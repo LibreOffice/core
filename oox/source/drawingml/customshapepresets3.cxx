@@ -41,7 +41,7 @@ class ShapeCstar6 : public CustomShapeProvider
             aAdjSequence [1].Value = aAny;
             aAdjSequence [1].Name = "hf";
         }
-        aPropertyMap [PROP_AdjustmentValues] <<= aAdjSequence;
+        aPropertyMap.setProperty(PROP_AdjustmentValues, aAdjSequence);
     }
     {
         static const char *aStrings[] = {
@@ -69,7 +69,7 @@ class ShapeCstar6 : public CustomShapeProvider
             "?7 +0-?12 ",
             "logheight"
         };
-        aPropertyMap [PROP_Equations] <<= createStringSequence( SAL_N_ELEMENTS( aStrings ), aStrings );
+        aPropertyMap.setProperty(PROP_Equations, createStringSequence( SAL_N_ELEMENTS( aStrings ), aStrings ));
     }
     {
         Sequence< Sequence < PropertyValue > > aPropSequenceSequence (1);
@@ -108,13 +108,13 @@ class ShapeCstar6 : public CustomShapeProvider
             }
             aPropSequenceSequence [0] = aPropSequence;
         }
-        aPropertyMap [PROP_Handles] <<= aPropSequenceSequence;
+        aPropertyMap.setProperty(PROP_Handles, aPropSequenceSequence);
     }
     {
-        aPropertyMap [PROP_MirroredX] <<= Any ((sal_Bool) sal_False);
+        aPropertyMap.setProperty(PROP_MirroredX, (sal_Bool) sal_False);
     }
     {
-        aPropertyMap [PROP_MirroredY] <<= Any ((sal_Bool) sal_False);
+        aPropertyMap.setProperty(PROP_MirroredY, (sal_Bool) sal_False);
     }
     {
         Sequence< PropertyValue > aPropSequence (3);
@@ -222,7 +222,7 @@ class ShapeCstar6 : public CustomShapeProvider
             }
             aPropSequence [2].Value = makeAny (aTextFrameSeq);
         }
-        aPropertyMap [PROP_Path] <<= aPropSequence;
+        aPropertyMap.setProperty(PROP_Path, aPropSequence);
     }
     {
         awt::Rectangle aRectangle;
@@ -230,9 +230,9 @@ class ShapeCstar6 : public CustomShapeProvider
         aRectangle.Y = 0;
         aRectangle.Width = 0;
         aRectangle.Height = 0;
-        aPropertyMap [PROP_ViewBox] <<= aRectangle;
+        aPropertyMap.setProperty(PROP_ViewBox, aRectangle);
     }
-    aPropertyMap [ PROP_Type ] <<= OUString("ooxml-star6");
+    aPropertyMap.setProperty( PROP_Type, OUString("ooxml-star6"));
 
     return aPropertyMap;
   }
@@ -258,7 +258,7 @@ class ShapeCround2SameRect : public CustomShapeProvider
             aAdjSequence [1].Value = aAny;
             aAdjSequence [1].Name = "adj2";
         }
-        aPropertyMap [PROP_AdjustmentValues] <<= aAdjSequence;
+        aPropertyMap.setProperty(PROP_AdjustmentValues, aAdjSequence);
     }
     {
         static const char *aStrings[] = {
@@ -289,7 +289,7 @@ class ShapeCround2SameRect : public CustomShapeProvider
             "(10800000)/60000.0",
             "(5400000)/60000.0"
         };
-        aPropertyMap [PROP_Equations] <<= createStringSequence( SAL_N_ELEMENTS( aStrings ), aStrings );
+        aPropertyMap.setProperty(PROP_Equations, createStringSequence( SAL_N_ELEMENTS( aStrings ), aStrings ));
     }
     {
         Sequence< Sequence < PropertyValue > > aPropSequenceSequence (2);
@@ -363,13 +363,13 @@ class ShapeCround2SameRect : public CustomShapeProvider
             }
             aPropSequenceSequence [1] = aPropSequence;
         }
-        aPropertyMap [PROP_Handles] <<= aPropSequenceSequence;
+        aPropertyMap.setProperty(PROP_Handles, aPropSequenceSequence);
     }
     {
-        aPropertyMap [PROP_MirroredX] <<= Any ((sal_Bool) sal_False);
+        aPropertyMap.setProperty(PROP_MirroredX, (sal_Bool) sal_False);
     }
     {
-        aPropertyMap [PROP_MirroredY] <<= Any ((sal_Bool) sal_False);
+        aPropertyMap.setProperty(PROP_MirroredY, (sal_Bool) sal_False);
     }
     {
         Sequence< PropertyValue > aPropSequence (3);
@@ -489,7 +489,7 @@ class ShapeCround2SameRect : public CustomShapeProvider
             }
             aPropSequence [2].Value = makeAny (aTextFrameSeq);
         }
-        aPropertyMap [PROP_Path] <<= aPropSequence;
+        aPropertyMap.setProperty(PROP_Path, aPropSequence);
     }
     {
         awt::Rectangle aRectangle;
@@ -497,9 +497,9 @@ class ShapeCround2SameRect : public CustomShapeProvider
         aRectangle.Y = 0;
         aRectangle.Width = 0;
         aRectangle.Height = 0;
-        aPropertyMap [PROP_ViewBox] <<= aRectangle;
+        aPropertyMap.setProperty(PROP_ViewBox, aRectangle);
     }
-    aPropertyMap [ PROP_Type ] <<= OUString("ooxml-round2SameRect");
+    aPropertyMap.setProperty( PROP_Type, OUString("ooxml-round2SameRect"));
 
     return aPropertyMap;
   }
@@ -525,7 +525,7 @@ class ShapeCnonIsoscelesTrapezoid : public CustomShapeProvider
             aAdjSequence [1].Value = aAny;
             aAdjSequence [1].Name = "adj2";
         }
-        aPropertyMap [PROP_AdjustmentValues] <<= aAdjSequence;
+        aPropertyMap.setProperty(PROP_AdjustmentValues, aAdjSequence);
     }
     {
         static const char *aStrings[] = {
@@ -550,7 +550,7 @@ class ShapeCnonIsoscelesTrapezoid : public CustomShapeProvider
             "logheight",
             "logwidth"
         };
-        aPropertyMap [PROP_Equations] <<= createStringSequence( SAL_N_ELEMENTS( aStrings ), aStrings );
+        aPropertyMap.setProperty(PROP_Equations, createStringSequence( SAL_N_ELEMENTS( aStrings ), aStrings ));
     }
     {
         Sequence< Sequence < PropertyValue > > aPropSequenceSequence (2);
@@ -624,13 +624,13 @@ class ShapeCnonIsoscelesTrapezoid : public CustomShapeProvider
             }
             aPropSequenceSequence [1] = aPropSequence;
         }
-        aPropertyMap [PROP_Handles] <<= aPropSequenceSequence;
+        aPropertyMap.setProperty(PROP_Handles, aPropSequenceSequence);
     }
     {
-        aPropertyMap [PROP_MirroredX] <<= Any ((sal_Bool) sal_False);
+        aPropertyMap.setProperty(PROP_MirroredX, (sal_Bool) sal_False);
     }
     {
-        aPropertyMap [PROP_MirroredY] <<= Any ((sal_Bool) sal_False);
+        aPropertyMap.setProperty(PROP_MirroredY, (sal_Bool) sal_False);
     }
     {
         Sequence< PropertyValue > aPropSequence (3);
@@ -698,7 +698,7 @@ class ShapeCnonIsoscelesTrapezoid : public CustomShapeProvider
             }
             aPropSequence [2].Value = makeAny (aTextFrameSeq);
         }
-        aPropertyMap [PROP_Path] <<= aPropSequence;
+        aPropertyMap.setProperty(PROP_Path, aPropSequence);
     }
     {
         awt::Rectangle aRectangle;
@@ -706,9 +706,9 @@ class ShapeCnonIsoscelesTrapezoid : public CustomShapeProvider
         aRectangle.Y = 0;
         aRectangle.Width = 0;
         aRectangle.Height = 0;
-        aPropertyMap [PROP_ViewBox] <<= aRectangle;
+        aPropertyMap.setProperty(PROP_ViewBox, aRectangle);
     }
-    aPropertyMap [ PROP_Type ] <<= OUString("ooxml-nonIsoscelesTrapezoid");
+    aPropertyMap.setProperty( PROP_Type, OUString("ooxml-nonIsoscelesTrapezoid"));
 
     return aPropertyMap;
   }
@@ -723,7 +723,7 @@ class ShapeCdiamond : public CustomShapeProvider
     PropertyMap aPropertyMap;
 
     {
-        aPropertyMap [PROP_AdjustmentValues] <<= Sequence< OUString >(0);
+        aPropertyMap.setProperty(PROP_AdjustmentValues, Sequence< OUString >(0));
     }
     {
         static const char *aStrings[] = {
@@ -736,16 +736,16 @@ class ShapeCdiamond : public CustomShapeProvider
             "logwidth/4",
             "logheight/4"
         };
-        aPropertyMap [PROP_Equations] <<= createStringSequence( SAL_N_ELEMENTS( aStrings ), aStrings );
+        aPropertyMap.setProperty(PROP_Equations, createStringSequence( SAL_N_ELEMENTS( aStrings ), aStrings ));
     }
     {
-        aPropertyMap [PROP_Handles] <<= Sequence< OUString >(0);
+        aPropertyMap.setProperty(PROP_Handles, Sequence< OUString >(0));
     }
     {
-        aPropertyMap [PROP_MirroredX] <<= Any ((sal_Bool) sal_False);
+        aPropertyMap.setProperty(PROP_MirroredX, (sal_Bool) sal_False);
     }
     {
-        aPropertyMap [PROP_MirroredY] <<= Any ((sal_Bool) sal_False);
+        aPropertyMap.setProperty(PROP_MirroredY, (sal_Bool) sal_False);
     }
     {
         Sequence< PropertyValue > aPropSequence (3);
@@ -813,7 +813,7 @@ class ShapeCdiamond : public CustomShapeProvider
             }
             aPropSequence [2].Value = makeAny (aTextFrameSeq);
         }
-        aPropertyMap [PROP_Path] <<= aPropSequence;
+        aPropertyMap.setProperty(PROP_Path, aPropSequence);
     }
     {
         awt::Rectangle aRectangle;
@@ -821,9 +821,9 @@ class ShapeCdiamond : public CustomShapeProvider
         aRectangle.Y = 0;
         aRectangle.Width = 0;
         aRectangle.Height = 0;
-        aPropertyMap [PROP_ViewBox] <<= aRectangle;
+        aPropertyMap.setProperty(PROP_ViewBox, aRectangle);
     }
-    aPropertyMap [ PROP_Type ] <<= OUString("ooxml-diamond");
+    aPropertyMap.setProperty( PROP_Type, OUString("ooxml-diamond"));
 
     return aPropertyMap;
   }
@@ -869,7 +869,7 @@ class ShapeCcallout2 : public CustomShapeProvider
             aAdjSequence [5].Value = aAny;
             aAdjSequence [5].Name = "adj6";
         }
-        aPropertyMap [PROP_AdjustmentValues] <<= aAdjSequence;
+        aPropertyMap.setProperty(PROP_AdjustmentValues, aAdjSequence);
     }
     {
         static const char *aStrings[] = {
@@ -884,7 +884,7 @@ class ShapeCcallout2 : public CustomShapeProvider
             "logwidth/2",
             "logheight"
         };
-        aPropertyMap [PROP_Equations] <<= createStringSequence( SAL_N_ELEMENTS( aStrings ), aStrings );
+        aPropertyMap.setProperty(PROP_Equations, createStringSequence( SAL_N_ELEMENTS( aStrings ), aStrings ));
     }
     {
         Sequence< Sequence < PropertyValue > > aPropSequenceSequence (3);
@@ -1056,13 +1056,13 @@ class ShapeCcallout2 : public CustomShapeProvider
             }
             aPropSequenceSequence [2] = aPropSequence;
         }
-        aPropertyMap [PROP_Handles] <<= aPropSequenceSequence;
+        aPropertyMap.setProperty(PROP_Handles, aPropSequenceSequence);
     }
     {
-        aPropertyMap [PROP_MirroredX] <<= Any ((sal_Bool) sal_False);
+        aPropertyMap.setProperty(PROP_MirroredX, (sal_Bool) sal_False);
     }
     {
-        aPropertyMap [PROP_MirroredY] <<= Any ((sal_Bool) sal_False);
+        aPropertyMap.setProperty(PROP_MirroredY, (sal_Bool) sal_False);
     }
     {
         Sequence< PropertyValue > aPropSequence (3);
@@ -1150,7 +1150,7 @@ class ShapeCcallout2 : public CustomShapeProvider
             }
             aPropSequence [2].Value = makeAny (aTextFrameSeq);
         }
-        aPropertyMap [PROP_Path] <<= aPropSequence;
+        aPropertyMap.setProperty(PROP_Path, aPropSequence);
     }
     {
         awt::Rectangle aRectangle;
@@ -1158,9 +1158,9 @@ class ShapeCcallout2 : public CustomShapeProvider
         aRectangle.Y = 0;
         aRectangle.Width = 0;
         aRectangle.Height = 0;
-        aPropertyMap [PROP_ViewBox] <<= aRectangle;
+        aPropertyMap.setProperty(PROP_ViewBox, aRectangle);
     }
-    aPropertyMap [ PROP_Type ] <<= OUString("ooxml-callout2");
+    aPropertyMap.setProperty( PROP_Type, OUString("ooxml-callout2"));
 
     return aPropertyMap;
   }
@@ -1191,7 +1191,7 @@ class ShapeCellipseRibbon : public CustomShapeProvider
             aAdjSequence [2].Value = aAny;
             aAdjSequence [2].Name = "adj3";
         }
-        aPropertyMap [PROP_AdjustmentValues] <<= aAdjSequence;
+        aPropertyMap.setProperty(PROP_AdjustmentValues, aAdjSequence);
     }
     {
         static const char *aStrings[] = {
@@ -1243,7 +1243,7 @@ class ShapeCellipseRibbon : public CustomShapeProvider
             "logheight",
             "logwidth"
         };
-        aPropertyMap [PROP_Equations] <<= createStringSequence( SAL_N_ELEMENTS( aStrings ), aStrings );
+        aPropertyMap.setProperty(PROP_Equations, createStringSequence( SAL_N_ELEMENTS( aStrings ), aStrings ));
     }
     {
         Sequence< Sequence < PropertyValue > > aPropSequenceSequence (3);
@@ -1352,13 +1352,13 @@ class ShapeCellipseRibbon : public CustomShapeProvider
             }
             aPropSequenceSequence [2] = aPropSequence;
         }
-        aPropertyMap [PROP_Handles] <<= aPropSequenceSequence;
+        aPropertyMap.setProperty(PROP_Handles, aPropSequenceSequence);
     }
     {
-        aPropertyMap [PROP_MirroredX] <<= Any ((sal_Bool) sal_False);
+        aPropertyMap.setProperty(PROP_MirroredX, (sal_Bool) sal_False);
     }
     {
-        aPropertyMap [PROP_MirroredY] <<= Any ((sal_Bool) sal_False);
+        aPropertyMap.setProperty(PROP_MirroredY, (sal_Bool) sal_False);
     }
     {
         Sequence< PropertyValue > aPropSequence (3);
@@ -1736,7 +1736,7 @@ class ShapeCellipseRibbon : public CustomShapeProvider
             }
             aPropSequence [2].Value = makeAny (aTextFrameSeq);
         }
-        aPropertyMap [PROP_Path] <<= aPropSequence;
+        aPropertyMap.setProperty(PROP_Path, aPropSequence);
     }
     {
         awt::Rectangle aRectangle;
@@ -1744,9 +1744,9 @@ class ShapeCellipseRibbon : public CustomShapeProvider
         aRectangle.Y = 0;
         aRectangle.Width = 0;
         aRectangle.Height = 0;
-        aPropertyMap [PROP_ViewBox] <<= aRectangle;
+        aPropertyMap.setProperty(PROP_ViewBox, aRectangle);
     }
-    aPropertyMap [ PROP_Type ] <<= OUString("ooxml-ellipseRibbon");
+    aPropertyMap.setProperty( PROP_Type, OUString("ooxml-ellipseRibbon"));
 
     return aPropertyMap;
   }
@@ -1772,7 +1772,7 @@ class ShapeCpie : public CustomShapeProvider
             aAdjSequence [1].Value = aAny;
             aAdjSequence [1].Name = "adj2";
         }
-        aPropertyMap [PROP_AdjustmentValues] <<= aAdjSequence;
+        aPropertyMap.setProperty(PROP_AdjustmentValues, aAdjSequence);
     }
     {
         static const char *aStrings[] = {
@@ -1808,7 +1808,7 @@ class ShapeCpie : public CustomShapeProvider
             "(?0 )/60000.0",
             "(?4 )/60000.0"
         };
-        aPropertyMap [PROP_Equations] <<= createStringSequence( SAL_N_ELEMENTS( aStrings ), aStrings );
+        aPropertyMap.setProperty(PROP_Equations, createStringSequence( SAL_N_ELEMENTS( aStrings ), aStrings ));
     }
     {
         Sequence< Sequence < PropertyValue > > aPropSequenceSequence (2);
@@ -1840,13 +1840,13 @@ class ShapeCpie : public CustomShapeProvider
             }
             aPropSequenceSequence [1] = aPropSequence;
         }
-        aPropertyMap [PROP_Handles] <<= aPropSequenceSequence;
+        aPropertyMap.setProperty(PROP_Handles, aPropSequenceSequence);
     }
     {
-        aPropertyMap [PROP_MirroredX] <<= Any ((sal_Bool) sal_False);
+        aPropertyMap.setProperty(PROP_MirroredX, (sal_Bool) sal_False);
     }
     {
-        aPropertyMap [PROP_MirroredY] <<= Any ((sal_Bool) sal_False);
+        aPropertyMap.setProperty(PROP_MirroredY, (sal_Bool) sal_False);
     }
     {
         Sequence< PropertyValue > aPropSequence (3);
@@ -1915,7 +1915,7 @@ class ShapeCpie : public CustomShapeProvider
             }
             aPropSequence [2].Value = makeAny (aTextFrameSeq);
         }
-        aPropertyMap [PROP_Path] <<= aPropSequence;
+        aPropertyMap.setProperty(PROP_Path, aPropSequence);
     }
     {
         awt::Rectangle aRectangle;
@@ -1923,9 +1923,9 @@ class ShapeCpie : public CustomShapeProvider
         aRectangle.Y = 0;
         aRectangle.Width = 0;
         aRectangle.Height = 0;
-        aPropertyMap [PROP_ViewBox] <<= aRectangle;
+        aPropertyMap.setProperty(PROP_ViewBox, aRectangle);
     }
-    aPropertyMap [ PROP_Type ] <<= OUString("ooxml-pie");
+    aPropertyMap.setProperty( PROP_Type, OUString("ooxml-pie"));
 
     return aPropertyMap;
   }
@@ -1946,7 +1946,7 @@ class ShapeCstar4 : public CustomShapeProvider
             aAdjSequence [0].Value = aAny;
             aAdjSequence [0].Name = "adj";
         }
-        aPropertyMap [PROP_AdjustmentValues] <<= aAdjSequence;
+        aPropertyMap.setProperty(PROP_AdjustmentValues, aAdjSequence);
     }
     {
         static const char *aStrings[] = {
@@ -1967,7 +1967,7 @@ class ShapeCstar4 : public CustomShapeProvider
             "logheight",
             "logwidth"
         };
-        aPropertyMap [PROP_Equations] <<= createStringSequence( SAL_N_ELEMENTS( aStrings ), aStrings );
+        aPropertyMap.setProperty(PROP_Equations, createStringSequence( SAL_N_ELEMENTS( aStrings ), aStrings ));
     }
     {
         Sequence< Sequence < PropertyValue > > aPropSequenceSequence (1);
@@ -2006,13 +2006,13 @@ class ShapeCstar4 : public CustomShapeProvider
             }
             aPropSequenceSequence [0] = aPropSequence;
         }
-        aPropertyMap [PROP_Handles] <<= aPropSequenceSequence;
+        aPropertyMap.setProperty(PROP_Handles, aPropSequenceSequence);
     }
     {
-        aPropertyMap [PROP_MirroredX] <<= Any ((sal_Bool) sal_False);
+        aPropertyMap.setProperty(PROP_MirroredX, (sal_Bool) sal_False);
     }
     {
-        aPropertyMap [PROP_MirroredY] <<= Any ((sal_Bool) sal_False);
+        aPropertyMap.setProperty(PROP_MirroredY, (sal_Bool) sal_False);
     }
     {
         Sequence< PropertyValue > aPropSequence (3);
@@ -2100,7 +2100,7 @@ class ShapeCstar4 : public CustomShapeProvider
             }
             aPropSequence [2].Value = makeAny (aTextFrameSeq);
         }
-        aPropertyMap [PROP_Path] <<= aPropSequence;
+        aPropertyMap.setProperty(PROP_Path, aPropSequence);
     }
     {
         awt::Rectangle aRectangle;
@@ -2108,9 +2108,9 @@ class ShapeCstar4 : public CustomShapeProvider
         aRectangle.Y = 0;
         aRectangle.Width = 0;
         aRectangle.Height = 0;
-        aPropertyMap [PROP_ViewBox] <<= aRectangle;
+        aPropertyMap.setProperty(PROP_ViewBox, aRectangle);
     }
-    aPropertyMap [ PROP_Type ] <<= OUString("ooxml-star4");
+    aPropertyMap.setProperty( PROP_Type, OUString("ooxml-star4"));
 
     return aPropertyMap;
   }
@@ -2125,7 +2125,7 @@ class ShapeCflowChartPredefinedProcess : public CustomShapeProvider
     PropertyMap aPropertyMap;
 
     {
-        aPropertyMap [PROP_AdjustmentValues] <<= Sequence< OUString >(0);
+        aPropertyMap.setProperty(PROP_AdjustmentValues, Sequence< OUString >(0));
     }
     {
         static const char *aStrings[] = {
@@ -2136,16 +2136,16 @@ class ShapeCflowChartPredefinedProcess : public CustomShapeProvider
             "logwidth",
             "logwidth/8"
         };
-        aPropertyMap [PROP_Equations] <<= createStringSequence( SAL_N_ELEMENTS( aStrings ), aStrings );
+        aPropertyMap.setProperty(PROP_Equations, createStringSequence( SAL_N_ELEMENTS( aStrings ), aStrings ));
     }
     {
-        aPropertyMap [PROP_Handles] <<= Sequence< OUString >(0);
+        aPropertyMap.setProperty(PROP_Handles, Sequence< OUString >(0));
     }
     {
-        aPropertyMap [PROP_MirroredX] <<= Any ((sal_Bool) sal_False);
+        aPropertyMap.setProperty(PROP_MirroredX, (sal_Bool) sal_False);
     }
     {
-        aPropertyMap [PROP_MirroredY] <<= Any ((sal_Bool) sal_False);
+        aPropertyMap.setProperty(PROP_MirroredY, (sal_Bool) sal_False);
     }
     {
         Sequence< PropertyValue > aPropSequence (4);
@@ -2288,7 +2288,7 @@ class ShapeCflowChartPredefinedProcess : public CustomShapeProvider
             }
             aPropSequence [3].Value = makeAny (aTextFrameSeq);
         }
-        aPropertyMap [PROP_Path] <<= aPropSequence;
+        aPropertyMap.setProperty(PROP_Path, aPropSequence);
     }
     {
         awt::Rectangle aRectangle;
@@ -2296,9 +2296,9 @@ class ShapeCflowChartPredefinedProcess : public CustomShapeProvider
         aRectangle.Y = 0;
         aRectangle.Width = 0;
         aRectangle.Height = 0;
-        aPropertyMap [PROP_ViewBox] <<= aRectangle;
+        aPropertyMap.setProperty(PROP_ViewBox, aRectangle);
     }
-    aPropertyMap [ PROP_Type ] <<= OUString("ooxml-flowChartPredefinedProcess");
+    aPropertyMap.setProperty( PROP_Type, OUString("ooxml-flowChartPredefinedProcess"));
 
     return aPropertyMap;
   }
@@ -2313,7 +2313,7 @@ class ShapeCflowChartPunchedTape : public CustomShapeProvider
     PropertyMap aPropertyMap;
 
     {
-        aPropertyMap [PROP_AdjustmentValues] <<= Sequence< OUString >(0);
+        aPropertyMap.setProperty(PROP_AdjustmentValues, Sequence< OUString >(0));
     }
     {
         static const char *aStrings[] = {
@@ -2333,16 +2333,16 @@ class ShapeCflowChartPunchedTape : public CustomShapeProvider
             "(0)/60000.0",
             "(10800000)/60000.0"
         };
-        aPropertyMap [PROP_Equations] <<= createStringSequence( SAL_N_ELEMENTS( aStrings ), aStrings );
+        aPropertyMap.setProperty(PROP_Equations, createStringSequence( SAL_N_ELEMENTS( aStrings ), aStrings ));
     }
     {
-        aPropertyMap [PROP_Handles] <<= Sequence< OUString >(0);
+        aPropertyMap.setProperty(PROP_Handles, Sequence< OUString >(0));
     }
     {
-        aPropertyMap [PROP_MirroredX] <<= Any ((sal_Bool) sal_False);
+        aPropertyMap.setProperty(PROP_MirroredX, (sal_Bool) sal_False);
     }
     {
-        aPropertyMap [PROP_MirroredY] <<= Any ((sal_Bool) sal_False);
+        aPropertyMap.setProperty(PROP_MirroredY, (sal_Bool) sal_False);
     }
     {
         Sequence< PropertyValue > aPropSequence (4);
@@ -2453,7 +2453,7 @@ class ShapeCflowChartPunchedTape : public CustomShapeProvider
             }
             aPropSequence [3].Value = makeAny (aTextFrameSeq);
         }
-        aPropertyMap [PROP_Path] <<= aPropSequence;
+        aPropertyMap.setProperty(PROP_Path, aPropSequence);
     }
     {
         awt::Rectangle aRectangle;
@@ -2461,9 +2461,9 @@ class ShapeCflowChartPunchedTape : public CustomShapeProvider
         aRectangle.Y = 0;
         aRectangle.Width = 0;
         aRectangle.Height = 0;
-        aPropertyMap [PROP_ViewBox] <<= aRectangle;
+        aPropertyMap.setProperty(PROP_ViewBox, aRectangle);
     }
-    aPropertyMap [ PROP_Type ] <<= OUString("ooxml-flowChartPunchedTape");
+    aPropertyMap.setProperty( PROP_Type, OUString("ooxml-flowChartPunchedTape"));
 
     return aPropertyMap;
   }
@@ -2478,7 +2478,7 @@ class ShapeCcurvedConnector2 : public CustomShapeProvider
     PropertyMap aPropertyMap;
 
     {
-        aPropertyMap [PROP_AdjustmentValues] <<= Sequence< OUString >(0);
+        aPropertyMap.setProperty(PROP_AdjustmentValues, Sequence< OUString >(0));
     }
     {
         static const char *aStrings[] = {
@@ -2487,16 +2487,16 @@ class ShapeCcurvedConnector2 : public CustomShapeProvider
             "logwidth/2",
             "logheight/2"
         };
-        aPropertyMap [PROP_Equations] <<= createStringSequence( SAL_N_ELEMENTS( aStrings ), aStrings );
+        aPropertyMap.setProperty(PROP_Equations, createStringSequence( SAL_N_ELEMENTS( aStrings ), aStrings ));
     }
     {
-        aPropertyMap [PROP_Handles] <<= Sequence< OUString >(0);
+        aPropertyMap.setProperty(PROP_Handles, Sequence< OUString >(0));
     }
     {
-        aPropertyMap [PROP_MirroredX] <<= Any ((sal_Bool) sal_False);
+        aPropertyMap.setProperty(PROP_MirroredX, (sal_Bool) sal_False);
     }
     {
-        aPropertyMap [PROP_MirroredY] <<= Any ((sal_Bool) sal_False);
+        aPropertyMap.setProperty(PROP_MirroredY, (sal_Bool) sal_False);
     }
     {
         Sequence< PropertyValue > aPropSequence (3);
@@ -2564,7 +2564,7 @@ class ShapeCcurvedConnector2 : public CustomShapeProvider
             }
             aPropSequence [2].Value = makeAny (aTextFrameSeq);
         }
-        aPropertyMap [PROP_Path] <<= aPropSequence;
+        aPropertyMap.setProperty(PROP_Path, aPropSequence);
     }
     {
         awt::Rectangle aRectangle;
@@ -2572,9 +2572,9 @@ class ShapeCcurvedConnector2 : public CustomShapeProvider
         aRectangle.Y = 0;
         aRectangle.Width = 0;
         aRectangle.Height = 0;
-        aPropertyMap [PROP_ViewBox] <<= aRectangle;
+        aPropertyMap.setProperty(PROP_ViewBox, aRectangle);
     }
-    aPropertyMap [ PROP_Type ] <<= OUString("ooxml-curvedConnector2");
+    aPropertyMap.setProperty( PROP_Type, OUString("ooxml-curvedConnector2"));
 
     return aPropertyMap;
   }
@@ -2595,7 +2595,7 @@ class ShapeCbentConnector3 : public CustomShapeProvider
             aAdjSequence [0].Value = aAny;
             aAdjSequence [0].Name = "adj1";
         }
-        aPropertyMap [PROP_AdjustmentValues] <<= aAdjSequence;
+        aPropertyMap.setProperty(PROP_AdjustmentValues, aAdjSequence);
     }
     {
         static const char *aStrings[] = {
@@ -2604,7 +2604,7 @@ class ShapeCbentConnector3 : public CustomShapeProvider
             "logwidth",
             "logheight"
         };
-        aPropertyMap [PROP_Equations] <<= createStringSequence( SAL_N_ELEMENTS( aStrings ), aStrings );
+        aPropertyMap.setProperty(PROP_Equations, createStringSequence( SAL_N_ELEMENTS( aStrings ), aStrings ));
     }
     {
         Sequence< Sequence < PropertyValue > > aPropSequenceSequence (1);
@@ -2643,13 +2643,13 @@ class ShapeCbentConnector3 : public CustomShapeProvider
             }
             aPropSequenceSequence [0] = aPropSequence;
         }
-        aPropertyMap [PROP_Handles] <<= aPropSequenceSequence;
+        aPropertyMap.setProperty(PROP_Handles, aPropSequenceSequence);
     }
     {
-        aPropertyMap [PROP_MirroredX] <<= Any ((sal_Bool) sal_False);
+        aPropertyMap.setProperty(PROP_MirroredX, (sal_Bool) sal_False);
     }
     {
-        aPropertyMap [PROP_MirroredY] <<= Any ((sal_Bool) sal_False);
+        aPropertyMap.setProperty(PROP_MirroredY, (sal_Bool) sal_False);
     }
     {
         Sequence< PropertyValue > aPropSequence (3);
@@ -2717,7 +2717,7 @@ class ShapeCbentConnector3 : public CustomShapeProvider
             }
             aPropSequence [2].Value = makeAny (aTextFrameSeq);
         }
-        aPropertyMap [PROP_Path] <<= aPropSequence;
+        aPropertyMap.setProperty(PROP_Path, aPropSequence);
     }
     {
         awt::Rectangle aRectangle;
@@ -2725,9 +2725,9 @@ class ShapeCbentConnector3 : public CustomShapeProvider
         aRectangle.Y = 0;
         aRectangle.Width = 0;
         aRectangle.Height = 0;
-        aPropertyMap [PROP_ViewBox] <<= aRectangle;
+        aPropertyMap.setProperty(PROP_ViewBox, aRectangle);
     }
-    aPropertyMap [ PROP_Type ] <<= OUString("ooxml-bentConnector3");
+    aPropertyMap.setProperty( PROP_Type, OUString("ooxml-bentConnector3"));
 
     return aPropertyMap;
   }
@@ -2742,7 +2742,7 @@ class ShapeCcornerTabs : public CustomShapeProvider
     PropertyMap aPropertyMap;
 
     {
-        aPropertyMap [PROP_AdjustmentValues] <<= Sequence< OUString >(0);
+        aPropertyMap.setProperty(PROP_AdjustmentValues, Sequence< OUString >(0));
     }
     {
         static const char *aStrings[] = {
@@ -2753,16 +2753,16 @@ class ShapeCcornerTabs : public CustomShapeProvider
             "logheight",
             "logwidth"
         };
-        aPropertyMap [PROP_Equations] <<= createStringSequence( SAL_N_ELEMENTS( aStrings ), aStrings );
+        aPropertyMap.setProperty(PROP_Equations, createStringSequence( SAL_N_ELEMENTS( aStrings ), aStrings ));
     }
     {
-        aPropertyMap [PROP_Handles] <<= Sequence< OUString >(0);
+        aPropertyMap.setProperty(PROP_Handles, Sequence< OUString >(0));
     }
     {
-        aPropertyMap [PROP_MirroredX] <<= Any ((sal_Bool) sal_False);
+        aPropertyMap.setProperty(PROP_MirroredX, (sal_Bool) sal_False);
     }
     {
-        aPropertyMap [PROP_MirroredY] <<= Any ((sal_Bool) sal_False);
+        aPropertyMap.setProperty(PROP_MirroredY, (sal_Bool) sal_False);
     }
     {
         Sequence< PropertyValue > aPropSequence (3);
@@ -2882,7 +2882,7 @@ class ShapeCcornerTabs : public CustomShapeProvider
             }
             aPropSequence [2].Value = makeAny (aTextFrameSeq);
         }
-        aPropertyMap [PROP_Path] <<= aPropSequence;
+        aPropertyMap.setProperty(PROP_Path, aPropSequence);
     }
     {
         awt::Rectangle aRectangle;
@@ -2890,9 +2890,9 @@ class ShapeCcornerTabs : public CustomShapeProvider
         aRectangle.Y = 0;
         aRectangle.Width = 0;
         aRectangle.Height = 0;
-        aPropertyMap [PROP_ViewBox] <<= aRectangle;
+        aPropertyMap.setProperty(PROP_ViewBox, aRectangle);
     }
-    aPropertyMap [ PROP_Type ] <<= OUString("ooxml-cornerTabs");
+    aPropertyMap.setProperty( PROP_Type, OUString("ooxml-cornerTabs"));
 
     return aPropertyMap;
   }
@@ -2918,7 +2918,7 @@ class ShapeChexagon : public CustomShapeProvider
             aAdjSequence [1].Value = aAny;
             aAdjSequence [1].Name = "vf";
         }
-        aPropertyMap [PROP_AdjustmentValues] <<= aAdjSequence;
+        aPropertyMap.setProperty(PROP_AdjustmentValues, aAdjSequence);
     }
     {
         static const char *aStrings[] = {
@@ -2947,7 +2947,7 @@ class ShapeChexagon : public CustomShapeProvider
             "logheight+0-?20 ",
             "logwidth"
         };
-        aPropertyMap [PROP_Equations] <<= createStringSequence( SAL_N_ELEMENTS( aStrings ), aStrings );
+        aPropertyMap.setProperty(PROP_Equations, createStringSequence( SAL_N_ELEMENTS( aStrings ), aStrings ));
     }
     {
         Sequence< Sequence < PropertyValue > > aPropSequenceSequence (1);
@@ -2986,13 +2986,13 @@ class ShapeChexagon : public CustomShapeProvider
             }
             aPropSequenceSequence [0] = aPropSequence;
         }
-        aPropertyMap [PROP_Handles] <<= aPropSequenceSequence;
+        aPropertyMap.setProperty(PROP_Handles, aPropSequenceSequence);
     }
     {
-        aPropertyMap [PROP_MirroredX] <<= Any ((sal_Bool) sal_False);
+        aPropertyMap.setProperty(PROP_MirroredX, (sal_Bool) sal_False);
     }
     {
-        aPropertyMap [PROP_MirroredY] <<= Any ((sal_Bool) sal_False);
+        aPropertyMap.setProperty(PROP_MirroredY, (sal_Bool) sal_False);
     }
     {
         Sequence< PropertyValue > aPropSequence (3);
@@ -3070,7 +3070,7 @@ class ShapeChexagon : public CustomShapeProvider
             }
             aPropSequence [2].Value = makeAny (aTextFrameSeq);
         }
-        aPropertyMap [PROP_Path] <<= aPropSequence;
+        aPropertyMap.setProperty(PROP_Path, aPropSequence);
     }
     {
         awt::Rectangle aRectangle;
@@ -3078,9 +3078,9 @@ class ShapeChexagon : public CustomShapeProvider
         aRectangle.Y = 0;
         aRectangle.Width = 0;
         aRectangle.Height = 0;
-        aPropertyMap [PROP_ViewBox] <<= aRectangle;
+        aPropertyMap.setProperty(PROP_ViewBox, aRectangle);
     }
-    aPropertyMap [ PROP_Type ] <<= OUString("ooxml-hexagon");
+    aPropertyMap.setProperty( PROP_Type, OUString("ooxml-hexagon"));
 
     return aPropertyMap;
   }
@@ -3095,7 +3095,7 @@ class ShapeCflowChartConnector : public CustomShapeProvider
     PropertyMap aPropertyMap;
 
     {
-        aPropertyMap [PROP_AdjustmentValues] <<= Sequence< OUString >(0);
+        aPropertyMap.setProperty(PROP_AdjustmentValues, Sequence< OUString >(0));
     }
     {
         static const char *aStrings[] = {
@@ -3120,16 +3120,16 @@ class ShapeCflowChartConnector : public CustomShapeProvider
             "(5400000)/60000.0",
             "(5400000)/60000.0"
         };
-        aPropertyMap [PROP_Equations] <<= createStringSequence( SAL_N_ELEMENTS( aStrings ), aStrings );
+        aPropertyMap.setProperty(PROP_Equations, createStringSequence( SAL_N_ELEMENTS( aStrings ), aStrings ));
     }
     {
-        aPropertyMap [PROP_Handles] <<= Sequence< OUString >(0);
+        aPropertyMap.setProperty(PROP_Handles, Sequence< OUString >(0));
     }
     {
-        aPropertyMap [PROP_MirroredX] <<= Any ((sal_Bool) sal_False);
+        aPropertyMap.setProperty(PROP_MirroredX, (sal_Bool) sal_False);
     }
     {
-        aPropertyMap [PROP_MirroredY] <<= Any ((sal_Bool) sal_False);
+        aPropertyMap.setProperty(PROP_MirroredY, (sal_Bool) sal_False);
     }
     {
         Sequence< PropertyValue > aPropSequence (3);
@@ -3222,7 +3222,7 @@ class ShapeCflowChartConnector : public CustomShapeProvider
             }
             aPropSequence [2].Value = makeAny (aTextFrameSeq);
         }
-        aPropertyMap [PROP_Path] <<= aPropSequence;
+        aPropertyMap.setProperty(PROP_Path, aPropSequence);
     }
     {
         awt::Rectangle aRectangle;
@@ -3230,9 +3230,9 @@ class ShapeCflowChartConnector : public CustomShapeProvider
         aRectangle.Y = 0;
         aRectangle.Width = 0;
         aRectangle.Height = 0;
-        aPropertyMap [PROP_ViewBox] <<= aRectangle;
+        aPropertyMap.setProperty(PROP_ViewBox, aRectangle);
     }
-    aPropertyMap [ PROP_Type ] <<= OUString("ooxml-flowChartConnector");
+    aPropertyMap.setProperty( PROP_Type, OUString("ooxml-flowChartConnector"));
 
     return aPropertyMap;
   }
@@ -3247,7 +3247,7 @@ class ShapeCflowChartMagneticDisk : public CustomShapeProvider
     PropertyMap aPropertyMap;
 
     {
-        aPropertyMap [PROP_AdjustmentValues] <<= Sequence< OUString >(0);
+        aPropertyMap.setProperty(PROP_AdjustmentValues, Sequence< OUString >(0));
     }
     {
         static const char *aStrings[] = {
@@ -3268,16 +3268,16 @@ class ShapeCflowChartMagneticDisk : public CustomShapeProvider
             "(0)/60000.0",
             "(10800000)/60000.0"
         };
-        aPropertyMap [PROP_Equations] <<= createStringSequence( SAL_N_ELEMENTS( aStrings ), aStrings );
+        aPropertyMap.setProperty(PROP_Equations, createStringSequence( SAL_N_ELEMENTS( aStrings ), aStrings ));
     }
     {
-        aPropertyMap [PROP_Handles] <<= Sequence< OUString >(0);
+        aPropertyMap.setProperty(PROP_Handles, Sequence< OUString >(0));
     }
     {
-        aPropertyMap [PROP_MirroredX] <<= Any ((sal_Bool) sal_False);
+        aPropertyMap.setProperty(PROP_MirroredX, (sal_Bool) sal_False);
     }
     {
-        aPropertyMap [PROP_MirroredY] <<= Any ((sal_Bool) sal_False);
+        aPropertyMap.setProperty(PROP_MirroredY, (sal_Bool) sal_False);
     }
     {
         Sequence< PropertyValue > aPropSequence (4);
@@ -3437,7 +3437,7 @@ class ShapeCflowChartMagneticDisk : public CustomShapeProvider
             }
             aPropSequence [3].Value = makeAny (aTextFrameSeq);
         }
-        aPropertyMap [PROP_Path] <<= aPropSequence;
+        aPropertyMap.setProperty(PROP_Path, aPropSequence);
     }
     {
         awt::Rectangle aRectangle;
@@ -3445,9 +3445,9 @@ class ShapeCflowChartMagneticDisk : public CustomShapeProvider
         aRectangle.Y = 0;
         aRectangle.Width = 0;
         aRectangle.Height = 0;
-        aPropertyMap [PROP_ViewBox] <<= aRectangle;
+        aPropertyMap.setProperty(PROP_ViewBox, aRectangle);
     }
-    aPropertyMap [ PROP_Type ] <<= OUString("ooxml-flowChartMagneticDisk");
+    aPropertyMap.setProperty( PROP_Type, OUString("ooxml-flowChartMagneticDisk"));
 
     return aPropertyMap;
   }
@@ -3462,7 +3462,7 @@ class ShapeCheart : public CustomShapeProvider
     PropertyMap aPropertyMap;
 
     {
-        aPropertyMap [PROP_AdjustmentValues] <<= Sequence< OUString >(0);
+        aPropertyMap.setProperty(PROP_AdjustmentValues, Sequence< OUString >(0));
     }
     {
         static const char *aStrings[] = {
@@ -3481,16 +3481,16 @@ class ShapeCheart : public CustomShapeProvider
             "logheight/4",
             "logheight"
         };
-        aPropertyMap [PROP_Equations] <<= createStringSequence( SAL_N_ELEMENTS( aStrings ), aStrings );
+        aPropertyMap.setProperty(PROP_Equations, createStringSequence( SAL_N_ELEMENTS( aStrings ), aStrings ));
     }
     {
-        aPropertyMap [PROP_Handles] <<= Sequence< OUString >(0);
+        aPropertyMap.setProperty(PROP_Handles, Sequence< OUString >(0));
     }
     {
-        aPropertyMap [PROP_MirroredX] <<= Any ((sal_Bool) sal_False);
+        aPropertyMap.setProperty(PROP_MirroredX, (sal_Bool) sal_False);
     }
     {
-        aPropertyMap [PROP_MirroredY] <<= Any ((sal_Bool) sal_False);
+        aPropertyMap.setProperty(PROP_MirroredY, (sal_Bool) sal_False);
     }
     {
         Sequence< PropertyValue > aPropSequence (3);
@@ -3573,7 +3573,7 @@ class ShapeCheart : public CustomShapeProvider
             }
             aPropSequence [2].Value = makeAny (aTextFrameSeq);
         }
-        aPropertyMap [PROP_Path] <<= aPropSequence;
+        aPropertyMap.setProperty(PROP_Path, aPropSequence);
     }
     {
         awt::Rectangle aRectangle;
@@ -3581,9 +3581,9 @@ class ShapeCheart : public CustomShapeProvider
         aRectangle.Y = 0;
         aRectangle.Width = 0;
         aRectangle.Height = 0;
-        aPropertyMap [PROP_ViewBox] <<= aRectangle;
+        aPropertyMap.setProperty(PROP_ViewBox, aRectangle);
     }
-    aPropertyMap [ PROP_Type ] <<= OUString("ooxml-heart");
+    aPropertyMap.setProperty( PROP_Type, OUString("ooxml-heart"));
 
     return aPropertyMap;
   }
@@ -3609,7 +3609,7 @@ class ShapeCribbon2 : public CustomShapeProvider
             aAdjSequence [1].Value = aAny;
             aAdjSequence [1].Name = "adj2";
         }
-        aPropertyMap [PROP_AdjustmentValues] <<= aAdjSequence;
+        aPropertyMap.setProperty(PROP_AdjustmentValues, aAdjSequence);
     }
     {
         static const char *aStrings[] = {
@@ -3672,7 +3672,7 @@ class ShapeCribbon2 : public CustomShapeProvider
             "(16200000)/60000.0",
             "(10800000)/60000.0"
         };
-        aPropertyMap [PROP_Equations] <<= createStringSequence( SAL_N_ELEMENTS( aStrings ), aStrings );
+        aPropertyMap.setProperty(PROP_Equations, createStringSequence( SAL_N_ELEMENTS( aStrings ), aStrings ));
     }
     {
         Sequence< Sequence < PropertyValue > > aPropSequenceSequence (2);
@@ -3746,13 +3746,13 @@ class ShapeCribbon2 : public CustomShapeProvider
             }
             aPropSequenceSequence [1] = aPropSequence;
         }
-        aPropertyMap [PROP_Handles] <<= aPropSequenceSequence;
+        aPropertyMap.setProperty(PROP_Handles, aPropSequenceSequence);
     }
     {
-        aPropertyMap [PROP_MirroredX] <<= Any ((sal_Bool) sal_False);
+        aPropertyMap.setProperty(PROP_MirroredX, (sal_Bool) sal_False);
     }
     {
-        aPropertyMap [PROP_MirroredY] <<= Any ((sal_Bool) sal_False);
+        aPropertyMap.setProperty(PROP_MirroredY, (sal_Bool) sal_False);
     }
     {
         Sequence< PropertyValue > aPropSequence (3);
@@ -4227,7 +4227,7 @@ class ShapeCribbon2 : public CustomShapeProvider
             }
             aPropSequence [2].Value = makeAny (aTextFrameSeq);
         }
-        aPropertyMap [PROP_Path] <<= aPropSequence;
+        aPropertyMap.setProperty(PROP_Path, aPropSequence);
     }
     {
         awt::Rectangle aRectangle;
@@ -4235,9 +4235,9 @@ class ShapeCribbon2 : public CustomShapeProvider
         aRectangle.Y = 0;
         aRectangle.Width = 0;
         aRectangle.Height = 0;
-        aPropertyMap [PROP_ViewBox] <<= aRectangle;
+        aPropertyMap.setProperty(PROP_ViewBox, aRectangle);
     }
-    aPropertyMap [ PROP_Type ] <<= OUString("ooxml-ribbon2");
+    aPropertyMap.setProperty( PROP_Type, OUString("ooxml-ribbon2"));
 
     return aPropertyMap;
   }
@@ -4258,7 +4258,7 @@ class ShapeCbracePair : public CustomShapeProvider
             aAdjSequence [0].Value = aAny;
             aAdjSequence [0].Name = "adj";
         }
-        aPropertyMap [PROP_AdjustmentValues] <<= aAdjSequence;
+        aPropertyMap.setProperty(PROP_AdjustmentValues, aAdjSequence);
     }
     {
         static const char *aStrings[] = {
@@ -4312,7 +4312,7 @@ class ShapeCbracePair : public CustomShapeProvider
             "(0)/60000.0",
             "(5400000)/60000.0"
         };
-        aPropertyMap [PROP_Equations] <<= createStringSequence( SAL_N_ELEMENTS( aStrings ), aStrings );
+        aPropertyMap.setProperty(PROP_Equations, createStringSequence( SAL_N_ELEMENTS( aStrings ), aStrings ));
     }
     {
         Sequence< Sequence < PropertyValue > > aPropSequenceSequence (1);
@@ -4351,13 +4351,13 @@ class ShapeCbracePair : public CustomShapeProvider
             }
             aPropSequenceSequence [0] = aPropSequence;
         }
-        aPropertyMap [PROP_Handles] <<= aPropSequenceSequence;
+        aPropertyMap.setProperty(PROP_Handles, aPropSequenceSequence);
     }
     {
-        aPropertyMap [PROP_MirroredX] <<= Any ((sal_Bool) sal_False);
+        aPropertyMap.setProperty(PROP_MirroredX, (sal_Bool) sal_False);
     }
     {
-        aPropertyMap [PROP_MirroredY] <<= Any ((sal_Bool) sal_False);
+        aPropertyMap.setProperty(PROP_MirroredY, (sal_Bool) sal_False);
     }
     {
         Sequence< PropertyValue > aPropSequence (3);
@@ -4650,7 +4650,7 @@ class ShapeCbracePair : public CustomShapeProvider
             }
             aPropSequence [2].Value = makeAny (aTextFrameSeq);
         }
-        aPropertyMap [PROP_Path] <<= aPropSequence;
+        aPropertyMap.setProperty(PROP_Path, aPropSequence);
     }
     {
         awt::Rectangle aRectangle;
@@ -4658,9 +4658,9 @@ class ShapeCbracePair : public CustomShapeProvider
         aRectangle.Y = 0;
         aRectangle.Width = 0;
         aRectangle.Height = 0;
-        aPropertyMap [PROP_ViewBox] <<= aRectangle;
+        aPropertyMap.setProperty(PROP_ViewBox, aRectangle);
     }
-    aPropertyMap [ PROP_Type ] <<= OUString("ooxml-bracePair");
+    aPropertyMap.setProperty( PROP_Type, OUString("ooxml-bracePair"));
 
     return aPropertyMap;
   }
@@ -4675,7 +4675,7 @@ class ShapeCflowChartExtract : public CustomShapeProvider
     PropertyMap aPropertyMap;
 
     {
-        aPropertyMap [PROP_AdjustmentValues] <<= Sequence< OUString >(0);
+        aPropertyMap.setProperty(PROP_AdjustmentValues, Sequence< OUString >(0));
     }
     {
         static const char *aStrings[] = {
@@ -4685,16 +4685,16 @@ class ShapeCflowChartExtract : public CustomShapeProvider
             "logheight/2",
             "logheight"
         };
-        aPropertyMap [PROP_Equations] <<= createStringSequence( SAL_N_ELEMENTS( aStrings ), aStrings );
+        aPropertyMap.setProperty(PROP_Equations, createStringSequence( SAL_N_ELEMENTS( aStrings ), aStrings ));
     }
     {
-        aPropertyMap [PROP_Handles] <<= Sequence< OUString >(0);
+        aPropertyMap.setProperty(PROP_Handles, Sequence< OUString >(0));
     }
     {
-        aPropertyMap [PROP_MirroredX] <<= Any ((sal_Bool) sal_False);
+        aPropertyMap.setProperty(PROP_MirroredX, (sal_Bool) sal_False);
     }
     {
-        aPropertyMap [PROP_MirroredY] <<= Any ((sal_Bool) sal_False);
+        aPropertyMap.setProperty(PROP_MirroredY, (sal_Bool) sal_False);
     }
     {
         Sequence< PropertyValue > aPropSequence (4);
@@ -4768,7 +4768,7 @@ class ShapeCflowChartExtract : public CustomShapeProvider
             }
             aPropSequence [3].Value = makeAny (aTextFrameSeq);
         }
-        aPropertyMap [PROP_Path] <<= aPropSequence;
+        aPropertyMap.setProperty(PROP_Path, aPropSequence);
     }
     {
         awt::Rectangle aRectangle;
@@ -4776,9 +4776,9 @@ class ShapeCflowChartExtract : public CustomShapeProvider
         aRectangle.Y = 0;
         aRectangle.Width = 0;
         aRectangle.Height = 0;
-        aPropertyMap [PROP_ViewBox] <<= aRectangle;
+        aPropertyMap.setProperty(PROP_ViewBox, aRectangle);
     }
-    aPropertyMap [ PROP_Type ] <<= OUString("ooxml-flowChartExtract");
+    aPropertyMap.setProperty( PROP_Type, OUString("ooxml-flowChartExtract"));
 
     return aPropertyMap;
   }
@@ -4793,7 +4793,7 @@ class ShapeCactionButtonHome : public CustomShapeProvider
     PropertyMap aPropertyMap;
 
     {
-        aPropertyMap [PROP_AdjustmentValues] <<= Sequence< OUString >(0);
+        aPropertyMap.setProperty(PROP_AdjustmentValues, Sequence< OUString >(0));
     }
     {
         static const char *aStrings[] = {
@@ -4829,16 +4829,16 @@ class ShapeCactionButtonHome : public CustomShapeProvider
             "logwidth",
             "logheight"
         };
-        aPropertyMap [PROP_Equations] <<= createStringSequence( SAL_N_ELEMENTS( aStrings ), aStrings );
+        aPropertyMap.setProperty(PROP_Equations, createStringSequence( SAL_N_ELEMENTS( aStrings ), aStrings ));
     }
     {
-        aPropertyMap [PROP_Handles] <<= Sequence< OUString >(0);
+        aPropertyMap.setProperty(PROP_Handles, Sequence< OUString >(0));
     }
     {
-        aPropertyMap [PROP_MirroredX] <<= Any ((sal_Bool) sal_False);
+        aPropertyMap.setProperty(PROP_MirroredX, (sal_Bool) sal_False);
     }
     {
-        aPropertyMap [PROP_MirroredY] <<= Any ((sal_Bool) sal_False);
+        aPropertyMap.setProperty(PROP_MirroredY, (sal_Bool) sal_False);
     }
     {
         Sequence< PropertyValue > aPropSequence (3);
@@ -5209,7 +5209,7 @@ class ShapeCactionButtonHome : public CustomShapeProvider
             }
             aPropSequence [2].Value = makeAny (aTextFrameSeq);
         }
-        aPropertyMap [PROP_Path] <<= aPropSequence;
+        aPropertyMap.setProperty(PROP_Path, aPropSequence);
     }
     {
         awt::Rectangle aRectangle;
@@ -5217,9 +5217,9 @@ class ShapeCactionButtonHome : public CustomShapeProvider
         aRectangle.Y = 0;
         aRectangle.Width = 0;
         aRectangle.Height = 0;
-        aPropertyMap [PROP_ViewBox] <<= aRectangle;
+        aPropertyMap.setProperty(PROP_ViewBox, aRectangle);
     }
-    aPropertyMap [ PROP_Type ] <<= OUString("ooxml-actionButtonHome");
+    aPropertyMap.setProperty( PROP_Type, OUString("ooxml-actionButtonHome"));
 
     return aPropertyMap;
   }
@@ -5275,7 +5275,7 @@ class ShapeCaccentBorderCallout3 : public CustomShapeProvider
             aAdjSequence [7].Value = aAny;
             aAdjSequence [7].Name = "adj8";
         }
-        aPropertyMap [PROP_AdjustmentValues] <<= aAdjSequence;
+        aPropertyMap.setProperty(PROP_AdjustmentValues, aAdjSequence);
     }
     {
         static const char *aStrings[] = {
@@ -5292,7 +5292,7 @@ class ShapeCaccentBorderCallout3 : public CustomShapeProvider
             "logwidth/2",
             "logheight"
         };
-        aPropertyMap [PROP_Equations] <<= createStringSequence( SAL_N_ELEMENTS( aStrings ), aStrings );
+        aPropertyMap.setProperty(PROP_Equations, createStringSequence( SAL_N_ELEMENTS( aStrings ), aStrings ));
     }
     {
         Sequence< Sequence < PropertyValue > > aPropSequenceSequence (4);
@@ -5520,13 +5520,13 @@ class ShapeCaccentBorderCallout3 : public CustomShapeProvider
             }
             aPropSequenceSequence [3] = aPropSequence;
         }
-        aPropertyMap [PROP_Handles] <<= aPropSequenceSequence;
+        aPropertyMap.setProperty(PROP_Handles, aPropSequenceSequence);
     }
     {
-        aPropertyMap [PROP_MirroredX] <<= Any ((sal_Bool) sal_False);
+        aPropertyMap.setProperty(PROP_MirroredX, (sal_Bool) sal_False);
     }
     {
-        aPropertyMap [PROP_MirroredY] <<= Any ((sal_Bool) sal_False);
+        aPropertyMap.setProperty(PROP_MirroredY, (sal_Bool) sal_False);
     }
     {
         Sequence< PropertyValue > aPropSequence (3);
@@ -5632,7 +5632,7 @@ class ShapeCaccentBorderCallout3 : public CustomShapeProvider
             }
             aPropSequence [2].Value = makeAny (aTextFrameSeq);
         }
-        aPropertyMap [PROP_Path] <<= aPropSequence;
+        aPropertyMap.setProperty(PROP_Path, aPropSequence);
     }
     {
         awt::Rectangle aRectangle;
@@ -5640,9 +5640,9 @@ class ShapeCaccentBorderCallout3 : public CustomShapeProvider
         aRectangle.Y = 0;
         aRectangle.Width = 0;
         aRectangle.Height = 0;
-        aPropertyMap [PROP_ViewBox] <<= aRectangle;
+        aPropertyMap.setProperty(PROP_ViewBox, aRectangle);
     }
-    aPropertyMap [ PROP_Type ] <<= OUString("ooxml-accentBorderCallout3");
+    aPropertyMap.setProperty( PROP_Type, OUString("ooxml-accentBorderCallout3"));
 
     return aPropertyMap;
   }
@@ -5657,7 +5657,7 @@ class ShapeCflowChartOfflineStorage : public CustomShapeProvider
     PropertyMap aPropertyMap;
 
     {
-        aPropertyMap [PROP_AdjustmentValues] <<= Sequence< OUString >(0);
+        aPropertyMap.setProperty(PROP_AdjustmentValues, Sequence< OUString >(0));
     }
     {
         static const char *aStrings[] = {
@@ -5667,16 +5667,16 @@ class ShapeCflowChartOfflineStorage : public CustomShapeProvider
             "logheight",
             "logwidth/4"
         };
-        aPropertyMap [PROP_Equations] <<= createStringSequence( SAL_N_ELEMENTS( aStrings ), aStrings );
+        aPropertyMap.setProperty(PROP_Equations, createStringSequence( SAL_N_ELEMENTS( aStrings ), aStrings ));
     }
     {
-        aPropertyMap [PROP_Handles] <<= Sequence< OUString >(0);
+        aPropertyMap.setProperty(PROP_Handles, Sequence< OUString >(0));
     }
     {
-        aPropertyMap [PROP_MirroredX] <<= Any ((sal_Bool) sal_False);
+        aPropertyMap.setProperty(PROP_MirroredX, (sal_Bool) sal_False);
     }
     {
-        aPropertyMap [PROP_MirroredY] <<= Any ((sal_Bool) sal_False);
+        aPropertyMap.setProperty(PROP_MirroredY, (sal_Bool) sal_False);
     }
     {
         Sequence< PropertyValue > aPropSequence (4);
@@ -5797,7 +5797,7 @@ class ShapeCflowChartOfflineStorage : public CustomShapeProvider
             }
             aPropSequence [3].Value = makeAny (aTextFrameSeq);
         }
-        aPropertyMap [PROP_Path] <<= aPropSequence;
+        aPropertyMap.setProperty(PROP_Path, aPropSequence);
     }
     {
         awt::Rectangle aRectangle;
@@ -5805,9 +5805,9 @@ class ShapeCflowChartOfflineStorage : public CustomShapeProvider
         aRectangle.Y = 0;
         aRectangle.Width = 0;
         aRectangle.Height = 0;
-        aPropertyMap [PROP_ViewBox] <<= aRectangle;
+        aPropertyMap.setProperty(PROP_ViewBox, aRectangle);
     }
-    aPropertyMap [ PROP_Type ] <<= OUString("ooxml-flowChartOfflineStorage");
+    aPropertyMap.setProperty( PROP_Type, OUString("ooxml-flowChartOfflineStorage"));
 
     return aPropertyMap;
   }
@@ -5822,7 +5822,7 @@ class ShapeCirregularSeal1 : public CustomShapeProvider
     PropertyMap aPropertyMap;
 
     {
-        aPropertyMap [PROP_AdjustmentValues] <<= Sequence< OUString >(0);
+        aPropertyMap.setProperty(PROP_AdjustmentValues, Sequence< OUString >(0));
     }
     {
         static const char *aStrings[] = {
@@ -5837,16 +5837,16 @@ class ShapeCirregularSeal1 : public CustomShapeProvider
             "logheight",
             "logwidth"
         };
-        aPropertyMap [PROP_Equations] <<= createStringSequence( SAL_N_ELEMENTS( aStrings ), aStrings );
+        aPropertyMap.setProperty(PROP_Equations, createStringSequence( SAL_N_ELEMENTS( aStrings ), aStrings ));
     }
     {
-        aPropertyMap [PROP_Handles] <<= Sequence< OUString >(0);
+        aPropertyMap.setProperty(PROP_Handles, Sequence< OUString >(0));
     }
     {
-        aPropertyMap [PROP_MirroredX] <<= Any ((sal_Bool) sal_False);
+        aPropertyMap.setProperty(PROP_MirroredX, (sal_Bool) sal_False);
     }
     {
-        aPropertyMap [PROP_MirroredY] <<= Any ((sal_Bool) sal_False);
+        aPropertyMap.setProperty(PROP_MirroredY, (sal_Bool) sal_False);
     }
     {
         Sequence< PropertyValue > aPropSequence (4);
@@ -6025,7 +6025,7 @@ class ShapeCirregularSeal1 : public CustomShapeProvider
             }
             aPropSequence [3].Value = makeAny (aTextFrameSeq);
         }
-        aPropertyMap [PROP_Path] <<= aPropSequence;
+        aPropertyMap.setProperty(PROP_Path, aPropSequence);
     }
     {
         awt::Rectangle aRectangle;
@@ -6033,9 +6033,9 @@ class ShapeCirregularSeal1 : public CustomShapeProvider
         aRectangle.Y = 0;
         aRectangle.Width = 0;
         aRectangle.Height = 0;
-        aPropertyMap [PROP_ViewBox] <<= aRectangle;
+        aPropertyMap.setProperty(PROP_ViewBox, aRectangle);
     }
-    aPropertyMap [ PROP_Type ] <<= OUString("ooxml-irregularSeal1");
+    aPropertyMap.setProperty( PROP_Type, OUString("ooxml-irregularSeal1"));
 
     return aPropertyMap;
   }
@@ -6066,7 +6066,7 @@ class ShapeCquadArrow : public CustomShapeProvider
             aAdjSequence [2].Value = aAny;
             aAdjSequence [2].Name = "adj3";
         }
-        aPropertyMap [PROP_AdjustmentValues] <<= aAdjSequence;
+        aPropertyMap.setProperty(PROP_AdjustmentValues, aAdjSequence);
     }
     {
         static const char *aStrings[] = {
@@ -6097,7 +6097,7 @@ class ShapeCquadArrow : public CustomShapeProvider
             "logwidth",
             "logheight"
         };
-        aPropertyMap [PROP_Equations] <<= createStringSequence( SAL_N_ELEMENTS( aStrings ), aStrings );
+        aPropertyMap.setProperty(PROP_Equations, createStringSequence( SAL_N_ELEMENTS( aStrings ), aStrings ));
     }
     {
         Sequence< Sequence < PropertyValue > > aPropSequenceSequence (3);
@@ -6206,13 +6206,13 @@ class ShapeCquadArrow : public CustomShapeProvider
             }
             aPropSequenceSequence [2] = aPropSequence;
         }
-        aPropertyMap [PROP_Handles] <<= aPropSequenceSequence;
+        aPropertyMap.setProperty(PROP_Handles, aPropSequenceSequence);
     }
     {
-        aPropertyMap [PROP_MirroredX] <<= Any ((sal_Bool) sal_False);
+        aPropertyMap.setProperty(PROP_MirroredX, (sal_Bool) sal_False);
     }
     {
-        aPropertyMap [PROP_MirroredY] <<= Any ((sal_Bool) sal_False);
+        aPropertyMap.setProperty(PROP_MirroredY, (sal_Bool) sal_False);
     }
     {
         Sequence< PropertyValue > aPropSequence (3);
@@ -6380,7 +6380,7 @@ class ShapeCquadArrow : public CustomShapeProvider
             }
             aPropSequence [2].Value = makeAny (aTextFrameSeq);
         }
-        aPropertyMap [PROP_Path] <<= aPropSequence;
+        aPropertyMap.setProperty(PROP_Path, aPropSequence);
     }
     {
         awt::Rectangle aRectangle;
@@ -6388,9 +6388,9 @@ class ShapeCquadArrow : public CustomShapeProvider
         aRectangle.Y = 0;
         aRectangle.Width = 0;
         aRectangle.Height = 0;
-        aPropertyMap [PROP_ViewBox] <<= aRectangle;
+        aPropertyMap.setProperty(PROP_ViewBox, aRectangle);
     }
-    aPropertyMap [ PROP_Type ] <<= OUString("ooxml-quadArrow");
+    aPropertyMap.setProperty( PROP_Type, OUString("ooxml-quadArrow"));
 
     return aPropertyMap;
   }
@@ -6416,7 +6416,7 @@ class ShapeCleftBrace : public CustomShapeProvider
             aAdjSequence [1].Value = aAny;
             aAdjSequence [1].Name = "adj2";
         }
-        aPropertyMap [PROP_AdjustmentValues] <<= aAdjSequence;
+        aPropertyMap.setProperty(PROP_AdjustmentValues, aAdjSequence);
     }
     {
         static const char *aStrings[] = {
@@ -6456,7 +6456,7 @@ class ShapeCleftBrace : public CustomShapeProvider
             "(10800000)/60000.0",
             "(5400000)/60000.0"
         };
-        aPropertyMap [PROP_Equations] <<= createStringSequence( SAL_N_ELEMENTS( aStrings ), aStrings );
+        aPropertyMap.setProperty(PROP_Equations, createStringSequence( SAL_N_ELEMENTS( aStrings ), aStrings ));
     }
     {
         Sequence< Sequence < PropertyValue > > aPropSequenceSequence (2);
@@ -6530,13 +6530,13 @@ class ShapeCleftBrace : public CustomShapeProvider
             }
             aPropSequenceSequence [1] = aPropSequence;
         }
-        aPropertyMap [PROP_Handles] <<= aPropSequenceSequence;
+        aPropertyMap.setProperty(PROP_Handles, aPropSequenceSequence);
     }
     {
-        aPropertyMap [PROP_MirroredX] <<= Any ((sal_Bool) sal_False);
+        aPropertyMap.setProperty(PROP_MirroredX, (sal_Bool) sal_False);
     }
     {
-        aPropertyMap [PROP_MirroredY] <<= Any ((sal_Bool) sal_False);
+        aPropertyMap.setProperty(PROP_MirroredY, (sal_Bool) sal_False);
     }
     {
         Sequence< PropertyValue > aPropSequence (3);
@@ -6707,7 +6707,7 @@ class ShapeCleftBrace : public CustomShapeProvider
             }
             aPropSequence [2].Value = makeAny (aTextFrameSeq);
         }
-        aPropertyMap [PROP_Path] <<= aPropSequence;
+        aPropertyMap.setProperty(PROP_Path, aPropSequence);
     }
     {
         awt::Rectangle aRectangle;
@@ -6715,9 +6715,9 @@ class ShapeCleftBrace : public CustomShapeProvider
         aRectangle.Y = 0;
         aRectangle.Width = 0;
         aRectangle.Height = 0;
-        aPropertyMap [PROP_ViewBox] <<= aRectangle;
+        aPropertyMap.setProperty(PROP_ViewBox, aRectangle);
     }
-    aPropertyMap [ PROP_Type ] <<= OUString("ooxml-leftBrace");
+    aPropertyMap.setProperty( PROP_Type, OUString("ooxml-leftBrace"));
 
     return aPropertyMap;
   }
@@ -6738,7 +6738,7 @@ class ShapeCleftBracket : public CustomShapeProvider
             aAdjSequence [0].Value = aAny;
             aAdjSequence [0].Name = "adj";
         }
-        aPropertyMap [PROP_AdjustmentValues] <<= aAdjSequence;
+        aPropertyMap.setProperty(PROP_AdjustmentValues, aAdjSequence);
     }
     {
         static const char *aStrings[] = {
@@ -6765,7 +6765,7 @@ class ShapeCleftBracket : public CustomShapeProvider
             "(10800000)/60000.0",
             "(5400000)/60000.0"
         };
-        aPropertyMap [PROP_Equations] <<= createStringSequence( SAL_N_ELEMENTS( aStrings ), aStrings );
+        aPropertyMap.setProperty(PROP_Equations, createStringSequence( SAL_N_ELEMENTS( aStrings ), aStrings ));
     }
     {
         Sequence< Sequence < PropertyValue > > aPropSequenceSequence (1);
@@ -6804,13 +6804,13 @@ class ShapeCleftBracket : public CustomShapeProvider
             }
             aPropSequenceSequence [0] = aPropSequence;
         }
-        aPropertyMap [PROP_Handles] <<= aPropSequenceSequence;
+        aPropertyMap.setProperty(PROP_Handles, aPropSequenceSequence);
     }
     {
-        aPropertyMap [PROP_MirroredX] <<= Any ((sal_Bool) sal_False);
+        aPropertyMap.setProperty(PROP_MirroredX, (sal_Bool) sal_False);
     }
     {
-        aPropertyMap [PROP_MirroredY] <<= Any ((sal_Bool) sal_False);
+        aPropertyMap.setProperty(PROP_MirroredY, (sal_Bool) sal_False);
     }
     {
         Sequence< PropertyValue > aPropSequence (3);
@@ -6927,7 +6927,7 @@ class ShapeCleftBracket : public CustomShapeProvider
             }
             aPropSequence [2].Value = makeAny (aTextFrameSeq);
         }
-        aPropertyMap [PROP_Path] <<= aPropSequence;
+        aPropertyMap.setProperty(PROP_Path, aPropSequence);
     }
     {
         awt::Rectangle aRectangle;
@@ -6935,9 +6935,9 @@ class ShapeCleftBracket : public CustomShapeProvider
         aRectangle.Y = 0;
         aRectangle.Width = 0;
         aRectangle.Height = 0;
-        aPropertyMap [PROP_ViewBox] <<= aRectangle;
+        aPropertyMap.setProperty(PROP_ViewBox, aRectangle);
     }
-    aPropertyMap [ PROP_Type ] <<= OUString("ooxml-leftBracket");
+    aPropertyMap.setProperty( PROP_Type, OUString("ooxml-leftBracket"));
 
     return aPropertyMap;
   }
@@ -6968,7 +6968,7 @@ class ShapeCblockArc : public CustomShapeProvider
             aAdjSequence [2].Value = aAny;
             aAdjSequence [2].Name = "adj3";
         }
-        aPropertyMap [PROP_AdjustmentValues] <<= aAdjSequence;
+        aPropertyMap.setProperty(PROP_AdjustmentValues, aAdjSequence);
     }
     {
         static const char *aStrings[] = {
@@ -7053,7 +7053,7 @@ class ShapeCblockArc : public CustomShapeProvider
             "(?1 )/60000.0",
             "(?6 )/60000.0"
         };
-        aPropertyMap [PROP_Equations] <<= createStringSequence( SAL_N_ELEMENTS( aStrings ), aStrings );
+        aPropertyMap.setProperty(PROP_Equations, createStringSequence( SAL_N_ELEMENTS( aStrings ), aStrings ));
     }
     {
         Sequence< Sequence < PropertyValue > > aPropSequenceSequence (2);
@@ -7101,13 +7101,13 @@ class ShapeCblockArc : public CustomShapeProvider
             }
             aPropSequenceSequence [1] = aPropSequence;
         }
-        aPropertyMap [PROP_Handles] <<= aPropSequenceSequence;
+        aPropertyMap.setProperty(PROP_Handles, aPropSequenceSequence);
     }
     {
-        aPropertyMap [PROP_MirroredX] <<= Any ((sal_Bool) sal_False);
+        aPropertyMap.setProperty(PROP_MirroredX, (sal_Bool) sal_False);
     }
     {
-        aPropertyMap [PROP_MirroredY] <<= Any ((sal_Bool) sal_False);
+        aPropertyMap.setProperty(PROP_MirroredY, (sal_Bool) sal_False);
     }
     {
         Sequence< PropertyValue > aPropSequence (3);
@@ -7187,7 +7187,7 @@ class ShapeCblockArc : public CustomShapeProvider
             }
             aPropSequence [2].Value = makeAny (aTextFrameSeq);
         }
-        aPropertyMap [PROP_Path] <<= aPropSequence;
+        aPropertyMap.setProperty(PROP_Path, aPropSequence);
     }
     {
         awt::Rectangle aRectangle;
@@ -7195,9 +7195,9 @@ class ShapeCblockArc : public CustomShapeProvider
         aRectangle.Y = 0;
         aRectangle.Width = 0;
         aRectangle.Height = 0;
-        aPropertyMap [PROP_ViewBox] <<= aRectangle;
+        aPropertyMap.setProperty(PROP_ViewBox, aRectangle);
     }
-    aPropertyMap [ PROP_Type ] <<= OUString("ooxml-blockArc");
+    aPropertyMap.setProperty( PROP_Type, OUString("ooxml-blockArc"));
 
     return aPropertyMap;
   }
@@ -7218,7 +7218,7 @@ class ShapeCcurvedConnector3 : public CustomShapeProvider
             aAdjSequence [0].Value = aAny;
             aAdjSequence [0].Name = "adj1";
         }
-        aPropertyMap [PROP_AdjustmentValues] <<= aAdjSequence;
+        aPropertyMap.setProperty(PROP_AdjustmentValues, aAdjSequence);
     }
     {
         static const char *aStrings[] = {
@@ -7231,7 +7231,7 @@ class ShapeCcurvedConnector3 : public CustomShapeProvider
             "logheight",
             "logheight/4"
         };
-        aPropertyMap [PROP_Equations] <<= createStringSequence( SAL_N_ELEMENTS( aStrings ), aStrings );
+        aPropertyMap.setProperty(PROP_Equations, createStringSequence( SAL_N_ELEMENTS( aStrings ), aStrings ));
     }
     {
         Sequence< Sequence < PropertyValue > > aPropSequenceSequence (1);
@@ -7270,13 +7270,13 @@ class ShapeCcurvedConnector3 : public CustomShapeProvider
             }
             aPropSequenceSequence [0] = aPropSequence;
         }
-        aPropertyMap [PROP_Handles] <<= aPropSequenceSequence;
+        aPropertyMap.setProperty(PROP_Handles, aPropSequenceSequence);
     }
     {
-        aPropertyMap [PROP_MirroredX] <<= Any ((sal_Bool) sal_False);
+        aPropertyMap.setProperty(PROP_MirroredX, (sal_Bool) sal_False);
     }
     {
-        aPropertyMap [PROP_MirroredY] <<= Any ((sal_Bool) sal_False);
+        aPropertyMap.setProperty(PROP_MirroredY, (sal_Bool) sal_False);
     }
     {
         Sequence< PropertyValue > aPropSequence (3);
@@ -7359,7 +7359,7 @@ class ShapeCcurvedConnector3 : public CustomShapeProvider
             }
             aPropSequence [2].Value = makeAny (aTextFrameSeq);
         }
-        aPropertyMap [PROP_Path] <<= aPropSequence;
+        aPropertyMap.setProperty(PROP_Path, aPropSequence);
     }
     {
         awt::Rectangle aRectangle;
@@ -7367,9 +7367,9 @@ class ShapeCcurvedConnector3 : public CustomShapeProvider
         aRectangle.Y = 0;
         aRectangle.Width = 0;
         aRectangle.Height = 0;
-        aPropertyMap [PROP_ViewBox] <<= aRectangle;
+        aPropertyMap.setProperty(PROP_ViewBox, aRectangle);
     }
-    aPropertyMap [ PROP_Type ] <<= OUString("ooxml-curvedConnector3");
+    aPropertyMap.setProperty( PROP_Type, OUString("ooxml-curvedConnector3"));
 
     return aPropertyMap;
   }
@@ -7400,7 +7400,7 @@ class ShapeCwedgeRoundRectCallout : public CustomShapeProvider
             aAdjSequence [2].Value = aAny;
             aAdjSequence [2].Name = "adj3";
         }
-        aPropertyMap [PROP_AdjustmentValues] <<= aAdjSequence;
+        aPropertyMap.setProperty(PROP_AdjustmentValues, aAdjSequence);
     }
     {
         static const char *aStrings[] = {
@@ -7456,7 +7456,7 @@ class ShapeCwedgeRoundRectCallout : public CustomShapeProvider
             "(5400000)/60000.0",
             "(5400000)/60000.0"
         };
-        aPropertyMap [PROP_Equations] <<= createStringSequence( SAL_N_ELEMENTS( aStrings ), aStrings );
+        aPropertyMap.setProperty(PROP_Equations, createStringSequence( SAL_N_ELEMENTS( aStrings ), aStrings ));
     }
     {
         Sequence< Sequence < PropertyValue > > aPropSequenceSequence (1);
@@ -7516,13 +7516,13 @@ class ShapeCwedgeRoundRectCallout : public CustomShapeProvider
             }
             aPropSequenceSequence [0] = aPropSequence;
         }
-        aPropertyMap [PROP_Handles] <<= aPropSequenceSequence;
+        aPropertyMap.setProperty(PROP_Handles, aPropSequenceSequence);
     }
     {
-        aPropertyMap [PROP_MirroredX] <<= Any ((sal_Bool) sal_False);
+        aPropertyMap.setProperty(PROP_MirroredX, (sal_Bool) sal_False);
     }
     {
-        aPropertyMap [PROP_MirroredY] <<= Any ((sal_Bool) sal_False);
+        aPropertyMap.setProperty(PROP_MirroredY, (sal_Bool) sal_False);
     }
     {
         Sequence< PropertyValue > aPropSequence (3);
@@ -7697,7 +7697,7 @@ class ShapeCwedgeRoundRectCallout : public CustomShapeProvider
             }
             aPropSequence [2].Value = makeAny (aTextFrameSeq);
         }
-        aPropertyMap [PROP_Path] <<= aPropSequence;
+        aPropertyMap.setProperty(PROP_Path, aPropSequence);
     }
     {
         awt::Rectangle aRectangle;
@@ -7705,9 +7705,9 @@ class ShapeCwedgeRoundRectCallout : public CustomShapeProvider
         aRectangle.Y = 0;
         aRectangle.Width = 0;
         aRectangle.Height = 0;
-        aPropertyMap [PROP_ViewBox] <<= aRectangle;
+        aPropertyMap.setProperty(PROP_ViewBox, aRectangle);
     }
-    aPropertyMap [ PROP_Type ] <<= OUString("ooxml-wedgeRoundRectCallout");
+    aPropertyMap.setProperty( PROP_Type, OUString("ooxml-wedgeRoundRectCallout"));
 
     return aPropertyMap;
   }
@@ -7722,7 +7722,7 @@ class ShapeCactionButtonMovie : public CustomShapeProvider
     PropertyMap aPropertyMap;
 
     {
-        aPropertyMap [PROP_AdjustmentValues] <<= Sequence< OUString >(0);
+        aPropertyMap.setProperty(PROP_AdjustmentValues, Sequence< OUString >(0));
     }
     {
         static const char *aStrings[] = {
@@ -7773,16 +7773,16 @@ class ShapeCactionButtonMovie : public CustomShapeProvider
             "logwidth",
             "logheight"
         };
-        aPropertyMap [PROP_Equations] <<= createStringSequence( SAL_N_ELEMENTS( aStrings ), aStrings );
+        aPropertyMap.setProperty(PROP_Equations, createStringSequence( SAL_N_ELEMENTS( aStrings ), aStrings ));
     }
     {
-        aPropertyMap [PROP_Handles] <<= Sequence< OUString >(0);
+        aPropertyMap.setProperty(PROP_Handles, Sequence< OUString >(0));
     }
     {
-        aPropertyMap [PROP_MirroredX] <<= Any ((sal_Bool) sal_False);
+        aPropertyMap.setProperty(PROP_MirroredX, (sal_Bool) sal_False);
     }
     {
-        aPropertyMap [PROP_MirroredY] <<= Any ((sal_Bool) sal_False);
+        aPropertyMap.setProperty(PROP_MirroredY, (sal_Bool) sal_False);
     }
     {
         Sequence< PropertyValue > aPropSequence (3);
@@ -8175,7 +8175,7 @@ class ShapeCactionButtonMovie : public CustomShapeProvider
             }
             aPropSequence [2].Value = makeAny (aTextFrameSeq);
         }
-        aPropertyMap [PROP_Path] <<= aPropSequence;
+        aPropertyMap.setProperty(PROP_Path, aPropSequence);
     }
     {
         awt::Rectangle aRectangle;
@@ -8183,9 +8183,9 @@ class ShapeCactionButtonMovie : public CustomShapeProvider
         aRectangle.Y = 0;
         aRectangle.Width = 0;
         aRectangle.Height = 0;
-        aPropertyMap [PROP_ViewBox] <<= aRectangle;
+        aPropertyMap.setProperty(PROP_ViewBox, aRectangle);
     }
-    aPropertyMap [ PROP_Type ] <<= OUString("ooxml-actionButtonMovie");
+    aPropertyMap.setProperty( PROP_Type, OUString("ooxml-actionButtonMovie"));
 
     return aPropertyMap;
   }
@@ -8200,7 +8200,7 @@ class ShapeCflowChartOnlineStorage : public CustomShapeProvider
     PropertyMap aPropertyMap;
 
     {
-        aPropertyMap [PROP_AdjustmentValues] <<= Sequence< OUString >(0);
+        aPropertyMap.setProperty(PROP_AdjustmentValues, Sequence< OUString >(0));
     }
     {
         static const char *aStrings[] = {
@@ -8214,16 +8214,16 @@ class ShapeCflowChartOnlineStorage : public CustomShapeProvider
             "(5400000)/60000.0",
             "(10800000)/60000.0"
         };
-        aPropertyMap [PROP_Equations] <<= createStringSequence( SAL_N_ELEMENTS( aStrings ), aStrings );
+        aPropertyMap.setProperty(PROP_Equations, createStringSequence( SAL_N_ELEMENTS( aStrings ), aStrings ));
     }
     {
-        aPropertyMap [PROP_Handles] <<= Sequence< OUString >(0);
+        aPropertyMap.setProperty(PROP_Handles, Sequence< OUString >(0));
     }
     {
-        aPropertyMap [PROP_MirroredX] <<= Any ((sal_Bool) sal_False);
+        aPropertyMap.setProperty(PROP_MirroredX, (sal_Bool) sal_False);
     }
     {
-        aPropertyMap [PROP_MirroredY] <<= Any ((sal_Bool) sal_False);
+        aPropertyMap.setProperty(PROP_MirroredY, (sal_Bool) sal_False);
     }
     {
         Sequence< PropertyValue > aPropSequence (4);
@@ -8320,7 +8320,7 @@ class ShapeCflowChartOnlineStorage : public CustomShapeProvider
             }
             aPropSequence [3].Value = makeAny (aTextFrameSeq);
         }
-        aPropertyMap [PROP_Path] <<= aPropSequence;
+        aPropertyMap.setProperty(PROP_Path, aPropSequence);
     }
     {
         awt::Rectangle aRectangle;
@@ -8328,9 +8328,9 @@ class ShapeCflowChartOnlineStorage : public CustomShapeProvider
         aRectangle.Y = 0;
         aRectangle.Width = 0;
         aRectangle.Height = 0;
-        aPropertyMap [PROP_ViewBox] <<= aRectangle;
+        aPropertyMap.setProperty(PROP_ViewBox, aRectangle);
     }
-    aPropertyMap [ PROP_Type ] <<= OUString("ooxml-flowChartOnlineStorage");
+    aPropertyMap.setProperty( PROP_Type, OUString("ooxml-flowChartOnlineStorage"));
 
     return aPropertyMap;
   }
@@ -8356,7 +8356,7 @@ class ShapeCgear6 : public CustomShapeProvider
             aAdjSequence [1].Value = aAny;
             aAdjSequence [1].Name = "adj2";
         }
-        aPropertyMap [PROP_AdjustmentValues] <<= aAdjSequence;
+        aPropertyMap.setProperty(PROP_AdjustmentValues, aAdjSequence);
     }
     {
         static const char *aStrings[] = {
@@ -8485,7 +8485,7 @@ class ShapeCgear6 : public CustomShapeProvider
             "(?60 )/60000.0",
             "(?73 )/60000.0"
         };
-        aPropertyMap [PROP_Equations] <<= createStringSequence( SAL_N_ELEMENTS( aStrings ), aStrings );
+        aPropertyMap.setProperty(PROP_Equations, createStringSequence( SAL_N_ELEMENTS( aStrings ), aStrings ));
     }
     {
         Sequence< Sequence < PropertyValue > > aPropSequenceSequence (2);
@@ -8559,13 +8559,13 @@ class ShapeCgear6 : public CustomShapeProvider
             }
             aPropSequenceSequence [1] = aPropSequence;
         }
-        aPropertyMap [PROP_Handles] <<= aPropSequenceSequence;
+        aPropertyMap.setProperty(PROP_Handles, aPropSequenceSequence);
     }
     {
-        aPropertyMap [PROP_MirroredX] <<= Any ((sal_Bool) sal_False);
+        aPropertyMap.setProperty(PROP_MirroredX, (sal_Bool) sal_False);
     }
     {
-        aPropertyMap [PROP_MirroredY] <<= Any ((sal_Bool) sal_False);
+        aPropertyMap.setProperty(PROP_MirroredY, (sal_Bool) sal_False);
     }
     {
         Sequence< PropertyValue > aPropSequence (3);
@@ -8779,7 +8779,7 @@ class ShapeCgear6 : public CustomShapeProvider
             }
             aPropSequence [2].Value = makeAny (aTextFrameSeq);
         }
-        aPropertyMap [PROP_Path] <<= aPropSequence;
+        aPropertyMap.setProperty(PROP_Path, aPropSequence);
     }
     {
         awt::Rectangle aRectangle;
@@ -8787,9 +8787,9 @@ class ShapeCgear6 : public CustomShapeProvider
         aRectangle.Y = 0;
         aRectangle.Width = 0;
         aRectangle.Height = 0;
-        aPropertyMap [PROP_ViewBox] <<= aRectangle;
+        aPropertyMap.setProperty(PROP_ViewBox, aRectangle);
     }
-    aPropertyMap [ PROP_Type ] <<= OUString("ooxml-gear6");
+    aPropertyMap.setProperty( PROP_Type, OUString("ooxml-gear6"));
 
     return aPropertyMap;
   }
@@ -8815,7 +8815,7 @@ class ShapeChalfFrame : public CustomShapeProvider
             aAdjSequence [1].Value = aAny;
             aAdjSequence [1].Name = "adj2";
         }
-        aPropertyMap [PROP_AdjustmentValues] <<= aAdjSequence;
+        aPropertyMap.setProperty(PROP_AdjustmentValues, aAdjSequence);
     }
     {
         static const char *aStrings[] = {
@@ -8841,7 +8841,7 @@ class ShapeChalfFrame : public CustomShapeProvider
             "logwidth",
             "logheight"
         };
-        aPropertyMap [PROP_Equations] <<= createStringSequence( SAL_N_ELEMENTS( aStrings ), aStrings );
+        aPropertyMap.setProperty(PROP_Equations, createStringSequence( SAL_N_ELEMENTS( aStrings ), aStrings ));
     }
     {
         Sequence< Sequence < PropertyValue > > aPropSequenceSequence (2);
@@ -8915,13 +8915,13 @@ class ShapeChalfFrame : public CustomShapeProvider
             }
             aPropSequenceSequence [1] = aPropSequence;
         }
-        aPropertyMap [PROP_Handles] <<= aPropSequenceSequence;
+        aPropertyMap.setProperty(PROP_Handles, aPropSequenceSequence);
     }
     {
-        aPropertyMap [PROP_MirroredX] <<= Any ((sal_Bool) sal_False);
+        aPropertyMap.setProperty(PROP_MirroredX, (sal_Bool) sal_False);
     }
     {
-        aPropertyMap [PROP_MirroredY] <<= Any ((sal_Bool) sal_False);
+        aPropertyMap.setProperty(PROP_MirroredY, (sal_Bool) sal_False);
     }
     {
         Sequence< PropertyValue > aPropSequence (3);
@@ -8999,7 +8999,7 @@ class ShapeChalfFrame : public CustomShapeProvider
             }
             aPropSequence [2].Value = makeAny (aTextFrameSeq);
         }
-        aPropertyMap [PROP_Path] <<= aPropSequence;
+        aPropertyMap.setProperty(PROP_Path, aPropSequence);
     }
     {
         awt::Rectangle aRectangle;
@@ -9007,9 +9007,9 @@ class ShapeChalfFrame : public CustomShapeProvider
         aRectangle.Y = 0;
         aRectangle.Width = 0;
         aRectangle.Height = 0;
-        aPropertyMap [PROP_ViewBox] <<= aRectangle;
+        aPropertyMap.setProperty(PROP_ViewBox, aRectangle);
     }
-    aPropertyMap [ PROP_Type ] <<= OUString("ooxml-halfFrame");
+    aPropertyMap.setProperty( PROP_Type, OUString("ooxml-halfFrame"));
 
     return aPropertyMap;
   }
@@ -9035,7 +9035,7 @@ class ShapeCsnip2SameRect : public CustomShapeProvider
             aAdjSequence [1].Value = aAny;
             aAdjSequence [1].Name = "adj2";
         }
-        aPropertyMap [PROP_AdjustmentValues] <<= aAdjSequence;
+        aPropertyMap.setProperty(PROP_AdjustmentValues, aAdjSequence);
     }
     {
         static const char *aStrings[] = {
@@ -9058,7 +9058,7 @@ class ShapeCsnip2SameRect : public CustomShapeProvider
             "logheight/2",
             "logwidth/2"
         };
-        aPropertyMap [PROP_Equations] <<= createStringSequence( SAL_N_ELEMENTS( aStrings ), aStrings );
+        aPropertyMap.setProperty(PROP_Equations, createStringSequence( SAL_N_ELEMENTS( aStrings ), aStrings ));
     }
     {
         Sequence< Sequence < PropertyValue > > aPropSequenceSequence (2);
@@ -9132,13 +9132,13 @@ class ShapeCsnip2SameRect : public CustomShapeProvider
             }
             aPropSequenceSequence [1] = aPropSequence;
         }
-        aPropertyMap [PROP_Handles] <<= aPropSequenceSequence;
+        aPropertyMap.setProperty(PROP_Handles, aPropSequenceSequence);
     }
     {
-        aPropertyMap [PROP_MirroredX] <<= Any ((sal_Bool) sal_False);
+        aPropertyMap.setProperty(PROP_MirroredX, (sal_Bool) sal_False);
     }
     {
-        aPropertyMap [PROP_MirroredY] <<= Any ((sal_Bool) sal_False);
+        aPropertyMap.setProperty(PROP_MirroredY, (sal_Bool) sal_False);
     }
     {
         Sequence< PropertyValue > aPropSequence (3);
@@ -9226,7 +9226,7 @@ class ShapeCsnip2SameRect : public CustomShapeProvider
             }
             aPropSequence [2].Value = makeAny (aTextFrameSeq);
         }
-        aPropertyMap [PROP_Path] <<= aPropSequence;
+        aPropertyMap.setProperty(PROP_Path, aPropSequence);
     }
     {
         awt::Rectangle aRectangle;
@@ -9234,9 +9234,9 @@ class ShapeCsnip2SameRect : public CustomShapeProvider
         aRectangle.Y = 0;
         aRectangle.Width = 0;
         aRectangle.Height = 0;
-        aPropertyMap [PROP_ViewBox] <<= aRectangle;
+        aPropertyMap.setProperty(PROP_ViewBox, aRectangle);
     }
-    aPropertyMap [ PROP_Type ] <<= OUString("ooxml-snip2SameRect");
+    aPropertyMap.setProperty( PROP_Type, OUString("ooxml-snip2SameRect"));
 
     return aPropertyMap;
   }
