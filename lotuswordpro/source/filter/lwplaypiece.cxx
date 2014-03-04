@@ -103,6 +103,12 @@ void LwpLayoutGeometry::Parse(IXFStream* /*pOutputStream*/)
 
 LwpLayoutScale::LwpLayoutScale(LwpObjectHeader& objHdr, LwpSvStream* pStrm)
     : LwpVirtualPiece(objHdr, pStrm)
+    , m_nScaleMode(0)
+    , m_nScalePercentage(0)
+    , m_nScaleWidth(0)
+    , m_nScaleHeight(0)
+    , m_nContentRotation(0)
+    , m_nPlacement(0)
 {}
 
 LwpLayoutScale::~LwpLayoutScale()
