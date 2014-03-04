@@ -129,13 +129,18 @@ UcbContentProviderProxy::~UcbContentProviderProxy()
 }
 
 
-
 // XInterface methods.
+void SAL_CALL UcbContentProviderProxy::acquire()
+    throw()
+{
+    OWeakObject::acquire();
+}
 
-
-
-XINTERFACE_COMMON_IMPL( UcbContentProviderProxy );
-
+void SAL_CALL UcbContentProviderProxy::release()
+    throw()
+{
+    OWeakObject::release();
+}
 
 // virtual
 Any SAL_CALL

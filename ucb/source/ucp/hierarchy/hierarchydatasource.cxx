@@ -610,11 +610,17 @@ HierarchyDataAccess::~HierarchyDataAccess()
 
 
 // XInterface methods.
+void SAL_CALL HierarchyDataAccess::acquire()
+    throw()
+{
+    OWeakObject::acquire();
+}
 
-
-
-XINTERFACE_COMMON_IMPL( HierarchyDataAccess );
-
+void SAL_CALL HierarchyDataAccess::release()
+    throw()
+{
+    OWeakObject::release();
+}
 
 // virtual
 uno::Any SAL_CALL HierarchyDataAccess::queryInterface( const uno::Type & aType )

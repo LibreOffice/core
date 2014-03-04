@@ -917,9 +917,18 @@ void SAL_CALL CachedContentResultSet
 }
 
 
-// XInterface methods. ( inherited )
+// XInterface methods.
+void SAL_CALL CachedContentResultSet::acquire()
+    throw()
+{
+    OWeakObject::acquire();
+}
 
-XINTERFACE_COMMON_IMPL( CachedContentResultSet )
+void SAL_CALL CachedContentResultSet::release()
+    throw()
+{
+    OWeakObject::release();
+}
 
 Any SAL_CALL CachedContentResultSet
     ::queryInterface( const Type&  rType )
