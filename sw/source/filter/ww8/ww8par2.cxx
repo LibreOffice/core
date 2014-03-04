@@ -3736,6 +3736,11 @@ bool WW8RStyle::PrepareStyle(SwWW8StyInf &rSI, ww::sti eSti, sal_uInt16 nThisSty
     }
 
     bool bImport = !bStyExist || pIo->mbNewDoc; // import content ?
+
+    // Do not override character styles the list import code created earlier.
+    if (bImport && bStyExist && rSI.GetOrgWWName().startsWith("WW8Num"))
+        bImport = false;
+
     bool bOldNoImp = pIo->bNoAttrImport;
     rSI.bImportSkipped = !bImport;
 
