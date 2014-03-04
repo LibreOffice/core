@@ -37,23 +37,6 @@
 
 
 
-// XInterface decl.
-
-
-
-#define XINTERFACE_DECL()                                                   \
-    virtual com::sun::star::uno::Any SAL_CALL                               \
-    queryInterface( const com::sun::star::uno::Type & rType )               \
-        throw( com::sun::star::uno::RuntimeException, std::exception );     \
-    virtual void SAL_CALL                                                   \
-    acquire()                                                               \
-        throw();                                                            \
-    virtual void SAL_CALL                                                   \
-    release()                                                               \
-        throw();
-
-
-
 // XInterface impl. internals.
 
 

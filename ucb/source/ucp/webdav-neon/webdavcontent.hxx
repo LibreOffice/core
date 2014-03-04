@@ -239,7 +239,12 @@ public:
     virtual ~Content();
 
     // XInterface
-    XINTERFACE_DECL()
+    virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType )
+        throw( css::uno::RuntimeException, std::exception );
+    virtual void SAL_CALL acquire()
+        throw();
+    virtual void SAL_CALL release()
+        throw();
 
     // XTypeProvider
     XTYPEPROVIDER_DECL()
