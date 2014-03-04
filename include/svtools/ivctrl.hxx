@@ -322,7 +322,9 @@ public:
     // in dem sal_uLong wird die Position in der Liste des gefunden Eintrags zurueckgegeben
     SvxIconChoiceCtrlEntry* GetSelectedEntry( sal_uLong& rPos ) const;
 
+#ifdef DBG_UTIL
     void                        SetEntryTextMode( SvxIconChoiceCtrlTextMode eMode, SvxIconChoiceCtrlEntry* pEntry = 0 );
+#endif
 
     virtual sal_Bool        HasBackground() const;
     virtual sal_Bool        HasFont() const;

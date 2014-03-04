@@ -68,7 +68,6 @@ SvtAccessibilityOptions::SetColorValueSetColumnCount(short)
 SvtAccessibilityOptions::SetEdgeBlending(short)
 SvtAccessibilityOptions::SetListBoxMaximumLineCount(short)
 SvtAccessibilityOptions::SetPreviewUsesCheckeredBackground(unsigned char)
-SvtIconChoiceCtrl::SetEntryTextMode(SvxIconChoiceCtrlTextMode, SvxIconChoiceCtrlEntry*)
 SvtListener::IsListening(SvtBroadcaster&) const
 SvxNumberFormatShell::IsAdded_Impl(unsigned long)
 SwAccessibleField::SwAccessibleField(SwField*, SwAccessibleParagraph*, short)

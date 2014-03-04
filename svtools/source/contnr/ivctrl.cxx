@@ -278,10 +278,12 @@ void SvtIconChoiceCtrl::Command( const CommandEvent& rCEvt )
     _pImp->Command( rCEvt );
 }
 
+#ifdef DBG_UTIL
 void SvtIconChoiceCtrl::SetEntryTextMode( SvxIconChoiceCtrlTextMode eMode, SvxIconChoiceCtrlEntry* pEntry )
 {
     _pImp->SetEntryTextMode( eMode, pEntry );
 }
+#endif
 
 sal_uLong SvtIconChoiceCtrl::GetEntryCount() const
 {
