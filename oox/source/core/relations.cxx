@@ -71,15 +71,6 @@ const Relation* Relations::getRelationFromFirstType( const OUString& rType ) con
     return 0;
 }
 
-RelationsRef Relations::getRelationsFromType( const OUString& rType ) const
-{
-    RelationsRef xRelations( new Relations( maFragmentPath ) );
-    for( const_iterator aIt = begin(), aEnd = end(); aIt != aEnd; ++aIt )
-        if( aIt->second.maType.equalsIgnoreAsciiCase( rType ) )
-            (*xRelations)[ aIt->first ] = aIt->second;
-    return xRelations;
-}
-
 RelationsRef Relations::getRelationsFromTypeFromOfficeDoc( const OUString& rType ) const
 {
     RelationsRef xRelations( new Relations( maFragmentPath ) );
