@@ -97,8 +97,8 @@ ModalDialog DLG_FPICKER_EXPLORERFILE
     {
         HelpID = "fpicker:PushButton:DLG_SVT_EXPLORERFILE:BTN_EXPLORERFILE_CONNECT_TO_SERVER";
         Pos = MAP_APPFONT ( 94 , 6 ) ;
-        Size = MAP_APPFONT ( 12 , 12 ) ;
-        Text [ en-US ] = "..." ;
+        Size = MAP_APPFONT ( 50 , 12 ) ;
+        Text [ en-US ] = "Servers..." ;
         QuickHelpText [ en-US ] = "Connect To Server" ;
     };
     Control CTL_EXPLORERFILE_FILELIST
