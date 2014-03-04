@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a930d6b_2ed56743",
+        "filename": ".gitignore",
+        "patchSetId": 1
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2014-03-04T08:51:43Z",
+      "side": 1,
+      "message": "we no longer use nor generate those files, so it\u0027s IMO better you manually remove them from your source tree (reps. rename autogen.lastrun to autogen.input) than to (re-)add them here",
+      "revId": "a7f254686dc79eab5e92cb412762973768a0b211",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
