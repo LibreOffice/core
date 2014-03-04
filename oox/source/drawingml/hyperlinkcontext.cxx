@@ -57,10 +57,10 @@ HyperLinkContext::HyperLinkContext( ContextHandler2Helper& rParent,
     }
     OUString sTooltip = rAttribs.getString( R_TOKEN( tooltip ) ).get();
     if ( !sTooltip.isEmpty() )
-        maProperties[ PROP_Representation ] <<= sTooltip;
+        maProperties.setProperty(PROP_Representation, sTooltip);
     OUString sFrame = rAttribs.getString( R_TOKEN( tgtFrame ) ).get();
     if( !sFrame.isEmpty() )
-        maProperties[ PROP_TargetFrame ] <<= sFrame;
+        maProperties.setProperty(PROP_TargetFrame, sFrame);
     OUString aAction = rAttribs.getString( XML_action ).get();
     if ( !aAction.isEmpty() )
     {
@@ -136,7 +136,7 @@ HyperLinkContext::HyperLinkContext( ContextHandler2Helper& rParent,
         }
     }
     if ( !sURL.isEmpty() )
-        maProperties[ PROP_URL ] <<= sURL;
+        maProperties.setProperty(PROP_URL, sURL);
 
     // TODO unhandled
     // XML_invalidUrl

@@ -39,7 +39,8 @@ struct PropertyNameVector;
 
 
 
-typedef ::std::map< sal_Int32, ::com::sun::star::uno::Any > PropertyMapBase;
+typedef ::std::map< sal_Int32, ::com::sun::star::uno::Any > PropertyMapType;
+typedef ::std::map< OUString, ::com::sun::star::uno::Any > PropertyNameMap;
 
 /** A helper that maps property identifiers to property values.
 
@@ -48,7 +49,7 @@ typedef ::std::map< sal_Int32, ::com::sun::star::uno::Any > PropertyMapBase;
     name mapping is done internally while the properties are written to
     property sets.
  */
-class OOX_DLLPUBLIC PropertyMap : public PropertyMapBase
+class OOX_DLLPUBLIC PropertyMap
 {
 public:
     PropertyMap();
@@ -57,23 +58,33 @@ public:
     static const OUString& getPropertyName( sal_Int32 nPropId );
 
     /** Returns true, if the map contains a property with the passed identifier. */
-    bool                hasProperty( sal_Int32 nPropId ) const
-                            { return find( nPropId ) != end(); }
+    bool                hasProperty( sal_Int32 nPropId ) const;
 
     /** Sets the specified property to the passed value. Does nothing, if the
         identifier is invalid. */
-    bool                setAnyProperty( sal_Int32 nPropId, const ::com::sun::star::uno::Any& rValue )
-                            { if( nPropId < 0 ) return false; (*this)[ nPropId ] = rValue; return true; }
+    bool                setAnyProperty( sal_Int32 nPropId, const ::com::sun::star::uno::Any& rValue );
 
     /** Sets the specified property to the passed value. Does nothing, if the
         identifier is invalid. */
     template< typename Type >
     bool                setProperty( sal_Int32 nPropId, const Type& rValue )
-                            { if( nPropId < 0 ) return false; (*this)[ nPropId ] <<= rValue; return true; }
+    {
+        if( nPropId < 0 )
+            return false;
+
+        maProperties[ nPropId ] <<= rValue;
+        return true;
+    }
+
+    com::sun::star::uno::Any getProperty( sal_Int32 nPropId );
+
+    void                erase( sal_Int32 nPropId );
+
+    bool                empty() const;
+    size_t              size() const;
 
     /** Inserts all properties contained in the passed property map. */
-    void                assignUsed( const PropertyMap& rPropMap )
-                            { insert( rPropMap.begin(), rPropMap.end() ); }
+    void                assignUsed( const PropertyMap& rPropMap );
 
     /** Inserts all properties contained in the passed property map */
     void                assignAll( const PropertyMap& rPropMap );
@@ -86,6 +97,8 @@ public:
     void                fillSequences(
                             ::com::sun::star::uno::Sequence< OUString >& rNames,
                             ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& rValues ) const;
+
+    void                fillPropertyNameMap(PropertyNameMap& rMap) const;
 
     /** Creates a property set supporting the XPropertySet interface and inserts all properties. */
     ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >
@@ -100,6 +113,9 @@ public:
 #endif
 private:
     const PropertyNameVector* mpPropNames;
+
+protected:
+    PropertyMapType maProperties;
 };
 
 

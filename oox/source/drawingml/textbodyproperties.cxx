@@ -42,19 +42,19 @@ void TextBodyProperties::pushVertSimulation()
     sal_Int32 tVert = moVert.get( XML_horz );
     if( tVert == XML_vert || tVert == XML_eaVert || tVert == XML_vert270 || tVert == XML_mongolianVert ) {
         // #160799# fake different vertical text modes by top-bottom writing mode
-        maPropertyMap[ PROP_TextWritingMode ] <<= WritingMode_TB_RL;
+        maPropertyMap.setProperty( PROP_TextWritingMode, WritingMode_TB_RL);
 
         // workaround for TB_LR as using WritingMode2 doesn't work
         if( meVA != TextVerticalAdjust_CENTER )
-            maPropertyMap[ PROP_TextHorizontalAdjust ] <<=
-                                (tVert == XML_vert270) ? TextHorizontalAdjust_RIGHT : TextHorizontalAdjust_LEFT;
+            maPropertyMap.setProperty( PROP_TextHorizontalAdjust,
+                                (tVert == XML_vert270) ? TextHorizontalAdjust_RIGHT : TextHorizontalAdjust_LEFT);
         if( tVert == XML_vert270 )
-            maPropertyMap[ PROP_TextVerticalAdjust ] <<= TextVerticalAdjust_BOTTOM;
+            maPropertyMap.setProperty( PROP_TextVerticalAdjust, TextVerticalAdjust_BOTTOM);
         if( ( tVert == XML_vert && meVA == TextVerticalAdjust_TOP ) ||
             ( tVert == XML_vert270 && meVA == TextVerticalAdjust_BOTTOM ) )
-            maPropertyMap[ PROP_TextHorizontalAdjust ] <<= TextHorizontalAdjust_RIGHT;
+            maPropertyMap.setProperty( PROP_TextHorizontalAdjust, TextHorizontalAdjust_RIGHT);
         else if( meVA == TextVerticalAdjust_CENTER )
-            maPropertyMap[ PROP_TextHorizontalAdjust ] <<= TextHorizontalAdjust_CENTER;
+            maPropertyMap.setProperty( PROP_TextHorizontalAdjust, TextHorizontalAdjust_CENTER);
     }
 }
 
@@ -85,9 +85,9 @@ void TextBodyProperties::pushRotationAdjustments( sal_Int32 nRotation )
         if( nVal < 0 ) nVal = 0;
 
         if( moInsets[i] )
-            maPropertyMap[ aProps[ nOff ] ] <<= static_cast< sal_Int32 >( *moInsets[i] + nVal );
+            maPropertyMap.setProperty( aProps[ nOff ], static_cast< sal_Int32 >( *moInsets[i] + nVal ));
         else if( nVal )
-            maPropertyMap[ aProps[ nOff ] ] <<= static_cast< sal_Int32 >( nVal );
+            maPropertyMap.setProperty( aProps[ nOff ], static_cast< sal_Int32 >( nVal ));
 
         nOff = (nOff+1) % n;
     }

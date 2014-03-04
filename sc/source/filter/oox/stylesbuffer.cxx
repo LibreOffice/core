@@ -1046,67 +1046,67 @@ void Font::writeToPropertyMap( PropertyMap& rPropMap, FontPropertyType ePropType
     {
         if( !maApiData.maLatinFont.maName.isEmpty() )
         {
-            rPropMap[ PROP_CharFontName ]    <<= maApiData.maLatinFont.maName;
-            rPropMap[ PROP_CharFontFamily ]  <<= maApiData.maLatinFont.mnFamily;
-            rPropMap[ PROP_CharFontCharSet ] <<= maApiData.maLatinFont.mnTextEnc;
+            rPropMap.setProperty( PROP_CharFontName, maApiData.maLatinFont.maName);
+            rPropMap.setProperty( PROP_CharFontFamily, maApiData.maLatinFont.mnFamily);
+            rPropMap.setProperty( PROP_CharFontCharSet, maApiData.maLatinFont.mnTextEnc);
         }
         if( !maApiData.maAsianFont.maName.isEmpty() )
         {
-            rPropMap[ PROP_CharFontNameAsian ]    <<= maApiData.maAsianFont.maName;
-            rPropMap[ PROP_CharFontFamilyAsian ]  <<= maApiData.maAsianFont.mnFamily;
-            rPropMap[ PROP_CharFontCharSetAsian ] <<= maApiData.maAsianFont.mnTextEnc;
+            rPropMap.setProperty( PROP_CharFontNameAsian, maApiData.maAsianFont.maName);
+            rPropMap.setProperty( PROP_CharFontFamilyAsian, maApiData.maAsianFont.mnFamily);
+            rPropMap.setProperty( PROP_CharFontCharSetAsian, maApiData.maAsianFont.mnTextEnc);
         }
         if( !maApiData.maCmplxFont.maName.isEmpty() )
         {
-            rPropMap[ PROP_CharFontNameComplex ]    <<= maApiData.maCmplxFont.maName;
-            rPropMap[ PROP_CharFontFamilyComplex ]  <<= maApiData.maCmplxFont.mnFamily;
-            rPropMap[ PROP_CharFontCharSetComplex ] <<= maApiData.maCmplxFont.mnTextEnc;
+            rPropMap.setProperty( PROP_CharFontNameComplex, maApiData.maCmplxFont.maName);
+            rPropMap.setProperty( PROP_CharFontFamilyComplex, maApiData.maCmplxFont.mnFamily);
+            rPropMap.setProperty( PROP_CharFontCharSetComplex, maApiData.maCmplxFont.mnTextEnc);
         }
     }
     // font height
     if( maUsedFlags.mbHeightUsed )
     {
         float fHeight = static_cast< float >( maApiData.maDesc.Height / 20.0 ); // twips to points
-        rPropMap[ PROP_CharHeight ] <<= fHeight;
-        rPropMap[ PROP_CharHeightAsian ] <<= fHeight;
-        rPropMap[ PROP_CharHeightComplex ] <<= fHeight;
+        rPropMap.setProperty( PROP_CharHeight, fHeight);
+        rPropMap.setProperty( PROP_CharHeightAsian, fHeight);
+        rPropMap.setProperty( PROP_CharHeightComplex, fHeight);
     }
     // font weight
     if( maUsedFlags.mbWeightUsed )
     {
         float fWeight = maApiData.maDesc.Weight;
-        rPropMap[ PROP_CharWeight ] <<= fWeight;
-        rPropMap[ PROP_CharWeightAsian ] <<= fWeight;
-        rPropMap[ PROP_CharWeightComplex ] <<= fWeight;
+        rPropMap.setProperty( PROP_CharWeight, fWeight);
+        rPropMap.setProperty( PROP_CharWeightAsian, fWeight);
+        rPropMap.setProperty( PROP_CharWeightComplex, fWeight);
     }
     // font posture
     if( maUsedFlags.mbPostureUsed )
     {
-        rPropMap[ PROP_CharPosture ] <<= maApiData.maDesc.Slant;
-        rPropMap[ PROP_CharPostureAsian ] <<= maApiData.maDesc.Slant;
-        rPropMap[ PROP_CharPostureComplex ] <<= maApiData.maDesc.Slant;
+        rPropMap.setProperty( PROP_CharPosture, maApiData.maDesc.Slant);
+        rPropMap.setProperty( PROP_CharPostureAsian, maApiData.maDesc.Slant);
+        rPropMap.setProperty( PROP_CharPostureComplex, maApiData.maDesc.Slant);
     }
     // character color
     if( maUsedFlags.mbColorUsed )
-        rPropMap[ PROP_CharColor ] <<= maApiData.mnColor;
+        rPropMap.setProperty( PROP_CharColor, maApiData.mnColor);
     // underline style
     if( maUsedFlags.mbUnderlineUsed )
-        rPropMap[ PROP_CharUnderline ] <<= maApiData.maDesc.Underline;
+        rPropMap.setProperty( PROP_CharUnderline, maApiData.maDesc.Underline);
     // strike out style
     if( maUsedFlags.mbStrikeoutUsed )
-        rPropMap[ PROP_CharStrikeout ] <<= maApiData.maDesc.Strikeout;
+        rPropMap.setProperty( PROP_CharStrikeout, maApiData.maDesc.Strikeout);
     // outline style
     if( maUsedFlags.mbOutlineUsed )
-        rPropMap[ PROP_CharContoured ] <<= maApiData.mbOutline;
+        rPropMap.setProperty( PROP_CharContoured, maApiData.mbOutline);
     // shadow style
     if( maUsedFlags.mbShadowUsed )
-        rPropMap[ PROP_CharShadowed ] <<= maApiData.mbShadow;
+        rPropMap.setProperty( PROP_CharShadowed, maApiData.mbShadow);
     // escapement
     if( maUsedFlags.mbEscapementUsed )
     {
-        rPropMap[ PROP_CharEscapement ] <<= maApiData.mnEscapement;
+        rPropMap.setProperty( PROP_CharEscapement, maApiData.mnEscapement);
         if( ePropType == FONT_PROPTYPE_TEXT )
-            rPropMap[ PROP_CharEscapementHeight ] <<= maApiData.mnEscapeHeight;
+            rPropMap.setProperty( PROP_CharEscapementHeight, maApiData.mnEscapeHeight);
     }
 }
 
@@ -1379,16 +1379,16 @@ void Alignment::fillToItemSet( SfxItemSet& rItemSet, bool bSkipPoolDefs ) const
 
 void Alignment::writeToPropertyMap( PropertyMap& rPropMap ) const
 {
-    rPropMap[ PROP_HoriJustify ]     <<= maApiData.meHorJustify;
-    rPropMap[ PROP_HoriJustifyMethod ] <<= maApiData.mnHorJustifyMethod;
-    rPropMap[ PROP_VertJustify ]     <<= maApiData.mnVerJustify;
-    rPropMap[ PROP_VertJustifyMethod ] <<= maApiData.mnVerJustifyMethod;
-    rPropMap[ PROP_WritingMode ]     <<= maApiData.mnWritingMode;
-    rPropMap[ PROP_RotateAngle ]     <<= maApiData.mnRotation;
-    rPropMap[ PROP_Orientation ]     <<= maApiData.meOrientation;
-    rPropMap[ PROP_ParaIndent ]      <<= maApiData.mnIndent;
-    rPropMap[ PROP_IsTextWrapped ]   <<= maApiData.mbWrapText;
-    rPropMap[ PROP_ShrinkToFit ]     <<= maApiData.mbShrink;
+    rPropMap.setProperty( PROP_HoriJustify, maApiData.meHorJustify);
+    rPropMap.setProperty( PROP_HoriJustifyMethod, maApiData.mnHorJustifyMethod);
+    rPropMap.setProperty( PROP_VertJustify, maApiData.mnVerJustify);
+    rPropMap.setProperty( PROP_VertJustifyMethod, maApiData.mnVerJustifyMethod);
+    rPropMap.setProperty( PROP_WritingMode, maApiData.mnWritingMode);
+    rPropMap.setProperty( PROP_RotateAngle, maApiData.mnRotation);
+    rPropMap.setProperty( PROP_Orientation, maApiData.meOrientation);
+    rPropMap.setProperty( PROP_ParaIndent, maApiData.mnIndent);
+    rPropMap.setProperty( PROP_IsTextWrapped, maApiData.mbWrapText);
+    rPropMap.setProperty( PROP_ShrinkToFit, maApiData.mbShrink);
 }
 
 
@@ -1442,7 +1442,7 @@ void Protection::finalizeImport()
 
 void Protection::writeToPropertyMap( PropertyMap& rPropMap ) const
 {
-    rPropMap[ PROP_CellProtection ] <<= maApiData.maCellProt;
+    rPropMap.setProperty( PROP_CellProtection, maApiData.maCellProt);
 }
 
 void Protection::fillToItemSet( SfxItemSet& rItemSet, bool bSkipPoolDefs ) const
@@ -1676,15 +1676,15 @@ void Border::writeToPropertyMap( PropertyMap& rPropMap ) const
 {
     if( maApiData.mbBorderUsed )
     {
-        rPropMap[ PROP_LeftBorder ]   <<= maApiData.maLeft;
-        rPropMap[ PROP_RightBorder ]  <<= maApiData.maRight;
-        rPropMap[ PROP_TopBorder ]    <<= maApiData.maTop;
-        rPropMap[ PROP_BottomBorder ] <<= maApiData.maBottom;
+        rPropMap.setProperty( PROP_LeftBorder, maApiData.maLeft);
+        rPropMap.setProperty( PROP_RightBorder, maApiData.maRight);
+        rPropMap.setProperty( PROP_TopBorder, maApiData.maTop);
+        rPropMap.setProperty( PROP_BottomBorder, maApiData.maBottom);
     }
     if( maApiData.mbDiagUsed )
     {
-        rPropMap[ PROP_DiagonalTLBR ] <<= maApiData.maTLtoBR;
-        rPropMap[ PROP_DiagonalBLTR ] <<= maApiData.maBLtoTR;
+        rPropMap.setProperty( PROP_DiagonalTLBR, maApiData.maTLtoBR);
+        rPropMap.setProperty( PROP_DiagonalBLTR, maApiData.maBLtoTR);
     }
 }
 
@@ -2079,8 +2079,8 @@ void Fill::writeToPropertyMap( PropertyMap& rPropMap ) const
 {
     if( maApiData.mbUsed )
     {
-        rPropMap[ PROP_CellBackColor ] <<= maApiData.mnColor;
-        rPropMap[ PROP_IsCellBackgroundTransparent ] <<= maApiData.mbTransparent;
+        rPropMap.setProperty( PROP_CellBackColor, maApiData.mnColor);
+        rPropMap.setProperty( PROP_IsCellBackgroundTransparent, maApiData.mbTransparent);
     }
 }
 
@@ -2245,7 +2245,7 @@ void Xf::writeToPropertyMap( PropertyMap& rPropMap ) const
 
     // create and set cell style
     if( isCellXf() )
-        rPropMap[ PROP_CellStyle ] <<= rStyles.createCellStyle( maModel.mnStyleXfId );
+        rPropMap.setProperty( PROP_CellStyle, rStyles.createCellStyle( maModel.mnStyleXfId ));
 
     if( maModel.mbFontUsed )
         rStyles.writeFontToPropertyMap( rPropMap, maModel.mnFontId );
@@ -2260,12 +2260,12 @@ void Xf::writeToPropertyMap( PropertyMap& rPropMap ) const
     if( maModel.mbAreaUsed )
         rStyles.writeFillToPropertyMap( rPropMap, maModel.mnFillId );
     if( maModel.mbAlignUsed || maModel.mbBorderUsed )
-        rPropMap[ PROP_RotateReference ] <<= meRotationRef;
+        rPropMap.setProperty( PROP_RotateReference, meRotationRef);
 
     sal_Int32 eRotRef = ::com::sun::star::table::CellVertJustify2::STANDARD;
     if (maModel.mbBorderUsed && rStyles.hasBorder(maModel.mnBorderId) && maAlignment.getApiData().mnRotation)
         eRotRef = ::com::sun::star::table::CellVertJustify2::BOTTOM;
-    rPropMap[ PROP_RotateReference ] <<= eRotRef;
+    rPropMap.setProperty( PROP_RotateReference, eRotRef);
 }
 
 void Xf::writeToPropertySet( PropertySet& rPropSet ) const

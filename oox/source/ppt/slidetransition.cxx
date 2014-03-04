@@ -75,14 +75,14 @@ namespace oox { namespace ppt {
     {
         try
         {
-            aProps[ PROP_TransitionType ] <<= mnTransitionType;
-            aProps[ PROP_TransitionSubtype ] <<= mnTransitionSubType;
-            aProps[ PROP_TransitionDirection ] <<= mbTransitionDirectionNormal;
-            aProps[ PROP_Speed ] <<= mnAnimationSpeed;
-            aProps[ PROP_TransitionFadeColor ] <<= mnFadeColor;
+            aProps.setProperty( PROP_TransitionType, mnTransitionType);
+            aProps.setProperty( PROP_TransitionSubtype, mnTransitionSubType);
+            aProps.setProperty( PROP_TransitionDirection, mbTransitionDirectionNormal);
+            aProps.setProperty( PROP_Speed, mnAnimationSpeed);
+            aProps.setProperty( PROP_TransitionFadeColor, mnFadeColor);
         if( mnAdvanceTime != -1 ) {
-        aProps[ PROP_Duration ] <<= mnAdvanceTime/1000;
-        aProps[ PROP_Change ] <<= static_cast<sal_Int32>(1);
+        aProps.setProperty( PROP_Duration, mnAdvanceTime/1000);
+        aProps.setProperty( PROP_Change, static_cast<sal_Int32>(1));
         }
         }
         catch( Exception& )

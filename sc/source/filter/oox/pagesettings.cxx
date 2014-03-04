@@ -972,35 +972,35 @@ void PageSettingsConverter::writePageSettingsProperties(
     // write all properties to property set
     const UnitConverter& rUnitConv = getUnitConverter();
     PropertyMap aPropMap;
-    aPropMap[ PROP_IsLandscape ]           <<= bLandscape;
-    aPropMap[ PROP_FirstPageNumber ]       <<= getLimitedValue< sal_Int16, sal_Int32 >( rModel.mbUseFirstPage ? rModel.mnFirstPage : 0, 0, 9999 );
-    aPropMap[ PROP_PrintDownFirst ]        <<= (rModel.mnPageOrder == XML_downThenOver);
-    aPropMap[ PROP_PrintAnnotations ]      <<= (rModel.mnCellComments == XML_asDisplayed);
-    aPropMap[ PROP_CenterHorizontally ]    <<= rModel.mbHorCenter;
-    aPropMap[ PROP_CenterVertically ]      <<= rModel.mbVerCenter;
-    aPropMap[ PROP_PrintGrid ]             <<= (!bChartSheet && rModel.mbPrintGrid);     // no gridlines in chart sheets
-    aPropMap[ PROP_PrintHeaders ]          <<= (!bChartSheet && rModel.mbPrintHeadings); // no column/row headings in chart sheets
-    aPropMap[ PROP_LeftMargin ]            <<= rUnitConv.scaleToMm100( rModel.mfLeftMargin, UNIT_INCH );
-    aPropMap[ PROP_RightMargin ]           <<= rUnitConv.scaleToMm100( rModel.mfRightMargin, UNIT_INCH );
+    aPropMap.setProperty( PROP_IsLandscape, bLandscape);
+    aPropMap.setProperty( PROP_FirstPageNumber, getLimitedValue< sal_Int16, sal_Int32 >( rModel.mbUseFirstPage ? rModel.mnFirstPage : 0, 0, 9999 ));
+    aPropMap.setProperty( PROP_PrintDownFirst, (rModel.mnPageOrder == XML_downThenOver));
+    aPropMap.setProperty( PROP_PrintAnnotations, (rModel.mnCellComments == XML_asDisplayed));
+    aPropMap.setProperty( PROP_CenterHorizontally, rModel.mbHorCenter);
+    aPropMap.setProperty( PROP_CenterVertically, rModel.mbVerCenter);
+    aPropMap.setProperty( PROP_PrintGrid, (!bChartSheet && rModel.mbPrintGrid));     // no gridlines in chart sheets
+    aPropMap.setProperty( PROP_PrintHeaders, (!bChartSheet && rModel.mbPrintHeadings)); // no column/row headings in chart sheets
+    aPropMap.setProperty( PROP_LeftMargin, rUnitConv.scaleToMm100( rModel.mfLeftMargin, UNIT_INCH ));
+    aPropMap.setProperty( PROP_RightMargin, rUnitConv.scaleToMm100( rModel.mfRightMargin, UNIT_INCH ));
     // #i23296# In Calc, "TopMargin" property is distance to top of header if enabled
-    aPropMap[ PROP_TopMargin ]             <<= rUnitConv.scaleToMm100( maHeaderData.mbHasContent ? rModel.mfHeaderMargin : rModel.mfTopMargin, UNIT_INCH );
+    aPropMap.setProperty( PROP_TopMargin, rUnitConv.scaleToMm100( maHeaderData.mbHasContent ? rModel.mfHeaderMargin : rModel.mfTopMargin, UNIT_INCH ));
     // #i23296# In Calc, "BottomMargin" property is distance to bottom of footer if enabled
-    aPropMap[ PROP_BottomMargin ]          <<= rUnitConv.scaleToMm100( maFooterData.mbHasContent ? rModel.mfFooterMargin : rModel.mfBottomMargin, UNIT_INCH );
-    aPropMap[ PROP_HeaderIsOn ]            <<= maHeaderData.mbHasContent;
-    aPropMap[ PROP_HeaderIsShared ]        <<= maHeaderData.mbShareOddEven;
-    aPropMap[ PROP_HeaderIsDynamicHeight ] <<= maHeaderData.mbDynamicHeight;
-    aPropMap[ PROP_HeaderHeight ]          <<= maHeaderData.mnHeight;
-    aPropMap[ PROP_HeaderBodyDistance ]    <<= maHeaderData.mnBodyDist;
-    aPropMap[ PROP_FooterIsOn ]            <<= maFooterData.mbHasContent;
-    aPropMap[ PROP_FooterIsShared ]        <<= maFooterData.mbShareOddEven;
-    aPropMap[ PROP_FooterIsDynamicHeight ] <<= maFooterData.mbDynamicHeight;
-    aPropMap[ PROP_FooterHeight ]          <<= maFooterData.mnHeight;
-    aPropMap[ PROP_FooterBodyDistance ]    <<= maFooterData.mnBodyDist;
+    aPropMap.setProperty( PROP_BottomMargin, rUnitConv.scaleToMm100( maFooterData.mbHasContent ? rModel.mfFooterMargin : rModel.mfBottomMargin, UNIT_INCH ));
+    aPropMap.setProperty( PROP_HeaderIsOn, maHeaderData.mbHasContent);
+    aPropMap.setProperty( PROP_HeaderIsShared, maHeaderData.mbShareOddEven);
+    aPropMap.setProperty( PROP_HeaderIsDynamicHeight, maHeaderData.mbDynamicHeight);
+    aPropMap.setProperty( PROP_HeaderHeight, maHeaderData.mnHeight);
+    aPropMap.setProperty( PROP_HeaderBodyDistance, maHeaderData.mnBodyDist);
+    aPropMap.setProperty( PROP_FooterIsOn, maFooterData.mbHasContent);
+    aPropMap.setProperty( PROP_FooterIsShared, maFooterData.mbShareOddEven);
+    aPropMap.setProperty( PROP_FooterIsDynamicHeight, maFooterData.mbDynamicHeight);
+    aPropMap.setProperty( PROP_FooterHeight, maFooterData.mnHeight);
+    aPropMap.setProperty( PROP_FooterBodyDistance, maFooterData.mnBodyDist);
     // background image
     if( !rModel.maGraphicUrl.isEmpty() )
     {
-        aPropMap[ PROP_BackGraphicURL ] <<= rModel.maGraphicUrl;
-        aPropMap[ PROP_BackGraphicLocation ] <<= ::com::sun::star::style::GraphicLocation_TILED;
+        aPropMap.setProperty( PROP_BackGraphicURL, rModel.maGraphicUrl);
+        aPropMap.setProperty( PROP_BackGraphicLocation, ::com::sun::star::style::GraphicLocation_TILED);
     }
 
     rPropSet.setProperties( aPropMap );

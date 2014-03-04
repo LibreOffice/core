@@ -54,7 +54,7 @@ ContextHandlerRef PPTShapePropertiesContext::onCreateContext( sal_Int32 aElement
     switch( aElementToken )
     {
         case A_TOKEN( xfrm ):
-            mrShape.getShapeProperties()[ PROP_IsPlaceholderDependent ] <<= sal_False;
+            mrShape.getShapeProperties().setProperty( PROP_IsPlaceholderDependent, sal_False);
             return ShapePropertiesContext::onCreateContext( aElementToken, rAttribs );
 
         default:

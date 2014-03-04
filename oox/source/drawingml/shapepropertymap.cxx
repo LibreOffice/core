@@ -112,7 +112,7 @@ bool ShapePropertyMap::setAnyProperty( ShapePropertyId ePropId, const Any& rValu
     }
 
     // set plain property value
-    operator[]( nPropId ) = rValue;
+    setAnyProperty( nPropId, rValue );
     return true;
 }
 

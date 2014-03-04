@@ -471,7 +471,7 @@ void FillProperties::pushToPropMap( ShapePropertyMap& rPropMap,
                                     aGraphCrop.Right = static_cast< sal_Int32 >( ( static_cast< double >( aOriginalSize.Width ) * aFillRect.X2 ) / 100000 );
                                 if ( aFillRect.Y2 )
                                     aGraphCrop.Bottom = static_cast< sal_Int32 >( ( static_cast< double >( aOriginalSize.Height ) * aFillRect.Y2 ) / 100000 );
-                                rPropMap[ PROP_GraphicCrop ] <<= aGraphCrop;
+                                rPropMap.setProperty(PROP_GraphicCrop, aGraphCrop);
                             }
                         }
                     }
@@ -523,12 +523,12 @@ void GraphicProperties::pushToPropMap( PropertyMap& rPropMap, const GraphicHelpe
         Reference< XGraphic > xGraphic = lclCheckAndApplyDuotoneTransform( maBlipProps, maBlipProps.mxGraphic, rGraphicHelper, nPhClr );
         xGraphic = lclCheckAndApplyChangeColorTransform( maBlipProps, xGraphic, rGraphicHelper, nPhClr );
 
-        rPropMap[ PROP_Graphic ] <<= xGraphic;
+        rPropMap.setProperty(PROP_Graphic, xGraphic);
 
         // do we still need to set GraphicURL as well? (TODO)
         OUString aGraphicUrl = rGraphicHelper.createGraphicObject( xGraphic );
         if( !aGraphicUrl.isEmpty() )
-            rPropMap[ PROP_GraphicURL ] <<= aGraphicUrl;
+            rPropMap.setProperty(PROP_GraphicURL, aGraphicUrl);
 
         // cropping
         if ( maBlipProps.moClipRect.has() )
@@ -546,7 +546,7 @@ void GraphicProperties::pushToPropMap( PropertyMap& rPropMap, const GraphicHelpe
                     aGraphCrop.Right = static_cast< sal_Int32 >( ( static_cast< double >( aOriginalSize.Width ) * oClipRect.X2 ) / 100000 );
                 if ( oClipRect.Y2 )
                     aGraphCrop.Bottom = static_cast< sal_Int32 >( ( static_cast< double >( aOriginalSize.Height ) * oClipRect.Y2 ) / 100000 );
-                rPropMap[ PROP_GraphicCrop ] <<= aGraphCrop;
+                rPropMap.setProperty(PROP_GraphicCrop, aGraphCrop);
             }
         }
     }
@@ -558,19 +558,19 @@ void GraphicProperties::pushToPropMap( PropertyMap& rPropMap, const GraphicHelpe
         case XML_biLevel:   eColorMode = ColorMode_MONO;    break;
         case XML_grayscl:   eColorMode = ColorMode_GREYS;   break;
     }
-    rPropMap[ PROP_GraphicColorMode ] <<= eColorMode;
+    rPropMap.setProperty(PROP_GraphicColorMode, eColorMode);
 
     // brightness and contrast
     sal_Int16 nBrightness = getLimitedValue< sal_Int16, sal_Int32 >( maBlipProps.moBrightness.get( 0 ) / PER_PERCENT, -100, 100 );
     if( nBrightness != 0 )
-        rPropMap[ PROP_AdjustLuminance ] <<= nBrightness;
+        rPropMap.setProperty(PROP_AdjustLuminance, nBrightness);
     sal_Int16 nContrast = getLimitedValue< sal_Int16, sal_Int32 >( maBlipProps.moContrast.get( 0 ) / PER_PERCENT, -100, 100 );
     if( nContrast != 0 )
-        rPropMap[ PROP_AdjustContrast ] <<= nContrast;
+        rPropMap.setProperty(PROP_AdjustContrast, nContrast);
 
     // Media content
     if( !maAudio.msEmbed.isEmpty() )
-        rPropMap[ PROP_MediaURL ] <<= maAudio.msEmbed;
+        rPropMap.setProperty(PROP_MediaURL, maAudio.msEmbed);
 }
 
 

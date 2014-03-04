@@ -44,7 +44,7 @@ TextBodyPropertiesContext::TextBodyPropertiesContext( ContextHandler2Helper& rPa
 {
     // ST_TextWrappingType
     sal_Int32 nWrappingType = rAttribs.getToken( XML_wrap, XML_square );
-    mrTextBodyProp.maPropertyMap[ PROP_TextWordWrap ] <<= static_cast< sal_Bool >( nWrappingType == XML_square );
+    mrTextBodyProp.maPropertyMap.setProperty( PROP_TextWordWrap, static_cast< sal_Bool >( nWrappingType == XML_square ));
 
     // ST_Coordinate
     OUString sValue;
@@ -59,8 +59,8 @@ TextBodyPropertiesContext::TextBodyPropertiesContext( ContextHandler2Helper& rPa
     bool bAnchorCenter = rAttribs.getBool( XML_anchorCtr, false );
     if( rAttribs.hasAttribute( XML_anchorCtr ) ) {
         if( bAnchorCenter )
-            mrTextBodyProp.maPropertyMap[ PROP_TextHorizontalAdjust ] <<=
-                TextHorizontalAdjust_CENTER;
+            mrTextBodyProp.maPropertyMap.setProperty( PROP_TextHorizontalAdjust,
+                TextHorizontalAdjust_CENTER);
     }
 //   bool bCompatLineSpacing = rAttribs.getBool( XML_compatLnSpc, false );
 //   bool bForceAA = rAttribs.getBool( XML_forceAA, false );
@@ -91,20 +91,20 @@ TextBodyPropertiesContext::TextBodyPropertiesContext( ContextHandler2Helper& rPa
         if( tVert == XML_vert || tVert == XML_eaVert || tVert == XML_vert270 || tVert == XML_mongolianVert )
             mrTextBodyProp.moRotation = -5400000*(tVert==XML_vert270?3:1);
         else
-            mrTextBodyProp.maPropertyMap[ PROP_TextWritingMode ]
-                <<= ( bRtl ? WritingMode_RL_TB : WritingMode_LR_TB );
+            mrTextBodyProp.maPropertyMap.setProperty( PROP_TextWritingMode,
+                ( bRtl ? WritingMode_RL_TB : WritingMode_LR_TB ));
     }
 
     // ST_TextAnchoringType
     if( rAttribs.hasAttribute( XML_anchor ) )
     {
         mrTextBodyProp.meVA = GetTextVerticalAdjust( rAttribs.getToken( XML_anchor, XML_t ) );
-        mrTextBodyProp.maPropertyMap[ PROP_TextVerticalAdjust ] <<= mrTextBodyProp.meVA;
+        mrTextBodyProp.maPropertyMap.setProperty( PROP_TextVerticalAdjust, mrTextBodyProp.meVA);
     }
 
     // Push defaults
-    mrTextBodyProp.maPropertyMap[ PROP_TextAutoGrowHeight ] <<= false;
-    mrTextBodyProp.maPropertyMap[ PROP_TextFitToSize ] <<= drawing::TextFitToSizeType_NONE;
+    mrTextBodyProp.maPropertyMap.setProperty( PROP_TextAutoGrowHeight, false);
+    mrTextBodyProp.maPropertyMap.setProperty( PROP_TextFitToSize, drawing::TextFitToSizeType_NONE);
 }
 
 ContextHandlerRef TextBodyPropertiesContext::onCreateContext( sal_Int32 aElementToken, const AttributeList& /*rAttribs*/)
@@ -118,14 +118,14 @@ ContextHandlerRef TextBodyPropertiesContext::onCreateContext( sal_Int32 aElement
 
             // EG_TextAutofit
             case A_TOKEN( noAutofit ):
-                mrTextBodyProp.maPropertyMap[ PROP_TextAutoGrowHeight ] <<= false;   // CT_TextNoAutofit
+                mrTextBodyProp.maPropertyMap.setProperty( PROP_TextAutoGrowHeight, false);   // CT_TextNoAutofit
                 break;
             case A_TOKEN( normAutofit ):    // CT_TextNormalAutofit
-                mrTextBodyProp.maPropertyMap[ PROP_TextFitToSize ] <<= TextFitToSizeType_AUTOFIT;
-                mrTextBodyProp.maPropertyMap[ PROP_TextAutoGrowHeight ] <<= false;
+                mrTextBodyProp.maPropertyMap.setProperty( PROP_TextFitToSize, TextFitToSizeType_AUTOFIT);
+                mrTextBodyProp.maPropertyMap.setProperty( PROP_TextAutoGrowHeight, false);
                 break;
             case A_TOKEN( spAutoFit ):
-                mrTextBodyProp.maPropertyMap[ PROP_TextAutoGrowHeight ] <<= true;
+                mrTextBodyProp.maPropertyMap.setProperty( PROP_TextAutoGrowHeight, true);
                 break;
 
             case A_TOKEN( scene3d ):        // CT_Scene3D

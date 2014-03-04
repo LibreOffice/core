@@ -54,7 +54,7 @@ TextParagraphPropertiesContext::TextParagraphPropertiesContext( ContextHandler2H
     PropertyMap& rPropertyMap( mrTextParagraphProperties.getTextParagraphPropertyMap() );
 
     // ST_TextAlignType
-    rPropertyMap[ PROP_ParaAdjust ] <<= GetParaAdjust( rAttribs.getToken( XML_algn, XML_l ) );
+    rPropertyMap.setProperty( PROP_ParaAdjust, GetParaAdjust( rAttribs.getToken( XML_algn, XML_l ) ));
     // TODO see to do the same with RubyAdjust
 
     // ST_Coordinate32
@@ -67,7 +67,7 @@ TextParagraphPropertiesContext::TextParagraphPropertiesContext( ContextHandler2H
     if ( rAttribs.hasAttribute( XML_latinLnBrk ) )
     {
         bool bLatinLineBrk = rAttribs.getBool( XML_latinLnBrk, true );
-        rPropertyMap[ PROP_ParaIsHyphenation ] <<= bLatinLineBrk;
+        rPropertyMap.setProperty( PROP_ParaIsHyphenation, bLatinLineBrk);
     }
     // TODO see what to do with Asian hyphenation
 
@@ -78,7 +78,7 @@ TextParagraphPropertiesContext::TextParagraphPropertiesContext( ContextHandler2H
     if ( rAttribs.hasAttribute( XML_hangingPunct ) )
     {
         bool bHangingPunct = rAttribs.getBool( XML_hangingPunct, false );
-        rPropertyMap[ PROP_ParaIsHangingPunctuation ] <<= bHangingPunct;
+        rPropertyMap.setProperty( PROP_ParaIsHangingPunctuation, bHangingPunct);
     }
 
   // ST_Coordinate
@@ -116,13 +116,13 @@ TextParagraphPropertiesContext::TextParagraphPropertiesContext( ContextHandler2H
     {
         sValue = rAttribs.getString( XML_marR ).get();
         sal_Int32 nMarR  = sValue.isEmpty() ? 0 : GetCoordinate( sValue ) ;
-        rPropertyMap[ PROP_ParaRightMargin ] <<= nMarR;
+        rPropertyMap.setProperty( PROP_ParaRightMargin, nMarR);
     }
 
     if ( rAttribs.hasAttribute( XML_rtl ) )
     {
         bool bRtl = rAttribs.getBool( XML_rtl, false );
-        rPropertyMap[ PROP_WritingMode ] <<= ( bRtl ? WritingMode2::RL_TB : WritingMode2::LR_TB );
+        rPropertyMap.setProperty( PROP_WritingMode, ( bRtl ? WritingMode2::RL_TB : WritingMode2::LR_TB ));
     }
 }
 
@@ -131,9 +131,9 @@ TextParagraphPropertiesContext::~TextParagraphPropertiesContext()
 {
     PropertyMap& rPropertyMap( mrTextParagraphProperties.getTextParagraphPropertyMap() );
     if ( maLineSpacing.bHasValue )
-        rPropertyMap[ PROP_ParaLineSpacing ] <<= maLineSpacing.toLineSpacing();
+        rPropertyMap.setProperty( PROP_ParaLineSpacing, maLineSpacing.toLineSpacing());
     else
-        rPropertyMap[ PROP_ParaLineSpacing ] <<= ::com::sun::star::style::LineSpacing( ::com::sun::star::style::LineSpacingMode::PROP, 100 );
+        rPropertyMap.setProperty( PROP_ParaLineSpacing, ::com::sun::star::style::LineSpacing( ::com::sun::star::style::LineSpacingMode::PROP, 100 ));
 
 
     ::std::list< TabStop >::size_type nTabCount = maTabList.size();
@@ -143,20 +143,20 @@ TextParagraphPropertiesContext::~TextParagraphPropertiesContext()
         TabStop * aArray = aSeq.getArray();
         OSL_ENSURE( aArray != NULL, "sequence array is NULL" );
         ::std::copy( maTabList.begin(), maTabList.end(), aArray );
-        rPropertyMap[ PROP_ParaTabStops ] <<= aSeq;
+        rPropertyMap.setProperty( PROP_ParaTabStops, aSeq);
     }
 
     if ( mxBlipProps.get() && mxBlipProps->mxGraphic.is() )
         mrBulletList.setGraphic( mxBlipProps->mxGraphic );
 
     if( mrBulletList.is() )
-        rPropertyMap[ PROP_IsNumbering ] <<= sal_True;
+        rPropertyMap.setProperty( PROP_IsNumbering, sal_True);
     sal_Int16 nLevel = mrTextParagraphProperties.getLevel();
-    rPropertyMap[ PROP_NumberingLevel ] <<= nLevel;
-    rPropertyMap[ PROP_NumberingIsNumber ] <<= sal_True;
+    rPropertyMap.setProperty( PROP_NumberingLevel, nLevel);
+    rPropertyMap.setProperty( PROP_NumberingIsNumber, sal_True);
 
     if( mrTextParagraphProperties.getParaAdjust() )
-        rPropertyMap[ PROP_ParaAdjust ] <<= mrTextParagraphProperties.getParaAdjust().get();
+        rPropertyMap.setProperty( PROP_ParaAdjust, mrTextParagraphProperties.getParaAdjust().get());
 }
 
 

@@ -154,16 +154,16 @@ table::TablePropertiesPtr Shape::getTableProperties()
 
 void Shape::setDefaults(bool bHeight)
 {
-    maDefaultShapeProperties[ PROP_TextAutoGrowHeight ] <<= false;
-    maDefaultShapeProperties[ PROP_TextWordWrap ] <<= true;
-    maDefaultShapeProperties[ PROP_TextLeftDistance ]  <<= static_cast< sal_Int32 >( 250 );
-    maDefaultShapeProperties[ PROP_TextUpperDistance ] <<= static_cast< sal_Int32 >( 125 );
-    maDefaultShapeProperties[ PROP_TextRightDistance ] <<= static_cast< sal_Int32 >( 250 );
-    maDefaultShapeProperties[ PROP_TextLowerDistance ] <<= static_cast< sal_Int32 >( 125 );
+    maDefaultShapeProperties.setProperty(PROP_TextAutoGrowHeight, false);
+    maDefaultShapeProperties.setProperty(PROP_TextWordWrap, true);
+    maDefaultShapeProperties.setProperty(PROP_TextLeftDistance, static_cast< sal_Int32 >( 250 ));
+    maDefaultShapeProperties.setProperty(PROP_TextUpperDistance, static_cast< sal_Int32 >( 125 ));
+    maDefaultShapeProperties.setProperty(PROP_TextRightDistance, static_cast< sal_Int32 >( 250 ));
+    maDefaultShapeProperties.setProperty(PROP_TextLowerDistance, static_cast< sal_Int32 >( 125 ));
     if (bHeight)
-        maDefaultShapeProperties[ PROP_CharHeight ] <<= static_cast< float >( 18.0 );
-    maDefaultShapeProperties[ PROP_TextVerticalAdjust ] <<= TextVerticalAdjust_TOP;
-    maDefaultShapeProperties[ PROP_ParaAdjust ] <<= static_cast< sal_Int16 >( ParagraphAdjust_LEFT ); // check for RTL?
+        maDefaultShapeProperties.setProperty(PROP_CharHeight, static_cast< float >( 18.0 ));
+    maDefaultShapeProperties.setProperty(PROP_TextVerticalAdjust, TextVerticalAdjust_TOP);
+    maDefaultShapeProperties.setProperty(PROP_ParaAdjust, static_cast< sal_Int16 >( ParagraphAdjust_LEFT )); // check for RTL?
 }
 
 ::oox::vml::OleObjectInfo& Shape::setOleObjectType()
@@ -475,7 +475,7 @@ Reference< XShape > Shape::createAndInsert(
         uno::Sequence< uno::Sequence< awt::Point > > aPolyPolySequence( 1 );
         aPolyPolySequence.getArray()[ 0 ] = aPointSequence;
 
-        maShapeProperties[ PROP_PolyPolygon ] <<= aPolyPolySequence;
+        maShapeProperties.setProperty(PROP_PolyPolygon, aPolyPolySequence);
     }
     else if ( aServiceName == "com.sun.star.drawing.ConnectorShape" )
     {
@@ -489,8 +489,8 @@ Reference< XShape > Shape::createAndInsert(
         awt::Point aAWTStartPosition( static_cast< sal_Int32 >( aStartPosition.getX() ), static_cast< sal_Int32 >( aStartPosition.getY() ) );
         awt::Point aAWTEndPosition( static_cast< sal_Int32 >( aEndPosition.getX() ), static_cast< sal_Int32 >( aEndPosition.getY() ) );
 
-        maShapeProperties[ PROP_StartPosition ] <<= aAWTStartPosition;
-        maShapeProperties[ PROP_EndPosition ] <<= aAWTEndPosition;
+        maShapeProperties.setProperty(PROP_StartPosition, aAWTStartPosition);
+        maShapeProperties.setProperty(PROP_EndPosition, aAWTEndPosition);
     }
     else
     {
@@ -510,7 +510,7 @@ Reference< XShape > Shape::createAndInsert(
         aMatrix.Line3.Column2 = aTransformation.get(2,1);
         aMatrix.Line3.Column3 = aTransformation.get(2,2);
 
-        maShapeProperties[ PROP_Transformation ] <<= aMatrix;
+        maShapeProperties.setProperty(PROP_Transformation, aMatrix);
     }
 
     Reference< lang::XMultiServiceFactory > xServiceFact( rFilterBase.getModel(), UNO_QUERY_THROW );
@@ -631,7 +631,7 @@ Reference< XShape > Shape::createAndInsert(
             aShapeProps.assignUsed( mpTextBody->getTextProperties().maPropertyMap );
             // Push char properties as well - specifically useful when this is a placeholder
             if( mpMasterTextListStyle &&  mpMasterTextListStyle->getListStyle()[0]->getTextCharacterProperties().moHeight.has() )
-                aShapeProps[ PROP_CharHeight ] <<= GetFontHeight( mpMasterTextListStyle->getListStyle()[0]->getTextCharacterProperties().moHeight.get() );
+                aShapeProps.setProperty(PROP_CharHeight, GetFontHeight( mpMasterTextListStyle->getListStyle()[0]->getTextCharacterProperties().moHeight.get() ));
         }
 
         // applying properties
@@ -676,19 +676,19 @@ Reference< XShape > Shape::createAndInsert(
                 // TextFrames have BackColor, not FillColor
                 if (aShapeProps.hasProperty(PROP_FillColor))
                 {
-                    aShapeProps.setProperty(PROP_BackColor, aShapeProps[PROP_FillColor]);
+                    aShapeProps.setProperty(PROP_BackColor, aShapeProps.getProperty(PROP_FillColor));
                     aShapeProps.erase(PROP_FillColor);
                 }
                 // TextFrames have BackColorTransparency, not FillTransparence
                 if (aShapeProps.hasProperty(PROP_FillTransparence))
                 {
-                    aShapeProps.setProperty(PROP_BackColorTransparency, aShapeProps[PROP_FillTransparence]);
+                    aShapeProps.setProperty(PROP_BackColorTransparency, aShapeProps.getProperty(PROP_FillTransparence));
                     aShapeProps.erase(PROP_FillTransparence);
                 }
                 // TextFrames have BackGrahicURL, not FillBitmapURL
                 if (aShapeProps.hasProperty(PROP_FillBitmapURL))
                 {
-                    aShapeProps.setProperty(PROP_BackGraphicURL, aShapeProps[PROP_FillBitmapURL]);
+                    aShapeProps.setProperty(PROP_BackGraphicURL, aShapeProps.getProperty(PROP_FillBitmapURL));
                     aShapeProps.erase(PROP_FillBitmapURL);
                 }
                 // And no LineColor property; individual borders can have colors
@@ -702,7 +702,7 @@ Reference< XShape > Shape::createAndInsert(
                     for (unsigned int i = 0; i < SAL_N_ELEMENTS(aBorders); ++i)
                     {
                         css::table::BorderLine2 aBorderLine = xPropertySet->getPropertyValue(PropertyMap::getPropertyName(aBorders[i])).get<css::table::BorderLine2>();
-                        aBorderLine.Color = aShapeProps[PROP_LineColor].get<sal_Int32>();
+                        aBorderLine.Color = aShapeProps.getProperty(PROP_LineColor).get<sal_Int32>();
                         if (aLineProperties.moLineWidth.has())
                             aBorderLine.LineWidth = convertEmuToHmm(aLineProperties.moLineWidth.get());
                         aShapeProps.setProperty(aBorders[i], uno::makeAny(aBorderLine));
@@ -735,7 +735,7 @@ Reference< XShape > Shape::createAndInsert(
                 boost::optional<sal_Int32> oShadowDistance;
                 if (aShapeProps.hasProperty(PROP_ShadowXDistance))
                 {
-                    oShadowDistance = aShapeProps[PROP_ShadowXDistance].get<sal_Int32>();
+                    oShadowDistance = aShapeProps.getProperty(PROP_ShadowXDistance).get<sal_Int32>();
                     aShapeProps.erase(PROP_ShadowXDistance);
                 }
                 if (aShapeProps.hasProperty(PROP_ShadowYDistance))
@@ -746,7 +746,7 @@ Reference< XShape > Shape::createAndInsert(
                 boost::optional<sal_Int32> oShadowColor;
                 if (aShapeProps.hasProperty(PROP_ShadowColor))
                 {
-                    oShadowColor = aShapeProps[PROP_ShadowColor].get<sal_Int32>();
+                    oShadowColor = aShapeProps.getProperty(PROP_ShadowColor).get<sal_Int32>();
                     aShapeProps.erase(PROP_ShadowColor);
                 }
                 if (aShapeProps.hasProperty(PROP_Shadow))
@@ -793,8 +793,8 @@ Reference< XShape > Shape::createAndInsert(
             // Store original fill and line colors of the shape and the theme color name to InteropGrabBag
             Sequence< PropertyValue > aProperties( 6 );  //allocate the maximum possible number of slots
             sal_Int32 nSize = 2;
-            PUT_PROP( aProperties, 0, "OriginalSolidFillClr", aShapeProps[PROP_FillColor] );
-            PUT_PROP( aProperties, 1, "OriginalLnSolidFillClr", aShapeProps[PROP_LineColor] );
+            PUT_PROP( aProperties, 0, "OriginalSolidFillClr", aShapeProps.getProperty(PROP_FillColor) );
+            PUT_PROP( aProperties, 1, "OriginalLnSolidFillClr", aShapeProps.getProperty(PROP_LineColor) );
             OUString sColorFillScheme = aFillProperties.maFillColor.getSchemeName();
             if( !aFillProperties.maFillColor.isPlaceHolder() && !sColorFillScheme.isEmpty() )
             {
@@ -857,7 +857,7 @@ Reference< XShape > Shape::createAndInsert(
                 // which is already saved into StyleFillRef property, so no need to save the explicit values too
                 if( getFillProperties().moFillType.has() )
                     putPropertyToGrabBag( "GradFillDefinition", Any( aGradientStops ) );
-                putPropertyToGrabBag( "OriginalGradFill", Any( aShapeProps[PROP_FillGradient] ) );
+                putPropertyToGrabBag( "OriginalGradFill", aShapeProps.getProperty(PROP_FillGradient) );
             }
         }
 
@@ -1084,7 +1084,7 @@ OUString Shape::finalizeServiceName( XmlFilterBase& rFilter, const OUString& rSe
             {
                 Reference< graphic::XGraphic > xGraphic = rFilter.getGraphicHelper().importEmbeddedGraphic( aGraphicPath );
                 if( xGraphic.is() )
-                    maShapeProperties[ PROP_Graphic ] <<= xGraphic;
+                    maShapeProperties.setProperty(PROP_Graphic, xGraphic);
             }
         }
         break;

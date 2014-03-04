@@ -118,15 +118,12 @@ public:
     virtual sal_Bool SAL_CALL hasPropertyByName( const OUString& Name ) throw (RuntimeException, std::exception);
 
 private:
-    typedef ::std::map< OUString, Any > PropertyNameMap;
     PropertyNameMap     maPropMap;
 };
 
 GenericPropertySet::GenericPropertySet( const PropertyMap& rPropMap )
 {
-    const PropertyNameVector& rPropNames = StaticPropertyNameVector::get();
-    for( PropertyMap::const_iterator aIt = rPropMap.begin(), aEnd = rPropMap.end(); aIt != aEnd; ++aIt )
-        maPropMap[ rPropNames[ aIt->first ] ] = aIt->second;
+    rPropMap.fillPropertyNameMap(maPropMap);
 }
 
 Reference< XPropertySetInfo > SAL_CALL GenericPropertySet::getPropertySetInfo() throw (RuntimeException, std::exception)
@@ -194,6 +191,42 @@ PropertyMap::PropertyMap() :
 {
 }
 
+bool PropertyMap::hasProperty( sal_Int32 nPropId ) const
+{
+    return maProperties.find( nPropId ) != maProperties.end();
+}
+
+bool PropertyMap::setAnyProperty( sal_Int32 nPropId, const Any& rValue )
+{
+    if( nPropId < 0 )
+        return false;
+
+    SAL_WARN_IF(sal_Int32(mpPropNames->size()) <= nPropId, "oox", "invalid PropId");
+    maProperties[ nPropId ] = rValue;
+    return true;
+}
+
+Any PropertyMap::getProperty( sal_Int32 nPropId )
+{
+    return maProperties[ nPropId ];
+}
+
+void PropertyMap::erase( sal_Int32 nPropId )
+{
+    maProperties.erase(nPropId);
+}
+
+bool PropertyMap::empty() const
+{
+    return maProperties.empty();
+}
+
+void PropertyMap::assignUsed( const PropertyMap& rPropMap )
+{
+    SAL_WARN_IF(rPropMap.maProperties.size() > maProperties.size(), "oox", "too many properties");
+    maProperties.insert(rPropMap.maProperties.begin(), rPropMap.maProperties.end());
+}
+
 const OUString& PropertyMap::getPropertyName( sal_Int32 nPropId )
 {
     OSL_ENSURE( (0 <= nPropId) && (nPropId < PROP_COUNT), "PropertyMap::getPropertyName - invalid property identifier" );
@@ -202,17 +235,17 @@ const OUString& PropertyMap::getPropertyName( sal_Int32 nPropId )
 
 void PropertyMap::assignAll( const PropertyMap& rPropMap )
 {
-    for( PropertyMap::const_iterator it=rPropMap.begin(); it != rPropMap.end(); ++it )
-        (*this)[it->first] = it->second;
+    for( PropertyMapType::const_iterator it=rPropMap.maProperties.begin(); it != rPropMap.maProperties.end(); ++it )
+        maProperties[it->first] = it->second;
 }
 
 Sequence< PropertyValue > PropertyMap::makePropertyValueSequence() const
 {
-    Sequence< PropertyValue > aSeq( static_cast< sal_Int32 >( size() ) );
-    if( !empty() )
+    Sequence< PropertyValue > aSeq( static_cast< sal_Int32 >( maProperties.size() ) );
+    if( !maProperties.empty() )
     {
         PropertyValue* pValues = aSeq.getArray();
-        for( const_iterator aIt = begin(), aEnd = end(); aIt != aEnd; ++aIt, ++pValues )
+        for( PropertyMapType::const_iterator aIt = maProperties.begin(), aEnd = maProperties.end(); aIt != aEnd; ++aIt, ++pValues )
         {
             OSL_ENSURE( (0 <= aIt->first) && (aIt->first < PROP_COUNT), "PropertyMap::makePropertyValueSequence - invalid property identifier" );
             pValues->Name = (*mpPropNames)[ aIt->first ];
@@ -225,13 +258,13 @@ Sequence< PropertyValue > PropertyMap::makePropertyValueSequence() const
 
 void PropertyMap::fillSequences( Sequence< OUString >& rNames, Sequence< Any >& rValues ) const
 {
-    rNames.realloc( static_cast< sal_Int32 >( size() ) );
-    rValues.realloc( static_cast< sal_Int32 >( size() ) );
-    if( !empty() )
+    rNames.realloc( static_cast< sal_Int32 >( maProperties.size() ) );
+    rValues.realloc( static_cast< sal_Int32 >( maProperties.size() ) );
+    if( !maProperties.empty() )
     {
         OUString* pNames = rNames.getArray();
         Any* pValues = rValues.getArray();
-        for( const_iterator aIt = begin(), aEnd = end(); aIt != aEnd; ++aIt, ++pNames, ++pValues )
+        for( PropertyMapType::const_iterator aIt = maProperties.begin(), aEnd = maProperties.end(); aIt != aEnd; ++aIt, ++pNames, ++pValues )
         {
             OSL_ENSURE( (0 <= aIt->first) && (aIt->first < PROP_COUNT), "PropertyMap::fillSequences - invalid property identifier" );
             if((sal_uInt32)aIt->first <= mpPropNames->size())
@@ -240,6 +273,15 @@ void PropertyMap::fillSequences( Sequence< OUString >& rNames, Sequence< Any >& 
                *pValues = aIt->second;
             }
         }
+    }
+}
+
+void PropertyMap::fillPropertyNameMap(PropertyNameMap& rMap) const
+{
+    for(PropertyMapType::const_iterator itr = maProperties.begin(),
+            itrEnd = maProperties.end(); itr != itrEnd; ++itr)
+    {
+        rMap.insert(std::pair<OUString, Any>((*mpPropNames)[itr->first], itr->second));
     }
 }
 

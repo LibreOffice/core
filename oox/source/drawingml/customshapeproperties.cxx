@@ -131,7 +131,7 @@ void CustomShapeProperties::pushToPropSet( const ::oox::core::FilterBase& /* rFi
             Reference< drawing::XEnhancedCustomShapeDefaulter > xDefaulter( xShape, UNO_QUERY );
             if( xDefaulter.is() ) {
                 xDefaulter->createCustomShapeDefaults( sConnectorShapeType );
-                aPropertyMap[ PROP_Type ] <<= Any( sConnectorShapeType );
+                aPropertyMap.setProperty( PROP_Type, sConnectorShapeType );
             }
         }
         else if (maPresetsMap.find(mnShapePresetType) != maPresetsMap.end())
@@ -146,10 +146,10 @@ void CustomShapeProperties::pushToPropSet( const ::oox::core::FilterBase& /* rFi
 #endif
         }
 
-        aPropertyMap[ PROP_MirroredX ] <<= Any( mbMirroredX );
-        aPropertyMap[ PROP_MirroredY ] <<= Any( mbMirroredY );
-        aPropertyMap[ PROP_TextPreRotateAngle ] <<= Any( mnTextRotateAngle );
-        aPropertyMap[ PROP_IsPostRotateAngle ] <<= true; // For OpenXML Imports
+        aPropertyMap.setProperty( PROP_MirroredX, (sal_Bool) mbMirroredX );
+        aPropertyMap.setProperty( PROP_MirroredY, (sal_Bool) mbMirroredY );
+        aPropertyMap.setProperty( PROP_TextPreRotateAngle, mnTextRotateAngle );
+        aPropertyMap.setProperty( PROP_IsPostRotateAngle, (sal_Bool)true); // For OpenXML Imports
         Sequence< PropertyValue > aSeq = aPropertyMap.makePropertyValueSequence();
         aPropSet.setProperty( PROP_CustomShapeGeometry, aSeq );
 
@@ -211,9 +211,9 @@ void CustomShapeProperties::pushToPropSet( const ::oox::core::FilterBase& /* rFi
     {
         sal_uInt32 i;
         PropertyMap aPropertyMap;
-        aPropertyMap[ PROP_Type ] <<= OUString( "ooxml-non-primitive" );
-        aPropertyMap[ PROP_MirroredX ] <<= Any( mbMirroredX );
-        aPropertyMap[ PROP_MirroredY ] <<= Any( mbMirroredY );
+        aPropertyMap.setProperty( PROP_Type, OUString( "ooxml-non-primitive" ));
+        aPropertyMap.setProperty( PROP_MirroredX, (sal_Bool) mbMirroredX );
+        aPropertyMap.setProperty( PROP_MirroredY, (sal_Bool) mbMirroredY );
         // Note 1: If Equations are defined - they are processed using internal div by 360 coordinates
         // while if they are not, standard ooxml coordinates are used.
         // This size specifically affects scaling.
@@ -221,7 +221,7 @@ void CustomShapeProperties::pushToPropSet( const ::oox::core::FilterBase& /* rFi
         awt::Rectangle aViewBox( 0, 0, aSize.Width, aSize.Height );
         if( maGuideList.size() )
             aViewBox = awt::Rectangle( 0, 0, 0, 0 );
-        aPropertyMap[ PROP_ViewBox ] <<= aViewBox;
+        aPropertyMap.setProperty( PROP_ViewBox, aViewBox);
 
         Sequence< EnhancedCustomShapeAdjustmentValue > aAdjustmentValues( maAdjustmentGuideList.size() );
         for ( i = 0; i < maAdjustmentGuideList.size(); i++ )
@@ -232,14 +232,14 @@ void CustomShapeProperties::pushToPropSet( const ::oox::core::FilterBase& /* rFi
             aAdjustmentVal.Name = maAdjustmentGuideList[ i ].maName;
             aAdjustmentValues[ i ] = aAdjustmentVal;
         }
-        aPropertyMap[ PROP_AdjustmentValues ] <<= aAdjustmentValues;
+        aPropertyMap.setProperty( PROP_AdjustmentValues, aAdjustmentValues);
 
         PropertyMap aPath;
 
         Sequence< EnhancedCustomShapeSegment > aSegments( maSegments.size() );
         for ( i = 0; i < maSegments.size(); i++ )
             aSegments[ i ] = maSegments[ i ];
-        aPath[ PROP_Segments ] <<= aSegments;
+        aPath.setProperty( PROP_Segments, aSegments);
 
         if ( maTextRect.has() ) {
             Sequence< EnhancedCustomShapeTextFrame > aTextFrames(1);
@@ -247,7 +247,7 @@ void CustomShapeProperties::pushToPropSet( const ::oox::core::FilterBase& /* rFi
             aTextFrames[0].TopLeft.Second = maTextRect.get().t;
             aTextFrames[0].BottomRight.First = maTextRect.get().r;
             aTextFrames[0].BottomRight.Second = maTextRect.get().b;
-            aPath[ PROP_TextFrames ] <<= aTextFrames;
+            aPath.setProperty( PROP_TextFrames, aTextFrames);
         }
 
         sal_uInt32 j, k, nParameterPairs = 0;
@@ -258,7 +258,7 @@ void CustomShapeProperties::pushToPropSet( const ::oox::core::FilterBase& /* rFi
         for ( i = 0, k = 0; i < maPath2DList.size(); i++ )
             for ( j = 0; j < maPath2DList[ i ].parameter.size(); j++ )
                 aParameterPairs[ k++ ] = maPath2DList[ i ].parameter[ j ];
-        aPath[ PROP_Coordinates ] <<= aParameterPairs;
+        aPath.setProperty( PROP_Coordinates, aParameterPairs);
 
         if ( maPath2DList.size() )
         {
@@ -279,17 +279,17 @@ void CustomShapeProperties::pushToPropSet( const ::oox::core::FilterBase& /* rFi
                     aSubViewSize[i].Height = static_cast< sal_Int32 >( maPath2DList[i].h );
                     OSL_TRACE("set subpath %d size: %d x %d", i, maPath2DList[i].w, maPath2DList[i].h);
                 }
-                aPath[ PROP_SubViewSize ] <<= aSubViewSize;
+                aPath.setProperty( PROP_SubViewSize, aSubViewSize);
             }
         }
 
         Sequence< PropertyValue > aPathSequence = aPath.makePropertyValueSequence();
-        aPropertyMap[ PROP_Path ] <<= aPathSequence;
+        aPropertyMap.setProperty( PROP_Path, aPathSequence);
 
         Sequence< OUString > aEquations( maGuideList.size() );
         for ( i = 0; i < maGuideList.size(); i++ )
             aEquations[ i ] = maGuideList[ i ].maFormula;
-        aPropertyMap[ PROP_Equations ] <<= aEquations;
+        aPropertyMap.setProperty( PROP_Equations, aEquations);
 
         Sequence< PropertyValues > aHandles( maAdjustHandleList.size() );
         for ( i = 0; i < maAdjustHandleList.size(); i++ )
@@ -303,48 +303,48 @@ void CustomShapeProperties::pushToPropSet( const ::oox::core::FilterBase& /* rFi
             // adjustment value is decisive
             if ( maAdjustHandleList[ i ].polar )
             {
-                aHandle[ PROP_Position ] <<= maAdjustHandleList[ i ].pos;
+                aHandle.setProperty( PROP_Position, maAdjustHandleList[ i ].pos);
                 if ( maAdjustHandleList[ i ].min1.has() )
-                    aHandle[ PROP_RadiusRangeMinimum ] <<= maAdjustHandleList[ i ].min1.get();
+                    aHandle.setProperty( PROP_RadiusRangeMinimum, maAdjustHandleList[ i ].min1.get());
                 if ( maAdjustHandleList[ i ].max1.has() )
-                    aHandle[ PROP_RadiusRangeMaximum ] <<= maAdjustHandleList[ i ].max1.get();
+                    aHandle.setProperty( PROP_RadiusRangeMaximum, maAdjustHandleList[ i ].max1.get());
 
                 /* TODO: AngleMin & AngleMax
                 if ( maAdjustHandleList[ i ].min2.has() )
-                    aHandle[ PROP_ ] = maAdjustHandleList[ i ].min2.get();
+                    aHandle.setProperty( PROP_ ] = maAdjustHandleList[ i ].min2.get());
                 if ( maAdjustHandleList[ i ].max2.has() )
-                    aHandle[ PROP_ ] = maAdjustHandleList[ i ].max2.get();
+                    aHandle.setProperty( PROP_ ] = maAdjustHandleList[ i ].max2.get());
                 */
             }
             else
             {
-                aHandle[ PROP_Position ] <<= maAdjustHandleList[ i ].pos;
+                aHandle.setProperty( PROP_Position, maAdjustHandleList[ i ].pos);
                 if ( maAdjustHandleList[ i ].gdRef1.has() )
                 {
                     // TODO: PROP_RefX and PROP_RefY are not yet part of our file format,
                     // so the handles will not work after save/reload
                     sal_Int32 nIndex = GetCustomShapeGuideValue( maAdjustmentGuideList, maAdjustHandleList[ i ].gdRef1.get() );
                     if ( nIndex >= 0 )
-                        aHandle[ PROP_RefX ] <<= nIndex;
+                        aHandle.setProperty( PROP_RefX, nIndex);
                 }
                 if ( maAdjustHandleList[ i ].gdRef2.has() )
                 {
                     sal_Int32 nIndex = GetCustomShapeGuideValue( maAdjustmentGuideList, maAdjustHandleList[ i ].gdRef2.get() );
                     if ( nIndex >= 0 )
-                        aHandle[ PROP_RefY ] <<= nIndex;
+                        aHandle.setProperty( PROP_RefY, nIndex);
                 }
                 if ( maAdjustHandleList[ i ].min1.has() )
-                    aHandle[ PROP_RangeXMinimum ] <<= maAdjustHandleList[ i ].min1.get();
+                    aHandle.setProperty( PROP_RangeXMinimum, maAdjustHandleList[ i ].min1.get());
                 if ( maAdjustHandleList[ i ].max1.has() )
-                    aHandle[ PROP_RangeXMaximum ] <<= maAdjustHandleList[ i ].max1.get();
+                    aHandle.setProperty( PROP_RangeXMaximum, maAdjustHandleList[ i ].max1.get());
                 if ( maAdjustHandleList[ i ].min2.has() )
-                    aHandle[ PROP_RangeYMinimum ] <<= maAdjustHandleList[ i ].min2.get();
+                    aHandle.setProperty( PROP_RangeYMinimum, maAdjustHandleList[ i ].min2.get());
                 if ( maAdjustHandleList[ i ].max2.has() )
-                    aHandle[ PROP_RangeYMaximum ] <<= maAdjustHandleList[ i ].max2.get();
+                    aHandle.setProperty( PROP_RangeYMaximum, maAdjustHandleList[ i ].max2.get());
             }
             aHandles[ i ] = aHandle.makePropertyValueSequence();
         }
-        aPropertyMap[ PROP_Handles ] <<= aHandles;
+        aPropertyMap.setProperty( PROP_Handles, aHandles);
 
 #ifdef DEBUG
         SAL_INFO("oox.cscode", "==cscode== begin");

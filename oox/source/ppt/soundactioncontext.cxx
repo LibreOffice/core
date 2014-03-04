@@ -64,8 +64,8 @@ namespace oox { namespace ppt {
                 }
                 if ( !url.isEmpty() )
                 {
-                    maSlideProperties[ PROP_Sound ] <<= url;
-                    maSlideProperties[ PROP_SoundOn ] <<= sal_True;
+                    maSlideProperties.setProperty( PROP_Sound, url);
+                    maSlideProperties.setProperty( PROP_SoundOn, sal_True);
                 }
             }
         }

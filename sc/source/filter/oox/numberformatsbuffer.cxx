@@ -1946,7 +1946,7 @@ void NumberFormat::fillToItemSet( SfxItemSet& rItemSet, bool bSkipPoolDefs ) con
 
 void NumberFormat::writeToPropertyMap( PropertyMap& rPropMap ) const
 {
-    rPropMap[ PROP_NumberFormat ] <<= maApiData.mnIndex;
+    rPropMap.setProperty( PROP_NumberFormat, maApiData.mnIndex);
 }
 
 

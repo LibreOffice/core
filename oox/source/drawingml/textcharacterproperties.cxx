@@ -42,7 +42,7 @@ namespace drawingml {
 void TextCharacterProperties::assignUsed( const TextCharacterProperties& rSourceProps )
 {
     // overwrite all properties exisiting in rSourceProps
-    maHyperlinkPropertyMap.insert( rSourceProps.maHyperlinkPropertyMap.begin(), rSourceProps.maHyperlinkPropertyMap.end() );
+    maHyperlinkPropertyMap.assignUsed( rSourceProps.maHyperlinkPropertyMap );
     maLatinFont.assignIfUsed( rSourceProps.maLatinFont );
     maLatinThemeFont.assignIfUsed( rSourceProps.maLatinThemeFont );
     maAsianFont.assignIfUsed( rSourceProps.maAsianFont );
@@ -77,9 +77,9 @@ void TextCharacterProperties::pushToPropMap( PropertyMap& rPropMap, const XmlFil
         bRet = maLatinThemeFont.getFontData( aFontName, nFontPitch, nFontFamily, rFilter );
     if (bRet)
     {
-        rPropMap[ PROP_CharFontName ] <<= aFontName;
-        rPropMap[ PROP_CharFontPitch ] <<= nFontPitch;
-        rPropMap[ PROP_CharFontFamily ] <<= nFontFamily;
+        rPropMap.setProperty( PROP_CharFontName, aFontName);
+        rPropMap.setProperty( PROP_CharFontPitch, nFontPitch);
+        rPropMap.setProperty( PROP_CharFontFamily, nFontFamily);
     }
 
     bRet = maAsianFont.getFontData( aFontName, nFontPitch, nFontFamily, rFilter );
@@ -87,9 +87,9 @@ void TextCharacterProperties::pushToPropMap( PropertyMap& rPropMap, const XmlFil
         bRet = maAsianThemeFont.getFontData( aFontName, nFontPitch, nFontFamily, rFilter );
     if (bRet)
     {
-        rPropMap[ PROP_CharFontNameAsian ] <<= aFontName;
-        rPropMap[ PROP_CharFontPitchAsian ] <<= nFontFamily;
-        rPropMap[ PROP_CharFontFamilyAsian ] <<= nFontPitch;
+        rPropMap.setProperty( PROP_CharFontNameAsian, aFontName);
+        rPropMap.setProperty( PROP_CharFontPitchAsian, nFontFamily);
+        rPropMap.setProperty( PROP_CharFontFamilyAsian, nFontPitch);
     }
 
     bRet = maComplexFont.getFontData( aFontName, nFontPitch, nFontFamily, rFilter );
@@ -97,65 +97,65 @@ void TextCharacterProperties::pushToPropMap( PropertyMap& rPropMap, const XmlFil
         bRet = maComplexThemeFont.getFontData( aFontName, nFontPitch, nFontFamily, rFilter );
     if (bRet)
     {
-        rPropMap[ PROP_CharFontNameComplex ] <<= aFontName;
-        rPropMap[ PROP_CharFontPitchComplex ] <<= nFontPitch;
-        rPropMap[ PROP_CharFontFamilyComplex ] <<= nFontFamily;
+        rPropMap.setProperty( PROP_CharFontNameComplex, aFontName);
+        rPropMap.setProperty( PROP_CharFontPitchComplex, nFontPitch);
+        rPropMap.setProperty( PROP_CharFontFamilyComplex, nFontFamily);
     }
 
     // symbolfont, will now be ... textrun.cxx ... ausgewertet !!!i#113673
 
     if( maCharColor.isUsed() )
-        rPropMap[ PROP_CharColor ] <<= maCharColor.getColor( rFilter.getGraphicHelper() );
+        rPropMap.setProperty( PROP_CharColor, maCharColor.getColor( rFilter.getGraphicHelper() ));
 
     if( moLang.has() && !moLang.get().isEmpty() )
     {
         lang::Locale aLocale( LanguageTag( moLang.get()).getLocale());
-        rPropMap[ PROP_CharLocale ] <<= aLocale;
-        rPropMap[ PROP_CharLocaleAsian ] <<= aLocale;
-        rPropMap[ PROP_CharLocaleComplex ] <<= aLocale;
+        rPropMap.setProperty( PROP_CharLocale, aLocale);
+        rPropMap.setProperty( PROP_CharLocaleAsian, aLocale);
+        rPropMap.setProperty( PROP_CharLocaleComplex, aLocale);
     }
 
     if( moHeight.has() )
     {
         float fHeight = GetFontHeight( moHeight.get() );
-        rPropMap[ PROP_CharHeight ] <<= fHeight;
-        rPropMap[ PROP_CharHeightAsian ] <<= fHeight;
-        rPropMap[ PROP_CharHeightComplex ] <<= fHeight;
+        rPropMap.setProperty( PROP_CharHeight, fHeight);
+        rPropMap.setProperty( PROP_CharHeightAsian, fHeight);
+        rPropMap.setProperty( PROP_CharHeightComplex, fHeight);
     }
 
-    rPropMap[ PROP_CharKerning ] <<= (sal_Int16) GetTextSpacingPoint( moSpacing.get( 0 ) );
+    rPropMap.setProperty( PROP_CharKerning, (sal_Int16) GetTextSpacingPoint( moSpacing.get( 0 ) ));
 
-    rPropMap[ PROP_CharUnderline ] <<= GetFontUnderline( moUnderline.get( XML_none ) );
-    rPropMap[ PROP_CharStrikeout ] <<= GetFontStrikeout( moStrikeout.get( XML_noStrike ) );
-    rPropMap[ PROP_CharCaseMap ] <<= GetCaseMap( moCaseMap.get( XML_none ) );
+    rPropMap.setProperty( PROP_CharUnderline, GetFontUnderline( moUnderline.get( XML_none ) ));
+    rPropMap.setProperty( PROP_CharStrikeout, GetFontStrikeout( moStrikeout.get( XML_noStrike ) ));
+    rPropMap.setProperty( PROP_CharCaseMap, GetCaseMap( moCaseMap.get( XML_none ) ));
 
     if( moBaseline.has() ) {
-        rPropMap[ PROP_CharEscapement ] <<= sal_Int16(moBaseline.get( 0 ) / 1000);
-        rPropMap[ PROP_CharEscapementHeight ] <<= sal_Int8(DFLT_ESC_PROP);
+        rPropMap.setProperty( PROP_CharEscapement, sal_Int16(moBaseline.get( 0 ) / 1000));
+        rPropMap.setProperty( PROP_CharEscapementHeight, sal_Int8(DFLT_ESC_PROP));
     } else {
-        rPropMap[ PROP_CharEscapement ] <<= sal_Int16(0);
-        rPropMap[ PROP_CharEscapementHeight ] <<= sal_Int8(100); // 100%
+        rPropMap.setProperty( PROP_CharEscapement, sal_Int16(0));
+        rPropMap.setProperty( PROP_CharEscapementHeight, sal_Int8(100)); // 100%
     }
 
     if( !bUseOptional || moBold.has() ) {
         float fWeight = moBold.get( false ) ? awt::FontWeight::BOLD : awt::FontWeight::NORMAL;
-        rPropMap[ PROP_CharWeight ] <<= fWeight;
-        rPropMap[ PROP_CharWeightAsian ] <<= fWeight;
-        rPropMap[ PROP_CharWeightComplex ] <<= fWeight;
+        rPropMap.setProperty( PROP_CharWeight, fWeight);
+        rPropMap.setProperty( PROP_CharWeightAsian, fWeight);
+        rPropMap.setProperty( PROP_CharWeightComplex, fWeight);
     }
 
     if( !bUseOptional || moItalic.has() ) {
         awt::FontSlant eSlant = moItalic.get( false ) ? awt::FontSlant_ITALIC : awt::FontSlant_NONE;
-        rPropMap[ PROP_CharPosture ] <<= eSlant;
-        rPropMap[ PROP_CharPostureAsian ] <<= eSlant;
-        rPropMap[ PROP_CharPostureComplex ] <<= eSlant;
+        rPropMap.setProperty( PROP_CharPosture, eSlant);
+        rPropMap.setProperty( PROP_CharPostureAsian, eSlant);
+        rPropMap.setProperty( PROP_CharPostureComplex, eSlant);
     }
 
     bool bUnderlineFillFollowText = moUnderlineFillFollowText.get( false );
     if( moUnderline.has() && maUnderlineColor.isUsed() && !bUnderlineFillFollowText )
     {
-        rPropMap[ PROP_CharUnderlineHasColor ] <<= true;
-        rPropMap[ PROP_CharUnderlineColor ] <<= maUnderlineColor.getColor( rFilter.getGraphicHelper() );
+        rPropMap.setProperty( PROP_CharUnderlineHasColor, true);
+        rPropMap.setProperty( PROP_CharUnderlineColor, maUnderlineColor.getColor( rFilter.getGraphicHelper() ));
     }
 }
 

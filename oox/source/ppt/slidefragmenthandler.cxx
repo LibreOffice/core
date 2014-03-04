@@ -78,7 +78,7 @@ SlideFragmentHandler::~SlideFragmentHandler() throw()
         PropertyMap aPropMap;
         PropertySet aSlideProp( xSlide );
 
-        aPropMap[ PROP_Visible ] = Any( rAttribs.getBool( XML_show, true ) );
+        aPropMap.setProperty( PROP_Visible, rAttribs.getBool( XML_show, true ));
         aSlideProp.setProperties( aPropMap );
 
         return this;

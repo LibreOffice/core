@@ -86,7 +86,7 @@ bool OleObjectHelper::importOleObject( PropertyMap& rPropMap, const OleObjectInf
         // linked OLE object - set target URL
         if( !rOleObject.maTargetLink.isEmpty() )
         {
-            rPropMap[ PROP_LinkURL ] <<= rOleObject.maTargetLink;
+            rPropMap.setProperty( PROP_LinkURL, rOleObject.maTargetLink);
             bRet = true;
         }
     }
@@ -107,7 +107,7 @@ bool OleObjectHelper::importOleObject( PropertyMap& rPropMap, const OleObjectInf
             OUString aPersistName = aUrl.copy( maEmbeddedObjScheme.getLength() );
             if( !aPersistName.isEmpty() )
             {
-                rPropMap[ PROP_PersistName ] <<= aPersistName;
+                rPropMap.setProperty( PROP_PersistName, aPersistName);
                 bRet = true;
             }
         }
@@ -118,8 +118,8 @@ bool OleObjectHelper::importOleObject( PropertyMap& rPropMap, const OleObjectInf
 
     if( bRet )
     {
-        rPropMap[ PROP_Aspect ] <<= (rOleObject.mbShowAsIcon ? Aspects::MSOLE_ICON : Aspects::MSOLE_CONTENT);
-        rPropMap[ PROP_VisualArea ] <<= awt::Rectangle( 0, 0, rObjSize.Width, rObjSize.Height );
+        rPropMap.setProperty( PROP_Aspect, (rOleObject.mbShowAsIcon ? Aspects::MSOLE_ICON : Aspects::MSOLE_CONTENT));
+        rPropMap.setProperty( PROP_VisualArea, awt::Rectangle( 0, 0, rObjSize.Width, rObjSize.Height ));
     }
     return bRet;
 }

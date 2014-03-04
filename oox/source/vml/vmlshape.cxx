@@ -387,13 +387,13 @@ void ShapeBase::convertShapeProperties( const Reference< XShape >& rxShape ) con
         // TextFrames have BackColor, not FillColor
         if (aPropMap.hasProperty(PROP_FillColor))
         {
-            aPropMap.setProperty(PROP_BackColor, aPropMap[PROP_FillColor]);
+            aPropMap.setAnyProperty(PROP_BackColor, aPropMap.getProperty(PROP_FillColor));
             aPropMap.erase(PROP_FillColor);
         }
         // TextFrames have BackColorTransparency, not FillTransparence
         if (aPropMap.hasProperty(PROP_FillTransparence))
         {
-            aPropMap.setProperty(PROP_BackColorTransparency, aPropMap[PROP_FillTransparence]);
+            aPropMap.setAnyProperty(PROP_BackColorTransparency, aPropMap.getProperty(PROP_FillTransparence));
             aPropMap.erase(PROP_FillTransparence);
         }
         // And no LineColor property; individual borders can have colors and widths
@@ -409,7 +409,7 @@ void ShapeBase::convertShapeProperties( const Reference< XShape >& rxShape ) con
             for (unsigned int i = 0; i < SAL_N_ELEMENTS(aBorders); ++i)
             {
                 table::BorderLine2 aBorderLine = xPropertySet->getPropertyValue(PropertyMap::getPropertyName(aBorders[i])).get<table::BorderLine2>();
-                aBorderLine.Color = aPropMap[PROP_LineColor].get<sal_Int32>();
+                aBorderLine.Color = aPropMap.getProperty(PROP_LineColor).get<sal_Int32>();
                 if (oLineWidth)
                     aBorderLine.LineWidth = *oLineWidth;
                 aPropMap.setProperty(aBorders[i], uno::makeAny(aBorderLine));
@@ -971,7 +971,7 @@ Reference< XShape > ComplexShape::implConvertAndInsert( const Reference< XShapes
                 {
                     Reference< XGraphic > xGraphic = rFilter.getGraphicHelper().importEmbeddedGraphic( aGraphicPath );
                     if( xGraphic.is() )
-                        aOleProps[ PROP_Graphic ] <<= xGraphic;
+                        aOleProps.setProperty( PROP_Graphic, xGraphic);
                 }
 
                 PropertySet aPropSet( xShape );

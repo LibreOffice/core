@@ -115,7 +115,6 @@ public:
 
     using PropertyMap::setAnyProperty;
     using PropertyMap::setProperty;
-    using PropertyMap::operator[];
 
 private:
     /** Sets an explicit line marker, or creates a named line marker. */

@@ -419,28 +419,28 @@ void SheetViewSettings::finalizeImport()
 
     // write the sheet view settings into the property sequence
     PropertyMap aPropMap;
-    aPropMap[ PROP_TableSelected ]                <<= bSelected;
-    aPropMap[ PROP_CursorPositionX ]              <<= aCursor.Column;
-    aPropMap[ PROP_CursorPositionY ]              <<= aCursor.Row;
-    aPropMap[ PROP_HorizontalSplitMode ]          <<= nHSplitMode;
-    aPropMap[ PROP_VerticalSplitMode ]            <<= nVSplitMode;
-    aPropMap[ PROP_HorizontalSplitPositionTwips ] <<= nHSplitPos;
-    aPropMap[ PROP_VerticalSplitPositionTwips ]   <<= nVSplitPos;
-    aPropMap[ PROP_ActiveSplitRange ]             <<= nActivePane;
-    aPropMap[ PROP_PositionLeft ]                 <<= aFirstPos.Column;
-    aPropMap[ PROP_PositionTop ]                  <<= aFirstPos.Row;
-    aPropMap[ PROP_PositionRight ]                <<= xModel->maSecondPos.Column;
-    aPropMap[ PROP_PositionBottom ]               <<= ((nVSplitPos > 0) ? xModel->maSecondPos.Row : xModel->maFirstPos.Row);
-    aPropMap[ PROP_ZoomType ]                     <<= API_ZOOMTYPE_PERCENT;
-    aPropMap[ PROP_ZoomValue ]                    <<= static_cast< sal_Int16 >( xModel->getNormalZoom() );
-    aPropMap[ PROP_PageViewZoomValue ]            <<= static_cast< sal_Int16 >( xModel->getPageBreakZoom() );
-    aPropMap[ PROP_GridColor ]                    <<= xModel->getGridColor( getBaseFilter() );
-    aPropMap[ PROP_ShowPageBreakPreview ]         <<= xModel->isPageBreakPreview();
-    aPropMap[ PROP_ShowFormulas ]                 <<= xModel->mbShowFormulas;
-    aPropMap[ PROP_ShowGrid ]                     <<= xModel->mbShowGrid;
-    aPropMap[ PROP_HasColumnRowHeaders ]          <<= xModel->mbShowHeadings;
-    aPropMap[ PROP_ShowZeroValues ]               <<= xModel->mbShowZeros;
-    aPropMap[ PROP_IsOutlineSymbolsSet ]          <<= xModel->mbShowOutline;
+    aPropMap.setProperty( PROP_TableSelected, bSelected);
+    aPropMap.setProperty( PROP_CursorPositionX, aCursor.Column);
+    aPropMap.setProperty( PROP_CursorPositionY, aCursor.Row);
+    aPropMap.setProperty( PROP_HorizontalSplitMode, nHSplitMode);
+    aPropMap.setProperty( PROP_VerticalSplitMode, nVSplitMode);
+    aPropMap.setProperty( PROP_HorizontalSplitPositionTwips, nHSplitPos);
+    aPropMap.setProperty( PROP_VerticalSplitPositionTwips, nVSplitPos);
+    aPropMap.setProperty( PROP_ActiveSplitRange, nActivePane);
+    aPropMap.setProperty( PROP_PositionLeft, aFirstPos.Column);
+    aPropMap.setProperty( PROP_PositionTop, aFirstPos.Row);
+    aPropMap.setProperty( PROP_PositionRight, xModel->maSecondPos.Column);
+    aPropMap.setProperty( PROP_PositionBottom, ((nVSplitPos > 0) ? xModel->maSecondPos.Row : xModel->maFirstPos.Row));
+    aPropMap.setProperty( PROP_ZoomType, API_ZOOMTYPE_PERCENT);
+    aPropMap.setProperty( PROP_ZoomValue, static_cast< sal_Int16 >( xModel->getNormalZoom() ));
+    aPropMap.setProperty( PROP_PageViewZoomValue, static_cast< sal_Int16 >( xModel->getPageBreakZoom() ));
+    aPropMap.setProperty( PROP_GridColor, xModel->getGridColor( getBaseFilter() ));
+    aPropMap.setProperty( PROP_ShowPageBreakPreview, xModel->isPageBreakPreview());
+    aPropMap.setProperty( PROP_ShowFormulas, xModel->mbShowFormulas);
+    aPropMap.setProperty( PROP_ShowGrid, xModel->mbShowGrid);
+    aPropMap.setProperty( PROP_HasColumnRowHeaders, xModel->mbShowHeadings);
+    aPropMap.setProperty( PROP_ShowZeroValues, xModel->mbShowZeros);
+    aPropMap.setProperty( PROP_IsOutlineSymbolsSet, xModel->mbShowOutline);
 
     // store sheet view settings in global view settings object
     getViewSettings().setSheetViewSettings( getSheetIndex(), xModel, Any( aPropMap.makePropertyValueSequence() ) );
@@ -567,22 +567,22 @@ void ViewSettings::finalizeImport()
     if( xContainer.is() ) try
     {
         PropertyMap aPropMap;
-        aPropMap[ PROP_Tables ]                        <<= xSheetsNC;
-        aPropMap[ PROP_ActiveTable ]                   <<= rWorksheets.getCalcSheetName( nActiveSheet );
-        aPropMap[ PROP_HasHorizontalScrollBar ]        <<= rModel.mbShowHorScroll;
-        aPropMap[ PROP_HasVerticalScrollBar ]          <<= rModel.mbShowVerScroll;
-        aPropMap[ PROP_HasSheetTabs ]                  <<= rModel.mbShowTabBar;
-        aPropMap[ PROP_RelativeHorizontalTabbarWidth ] <<= double( rModel.mnTabBarWidth / 1000.0 );
-        aPropMap[ PROP_ShowObjects ]                   <<= nShowMode;
-        aPropMap[ PROP_ShowCharts ]                    <<= nShowMode;
-        aPropMap[ PROP_ShowDrawing ]                   <<= nShowMode;
-        aPropMap[ PROP_GridColor ]                     <<= rxActiveSheetView->getGridColor( getBaseFilter() );
-        aPropMap[ PROP_ShowPageBreakPreview ]          <<= rxActiveSheetView->isPageBreakPreview();
-        aPropMap[ PROP_ShowFormulas ]                  <<= rxActiveSheetView->mbShowFormulas;
-        aPropMap[ PROP_ShowGrid ]                      <<= rxActiveSheetView->mbShowGrid;
-        aPropMap[ PROP_HasColumnRowHeaders ]           <<= rxActiveSheetView->mbShowHeadings;
-        aPropMap[ PROP_ShowZeroValues ]                <<= rxActiveSheetView->mbShowZeros;
-        aPropMap[ PROP_IsOutlineSymbolsSet ]           <<= rxActiveSheetView->mbShowOutline;
+        aPropMap.setProperty( PROP_Tables, xSheetsNC);
+        aPropMap.setProperty( PROP_ActiveTable, rWorksheets.getCalcSheetName( nActiveSheet ));
+        aPropMap.setProperty( PROP_HasHorizontalScrollBar, rModel.mbShowHorScroll);
+        aPropMap.setProperty( PROP_HasVerticalScrollBar, rModel.mbShowVerScroll);
+        aPropMap.setProperty( PROP_HasSheetTabs, rModel.mbShowTabBar);
+        aPropMap.setProperty( PROP_RelativeHorizontalTabbarWidth, double( rModel.mnTabBarWidth / 1000.0 ));
+        aPropMap.setProperty( PROP_ShowObjects, nShowMode);
+        aPropMap.setProperty( PROP_ShowCharts, nShowMode);
+        aPropMap.setProperty( PROP_ShowDrawing, nShowMode);
+        aPropMap.setProperty( PROP_GridColor, rxActiveSheetView->getGridColor( getBaseFilter() ));
+        aPropMap.setProperty( PROP_ShowPageBreakPreview, rxActiveSheetView->isPageBreakPreview());
+        aPropMap.setProperty( PROP_ShowFormulas, rxActiveSheetView->mbShowFormulas);
+        aPropMap.setProperty( PROP_ShowGrid, rxActiveSheetView->mbShowGrid);
+        aPropMap.setProperty( PROP_HasColumnRowHeaders, rxActiveSheetView->mbShowHeadings);
+        aPropMap.setProperty( PROP_ShowZeroValues, rxActiveSheetView->mbShowZeros);
+        aPropMap.setProperty( PROP_IsOutlineSymbolsSet, rxActiveSheetView->mbShowOutline);
 
         xContainer->insertByIndex( 0, Any( aPropMap.makePropertyValueSequence() ) );
         Reference< XViewDataSupplier > xViewDataSuppl( getDocument(), UNO_QUERY_THROW );

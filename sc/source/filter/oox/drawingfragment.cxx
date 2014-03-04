@@ -101,7 +101,7 @@ Shape::Shape( const WorksheetHelper& rHelper, const AttributeList& rAttribs, con
 void Shape::finalizeXShape( XmlFilterBase& rFilter, const Reference< XShapes >& rxShapes )
 {
     OUString sURL;
-    getShapeProperties()[ PROP_URL ] >>= sURL;
+    getShapeProperties().getProperty( PROP_URL ) >>= sURL;
     getWorksheets().convertSheetNameRef( sURL );
     if( !maMacroName.isEmpty() && mxShape.is() )
     {
