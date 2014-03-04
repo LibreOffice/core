@@ -199,7 +199,6 @@ protected:
 #endif
     void            NextToken();
     sal_Int32       GetTokenIndex() const   { return m_nTokenIndex; }
-    void            Insert(const OUString &rText, sal_Int32 nPos);
     void            Replace( sal_Int32 nPos, sal_Int32 nLen, const OUString &rText );
 
     inline bool     TokenInGroup( sal_uLong nGroup );

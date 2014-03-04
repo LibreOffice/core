@@ -47,7 +47,6 @@ SfxInt64Item::SetValue(long)
 SfxItemPool::GetMasterPool() const
 SimpleErrorHandler::SimpleErrorHandler()
 SmFontPickList::Contains(Font const&) const
-SmParser::Insert(rtl::OUString const&, int)
 StyleSettings::SetActiveColor2(Color const&)
 StyleSettings::SetCursorSize(long)
 StyleSettings::SetDeactiveColor2(Color const&)
