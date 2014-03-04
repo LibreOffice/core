@@ -1014,6 +1014,7 @@ void SwTxtNode::Update(
         }
     }
 
+    bool bSortMarks = false;
     SwIndexReg aTmpIdxReg;
     if ( !bNegative && !bDelete )
     {
@@ -1072,6 +1073,7 @@ void SwTxtNode::Update(
                     rPos.GetIndex() == rIdx.GetIndex() )
                 {
                     rIdx.Assign( &aTmpIdxReg, rIdx.GetIndex() );
+                    bSortMarks = true;
                 }
             }
         }
@@ -1090,6 +1092,10 @@ void SwTxtNode::Update(
     }
 
     aTmpIdxReg.MoveTo( *this );
+    if ( bSortMarks )
+    {
+        getIDocumentMarkAccess()->assureSortedMarkContainers();
+    }
 }
 
 void SwTxtNode::_ChgTxtCollUpdateNum( const SwTxtFmtColl *pOldColl,

@@ -95,6 +95,8 @@ namespace sw {
             virtual sal_Int32 getAnnotationMarksCount() const;
             virtual const_iterator_t findAnnotationMark( const ::rtl::OUString& rName ) const;
 
+            virtual void assureSortedMarkContainers() const;
+
         private:
             // make names
             OUString getUniqueMarkName(const OUString& rName) const;

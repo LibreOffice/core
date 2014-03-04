@@ -36,6 +36,7 @@ namespace sw {
                 const OUString& rShortName,
                 const OUString& rPrefix);
 
+            // getters
             virtual SwPosition& GetOtherMarkPos() const;
             virtual SwPosition& GetMarkStart() const
                 { return *m_pPos1; }

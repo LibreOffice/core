@@ -194,6 +194,8 @@ class IDocumentMarkAccess
         */
         virtual void clearAllMarks() =0;
 
+        virtual void assureSortedMarkContainers() const = 0;
+
         /** returns a STL-like random access iterator to the begin of the sequence of marks.
         */
         virtual const_iterator_t getAllMarksBegin() const =0;

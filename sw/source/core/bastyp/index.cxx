@@ -223,8 +223,11 @@ SwIndexReg::~SwIndexReg()
     assert(!m_pFirst && !m_pLast); // There are still indices registered
 }
 
-void SwIndexReg::Update( SwIndex const & rIdx, const sal_Int32 nDiff,
-    const bool bNeg, const bool /* argument is only used in derived class*/ )
+void SwIndexReg::Update(
+    SwIndex const & rIdx,
+    const sal_Int32 nDiff,
+    const bool bNeg,
+    const bool /* argument is only used in derived class*/ )
 {
     SwIndex* pStt = const_cast<SwIndex*>(&rIdx);
     const sal_Int32 nNewVal = rIdx.m_nIndex;

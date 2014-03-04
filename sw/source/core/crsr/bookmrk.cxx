@@ -64,31 +64,32 @@ namespace
         const sal_Unicode aStartMark,
         const sal_Unicode aEndMark)
     {
-        SwPosition& rStart = pField->GetMarkStart();
-        SwPosition& rEnd = pField->GetMarkEnd();
+        io_pDoc->GetIDocumentUndoRedo().StartUndo(UNDO_UI_REPLACE, NULL);
 
-        SwTxtNode const*const pStartTxtNode =
-            rStart.nNode.GetNode().GetTxtNode();
-        SwTxtNode const*const pEndTxtNode = rEnd.nNode.GetNode().GetTxtNode();
+        SwPosition rStart = pField->GetMarkStart();
+        SwTxtNode const*const pStartTxtNode = rStart.nNode.GetNode().GetTxtNode();
         const sal_Unicode ch_start = ( rStart.nContent.GetIndex() >= pStartTxtNode->GetTxt().getLength() ) ? 0 :
             pStartTxtNode->GetTxt()[rStart.nContent.GetIndex()];
+        if( ( ch_start != aStartMark ) && ( aEndMark != CH_TXT_ATR_FORMELEMENT ) )
+        {
+            SwPaM aStartPaM(rStart);
+            io_pDoc->InsertString(aStartPaM, OUString(aStartMark));
+            rStart.nContent--;
+            pField->SetMarkStartPos( rStart );
+        }
+
+        SwPosition& rEnd = pField->GetMarkEnd();
+        SwTxtNode const*const pEndTxtNode = rEnd.nNode.GetNode().GetTxtNode();
         const sal_Int32 nEndPos = ( rEnd == rStart ||  rEnd.nContent.GetIndex() == 0 ) ?
             rEnd.nContent.GetIndex() : rEnd.nContent.GetIndex() - 1;
         const sal_Unicode ch_end = nEndPos >= pEndTxtNode->GetTxt().getLength() ? 0 : pEndTxtNode->GetTxt()[nEndPos];
-        SwPaM aStartPaM(rStart);
-        SwPaM aEndPaM(rEnd);
-
-        io_pDoc->GetIDocumentUndoRedo().StartUndo(UNDO_UI_REPLACE, NULL);
-        if( ( ch_start != aStartMark ) && ( aEndMark != CH_TXT_ATR_FORMELEMENT ) )
-        {
-            io_pDoc->InsertString(aStartPaM, OUString(aStartMark));
-            rStart.nContent--;
-        }
         if ( aEndMark && ( ch_end != aEndMark ) )
         {
+            SwPaM aEndPaM(rEnd);
             io_pDoc->InsertString(aEndPaM, OUString(aEndMark));
             rEnd.nContent++;
         }
+
         io_pDoc->GetIDocumentUndoRedo().EndUndo(UNDO_UI_REPLACE, NULL);
     };
 
@@ -97,31 +98,33 @@ namespace
         const sal_Unicode aStartMark,
         const sal_Unicode aEndMark)
     {
-        SwPosition& rStart = pField->GetMarkStart();
-        SwPosition& rEnd = pField->GetMarkEnd();
-        SwTxtNode const*const pStartTxtNode =
-            rStart.nNode.GetNode().GetTxtNode();
-        SwTxtNode const*const pEndTxtNode = rEnd.nNode.GetNode().GetTxtNode();
+        io_pDoc->GetIDocumentUndoRedo().StartUndo(UNDO_UI_REPLACE, NULL);
+
+        const SwPosition& rStart = pField->GetMarkStart();
+        SwTxtNode const*const pStartTxtNode = rStart.nNode.GetNode().GetTxtNode();
         const sal_Unicode ch_start =
             pStartTxtNode->GetTxt()[rStart.nContent.GetIndex()];
-        const sal_Int32 nEndPos = ( rEnd == rStart ||  rEnd.nContent.GetIndex() == 0 ) ?
-            rEnd.nContent.GetIndex() : rEnd.nContent.GetIndex() - 1;
-        const sal_Unicode ch_end = pEndTxtNode->GetTxt()[nEndPos];
-        SwPaM aStartPaM(rStart);
-        SwPaM aEndPaM(rEnd);
-        io_pDoc->GetIDocumentUndoRedo().StartUndo(UNDO_UI_REPLACE, NULL);
+
         if( ch_start == aStartMark )
         {
             SwPaM aStart(rStart, rStart);
             aStart.End()->nContent++;
             io_pDoc->DeleteRange(aStart);
         }
+
+        const SwPosition& rEnd = pField->GetMarkEnd();
+        SwTxtNode const*const pEndTxtNode = rEnd.nNode.GetNode().GetTxtNode();
+        const sal_Int32 nEndPos = ( rEnd == rStart ||  rEnd.nContent.GetIndex() == 0 )
+                                   ? rEnd.nContent.GetIndex()
+                                   : rEnd.nContent.GetIndex() - 1;
+        const sal_Unicode ch_end = pEndTxtNode->GetTxt()[nEndPos];
         if ( ch_end == aEndMark )
         {
             SwPaM aEnd(rEnd, rEnd);
             aEnd.Start()->nContent--;
             io_pDoc->DeleteRange(aEnd);
         }
+
         io_pDoc->GetIDocumentUndoRedo().EndUndo(UNDO_UI_REPLACE, NULL);
     };
 }
@@ -308,6 +311,22 @@ namespace sw { namespace mark
             SetOtherMarkPos(GetMarkPos());
     }
 
+    void Fieldmark::SetMarkStartPos( const SwPosition& rNewStartPos )
+    {
+        if ( GetMarkPos( ) <= GetOtherMarkPos( ) )
+            return SetMarkPos( rNewStartPos );
+        else
+            return SetOtherMarkPos( rNewStartPos );
+    }
+
+    void Fieldmark::SetMarkEndPos( const SwPosition& rNewEndPos )
+    {
+        if ( GetMarkPos( ) <= GetOtherMarkPos( ) )
+            return SetOtherMarkPos( rNewEndPos );
+        else
+            return SetMarkPos( rNewEndPos );
+    }
+
     OUString Fieldmark::ToString( ) const
     {
         return "Fieldmark: ( Name, Type, [ Nd1, Id1 ], [ Nd2, Id2 ] ): ( " + m_aName + ", "
@@ -349,7 +368,9 @@ namespace sw { namespace mark
 
         // For some reason the end mark is moved from 1 by the Insert: we don't
         // want this for checkboxes
-        this->GetMarkEnd( ).nContent--;
+        SwPosition aNewEndPos = this->GetMarkEnd();
+        aNewEndPos.nContent--;
+        SetMarkEndPos( aNewEndPos );
     }
 
     void CheckboxFieldmark::ReleaseDoc(SwDoc* const pDoc)

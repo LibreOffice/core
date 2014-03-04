@@ -828,16 +828,26 @@ namespace sw { namespace mark
             case IDocumentMarkAccess::BOOKMARK:
             case IDocumentMarkAccess::CROSSREF_HEADING_BOOKMARK:
             case IDocumentMarkAccess::CROSSREF_NUMITEM_BOOKMARK:
-                // if(dynamic_cast<IBookmark*>)
                 {
                     IDocumentMarkAccess::iterator_t ppBookmark = lcl_FindMark(m_vBookmarks, *ppMark);
-                    OSL_ENSURE(ppBookmark != m_vBookmarks.end(),
-                        "<MarkManager::deleteMark(..)>"
-                        " - Bookmark not found.");
-                    m_vBookmarks.erase(ppBookmark);
+                    if ( ppBookmark != m_vBookmarks.end() )
+                    {
+                        m_vBookmarks.erase(ppBookmark);
+                    }
+                    else
+                    {
+                        OSL_ENSURE( false, "<MarkManager::deleteMark(..)> - Bookmark not found in Bookmark container.");
+                    }
 
                     ppBookmark = lcl_FindMark(m_vCommonMarks, *ppMark);
-                    m_vCommonMarks.erase(ppBookmark);
+                    if ( ppBookmark != m_vCommonMarks.end() )
+                    {
+                        m_vCommonMarks.erase(ppBookmark);
+                    }
+                    else
+                    {
+                        OSL_ENSURE( false, "<MarkManager::deleteMark(..)> - Bookmark not found in common mark container.");
+                    }
                 }
                 break;
 
@@ -845,22 +855,39 @@ namespace sw { namespace mark
             case IDocumentMarkAccess::CHECKBOX_FIELDMARK:
                 {
                     IDocumentMarkAccess::iterator_t ppFieldmark = lcl_FindMark(m_vFieldmarks, *ppMark);
-                    OSL_ENSURE(ppFieldmark != m_vFieldmarks.end(),
-                        "<MarkManager::deleteMark(..)>"
-                        " - Bookmark not found.");
-                    m_vFieldmarks.erase(ppFieldmark);
-                    ret.reset(new LazyFieldmarkDeleter(*ppMark, m_pDoc));
+                    if ( ppFieldmark != m_vFieldmarks.end() )
+                    {
+                        m_vFieldmarks.erase(ppFieldmark);
+                        ret.reset(new LazyFieldmarkDeleter(*ppMark, m_pDoc));
+                    }
+                    else
+                    {
+                        OSL_ENSURE( false, "<MarkManager::deleteMark(..)> - Fieldmark not found in Fieldmark container.");
+                    }
 
                     ppFieldmark = lcl_FindMark(m_vCommonMarks, *ppMark);
-                    m_vCommonMarks.erase(ppFieldmark);
+                    if ( ppFieldmark != m_vCommonMarks.end() )
+                    {
+                        m_vCommonMarks.erase(ppFieldmark);
+                    }
+                    else
+                    {
+                        OSL_ENSURE( false, "<MarkManager::deleteMark(..)> - Fieldmark not found in common mark container.");
+                    }
                 }
                 break;
 
             case IDocumentMarkAccess::ANNOTATIONMARK:
                 {
                     IDocumentMarkAccess::iterator_t ppAnnotationMark = lcl_FindMark(m_vAnnotationMarks, *ppMark);
-                    OSL_ENSURE( ppAnnotationMark != m_vAnnotationMarks.end(), "<MarkManager::deleteMark(..)> - Annotation Mark not found." );
-                    m_vAnnotationMarks.erase(ppAnnotationMark);
+                    if ( ppAnnotationMark != m_vAnnotationMarks.end() )
+                    {
+                        m_vAnnotationMarks.erase(ppAnnotationMark);
+                    }
+                    else
+                    {
+                        OSL_ENSURE( false, "<MarkManager::deleteMark(..)> - Annotation Mark not found in Annotation Mark container.");
+                    }
                 }
                 break;
 
@@ -869,7 +896,14 @@ namespace sw { namespace mark
             case IDocumentMarkAccess::UNO_BOOKMARK:
                 {
                     IDocumentMarkAccess::iterator_t ppOtherMark = lcl_FindMark(m_vCommonMarks, *ppMark);
-                    m_vCommonMarks.erase(ppOtherMark);
+                    if ( ppOtherMark != m_vCommonMarks.end() )
+                    {
+                        m_vCommonMarks.erase(ppOtherMark);
+                    }
+                    else
+                    {
+                        OSL_ENSURE( false, "<MarkManager::deleteMark(..)> - Navigator Reminder, DDE Mark or Uno Makr not found in common mark container.");
+                    }
                 }
                 break;
         }
@@ -1050,6 +1084,11 @@ namespace sw { namespace mark
         m_aMarkBasenameMapUniqueOffset[rName] = nCnt;
 
         return sTmp;
+    }
+
+    void MarkManager::assureSortedMarkContainers() const
+    {
+        const_cast< MarkManager* >(this)->sortMarks();
     }
 
     void MarkManager::sortSubsetMarks()

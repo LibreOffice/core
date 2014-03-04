@@ -47,6 +47,7 @@ namespace sw {
             : virtual public IMark
         {
         public:
+            //getters
             virtual SwPosition& GetMarkPos() const
                 { return *m_pPos1; }
             virtual const OUString& GetName() const
@@ -214,6 +215,9 @@ namespace sw {
                 { m_aFieldHelptext = aFieldHelptext; }
 
             virtual void ReleaseDoc(SwDoc* const) = 0;
+
+            void SetMarkStartPos( const SwPosition& rNewStartPos );
+            void SetMarkEndPos( const SwPosition& rNewEndPos );
 
             virtual void Invalidate();
             virtual OUString ToString() const;
