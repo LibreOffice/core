@@ -41,6 +41,7 @@ make
 
 callanalyse \
   instdir/program/* \
+  instdir/sdk/bin/* \
   workdir/LinkTarget/*/* workdir/LinkTarget/*/*/* \
   workdir/UnpackedTarball/cppunit/src/cppunit/.libs/libcppunit.so* \
   > unusedcode.all

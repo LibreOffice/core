@@ -1,3 +1,4 @@
+AstDeclaration::setName(rtl::OString const&)
 BigInt::BigInt(unsigned int)
 CalcUnoApiTest::CalcUnoApiTest(rtl::OUString const&)
 Chart2ExportTest::testFdo74115WallGradientFill()
@@ -7,11 +8,6 @@ DocxSdrExport::getFlyFrameGraphic()
 DocxSdrExport::setFlyFrameGraphic(bool)
 DocxSdrExport::setFrameBtLr(bool)
 EditEngine::IsIdleFormatterActive() const
-EditSelection::IsInvalid() const
-FileStream::FileStream()
-FileStream::close()
-FileStream::createTempFile(rtl::OString const&)
-FileStream::write(void const*, unsigned long)
 GDriveDocument::GDriveDocument(GDriveSession*)
 GDriveFolder::GDriveFolder(GDriveSession*)
 GDriveProperty::GDriveProperty()
@@ -26,11 +22,6 @@ MenuBar::RemoveMenuBarButton(unsigned short)
 MenuBar::SetMenuBarButtonHighlightHdl(unsigned short, Link const&)
 OAuth2Handler::OAuth2Handler()
 OAuth2Handler::getAccessToken()
-Options::Options()
-Options::getInputFiles()
-Options::getOption(rtl::OString const&) const
-Options::getProgramName() const
-Options::isValid(rtl::OString const&) const
 OutputDevice::GetCanvas() const
 OutputDevice::LogicToLogic(basegfx::B2DPolyPolygon const&, MapMode const&, MapMode const&)
 OutputDevice::LogicToPixel(Region const&, MapMode const&) const
@@ -52,6 +43,7 @@ SfxBindings::GetSlot(unsigned short)
 SfxBindings::GetSystemWindow() const
 SfxDispatcher::IsOnTop(SfxShell const&)
 SfxGrabBagItem::SetGrabBag(std::map<rtl::OUString, com::sun::star::uno::Any, std::less<rtl::OUString>, std::allocator<std::pair<rtl::OUString const, com::sun::star::uno::Any> > > const&)
+SfxInt64Item::SetValue(long)
 SfxItemPool::GetMasterPool() const
 SimpleErrorHandler::SimpleErrorHandler()
 SmFontPickList::Contains(Font const&) const
@@ -101,10 +93,6 @@ ThumbnailView::DeselectItem(unsigned short)
 ThumbnailView::GetItemText(unsigned short) const
 ThumbnailView::SetColor(Color const&)
 ToolBox::GetItemExpand(unsigned short) const
-TypeManager::TypeManager()
-TypeManager::decompose(rtl::OUString const&, bool, rtl::OUString*, int*, std::vector<rtl::OUString, std::allocator<rtl::OUString> >*, rtl::Reference<unoidl::Entity>*) const
-TypeManager::foundAtPrimaryProvider(rtl::OUString const&) const
-TypeManager::loadProvider(rtl::OUString const&, bool)
 UnoApiTest::closeDocument(com::sun::star::uno::Reference<com::sun::star::lang::XComponent>)
 VclMultiLineEdit::IsRightToLeft() const
 VclMultiLineEdit::SetTextSelectable(bool)
@@ -228,13 +216,6 @@ basegfx::tools::equal(basegfx::B3DPolyPolygon const&, basegfx::B3DPolyPolygon co
 canvas::createSurfaceProxyManager(boost::shared_ptr<canvas::IRenderModule> const&)
 chart::ChartModelHelper::setPageSize(com::sun::star::awt::Size const&, com::sun::star::uno::Reference<com::sun::star::frame::XModel> const&)
 chart::ModifyListenerCallBack::startListening(com::sun::star::uno::Reference<com::sun::star::util::XModifyBroadcaster> const&)
-codemaker::ExceptionTree::add(rtl::OString const&, rtl::Reference<TypeManager> const&)
-codemaker::convertString(rtl::OUString const&)
-codemaker::cpp::scopedCppName(rtl::OString const&, bool)
-codemaker::cpp::translateUnoToCppIdentifier(rtl::OString const&, rtl::OString const&, codemaker::cpp::IdentifierTranslationMode, rtl::OString const*)
-codemaker::cpp::translateUnoToCppType(codemaker::UnoType::Sort, rtl::OUString const&)
-codemaker::java::translateUnoToJavaIdentifier(rtl::OString const&, rtl::OString const&)
-codemaker::java::translateUnoToJavaType(codemaker::UnoType::Sort, rtl::OString const&, bool)
 comphelper::detail::ConfigurationWrapper::getGroupReadWrite(boost::shared_ptr<comphelper::ConfigurationChanges> const&, rtl::OUString const&) const
 comphelper::detail::ConfigurationWrapper::getLocalizedPropertyValue(rtl::OUString const&) const
 comphelper::detail::ConfigurationWrapper::setLocalizedPropertyValue(boost::shared_ptr<comphelper::ConfigurationChanges> const&, rtl::OUString const&, com::sun::star::uno::Any const&) const
@@ -253,16 +234,16 @@ formula::SingleVectorRefToken::GetRequestedArrayLength() const
 formula::SingleVectorRefToken::SingleVectorRefToken(double const*, unsigned long, unsigned long)
 oglcanvas::CanvasHelper::flush() const
 oglcanvas::TextLayout::draw(com::sun::star::rendering::ViewState const&, com::sun::star::rendering::RenderState const&, com::sun::star::uno::Reference<com::sun::star::rendering::XGraphicDevice> const&) const
+oox::core::Relations::getRelationsFromType(rtl::OUString const&) const
+oox::core::XmlFilterBase::getFragmentPathFromFirstType(rtl::OUString const&)
 oox::xls::BiffDrawingObjectBase::BiffDrawingObjectBase(oox::xls::WorksheetHelper const&)
-registry::tools::Options::Options(char const*)
-registry::tools::Options::badOption(char const*, char const*) const
-registry::tools::Options::initOptions(std::vector<std::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::allocator<std::basic_string<char, std::char_traits<char>, std::allocator<char> > > >&)
-registry::tools::convertToFileUrl(char const*, int)
 rtl_OUString::convertFromString::test()
 sc::CLBuildKernelThread::consume()
 sc::CLBuildKernelThread::produce()
 sd::LeftDrawPaneShell::RegisterInterface(SfxModule*)
 sd::LeftImpressPaneShell::RegisterInterface(SfxModule*)
+sfx2::sidebar::Deck::PrintWindowTree(std::vector<sfx2::sidebar::Panel*, std::allocator<sfx2::sidebar::Panel*> > const&)
+sfx2::sidebar::Panel::PrintWindowTree()
 std::_Rb_tree<rtl::OUString, std::pair<rtl::OUString const, (anonymous namespace)::TemplateId>, std::_Select1st<std::pair<rtl::OUString const, (anonymous namespace)::TemplateId> >, std::less<rtl::OUString>, std::allocator<std::pair<rtl::OUString const, (anonymous namespace)::TemplateId> > >::_Rb_tree(std::_Rb_tree<rtl::OUString, std::pair<rtl::OUString const, (anonymous namespace)::TemplateId>, std::_Select1st<std::pair<rtl::OUString const, (anonymous namespace)::TemplateId> >, std::less<rtl::OUString>, std::allocator<std::pair<rtl::OUString const, (anonymous namespace)::TemplateId> > >&&)
 std::auto_ptr<formula::FormulaTokenArray>::auto_ptr(std::auto_ptr<formula::FormulaTokenArray>&)
 std::auto_ptr<formula::FormulaTokenArray>::auto_ptr(std::auto_ptr_ref<formula::FormulaTokenArray>)
