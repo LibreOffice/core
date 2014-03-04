@@ -36,8 +36,6 @@ public:
     // Fill view with template folders thumbnails
     virtual void Populate ();
 
-    bool HasUnfilteredItems(FILTER_APPLICATION App);
-
     virtual void reload ();
 
     virtual void showRootRegion ();

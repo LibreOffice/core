@@ -53,22 +53,6 @@ TemplateLocalView::~TemplateLocalView()
     delete mpDocTemplates;
 }
 
-bool TemplateLocalView::HasUnfilteredItems(FILTER_APPLICATION App)
-{
-    ViewFilter_Application aFilter(App);
-    bool bFound = false;
-    for (size_t i = 0; !bFound && i < maRegions.size(); ++i)
-    {
-        TemplateContainerItem *pFolderItem = maRegions[i];
-
-        for (size_t j = 0; !bFound && j < pFolderItem->maTemplates.size(); ++j)
-        {
-            bFound = aFilter.isValid(pFolderItem->maTemplates[j].aPath);
-        }
-    }
-    return bFound;
-}
-
 void TemplateLocalView::Populate ()
 {
     for (size_t i = 0; i < maRegions.size(); ++i)
