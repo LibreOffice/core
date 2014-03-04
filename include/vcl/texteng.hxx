@@ -196,20 +196,20 @@ protected:
 
     bool                IsFormatted() const { return mbFormatted; }
 
-    sal_uInt16              GetCharPos( sal_uLong nPara, sal_uInt16 nLine, long nDocPosX, bool bSmart = false );
+    sal_uInt16          GetCharPos( sal_uLong nPara, sal_uInt16 nLine, long nDocPosX, bool bSmart = false );
     Rectangle           GetEditCursor( const TextPaM& rPaM, bool bSpecial, bool bPreferPortionStart = false );
-    sal_uInt16              ImpFindIndex( sal_uLong nPortion, const Point& rPosInPara, bool bSmart );
+    sal_uInt16          ImpFindIndex( sal_uLong nPortion, const Point& rPosInPara, bool bSmart );
     long                ImpGetPortionXOffset( sal_uLong nPara, TextLine* pLine, sal_uInt16 nTextPortion );
     long                ImpGetXPos( sal_uLong nPara, TextLine* pLine, sal_uInt16 nIndex, bool bPreferPortionStart = false );
     long                ImpGetOutputOffset( sal_uLong nPara, TextLine* pLine, sal_uInt16 nIndex, sal_uInt16 nIndex2 );
-    sal_uInt8                ImpGetRightToLeft( sal_uLong nPara, sal_uInt16 nPos, sal_uInt16* pStart = NULL, sal_uInt16* pEnd = NULL );
+    sal_uInt8           ImpGetRightToLeft( sal_uLong nPara, sal_uInt16 nPos, sal_uInt16* pStart = NULL, sal_uInt16* pEnd = NULL );
     void                ImpInitLayoutMode( OutputDevice* pOutDev, bool bDrawingR2LPortion = false );
     TxtAlign            ImpGetAlign() const;
 
-    sal_uLong               CalcTextHeight();
-    sal_uLong               CalcParaHeight( sal_uLong nParagraph ) const;
-    sal_uLong               CalcTextWidth( sal_uLong nPara );
-    sal_uLong               CalcTextWidth( sal_uLong nPara, sal_uInt16 nPortionStart, sal_uInt16 nPortionLen, const Font* pFont = 0 );
+    sal_uLong           CalcTextHeight();
+    sal_uLong           CalcParaHeight( sal_uLong nParagraph ) const;
+    sal_uLong           CalcTextWidth( sal_uLong nPara );
+    sal_uLong           CalcTextWidth( sal_uLong nPara, sal_uInt16 nPortionStart, sal_uInt16 nPortionLen, const Font* pFont = 0 );
     Range               GetInvalidYOffsets( sal_uLong nPortion );
 
     // for Undo/Redo
@@ -231,19 +231,18 @@ public:
     OUString            GetTextLines( LineEnd aSeparator = LINEEND_LF ) const;
     void                ReplaceText(const TextSelection& rSel, const OUString& rText);
 
-    sal_uLong               GetTextLen( LineEnd aSeparator = LINEEND_LF ) const;
-    sal_uLong               GetTextLen( const TextSelection& rSel, LineEnd aSeparator = LINEEND_LF ) const;
+    sal_uLong           GetTextLen( LineEnd aSeparator = LINEEND_LF ) const;
+    sal_uLong           GetTextLen( const TextSelection& rSel, LineEnd aSeparator = LINEEND_LF ) const;
 
     void                SetFont( const Font& rFont );
     const Font&         GetFont() const { return maFont; }
 
-    sal_uInt16              GetDefTab() const;
+    sal_uInt16          GetDefTab() const;
 
     void                SetLeftMargin( sal_uInt16 n );
-    sal_uInt16          GetLeftMargin() const;
 
     void                SetUpdateMode( bool bUpdate );
-    bool            GetUpdateMode() const { return mbUpdate; }
+    bool                GetUpdateMode() const { return mbUpdate; }
 
     sal_uInt16          GetViewCount() const;
     TextView*           GetView( sal_uInt16 nView ) const;
@@ -271,33 +270,33 @@ public:
     sal_uInt16          GetLineLen( sal_uLong nParagraph, sal_uInt16 nLine ) const;
 
     void                SetRightToLeft( bool bR2L );
-    bool            IsRightToLeft() const { return mbRightToLeft; }
+    bool                IsRightToLeft() const { return mbRightToLeft; }
 
-    bool            HasUndoManager() const { return mpUndoManager ? true : false; }
+    bool                HasUndoManager() const { return mpUndoManager ? true : false; }
     ::svl::IUndoManager&
                         GetUndoManager();
     void                UndoActionStart( sal_uInt16 nId = 0 );
     void                UndoActionEnd();
     void                InsertUndo( TextUndo* pUndo, bool bTryMerge = false );
-    bool            IsInUndo()                  { return mbIsInUndo; }
+    bool                IsInUndo()                  { return mbIsInUndo; }
     void                SetIsInUndo( bool bInUndo ) { mbIsInUndo = bInUndo; }
     void                ResetUndo();
 
     void                EnableUndo( bool bEnable );
-    bool            IsUndoEnabled()             { return mbUndoEnabled; }
+    bool                IsUndoEnabled()             { return mbUndoEnabled; }
 
     void                SetModified( bool bModified )   { mbModified = bModified; }
-    bool            IsModified() const              { return mbModified; }
+    bool                IsModified() const              { return mbModified; }
 
-    bool            Read( SvStream& rInput, const TextSelection* pSel = NULL );
+    bool                Read( SvStream& rInput, const TextSelection* pSel = NULL );
 
-    bool            Write( SvStream& rOutput, const TextSelection* pSel = NULL, bool bHTML = false );
+    bool                Write( SvStream& rOutput, const TextSelection* pSel = NULL, bool bHTML = false );
 
     TextPaM             GetPaM( const Point& rDocPos, bool bSmart = true );
     Rectangle           PaMtoEditCursor( const TextPaM& rPaM, bool bSpecial = false );
     OUString            GetWord( const TextPaM& rCursorPos, TextPaM* pStartOfWord = 0 );
 
-    bool            HasAttrib( sal_uInt16 nWhich ) const;
+    bool                HasAttrib( sal_uInt16 nWhich ) const;
     const TextAttrib*       FindAttrib( const TextPaM& rPaM, sal_uInt16 nWhich ) const;
     const TextCharAttrib*   FindCharAttrib( const TextPaM& rPaM, sal_uInt16 nWhich ) const;
 
@@ -315,8 +314,8 @@ public:
     ::com::sun::star::lang::Locale  GetLocale();
     ::com::sun::star::uno::Reference< ::com::sun::star::i18n::XBreakIterator > GetBreakIterator();
 
-    static bool     DoesKeyChangeText( const KeyEvent& rKeyEvent );
-    static bool     IsSimpleCharInput( const KeyEvent& rKeyEvent );
+    static bool         DoesKeyChangeText( const KeyEvent& rKeyEvent );
+    static bool         IsSimpleCharInput( const KeyEvent& rKeyEvent );
 
     Color               GetTextColor() const { return maTextColor; }
 };
