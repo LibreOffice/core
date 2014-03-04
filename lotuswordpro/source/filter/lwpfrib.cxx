@@ -86,11 +86,15 @@
 #include "lwpglobalmgr.hxx"
 
 LwpFrib::LwpFrib(LwpPara* pPara)
-    : m_pPara(pPara), m_pNext(NULL)
+    : m_pPara(pPara)
+    , m_pNext(NULL)
+    , m_nFribType(0)
+    , m_pModifiers(NULL)
+    , m_ModFlag(sal_False)
+    , m_nRevisionType(0)
+    , m_bRevisionFlag(sal_False)
+    , m_nEditor(0)
 {
-    m_ModFlag = sal_False;
-    m_pModifiers = NULL;
-    m_bRevisionFlag = sal_False;
 }
 
 LwpFrib::~LwpFrib()
