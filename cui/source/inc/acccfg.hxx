@@ -179,7 +179,6 @@ public:
     virtual void                Reset( const SfxItemSet& );
 
     void                        Apply(const css::uno::Reference< css::ui::XAcceleratorConfiguration >& pAccMgr);
-    static SfxTabPage*          Create( Window* pParent, const SfxItemSet& rAttrSet );
 };
 
 #endif

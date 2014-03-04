@@ -1517,12 +1517,6 @@ OUString SfxAcceleratorConfigPage::GetLabel4Command(const OUString& sCommand)
     return sCommand;
 }
 
-SfxTabPage* SfxAcceleratorConfigPage::Create( Window* pParent, const SfxItemSet& rAttrSet )
-{
-    return new SfxAcceleratorConfigPage( pParent, rAttrSet );
-}
-
-
 css::uno::Reference< css::frame::XModel > SfxAcceleratorConfigPage::SearchForAlreadyLoadedDoc(const OUString& /*sName*/)
 {
     return css::uno::Reference< css::frame::XModel >();
