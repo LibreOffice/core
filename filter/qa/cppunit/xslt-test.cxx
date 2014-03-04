@@ -57,7 +57,7 @@ struct Listener : public ::cppu::WeakImplHelper1<io::XStreamListener>
 
     Listener() : m_bDone(false) {}
 
-    virtual void disposing(const lang::EventObject&) throw() SAL_OVERRIDE {}
+    virtual void SAL_CALL disposing(const lang::EventObject&) throw() SAL_OVERRIDE {}
     virtual void SAL_CALL started() throw() SAL_OVERRIDE { m_bDone = false; }
     virtual void SAL_CALL closed() throw() SAL_OVERRIDE { m_bDone = true; }
     virtual void SAL_CALL terminated() throw() SAL_OVERRIDE { m_bDone = true; }
