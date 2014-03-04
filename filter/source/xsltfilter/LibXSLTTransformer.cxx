@@ -478,7 +478,10 @@ namespace XSLT
             throw (RuntimeException, std::exception)
     {
         Sequence<Any> params;
-        args[0] >>= params;
+        if (!(args[0] >>= params))
+        {   // backward compatibility for old clients using createInstance
+            params = args;
+        }
         xmlSubstituteEntitiesDefault(0);
         m_parameters.clear();
         for (int i = 0; i < params.getLength(); i++)
