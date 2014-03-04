@@ -1708,11 +1708,6 @@ void SAL_CALL SwAccessibleTable::deselectAccessibleChild(
     pCrsrShell->EndAction();
 }
 
-void  SwAccessibleTable::SetTableData(SwAccessibleTableData_Impl* mpNewTableData)
-{
-    mpTableData = mpNewTableData;
-}
-
 sal_Int32 SAL_CALL SwAccessibleTable::getBackground()
         throw (::com::sun::star::uno::RuntimeException, std::exception)
 {

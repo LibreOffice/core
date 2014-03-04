@@ -83,7 +83,6 @@ protected:
     // Is table data evailable?
     sal_Bool HasTableData() const { return (mpTableData != 0); }
 
-    void SetTableData(SwAccessibleTableData_Impl* mpNewTableData)  ;
     virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew);
 
 public:

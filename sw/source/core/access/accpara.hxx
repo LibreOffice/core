@@ -162,7 +162,6 @@ class SwAccessibleParagraph :
 
 public:
     SwTOXSortTabBase* GetTOXSortTabBase();
-    short GetTOCLevel();
 
     sal_Bool IsHeading() const;
 

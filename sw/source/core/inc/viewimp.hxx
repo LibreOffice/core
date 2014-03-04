@@ -239,10 +239,6 @@ public:
 
     inline void AddAccessibleObj( const SdrObject *pObj );
 
-    void FirePageChangeEvent(sal_uInt16 nOldPage, sal_uInt16 nNewPage);
-    void FireSectionChangeEvent(sal_uInt16 nOldSection, sal_uInt16 nNewSection);
-    void FireColumnChangeEvent(sal_uInt16 nOldColumn, sal_uInt16 nNewColumn);
-
     // Invalidate accessible frame's frame's content
     void InvalidateAccessibleFrmContent( const SwFrm *pFrm );
 

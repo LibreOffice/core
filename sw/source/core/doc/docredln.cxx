@@ -3913,11 +3913,6 @@ bool SwDoc::IsInRedlines(const SwNode & rNode) const
     return aPam.ContainsPosition(aPos);
 }
 
-bool SwExtraRedlineTbl::Contains(const SwExtraRedline* p) const
-{
-    return GetPos(p) != USHRT_MAX;
-}
-
 sal_uInt16 SwExtraRedlineTbl::GetPos(const SwExtraRedline* p) const
 {
     std::vector<SwExtraRedline*>::const_iterator it = std::find(m_aExtraRedlines.begin(), m_aExtraRedlines.end(), p);
@@ -3949,14 +3944,6 @@ void SwExtraRedlineTbl::Remove( sal_uInt16 nPos )
         0 != ( pSh = pDoc->GetCurrentViewShell()) )
         pSh->InvalidateWindows( SwRect( 0, 0, LONG_MAX, LONG_MAX ) );
     */
-}
-
-bool SwExtraRedlineTbl::Remove( const SwExtraRedline* p )
-{
-    sal_uInt16 nPos = GetPos(p);
-    if (nPos != USHRT_MAX)
-        Remove(nPos);
-    return nPos != USHRT_MAX;
 }
 
 void SwExtraRedlineTbl::DeleteAndDestroy( sal_uInt16 nPos, sal_uInt16 nLen )

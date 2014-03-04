@@ -708,21 +708,6 @@ SwTOXSortTabBase* SwAccessibleParagraph::GetTOXSortTabBase()
     return NULL;
 }
 
-short SwAccessibleParagraph::GetTOCLevel()
-{
-    SwTOXSortTabBase* pToxBase = GetTOXSortTabBase();
-    if( pToxBase )
-    {
-        const SwCntntNode*  pNd = pToxBase->aTOXSources[0].pNd;
-        if( pNd )
-            return pToxBase->GetLevel();
-        else
-            return -1;
-    }
-    else
-        return -1;
-}
-
 //the function is to check whether the position is in a redline range.
 const SwRangeRedline* SwAccessibleParagraph::GetRedlineAtIndex( sal_Int32 )
 {

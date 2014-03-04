@@ -532,9 +532,6 @@ public:
                    const DateTime& rDate);
     ~SwPostItField();
 
-    /// Looks up a field identified by its unique name (used to get the postit field of a comment fieldmark)
-    static const SwFmtFld* GetByName(SwDoc* pDoc, const OUString& rName);
-
     virtual OUString        Expand() const;
     virtual SwField*        Copy() const;
 

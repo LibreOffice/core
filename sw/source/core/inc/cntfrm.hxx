@@ -105,7 +105,6 @@ public:
     inline  SwCntntFrm* GetPrevCntntFrm() const;
     static bool CalcLowers( SwLayoutFrm* pLay, const SwLayoutFrm* pDontLeave, long nBottom, bool bSkipRowSpanCells );
     void RegisterToNode( SwCntntNode& );
-    static void DelFrms( const SwCntntNode& );
 };
 
 inline SwCntntFrm* SwCntntFrm::GetNextCntntFrm() const

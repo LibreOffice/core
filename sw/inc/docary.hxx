@@ -190,13 +190,11 @@ private:
     std::vector<SwExtraRedline*>    m_aExtraRedlines;
 
 public:
-    bool Contains(const SwExtraRedline* p) const;
     sal_uInt16 GetPos(const SwExtraRedline* p) const;
 
     bool Insert( SwExtraRedline* p );
 
     void Remove( sal_uInt16 nPos );
-    bool Remove( const SwExtraRedline* p );
     void DeleteAndDestroy( sal_uInt16 nPos, sal_uInt16 nLen = 1 );
     void DeleteAndDestroyAll();
 

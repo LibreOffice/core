@@ -674,21 +674,6 @@ sal_uInt16 SwAccessiblePortionData::FillSpecialPos(
     return static_cast<sal_uInt16>( nModelPos );
 }
 
-sal_uInt16 SwAccessiblePortionData::GetAttrFldType( sal_Int32 nPos )
-{
-    if( aFieldPosition.size() < 2 ) return sal_False;
-    sal_Int32 nFieldIndex = 0;
-    for( size_t i = 0; i < aFieldPosition.size() - 1; i += 2 )
-    {
-        if( nPos < aFieldPosition[ i + 1 ]  &&  nPos >= aFieldPosition[ i ] )
-        {
-            return aAttrFieldType[nFieldIndex];
-        }
-        nFieldIndex++ ;
-    }
-    return 0;
-}
-
 sal_Bool SwAccessiblePortionData::FillBoundaryIFDateField( com::sun::star::i18n::Boundary& rBound, const sal_Int32 nPos )
 {
     if( aFieldPosition.size() < 2 ) return sal_False;

@@ -162,7 +162,6 @@ public:
     void GetAttributeBoundary( com::sun::star::i18n::Boundary& rBound,
                                sal_Int32 nPos ) const;
 
-    sal_uInt16 GetAttrFldType( sal_Int32 nPos );
     /// Convert start and end positions into core positions.
     /// @returns true if 'special' portions are included either completely
     ///          or not at all. This can be used to test whether editing

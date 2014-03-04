@@ -465,58 +465,6 @@ void SwCntntFrm::RegisterToNode( SwCntntNode& rNode )
     rNode.Add( this );
 }
 
-void SwCntntFrm::DelFrms( const SwCntntNode& rNode )
-{
-    SwIterator<SwCntntFrm,SwCntntNode> aIter( rNode );
-    for( SwCntntFrm* pFrm = aIter.First(); pFrm; pFrm = aIter.Next() )
-    {
-        // #i27138#
-        // notify accessibility paragraphs objects about changed
-        // CONTENT_FLOWS_FROM/_TO relation.
-        // Relation CONTENT_FLOWS_FROM for current next paragraph will change
-        // and relation CONTENT_FLOWS_TO for current previous paragraph will change.
-        if ( pFrm->IsTxtFrm() )
-        {
-            SwViewShell* pViewShell( pFrm->getRootFrm()->GetCurrShell() );
-            if ( pViewShell && pViewShell->GetLayout() &&
-                 pViewShell->GetLayout()->IsAnyShellAccessible() )
-            {
-                pViewShell->InvalidateAccessibleParaFlowRelation(
-                            dynamic_cast<SwTxtFrm*>(pFrm->FindNextCnt( true )),
-                            dynamic_cast<SwTxtFrm*>(pFrm->FindPrevCnt( true )) );
-            }
-        }
-        if( pFrm->IsFollow() )
-        {
-            SwCntntFrm* pMaster = (SwTxtFrm*)pFrm->FindMaster();
-            pMaster->SetFollow( pFrm->GetFollow() );
-        }
-        pFrm->SetFollow( 0 );//So it doesn't get funny ideas.
-                                //Otherwise it could be possible that a follow
-                                //gets destroyed before its master. Following
-                                //the now invalid pointer will then lead to an
-                                //illegal memory access. The chain can be
-                                //crushed here because we'll destroy all of it
-                                //anyway.
-
-        if( pFrm->GetUpper() && pFrm->IsInFtn() && !pFrm->GetIndNext() &&
-            !pFrm->GetIndPrev() )
-        {
-            SwFtnFrm *pFtn = pFrm->FindFtnFrm();
-            OSL_ENSURE( pFtn, "You promised a FtnFrm?" );
-            SwCntntFrm* pCFrm;
-            if( !pFtn->GetFollow() && !pFtn->GetMaster() &&
-                0 != ( pCFrm = pFtn->GetRefFromAttr()) && pCFrm->IsFollow() )
-            {
-                OSL_ENSURE( pCFrm->IsTxtFrm(), "NoTxtFrm has Footnote?" );
-                ((SwTxtFrm*)pCFrm->FindMaster())->Prepare( PREP_FTN_GONE );
-            }
-        }
-        pFrm->Cut();
-        delete pFrm;
-    }
-}
-
 void SwLayoutFrm::Destroy()
 {
     while (!aVertPosOrientFrmsFor.empty())
