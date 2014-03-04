@@ -157,7 +157,6 @@ uno::Sequence< OUString > SAL_CALL OShape::getSupportedServiceNames(  ) throw(un
 
 sal_Bool SAL_CALL OShape::supportsService(const OUString& ServiceName) throw( uno::RuntimeException, std::exception )
 {
-
     return cppu::supportsService(this, ServiceName);
 }
 

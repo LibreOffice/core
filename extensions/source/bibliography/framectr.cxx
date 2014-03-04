@@ -18,7 +18,6 @@
  */
 
 #include <vcl/waitobj.hxx>
-#include <cppuhelper/interfacecontainer.hxx>
 #include <com/sun/star/util/URL.hpp>
 #include <vcl/msgbox.hxx>
 #include <tools/debug.hxx>
@@ -46,6 +45,8 @@
 #include <com/sun/star/sdb/RowChangeAction.hpp>
 #include <com/sun/star/frame/CommandGroup.hpp>
 #include <com/sun/star/datatransfer/clipboard/XClipboard.hpp>
+#include <cppuhelper/interfacecontainer.hxx>
+#include <cppuhelper/supportsservice.hxx>
 #include <sot/exchange.hxx>
 #include <sot/formats.hxx>
 #include <vcl/edit.hxx>
@@ -208,7 +209,7 @@ OUString SAL_CALL BibFrameController_Impl::getImplementationName() throw (::com:
 
 sal_Bool SAL_CALL BibFrameController_Impl::supportsService( const OUString& sServiceName ) throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
-    return ( sServiceName == "com.sun.star.frame.Bibliography" || sServiceName == "com.sun.star.frame.Controller" );
+    return cppu::supportsService( this, sServiceName );
 }
 
 ::com::sun::star::uno::Sequence< OUString > SAL_CALL BibFrameController_Impl::getSupportedServiceNames() throw (::com::sun::star::uno::RuntimeException, std::exception)

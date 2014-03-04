@@ -288,7 +288,8 @@ public:
 };
 
 class XPluginManager_Impl :
-    public cppu::WeakAggImplHelper1< com::sun::star::plugin::XPluginManager >
+    public cppu::WeakAggImplHelper2< com::sun::star::plugin::XPluginManager,
+                                    com::sun::star::lang::XServiceInfo >
 {
     Reference< com::sun::star::uno::XComponentContext >     m_xContext;
 public:

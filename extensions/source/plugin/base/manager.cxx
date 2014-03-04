@@ -57,6 +57,8 @@
 #include "com/sun/star/container/XIndexAccess.hpp"
 #include "com/sun/star/loader/XImplementationLoader.hpp"
 
+#include <cppuhelper/supportsservice.hxx>
+
 PluginManager* PluginManager::pManager = NULL;
 
 PluginManager& PluginManager::get()
@@ -115,12 +117,7 @@ OUString XPluginManager_Impl::getImplementationName() throw(  )
 // ::com::sun::star::lang::XServiceInfo
 sal_Bool XPluginManager_Impl::supportsService(const OUString& ServiceName) throw(  )
 {
-    Sequence< OUString > aSNL = getSupportedServiceNames();
-    const OUString * pArray = aSNL.getConstArray();
-    for( sal_Int32 i = 0; i < aSNL.getLength(); i++ )
-        if( pArray[i] == ServiceName )
-            return sal_True;
-    return sal_False;
+    return cppu::supportsService(this, ServiceName);
 }
 
 // ::com::sun::star::lang::XServiceInfo

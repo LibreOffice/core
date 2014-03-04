@@ -4071,7 +4071,7 @@ uno::Sequence< OUString > SAL_CALL SvxShapeText::getSupportedServiceNames() thro
 
 sal_Bool SAL_CALL SvxShapeText::supportsService( const OUString& ServiceName ) throw ( uno::RuntimeException, std::exception )
 {
-    return SvxShape::supportsService(ServiceName);
+    return cppu::supportsService(static_cast<SvxShape*>(this), ServiceName);
 }
 
     // XTypeProvider

@@ -18,6 +18,7 @@
  */
 
 #include <certificatecontainer.hxx>
+#include <cppuhelper/supportsservice.hxx>
 
 #include <sal/config.h>
 
@@ -96,10 +97,7 @@ sal_Bool SAL_CALL
 CertificateContainer::supportsService( const OUString& ServiceName )
     throw(::com::sun::star::uno::RuntimeException, std::exception)
 {
-    if ( ServiceName.equalsAscii("com.sun.star.security.CertificateContainer") )
-        return sal_True;
-    else
-        return sal_False;
+    return cppu::supportsService( this, ServiceName );
 }
 
 Sequence< OUString > SAL_CALL

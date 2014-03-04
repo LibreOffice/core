@@ -19,11 +19,12 @@
 #ifndef INCLUDED_CHART2_SOURCE_MODEL_MAIN_PAGEBACKGROUND_HXX
 #define INCLUDED_CHART2_SOURCE_MODEL_MAIN_PAGEBACKGROUND_HXX
 
+#include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/util/XCloneable.hpp>
 #include "MutexContainer.hxx"
 #include "OPropertySet.hxx"
-#include <cppuhelper/implbase3.hxx>
+#include <cppuhelper/implbase4.hxx>
 
 #include "ServiceMacros.hxx"
 #include "ModifyListenerHelper.hxx"
@@ -34,10 +35,11 @@ namespace chart
 
 namespace impl
 {
-typedef ::cppu::WeakImplHelper3<
+typedef ::cppu::WeakImplHelper4<
         ::com::sun::star::util::XCloneable,
         ::com::sun::star::util::XModifyBroadcaster,
-        ::com::sun::star::util::XModifyListener >
+        ::com::sun::star::util::XModifyListener,
+        ::com::sun::star::lang::XServiceInfo >
     PageBackground_Base;
 }
 

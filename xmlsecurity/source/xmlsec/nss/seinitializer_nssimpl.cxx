@@ -34,6 +34,7 @@
 #include <osl/thread.h>
 #include <com/sun/star/xml/crypto/SecurityEnvironment.hpp>
 #include <com/sun/star/xml/crypto/XMLSecurityContext.hpp>
+#include <cppuhelper/supportsservice.hxx>
 
 #include "seinitializer_nssimpl.hxx"
 #include "securityenvironment_nssimpl.hxx"
@@ -51,7 +52,6 @@ namespace cssxc = css::xml::crypto;
 
 using namespace com::sun::star;
 
-#define SE_SERVICE_NAME "com.sun.star.xml.crypto.SEInitializer"
 
 SEInitializer_NssImpl::SEInitializer_NssImpl( const css::uno::Reference< css::uno::XComponentContext > &rxContext )
 {
@@ -117,18 +117,12 @@ OUString SEInitializer_NssImpl_getImplementationName ()
     return OUString ("com.sun.star.xml.security.bridge.xmlsec.SEInitializer_NssImpl" );
 }
 
-sal_Bool SAL_CALL SEInitializer_NssImpl_supportsService( const OUString& ServiceName )
-    throw (uno::RuntimeException)
-{
-    return ( ServiceName == SE_SERVICE_NAME || ServiceName == NSS_SERVICE_NAME );
-}
-
 uno::Sequence< OUString > SAL_CALL SEInitializer_NssImpl_getSupportedServiceNames(  )
     throw (uno::RuntimeException)
 {
     uno::Sequence < OUString > aRet(2);
     OUString* pArray = aRet.getArray();
-    pArray[0] =  OUString ( SE_SERVICE_NAME );
+    pArray[0] =  "com.sun.star.xml.crypto.SEInitializer";
     pArray[1] =  OUString ( NSS_SERVICE_NAME );
     return aRet;
 }
@@ -148,7 +142,7 @@ OUString SAL_CALL SEInitializer_NssImpl::getImplementationName(  )
 sal_Bool SAL_CALL SEInitializer_NssImpl::supportsService( const OUString& rServiceName )
     throw (uno::RuntimeException, std::exception)
 {
-    return SEInitializer_NssImpl_supportsService( rServiceName );
+    return cppu::supportsService( this, rServiceName );
 }
 uno::Sequence< OUString > SAL_CALL SEInitializer_NssImpl::getSupportedServiceNames(  )
     throw (uno::RuntimeException, std::exception)

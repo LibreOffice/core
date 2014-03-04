@@ -29,6 +29,7 @@
 #include <unotools/accessiblerelationsethelper.hxx>
 #include <comphelper/accessibleeventnotifier.hxx>
 #include <comphelper/servicehelper.hxx>
+#include <cppuhelper/supportsservice.hxx>
 #include <osl/mutex.hxx>
 
 #include <utility>
@@ -465,11 +466,7 @@ void SAL_CALL AccessibleContextBase::removeAccessibleEventListener (
     }
 }
 
-
-
-
 //=====  XServiceInfo  ========================================================
-
 OUString SAL_CALL AccessibleContextBase::getImplementationName (void)
     throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
@@ -477,26 +474,11 @@ OUString SAL_CALL AccessibleContextBase::getImplementationName (void)
     return OUString("AccessibleContextBase");
 }
 
-
-
-
-sal_Bool SAL_CALL
-     AccessibleContextBase::supportsService (const OUString& sServiceName)
+sal_Bool SAL_CALL AccessibleContextBase::supportsService (const OUString& sServiceName)
     throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
-    ThrowIfDisposed ();
-    //  Iterate over all supported service names and return true if on of them
-    //  matches the given name.
-    uno::Sequence< OUString > aSupportedServices (
-        getSupportedServiceNames ());
-    for (int i=0; i<aSupportedServices.getLength(); i++)
-        if (sServiceName == aSupportedServices[i])
-            return sal_True;
-    return sal_False;
+    return cppu::supportsService(this, sServiceName);
 }
-
-
-
 
 uno::Sequence< OUString > SAL_CALL
        AccessibleContextBase::getSupportedServiceNames (void)
