@@ -8966,7 +8966,7 @@ if test -z "$enable_orcus" -o "$enable_orcus" != no; then
     ENABLE_ORCUS="TRUE"
     AC_DEFINE(ENABLE_ORCUS)
 
-    libo_CHECK_SYSTEM_MODULE([orcus],[ORCUS],[liborcus-0.6 >= 0.5.0])
+    libo_CHECK_SYSTEM_MODULE([orcus],[ORCUS],[liborcus-0.8 >= 0.7.0])
     if test "$with_system_orcus" != "yes"; then
         if test "$SYSTEM_BOOST" = "TRUE"; then
             # ===========================================================
