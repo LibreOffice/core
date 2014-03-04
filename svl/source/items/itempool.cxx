@@ -918,10 +918,12 @@ SfxItemPool* SfxItemPool::GetSecondaryPool() const
     return pImp->mpSecondary;
 }
 
+#ifdef DBG_UTIL
 SfxItemPool* SfxItemPool::GetMasterPool() const
 {
     return pImp->mpMaster;
 }
+#endif
 
 void SfxItemPool::FreezeIdRanges()
 
