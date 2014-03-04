@@ -767,9 +767,9 @@ static const char* lclDumpAnyValueCode( Any value, int level = 0)
         fprintf (stderr,"%f\n", floatValue);
     else if( value >>= boolValue ) {
         if (boolValue)
-            return "Any ((sal_Bool) sal_True)";
+            return "(sal_Bool) sal_True";
         else
-            return "Any ((sal_Bool) sal_False)";
+            return "(sal_Bool) sal_False";
     }
     else if( value >>= xNumRule ) {
         fprintf (stderr, "XIndexReplace\n");
@@ -882,7 +882,7 @@ void PropertyMap::dumpCode( Reference< XPropertySet > rXPropSet )
             fprintf (stderr, "{\n");
             const char* var = lclDumpAnyValueCode (rXPropSet->getPropertyValue (props [i].Name), level + 1);
             printLevel (level + 1);
-            fprintf (stderr,"aPropertyMap [PROP_%s] <<= %s;\n", name.getStr(), var);
+            fprintf (stderr,"aPropertyMap.setProperty(PROP_%s, %s);\n", name.getStr(), var);
             printLevel (level);
             fprintf (stderr, "}\n");
         } catch (const Exception&) {
