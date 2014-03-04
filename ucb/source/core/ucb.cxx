@@ -251,21 +251,34 @@ UniversalContentBroker::~UniversalContentBroker()
 
 
 // XInterface methods.
+void SAL_CALL UniversalContentBroker::acquire()
+    throw()
+{
+    OWeakObject::acquire();
+}
 
+void SAL_CALL UniversalContentBroker::release()
+    throw()
+{
+    OWeakObject::release();
+}
 
-
-XINTERFACE_IMPL_9( UniversalContentBroker,
-                   XUniversalContentBroker,
-                   XTypeProvider,
-                   XComponent,
-                   XServiceInfo,
-                   XInitialization,
-                   XContentProviderManager,
-                   XContentProvider,
-                   XContentIdentifierFactory,
-                   XCommandProcessor );
-
-
+css::uno::Any SAL_CALL UniversalContentBroker::queryInterface( const css::uno::Type & rType )
+    throw( css::uno::RuntimeException, std::exception )
+{
+    css::uno::Any aRet = cppu::queryInterface( rType,
+                                               (static_cast< XUniversalContentBroker* >(this)),
+                                               (static_cast< XTypeProvider* >(this)),
+                                               (static_cast< XComponent* >(this)),
+                                               (static_cast< XServiceInfo* >(this)),
+                                               (static_cast< XInitialization* >(this)),
+                                               (static_cast< XContentProviderManager* >(this)),
+                                               (static_cast< XContentProvider* >(this)),
+                                               (static_cast< XContentIdentifierFactory* >(this)),
+                                               (static_cast< XCommandProcessor* >(this))
+                                               );
+    return aRet.hasValue() ? aRet : OWeakObject::queryInterface( rType );
+}
 
 // XTypeProvider methods.
 

@@ -89,36 +89,6 @@ com::sun::star::uno::Any SAL_CALL Class::queryInterface(                    \
 }\
 
 // 9 interfaces implemented
-#define XINTERFACE_IMPL_9( Class,I1,I2,I3,I4,I5,I6,I7,I8,I9 )               \
-void SAL_CALL Class::acquire()                                              \
-    throw()                                                                 \
-{                                                                           \
-    OWeakObject::acquire();                                                 \
-}                                                                           \
-                                                                            \
-void SAL_CALL Class::release()                                              \
-    throw()                                                                 \
-{                                                                           \
-    OWeakObject::release();                                                 \
-} \
-com::sun::star::uno::Any SAL_CALL Class::queryInterface(                    \
-                                const com::sun::star::uno::Type & rType )   \
-    throw( com::sun::star::uno::RuntimeException, std::exception )          \
-{                                                                           \
-    com::sun::star::uno::Any aRet = cppu::queryInterface( rType, \
-    (static_cast< I1* >(this)),                                           \
-    (static_cast< I2* >(this)),                                           \
-    (static_cast< I3* >(this)),                                           \
-    (static_cast< I4* >(this)),                                           \
-    (static_cast< I5* >(this)),                                           \
-    (static_cast< I6* >(this)),                                           \
-    (static_cast< I7* >(this)),                                           \
-    (static_cast< I8* >(this)),                                           \
-    (static_cast< I9* >(this))                                            \
-                    );                                                      \
-    return aRet.hasValue() ? aRet : OWeakObject::queryInterface( rType );   \
-}\
-
 // XTypeProvider decl.
 
 

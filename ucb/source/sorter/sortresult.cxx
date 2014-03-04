@@ -210,18 +210,34 @@ SortedResultSet::~SortedResultSet()
 
 // XInterface methods.
 
+void SAL_CALL SortedResultSet::acquire()
+    throw()
+{
+    OWeakObject::acquire();
+}
 
-XINTERFACE_IMPL_9( SortedResultSet,
-                   XTypeProvider,
-                   XServiceInfo,
-                   XComponent,
-                   XContentAccess,
-                   XResultSet,
-                   XRow,
-                   XCloseable,
-                   XResultSetMetaDataSupplier,
-                   XPropertySet );
+void SAL_CALL SortedResultSet::release()
+    throw()
+{
+    OWeakObject::release();
+}
 
+css::uno::Any SAL_CALL SortedResultSet::queryInterface( const css::uno::Type & rType )
+    throw( css::uno::RuntimeException, std::exception )
+{
+    css::uno::Any aRet = cppu::queryInterface( rType,
+                                               (static_cast< XTypeProvider* >(this)),
+                                               (static_cast< XServiceInfo* >(this)),
+                                               (static_cast< XComponent* >(this)),
+                                               (static_cast< XContentAccess* >(this)),
+                                               (static_cast< XResultSet* >(this)),
+                                               (static_cast< XRow* >(this)),
+                                               (static_cast< XCloseable* >(this)),
+                                               (static_cast< XResultSetMetaDataSupplier* >(this)),
+                                               (static_cast< XPropertySet* >(this))
+                                               );
+    return aRet.hasValue() ? aRet : OWeakObject::queryInterface( rType );
+}
 
 // XTypeProvider methods.
 

@@ -1282,21 +1282,34 @@ PersistentPropertySet::~PersistentPropertySet()
 
 
 // XInterface methods.
+void SAL_CALL PersistentPropertySet::acquire()
+    throw()
+{
+    OWeakObject::acquire();
+}
 
+void SAL_CALL PersistentPropertySet::release()
+    throw()
+{
+    OWeakObject::release();
+}
 
-
-XINTERFACE_IMPL_9( PersistentPropertySet,
-                   XTypeProvider,
-                   XServiceInfo,
-                   XComponent,
-                   XPropertySet, /* base of XPersistentPropertySet */
-                   XNamed,
-                   XPersistentPropertySet,
-                   XPropertyContainer,
-                   XPropertySetInfoChangeNotifier,
-                   XPropertyAccess );
-
-
+css::uno::Any SAL_CALL PersistentPropertySet::queryInterface( const css::uno::Type & rType )
+    throw( css::uno::RuntimeException, std::exception )
+{
+    css::uno::Any aRet = cppu::queryInterface( rType,
+                                               (static_cast< XTypeProvider* >(this)),
+                                               (static_cast< XServiceInfo* >(this)),
+                                               (static_cast< XComponent* >(this)),
+                                               (static_cast< XPropertySet* >(this)),
+                                               (static_cast< XNamed* >(this)),
+                                               (static_cast< XPersistentPropertySet* >(this)),
+                                               (static_cast< XPropertyContainer* >(this)),
+                                               (static_cast< XPropertySetInfoChangeNotifier* >(this)),
+                                               (static_cast< XPropertyAccess* >(this))
+                                               );
+    return aRet.hasValue() ? aRet : OWeakObject::queryInterface( rType );
+}
 
 // XTypeProvider methods.
 

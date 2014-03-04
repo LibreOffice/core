@@ -248,20 +248,34 @@ ResultSet::~ResultSet()
 
 // XInterface methods.
 
+void SAL_CALL ResultSet::acquire()
+    throw()
+{
+    OWeakObject::acquire();
+}
 
+void SAL_CALL ResultSet::release()
+    throw()
+{
+    OWeakObject::release();
+}
 
-XINTERFACE_IMPL_9( ResultSet,
-                   lang::XTypeProvider,
-                   lang::XServiceInfo,
-                   lang::XComponent,
-                   com::sun::star::ucb::XContentAccess,
-                   sdbc::XResultSet,
-                   sdbc::XResultSetMetaDataSupplier,
-                   sdbc::XRow,
-                   sdbc::XCloseable,
-                   beans::XPropertySet );
-
-
+css::uno::Any SAL_CALL ResultSet::queryInterface( const css::uno::Type & rType )
+    throw( css::uno::RuntimeException, std::exception )
+{
+    css::uno::Any aRet = cppu::queryInterface( rType,
+                                               (static_cast< lang::XTypeProvider* >(this)),
+                                               (static_cast< lang::XServiceInfo* >(this)),
+                                               (static_cast< lang::XComponent* >(this)),
+                                               (static_cast< css::ucb::XContentAccess* >(this)),
+                                               (static_cast< sdbc::XResultSet* >(this)),
+                                               (static_cast< sdbc::XResultSetMetaDataSupplier* >(this)),
+                                               (static_cast< sdbc::XRow* >(this)),
+                                               (static_cast< sdbc::XCloseable* >(this)),
+                                               (static_cast< beans::XPropertySet* >(this))
+                                               );
+    return aRet.hasValue() ? aRet : OWeakObject::queryInterface( rType );
+}
 
 // XTypeProvider methods.
 
