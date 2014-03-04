@@ -35,13 +35,10 @@
 #define CPPU_TYPE( T )      getCppuType( static_cast< T * >( 0 ) )
 #define CPPU_TYPE_REF( T )  CPPU_TYPE( com::sun::star::uno::Reference< T > )
 
+// XInterface impl.
 
-
-// XInterface impl. internals.
-
-
-
-#define XINTERFACE_COMMON_IMPL( Class )                                     \
+// 2 interfaces implemented
+#define XINTERFACE_IMPL_2( Class, Ifc1, Ifc2 )                              \
 void SAL_CALL Class::acquire()                                              \
     throw()                                                                 \
 {                                                                           \
@@ -52,76 +49,142 @@ void SAL_CALL Class::release()                                              \
     throw()                                                                 \
 {                                                                           \
     OWeakObject::release();                                                 \
-}
-
-#define QUERYINTERFACE_IMPL_START( Class )                                  \
+} \
 com::sun::star::uno::Any SAL_CALL Class::queryInterface(                    \
                                 const com::sun::star::uno::Type & rType )   \
     throw( com::sun::star::uno::RuntimeException, std::exception )          \
 {                                                                           \
-    com::sun::star::uno::Any aRet = cppu::queryInterface( rType,
-
-#define QUERYINTERFACE_IMPL_END                                             \
-                    );                                                      \
-    return aRet.hasValue() ? aRet : OWeakObject::queryInterface( rType );   \
-}
-
-// XInterface impl.
-
-// 2 interfaces implemented
-#define XINTERFACE_IMPL_2( Class, Ifc1, Ifc2 )                              \
-XINTERFACE_COMMON_IMPL( Class )                                             \
-QUERYINTERFACE_IMPL_START( Class )                                          \
+    com::sun::star::uno::Any aRet = cppu::queryInterface( rType, \
     (static_cast< Ifc1* >(this)),                                         \
     (static_cast< Ifc2* >(this))                                          \
-QUERYINTERFACE_IMPL_END
+                    );                                                      \
+    return aRet.hasValue() ? aRet : OWeakObject::queryInterface( rType );   \
+}\
 
 // 3 interfaces implemented
 #define XINTERFACE_IMPL_3( Class, Ifc1, Ifc2, Ifc3 )                        \
-XINTERFACE_COMMON_IMPL( Class )                                             \
-QUERYINTERFACE_IMPL_START( Class )                                          \
+void SAL_CALL Class::acquire()                                              \
+    throw()                                                                 \
+{                                                                           \
+    OWeakObject::acquire();                                                 \
+}                                                                           \
+                                                                            \
+void SAL_CALL Class::release()                                              \
+    throw()                                                                 \
+{                                                                           \
+    OWeakObject::release();                                                 \
+} \
+com::sun::star::uno::Any SAL_CALL Class::queryInterface(                    \
+                                const com::sun::star::uno::Type & rType )   \
+    throw( com::sun::star::uno::RuntimeException, std::exception )          \
+{                                                                           \
+    com::sun::star::uno::Any aRet = cppu::queryInterface( rType, \
     (static_cast< Ifc1* >(this)),                                         \
     (static_cast< Ifc2* >(this)),                                         \
     (static_cast< Ifc3* >(this))                                          \
-QUERYINTERFACE_IMPL_END
+                    );                                                      \
+    return aRet.hasValue() ? aRet : OWeakObject::queryInterface( rType );   \
+}\
 
 // 4 interfaces implemented
 #define XINTERFACE_IMPL_4( Class, Ifc1, Ifc2, Ifc3, Ifc4 )                  \
-XINTERFACE_COMMON_IMPL( Class )                                             \
-QUERYINTERFACE_IMPL_START( Class )                                          \
+void SAL_CALL Class::acquire()                                              \
+    throw()                                                                 \
+{                                                                           \
+    OWeakObject::acquire();                                                 \
+}                                                                           \
+                                                                            \
+void SAL_CALL Class::release()                                              \
+    throw()                                                                 \
+{                                                                           \
+    OWeakObject::release();                                                 \
+} \
+com::sun::star::uno::Any SAL_CALL Class::queryInterface(                    \
+                                const com::sun::star::uno::Type & rType )   \
+    throw( com::sun::star::uno::RuntimeException, std::exception )          \
+{                                                                           \
+    com::sun::star::uno::Any aRet = cppu::queryInterface( rType, \
     (static_cast< Ifc1* >(this)),                                         \
     (static_cast< Ifc2* >(this)),                                         \
     (static_cast< Ifc3* >(this)),                                         \
     (static_cast< Ifc4* >(this))                                          \
-QUERYINTERFACE_IMPL_END
+                    );                                                      \
+    return aRet.hasValue() ? aRet : OWeakObject::queryInterface( rType );   \
+}\
 
 // 5 interfaces implemented
 #define XINTERFACE_IMPL_5( Class, Ifc1, Ifc2, Ifc3, Ifc4, Ifc5 )            \
-XINTERFACE_COMMON_IMPL( Class )                                             \
-QUERYINTERFACE_IMPL_START( Class )                                          \
+void SAL_CALL Class::acquire()                                              \
+    throw()                                                                 \
+{                                                                           \
+    OWeakObject::acquire();                                                 \
+}                                                                           \
+                                                                            \
+void SAL_CALL Class::release()                                              \
+    throw()                                                                 \
+{                                                                           \
+    OWeakObject::release();                                                 \
+} \
+com::sun::star::uno::Any SAL_CALL Class::queryInterface(                    \
+                                const com::sun::star::uno::Type & rType )   \
+    throw( com::sun::star::uno::RuntimeException, std::exception )          \
+{                                                                           \
+    com::sun::star::uno::Any aRet = cppu::queryInterface( rType, \
     (static_cast< Ifc1* >(this)),                                         \
     (static_cast< Ifc2* >(this)),                                         \
     (static_cast< Ifc3* >(this)),                                         \
     (static_cast< Ifc4* >(this)),                                         \
     (static_cast< Ifc5* >(this))                                          \
-QUERYINTERFACE_IMPL_END
+                    );                                                      \
+    return aRet.hasValue() ? aRet : OWeakObject::queryInterface( rType );   \
+}\
 
 // 6 interfaces implemented
 #define XINTERFACE_IMPL_6( Class,I1,I2,I3,I4,I5,I6 )                        \
-XINTERFACE_COMMON_IMPL( Class )                                             \
-QUERYINTERFACE_IMPL_START( Class )                                          \
+void SAL_CALL Class::acquire()                                              \
+    throw()                                                                 \
+{                                                                           \
+    OWeakObject::acquire();                                                 \
+}                                                                           \
+                                                                            \
+void SAL_CALL Class::release()                                              \
+    throw()                                                                 \
+{                                                                           \
+    OWeakObject::release();                                                 \
+} \
+com::sun::star::uno::Any SAL_CALL Class::queryInterface(                    \
+                                const com::sun::star::uno::Type & rType )   \
+    throw( com::sun::star::uno::RuntimeException, std::exception )          \
+{                                                                           \
+    com::sun::star::uno::Any aRet = cppu::queryInterface( rType, \
     (static_cast< I1* >(this)),                                           \
     (static_cast< I2* >(this)),                                           \
     (static_cast< I3* >(this)),                                           \
     (static_cast< I4* >(this)),                                           \
     (static_cast< I5* >(this)),                                           \
     (static_cast< I6* >(this))                                            \
-QUERYINTERFACE_IMPL_END
+                    );                                                      \
+    return aRet.hasValue() ? aRet : OWeakObject::queryInterface( rType );   \
+}\
 
 // 9 interfaces implemented
 #define XINTERFACE_IMPL_9( Class,I1,I2,I3,I4,I5,I6,I7,I8,I9 )               \
-XINTERFACE_COMMON_IMPL( Class )                                             \
-QUERYINTERFACE_IMPL_START( Class )                                          \
+void SAL_CALL Class::acquire()                                              \
+    throw()                                                                 \
+{                                                                           \
+    OWeakObject::acquire();                                                 \
+}                                                                           \
+                                                                            \
+void SAL_CALL Class::release()                                              \
+    throw()                                                                 \
+{                                                                           \
+    OWeakObject::release();                                                 \
+} \
+com::sun::star::uno::Any SAL_CALL Class::queryInterface(                    \
+                                const com::sun::star::uno::Type & rType )   \
+    throw( com::sun::star::uno::RuntimeException, std::exception )          \
+{                                                                           \
+    com::sun::star::uno::Any aRet = cppu::queryInterface( rType, \
     (static_cast< I1* >(this)),                                           \
     (static_cast< I2* >(this)),                                           \
     (static_cast< I3* >(this)),                                           \
@@ -131,7 +194,9 @@ QUERYINTERFACE_IMPL_START( Class )                                          \
     (static_cast< I7* >(this)),                                           \
     (static_cast< I8* >(this)),                                           \
     (static_cast< I9* >(this))                                            \
-QUERYINTERFACE_IMPL_END
+                    );                                                      \
+    return aRet.hasValue() ? aRet : OWeakObject::queryInterface( rType );   \
+}\
 
 // XTypeProvider decl.
 

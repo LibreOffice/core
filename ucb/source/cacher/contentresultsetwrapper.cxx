@@ -1420,17 +1420,18 @@ void SAL_CALL ContentResultSetWrapperListener::release()
     OWeakObject::release();
 }
 
-//list all interfaces inclusive baseclasses of interfaces
-QUERYINTERFACE_IMPL_START( ContentResultSetWrapperListener )
-
-    static_cast< XEventListener * >(
-                     static_cast< XPropertyChangeListener * >(this))
-    , (static_cast< XPropertyChangeListener* >(this))
-    , (static_cast< XVetoableChangeListener* >(this))
-
-QUERYINTERFACE_IMPL_END
-
-
+css::uno::Any SAL_CALL ContentResultSetWrapperListener::queryInterface( const css::uno::Type & rType )
+    throw( com::sun::star::uno::RuntimeException, std::exception )
+{
+    //list all interfaces inclusive baseclasses of interfaces
+    css::uno::Any aRet = cppu::queryInterface( rType,
+                                               static_cast< XEventListener * >(
+                                                       static_cast< XPropertyChangeListener * >(this)),
+                                               static_cast< XPropertyChangeListener* >(this),
+                                               static_cast< XVetoableChangeListener* >(this)
+        );
+    return aRet.hasValue() ? aRet : OWeakObject::queryInterface( rType );
+}
 
 //XEventListener methods.
 
