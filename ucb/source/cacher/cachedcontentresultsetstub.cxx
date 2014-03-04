@@ -53,8 +53,17 @@ CachedContentResultSetStub::~CachedContentResultSetStub()
 
 
 // XInterface methods.
+void SAL_CALL CachedContentResultSetStub::acquire()
+    throw()
+{
+    OWeakObject::acquire();
+}
 
-XINTERFACE_COMMON_IMPL( CachedContentResultSetStub )
+void SAL_CALL CachedContentResultSetStub::release()
+    throw()
+{
+    OWeakObject::release();
+}
 
 Any SAL_CALL CachedContentResultSetStub
     ::queryInterface( const Type&  rType )

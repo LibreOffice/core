@@ -1407,9 +1407,19 @@ ContentResultSetWrapperListener::~ContentResultSetWrapperListener()
 
 
 // XInterface methods.
+void SAL_CALL ContentResultSetWrapperListener::acquire()
+    throw()
+{
+    OWeakObject::acquire();
+}
+
+void SAL_CALL ContentResultSetWrapperListener::release()
+    throw()
+{
+    OWeakObject::release();
+}
 
 //list all interfaces inclusive baseclasses of interfaces
-XINTERFACE_COMMON_IMPL( ContentResultSetWrapperListener )
 QUERYINTERFACE_IMPL_START( ContentResultSetWrapperListener )
 
     static_cast< XEventListener * >(

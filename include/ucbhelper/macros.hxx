@@ -72,13 +72,6 @@ com::sun::star::uno::Any SAL_CALL Class::queryInterface(                    \
 
 
 
-// 1 interface implemented
-#define XINTERFACE_IMPL_1( Class, Ifc1 )                                    \
-XINTERFACE_COMMON_IMPL( Class )                                             \
-QUERYINTERFACE_IMPL_START( Class )                                          \
-    (static_cast< Ifc1* >(this))                                          \
-QUERYINTERFACE_IMPL_END
-
 // 2 interfaces implemented
 #define XINTERFACE_IMPL_2( Class, Ifc1, Ifc2 )                              \
 XINTERFACE_COMMON_IMPL( Class )                                             \
@@ -129,33 +122,6 @@ QUERYINTERFACE_IMPL_START( Class )                                          \
     (static_cast< I6* >(this))                                            \
 QUERYINTERFACE_IMPL_END
 
-// 7 interfaces implemented
-#define XINTERFACE_IMPL_7( Class,I1,I2,I3,I4,I5,I6,I7 )                     \
-XINTERFACE_COMMON_IMPL( Class )                                             \
-QUERYINTERFACE_IMPL_START( Class )                                          \
-    (static_cast< I1* >(this)),                                           \
-    (static_cast< I2* >(this)),                                           \
-    (static_cast< I3* >(this)),                                           \
-    (static_cast< I4* >(this)),                                           \
-    (static_cast< I5* >(this)),                                           \
-    (static_cast< I6* >(this)),                                           \
-    (static_cast< I7* >(this))                                            \
-QUERYINTERFACE_IMPL_END
-
-// 8 interfaces implemented
-#define XINTERFACE_IMPL_8( Class,I1,I2,I3,I4,I5,I6,I7,I8 )                  \
-XINTERFACE_COMMON_IMPL( Class )                                             \
-QUERYINTERFACE_IMPL_START( Class )                                          \
-    (static_cast< I1* >(this)),                                           \
-    (static_cast< I2* >(this)),                                           \
-    (static_cast< I3* >(this)),                                           \
-    (static_cast< I4* >(this)),                                           \
-    (static_cast< I5* >(this)),                                           \
-    (static_cast< I6* >(this)),                                           \
-    (static_cast< I7* >(this)),                                           \
-    (static_cast< I8* >(this))                                            \
-QUERYINTERFACE_IMPL_END
-
 // 9 interfaces implemented
 #define XINTERFACE_IMPL_9( Class,I1,I2,I3,I4,I5,I6,I7,I8,I9 )               \
 XINTERFACE_COMMON_IMPL( Class )                                             \
@@ -170,119 +136,6 @@ QUERYINTERFACE_IMPL_START( Class )                                          \
     (static_cast< I8* >(this)),                                           \
     (static_cast< I9* >(this))                                            \
 QUERYINTERFACE_IMPL_END
-
-// 10 interfaces implemented
-#define XINTERFACE_IMPL_10( Class,I1,I2,I3,I4,I5,I6,I7,I8,I9,I10 )          \
-XINTERFACE_COMMON_IMPL( Class )                                             \
-QUERYINTERFACE_IMPL_START( Class )                                          \
-    (static_cast< I1* >(this)),                                           \
-    (static_cast< I2* >(this)),                                           \
-    (static_cast< I3* >(this)),                                           \
-    (static_cast< I4* >(this)),                                           \
-    (static_cast< I5* >(this)),                                           \
-    (static_cast< I6* >(this)),                                           \
-    (static_cast< I7* >(this)),                                           \
-    (static_cast< I8* >(this)),                                           \
-    (static_cast< I9* >(this)),                                           \
-    (static_cast< I10* >(this))                                           \
-QUERYINTERFACE_IMPL_END
-
-// 11 interfaces implemented
-#define XINTERFACE_IMPL_11( Class,I1,I2,I3,I4,I5,I6,I7,I8,I9,I10,I11 )      \
-XINTERFACE_COMMON_IMPL( Class )                                             \
-QUERYINTERFACE_IMPL_START( Class )                                          \
-    (static_cast< I1* >(this)),                                           \
-    (static_cast< I2* >(this)),                                           \
-    (static_cast< I3* >(this)),                                           \
-    (static_cast< I4* >(this)),                                           \
-    (static_cast< I5* >(this)),                                           \
-    (static_cast< I6* >(this)),                                           \
-    (static_cast< I7* >(this)),                                           \
-    (static_cast< I8* >(this)),                                           \
-    (static_cast< I9* >(this)),                                           \
-    (static_cast< I10* >(this)),                                          \
-    (static_cast< I11* >(this))                                           \
-QUERYINTERFACE_IMPL_END
-
-// 12 interfaces implemented
-#define XINTERFACE_IMPL_12( Class,I1,I2,I3,I4,I5,I6,I7,I8,I9,I10,I11,I12 )  \
-XINTERFACE_COMMON_IMPL( Class )                                             \
-QUERYINTERFACE_IMPL_START( Class )                                          \
-    (static_cast< I1* >(this)),                                           \
-    (static_cast< I2* >(this)),                                           \
-    (static_cast< I3* >(this)),                                           \
-    (static_cast< I4* >(this)),                                           \
-    (static_cast< I5* >(this)),                                           \
-    (static_cast< I6* >(this)),                                           \
-    (static_cast< I7* >(this)),                                           \
-    (static_cast< I8* >(this)),                                           \
-    (static_cast< I9* >(this)),                                           \
-    (static_cast< I10* >(this)),                                          \
-    (static_cast< I11* >(this)),                                          \
-    (static_cast< I12* >(this))                                           \
-QUERYINTERFACE_IMPL_END
-
-// 13 interfaces implemented
-#define XINTERFACE_IMPL_13( Class,I1,I2,I3,I4,I5,I6,I7,I8,I9,I10,I11,I12,I13 ) \
-XINTERFACE_COMMON_IMPL( Class )                                             \
-QUERYINTERFACE_IMPL_START( Class )                                          \
-    (static_cast< I1* >(this)),                                           \
-    (static_cast< I2* >(this)),                                           \
-    (static_cast< I3* >(this)),                                           \
-    (static_cast< I4* >(this)),                                           \
-    (static_cast< I5* >(this)),                                           \
-    (static_cast< I6* >(this)),                                           \
-    (static_cast< I7* >(this)),                                           \
-    (static_cast< I8* >(this)),                                           \
-    (static_cast< I9* >(this)),                                           \
-    (static_cast< I10* >(this)),                                          \
-    (static_cast< I11* >(this)),                                          \
-    (static_cast< I12* >(this)),                                          \
-    (static_cast< I13* >(this))                                           \
-QUERYINTERFACE_IMPL_END
-
-// 14 interfaces implemented
-#define XINTERFACE_IMPL_14( Class,I1,I2,I3,I4,I5,I6,I7,I8,I9,I10,I11,I12,I13,I14 )  \
-XINTERFACE_COMMON_IMPL( Class )                                             \
-QUERYINTERFACE_IMPL_START( Class )                                          \
-    (static_cast< I1* >(this)),                                           \
-    (static_cast< I2* >(this)),                                           \
-    (static_cast< I3* >(this)),                                           \
-    (static_cast< I4* >(this)),                                           \
-    (static_cast< I5* >(this)),                                           \
-    (static_cast< I6* >(this)),                                           \
-    (static_cast< I7* >(this)),                                           \
-    (static_cast< I8* >(this)),                                           \
-    (static_cast< I9* >(this)),                                           \
-    (static_cast< I10* >(this)),                                          \
-    (static_cast< I11* >(this)),                                          \
-    (static_cast< I12* >(this)),                                          \
-    (static_cast< I13* >(this)),                                          \
-    (static_cast< I14* >(this))                                           \
-QUERYINTERFACE_IMPL_END
-
-// 15 interfaces implemented
-#define XINTERFACE_IMPL_15( Class,I1,I2,I3,I4,I5,I6,I7,I8,I9,I10,I11,I12,I13,I14,I15 )  \
-XINTERFACE_COMMON_IMPL( Class )                                             \
-QUERYINTERFACE_IMPL_START( Class )                                          \
-    (static_cast< I1* >(this)),                                           \
-    (static_cast< I2* >(this)),                                           \
-    (static_cast< I3* >(this)),                                           \
-    (static_cast< I4* >(this)),                                           \
-    (static_cast< I5* >(this)),                                           \
-    (static_cast< I6* >(this)),                                           \
-    (static_cast< I7* >(this)),                                           \
-    (static_cast< I8* >(this)),                                           \
-    (static_cast< I9* >(this)),                                           \
-    (static_cast< I10* >(this)),                                          \
-    (static_cast< I11* >(this)),                                          \
-    (static_cast< I12* >(this)),                                          \
-    (static_cast< I13* >(this)),                                          \
-    (static_cast< I14* >(this)),                                          \
-    (static_cast< I15* >(this))                                           \
-QUERYINTERFACE_IMPL_END
-
-
 
 // XTypeProvider decl.
 
@@ -346,13 +199,6 @@ Class::getTypes()                                                           \
 // XTypeProvider impl.
 
 
-
-// 1 interface supported
-#define XTYPEPROVIDER_IMPL_1( Class, I1 )                                   \
-XTYPEPROVIDER_COMMON_IMPL( Class )                                          \
-GETTYPES_IMPL_START( Class )                                                \
-    CPPU_TYPE_REF( I1 )                                                 \
-GETTYPES_IMPL_END
 
 // 2 interfaces supported
 #define XTYPEPROVIDER_IMPL_2( Class, I1,I2 )                                \
@@ -478,86 +324,6 @@ GETTYPES_IMPL_START( Class )                                                \
     CPPU_TYPE_REF( I10 ),                                                   \
     CPPU_TYPE_REF( I11 )                                                    \
 GETTYPES_IMPL_END
-
-// 12 interfaces supported
-#define XTYPEPROVIDER_IMPL_12( Class, I1,I2,I3,I4,I5,I6,I7,I8,I9,I10,I11,I12 )  \
-XTYPEPROVIDER_COMMON_IMPL( Class )                                          \
-GETTYPES_IMPL_START( Class )                                                \
-    CPPU_TYPE_REF( I1 ),                                                    \
-    CPPU_TYPE_REF( I2 ),                                                    \
-    CPPU_TYPE_REF( I3 ),                                                    \
-    CPPU_TYPE_REF( I4 ),                                                    \
-    CPPU_TYPE_REF( I5 ),                                                    \
-    CPPU_TYPE_REF( I6 ),                                                    \
-    CPPU_TYPE_REF( I7 ),                                                    \
-    CPPU_TYPE_REF( I8 ),                                                    \
-    CPPU_TYPE_REF( I9 ),                                                    \
-    CPPU_TYPE_REF( I10 ),                                                   \
-    CPPU_TYPE_REF( I11 ),                                                   \
-    CPPU_TYPE_REF( I12 )                                                    \
-GETTYPES_IMPL_END
-
-// 13 interfaces supported
-#define XTYPEPROVIDER_IMPL_13( Class, I1,I2,I3,I4,I5,I6,I7,I8,I9,I10,I11,I12,I13 )  \
-XTYPEPROVIDER_COMMON_IMPL( Class )                                          \
-GETTYPES_IMPL_START( Class )                                                \
-    CPPU_TYPE_REF( I1 ),                                                    \
-    CPPU_TYPE_REF( I2 ),                                                    \
-    CPPU_TYPE_REF( I3 ),                                                    \
-    CPPU_TYPE_REF( I4 ),                                                    \
-    CPPU_TYPE_REF( I5 ),                                                    \
-    CPPU_TYPE_REF( I6 ),                                                    \
-    CPPU_TYPE_REF( I7 ),                                                    \
-    CPPU_TYPE_REF( I8 ),                                                    \
-    CPPU_TYPE_REF( I9 ),                                                    \
-    CPPU_TYPE_REF( I10 ),                                                   \
-    CPPU_TYPE_REF( I11 ),                                                   \
-    CPPU_TYPE_REF( I12 ),                                                   \
-    CPPU_TYPE_REF( I13 )                                                    \
-GETTYPES_IMPL_END
-
-// 14 interfaces supported
-#define XTYPEPROVIDER_IMPL_14( Class, I1,I2,I3,I4,I5,I6,I7,I8,I9,I10,I11,I12,I13,I14 )  \
-XTYPEPROVIDER_COMMON_IMPL( Class )                                          \
-GETTYPES_IMPL_START( Class )                                                \
-    CPPU_TYPE_REF( I1 ),                                                    \
-    CPPU_TYPE_REF( I2 ),                                                    \
-    CPPU_TYPE_REF( I3 ),                                                    \
-    CPPU_TYPE_REF( I4 ),                                                    \
-    CPPU_TYPE_REF( I5 ),                                                    \
-    CPPU_TYPE_REF( I6 ),                                                    \
-    CPPU_TYPE_REF( I7 ),                                                    \
-    CPPU_TYPE_REF( I8 ),                                                    \
-    CPPU_TYPE_REF( I9 ),                                                    \
-    CPPU_TYPE_REF( I10 ),                                                   \
-    CPPU_TYPE_REF( I11 ),                                                   \
-    CPPU_TYPE_REF( I12 ),                                                   \
-    CPPU_TYPE_REF( I13 ),                                                   \
-    CPPU_TYPE_REF( I14 )                                                    \
-GETTYPES_IMPL_END
-
-// 15 interfaces supported
-#define XTYPEPROVIDER_IMPL_15( Class, I1,I2,I3,I4,I5,I6,I7,I8,I9,I10,I11,I12,I13,I14,I15 )  \
-XTYPEPROVIDER_COMMON_IMPL( Class )                                          \
-GETTYPES_IMPL_START( Class )                                                \
-    CPPU_TYPE_REF( I1 ),                                                    \
-    CPPU_TYPE_REF( I2 ),                                                    \
-    CPPU_TYPE_REF( I3 ),                                                    \
-    CPPU_TYPE_REF( I4 ),                                                    \
-    CPPU_TYPE_REF( I5 ),                                                    \
-    CPPU_TYPE_REF( I6 ),                                                    \
-    CPPU_TYPE_REF( I7 ),                                                    \
-    CPPU_TYPE_REF( I8 ),                                                    \
-    CPPU_TYPE_REF( I9 ),                                                    \
-    CPPU_TYPE_REF( I10 ),                                                   \
-    CPPU_TYPE_REF( I11 ),                                                   \
-    CPPU_TYPE_REF( I12 ),                                                   \
-    CPPU_TYPE_REF( I13 ),                                                   \
-    CPPU_TYPE_REF( I14 ),                                                   \
-    CPPU_TYPE_REF( I15 )                                                    \
-GETTYPES_IMPL_END
-
-
 
 // XServiceInfo decl.
 

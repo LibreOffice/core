@@ -76,8 +76,17 @@ void SAL_CALL CachedDynamicResultSetStub
 
 
 // XInterface methods.
+void SAL_CALL CachedDynamicResultSetStub::acquire()
+    throw()
+{
+    OWeakObject::acquire();
+}
 
-XINTERFACE_COMMON_IMPL( CachedDynamicResultSetStub )
+void SAL_CALL CachedDynamicResultSetStub::release()
+    throw()
+{
+    OWeakObject::release();
+}
 
 Any SAL_CALL CachedDynamicResultSetStub
     ::queryInterface( const Type&  rType )
