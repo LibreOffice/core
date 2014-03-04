@@ -35,7 +35,7 @@ echo
 # We need only the SAL_INFO output with tag "oox.cscode", plus stderr
 # for PropertyMap::dumpCode() output.
 
-SAL_LOG='+INFO.oox.cscode-WARN' install/program/soffice oox/source/drawingml/customshapes/pptx/cshape-all.pptx > oox/source/drawingml/customshapes/custom-shapes.log 2>&1
+SAL_LOG='+INFO.oox.cscode-WARN' instdir/program/soffice oox/source/drawingml/customshapes/pptx/cshape-all.pptx > oox/source/drawingml/customshapes/custom-shapes.log 2>&1
 
 
 # Now run a script that reads the above log file and generates the
