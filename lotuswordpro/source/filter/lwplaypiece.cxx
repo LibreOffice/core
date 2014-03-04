@@ -334,6 +334,12 @@ void LwpLayoutGutters::Parse(IXFStream* /*pOutputStream*/)
 {}
 
 LwpJoinStuff::LwpJoinStuff()
+    : m_nPercentage(0)
+    , m_nCorners(0)
+    , m_nWidth(0)
+    , m_nHeight(0)
+    , m_nID(0)
+    , m_nScaling(0)
 {}
 
 LwpJoinStuff::~LwpJoinStuff()
