@@ -1201,7 +1201,7 @@ public:
     typedef ParallelReductionVectorRef<VectorRef> ParallelNumericRange;
 
     virtual void GenSlidingWindowFunction(std::stringstream &ss,
-            const std::string sSymName, SubArguments &vSubArguments)
+            const std::string &sSymName, SubArguments &vSubArguments)
     {
         ss << "\ndouble " << sSymName;
         ss << "_"<< BinFuncName() <<"(";
@@ -1321,7 +1321,7 @@ class Binary: public SlidingFunctionBase
 {
 public:
     virtual void GenSlidingWindowFunction(std::stringstream &ss,
-            const std::string sSymName, SubArguments &vSubArguments)
+            const std::string &sSymName, SubArguments &vSubArguments)
     {
         ss << "\ndouble " << sSymName;
         ss << "_"<< BinFuncName() <<"(";
@@ -1347,7 +1347,7 @@ class SumOfProduct: public SlidingFunctionBase
 {
 public:
     virtual void GenSlidingWindowFunction(std::stringstream &ss,
-            const std::string sSymName, SubArguments &vSubArguments)
+            const std::string &sSymName, SubArguments &vSubArguments)
     {
         size_t nCurWindowSize = 0;
         FormulaToken *tmpCur = NULL;

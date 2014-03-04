@@ -95,7 +95,7 @@ size_t VectorRef::GetWindowSize(void) const
 }
 
 void Normal::GenSlidingWindowFunction(
-    std::stringstream &ss, const std::string sSymName, SubArguments &vSubArguments)
+    std::stringstream &ss, const std::string &sSymName, SubArguments &vSubArguments)
 {
     ArgVector argVector;
     ss << "\ndouble " << sSymName;

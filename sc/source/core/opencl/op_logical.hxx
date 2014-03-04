@@ -19,7 +19,7 @@ class OpAnd: public Normal
 {
 public:
     virtual void GenSlidingWindowFunction(std::stringstream &ss,
-            const std::string sSymName, SubArguments &vSubArguments);
+            const std::string &sSymName, SubArguments &vSubArguments);
     virtual std::string BinFuncName(void) const { return "And"; }
 };
 
@@ -27,21 +27,21 @@ class OpOr: public Normal
 {
 public:
     virtual void GenSlidingWindowFunction(std::stringstream &ss,
-            const std::string sSymName, SubArguments &vSubArguments);
+            const std::string &sSymName, SubArguments &vSubArguments);
     virtual std::string BinFuncName(void) const { return "Or"; }
 };
 class OpNot: public Normal
 {
 public:
     virtual void GenSlidingWindowFunction(std::stringstream &ss,
-            const std::string sSymName, SubArguments &vSubArguments);
+            const std::string &sSymName, SubArguments &vSubArguments);
     virtual std::string BinFuncName(void) const { return "Not"; }
 };
 class OpXor: public Normal
 {
 public:
     virtual void GenSlidingWindowFunction(std::stringstream &ss,
-            const std::string sSymName, SubArguments &vSubArguments);
+            const std::string &sSymName, SubArguments &vSubArguments);
     virtual std::string BinFuncName(void) const { return "Xor"; }
 };
 
