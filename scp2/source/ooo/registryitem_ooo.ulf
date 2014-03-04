@@ -16,17 +16,11 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-[STR_REG_VAL_NEW]
-en-US = "&New"
-
 [STR_REG_VAL_INSTALL]
 en-US = "&Install"
 
 [STR_REG_VAL_SO60_CONFIGFILE]
 en-US = "%SXWFORMATNAME %SXWFORMATVERSION Configuration File"
-
-[STR_REG_VAL_SO50_TEMPLATE_OOO]
-en-US = "StarOffice 5.0 Template"
 
 [STR_REG_VAL_APPCAPABILITY_DESCRIPTION_OOO]
 en-US = "LibreOffice"
