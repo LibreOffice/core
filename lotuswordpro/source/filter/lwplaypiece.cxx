@@ -260,7 +260,9 @@ void LwpColumnInfo:: Read(LwpObjectStream *pStrm)
 }
 
 LwpLayoutColumns::LwpLayoutColumns(LwpObjectHeader& objHdr, LwpSvStream* pStrm)
-    : LwpVirtualPiece(objHdr, pStrm),m_pColumns(NULL)
+    : LwpVirtualPiece(objHdr, pStrm)
+    , m_nNumCols(0)
+    , m_pColumns(NULL)
 {}
 
 LwpLayoutColumns::~LwpLayoutColumns()
