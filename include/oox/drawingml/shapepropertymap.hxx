@@ -23,6 +23,8 @@
 #include <oox/helper/propertymap.hxx>
 #include <oox/dllapi.h>
 
+#include <vector>
+
 namespace oox { class ModelObjectHelper; }
 
 namespace oox {
@@ -70,7 +72,7 @@ enum ShapePropertyId
 
 struct OOX_DLLPUBLIC ShapePropertyInfo
 {
-    const sal_Int32*    mpnPropertyIds;         /// Pointer to array of property identifiers for all SHAPEPROP properties.
+    std::vector<sal_Int32> maPropertyIds;
     bool                mbNamedLineMarker;      /// True = use named line marker instead of explicit line marker.
     bool                mbNamedLineDash;        /// True = use named line dash instead of explicit line dash.
     bool                mbNamedFillGradient;    /// True = use named fill gradient instead of explicit fill gradient.
@@ -85,8 +87,8 @@ struct OOX_DLLPUBLIC ShapePropertyInfo
                             bool bNamedFillGradient,
                             bool bNamedFillBitmapUrl );
 
-    bool         has( ShapePropertyId ePropId ) const { return mpnPropertyIds[ ePropId ] >= 0; }
-    sal_Int32    operator[]( ShapePropertyId ePropId ) const { return mpnPropertyIds[ ePropId ]; }
+    bool         has( ShapePropertyId ePropId ) const { return maPropertyIds.size() > size_t(ePropId) && maPropertyIds[ ePropId ] >= 0; }
+    sal_Int32    operator[]( ShapePropertyId ePropId ) const { return maPropertyIds[ ePropId ]; }
 };
 
 

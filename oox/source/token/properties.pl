@@ -53,6 +53,7 @@ foreach( sort( keys( %props ) ) )
 
 print( IDFILE "const sal_Int32 PROP_COUNT = $i;\n" );
 print( IDFILE "const sal_Int32 PROP_INVALID = -1;\n" );
+print( IDFILE "const sal_Int32 PROP_END_LIST = -2;\n" );
 
 close( IDFILE );
 close( NAMEFILE );

@@ -469,7 +469,8 @@ static const sal_Int32 spnCommonPropIds[] =
     PROP_INVALID, PROP_INVALID, PROP_INVALID, PROP_INVALID, PROP_INVALID, PROP_INVALID, PROP_INVALID,
     PROP_FillStyle, PROP_FillColor, PROP_FillTransparence, PROP_INVALID, PROP_FillGradientName,
     PROP_FillBitmapName, PROP_FillBitmapMode, PROP_FillBitmapSizeX, PROP_FillBitmapSizeY,
-    PROP_FillBitmapPositionOffsetX, PROP_FillBitmapPositionOffsetY, PROP_FillBitmapRectanglePoint
+    PROP_FillBitmapPositionOffsetX, PROP_FillBitmapPositionOffsetY, PROP_FillBitmapRectanglePoint,
+    PROP_END_LIST
 };
 
 /** Property identifiers for linear data series, to be used in ShapePropertyInfo. */
@@ -479,17 +480,37 @@ static const sal_Int32 spnLinearPropIds[] =
     PROP_INVALID, PROP_INVALID, PROP_INVALID, PROP_INVALID, PROP_INVALID, PROP_INVALID, PROP_INVALID,
     PROP_INVALID, PROP_INVALID, PROP_INVALID, PROP_INVALID,
     PROP_INVALID, PROP_INVALID, PROP_INVALID, PROP_INVALID,
-    PROP_INVALID, PROP_INVALID, PROP_INVALID
+    PROP_INVALID, PROP_INVALID, PROP_INVALID,
+    PROP_END_LIST
 };
 
 /** Property identifiers for filled data series, to be used in ShapePropertyInfo. */
 static const sal_Int32 spnFilledPropIds[] =
 {
-    PROP_BorderStyle, PROP_BorderWidth, PROP_BorderColor, PROP_BorderTransparency, PROP_BorderDashName,
-    PROP_INVALID, PROP_INVALID, PROP_INVALID, PROP_INVALID, PROP_INVALID, PROP_INVALID, PROP_INVALID,
-    PROP_FillStyle, PROP_Color, PROP_Transparency, PROP_GradientName,
-    PROP_FillBitmapName, PROP_FillBitmapMode, PROP_FillBitmapSizeX, PROP_FillBitmapSizeY,
-    PROP_FillBitmapPositionOffsetX, PROP_FillBitmapPositionOffsetY, PROP_FillBitmapRectanglePoint
+    PROP_BorderStyle,
+    PROP_BorderWidth,
+    PROP_BorderColor,
+    PROP_BorderTransparency,
+    PROP_BorderDashName,
+    PROP_INVALID,
+    PROP_INVALID,
+    PROP_INVALID,
+    PROP_INVALID,
+    PROP_INVALID,
+    PROP_INVALID,
+    PROP_INVALID,
+    PROP_FillStyle,
+    PROP_Color,
+    PROP_Transparency,
+    PROP_GradientName,
+    PROP_FillBitmapName,
+    PROP_FillBitmapMode,
+    PROP_FillBitmapSizeX,
+    PROP_FillBitmapSizeY,
+    PROP_FillBitmapPositionOffsetX,
+    PROP_FillBitmapPositionOffsetY,
+    PROP_FillBitmapRectanglePoint,
+    PROP_END_LIST
 };
 
 /** Property info for common chart objects, to be used in ShapePropertyMap. */
