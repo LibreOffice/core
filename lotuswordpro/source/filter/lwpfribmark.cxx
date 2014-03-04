@@ -175,7 +175,11 @@ void  LwpFribBookMark::RegisterStyle(LwpFoundry* pFoundry)
     }
 }
 
-LwpFribBookMark::LwpFribBookMark(LwpPara* pPara ) : LwpFrib(pPara),m_pStart(NULL),m_pEnd(NULL)
+LwpFribBookMark::LwpFribBookMark(LwpPara* pPara )
+    : LwpFrib(pPara)
+    , m_nType(0)
+    , m_pStart(NULL)
+    , m_pEnd(NULL)
 {
 }
 
