@@ -227,12 +227,6 @@ FastParser* XmlFilterBase::createParser() const
     return pParser;
 }
 
-OUString XmlFilterBase::getFragmentPathFromFirstType( const OUString& rType )
-{
-    // importRelations() caches the relations map for subsequence calls
-    return importRelations( OUString() )->getFragmentPathFromFirstType( rType );
-}
-
 namespace {
 
 OUString getTransitionalRelationshipOfficeDocType(const OUString& rPart)
