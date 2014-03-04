@@ -23,7 +23,7 @@ using namespace formula;
 
 namespace sc { namespace opencl {
 void OpAnd::GenSlidingWindowFunction(std::stringstream &ss,
-    const std::string sSymName, SubArguments &vSubArguments)
+    const std::string &sSymName, SubArguments &vSubArguments)
 {
     ss << "\ndouble " << sSymName;
     ss << "_"<< BinFuncName() <<"(";
@@ -107,7 +107,7 @@ void OpAnd::GenSlidingWindowFunction(std::stringstream &ss,
 }
 
 void OpOr::GenSlidingWindowFunction(std::stringstream &ss,
-    const std::string sSymName, SubArguments &vSubArguments)
+    const std::string &sSymName, SubArguments &vSubArguments)
 {
     ss << "\ndouble " << sSymName;
     ss << "_"<< BinFuncName() <<"(";
@@ -190,7 +190,7 @@ void OpOr::GenSlidingWindowFunction(std::stringstream &ss,
     ss << "}\n";
 }
 void OpNot::GenSlidingWindowFunction(std::stringstream &ss,
-    const std::string sSymName, SubArguments &vSubArguments)
+    const std::string &sSymName, SubArguments &vSubArguments)
 {
     ss << "\ndouble " << sSymName;
     ss << "_"<< BinFuncName() <<"(";
@@ -229,7 +229,7 @@ void OpNot::GenSlidingWindowFunction(std::stringstream &ss,
 }
 
 void OpXor::GenSlidingWindowFunction(std::stringstream &ss,
-    const std::string sSymName, SubArguments &vSubArguments)
+    const std::string &sSymName, SubArguments &vSubArguments)
 {
     ss << "\ndouble " << sSymName;
     ss << "_"<< BinFuncName() <<"(";

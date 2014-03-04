@@ -261,7 +261,7 @@ class Normal: public SlidingFunctionBase
 {
 public:
     virtual void GenSlidingWindowFunction(std::stringstream &ss,
-            const std::string sSymName, SubArguments &vSubArguments);
+            const std::string &sSymName, SubArguments &vSubArguments);
     virtual bool takeString() const { return false; }
     virtual bool takeNumeric() const { return true; }
 };

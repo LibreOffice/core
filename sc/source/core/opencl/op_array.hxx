@@ -18,7 +18,7 @@ class OpSumX2MY2: public CheckVariables
 {
 public:
     virtual void GenSlidingWindowFunction(std::stringstream &ss,
-            const std::string sSymName, SubArguments &vSubArguments);
+            const std::string &sSymName, SubArguments &vSubArguments);
     virtual std::string BinFuncName(void) const { return "SumX2MY2"; }
 };
 
@@ -26,7 +26,7 @@ class OpSumX2PY2: public CheckVariables
 {
 public:
     virtual void GenSlidingWindowFunction(std::stringstream &ss,
-            const std::string sSymName, SubArguments &vSubArguments);
+            const std::string &sSymName, SubArguments &vSubArguments);
     virtual std::string BinFuncName(void) const { return "SumX2PY2"; }
 };
 
@@ -34,7 +34,7 @@ class OpSumXMY2: public CheckVariables
 {
 public:
     virtual void GenSlidingWindowFunction(std::stringstream &ss,
-            const std::string sSymName, SubArguments &vSubArguments);
+            const std::string &sSymName, SubArguments &vSubArguments);
     virtual std::string BinFuncName(void) const { return "SumXMY2"; }
 };
 }}
