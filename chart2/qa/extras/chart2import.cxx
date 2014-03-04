@@ -34,7 +34,6 @@ public:
     void testPPTChartSeries();
     void testODPChartSeries();
     void testBnc864396();
-    void testChartFileOpen();
 
     CPPUNIT_TEST_SUITE(Chart2ImportTest);
     CPPUNIT_TEST(Fdo60083);
@@ -46,7 +45,6 @@ public:
     CPPUNIT_TEST(testODTChartSeries);
     CPPUNIT_TEST(testDOCChartSeries);
     CPPUNIT_TEST(testDOCXChartSeries);
-    CPPUNIT_TEST(testChartFileOpen);
 /*
  *  Disabling Impress Uts.
  *  ChartTest::tearDown() calls dispose of mxComponent
@@ -262,6 +260,7 @@ void Chart2ImportTest::testPPTChartSeries()
     CPPUNIT_ASSERT_EQUAL(OUString("Column 1"), seriesList[0]);
     CPPUNIT_ASSERT_EQUAL(OUString("Column 2"), seriesList[1]);
     CPPUNIT_ASSERT_EQUAL(OUString("Column 3"), seriesList[2]);
+
 }
 
 void Chart2ImportTest::testPPTXChartSeries()
@@ -271,6 +270,7 @@ void Chart2ImportTest::testPPTXChartSeries()
     CPPUNIT_ASSERT_EQUAL(OUString("Column 1"), seriesList[1]);
     CPPUNIT_ASSERT_EQUAL(OUString("Column 2"), seriesList[2]);
     CPPUNIT_ASSERT_EQUAL(OUString("Column 3"), seriesList[3]);
+
 }
 
 void Chart2ImportTest::testODPChartSeries()
@@ -280,6 +280,7 @@ void Chart2ImportTest::testODPChartSeries()
     CPPUNIT_ASSERT_EQUAL(OUString("Column 1"), seriesList[0]);
     CPPUNIT_ASSERT_EQUAL(OUString("Column 2"), seriesList[1]);
     CPPUNIT_ASSERT_EQUAL(OUString("Column 3"), seriesList[2]);
+
 }
 
 void Chart2ImportTest::testBnc864396()
@@ -295,11 +296,6 @@ void Chart2ImportTest::testBnc864396()
         OUString aExpected = OUString("cat") + OUString::number(i+1);
         CPPUNIT_ASSERT_EQUAL(aExpected, aRowLabels[i]);
     }
-}
-
-void Chart2ImportTest::testChartFileOpen()
-{
-    load("/chart2/qa/extras/data/docx/", "barChart.docx");
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Chart2ImportTest);
