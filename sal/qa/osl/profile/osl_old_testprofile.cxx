@@ -23,10 +23,8 @@
 #include "cppunit/extensions/HelperMacros.h"
 #include "cppunit/plugin/TestPlugIn.h"
 
-#include <stdio.h>
 #include <osl/profile.h>
-
-
+#include <rtl/bootstrap.hxx>
 
 namespace osl_Profile
 {
@@ -42,36 +40,19 @@ namespace osl_Profile
 
 void oldtests::test_profile(void)
 {
-    oslProfile hProfile;
-    rtl_uString* ustrProfileName=0;
-    rtl_uString* ustrProfileName2=0;
-
-    rtl_uString_newFromAscii(&ustrProfileName,"//./tmp/soffice.ini");
-    rtl_uString_newFromAscii(&ustrProfileName2,"//./tmp/not_existing_path/soffice.ini");
-
+    rtl::OUString baseUrl;
+    CPPUNIT_ASSERT(rtl::Bootstrap::get("UserInstallation", baseUrl));
 
     // successful write
-    hProfile = osl_openProfile( ustrProfileName, 0 );
-    if (hProfile != 0)
-    {
-        if (! osl_writeProfileBool( hProfile, "testsection", "testbool", 1 ))
-            printf( "### cannot write into init file!\n" );
+    oslProfile hProfile = osl_openProfile( rtl::OUString(baseUrl + "/soffice.ini").pData, osl_Profile_WRITELOCK );
+    CPPUNIT_ASSERT(hProfile != 0);
+    CPPUNIT_ASSERT_MESSAGE(
+        "cannot write into init file",
+        osl_writeProfileBool( hProfile, "testsection", "testbool", 1 ));
+    CPPUNIT_ASSERT(osl_closeProfile( hProfile ));
 
-        osl_closeProfile( hProfile );
-    }
-
-    // unsuccessful write
-    hProfile = osl_openProfile( ustrProfileName2, 0 );
-    if (hProfile != 0)
-    {
-        if (osl_writeProfileBool( hProfile, "testsection", "testbool", 1 ))
-            printf( "### unexpected success writing into test2.ini!\n" );
-
-        osl_closeProfile( hProfile );
-    }
-
-    rtl_uString_release(ustrProfileName);
-    rtl_uString_release(ustrProfileName2);
+    // unsuccessful open
+    CPPUNIT_ASSERT_EQUAL(oslProfile(0), osl_openProfile( rtl::OUString(baseUrl + "/not_existing_path/soffice.ini").pData, osl_Profile_WRITELOCK ));
 }
 
 } // namespace osl_Profile
