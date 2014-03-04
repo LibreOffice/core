@@ -77,8 +77,12 @@ Mar 2005            Created
 #include "lwpglobalmgr.hxx"
 
 LwpPageLayout::LwpPageLayout(LwpObjectHeader &objHdr, LwpSvStream* pStrm)
-    : LwpLayout(objHdr, pStrm), m_pPrinterBinName(new LwpAtomHolder),
-    m_pPaperName(new LwpAtomHolder),m_pXFPageMaster(NULL)
+    : LwpLayout(objHdr, pStrm)
+    , m_pPrinterBinName(new LwpAtomHolder)
+    , m_nPrinterBin(0)
+    , m_nBdroffset(0)
+    , m_pPaperName(new LwpAtomHolder)
+    , m_pXFPageMaster(NULL)
 {
 }
 
