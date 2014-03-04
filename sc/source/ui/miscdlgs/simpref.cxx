@@ -150,11 +150,6 @@ bool ScSimpleRefDlg::IsRefInputMode() const
     return true;
 }
 
-OUString ScSimpleRefDlg::GetRefString() const
-{
-    return m_pEdAssign->GetText();
-}
-
 void ScSimpleRefDlg::SetCloseHdl( const Link& rLink )
 {
     aCloseHdl=rLink;

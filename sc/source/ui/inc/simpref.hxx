@@ -83,7 +83,6 @@ public:
 
     void            StartRefInput();
 
-    OUString       GetRefString() const;
     void           SetRefString(const OUString &rStr);
     virtual void   FillInfo(SfxChildWinInfo&) const;
 

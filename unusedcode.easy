@@ -31,7 +31,6 @@ OutputDevice::PixelToLogic(Region const&, MapMode const&) const
 SalGraphics::drawTransformedBitmap(basegfx::B2DPoint const&, basegfx::B2DPoint const&, basegfx::B2DPoint const&, SalBitmap const&, SalBitmap const*)
 ScDocument::CreateFormatTable() const
 ScExtIButton::GetSelected() const
-ScSimpleRefDlg::GetRefString() const
 ScVbaFormat<ooo::vba::excel::XStyle>::getAddIndent()
 ScVbaFormat<ooo::vba::excel::XStyle>::setAddIndent(com::sun::star::uno::Any const&)
 SdrItemBrowser::ForceParent()
