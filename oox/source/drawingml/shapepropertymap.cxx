@@ -63,7 +63,7 @@ ShapePropertyInfo::ShapePropertyInfo( const sal_Int32* pnPropertyIds,
     mbNamedFillBitmapUrl( bNamedFillBitmapUrl )
 {
     assert(pnPropertyIds);
-    for(size_t i = 0;; ++i)
+    for(size_t i = 0; i < PROP_COUNT; ++i) // normally we should not reach PROP_COUNT but it prevents infinite loops if we hit a bug
     {
         if(pnPropertyIds[i] == PROP_END_LIST)
             break;
