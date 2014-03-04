@@ -1321,13 +1321,27 @@ void Content_Impl::inserted()
 
 // XInterface methods.
 
+void SAL_CALL ContentEventListener_Impl::acquire()
+    throw()
+{
+    OWeakObject::acquire();
+}
 
+void SAL_CALL ContentEventListener_Impl::release()
+    throw()
+{
+    OWeakObject::release();
+}
 
-XINTERFACE_IMPL_2( ContentEventListener_Impl,
-                   XContentEventListener,
-                   XEventListener ); /* base of XContentEventListener */
-
-
+css::uno::Any SAL_CALL ContentEventListener_Impl::queryInterface( const css::uno::Type & rType )
+    throw( css::uno::RuntimeException, std::exception )
+{
+    css::uno::Any aRet = cppu::queryInterface( rType,
+                                               (static_cast< XContentEventListener* >(this)),
+                                               (static_cast< XEventListener* >(this))
+                                               );
+    return aRet.hasValue() ? aRet : OWeakObject::queryInterface( rType );
+}
 
 // XContentEventListener methods.
 

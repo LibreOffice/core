@@ -570,11 +570,27 @@ SortedDynamicResultSetListener::~SortedDynamicResultSetListener()
 
 // XInterface methods.
 
+void SAL_CALL SortedDynamicResultSetListener::acquire()
+    throw()
+{
+    OWeakObject::acquire();
+}
 
-XINTERFACE_IMPL_2( SortedDynamicResultSetListener,
-                   XEventListener,  /* base class of XDynamicResultSetListener */
-                   XDynamicResultSetListener );
+void SAL_CALL SortedDynamicResultSetListener::release()
+    throw()
+{
+    OWeakObject::release();
+}
 
+css::uno::Any SAL_CALL SortedDynamicResultSetListener::queryInterface( const css::uno::Type & rType )
+    throw( css::uno::RuntimeException, std::exception )
+{
+    css::uno::Any aRet = cppu::queryInterface( rType,
+                                               (static_cast< XEventListener* >(this)),
+                                               (static_cast< XDynamicResultSetListener* >(this))
+                                               );
+    return aRet.hasValue() ? aRet : OWeakObject::queryInterface( rType );
+}
 
 // XEventListener ( base of XDynamicResultSetListener )
 

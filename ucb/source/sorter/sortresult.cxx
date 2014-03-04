@@ -2021,11 +2021,27 @@ SRSPropertySetInfo::~SRSPropertySetInfo()
 
 // XInterface methods.
 
+void SAL_CALL SRSPropertySetInfo::acquire()
+    throw()
+{
+    OWeakObject::acquire();
+}
 
-XINTERFACE_IMPL_2( SRSPropertySetInfo,
-                   XTypeProvider,
-                   XPropertySetInfo );
+void SAL_CALL SRSPropertySetInfo::release()
+    throw()
+{
+    OWeakObject::release();
+}
 
+css::uno::Any SAL_CALL SRSPropertySetInfo::queryInterface( const css::uno::Type & rType )
+    throw( css::uno::RuntimeException, std::exception )
+{
+    css::uno::Any aRet = cppu::queryInterface( rType,
+                                               (static_cast< XTypeProvider* >(this)),
+                                               (static_cast< XPropertySetInfo* >(this))
+                                               );
+    return aRet.hasValue() ? aRet : OWeakObject::queryInterface( rType );
+}
 
 // XTypeProvider methods.
 

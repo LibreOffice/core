@@ -521,12 +521,27 @@ CCRS_PropertySetInfo::~CCRS_PropertySetInfo()
 
 // XInterface methods.
 
-//list all interfaces inclusive baseclasses of interfaces
-XINTERFACE_IMPL_2( CCRS_PropertySetInfo
-                  , XTypeProvider
-                  , XPropertySetInfo
-                  );
+void SAL_CALL CCRS_PropertySetInfo::acquire()
+    throw()
+{
+    OWeakObject::acquire();
+}
 
+void SAL_CALL CCRS_PropertySetInfo::release()
+    throw()
+{
+    OWeakObject::release();
+}
+
+css::uno::Any SAL_CALL CCRS_PropertySetInfo::queryInterface( const css::uno::Type & rType )
+    throw( css::uno::RuntimeException, std::exception )
+{
+    css::uno::Any aRet = cppu::queryInterface( rType,
+                                               (static_cast< XTypeProvider* >(this)),
+                                               (static_cast< XPropertySetInfo* >(this))
+                                               );
+    return aRet.hasValue() ? aRet : OWeakObject::queryInterface( rType );
+}
 
 // XTypeProvider methods.
 

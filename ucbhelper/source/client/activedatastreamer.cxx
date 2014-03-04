@@ -42,13 +42,27 @@ namespace ucbhelper
 
 // XInterface methods
 
+void SAL_CALL ActiveDataStreamer::acquire()
+    throw()
+{
+    OWeakObject::acquire();
+}
 
+void SAL_CALL ActiveDataStreamer::release()
+    throw()
+{
+    OWeakObject::release();
+}
 
-XINTERFACE_IMPL_2( ActiveDataStreamer,
-                   lang::XTypeProvider,
-                   io::XActiveDataStreamer );
-
-
+css::uno::Any SAL_CALL ActiveDataStreamer::queryInterface( const css::uno::Type & rType )
+    throw( css::uno::RuntimeException, std::exception )
+{
+    css::uno::Any aRet = cppu::queryInterface( rType,
+                                               (static_cast< lang::XTypeProvider* >(this)),
+                                               (static_cast< io::XActiveDataStreamer* >(this))
+                                               );
+    return aRet.hasValue() ? aRet : OWeakObject::queryInterface( rType );
+}
 
 // XTypeProvider methods
 

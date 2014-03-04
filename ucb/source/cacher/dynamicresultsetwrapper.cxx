@@ -470,12 +470,27 @@ DynamicResultSetWrapperListener::~DynamicResultSetWrapperListener()
 
 // XInterface methods.
 
-//list all interfaces inclusive baseclasses of interfaces
-XINTERFACE_IMPL_2( DynamicResultSetWrapperListener
-                   , XDynamicResultSetListener
-                   , XEventListener //base of XDynamicResultSetListener
-                   );
+void SAL_CALL DynamicResultSetWrapperListener::acquire()
+    throw()
+{
+    OWeakObject::acquire();
+}
 
+void SAL_CALL DynamicResultSetWrapperListener::release()
+    throw()
+{
+    OWeakObject::release();
+}
+
+css::uno::Any SAL_CALL DynamicResultSetWrapperListener::queryInterface( const css::uno::Type & rType )
+    throw( css::uno::RuntimeException, std::exception )
+{
+    css::uno::Any aRet = cppu::queryInterface( rType,
+                                               (static_cast< XDynamicResultSetListener* >(this)),
+                                               (static_cast< XEventListener* >(this))
+                                               );
+    return aRet.hasValue() ? aRet : OWeakObject::queryInterface( rType );
+}
 
 // XDynamicResultSetListener methods:
 

@@ -2365,13 +2365,27 @@ PropertySetInfo_Impl::~PropertySetInfo_Impl()
 
 // XInterface methods.
 
+void SAL_CALL PropertySetInfo_Impl::acquire()
+    throw()
+{
+    OWeakObject::acquire();
+}
 
+void SAL_CALL PropertySetInfo_Impl::release()
+    throw()
+{
+    OWeakObject::release();
+}
 
-XINTERFACE_IMPL_2( PropertySetInfo_Impl,
-                   XTypeProvider,
-                   XPropertySetInfo );
-
-
+css::uno::Any SAL_CALL PropertySetInfo_Impl::queryInterface( const css::uno::Type & rType )
+    throw( css::uno::RuntimeException, std::exception )
+{
+    css::uno::Any aRet = cppu::queryInterface( rType,
+                                               (static_cast< XTypeProvider* >(this)),
+                                               (static_cast< XPropertySetInfo* >(this))
+                                               );
+    return aRet.hasValue() ? aRet : OWeakObject::queryInterface( rType );
+}
 
 // XTypeProvider methods.
 
