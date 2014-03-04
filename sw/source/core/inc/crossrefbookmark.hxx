@@ -41,10 +41,10 @@ namespace sw { namespace mark
                 const ::rtl::OUString& rPrefix);
 
             // getters
-            virtual SwPosition& GetOtherMarkPos() const;
-            virtual SwPosition& GetMarkStart() const
+            virtual const SwPosition& GetOtherMarkPos() const;
+            virtual const SwPosition& GetMarkStart() const
                 { return *m_pPos1; }
-            virtual SwPosition& GetMarkEnd() const
+            virtual const SwPosition& GetMarkEnd() const
                 { return *m_pPos1; }
             virtual bool IsExpanded() const
                 { return false; }

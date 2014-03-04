@@ -49,17 +49,17 @@ namespace sw { namespace mark
     {
         public:
             //getters
-            virtual SwPosition& GetMarkPos() const
+            virtual const SwPosition& GetMarkPos() const
                 { return *m_pPos1; }
             virtual const ::rtl::OUString& GetName() const
                 { return m_aName; }
             virtual bool IsCoveringPosition(const SwPosition& rPos) const;
-            virtual SwPosition& GetOtherMarkPos() const
+            virtual const SwPosition& GetOtherMarkPos() const
             {
                 OSL_PRECOND(IsExpanded(), "<SwPosition::GetOtherMarkPos(..)> - I have no other Pos set." );
                 return *m_pPos2;
             }
-            virtual SwPosition& GetMarkStart() const
+            virtual const SwPosition& GetMarkStart() const
             {
                 if( !IsExpanded() ) return GetMarkPos( );
                 if ( GetMarkPos( ) < GetOtherMarkPos( ) )
@@ -67,7 +67,7 @@ namespace sw { namespace mark
                 else
                     return GetOtherMarkPos( );
             }
-            virtual SwPosition& GetMarkEnd() const
+            virtual const SwPosition& GetMarkEnd() const
             {
                 if( !IsExpanded() ) return GetMarkPos();
                 if ( GetMarkPos( ) > GetOtherMarkPos( ) )
@@ -227,6 +227,9 @@ namespace sw { namespace mark
                 { m_aFieldname = aFieldname; }
             virtual void SetFieldHelptext(const ::rtl::OUString& aFieldHelptext)
                 { m_aFieldHelptext = aFieldHelptext; }
+
+            void SetMarkStartPos( const SwPosition& rNewStartPos );
+            void SetMarkEndPos( const SwPosition& rNewEndPos );
 
             virtual void Invalidate();
             virtual rtl::OUString ToString() const;
