@@ -81,7 +81,7 @@ static Id lcl_getParagraphBorder(sal_uInt32 nIndex)
 }
 
 static void lcl_putNestedAttribute(RTFSprms& rSprms, Id nParent, Id nId, RTFValue::Pointer_t pValue,
-        bool bOverwrite = true, bool bAttribute = true)
+        bool bOverwrite = true, bool bAttribute = true, bool bAppend = true)
 {
     RTFValue::Pointer_t pParent = rSprms.find(nParent);
     if (!pParent.get())
@@ -94,11 +94,11 @@ static void lcl_putNestedAttribute(RTFSprms& rSprms, Id nParent, Id nId, RTFValu
             aAttributes.set(NS_ooxml::LN_CT_Shd_fill, RTFValue::Pointer_t(new RTFValue(0x0a)));
         }
         RTFValue::Pointer_t pParentValue(new RTFValue(aAttributes));
-        rSprms.set(nParent, pParentValue, bOverwrite);
+        rSprms.set(nParent, pParentValue, bOverwrite, bAppend);
         pParent = pParentValue;
     }
     RTFSprms& rAttributes = (bAttribute ? pParent->getAttributes() : pParent->getSprms());
-    rAttributes.set(nId, pValue, bOverwrite);
+    rAttributes.set(nId, pValue, bOverwrite, bAppend);
 }
 
 static void lcl_putNestedSprm(RTFSprms& rSprms, Id nParent, Id nId, RTFValue::Pointer_t pValue, bool bOverwrite = false)
@@ -3016,10 +3016,6 @@ int RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
     // Trivial paragraph sprms.
     switch (nKeyword)
     {
-        case RTF_FI: nSprm = NS_sprm::LN_PDxaLeft1; break;
-        case RTF_LIN: nSprm = 0x845e; break;
-        case RTF_RI: nSprm = NS_sprm::LN_PDxaRight; break;
-        case RTF_RIN: nSprm = 0x845d; break;
         case RTF_ITAP: nSprm = NS_ooxml::LN_tblDepth; break;
         case RTF_SBASEDON:
            nSprm = NS_ooxml::LN_CT_Style_basedOn;
@@ -3845,15 +3841,6 @@ int RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
         case RTF_DPFILLBGCB:
             m_aStates.top().aDrawingObject.nFillColorB = nParam; m_aStates.top().aDrawingObject.bHasFillColor = true;
             break;
-        case RTF_LI:
-            {
-                m_aStates.top().aParagraphSprms.set(NS_sprm::LN_PDxaLeft, pIntValue);
-                // It turns out \li should reset the \fi inherited from the stylesheet.
-                // So set the direct formatting to zero, if we don't have such direct formatting yet.
-                if (!m_aStates.top().aParagraphSprms.find(NS_sprm::LN_PDxaLeft1).get())
-                    m_aStates.top().aParagraphSprms.set(NS_sprm::LN_PDxaLeft1, RTFValue::Pointer_t(new RTFValue(0)));
-            }
-            break;
         case RTF_CLSHDNG:
             {
                 int nValue = -1;
@@ -3960,6 +3947,27 @@ int RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
                 }
                 lcl_putNestedSprm(m_aStates.top().aTableCellSprms, NS_ooxml::LN_CT_TcPrBase_tcMar, nSprm, RTFValue::Pointer_t(new RTFValue(aAttributes)));
             }
+            break;
+        case RTF_FI:
+            lcl_putNestedAttribute(m_aStates.top().aParagraphSprms, NS_ooxml::LN_CT_PPrBase_ind, NS_ooxml::LN_CT_Ind_firstLine, pIntValue);
+            break;
+        case RTF_LI:
+            {
+                lcl_putNestedAttribute(m_aStates.top().aParagraphSprms, NS_ooxml::LN_CT_PPrBase_ind, NS_ooxml::LN_CT_Ind_left, pIntValue);
+                // It turns out \li should reset the \fi inherited from the stylesheet.
+                // So set the direct formatting to zero, if we don't have such direct formatting yet.
+                lcl_putNestedAttribute(m_aStates.top().aParagraphSprms, NS_ooxml::LN_CT_PPrBase_ind, NS_ooxml::LN_CT_Ind_firstLine, RTFValue::Pointer_t(new RTFValue(0)),
+                                       /*bOverwrite=*/false, /*bAttribute=*/true, /*bAppend=*/false);
+            }
+            break;
+        case RTF_RI:
+            lcl_putNestedAttribute(m_aStates.top().aParagraphSprms, NS_ooxml::LN_CT_PPrBase_ind, NS_ooxml::LN_CT_Ind_right, pIntValue);
+            break;
+        case RTF_LIN:
+            lcl_putNestedAttribute(m_aStates.top().aParagraphSprms, NS_ooxml::LN_CT_PPrBase_ind, NS_ooxml::LN_CT_Ind_start, pIntValue);
+            break;
+        case RTF_RIN:
+            lcl_putNestedAttribute(m_aStates.top().aParagraphSprms, NS_ooxml::LN_CT_PPrBase_ind, NS_ooxml::LN_CT_Ind_end, pIntValue);
             break;
         default:
             {

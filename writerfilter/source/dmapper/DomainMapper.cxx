@@ -973,7 +973,7 @@ static bool ExchangeLeftRight( const PropertyMapPtr rContext, DomainMapper_Impl*
     return bExchangeLeftRight;
 }
 
-void DomainMapper::sprmWithProps( Sprm& rSprm, PropertyMapPtr rContext, SprmType eSprmType )
+void DomainMapper::sprmWithProps( Sprm& rSprm, PropertyMapPtr rContext, SprmType /*eSprmType*/ )
 {
     OSL_ENSURE(rContext.get(), "PropertyMap has to be valid!");
     if(!rContext.get())
@@ -1064,30 +1064,6 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, PropertyMapPtr rContext, SprmType
         break;
     case NS_ooxml::LN_CT_PPrBase_suppressLineNumbers:
         rContext->Insert(PROP_PARA_LINE_NUMBER_COUNT, uno::makeAny( nIntValue ? false : true) );
-        break;
-    case 0x845d:    //right margin Asian - undocumented
-    case 0x845e:    //left margin Asian - undocumented
-    case 16:      // sprmPDxaRight - right margin
-    case NS_sprm::LN_PDxaRight:   // sprmPDxaRight - right margin
-    case 17:
-    case NS_sprm::LN_PDxaLeft:   // sprmPDxaLeft
-    {
-        bool bExchangeLeftRight = ExchangeLeftRight( rContext, m_pImpl );
-        if( NS_sprm::LN_PDxaLeft == nSprmId || 0x17 == nSprmId|| (bExchangeLeftRight && nSprmId == 0x845d) || ( !bExchangeLeftRight && nSprmId == 0x845e))
-            rContext->Insert(
-                             eSprmType == SPRM_DEFAULT ? PROP_PARA_LEFT_MARGIN : PROP_LEFT_MARGIN,
-                             uno::makeAny( ConversionHelper::convertTwipToMM100( nIntValue ) ));
-        else if(eSprmType == SPRM_DEFAULT)
-            rContext->Insert(
-                             PROP_PARA_RIGHT_MARGIN,
-                             uno::makeAny( ConversionHelper::convertTwipToMM100(nIntValue ) ));
-    }
-        //TODO: what happens to the right margins in numberings?
-        break;
-    case NS_sprm::LN_PDxaLeft1:    // sprmPDxaLeft1
-        rContext->Insert(
-                         eSprmType == SPRM_DEFAULT ? PROP_PARA_FIRST_LINE_INDENT : PROP_FIRST_LINE_OFFSET,
-                         uno::makeAny( ConversionHelper::convertTwipToMM100(nIntValue ) ));
         break;
     case NS_ooxml::LN_inTbl:
         break;

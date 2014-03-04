@@ -49,8 +49,13 @@ namespace writerfilter {
             ~RTFSprms();
             RTFSprms& operator=(const RTFSprms& rOther);
             RTFValue::Pointer_t find(Id nKeyword, bool bFirst = true);
-            /// Does the same as ->push_back(), except that it can overwrite existing entries.
-            void set(Id nKeyword, RTFValue::Pointer_t pValue, bool bOverwrite = true);
+            /**
+             * Does the same as ->push_back(), except that it can overwrite existing entries.
+             *
+             * @param bOverwrite if existing element should be overwritten or appended.
+             * @param bAppend if not overwriting, then append or NOP.
+             */
+            void set(Id nKeyword, RTFValue::Pointer_t pValue, bool bOverwrite = true, bool bAppend = true);
             bool erase(Id nKeyword);
             /// Removes elements, which are already in the reference set.
             void deduplicate(RTFSprms& rReference);
