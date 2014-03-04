@@ -386,13 +386,6 @@ Reference< XAccessibleRelationSet > SAL_CALL SvxRectCtlAccessibleContext::getAcc
     return xSet;
 }
 
-//Add the event handling method
-void SvxRectCtlAccessibleContext::FireAccessibleEvent (short nEventId, const ::com::sun::star::uno::Any& rOld, const ::com::sun::star::uno::Any& rNew)
-{
-    const Reference< XInterface >   xSource( *this );
-    CommitChange( AccessibleEventObject( xSource, nEventId, rNew,rOld ) );
-}
-
 Reference< XAccessibleStateSet > SAL_CALL SvxRectCtlAccessibleContext::getAccessibleStateSet( void ) throw( RuntimeException, std::exception )
 {
     ::osl::MutexGuard                       aGuard( m_aMutex );

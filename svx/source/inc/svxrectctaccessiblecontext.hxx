@@ -254,8 +254,6 @@ public:
     */
     void selectChild( RECT_POINT ePoint, sal_Bool bFireFocus = sal_True );
     void FireChildFocus( RECT_POINT eButton );
-    //Add the event handling method
-    void FireAccessibleEvent (short nEventId, const ::com::sun::star::uno::Any& rOld, const ::com::sun::star::uno::Any& rNew);
 
 private:
     static ::com::sun::star::uno::Sequence< sal_Int8 > getUniqueId( void );
