@@ -66,11 +66,7 @@ com::sun::star::uno::Any SAL_CALL Class::queryInterface(                    \
     return aRet.hasValue() ? aRet : OWeakObject::queryInterface( rType );   \
 }
 
-
-
 // XInterface impl.
-
-
 
 // 2 interfaces implemented
 #define XINTERFACE_IMPL_2( Class, Ifc1, Ifc2 )                              \

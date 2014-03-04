@@ -121,16 +121,18 @@ void SAL_CALL DynamicResultSetWrapper
     m_xMyResultTwo = xResultSet;
 }
 
-
 // XInterface methods.
-
-//list all interfaces inclusive baseclasses of interfaces
-QUERYINTERFACE_IMPL_START( DynamicResultSetWrapper )
-    (static_cast< XComponent* >(this)) //base of XDynamicResultSet
-    , (static_cast< XDynamicResultSet* >(this))
-    , (static_cast< XSourceInitialization* >(this))
-QUERYINTERFACE_IMPL_END
-
+css::uno::Any SAL_CALL DynamicResultSetWrapper::queryInterface( const css::uno::Type & rType )
+    throw( css::uno::RuntimeException, std::exception )
+{
+    //list all interfaces inclusive baseclasses of interfaces
+    css::uno::Any aRet = cppu::queryInterface( rType,
+                                               (static_cast< XComponent* >(this)), //base of XDynamicResultSet
+                                               (static_cast< XDynamicResultSet* >(this)),
+                                               (static_cast< XSourceInitialization* >(this))
+                                               );
+    return aRet.hasValue() ? aRet : OWeakObject::queryInterface( rType );
+}
 
 // XComponent methods.
 

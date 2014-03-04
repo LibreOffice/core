@@ -338,20 +338,21 @@ sal_Bool SAL_CALL ContentResultSetWrapper
 
 // XInterface methods.
 
-//list all interfaces inclusive baseclasses of interfaces
-QUERYINTERFACE_IMPL_START( ContentResultSetWrapper )
-
-    (static_cast< XComponent* >(this)),
-    (static_cast< XCloseable* >(this)),
-    (static_cast< XResultSetMetaDataSupplier* >(this)),
-    (static_cast< XPropertySet* >(this)),
-
-    (static_cast< XContentAccess* >(this)),
-    (static_cast< XResultSet* >(this)),
-    (static_cast< XRow* >(this))
-
-QUERYINTERFACE_IMPL_END
-
+css::uno::Any SAL_CALL ContentResultSetWrapper::queryInterface( const css::uno::Type & rType )
+    throw( css::uno::RuntimeException, std::exception )
+{
+    //list all interfaces inclusive baseclasses of interfaces
+    css::uno::Any aRet = cppu::queryInterface( rType,
+                                               (static_cast< XComponent* >(this)),
+                                               (static_cast< XCloseable* >(this)),
+                                               (static_cast< XResultSetMetaDataSupplier* >(this)),
+                                               (static_cast< XPropertySet* >(this)),
+                                               (static_cast< XContentAccess* >(this)),
+                                               (static_cast< XResultSet* >(this)),
+                                               (static_cast< XRow* >(this))
+                                               );
+    return aRet.hasValue() ? aRet : OWeakObject::queryInterface( rType );
+}
 
 // XComponent methods.
 
