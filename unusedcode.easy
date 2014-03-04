@@ -60,14 +60,6 @@ StyleSettings::SetUseFlatBorders(bool)
 StyleSettings::SetUseFlatMenus(bool)
 SvdProgressInfo::ReportError()
 SvpSalInstance::PostedEventsInQueue()
-SvtAccessibilityOptions::GetColorValueSetColumnCount() const
-SvtAccessibilityOptions::GetEdgeBlending() const
-SvtAccessibilityOptions::GetListBoxMaximumLineCount() const
-SvtAccessibilityOptions::GetPreviewUsesCheckeredBackground() const
-SvtAccessibilityOptions::SetColorValueSetColumnCount(short)
-SvtAccessibilityOptions::SetEdgeBlending(short)
-SvtAccessibilityOptions::SetListBoxMaximumLineCount(short)
-SvtAccessibilityOptions::SetPreviewUsesCheckeredBackground(unsigned char)
 SvtListener::IsListening(SvtBroadcaster&) const
 SvxNumberFormatShell::IsAdded_Impl(unsigned long)
 SwAccessibleField::SwAccessibleField(SwField*, SwAccessibleParagraph*, short)

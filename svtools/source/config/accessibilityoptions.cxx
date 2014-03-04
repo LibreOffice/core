@@ -793,22 +793,6 @@ sal_Bool SvtAccessibilityOptions::IsSelectionInReadonly() const
 {
     return sm_pSingleImplConfig->IsSelectionInReadonly();
 }
-sal_Int16 SvtAccessibilityOptions::GetEdgeBlending() const
-{
-    return sm_pSingleImplConfig->GetEdgeBlending();
-}
-sal_Int16 SvtAccessibilityOptions::GetListBoxMaximumLineCount() const
-{
-    return sm_pSingleImplConfig->GetListBoxMaximumLineCount();
-}
-sal_Int16 SvtAccessibilityOptions::GetColorValueSetColumnCount() const
-{
-    return sm_pSingleImplConfig->GetColorValueSetColumnCount();
-}
-sal_Bool SvtAccessibilityOptions::GetPreviewUsesCheckeredBackground() const
-{
-    return sm_pSingleImplConfig->GetPreviewUsesCheckeredBackground();
-}
 
 
 void SvtAccessibilityOptions::SetAutoDetectSystemHC(sal_Bool bSet)
@@ -850,22 +834,6 @@ void SvtAccessibilityOptions::SetSelectionInReadonly(sal_Bool bSet)
 void SvtAccessibilityOptions::SetVCLSettings()
 {
     sm_pSingleImplConfig->SetVCLSettings();
-}
-void SvtAccessibilityOptions::SetEdgeBlending(sal_Int16 nSet)
-{
-    sm_pSingleImplConfig->SetEdgeBlending(nSet);
-}
-void SvtAccessibilityOptions::SetListBoxMaximumLineCount(sal_Int16 nSet)
-{
-    sm_pSingleImplConfig->SetListBoxMaximumLineCount(nSet);
-}
-void SvtAccessibilityOptions::SetColorValueSetColumnCount(sal_Int16 nSet)
-{
-    sm_pSingleImplConfig->SetColorValueSetColumnCount(nSet);
-}
-void SvtAccessibilityOptions::SetPreviewUsesCheckeredBackground(sal_Bool bSet)
-{
-    sm_pSingleImplConfig->SetPreviewUsesCheckeredBackground(bSet);
 }
 
 
