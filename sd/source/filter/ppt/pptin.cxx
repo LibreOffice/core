@@ -91,6 +91,8 @@
 #include <comphelper/string.hxx>
 #include <oox/ole/olehelper.hxx>
 
+#include <boost/make_shared.hpp>
+
 using namespace ::com::sun::star;
 
 SdPPTImport::SdPPTImport( SdDrawDocument* pDocument, SvStream& rDocStream, SvStorage& rStorage, SfxMedium& rMedium )
@@ -137,13 +139,12 @@ SdPPTImport::SdPPTImport( SdDrawDocument* pDocument, SvStream& rDocStream, SvSto
     {
         // iterate over all styles
         SdStyleSheetPool* pStyleSheetPool = pDocument->GetSdStyleSheetPool();
+        SfxStyleSheetIteratorPtr aIter =
+                boost::make_shared<SfxStyleSheetIterator>(pStyleSheetPool, SFX_STYLE_FAMILY_ALL);
 
-        sal_uInt32 nStyles = pStyleSheetPool ? pStyleSheetPool->GetStyles().size() : 0;
-        for (sal_uInt32 nStyle = 0; nStyle < nStyles; nStyle++)
+        for (SfxStyleSheetBase *pSheet = aIter->First(); pSheet; pSheet = aIter->Next())
         {
-            SfxStyleSheet* pSheet = static_cast<SfxStyleSheet*>( pStyleSheetPool->GetStyles()[nStyle].get() );
             SfxItemSet& rSet = pSheet->GetItemSet();
-
             // if autokerning is set in style, override it, ppt has no autokerning
             if( rSet.GetItemState( EE_CHAR_PAIRKERNING, false ) == SFX_ITEM_SET )
                 rSet.ClearItem( EE_CHAR_PAIRKERNING );
