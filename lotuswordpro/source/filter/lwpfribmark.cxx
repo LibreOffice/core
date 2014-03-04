@@ -217,15 +217,16 @@ void LwpFribBookMark::XFConvert(XFContentContainer* pXFPara)
  * @param:
  * @param:
  */
-LwpFribField::LwpFribField( LwpPara* pPara ) : LwpFrib(pPara)
+LwpFribField::LwpFribField( LwpPara* pPara )
+    : LwpFrib(pPara)
+    , m_nType(0)
+    , m_TimeStyle("")
+    , m_nSubType(0)
+    , m_sFormula("")
+    , m_nCrossRefType(0)
+    , m_nDateTimeType(0)
+    , m_nDocPowerType(0)
 {
-    m_TimeStyle = A2OUSTR("");
-
-    m_nSubType = 0;//datetime/crossref/other
-    m_sFormula = A2OUSTR("");
-
-    m_nCrossRefType = 0;
-    m_nDateTimeType = 0;
 }
 
 void LwpFribField::Read(LwpObjectStream* pObjStrm, sal_uInt16 /*len*/)
