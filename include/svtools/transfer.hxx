@@ -321,7 +321,15 @@ public:
     sal_Bool                    GetBitmapEx( SotFormatStringId nFormat, BitmapEx& rBmp );
     sal_Bool                    GetBitmapEx( const ::com::sun::star::datatransfer::DataFlavor& rFlavor, BitmapEx& rBmp );
 
-    sal_Bool                    GetGDIMetaFile( SotFormatStringId nFormat, GDIMetaFile& rMtf );
+    /** Return as GDI metafile.
+
+        @param nMaxAction Allows you to limit the amount of actions; defaults to 0 which means no limit.
+
+        Whet you eg. Ctrl+a in Excel, you can get the entire sheet as
+        metafile, with over 3 million (!) actions; which is just too large for
+        any reasonable handling - and you need to set a limit.
+    */
+    sal_Bool                    GetGDIMetaFile( SotFormatStringId nFormat, GDIMetaFile& rMtf, size_t nMaxActions = 0 );
     sal_Bool                    GetGDIMetaFile( const ::com::sun::star::datatransfer::DataFlavor& rFlavor, GDIMetaFile& rMtf );
 
     sal_Bool                    GetGraphic( SotFormatStringId nFormat, Graphic& rGraphic );

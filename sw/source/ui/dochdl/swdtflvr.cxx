@@ -1816,8 +1816,13 @@ bool SwTransferable::_PasteOLE( TransferableDataHelper& rData, SwWrtShell& rSh,
             Graphic aGraphic;
             sal_uLong nGrFormat = 0;
 
-            if( rData.GetGraphic( FORMAT_GDIMETAFILE, aGraphic ) )
+            // limit the size of the preview metafile to 100000 actions
+            GDIMetaFile aMetafile;
+            if (rData.GetGDIMetaFile(FORMAT_GDIMETAFILE, aMetafile, 100000))
+            {
                 nGrFormat = SOT_FORMAT_GDIMETAFILE;
+                aGraphic = aMetafile;
+            }
 
             // insert replacement image ( if there is one ) into the object helper
             if ( nGrFormat )

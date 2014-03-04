@@ -1777,10 +1777,12 @@ sal_Bool TransferableDataHelper::GetBitmapEx( const DataFlavor& rFlavor, BitmapE
 
 
 
-sal_Bool TransferableDataHelper::GetGDIMetaFile( SotFormatStringId nFormat, GDIMetaFile& rMtf )
+sal_Bool TransferableDataHelper::GetGDIMetaFile(SotFormatStringId nFormat, GDIMetaFile& rMtf, size_t nMaxActions)
 {
     DataFlavor aFlavor;
-    return( SotExchange::GetFormatDataFlavor( nFormat, aFlavor ) && GetGDIMetaFile( aFlavor, rMtf ) );
+    return SotExchange::GetFormatDataFlavor(nFormat, aFlavor) &&
+        GetGDIMetaFile(aFlavor, rMtf) &&
+        (nMaxActions == 0 || rMtf.GetActionSize() < nMaxActions);
 }
 
 
