@@ -439,6 +439,7 @@ void LwpFootnoteSeparatorOptions::Read(LwpObjectStream *pObjStrm)
 
 LwpFootnoteOptions::LwpFootnoteOptions(LwpObjectHeader &objHdr, LwpSvStream *pStrm)
     : LwpObject(objHdr, pStrm)
+    , m_nFlag(0)
 {
 }
 
