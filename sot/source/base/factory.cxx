@@ -113,6 +113,7 @@ SotFactory::~SotFactory()
 |*
 |*    Beschreibung
 *************************************************************************/
+#ifdef DBG_UTIL
 const SotFactory* SotFactory::Find( const SvGlobalName & rFactName )
 {
     SvGlobalName aEmpty;
@@ -128,6 +129,7 @@ const SotFactory* SotFactory::Find( const SvGlobalName & rFactName )
 
     return 0;
 }
+#endif
 
 /*************************************************************************
 |*    SotFactory::PutSuperClass()

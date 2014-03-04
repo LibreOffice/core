@@ -50,7 +50,9 @@ public:
     static  void        IncSvObjectCount( SotObject * = NULL );
     static  void        DecSvObjectCount( SotObject * = NULL );
 
+#ifdef DBG_UTIL
     static  const SotFactory *      Find( const SvGlobalName & );
+#endif
 
             SotFactory( const SvGlobalName &,
                         const OUString & rClassName, CreateInstanceType );
