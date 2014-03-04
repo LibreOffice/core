@@ -111,7 +111,7 @@ protected:
     bool HasAnyIndex() const { return 0 != m_pFirst; }
 
 public:
-    explicit SwIndexReg();
+    SwIndexReg();
     virtual ~SwIndexReg();
 
     /// rtti, derived classes might do the same. If so, one can cast typesavely
