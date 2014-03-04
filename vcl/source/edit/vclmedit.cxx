@@ -908,6 +908,7 @@ void TextWindow::Command( const CommandEvent& rCEvt )
 
 void TextWindow::GetFocus()
 {
+    Window::GetFocus();
     if ( !mbActivePopup )
     {
         bool bGotoCursor = !mpExtTextView->IsReadOnly();
