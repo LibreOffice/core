@@ -38,6 +38,7 @@ public:
     void testFdo36868();
     void testListNolevel();
     void testCp1000039();
+    void testBnc821208();
 
     CPPUNIT_TEST_SUITE(Test);
 #if !defined(MACOSX) && !defined(WNT)
@@ -67,6 +68,7 @@ void Test::run()
         {"fdo36868.doc", &Test::testFdo36868},
         {"list-nolevel.doc", &Test::testListNolevel},
         {"cp1000039.doc", &Test::testCp1000039},
+        {"bnc821208.doc", &Test::testBnc821208},
     };
     header();
     for (unsigned int i = 0; i < SAL_N_ELEMENTS(aMethods); ++i)
@@ -290,6 +292,15 @@ void Test::testCp1000039()
 {
     // This was RTL_TEXTENCODING_SYMBOL, causing "1" rendered as a placeholder rectangle.
     CPPUNIT_ASSERT_EQUAL(sal_Int16(RTL_TEXTENCODING_DONTKNOW), getProperty<sal_Int16>(getRun(getParagraph(1), 1), "CharFontCharSet"));
+}
+
+void Test::testBnc821208()
+{
+    // WW8Num1z0 earned a Symbol font, turning numbers into rectangles.
+    uno::Reference<beans::XPropertyState> xPropertyState(getStyles("CharacterStyles")->getByName("WW8Num1z0"), uno::UNO_QUERY);
+    beans::PropertyState ePropertyState = xPropertyState->getPropertyState("CharFontName");
+    // This was beans::PropertyState_DIRECT_VALUE.
+    CPPUNIT_ASSERT_EQUAL(beans::PropertyState_DEFAULT_VALUE, ePropertyState);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);
