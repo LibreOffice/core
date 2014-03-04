@@ -219,10 +219,9 @@ struct ImplMiscData
 
 struct ImplHelpData
 {
-                                    ImplHelpData();
-                                    ImplHelpData( const ImplHelpData& rData );
+    ImplHelpData();
+    ImplHelpData( const ImplHelpData& rData );
 
-    sal_uLong                           mnOptions;
     sal_uLong                           mnTipDelay;
     sal_uLong                           mnTipTimeout;
     sal_uLong                           mnBalloonDelay;
@@ -2578,8 +2577,7 @@ bool HelpSettings::operator ==( const HelpSettings& rSet ) const
     if ( mpData == rSet.mpData )
         return true;
 
-    if ( (mpData->mnOptions         == rSet.mpData->mnOptions ) &&
-         (mpData->mnTipDelay        == rSet.mpData->mnTipDelay ) &&
+    if ( (mpData->mnTipDelay        == rSet.mpData->mnTipDelay ) &&
          (mpData->mnTipTimeout      == rSet.mpData->mnTipTimeout ) &&
          (mpData->mnBalloonDelay    == rSet.mpData->mnBalloonDelay ) )
         return true;
