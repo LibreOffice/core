@@ -682,7 +682,7 @@ public:
     inline SwLayoutFrm *GetPrevLayoutLeaf();
     inline SwLayoutFrm *GetNextLayoutLeaf();
 
-    inline void Calc() const;       // here might be "formatted"
+    virtual void Calc() const;      // here might be "formatted"
     inline void OptCalc() const;    // here we assume (for optimization) that
                                     // the predecessors are already formatted
 

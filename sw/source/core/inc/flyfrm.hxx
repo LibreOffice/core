@@ -118,8 +118,12 @@ protected:
 
     friend class SwNoTxtFrm; // is allowed to call NotifyBackground
 
+    Point m_aContentPos;        // content area's position relatively to Frm
+    bool m_bValidContentPos;
+
     virtual void Format( const SwBorderAttrs *pAttrs = 0 );
     void MakePrtArea( const SwBorderAttrs &rAttrs );
+    void MakeContentPos( const SwBorderAttrs &rAttrs );
 
     void Lock()         { bLocked = sal_True; }
     void Unlock()       { bLocked = sal_False; }
@@ -146,6 +150,8 @@ protected:
     virtual void Modify( const SfxPoolItem*, const SfxPoolItem* );
 
     virtual const IDocumentDrawModelAccess* getIDocumentDrawModelAccess( );
+
+    SwTwips CalcContentHeight(const SwBorderAttrs *pAttrs, const SwTwips nMinHeight, const SwTwips nUL);
 
 public:
     // #i26791#
@@ -279,6 +285,13 @@ public:
     virtual       SwFlyFrmFmt *GetFmt();
 
     virtual void dumpAsXml( xmlTextWriterPtr writer ) { SwLayoutFrm::dumpAsXml( writer ); };
+
+    virtual void Calc() const;
+
+    const Point& ContentPos() const { return m_aContentPos; }
+    Point& ContentPos() { return m_aContentPos; }
+
+    void InvalidateContentPos();
 };
 #endif
 

@@ -72,7 +72,8 @@ SwFlyFrm::SwFlyFrm( SwFlyFrmFmt *pFmt, SwFrm* pSib, SwFrm *pAnch ) :
     bLayout( sal_False ),
     bAutoPosition( sal_False ),
     bNoShrink( sal_False ),
-    bLockDeleteContent( sal_False )
+    bLockDeleteContent( sal_False ),
+    m_bValidContentPos( false )
 {
     mnType = FRMC_FLY;
 
@@ -931,6 +932,13 @@ void SwFlyFrm::_UpdateAttr( const SfxPoolItem *pOld, const SfxPoolItem *pNew,
         }
         break;
 
+        case RES_TEXT_VERT_ADJUST:
+        {
+            InvalidateContentPos();
+            rInvFlags |= 0x10;
+        }
+        break;
+
         case RES_BOX:
         case RES_SHADOW:
             rInvFlags |= 0x17;
@@ -1232,7 +1240,7 @@ void SwFlyFrm::Format( const SwBorderAttrs *pAttrs )
         const SwTwips nUL = pAttrs->CalcTopLine()  + pAttrs->CalcBottomLine();
         const SwTwips nLR = pAttrs->CalcLeftLine() + pAttrs->CalcRightLine();
         const SwFmtFrmSize &rFrmSz = GetFmt()->GetFrmSize();
-              Size aRelSize( CalcRel( rFrmSz ) );
+        Size aRelSize( CalcRel( rFrmSz ) );
 
         OSL_ENSURE( pAttrs->GetSize().Height() != 0 || rFrmSz.GetHeightPercent(), "FrameAttr height is 0." );
         OSL_ENSURE( pAttrs->GetSize().Width()  != 0 || rFrmSz.GetWidthPercent(), "FrameAttr width is 0." );
@@ -1240,62 +1248,11 @@ void SwFlyFrm::Format( const SwBorderAttrs *pAttrs )
         SWRECTFN( this )
         if( !HasFixSize() )
         {
-            SwTwips nRemaining = 0;
-
             long nMinHeight = 0;
             if( IsMinHeight() )
                 nMinHeight = bVert ? aRelSize.Width() : aRelSize.Height();
 
-            if ( Lower() )
-            {
-                if ( Lower()->IsColumnFrm() )
-                {
-                    FormatWidthCols( *pAttrs, nUL, nMinHeight );
-                    nRemaining = (Lower()->Frm().*fnRect->fnGetHeight)();
-                }
-                else
-                {
-                    SwFrm *pFrm = Lower();
-                    while ( pFrm )
-                    {
-                        nRemaining += (pFrm->Frm().*fnRect->fnGetHeight)();
-                        if( pFrm->IsTxtFrm() && ((SwTxtFrm*)pFrm)->IsUndersized() )
-                            // This TxtFrm would like to be a bit larger
-                            nRemaining += ((SwTxtFrm*)pFrm)->GetParHeight()
-                                    - (pFrm->Prt().*fnRect->fnGetHeight)();
-                        else if( pFrm->IsSctFrm() && ((SwSectionFrm*)pFrm)->IsUndersized() )
-                            nRemaining += ((SwSectionFrm*)pFrm)->Undersize();
-                        pFrm = pFrm->GetNext();
-                    }
-                }
-                if ( GetDrawObjs() )
-                {
-                    sal_uInt32 nCnt = GetDrawObjs()->Count();
-                    SwTwips nTop = (Frm().*fnRect->fnGetTop)();
-                    SwTwips nBorder = (Frm().*fnRect->fnGetHeight)() -
-                                      (Prt().*fnRect->fnGetHeight)();
-                    for ( sal_uInt16 i = 0; i < nCnt; ++i )
-                    {
-                        SwAnchoredObject* pAnchoredObj = (*GetDrawObjs())[i];
-                        if ( pAnchoredObj->ISA(SwFlyFrm) )
-                        {
-                            SwFlyFrm* pFly = static_cast<SwFlyFrm*>(pAnchoredObj);
-                            // OD 06.11.2003 #i22305# - consider
-                            // only Writer fly frames, which follow the text flow.
-                            if ( pFly->IsFlyLayFrm() &&
-                                 pFly->Frm().Top() != FAR_AWAY &&
-                                 pFly->GetFmt()->GetFollowTextFlow().GetValue() )
-                            {
-                                SwTwips nDist = -(pFly->Frm().*fnRect->
-                                    fnBottomDist)( nTop );
-                                if( nDist > nBorder + nRemaining )
-                                    nRemaining = nDist - nBorder;
-                            }
-                        }
-                    }
-                }
-            }
-
+            SwTwips nRemaining = CalcContentHeight(pAttrs, nMinHeight, nUL);
             if( IsMinHeight() && (nRemaining + nUL) < nMinHeight )
                 nRemaining = nMinHeight - nUL;
             // Because the Grow/Shrink of the Flys does not directly
@@ -1304,8 +1261,10 @@ void SwFlyFrm::Format( const SwBorderAttrs *pAttrs )
             // Notification is running along already.
             // As we already got a lot of zeros per attribute, we block them
             // from now on.
+
             if ( nRemaining < MINFLY )
                 nRemaining = MINFLY;
+
             (Prt().*fnRect->fnSetHeight)( nRemaining );
             nRemaining -= (Frm().*fnRect->fnGetHeight)();
             (Frm().*fnRect->fnAddBottom)( nRemaining + nUL );
@@ -1715,7 +1674,6 @@ void SwFlyFrm::MakeObjPos()
 
 void SwFlyFrm::MakePrtArea( const SwBorderAttrs &rAttrs )
 {
-
     if ( !mbValidPrtArea )
     {
         mbValidPrtArea = sal_True;
@@ -1727,6 +1685,55 @@ void SwFlyFrm::MakePrtArea( const SwBorderAttrs &rAttrs )
         (this->*fnRect->fnSetYMargins)( rAttrs.CalcTopLine(),
                                         rAttrs.CalcBottomLine() );
     }
+}
+
+void SwFlyFrm::MakeContentPos( const SwBorderAttrs &rAttrs )
+{
+    if ( !m_bValidContentPos )
+    {
+        m_bValidContentPos = true;
+
+        const SwTwips nUL = rAttrs.CalcTopLine()  + rAttrs.CalcBottomLine();
+        Size aRelSize( CalcRel( GetFmt()->GetFrmSize() ) );
+
+        SWRECTFN( this )
+        long nMinHeight = 0;
+        if( IsMinHeight() )
+            nMinHeight = bVert ? aRelSize.Width() : aRelSize.Height();
+
+        Point aNewContentPos;
+        aNewContentPos = Prt().Pos();
+        const SdrTextVertAdjust nAdjust = GetFmt()->GetTextVertAdjust().GetValue();
+        if( nAdjust != SDRTEXTVERTADJUST_TOP )
+        {
+            SwTwips nDiff = (Prt().*fnRect->fnGetHeight)() - CalcContentHeight(&rAttrs, nMinHeight, nUL);
+            if( nDiff > 0 )
+            {
+                if( nAdjust == SDRTEXTVERTADJUST_CENTER )
+                {
+                    aNewContentPos.setY(aNewContentPos.getY() + nDiff/2);
+                }
+                else if( nAdjust == SDRTEXTVERTADJUST_BOTTOM )
+                {
+                    aNewContentPos.setY(aNewContentPos.getY() + nDiff);
+                }
+            }
+        }
+        if( aNewContentPos != ContentPos() )
+        {
+            ContentPos() = aNewContentPos;
+            for( SwFrm *pFrm = Lower(); pFrm; pFrm = pFrm->GetNext())
+            {
+                pFrm->InvalidatePos();
+            }
+        }
+    }
+}
+
+void SwFlyFrm::InvalidateContentPos()
+{
+    m_bValidContentPos = false;
+    _Invalidate();
 }
 
 SwTwips SwFlyFrm::_Grow( SwTwips nDist, sal_Bool bTst )
@@ -2611,6 +2618,70 @@ const SwFlyFrmFmt * SwFlyFrm::GetFmt() const
 SwFlyFrmFmt * SwFlyFrm::GetFmt()
 {
     return static_cast< SwFlyFrmFmt * >( GetDep() );
+}
+
+void SwFlyFrm::Calc() const
+{
+    if ( !m_bValidContentPos )
+        ((SwFlyFrm*)this)->PrepareMake();
+    else
+        SwLayoutFrm::Calc();
+}
+
+SwTwips SwFlyFrm::CalcContentHeight(const SwBorderAttrs *pAttrs, const SwTwips nMinHeight, const SwTwips nUL)
+{
+    SWRECTFN( this )
+    SwTwips nHeight = 0;
+    if ( Lower() )
+    {
+        if ( Lower()->IsColumnFrm() )
+        {
+            FormatWidthCols( *pAttrs, nUL, nMinHeight );
+            nHeight = (Lower()->Frm().*fnRect->fnGetHeight)();
+        }
+        else
+        {
+            SwFrm *pFrm = Lower();
+            while ( pFrm )
+            {
+                nHeight += (pFrm->Frm().*fnRect->fnGetHeight)();
+                if( pFrm->IsTxtFrm() && ((SwTxtFrm*)pFrm)->IsUndersized() )
+                // This TxtFrm would like to be a bit larger
+                    nHeight += ((SwTxtFrm*)pFrm)->GetParHeight()
+                            - (pFrm->Prt().*fnRect->fnGetHeight)();
+                else if( pFrm->IsSctFrm() && ((SwSectionFrm*)pFrm)->IsUndersized() )
+                    nHeight += ((SwSectionFrm*)pFrm)->Undersize();
+                pFrm = pFrm->GetNext();
+            }
+        }
+        if ( GetDrawObjs() )
+        {
+            sal_uInt32 nCnt = GetDrawObjs()->Count();
+            SwTwips nTop = (Frm().*fnRect->fnGetTop)();
+            SwTwips nBorder = (Frm().*fnRect->fnGetHeight)() -
+            (Prt().*fnRect->fnGetHeight)();
+            for ( sal_uInt16 i = 0; i < nCnt; ++i )
+            {
+                SwAnchoredObject* pAnchoredObj = (*GetDrawObjs())[i];
+                if ( pAnchoredObj->ISA(SwFlyFrm) )
+                {
+                    SwFlyFrm* pFly = static_cast<SwFlyFrm*>(pAnchoredObj);
+                    // OD 06.11.2003 #i22305# - consider
+                    // only Writer fly frames, which follow the text flow.
+                    if ( pFly->IsFlyLayFrm() &&
+                        pFly->Frm().Top() != FAR_AWAY &&
+                        pFly->GetFmt()->GetFollowTextFlow().GetValue() )
+                    {
+                        SwTwips nDist = -(pFly->Frm().*fnRect->
+                            fnBottomDist)( nTop );
+                        if( nDist > nBorder + nHeight )
+                            nHeight = nDist - nBorder;
+                    }
+                }
+            }
+        }
+    }
+    return nHeight;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

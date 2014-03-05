@@ -140,7 +140,7 @@ void SwFlyFreeFrm::MakeAll()
     sal_uInt16 nLoopControlRuns = 0;
     const sal_uInt16 nLoopControlMax = 10;
 
-    while ( !mbValidPos || !mbValidSize || !mbValidPrtArea || bFormatHeightOnly )
+    while ( !mbValidPos || !mbValidSize || !mbValidPrtArea || bFormatHeightOnly || !m_bValidContentPos )
     {
         SWRECTFN( this )
         const SwFmtFrmSize *pSz;
@@ -157,7 +157,10 @@ void SwFlyFreeFrm::MakeAll()
             }
 
             if ( !mbValidPrtArea )
+            {
                 MakePrtArea( rAttrs );
+                m_bValidContentPos = false;
+            }
 
             if ( !mbValidSize || bFormatHeightOnly )
             {
@@ -185,6 +188,9 @@ void SwFlyFreeFrm::MakeAll()
                 else
                     mbValidSize = sal_False;
             }
+
+            if ( !m_bValidContentPos )
+                MakeContentPos( rAttrs );
         }
 
         if ( mbValidPos && mbValidSize )

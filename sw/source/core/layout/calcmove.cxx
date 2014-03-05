@@ -25,6 +25,7 @@
 #include "fmtftn.hxx"
 #include <editeng/ulspitem.hxx>
 #include <editeng/keepitem.hxx>
+#include <svx/sdtaitm.hxx>
 
 #include <fmtfsize.hxx>
 #include <fmtanchr.hxx>
@@ -581,7 +582,11 @@ void SwFrm::MakePos()
             else
             {
                 maFrm.Pos( GetUpper()->Frm().Pos() );
-                maFrm.Pos() += GetUpper()->Prt().Pos();
+                if( GetUpper()->IsFlyFrm() )
+                    maFrm.Pos() += static_cast<SwFlyFrm*>(GetUpper())->ContentPos();
+                else
+                    maFrm.Pos() += GetUpper()->Prt().Pos();
+
                 if( FRM_NEIGHBOUR & nMyType && IsRightToLeft() )
                 {
                     if( bVert )
@@ -1335,6 +1340,14 @@ void SwCntntFrm::MakeAll()
             if ( nConsequetiveFormatsWithoutChange <= cnStopFormat )
             {
                 Format();
+
+                // When a lower of a vertically aligned fly frame changes it's size we need to recalculate content pos.
+                if( GetUpper() && GetUpper()->IsFlyFrm() &&
+                    GetUpper()->GetFmt()->GetTextVertAdjust().GetValue() != SDRTEXTVERTADJUST_TOP )
+                {
+                    static_cast<SwFlyFrm*>(GetUpper())->InvalidateContentPos();
+                    GetUpper()->SetCompletePaint();
+                }
             }
 #if OSL_DEBUG_LEVEL > 0
             else
