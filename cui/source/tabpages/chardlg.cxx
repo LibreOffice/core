@@ -353,9 +353,9 @@ SvxCharNamePage::SvxCharNamePage( Window* pParent, const SfxItemSet& rInSet )
 
     get(m_pPreviewWin, "preview");
 
-    m_pWestFontLanguageLB->SetLanguageList(LANG_LIST_WESTERN, sal_True, sal_False, sal_True);
-    m_pEastFontLanguageLB->SetLanguageList(LANG_LIST_CJK, sal_True, sal_False, sal_True);
-    m_pCTLFontLanguageLB->SetLanguageList(LANG_LIST_CTL, sal_True, sal_False, sal_True);
+    m_pWestFontLanguageLB->SetLanguageList(LANG_LIST_WESTERN, true, false, true);
+    m_pEastFontLanguageLB->SetLanguageList(LANG_LIST_CJK, true, false, true);
+    m_pCTLFontLanguageLB->SetLanguageList(LANG_LIST_CTL, true, false, true);
 
     if (!bShowNonWestern)
     {

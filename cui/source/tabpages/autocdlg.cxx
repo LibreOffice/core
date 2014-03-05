@@ -114,7 +114,7 @@ OfaAutoCorrDlg::OfaAutoCorrDlg(Window* pParent, const SfxItemSet* _pSet )
 
     if( SvtLanguageOptions().IsCTLFontEnabled() )
         nLangList |= LANG_LIST_CTL;
-    m_pLanguageLB->SetLanguageList( nLangList, sal_True, sal_True );
+    m_pLanguageLB->SetLanguageList( nLangList, true, true );
     m_pLanguageLB->SelectLanguage( LANGUAGE_NONE );
     sal_Int32 nPos = m_pLanguageLB->GetSelectEntryPos();
     DBG_ASSERT( LISTBOX_ENTRY_NOTFOUND != nPos, "listbox entry missing" );

@@ -113,7 +113,7 @@ SvxNewDictionaryDialog::SvxNewDictionaryDialog( Window* pParent,
     pOKBtn->SetClickHdl( LINK( this, SvxNewDictionaryDialog, OKHdl_Impl ) );
 
     // display languages
-    pLanguageLB->SetLanguageList( LANG_LIST_ALL, sal_True, sal_True );
+    pLanguageLB->SetLanguageList( LANG_LIST_ALL, true, true );
     pLanguageLB->SelectEntryPos(0);
 }
 
@@ -292,7 +292,7 @@ SvxEditDictionaryDialog::SvxEditDictionaryDialog(
         }
     }
 
-    pLangLB->SetLanguageList( LANG_LIST_ALL, sal_True, sal_True );
+    pLangLB->SetLanguageList( LANG_LIST_ALL, true, true );
 
     pReplaceED->SetSpaces(sal_True);
     pWordED->SetSpaces(sal_True);

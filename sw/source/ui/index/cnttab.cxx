@@ -865,7 +865,7 @@ SwTOXSelectTabPage::SwTOXSelectTabPage(Window* pParent, const SfxItemSet& rAttrS
     pIndexEntryWrapper = new IndexEntrySupplierWrapper();
 
     m_pLanguageLB->SetLanguageList( LANG_LIST_ALL | LANG_LIST_ONLY_KNOWN,
-                                 sal_False, sal_False, sal_False );
+                                 false, false, false );
 
     sAddStyleContent = m_pAddStylesCB->GetText();
 

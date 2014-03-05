@@ -71,23 +71,23 @@ private:
         { return ((const Svx3DEndAngleItem&)GetObjectItemSet().Get(SDRATTR_3DOBJ_END_ANGLE)).GetValue(); }
 
     // #107245# GetSmoothNormals() for bLatheSmoothed
-    sal_Bool GetSmoothNormals() const
+    bool GetSmoothNormals() const
         { return ((const Svx3DSmoothNormalsItem&)GetObjectItemSet().Get(SDRATTR_3DOBJ_SMOOTH_NORMALS)).GetValue(); }
 
     // #107245# GetSmoothLids() for bLatheSmoothFrontBack
-    sal_Bool GetSmoothLids() const
+    bool GetSmoothLids() const
         { return ((const Svx3DSmoothLidsItem&)GetObjectItemSet().Get(SDRATTR_3DOBJ_SMOOTH_LIDS)).GetValue(); }
 
     // #107245# GetCharacterMode() for bLatheCharacterMode
-    sal_Bool GetCharacterMode() const
+    bool GetCharacterMode() const
         { return ((const Svx3DCharacterModeItem&)GetObjectItemSet().Get(SDRATTR_3DOBJ_CHARACTER_MODE)).GetValue(); }
 
     // #107245# GetCloseFront() for bLatheCloseFront
-    sal_Bool GetCloseFront() const
+    bool GetCloseFront() const
         { return ((const Svx3DCloseFrontItem&)GetObjectItemSet().Get(SDRATTR_3DOBJ_CLOSE_FRONT)).GetValue(); }
 
     // #107245# GetCloseBack() for bLatheCloseBack
-    sal_Bool GetCloseBack() const
+    bool GetCloseBack() const
         { return ((const Svx3DCloseBackItem&)GetObjectItemSet().Get(SDRATTR_3DOBJ_CLOSE_BACK)).GetValue(); }
 
     virtual sal_uInt16 GetObjIdentifier() const;

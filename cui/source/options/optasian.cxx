@@ -147,7 +147,7 @@ SvxAsianLayoutPage::SvxAsianLayoutPage( Window* pParent, const SfxItemSet& rSet 
     m_pStartED->SetModifyHdl(aLk);
     m_pEndED->SetModifyHdl(aLk);
 
-    m_pLanguageLB->SetLanguageList( LANG_LIST_FBD_CHARS, sal_False, sal_False );
+    m_pLanguageLB->SetLanguageList( LANG_LIST_FBD_CHARS, false, false );
 }
 
 SvxAsianLayoutPage::~SvxAsianLayoutPage()

@@ -119,7 +119,7 @@ sal_Int32 TypeToPos_Impl( LanguageType eType, const ListBox& rLb )
     return nPos;
 }
 
-SvxLanguageBox::SvxLanguageBox( Window* pParent, WinBits nBits, sal_Bool bCheck )
+SvxLanguageBox::SvxLanguageBox( Window* pParent, WinBits nBits, bool bCheck )
     : ListBox( pParent, nBits )
     , m_pSpellUsedLang( NULL )
     , m_bWithCheckmark( bCheck )
@@ -148,8 +148,8 @@ void SvxLanguageBox::Init()
     m_aCheckedImage = Image( SVX_RES( RID_SVXIMG_CHECKED ) );
     m_aAllString            = SVX_RESSTR( RID_SVXSTR_LANGUAGE_ALL );
     m_nLangList             = LANG_LIST_EMPTY;
-    m_bHasLangNone          = sal_False;
-    m_bLangNoneIsLangAll    = sal_False;
+    m_bHasLangNone          = false;
+    m_bLangNoneIsLangAll    = false;
 
     // display entries sorted
     SetStyle( GetStyle() | WB_SORT );
@@ -198,7 +198,7 @@ sal_Int32 SvxLanguageBox::ImplInsertImgEntry( const OUString& rEntry, sal_Int32 
 
 
 void SvxLanguageBox::SetLanguageList( sal_Int16 nLangList,
-        sal_Bool bHasLangNone, sal_Bool bLangNoneIsLangAll, sal_Bool bCheckSpellAvail )
+        bool bHasLangNone, bool bLangNoneIsLangAll, bool bCheckSpellAvail )
 {
     Clear();
 
@@ -398,7 +398,7 @@ sal_Int32 SvxLanguageBox::InsertSystemLanguage( sal_Int32 nPos )
 
 
 sal_Int32 SvxLanguageBox::InsertLanguage( const LanguageType nLangType,
-        sal_Bool bCheckEntry, sal_Int32 nPos )
+        bool bCheckEntry, sal_Int32 nPos )
 {
     LanguageType nLang = MsLangId::getReplacementForObsoleteLanguage( nLangType);
     // For obsolete and to be replaced languages check whether an entry of the
@@ -445,7 +445,7 @@ LanguageType SvxLanguageBox::GetSelectLanguage() const
 
 
 
-void SvxLanguageBox::SelectLanguage( const LanguageType eLangType, sal_Bool bSelect )
+void SvxLanguageBox::SelectLanguage( const LanguageType eLangType, bool bSelect )
 {
     // If the core uses a LangID of an imported MS document and wants to select
     // a language that is replaced, we need to select the replacement instead.
@@ -462,7 +462,7 @@ void SvxLanguageBox::SelectLanguage( const LanguageType eLangType, sal_Bool bSel
 
 
 
-sal_Bool SvxLanguageBox::IsLanguageSelected( const LanguageType eLangType ) const
+bool SvxLanguageBox::IsLanguageSelected( const LanguageType eLangType ) const
 {
     // Same here, work on the replacement if applicable.
     LanguageType nLang = MsLangId::getReplacementForObsoleteLanguage( eLangType);
@@ -472,7 +472,7 @@ sal_Bool SvxLanguageBox::IsLanguageSelected( const LanguageType eLangType ) cons
     if ( nAt != LISTBOX_ENTRY_NOTFOUND )
         return IsEntryPosSelected( nAt );
     else
-        return sal_False;
+        return false;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

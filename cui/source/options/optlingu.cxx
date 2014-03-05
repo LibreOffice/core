@@ -102,7 +102,7 @@ static Sequence< sal_Int16 > lcl_LocaleSeqToLangSeq( const Sequence< Locale > &r
 }
 
 
-static sal_Bool lcl_SeqHasLang( const Sequence< sal_Int16 > &rSeq, sal_Int16 nLang )
+static bool lcl_SeqHasLang( const Sequence< sal_Int16 > &rSeq, sal_Int16 nLang )
 {
     sal_Int32 nLen = rSeq.getLength();
     const sal_Int16 *pLang = rSeq.getConstArray();
@@ -112,7 +112,7 @@ static sal_Bool lcl_SeqHasLang( const Sequence< sal_Int16 > &rSeq, sal_Int16 nLa
         if (nLang == pLang[i])
             nPos = i;
     }
-    return nPos < 0 ? sal_False : sal_True;
+    return nPos >= 0;
 }
 
 

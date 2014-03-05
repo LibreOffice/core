@@ -42,7 +42,7 @@ private:
     XLineStyleItem*     pStyleItem;
     XLineDashItem*      pDashItem;
 
-    sal_Bool                bUpdate;
+    bool                bUpdate;
 
 public:
     SFX_DECL_TOOLBOX_CONTROL();
@@ -101,11 +101,11 @@ class SvxLineEndWindow : public SfxPopupWindow
 private:
     XLineEndListRef pLineEndList;
     ValueSet        aLineEndSet;
-    sal_uInt16          nCols;
-    sal_uInt16          nLines;
-    sal_uIntPtr             nLineEndWidth;
+    sal_uInt16      nCols;
+    sal_uInt16      nLines;
+    sal_uIntPtr     nLineEndWidth;
     Size            aBmpSize;
-    sal_Bool            bPopupMode;
+    bool            bPopupMode;
     bool            mbInResize;
     ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame > mxFrame;
 

@@ -63,7 +63,7 @@ SvxLineStyleToolBoxControl::SvxLineStyleToolBoxControl( sal_uInt16 nSlotId,
     SfxToolBoxControl( nSlotId, nId, rTbx ),
     pStyleItem      ( NULL ),
     pDashItem       ( NULL ),
-    bUpdate         ( sal_False )
+    bUpdate         ( false )
 {
     addStatusListener( OUString( ".uno:LineDash" ));
     addStatusListener( OUString( ".uno:DashListState" ));
@@ -109,7 +109,7 @@ void SvxLineStyleToolBoxControl::StateChanged (
                 pDashItem = (XLineDashItem*)pState->Clone();
             }
 
-            bUpdate = sal_True;
+            bUpdate = true;
             Update( pState );
         }
         else if ( nSID != SID_DASH_LIST )
@@ -126,7 +126,7 @@ void SvxLineStyleToolBoxControl::Update( const SfxPoolItem* pState )
 {
     if ( pState && bUpdate )
     {
-        bUpdate = sal_False;
+        bUpdate = false;
 
         SvxLineBox* pBox = (SvxLineBox*)GetToolBox().GetItemWindow( GetId() );
         DBG_ASSERT( pBox, "Window not found!" );
@@ -357,7 +357,7 @@ SvxLineEndWindow::SvxLineEndWindow(
     nCols           ( 2 ),
     nLines          ( 12 ),
     nLineEndWidth   ( 400 ),
-    bPopupMode      ( sal_True ),
+    bPopupMode      ( true ),
     mbInResize      ( false ),
     mxFrame         ( rFrame )
 {
@@ -378,7 +378,7 @@ SvxLineEndWindow::SvxLineEndWindow(
     nCols           ( 2 ),
     nLines          ( 12 ),
     nLineEndWidth   ( 400 ),
-    bPopupMode      ( sal_True ),
+    bPopupMode      ( true ),
     mbInResize      ( false ),
     mxFrame         ( rFrame )
 {
@@ -657,7 +657,7 @@ void SvxLineEndWindow::PopupModeEnd()
 {
     if ( IsVisible() )
     {
-        bPopupMode = sal_False;
+        bPopupMode = false;
         SetSize();
     }
     SfxPopupWindow::PopupModeEnd();

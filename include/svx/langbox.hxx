@@ -58,32 +58,32 @@ private:
     OUString                m_aAllString;
     com::sun::star::uno::Sequence< sal_Int16 >  *m_pSpellUsedLang;
     SvtLanguageTable*       m_pLangTable;
-    sal_Int16                   m_nLangList;
-    sal_Bool                    m_bHasLangNone;
-    sal_Bool                    m_bLangNoneIsLangAll;
-    sal_Bool                    m_bWithCheckmark;
+    sal_Int16               m_nLangList;
+    bool                    m_bHasLangNone;
+    bool                    m_bLangNoneIsLangAll;
+    bool                    m_bWithCheckmark;
 
     SVX_DLLPRIVATE void                    Init();
     SVX_DLLPRIVATE sal_Int32                   ImplInsertImgEntry( const OUString& rEntry, sal_Int32  nPos, bool bChecked );
     SVX_DLLPRIVATE sal_Int32                   ImplInsertLanguage(LanguageType, sal_Int32 nPos, sal_Int16 nType);
 
 public:
-    SvxLanguageBox(Window* pParent, WinBits nBits, sal_Bool bCheck = sal_False);
+    SvxLanguageBox(Window* pParent, WinBits nBits, bool bCheck = false);
     ~SvxLanguageBox();
 
     void            SetLanguageList( sal_Int16 nLangList,
-                            sal_Bool bHasLangNone, sal_Bool bLangNoneIsLangAll = sal_False,
-                            sal_Bool bCheckSpellAvail = sal_False );
+                            bool bHasLangNone, bool bLangNoneIsLangAll = false,
+                            bool bCheckSpellAvail = false );
 
     sal_Int32           InsertLanguage( const LanguageType eLangType, sal_Int32  nPos = LISTBOX_APPEND );
     sal_Int32           InsertDefaultLanguage( sal_Int16 nType, sal_Int32  nPos = LISTBOX_APPEND );
     sal_Int32           InsertSystemLanguage( sal_Int32  nPos = LISTBOX_APPEND );
     sal_Int32           InsertLanguage( const LanguageType eLangType,
-                            sal_Bool bCheckEntry, sal_Int32  nPos = LISTBOX_APPEND );
+                            bool bCheckEntry, sal_Int32  nPos = LISTBOX_APPEND );
     void            RemoveLanguage( const LanguageType eLangType );
-    void            SelectLanguage( const LanguageType eLangType, sal_Bool bSelect = sal_True );
+    void            SelectLanguage( const LanguageType eLangType, bool bSelect = true );
     LanguageType    GetSelectLanguage() const;
-    sal_Bool            IsLanguageSelected( const LanguageType eLangType ) const;
+    bool            IsLanguageSelected( const LanguageType eLangType ) const;
 };
 
 #endif

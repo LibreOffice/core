@@ -162,7 +162,7 @@ SwAsciiFilterDlg::SwAsciiFilterDlg( Window* pParent, SwDocShell& rDocSh,
                 }
             }
 
-            m_pLanguageLB->SetLanguageList( LANG_LIST_ALL, sal_True, sal_False );
+            m_pLanguageLB->SetLanguageList( LANG_LIST_ALL, true, false );
             m_pLanguageLB->SelectLanguage( aOpt.GetLanguage() );
         }
 
