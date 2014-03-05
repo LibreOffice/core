@@ -563,6 +563,7 @@ alwaysShowPlaceholderText
 amt
 anchor
 anchorCtr
+anchorId
 anchorLock
 anchorlock
 anchorx
