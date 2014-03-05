@@ -62,8 +62,6 @@
 #include <com/sun/star/chart2/XChartDocument.hpp>
 #include <com/sun/star/chart2/data/XDataReceiver.hpp>
 
-#define TEST_BUG_FILES 0
-
 #include "helper/qahelper.hxx"
 #include "helper/shared_test_impl.hxx"
 
@@ -226,11 +224,6 @@ public:
     CPPUNIT_TEST(testPasswordNew);
 #endif
 
-#if TEST_BUG_FILES
-    CPPUNIT_TEST(testBugFiles);
-    CPPUNIT_TEST(testBugFilesXLS);
-    CPPUNIT_TEST(testBugFilesXLSX);
-#endif
     CPPUNIT_TEST(testMiscRowHeights);
     CPPUNIT_TEST(testOptimalHeightReset);
     CPPUNIT_TEST(testPrintRangeODS);
