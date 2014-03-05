@@ -911,6 +911,32 @@ DECLARE_OOXMLEXPORT_TEST(testDkVert, "dkvert.docx")
     CPPUNIT_ASSERT_EQUAL(sal_Int32(25), getProperty<drawing::Hatch>(xShape, "FillHatch").Distance);
 }
 
+DECLARE_OOXMLEXPORT_TEST(testTextWatermark, "textWatermark.docx")
+{
+    //The problem was that the watermark ID was not preserved,
+    //and Word uses the object ID to identify if it is a watermark.
+    //It has to have the 'PowerPlusWaterMarkObject' string in it
+    xmlDocPtr pXmlHeader1 = parseExport("word/header1.xml");
+    if (!pXmlHeader1)
+       return;
+
+    assertXPath(pXmlHeader1, "/w:hdr[1]/w:p[1]/w:r[1]/w:pict[1]/v:shape[1]","id","PowerPlusWaterMarkObject93701316");
+}
+
+DECLARE_OOXMLEXPORT_TEST(testPictureWatermark, "pictureWatermark.docx")
+{
+    //The problem was that the watermark ID was not preserved,
+    //and Word uses the object ID to identify if it is a watermark.
+    //It has to have the 'WordPictureWaterMarkObject' string in it
+
+    xmlDocPtr pXmlHeader1 = parseExport("word/header1.xml");
+    if (!pXmlHeader1)
+       return;
+
+    // Check the watermark ID
+    assertXPath(pXmlHeader1, "/w:hdr[1]/w:p[1]/w:r[1]/mc:AlternateContent[1]/mc:Fallback[1]/w:pict[1]/v:rect[1]","id","WordPictureWatermark11962361");
+}
+
 #endif
 
 CPPUNIT_PLUGIN_IMPLEMENT();
