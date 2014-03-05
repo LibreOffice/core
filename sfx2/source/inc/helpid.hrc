@@ -107,7 +107,6 @@
 #define HID_HELP_TABPAGE_CONTENTS                             "SFX2_HID_HELP_TABPAGE_CONTENTS"
 #define HID_HELP_TABPAGE_INDEX                                "SFX2_HID_HELP_TABPAGE_INDEX"
 #define HID_HELP_TABPAGE_SEARCH                               "SFX2_HID_HELP_TABPAGE_SEARCH"
-#define HID_HELP_TABPAGE_BOOKMARKS                            "SFX2_HID_HELP_TABPAGE_BOOKMARKS"
 #define HID_TBXCONTROL_FILENEW                                "SFX2_HID_TBXCONTROL_FILENEW"
 #define HID_HELP_TOOLBOXITEM_SEARCHDIALOG                     "SFX2_HID_HELP_TOOLBOXITEM_SEARCHDIALOG"
 #define HID_HELP_BOOKMARKS_OPEN                               "SFX2_HID_HELP_BOOKMARKS_OPEN"

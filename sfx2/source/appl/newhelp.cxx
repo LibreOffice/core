@@ -92,6 +92,7 @@
 #include <svtools/imagemgr.hxx>
 #include <svtools/miscopt.hxx>
 #include <svtools/imgdef.hxx>
+#include <vcl/builder.hxx>
 #include <vcl/unohelp.hxx>
 #include <vcl/i18nhelp.hxx>
 #include <vcl/settings.hxx>
@@ -414,13 +415,17 @@ OUString ContentListBox_Impl::GetSelectEntry() const
 
 // class HelpTabPage_Impl ------------------------------------------------
 
-HelpTabPage_Impl::HelpTabPage_Impl(
-    Window* pParent, SfxHelpIndexWindow_Impl* _pIdxWin, const ResId& rResId ) :
+HelpTabPage_Impl::HelpTabPage_Impl(Window* pParent, SfxHelpIndexWindow_Impl* _pIdxWin,
+    const ResId& rResId )
+    : TabPage( pParent, rResId )
+    , m_pIdxWin( _pIdxWin )
+{
+}
 
-    TabPage( pParent, rResId ),
-
-    m_pIdxWin( _pIdxWin )
-
+HelpTabPage_Impl::HelpTabPage_Impl(Window* pParent, SfxHelpIndexWindow_Impl* _pIdxWin,
+    const OString& rID, const OUString& rUIXMLDescription)
+    : TabPage( pParent, rID, rUIXMLDescription)
+    , m_pIdxWin( _pIdxWin )
 {
 }
 
@@ -1229,16 +1234,22 @@ void GetBookmarkEntry_Impl
     }
 }
 
-
-
-BookmarksBox_Impl::BookmarksBox_Impl( Window* pParent, const ResId& rResId ) :
-
-    ListBox( pParent, rResId )
-
+BookmarksBox_Impl::BookmarksBox_Impl(Window* pParent, WinBits nStyle)
+    : ListBox(pParent, nStyle)
 {
 }
 
-
+extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeBookmarksBox(Window *pParent,
+    VclBuilder::stringmap &rMap)
+{
+    WinBits nWinBits = WB_CLIPCHILDREN|WB_LEFT|WB_VCENTER|WB_3DLOOK|WB_SIMPLEMODE;
+    OString sBorder = VclBuilder::extractCustomProperty(rMap);
+    if (!sBorder.isEmpty())
+       nWinBits |= WB_BORDER;
+    BookmarksBox_Impl* pListBox = new BookmarksBox_Impl(pParent, nWinBits);
+    pListBox->EnableAutoSize(true);
+    return pListBox;
+}
 
 BookmarksBox_Impl::~BookmarksBox_Impl()
 {
@@ -1345,20 +1356,17 @@ bool BookmarksBox_Impl::Notify( NotifyEvent& rNEvt )
 
 // class BookmarksTabPage_Impl -------------------------------------------
 
-BookmarksTabPage_Impl::BookmarksTabPage_Impl( Window* pParent, SfxHelpIndexWindow_Impl* _pIdxWin ) :
-
-    HelpTabPage_Impl( pParent, _pIdxWin, SfxResId( TP_HELP_BOOKMARKS ) ),
-
-    aBookmarksFT    ( this, SfxResId( FT_BOOKMARKS ) ),
-    aBookmarksBox   ( this, SfxResId( LB_BOOKMARKS ) ),
-    aBookmarksPB    ( this, SfxResId( PB_BOOKMARKS ) )
-
+BookmarksTabPage_Impl::BookmarksTabPage_Impl(Window* pParent, SfxHelpIndexWindow_Impl* _pIdxWin)
+    : HelpTabPage_Impl(pParent, _pIdxWin, "HelpBookmarkPage",
+        "sfx/ui/helpbookmarkpage.ui")
 {
-    FreeResource();
+    get(m_pBookmarksPB, "display");
+    get(m_pBookmarksBox, "bookmarks");
+    Size aSize(LogicToPixel(Size(120 , 200), MAP_APPFONT));
+    m_pBookmarksBox->set_width_request(aSize.Width());
+    m_pBookmarksBox->set_height_request(aSize.Height());
 
-    nMinWidth = aBookmarksPB.GetSizePixel().Width();
-
-    aBookmarksPB.SetClickHdl( LINK( this, BookmarksTabPage_Impl, OpenHdl ) );
+    m_pBookmarksPB->SetClickHdl( LINK( this, BookmarksTabPage_Impl, OpenHdl ) );
 
     // load bookmarks from configuration
     Sequence< Sequence< PropertyValue > > aBookmarkSeq;
@@ -1379,41 +1387,9 @@ BookmarksTabPage_Impl::BookmarksTabPage_Impl( Window* pParent, SfxHelpIndexWindo
 
 IMPL_LINK_NOARG(BookmarksTabPage_Impl, OpenHdl)
 {
-    aBookmarksBox.GetDoubleClickHdl().Call( &aBookmarksBox );
+    m_pBookmarksBox->GetDoubleClickHdl().Call(m_pBookmarksBox);
     return 0;
 }
-
-
-
-void BookmarksTabPage_Impl::Resize()
-{
-    Size aSize = GetSizePixel();
-    if ( aSize.Width() < nMinWidth )
-        aSize.Width() = nMinWidth;
-    Point aPnt = aBookmarksFT.GetPosPixel();
-    Size aNewSize = aBookmarksFT.GetSizePixel();
-    aNewSize.Width() = aSize.Width() - ( aPnt.X() * 2 );
-    aBookmarksFT.SetSizePixel( aNewSize );
-
-    Size a6Size = LogicToPixel( Size( 6, 6 ), MAP_APPFONT );
-    Size aBtnSize = aBookmarksPB.GetSizePixel();
-
-    aPnt = aBookmarksBox.GetPosPixel();
-    aNewSize = aBookmarksBox.GetSizePixel();
-    aNewSize.Width() = aSize.Width() - ( aPnt.X() * 2 );
-    aNewSize.Height() = aSize.Height() - aPnt.Y();
-    aNewSize.Height() -= ( aBtnSize.Height() + ( a6Size.Height() * 3 / 2 ) );
-    aBookmarksBox.SetSizePixel( aNewSize );
-
-    aPnt.X() += ( aNewSize.Width() - aBtnSize.Width() );
-    aPnt.Y() += aNewSize.Height() + ( a6Size.Height() / 2 );
-    long nMinX = aBookmarksBox.GetPosPixel().X();
-    if ( aPnt.X() < nMinX )
-        aPnt.X() = nMinX;
-    aBookmarksPB.SetPosPixel( aPnt );
-}
-
-
 
 void BookmarksTabPage_Impl::ActivatePage()
 {
@@ -1421,26 +1397,20 @@ void BookmarksTabPage_Impl::ActivatePage()
         SetFocusOnBox();
 }
 
-
-
 Control* BookmarksTabPage_Impl::GetLastFocusControl()
 {
-    return &aBookmarksPB;
+    return m_pBookmarksPB;
 }
-
-
 
 void BookmarksTabPage_Impl::SetDoubleClickHdl( const Link& rLink )
 {
-    aBookmarksBox.SetDoubleClickHdl( rLink );
+    m_pBookmarksBox->SetDoubleClickHdl(rLink);
 }
-
-
 
 OUString BookmarksTabPage_Impl::GetSelectEntry() const
 {
     OUString aRet;
-    OUString* pData = (OUString*)(sal_uIntPtr)aBookmarksBox.GetEntryData( aBookmarksBox.GetSelectEntryPos() );
+    OUString* pData = (OUString*)(sal_uIntPtr)m_pBookmarksBox->GetEntryData(m_pBookmarksBox->GetSelectEntryPos());
     if ( pData )
         aRet = *pData;
     return aRet;
@@ -1452,8 +1422,8 @@ void BookmarksTabPage_Impl::AddBookmarks( const OUString& rTitle, const OUString
 {
     OUString aImageURL = IMAGE_URL;
     aImageURL += INetURLObject( rURL ).GetHost();
-    sal_uInt16 nPos = aBookmarksBox.InsertEntry( rTitle, SvFileInformationManager::GetImage( INetURLObject(aImageURL), false ) );
-    aBookmarksBox.SetEntryData( nPos, new OUString( rURL ) );
+    sal_uInt16 nPos = m_pBookmarksBox->InsertEntry( rTitle, SvFileInformationManager::GetImage( INetURLObject(aImageURL), false ) );
+    m_pBookmarksBox->SetEntryData( nPos, new OUString( rURL ) );
 }
 
 OUString SfxHelpWindow_Impl::buildHelpURL(const OUString& sFactory        ,

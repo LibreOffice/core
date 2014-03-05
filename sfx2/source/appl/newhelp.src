@@ -156,35 +156,6 @@ TabPage TP_HELP_SEARCH
     };
 };
 
-TabPage TP_HELP_BOOKMARKS
-{
-    HelpId = HID_HELP_TABPAGE_BOOKMARKS;
-    Hide = TRUE ;
-    DialogControl = TRUE;
-    Size = MAP_APPFONT ( 120 , 200 ) ;
-    FixedText FT_BOOKMARKS
-    {
-        Pos = MAP_APPFONT ( 6 , 6 ) ;
-        Size = MAP_APPFONT ( 108 , 10 ) ;
-        Text [ en-US ] = "~Bookmarks" ;
-    };
-    ListBox LB_BOOKMARKS
-    {
-        HelpID = "sfx2:ListBox:TP_HELP_BOOKMARKS:LB_BOOKMARKS";
-        Border = TRUE ;
-        Sort = TRUE;
-        Pos = MAP_APPFONT ( 6 , 19 ) ;
-        Size = MAP_APPFONT ( 108 , 97 ) ;
-    };
-    PushButton PB_BOOKMARKS
-    {
-        HelpID = "sfx2:PushButton:TP_HELP_BOOKMARKS:PB_BOOKMARKS";
-        Pos = MAP_APPFONT ( 64 , 119 ) ;
-        Size = MAP_APPFONT ( 50 , 14 ) ;
-        Text [ en-US ] = "~Display" ;
-    };
-};
-
 TabPage TP_HELP_CONTENT
 {
     HelpId = HID_HELP_TABPAGE_CONTENTS;

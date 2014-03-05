@@ -79,6 +79,8 @@ protected:
 
 public:
     HelpTabPage_Impl( Window* pParent, SfxHelpIndexWindow_Impl* _pIdxWin, const ResId& rResId );
+    HelpTabPage_Impl(Window* pParent, SfxHelpIndexWindow_Impl* _pIdxWin,
+        const OString& rID, const OUString& rUIXMLDescription);
 
     virtual Control*    GetLastFocusControl() = 0;
 };
@@ -238,7 +240,7 @@ private:
     void                DoAction( sal_uInt16 nAction );
 
 public:
-    BookmarksBox_Impl( Window* pParent, const ResId& rResId );
+    BookmarksBox_Impl(Window* pParent, WinBits nStyle);
     ~BookmarksBox_Impl();
 
     virtual bool        Notify( NotifyEvent& rNEvt );
@@ -247,25 +249,21 @@ public:
 class BookmarksTabPage_Impl : public HelpTabPage_Impl
 {
 private:
-    FixedText           aBookmarksFT;
-    BookmarksBox_Impl   aBookmarksBox;
-    PushButton          aBookmarksPB;
-
-    long                nMinWidth;
+    BookmarksBox_Impl*  m_pBookmarksBox;
+    PushButton*         m_pBookmarksPB;
 
     DECL_LINK(OpenHdl, void *);
 
 public:
     BookmarksTabPage_Impl( Window* pParent, SfxHelpIndexWindow_Impl* _pIdxWin );
 
-    virtual void        Resize();
     virtual void        ActivatePage();
     virtual Control*    GetLastFocusControl();
 
     void                SetDoubleClickHdl( const Link& rLink );
     OUString            GetSelectEntry() const;
     void                AddBookmarks( const OUString& rTitle, const OUString& rURL );
-    inline void         SetFocusOnBox() { aBookmarksBox.GrabFocus(); }
+    void                SetFocusOnBox() { m_pBookmarksBox->GrabFocus(); }
 };
 
 // class SfxHelpIndexWindow_Impl -----------------------------------------

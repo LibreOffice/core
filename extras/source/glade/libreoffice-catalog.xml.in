@@ -15,6 +15,9 @@
 -->
 <glade-catalog name="LibreOffice" domain="glade-3" depends="gtk+" version="1.0">
   <glade-widget-classes>
+    <glade-widget-class title="Bookmarks Box" name="sfxlo-BookmarksBox"
+                        generic-name="BookmarksBox" parent="GtkComboBoxText"
+                        icon-name="widget-gtk-comboboxtext"/>
     <glade-widget-class title="Font PickListBox" name="smlo-SmFontPickListBox"
                         generic-name="SmFontPickListBox" parent="GtkComboBoxText"
                         icon-name="widget-gtk-comboboxtext"/>
