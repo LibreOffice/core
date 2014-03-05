@@ -62,7 +62,11 @@ public:
     AlignedAllocator(const AlignedAllocator<_Type2,_Alignment>&) {}
 
     void construct(T* p, const value_type& val) { new(p) value_type(val); }
-    void destroy(T* p) { p->~value_type(); }
+    void destroy(T* p)
+    {
+        p->~value_type();
+        (void)p; // avoid bogus MSVC '12 "unreferenced formal parameter" warning
+    }
 
     size_type max_size() const
     {
