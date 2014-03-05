@@ -2319,6 +2319,8 @@ throw (lang::IllegalArgumentException, uno::RuntimeException, std::exception)
     {
     }
 
+    assert(SwTable::FindTable(pTable->GetFrmFmt()) == pTable);
+    assert(pTable->GetFrmFmt() == pTextTable->GetFrmFmt());
     return xRet;
 }
 
