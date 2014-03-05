@@ -57,7 +57,7 @@ private:
     void            ClearChildren( SvTreeListEntry* pParent );
 
 public:
-    ContentListBox_Impl( Window* pParent, const ResId& rResId );
+    ContentListBox_Impl(Window* pParent, WinBits nStyle);
     ~ContentListBox_Impl();
 
 
@@ -90,18 +90,17 @@ public:
 class ContentTabPage_Impl : public HelpTabPage_Impl
 {
 private:
-    ContentListBox_Impl aContentBox;
+    ContentListBox_Impl* m_pContentBox;
 
 public:
-    ContentTabPage_Impl( Window* pParent, SfxHelpIndexWindow_Impl* _pIdxWin );
+    ContentTabPage_Impl(Window* pParent, SfxHelpIndexWindow_Impl* _pIdxWin);
 
-    virtual void        Resize();
     virtual void        ActivatePage();
     virtual Control*    GetLastFocusControl();
 
-    inline void     SetOpenHdl( const Link& rLink ) { aContentBox.SetOpenHdl( rLink ); }
-    inline OUString GetSelectEntry() const { return aContentBox.GetSelectEntry(); }
-    inline void     SetFocusOnBox() { aContentBox.GrabFocus(); }
+    void     SetOpenHdl( const Link& rLink ) { m_pContentBox->SetOpenHdl( rLink ); }
+    OUString GetSelectEntry() const { return m_pContentBox->GetSelectEntry(); }
+    void     SetFocusOnBox() { m_pContentBox->GrabFocus(); }
 };
 
 // class IndexTabPage_Impl -----------------------------------------------

@@ -26,9 +26,6 @@
 #define FL_ACTIVE                               11
 #define TC_INDEX                                12
 
-// Content TabPage
-#define LB_CONTENTS                             10
-
 // Index Window: Id's of the tabpages
 #define HELP_INDEX_PAGE_FIRST                   1
 #define HELP_INDEX_PAGE_CONTENTS                HELP_INDEX_PAGE_FIRST

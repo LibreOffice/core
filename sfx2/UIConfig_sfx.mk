@@ -23,6 +23,7 @@ $(eval $(call gb_UIConfig_add_uifiles,sfx,\
 	sfx2/uiconfig/ui/editdurationdialog \
 	sfx2/uiconfig/ui/errorfindemaildialog \
 	sfx2/uiconfig/ui/helpbookmarkpage \
+	sfx2/uiconfig/ui/helpcontentpage \
 	sfx2/uiconfig/ui/helpindexpage \
 	sfx2/uiconfig/ui/helpsearchpage \
 	sfx2/uiconfig/ui/inputdialog \

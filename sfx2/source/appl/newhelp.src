@@ -71,22 +71,6 @@ Window WIN_HELPINDEX
     };
 };
 
-TabPage TP_HELP_CONTENT
-{
-    HelpId = HID_HELP_TABPAGE_CONTENTS;
-    Hide = TRUE ;
-    DialogControl = TRUE;
-    Size = MAP_APPFONT ( 120 , 200 ) ;
-    Control LB_CONTENTS
-    {
-        HelpId = HID_HELP_TREELISTBOX_CONTENTS ;
-        Border = TRUE ;
-        TabStop = TRUE;
-        Pos = MAP_APPFONT ( 6 , 6 ) ;
-        Size = MAP_APPFONT ( 108 , 188 ) ;
-    };
-};
-
 #define MASKCOLOR_MAGENTA \
     MaskColor = Color { Red = 0xFFFF ; Green = 0x0000 ; Blue = 0xFFFF ; };
 

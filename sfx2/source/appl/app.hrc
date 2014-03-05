@@ -42,7 +42,6 @@
 #define CONFIG_PATH_START               (RID_SFX_APP_START+98)
 
 #define WIN_HELPINDEX                           (RID_SFX_APP_START+99)
-#define TP_HELP_CONTENT                         (RID_SFX_APP_START+100)
 
 #define MENU_HELP_BOOKMARKS                     (RID_SFX_APP_START+105)
 #define RID_INFO_NOSEARCHRESULTS                (RID_SFX_APP_START+106)

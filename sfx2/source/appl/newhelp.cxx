@@ -270,13 +270,11 @@ struct ContentEntry_Impl
 
 // ContentListBox_Impl ---------------------------------------------------
 
-ContentListBox_Impl::ContentListBox_Impl( Window* pParent, const ResId& rResId ) :
-
-    SvTreeListBox( pParent, rResId ),
-
-    aOpenBookImage      ( SfxResId( IMG_HELP_CONTENT_BOOK_OPEN ) ),
-    aClosedBookImage    ( SfxResId( IMG_HELP_CONTENT_BOOK_CLOSED ) ),
-    aDocumentImage      ( SfxResId( IMG_HELP_CONTENT_DOC ) )
+ContentListBox_Impl::ContentListBox_Impl(Window* pParent, WinBits nStyle)
+    : SvTreeListBox(pParent, nStyle)
+    , aOpenBookImage(SfxResId(IMG_HELP_CONTENT_BOOK_OPEN))
+    , aClosedBookImage(SfxResId(IMG_HELP_CONTENT_BOOK_CLOSED))
+    , aDocumentImage(SfxResId(IMG_HELP_CONTENT_DOC))
 
 {
     SetStyle( GetStyle() | WB_HIDESELECTION | WB_HSCROLL );
@@ -292,7 +290,15 @@ ContentListBox_Impl::ContentListBox_Impl( Window* pParent, const ResId& rResId )
     InitRoot();
 }
 
-
+extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeContentListBox(Window *pParent,
+    VclBuilder::stringmap &rMap)
+{
+    WinBits nWinStyle = WB_TABSTOP;
+    OString sBorder = VclBuilder::extractCustomProperty(rMap);
+    if (!sBorder.isEmpty())
+        nWinStyle |= WB_BORDER;
+    return new ContentListBox_Impl(pParent, nWinStyle);
+}
 
 ContentListBox_Impl::~ContentListBox_Impl()
 {
@@ -305,8 +311,6 @@ ContentListBox_Impl::~ContentListBox_Impl()
         pEntry = GetEntry( nPos++ );
     }
 }
-
-
 
 void ContentListBox_Impl::InitRoot()
 {
@@ -431,29 +435,15 @@ HelpTabPage_Impl::HelpTabPage_Impl(Window* pParent, SfxHelpIndexWindow_Impl* _pI
 
 // class ContentTabPage_Impl ---------------------------------------------
 
-ContentTabPage_Impl::ContentTabPage_Impl( Window* pParent, SfxHelpIndexWindow_Impl* _pIdxWin ) :
-
-    HelpTabPage_Impl( pParent, _pIdxWin, SfxResId( TP_HELP_CONTENT ) ),
-
-    aContentBox( this, SfxResId( LB_CONTENTS ) )
-
+ContentTabPage_Impl::ContentTabPage_Impl(Window* pParent, SfxHelpIndexWindow_Impl* _pIdxWin)
+    : HelpTabPage_Impl(pParent, _pIdxWin, "HelpContentPage",
+        "sfx/ui/helpcontentpage.ui")
 {
-    FreeResource();
-
-    aContentBox.Show();
+    get(m_pContentBox, "content");
+    Size aSize(LogicToPixel(Size(108 , 188), MAP_APPFONT));
+    m_pContentBox->set_width_request(aSize.Width());
+    m_pContentBox->set_height_request(aSize.Height());
 }
-
-
-
-void ContentTabPage_Impl::Resize()
-{
-    Size aSize = GetOutputSizePixel();
-    aSize.Width() -= 8;
-    aSize.Height() -= 8;
-    aContentBox.SetPosSizePixel( Point( 4, 4 ), aSize );
-}
-
-
 
 void ContentTabPage_Impl::ActivatePage()
 {
@@ -461,11 +451,9 @@ void ContentTabPage_Impl::ActivatePage()
         SetFocusOnBox();
 }
 
-
-
 Control* ContentTabPage_Impl::GetLastFocusControl()
 {
-    return &aContentBox;
+    return m_pContentBox;
 }
 
 // class IndexBox_Impl ---------------------------------------------------
