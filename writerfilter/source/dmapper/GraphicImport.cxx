@@ -66,11 +66,10 @@ using resourcemodel::resolveSprmProps;
 
 namespace dmapper
 {
-using namespace ::std;
-using namespace ::com::sun::star;
+using namespace std;
+using namespace css;
 
-class XInputStreamHelper : public cppu::WeakImplHelper1
-<    io::XInputStream   >
+class XInputStreamHelper : public cppu::WeakImplHelper1<io::XInputStream>
 {
     const sal_uInt8* m_pBuffer;
     const sal_Int32  m_nLength;
@@ -90,7 +89,6 @@ public:
     virtual void SAL_CALL closeInput(  ) throw (io::NotConnectedException, io::IOException, uno::RuntimeException, std::exception);
 };
 
-
 XInputStreamHelper::XInputStreamHelper(const sal_uInt8* buf, size_t len, bool bBmp) :
         m_pBuffer( buf ),
         m_nLength( len ),
@@ -101,7 +99,6 @@ XInputStreamHelper::XInputStreamHelper(const sal_uInt8* buf, size_t len, bool bB
         {0x42, 0x4d, 0xe6, 0x04, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00 };
     m_pBMPHeader = aHeader;
     m_nHeaderLength = m_bBmp ? sizeof( aHeader ) / sizeof(sal_uInt8) : 0;
-
 }
 
 
@@ -109,15 +106,13 @@ XInputStreamHelper::~XInputStreamHelper()
 {
 }
 
-
-::sal_Int32 XInputStreamHelper::readBytes( uno::Sequence< ::sal_Int8 >& aData, ::sal_Int32 nBytesToRead )
+sal_Int32 XInputStreamHelper::readBytes( uno::Sequence<sal_Int8>& aData, sal_Int32 nBytesToRead )
     throw (io::NotConnectedException, io::BufferSizeExceededException, io::IOException, uno::RuntimeException, std::exception)
 {
     return readSomeBytes( aData, nBytesToRead );
 }
 
-
-::sal_Int32 XInputStreamHelper::readSomeBytes( uno::Sequence< ::sal_Int8 >& aData, ::sal_Int32 nMaxBytesToRead )
+sal_Int32 XInputStreamHelper::readSomeBytes( uno::Sequence<sal_Int8>& aData, sal_Int32 nMaxBytesToRead )
         throw (io::NotConnectedException, io::BufferSizeExceededException, io::IOException, uno::RuntimeException, std::exception)
 {
     sal_Int32 nRet = 0;
@@ -148,7 +143,7 @@ XInputStreamHelper::~XInputStreamHelper()
 }
 
 
-void XInputStreamHelper::skipBytes( ::sal_Int32 nBytesToSkip ) throw (io::NotConnectedException, io::BufferSizeExceededException, io::IOException, uno::RuntimeException, std::exception)
+void XInputStreamHelper::skipBytes( sal_Int32 nBytesToSkip ) throw (io::NotConnectedException, io::BufferSizeExceededException, io::IOException, uno::RuntimeException, std::exception)
 {
     if( nBytesToSkip < 0 || m_nPosition + nBytesToSkip > (m_nLength + m_nHeaderLength))
         throw io::BufferSizeExceededException();
@@ -156,7 +151,7 @@ void XInputStreamHelper::skipBytes( ::sal_Int32 nBytesToSkip ) throw (io::NotCon
 }
 
 
-::sal_Int32 XInputStreamHelper::available(  ) throw (io::NotConnectedException, io::IOException, uno::RuntimeException, std::exception)
+sal_Int32 XInputStreamHelper::available(  ) throw (io::NotConnectedException, io::IOException, uno::RuntimeException, std::exception)
 {
     return ( m_nLength + m_nHeaderLength ) - m_nPosition;
 }
@@ -318,7 +313,7 @@ public:
         ,bPositionProtected(false)
         ,nShapeOptionType(0)
         ,m_rPositivePercentages(rPositivePercentages)
-        {}
+    {}
 
     void setXSize(sal_Int32 _nXSize)
     {
@@ -418,25 +413,22 @@ public:
     }
 };
 
-
-GraphicImport::GraphicImport(uno::Reference < uno::XComponentContext >    xComponentContext,
-                             uno::Reference< lang::XMultiServiceFactory > xTextFactory,
+GraphicImport::GraphicImport(uno::Reference<uno::XComponentContext> xComponentContext,
+                             uno::Reference<lang::XMultiServiceFactory> xTextFactory,
                              DomainMapper& rDMapper,
                              GraphicImportType eImportType,
                              std::queue<OUString>& rPositivePercentages)
 : LoggedProperties(dmapper_logger, "GraphicImport")
 , LoggedTable(dmapper_logger, "GraphicImport")
 , LoggedStream(dmapper_logger, "GraphicImport")
-, m_pImpl( new GraphicImport_Impl( eImportType, rDMapper, rPositivePercentages ))
-, m_xComponentContext( xComponentContext )
-, m_xTextFactory( xTextFactory)
+, m_pImpl(new GraphicImport_Impl(eImportType, rDMapper, rPositivePercentages))
+, m_xComponentContext(xComponentContext)
+, m_xTextFactory(xTextFactory)
 {
 }
 
-
 GraphicImport::~GraphicImport()
 {
-    delete m_pImpl;
 }
 
 void GraphicImport::handleWrapTextValue(sal_uInt32 nVal)
@@ -491,14 +483,14 @@ void GraphicImport::putPropertyToFrameGrabBag( const OUString& sPropertyName, co
     }
 }
 
-void GraphicImport::lcl_attribute(Id nName, Value & val)
+void GraphicImport::lcl_attribute(Id nName, Value& rValue)
 {
-    sal_Int32 nIntValue = val.getInt();
+    sal_Int32 nIntValue = rValue.getInt();
     switch( nName )
     {
         case NS_ooxml::LN_blip: //the binary graphic data in a shape
             {
-            writerfilter::Reference<Properties>::Pointer_t pProperties = val.getProperties();
+            writerfilter::Reference<Properties>::Pointer_t pProperties = rValue.getProperties();
             if( pProperties.get())
             {
                 pProperties->resolve(*this);
@@ -507,7 +499,7 @@ void GraphicImport::lcl_attribute(Id nName, Value & val)
         break;
         case NS_ooxml::LN_payload :
         {
-            writerfilter::Reference<BinaryObj>::Pointer_t pPictureData = val.getBinary();
+            writerfilter::Reference<BinaryObj>::Pointer_t pPictureData = rValue.getBinary();
             if( pPictureData.get())
                 pPictureData->resolve(*this);
         }
@@ -549,15 +541,15 @@ void GraphicImport::lcl_attribute(Id nName, Value & val)
         break;
         case NS_ooxml::LN_CT_NonVisualDrawingProps_name:// 90651;
             //name of the object
-            m_pImpl->sName = val.getString();
+            m_pImpl->sName = rValue.getString();
         break;
         case NS_ooxml::LN_CT_NonVisualDrawingProps_descr:// 90652;
             //alternative text
-            m_pImpl->sAlternativeText = val.getString();
+            m_pImpl->sAlternativeText = rValue.getString();
         break;
         case NS_ooxml::LN_CT_NonVisualDrawingProps_title:
             //alternative text
-            m_pImpl->title = val.getString();
+            m_pImpl->title = rValue.getString();
         break;
         case NS_ooxml::LN_CT_GraphicalObjectFrameLocking_noChangeAspect://90644;
             //disallow aspect ratio change - ignored
@@ -574,7 +566,7 @@ void GraphicImport::lcl_attribute(Id nName, Value & val)
         case NS_ooxml::LN_CT_Anchor_distR: // 90986;
         {
             m_pImpl->nShapeOptionType = nName;
-            ProcessShapeOptions(val);
+            ProcessShapeOptions(rValue);
         }
         break;
         case NS_ooxml::LN_CT_Anchor_simplePos_attr: // 90987;
@@ -585,7 +577,7 @@ void GraphicImport::lcl_attribute(Id nName, Value & val)
         break;
         case NS_ooxml::LN_CT_Anchor_behindDoc: // 90989; - in background
             if( nIntValue > 0 )
-                    m_pImpl->bOpaque = false;
+                m_pImpl->bOpaque = false;
         break;
         case NS_ooxml::LN_CT_Anchor_locked: // 90990; - ignored
         case NS_ooxml::LN_CT_Anchor_layoutInCell: // 90991; - ignored
@@ -617,23 +609,23 @@ void GraphicImport::lcl_attribute(Id nName, Value & val)
             m_pImpl->bContour = true;
             m_pImpl->bContourOutside = true;
 
-            handleWrapTextValue(val.getInt());
+            handleWrapTextValue(rValue.getInt());
 
             break;
         case NS_ooxml::LN_CT_WrapThrough_wrapText:
             m_pImpl->bContour = true;
             m_pImpl->bContourOutside = false;
 
-            handleWrapTextValue(val.getInt());
+            handleWrapTextValue(rValue.getInt());
 
             break;
         case NS_ooxml::LN_CT_WrapSquare_wrapText: //90928;
-            handleWrapTextValue(val.getInt());
+            handleWrapTextValue(rValue.getInt());
             break;
         case NS_ooxml::LN_shape:
             {
                 uno::Reference< drawing::XShape> xShape;
-                val.getAny( ) >>= xShape;
+                rValue.getAny( ) >>= xShape;
 
                 if ( xShape.is( ) )
                 {
@@ -794,7 +786,7 @@ void GraphicImport::lcl_attribute(Id nName, Value & val)
             m_pImpl->nRightMargin = ConversionHelper::convertEMUToMM100(nIntValue);
         break;
         case NS_ooxml::LN_CT_GraphicalObjectData_uri:
-            val.getString();
+            rValue.getString();
             //TODO: does it need to be handled?
         break;
         case NS_ooxml::LN_CT_SizeRelH_relativeFrom:
@@ -867,14 +859,13 @@ uno::Reference<text::XTextContent> GraphicImport::GetGraphicObject()
     return xResult;
 }
 
-uno::Reference< ::com::sun::star::drawing::XShape> GraphicImport::GetXShapeObject(){
+uno::Reference<drawing::XShape> GraphicImport::GetXShapeObject(){
     return m_xShape;
 }
 
-
-void GraphicImport::ProcessShapeOptions(Value& val)
+void GraphicImport::ProcessShapeOptions(Value& rValue)
 {
-    sal_Int32 nIntValue = val.getInt();
+    sal_Int32 nIntValue = rValue.getInt();
     switch( m_pImpl->nShapeOptionType )
     {
         case NS_ooxml::LN_CT_Anchor_distL:
@@ -899,7 +890,7 @@ void GraphicImport::ProcessShapeOptions(Value& val)
 }
 
 
-void GraphicImport::lcl_sprm(Sprm & rSprm)
+void GraphicImport::lcl_sprm(Sprm& rSprm)
 {
     sal_uInt32 nSprmId = rSprm.getId();
     Value::Pointer_t pValue = rSprm.getValue();
@@ -1052,10 +1043,9 @@ void GraphicImport::lcl_sprm(Sprm & rSprm)
             sMessage += OString::number( nSprmId, 16 );
             SAL_WARN("writerfilter", sMessage.getStr());
 #endif
-            ;
+        break;
     }
 }
-
 
 void GraphicImport::lcl_entry(int /*pos*/, writerfilter::Reference<Properties>::Pointer_t /*ref*/)
 {
@@ -1399,9 +1389,7 @@ void GraphicImport::lcl_endShape( )
 {
 }
 
-
-
-bool    GraphicImport::IsGraphic() const
+bool GraphicImport::IsGraphic() const
 {
     return m_pImpl->bIsGraphic;
 }

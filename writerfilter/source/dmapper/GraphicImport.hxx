@@ -20,11 +20,13 @@
 #define INCLUDED_GRAPHICIMPORT_HXX
 
 #include <queue>
+#include <boost/scoped_ptr.hpp>
 
 #include <resourcemodel/LoggedResources.hxx>
 
-namespace com{ namespace sun { namespace star {
-    namespace uno{
+namespace com { namespace sun { namespace star {
+    namespace uno
+    {
         class XComponentContext;
     }
     namespace lang
@@ -42,11 +44,12 @@ namespace com{ namespace sun { namespace star {
     namespace beans
     {
         struct PropertyValue;
-        typedef ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > PropertyValues;
+        typedef css::uno::Sequence< css::beans::PropertyValue > PropertyValues;
     }
 }}}
 
-namespace writerfilter {
+namespace writerfilter
+{
 namespace dmapper
 {
 class GraphicImport_Impl;
@@ -63,34 +66,34 @@ enum GraphicImportType
 class GraphicImport : public LoggedProperties, public LoggedTable
                     ,public BinaryObj, public LoggedStream
 {
-    GraphicImport_Impl* m_pImpl;
-    ::com::sun::star::uno::Reference < ::com::sun::star::uno::XComponentContext >    m_xComponentContext;
-    ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > m_xTextFactory;
+    boost::scoped_ptr<GraphicImport_Impl> m_pImpl;
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextContent > m_xGraphicObject;
+    css::uno::Reference<css::uno::XComponentContext>     m_xComponentContext;
+    css::uno::Reference<css::lang::XMultiServiceFactory> m_xTextFactory;
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape> m_xShape;
+    css::uno::Reference<css::text::XTextContent> m_xGraphicObject;
+
+    css::uno::Reference<css::drawing::XShape> m_xShape;
     void ProcessShapeOptions(Value & val);
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextContent > createGraphicObject(
-            const ::com::sun::star::beans::PropertyValues& aMediaProperties );
+    css::uno::Reference<css::text::XTextContent > createGraphicObject(const css::beans::PropertyValues& aMediaProperties );
 
     void putPropertyToFrameGrabBag( const OUString& sPropertyName, const css::uno::Any& aPropertyValue );
 
 public:
-    explicit GraphicImport(::com::sun::star::uno::Reference < ::com::sun::star::uno::XComponentContext >    xComponentContext,
-                  ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > xTextFactory,
-                  DomainMapper& rDomainMapper,
-                  GraphicImportType eGraphicImportType,
-                  std::queue<OUString>& rPositivePercentages);
+    explicit GraphicImport( css::uno::Reference<css::uno::XComponentContext> xComponentContext,
+                            css::uno::Reference<css::lang::XMultiServiceFactory> xTextFactory,
+                            DomainMapper& rDomainMapper,
+                            GraphicImportType eGraphicImportType,
+                            std::queue<OUString>& rPositivePercentages);
     virtual ~GraphicImport();
 
     // BinaryObj
-    virtual void data(const sal_uInt8* buf, size_t len, writerfilter::Reference<Properties>::Pointer_t ref);
+    virtual void data(const sal_uInt8* buffer, size_t len, writerfilter::Reference<Properties>::Pointer_t ref);
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextContent > GetGraphicObject();
-    ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape> GetXShapeObject();
-    bool    IsGraphic() const;
+    css::uno::Reference<css::text::XTextContent> GetGraphicObject();
+    css::uno::Reference<css::drawing::XShape> GetXShapeObject();
+    bool IsGraphic() const;
 
  private:
     // Properties
@@ -112,16 +115,16 @@ public:
     virtual void lcl_props(writerfilter::Reference<Properties>::Pointer_t ref);
     virtual void lcl_table(Id name,
                            writerfilter::Reference<Table>::Pointer_t ref);
-    virtual void lcl_substream(Id name,
-                               ::writerfilter::Reference<Stream>::Pointer_t ref);
+    virtual void lcl_substream(Id name, writerfilter::Reference<Stream>::Pointer_t ref);
     virtual void lcl_info(const string & info);
-    virtual void lcl_startShape( ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > xShape );
-    virtual void lcl_endShape( );
+    virtual void lcl_startShape(css::uno::Reference<css::drawing::XShape> xShape);
+    virtual void lcl_endShape();
 
     void handleWrapTextValue(sal_uInt32 nVal);
 };
 
-typedef boost::shared_ptr< GraphicImport >          GraphicImportPtr;
+typedef boost::shared_ptr<GraphicImport> GraphicImportPtr;
+
 }}
 
 #endif
