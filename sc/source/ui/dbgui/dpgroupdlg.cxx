@@ -230,8 +230,8 @@ ScDPDateGroupDlg::ScDPDateGroupDlg( Window* pParent,
     for( size_t nIdx = 0 ; nIdx < nCount; ++nIdx )
         mpLbUnits->InsertEntry( ScGlobal::GetRscString( nDatePartResIds[nIdx] ) );
 
-    mpEdStart->SetShowDateCentury( sal_True );
-    mpEdEnd->SetShowDateCentury( sal_True );
+    mpEdStart->SetShowDateCentury( true );
+    mpEdEnd->SetShowDateCentury( true );
 
     maStartHelper.SetValue( rInfo.mbAutoStart, rInfo.mfStart );
     maEndHelper.SetValue( rInfo.mbAutoEnd, rInfo.mfEnd );
@@ -278,7 +278,7 @@ ScDPDateGroupDlg::ScDPDateGroupDlg( Window* pParent,
 ScDPNumGroupInfo ScDPDateGroupDlg::GetGroupInfo() const
 {
     ScDPNumGroupInfo aInfo;
-    aInfo.mbEnable = sal_True;
+    aInfo.mbEnable = true;
     aInfo.mbDateValues = mpRbNumDays->IsChecked();
     aInfo.mbAutoStart = maStartHelper.IsAuto();
     aInfo.mbAutoEnd = maEndHelper.IsAuto();
