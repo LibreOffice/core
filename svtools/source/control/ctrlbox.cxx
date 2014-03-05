@@ -827,7 +827,7 @@ sal_Int32 LineListBox::InsertEntry( const OUString& rStr, sal_Int32 nPos )
 {
     nPos = ListBox::InsertEntry( rStr, nPos );
     if ( nPos != LISTBOX_ERROR ) {
-        if ( nPos < pLineList->size() ) {
+        if ( nPos < static_cast<sal_Int32>(pLineList->size()) ) {
             ImpLineList::iterator it = pLineList->begin();
             ::std::advance( it, nPos );
             pLineList->insert( it, reinterpret_cast<ImpLineListData *>(NULL) );
@@ -855,7 +855,7 @@ void LineListBox::RemoveEntry( sal_Int32 nPos )
 {
     ListBox::RemoveEntry( nPos );
 
-    if ( 0 <= nPos && nPos < pLineList->size() ) {
+    if ( 0 <= nPos && nPos < static_cast<sal_Int32>(pLineList->size()) ) {
         ImpLineList::iterator it = pLineList->begin();
         ::std::advance( it, nPos );
         if ( *it ) delete *it;
@@ -901,7 +901,7 @@ sal_Int32 LineListBox::GetEntryPos( sal_uInt16 nStyle ) const
 
 sal_uInt16 LineListBox::GetEntryStyle( sal_Int32 nPos ) const
 {
-    ImpLineListData* pData = (0 <= nPos && nPos < pLineList->size()) ? (*pLineList)[ nPos ] : NULL;
+    ImpLineListData* pData = (0 <= nPos && nPos < static_cast<sal_Int32>(pLineList->size())) ? (*pLineList)[ nPos ] : NULL;
     return ( pData ) ? pData->GetStyle() : table::BorderLineStyle::NONE;
 }
 
