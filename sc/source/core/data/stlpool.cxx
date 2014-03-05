@@ -36,6 +36,7 @@
 #include <editeng/justifyitem.hxx>
 #include <svl/itemset.hxx>
 #include <svl/zforlist.hxx>
+#include <svl/IndexedStyleSheets.hxx>
 #include <unotools/charclass.hxx>
 #include <unotools/fontcvt.hxx>
 #include <vcl/outdev.hxx>
@@ -93,7 +94,7 @@ SfxStyleSheetBase& ScStyleSheetPool::Make( const OUString& rName,
     if ( rName == STRING_STANDARD && Find( rName, eFam ) != NULL )
     {
         OSL_FAIL("renaming additional default style");
-        sal_uInt32 nCount = aStyles.size();
+        sal_uInt32 nCount = GetIndexedStyleSheets().GetNumberOfStyleSheets();
         for ( sal_uInt32 nAdd = 1; nAdd <= nCount; nAdd++ )
         {
             OUString aNewName = ScGlobal::GetRscString(STR_STYLENAME_STANDARD);
@@ -102,7 +103,6 @@ SfxStyleSheetBase& ScStyleSheetPool::Make( const OUString& rName,
                 return SfxStyleSheetPool::Make(aNewName, eFam, mask);
         }
     }
-
     return SfxStyleSheetPool::Make(rName, eFam, mask);
 }
 
@@ -480,25 +480,54 @@ void ScStyleSheetPool::CreateStandardStyles()
     DELETEZ( pEdEngine );
 }
 
+namespace {
 
-
-
-ScStyleSheet* ScStyleSheetPool::FindCaseIns( const OUString& rName, SfxStyleFamily eFam )
+struct CaseInsensitiveNamePredicate : svl::StyleSheetPredicate
 {
-    OUString aUpSearch = ScGlobal::pCharClass->uppercase(rName);
-
-    sal_uInt32 nCount = aStyles.size();
-    for (sal_uInt32 n=0; n<nCount; n++)
+    CaseInsensitiveNamePredicate(const rtl::OUString& rName, SfxStyleFamily eFam)
+    : mFamily(eFam)
     {
-        SfxStyleSheetBase* pStyle = aStyles[n].get();
-        if ( pStyle->GetFamily() == eFam )
-        {
-            OUString aUpName = ScGlobal::pCharClass->uppercase(pStyle->GetName());
-            if (aUpName == aUpSearch)
-                return (ScStyleSheet*)pStyle;
-        }
+        mUppercaseName = ScGlobal::pCharClass->uppercase(rName);
     }
 
+    bool
+    Check(const SfxStyleSheetBase& rStyleSheet)
+    {
+        if (rStyleSheet.GetFamily() == mFamily)
+        {
+            rtl::OUString aUpName = ScGlobal::pCharClass->uppercase(rStyleSheet.GetName());
+            if (mUppercaseName == aUpName)
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    rtl::OUString mUppercaseName;
+    SfxStyleFamily mFamily;
+};
+
+}
+
+// Functor object to find all style sheets of a family which match a given name caseinsensitively
+ScStyleSheet* ScStyleSheetPool::FindCaseIns( const OUString& rName, SfxStyleFamily eFam )
+{
+    CaseInsensitiveNamePredicate aPredicate(rName, eFam);
+    std::vector<unsigned> aFoundPositions = GetIndexedStyleSheets().FindPositionsByPredicate(aPredicate);
+    std::vector<unsigned>::const_iterator it = aFoundPositions.begin();
+
+    for (/**/;it != aFoundPositions.end(); ++it)
+    {
+        SfxStyleSheetBase *pFound = GetStyleSheetByPositionInIndex(*it).get();
+        ScStyleSheet* pSheet = NULL;
+        // we do not know what kind of sheets we have.
+        pSheet = dynamic_cast<ScStyleSheet*>(pFound);
+        if (pSheet != NULL)
+        {
+            return pSheet;
+        }
+    }
     return NULL;
 }
 
