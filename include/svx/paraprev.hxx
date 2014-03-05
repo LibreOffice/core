@@ -65,7 +65,7 @@ protected:
     virtual void Paint( const Rectangle& rRect );
     virtual Size GetOptimalSize() const;
 
-    void DrawParagraph( sal_Bool bAll );
+    void DrawParagraph( bool bAll );
 
 public:
     SvxParaPrevWindow( Window* pParent, WinBits nBits);
@@ -94,7 +94,7 @@ public:
     OUString            GetText() const         { return aText; }
     Size                GetSize() const         { return aSize; }
 
-    void        Draw( sal_Bool bAll )               { DrawParagraph( bAll ); }
+    void        Draw( bool bAll )               { DrawParagraph( bAll ); }
 };
 
 #endif

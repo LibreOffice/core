@@ -794,7 +794,7 @@ void SvxHFPage::ActivatePage( const SfxItemSet& rSet )
             m_pBspWin->SetHdDist( nDist );
             m_pBspWin->SetHdLeft( rLR.GetLeft() );
             m_pBspWin->SetHdRight( rLR.GetRight() );
-            m_pBspWin->SetHeader( sal_True );
+            m_pBspWin->SetHeader( true );
         }
         else
             pSetItem = 0;
@@ -802,7 +802,7 @@ void SvxHFPage::ActivatePage( const SfxItemSet& rSet )
 
     if ( !pSetItem )
     {
-        m_pBspWin->SetHeader( sal_False );
+        m_pBspWin->SetHeader( false );
 
         if ( SID_ATTR_PAGE_HEADERSET == nId )
         {
@@ -834,7 +834,7 @@ void SvxHFPage::ActivatePage( const SfxItemSet& rSet )
             m_pBspWin->SetFtDist( nDist );
             m_pBspWin->SetFtLeft( rLR.GetLeft() );
             m_pBspWin->SetFtRight( rLR.GetRight() );
-            m_pBspWin->SetFooter( sal_True );
+            m_pBspWin->SetFooter( true );
         }
         else
             pSetItem = 0;
@@ -842,7 +842,7 @@ void SvxHFPage::ActivatePage( const SfxItemSet& rSet )
 
     if ( !pSetItem )
     {
-        m_pBspWin->SetFooter( sal_False );
+        m_pBspWin->SetFooter( false );
 
         if ( SID_ATTR_PAGE_FOOTERSET == nId )
         {
@@ -855,7 +855,7 @@ void SvxHFPage::ActivatePage( const SfxItemSet& rSet )
 
     if ( pItem && pItem->ISA(SfxBoolItem) )
     {
-        m_pBspWin->SetTable( sal_True );
+        m_pBspWin->SetTable( true );
         m_pBspWin->SetHorz( ( (SfxBoolItem*)pItem )->GetValue() );
     }
 
@@ -863,7 +863,7 @@ void SvxHFPage::ActivatePage( const SfxItemSet& rSet )
 
     if ( pItem && pItem->ISA(SfxBoolItem) )
     {
-        m_pBspWin->SetTable( sal_True );
+        m_pBspWin->SetTable( true );
         m_pBspWin->SetVert( ( (SfxBoolItem*)pItem )->GetValue() );
     }
     ResetBackground_Impl( rSet );

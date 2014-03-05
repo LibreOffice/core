@@ -270,7 +270,7 @@ SvxPageDescPage::SvxPageDescPage( Window* pParent, const SfxItemSet& rAttr ) :
         m_pTextFlowBox->Show();
         m_pTextFlowBox->SetSelectHdl(LINK(this, SvxPageDescPage, FrameDirectionModify_Impl ));
 
-        m_pBspWin->EnableFrameDirection(sal_True);
+        m_pBspWin->EnableFrameDirection(true);
     }
     Init_Impl();
 
@@ -567,7 +567,7 @@ void SvxPageDescPage::Reset( const SfxItemSet& rSet )
                                   : sal_False );
 
             // set example window on the table
-            m_pBspWin->SetTable( sal_True );
+            m_pBspWin->SetTable( true );
             m_pBspWin->SetHorz( m_pHorzBox->IsChecked() );
             m_pBspWin->SetVert( m_pVertBox->IsChecked() );
 
@@ -1298,10 +1298,10 @@ void SvxPageDescPage::InitHeadFoot_Impl( const SfxItemSet& rSet )
                 rHeaderSet.Get( GetWhich( SID_ATTR_LRSPACE ) );
             m_pBspWin->SetHdLeft( rLR.GetLeft() );
             m_pBspWin->SetHdRight( rLR.GetRight() );
-            m_pBspWin->SetHeader( sal_True );
+            m_pBspWin->SetHeader( true );
         }
         else
-            m_pBspWin->SetHeader( sal_False );
+            m_pBspWin->SetHeader( false );
 
         // show background and border in the example
         sal_uInt16 nWhich = GetWhich( SID_ATTR_BRUSH );
@@ -1345,10 +1345,10 @@ void SvxPageDescPage::InitHeadFoot_Impl( const SfxItemSet& rSet )
                 rFooterSet.Get( GetWhich( SID_ATTR_LRSPACE ) );
             m_pBspWin->SetFtLeft( rLR.GetLeft() );
             m_pBspWin->SetFtRight( rLR.GetRight() );
-            m_pBspWin->SetFooter( sal_True );
+            m_pBspWin->SetFooter( true );
         }
         else
-            m_pBspWin->SetFooter( sal_False );
+            m_pBspWin->SetFooter( false );
 
         // show background and border in the example
         sal_uInt16 nWhich = GetWhich( SID_ATTR_BRUSH );
@@ -1602,7 +1602,7 @@ void SvxPageDescPage::DisableVerticalPageDir()
     {
         m_pTextFlowLbl->Hide();
         m_pTextFlowBox->Hide();
-        m_pBspWin->EnableFrameDirection( sal_False );
+        m_pBspWin->EnableFrameDirection( false );
     }
 }
 

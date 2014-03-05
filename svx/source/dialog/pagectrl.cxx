@@ -79,11 +79,11 @@ SvxPageWindow::SvxPageWindow( Window* pParent ) :
     nFtHeight   ( 0 ),
     aFtColor    ( COL_TRANSPARENT ),
     pFtBorder   ( 0 ),
-    bFooter     ( sal_False ),
-    bHeader     ( sal_False ),
-    bTable      ( sal_False ),
-    bHorz       ( sal_False ),
-    bVert       ( sal_False ),
+    bFooter     ( false ),
+    bHeader     ( false ),
+    bTable      ( false ),
+    bHorz       ( false ),
+    bVert       ( false ),
     eUsage      ( SVX_PAGE_ALL )
 {
     pImpl = new PageWindow_Impl;
@@ -152,23 +152,23 @@ void SvxPageWindow::Paint( const Rectangle& )
             aSz = PixelToLogic( GetSizePixel() );
             nYPos = ( aSz.Height() - aSize.Height() ) / 2;
             long nXPos = ( aSz.Width() - aSize.Width() ) / 2;
-            DrawPage( Point( nXPos, nYPos ), sal_True, sal_True );
+            DrawPage( Point( nXPos, nYPos ), true, true );
         }
         else
             // Portrait
-            DrawPage( Point( ( aSz.Width() - aSize.Width() ) / 2, nYPos ), sal_True, sal_True );
+            DrawPage( Point( ( aSz.Width() - aSize.Width() ) / 2, nYPos ), true, true );
     }
     else
     {
         // Left and right page are different -> draw two pages if possible
-        DrawPage( Point( 0, nYPos ), sal_False, (sal_Bool)( eUsage & SVX_PAGE_LEFT ) );
-        DrawPage( Point( aSize.Width() + aSize.Width() / 8, nYPos ), sal_True,
-                  (sal_Bool)( eUsage & SVX_PAGE_RIGHT ) );
+        DrawPage( Point( 0, nYPos ), false, eUsage & SVX_PAGE_LEFT );
+        DrawPage( Point( aSize.Width() + aSize.Width() / 8, nYPos ), true,
+                  eUsage & SVX_PAGE_RIGHT );
     }
 }
 
 
-void SvxPageWindow::DrawPage( const Point& rOrg, const sal_Bool bSecond, const sal_Bool bEnabled )
+void SvxPageWindow::DrawPage( const Point& rOrg, const bool bSecond, const bool bEnabled )
 {
     const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
     const Color& rFieldColor = rStyleSettings.GetFieldColor();
@@ -389,7 +389,7 @@ void SvxPageWindow::SetFtBorder( const SvxBoxItem& rNew )
     pFtBorder = new SvxBoxItem( rNew );
 }
 
-void  SvxPageWindow::EnableFrameDirection(sal_Bool bEnable)
+void  SvxPageWindow::EnableFrameDirection(bool bEnable)
 {
     pImpl->EnableFrameDirection(bEnable);
 }

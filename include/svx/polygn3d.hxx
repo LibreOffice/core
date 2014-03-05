@@ -30,7 +30,7 @@ private:
     basegfx::B3DPolyPolygon aPolyPoly3D;
     basegfx::B3DPolyPolygon aPolyNormals3D;
     basegfx::B2DPolyPolygon aPolyTexture2D;
-    sal_Bool            bLineOnly;
+    bool            bLineOnly;
 
     SVX_DLLPRIVATE void CreateDefaultNormals();
     SVX_DLLPRIVATE void CreateDefaultTexture();
@@ -48,7 +48,7 @@ public:
     E3dPolygonObj(
         E3dDefaultAttributes& rDefault,
         const basegfx::B3DPolyPolygon& rPolyPoly3D,
-        sal_Bool bLinOnly=sal_False);
+        bool bLinOnly=false);
 
     E3dPolygonObj();
     virtual ~E3dPolygonObj();
@@ -63,8 +63,8 @@ public:
     virtual E3dPolygonObj* Clone() const;
 
     // LineOnly?
-    sal_Bool GetLineOnly() { return bLineOnly; }
-    void SetLineOnly(sal_Bool bNew);
+    bool GetLineOnly() { return bLineOnly; }
+    void SetLineOnly(bool bNew);
 };
 
 #endif // INCLUDED_SVX_POLYGN3D_HXX

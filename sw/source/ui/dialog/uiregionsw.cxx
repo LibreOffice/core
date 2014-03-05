@@ -2211,7 +2211,7 @@ IMPL_LINK_NOARG(SwSectionIndentTabPage, IndentModifyHdl)
 {
     m_pPreviewWin->SetLeftMargin( static_cast< long >(m_pBeforeMF->Denormalize(m_pBeforeMF->GetValue(FUNIT_TWIP))) );
     m_pPreviewWin->SetRightMargin( static_cast< long >(m_pAfterMF->Denormalize(m_pAfterMF->GetValue(FUNIT_TWIP))) );
-    m_pPreviewWin->Draw(sal_True);
+    m_pPreviewWin->Draw(true);
     return 0;
 }
 

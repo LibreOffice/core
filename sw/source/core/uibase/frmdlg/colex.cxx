@@ -116,7 +116,7 @@ void SwPageExample::UpdateExample( const SfxItemSet& rSet )
             SetHdDist( rUL.GetLower() );
             SetHdLeft( rLR.GetLeft() );
             SetHdRight( rLR.GetRight() );
-            SetHeader( sal_True );
+            SetHeader( true );
             if ( rHeaderSet.GetItemState( RES_BACKGROUND ) == SFX_ITEM_SET )
             {
                 const SvxBrushItem& rItem =
@@ -131,7 +131,7 @@ void SwPageExample::UpdateExample( const SfxItemSet& rSet )
             }
         }
         else
-            SetHeader( sal_False );
+            SetHeader( false );
     }
 
     if( SFX_ITEM_SET == rSet.GetItemState( pPool->GetWhich( SID_ATTR_PAGE_FOOTERSET),
@@ -155,7 +155,7 @@ void SwPageExample::UpdateExample( const SfxItemSet& rSet )
             SetFtDist( rUL.GetUpper() );
             SetFtLeft( rLR.GetLeft() );
             SetFtRight( rLR.GetRight() );
-            SetFooter( sal_True );
+            SetFooter( true );
             if( rFooterSet.GetItemState( RES_BACKGROUND ) == SFX_ITEM_SET )
             {
                 const SvxBrushItem& rItem =
@@ -170,7 +170,7 @@ void SwPageExample::UpdateExample( const SfxItemSet& rSet )
             }
         }
         else
-            SetFooter( sal_False );
+            SetFooter( false );
     }
     if( SFX_ITEM_SET == rSet.GetItemState( RES_BACKGROUND,
             false, &pItem ) )
@@ -191,8 +191,8 @@ void SwPageExample::UpdateExample( const SfxItemSet& rSet )
 }
 
 void SwColExample::DrawPage( const Point& rOrg,
-                            const sal_Bool bSecond,
-                            const sal_Bool bEnabled )
+                            const bool bSecond,
+                            const bool bEnabled )
 {
     SwPageExample::DrawPage( rOrg, bSecond, bEnabled );
     sal_uInt16 nColumnCount;
@@ -465,8 +465,8 @@ SwPageGridExample::~SwPageGridExample()
 }
 
 void SwPageGridExample::DrawPage( const Point& rOrg,
-                           const sal_Bool bSecond,
-                           const sal_Bool bEnabled )
+                           const bool bSecond,
+                           const bool bEnabled )
 {
     SwPageExample::DrawPage(rOrg, bSecond, bEnabled);
     if(pGridItem && pGridItem->GetGridType())

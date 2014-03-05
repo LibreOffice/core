@@ -498,7 +498,7 @@ void FuPage::ApplyItemSet( const SfxItemSet* pArgs )
     {
         mpDoc->SetPageNumType(((const SvxPageItem*) pPoolItem)->GetNumType());
 
-        eOrientation = (((const SvxPageItem*) pPoolItem)->IsLandscape() == ORIENTATION_LANDSCAPE) ?
+        eOrientation = ((const SvxPageItem*) pPoolItem)->IsLandscape() ?
             ORIENTATION_LANDSCAPE : ORIENTATION_PORTRAIT;
 
         if( mpPage->GetOrientation() != eOrientation )

@@ -63,7 +63,7 @@ class SVX_DLLPUBLIC SvxPageItem: public SfxPoolItem
 private:
     OUString            aDescName;          // name of the template
     SvxNumType          eNumType;           // enumeration
-    sal_Bool            bLandscape;         // Portrait / Landscape
+    bool                bLandscape;         // Portrait / Landscape
     sal_uInt16          eUse;               // Layout
 
 public:
@@ -89,8 +89,8 @@ public:
     sal_uInt16          GetPageUsage() const                { return eUse;       }
     void            SetPageUsage(sal_uInt16 eU)             { eUse= eU;          }
 
-    sal_Bool            IsLandscape() const                 { return bLandscape; }
-    void            SetLandscape(sal_Bool bL)               { bLandscape = bL;   }
+    bool            IsLandscape() const                 { return bLandscape; }
+    void            SetLandscape(bool bL)               { bLandscape = bL;   }
 
     // enumeration
     SvxNumType      GetNumType() const                  { return eNumType;   }

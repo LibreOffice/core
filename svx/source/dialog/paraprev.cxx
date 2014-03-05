@@ -61,14 +61,14 @@ Size SvxParaPrevWindow::GetOptimalSize() const
 
 void SvxParaPrevWindow::Paint( const Rectangle& )
 {
-    DrawParagraph( sal_True );
+    DrawParagraph( true );
 }
 
 
 
 #define DEF_MARGIN  120
 
-void SvxParaPrevWindow::DrawParagraph( sal_Bool bAll )
+void SvxParaPrevWindow::DrawParagraph( bool bAll )
 {
     Size aWinSize = GetOutputSizePixel();
     aWinSize = PixelToLogic( aWinSize );

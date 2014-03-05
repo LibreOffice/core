@@ -38,7 +38,7 @@ sdr::contact::ViewContact* E3dPolygonObj::CreateObjectSpecificViewContact()
 E3dPolygonObj::E3dPolygonObj(
     E3dDefaultAttributes& rDefault,
     const basegfx::B3DPolyPolygon& rPolyPoly3D,
-    sal_Bool bLinOnly)
+    bool bLinOnly)
 :   E3dCompoundObject(rDefault),
     bLineOnly(bLinOnly)
 {
@@ -228,7 +228,7 @@ E3dPolygonObj* E3dPolygonObj::Clone() const
     return CloneHelper< E3dPolygonObj >();
 }
 
-void E3dPolygonObj::SetLineOnly(sal_Bool bNew)
+void E3dPolygonObj::SetLineOnly(bool bNew)
 {
     if(bNew != bLineOnly)
     {

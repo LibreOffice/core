@@ -45,13 +45,13 @@ private:
 
     Link            aCheckPasswordHdl;
 
-    sal_Bool            bEmpty;
+    bool            bEmpty;
 
     DECL_LINK(ButtonHdl, void *);
     DECL_LINK(EditModifyHdl, void *);
 
 public:
-                    SvxPasswordDialog( Window* pParent, sal_Bool bAllowEmptyPasswords = sal_False, sal_Bool bDisableOldPassword = sal_False );
+                    SvxPasswordDialog( Window* pParent, bool bAllowEmptyPasswords = false, bool bDisableOldPassword = false );
                     ~SvxPasswordDialog();
 
     OUString        GetOldPassword() const { return m_pOldPasswdED->GetText(); }

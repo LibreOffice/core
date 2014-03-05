@@ -43,7 +43,7 @@ TYPEINIT1_FACTORY( SvxPageItem, SfxPoolItem , new  SvxPageItem(0));
 SvxPageItem::SvxPageItem( const sal_uInt16 nId ) : SfxPoolItem( nId ),
 
     eNumType    ( SVX_ARABIC ),
-    bLandscape  ( sal_False ),
+    bLandscape  ( false ),
     eUse        ( SVX_PAGE_ALL )
 {
 }
