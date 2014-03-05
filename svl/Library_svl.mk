@@ -79,6 +79,7 @@ $(eval $(call gb_Library_add_exception_objects,svl,\
     svl/source/items/itemiter \
     svl/source/items/itempool \
     svl/source/items/itemprop \
+    svl/source/items/IndexedStyleSheets \
     svl/source/items/itemset \
     svl/source/items/lckbitem \
     svl/source/items/macitem \
