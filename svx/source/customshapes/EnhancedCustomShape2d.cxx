@@ -1737,8 +1737,8 @@ void EnhancedCustomShape2d::CreateSubPath( sal_uInt16& rSrcPt, sal_uInt16& rSegm
                             const Point aPreviousEndPoint(GetPoint( seqCoordinates[ rSrcPt - 1 ], true, true));
                             const Point aControlQ(GetPoint( seqCoordinates[ rSrcPt++ ], true, true ));
                             const Point aEnd(GetPoint( seqCoordinates[ rSrcPt++ ], true, true ));
-                            const Point aControlA((aPreviousEndPoint + (aControlQ * 2.0)) / 3.0);
-                            const Point aControlB(((aControlQ * 2.0) + aEnd) / 3.0);
+                            const Point aControlA((aPreviousEndPoint + (aControlQ * 2)) / 3);
+                            const Point aControlB(((aControlQ * 2) + aEnd) / 3);
 
                             DBG_ASSERT(aNewB2DPolygon.count(), "EnhancedCustomShape2d::CreateSubPath: Error in adding Q control point (!)");
                             aNewB2DPolygon.appendBezierSegment(
