@@ -80,9 +80,9 @@ public:
 
         size_type size = n*sizeof(value_type);
 #ifdef WNT
-        return _aligned_malloc(size, _Alignment);
+        return (pointer)_aligned_malloc(size, _Alignment);
 #elif defined __ANDROID__
-        return memalign(_Alignment, size);
+        return (pointer)memalign(_Alignment, size);
 #else
         void* ptr;
         int err = posix_memalign(&ptr, _Alignment, size);
