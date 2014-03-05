@@ -75,6 +75,8 @@ class GraphicImport : public LoggedProperties, public LoggedTable
     ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextContent > createGraphicObject(
             const ::com::sun::star::beans::PropertyValues& aMediaProperties );
 
+    void putPropertyToFrameGrabBag( const OUString& sPropertyName, const css::uno::Any& aPropertyValue );
+
 public:
     explicit GraphicImport(::com::sun::star::uno::Reference < ::com::sun::star::uno::XComponentContext >    xComponentContext,
                   ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > xTextFactory,

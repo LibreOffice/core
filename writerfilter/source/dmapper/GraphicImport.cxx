@@ -44,6 +44,9 @@
 #include <cppuhelper/implbase1.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <rtl/math.hxx>
+#include <rtl/ustrbuf.hxx>
+#include <comphelper/string.hxx>
+
 #include <oox/drawingml/drawingmltypes.hxx>
 
 #include <dmapper/DomainMapper.hxx>
@@ -258,6 +261,7 @@ public:
     OUString sAlternativeText;
     OUString title;
     std::queue<OUString>& m_rPositivePercentages;
+    OUString sAnchorId;
 
     GraphicImport_Impl(GraphicImportType eImportType, DomainMapper&   rDMapper, std::queue<OUString>& rPositivePercentages) :
         nXSize(0)
@@ -455,7 +459,37 @@ void GraphicImport::handleWrapTextValue(sal_uInt32 nVal)
     }
 }
 
+void GraphicImport::putPropertyToFrameGrabBag( const OUString& sPropertyName, const uno::Any& aPropertyValue )
+{
+    beans::PropertyValue pProperty;
+    pProperty.Name = sPropertyName;
+    pProperty.Value = aPropertyValue;
 
+    if (!m_xShape.is())
+        return;
+
+    uno::Reference< beans::XPropertySet > xSet(m_xShape, uno::UNO_QUERY_THROW);
+    if (!xSet.is())
+        return;
+
+    uno::Reference< beans::XPropertySetInfo > xSetInfo(xSet->getPropertySetInfo());
+    if (!xSetInfo.is())
+        return;
+
+    const OUString& aGrabBagPropName = OUString("FrameInteropGrabBag");
+
+    if (xSetInfo->hasPropertyByName(aGrabBagPropName))
+    {
+        uno::Sequence< beans::PropertyValue > aGrabBag;
+        xSet->getPropertyValue( aGrabBagPropName ) >>= aGrabBag;
+
+        sal_Int32 nLength = aGrabBag.getLength();
+        aGrabBag.realloc(nLength + 1);
+        aGrabBag[nLength] = pProperty;
+
+        xSet->setPropertyValue(aGrabBagPropName, uno::makeAny(aGrabBag));
+    }
+}
 
 void GraphicImport::lcl_attribute(Id nName, Value & val)
 {
@@ -559,6 +593,15 @@ void GraphicImport::lcl_attribute(Id nName, Value & val)
         break;
         case NS_ooxml::LN_CT_Anchor_allowOverlap: // 90993;
             //enable overlapping - ignored
+        break;
+        case NS_ooxml::LN_CT_Anchor_wp14_anchorId:
+        {
+            OUStringBuffer aBuffer = OUString::number(nIntValue, 16);
+            OUStringBuffer aString;
+            comphelper::string::padToLength(aString, 8 - aBuffer.getLength(), '0');
+            aString.append(aBuffer.getStr());
+            m_pImpl->sAnchorId = aString.makeStringAndClear().toAsciiUpperCase();
+        }
         break;
         case NS_ooxml::LN_CT_Point2D_x: // 90405;
             m_pImpl->nLeftPosition = ConversionHelper::convertTwipToMM100(nIntValue);
@@ -702,6 +745,11 @@ void GraphicImport::lcl_attribute(Id nName, Value & val)
                             xShapeProps->setPropertyValue("RotateAngle", aRotation);
 
                         m_pImpl->bIsGraphic = true;
+
+                        if (!m_pImpl->sAnchorId.isEmpty())
+                        {
+                            putPropertyToFrameGrabBag("AnchorId", uno::makeAny(m_pImpl->sAnchorId));
+                        }
                     }
 
                     if (bUseShape && m_pImpl->eGraphicImportType == IMPORT_AS_DETECTED_ANCHOR)
@@ -801,7 +849,7 @@ void GraphicImport::lcl_attribute(Id nName, Value & val)
 #ifdef DEBUG_DMAPPER_GRAPHIC_IMPORT
             dmapper_logger->element("unhandled");
 #endif
-            ;
+            break;
     }
 }
 
