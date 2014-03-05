@@ -158,8 +158,8 @@ SvxHFPage::SvxHFPage( Window* pParent, const SfxItemSet& rSet, sal_uInt16 nSetId
     SfxTabPage( pParent, "HFFormatPage", "svx/ui/headfootformatpage.ui", rSet ),
     nId                         ( nSetId ),
     pBBSet                      ( NULL ),
-    bDisableQueryBox            ( sal_False ),
-    bEnableBackgroundSelector   ( sal_True )
+    bDisableQueryBox            ( false ),
+    bEnableBackgroundSelector   ( true )
 
 {
     get(m_pCntSharedBox,"checkSameLR");

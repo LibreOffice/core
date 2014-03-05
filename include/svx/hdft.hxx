@@ -49,8 +49,8 @@ public:
 
     virtual         ~SvxHFPage();
 
-    void            DisableDeleteQueryBox() { bDisableQueryBox = sal_True; }
-    void            EnableBackgroundSelector( sal_Bool bNew ) { bEnableBackgroundSelector = bNew; }
+    void            DisableDeleteQueryBox() { bDisableQueryBox = true; }
+    void            EnableBackgroundSelector( bool bNew ) { bEnableBackgroundSelector = bNew; }
     void            EnableDynamicSpacing();
 
 protected:
@@ -78,8 +78,8 @@ protected:
 
     sal_uInt16       nId;
     SfxItemSet*      pBBSet;
-    sal_Bool         bDisableQueryBox;
-    sal_Bool         bEnableBackgroundSelector;
+    bool             bDisableQueryBox;
+    bool             bEnableBackgroundSelector;
     bool             bInReset;
 
     void            InitHandler();
