@@ -411,6 +411,7 @@ public:
     // evil calc grid/shape drawlayer syncing
     Point GetGridOffset() const { return aGridOffset; }
     void SetGridOffset( const Point& rGridOffset ){ aGridOffset = rGridOffset; }
+
 protected:
     void ImpDeleteUserData();
     SdrObjUserData* ImpGetMacroUserData() const;

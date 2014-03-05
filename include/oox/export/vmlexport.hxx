@@ -134,6 +134,8 @@ private:
 
     /// Add position and size to the OStringBuffer.
     void AddRectangleDimensions( OStringBuffer& rBuffer, const Rectangle& rRectangle, sal_Bool rbAbsolutePos = true );
+
+    bool IsWaterMarkShape(const OUString& rStr);
 };
 
 } // namespace vml
