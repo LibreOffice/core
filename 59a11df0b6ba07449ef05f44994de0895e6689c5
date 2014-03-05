@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a930d6b_ae78772c",
+        "filename": "sw/source/filter/ww8/docxattributeoutput.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 246,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2014-03-05T09:52:27Z",
+      "side": 1,
+      "message": "Please do not mix whitespace and functional changes in the same commit.",
+      "revId": "59a11df0b6ba07449ef05f44994de0895e6689c5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a930d6b_ce75c333",
+        "filename": "sw/source/filter/ww8/docxattributeoutput.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 123,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2014-03-05T09:52:27Z",
+      "side": 1,
+      "message": "No need for this, boost::shared_ptr has a default ctor.",
+      "revId": "59a11df0b6ba07449ef05f44994de0895e6689c5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
