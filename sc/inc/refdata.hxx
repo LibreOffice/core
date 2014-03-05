@@ -78,7 +78,7 @@ struct SC_DLLPUBLIC ScSingleRefData        // Single reference (one address) int
     inline  void InitFlags() { bFlags = 0; }    // all FALSE
 
     // #123870# Make it possible to init members to some defined values
-    inline void InitMembers() { nCol = nRow = nTab = nRelCol = nRelRow = nRelTab = 0; }
+    inline void InitMembers() { nRow = nRelRow = 0; nCol = nRelCol = 0; nTab = nRelTab = 0; }
 
     // InitAddress: InitFlags and set address
     inline  void InitAddress( const ScAddress& rAdr );
