@@ -180,7 +180,15 @@ public:
 class LwpFontAttrEntry
 {
 public:
-    LwpFontAttrEntry(){}
+    LwpFontAttrEntry()
+     : m_nAttrBits(0)
+     , m_nAttrOverrideBits(0)
+     , m_nAttrApplyBits(0)
+     , m_nAttrOverrideBits2(0)
+     , m_nAttrApplyBits2(0)
+     , m_nCase(0)
+     , m_nUnder(0)
+        {}
     ~LwpFontAttrEntry(){}
 public:
     void Read(LwpObjectStream *pStrm);
