@@ -127,7 +127,7 @@ struct SVX_DLLPUBLIC SvxColumnDescription
 {
     long     nStart;    /* Start of the column */
     long     nEnd;      /* End of the column */
-    sal_Bool bVisible;  /* Visibility */
+    bool     bVisible;  /* Visibility */
 
     long nEndMin; //min. possible position of end
     long nEndMax; //max. possible position of end
@@ -136,10 +136,10 @@ struct SVX_DLLPUBLIC SvxColumnDescription
 
     SvxColumnDescription(const SvxColumnDescription &rCopy);
 
-    SvxColumnDescription(long start, long end, sal_Bool bVis = sal_True);
+    SvxColumnDescription(long start, long end, bool bVis = true);
 
     SvxColumnDescription(long start, long end,
-                         long endMin, long endMax, sal_Bool bVis = sal_True);
+                         long endMin, long endMax, bool bVis = true);
 
     bool operator==(const SvxColumnDescription &rCmp) const;
     bool operator!=(const SvxColumnDescription &rCmp) const;
@@ -195,14 +195,14 @@ public:
     void        SetLeft(long aLeft);
     void        SetRight(long aRight);
     sal_uInt16  GetActColumn() const;
-    sal_Bool    IsFirstAct() const;
-    sal_Bool    IsLastAct() const;
+    bool        IsFirstAct() const;
+    bool        IsLastAct() const;
     long        GetLeft();
     long        GetRight();
-    sal_Bool    IsTable() const;
-    sal_Bool    CalcOrtho() const;
-    void        SetOrtho(sal_Bool bVal);
-    sal_Bool    IsConsistent() const;
+    bool        IsTable() const;
+    bool        CalcOrtho() const;
+    void        SetOrtho(bool bVal);
+    bool        IsConsistent() const;
 };
 
 // class SvxObjectItem ---------------------------------------------------
@@ -214,7 +214,7 @@ private:
     long nEndX;     /* End in x direction */
     long nStartY;   /* Start in y direction */
     long nEndY;     /* Ende in y direction */
-    sal_Bool bLimits; /* boundary limit control by the application */
+    bool bLimits; /* boundary limit control by the application */
 
 protected:
     virtual bool             operator==( const SfxPoolItem& ) const;
@@ -236,10 +236,10 @@ public:
     TYPEINFO();
     SvxObjectItem(long nStartX, long nEndX,
                   long nStartY, long nEndY,
-                  sal_Bool bLimits = sal_False);
+                  bool bLimits = false);
     SvxObjectItem(const SvxObjectItem& rCopy);
 
-    sal_Bool HasLimits() const;
+    bool HasLimits() const;
 
     long GetStartX() const;
     long GetEndX() const;

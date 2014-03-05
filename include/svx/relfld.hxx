@@ -31,9 +31,9 @@ private:
     sal_uInt16          nRelMin;
     sal_uInt16          nRelMax;
     sal_uInt16          nRelStep;
-    sal_Bool            bRelativeMode;
-    sal_Bool            bRelative;
-    sal_Bool            bNegativeEnabled;
+    bool                bRelativeMode;
+    bool                bRelative;
+    bool                bNegativeEnabled;
 
 protected:
     void            Modify();
@@ -43,10 +43,10 @@ public:
 
     void            EnableRelativeMode( sal_uInt16 nMin = 50, sal_uInt16 nMax = 150,
                                         sal_uInt16 nStep = 5 );
-    sal_Bool        IsRelativeMode() const { return bRelativeMode; }
-    void            SetRelative( sal_Bool bRelative = sal_False );
-    sal_Bool        IsRelative() const { return bRelative; }
-    void            EnableNegativeMode() {bNegativeEnabled = sal_True;}
+    bool            IsRelativeMode() const { return bRelativeMode; }
+    void            SetRelative( bool bRelative = false );
+    bool            IsRelative() const { return bRelative; }
+    void            EnableNegativeMode() {bNegativeEnabled = true;}
 };
 
 

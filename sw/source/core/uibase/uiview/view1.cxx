@@ -67,8 +67,8 @@ void SwView::Activate(sal_Bool bMDIActivate)
         m_pWrtShell->MakeSelVisible();
         m_bMakeSelectionVisible = sal_False;
     }
-    m_pHRuler->SetActive( sal_True );
-    m_pVRuler->SetActive( sal_True );
+    m_pHRuler->SetActive( true );
+    m_pVRuler->SetActive( true );
 
     if ( bMDIActivate )
     {
@@ -126,8 +126,8 @@ void SwView::Deactivate(sal_Bool bMDIActivate)
     {
         m_pWrtShell->ShLooseFcs();    // Selections invisible
 
-        m_pHRuler->SetActive( sal_False );
-        m_pVRuler->SetActive( sal_False );
+        m_pHRuler->SetActive( false );
+        m_pVRuler->SetActive( false );
     }
     SfxViewShell::Deactivate(bMDIActivate);
 }

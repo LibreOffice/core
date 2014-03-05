@@ -313,9 +313,9 @@ void ViewShell::Activate(sal_Bool bIsMDIActivate)
        gets the focus. */
 
     if (mpHorizontalRuler.get() != NULL)
-        mpHorizontalRuler->SetActive(sal_True);
+        mpHorizontalRuler->SetActive(true);
     if (mpVerticalRuler.get() != NULL)
-        mpVerticalRuler->SetActive(sal_True);
+        mpVerticalRuler->SetActive(true);
 
     if (bIsMDIActivate)
     {
@@ -401,9 +401,9 @@ void ViewShell::Deactivate(sal_Bool bIsMDIActivate)
     }
 
     if (mpHorizontalRuler.get() != NULL)
-        mpHorizontalRuler->SetActive(sal_False);
+        mpHorizontalRuler->SetActive(false);
     if (mpVerticalRuler.get() != NULL)
-        mpVerticalRuler->SetActive(sal_False);
+        mpVerticalRuler->SetActive(false);
 
     SfxShell::Deactivate(bIsMDIActivate);
 }
@@ -733,7 +733,7 @@ void ViewShell::SetupRulers (void)
             if ( mpVerticalRuler.get() != NULL )
             {
                 nHRulerOfs = mpVerticalRuler->GetSizePixel().Width();
-                mpVerticalRuler->SetActive(sal_True);
+                mpVerticalRuler->SetActive(true);
                 mpVerticalRuler->Show();
             }
         }
@@ -743,7 +743,7 @@ void ViewShell::SetupRulers (void)
             if ( mpHorizontalRuler.get() != NULL )
             {
                 mpHorizontalRuler->SetWinPos(nHRulerOfs);
-                mpHorizontalRuler->SetActive(sal_True);
+                mpHorizontalRuler->SetActive(true);
                 mpHorizontalRuler->Show();
             }
         }

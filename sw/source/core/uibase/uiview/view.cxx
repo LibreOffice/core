@@ -877,8 +877,8 @@ SwView::SwView( SfxViewFrame *_pFrame, SfxViewShell* pOldSh )
     bool bOld = bNoInterrupt;
     bNoInterrupt = true;
 
-    m_pHRuler->SetActive( sal_True );
-    m_pVRuler->SetActive( sal_True );
+    m_pHRuler->SetActive( true );
+    m_pVRuler->SetActive( true );
 
     SfxViewFrame* pViewFrame = GetViewFrame();
     if( pViewFrame->GetFrame().GetParentFrame())

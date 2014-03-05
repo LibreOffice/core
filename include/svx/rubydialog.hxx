@@ -120,7 +120,7 @@ class SvxRubyDialog : public SfxModelessDialog
     long                nLastPos;
     long                nCurrentEdit;
 
-    sal_Bool            bModified;
+    bool                bModified;
 
     com::sun::star::uno::Reference<com::sun::star::view::XSelectionChangeListener> xImpl;
     SfxBindings*    pBindings;
@@ -148,8 +148,8 @@ class SvxRubyDialog : public SfxModelessDialog
     long                GetLastPos() const {return nLastPos;}
     void                SetLastPos(long nSet) {nLastPos = nSet;}
 
-    sal_Bool            IsModified() const {return bModified;}
-    void                SetModified(sal_Bool bSet) {bModified = bSet;}
+    bool                IsModified() const {return bModified;}
+    void                SetModified(bool bSet) {bModified = bSet;}
 
     void EnableControls(bool bEnable);
 

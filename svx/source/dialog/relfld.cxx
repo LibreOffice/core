@@ -27,9 +27,9 @@ SvxRelativeField::SvxRelativeField( Window* pParent, WinBits nBits)
     , nRelMin(0)
     , nRelMax(0)
     , nRelStep(0)
-    , bRelativeMode(sal_False)
-    , bRelative(sal_False)
-    , bNegativeEnabled(sal_False)
+    , bRelativeMode(false)
+    , bRelative(false)
+    , bNegativeEnabled(false)
 
 {
 
@@ -51,7 +51,7 @@ void SvxRelativeField::Modify()
     if ( bRelativeMode )
     {
         OUString  aStr = GetText();
-        sal_Bool    bNewMode = bRelative;
+        bool      bNewMode = bRelative;
 
         if ( bRelative )
         {
@@ -62,7 +62,7 @@ void SvxRelativeField::Modify()
                 if( ( ( *pStr < '0' ) || ( *pStr > '9' ) ) &&
                     ( *pStr != '%' ) )
                 {
-                    bNewMode = sal_False;
+                    bNewMode = false;
                     break;
                 }
                 pStr++;
@@ -71,7 +71,7 @@ void SvxRelativeField::Modify()
         else
         {
             if ( aStr.indexOf( "%" ) != -1 )
-                bNewMode = sal_True;
+                bNewMode = true;
         }
 
         if ( bNewMode != bRelative )
@@ -86,7 +86,7 @@ void SvxRelativeField::Modify()
 void SvxRelativeField::EnableRelativeMode( sal_uInt16 nMin,
                                            sal_uInt16 nMax, sal_uInt16 nStep )
 {
-    bRelativeMode = sal_True;
+    bRelativeMode = true;
     nRelMin       = nMin;
     nRelMax       = nMax;
     nRelStep      = nStep;
@@ -95,14 +95,14 @@ void SvxRelativeField::EnableRelativeMode( sal_uInt16 nMin,
 
 
 
-void SvxRelativeField::SetRelative( sal_Bool bNewRelative )
+void SvxRelativeField::SetRelative( bool bNewRelative )
 {
     Selection aSelection = GetSelection();
     OUString aStr = GetText();
 
     if ( bNewRelative )
     {
-        bRelative = sal_True;
+        bRelative = true;
         SetDecimalDigits( 0 );
         SetMin( nRelMin );
         SetMax( nRelMax );
@@ -110,7 +110,7 @@ void SvxRelativeField::SetRelative( sal_Bool bNewRelative )
     }
     else
     {
-        bRelative = sal_False;
+        bRelative = false;
         SetDecimalDigits( 2 );
         SetMin( bNegativeEnabled ? -9999 : 0 );
         SetMax( 9999 );

@@ -92,7 +92,7 @@ static void lcl_FillSvxColumn(const SwFmtCol& rCol,
             nWidth = static_cast< sal_uInt16 >(nWidth + rCol.CalcColWidth(i, nTotalWidth));
         const sal_uInt16 nEnd = sal_uInt16(nWidth - pCol->GetRight() + nDistance);
 
-        SvxColumnDescription aColDesc(nStart, nEnd, sal_True);
+        SvxColumnDescription aColDesc(nStart, nEnd, true);
         rColItem.Append(aColDesc);
     }
 }
@@ -1478,7 +1478,7 @@ void SwView::StateTabWin(SfxItemSet& rSet)
                         nStart = nEnd;
                     }
                     SvxColumnDescription aColDesc(nStart,
-                                    aTabCols.GetRight() - aTabCols.GetLeft(), sal_True);
+                                    aTabCols.GetRight() - aTabCols.GetLeft(), true);
                     aColItem.Append(aColDesc);
                 }
                 else
@@ -1494,8 +1494,7 @@ void SwView::StateTabWin(SfxItemSet& rSet)
                         nStart = nEnd;
                     }
                     SvxColumnDescription aColDesc(nStart, aTabCols.GetRight() - aTabCols.GetLeft(),
-                                0, 0,
-                                    sal_True);
+                                0, 0, true);
                     aColItem.Append(aColDesc);
                 }
                 rSet.Put(aColItem, nWhich);
@@ -1730,7 +1729,7 @@ void SwView::StateTabWin(SfxItemSet& rSet)
 
                 SvxColumnDescription aColDesc( nStart, nEnd,
                     aTabCols.GetRight(), aTabCols.GetRight(),
-                                            sal_False );
+                                            false );
                 aColItem.Append(aColDesc);
 
                 rSet.Put(aColItem, nWhich);

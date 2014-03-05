@@ -521,20 +521,20 @@ const SvxColumnItem& SvxColumnItem::operator=(const SvxColumnItem& rCopy)
     return *this;
 }
 
-sal_Bool SvxColumnItem::CalcOrtho() const
+bool SvxColumnItem::CalcOrtho() const
 {
     const sal_uInt16 nCount = Count();
     DBG_ASSERT(nCount >= 2, "no columns");
     if(nCount < 2)
-        return sal_False;
+        return false;
 
     long nColWidth = (*this)[0].GetWidth();
     for(sal_uInt16 i = 1; i < nCount; ++i) {
         if( (*this)[i].GetWidth() != nColWidth)
-            return sal_False;
+            return false;
     }
     //!! Wide divider
-    return sal_True;
+    return true;
 }
 
 bool SvxColumnItem::QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId ) const
@@ -653,12 +653,12 @@ sal_uInt16 SvxColumnItem::GetActColumn() const
     return nActColumn;
 }
 
-sal_Bool SvxColumnItem::IsFirstAct() const
+bool SvxColumnItem::IsFirstAct() const
 {
     return nActColumn == 0;
 }
 
-sal_Bool SvxColumnItem::IsLastAct() const
+bool SvxColumnItem::IsLastAct() const
 {
     return nActColumn == Count() - 1;
 }
@@ -673,7 +673,7 @@ long SvxColumnItem::GetRight()
     return nRight;
 }
 
-sal_Bool SvxColumnItem::IsTable() const
+bool SvxColumnItem::IsTable() const
 {
     return bTable;
 }
@@ -683,7 +683,7 @@ sal_Bool SvxColumnItem::IsTable() const
 SvxColumnDescription::SvxColumnDescription() :
     nStart   (0),
     nEnd     (0),
-    bVisible (sal_True),
+    bVisible (true),
     nEndMin  (0),
     nEndMax  (0)
 {}
@@ -696,7 +696,7 @@ SvxColumnDescription::SvxColumnDescription(const SvxColumnDescription &rCopy) :
     nEndMax  (rCopy.nEndMax)
 {}
 
-SvxColumnDescription::SvxColumnDescription(long start, long end, sal_Bool bVis) :
+SvxColumnDescription::SvxColumnDescription(long start, long end, bool bVis) :
     nStart   (start),
     nEnd     (end),
     bVisible (bVis),
@@ -704,7 +704,7 @@ SvxColumnDescription::SvxColumnDescription(long start, long end, sal_Bool bVis) 
     nEndMax  (0)
 {}
 
-SvxColumnDescription::SvxColumnDescription(long start, long end, long endMin, long endMax, sal_Bool bVis) :
+SvxColumnDescription::SvxColumnDescription(long start, long end, long endMin, long endMax, bool bVis) :
     nStart   (start),
     nEnd     (end),
     bVisible (bVis),
@@ -732,12 +732,12 @@ long SvxColumnDescription::GetWidth() const
 }
 
 /* SvxColumnItem */
-void SvxColumnItem::SetOrtho(sal_Bool bVal)
+void SvxColumnItem::SetOrtho(bool bVal)
 {
     bOrtho = bVal;
 }
 
-sal_Bool SvxColumnItem::IsConsistent() const
+bool SvxColumnItem::IsConsistent() const
 {
     return nActColumn < aColumns.size();
 }
@@ -773,7 +773,7 @@ SfxPoolItem* SvxObjectItem::Clone(SfxItemPool *) const
 }
 
 SvxObjectItem::SvxObjectItem( long nSX, long nEX,
-                              long nSY, long nEY, sal_Bool limits ) :
+                              long nSY, long nEY, bool limits ) :
     SfxPoolItem (SID_RULER_OBJECT),
     nStartX     (nSX),
     nEndX       (nEX),
@@ -846,7 +846,7 @@ bool SvxObjectItem::PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nM
     return bRet;
 }
 
-sal_Bool SvxObjectItem::HasLimits() const
+bool SvxObjectItem::HasLimits() const
 {
     return bLimits;
 }

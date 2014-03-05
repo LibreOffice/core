@@ -445,7 +445,7 @@ void SvxStdParagraphTabPage::Reset( const SfxItemSet& rSet )
 
             if ( rOldItem.GetPropLeft() != 100 )
             {
-                m_pLeftIndent->SetRelative( sal_True );
+                m_pLeftIndent->SetRelative( true );
                 m_pLeftIndent->SetValue( rOldItem.GetPropLeft() );
             }
             else
@@ -457,7 +457,7 @@ void SvxStdParagraphTabPage::Reset( const SfxItemSet& rSet )
 
             if ( rOldItem.GetPropRight() != 100 )
             {
-                m_pRightIndent->SetRelative( sal_True );
+                m_pRightIndent->SetRelative( true );
                 m_pRightIndent->SetValue( rOldItem.GetPropRight() );
             }
             else
@@ -469,7 +469,7 @@ void SvxStdParagraphTabPage::Reset( const SfxItemSet& rSet )
 
             if ( rOldItem.GetPropTxtFirstLineOfst() != 100 )
             {
-                m_pFLineIndent->SetRelative( sal_True );
+                m_pFLineIndent->SetRelative( true );
                 m_pFLineIndent->SetValue( rOldItem.GetPropTxtFirstLineOfst() );
             }
             else
@@ -515,7 +515,7 @@ void SvxStdParagraphTabPage::Reset( const SfxItemSet& rSet )
 
             if ( rOldItem.GetPropUpper() != 100 )
             {
-                m_pTopDist->SetRelative( sal_True );
+                m_pTopDist->SetRelative( true );
                 m_pTopDist->SetValue( rOldItem.GetPropUpper() );
             }
             else
@@ -530,7 +530,7 @@ void SvxStdParagraphTabPage::Reset( const SfxItemSet& rSet )
 
             if ( rOldItem.GetPropLower() != 100 )
             {
-                m_pBottomDist->SetRelative( sal_True );
+                m_pBottomDist->SetRelative( true );
                 m_pBottomDist->SetValue( rOldItem.GetPropLower() );
             }
             else

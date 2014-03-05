@@ -132,8 +132,8 @@ SwInputWindow::~SwInputWindow()
     // wake rulers
     if(pView)
     {
-        pView->GetHRuler().SetActive( sal_True );
-        pView->GetVRuler().SetActive( sal_True );
+        pView->GetHRuler().SetActive( true );
+        pView->GetVRuler().SetActive( true );
     }
     delete pMgr;
     if(pWrtShell)
@@ -193,8 +193,8 @@ void SwInputWindow::ShowWin()
     // stop rulers
     if(pView)
     {
-        pView->GetHRuler().SetActive( sal_False );
-        pView->GetVRuler().SetActive( sal_False );
+        pView->GetHRuler().SetActive( false );
+        pView->GetVRuler().SetActive( false );
 
         OSL_ENSURE(pWrtShell, "no WrtShell!");
         // Cursor in table

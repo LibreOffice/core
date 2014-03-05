@@ -412,7 +412,7 @@ void SvxRubyDialog::GetRubyText()
         {
             Sequence<PropertyValues>& aRubyValues = pImpl->GetRubyValues();
             DBG_ASSERT(aRubyValues.getLength() > (i / 2 + nTempLastPos), "wrong index" );
-            SetModified(sal_True);
+            SetModified(true);
             Sequence<PropertyValue> &rProps = aRubyValues.getArray()[i / 2 + nTempLastPos];
             PropertyValue* pProps = rProps.getArray();
             for(sal_Int32 nProp = 0; nProp < rProps.getLength(); nProp++)
@@ -434,7 +434,7 @@ void SvxRubyDialog::Update()
     m_pScrollSB->SetRange( Range(0, nLen > 4 ? nLen - 4 : 0));
     m_pScrollSB->SetThumbPos(0);
     SetLastPos(0);
-    SetModified(sal_False);
+    SetModified(false);
 
     sal_Int16 nAdjust = -1;
     sal_Int16 nPosition = -1;
@@ -590,7 +590,7 @@ IMPL_LINK(SvxRubyDialog, AdjustHdl_Impl, ListBox*, pBox)
             if ( pProps[nProp].Name == cRubyAdjust )
                 pProps[nProp].Value <<= nAdjust;
         }
-        SetModified(sal_True);
+        SetModified(true);
     }
     m_pPreviewWin->Invalidate();
     return 0;
@@ -611,7 +611,7 @@ IMPL_LINK(SvxRubyDialog, PositionHdl_Impl, ListBox*, pBox)
             if ( pProps[nProp].Name == cRubyIsAbove )
                 pProps[nProp].Value.setValue(&bAbove, rType);
         }
-        SetModified(sal_True);
+        SetModified(true);
     }
     m_pPreviewWin->Invalidate();
     return 0;
@@ -635,7 +635,7 @@ IMPL_LINK_NOARG(SvxRubyDialog, CharStyleHdl_Impl)
                 pProps[nProp].Value <<= sStyleName;
             }
         }
-        SetModified(sal_True);
+        SetModified(true);
     }
     return 0;
 }

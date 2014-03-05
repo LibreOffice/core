@@ -61,8 +61,8 @@ class SVX_DLLPUBLIC SvxRuler: public Ruler, public SfxListener
 
     boost::scoped_ptr<SvxRuler_Impl> mpRulerImpl;
 
-    sal_Bool        bAppSetNullOffset :1;
-    sal_Bool        bHorz :1;
+    bool            bAppSetNullOffset :1;
+    bool            bHorz :1;
     long            lLogicNullOffset;     // in logic coordinates
     long            lAppNullOffset;       // in logic coordinates
     long            lMinFrame;            // minimal frame width in pixels
@@ -97,16 +97,16 @@ class SVX_DLLPUBLIC SvxRuler: public Ruler, public SfxListener
     long            nDragOffset;
     long            nMaxLeft;
     long            nMaxRight;
-    sal_Bool        bValid;
-    sal_Bool        bListening;
-    sal_Bool        bActive;
+    bool            bValid;
+    bool            bListening;
+    bool            bActive;
 
     bool mbCoarseSnapping;
     bool mbSnapping;
 
     void StartListening_Impl();
-    long GetCorrectedDragPos(sal_Bool bLeft = sal_True, sal_Bool bRight = sal_True );
-    void DrawLine_Impl(long &lTabPos, int, sal_Bool Horizontal=sal_True);
+    long GetCorrectedDragPos(bool bLeft = true, bool bRight = true );
+    void DrawLine_Impl(long &lTabPos, int, bool Horizontal = true);
     sal_uInt16 GetObjectBordersOff(sal_uInt16 nIdx) const;
 
     // page borders or surrounding frame
@@ -224,18 +224,18 @@ protected:
 
     // calculation of boundary values for object borders
     // values refer to the page
-    virtual sal_Bool    CalcLimits(long &nMax1, long &nMax2, sal_Bool bFirst) const;
-    sal_Bool IsActLastColumn(
-                sal_Bool bForceDontConsiderHidden = sal_False,
+    virtual bool    CalcLimits(long &nMax1, long &nMax2, bool bFirst) const;
+    bool IsActLastColumn(
+                bool bForceDontConsiderHidden = false,
                 sal_uInt16 nAct=USHRT_MAX) const;
-    sal_Bool IsActFirstColumn(
-                sal_Bool bForceDontConsiderHidden = sal_False,
+    bool IsActFirstColumn(
+                bool bForceDontConsiderHidden = false,
                 sal_uInt16 nAct=USHRT_MAX) const;
     sal_uInt16 GetActLeftColumn(
-                sal_Bool bForceDontConsiderHidden = sal_False,
+                bool bForceDontConsiderHidden = false,
                 sal_uInt16 nAct=USHRT_MAX ) const;
     sal_uInt16 GetActRightColumn (
-                sal_Bool bForceDontConsiderHidden = sal_False,
+                bool bForceDontConsiderHidden = false,
                 sal_uInt16 nAct=USHRT_MAX ) const;
     long CalcPropMaxRight(sal_uInt16 nCol = USHRT_MAX) const;
     long GetPageWidth() const;
@@ -272,8 +272,8 @@ public:
         return lAppNullOffset;
     }
 
-    void SetActive(sal_Bool bOn = sal_True);
-    sal_Bool IsActive() const
+    void SetActive(bool bOn = true);
+    bool IsActive() const
     {
         return bActive;
     }
@@ -284,7 +284,7 @@ public:
     }
 
     //#i24363# tab stops relative to indent
-    void SetTabsRelativeToIndent( sal_Bool bRel = sal_True );
+    void SetTabsRelativeToIndent( bool bRel = true );
 };
 
 #endif
