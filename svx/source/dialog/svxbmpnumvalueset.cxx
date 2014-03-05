@@ -403,7 +403,7 @@ void SvxNumValueSet::init(sal_uInt16 nType)
 {
     aLineColor = COL_LIGHTGRAY;
     nPageType = nType;
-    bHTMLMode = sal_False;
+    bHTMLMode = false;
     pVDev = NULL;
 
     SetColCount( 4 );
@@ -474,7 +474,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeSvxBmpNumValueSet(Window *p
 void SvxBmpNumValueSet::init()
 {
     SvxNumValueSet::init(NUM_PAGETYPE_BMP);
-    bGrfNotFound = sal_False;
+    bGrfNotFound = false;
     GalleryExplorer::BeginLocking(GALLERY_THEME_BULLETS);
     SetStyle( GetStyle() | WB_VSCROLL );
     SetLineCount( 3 );
@@ -505,7 +505,7 @@ void SvxBmpNumValueSet::UserDraw( const UserDrawEvent& rUDEvt )
     if(!GalleryExplorer::GetGraphicObj( GALLERY_THEME_BULLETS, nItemId - 1,
                         &aGraphic, NULL))
     {
-        bGrfNotFound = sal_True;
+        bGrfNotFound = true;
     }
     else
     {
@@ -524,7 +524,7 @@ IMPL_LINK_NOARG(SvxBmpNumValueSet, FormatHdl_Impl)
     // only when a graphics was not there, it needs to be formatted
     if(bGrfNotFound)
     {
-        bGrfNotFound = sal_False;
+        bGrfNotFound = false;
         Format();
     }
     Invalidate();

@@ -49,8 +49,8 @@ struct SvxBmpItemInfo
 class SVX_DLLPUBLIC SvxNumValueSet : public ValueSet
 {
     Color           aLineColor;
-    sal_uInt16          nPageType;
-    sal_Bool            bHTMLMode;
+    sal_uInt16      nPageType;
+    bool            bHTMLMode;
     Rectangle       aOrgRect;
     VirtualDevice*  pVDev;
 
@@ -72,7 +72,7 @@ class SVX_DLLPUBLIC SvxNumValueSet : public ValueSet
 
     virtual void    UserDraw( const UserDrawEvent& rUDEvt );
 
-    void            SetHTMLMode(sal_Bool bSet) {bHTMLMode = bSet;}
+    void            SetHTMLMode(bool bSet) {bHTMLMode = bSet;}
     void            SetNumberingSettings(
         const com::sun::star::uno::Sequence<
             com::sun::star::uno::Sequence<
@@ -92,15 +92,15 @@ class SVX_DLLPUBLIC SvxBmpNumValueSet : public SvxNumValueSet
 {
     OUString    sBullets;
     Timer       aFormatTimer;
-    sal_Bool    bGrfNotFound;
+    bool        bGrfNotFound;
 
     void init();
 
     protected:
         DECL_LINK(FormatHdl_Impl, void *);
 
-    void            SetGrfNotFound(sal_Bool bSet) {bGrfNotFound = bSet;}
-    sal_Bool            IsGrfNotFound()const {return bGrfNotFound;}
+    void            SetGrfNotFound(bool bSet) {bGrfNotFound = bSet;}
+    bool            IsGrfNotFound()const {return bGrfNotFound;}
 
     Timer&          GetFormatTimer() {return aFormatTimer;}
 
