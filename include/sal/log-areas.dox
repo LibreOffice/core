@@ -457,6 +457,7 @@ certain functionality.
 @li @c shell
 @li @c stoc
 @li @c svg
+@li @c test
 @li @c ucbhelper
 @li @c unoidl
 @li @c unoxml
