@@ -52,10 +52,10 @@ SvxOptionsGrid::SvxOptionsGrid() :
     nFldDivisionY   ( 0 ),
     nFldSnapX       ( 100 ),
     nFldSnapY       ( 100 ),
-    bUseGridsnap    ( 0 ),
-    bSynchronize    ( 1 ),
-    bGridVisible    ( 0 ),
-    bEqualGrid      ( 1 )
+    bUseGridsnap    ( false ),
+    bSynchronize    ( true ),
+    bGridVisible    ( false ),
+    bEqualGrid      ( true )
 {
 }
 
@@ -129,7 +129,7 @@ SfxItemPresentation  SvxGridItem::GetPresentation
 SvxGridTabPage::SvxGridTabPage( Window* pParent, const SfxItemSet& rCoreSet) :
 
     SfxTabPage( pParent, "OptGridPage" , "svx/ui/optgridpage.ui", rCoreSet ),
-    bAttrModified( sal_False )
+    bAttrModified( false )
 {
     get(pCbxUseGridsnap,"usegridsnap");
     get(pCbxGridVisible,"gridvisible");
@@ -226,9 +226,9 @@ void SvxGridTabPage::Reset( const SfxItemSet& rSet )
                                     (const SfxPoolItem**)&pAttr ))
     {
         const SvxGridItem* pGridAttr = (SvxGridItem*)pAttr;
-        pCbxUseGridsnap->Check( pGridAttr->bUseGridsnap == 1 );
-        pCbxSynchronize->Check( pGridAttr->bSynchronize == 1 );
-        pCbxGridVisible->Check( pGridAttr->bGridVisible == 1 );
+        pCbxUseGridsnap->Check( pGridAttr->bUseGridsnap );
+        pCbxSynchronize->Check( pGridAttr->bSynchronize );
+        pCbxGridVisible->Check( pGridAttr->bGridVisible );
 
         SfxMapUnit eUnit =
             rSet.GetPool()->GetMetric( GetWhich( SID_ATTR_GRID_OPTIONS ) );
@@ -240,7 +240,7 @@ void SvxGridTabPage::Reset( const SfxItemSet& rSet )
     }
 
     ChangeGridsnapHdl_Impl( pCbxUseGridsnap );
-    bAttrModified = sal_False;
+    bAttrModified = false;
 }
 
 
@@ -252,7 +252,7 @@ void SvxGridTabPage::ActivatePage( const SfxItemSet& rSet )
                                     (const SfxPoolItem**)&pAttr ))
     {
         const SvxGridItem* pGridAttr = (SvxGridItem*) pAttr;
-        pCbxUseGridsnap->Check( pGridAttr->bUseGridsnap == 1 );
+        pCbxUseGridsnap->Check( pGridAttr->bUseGridsnap );
 
         ChangeGridsnapHdl_Impl( pCbxUseGridsnap );
     }
@@ -298,7 +298,7 @@ int SvxGridTabPage::DeactivatePage( SfxItemSet* _pSet )
 
 IMPL_LINK( SvxGridTabPage, ChangeDrawHdl_Impl, MetricField *, pField )
 {
-    bAttrModified = sal_True;
+    bAttrModified = true;
     if( pCbxSynchronize->IsChecked() )
     {
         if(pField == pMtrFldDrawX)
@@ -324,7 +324,7 @@ IMPL_LINK_NOARG(SvxGridTabPage, ClickRotateHdl_Impl)
 
 IMPL_LINK( SvxGridTabPage, ChangeDivisionHdl_Impl, NumericField *, pField )
 {
-    bAttrModified = sal_True;
+    bAttrModified = true;
     if( pCbxSynchronize->IsChecked() )
     {
         if(pNumFldDivisionX == pField)
@@ -338,7 +338,7 @@ IMPL_LINK( SvxGridTabPage, ChangeDivisionHdl_Impl, NumericField *, pField )
 
 IMPL_LINK_NOARG(SvxGridTabPage, ChangeGridsnapHdl_Impl)
 {
-    bAttrModified = sal_True;
+    bAttrModified = true;
     return 0;
 }
 

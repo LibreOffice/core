@@ -133,7 +133,7 @@ protected:
     // and no instances should be created from anyone, so i move the constructors
     // to protected area
     E3dObject();
-    E3dObject(sal_Bool bIsFromChart);
+    E3dObject(bool bIsFromChart);
 
 public:
     TYPEINFO();
@@ -250,7 +250,7 @@ public :
     virtual void    AddToHdlList(SdrHdlList& rHdlList) const;
 
     // DoubleSided: sal_True/FALSE
-    sal_Bool GetDoubleSided() const
+    bool GetDoubleSided() const
         { return ((const Svx3DDoubleSidedItem&)GetObjectItemSet().Get(SDRATTR_3DOBJ_DOUBLE_SIDED)).GetValue(); }
 
     // NormalsKind: 0 == sal_False/sal_False, 1 == sal_True/sal_False, else == sal_True/TRUE
@@ -258,7 +258,7 @@ public :
         { return ((const Svx3DNormalsKindItem&)GetObjectItemSet().Get(SDRATTR_3DOBJ_NORMALS_KIND)).GetValue(); }
 
     // NormalsInvert: sal_True/FALSE
-    sal_Bool GetNormalsInvert() const
+    bool GetNormalsInvert() const
         { return ((const Svx3DNormalsInvertItem&)GetObjectItemSet().Get(SDRATTR_3DOBJ_NORMALS_INVERT)).GetValue(); }
 
     // TextureProjX: 0 == sal_False/sal_False, 1 == sal_True/sal_False, else == sal_True/TRUE
@@ -270,7 +270,7 @@ public :
         { return ((const Svx3DTextureProjectionYItem&)GetObjectItemSet().Get(SDRATTR_3DOBJ_TEXTURE_PROJ_Y)).GetValue(); }
 
     // Shadow3D: sal_True/FALSE
-    sal_Bool GetShadow3D() const
+    bool GetShadow3D() const
         { return ((const Svx3DShadow3DItem&)GetObjectItemSet().Get(SDRATTR_3DOBJ_SHADOW_3D)).GetValue(); }
 
     // MaterialColor: Color
@@ -290,21 +290,21 @@ public :
         { return ((const Svx3DMaterialSpecularIntensityItem&)GetObjectItemSet().Get(SDRATTR_3DOBJ_MAT_SPECULAR_INTENSITY)).GetValue(); }
 
     // TextureFilter: sal_True/FALSE
-    sal_Bool GetTextureFilter() const
+    bool GetTextureFilter() const
         { return ((const Svx3DTextureFilterItem&)GetObjectItemSet().Get(SDRATTR_3DOBJ_TEXTURE_FILTER)).GetValue(); }
 
     // #i28528#
     // Added extra Item (Bool) for chart2 to be able to show reduced line geometry
-    sal_Bool GetReducedLineGeometry() const
+    bool GetReducedLineGeometry() const
         { return ((const Svx3DReducedLineGeometryItem&)GetObjectItemSet().Get(SDRATTR_3DOBJ_REDUCED_LINE_GEOMETRY)).GetValue(); }
 
     virtual sal_uInt16 GetObjIdentifier() const;
     virtual void RecalcSnapRect();
 
     // set/get parameters for geometry creation
-    sal_Bool GetCreateNormals() const { return bCreateNormals; }
+    bool GetCreateNormals() const { return bCreateNormals; }
 
-    sal_Bool GetCreateTexture() const { return bCreateTexture; }
+    bool GetCreateTexture() const { return bCreateTexture; }
 
     virtual E3dCompoundObject* Clone() const;
 

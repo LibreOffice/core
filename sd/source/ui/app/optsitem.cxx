@@ -1107,10 +1107,10 @@ void SdOptionsGrid::SetDefaults()
     SetFldDrawY( nVal );
     SetFldSnapX( nVal );
     SetFldSnapY( nVal );
-    SetUseGridSnap( sal_False );
-    SetSynchronize( sal_True );
-    SetGridVisible( sal_False );
-    SetEqualGrid( sal_True );
+    SetUseGridSnap( false );
+    SetSynchronize( true );
+    SetGridVisible( false );
+    SetEqualGrid( true );
 }
 
 

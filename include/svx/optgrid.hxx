@@ -39,10 +39,10 @@ protected:
     sal_uInt32  nFldDivisionY;
     sal_uInt32  nFldSnapX;
     sal_uInt32  nFldSnapY;
-    sal_Bool    bUseGridsnap:1;
-    sal_Bool    bSynchronize:1;
-    sal_Bool    bGridVisible:1;
-    sal_Bool    bEqualGrid:  1;
+    bool        bUseGridsnap:1;
+    bool        bSynchronize:1;
+    bool        bGridVisible:1;
+    bool        bEqualGrid:  1;
 
 public:
     SvxOptionsGrid();
@@ -54,10 +54,10 @@ public:
     void    SetFldDivisionY(sal_uInt32 nSet){nFldDivisionY  = nSet;}
     void    SetFldSnapX(    sal_uInt32 nSet){nFldSnapX      = nSet;}
     void    SetFldSnapY   ( sal_uInt32 nSet){nFldSnapY      = nSet;}
-    void    SetUseGridSnap( sal_Bool bSet ) {bUseGridsnap   = bSet;}
-    void    SetSynchronize( sal_Bool bSet ) {bSynchronize   = bSet;}
-    void    SetGridVisible( sal_Bool bSet ) {bGridVisible   = bSet;}
-    void    SetEqualGrid( sal_Bool bSet )   {bEqualGrid     = bSet;}
+    void    SetUseGridSnap( bool bSet ) {bUseGridsnap   = bSet;}
+    void    SetSynchronize( bool bSet ) {bSynchronize   = bSet;}
+    void    SetGridVisible( bool bSet ) {bGridVisible   = bSet;}
+    void    SetEqualGrid( bool bSet )   {bEqualGrid     = bSet;}
 
     sal_uInt32  GetFldDrawX(    ) const {  return nFldDrawX;    }
     sal_uInt32  GetFldDivisionX() const {  return nFldDivisionX;}
@@ -65,10 +65,10 @@ public:
     sal_uInt32  GetFldDivisionY() const {  return nFldDivisionY;}
     sal_uInt32  GetFldSnapX(    ) const {  return nFldSnapX;    }
     sal_uInt32  GetFldSnapY   ( ) const {  return nFldSnapY;    }
-    sal_Bool    GetUseGridSnap( ) const {  return bUseGridsnap; }
-    sal_Bool    GetSynchronize( ) const {  return bSynchronize; }
-    sal_Bool    GetGridVisible( ) const {  return bGridVisible; }
-    sal_Bool    GetEqualGrid()    const {  return bEqualGrid;   }
+    bool        GetUseGridSnap( ) const {  return bUseGridsnap; }
+    bool        GetSynchronize( ) const {  return bSynchronize; }
+    bool        GetGridVisible( ) const {  return bGridVisible; }
+    bool        GetEqualGrid()    const {  return bEqualGrid;   }
 };
 
 // class SvxGridItem -----------------------------------------------------
@@ -137,7 +137,7 @@ protected:
     MetricField*     pMtrFldBezAngle;
 
 private:
-    sal_Bool                bAttrModified;
+    bool                bAttrModified;
 
     DECL_LINK( ClickRotateHdl_Impl, void * );
     DECL_LINK( ChangeDrawHdl_Impl, MetricField * );
