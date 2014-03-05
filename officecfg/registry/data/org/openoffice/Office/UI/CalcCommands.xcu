@@ -835,11 +835,6 @@
           <value xml:lang="en-US">~Formula Bar</value>
         </prop>
       </node>
-      <node oor:name=".uno:ViewGridLines" oor:op="replace">
-        <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">View Grid lines</value>
-        </prop>
-      </node>
       <node oor:name=".uno:ViewRowColumnHeaders" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">C~olumn &amp; Row Headers</value>
