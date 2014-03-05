@@ -81,6 +81,9 @@ struct FormulaGroupContext : boost::noncopyable
  */
 class SC_DLLPUBLIC CompiledFormula
 {
+public:
+    CompiledFormula();
+    virtual ~CompiledFormula();
 };
 
 /**
