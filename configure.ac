@@ -328,7 +328,7 @@ if test -n "$with_android_ndk"; then
         android_gnu_prefix=i686-linux-android
     fi
 
-    test -z "$SYSBASE" && export SYSBASE=$ANDROID_NDK_HOME/platforms/android-9/arch-$android_cpu
+    test -z "$SYSBASE" && export SYSBASE=$ANDROID_NDK_HOME/platforms/android-15/arch-$android_cpu
     test -z "$AR" && AR=$ANDROID_BINUTILS_BIN/$android_gnu_prefix-ar
     test -z "$NM" && NM=$ANDROID_BINUTILS_BIN/$android_gnu_prefix-nm
     test -z "$OBJDUMP" && OBJDUMP=$ANDROID_BINUTILS_BIN/$android_gnu_prefix-objdump
@@ -355,7 +355,7 @@ if test -n "$with_android_ndk"; then
     fi
     ANDROIDCFLAGS="$ANDROIDCFLAGS -ffunction-sections -fdata-sections"
     ANDROIDCFLAGS="$ANDROIDCFLAGS -L$ANDROID_NDK_HOME/sources/cxx-stl/gnu-libstdc++/${ANDROID_NDK_TOOLCHAIN_VERSION_SUBDIR}libs/$ANDROID_APP_ABI"
-    ANDROIDCFLAGS="$ANDROIDCFLAGS --sysroot $ANDROID_NDK_HOME/platforms/android-9/arch-$android_cpu"
+    ANDROIDCFLAGS="$ANDROIDCFLAGS --sysroot $ANDROID_NDK_HOME/platforms/android-15/arch-$android_cpu"
     ANDROIDCFLAGS="$ANDROIDCFLAGS -Wl,--fix-cortex-a8"
 
     if test -n "$ANDROID_USING_CLANG"; then
@@ -678,7 +678,7 @@ linux-android*)
     fi
 
     # Verify that the NDK and SDK options are proper
-    if test ! -f "$ANDROID_NDK_HOME/platforms/android-9/arch-arm/usr/lib/libc.a"; then
+    if test ! -f "$ANDROID_NDK_HOME/platforms/android-15/arch-arm/usr/lib/libc.a"; then
         AC_MSG_ERROR([the --with-android-ndk option does not point to an Android NDK])
     fi
 
