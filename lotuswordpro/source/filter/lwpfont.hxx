@@ -110,7 +110,15 @@ private:
 class LwpFontNameEntry
 {
 public:
-    LwpFontNameEntry(){}
+    LwpFontNameEntry()
+        : m_nOverrideBits(0)
+        , m_nApplyBits(0)
+        , m_nPointSize(0)
+        , m_nOverstrike(0)
+        , m_nTightness(0)
+        , m_nFaceName(0)
+        , m_nAltFaceName(0)
+        {}
     ~LwpFontNameEntry(){}
 public:
     void Read(LwpObjectStream *pStrm);
