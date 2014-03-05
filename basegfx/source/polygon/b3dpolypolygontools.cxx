@@ -505,6 +505,13 @@ namespace basegfx
             return true;
         }
 
+        bool equal(const B3DPolyPolygon& rCandidateA, const B3DPolyPolygon& rCandidateB)
+        {
+            const double fSmallValue(fTools::getSmallValue());
+
+            return equal(rCandidateA, rCandidateB, fSmallValue);
+        }
+
 /// converters for com::sun::star::drawing::PolyPolygonShape3D
         B3DPolyPolygon UnoPolyPolygonShape3DToB3DPolyPolygon(
             const com::sun::star::drawing::PolyPolygonShape3D& rPolyPolygonShape3DSource,
