@@ -1506,47 +1506,6 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, PropertyMapPtr rContext, SprmType
     case NS_ooxml::LN_EG_RPrBase_kern: // auto kerning is bound to a minimum font size in Word - but not in Writer :-(
         rContext->Insert(PROP_CHAR_AUTO_KERNING, uno::makeAny( sal_Bool(nIntValue) ) );
         break;
-    case NS_sprm::LN_CRgFtc0:  // sprmCRgFtc0     //ascii font index
-    case NS_sprm::LN_CRgFtc1:  // sprmCRgFtc1     //Asian font index
-    case NS_sprm::LN_CRgFtc2:  // sprmCRgFtc2     //CTL font index
-        {
-            FontTablePtr pFontTable = m_pImpl->GetFontTable();
-            if(nIntValue >= 0 && pFontTable->size() > sal_uInt32(nIntValue))
-            {
-                PropertyIds eFontName    = PROP_CHAR_FONT_NAME;
-                PropertyIds eFontStyle   = PROP_CHAR_FONT_STYLE;
-                PropertyIds eFontFamily  = PROP_CHAR_FONT_FAMILY;
-                PropertyIds eFontCharSet = PROP_CHAR_FONT_CHAR_SET;
-                PropertyIds eFontPitch   = PROP_CHAR_FONT_PITCH;
-                switch(nSprmId)
-                {
-                case NS_sprm::LN_CRgFtc0:
-                    //already initialized
-                    break;
-                case NS_sprm::LN_CRgFtc1:
-                    eFontName =     PROP_CHAR_FONT_NAME_ASIAN;
-                    eFontStyle =    PROP_CHAR_FONT_STYLE_ASIAN;
-                    eFontFamily =   PROP_CHAR_FONT_FAMILY_ASIAN;
-                    eFontCharSet =  PROP_CHAR_FONT_CHAR_SET_ASIAN;
-                    eFontPitch =    PROP_CHAR_FONT_PITCH_ASIAN;
-                    break;
-                case NS_sprm::LN_CRgFtc2:
-                    eFontName =     PROP_CHAR_FONT_NAME_COMPLEX;
-                    eFontStyle =    PROP_CHAR_FONT_STYLE_COMPLEX;
-                    eFontFamily =   PROP_CHAR_FONT_FAMILY_COMPLEX;
-                    eFontCharSet =  PROP_CHAR_FONT_CHAR_SET_COMPLEX;
-                    eFontPitch =    PROP_CHAR_FONT_PITCH_COMPLEX;
-                    break;
-                }
-                (void)eFontFamily;
-                (void)eFontStyle;
-                const FontEntry::Pointer_t pFontEntry(pFontTable->getFontEntry(sal_uInt32(nIntValue)));
-                rContext->Insert(eFontName, uno::makeAny( pFontEntry->sFontName  ));
-                rContext->Insert(eFontCharSet, uno::makeAny( (sal_Int16)pFontEntry->nTextEncoding  ));
-                rContext->Insert(eFontPitch, uno::makeAny( pFontEntry->nPitchRequest  ));
-            }
-        }
-        break;
     case NS_ooxml::LN_EG_RPrBase_w:
         rContext->Insert(PROP_CHAR_SCALE_WIDTH,
                          uno::makeAny( sal_Int16(nIntValue) ));
