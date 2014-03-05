@@ -321,7 +321,7 @@ void ScFuncDesc::fillVisibleArgumentMapping(::std::vector<sal_uInt16>& _rArgumen
         nArgs -= VAR_ARGS - 1;
     for (sal_uInt16 i=0; i < nArgs; ++i)
     {
-        if (!pDefArgFlags[i].bSuppress)
+        if (!pDefArgFlags || !pDefArgFlags[i].bSuppress)
             _rArguments.push_back(i);
     }
 }
