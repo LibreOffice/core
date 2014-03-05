@@ -673,7 +673,8 @@ void SAL_CALL SlideshowImpl::disposing()
     if( mpViewShell )
     {
         mpViewShell->SetActiveWindow(mpOldActiveWindow);
-        mpShowWindow->SetViewShell( NULL );
+        if (mpShowWindow)
+            mpShowWindow->SetViewShell( NULL );
     }
 
     if( mpView )
