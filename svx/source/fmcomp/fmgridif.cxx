@@ -2418,10 +2418,10 @@ void FmXGridPeer::setMode(const OUString& Mode) throw( NoSupportException, Runti
 
     FmGridControl* pGrid = (FmGridControl*) GetWindow();
     if ( Mode == "FilterMode" )
-        pGrid->SetFilterMode(sal_True);
+        pGrid->SetFilterMode(true);
     else
     {
-        pGrid->SetFilterMode(sal_False);
+        pGrid->SetFilterMode(false);
         pGrid->setDataSource(m_xCursor);
     }
 }

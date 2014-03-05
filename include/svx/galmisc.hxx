@@ -86,17 +86,17 @@ class Gallery;
 
 SVX_DLLPUBLIC ResMgr*
                     GetGalleryResMgr();
-sal_uInt16          GalleryGraphicImport( const INetURLObject& rURL, Graphic& rGraphic, OUString& rFilterName, sal_Bool bShowProgress = sal_False );
-sal_Bool            GallerySvDrawImport( SvStream& rIStm, SdrModel& rModel );
-sal_Bool            CreateIMapGraphic( const FmFormModel& rModel, Graphic& rGraphic, ImageMap& rImageMap );
+sal_uInt16          GalleryGraphicImport( const INetURLObject& rURL, Graphic& rGraphic, OUString& rFilterName, bool bShowProgress = false );
+bool                GallerySvDrawImport( SvStream& rIStm, SdrModel& rModel );
+bool                CreateIMapGraphic( const FmFormModel& rModel, Graphic& rGraphic, ImageMap& rImageMap );
 SVX_DLLPUBLIC OUString
                     GetReducedString( const INetURLObject& rURL, sal_Int32 nMaxLen );
 OUString            GetSvDrawStreamNameFromURL( const INetURLObject& rSvDrawObjURL );
 
-sal_Bool            FileExists( const INetURLObject& rURL );
-sal_Bool            CreateDir(  const INetURLObject& rURL );
-sal_Bool            CopyFile(  const INetURLObject& rSrcURL, const INetURLObject& rDstURL );
-sal_Bool            KillFile( const INetURLObject& rURL );
+bool                FileExists( const INetURLObject& rURL );
+bool                CreateDir(  const INetURLObject& rURL );
+bool                CopyFile(  const INetURLObject& rSrcURL, const INetURLObject& rDstURL );
+bool                KillFile( const INetURLObject& rURL );
 BitmapEx            GalleryResGetBitmapEx( sal_uInt32 nId );
 
 class SgaIMapInfo : public SdrObjUserData, public SfxListener

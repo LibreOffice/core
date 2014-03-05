@@ -427,7 +427,7 @@ void GalleryBrowser1::ImplExecute( sal_uInt16 nId )
                     DBG_ASSERT(aDlg, "Dialogdiet fail!");
 
                     if( aDlg->Execute() == RET_OK )
-                        pTheme->SetId( aDlg->GetId(), sal_True );
+                        pTheme->SetId( aDlg->GetId(), true );
                     delete aDlg;
                 }
             }

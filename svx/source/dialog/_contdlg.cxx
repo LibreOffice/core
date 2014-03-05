@@ -454,7 +454,7 @@ IMPL_LINK( SvxSuperContourDlg, Tbx1ClickHdl, ToolBox*, pTbx )
         case( TBI_SELECT ):
         {
             pTbx->CheckItem( nNewItemId, true );
-            aContourWnd.SetEditMode( sal_True );
+            aContourWnd.SetEditMode( true );
         }
         break;
 
@@ -509,7 +509,7 @@ IMPL_LINK( SvxSuperContourDlg, Tbx1ClickHdl, ToolBox*, pTbx )
             aRedoGraphic = aGraphic;
             aGraphic = aUndoGraphic;
             aUndoGraphic = Graphic();
-            aContourWnd.SetGraphic( aGraphic, sal_False );
+            aContourWnd.SetGraphic( aGraphic, false );
         }
         break;
 
@@ -519,7 +519,7 @@ IMPL_LINK( SvxSuperContourDlg, Tbx1ClickHdl, ToolBox*, pTbx )
             aUndoGraphic = aGraphic;
             aGraphic = aRedoGraphic;
             aRedoGraphic = Graphic();
-            aContourWnd.SetGraphic( aGraphic, sal_False );
+            aContourWnd.SetGraphic( aGraphic, false );
         }
         break;
 

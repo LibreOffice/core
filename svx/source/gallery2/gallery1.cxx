@@ -51,10 +51,10 @@ static bool FileExists( const INetURLObject &rURL, const rtl::OUString &rExt )
 
 GalleryThemeEntry::GalleryThemeEntry( bool bCreateUniqueURL,
                                       const INetURLObject& rBaseURL, const OUString& rName,
-                                      sal_Bool _bReadOnly, sal_Bool _bNewFile,
-                                      sal_uInt32 _nId, sal_Bool _bThemeNameFromResource ) :
-        nId                                     ( _nId ),
-        bReadOnly                               ( _bReadOnly ),
+                                      bool _bReadOnly, bool _bNewFile,
+                                      sal_uInt32 _nId, bool _bThemeNameFromResource ) :
+        nId                     ( _nId ),
+        bReadOnly               ( _bReadOnly ),
         bThemeNameFromResource  ( _bThemeNameFromResource )
 {
     INetURLObject aURL( rBaseURL );
@@ -123,15 +123,15 @@ void GalleryThemeEntry::SetName( const OUString& rNewName )
     if( aName != rNewName )
     {
         aName = rNewName;
-        SetModified( sal_True );
-        bThemeNameFromResource = sal_False;
+        SetModified( true );
+        bThemeNameFromResource = false;
     }
 }
 
-void GalleryThemeEntry::SetId( sal_uInt32 nNewId, sal_Bool bResetThemeName )
+void GalleryThemeEntry::SetId( sal_uInt32 nNewId, bool bResetThemeName )
 {
     nId = nNewId;
-    SetModified( sal_True );
+    SetModified( true );
     bThemeNameFromResource = ( nId && bResetThemeName );
 }
 
@@ -158,7 +158,7 @@ public:
 
 Gallery::Gallery( const OUString& rMultiPath )
 :       nReadTextEncoding   ( osl_getThreadTextEncoding() )
-,       bMultiPath          ( sal_False )
+,       bMultiPath          ( false )
 {
     ImplLoad( rMultiPath );
 }
@@ -190,7 +190,7 @@ Gallery* Gallery::GetGalleryInstance()
 void Gallery::ImplLoad( const OUString& rMultiPath )
 {
     const sal_Int32 nTokenCount = comphelper::string::getTokenCount(rMultiPath, ';');
-    sal_Bool        bIsReadOnlyDir;
+    bool            bIsReadOnlyDir;
 
     bMultiPath = ( nTokenCount > 0 );
 
@@ -221,9 +221,9 @@ void Gallery::ImplLoad( const OUString& rMultiPath )
     DBG_ASSERT( aRelURL.GetProtocol() != INET_PROT_NOT_VALID, "invalid URL" );
 }
 
-void Gallery::ImplLoadSubDirs( const INetURLObject& rBaseURL, sal_Bool& rbDirIsReadOnly )
+void Gallery::ImplLoadSubDirs( const INetURLObject& rBaseURL, bool& rbDirIsReadOnly )
 {
-    rbDirIsReadOnly = sal_False;
+    rbDirIsReadOnly = false;
 
     try
     {
@@ -249,13 +249,13 @@ void Gallery::ImplLoadSubDirs( const INetURLObject& rBaseURL, sal_Bool& rbDirIsR
                 pTestStm->WriteInt32( sal_Int32(1) );
 
                 if( pTestStm->GetError() )
-                    rbDirIsReadOnly = sal_True;
+                    rbDirIsReadOnly = true;
 
                 delete pTestStm;
                 KillFile( aTestURL );
             }
             else
-                rbDirIsReadOnly = sal_True;
+                rbDirIsReadOnly = true;
         }
         catch( const ucb::ContentCreationException& )
         {
@@ -499,14 +499,14 @@ OUString Gallery::GetThemeName( sal_uIntPtr nThemeId ) const
     return( pFound ? pFound->GetThemeName() : OUString() );
 }
 
-sal_Bool Gallery::HasTheme( const OUString& rThemeName )
+bool Gallery::HasTheme( const OUString& rThemeName )
 {
     return( ImplGetThemeEntry( rThemeName ) != NULL );
 }
 
-sal_Bool Gallery::CreateTheme( const OUString& rThemeName )
+bool Gallery::CreateTheme( const OUString& rThemeName )
 {
-    sal_Bool bRet = sal_False;
+    bool bRet = false;
 
     if( !HasTheme( rThemeName ) && ( GetUserURL().GetProtocol() != INET_PROT_NOT_VALID ) )
     {
@@ -514,21 +514,21 @@ sal_Bool Gallery::CreateTheme( const OUString& rThemeName )
         aURL.Append( rThemeName );
         GalleryThemeEntry* pNewEntry = new GalleryThemeEntry(
                 true, aURL, rThemeName,
-                sal_False, sal_True, 0, sal_False );
+                false, true, 0, false );
 
         aThemeList.push_back( pNewEntry );
         delete( new GalleryTheme( this, pNewEntry ) );
         Broadcast( GalleryHint( GALLERY_HINT_THEME_CREATED, rThemeName ) );
-        bRet = sal_True;
+        bRet = true;
     }
 
     return bRet;
 }
 
-sal_Bool Gallery::RenameTheme( const OUString& rOldName, const OUString& rNewName )
+bool Gallery::RenameTheme( const OUString& rOldName, const OUString& rNewName )
 {
     GalleryThemeEntry*      pThemeEntry = ImplGetThemeEntry( rOldName );
-    sal_Bool                            bRet = sal_False;
+    bool                    bRet = false;
 
     // check if the new theme name is already present
     if( pThemeEntry && !HasTheme( rNewName ) && !pThemeEntry->IsReadOnly() )
@@ -545,17 +545,17 @@ sal_Bool Gallery::RenameTheme( const OUString& rOldName, const OUString& rNewNam
 
             Broadcast( GalleryHint( GALLERY_HINT_THEME_RENAMED, aOldName, pThm->GetName() ) );
             ReleaseTheme( pThm, aListener );
-            bRet = sal_True;
+            bRet = true;
         }
     }
 
     return bRet;
 }
 
-sal_Bool Gallery::RemoveTheme( const OUString& rThemeName )
+bool Gallery::RemoveTheme( const OUString& rThemeName )
 {
     GalleryThemeEntry*  pThemeEntry = ImplGetThemeEntry( rThemeName );
-    sal_Bool                bRet = sal_False;
+    bool                bRet = false;
 
     if( pThemeEntry && !pThemeEntry->IsReadOnly() )
     {
@@ -590,7 +590,7 @@ sal_Bool Gallery::RemoveTheme( const OUString& rThemeName )
 
         Broadcast( GalleryHint( GALLERY_HINT_THEME_REMOVED, rThemeName ) );
 
-        bRet = sal_True;
+        bRet = true;
     }
 
     return bRet;
@@ -678,7 +678,9 @@ void Gallery::ReleaseTheme( GalleryTheme* pTheme, SfxListener& rListener )
     }
 }
 
-sal_Bool GalleryThemeEntry::IsDefault() const
-{ return( ( nId > 0 ) && ( nId != ( RID_GALLERYSTR_THEME_MYTHEME - RID_GALLERYSTR_THEME_START ) ) ); }
+bool GalleryThemeEntry::IsDefault() const
+{
+    return ( nId > 0 ) && ( nId != ( RID_GALLERYSTR_THEME_MYTHEME - RID_GALLERYSTR_THEME_START ) );
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

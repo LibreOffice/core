@@ -152,7 +152,7 @@ void ContourWindow::MouseButtonDown( const MouseEvent& rMEvt )
         SetPolyPolygon( PolyPolygon() );
         aWorkRect = Rectangle( aLogPt, aLogPt );
         Paint( Rectangle( Point(), GetGraphicSize() ) );
-        SetEditMode( sal_True );
+        SetEditMode( true );
     }
 
     if ( !bPipetteMode )

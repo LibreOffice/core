@@ -83,7 +83,7 @@ IMPL_LINK( SgaUserDataFactory, MakeUserData, SdrObjFactory*, pObjFactory )
 }
 
 sal_uInt16 GalleryGraphicImport( const INetURLObject& rURL, Graphic& rGraphic,
-                             OUString& rFilterName, sal_Bool bShowProgress )
+                             OUString& rFilterName, bool bShowProgress )
 {
     sal_uInt16      nRet = SGA_IMPORT_NONE;
     SfxMedium   aMedium( rURL.GetMainURL( INetURLObject::NO_DECODE ), STREAM_READ );
@@ -110,10 +110,10 @@ sal_uInt16 GalleryGraphicImport( const INetURLObject& rURL, Graphic& rGraphic,
     return nRet;
 }
 
-sal_Bool GallerySvDrawImport( SvStream& rIStm, SdrModel& rModel )
+bool GallerySvDrawImport( SvStream& rIStm, SdrModel& rModel )
 {
     sal_uInt32  nVersion;
-    sal_Bool    bRet = sal_False;
+    bool        bRet = false;
 
     if( GalleryCodec::IsCoded( rIStm, nVersion ) )
     {
@@ -154,9 +154,9 @@ sal_Bool GallerySvDrawImport( SvStream& rIStm, SdrModel& rModel )
     return bRet;
 }
 
-sal_Bool CreateIMapGraphic( const FmFormModel& rModel, Graphic& rGraphic, ImageMap& rImageMap )
+bool CreateIMapGraphic( const FmFormModel& rModel, Graphic& rGraphic, ImageMap& rImageMap )
 {
-    sal_Bool bRet = sal_False;
+    bool bRet = false;
 
     if ( rModel.GetPageCount() )
     {
@@ -176,7 +176,7 @@ sal_Bool CreateIMapGraphic( const FmFormModel& rModel, Graphic& rGraphic, ImageM
                 {
                     rGraphic = ( (SdrGrafObj*) pObj )->GetGraphic();
                     rImageMap = ( (SgaIMapInfo*) pUserData )->GetImageMap();
-                    bRet = sal_True;
+                    bRet = true;
                     break;
                 }
             }
@@ -237,9 +237,9 @@ OUString GetSvDrawStreamNameFromURL( const INetURLObject& rSvDrawObjURL )
     return aRet;
 }
 
-sal_Bool FileExists( const INetURLObject& rURL )
+bool FileExists( const INetURLObject& rURL )
 {
-    sal_Bool bRet = sal_False;
+    bool bRet = false;
 
     if( rURL.GetProtocol() != INET_PROT_NOT_VALID )
     {
@@ -265,9 +265,9 @@ sal_Bool FileExists( const INetURLObject& rURL )
     return bRet;
 }
 
-sal_Bool CreateDir( const INetURLObject& rURL )
+bool CreateDir( const INetURLObject& rURL )
 {
-    sal_Bool bRet = FileExists( rURL );
+    bool bRet = FileExists( rURL );
 
     if( !bRet )
     {
@@ -300,9 +300,9 @@ sal_Bool CreateDir( const INetURLObject& rURL )
     return bRet;
 }
 
-sal_Bool CopyFile(  const INetURLObject& rSrcURL, const INetURLObject& rDstURL )
+bool CopyFile(  const INetURLObject& rSrcURL, const INetURLObject& rDstURL )
 {
-    sal_Bool bRet = sal_False;
+    bool bRet = false;
 
     try
     {
@@ -311,7 +311,7 @@ sal_Bool CopyFile(  const INetURLObject& rSrcURL, const INetURLObject& rDstURL )
         aDestPath.executeCommand( OUString("transfer"),
                                   uno::makeAny( ucb::TransferInfo( sal_False, rSrcURL.GetMainURL( INetURLObject::NO_DECODE ),
                                                 rDstURL.GetName(), ucb::NameClash::OVERWRITE ) ) );
-        bRet = sal_True;
+        bRet = true;
     }
     catch( const ucb::ContentCreationException& )
     {
@@ -326,9 +326,9 @@ sal_Bool CopyFile(  const INetURLObject& rSrcURL, const INetURLObject& rDstURL )
     return bRet;
 }
 
-sal_Bool KillFile( const INetURLObject& rURL )
+bool KillFile( const INetURLObject& rURL )
 {
-    sal_Bool bRet = FileExists( rURL );
+    bool bRet = FileExists( rURL );
 
     if( bRet )
     {
@@ -339,15 +339,15 @@ sal_Bool KillFile( const INetURLObject& rURL )
         }
         catch( const ucb::ContentCreationException& )
         {
-            bRet = sal_False;
+            bRet = false;
         }
         catch( const uno::RuntimeException& )
         {
-            bRet = sal_False;
+            bRet = false;
         }
         catch( const uno::Exception& )
         {
-            bRet = sal_False;
+            bRet = false;
         }
     }
 
@@ -559,7 +559,7 @@ sal_Bool GalleryTransferable::WriteObject( SotStorageStreamRef& rxOStm, void* pU
 
 void GalleryTransferable::DragFinished( sal_Int8 nDropAction )
 {
-    mpTheme->SetDragging( sal_False );
+    mpTheme->SetDragging( false );
     mpTheme->SetDragPos( 0 );
     if ( nDropAction )
     {
@@ -589,7 +589,7 @@ void GalleryTransferable::StartDrag( Window* pWindow, sal_Int8 nDragSourceAction
 
     if( mpTheme->GetURL( mnObjectPos, aURL ) && ( aURL.GetProtocol() != INET_PROT_NOT_VALID ) )
     {
-        mpTheme->SetDragging( sal_True );
+        mpTheme->SetDragging( true );
         mpTheme->SetDragPos( mnObjectPos );
         TransferableHelper::StartDrag( pWindow, nDragSourceActions, nDragPointer, nDragImage );
     }

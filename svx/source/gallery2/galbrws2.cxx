@@ -603,7 +603,7 @@ sal_Int8 GalleryBrowser2::ExecuteDrop( DropTargetHelper&, const ExecuteDropEvent
         if( mpCurTheme->IsDragging() )
             mpCurTheme->ChangeObjectPos( mpCurTheme->GetDragPos(), nInsertPos );
         else
-            nRet = mpCurTheme->InsertTransferable( rEvt.maDropEvent.Transferable, nInsertPos );
+            nRet = mpCurTheme->InsertTransferable( rEvt.maDropEvent.Transferable, nInsertPos ) ? 1 : 0;
     }
 
     return nRet;

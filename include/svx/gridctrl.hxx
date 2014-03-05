@@ -41,7 +41,7 @@
 class DbGridControl;
 class CursorWrapper;
 
-sal_Bool CompareBookmark(const ::com::sun::star::uno::Any& aLeft, const ::com::sun::star::uno::Any& aRight);
+bool CompareBookmark(const ::com::sun::star::uno::Any& aLeft, const ::com::sun::star::uno::Any& aRight);
 
 namespace svxform
 {
@@ -66,28 +66,28 @@ class DbGridRow : public SvRefBase
     ::com::sun::star::uno::Any  m_aBookmark;        // ::com::sun::star::text::Bookmark of the row, can be set
     DbDataColumns               m_aVariants;
     GridRowStatus               m_eStatus;
-    sal_Bool                    m_bIsNew;
+    bool                        m_bIsNew;
                                                     // row is no longer valid
                                                     // is removed on the next positioning
 public:
-    DbGridRow():m_eStatus(GRS_CLEAN), m_bIsNew(sal_True) { }
-    DbGridRow(CursorWrapper* pCur, sal_Bool bPaintCursor);
-    void SetState(CursorWrapper* pCur, sal_Bool bPaintCursor);
+    DbGridRow():m_eStatus(GRS_CLEAN), m_bIsNew(true) { }
+    DbGridRow(CursorWrapper* pCur, bool bPaintCursor);
+    void SetState(CursorWrapper* pCur, bool bPaintCursor);
 
     ~DbGridRow();
 
-    sal_Bool HasField(sal_uInt32 nPos) const { return nPos < m_aVariants.size(); }
+    bool HasField(sal_uInt32 nPos) const { return nPos < m_aVariants.size(); }
     const ::svxform::DataColumn& GetField(sal_uInt32 nPos) const { return *m_aVariants[ nPos ]; }
 
     void            SetStatus(GridRowStatus _eStat) { m_eStatus = _eStat; }
     GridRowStatus   GetStatus() const               { return m_eStatus; }
-    void            SetNew(sal_Bool _bNew)              { m_bIsNew = _bNew; }
-    sal_Bool            IsNew() const                   { return m_bIsNew; }
+    void            SetNew(bool _bNew)              { m_bIsNew = _bNew; }
+    bool            IsNew() const                   { return m_bIsNew; }
 
     const ::com::sun::star::uno::Any& GetBookmark() const { return m_aBookmark; }
 
-    sal_Bool    IsValid() const { return m_eStatus == GRS_CLEAN || m_eStatus == GRS_MODIFIED; }
-    sal_Bool    IsModified() const { return m_eStatus == GRS_MODIFIED; }
+    bool    IsValid() const { return m_eStatus == GRS_CLEAN || m_eStatus == GRS_MODIFIED; }
+    bool    IsModified() const { return m_eStatus == GRS_MODIFIED; }
 };
 
 SV_DECL_REF(DbGridRow)
@@ -164,7 +164,7 @@ public:
         sal_uInt16      m_nDefaultWidth;
         sal_Int32       m_nCurrentPos;
 
-        sal_Bool            m_bPositioning;     // protect PositionDataSource against recursion
+        bool            m_bPositioning;     // protect PositionDataSource against recursion
 
     public:
         //  StatusIds for Controls of the Bar
@@ -185,10 +185,10 @@ public:
         NavigationBar(Window* pParent, WinBits nStyle = 0);
 
         // Status methods for Controls
-        void InvalidateAll(sal_Int32 nCurrentPos = -1, sal_Bool bAll = sal_False);
+        void InvalidateAll(sal_Int32 nCurrentPos = -1, bool bAll = false);
         void InvalidateState(sal_uInt16 nWhich) {SetState(nWhich);}
         void SetState(sal_uInt16 nWhich);
-        sal_Bool GetState(sal_uInt16 nWhich) const;
+        bool GetState(sal_uInt16 nWhich) const;
         sal_uInt16 GetDefaultWidth() const {return m_nDefaultWidth;}
 
     protected:
@@ -278,25 +278,25 @@ private:
     sal_uInt16          m_nOptionMask;      // the mask of options to be enabled in setDataSource
                                         // (with respect to the data source capabilities)
                                         // defaults to (insert | update | delete)
-    sal_uInt16              m_nLastColId;
+    sal_uInt16          m_nLastColId;
     long                m_nLastRowId;
 
-    sal_Bool            m_bDesignMode : 1;      // default = sal_False
-    sal_Bool            m_bRecordCountFinal : 1;
-    sal_Bool            m_bMultiSelection   : 1;
-    sal_Bool            m_bNavigationBar      : 1;
+    bool                m_bDesignMode : 1;      // default = sal_False
+    bool                m_bRecordCountFinal : 1;
+    bool                m_bMultiSelection   : 1;
+    bool                m_bNavigationBar      : 1;
 
-    sal_Bool            m_bSynchDisplay : 1;
-    sal_Bool            m_bForceROController : 1;
-    sal_Bool            m_bHandle : 1;
-    sal_Bool            m_bFilterMode : 1;
-    sal_Bool            m_bWantDestruction : 1;
-    sal_Bool            m_bInAdjustDataSource : 1;
-    sal_Bool            m_bPendingAdjustRows : 1;   // if an async adjust is pending, is it for AdjustRows or AdjustDataSource ?
-    sal_Bool            m_bHideScrollbars : 1;
+    bool                m_bSynchDisplay : 1;
+    bool                m_bForceROController : 1;
+    bool                m_bHandle : 1;
+    bool                m_bFilterMode : 1;
+    bool                m_bWantDestruction : 1;
+    bool                m_bInAdjustDataSource : 1;
+    bool                m_bPendingAdjustRows : 1;   // if an async adjust is pending, is it for AdjustRows or AdjustDataSource ?
+    bool                m_bHideScrollbars : 1;
 
 protected:
-    sal_Bool            m_bUpdating : 1;            // are any updates being executed right now?
+    bool                m_bUpdating : 1;            // are any updates being executed right now?
 
 protected:
     virtual sal_Bool SeekRow(long nRow);
@@ -385,7 +385,7 @@ public:
     */
     virtual OUString  GetCellText(long _nRow, sal_uInt16 _nColId) const;
 
-    void RemoveRows(sal_Bool bNewCursor);
+    void RemoveRows(bool bNewCursor);
 
     void InvalidateStatus();
 
@@ -400,8 +400,8 @@ public:
     CursorWrapper* getDataSource() const {return m_pDataCursor;}
     const DbGridColumns& GetColumns() const {return m_aColumns;}
 
-    void EnableHandle(sal_Bool bEnable);
-    sal_Bool HasHandle() const {return m_bHandle;}
+    void EnableHandle(bool bEnable);
+    bool HasHandle() const {return m_bHandle;}
     void InsertHandleColumn();
 
     // which position does the column with the id in the ::com::sun::star::sdbcx::View have, the handle column doesn't count
@@ -420,15 +420,15 @@ public:
     sal_uInt16 GetColumnIdFromModelPos( sal_uInt16 nPos ) const;
 
     virtual void SetDesignMode(bool bMode);
-    sal_Bool IsDesignMode() const {return m_bDesignMode;}
-    sal_Bool IsOpen() const {return m_pSeekCursor != NULL;}
+    bool IsDesignMode() const {return m_bDesignMode;}
+    bool IsOpen() const {return m_pSeekCursor != NULL;}
 
-    virtual void SetFilterMode(sal_Bool bMode);
-    sal_Bool IsFilterMode() const {return m_bFilterMode;}
-    sal_Bool IsFilterRow(long nRow) const {return m_bFilterMode && nRow == 0;}
+    virtual void SetFilterMode(bool bMode);
+    bool IsFilterMode() const {return m_bFilterMode;}
+    bool IsFilterRow(long nRow) const {return m_bFilterMode && nRow == 0;}
 
-    void EnableNavigationBar(sal_Bool bEnable);
-    sal_Bool HasNavigationBar() const {return m_bNavigationBar;}
+    void EnableNavigationBar(bool bEnable);
+    bool HasNavigationBar() const {return m_bNavigationBar;}
 
     sal_uInt16 GetOptions() const {return m_nOptions;}
     NavigationBar& GetNavigationBar() {return m_aBar;}
@@ -451,23 +451,23 @@ public:
     // moved from the outside.
     // the flag indicates if an adjustment of the row count should be
     // done as well
-    void AdjustDataSource(sal_Bool bFull = sal_False);
+    void AdjustDataSource(bool bFull = false);
     void Undo();
 
     virtual void BeginCursorAction();
     virtual void EndCursorAction();
 
     // is the current line being updated
-    sal_Bool IsUpdating() const {return m_bUpdating;}
+    bool IsUpdating() const {return m_bUpdating;}
 
-    virtual void RowRemoved( long nRow, long nNumRows = 1, sal_Bool bDoPaint = sal_True );
-    virtual void RowInserted( long nRow, long nNumRows = 1, sal_Bool bDoPaint = sal_True, sal_Bool bKeepSelection = sal_False );
+    virtual void RowRemoved( long nRow, long nNumRows = 1, bool bDoPaint = true );
+    virtual void RowInserted( long nRow, long nNumRows = 1, bool bDoPaint = true, bool bKeepSelection = false );
     virtual void RowModified( long nRow, sal_uInt16 nColId = USHRT_MAX );
 
     void resetCurrentRow();
 
-    sal_Bool getDisplaySynchron() const { return m_bSynchDisplay; }
-    void setDisplaySynchron(sal_Bool bSync);
+    bool getDisplaySynchron() const { return m_bSynchDisplay; }
+    void setDisplaySynchron(bool bSync);
         // when set to sal_False, the display is no longer in sync with the current cursor position
         // (means that in AdjustDataSource we are jumping to a row not belonging to CursorPosition)
         // when using this, you should know what you are doing, because for example entering data
@@ -485,8 +485,8 @@ public:
         // analogous : if this link is set, all nav-bar slots will be routed through it when executed
         // if the handler returns nonzero, no further handling of the slot occurs
 
-    void EnablePermanentCursor(sal_Bool bEnable);
-    sal_Bool IsPermanentCursorEnabled() const;
+    void EnablePermanentCursor(bool bEnable);
+    bool IsPermanentCursorEnabled() const;
 
     /** forces both scrollbars to be hidden
 
@@ -494,13 +494,13 @@ public:
         bar <b>always</b> implies a horizontal scroll bar
         @seealso EnableNavigationBar
     */
-    void        ForceHideScrollbars( sal_Bool _bForce );
+    void        ForceHideScrollbars( bool _bForce );
 
     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >
         getContext() const { return m_xContext; }
 
     /// returns <TRUE/> if the text of the given cell can be copied into the clipboard
-    sal_Bool    canCopyCellText(sal_Int32 _nRow, sal_Int16 _nColId);
+    bool    canCopyCellText(sal_Int32 _nRow, sal_Int16 _nColId);
     /// copies the text of the given cell into the clipboard
     void        copyCellText(sal_Int32 _nRow, sal_Int16 _nColId);
 
@@ -550,22 +550,22 @@ public:
     CreateAccessibleCell( sal_Int32 nRow, sal_uInt16 nColumnId );
 
 protected:
-    void RecalcRows(long nNewTopRow, sal_uInt16 nLinesOnScreen, sal_Bool bUpdateCursor);
-    sal_Bool SeekCursor(long nRow, sal_Bool bAbsolute = sal_False);
+    void RecalcRows(long nNewTopRow, sal_uInt16 nLinesOnScreen, bool bUpdateCursor);
+    bool SeekCursor(long nRow, bool bAbsolute = false);
     void RemoveColumns();       // cleaning of own structures
     void AdjustRows();
     sal_Int32 AlignSeekCursor();
-    sal_Bool SetCurrent(long nNewRow);
+    bool SetCurrent(long nNewRow);
 
     OUString GetCurrentRowCellText(DbGridColumn* pCol,const DbGridRowRef& _rRow) const;
     virtual void DeleteSelectedRows();
-    sal_Bool IsValid(const DbGridRowRef& _xRow) const {return _xRow && _xRow->IsValid();}
+    bool IsValid(const DbGridRowRef& _xRow) const {return _xRow && _xRow->IsValid();}
 
     // row which is currently being appended
-    sal_Bool IsCurrentAppending() const;
+    bool IsCurrentAppending() const;
 
     // empty row for insertion
-    sal_Bool IsInsertionRow(long nRow) const;
+    bool IsInsertionRow(long nRow) const;
 
     void  SetSeekPos(sal_Int32 nPos) {m_nSeekPos = nPos;}
     sal_Int32 GetCurrentPos() const {return m_nCurrentPos;}
@@ -581,7 +581,7 @@ protected:
     void ConnectToFields();
     void DisconnectFromFields();
 
-    void implAdjustInSolarThread(sal_Bool _bRows);
+    void implAdjustInSolarThread(bool _bRows);
         // calls AdjustRows or AdjustDataSource, synchron if the caller is running in the solar thread, else asynchron
 
 protected:

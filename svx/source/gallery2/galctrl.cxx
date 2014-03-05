@@ -102,11 +102,11 @@ void GalleryPreview::DataChanged( const DataChangedEvent& rDCEvt )
         Window::DataChanged( rDCEvt );
 }
 
-sal_Bool GalleryPreview::ImplGetGraphicCenterRect( const Graphic& rGraphic, Rectangle& rResultRect ) const
+bool GalleryPreview::ImplGetGraphicCenterRect( const Graphic& rGraphic, Rectangle& rResultRect ) const
 {
     const Size  aWinSize( GetOutputSizePixel() );
     Size        aNewSize( LogicToPixel( rGraphic.GetPrefSize(), rGraphic.GetPrefMapMode() ) );
-    sal_Bool        bRet = sal_False;
+    bool        bRet = false;
 
     if( aNewSize.Width() && aNewSize.Height() )
     {
@@ -129,7 +129,7 @@ sal_Bool GalleryPreview::ImplGetGraphicCenterRect( const Graphic& rGraphic, Rect
                              ( aWinSize.Height() - aNewSize.Height() ) >> 1 );
 
         rResultRect = Rectangle( aNewPos, aNewSize );
-        bRet = sal_True;
+        bRet = true;
     }
 
     return bRet;

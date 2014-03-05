@@ -66,7 +66,7 @@ GalleryTheme::GalleryTheme( Gallery* pGallery, GalleryThemeEntry* pThemeEntry ) 
         mnThemeLockCount      ( 0 ),
         mnBroadcasterLockCount( 0 ),
         nDragPos              ( 0 ),
-        bDragging             ( sal_False )
+        bDragging             ( false )
 {
 
     ImplCreateSvDrawStorage();
@@ -95,10 +95,10 @@ void GalleryTheme::ImplCreateSvDrawStorage()
         aSvDrawStorageRef = new SvStorage( false, GetSdvURL().GetMainURL( INetURLObject::NO_DECODE ), STREAM_READ );
 }
 
-sal_Bool GalleryTheme::ImplWriteSgaObject( const SgaObject& rObj, size_t nPos, GalleryObject* pExistentEntry )
+bool GalleryTheme::ImplWriteSgaObject( const SgaObject& rObj, size_t nPos, GalleryObject* pExistentEntry )
 {
     SvStream*   pOStm = ::utl::UcbStreamHelper::CreateStream( GetSdgURL().GetMainURL( INetURLObject::NO_DECODE ), STREAM_WRITE );
-    sal_Bool        bRet = sal_False;
+    bool        bRet = false;
 
     if( pOStm )
     {
@@ -128,7 +128,7 @@ sal_Bool GalleryTheme::ImplWriteSgaObject( const SgaObject& rObj, size_t nPos, G
             pEntry->aURL = rObj.GetURL();
             pEntry->nOffset = nOffset;
             pEntry->eObjKind = rObj.GetObjKind();
-            bRet = sal_True;
+            bRet = true;
         }
 
         delete pOStm;
@@ -208,7 +208,7 @@ void GalleryTheme::ImplWrite()
                 delete pOStm;
             }
 
-            ImplSetModified( sal_False );
+            ImplSetModified( false );
         }
     }
 }
@@ -334,16 +334,16 @@ void GalleryTheme::ImplBroadcast( sal_uIntPtr nUpdatePos )
     }
 }
 
-sal_Bool GalleryTheme::UnlockTheme()
+bool GalleryTheme::UnlockTheme()
 {
     DBG_ASSERT( mnThemeLockCount, "Theme is not locked" );
 
-    sal_Bool bRet = sal_False;
+    bool bRet = false;
 
     if( mnThemeLockCount )
     {
         --mnThemeLockCount;
-        bRet = sal_True;
+        bRet = true;
     }
 
     return bRet;
@@ -472,7 +472,7 @@ bool GalleryTheme::RemoveObject( size_t nPos )
         Broadcast( GalleryHint( GALLERY_HINT_OBJECT_REMOVED, GetName(), reinterpret_cast< sal_uIntPtr >( pEntry ) ) );
         delete pEntry;
 
-        ImplSetModified( sal_True );
+        ImplSetModified( true );
         ImplBroadcast( nPos );
     }
 
@@ -516,7 +516,7 @@ void GalleryTheme::Actualize( const Link& rActualizeLink, GalleryProgress* pProg
         const size_t    nCount = aObjectList.size();
 
         LockBroadcaster();
-        bAbortActualize = sal_False;
+        bAbortActualize = false;
 
         // reset delete flag
         for (size_t i = 0; i < nCount; i++)
@@ -675,13 +675,13 @@ void GalleryTheme::Actualize( const Link& rActualizeLink, GalleryProgress* pProg
         }
 
         KillFile( aTmpURL );
-        ImplSetModified( sal_True );
+        ImplSetModified( true );
         ImplWrite();
         UnlockBroadcaster();
     }
 }
 
-GalleryThemeEntry* GalleryTheme::CreateThemeEntry( const INetURLObject& rURL, sal_Bool bReadOnly )
+GalleryThemeEntry* GalleryTheme::CreateThemeEntry( const INetURLObject& rURL, bool bReadOnly )
 {
     DBG_ASSERT( rURL.GetProtocol() != INET_PROT_NOT_VALID, "invalid URL" );
 
@@ -744,7 +744,7 @@ GalleryThemeEntry* GalleryTheme::CreateThemeEntry( const INetURLObject& rURL, sa
 
                 INetURLObject aPathURL( rURL );
                 pRet = new GalleryThemeEntry( false, aPathURL, aThemeName,
-                                              bReadOnly, sal_False, nThemeId,
+                                              bReadOnly, false, nThemeId,
                                               bThemeNameFromResource );
             }
 
@@ -755,25 +755,25 @@ GalleryThemeEntry* GalleryTheme::CreateThemeEntry( const INetURLObject& rURL, sa
     return pRet;
 }
 
-sal_Bool GalleryTheme::GetThumb( sal_uIntPtr nPos, BitmapEx& rBmp, sal_Bool )
+bool GalleryTheme::GetThumb( sal_uIntPtr nPos, BitmapEx& rBmp, bool )
 {
     SgaObject*  pObj = AcquireObject( nPos );
-    sal_Bool        bRet = sal_False;
+    bool        bRet = false;
 
     if( pObj )
     {
         rBmp = pObj->GetThumbBmp();
         ReleaseObject( pObj );
-        bRet = sal_True;
+        bRet = true;
     }
 
     return bRet;
 }
 
-sal_Bool GalleryTheme::GetGraphic( sal_uIntPtr nPos, Graphic& rGraphic, sal_Bool bProgress )
+bool GalleryTheme::GetGraphic( sal_uIntPtr nPos, Graphic& rGraphic, bool bProgress )
 {
     const GalleryObject*    pObject = ImplGetGalleryObject( nPos );
-    sal_Bool                    bRet = sal_False;
+    bool                    bRet = false;
 
     if( pObject )
     {
@@ -801,7 +801,7 @@ sal_Bool GalleryTheme::GetGraphic( sal_uIntPtr nPos, Graphic& rGraphic, sal_Bool
                         ImageMap aIMap;
 
                         if( CreateIMapGraphic( *aModel.GetModel(), rGraphic, aIMap ) )
-                            bRet = sal_True;
+                            bRet = true;
                         else
                         {
                             VirtualDevice aVDev;
@@ -812,7 +812,7 @@ sal_Bool GalleryTheme::GetGraphic( sal_uIntPtr nPos, Graphic& rGraphic, sal_Bool
                             aView.ShowSdrPage(aView.GetModel()->GetPage(0));
                             aView.MarkAll();
                             rGraphic = aView.GetAllMarkedGraphic();
-                            bRet = sal_True;
+                            bRet = true;
                         }
                     }
                 }
@@ -830,7 +830,7 @@ sal_Bool GalleryTheme::GetGraphic( sal_uIntPtr nPos, Graphic& rGraphic, sal_Bool
                     //aBmp.Replace( COL_LIGHTMAGENTA, COL_WHITE );
                     //rGraphic = aBmp;
                     ReleaseObject( pObj );
-                    bRet = sal_True;
+                    bRet = true;
                 }
             }
             break;
@@ -843,9 +843,9 @@ sal_Bool GalleryTheme::GetGraphic( sal_uIntPtr nPos, Graphic& rGraphic, sal_Bool
     return bRet;
 }
 
-sal_Bool GalleryTheme::InsertGraphic( const Graphic& rGraphic, sal_uIntPtr nInsertPos )
+bool GalleryTheme::InsertGraphic( const Graphic& rGraphic, sal_uIntPtr nInsertPos )
 {
-    sal_Bool bRet = sal_False;
+    bool bRet = false;
 
     if( rGraphic.GetType() != GRAPHIC_NONE )
     {
@@ -925,10 +925,10 @@ sal_Bool GalleryTheme::InsertGraphic( const Graphic& rGraphic, sal_uIntPtr nInse
     return bRet;
 }
 
-sal_Bool GalleryTheme::GetModel( sal_uIntPtr nPos, SdrModel& rModel, sal_Bool )
+bool GalleryTheme::GetModel( sal_uIntPtr nPos, SdrModel& rModel, bool )
 {
     const GalleryObject*    pObject = ImplGetGalleryObject( nPos );
-    sal_Bool                    bRet = sal_False;
+    bool                    bRet = false;
 
     if( pObject && ( SGA_OBJ_SVDRAW == pObject->eObjKind ) )
     {
@@ -952,11 +952,11 @@ sal_Bool GalleryTheme::GetModel( sal_uIntPtr nPos, SdrModel& rModel, sal_Bool )
     return bRet;
 }
 
-sal_Bool GalleryTheme::InsertModel( const FmFormModel& rModel, sal_uIntPtr nInsertPos )
+bool GalleryTheme::InsertModel( const FmFormModel& rModel, sal_uIntPtr nInsertPos )
 {
     INetURLObject   aURL( ImplCreateUniqueURL( SGA_OBJ_SVDRAW ) );
     SvStorageRef    xStor( GetSvDrawStorage() );
-    sal_Bool            bRet = sal_False;
+    bool            bRet = false;
 
     if( xStor.Is() )
     {
@@ -997,10 +997,10 @@ sal_Bool GalleryTheme::InsertModel( const FmFormModel& rModel, sal_uIntPtr nInse
     return bRet;
 }
 
-sal_Bool GalleryTheme::GetModelStream( sal_uIntPtr nPos, SotStorageStreamRef& rxModelStream, sal_Bool )
+bool GalleryTheme::GetModelStream( sal_uIntPtr nPos, SotStorageStreamRef& rxModelStream, bool )
 {
     const GalleryObject*    pObject = ImplGetGalleryObject( nPos );
-    sal_Bool                    bRet = sal_False;
+    bool                    bRet = false;
 
     if( pObject && ( SGA_OBJ_SVDRAW == pObject->eObjKind ) )
     {
@@ -1048,11 +1048,11 @@ sal_Bool GalleryTheme::GetModelStream( sal_uIntPtr nPos, SotStorageStreamRef& rx
     return bRet;
 }
 
-sal_Bool GalleryTheme::InsertModelStream( const SotStorageStreamRef& rxModelStream, sal_uIntPtr nInsertPos )
+bool GalleryTheme::InsertModelStream( const SotStorageStreamRef& rxModelStream, sal_uIntPtr nInsertPos )
 {
     INetURLObject   aURL( ImplCreateUniqueURL( SGA_OBJ_SVDRAW ) );
     SvStorageRef    xStor( GetSvDrawStorage() );
-    sal_Bool            bRet = sal_False;
+    bool            bRet = false;
 
     if( xStor.Is() )
     {
@@ -1082,27 +1082,27 @@ sal_Bool GalleryTheme::InsertModelStream( const SotStorageStreamRef& rxModelStre
     return bRet;
 }
 
-sal_Bool GalleryTheme::GetURL( sal_uIntPtr nPos, INetURLObject& rURL, sal_Bool )
+bool GalleryTheme::GetURL( sal_uIntPtr nPos, INetURLObject& rURL, bool )
 {
     const GalleryObject*    pObject = ImplGetGalleryObject( nPos );
-    sal_Bool                    bRet = sal_False;
+    bool                    bRet = false;
 
     if( pObject )
     {
         rURL = INetURLObject( ImplGetURL( pObject ) );
-        bRet = sal_True;
+        bRet = true;
     }
 
     return bRet;
 }
 
-sal_Bool GalleryTheme::InsertURL( const INetURLObject& rURL, sal_uIntPtr nInsertPos )
+bool GalleryTheme::InsertURL( const INetURLObject& rURL, sal_uIntPtr nInsertPos )
 {
     Graphic         aGraphic;
     OUString        aFormat;
     SgaObject*      pNewObj = NULL;
     const sal_uInt16    nImportRet = GalleryGraphicImport( rURL, aGraphic, aFormat );
-    sal_Bool            bRet = sal_False;
+    bool            bRet = false;
 
     if( nImportRet != SGA_IMPORT_NONE )
     {
@@ -1117,18 +1117,18 @@ sal_Bool GalleryTheme::InsertURL( const INetURLObject& rURL, sal_uIntPtr nInsert
         pNewObj = (SgaObject*) new SgaObjectSound( rURL );
 
     if( pNewObj && InsertObject( *pNewObj, nInsertPos ) )
-        bRet = sal_True;
+        bRet = true;
 
     delete pNewObj;
 
     return bRet;
 }
 
-sal_Bool GalleryTheme::InsertFileOrDirURL( const INetURLObject& rFileOrDirURL, sal_uIntPtr nInsertPos )
+bool GalleryTheme::InsertFileOrDirURL( const INetURLObject& rFileOrDirURL, sal_uIntPtr nInsertPos )
 {
     INetURLObject                   aURL;
     ::std::vector< INetURLObject >  aURLVector;
-    sal_Bool                            bRet = sal_False;
+    bool                            bRet = false;
 
     try
     {
@@ -1173,9 +1173,9 @@ sal_Bool GalleryTheme::InsertFileOrDirURL( const INetURLObject& rFileOrDirURL, s
     return bRet;
 }
 
-sal_Bool GalleryTheme::InsertTransferable( const uno::Reference< datatransfer::XTransferable >& rxTransferable, sal_uIntPtr nInsertPos )
+bool GalleryTheme::InsertTransferable( const uno::Reference< datatransfer::XTransferable >& rxTransferable, sal_uIntPtr nInsertPos )
 {
-    sal_Bool bRet = sal_False;
+    bool bRet = false;
 
     if( rxTransferable.is() )
     {
@@ -1241,7 +1241,7 @@ sal_Bool GalleryTheme::InsertTransferable( const uno::Reference< datatransfer::X
 
         if( pGraphic )
         {
-            bRet = sal_False;
+            bRet = false;
 
             if( aDataHelper.HasFormat( SOT_FORMATSTR_ID_SVIM ) )
             {
@@ -1509,7 +1509,7 @@ SvStream& GalleryTheme::ReadData( SvStream& rIStm )
     else
         rIStm.SetError( SVSTREAM_READ_ERROR );
 
-    ImplSetModified( sal_False );
+    ImplSetModified( false );
 
     return rIStm;
 }
@@ -1524,7 +1524,7 @@ SvStream& ReadGalleryTheme( SvStream& rIn, GalleryTheme& rTheme )
     return rTheme.ReadData( rIn );
 }
 
-void GalleryTheme::ImplSetModified( sal_Bool bModified )
+void GalleryTheme::ImplSetModified( bool bModified )
 { pThm->SetModified( bModified ); }
 
 const OUString& GalleryTheme::GetRealName() const { return pThm->GetThemeName(); }
@@ -1532,11 +1532,11 @@ const INetURLObject& GalleryTheme::GetThmURL() const { return pThm->GetThmURL();
 const INetURLObject& GalleryTheme::GetSdgURL() const { return pThm->GetSdgURL(); }
 const INetURLObject& GalleryTheme::GetSdvURL() const { return pThm->GetSdvURL(); }
 sal_uInt32 GalleryTheme::GetId() const { return pThm->GetId(); }
-void GalleryTheme::SetId( sal_uInt32 nNewId, sal_Bool bResetThemeName ) { pThm->SetId( nNewId, bResetThemeName ); }
-sal_Bool GalleryTheme::IsThemeNameFromResource() const { return pThm->IsNameFromResource(); }
-sal_Bool GalleryTheme::IsReadOnly() const { return pThm->IsReadOnly(); }
-sal_Bool GalleryTheme::IsDefault() const { return pThm->IsDefault(); }
-sal_Bool GalleryTheme::IsModified() const { return pThm->IsModified(); }
+void GalleryTheme::SetId( sal_uInt32 nNewId, bool bResetThemeName ) { pThm->SetId( nNewId, bResetThemeName ); }
+bool GalleryTheme::IsThemeNameFromResource() const { return pThm->IsNameFromResource(); }
+bool GalleryTheme::IsReadOnly() const { return pThm->IsReadOnly(); }
+bool GalleryTheme::IsDefault() const { return pThm->IsDefault(); }
+bool GalleryTheme::IsModified() const { return pThm->IsModified(); }
 const OUString& GalleryTheme::GetName() const { return pThm->GetThemeName(); }
 
 void GalleryTheme::InsertAllThemes( ListBox& rListBox )

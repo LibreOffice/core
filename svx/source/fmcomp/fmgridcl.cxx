@@ -1045,7 +1045,7 @@ void FmGridControl::propertyChange(const ::com::sun::star::beans::PropertyChange
     if (evt.PropertyName == FM_PROP_ROWCOUNT)
     {
         // if we're not in the main thread call AdjustRows asynchronously
-        implAdjustInSolarThread(sal_True);
+        implAdjustInSolarThread(true);
         return;
     }
 
@@ -1169,7 +1169,7 @@ void FmGridControl::DeleteSelectedRows()
             OSL_FAIL("Exception caught while deleting rows!");
         }
         // An den DatenCursor anpassen
-        AdjustDataSource(sal_True);
+        AdjustDataSource(true);
         EndCursorAction();
         SetUpdateMode(sal_True);
     }
@@ -1201,7 +1201,7 @@ void FmGridControl::DeleteSelectedRows()
                 // there is a next row to position on
                 if (SeekCursor(nIdx))
                 {
-                    GetSeekRow()->SetState(m_pSeekCursor, sal_True);
+                    GetSeekRow()->SetState(m_pSeekCursor, true);
 
                     bNewPos = sal_True;
                     // if it's not the row for inserting we keep the bookmark
@@ -1215,7 +1215,7 @@ void FmGridControl::DeleteSelectedRows()
                 nIdx = FirstSelectedRow() - 1;
                 if (nIdx >= 0 && SeekCursor(nIdx))
                 {
-                    GetSeekRow()->SetState(m_pSeekCursor, sal_True);
+                    GetSeekRow()->SetState(m_pSeekCursor, true);
 
                     bNewPos = sal_True;
                     aBookmark = m_pSeekCursor->getBookmark();
@@ -1318,7 +1318,7 @@ void FmGridControl::DeleteSelectedRows()
             }
 
             // An den DatenCursor anpassen
-            AdjustDataSource(sal_True);
+            AdjustDataSource(true);
 
             // es konnten nicht alle Zeilen geloescht werden
             // da nie nicht geloeschten wieder selektieren
@@ -1382,7 +1382,7 @@ void FmGridControl::positioned(const ::com::sun::star::lang::EventObject& /*rEve
 {
     SAL_INFO("svx.fmcmop", "FmGridControl::positioned");
     // position on the data source (force it to be done in the main thread)
-    implAdjustInSolarThread(sal_False);
+    implAdjustInSolarThread(false);
 }
 
 sal_Bool FmGridControl::commit()
@@ -1407,8 +1407,8 @@ void FmGridControl::inserted(const ::com::sun::star::lang::EventObject& /*rEvent
         return;
 
     // Zeile ist eingefuegt worden, dann den status und mode zuruecksetzen
-    xRow->SetState(m_pDataCursor, sal_False);
-    xRow->SetNew(sal_False);
+    xRow->SetState(m_pDataCursor, false);
+    xRow->SetNew(false);
 
 }
 
@@ -1832,7 +1832,7 @@ Sequence< Any> FmGridControl::getSelectionBookmarks()
             // Zunaechst den DatenCursor auf den selektierten Satz pos.
             if (SeekCursor(nIdx))
             {
-                GetSeekRow()->SetState(m_pSeekCursor, sal_True);
+                GetSeekRow()->SetState(m_pSeekCursor, true);
 
                 pBookmarks[i] = m_pSeekCursor->getBookmark();
             }

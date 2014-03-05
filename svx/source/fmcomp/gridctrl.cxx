@@ -108,7 +108,7 @@ private:
             {
                 pSeek->moveToBookmark(*pIter);
                 // get the data
-                rSeekRow->SetState(pSeek, sal_True);
+                rSeekRow->SetState(pSeek, true);
                 sal_Int32 nSeekPos = pSeek->getRow() - 1;
                 m_pControl->SetSeekPos(nSeekPos,aAccess);
                 m_pControl->RowModified(nSeekPos);
@@ -239,7 +239,7 @@ static const sal_uInt16 ControlMap[] =
         0
     };
 
-sal_Bool CompareBookmark(const Any& aLeft, const Any& aRight)
+bool CompareBookmark(const Any& aLeft, const Any& aRight)
 {
     return ::comphelper::compare(aLeft, aRight);
 }
@@ -322,9 +322,9 @@ void DbGridControl::NavigationBar::PositionDataSource(sal_Int32 nRecord)
         return;
     // the MoveToPosition may cause a LoseFocus which would lead to a second MoveToPosition,
     // so protect against this recursion
-    m_bPositioning = sal_True;
+    m_bPositioning = true;
     ((DbGridControl*)GetParent())->MoveToPosition(nRecord - 1);
-    m_bPositioning = sal_False;
+    m_bPositioning = false;
 }
 
 DbGridControl::NavigationBar::NavigationBar(Window* pParent, WinBits nStyle)
@@ -340,7 +340,7 @@ DbGridControl::NavigationBar::NavigationBar(Window* pParent, WinBits nStyle)
           ,m_aNewBtn(this, WB_RECTSTYLE|WB_NOPOINTERFOCUS)
           ,m_nDefaultWidth(0)
           ,m_nCurrentPos(-1)
-          ,m_bPositioning(sal_False)
+          ,m_bPositioning(false)
 {
     m_aFirstBtn.SetSymbol(SYMBOL_FIRST);
     m_aPrevBtn.SetSymbol(SYMBOL_PREV);
@@ -511,7 +511,7 @@ IMPL_LINK(DbGridControl::NavigationBar, OnClick, Button *, pButton )
     return 0;
 }
 
-void DbGridControl::NavigationBar::InvalidateAll(sal_Int32 nCurrentPos, sal_Bool bAll)
+void DbGridControl::NavigationBar::InvalidateAll(sal_Int32 nCurrentPos, bool bAll)
 {
     if (m_nCurrentPos != nCurrentPos || nCurrentPos < 0 || bAll)
     {
@@ -541,13 +541,13 @@ void DbGridControl::NavigationBar::InvalidateAll(sal_Int32 nCurrentPos, sal_Bool
     }
 }
 
-sal_Bool DbGridControl::NavigationBar::GetState(sal_uInt16 nWhich) const
+bool DbGridControl::NavigationBar::GetState(sal_uInt16 nWhich) const
 {
     DbGridControl* pParent = (DbGridControl*)GetParent();
 
     if (!pParent->IsOpen() || pParent->IsDesignMode() || !pParent->IsEnabled()
         || pParent->IsFilterMode() )
-        return sal_False;
+        return false;
     else
     {
         // check if we have a master state provider
@@ -558,7 +558,7 @@ sal_Bool DbGridControl::NavigationBar::GetState(sal_uInt16 nWhich) const
                 return (nState>0);
         }
 
-        sal_Bool bAvailable = sal_True;
+        bool bAvailable = true;
 
         switch (nWhich)
         {
@@ -755,8 +755,8 @@ void DbGridControl::NavigationBar::StateChanged( StateChangedType nType )
     }
 }
 
-DbGridRow::DbGridRow(CursorWrapper* pCur, sal_Bool bPaintCursor)
-          :m_bIsNew(sal_False)
+DbGridRow::DbGridRow(CursorWrapper* pCur, bool bPaintCursor)
+          :m_bIsNew(false)
 {
 
     if (pCur && pCur->Is())
@@ -810,14 +810,14 @@ DbGridRow::~DbGridRow()
     m_aVariants.clear();
 }
 
-void DbGridRow::SetState(CursorWrapper* pCur, sal_Bool bPaintCursor)
+void DbGridRow::SetState(CursorWrapper* pCur, bool bPaintCursor)
 {
     if (pCur && pCur->Is())
     {
         if (pCur->rowDeleted())
         {
             m_eStatus = GRS_DELETED;
-            m_bIsNew = sal_False;
+            m_bIsNew = false;
         }
         else
         {
@@ -832,7 +832,7 @@ void DbGridRow::SetState(CursorWrapper* pCur, sal_Bool bPaintCursor)
                 m_bIsNew = ::comphelper::getBOOL(xSet->getPropertyValue(FM_PROP_ISNEW));
             }
             else
-                m_bIsNew = sal_False;
+                m_bIsNew = false;
         }
 
         try
@@ -847,14 +847,14 @@ void DbGridRow::SetState(CursorWrapper* pCur, sal_Bool bPaintCursor)
             DBG_UNHANDLED_EXCEPTION();
             m_aBookmark = Any();
             m_eStatus = GRS_INVALID;
-            m_bIsNew = sal_False;
+            m_bIsNew = false;
         }
     }
     else
     {
         m_aBookmark = Any();
         m_eStatus = GRS_INVALID;
-        m_bIsNew = sal_False;
+        m_bIsNew = false;
     }
 }
 
@@ -883,19 +883,19 @@ DbGridControl::DbGridControl(
             ,m_nOptionMask(OPT_INSERT | OPT_UPDATE | OPT_DELETE)
             ,m_nLastColId((sal_uInt16)-1)
             ,m_nLastRowId(-1)
-            ,m_bDesignMode(sal_False)
-            ,m_bRecordCountFinal(sal_False)
-            ,m_bMultiSelection(sal_True)
-            ,m_bNavigationBar(sal_True)
-            ,m_bSynchDisplay(sal_True)
-            ,m_bForceROController(sal_False)
-            ,m_bHandle(sal_True)
-            ,m_bFilterMode(sal_False)
-            ,m_bWantDestruction(sal_False)
-            ,m_bInAdjustDataSource(sal_False)
-            ,m_bPendingAdjustRows(sal_False)
-            ,m_bHideScrollbars( sal_False )
-            ,m_bUpdating(sal_False)
+            ,m_bDesignMode(false)
+            ,m_bRecordCountFinal(false)
+            ,m_bMultiSelection(true)
+            ,m_bNavigationBar(true)
+            ,m_bSynchDisplay(true)
+            ,m_bForceROController(false)
+            ,m_bHandle(true)
+            ,m_bFilterMode(false)
+            ,m_bWantDestruction(false)
+            ,m_bInAdjustDataSource(false)
+            ,m_bPendingAdjustRows(false)
+            ,m_bHideScrollbars( false )
+            ,m_bUpdating(false)
 {
 
     OUString sName(SVX_RESSTR(RID_STR_NAVIGATIONBAR));
@@ -930,7 +930,7 @@ DbGridControl::~DbGridControl()
     RemoveColumns();
 
     {
-        m_bWantDestruction = sal_True;
+        m_bWantDestruction = true;
         osl::MutexGuard aGuard(m_aDestructionSafety);
         if (m_pFieldListeners)
             DisconnectFromFields();
@@ -1065,7 +1065,7 @@ void DbGridControl::ImplInitWindow( const InitWindowFacet _eInitWhat )
     }
 }
 
-void DbGridControl::RemoveRows(sal_Bool bNewCursor)
+void DbGridControl::RemoveRows(bool bNewCursor)
 {
     // Did the data cursor change?
     if (!bNewCursor)
@@ -1075,7 +1075,7 @@ void DbGridControl::RemoveRows(sal_Bool bNewCursor)
         m_nCurrentPos = m_nSeekPos = -1;
         m_nOptions  = OPT_READONLY;
 
-        RowRemoved(0, GetRowCount(), sal_False);
+        RowRemoved(0, GetRowCount(), false);
         m_nTotalCount = -1;
     }
     else
@@ -1104,7 +1104,7 @@ void DbGridControl::RemoveRows()
 
     // reset number of sentences to zero in the browser
     DbGridControl_Base::RemoveRows();
-    m_aBar.InvalidateAll(m_nCurrentPos, sal_True);
+    m_aBar.InvalidateAll(m_nCurrentPos, true);
 }
 
 void DbGridControl::ArrangeControls(sal_uInt16& nX, sal_uInt16 nY)
@@ -1118,7 +1118,7 @@ void DbGridControl::ArrangeControls(sal_uInt16& nX, sal_uInt16 nY)
     }
 }
 
-void DbGridControl::EnableHandle(sal_Bool bEnable)
+void DbGridControl::EnableHandle(bool bEnable)
 {
     if (m_bHandle == bEnable)
         return;
@@ -1163,7 +1163,7 @@ namespace
     }
 }
 
-void DbGridControl::EnableNavigationBar(sal_Bool bEnable)
+void DbGridControl::EnableNavigationBar(bool bEnable)
 {
     if (m_bNavigationBar == bEnable)
         return;
@@ -1174,7 +1174,7 @@ void DbGridControl::EnableNavigationBar(sal_Bool bEnable)
     {
         m_aBar.Show();
         m_aBar.Enable();
-        m_aBar.InvalidateAll(m_nCurrentPos, sal_True);
+        m_aBar.InvalidateAll(m_nCurrentPos, true);
 
         if ( adjustModeForScrollbars( m_nMode, m_bNavigationBar, m_bHideScrollbars ) )
             SetMode( m_nMode );
@@ -1259,14 +1259,14 @@ sal_uInt16 DbGridControl::SetOptions(sal_uInt16 nOpt)
         if (m_nOptions & OPT_INSERT)
         {   // the insert option is to be set
             m_xEmptyRow = new DbGridRow();
-            RowInserted(GetRowCount(), 1, sal_True);
+            RowInserted(GetRowCount(), 1, true);
         }
         else
         {   // the insert option is to be reset
             m_xEmptyRow = NULL;
             if ((GetCurRow() == GetRowCount() - 1) && (GetCurRow() > 0))
                 GoToRowColumnId(GetCurRow() - 1, GetCurColumnId());
-            RowRemoved(GetRowCount(), 1, sal_True);
+            RowRemoved(GetRowCount(), 1, true);
         }
     }
 
@@ -1277,7 +1277,7 @@ sal_uInt16 DbGridControl::SetOptions(sal_uInt16 nOpt)
     return m_nOptions;
 }
 
-void DbGridControl::ForceHideScrollbars( sal_Bool _bForce )
+void DbGridControl::ForceHideScrollbars( bool _bForce )
 {
     if ( m_bHideScrollbars == _bForce )
         return;
@@ -1288,7 +1288,7 @@ void DbGridControl::ForceHideScrollbars( sal_Bool _bForce )
         SetMode( m_nMode );
 }
 
-void DbGridControl::EnablePermanentCursor(sal_Bool bEnable)
+void DbGridControl::EnablePermanentCursor(bool bEnable)
 {
     if (IsPermanentCursorEnabled() == bEnable)
         return;
@@ -1315,7 +1315,7 @@ void DbGridControl::EnablePermanentCursor(sal_Bool bEnable)
         ActivateCell();
 }
 
-sal_Bool DbGridControl::IsPermanentCursorEnabled() const
+bool DbGridControl::IsPermanentCursorEnabled() const
 {
     return ((m_nMode & BROWSER_CURSOR_WO_FOCUS) != 0) && ((m_nMode & BROWSER_HIDECURSOR) == 0);
 }
@@ -1509,9 +1509,9 @@ void DbGridControl::setDataSource(const Reference< XRowSet >& _xCursor, sal_uInt
         }
         if (nRecordCount)
         {
-            m_xPaintRow = m_xSeekRow = new DbGridRow(m_pSeekCursor, sal_True);
-            m_xDataRow  = new DbGridRow(m_pDataCursor, sal_False);
-            RowInserted(0, nRecordCount, sal_False);
+            m_xPaintRow = m_xSeekRow = new DbGridRow(m_pSeekCursor, true);
+            m_xDataRow  = new DbGridRow(m_pDataCursor, false);
+            RowInserted(0, nRecordCount, false);
 
             if (m_xSeekRow->IsValid())
                 try
@@ -1554,9 +1554,9 @@ void DbGridControl::setDataSource(const Reference< XRowSet >& _xCursor, sal_uInt
 
     // RecalcRows was already called while resizing
     if (!IsResizing() && GetRowCount())
-        RecalcRows(GetTopRow(), GetVisibleRows(), sal_True);
+        RecalcRows(GetTopRow(), GetVisibleRows(), true);
 
-    m_aBar.InvalidateAll(m_nCurrentPos, sal_True);
+    m_aBar.InvalidateAll(m_nCurrentPos, true);
     SetUpdateMode(sal_True);
 
     // start listening on the seek cursor
@@ -1754,7 +1754,7 @@ sal_Bool DbGridControl::SeekRow(long nRow)
             m_xPaintRow = m_xEmptyRow;
         else
         {
-            m_xSeekRow->SetState( m_pSeekCursor, sal_True );
+            m_xSeekRow->SetState( m_pSeekCursor, true );
             m_xPaintRow = m_xSeekRow;
         }
     }
@@ -1767,10 +1767,10 @@ sal_Bool DbGridControl::SeekRow(long nRow)
 // Is called whenever the visible amount of data changes
 void DbGridControl::VisibleRowsChanged( long nNewTopRow, sal_uInt16 nLinesOnScreen )
 {
-    RecalcRows(nNewTopRow, nLinesOnScreen , sal_False);
+    RecalcRows(nNewTopRow, nLinesOnScreen, false);
 }
 
-void DbGridControl::RecalcRows(long nNewTopRow, sal_uInt16 nLinesOnScreen, sal_Bool bUpdateCursor)
+void DbGridControl::RecalcRows(long nNewTopRow, sal_uInt16 nLinesOnScreen, bool bUpdateCursor)
 {
     // Wenn kein Cursor -> keine Rows im Browser.
     if (!m_pSeekCursor)
@@ -1802,7 +1802,7 @@ void DbGridControl::RecalcRows(long nNewTopRow, sal_uInt16 nLinesOnScreen, sal_B
         aCacheSize <<= sal_Int32(nLinesOnScreen*2);
         xSet->setPropertyValue(FM_PROP_FETCHSIZE, aCacheSize);
         // here we need to update the cursor for sure
-        bUpdateCursor = sal_True;
+        bUpdateCursor = true;
         bCacheAligned = true;
         nLimit = nLinesOnScreen;
     }
@@ -1814,11 +1814,11 @@ void DbGridControl::RecalcRows(long nNewTopRow, sal_uInt16 nLinesOnScreen, sal_B
     // the cache was updated and no rowcount yet
     if (nDelta < nLimit && (nDelta > 0
         || (bCacheAligned && m_nTotalCount < 0)) )
-        SeekCursor(nNewTopRow + nLinesOnScreen - 1, sal_False);
+        SeekCursor(nNewTopRow + nLinesOnScreen - 1, false);
     else if (nDelta < 0 && std::abs(nDelta) < nLimit)
-        SeekCursor(nNewTopRow, sal_False);
+        SeekCursor(nNewTopRow, false);
     else if (nDelta != 0 || bUpdateCursor)
-        SeekCursor(nNewTopRow, sal_True);
+        SeekCursor(nNewTopRow, true);
 
     AdjustRows();
 
@@ -1826,7 +1826,7 @@ void DbGridControl::RecalcRows(long nNewTopRow, sal_uInt16 nLinesOnScreen, sal_B
     EnablePaint(true);
 }
 
-void DbGridControl::RowInserted(long nRow, long nNumRows, sal_Bool bDoPaint, sal_Bool bKeepSelection)
+void DbGridControl::RowInserted(long nRow, long nNumRows, bool bDoPaint, bool bKeepSelection)
 {
     if (nNumRows)
     {
@@ -1846,7 +1846,7 @@ void DbGridControl::RowInserted(long nRow, long nNumRows, sal_Bool bDoPaint, sal
     }
 }
 
-void DbGridControl::RowRemoved(long nRow, long nNumRows, sal_Bool bDoPaint)
+void DbGridControl::RowRemoved(long nRow, long nNumRows, bool bDoPaint)
 {
     if (nNumRows)
     {
@@ -1898,7 +1898,7 @@ void DbGridControl::AdjustRows()
         long nDelta = GetRowCount() - (long)nRecordCount;
         if (nDelta > 0) // too many
         {
-            RowRemoved(GetRowCount() - nDelta, nDelta, sal_False);
+            RowRemoved(GetRowCount() - nDelta, nDelta, false);
             // some rows are gone, thus, repaint starting at the current position
             Invalidate();
 
@@ -1911,11 +1911,11 @@ void DbGridControl::AdjustRows()
             if (nRecordCount)
                 GoToRowColumnId(nNewPos, GetColumnId(GetCurColumnId()));
             if (!IsResizing() && GetRowCount())
-                RecalcRows(GetTopRow(), GetVisibleRows(), sal_True);
-            m_aBar.InvalidateAll(m_nCurrentPos, sal_True);
+                RecalcRows(GetTopRow(), GetVisibleRows(), true);
+            m_aBar.InvalidateAll(m_nCurrentPos, true);
         }
         else  // too few
-            RowInserted(GetRowCount(), -nDelta, sal_True);
+            RowInserted(GetRowCount(), -nDelta, true);
     }
 
     if (m_bRecordCountFinal && m_nTotalCount < 0)
@@ -1996,7 +1996,7 @@ sal_Bool DbGridControl::CursorMoving(long nNewRow, sal_uInt16 nNewCol)
     return sal_True;
 }
 
-sal_Bool DbGridControl::SetCurrent(long nNewRow)
+bool DbGridControl::SetCurrent(long nNewRow)
 {
     // Each movement of the datacursor must start with BeginCursorAction and end with
     // EndCursorAction to block all notifications during the movement
@@ -2041,12 +2041,12 @@ sal_Bool DbGridControl::SetCurrent(long nNewRow)
                             if (!m_pDataCursor->moveToBookmark(aBookmark))
                             {
                                 EndCursorAction();
-                                return sal_False;
+                                return false;
                             }
                         }
                     }
                 }
-                m_xDataRow->SetState(m_pDataCursor, sal_False);
+                m_xDataRow->SetState(m_pDataCursor, false);
                 m_xCurrentRow = m_xDataRow;
 
                 long nPaintPos = -1;
@@ -2067,18 +2067,18 @@ sal_Bool DbGridControl::SetCurrent(long nNewRow)
         {
             OSL_FAIL("DbGridControl::SetCurrent : SeekRow failed !");
             EndCursorAction();
-            return sal_False;
+            return false;
         }
     }
     catch ( const Exception& )
     {
         DBG_UNHANDLED_EXCEPTION();
         EndCursorAction();
-        return sal_False;
+        return false;
     }
 
     EndCursorAction();
-    return sal_True;
+    return true;
 }
 
 void DbGridControl::CursorMoved()
@@ -2120,17 +2120,17 @@ void DbGridControl::onColumnChange()
         m_pGridListener->columnChanged();
 }
 
-void DbGridControl::setDisplaySynchron(sal_Bool bSync)
+void DbGridControl::setDisplaySynchron(bool bSync)
 {
     if (bSync != m_bSynchDisplay)
     {
         m_bSynchDisplay = bSync;
         if (m_bSynchDisplay)
-            AdjustDataSource(sal_False);
+            AdjustDataSource(false);
     }
 }
 
-void DbGridControl::AdjustDataSource(sal_Bool bFull)
+void DbGridControl::AdjustDataSource(bool bFull)
 {
     SAL_INFO("svx.fmcomp", "DbGridControl::AdjustDataSource");
     SolarMutexGuard aGuard;
@@ -2177,7 +2177,7 @@ void DbGridControl::AdjustDataSource(sal_Bool bFull)
     if (nNewPos < 0)// could not find any position
         return;
 
-    m_bInAdjustDataSource = sal_True;
+    m_bInAdjustDataSource = true;
     if (nNewPos != m_nCurrentPos)
     {
         if (m_bSynchDisplay)
@@ -2195,7 +2195,7 @@ void DbGridControl::AdjustDataSource(sal_Bool bFull)
         SetCurrent(nNewPos);
         RowModified(nNewPos);
     }
-    m_bInAdjustDataSource = sal_False;
+    m_bInAdjustDataSource = false;
 
     // if the data cursor was moved from outside, this section is voided
     SetNoSelection();
@@ -2253,7 +2253,7 @@ sal_Int32 DbGridControl::AlignSeekCursor()
     return m_nSeekPos;
 }
 
-sal_Bool DbGridControl::SeekCursor(long nRow, sal_Bool bAbsolute)
+bool DbGridControl::SeekCursor(long nRow, bool bAbsolute)
 {
     // position SeekCursor onto the data cursor, no data transmission
 
@@ -2261,11 +2261,11 @@ sal_Bool DbGridControl::SeekCursor(long nRow, sal_Bool bAbsolute)
     if (IsFilterRow(nRow))
     {
         m_nSeekPos = 0;
-        return sal_True;
+        return true;
     }
 
     if (!m_pSeekCursor)
-        return sal_False;
+        return false;
 
     // is this an insertion?
     if (IsValid(m_xCurrentRow) && m_xCurrentRow->IsNew() &&
@@ -2286,7 +2286,7 @@ sal_Bool DbGridControl::SeekCursor(long nRow, sal_Bool bAbsolute)
         m_nSeekPos = nRow;
     else
     {
-        sal_Bool bSuccess=sal_False;
+        bool bSuccess = false;
         long nSteps = 0;
         try
         {
@@ -2295,7 +2295,7 @@ sal_Bool DbGridControl::SeekCursor(long nRow, sal_Bool bAbsolute)
                 // somebody deleted the current row of the seek cursor. Move it away from this row.
                 m_pSeekCursor->next();
                 if ( m_pSeekCursor->isAfterLast() || m_pSeekCursor->isBeforeFirst() )
-                    bAbsolute = sal_True;
+                    bAbsolute = true;
             }
 
             if ( !bAbsolute )
@@ -2317,7 +2317,7 @@ sal_Bool DbGridControl::SeekCursor(long nRow, sal_Bool bAbsolute)
                 if (nSteps > 0) // position onto the last needed data set
                 {
                     if (m_pSeekCursor->isAfterLast())
-                        bSuccess = sal_False;
+                        bSuccess = false;
                     else if (m_pSeekCursor->isBeforeFirst())
                         bSuccess = m_pSeekCursor->absolute(nSteps);
                     else
@@ -2326,7 +2326,7 @@ sal_Bool DbGridControl::SeekCursor(long nRow, sal_Bool bAbsolute)
                 else if (nSteps < 0)
                 {
                     if (m_pSeekCursor->isBeforeFirst())
-                        bSuccess = sal_False;
+                        bSuccess = false;
                     else if (m_pSeekCursor->isAfterLast())
                         bSuccess = m_pSeekCursor->absolute(nSteps);
                     else
@@ -2335,7 +2335,7 @@ sal_Bool DbGridControl::SeekCursor(long nRow, sal_Bool bAbsolute)
                 else
                 {
                     m_nSeekPos = nRow;
-                    return sal_True;
+                    return true;
                 }
             }
         }
@@ -2351,14 +2351,14 @@ sal_Bool DbGridControl::SeekCursor(long nRow, sal_Bool bAbsolute)
                 if (bAbsolute || nSteps > 0)
                 {
                     if (m_pSeekCursor->isLast())
-                        bSuccess=sal_True;
+                        bSuccess = true;
                     else
                         bSuccess = m_pSeekCursor->last();
                 }
                 else
                 {
                     if (m_pSeekCursor->isFirst())
-                        bSuccess = sal_True;
+                        bSuccess = true;
                     else
                         bSuccess = m_pSeekCursor->first();
                 }
@@ -2547,11 +2547,11 @@ void DbGridControl::SetDesignMode(bool bMode)
         GetDataWindow().SetMouseTransparent(bMode);
         SetMouseTransparent(bMode);
 
-        m_aBar.InvalidateAll(m_nCurrentPos, sal_True);
+        m_aBar.InvalidateAll(m_nCurrentPos, true);
     }
 }
 
-void DbGridControl::SetFilterMode(sal_Bool bMode)
+void DbGridControl::SetFilterMode(bool bMode)
 {
     if (IsFilterMode() != bMode)
     {
@@ -2564,7 +2564,7 @@ void DbGridControl::SetFilterMode(sal_Bool bMode)
             // there is no cursor anymore
             if (IsEditing())
                 DeactivateCell();
-            RemoveRows(sal_False);
+            RemoveRows(false);
 
             m_xEmptyRow = new DbGridRow();
 
@@ -2577,7 +2577,7 @@ void DbGridControl::SetFilterMode(sal_Bool bMode)
             }
 
             // one row for filtering
-            RowInserted(0, 1, sal_True);
+            RowInserted(0, 1, true);
             SetUpdateMode(sal_True);
         }
         else
@@ -2680,7 +2680,7 @@ void DbGridControl::DataSourcePropertyChanged(const PropertyChangeEvent& evt) th
                 // -> we've to add a new grid row
                 if ((nRecordCount == GetRowCount() - 1)  && m_xCurrentRow->IsNew())
                 {
-                    RowInserted(GetRowCount(), 1, sal_True);
+                    RowInserted(GetRowCount(), 1, true);
                     InvalidateStatusCell(m_nCurrentPos);
                     m_aBar.InvalidateAll(m_nCurrentPos);
                 }
@@ -2692,7 +2692,7 @@ void DbGridControl::DataSourcePropertyChanged(const PropertyChangeEvent& evt) th
                 // one is about to be cleaned, too, the second one is obsolet now.
                 if (m_xCurrentRow->IsNew() && nRecordCount == (GetRowCount() - 2))
                 {
-                    RowRemoved(GetRowCount() - 1, 1, sal_True);
+                    RowRemoved(GetRowCount() - 1, 1, true);
                     InvalidateStatusCell(m_nCurrentPos);
                     m_aBar.InvalidateAll(m_nCurrentPos);
                 }
@@ -2728,7 +2728,7 @@ void DbGridControl::StartDrag( sal_Int8 /*nAction*/, const Point& rPosPixel )
     }
 }
 
-sal_Bool DbGridControl::canCopyCellText(sal_Int32 _nRow, sal_Int16 _nColId)
+bool DbGridControl::canCopyCellText(sal_Int32 _nRow, sal_Int16 _nColId)
 {
     return  (_nRow >= 0)
         &&  (_nRow < GetRowCount())
@@ -2908,14 +2908,14 @@ void DbGridControl::CellModified()
             if (m_nCurrentPos == GetRowCount() - 1)
             {
                 // increment RowCount
-                RowInserted(GetRowCount(), 1, sal_True);
+                RowInserted(GetRowCount(), 1, true);
                 InvalidateStatusCell(m_nCurrentPos);
                 m_aBar.InvalidateAll(m_nCurrentPos);
             }
         }
         else if (m_xCurrentRow->GetStatus() != GRS_MODIFIED)
         {
-            m_xCurrentRow->SetState(m_pDataCursor, sal_False);
+            m_xCurrentRow->SetState(m_pDataCursor, false);
             SAL_INFO("svx.fmcomp", "current row is not new, after SetState, new state: " << ROWSTATUS(m_xCurrentRow));
             m_xCurrentRow->SetStatus(GRS_MODIFIED);
             SAL_INFO("svx.fmcomp", "current row is not new, new state: MODIFIED");
@@ -2981,7 +2981,7 @@ void DbGridControl::Undo()
 
         EndCursorAction();
 
-        m_xDataRow->SetState(m_pDataCursor, sal_False);
+        m_xDataRow->SetState(m_pDataCursor, false);
         if (&m_xPaintRow == &m_xCurrentRow)
             m_xPaintRow = m_xCurrentRow = m_xDataRow;
         else
@@ -2992,7 +2992,7 @@ void DbGridControl::Undo()
             if (m_nCurrentPos == GetRowCount() - 2)
             {   // maybe we already removed it (in resetCurrentRow, called if the above moveToInsertRow
                 // caused our data source form to be reset - which should be the usual case ....)
-                RowRemoved(GetRowCount() - 1, 1, sal_True);
+                RowRemoved(GetRowCount() - 1, 1, true);
                 m_aBar.InvalidateAll(m_nCurrentPos);
             }
 
@@ -3019,14 +3019,14 @@ void DbGridControl::resetCurrentRow()
             {
                 if (m_nCurrentPos == GetRowCount() - 2)
                 {
-                    RowRemoved(GetRowCount() - 1, 1, sal_True);
+                    RowRemoved(GetRowCount() - 1, 1, true);
                     m_aBar.InvalidateAll(m_nCurrentPos);
                 }
             }
         }
 
         // update the rows
-        m_xDataRow->SetState(m_pDataCursor, sal_False);
+        m_xDataRow->SetState(m_pDataCursor, false);
         if (&m_xPaintRow == &m_xCurrentRow)
             m_xPaintRow = m_xCurrentRow = m_xDataRow;
         else
@@ -3052,12 +3052,12 @@ sal_Bool DbGridControl::IsModified() const
     return !IsFilterMode() && IsValid(m_xCurrentRow) && (m_xCurrentRow->IsModified() || DbGridControl_Base::IsModified());
 }
 
-sal_Bool DbGridControl::IsCurrentAppending() const
+bool DbGridControl::IsCurrentAppending() const
 {
     return m_xCurrentRow.Is() && m_xCurrentRow->IsNew();
 }
 
-sal_Bool DbGridControl::IsInsertionRow(long nRow) const
+bool DbGridControl::IsInsertionRow(long nRow) const
 {
     return (m_nOptions & OPT_INSERT) && m_nTotalCount >= 0 && (nRow == GetRowCount() - 1);
 }
@@ -3093,7 +3093,7 @@ sal_Bool DbGridControl::SaveModified()
 
         if ( IsValid(m_xCurrentRow) )
         {
-            m_xCurrentRow->SetState(m_pDataCursor, sal_False);
+            m_xCurrentRow->SetState(m_pDataCursor, false);
             SAL_INFO("svx.fmcomp", "explicit SetState, new state: " << ROWSTATUS(m_xCurrentRow));
             InvalidateStatusCell( m_nCurrentPos );
         }
@@ -3123,7 +3123,7 @@ sal_Bool DbGridControl::SaveRow()
         if (!SaveModified())
             return sal_False;
     }
-    m_bUpdating = sal_True;
+    m_bUpdating = true;
 
     BeginCursorAction();
     sal_Bool bAppending = m_xCurrentRow->IsNew();
@@ -3140,7 +3140,7 @@ sal_Bool DbGridControl::SaveRow()
     catch(SQLException&)
     {
         EndCursorAction();
-        m_bUpdating = sal_False;
+        m_bUpdating = false;
         return sal_False;
     }
 
@@ -3150,9 +3150,9 @@ sal_Bool DbGridControl::SaveRow()
         {
             // if we are appending we still sit on the insert row
             // we don't move just clear the flags not to move on the current row
-            m_xCurrentRow->SetState(m_pDataCursor, sal_False);
+            m_xCurrentRow->SetState(m_pDataCursor, false);
             SAL_INFO("svx.fmcomp", "explicit SetState after a successful update, new state: " << ROWSTATUS(m_xCurrentRow));
-            m_xCurrentRow->SetNew(sal_False);
+            m_xCurrentRow->SetNew(false);
 
             // adjust the seekcursor if it is on the same position as the datacursor
             if (m_nSeekPos == m_nCurrentPos || bAppending)
@@ -3162,7 +3162,7 @@ sal_Bool DbGridControl::SaveRow()
                 Any aBookmark = bAppending ? m_pDataCursor->getBookmark() : m_pSeekCursor->getBookmark();
                 m_pSeekCursor->moveToBookmark(aBookmark);
                 // get the data
-                m_xSeekRow->SetState(m_pSeekCursor, sal_True);
+                m_xSeekRow->SetState(m_pSeekCursor, true);
                 m_nSeekPos = m_pSeekCursor->getRow() - 1;
             }
         }
@@ -3173,7 +3173,7 @@ sal_Bool DbGridControl::SaveRow()
     {
     }
 
-    m_bUpdating = sal_False;
+    m_bUpdating = false;
     EndCursorAction();
 
     // The old code returned (nRecords != 0) here.
@@ -3399,7 +3399,7 @@ sal_uInt16 DbGridControl::GetModelColumnPos( sal_uInt16 nId ) const
     return GRID_COLUMN_NOT_FOUND;
 }
 
-void DbGridControl::implAdjustInSolarThread(sal_Bool _bRows)
+void DbGridControl::implAdjustInSolarThread(bool _bRows)
 {
     SAL_INFO("svx.fmcomp", "DbGridControl::implAdjustInSolarThread");
     ::osl::MutexGuard aGuard(m_aAdjustSafety);

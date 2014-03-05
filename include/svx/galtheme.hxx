@@ -101,15 +101,15 @@ private:
     SotStorageRef               aSvDrawStorageRef;
     Gallery*                    pParent;
     GalleryThemeEntry*          pThm;
-    sal_uIntPtr                     mnThemeLockCount;
-    sal_uIntPtr                     mnBroadcasterLockCount;
-    sal_uIntPtr                     nDragPos;
-    sal_Bool                        bDragging;
-    sal_Bool                        bAbortActualize;
+    sal_uIntPtr                 mnThemeLockCount;
+    sal_uIntPtr                 mnBroadcasterLockCount;
+    sal_uIntPtr                 nDragPos;
+    bool                        bDragging;
+    bool                        bAbortActualize;
 
     void                        ImplCreateSvDrawStorage();
     SVX_DLLPUBLIC SgaObject*                    ImplReadSgaObject( GalleryObject* pEntry );
-    sal_Bool                    ImplWriteSgaObject( const SgaObject& rObj, size_t nPos, GalleryObject* pExistentEntry );
+    bool                        ImplWriteSgaObject( const SgaObject& rObj, size_t nPos, GalleryObject* pExistentEntry );
     void                        ImplWrite();
     const GalleryObject*        ImplGetGalleryObject( size_t nPos ) const
                                 { return ( nPos < aObjectList.size() ) ? aObjectList[ nPos ] : NULL; }
@@ -124,7 +124,7 @@ private:
                                 }
     INetURLObject               ImplGetURL( const GalleryObject* pObject ) const;
     INetURLObject               ImplCreateUniqueURL( SgaObjKind eObjKind, sal_uIntPtr nFormat = CVT_UNKNOWN );
-    void                        ImplSetModified( sal_Bool bModified );
+    void                        ImplSetModified( bool bModified );
     void                        ImplBroadcast( sal_uIntPtr nUpdatePos );
 
                                 GalleryTheme();
@@ -133,7 +133,7 @@ private:
 
 public:
 
-    static GalleryThemeEntry*   CreateThemeEntry( const INetURLObject& rURL, sal_Bool bReadOnly );
+    static GalleryThemeEntry*   CreateThemeEntry( const INetURLObject& rURL, bool bReadOnly );
 
     size_t                      GetObjectCount() const { return aObjectList.size(); }
 
@@ -156,30 +156,30 @@ public:
     SVX_DLLPUBLIC const INetURLObject&      GetSdgURL() const;
     const INetURLObject&        GetSdvURL() const;
 
-    SVX_DLLPUBLIC sal_uInt32        GetId() const;
-    void                        SetId( sal_uInt32 nNewId, sal_Bool bResetThemeName );
+    SVX_DLLPUBLIC sal_uInt32    GetId() const;
+    void                        SetId( sal_uInt32 nNewId, bool bResetThemeName );
 
-    void                        SetDragging( sal_Bool bSet ) { bDragging = bSet; }
-    sal_Bool                        IsDragging() const { return bDragging; }
+    void                        SetDragging( bool bSet ) { bDragging = bSet; }
+    bool                        IsDragging() const { return bDragging; }
 
     void                        LockTheme() { ++mnThemeLockCount; }
-    sal_Bool                        UnlockTheme();
+    bool                        UnlockTheme();
 
     void                        LockBroadcaster() { mnBroadcasterLockCount++; }
     SVX_DLLPUBLIC void          UnlockBroadcaster( sal_uIntPtr nUpdatePos = 0 );
-    sal_Bool                        IsBroadcasterLocked() const { return mnBroadcasterLockCount > 0; }
+    bool                        IsBroadcasterLocked() const { return mnBroadcasterLockCount > 0; }
 
     void                        SetDragPos( sal_uIntPtr nPos ) { nDragPos = nPos; }
     sal_uIntPtr                     GetDragPos() const { return nDragPos; }
 
-    sal_Bool                        IsThemeNameFromResource() const;
+    bool                        IsThemeNameFromResource() const;
 
-    SVX_DLLPUBLIC sal_Bool          IsReadOnly() const;
-    SVX_DLLPUBLIC sal_Bool          IsDefault() const;
-    sal_Bool                        IsModified() const;
+    SVX_DLLPUBLIC bool          IsReadOnly() const;
+    SVX_DLLPUBLIC bool          IsDefault() const;
+    bool                        IsModified() const;
 
     SVX_DLLPUBLIC void                      Actualize( const Link& rActualizeLink, GalleryProgress* pProgress = NULL );
-    void                        AbortActualize() { bAbortActualize = sal_True; }
+    void                        AbortActualize() { bAbortActualize = true; }
 
     Gallery*                    GetParent() const { return pParent; }
     SotStorageRef               GetSvDrawStorage() const { return aSvDrawStorageRef; }
@@ -199,22 +199,22 @@ public:
                                     return ImplGetGalleryObject( nPos )->aURL;
                                 }
 
-    sal_Bool                        GetThumb( sal_uIntPtr nPos, BitmapEx& rBmp, sal_Bool bProgress = sal_False );
+    bool                        GetThumb( sal_uIntPtr nPos, BitmapEx& rBmp, bool bProgress = false );
 
-    SVX_DLLPUBLIC sal_Bool                      GetGraphic( sal_uIntPtr nPos, Graphic& rGraphic, sal_Bool bProgress = sal_False );
-    SVX_DLLPUBLIC sal_Bool                      InsertGraphic( const Graphic& rGraphic, sal_uIntPtr nInsertPos = CONTAINER_APPEND );
+    SVX_DLLPUBLIC bool         GetGraphic( sal_uIntPtr nPos, Graphic& rGraphic, bool bProgress = false );
+    SVX_DLLPUBLIC bool         InsertGraphic( const Graphic& rGraphic, sal_uIntPtr nInsertPos = CONTAINER_APPEND );
 
-    SVX_DLLPUBLIC sal_Bool                      GetModel( sal_uIntPtr nPos, SdrModel& rModel, sal_Bool bProgress = sal_False );
-    SVX_DLLPUBLIC sal_Bool                      InsertModel( const FmFormModel& rModel, sal_uIntPtr nInsertPos = CONTAINER_APPEND );
+    SVX_DLLPUBLIC bool          GetModel( sal_uIntPtr nPos, SdrModel& rModel, bool bProgress = false );
+    SVX_DLLPUBLIC bool          InsertModel( const FmFormModel& rModel, sal_uIntPtr nInsertPos = CONTAINER_APPEND );
 
-    sal_Bool                        GetModelStream( sal_uIntPtr nPos, SotStorageStreamRef& rModelStreamRef, sal_Bool bProgress = sal_False );
-    sal_Bool                        InsertModelStream( const SotStorageStreamRef& rModelStream, sal_uIntPtr nInsertPos = CONTAINER_APPEND );
+    bool                        GetModelStream( sal_uIntPtr nPos, SotStorageStreamRef& rModelStreamRef, bool bProgress = false );
+    bool                        InsertModelStream( const SotStorageStreamRef& rModelStream, sal_uIntPtr nInsertPos = CONTAINER_APPEND );
 
-    sal_Bool                        GetURL( sal_uIntPtr nPos, INetURLObject& rURL, sal_Bool bProgress = sal_False );
-    SVX_DLLPUBLIC sal_Bool                      InsertURL( const INetURLObject& rURL, sal_uIntPtr nInsertPos = CONTAINER_APPEND );
-    sal_Bool                        InsertFileOrDirURL( const INetURLObject& rFileOrDirURL, sal_uIntPtr nInsertPos = CONTAINER_APPEND );
+    bool                        GetURL( sal_uIntPtr nPos, INetURLObject& rURL, bool bProgress = false );
+    SVX_DLLPUBLIC bool          InsertURL( const INetURLObject& rURL, sal_uIntPtr nInsertPos = CONTAINER_APPEND );
+    bool                        InsertFileOrDirURL( const INetURLObject& rFileOrDirURL, sal_uIntPtr nInsertPos = CONTAINER_APPEND );
 
-    sal_Bool                        InsertTransferable( const ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::XTransferable >& rxTransferable, sal_uIntPtr nInsertPos );
+    bool                        InsertTransferable( const ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::XTransferable >& rxTransferable, sal_uIntPtr nInsertPos );
 
     void                        CopyToClipboard( Window* pWindow, sal_uIntPtr nPos );
     void                        StartDrag( Window* pWindow, sal_uIntPtr nPos );

@@ -61,9 +61,9 @@ GraphCtrl::GraphCtrl( Window* pParent, const ResId& rResId ) :
             nWinStyle       ( 0 ),
             eObjKind        ( OBJ_NONE ),
             nPolyEdit       ( 0 ),
-            bEditMode       ( sal_False ),
-            bSdrMode        ( sal_False ),
-            bAnim           ( sal_False ),
+            bEditMode       ( false ),
+            bSdrMode        ( false ),
+            bAnim           ( false ),
             mpAccContext    ( NULL ),
             pModel          ( NULL ),
             pView           ( NULL )
@@ -81,9 +81,9 @@ GraphCtrl::GraphCtrl( Window* pParent, WinBits nStyle ) :
             nWinStyle       ( 0 ),
             eObjKind        ( OBJ_NONE ),
             nPolyEdit       ( 0 ),
-            bEditMode       ( sal_False ),
-            bSdrMode        ( sal_False ),
-            bAnim           ( sal_False ),
+            bEditMode       ( false ),
+            bSdrMode        ( false ),
+            bAnim           ( false ),
             mpAccContext    ( NULL ),
             pModel          ( NULL ),
             pView           ( NULL )
@@ -179,7 +179,7 @@ void GraphCtrl::InitSdrModel()
         mpAccContext->setModelAndView (pModel, pView);
 }
 
-void GraphCtrl::SetGraphic( const Graphic& rGraphic, sal_Bool bNewModel )
+void GraphCtrl::SetGraphic( const Graphic& rGraphic, bool bNewModel )
 {
     // If possible we dither bitmaps for the display
     if ( !bAnim && ( rGraphic.GetType() == GRAPHIC_BITMAP )  )
@@ -718,7 +718,7 @@ SdrObject* GraphCtrl::GetSelectedSdrObject() const
     return pSdrObj;
 }
 
-void GraphCtrl::SetEditMode( const sal_Bool _bEditMode )
+void GraphCtrl::SetEditMode( const bool _bEditMode )
 {
     if ( bSdrMode )
     {
@@ -728,7 +728,7 @@ void GraphCtrl::SetEditMode( const sal_Bool _bEditMode )
         pView->SetCurrentObj( sal::static_int_cast< sal_uInt16 >( eObjKind ) );
     }
     else
-        bEditMode = sal_False;
+        bEditMode = false;
 }
 
 void GraphCtrl::SetPolyEditMode( const sal_uInt16 _nPolyEdit )
@@ -746,7 +746,7 @@ void GraphCtrl::SetObjKind( const SdrObjKind _eObjKind )
 {
     if ( bSdrMode )
     {
-        bEditMode = sal_False;
+        bEditMode = false;
         pView->SetEditMode( bEditMode );
         eObjKind = _eObjKind;
         pView->SetCurrentObj( sal::static_int_cast< sal_uInt16 >( eObjKind ) );

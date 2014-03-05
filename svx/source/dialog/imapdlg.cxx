@@ -348,7 +348,7 @@ IMPL_LINK( SvxIMapDlg, TbxClickHdl, ToolBox*, pTbx )
         case( TBI_SELECT ):
         {
             pTbx->CheckItem( nNewItemId, true );
-            pIMapWnd->SetEditMode( sal_True );
+            pIMapWnd->SetEditMode( true );
             if( pTbx->IsKeyEvent() )
             {
                 if((pTbx->GetKeyModifier() & KEY_MOD1) != 0)
@@ -737,7 +737,7 @@ IMPL_LINK_NOARG(SvxIMapDlg, UpdateHdl)
 
         // After changes => default selection
         aTbxIMapDlg1.CheckItem( TBI_SELECT, true );
-        pIMapWnd->SetEditMode( sal_True );
+        pIMapWnd->SetEditMode( true );
     }
 
     // Delete the copied list again in the Update method

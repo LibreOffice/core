@@ -48,8 +48,8 @@ private:
     Rectangle           aPreviewRect;
     GalleryTheme*       mpTheme;
 
-    SVX_DLLPRIVATE sal_Bool             ImplGetGraphicCenterRect( const Graphic& rGraphic, Rectangle& rResultRect ) const;
-    SVX_DLLPRIVATE void                InitSettings();
+    SVX_DLLPRIVATE bool             ImplGetGraphicCenterRect( const Graphic& rGraphic, Rectangle& rResultRect ) const;
+    SVX_DLLPRIVATE void             InitSettings();
 
     // Window
     SVX_DLLPRIVATE virtual void         Paint(const Rectangle& rRect);
