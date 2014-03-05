@@ -21,6 +21,12 @@
     <glade-widget-class title="Index Box" name="sfxlo-IndexBox"
                         generic-name="IndexBox" parent="GtkComboBoxText"
                         icon-name="widget-gtk-comboboxtext"/>
+    <glade-widget-class title="Search Box" name="sfxlo-SearchBox"
+                        generic-name="SearchBox" parent="GtkComboBoxText"
+                        icon-name="widget-gtk-comboboxtext"/>
+    <glade-widget-class title="Search Results Box" name="sfxlo-SearchResultsBox"
+                        generic-name="SearchResultsBox" parent="GtkComboBoxText"
+                        icon-name="widget-gtk-comboboxtext"/>
     <glade-widget-class title="Font PickListBox" name="smlo-SmFontPickListBox"
                         generic-name="SmFontPickListBox" parent="GtkComboBoxText"
                         icon-name="widget-gtk-comboboxtext"/>

@@ -71,63 +71,6 @@ Window WIN_HELPINDEX
     };
 };
 
-TabPage TP_HELP_SEARCH
-{
-    HelpId = HID_HELP_TABPAGE_SEARCH;
-    Hide = TRUE ;
-    DialogControl = TRUE;
-    Size = MAP_APPFONT ( 140 , 122 ) ;
-    FixedText FT_SEARCH
-    {
-        Pos = MAP_APPFONT ( 6 , 6 ) ;
-        Size = MAP_APPFONT ( 128 , 10 ) ;
-        Text [ en-US ] = "S~earch term" ;
-    };
-    ComboBox ED_SEARCH
-    {
-        HelpID = "sfx2:ComboBox:TP_HELP_SEARCH:ED_SEARCH";
-        Border = TRUE ;
-        DropDown = TRUE;
-        Pos = MAP_APPFONT ( 6 , 17 ) ;
-        Size = MAP_APPFONT ( 92 , 40 ) ;
-    };
-    PushButton PB_SEARCH
-    {
-        HelpID = "sfx2:PushButton:TP_HELP_SEARCH:PB_SEARCH";
-        Pos = MAP_APPFONT ( 101 , 17 ) ;
-        Size = MAP_APPFONT ( 50 , 14 ) ;
-        Text [ en-US ] = "~Find";
-    };
-    CheckBox CB_FULLWORDS
-    {
-        HelpID = "sfx2:CheckBox:TP_HELP_SEARCH:CB_FULLWORDS";
-        Pos = MAP_APPFONT ( 6, 34 ) ;
-        Size = MAP_APPFONT ( 128 , 10 ) ;
-        Text [ en-US ] = "~Complete words only";
-    };
-    CheckBox CB_SCOPE
-    {
-        HelpID = "sfx2:CheckBox:TP_HELP_SEARCH:CB_SCOPE";
-        Pos = MAP_APPFONT ( 6, 47 ) ;
-        Size = MAP_APPFONT ( 128 , 10 ) ;
-        Text [ en-US ] = "Find in ~headings only";
-    };
-    ListBox LB_RESULT
-    {
-        HelpID = "sfx2:ListBox:TP_HELP_SEARCH:LB_RESULT";
-        Border = TRUE ;
-        Pos = MAP_APPFONT ( 6 , 60 ) ;
-        Size = MAP_APPFONT ( 128 , 30 ) ;
-    };
-    PushButton PB_OPEN_SEARCH
-    {
-        HelpID = "sfx2:PushButton:TP_HELP_SEARCH:PB_OPEN_SEARCH";
-        Pos = MAP_APPFONT ( 84 , 182 ) ;
-        Size = MAP_APPFONT ( 50 , 14 ) ;
-        Text [ en-US ] = "~Display" ;
-    };
-};
-
 TabPage TP_HELP_CONTENT
 {
     HelpId = HID_HELP_TABPAGE_CONTENTS;

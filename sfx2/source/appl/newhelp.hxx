@@ -169,8 +169,11 @@ private:
     Link                aSearchLink;
 
 public:
-    SearchBox_Impl( Window* pParent, const ResId& rResId ) :
-        ComboBox( pParent, rResId ) { SetDropDownLineCount( 5 ); }
+    SearchBox_Impl(Window* pParent, WinBits nStyle)
+        : ComboBox(pParent, nStyle)
+    {
+        SetDropDownLineCount(5);
+    }
 
     virtual bool        PreNotify( NotifyEvent& rNEvt );
     virtual void        Select();
@@ -181,7 +184,10 @@ public:
 class SearchResultsBox_Impl : public ListBox
 {
 public:
-    SearchResultsBox_Impl( Window* pParent, const ResId& rResId ) : ListBox( pParent, rResId ) {}
+    SearchResultsBox_Impl(Window* pParent, WinBits nStyle)
+        : ListBox(pParent, nStyle)
+    {
+    }
 
     virtual bool    Notify( NotifyEvent& rNEvt );
 };
@@ -189,15 +195,13 @@ public:
 class SearchTabPage_Impl : public HelpTabPage_Impl
 {
 private:
-    FixedText               aSearchFT;
-    SearchBox_Impl          aSearchED;
-    PushButton              aSearchBtn;
-    CheckBox                aFullWordsCB;
-    CheckBox                aScopeCB;
-    SearchResultsBox_Impl   aResultsLB;
-    PushButton              aOpenBtn;
+    SearchBox_Impl*         m_pSearchED;
+    PushButton*             m_pSearchBtn;
+    CheckBox*               m_pFullWordsCB;
+    CheckBox*               m_pScopeCB;
+    SearchResultsBox_Impl*  m_pResultsLB;
+    PushButton*             m_pOpenBtn;
 
-    Size                    aMinSize;
     OUString                aFactory;
 
     ::com::sun::star::uno::Reference< ::com::sun::star::i18n::XBreakIterator >
@@ -214,7 +218,6 @@ public:
     SearchTabPage_Impl( Window* pParent, SfxHelpIndexWindow_Impl* _pIdxWin );
     ~SearchTabPage_Impl();
 
-    virtual void        Resize();
     virtual void        ActivatePage();
     virtual Control*    GetLastFocusControl();
 
@@ -222,10 +225,10 @@ public:
     inline void         SetFactory( const OUString& rFactory ) { aFactory = rFactory; }
     OUString            GetSelectEntry() const;
     void                ClearPage();
-    inline void         SetFocusOnBox() { aResultsLB.GrabFocus(); }
-    inline sal_Bool     HasFocusOnEdit() const { return aSearchED.HasChildPathFocus(); }
-    inline OUString     GetSearchText() const { return aSearchED.GetText(); }
-    inline sal_Bool     IsFullWordSearch() const { return aFullWordsCB.IsChecked(); }
+    inline void         SetFocusOnBox() { m_pResultsLB->GrabFocus(); }
+    inline sal_Bool     HasFocusOnEdit() const { return m_pSearchED->HasChildPathFocus(); }
+    inline OUString     GetSearchText() const { return m_pSearchED->GetText(); }
+    inline sal_Bool     IsFullWordSearch() const { return m_pFullWordsCB->IsChecked(); }
     sal_Bool            OpenKeyword( const OUString& rKeyword );
 };
 

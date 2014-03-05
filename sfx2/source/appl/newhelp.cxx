@@ -873,6 +873,15 @@ void IndexTabPage_Impl::OpenKeyword()
 
 // class SearchBox_Impl --------------------------------------------------
 
+extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeSearchBox(Window *pParent,
+    VclBuilder::stringmap &)
+{
+    WinBits nWinBits = WB_CLIPCHILDREN|WB_LEFT|WB_VCENTER|WB_3DLOOK|WB_SIMPLEMODE|WB_DROPDOWN;
+    SearchBox_Impl* pComboBox = new SearchBox_Impl(pParent, nWinBits);
+    pComboBox->EnableAutoSize(true);
+    return pComboBox;
+}
+
 bool SearchBox_Impl::PreNotify( NotifyEvent& rNEvt )
 {
     sal_Bool bHandled = sal_False;
@@ -897,6 +906,18 @@ void SearchBox_Impl::Select()
 
 // class SearchResultsBox_Impl -------------------------------------------
 
+extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeSearchResultsBox(Window *pParent,
+    VclBuilder::stringmap &rMap)
+{
+    WinBits nWinBits = WB_CLIPCHILDREN|WB_LEFT|WB_VCENTER|WB_3DLOOK;
+    OString sBorder = VclBuilder::extractCustomProperty(rMap);
+    if (!sBorder.isEmpty())
+       nWinBits |= WB_BORDER;
+    SearchResultsBox_Impl* pListBox = new SearchResultsBox_Impl(pParent, nWinBits);
+    pListBox->EnableAutoSize(true);
+    return pListBox;
+}
+
 bool SearchResultsBox_Impl::Notify( NotifyEvent& rNEvt )
 {
     bool bHandled = false;
@@ -912,29 +933,30 @@ bool SearchResultsBox_Impl::Notify( NotifyEvent& rNEvt )
 
 // class SearchTabPage_Impl ----------------------------------------------
 
-SearchTabPage_Impl::SearchTabPage_Impl( Window* pParent, SfxHelpIndexWindow_Impl* _pIdxWin ) :
+SearchTabPage_Impl::SearchTabPage_Impl(Window* pParent, SfxHelpIndexWindow_Impl* _pIdxWin)
+    : HelpTabPage_Impl(pParent, _pIdxWin, "HelpSearchPage",
+        "sfx/ui/helpsearchpage.ui")
 
-    HelpTabPage_Impl( pParent, _pIdxWin, SfxResId( TP_HELP_SEARCH ) ),
+    ,
 
-    aSearchFT       ( this, SfxResId( FT_SEARCH ) ),
-    aSearchED       ( this, SfxResId( ED_SEARCH ) ),
-    aSearchBtn      ( this, SfxResId( PB_SEARCH ) ),
-    aFullWordsCB    ( this, SfxResId( CB_FULLWORDS ) ),
-    aScopeCB        ( this, SfxResId( CB_SCOPE ) ),
-    aResultsLB      ( this, SfxResId( LB_RESULT ) ),
-    aOpenBtn        ( this, SfxResId( PB_OPEN_SEARCH ) ),
     xBreakIterator  ( vcl::unohelper::CreateBreakIterator() )
 
 {
-    FreeResource();
+    get(m_pSearchED, "search");
+    get(m_pSearchBtn, "find");
+    get(m_pFullWordsCB, "completewords");
+    get(m_pScopeCB, "headings");
+    get(m_pResultsLB, "results");
+    Size aSize(LogicToPixel(Size(128 , 30), MAP_APPFONT));
+    m_pResultsLB->set_width_request(aSize.Width());
+    m_pResultsLB->set_height_request(aSize.Height());
+    get(m_pOpenBtn, "display");
 
     Link aLink = LINK( this, SearchTabPage_Impl, SearchHdl );
-    aSearchED.SetSearchLink( aLink );
-    aSearchBtn.SetClickHdl( aLink );
-    aSearchED.SetModifyHdl( LINK( this, SearchTabPage_Impl, ModifyHdl ) );
-    aOpenBtn.SetClickHdl( LINK( this, SearchTabPage_Impl, OpenHdl ) );
-
-    aMinSize = GetSizePixel();
+    m_pSearchED->SetSearchLink( aLink );
+    m_pSearchBtn->SetClickHdl(aLink);
+    m_pSearchED->SetModifyHdl( LINK( this, SearchTabPage_Impl, ModifyHdl ) );
+    m_pOpenBtn->SetClickHdl( LINK( this, SearchTabPage_Impl, OpenHdl ) );
 
     SvtViewOptions aViewOpt( E_TABPAGE, CONFIGNAME_SEARCHPAGE );
     if ( aViewOpt.Exists() )
@@ -944,38 +966,36 @@ SearchTabPage_Impl::SearchTabPage_Impl( Window* pParent, SfxHelpIndexWindow_Impl
         if ( aUserItem >>= aUserData )
         {
             sal_Bool bChecked = ( 1 == aUserData.getToken(0, ';').toInt32() ) ? sal_True : sal_False;
-            aFullWordsCB.Check( bChecked );
+            m_pFullWordsCB->Check( bChecked );
             bChecked = ( 1 == aUserData.getToken(1, ';').toInt32() ) ? sal_True : sal_False;
-            aScopeCB.Check( bChecked );
+            m_pScopeCB->Check( bChecked );
 
             for ( sal_uInt16 i = 2; i < comphelper::string::getTokenCount(aUserData, ';'); ++i )
             {
                 OUString aToken = aUserData.getToken(i, ';');
-                aSearchED.InsertEntry( INetURLObject::decode(
+                m_pSearchED->InsertEntry( INetURLObject::decode(
                     aToken, '%', INetURLObject::DECODE_WITH_CHARSET ) );
             }
         }
     }
 
-    ModifyHdl( &aSearchED );
+    ModifyHdl(m_pSearchED);
 }
-
-
 
 SearchTabPage_Impl::~SearchTabPage_Impl()
 {
     SvtViewOptions aViewOpt( E_TABPAGE, CONFIGNAME_SEARCHPAGE );
-    sal_Int32 nChecked = aFullWordsCB.IsChecked() ? 1 : 0;
+    sal_Int32 nChecked = m_pFullWordsCB->IsChecked() ? 1 : 0;
     OUString aUserData = OUString::number( nChecked );
     aUserData += ";";
-    nChecked = aScopeCB.IsChecked() ? 1 : 0;
+    nChecked = m_pScopeCB->IsChecked() ? 1 : 0;
     aUserData += OUString::number( nChecked );
     aUserData += ";";
-    sal_uInt16 nCount = std::min( aSearchED.GetEntryCount(), (sal_uInt16)10 );  // save only 10 entries
+    sal_uInt16 nCount = std::min( m_pSearchED->GetEntryCount(), (sal_uInt16)10 );  // save only 10 entries
 
     for ( sal_uInt16 i = 0; i < nCount; ++i )
     {
-        OUString aText = aSearchED.GetEntry(i);
+        OUString aText = m_pSearchED->GetEntry(i);
         aUserData += INetURLObject::encode(
             aText, INetURLObject::PART_UNO_PARAM_VALUE, '%',
             INetURLObject::ENCODE_ALL );
@@ -991,34 +1011,34 @@ SearchTabPage_Impl::~SearchTabPage_Impl()
 
 void SearchTabPage_Impl::ClearSearchResults()
 {
-    sal_uInt16 nCount = aResultsLB.GetEntryCount();
+    sal_uInt16 nCount = m_pResultsLB->GetEntryCount();
     for ( sal_uInt16 i = 0; i < nCount; ++i )
-        delete (OUString*)(sal_uIntPtr)aResultsLB.GetEntryData(i);
-    aResultsLB.Clear();
-    aResultsLB.Update();
+        delete (OUString*)(sal_uIntPtr)m_pResultsLB->GetEntryData(i);
+    m_pResultsLB->Clear();
+    m_pResultsLB->Update();
 }
 
 
 
 void SearchTabPage_Impl::RememberSearchText( const OUString& rSearchText )
 {
-    for ( sal_uInt16 i = 0; i < aSearchED.GetEntryCount(); ++i )
+    for ( sal_uInt16 i = 0; i < m_pSearchED->GetEntryCount(); ++i )
     {
-        if ( rSearchText == aSearchED.GetEntry(i) )
+        if ( rSearchText == m_pSearchED->GetEntry(i) )
         {
-            aSearchED.RemoveEntryAt(i);
+            m_pSearchED->RemoveEntryAt(i);
             break;
         }
     }
 
-    aSearchED.InsertEntry( rSearchText, 0 );
+    m_pSearchED->InsertEntry( rSearchText, 0 );
 }
 
 
 
 IMPL_LINK_NOARG(SearchTabPage_Impl, SearchHdl)
 {
-    OUString aSearchText = comphelper::string::strip(aSearchED.GetText(), ' ');
+    OUString aSearchText = comphelper::string::strip(m_pSearchED->GetText(), ' ');
     if ( !aSearchText.isEmpty() )
     {
         EnterWait();
@@ -1027,11 +1047,11 @@ IMPL_LINK_NOARG(SearchTabPage_Impl, SearchHdl)
         OUStringBuffer aSearchURL(HELP_URL);
         aSearchURL.append(aFactory);
         aSearchURL.append(HELP_SEARCH_TAG);
-        if ( !aFullWordsCB.IsChecked() )
+        if ( !m_pFullWordsCB->IsChecked() )
             aSearchText = sfx2::PrepareSearchString( aSearchText, xBreakIterator, true );
         aSearchURL.append(aSearchText);
         AppendConfigToken(aSearchURL, sal_False);
-        if ( aScopeCB.IsChecked() )
+        if ( m_pScopeCB->IsChecked() )
             aSearchURL.append("&Scope=Heading");
         std::vector< OUString > aFactories = SfxContentHelper::GetResultSet(aSearchURL.makeStringAndClear());
         for (size_t i = 0, n = aFactories.size(); i < n; ++i )
@@ -1041,8 +1061,8 @@ IMPL_LINK_NOARG(SearchTabPage_Impl, SearchHdl)
             OUString aTitle = rRow.getToken( 0, '\t', nIdx );
             nIdx = 0;
             OUString* pURL = new OUString( rRow.getToken( 2, '\t', nIdx ) );
-            sal_uInt16 nPos = aResultsLB.InsertEntry( aTitle );
-            aResultsLB.SetEntryData( nPos, pURL );
+            sal_uInt16 nPos = m_pResultsLB->InsertEntry( aTitle );
+            m_pResultsLB->SetEntryData( nPos, pURL );
         }
         LeaveWait();
 
@@ -1056,86 +1076,33 @@ IMPL_LINK_NOARG(SearchTabPage_Impl, SearchHdl)
     return 0;
 }
 
-
-
 IMPL_LINK_NOARG(SearchTabPage_Impl, OpenHdl)
 {
-    aResultsLB.GetDoubleClickHdl().Call( &aResultsLB );
+    m_pResultsLB->GetDoubleClickHdl().Call(m_pResultsLB);
     return 0;
 }
-
-
 
 IMPL_LINK_NOARG(SearchTabPage_Impl, ModifyHdl)
 {
-    OUString aSearchText = comphelper::string::strip(aSearchED.GetText(), ' ');
-    aSearchBtn.Enable( !aSearchText.isEmpty() );
+    OUString aSearchText = comphelper::string::strip(m_pSearchED->GetText(), ' ');
+    m_pSearchBtn->Enable(!aSearchText.isEmpty());
     return 0;
 }
-
-
-
-void SearchTabPage_Impl::Resize()
-{
-    Size a6Size = LogicToPixel( Size( 6, 6 ), MAP_APPFONT );
-    Size aSize = GetSizePixel();
-    if ( aSize.Width() < aMinSize.Width() )
-        aSize.Width() = aMinSize.Width();
-    Point aPnt = aSearchFT.GetPosPixel();
-    Size aNewSize = aSearchFT.GetSizePixel();
-    aNewSize.Width() = aSize.Width() - ( aPnt.X() * 2 );
-    aSearchFT.SetSizePixel( aNewSize );
-    aNewSize.Height() = aResultsLB.GetSizePixel().Height();
-    aResultsLB.SetSizePixel( aNewSize );
-    aNewSize.Height() = aFullWordsCB.GetSizePixel().Height();
-    aFullWordsCB.SetSizePixel( aNewSize );
-    aScopeCB.SetSizePixel( aNewSize );
-    aNewSize = aSearchED.GetSizePixel();
-    aNewSize.Width() = aSize.Width() - ( aPnt.X() * 2 ) -
-                       ( aSearchBtn.GetSizePixel().Width() + ( aPnt.X() / 2 ) );
-    aSearchED.SetSizePixel( aNewSize );
-    Point aNewPnt = aSearchBtn.GetPosPixel();
-    aNewPnt.X() = aPnt.X() + aNewSize.Width() + ( aPnt.X() / 2 );
-    aSearchBtn.SetPosPixel( aNewPnt );
-
-    if ( aSize.Height() > aMinSize.Height() )
-    {
-        long n3Height = a6Size.Height() / 2;
-        Size aBtnSize = aOpenBtn.GetSizePixel();
-        long nExtraHeight = aBtnSize.Height() + n3Height;
-
-        aPnt = aResultsLB.GetPosPixel();
-        aNewSize = aResultsLB.GetSizePixel();
-        aNewSize.Height() = aSize.Height() - aPnt.Y();
-        aNewSize.Height() -= ( nExtraHeight + ( a6Size.Height() * 3 / 2 ) );
-        aResultsLB.SetSizePixel( aNewSize );
-
-        aPnt.X() += ( aNewSize.Width() - aBtnSize.Width() );
-        aPnt.Y() += aNewSize.Height() + a6Size.Height();
-        aOpenBtn.SetPosPixel( aPnt );
-    }
-}
-
-
 
 void SearchTabPage_Impl::ActivatePage()
 {
     if ( !m_pIdxWin->WasCursorLeftOrRight() )
-        aSearchED.GrabFocus();
+        m_pSearchED->GrabFocus();
 }
-
-
 
 Control* SearchTabPage_Impl::GetLastFocusControl()
 {
-    return &aOpenBtn;
+    return m_pOpenBtn;
 }
-
-
 
 void SearchTabPage_Impl::SetDoubleClickHdl( const Link& rLink )
 {
-    aResultsLB.SetDoubleClickHdl( rLink );
+    m_pResultsLB->SetDoubleClickHdl( rLink );
 }
 
 
@@ -1143,7 +1110,7 @@ void SearchTabPage_Impl::SetDoubleClickHdl( const Link& rLink )
 OUString SearchTabPage_Impl::GetSelectEntry() const
 {
     OUString aRet;
-    OUString* pData = (OUString*)(sal_uIntPtr)aResultsLB.GetEntryData( aResultsLB.GetSelectEntryPos() );
+    OUString* pData = (OUString*)(sal_uIntPtr)m_pResultsLB->GetEntryData( m_pResultsLB->GetSelectEntryPos() );
     if ( pData )
         aRet = *pData;
     return aRet;
@@ -1154,7 +1121,7 @@ OUString SearchTabPage_Impl::GetSelectEntry() const
 void SearchTabPage_Impl::ClearPage()
 {
     ClearSearchResults();
-    aSearchED.SetText( OUString() );
+    m_pSearchED->SetText( OUString() );
 }
 
 
@@ -1162,12 +1129,12 @@ void SearchTabPage_Impl::ClearPage()
 sal_Bool SearchTabPage_Impl::OpenKeyword( const OUString& rKeyword )
 {
     sal_Bool bRet = sal_False;
-    aSearchED.SetText( rKeyword );
+    m_pSearchED->SetText( rKeyword );
     SearchHdl( NULL );
-    if ( aResultsLB.GetEntryCount() > 0 )
+    if ( m_pResultsLB->GetEntryCount() > 0 )
     {
         // found keyword -> open it
-        aResultsLB.SelectEntryPos(0);
+        m_pResultsLB->SelectEntryPos(0);
         OpenHdl( NULL );
         bRet = sal_True;
     }
