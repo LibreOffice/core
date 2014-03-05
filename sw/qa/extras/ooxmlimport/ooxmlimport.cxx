@@ -198,6 +198,18 @@ DECLARE_OOXMLIMPORT_TEST(testN757890, "n757890.docx")
     CPPUNIT_ASSERT_EQUAL(text::HoriOrientation::CENTER, nValue);
 }
 
+DECLARE_OOXMLIMPORT_TEST(testRhbz988516, "rhbz988516.docx")
+{
+    // The problem was that the list properties of the footer leaked into body
+    CPPUNIT_ASSERT_EQUAL(OUString(),
+            getProperty<OUString>(getParagraph(1), "NumberingStyleName"));
+    CPPUNIT_ASSERT_EQUAL(OUString("Enclosure 3"), getParagraph(2)->getString());
+    CPPUNIT_ASSERT_EQUAL(OUString(),
+            getProperty<OUString>(getParagraph(2), "NumberingStyleName"));
+    CPPUNIT_ASSERT_EQUAL(OUString(),
+            getProperty<OUString>(getParagraph(3), "NumberingStyleName"));
+}
+
 DECLARE_OOXMLIMPORT_TEST(testFdo49940, "fdo49940.docx")
 {
     uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);

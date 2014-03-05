@@ -24210,7 +24210,9 @@
       <element name="headerReference" tokenid="ooxml:EG_HdrFtrReferences_headerReference"/>
       <element name="footerReference" tokenid="ooxml:EG_HdrFtrReferences_footerReference"/>
     </resource>
-    <resource name="CT_HdrFtr" resource="Stream" tag="header"/>
+    <resource name="CT_HdrFtr" resource="Stream" tag="header">
+      <action name="end" action="endParagraphGroup"/>
+    </resource>
     <resource name="EG_SectPrContents" resource="Properties" tag="section">
       <element name="bidi" tokenid="ooxml:EG_SectPrContents_bidi"/>
       <element name="cols" tokenid="ooxml:EG_SectPrContents_cols"/>
