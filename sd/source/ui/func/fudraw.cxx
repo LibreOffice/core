@@ -381,7 +381,7 @@ sal_Bool FuDraw::KeyInput(const KeyEvent& rKEvt)
         {
             if (!mpDocSh->IsReadOnly())
             {
-                if ( mpView && mpView->IsPresObjSelected(sal_False, sal_True, sal_False, sal_True) )
+                if (mpView->IsPresObjSelected(sal_False, sal_True, sal_False, sal_True))
                 {
                     InfoBox(mpWindow, SD_RESSTR(STR_ACTION_NOTPOSSIBLE) ).Execute();
                 }
