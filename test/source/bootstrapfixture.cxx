@@ -23,6 +23,11 @@
 #include <tools/resmgr.hxx>
 #include <vcl/graphicfilter.hxx>
 #include <unotools/syslocaleoptions.hxx>
+#include <osl/file.hxx>
+#include <unotools/tempfile.hxx>
+
+#include <boost/scoped_array.hpp>
+#include <cstring>
 
 using namespace ::com::sun::star;
 
@@ -111,6 +116,75 @@ void test::BootstrapFixture::tearDown()
 
 test::BootstrapFixture::~BootstrapFixture()
 {
+}
+
+namespace {
+
+OString loadFile(const OUString& rURL)
+{
+    osl::File aFile(rURL);
+    osl::FileBase::RC eStatus = aFile.open(osl_File_OpenFlag_Read);
+    CPPUNIT_ASSERT_EQUAL(eStatus, osl::FileBase::E_None);
+    sal_uInt64 nSize;
+    aFile.getSize(nSize);
+    boost::scoped_array<char> aBytes(new char[nSize]);
+    sal_uInt64 nBytesRead;
+    aFile.read(aBytes.get(), nSize, nBytesRead);
+    CPPUNIT_ASSERT_EQUAL(nSize, nBytesRead);
+    OString aContent(aBytes.get());
+
+    return aContent;
+}
+
+}
+
+void test::BootstrapFixture::validate(const OUString& rPath, test::ValidationFormat eFormat )
+{
+    (void)rPath;
+    (void)eFormat;
+
+#if HAVE_EXPORT_VALIDATION
+    OUString aValidator;
+    if( eFormat == test::OOXML )
+    {
+        aValidator = "officeotron ";
+    }
+    else
+        return;
+
+    utl::TempFile aOutput;
+    aOutput.EnableKillingFile();
+    OUString aOutputFile = aOutput.GetFileName();
+    OUString aCommand = aValidator + rPath + " > " + aOutputFile;
+
+    system(OUStringToOString(aCommand, RTL_TEXTENCODING_UTF8).getStr());
+
+    OString aContentString = loadFile(aOutput.GetURL());
+    OUString aContentOUString = OStringToOUString(aContentString, RTL_TEXTENCODING_UTF8);
+
+    if( eFormat == test::OOXML && !aContentOUString.isEmpty() )
+    {
+        // check for validation errors here
+        sal_Int32 nIndex = aContentOUString.lastIndexOf("Grand total of errors in submitted package: ");
+        if(nIndex == -1)
+        {
+            SAL_WARN("test", "no summery line");
+        }
+        else
+        {
+            sal_Int32 nStartOfNumber = nIndex + std::strlen("Grand total of errors in submitted package: ");
+            OUString aNumber = aContentOUString.copy(nStartOfNumber);
+            sal_Int32 nErrors = aNumber.toInt32();
+            OString aMsg("validation error in OOXML export: Errors: ");
+            aMsg = aMsg + OString::number(nErrors);
+            if(nErrors)
+            {
+                SAL_WARN("test", aContentOUString);
+            }
+            CPPUNIT_ASSERT_EQUAL_MESSAGE(aMsg.getStr(), sal_Int32(0), nErrors);
+        }
+    }
+#endif
 }
 
 IMPL_STATIC_LINK_NOINSTANCE(

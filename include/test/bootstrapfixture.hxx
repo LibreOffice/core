@@ -27,6 +27,12 @@
 
 namespace test {
 
+enum ValidationFormat
+{
+    OOXML,
+    ODF
+};
+
 // Class to do lots of heavy-lifting UNO & environment
 // bootstrapping for unit tests, such that we can use
 // almost an entire LibreOffice during compile - so
@@ -47,6 +53,8 @@ public:
 
   virtual void setUp();
   virtual void tearDown();
+
+  static void validate(const OUString& rURL, ValidationFormat);
 };
 
 }
