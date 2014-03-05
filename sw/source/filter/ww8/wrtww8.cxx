@@ -3103,7 +3103,7 @@ void WW8Export::ExportDocument_Impl()
     aTempData.EnableKillingFile();
 
     msfilter::MSCodec_Std97 aCtx;
-    bool bEncrypt = m_pWriter ? m_pWriter->InitStd97CodecUpdateMedium( aCtx ) : false;
+    bool bEncrypt = GetWriter().InitStd97CodecUpdateMedium(aCtx);
     if ( bEncrypt )
     {
         GetWriter().SetStream(
