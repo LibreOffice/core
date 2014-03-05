@@ -47,6 +47,39 @@
 using namespace com::sun::star;
 using namespace oox;
 
+namespace
+{
+
+OUString lclGetAnchorIdFromGrabBag(const SdrObject* pObj)
+{
+    OUString aResult;
+    uno::Reference<drawing::XShape> xShape(const_cast<SdrObject*>(pObj)->getUnoShape(), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xPropertySet(xShape, uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySetInfo> xPropSetInfo;
+
+    if (!xPropertySet.is())
+        return aResult;
+
+    xPropSetInfo = xPropertySet->getPropertySetInfo();
+    if (xPropSetInfo.is() && xPropSetInfo->hasPropertyByName("FrameInteropGrabBag"))
+    {
+        uno::Sequence< beans::PropertyValue > propList;
+        xPropertySet->getPropertyValue("FrameInteropGrabBag") >>= propList;
+        for (sal_Int32 nProp = 0; nProp < propList.getLength(); ++nProp)
+        {
+            OUString aPropName = propList[nProp].Name;
+            if (aPropName == "AnchorId")
+            {
+                propList[nProp].Value >>= aResult;
+                break;
+            }
+        }
+    }
+    return aResult;
+}
+
+}
+
 ExportDataSaveRestore::ExportDataSaveRestore(DocxExport& rExport, sal_uLong nStt, sal_uLong nEnd, sw::Frame* pParentFrame)
     : m_rExport(rExport)
 {
@@ -223,11 +256,14 @@ void DocxSdrExport::startDMLAnchorInline(const SwFrmFmt* pFrmFmt, const Size& rS
     }
     if (isAnchor)
     {
-        ::sax_fastparser::FastAttributeList* attrList = m_pImpl->m_pSerializer->createAttrList();
+        sax_fastparser::FastAttributeList* attrList = m_pImpl->m_pSerializer->createAttrList();
         bool bOpaque = pFrmFmt->GetOpaque().GetValue();
-        if (const SdrObject* pObj = pFrmFmt->FindRealSdrObject())
+        const SdrObject* pObj = pFrmFmt->FindRealSdrObject();
+        if (pObj != NULL)
+        {
             // SdrObjects know their layer, consider that instead of the frame format.
             bOpaque = pObj->GetLayer() != pFrmFmt->GetDoc()->GetHellId() && pObj->GetLayer() != pFrmFmt->GetDoc()->GetInvisibleHellId();
+        }
         attrList->add(XML_behindDoc, bOpaque ? "0" : "1");
         attrList->add(XML_distT, OString::number(TwipsToEMU(pULSpaceItem.GetUpper())).getStr());
         attrList->add(XML_distB, OString::number(TwipsToEMU(pULSpaceItem.GetLower())).getStr());
@@ -237,12 +273,18 @@ void DocxSdrExport::startDMLAnchorInline(const SwFrmFmt* pFrmFmt, const Size& rS
         attrList->add(XML_locked, "0");
         attrList->add(XML_layoutInCell, "1");
         attrList->add(XML_allowOverlap, "1");   // TODO
-        if (const SdrObject* pObj = pFrmFmt->FindRealSdrObject())
+        if (pObj != NULL)
             // It seems 0 and 1 have special meaning: just start counting from 2 to avoid issues with that.
             attrList->add(XML_relativeHeight, OString::number(pObj->GetOrdNum() + 2));
         else
             // relativeHeight is mandatory attribute, if value is not present, we must write default value
             attrList->add(XML_relativeHeight, "0");
+        if (pObj != NULL)
+        {
+            OUString sAnchorId = lclGetAnchorIdFromGrabBag(pObj);
+            if (!sAnchorId.isEmpty())
+                attrList->addNS(XML_wp14, XML_anchorId, OUStringToOString(sAnchorId, RTL_TEXTENCODING_UTF8));
+        }
         sax_fastparser::XFastAttributeListRef xAttrList(attrList);
         m_pImpl->m_pSerializer->startElementNS(XML_wp, XML_anchor, xAttrList);
         m_pImpl->m_pSerializer->singleElementNS(XML_wp, XML_simplePos, XML_x, "0", XML_y, "0", FSEND);   // required, unused
@@ -1130,6 +1172,15 @@ void DocxSdrExport::writeVMLTextFrame(sw::Frame* pParentFrame)
     m_pImpl->m_aTextFrameStyle = "position:absolute";
     m_pImpl->m_rExport.OutputFormat(pParentFrame->GetFrmFmt(), false, false, true);
     m_pImpl->m_pFlyAttrList->add(XML_style, m_pImpl->m_aTextFrameStyle.makeStringAndClear());
+
+    const SdrObject* pObject = pParentFrame->GetFrmFmt().FindRealSdrObject();
+    if (pObject != NULL)
+    {
+        OUString sAnchorId = lclGetAnchorIdFromGrabBag(pObject);
+        if(!sAnchorId.isEmpty())
+            m_pImpl->m_pFlyAttrList->addNS(XML_w14, XML_anchorId, OUStringToOString(sAnchorId, RTL_TEXTENCODING_UTF8));
+    }
+
     sax_fastparser::XFastAttributeListRef xFlyAttrList(m_pImpl->m_pFlyAttrList);
     m_pImpl->m_pFlyAttrList = NULL;
     m_pImpl->m_bFrameBtLr = checkFrameBtlr(m_pImpl->m_rExport.pDoc->GetNodes()[nStt], m_pImpl->m_pTextboxAttrList);
