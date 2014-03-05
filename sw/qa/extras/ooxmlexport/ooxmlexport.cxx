@@ -2943,6 +2943,14 @@ DECLARE_OOXMLEXPORT_TEST(testCompatSettingsForW14, "TextEffects_StylisticSets_Cn
     assertXPath(pXmlDoc, "/w:settings/w:compat/w:compatSetting[5]", "uri", "http://schemas.microsoft.com/office/word");
     assertXPath(pXmlDoc, "/w:settings/w:compat/w:compatSetting[5]", "val", "1");
 }
+DECLARE_OOXMLEXPORT_TEST(testOleObject, "test_ole_object.docx")
+{
+    xmlDocPtr pXmlDoc = parseExport("word/document.xml");
+    if (!pXmlDoc)
+        return;
+
+     assertXPath(pXmlDoc, "/w:document/w:body/w:p[2]/w:r/w:object/v:shape/v:imagedata", "o:title", "");
+}
 
 DECLARE_OOXMLEXPORT_TEST(testFdo74792, "fdo74792.docx")
 {

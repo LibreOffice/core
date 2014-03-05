@@ -3712,6 +3712,7 @@ void DocxAttributeOutput::WriteOLE( SwOLENode& rNode, const Size& rSize, const S
     // shape filled with the preview image
     m_pSerializer->singleElementNS( XML_v, XML_imagedata,
                                     FSNS( XML_r, XML_id ), OUStringToOString( sImageId, RTL_TEXTENCODING_UTF8 ).getStr(),
+                                    FSNS( XML_o, XML_title ), "",
                                     FSEND );
 
     m_pSerializer->endElementNS( XML_v, XML_shape );
