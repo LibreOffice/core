@@ -734,7 +734,7 @@ void SfxStyleSheetBasePool::Remove( SfxStyleSheetBase* p )
         bool bWasRemoved = mIndexedStyleSheets->RemoveStyleSheet(xP);
         if( bWasRemoved )
         {
-            // Alle Styles umsetzen, deren Parent dieser hier ist
+            // Adapt all styles which have this style as parant
             ChangeParent( p->GetName(), p->GetParent() );
 
             // #120015# Do not dispose, the removed StyleSheet may still be used in
