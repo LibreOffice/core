@@ -43,6 +43,7 @@ class SfxItemPool;
 class SfxStyleSheetBasePool;
 class SvStream;
 
+namespace svl { class IndexedStyleSheets; }
 /*
 Everyone changing instances of SfxStyleSheetBasePool or SfxStyleSheetBase
 must broadcast this using <SfxStyleSheetBasePool::GetBroadcaster()> broadcasts.
@@ -144,12 +145,6 @@ public:
     virtual sal_uInt16 GetVersion() const;
 };
 
-
-
-typedef std::vector< rtl::Reference< SfxStyleSheetBase > > SfxStyles;
-
-
-
 class SVL_DLLPUBLIC SfxStyleSheetIterator
 
 /*  [Beschreibung]
@@ -174,18 +169,18 @@ public:
     virtual SfxStyleSheetBase* Find(const OUString& rStr);
     virtual ~SfxStyleSheetIterator();
 
+    bool                    SearchUsed() const { return bSearchUsed; }
+
 protected:
 
     SfxStyleSheetBasePool*  pBasePool;
     SfxStyleFamily          nSearchFamily;
     sal_uInt16              nMask;
 
-    bool                    SearchUsed() const { return bSearchUsed; }
 
 private:
     sal_uInt16                  GetPos() { return nAktPosition; }
     SVL_DLLPRIVATE bool         IsTrivialSearch();
-    SVL_DLLPRIVATE bool         DoesStyleMatch(SfxStyleSheetBase *pStyle);
 
     SfxStyleSheetBase*      pAktStyle;
     sal_uInt16              nAktPosition;
@@ -211,16 +206,23 @@ protected:
 
     OUString                    aAppName;
     SfxItemPool&                rPool;
-    SfxStyles                   aStyles;
     SfxStyleFamily              nSearchFamily;
     sal_uInt16                  nMask;
 
-    SfxStyleSheetBase&          Add( SfxStyleSheetBase& );
     void                        ChangeParent( const OUString&, const OUString&, bool bVirtual = true );
     virtual SfxStyleSheetBase*  Create( const OUString&, SfxStyleFamily, sal_uInt16 );
     virtual SfxStyleSheetBase*  Create( const SfxStyleSheetBase& );
 
     virtual                     ~SfxStyleSheetBasePool();
+
+    void                        StoreStyleSheet(rtl::Reference< SfxStyleSheetBase >);
+
+    /** Obtain the indexed style sheets.
+     */
+    const svl::IndexedStyleSheets&
+                                GetIndexedStyleSheets() const;
+    rtl::Reference<SfxStyleSheetBase>
+                                GetStyleSheetByPositionInIndex(unsigned pos);
 
 public:
                                 SfxStyleSheetBasePool( SfxItemPool& );
@@ -250,6 +252,8 @@ public:
     SfxStyleSheetBasePool&      operator=( const SfxStyleSheetBasePool& );
     SfxStyleSheetBasePool&      operator+=( const SfxStyleSheetBasePool& );
 
+    unsigned                    GetNumberOfStyles();
+
     virtual SfxStyleSheetBase*  First();
     virtual SfxStyleSheetBase*  Next();
     virtual SfxStyleSheetBase*  Find( const OUString&, SfxStyleFamily eFam, sal_uInt16 n=SFXSTYLEBIT_ALL );
@@ -264,6 +268,21 @@ public:
     void                        SetSearchMask(SfxStyleFamily eFam, sal_uInt16 n=SFXSTYLEBIT_ALL );
     sal_uInt16                      GetSearchMask() const;
     SfxStyleFamily              GetSearchFamily() const  { return nSearchFamily; }
+
+    void                        Reindex();
+    /** Add a style sheet.
+     * Not an actual public function. Do not call it from non-subclasses.
+     */
+    SfxStyleSheetBase&          Add( const SfxStyleSheetBase& );
+
+private:
+    /** This member holds the indexed style sheets.
+     *
+     * @internal
+     * This member is private and not protected in order to have more control which style sheets are added
+     * where. Ideally, all calls which add/remove/change style sheets are done in the base class.
+     */
+    boost::shared_ptr<svl::IndexedStyleSheets> mIndexedStyleSheets;
 };
 
 
