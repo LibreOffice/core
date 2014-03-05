@@ -677,8 +677,7 @@
 // Sidebar -------------------------------------------------------------
 
 #define SID_PROPERTY_PANEL_CELLTEXT_DLG (SC_SIDEBAR_PROPERTY_BEGIN+0)
-#define SID_SCGRIDSHOW                  (SC_SIDEBAR_PROPERTY_BEGIN+1)
-#define SID_NUMBER_TYPE_FORMAT          (SC_SIDEBAR_PROPERTY_BEGIN+2)
+#define SID_NUMBER_TYPE_FORMAT          (SC_SIDEBAR_PROPERTY_BEGIN+1)
 
 // resources
 

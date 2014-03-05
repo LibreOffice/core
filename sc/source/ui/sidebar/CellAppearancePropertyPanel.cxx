@@ -161,7 +161,7 @@ CellAppearancePropertyPanel::CellAppearancePropertyPanel(
     maLineStyleControl(SID_FRAME_LINESTYLE, *pBindings, *this),
     maBorderOuterControl(SID_ATTR_BORDER_OUTER, *pBindings, *this),
     maBorderInnerControl(SID_ATTR_BORDER_INNER, *pBindings, *this),
-    maGridShowControl(SID_SCGRIDSHOW, *pBindings, *this),
+    maGridShowControl(FID_TAB_TOGGLE_GRID, *pBindings, *this),
     maBorderTLBRControl(SID_ATTR_BORDER_DIAG_TLBR, *pBindings, *this),
     maBorderBLTRControl(SID_ATTR_BORDER_DIAG_BLTR, *pBindings, *this),
 
@@ -359,8 +359,8 @@ IMPL_LINK(CellAppearancePropertyPanel, TbxLineStyleSelectHdl, ToolBox*, pToolBox
 IMPL_LINK(CellAppearancePropertyPanel, CBOXGridShowClkHdl, void*, EMPTYARG)
 {
     bool bState = mpCBXShowGrid->IsChecked();
-    SfxBoolItem aItem( SID_SCGRIDSHOW , bState);
-    GetBindings()->GetDispatcher()->Execute(SID_SCGRIDSHOW, SFX_CALLMODE_RECORD, &aItem, 0L);
+    SfxBoolItem aItem( FID_TAB_TOGGLE_GRID , bState);
+    GetBindings()->GetDispatcher()->Execute(FID_TAB_TOGGLE_GRID, SFX_CALLMODE_RECORD, &aItem, 0L);
     return 0;
 }
 
@@ -671,7 +671,7 @@ void CellAppearancePropertyPanel::NotifyItemUpdate(
         mbBLTR = false;
         UpdateControlState();
         break;
-    case SID_SCGRIDSHOW:
+    case FID_TAB_TOGGLE_GRID:
         if(eState >= SFX_ITEM_DEFAULT)
         {
             const SfxBoolItem* pItem = dynamic_cast< const SfxBoolItem* >(pState);
