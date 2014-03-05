@@ -151,6 +151,11 @@ enum SdrUserCallType {SDRUSERCALL_MOVEONLY,         // only moved, size unchange
                       SDRUSERCALL_CHILD_INSERTED,   // a child within a group has changed
                       SDRUSERCALL_CHILD_REMOVED};   // a child within a group has changed
 
+enum SdrWatermarkType {WATERMARK_TYPE_NONE       = 0,  // Not a Watermark object
+                       WATERMARK_TYPE_TEXT       = 1,  // Text-Watermark object
+                       WATERMARK_TYPE_PICTURE    = 2   // Picture-Watermark object
+                      };
+
 class SVX_DLLPUBLIC SdrObjUserCall
 {
 public:
@@ -340,6 +345,7 @@ protected:
     SdrModel*                   pModel;
     SdrObjUserCall*             pUserCall;
     SdrObjPlusData*             pPlusData;    // Broadcaster, UserData, connektors, ... (this is the Bitsack)
+    SdrWatermarkType            eWatermarkType;  // Object's watermark type
 
     sal_uInt32                  nOrdNum;      // order number of the object in the list
 
@@ -411,6 +417,10 @@ public:
     // evil calc grid/shape drawlayer syncing
     Point GetGridOffset() const { return aGridOffset; }
     void SetGridOffset( const Point& rGridOffset ){ aGridOffset = rGridOffset; }
+
+    SdrWatermarkType GetWatermarkType() const                   {   return eWatermarkType;            }
+    void SetWatermarkType( SdrWatermarkType rWatermarkType )    {   eWatermarkType = rWatermarkType;  }
+
 protected:
     void ImpDeleteUserData();
     SdrObjUserData* ImpGetMacroUserData() const;

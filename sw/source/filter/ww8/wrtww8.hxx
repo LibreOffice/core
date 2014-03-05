@@ -1539,6 +1539,8 @@ public:
     OUString GetSnippet(const OUString &rStr, sal_Int32 nAktPos,
         sal_Int32 nLen) const;
     const SwFmtDrop& GetSwFmtDrop() const { return mrSwFmtDrop; }
+
+    bool IsWatermarkFrame();
 };
 
 /// Class to collect and output the styles table.
