@@ -614,17 +614,24 @@ sal_Bool FuText::MouseButtonUp(const MouseEvent& rMEvt)
 
     if (mxTextObj.is())
     {
-        const SdrMarkList& rMarkList = mpView->GetMarkedObjectList();
+        bool bReset = true;
 
-        if (rMarkList.GetMarkCount() == 1
-            && ( rMarkList.GetMark(0)->GetMarkedSdrObj() == mxTextObj.get()) )
+        if (mpView)
         {
-            if( mxTextObj.is() && !GetTextObj()->GetOutlinerParaObject() )
-                bEmptyTextObj = sal_True;
-            else
-                bFirstObjCreated = sal_True;
+            const SdrMarkList& rMarkList = mpView->GetMarkedObjectList();
+
+            if (rMarkList.GetMarkCount() == 1
+                && ( rMarkList.GetMark(0)->GetMarkedSdrObj() == mxTextObj.get()) )
+            {
+                if( mxTextObj.is() && !GetTextObj()->GetOutlinerParaObject() )
+                    bEmptyTextObj = sal_True;
+                else
+                    bFirstObjCreated = sal_True;
+                bReset = false;
+            }
         }
-        else
+
+        if (bReset)
         {
             mxTextObj.reset( 0 );
         }
