@@ -676,7 +676,7 @@ sal_Bool FuPoor::KeyInput(const KeyEvent& rKEvt)
                     else if(rKEvt.GetKeyCode().IsMod2())
                     {
                         // move in 1 pixel distance
-                        Size aLogicSizeOnePixel = (mpWindow) ? mpWindow->PixelToLogic(Size(1,1)) : Size(100, 100);
+                        Size aLogicSizeOnePixel = mpWindow->PixelToLogic(Size(1,1));
                         nX *= aLogicSizeOnePixel.Width();
                         nY *= aLogicSizeOnePixel.Height();
                     }
