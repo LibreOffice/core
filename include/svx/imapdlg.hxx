@@ -113,7 +113,7 @@ class SVX_DLLPUBLIC SvxIMapDlg : public SfxModelessDialog // SfxFloatingWindow
     DECL_LINK( MiscHdl, void* );
 
     void                DoOpen();
-    sal_Bool            DoSave();
+    bool                DoSave();
 
 public:
 
@@ -121,7 +121,7 @@ public:
                                     Window* pParent, const ResId& rResId );
                         ~SvxIMapDlg();
 
-    void                SetExecState( sal_Bool bEnable );
+    void                SetExecState( bool bEnable );
 
     void                SetGraphic( const Graphic& rGraphic );
 

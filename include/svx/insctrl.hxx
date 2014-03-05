@@ -38,7 +38,7 @@ public:
     ~SvxInsertStatusBarControl();
 
 private:
-    sal_Bool    bInsert;
+    bool    bInsert;
 
     SVX_DLLPRIVATE void DrawItemText_Impl();
 };

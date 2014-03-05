@@ -1137,7 +1137,7 @@ void MotionPathTag::DeleteMarkedPoints()
     }
 }
 
-sal_Bool MotionPathTag::IsDeleteMarkedPointsPossible() const
+bool MotionPathTag::IsDeleteMarkedPointsPossible() const
 {
     return mpPathObj && isSelected() && (GetMarkedPointCount() != 0);
 }
@@ -1153,12 +1153,12 @@ bool MotionPathTag::IsRipUpAtMarkedPointsPossible() const
     return false;
 }
 
-sal_Bool MotionPathTag::IsSetMarkedSegmentsKindPossible() const
+bool MotionPathTag::IsSetMarkedSegmentsKindPossible() const
 {
     if( mpPathObj )
         return mrView.IsSetMarkedSegmentsKindPossible();
     else
-        return sal_False;
+        return false;
 }
 
 SdrPathSegmentKind MotionPathTag::GetMarkedSegmentsKind() const
@@ -1187,12 +1187,12 @@ void MotionPathTag::SetMarkedSegmentsKind(SdrPathSegmentKind eKind)
     }
 }
 
-sal_Bool MotionPathTag::IsSetMarkedPointsSmoothPossible() const
+bool MotionPathTag::IsSetMarkedPointsSmoothPossible() const
 {
     if( mpPathObj )
         return mrView.IsSetMarkedPointsSmoothPossible();
     else
-        return sal_False;
+        return false;
 }
 
 SdrPathSmoothKind MotionPathTag::GetMarkedPointsSmooth() const
@@ -1240,7 +1240,7 @@ void MotionPathTag::SetMarkedPointsSmooth(SdrPathSmoothKind eKind)
     }
 }
 
-void MotionPathTag::CloseMarkedObjects(sal_Bool /*bToggle*/, sal_Bool /*bOpen*/ )
+void MotionPathTag::CloseMarkedObjects(bool /*bToggle*/, bool /*bOpen*/ )
 {
     // not supported for motion path
 }

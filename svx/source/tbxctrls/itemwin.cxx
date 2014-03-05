@@ -61,7 +61,7 @@ SvxLineBox::SvxLineBox( Window* pParent, const Reference< XFrame >& rFrame, WinB
     LineLB( pParent, nBits ),
     nCurPos     ( 0 ),
     aLogicalSize(40,140),
-    bRelease    ( sal_True ),
+    bRelease    ( true ),
     mpSh        ( NULL ),
     mxFrame     ( rFrame )
 {
@@ -176,7 +176,7 @@ bool SvxLineBox::PreNotify( NotifyEvent& rNEvt )
             const KeyEvent* pKEvt = rNEvt.GetKeyEvent();
             if( pKEvt->GetKeyCode().GetCode() == KEY_TAB)
             {
-                bRelease = sal_False;
+                bRelease = false;
                 Select();
             }
         }
@@ -218,7 +218,7 @@ void SvxLineBox::ReleaseFocus_Impl()
 {
     if(!bRelease)
     {
-        bRelease = sal_True;
+        bRelease = true;
         return;
     }
 
@@ -270,7 +270,7 @@ SvxColorBox::SvxColorBox(
     ColorLB( pParent, nBits ),
     nCurPos     ( 0 ),
     aLogicalSize(45,80),
-    bRelease    ( sal_True ),
+    bRelease    ( true ),
     maCommand   ( rCommand ),
     mxFrame     ( rFrame )
 {
@@ -382,7 +382,7 @@ bool SvxColorBox::PreNotify( NotifyEvent& rNEvt )
 
             if( pKEvt->GetKeyCode().GetCode() == KEY_TAB)
             {
-                bRelease = sal_False;
+                bRelease = false;
                 Select();
             }
         }
@@ -436,7 +436,7 @@ void SvxColorBox::ReleaseFocus_Impl()
 {
     if(!bRelease)
     {
-        bRelease = sal_True;
+        bRelease = true;
         return;
     }
 
@@ -636,8 +636,8 @@ void SvxMetricField::DataChanged( const DataChangedEvent& rDCEvt )
 SvxFillTypeBox::SvxFillTypeBox( Window* pParent, WinBits nBits ) :
     FillTypeLB( pParent, nBits | WB_TABSTOP ),
     nCurPos ( 0 ),
-    bSelect ( sal_False ),
-    bRelease(sal_True)
+    bSelect ( false ),
+    bRelease( true )
 {
     SetSizePixel( LogicToPixel( Size(40, 40 ),MAP_APPFONT ));
     Fill();
@@ -671,7 +671,7 @@ bool SvxFillTypeBox::PreNotify( NotifyEvent& rNEvt )
         if ( !bSelect )
             SelectEntryPos( nCurPos );
         else
-            bSelect = sal_False;
+            bSelect = false;
     }
 
     return FillTypeLB::PreNotify( rNEvt );
@@ -693,9 +693,9 @@ bool SvxFillTypeBox::Notify( NotifyEvent& rNEvt )
                 ( (Link&)GetSelectHdl() ).Call( this );
             break;
             case KEY_TAB:
-                bRelease = sal_False;
+                bRelease = false;
                 ( (Link&)GetSelectHdl() ).Call( this );
-                bRelease = sal_True;
+                bRelease = true;
                 break;
 
             case KEY_ESCAPE:
@@ -726,11 +726,9 @@ void SvxFillTypeBox::ReleaseFocus_Impl()
 
 
 SvxFillAttrBox::SvxFillAttrBox( Window* pParent, WinBits nBits ) :
-
     FillAttrLB( pParent, nBits | WB_TABSTOP ),
-
     nCurPos( 0 ),
-    bRelease( sal_True )
+    bRelease( true )
 
 {
     SetPosPixel( Point( 90, 0 ) );
@@ -778,9 +776,9 @@ bool SvxFillAttrBox::Notify( NotifyEvent& rNEvt )
                 nHandled = true;
             break;
             case KEY_TAB:
-                bRelease = sal_False;
+                bRelease = false;
                 GetSelectHdl().Call( this );
-                bRelease = sal_True;
+                bRelease = true;
             break;
             case KEY_ESCAPE:
                 SelectEntryPos( nCurPos );

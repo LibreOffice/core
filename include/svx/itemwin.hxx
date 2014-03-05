@@ -34,10 +34,10 @@ class SfxObjectShell;
 
 class SvxLineBox : public LineLB
 {
-    sal_uInt16          nCurPos;
+    sal_uInt16      nCurPos;
     Timer           aDelayTimer;
     Size            aLogicalSize;
-    sal_Bool            bRelease;
+    bool            bRelease;
     SfxObjectShell* mpSh;
     ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame > mxFrame;
 
@@ -67,10 +67,10 @@ class SvxColorBox : public ColorLB
 {
     using Window::Update;
 
-    sal_uInt16          nCurPos;
+    sal_uInt16      nCurPos;
     Timer           aDelayTimer;
     Size            aLogicalSize;
-    sal_Bool            bRelease;
+    bool            bRelease;
     OUString maCommand;
     ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame > mxFrame;
 
@@ -135,17 +135,17 @@ public:
     SvxFillTypeBox( Window* pParent, WinBits nBits = WB_BORDER | WB_DROPDOWN | WB_AUTOHSCROLL );
     ~SvxFillTypeBox();
 
-    void            Selected() { bSelect = sal_True; }
-    sal_Bool            IsRelease() { return bRelease;}
+    void            Selected() { bSelect = true; }
+    bool            IsRelease() { return bRelease;}
 
 protected:
     virtual bool    PreNotify( NotifyEvent& rNEvt );
     virtual bool    Notify( NotifyEvent& rNEvt );
 
 private:
-    sal_uInt16          nCurPos;
-    sal_Bool            bSelect;
-    sal_Bool            bRelease;
+    sal_uInt16      nCurPos;
+    bool            bSelect;
+    bool            bRelease;
 
     void            ReleaseFocus_Impl();
 };
@@ -158,7 +158,7 @@ public:
     SvxFillAttrBox( Window* pParent, WinBits nBits = WB_BORDER | WB_DROPDOWN | WB_AUTOHSCROLL );
     ~SvxFillAttrBox();
 
-    sal_Bool            IsRelease() { return bRelease;}
+    bool            IsRelease() { return bRelease;}
 
 protected:
     virtual bool    PreNotify( NotifyEvent& rNEvt );
@@ -166,8 +166,8 @@ protected:
     virtual void    Select();
 
 private:
-    sal_uInt16          nCurPos;
-    sal_Bool            bRelease;
+    sal_uInt16      nCurPos;
+    bool            bRelease;
 
     void            ReleaseFocus_Impl();
 };

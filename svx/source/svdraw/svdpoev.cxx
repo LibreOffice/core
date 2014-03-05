@@ -265,7 +265,7 @@ void SdrPolyEditView::SetMarkedSegmentsKind(SdrPathSegmentKind eKind)
     }
 }
 
-sal_Bool SdrPolyEditView::IsSetMarkedPointsSmoothPossible() const
+bool SdrPolyEditView::IsSetMarkedPointsSmoothPossible() const
 {
     ForcePossibilities();
     return bSetMarkedPointsSmoothPossible;
@@ -277,7 +277,7 @@ SdrPathSmoothKind SdrPolyEditView::GetMarkedPointsSmooth() const
     return eMarkedPointsSmooth;
 }
 
-sal_Bool SdrPolyEditView::IsSetMarkedSegmentsKindPossible() const
+bool SdrPolyEditView::IsSetMarkedSegmentsKindPossible() const
 {
     ForcePossibilities();
     return bSetMarkedSegmentsKindPossible;
@@ -289,7 +289,7 @@ SdrPathSegmentKind SdrPolyEditView::GetMarkedSegmentsKind() const
     return eMarkedSegmentsKind;
 }
 
-sal_Bool SdrPolyEditView::IsDeleteMarkedPointsPossible() const
+bool SdrPolyEditView::IsDeleteMarkedPointsPossible() const
 {
     return HasMarkedPoints();
 }
@@ -538,7 +538,7 @@ SdrObjClosedKind SdrPolyEditView::GetMarkedObjectsClosedState() const
     }
 }
 
-void SdrPolyEditView::CloseMarkedObjects(sal_Bool bToggle, sal_Bool bOpen)
+void SdrPolyEditView::CloseMarkedObjects(bool bToggle, bool bOpen)
 {
     if (AreObjectsMarked())
     {
@@ -552,7 +552,7 @@ void SdrPolyEditView::CloseMarkedObjects(sal_Bool bToggle, sal_Bool bOpen)
         {
             SdrMark* pM=GetSdrMarkByIndex(nm);
             SdrObject* pO=pM->GetMarkedSdrObj();
-            sal_Bool bClosed=pO->IsClosedObj();
+            bool bClosed=pO->IsClosedObj();
             if ((pO->IsPolyObj() && (bClosed==bOpen)) || bToggle)
             {
                 if( bUndo )

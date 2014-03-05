@@ -37,7 +37,7 @@ SvxInsertStatusBarControl::SvxInsertStatusBarControl( sal_uInt16 _nSlotId,
                                                       StatusBar& rStb ) :
 
     SfxStatusBarControl( _nSlotId, _nId, rStb ),
-    bInsert( sal_True )
+    bInsert( true )
 {
 }
 

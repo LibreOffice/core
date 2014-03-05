@@ -252,7 +252,7 @@ bool SvxIMapDlg::Close()
 
 // Enabled or disable all Controls
 
-void SvxIMapDlg::SetExecState( sal_Bool bEnable )
+void SvxIMapDlg::SetExecState( bool bEnable )
 {
     pOwnData->bExecState = bEnable;
 }
@@ -504,7 +504,7 @@ void SvxIMapDlg::DoOpen()
     }
 }
 
-sal_Bool SvxIMapDlg::DoSave()
+bool SvxIMapDlg::DoSave()
 {
     ::sfx2::FileDialogHelper aDlg(
         com::sun::star::ui::dialogs::TemplateDescription::FILESAVE_SIMPLE, 0 );
@@ -514,7 +514,7 @@ sal_Bool SvxIMapDlg::DoSave()
     const OUString    aNCSAFilter( IMAP_NCSA_FILTER );
     SdrModel*       pModel = pIMapWnd->GetSdrModel();
     const sal_Bool bChanged = pModel->IsChanged();
-    sal_Bool            bRet = false;
+    bool            bRet = false;
 
     aDlg.AddFilter( aCERNFilter, IMAP_CERN_TYPE );
     aDlg.AddFilter( aNCSAFilter, IMAP_NCSA_TYPE );
@@ -546,7 +546,7 @@ sal_Bool SvxIMapDlg::DoSave()
         }
         else
         {
-            return sal_False;
+            return false;
         }
 
         INetURLObject aURL( aDlg.GetPath() );
@@ -570,7 +570,7 @@ sal_Bool SvxIMapDlg::DoSave()
 
                 delete pOStm;
                 pModel->SetChanged( bChanged );
-                bRet = sal_True;
+                bRet = true;
             }
         }
     }

@@ -62,20 +62,20 @@ public:
 
     // IPolyPolygonEditorController
     virtual void DeleteMarkedPoints();
-    virtual sal_Bool IsDeleteMarkedPointsPossible() const;
+    virtual bool IsDeleteMarkedPointsPossible() const;
 
     virtual void RipUpAtMarkedPoints();
     virtual bool IsRipUpAtMarkedPointsPossible() const;
 
-    virtual sal_Bool IsSetMarkedSegmentsKindPossible() const;
+    virtual bool IsSetMarkedSegmentsKindPossible() const;
     virtual SdrPathSegmentKind GetMarkedSegmentsKind() const;
     virtual void SetMarkedSegmentsKind(SdrPathSegmentKind eKind);
 
-    virtual sal_Bool IsSetMarkedPointsSmoothPossible() const;
+    virtual bool IsSetMarkedPointsSmoothPossible() const;
     virtual SdrPathSmoothKind GetMarkedPointsSmooth() const;
     virtual void SetMarkedPointsSmooth(SdrPathSmoothKind eKind);
 
-    virtual void CloseMarkedObjects(sal_Bool bToggle, sal_Bool bOpen );
+    virtual void CloseMarkedObjects(bool bToggle, bool bOpen );
     virtual bool IsOpenCloseMarkedObjectsPossible() const;
     virtual SdrObjClosedKind GetMarkedObjectsClosedState() const;
 

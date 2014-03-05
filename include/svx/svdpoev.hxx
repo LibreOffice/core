@@ -50,18 +50,18 @@ protected:
     virtual ~SdrPolyEditView();
 
 public:
-    sal_Bool IsSetMarkedPointsSmoothPossible() const;
+    bool IsSetMarkedPointsSmoothPossible() const;
     SdrPathSmoothKind GetMarkedPointsSmooth() const;
     void SetMarkedPointsSmooth(SdrPathSmoothKind eKind);
 
     // Ein PolySegment kann eine Strecke oder eine Bezierkurve sein.
-    sal_Bool IsSetMarkedSegmentsKindPossible() const;
+    bool IsSetMarkedSegmentsKindPossible() const;
     SdrPathSegmentKind GetMarkedSegmentsKind() const;
     void SetMarkedSegmentsKind(SdrPathSegmentKind eKind);
 
     // Moeglicherweise ist das Obj hinterher geloescht:
     void DeleteMarkedPoints();
-    sal_Bool IsDeleteMarkedPointsPossible() const;
+    bool IsDeleteMarkedPointsPossible() const;
 
     void MoveMarkedPoints(const Size& rSiz, bool bCopy=false);
     void ResizeMarkedPoints(const Point& rRef, const Fraction& xFact, const Fraction& yFact, bool bCopy=false);
@@ -73,7 +73,7 @@ public:
 
     // Alle markierten Polylines werden zu Polygonen, alle offenen
     // Bezierkurven zu geschlossenen.
-    void CloseMarkedObjects(sal_Bool bToggle=sal_False, sal_Bool bOpen=sal_False); // , long nOpenDistance=0);
+    void CloseMarkedObjects(bool bToggle=false, bool bOpen=false); // , long nOpenDistance=0);
     bool IsOpenCloseMarkedObjectsPossible() const;
     SdrObjClosedKind GetMarkedObjectsClosedState() const;
 
