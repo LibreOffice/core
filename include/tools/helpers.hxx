@@ -9,9 +9,39 @@
 #ifndef INCLUDED_TOOLS_HELPERS_HXX
 #define INCLUDED_TOOLS_HELPERS_HXX
 
-inline long MinMax( long nVal, long nMin, long nMax )
+#include <sal/config.h>
+
+#include <cassert>
+
+#include <boost/mpl/or.hpp>
+#include <boost/type_traits/is_floating_point.hpp>
+#include <boost/type_traits/is_signed.hpp>
+#include <boost/type_traits/is_unsigned.hpp>
+#include <boost/utility/enable_if.hpp>
+
+template<typename T>
+inline
+typename boost::enable_if<
+    boost::mpl::or_< boost::is_signed<T>, boost::is_floating_point<T> >, long>
+    ::type
+MinMax(T nVal, long nMin, long nMax)
 {
-    return nVal >= nMin ? ( nVal <= nMax ? nVal : nMax ) : nMin;
+    assert(nMin <= nMax);
+    return nVal >= nMin
+        ? (nVal <= nMax ? static_cast<long>(nVal) : nMax) : nMin;
+}
+
+template<typename T>
+inline typename boost::enable_if<boost::is_unsigned<T>, long>::type MinMax(
+    T nVal, long nMin, long nMax)
+{
+    assert(nMin <= nMax);
+    return nMax < 0
+        ? nMax
+        : ((nMin < 0 || nVal >= static_cast<unsigned long>(nMin))
+           ? (nVal <= static_cast<unsigned long>(nMax)
+              ? static_cast<long>(nVal) : nMax)
+           : nMin);
 }
 
 inline long AlignedWidth4Bytes( long nWidthBits )
