@@ -646,7 +646,6 @@ XFFrame* LwpDrawPolygon::CreateStandardDrawObj(const  OUString& rStyleName)
  */
 LwpDrawRectangle::LwpDrawRectangle(SvStream * pStream, DrawingOffsetAndScale* pTransData)
     : LwpDrawObj(pStream, pTransData)
-    , m_aVector{}
 {
 }
 
