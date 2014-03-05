@@ -638,7 +638,7 @@ void validate(const utl::TempFile& rTempFile, validation::ScValidationFormat eFo
             sal_Int32 nErrors = aNumber.toInt32();
             OString aMsg("validation error in OOXML export: Errors: ");
             aMsg = aMsg + OString::number(nErrors);
-            CPPUNIT_ASSERT_MESSAGE(aMsg.getStr(), nErrors == 0);
+            CPPUNIT_ASSERT_EQUAL_MESSAGE(aMsg.getStr(), sal_Int32(0), nErrors);
         }
     }
 }
