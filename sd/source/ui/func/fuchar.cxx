@@ -72,13 +72,15 @@ void FuChar::DoExecute( SfxRequest& rReq )
 
         SdAbstractDialogFactory* pFact = SdAbstractDialogFactory::Create();
         SfxAbstractTabDialog* pDlg = pFact ? pFact->CreateSdTabCharDialog( NULL, &aNewAttr, mpDoc->GetDocSh() ) : 0;
+        sal_uInt16 nResult = RET_CANCEL;
         if( pDlg )
         {
             if (rReq.GetSlot() == SID_CHAR_DLG_EFFECT)
             {
                 pDlg->SetCurPageId(RID_SVXPAGE_CHAR_EFFECTS);
             }
-            sal_uInt16 nResult = pDlg->Execute();
+
+            nResult = pDlg->Execute();
 
             if( nResult == RET_OK )
             {
@@ -87,11 +89,10 @@ void FuChar::DoExecute( SfxRequest& rReq )
             }
 
             delete pDlg;
-
-            if( nResult != RET_OK )
-            {
-                return;
-            }
+        }
+        if( nResult != RET_OK )
+        {
+            return;
         }
     }
     mpView->SetAttributes(*pArgs);
