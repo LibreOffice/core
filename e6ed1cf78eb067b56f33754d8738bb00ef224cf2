@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a930d6b_8ea2db98",
+        "filename": "writerfilter/source/dmapper/DomainMapper_Impl.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 468,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2014-03-05T10:06:53Z",
+      "side": 1,
+      "message": "In new code, please use SAL_WARN_IF instead:\n\nSAL_WARN_IF(m_aFieldStack.empty(), \"writerfilter\", \"Field stack is empty\");",
+      "revId": "e6ed1cf78eb067b56f33754d8738bb00ef224cf2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
