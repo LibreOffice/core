@@ -2367,9 +2367,9 @@ sal_Bool SfxObjectShell::ExportTo( SfxMedium& rMedium )
         // put in the REAL file name, and copy all PropertyValues
         const OUString sOutputStream ( "OutputStream"  );
         const OUString sStream ( "StreamForOutput"  );
-        sal_Bool bHasOutputStream = sal_False;
-        sal_Bool bHasStream = sal_False;
-        sal_Bool bHasBaseURL = sal_False;
+        bool bHasOutputStream = false;
+        bool bHasStream = false;
+        bool bHasBaseURL = false;
         bool bHasFilterName = false;
         sal_Int32 i;
         sal_Int32 nEnd = aOldArgs.getLength();
@@ -2380,11 +2380,11 @@ sal_Bool SfxObjectShell::ExportTo( SfxMedium& rMedium )
             if ( pOldValue[i].Name == "FileName" )
                 pNewValue[i].Value <<= OUString ( rMedium.GetName() );
             else if ( pOldValue[i].Name == sOutputStream )
-                bHasOutputStream = sal_True;
+                bHasOutputStream = true;
             else if ( pOldValue[i].Name == sStream )
-                bHasStream = sal_True;
+                bHasStream = true;
             else if ( pOldValue[i].Name == "DocumentBaseURL" )
-                bHasBaseURL = sal_True;
+                bHasBaseURL = true;
             else if( pOldValue[i].Name == "FilterName" )
                 bHasFilterName = true;
         }
