@@ -104,7 +104,7 @@ private:
     static const sal_uInt8 nMatchedUsedAsReturn;     // 0x10
 
     int    nSign;                               // Sign of number
-    short  nMonth;                              // Month (1..x) if date
+    int    nMonth;                              // Month (1..x) if date
                                                 // negative => short format
     short  nMonthPos;                           // 1 = front, 2 = middle
                                                 // 3 = end

@@ -19,7 +19,7 @@
 
 
 #include <ctype.h>
-#include <stdlib.h>
+#include <cstdlib>
 #include <float.h>
 #include <errno.h>
 #include <comphelper/string.hxx>

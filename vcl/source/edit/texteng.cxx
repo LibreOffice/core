@@ -53,6 +53,7 @@
 
 #include <unicode/ubidi.h>
 
+#include <cstdlib>
 #include <set>
 #include <vector>
 #include <boost/foreach.hpp>
@@ -2183,7 +2184,7 @@ bool TextEngine::CreateLines( sal_uLong nPara )
         pTEParaPortion->GetLines().push_back( pL );
     }
 
-    const short nInvalidDiff = pTEParaPortion->GetInvalidDiff();
+    const int nInvalidDiff = pTEParaPortion->GetInvalidDiff();
     const sal_uInt16 nInvalidStart = pTEParaPortion->GetInvalidPosStart();
     const sal_uInt16 nInvalidEnd =  nInvalidStart + std::abs( nInvalidDiff );
     bool bQuickFormat = false;
