@@ -14,7 +14,9 @@
 #include <limits>
 
 #include <stdlib.h>
+#if defined(WNT) || defined (__ANDROID__)
 #include <malloc.h>
+#endif
 
 /**
  * Function object to allow deleting instances stored in STL containers as
