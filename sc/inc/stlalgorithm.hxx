@@ -82,7 +82,7 @@ public:
 #ifdef WNT
         return _aligned_malloc(size, _Alignment);
 #elif defined __ANDROID__
-        return memalign(align, size);
+        return memalign(_Alignment, size);
 #else
         void* ptr;
         int err = posix_memalign(&ptr, _Alignment, size);
