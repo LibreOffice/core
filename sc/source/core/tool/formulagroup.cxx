@@ -277,6 +277,10 @@ void fillMatrix( ScMatrix& rMat, size_t nCol, const double* pNums, rtl_uString**
 
 }
 
+CompiledFormula::CompiledFormula() {}
+
+CompiledFormula::~CompiledFormula() {}
+
 FormulaGroupInterpreterSoftware::FormulaGroupInterpreterSoftware() : FormulaGroupInterpreter()
 {
 }
