@@ -160,6 +160,9 @@ class SVL_DLLPUBLIC SfxStyleSheetIterator
 
 {
 public:
+    /** Constructor.
+     * The iterator will only iterate over style sheets which have the family \p eFam
+     */
     SfxStyleSheetIterator(SfxStyleSheetBasePool *pBase,
                           SfxStyleFamily eFam, sal_uInt16 n=SFXSTYLEBIT_ALL );
     virtual sal_uInt16 GetSearchMask() const;
