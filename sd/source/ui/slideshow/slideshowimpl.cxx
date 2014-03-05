@@ -741,7 +741,8 @@ void SAL_CALL SlideshowImpl::disposing()
                 Size aVisSizePixel = pActWin->GetOutputSizePixel();
                 Rectangle aVisAreaWin = pActWin->PixelToLogic( Rectangle( Point(0,0), aVisSizePixel) );
                 mpViewShell->VisAreaChanged(aVisAreaWin);
-                mpView->VisAreaChanged(pActWin);
+                if (mpView)
+                    mpView->VisAreaChanged(pActWin);
                 pActWin->GrabFocus();
             }
         }
