@@ -359,7 +359,8 @@ sal_Bool LwpFontNameEntry::IsBackgroundColorOverridden()
 //}
 
 LwpFontNameManager::LwpFontNameManager()
-    :m_pFontNames(NULL)
+    : m_nCount(0)
+    , m_pFontNames(NULL)
 {}
 
 LwpFontNameManager::~LwpFontNameManager()
