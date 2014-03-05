@@ -2370,6 +2370,7 @@ sal_Bool SfxObjectShell::ExportTo( SfxMedium& rMedium )
         sal_Bool bHasOutputStream = sal_False;
         sal_Bool bHasStream = sal_False;
         sal_Bool bHasBaseURL = sal_False;
+        bool bHasFilterName = false;
         sal_Int32 i;
         sal_Int32 nEnd = aOldArgs.getLength();
 
@@ -2384,6 +2385,8 @@ sal_Bool SfxObjectShell::ExportTo( SfxMedium& rMedium )
                 bHasStream = sal_True;
             else if ( pOldValue[i].Name == "DocumentBaseURL" )
                 bHasBaseURL = sal_True;
+            else if( pOldValue[i].Name == "FilterName" )
+                bHasFilterName = true;
         }
 
         if ( !bHasOutputStream )
@@ -2406,6 +2409,13 @@ sal_Bool SfxObjectShell::ExportTo( SfxMedium& rMedium )
             aArgs.realloc ( ++nEnd );
             aArgs[nEnd-1].Name = "DocumentBaseURL";
             aArgs[nEnd-1].Value <<= rMedium.GetBaseURL( true );
+        }
+
+        if( !bHasFilterName )
+        {
+            aArgs.realloc( ++nEnd );
+            aArgs[nEnd-1].Name = "FilterName";
+            aArgs[nEnd-1].Value <<= aFilterName;
         }
 
         return xFilter->filter( aArgs );
