@@ -190,7 +190,6 @@ OUString SfxFilter::GetTypeFromStorage(
         throw ( beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException )
 {
     SfxFilterMatcher aMatcher;
-    const char* pType=0;
     OUString aName;
     if ( pFilterName )
     {
@@ -243,17 +242,7 @@ OUString SfxFilter::GetTypeFromStorage(
         }
     }
 
-    //TODO: do it without SfxFilter
-    //TODO/LATER: don't yield FilterName, should be done in FWK!
-    OUString aRet;
-    if ( pType )
-    {
-        aRet = OUString::createFromAscii(pType);
-        if ( pFilterName )
-            *pFilterName = aMatcher.GetFilter4EA( aRet )->GetName();
-    }
-
-    return aRet;
+    return OUString();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
