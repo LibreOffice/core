@@ -957,7 +957,7 @@ Any OFormattedModel::translateControlValueToExternalValue( ) const
             // if this asserts ... well, the somebody set the TreatAsNumeric property to false,
             // and the control value is a string. This implies some weird misconfiguration
             // of the FormattedModel, so we won't care for it for the moment.
-        aExternalValue <<= (sal_Bool)( fValue ? sal_True : sal_False );
+        aExternalValue <<= fValue != 0.0;
     }
     break;
     default:
