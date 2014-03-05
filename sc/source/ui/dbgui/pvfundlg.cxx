@@ -176,14 +176,14 @@ void ScDPFunctionListBox::SetSelection( sal_uInt16 nFuncMask )
     if( (nFuncMask == PIVOT_FUNC_NONE) || (nFuncMask == PIVOT_FUNC_AUTO) )
         SetNoSelection();
     else
-        for( sal_uInt16 nEntry = 0, nCount = GetEntryCount(); nEntry < nCount; ++nEntry )
+        for( sal_Int32 nEntry = 0, nCount = GetEntryCount(); nEntry < nCount; ++nEntry )
             SelectEntryPos( nEntry, (nFuncMask & spnFunctions[ nEntry ]) != 0 );
 }
 
 sal_uInt16 ScDPFunctionListBox::GetSelection() const
 {
     sal_uInt16 nFuncMask = PIVOT_FUNC_NONE;
-    for( sal_uInt16 nSel = 0, nCount = GetSelectEntryCount(); nSel < nCount; ++nSel )
+    for( sal_Int32 nSel = 0, nCount = GetSelectEntryCount(); nSel < nCount; ++nSel )
         nFuncMask |= spnFunctions[ GetSelectEntryPos( nSel ) ];
     return nFuncMask;
 }
@@ -233,7 +233,7 @@ DataPilotFieldReference ScDPFunctionDlg::GetFieldRef() const
     aRef.ReferenceType = mxLbTypeWrp->GetControlValue();
     aRef.ReferenceField = GetBaseFieldName(mpLbBaseField->GetSelectEntry());
 
-    sal_uInt16 nBaseItemPos = mpLbBaseItem->GetSelectEntryPos();
+    sal_Int32 nBaseItemPos = mpLbBaseItem->GetSelectEntryPos();
     switch( nBaseItemPos )
     {
         case SC_BASEITEM_PREV_POS:
@@ -309,8 +309,8 @@ void ScDPFunctionDlg::Init( const ScDPLabelData& rLabelData, const ScPivotFuncDa
             }
             else
             {
-                sal_uInt16 nStartPos = mbEmptyItem ? (SC_BASEITEM_USER_POS + 1) : SC_BASEITEM_USER_POS;
-                sal_uInt16 nPos = FindBaseItemPos( rFuncData.maFieldRef.ReferenceItemName, nStartPos );
+                sal_Int32 nStartPos = mbEmptyItem ? (SC_BASEITEM_USER_POS + 1) : SC_BASEITEM_USER_POS;
+                sal_Int32 nPos = FindBaseItemPos( rFuncData.maFieldRef.ReferenceItemName, nStartPos );
                 if( nPos >= mpLbBaseItem->GetEntryCount() )
                     nPos = (mpLbBaseItem->GetEntryCount() > SC_BASEITEM_USER_POS) ? SC_BASEITEM_USER_POS : SC_BASEITEM_PREV_POS;
                 mpLbBaseItem->SelectEntryPos( nPos );
@@ -331,9 +331,9 @@ const OUString& ScDPFunctionDlg::GetBaseItemName(const OUString& rLayoutName) co
     return itr == maBaseItemNameMap.end() ? rLayoutName : itr->second;
 }
 
-sal_uInt16 ScDPFunctionDlg::FindBaseItemPos( const OUString& rEntry, sal_uInt16 nStartPos ) const
+sal_Int32 ScDPFunctionDlg::FindBaseItemPos( const OUString& rEntry, sal_Int32 nStartPos ) const
 {
-    sal_uInt16 nPos = nStartPos;
+    sal_Int32 nPos = nStartPos;
     bool bFound = false;
     while (nPos < mpLbBaseItem->GetEntryCount())
     {
@@ -625,7 +625,7 @@ void ScDPSubtotalOptDlg::Init( const ScDPNameVec& rDataFields, bool bEnableLayou
     if( m_pLbSortBy->GetEntryCount() > SC_SORTDATA_POS )
         m_pLbSortBy->SetSeparatorPos( SC_SORTDATA_POS - 1 );
 
-    sal_uInt16 nSortPos = SC_SORTNAME_POS;
+    sal_Int32 nSortPos = SC_SORTNAME_POS;
     if( nSortMode == DataPilotFieldSortMode::DATA )
     {
         nSortPos = FindListBoxEntry( *m_pLbSortBy, maLabelData.maSortInfo.Field, SC_SORTDATA_POS );
@@ -691,7 +691,7 @@ void ScDPSubtotalOptDlg::Init( const ScDPNameVec& rDataFields, bool bEnableLayou
         lclFillListBox( *m_pLbHierarchy, maLabelData.maHiers );
         sal_Int32 nHier = maLabelData.mnUsedHier;
         if( (nHier < 0) || (nHier >= maLabelData.maHiers.getLength()) ) nHier = 0;
-        m_pLbHierarchy->SelectEntryPos( static_cast< sal_uInt16 >( nHier ) );
+        m_pLbHierarchy->SelectEntryPos( static_cast< sal_Int32 >( nHier ) );
         m_pLbHierarchy->SetSelectHdl( LINK( this, ScDPSubtotalOptDlg, SelectHdl ) );
     }
     else
@@ -706,8 +706,8 @@ void ScDPSubtotalOptDlg::InitHideListBox()
     m_pLbHide->Clear();
     lclFillListBox( *m_pLbHide, maLabelData.maMembers );
     size_t n = maLabelData.maMembers.size();
-    for (size_t i = 0; i < n; ++i)
-        m_pLbHide->CheckEntryPos(static_cast<sal_uInt16>(i), !maLabelData.maMembers[i].mbVisible);
+    for (sal_uLong i = 0; i < n; ++i)
+        m_pLbHide->CheckEntryPos(i, !maLabelData.maMembers[i].mbVisible);
     bool bEnable = m_pLbHide->GetEntryCount() > 0;
     m_pHideFrame->Enable(bEnable);
 }
@@ -718,10 +718,10 @@ ScDPName ScDPSubtotalOptDlg::GetFieldName(const OUString& rLayoutName) const
     return itr == maDataFieldNameMap.end() ? ScDPName() : itr->second;
 }
 
-sal_uInt16 ScDPSubtotalOptDlg::FindListBoxEntry(
-    const ListBox& rLBox, const OUString& rEntry, sal_uInt16 nStartPos ) const
+sal_Int32 ScDPSubtotalOptDlg::FindListBoxEntry(
+    const ListBox& rLBox, const OUString& rEntry, sal_Int32 nStartPos ) const
 {
-    sal_uInt16 nPos = nStartPos;
+    sal_Int32 nPos = nStartPos;
     bool bFound = false;
     while (nPos < rLBox.GetEntryCount())
     {

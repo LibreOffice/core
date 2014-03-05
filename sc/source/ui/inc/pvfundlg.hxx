@@ -79,7 +79,7 @@ private:
     const OUString& GetBaseItemName(const OUString& rLayoutName) const;
 
     /** Searches for a listbox entry, starts search at specified position. */
-    sal_uInt16 FindBaseItemPos( const OUString& rEntry, sal_uInt16 nStartPos ) const;
+    sal_Int32 FindBaseItemPos( const OUString& rEntry, sal_Int32 nStartPos ) const;
 
     DECL_LINK( SelectHdl, ListBox* );
     DECL_LINK( DblClickHdl, void* );
@@ -158,7 +158,7 @@ private:
     ScDPName GetFieldName(const OUString& rLayoutName) const;
 
     /** Searches for a listbox entry, starts search at specified position. */
-    sal_uInt16 FindListBoxEntry( const ListBox& rLBox, const OUString& rEntry, sal_uInt16 nStartPos ) const;
+    sal_Int32 FindListBoxEntry( const ListBox& rLBox, const OUString& rEntry, sal_Int32 nStartPos ) const;
 
     DECL_LINK( RadioClickHdl, RadioButton* );
     DECL_LINK( CheckHdl, CheckBox* );
