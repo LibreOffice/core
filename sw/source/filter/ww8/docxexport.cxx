@@ -796,8 +796,11 @@ void DocxExport::WriteSettings()
             FSEND );
 
     // Zoom
-    OString aZoom(OString::number(pViewShell->GetViewOptions()->GetZoom()));
-    pFS->singleElementNS(XML_w, XML_zoom, FSNS(XML_w, XML_percent), aZoom.getStr(), FSEND);
+    if (pViewShell)
+    {
+        OString aZoom(OString::number(pViewShell->GetViewOptions()->GetZoom()));
+        pFS->singleElementNS(XML_w, XML_zoom, FSNS(XML_w, XML_percent), aZoom.getStr(), FSEND);
+    }
 
     // Display Background Shape
     if (boost::optional<const SvxBrushItem*> oBrush = getBackground())
