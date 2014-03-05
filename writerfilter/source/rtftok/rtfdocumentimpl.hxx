@@ -353,10 +353,12 @@ namespace writerfilter {
                 void setNeedPar(bool bNeedPar);
                 /// Return the dmapper index of an RTF index for fonts.
                 int getFontIndex(int nIndex);
+                /// Return the name of the font, based on a dmapper index.
+                OUString getFontName(int nIndex);
                 /// Return the style name of an RTF style index.
                 OUString getStyleName(int nIndex);
-                /// Return the encoding associated with a dmapper font index.
-                rtl_TextEncoding getEncoding(sal_uInt32 nFontIndex);
+                /// Return the encoding associated with a font name.
+                rtl_TextEncoding getEncoding(OUString aFontName);
                 /// Get the default parser state.
                 RTFParserState& getDefaultState();
                 oox::GraphicHelper& getGraphicHelper();
@@ -420,8 +422,10 @@ namespace writerfilter {
                 /// Read by RTF_PARD.
                 RTFParserState m_aDefaultState;
                 bool m_bSkipUnknown;
-                /// Font index <-> encoding map, *not* part of the parser state
-                std::map<int, rtl_TextEncoding> m_aFontEncodings;
+                /// Font name <-> encoding map, *not* part of the parser state
+                std::map<OUString, rtl_TextEncoding> m_aFontEncodings;
+                /// Font index <-> name map.
+                std::map<int, OUString> m_aFontNames;
                 /// Maps the non-continuous font indexes to the continuous dmapper indexes.
                 std::vector<int> m_aFontIndexes;
                 /// Maps style indexes to style names.
@@ -510,6 +514,10 @@ namespace writerfilter {
 
                 RTFReferenceTable::Entries_t m_aFontTableEntries;
                 int m_nCurrentFontIndex;
+                /// Used only during font table parsing till we don't know the font name.
+                int m_nCurrentEncoding;
+                /// Used only before font table parsing.
+                int m_nDefaultFontIndex;
 
                 RTFReferenceTable::Entries_t m_aStyleTableEntries;
                 int m_nCurrentStyleIndex;
