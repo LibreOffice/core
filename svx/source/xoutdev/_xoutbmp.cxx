@@ -231,7 +231,7 @@ sal_uInt16 XOutBitmap::WriteGraphic( const Graphic& rGraphic, OUString& rFileNam
 
             if( GRFILTER_FORMAT_NOTFOUND == nFilter )
             {
-                nFilter = rFilter.GetExportFormatNumberForShortName( FORMAT_JPG );
+                nFilter = rFilter.GetExportFormatNumberForShortName( FORMAT_PNG );
 
                 if( GRFILTER_FORMAT_NOTFOUND == nFilter )
                     nFilter = rFilter.GetExportFormatNumberForShortName( FORMAT_BMP );
