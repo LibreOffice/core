@@ -8196,6 +8196,11 @@
           </choice>
         </list>
       </define>
+      <define name="ST_LongHexNumber">
+        <data type="hexBinary">
+          <param name="length">4</param>
+        </data>
+      </define>
       <define name="CT_PosV">
         <choice>
           <element name="align">
@@ -8320,6 +8325,9 @@
           </data>
           <xs:documentation>Allow Objects to Overlap</xs:documentation>
         </attribute>
+        <attribute name="wp14:anchorId">
+          <ref name="ST_LongHexNumber"/>
+        </attribute>
       </define>
       <define name="inline">
         <element name="inline">
@@ -8435,6 +8443,7 @@
       <element name="posOffset" tokenid="ooxml:CT_PosV_posOffset"/>
       <attribute name="relativeFrom" tokenid="ooxml:CT_PosV_relativeFrom"/>
     </resource>
+    <resource name="ST_LongHexNumber" resource="Hex"/>
     <resource xmlns:a="http://schemas.openxmlformats.org/drawingml/2006/main" xmlns:wp14="http://schemas.microsoft.com/office/word/2010/wordprocessingDrawing" name="CT_Anchor" resource="Properties" tag="shape">
       <element name="simplePos" tokenid="ooxml:CT_Anchor_simplePos_elem"/>
       <element name="positionH" tokenid="ooxml:CT_Anchor_positionH"/>
@@ -8456,6 +8465,7 @@
       <attribute name="layoutInCell" tokenid="ooxml:CT_Anchor_layoutInCell"/>
       <attribute name="hidden" tokenid="ooxml:CT_Anchor_hidden"/>
       <attribute name="allowOverlap" tokenid="ooxml:CT_Anchor_allowOverlap"/>
+      <attribute name="wp14:anchorId" tokenid="ooxml:CT_Anchor_wp14_anchorId"/>
     </resource>
     <resource name="inline" resource="Properties" tag="shape">
       <element name="inline" tokenid="ooxml:inline_inline"/>
