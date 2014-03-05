@@ -101,7 +101,6 @@ interface FormatForSelection
     SID_ALIGNCENTERVER  [ ExecMethod = ExecuteTextAttr; StateMethod = GetTextAttrState; ]
     SID_ALIGNBLOCK      [ ExecMethod = ExecuteTextAttr; StateMethod = GetTextAttrState; ]
     SID_ALIGNCENTERHOR  [ ExecMethod = ExecuteTextAttr; StateMethod = GetTextAttrState; ]
-    SID_SCGRIDSHOW      [ ExecMethod = ExecViewOptions; StateMethod = GetViewOptions; ]
 
     SID_V_ALIGNCELL         [ ExecMethod = ExecuteAlignment; StateMethod = GetAlignState; ]
     SID_H_ALIGNCELL         [ ExecMethod = ExecuteAlignment; StateMethod = GetAlignState; ]
