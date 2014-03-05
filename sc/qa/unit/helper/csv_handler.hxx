@@ -167,7 +167,7 @@ public:
                 std::cout << "CSVValue: " << nValue << std::endl;
                 std::cout << "result: " << (int)(aValue == nValue) << std::endl;
 #endif //DEBUG_CSV_HANDLER
-                CPPUNIT_ASSERT_MESSAGE(createErrorMessage(mnCol, mnRow, mnTab, nValue, aValue).getStr(), aValue == nValue);
+                CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE(createErrorMessage(mnCol, mnRow, mnTab, nValue, aValue).getStr(), nValue, aValue, 1e-10);
             }
         }
         ++mnCol;

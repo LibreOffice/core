@@ -402,6 +402,9 @@ void ScFiltersTest::testFunctionsODS()
     // statistical functions
     createCSVPath(OUString("statistical-functions."), aCSVFileName);
     testFile(aCSVFileName, pDoc, 5);
+    // financial functions
+    createCSVPath("financial-functions.", aCSVFileName);
+    testFile(aCSVFileName, pDoc, 6);
 
     xDocSh->DoClose();
 }
