@@ -226,7 +226,7 @@ struct WW8_FFN : public WW8_FFN_BASE
                                         // font does not exist on this system.
 };
 
-struct WW8_BRCVer6  // alter Border Code
+struct WW8_BRCVer6  // BoRder Code (WW6 version)
 {
     SVBT16 aBits1;
 //  sal_uInt16 dxpLineWidth : 3;// 0007 When dxpLineWidth is 0, 1, 2, 3, 4, or 5, this field is the width of
@@ -238,35 +238,134 @@ struct WW8_BRCVer6  // alter Border Code
 //  sal_uInt16 ico : 5;         // 07C0 color code (see chp.ico)
 //  sal_uInt16 dxpSpace : 5;    // F800 width of space to maintain between border and text within border.
                             //      Must be 0 when BRC is a substructure of the TC.  Stored in points for Windows.
+    sal_uInt8 dxpLineWidth() const
+        { return aBits1[0] & 0x07; }
+    sal_uInt8 brcType() const
+        { return (aBits1[0] & 0x18) >> 3; }
+    bool fShadow() const
+        { return !!(aBits1[0] & 0x20); }
+    sal_uInt8 ico() const
+        { return ((aBits1[0] & 0xc0) >> 6) | ((aBits1[1] & 0x07) << 2); }
+    sal_uInt8 dxpSpace() const
+        { return aBits1[1] >> 3; }
+
+    WW8_BRCVer6(sal_uInt8 _dxpLineWidth, sal_uInt8 _brcType, sal_uInt8 _ico,
+        sal_uInt8 _dxpSpace, bool _fShadow)
+    {
+        assert(_dxpSpace < 0x20);
+        assert(_brcType <= 3);
+        assert(_ico < 32);
+        aBits1[0] = _dxpLineWidth | (_brcType << 3) | ((sal_uInt8)_fShadow << 5)
+            | ((_ico << 6) & 0xc0);
+        aBits1[1] = (_ico >> 2) | (_dxpSpace << 3);
+    }
+    // Convert BRC from WW8 to WW6 format
+    WW8_BRCVer6(const class WW8_BRC& brcVer8);
 };
 
-class WW8_BRC      // Border Code
+struct WW8_BRC  // BoRder Code (WW8 version)
+// Documented at http://msdn.microsoft.com/en-us/library/dd952599.aspx
 {
-public:
     SVBT16 aBits1;
     SVBT16 aBits2;
-//  sal_uInt16 dxpLineWidth : 3;// 0007 When dxpLineWidth is 0, 1, 2, 3, 4, or 5, this field is the width of
-                            //      a single line of border in units of 0.75 points
-                            //      Must be nonzero when brcType is nonzero.
-                            //      6 == dotted, 7 == dashed.
-//  sal_uInt16 brcType : 2;     // 0018 border type code: 0 == none, 1 == single, 2 == thick, 3 == double
-//  sal_uInt16 fShadow : 1;     // 0020 when 1, border is drawn with shadow. Must be 0 when BRC is a substructure of the TC
-//  sal_uInt16 ico : 5;         // 07C0 color code (see chp.ico)
-//  sal_uInt16 dxpSpace : 5;    // F800 width of space to maintain between border and text within border.
-                            //      Must be 0 when BRC is a substructure of the TC.  Stored in points for Windows.
+//  sal_uInt8 dptLineWidth;
+//  sal_uInt8 brcType;
+//  sal_uInt8 ico;
+//  sal_uInt8 dptSpace : 5
+//  bool fShadow : 1;
+//  bool fFrame : 1;
+//  bool fReserved : 1;
     WW8_BRC()
     {
         memset(aBits1, 0, sizeof(aBits1));
         memset(aBits2, 0, sizeof(aBits2));
     }
-    short DetermineBorderProperties (bool bVer67, short *pSpace=0,
-        sal_uInt8 *pCol=0, short *pIdx=0) const;
-    bool IsEmpty(bool bVer67) const;
-    bool IsZeroed(bool bVer67) const;
-    bool IsBlank() const;
+
+    sal_uInt8 dptLineWidth() const // border line width (1/8pt)
+        { return aBits1[0]; }
+    sal_uInt8 brcType() const      // border type (eg single, double, dotted)
+        { return aBits1[1]; }
+    sal_uInt8 ico() const          // colour index, 1-17 or 0=auto
+        { return aBits2[0]; }
+    sal_uInt8 dptSpace() const     // space between text & border (pt)
+        { return aBits2[1] & 0x1f; }
+    bool fShadow() const           // shadow effect
+        { return !!(aBits2[1] & 0x20); }
+    bool fFrame() const            // 3D frame effect
+        { return !!(aBits2[1] & 0x40); }
+    bool isNil() const             // nil = no border
+        { return aBits1[0] == 0xff && aBits1[1] == 0xff; }
+
+    WW8_BRC(sal_uInt8 _dptLineWidth, sal_uInt8 _brcType, sal_uInt8 _ico,
+        sal_uInt8 _dptSpace, bool _fShadow, bool _fFrame)
+    {
+        assert(_dptSpace < 0x20);
+        aBits1[0] = _dptLineWidth;
+        aBits1[1] = _brcType;
+        aBits2[0] = _ico;
+        aBits2[1] = _dptSpace | ((sal_uInt8)_fShadow << 5)
+            | ((sal_uInt8)_fFrame << 6);
+    }
+    // Convert BRC from WW6 to WW8 format
+    WW8_BRC(const WW8_BRCVer6& brcVer6);
+
+    // Returns LO border width in twips=1/20pt, taking into account brcType
+    short DetermineBorderProperties(short *pSpace=0) const;
 };
 
 typedef WW8_BRC WW8_BRC5[5];        // 5 * Border Code
+
+struct WW8_BRCVer9  // BoRder Code (WW9 version)
+// Documented at http://msdn.microsoft.com/en-us/library/dd907496.aspx
+{
+    SVBT32 aBits1; // border colour (RGB)
+    SVBT32 aBits2;
+//  sal_uInt8 dptLineWidth;   // border line width (1/8pt)
+//  sal_uInt8 brcType;        // border type (eg single, double, dotted)
+//  sal_uInt8 dptSpace : 5;   // space between text & border (pt)
+//  bool fShadow : 1;         // border has shadow effect
+//  bool fFrame : 1;          // border has 3D effect
+//  sal_uInt16 fReserved : 9; // unused
+    WW8_BRCVer9()
+    {
+        memset(aBits1, 0, sizeof(aBits1));
+        memset(aBits2, 0, sizeof(aBits2));
+    }
+
+    sal_uInt32 cv() const          // colour value (BGR)
+        { return SVBT32ToUInt32(aBits1); }
+    sal_uInt8 dptLineWidth() const // border line width (1/8pt)
+        { return aBits2[0]; }
+    sal_uInt8 brcType() const      // border type (eg single, double, dotted)
+        { return aBits2[1]; }
+    sal_uInt8 dptSpace() const     // space between text & border (pt)
+        { return aBits2[2] & 0x1f; }
+    bool fShadow() const           // shadow effect
+        { return !!(aBits2[2] & 0x20); }
+    bool fFrame() const            // 3D frame effect
+        { return !!(aBits2[2] & 0x40); }
+    bool isNil() const             // nil = no border
+        { return SVBT32ToUInt32(aBits2) == 0xffffffff; }
+
+    WW8_BRCVer9(sal_uInt32 _cv, sal_uInt8 _dptLineWidth, sal_uInt8 _brcType,
+        sal_uInt8 _dptSpace, bool _fShadow, bool _fFrame)
+    {
+        assert(_dptSpace < 0x20);
+        UInt32ToSVBT32(_cv, aBits1);
+        aBits2[0] = _dptLineWidth;
+        aBits2[1] = _brcType;
+        aBits2[2] = _dptSpace | ((sal_uInt8)_fShadow << 5)
+            | ((sal_uInt8)_fFrame << 6);
+        aBits2[3] = 0;
+    }
+    // Convert BRC from WW8 to WW9 format
+    WW8_BRCVer9(const WW8_BRC& brcVer8);
+
+    // Returns LO border width in twips=1/20pt, taking into account brcType
+    short DetermineBorderProperties(short *pSpace=0) const;
+};
+
+typedef WW8_BRCVer9 WW8_BRCVer9_5[5];        // 5 * Border Code
 
 enum BRC_Sides
 {
@@ -444,7 +543,7 @@ struct WW8_TCell    // hiermit wird weitergearbeitet (entspricht weitestgehend d
                                                     //          2 bottom
     sal_uInt16 fUnused      : 7;// reserved - nicht loeschen: macht das sal_uInt16 voll !!
 
-    WW8_BRC rgbrc[4];               // border codes
+    WW8_BRCVer9 rgbrc[4];   // border codes
 //notational convenience for referring to brcTop, brcLeft, etc fields.
 //  BRC brcTop;             // specification of the top border of a table cell
 //  BRC brcLeft;            // specification of left border of table row
