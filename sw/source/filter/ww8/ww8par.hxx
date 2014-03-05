@@ -207,7 +207,7 @@ struct WW8FlyPara
     sal_Int16 nLeMgn, nRiMgn, nUpMgn, nLoMgn;           // Raender
     sal_uInt8 nSp29;                 // rohe Bindung + Alignment
     sal_uInt8 nSp37;                 // Wrap-Mode ( 1 / 2; 0 = no Apo ? )
-    WW8_BRC5 brc;               // Umrandung Top, Left, Bottom, Right, Between
+    WW8_BRCVer9_5 brc;          // Umrandung Top, Left, Bottom, Right, Between
     bool bBorderLines;          // Umrandungslinien
     bool bGrafApo;              // true: Dieser Rahmen dient allein dazu, die
                                 // enthaltene Grafik anders als zeichengebunden
@@ -758,7 +758,7 @@ class wwSection
 public:
     wwSection(const SwPosition &rPos);
     SEPr maSep;
-    WW8_BRC brc[4];
+    WW8_BRCVer9 brc[4];
     SwNodeIndex maStart;
     SwSection *mpSection;
     SwPageDesc *mpPage;
@@ -1006,7 +1006,7 @@ struct WW8TabBandDesc
     short nOverrideValues[MAX_COL + 1][4];
     WW8_SHD* pSHDs;
     sal_uInt32* pNewSHDs;
-    WW8_BRC aDefBrcs[6];
+    WW8_BRCVer9 aDefBrcs[6];
 
     bool bExist[MAX_COL];           // does this cell exist ?
     sal_uInt8 nTransCell[MAX_COL + 2];  // translation WW-Index -> SW-Index
@@ -1022,8 +1022,8 @@ struct WW8TabBandDesc
     static void setcelldefaults(WW8_TCell *pCells, short nCells);
     void ReadDef(bool bVer67, const sal_uInt8* pS);
     void ProcessDirection(const sal_uInt8* pParams);
-    void ProcessSprmTSetBRC(bool bVer67, const sal_uInt8* pParamsTSetBRC);
-    void ProcessSprmTTableBorders(bool bVer67, const sal_uInt8* pParams);
+    void ProcessSprmTSetBRC(int nBrcVer, const sal_uInt8* pParamsTSetBRC);
+    void ProcessSprmTTableBorders(int nBrcVer, const sal_uInt8* pParams);
     void ProcessSprmTDxaCol(const sal_uInt8* pParamsTDxaCol);
     void ProcessSprmTDelete(const sal_uInt8* pParamsTDelete);
     void ProcessSprmTInsert(const sal_uInt8* pParamsTInsert);
@@ -1426,7 +1426,7 @@ private:
     const SfxPoolItem* GetFmtAttr( sal_uInt16 nWhich );
     bool JoinNode(SwPaM &rPam, bool bStealAttr = false);
 
-    bool IsBorder(const WW8_BRC* pbrc, bool bChkBtwn = false) const;
+    bool IsBorder(const WW8_BRCVer9* pbrc, bool bChkBtwn = false) const;
 
     //Set closest writer border equivalent into rBox from pbrc, optionally
     //recording true winword dimensions in pSizeArray. nSetBorders to mark a
@@ -1436,14 +1436,14 @@ private:
 
     // Note #i20672# we can't properly support between lines so best to ignore
     // them for now
-    bool SetBorder(SvxBoxItem& rBox, const WW8_BRC* pbrc, short *pSizeArray=0,
-        sal_uInt8 nSetBorders=0xFF) const;
-    void GetBorderDistance(const WW8_BRC* pbrc, Rectangle& rInnerDist) const;
+    bool SetBorder(SvxBoxItem& rBox, const WW8_BRCVer9* pbrc,
+        short *pSizeArray=0, sal_uInt8 nSetBorders=0xFF) const;
+    void GetBorderDistance(const WW8_BRCVer9* pbrc, Rectangle& rInnerDist) const;
     sal_uInt16 GetParagraphAutoSpace(bool fDontUseHTMLAutoSpacing);
     bool SetShadow(SvxShadowItem& rShadow, const short *pSizeArray,
-    const WW8_BRC& aRightBrc) const;
+        const WW8_BRCVer9& aRightBrc) const;
     //returns true is a shadow was set
-    bool SetFlyBordersShadow(SfxItemSet& rFlySet, const WW8_BRC *pbrc,
+    bool SetFlyBordersShadow(SfxItemSet& rFlySet, const WW8_BRCVer9 *pbrc,
         short *SizeArray=0) const;
     void SetPageBorder(SwFrmFmt &rFmt, const wwSection &rSection) const;
 

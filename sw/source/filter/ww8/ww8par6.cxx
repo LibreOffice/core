@@ -109,7 +109,8 @@ using namespace nsHdFtFlags;
 #define MM_250 1417             // WW-Default fuer Hor. Seitenraender: 2.5 cm
 #define MM_200 1134             // WW-Default fuer u.Seitenrand: 2.0 cm
 
-static sal_uInt8 lcl_ReadBorders(bool bVer67, WW8_BRC* brc, WW8PLCFx_Cp_FKP* pPap,
+
+static sal_uInt8 lcl_ReadBorders(bool bVer67, WW8_BRCVer9* brc, WW8PLCFx_Cp_FKP* pPap,
     const WW8RStyle* pSty = 0, const WW8PLCFx_SEPX* pSep = 0);
 
 ColorData SwWW8ImplReader::GetCol(sal_uInt8 nIco)
@@ -1191,20 +1192,26 @@ void SwWW8ImplReader::CopyPageDescHdFt(const SwPageDesc* pOrgPageDesc,
 
 //   Hilfsroutinen fuer Grafiken und Apos und Tabellen
 
-static bool _SetWW8_BRC(bool bVer67, WW8_BRC& rVar, const sal_uInt8* pS)
+// Read BoRder Control structure
+// nBrcVer should be set to the version of the BRC record being read (6, 8 or 9)
+// This will be converted to the latest format (9).
+static bool _SetWW8_BRC(int nBrcVer, WW8_BRCVer9& rVar, const sal_uInt8* pS)
 {
+
     if( pS )
     {
-        if( bVer67 )
-            memcpy( rVar.aBits1, pS, sizeof( SVBT16 ) );
-        else
-            rVar = *((WW8_BRC*)pS);
+        if ( nBrcVer == 9 )
+            rVar = *(const WW8_BRCVer9*)pS;
+        else if( nBrcVer == 8 )
+            rVar = *(const WW8_BRC*)pS;
+        else // nBrcVer == 6
+            rVar = WW8_BRC(*(const WW8_BRCVer6*)pS);
     }
 
     return 0 != pS;
 }
 
-static sal_uInt8 lcl_ReadBorders(bool bVer67, WW8_BRC* brc, WW8PLCFx_Cp_FKP* pPap,
+static sal_uInt8 lcl_ReadBorders(bool bVer67, WW8_BRCVer9* brc, WW8PLCFx_Cp_FKP* pPap,
     const WW8RStyle* pSty, const WW8PLCFx_SEPX* pSep)
 {
 
@@ -1223,7 +1230,7 @@ static sal_uInt8 lcl_ReadBorders(bool bVer67, WW8_BRC* brc, WW8PLCFx_Cp_FKP* pPa
                                     pSprm[0], pSprm[1], pSprm[2], pSprm[3] ) )
              {
                 for( int i = 0; i < 4; ++i )
-                    nBorder |= int(_SetWW8_BRC( bVer67, brc[ i ], pSprm[ i ] ))<<i;
+                    nBorder |= int(_SetWW8_BRC( 8, brc[ i ], pSprm[ i ] ))<<i;
              }
         }
     }
@@ -1235,17 +1242,40 @@ static sal_uInt8 lcl_ReadBorders(bool bVer67, WW8_BRC* brc, WW8PLCFx_Cp_FKP* pPa
         static const sal_uInt16 aVer8Ids[5] =
                 { 0x6424, 0x6425, 0x6426, 0x6427, 0x6428 };
 
-        const sal_uInt16* pIds = bVer67 ? aVer67Ids : aVer8Ids;
+        static const sal_uInt16 aVer9Ids[5] =
+                { 0xC64E, 0xC64F, 0xC650, 0xC651, 0xC652 };
 
         if( pPap )
         {
-            for( int i = 0; i < 5; ++i, ++pIds )
-                nBorder |= int(_SetWW8_BRC( bVer67, brc[ i ], pPap->HasSprm( *pIds )))<<i;
+            if (bVer67)
+            {
+                for( int i = 0; i < 5; ++i )
+                    nBorder |= int(_SetWW8_BRC( 6 , brc[ i ], pPap->HasSprm( aVer67Ids[ i ] )))<<i;
+            }
+            else
+            {
+                for( int i = 0; i < 5; ++i )
+                    nBorder |= int(_SetWW8_BRC( 8 , brc[ i ], pPap->HasSprm( aVer8Ids[ i ] )))<<i;
+                // Version 9 BRCs if present will override version 8
+                for( int i = 0; i < 5; ++i )
+                    nBorder |= int(_SetWW8_BRC( 9 , brc[ i ], pPap->HasSprm( aVer9Ids[ i ] )))<<i;
+            }
         }
         else if( pSty )
         {
-            for( int i = 0; i < 5; ++i, ++pIds )
-                nBorder |= int(_SetWW8_BRC( bVer67, brc[ i ], pSty->HasParaSprm( *pIds )))<<i;
+            if (bVer67)
+            {
+                for( int i = 0; i < 5; ++i )
+                    nBorder |= int(_SetWW8_BRC( 6 , brc[ i ], pSty->HasParaSprm( aVer67Ids[ i ] )))<<i;
+            }
+            else
+            {
+                for( int i = 0; i < 5; ++i )
+                    nBorder |= int(_SetWW8_BRC( 8 , brc[ i ], pSty->HasParaSprm( aVer8Ids[ i ] )))<<i;
+                // Version 9 BRCs if present will override version 8
+                for( int i = 0; i < 5; ++i )
+                    nBorder |= int(_SetWW8_BRC( 9 , brc[ i ], pSty->HasParaSprm( aVer9Ids[ i ] )))<<i;
+            }
         }
         else {
             OSL_ENSURE( pSty || pPap, "WW8PLCFx_Cp_FKP and WW8RStyle "
@@ -1256,9 +1286,17 @@ static sal_uInt8 lcl_ReadBorders(bool bVer67, WW8_BRC* brc, WW8PLCFx_Cp_FKP* pPa
     return nBorder;
 }
 
-void GetLineIndex(SvxBoxItem &rBox, short nLineThickness, short nSpace, sal_uInt8 nCol, short nIdx,
-    sal_uInt16 nOOIndex, sal_uInt16 nWWIndex, short *pSize=0)
+void GetLineIndex(SvxBoxItem &rBox, short nLineThickness, short nSpace,
+    sal_uInt32 cv, short nIdx, sal_uInt16 nOOIndex, sal_uInt16 nWWIndex,
+    short *pSize=0)
 {
+    // LO cannot handle outset/inset (new in WW9 BRC) so fall back same as WW8
+    if ( nIdx == 0x1A || nIdx == 0x1B )
+    {
+        nIdx = (nIdx == 0x1A) ? 0x12 : 0x11;
+        cv = 0xc0c0c0;
+    }
+
     ::editeng::SvxBorderStyle const eStyle(
             ::editeng::ConvertBorderStyleFromWord(nIdx));
 
@@ -1269,10 +1307,9 @@ void GetLineIndex(SvxBoxItem &rBox, short nLineThickness, short nSpace, sal_uInt
     aLine.SetWidth(fConverted);
 
     //No AUTO for borders as yet, so if AUTO, use BLACK
-    if (nCol == 0)
-        nCol = 1;
+    ColorData col = (cv==0xff000000) ? COL_BLACK : msfilter::util::BGRToRGB(cv);
 
-    aLine.SetColor(SwWW8ImplReader::GetCol(nCol));
+    aLine.SetColor(col);
 
     if (pSize)
         pSize[nWWIndex] = fConverted + nSpace;
@@ -1282,64 +1319,32 @@ void GetLineIndex(SvxBoxItem &rBox, short nLineThickness, short nSpace, sal_uInt
 
 }
 
-void Set1Border(bool bVer67, SvxBoxItem &rBox, const WW8_BRC& rBor,
-    sal_uInt16 nOOIndex, sal_uInt16 nWWIndex, short *pSize, const bool bIgnoreSpace)
+void Set1Border(SvxBoxItem &rBox, const WW8_BRCVer9& rBor, sal_uInt16 nOOIndex,
+    sal_uInt16 nWWIndex, short *pSize, const bool bIgnoreSpace)
 {
-    sal_uInt8 nCol;
-    short nSpace, nIdx;
-    short nLineThickness = rBor.DetermineBorderProperties(bVer67,&nSpace,&nCol,
-        &nIdx);
+    short nSpace;
+    short nLineThickness = rBor.DetermineBorderProperties(&nSpace);
 
-    GetLineIndex(rBox, nLineThickness, bIgnoreSpace ? 0 : nSpace, nCol, nIdx, nOOIndex, nWWIndex, pSize );
+    GetLineIndex(rBox, nLineThickness, bIgnoreSpace ? 0 : nSpace,
+        rBor.cv(), rBor.brcType(), nOOIndex, nWWIndex, pSize );
 
 }
 
-static bool lcl_IsBorder(bool bVer67, const WW8_BRC* pbrc, bool bChkBtwn = false)
+static bool lcl_IsBorder(const WW8_BRCVer9* pbrc, bool bChkBtwn = false)
 {
-    if( bVer67  )
-        return ( pbrc[WW8_TOP  ].aBits1[0] & 0x18 ) ||  // brcType  != 0
-               ( pbrc[WW8_LEFT ].aBits1[0] & 0x18 ) ||
-               ( pbrc[WW8_BOT  ].aBits1[0] & 0x18 ) ||
-               ( pbrc[WW8_RIGHT].aBits1[0] & 0x18 ) ||
-               ( bChkBtwn && ( pbrc[WW8_BETW ].aBits1[0] )) ||
-               //can have dotted and dashed with a brcType of 0
-               ( (pbrc[WW8_TOP  ].aBits1[0] & 0x07)+1 > 6) ||
-               ( (pbrc[WW8_LEFT ].aBits1[0] & 0x07)+1 > 6) ||
-               ( (pbrc[WW8_BOT  ].aBits1[0] & 0x07)+1 > 6) ||
-               ( (pbrc[WW8_RIGHT].aBits1[0] & 0x07)+1 > 6) ||
-               ( bChkBtwn && ( (pbrc[WW8_BETW ].aBits1[0] & 0x07)+1 > 6))
-               ;
-                // Abfrage auf 0x1f statt 0x18 ist noetig, da zumindest einige
-                // WW-Versionen ( 6.0 US ) bei dotted brcType auf 0 setzen
-    else
-        return pbrc[WW8_TOP  ].aBits1[1] ||         // brcType  != 0
-               pbrc[WW8_LEFT ].aBits1[1] ||
-               pbrc[WW8_BOT  ].aBits1[1] ||
-               pbrc[WW8_RIGHT].aBits1[1] ||
-               (bChkBtwn && pbrc[WW8_BETW ].aBits1[1]);
+    return pbrc[WW8_TOP  ].brcType() ||         // brcType  != 0
+           pbrc[WW8_LEFT ].brcType() ||
+           pbrc[WW8_BOT  ].brcType() ||
+           pbrc[WW8_RIGHT].brcType() ||
+           (bChkBtwn && pbrc[WW8_BETW ].brcType());
 }
 
-bool SwWW8ImplReader::IsBorder(const WW8_BRC* pbrc, bool bChkBtwn) const
+bool SwWW8ImplReader::IsBorder(const WW8_BRCVer9* pbrc, bool bChkBtwn) const
 {
-    return lcl_IsBorder(bVer67, pbrc, bChkBtwn);
+    return lcl_IsBorder(pbrc, bChkBtwn);
 }
 
-bool WW8_BRC::IsEmpty(bool bVer67) const
-{
-    return (IsBlank() || IsZeroed(bVer67));
-}
-
-bool WW8_BRC::IsBlank() const
-{
-    return (aBits1[0] == 0xff && aBits1[1] == 0xff);
-}
-
-bool WW8_BRC::IsZeroed(bool bVer67) const
-{
-    return (!(bVer67 ? (aBits1[0] & 0x001f) : aBits1[1]));
-}
-
-bool SwWW8ImplReader::SetBorder(SvxBoxItem& rBox, const WW8_BRC* pbrc,
+bool SwWW8ImplReader::SetBorder(SvxBoxItem& rBox, const WW8_BRCVer9* pbrc,
     short *pSizeArray, sal_uInt8 nSetBorders) const
 {
     bool bChange = false;
@@ -1355,10 +1360,10 @@ bool SwWW8ImplReader::SetBorder(SvxBoxItem& rBox, const WW8_BRC* pbrc,
     for( int i = 0, nEnd = 8; i < nEnd; i += 2 )
     {
         // ungueltige Borders ausfiltern
-        const WW8_BRC& rB = pbrc[ aIdArr[ i ] ];
-        if( !rB.IsEmpty(bVer67))
+        const WW8_BRCVer9& rB = pbrc[ aIdArr[ i ] ];
+        if( !rB.isNil() && rB.brcType() )
         {
-            Set1Border(bVer67, rBox, rB, aIdArr[i+1], aIdArr[i], pSizeArray, false);
+            Set1Border(rBox, rB, aIdArr[i+1], aIdArr[i], pSizeArray, false);
             bChange = true;
         }
         else if ( nSetBorders & (1 << aIdArr[i]) )
@@ -1381,18 +1386,14 @@ bool SwWW8ImplReader::SetBorder(SvxBoxItem& rBox, const WW8_BRC* pbrc,
 }
 
 bool SwWW8ImplReader::SetShadow(SvxShadowItem& rShadow, const short *pSizeArray,
-    const WW8_BRC& aRightBrc) const
+    const WW8_BRCVer9& aRightBrc) const
 {
-    bool bRet = (
-                ( bVer67 ? (aRightBrc.aBits1[ 0 ] & 0x20 )
-                         : (aRightBrc.aBits2[ 1 ] & 0x20 ) )
-                && (pSizeArray && pSizeArray[WW8_RIGHT])
-                );
+    bool bRet = aRightBrc.fShadow() && pSizeArray && pSizeArray[WW8_RIGHT];
     if (bRet)
     {
         rShadow.SetColor(Color(COL_BLACK));
     //i120718
-        short nVal = aRightBrc.DetermineBorderProperties(bVer67);
+        short nVal = aRightBrc.DetermineBorderProperties();
     //End
         if (nVal < 0x10)
             nVal = 0x10;
@@ -1403,28 +1404,17 @@ bool SwWW8ImplReader::SetShadow(SvxShadowItem& rShadow, const short *pSizeArray,
     return bRet;
 }
 
-void SwWW8ImplReader::GetBorderDistance(const WW8_BRC* pbrc,
+void SwWW8ImplReader::GetBorderDistance(const WW8_BRCVer9* pbrc,
     Rectangle& rInnerDist) const
 {
-    // 'dptSpace' is stored in 3 bits of 'Border Code (BRC)'
-    if (bVer67)
-    {
-        rInnerDist = Rectangle(((pbrc[ 1 ].aBits1[1] >> 3) & 0x1f) * 20,
-                               ((pbrc[ 0 ].aBits1[1] >> 3) & 0x1f) * 20,
-                               ((pbrc[ 3 ].aBits1[1] >> 3) & 0x1f) * 20,
-                               ((pbrc[ 2 ].aBits1[1] >> 3) & 0x1f) * 20 );
-    }
-    else
-    {
-        rInnerDist = Rectangle( (pbrc[ 1 ].aBits2[1]       & 0x1f) * 20,
-                                (pbrc[ 0 ].aBits2[1]       & 0x1f) * 20,
-                                (pbrc[ 3 ].aBits2[1]       & 0x1f) * 20,
-                                (pbrc[ 2 ].aBits2[1]       & 0x1f) * 20 );
-    }
+    rInnerDist = Rectangle( pbrc[ 1 ].dptSpace() * 20,
+                            pbrc[ 0 ].dptSpace() * 20,
+                            pbrc[ 3 ].dptSpace() * 20,
+                            pbrc[ 2 ].dptSpace() * 20 );
 }
 
 bool SwWW8ImplReader::SetFlyBordersShadow(SfxItemSet& rFlySet,
-    const WW8_BRC *pbrc, short *pSizeArray) const
+    const WW8_BRCVer9 *pbrc, short *pSizeArray) const
 {
     bool bShadowed = false;
     if (IsBorder(pbrc))
@@ -1567,7 +1557,7 @@ void WW8FlyPara::Read(sal_uInt8 nOrigSp29, WW8PLCFx_Cp_FKP* pPap)
     }
 
     if( ::lcl_ReadBorders( bVer67, brc, pPap ))     // Umrandung
-        bBorderLines = ::lcl_IsBorder( bVer67, brc );
+        bBorderLines = ::lcl_IsBorder( brc );
 
     /*
      #i8798#
@@ -1685,7 +1675,7 @@ void WW8FlyPara::Read(sal_uInt8 nOrigSp29, WW8RStyle* pStyle)
     }
 
     if (::lcl_ReadBorders(bVer67, brc, 0, pStyle))      // Umrandung
-        bBorderLines = ::lcl_IsBorder(bVer67, brc);
+        bBorderLines = ::lcl_IsBorder(brc);
 
     /*
      #i8798#
@@ -1882,16 +1872,16 @@ WW8SwFlyPara::WW8SwFlyPara( SwPaM& rPaM,
     sal_Int16 nLeBorderMgn( 0L );
     if ( !bAutoWidth )
     {
-        sal_Int16 nTemp = rWW.brc[WW8_LEFT].DetermineBorderProperties(rWW.bVer67,
-            &nLeBorderMgn);
+        WW8_BRCVer9 &rBrc = rWW.brc[WW8_LEFT];
+        sal_Int16 nTemp = rBrc.DetermineBorderProperties(&nLeBorderMgn);
         nLeBorderMgn = nLeBorderMgn + nTemp;
     }
     // determine right border distance
     sal_Int16 nRiBorderMgn( 0L );
     if ( !bAutoWidth )
     {
-        sal_Int16 nTemp = rWW.brc[WW8_RIGHT].DetermineBorderProperties(rWW.bVer67,
-            &nRiBorderMgn);
+        WW8_BRCVer9 &rBrc = rWW.brc[WW8_RIGHT];
+        sal_Int16 nTemp = rBrc.DetermineBorderProperties(&nRiBorderMgn);
         nRiBorderMgn = nRiBorderMgn + nTemp;
     }
     if ( !bAutoWidth && eHAlign == text::HoriOrientation::LEFT && eHRel == text::RelOrientation::PAGE_FRAME )
@@ -1943,9 +1933,9 @@ WW8SwFlyPara::WW8SwFlyPara( SwPaM& rPaM,
         Word has a curious bug where the offset stored do not take into
         account the internal distance from the corner both
         */
+        WW8_BRCVer9 &rBrc = rWW.brc[WW8_LEFT];
         sal_Int16 nLeLMgn = 0;
-        sal_Int16 nTemp = rWW.brc[WW8_LEFT].DetermineBorderProperties(rWW.bVer67,
-            &nLeLMgn);
+        sal_Int16 nTemp = rBrc.DetermineBorderProperties(&nLeLMgn);
         nLeLMgn = nLeLMgn + nTemp;
 
         if (nLeLMgn)
@@ -2014,7 +2004,7 @@ WW8FlySet::WW8FlySet(SwWW8ImplReader& rReader, const WW8FlyPara* pFW,
     Put( aSurround );
 
     short aSizeArray[5]={0};
-    rReader.SetFlyBordersShadow(*this,(const WW8_BRC*)pFW->brc,&aSizeArray[0]);
+    rReader.SetFlyBordersShadow(*this,pFW->brc,&aSizeArray[0]);
 
     // der 5. Parameter ist immer 0, daher geht beim Cast nix verloren
 
@@ -2058,7 +2048,10 @@ WW8FlySet::WW8FlySet( SwWW8ImplReader& rReader, const SwPaM* pPaM,
     region is translated spacing around the graphic to those sides, and the
     bottom and right shadow size is added to the graphic size.
     */
-    if (rReader.SetFlyBordersShadow( *this, rPic.rgbrc, &aSizeArray[0]))
+    WW8_BRCVer9 brcVer9[4];
+    for (int i = 0; i < 4; i++)
+        brcVer9[i] = rPic.rgbrc[i];
+    if (rReader.SetFlyBordersShadow( *this, brcVer9, &aSizeArray[0]))
     {
         Put(SvxLRSpaceItem( aSizeArray[WW8_LEFT], 0, 0, 0, RES_LR_SPACE ) );
         Put(SvxULSpaceItem( aSizeArray[WW8_TOP], 0, RES_UL_SPACE ));
@@ -4672,7 +4665,7 @@ void SwWW8ImplReader::Read_Border(sal_uInt16 , const sal_uInt8*, short nLen)
         // CtrlStack und wieder runter
         bHasBorder = true;
 
-        WW8_BRC5 aBrcs;   // Top, Left, Bottom, Right, Between
+        WW8_BRCVer9_5 aBrcs;   // Top, Left, Bottom, Right, Between
         sal_uInt8 nBorder;
 
         if( pAktColl )
@@ -4728,11 +4721,11 @@ void SwWW8ImplReader::Read_Border(sal_uInt16 , const sal_uInt8*, short nLen)
     }
 }
 
-void SwWW8ImplReader::Read_CharBorder(sal_uInt16 /*nId*/, const sal_uInt8* pData, short nLen )
+void SwWW8ImplReader::Read_CharBorder(sal_uInt16 nId, const sal_uInt8* pData, short nLen )
 {
     //Ignore this old border type
-    if (!bVer67 && pPlcxMan && pPlcxMan->GetChpPLCF()->HasSprm(0xCA72))
-        return;
+    //if (!bVer67 && pPlcxMan && pPlcxMan->GetChpPLCF()->HasSprm(0xCA72))
+    //    return;
 
     if( nLen < 0 )
     {
@@ -4747,13 +4740,15 @@ void SwWW8ImplReader::Read_CharBorder(sal_uInt16 /*nId*/, const sal_uInt8* pData
         {
             SvxBoxItem aBoxItem(RES_CHRATR_BOX);
             aBoxItem = *pBox;
-            WW8_BRC aBrc;
-            _SetWW8_BRC(bVer67, aBrc, pData);
+            WW8_BRCVer9 aBrc;
+            int nBrcVer = (nId == NS_sprm::LN_CBorder) ? 9 : (bVer67 ? 6 : 8);
 
-            Set1Border(bVer67, aBoxItem, aBrc, BOX_LINE_TOP, 0, 0, true);
-            Set1Border(bVer67, aBoxItem, aBrc, BOX_LINE_BOTTOM, 0, 0, true);
-            Set1Border(bVer67, aBoxItem, aBrc, BOX_LINE_LEFT, 0, 0, true);
-            Set1Border(bVer67, aBoxItem, aBrc, BOX_LINE_RIGHT, 0, 0, true);
+            _SetWW8_BRC(nBrcVer, aBrc, pData);
+
+            Set1Border(aBoxItem, aBrc, BOX_LINE_TOP, 0, 0, true);
+            Set1Border(aBoxItem, aBrc, BOX_LINE_BOTTOM, 0, 0, true);
+            Set1Border(aBoxItem, aBrc, BOX_LINE_LEFT, 0, 0, true);
+            Set1Border(aBoxItem, aBrc, BOX_LINE_RIGHT, 0, 0, true);
             NewAttr( aBoxItem );
 
             short aSizeArray[WW8_RIGHT+1]={0}; aSizeArray[WW8_RIGHT] = 1;
@@ -5845,6 +5840,7 @@ const wwSprmDispatcher *GetWW8SprmDispatcher()
         {NS_sprm::LN_CDttmRMarkDel, 0},
                                                      //chp.dttmRMarkDel;DTTM;long;
         {0x6865, &SwWW8ImplReader::Read_CharBorder}, //"sprmCBrc" chp.brc;BRC;long;
+        {0xca72, &SwWW8ImplReader::Read_CharBorder}, //"sprmCBorder" chp.brc;BRC;long;
         {0x4866, &SwWW8ImplReader::Read_CharShadow}, //"sprmCShd" chp.shd;SHD;short;
         {0x4867, 0},                                 //"sprmCIdslRMarkDel"
                                                      //chp.idslRMReasonDel;an index
@@ -6067,10 +6063,11 @@ const wwSprmDispatcher *GetWW8SprmDispatcher()
         {0xD634, 0},                                 //undocumented
         {0xD632, 0},                                 //undocumented
         {0xD238, 0},                                 //undocumented sep
-        {0xC64E, 0},                                 //undocumented
-        {0xC64F, 0},                                 //undocumented
-        {0xC650, 0},                                 //undocumented
-        {0xC651, 0},                                 //undocumented
+        {0xC64E, &SwWW8ImplReader::Read_Border},     //"sprmPBorderTop"
+        {0xC64F, &SwWW8ImplReader::Read_Border},     //"sprmPBorderLeft"
+        {0xC650, &SwWW8ImplReader::Read_Border},     //"sprmPBorderBottom"
+        {0xC651, &SwWW8ImplReader::Read_Border},     //"sprmPBorderRight"
+        {0xC652, &SwWW8ImplReader::Read_Border},     //"sprmPBorderBetween"
         {0xF661, 0},                                 //undocumented
         {0x4873, &SwWW8ImplReader::Read_Language},   //"sprmCRgLid0" chp.rglid[0];
                                                      //LID: for non-Far East text;

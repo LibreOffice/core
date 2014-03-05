@@ -121,8 +121,7 @@ DECLARE_WW8EXPORT_TEST(testCharacterBorder, "charborder.odt")
     // Border
     {
         const table::BorderLine2 aTopBorder = getProperty<table::BorderLine2>(xRun,"CharTopBorder");
-        // In the original ODT file the border color is 0xFF3333
-        CPPUNIT_ASSERT_BORDER_EQUAL(table::BorderLine2(0xFF0000,0,318,0,0,318), aTopBorder);
+        CPPUNIT_ASSERT_BORDER_EQUAL(table::BorderLine2(0xFF3333,0,318,0,0,318), aTopBorder);
         CPPUNIT_ASSERT_BORDER_EQUAL(aTopBorder, getProperty<table::BorderLine2>(xRun,"CharLeftBorder"));
         CPPUNIT_ASSERT_BORDER_EQUAL(aTopBorder, getProperty<table::BorderLine2>(xRun,"CharBottomBorder"));
         CPPUNIT_ASSERT_BORDER_EQUAL(aTopBorder, getProperty<table::BorderLine2>(xRun,"CharRightBorder"));

@@ -228,6 +228,10 @@ namespace NS_sprm {
     const sal_uInt16 LN_SBrcLeft = 0x702c;
     const sal_uInt16 LN_SBrcBottom = 0x702d;
     const sal_uInt16 LN_SBrcRight = 0x702e;
+    const sal_uInt16 LN_SBorderTop = 0xd234;
+    const sal_uInt16 LN_SBorderLeft = 0xd235;
+    const sal_uInt16 LN_SBorderBottom = 0xd236;
+    const sal_uInt16 LN_SBorderRight = 0xd237;
     const sal_uInt16 LN_SPgbProp = 0x522f;
     const sal_uInt16 LN_SDxtCharSpace = 0x7030;
     const sal_uInt16 LN_SDyaLinePitch = 0x9031;
