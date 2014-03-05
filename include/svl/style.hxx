@@ -145,14 +145,8 @@ public:
     virtual sal_uInt16 GetVersion() const;
 };
 
+/* Class to iterate and search on a SfxStyleSheetBasePool */
 class SVL_DLLPUBLIC SfxStyleSheetIterator
-
-/*  [Beschreibung]
-
-    Klasse zum Iterieren und Suchen auf einem SfxStyleSheetBasePool.
-
-*/
-
 {
 public:
     /** Constructor.
@@ -328,16 +322,14 @@ public:
 
 
 
-#define SFX_STYLESHEET_CREATED       1  // neu
-#define SFX_STYLESHEET_MODIFIED      2  // ver"andert
-#define SFX_STYLESHEET_CHANGED       3  // gel"oscht und neu (ausgetauscht)
-#define SFX_STYLESHEET_ERASED        4  // gel"oscht
-#define SFX_STYLESHEET_INDESTRUCTION 5  // wird gerade entfernt
+#define SFX_STYLESHEET_CREATED       1  // new
+#define SFX_STYLESHEET_MODIFIED      2  // changed
+#define SFX_STYLESHEET_CHANGED       3  // erased and re-created (replaced)
+#define SFX_STYLESHEET_ERASED        4  // erased
+#define SFX_STYLESHEET_INDESTRUCTION 5  // in the process of being destructed
 
-#define SFX_STYLESHEETPOOL_CHANGES  1  // Aenderungen, die den Zustand
-                                       // des Pools anedern, aber nicht
-                                       // ueber die STYLESHEET Hints
-                                       // verschickt werden sollen.
+#define SFX_STYLESHEETPOOL_CHANGES  1  // Changes which change the state of the pool, but should not be
+                                       // broadcasted by STYLESHEET hits.
 
 
 
