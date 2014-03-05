@@ -405,12 +405,19 @@ void DocxSdrExport::startDMLAnchorInline(const SwFrmFmt* pFrmFmt, const Size& rS
     }
     else
     {
-        m_pImpl->m_pSerializer->startElementNS(XML_wp, XML_inline,
-                                               XML_distT, OString::number(TwipsToEMU(pULSpaceItem.GetUpper())).getStr(),
-                                               XML_distB, OString::number(TwipsToEMU(pULSpaceItem.GetLower())).getStr(),
-                                               XML_distL, OString::number(TwipsToEMU(pLRSpaceItem.GetLeft())).getStr(),
-                                               XML_distR, OString::number(TwipsToEMU(pLRSpaceItem.GetRight())).getStr(),
-                                               FSEND);
+        sax_fastparser::FastAttributeList* aAttrList = m_pImpl->m_pSerializer->createAttrList();
+        aAttrList->add(XML_distT, OString::number(TwipsToEMU(pULSpaceItem.GetUpper())).getStr());
+        aAttrList->add(XML_distB, OString::number(TwipsToEMU(pULSpaceItem.GetLower())).getStr());
+        aAttrList->add(XML_distL, OString::number(TwipsToEMU(pLRSpaceItem.GetLeft())).getStr());
+        aAttrList->add(XML_distR, OString::number(TwipsToEMU(pLRSpaceItem.GetRight())).getStr());
+        const SdrObject* pObj = pFrmFmt->FindRealSdrObject();
+        if (pObj != NULL)
+        {
+            OUString sAnchorId = lclGetAnchorIdFromGrabBag(pObj);
+            if (!sAnchorId.isEmpty())
+                aAttrList->addNS(XML_wp14, XML_anchorId, OUStringToOString(sAnchorId, RTL_TEXTENCODING_UTF8));
+        }
+        m_pImpl->m_pSerializer->startElementNS(XML_wp, XML_inline, aAttrList);
     }
 
     // now the common parts
