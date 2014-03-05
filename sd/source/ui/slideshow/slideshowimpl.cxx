@@ -970,7 +970,7 @@ bool SlideshowImpl::startShow( PresentationSettingsEx* pPresSettings )
         }
         else
         {
-            if( pStartPage->GetPageKind() != PK_STANDARD )
+            if( !pStartPage || pStartPage->GetPageKind() != PK_STANDARD )
             {
                 bStartWithActualSlide = false;
             }
