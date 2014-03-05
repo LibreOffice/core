@@ -56,6 +56,7 @@
 #include "../ui/inc/ViewShellBase.hxx"
 #include <editeng/boxitem.hxx>
 
+#include <boost/make_shared.hpp>
 
 using ::osl::MutexGuard;
 using ::osl::ClearableMutexGuard;
@@ -970,19 +971,17 @@ void SAL_CALL SdStyleSheet::setParentStyle( const OUString& rParentName  ) throw
 
     if( !rParentName.isEmpty() )
     {
-        const SfxStyles& rStyles = mxPool->GetStyles();
-
-        /* Use reverse iterator to find the parents quicker - most probably its inserted recently.
-         * Also avoids/fixes the issue n#708518
-         * To fix it completely its probably wiser to compare this->GetName() and pStyle->GetName() or use complete names for styles (?)
-         */
-        for( SfxStyles::const_reverse_iterator iter( rStyles.rbegin() ); iter != rStyles.rend(); ++iter )
+        SfxStyleSheetIteratorPtr aSSSI = boost::make_shared<SfxStyleSheetIterator>(mxPool.get(), nFamily, SFX_STYLE_FAMILY_ALL);
+        for (SfxStyleSheetBase *pStyle = aSSSI->First(); pStyle; pStyle = aSSSI->Next())
         {
-            SdStyleSheet* pStyle = static_cast< SdStyleSheet* >( (*iter).get() );
-            if( pStyle && (pStyle->nFamily == nFamily) && (pStyle->msApiName == rParentName) )
+            // we hope that we have only sd style sheets
+            SdStyleSheet* pSdStyleSheet = static_cast<SdStyleSheet*>(pStyle);
+            if (pSdStyleSheet->msApiName == rParentName)
             {
                 if( pStyle != this )
+                {
                     SetParent( pStyle->GetName() );
+                }
                 return;
             }
         }
