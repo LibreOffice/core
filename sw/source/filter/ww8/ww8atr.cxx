@@ -1229,7 +1229,7 @@ void WW8AttributeOutput::CharHidden( const SvxCharHiddenItem& rHidden )
 
 void WW8AttributeOutput::CharBorder( const SvxBorderLine* pAllBorder, const sal_uInt16 /*nDist*/, const bool bShadow )
 {
-    m_rWW8Export.Out_BorderLine( *m_rWW8Export.pO, pAllBorder, 0, NS_sprm::LN_CBrc, bShadow );
+    m_rWW8Export.Out_BorderLine( *m_rWW8Export.pO, pAllBorder, 0, NS_sprm::LN_CBrc, NS_sprm::LN_CBorder, bShadow );
 }
 
 void WW8AttributeOutput::CharUnderline( const SvxUnderlineItem& rUnderline )
@@ -4169,16 +4169,16 @@ void WW8AttributeOutput::FormatFillGradient( const XFillGradientItem& /*rFillGra
 {
 }
 
-WW8_BRC WW8Export::TranslateBorderLine(const SvxBorderLine& rLine,
+WW8_BRCVer9 WW8Export::TranslateBorderLine(const SvxBorderLine& rLine,
     sal_uInt16 nDist, bool bShadow)
 {
     // M.M. This function writes out border lines to the word format similar to
     // what SwRTFWriter::OutRTFBorder does in the RTF filter Eventually it
     // would be nice if all this functionality was in the one place
-    WW8_BRC aBrc;
+    sal_uInt32 nColBGR = 0;
     sal_uInt16 nWidth = ::editeng::ConvertBorderWidthToWord(
             rLine.GetBorderLineStyle(), rLine.GetWidth());
-    sal_uInt8 brcType = 0, nColCode = 0;
+    sal_uInt8 brcType = 0;
 
     if( nWidth )                                // Linie ?
     {
@@ -4248,66 +4248,30 @@ WW8_BRC WW8Export::TranslateBorderLine(const SvxBorderLine& rLine,
             }
         }
 
-        // BRC.dxpLineWidth
+        // BRC.dptLineWidth
         if( bThick )
             nWidth /= 2;
 
-        if( bWrtWW8 )
-        {
-            // Angabe in 8tel Punkten, also durch 2.5, da 1 Punkt = 20 Twips
-            nWidth = (( nWidth * 8 ) + 10 ) / 20;
-            if( 0xff < nWidth )
-                nWidth = 0xff;
-        }
-        else
-        {
-            // Angabe in 0.75 pt
-            nWidth = ( nWidth + 7 ) / 15;
-            if( nWidth > 5 )
-                nWidth = 5;
-            ::editeng::SvxBorderStyle const eStyle(rLine.GetBorderLineStyle());
-            if (table::BorderLineStyle::DOTTED == eStyle)
-                nWidth = 6;
-            else if (table::BorderLineStyle::DASHED == eStyle)
-                nWidth = 7;
-        }
+        // convert width from twips (1/20 pt) to eighths of a point
+        nWidth = (( nWidth * 8 ) + 10 ) / 20;
+        if( 0xff < nWidth )
+            nWidth = 0xff;
 
         if( 0 == nWidth )                       // ganz duenne Linie
             nWidth = 1;                         //       nicht weglassen
 
-        // BRC.ico
-        nColCode = TransCol( rLine.GetColor() );
+        // BRC.cv
+        nColBGR = wwUtility::RGBToBGR(rLine.GetColor().GetRGBColor());
     }
 
-    // BRC.dxpSpace
+    // BRC.dptSpace
     sal_uInt16 nLDist = nDist;
     nLDist /= 20;               // Masseinheit : pt
     if( nLDist > 0x1f )
         nLDist = 0x1f;
 
-    if( bWrtWW8 )
-    {
-        aBrc.aBits1[0] = sal_uInt8(nWidth);
-        aBrc.aBits1[1] = brcType;
-        aBrc.aBits2[0] = nColCode;
-        aBrc.aBits2[1] = sal_uInt8(nLDist);
-
-        // fShadow, keine weiteren Einstellungen im WW moeglich
-        if( bShadow )
-            aBrc.aBits2[1] |= 0x20;
-    }
-    else
-    {
-        sal_uInt16 aBits = nWidth + ( brcType << 3 );
-        aBits |= (nColCode & 0x1f) << 6;
-        aBits |= nLDist << 11;
-        // fShadow, keine weiteren Einstellungen im WW moeglich
-        if( bShadow )
-            aBits |= 0x20;
-        ShortToSVBT16( aBits, aBrc.aBits1);
-    }
-
-    return aBrc;
+    return WW8_BRCVer9(nColBGR, sal_uInt8(nWidth), brcType, sal_uInt8(nLDist),
+        bShadow, false);
 }
 
 // MakeBorderLine() bekommt einen WW8Bytes* uebergeben, um die Funktion
@@ -4315,7 +4279,7 @@ WW8_BRC WW8Export::TranslateBorderLine(const SvxBorderLine& rLine,
 // Wenn nSprmNo == 0, dann wird der Opcode nicht ausgegeben.
 // bShadow darf bei Tabellenzellen *nicht* gesetzt sein !
 void WW8Export::Out_BorderLine(ww::bytes& rO, const SvxBorderLine* pLine,
-    sal_uInt16 nDist, sal_uInt16 nSprmNo, bool bShadow)
+    sal_uInt16 nDist, sal_uInt16 nSprmNo, sal_uInt16 nSprmNoVer9, bool bShadow)
 {
     OSL_ENSURE( ( nSprmNo == 0 ) ||
             ( nSprmNo >= 38 && nSprmNo <= 41 ) ||
@@ -4323,10 +4287,16 @@ void WW8Export::Out_BorderLine(ww::bytes& rO, const SvxBorderLine* pLine,
             ( nSprmNo >= NS_sprm::LN_SBrcTop && nSprmNo <= NS_sprm::LN_SBrcRight ),
             "Sprm for border out is of range" );
 
-    WW8_BRC aBrc;
+    WW8_BRCVer9 aBrcVer9;
+    WW8_BRC aBrcVer8;
 
-    if (pLine)
-        aBrc = TranslateBorderLine( *pLine, nDist, bShadow );
+    if( pLine && pLine->GetBorderLineStyle() != table::BorderLineStyle::NONE )
+    {
+        aBrcVer9 = TranslateBorderLine( *pLine, nDist, bShadow );
+        sal_uInt8 ico = TransCol( msfilter::util::BGRToRGB(aBrcVer9.cv()) );
+        aBrcVer8 = WW8_BRC( aBrcVer9.dptLineWidth(), aBrcVer9.brcType(), ico,
+            aBrcVer9.dptSpace(), aBrcVer9.fShadow(), aBrcVer9.fFrame() );
+    }
 
     if( bWrtWW8 )
     {
@@ -4334,15 +4304,22 @@ void WW8Export::Out_BorderLine(ww::bytes& rO, const SvxBorderLine* pLine,
         if ( nSprmNo != 0 )
             SwWW8Writer::InsUInt16( rO, nSprmNo );
 
-        rO.insert( rO.end(), aBrc.aBits1, aBrc.aBits1+2 );
-        rO.insert( rO.end(), aBrc.aBits2, aBrc.aBits2+2 );
+        rO.insert( rO.end(), aBrcVer8.aBits1, aBrcVer8.aBits2+2 );
+
+        if ( nSprmNoVer9 != 0 )
+        {
+            SwWW8Writer::InsUInt16( rO, nSprmNoVer9 );
+            rO.push_back(sizeof(WW8_BRCVer9));
+            rO.insert( rO.end(), aBrcVer9.aBits1, aBrcVer9.aBits2+4);
+        }
     }
     else
     {
+        WW8_BRCVer6 aBrcVer6(aBrcVer8);
         // WW95-SprmIds
         if ( nSprmNo != 0 )
             rO.push_back( static_cast<sal_uInt8>( nSprmNo ) );
-        rO.insert( rO.end(), aBrc.aBits1, aBrc.aBits1+2 );
+        rO.insert( rO.end(), aBrcVer6.aBits1, aBrcVer6.aBits1+2 );
     }
 }
 
@@ -4359,11 +4336,21 @@ void WW8Export::Out_SwFmtBox(const SvxBoxItem& rBox, bool bShadow)
     };
     static const sal_uInt16 aPBrc[] =
     {
-        NS_sprm::LN_PBrcTop, NS_sprm::LN_PBrcLeft, NS_sprm::LN_PBrcBottom, NS_sprm::LN_PBrcRight
+        // WW8 SPRMs
+        NS_sprm::LN_PBrcTop, NS_sprm::LN_PBrcLeft,
+        NS_sprm::LN_PBrcBottom, NS_sprm::LN_PBrcRight,
+        // WW9 SPRMs
+        NS_sprm::LN_PBorderTop, NS_sprm::LN_PBorderLeft,
+        NS_sprm::LN_PBorderBottom, NS_sprm::LN_PBorderRight
     };
     static const sal_uInt16 aSBrc[] =
     {
-        NS_sprm::LN_SBrcTop, NS_sprm::LN_SBrcLeft, NS_sprm::LN_SBrcBottom, NS_sprm::LN_SBrcRight
+        // WW8 SPRMs
+        NS_sprm::LN_SBrcTop, NS_sprm::LN_SBrcLeft,
+        NS_sprm::LN_SBrcBottom, NS_sprm::LN_SBrcRight,
+        // WW9 SPRMs
+        NS_sprm::LN_SBorderTop, NS_sprm::LN_SBorderLeft,
+        NS_sprm::LN_SBorderBottom, NS_sprm::LN_SBorderRight,
     };
     static const sal_uInt16 aWW6PBrc[] =
     {
@@ -4375,15 +4362,22 @@ void WW8Export::Out_SwFmtBox(const SvxBoxItem& rBox, bool bShadow)
     {
         const SvxBorderLine* pLn = rBox.GetLine( *pBrd );
 
-        sal_uInt16 nSprmNo = 0;
+        sal_uInt16 nSprmNo, nSprmNoVer9 = 0;
         if ( !bWrtWW8 )
             nSprmNo = aWW6PBrc[i];
         else if ( bOutPageDescs )
+        {
             nSprmNo = aSBrc[i];
+            nSprmNoVer9 = aSBrc[i+4];
+        }
         else
+        {
             nSprmNo = aPBrc[i];
+            nSprmNoVer9 = aPBrc[i+4];
+        }
 
-        Out_BorderLine( *pO, pLn, rBox.GetDistance( *pBrd ), nSprmNo, bShadow );
+        Out_BorderLine( *pO, pLn, rBox.GetDistance( *pBrd ), nSprmNo,
+            nSprmNoVer9, bShadow );
     }
 }
 
@@ -4411,7 +4405,7 @@ void WW8Export::Out_SwFmtTableBox( ww::bytes& rO, const SvxBoxItem * pBox )
         else
             pLn = & aBorderLine;
 
-        Out_BorderLine(rO, pLn, 0, 0, false);
+        Out_BorderLine(rO, pLn, 0, 0, 0, false);
     }
 }
 

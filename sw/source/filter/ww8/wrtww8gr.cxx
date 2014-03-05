@@ -582,15 +582,18 @@ void SwWW8WrGrf::WritePICFHeader(SvStream& rStrm, const sw::Frame &rFly,
                 WW8_BRC aBrc;
                 if (pLn)
                 {
-                    aBrc = rWrt.TranslateBorderLine( *pLn,
+                    WW8_BRCVer9 aBrc90 = rWrt.TranslateBorderLine( *pLn,
                         pBox->GetDistance( aLnArr[ i ] ), bShadow );
+                    sal_uInt8 ico = rWrt.TransCol(msfilter::util::BGRToRGB(
+                        aBrc90.cv()));
+                    aBrc = WW8_BRC(ico, aBrc90.dptLineWidth(), aBrc90.brcType(),
+                        aBrc90.dptSpace(), aBrc90.fShadow(), aBrc90.fFrame());
                 }
 
                 // use importer logic to determine how large the exported
                 // border will really be in word and adjust accordingly
                 short nSpacing;
-                short nThick = aBrc.DetermineBorderProperties(!bWrtWW8,
-                    &nSpacing);
+                short nThick = aBrc.DetermineBorderProperties(&nSpacing);
                 switch (aLnArr[ i ])
                 {
                     case BOX_LINE_TOP:
@@ -778,8 +781,7 @@ void SwWW8WrGrf::WritePICBulletFHeader(SvStream& rStrm, const Graphic &rGrf,
         WW8_BRC aBrc;
 
         short nSpacing;
-        short nThick = aBrc.DetermineBorderProperties(!bWrtWW8,
-        &nSpacing);
+        short nThick = aBrc.DetermineBorderProperties(&nSpacing);
         switch (aLnArr[ i ])
         {
             case BOX_LINE_TOP:

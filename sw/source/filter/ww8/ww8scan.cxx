@@ -18,6 +18,7 @@
  */
 
 #include "ww8scan.hxx"
+#include "ww8par.hxx"
 
 #include <functional>
 #include <algorithm>
@@ -739,10 +740,11 @@ const wwSprmSearcher *wwSprmParser::GetWW8SprmSearcher()
         {0xD632, 0, L_VAR}, // undocumented
         {0xD634, 0, L_VAR}, // undocumented
         {0xD238, 0, L_VAR}, // undocumented sep
-        {0xC64E, 0, L_VAR}, // undocumented
-        {0xC64F, 0, L_VAR}, // undocumented
-        {0xC650, 0, L_VAR}, // undocumented
-        {0xC651, 0, L_VAR}, // undocumented
+        {0xC64E, 0, L_VAR}, // "sprmPBorderTop"
+        {0xC64F, 0, L_VAR}, // "sprmPBorderLeft"
+        {0xC650, 0, L_VAR}, // "sprmPBorderBottom"
+        {0xC651, 0, L_VAR}, // "sprmPBorderRight"
+        {0xC652, 0, L_VAR}, // "sprmPBorderBetween"
         {0xF661, 3, L_FIX}, // undocumented
         {0x4873, 2, L_FIX}, // "sprmCRgLid0" chp.rglid[0];LID: for non-FE text
         {0x4874, 2, L_FIX}, // "sprmCRgLid1" chp.rglid[1];LID: for Far East text
@@ -1256,8 +1258,64 @@ WW8_CP WW8PLCFx_PCD::AktPieceStartFc2Cp( WW8_FC nStartPos )
 
 //      Helper routines for all
 
-short WW8_BRC::DetermineBorderProperties(bool bVer67, short *pSpace,
-    sal_uInt8 *pCol, short *pIdx) const
+// Convert BRC from WW6 to WW8 format
+WW8_BRC::WW8_BRC(const WW8_BRCVer6& brcVer6)
+{
+    sal_uInt8 _dptLineWidth = brcVer6.dxpLineWidth(),
+              _brcType = brcVer6.brcType();
+
+    if (_dptLineWidth > 5) // this signifies dashed(6) or dotted(7) line
+    {
+        _brcType = _dptLineWidth;
+        _dptLineWidth = 1;
+    }
+    _dptLineWidth *= 6; // convert units from 0.75pt to 1/8pt
+
+    *this = WW8_BRC(_dptLineWidth, _brcType, brcVer6.ico(), brcVer6.dxpSpace(),
+        brcVer6.fShadow(), false);
+}
+
+// Convert BRC from WW8 to WW6 format
+WW8_BRCVer6::WW8_BRCVer6(const WW8_BRC& brcVer8)
+{
+    sal_uInt8 _brcType = brcVer8.brcType();
+    sal_uInt8 _dxpLineWidth = std::max(brcVer8.dptLineWidth() / 6, 7);
+    if (_brcType == 5 || _brcType == 6 )
+    {
+        _dxpLineWidth = _brcType;
+        _brcType = 1;
+    }
+    else if (_brcType > 3)
+    {
+        _brcType = 1;
+    }
+    *this = WW8_BRCVer6(_dxpLineWidth, _brcType, brcVer8.ico(),
+        brcVer8.dptSpace(), brcVer8.fShadow());
+}
+
+// Convert BRC from WW8 to WW9 format
+WW8_BRCVer9::WW8_BRCVer9(const WW8_BRC& brcVer8)
+{
+    if (brcVer8.isNil()) {
+        UInt32ToSVBT32(0, aBits1);
+        UInt32ToSVBT32(0xffffffff, aBits2);
+    }
+    else
+    {
+        sal_uInt32 _cv = brcVer8.ico() == 0 ? 0xff000000 // "auto" colour
+            : wwUtility::RGBToBGR(SwWW8ImplReader::GetCol(brcVer8.ico()));
+        *this = WW8_BRCVer9(_cv, brcVer8.dptLineWidth(), brcVer8.brcType(),
+            brcVer8.dptSpace(), brcVer8.fShadow(), brcVer8.fFrame());
+    }
+}
+
+short WW8_BRC::DetermineBorderProperties(short *pSpace) const
+{
+    WW8_BRCVer9 brcVer9(*this);
+    return brcVer9.DetermineBorderProperties(pSpace);
+}
+
+short WW8_BRCVer9::DetermineBorderProperties(short *pSpace) const
 {
     /*
         Word does not factor the width of the border into the width/height
@@ -1266,89 +1324,61 @@ short WW8_BRC::DetermineBorderProperties(bool bVer67, short *pSpace,
         our calculations
     */
     short nMSTotalWidth;
-    sal_uInt8 nCol;
-    short nIdx,nSpace;
-    if( bVer67 )
+
+    //Specification in 8ths of a point, 1 Point = 20 Twips, so by 2.5
+    nMSTotalWidth  = (short)dptLineWidth() * 20 / 8;
+
+    //Figure out the real size of the border according to word
+    switch (brcType())
     {
-        sal_uInt16 aBrc1 = SVBT16ToShort(aBits1);
-        nCol = static_cast< sal_uInt8 >((aBrc1 >> 6) & 0x1f);   // aBor.ico
-        nSpace = (aBrc1 & 0xF800) >> 11;
-
-        nMSTotalWidth = aBrc1 & 0x07;
-        nIdx = (aBrc1 & 0x18) >> 3;
-        //Dashed/Dotted unsets double/thick
-        if (nMSTotalWidth > 5)
-        {
-            nIdx = nMSTotalWidth;
-            nMSTotalWidth=1;
-        }
-        nMSTotalWidth = nMSTotalWidth * nIdx * 15;
-    }
-    else
-    {
-        nIdx = aBits1[1];
-        nCol = aBits2[0];   // aBor.ico
-        nSpace = aBits2[1] & 0x1F; //space between line and object
-
-        //Specification in 8ths of a point, 1 Point = 20 Twips, so by 2.5
-        nMSTotalWidth  = aBits1[ 0 ] * 20 / 8;
-
-        //Figure out the real size of the border according to word
-        switch (nIdx)
-        {
-            //Note that codes over 25 are undocumented, and I can't create
-            //these 4 here in the wild.
-            case 2:
-            case 4:
-            case 5:
-            case 22:
-                OSL_FAIL("Can't create these from the menus, please report");
-            default:
-            case 23:    //Only 3pt in the menus, but honours the size setting.
-                break;
-            case 10:
-                /*
-                triple line is five times the width of an ordinary line,
-                except that the smallest 1/4 point size appears to have
-                exactly the same total border width as a 3/4 point size
-                ordinary line, i.e. three times the nominal line width.  The
-                second smallest 1/2 point size appears to have exactly the
-                total border width as a 2 1/4 border, i.e 4.5 times the size.
-                */
-                if (nMSTotalWidth == 5)
-                    nMSTotalWidth*=3;
-                else if (nMSTotalWidth == 10)
-                    nMSTotalWidth = nMSTotalWidth*9/2;
-                else
-                    nMSTotalWidth*=5;
-                break;
-            case 20:
-                /*
-                wave, the dimensions appear to be created by the drawing of
-                the wave, so we have only two possibilites in the menus, 3/4
-                point is equal to solid 3 point. This calculation seems to
-                match well to results.
-                */
-                nMSTotalWidth +=45;
-                break;
-            case 21:
-                /*
-                double wave, the dimensions appear to be created by the
-                drawing of the wave, so we have only one possibilites in the
-                menus, that of 3/4 point is equal to solid 3 point. This
-                calculation seems to match well to results.
-                */
-                nMSTotalWidth += 45*2;
-                break;
-        }
+        //Note that codes over 25 are undocumented, and I can't create
+        //these 4 here in the wild.
+        case 2:
+        case 4:
+        case 5:
+        case 22:
+            OSL_FAIL("Can't create these from the menus, please report");
+        default:
+        case 23:    //Only 3pt in the menus, but honours the size setting.
+            break;
+        case 10:
+            /*
+            triple line is five times the width of an ordinary line,
+            except that the smallest 1/4 point size appears to have
+            exactly the same total border width as a 3/4 point size
+            ordinary line, i.e. three times the nominal line width.  The
+            second smallest 1/2 point size appears to have exactly the
+            total border width as a 2 1/4 border, i.e 4.5 times the size.
+            */
+            if (nMSTotalWidth == 5)
+                nMSTotalWidth*=3;
+            else if (nMSTotalWidth == 10)
+                nMSTotalWidth = nMSTotalWidth*9/2;
+            else
+                nMSTotalWidth*=5;
+            break;
+        case 20:
+            /*
+            wave, the dimensions appear to be created by the drawing of
+            the wave, so we have only two possibilites in the menus, 3/4
+            point is equal to solid 3 point. This calculation seems to
+            match well to results.
+            */
+            nMSTotalWidth +=45;
+            break;
+        case 21:
+            /*
+            double wave, the dimensions appear to be created by the
+            drawing of the wave, so we have only one possibilites in the
+            menus, that of 3/4 point is equal to solid 3 point. This
+            calculation seems to match well to results.
+            */
+            nMSTotalWidth += 45*2;
+            break;
     }
 
-    if (pIdx)
-        *pIdx = nIdx;
     if (pSpace)
-        *pSpace = nSpace*20;
-    if (pCol)
-        *pCol = nCol;
+        *pSpace = (short)dptSpace() * 20; // convert from points to twips
     return nMSTotalWidth;
 }
 

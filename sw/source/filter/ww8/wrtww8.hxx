@@ -1082,13 +1082,14 @@ public:
                                      const SwPageDesc* pNewPgDesc = 0 );
 
     void Out_BorderLine(ww::bytes& rO, const ::editeng::SvxBorderLine* pLine,
-        sal_uInt16 nDist, sal_uInt16 nSprmNo, bool bShadow);
+        sal_uInt16 nDist, sal_uInt16 nSprmNo, sal_uInt16 nSprmNoVer9,
+        bool bShadow);
 
     void Out_SwFmtBox(const SvxBoxItem& rBox, bool bShadow);
     void Out_SwFmtTableBox( ww::bytes& rO, const SvxBoxItem * rBox );
     sal_uInt8 TransCol( const Color& rCol );
     bool TransBrush(const Color& rCol, WW8_SHD& rShd);
-    WW8_BRC TranslateBorderLine(const ::editeng::SvxBorderLine& pLine,
+    WW8_BRCVer9 TranslateBorderLine(const ::editeng::SvxBorderLine& pLine,
         sal_uInt16 nDist, bool bShadow);
 
     // #i77805# - new return value indicates, if an inherited outline numbering is suppressed
