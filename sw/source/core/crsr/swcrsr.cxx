@@ -347,18 +347,31 @@ sal_Bool SwCursor::IsSelOvr( int eFlags )
                 }
             }
 
-            SwCntntNode* pCNd;
-            if( pFrm && 0 != (pCNd = (SwCntntNode*)pFrm->GetNode()) )
+            SwCntntNode* pCNd = (pFrm != NULL) ? (SwCntntNode*)pFrm->GetNode() : NULL;
+            if ( pCNd != NULL )
             {
                 // set this CntntNode as new position
                 rPtIdx = *pCNd;
                 pNd = pCNd;
 
-                // register ContentIndex:
-                GetPoint()->nContent.Assign( pCNd, bGoNxt ? 0 : pCNd->Len() );
+                // assign corresponding ContentIndex
+                const sal_Int32 nTmpPos = bGoNxt ? 0 : pCNd->Len();
+                GetPoint()->nContent.Assign( pCNd, nTmpPos );
 
-                if( IsInProtectTable( sal_True ) )
-                    pFrm = 0;
+                if ( rPtIdx.GetIndex() == pSavePos->nNode
+                     && nTmpPos == pSavePos->nCntnt )
+                {
+                    // new position equals saved one
+                    // --> trigger restore of saved pos by setting <pFrm> to NULL - see below
+                    pFrm = NULL;
+                }
+
+                if ( IsInProtectTable( sal_True ) )
+                {
+                    // new position in protected table
+                    // --> trigger restore of saved pos by setting <pFrm> to NULL - see below
+                    pFrm = NULL;
+                }
             }
         }
 
