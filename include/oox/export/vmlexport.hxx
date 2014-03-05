@@ -90,7 +90,7 @@ public:
             sal_Int16 eVOri = -1, sal_Int16 eHRel = -1,
             sal_Int16 eVRel = -1, const Point* pNdTopLeft = 0, const sal_Bool bOOxmlExport = false );
     virtual void  AddSdrObjectVMLObject( const SdrObject& rObj);
-
+    static bool IsWaterMarkShape(const OUString& rStr);
 protected:
     /// Add an attribute to the generated <v:shape/> element.
     ///
