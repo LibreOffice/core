@@ -48,7 +48,7 @@ namespace
     */
     CFStringRef getProcessLocale()
     {
-        CFPropertyListRef pref = CFPreferencesCopyAppValue(CFSTR("AppleLocale"), kCFPreferencesCurrentApplication);
+        CFPropertyListRef pref = CFPreferencesCopyAppValue(CFSTR("AppleLanguages"), kCFPreferencesCurrentApplication);
         CFPropertyListGuard proplGuard(pref);
 
         if (pref == NULL) // return fallback value 'en_US'
@@ -72,7 +72,7 @@ int macosx_getLocale(char *locale, sal_uInt32 bufferLen)
 
     // split the string into substrings; the first two (if there are two) substrings
     // are language and country
-    CFArrayRef subs = CFStringCreateArrayBySeparatingStrings(NULL, sref, CFSTR("_"));
+    CFArrayRef subs = CFStringCreateArrayBySeparatingStrings(NULL, sref, CFSTR("-"));
     CFArrayGuard arrGuard(subs);
 
     CFStringRef lang = (CFStringRef)CFArrayGetValueAtIndex(subs, 0);
