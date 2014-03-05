@@ -286,6 +286,9 @@ class SwFrmAddPage : public SfxTabPage
     CheckBox*     pProtectFrameCB;
     CheckBox*     pProtectSizeCB;
 
+    VclContainer* m_pContentAlignFrame;
+    ListBox*      m_pVertAlignLB;
+
     VclContainer* pPropertiesFrame;
     CheckBox*     pEditInReadonlyCB;
     CheckBox*     pPrintFrameCB;

@@ -57,6 +57,8 @@
 #include <grfatr.hxx>
 #include <uiitems.hxx>
 #include <fmtfollowtextflow.hxx>
+#include <editeng/adjustitem.hxx>
+#include <svx/sdtaitm.hxx>
 
 #include <frmui.hrc>
 #include <sfx2/filedlghelper.hxx>
@@ -2883,6 +2885,9 @@ SwFrmAddPage::SwFrmAddPage(Window *pParent, const SfxItemSet &rSet)
     get(pProtectFrameCB,"protectframe");
     get(pProtectSizeCB,"protectsize");
 
+    get(m_pContentAlignFrame, "contentalign");
+    get(m_pVertAlignLB,"vertalign");
+
     get(pPropertiesFrame,"properties");
     get(pEditInReadonlyCB,"editinreadonly");
     get(pPrintFrameCB,"printframe");
@@ -2918,6 +2923,7 @@ void SwFrmAddPage::Reset(const SfxItemSet &rSet )
         {
             pPropertiesFrame->Hide();
         }
+        m_pContentAlignFrame->Hide();
     }
 
     if(SFX_ITEM_SET == rSet.GetItemState(FN_SET_FRM_ALT_NAME, false, &pItem))
@@ -3064,6 +3070,22 @@ void SwFrmAddPage::Reset(const SfxItemSet &rSet )
         pTextFlowFT->Hide();
         pTextFlowLB->Hide();
     }
+
+    // Content alignment
+    if ( rSet.GetItemState(RES_TEXT_VERT_ADJUST) > SFX_ITEM_AVAILABLE )
+    {
+        SdrTextVertAdjust nAdjust = ((const SdrTextVertAdjustItem&)rSet.Get(RES_TEXT_VERT_ADJUST)).GetValue();
+        sal_uInt16 nPos = 0;
+        switch(nAdjust)
+        {
+            case SDRTEXTVERTADJUST_TOP:      nPos = 0;   break;
+            case SDRTEXTVERTADJUST_CENTER:
+            case SDRTEXTVERTADJUST_BLOCK:    nPos = 1;   break;
+            case SDRTEXTVERTADJUST_BOTTOM:   nPos = 2;   break;
+        }
+        m_pVertAlignLB->SelectEntryPos(nPos);
+    }
+    m_pVertAlignLB->SaveValue();
 }
 
 sal_Bool SwFrmAddPage::FillItemSet(SfxItemSet &rSet)
@@ -3125,6 +3147,20 @@ sal_Bool SwFrmAddPage::FillItemSet(SfxItemSet &rSet)
                 bRet |= 0 != rSet.Put(SfxStringItem(FN_PARAM_CHAIN_NEXT, sCurrentNextChain));
         }
     }
+
+    if(m_pVertAlignLB->GetSelectEntryPos() != m_pVertAlignLB->GetSavedValue())
+    {
+        SdrTextVertAdjust nAdjust;
+        switch(m_pVertAlignLB->GetSelectEntryPos())
+        {
+            default:
+            case 0 : nAdjust = SDRTEXTVERTADJUST_TOP; break;
+            case 1 : nAdjust = SDRTEXTVERTADJUST_CENTER; break;
+            case 2 : nAdjust = SDRTEXTVERTADJUST_BOTTOM; break;
+        }
+        bRet |= 0 != rSet.Put(SdrTextVertAdjustItem(nAdjust, RES_TEXT_VERT_ADJUST));
+    }
+
     return bRet;
 }
 
