@@ -481,7 +481,8 @@ void ShowWindow::RestartShow( sal_Int32 nPageIndexToRestart )
     // show navigator?
     if( mbShowNavigatorAfterSpecialMode )
     {
-        mpViewShell->GetViewFrame()->ShowChildWindow( SID_NAVIGATOR, sal_True );
+        if (mpViewShell)
+            mpViewShell->GetViewFrame()->ShowChildWindow( SID_NAVIGATOR, sal_True );
         mbShowNavigatorAfterSpecialMode = false;
     }
 }
