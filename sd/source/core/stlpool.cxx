@@ -53,6 +53,7 @@
 #include <editeng/adjustitem.hxx>
 #include <editeng/numdef.hxx>
 #include <svl/itempool.hxx>
+#include <svl/IndexedStyleSheets.hxx>
 
 #include "stlpool.hxx"
 #include "sdresid.hxx"
@@ -126,8 +127,6 @@ SdStyleSheetPool::SdStyleSheetPool(SfxItemPool const& _rPool, SdDrawDocument* pD
 
     }
 }
-
-
 
 SdStyleSheetPool::~SdStyleSheetPool()
 {
@@ -624,41 +623,66 @@ void SdStyleSheetPool::CopySheets(SdStyleSheetPool& rSourcePool, SfxStyleFamily 
     CopySheets(rSourcePool, eFamily, rCreatedSheets, emptyName);
 }
 
+namespace
+{
+
+struct HasFamilyPredicate : svl::StyleSheetPredicate
+{
+    HasFamilyPredicate(SfxStyleFamily eFamily)
+    : meFamily(eFamily) {;}
+
+    bool Check(const SfxStyleSheetBase& sheet)
+    {
+        return sheet.GetFamily() == meFamily;
+    }
+    SfxStyleFamily meFamily;
+};
+
+}
+
 void SdStyleSheetPool::CopySheets(SdStyleSheetPool& rSourcePool, SfxStyleFamily eFamily, SdStyleSheetVector& rCreatedSheets, OUString& rRenameSuffix)
 {
     OUString aHelpFile;
 
-    sal_uInt32 nCount = rSourcePool.aStyles.size();
-
     std::vector< std::pair< rtl::Reference< SfxStyleSheetBase >, OUString > > aNewStyles;
     std::vector< std::pair< OUString, OUString > > aRenamedList;
 
-    for (sal_uInt32 n = 0; n < nCount; n++)
-    {
-        rtl::Reference< SfxStyleSheetBase > xSheet( rSourcePool.aStyles[sal::static_int_cast<sal_uInt16>(n)] );
+    // find all style sheets of the source pool which have the same family
+    HasFamilyPredicate aHasFamilyPredicate(eFamily);
+    std::vector<unsigned> aSheetsWithFamily = rSourcePool.GetIndexedStyleSheets().FindPositionsByPredicate(aHasFamilyPredicate);
 
-        if( xSheet->GetFamily() == eFamily )
+    for (std::vector<unsigned>::const_iterator it = aSheetsWithFamily.begin();
+         it != aSheetsWithFamily.end(); ++it )
+    {
+        rtl::Reference< SfxStyleSheetBase > xSheet = GetStyleSheetByPositionInIndex( *it );
+        rtl::OUString aName( xSheet->GetName() );
+
+        // now check whether we already have a sheet with the same name
+        std::vector<unsigned> aSheetsWithName = GetIndexedStyleSheets().FindPositionsByName(aName);
+        bool bAddToList = false;
+        if (!aSheetsWithName.empty() && !rRenameSuffix.isEmpty())
         {
-            bool bAddToList = false;
-            OUString aName( xSheet->GetName() );
-            SfxStyleSheetBase* pExistingSheet = Find(aName, eFamily);
-            if( pExistingSheet && !rRenameSuffix.isEmpty() )
+            // if we have a rename suffix, try to find a new name
+            SfxStyleSheetBase* pExistingSheet = GetStyleSheetByPositionInIndex(aSheetsWithName.front()).get();
+            sal_Int32 nHash = xSheet->GetItemSet().getHash();
+            if( pExistingSheet->GetItemSet().getHash() != nHash )
             {
-                sal_Int32 nHash = xSheet->GetItemSet().getHash();
-                if( pExistingSheet->GetItemSet().getHash() != nHash )
+                // we have found a sheet with the same name, but different contents. Try to find a new name.
+                // If we already have a sheet with the new name, and it is equal to the one in the source pool,
+                // do nothing.
+                OUString aTmpName = aName + rRenameSuffix;
+                sal_Int32 nSuffix = 1;
+                do
                 {
-                    OUString aTmpName = aName + rRenameSuffix;
-                    sal_Int32 nSuffix = 1;
-                    do
-                    {
-                        aTmpName = aName + rRenameSuffix + OUString::number(nSuffix);
-                        pExistingSheet = Find(aTmpName, eFamily);
-                        nSuffix++;
-                    } while( pExistingSheet && pExistingSheet->GetItemSet().getHash() != nHash );
-                    aName = aTmpName;
-                    bAddToList = true;
-                }
+                    aTmpName = aName + rRenameSuffix + OUString::number(nSuffix);
+                    pExistingSheet = Find(aTmpName, eFamily);
+                    nSuffix++;
+                } while( pExistingSheet && pExistingSheet->GetItemSet().getHash() != nHash );
+                aName = aTmpName;
+                bAddToList = true;
             }
+
+            // we do not already have a sheet with the same name and contents. Create a new one.
             if ( !pExistingSheet )
             {
                 rtl::Reference< SfxStyleSheetBase > xNewSheet( &Make( aName, eFamily ) );
@@ -701,6 +725,8 @@ void SdStyleSheetPool::CopySheets(SdStyleSheetPool& rSourcePool, SfxStyleFamily 
         DBG_ASSERT( rSourcePool.Find( (*aIter).second, eFamily ), "StyleSheet has invalid parent: Family mismatch" );
         (*aIter).first->SetParent( (*aIter).second );
     }
+    // we have changed names of style sheets. Trigger reindexing.
+    Reindex();
 }
 
 
@@ -902,15 +928,30 @@ void SdStyleSheetPool::CreatePseudosIfNecessary()
 |*
 \************************************************************************/
 
+namespace
+{
+struct StyleSheetIsUserDefinedPredicate : svl::StyleSheetPredicate
+{
+    StyleSheetIsUserDefinedPredicate()
+    {;}
+
+    bool Check(const SfxStyleSheetBase& sheet)
+    {
+        return sheet.IsUserDefined();
+    }
+};
+}
+
 void SdStyleSheetPool::UpdateStdNames()
 {
     OUString aHelpFile;
-    sal_uInt32  nCount = aStyles.size();
+    StyleSheetIsUserDefinedPredicate aPredicate;
     std::vector<SfxStyleSheetBase*> aEraseList;
-
-    for( sal_uInt32 n=0; n < nCount; n++ )
+    std::vector<unsigned> aUserDefinedStyles = GetIndexedStyleSheets().FindPositionsByPredicate(aPredicate);
+    for (std::vector<unsigned>::const_iterator it = aUserDefinedStyles.begin();
+            it != aUserDefinedStyles.end(); ++it)
     {
-        SfxStyleSheetBase* pStyle = aStyles[ n ].get();
+        SfxStyleSheetBase* pStyle = GetStyleSheetByPositionInIndex(*it).get();
 
         if( !pStyle->IsUserDefined() )
         {
@@ -991,6 +1032,7 @@ void SdStyleSheetPool::UpdateStdNames()
                         // Sheet does exist: old sheet has to be removed
                         aEraseList.push_back( pStyle );
                     }
+                    Reindex();
                 }
             }
         }
@@ -999,6 +1041,7 @@ void SdStyleSheetPool::UpdateStdNames()
     // styles that could not be renamed, must be removed
     for ( size_t i = 0, n = aEraseList.size(); i < n; ++i )
         Remove( aEraseList[ i ] );
+    Reindex();
 }
 
 // Set new SvxNumBulletItem for the respective style sheet

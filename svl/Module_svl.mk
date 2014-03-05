@@ -32,6 +32,7 @@ $(eval $(call gb_Module_add_l10n_targets,svl,\
 $(eval $(call gb_Module_add_check_targets,svl,\
 	CppunitTest_svl_lngmisc \
 	CppunitTest_svl_qa_cppunit \
+	CppunitTest_svl_items \
 ))
 
 #TODO: CppunitTest_svl_urihelper depends on ucb, can only be added once svl is
