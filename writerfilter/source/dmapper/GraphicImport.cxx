@@ -587,6 +587,7 @@ void GraphicImport::lcl_attribute(Id nName, Value& rValue)
             //enable overlapping - ignored
         break;
         case NS_ooxml::LN_CT_Anchor_wp14_anchorId:
+        case NS_ooxml::LN_CT_Inline_wp14_anchorId:
         {
             OUStringBuffer aBuffer = OUString::number(nIntValue, 16);
             OUStringBuffer aString;
