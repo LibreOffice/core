@@ -233,7 +233,7 @@ void SvtScriptedTextHelper_Impl::CalculateBreaks( const uno::Reference< i18n::XB
                                 maScriptVec.push_back( nScript );
                                 nCharIx = nNextCharIx;
                             }
-                            while( nCharIx < nNextPos );
+                            while( nCharIx < nNextPos && nCharIx != -1 );
                         }
                         // nothing to do for following portions
                     }
