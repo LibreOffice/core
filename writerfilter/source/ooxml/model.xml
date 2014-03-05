@@ -7887,6 +7887,11 @@
           <xs:documentation>Distance from Text</xs:documentation>
         </data>
       </define>
+      <define name="ST_EditId">
+        <data type="hexBinary">
+          <param name="length">4</param>
+        </data>
+      </define>
       <define name="CT_Inline">
         <group>
           <element name="extent">
@@ -7941,6 +7946,11 @@
           <attribute name="distR">
             <ref name="ST_WrapDistance"/>
             <xs:documentation>Distance From Text on Right Edge</xs:documentation>
+          </attribute>
+        </optional>
+        <optional>
+          <attribute name="wp14:anchorId">
+            <ref name="ST_EditId"/>
           </attribute>
         </optional>
       </define>
@@ -8196,11 +8206,6 @@
           </choice>
         </list>
       </define>
-      <define name="ST_EditId">
-        <data type="hexBinary">
-          <param name="length">4</param>
-        </data>
-      </define>
       <define name="CT_PosV">
         <choice>
           <element name="align">
@@ -8325,9 +8330,11 @@
           </data>
           <xs:documentation>Allow Objects to Overlap</xs:documentation>
         </attribute>
-        <attribute name="wp14:anchorId">
-          <ref name="ST_EditId"/>
-        </attribute>
+        <optional>
+          <attribute name="wp14:anchorId">
+            <ref name="ST_EditId"/>
+          </attribute>
+        </optional>
       </define>
       <define name="inline">
         <element name="inline">
@@ -8347,7 +8354,7 @@
       <attribute name="b" tokenid="ooxml:CT_EffectExtent_b"/>
     </resource>
     <resource name="ST_WrapDistance" resource="Integer" generated="yes"/>
-    <resource xmlns:a="http://schemas.openxmlformats.org/drawingml/2006/main" name="CT_Inline" resource="Properties" tag="shape">
+    <resource xmlns:a="http://schemas.openxmlformats.org/drawingml/2006/main" xmlns:wp14="http://schemas.microsoft.com/office/word/2010/wordprocessingDrawing" name="CT_Inline" resource="Properties" tag="shape">
       <element name="extent" tokenid="ooxml:CT_Inline_extent"/>
       <element name="effectExtent" tokenid="ooxml:CT_Inline_effectExtent"/>
       <element name="docPr" tokenid="ooxml:CT_Inline_docPr"/>
@@ -8359,6 +8366,7 @@
       <attribute name="distB" tokenid="ooxml:CT_Inline_distB"/>
       <attribute name="distL" tokenid="ooxml:CT_Inline_distL"/>
       <attribute name="distR" tokenid="ooxml:CT_Inline_distR"/>
+      <attribute name="wp14:anchorId" tokenid="ooxml:CT_Inline_wp14_anchorId"/>
     </resource>
     <resource name="ST_WrapText" resource="List" generated="yes">
       <value name="bothSides" tokenid="ooxml:Value_wordprocessingDrawing_ST_WrapText_bothSides">bothSides</value>
