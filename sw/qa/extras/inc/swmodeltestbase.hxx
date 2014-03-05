@@ -580,21 +580,20 @@ protected:
                                      nNumberOfNodes, xmlXPathNodeSetGetLength(pXmlNodes));
     }
 
-
     /**
-     * Assert that rXPath exists, and returns exactly nNumberOfNodes nodes.
-     * Useful for checking that we do _not_ export some node (nNumberOfNodes == 0).
+     * Assert that rXPath exists, and its content equals rContent.
      */
     void assertXPathContent(xmlDocPtr pXmlDoc, const OString& rXPath, const OUString& rContent)
     {
         xmlNodeSetPtr pXmlNodes = getXPathNode(pXmlDoc, rXPath);
 
-        CPPUNIT_ASSERT_EQUAL_MESSAGE(OString("XPath '" + rXPath + "' not found").getStr(),
-                                     1, xmlXPathNodeSetGetLength(pXmlNodes));
+        CPPUNIT_ASSERT_MESSAGE(OString("XPath '" + rXPath + "' not found").getStr(),
+                xmlXPathNodeSetGetLength(pXmlNodes) > 0);
 
         xmlNodePtr pXmlNode = pXmlNodes->nodeTab[0];
-        OUString contents = OUString::createFromAscii((const char*)((pXmlNode->children[0]).content));
-        CPPUNIT_ASSERT_EQUAL_MESSAGE("XPath contents do not match",rContent,contents);
+
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("XPath contents of child does not match", rContent,
+            OUString::createFromAscii((const char*)((pXmlNode->children[0]).content)));
     }
 
     /**

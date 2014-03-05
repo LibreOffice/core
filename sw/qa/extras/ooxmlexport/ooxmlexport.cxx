@@ -2108,10 +2108,8 @@ DECLARE_OOXMLEXPORT_TEST(testFdo69649, "fdo69649.docx")
     xmlDocPtr pXmlDoc = parseExport("word/document.xml");
     if (!pXmlDoc)
         return;
-    xmlNodeSetPtr pXmlNodes = getXPathNode(pXmlDoc,"/w:document/w:body/w:p[21]/w:hyperlink/w:r[5]/w:t");
-    xmlNodePtr pXmlNode = pXmlNodes->nodeTab[0];
-    OUString contents = OUString::createFromAscii((const char*)((pXmlNode->children[0]).content));
-    CPPUNIT_ASSERT(contents.match("15"));
+
+    assertXPathContent(pXmlDoc, "/w:document/w:body/w:p[21]/w:hyperlink/w:r[5]/w:t", "15");
 }
 
 DECLARE_OOXMLEXPORT_TEST(testTextBoxPictureFill, "textbox_picturefill.docx")
@@ -2143,12 +2141,10 @@ DECLARE_OOXMLEXPORT_TEST(testFieldFlagO,"TOC_field_f.docx")
     xmlDocPtr pXmlDoc = parseExport();
     if (!pXmlDoc)
         return;
+
     // FIXME "p[2]" will have to be "p[1]", once the TOC import code is fixed
     // not to insert an empty paragraph before TOC.
-    xmlNodeSetPtr pXmlNodes = getXPathNode(pXmlDoc,"/w:document/w:body/w:p[2]/w:r[2]/w:instrText");
-    xmlNodePtr pXmlNode = pXmlNodes->nodeTab[0];
-    OUString contents = OUString::createFromAscii((const char*)((pXmlNode->children[0]).content));
-    CPPUNIT_ASSERT(contents.match(" TOC \\z \\f \\o \"1-3\" \\u \\h"));
+    assertXPathContent(pXmlDoc, "/w:document/w:body/w:p[2]/w:r[2]/w:instrText", " TOC \\z \\f \\o \"1-3\" \\u \\h");
 }
 
 DECLARE_OOXMLEXPORT_TEST(testTOCFlag_f, "toc_doc.docx")
@@ -2162,12 +2158,10 @@ DECLARE_OOXMLEXPORT_TEST(testTOCFlag_f, "toc_doc.docx")
     xmlDocPtr pXmlDoc = parseExport();
     if (!pXmlDoc)
         return;
+
     // FIXME "p[2]" will have to be "p[1]", once the TOC import code is fixed
     // not to insert an empty paragraph before TOC.
-    xmlNodeSetPtr pXmlNodes = getXPathNode(pXmlDoc,"/w:document/w:body/w:p[2]/w:r[2]/w:instrText");
-    xmlNodePtr pXmlNode = pXmlNodes->nodeTab[0];
-    OUString contents = OUString::createFromAscii((const char*)((pXmlNode->children[0]).content));
-    CPPUNIT_ASSERT(contents.endsWith("\\h"));
+    assertXPathContent(pXmlDoc, "/w:document/w:body/w:p[2]/w:r[2]/w:instrText", " TOC \\z \\o \"1-3\" \\u \\h");
 }
 
 DECLARE_OOXMLEXPORT_TEST(testPreserveZfield,"preserve_Z_field_TOC.docx")
@@ -2175,48 +2169,40 @@ DECLARE_OOXMLEXPORT_TEST(testPreserveZfield,"preserve_Z_field_TOC.docx")
     xmlDocPtr pXmlDoc = parseExport("word/document.xml");
     if (!pXmlDoc)
         return;
+
     // FIXME "p[2]" will have to be "p[1]", once the TOC import code is fixed
     // not to insert an empty paragraph before TOC.
-    xmlNodeSetPtr pXmlNodes = getXPathNode(pXmlDoc,"/w:document/w:body/w:p[2]/w:r[2]/w:instrText");
-    xmlNodePtr pXmlNode = pXmlNodes->nodeTab[0];
-    OUString contents = OUString::createFromAscii((const char*)((pXmlNode->children[0]).content));
-    CPPUNIT_ASSERT(contents.match(" TOC \\z \\f \\o \"1-3\" \\h"));
+    assertXPathContent(pXmlDoc, "/w:document/w:body/w:p[2]/w:r[2]/w:instrText", " TOC \\z \\f \\o \"1-3\" \\h");
 }
 
- DECLARE_OOXMLEXPORT_TEST(testPreserveWfieldTOC, "PreserveWfieldTOC.docx")
+DECLARE_OOXMLEXPORT_TEST(testPreserveWfieldTOC, "PreserveWfieldTOC.docx")
 {
-     xmlDocPtr pXmlDoc = parseExport("word/document.xml");
+    xmlDocPtr pXmlDoc = parseExport("word/document.xml");
     if (!pXmlDoc)
         return;
-    xmlNodeSetPtr pXmlNodes = getXPathNode(pXmlDoc,"/w:document/w:body/w:p[2]/w:r[2]/w:instrText");
-    xmlNodePtr pXmlNode = pXmlNodes->nodeTab[0];
-    OUString contents = OUString::createFromAscii((const char*)((pXmlNode->children[0]).content));
-   CPPUNIT_ASSERT(contents.match(" TOC \\z \\w \\f \\o \"1-3\" \\h"));
+
+    assertXPathContent(pXmlDoc, "/w:document/w:body/w:p[2]/w:r[2]/w:instrText", " TOC \\z \\w \\f \\o \"1-3\" \\h");
 }
 
 DECLARE_OOXMLEXPORT_TEST(testFieldFlagB,"TOC_field_b.docx")
 {
-   // This test case is to verify \b flag.
+    // This test case is to verify \b flag.
     xmlDocPtr pXmlDoc = parseExport();
     if (!pXmlDoc)
         return;
+
     // FIXME "p[2]" will have to be "p[1]", once the TOC import code is fixed
     // not to insert an empty paragraph before TOC.
-    xmlNodeSetPtr pXmlNodes = getXPathNode(pXmlDoc,"/w:document/w:body/w:p[2]/w:r[2]/w:instrText");
-    xmlNodePtr pXmlNode = pXmlNodes->nodeTab[0];
-    OUString contents = OUString::createFromAscii((const char*)((pXmlNode->children[0]).content));
-    CPPUNIT_ASSERT(contents.match(" TOC \\b \"bookmark111\" \\o \"1-9\" \\h"));
+    assertXPathContent(pXmlDoc, "/w:document/w:body/w:p[2]/w:r[2]/w:instrText", " TOC \\b \"bookmark111\" \\o \"1-9\" \\h");
 }
 
 DECLARE_OOXMLEXPORT_TEST(testPreserveXfieldTOC, "PreserveXfieldTOC.docx")
 {
-     xmlDocPtr pXmlDoc = parseExport("word/document.xml");
+    xmlDocPtr pXmlDoc = parseExport("word/document.xml");
     if (!pXmlDoc)
         return;
-    xmlNodeSetPtr pXmlNodes = getXPathNode(pXmlDoc,"/w:document/w:body/w:p[2]/w:r[2]/w:instrText");
-    xmlNodePtr pXmlNode = pXmlNodes->nodeTab[0];
-    OUString contents = OUString::createFromAscii((const char*)((pXmlNode->children[0]).content));
-   CPPUNIT_ASSERT(contents.match(" TOC \\x \\f \\o \"1-3\" \\h"));
+
+    assertXPathContent(pXmlDoc, "/w:document/w:body/w:p[2]/w:r[2]/w:instrText", " TOC \\x \\f \\o \"1-3\" \\h");
 }
 
 DECLARE_OOXMLEXPORT_TEST(testTrackChangesParagraphProperties, "testTrackChangesParagraphProperties.docx")
@@ -2276,12 +2262,10 @@ DECLARE_OOXMLEXPORT_TEST(testTOCFlag_u,"testTOCFlag_u.docx")
     xmlDocPtr pXmlDoc = parseExport("word/document.xml");
     if (!pXmlDoc)
         return;
+
     // FIXME "p[2]" will have to be "p[1]", once the TOC import code is fixed
     // not to insert an empty paragraph before TOC.
-    xmlNodeSetPtr pXmlNodes = getXPathNode(pXmlDoc, "/w:document/w:body/w:p[2]/w:r[2]/w:instrText");
-    xmlNodePtr pXmlNode = pXmlNodes->nodeTab[0];
-    OUString contents = OUString::createFromAscii((const char*)((pXmlNode->children[0]).content));
-    CPPUNIT_ASSERT(contents.match(" TOC \\z \\o \"1-9\" \\u \\h"));
+    assertXPathContent(pXmlDoc, "/w:document/w:body/w:p[2]/w:r[2]/w:instrText", " TOC \\z \\o \"1-9\" \\u \\h");
 }
 
 DECLARE_OOXMLEXPORT_TEST(testTestTitlePage, "testTitlePage.docx")
@@ -2356,7 +2340,8 @@ DECLARE_OOXMLEXPORT_TEST(testfdo73596_RunInStyle,"fdo73596_RunInStyle.docx")
     xmlDocPtr pXmlDoc = parseExport("word/document.xml");
     if (!pXmlDoc)
         return;
-    assertXPathContent(pXmlDoc, "/w:document/w:body/w:p[2]/w:r[2]/w:instrText[1]"," INDEX \\e \"");
+
+    assertXPathContent(pXmlDoc, "/w:document/w:body/w:p[2]/w:r[2]/w:instrText[1]", " INDEX \\e \"");
 }
 
 DECLARE_OOXMLEXPORT_TEST(testfdo73596_AlphaSeparator,"fdo73596_AlphaSeparator.docx")
@@ -2365,10 +2350,8 @@ DECLARE_OOXMLEXPORT_TEST(testfdo73596_AlphaSeparator,"fdo73596_AlphaSeparator.do
     xmlDocPtr pXmlDoc = parseExport("word/document.xml");
     if (!pXmlDoc)
         return;
-    xmlNodeSetPtr pXmlNodes = getXPathNode(pXmlDoc, "/w:document/w:body/w:p[2]/w:r[2]/w:instrText[1]");
-    xmlNodePtr pXmlNode = pXmlNodes->nodeTab[0];
-    OUString contents = OUString::createFromAscii((const char*)((pXmlNode->children[0]).content));
-    CPPUNIT_ASSERT(contents.match(" INDEX \\h \"A\" \\e \""));
+
+    assertXPathContent(pXmlDoc, "/w:document/w:body/w:p[2]/w:r[2]/w:instrText[1]", " INDEX \\h \"A\" \\e \"");
 }
 
 DECLARE_OOXMLEXPORT_TEST(testFDO74106, "FDO74106.docx")
@@ -2417,10 +2400,8 @@ DECLARE_OOXMLEXPORT_TEST(testCaption1, "EquationAsScientificNumbering.docx")
     xmlDocPtr pXmlDoc = parseExport();
     if (!pXmlDoc)
         return;
-    xmlNodeSetPtr pXmlNodes = getXPathNode(pXmlDoc,"/w:document/w:body/w:p/w:r[3]/w:instrText");
-    xmlNodePtr pXmlNode = pXmlNodes->nodeTab[0];
-    OUString contents = OUString::createFromAscii((const char*)((pXmlNode->children[0]).content));
-    CPPUNIT_ASSERT(contents.match(" SEQ scientific \\* ROMAN"));
+
+    assertXPathContent(pXmlDoc, "/w:document/w:body/w:p/w:r[3]/w:instrText", " SEQ scientific \\* ROMAN ");
 }
 
 DECLARE_OOXMLEXPORT_TEST(testCaption2, "EquationWithAboveAndBelowCaption.docx")
@@ -2430,10 +2411,8 @@ DECLARE_OOXMLEXPORT_TEST(testCaption2, "EquationWithAboveAndBelowCaption.docx")
     xmlDocPtr pXmlDoc = parseExport();
     if (!pXmlDoc)
         return;
-    xmlNodeSetPtr pXmlNodes = getXPathNode(pXmlDoc,"/w:document/w:body/w:p[5]/w:r[3]/w:instrText");
-    xmlNodePtr pXmlNode = pXmlNodes->nodeTab[0];
-    OUString contents = OUString::createFromAscii((const char*)((pXmlNode->children[0]).content));
-    CPPUNIT_ASSERT(contents.match(" SEQ Equation \\* ARABIC"));
+
+    assertXPathContent(pXmlDoc, "/w:document/w:body/w:p[5]/w:r[3]/w:instrText", " SEQ Equation \\* ARABIC ");
 }
 
 DECLARE_OOXMLEXPORT_TEST(testCaption3, "FigureAsLabelPicture.docx")
@@ -2443,10 +2422,8 @@ DECLARE_OOXMLEXPORT_TEST(testCaption3, "FigureAsLabelPicture.docx")
     xmlDocPtr pXmlDoc = parseExport();
     if (!pXmlDoc)
         return;
-    xmlNodeSetPtr pXmlNodes = getXPathNode(pXmlDoc,"/w:document/w:body/w:p[2]/w:r[3]/w:instrText");
-    xmlNodePtr pXmlNode = pXmlNodes->nodeTab[0];
-    OUString contents = OUString::createFromAscii((const char*)((pXmlNode->children[0]).content));
-    CPPUNIT_ASSERT(contents.match(" SEQ picture \\* ARABIC"));
+
+    assertXPathContent(pXmlDoc, "/w:document/w:body/w:p[2]/w:r[3]/w:instrText", " SEQ picture \\* ARABIC ");
 }
 
 DECLARE_OOXMLEXPORT_TEST(testCaption4, "TableWithAboveCaptions.docx")
@@ -2456,10 +2433,8 @@ DECLARE_OOXMLEXPORT_TEST(testCaption4, "TableWithAboveCaptions.docx")
     xmlDocPtr pXmlDoc = parseExport();
     if (!pXmlDoc)
         return;
-    xmlNodeSetPtr pXmlNodes = getXPathNode(pXmlDoc,"/w:document/w:body/w:p[1]/w:r[3]/w:instrText");
-    xmlNodePtr pXmlNode = pXmlNodes->nodeTab[0];
-    OUString contents = OUString::createFromAscii((const char*)((pXmlNode->children[0]).content));
-    CPPUNIT_ASSERT(contents.match(" SEQ Table \\* ARABIC"));
+
+    assertXPathContent(pXmlDoc, "/w:document/w:body/w:p[1]/w:r[3]/w:instrText", " SEQ Table \\* ARABIC ");
 }
 
 DECLARE_OOXMLEXPORT_TEST(testChartInFooter, "chart-in-footer.docx")
@@ -2746,12 +2721,11 @@ DECLARE_OOXMLEXPORT_TEST(testAlphabeticalIndex_MultipleColumns,"alphabeticalInde
      * MS Office adds section breaks before and after the Index.
      */
     xmlDocPtr pXmlDoc = parseExport("word/document.xml");
-        if (!pXmlDoc)
-            return;
-    xmlNodeSetPtr pXmlNodes = getXPathNode(pXmlDoc,"/w:document/w:body/w:p[3]/w:r[2]/w:instrText");
-    xmlNodePtr pXmlNode = pXmlNodes->nodeTab[0];
-    OUString contents = OUString::createFromAscii((const char*)((pXmlNode->children[0]).content));
-    CPPUNIT_ASSERT( contents.match(" INDEX \\c \"4\"\\e \"") );
+    if (!pXmlDoc)
+        return;
+
+    assertXPathContent(pXmlDoc, "/w:document/w:body/w:p[3]/w:r[2]/w:instrText", " INDEX \\c \"4\"\\e \"");
+
     // check for section breaks after and before the Index Section
     assertXPath(pXmlDoc, "/w:document/w:body/w:p[2]/w:pPr/w:sectPr/w:type","val","continuous");
     assertXPath(pXmlDoc, "/w:document/w:body/w:p[9]/w:pPr/w:sectPr/w:type","val","continuous");
@@ -2766,10 +2740,8 @@ DECLARE_OOXMLEXPORT_TEST(testPageref, "testPageref.docx")
     xmlDocPtr pXmlDoc = parseExport();
     if (!pXmlDoc)
         return;
-    xmlNodeSetPtr pXmlNodes = getXPathNode(pXmlDoc,"/w:document/w:body/w:p[2]/w:hyperlink/w:r[3]/w:instrText");
-    xmlNodePtr pXmlNode = pXmlNodes->nodeTab[0];
-    OUString contents = OUString::createFromAscii((const char*)((pXmlNode->children[0]).content));
-    CPPUNIT_ASSERT(contents.match("PAGEREF _Toc355095261 \\h"));
+
+    assertXPathContent(pXmlDoc, "/w:document/w:body/w:p[2]/w:hyperlink/w:r[3]/w:instrText", "PAGEREF _Toc355095261 \\h");
 }
 
 DECLARE_OOXMLEXPORT_TEST(testAlphabeticalIndex_AutoColumn,"alphabeticalIndex_AutoColumn.docx")
@@ -2781,12 +2753,11 @@ DECLARE_OOXMLEXPORT_TEST(testAlphabeticalIndex_AutoColumn,"alphabeticalIndex_Aut
      * before and after the Index Context
      */
     xmlDocPtr pXmlDoc = parseExport("word/document.xml");
-        if (!pXmlDoc)
-            return;
-    xmlNodeSetPtr pXmlNodes = getXPathNode(pXmlDoc,"/w:document/w:body/w:p[2]/w:r[2]/w:instrText");
-    xmlNodePtr pXmlNode = pXmlNodes->nodeTab[0];
-    OUString contents = OUString::createFromAscii((const char*)((pXmlNode->children[0]).content));
-    CPPUNIT_ASSERT( contents.match(" INDEX \\e \"") );
+    if (!pXmlDoc)
+        return;
+
+    assertXPathContent(pXmlDoc, "/w:document/w:body/w:p[2]/w:r[2]/w:instrText", " INDEX \\e \"");
+
     // check for section break doestn't appear for any paragraph
     assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:pPr/w:sectPr", 0);
 }
@@ -2796,10 +2767,8 @@ DECLARE_OOXMLEXPORT_TEST(testBibliography,"FDO75133.docx")
     xmlDocPtr pXmlDoc = parseExport();
     if (!pXmlDoc)
         return;
-    xmlNodeSetPtr pXmlNodes = getXPathNode(pXmlDoc,"/w:document/w:body/w:p[3]/w:r[2]/w:instrText");
-    xmlNodePtr pXmlNode = pXmlNodes->nodeTab[0];
-    OUString contents = OUString::createFromAscii((const char*)((pXmlNode->children[0]).content));
-    CPPUNIT_ASSERT(contents.match(" BIBLIOGRAPHY "));
+
+    assertXPathContent(pXmlDoc, "/w:document/w:body/w:p[3]/w:r[2]/w:instrText", " BIBLIOGRAPHY ");
 }
 
 DECLARE_OOXMLEXPORT_TEST(testW14TextEffects_TextFill, "TextEffects_TextFill.docx")
