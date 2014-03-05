@@ -26,11 +26,6 @@
 #define FL_ACTIVE                               11
 #define TC_INDEX                                12
 
-// Index TabPage
-#define FT_EXPRESSION                           10
-#define CB_INDEX                                11
-#define PB_OPEN_INDEX                           12
-
 // Search TabPage
 #define FT_SEARCH                               10
 #define ED_SEARCH                               11
@@ -40,11 +35,6 @@
 #define CB_SCOPE                                15
 #define LB_RESULT                               16
 #define PB_OPEN_SEARCH                          17
-
-// Bookmarks TabPage
-#define FT_BOOKMARKS                            10
-#define LB_BOOKMARKS                            11
-#define PB_BOOKMARKS                            12
 
 // Content TabPage
 #define LB_CONTENTS                             10

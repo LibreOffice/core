@@ -18,6 +18,9 @@
     <glade-widget-class title="Bookmarks Box" name="sfxlo-BookmarksBox"
                         generic-name="BookmarksBox" parent="GtkComboBoxText"
                         icon-name="widget-gtk-comboboxtext"/>
+    <glade-widget-class title="Index Box" name="sfxlo-IndexBox"
+                        generic-name="IndexBox" parent="GtkComboBoxText"
+                        icon-name="widget-gtk-comboboxtext"/>
     <glade-widget-class title="Font PickListBox" name="smlo-SmFontPickListBox"
                         generic-name="SmFontPickListBox" parent="GtkComboBoxText"
                         icon-name="widget-gtk-comboboxtext"/>

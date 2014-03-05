@@ -109,7 +109,7 @@ public:
 class IndexBox_Impl : public ComboBox
 {
 public:
-    IndexBox_Impl( Window* pParent, const ResId& rResId );
+    IndexBox_Impl(Window* pParent, WinBits nStyle);
 
     virtual void        UserDraw( const UserDrawEvent& rUDEvt );
     virtual bool        Notify( NotifyEvent& rNEvt );
@@ -120,9 +120,8 @@ public:
 class IndexTabPage_Impl : public HelpTabPage_Impl
 {
 private:
-    FixedText           aExpressionFT;
-    IndexBox_Impl       aIndexCB;
-    PushButton          aOpenBtn;
+    IndexBox_Impl*      m_pIndexCB;
+    PushButton*         m_pOpenBtn;
 
     Timer               aFactoryTimer;
     Timer               aKeywordTimer;
@@ -131,8 +130,7 @@ private:
     OUString            sFactory;
     OUString            sKeyword;
 
-    long                nMinWidth;
-    sal_Bool            bIsActivated;
+    bool                bIsActivated;
 
     void                InitializeIndex();
     void                ClearIndex();
@@ -144,7 +142,6 @@ public:
     IndexTabPage_Impl( Window* pParent, SfxHelpIndexWindow_Impl* _pIdxWin );
     ~IndexTabPage_Impl();
 
-    virtual void        Resize();
     virtual void        ActivatePage();
     virtual Control*    GetLastFocusControl();
 
@@ -152,8 +149,8 @@ public:
     void                SetFactory( const OUString& rFactory );
     inline OUString     GetFactory() const { return sFactory; }
     OUString            GetSelectEntry() const;
-    inline void         SetFocusOnBox() { aIndexCB.GrabFocus(); }
-    inline sal_Bool     HasFocusOnEdit() const { return aIndexCB.HasChildPathFocus(); }
+    inline void         SetFocusOnBox() { m_pIndexCB->GrabFocus(); }
+    inline sal_Bool     HasFocusOnEdit() const { return m_pIndexCB->HasChildPathFocus(); }
 
     inline void         SetKeywordHdl( const Link& rLink ) { aKeywordLink = rLink; }
     void                SetKeyword( const OUString& rKeyword );
@@ -161,7 +158,7 @@ public:
     sal_Bool            HasKeywordIgnoreCase();
     void                OpenKeyword();
 
-    inline void         SelectExecutableEntry() { aIndexCB.SelectExecutableEntry(); }
+    inline void         SelectExecutableEntry() { m_pIndexCB->SelectExecutableEntry(); }
 };
 
 // class SearchTabPage_Impl ----------------------------------------------

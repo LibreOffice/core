@@ -470,16 +470,24 @@ Control* ContentTabPage_Impl::GetLastFocusControl()
 
 // class IndexBox_Impl ---------------------------------------------------
 
-IndexBox_Impl::IndexBox_Impl( Window* pParent, const ResId& rResId ) :
-
-    ComboBox( pParent, rResId )
-
+IndexBox_Impl::IndexBox_Impl(Window* pParent, WinBits nStyle)
+    : ComboBox(pParent, nStyle)
 {
-    EnableAutocomplete( true );
-    EnableUserDraw( true );
+    EnableAutocomplete(true);
+    EnableUserDraw(true);
 }
 
-
+extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeIndexBox(Window *pParent,
+    VclBuilder::stringmap &rMap)
+{
+    WinBits nWinBits = WB_CLIPCHILDREN|WB_LEFT|WB_VCENTER|WB_3DLOOK;
+    OString sBorder = VclBuilder::extractCustomProperty(rMap);
+    if (!sBorder.isEmpty())
+       nWinBits |= WB_BORDER;
+    IndexBox_Impl* pListBox = new IndexBox_Impl(pParent, nWinBits);
+    pListBox->EnableAutoSize(true);
+    return pListBox;
+}
 
 void IndexBox_Impl::UserDraw( const UserDrawEvent& rUDEvt )
 {
@@ -537,30 +545,24 @@ void IndexBox_Impl::SelectExecutableEntry()
 
 // class IndexTabPage_Impl -----------------------------------------------
 
-IndexTabPage_Impl::IndexTabPage_Impl( Window* pParent, SfxHelpIndexWindow_Impl* _pIdxWin ) :
-
-    HelpTabPage_Impl( pParent, _pIdxWin, SfxResId( TP_HELP_INDEX ) ),
-
-    aExpressionFT   ( this, SfxResId( FT_EXPRESSION ) ),
-    aIndexCB        ( this, SfxResId( CB_INDEX ) ),
-    aOpenBtn        ( this, SfxResId( PB_OPEN_INDEX ) ),
-
-    bIsActivated    ( sal_False )
-
+IndexTabPage_Impl::IndexTabPage_Impl(Window* pParent, SfxHelpIndexWindow_Impl* _pIdxWin)
+    : HelpTabPage_Impl(pParent, _pIdxWin, "HelpIndexPage",
+        "sfx/ui/helpindexpage.ui")
+    , bIsActivated(false)
 {
-    FreeResource();
+    get(m_pIndexCB, "terms");
+    Size aSize(LogicToPixel(Size(108, 97), MAP_APPFONT));
+    m_pIndexCB->set_width_request(aSize.Width());
+    m_pIndexCB->set_height_request(aSize.Height());
+    get(m_pOpenBtn, "display");
 
-    aOpenBtn.SetClickHdl( LINK( this, IndexTabPage_Impl, OpenHdl ) );
+    m_pOpenBtn->SetClickHdl( LINK( this, IndexTabPage_Impl, OpenHdl ) );
     Link aTimeoutLink = LINK( this, IndexTabPage_Impl, TimeoutHdl );
     aFactoryTimer.SetTimeoutHdl( aTimeoutLink );
     aFactoryTimer.SetTimeout( 300 );
     aKeywordTimer.SetTimeoutHdl( aTimeoutLink );
     aFactoryTimer.SetTimeout( 300 );
-
-    nMinWidth = aOpenBtn.GetSizePixel().Width();
 }
-
-
 
 IndexTabPage_Impl::~IndexTabPage_Impl()
 {
@@ -597,18 +599,18 @@ namespace sfx2 {
 #define UNIFY_AND_INSERT_TOKEN( aToken )                                                            \
     it = aInfo.insert( sfx2::KeywordInfo::value_type( aToken, 0 ) ).first;                          \
     if ( ( tmp = it->second++ ) != 0 )                                                              \
-       nPos = aIndexCB.InsertEntry( aToken + OUString( append, tmp ) );                             \
+       nPos = m_pIndexCB->InsertEntry( aToken + OUString( append, tmp ) );                             \
     else                                                                                            \
-       nPos = aIndexCB.InsertEntry( aToken )
+       nPos = m_pIndexCB->InsertEntry( aToken )
 
 #define INSERT_DATA( j )                                                                            \
     if ( aAnchorList[j].getLength() > 0 )                                                           \
     {                                                                                               \
         aData.append( aRefList[j] ).append( '#' ).append( aAnchorList[j] );            \
-        aIndexCB.SetEntryData( nPos, NEW_ENTRY( aData.makeStringAndClear(), insert ) );             \
+        m_pIndexCB->SetEntryData( nPos, NEW_ENTRY( aData.makeStringAndClear(), insert ) );             \
     }                                                                                               \
     else                                                                                            \
-        aIndexCB.SetEntryData( nPos, NEW_ENTRY( aRefList[j], insert ) );
+        m_pIndexCB->SetEntryData( nPos, NEW_ENTRY( aRefList[j], insert ) );
 
 
 
@@ -622,7 +624,7 @@ void IndexTabPage_Impl::InitializeIndex()
         append[k] =  ' ';
 
     sfx2::KeywordInfo aInfo;
-    aIndexCB.SetUpdateMode( false );
+    m_pIndexCB->SetUpdateMode( false );
 
     try
     {
@@ -719,7 +721,7 @@ void IndexTabPage_Impl::InitializeIndex()
         OSL_FAIL( "IndexTabPage_Impl::InitializeIndex(): unexpected exception" );
     }
 
-    aIndexCB.SetUpdateMode( true );
+    m_pIndexCB->SetUpdateMode( true );
 
     if ( !sKeyword.isEmpty() )
         aKeywordLink.Call( this );
@@ -732,21 +734,17 @@ void IndexTabPage_Impl::InitializeIndex()
 
 void IndexTabPage_Impl::ClearIndex()
 {
-    sal_uInt16 nCount = aIndexCB.GetEntryCount();
+    sal_uInt16 nCount = m_pIndexCB->GetEntryCount();
     for ( sal_uInt16 i = 0; i < nCount; ++i )
-        delete (IndexEntry_Impl*)(sal_uIntPtr)aIndexCB.GetEntryData(i);
-    aIndexCB.Clear();
+        delete (IndexEntry_Impl*)(sal_uIntPtr)m_pIndexCB->GetEntryData(i);
+    m_pIndexCB->Clear();
 }
-
-
 
 IMPL_LINK_NOARG(IndexTabPage_Impl, OpenHdl)
 {
-    aIndexCB.GetDoubleClickHdl().Call( &aIndexCB );
+    m_pIndexCB->GetDoubleClickHdl().Call(m_pIndexCB);
     return 0;
 }
-
-
 
 IMPL_LINK( IndexTabPage_Impl, TimeoutHdl, Timer*, pTimer )
 {
@@ -757,43 +755,11 @@ IMPL_LINK( IndexTabPage_Impl, TimeoutHdl, Timer*, pTimer )
     return 0;
 }
 
-
-
-void IndexTabPage_Impl::Resize()
-{
-    Size aSize = GetSizePixel();
-    if ( aSize.Width() < nMinWidth )
-        aSize.Width() = nMinWidth;
-    Point aPnt = aExpressionFT.GetPosPixel();
-    Size aNewSize = aExpressionFT.GetSizePixel();
-    aNewSize.Width() = aSize.Width() - ( aPnt.X() * 2 );
-    aExpressionFT.SetSizePixel( aNewSize );
-
-    Size a6Size = LogicToPixel( Size( 6, 6 ), MAP_APPFONT );
-    Size aBtnSize = aOpenBtn.GetSizePixel();
-
-    aPnt = aIndexCB.GetPosPixel();
-    aNewSize = aIndexCB.GetSizePixel();
-    aNewSize.Width() = aSize.Width() - ( aPnt.X() * 2 );
-    aNewSize.Height() = aSize.Height() - aPnt.Y();
-    aNewSize.Height() -= ( aBtnSize.Height() + ( a6Size.Height() * 3 / 2 ) );
-    aIndexCB.SetSizePixel( aNewSize );
-
-    aPnt.X() += ( aNewSize.Width() - aBtnSize.Width() );
-    aPnt.Y() += aNewSize.Height() + ( a6Size.Height() / 2 );
-    long nMinX = aIndexCB.GetPosPixel().X();
-    if ( aPnt.X() < nMinX )
-        aPnt.X() = nMinX;
-    aOpenBtn.SetPosPixel( aPnt );
-}
-
-
-
 void IndexTabPage_Impl::ActivatePage()
 {
     if ( !bIsActivated )
     {
-        bIsActivated = sal_True;
+        bIsActivated = true;
         aFactoryTimer.Start();
     }
 
@@ -801,21 +767,15 @@ void IndexTabPage_Impl::ActivatePage()
         SetFocusOnBox();
 }
 
-
-
 Control* IndexTabPage_Impl::GetLastFocusControl()
 {
-    return &aOpenBtn;
+    return m_pOpenBtn;
 }
-
-
 
 void IndexTabPage_Impl::SetDoubleClickHdl( const Link& rLink )
 {
-    aIndexCB.SetDoubleClickHdl( rLink );
+    m_pIndexCB->SetDoubleClickHdl( rLink );
 }
-
-
 
 void IndexTabPage_Impl::SetFactory( const OUString& rFactory )
 {
@@ -843,7 +803,7 @@ void IndexTabPage_Impl::SetFactory( const OUString& rFactory )
 OUString IndexTabPage_Impl::GetSelectEntry() const
 {
     OUString aRet;
-    IndexEntry_Impl* pEntry = (IndexEntry_Impl*)(sal_uIntPtr)aIndexCB.GetEntryData( aIndexCB.GetEntryPos( aIndexCB.GetText() ) );
+    IndexEntry_Impl* pEntry = (IndexEntry_Impl*)(sal_uIntPtr)m_pIndexCB->GetEntryData( m_pIndexCB->GetEntryPos( m_pIndexCB->GetText() ) );
     if ( pEntry )
         aRet = pEntry->m_aURL;
     return aRet;
@@ -855,7 +815,7 @@ void IndexTabPage_Impl::SetKeyword( const OUString& rKeyword )
 {
     sKeyword = rKeyword;
 
-    if ( aIndexCB.GetEntryCount() > 0 )
+    if ( m_pIndexCB->GetEntryCount() > 0 )
         aKeywordTimer.Start();
     else if ( !bIsActivated )
         aFactoryTimer.Start();
@@ -868,7 +828,7 @@ sal_Bool IndexTabPage_Impl::HasKeyword() const
     sal_Bool bRet = sal_False;
     if ( !sKeyword.isEmpty() )
     {
-        sal_uInt16 nPos = aIndexCB.GetEntryPos( sKeyword );
+        sal_uInt16 nPos = m_pIndexCB->GetEntryPos( sKeyword );
         bRet = ( nPos != LISTBOX_ENTRY_NOTFOUND );
     }
 
@@ -882,12 +842,12 @@ sal_Bool IndexTabPage_Impl::HasKeywordIgnoreCase()
     sal_Bool bRet = sal_False;
     if ( !sKeyword.isEmpty() )
     {
-        sal_uInt16 nEntries = aIndexCB.GetEntryCount();
+        sal_uInt16 nEntries = m_pIndexCB->GetEntryCount();
         OUString sIndexItem;
         const vcl::I18nHelper& rI18nHelper = GetSettings().GetLocaleI18nHelper();
         for ( sal_uInt16 n = 0; n < nEntries; n++)
         {
-            sIndexItem = aIndexCB.GetEntry( n );
+            sIndexItem = m_pIndexCB->GetEntry( n );
             if (rI18nHelper.MatchString( sIndexItem, sKeyword ))
             {
                 sKeyword = sIndexItem;
@@ -905,8 +865,8 @@ void IndexTabPage_Impl::OpenKeyword()
 {
     if ( !sKeyword.isEmpty() )
     {
-        aIndexCB.SetText( sKeyword );
-        aIndexCB.GetDoubleClickHdl().Call( NULL );
+        m_pIndexCB->SetText( sKeyword );
+        m_pIndexCB->GetDoubleClickHdl().Call( NULL );
         sKeyword = "";
     }
 }
