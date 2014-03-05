@@ -645,7 +645,8 @@ XFFrame* LwpDrawPolygon::CreateStandardDrawObj(const  OUString& rStyleName)
  * @param   pStream   The memory stream which contains the lwp-sdw draw objects
  */
 LwpDrawRectangle::LwpDrawRectangle(SvStream * pStream, DrawingOffsetAndScale* pTransData)
-: LwpDrawObj(pStream, pTransData)
+    : LwpDrawObj(pStream, pTransData)
+    , m_aVector{}
 {
 }
 
