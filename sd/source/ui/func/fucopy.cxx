@@ -100,27 +100,27 @@ void FuCopy::DoExecute( SfxRequest& rReq )
             if( pFact )
             {
                 AbstractCopyDlg* pDlg = pFact->CreateCopyDlg(NULL, aSet, mpDoc->GetColorList(), mpView );
-                if( pDlg )
+                if (!pDlg)
+                    return;
+
+                sal_uInt16 nResult = pDlg->Execute();
+
+                switch( nResult )
                 {
-                    sal_uInt16 nResult = pDlg->Execute();
+                    case RET_OK:
+                        pDlg->GetAttr( aSet );
+                        rReq.Done( aSet );
+                        pArgs = rReq.GetArgs();
+                    break;
 
-                    switch( nResult )
+                    default:
                     {
-                        case RET_OK:
-                            pDlg->GetAttr( aSet );
-                            rReq.Done( aSet );
-                            pArgs = rReq.GetArgs();
-                        break;
-
-                        default:
-                        {
-                            delete pDlg;
-                            mpView->EndUndo();
-                        }
-                        return; // Cancel
+                        delete pDlg;
+                        mpView->EndUndo();
                     }
-                    delete( pDlg );
+                    return; // Cancel
                 }
+                delete pDlg;
             }
         }
 
