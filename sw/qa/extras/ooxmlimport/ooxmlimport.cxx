@@ -139,6 +139,7 @@ public:
     void testRPrChangeClosed();
     void testFdo65090();
     void testFdo73389();
+    void testRhbz988516();
 
     CPPUNIT_TEST_SUITE(Test);
 #if !defined(MACOSX) && !defined(WNT)
@@ -243,6 +244,7 @@ void Test::run()
         {"rprchange_closed.docx", &Test::testRPrChangeClosed},
         {"fdo65090.docx", &Test::testFdo65090},
         {"fdo73389.docx", &Test::testFdo73389},
+        {"rhbz988516.docx", &Test::testRhbz988516},
     };
     header();
     for (unsigned int i = 0; i < SAL_N_ELEMENTS(aMethods); ++i)
@@ -374,6 +376,18 @@ void Test::testN757890()
     sal_Int16 nValue;
     xFrame->getPropertyValue("HoriOrient") >>= nValue;
     CPPUNIT_ASSERT_EQUAL(text::HoriOrientation::CENTER, nValue);
+}
+
+void Test::testRhbz988516()
+{
+    // The problem was that the list properties of the footer leaked into body
+    CPPUNIT_ASSERT_EQUAL(OUString(),
+            getProperty<OUString>(getParagraph(1), "NumberingStyleName"));
+    CPPUNIT_ASSERT_EQUAL(OUString("Enclosure 3"), getParagraph(2)->getString());
+    CPPUNIT_ASSERT_EQUAL(OUString(),
+            getProperty<OUString>(getParagraph(2), "NumberingStyleName"));
+    CPPUNIT_ASSERT_EQUAL(OUString(),
+            getProperty<OUString>(getParagraph(3), "NumberingStyleName"));
 }
 
 void Test::testFdo49940()
