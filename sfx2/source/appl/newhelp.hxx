@@ -78,7 +78,6 @@ protected:
     SfxHelpIndexWindow_Impl*    m_pIdxWin;
 
 public:
-    HelpTabPage_Impl( Window* pParent, SfxHelpIndexWindow_Impl* _pIdxWin, const ResId& rResId );
     HelpTabPage_Impl(Window* pParent, SfxHelpIndexWindow_Impl* _pIdxWin,
         const OString& rID, const OUString& rUIXMLDescription);
 

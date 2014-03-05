@@ -420,13 +420,6 @@ OUString ContentListBox_Impl::GetSelectEntry() const
 // class HelpTabPage_Impl ------------------------------------------------
 
 HelpTabPage_Impl::HelpTabPage_Impl(Window* pParent, SfxHelpIndexWindow_Impl* _pIdxWin,
-    const ResId& rResId )
-    : TabPage( pParent, rResId )
-    , m_pIdxWin( _pIdxWin )
-{
-}
-
-HelpTabPage_Impl::HelpTabPage_Impl(Window* pParent, SfxHelpIndexWindow_Impl* _pIdxWin,
     const OString& rID, const OUString& rUIXMLDescription)
     : TabPage( pParent, rID, rUIXMLDescription)
     , m_pIdxWin( _pIdxWin )
