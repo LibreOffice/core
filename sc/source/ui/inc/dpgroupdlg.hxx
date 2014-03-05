@@ -115,8 +115,6 @@ private:
     ScDoubleField*       mpEdEnd;
     ScDoubleField*       mpEdBy;
     OKButton*            mpBtnOk;
-    CancelButton*        mpBtnCancel;
-    HelpButton*          mpBtnHelp;
     ScDPNumGroupEditHelper maStartHelper;
     ScDPNumGroupEditHelper maEndHelper;
 };
