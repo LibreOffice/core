@@ -68,7 +68,7 @@ std::ostream& operator<<(std::ostream& rStrm, const Color& rColor)
 FileFormat aFileFormats[] = {
     { "ods" , "calc8", "", ODS_FORMAT_TYPE },
     { "xls" , "MS Excel 97", "calc_MS_EXCEL_97", XLS_FORMAT_TYPE },
-    { "xlsx", "Calc MS Excel 2007 XML" , "MS Excel 2007 XML", XLSX_FORMAT_TYPE },
+    { "xlsx", "Calc Office Open XML" , "Office Open XML Spreadsheet", XLSX_FORMAT_TYPE },
     { "csv" , "Text - txt - csv (StarCalc)", "generic_Text", CSV_FORMAT_TYPE },
     { "html" , "calc_HTML_WebQuery", "generic_HTML", HTML_FORMAT_TYPE },
     { "123" , "Lotus", "calc_Lotus", LOTUS123_FORMAT_TYPE },
@@ -638,6 +638,10 @@ void validate(const utl::TempFile& rTempFile, validation::ScValidationFormat eFo
             sal_Int32 nErrors = aNumber.toInt32();
             OString aMsg("validation error in OOXML export: Errors: ");
             aMsg = aMsg + OString::number(nErrors);
+            if(nErrors)
+            {
+                SAL_WARN("sc", aContent);
+            }
             CPPUNIT_ASSERT_EQUAL_MESSAGE(aMsg.getStr(), sal_Int32(0), nErrors);
         }
     }
