@@ -82,6 +82,7 @@ public:
     /** Returns the first relation with the passed type. */
     const Relation*     getRelationFromFirstTypeFromOfficeDoc( const OUString& rType ) const;
     /** Finds all relations associated with the passed type. */
+    RelationsRef        getRelationsFromType( const OUString& rType ) const;
     RelationsRef        getRelationsFromTypeFromOfficeDoc( const OUString& rType ) const;
 
     /** Returns the external target of the relation with the passed relation identifier. */

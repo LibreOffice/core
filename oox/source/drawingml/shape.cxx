@@ -1208,7 +1208,7 @@ uno::Sequence< uno::Sequence< uno::Any > >  Shape::resolveRelationshipsOfType(co
     core::RelationsRef xRels = rFilter.importRelations( sFragment );
     if ( xRels )
     {
-        core::RelationsRef xImageRels = xRels->getRelationsFromTypeFromOfficeDoc( sType );
+        core::RelationsRef xImageRels = xRels->getRelationsFromType( sType );
         if ( xImageRels )
         {
             xRelListTemp.realloc( xImageRels->size() );
