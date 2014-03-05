@@ -1048,7 +1048,7 @@ MSWordSections::MSWordSections( MSWordExportBase& rExport )
         pSet = &pTblNd->GetTable().GetFrmFmt()->GetAttrSet();
         pNd = pTblNd;
     }
-    else if ( 0 != ( pSectNd = pNd->FindSectionNode() ) )
+    else if (pNd && 0 != ( pSectNd = pNd->FindSectionNode() ))
     {
         if ( TOX_HEADER_SECTION == pSectNd->GetSection().GetType() &&
              pSectNd->StartOfSectionNode()->IsSectionNode() )
