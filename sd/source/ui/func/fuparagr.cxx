@@ -91,28 +91,28 @@ void FuParagraph::DoExecute( SfxRequest& rReq )
 
         SdAbstractDialogFactory* pFact = SdAbstractDialogFactory::Create();
         SfxAbstractTabDialog* pDlg = pFact ? pFact->CreateSdParagraphTabDlg(NULL, &aNewAttr ) : 0;
-        if( pDlg )
+        if (!pDlg)
+            return;
+
+        sal_uInt16 nResult = pDlg->Execute();
+
+        switch( nResult )
         {
-            sal_uInt16 nResult = pDlg->Execute();
-
-            switch( nResult )
+            case RET_OK:
             {
-                case RET_OK:
-                {
-                    rReq.Done( *( pDlg->GetOutputItemSet() ) );
+                rReq.Done( *( pDlg->GetOutputItemSet() ) );
 
-                    pArgs = rReq.GetArgs();
-                }
-                break;
-
-                default:
-                {
-                    delete pDlg;
-                }
-                return; // Cancel
+                pArgs = rReq.GetArgs();
             }
-            delete( pDlg );
+            break;
+
+            default:
+            {
+                delete pDlg;
+            }
+            return; // Cancel
         }
+        delete( pDlg );
     }
     mpView->SetAttributes( *pArgs );
 
