@@ -3183,7 +3183,7 @@ public:
     cl_mem GetResultBuffer(void) const { return mpResClmem; }
 
 private:
-    void TraverseAST(FormulaTreeNodeRef);
+
     FormulaTreeNodeRef mpRoot;
     SymbolTable mSyms;
     std::string mKernelSignature, mKernelHash;
