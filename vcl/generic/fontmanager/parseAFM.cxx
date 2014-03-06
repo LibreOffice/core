@@ -654,8 +654,8 @@ static int parseCharWidths( FileInputStream* fp, int* cwi)
                     keyword = token(fp,tokenlen); keyword = token(fp,tokenlen);
                     break;
                 case VVECTOR:
-                    keyword = token(fp,tokenlen);
-                    keyword = token(fp,tokenlen);
+                    token(fp,tokenlen); /*eat token*/
+                    token(fp,tokenlen); /*eat token*/
                     break;
                 case NOPE:
                 default:
