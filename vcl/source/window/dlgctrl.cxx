@@ -1142,7 +1142,7 @@ static Window* ImplGetLabelFor( Window* pFrameWindow, WindowType nMyType, Window
         bool bThisIsAGroupControl = (nMyType == WINDOW_GROUPBOX) || (nMyType == WINDOW_FIXEDLINE);
         // get index, form start and form end
         sal_uInt16 nIndex=0, nFormStart=0, nFormEnd=0;
-        Window* pSWindow = ::ImplFindDlgCtrlWindow( pFrameWindow,
+        ::ImplFindDlgCtrlWindow( pFrameWindow,
                                            pLabel,
                                            nIndex,
                                            nFormStart,
@@ -1164,7 +1164,7 @@ static Window* ImplGetLabelFor( Window* pFrameWindow, WindowType nMyType, Window
             while( nIndex < nFormEnd )
             {
                 nIndex++;
-                pSWindow = ::ImplGetChildWindow( pFrameWindow,
+                Window* pSWindow = ::ImplGetChildWindow( pFrameWindow,
                                                  nIndex,
                                                  nIndex,
                                                  false );
