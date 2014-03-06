@@ -333,7 +333,7 @@ class DummyText : public DummyXShape
 public:
     DummyText(const OUString& rText, const tNameSequence& rNames,
             const tAnySequence& rValues, const uno::Any& rTrans, com::sun::star::uno::Reference<
-            com::sun::star::drawing::XShapes > xTarget);
+            com::sun::star::drawing::XShapes > xTarget, double nRotation);
 
     virtual void render() SAL_OVERRIDE;
 

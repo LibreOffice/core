@@ -1318,12 +1318,6 @@ int OpenGLRender::CreateTextTexture(const BitmapEx& rBitmapEx, const awt::Point&
     aTextInfo.bmpWidth = bmpWidth;
     aTextInfo.bmpHeight = bmpHeight;
 
-    //if has ratotion, we must re caculate the central pos
-    if (!rtl::math::approxEqual(0, rotation))
-    {
-        // handle rotation
-    }
-
     CHECK_GL_ERROR();
     glGenTextures(1, &aTextInfo.texture);
     CHECK_GL_ERROR();
@@ -1353,7 +1347,11 @@ int OpenGLRender::RenderTextShape()
     {
         TextInfo &textInfo = m_TextInfoList.front();
         PosVecf3 trans = { (float)-textInfo.bmpWidth/2.0f, (float)-textInfo.bmpHeight/2.0f, 0};
-        PosVecf3 angle = {0.0f, 0.0f, float(textInfo.rotation)};
+        if(0.0 != textInfo.rotation)
+        {
+            SAL_WARN("chart2.opengl", "rotation: " << textInfo.rotation);
+        }
+        PosVecf3 angle = {0.0f, float(textInfo.rotation), float(textInfo.rotation)};
         PosVecf3 scale = {1.0, 1.0, 1.0f};
         MoveModelf(trans, angle, scale);
         m_MVP = m_Projection * m_View * m_Model;

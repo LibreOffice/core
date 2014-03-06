@@ -784,9 +784,10 @@ private:
 }
 
 DummyText::DummyText(const OUString& rText, const tNameSequence& rNames,
-        const tAnySequence& rValues, const uno::Any& rTrans, uno::Reference< drawing::XShapes > xTarget ):
+        const tAnySequence& rValues, const uno::Any& rTrans, uno::Reference< drawing::XShapes > xTarget, double nRotation ):
     maText(rText),
-    maTrans(rTrans)
+    maTrans(rTrans),
+    mnRotation(nRotation)
 {
     setProperties(rNames, rValues, maProperties);
 
@@ -857,8 +858,8 @@ void DummyText::render()
     {
         aTransformation = maTrans.get<drawing::HomogenMatrix3>();
     }
-    pChart->m_GLRender.CreateTextTexture(maBitmap, maPosition, maSize, 0,
-            aTransformation);
+    pChart->m_GLRender.CreateTextTexture(maBitmap, maPosition, maSize,
+            mnRotation, aTransformation);
     pChart->m_GLRender.RenderTextShape();
 }
 
