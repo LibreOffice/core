@@ -1196,7 +1196,6 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, PropertyMapPtr rContext, SprmType
         break;  // sprmPDxaFromText
     case NS_ooxml::LN_CT_FramePr_anchorLock:
         break;
-    case NS_sprm::LN_PFWidowControl:
     case NS_ooxml::LN_CT_PPrBase_widowControl:
     {
         uno::Any aVal( uno::makeAny( sal_Int8(nIntValue ? 2 : 0 )));

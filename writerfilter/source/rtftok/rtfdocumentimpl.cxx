@@ -2546,7 +2546,7 @@ int RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
         case RTF_NOWIDCTLPAR:
             {
                 RTFValue::Pointer_t pValue(new RTFValue(int(nKeyword == RTF_WIDCTLPAR)));
-                m_aStates.top().aParagraphSprms.set(NS_sprm::LN_PFWidowControl, pValue);
+                m_aStates.top().aParagraphSprms.set(NS_ooxml::LN_CT_PPrBase_widowControl, pValue);
             }
             break;
         case RTF_BOX:
