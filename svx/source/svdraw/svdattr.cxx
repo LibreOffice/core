@@ -1387,7 +1387,7 @@ SfxItemPresentation SdrTextAniAmountItem::GetPresentation(
 }
 
 TYPEINIT1_AUTOFACTORY( SdrTextFixedCellHeightItem, SfxBoolItem );
-SdrTextFixedCellHeightItem::SdrTextFixedCellHeightItem( sal_Bool bUseFixedCellHeight )
+SdrTextFixedCellHeightItem::SdrTextFixedCellHeightItem( bool bUseFixedCellHeight )
     : SfxBoolItem( SDRATTR_TEXT_USEFIXEDCELLHEIGHT, bUseFixedCellHeight )
 {
 }

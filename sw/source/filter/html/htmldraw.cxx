@@ -389,8 +389,8 @@ void SwHTMLParser::NewMarquee( HTMLTable *pCurTable )
                               EE_CHAR_START,      EE_CHAR_END,
                               0 };
     SfxItemSet aItemSet( pModel->GetItemPool(), aWhichMap );
-    aItemSet.Put( SdrTextAutoGrowWidthItem( sal_False ) );
-    aItemSet.Put( SdrTextAutoGrowHeightItem( sal_True ) );
+    aItemSet.Put( SdrTextAutoGrowWidthItem( false ) );
+    aItemSet.Put( SdrTextAutoGrowHeightItem( true ) );
     aItemSet.Put( SdrTextAniKindItem( eAniKind ) );
     aItemSet.Put( SdrTextAniDirectionItem( eAniDir ) );
     aItemSet.Put( SdrTextAniCountItem( nCount ) );
@@ -399,8 +399,8 @@ void SwHTMLParser::NewMarquee( HTMLTable *pCurTable )
     if( SDRTEXTANI_ALTERNATE==eAniKind )
     {
         // (Nur) Alternate startet und stoppt per default Inside
-        aItemSet.Put( SdrTextAniStartInsideItem(sal_True) );
-        aItemSet.Put( SdrTextAniStopInsideItem(sal_True) );
+        aItemSet.Put( SdrTextAniStartInsideItem(true) );
+        aItemSet.Put( SdrTextAniStopInsideItem(true) );
         if( SDRTEXTANI_LEFT==eAniDir )
             aItemSet.Put( SdrTextHorzAdjustItem(SDRTEXTHORZADJUST_RIGHT) );
     }

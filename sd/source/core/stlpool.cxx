@@ -263,7 +263,7 @@ void SdStyleSheetPool::CreateLayoutStyleSheets(const OUString& rLayoutName, sal_
                 rSet.Put( XLineStyleItem(XLINE_NONE) );
                 rSet.Put( XFillStyleItem(XFILL_NONE) );
                 rSet.Put( SdrTextFitToSizeTypeItem(SDRTEXTFIT_AUTOFIT) );
-                rSet.Put( SdrTextAutoGrowHeightItem(sal_False) );
+                rSet.Put( SdrTextAutoGrowHeightItem(false) );
                 // #i16874# enable kerning by default but only for new documents
                 rSet.Put( SvxAutoKernItem( true, EE_CHAR_PAIRKERNING ) );
 
@@ -491,7 +491,7 @@ void SdStyleSheetPool::CreateLayoutStyleSheets(const OUString& rLayoutName, sal_
         pSheet->SetHelpId( aHelpFile, HID_PSEUDOSHEET_BACKGROUNDOBJECTS );
         pSheet->SetParent( OUString() );
         SfxItemSet& rBackgroundObjectsSet = pSheet->GetItemSet();
-        rBackgroundObjectsSet.Put(SdrShadowItem(sal_False));
+        rBackgroundObjectsSet.Put(SdrShadowItem(false));
         rBackgroundObjectsSet.Put(SdrShadowColorItem(Color(COL_GRAY)));
         rBackgroundObjectsSet.Put(SdrShadowXDistItem(200)); // 3 mm shadow distance
         rBackgroundObjectsSet.Put(SdrShadowYDistItem(200));

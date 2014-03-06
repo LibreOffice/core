@@ -506,7 +506,7 @@ bool FuText::MouseButtonUp(const MouseEvent& rMEvt)
 
                         pText->SetVerticalWriting(sal_True);
 
-                        aSet.Put(SdrTextAutoGrowWidthItem(sal_True));
+                        aSet.Put(SdrTextAutoGrowWidthItem(true));
                         aSet.Put(SdrTextAutoGrowHeightItem(false));
                         aSet.Put(SdrTextVertAdjustItem(SDRTEXTVERTADJUST_TOP));
                         aSet.Put(SdrTextHorzAdjustItem(SDRTEXTHORZADJUST_RIGHT));
@@ -823,7 +823,7 @@ SdrObject* FuText::CreateDefaultObject(const sal_uInt16 nID, const Rectangle& rR
             {
                 SfxItemSet aSet(pDrDoc->GetItemPool());
 
-                aSet.Put(SdrTextAutoGrowWidthItem(sal_True));
+                aSet.Put(SdrTextAutoGrowWidthItem(true));
                 aSet.Put(SdrTextAutoGrowHeightItem(false));
                 aSet.Put(SdrTextVertAdjustItem(SDRTEXTVERTADJUST_TOP));
                 aSet.Put(SdrTextHorzAdjustItem(SDRTEXTHORZADJUST_RIGHT));

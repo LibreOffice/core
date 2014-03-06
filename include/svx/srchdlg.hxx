@@ -132,8 +132,8 @@ public:
     const SearchAttrItemList*   GetReplaceItemList() const
                                     { return pReplaceList; }
 
-    inline sal_Bool     HasSearchAttributes() const;
-    inline sal_Bool     HasReplaceAttributes() const;
+    inline bool     HasSearchAttributes() const;
+    inline bool     HasReplaceAttributes() const;
 
     PushButton&     GetReplaceBtn() { return *m_pReplaceBtn; }
 
@@ -141,8 +141,8 @@ public:
 
     void SetDocWin( Window* pDocWin ) { mpDocWin = pDocWin; }
     Window* GetDocWin() { return mpDocWin; }
-    void SetSrchFlag( sal_Bool bSuccess = sal_False ) { mbSuccess = bSuccess; }
-    sal_Bool GetSrchFlag() { return mbSuccess; }
+    void SetSrchFlag( bool bSuccess = false ) { mbSuccess = bSuccess; }
+    bool GetSrchFlag() { return mbSuccess; }
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer >
         GetComponentInterface( sal_Bool bCreate );
 
@@ -152,7 +152,7 @@ public:
 
 private:
     Window*         mpDocWin;
-    sal_Bool        mbSuccess;
+    bool            mbSuccess;
 
     VclFrame*       m_pSearchFrame;
     ComboBox*       m_pSearchLB;
@@ -203,9 +203,9 @@ private:
     CheckBox*       m_pAllSheetsCB;
 
     SfxBindings&    rBindings;
-    sal_Bool            bWriter;
-    sal_Bool            bSearch;
-    sal_Bool            bFormat;
+    bool            bWriter;
+    bool            bSearch;
+    bool            bFormat;
     sal_uInt16          nOptions;
     bool            bSet;
     bool            bReadOnly;
@@ -250,9 +250,9 @@ private:
     void            Init_Impl( bool bHasItemSet );
     void            InitAttrList_Impl( const SfxItemSet* pSSet,
                                        const SfxItemSet* pRSet );
-    void            Remember_Impl( const OUString &rStr,sal_Bool bSearch );
+    void            Remember_Impl( const OUString &rStr, bool bSearch );
     void            PaintAttrText_Impl();
-    OUString&       BuildAttrText_Impl( OUString& rStr, sal_Bool bSrchFlag ) const;
+    OUString&       BuildAttrText_Impl( OUString& rStr, bool bSrchFlag ) const;
 
     void            TemplatesChanged_Impl( SfxStyleSheetBasePool& rPool );
     void            EnableControls_Impl( const sal_uInt16 nFlags );
@@ -265,15 +265,15 @@ private:
     void            ApplyTransliterationFlags_Impl( sal_Int32 nSettings );
 };
 
-inline sal_Bool SvxSearchDialog::HasSearchAttributes() const
+inline bool SvxSearchDialog::HasSearchAttributes() const
 {
-    sal_Bool bLen = !m_pSearchAttrText->GetText().isEmpty();
+    bool bLen = !m_pSearchAttrText->GetText().isEmpty();
     return ( m_pSearchAttrText->IsEnabled() && bLen );
 }
 
-inline sal_Bool SvxSearchDialog::HasReplaceAttributes() const
+inline bool SvxSearchDialog::HasReplaceAttributes() const
 {
-    sal_Bool bLen = !m_pReplaceAttrText->GetText().isEmpty();
+    bool bLen = !m_pReplaceAttrText->GetText().isEmpty();
     return ( m_pReplaceAttrText->IsEnabled() && bLen );
 }
 

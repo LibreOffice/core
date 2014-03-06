@@ -843,10 +843,10 @@ SdrCaptionObj* ScNoteUtil::CreateTempCaption(
         ScCaptionUtil::SetDefaultItems( *pCaption, rDoc );
         // adjust caption size to text size
         long nMaxWidth = ::std::min< long >( aVisRect.GetWidth() * 2 / 3, SC_NOTECAPTION_MAXWIDTH_TEMP );
-        pCaption->SetMergedItem( SdrTextAutoGrowWidthItem( sal_True ) );
+        pCaption->SetMergedItem( SdrTextAutoGrowWidthItem( true ) );
         pCaption->SetMergedItem( SdrTextMinFrameWidthItem( SC_NOTECAPTION_WIDTH ) );
         pCaption->SetMergedItem( SdrTextMaxFrameWidthItem( nMaxWidth ) );
-        pCaption->SetMergedItem( SdrTextAutoGrowHeightItem( sal_True ) );
+        pCaption->SetMergedItem( SdrTextAutoGrowHeightItem( true ) );
         pCaption->AdjustTextFrameWidthAndHeight();
     }
 

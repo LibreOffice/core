@@ -1543,7 +1543,7 @@ void SdrEditView::ImpDismantleOneObject(const SdrObject* pObj, SdrObjList& rOL, 
                 {
                     if(pReplacement->ISA(SdrObjGroup))
                     {
-                        pCandidate->SetMergedItem(SdrShadowItem(sal_True));
+                        pCandidate->SetMergedItem(SdrShadowItem(true));
                     }
                 }
 

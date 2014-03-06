@@ -482,8 +482,8 @@ void FuConstructRectangle::SetAttributes(SfxItemSet& rAttr, SdrObject* pObj)
         Size aSize(pObj->GetLogicRect().GetSize());
         rAttr.Put( SdrTextMinFrameHeightItem( aSize.Height() ) );
         rAttr.Put( SdrTextMinFrameWidthItem( aSize.Width() ) );
-        rAttr.Put( SdrTextAutoGrowHeightItem( sal_True ) );
-        rAttr.Put( SdrTextAutoGrowWidthItem( sal_True ) );
+        rAttr.Put( SdrTextAutoGrowHeightItem( true ) );
+        rAttr.Put( SdrTextAutoGrowWidthItem( true ) );
 
         // Support full with for vertical caption objects, too
         if(SID_DRAW_CAPTION == nSlotId)

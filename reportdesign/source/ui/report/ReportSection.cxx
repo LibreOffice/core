@@ -679,7 +679,7 @@ void OReportSection::createDefault(const OUString& _sType,SdrObject* _pObj)
         _pObj->SetMergedItem( SvxAdjustItem( SVX_ADJUST_CENTER ,ITEMID_ADJUST) );
         _pObj->SetMergedItem( SdrTextVertAdjustItem( SDRTEXTVERTADJUST_CENTER ) );
         _pObj->SetMergedItem( SdrTextHorzAdjustItem( SDRTEXTHORZADJUST_BLOCK ) );
-        _pObj->SetMergedItem( SdrTextAutoGrowHeightItem( sal_False ) );
+        _pObj->SetMergedItem( SdrTextAutoGrowHeightItem( false ) );
         ((SdrObjCustomShape*)_pObj)->MergeDefaultAttributes( &_sType );
     }
 }

@@ -279,7 +279,7 @@ SdrObject* ImpCreateShadowObjectClone(const SdrObject& rOriginal, const SfxItemS
         aTempSet.Put( SvxWritingModeItem( com::sun::star::text::WritingMode_LR_TB, SDRATTR_TEXTDIRECTION ) );
 
         // no shadow
-        aTempSet.Put(SdrShadowItem(sal_False));
+        aTempSet.Put(SdrShadowItem(false));
         aTempSet.Put(SdrShadowXDistItem(0L));
         aTempSet.Put(SdrShadowYDistItem(0L));
 
@@ -2886,7 +2886,7 @@ SdrObject* SdrObjCustomShape::DoConvertToPolyObj(sal_Bool bBezier, bool bAddText
             const sal_Bool bShadow(((SdrShadowItem&)GetMergedItem(SDRATTR_SHADOW)).GetValue());
             if(bShadow)
             {
-                pRetval->SetMergedItem(SdrShadowItem(sal_True));
+                pRetval->SetMergedItem(SdrShadowItem(true));
             }
         }
 

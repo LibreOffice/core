@@ -709,7 +709,7 @@ void SdrEscherImport::RecolorGraphic( SvStream& rSt, sal_uInt32 nRecLen, Graphic
 SdrObject* SdrEscherImport::ProcessObj( SvStream& rSt, DffObjData& rObjData, void* pData, Rectangle& rTextRect, SdrObject* pOriginalObj )
 {
     if ( pOriginalObj && pOriginalObj->ISA( SdrObjCustomShape ) )
-        pOriginalObj->SetMergedItem( SdrTextFixedCellHeightItem( sal_True ) );
+        pOriginalObj->SetMergedItem( SdrTextFixedCellHeightItem( true ) );
 
     // we are initializing our return value with the object that was imported by our escher import
     SdrObject* pRet = pOriginalObj;
@@ -1096,7 +1096,7 @@ SdrObject* SdrEscherImport::ProcessObj( SvStream& rSt, DffObjData& rObjData, voi
             pTObj->SetMergedItem( SdrTextRightDistItem( nTextRight ) );
             pTObj->SetMergedItem( SdrTextUpperDistItem( nTextTop ) );
             pTObj->SetMergedItem( SdrTextLowerDistItem( nTextBottom ) );
-            pTObj->SetMergedItem( SdrTextFixedCellHeightItem( sal_True ) );
+            pTObj->SetMergedItem( SdrTextFixedCellHeightItem( true ) );
 
             if ( !pTObj->ISA( SdrObjCustomShape ) )
                 pTObj->SetSnapRect( rTextRect );
@@ -6153,7 +6153,7 @@ void PPTParagraphObj::ApplyTo( SfxItemSet& rSet,  boost::optional< sal_Int16 >& 
             pPortion->GetAttrib( PPT_CharAttr_FontHeight, nFontHeight, nDestinationInstance );
             nVal2 = -(sal_Int16)( ( nFontHeight * nVal * 8 ) / 100 );
         }
-        rSet.Put( SdrTextFixedCellHeightItem( sal_True ), SDRATTR_TEXT_USEFIXEDCELLHEIGHT );
+        rSet.Put( SdrTextFixedCellHeightItem( true ), SDRATTR_TEXT_USEFIXEDCELLHEIGHT );
         SvxLineSpacingItem aItem( 200, EE_PARA_SBL );
         if ( nVal2 <= 0 ) {
             aItem.SetLineHeight( (sal_uInt16)( rManager.ScalePoint( -nVal2 ) / 8 ) );

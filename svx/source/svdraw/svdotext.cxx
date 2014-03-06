@@ -553,7 +553,7 @@ bool SdrTextObj::NbcSetMinTextFrameHeight(long nHgt)
         if(IsVerticalWriting() && bDisableAutoWidthOnDragging)
         {
             bDisableAutoWidthOnDragging = sal_False;
-            SetObjectItem(SdrTextAutoGrowHeightItem(sal_False));
+            SetObjectItem(SdrTextAutoGrowHeightItem(false));
         }
 
         return true;
@@ -572,7 +572,7 @@ bool SdrTextObj::NbcSetMinTextFrameWidth(long nWdt)
         if(!IsVerticalWriting() && bDisableAutoWidthOnDragging)
         {
             bDisableAutoWidthOnDragging = sal_False;
-            SetObjectItem(SdrTextAutoGrowWidthItem(sal_False));
+            SetObjectItem(SdrTextAutoGrowWidthItem(false));
         }
 
         return true;
@@ -615,7 +615,7 @@ void SdrTextObj::ImpSetContourPolygon( SdrOutliner& rOutliner, Rectangle& rAncho
         {
             // force shadow off
             SdrObject* pCopy = Clone();
-            pCopy->SetMergedItem(SdrShadowItem(sal_False));
+            pCopy->SetMergedItem(SdrShadowItem(false));
             *pContourPolyPolygon = pCopy->TakeContour();
             SdrObject::Free( pCopy );
         }

@@ -263,7 +263,7 @@ void FuConstructCustomShape::SetAttributes( SdrObject* pObj )
         pObj->SetMergedItem( SvxAdjustItem( SVX_ADJUST_CENTER, EE_PARA_JUST ) );
         pObj->SetMergedItem( SdrTextVertAdjustItem( SDRTEXTVERTADJUST_CENTER ) );
         pObj->SetMergedItem( SdrTextHorzAdjustItem( SDRTEXTHORZADJUST_BLOCK ) );
-        pObj->SetMergedItem( SdrTextAutoGrowHeightItem( sal_False ) );
+        pObj->SetMergedItem( SdrTextAutoGrowHeightItem( false ) );
         ((SdrObjCustomShape*)pObj)->MergeDefaultAttributes( &aCustomShape );
     }
 }

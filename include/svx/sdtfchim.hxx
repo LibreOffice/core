@@ -26,7 +26,7 @@ class SVX_DLLPUBLIC SdrTextFixedCellHeightItem : public SfxBoolItem
 public:
 
     TYPEINFO();
-    SdrTextFixedCellHeightItem( sal_Bool bUseFixedCellHeight = sal_False );
+    SdrTextFixedCellHeightItem( bool bUseFixedCellHeight = false );
     SVX_DLLPRIVATE SdrTextFixedCellHeightItem( SvStream & rStream, sal_uInt16 nVersion );
 
     SVX_DLLPRIVATE virtual SfxItemPresentation GetPresentation(SfxItemPresentation ePresentation,

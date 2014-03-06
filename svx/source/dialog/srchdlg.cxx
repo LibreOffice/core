@@ -105,7 +105,7 @@ namespace
 
 struct SearchDlg_Impl
 {
-    sal_Bool    bSaveToModule  : 1,
+    bool        bSaveToModule  : 1,
                 bFocusOnSearch : 1;
     sal_uInt16* pRanges;
     Timer       aSelectionTimer;
@@ -546,7 +546,7 @@ void SvxSearchDialog::SetSaveToModule(bool b)
 void SvxSearchDialog::ApplyTransliterationFlags_Impl( sal_Int32 nSettings )
 {
     nTransliterationFlags = nSettings;
-    sal_Bool bVal = 0 != (nSettings & TransliterationModules_IGNORE_CASE);
+    bool bVal = 0 != (nSettings & TransliterationModules_IGNORE_CASE);
     m_pMatchCaseCB->Check(!bVal );
     bVal = 0 != (nSettings & TransliterationModules_IGNORE_WIDTH);
     m_pJapMatchFullHalfWidthCB->Check( !bVal );
@@ -849,7 +849,7 @@ void SvxSearchDialog::Init_Impl( bool bSearchPattern )
 
     if ( pViewShell )
     {
-        sal_Bool bText = !bSearchPattern;
+        bool bText = !bSearchPattern;
 
         if ( pViewShell->HasSelection( bText ) )
             EnableControl_Impl(m_pSelectionBtn);
@@ -984,9 +984,9 @@ void SvxSearchDialog::Init_Impl( bool bSearchPattern )
 
     if ( m_pLayoutBtn->IsChecked() )
     {
-        pImpl->bSaveToModule = sal_False;
+        pImpl->bSaveToModule = false;
         TemplateHdl_Impl(m_pLayoutBtn);
-        pImpl->bSaveToModule = sal_True;
+        pImpl->bSaveToModule = true;
     }
 }
 
@@ -1026,10 +1026,10 @@ void SvxSearchDialog::InitAttrList_Impl( const SfxItemSet* pSSet,
         {
             pSearchList->Put( *pSSet );
 
-            m_pSearchAttrText->SetText( BuildAttrText_Impl( aDesc, sal_True ) );
+            m_pSearchAttrText->SetText( BuildAttrText_Impl( aDesc, true ) );
 
             if ( !aDesc.isEmpty() )
-                bFormat |= sal_True;
+                bFormat |= true;
         }
     }
 
@@ -1042,10 +1042,10 @@ void SvxSearchDialog::InitAttrList_Impl( const SfxItemSet* pSSet,
         {
             pReplaceList->Put( *pRSet );
 
-            m_pReplaceAttrText->SetText( BuildAttrText_Impl( aDesc, sal_False ) );
+            m_pReplaceAttrText->SetText( BuildAttrText_Impl( aDesc, false ) );
 
             if ( !aDesc.isEmpty() )
-                bFormat |= sal_True;
+                bFormat |= true;
         }
     }
 }
@@ -1061,7 +1061,7 @@ IMPL_LINK( SvxSearchDialog, FlagHdl_Impl, Control *, pCtrl )
 
     if (pCtrl == m_pSimilarityBox)
     {
-        sal_Bool bIsChecked = m_pSimilarityBox->IsChecked();
+        bool bIsChecked = m_pSimilarityBox->IsChecked();
 
         if ( bIsChecked )
         {
@@ -1159,7 +1159,7 @@ IMPL_LINK( SvxSearchDialog, FlagHdl_Impl, Control *, pCtrl )
 
     if (m_pJapOptionsCB == pCtrl)
     {
-        sal_Bool bEnableJapOpt = m_pJapOptionsCB->IsChecked();
+        bool bEnableJapOpt = m_pJapOptionsCB->IsChecked();
         m_pMatchCaseCB->Enable(!bEnableJapOpt );
         m_pJapMatchFullHalfWidthCB->Enable(!bEnableJapOpt );
         m_pJapOptionsBtn->Enable( bEnableJapOpt );
@@ -1192,13 +1192,13 @@ IMPL_LINK( SvxSearchDialog, CommandHdl_Impl, Button *, pBtn )
             pSearchItem->SetReplaceString( m_pReplaceLB->GetText() );
 
             if ( pBtn == m_pReplaceBtn )
-                Remember_Impl( m_pReplaceLB->GetText(), sal_False );
+                Remember_Impl( m_pReplaceLB->GetText(), false );
             else
             {
-                Remember_Impl( m_pSearchLB->GetText(), sal_True );
+                Remember_Impl( m_pSearchLB->GetText(), true );
 
                 if ( pBtn == m_pReplaceAllBtn )
-                    Remember_Impl( m_pReplaceLB->GetText(), sal_False );
+                    Remember_Impl( m_pReplaceLB->GetText(), false );
             }
         }
 
@@ -1261,11 +1261,11 @@ IMPL_LINK( SvxSearchDialog, CommandHdl_Impl, Button *, pBtn )
             OUString aStr( m_pSearchLB->GetText() );
 
             if ( !aStr.isEmpty() )
-                Remember_Impl( aStr, sal_True );
+                Remember_Impl( aStr, true );
             aStr = m_pReplaceLB->GetText();
 
             if ( !aStr.isEmpty() )
-                Remember_Impl( aStr, sal_False );
+                Remember_Impl( aStr, false );
         }
         SaveToModule_Impl();
         Close();
@@ -1449,8 +1449,8 @@ IMPL_LINK_NOARG(SvxSearchDialog, TemplateHdl_Impl)
         m_pSearchTmplLB->Hide();
         m_pReplaceTmplLB->Hide();
 
-        m_pSearchAttrText->SetText( BuildAttrText_Impl( sDesc, sal_True ) );
-        m_pReplaceAttrText->SetText( BuildAttrText_Impl( sDesc, sal_False ) );
+        m_pSearchAttrText->SetText( BuildAttrText_Impl( sDesc, true ) );
+        m_pReplaceAttrText->SetText( BuildAttrText_Impl( sDesc, false ) );
 
         EnableControl_Impl(m_pFormatBtn);
         EnableControl_Impl(m_pAttributeBtn);
@@ -1459,15 +1459,15 @@ IMPL_LINK_NOARG(SvxSearchDialog, TemplateHdl_Impl)
         FocusHdl_Impl( bSearch ? m_pSearchLB : m_pReplaceLB );
     }
     bSet = true;
-    pImpl->bSaveToModule = sal_False;
+    pImpl->bSaveToModule = false;
     FlagHdl_Impl(m_pLayoutBtn);
-    pImpl->bSaveToModule = sal_True;
+    pImpl->bSaveToModule = true;
     return 0;
 }
 
 
 
-void SvxSearchDialog::Remember_Impl( const OUString &rStr, sal_Bool _bSearch )
+void SvxSearchDialog::Remember_Impl( const OUString &rStr, bool _bSearch )
 {
     if ( rStr.isEmpty() )
         return;
@@ -1555,7 +1555,7 @@ void SvxSearchDialog::EnableControls_Impl( const sal_uInt16 nFlags )
         Show();
     bool bNoSearch = true;
 
-    sal_Bool bEnableSearch = ( SEARCH_OPTIONS_SEARCH & nOptions ) != 0;
+    bool bEnableSearch = ( SEARCH_OPTIONS_SEARCH & nOptions ) != 0;
     m_pSearchBtn->Enable(bEnableSearch);
 
     if( bEnableSearch )
@@ -1762,9 +1762,9 @@ IMPL_LINK( SvxSearchDialog, FocusHdl_Impl, Control *, pCtrl )
     if ( pCtrl == m_pSearchLB )
     {
         if ( pCtrl->HasChildPathFocus() )
-            pImpl->bFocusOnSearch = sal_True;
+            pImpl->bFocusOnSearch = true;
         pCtrl = m_pSearchLB;
-        bSearch = sal_True;
+        bSearch = true;
 
         if( nTxtLen )
             EnableControl_Impl(m_pNoFormatBtn);
@@ -1774,9 +1774,9 @@ IMPL_LINK( SvxSearchDialog, FocusHdl_Impl, Control *, pCtrl )
     }
     else
     {
-        pImpl->bFocusOnSearch = sal_False;
+        pImpl->bFocusOnSearch = false;
         pCtrl = m_pReplaceLB;
-        bSearch = sal_False;
+        bSearch = false;
 
         if (!m_pReplaceAttrText->GetText().isEmpty())
             EnableControl_Impl(m_pNoFormatBtn);
@@ -1939,7 +1939,7 @@ IMPL_LINK_NOARG(SvxSearchDialog, NoFormatHdl_Impl)
             m_pLayoutBtn->SetText( aStylesStr );
     }
 
-    bFormat = sal_False;
+    bFormat = false;
     m_pLayoutBtn->Check( false );
 
     if ( bSearch )
@@ -1952,9 +1952,9 @@ IMPL_LINK_NOARG(SvxSearchDialog, NoFormatHdl_Impl)
         m_pReplaceAttrText->SetText( "" );
         pReplaceList->Clear();
     }
-    pImpl->bSaveToModule = sal_False;
+    pImpl->bSaveToModule = false;
     TemplateHdl_Impl(m_pLayoutBtn);
-    pImpl->bSaveToModule = sal_True;
+    pImpl->bSaveToModule = true;
     m_pNoFormatBtn->Disable();
     return 0;
 }
@@ -2002,7 +2002,7 @@ IMPL_LINK( SvxSearchDialog, TimeoutHdl_Impl, Timer *, pTimer )
 
 
 OUString& SvxSearchDialog::BuildAttrText_Impl( OUString& rStr,
-                                             sal_Bool bSrchFlag ) const
+                                             bool bSrchFlag ) const
 {
     if ( !rStr.isEmpty() )
         rStr = "";
@@ -2078,7 +2078,7 @@ void SvxSearchDialog::PaintAttrText_Impl()
     BuildAttrText_Impl( aDesc, bSearch );
 
     if ( !bFormat && !aDesc.isEmpty() )
-        bFormat = sal_True;
+        bFormat = true;
 
     if ( bSearch )
     {
@@ -2146,7 +2146,7 @@ void SvxSearchDialog::SaveToModule_Impl()
     {
         pSearchItem->SetSearchString ( m_pSearchLB->GetText() );
         pSearchItem->SetReplaceString( m_pReplaceLB->GetText() );
-        Remember_Impl( m_pSearchLB->GetText(), sal_True );
+        Remember_Impl( m_pSearchLB->GetText(), true );
     }
 
     pSearchItem->SetRegExp( false );
@@ -2241,7 +2241,7 @@ SvxSearchDialog *SvxSearchDialogWrapper::getDialog ()
 SfxChildWinInfo SvxSearchDialogWrapper::GetInfo() const
 {
     SfxChildWinInfo aInfo = SfxChildWindow::GetInfo();
-    aInfo.bVisible = sal_False;
+    aInfo.bVisible = false;
     return aInfo;
 }
 

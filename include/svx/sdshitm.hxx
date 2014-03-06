@@ -27,7 +27,7 @@
  */
 class SdrShadowItem: public SdrOnOffItem {
 public:
-    SdrShadowItem(sal_Bool bShadow=sal_False): SdrOnOffItem(SDRATTR_SHADOW, bShadow) {}
+    SdrShadowItem(bool bShadow=false): SdrOnOffItem(SDRATTR_SHADOW, bShadow) {}
     SdrShadowItem(SvStream& rIn):      SdrOnOffItem(SDRATTR_SHADOW, rIn)     {}
 };
 

@@ -174,7 +174,7 @@ void SdDrawDocument::CreateLayoutTemplates()
     rISet.Put(XFillBitmapItem(pPool, Graphic(aNullBmp)));
 
                     // Shadow attributes (Drawing Engine)
-    rISet.Put(SdrShadowItem(sal_False));
+    rISet.Put(SdrShadowItem(false));
     rISet.Put(SdrShadowColorItem(RGB_Color(COL_GRAY)));
     rISet.Put(SdrShadowXDistItem(200));         // 3 mm Shadow distance
     rISet.Put(SdrShadowYDistItem(200));
@@ -282,7 +282,7 @@ void SdDrawDocument::CreateLayoutTemplates()
     pSheet->SetHelpId( aHelpFile, HID_POOLSHEET_OBJWITHSHADOW );
     pISet = &pSheet->GetItemSet();
 
-    pISet->Put(SdrShadowItem(sal_True));
+    pISet->Put(SdrShadowItem(true));
     pISet->Put(SdrShadowColorItem(RGB_Color(COL_GRAY)));
     pISet->Put(SdrShadowXDistItem(200));        // 3 mm shadow distance
     pISet->Put(SdrShadowYDistItem(200));
@@ -381,7 +381,7 @@ void SdDrawDocument::CreateLayoutTemplates()
     pISet->Put(XFillStyleItem(XFILL_SOLID));
     pISet->Put(XFillColorItem(OUString(), RGB_Color(COL_CYAN)));
 
-    pISet->Put(SdrShadowItem(sal_True));
+    pISet->Put(SdrShadowItem(true));
     pISet->Put(SdrShadowColorItem(RGB_Color(COL_GRAY)));
     pISet->Put(SdrShadowXDistItem(200));        // 2 mm shadow distance
     pISet->Put(SdrShadowYDistItem(200));
@@ -405,7 +405,7 @@ void SdDrawDocument::CreateLayoutTemplates()
     Color aOrange4(255, 204, 153);
     pISet->Put(XFillColorItem(OUString(), aOrange4));
 
-    pISet->Put(SdrShadowItem(sal_True));
+    pISet->Put(SdrShadowItem(true));
     pISet->Put(SdrShadowColorItem(RGB_Color(COL_GRAY)));
     pISet->Put(SdrShadowXDistItem(200));        // 2 mm shadow distance
     pISet->Put(SdrShadowYDistItem(200));

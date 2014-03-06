@@ -121,10 +121,10 @@ public:
     bool OutputToPrinter() const { return (OUTDEV_PRINTER == mrOutputDevice.GetOutDevType()); }
 
     // Is OutDev a window?
-    sal_Bool OutputToWindow() const { return (OUTDEV_WINDOW == mrOutputDevice.GetOutDevType()); }
+    bool OutputToWindow() const { return (OUTDEV_WINDOW == mrOutputDevice.GetOutDevType()); }
 
     // Is OutDev a VirtualDevice?
-    sal_Bool OutputToVirtualDevice() const { return (OUTDEV_VIRDEV == mrOutputDevice.GetOutDevType()); }
+    bool OutputToVirtualDevice() const { return (OUTDEV_VIRDEV == mrOutputDevice.GetOutDevType()); }
 
     // Is OutDev a recording MetaFile?
     bool OutputToRecordingMetaFile() const;

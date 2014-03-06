@@ -767,7 +767,7 @@ void XclImpDrawObjBase::ConvertFrameStyle( SdrObject& rSdrObj, sal_uInt16 nFrame
 {
     if( ::get_flag( nFrameFlags, EXC_OBJ_FRAME_SHADOW ) )
     {
-        rSdrObj.SetMergedItem( SdrShadowItem( sal_True ) );
+        rSdrObj.SetMergedItem( SdrShadowItem( true ) );
         rSdrObj.SetMergedItem( SdrShadowXDistItem( 35 ) );
         rSdrObj.SetMergedItem( SdrShadowYDistItem( 35 ) );
         rSdrObj.SetMergedItem( SdrShadowColorItem( GetPalette().GetColor( EXC_COLOR_WINDOWTEXT ) ) );

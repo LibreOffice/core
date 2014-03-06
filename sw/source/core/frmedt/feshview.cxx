@@ -2978,8 +2978,8 @@ long SwFEShell::GetSectionWidth( SwFmt& rFmt ) const
             if(bVertical)
             {
                 SfxItemSet aSet(pDrawModel->GetItemPool());
-                aSet.Put(SdrTextAutoGrowWidthItem(sal_True));
-                aSet.Put(SdrTextAutoGrowHeightItem(sal_False));
+                aSet.Put(SdrTextAutoGrowWidthItem(true));
+                aSet.Put(SdrTextAutoGrowHeightItem(false));
                 aSet.Put(SdrTextVertAdjustItem(SDRTEXTVERTADJUST_TOP));
                 aSet.Put(SdrTextHorzAdjustItem(SDRTEXTHORZADJUST_RIGHT));
                 pText->SetMergedItemSet(aSet);
@@ -2988,8 +2988,8 @@ long SwFEShell::GetSectionWidth( SwFmt& rFmt ) const
             if(bMarquee)
             {
                 SfxItemSet aSet(pDrawModel->GetItemPool(), SDRATTR_MISC_FIRST, SDRATTR_MISC_LAST);
-                aSet.Put( SdrTextAutoGrowWidthItem( sal_False ) );
-                aSet.Put( SdrTextAutoGrowHeightItem( sal_False ) );
+                aSet.Put( SdrTextAutoGrowWidthItem( false ) );
+                aSet.Put( SdrTextAutoGrowHeightItem( false ) );
                 aSet.Put( SdrTextAniKindItem( SDRTEXTANI_SLIDE ) );
                 aSet.Put( SdrTextAniDirectionItem( SDRTEXTANI_LEFT ) );
                 aSet.Put( SdrTextAniCountItem( 1 ) );
