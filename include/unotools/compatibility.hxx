@@ -137,7 +137,7 @@ class UNOTOOLS_DLLPUBLIC SvtCompatibilityOptions: public utl::detail::Options
 
         void Clear();
 
-        void SetDefault( OUString sName, bool bValue );
+        void SetDefault( const OUString & sName, bool bValue );
 
         /*-****************************************************************************************************
             @short      return complete specified list

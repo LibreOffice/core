@@ -52,7 +52,7 @@ namespace comphelper
 
 struct hashObjectName_Impl
 {
-    size_t operator()(const OUString Str) const
+    size_t operator()(const OUString & Str) const
     {
         return (size_t)Str.hashCode();
     }
@@ -60,7 +60,7 @@ struct hashObjectName_Impl
 
 struct eqObjectName_Impl
 {
-    bool operator()(const OUString Str1, const OUString Str2) const
+    bool operator()(const OUString & Str1, const OUString & Str2) const
     {
         return ( Str1 == Str2 );
     }

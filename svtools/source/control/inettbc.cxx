@@ -81,7 +81,7 @@ public:
     std::vector<OUString>      aCompletions;
     std::vector<WildCard>      m_aFilters;
 
-    static sal_Bool TildeParsing( OUString& aText, OUString& aBaseUrl );
+    static sal_Bool TildeParsing( const OUString& aText );
 
     inline SvtURLBox_Impl( )
     {
@@ -469,13 +469,13 @@ void SvtMatchContext_Impl::ReadFolder( const OUString& rURL,
 }
 
 
-OUString SvtURLBox::ParseSmart( OUString aText, OUString aBaseURL, const OUString& aWorkDir )
+OUString SvtURLBox::ParseSmart( const OUString& aText, const OUString& aBaseURL, const OUString& aWorkDir )
 {
     OUString aMatch;
 
     // parse ~ for Unix systems
     // does nothing for Windows
-    if( !SvtURLBox_Impl::TildeParsing( aText, aBaseURL ) )
+    if( !SvtURLBox_Impl::TildeParsing( aText ) )
         return OUString();
 
     if( !aBaseURL.isEmpty() )
@@ -1284,13 +1284,9 @@ void SvtURLBox::SetBaseURL( const OUString& rURL )
     does nothing for Windows
  */
 sal_Bool SvtURLBox_Impl::TildeParsing(
-    OUString&
+    const OUString&
 #ifdef UNX
     aText
-#endif
-    , OUString&
-#ifdef UNX
-    aBaseURL
 #endif
 )
 {
@@ -1368,8 +1364,6 @@ sal_Bool SvtURLBox_Impl::TildeParsing(
                 aParseTilde += aText.copy( 2 );
         }
 
-        aText = aParseTilde;
-        aBaseURL = ""; // tilde provide absolute path
     }
 #endif
 

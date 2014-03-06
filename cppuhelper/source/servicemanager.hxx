@@ -367,7 +367,7 @@ private:
         css::uno::Reference< css::lang::XServiceInfo > const & factoryInfo,
         bool removeListener);
 
-    void removeImplementation(rtl::OUString name);
+    void removeImplementation(const rtl::OUString & name);
 
     boost::shared_ptr< Data::Implementation > findServiceImplementation(
         css::uno::Reference< css::uno::XComponentContext > const & context,
