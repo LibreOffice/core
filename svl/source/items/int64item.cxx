@@ -16,7 +16,7 @@ SfxInt64Item::SfxInt64Item( sal_uInt16 nWhich, sal_Int64 nVal ) :
 }
 
 SfxInt64Item::SfxInt64Item( sal_uInt16 nWhich, SvStream& rStream ) :
-    SfxPoolItem(nWhich)
+    SfxPoolItem(nWhich), mnValue(0)
 {
     rStream.ReadInt64(mnValue);
 }
