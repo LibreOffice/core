@@ -370,43 +370,37 @@ FontSubstConfiguration::FontSubstConfiguration() :
         // get service provider
         Reference< XComponentContext > xContext( comphelper::getProcessComponentContext() );
         // create configuration hierachical access name
-        try
+        m_xConfigProvider = theDefaultProvider::get( xContext );
+        Sequence< Any > aArgs(1);
+        PropertyValue aVal;
+        aVal.Name = "nodepath";
+        aVal.Value <<= OUString( "/org.openoffice.VCL/FontSubstitutions" );
+        aArgs.getArray()[0] <<= aVal;
+        m_xConfigAccess =
+            Reference< XNameAccess >(
+                m_xConfigProvider->createInstanceWithArguments( OUString( "com.sun.star.configuration.ConfigurationAccess" ),
+                                                                aArgs ),
+                UNO_QUERY );
+        if( m_xConfigAccess.is() )
         {
-            m_xConfigProvider = theDefaultProvider::get( xContext );
-            Sequence< Any > aArgs(1);
-            PropertyValue aVal;
-            aVal.Name = "nodepath";
-            aVal.Value <<= OUString( "/org.openoffice.VCL/FontSubstitutions" );
-            aArgs.getArray()[0] <<= aVal;
-            m_xConfigAccess =
-                Reference< XNameAccess >(
-                    m_xConfigProvider->createInstanceWithArguments( OUString( "com.sun.star.configuration.ConfigurationAccess" ),
-                                                                    aArgs ),
-                    UNO_QUERY );
-            if( m_xConfigAccess.is() )
+            Sequence< OUString > aLocales = m_xConfigAccess->getElementNames();
+            // fill config hash with empty interfaces
+            int nLocales = aLocales.getLength();
+            const OUString* pLocaleStrings = aLocales.getConstArray();
+            for( int i = 0; i < nLocales; i++ )
             {
-                Sequence< OUString > aLocales = m_xConfigAccess->getElementNames();
-                // fill config hash with empty interfaces
-                int nLocales = aLocales.getLength();
-                const OUString* pLocaleStrings = aLocales.getConstArray();
-                for( int i = 0; i < nLocales; i++ )
-                {
-                    // Feed through LanguageTag for casing.
-                    OUString aLoc( LanguageTag( pLocaleStrings[i], true).getBcp47( false));
-                    m_aSubst[ aLoc ] = LocaleSubst();
-                    m_aSubst[ aLoc ].aConfigLocaleString = pLocaleStrings[i];
-                }
+                // Feed through LanguageTag for casing.
+                OUString aLoc( LanguageTag( pLocaleStrings[i], true).getBcp47( false));
+                m_aSubst[ aLoc ] = LocaleSubst();
+                m_aSubst[ aLoc ].aConfigLocaleString = pLocaleStrings[i];
             }
         }
-        catch (const Exception&)
-        {
-            // configuration is awry
-            m_xConfigProvider.clear();
-            m_xConfigAccess.clear();
-        }
     }
-    catch (const WrappedTargetException&)
+    catch (const Exception&)
     {
+        // configuration is awry
+        m_xConfigProvider.clear();
+        m_xConfigAccess.clear();
     }
     #if OSL_DEBUG_LEVEL > 1
     fprintf( stderr, "config provider: %s, config access: %s\n",
