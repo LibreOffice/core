@@ -56,6 +56,13 @@ bool ObjectContainer::hasObject( const OUString& rObjName ) const
     return mxContainer.is() && mxContainer->hasByName( rObjName );
 }
 
+Any ObjectContainer::getObject( const OUString& rObjName ) const
+{
+    if( hasObject( rObjName ) )
+        return mxContainer->getByName( rObjName );
+    return Any();
+}
+
 OUString ObjectContainer::insertObject( const OUString& rObjName, const Any& rObj, bool bInsertByUnusedName )
 {
     createContainer();
@@ -129,6 +136,14 @@ OUString ModelObjectHelper::insertFillBitmapUrl( const OUString& rGraphicUrl )
 {
     if( !rGraphicUrl.isEmpty() )
         return maBitmapUrlContainer.insertObject( maBitmapUrlNameBase, Any( rGraphicUrl ), true );
+    return OUString();
+}
+
+OUString ModelObjectHelper::getFillBitmapUrl( const OUString &rGraphicName )
+{
+    Any aAny = maBitmapUrlContainer.getObject( rGraphicName );
+    if( aAny.hasValue() )
+        return aAny.get<OUString>();
     return OUString();
 }
 

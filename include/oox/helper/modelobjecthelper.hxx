@@ -48,6 +48,8 @@ public:
     /** Returns true, if the object with the passed name exists in the container. */
     bool                hasObject( const OUString& rObjName ) const;
 
+    ::com::sun::star::uno::Any getObject( const OUString& rObjName ) const;
+
     /** Inserts the passed object into the container, returns its final name. */
     OUString     insertObject(
                             const OUString& rObjName,
@@ -103,6 +105,8 @@ public:
     /** Inserts a new named fill bitmap URL, returns the bitmap name, based on
         an internal constant name with a new unused index appended. */
     OUString     insertFillBitmapUrl( const OUString& rGraphicUrl );
+
+    OUString     getFillBitmapUrl( const OUString& rGraphicName );
 
 private:
     ObjectContainer     maMarkerContainer;      ///< Contains all named line markers (line end polygons).

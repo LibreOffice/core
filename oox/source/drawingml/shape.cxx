@@ -35,6 +35,7 @@
 #include "oox/core/xmlfilterbase.hxx"
 #include "oox/helper/graphichelper.hxx"
 #include "oox/helper/propertyset.hxx"
+#include "oox/helper/modelobjecthelper.hxx"
 
 #include <tools/gen.hxx>
 #include <tools/mapunit.hxx>
@@ -690,6 +691,12 @@ Reference< XShape > Shape::createAndInsert(
                 {
                     aShapeProps.setProperty(PROP_BackGraphicURL, aShapeProps.getProperty(PROP_FillBitmapURL));
                     aShapeProps.erase(PROP_FillBitmapURL);
+                }
+                if (aShapeProps.hasProperty(PROP_FillBitmapName))
+                {
+                    uno::Any aAny = aShapeProps[PROP_FillBitmapName];
+                    aShapeProps.setProperty(PROP_BackGraphicURL, rFilterBase.getModelObjectHelper().getFillBitmapUrl( aAny.get<OUString>() ));
+                    // aShapeProps.erase(PROP_FillBitmapName);  // Maybe, leave the name as well
                 }
                 // And no LineColor property; individual borders can have colors
                 if (aShapeProps.hasProperty(PROP_LineColor))
