@@ -30,6 +30,7 @@
 #include <com/sun/star/ucb/XContentProviderSupplier.hpp>
 #include <cppuhelper/weak.hxx>
 #include <ucbhelper/macros.hxx>
+#include <cppuhelper/implbase2.hxx>
 
 
 
@@ -44,11 +45,9 @@
 
 
 
-class UcbContentProviderProxyFactory :
-                public cppu::OWeakObject,
-                public com::sun::star::lang::XTypeProvider,
-                public com::sun::star::lang::XServiceInfo,
-                public com::sun::star::ucb::XContentProviderFactory
+class UcbContentProviderProxyFactory : public cppu::WeakImplHelper2 <
+    css::lang::XServiceInfo,
+    css::ucb::XContentProviderFactory >
 {
     com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory >
                                 m_xSMgr;
@@ -58,17 +57,6 @@ public:
             const com::sun::star::uno::Reference<
                 com::sun::star::lang::XMultiServiceFactory >& rxSMgr );
     virtual ~UcbContentProviderProxyFactory();
-
-    // XInterface
-    virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType )
-        throw( css::uno::RuntimeException, std::exception );
-    virtual void SAL_CALL acquire()
-        throw();
-    virtual void SAL_CALL release()
-        throw();
-
-    // XTypeProvider
-    XTYPEPROVIDER_DECL()
 
     // XServiceInfo
     XSERVICEINFO_DECL()
