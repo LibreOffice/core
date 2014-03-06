@@ -703,7 +703,7 @@ short SvxNumberFormatShell::FillEListWithDateTime_Impl( std::vector<OUString>& r
 {
     sal_uInt16  nMyType;
 
-    DBG_ASSERT( pCurFmtTable != NULL, "Unbekanntes Zahlenformat!" );
+    DBG_ASSERT( pCurFmtTable != NULL, "Unknown number format!" );
 
     const SvNumberformat*   pNumEntry   = pCurFmtTable->empty() ? 0 : pCurFmtTable->begin()->second;
     sal_uInt32          nNFEntry;
