@@ -69,7 +69,7 @@ IMPL_LINK( DetailsContainer, ValueChangeHdl, void *, EMPTYARG )
     return 0;
 }
 
-HostDetailsContainer::HostDetailsContainer( VclBuilderContainer* pBuilder, sal_uInt16 nPort, OUString sScheme ) :
+HostDetailsContainer::HostDetailsContainer( VclBuilderContainer* pBuilder, sal_uInt16 nPort, const OUString& sScheme ) :
     DetailsContainer( pBuilder, "HostDetails" ),
     m_nDefaultPort( nPort ),
     m_sScheme( sScheme )

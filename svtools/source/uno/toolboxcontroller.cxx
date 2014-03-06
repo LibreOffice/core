@@ -633,7 +633,7 @@ void ToolboxController::updateStatus()
     bindListener();
 }
 
-void ToolboxController::updateStatus( const OUString aCommandURL )
+void ToolboxController::updateStatus( const OUString& aCommandURL )
 {
     Reference< XDispatch > xDispatch;
     Reference< XStatusListener > xStatusListener;

@@ -1439,7 +1439,7 @@ public:
                                                     const Rectangle& rControlRegion,
                                                     ControlState nState,
                                                     const ImplControlValue& aValue,
-                                                    OUString aCaption );
+                                                    const OUString& aCaption );
 
     // Query the native control's actual drawing region (including adornment)
     bool                    GetNativeControlRegion( ControlType nType,
@@ -1447,7 +1447,7 @@ public:
                                                         const Rectangle& rControlRegion,
                                                         ControlState nState,
                                                         const ImplControlValue& aValue,
-                                                        OUString aCaption,
+                                                        const OUString& aCaption,
                                                         Rectangle &rNativeBoundingRegion,
                                                         Rectangle &rNativeContentRegion ) const;
 

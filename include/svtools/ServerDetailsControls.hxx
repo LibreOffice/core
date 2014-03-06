@@ -62,7 +62,7 @@ class HostDetailsContainer : public DetailsContainer
         Edit*           m_pEDPath;
 
     public:
-        HostDetailsContainer( VclBuilderContainer* pBuilder, sal_uInt16 nPort, OUString sScheme );
+        HostDetailsContainer( VclBuilderContainer* pBuilder, sal_uInt16 nPort, const OUString& sScheme );
         virtual ~HostDetailsContainer( ) { };
 
         virtual void show( bool bShow = true );
@@ -70,7 +70,7 @@ class HostDetailsContainer : public DetailsContainer
         virtual bool setUrl( const INetURLObject& rUrl );
 
     protected:
-        void setScheme( OUString sScheme ) { m_sScheme = sScheme; }
+        void setScheme( const OUString& sScheme ) { m_sScheme = sScheme; }
 
         /** Verifies that the schement split from the URL can be handled by
             the container and set the proper controls accordingly if needed.
