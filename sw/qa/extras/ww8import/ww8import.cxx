@@ -37,6 +37,7 @@ public:
     void testN823651();
     void testFdo36868();
     void testListNolevel();
+    void testCp1000039();
 
     CPPUNIT_TEST_SUITE(Test);
 #if !defined(MACOSX) && !defined(WNT)
@@ -65,6 +66,7 @@ void Test::run()
         {"n823651.doc", &Test::testN823651},
         {"fdo36868.doc", &Test::testFdo36868},
         {"list-nolevel.doc", &Test::testListNolevel},
+        {"cp1000039.doc", &Test::testCp1000039},
     };
     header();
     for (unsigned int i = 0; i < SAL_N_ELEMENTS(aMethods); ++i)
@@ -282,6 +284,12 @@ void Test::testListNolevel()
     OUString aText = parseDump("/root/page/body/txt[1]/Special[@nType='POR_NUMBER']", "rText");
     // POR_NUMBER was completely missing.
     CPPUNIT_ASSERT_EQUAL(OUString("1."), aText);
+}
+
+void Test::testCp1000039()
+{
+    // This was RTL_TEXTENCODING_SYMBOL, causing "1" rendered as a placeholder rectangle.
+    CPPUNIT_ASSERT_EQUAL(sal_Int16(RTL_TEXTENCODING_DONTKNOW), getProperty<sal_Int16>(getRun(getParagraph(1), 1), "CharFontCharSet"));
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);
