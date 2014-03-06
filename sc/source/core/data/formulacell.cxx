@@ -413,7 +413,8 @@ ScFormulaCellGroup::ScFormulaCellGroup() :
     mnFormatType(NUMBERFORMAT_NUMBER),
     mbInvariant(false),
     mbSubTotal(false),
-    meCalcState(sc::GroupCalcEnabled)
+    meCalcState(sc::GroupCalcEnabled),
+    meKernelState(sc::OpenCLKernelNone)
 {
     if (ScInterpreter::GetGlobalConfig().mbOpenCLEnabled)
     {
@@ -446,7 +447,7 @@ ScFormulaCellGroup::~ScFormulaCellGroup()
 
 void ScFormulaCellGroup::scheduleCompilation()
 {
-    meCalcState = sc::GroupCalcOpenCLKernelCompilationScheduled;
+    meKernelState = sc::OpenCLKernelCompilationScheduled;
     sc::CLBuildKernelWorkItem aWorkItem;
     aWorkItem.meWhatToDo = sc::CLBuildKernelWorkItem::COMPILE;
     aWorkItem.mxGroup = this;
@@ -2071,7 +2072,7 @@ bool ScFormulaCell::IsMultilineResult()
 
 void ScFormulaCell::MaybeInterpret()
 {
-    if (mxGroup && mxGroup->meCalcState == sc::GroupCalcOpenCLKernelCompilationScheduled)
+    if (mxGroup && mxGroup->meKernelState == sc::OpenCLKernelCompilationScheduled)
         return;
 
     if (!IsDirtyOrInTableOpDirty())

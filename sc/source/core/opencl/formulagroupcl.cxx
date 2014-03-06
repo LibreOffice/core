@@ -3456,10 +3456,10 @@ bool FormulaGroupInterpreterOpenCL::interpret( ScDocument& rDoc,
 {
     DynamicKernel *pKernel;
 
-    if (xGroup->meCalcState == sc::GroupCalcOpenCLKernelCompilationScheduled ||
-        xGroup->meCalcState == sc::GroupCalcOpenCLKernelBinaryCreated)
+    if (xGroup->meKernelState == sc::OpenCLKernelCompilationScheduled ||
+        xGroup->meKernelState == sc::OpenCLKernelBinaryCreated)
     {
-        if (xGroup->meCalcState == sc::GroupCalcOpenCLKernelCompilationScheduled)
+        if (xGroup->meKernelState == sc::OpenCLKernelCompilationScheduled)
         {
             ScFormulaCellGroup::sxCompilationThread->maCompilationDoneCondition.wait();
             ScFormulaCellGroup::sxCompilationThread->maCompilationDoneCondition.reset();
