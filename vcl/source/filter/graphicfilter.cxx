@@ -1356,6 +1356,7 @@ sal_uInt16 GraphicFilter::ImportGraphic( Graphic& rGraphic, const OUString& rPat
     bool                bCreateNativeLink = true;
 
     sal_uInt8* pGraphicContent = NULL;
+    bool bGraphicContentOwned = true;
     sal_Int32  nGraphicContentSize = 0;
 
     ResetLastError();
@@ -1774,13 +1775,14 @@ sal_uInt16 GraphicFilter::ImportGraphic( Graphic& rGraphic, const OUString& rPat
             }
         }
         if( nStatus == GRFILTER_OK )
+        {
             rGraphic.SetLink( GfxLink( pGraphicContent, nGraphicContentSize, eLinkType, true ) );
+            bGraphicContentOwned = false; //ownership passed to the GfxLink
+        }
     }
-    else
-    {
-        if(nGraphicContentSize > 0)
-            delete[] pGraphicContent;
-    }
+
+    if (bGraphicContentOwned)
+        delete[] pGraphicContent;
 
     // Set error code or try to set native buffer
     if( nStatus != GRFILTER_OK )
