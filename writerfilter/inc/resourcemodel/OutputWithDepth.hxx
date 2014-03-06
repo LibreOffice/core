@@ -57,7 +57,10 @@ public:
 
 template <typename T>
 OutputWithDepth<T>::OutputWithDepth(const T & aOpenTag, const T & aEndTag)
-: mOpenTag(aOpenTag), mCloseTag(aEndTag)
+    : mnCurrentDepth(0)
+    , mnGroupDepth(0)
+    , mOpenTag(aOpenTag)
+    , mCloseTag(aEndTag)
 {
 }
 
