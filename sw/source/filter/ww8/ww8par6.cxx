@@ -3397,6 +3397,11 @@ bool SwWW8ImplReader::GetFontParams( sal_uInt16 nFCode, FontFamily& reFamily,
             reCharSet = rtl_getTextEncodingFromWindowsCharset( pF->chs );
     }
 
+    // Make sure charset is not set in case of Symbol, otherwise in case a
+    // character is missing in our OpenSymbol, the character won't be replaced.
+    if (reCharSet == RTL_TEXTENCODING_SYMBOL && rName == "Symbol")
+        reCharSet = RTL_TEXTENCODING_DONTKNOW;
+
     // make sure Font Family Code is set correctly
     // at least for the most important fonts
     // ( might be set wrong when Doc was not created by
