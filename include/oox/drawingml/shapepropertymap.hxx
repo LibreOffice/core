@@ -65,6 +65,7 @@ enum ShapePropertyId
     SHAPEPROP_FillBitmapRectanglePoint,
     SHAPEPROP_FillHatch,
     SHAPEPROP_ShadowXDistance,
+    SHAPEPROP_FillBitmapNameFromUrl,
     SHAPEPROP_END
 };
 
@@ -129,6 +130,8 @@ private:
     bool                setGradientTrans( sal_Int32 nPropId, const ::com::sun::star::uno::Any& rValue );
     /** Sets an explicit fill bitmap URL, or creates a named fill bitmap URL. */
     bool                setFillBitmapUrl( sal_Int32 nPropId, const ::com::sun::star::uno::Any& rValue );
+    /** Sets an explicit fill bitmap URL and pushes the name to FillBitmapName */
+    bool                setFillBitmapNameFromUrl( sal_Int32 nPropId, const ::com::sun::star::uno::Any& rValue );
 
     // not implemented, to prevent implicit conversion from enum to int
     ::com::sun::star::uno::Any& operator[]( ShapePropertyId ePropId );
