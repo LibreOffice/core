@@ -13,7 +13,7 @@ include $(BOOTSTRAPDIR)/Makefile.shared
 
 native-code.cxx: $(SRCDIR)/solenv/bin/native-code.py
 	$< -j \
-		-g core -g writer \
+		-g core -g edit -g writer \
 		> $@
 
 # The name of the Bootstrap activity class

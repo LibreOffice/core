@@ -108,6 +108,16 @@ core_constructor_list = [
     "XMLVersionListPersistence_get_implementation",
     ]
 
+# edit group for apps, where you can edit documents
+edit_factory_list = [
+    ]
+
+edit_constructor_list = [
+    "com_sun_star_comp_framework_GlobalAcceleratorConfiguration_get_implementation",
+    "com_sun_star_i18n_InputSequenceChecker_get_implementation",
+    "com_sun_star_i18n_OrdinalSuffix_get_implementation",
+    ]
+
 calc_factory_list = [
     ("libscdlo.a", "scd_component_getFactory"),
     ("libscfiltlo.a", "scfilt_component_getFactory"),
@@ -138,6 +148,7 @@ writer_constructor_list = [
 
 factory_map = {
     'core' : core_factory_list,
+    'edit' : edit_factory_list,
     'calc' : calc_factory_list,
     'draw' : draw_factory_list,
     'writer' : writer_factory_list,
@@ -145,6 +156,7 @@ factory_map = {
 
 constructor_map = {
     'core' : core_constructor_list,
+    'edit' : edit_constructor_list,
     'calc' : calc_constructor_list,
     'draw' : draw_constructor_list,
     'writer' : writer_constructor_list,
