@@ -901,6 +901,9 @@ void SfxTemplateManagerDlg::OnTemplateImport ()
     aFileDlg.AddFilter( sFilterName, sFilterExt );
     aFileDlg.SetCurrentFilter( sFilterName );
 
+    // fdo#74787 file dialog causes ThumbnailView::LoseFocus() - save selection
+    std::set<const ThumbnailViewItem*,selection_cmp_fn> selFolders(maSelFolders);
+
     ErrCode nCode = aFileDlg.Execute();
 
     if ( nCode == ERRCODE_NONE )
@@ -909,11 +912,11 @@ void SfxTemplateManagerDlg::OnTemplateImport ()
 
         if (aFiles.hasElements())
         {
-            if (!maSelFolders.empty())
+            if (!selFolders.empty())
             {
                 //Import to the selected regions
                 std::set<const ThumbnailViewItem*,selection_cmp_fn>::const_iterator pIter;
-                for (pIter = maSelFolders.begin(); pIter != maSelFolders.end(); ++pIter)
+                for (pIter = selFolders.begin(); pIter != selFolders.end(); ++pIter)
                 {
                     OUString aTemplateList;
                     TemplateContainerItem *pFolder = (TemplateContainerItem*)(*pIter);
