@@ -1532,13 +1532,13 @@ sal_uInt16 GraphicFilter::ImportGraphic( Graphic& rGraphic, const OUString& rPat
                 {
                     SvMemoryStream aMemStream;
                     GZCodec aCodec;
-                    sal_uInt32 nMemoryLength;
+                    long nMemoryLength;
 
                     aCodec.BeginCompression();
                     nMemoryLength = aCodec.Decompress(rIStream, aMemStream);
                     aCodec.EndCompression();
 
-                    if(!rIStream.GetError() )
+                    if (!rIStream.GetError() && nMemoryLength >= 0)
                     {
                         SvgDataArray aNewData(new sal_uInt8[nMemoryLength]);
                         aMemStream.Seek(STREAM_SEEK_TO_BEGIN);
