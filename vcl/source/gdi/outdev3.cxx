@@ -419,6 +419,7 @@ static void ImplFontSubstitute( OUString& rFontName,
     }
 }
 
+//hidpi TODO: This routine has hard-coded font-sizes that break places such as DialControl
 Font OutputDevice::GetDefaultFont( sal_uInt16 nType, LanguageType eLang,
                                    sal_uLong nFlags, const OutputDevice* pOutDev )
 {
@@ -5339,11 +5340,24 @@ void OutputDevice::DrawWaveLine( const Point& rStartPos, const Point& rEndPos,
     }
 
     long nWaveHeight;
+
     if ( nStyle == WAVE_NORMAL )
     {
         nWaveHeight = 3;
         nStartY++;
         nEndY++;
+
+        if (mnDPIScaleFactor > 1)
+        {
+            nWaveHeight *= mnDPIScaleFactor;
+
+            // odd heights look better than even
+            if (mnDPIScaleFactor % 2 == 0)
+            {
+                nStartY++; // Shift down an additional pixel to create more visual separation.
+                nWaveHeight--;
+            }
+        }
     }
     else if( nStyle == WAVE_SMALL )
     {
@@ -5354,14 +5368,15 @@ void OutputDevice::DrawWaveLine( const Point& rStartPos, const Point& rEndPos,
     else // WAVE_FLAT
         nWaveHeight = 1;
 
-     // #109280# make sure the waveline does not exceed the descent to avoid paint problems
-     ImplFontEntry* pFontEntry = mpFontEntry;
-     if( nWaveHeight > pFontEntry->maMetric.mnWUnderlineSize )
-         nWaveHeight = pFontEntry->maMetric.mnWUnderlineSize;
+    // #109280# make sure the waveline does not exceed the descent to avoid paint problems
+    ImplFontEntry* pFontEntry = mpFontEntry;
+    if( nWaveHeight > pFontEntry->maMetric.mnWUnderlineSize )
+        nWaveHeight = pFontEntry->maMetric.mnWUnderlineSize;
 
-     ImplDrawWaveLine( nStartX, nStartY, 0, 0,
-                      nEndX-nStartX, nWaveHeight, 1,
-                      nOrientation, GetLineColor() );
+    ImplDrawWaveLine(nStartX, nStartY, 0, 0,
+            nEndX-nStartX, nWaveHeight,
+            mnDPIScaleFactor, nOrientation, GetLineColor());
+
     if( mpAlphaVDev )
         mpAlphaVDev->DrawWaveLine( rStartPos, rEndPos, nStyle );
 }
