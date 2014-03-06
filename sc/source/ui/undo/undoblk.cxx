@@ -1110,6 +1110,7 @@ ScUndoDragDrop::ScUndoDragDrop( ScDocShell* pNewDocShell,
                     const ScRange& rRange, ScAddress aNewDestPos, bool bNewCut,
                     ScDocument* pUndoDocument, ScRefUndoData* pRefData, bool bScenario ) :
     ScMoveUndo( pNewDocShell, pUndoDocument, pRefData, SC_UNDO_REFFIRST ),
+    mnPaintExtFlags( 0 ),
     aSrcRange( rRange ),
     bCut( bNewCut ),
     bKeepScenarioFlags( bScenario )
