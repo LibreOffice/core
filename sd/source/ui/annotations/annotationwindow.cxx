@@ -450,7 +450,7 @@ void AnnotationWindow::SetSizePixel( const Size& rNewSize )
 
 void AnnotationWindow::SetScrollbar()
 {
-    mpVScrollbar->SetThumbPos( mpOutlinerView->GetVisArea().Top()+ mpOutlinerView->GetEditView().GetCursor()->GetOffsetY());
+    mpVScrollbar->SetThumbPos(mpOutlinerView->GetVisArea().Top());
 }
 
 void AnnotationWindow::ResizeIfNecessary(long aOldHeight, long aNewHeight)

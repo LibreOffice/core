@@ -39,7 +39,6 @@ private:
     ImplCursorData* mpData;
     Window*         mpWindow;           // only for shadow cursor
     long            mnSlant;
-    long            mnOffsetY;          // Offset for rotation
     Size            maSize;
     Point           maPos;
     short           mnOrientation;
@@ -74,7 +73,6 @@ public:
 
     void            SetPos( const Point& rNewPos );
     const Point&    GetPos() const { return maPos; }
-    long            GetOffsetY() const { return mnOffsetY; }
 
     void            SetSize( const Size& rNewSize );
     const Size&     GetSize() const { return maSize; }

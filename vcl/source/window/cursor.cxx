@@ -133,12 +133,9 @@ void Cursor::ImplDraw()
         mpData->mnPixSlant      = pWindow->LogicToPixel( Size( mnSlant, 0 ) ).Width();
         mpData->mnOrientation   = mnOrientation;
         mpData->mnDirection     = mnDirection;
-        long nOffsetY           = pWindow->LogicToPixel( Size( 0, mnOffsetY ) ).Height();
 
         // correct the position with the offset
-        mpData->maPixPos.Y() -= nOffsetY;
         mpData->maPixRotOff = mpData->maPixPos;
-        mpData->maPixRotOff.Y() += nOffsetY;
 
         // use width (as set in Settings) if size is 0,
         if ( !mpData->maPixSize.Width() )
@@ -278,7 +275,6 @@ Cursor::Cursor()
     mpData          = NULL;
     mpWindow        = NULL;
     mnSlant         = 0;
-    mnOffsetY       = 0;
     mnOrientation   = 0;
     mnDirection     = 0;
     mnStyle         = 0;
