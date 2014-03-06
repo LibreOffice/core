@@ -5078,8 +5078,6 @@ SdrObject* SvxMSDffManager::ProcessObj(SvStream& rSt,
                             nTextBottom = nOldTextLeft;
                         }
                         break;
-                    default:
-                        break;
                 }
             }
 
