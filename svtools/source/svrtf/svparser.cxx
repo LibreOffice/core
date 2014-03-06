@@ -59,11 +59,14 @@ SvParser::SvParser( SvStream& rIn, sal_uInt8 nStackSize )
     , bTokenHasValue( false )
     , eState( SVPAR_NOTSTARTED )
     , eSrcEnc( RTL_TEXTENCODING_DONTKNOW )
-    , bDownloadingFile( sal_False )
+    , nNextChPos(0)
+    , bDownloadingFile(false)
+    , bUCS2BSrcEnc(false)
+    , bSwitchToUCS2(false)
+    , bRTF_InTextRead(false)
     , nTokenStackSize( nStackSize )
     , nTokenStackPos( 0 )
 {
-    bUCS2BSrcEnc = bSwitchToUCS2 = sal_False;
     eState = SVPAR_NOTSTARTED;
     if( nTokenStackSize < 3 )
         nTokenStackSize = 3;
