@@ -1,0 +1,123 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a930d6b_9112fc56",
+        "filename": "sw/inc/fldbas.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 290,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2014-03-06T08:28:17Z",
+      "side": 1,
+      "message": "m_bCitation is not a cached member, please don\u0027t use mutable. Also please use \u0027bool\u0027, not \u0027sal_Bool\u0027 in new code, unless you interact with UNO.",
+      "revId": "327c78a319f25683900f97f99abb359cb6669e02",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a930d6b_b10ff82d",
+        "filename": "sw/inc/fldbas.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 363,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2014-03-06T08:28:17Z",
+      "side": 1,
+      "message": "Same here, sal_Bool -\u003e bool.",
+      "revId": "327c78a319f25683900f97f99abb359cb6669e02",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a930d6b_d11c846d",
+        "filename": "sw/inc/tox.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 654,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2014-03-06T08:28:17Z",
+      "side": 1,
+      "message": "Please don\u0027t mix whitespace and function changes in the same patch, just avoid this additional newline.",
+      "revId": "327c78a319f25683900f97f99abb359cb6669e02",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a930d6b_f119807a",
+        "filename": "sw/source/core/fields/fldbas.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 164,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2014-03-06T08:28:17Z",
+      "side": 1,
+      "message": "Please use false, not sal_False in new code.",
+      "revId": "327c78a319f25683900f97f99abb359cb6669e02",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a930d6b_11260cbb",
+        "filename": "sw/source/core/unocore/unoidx.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2014-03-06T08:28:17Z",
+      "side": 1,
+      "message": "Please avoid this hunk, no need to touch the modeline.",
+      "revId": "327c78a319f25683900f97f99abb359cb6669e02",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a930d6b_5120949b",
+        "filename": "sw/source/filter/ww8/ww8atr.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1773,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2014-03-06T08:28:17Z",
+      "side": 1,
+      "message": "Please don\u0027t change this unconditionally, do it only for your new citation field, if you need it at all.",
+      "revId": "327c78a319f25683900f97f99abb359cb6669e02",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a930d6b_91391cdb",
+        "filename": "writerfilter/source/dmapper/DomainMapper_Impl.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 3551,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2014-03-06T08:28:17Z",
+      "side": 1,
+      "message": "Don\u0027t mix whitespace and functional changes, no need to reindent \"break;\" here just makes it harder to understand what did you change.",
+      "revId": "327c78a319f25683900f97f99abb359cb6669e02",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}

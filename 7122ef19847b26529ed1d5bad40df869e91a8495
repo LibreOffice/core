@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a930d6b_312b0884",
+        "filename": "sw/source/filter/ww8/docxattributeoutput.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1050,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2014-03-06T08:28:17Z",
+      "side": 0,
+      "message": "Again, please avoid mixing functional and cosmetic changes, just don\u0027t remove this empty line here.",
+      "revId": "7122ef19847b26529ed1d5bad40df869e91a8495",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a930d6b_712590aa",
+        "filename": "sw/source/filter/ww8/ww8atr.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2854,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2014-03-06T08:28:17Z",
+      "side": 0,
+      "message": "Don\u0027t remove this newline, mixing functional and whitespace changes.",
+      "revId": "7122ef19847b26529ed1d5bad40df869e91a8495",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
