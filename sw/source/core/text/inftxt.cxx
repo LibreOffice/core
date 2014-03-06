@@ -833,19 +833,13 @@ static void lcl_DrawSpecial( const SwTxtPaintInfo& rInf, const SwLinePortion& rP
 
     // The maximum width depends on the current orientation
     const sal_uInt16 nDir = m_pFnt->GetOrientation( rInf.GetTxtFrm()->IsVertical() );
-    SwTwips nMaxWidth = 0;
-    switch ( nDir )
-    {
-    case 0 :
-        nMaxWidth = rRect.Width();
-        break;
-    case 900 :
-    case 2700 :
+    SwTwips nMaxWidth;
+    if (nDir == 900 || nDir == 2700)
         nMaxWidth = rRect.Height();
-        break;
-    default:
-        OSL_FAIL( "Unknown direction set at font" );
-        break;
+    else
+    {
+        assert(nDir == 0); //Unknown direction set at font
+        nMaxWidth = rRect.Width();
     }
 
     // check if char fits into rectangle
