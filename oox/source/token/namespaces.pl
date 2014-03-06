@@ -89,6 +89,7 @@ foreach( keys( %namespaces ) )
     print( NAMEFILE "{ $id, \"$namespaces{$_}\" },\n" );
     print( NAMEFILE_STRICT "{ $id, \"$namespaces_strict{$_}\" },\n" );
     print( TXTFILE "$id $_ $namespaces{$_}\n" );
+    print( TXTFILE "$id $_ $namespaces_strict{$_}\n" );
     ++$i;
 }
 
