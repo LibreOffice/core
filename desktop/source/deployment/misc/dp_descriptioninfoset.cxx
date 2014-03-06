@@ -454,7 +454,7 @@ void DescriptionInfoset::checkBlacklist() const
 }
 
 bool DescriptionInfoset::checkBlacklistVersion(
-    OUString currentversion,
+    const OUString& currentversion,
     ::com::sun::star::uno::Sequence< OUString > const & versions) const
 {
     sal_Int32 nLen = versions.getLength();

@@ -91,7 +91,7 @@ public:
 
     const SfxItemPropertySimpleEntry*  getByName( const OUString &rName ) const;
     com::sun::star::uno::Sequence< com::sun::star::beans::Property > getProperties() const;
-    com::sun::star::beans::Property getPropertyByName( const OUString rName ) const
+    com::sun::star::beans::Property getPropertyByName( const OUString & rName ) const
         throw( ::com::sun::star::beans::UnknownPropertyException );
     bool hasPropertyByName( const OUString& rName ) const;
 

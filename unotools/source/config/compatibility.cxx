@@ -227,7 +227,7 @@ class SvtCompatibilityOptions_Impl : public ConfigItem
          SvtCompatibilityOptions_Impl();
         ~SvtCompatibilityOptions_Impl();
 
-        void SetDefault( OUString sName, bool bValue );
+        void SetDefault( const OUString & sName, bool bValue );
 
 
         //  overloaded methods of baseclass
@@ -426,7 +426,7 @@ SvtCompatibilityOptions_Impl::~SvtCompatibilityOptions_Impl()
     }
 }
 
-void SvtCompatibilityOptions_Impl::SetDefault( OUString sName, bool bValue )
+void SvtCompatibilityOptions_Impl::SetDefault( const OUString & sName, bool bValue )
 {
     if ( COMPATIBILITY_PROPERTYNAME_USEPRTMETRICS.equals( sName ) )
         m_aDefOptions.SetUsePrtMetrics( bValue );
@@ -689,7 +689,7 @@ void SvtCompatibilityOptions::Clear()
     m_pDataContainer->Clear();
 }
 
-void SvtCompatibilityOptions::SetDefault( OUString sName, bool bValue )
+void SvtCompatibilityOptions::SetDefault( const OUString & sName, bool bValue )
 {
     m_pDataContainer->SetDefault( sName, bValue );
 }

@@ -112,7 +112,7 @@ uno::Sequence<beans::Property> SfxItemPropertyMap::getProperties() const
     return m_pImpl->m_aPropSeq;
 }
 
-beans::Property SfxItemPropertyMap::getPropertyByName( const OUString rName ) const
+beans::Property SfxItemPropertyMap::getPropertyByName( const OUString & rName ) const
     throw( beans::UnknownPropertyException )
 {
     SfxItemPropertyHashMap_t::const_iterator aIter = m_pImpl->find(rName);
