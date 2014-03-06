@@ -100,7 +100,7 @@ void ExternalToolEdit::Edit( GraphicObject* pGraphicObject )
 
     //Write Graphic to the Temp File
     GraphicFilter& rGraphicFilter = GraphicFilter::GetGraphicFilter();
-    sal_uInt16 nFilter(rGraphicFilter.GetExportFormatNumber(fExtension));
+    sal_uInt16 nFilter(rGraphicFilter.GetExportFormatNumberForShortName(fExtension));
 
     OUString aFilter(rGraphicFilter.GetExportFormatShortName(nFilter));
 
