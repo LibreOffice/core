@@ -1408,6 +1408,10 @@ namespace cmis
         try
         {
             libcmis::Document* document = dynamic_cast< libcmis::Document* >( getObject( xEnv ).get() );
+
+            if (!document)
+                return sal_False;
+
             boost::shared_ptr< istream > aIn = document->getContentStream( );
 
             uno::Reference< io::XInputStream > xIn = new ucbhelper::StdInputStream( aIn );
