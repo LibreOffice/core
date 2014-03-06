@@ -136,6 +136,12 @@ published service TextFrame
      */
     [optional, property] boolean IsFollowingTextFlow;
 
+    /** adjusts the vertical position of the text inside of the frame.
+
+        @see com::sun::star::drawing::TextVerticalAdjust
+        @since LibreOffice 4.3
+    */
+    [optional, property] com::sun::star::drawing::TextVerticalAdjust TextVerticalAdjust;
 };
 
 
