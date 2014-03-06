@@ -850,8 +850,8 @@ static int parseCharMetrics( FileInputStream* fp, FontInfo* fi)
                 error = normalEOF;
                 break;
             case VVECTOR:
-                keyword = token(fp,tokenlen);
-                keyword = token(fp,tokenlen);
+                token(fp,tokenlen); /*eat token*/
+                token(fp,tokenlen); /*eat token*/
                 break;
             case NOPE:
             default:
