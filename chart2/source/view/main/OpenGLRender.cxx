@@ -1298,7 +1298,7 @@ int OpenGLRender::CreateTextTexture(const BitmapEx& rBitmapEx, const awt::Point&
     }
 
     TextInfo aTextInfo;
-    aTextInfo.rotation = -(double)rotation * GL_PI / 18000.0f;
+    aTextInfo.rotation = -(double)rotation / 360.0 * 2* GL_PI;
     aTextInfo.vertex[0] = rTrans.Line1.Column3 / OPENGL_SCALE_VALUE;
     aTextInfo.vertex[1] = rTrans.Line2.Column3 / OPENGL_SCALE_VALUE;
     aTextInfo.vertex[2] = m_fZStep;
@@ -1351,7 +1351,7 @@ int OpenGLRender::RenderTextShape()
         {
             SAL_WARN("chart2.opengl", "rotation: " << textInfo.rotation);
         }
-        PosVecf3 angle = {0.0f, float(textInfo.rotation), float(textInfo.rotation)};
+        PosVecf3 angle = {0.0f, 0.0f, float(textInfo.rotation)};
         PosVecf3 scale = {1.0, 1.0, 1.0f};
         MoveModelf(trans, angle, scale);
         m_MVP = m_Projection * m_View * m_Model;
