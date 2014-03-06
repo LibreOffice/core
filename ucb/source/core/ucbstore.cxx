@@ -37,6 +37,7 @@
 #include <com/sun/star/container/XNameReplace.hpp>
 #include <com/sun/star/util/XChangesBatch.hpp>
 #include <comphelper/processfactory.hxx>
+#include <cppuhelper/implbase1.hxx>
 #include "ucbstore.hxx"
 
 using namespace com::sun::star::beans;
@@ -120,8 +121,7 @@ PropertySetMap_Impl;
 
 
 
-class PropertySetInfo_Impl :
-        public OWeakObject, public XTypeProvider, public XPropertySetInfo
+class PropertySetInfo_Impl : public cppu::WeakImplHelper1 < XPropertySetInfo >
 {
     Reference< XComponentContext >    m_xContext;
     Sequence< Property >*             m_pProps;
@@ -131,17 +131,6 @@ public:
     PropertySetInfo_Impl( const Reference< XComponentContext >& xContext,
                           PersistentPropertySet* pOwner );
     virtual ~PropertySetInfo_Impl();
-
-    // XInterface
-    virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType )
-        throw( css::uno::RuntimeException, std::exception );
-    virtual void SAL_CALL acquire()
-        throw();
-    virtual void SAL_CALL release()
-        throw();
-
-    // XTypeProvider
-    XTYPEPROVIDER_DECL()
 
     // XPropertySetInfo
     virtual Sequence< Property > SAL_CALL getProperties()
@@ -190,48 +179,6 @@ UcbStore::~UcbStore()
 {
     delete m_pImpl;
 }
-
-
-
-// XInterface methods.
-void SAL_CALL UcbStore::acquire()
-    throw()
-{
-    OWeakObject::acquire();
-}
-
-void SAL_CALL UcbStore::release()
-    throw()
-{
-    OWeakObject::release();
-}
-
-css::uno::Any SAL_CALL UcbStore::queryInterface( const css::uno::Type & rType )
-    throw( css::uno::RuntimeException, std::exception )
-{
-    css::uno::Any aRet = cppu::queryInterface( rType,
-                                               (static_cast< XTypeProvider* >(this)),
-                                               (static_cast< XServiceInfo* >(this)),
-                                               (static_cast< XPropertySetRegistryFactory* >(this)),
-                                               (static_cast< XInitialization* >(this))
-                                               );
-    return aRet.hasValue() ? aRet : OWeakObject::queryInterface( rType );
-}
-
-// XTypeProvider methods.
-
-
-
-XTYPEPROVIDER_IMPL_4( UcbStore,
-                         XTypeProvider,
-                         XServiceInfo,
-                      XPropertySetRegistryFactory,
-                      XInitialization );
-
-
-
-// XServiceInfo methods.
-
 
 
 XSERVICEINFO_IMPL_1_CTX( UcbStore,
@@ -339,44 +286,6 @@ PropertySetRegistry::~PropertySetRegistry()
 {
     delete m_pImpl;
 }
-
-
-
-// XInterface methods.
-
-void SAL_CALL PropertySetRegistry::acquire()
-    throw()
-{
-    OWeakObject::acquire();
-}
-
-void SAL_CALL PropertySetRegistry::release()
-    throw()
-{
-    OWeakObject::release();
-}
-
-css::uno::Any SAL_CALL PropertySetRegistry::queryInterface( const css::uno::Type & rType )
-    throw( css::uno::RuntimeException, std::exception )
-{
-    css::uno::Any aRet = cppu::queryInterface( rType,
-                                               (static_cast< XTypeProvider* >(this)),
-                                               (static_cast< XServiceInfo* >(this)),
-                                               (static_cast< XPropertySetRegistry* >(this)),
-                                               (static_cast< XElementAccess* >(this)),
-                                               (static_cast< XNameAccess* >(this))
-                                               );
-    return aRet.hasValue() ? aRet : OWeakObject::queryInterface( rType );
-}
-
-// XTypeProvider methods.
-
-
-XTYPEPROVIDER_IMPL_4( PropertySetRegistry,
-                         XTypeProvider,
-                      XServiceInfo,
-                      XPropertySetRegistry,
-                      XNameAccess );
 
 
 
@@ -1292,54 +1201,6 @@ PersistentPropertySet::~PersistentPropertySet()
     delete m_pImpl;
 }
 
-
-
-// XInterface methods.
-void SAL_CALL PersistentPropertySet::acquire()
-    throw()
-{
-    OWeakObject::acquire();
-}
-
-void SAL_CALL PersistentPropertySet::release()
-    throw()
-{
-    OWeakObject::release();
-}
-
-css::uno::Any SAL_CALL PersistentPropertySet::queryInterface( const css::uno::Type & rType )
-    throw( css::uno::RuntimeException, std::exception )
-{
-    css::uno::Any aRet = cppu::queryInterface( rType,
-                                               (static_cast< XTypeProvider* >(this)),
-                                               (static_cast< XServiceInfo* >(this)),
-                                               (static_cast< XComponent* >(this)),
-                                               (static_cast< XPropertySet* >(this)),
-                                               (static_cast< XNamed* >(this)),
-                                               (static_cast< XPersistentPropertySet* >(this)),
-                                               (static_cast< XPropertyContainer* >(this)),
-                                               (static_cast< XPropertySetInfoChangeNotifier* >(this)),
-                                               (static_cast< XPropertyAccess* >(this))
-                                               );
-    return aRet.hasValue() ? aRet : OWeakObject::queryInterface( rType );
-}
-
-// XTypeProvider methods.
-
-
-
-XTYPEPROVIDER_IMPL_8( PersistentPropertySet,
-                         XTypeProvider,
-                         XServiceInfo,
-                      XComponent,
-                      XPersistentPropertySet,
-                      XNamed,
-                      XPropertyContainer,
-                      XPropertySetInfoChangeNotifier,
-                      XPropertyAccess );
-
-
-
 // XServiceInfo methods.
 
 
@@ -1414,8 +1275,7 @@ void SAL_CALL PersistentPropertySet::removeEventListener(
 
 
 // virtual
-Reference< XPropertySetInfo > SAL_CALL
-                                PersistentPropertySet::getPropertySetInfo()
+Reference< XPropertySetInfo > SAL_CALL PersistentPropertySet::getPropertySetInfo()
     throw( RuntimeException, std::exception )
 {
     osl::Guard< osl::Mutex > aGuard( m_pImpl->m_aMutex );
@@ -1431,13 +1291,14 @@ Reference< XPropertySetInfo > SAL_CALL
 
 
 // virtual
-void SAL_CALL PersistentPropertySet::setPropertyValue(
-                        const OUString& aPropertyName, const Any& aValue )
+void SAL_CALL PersistentPropertySet::setPropertyValue( const OUString& aPropertyName,
+                                                       const Any& aValue )
     throw( UnknownPropertyException,
            PropertyVetoException,
            IllegalArgumentException,
            WrappedTargetException,
-           RuntimeException, std::exception )
+           RuntimeException,
+           std::exception )
 {
     if ( aPropertyName.isEmpty() )
         throw UnknownPropertyException();
@@ -2399,42 +2260,6 @@ PropertySetInfo_Impl::~PropertySetInfo_Impl()
 
     // !!! Do not delete m_pOwner !!!
 }
-
-
-
-// XInterface methods.
-
-void SAL_CALL PropertySetInfo_Impl::acquire()
-    throw()
-{
-    OWeakObject::acquire();
-}
-
-void SAL_CALL PropertySetInfo_Impl::release()
-    throw()
-{
-    OWeakObject::release();
-}
-
-css::uno::Any SAL_CALL PropertySetInfo_Impl::queryInterface( const css::uno::Type & rType )
-    throw( css::uno::RuntimeException, std::exception )
-{
-    css::uno::Any aRet = cppu::queryInterface( rType,
-                                               (static_cast< XTypeProvider* >(this)),
-                                               (static_cast< XPropertySetInfo* >(this))
-                                               );
-    return aRet.hasValue() ? aRet : OWeakObject::queryInterface( rType );
-}
-
-// XTypeProvider methods.
-
-
-
-XTYPEPROVIDER_IMPL_2( PropertySetInfo_Impl,
-                         XTypeProvider,
-                         XPropertySetInfo );
-
-
 
 // XPropertySetInfo methods.
 

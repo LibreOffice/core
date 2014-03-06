@@ -35,7 +35,8 @@
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <cppuhelper/weak.hxx>
 #include <ucbhelper/macros.hxx>
-
+#include <cppuhelper/implbase3.hxx>
+#include <cppuhelper/implbase7.hxx>
 
 
 #define STORE_SERVICE_NAME          "com.sun.star.ucb.Store"
@@ -46,12 +47,10 @@
 
 struct UcbStore_Impl;
 
-class UcbStore :
-                public cppu::OWeakObject,
-                public com::sun::star::lang::XTypeProvider,
-                public com::sun::star::lang::XServiceInfo,
-                public com::sun::star::ucb::XPropertySetRegistryFactory,
-                public com::sun::star::lang::XInitialization
+class UcbStore : public cppu::WeakImplHelper3 <
+    css::lang::XServiceInfo,
+    css::ucb::XPropertySetRegistryFactory,
+    css::lang::XInitialization >
 {
     com::sun::star::uno::Reference<
                 com::sun::star::uno::XComponentContext > m_xContext;
@@ -62,17 +61,6 @@ public:
         const com::sun::star::uno::Reference<
                 com::sun::star::uno::XComponentContext >& xContext );
     virtual ~UcbStore();
-
-    // XInterface
-    virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType )
-        throw( css::uno::RuntimeException, std::exception );
-    virtual void SAL_CALL acquire()
-        throw();
-    virtual void SAL_CALL release()
-        throw();
-
-    // XTypeProvider
-    XTYPEPROVIDER_DECL()
 
     // XServiceInfo
     XSERVICEINFO_DECL()
@@ -99,12 +87,10 @@ public:
 struct PropertySetRegistry_Impl;
 class PersistentPropertySet;
 
-class PropertySetRegistry :
-                public cppu::OWeakObject,
-                public com::sun::star::lang::XTypeProvider,
-                public com::sun::star::lang::XServiceInfo,
-                public com::sun::star::ucb::XPropertySetRegistry,
-                public com::sun::star::container::XNameAccess
+class PropertySetRegistry : public cppu::WeakImplHelper3 <
+    css::lang::XServiceInfo,
+    css::ucb::XPropertySetRegistry,
+    css::container::XNameAccess >
 {
     friend class PersistentPropertySet;
 
@@ -130,16 +116,6 @@ public:
                                                 ::com::sun::star::uno::Any >& rInitArgs);
     virtual ~PropertySetRegistry();
 
-    // XInterface
-    virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType )
-        throw( css::uno::RuntimeException, std::exception );
-    virtual void SAL_CALL acquire()
-        throw();
-    virtual void SAL_CALL release()
-        throw();
-
-    // XTypeProvider
-    XTYPEPROVIDER_DECL()
 
     // XServiceInfo
     XSERVICEINFO_NOFACTORY_DECL()
@@ -185,19 +161,16 @@ public:
 
 struct PersistentPropertySet_Impl;
 
-class PersistentPropertySet :
-                public cppu::OWeakObject,
-                public com::sun::star::lang::XTypeProvider,
-                public com::sun::star::lang::XServiceInfo,
-                public com::sun::star::lang::XComponent,
-                public com::sun::star::ucb::XPersistentPropertySet,
-                public com::sun::star::container::XNamed,
-                public com::sun::star::beans::XPropertyContainer,
-                public com::sun::star::beans::XPropertySetInfoChangeNotifier,
-                public com::sun::star::beans::XPropertyAccess
+class PersistentPropertySet : public cppu::WeakImplHelper7 <
+    css::lang::XServiceInfo,
+    css::lang::XComponent,
+    css::ucb::XPersistentPropertySet,
+    css::container::XNamed,
+    css::beans::XPropertyContainer,
+    css::beans::XPropertySetInfoChangeNotifier,
+    css::beans::XPropertyAccess >
 {
-    com::sun::star::uno::Reference<
-            com::sun::star::uno::XComponentContext > m_xContext;
+    css::uno::Reference< css::uno::XComponentContext > m_xContext;
     PersistentPropertySet_Impl* m_pImpl;
 
 private:
@@ -213,17 +186,6 @@ public:
         PropertySetRegistry& rCreator,
         const OUString& rKey );
     virtual ~PersistentPropertySet();
-
-    // XInterface
-    virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType )
-        throw( css::uno::RuntimeException, std::exception );
-    virtual void SAL_CALL acquire()
-        throw();
-    virtual void SAL_CALL release()
-        throw();
-
-    // XTypeProvider
-    XTYPEPROVIDER_DECL()
 
     // XServiceInfo
     XSERVICEINFO_NOFACTORY_DECL()
