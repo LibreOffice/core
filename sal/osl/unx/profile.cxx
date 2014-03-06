@@ -25,6 +25,7 @@
 #include <osl/process.h>
 #include <osl/thread.h>
 #include <rtl/alloc.h>
+#include <sal/log.hxx>
 
 #define LINES_INI       32
 #define LINES_ADD       10
@@ -1221,7 +1222,10 @@ static osl_TFile* openFileImpl(const sal_Char* pszFilename, oslProfileOption Pro
     if ((Flags = fcntl(pFile->m_Handle, F_GETFD, 0)) != -1)
     {
         Flags |= FD_CLOEXEC;
-        fcntl(pFile->m_Handle, F_SETFD, Flags);
+        int e = fcntl(pFile->m_Handle, F_SETFD, Flags);
+        SAL_INFO_IF(
+            e != 0, "sal.osl",
+            "fcntl to set FD_CLOEXEC failed for " << pszFilename);
     }
 
     pFile->m_pWriteBuf=0;
