@@ -29,58 +29,11 @@ using namespace com::sun::star;
 
 namespace ucbhelper
 {
-
-
-
-
 // ActiveDataSink Implementation.
-
-
-
-
-
-
-// XInterface methods
-
-void SAL_CALL ActiveDataSink::acquire()
-    throw()
-{
-    OWeakObject::acquire();
-}
-
-void SAL_CALL ActiveDataSink::release()
-    throw()
-{
-    OWeakObject::release();
-}
-
-css::uno::Any SAL_CALL ActiveDataSink::queryInterface( const css::uno::Type & rType )
-    throw( css::uno::RuntimeException, std::exception )
-{
-    css::uno::Any aRet = cppu::queryInterface( rType,
-                                               (static_cast< lang::XTypeProvider* >(this)),
-                                               (static_cast< io::XActiveDataSink* >(this))
-                                               );
-    return aRet.hasValue() ? aRet : OWeakObject::queryInterface( rType );
-}
-
-// XTypeProvider methods
-
-
-
-XTYPEPROVIDER_IMPL_2( ActiveDataSink,
-                      lang::XTypeProvider,
-                      io::XActiveDataSink );
-
-
-
 // XActiveDataSink methods.
 
-
-
 // virtual
-void SAL_CALL ActiveDataSink::setInputStream(
-                        const uno::Reference< io::XInputStream >& aStream )
+void SAL_CALL ActiveDataSink::setInputStream( const uno::Reference< io::XInputStream >& aStream )
     throw( uno::RuntimeException, std::exception )
 {
     m_xStream = aStream;
