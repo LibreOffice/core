@@ -220,7 +220,7 @@ void SwFlyInCntFrm::MakeAll()
     if ( IsClipped() )
         mbValidSize = bHeightClipped = bWidthClipped = sal_False;
 
-    while ( !mbValidPos || !mbValidSize || !mbValidPrtArea )
+    while ( !mbValidPos || !mbValidSize || !mbValidPrtArea || !m_bValidContentPos )
     {
         //Only stop, if the flag is set!!
         if ( !mbValidSize )
@@ -229,7 +229,10 @@ void SwFlyInCntFrm::MakeAll()
         }
 
         if ( !mbValidPrtArea )
+        {
             MakePrtArea( rAttrs );
+            m_bValidContentPos = false;
+        }
 
         if ( !mbValidSize )
             Format( &rAttrs );
@@ -238,6 +241,9 @@ void SwFlyInCntFrm::MakeAll()
         {
             MakeObjPos();
         }
+
+        if ( !m_bValidContentPos )
+            MakeContentPos( rAttrs );
 
         // re-activate clipping of as-character anchored Writer fly frames
         // depending on compatibility option <ClipAsCharacterAnchoredWriterFlyFrames>
