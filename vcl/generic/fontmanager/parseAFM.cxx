@@ -613,7 +613,7 @@ static int parseCharWidths( FileInputStream* fp, int* cwi)
             switch(recognize(keyword,tokenlen))
             {
                 case COMMENT:
-                    keyword = linetoken(fp);
+                    linetoken(fp); /*eat token*/
                     break;
                 case CODE:
                     if ((keyword = token(fp,tokenlen)) != NULL)
