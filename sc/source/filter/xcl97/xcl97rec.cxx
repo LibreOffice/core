@@ -256,6 +256,7 @@ static void SaveVmlObjects( XclExpObjList& rList, XclExpXmlStream& rStrm, sal_In
             FSNS( XML_xmlns, XML_v ),   "urn:schemas-microsoft-com:vml",
             FSNS( XML_xmlns, XML_o ),   "urn:schemas-microsoft-com:office:office",
             FSNS( XML_xmlns, XML_x ),   "urn:schemas-microsoft-com:office:excel",
+            FSNS( XML_xmlns, XML_w10 ), "urn:schemas-microsoft-com:office:word",
             FSEND );
 
     std::vector<XclObj*>::iterator pIter;
