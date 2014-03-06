@@ -717,6 +717,8 @@ bool ScValidationData::GetSelectionFromFormula(
         }
     }
 
+    bool bHaveEmpty = false;
+
     /* XL artificially limits things to a single col or row in the UI but does
      * not list the constraint in MOOXml. If a defined name or INDIRECT
      * resulting in 1D is entered in the UI and the definition later modified
@@ -736,6 +738,16 @@ bool ScValidationData::GetSelectionFromFormula(
             if( ScMatrix::IsNonValueType( nMatVal.nType ) )
             {
                 aValStr = nMatVal.GetString().getString();
+
+                // Do not add multiple empty strings to the validation list,
+                // especially not if they'd bloat the tail with a million empty
+                // entries for a column range, fdo#61520
+                if (aValStr.isEmpty())
+                {
+                    if (bHaveEmpty)
+                        continue;
+                    bHaveEmpty = true;
+                }
 
                 if( NULL != pStrings )
                     pEntry = new ScTypedStrData( aValStr, 0.0, ScTypedStrData::Standard);
