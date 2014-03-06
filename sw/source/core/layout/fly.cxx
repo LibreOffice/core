@@ -1036,7 +1036,7 @@ void SwFlyFrm::_UpdateAttr( const SfxPoolItem *pOld, const SfxPoolItem *pNew,
                 else if ( GetPrevLink() )
                     SwFlyFrm::UnchainFrames( GetPrevLink(), this );
             }
-
+            //fall-through
         default:
             bClear = false;
     }
