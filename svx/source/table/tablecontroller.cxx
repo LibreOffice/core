@@ -2843,90 +2843,90 @@ void SvxTableController::FillCommonBorderAttrFromSelectedCells( SvxBoxItem& rBox
     }
 }
 
-sal_Bool SvxTableController::selectRow( sal_Int32 row )
+bool SvxTableController::selectRow( sal_Int32 row )
 {
     if( !mxTable.is() )
-        return sal_False;
+        return false;
     CellPos aStart( 0, row ), aEnd( mxTable->getColumnCount() - 1, row );
     StartSelection( aEnd );
     gotoCell( aStart, true, 0 );
-    return sal_True;
+    return true;
 }
 
-sal_Bool SvxTableController::selectColumn( sal_Int32 column )
+bool SvxTableController::selectColumn( sal_Int32 column )
 {
     if( !mxTable.is() )
-        return sal_False;
+        return false;
     CellPos aStart( column, 0 ), aEnd( column, mxTable->getRowCount() - 1 );
     StartSelection( aEnd );
     gotoCell( aStart, true, 0 );
-    return sal_True;
+    return true;
 }
 
-sal_Bool SvxTableController::deselectRow( sal_Int32 row )
+bool SvxTableController::deselectRow( sal_Int32 row )
 {
     if( !mxTable.is() )
-        return sal_False;
+        return false;
     CellPos aStart( 0, row ), aEnd( mxTable->getColumnCount() - 1, row );
     StartSelection( aEnd );
     gotoCell( aStart, false, 0 );
-    return sal_True;
+    return true;
 }
 
-sal_Bool SvxTableController::deselectColumn( sal_Int32 column )
+bool SvxTableController::deselectColumn( sal_Int32 column )
 {
     if( !mxTable.is() )
-        return sal_False;
+        return false;
     CellPos aStart( column, 0 ), aEnd( column, mxTable->getRowCount() - 1 );
     StartSelection( aEnd );
     gotoCell( aStart, false, 0 );
-    return sal_True;
+    return true;
 }
 
-sal_Bool SvxTableController::isRowSelected( sal_Int32 nRow )
+bool SvxTableController::isRowSelected( sal_Int32 nRow )
 {
     if( hasSelectedCells() )
     {
         CellPos aFirstPos, aLastPos;
         getSelectedCells( aFirstPos, aLastPos );
         if( (aFirstPos.mnCol == 0) && (nRow >= aFirstPos.mnRow && nRow <= aLastPos.mnRow) && (mxTable->getColumnCount() - 1 == aLastPos.mnCol) )
-            return sal_True;
+            return true;
     }
-    return sal_False;
+    return false;
 }
 
-sal_Bool SvxTableController::isColumnSelected( sal_Int32 nColumn )
+bool SvxTableController::isColumnSelected( sal_Int32 nColumn )
 {
     if( hasSelectedCells() )
     {
         CellPos aFirstPos, aLastPos;
         getSelectedCells( aFirstPos, aLastPos );
         if( (aFirstPos.mnRow == 0) && (nColumn >= aFirstPos.mnCol && nColumn <= aLastPos.mnCol) && (mxTable->getRowCount() - 1 == aLastPos.mnRow) )
-            return sal_True;
+            return true;
     }
-    return sal_False;
+    return false;
 }
 
-sal_Bool SvxTableController::isRowHeader()
+bool SvxTableController::isRowHeader()
 {
     SdrTableObj* pTableObj = dynamic_cast< ::sdr::table::SdrTableObj* >( mxTableObj.get() );
     SdrModel* pModel = pTableObj ? pTableObj->GetModel() : 0;
 
     if( !pTableObj || !pModel )
-        return sal_False;
+        return false;
 
     TableStyleSettings aSettings( pTableObj->getTableStyleSettings() );
 
     return aSettings.mbUseFirstRow;
 }
 
-sal_Bool SvxTableController::isColumnHeader()
+bool SvxTableController::isColumnHeader()
 {
     SdrTableObj* pTableObj = dynamic_cast< ::sdr::table::SdrTableObj* >( mxTableObj.get() );
     SdrModel* pModel = pTableObj ? pTableObj->GetModel() : 0;
 
     if( !pTableObj || !pModel )
-        return sal_False;
+        return false;
 
     TableStyleSettings aSettings( pTableObj->getTableStyleSettings() );
 

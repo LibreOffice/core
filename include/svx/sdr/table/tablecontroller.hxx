@@ -101,14 +101,14 @@ public:
 
     SVX_DLLPRIVATE void onTableModified();
 
-    sal_Bool selectRow( sal_Int32 row );
-    sal_Bool selectColumn( sal_Int32 column );
-    sal_Bool deselectRow( sal_Int32 row );
-    sal_Bool deselectColumn( sal_Int32 column );
-    sal_Bool isRowSelected( sal_Int32 nRow );
-    sal_Bool isColumnSelected( sal_Int32 nColumn );
-    sal_Bool isRowHeader();
-    sal_Bool isColumnHeader();
+    bool selectRow( sal_Int32 row );
+    bool selectColumn( sal_Int32 column );
+    bool deselectRow( sal_Int32 row );
+    bool deselectColumn( sal_Int32 column );
+    bool isRowSelected( sal_Int32 nRow );
+    bool isColumnSelected( sal_Int32 nColumn );
+    bool isRowHeader();
+    bool isColumnHeader();
     ::sdr::table::SdrTableObj* GetTableObj() { return dynamic_cast< ::sdr::table::SdrTableObj* >( mxTableObj.get() ); }
     //declare event notification method
     void NotifySelection( const CellPos& firstPos, const CellPos& lastPos, const CellPos& newPos );
