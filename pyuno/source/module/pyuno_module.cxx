@@ -106,7 +106,7 @@ public:
     {
         PyDict_SetItem(used, key, Py_True);
     }
-    void setInitialised(OUString key, sal_Int32 pos = -1)
+    void setInitialised(const OUString& key, sal_Int32 pos = -1)
     {
         if (initialised[key])
         {
@@ -126,7 +126,7 @@ public:
         if ( pos >= 0 )
             ++nPosConsumed;
     }
-    bool isInitialised(OUString key)
+    bool isInitialised(const OUString& key)
     {
         return initialised[key];
     }

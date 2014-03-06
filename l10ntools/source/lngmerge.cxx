@@ -29,7 +29,7 @@
 
 namespace {
 
-OString getBracketedContent(OString text) {
+OString getBracketedContent(const OString& text) {
     return text.getToken(1, '[').getToken(0, ']');
 }
 

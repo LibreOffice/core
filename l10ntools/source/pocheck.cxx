@@ -17,7 +17,7 @@
 #include "po.hxx"
 
 // Translated style names must be unique
-static void checkStyleNames(OString aLanguage)
+static void checkStyleNames(const OString& aLanguage)
 {
     std::map<OString,sal_uInt16> aLocalizedStyleNames;
     std::map<OString,sal_uInt16> aLocalizedNumStyleNames;
@@ -130,7 +130,7 @@ static void checkStyleNames(OString aLanguage)
 }
 
 // Translated spreadsheet function names must be unique
-static void checkFunctionNames(OString aLanguage)
+static void checkFunctionNames(const OString& aLanguage)
 {
     std::map<OString,sal_uInt16> aLocalizedFunctionNames;
     std::map<OString,sal_uInt16> aLocalizedCoreFunctionNames;
@@ -352,7 +352,7 @@ static void checkFunctionNames(OString aLanguage)
 // In instsetoo_native/inc_openoffice/windows/msi_languages.po
 // where an en-US string ends with '|', translation must end
 // with '|', too.
-static void checkVerticalBar(OString aLanguage)
+static void checkVerticalBar(const OString& aLanguage)
 {
     OString aPoPath = OString(getenv("SRC_ROOT")) +
                       "/translations/source/" +
@@ -400,7 +400,7 @@ static void checkVerticalBar(OString aLanguage)
 
 // In starmath/source.po Math symbol names (from symbol.src)
 // must not contain spaces
-static void checkMathSymbolNames(OString aLanguage)
+static void checkMathSymbolNames(const OString& aLanguage)
 {
     OString aPoPath = OString(getenv("SRC_ROOT")) +
                       "/translations/source/" +

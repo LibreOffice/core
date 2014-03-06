@@ -68,12 +68,12 @@ namespace chelp {
 
     public:
 
-        StaticModuleInformation( OUString aTitle,
-                                 OUString aStartId,
-                                 OUString aProgramSwitch,
-                                 OUString aHeading,
-                                 OUString aFulltext,
-                                 OUString aOrder )
+        StaticModuleInformation( const OUString& aTitle,
+                                 const OUString& aStartId,
+                                 const OUString& aProgramSwitch,
+                                 const OUString& aHeading,
+                                 const OUString& aFulltext,
+                                 const OUString& aOrder )
             : m_aStartId( aStartId ),
               m_aProgramSwitch( aProgramSwitch ),
               m_aTitle( aTitle ),

@@ -138,7 +138,7 @@ void writeValueContent_(oslFileHandle handle, double value) {
     writeData(handle, OString::number(value));
 }
 
-void writeValueContent_(oslFileHandle handle, OUString value) {
+void writeValueContent_(oslFileHandle handle, const OUString& value) {
     writeValueContent(handle, value);
 }
 

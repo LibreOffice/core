@@ -963,7 +963,7 @@ void SmCursor::InsertFraction() {
     FinishEdit(pLineList, pLineParent, nParentIndex, SmCaretPos(pSelectedNode, 1));
 }
 
-void SmCursor::InsertText(OUString aString)
+void SmCursor::InsertText(const OUString& aString)
 {
     BeginEdit();
 
@@ -1092,12 +1092,12 @@ void SmCursor::InsertElement(SmFormulaElement element){
     EndEdit();
 }
 
-void SmCursor::InsertSpecial(OUString aString)
+void SmCursor::InsertSpecial(const OUString& _aString)
 {
     BeginEdit();
     Delete();
 
-    aString = comphelper::string::strip(aString, ' ');
+    OUString aString = comphelper::string::strip(_aString, ' ');
 
     //Create instance of special node
     SmToken token;
@@ -1140,7 +1140,7 @@ void SmCursor::InsertCommand(sal_uInt16 nCommand) {
     }
 }
 
-void SmCursor::InsertCommandText(OUString aCommandText) {
+void SmCursor::InsertCommandText(const OUString& aCommandText) {
     //Parse the sub expression
     SmNode* pSubExpr = SmParser().ParseExpression(aCommandText);
 

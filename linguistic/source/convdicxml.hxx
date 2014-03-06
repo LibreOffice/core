@@ -76,14 +76,14 @@ class ConvDicXMLImport : public SvXMLImport
                                 //   but the language and conversion type will
                                 //   still be determined!
 
-    sal_Int16           nLanguage;          // language of the dictionary
+    sal_Int16       nLanguage;          // language of the dictionary
     sal_Int16       nConversionType;    // conversion type the dictionary is used for
     sal_Bool        bSuccess;
 
 public:
 
     //!!  see comment for pDic member
-    ConvDicXMLImport( ConvDic *pConvDic, const OUString /*&rFileName*/ ) :
+    ConvDicXMLImport( ConvDic *pConvDic, const OUString& /*&rFileName*/ ) :
         SvXMLImport ( comphelper::getProcessComponentContext(), "com.sun.star.lingu2.ConvDicXMLImport", IMPORT_ALL ),
         pDic        ( pConvDic )
     {

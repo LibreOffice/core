@@ -137,7 +137,7 @@ sal_Bool isDerivedFrom( Reference<XIdlClass> xToTestClass, Reference<XIdlClass> 
 // Hashtable for the search of names
 struct hashName_Impl
 {
-    size_t operator()(const OUString Str) const
+    size_t operator()(const OUString& Str) const
     {
         return (size_t)Str.hashCode();
     }
@@ -145,7 +145,7 @@ struct hashName_Impl
 
 struct eqName_Impl
 {
-    sal_Bool operator()(const OUString Str1, const OUString Str2) const
+    sal_Bool operator()(const OUString& Str1, const OUString& Str2) const
     {
         return ( Str1 == Str2 );
     }
@@ -1411,7 +1411,7 @@ Any ImplIntrospectionAccess::getMaterial(void) throw(RuntimeException, std::exce
 }
 
 // Hilfs-Funktion zur LowerCase-Wandlung eines OUString
-OUString toLower( OUString aUStr )
+OUString toLower( const OUString& aUStr )
 {
     // Tabelle fuer XExactName pflegen
     OUString aOWStr( aUStr.getStr() );

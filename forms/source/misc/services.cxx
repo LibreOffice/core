@@ -99,7 +99,7 @@ static Sequence<sal_Int64>                              s_aFactories;
 
 
 void registerClassInfo(
-        OUString _rClassImplName,                                // the ImplName of the class
+        const OUString& _rClassImplName,                                // the ImplName of the class
         const Sequence< OUString >& _rServiceNames,      // the services supported by this class
         ::cppu::ComponentInstantiation _pCreateFunction                 // the method for instantiating such a class
         )

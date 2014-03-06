@@ -102,7 +102,7 @@ static void InsertMenu_Impl( const uno::Reference< container::XIndexContainer >&
                             sal_Int32 nTargetIndex,
                             const uno::Reference< container::XIndexAccess >& xSourceMenu,
                             sal_Int32 nSourceIndex,
-                            const OUString aContModuleName,
+                            const OUString& aContModuleName,
                             const uno::Reference< frame::XDispatchProvider >& xSourceDisp )
 {
     sal_Int32 nInd = 0;

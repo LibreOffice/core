@@ -59,10 +59,10 @@ class OLESimpleStorage  : public ::cppu::WeakImplHelper3
 
     void UpdateOriginal_Impl();
 
-    static void InsertInputStreamToStorage_Impl( BaseStorage* pStorage, OUString aName, const ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >& xInputStream )
+    static void InsertInputStreamToStorage_Impl( BaseStorage* pStorage, const OUString & aName, const ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >& xInputStream )
     throw ( ::com::sun::star::uno::Exception );
 
-    static void InsertNameAccessToStorage_Impl( BaseStorage* pStorage, OUString aName, const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >& xNameAccess )
+    static void InsertNameAccessToStorage_Impl( BaseStorage* pStorage, const OUString & aName, const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >& xNameAccess )
     throw ( ::com::sun::star::uno::Exception );
 
 public:

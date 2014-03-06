@@ -39,7 +39,7 @@ const OUString rowLevel4 = "OutlineSheet.A7:A21";
 
 uno::Reference< sheet::XSpreadsheet > aSheetGlobal;
 
-OUString getVisibleAdress(OUString aLevelRangeString)
+OUString getVisibleAdress(const OUString& aLevelRangeString)
 {
 
     uno::Reference<table::XCellRange> aSheetRangeAccess(aSheetGlobal, UNO_QUERY_THROW);
@@ -53,7 +53,7 @@ OUString getVisibleAdress(OUString aLevelRangeString)
 
 }
 
-table::CellRangeAddress getAddressFromRangeString(OUString aStringAddress)
+table::CellRangeAddress getAddressFromRangeString(const OUString& aStringAddress)
 {
 
     uno::Reference< table::XCellRange > aSheetRangeAccess(aSheetGlobal, UNO_QUERY_THROW);

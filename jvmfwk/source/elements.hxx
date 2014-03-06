@@ -358,7 +358,7 @@ struct PluginLibrary
     PluginLibrary()
     {
     }
-    PluginLibrary(OUString vendor,OUString path) :
+    PluginLibrary(const OUString & vendor, const OUString & path) :
         sVendor(vendor), sPath(path)
     {
     }

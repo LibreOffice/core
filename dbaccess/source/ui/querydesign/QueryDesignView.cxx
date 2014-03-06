@@ -187,7 +187,7 @@ namespace
     }
     OUString ParseCondition( OQueryController& rController
                                     ,const ::connectivity::OSQLParseNode* pCondition
-                                    ,const OUString _sDecimal
+                                    ,const OUString& _sDecimal
                                     ,const ::com::sun::star::lang::Locale& _rLocale
                                     ,sal_uInt32 _nStartIndex)
     {

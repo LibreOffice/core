@@ -614,7 +614,7 @@ css::uno::Sequence< OUString > SaxExpatParser::getSupportedServiceNames(void) th
 *
 *
 *-------------------------------------------*/
-OUString getErrorMessage( XML_Error xmlE, OUString sSystemId , sal_Int32 nLine )
+OUString getErrorMessage( XML_Error xmlE, const OUString& sSystemId , sal_Int32 nLine )
 {
     OUString Message;
     if( XML_ERROR_NONE == xmlE ) {

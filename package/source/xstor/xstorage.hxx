@@ -232,19 +232,19 @@ struct OStorage_Impl
                         sal_Bool bDirect );
     void CopyStorageElement( SotElement_Impl* pElement,
                             ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage > xDest,
-                            OUString aName,
+                            const OUString& aName,
                             sal_Bool bDirect );
 
     void SetModified( sal_Bool bModified );
 
     SotElement_Impl* FindElement( const OUString& rName );
 
-    SotElement_Impl* InsertStream( OUString aName, sal_Bool bEncr );
-    SotElement_Impl* InsertRawStream( OUString aName, const ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >& xInStream );
+    SotElement_Impl* InsertStream( const OUString& aName, sal_Bool bEncr );
+    SotElement_Impl* InsertRawStream( const OUString& aName, const ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >& xInStream );
 
     OStorage_Impl* CreateNewStorageImpl( sal_Int32 nStorageMode );
-    SotElement_Impl* InsertStorage( OUString aName, sal_Int32 nStorageMode );
-    SotElement_Impl* InsertElement( OUString aName, sal_Bool bIsStorage );
+    SotElement_Impl* InsertStorage( const OUString& aName, sal_Int32 nStorageMode );
+    SotElement_Impl* InsertElement( const OUString& aName, sal_Bool bIsStorage );
 
     void OpenSubStorage( SotElement_Impl* pElement, sal_Int32 nStorageMode );
     void OpenSubStream( SotElement_Impl* pElement );

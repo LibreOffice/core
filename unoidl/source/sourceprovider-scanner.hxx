@@ -58,7 +58,7 @@ private:
 class SourceProviderPlainStructTypeEntityPad: public SourceProviderEntityPad {
 public:
     SourceProviderPlainStructTypeEntityPad(
-        bool published, OUString theBaseName,
+        bool published, const OUString & theBaseName,
         rtl::Reference<unoidl::PlainStructTypeEntity> const & theBaseEntity):
         SourceProviderEntityPad(published), baseName(theBaseName),
         baseEntity(theBaseEntity)
@@ -90,7 +90,7 @@ private:
 class SourceProviderExceptionTypeEntityPad: public SourceProviderEntityPad {
 public:
     SourceProviderExceptionTypeEntityPad(
-        bool published, OUString theBaseName,
+        bool published, const OUString & theBaseName,
         rtl::Reference<unoidl::ExceptionTypeEntity> const & theBaseEntity):
         SourceProviderEntityPad(published), baseName(theBaseName),
         baseEntity(theBaseEntity)
@@ -128,7 +128,7 @@ public:
         OUString mandatory;
         std::set<OUString> optional;
 
-        explicit Member(OUString theMandatory): mandatory(theMandatory) {}
+        explicit Member(const OUString & theMandatory): mandatory(theMandatory) {}
     };
 
     SourceProviderInterfaceTypeEntityPad(bool published, bool theSingleBase):

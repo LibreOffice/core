@@ -80,8 +80,8 @@ struct DispatchHolder
     Reference< XDispatch > xDispatch;
 };
 
-static OUString impl_GetFilterFromExt( OUString aUrl, SfxFilterFlags nFlags,
-                                        OUString aAppl )
+static OUString impl_GetFilterFromExt( const OUString& aUrl, SfxFilterFlags nFlags,
+                                        const OUString& aAppl )
 {
     OUString aFilter;
     SfxMedium* pMedium = new SfxMedium( aUrl,
@@ -108,7 +108,7 @@ static OUString impl_GetFilterFromExt( OUString aUrl, SfxFilterFlags nFlags,
     delete pMedium;
     return aFilter;
 }
-static OUString impl_GuessFilter( OUString aUrlIn, OUString aUrlOut )
+static OUString impl_GuessFilter( const OUString& aUrlIn, const OUString& aUrlOut )
 {
     /* aAppl can also be set to Factory like scalc, swriter... */
     OUString aAppl;

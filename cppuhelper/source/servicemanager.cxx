@@ -1830,7 +1830,7 @@ bool cppuhelper::ServiceManager::removeLegacyFactory(
     return true;
 }
 
-void cppuhelper::ServiceManager::removeImplementation(rtl::OUString name) {
+void cppuhelper::ServiceManager::removeImplementation(const rtl::OUString & name) {
     // The underlying data structures make this function somewhat inefficient,
     // but the assumption is that it is rarely called:
     boost::shared_ptr< Data::Implementation > clear;

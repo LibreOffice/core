@@ -100,7 +100,7 @@ namespace frm
             {
             }
 
-            void operator()( const OUString _append )
+            void operator()( const OUString& _append )
             {
                 m_string += _append;
             }

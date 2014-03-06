@@ -265,7 +265,7 @@ private:
     /** Helper method to compare the versions with the current version
      */
     SAL_DLLPRIVATE bool
-        checkBlacklistVersion(OUString currentversion,
+        checkBlacklistVersion(const OUString& currentversion,
                               ::com::sun::star::uno::Sequence< OUString > const & versions) const;
 
     ::com::sun::star::uno::Reference<

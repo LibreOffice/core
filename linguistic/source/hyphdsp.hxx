@@ -75,7 +75,7 @@ class HyphenatorDispatcher :
 
     com::sun::star::uno::Reference<
         ::com::sun::star::linguistic2::XHyphenatedWord>
-            buildHyphWord( const OUString rOrigWord,
+            buildHyphWord( const OUString& rOrigWord,
                 const ::com::sun::star::uno::Reference<
                     ::com::sun::star::linguistic2::XDictionaryEntry> &xEntry,
                 sal_Int16 nLang, sal_Int16 nMaxLeading );

@@ -34,7 +34,7 @@ public:
     Point mBoxLocation;
     Size  mBoxSize;
 
-    SmElement(SmNodePointer pNode, OUString aText, OUString aHelpText);
+    SmElement(SmNodePointer pNode, const OUString& aText, const OUString& aHelpText);
     virtual ~SmElement();
 
     SmNodePointer getNode();
@@ -96,7 +96,7 @@ class SmElementsControl : public Control
     Size          maMaxElementDimensions;
     bool          mbVerticalMode;
 
-    void addElement(OUString aElementVisual, OUString aElementSource, OUString aHelpText);
+    void addElement(const OUString& aElementVisual, const OUString& aElementSource, const OUString& aHelpText);
 
     void addElements(const sal_uInt16 aElementsArray[][2], sal_uInt16 size);
 

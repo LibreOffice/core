@@ -849,7 +849,7 @@ namespace cppcanvas
 
         // create text effects such as shadow/relief/embossed
         void ImplRenderer::createTextAction( const ::Point&                 rStartPoint,
-                                             const OUString                 rString,
+                                             const OUString&                rString,
                                              int                            nIndex,
                                              int                            nLength,
                                              const sal_Int32*               pCharWidths,

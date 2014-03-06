@@ -576,7 +576,7 @@ sal_Bool ImpOptimizer::Optimize()
     return sal_True;
 }
 
-static void DispatchURL( Reference< XComponentContext > xContext, OUString sURL, Reference< XFrame > xFrame )
+static void DispatchURL( Reference< XComponentContext > xContext, const OUString& sURL, Reference< XFrame > xFrame )
 {
     try
     {

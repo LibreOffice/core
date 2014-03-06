@@ -65,7 +65,7 @@ void HyphenatorDispatcher::ClearSvcList()
 
 
 Reference<XHyphenatedWord>  HyphenatorDispatcher::buildHyphWord(
-            const OUString rOrigWord,
+            const OUString& rOrigWord,
             const Reference<XDictionaryEntry> &xEntry,
             sal_Int16 nLang, sal_Int16 nMaxLeading )
 {

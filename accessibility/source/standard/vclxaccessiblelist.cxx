@@ -185,7 +185,7 @@ void VCLXAccessibleList::notifyVisibleStates(sal_Bool _bSetNew )
     }
 }
 
-void VCLXAccessibleList::UpdateSelection_Acc (::rtl::OUString sTextOfSelectedItem, bool b_IsDropDownList)
+void VCLXAccessibleList::UpdateSelection_Acc (const ::rtl::OUString& sTextOfSelectedItem, bool b_IsDropDownList)
 {
     if ( m_aBoxType == COMBOBOX )
     {
@@ -491,7 +491,7 @@ void VCLXAccessibleList::ProcessWindowEvent (const VclWindowEvent& rVclWindowEve
     state of the associated accessibility objects accordingly we exploit the
     fact that the
 */
-void VCLXAccessibleList::UpdateSelection (OUString sTextOfSelectedItem)
+void VCLXAccessibleList::UpdateSelection (const OUString& sTextOfSelectedItem)
 {
     if ( m_aBoxType == COMBOBOX )
     {

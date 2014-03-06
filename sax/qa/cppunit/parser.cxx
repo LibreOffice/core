@@ -39,7 +39,7 @@ public:
     CPPUNIT_TEST_SUITE_END();
 
 private:
-    uno::Reference< io::XInputStream > createStream(OString sInput);
+    uno::Reference< io::XInputStream > createStream(const OString& sInput);
 };
 
 void ParserTest::setUp()
@@ -55,7 +55,7 @@ void ParserTest::tearDown()
     test::BootstrapFixture::tearDown();
 }
 
-uno::Reference< io::XInputStream > ParserTest::createStream(OString sInput)
+uno::Reference< io::XInputStream > ParserTest::createStream(const OString& sInput)
 {
     uno::Reference< io::XOutputStream > xPipe( io::Pipe::create(m_xContext) );
     uno::Reference< io::XInputStream > xInStream( xPipe, uno::UNO_QUERY );

@@ -1383,7 +1383,7 @@ public:
     virtual sal_Bool SAL_CALL hasElements(  ) throw(RuntimeException, std::exception);
 };
 
-static sal_Char* U2C( OUString str )
+static sal_Char* U2C( const OUString& str )
 {
     sal_Char* s = new sal_Char[ str.getLength()+1 ];
     int i;
