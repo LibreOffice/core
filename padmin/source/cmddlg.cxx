@@ -232,7 +232,8 @@ RTSCommandPage::RTSCommandPage( RTSDialog* pParent ) :
         m_aRemovePB( this, PaResId( RID_RTS_CMD_BTN_REMOVE ) ),
         m_aFaxHelp( PaResId( RID_RTS_CMD_STR_FAXHELP ) ),
         m_aPrinterHelp( PaResId( RID_RTS_CMD_STR_PRINTERHELP ) ),
-        m_aPdfHelp( PaResId( RID_RTS_CMD_STR_PDFHELP ) )
+        m_aPdfHelp( PaResId( RID_RTS_CMD_STR_PDFHELP ) ),
+        m_bWasExternalDialog(false)
 {
     // configuring as printer is only sensible in default print system
     PrinterInfoManager& rMgr( PrinterInfoManager::get() );
