@@ -1150,20 +1150,7 @@ SvxLinguTabPage::SvxLinguTabPage( Window* pParent, const SfxItemSet& rSet ) :
         m_pLinguDicsEditPB->Disable();
         m_pLinguDicsDelPB->Disable();
     }
-
-    const SfxSpellCheckItem* pItem = 0;
-
-    SfxItemState eItemState = rSet.GetItemState( GetWhich( SID_ATTR_SPELL ),
-                                    false, (const SfxPoolItem**)&pItem );
-
-    // is it about a default-item?
-    if ( eItemState == SFX_ITEM_DEFAULT )
-        pItem = (const SfxSpellCheckItem*)&(rSet.Get( GetWhich( SID_ATTR_SPELL ) ) );
-    else if ( eItemState == SFX_ITEM_DONTCARE )
-        pItem = NULL;
 }
-
-
 
 SvxLinguTabPage::~SvxLinguTabPage()
 {
