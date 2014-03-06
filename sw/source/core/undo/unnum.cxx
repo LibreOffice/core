@@ -90,10 +90,6 @@ void SwUndoInsNum::UndoImpl(::sw::UndoRedoContext & rContext)
         if( nLRSavePos )
         {
             // Update immediately so that potential "old" LRSpaces will be valid again.
-            // For that search firstly the correct NumRule names!
-            if( !pNd && nSttNode )
-                pNd = rDoc.GetNodes()[ nSttNode ]->GetTxtNode();
-
             pHistory->TmpRollback( &rDoc, nLRSavePos );
 
         }
