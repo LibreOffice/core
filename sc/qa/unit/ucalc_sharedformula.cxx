@@ -565,6 +565,7 @@ void Test::testSharedFormulasDeleteColumns()
     pUndoMgr->Undo();
     CPPUNIT_ASSERT_EQUAL(11.0, m_pDoc->GetValue(ScAddress(2,0,0)));
     pFC = m_pDoc->GetFormulaCell(ScAddress(2,0,0));
+    CPPUNIT_ASSERT(pFC);
     CPPUNIT_ASSERT_EQUAL(OUString("=B1"), pFC->GetFormula(aCFCxt));
 
     // Clear row 1 and move over to a formula group case.
