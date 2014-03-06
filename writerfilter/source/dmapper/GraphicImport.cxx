@@ -468,7 +468,7 @@ void GraphicImport::putPropertyToFrameGrabBag( const OUString& sPropertyName, co
     if (!xSetInfo.is())
         return;
 
-    const OUString& aGrabBagPropName = OUString("FrameInteropGrabBag");
+    const OUString aGrabBagPropName("FrameInteropGrabBag");
 
     if (xSetInfo->hasPropertyByName(aGrabBagPropName))
     {
