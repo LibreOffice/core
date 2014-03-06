@@ -44,13 +44,6 @@ sal_Unicode lclGetGroupSep()
 
 } // namespace
 
-
-
-ScDoubleField::ScDoubleField( Window* pParent, const ResId& rResId ) :
-    Edit( pParent, rResId )
-{
-}
-
 ScDoubleField::ScDoubleField( Window* pParent, WinBits nStyle ) :
     Edit( pParent, nStyle )
 {

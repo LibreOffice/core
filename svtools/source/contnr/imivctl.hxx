@@ -487,10 +487,12 @@ public:
                         );
 
     void                AdjustEntryAtGrid( SvxIconChoiceCtrlEntry* pStart = 0 );
+#ifdef DBG_UTIL
     void                SetEntryTextMode(
                             SvxIconChoiceCtrlTextMode,
                             SvxIconChoiceCtrlEntry* pEntry = 0
                         );
+#endif
     void                EnableEntryEditing( sal_Bool bEnable ) { bEntryEditingEnabled = bEnable; }
     sal_Bool            IsEntryEditingEnabled() const { return bEntryEditingEnabled; }
     sal_Bool            IsEntryEditing() const { return (sal_Bool)(pCurEditedEntry!=0); }

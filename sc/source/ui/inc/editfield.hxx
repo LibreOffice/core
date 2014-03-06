@@ -28,7 +28,6 @@
 class ScDoubleField : public Edit
 {
 public:
-    explicit            ScDoubleField( Window* pParent, const ResId& rResId );
     explicit            ScDoubleField( Window* pParent, WinBits nStyle );
 
     bool                GetValue( double& rfValue ) const;
