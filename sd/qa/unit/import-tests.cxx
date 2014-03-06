@@ -57,6 +57,7 @@ public:
     void testN828390_3();
     void testN828390_4();
     void testN828390_5();
+    void testN821567();
     void testFdo68594();
     void testFdo72998();
 
@@ -72,6 +73,7 @@ public:
     CPPUNIT_TEST(testN828390_3);
     CPPUNIT_TEST(testN828390_4);
     CPPUNIT_TEST(testN828390_5);
+    CPPUNIT_TEST(testN821567);
     CPPUNIT_TEST(testFdo68594);
     CPPUNIT_TEST(testFdo72998);
 
@@ -202,6 +204,33 @@ void SdFiltersTest::testN759180()
             }
         }
     }
+}
+
+void SdFiltersTest::testN821567()
+{
+    OUString bgImage;
+    ::sd::DrawDocShellRef xDocShRef = loadURL( getURLFromSrc("/sd/qa/unit/data/pptx/n821567.pptx") );
+    CPPUNIT_ASSERT_MESSAGE( "failed to load", xDocShRef.Is() );
+
+    xDocShRef = saveAndReload( xDocShRef, ODP );
+    CPPUNIT_ASSERT_MESSAGE( "failed to load", xDocShRef.Is() );
+    CPPUNIT_ASSERT_MESSAGE( "in destruction", !xDocShRef->IsInDestruction() );
+    uno::Reference< drawing::XDrawPagesSupplier > xDoc(
+        xDocShRef->GetDoc()->getUnoModel(), uno::UNO_QUERY_THROW );
+    CPPUNIT_ASSERT_MESSAGE( "not exactly one page", xDoc->getDrawPages()->getCount() == 1 );
+    uno::Reference< drawing::XDrawPage > xPage(
+        xDoc->getDrawPages()->getByIndex(0), uno::UNO_QUERY_THROW );
+
+    uno::Reference< beans::XPropertySet > xPropSet( xPage, uno::UNO_QUERY );
+    uno::Any aAny = xPropSet->getPropertyValue( OUString("Background") );
+    if(aAny.hasValue())
+    {
+        uno::Reference< beans::XPropertySet > aXBackgroundPropSet;
+        aAny >>= aXBackgroundPropSet;
+        aAny = aXBackgroundPropSet->getPropertyValue( OUString("FillBitmapName"));
+        aAny >>= bgImage;
+    }
+    CPPUNIT_ASSERT_MESSAGE("Slide Background is not exported properly", !bgImage.isEmpty());
 }
 
 void SdFiltersTest::testN828390()
