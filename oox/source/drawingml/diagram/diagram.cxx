@@ -421,8 +421,8 @@ void loadDiagram( ShapePtr& pShape,
                        pDiagram,
                        xRefDataModel);
 
-        pDiagram->getDataRelsMap() = pShape->resolveRelationshipsOfType( rFilter, xRefDataModel->getFragmentPath(),
-                                                           "http://schemas.openxmlformats.org/officeDocument/2006/relationships/image" );
+        pDiagram->getDataRelsMap() = pShape->resolveRelationshipsOfTypeFromOfficeDoc( rFilter,
+                xRefDataModel->getFragmentPath(), "image" );
 
 
         // Pass the info to pShape

@@ -1200,7 +1200,7 @@ void Shape::putPropertiesToGrabBag( const Sequence< PropertyValue >& aProperties
     }
 }
 
-uno::Sequence< uno::Sequence< uno::Any > >  Shape::resolveRelationshipsOfType(core::XmlFilterBase& rFilter, OUString sFragment, OUString sType )
+uno::Sequence< uno::Sequence< uno::Any > >  Shape::resolveRelationshipsOfTypeFromOfficeDoc(core::XmlFilterBase& rFilter, OUString sFragment, OUString sType )
 {
     uno::Sequence< uno::Sequence< uno::Any > > xRelListTemp;
     sal_Int32 counter = 0;
@@ -1208,7 +1208,7 @@ uno::Sequence< uno::Sequence< uno::Any > >  Shape::resolveRelationshipsOfType(co
     core::RelationsRef xRels = rFilter.importRelations( sFragment );
     if ( xRels )
     {
-        core::RelationsRef xImageRels = xRels->getRelationsFromType( sType );
+        core::RelationsRef xImageRels = xRels->getRelationsFromTypeFromOfficeDoc( sType );
         if ( xImageRels )
         {
             xRelListTemp.realloc( xImageRels->size() );

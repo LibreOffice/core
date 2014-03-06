@@ -178,7 +178,7 @@ public:
     const com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue> &
                         getDiagramDoms() { return maDiagramDoms; }
     void                setDiagramDoms(const com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue>& rDiagramDoms) { maDiagramDoms = rDiagramDoms; }
-    com::sun::star::uno::Sequence< com::sun::star::uno::Sequence< com::sun::star::uno::Any > >resolveRelationshipsOfType(
+    com::sun::star::uno::Sequence< com::sun::star::uno::Sequence< com::sun::star::uno::Any > >resolveRelationshipsOfTypeFromOfficeDoc(
                                                                           core::XmlFilterBase& rFilter, OUString sFragment, OUString sType );
 protected:
 
