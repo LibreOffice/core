@@ -261,7 +261,6 @@ IMPL_LINK( SwGlossaryDlg, GrpSelect, SvTreeListBox *, pBox )
         OUString aName(pBox->GetEntryText(pEntry));
         m_pNameED->SetText(aName);
         m_pShortNameEdit->SetText(*reinterpret_cast<OUString*>(pEntry->GetUserData()));
-        pEntry = pBox->GetParent(pEntry);
         m_pInsertBtn->Enable( !bIsDocReadOnly);
         ShowAutoText(::GetCurrGlosGroup(), m_pShortNameEdit->GetText());
     }
