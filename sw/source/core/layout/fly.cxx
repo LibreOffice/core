@@ -1711,11 +1711,21 @@ void SwFlyFrm::MakeContentPos( const SwBorderAttrs &rAttrs )
             {
                 if( nAdjust == SDRTEXTVERTADJUST_CENTER )
                 {
-                    aNewContentPos.setY(aNewContentPos.getY() + nDiff/2);
+                    if( bVertL2R )
+                        aNewContentPos.setX(aNewContentPos.getX() + nDiff/2);
+                    else if( bVert )
+                        aNewContentPos.setX(aNewContentPos.getX() - nDiff/2);
+                    else
+                        aNewContentPos.setY(aNewContentPos.getY() + nDiff/2);
                 }
                 else if( nAdjust == SDRTEXTVERTADJUST_BOTTOM )
                 {
-                    aNewContentPos.setY(aNewContentPos.getY() + nDiff);
+                    if( bVertL2R )
+                        aNewContentPos.setX(aNewContentPos.getX() + nDiff);
+                    else if( bVert )
+                        aNewContentPos.setX(aNewContentPos.getX() - nDiff);
+                    else
+                        aNewContentPos.setY(aNewContentPos.getY() + nDiff);
                 }
             }
         }
