@@ -27,6 +27,7 @@
 #include <cppuhelper/weak.hxx>
 #include <osl/mutex.hxx>
 #include <ucbhelper/macros.hxx>
+#include <cppuhelper/implbase2.hxx>
 
 
 
@@ -38,15 +39,12 @@
 
 
 
-class UcbPropertiesManager :
-                public cppu::OWeakObject,
-                public com::sun::star::lang::XTypeProvider,
-                public com::sun::star::lang::XServiceInfo,
-                public com::sun::star::beans::XPropertySetInfo
+class UcbPropertiesManager : public cppu::WeakImplHelper2 <
+    css::lang::XServiceInfo,
+    css::beans::XPropertySetInfo >
 {
-    com::sun::star::uno::Sequence< com::sun::star::beans::Property >*
-                                m_pProps;
-    osl::Mutex                  m_aMutex;
+    css::uno::Sequence< css::beans::Property >* m_pProps;
+    osl::Mutex m_aMutex;
 
 private:
     sal_Bool queryProperty( const OUString& rName,
@@ -57,17 +55,6 @@ public:
                             com::sun::star::lang::XMultiServiceFactory >&
                                 rxSMgr );
     virtual ~UcbPropertiesManager();
-
-    // XInterface
-    virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType )
-        throw( css::uno::RuntimeException, std::exception );
-    virtual void SAL_CALL acquire()
-        throw();
-    virtual void SAL_CALL release()
-        throw();
-
-    // XTypeProvider
-    XTYPEPROVIDER_DECL()
 
     // XServiceInfo
     XSERVICEINFO_DECL()
