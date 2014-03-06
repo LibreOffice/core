@@ -84,7 +84,8 @@ private:
         Span prefix;
         int nsId;
 
-        NamespaceData() {}
+        NamespaceData():
+            nsId(-1) {}
 
         NamespaceData(Span const & thePrefix, int theNsId):
             prefix(thePrefix), nsId(theNsId) {}
