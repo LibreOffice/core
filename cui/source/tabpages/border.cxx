@@ -87,9 +87,6 @@ SvxBorderTabPage::SvxBorderTabPage(Window* pParent, const SfxItemSet& rCoreAttrs
 
 ,
 
-
-
-
         aShadowImgLst( CUI_RES(IL_SDW_BITMAPS)),
         aBorderImgLst( CUI_RES(IL_PRE_BITMAPS)),
         nMinValue(0),
@@ -130,6 +127,25 @@ SvxBorderTabPage::SvxBorderTabPage(Window* pParent, const SfxItemSet& rCoreAttrs
     get(m_pPropertiesFrame, "properties");
     get(m_pMergeWithNextCB, "mergewithnext");
     get(m_pMergeAdjacentBordersCB, "mergeadjacent");
+
+    if ( GetDPIScaleFactor() > 1 )
+    {
+        for (short i = 0; i < aBorderImgLst.GetImageCount(); i++)
+        {
+            OUString rImageName = aBorderImgLst.GetImageName(i);
+            BitmapEx b = aBorderImgLst.GetImage(rImageName).GetBitmapEx();
+            b.Scale(GetDPIScaleFactor(), GetDPIScaleFactor(), BMP_SCALE_FAST);
+            aBorderImgLst.ReplaceImage(rImageName, Image(b));
+        }
+
+        for (short i = 0; i < aShadowImgLst.GetImageCount(); i++)
+        {
+            OUString rImageName = aShadowImgLst.GetImageName(i);
+            BitmapEx b = aShadowImgLst.GetImage(rImageName).GetBitmapEx();
+            b.Scale(GetDPIScaleFactor(), GetDPIScaleFactor(), BMP_SCALE_FAST);
+            aShadowImgLst.ReplaceImage(rImageName, Image(b));
+        }
+    }
 
     // this page needs ExchangeSupport
     SetExchangeSupport();

@@ -74,7 +74,7 @@ String RID_SVXSTR_FRAME_COLOR
 ComboBox RID_SVXTBX_STYLE
 {
     HelpId = HID_STYLE_LISTBOX ;
-    Size = MAP_APPFONT ( 67 , 86 ) ;
+    Size = MAP_APPFONT ( 50 , 86 ) ;
     DropDown = TRUE ;
     Sort = TRUE ;
     AutoHScroll = TRUE ;

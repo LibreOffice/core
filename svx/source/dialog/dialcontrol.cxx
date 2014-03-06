@@ -449,8 +449,13 @@ void DialControl::Init( const Size& rWinSize, const Font& rWinFont )
 
 void DialControl::Init( const Size& rWinSize )
 {
+    //hidpi TODO: GetDefaultFont() picks a font size too small, so fix it here.
+    Font aDefaultSize = GetFont();
+
     Font aFont( OutputDevice::GetDefaultFont(
         DEFAULTFONT_UI_SANS, Application::GetSettings().GetUILanguageTag().getLanguageType(), DEFAULTFONT_FLAGS_ONLYONE ) );
+
+    aFont.SetHeight(aDefaultSize.GetHeight());
     Init( rWinSize, aFont );
 }
 

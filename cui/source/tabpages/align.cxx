@@ -322,6 +322,18 @@ void AlignmentTabPage::InitVsRefEgde()
 
     ResId aResId( IL_LOCK_BMPS, CUI_MGR() );
     ImageList aImageList( aResId );
+
+    if( GetDPIScaleFactor() > 1 )
+    {
+        for (short i = 0; i < aImageList.GetImageCount(); i++)
+        {
+            OUString rImageName = aImageList.GetImageName(i);
+            BitmapEx b = aImageList.GetImage(rImageName).GetBitmapEx();
+            b.Scale(GetDPIScaleFactor(), GetDPIScaleFactor(), BMP_SCALE_FAST);
+            aImageList.ReplaceImage(rImageName, Image(b));
+        }
+    }
+
     Size aItemSize( aImageList.GetImage( IID_BOTTOMLOCK ).GetSizePixel() );
 
     m_pVsRefEdge->Clear();
