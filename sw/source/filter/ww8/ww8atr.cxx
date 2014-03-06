@@ -2088,7 +2088,9 @@ void AttributeOutputBase::StartTOX( const SwSection& rSect )
                         if( GetExport().AddSectionBreaksForTOX() )
                         {
                             sal_uLong nRstLnNum = 0;
-                            WW8_SepInfo rInfo( &GetExport( ).pDoc->GetPageDesc( 0 ), rSect.GetParent()->GetFmt() , nRstLnNum );
+                            SwSection *pParent = rSect.GetParent();
+                            WW8_SepInfo rInfo(&GetExport( ).pDoc->GetPageDesc(0),
+                                pParent ? pParent->GetFmt() : NULL, nRstLnNum);
                             GetExport( ).AttrOutput().SectionBreak( msword::PageBreak, &rInfo );
                         }
 
