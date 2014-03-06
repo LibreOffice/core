@@ -65,14 +65,10 @@ namespace connectivity { namespace hsqldb
     private:
         /** retrieves the current command of the View
 
-            @throws ::com::sun::star::lang::WrappedTargetException
-                if an error occurs while retrieving the command from the database and
-                <arg>_bAllowSQLExceptin</arg> is <FALSE/>
             @throws ::com::sun::star::sdbc::SQLException
-                if an error occurs while retrieving the command from the database and
-                <arg>_bAllowSQLException</arg> is <TRUE/>
+                if an error occurs while retrieving the command from the database.
         */
-        OUString impl_getCommand_throw( bool _bAllowSQLException ) const;
+        OUString impl_getCommand_throw() const;
 
     private:
         ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection > m_xConnection;

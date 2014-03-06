@@ -101,7 +101,7 @@ namespace connectivity { namespace hsqldb
         aRestoreCommand.appendAscii( "CREATE VIEW " );
         aRestoreCommand.append     ( sQualifiedName );
         aRestoreCommand.appendAscii( " AS " );
-        aRestoreCommand.append     ( impl_getCommand_throw( true ) );
+        aRestoreCommand.append     ( impl_getCommand_throw() );
         OUString sRestoreCommand( aRestoreCommand.makeStringAndClear() );
 
         bool bDropSucceeded( false );
@@ -150,15 +150,23 @@ namespace connectivity { namespace hsqldb
         {
             // retrieve the very current command, don't rely on the base classes cached value
             // (which we initialized empty, anyway)
-            _rValue <<= impl_getCommand_throw( false );
-            return;
+            try
+            {
+                _rValue <<= impl_getCommand_throw();
+            }
+            catch (const SQLException& e)
+            {
+                throw WrappedTargetException(e.Message,
+                    static_cast< XAlterView* >( const_cast< HView* >( this ) ),
+                        ::cppu::getCaughtException() );
+            }
         }
 
         HView_Base::getFastPropertyValue( _rValue, _nHandle );
     }
 
 
-    OUString HView::impl_getCommand_throw( bool _bAllowSQLException ) const
+    OUString HView::impl_getCommand_throw() const
     {
         OUString sCommand;
 
@@ -180,12 +188,7 @@ namespace connectivity { namespace hsqldb
             sCommand = xRow->getString( 1 );
         }
         catch( const RuntimeException& ) { throw; }
-        catch( const SQLException& e )
-        {
-            if ( _bAllowSQLException )
-                throw;
-            throw WrappedTargetException( e.Message, static_cast< XAlterView* >( const_cast< HView* >( this ) ), ::cppu::getCaughtException() );
-        }
+        catch( const SQLException& ) { throw; }
         catch( const Exception& )
         {
             DBG_UNHANDLED_EXCEPTION();
