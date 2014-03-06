@@ -63,7 +63,7 @@ CreateFlatParagraphIterator(SwDoc & rDoc, sal_Int32 const nTextMarkupType,
  * SwXFlatParagraph
  ******************************************************************************/
 
-SwXFlatParagraph::SwXFlatParagraph( SwTxtNode& rTxtNode, OUString aExpandText, const ModelToViewHelper& rMap ) :
+SwXFlatParagraph::SwXFlatParagraph( SwTxtNode& rTxtNode, const OUString& aExpandText, const ModelToViewHelper& rMap ) :
     SwXTextMarkup( rTxtNode, rMap ),
     maExpandText( aExpandText )
 {

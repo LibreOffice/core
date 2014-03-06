@@ -109,7 +109,7 @@ public:
 
     virtual sal_Bool Compile();
     virtual sal_Bool IsCompiled() const;
-    const SbxObject* FindType( OUString aTypeName ) const;
+    const SbxObject* FindType( const OUString& aTypeName ) const;
 
     virtual sal_Bool IsBreakable( sal_uInt16 nLine ) const;
     virtual sal_Bool IsBP( sal_uInt16 nLine ) const;

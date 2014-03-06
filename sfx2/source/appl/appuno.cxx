@@ -1720,14 +1720,14 @@ class RequestPackageReparation_Impl : public ::cppu::WeakImplHelper1< task::XInt
     comphelper::OInteractionDisapprove*  m_pDisapprove;
 
 public:
-    RequestPackageReparation_Impl( OUString aName );
+    RequestPackageReparation_Impl( const OUString& aName );
     sal_Bool    isApproved();
     virtual uno::Any SAL_CALL getRequest() throw( uno::RuntimeException, std::exception );
     virtual uno::Sequence< uno::Reference< task::XInteractionContinuation > > SAL_CALL getContinuations()
         throw( uno::RuntimeException, std::exception );
 };
 
-RequestPackageReparation_Impl::RequestPackageReparation_Impl( OUString aName )
+RequestPackageReparation_Impl::RequestPackageReparation_Impl( const OUString& aName )
 {
     OUString temp;
     uno::Reference< uno::XInterface > temp2;
@@ -1760,7 +1760,7 @@ uno::Sequence< uno::Reference< task::XInteractionContinuation > >
     return m_lContinuations;
 }
 
-RequestPackageReparation::RequestPackageReparation( OUString aName )
+RequestPackageReparation::RequestPackageReparation( const OUString& aName )
 {
     pImp = new RequestPackageReparation_Impl( aName );
     pImp->acquire();
@@ -1789,13 +1789,13 @@ class NotifyBrokenPackage_Impl : public ::cppu::WeakImplHelper1< task::XInteract
     comphelper::OInteractionAbort*  m_pAbort;
 
 public:
-    NotifyBrokenPackage_Impl( OUString aName );
+    NotifyBrokenPackage_Impl( const OUString& aName );
     virtual uno::Any SAL_CALL getRequest() throw( uno::RuntimeException, std::exception );
     virtual uno::Sequence< uno::Reference< task::XInteractionContinuation > > SAL_CALL getContinuations()
         throw( uno::RuntimeException, std::exception );
 };
 
-NotifyBrokenPackage_Impl::NotifyBrokenPackage_Impl( OUString aName )
+NotifyBrokenPackage_Impl::NotifyBrokenPackage_Impl( const OUString& aName )
 {
     OUString temp;
     uno::Reference< uno::XInterface > temp2;
@@ -1821,7 +1821,7 @@ uno::Sequence< uno::Reference< task::XInteractionContinuation > >
     return m_lContinuations;
 }
 
-NotifyBrokenPackage::NotifyBrokenPackage( OUString aName )
+NotifyBrokenPackage::NotifyBrokenPackage( const OUString& aName )
 {
     pImp = new NotifyBrokenPackage_Impl( aName );
     pImp->acquire();

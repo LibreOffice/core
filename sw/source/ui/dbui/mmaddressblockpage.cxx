@@ -394,7 +394,7 @@ const uno::Sequence< OUString >&    SwSelectAddressBlockDialog::GetAddressBlocks
 }
 
 void SwSelectAddressBlockDialog::SetSettings(
-        sal_Bool bIsCountry, OUString rCountry)
+        sal_Bool bIsCountry, const OUString& rCountry)
 {
     RadioButton *pActive = m_pNeverRB;
     if(bIsCountry)

@@ -250,7 +250,7 @@ void ScRandomNumberGeneratorDialog::SelectGeneratorAndGenerateNumbers()
 }
 
 template<class RNG>
-void ScRandomNumberGeneratorDialog::GenerateNumbers(RNG randomGenerator, OUString aDistributionName)
+void ScRandomNumberGeneratorDialog::GenerateNumbers(RNG randomGenerator, const OUString& aDistributionName)
 {
     OUString aUndo = SC_STRLOAD( RID_STATISTICS_DLGS, STR_UNDO_DISTRIBUTION_TEMPLATE);
     aUndo = aUndo.replaceAll("$(DISTRIBUTION)",  aDistributionName);

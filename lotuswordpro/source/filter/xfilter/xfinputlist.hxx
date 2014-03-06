@@ -69,7 +69,7 @@
 class XFInputList : public XFContent
 {
 public:
-    void SetName(OUString sName);
+    void SetName(const OUString& sName);
     void SetLabels(std::vector<OUString> list);
     virtual void    ToXml(IXFStream *pStrm);
 private:
@@ -77,7 +77,7 @@ private:
     std::vector<OUString> m_list;
 };
 
-inline void XFInputList::SetName(OUString sName)
+inline void XFInputList::SetName(const OUString& sName)
 {
     m_strName = sName;
 }

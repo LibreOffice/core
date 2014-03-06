@@ -39,8 +39,8 @@ class SdPresentationLayoutUndoAction : public SdUndoAction
 public:
     TYPEINFO();
     SdPresentationLayoutUndoAction(SdDrawDocument* pTheDoc,
-                         OUString        aTheOldLayoutName,
-                         OUString        aTheNewLayoutName,
+                         const OUString& aTheOldLayoutName,
+                         const OUString& aTheNewLayoutName,
                          AutoLayout      eTheOldAutoLayout,
                          AutoLayout      eTheNewAutoLayout,
                          sal_Bool            bSet,

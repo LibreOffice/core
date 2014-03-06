@@ -31,16 +31,16 @@
 class ScMetricInputDlg : public ModalDialog
 {
 public:
-    ScMetricInputDlg( Window*       pParent,
-                      OString       sDialogName,
-                      long          nCurrent,
-                      long          nDefault,
-                      FieldUnit     eFUnit    = FUNIT_MM,
-                      sal_uInt16    nDecimals = 2,
-                      long          nMaximum  = 1000,
-                      long          nMinimum  = 0,
-                      long          nFirst    = 1,
-                      long          nLast     = 100 );
+    ScMetricInputDlg( Window*        pParent,
+                      const OString& sDialogName,
+                      long           nCurrent,
+                      long           nDefault,
+                      FieldUnit      eFUnit    = FUNIT_MM,
+                      sal_uInt16     nDecimals = 2,
+                      long           nMaximum  = 1000,
+                      long           nMinimum  = 0,
+                      long           nFirst    = 1,
+                      long           nLast     = 100 );
 
     long GetInputValue( FieldUnit eUnit = FUNIT_TWIP ) const;
 

@@ -61,7 +61,7 @@ private:
     void GetRangeFromSelection();
 
     template<class RNG>
-    void GenerateNumbers(RNG randomGenerator, OUString aDistributionName);
+    void GenerateNumbers(RNG randomGenerator, const OUString& aDistributionName);
 
     void SelectGeneratorAndGenerateNumbers();
 

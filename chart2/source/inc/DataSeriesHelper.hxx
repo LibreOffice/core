@@ -56,7 +56,7 @@ OUString GetRole(
 OOO_DLLPUBLIC_CHARTTOOLS ::com::sun::star::uno::Reference< ::com::sun::star::chart2::data::XLabeledDataSequence >
     getDataSequenceByRole( const ::com::sun::star::uno::Reference<
                                ::com::sun::star::chart2::data::XDataSource > & xSource,
-                           OUString aRole,
+                           const OUString& aRole,
                            bool bMatchPrefix = false );
 
 /** Retrieves all data sequences in the given data source that match the given
@@ -73,7 +73,7 @@ OOO_DLLPUBLIC_CHARTTOOLS ::std::vector<
     getAllDataSequencesByRole( const ::com::sun::star::uno::Sequence<
                                    ::com::sun::star::uno::Reference<
                                        ::com::sun::star::chart2::data::XLabeledDataSequence > > & aDataSequences,
-                               OUString aRole,
+                               const OUString& aRole,
                                bool bMatchPrefix = false );
 
 /** Retrieves all data sequences found in the given data series and puts them

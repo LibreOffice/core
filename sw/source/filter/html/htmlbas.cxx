@@ -229,7 +229,7 @@ void SwHTMLParser::AddScriptSource()
     }
 }
 
-void SwHTMLParser::InsertBasicDocEvent( OUString aEvent, const OUString& rName,
+void SwHTMLParser::InsertBasicDocEvent( const OUString& aEvent, const OUString& rName,
                                         ScriptType eScrType,
                                         const OUString& rScrType )
 {

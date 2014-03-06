@@ -86,7 +86,7 @@ public:
                               SvTreeListEntry * pParent,
                               bool bChildrenOnDemand,
                               std::auto_ptr< SFEntry > aUserData,
-                              OUString factoryURL );
+                              const OUString& factoryURL );
     SvTreeListEntry * insertEntry(OUString const & rText, sal_uInt16 nBitmap,
                               SvTreeListEntry * pParent,
                               bool bChildrenOnDemand,
@@ -177,7 +177,7 @@ protected:
 public:
                     // prob need another arg in the ctor
                     // to specify the language or provider
-                    SvxScriptOrgDialog( Window* pParent, OUString language );
+                    SvxScriptOrgDialog( Window* pParent, const OUString& language );
                     ~SvxScriptOrgDialog();
 
     virtual short   Execute();

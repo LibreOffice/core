@@ -71,8 +71,8 @@ namespace connectivity
             virtual void swap() = 0;
             virtual void clear() = 0;
             virtual void reFill(const TStringVector &_rVector) = 0;
-            virtual void insert(const OUString& _sName,const ObjectType& _xObject) = 0;
-            virtual bool rename(const OUString _sOldName,const OUString _sNewName) = 0;
+            virtual void insert(const OUString& _sName, const ObjectType& _xObject) = 0;
+            virtual bool rename(const OUString& _sOldName, const OUString& _sNewName) = 0;
             virtual sal_Int32 size() = 0;
             virtual ::com::sun::star::uno::Sequence< OUString > getElementNames() = 0;
             virtual OUString getName(sal_Int32 _nIndex) = 0;
@@ -126,7 +126,7 @@ namespace connectivity
             virtual ObjectType appendObject( const OUString& _rForName, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& descriptor );
 
             // called when XDrop was called
-            virtual void dropObject(sal_Int32 _nPos,const OUString _sElementName);
+            virtual void dropObject(sal_Int32 _nPos, const OUString& _sElementName);
 
             /** returns the name for the object. The default implementation ask for the property NAME. If this doesn't satisfy, it has to be overloaded.
                 @param  _xObject    The object where the name should be extracted.
@@ -182,7 +182,7 @@ namespace connectivity
 
             void reFill(const TStringVector &_rVector);
             inline sal_Bool isCaseSensitive() const { return m_pElements->isCaseSensitive(); }
-            void renameObject(const OUString _sOldName,const OUString _sNewName);
+            void renameObject(const OUString& _sOldName, const OUString& _sNewName);
 
             // only the name is identical to ::cppu::OComponentHelper
             virtual void SAL_CALL disposing(void);

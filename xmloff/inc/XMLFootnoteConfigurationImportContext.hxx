@@ -103,10 +103,10 @@ public:
             ::com::sun::star::beans::XPropertySet> & rConfig);
 
     /// for helper class: set begin notice
-    void SetBeginNotice( OUString sText);
+    void SetBeginNotice( const OUString& sText);
 
     /// for helper class: set end notice
-    void SetEndNotice( OUString sText);
+    void SetEndNotice( const OUString& sText);
 };
 
 #endif

@@ -333,7 +333,7 @@ static OUString getParagraphStyle( SdrOutliner* pOutliner, sal_Int32 nPara )
 
 // constructor for the html export helper classes
 HtmlExport::HtmlExport(
-    OUString aPath,
+    const OUString& aPath,
     const Sequence< PropertyValue >& rParams,
     SdDrawDocument* pExpDoc,
     ::sd::DrawDocShell* pDocShell )

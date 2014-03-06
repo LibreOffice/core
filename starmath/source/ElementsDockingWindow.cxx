@@ -31,7 +31,7 @@
 SV_DECL_REF(SmDocShell)
 SV_IMPL_REF(SmDocShell)
 
-SmElement::SmElement(SmNodePointer pNode, OUString aText, OUString aHelpText) :
+SmElement::SmElement(SmNodePointer pNode, const OUString& aText, const OUString& aHelpText) :
     mpNode(pNode),
     maText(aText),
     maHelpText(aHelpText)
@@ -397,7 +397,7 @@ void SmElementsControl::addSeparator()
     maElementList.push_back(pElement);
 }
 
-void SmElementsControl::addElement(OUString aElementVisual, OUString aElementSource, OUString aHelpText)
+void SmElementsControl::addElement(const OUString& aElementVisual, const OUString& aElementSource, const OUString& aHelpText)
 {
     SmNodePointer pNode(SmParser().ParseExpression(aElementVisual));
 

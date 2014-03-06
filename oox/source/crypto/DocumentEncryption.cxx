@@ -25,7 +25,7 @@ using namespace css::uno;
 
 using namespace std;
 
-DocumentEncryption::DocumentEncryption(Reference< XStream > xDocumentStream, oox::ole::OleStorage& rOleStorage, OUString aPassword) :
+DocumentEncryption::DocumentEncryption(Reference< XStream > xDocumentStream, oox::ole::OleStorage& rOleStorage, const OUString& aPassword) :
     mxDocumentStream(xDocumentStream),
     mrOleStorage(rOleStorage),
     maPassword(aPassword)

@@ -96,7 +96,7 @@ static sal_Int32 lcl_APIToSubType(const uno::Any& rAny)
         return nSet;
 }
 
-OUString ReplacePoint( OUString rTmpName, bool bWithCommandType )
+OUString ReplacePoint( const OUString& rTmpName, bool bWithCommandType )
 {
     // replace first and last (if bWithCommandType: last two) dot
     // since table names may contain dots

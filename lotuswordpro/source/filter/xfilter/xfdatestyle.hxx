@@ -91,9 +91,9 @@ public:
 
     void    SetFixed(sal_Bool fixed);
 
-    void    SetLanguage(OUString lang);
+    void    SetLanguage(const OUString& lang);
 
-    void    SetCountry(OUString country);
+    void    SetCountry(const OUString& country);
 
     void    SetAutoOrder(sal_Bool bAutoOrder);
 
@@ -119,7 +119,7 @@ public:
 
     void    AddAmPm(sal_Bool bAmPm);
 
-    void    AddText( OUString part );
+    void    AddText( const OUString& part );
 
     virtual enumXFStyle GetStyleFamily();
 
@@ -143,12 +143,12 @@ inline void XFDateStyle::SetFixed(sal_Bool fixed)
     m_bFixed = fixed;
 }
 
-inline void XFDateStyle::SetLanguage(OUString lang)
+inline void XFDateStyle::SetLanguage(const OUString& lang)
 {
     m_strLanguage = lang;
 }
 
-inline void XFDateStyle::SetCountry(OUString country)
+inline void XFDateStyle::SetCountry(const OUString& country)
 {
     m_strCountry = country;
 }
@@ -214,7 +214,7 @@ inline void XFDateStyle::AddQuarter(sal_Bool bLongFmt)
     m_aParts.AddStyle(part);
 }
 
-inline void XFDateStyle::AddText( OUString text )
+inline void XFDateStyle::AddText( const OUString& text )
 {
     XFDatePart  *part = new XFDatePart();
     part->SetPartType(enumXFDateText);

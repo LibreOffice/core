@@ -177,11 +177,12 @@ void SAL_CALL SvXMLEmbeddedObjectHelper::disposing()
 }
 
 
-void SvXMLEmbeddedObjectHelper::splitObjectURL(OUString aURLNoPar,
+void SvXMLEmbeddedObjectHelper::splitObjectURL(const OUString& _aURLNoPar,
     OUString& rContainerStorageName,
     OUString& rObjectStorageName)
 {
-    DBG_ASSERT( '#' != aURLNoPar[0], "invalid object URL" );
+    DBG_ASSERT( '#' != _aURLNoPar[0], "invalid object URL" );
+    OUString aURLNoPar = _aURLNoPar;
 
     sal_Int32 _nPos = aURLNoPar.lastIndexOf( '/' );
     if( -1 == _nPos )

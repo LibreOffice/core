@@ -87,7 +87,7 @@ protected:
             const ::rtl::Reference < EncryptionData > &rData,
             sal_Int8 nStreamMode,
             sal_Bool bDecrypt,
-            OUString aMediaType = OUString() );
+            const OUString& aMediaType = OUString() );
 
     sal_Bool hasValidPassword ( ZipEntry & rEntry, const rtl::Reference < EncryptionData > &rData );
 

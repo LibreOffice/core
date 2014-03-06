@@ -57,20 +57,20 @@ private:
 public:
     void addListener(
         xmlNodePtr pNode,
-        OUString aType,
+        const OUString& aType,
         const Reference<com::sun::star::xml::dom::events::XEventListener>& aListener,
         sal_Bool bCapture);
 
     void removeListener(
         xmlNodePtr pNode,
-        OUString aType,
+        const OUString& aType,
         const Reference<com::sun::star::xml::dom::events::XEventListener>& aListener,
         sal_Bool bCapture);
 
     static void callListeners(
         TypeListenerMap const& rTMap,
         xmlNodePtr const pNode,
-        OUString aType,
+        const OUString& aType,
         const Reference< XEvent >& xEvent);
 
     bool dispatchEvent(

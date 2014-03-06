@@ -822,7 +822,7 @@ static void lcl_ChgNumRule( SwDoc& rDoc, const SwNumRule& rRule )
 void SwDoc::SetNumRule( const SwPaM& rPam,
                         const SwNumRule& rRule,
                         const bool bCreateNewList,
-                        const OUString sContinuedListId,
+                        const OUString& sContinuedListId,
                         bool bSetItem,
                         const bool bResetIndentAttrs )
 {

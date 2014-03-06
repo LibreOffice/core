@@ -40,7 +40,7 @@ using namespace ::svt;
 const OString aGroupIdent("dBase III");
 
 
-ODbaseIndexDialog::ODbaseIndexDialog(Window * pParent, OUString aDataSrcName)
+ODbaseIndexDialog::ODbaseIndexDialog(Window * pParent, const OUString& aDataSrcName)
     : ModalDialog(pParent, "DBaseIndexDialog", "dbaccess/ui/dbaseindexdialog.ui")
     , m_aDSN(aDataSrcName)
     , m_bCaseSensitiv(true)

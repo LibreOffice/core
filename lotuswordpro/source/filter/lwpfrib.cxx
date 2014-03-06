@@ -383,7 +383,7 @@ sal_Bool LwpFrib::HasNextFrib()
     return sal_True;
 }
 
-void LwpFrib::ConvertChars(XFContentContainer* pXFPara,OUString text)
+void LwpFrib::ConvertChars(XFContentContainer* pXFPara,const OUString& text)
 {
     if (m_ModFlag)
     {
@@ -399,7 +399,7 @@ void LwpFrib::ConvertChars(XFContentContainer* pXFPara,OUString text)
     }
 }
 
-void LwpFrib::ConvertHyperLink(XFContentContainer* pXFPara,LwpHyperlinkMgr* pHyperlink,OUString text)
+void LwpFrib::ConvertHyperLink(XFContentContainer* pXFPara,LwpHyperlinkMgr* pHyperlink,const OUString& text)
 {
     XFHyperlink* pHyper = new XFHyperlink;
     pHyper->SetHRef(pHyperlink->GetHyperlink());

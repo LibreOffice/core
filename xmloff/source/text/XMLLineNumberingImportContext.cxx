@@ -126,7 +126,7 @@ void XMLLineNumberingImportContext::StartElement(
 
 void XMLLineNumberingImportContext::ProcessAttribute(
     enum LineNumberingToken eToken,
-    OUString sValue)
+    const OUString& sValue)
 {
     bool bTmp(false);
     sal_Int32 nTmp;

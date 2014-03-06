@@ -77,7 +77,7 @@ sdbcx::ObjectType OTables::appendObject( const OUString&, const Reference< XProp
 }
 
 // XDrop
-void OTables::dropObject(sal_Int32 /*_nPos*/,const OUString _sElementName)
+void OTables::dropObject(sal_Int32 /*_nPos*/,const OUString& _sElementName)
 {
     OSL_ENSURE(m_aCollection.IsValid(),"Collection isn't valid");
     if ( !m_aCollection.Delete(_sElementName) )

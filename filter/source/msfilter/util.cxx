@@ -1323,7 +1323,7 @@ const char* GetOOXMLPresetGeometry( const char* sShapeType )
 typedef boost::unordered_map< const char*, MSO_SPT, rtl::CStringHash, rtl::CStringEqual> DMLToVMLTranslationHashMap;
 static DMLToVMLTranslationHashMap* pDMLToVMLMap;
 
-MSO_SPT GETVMLShapeType(OString aType)
+MSO_SPT GETVMLShapeType(const OString& aType)
 {
     const char* pDML = GetOOXMLPresetGeometry(aType.getStr());
 

@@ -34,7 +34,7 @@ public:
         const OUString &rURL, const OUString &,
         unsigned int, unsigned int, unsigned int);
 
-    void checkExportImport(OUString aFilterShortName);
+    void checkExportImport(const OUString& aFilterShortName);
 
     /**
      * Ensure CVEs remain unbroken
@@ -77,7 +77,7 @@ void VclFiltersTest::testScaling()
     }
 }
 
-void VclFiltersTest::checkExportImport(OUString aFilterShortName)
+void VclFiltersTest::checkExportImport(const OUString& aFilterShortName)
 {
     Bitmap aBitmap( Size( 100, 100 ), 24 );
     aBitmap.Erase(COL_WHITE);

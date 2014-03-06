@@ -265,7 +265,7 @@ void ThemeTable::setThemeFontLangProperties(uno::Sequence<beans::PropertyValue> 
     }
 }
 
-OUString ThemeTable::fromLocaleToScriptTag(OUString sLocale)
+OUString ThemeTable::fromLocaleToScriptTag(const OUString& sLocale)
 {
     return fromLCIDToScriptTag(LanguageTag::convertToLanguageType(sLocale));
 }

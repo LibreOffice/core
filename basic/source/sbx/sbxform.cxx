@@ -104,14 +104,14 @@ double get_number_of_digits( double dNumber )
 
 
 SbxBasicFormater::SbxBasicFormater( sal_Unicode _cDecPoint, sal_Unicode _cThousandSep,
-                      OUString _sOnStrg,
-                      OUString _sOffStrg,
-                      OUString _sYesStrg,
-                      OUString _sNoStrg,
-                      OUString _sTrueStrg,
-                      OUString _sFalseStrg,
-                      OUString _sCurrencyStrg,
-                      OUString _sCurrencyFormatStrg )
+                      const OUString& _sOnStrg,
+                      const OUString& _sOffStrg,
+                      const OUString& _sYesStrg,
+                      const OUString& _sNoStrg,
+                      const OUString& _sTrueStrg,
+                      const OUString& _sFalseStrg,
+                      const OUString& _sCurrencyStrg,
+                      const OUString& _sCurrencyFormatStrg )
     : cDecPoint(_cDecPoint)
     , cThousandSep(_cThousandSep)
     , sOnStrg(_sOnStrg)
@@ -954,7 +954,7 @@ void SbxBasicFormater::ScanFormatString( double dNumber,
     sReturnStrgFinal = sReturnStrg.makeStringAndClear();
 }
 
-OUString SbxBasicFormater::BasicFormatNull( OUString sFormatStrg )
+OUString SbxBasicFormater::BasicFormatNull( const OUString& sFormatStrg )
 {
     sal_Bool bNullFormatFound;
     OUString sNullFormatStrg = GetNullFormatString( sFormatStrg, bNullFormatFound );
@@ -966,9 +966,10 @@ OUString SbxBasicFormater::BasicFormatNull( OUString sFormatStrg )
     return OUString("null");
 }
 
-OUString SbxBasicFormater::BasicFormat( double dNumber, OUString sFormatStrg )
+OUString SbxBasicFormater::BasicFormat( double dNumber, const OUString& _sFormatStrg )
 {
     sal_Bool bPosFormatFound,bNegFormatFound,b0FormatFound;
+    OUString sFormatStrg = _sFormatStrg;
 
     // analyse format-string concerning predefined formats:
     if( sFormatStrg.equalsIgnoreAsciiCase( BASICFORMAT_GENERALNUMBER ) )
@@ -1071,7 +1072,7 @@ OUString SbxBasicFormater::BasicFormat( double dNumber, OUString sFormatStrg )
     return sReturnStrg;
 }
 
-sal_Bool SbxBasicFormater::isBasicFormat( OUString sFormatStrg )
+sal_Bool SbxBasicFormater::isBasicFormat( const OUString& sFormatStrg )
 {
     if( sFormatStrg.equalsIgnoreAsciiCase( BASICFORMAT_GENERALNUMBER ) )
     {

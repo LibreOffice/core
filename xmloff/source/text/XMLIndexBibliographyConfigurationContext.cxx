@@ -95,8 +95,8 @@ void XMLIndexBibliographyConfigurationContext::StartElement(
 
 void XMLIndexBibliographyConfigurationContext::ProcessAttribute(
     sal_uInt16 nPrefix,
-    OUString sLocalName,
-    OUString sValue)
+    const OUString& sLocalName,
+    const OUString& sValue)
 {
     if( XML_NAMESPACE_TEXT == nPrefix )
     {

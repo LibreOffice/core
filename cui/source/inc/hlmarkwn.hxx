@@ -71,10 +71,10 @@ private:
     sal_uInt16          mnError;
 
 protected:
-    sal_Bool RefreshFromDoc( OUString aURL );
+    sal_Bool RefreshFromDoc( const OUString& aURL );
     void RestoreLastSelection();
 
-    SvTreeListEntry* FindEntry(OUString aStrName);
+    SvTreeListEntry* FindEntry(const OUString& aStrName);
     void ClearTree();
     int FillTree( ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess > xLinks, SvTreeListEntry* pParentEntry =NULL );
 
@@ -88,8 +88,8 @@ public:
     ~SvxHlinkDlgMarkWnd();
 
     sal_Bool MoveTo ( Point aNewPos );
-    void RefreshTree(OUString aStrURL);
-    bool SelectEntry(OUString aStrMark);
+    void RefreshTree(const OUString& aStrURL);
+    bool SelectEntry(const OUString& aStrMark);
 
     sal_Bool ConnectToDialog( sal_Bool bDoit = sal_True );
 

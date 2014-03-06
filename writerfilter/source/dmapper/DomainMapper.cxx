@@ -3060,7 +3060,7 @@ bool DomainMapper::IsInHeaderFooter() const
     return m_pImpl->IsInHeaderFooter();
 }
 
-void DomainMapper::enableInteropGrabBag(OUString aName)
+void DomainMapper::enableInteropGrabBag(const OUString& aName)
 {
     m_pImpl->m_aInteropGrabBagName = aName;
 }

@@ -260,7 +260,7 @@ OUString OKeysHelper::getDropForeignKey() const
 }
 
 // XDrop
-void OKeysHelper::dropObject(sal_Int32 _nPos,const OUString _sElementName)
+void OKeysHelper::dropObject(sal_Int32 _nPos, const OUString& _sElementName)
 {
     Reference< XConnection> xConnection = m_pTable->getConnection();
     if ( xConnection.is() && !m_pTable->isNew() )

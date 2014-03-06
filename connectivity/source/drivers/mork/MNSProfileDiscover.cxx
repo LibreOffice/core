@@ -27,7 +27,7 @@ namespace connectivity
 {
     namespace mork
     {
-        ProfileStruct::ProfileStruct(MozillaProductType aProduct,OUString aProfileName,
+        ProfileStruct::ProfileStruct(MozillaProductType aProduct, const OUString& aProfileName,
             const OUString& aProfilePath
           )
         {

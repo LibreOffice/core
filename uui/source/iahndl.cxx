@@ -257,9 +257,10 @@ UUIInteractionHelper::getStringFromRequest(
 
 OUString
 UUIInteractionHelper::replaceMessageWithArguments(
-    OUString aMessage,
+    const OUString& _aMessage,
     std::vector< OUString > const & rArguments )
 {
+    OUString aMessage = _aMessage;
     for (sal_Int32 i = 0;;)
     {
         i = aMessage.indexOf("$(ARG", i);

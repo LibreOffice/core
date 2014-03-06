@@ -95,10 +95,10 @@ protected:
     /// If set, this is the parent of the currently handled shape.
     com::sun::star::uno::Reference<com::sun::star::drawing::XShape> m_xParent;
 
-    bool GetProperty( ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > rXPropSet, OUString aName );
+    bool GetProperty( ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > rXPropSet, const OUString& aName );
     bool GetPropertyAndState( ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > rXPropSet,
                   ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertyState > rXPropState,
-                  OUString aName, ::com::sun::star::beans::PropertyState& eState );
+                  const OUString& aName, ::com::sun::star::beans::PropertyState& eState );
     const char* GetFieldType( ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextRange > rRun, sal_Bool& bIsField );
 
 
@@ -123,14 +123,14 @@ public:
     OUString WriteImage( const Graphic &rGraphic , bool bRelPathToMedia = false);
 
     void WriteColor( sal_uInt32 nColor, sal_Int32 nAlpha = MAX_PERCENT );
-    void WriteColor( OUString sColorSchemeName, ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > aTransformations );
+    void WriteColor( const OUString& sColorSchemeName, ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > aTransformations );
     void WriteColorTransformations( ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > aTransformations );
     void WriteGradientStop( sal_uInt16 nStop, sal_uInt32 nColor );
     void WriteLineArrow( ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > rXPropSet, sal_Bool bLineStart );
     void WriteConnectorConnections( EscherConnectorListEntry& rConnectorEntry, sal_Int32 nStartID, sal_Int32 nEndID );
 
     void WriteSolidFill( sal_uInt32 nColor, sal_Int32 nAlpha = MAX_PERCENT );
-    void WriteSolidFill( OUString sSchemeName, ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > aTransformations );
+    void WriteSolidFill( const OUString& sSchemeName, ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > aTransformations );
     void WriteSolidFill( ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > rXPropSet );
     void WriteGradientFill( ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > rXPropSet );
     void WriteGradientFill( ::com::sun::star::awt::Gradient rGradient );

@@ -81,14 +81,14 @@ class XMLOFF_DLLPUBLIC XMLSettingsExportHelper
         const OUString& rName) const;
     void exportIndexAccess(
         const com::sun::star::uno::Reference<com::sun::star::container::XIndexAccess> aIndexed,
-        const OUString rName) const;
+        const OUString& rName) const;
 
     void exportSymbolDescriptors(
                     const com::sun::star::uno::Sequence < com::sun::star::formula::SymbolDescriptor > &rProps,
-                    const OUString rName) const;
+                    const OUString& rName) const;
     void exportForbiddenCharacters(
                     const com::sun::star::uno::Any &rAny,
-                    const OUString rName) const;
+                    const OUString& rName) const;
 
 public:
     XMLSettingsExportHelper( ::xmloff::XMLSettingsExportContext& i_rContext );

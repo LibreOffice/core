@@ -73,7 +73,7 @@ public:
     virtual ~XFMasterPage();
 
 public:
-    void    SetPageMaster(OUString pm);
+    void    SetPageMaster(const OUString& pm);
 
     void    SetHeader(XFHeader *pHeader);
 

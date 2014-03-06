@@ -407,7 +407,7 @@ public:
     explicit            XclExpChSourceLink( const XclExpChRoot& rRoot, sal_uInt8 nDestType );
 
 
-    void                ConvertString( OUString aString );
+    void                ConvertString( const OUString& aString );
     /** Converts the passed source link, returns the number of linked values. */
     sal_uInt16          ConvertDataSequence( XDataSequenceRef xDataSeq, bool bSplitToColumns, sal_uInt16 nDefCount = 0 );
     /** Converts the passed sequence of formatted string objects, returns leading font index. */

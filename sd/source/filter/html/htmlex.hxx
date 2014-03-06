@@ -210,7 +210,7 @@ class HtmlExport
     OUString GetButtonName( int nButton ) const;
 
  public:
-     HtmlExport( OUString aPath, const com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue >& rParams, SdDrawDocument* pExpDoc, ::sd::DrawDocShell* pDocShell );
+     HtmlExport( const OUString& aPath, const com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue >& rParams, SdDrawDocument* pExpDoc, ::sd::DrawDocShell* pDocShell );
     virtual ~HtmlExport();
 
     static OUString ColorToHTMLString( Color aColor );

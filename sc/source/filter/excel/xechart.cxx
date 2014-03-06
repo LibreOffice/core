@@ -972,7 +972,7 @@ sal_uInt16 XclExpChSourceLink::ConvertDataSequence( Reference< XDataSequence > x
     return ulimit_cast< sal_uInt16 >( nValueCount, EXC_CHDATAFORMAT_MAXPOINTCOUNT );
 }
 
-void XclExpChSourceLink::ConvertString( OUString aString )
+void XclExpChSourceLink::ConvertString( const OUString& aString )
 {
     mxString = XclExpStringHelper::CreateString( GetRoot(), aString, EXC_STR_FORCEUNICODE | EXC_STR_8BITLENGTH | EXC_STR_SEPARATEFORMATS );
 }

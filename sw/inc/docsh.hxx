@@ -113,7 +113,7 @@ class SW_DLLPUBLIC SwDocShell: public SfxObjectShell, public SfxListener
         const sal_uInt16 nFamily,
         sal_uInt16 nMask,
         const sal_Bool bNew,
-        const OString sPageId = OString(),
+        const OString& sPageId = OString(),
         SwWrtShell* pActShell = 0,
         const sal_Bool bBasic = sal_False );
 

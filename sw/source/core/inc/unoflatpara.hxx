@@ -54,7 +54,7 @@ class SwXFlatParagraph:
     public SwXTextMarkup
 {
 public:
-    SwXFlatParagraph( SwTxtNode& rTxtNode, OUString aExpandText, const ModelToViewHelper& rConversionMap );
+    SwXFlatParagraph( SwTxtNode& rTxtNode, const OUString& aExpandText, const ModelToViewHelper& rConversionMap );
     virtual ~SwXFlatParagraph();
 
     virtual     ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type& aType ) throw(::com::sun::star::uno::RuntimeException, std::exception);

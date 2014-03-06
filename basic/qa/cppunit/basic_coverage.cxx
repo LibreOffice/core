@@ -24,8 +24,8 @@ private:
     int  m_nb_tests_ok;
     int  m_nb_tests_skipped;
     OUString m_sCurrentTest;
-    void process_directory(OUString sDirName);
-    void run_test(OUString sFileName);
+    void process_directory(const OUString& sDirName);
+    void run_test(const OUString& sFileName);
     void test_failed(void);
     void test_success(void);
     StringVec get_subdirnames( const OUString& sDirName );
@@ -70,7 +70,7 @@ void Coverage::test_success()
     fprintf(stderr,"%s,PASS\n", OUStringToOString( m_sCurrentTest, RTL_TEXTENCODING_UTF8 ).getStr() );
 }
 
-void Coverage::run_test(OUString sFileURL)
+void Coverage::run_test(const OUString& sFileURL)
 {
     m_sCurrentTest = sFileURL;
     bool result = false;
@@ -113,7 +113,7 @@ Coverage::StringVec Coverage::get_subdirnames( const OUString& sDirName )
     }
     return sSubDirNames;
 }
-void Coverage::process_directory(OUString sDirName)
+void Coverage::process_directory(const OUString& sDirName)
 {
     osl::Directory aDir(sDirName);
     osl::DirectoryItem aItem;

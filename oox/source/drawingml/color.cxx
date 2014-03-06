@@ -382,7 +382,7 @@ OUString Color::getColorTransformationName( sal_Int32 nElement )
     return OUString();
 }
 
-sal_Int32 Color::getColorTransformationToken( OUString sName )
+sal_Int32 Color::getColorTransformationToken( const OUString& sName )
 {
     if( sName == "red" )
         return XML_red;

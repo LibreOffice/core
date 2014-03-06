@@ -908,7 +908,7 @@ void Shell::EnableScrollbars( bool bEnable )
     aVScrollBar.Enable(bEnable);
 }
 
-void Shell::SetCurLib( const ScriptDocument& rDocument, OUString aLibName, bool bUpdateWindows, bool bCheck )
+void Shell::SetCurLib( const ScriptDocument& rDocument, const OUString& aLibName, bool bUpdateWindows, bool bCheck )
 {
     if ( !bCheck || ( rDocument != m_aCurDocument || aLibName != m_aCurLibName ) )
     {
@@ -939,7 +939,7 @@ void Shell::SetCurLib( const ScriptDocument& rDocument, OUString aLibName, bool 
     }
 }
 
-void Shell::SetCurLibForLocalization( const ScriptDocument& rDocument, OUString aLibName )
+void Shell::SetCurLibForLocalization( const ScriptDocument& rDocument, const OUString& aLibName )
 {
     // Create LocalizationMgr
     Reference< resource::XStringResourceManager > xStringResourceManager;

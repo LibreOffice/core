@@ -61,9 +61,9 @@ public: // TODO: create matching interface class
     FontPitch       GetPitch() const        { return mePitch; }
     FontWidth       GetWidthType() const    { return meWidthType; }
     bool            IsSymbolFont() const    { return mbSymbolFlag; }
-    void            SetFamilyName(const OUString sFamilyName)    { maName = sFamilyName; }
-    void            SetStyleName( const OUString sStyleName)     { maStyleName = sStyleName; }
-    void            SetFamilyType(const FontFamily eFontFamily)  { meFamily = eFontFamily; }
+    void            SetFamilyName(const OUString& sFamilyName)  { maName = sFamilyName; }
+    void            SetStyleName( const OUString& sStyleName)   { maStyleName = sStyleName; }
+    void            SetFamilyType(const FontFamily eFontFamily) { meFamily = eFontFamily; }
     void            SetPitch(const FontPitch ePitch )          { mePitch = ePitch; }
     void            SetItalic(const FontItalic eItalic )       { meItalic = eItalic; }
     void            SetWeight(const FontWeight eWeight )       { meWeight = eWeight; }

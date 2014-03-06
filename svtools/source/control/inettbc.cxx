@@ -469,9 +469,11 @@ void SvtMatchContext_Impl::ReadFolder( const OUString& rURL,
 }
 
 
-OUString SvtURLBox::ParseSmart( OUString aText, OUString aBaseURL, const OUString& aWorkDir )
+OUString SvtURLBox::ParseSmart( const OUString& _aText, const OUString& _aBaseURL, const OUString& aWorkDir )
 {
     OUString aMatch;
+    OUString aText = _aText;
+    OUString aBaseURL = _aBaseURL;
 
     // parse ~ for Unix systems
     // does nothing for Windows

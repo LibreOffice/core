@@ -145,15 +145,15 @@ private:
         typedef std::vector<OString> row;
         std::vector<row> m_aEntries;
     };
-    const ListStore* get_model_by_name(OString sID) const;
+    const ListStore* get_model_by_name(const OString& sID) const;
     static void mungeModel(ListBox &rTarget, const ListStore &rStore, sal_uInt16 nActiveId);
 
     typedef stringmap TextBuffer;
-    const TextBuffer* get_buffer_by_name(OString sID) const;
+    const TextBuffer* get_buffer_by_name(const OString& sID) const;
     static void mungeTextBuffer(VclMultiLineEdit &rTarget, const TextBuffer &rTextBuffer);
 
     typedef stringmap Adjustment;
-    const Adjustment *get_adjustment_by_name(OString sID) const;
+    const Adjustment *get_adjustment_by_name(const OString& sID) const;
     static void mungeAdjustment(NumericFormatter &rTarget, const Adjustment &rAdjustment);
     static void mungeAdjustment(DateField &rTarget, const Adjustment &rAdjustment);
     static void mungeAdjustment(TimeField &rTarget, const Adjustment &rAdjustment);
@@ -236,8 +236,8 @@ private:
     bool m_bToplevelParentFound;
     ParserState *m_pParserState;
 
-    ::Window *get_by_name(OString sID);
-    void delete_by_name(OString sID);
+    ::Window *get_by_name(const OString& sID);
+    void delete_by_name(const OString& sID);
 
     class sortIntoBestTabTraversalOrder
         : public std::binary_function<const ::Window*, const ::Window*, bool>
@@ -255,13 +255,13 @@ private:
     css::uno::Reference<css::frame::XFrame> m_xFrame;
 
 public:
-    VclBuilder(::Window *pParent, OUString sUIRootDir, OUString sUIFile,
-            OString sID = OString(),
+    VclBuilder(::Window *pParent, const OUString& sUIRootDir, const OUString& sUIFile,
+            const OString& sID = OString(),
             const com::sun::star::uno::Reference<com::sun::star::frame::XFrame> &rFrame = com::sun::star::uno::Reference<com::sun::star::frame::XFrame>());
     ~VclBuilder();
     ::Window *get_widget_root();
     //sID must exist and be of type T
-    template <typename T> T* get(T*& ret, OString sID)
+    template <typename T> T* get(T*& ret, const OString& sID)
     {
         ::Window *w = get_by_name(sID);
         SAL_WARN_IF(!w, "vcl.layout", "widget \"" << sID.getStr() << "\" not found in .ui");
@@ -271,7 +271,7 @@ public:
         ret = static_cast<T*>(w);
         return ret;
     }
-    PopupMenu* get_menu(PopupMenu*& ret, OString sID)
+    PopupMenu* get_menu(PopupMenu*& ret, const OString& sID)
     {
         ret = get_menu(sID);
         SAL_WARN_IF(!ret, "vcl.layout", "menu \"" << sID.getStr() << "\" not found in .ui");
@@ -279,7 +279,7 @@ public:
         return ret;
     }
     //sID may not exist, but must be of type T if it does
-    template <typename T /*= ::Window if we had c++11*/> T* get(OString sID)
+    template <typename T /*= ::Window if we had c++11*/> T* get(const OString& sID)
     {
         ::Window *w = get_by_name(sID);
         SAL_WARN_IF(w && !dynamic_cast<T*>(w),
@@ -288,7 +288,7 @@ public:
         return static_cast<T*>(w);
     }
     //sID may not exist
-    PopupMenu* get_menu(OString sID);
+    PopupMenu* get_menu(const OString& sID);
 
     //given an sID return the response value for that widget
     short get_response(const ::Window *pWindow) const;
@@ -378,7 +378,7 @@ private:
     ::Window* prepareWidgetOwnScrolling(::Window *pParent, WinBits &rWinStyle);
     void cleanupWidgetOwnScrolling(::Window *pScrollParent, ::Window *pWindow, stringmap &rMap);
 
-    void set_response(OString sID, short nResponse);
+    void set_response(const OString& sID, short nResponse);
 };
 
 
@@ -403,19 +403,19 @@ public:
     static OUString getUIRootDir();
     bool hasBuilder() const { return m_pUIBuilder != NULL; }
     css::uno::Reference<css::frame::XFrame> getFrame() { return m_pUIBuilder->getFrame(); }
-    template <typename T> T* get(T*& ret, OString sID)
+    template <typename T> T* get(T*& ret, const OString& sID)
     {
         return m_pUIBuilder->get<T>(ret, sID);
     }
-    template <typename T /*= ::Window if we had c++11*/> T* get(OString sID)
+    template <typename T /*= ::Window if we had c++11*/> T* get(const OString & sID)
     {
         return m_pUIBuilder->get<T>(sID);
     }
-    PopupMenu* get_menu(PopupMenu*& ret, OString sID)
+    PopupMenu* get_menu(PopupMenu*& ret, const OString & sID)
     {
         return m_pUIBuilder->get_menu(ret, sID);
     }
-    PopupMenu* get_menu(OString sID)
+    PopupMenu* get_menu(const OString & sID)
     {
         return m_pUIBuilder->get_menu(sID);
     }

@@ -2795,7 +2795,7 @@ void XMLTextFieldExport::ProcessCommandType(
 
 void XMLTextFieldExport::ProcessStringSequence(
     const Sequence<OUString>& rSequence,
-    const OUString sSelected )
+    const OUString& sSelected )
 {
     // find selected element
     sal_Int32 nSelected = -1;
@@ -3353,7 +3353,7 @@ enum XMLTokenEnum XMLTextFieldExport::MapDocInfoFieldName(
     return eElement;
 }
 
-enum XMLTokenEnum XMLTextFieldExport::MapBibliographyFieldName(OUString sName)
+enum XMLTokenEnum XMLTextFieldExport::MapBibliographyFieldName(const OUString& sName)
 {
     enum XMLTokenEnum eName = XML_TOKEN_INVALID;
 

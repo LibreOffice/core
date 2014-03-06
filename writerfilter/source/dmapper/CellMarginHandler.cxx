@@ -68,7 +68,7 @@ void CellMarginHandler::lcl_attribute(Id rName, Value & rVal)
     }
 }
 
-void CellMarginHandler::createGrabBag(OUString aName)
+void CellMarginHandler::createGrabBag(const OUString& aName)
 {
     if (m_aInteropGrabBagName.isEmpty())
         return;
@@ -158,7 +158,7 @@ void CellMarginHandler::lcl_sprm(Sprm & rSprm)
     m_nValue = 0;
 }
 
-void CellMarginHandler::enableInteropGrabBag(OUString aName)
+void CellMarginHandler::enableInteropGrabBag(const OUString& aName)
 {
     m_aInteropGrabBagName = aName;
 }

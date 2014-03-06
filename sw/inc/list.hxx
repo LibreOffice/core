@@ -31,7 +31,7 @@ class SwListImpl;
 class SwList
 {
     public:
-        SwList( const OUString sListId,
+        SwList( const OUString& sListId,
                 SwNumRule& rDefaultListStyle,
                 const SwNodes& rNodes );
         ~SwList();

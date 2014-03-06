@@ -71,7 +71,7 @@ public:
         DocumentSignatureMode eDocSigMode );
     static std::vector< OUString > CreateElementList(
         const css::uno::Reference < css::embed::XStorage >& rxStore,
-        const OUString rRootStorageName, DocumentSignatureMode eMode,
+        DocumentSignatureMode eMode,
         const DocumentSignatureAlgorithm mode);
     static bool isODFPre_1_2(const OUString & sODFVersion);
     static bool isOOo3_2_Signature(const SignatureInformation & sigInfo);

@@ -1367,7 +1367,7 @@ public:
     sal_uInt16 MakePageDesc( const OUString &rName, const SwPageDesc* pCpy = 0,
                              bool bRegardLanguage = true,
                              bool bBroadcast = false);
-    void BroadcastStyleOperation(OUString rName, SfxStyleFamily eFamily,
+    void BroadcastStyleOperation(const OUString& rName, SfxStyleFamily eFamily,
                                  sal_uInt16 nOp);
 
     /** The html import sometimes overwrites the
@@ -1394,7 +1394,7 @@ public:
 
     bool DeleteTOX( const SwTOXBase& rTOXBase, bool bDelNodes = false );
     OUString GetUniqueTOXBaseName( const SwTOXType& rType,
-                                   const OUString sChkStr ) const;
+                                   const OUString& sChkStr ) const;
 
     bool SetTOXBaseName(const SwTOXBase& rTOXBase, const OUString& rName);
     void SetTOXBaseProtection(const SwTOXBase& rTOXBase, sal_Bool bProtect);
@@ -1496,7 +1496,7 @@ public:
     void SetNumRule( const SwPaM&,
                      const SwNumRule&,
                      const bool bCreateNewList,
-                     const OUString sContinuedListId = OUString(),
+                     const OUString& sContinuedListId = OUString(),
                      bool bSetItem = true,
                      const bool bResetIndentAttrs = false );
     void SetCounted( const SwPaM&, bool bCounted);

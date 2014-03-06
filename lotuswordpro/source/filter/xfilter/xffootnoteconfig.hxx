@@ -68,15 +68,15 @@ public:
     XFFootnoteConfig();
 
 public:
-    void    SetBodyStyle(OUString style);
+    void    SetBodyStyle(const OUString& style);
 
-    void    SetCitationStyle(OUString style);
+    void    SetCitationStyle(const OUString& style);
 
-    void    SetDefaultStyle(OUString style);
+    void    SetDefaultStyle(const OUString& style);
 
-    void    SetMasterPage(OUString masterPage);
+    void    SetMasterPage(const OUString& masterPage);
 
-    void    SetNumberFormat(OUString numberFormat);
+    void    SetNumberFormat(const OUString& numberFormat);
 
     void    SetStartValue(sal_Int32 value=0);
 
@@ -86,13 +86,13 @@ public:
 
     void    SetInsertInPage(sal_Bool page=sal_True);
 
-    void    SetNumPrefix(OUString numprefix);
+    void    SetNumPrefix(const OUString& numprefix);
 
-    void    SetNumSuffix(OUString numsuffix);
+    void    SetNumSuffix(const OUString& numsuffix);
 
-    void    SetMessageOn(OUString message);
+    void    SetMessageOn(const OUString& message);
 
-    void    SetMessageFrom(OUString message);
+    void    SetMessageFrom(const OUString& message);
 
     virtual void    ToXml(IXFStream *pStrm);
 
@@ -125,27 +125,27 @@ inline XFFootnoteConfig::XFFootnoteConfig()
     m_bIsFootnote = sal_True;
 }
 
-inline void XFFootnoteConfig::SetBodyStyle(OUString style)
+inline void XFFootnoteConfig::SetBodyStyle(const OUString& style)
 {
     m_strBodyStyle = style;
 }
 
-inline void XFFootnoteConfig::SetCitationStyle(OUString style)
+inline void XFFootnoteConfig::SetCitationStyle(const OUString& style)
 {
     m_strCitationStyle = style;
 }
 
-inline void XFFootnoteConfig::SetDefaultStyle(OUString style)
+inline void XFFootnoteConfig::SetDefaultStyle(const OUString& style)
 {
     m_strDefaultStyle = style;
 }
 
-inline void XFFootnoteConfig::SetMasterPage(OUString masterPage)
+inline void XFFootnoteConfig::SetMasterPage(const OUString& masterPage)
 {
     m_strMasterPage = masterPage;
 }
 
-inline void XFFootnoteConfig::SetNumberFormat(OUString numberFormat)
+inline void XFFootnoteConfig::SetNumberFormat(const OUString& numberFormat)
 {
     m_strNumFmt = numberFormat;
 }
@@ -172,22 +172,22 @@ inline void XFFootnoteConfig::SetInsertInPage(sal_Bool page)
     m_bInsertInPage = page;
 }
 
-inline void XFFootnoteConfig::SetNumPrefix(OUString numprefix)
+inline void XFFootnoteConfig::SetNumPrefix(const OUString& numprefix)
 {
     m_strNumPrefix = numprefix;
 }
 
-inline void XFFootnoteConfig::SetNumSuffix(OUString numsuffix)
+inline void XFFootnoteConfig::SetNumSuffix(const OUString& numsuffix)
 {
     m_strNumSuffix = numsuffix;
 }
 
-inline void XFFootnoteConfig::SetMessageOn(OUString message)
+inline void XFFootnoteConfig::SetMessageOn(const OUString& message)
 {
     m_strMessageOn = message;
 }
 
-inline void XFFootnoteConfig::SetMessageFrom(OUString message)
+inline void XFFootnoteConfig::SetMessageFrom(const OUString& message)
 {
     m_strMessageFrom = message;
 }

@@ -93,8 +93,8 @@ protected:
 
     void ProcessAttribute(
         sal_uInt16 nPrefix,
-        const OUString sLocalName,
-        const OUString sValue);
+        const OUString& sLocalName,
+        const OUString& sValue);
 };
 
 #endif

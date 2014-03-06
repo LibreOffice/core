@@ -285,8 +285,8 @@ class AbstractSvxHlinkDlgMarkWnd_Impl : public AbstractSvxHlinkDlgMarkWnd
     virtual Size                GetSizePixel() const;
     virtual sal_Bool            MoveTo ( Point aNewPos )const;
     virtual sal_Bool            ConnectToDialog( sal_Bool bDoit = sal_True )const;
-    virtual void                RefreshTree ( OUString aStrURL ) ;
-    virtual void                SelectEntry ( OUString aStrMark );
+    virtual void                RefreshTree ( const OUString& aStrURL ) ;
+    virtual void                SelectEntry ( const OUString& aStrMark );
     virtual sal_uInt16          SetError( sal_uInt16 nError) ;
 
 };

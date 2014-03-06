@@ -212,7 +212,7 @@ const uno::Sequence<sal_Int8>& ScVbaWorksheet::getUnoTunnelId()
 }
 
 uno::Reference< ov::excel::XWorksheet >
-ScVbaWorksheet::createSheetCopyInNewDoc(OUString aCurrSheetName)
+ScVbaWorksheet::createSheetCopyInNewDoc(const OUString& aCurrSheetName)
 {
     uno::Reference< sheet::XSheetCellCursor > xSheetCellCursor = getSheet()->createCursor( );
     uno::Reference<sheet::XUsedAreaCursor> xUsedCursor(xSheetCellCursor,uno::UNO_QUERY_THROW);

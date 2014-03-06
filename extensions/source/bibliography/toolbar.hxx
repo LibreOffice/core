@@ -48,7 +48,7 @@ protected:
 
 public:
 
-    BibToolBarListener(BibToolBar *pTB,OUString aStr,sal_uInt16 nId);
+    BibToolBarListener(BibToolBar *pTB, const OUString& aStr, sal_uInt16 nId);
     ~BibToolBarListener();
 
     OUString           GetCommand() const;
@@ -68,7 +68,7 @@ class BibTBListBoxListener: public BibToolBarListener
 {
 public:
 
-    BibTBListBoxListener(BibToolBar *pTB,OUString aStr,sal_uInt16 nId);
+    BibTBListBoxListener(BibToolBar *pTB, const OUString& aStr, sal_uInt16 nId);
     ~BibTBListBoxListener();
 
     virtual void    SAL_CALL statusChanged(const ::com::sun::star::frame::FeatureStateEvent& Event)
@@ -80,7 +80,7 @@ class BibTBEditListener: public BibToolBarListener
 {
 public:
 
-    BibTBEditListener(BibToolBar *pTB,OUString aStr,sal_uInt16 nId);
+    BibTBEditListener(BibToolBar *pTB, const OUString& aStr, sal_uInt16 nId);
     ~BibTBEditListener();
 
     virtual void    SAL_CALL statusChanged(const ::com::sun::star::frame::FeatureStateEvent& Event)
@@ -92,7 +92,7 @@ class BibTBQueryMenuListener:   public BibToolBarListener
 {
 public:
 
-    BibTBQueryMenuListener(BibToolBar *pTB,OUString aStr,sal_uInt16 nId);
+    BibTBQueryMenuListener(BibToolBar *pTB, const OUString& aStr, sal_uInt16 nId);
     ~BibTBQueryMenuListener();
 
     virtual void    SAL_CALL statusChanged(const ::com::sun::star::frame::FeatureStateEvent& Event)

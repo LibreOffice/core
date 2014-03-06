@@ -82,15 +82,15 @@ public:
     void    SetColor(const XFColor& color);
     XFColor GetColor(){return m_aColor;}
 
-    void    SetPrefix(OUString prefix);
+    void    SetPrefix(const OUString& prefix);
 
-    void    SetSurfix(OUString surfix);
+    void    SetSurfix(const OUString& surfix);
 
-    void    SetNegativeStyle(OUString prefix, OUString suffix, const XFColor& color=XFColor(255,0,0));
+    void    SetNegativeStyle(const OUString& prefix, const OUString& suffix, const XFColor& color=XFColor(255,0,0));
 
     void    SetNumberType(enumXFNumberType type);
 
-    void    SetCurrencySymbol(sal_Bool post, OUString symbol, sal_Bool bShowSpace=sal_False);
+    void    SetCurrencySymbol(sal_Bool post, const OUString& symbol, sal_Bool bShowSpace=sal_False);
 
     virtual enumXFStyle GetStyleFamily();
 
@@ -142,7 +142,7 @@ inline void XFNumberStyle::SetMinExponent(sal_Int32 exponent)
     m_nMinExponent = exponent;
 }
 
-inline void XFNumberStyle::SetNegativeStyle(OUString prefix, OUString suffix, const XFColor& color)
+inline void XFNumberStyle::SetNegativeStyle(const OUString& prefix, const OUString& suffix, const XFColor& color)
 {
     m_bRedIfNegative = sal_True;
     m_aNegativeColor = color;
@@ -165,17 +165,17 @@ inline void XFNumberStyle::SetNumberType(enumXFNumberType type)
     m_eType = type;
 }
 
-inline void XFNumberStyle::SetPrefix(OUString prefix)
+inline void XFNumberStyle::SetPrefix(const OUString& prefix)
 {
     m_strPrefix = prefix;
 }
 
-inline void XFNumberStyle::SetSurfix(OUString surfix)
+inline void XFNumberStyle::SetSurfix(const OUString& surfix)
 {
     m_strSuffix = surfix;
 }
 
-inline void XFNumberStyle::SetCurrencySymbol(sal_Bool post, OUString symbol, sal_Bool bShowSpace)
+inline void XFNumberStyle::SetCurrencySymbol(sal_Bool post, const OUString& symbol, sal_Bool bShowSpace)
 {
     m_bCurrencySymbolPost = post;
     m_strCurrencySymbol = symbol;

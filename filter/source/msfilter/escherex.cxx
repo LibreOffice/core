@@ -5198,7 +5198,7 @@ void EscherEx::ReplacePersistOffset( sal_uInt32 nKey, sal_uInt32 nOffset )
     PtReplace( ESCHER_Persist_PrivateEntry | nKey, nOffset );
 }
 
-void EscherEx::SetEditAs( OUString rEditAs )
+void EscherEx::SetEditAs( const OUString& rEditAs )
 {
     mEditAs = rEditAs;
 }

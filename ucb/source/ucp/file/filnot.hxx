@@ -108,7 +108,7 @@ namespace fileaccess {
     {
     public:
         // Side effect of this function is the change of the name
-        virtual ContentEventNotifier*          cEXC( const OUString aNewName ) = 0;
+        virtual ContentEventNotifier*          cEXC( const OUString& aNewName ) = 0;
         // Side effect is the change of the state of the object to "deleted".
         virtual ContentEventNotifier*          cDEL( void ) = 0;
         virtual ContentEventNotifier*          cCEL( void ) = 0;

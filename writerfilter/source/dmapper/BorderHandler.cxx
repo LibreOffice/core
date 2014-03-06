@@ -194,12 +194,12 @@ bool BorderHandler::getShadow()
     return m_bShadow;
 }
 
-void BorderHandler::enableInteropGrabBag(OUString aName)
+void BorderHandler::enableInteropGrabBag(const OUString& aName)
 {
     m_aInteropGrabBagName = aName;
 }
 
-beans::PropertyValue BorderHandler::getInteropGrabBag(OUString aName)
+beans::PropertyValue BorderHandler::getInteropGrabBag(const OUString& aName)
 {
     beans::PropertyValue aRet;
     if (aName.isEmpty())
@@ -216,7 +216,7 @@ beans::PropertyValue BorderHandler::getInteropGrabBag(OUString aName)
     return aRet;
 }
 
-void BorderHandler::appendGrabBag(OUString aKey, OUString aValue)
+void BorderHandler::appendGrabBag(const OUString& aKey, const OUString& aValue)
 {
     beans::PropertyValue aProperty;
     aProperty.Name = aKey;

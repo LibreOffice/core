@@ -1008,7 +1008,7 @@ void PageSettingsConverter::writePageSettingsProperties(
 
 void PageSettingsConverter::convertHeaderFooterData(
         PropertySet& rPropSet, HFHelperData& orHFData,
-        const OUString rOddContent, const OUString rEvenContent, bool bUseEvenContent,
+        const OUString& rOddContent, const OUString& rEvenContent, bool bUseEvenContent,
         double fPageMargin, double fContentMargin )
 {
     bool bHasOddContent  = !rOddContent.isEmpty();

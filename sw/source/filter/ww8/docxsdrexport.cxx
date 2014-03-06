@@ -736,7 +736,7 @@ void DocxSdrExport::writeDMLEffectLst(const SwFrmFmt& rFrmFmt)
 
 void DocxSdrExport::writeDiagramRels(uno::Reference<xml::dom::XDocument> xDom,
                                      uno::Sequence< uno::Sequence< uno::Any > > xRelSeq,
-                                     uno::Reference< io::XOutputStream > xOutStream, OUString sGrabBagProperyName)
+                                     uno::Reference< io::XOutputStream > xOutStream, const OUString& sGrabBagProperyName)
 {
     // add image relationships of OOXData, OOXDiagram
     OUString sType("http://schemas.openxmlformats.org/officeDocument/2006/relationships/image");

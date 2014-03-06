@@ -75,7 +75,7 @@ public:
         const OUString& rNewName, SfxStyleFamily eNewFamily);
     void ChangeStyleSheetName(SfxStyleFamily eFamily, const OUString& rOldName,
         const OUString& rNewName);
-    void SetStyleSheets(sal_uInt16 nLevel, const OUString rNewName,
+    void SetStyleSheets(sal_uInt16 nLevel, const OUString& rNewName,
         const SfxStyleFamily& rNewFamily);
 };
 

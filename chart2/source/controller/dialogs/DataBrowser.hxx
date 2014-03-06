@@ -85,7 +85,7 @@ public:
     */
     double GetCellNumber( long nRow, sal_uInt16 nColumnId ) const;
 
-    bool isDateString( OUString aInputString, double& fOutDateValue );
+    bool isDateString( const OUString& aInputString, double& fOutDateValue );
 
     // Window
     virtual void Resize();

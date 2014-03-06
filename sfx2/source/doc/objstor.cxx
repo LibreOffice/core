@@ -213,9 +213,9 @@ bool GetEncryptionData_Impl( const SfxItemSet* pSet, uno::Sequence< beans::Named
 
 
 sal_Bool SfxObjectShell::PutURLContentsToVersionStream_Impl(
-                                            OUString aURL,
+                                            const OUString& aURL,
                                             const uno::Reference< embed::XStorage >& xDocStorage,
-                                            OUString aStreamName )
+                                            const OUString& aStreamName )
 {
     sal_Bool bResult = sal_False;
     try

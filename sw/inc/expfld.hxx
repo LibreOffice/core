@@ -39,7 +39,7 @@ class SwEditShell;
 const SwTxtNode* GetBodyTxtNode( const SwDoc& pDoc, SwPosition& rPos,
                                  const SwFrm& rFrm );
 
-OUString ReplacePoint(OUString sTmpName, bool bWithCommandType = false);
+OUString ReplacePoint(const OUString& sTmpName, bool bWithCommandType = false);
 
 struct _SeqFldLstElem
 {

@@ -40,7 +40,7 @@ class WrappedDataCaptionProperty : public WrappedSeriesOrDiagramProperty< sal_In
 {
 public:
     virtual sal_Int32 getValueFromSeries( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& xSeriesPropertySet ) const;
-    virtual void setValueToSeries( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& xSeriesPropertySet, sal_Int32 aNewValue ) const;
+    virtual void setValueToSeries( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& xSeriesPropertySet, const sal_Int32& aNewValue ) const;
 
     explicit WrappedDataCaptionProperty( ::boost::shared_ptr< Chart2ModelContact > spChart2ModelContact,
                                          tSeriesOrDiagramPropertyType ePropertyType );
@@ -142,7 +142,7 @@ sal_Int32 WrappedDataCaptionProperty::getValueFromSeries( const Reference< beans
     return aRet;
 }
 
-void WrappedDataCaptionProperty::setValueToSeries( const Reference< beans::XPropertySet >& xSeriesPropertySet, sal_Int32 nCaption ) const
+void WrappedDataCaptionProperty::setValueToSeries( const Reference< beans::XPropertySet >& xSeriesPropertySet, const sal_Int32& nCaption ) const
 {
     if(!xSeriesPropertySet.is())
         return;

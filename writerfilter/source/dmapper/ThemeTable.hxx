@@ -54,7 +54,7 @@ public:
     virtual void lcl_entry(int pos, writerfilter::Reference<Properties>::Pointer_t ref);
 
     // Helper methods
-    OUString fromLocaleToScriptTag(OUString sLocale);
+    OUString fromLocaleToScriptTag(const OUString& sLocale);
     OUString fromLCIDToScriptTag(LanguageType lang);
 };
 typedef boost::shared_ptr< ThemeTable >          ThemeTablePtr;

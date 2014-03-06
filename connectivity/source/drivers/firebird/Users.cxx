@@ -75,7 +75,7 @@ ObjectType Users::appendObject(const OUString& rName,
 }
 
 //----- XDrop -----------------------------------------------------------------
-void Users::dropObject(sal_Int32 nPosition, const OUString sName)
+void Users::dropObject(sal_Int32 nPosition, const OUString& sName)
 {
     uno::Reference< XPropertySet > xUser(getObject(nPosition));
 

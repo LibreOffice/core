@@ -910,7 +910,7 @@ sal_Int32 DatabaseMetaData::getMaxCharLiteralLength(  ) throw (SQLException, Run
 }
 
 // Copied / adapted / simplified from JDBC driver
-sal_Int32 DatabaseMetaData::getIntSetting(OUString settingName)
+sal_Int32 DatabaseMetaData::getIntSetting(const OUString& settingName)
     throw (::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
 {
     MutexGuard guard( m_refMutex->mutex );

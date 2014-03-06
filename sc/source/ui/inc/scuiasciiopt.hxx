@@ -82,7 +82,7 @@ class ScImportAsciiDlg : public ModalDialog
 
 public:
                                 ScImportAsciiDlg(
-                                    Window* pParent, OUString aDatName,
+                                    Window* pParent, const OUString& aDatName,
                                     SvStream* pInStream, ScImportAsciiCall eCall );
                                 ~ScImportAsciiDlg();
 

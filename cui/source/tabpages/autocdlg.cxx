@@ -1130,7 +1130,7 @@ IMPL_LINK(OfaAutocorrReplacePage, SelectHdl, SvTabListBox*, pBox)
     return 0;
 };
 
-void OfaAutocorrReplacePage::NewEntry(OUString sShort, OUString sLong, bool bKeepSourceFormatting)
+void OfaAutocorrReplacePage::NewEntry(const OUString& sShort, const OUString& sLong, bool bKeepSourceFormatting)
 {
     DoubleStringArray& rNewArray = aChangesTable[eLang].aNewEntries;
     for (sal_uInt32 i = 0; i < rNewArray.size(); i++)
@@ -1160,7 +1160,7 @@ void OfaAutocorrReplacePage::NewEntry(OUString sShort, OUString sLong, bool bKee
         rNewArray.back().pUserData = &bHasSelectionText;
 }
 
-void OfaAutocorrReplacePage::DeleteEntry(OUString sShort, OUString sLong)
+void OfaAutocorrReplacePage::DeleteEntry(const OUString& sShort, const OUString& sLong)
 {
     DoubleStringArray& rNewArray = aChangesTable[eLang].aNewEntries;
     for (sal_uInt32 i = 0; i < rNewArray.size(); i++)

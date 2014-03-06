@@ -1116,8 +1116,8 @@ shell::getv( sal_Int32 CommandId,
 
 void SAL_CALL
 shell::move( sal_Int32 CommandId,
-             const OUString srcUnqPath,
-             const OUString dstUnqPathIn,
+             const OUString& srcUnqPath,
+             const OUString& dstUnqPathIn,
              const sal_Int32 NameClash )
     throw()
 {
@@ -1327,8 +1327,8 @@ bool getType(
 void SAL_CALL
 shell::copy(
     sal_Int32 CommandId,
-    const OUString srcUnqPath,
-    const OUString dstUnqPathIn,
+    const OUString& srcUnqPath,
+    const OUString& dstUnqPathIn,
     sal_Int32 NameClash )
     throw()
 {
@@ -2714,8 +2714,8 @@ shell::notifyPropertyRemoved( std::list< PropertySetInfoChangeNotifier* >* liste
 
 
 std::vector< std::list< ContentEventNotifier* >* >* SAL_CALL
-shell::getContentExchangedEventListeners( const OUString aOldPrefix,
-                                          const OUString aNewPrefix,
+shell::getContentExchangedEventListeners( const OUString& aOldPrefix,
+                                          const OUString& aNewPrefix,
                                           sal_Bool withChildren )
 {
 

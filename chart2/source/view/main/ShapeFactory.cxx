@@ -1732,7 +1732,7 @@ uno::Reference< drawing::XShape >
 
 uno::Reference< drawing::XShapes >
         ShapeFactory::createGroup2D( const uno::Reference< drawing::XShapes >& xTarget
-        , OUString aName )
+        , const OUString& aName )
 {
     if( !xTarget.is() )
         return 0;
@@ -1767,7 +1767,7 @@ uno::Reference< drawing::XShapes >
 
 uno::Reference< drawing::XShapes >
         ShapeFactory::createGroup3D( const uno::Reference< drawing::XShapes >& xTarget
-        , OUString aName )
+        , const OUString& aName )
 {
     if( !xTarget.is() )
         return 0;

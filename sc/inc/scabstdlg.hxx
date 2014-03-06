@@ -326,7 +326,7 @@ class ScAbstractDialogFactory
 public:
     SC_DLLPUBLIC static ScAbstractDialogFactory*    Create();
 
-    virtual     AbstractScImportAsciiDlg * CreateScImportAsciiDlg( Window* pParent, OUString aDatName,
+    virtual     AbstractScImportAsciiDlg * CreateScImportAsciiDlg( Window* pParent, const OUString& aDatName,
                                                                     SvStream* pInStream,
                                                                     ScImportAsciiCall eCall) = 0;
 
@@ -367,7 +367,7 @@ public:
                                                             FillDir     eFillDir,
                                                             FillCmd     eFillCmd,
                                                             FillDateCmd eFillDateCmd,
-                                                            OUString        aStartStr,
+                                                            const OUString& aStartStr,
                                                             double          fStep,
                                                             double          fMax,
                                                             sal_uInt16          nPossDir) = 0;
@@ -392,7 +392,7 @@ public:
     virtual AbstractScLinkedAreaDlg * CreateScLinkedAreaDlg(Window* pParent) = 0;
 
     virtual AbstractScMetricInputDlg * CreateScMetricInputDlg ( Window*        pParent,
-                                                                OString sDialogName,
+                                                                const OString&  sDialogName,
                                                                 long            nCurrent,
                                                                 long            nDefault,
                                                                 FieldUnit       eFUnit    = FUNIT_MM,

@@ -49,7 +49,7 @@ namespace connectivity
         class ProfileStruct
         {
         public:
-            ProfileStruct(MozillaProductType aProduct,OUString aProfileName,
+            ProfileStruct(MozillaProductType aProduct, const OUString& aProfileName,
                           const OUString &aProfilePath
                             );
             MozillaProductType getProductType() { return product;}

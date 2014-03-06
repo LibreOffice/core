@@ -46,7 +46,7 @@ using namespace ::com::sun::star::beans;
 // Konstanten -------------------------------------------------------------
 
 
-BibToolBarListener::BibToolBarListener(BibToolBar *pTB,OUString aStr,sal_uInt16 nId):
+BibToolBarListener::BibToolBarListener(BibToolBar *pTB, const OUString& aStr, sal_uInt16 nId):
         nIndex(nId),
         aCommand(aStr),
         pToolBar(pTB)
@@ -79,7 +79,7 @@ OUString   BibToolBarListener::GetCommand() const
     return aCommand;
 }
 
-BibTBListBoxListener::BibTBListBoxListener(BibToolBar *pTB,OUString aStr,sal_uInt16 nId):
+BibTBListBoxListener::BibTBListBoxListener(BibToolBar *pTB, const OUString& aStr, sal_uInt16 nId):
     BibToolBarListener(pTB,aStr,nId)
 {
 }
@@ -118,7 +118,7 @@ void BibTBListBoxListener::statusChanged(const ::com::sun::star::frame::FeatureS
     }
 };
 
-BibTBQueryMenuListener::BibTBQueryMenuListener(BibToolBar *pTB,OUString aStr,sal_uInt16 nId):
+BibTBQueryMenuListener::BibTBQueryMenuListener(BibToolBar *pTB, const OUString& aStr, sal_uInt16 nId):
     BibToolBarListener(pTB,aStr,nId)
 {
 }
@@ -155,7 +155,7 @@ void BibTBQueryMenuListener::statusChanged(const frame::FeatureStateEvent& rEvt)
     }
 };
 
-BibTBEditListener::BibTBEditListener(BibToolBar *pTB,OUString aStr,sal_uInt16 nId):
+BibTBEditListener::BibTBEditListener(BibToolBar *pTB, const OUString& aStr, sal_uInt16 nId):
     BibToolBarListener(pTB,aStr,nId)
 {
 }

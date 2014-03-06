@@ -74,7 +74,7 @@ public:
     SwTemplateDlg(  Window*             pParent,
                     SfxStyleSheetBase&  rBase,
                     sal_uInt16          nRegion,
-                    OString             sPage = OString(),
+                    const OString&      sPage = OString(),
                     SwWrtShell*         pActShell = 0,
                     bool                bNew = false );
 

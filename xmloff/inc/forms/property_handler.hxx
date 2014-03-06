@@ -51,7 +51,7 @@ namespace xmloff
         /** retrieves the values of the properties controlled by an XML attributed, described by a given attribute value
         */
         virtual bool
-            getPropertyValues( const OUString i_attributeValue, PropertyValues& o_propertyValues ) const = 0;
+            getPropertyValues( const OUString& i_attributeValue, PropertyValues& o_propertyValues ) const = 0;
 
         virtual ~IPropertyHandler() { }
     };

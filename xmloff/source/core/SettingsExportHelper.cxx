@@ -290,7 +290,7 @@ void XMLSettingsExportHelper::exportSequencePropertyValue(
 }
 void XMLSettingsExportHelper::exportSymbolDescriptors(
                     const uno::Sequence < formula::SymbolDescriptor > &rProps,
-                    const OUString rName) const
+                    const OUString& rName) const
 {
     uno::Reference< container::XIndexContainer > xBox = document::IndexedPropertyValues::create(m_rContext.GetComponentContext());
 
@@ -397,7 +397,7 @@ void XMLSettingsExportHelper::exportNameAccess(
 
 void XMLSettingsExportHelper::exportIndexAccess(
                     const uno::Reference<container::XIndexAccess> aIndexed,
-                    const OUString rName) const
+                    const OUString& rName) const
 {
     DBG_ASSERT(!rName.isEmpty(), "no name");
     DBG_ASSERT(aIndexed->getElementType().equals(getCppuType( (uno::Sequence<beans::PropertyValue> *)0 ) ),
@@ -418,7 +418,7 @@ void XMLSettingsExportHelper::exportIndexAccess(
 
 void XMLSettingsExportHelper::exportForbiddenCharacters(
                     const uno::Any &rAny,
-                    const OUString rName) const
+                    const OUString& rName) const
 {
     uno::Reference<i18n::XForbiddenCharacters> xForbChars;
     uno::Reference<linguistic2::XSupportedLocales> xLocales;

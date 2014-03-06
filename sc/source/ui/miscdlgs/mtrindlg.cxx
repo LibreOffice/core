@@ -32,7 +32,7 @@
 
 
 ScMetricInputDlg::ScMetricInputDlg( Window*         pParent,
-                                    OString         sDialogName,
+                                    const OString&  sDialogName,
                                     long            nCurrent,
                                     long            nDefault,
                                     FieldUnit       eFUnit,

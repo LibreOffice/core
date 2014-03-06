@@ -227,7 +227,7 @@ public:
 
     const void * getRequestData() const { return m_pRequestData; }
 
-    sal_Bool isDomainMatch( OUString certHostName );
+    sal_Bool isDomainMatch( const OUString& certHostName );
 
 private:
     friend class NeonLockStore;

@@ -543,7 +543,7 @@ void SwDoc::PreDelPageDesc(SwPageDesc * pDel)
     }
 }
 
-void SwDoc::BroadcastStyleOperation(OUString rName, SfxStyleFamily eFamily,
+void SwDoc::BroadcastStyleOperation(const OUString& rName, SfxStyleFamily eFamily,
                                     sal_uInt16 nOp)
 {
     if (mpDocShell)

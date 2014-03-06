@@ -102,8 +102,8 @@ private:
     void                StoreAllWindowData( bool bPersistent = true );
     void                SetMDITitle();
     void                EnableScrollbars( bool bEnable );
-    void                SetCurLib( const ScriptDocument& rDocument, OUString aLibName, bool bUpdateWindows = true , bool bCheck = true );
-    void                SetCurLibForLocalization( const ScriptDocument& rDocument, OUString aLibName );
+    void                SetCurLib( const ScriptDocument& rDocument, const OUString& aLibName, bool bUpdateWindows = true , bool bCheck = true );
+    void                SetCurLibForLocalization( const ScriptDocument& rDocument, const OUString& aLibName );
 
     void                ImplStartListening( StarBASIC* pBasic );
 

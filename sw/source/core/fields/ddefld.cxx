@@ -259,8 +259,9 @@ OUString SwDDEFieldType::GetName() const
     return aName;
 }
 
-void SwDDEFieldType::SetCmd( OUString aStr )
+void SwDDEFieldType::SetCmd( const OUString& _aStr )
 {
+    OUString aStr = _aStr;
     sal_Int32 nIndex = 0;
     do
     {

@@ -137,7 +137,7 @@ public:
     virtual sal_Bool SAL_CALL hasElements(  ) throw (::com::sun::star::uno::RuntimeException, std::exception);
 
 
-    static void splitObjectURL(OUString aURLNoPar,
+    static void splitObjectURL(const OUString& aURLNoPar,
         OUString& rContainerStorageName,
         OUString& rObjectStorageName);
 };

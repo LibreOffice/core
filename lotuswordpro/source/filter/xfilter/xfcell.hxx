@@ -108,12 +108,12 @@ public:
     /**
      * @descr   Set cell number value.
      */
-    void    SetValue(OUString value);
+    void    SetValue(const OUString& value);
 
     /**
      * @descr   Set cell formula.
      */
-    void    SetFormula(OUString formula);
+    void    SetFormula(const OUString& formula);
 
     /**
      * @descr   Set cell protected.
@@ -183,7 +183,7 @@ inline void XFCell::SetRepeated(sal_Int32 repeated)
     m_nRepeated = repeated;
 }
 
-inline void XFCell::SetFormula(OUString formula)
+inline void XFCell::SetFormula(const OUString& formula)
 {
     m_strFormula = formula;
 }

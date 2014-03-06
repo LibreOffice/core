@@ -409,7 +409,7 @@ public:
 // get foreign key names
 namespace vcl_sal {
     OUString getKeysymReplacementName(
-        OUString pLang,
+        const OUString& pLang,
         KeySym nSymbol );
 }
 

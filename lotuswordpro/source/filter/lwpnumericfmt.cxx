@@ -461,7 +461,7 @@ XFStyle* LwpNumericFormat::Convert()
 *   @param
 *   @return fix wrong encoding of POUND symbol
 */
-OUString    LwpNumericFormat::reencode(OUString sCode)
+OUString    LwpNumericFormat::reencode(const OUString& sCode)
 {
     const sal_Unicode * pString = sCode.getStr();
     sal_uInt16 nLen = sCode.getLength();

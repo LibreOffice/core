@@ -2251,7 +2251,7 @@ IMPL_LINK_NOARG(CustomAnimationTextAnimTabPage, implSelectHdl)
 
 
 
-CustomAnimationDialog::CustomAnimationDialog(Window* pParent, STLPropertySet* pSet, OString sPage)
+CustomAnimationDialog::CustomAnimationDialog(Window* pParent, STLPropertySet* pSet, const OString& sPage)
 : TabDialog( pParent, "CustomAnimationProperties", "modules/simpress/ui/customanimationproperties.ui")
 , mpSet( pSet )
 , mpResultSet( 0 )

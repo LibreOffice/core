@@ -77,7 +77,7 @@ public:
     LwpMarker(LwpObjectHeader &objHdr, LwpSvStream *pStrm);
     ~LwpMarker(){}
     void Read();
-    OUString GetNamedProperty(OUString name);
+    OUString GetNamedProperty(const OUString& name);
 protected:
     enum{
         MARKER_START=1,

@@ -4136,7 +4136,7 @@ sal_Int32 DomainMapper_Impl::GetCurrentRedlineToken(  )
     return nToken;
 }
 
-void DomainMapper_Impl::SetCurrentRedlineAuthor( OUString sAuthor )
+void DomainMapper_Impl::SetCurrentRedlineAuthor( const OUString& sAuthor )
 {
     if (!m_xAnnotationField.is())
     {
@@ -4148,13 +4148,13 @@ void DomainMapper_Impl::SetCurrentRedlineAuthor( OUString sAuthor )
         m_xAnnotationField->setPropertyValue("Author", uno::makeAny(sAuthor));
 }
 
-void DomainMapper_Impl::SetCurrentRedlineInitials( OUString sInitials )
+void DomainMapper_Impl::SetCurrentRedlineInitials( const OUString& sInitials )
 {
     if (m_xAnnotationField.is())
         m_xAnnotationField->setPropertyValue("Initials", uno::makeAny(sInitials));
 }
 
-void DomainMapper_Impl::SetCurrentRedlineDate( OUString sDate )
+void DomainMapper_Impl::SetCurrentRedlineDate( const OUString& sDate )
 {
     if (!m_xAnnotationField.is())
     {
@@ -4362,7 +4362,7 @@ void DomainMapper_Impl::processDeferredCharacterProperties()
     }
 }
 
-sal_Int32 DomainMapper_Impl::getCurrentNumberingProperty(OUString aProp)
+sal_Int32 DomainMapper_Impl::getCurrentNumberingProperty(const OUString& aProp)
 {
     sal_Int32 nRet = 0;
 
@@ -4398,7 +4398,7 @@ bool DomainMapper_Impl::IsNewDoc()
     return m_bIsNewDoc;
 }
 
-void DomainMapper_Impl::enableInteropGrabBag(OUString aName)
+void DomainMapper_Impl::enableInteropGrabBag(const OUString& aName)
 {
     m_aInteropGrabBagName = aName;
 }
@@ -4415,7 +4415,7 @@ bool DomainMapper_Impl::isInteropGrabBagEnabled()
     return !(m_aInteropGrabBagName.isEmpty());
 }
 
-void DomainMapper_Impl::appendGrabBag(std::vector<beans::PropertyValue>& rInteropGrabBag, OUString aKey, OUString aValue)
+void DomainMapper_Impl::appendGrabBag(std::vector<beans::PropertyValue>& rInteropGrabBag, const OUString& aKey, const OUString& aValue)
 {
     if (m_aInteropGrabBagName.isEmpty())
         return;
@@ -4425,7 +4425,7 @@ void DomainMapper_Impl::appendGrabBag(std::vector<beans::PropertyValue>& rIntero
     rInteropGrabBag.push_back(aProperty);
 }
 
-void DomainMapper_Impl::appendGrabBag(std::vector<beans::PropertyValue>& rInteropGrabBag, OUString aKey, std::vector<beans::PropertyValue>& rValue)
+void DomainMapper_Impl::appendGrabBag(std::vector<beans::PropertyValue>& rInteropGrabBag, const OUString& aKey, std::vector<beans::PropertyValue>& rValue)
 {
     if (m_aInteropGrabBagName.isEmpty())
         return;

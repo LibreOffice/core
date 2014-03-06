@@ -604,9 +604,9 @@ public:
     SAL_DLLPRIVATE sal_Bool DisconnectStorage_Impl( SfxMedium& rSrcMedium, SfxMedium& rTargetMedium );
 
     SAL_DLLPRIVATE sal_Bool PutURLContentsToVersionStream_Impl(
-                    OUString aURL,
+                    const OUString& aURL,
                     const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& xDocStorage,
-                    OUString aStreamName );
+                    const OUString& aStreamName );
 
     SAL_DLLPRIVATE OUString CreateTempCopyOfStorage_Impl(
                     const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& xStorage );

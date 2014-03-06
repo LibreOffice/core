@@ -124,7 +124,7 @@ sal_Int32 MeasureHandler::getMeasureValue() const
     return nRet;
 }
 
-void MeasureHandler::enableInteropGrabBag(OUString aName)
+void MeasureHandler::enableInteropGrabBag(const OUString& aName)
 {
     m_aInteropGrabBagName = aName;
 }

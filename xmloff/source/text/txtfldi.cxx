@@ -3449,7 +3449,7 @@ void XMLBibliographyFieldImportContext::PrepareField(
 }
 
 const sal_Char* XMLBibliographyFieldImportContext::MapBibliographyFieldName(
-    OUString sName)
+    const OUString& sName)
 {
     const sal_Char* pName = NULL;
 

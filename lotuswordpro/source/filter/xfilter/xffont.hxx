@@ -120,17 +120,17 @@ public:
     /**
      * @descr   Set font name.
      */
-    void    SetFontName(OUString name);
+    void    SetFontName(const OUString& name);
 
     /**
      * @descr   Set font name for asia locale.
      */
-    void    SetFontNameAsia(OUString name);
+    void    SetFontNameAsia(const OUString& name);
 
     /**
      * @descr   Set font name for BIDI locale.
      */
-    void    SetFontNameComplex(OUString name);
+    void    SetFontNameComplex(const OUString& name);
 
     /**
      * @descr   Set font size.
@@ -297,7 +297,7 @@ private:
     sal_Bool    m_bTransparent;
 };
 
-inline void XFFont::SetFontName(OUString name)
+inline void XFFont::SetFontName(const OUString& name)
 {
     m_strFontName = name;
     m_nFlag |= XFFONT_FLAG_NAME;
@@ -306,13 +306,13 @@ inline void XFFont::SetFontName(OUString name)
     SetFontNameComplex(name);
 }
 
-inline void XFFont::SetFontNameAsia(OUString name)
+inline void XFFont::SetFontNameAsia(const OUString& name)
 {
     m_strFontNameAsia = name;
     m_nFlag |= XFFONT_FLAG_NAME_ASIA;
 }
 
-inline void XFFont::SetFontNameComplex(OUString name)
+inline void XFFont::SetFontNameComplex(const OUString& name)
 {
     m_strFontNameComplex = name;
     m_nFlag |= XFFONT_FLAG_NAME_COMPLEX;

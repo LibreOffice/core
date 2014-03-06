@@ -116,7 +116,7 @@ sdbcx::ObjectType OTables::appendObject( const OUString& _rForName, const Refere
 }
 
 // XDrop
-void OTables::dropObject(sal_Int32 _nPos,const OUString _sElementName)
+void OTables::dropObject(sal_Int32 _nPos,const OUString& _sElementName)
 {
     Reference< XInterface > xObject( getObject( _nPos ) );
     sal_Bool bIsNew = connectivity::sdbcx::ODescriptor::isNew( xObject );

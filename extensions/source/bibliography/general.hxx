@@ -128,7 +128,7 @@ class BibGeneralPage: public BibGeneralPageBaseClass, public BibTabPage
                                             sal_Int16& rIndex );
 
     void                        AddControlWithError( const OUString& rColumnName, const Point& rPos,
-                                            const Size& rSize, OUString& rErrorString, OUString aColumnUIName,
+                                            const Size& rSize, OUString& rErrorString, const OUString& aColumnUIName,
                                             const OString& sHelpId, sal_uInt16 nIndexInFTArray );
 
     void                        AdjustScrollbars();

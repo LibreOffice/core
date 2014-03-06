@@ -776,7 +776,7 @@ void OStorage_Impl::CopyToStorage( const uno::Reference< embed::XStorage >& xDes
 
 void OStorage_Impl::CopyStorageElement( SotElement_Impl* pElement,
                                         uno::Reference< embed::XStorage > xDest,
-                                        OUString aName,
+                                        const OUString& aName,
                                         sal_Bool bDirect )
 {
     SAL_WARN_IF( !xDest.is(), "package.xstor", "No destination storage!" );
@@ -1384,7 +1384,7 @@ SotElement_Impl* OStorage_Impl::FindElement( const OUString& rName )
     return NULL;
 }
 
-SotElement_Impl* OStorage_Impl::InsertStream( OUString aName, sal_Bool bEncr )
+SotElement_Impl* OStorage_Impl::InsertStream( const OUString& aName, sal_Bool bEncr )
 {
     SAL_WARN_IF( !m_xPackage.is(), "package.xstor", "Not possible to refer to package as to factory!" );
     if ( !m_xPackage.is() )
@@ -1418,7 +1418,7 @@ SotElement_Impl* OStorage_Impl::InsertStream( OUString aName, sal_Bool bEncr )
     return pNewElement;
 }
 
-SotElement_Impl* OStorage_Impl::InsertRawStream( OUString aName, const uno::Reference< io::XInputStream >& xInStream )
+SotElement_Impl* OStorage_Impl::InsertRawStream( const OUString& aName, const uno::Reference< io::XInputStream >& xInStream )
 {
     // insert of raw stream means insert and commit
     SAL_WARN_IF( !m_xPackage.is(), "package.xstor", "Not possible to refer to package as to factory!" );
@@ -1486,7 +1486,7 @@ OStorage_Impl* OStorage_Impl::CreateNewStorageImpl( sal_Int32 nStorageMode )
     return pResult;
 }
 
-SotElement_Impl* OStorage_Impl::InsertStorage( OUString aName, sal_Int32 nStorageMode )
+SotElement_Impl* OStorage_Impl::InsertStorage( const OUString& aName, sal_Int32 nStorageMode )
 {
     SotElement_Impl* pNewElement = InsertElement( aName, sal_True );
 
@@ -1497,7 +1497,7 @@ SotElement_Impl* OStorage_Impl::InsertStorage( OUString aName, sal_Int32 nStorag
     return pNewElement;
 }
 
-SotElement_Impl* OStorage_Impl::InsertElement( OUString aName, sal_Bool bIsStorage )
+SotElement_Impl* OStorage_Impl::InsertElement( const OUString& aName, sal_Bool bIsStorage )
 {
     OSL_ENSURE( FindElement( aName ) == NULL, "Should not try to insert existing element" );
 

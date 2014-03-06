@@ -66,13 +66,13 @@ public:
     XFHyperlink();
 
 public:
-    void    SetHRef(OUString href);
+    void    SetHRef(const OUString& href);
 
-    void    SetText(OUString text);
+    void    SetText(const OUString& text);
 
-    void    SetName(OUString name);
+    void    SetName(const OUString& name);
 
-    void    SetTargetFrame(OUString frame="_self");
+    void    SetTargetFrame(const OUString& frame="_self");
 
     virtual void    ToXml(IXFStream *pStrm);
 
@@ -88,22 +88,22 @@ inline XFHyperlink::XFHyperlink()
     m_strFrame = "_self";
 }
 
-inline void XFHyperlink::SetHRef(OUString href)
+inline void XFHyperlink::SetHRef(const OUString& href)
 {
     m_strHRef = href;
 }
 
-inline void XFHyperlink::SetName(OUString name)
+inline void XFHyperlink::SetName(const OUString& name)
 {
     m_strName = name;
 }
 
-inline void XFHyperlink::SetTargetFrame(OUString frame)
+inline void XFHyperlink::SetTargetFrame(const OUString& frame)
 {
     m_strFrame = frame;
 }
 
-inline void XFHyperlink::SetText(OUString text)
+inline void XFHyperlink::SetText(const OUString& text)
 {
     m_strText = text;
 }

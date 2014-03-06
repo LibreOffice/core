@@ -1097,7 +1097,7 @@ const uno::Sequence< OUString>&
     return m_pImpl->aSavedDocuments;
 }
 
-void SwMailMergeConfigItem::AddSavedDocument(OUString rName)
+void SwMailMergeConfigItem::AddSavedDocument(const OUString& rName)
 {
     const OUString* pDocs = m_pImpl->aSavedDocuments.getConstArray();
     bool bFound = false;
@@ -1212,7 +1212,7 @@ const OUString& SwMailMergeConfigItem::GetFemaleGenderValue() const
     return m_pImpl->sFemaleGenderValue;
 }
 
-void SwMailMergeConfigItem::SetFemaleGenderValue(const OUString rValue)
+void SwMailMergeConfigItem::SetFemaleGenderValue(const OUString& rValue)
 {
     if( m_pImpl->sFemaleGenderValue != rValue )
     {

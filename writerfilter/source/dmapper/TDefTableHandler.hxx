@@ -64,7 +64,7 @@ private:
 
     OUString m_aInteropGrabBagName;
     std::vector<beans::PropertyValue> m_aInteropGrabBag;
-    void appendGrabBag(OUString aKey, OUString aValue);
+    void appendGrabBag(const OUString& aKey, const OUString& aValue);
 
     void localResolve(Id Name, writerfilter::Reference<Properties>::Pointer_t pProperties);
 
@@ -80,8 +80,8 @@ public:
     void                                        fillCellProperties( size_t nCell, ::boost::shared_ptr< TablePropertyMap > pCellProperties) const;
     ::boost::shared_ptr<PropertyMap>            getRowProperties() const;
     sal_Int32                                   getTableWidth() const;
-    void enableInteropGrabBag(OUString aName);
-    beans::PropertyValue getInteropGrabBag(OUString aName = OUString());
+    void enableInteropGrabBag(const OUString& aName);
+    beans::PropertyValue getInteropGrabBag(const OUString& aName = OUString());
     static OUString getBorderTypeString(sal_Int32 nType);
     static OUString getThemeColorTypeString(sal_Int32 nType);
 };

@@ -57,16 +57,16 @@ class XMLTextListsHelper : private boost::noncopyable
 
         // keeping track of processed lists for import and export
         // Add optional parameter <sListStyleDefaultListId> (#i92811#)
-        void KeepListAsProcessed( OUString sListId,
-                                  OUString sListStyleName,
-                                  OUString sContinueListId,
-                                  OUString sListStyleDefaultListId = OUString() );
+        void KeepListAsProcessed( const OUString& sListId,
+                                  const OUString& sListStyleName,
+                                  const OUString& sContinueListId,
+                                  const OUString& sListStyleDefaultListId = OUString() );
 
-        sal_Bool IsListProcessed( const OUString sListId ) const;
+        sal_Bool IsListProcessed( const OUString& sListId ) const;
         OUString GetListStyleOfProcessedList(
-                                        const OUString sListId ) const;
+                                        const OUString& sListId ) const;
         OUString GetContinueListIdOfProcessedList(
-                                        const OUString sListId ) const;
+                                        const OUString& sListId ) const;
         const OUString& GetLastProcessedListId() const;
         const OUString& GetListStyleOfLastProcessedList() const;
 
@@ -76,16 +76,16 @@ class XMLTextListsHelper : private boost::noncopyable
         OUString GetListIdForListBlock( XMLTextListBlockContext& rListBlock );
 
         // keep track of continue list chain for export
-        void StoreLastContinuingList( OUString sListId,
-                                      OUString sContinuingListId );
+        void StoreLastContinuingList( const OUString& sListId,
+                                      const OUString& sContinuingListId );
 
-        OUString GetLastContinuingListId( OUString sListId ) const;
+        OUString GetLastContinuingListId( const OUString& sListId ) const;
 
         // keep track of opened list elements of a certain list for export
-        void PushListOnStack( OUString sListId,
-                              OUString sListStyleName );
+        void PushListOnStack( const OUString& sListId,
+                              const OUString& sListStyleName );
         void PopListFromStack();
-        sal_Bool EqualsToTopListStyleOnStack( const OUString sListId ) const;
+        sal_Bool EqualsToTopListStyleOnStack( const OUString& sListId ) const;
 
         /** for importing numbered-paragraph
             note that the ID namespace for numbered-paragraph and regular list
@@ -95,13 +95,13 @@ class XMLTextListsHelper : private boost::noncopyable
                 ::com::sun::star::container::XIndexReplace>
         EnsureNumberedParagraph(
             SvXMLImport & i_rImport,
-            const OUString i_ListId,
-            sal_Int16 & io_rLevel, const OUString i_StyleName);
+            const OUString& i_ListId,
+            sal_Int16 & io_rLevel, const OUString& i_StyleName);
 
         /// get ID of the last numbered-paragraph iff it has given style-name
         OUString GetNumberedParagraphListId(
             const sal_uInt16 i_Level,
-            const OUString i_StyleName);
+            const OUString& i_StyleName);
 
         /** Creates a NumRule from given style-name.
             @param i_rImport        the SvXMLImport
@@ -117,8 +117,8 @@ class XMLTextListsHelper : private boost::noncopyable
             SvXMLImport & i_rImport,
             const ::com::sun::star::uno::Reference<
                 ::com::sun::star::container::XIndexReplace>& i_xNumRule,
-            const OUString i_ParentStyleName,
-            const OUString i_StyleName,
+            const OUString& i_ParentStyleName,
+            const OUString& i_StyleName,
             sal_Int16 & io_rLevel,
             sal_Bool* o_pRestartNumbering = 0,
             sal_Bool* io_pSetDefaults = 0);

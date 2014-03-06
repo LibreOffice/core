@@ -511,7 +511,7 @@ ContainerUtilities::getUniqueName( const uno::Sequence< OUString >&  _slist, con
 }
 
 OUString
-ContainerUtilities::getUniqueName( const uno::Sequence< OUString >& _slist, const OUString _sElementName, const OUString& _sSuffixSeparator, sal_Int32 _nStartSuffix)
+ContainerUtilities::getUniqueName( const uno::Sequence< OUString >& _slist, const OUString& _sElementName, const OUString& _sSuffixSeparator, sal_Int32 _nStartSuffix)
 {
     sal_Int32 a = _nStartSuffix;
     OUString scompname = _sElementName;

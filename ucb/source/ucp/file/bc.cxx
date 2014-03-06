@@ -1289,7 +1289,7 @@ BaseContent::cDEL( void )
 
 
 ContentEventNotifier*
-BaseContent::cEXC( const OUString aNewName )
+BaseContent::cEXC( const OUString& aNewName )
 {
     osl::MutexGuard aGuard( m_aMutex );
 

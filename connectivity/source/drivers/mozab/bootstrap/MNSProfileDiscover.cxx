@@ -85,7 +85,7 @@ namespace connectivity
 {
     namespace mozab
     {
-        ProfileStruct::ProfileStruct(MozillaProductType aProduct,OUString aProfileName,
+        ProfileStruct::ProfileStruct(MozillaProductType aProduct, const OUString& aProfileName,
 #ifdef MINIMAL_PROFILEDISCOVER
             const OUString& aProfilePath
 #else

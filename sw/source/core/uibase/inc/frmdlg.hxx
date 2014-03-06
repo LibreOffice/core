@@ -53,9 +53,9 @@ public:
     SwFrmDlg(   SfxViewFrame *pFrame, Window *pParent,
                 const SfxItemSet& rCoreSet,
                 bool bNewFrm  = false,
-                OString sResType = OString("FrameDialog"),
+                const OString& sResType = OString("FrameDialog"),
                 bool bFmt     = false,
-                OString sDefPage = OString(),
+                const OString& sDefPage = OString(),
                 const OUString* pFmtStr  = 0);
 
     ~SwFrmDlg();

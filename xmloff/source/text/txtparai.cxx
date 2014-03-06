@@ -1037,8 +1037,8 @@ protected:
      * are not expected to.
      */
     virtual void ProcessAttribute(sal_uInt16 nNamespace,
-                                  OUString sLocalName,
-                                  OUString sValue,
+                                  const OUString& sLocalName,
+                                  const OUString& sValue,
                                   Reference<beans::XPropertySet>& rPropSet);
 
     static void GetServiceName(OUString& sServiceName,
@@ -1168,8 +1168,8 @@ void XMLIndexMarkImportContext_Impl::ProcessAttributes(
 
 void XMLIndexMarkImportContext_Impl::ProcessAttribute(
     sal_uInt16 nNamespace,
-    OUString sLocalName,
-    OUString sValue,
+    const OUString& sLocalName,
+    const OUString& sValue,
     Reference<beans::XPropertySet>& rPropSet)
 {
     // we only know ID + string-value attribute;
@@ -1297,8 +1297,8 @@ protected:
 
     /** process outline level */
     virtual void ProcessAttribute(sal_uInt16 nNamespace,
-                                  OUString sLocalName,
-                                  OUString sValue,
+                                  const OUString& sLocalName,
+                                  const OUString& sValue,
                                   Reference<beans::XPropertySet>& rPropSet);
 };
 
@@ -1315,8 +1315,8 @@ XMLTOCMarkImportContext_Impl::XMLTOCMarkImportContext_Impl(
 
 void XMLTOCMarkImportContext_Impl::ProcessAttribute(
     sal_uInt16 nNamespace,
-    OUString sLocalName,
-    OUString sValue,
+    const OUString& sLocalName,
+    const OUString& sValue,
     Reference<beans::XPropertySet>& rPropSet)
 {
     SAL_WARN_IF(!rPropSet.is(), "xmloff.text", "need PropertySet");
@@ -1362,8 +1362,8 @@ protected:
 
     /** process index name */
     virtual void ProcessAttribute(sal_uInt16 nNamespace,
-                                  OUString sLocalName,
-                                  OUString sValue,
+                                  const OUString& sLocalName,
+                                  const OUString& sValue,
                                   Reference<beans::XPropertySet>& rPropSet);
 };
 
@@ -1380,7 +1380,7 @@ XMLUserIndexMarkImportContext_Impl::XMLUserIndexMarkImportContext_Impl(
 }
 
 void XMLUserIndexMarkImportContext_Impl::ProcessAttribute(
-    sal_uInt16 nNamespace, OUString sLocalName, OUString sValue,
+    sal_uInt16 nNamespace, const OUString& sLocalName, const OUString& sValue,
     Reference<beans::XPropertySet>& rPropSet)
 {
     if ( XML_NAMESPACE_TEXT == nNamespace )
@@ -1439,8 +1439,8 @@ protected:
 
     /** process primary + secondary keys */
     virtual void ProcessAttribute(sal_uInt16 nNamespace,
-                                  OUString sLocalName,
-                                  OUString sValue,
+                                  const OUString& sLocalName,
+                                  const OUString& sValue,
                                   Reference<beans::XPropertySet>& rPropSet);
 };
 
@@ -1462,7 +1462,7 @@ XMLAlphaIndexMarkImportContext_Impl::XMLAlphaIndexMarkImportContext_Impl(
 }
 
 void XMLAlphaIndexMarkImportContext_Impl::ProcessAttribute(
-    sal_uInt16 nNamespace, OUString sLocalName, OUString sValue,
+    sal_uInt16 nNamespace, const OUString& sLocalName, const OUString& sValue,
     Reference<beans::XPropertySet>& rPropSet)
 {
     if (XML_NAMESPACE_TEXT == nNamespace)

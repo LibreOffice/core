@@ -249,7 +249,7 @@ std::vector<ClientInfo*> RemoteServer::getClients()
     return aClients;
 }
 
-sal_Bool RemoteServer::connectClient( ClientInfo* pClient, OUString aPin )
+sal_Bool RemoteServer::connectClient( ClientInfo* pClient, const OUString& aPin )
 {
     SAL_INFO( "sdremote", "RemoteServer::connectClient called" );
     if ( !spServer )

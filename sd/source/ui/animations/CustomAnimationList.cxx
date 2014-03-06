@@ -203,7 +203,7 @@ static OUString getDescription( const Any& rTarget, bool bWithText = true )
 class CustomAnimationListEntryItem : public SvLBoxString
 {
 public:
-                    CustomAnimationListEntryItem( SvTreeListEntry*,sal_uInt16 nFlags, OUString aDescription, CustomAnimationEffectPtr pEffect, CustomAnimationList* pParent  );
+                    CustomAnimationListEntryItem( SvTreeListEntry*,sal_uInt16 nFlags, const OUString& aDescription, CustomAnimationEffectPtr pEffect, CustomAnimationList* pParent  );
     virtual         ~CustomAnimationListEntryItem();
     void            InitViewData( SvTreeListBox*,SvTreeListEntry*,SvViewDataItem* );
     SvLBoxItem*     Create() const;
@@ -219,7 +219,7 @@ private:
 
 
 
-CustomAnimationListEntryItem::CustomAnimationListEntryItem( SvTreeListEntry* pEntry, sal_uInt16 nFlags, OUString aDescription, CustomAnimationEffectPtr pEffect, CustomAnimationList* pParent  )
+CustomAnimationListEntryItem::CustomAnimationListEntryItem( SvTreeListEntry* pEntry, sal_uInt16 nFlags, const OUString& aDescription, CustomAnimationEffectPtr pEffect, CustomAnimationList* pParent  )
 : SvLBoxString( pEntry, nFlags, aDescription )
 , mpParent( pParent )
 , maDescription( aDescription )
@@ -355,7 +355,7 @@ CustomAnimationListEntry::~CustomAnimationListEntry()
 class CustomAnimationTriggerEntryItem : public SvLBoxString
 {
 public:
-                    CustomAnimationTriggerEntryItem( SvTreeListEntry*,sal_uInt16 nFlags, OUString aDescription );
+                    CustomAnimationTriggerEntryItem( SvTreeListEntry*,sal_uInt16 nFlags, const OUString& aDescription );
     virtual         ~CustomAnimationTriggerEntryItem();
     virtual sal_uInt16  IsA();
     void            InitViewData( SvTreeListBox*,SvTreeListEntry*,SvViewDataItem* );
@@ -370,7 +370,7 @@ private:
 
 
 
-CustomAnimationTriggerEntryItem::CustomAnimationTriggerEntryItem( SvTreeListEntry* pEntry, sal_uInt16 nFlags, OUString aDescription )
+CustomAnimationTriggerEntryItem::CustomAnimationTriggerEntryItem( SvTreeListEntry* pEntry, sal_uInt16 nFlags, const OUString& aDescription )
 : SvLBoxString( pEntry, nFlags, aDescription ), maDescription( aDescription )
 {
 }

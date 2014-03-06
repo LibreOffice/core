@@ -72,9 +72,9 @@
 class LwpBookmarkMgr
 {
 public:
-    void AddXFBookmarkEnd(OUString sName,XFBookmarkEnd* pMark);
-    void AddXFBookmarkStart(OUString sName,XFBookmarkStart* pMark);
-    sal_Bool FindBookmark(OUString sName);
+    void AddXFBookmarkEnd(const OUString& sName,XFBookmarkEnd* pMark);
+    void AddXFBookmarkStart(const OUString& sName,XFBookmarkStart* pMark);
+    sal_Bool FindBookmark(const OUString& sName);
     ~LwpBookmarkMgr();
     LwpBookmarkMgr();
 private:

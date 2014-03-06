@@ -30,8 +30,8 @@ TYPEINIT1(SdPresentationLayoutUndoAction, SdUndoAction);
 
 SdPresentationLayoutUndoAction::SdPresentationLayoutUndoAction(
                             SdDrawDocument* pTheDoc,
-                            OUString        aTheOldLayoutName,
-                            OUString        aTheNewLayoutName,
+                            const OUString& aTheOldLayoutName,
+                            const OUString& aTheNewLayoutName,
                             AutoLayout      eTheOldAutoLayout,
                             AutoLayout      eTheNewAutoLayout,
                             sal_Bool            bSet,

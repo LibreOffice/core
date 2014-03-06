@@ -78,7 +78,7 @@ protected:
 
 public:
                         TYPEINFO();
-    DialogWindow (DialogWindowLayout* pParent, ScriptDocument const& rDocument, OUString aLibName, OUString aName, com::sun::star::uno::Reference<com::sun::star::container::XNameContainer> const& xDialogModel);
+    DialogWindow (DialogWindowLayout* pParent, ScriptDocument const& rDocument, const OUString& aLibName, const OUString& aName, com::sun::star::uno::Reference<com::sun::star::container::XNameContainer> const& xDialogModel);
                         DialogWindow( DialogWindow* pCurView ); // never implemented
                         ~DialogWindow();
 

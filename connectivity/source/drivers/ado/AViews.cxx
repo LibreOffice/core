@@ -83,7 +83,7 @@ sdbcx::ObjectType OViews::appendObject( const OUString& _rForName, const Referen
 }
 
 // XDrop
-void OViews::dropObject(sal_Int32 /*_nPos*/,const OUString _sElementName)
+void OViews::dropObject(sal_Int32 /*_nPos*/,const OUString& _sElementName)
 {
     if(!m_aCollection.Delete(_sElementName))
         ADOS::ThrowException(*m_pCatalog->getConnection()->getConnection(),static_cast<XTypeProvider*>(this));

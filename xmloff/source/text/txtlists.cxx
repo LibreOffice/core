@@ -133,10 +133,10 @@ void XMLTextListsHelper::SetListItem( XMLTextListItemContext *i_pListItem )
 }
 
 // Handling for parameter <sListStyleDefaultListId> (#i92811#)
-void XMLTextListsHelper::KeepListAsProcessed( OUString sListId,
-                                              OUString sListStyleName,
-                                              OUString sContinueListId,
-                                              OUString sListStyleDefaultListId )
+void XMLTextListsHelper::KeepListAsProcessed( const OUString& sListId,
+                                              const OUString& sListStyleName,
+                                              const OUString& sContinueListId,
+                                              const OUString& sListStyleDefaultListId )
 {
     if ( IsListProcessed( sListId ) )
     {
@@ -176,7 +176,7 @@ void XMLTextListsHelper::KeepListAsProcessed( OUString sListId,
     }
 }
 
-sal_Bool XMLTextListsHelper::IsListProcessed( const OUString sListId ) const
+sal_Bool XMLTextListsHelper::IsListProcessed( const OUString& sListId ) const
 {
     if ( mpProcessedLists == 0 )
     {
@@ -187,7 +187,7 @@ sal_Bool XMLTextListsHelper::IsListProcessed( const OUString sListId ) const
 }
 
 OUString XMLTextListsHelper::GetListStyleOfProcessedList(
-                                            const OUString sListId ) const
+                                            const OUString& sListId ) const
 {
     if ( mpProcessedLists != 0 )
     {
@@ -202,7 +202,7 @@ OUString XMLTextListsHelper::GetListStyleOfProcessedList(
 }
 
 OUString XMLTextListsHelper::GetContinueListIdOfProcessedList(
-                                            const OUString sListId ) const
+                                            const OUString& sListId ) const
 {
     if ( mpProcessedLists != 0 )
     {
@@ -292,8 +292,8 @@ OUString XMLTextListsHelper::GetListIdForListBlock( XMLTextListBlockContext& rLi
     return sListBlockListId;
 }
 
-void XMLTextListsHelper::StoreLastContinuingList( OUString sListId,
-                                                  OUString sContinuingListId )
+void XMLTextListsHelper::StoreLastContinuingList( const OUString& sListId,
+                                                  const OUString& sContinuingListId )
 {
     if ( mpContinuingLists == 0 )
     {
@@ -304,7 +304,7 @@ void XMLTextListsHelper::StoreLastContinuingList( OUString sListId,
 }
 
 OUString XMLTextListsHelper::GetLastContinuingListId(
-                                                OUString sListId ) const
+                                                const OUString& sListId ) const
 {
     if ( mpContinuingLists != 0)
     {
@@ -319,8 +319,8 @@ OUString XMLTextListsHelper::GetLastContinuingListId(
     return sListId;
 }
 
-void XMLTextListsHelper::PushListOnStack( OUString sListId,
-                                          OUString sListStyleName )
+void XMLTextListsHelper::PushListOnStack( const OUString& sListId,
+                                          const OUString& sListStyleName )
 {
     if ( mpListStack == 0 )
     {
@@ -339,7 +339,7 @@ void XMLTextListsHelper::PopListFromStack()
     }
 }
 
-sal_Bool XMLTextListsHelper::EqualsToTopListStyleOnStack( const OUString sListId ) const
+sal_Bool XMLTextListsHelper::EqualsToTopListStyleOnStack( const OUString& sListId ) const
 {
     return mpListStack != 0
            ? sListId == mpListStack->back().second
@@ -349,7 +349,7 @@ sal_Bool XMLTextListsHelper::EqualsToTopListStyleOnStack( const OUString sListId
 OUString
 XMLTextListsHelper::GetNumberedParagraphListId(
     const sal_uInt16 i_Level,
-    const OUString i_StyleName)
+    const OUString& i_StyleName)
 {
     if (i_StyleName.isEmpty()) {
         OSL_FAIL("invalid numbered-paragraph: no style-name");
@@ -382,8 +382,8 @@ ClampLevel(uno::Reference<container::XIndexReplace> const& i_xNumRules,
 uno::Reference<container::XIndexReplace>
 XMLTextListsHelper::EnsureNumberedParagraph(
     SvXMLImport & i_rImport,
-    const OUString i_ListId,
-    sal_Int16 & io_rLevel, const OUString i_StyleName)
+    const OUString& i_ListId,
+    sal_Int16 & io_rLevel, const OUString& i_StyleName)
 {
     OSL_ENSURE(!i_ListId.isEmpty(), "invalid ListId");
     OSL_ENSURE(io_rLevel >= 0, "invalid Level");
@@ -444,8 +444,8 @@ uno::Reference<container::XIndexReplace>
 XMLTextListsHelper::MakeNumRule(
     SvXMLImport & i_rImport,
     const uno::Reference<container::XIndexReplace>& i_rNumRule,
-    const OUString i_ParentStyleName,
-    const OUString i_StyleName,
+    const OUString& i_ParentStyleName,
+    const OUString& i_StyleName,
     sal_Int16 & io_rLevel,
     sal_Bool* o_pRestartNumbering,
     sal_Bool* io_pSetDefaults)

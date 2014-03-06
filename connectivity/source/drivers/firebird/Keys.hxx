@@ -31,7 +31,7 @@ namespace connectivity
                  const ::connectivity::TStringVector& rNames);
 
         // OKeysHelper / XDrop
-        void dropObject(sal_Int32 nPosition, const ::rtl::OUString sName);
+        void dropObject(sal_Int32 nPosition, const ::rtl::OUString& sName);
 
         };
     }

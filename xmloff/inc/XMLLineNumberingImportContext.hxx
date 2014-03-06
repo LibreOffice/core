@@ -100,7 +100,7 @@ protected:
 
     void ProcessAttribute(
         enum LineNumberingToken eToken,
-        OUString sValue);
+        const OUString& sValue);
 
     virtual void CreateAndInsert(sal_Bool bOverwrite);
 
@@ -111,8 +111,8 @@ protected:
             ::com::sun::star::xml::sax::XAttributeList> & xAttrList );
 
     void ProcessAttribute(
-        const OUString sLocalName,
-        const OUString sValue);
+        const OUString& sLocalName,
+        const OUString& sValue);
 };
 
 #endif

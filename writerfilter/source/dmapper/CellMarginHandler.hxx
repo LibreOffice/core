@@ -42,7 +42,7 @@ private:
     virtual void lcl_attribute(Id Name, Value & val);
     virtual void lcl_sprm(Sprm & sprm);
 
-    void createGrabBag(OUString aName);
+    void createGrabBag(const OUString& aName);
 
 public:
     sal_Int32   m_nLeftMargin;
@@ -60,7 +60,7 @@ public:
 
     ::boost::shared_ptr<TablePropertyMap>            getProperties();
 
-    void enableInteropGrabBag(OUString aName);
+    void enableInteropGrabBag(const OUString& aName);
     beans::PropertyValue getInteropGrabBag();
 
 };

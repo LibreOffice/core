@@ -270,9 +270,9 @@ void    XFListStyle::SetListPosition(sal_Int32 level,
 
 void    XFListStyle::SetListBullet(sal_Int32 level,
                                    UChar32 bullet,
-                                   OUString fontname,
-                                   OUString prefix,
-                                   OUString suffix
+                                   const OUString& fontname,
+                                   const OUString& prefix,
+                                   const OUString& suffix
                                    )
 {
     assert(level>=1&&level<=10);

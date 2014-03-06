@@ -57,11 +57,11 @@ static const SwFrm* lcl_GetBoxFrm( const SwTableBox& rBox );
 static sal_Int32 lcl_GetLongBoxNum( OUString& rStr );
 static const SwTableBox* lcl_RelToBox( const SwTable& rTbl,
                                        const SwTableBox* pRefBox,
-                                       OUString sGetName);
+                                       const OUString& sGetName);
 static OUString lcl_BoxNmToRel( const SwTable& rTbl,
                                 const SwTableNode& rTblNd,
-                                OUString sRefBoxNm,
-                                OUString sGetStr,
+                                const OUString& sRefBoxNm,
+                                const OUString& sGetStr,
                                 bool bExtrnlNm);
 
 /** Get value of this box.
@@ -738,10 +738,11 @@ static sal_Int32 lcl_GetLongBoxNum( OUString& rStr )
 
 static const SwTableBox* lcl_RelToBox( const SwTable& rTbl,
                                     const SwTableBox* pRefBox,
-                                    OUString sGetName )
+                                    const OUString& _sGetName )
 {
     // get line
     const SwTableBox* pBox = 0;
+    OUString sGetName = _sGetName;
 
     // Is it really a relative value?
     if ( cRelIdentifier == sGetName[0] ) // yes
@@ -822,8 +823,10 @@ static const SwTableBox* lcl_RelToBox( const SwTable& rTbl,
 }
 
 static OUString lcl_BoxNmToRel( const SwTable& rTbl, const SwTableNode& rTblNd,
-                                OUString sRefBoxNm, OUString sTmp, bool bExtrnlNm )
+                                const OUString& _sRefBoxNm, const OUString& _sTmp, bool bExtrnlNm )
 {
+    OUString sTmp = _sTmp;
+    OUString sRefBoxNm = _sRefBoxNm;
     if( !bExtrnlNm )
     {
         // convert into external presentation

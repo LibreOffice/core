@@ -42,7 +42,7 @@ namespace connectivity { namespace hsqldb
         */
         static void appendTableFilterCrit(
             OUStringBuffer& _inout_rBuffer, const OUString& _rCatalog,
-            const OUString _rSchema, const OUString _rName,
+            const OUString& _rSchema, const OUString& _rName,
             bool _bShortForm
         );
     };

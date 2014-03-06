@@ -94,7 +94,7 @@ public:
     // UNO mapping functions
 
     // rPrefix and rSuffix are out parameters
-    static sal_Int16 GetParentNumbering( OUString sText, sal_Int16 nLevel,
+    static sal_Int16 GetParentNumbering( const OUString& sText, sal_Int16 nLevel,
         OUString& rPrefix, OUString& rSuffix );
 
     com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue >

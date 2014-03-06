@@ -119,7 +119,7 @@ public:
 
     const com::sun::star::uno::Sequence< OUString>&
                         GetSavedDocuments() const;
-    void                AddSavedDocument(OUString rName);
+    void                AddSavedDocument(const OUString& rName);
 
     sal_Bool            IsOutputToLetter()const;
     void                SetOutputToLetter(sal_Bool bSet);
@@ -156,7 +156,7 @@ public:
 
     //the content of the gender column that marks it as female
     const OUString& GetFemaleGenderValue() const;
-    void                   SetFemaleGenderValue(const OUString rValue);
+    void                   SetFemaleGenderValue(const OUString& rValue);
 
     //returns the assignment in the order of the default headers (GetDefaultAddressHeaders())
     com::sun::star::uno::Sequence< OUString >

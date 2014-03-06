@@ -2023,7 +2023,7 @@ NeonSession::getDataFromInputStream(
 }
 
 sal_Bool
-NeonSession::isDomainMatch( OUString certHostName )
+NeonSession::isDomainMatch( const OUString& certHostName )
 {
     OUString hostName = getHostName();
 

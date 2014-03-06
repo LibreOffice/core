@@ -36,7 +36,7 @@ private:
 protected:
     virtual OUString getServiceImplName();
     virtual css::uno::Sequence<OUString> getServiceNames();
-    sal_Int32 convertLineStartEndNameToArrowheadStyle( OUString sLineName );
+    sal_Int32 convertLineStartEndNameToArrowheadStyle( const OUString& sLineName );
     OUString convertArrowheadStyleToLineStartEndName( sal_Int32 nArrowheadStyle ) throw (css::uno::RuntimeException);
 public:
     ScVbaLineFormat( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext >& xContext, const css::uno::Reference< css::drawing::XShape > xShape );

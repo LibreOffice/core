@@ -41,7 +41,7 @@ public:
     DocumentEncryption(
         com::sun::star::uno::Reference< com::sun::star::io::XStream > xDocumentStream,
         oox::ole::OleStorage& rOleStorage,
-        OUString aPassword);
+        const OUString& aPassword);
 
     bool encrypt();
 

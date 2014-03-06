@@ -123,7 +123,7 @@ XFTable::~XFTable()
     m_aColumns.clear();
 }
 
-void    XFTable::SetColumnStyle(sal_Int32 col, OUString style)
+void    XFTable::SetColumnStyle(sal_Int32 col, const OUString& style)
 {
     m_aColumns[col] = style;
 }

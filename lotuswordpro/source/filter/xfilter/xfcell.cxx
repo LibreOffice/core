@@ -165,7 +165,7 @@ void    XFCell::SetValue(double value)
     SetValue(OUString::number(value));
 }
 
-void    XFCell::SetValue(OUString value)
+void    XFCell::SetValue(const OUString& value)
 {
     m_eValueType = enumXFValueTypeFloat;
     m_strValue = value;

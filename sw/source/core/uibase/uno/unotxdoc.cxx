@@ -3476,7 +3476,7 @@ Sequence< OUString > SwXLinkTargetSupplier::getSupportedServiceNames(void)
 }
 
 SwXLinkNameAccessWrapper::SwXLinkNameAccessWrapper(
-            Reference< XNameAccess >  xAccess, const OUString& rLinkDisplayName, OUString sSuffix ) :
+            Reference< XNameAccess >  xAccess, const OUString& rLinkDisplayName, const OUString& sSuffix ) :
     xRealAccess(xAccess),
     pPropSet(aSwMapProvider.GetPropertySet(PROPERTY_MAP_LINK_TARGET)),
     sLinkSuffix(sSuffix),
@@ -3486,7 +3486,7 @@ SwXLinkNameAccessWrapper::SwXLinkNameAccessWrapper(
 }
 
 SwXLinkNameAccessWrapper::SwXLinkNameAccessWrapper(SwXTextDocument& rxDoc,
-            const OUString& rLinkDisplayName, OUString sSuffix) :
+            const OUString& rLinkDisplayName, const OUString& sSuffix) :
     pPropSet(aSwMapProvider.GetPropertySet(PROPERTY_MAP_LINK_TARGET)),
     sLinkSuffix(sSuffix),
     sLinkDisplayName(rLinkDisplayName),

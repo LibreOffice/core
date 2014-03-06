@@ -151,7 +151,7 @@ void ListLevel::SetParaStyle( boost::shared_ptr< StyleSheetEntry > pStyle )
         && styleId[ RTL_CONSTASCII_LENGTH( "Heading" ) ] <= '9' );
 }
 
-sal_Int16 ListLevel::GetParentNumbering( OUString sText, sal_Int16 nLevel,
+sal_Int16 ListLevel::GetParentNumbering( const OUString& sText, sal_Int16 nLevel,
         OUString& rPrefix, OUString& rSuffix )
 {
     sal_Int16 nParentNumbering = 1;

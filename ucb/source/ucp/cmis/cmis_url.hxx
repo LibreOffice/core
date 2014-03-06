@@ -36,8 +36,8 @@ namespace cmis
             OUString& getRepositoryId( );
             OUString& getUsername( ) { return m_sUser; }
             OUString& getPassword( ) { return m_sPass; }
-            void setObjectPath( OUString sPath );
-            void setObjectId( OUString sId );
+            void setObjectPath( const OUString& sPath );
+            void setObjectId( const OUString& sId );
 
             OUString asString( );
     };

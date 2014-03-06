@@ -121,7 +121,7 @@ public:
     void DeletePrev(OutputDevice* pDev);
 
     /** Insert text at the current position */
-    void InsertText(OUString aString);
+    void InsertText(const OUString& aString);
 
     /** Insert an element into the formula */
     void InsertElement(SmFormulaElement element);
@@ -137,7 +137,7 @@ public:
      * This will work for stuff like "A intersection B". But stuff spaning multiple lines
      * or dependent on the context which position is placed in will not work!
      */
-    void InsertCommandText(OUString aCommandText);
+    void InsertCommandText(const OUString& aCommandText);
 
     /** Insert a special node created from aString
      *
@@ -148,7 +148,7 @@ public:
      * For more complex expressions use InsertCommandText, this method doesn't
      * use SmParser, this means that it's faster, but not as strong.
      */
-    void InsertSpecial(OUString aString);
+    void InsertSpecial(const OUString& aString);
 
     /** Create sub-/super script
      *

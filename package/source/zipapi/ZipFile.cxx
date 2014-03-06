@@ -518,7 +518,7 @@ uno::Reference< XInputStream > ZipFile::createUnbufferedStream(
             const ::rtl::Reference< EncryptionData > &rData,
             sal_Int8 nStreamMode,
             sal_Bool bIsEncrypted,
-            OUString aMediaType )
+            const OUString& aMediaType )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 

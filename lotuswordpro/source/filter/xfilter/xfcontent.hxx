@@ -78,7 +78,7 @@ public:
     /**
      * @short:  All content except XFTextContent can have a style.
      */
-    virtual void    SetStyleName(OUString style){m_strStyleName = style;}
+    virtual void    SetStyleName(const OUString& style){m_strStyleName = style;}
 
     /**
      * @short:  return the style name.

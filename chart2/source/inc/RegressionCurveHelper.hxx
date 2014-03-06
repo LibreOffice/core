@@ -45,7 +45,7 @@ public:
     SAL_DLLPRIVATE static css::uno::Reference<css::chart2::XRegressionCurve>
         createRegressionCurveByServiceName(
             const css::uno::Reference<css::uno::XComponentContext> & xContext,
-            OUString aServiceName );
+            const OUString& aServiceName );
 
     static bool hasMeanValueLine(
         const css::uno::Reference<css::chart2::XRegressionCurveContainer> & xRegCnt );
@@ -136,7 +136,7 @@ public:
 
     /// returns a calculator object for regression curves (used by the view)
     static css::uno::Reference<css::chart2::XRegressionCurveCalculator>
-        createRegressionCurveCalculatorByServiceName( OUString aServiceName );
+        createRegressionCurveCalculatorByServiceName( const OUString& aServiceName );
 
     /** recalculates the regression parameters according to the data given in
         the data source.

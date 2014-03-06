@@ -603,7 +603,7 @@ bool AbstractScTextImportOptionsDlg_Impl::IsDateConversionSet() const
 }
 
 // =========================Factories  for createdialog ===================
-AbstractScImportAsciiDlg * ScAbstractDialogFactory_Impl::CreateScImportAsciiDlg ( Window* pParent, OUString aDatName,
+AbstractScImportAsciiDlg * ScAbstractDialogFactory_Impl::CreateScImportAsciiDlg ( Window* pParent, const OUString& aDatName,
                                                     SvStream* pInStream, ScImportAsciiCall eCall )
 {
     ScImportAsciiDlg* pDlg = new ScImportAsciiDlg( pParent, aDatName,pInStream, eCall );
@@ -711,11 +711,11 @@ AbstractScDeleteContentsDlg* ScAbstractDialogFactory_Impl::CreateScDeleteContent
 }
 
 AbstractScFillSeriesDlg* ScAbstractDialogFactory_Impl::CreateScFillSeriesDlg( Window*       pParent,
-                                                            ScDocument& rDocument,
-                                                            FillDir     eFillDir,
-                                                            FillCmd     eFillCmd,
-                                                            FillDateCmd eFillDateCmd,
-                                                            OUString        aStartStr,
+                                                            ScDocument&     rDocument,
+                                                            FillDir         eFillDir,
+                                                            FillCmd         eFillCmd,
+                                                            FillDateCmd     eFillDateCmd,
+                                                            const OUString& aStartStr,
                                                             double          fStep,
                                                             double          fMax,
                                                             sal_uInt16      nPossDir)
@@ -780,7 +780,7 @@ AbstractScLinkedAreaDlg * ScAbstractDialogFactory_Impl::CreateScLinkedAreaDlg(Wi
 }
 
 AbstractScMetricInputDlg * ScAbstractDialogFactory_Impl::CreateScMetricInputDlg (  Window*      pParent,
-                                                                OString sDialogName,
+                                                                const OString& sDialogName,
                                                                 long            nCurrent,
                                                                 long            nDefault,
                                                                 FieldUnit       eFUnit,
@@ -788,7 +788,7 @@ AbstractScMetricInputDlg * ScAbstractDialogFactory_Impl::CreateScMetricInputDlg 
                                                                 long            nMaximum ,
                                                                 long            nMinimum,
                                                                 long            nFirst,
-                                                                long          nLast )
+                                                                long            nLast )
 {
     ScMetricInputDlg * pDlg = new ScMetricInputDlg(pParent, sDialogName, nCurrent ,nDefault, eFUnit,
         nDecimals, nMaximum , nMinimum , nFirst, nLast);

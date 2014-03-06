@@ -39,7 +39,7 @@ VbaTextFrame::setAsMSObehavior()
     m_xPropertySet->setPropertyValue( "TextFitToSize", uno::makeAny( drawing::TextFitToSizeType_NONE ) );
 }
 
-sal_Int32 VbaTextFrame::getMargin( OUString sMarginType )
+sal_Int32 VbaTextFrame::getMargin( const OUString& sMarginType )
 {
     sal_Int32 nMargin = 0;
     uno::Any aMargin = m_xPropertySet->getPropertyValue( sMarginType );
@@ -47,7 +47,7 @@ sal_Int32 VbaTextFrame::getMargin( OUString sMarginType )
     return nMargin;
 }
 
-void VbaTextFrame::setMargin( OUString sMarginType, float fMargin )
+void VbaTextFrame::setMargin( const OUString& sMarginType, float fMargin )
 {
     sal_Int32 nMargin = Millimeter::getInHundredthsOfOneMillimeter( fMargin );
     m_xPropertySet->setPropertyValue( sMarginType, uno::makeAny( nMargin ) );

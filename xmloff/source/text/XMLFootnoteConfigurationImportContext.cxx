@@ -429,13 +429,13 @@ void XMLFootnoteConfigurationImportContext::ProcessSettings(
 }
 
 void XMLFootnoteConfigurationImportContext::SetBeginNotice(
-    OUString sText)
+    const OUString& sText)
 {
     sBeginNotice = sText;
 }
 
 void XMLFootnoteConfigurationImportContext::SetEndNotice(
-    OUString sText)
+    const OUString& sText)
 {
     sEndNotice = sText;
 }

@@ -31,10 +31,10 @@ struct TrieNode
 
     void      markWord();
     TrieNode* findChild(sal_Unicode aCharacter);
-    TrieNode* traversePath(OUString sPath);
+    TrieNode* traversePath(const OUString& sPath);
     void      addNewChild(TrieNode* pChild);
-    void      collectSuggestions(OUString sPath, std::vector<OUString>& rSuggestionList);
-    void      collectSuggestionsForCurrentNode(TrieNode* pCurrent, OUString sPath, vector<OUString>& rSuggestionList);
+    void      collectSuggestions(const OUString& sPath, std::vector<OUString>& rSuggestionList);
+    void      collectSuggestionsForCurrentNode(TrieNode* pCurrent, const OUString& sPath, vector<OUString>& rSuggestionList);
 };
 
 TrieNode::TrieNode(sal_Unicode aCharacter) :
@@ -99,7 +99,7 @@ TrieNode* TrieNode::findChild(sal_Unicode aInputCharacter)
     return NULL;
 }
 
-void TrieNode::collectSuggestions(OUString sPath, vector<OUString>& rSuggestionList)
+void TrieNode::collectSuggestions(const OUString& sPath, vector<OUString>& rSuggestionList)
 {
     // first traverse nodes for alphabet characters
     for (int i=0; i<LATIN_ARRAY_SIZE; i++)
@@ -119,7 +119,7 @@ void TrieNode::collectSuggestions(OUString sPath, vector<OUString>& rSuggestionL
     }
 }
 
-void TrieNode::collectSuggestionsForCurrentNode(TrieNode* pCurrent, OUString sPath, vector<OUString>& rSuggestionList)
+void TrieNode::collectSuggestionsForCurrentNode(TrieNode* pCurrent, const OUString& sPath, vector<OUString>& rSuggestionList)
 {
     OUString aStringPath = sPath + OUString(pCurrent->mCharacter);
     if(pCurrent->mMarker)
@@ -130,7 +130,7 @@ void TrieNode::collectSuggestionsForCurrentNode(TrieNode* pCurrent, OUString sPa
     pCurrent->collectSuggestions(aStringPath, rSuggestionList);
 }
 
-TrieNode* TrieNode::traversePath(OUString sPath)
+TrieNode* TrieNode::traversePath(const OUString& sPath)
 {
     TrieNode* pCurrent = this;
 
@@ -154,7 +154,7 @@ Trie::Trie() :
 Trie::~Trie()
 {}
 
-void Trie::insert(OUString sInputString) const
+void Trie::insert(const OUString& sInputString) const
 {
     // adding an empty word is not allowed
     if ( sInputString.isEmpty() )
@@ -186,13 +186,13 @@ void Trie::insert(OUString sInputString) const
     pCurrent->markWord();
 }
 
-void Trie::findSuggestions(OUString sWordPart, vector<OUString>& rSuggesstionList) const
+void Trie::findSuggestions(const OUString& sWordPart, vector<OUString>& rSuggestionList) const
 {
     TrieNode* pNode = mRoot->traversePath(sWordPart);
 
     if (pNode != NULL)
     {
-        pNode->collectSuggestions(sWordPart, rSuggesstionList);
+        pNode->collectSuggestions(sWordPart, rSuggestionList);
     }
 }
 

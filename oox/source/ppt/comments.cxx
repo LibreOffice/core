@@ -30,8 +30,9 @@ void CommentAuthorList::setValues(const CommentAuthorList& list)
 }
 
 //DateTime is saved as : 2013-01-10T15:53:26.000
-void Comment::setDateTime (OUString datetime)
+void Comment::setDateTime (const OUString& _datetime)
 {
+    OUString datetime = _datetime;
     aDateTime.Year = datetime.getToken(0,'-').toInt32();
     aDateTime.Month = datetime.getToken(1,'-').toInt32();
     aDateTime.Day = datetime.getToken(2,'-').toInt32();

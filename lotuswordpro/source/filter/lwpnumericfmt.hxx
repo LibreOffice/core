@@ -282,7 +282,7 @@ private:
 
     void GetCurrencyStr(LwpNumericFormatSubset aNumber, OUString& aPrefix, OUString& aSuffix, sal_Bool bNegtive=sal_False);
     void SetNumberType(XFNumberStyle* pStyle);
-    OUString    reencode(OUString sCode);
+    OUString    reencode(const OUString& sCode);
 };
 
 inline sal_Bool

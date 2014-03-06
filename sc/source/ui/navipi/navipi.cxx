@@ -1015,7 +1015,7 @@ void ScNavigatorDlg::SetCurrentCell( SCCOL nColNo, SCROW nRowNo )
     }
 }
 
-void ScNavigatorDlg::SetCurrentCellStr( const OUString rName )
+void ScNavigatorDlg::SetCurrentCellStr( const OUString& rName )
 {
     ppBoundItems[0]->ClearCache();
     SfxStringItem   aNameItem( SID_CURRENTCELL, rName );
@@ -1060,7 +1060,7 @@ void ScNavigatorDlg::SetCurrentTableStr( const OUString& rName )
 
 
 
-void ScNavigatorDlg::SetCurrentObject( const OUString rName )
+void ScNavigatorDlg::SetCurrentObject( const OUString& rName )
 {
     SfxStringItem aNameItem( SID_CURRENTOBJECT, rName );
     rBindings.GetDispatcher()->Execute( SID_CURRENTOBJECT,

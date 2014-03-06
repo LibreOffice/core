@@ -105,10 +105,10 @@ private:
 ::rtl::OString getTempDir(const ::rtl::OString& sFileName);
 
 ::rtl::OString createFileNameFromType(const ::rtl::OString& destination,
-                                      const ::rtl::OString type,
-                                      const ::rtl::OString postfix,
+                                      const ::rtl::OString& type,
+                                      const ::rtl::OString& postfix,
                                       bool bLowerCase=false,
-                                      const ::rtl::OString prefix="");
+                                      const ::rtl::OString& prefix="");
 
 bool fileExists(const ::rtl::OString& fileName);
 bool makeValidTypeFile(const ::rtl::OString& targetFileName,

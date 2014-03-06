@@ -197,7 +197,7 @@ bool bSourceLinesEnabled = false;
 ModulWindow::ModulWindow (
     ModulWindowLayout* pParent,
     ScriptDocument const& rDocument,
-    OUString aLibName, OUString aName, OUString& aModule
+    const OUString& aLibName, const OUString& aName, OUString& aModule
 ) :
     BaseWindow(pParent, rDocument, aLibName, aName),
     rLayout(*pParent),

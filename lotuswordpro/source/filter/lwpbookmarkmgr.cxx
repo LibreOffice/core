@@ -55,7 +55,7 @@
  ************************************************************************/
 #include "lwpbookmarkmgr.hxx"
 
-void LwpBookmarkMgr::AddXFBookmarkStart(OUString sName,XFBookmarkStart* pMark)
+void LwpBookmarkMgr::AddXFBookmarkStart(const OUString& sName,XFBookmarkStart* pMark)
 {
     std::map<OUString,XFBookmarkStart*>::iterator iter;
     iter = m_MapStart.find(sName);
@@ -73,7 +73,7 @@ void LwpBookmarkMgr::AddXFBookmarkStart(OUString sName,XFBookmarkStart* pMark)
         m_MapStart[sName] = pMark;
     }
 }
-void LwpBookmarkMgr::AddXFBookmarkEnd(OUString sName,XFBookmarkEnd* pMark)
+void LwpBookmarkMgr::AddXFBookmarkEnd(const OUString& sName,XFBookmarkEnd* pMark)
 {
     std::map<OUString,XFBookmarkEnd*>::iterator iter;
     iter = m_MapEnd.find(sName);
@@ -91,7 +91,7 @@ void LwpBookmarkMgr::AddXFBookmarkEnd(OUString sName,XFBookmarkEnd* pMark)
         m_MapEnd[sName] = pMark;
     }
 }
-sal_Bool LwpBookmarkMgr::FindBookmark(OUString sName)
+sal_Bool LwpBookmarkMgr::FindBookmark(const OUString& sName)
 {
     std::map<OUString,XFBookmarkStart*>::iterator iter;
     iter = m_MapStart.find(sName);

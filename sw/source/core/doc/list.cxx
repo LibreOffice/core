@@ -30,7 +30,7 @@
 class SwListImpl
 {
     public:
-        SwListImpl( const OUString sListId,
+        SwListImpl( const OUString& sListId,
                     SwNumRule& rDefaultListStyle,
                     const SwNodes& rNodes );
         ~SwListImpl();
@@ -67,7 +67,7 @@ class SwListImpl
         void NotifyItemsOnListLevel( const int nLevel );
 };
 
-SwListImpl::SwListImpl( const OUString sListId,
+SwListImpl::SwListImpl( const OUString& sListId,
                         SwNumRule& rDefaultListStyle,
                         const SwNodes& rNodes )
     : msListId( sListId ),
@@ -220,7 +220,7 @@ void SwListImpl::NotifyItemsOnListLevel( const int nLevel )
 }
 
 // SwList ---------------------------------------------------------------------
-SwList::SwList( const OUString sListId,
+SwList::SwList( const OUString& sListId,
                 SwNumRule& rDefaultListStyle,
                 const SwNodes& rNodes )
     : mpListImpl( new SwListImpl( sListId, rDefaultListStyle, rNodes ) )

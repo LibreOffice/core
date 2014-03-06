@@ -122,7 +122,7 @@ public:
     // Helper.
     static OUString
     replaceMessageWithArguments(
-        OUString aMessage,
+        const OUString& aMessage,
             std::vector< OUString > const & rArguments );
 
     ::com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >

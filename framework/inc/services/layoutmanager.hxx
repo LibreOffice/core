@@ -217,7 +217,7 @@ namespace framework
 
             ::com::sun::star::uno::Reference< ::com::sun::star::ui::XUIElement > implts_findElement( const OUString& aName );
 
-            void implts_writeNewStateData( const OUString aName, const ::com::sun::star::uno::Reference< com::sun::star::awt::XWindow >& xWindow );
+            void implts_writeNewStateData( const OUString& aName, const ::com::sun::star::uno::Reference< com::sun::star::awt::XWindow >& xWindow );
             sal_Bool implts_readWindowStateData( const OUString& rName, UIElement& rElementData );
             void implts_writeWindowStateData( const OUString& rName, const UIElement& rElementData );
             void implts_setElementData( UIElement& rUIElement, const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XDockableWindow >& rDockWindow );

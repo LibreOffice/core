@@ -98,7 +98,7 @@ ObjectType Tables::appendObject(const OUString& rName,
 }
 
 //----- XDrop -----------------------------------------------------------------
-void Tables::dropObject(sal_Int32 nPosition, const OUString sName)
+void Tables::dropObject(sal_Int32 nPosition, const OUString& sName)
 {
     uno::Reference< XPropertySet > xTable(getObject(nPosition));
 

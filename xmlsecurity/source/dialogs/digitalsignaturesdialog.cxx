@@ -437,7 +437,7 @@ IMPL_LINK_NOARG(DigitalSignaturesDialog, AddButtonHdl)
 
             std::vector< OUString > aElements =
                 DocumentSignatureHelper::CreateElementList(
-                    mxStore, OUString(), meSignatureMode, OOo3_2Document);
+                    mxStore, meSignatureMode, OOo3_2Document);
 
             sal_Int32 nElements = aElements.size();
             for ( sal_Int32 n = 0; n < nElements; n++ )
@@ -576,7 +576,7 @@ void DigitalSignaturesDialog::ImplFillSignaturesBox()
                 m_sODFVersion, maCurrentSignatureInformations[n]);
             std::vector< OUString > aElementsToBeVerified =
                 DocumentSignatureHelper::CreateElementList(
-                mxStore, OUString(), meSignatureMode, mode);
+                mxStore, meSignatureMode, mode);
 
             const SignatureInformation& rInfo = maCurrentSignatureInformations[n];
             //First we try to get the certificate which is embedded in the XML Signature

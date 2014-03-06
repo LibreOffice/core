@@ -411,7 +411,7 @@ void LwpFribField::RegisterTotalTimeStyle()
     m_TimeStyle = pXFStyleManager->AddStyle(pTimeStyle)->GetStyleName();
 }
 
-void LwpFribField::RegisterDateTimeStyle(OUString sFormula)
+void LwpFribField::RegisterDateTimeStyle(const OUString& sFormula)
 {
     XFDateStyle* pDateStyle = NULL;
     XFTimeStyle* pTimeStyle = NULL;

@@ -75,7 +75,7 @@ public:
 
     // EnhancedCustomShapeGeometry.idl
     void dumpEnhancedCustomShapeGeometryService(com::sun::star::uno::Reference< com::sun::star::beans::XPropertySet > xPropSet);
-    void dumpTypeAsAttribute(OUString sType);
+    void dumpTypeAsAttribute(const OUString& sType);
     void dumpViewBoxAsElement(com::sun::star::awt::Rectangle aViewBox);
     void dumpMirroredXAsAttribute(sal_Bool bMirroredX); // also used in EnhancedCustomShapeHandle
     void dumpMirroredYAsAttribute(sal_Bool bMirroredY); // also used in EnhancedCustomShapeHandle

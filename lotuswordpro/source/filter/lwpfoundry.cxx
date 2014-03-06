@@ -287,7 +287,7 @@ LwpObjectID * LwpFoundry::GetDefaultTextStyle()
 * @descr:   Get paragraph style object id according to its style name
 *
 */
-LwpObjectID * LwpFoundry::FindParaStyleByName(OUString name)
+LwpObjectID * LwpFoundry::FindParaStyleByName(const OUString& name)
 {
     //Register all text styles: para styles, character styles
     LwpDLVListHeadHolder* pParaStyleHolder = static_cast<LwpDLVListHeadHolder*>(GetTextStyleHead()->obj());
@@ -310,7 +310,7 @@ LwpObjectID * LwpFoundry::FindParaStyleByName(OUString name)
 * @descr:   Get style name registered according the original style name
 *
 */
-OUString LwpFoundry::FindActuralStyleName(OUString name)
+OUString LwpFoundry::FindActuralStyleName(const OUString& name)
 {
     LwpObjectID* pID = FindParaStyleByName(name);
     if(pID)

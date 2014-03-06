@@ -60,7 +60,7 @@
 #include "xftextcontent.hxx"
 #include "ixfstream.hxx"
 
-XFTextContent::XFTextContent(OUString text):m_strText(text)
+XFTextContent::XFTextContent(const OUString& text):m_strText(text)
 {
 }
 

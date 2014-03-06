@@ -69,12 +69,12 @@ public:
     XFOfficeMeta(){}
     virtual ~XFOfficeMeta(){}
 
-    void    SetCreator(OUString creator);
-    void    SetDescription(OUString dsr);
-    void SetKeywords(OUString keywords);
-    void SetCreationTime(OUString crtime);
-    void SetLastTime(OUString lstime);
-    void SetEditTime(OUString edtime);
+    void SetCreator(const OUString& creator);
+    void SetDescription(const OUString& dsr);
+    void SetKeywords(const OUString& keywords);
+    void SetCreationTime(const OUString& crtime);
+    void SetLastTime(const OUString& lstime);
+    void SetEditTime(const OUString& edtime);
 
     virtual void ToXml(IXFStream *pStream);
 private:

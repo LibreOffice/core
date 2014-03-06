@@ -257,7 +257,7 @@ namespace fileaccess {
         // Notifier
 
         ContentEventNotifier*          cDEL( void );
-        ContentEventNotifier*          cEXC( const OUString aNewName );
+        ContentEventNotifier*          cEXC( const OUString& aNewName );
         ContentEventNotifier*          cCEL( void );
         PropertySetInfoChangeNotifier* cPSL( void );
         PropertyChangeNotifier*        cPCL( void );

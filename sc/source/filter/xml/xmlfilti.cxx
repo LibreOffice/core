@@ -815,7 +815,7 @@ SvXMLImportContext *ScXMLDPConditionContext::CreateChildContext( sal_uInt16 nPre
 }
 
 void ScXMLDPConditionContext::getOperatorXML(
-    const OUString sTempOperator, ScQueryOp& aFilterOperator, bool& bUseRegularExpressions) const
+    const OUString& sTempOperator, ScQueryOp& aFilterOperator, bool& bUseRegularExpressions) const
 {
     bUseRegularExpressions = false;
     if (IsXMLToken(sTempOperator, XML_MATCH))

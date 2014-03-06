@@ -67,8 +67,8 @@ XFTextSpan::XFTextSpan()
 
 }
 
-XFTextSpan::XFTextSpan(OUString& text,
-                       OUString& style
+XFTextSpan::XFTextSpan(const OUString& text,
+                       const OUString& style
                        )
 {
     Add(text);
@@ -99,7 +99,7 @@ void    XFTextSpan::Add(IXFContent *pContent)
     m_aContents.push_back(pContent);
 }
 
-void    XFTextSpan::Add(OUString& text)
+void    XFTextSpan::Add(const OUString& text)
 {
     IXFContent *pText = new XFTextContent(text);
     Add(pText);

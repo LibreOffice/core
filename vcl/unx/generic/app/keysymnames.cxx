@@ -474,7 +474,7 @@ namespace vcl_sal {
     };
 
     // translate keycodes, used within the displayed menu shortcuts
-    OUString getKeysymReplacementName( OUString pLang, KeySym nSymbol )
+    OUString getKeysymReplacementName( const OUString& pLang, KeySym nSymbol )
     {
         for( unsigned int n = 0; n < SAL_N_ELEMENTS(aKeyboards); n++ )
         {

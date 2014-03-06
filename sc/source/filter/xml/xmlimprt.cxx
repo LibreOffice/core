@@ -3036,7 +3036,7 @@ throw( ::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeE
     UnlockSolarMutex();
 }
 
-sal_Int32 ScXMLImport::GetRangeType(const OUString sRangeType) const
+sal_Int32 ScXMLImport::GetRangeType(const OUString& sRangeType) const
 {
     sal_Int32 nRangeType(0);
     OUStringBuffer sBuffer;

@@ -66,7 +66,7 @@ sdbcx::ObjectType OUsers::appendObject( const OUString& _rForName, const Referen
 }
 
 // XDrop
-void OUsers::dropObject(sal_Int32 /*_nPos*/,const OUString _sElementName)
+void OUsers::dropObject(sal_Int32 /*_nPos*/,const OUString& _sElementName)
 {
     m_aCollection.Delete(_sElementName);
 }

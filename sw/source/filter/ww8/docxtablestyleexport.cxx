@@ -33,7 +33,7 @@ struct DocxTableStyleExport::Impl
     void TableStyle(uno::Sequence<beans::PropertyValue>& rStyle);
 
     /// Handles a boolean value.
-    void handleBoolean(OUString aValue, sal_Int32 nToken);
+    void handleBoolean(const OUString& aValue, sal_Int32 nToken);
 
     /// Export of w:pPr.
     void tableStylePPr(uno::Sequence<beans::PropertyValue>& rPPr);
@@ -327,7 +327,7 @@ void DocxTableStyleExport::Impl::tableStyleTblInd(uno::Sequence<beans::PropertyV
     m_pSerializer->singleElementNS(XML_w, XML_tblInd, xAttributeList);
 }
 
-void DocxTableStyleExport::Impl::handleBoolean(OUString aValue, sal_Int32 nToken)
+void DocxTableStyleExport::Impl::handleBoolean(const OUString& aValue, sal_Int32 nToken)
 {
     if (aValue.isEmpty())
         return;

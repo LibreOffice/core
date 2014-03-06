@@ -127,7 +127,7 @@ sdbcx::ObjectType OColumns::appendObject( const OUString&, const Reference< XPro
 }
 
 // XDrop
-void OColumns::dropObject(sal_Int32 /*_nPos*/,const OUString _sElementName)
+void OColumns::dropObject(sal_Int32 /*_nPos*/,const OUString& _sElementName)
 {
     if(!m_aCollection.Delete(_sElementName))
         ADOS::ThrowException(*m_pConnection->getConnection(),static_cast<XTypeProvider*>(this));

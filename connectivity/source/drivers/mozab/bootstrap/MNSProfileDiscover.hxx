@@ -51,7 +51,7 @@ namespace connectivity
         class ProfileStruct
         {
         public:
-            ProfileStruct(MozillaProductType aProduct,OUString aProfileName,
+            ProfileStruct(MozillaProductType aProduct, const OUString& aProfileName,
 #ifdef MINIMAL_PROFILEDISCOVER
                           const OUString &aProfilePath
 #else

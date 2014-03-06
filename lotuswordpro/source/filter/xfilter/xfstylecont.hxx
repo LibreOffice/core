@@ -97,7 +97,7 @@ public:
     /**
      * @descr   get style by name.
      */
-    IXFStyle*       FindStyle(OUString name);
+    IXFStyle*       FindStyle(const OUString& name);
 
     /**
      * @descr   clear container.

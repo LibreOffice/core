@@ -354,7 +354,7 @@ namespace dbaui
         return _inout_rDisplayName.getLength() > 0;
     }
 
-    void OGeneralPage::insertDatasourceTypeEntryData(const OUString& _sType, OUString sDisplayName)
+    void OGeneralPage::insertDatasourceTypeEntryData(const OUString& _sType, const OUString& sDisplayName)
     {
         // insert a (temporary) entry
         sal_uInt16 nPos = m_pDatasourceType->InsertEntry(sDisplayName);
@@ -363,7 +363,7 @@ namespace dbaui
         m_aURLPrefixes[nPos] = _sType;
     }
 
-    void OGeneralPageWizard::insertEmbeddedDBTypeEntryData(const OUString& _sType, OUString sDisplayName)
+    void OGeneralPageWizard::insertEmbeddedDBTypeEntryData(const OUString& _sType, const OUString& sDisplayName)
     {
         // insert a (temporary) entry
         sal_uInt16 nPos = m_pEmbeddedDBType->InsertEntry(sDisplayName);

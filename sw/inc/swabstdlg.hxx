@@ -363,7 +363,7 @@ public:
                                                     sal_uInt8 nDialogMode,
                                                     const OUString *pCollName = 0,
                                                     sal_Bool bDraw = sal_False,
-                                                    OString sDefPage = OString() ) = 0;
+                                                    const OString& sDefPage = OString() ) = 0;
 
     virtual AbstractSwSelGlossaryDlg * CreateSwSelGlossaryDlg(Window * pParent, const OUString &rShortName) = 0;
 
@@ -393,7 +393,7 @@ public:
                                                 const SfxItemSet& rCoreSet,
                                                 bool bNewFrm = true,
                                                 bool bFmt = false,
-                                                OString sDefPage = OString(),
+                                                const OString& sDefPage = OString(),
                                                 const OUString* pFmtStr = 0) = 0;
     // @param nSlot
     // Identifies optional Slot by which the creation of the Template (Style) dialog is triggered.
@@ -402,7 +402,7 @@ public:
                                                 Window*             pParent,
                                                 SfxStyleSheetBase&  rBase,
                                                 sal_uInt16          nRegion,
-                                                OString             sPage = OString(),
+                                                const OString&      sPage = OString(),
                                                 SwWrtShell*         pActShell = 0,
                                                 bool                bNew = false) = 0;
     virtual AbstractGlossaryDlg*        CreateGlossaryDlg(SfxViewFrame* pViewFrame,

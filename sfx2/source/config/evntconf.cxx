@@ -263,7 +263,7 @@ void PropagateEvent_Impl( SfxObjectShell *pDoc, OUString aEventName, const SvxMa
 }
 
 
-void SfxEventConfiguration::ConfigureEvent( OUString aName, const SvxMacro& rMacro, SfxObjectShell *pDoc )
+void SfxEventConfiguration::ConfigureEvent( const OUString& aName, const SvxMacro& rMacro, SfxObjectShell *pDoc )
 {
     boost::scoped_ptr<SvxMacro> pMacro;
     if ( rMacro.HasMacro() )

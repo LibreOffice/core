@@ -395,7 +395,7 @@ class ScAbstractDialogFactory_Impl : public ScAbstractDialogFactory
 public:
     virtual ~ScAbstractDialogFactory_Impl() {}
 
-    virtual     AbstractScImportAsciiDlg * CreateScImportAsciiDlg( Window* pParent, OUString aDatName,
+    virtual     AbstractScImportAsciiDlg * CreateScImportAsciiDlg( Window* pParent, const OUString& aDatName,
                                                                     SvStream* pInStream,
                                                                     ScImportAsciiCall eCall);
 
@@ -432,14 +432,14 @@ public:
                                                                     sal_uInt16  nCheckDefaults = 0);
 
     virtual AbstractScFillSeriesDlg * CreateScFillSeriesDlg( Window*        pParent,
-                                                            ScDocument& rDocument,
-                                                            FillDir     eFillDir,
-                                                            FillCmd     eFillCmd,
-                                                            FillDateCmd eFillDateCmd,
-                                                            OUString        aStartStr,
+                                                            ScDocument&     rDocument,
+                                                            FillDir         eFillDir,
+                                                            FillCmd         eFillCmd,
+                                                            FillDateCmd     eFillDateCmd,
+                                                            const OUString& aStartStr,
                                                             double          fStep,
                                                             double          fMax,
-                                                            sal_uInt16          nPossDir);
+                                                            sal_uInt16       nPossDir);
     virtual AbstractScGroupDlg * CreateAbstractScGroupDlg( Window* pParent,
                                                             bool bUnGroup = false,
                                                             bool bRows = true);
@@ -461,7 +461,7 @@ public:
     virtual AbstractScLinkedAreaDlg * CreateScLinkedAreaDlg(Window* pParent);
 
     virtual AbstractScMetricInputDlg * CreateScMetricInputDlg (  Window*        pParent,
-                                                                OString sDialogName,
+                                                                const OString&  sDialogName,
                                                                 long            nCurrent,
                                                                 long            nDefault,
                                                                 FieldUnit       eFUnit    = FUNIT_MM,

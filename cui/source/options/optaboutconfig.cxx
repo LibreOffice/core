@@ -381,7 +381,7 @@ void CuiAboutConfigTabPage::FillItems(const Reference< XNameAccess >& xNameAcces
     }
 }
 
-Reference< XNameAccess > CuiAboutConfigTabPage::getConfigAccess( OUString sNodePath, sal_Bool bUpdate )
+Reference< XNameAccess > CuiAboutConfigTabPage::getConfigAccess( const OUString& sNodePath, sal_Bool bUpdate )
 {
     uno::Reference< uno::XComponentContext > xContext( ::comphelper::getProcessComponentContext() );
 

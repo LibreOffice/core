@@ -348,7 +348,7 @@ void SwAutoCompleteWord::SetMinWordLen( sal_uInt16 n )
  *  @param aMatch the prefix to search for
  *  @param aWords the words to search in
  */
-bool SwAutoCompleteWord::GetWordsMatching(OUString aMatch, std::vector<OUString>& aWords) const
+bool SwAutoCompleteWord::GetWordsMatching(const OUString& aMatch, std::vector<OUString>& aWords) const
 {
     OUString aStringRoot = aMatch;
 

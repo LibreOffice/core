@@ -26,7 +26,7 @@ Indexes::Indexes(Table* pTable, Mutex& rMutex, const vector< OUString>& rVector)
 }
 
 // XDrop
-void Indexes::dropObject(sal_Int32 /*nPosition*/, const OUString sIndexName)
+void Indexes::dropObject(sal_Int32 /*nPosition*/, const OUString& sIndexName)
 {
     OUString sSql("DROP INDEX \"" + sIndexName +"\"");
     m_pTable->getConnection()->createStatement()->execute(sSql);

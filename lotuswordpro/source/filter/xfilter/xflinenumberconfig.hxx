@@ -74,11 +74,11 @@ public:
 
     void    SetNumberIncrement(sal_Int32 increment);
 
-    void    SetSeparator(sal_Int32 increment, OUString separator);
+    void    SetSeparator(sal_Int32 increment, const OUString& separator);
 
-    void    SetNumberFormat(OUString numfmt = "1");
+    void    SetNumberFormat(const OUString& numfmt = "1");
 
-    void    SetTextStyle(OUString style);
+    void    SetTextStyle(const OUString& style);
 
     void    SetRestartOnPage(sal_Bool restart = sal_True);
 
@@ -127,18 +127,18 @@ inline void XFLineNumberConfig::SetNumberIncrement(sal_Int32 increment)
     m_nIncrement = increment;
 }
 
-inline void XFLineNumberConfig::SetSeparator(sal_Int32 increment, OUString separator)
+inline void XFLineNumberConfig::SetSeparator(sal_Int32 increment, const OUString& separator)
 {
     m_nSepIncrement = increment;
     m_strSeparator = separator;
 }
 
-inline void XFLineNumberConfig::SetNumberFormat(OUString numfmt)
+inline void XFLineNumberConfig::SetNumberFormat(const OUString& numfmt)
 {
     m_strNumFmt = numfmt;
 }
 
-inline void XFLineNumberConfig::SetTextStyle(OUString style)
+inline void XFLineNumberConfig::SetTextStyle(const OUString& style)
 {
     m_strTextStyle = style;
 }

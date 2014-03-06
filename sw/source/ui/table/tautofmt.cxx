@@ -94,7 +94,7 @@ private:
     void                DrawBackground();
 
     void    MakeFonts       ( sal_uInt8 nIndex, Font& rFont, Font& rCJKFont, Font& rCTLFont );
-    OUString  MakeNumberString( OUString cellString, sal_Bool bAddDec );
+    OUString  MakeNumberString( const OUString& cellString, sal_Bool bAddDec );
 };
 
 class SwStringInputDlg : public ModalDialog

@@ -234,8 +234,8 @@ class SVX_DLLPUBLIC NBOTypeMgrBase
         SfxMapUnit GetMapUnit();
     protected:
         bool    bIsLoading;
-        void    ImplLoad(OUString filename);
-        void    ImplStore(OUString filename);
+        void    ImplLoad(const OUString& filename);
+        void    ImplStore(const OUString& filename);
 
 };
 

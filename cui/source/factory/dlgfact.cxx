@@ -578,12 +578,12 @@ sal_Bool AbstractSvxHlinkDlgMarkWnd_Impl::ConnectToDialog( sal_Bool bDoit  )cons
     return pDlg->ConnectToDialog(bDoit);
 }
 
-void AbstractSvxHlinkDlgMarkWnd_Impl::RefreshTree ( OUString aStrURL )
+void AbstractSvxHlinkDlgMarkWnd_Impl::RefreshTree ( const OUString& aStrURL )
 {
     pDlg->RefreshTree(aStrURL);
 }
 
-void AbstractSvxHlinkDlgMarkWnd_Impl::SelectEntry ( OUString aStrMark )
+void AbstractSvxHlinkDlgMarkWnd_Impl::SelectEntry ( const OUString& aStrMark )
 {
     pDlg->SelectEntry(aStrMark);
 }

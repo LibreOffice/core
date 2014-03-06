@@ -1247,7 +1247,7 @@ void ThumbnailView::sortItems (const boost::function<bool (const ThumbnailViewIt
     Invalidate();
 }
 
-bool ThumbnailView::renameItem(ThumbnailViewItem*, OUString)
+bool ThumbnailView::renameItem(ThumbnailViewItem*, const OUString&)
 {
     // Do nothing by default
     return false;

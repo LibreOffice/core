@@ -136,7 +136,7 @@ MSFILTER_DLLPUBLIC EquationResult ParseCombinedChars(const OUString& rStr);
 MSFILTER_DLLPUBLIC const char* GetOOXMLPresetGeometry( const char* sShapeType );
 
 /// Similar to EnhancedCustomShapeTypeNames::Get(), but returns an MSO_SPT (binary / VML type).
-MSFILTER_DLLPUBLIC MSO_SPT GETVMLShapeType(OString aType);
+MSFILTER_DLLPUBLIC MSO_SPT GETVMLShapeType(const OString& aType);
 
 }
 

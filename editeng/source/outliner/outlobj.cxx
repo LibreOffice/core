@@ -254,7 +254,7 @@ void OutlinerParaObject::ChangeStyleSheetName(SfxStyleFamily eFamily,
     mpImplOutlinerParaObject->mpEditTextObject->ChangeStyleSheetName(eFamily, rOldName, rNewName);
 }
 
-void OutlinerParaObject::SetStyleSheets(sal_uInt16 nLevel, const OUString rNewName,
+void OutlinerParaObject::SetStyleSheets(sal_uInt16 nLevel, const OUString& rNewName,
     const SfxStyleFamily& rNewFamily)
 {
     const sal_Int32 nCount(Count());

@@ -68,7 +68,7 @@ class WrappedSymbolTypeProperty : public WrappedSeriesOrDiagramProperty< sal_Int
 {
 public:
     virtual sal_Int32 getValueFromSeries( const Reference< beans::XPropertySet >& xSeriesPropertySet ) const;
-    virtual void setValueToSeries( const Reference< beans::XPropertySet >& xSeriesPropertySet, sal_Int32 aNewValue ) const;
+    virtual void setValueToSeries( const Reference< beans::XPropertySet >& xSeriesPropertySet, const sal_Int32& aNewValue ) const;
 
     virtual Any getPropertyValue( const Reference< beans::XPropertySet >& xInnerPropertySet ) const
                             throw ( beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException);
@@ -84,7 +84,7 @@ class WrappedSymbolBitmapURLProperty : public WrappedSeriesOrDiagramProperty< OU
 {
 public:
     virtual OUString getValueFromSeries( const Reference< beans::XPropertySet >& xSeriesPropertySet ) const;
-    virtual void setValueToSeries( const Reference< beans::XPropertySet >& xSeriesPropertySet, OUString aNewGraphicURL ) const;
+    virtual void setValueToSeries( const Reference< beans::XPropertySet >& xSeriesPropertySet, const OUString& aNewGraphicURL ) const;
 
     explicit WrappedSymbolBitmapURLProperty( ::boost::shared_ptr< Chart2ModelContact > spChart2ModelContact,
                                              tSeriesOrDiagramPropertyType ePropertyType );
@@ -95,7 +95,7 @@ class WrappedSymbolSizeProperty : public WrappedSeriesOrDiagramProperty< awt::Si
 {
 public:
     virtual awt::Size getValueFromSeries( const Reference< beans::XPropertySet >& xSeriesPropertySet ) const;
-    virtual void setValueToSeries( const Reference< beans::XPropertySet >& xSeriesPropertySet, awt::Size aNewSize ) const;
+    virtual void setValueToSeries( const Reference< beans::XPropertySet >& xSeriesPropertySet, const awt::Size& aNewSize ) const;
     virtual beans::PropertyState getPropertyState( const Reference< beans::XPropertyState >& xInnerPropertyState ) const
                         throw (beans::UnknownPropertyException, uno::RuntimeException);
 
@@ -108,7 +108,7 @@ class WrappedSymbolAndLinesProperty : public WrappedSeriesOrDiagramProperty< sal
 {
 public:
     virtual sal_Bool getValueFromSeries( const Reference< beans::XPropertySet >& xSeriesPropertySet ) const;
-    virtual void setValueToSeries( const Reference< beans::XPropertySet >& xSeriesPropertySet, sal_Bool bDrawLines ) const;
+    virtual void setValueToSeries( const Reference< beans::XPropertySet >& xSeriesPropertySet, const sal_Bool& bDrawLines ) const;
     virtual beans::PropertyState getPropertyState( const Reference< beans::XPropertyState >& xInnerPropertyState ) const
                         throw (beans::UnknownPropertyException, uno::RuntimeException);
 
@@ -251,7 +251,7 @@ sal_Int32 WrappedSymbolTypeProperty::getValueFromSeries( const Reference< beans:
     return aRet;
 }
 
-void WrappedSymbolTypeProperty::setValueToSeries( const Reference< beans::XPropertySet >& xSeriesPropertySet, sal_Int32 nSymbolType ) const
+void WrappedSymbolTypeProperty::setValueToSeries( const Reference< beans::XPropertySet >& xSeriesPropertySet, const sal_Int32& nSymbolType ) const
 {
     if(!xSeriesPropertySet.is())
         return;
@@ -344,7 +344,7 @@ OUString WrappedSymbolBitmapURLProperty::getValueFromSeries( const Reference< be
 
 void WrappedSymbolBitmapURLProperty::setValueToSeries(
     const Reference< beans::XPropertySet >& xSeriesPropertySet,
-    OUString aNewGraphicURL ) const
+    const OUString& aNewGraphicURL ) const
 {
     if(!xSeriesPropertySet.is())
         return;
@@ -466,7 +466,7 @@ awt::Size WrappedSymbolSizeProperty::getValueFromSeries( const Reference< beans:
 
 void WrappedSymbolSizeProperty::setValueToSeries(
     const Reference< beans::XPropertySet >& xSeriesPropertySet,
-    awt::Size aNewSize ) const
+    const awt::Size& aNewSize ) const
 {
     if(!xSeriesPropertySet.is())
         return;
@@ -524,7 +524,7 @@ sal_Bool WrappedSymbolAndLinesProperty::getValueFromSeries( const Reference< bea
 
 void WrappedSymbolAndLinesProperty::setValueToSeries(
     const Reference< beans::XPropertySet >& xSeriesPropertySet,
-    sal_Bool bDrawLines ) const
+    const sal_Bool& bDrawLines ) const
 {
     if(!xSeriesPropertySet.is())
         return;

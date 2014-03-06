@@ -214,7 +214,7 @@ private:
     void METFullArc(Point aCenter, double fMultiplier);
     void METPartialArcAtCurPos(Point aCenter, double fMultiplier,
                                double fStartAngle, double fSweepAngle);
-    void METChrStr(Point aPt, OUString aStr);
+    void METChrStr(Point aPt, const OUString& aStr);
     void METSetArcParams(sal_Int32 nP, sal_Int32 nQ, sal_Int32 nR, sal_Int32 nS);
     void METSetColor(Color aColor);
     void METSetBackgroundColor(Color aColor);
@@ -1374,7 +1374,7 @@ void METWriter::METPartialArcAtCurPos(Point aCenter, double fMultiplier,
 }
 
 
-void METWriter::METChrStr( Point aPt, OUString aUniStr )
+void METWriter::METChrStr( Point aPt, const OUString& aUniStr )
 {
     OString aStr(OUStringToOString(aUniStr,
         osl_getThreadTextEncoding()));

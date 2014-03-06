@@ -204,7 +204,8 @@ OUString GetRole( const uno::Reference< chart2::data::XLabeledDataSequence >& xL
 
 Reference< chart2::data::XLabeledDataSequence >
     getDataSequenceByRole(
-        const Reference< chart2::data::XDataSource > & xSource, OUString aRole,
+        const Reference< chart2::data::XDataSource > & xSource,
+        const OUString& aRole,
         bool bMatchPrefix /* = false */ )
 {
     Reference< chart2::data::XLabeledDataSequence > aNoResult;
@@ -225,7 +226,7 @@ Reference< chart2::data::XLabeledDataSequence >
 
 ::std::vector< Reference< chart2::data::XLabeledDataSequence > >
     getAllDataSequencesByRole( const Sequence< Reference< chart2::data::XLabeledDataSequence > > & aDataSequences,
-                               OUString aRole, bool bMatchPrefix /* = false */ )
+                               const OUString& aRole, bool bMatchPrefix /* = false */ )
 {
     ::std::vector< Reference< chart2::data::XLabeledDataSequence > > aResultVec;
     ::std::remove_copy_if( aDataSequences.getConstArray(), aDataSequences.getConstArray() + aDataSequences.getLength(),

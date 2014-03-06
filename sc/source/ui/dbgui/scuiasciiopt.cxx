@@ -235,7 +235,7 @@ static void save_Separators(
 
 
 
-ScImportAsciiDlg::ScImportAsciiDlg( Window* pParent,OUString aDatName,
+ScImportAsciiDlg::ScImportAsciiDlg( Window* pParent, const OUString& aDatName,
                                     SvStream* pInStream, ScImportAsciiCall eCall ) :
         ModalDialog (pParent, "TextImportCsvDialog",
             "modules/scalc/ui/textimportcsv.ui"),

@@ -29,7 +29,7 @@
 
 namespace DOM { namespace events {
 
-    void CEventDispatcher::addListener(xmlNodePtr pNode, OUString aType, const Reference<XEventListener>& aListener, sal_Bool bCapture)
+    void CEventDispatcher::addListener(xmlNodePtr pNode, const OUString& aType, const Reference<XEventListener>& aListener, sal_Bool bCapture)
     {
         TypeListenerMap *const pTMap = (bCapture)
             ? (& m_CaptureListeners) : (& m_TargetListeners);
@@ -48,7 +48,7 @@ namespace DOM { namespace events {
             pMap->insert(ListenerMap::value_type(pNode, aListener));
     }
 
-    void CEventDispatcher::removeListener(xmlNodePtr pNode, OUString aType, const Reference<XEventListener>& aListener, sal_Bool bCapture)
+    void CEventDispatcher::removeListener(xmlNodePtr pNode, const OUString& aType, const Reference<XEventListener>& aListener, sal_Bool bCapture)
     {
         TypeListenerMap *const pTMap = (bCapture)
             ? (& m_CaptureListeners) : (& m_TargetListeners);
@@ -87,7 +87,7 @@ namespace DOM { namespace events {
     void CEventDispatcher::callListeners(
             TypeListenerMap const& rTMap,
             xmlNodePtr const pNode,
-            OUString aType, Reference< XEvent > const& xEvent)
+            const OUString& aType, Reference< XEvent > const& xEvent)
     {
         // get the multimap for the specified type
         TypeListenerMap::const_iterator tIter = rTMap.find(aType);

@@ -298,8 +298,8 @@ namespace fileaccess {
 
         void SAL_CALL
         move( sal_Int32 CommandId,
-              const OUString srcUnqPath,   // Full file(folder)-path
-              const OUString dstUnqPath,   // Path to the destination-directory
+              const OUString& srcUnqPath,   // Full file(folder)-path
+              const OUString& dstUnqPath,   // Path to the destination-directory
               const sal_Int32 NameClash )
             throw();
 
@@ -309,8 +309,8 @@ namespace fileaccess {
 
         void SAL_CALL
         copy( sal_Int32 CommandId,               // See "move"
-              const OUString srcUnqPath,
-              const OUString dstUnqPath,
+              const OUString& srcUnqPath,
+              const OUString& dstUnqPath,
               sal_Int32 NameClash )
             throw();
 
@@ -414,8 +414,8 @@ namespace fileaccess {
         getContentDeletedEventListeners( const OUString& aName );
 
         std::vector< std::list< ContentEventNotifier* >* >* SAL_CALL
-        getContentExchangedEventListeners( const OUString aOldPrefix,
-                                           const OUString aNewPrefix,
+        getContentExchangedEventListeners( const OUString& aOldPrefix,
+                                           const OUString& aNewPrefix,
                                            sal_Bool withChildren );
 
         std::list< PropertyChangeNotifier* >* SAL_CALL

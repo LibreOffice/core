@@ -352,7 +352,7 @@ void SFTreeListBox::ExpandAllTrees()
 SAL_WNODEPRECATED_DECLARATIONS_PUSH
 SvTreeListEntry * SFTreeListBox::insertEntry(
     OUString const & rText, sal_uInt16 nBitmap, SvTreeListEntry * pParent,
-    bool bChildrenOnDemand, std::auto_ptr< SFEntry > aUserData, OUString factoryURL )
+    bool bChildrenOnDemand, std::auto_ptr< SFEntry > aUserData, const OUString& factoryURL )
 {
     SvTreeListEntry * p;
     if( nBitmap == RID_CUIIMG_DOC && !factoryURL.isEmpty() )
@@ -454,7 +454,7 @@ CuiInputDialog::CuiInputDialog(Window * pParent, sal_uInt16 nMode )
 
 // ScriptOrgDialog ------------------------------------------------------------
 
-SvxScriptOrgDialog::SvxScriptOrgDialog( Window* pParent, OUString language )
+SvxScriptOrgDialog::SvxScriptOrgDialog( Window* pParent, const OUString& language )
     : SfxModalDialog(pParent, "ScriptOrganizerDialog",
         "cui/ui/scriptorganizer.ui")
     , m_sLanguage(language)

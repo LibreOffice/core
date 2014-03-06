@@ -2500,7 +2500,7 @@ void SdPage::SetObjText(SdrTextObj* pObj, SdrOutliner* pOutliner, PresObjKind eO
 |* Set the name of the layout
 |*
 \************************************************************************/
-void SdPage::SetLayoutName(OUString aName)
+void SdPage::SetLayoutName(const OUString& aName)
 {
     maLayoutName = aName;
 

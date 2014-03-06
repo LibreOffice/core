@@ -185,7 +185,7 @@ DocumentSignatureHelper::getDocumentAlgorithm(
 std::vector< OUString >
 DocumentSignatureHelper::CreateElementList(
     const Reference < css::embed::XStorage >& rxStore,
-    const OUString /*rRootStorageName*/, DocumentSignatureMode eMode,
+    DocumentSignatureMode eMode,
     const DocumentSignatureAlgorithm mode)
 {
     std::vector< OUString > aElements;

@@ -71,7 +71,7 @@
 class   XFFontDecl
 {
 public:
-    XFFontDecl(OUString name, OUString family, sal_Bool fixed = false);
+    XFFontDecl(const OUString& name, const OUString& family, sal_Bool fixed = false);
 
 public:
     /**

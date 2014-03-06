@@ -217,7 +217,7 @@ ScVbaShapes::SelectAll() throw (uno::RuntimeException, std::exception)
 }
 
 uno::Reference< drawing::XShape >
-ScVbaShapes::createShape( OUString service ) throw (css::uno::RuntimeException)
+ScVbaShapes::createShape( const OUString& service ) throw (css::uno::RuntimeException)
 {
     uno::Reference< lang::XMultiServiceFactory > xMSF( m_xModel, uno::UNO_QUERY_THROW );
     uno::Reference< drawing::XShape > xShape( xMSF->createInstance( service ), uno::UNO_QUERY_THROW );
@@ -419,7 +419,7 @@ ScVbaShapes::setDefaultShapeProperties( uno::Reference< drawing::XShape > xShape
 }
 
 void
-ScVbaShapes::setShape_NameProperty( uno::Reference< css::drawing::XShape > xShape, OUString sName )
+ScVbaShapes::setShape_NameProperty( uno::Reference< css::drawing::XShape > xShape, const OUString& sName )
 {
     uno::Reference< beans::XPropertySet > xPropertySet( xShape, uno::UNO_QUERY_THROW );
     try
@@ -432,12 +432,11 @@ ScVbaShapes::setShape_NameProperty( uno::Reference< css::drawing::XShape > xShap
 }
 
 OUString
-ScVbaShapes::createName( OUString sName )
+ScVbaShapes::createName( const OUString& sName )
 {
     sal_Int32 nActNumber = 1 + m_nNewShapeCount;
     m_nNewShapeCount++;
-    sName += OUString::number( nActNumber );
-    return sName;
+    return sName + OUString::number( nActNumber );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

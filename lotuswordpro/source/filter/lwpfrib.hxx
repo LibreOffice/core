@@ -118,8 +118,8 @@ public:
     ModifierInfo* GetModifiers(){return m_pModifiers;}
     virtual void RegisterStyle(LwpFoundry* pFoundry);
     sal_Bool HasNextFrib();
-    void ConvertChars(XFContentContainer* pXFPara,OUString text);
-    void ConvertHyperLink(XFContentContainer* pXFPara,LwpHyperlinkMgr* pHyperlink,OUString text);
+    void ConvertChars(XFContentContainer* pXFPara,const OUString& text);
+    void ConvertHyperLink(XFContentContainer* pXFPara,LwpHyperlinkMgr* pHyperlink,const OUString& text);
     XFFont* GetFont();
 
     sal_uInt8 GetRevisionType(){return m_nRevisionType;}

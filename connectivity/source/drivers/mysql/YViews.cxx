@@ -93,7 +93,7 @@ sdbcx::ObjectType OViews::appendObject( const OUString& _rForName, const Referen
 }
 
 // XDrop
-void OViews::dropObject(sal_Int32 _nPos,const OUString /*_sElementName*/)
+void OViews::dropObject(sal_Int32 _nPos,const OUString& /*_sElementName*/)
 {
     if ( m_bInDrop )
         return;

@@ -322,7 +322,7 @@ TablePropertyMapPtr  CellColorHandler::getProperties()
     return pPropertyMap;
 }
 
-void CellColorHandler::createGrabBag(OUString aName, uno::Any aAny)
+void CellColorHandler::createGrabBag(const OUString& aName, uno::Any aAny)
 {
     if (m_aInteropGrabBagName.isEmpty())
         return;
@@ -333,7 +333,7 @@ void CellColorHandler::createGrabBag(OUString aName, uno::Any aAny)
     m_aInteropGrabBag.push_back(aValue);
 }
 
-void CellColorHandler::enableInteropGrabBag(OUString aName)
+void CellColorHandler::enableInteropGrabBag(const OUString& aName)
 {
     m_aInteropGrabBagName = aName;
 }

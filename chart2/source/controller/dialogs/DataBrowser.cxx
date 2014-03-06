@@ -1118,7 +1118,7 @@ sal_uInt32 DataBrowser::GetNumberFormatKey( sal_Int32 nRow, sal_uInt16 nCol ) co
     return m_apDataBrowserModel->getNumberFormatKey( lcl_getColumnInData( nCol ), lcl_getRowInData( nRow ));
 }
 
-bool DataBrowser::isDateString( OUString aInputString, double& fOutDateValue )
+bool DataBrowser::isDateString( const OUString& aInputString, double& fOutDateValue )
 {
     sal_uInt32 nNumberFormat=0;
     SvNumberFormatter* pSvNumberFormatter = m_spNumberFormatterWrapper.get() ? m_spNumberFormatterWrapper->getSvNumberFormatter() : 0;

@@ -580,9 +580,9 @@ public:
 
     OUString FindActiveBookmarkName();
 
-    void pushFieldCtx( OUString name, OUString type );
+    void pushFieldCtx( const OUString& name, const OUString& type );
     void popFieldCtx();
-    void addFieldParam( OUString name, OUString value );
+    void addFieldParam( const OUString& name, const OUString& value );
     void setCurrentFieldParamsTo(::com::sun::star::uno::Reference< ::com::sun::star::text::XFormField> &xFormField);
     OUString getCurrentFieldType();
     bool hasCurrentFieldCtx();

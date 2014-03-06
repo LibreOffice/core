@@ -162,8 +162,8 @@ private:
     void                convertHeaderFooterData(
                             PropertySet& rPropSet,
                             HFHelperData& orHFData,
-                            const OUString rOddContent,
-                            const OUString rEvenContent,
+                            const OUString& rOddContent,
+                            const OUString& rEvenContent,
                             bool bUseEvenContent,
                             double fPageMargin,
                             double fContentMargin );

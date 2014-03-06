@@ -412,7 +412,7 @@ public:
                                                     sal_uInt8 nDialogMode,
                                                     const OUString *pCollName = 0,
                                                     sal_Bool bDraw = sal_False,
-                                                    OString sDefPage = OString() );
+                                                    const OString& sDefPage = OString() );
 
     virtual AbstractSwSelGlossaryDlg * CreateSwSelGlossaryDlg(Window * pParent, const OUString &rShortName);
     virtual VclAbstractDialog * CreateVclAbstractDialog ( Window * pParent, SwWrtShell &rSh, int nResId );
@@ -440,13 +440,13 @@ public:
                                                 const SfxItemSet& rCoreSet,
                                                 bool bNewFrm  = true,
                                                 bool bFmt     = false,
-                                                OString sDefPage = OString(),
+                                                const OString& sDefPage = OString(),
                                                 const OUString*   pFmtStr  = 0);
     virtual SfxAbstractApplyTabDialog*  CreateTemplateDialog(
                                                 Window*             pParent,
                                                 SfxStyleSheetBase&  rBase,
                                                 sal_uInt16          nRegion,
-                                                OString             sPage = OString(),
+                                                const OString&      sPage = OString(),
                                                 SwWrtShell*         pActShell = 0,
                                                 bool                bNew = false);
     virtual AbstractGlossaryDlg*        CreateGlossaryDlg(SfxViewFrame* pViewFrame,
