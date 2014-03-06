@@ -581,6 +581,9 @@ void SvxRuler::MouseMove( const MouseEvent& rMEvt )
     {
         case RULER_TYPE_INDENT:
         {
+            if (!mpParaItem.get())
+                break;
+
             long nIndex = aSelection.nAryPos + INDENT_GAP;
 
             long nIndentValue = 0.0;
