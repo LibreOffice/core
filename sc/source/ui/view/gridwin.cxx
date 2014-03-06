@@ -3264,7 +3264,8 @@ void ScGridWindow::KeyInput(const KeyEvent& rKEvt)
 
         // hide the border around the copy source
         pViewData->SetPasteMode( SC_PASTE_NONE );
-        UpdateCopySourceOverlay();
+        // Clear CopySourceOverlay in each window of a split/frozen tabview
+        pViewData->GetView()->UpdateCopySourceOverlay();
         return;
     }
     // wenn semi-Modeless-SfxChildWindow-Dialog oben, keine KeyInputs:
@@ -3273,7 +3274,8 @@ void ScGridWindow::KeyInput(const KeyEvent& rKEvt)
         if (rKeyCode.GetCode() == KEY_ESCAPE)
         {
             pViewData->SetPasteMode( SC_PASTE_NONE );
-            UpdateCopySourceOverlay();
+            // Clear CopySourceOverlay in each window of a split/frozen tabview
+            pViewData->GetView()->UpdateCopySourceOverlay();
         }
         //  query for existing note marker before calling ViewShell's keyboard handling
         //  which may remove the marker
