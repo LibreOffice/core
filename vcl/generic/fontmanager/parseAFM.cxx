@@ -1033,7 +1033,7 @@ static int parsePairKernData( FileInputStream* fp, FontInfo* fi)
             switch(recognize(keyword,tokenlen))
             {
                 case COMMENT:
-                    keyword = linetoken(fp);
+                    linetoken(fp); /*eat token*/
                     break;
                 case KERNPAIR:
                     if (!(pcount < fi->numOfPairs))
