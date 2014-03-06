@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "rtl/logfile.hxx"
 
 #include <osl/file.hxx>
@@ -140,8 +139,6 @@ oslSignalAction SAL_CALL VCLExceptionSignal_impl( void* /*pData*/, oslSignalInfo
 int ImplSVMain()
 {
     // The 'real' SVMain()
-    SAL_INFO( "vcl.app", "vcl (ss112471) ::SVMain" );
-
     ImplSVData* pSVData = ImplGetSVData();
 
     DBG_ASSERT( pSVData->mpApp, "no instance of class Application" );
@@ -192,9 +189,11 @@ int SVMain()
     else
         return ImplSVMain();
 }
+
 // This variable is set, when no Application object is instantiated
 // before SVInit is called
 static Application *        pOwnSvApp = NULL;
+
 // Exception handler. pExceptionHandler != NULL => VCL already inited
 oslSignalHandler   pExceptionHandler = NULL;
 
@@ -236,8 +235,6 @@ uno::Any SAL_CALL DesktopEnvironmentContext::getValueByName( const OUString& Nam
 
 bool InitVCL()
 {
-    SAL_INFO( "vcl.app", "vcl (ss112471) ::InitVCL" );
-
     if( pExceptionHandler != NULL )
         return false;
 
@@ -261,11 +258,9 @@ bool InitVCL()
     pSVData->mnMainThreadId = ::osl::Thread::getCurrentIdentifier();
 
     // Initialize Sal
-    SAL_INFO( "vcl.app", "{ ::CreateSalInstance" );
     pSVData->mpDefInst = CreateSalInstance();
     if ( !pSVData->mpDefInst )
         return false;
-    SAL_INFO( "vcl.app", "} ::CreateSalInstance" );
 
     // Desktop Environment context (to be able to get value of "system.desktop-environment" as soon as possible)
     com::sun::star::uno::setCurrentContext(
@@ -357,7 +352,7 @@ void DeInitVCL()
     delete pSVData->mpImeStatus;
     pSVData->mpImeStatus = NULL;
 
-    #if OSL_DEBUG_LEVEL > 0
+#if OSL_DEBUG_LEVEL > 0
     OStringBuffer aBuf( 256 );
     aBuf.append( "DeInitVCL: some top Windows are still alive\n" );
     long nTopWindowCount = Application::GetTopWindowCount();
@@ -381,7 +376,7 @@ void DeInitVCL()
         }
     }
     DBG_ASSERT( nBadTopWindows==0, aBuf.getStr() );
-    #endif
+#endif
 
     ImplImageTreeSingletonRef()->shutDown();
 
