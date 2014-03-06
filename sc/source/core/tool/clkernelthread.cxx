@@ -49,15 +49,7 @@ void CLBuildKernelThread::execute()
             {
             case CLBuildKernelWorkItem::COMPILE:
                 SAL_INFO("sc.opencl.thread", "told to compile group " << aWorkItem.mxGroup << " (state " << aWorkItem.mxGroup->meCalcState << ") to binary");
-                if (aWorkItem.mxGroup->meCalcState == sc::GroupCalcDisabled)
-                    break;
-                assert(aWorkItem.mxGroup->meCalcState == sc::GroupCalcOpenCLKernelCompilationScheduled);
-                aWorkItem.mxGroup->mpCompiledFormula =
-                    sc::FormulaGroupInterpreter::getStatic()->createCompiledFormula(*aWorkItem.mxGroup->mpTopCell->GetDocument(),
-                                                                                    aWorkItem.mxGroup->mpTopCell->aPos,
-                                                                                    aWorkItem.mxGroup,
-                                                                                    *aWorkItem.mxGroup->mpCode);
-                aWorkItem.mxGroup->meCalcState = sc::GroupCalcOpenCLKernelBinaryCreated;
+                aWorkItem.mxGroup->compileOpenCLKernel();
                 SAL_INFO("sc.opencl.thread", "group " << aWorkItem.mxGroup << " compilation done");
                 maCompilationDoneCondition.set();
                 break;
