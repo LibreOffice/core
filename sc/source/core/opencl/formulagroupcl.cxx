@@ -3088,7 +3088,7 @@ class DynamicKernel : public CompiledFormula
 {
 public:
     DynamicKernel(FormulaTreeNodeRef r):mpRoot(r),
-        mpProgram(NULL), mpKernel(NULL), mpResClmem(NULL), mpCode(NULL) {}
+        mpProgram(NULL), mpKernel(NULL), mpResClmem(NULL) {}
     static DynamicKernel *create(ScDocument& rDoc,
                                  const ScAddress& rTopPos,
                                  ScTokenArray& rCode);
@@ -3181,7 +3181,6 @@ public:
     }
     ~DynamicKernel();
     cl_mem GetResultBuffer(void) const { return mpResClmem; }
-    void SetPCode(ScTokenArray *pCode) { mpCode = pCode; }
 
 private:
     void TraverseAST(FormulaTreeNodeRef);
@@ -3194,7 +3193,6 @@ private:
     cl_mem mpResClmem; // Results
     std::set<std::string> inlineDecl;
     std::set<std::string> inlineFun;
-    ScTokenArray *mpCode;
 };
 
 DynamicKernel::~DynamicKernel()
@@ -3206,8 +3204,6 @@ DynamicKernel::~DynamicKernel()
         clReleaseKernel(mpKernel);
     }
     // mpProgram is not going to be released here -- it's cached.
-    if (mpCode)
-        delete mpCode;
 }
 /// Build code
 void DynamicKernel::CreateKernel(void)
@@ -3444,10 +3440,7 @@ CompiledFormula* FormulaGroupInterpreterOpenCL::createCompiledFormula(ScDocument
     }
     SymbolTable::nR = xGroup->mnLength;
 
-    DynamicKernel *result = DynamicKernel::create(rDoc, rTopPos, *pCode);
-    if ( result )
-        result->SetPCode(pCode);
-    return result;
+    return DynamicKernel::create(rDoc, rTopPos, *pCode);
 }
 
 bool FormulaGroupInterpreterOpenCL::interpret( ScDocument& rDoc,
