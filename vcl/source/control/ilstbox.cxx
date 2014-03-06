@@ -326,12 +326,14 @@ long ImplEntryList::GetAddedHeight( sal_Int32 i_nEndIndex, sal_Int32 i_nBeginInd
     sal_Int32 nStart = i_nEndIndex > i_nBeginIndex ? i_nBeginIndex : i_nEndIndex;
     sal_Int32 nStop  = i_nEndIndex > i_nBeginIndex ? i_nEndIndex : i_nBeginIndex;
     sal_Int32 nEntryCount = GetEntryCount();
-    if( nStop != LISTBOX_ENTRY_NOTFOUND && nEntryCount != 0 )
+    if( 0 <= nStop && nStop != LISTBOX_ENTRY_NOTFOUND && nEntryCount != 0 )
     {
         // sanity check
         if( nStop > nEntryCount-1 )
             nStop = nEntryCount-1;
-        if( nStart > nEntryCount-1 )
+        if (nStart < 0)
+            nStart = 0;
+        else if( nStart > nEntryCount-1 )
             nStart = nEntryCount-1;
 
         sal_Int32 nIndex = nStart;
@@ -1735,7 +1737,7 @@ void ImplListBoxWindow::ImplPaint( sal_Int32 nPos, bool bErase, bool bLayout )
         aRect.Left() -= mnLeft;
         if ( nPos < GetEntryList()->GetMRUCount() )
             nPos = GetEntryList()->FindEntry( GetEntryList()->GetEntryText( nPos ) );
-        nPos = sal::static_int_cast<sal_Int32>(nPos - GetEntryList()->GetMRUCount());
+        nPos = nPos - GetEntryList()->GetMRUCount();
         sal_Int32 nCurr = mnCurrentPos;
         if ( mnCurrentPos < GetEntryList()->GetMRUCount() )
             nCurr = GetEntryList()->FindEntry( GetEntryList()->GetEntryText( nCurr ) );

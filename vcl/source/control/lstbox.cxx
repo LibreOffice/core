@@ -195,8 +195,10 @@ void ListBox::ImplLoadRes( const ResId& rResId )
 {
     Control::ImplLoadRes( rResId );
 
-    sal_Int32 nSelPos = ReadShortRes();
-    sal_Int32 nNumber = sal::static_int_cast<sal_Int32>(ReadLongRes());
+    // The resource short is actually to be treated as unsigned short.
+    sal_uInt16 nResPos = static_cast<sal_uInt16>(ReadShortRes());
+    sal_Int32 nSelPos = (nResPos == SAL_MAX_UINT16) ? LISTBOX_ENTRY_NOTFOUND : nResPos;
+    sal_Int32 nNumber = ReadLongRes();
 
     for( sal_Int32 i = 0; i < nNumber; i++ )
     {
@@ -1044,7 +1046,7 @@ sal_Int32 ListBox::GetEntryPos( const OUString& rStr ) const
 {
     sal_Int32 nPos = mpImplLB->GetEntryList()->FindEntry( rStr );
     if ( nPos != LISTBOX_ENTRY_NOTFOUND )
-        nPos = sal::static_int_cast<sal_Int32>(nPos - mpImplLB->GetEntryList()->GetMRUCount());
+        nPos = nPos - mpImplLB->GetEntryList()->GetMRUCount();
     return nPos;
 }
 
@@ -1052,7 +1054,7 @@ sal_Int32 ListBox::GetEntryPos( const void* pData ) const
 {
     sal_Int32 nPos = mpImplLB->GetEntryList()->FindEntry( pData );
     if ( nPos != LISTBOX_ENTRY_NOTFOUND )
-        nPos = sal::static_int_cast<sal_Int32>(nPos - mpImplLB->GetEntryList()->GetMRUCount());
+        nPos = nPos - mpImplLB->GetEntryList()->GetMRUCount();
     return nPos;
 }
 
@@ -1083,7 +1085,7 @@ sal_Int32 ListBox::GetSelectEntryPos( sal_Int32 nIndex ) const
     {
         if ( nPos < mpImplLB->GetEntryList()->GetMRUCount() )
             nPos = mpImplLB->GetEntryList()->FindEntry( mpImplLB->GetEntryList()->GetEntryText( nPos ) );
-        nPos = sal::static_int_cast<sal_Int32>(nPos - mpImplLB->GetEntryList()->GetMRUCount());
+        nPos = nPos - mpImplLB->GetEntryList()->GetMRUCount();
     }
     return nPos;
 }
@@ -1105,7 +1107,7 @@ void ListBox::SelectEntry( const OUString& rStr, bool bSelect )
 
 void ListBox::SelectEntryPos( sal_Int32 nPos, bool bSelect )
 {
-    if ( nPos < mpImplLB->GetEntryList()->GetEntryCount() )
+    if ( 0 <= nPos && nPos < mpImplLB->GetEntryList()->GetEntryCount() )
     {
         sal_Int32 oldSelectCount = GetSelectEntryCount(), newSelectCount = 0, nCurrentPos = mpImplLB->GetCurrentPos();
         mpImplLB->SelectEntry( nPos + mpImplLB->GetEntryList()->GetMRUCount(), bSelect );
