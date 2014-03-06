@@ -542,7 +542,7 @@ static int parseGlobals( FileInputStream* fp, GlobalFontInfo* gfi )
                     /* ignore y-width for now */
                     break;
                 case METRICSSETS:
-                    keyword = token(fp,tokenlen);
+                    token(fp,tokenlen); /*eat token*/
                     break; /* ignore this for now */
                 case NOPE:
                 default:
