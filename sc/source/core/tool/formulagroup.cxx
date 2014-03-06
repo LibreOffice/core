@@ -292,7 +292,7 @@ ScMatrixRef FormulaGroupInterpreterSoftware::inverseMatrix(const ScMatrix& /*rMa
 
 CompiledFormula* FormulaGroupInterpreterSoftware::createCompiledFormula(ScDocument& /* rDoc */,
                                                                         const ScAddress& /* rTopPos */,
-                                                                        ScFormulaCellGroupRef& /* xGroup */,
+                                                                        ScFormulaCellGroup& /* rGroup */,
                                                                         ScTokenArray& /* rCode */)
 {
     return NULL;
@@ -500,7 +500,7 @@ public:
     FormulaGroupInterpreterOpenCLMissing() : FormulaGroupInterpreter() {}
     virtual ~FormulaGroupInterpreterOpenCLMissing() {}
     virtual ScMatrixRef inverseMatrix(const ScMatrix&) { return ScMatrixRef(); }
-    virtual CompiledFormula* createCompiledFormula(ScDocument&, const ScAddress&, ScFormulaCellGroupRef&, ScTokenArray&) SAL_OVERRIDE { return NULL; }
+    virtual CompiledFormula* createCompiledFormula(ScDocument&, const ScAddress&, ScFormulaCellGroup&, ScTokenArray&) SAL_OVERRIDE { return NULL; }
     virtual bool interpret(ScDocument&, const ScAddress&, ScFormulaCellGroupRef&,  ScTokenArray&) { return false; }
 };
 

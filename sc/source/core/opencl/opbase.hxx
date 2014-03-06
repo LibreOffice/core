@@ -128,17 +128,17 @@ typedef boost::shared_ptr<FormulaTreeNode> FormulaTreeNodeRef;
 class FormulaTreeNode
 {
 public:
-    FormulaTreeNode(formula::FormulaToken *ft): mpCurrentFormula(ft)
+    FormulaTreeNode(const formula::FormulaToken* ft): mpCurrentFormula(ft)
     {
         Children.reserve(8);
     }
     std::vector<FormulaTreeNodeRef> Children;
     formula::FormulaToken *GetFormulaToken(void) const
     {
-        return mpCurrentFormula;
+        return const_cast<formula::FormulaToken*>(mpCurrentFormula.get());
     }
 private:
-    formula::FormulaToken *const mpCurrentFormula;
+    formula::FormulaConstTokenRef mpCurrentFormula;
 };
 
 /// (Partially) abstract base class for an operand

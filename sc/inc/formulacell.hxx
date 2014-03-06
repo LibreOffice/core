@@ -64,7 +64,9 @@ struct SC_DLLPUBLIC ScFormulaCellGroup : boost::noncopyable
     short mnFormatType;
     bool mbInvariant:1;
     bool mbSubTotal:1;
-    sc::GroupCalcState meCalcState;
+
+    sal_uInt8 meCalcState;
+    sal_uInt8 meKernelState;
 
     ScFormulaCellGroup();
     ~ScFormulaCellGroup();
@@ -74,6 +76,7 @@ struct SC_DLLPUBLIC ScFormulaCellGroup : boost::noncopyable
     void setCode( const ScTokenArray& rCode );
     void compileCode(
         ScDocument& rDoc, const ScAddress& rPos, formula::FormulaGrammar::Grammar eGram );
+    void compileOpenCLKernel();
 
     static int snCount;
     static rtl::Reference<sc::CLBuildKernelThread> sxCompilationThread;

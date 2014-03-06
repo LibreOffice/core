@@ -58,11 +58,16 @@ const sal_uInt16 MatrixEdgeOpen    = 32;
 
 enum GroupCalcState
 {
+    GroupCalcDisabled = 0,
     GroupCalcEnabled,
-    GroupCalcOpenCLKernelCompilationScheduled,
-    GroupCalcOpenCLKernelBinaryCreated,
     GroupCalcRunning,
-    GroupCalcDisabled
+};
+
+enum OpenCLKernelState
+{
+    OpenCLKernelNone = 0,
+    OpenCLKernelCompilationScheduled,
+    OpenCLKernelBinaryCreated
 };
 
 struct RangeMatrix
