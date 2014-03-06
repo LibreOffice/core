@@ -32,14 +32,11 @@
 
 class PasswordDialog : public ModalDialog
 {
-    FixedText       aFTPassword;
-    Edit            aEDPassword;
-    FixedText       aFTConfirmPassword;
-    Edit            aEDConfirmPassword;
-    OKButton        aOKBtn;
-    CancelButton    aCancelBtn;
-    HelpButton      aHelpBtn;
-    FixedLine       aFixedLine1;
+    FixedText*      m_pFTPassword;
+    Edit*           m_pEDPassword;
+    FixedText*      m_pFTConfirmPassword;
+    Edit*           m_pEDConfirmPassword;
+    OKButton*       m_pOKBtn;
     sal_uInt16      nMinLen;
     OUString        aPasswdMismatch;
 
@@ -51,7 +48,7 @@ public:
             bool bOpenToModify = false, bool bIsSimplePasswordRequest = false );
 
     void            SetMinLen( sal_uInt16 nMin ) { nMinLen = nMin; }
-    OUString        GetPassword() const { return aEDPassword.GetText(); }
+    OUString        GetPassword() const { return m_pEDPassword->GetText(); }
 
 private:
     ::com::sun::star::task::PasswordRequestMode     nDialogMode;

@@ -34,7 +34,6 @@
 
 #define RID_UUI_ERRHDL                                  (RID_UUI_START + 20)
 #define DLG_UUI_MASTERPASSWORD_CRT                      (RID_UUI_START + 21)
-#define DLG_UUI_PASSWORD                                (RID_UUI_START + 22)
 #define STR_ERROR_SIMPLE_PASSWORD_WRONG                 (RID_UUI_START + 23)
 #define STR_ERROR_PASSWORD_TO_OPEN_WRONG                (RID_UUI_START + 24)
 #define STR_ERROR_PASSWORD_TO_MODIFY_WRONG              (RID_UUI_START + 25)
@@ -154,7 +153,6 @@
 #define TITLE_UUI_SSLWARN_INVALID (ERRCODE_AREA_UUI_UNKNOWNAUTH + SSLWARN_TYPE_INVALID + 3)
 
 #define HID_DLG_FILTER_SELECT                                  "UUI_HID_DLG_FILTER_SELECT"
-#define HID_DLG_PASSWORD_UUI                                   "UUI_HID_DLG_PASSWORD_UUI"
 #define HID_XMLSECDLG_MACROWARN                                "UUI_HID_XMLSECDLG_MACROWARN"
 #define HID_DLG_NEWERVERSIONWARNING                            "UUI_HID_DLG_NEWERVERSIONWARNING"
 
