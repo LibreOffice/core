@@ -129,7 +129,6 @@ namespace rptui
         svtools::ColorConfig                    m_aColorConfig;
         OReportWindow*                          m_pParent;
         OUString                         m_sShapeType;
-        sal_Bool                                m_bInSplitHandler;
         sal_Bool                                m_bInUnmark;
 
         void ImplInitSettings();
