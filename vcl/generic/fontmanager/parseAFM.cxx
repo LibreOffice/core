@@ -1177,7 +1177,7 @@ static int parseCompCharData( FileInputStream* fp, FontInfo* fi)
             switch(recognize(keyword,tokenlen))
             {
                 case COMMENT:
-                    keyword = linetoken(fp);
+                    linetoken(fp); /*eat token*/
                     break;
                 case COMPCHAR:
                     if (!(ccount < fi->numOfComps))
