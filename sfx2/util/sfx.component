@@ -57,11 +57,11 @@
     <service name="com.sun.star.frame.AppDispatchProvider"/>
   </implementation>
   <implementation name="com.sun.star.comp.sfx2.ApplicationDialogLibraryContainer"
-      constructor="com.sun.star.comp.sfx2.ApplicationDialogLibraryContainer_get_implementation">
+      constructor="com_sun_star_comp_sfx2_ApplicationDialogLibraryContainer_get_implementation">
     <service name="com.sun.star.script.ApplicationDialogLibraryContainer"/>
   </implementation>
   <implementation name="com.sun.star.comp.sfx2.ApplicationScriptLibraryContainer"
-      constructor="com.sun.star.comp.sfx2.ApplicationScriptLibraryContainer_get_implementation">
+      constructor="com_sun_star_comp_sfx2_ApplicationScriptLibraryContainer_get_implementation">
     <service name="com.sun.star.script.ApplicationScriptLibraryContainer"/>
   </implementation>
   <implementation name="com.sun.star.comp.sfx2.DocumentTemplates"
