@@ -44,7 +44,7 @@ namespace osl {
         /** Open or create a configuration profile.
             @return 0 if the profile could not be created, otherwise a handle to the profile.
         */
-        Profile(const rtl::OUString strProfileName, oslProfileOption Options = Profile_DEFAULT )
+        Profile(const rtl::OUString & strProfileName, oslProfileOption Options = Profile_DEFAULT )
         {
             profile = osl_openProfile(strProfileName.pData, Options);
             if( ! profile )
