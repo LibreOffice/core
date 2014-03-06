@@ -64,6 +64,10 @@ inline RGBAColor::RGBAColor( float fRed, float fGreen, float fBlue, float fAlpha
     m_fRGBA[3] = fAlpha;
 }
 
+// XOR emulation suckage.
+// See http://www.openoffice.org/marketing/ooocon2008/programme/wednesday_1401.pdf
+// and https://bugs.freedesktop.org/show_bug.cgi?id=38844 .
+
 class XorEmulation
 {
 public:
