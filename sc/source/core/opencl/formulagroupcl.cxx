@@ -3358,45 +3358,44 @@ DynamicKernel* DynamicKernel::create(ScDocument& /* rDoc */,
                                      ScTokenArray& rCode)
 {
     // Constructing "AST"
-    FormulaTokenIterator aCode = rCode;
-    std::list<FormulaToken *> list;
-    std::map<FormulaToken *, FormulaTreeNodeRef> m_hash_map;
+    FormulaTokenIterator aCode(rCode);
+    std::list<FormulaToken*> aTokenList;
+    std::map<FormulaToken*, FormulaTreeNodeRef> aHashMap;
     FormulaToken*  pCur;
     while( (pCur = (FormulaToken*)(aCode.Next()) ) != NULL)
     {
         OpCode eOp = pCur->GetOpCode();
         if ( eOp != ocPush )
         {
-            FormulaTreeNodeRef m_currNode =
-                 FormulaTreeNodeRef(new FormulaTreeNode(pCur));
-            sal_uInt8 m_ParamCount =  pCur->GetParamCount();
-            for(int i=0; i<m_ParamCount; i++)
+            FormulaTreeNodeRef pCurNode(new FormulaTreeNode(pCur));
+            sal_uInt8 nParamCount =  pCur->GetParamCount();
+            for (sal_uInt8 i = 0; i < nParamCount; i++)
             {
-                FormulaToken* m_TempFormula = list.back();
-                list.pop_back();
+                FormulaToken* m_TempFormula = aTokenList.back();
+                aTokenList.pop_back();
                 if(m_TempFormula->GetOpCode()!=ocPush)
                 {
-                    if(m_hash_map.find(m_TempFormula)==m_hash_map.end())
+                    if (aHashMap.find(m_TempFormula)==aHashMap.end())
                         return NULL;
-                    m_currNode->Children.push_back(m_hash_map[m_TempFormula]);
+                    pCurNode->Children.push_back(aHashMap[m_TempFormula]);
                 }
                 else
                 {
                     FormulaTreeNodeRef m_ChildTreeNode =
                       FormulaTreeNodeRef(
                                new FormulaTreeNode(m_TempFormula));
-                    m_currNode->Children.push_back(m_ChildTreeNode);
+                    pCurNode->Children.push_back(m_ChildTreeNode);
                 }
             }
-            std::reverse(m_currNode->Children.begin(),
-                                m_currNode->Children.end());
-            m_hash_map[pCur] = m_currNode;
+            std::reverse(pCurNode->Children.begin(),
+                                pCurNode->Children.end());
+            aHashMap[pCur] = pCurNode;
         }
-        list.push_back(pCur);
+        aTokenList.push_back(pCur);
     }
 
     FormulaTreeNodeRef Root = FormulaTreeNodeRef(new FormulaTreeNode(NULL));
-    Root->Children.push_back(m_hash_map[list.back()]);
+    Root->Children.push_back(aHashMap[aTokenList.back()]);
 
     DynamicKernel* pDynamicKernel = new DynamicKernel(Root);
 
@@ -3431,16 +3430,14 @@ CompiledFormula* FormulaGroupInterpreterOpenCL::createCompiledFormula(ScDocument
                                                                       ScFormulaCellGroupRef& xGroup,
                                                                       ScTokenArray& rCode)
 {
-    ScTokenArray *pCode = new ScTokenArray();
-    ScGroupTokenConverter aConverter(*pCode, rDoc, *xGroup->mpTopCell, rTopPos);
-    if (!aConverter.convert(rCode) || pCode->GetLen() == 0)
-    {
-        delete pCode;
+    ScTokenArray aConvertedCode;
+    ScGroupTokenConverter aConverter(aConvertedCode, rDoc, *xGroup->mpTopCell, rTopPos);
+    if (!aConverter.convert(rCode) || aConvertedCode.GetLen() == 0)
         return NULL;
-    }
+
     SymbolTable::nR = xGroup->mnLength;
 
-    return DynamicKernel::create(rDoc, rTopPos, *pCode);
+    return DynamicKernel::create(rDoc, rTopPos, aConvertedCode);
 }
 
 bool FormulaGroupInterpreterOpenCL::interpret( ScDocument& rDoc,
