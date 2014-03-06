@@ -249,12 +249,14 @@ void MessBox::ImplPosControls()
         mpCheckBox = NULL;
     }
 
-    // Message-Text um Tabs bereinigen
+    // Clean up message text with tabs
     OUString aMessText(maMessText.replaceAll("\t", "    "));
 
-    // Wenn Fenster zu schmall, machen wir Dialog auch breiter
+    //If window too small, we make dialog box be wider
     if ( mpWindowImpl->mbFrame )
-        nMaxWidth = 630;
+    {
+        nMaxWidth = 630 * GetDPIScaleFactor();
+    }
     else if ( nMaxWidth < 120 )
         nMaxWidth = 120;
 
@@ -286,18 +288,21 @@ void MessBox::ImplPosControls()
     else
         aTextPos.X() += IMPL_MSGBOX_OFFSET_EXTRA_X;
 
-    // Maximale Zeilenlaenge ohne Wordbreak ermitteln
+    // Determine maximum line length without wordbreak
     aFormatRect = GetTextRect( aRect, aMessText, nTextStyle, &aTextInfo );
     nMaxLineWidth = aFormatRect.GetWidth();
     nTextStyle |= TEXT_DRAW_WORDBREAK;
 
-    // Breite fuer Textformatierung ermitteln
+    // Determine the width for text formatting
     if ( nMaxLineWidth > 450 )
         nWidth = 450;
     else if ( nMaxLineWidth > 300 )
         nWidth = nMaxLineWidth+5;
     else
         nWidth = 300;
+
+    nWidth *= GetDPIScaleFactor();
+
     if ( nButtonSize > nWidth )
         nWidth = nButtonSize-(aTextPos.X()-IMPL_DIALOG_OFFSET);
     if ( nWidth > nMaxWidth )

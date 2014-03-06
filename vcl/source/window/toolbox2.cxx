@@ -1020,6 +1020,7 @@ const Size& ToolBox::GetDefaultImageSize(bool bLarge)
                 aLargeButtonSize = Size( TB_LARGEIMAGESIZE, TB_LARGEIMAGESIZE );
         }
     }
+
     return bLarge ? aLargeButtonSize : aSmallButtonSize;
 }
 
@@ -1348,19 +1349,34 @@ void ToolBox::SetItemImage( sal_uInt16 nItemId, const Image& rImage )
 
     if ( nPos != TOOLBOX_ITEM_NOTFOUND )
     {
+        Image aImage(rImage);
+
+        if ( GetDPIScaleFactor() > 1)
+        {
+            BitmapEx aBitmap(aImage.GetBitmapEx());
+
+            // Some code calls this twice, so add a sanity check
+            // FIXME find out what that code is & fix accordingly
+            if (aBitmap.GetSizePixel().Width() < 32)
+            {
+                aBitmap.Scale(GetDPIScaleFactor(), GetDPIScaleFactor(), BMP_SCALE_FAST);
+                aImage = Image(aBitmap);
+            }
+        }
+
         ImplToolItem* pItem = &mpData->m_aItems[nPos];
         // Nur wenn alles berechnet ist, mehr Aufwand treiben
         if ( !mbCalc )
         {
             Size aOldSize = pItem->maImage.GetSizePixel();
-            pItem->maImage = rImage;
+            pItem->maImage = aImage;
             if ( aOldSize != pItem->maImage.GetSizePixel() )
                 ImplInvalidate( sal_True );
             else
                 ImplUpdateItem( nPos );
         }
         else
-            pItem->maImage = rImage;
+            pItem->maImage = aImage;
     }
 }
 

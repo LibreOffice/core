@@ -64,17 +64,25 @@ struct SvxModifyControl::ImplData
         maImages[MODIFICATION_STATE_NO]       = Image(SVX_RES(RID_SVXBMP_DOC_MODIFIED_NO));
         maImages[MODIFICATION_STATE_YES]      = Image(SVX_RES(RID_SVXBMP_DOC_MODIFIED_YES));
         maImages[MODIFICATION_STATE_FEEDBACK] = Image(SVX_RES(RID_SVXBMP_DOC_MODIFIED_FEEDBACK));
+
         maTimer.SetTimeout(_FEEDBACK_TIMEOUT);
     }
 };
 
-SvxModifyControl::SvxModifyControl( sal_uInt16 _nSlotId,
-                                    sal_uInt16 _nId,
-                                    StatusBar& rStb ) :
-
+SvxModifyControl::SvxModifyControl( sal_uInt16 _nSlotId, sal_uInt16 _nId, StatusBar& rStb ) :
     SfxStatusBarControl( _nSlotId, _nId, rStb ),
     mpImpl(new ImplData)
 {
+    if ( rStb.GetDPIScaleFactor() > 1 )
+    {
+        for (int i = 0; i < mpImpl->MODIFICATION_STATE_SIZE; i++)
+        {
+            BitmapEx b = mpImpl->maImages[i].GetBitmapEx();
+            b.Scale(rStb.GetDPIScaleFactor(), rStb.GetDPIScaleFactor(), BMP_SCALE_FAST);
+            mpImpl->maImages[i] = Image(b);
+        }
+    }
+
     mpImpl->maTimer.SetTimeoutHdl( LINK(this, SvxModifyControl, OnTimer) );
 }
 
