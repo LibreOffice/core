@@ -229,7 +229,7 @@ void SheetDataBuffer::setDateCell( const CellModel& rModel, const OUString& rDat
     SvNumberFormatter* pFormatter = rDoc.GetFormatTable();
 
     double fValue = 0.0;
-    sal_uInt32 nFormatIndex;
+    sal_uInt32 nFormatIndex = 0;
     bool bValid = pFormatter->IsNumberFormat( rDateString, nFormatIndex, fValue );
 
     if(bValid)
