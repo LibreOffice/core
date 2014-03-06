@@ -34,7 +34,7 @@ public:
 
                             TYPEINFO();
 
-                            SdrGrafInvertItem( sal_Bool bInvert = sal_False ) : SdrOnOffItem( SDRATTR_GRAFINVERT, bInvert ) {}
+                            SdrGrafInvertItem( bool bInvert = false ) : SdrOnOffItem( SDRATTR_GRAFINVERT, bInvert ) {}
                             SdrGrafInvertItem( SvStream& rIn ) : SdrOnOffItem( SDRATTR_GRAFINVERT, rIn ) {}
 
     virtual SfxPoolItem*    Clone( SfxItemPool* pPool = NULL ) const;

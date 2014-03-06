@@ -114,7 +114,7 @@ class SdrCustomShapeReplacementURLItem : public SfxStringItem
 
 class SdrTextWordWrapItem : public SdrOnOffItem {
 public:
-    SdrTextWordWrapItem( sal_Bool bAuto = sal_False ):  SdrOnOffItem( SDRATTR_TEXT_WORDWRAP, bAuto ) {}
+    SdrTextWordWrapItem( bool bAuto = false ):  SdrOnOffItem( SDRATTR_TEXT_WORDWRAP, bAuto ) {}
     SdrTextWordWrapItem( SvStream& rIn )  :     SdrOnOffItem( SDRATTR_TEXT_WORDWRAP, rIn )   {}
 };
 
@@ -123,7 +123,7 @@ public:
 
 class SdrTextAutoGrowSizeItem : public SdrOnOffItem {
 public:
-    SdrTextAutoGrowSizeItem( sal_Bool bAuto = sal_False ):      SdrOnOffItem( SDRATTR_TEXT_AUTOGROWSIZE, bAuto ) {}
+    SdrTextAutoGrowSizeItem( bool bAuto = false ):      SdrOnOffItem( SDRATTR_TEXT_AUTOGROWSIZE, bAuto ) {}
     SdrTextAutoGrowSizeItem( SvStream& rIn )   :        SdrOnOffItem( SDRATTR_TEXT_AUTOGROWSIZE, rIn )   {}
 };
 

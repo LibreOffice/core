@@ -115,7 +115,7 @@ public:
         { return ((const Svx3DFocalLengthItem&)GetObjectItemSet().Get(SDRATTR_3DSCENE_FOCAL_LENGTH)).GetValue(); }
 
     // Two sided lighting:
-    sal_Bool GetTwoSidedLighting() const
+    bool GetTwoSidedLighting() const
         { return ((const Svx3DTwoSidedLightingItem&)GetObjectItemSet().Get(SDRATTR_3DSCENE_TWO_SIDED_LIGHTING)).GetValue(); }
 
     // Lightcolor:
@@ -141,21 +141,21 @@ public:
         { return ((const Svx3DAmbientcolorItem&)GetObjectItemSet().Get(SDRATTR_3DSCENE_AMBIENTCOLOR)).GetValue(); }
 
     // Light on/off:
-    sal_Bool GetLightOnOff1() const
+    bool GetLightOnOff1() const
         { return ((const Svx3DLightOnOff1Item&)GetObjectItemSet().Get(SDRATTR_3DSCENE_LIGHTON_1)).GetValue(); }
-    sal_Bool GetLightOnOff2() const
+    bool GetLightOnOff2() const
         { return ((const Svx3DLightOnOff2Item&)GetObjectItemSet().Get(SDRATTR_3DSCENE_LIGHTON_2)).GetValue(); }
-    sal_Bool GetLightOnOff3() const
+    bool GetLightOnOff3() const
         { return ((const Svx3DLightOnOff3Item&)GetObjectItemSet().Get(SDRATTR_3DSCENE_LIGHTON_3)).GetValue(); }
-    sal_Bool GetLightOnOff4() const
+    bool GetLightOnOff4() const
         { return ((const Svx3DLightOnOff4Item&)GetObjectItemSet().Get(SDRATTR_3DSCENE_LIGHTON_4)).GetValue(); }
-    sal_Bool GetLightOnOff5() const
+    bool GetLightOnOff5() const
         { return ((const Svx3DLightOnOff5Item&)GetObjectItemSet().Get(SDRATTR_3DSCENE_LIGHTON_5)).GetValue(); }
-    sal_Bool GetLightOnOff6() const
+    bool GetLightOnOff6() const
         { return ((const Svx3DLightOnOff6Item&)GetObjectItemSet().Get(SDRATTR_3DSCENE_LIGHTON_6)).GetValue(); }
-    sal_Bool GetLightOnOff7() const
+    bool GetLightOnOff7() const
         { return ((const Svx3DLightOnOff7Item&)GetObjectItemSet().Get(SDRATTR_3DSCENE_LIGHTON_7)).GetValue(); }
-    sal_Bool GetLightOnOff8() const
+    bool GetLightOnOff8() const
         { return ((const Svx3DLightOnOff8Item&)GetObjectItemSet().Get(SDRATTR_3DSCENE_LIGHTON_8)).GetValue(); }
 
     // Light direction:
@@ -185,7 +185,7 @@ public:
         { return ((const Svx3DShadeModeItem&)GetObjectItemSet().Get(SDRATTR_3DSCENE_SHADE_MODE)).GetValue(); }
 
     // set flag to draw only selected
-    void SetDrawOnlySelected(sal_Bool bNew) { bDrawOnlySelected = bNew; }
+    void SetDrawOnlySelected(bool bNew) { bDrawOnlySelected = bNew; }
     bool GetDrawOnlySelected() const { return bDrawOnlySelected; }
     virtual sal_uInt16 GetObjIdentifier() const;
 

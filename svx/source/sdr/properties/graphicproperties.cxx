@@ -118,7 +118,7 @@ namespace sdr
             mpItemSet->Put( SdrGrafBlueItem( 0 ) );
             mpItemSet->Put( SdrGrafGamma100Item( 100 ) );
             mpItemSet->Put( SdrGrafTransparenceItem( 0 ) );
-            mpItemSet->Put( SdrGrafInvertItem( sal_False ) );
+            mpItemSet->Put( SdrGrafInvertItem( false ) );
             mpItemSet->Put( SdrGrafModeItem( GRAPHICDRAWMODE_STANDARD ) );
             mpItemSet->Put( SdrGrafCropItem( 0, 0, 0, 0 ) );
         }

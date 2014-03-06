@@ -292,9 +292,9 @@ void E3dView::DrawMarkedObj(OutputDevice& rOut) const
             // code from parent
             SortMarkedObjects();
 
-            pScene->SetDrawOnlySelected(sal_True);
+            pScene->SetDrawOnlySelected(true);
             pScene->SingleObjectPainter(rOut);
-            pScene->SetDrawOnlySelected(sal_False);
+            pScene->SetDrawOnlySelected(false);
         }
 
         // Reset selection flag

@@ -32,7 +32,7 @@ class SVX_DLLPUBLIC SdrOnOffItem: public SfxBoolItem {
 public:
     TYPEINFO();
     SdrOnOffItem(): SfxBoolItem() {}
-    SdrOnOffItem(sal_uInt16 nId, sal_Bool bOn=sal_False): SfxBoolItem(nId,bOn) {}
+    SdrOnOffItem(sal_uInt16 nId, bool bOn=false): SfxBoolItem(nId,bOn) {}
     SdrOnOffItem(sal_uInt16 nId, SvStream& rIn):  SfxBoolItem(nId,rIn) {}
     virtual SfxPoolItem* Clone(SfxItemPool* pPool=NULL) const;
     virtual SfxPoolItem* Create(SvStream& rIn, sal_uInt16 nVer) const;
