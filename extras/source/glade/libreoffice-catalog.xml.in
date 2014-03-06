@@ -344,6 +344,9 @@
     <glade-widget-class title="ConfigGroup ListBox" name="cuilo-SfxConfigGroupListBox"
                         generic-name="ConfigGroup ListBox" parent="GtkTreeView"
                         icon-name="widget-gtk-treeview"/>
+    <glade-widget-class title="SfxAccCfgTabListBox" name="cuilo-SfxAccCfgTabListBox"
+                        generic-name="AccCfgTabListBox" parent="GtkTreeView"
+                        icon-name="widget-gtk-treeview"/>
     <glade-widget-class title="ConfigGroupFunction ListBox" name="cuilo-SfxConfigFunctionListBox"
                         generic-name="ConfigGroupFunction ListBox" parent="GtkTreeView"
                         icon-name="widget-gtk-treeview"/>

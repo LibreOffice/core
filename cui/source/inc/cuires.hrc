@@ -262,7 +262,6 @@
 // customize
 #define RID_SVXDLG_CUSTOMIZE                (RID_SVX_START + 291)
 #define RID_SVXPAGE_MENUS                   (RID_SVX_START + 292)
-#define RID_SVXPAGE_KEYBOARD                (RID_SVX_START + 293)
 #define RID_SVXPAGE_TOOLBARS                (RID_SVX_START + 294)
 #define RID_SVXPAGE_EVENTS                  (RID_SVX_START + 295)
 #define RID_SVXPAGE_CONFIGGROUPBOX          (RID_SVX_START + 304)
@@ -443,6 +442,10 @@
 #define RID_SVXSTR_TWO_PASSWORDS_MISMATCH                   (RID_SVX_START + 1259)
 #define RID_SVXSTR_INVALID_STATE_FOR_OK_BUTTON              (RID_SVX_START + 1260)
 #define RID_SVXSTR_INVALID_STATE_FOR_OK_BUTTON_V2           (RID_SVX_START + 1261)
+
+#define RID_SVXSTR_LOADACCELCONFIG                          (RID_SVX_START + 1262)
+#define RID_SVXSTR_SAVEACCELCONFIG                          (RID_SVX_START + 1263)
+#define RID_SVXSTR_FILTERNAME_CFG                           (RID_SVX_START + 1264)
 
 #endif
 

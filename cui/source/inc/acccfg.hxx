@@ -62,15 +62,18 @@ protected:
                                           const Image&, SvLBoxButtonKind eButtonKind);
 
 public:
-                                SfxAccCfgTabListBox_Impl(
-                                        SfxAcceleratorConfigPage* pAccelConfigPage,
-                                        Window *pParent,
-                                        const ResId &rResId ) :
-                                     SvTabListBox( pParent, rResId ),
-                                    m_pAccelConfigPage( pAccelConfigPage )
-                                {}
+    SfxAccCfgTabListBox_Impl(Window *pParent, WinBits nStyle)
+        : SvTabListBox(pParent, nStyle)
+        , m_pAccelConfigPage(NULL)
+    {
+    }
 
-    void                        ReplaceEntry( sal_uInt16 nPos, const OUString &rStr );
+    void SetAccelConfigPage(SfxAcceleratorConfigPage* pAccelConfigPage)
+    {
+        m_pAccelConfigPage = pAccelConfigPage;
+    }
+
+    void ReplaceEntry( sal_uInt16 nPos, const OUString &rStr );
 };
 
 // class SfxAcceleratorConfigPage ----------------------------------------
@@ -115,22 +118,17 @@ private:
     const SfxStringItem*            m_pFontItem;
     sfx2::FileDialogHelper*         m_pFileDlg;
 
-    SfxAccCfgTabListBox_Impl        aEntriesBox;
-    FixedLine                       aKeyboardGroup;
-     RadioButton                        aOfficeButton;
-    RadioButton                     aModuleButton;
-    PushButton                      aChangeButton;
-    PushButton                      aRemoveButton;
-    FixedText                       aGroupText;
-    SfxConfigGroupListBox*     pGroupLBox;
-    FixedText                       aFunctionText;
-    SfxConfigFunctionListBox*  pFunctionBox;
-    FixedText                       aKeyText;
-    SvTreeListBox                   aKeyBox;
-    FixedLine                       aFunctionsGroup;
-    PushButton                      aLoadButton;
-    PushButton                      aSaveButton;
-    PushButton                      aResetButton;
+    SfxAccCfgTabListBox_Impl*       m_pEntriesBox;
+    RadioButton*                    m_pOfficeButton;
+    RadioButton*                    m_pModuleButton;
+    PushButton*                     m_pChangeButton;
+    PushButton*                     m_pRemoveButton;
+    SfxConfigGroupListBox*          m_pGroupLBox;
+    SfxConfigFunctionListBox*       m_pFunctionBox;
+    SvTreeListBox*                  m_pKeyBox;
+    PushButton*                     m_pLoadButton;
+    PushButton*                     m_pSaveButton;
+    PushButton*                     m_pResetButton;
     OUString                        aLoadAccelConfigStr;
     OUString                        aSaveAccelConfigStr;
     OUString                        aFilterAllStr;

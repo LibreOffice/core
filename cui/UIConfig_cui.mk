@@ -13,6 +13,7 @@ $(eval $(call gb_UIConfig_add_uifiles,cui,\
 	cui/uiconfig/ui/aboutdialog \
 	cui/uiconfig/ui/aboutconfigdialog\
 	cui/uiconfig/ui/aboutconfigvaluedialog \
+	cui/uiconfig/ui/accelconfigpage \
 	cui/uiconfig/ui/agingdialog \
 	cui/uiconfig/ui/acorexceptpage \
 	cui/uiconfig/ui/acoroptionspage \

@@ -34,8 +34,6 @@
 #define BTN_SAVE                41
 #define RB_OFFICE               44
 #define RB_MODULE               45
-#define STR_LOADACCELCONFIG     46
-#define STR_SAVEACCELCONFIG     47
 
 #define STR_GROUP_STYLES        58
 #define STR_PDF_EXPORT_SEND     59

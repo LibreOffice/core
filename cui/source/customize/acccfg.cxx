@@ -656,6 +656,17 @@ void SfxAccCfgLBoxString_Impl::Paint(
 
 }
 
+extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeSfxAccCfgTabListBox(Window *pParent, VclBuilder::stringmap &rMap)
+{
+    WinBits nWinBits = WB_TABSTOP;
+
+    OString sBorder = VclBuilder::extractCustomProperty(rMap);
+    if (!sBorder.isEmpty())
+       nWinBits |= WB_BORDER;
+
+    return new SfxAccCfgTabListBox_Impl(pParent, nWinBits);
+}
+
 
 void SfxAccCfgTabListBox_Impl::InitEntry(SvTreeListEntry* pEntry,
                                          const OUString& rText,
@@ -714,59 +725,66 @@ void SfxAccCfgTabListBox_Impl::KeyInput(const KeyEvent& aKey)
 
 
 SfxAcceleratorConfigPage::SfxAcceleratorConfigPage( Window* pParent, const SfxItemSet& aSet )
-    : SfxTabPage              (pParent, CUI_RES(RID_SVXPAGE_KEYBOARD), aSet)
-    , m_pMacroInfoItem        ()
-    , m_pStringItem        ()
-    , m_pFontItem        ()
-    , m_pFileDlg              (NULL)
-    , aEntriesBox             (this   , this, CUI_RES(BOX_ACC_ENTRIES   ))
-    , aKeyboardGroup          (this   , CUI_RES(GRP_ACC_KEYBOARD        ))
-    , aOfficeButton           (this   , CUI_RES(RB_OFFICE               ))
-    , aModuleButton           (this   , CUI_RES(RB_MODULE               ))
-    , aChangeButton           (this   , CUI_RES(BTN_ACC_CHANGE          ))
-    , aRemoveButton           (this   , CUI_RES(BTN_ACC_REMOVE          ))
-    , aGroupText              (this   , CUI_RES(TXT_ACC_GROUP           ))
-    , pGroupLBox(new SfxConfigGroupListBox( this, CUI_RES(BOX_ACC_GROUP) ))
-    , aFunctionText           (this   , CUI_RES(TXT_ACC_FUNCTION        ))
-    , pFunctionBox(new SfxConfigFunctionListBox( this, CUI_RES( BOX_ACC_FUNCTION )))
-    , aKeyText                (this   , CUI_RES(TXT_ACC_KEY             ))
-    , aKeyBox                 (this   , CUI_RES(BOX_ACC_KEY             ))
-    , aFunctionsGroup         (this   , CUI_RES(GRP_ACC_FUNCTIONS       ))
-    , aLoadButton             (this   , CUI_RES(BTN_LOAD                ))
-    , aSaveButton             (this   , CUI_RES(BTN_SAVE                ))
-    , aResetButton            (this   , CUI_RES(BTN_RESET               ))
-    , aLoadAccelConfigStr             ( CUI_RES( STR_LOADACCELCONFIG ) )
-    , aSaveAccelConfigStr             ( CUI_RES( STR_SAVEACCELCONFIG ) )
-    , aFilterCfgStr                   ( CUI_RES( STR_FILTERNAME_CFG ) )
+    : SfxTabPage(pParent, "AccelConfigPage", "cui/ui/accelconfigpage.ui", aSet)
+    , m_pMacroInfoItem()
+    , m_pStringItem()
+    , m_pFontItem()
+    , m_pFileDlg(NULL)
+    , aLoadAccelConfigStr(CUI_RES(RID_SVXSTR_LOADACCELCONFIG))
+    , aSaveAccelConfigStr(CUI_RES(RID_SVXSTR_SAVEACCELCONFIG))
+    , aFilterCfgStr(CUI_RES(RID_SVXSTR_FILTERNAME_CFG))
     , m_bStylesInfoInitialized(sal_False)
-    , m_xGlobal               ()
-    , m_xModule               ()
-    , m_xAct                  ()
+    , m_xGlobal()
+    , m_xModule()
+    , m_xAct()
 {
-    FreeResource();
+    get(m_pOfficeButton, "office");
+    get(m_pModuleButton, "module");
+    get(m_pChangeButton, "change");
+    get(m_pRemoveButton, "delete");
+    get(m_pLoadButton, "load");
+    get(m_pSaveButton, "save");
+    get(m_pResetButton, "reset");
+    get(m_pEntriesBox, "shortcuts");
+    Size aSize(LogicToPixel(Size(174, 100), MAP_APPFONT));
+    m_pEntriesBox->set_width_request(aSize.Width());
+    m_pEntriesBox->set_height_request(aSize.Height());
+    m_pEntriesBox->SetAccelConfigPage(this);
+    get(m_pGroupLBox, "category");
+    aSize = LogicToPixel(Size(78 , 91), MAP_APPFONT);
+    m_pGroupLBox->set_width_request(aSize.Width());
+    m_pGroupLBox->set_height_request(aSize.Height());
+    get(m_pFunctionBox, "function");
+    aSize = LogicToPixel(Size(88, 91), MAP_APPFONT);
+    m_pFunctionBox->set_width_request(aSize.Width());
+    m_pFunctionBox->set_height_request(aSize.Height());
+    get(m_pKeyBox, "keys");
+    aSize = LogicToPixel(Size(80, 91), MAP_APPFONT);
+    m_pKeyBox->set_width_request(aSize.Width());
+    m_pKeyBox->set_height_request(aSize.Height());
 
     aFilterAllStr = SfxResId( STR_SFX_FILTERNAME_ALL );
 
 // install handler functions
-    aChangeButton.SetClickHdl( LINK( this, SfxAcceleratorConfigPage, ChangeHdl ));
-    aRemoveButton.SetClickHdl( LINK( this, SfxAcceleratorConfigPage, RemoveHdl ));
-    aEntriesBox.SetSelectHdl ( LINK( this, SfxAcceleratorConfigPage, SelectHdl ));
-    pGroupLBox->SetSelectHdl  ( LINK( this, SfxAcceleratorConfigPage, SelectHdl ));
-    pFunctionBox->SetSelectHdl( LINK( this, SfxAcceleratorConfigPage, SelectHdl ));
-    aKeyBox.SetSelectHdl     ( LINK( this, SfxAcceleratorConfigPage, SelectHdl ));
-    aLoadButton.SetClickHdl  ( LINK( this, SfxAcceleratorConfigPage, Load      ));
-    aSaveButton.SetClickHdl  ( LINK( this, SfxAcceleratorConfigPage, Save      ));
-    aResetButton.SetClickHdl ( LINK( this, SfxAcceleratorConfigPage, Default   ));
-    aOfficeButton.SetClickHdl( LINK( this, SfxAcceleratorConfigPage, RadioHdl  ));
-    aModuleButton.SetClickHdl( LINK( this, SfxAcceleratorConfigPage, RadioHdl  ));
+    m_pChangeButton->SetClickHdl( LINK( this, SfxAcceleratorConfigPage, ChangeHdl ));
+    m_pRemoveButton->SetClickHdl( LINK( this, SfxAcceleratorConfigPage, RemoveHdl ));
+    m_pEntriesBox->SetSelectHdl ( LINK( this, SfxAcceleratorConfigPage, SelectHdl ));
+    m_pGroupLBox->SetSelectHdl  ( LINK( this, SfxAcceleratorConfigPage, SelectHdl ));
+    m_pFunctionBox->SetSelectHdl( LINK( this, SfxAcceleratorConfigPage, SelectHdl ));
+    m_pKeyBox->SetSelectHdl     ( LINK( this, SfxAcceleratorConfigPage, SelectHdl ));
+    m_pLoadButton->SetClickHdl  ( LINK( this, SfxAcceleratorConfigPage, Load      ));
+    m_pSaveButton->SetClickHdl  ( LINK( this, SfxAcceleratorConfigPage, Save      ));
+    m_pResetButton->SetClickHdl ( LINK( this, SfxAcceleratorConfigPage, Default   ));
+    m_pOfficeButton->SetClickHdl( LINK( this, SfxAcceleratorConfigPage, RadioHdl  ));
+    m_pModuleButton->SetClickHdl( LINK( this, SfxAcceleratorConfigPage, RadioHdl  ));
 
     // initialize Entriesbox
-    aEntriesBox.SetStyle(aEntriesBox.GetStyle()|WB_HSCROLL|WB_CLIPCHILDREN);
-    aEntriesBox.SetSelectionMode(SINGLE_SELECTION);
-    aEntriesBox.SetTabs(&AccCfgTabs[0], MAP_APPFONT);
-    aEntriesBox.Resize(); // OS: Hack for right selection
-    aEntriesBox.SetSpaceBetweenEntries(0);
-    aEntriesBox.SetDragDropMode(0);
+    m_pEntriesBox->SetStyle(m_pEntriesBox->GetStyle()|WB_HSCROLL|WB_CLIPCHILDREN);
+    m_pEntriesBox->SetSelectionMode(SINGLE_SELECTION);
+    m_pEntriesBox->SetTabs(&AccCfgTabs[0], MAP_APPFONT);
+    m_pEntriesBox->Resize(); // OS: Hack for right selection
+    m_pEntriesBox->SetSpaceBetweenEntries(0);
+    m_pEntriesBox->SetDragDropMode(0);
 
     // detect max keyname width
     long nMaxWidth  = 0;
@@ -779,43 +797,41 @@ SfxAcceleratorConfigPage::SfxAcceleratorConfigPage( Window* pParent, const SfxIt
     // recalc second tab
     long nNewTab = PixelToLogic( Size( nMaxWidth, 0 ), MAP_APPFONT ).Width();
     nNewTab = nNewTab + 5; // additional space
-    aEntriesBox.SetTab( 1, nNewTab );
+    m_pEntriesBox->SetTab( 1, nNewTab );
 
     // initialize GroupBox
-    pGroupLBox->SetFunctionListBox(pFunctionBox);
+    m_pGroupLBox->SetFunctionListBox(m_pFunctionBox);
 
     // initialize KeyBox
-    aKeyBox.SetStyle(aKeyBox.GetStyle()|WB_CLIPCHILDREN|WB_HSCROLL|WB_SORT);
+    m_pKeyBox->SetStyle(m_pKeyBox->GetStyle()|WB_CLIPCHILDREN|WB_HSCROLL|WB_SORT);
 }
 
 
 SfxAcceleratorConfigPage::~SfxAcceleratorConfigPage()
 {
     // free memory - remove all dynamic user data
-    SvTreeListEntry* pEntry = aEntriesBox.First();
+    SvTreeListEntry* pEntry = m_pEntriesBox->First();
     while (pEntry)
     {
         TAccInfo* pUserData = (TAccInfo*)pEntry->GetUserData();
         if (pUserData)
             delete pUserData;
-        pEntry = aEntriesBox.Next(pEntry);
+        pEntry = m_pEntriesBox->Next(pEntry);
     }
 
-    pEntry = aKeyBox.First();
+    pEntry = m_pKeyBox->First();
     while (pEntry)
     {
         TAccInfo* pUserData = (TAccInfo*)pEntry->GetUserData();
         if (pUserData)
             delete pUserData;
-        pEntry = aKeyBox.Next(pEntry);
+        pEntry = m_pKeyBox->Next(pEntry);
     }
 
-    aEntriesBox.Clear();
-    aKeyBox.Clear();
+    m_pEntriesBox->Clear();
+    m_pKeyBox->Clear();
 
     delete m_pFileDlg;
-    delete pGroupLBox;
-    delete pFunctionBox;
 }
 
 
@@ -896,8 +912,8 @@ void SfxAcceleratorConfigPage::Init(const css::uno::Reference< css::ui::XAcceler
             xModel = xController->getModel();
 
         m_aStylesInfo.setModel(xModel);
-        pFunctionBox->SetStylesInfo(&m_aStylesInfo);
-        pGroupLBox->SetStylesInfo(&m_aStylesInfo);
+        m_pFunctionBox->SetStylesInfo(&m_aStylesInfo);
+        m_pGroupLBox->SetStylesInfo(&m_aStylesInfo);
         m_bStylesInfoInitialized = sal_True;
     }
 
@@ -914,7 +930,7 @@ void SfxAcceleratorConfigPage::Init(const css::uno::Reference< css::ui::XAcceler
         if (sKey.isEmpty())
             continue;
         TAccInfo*    pEntry   = new TAccInfo(i1, nListPos, aKey);
-        SvTreeListEntry* pLBEntry = aEntriesBox.InsertEntryToColumn(sKey, 0L, TREELIST_APPEND, 0xFFFF);
+        SvTreeListEntry* pLBEntry = m_pEntriesBox->InsertEntryToColumn(sKey, 0L, TREELIST_APPEND, 0xFFFF);
         pLBEntry->SetUserData(pEntry);
     }
 
@@ -922,7 +938,7 @@ void SfxAcceleratorConfigPage::Init(const css::uno::Reference< css::ui::XAcceler
     css::uno::Sequence< css::awt::KeyEvent > lKeys = xAccMgr->getAllKeyEvents();
     sal_Int32                                c2    = lKeys.getLength();
     sal_Int32                                i2    = 0;
-    sal_uInt16                                   nCol  = aEntriesBox.TabCount()-1;
+    sal_uInt16                                   nCol  = m_pEntriesBox->TabCount()-1;
 
     for (i2=0; i2<c2; ++i2)
     {
@@ -935,14 +951,14 @@ void SfxAcceleratorConfigPage::Init(const css::uno::Reference< css::ui::XAcceler
         if (nPos == TREELIST_ENTRY_NOTFOUND)
             continue;
 
-        aEntriesBox.SetEntryText(sLabel, nPos, nCol);
+        m_pEntriesBox->SetEntryText(sLabel, nPos, nCol);
 
-        SvTreeListEntry* pLBEntry = aEntriesBox.GetEntry(0, nPos);
+        SvTreeListEntry* pLBEntry = m_pEntriesBox->GetEntry(0, nPos);
         TAccInfo*    pEntry   = (TAccInfo*)pLBEntry->GetUserData();
 
         pEntry->m_bIsConfigurable = sal_True;
         pEntry->m_sCommand        = sCommand;
-        CreateCustomItems(pLBEntry, aEntriesBox.GetEntryText(pLBEntry, 0), sLabel);
+        CreateCustomItems(pLBEntry, m_pEntriesBox->GetEntryText(pLBEntry, 0), sLabel);
     }
 
     // Map the VCL hardcoded key codes and mark them as not changeable
@@ -957,11 +973,11 @@ void SfxAcceleratorConfigPage::Init(const css::uno::Reference< css::ui::XAcceler
             continue;
 
         // Hardcoded function mapped so no ID possible and mark entry as not changeable
-        SvTreeListEntry* pLBEntry = aEntriesBox.GetEntry(0, nPos);
+        SvTreeListEntry* pLBEntry = m_pEntriesBox->GetEntry(0, nPos);
         TAccInfo*    pEntry   = (TAccInfo*)pLBEntry->GetUserData();
 
         pEntry->m_bIsConfigurable = sal_False;
-        CreateCustomItems(pLBEntry, aEntriesBox.GetEntryText(pLBEntry, 0), OUString());
+        CreateCustomItems(pLBEntry, m_pEntriesBox->GetEntryText(pLBEntry, 0), OUString());
     }
 }
 
@@ -974,7 +990,7 @@ void SfxAcceleratorConfigPage::Apply(const css::uno::Reference< css::ui::XAccele
     // Go through the list from the bottom to the top ...
     // because logical accelerator must be preferred instead of
     // physical ones!
-    SvTreeListEntry* pEntry = aEntriesBox.First();
+    SvTreeListEntry* pEntry = m_pEntriesBox->First();
     while (pEntry)
     {
         TAccInfo*          pUserData = (TAccInfo*)pEntry->GetUserData();
@@ -999,14 +1015,14 @@ void SfxAcceleratorConfigPage::Apply(const css::uno::Reference< css::ui::XAccele
         catch(const css::uno::Exception&)
             {}
 
-        pEntry = aEntriesBox.Next(pEntry);
+        pEntry = m_pEntriesBox->Next(pEntry);
     }
 }
 
 
 void SfxAcceleratorConfigPage::ResetConfig()
 {
-    aEntriesBox.Clear();
+    m_pEntriesBox->Clear();
 }
 
 
@@ -1031,12 +1047,12 @@ IMPL_LINK_NOARG(SfxAcceleratorConfigPage, Default)
     if (xReset.is())
         xReset->reset();
 
-    aEntriesBox.SetUpdateMode(sal_False);
+    m_pEntriesBox->SetUpdateMode(sal_False);
     ResetConfig();
     Init(m_xAct);
-    aEntriesBox.SetUpdateMode(sal_True);
-    aEntriesBox.Invalidate();
-    aEntriesBox.Select(aEntriesBox.GetEntry(0, 0));
+    m_pEntriesBox->SetUpdateMode(sal_True);
+    m_pEntriesBox->Invalidate();
+    m_pEntriesBox->Select(m_pEntriesBox->GetEntry(0, 0));
 
     return 0;
 }
@@ -1044,18 +1060,18 @@ IMPL_LINK_NOARG(SfxAcceleratorConfigPage, Default)
 
 IMPL_LINK_NOARG(SfxAcceleratorConfigPage, ChangeHdl)
 {
-    sal_uLong    nPos        = aEntriesBox.GetModel()->GetRelPos( aEntriesBox.FirstSelected() );
-    TAccInfo* pEntry      = (TAccInfo*)aEntriesBox.GetEntry(0, nPos)->GetUserData();
-    OUString    sNewCommand = pFunctionBox->GetCurCommand();
-    OUString    sLabel      = pFunctionBox->GetCurLabel();
+    sal_uLong    nPos        = m_pEntriesBox->GetModel()->GetRelPos( m_pEntriesBox->FirstSelected() );
+    TAccInfo* pEntry      = (TAccInfo*)m_pEntriesBox->GetEntry(0, nPos)->GetUserData();
+    OUString    sNewCommand = m_pFunctionBox->GetCurCommand();
+    OUString    sLabel      = m_pFunctionBox->GetCurLabel();
     if (sLabel.isEmpty())
         sLabel = GetLabel4Command(sNewCommand);
 
     pEntry->m_sCommand = sNewCommand;
-    sal_uInt16 nCol = aEntriesBox.TabCount() - 1;
-    aEntriesBox.SetEntryText(sLabel, nPos, nCol);
+    sal_uInt16 nCol = m_pEntriesBox->TabCount() - 1;
+    m_pEntriesBox->SetEntryText(sLabel, nPos, nCol);
 
-    ((Link &) pFunctionBox->GetSelectHdl()).Call( pFunctionBox );
+    ((Link &) m_pFunctionBox->GetSelectHdl()).Call( m_pFunctionBox );
     return 0;
 }
 
@@ -1063,15 +1079,15 @@ IMPL_LINK_NOARG(SfxAcceleratorConfigPage, ChangeHdl)
 IMPL_LINK_NOARG(SfxAcceleratorConfigPage, RemoveHdl)
 {
     // get selected entry
-    sal_uLong    nPos   = aEntriesBox.GetModel()->GetRelPos( aEntriesBox.FirstSelected() );
-    TAccInfo* pEntry = (TAccInfo*)aEntriesBox.GetEntry(0, nPos)->GetUserData();
+    sal_uLong    nPos   = m_pEntriesBox->GetModel()->GetRelPos( m_pEntriesBox->FirstSelected() );
+    TAccInfo* pEntry = (TAccInfo*)m_pEntriesBox->GetEntry(0, nPos)->GetUserData();
 
     // remove function name from selected entry
-    sal_uInt16 nCol = aEntriesBox.TabCount() - 1;
-    aEntriesBox.SetEntryText( OUString(), nPos, nCol );
+    sal_uInt16 nCol = m_pEntriesBox->TabCount() - 1;
+    m_pEntriesBox->SetEntryText( OUString(), nPos, nCol );
     pEntry->m_sCommand = OUString();
 
-    ((Link &) pFunctionBox->GetSelectHdl()).Call( pFunctionBox );
+    ((Link &) m_pFunctionBox->GetSelectHdl()).Call( m_pFunctionBox );
     return 0;
 }
 
@@ -1080,62 +1096,62 @@ IMPL_LINK( SfxAcceleratorConfigPage, SelectHdl, Control*, pListBox )
 {
     // disable help
     Help::ShowBalloon( this, Point(), OUString() );
-    if ( pListBox == &aEntriesBox )
+    if (pListBox == m_pEntriesBox)
     {
-        sal_uLong          nPos                = aEntriesBox.GetModel()->GetRelPos( aEntriesBox.FirstSelected() );
-        TAccInfo*       pEntry              = (TAccInfo*)aEntriesBox.GetEntry(0, nPos)->GetUserData();
-        OUString sPossibleNewCommand = pFunctionBox->GetCurCommand();
+        sal_uLong          nPos                = m_pEntriesBox->GetModel()->GetRelPos( m_pEntriesBox->FirstSelected() );
+        TAccInfo*       pEntry              = (TAccInfo*)m_pEntriesBox->GetEntry(0, nPos)->GetUserData();
+        OUString sPossibleNewCommand = m_pFunctionBox->GetCurCommand();
 
-        aRemoveButton.Enable( false );
-        aChangeButton.Enable( false );
+        m_pRemoveButton->Enable( false );
+        m_pChangeButton->Enable( false );
 
         if (pEntry->m_bIsConfigurable)
         {
             if (pEntry->isConfigured())
-                aRemoveButton.Enable( true );
-            aChangeButton.Enable( pEntry->m_sCommand != sPossibleNewCommand );
+                m_pRemoveButton->Enable( true );
+            m_pChangeButton->Enable( pEntry->m_sCommand != sPossibleNewCommand );
         }
     }
-    else if ( pListBox == pGroupLBox )
+    else if ( pListBox == m_pGroupLBox )
     {
-        pGroupLBox->GroupSelected();
-        if ( !pFunctionBox->FirstSelected() )
-            aChangeButton.Enable( false );
+        m_pGroupLBox->GroupSelected();
+        if ( !m_pFunctionBox->FirstSelected() )
+            m_pChangeButton->Enable( false );
     }
-    else if ( pListBox == pFunctionBox )
+    else if ( pListBox == m_pFunctionBox )
     {
-        aRemoveButton.Enable( false );
-        aChangeButton.Enable( false );
+        m_pRemoveButton->Enable( false );
+        m_pChangeButton->Enable( false );
 
         // #i36994 First selected can return zero!
-        SvTreeListEntry*    pLBEntry = aEntriesBox.FirstSelected();
+        SvTreeListEntry*    pLBEntry = m_pEntriesBox->FirstSelected();
         if ( pLBEntry != 0 )
         {
-            sal_uLong          nPos                = aEntriesBox.GetModel()->GetRelPos( pLBEntry );
-            TAccInfo*       pEntry              = (TAccInfo*)aEntriesBox.GetEntry(0, nPos)->GetUserData();
-            OUString sPossibleNewCommand = pFunctionBox->GetCurCommand();
+            sal_uLong          nPos                = m_pEntriesBox->GetModel()->GetRelPos( pLBEntry );
+            TAccInfo*       pEntry              = (TAccInfo*)m_pEntriesBox->GetEntry(0, nPos)->GetUserData();
+            OUString sPossibleNewCommand = m_pFunctionBox->GetCurCommand();
 
             if (pEntry->m_bIsConfigurable)
             {
                 if (pEntry->isConfigured())
-                    aRemoveButton.Enable( true );
-                aChangeButton.Enable( pEntry->m_sCommand != sPossibleNewCommand );
+                    m_pRemoveButton->Enable( true );
+                m_pChangeButton->Enable( pEntry->m_sCommand != sPossibleNewCommand );
             }
 
             // update key box
-            aKeyBox.Clear();
-            SvTreeListEntry* pIt = aEntriesBox.First();
+            m_pKeyBox->Clear();
+            SvTreeListEntry* pIt = m_pEntriesBox->First();
             while ( pIt )
             {
                 TAccInfo* pUserData = (TAccInfo*)pIt->GetUserData();
                 if ( pUserData && pUserData->m_sCommand == sPossibleNewCommand )
                 {
                     TAccInfo*    pU1 = new TAccInfo(-1, -1, pUserData->m_aKey);
-                    SvTreeListEntry* pE1 = aKeyBox.InsertEntry( pUserData->m_aKey.GetName(), 0L, sal_True, TREELIST_APPEND );
+                    SvTreeListEntry* pE1 = m_pKeyBox->InsertEntry( pUserData->m_aKey.GetName(), 0L, sal_True, TREELIST_APPEND );
                     pE1->SetUserData(pU1);
                     pE1->EnableChildrenOnDemand( false );
                 }
-                pIt = aEntriesBox.Next(pIt);
+                pIt = m_pEntriesBox->Next(pIt);
             }
         }
     }
@@ -1147,17 +1163,17 @@ IMPL_LINK( SfxAcceleratorConfigPage, SelectHdl, Control*, pListBox )
         sal_uLong       nP2 = TREELIST_ENTRY_NOTFOUND;
         SvTreeListEntry* pE3 = 0;
 
-        pE2 = aKeyBox.FirstSelected();
+        pE2 = m_pKeyBox->FirstSelected();
         if (pE2)
             pU2 = (TAccInfo*)pE2->GetUserData();
         if (pU2)
             nP2 = MapKeyCodeToPos(pU2->m_aKey);
         if (nP2 != TREELIST_ENTRY_NOTFOUND)
-            pE3 = aEntriesBox.GetEntry( 0, nP2 );
+            pE3 = m_pEntriesBox->GetEntry( 0, nP2 );
         if (pE3)
         {
-            aEntriesBox.Select( pE3 );
-            aEntriesBox.MakeVisible( pE3 );
+            m_pEntriesBox->Select( pE3 );
+            m_pEntriesBox->MakeVisible( pE3 );
         }
     }
 
@@ -1169,32 +1185,32 @@ IMPL_LINK_NOARG(SfxAcceleratorConfigPage, RadioHdl)
 {
     css::uno::Reference< css::ui::XAcceleratorConfiguration > xOld = m_xAct;
 
-    if (aOfficeButton.IsChecked())
+    if (m_pOfficeButton->IsChecked())
         m_xAct = m_xGlobal;
-    else if (aModuleButton.IsChecked())
+    else if (m_pModuleButton->IsChecked())
         m_xAct = m_xModule;
 
     // nothing changed? => do nothing!
     if ( m_xAct.is() && ( xOld == m_xAct ) )
         return 0;
 
-    aEntriesBox.SetUpdateMode( sal_False );
+    m_pEntriesBox->SetUpdateMode( sal_False );
     ResetConfig();
     Init(m_xAct);
-    aEntriesBox.SetUpdateMode( sal_True );
-    aEntriesBox.Invalidate();
+    m_pEntriesBox->SetUpdateMode( sal_True );
+    m_pEntriesBox->Invalidate();
 
-    pGroupLBox->Init(m_xContext, m_xFrame, m_sModuleLongName, true);
+    m_pGroupLBox->Init(m_xContext, m_xFrame, m_sModuleLongName, true);
 
     // pb: #133213# do not select NULL entries
-    SvTreeListEntry* pEntry = aEntriesBox.GetEntry( 0, 0 );
+    SvTreeListEntry* pEntry = m_pEntriesBox->GetEntry( 0, 0 );
     if ( pEntry )
-        aEntriesBox.Select( pEntry );
-    pEntry = pGroupLBox->GetEntry( 0, 0 );
+        m_pEntriesBox->Select( pEntry );
+    pEntry = m_pGroupLBox->GetEntry( 0, 0 );
     if ( pEntry )
-        pGroupLBox->Select( pEntry );
+        m_pGroupLBox->Select( pEntry );
 
-    ((Link &) pFunctionBox->GetSelectHdl()).Call( pFunctionBox );
+    ((Link &) m_pFunctionBox->GetSelectHdl()).Call( m_pFunctionBox );
     return 1L;
 }
 
@@ -1250,12 +1266,12 @@ IMPL_LINK_NOARG(SfxAcceleratorConfigPage, LoadHdl)
             // open the configuration and update our UI
             css::uno::Reference< css::ui::XAcceleratorConfiguration > xTempAccMgr(xCfgMgr->getShortCutManager(), css::uno::UNO_QUERY_THROW);
 
-            aEntriesBox.SetUpdateMode(sal_False);
+            m_pEntriesBox->SetUpdateMode(sal_False);
             ResetConfig();
             Init(xTempAccMgr);
-            aEntriesBox.SetUpdateMode(sal_True);
-            aEntriesBox.Invalidate();
-            aEntriesBox.Select(aEntriesBox.GetEntry(0, 0));
+            m_pEntriesBox->SetUpdateMode(sal_True);
+            m_pEntriesBox->Invalidate();
+            m_pEntriesBox->Select(m_pEntriesBox->GetEntry(0, 0));
 
         }
 
@@ -1429,16 +1445,16 @@ void SfxAcceleratorConfigPage::Reset( const SfxItemSet& rSet )
 
     // change te description of the radio button, which switch to the module
     // dependend accelerator configuration
-    OUString sButtonText = aModuleButton.GetText();
+    OUString sButtonText = m_pModuleButton->GetText();
     sButtonText = sButtonText.replaceFirst("$(MODULE)", m_sModuleUIName);
-    aModuleButton.SetText(sButtonText);
+    m_pModuleButton->SetText(sButtonText);
 
     if (m_xModule.is())
-        aModuleButton.Check();
+        m_pModuleButton->Check();
     else
     {
-        aModuleButton.Hide();
-        aOfficeButton.Check();
+        m_pModuleButton->Hide();
+        m_pOfficeButton->Check();
     }
 
     RadioHdl(0);
@@ -1447,7 +1463,7 @@ void SfxAcceleratorConfigPage::Reset( const SfxItemSet& rSet )
     if( SFX_ITEM_SET == rSet.GetItemState( SID_MACROINFO, true, &pMacroItem ) )
     {
         m_pMacroInfoItem = PTR_CAST( SfxMacroInfoItem, pMacroItem );
-        pGroupLBox->SelectMacro( m_pMacroInfoItem );
+        m_pGroupLBox->SelectMacro( m_pMacroInfoItem );
     }
     else
     {
@@ -1465,7 +1481,7 @@ void SfxAcceleratorConfigPage::Reset( const SfxItemSet& rSet )
 sal_uLong SfxAcceleratorConfigPage::MapKeyCodeToPos(const KeyCode& aKey) const
 {
     sal_uInt16       nCode1 = aKey.GetCode()+aKey.GetModifier();
-    SvTreeListEntry* pEntry = aEntriesBox.First();
+    SvTreeListEntry* pEntry = m_pEntriesBox->First();
     sal_uLong       i      = 0;
 
     while (pEntry)
@@ -1477,7 +1493,7 @@ sal_uLong SfxAcceleratorConfigPage::MapKeyCodeToPos(const KeyCode& aKey) const
             if (nCode1 == nCode2)
                 return i;
         }
-        pEntry = aEntriesBox.Next(pEntry);
+        pEntry = m_pEntriesBox->Next(pEntry);
         ++i;
     }
 

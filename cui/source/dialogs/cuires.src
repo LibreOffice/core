@@ -92,4 +92,19 @@ Image RID_CUIIMG_DOC
     MASKCOLOR
 };
 
+String RID_SVXSTR_LOADACCELCONFIG
+{
+    Text [ en-US ] = "Load Keyboard Configuration" ;
+};
+
+String RID_SVXSTR_SAVEACCELCONFIG
+{
+    Text [ en-US ] = "Save Keyboard Configuration" ;
+};
+
+String RID_SVXSTR_FILTERNAME_CFG
+{
+    Text [ en-US ] = "Configuration (*.cfg)" ;
+};
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
