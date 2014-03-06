@@ -814,11 +814,21 @@ void SvxNumRule::SetLevel( sal_uInt16 i, const SvxNumberFormat& rNumFmt, bool bI
 {
     DBG_ASSERT(i < SVX_MAX_NUM, "Wrong Level" );
 
-    if( (i < SVX_MAX_NUM) && (!aFmtsSet[i] || !(rNumFmt == *Get( i ))) )
+    if( (i < SVX_MAX_NUM) )
     {
-        delete aFmts[ i ];
-        aFmts[ i ] = new SvxNumberFormat( rNumFmt );
-        aFmtsSet[i] = bIsValid;
+        bool bReplace = !aFmtsSet[i];
+        if (!bReplace)
+        {
+            const SvxNumberFormat *pFmt = Get(i);
+            bReplace = pFmt ? rNumFmt != *pFmt : true;
+        }
+
+        if (bReplace)
+        {
+            delete aFmts[i];
+            aFmts[i] = new SvxNumberFormat(rNumFmt);
+            aFmtsSet[i] = bIsValid;
+        }
     }
 }
 
