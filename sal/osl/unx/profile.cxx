@@ -130,7 +130,7 @@ static sal_Bool releaseProfile(osl_TProfileImpl* pProfile);
 
 static sal_Bool writeProfileImpl (osl_TFile* pFile);
 static osl_TFile* osl_openTmpProfileImpl(osl_TProfileImpl*);
-static sal_Bool osl_ProfileSwapProfileNames(osl_TProfileImpl*);
+static bool osl_ProfileSwapProfileNames(osl_TProfileImpl*);
 static void osl_ProfileGenerateExtension(const sal_Char* pszFileName, const sal_Char* pszExtension, sal_Char* pszTmpName, int BufferMaxLen);
 static oslProfile SAL_CALL osl_psz_openProfile(const sal_Char *pszProfileName, oslProfileOption Flags);
 
@@ -2014,10 +2014,8 @@ static osl_TFile* osl_openTmpProfileImpl(osl_TProfileImpl* pProfile)
     return pFile;
 }
 
-static sal_Bool osl_ProfileSwapProfileNames(osl_TProfileImpl* pProfile)
+static bool osl_ProfileSwapProfileNames(osl_TProfileImpl* pProfile)
 {
-    sal_Bool bRet = sal_False;
-
     sal_Char pszBakFile[PATH_MAX];
     sal_Char pszTmpFile[PATH_MAX];
 
@@ -2030,13 +2028,9 @@ static sal_Bool osl_ProfileSwapProfileNames(osl_TProfileImpl* pProfile)
     /* unlink bak */
     unlink( pszBakFile );
 
-    /* rename ini bak */
-    rename( pProfile->m_FileName, pszBakFile );
-
-    /* rename tmp ini */
-    rename( pszTmpFile, pProfile->m_FileName );
-
-    return bRet;
+    // Rename ini -> bak, then tmp -> ini:
+    return rename( pProfile->m_FileName, pszBakFile ) == 0
+        && rename( pszTmpFile, pProfile->m_FileName ) == 0;
 }
 
 static void osl_ProfileGenerateExtension(const sal_Char* pszFileName, const sal_Char* pszExtension, sal_Char* pszTmpName, int BufferMaxLen)
