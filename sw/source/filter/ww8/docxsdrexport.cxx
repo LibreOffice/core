@@ -1184,7 +1184,7 @@ void DocxSdrExport::writeVMLTextFrame(sw::Frame* pParentFrame)
     if (pObject != NULL)
     {
         OUString sAnchorId = lclGetAnchorIdFromGrabBag(pObject);
-        if(!sAnchorId.isEmpty())
+        if (!sAnchorId.isEmpty())
             m_pImpl->m_pFlyAttrList->addNS(XML_w14, XML_anchorId, OUStringToOString(sAnchorId, RTL_TEXTENCODING_UTF8));
     }
 
