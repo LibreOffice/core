@@ -24,10 +24,13 @@
 #include "unx/i18n_xkb.hxx"
 
 SalI18N_KeyboardExtension::SalI18N_KeyboardExtension( Display* pDisplay )
-    : mbUseExtension( true ),
-      mnDefaultGroup( 0 )
+    : mbUseExtension(true)
+    , mnDefaultGroup(0)
+    , mnGroup(0)
+    , mnEventBase(0)
+    , mnErrorBase(0)
+    , mpDisplay(pDisplay)
 {
-    mpDisplay = pDisplay;
 
     // allow user to set the default keyboard group idx or to disable the usage
     // of x keyboard extension at all:
