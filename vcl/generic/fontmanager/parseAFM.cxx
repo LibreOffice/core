@@ -747,7 +747,7 @@ static int parseCharMetrics( FileInputStream* fp, FontInfo* fi)
         switch(recognize(keyword,tokenlen))
         {
             case COMMENT:
-                keyword = linetoken(fp);
+                linetoken(fp); /*eat token*/
                 break;
             case CODE:
                 if (!(count < fi->numOfChars))
