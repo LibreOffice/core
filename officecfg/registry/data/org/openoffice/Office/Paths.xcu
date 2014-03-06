@@ -171,11 +171,11 @@
            in that dir.
       -->
       <prop oor:name="WritePath">
-        <value install:module="notunixdesktop">$(userurl)/template</value>
+        <value>$(userurl)/template</value>
         <value install:module="unixdesktop" oor:external="com.sun.star.configuration.backend.DesktopBackend TemplatePathVariable"/>
       </prop>
-      <prop oor:name="UserPaths" install:module="unixdesktop">
-        <value>$(userurl)/template</value>
+      <prop oor:name="UserPaths">
+        <value install:module="unixdesktop">$(userurl)/template</value>
       </prop>
     </node>
     <node oor:name="UIConfig" oor:op="fuse" oor:mandatory="true">
