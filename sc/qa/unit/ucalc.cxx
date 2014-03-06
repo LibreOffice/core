@@ -2452,6 +2452,7 @@ void Test::testFunctionLists()
         "ACOSH",
         "ACOT",
         "ACOTH",
+        "AGGREGATE",
         "ASIN",
         "ASINH",
         "ATAN",

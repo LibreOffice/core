@@ -4158,6 +4158,7 @@ StackVar ScInterpreter::Interpret()
                 case ocBad              : ScBadName();                  break;
                 case ocZTest            :
                 case ocZTest_MS         : ScZTest();                    break;
+                case ocAggregate        : ScAggregate();                break;
                 case ocTTest            :
                 case ocTTest_MS         : ScTTest();                    break;
                 case ocFTest            :
