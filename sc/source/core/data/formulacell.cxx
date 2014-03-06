@@ -54,6 +54,8 @@
 
 #include <boost/scoped_ptr.hpp>
 
+#define ENABLE_THREADED_OPENCL_KERNEL_COMPILATION 0
+
 using namespace formula;
 
 #ifdef USE_MEMPOOL
@@ -414,7 +416,8 @@ ScFormulaCellGroup::ScFormulaCellGroup() :
     mnFormatType(NUMBERFORMAT_NUMBER),
     mbInvariant(false),
     mbSubTotal(false),
-    meCalcState(sc::GroupCalcEnabled)
+    meCalcState(sc::GroupCalcEnabled),
+    meKernelState(sc::OpenCLKernelNone)
 {
     if (ScInterpreter::GetGlobalConfig().mbOpenCLEnabled)
     {
@@ -447,7 +450,7 @@ ScFormulaCellGroup::~ScFormulaCellGroup()
 
 void ScFormulaCellGroup::scheduleCompilation()
 {
-    meCalcState = sc::GroupCalcOpenCLKernelCompilationScheduled;
+    meKernelState = sc::OpenCLKernelCompilationScheduled;
     sc::CLBuildKernelWorkItem aWorkItem;
     aWorkItem.meWhatToDo = sc::CLBuildKernelWorkItem::COMPILE;
     aWorkItem.mxGroup = this;
@@ -482,7 +485,16 @@ void ScFormulaCellGroup::compileCode(
     }
 }
 
-// ============================================================================
+void ScFormulaCellGroup::compileOpenCLKernel()
+{
+    if (meCalcState == sc::GroupCalcDisabled)
+        return;
+
+    mpCompiledFormula = sc::FormulaGroupInterpreter::getStatic()->createCompiledFormula(
+        *mpTopCell->GetDocument(), mpTopCell->aPos, *this, *mpCode);
+
+    meKernelState = sc::OpenCLKernelBinaryCreated;
+}
 
 ScFormulaCell::ScFormulaCell( ScDocument* pDoc, const ScAddress& rPos ) :
     eTempGrammar(formula::FormulaGrammar::GRAM_DEFAULT),
@@ -2072,7 +2084,7 @@ bool ScFormulaCell::IsMultilineResult()
 
 void ScFormulaCell::MaybeInterpret()
 {
-    if (mxGroup && mxGroup->meCalcState == sc::GroupCalcOpenCLKernelCompilationScheduled)
+    if (mxGroup && mxGroup->meKernelState == sc::OpenCLKernelCompilationScheduled)
         return;
 
     if (!IsDirtyOrInTableOpDirty())
@@ -3509,8 +3521,10 @@ ScFormulaCellGroupRef ScFormulaCell::CreateCellGroup( SCROW nLen, bool bInvarian
     mxGroup->mbInvariant = bInvariant;
     mxGroup->mnLength = nLen;
     mxGroup->mpCode = pCode; // Move this to the shared location.
+#if ENABLE_THREADED_OPENCL_KERNEL_COMPILATION
     if (mxGroup->sxCompilationThread.is())
         mxGroup->scheduleCompilation();
+#endif
     return mxGroup;
 }
 

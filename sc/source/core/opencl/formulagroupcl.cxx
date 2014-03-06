@@ -3103,7 +3103,7 @@ class DynamicKernel : public CompiledFormula
 {
 public:
     DynamicKernel(FormulaTreeNodeRef r):mpRoot(r),
-        mpProgram(NULL), mpKernel(NULL), mpResClmem(NULL), mpCode(NULL) {}
+        mpProgram(NULL), mpKernel(NULL), mpResClmem(NULL) {}
     static DynamicKernel *create(ScDocument& rDoc,
                                  const ScAddress& rTopPos,
                                  ScTokenArray& rCode);
@@ -3198,10 +3198,9 @@ public:
     }
     ~DynamicKernel();
     cl_mem GetResultBuffer(void) const { return mpResClmem; }
-    void SetPCode(ScTokenArray *pCode) { mpCode = pCode; }
 
 private:
-    void TraverseAST(FormulaTreeNodeRef);
+
     FormulaTreeNodeRef mpRoot;
     SymbolTable mSyms;
     std::string mKernelSignature, mKernelHash;
@@ -3211,7 +3210,6 @@ private:
     cl_mem mpResClmem; // Results
     std::set<std::string> inlineDecl;
     std::set<std::string> inlineFun;
-    ScTokenArray *mpCode;
 };
 
 DynamicKernel::~DynamicKernel()
@@ -3225,12 +3223,14 @@ DynamicKernel::~DynamicKernel()
         clReleaseKernel(mpKernel);
     }
     // mpProgram is not going to be released here -- it's cached.
-    if (mpCode)
-        delete mpCode;
 }
 /// Build code
 void DynamicKernel::CreateKernel(void)
 {
+    if (mpKernel)
+        // already created.
+        return;
+
     cl_int err;
     std::string kname = "DynamicKernel"+mKernelSignature;
     // Compile kernel here!!!
@@ -3321,7 +3321,7 @@ public:
     virtual ScMatrixRef inverseMatrix( const ScMatrix& rMat ) SAL_OVERRIDE;
     virtual CompiledFormula* createCompiledFormula(ScDocument& rDoc,
                                                    const ScAddress& rTopPos,
-                                                   ScFormulaCellGroupRef& xGroup,
+                                                   ScFormulaCellGroup& rGroup,
                                                    ScTokenArray& rCode) SAL_OVERRIDE;
     virtual bool interpret( ScDocument& rDoc, const ScAddress& rTopPos,
                             ScFormulaCellGroupRef& xGroup, ScTokenArray& rCode ) SAL_OVERRIDE;
@@ -3337,45 +3337,44 @@ DynamicKernel* DynamicKernel::create(ScDocument& /* rDoc */,
                                      ScTokenArray& rCode)
 {
     // Constructing "AST"
-    FormulaTokenIterator aCode = rCode;
-    std::list<FormulaToken *> list;
-    std::map<FormulaToken *, FormulaTreeNodeRef> m_hash_map;
+    FormulaTokenIterator aCode(rCode);
+    std::list<FormulaToken*> aTokenList;
+    std::map<FormulaToken*, FormulaTreeNodeRef> aHashMap;
     FormulaToken*  pCur;
     while( (pCur = (FormulaToken*)(aCode.Next()) ) != NULL)
     {
         OpCode eOp = pCur->GetOpCode();
         if ( eOp != ocPush )
         {
-            FormulaTreeNodeRef m_currNode =
-                 FormulaTreeNodeRef(new FormulaTreeNode(pCur));
-            sal_uInt8 m_ParamCount =  pCur->GetParamCount();
-            for(int i=0; i<m_ParamCount; i++)
+            FormulaTreeNodeRef pCurNode(new FormulaTreeNode(pCur));
+            sal_uInt8 nParamCount =  pCur->GetParamCount();
+            for (sal_uInt8 i = 0; i < nParamCount; i++)
             {
-                FormulaToken* m_TempFormula = list.back();
-                list.pop_back();
+                FormulaToken* m_TempFormula = aTokenList.back();
+                aTokenList.pop_back();
                 if(m_TempFormula->GetOpCode()!=ocPush)
                 {
-                    if(m_hash_map.find(m_TempFormula)==m_hash_map.end())
+                    if (aHashMap.find(m_TempFormula)==aHashMap.end())
                         return NULL;
-                    m_currNode->Children.push_back(m_hash_map[m_TempFormula]);
+                    pCurNode->Children.push_back(aHashMap[m_TempFormula]);
                 }
                 else
                 {
                     FormulaTreeNodeRef m_ChildTreeNode =
                       FormulaTreeNodeRef(
                                new FormulaTreeNode(m_TempFormula));
-                    m_currNode->Children.push_back(m_ChildTreeNode);
+                    pCurNode->Children.push_back(m_ChildTreeNode);
                 }
             }
-            std::reverse(m_currNode->Children.begin(),
-                                m_currNode->Children.end());
-            m_hash_map[pCur] = m_currNode;
+            std::reverse(pCurNode->Children.begin(),
+                                pCurNode->Children.end());
+            aHashMap[pCur] = pCurNode;
         }
-        list.push_back(pCur);
+        aTokenList.push_back(pCur);
     }
 
     FormulaTreeNodeRef Root = FormulaTreeNodeRef(new FormulaTreeNode(NULL));
-    Root->Children.push_back(m_hash_map[list.back()]);
+    Root->Children.push_back(aHashMap[aTokenList.back()]);
 
     DynamicKernel* pDynamicKernel = new DynamicKernel(Root);
 
@@ -3407,22 +3406,17 @@ DynamicKernel* DynamicKernel::create(ScDocument& /* rDoc */,
 
 CompiledFormula* FormulaGroupInterpreterOpenCL::createCompiledFormula(ScDocument& rDoc,
                                                                       const ScAddress& rTopPos,
-                                                                      ScFormulaCellGroupRef& xGroup,
+                                                                      ScFormulaCellGroup& rGroup,
                                                                       ScTokenArray& rCode)
 {
-    ScTokenArray *pCode = new ScTokenArray();
-    ScGroupTokenConverter aConverter(*pCode, rDoc, *xGroup->mpTopCell, rTopPos);
-    if (!aConverter.convert(rCode) || pCode->GetLen() == 0)
-    {
-        delete pCode;
+    ScTokenArray aConvertedCode;
+    ScGroupTokenConverter aConverter(aConvertedCode, rDoc, *rGroup.mpTopCell, rTopPos);
+    if (!aConverter.convert(rCode) || aConvertedCode.GetLen() == 0)
         return NULL;
-    }
-    SymbolTable::nR = xGroup->mnLength;
 
-    DynamicKernel *result = DynamicKernel::create(rDoc, rTopPos, *pCode);
-    if ( result )
-        result->SetPCode(pCode);
-    return result;
+    SymbolTable::nR = rGroup.mnLength;
+
+    return DynamicKernel::create(rDoc, rTopPos, aConvertedCode);
 }
 
 bool FormulaGroupInterpreterOpenCL::interpret( ScDocument& rDoc,
@@ -3431,10 +3425,10 @@ bool FormulaGroupInterpreterOpenCL::interpret( ScDocument& rDoc,
 {
     DynamicKernel *pKernel;
 
-    if (xGroup->meCalcState == sc::GroupCalcOpenCLKernelCompilationScheduled ||
-        xGroup->meCalcState == sc::GroupCalcOpenCLKernelBinaryCreated)
+    if (xGroup->meKernelState == sc::OpenCLKernelCompilationScheduled ||
+        xGroup->meKernelState == sc::OpenCLKernelBinaryCreated)
     {
-        if (xGroup->meCalcState == sc::GroupCalcOpenCLKernelCompilationScheduled)
+        if (xGroup->meKernelState == sc::OpenCLKernelCompilationScheduled)
         {
             ScFormulaCellGroup::sxCompilationThread->maCompilationDoneCondition.wait();
             ScFormulaCellGroup::sxCompilationThread->maCompilationDoneCondition.reset();
@@ -3445,7 +3439,7 @@ bool FormulaGroupInterpreterOpenCL::interpret( ScDocument& rDoc,
     else
     {
         assert(xGroup->meCalcState == sc::GroupCalcRunning);
-        pKernel = static_cast<DynamicKernel*>(createCompiledFormula(rDoc, rTopPos, xGroup, rCode));
+        pKernel = static_cast<DynamicKernel*>(createCompiledFormula(rDoc, rTopPos, *xGroup, rCode));
     }
 
     if (!pKernel)
