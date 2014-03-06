@@ -274,7 +274,6 @@ void SAL_CALL LotusWordProImportFilter::cancel(  )
 void SAL_CALL LotusWordProImportFilter::setTargetDocument( const uno::Reference< ::com::sun::star::lang::XComponent >& xDoc )
     throw (::com::sun::star::lang::IllegalArgumentException, RuntimeException, std::exception)
 {
-    meType = FILTER_IMPORT;
     mxDoc = xDoc;
 }
 

@@ -29,11 +29,6 @@
 #include <cppuhelper/implbase5.hxx>
 #include <rtl/ustrbuf.hxx>
 
-enum FilterType
-{
-    FILTER_IMPORT,
-    FILTER_EXPORT
-};
 /* This component will be instantiated for both import or export. Whether it calls
  * setSourceDocument or setTargetDocument determines which Impl function the filter
  * member calls */
@@ -55,14 +50,14 @@ protected:
     OUString msFilterName;
     ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XDocumentHandler > mxHandler;
 
-    FilterType meType;
-
     sal_Bool SAL_CALL importImpl( const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& aDescriptor )
         throw (::com::sun::star::uno::RuntimeException);
 
 public:
     LotusWordProImportFilter( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > &rxContext)
-        : mxContext( rxContext ) {}
+        : mxContext( rxContext )
+    {
+    }
     virtual ~LotusWordProImportFilter() {}
 
     // XFilter
