@@ -164,6 +164,7 @@ LtcBenContainer::FindNextObjectWithProperty(pCBenObject pCurrObject,
 *   @return
 */
 LtcBenContainer::LtcBenContainer(LwpSvStream * pStream)
+    : cNextAvailObjectID(0)
 {
     cpStream = pStream;
     pStream->Seek(STREAM_SEEK_TO_END);
