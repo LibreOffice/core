@@ -82,7 +82,7 @@ namespace sdr
             rObj.ImpSetAttrToCircInfo();
         }
 
-        void CircleProperties::SetStyleSheet(SfxStyleSheet* pNewStyleSheet, sal_Bool bDontRemoveHardAttr)
+        void CircleProperties::SetStyleSheet(SfxStyleSheet* pNewStyleSheet, bool bDontRemoveHardAttr)
         {
             SdrCircObj& rObj = (SdrCircObj&)GetSdrObject();
 

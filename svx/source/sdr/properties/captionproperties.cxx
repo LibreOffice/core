@@ -80,7 +80,7 @@ namespace sdr
             RectangleProperties::ItemSetChanged(rSet);
         }
 
-        void CaptionProperties::SetStyleSheet(SfxStyleSheet* pNewStyleSheet, sal_Bool bDontRemoveHardAttr)
+        void CaptionProperties::SetStyleSheet(SfxStyleSheet* pNewStyleSheet, bool bDontRemoveHardAttr)
         {
             SdrCaptionObj& rObj = (SdrCaptionObj&)GetSdrObject();
 

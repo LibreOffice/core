@@ -89,7 +89,7 @@ namespace sdr
             RectangleProperties::ItemSetChanged(rSet);
         }
 
-        void GraphicProperties::SetStyleSheet(SfxStyleSheet* pNewStyleSheet, sal_Bool bDontRemoveHardAttr)
+        void GraphicProperties::SetStyleSheet(SfxStyleSheet* pNewStyleSheet, bool bDontRemoveHardAttr)
         {
             SdrGrafObj& rObj = (SdrGrafObj&)GetSdrObject();
 

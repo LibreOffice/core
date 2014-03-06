@@ -37,7 +37,7 @@ namespace sdr
             virtual SfxItemSet& CreateObjectSpecificItemSet(SfxItemPool& rPool);
 
             // test changeability for a single item
-            virtual sal_Bool AllowItemChange(const sal_uInt16 nWhich, const SfxPoolItem* pNewItem = 0) const;
+            virtual bool AllowItemChange(const sal_uInt16 nWhich, const SfxPoolItem* pNewItem = 0) const;
 
             // react on ItemSet changes
             virtual void ItemSetChanged(const SfxItemSet& rSet);
@@ -55,7 +55,7 @@ namespace sdr
         public:
 
             // set a new StyleSheet and broadcast
-            virtual void SetStyleSheet(SfxStyleSheet* pNewStyleSheet, sal_Bool bDontRemoveHardAttr);
+            virtual void SetStyleSheet(SfxStyleSheet* pNewStyleSheet, bool bDontRemoveHardAttr);
 
             // force default attributes for a specific object type, called from
             // DefaultProperties::GetObjectItemSet() if a new ItemSet is created

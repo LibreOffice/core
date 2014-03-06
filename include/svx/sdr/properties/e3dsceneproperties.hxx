@@ -58,7 +58,7 @@ namespace sdr
             virtual const SfxItemSet& GetMergedItemSet() const;
 
             // Set merged ItemSet. Normally, this maps to SetObjectItemSet().
-            virtual void SetMergedItemSet(const SfxItemSet& rSet, sal_Bool bClearAllItems = sal_False);
+            virtual void SetMergedItemSet(const SfxItemSet& rSet, bool bClearAllItems = false);
 
             // Set a single item, iterate over hierarchies if necessary.
             virtual void SetMergedItem(const SfxPoolItem& rItem);
@@ -67,7 +67,7 @@ namespace sdr
             virtual void ClearMergedItem(const sal_uInt16 nWhich = 0);
 
             // set a new StyleSheet and broadcast
-            virtual void SetStyleSheet(SfxStyleSheet* pNewStyleSheet, sal_Bool bDontRemoveHardAttr);
+            virtual void SetStyleSheet(SfxStyleSheet* pNewStyleSheet, bool bDontRemoveHardAttr);
 
             // get the installed StyleSheet
             virtual SfxStyleSheet* GetStyleSheet() const;

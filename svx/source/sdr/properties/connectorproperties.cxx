@@ -80,7 +80,7 @@ namespace sdr
             rObj.ImpSetAttrToEdgeInfo();
         }
 
-        void ConnectorProperties::SetStyleSheet(SfxStyleSheet* pNewStyleSheet, sal_Bool bDontRemoveHardAttr)
+        void ConnectorProperties::SetStyleSheet(SfxStyleSheet* pNewStyleSheet, bool bDontRemoveHardAttr)
         {
             SdrEdgeObj& rObj = (SdrEdgeObj&)GetSdrObject();
 

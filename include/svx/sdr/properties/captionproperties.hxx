@@ -51,7 +51,7 @@ namespace sdr
             virtual BaseProperties& Clone(SdrObject& rObj) const;
 
             // set a new StyleSheet and broadcast
-            virtual void SetStyleSheet(SfxStyleSheet* pNewStyleSheet, sal_Bool bDontRemoveHardAttr);
+            virtual void SetStyleSheet(SfxStyleSheet* pNewStyleSheet, bool bDontRemoveHardAttr);
 
             // force default attributes for a specific object type, called from
             // DefaultProperties::GetObjectItemSet() if a new ItemSet is created

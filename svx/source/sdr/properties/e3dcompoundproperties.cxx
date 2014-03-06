@@ -74,7 +74,7 @@ namespace sdr
             return E3dProperties::GetMergedItemSet();
         }
 
-        void E3dCompoundProperties::SetMergedItemSet(const SfxItemSet& rSet, sal_Bool bClearAllItems)
+        void E3dCompoundProperties::SetMergedItemSet(const SfxItemSet& rSet, bool bClearAllItems)
         {
             // Set scene specific items at scene
             E3dCompoundObject& rObj = (E3dCompoundObject&)GetSdrObject();

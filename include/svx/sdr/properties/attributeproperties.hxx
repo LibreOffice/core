@@ -34,7 +34,7 @@ namespace sdr
         class SVX_DLLPUBLIC AttributeProperties : public DefaultProperties, public SfxListener, public svl::StyleSheetUser
         {
             // add style sheet, do all the necessary handling
-            void ImpAddStyleSheet(SfxStyleSheet* pNewStyleSheet, sal_Bool bDontRemoveHardAttr);
+            void ImpAddStyleSheet(SfxStyleSheet* pNewStyleSheet, bool bDontRemoveHardAttr);
 
             // remove StyleSheet, do all the necessary handling
             void ImpRemoveStyleSheet();
@@ -66,7 +66,7 @@ namespace sdr
             virtual ~AttributeProperties();
 
             // set a new StyleSheet and broadcast
-            virtual void SetStyleSheet(SfxStyleSheet* pNewStyleSheet, sal_Bool bDontRemoveHardAttr);
+            virtual void SetStyleSheet(SfxStyleSheet* pNewStyleSheet, bool bDontRemoveHardAttr);
 
             // get the installed StyleSheet
             virtual SfxStyleSheet* GetStyleSheet() const;

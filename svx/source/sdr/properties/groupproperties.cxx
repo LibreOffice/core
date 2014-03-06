@@ -110,7 +110,7 @@ namespace sdr
             return *mpItemSet;
         }
 
-        void GroupProperties::SetMergedItemSet(const SfxItemSet& rSet, sal_Bool bClearAllItems)
+        void GroupProperties::SetMergedItemSet(const SfxItemSet& rSet, bool bClearAllItems)
         {
             // iterate over contained SdrObjects
             const SdrObjList* pSub = ((const SdrObjGroup&)GetSdrObject()).GetSubList();
@@ -184,10 +184,10 @@ namespace sdr
             DBG_ASSERT(false, "GroupProperties::ItemSetChanged() should never be called (!)");
         }
 
-        sal_Bool GroupProperties::AllowItemChange(const sal_uInt16 /*nWhich*/, const SfxPoolItem* /*pNewItem*/) const
+        bool GroupProperties::AllowItemChange(const sal_uInt16 /*nWhich*/, const SfxPoolItem* /*pNewItem*/) const
         {
             DBG_ASSERT(false, "GroupProperties::AllowItemChange() should never be called (!)");
-            return sal_False;
+            return false;
         }
 
         void GroupProperties::ItemChange(const sal_uInt16 /*nWhich*/, const SfxPoolItem* /*pNewItem*/)
@@ -228,7 +228,7 @@ namespace sdr
             return pRetval;
         }
 
-        void GroupProperties::SetStyleSheet(SfxStyleSheet* pNewStyleSheet, sal_Bool bDontRemoveHardAttr)
+        void GroupProperties::SetStyleSheet(SfxStyleSheet* pNewStyleSheet, bool bDontRemoveHardAttr)
         {
             const SdrObjList* pSub = ((const SdrObjGroup&)GetSdrObject()).GetSubList();
             const sal_uInt32 nCount(pSub->GetObjCount());

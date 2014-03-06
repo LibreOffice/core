@@ -66,7 +66,7 @@ namespace sdr
 
             // Test changeability for a single item. If a implementation wants to prevent
             // changing an item this method may be overloaded.
-            virtual sal_Bool AllowItemChange(const sal_uInt16 nWhich, const SfxPoolItem* pNewItem = 0) const = 0;
+            virtual bool AllowItemChange(const sal_uInt16 nWhich, const SfxPoolItem* pNewItem = 0) const = 0;
 
             // Do the internal ItemChange. If only nWhich is given, the item needs to be cleared.
             // Also needs to handle if nWhich and pNewItem is 0, which means to clear all items.
@@ -110,7 +110,7 @@ namespace sdr
             virtual void SetObjectItemSet(const SfxItemSet& rSet) = 0;
 
             // Set merged ItemSet. Normally, this maps to SetObjectItemSet().
-            virtual void SetMergedItemSet(const SfxItemSet& rSet, sal_Bool bClearAllItems = sal_False);
+            virtual void SetMergedItemSet(const SfxItemSet& rSet, bool bClearAllItems = false);
 
             // Set single item at the local ItemSet. Uses AllowItemChange(),
             // ItemChange(), PostItemChange() and ItemSetChanged() calls.
@@ -139,7 +139,7 @@ namespace sdr
 
             // Set a new StyleSheet. Registers as listener at the StyleSheet to get knowledge
             // of StyleSheet changes.
-            virtual void SetStyleSheet(SfxStyleSheet* pNewStyleSheet, sal_Bool bDontRemoveHardAttr) = 0;
+            virtual void SetStyleSheet(SfxStyleSheet* pNewStyleSheet, bool bDontRemoveHardAttr) = 0;
 
             // Get the installed StyleSheet.
             virtual SfxStyleSheet* GetStyleSheet() const = 0;
@@ -164,7 +164,7 @@ namespace sdr
             // will be changed these broadcasts will no longer be needed.
             //void SetItemAndBroadcast(const SfxPoolItem& rItem);
             //void ClearItemAndBroadcast(const sal_uInt16 nWhich = 0);
-            void SetMergedItemSetAndBroadcast(const SfxItemSet& rSet, sal_Bool bClearAllItems = sal_False);
+            void SetMergedItemSetAndBroadcast(const SfxItemSet& rSet, bool bClearAllItems = false);
 
             // Just a convenient shortcut for GetObjectItemSet().Get(nWhich).
             const SfxPoolItem& GetItem(const sal_uInt16 nWhich) const;

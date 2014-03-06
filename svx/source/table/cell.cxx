@@ -170,7 +170,7 @@ namespace sdr
 
             void ItemChange(const sal_uInt16 nWhich, const SfxPoolItem* pNewItem);
 
-            void SetStyleSheet(SfxStyleSheet* pNewStyleSheet, sal_Bool bDontRemoveHardAttr);
+            void SetStyleSheet(SfxStyleSheet* pNewStyleSheet, bool bDontRemoveHardAttr);
 
             sdr::table::CellRef mxCell;
 
@@ -322,7 +322,7 @@ namespace sdr
             AttributeProperties::ItemChange( nWhich, pNewItem );
         }
 
-        void CellProperties::SetStyleSheet(SfxStyleSheet* pNewStyleSheet, sal_Bool bDontRemoveHardAttr)
+        void CellProperties::SetStyleSheet(SfxStyleSheet* pNewStyleSheet, bool bDontRemoveHardAttr)
         {
             TextProperties::SetStyleSheet( pNewStyleSheet, bDontRemoveHardAttr );
         }

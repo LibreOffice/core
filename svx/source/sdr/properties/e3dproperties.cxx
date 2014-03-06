@@ -75,7 +75,7 @@ namespace sdr
             rObj.StructureChanged();
         }
 
-        void E3dProperties::SetStyleSheet(SfxStyleSheet* pNewStyleSheet, sal_Bool bDontRemoveHardAttr)
+        void E3dProperties::SetStyleSheet(SfxStyleSheet* pNewStyleSheet, bool bDontRemoveHardAttr)
         {
             // call parent
             AttributeProperties::SetStyleSheet(pNewStyleSheet, bDontRemoveHardAttr);

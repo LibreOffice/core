@@ -181,9 +181,9 @@ namespace sdr
         {
         }
 
-        sal_Bool DefaultProperties::AllowItemChange(const sal_uInt16 /*nWhich*/, const SfxPoolItem* /*pNewItem*/) const
+        bool DefaultProperties::AllowItemChange(const sal_uInt16 /*nWhich*/, const SfxPoolItem* /*pNewItem*/) const
         {
-            return sal_True;
+            return true;
         }
 
         void DefaultProperties::ItemChange(const sal_uInt16 /*nWhich*/, const SfxPoolItem* /*pNewItem*/)
@@ -196,7 +196,7 @@ namespace sdr
                 CleanupFillProperties(*mpItemSet);
         }
 
-        void DefaultProperties::SetStyleSheet(SfxStyleSheet* /*pNewStyleSheet*/, sal_Bool /*bDontRemoveHardAttr*/)
+        void DefaultProperties::SetStyleSheet(SfxStyleSheet* /*pNewStyleSheet*/, bool /*bDontRemoveHardAttr*/)
         {
             // no StyleSheet in DefaultProperties
         }

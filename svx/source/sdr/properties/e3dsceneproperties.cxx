@@ -111,7 +111,7 @@ namespace sdr
             return E3dProperties::GetMergedItemSet();
         }
 
-        void E3dSceneProperties::SetMergedItemSet(const SfxItemSet& rSet, sal_Bool bClearAllItems)
+        void E3dSceneProperties::SetMergedItemSet(const SfxItemSet& rSet, bool bClearAllItems)
         {
             // Set SDRATTR_3DOBJ_ range at contained objects.
             const SdrObjList* pSub = ((const E3dScene&)GetSdrObject()).GetSubList();
@@ -236,7 +236,7 @@ namespace sdr
             }
         }
 
-        void E3dSceneProperties::SetStyleSheet(SfxStyleSheet* pNewStyleSheet, sal_Bool bDontRemoveHardAttr)
+        void E3dSceneProperties::SetStyleSheet(SfxStyleSheet* pNewStyleSheet, bool bDontRemoveHardAttr)
         {
             const SdrObjList* pSub = ((const E3dScene&)GetSdrObject()).GetSubList();
             const sal_uInt32 nCount(pSub->GetObjCount());

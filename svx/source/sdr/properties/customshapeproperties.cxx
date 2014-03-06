@@ -67,7 +67,7 @@ namespace sdr
                 // end
                 0, 0));
         }
-        sal_Bool CustomShapeProperties::AllowItemChange(const sal_uInt16 nWhich, const SfxPoolItem* pNewItem ) const
+        bool CustomShapeProperties::AllowItemChange(const sal_uInt16 nWhich, const SfxPoolItem* pNewItem ) const
         {
             sal_Bool bAllowItemChange = sal_True;
             if ( !pNewItem )
@@ -140,7 +140,7 @@ namespace sdr
 
             rObj.InvalidateRenderGeometry();
         }
-        void CustomShapeProperties::SetStyleSheet(SfxStyleSheet* pNewStyleSheet, sal_Bool bDontRemoveHardAttr)
+        void CustomShapeProperties::SetStyleSheet(SfxStyleSheet* pNewStyleSheet, bool bDontRemoveHardAttr)
         {
             TextProperties::SetStyleSheet( pNewStyleSheet, bDontRemoveHardAttr );
             UpdateTextFrameStatus();

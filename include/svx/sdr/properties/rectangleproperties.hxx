@@ -49,7 +49,7 @@ namespace sdr
             virtual BaseProperties& Clone(SdrObject& rObj) const;
 
             // set a new StyleSheet and broadcast
-            virtual void SetStyleSheet(SfxStyleSheet* pNewStyleSheet, sal_Bool bDontRemoveHardAttr);
+            virtual void SetStyleSheet(SfxStyleSheet* pNewStyleSheet, bool bDontRemoveHardAttr);
         };
     } // end of namespace properties
 } // end of namespace sdr

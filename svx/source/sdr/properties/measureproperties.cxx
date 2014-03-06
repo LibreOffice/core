@@ -87,7 +87,7 @@ namespace sdr
             rObj.SetTextDirty();
         }
 
-        void MeasureProperties::SetStyleSheet(SfxStyleSheet* pNewStyleSheet, sal_Bool bDontRemoveHardAttr)
+        void MeasureProperties::SetStyleSheet(SfxStyleSheet* pNewStyleSheet, bool bDontRemoveHardAttr)
         {
             SdrMeasureObj& rObj = (SdrMeasureObj&)GetSdrObject();
 

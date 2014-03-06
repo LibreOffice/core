@@ -110,10 +110,10 @@ namespace sdr
             DBG_ASSERT(false, "EmptyProperties::ItemSetChanged() should never be called (!)");
         }
 
-        sal_Bool EmptyProperties::AllowItemChange(const sal_uInt16 /*nWhich*/, const SfxPoolItem* /*pNewItem*/) const
+        bool EmptyProperties::AllowItemChange(const sal_uInt16 /*nWhich*/, const SfxPoolItem* /*pNewItem*/) const
         {
             DBG_ASSERT(false, "EmptyProperties::AllowItemChange() should never be called (!)");
-            return sal_True;
+            return true;
         }
 
         void EmptyProperties::ItemChange(const sal_uInt16 /*nWhich*/, const SfxPoolItem* /*pNewItem*/)
@@ -126,7 +126,7 @@ namespace sdr
             DBG_ASSERT(false, "EmptyProperties::PostItemChange() should never be called (!)");
         }
 
-        void EmptyProperties::SetStyleSheet(SfxStyleSheet* /*pNewStyleSheet*/, sal_Bool /*bDontRemoveHardAttr*/)
+        void EmptyProperties::SetStyleSheet(SfxStyleSheet* /*pNewStyleSheet*/, bool /*bDontRemoveHardAttr*/)
         {
             DBG_ASSERT(false, "EmptyProperties::SetStyleSheet() should never be called (!)");
         }

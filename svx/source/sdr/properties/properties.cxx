@@ -50,7 +50,7 @@ namespace sdr
             return GetObjectItemSet();
         }
 
-        void BaseProperties::SetMergedItemSet(const SfxItemSet& rSet, sal_Bool bClearAllItems)
+        void BaseProperties::SetMergedItemSet(const SfxItemSet& rSet, bool bClearAllItems)
         {
             // clear items if requested
             if(bClearAllItems)
@@ -99,7 +99,7 @@ namespace sdr
             // Overload where an ItemSet is implemented.
         }
 
-        void BaseProperties::SetMergedItemSetAndBroadcast(const SfxItemSet& rSet, sal_Bool bClearAllItems)
+        void BaseProperties::SetMergedItemSetAndBroadcast(const SfxItemSet& rSet, bool bClearAllItems)
         {
             ItemChangeBroadcaster aC(GetSdrObject());
 

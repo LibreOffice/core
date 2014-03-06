@@ -49,7 +49,7 @@ namespace sdr
 {
     namespace properties
     {
-        void AttributeProperties::ImpAddStyleSheet(SfxStyleSheet* pNewStyleSheet, sal_Bool bDontRemoveHardAttr)
+        void AttributeProperties::ImpAddStyleSheet(SfxStyleSheet* pNewStyleSheet, bool bDontRemoveHardAttr)
         {
             // test if old StyleSheet is cleared, else it would be lost
             // after this method -> memory leak (!)
@@ -137,7 +137,7 @@ namespace sdr
         {
             if(rProps.GetStyleSheet())
             {
-                ImpAddStyleSheet(rProps.GetStyleSheet(), sal_True);
+                ImpAddStyleSheet(rProps.GetStyleSheet(), true);
             }
         }
 
@@ -232,7 +232,7 @@ namespace sdr
             }
         }
 
-        void AttributeProperties::SetStyleSheet(SfxStyleSheet* pNewStyleSheet, sal_Bool bDontRemoveHardAttr)
+        void AttributeProperties::SetStyleSheet(SfxStyleSheet* pNewStyleSheet, bool bDontRemoveHardAttr)
         {
             ImpRemoveStyleSheet();
             ImpAddStyleSheet(pNewStyleSheet, bDontRemoveHardAttr);
@@ -279,7 +279,7 @@ namespace sdr
                         if(pStyleSheetPool == pDestPool)
                         {
                             // just re-set stylesheet
-                            ImpAddStyleSheet(pStySheet, sal_True);
+                            ImpAddStyleSheet(pStySheet, true);
                         }
                         else
                         {
@@ -300,7 +300,7 @@ namespace sdr
                                 // document.  Use the default as a fallback.
                                 pNewStyleSheet = pNewModel->GetDefaultStyleSheet();
                             }
-                            ImpAddStyleSheet(pNewStyleSheet, sal_True);
+                            ImpAddStyleSheet(pNewStyleSheet, true);
                         }
                     }
 
@@ -407,7 +407,7 @@ namespace sdr
                             if(GetStyleSheet() != pForThisObject)
                             {
                                 ImpRemoveStyleSheet();
-                                ImpAddStyleSheet((SfxStyleSheet*)pForThisObject, sal_True);
+                                ImpAddStyleSheet((SfxStyleSheet*)pForThisObject, true);
                             }
                         }
                         else
@@ -471,7 +471,7 @@ namespace sdr
                 if(!GetStyleSheet() && pNewModel && !pNewModel->IsLoading())
                 {
                     GetObjectItemSet(); // #118414 force ItemSet to allow style to be set
-                    SetStyleSheet(pNewModel->GetDefaultStyleSheet(), sal_True);
+                    SetStyleSheet(pNewModel->GetDefaultStyleSheet(), true);
                 }
             }
         }
@@ -574,7 +574,7 @@ namespace sdr
 
                         if(pNewStSh)
                         {
-                            ImpAddStyleSheet(pNewStSh, sal_True);
+                            ImpAddStyleSheet(pNewStSh, true);
                         }
 
                         break;

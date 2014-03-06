@@ -57,7 +57,7 @@ namespace sdr
         }
 
         // set a new StyleSheet and broadcast
-        void RectangleProperties::SetStyleSheet(SfxStyleSheet* pNewStyleSheet, sal_Bool bDontRemoveHardAttr)
+        void RectangleProperties::SetStyleSheet(SfxStyleSheet* pNewStyleSheet, bool bDontRemoveHardAttr)
         {
             SdrRectObj& rObj = (SdrRectObj&)GetSdrObject();
 
