@@ -9,7 +9,7 @@ from __future__ import print_function
 from optparse import OptionParser
 
 # foo_component_getFactory functions are split into groups, so that you could
-# choose e.g. 'extended_core' and 'writer' functionality and through factory_map,
+# choose e.g. 'core' and 'writer' functionality and through factory_map,
 # relevant function sections will be referenced in lo_get_factory_map().
 # That prevents garbage collector to ignore them as unused.
 
@@ -108,95 +108,45 @@ core_constructor_list = [
     "XMLVersionListPersistence_get_implementation",
     ]
 
-extended_core_factory_list = core_factory_list + [
-    ("libanimcorelo.a", "animcore_component_getFactory"),
-    ("libavmedialo.a", "avmedia_component_getFactory"),
-    ("libcanvasfactorylo.a", "canvasfactory_component_getFactory"),
-    ("libchartcorelo.a", "chartcore_component_getFactory"),
-    ("libcuilo.a", "cui_component_getFactory"),
-    ("libembobj.a", "embobj_component_getFactory"),
-    ("libemboleobj.a", "emboleobj_component_getFactory"),
-    ("libevtattlo.a", "evtatt_component_getFactory"),
-    ("libfrmlo.a", "frm_component_getFactory"),
-    ("libfwllo.a", "fwl_component_getFactory"),
-    ("libfwmlo.a", "fwm_component_getFactory"),
-    ("libspllo.a", "spl_component_getFactory"),
-    ("libsvllo.a", "svl_component_getFactory"),
-    ("libsvxcorelo.a", "svxcore_component_getFactory"),
-    ("libtextfdlo.a", "textfd_component_getFactory"),
-    ("libucpexpand1lo.a", "ucpexpand1_component_getFactory"),
-    ("libucppkg1.a", "ucppkg1_component_getFactory"),
-    ("libvcllo.a", "vcl_component_getFactory"),
-    ("libxmlfdlo.a", "xmlfd_component_getFactory"),
-    ("libxoflo.a", "xof_component_getFactory"),
-    ]
-
-extended_core_constructor_list = core_constructor_list + [
-    ]
-
-calc_core_factory_list = [
+calc_factory_list = [
     ("libscdlo.a", "scd_component_getFactory"),
     ("libscfiltlo.a", "scfilt_component_getFactory"),
     ("libsclo.a", "sc_component_getFactory"),
     ]
 
-calc_core_constructor_list = [
+calc_constructor_list = [
     ]
 
-calc_factory_list = calc_core_factory_list + [
-    ("libanalysislo.a", "analysis_component_getFactory"),
-    ("libdatelo.a", "date_component_getFactory"),
-    ("libpricinglo.a", "pricing_component_getFactory"),
-    ]
-
-calc_constructor_list = calc_core_constructor_list + [
-    ]
-
-draw_core_factory_list = [
+draw_factory_list = [
     ("libsddlo.a", "sdd_component_getFactory"),
     ("libsdlo.a", "sd_component_getFactory"),
     ("libsvgfilterlo.a", "svgfilter_component_getFactory"),
     ("libwpftdrawlo.a", "wpftdraw_component_getFactory"),
     ]
 
-draw_core_constructor_list = [
+draw_constructor_list = [
     ]
 
-writer_core_factory_list = [
+writer_factory_list = [
     ("libswdlo.a", "swd_component_getFactory"),
     ("libswlo.a", "sw_component_getFactory"),
     ("libwriterfilterlo.a", "writerfilter_component_getFactory"),
     ]
 
-writer_core_constructor_list = [
-    ]
-
-writer_factory_list = writer_core_factory_list + [
-    ("libhwplo.a", "hwp_component_getFactory"),
-    ("libt602filterlo.a", "t602filter_component_getFactory"),
-    ("libwpftwriterlo.a", "wpftwriter_component_getFactory"),
-    ]
-
-writer_constructor_list = writer_core_constructor_list + [
+writer_constructor_list = [
     ]
 
 factory_map = {
     'core' : core_factory_list,
-    'extended_core' : extended_core_factory_list,
-    'calc_core' : calc_core_factory_list,
     'calc' : calc_factory_list,
-    'draw_core' : draw_core_factory_list,
-    'writer_core' : writer_core_factory_list,
+    'draw' : draw_factory_list,
     'writer' : writer_factory_list,
     }
 
 constructor_map = {
     'core' : core_constructor_list,
-    'extended_core' : extended_core_constructor_list,
-    'calc_core' : calc_core_constructor_list,
     'calc' : calc_constructor_list,
-    'draw_core' : draw_core_constructor_list,
-    'writer_core' : writer_core_constructor_list,
+    'draw' : draw_constructor_list,
     'writer' : writer_constructor_list,
     }
 

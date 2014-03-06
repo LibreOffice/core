@@ -28,7 +28,7 @@ $(eval $(call gb_Executable_add_generated_cxxobjects,LibreOffice,\
 $(call gb_CustomTarget_get_workdir,ios/LibreOffice)/native-code.cxx :
 	mkdir -p `dirname $@`
 	$(SRCDIR)/solenv/bin/native-code.py \
-		-g extended_core -g writer \
+		-g core -g writer \
 		> $@
 
 $(eval $(call gb_Executable_add_objcxxobjects,LibreOffice,\
