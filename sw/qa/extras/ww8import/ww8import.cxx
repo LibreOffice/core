@@ -243,6 +243,12 @@ DECLARE_WW8IMPORT_TEST(testBnc821208, "bnc821208.doc")
     CPPUNIT_ASSERT_EQUAL(beans::PropertyState_DEFAULT_VALUE, ePropertyState);
 }
 
+DECLARE_WW8IMPORT_TEST(testCp1000039, "cp1000039.doc")
+{
+    // This was RTL_TEXTENCODING_SYMBOL, causing "1" rendered as a placeholder rectangle.
+    CPPUNIT_ASSERT_EQUAL(sal_Int16(RTL_TEXTENCODING_DONTKNOW), getProperty<sal_Int16>(getRun(getParagraph(1), 1), "CharFontCharSet"));
+}
+
 #endif
 
 CPPUNIT_PLUGIN_IMPLEMENT();
