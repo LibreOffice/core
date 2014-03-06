@@ -411,24 +411,47 @@ uno::Reference< drawing::XShape >
 
 uno::Reference< drawing::XShape >
         OpenglShapeFactory::createText( const uno::Reference< drawing::XShapes >& xTarget,
-                const awt::Size& rSize, const awt::Point& rPos,
+                const awt::Size& , const awt::Point& rPos,
                 uno::Sequence< uno::Reference< chart2::XFormattedString > >& rFormattedString,
                 const uno::Reference< beans::XPropertySet > & xTextProperties,
-                double, const OUString& rName)
+                double nRotation, const OUString& rName)
 {
-    dummy::DummyFormattedText* pText = new dummy::DummyFormattedText( rFormattedString );
-    uno::Reference< drawing::XShape > xShape(pText);
-    uno::Reference< beans::XPropertySet > xTargetProps(xShape, uno::UNO_QUERY_THROW);
-    awt::Size aOldRefSize;
-    bool bHasRefPageSize =
-        ( xTextProperties->getPropertyValue( "ReferencePageSize") >>= aOldRefSize );
-    // adapt font size according to page size
-    if( bHasRefPageSize )
+    tPropertyNameValueMap aValueMap;
+    //fill line-, fill- and paragraph-properties into the ValueMap
     {
-        RelativeSizeHelper::adaptFontSizes( xTargetProps, aOldRefSize, rSize );
+        tMakePropertyNameMap aNameMap = PropertyMapper::getPropertyNameMapForParagraphProperties();
+        aNameMap( PropertyMapper::getPropertyNameMapForFillAndLineProperties() );
+
+        PropertyMapper::getValueMap( aValueMap, aNameMap, xTextProperties );
     }
-    pText->setPosition(rPos);
-    pText->setSize(awt::Size(0,0));
+
+    //fill some more shape properties into the ValueMap
+    {
+        drawing::TextHorizontalAdjust eHorizontalAdjust = drawing::TextHorizontalAdjust_CENTER;
+        drawing::TextVerticalAdjust eVerticalAdjust = drawing::TextVerticalAdjust_CENTER;
+
+        aValueMap.insert( tPropertyNameValueMap::value_type( "TextHorizontalAdjust", uno::makeAny(eHorizontalAdjust) ) ); // drawing::TextHorizontalAdjust
+        aValueMap.insert( tPropertyNameValueMap::value_type( "TextVerticalAdjust", uno::makeAny(eVerticalAdjust) ) ); //drawing::TextVerticalAdjust
+        aValueMap.insert( tPropertyNameValueMap::value_type( "TextAutoGrowHeight", uno::makeAny(sal_True) ) ); // sal_Bool
+        aValueMap.insert( tPropertyNameValueMap::value_type( "TextAutoGrowWidth", uno::makeAny(sal_True) ) ); // sal_Bool
+
+    }
+
+    //set global title properties
+    tNameSequence aPropNames;
+    tAnySequence aPropValues;
+    PropertyMapper::getMultiPropertyListsFromValueMap( aPropNames, aPropValues, aValueMap );
+
+    OUString aString = rFormattedString[0]->getString();
+
+    sal_Int32 nXPos = rPos.X;
+    sal_Int32 nYPos = rPos.Y;
+    ::basegfx::B2DHomMatrix aM;
+    aM.rotate( -nRotation*F_PI/180.0 );//#i78696#->#i80521#
+    aM.translate( nXPos, nYPos );
+
+    dummy::DummyText* pText = new dummy::DummyText(aString, aPropNames, aPropValues,
+            uno::makeAny(B2DHomMatrixToHomogenMatrix3(aM)), xTarget);
     pText->setName(rName);
     xTarget->add(pText);
     return pText;
