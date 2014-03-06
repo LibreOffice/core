@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "passwdomdlg.hrc"
 #include "passwdomdlg.hxx"
 
 #include "cuires.hrc"
@@ -27,78 +26,21 @@
 #include <vcl/fixed.hxx>
 #include <vcl/edit.hxx>
 #include <vcl/button.hxx>
-#include <vcl/morebtn.hxx>
+#include <vcl/layout.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/msgbox.hxx>
-
-
-
-
-class PasswordReenterEdit_Impl : public Edit
-{
-    OUString  m_aDefaultTxt;
-
-    // disallow use of copy c-tor and assignment operator
-    PasswordReenterEdit_Impl( const PasswordReenterEdit_Impl & );
-    PasswordReenterEdit_Impl & operator = ( const PasswordReenterEdit_Impl & );
-
-public:
-    PasswordReenterEdit_Impl( Window * pParent, const ResId &rResId );
-    virtual ~PasswordReenterEdit_Impl();
-
-    // Edit
-    virtual void        Paint( const Rectangle& rRect );
-};
-
-
-PasswordReenterEdit_Impl::PasswordReenterEdit_Impl( Window * pParent, const ResId &rResId ) :
-    Edit( pParent, rResId )
-{
-}
-
-
-PasswordReenterEdit_Impl::~PasswordReenterEdit_Impl()
-{
-}
-
-
-void PasswordReenterEdit_Impl::Paint( const Rectangle& rRect )
-{
-    if (GetText().isEmpty())
-    {
-        Push( PUSH_TEXTCOLOR );
-        SetTextColor( Color( COL_GRAY ) );
-        DrawText( Point(), m_aDefaultTxt );
-
-        Pop();
-    }
-    else
-        Edit::Paint( rRect );
-}
-
-
-
 
 struct PasswordToOpenModifyDialog_Impl
 {
     PasswordToOpenModifyDialog *    m_pParent;
 
-    FixedLine                   m_aFileEncryptionFL;
-    FixedText                   m_aPasswdToOpenFT;
-    Edit                        m_aPasswdToOpenED;
-    FixedText                   m_aReenterPasswdToOpenFT;
-    PasswordReenterEdit_Impl    m_aReenterPasswdToOpenED;
-    FixedText                   m_aPasswdNoteFT;
-    FixedLine                   m_aButtonsFL;
-    MoreButton                  m_aMoreFewerOptionsBTN;
-    OKButton                    m_aOk;
-    CancelButton                m_aCancel;
-    FixedLine                   m_aFileSharingOptionsFL;
-    CheckBox                    m_aOpenReadonlyCB;
-    FixedText                   m_aPasswdToModifyFT;
-    Edit                        m_aPasswdToModifyED;
-    FixedText                   m_aReenterPasswdToModifyFT;
-    PasswordReenterEdit_Impl    m_aReenterPasswdToModifyED;
+    Edit*                       m_pPasswdToOpenED;
+    Edit*                       m_pReenterPasswdToOpenED;
+    VclExpander*                m_pOptionsExpander;
+    OKButton*                   m_pOk;
+    CheckBox*                   m_pOpenReadonlyCB;
+    Edit*                       m_pPasswdToModifyED;
+    Edit*                       m_pReenterPasswdToModifyED;
 
     OUString                    m_aOneMismatch;
     OUString                    m_aTwoMismatch;
@@ -112,70 +54,52 @@ struct PasswordToOpenModifyDialog_Impl
 
     PasswordToOpenModifyDialog_Impl( PasswordToOpenModifyDialog * pParent,
             sal_uInt16 nMinPasswdLen, sal_uInt16 nMaxPasswdLen, bool bIsPasswordToModify );
-    ~PasswordToOpenModifyDialog_Impl();
 };
-
 
 PasswordToOpenModifyDialog_Impl::PasswordToOpenModifyDialog_Impl(
         PasswordToOpenModifyDialog * pParent,
         sal_uInt16 nMinPasswdLen,
         sal_uInt16 nMaxPasswdLen,
-        bool bIsPasswordToModify ) :
-    m_pParent( pParent ),
-    m_aFileEncryptionFL         ( pParent, CUI_RES( FL_FILE_ENCRYPTION ) ),
-    m_aPasswdToOpenFT           ( pParent, CUI_RES( FT_PASSWD_TO_OPEN ) ),
-    m_aPasswdToOpenED           ( pParent, CUI_RES( ED_PASSWD_TO_OPEN ) ),
-    m_aReenterPasswdToOpenFT    ( pParent, CUI_RES( FT_REENTER_PASSWD_TO_OPEN ) ),
-    m_aReenterPasswdToOpenED    ( pParent, CUI_RES( ED_REENTER_PASSWD_TO_OPEN ) ),
-    m_aPasswdNoteFT             ( pParent, CUI_RES( FT_PASSWD_NOTE ) ),
-    m_aButtonsFL                ( pParent, CUI_RES( FL_BUTTONS ) ),
-    m_aMoreFewerOptionsBTN      ( pParent, CUI_RES( BTN_MORE_FEWER_OPTIONS ) ),
-    m_aOk                       ( pParent, CUI_RES( BTN_OK ) ),
-    m_aCancel                   ( pParent, CUI_RES( BTN_CANCEL ) ),
-    m_aFileSharingOptionsFL     ( pParent, CUI_RES( FL_FILE_SHARING_OPTIONS ) ),
-    m_aOpenReadonlyCB           ( pParent, CUI_RES( CB_OPEN_READONLY ) ),
-    m_aPasswdToModifyFT         ( pParent, CUI_RES( FT_PASSWD_TO_MODIFY ) ),
-    m_aPasswdToModifyED         ( pParent, CUI_RES( ED_PASSWD_TO_MODIFY ) ),
-    m_aReenterPasswdToModifyFT  ( pParent, CUI_RES( FT_REENTER_PASSWD_TO_MODIFY ) ),
-    m_aReenterPasswdToModifyED  ( pParent, CUI_RES( ED_REENTER_PASSWD_TO_MODIFY ) ),
-    m_aOneMismatch( CUI_RES( STR_ONE_PASSWORD_MISMATCH ) ),
-    m_aTwoMismatch( CUI_RES( STR_TWO_PASSWORDS_MISMATCH ) ),
-    m_aInvalidStateForOkButton( CUI_RES( STR_INVALID_STATE_FOR_OK_BUTTON ) ),
-    m_aInvalidStateForOkButton_v2( CUI_RES( STR_INVALID_STATE_FOR_OK_BUTTON_V2 ) ),
-    m_bIsPasswordToModify( bIsPasswordToModify )
+        bool bIsPasswordToModify )
+    : m_pParent( pParent )
+    , m_aOneMismatch( CUI_RES( RID_SVXSTR_ONE_PASSWORD_MISMATCH ) )
+    , m_aTwoMismatch( CUI_RES( RID_SVXSTR_TWO_PASSWORDS_MISMATCH ) )
+    , m_aInvalidStateForOkButton( CUI_RES( RID_SVXSTR_INVALID_STATE_FOR_OK_BUTTON ) )
+    , m_aInvalidStateForOkButton_v2( CUI_RES( RID_SVXSTR_INVALID_STATE_FOR_OK_BUTTON_V2 ) )
+    , m_bIsPasswordToModify( bIsPasswordToModify )
 {
-    m_aMoreFewerOptionsBTN.SetMoreText( CUI_RES( STR_MORE_OPTIONS ) );
-    m_aMoreFewerOptionsBTN.SetLessText( CUI_RES( STR_FEWER_OPTIONS ) );
+    pParent->get(m_pPasswdToOpenED, "newpassEntry");
+    pParent->get(m_pReenterPasswdToOpenED, "confirmpassEntry");
+    pParent->get(m_pOk, "ok");
+    pParent->get(m_pOpenReadonlyCB, "readonly");
+    pParent->get(m_pPasswdToModifyED, "newpassroEntry");
+    pParent->get(m_pReenterPasswdToModifyED, "confirmropassEntry");
+    pParent->get(m_pOptionsExpander, "expander");
 
-    m_aOk.SetClickHdl( LINK( this, PasswordToOpenModifyDialog_Impl, OkBtnClickHdl ) );
+    m_pOk->SetClickHdl( LINK( this, PasswordToOpenModifyDialog_Impl, OkBtnClickHdl ) );
 
     if (nMaxPasswdLen)
     {
-        m_aPasswdToOpenED.SetMaxTextLen( nMaxPasswdLen );
-        m_aReenterPasswdToOpenED.SetMaxTextLen( nMaxPasswdLen );
-        m_aPasswdToModifyED.SetMaxTextLen( nMaxPasswdLen );
-        m_aReenterPasswdToModifyED.SetMaxTextLen( nMaxPasswdLen );
+        m_pPasswdToOpenED->SetMaxTextLen( nMaxPasswdLen );
+        m_pReenterPasswdToOpenED->SetMaxTextLen( nMaxPasswdLen );
+        m_pPasswdToModifyED->SetMaxTextLen( nMaxPasswdLen );
+        m_pReenterPasswdToModifyED->SetMaxTextLen( nMaxPasswdLen );
     }
 
     (void) nMinPasswdLen;   // currently not supported
 
-    m_aPasswdToOpenED.GrabFocus();
+    m_pPasswdToOpenED->GrabFocus();
 
-    m_aMoreFewerOptionsBTN.Enable( bIsPasswordToModify );
+    m_pOptionsExpander->Enable(bIsPasswordToModify);
     if (!bIsPasswordToModify)
-        m_aMoreFewerOptionsBTN.Hide();
-}
-
-
-PasswordToOpenModifyDialog_Impl::~PasswordToOpenModifyDialog_Impl()
-{
+        m_pOptionsExpander->Hide();
 }
 
 IMPL_LINK( PasswordToOpenModifyDialog_Impl, OkBtnClickHdl, OKButton *, EMPTYARG /*pBtn*/ )
 {
-    bool bInvalidState = !m_aOpenReadonlyCB.IsChecked() &&
-            m_aPasswdToOpenED.GetText().isEmpty() &&
-            m_aPasswdToModifyED.GetText().isEmpty();
+    bool bInvalidState = !m_pOpenReadonlyCB->IsChecked() &&
+            m_pPasswdToOpenED->GetText().isEmpty() &&
+            m_pPasswdToModifyED->GetText().isEmpty();
     if (bInvalidState)
     {
         ErrorBox aErrorBox( m_pParent, WB_OK,
@@ -184,30 +108,30 @@ IMPL_LINK( PasswordToOpenModifyDialog_Impl, OkBtnClickHdl, OKButton *, EMPTYARG 
     }
     else // check for mismatched passwords...
     {
-        const bool bToOpenMatch     = m_aPasswdToOpenED.GetText()   == m_aReenterPasswdToOpenED.GetText();
-        const bool bToModifyMatch   = m_aPasswdToModifyED.GetText() == m_aReenterPasswdToModifyED.GetText();
+        const bool bToOpenMatch     = m_pPasswdToOpenED->GetText()   == m_pReenterPasswdToOpenED->GetText();
+        const bool bToModifyMatch   = m_pPasswdToModifyED->GetText() == m_pReenterPasswdToModifyED->GetText();
         const int nMismatch = (bToOpenMatch? 0 : 1) + (bToModifyMatch? 0 : 1);
         if (nMismatch > 0)
         {
             ErrorBox aErrorBox( m_pParent, WB_OK, nMismatch == 1 ? m_aOneMismatch : m_aTwoMismatch );
             aErrorBox.Execute();
 
-            Edit &rEdit = !bToOpenMatch? m_aPasswdToOpenED : m_aPasswdToModifyED;
-            PasswordReenterEdit_Impl &rRepeatEdit = !bToOpenMatch? m_aReenterPasswdToOpenED : m_aReenterPasswdToModifyED;
+            Edit* pEdit = !bToOpenMatch ? m_pPasswdToOpenED : m_pPasswdToModifyED;
+            Edit* pRepeatEdit = !bToOpenMatch? m_pReenterPasswdToOpenED : m_pReenterPasswdToModifyED;
             OUString aEmpty;
             if (nMismatch == 1)
             {
-                rEdit.SetText( aEmpty );
-                rRepeatEdit.SetText( aEmpty );
+                pEdit->SetText( aEmpty );
+                pRepeatEdit->SetText( aEmpty );
             }
             else if (nMismatch == 2)
             {
-                m_aPasswdToOpenED.SetText( aEmpty );
-                m_aReenterPasswdToOpenED.SetText( aEmpty );
-                m_aPasswdToModifyED.SetText( aEmpty );
-                m_aReenterPasswdToModifyED.SetText( aEmpty );
+                m_pPasswdToOpenED->SetText( aEmpty );
+                m_pReenterPasswdToOpenED->SetText( aEmpty );
+                m_pPasswdToModifyED->SetText( aEmpty );
+                m_pReenterPasswdToModifyED->SetText( aEmpty );
             }
-            rEdit.GrabFocus();
+            pEdit->GrabFocus();
         }
         else
         {
@@ -218,20 +142,13 @@ IMPL_LINK( PasswordToOpenModifyDialog_Impl, OkBtnClickHdl, OKButton *, EMPTYARG 
     return 0;
 }
 
-
-
-
 PasswordToOpenModifyDialog::PasswordToOpenModifyDialog(
-        Window * pParent,
-        sal_uInt16 nMinPasswdLen,
-        sal_uInt16 nMaxPasswdLen,
-        bool bIsPasswordToModify ) :
-    SfxModalDialog( pParent, CUI_RES( RID_DLG_PASSWORD_TO_OPEN_MODIFY ) )
+    Window * pParent, sal_uInt16 nMinPasswdLen,
+    sal_uInt16 nMaxPasswdLen, bool bIsPasswordToModify)
+    : SfxModalDialog( pParent, "PasswordDialog", "cui/ui/password.ui" )
 {
-    m_pImpl.reset(
-            new PasswordToOpenModifyDialog_Impl( this, nMinPasswdLen, nMaxPasswdLen, bIsPasswordToModify ) );
-
-    FreeResource();
+    m_pImpl.reset(new PasswordToOpenModifyDialog_Impl(this,
+        nMinPasswdLen, nMaxPasswdLen, bIsPasswordToModify ) );
 }
 
 
@@ -243,24 +160,24 @@ PasswordToOpenModifyDialog::~PasswordToOpenModifyDialog()
 OUString PasswordToOpenModifyDialog::GetPasswordToOpen() const
 {
     const bool bPasswdOk =
-            !m_pImpl->m_aPasswdToOpenED.GetText().isEmpty() &&
-            m_pImpl->m_aPasswdToOpenED.GetText() == m_pImpl->m_aReenterPasswdToOpenED.GetText();
-    return bPasswdOk ? m_pImpl->m_aPasswdToOpenED.GetText() : OUString();
+            !m_pImpl->m_pPasswdToOpenED->GetText().isEmpty() &&
+            m_pImpl->m_pPasswdToOpenED->GetText() == m_pImpl->m_pReenterPasswdToOpenED->GetText();
+    return bPasswdOk ? m_pImpl->m_pPasswdToOpenED->GetText() : OUString();
 }
 
 
 OUString PasswordToOpenModifyDialog::GetPasswordToModify() const
 {
     const bool bPasswdOk =
-            !m_pImpl->m_aPasswdToModifyED.GetText().isEmpty() &&
-            m_pImpl->m_aPasswdToModifyED.GetText() == m_pImpl->m_aReenterPasswdToModifyED.GetText();
-    return bPasswdOk ? m_pImpl->m_aPasswdToModifyED.GetText() : OUString();
+            !m_pImpl->m_pPasswdToModifyED->GetText().isEmpty() &&
+            m_pImpl->m_pPasswdToModifyED->GetText() == m_pImpl->m_pReenterPasswdToModifyED->GetText();
+    return bPasswdOk ? m_pImpl->m_pPasswdToModifyED->GetText() : OUString();
 }
 
 
 bool PasswordToOpenModifyDialog::IsRecommendToOpenReadonly() const
 {
-    return m_pImpl->m_aOpenReadonlyCB.IsChecked();
+    return m_pImpl->m_pOpenReadonlyCB->IsChecked();
 }
 
 

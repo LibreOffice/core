@@ -225,9 +225,6 @@
 #define RID_SVXSTR_ARCHIVE_HEADLINE         (RID_SVX_START + 485)
 #define RID_SVXSTR_MULTIFILE_DBL_ERR        (RID_SVX_START + 486)
 
-// password to open/modify dialog
-#define RID_DLG_PASSWORD_TO_OPEN_MODIFY     (RID_SVX_START + 500)
-
 // multi path dialog
 #define RID_SVXDLG_MULTIPATH                (RID_SVX_START + 201)
 #define RID_MULTIPATH_DBL_ERR               (RID_SVX_START + 207)
@@ -440,6 +437,12 @@
 #define RID_SVXSTR_HYPH                                     (RID_SVX_START + 1254)
 #define RID_SVXSTR_THES                                     (RID_SVX_START + 1255)
 #define RID_SVXSTR_GRAMMAR                                  (RID_SVX_START + 1256)
+
+#define RID_SVXSTR_PASSWD_MUST_BE_CONFIRMED                 (RID_SVX_START + 1257)
+#define RID_SVXSTR_ONE_PASSWORD_MISMATCH                    (RID_SVX_START + 1258)
+#define RID_SVXSTR_TWO_PASSWORDS_MISMATCH                   (RID_SVX_START + 1259)
+#define RID_SVXSTR_INVALID_STATE_FOR_OK_BUTTON              (RID_SVX_START + 1260)
+#define RID_SVXSTR_INVALID_STATE_FOR_OK_BUTTON_V2           (RID_SVX_START + 1261)
 
 #endif
 

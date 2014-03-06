@@ -17,187 +17,32 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <cuires.hrc>
-#include "passwdomdlg.hrc"
-#include "helpid.hrc"
 
-
-ModalDialog RID_DLG_PASSWORD_TO_OPEN_MODIFY
+String RID_SVXSTR_PASSWD_MUST_BE_CONFIRMED
 {
-    Size = MAP_APPFONT( 171, 150 );
-    Text [ en-US ] = "Set Password";
-    HelpId = HID_DLG_PASSWORD_TO_OPEN_MODIFY;
-    Border = TRUE ;
-    Moveable = TRUE ;
-    OutputSize = TRUE ;
-    SVLook = TRUE ;
+    Text [ en-US ] = "Password must be confirmed" ;
+};
 
-    FixedLine FL_FILE_ENCRYPTION
-    {
-        Pos = MAP_APPFONT( 3, 3 );
-        Size = MAP_APPFONT( 165, 8 );
-        Text [ en-US ] = "File encryption password";
-    };
+String RID_SVXSTR_ONE_PASSWORD_MISMATCH
+{
+    Text [ en-US ] = "The confirmation password did not match the password. Set the password again by entering the same password in both boxes." ;
+};
 
-    FixedText FT_PASSWD_TO_OPEN
-    {
-        Pos = MAP_APPFONT( 6, 17 );
-        Size = MAP_APPFONT( 159, 8 );
-        Text [ en-US ] = "~Enter password to open";
-        WordBreak = TRUE;
-    };
+String RID_SVXSTR_TWO_PASSWORDS_MISMATCH
+{
+    Text [ en-US ] = "The confirmation passwords did not match the original passwords. Set the passwords again." ;
+};
 
-    Edit ED_PASSWD_TO_OPEN
-    {
-        HelpId = HID_DLG_PASSWORD_TO_OPEN_MODIFY_PASSWORD_TO_OPEN;
-        Pos = MAP_APPFONT( 6, 28 );
-        Size = MAP_APPFONT( 159, 12 );
-        Border = TRUE ;
-        PassWord = TRUE ;
-    };
+String RID_SVXSTR_INVALID_STATE_FOR_OK_BUTTON
+{
+    Text [ en-US ] = "Please enter a password to open or to modify, or check the open read-only option to continue." ;
+};
 
-    FixedText FT_REENTER_PASSWD_TO_OPEN
-    {
-        Pos = MAP_APPFONT( 6, 45 );
-        Size = MAP_APPFONT( 159, 8 );
-        Text [ en-US ] = "Confirm password";
-        WordBreak = TRUE;
-    };
-
-    Edit ED_REENTER_PASSWD_TO_OPEN
-    {
-        HelpId = HID_DLG_PASSWORD_TO_OPEN_MODIFY_CONFIRM_PASSWORD_TO_OPEN;
-        Pos = MAP_APPFONT( 6, 56 );
-        Size = MAP_APPFONT( 159, 12 );
-        Border = TRUE ;
-        PassWord = TRUE ;
-    };
-
-    FixedText FT_PASSWD_NOTE
-    {
-        Pos = MAP_APPFONT( 6, 80 );
-        Size = MAP_APPFONT( 159, 4*8 );     // some extra space for translation in other languages
-        Text [ en-US ] = "Note: After a password has been set, the document will only open with "\
-                "the password. Should you lose the password, there will be no way to "\
-                "recover the document. Please also note that this password is case-sensitive.";
-        WordBreak = TRUE;
-    };
-
-    FixedLine FL_BUTTONS
-    {
-        Pos = MAP_APPFONT( 0, 117 );
-        Size = MAP_APPFONT( 171, 8 );
-    };
-
-    MoreButton BTN_MORE_FEWER_OPTIONS
-    {
-        HelpId = HID_DLG_PASSWORD_TO_OPEN_MODIFY_MORE;
-        Pos = MAP_APPFONT( 6 , 130 ) ;
-        Size = MAP_APPFONT( 50 , 14 ) ;
-        Delta = 92 ;
-        MapUnit = MAP_APPFONT ;
-        State = FALSE ;
-    };
-
-    OKButton BTN_OK
-    {
-        Pos = MAP_APPFONT( 62, 130 );
-        Size = MAP_APPFONT( 50, 14 );
-        DefButton = TRUE ;
-    };
-
-    CancelButton BTN_CANCEL
-    {
-        Pos = MAP_APPFONT( 115, 130 );
-        Size = MAP_APPFONT( 50, 14 );
-    };
-
-    FixedLine FL_FILE_SHARING_OPTIONS
-    {
-        Pos = MAP_APPFONT( 3, 154 );
-        Size = MAP_APPFONT( 165, 8 );
-        Text [ en-US ] = "File sharing password";
-    };
-
-    CheckBox CB_OPEN_READONLY
-    {
-        HelpId = HID_DLG_PASSWORD_TO_OPEN_MODIFY_FILE_READONLY;
-        Pos = MAP_APPFONT( 6, 170 );
-        Size = MAP_APPFONT( 159, 8 );
-
-        Text [ en-US ] = "Open file read-only";
-    };
-
-    FixedText FT_PASSWD_TO_MODIFY
-    {
-        Pos = MAP_APPFONT( 6, 186 );
-        Size = MAP_APPFONT( 159, 8 );
-        Text [ en-US ] = "Enter password to allow editing";
-        WordBreak = TRUE;
-    };
-
-    Edit ED_PASSWD_TO_MODIFY
-    {
-        HelpId = HID_DLG_PASSWORD_TO_OPEN_MODIFY_PASSWORD_TO_MODIFY;
-        Pos = MAP_APPFONT( 6, 196 );
-        Size = MAP_APPFONT( 159, 12 );
-        Border = TRUE ;
-        PassWord = TRUE ;
-    };
-
-    FixedText FT_REENTER_PASSWD_TO_MODIFY
-    {
-        Pos = MAP_APPFONT( 6, 214 );
-        Size = MAP_APPFONT( 159, 8 );
-        Text [ en-US ] = "Confirm password";
-        WordBreak = TRUE;
-    };
-
-    Edit ED_REENTER_PASSWD_TO_MODIFY
-    {
-        HelpId = HID_DLG_PASSWORD_TO_OPEN_MODIFY_CONFIRM_PASSWORD_TO_MODIFY;
-        Pos = MAP_APPFONT( 6, 224 );
-        Size = MAP_APPFONT( 159, 12 );
-        Border = TRUE ;
-        PassWord = TRUE ;
-    };
-
-    String STR_PASSWD_MUST_BE_CONFIRMED
-    {
-        Text [ en-US ] = "Password must be confirmed" ;
-    };
-
-    String STR_MORE_OPTIONS
-    {
-        Text [ en-US ] = "More ~Options" ;
-    };
-
-    String STR_FEWER_OPTIONS
-    {
-        Text [ en-US ] = "Fewer ~Options" ;
-    };
-
-    String STR_ONE_PASSWORD_MISMATCH
-    {
-        Text [ en-US ] = "The confirmation password did not match the password. Set the password again by entering the same password in both boxes." ;
-    };
-
-    String STR_TWO_PASSWORDS_MISMATCH
-    {
-        Text [ en-US ] = "The confirmation passwords did not match the original passwords. Set the passwords again." ;
-    };
-
-    String STR_INVALID_STATE_FOR_OK_BUTTON
-    {
-        Text [ en-US ] = "Please enter a password to open or to modify, or check the open read-only option to continue." ;
-    };
-
-    // this missing string was detected late - so for 3.4 we just add an english string
-    String STR_INVALID_STATE_FOR_OK_BUTTON_V2
-    {
-        Text = "Set the password by entering the same password in both boxes." ;
-    };
+// this missing string was detected late - so for 3.4 we just add an english string
+String RID_SVXSTR_INVALID_STATE_FOR_OK_BUTTON_V2
+{
+    Text = "Set the password by entering the same password in both boxes." ;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
