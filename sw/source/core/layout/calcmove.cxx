@@ -1266,6 +1266,14 @@ void SwCntntFrm::MakeAll()
             }
 
             (Frm().*fnRect->fnSetWidth)( nNewFrmWidth );
+
+            // When a lower of a vertically aligned fly frame changes it's size we need to recalculate content pos.
+            if( GetUpper() && GetUpper()->IsFlyFrm() &&
+                GetUpper()->GetFmt()->GetTextVertAdjust().GetValue() != SDRTEXTVERTADJUST_TOP )
+            {
+                static_cast<SwFlyFrm*>(GetUpper())->InvalidateContentPos();
+                GetUpper()->SetCompletePaint();
+            }
         }
         if ( !mbValidPrtArea )
         {
@@ -1340,14 +1348,6 @@ void SwCntntFrm::MakeAll()
             if ( nConsequetiveFormatsWithoutChange <= cnStopFormat )
             {
                 Format();
-
-                // When a lower of a vertically aligned fly frame changes it's size we need to recalculate content pos.
-                if( GetUpper() && GetUpper()->IsFlyFrm() &&
-                    GetUpper()->GetFmt()->GetTextVertAdjust().GetValue() != SDRTEXTVERTADJUST_TOP )
-                {
-                    static_cast<SwFlyFrm*>(GetUpper())->InvalidateContentPos();
-                    GetUpper()->SetCompletePaint();
-                }
             }
 #if OSL_DEBUG_LEVEL > 0
             else
