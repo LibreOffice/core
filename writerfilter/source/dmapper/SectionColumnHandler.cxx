@@ -29,13 +29,14 @@ namespace dmapper {
 using namespace ::com::sun::star;
 
 
-SectionColumnHandler::SectionColumnHandler() :
-LoggedProperties(dmapper_logger, "SectionColumnHandler"),
-bEqualWidth( false ),
-nSpace( 0 ),
-nNum( 0 ),
-bSep( false )
+SectionColumnHandler::SectionColumnHandler()
+    : LoggedProperties(dmapper_logger, "SectionColumnHandler")
+    , bEqualWidth(false)
+    , nSpace(0)
+    , nNum(0)
+    , bSep(false)
 {
+    aTempColumn.nWidth = aTempColumn.nSpace = 0;
 }
 
 SectionColumnHandler::~SectionColumnHandler()
