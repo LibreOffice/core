@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
  * This file is part of the LibreOffice project.
  *
@@ -80,5 +81,4 @@ public:
 
 #endif // INCLUDED_VCL_INC_REGIONBAND_HXX
 
-
-//eof
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

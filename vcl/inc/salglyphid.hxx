@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
  * This file is part of the LibreOffice project.
  *
@@ -15,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _SV_SALGLYPHID_HXX
-#define _SV_SALGLYPHID_HXX
+#ifndef INCLUDED_VCL_INC_SALGLYPHID_HXX
+#define INCLUDED_VCL_INC_SALGLYPHID_HXX
 
 // TODO: sal_GlyphId should become a class...
 typedef sal_uInt32 sal_GlyphId;
@@ -41,5 +42,6 @@ typedef sal_uInt32 sal_GlyphId;
 
 #define GF_DROPPED  0xFFFFFFFF
 
-#endif // _SV_SALGLYPHID_HXX
+#endif // INCLUDED_VCL_INC_SALGLYPHID_HXX
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

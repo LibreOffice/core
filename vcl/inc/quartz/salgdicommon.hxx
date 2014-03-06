@@ -90,3 +90,5 @@ private:
 };
 
 #endif // INCLUDED_VCL_INC_QUARTZ_SALGDICOMMON_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */
