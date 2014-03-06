@@ -134,14 +134,6 @@ extended_core_factory_list = core_factory_list + [
 extended_core_constructor_list = core_constructor_list + [
     ]
 
-base_core_factory_list = [
-    ("libdbalo.a", "dba_component_getFactory"),
-    ("libdbaxmllo.a", "dbaxml_component_getFactory"),
-    ]
-
-base_core_constructor_list = [
-    ]
-
 calc_core_factory_list = [
     ("libscdlo.a", "scd_component_getFactory"),
     ("libscfiltlo.a", "scfilt_component_getFactory"),
@@ -170,14 +162,6 @@ draw_core_factory_list = [
 draw_core_constructor_list = [
     ]
 
-math_factory_list = [
-    ("libsmdlo.a", "smd_component_getFactory"),
-    ("libsmlo.a", "sm_component_getFactory"),
-    ]
-
-math_constructor_list = [
-    ]
-
 writer_core_factory_list = [
     ("libswdlo.a", "swd_component_getFactory"),
     ("libswlo.a", "sw_component_getFactory"),
@@ -199,11 +183,9 @@ writer_constructor_list = writer_core_constructor_list + [
 factory_map = {
     'core' : core_factory_list,
     'extended_core' : extended_core_factory_list,
-    'base_core' : base_core_factory_list,
     'calc_core' : calc_core_factory_list,
     'calc' : calc_factory_list,
     'draw_core' : draw_core_factory_list,
-    'math' : math_factory_list,
     'writer_core' : writer_core_factory_list,
     'writer' : writer_factory_list,
     }
@@ -211,11 +193,9 @@ factory_map = {
 constructor_map = {
     'core' : core_constructor_list,
     'extended_core' : extended_core_constructor_list,
-    'base_core' : base_core_constructor_list,
     'calc_core' : calc_core_constructor_list,
     'calc' : calc_constructor_list,
     'draw_core' : draw_core_constructor_list,
-    'math' : math_constructor_list,
     'writer_core' : writer_core_constructor_list,
     'writer' : writer_constructor_list,
     }
