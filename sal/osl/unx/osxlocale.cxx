@@ -96,24 +96,4 @@ int macosx_getLocale(char *locale, sal_uInt32 bufferLen)
 }
 }
 
-
-
-/*
- * macxp_OSXConvertCFEncodingToIANACharSetName
- *
- * Convert a CoreFoundation text encoding to an IANA charset name.
- */
-extern "C" int macxp_OSXConvertCFEncodingToIANACharSetName( char *buffer, unsigned int bufferLen, CFStringEncoding cfEncoding )
-{
-    CFStringRef sCFEncodingName;
-
-    sCFEncodingName = CFStringConvertEncodingToIANACharSetName( cfEncoding );
-    CFStringGetCString( sCFEncodingName, buffer, bufferLen, cfEncoding );
-
-    if ( sCFEncodingName )
-        CFRelease( sCFEncodingName );
-
-    return( noErr );
-}
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
