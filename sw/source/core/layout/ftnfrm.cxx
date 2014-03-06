@@ -2559,8 +2559,16 @@ sal_Bool SwLayoutFrm::MoveLowerFtns( SwCntntFrm *pStart, SwFtnBossFrm *pOldBoss,
     SwFtnFrms *pFtnArr;
     SwLayoutFrm* pNewChief = 0;
     SwLayoutFrm* pOldChief = 0;
-    if( pStart && pOldBoss->IsInSct() && ( pOldChief = pOldBoss->FindSctFrm() )
-        != ( pNewChief = pNewBoss->FindSctFrm() ) )
+
+    bool bFoundCandidate = false;
+    if (pStart && pOldBoss->IsInSct())
+    {
+        pOldChief = pOldBoss->FindSctFrm();
+        pNewChief = pNewBoss->FindSctFrm();
+        bFoundCandidate = pOldChief != pNewChief;
+    }
+
+    if (bFoundCandidate)
     {
         pFtnArr = new SwFtnFrms;
         pOldChief = pOldBoss->FindFtnBossFrm( sal_True );
