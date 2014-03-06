@@ -61,7 +61,7 @@ struct Listener : public ::cppu::WeakImplHelper1<io::XStreamListener>
     virtual void SAL_CALL started() throw() SAL_OVERRIDE { m_bDone = false; }
     virtual void SAL_CALL closed() throw() SAL_OVERRIDE { m_bDone = true; }
     virtual void SAL_CALL terminated() throw() SAL_OVERRIDE { m_bDone = true; }
-    virtual void SAL_CALL error(const uno::Any& e) throw() SAL_OVERRIDE
+    virtual void SAL_CALL error(const uno::Any& e) throw(uno::RuntimeException, std::exception) SAL_OVERRIDE
     {
         m_bDone = true; // set on error too, otherwise main thread waits forever
         SAL_WARN("filter.xslt", "exception " << e);
