@@ -347,17 +347,7 @@ private:
     OUString maText;
     uno::Any maTrans;
     BitmapEx maBitmap;
-};
-
-class DummyFormattedText : public DummyXShape
-{
-public:
-    DummyFormattedText(uno::Sequence< uno::Reference<
-        chart2::XFormattedString > >& rFormattedString);
-
-private:
-    com::sun::star::uno::Sequence< com::sun::star::uno::Reference<
-        chart2::XFormattedString > > maFormattedString;
+    double mnRotation;
 };
 
 class DummyXShapes : public DummyXShape, public com::sun::star::drawing::XShapes

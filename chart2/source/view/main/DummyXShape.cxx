@@ -900,12 +900,6 @@ void DummyText::setTransformatAsProperty(const drawing::HomogenMatrix3& rMatrix)
     setPropertyValue("Transformation", aNewTrans);
 }
 
-DummyFormattedText::DummyFormattedText(uno::Sequence< uno::Reference<
-        chart2::XFormattedString > >& rFormattedString):
-    maFormattedString(rFormattedString)
-{
-}
-
 DummyGroup3D::DummyGroup3D(const OUString& rName)
 {
     setName(rName);
