@@ -76,6 +76,8 @@ KeyCode::KeyCode( KeyFuncType eFunction )
 
 
 KeyCode::KeyCode( const ResId& rResId )
+    : nCode(0)
+    , eFunc(KEYFUNC_DONTKNOW)
 {
     rResId.SetRT( RSC_KEYCODE );
 
