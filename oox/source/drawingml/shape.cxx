@@ -694,7 +694,7 @@ Reference< XShape > Shape::createAndInsert(
                 }
                 if (aShapeProps.hasProperty(PROP_FillBitmapName))
                 {
-                    uno::Any aAny = aShapeProps[PROP_FillBitmapName];
+                    uno::Any aAny = aShapeProps.getProperty(PROP_FillBitmapName);
                     aShapeProps.setProperty(PROP_BackGraphicURL, rFilterBase.getModelObjectHelper().getFillBitmapUrl( aAny.get<OUString>() ));
                     // aShapeProps.erase(PROP_FillBitmapName);  // Maybe, leave the name as well
                 }
