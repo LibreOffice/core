@@ -113,7 +113,7 @@ struct PrintProperties
 #if ENABLE_DEBUG_PROPERTIES
     void operator()(const std::pair<OUString, uno::Any>& rProp)
     {
-        SAL_WARN("chart2.opengl", "Property: " << rProp.first);
+        SAL_INFO("chart2.opengl.properties", "Property: " << rProp.first);
     }
 #else
     void operator()(const std::pair<OUString, uno::Any>&)
@@ -186,18 +186,18 @@ void SAL_CALL DummyXShape::setPropertyValue( const OUString& rName, const uno::A
             lang::IllegalArgumentException, lang::WrappedTargetException,
             uno::RuntimeException, std::exception)
 {
-    SAL_WARN("chart2", "DummyXShape::setProperty: " << rName << " " << "Any");
+    SAL_INFO("chart2", "DummyXShape::setProperty: " << rName << " " << "Any");
     maProperties[rName] = rValue;
     if(rName == "Transformation")
     {
-        SAL_WARN("chart2.opengl", "Transformation");
+        SAL_INFO("chart2.opengl", "Transformation");
     }
 }
 
 uno::Any SAL_CALL DummyXShape::getPropertyValue( const OUString& rName )
     throw(beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException, std::exception)
 {
-    SAL_WARN("chart2.opengl", "DummyXShape::getPropertyValue: " << rName);
+    SAL_INFO("chart2.opengl", "DummyXShape::getPropertyValue: " << rName);
     std::map<OUString, uno::Any>::iterator itr = maProperties.find(rName);
     if(itr != maProperties.end())
         return itr->second;
@@ -393,7 +393,7 @@ DummyPieSegment2D::DummyPieSegment2D(double fUnitCircleStartAngleDegree, double 
 
 void DummyPieSegment2D::render()
 {
-    SAL_WARN("chart2.opengl", "render DummyPieSegment2D");
+    SAL_INFO("chart2.opengl", "render DummyPieSegment2D");
     DummyChart* pChart = getRootShape();
 
     while(mfUnitCircleWidthAngleDegree>360)
@@ -450,7 +450,7 @@ DummyArea2D::DummyArea2D(const drawing::PointSequenceSequence& rShape):
 
 void DummyArea2D::render()
 {
-    SAL_WARN("chart2.opengl", "render DummyArea2D");
+    SAL_INFO("chart2.opengl", "render DummyArea2D");
     DummyChart* pChart = getRootShape();
     sal_Int32 nPointssCount = maShapes.getLength();
     for(sal_Int32 i = 0; i < nPointssCount; i++)
@@ -502,7 +502,7 @@ DummyCircle::DummyCircle(const awt::Point& rPos, const awt::Size& rSize)
 
 void DummyCircle::render()
 {
-    SAL_WARN("chart2.opengl", "render DummyCircle");
+    SAL_INFO("chart2.opengl", "render DummyCircle");
     debugProperties(maProperties);
     DummyChart* pChart = getRootShape();
 
@@ -581,7 +581,7 @@ DummyLine2D::DummyLine2D(const awt::Size& rSize, const awt::Point& rPosition)
 
 void DummyLine2D::render()
 {
-    SAL_WARN("chart2.opengl", "rendering line 2D");
+    SAL_INFO("chart2.opengl", "rendering line 2D");
     debugProperties(maProperties);
     DummyChart* pChart = getRootShape();
 
@@ -631,7 +631,7 @@ void DummyLine2D::render()
         sal_Int32 nWidth = cow.get<sal_Int32>();
         pChart->m_GLRender.SetLine2DWidth(nWidth);
 
-        SAL_WARN("chart2.opengl", "width = " << nWidth);
+        SAL_INFO("chart2.opengl", "width = " << nWidth);
     }
     else
         SAL_WARN("chart2.opengl", "no line width set");
@@ -671,7 +671,7 @@ DummyRectangle::DummyRectangle(const awt::Size& rSize, const awt::Point& rPoint,
 
 void DummyRectangle::render()
 {
-    SAL_WARN("chart2.opengl", "render DummyRectangle");
+    SAL_INFO("chart2.opengl", "render DummyRectangle");
     debugProperties(maProperties);
     DummyChart* pChart = getRootShape();
     std::map< OUString, uno::Any >::const_iterator itr = maProperties.find("Invisible");
@@ -838,7 +838,7 @@ DummyText::DummyText(const OUString& rText, const tNameSequence& rNames,
 
 void DummyText::render()
 {
-    SAL_WARN("chart2.opengl", "render DummyText");
+    SAL_INFO("chart2.opengl", "render DummyText");
     debugProperties(maProperties);
 
     DummyChart* pChart = getRootShape();
@@ -848,7 +848,7 @@ void DummyText::render()
         maProperties.find("Transformation");
     if(itr != maProperties.end())
     {
-        SAL_WARN("chart2.opengl", "found a transformation");
+        SAL_INFO("chart2.opengl", "found a transformation");
         if(itr->second.hasValue())
         {
             aTransformation = itr->second.get<drawing::HomogenMatrix3>();
@@ -868,8 +868,7 @@ void SAL_CALL DummyText::setPropertyValue( const OUString& rName, const uno::Any
             lang::IllegalArgumentException, lang::WrappedTargetException,
             uno::RuntimeException, std::exception)
 {
-    SAL_WARN("chart2.opengl", "property value set after image has been created");
-    SAL_WARN("chart2.opengl", rName);
+    SAL_INFO("chart2.opengl", "property value set after image has been created");
     DummyXShape::setPropertyValue(rName, rValue);
 }
 
@@ -1085,7 +1084,7 @@ uno::Any SAL_CALL DummyXShapes::getByIndex(sal_Int32 nIndex)
 
 void DummyXShapes::render()
 {
-    SAL_WARN("chart2.opengl", "render DummyShapes");
+    SAL_INFO("chart2.opengl", "render DummyShapes");
     for(std::vector<DummyXShape*>::iterator itr = maShapes.begin(),
             itrEnd = maShapes.end(); itr != itrEnd; ++itr)
     {
@@ -1338,7 +1337,7 @@ debug_callback(GLenum source, GLenum type, GLuint id,
 
 bool DummyChart::initOpengl()
 {
-    SAL_WARN("chart2.opengl", "DummyChart::initOpengl----start");
+    SAL_INFO("chart2.opengl", "DummyChart::initOpengl----start");
     initWindow();
     mpWindow->setPosSizePixel(0,0,0,0);
     GLWin.Width = 0;
@@ -1482,8 +1481,7 @@ bool DummyChart::initOpengl()
     glMaterialfv(GL_FRONT,GL_DIFFUSE,materialDiffuse);
     glEnable(GL_LIGHT0);
     glEnable(GL_NORMALIZE);
-    SAL_WARN("chart2.opengl", "DummyChart::initOpengl----end");
-//    mpWindow->Show(1, 1);
+    SAL_INFO("chart2.opengl", "DummyChart::initOpengl----end");
     return true;
 }
 
@@ -1492,7 +1490,7 @@ DummyChart::DummyChart(uno::Reference< drawing::XShape > xTarget):
     mpWindow(new Window(0, WB_NOBORDER|WB_NODIALOGCONTROL)),
     m_GLRender(xTarget)
 {
-    SAL_WARN("chart2.opengl", "DummyXShape::DummyChart()-----test: ");
+    SAL_INFO("chart2.opengl", "DummyXShape::DummyChart()-----test: ");
     setName("com.sun.star.chart2.shapes");
     createGLContext();
 }
@@ -1527,7 +1525,7 @@ void SAL_CALL DummyChart::setSize( const awt::Size& aSize )
 
 void DummyChart::render()
 {
-    SAL_WARN("chart2.opengl", "render chart");
+    SAL_INFO("chart2.opengl", "render chart");
     m_GLRender.prepareToRender();
 #if 0
     m_GLRender.renderDebug();
