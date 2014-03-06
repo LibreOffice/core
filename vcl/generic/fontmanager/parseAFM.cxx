@@ -925,7 +925,7 @@ static int parseTrackKernData( FileInputStream* fp, FontInfo* fi)
             switch(recognize(keyword,tokenlen))
             {
                 case COMMENT:
-                    keyword = linetoken(fp);
+                    linetoken(fp); /*eat token*/
                     break;
                 case TRACKKERN:
                     if (!(tcount < fi->numOfTracks))
