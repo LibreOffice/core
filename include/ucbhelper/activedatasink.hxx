@@ -20,16 +20,12 @@
 #ifndef INCLUDED_UCBHELPER_ACTIVEDATASINK_HXX
 #define INCLUDED_UCBHELPER_ACTIVEDATASINK_HXX
 
-#include <com/sun/star/lang/XTypeProvider.hpp>
 #include <com/sun/star/io/XActiveDataSink.hpp>
-#include <cppuhelper/weak.hxx>
-#include <ucbhelper/macros.hxx>
 #include <ucbhelper/ucbhelperdllapi.h>
+#include <cppuhelper/implbase1.hxx>
 
 namespace ucbhelper
 {
-
-
 
 /**
   * This class implements the interface com::sun::star::io::XActiveDataSink.
@@ -37,34 +33,18 @@ namespace ucbhelper
   * "open" command.
   */
 
-class UCBHELPER_DLLPUBLIC ActiveDataSink : public cppu::OWeakObject,
-                       public com::sun::star::lang::XTypeProvider,
-                       public com::sun::star::io::XActiveDataSink
+class UCBHELPER_DLLPUBLIC ActiveDataSink :
+        public cppu::WeakImplHelper1< css::io::XActiveDataSink >
 {
-    com::sun::star::uno::Reference<
-        com::sun::star::io::XInputStream > m_xStream;
+    css::uno::Reference< css::io::XInputStream > m_xStream;
 
 public:
-    // XInterface
-    virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType )
-        throw( css::uno::RuntimeException, std::exception );
-    virtual void SAL_CALL acquire()
-        throw();
-    virtual void SAL_CALL release()
-        throw();
-
-    // XTypeProvider
-    XTYPEPROVIDER_DECL()
-
     // XActiveDataSink methods.
-    virtual void SAL_CALL
-    setInputStream( const com::sun::star::uno::Reference<
-                            com::sun::star::io::XInputStream >& aStream )
-        throw( com::sun::star::uno::RuntimeException, std::exception );
-    virtual com::sun::star::uno::Reference<
-        com::sun::star::io::XInputStream > SAL_CALL
-    getInputStream()
-        throw( com::sun::star::uno::RuntimeException, std::exception );
+    virtual void SAL_CALL setInputStream( const css::uno::Reference< css::io::XInputStream >& aStream )
+        throw( css::uno::RuntimeException, std::exception );
+
+    virtual css::uno::Reference< css::io::XInputStream > SAL_CALL getInputStream()
+        throw( css::uno::RuntimeException, std::exception );
 };
 
 } /* namespace ucbhelper */
