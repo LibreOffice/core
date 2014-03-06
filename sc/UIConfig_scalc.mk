@@ -63,6 +63,7 @@ $(eval $(call gb_UIConfig_add_uifiles,modules/scalc,\
 	sc/uiconfig/scalc/ui/advancedfilterdialog \
 	sc/uiconfig/scalc/ui/allheaderfooterdialog \
 	sc/uiconfig/scalc/ui/analysisofvariancedialog \
+	sc/uiconfig/scalc/ui/autoformattable \
 	sc/uiconfig/scalc/ui/cellprotectionpage \
 	sc/uiconfig/scalc/ui/changesourcedialog \
 	sc/uiconfig/scalc/ui/chardialog \

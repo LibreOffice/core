@@ -970,8 +970,20 @@
 #define STR_WRONGROWCOL         (STR_START + 418)
 #define STR_NOCOLFORMULA        (STR_START + 419)
 #define STR_NOROWFORMULA        (STR_START + 420)
-
-#define STR_END                 (STR_NOROWFORMULA)
+#define STR_ADD_AUTOFORMAT_TITLE (STR_START + 421)
+#define STR_RENAME_AUTOFORMAT_TITLE (STR_START + 422)
+#define STR_ADD_AUTOFORMAT_LABEL (STR_START + 423)
+#define STR_DEL_AUTOFORMAT_TITLE (STR_START + 424)
+#define STR_DEL_AUTOFORMAT_MSG  (STR_START + 425)
+#define STR_BTN_AUTOFORMAT_CLOSE (STR_START + 426)
+#define STR_JAN                 (STR_START + 427)
+#define STR_FEB                 (STR_START + 428)
+#define STR_MAR                 (STR_START + 429)
+#define STR_NORTH               (STR_START + 430)
+#define STR_MID                 (STR_START + 431)
+#define STR_SOUTH               (STR_START + 432)
+#define STR_SUM                 (STR_START + 433)
+#define STR_END                 (STR_SUM)
 
 #define BMP_START               (STR_END)
 
@@ -1005,7 +1017,6 @@
 #define RID_SCDLG_INSCELL       (SC_DIALOGS_START + 12)
 
 #define RID_SCDLG_SELENTRY      (SC_DIALOGS_START + 18)
-#define RID_SCDLG_AUTOFORMAT    (SC_DIALOGS_START + 20)
 #define RID_SCDLG_NAMES         (SC_DIALOGS_START + 22)
 #define RID_SCDLG_DBNAMES       (SC_DIALOGS_START + 23)
 #define RID_SCDLG_SOLVER        (SC_DIALOGS_START + 26)

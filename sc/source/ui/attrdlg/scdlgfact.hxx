@@ -401,11 +401,10 @@ public:
 
     virtual AbstractScTextImportOptionsDlg * CreateScTextImportOptionsDlg(Window* pParent);
 
-    virtual     AbstractScAutoFormatDlg * CreateScAutoFormatDlg( Window*                    pParent,
-                                                                ScAutoFormat*               pAutoFormat,
-                                                                const ScAutoFormatData*    pSelFormatData,
-                                                                ScDocument*                pDoc,
-                                                                int nId);
+    virtual     AbstractScAutoFormatDlg * CreateScAutoFormatDlg(Window* pParent,
+                                                                ScAutoFormat* pAutoFormat,
+                                                                const ScAutoFormatData* pSelFormatData,
+                                                                ScViewData *pViewData);
     virtual AbstractScColRowLabelDlg * CreateScColRowLabelDlg (Window* pParent,
                                                                 bool bCol = false,
                                                                 bool bRow = false);

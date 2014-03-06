@@ -616,25 +616,13 @@ AbstractScTextImportOptionsDlg * ScAbstractDialogFactory_Impl::CreateScTextImpor
     return new AbstractScTextImportOptionsDlg_Impl(pDlg);
 }
 
-AbstractScAutoFormatDlg * ScAbstractDialogFactory_Impl::CreateScAutoFormatDlg( Window*                  pParent,
-                                                                ScAutoFormat*               pAutoFormat,
-                                                                const ScAutoFormatData*    pSelFormatData,
-                                                                ScDocument*                pDoc,
-                                                                int nId)
+AbstractScAutoFormatDlg * ScAbstractDialogFactory_Impl::CreateScAutoFormatDlg(Window* pParent,
+                                                                ScAutoFormat* pAutoFormat,
+                                                                const ScAutoFormatData* pSelFormatData,
+                                                                ScViewData *pViewData)
 {
-    ScAutoFormatDlg* pDlg=NULL;
-    switch ( nId )
-    {
-        case RID_SCDLG_AUTOFORMAT :
-            pDlg = new ScAutoFormatDlg( pParent, pAutoFormat,pSelFormatData, pDoc );
-            break;
-        default:
-            break;
-    }
-
-    if ( pDlg )
-        return new AbstractScAutoFormatDlg_Impl( pDlg );
-    return 0;
+    ScAutoFormatDlg* pDlg = new ScAutoFormatDlg(pParent, pAutoFormat, pSelFormatData, pViewData);
+    return new AbstractScAutoFormatDlg_Impl(pDlg);
 }
 
 AbstractScColRowLabelDlg *  ScAbstractDialogFactory_Impl::CreateScColRowLabelDlg(Window* pParent,

@@ -332,11 +332,10 @@ public:
 
     virtual     AbstractScTextImportOptionsDlg * CreateScTextImportOptionsDlg(Window* pParent) = 0;
 
-    virtual     AbstractScAutoFormatDlg * CreateScAutoFormatDlg( Window*                    pParent,
-                                                                ScAutoFormat*               pAutoFormat,
-                                                                const ScAutoFormatData*    pSelFormatData,
-                                                                ScDocument*                pDoc,
-                                                                int nId) = 0;
+    virtual     AbstractScAutoFormatDlg * CreateScAutoFormatDlg(Window* pParent,
+                                                                ScAutoFormat* pAutoFormat,
+                                                                const ScAutoFormatData* pSelFormatData,
+                                                                ScViewData *pViewData) = 0;
     virtual AbstractScColRowLabelDlg * CreateScColRowLabelDlg (Window* pParent,
                                                                 bool bCol = false,
                                                                 bool bRow = false) = 0;

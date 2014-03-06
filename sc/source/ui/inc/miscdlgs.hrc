@@ -21,7 +21,6 @@
                     // -> RID_SCDLG_MOVETAB
                     // -> RID_SCDLG_SELENTRY
                     // -> RID_SCDLG_FILLSERIES
-                    // -> RID_SCDLG_AUTOFORMAT
 
 // General
 #define BTN_OK          100
@@ -41,32 +40,6 @@
 // Selection from a (String-)ListBox
 #define FL_ENTRYLIST    10
 #define LB_ENTRYLIST    11
-
-// Auto format
-#define LB_FORMAT           1
-#define FL_FORMAT           9
-#define WND_PREVIEW         19
-#define BTN_NUMFORMAT       20
-#define BTN_BORDER          21
-#define BTN_FONT            23
-#define BTN_PATTERN         24
-#define BTN_ALIGNMENT       25
-#define BTN_ADJUST          26
-#define BTN_RENAME          27
-#define FL_FORMATTING       29
-#define STR_ADD_TITLE       100
-#define STR_ADD_LABEL       101
-#define STR_DEL_TITLE       102
-#define STR_DEL_MSG         103
-#define STR_RENAME_TITLE    104
-    // Auto format Preview:
-#define STR_JAN         121
-#define STR_FEB         122
-#define STR_MAR         123
-#define STR_NORTH       124
-#define STR_MID         125
-#define STR_SOUTH       126
-#define STR_SUM         127
 
 // Set/Reset Grouping:
 #define BTN_GROUP_COLS  1

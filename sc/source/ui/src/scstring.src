@@ -106,8 +106,6 @@ String SCSTR_AUDITSHELL
     Text [ en-US ] = "Detective Fill Mode" ;
 };
 
-
-
 String STR_ROWHEIGHT
 {
     Text [ en-US ] = "Height" ;
@@ -898,6 +896,71 @@ String STR_NOCOLFORMULA
 String STR_NOROWFORMULA
 {
     Text [ en-US ] = "Formulas don't form a row." ;
+};
+
+String STR_ADD_AUTOFORMAT_TITLE
+{
+    Text [ en-US ] = "Add AutoFormat" ;
+};
+
+String STR_RENAME_AUTOFORMAT_TITLE
+{
+    Text [ en-US ] = "Rename AutoFormat" ;
+};
+
+String STR_ADD_AUTOFORMAT_LABEL
+{
+    Text [ en-US ] = "Name" ;
+};
+
+String STR_DEL_AUTOFORMAT_TITLE
+{
+    Text [ en-US ] = "Delete AutoFormat" ;
+};
+
+String STR_DEL_AUTOFORMAT_MSG
+{
+    Text [ en-US ] = "Do you really want to delete the # AutoFomat?" ;
+};
+
+String STR_BTN_AUTOFORMAT_CLOSE
+{
+    Text [ en-US ] = "~Close" ;
+};
+
+String STR_JAN
+{
+    Text [ en-US ] = "Jan" ;
+};
+
+String STR_FEB
+{
+    Text [ en-US ] = "Feb" ;
+};
+
+String STR_MAR
+{
+    Text [ en-US ] = "Mar" ;
+};
+
+String STR_NORTH
+{
+    Text [ en-US ] = "North" ;
+};
+
+String STR_MID
+{
+    Text [ en-US ] = "Mid" ;
+};
+
+String STR_SOUTH
+{
+    Text [ en-US ] = "South" ;
+};
+
+String STR_SUM
+{
+    Text [ en-US ] = "Total" ;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

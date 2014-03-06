@@ -23,33 +23,28 @@
 class ScAutoFormatDlg : public ModalDialog
 {
 public:
-            ScAutoFormatDlg( Window*                    pParent,
-                             ScAutoFormat*              pAutoFormat,
-                             const ScAutoFormatData*    pSelFormatData,
-                             ScDocument*                pDoc );
-            ~ScAutoFormatDlg();
+    ScAutoFormatDlg(Window* pParent,
+                    ScAutoFormat* pAutoFormat,
+                    const ScAutoFormatData* pSelFormatData,
+                    ScViewData *pViewData);
 
     sal_uInt16 GetIndex() const { return nIndex; }
     OUString GetCurrFormatName();
 
 private:
-    FixedLine       aFlFormat;
-    ListBox         aLbFormat;
-    ScAutoFmtPreview*   pWndPreview;
-    OKButton        aBtnOk;
-    CancelButton    aBtnCancel;
-    HelpButton      aBtnHelp;
-    PushButton      aBtnAdd;
-    PushButton      aBtnRemove;
-    MoreButton      aBtnMore;
-    FixedLine       aFlFormatting;
-    CheckBox        aBtnNumFormat;
-    CheckBox        aBtnBorder;
-    CheckBox        aBtnFont;
-    CheckBox        aBtnPattern;
-    CheckBox        aBtnAlignment;
-    CheckBox        aBtnAdjust;
-    PushButton      aBtnRename;
+    ListBox*        m_pLbFormat;
+    ScAutoFmtPreview* m_pWndPreview;
+    OKButton*       m_pBtnOk;
+    CancelButton*   m_pBtnCancel;
+    PushButton*     m_pBtnAdd;
+    PushButton*     m_pBtnRemove;
+    PushButton*     m_pBtnRename;
+    CheckBox*       m_pBtnNumFormat;
+    CheckBox*       m_pBtnBorder;
+    CheckBox*       m_pBtnFont;
+    CheckBox*       m_pBtnPattern;
+    CheckBox*       m_pBtnAlignment;
+    CheckBox*       m_pBtnAdjust;
     OUString        aStrTitle;
     OUString        aStrLabel;
     OUString        aStrClose;

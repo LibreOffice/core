@@ -56,117 +56,92 @@
 
 // AutoFormat-Dialog:
 
-ScAutoFormatDlg::ScAutoFormatDlg( Window*                   pParent,
-                                  ScAutoFormat*             pAutoFormat,
-                                  const ScAutoFormatData*   pSelFormatData,
-                                  ScDocument*               pDoc ) :
-
-    ModalDialog     ( pParent, ScResId( RID_SCDLG_AUTOFORMAT ) ),
-
-    aFlFormat       ( this, ScResId( FL_FORMAT ) ),
-    aLbFormat       ( this, ScResId( LB_FORMAT ) ),
-    pWndPreview     ( new ScAutoFmtPreview( this, ScResId( WND_PREVIEW ), pDoc ) ),
-    aBtnOk          ( this, ScResId( BTN_OK ) ),
-    aBtnCancel      ( this, ScResId( BTN_CANCEL ) ),
-    aBtnHelp        ( this, ScResId( BTN_HELP ) ),
-    aBtnAdd         ( this, ScResId( BTN_ADD ) ),
-    aBtnRemove      ( this, ScResId( BTN_REMOVE ) ),
-    aBtnMore        ( this, ScResId( BTN_MORE ) ),
-    aFlFormatting   ( this, ScResId( FL_FORMATTING ) ),
-    aBtnNumFormat   ( this, ScResId( BTN_NUMFORMAT ) ),
-    aBtnBorder      ( this, ScResId( BTN_BORDER ) ),
-    aBtnFont        ( this, ScResId( BTN_FONT ) ),
-    aBtnPattern     ( this, ScResId( BTN_PATTERN ) ),
-    aBtnAlignment   ( this, ScResId( BTN_ALIGNMENT ) ),
-    aBtnAdjust      ( this, ScResId( BTN_ADJUST ) ),
-    aBtnRename      ( this, ScResId( BTN_RENAME ) ),
-    aStrTitle       ( ScResId( STR_ADD_TITLE ) ),
-    aStrLabel       ( ScResId( STR_ADD_LABEL ) ),
-    aStrClose       ( ScResId( STR_BTN_CLOSE ) ),
-    aStrDelTitle    ( ScResId( STR_DEL_TITLE ) ),
-    aStrDelMsg      ( ScResId( STR_DEL_MSG ) ) ,
-    aStrRename      ( ScResId( STR_RENAME_TITLE ) ),
-
-    pFormat         ( pAutoFormat ),
-    pSelFmtData     ( pSelFormatData ),
-    nIndex          ( 0 ),
-    bCoreDataChanged( false ),
-    bFmtInserted    ( false )
+ScAutoFormatDlg::ScAutoFormatDlg(Window* pParent,
+    ScAutoFormat* pAutoFormat,
+    const ScAutoFormatData* pSelFormatData,
+    ScViewData *pViewData)
+    : ModalDialog(pParent, "AutoFormatTableDialog",
+        "modules/scalc/ui/autoformattable.ui")
+    , aStrTitle(ScResId(STR_ADD_AUTOFORMAT_TITLE))
+    , aStrLabel(ScResId(STR_ADD_AUTOFORMAT_LABEL))
+    , aStrClose(ScResId(STR_BTN_AUTOFORMAT_CLOSE))
+    , aStrDelTitle(ScResId(STR_DEL_AUTOFORMAT_TITLE))
+    , aStrDelMsg(ScResId(STR_DEL_AUTOFORMAT_MSG))
+    , aStrRename(ScResId(STR_RENAME_AUTOFORMAT_TITLE))
+    , pFormat(pAutoFormat)
+    , pSelFmtData(pSelFormatData)
+    , nIndex(0)
+    , bCoreDataChanged(false)
+    , bFmtInserted(false)
 {
+    get(m_pLbFormat, "formatlb");
+    get(m_pWndPreview, "preview");
+    m_pWndPreview->DetectRTL(pViewData);
+    get(m_pBtnOk, "ok");
+    get(m_pBtnCancel, "cancel");
+    get(m_pBtnAdd, "add");
+    get(m_pBtnRemove, "remove");
+    get(m_pBtnRename, "rename");
+    get(m_pBtnNumFormat, "numformatcb");
+    get(m_pBtnBorder, "bordercb");
+    get(m_pBtnFont, "fontcb");
+    get(m_pBtnPattern, "patterncb");
+    get(m_pBtnAlignment, "alignmentcb");
+    get(m_pBtnAdjust, "autofitcb");
+
     Init();
     ScAutoFormat::iterator it = pFormat->begin();
-    pWndPreview->NotifyChange(it->second);
-    FreeResource();
+    m_pWndPreview->NotifyChange(it->second);
 }
-
-
-
-ScAutoFormatDlg::~ScAutoFormatDlg()
-{
-    delete pWndPreview;
-}
-
-
 
 void ScAutoFormatDlg::Init()
 {
-    aLbFormat    .SetSelectHdl( LINK( this, ScAutoFormatDlg, SelFmtHdl ) );
-    aBtnNumFormat.SetClickHdl ( LINK( this, ScAutoFormatDlg, CheckHdl ) );
-    aBtnBorder   .SetClickHdl ( LINK( this, ScAutoFormatDlg, CheckHdl ) );
-    aBtnFont     .SetClickHdl ( LINK( this, ScAutoFormatDlg, CheckHdl ) );
-    aBtnPattern  .SetClickHdl ( LINK( this, ScAutoFormatDlg, CheckHdl ) );
-    aBtnAlignment.SetClickHdl ( LINK( this, ScAutoFormatDlg, CheckHdl ) );
-    aBtnAdjust   .SetClickHdl ( LINK( this, ScAutoFormatDlg, CheckHdl ) );
-    aBtnAdd      .SetClickHdl ( LINK( this, ScAutoFormatDlg, AddHdl ) );
-    aBtnRemove   .SetClickHdl ( LINK( this, ScAutoFormatDlg, RemoveHdl ) );
-    aBtnOk       .SetClickHdl ( LINK( this, ScAutoFormatDlg, CloseHdl ) );
-    aBtnCancel   .SetClickHdl ( LINK( this, ScAutoFormatDlg, CloseHdl ) );
-    aBtnRename   .SetClickHdl ( LINK( this, ScAutoFormatDlg, RenameHdl ) );
-    aLbFormat    .SetDoubleClickHdl( LINK( this, ScAutoFormatDlg, DblClkHdl ) );
-
-    aBtnMore.AddWindow( &aBtnRename );
-    aBtnMore.AddWindow( &aBtnNumFormat );
-    aBtnMore.AddWindow( &aBtnBorder );
-    aBtnMore.AddWindow( &aBtnFont );
-    aBtnMore.AddWindow( &aBtnPattern );
-    aBtnMore.AddWindow( &aBtnAlignment );
-    aBtnMore.AddWindow( &aBtnAdjust );
-    aBtnMore.AddWindow( &aFlFormatting );
+    m_pLbFormat->SetSelectHdl( LINK( this, ScAutoFormatDlg, SelFmtHdl ) );
+    m_pBtnNumFormat->SetClickHdl ( LINK( this, ScAutoFormatDlg, CheckHdl ) );
+    m_pBtnBorder->SetClickHdl ( LINK( this, ScAutoFormatDlg, CheckHdl ) );
+    m_pBtnFont->SetClickHdl ( LINK( this, ScAutoFormatDlg, CheckHdl ) );
+    m_pBtnPattern->SetClickHdl ( LINK( this, ScAutoFormatDlg, CheckHdl ) );
+    m_pBtnAlignment->SetClickHdl ( LINK( this, ScAutoFormatDlg, CheckHdl ) );
+    m_pBtnAdjust->SetClickHdl ( LINK( this, ScAutoFormatDlg, CheckHdl ) );
+    m_pBtnAdd->SetClickHdl ( LINK( this, ScAutoFormatDlg, AddHdl ) );
+    m_pBtnRemove->SetClickHdl ( LINK( this, ScAutoFormatDlg, RemoveHdl ) );
+    m_pBtnOk->SetClickHdl ( LINK( this, ScAutoFormatDlg, CloseHdl ) );
+    m_pBtnCancel->SetClickHdl ( LINK( this, ScAutoFormatDlg, CloseHdl ) );
+    m_pBtnRename->SetClickHdl ( LINK( this, ScAutoFormatDlg, RenameHdl ) );
+    m_pLbFormat->SetDoubleClickHdl( LINK( this, ScAutoFormatDlg, DblClkHdl ) );
 
     ScAutoFormat::const_iterator it = pFormat->begin(), itEnd = pFormat->end();
     for (; it != itEnd; ++it)
-        aLbFormat.InsertEntry(it->second->GetName());
+        m_pLbFormat->InsertEntry(it->second->GetName());
 
     if (pFormat->size() == 1)
-        aBtnRemove.Disable();
+        m_pBtnRemove->Disable();
 
-    aLbFormat.SelectEntryPos( 0 );
-    aBtnRename.Disable();
-    aBtnRemove.Disable();
+    m_pLbFormat->SelectEntryPos( 0 );
+    m_pBtnRename->Disable();
+    m_pBtnRemove->Disable();
 
     nIndex = 0;
     UpdateChecks();
 
     if ( !pSelFmtData )
     {
-        aBtnAdd.Disable();
-        aBtnRemove.Disable();
+        m_pBtnAdd->Disable();
+        m_pBtnRemove->Disable();
         bFmtInserted = true;
     }
 }
-
-
 
 void ScAutoFormatDlg::UpdateChecks()
 {
     const ScAutoFormatData* pData = pFormat->findByIndex(nIndex);
 
-    aBtnNumFormat.Check( pData->GetIncludeValueFormat() );
-    aBtnBorder   .Check( pData->GetIncludeFrame() );
-    aBtnFont     .Check( pData->GetIncludeFont() );
-    aBtnPattern  .Check( pData->GetIncludeBackground() );
-    aBtnAlignment.Check( pData->GetIncludeJustify() );
-    aBtnAdjust   .Check( pData->GetIncludeWidthHeight() );
+    m_pBtnNumFormat->Check( pData->GetIncludeValueFormat() );
+    m_pBtnBorder->Check( pData->GetIncludeFrame() );
+    m_pBtnFont->Check( pData->GetIncludeFont() );
+    m_pBtnPattern->Check( pData->GetIncludeBackground() );
+    m_pBtnAlignment->Check( pData->GetIncludeJustify() );
+    m_pBtnAdjust->Check( pData->GetIncludeWidthHeight() );
 }
 
 
@@ -175,12 +150,12 @@ void ScAutoFormatDlg::UpdateChecks()
 
 IMPL_LINK( ScAutoFormatDlg, CloseHdl, PushButton *, pBtn )
 {
-    if ( pBtn == &aBtnOk || pBtn == &aBtnCancel )
+    if (pBtn == m_pBtnOk || pBtn == m_pBtnCancel)
     {
         if ( bCoreDataChanged )
             ScGlobal::GetOrCreateAutoFormat()->Save();
 
-        EndDialog( (pBtn == &aBtnOk) ? RET_OK : RET_CANCEL );
+        EndDialog( (pBtn == m_pBtnOk) ? RET_OK : RET_CANCEL );
     }
     return 0;
 }
@@ -204,26 +179,26 @@ IMPL_LINK( ScAutoFormatDlg, CheckHdl, Button *, pBtn )
     ScAutoFormatData* pData = pFormat->findByIndex(nIndex);
     bool bCheck = ((CheckBox*)pBtn)->IsChecked();
 
-    if ( pBtn == &aBtnNumFormat )
+    if ( pBtn == m_pBtnNumFormat )
         pData->SetIncludeValueFormat( bCheck );
-    else if ( pBtn == &aBtnBorder )
+    else if ( pBtn == m_pBtnBorder )
         pData->SetIncludeFrame( bCheck );
-    else if ( pBtn == &aBtnFont )
+    else if ( pBtn == m_pBtnFont )
         pData->SetIncludeFont( bCheck );
-    else if ( pBtn == &aBtnPattern )
+    else if ( pBtn == m_pBtnPattern )
         pData->SetIncludeBackground( bCheck );
-    else if ( pBtn == &aBtnAlignment )
+    else if ( pBtn == m_pBtnAlignment )
         pData->SetIncludeJustify( bCheck );
-    else if ( pBtn == &aBtnAdjust )
+    else if ( pBtn == m_pBtnAdjust )
         pData->SetIncludeWidthHeight( bCheck );
 
     if ( !bCoreDataChanged )
     {
-        aBtnCancel.SetText( aStrClose );
+        m_pBtnCancel->SetText( aStrClose );
         bCoreDataChanged = true;
     }
 
-    pWndPreview->NotifyChange( pData );
+    m_pWndPreview->NotifyChange( pData );
 
     return 0;
 }
@@ -264,13 +239,13 @@ IMPL_LINK_NOARG(ScAutoFormatDlg, AddHdl)
                         ScAutoFormat::const_iterator it = pFormat->find(pNewData);
                         ScAutoFormat::const_iterator itBeg = pFormat->begin();
                         size_t nPos = std::distance(itBeg, it);
-                        aLbFormat.InsertEntry(aFormatName, nPos);
-                        aLbFormat.SelectEntry( aFormatName );
-                        aBtnAdd.Disable();
+                        m_pLbFormat->InsertEntry(aFormatName, nPos);
+                        m_pLbFormat->SelectEntry( aFormatName );
+                        m_pBtnAdd->Disable();
 
                         if ( !bCoreDataChanged )
                         {
-                            aBtnCancel.SetText( aStrClose );
+                            m_pBtnCancel->SetText( aStrClose );
                             bCoreDataChanged = true;
                         }
 
@@ -306,25 +281,25 @@ IMPL_LINK_NOARG(ScAutoFormatDlg, AddHdl)
 
 IMPL_LINK_NOARG(ScAutoFormatDlg, RemoveHdl)
 {
-    if ( (nIndex > 0) && (aLbFormat.GetEntryCount() > 0) )
+    if ( (nIndex > 0) && (m_pLbFormat->GetEntryCount() > 0) )
     {
         OUString aMsg( aStrDelMsg.getToken( 0, '#' ) );
 
-        aMsg += aLbFormat.GetSelectEntry();
+        aMsg += m_pLbFormat->GetSelectEntry();
         aMsg += aStrDelMsg.getToken( 1, '#' );
 
         if ( RET_YES ==
              QueryBox( this, WinBits( WB_YES_NO | WB_DEF_YES ), aMsg ).Execute() )
         {
-            aLbFormat.RemoveEntry( nIndex );
-            aLbFormat.SelectEntryPos( nIndex-1 );
+            m_pLbFormat->RemoveEntry( nIndex );
+            m_pLbFormat->SelectEntryPos( nIndex-1 );
 
             if ( nIndex-1 == 0 )
-                aBtnRemove.Disable();
+                m_pBtnRemove->Disable();
 
             if ( !bCoreDataChanged )
             {
-                aBtnCancel.SetText( aStrClose );
+                m_pBtnCancel->SetText( aStrClose );
                 bCoreDataChanged = true;
             }
 
@@ -348,7 +323,7 @@ IMPL_LINK_NOARG(ScAutoFormatDlg, RenameHdl)
     while( !bOk )
     {
 
-        OUString aFormatName = aLbFormat.GetSelectEntry();
+        OUString aFormatName = m_pLbFormat->GetSelectEntry();
         OUString aEntry;
 
         ScStringInputDlg* pDlg = new ScStringInputDlg( this,
@@ -375,7 +350,7 @@ IMPL_LINK_NOARG(ScAutoFormatDlg, RenameHdl)
                     // Format mit dem Namen noch nicht vorhanden, also
                     // umbenennen
 
-                    aLbFormat.RemoveEntry(nIndex );
+                    m_pLbFormat->RemoveEntry(nIndex );
                     const ScAutoFormatData* p = pFormat->findByIndex(nIndex);
                     ScAutoFormatData* pNewData
                         = new ScAutoFormatData(*p);
@@ -388,20 +363,20 @@ IMPL_LINK_NOARG(ScAutoFormatDlg, RenameHdl)
 
                     pFormat->insert(pNewData);
 
-                    aLbFormat.SetUpdateMode(false);
-                    aLbFormat.Clear();
+                    m_pLbFormat->SetUpdateMode(false);
+                    m_pLbFormat->Clear();
                     for (it = pFormat->begin(); it != itEnd; ++it)
                     {
                         aEntry = it->second->GetName();
-                        aLbFormat.InsertEntry( aEntry );
+                        m_pLbFormat->InsertEntry( aEntry );
                     }
 
-                    aLbFormat.SetUpdateMode(true);
-                    aLbFormat.SelectEntry( aFormatName);
+                    m_pLbFormat->SetUpdateMode(true);
+                    m_pLbFormat->SelectEntry( aFormatName);
 
                     if ( !bCoreDataChanged )
                     {
-                        aBtnCancel.SetText( aStrClose );
+                        m_pBtnCancel->SetText( aStrClose );
                         bCoreDataChanged = true;
                     }
 
@@ -431,22 +406,22 @@ IMPL_LINK_NOARG(ScAutoFormatDlg, RenameHdl)
 
 IMPL_LINK_NOARG(ScAutoFormatDlg, SelFmtHdl)
 {
-    nIndex = aLbFormat.GetSelectEntryPos();
+    nIndex = m_pLbFormat->GetSelectEntryPos();
     UpdateChecks();
 
     if ( nIndex == 0 )
     {
-        aBtnRename.Disable();
-        aBtnRemove.Disable();
+        m_pBtnRename->Disable();
+        m_pBtnRemove->Disable();
     }
     else
     {
-        aBtnRename.Enable();
-        aBtnRemove.Enable();
+        m_pBtnRename->Enable();
+        m_pBtnRemove->Enable();
     }
 
     ScAutoFormatData* p = pFormat->findByIndex(nIndex);
-    pWndPreview->NotifyChange(p);
+    m_pWndPreview->NotifyChange(p);
 
     return 0;
 }

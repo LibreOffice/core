@@ -56,39 +56,44 @@
 
 // ScAutoFmtPreview
 
-ScAutoFmtPreview::ScAutoFmtPreview( Window* pParent, const ResId& rRes, ScDocument* pDoc ) :
-        Window          ( pParent, rRes ),
-        pCurData        ( NULL ),
-        aVD             ( *this ),
-        aScriptedText   ( aVD ),
-        xBreakIter      ( pDoc->GetBreakIterator() ),
-        bFitWidth       ( false ),
-        mbRTL           ( false ),
-        aPrvSize        ( GetSizePixel().Width() - 6, GetSizePixel().Height() - 30 ),
-        mnLabelColWidth ( (aPrvSize.Width() - 4) / 4 - 12 ),
-        mnDataColWidth1 ( (aPrvSize.Width() - 4 - 2 * mnLabelColWidth) / 3 ),
-        mnDataColWidth2 ( (aPrvSize.Width() - 4 - 2 * mnLabelColWidth) / 4 ),
-        mnRowHeight     ( (aPrvSize.Height() - 4) / 5 ),
-        aStrJan         ( ScResId( STR_JAN ) ),
-        aStrFeb         ( ScResId( STR_FEB ) ),
-        aStrMar         ( ScResId( STR_MAR ) ),
-        aStrNorth       ( ScResId( STR_NORTH ) ),
-        aStrMid         ( ScResId( STR_MID ) ),
-        aStrSouth       ( ScResId( STR_SOUTH ) ),
-        aStrSum         ( ScResId( STR_SUM ) ),
-        pNumFmt         ( new SvNumberFormatter( ::comphelper::getProcessComponentContext(), ScGlobal::eLnge ) )
+ScAutoFmtPreview::ScAutoFmtPreview(Window* pParent)
+    : Window(pParent)
+    , pCurData(NULL)
+    , aVD(*this)
+    , aScriptedText(aVD)
+    , bFitWidth(false)
+    , mbRTL(false)
+    , aStrJan(ScResId(STR_JAN))
+    , aStrFeb(ScResId(STR_FEB))
+    , aStrMar(ScResId(STR_MAR))
+    , aStrNorth(ScResId(STR_NORTH))
+    , aStrMid(ScResId(STR_MID))
+    , aStrSouth(ScResId(STR_SOUTH))
+    , aStrSum(ScResId(STR_SUM))
+    , pNumFmt(new SvNumberFormatter(::comphelper::getProcessComponentContext(), ScGlobal::eLnge))
 {
     Init();
 }
 
+extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeScAutoFmtPreview(Window *pParent, VclBuilder::stringmap &)
+{
+    return new ScAutoFmtPreview(pParent);
+}
 
+void ScAutoFmtPreview::Resize()
+{
+    aPrvSize  = Size(GetSizePixel().Width() - 6, GetSizePixel().Height() - 30);
+    mnLabelColWidth = (aPrvSize.Width() - 4) / 4 - 12;
+    mnDataColWidth1 = (aPrvSize.Width() - 4 - 2 * mnLabelColWidth) / 3;
+    mnDataColWidth2 = (aPrvSize.Width() - 4 - 2 * mnLabelColWidth) / 4;
+    mnRowHeight = (aPrvSize.Height() - 4) / 5;
+    NotifyChange(pCurData);
+}
 
 ScAutoFmtPreview::~ScAutoFmtPreview()
 {
     delete pNumFmt;
 }
-
-
 
 static void lcl_SetFontProperties(
         Font& rFont,
@@ -415,8 +420,6 @@ void ScAutoFmtPreview::PaintCells()
     }
 }
 
-
-
 void ScAutoFmtPreview::Init()
 {
     SetBorderStyle( WINDOW_BORDER_MONO );
@@ -424,19 +427,15 @@ void ScAutoFmtPreview::Init()
     maArray.SetUseDiagDoubleClipping( false );
     CalcCellArray( false );
     CalcLineMap();
-
-    TypeId aType(TYPE(ScDocShell));
-    ScDocShell* pDocShell = (ScDocShell*)SfxObjectShell::GetFirst(&aType);
-    SfxViewFrame* pFrame = SfxViewFrame::GetFirst( pDocShell );
-    SfxViewShell* p = pFrame->GetViewShell();
-    ScTabViewShell* pViewSh = dynamic_cast< ScTabViewShell* >( p );
-    ScViewData* pViewData = pViewSh->GetViewData();
-    SCTAB nCurrentTab = pViewData->GetTabNo();
-    ScDocument* pDoc = pViewData->GetDocument();
-    mbRTL = pDoc->IsLayoutRTL( nCurrentTab );
 }
 
-
+void ScAutoFmtPreview::DetectRTL(ScViewData *pViewData)
+{
+    SCTAB nCurrentTab = pViewData->GetTabNo();
+    ScDocument* pDoc = pViewData->GetDocument();
+    mbRTL = pDoc->IsLayoutRTL(nCurrentTab);
+    xBreakIter = pDoc->GetBreakIterator();
+}
 
 void ScAutoFmtPreview::CalcCellArray( bool bFitWidthP )
 {
@@ -488,27 +487,19 @@ void ScAutoFmtPreview::CalcLineMap()
     }
 }
 
-
-
 void ScAutoFmtPreview::NotifyChange( ScAutoFormatData* pNewData )
 {
-    if ( pNewData != pCurData )
+    if (pNewData)
     {
-        pCurData  = pNewData;
+        pCurData = pNewData;
         bFitWidth = pNewData->GetIncludeWidthHeight();
-        CalcCellArray( bFitWidth );
-        CalcLineMap();
     }
-    else if ( bFitWidth != pNewData->GetIncludeWidthHeight() )
-    {
-        bFitWidth = !bFitWidth;
-        CalcCellArray( bFitWidth );
-    }
+
+    CalcCellArray( bFitWidth );
+    CalcLineMap();
 
     DoPaint( Rectangle( Point(0,0), GetSizePixel() ) );
 }
-
-
 
 void ScAutoFmtPreview::DoPaint( const Rectangle& /* rRect */ )
 {

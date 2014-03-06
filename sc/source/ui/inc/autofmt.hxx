@@ -29,8 +29,7 @@
 #include <svtools/scriptedtext.hxx>
 #include <svx/framelinkarray.hxx>
 #include "scdllapi.h"
-
-
+#include "viewdata.hxx"
 
 class ScAutoFormatData;
 class SvxBoxItem;
@@ -48,13 +47,15 @@ enum AutoFmtLine { TOP_LINE, BOTTOM_LINE, LEFT_LINE, RIGHT_LINE };
 class SC_DLLPUBLIC ScAutoFmtPreview : public Window
 {
 public:
-            ScAutoFmtPreview( Window* pParent, const ResId& rRes, ScDocument* pDoc );
-            ~ScAutoFmtPreview();
+    ScAutoFmtPreview(Window* pParent);
+    void DetectRTL(ScViewData *pViewData);
+    ~ScAutoFmtPreview();
 
     void NotifyChange( ScAutoFormatData* pNewData );
 
 protected:
-    virtual void Paint( const Rectangle& rRect );
+    virtual void Paint(const Rectangle& rRect);
+    virtual void Resize();
 
 private:
     ScAutoFormatData*       pCurData;
