@@ -60,6 +60,23 @@ XmlSecStatusBarControl::XmlSecStatusBarControl( sal_uInt16 _nSlotId,  sal_uInt16
     mpImpl->maImage             = Image( SVX_RES( RID_SVXBMP_SIGNET              ) );
     mpImpl->maImageBroken       = Image( SVX_RES( RID_SVXBMP_SIGNET_BROKEN       ) );
     mpImpl->maImageNotValidated = Image( SVX_RES( RID_SVXBMP_SIGNET_NOTVALIDATED ) );
+
+    if (_rStb.GetDPIScaleFactor() > 1)
+    {
+        Image arr[3] = {mpImpl->maImage, mpImpl->maImageBroken, mpImpl->maImageNotValidated};
+
+        for (int i = 0; i < 3; i++)
+        {
+            BitmapEx b = arr[i].GetBitmapEx();
+            b.Scale(_rStb.GetDPIScaleFactor(), _rStb.GetDPIScaleFactor(), BMP_SCALE_FAST);
+            arr[i] = Image(b);
+        }
+
+        mpImpl->maImage = arr[0];
+        mpImpl->maImageBroken = arr[1];
+        mpImpl->maImageNotValidated = arr[2];
+    }
+
 }
 
 XmlSecStatusBarControl::~XmlSecStatusBarControl()
@@ -135,20 +152,22 @@ void XmlSecStatusBarControl::Paint( const UserDrawEvent& rUsrEvt )
     pDev->SetLineColor();
     pDev->SetFillColor( pDev->GetBackground().GetColor() );
 
+    long yOffset = (aRect.GetHeight() - mpImpl->maImage.GetSizePixel().Height()) / 2;
+
     if( mpImpl->mnState == SIGNATURESTATE_SIGNATURES_OK )
     {
-        ++aRect.Top();
+        aRect.Top() += yOffset;
         pDev->DrawImage( aRect.TopLeft(), mpImpl->maImage );
     }
     else if( mpImpl->mnState == SIGNATURESTATE_SIGNATURES_BROKEN )
     {
-        ++aRect.Top();
+        aRect.Top() += yOffset;
         pDev->DrawImage( aRect.TopLeft(), mpImpl->maImageBroken );
     }
     else if( mpImpl->mnState == SIGNATURESTATE_SIGNATURES_NOTVALIDATED
         || mpImpl->mnState == SIGNATURESTATE_SIGNATURES_PARTIAL_OK)
     {
-        ++aRect.Top();
+        aRect.Top() += yOffset;
         pDev->DrawImage( aRect.TopLeft(), mpImpl->maImageNotValidated );
     }
     else

@@ -28,12 +28,6 @@
 
 SFX_IMPL_STATUSBAR_CONTROL( SwViewLayoutControl, SvxViewLayoutItem );
 
-const long nImageWidthSingle = 14;
-const long nImageWidthAuto = 24;
-const long nImageWidthBook = 22;
-const long nImageWidthSum = nImageWidthSingle + nImageWidthAuto + nImageWidthBook;
-const long nImageHeight = 10;
-
 struct SwViewLayoutControl::SwViewLayoutControl_Impl
 {
     sal_uInt16      mnState; // 0 = single, 1 = auto, 2 = book, 3 = none
@@ -57,6 +51,30 @@ SwViewLayoutControl::SwViewLayoutControl( sal_uInt16 _nSlotId, sal_uInt16 _nId, 
     mpImpl->maImageAutomatic_Active     = Image( SW_RES(IMG_VIEWLAYOUT_AUTOMATIC_ACTIVE) );
     mpImpl->maImageBookMode             = Image( SW_RES(IMG_VIEWLAYOUT_BOOKMODE) );
     mpImpl->maImageBookMode_Active      = Image( SW_RES(IMG_VIEWLAYOUT_BOOKMODE_ACTIVE) );
+
+    if ( rStb.GetDPIScaleFactor() > 1)
+    {
+        Image arr[6] = {mpImpl->maImageSingleColumn, mpImpl->maImageSingleColumn_Active,
+                        mpImpl->maImageAutomatic, mpImpl->maImageAutomatic_Active,
+                        mpImpl->maImageBookMode, mpImpl->maImageBookMode_Active};
+
+        for (int i = 0; i < 6; i++)
+        {
+            BitmapEx b = arr[i].GetBitmapEx();
+            //Don't scale width, no space.
+            b.Scale(1.0, rStb.GetDPIScaleFactor(), BMP_SCALE_FAST);
+            arr[i] = Image(b);
+        }
+
+        mpImpl->maImageSingleColumn = arr[0];
+        mpImpl->maImageSingleColumn_Active = arr[1];
+
+        mpImpl->maImageAutomatic = arr[2];
+        mpImpl->maImageAutomatic_Active = arr[3];
+
+        mpImpl->maImageBookMode = arr[4];
+        mpImpl->maImageBookMode_Active = arr[5];
+    }
 }
 
 SwViewLayoutControl::~SwViewLayoutControl()
@@ -102,8 +120,12 @@ void SwViewLayoutControl::Paint( const UserDrawEvent& rUsrEvt )
     const bool bAutomatic       = 1 == mpImpl->mnState;
     const bool bBookMode        = 2 == mpImpl->mnState;
 
+    const long nImageWidthSum = mpImpl->maImageSingleColumn.GetSizePixel().Width() +
+                                mpImpl->maImageAutomatic.GetSizePixel().Width() +
+                                mpImpl->maImageBookMode.GetSizePixel().Width();
+
     const long nXOffset = (aRect.GetWidth()  - nImageWidthSum)/2;
-    const long nYOffset = (aControlRect.GetHeight() - nImageHeight)/2;
+    const long nYOffset = (aControlRect.GetHeight() - mpImpl->maImageSingleColumn.GetSizePixel().Height())/2;
 
     aRect.Left() = aRect.Left() + nXOffset;
     aRect.Top()  = aRect.Top() + nYOffset;
@@ -112,11 +134,11 @@ void SwViewLayoutControl::Paint( const UserDrawEvent& rUsrEvt )
     pDev->DrawImage( aRect.TopLeft(), bSingleColumn ? mpImpl->maImageSingleColumn_Active : mpImpl->maImageSingleColumn );
 
     // draw automatic image:
-    aRect.Left() += nImageWidthSingle;
+    aRect.Left() += mpImpl->maImageSingleColumn.GetSizePixel().Width();
     pDev->DrawImage( aRect.TopLeft(), bAutomatic ? mpImpl->maImageAutomatic_Active       : mpImpl->maImageAutomatic );
 
     // draw bookmode image:
-    aRect.Left() += nImageWidthAuto;
+    aRect.Left() += mpImpl->maImageAutomatic.GetSizePixel().Width();
     pDev->DrawImage( aRect.TopLeft(), bBookMode ? mpImpl->maImageBookMode_Active         : mpImpl->maImageBookMode );
 }
 
@@ -128,6 +150,11 @@ sal_Bool SwViewLayoutControl::MouseButtonDown( const MouseEvent & rEvt )
 
     sal_uInt16 nColumns = 1;
     bool bBookMode = false;
+
+    const long nImageWidthSingle = mpImpl->maImageSingleColumn.GetSizePixel().Width();
+    const long nImageWidthAuto = mpImpl->maImageAutomatic.GetSizePixel().Width();
+    const long nImageWidthBook = mpImpl->maImageBookMode.GetSizePixel().Width();
+    const long nImageWidthSum = nImageWidthSingle + nImageWidthAuto + nImageWidthBook;
 
     const long nXOffset = (aRect.GetWidth() - nImageWidthSum)/2;
 
