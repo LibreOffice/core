@@ -621,6 +621,7 @@ void SvImpLBox::SetCursor( SvTreeListEntry* pEntry, bool bForceNoSelect )
         pViewDataNewCur= pView->GetViewDataEntry(pEntry);
     if( pEntry &&
         pEntry == pCursor &&
+        pViewDataNewCur &&
         pViewDataNewCur->HasFocus() &&
         pViewDataNewCur->IsSelected())
     {
@@ -645,7 +646,8 @@ void SvImpLBox::SetCursor( SvTreeListEntry* pEntry, bool bForceNoSelect )
     pCursor = pEntry;
     if( pCursor )
     {
-        pViewDataNewCur->SetFocus( true );
+        if (pViewDataNewCur)
+            pViewDataNewCur->SetFocus( true );
         if(!bForceNoSelect && bSimpleTravel && !(nFlags & F_DESEL_ALL) && GetUpdateMode())
         {
             pView->Select( pCursor, true );
