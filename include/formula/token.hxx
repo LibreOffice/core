@@ -94,10 +94,8 @@ protected:
             mutable oslInterlockedCount mnRefCnt;        // reference count
 
 public:
-                                FormulaToken( StackVar eTypeP,OpCode e = ocPush ) :
-                                    eOp(e), eType( eTypeP ), mnRefCnt(0) {}
-                                FormulaToken( const FormulaToken& r ) : IFormulaToken(),
-                                    eOp(r.eOp), eType( r.eType ), mnRefCnt(0) {}
+    FormulaToken( StackVar eTypeP,OpCode e = ocPush );
+    FormulaToken( const FormulaToken& r );
 
     virtual                     ~FormulaToken();
 

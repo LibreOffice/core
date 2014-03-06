@@ -60,6 +60,17 @@ inline bool lcl_IsReference( OpCode eOp, StackVar eType )
 }
 
 // --- class FormulaToken --------------------------------------------------------
+
+FormulaToken::FormulaToken( StackVar eTypeP, OpCode e ) :
+    eOp(e), eType( eTypeP ), mnRefCnt(0)
+{
+}
+
+FormulaToken::FormulaToken( const FormulaToken& r ) :
+    IFormulaToken(), eOp(r.eOp), eType( r.eType ), mnRefCnt(0)
+{
+}
+
 FormulaToken::~FormulaToken()
 {
 }
