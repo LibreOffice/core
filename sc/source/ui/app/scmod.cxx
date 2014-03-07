@@ -1728,7 +1728,14 @@ bool ScModule::IsTableLocked()
         SfxChildWindow* pChildWnd = lcl_GetChildWinFromAnyView( nCurRefDlgId );
         ScAnyRefModalDlg* pModalDlg = GetCurrentAnyRefDlg();
         if ( pChildWnd )
-            bLocked = dynamic_cast<IAnyRefDialog*>(pChildWnd->GetWindow())->IsTableLocked();
+        {
+            IAnyRefDialog* pRefDlg(dynamic_cast<IAnyRefDialog*>(pChildWnd->GetWindow()));
+            assert(pRefDlg);
+            if(pRefDlg)
+            {
+                bLocked = pRefDlg->IsTableLocked();
+            }
+        }
         else if( pModalDlg )
             bLocked = pModalDlg->IsTableLocked();
         else
