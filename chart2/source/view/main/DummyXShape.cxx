@@ -799,13 +799,13 @@ DummyText::DummyText(const OUString& rText, const tNameSequence& rNames,
     Rectangle aRect;
     aDevice.SetFont(aFont);
     aDevice.GetTextBoundRect(aRect, rText);
-    int screenWidth = (aRect.BottomRight().X() + 3) & ~3;
-    int screenHeight = (aRect.BottomRight().Y() + 3) & ~3;
+    int screenWidth = (aRect.BottomRight().X());
+    int screenHeight = (aRect.BottomRight().Y());
     aDevice.SetOutputSizePixel(Size(screenWidth * 3, screenHeight));
     aDevice.SetBackground(Wallpaper(COL_TRANSPARENT));
     aDevice.DrawText(Point(0, 0), rText);
-    int bmpWidth = (aRect.Right() - aRect.Left() + 3) & ~3;
-    int bmpHeight = (aRect.Bottom() - aRect.Top() + 3) & ~3;
+    int bmpWidth = aRect.Right() - aRect.Left();
+    int bmpHeight = aRect.Bottom() - aRect.Top();
     maBitmap = BitmapEx(aDevice.GetBitmapEx(aRect.TopLeft(), Size(bmpWidth, bmpHeight)));
 
     if(rTrans.hasValue())
