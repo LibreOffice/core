@@ -424,7 +424,7 @@ void TextObjectBar::GetAttrState( SfxItemSet& rSet )
 
 
     // these are disabled in outline-mode
-    if (!mpViewShell->ISA(DrawViewShell))
+    if (!mpViewShell || !mpViewShell->ISA(DrawViewShell))
     {
         rSet.DisableItem( SID_ATTR_PARA_ADJUST_LEFT );
         rSet.DisableItem( SID_ATTR_PARA_ADJUST_RIGHT );
