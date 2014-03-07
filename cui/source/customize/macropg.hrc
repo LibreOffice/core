@@ -30,7 +30,6 @@
 #define     FT_ASSIGN               6
 #define     PB_ASSIGN_COMPONENT     7
 
-// Starting new IDs with 30 as eventdlg.hrc also includes this file
 #define     IMG_MACRO               30
 #define     IMG_COMPONENT           31
 

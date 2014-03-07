@@ -25,7 +25,6 @@ $(eval $(call gb_SrsTarget_set_include,cui/res,\
 $(eval $(call gb_SrsTarget_add_files,cui/res,\
     cui/source/customize/acccfg.src \
     cui/source/customize/cfg.src \
-    cui/source/customize/eventdlg.src \
     cui/source/customize/macropg.src \
     cui/source/dialogs/colorpicker.src \
     cui/source/dialogs/commonlingui.src \

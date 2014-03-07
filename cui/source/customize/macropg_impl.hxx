@@ -25,7 +25,6 @@ class _SvxMacroTabPage_Impl
 public:
     _SvxMacroTabPage_Impl( const SfxItemSet& rAttrSet );
 
-    FixedText*                      pAssignFT;
     PushButton*                     pAssignPB;
     PushButton*                     pAssignComponentPB;
     PushButton*                     pDeletePB;

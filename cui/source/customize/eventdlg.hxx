@@ -29,8 +29,7 @@
 
 class SvxEventConfigPage : public _SvxMacroTabPage
 {
-    FixedText                           aSaveInText;
-    ListBox                             aSaveInListBox;
+    ListBox*   m_pSaveInListBox;
 
     ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameReplace >   m_xAppEvents;
     ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameReplace >   m_xDocumentEvents;

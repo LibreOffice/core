@@ -53,8 +53,7 @@ static OUString aVndSunStarUNO( "vnd.sun.star.UNO:" );
 static OUString aVndSunStarScript( "vnd.sun.star.script:" );
 
 _SvxMacroTabPage_Impl::_SvxMacroTabPage_Impl( const SfxItemSet& rAttrSet )
-    : pAssignFT(NULL)
-    , pAssignPB(NULL)
+    : pAssignPB(NULL)
     , pAssignComponentPB(NULL)
     , pDeletePB(NULL)
     , pEventLB(NULL)

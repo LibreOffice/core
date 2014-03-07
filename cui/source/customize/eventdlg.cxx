@@ -46,7 +46,6 @@
 
 #include <dialmgr.hxx>
 #include <cuires.hrc>
-#include "eventdlg.hrc"
 #include "helpid.hrc"
 #include "selector.hxx"
 #include "cfg.hxx"
@@ -55,30 +54,28 @@
 using namespace ::com::sun::star;
 
 
-SvxEventConfigPage::SvxEventConfigPage( Window *pParent, const SfxItemSet& rSet, SvxEventConfigPage::EarlyInit ) :
-
-    _SvxMacroTabPage( pParent, CUI_RES(RID_SVXPAGE_EVENTS), rSet ),
-    aSaveInText( this, CUI_RES( TXT_SAVEIN ) ),
-    aSaveInListBox( this, CUI_RES( LB_SAVEIN ) ),
-    bAppConfig  ( sal_True )
+SvxEventConfigPage::SvxEventConfigPage(Window *pParent, const SfxItemSet& rSet,
+    SvxEventConfigPage::EarlyInit)
+    : _SvxMacroTabPage(pParent, "EventsConfigPage",
+        "cui/ui/eventsconfigpage.ui", rSet)
+    , bAppConfig(true)
 {
-    mpImpl->sStrEvent           = OUString( CUI_RES( STR_EVENT ));
-    mpImpl->sAssignedMacro      = OUString( CUI_RES( STR_ASSMACRO ));
-    mpImpl->pEventLB            = new MacroEventListBox( this, CUI_RES( LB_EVENT ));
-    mpImpl->pAssignFT           = new FixedText( this,  CUI_RES( FT_ASSIGN ));
-    mpImpl->pAssignPB           = new PushButton( this, CUI_RES( PB_ASSIGN ));
-    mpImpl->pDeletePB           = new PushButton( this, CUI_RES( PB_DELETE ));
-    mpImpl->aMacroImg           = Image( CUI_RES( IMG_MACRO) );
-    mpImpl->aComponentImg       = Image( CUI_RES( IMG_COMPONENT) );
+    get(m_pSaveInListBox, "savein");
 
-    FreeResource();
+    mpImpl->sStrEvent = get<FixedText>("eventft")->GetText();
+    mpImpl->sAssignedMacro = get<FixedText>("actionft")->GetText();
+    get(mpImpl->pEventLB, "events");
+    Size aSize(LogicToPixel(Size(205, 229), MAP_APPFONT));
+    mpImpl->pEventLB->set_width_request(aSize.Width());
+    mpImpl->pEventLB->set_height_request(aSize.Height());
+    get(mpImpl->pAssignPB, "macro");
+    get(mpImpl->pDeletePB, "delete");
+    mpImpl->aMacroImg = get<FixedImage>("macroimg")->GetImage();
+    mpImpl->aComponentImg = get<FixedImage>("componentimg")->GetImage();
 
-    // must be done after FreeResource is called
     InitResources();
 
-    mpImpl->pEventLB->GetListBox().SetHelpId( HID_SVX_MACRO_LB_EVENT );
-
-    aSaveInListBox.SetSelectHdl( LINK( this, SvxEventConfigPage,
+    m_pSaveInListBox->SetSelectHdl( LINK( this, SvxEventConfigPage,
                 SelectHdl_Impl ) );
 
     uno::Reference< frame::XGlobalEventBroadcaster > xSupplier;
@@ -88,12 +85,11 @@ SvxEventConfigPage::SvxEventConfigPage( Window *pParent, const SfxItemSet& rSet,
 
     sal_uInt16 nPos(0);
     m_xAppEvents = xSupplier->getEvents();
-    nPos = aSaveInListBox.InsertEntry(
+    nPos = m_pSaveInListBox->InsertEntry(
         utl::ConfigManager::getProductName() );
-    aSaveInListBox.SetEntryData( nPos, new bool(true) );
-    aSaveInListBox.SelectEntryPos( nPos, true );
+    m_pSaveInListBox->SetEntryData( nPos, new bool(true) );
+    m_pSaveInListBox->SelectEntryPos( nPos, true );
 }
-
 
 void SvxEventConfigPage::LateInit( const uno::Reference< frame::XFrame >& _rxFrame  )
 {
@@ -104,8 +100,6 @@ void SvxEventConfigPage::LateInit( const uno::Reference< frame::XFrame >& _rxFra
 
     SelectHdl_Impl( NULL );
 }
-
-
 
 SvxEventConfigPage::~SvxEventConfigPage()
 {
@@ -119,14 +113,7 @@ SvxEventConfigPage::~SvxEventConfigPage()
         pE->SetUserData((void*)0);
         pE = rListBox.NextSibling( pE );
     }
-    delete mpImpl->pEventLB;
-
-    delete mpImpl->pAssignFT;
-    delete mpImpl->pAssignPB;
-    delete mpImpl->pDeletePB;
 }
-
-
 
 void SvxEventConfigPage::ImplInitDocument()
 {
@@ -160,10 +147,10 @@ void SvxEventConfigPage::ImplInitDocument()
             m_xDocumentModifiable = m_xDocumentModifiable.query( xModel );
 
             OUString aTitle = ::comphelper::DocumentInfo::getDocumentTitle( xModel );
-            sal_uInt16 nPos = aSaveInListBox.InsertEntry( aTitle );
+            sal_uInt16 nPos = m_pSaveInListBox->InsertEntry( aTitle );
 
-            aSaveInListBox.SetEntryData( nPos, new bool(false) );
-            aSaveInListBox.SelectEntryPos( nPos, true );
+            m_pSaveInListBox->SetEntryData( nPos, new bool(false) );
+            m_pSaveInListBox->SelectEntryPos( nPos, true );
 
             bAppConfig = false;
         }
@@ -174,14 +161,12 @@ void SvxEventConfigPage::ImplInitDocument()
     }
 }
 
-
-
 IMPL_LINK( SvxEventConfigPage, SelectHdl_Impl, ListBox *, pBox )
 {
     (void)pBox;
 
-    bool* bApp = (bool*) aSaveInListBox.GetEntryData(
-            aSaveInListBox.GetSelectEntryPos());
+    bool* bApp = (bool*) m_pSaveInListBox->GetEntryData(
+            m_pSaveInListBox->GetSelectEntryPos());
 
     mpImpl->pEventLB->SetUpdateMode( false );
     bAppConfig = *bApp;
@@ -220,8 +205,6 @@ IMPL_LINK( SvxEventConfigPage, SelectHdl_Impl, ListBox *, pBox )
     mpImpl->pEventLB->SetUpdateMode( true );
     return sal_True;
 }
-
-
 
 sal_Bool SvxEventConfigPage::FillItemSet( SfxItemSet& rSet )
 {
