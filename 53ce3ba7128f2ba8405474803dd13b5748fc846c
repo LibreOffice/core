@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a930d6b_51b094dd",
+        "filename": "bridges/source/cpp_uno/gcc3_aix_powerpc/share.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 92,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2014-03-07T20:04:48Z",
+      "side": 1,
+      "message": "In existing files the final #endif is typically before the vim modeline, wouldn\u0027t it be better to follow the current convention?",
+      "revId": "53ce3ba7128f2ba8405474803dd13b5748fc846c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
