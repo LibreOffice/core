@@ -3208,6 +3208,10 @@ DynamicKernel::~DynamicKernel()
 /// Build code
 void DynamicKernel::CreateKernel(void)
 {
+    if (mpKernel)
+        // already created.
+        return;
+
     cl_int err;
     std::string kname = "DynamicKernel"+mKernelSignature;
     // Compile kernel here!!!

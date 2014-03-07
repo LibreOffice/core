@@ -54,7 +54,7 @@
 
 #include <boost/scoped_ptr.hpp>
 
-#define ENABLE_THREADED_OPENCL_KERNEL_COMPILATION 1
+#define ENABLE_THREADED_OPENCL_KERNEL_COMPILATION 0
 
 using namespace formula;
 
@@ -3506,8 +3506,6 @@ ScFormulaCellGroupRef ScFormulaCell::CreateCellGroup( SCROW nLen, bool bInvarian
 #if ENABLE_THREADED_OPENCL_KERNEL_COMPILATION
     if (mxGroup->sxCompilationThread.is())
         mxGroup->scheduleCompilation();
-#else
-    mxGroup->compileOpenCLKernel();
 #endif
     return mxGroup;
 }
