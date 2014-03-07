@@ -2200,7 +2200,7 @@ SdrObject* convertPresentationObjectImpl( SdPage& rPage, SdrObject* pSourceObj, 
 */
 SdrObject* SdPage::InsertAutoLayoutShape( SdrObject* pObj, PresObjKind eObjKind, bool bVertical, Rectangle aRect, bool bInit )
 {
-    ::svl::IUndoManager* pUndoManager = pModel ? static_cast<SdDrawDocument*>(pModel)->GetUndoManager() : 0;
+    ::svl::IUndoManager* pUndoManager = static_cast<SdDrawDocument*>(pModel)->GetUndoManager();
     const bool bUndo = pUndoManager && pUndoManager->IsInListAction() && IsInserted();
 
     if (!pObj && bInit)
