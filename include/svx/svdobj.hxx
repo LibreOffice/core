@@ -1060,6 +1060,8 @@ public:
     /// @see mbDoNotInsertIntoPageAutomatically
     bool IsDoNotInsertIntoPageAutomatically() const;
 
+    virtual OString stringify() const;
+
 protected:
     /** Sets a new UNO shape
       *
