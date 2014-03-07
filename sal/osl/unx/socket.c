@@ -1446,13 +1446,15 @@ void SAL_CALL osl_closeSocket(oslSocket pSocket)
             {
                 OSL_TRACE("socket call failed with error: %s", strerror(errno));
             }
-
-            nRet = connect(nConnFD, &s.aSockAddr, sizeof(s.aSockAddr));
-            if ( nRet < 0 )
+            else
             {
-                OSL_TRACE("connect call failed with error: %s", strerror(errno));
+                nRet = connect(nConnFD, &s.aSockAddr, sizeof(s.aSockAddr));
+                if ( nRet < 0 )
+                {
+                    OSL_TRACE("connect call failed with error: %s", strerror(errno));
+                }
+                close(nConnFD);
             }
-            close(nConnFD);
         }
         pSocket->m_bIsAccepting = sal_False;
     }
