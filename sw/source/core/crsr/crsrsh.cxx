@@ -1428,6 +1428,13 @@ void SwCrsrShell::UpdateCrsr( sal_uInt16 eFlags, sal_Bool bIdleEnd )
                 m_pCurCrsr->SwSelPaintRects::Hide();
 
                 CheckTblBoxCntnt();
+                if(!m_pTblCrsr)
+                {
+                    SAL_WARN("sw", "fdo#74854: "
+                        "this should not happen, but better loose the selection "
+                        "rather than crashing");
+                    return;
+                }
             }
 
             SwCrsrMoveState aTmpState( MV_NONE );
