@@ -1949,7 +1949,7 @@ void SAL_CALL SdXImpressDocument::render( sal_Int32 nRenderer, const uno::Any& r
                         }
                         pView->SdrPaintView::CompleteRedraw( pOut, aRegion, &aImplRenderPaintProc );
 
-                        if ( pPDFExtOutDevData )
+                        if ( pPDFExtOutDevData && pPage )
                         {
                             try
                             {
