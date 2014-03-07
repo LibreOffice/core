@@ -1907,7 +1907,11 @@ void ScModule::EndReference()
         if ( pChildWnd )
         {
             IAnyRefDialog* pRefDlg = dynamic_cast<IAnyRefDialog*>(pChildWnd->GetWindow());
-            pRefDlg->SetActive();
+            assert(pRefDlg);
+            if(pRefDlg)
+            {
+                pRefDlg->SetActive();
+            }
         }
         else
             pModalDlg->SetActive();
