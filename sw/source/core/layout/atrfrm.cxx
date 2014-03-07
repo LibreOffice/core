@@ -2105,10 +2105,10 @@ bool SwFmtLineNumber::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
 // class SwTextGridItem
 
 SwTextGridItem::SwTextGridItem()
-    : SfxPoolItem( RES_TEXTGRID ), aColor( COL_LIGHTGRAY ), nLines( 20 ),
-      nBaseHeight( 400 ), nRubyHeight( 200 ), eGridType( GRID_NONE ),
-      bRubyTextBelow( 0 ), bPrintGrid( 1 ), bDisplayGrid( 1 ),
-      nBaseWidth(400), bSnapToChars( 1 ), bSquaredMode(1)
+    : SfxPoolItem( RES_TEXTGRID ), m_aColor( COL_LIGHTGRAY ), m_nLines( 20 )
+    , m_nBaseHeight( 400 ), m_nRubyHeight( 200 ), m_eGridType( GRID_NONE )
+    , m_bRubyTextBelow( 0 ), m_bPrintGrid( 1 ), m_bDisplayGrid( 1 )
+    , m_nBaseWidth(400), m_bSnapToChars( 1 ), m_bSquaredMode(1)
 {
 }
 
@@ -2119,17 +2119,18 @@ SwTextGridItem::~SwTextGridItem()
 bool SwTextGridItem::operator==( const SfxPoolItem& rAttr ) const
 {
     OSL_ENSURE( SfxPoolItem::operator==( rAttr ), "keine gleichen Attribute" );
-    return eGridType == ((SwTextGridItem&)rAttr).GetGridType() &&
-           nLines == ((SwTextGridItem&)rAttr).GetLines() &&
-           nBaseHeight == ((SwTextGridItem&)rAttr).GetBaseHeight() &&
-           nRubyHeight == ((SwTextGridItem&)rAttr).GetRubyHeight() &&
-           bRubyTextBelow == ((SwTextGridItem&)rAttr).GetRubyTextBelow() &&
-           bDisplayGrid == ((SwTextGridItem&)rAttr).GetDisplayGrid() &&
-           bPrintGrid == ((SwTextGridItem&)rAttr).GetPrintGrid() &&
-           aColor == ((SwTextGridItem&)rAttr).GetColor() &&
-           nBaseWidth == ((SwTextGridItem&)rAttr).GetBaseWidth() &&
-           bSnapToChars == ((SwTextGridItem&)rAttr).GetSnapToChars() &&
-           bSquaredMode == ((SwTextGridItem&)rAttr).GetSquaredMode();
+    SwTextGridItem const& rOther(static_cast<SwTextGridItem const&>(rAttr));
+    return m_eGridType == rOther.GetGridType()
+        && m_nLines == rOther.GetLines()
+        && m_nBaseHeight == rOther.GetBaseHeight()
+        && m_nRubyHeight == rOther.GetRubyHeight()
+        && m_bRubyTextBelow == rOther.GetRubyTextBelow()
+        && m_bDisplayGrid == rOther.GetDisplayGrid()
+        && m_bPrintGrid == rOther.GetPrintGrid()
+        && m_aColor == rOther.GetColor()
+        && m_nBaseWidth == rOther.GetBaseWidth()
+        && m_bSnapToChars == rOther.GetSnapToChars()
+        && m_bSquaredMode == rOther.GetSquaredMode();
 }
 
 SfxPoolItem* SwTextGridItem::Clone( SfxItemPool* ) const
@@ -2139,17 +2140,17 @@ SfxPoolItem* SwTextGridItem::Clone( SfxItemPool* ) const
 
 SwTextGridItem& SwTextGridItem::operator=( const SwTextGridItem& rCpy )
 {
-    aColor = rCpy.GetColor();
-    nLines = rCpy.GetLines();
-    nBaseHeight = rCpy.GetBaseHeight();
-    nRubyHeight = rCpy.GetRubyHeight();
-    eGridType = rCpy.GetGridType();
-    bRubyTextBelow = rCpy.GetRubyTextBelow();
-    bPrintGrid = rCpy.GetPrintGrid();
-    bDisplayGrid = rCpy.GetDisplayGrid();
-    nBaseWidth = rCpy.GetBaseWidth();
-    bSnapToChars = rCpy.GetSnapToChars();
-    bSquaredMode = rCpy.GetSquaredMode();
+    m_aColor = rCpy.GetColor();
+    m_nLines = rCpy.GetLines();
+    m_nBaseHeight = rCpy.GetBaseHeight();
+    m_nRubyHeight = rCpy.GetRubyHeight();
+    m_eGridType = rCpy.GetGridType();
+    m_bRubyTextBelow = rCpy.GetRubyTextBelow();
+    m_bPrintGrid = rCpy.GetPrintGrid();
+    m_bDisplayGrid = rCpy.GetDisplayGrid();
+    m_nBaseWidth = rCpy.GetBaseWidth();
+    m_bSnapToChars = rCpy.GetSnapToChars();
+    m_bSquaredMode = rCpy.GetSquaredMode();
 
     return *this;
 }
@@ -2167,28 +2168,28 @@ bool SwTextGridItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
             rVal <<= GetLines();
             break;
         case MID_GRID_RUBY_BELOW:
-            rVal.setValue( &bRubyTextBelow, ::getBooleanCppuType() );
+            rVal.setValue( &m_bRubyTextBelow, ::getBooleanCppuType() );
             break;
         case MID_GRID_PRINT:
-            rVal.setValue( &bPrintGrid, ::getBooleanCppuType() );
+            rVal.setValue( &m_bPrintGrid, ::getBooleanCppuType() );
             break;
         case MID_GRID_DISPLAY:
-            rVal.setValue( &bDisplayGrid, ::getBooleanCppuType() );
+            rVal.setValue( &m_bDisplayGrid, ::getBooleanCppuType() );
             break;
         case MID_GRID_BASEHEIGHT:
             OSL_ENSURE( (nMemberId & CONVERT_TWIPS) != 0,
                         "This value needs TWIPS-MM100 conversion" );
-            rVal <<= (sal_Int32) TWIP_TO_MM100_UNSIGNED(nBaseHeight);
+            rVal <<= (sal_Int32) TWIP_TO_MM100_UNSIGNED(m_nBaseHeight);
             break;
         case MID_GRID_BASEWIDTH:
             OSL_ENSURE( (nMemberId & CONVERT_TWIPS) != 0,
                         "This value needs TWIPS-MM100 conversion" );
-            rVal <<= (sal_Int32) TWIP_TO_MM100_UNSIGNED(nBaseWidth);
+            rVal <<= (sal_Int32) TWIP_TO_MM100_UNSIGNED(m_nBaseWidth);
             break;
         case MID_GRID_RUBYHEIGHT:
             OSL_ENSURE( (nMemberId & CONVERT_TWIPS) != 0,
                         "This value needs TWIPS-MM100 conversion" );
-            rVal <<= (sal_Int32)TWIP_TO_MM100_UNSIGNED(nRubyHeight);
+            rVal <<= (sal_Int32)TWIP_TO_MM100_UNSIGNED(m_nRubyHeight);
             break;
         case MID_GRID_TYPE:
             switch( GetGridType() )
@@ -2209,11 +2210,11 @@ bool SwTextGridItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
             }
             break;
         case MID_GRID_SNAPTOCHARS:
-            rVal.setValue( &bSnapToChars, ::getBooleanCppuType() );
+            rVal.setValue( &m_bSnapToChars, ::getBooleanCppuType() );
             break;
         case MID_GRID_STANDARD_MODE:
             {
-                sal_Bool bStandardMode = !bSquaredMode;
+                sal_Bool bStandardMode = !m_bSquaredMode;
                 rVal.setValue( &bStandardMode, ::getBooleanCppuType() );
             }
             break;
@@ -2333,62 +2334,62 @@ bool SwTextGridItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
 
 void SwTextGridItem::SwitchPaperMode(sal_Bool bNew)
 {
-    if( bNew == bSquaredMode )
+    if (bNew == m_bSquaredMode)
     {
         //same paper mode, not switch
         return;
     }
 
     // use default value when grid is disable
-    if( eGridType == GRID_NONE )
+    if (m_eGridType == GRID_NONE)
     {
-        bSquaredMode = bNew;
+        m_bSquaredMode = bNew;
         Init();
         return;
     }
 
-    if( bSquaredMode )
+    if (m_bSquaredMode)
     {
         //switch from "squared mode" to "standard mode"
-        nBaseWidth = nBaseHeight;
-        nBaseHeight = nBaseHeight + nRubyHeight;
-        nRubyHeight = 0;
+        m_nBaseWidth = m_nBaseHeight;
+        m_nBaseHeight = m_nBaseHeight + m_nRubyHeight;
+        m_nRubyHeight = 0;
     }
     else
     {
         //switch from "standard mode" to "squared mode"
-        nRubyHeight = nBaseHeight/3;
-        nBaseHeight = nBaseHeight - nRubyHeight;
-        nBaseWidth = nBaseHeight;
+        m_nRubyHeight = m_nBaseHeight/3;
+        m_nBaseHeight = m_nBaseHeight - m_nRubyHeight;
+        m_nBaseWidth = m_nBaseHeight;
     }
-    bSquaredMode = !bSquaredMode;
+    m_bSquaredMode = !m_bSquaredMode;
 }
 
 void SwTextGridItem::Init()
 {
-    if( bSquaredMode )
+    if (m_bSquaredMode)
     {
-        nLines = 20;
-        nBaseHeight = 400;
-        nRubyHeight = 200;
-        eGridType = GRID_NONE;
-        bRubyTextBelow = 0;
-        bPrintGrid = 1;
-        bDisplayGrid = 1;
-        bSnapToChars = 1;
-        nBaseWidth = 400;
+        m_nLines = 20;
+        m_nBaseHeight = 400;
+        m_nRubyHeight = 200;
+        m_eGridType = GRID_NONE;
+        m_bRubyTextBelow = 0;
+        m_bPrintGrid = 1;
+        m_bDisplayGrid = 1;
+        m_bSnapToChars = 1;
+        m_nBaseWidth = 400;
     }
     else
     {
-        nLines = 44;
-        nBaseHeight = 312;
-        nRubyHeight = 0;
-        eGridType = GRID_NONE;
-        bRubyTextBelow = 0;
-        bPrintGrid = 1;
-        bDisplayGrid = 1;
-        nBaseWidth = 210;
-        bSnapToChars = 1;
+        m_nLines = 44;
+        m_nBaseHeight = 312;
+        m_nRubyHeight = 0;
+        m_eGridType = GRID_NONE;
+        m_bRubyTextBelow = 0;
+        m_bPrintGrid = 1;
+        m_bDisplayGrid = 1;
+        m_nBaseWidth = 210;
+        m_bSnapToChars = 1;
     }
 }
 
