@@ -375,19 +375,18 @@ namespace
         Sequence< Type> aModelListeners;
         Sequence< Type> aControlListeners;
 
-        Reference< XIntrospection> xModelIntrospection = theIntrospection::get(::comphelper::getProcessComponentContext());
-        Reference< XIntrospection> xControlIntrospection = theIntrospection::get(::comphelper::getProcessComponentContext());
+        Reference< XIntrospection> xIntrospection = theIntrospection::get(::comphelper::getProcessComponentContext());
 
         if (xModel.is())
         {
             Any aModel(makeAny(xModel));
-            aModelListeners = xModelIntrospection->inspect(aModel)->getSupportedListeners();
+            aModelListeners = xIntrospection->inspect(aModel)->getSupportedListeners();
         }
 
         if (xControl.is())
         {
             Any aControl(makeAny(xControl));
-            aControlListeners = xControlIntrospection->inspect(aControl)->getSupportedListeners();
+            aControlListeners = xIntrospection->inspect(aControl)->getSupportedListeners();
         }
 
         sal_Int32 nMaxNewLen = aModelListeners.getLength() + aControlListeners.getLength();
