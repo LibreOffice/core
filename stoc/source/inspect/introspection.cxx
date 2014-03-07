@@ -19,9 +19,11 @@
 
 #include <sal/config.h>
 
+#include <cassert>
+#include <cstddef>
+#include <limits>
+#include <map>
 #include <set>
-
-#include <string.h>
 
 #include <osl/diagnose.h>
 #include <osl/mutex.hxx>
@@ -78,8 +80,6 @@ using namespace osl;
 
 namespace
 {
-
-enum { INTROSPECTION_CACHE_MAX_SIZE = 100 };
 
 typedef WeakImplHelper3< XIntrospectionAccess, XMaterialHolder, XExactName > IntrospectionAccessHelper;
 
@@ -1431,151 +1431,145 @@ OUString ImplIntrospectionAccess::getExactName( const OUString& rApproximateName
     return aRetStr;
 }
 
+struct ClassKey {
+    ClassKey(
+        css::uno::Reference<css::beans::XPropertySetInfo> const & theProperties,
+        css::uno::Reference<css::reflection::XIdlClass> const &
+            theImplementation,
+        css::uno::Sequence< css::uno::Reference<css::reflection::XIdlClass> >
+            const & theClasses):
+        properties(theProperties), implementation(theImplementation),
+        classes(theClasses)
+    {}
 
-
-
-struct hashIntrospectionKey_Impl
-{
-    Sequence< Reference<XIdlClass> >    aIdlClasses;
-    Reference<XPropertySetInfo>            xPropInfo;
-    Reference<XIdlClass>                xImplClass;
-    sal_Int32                            nHitCount;
-
-    void    IncHitCount() const { ((hashIntrospectionKey_Impl*)this)->nHitCount++; }
-    hashIntrospectionKey_Impl() : nHitCount( 0 ) {}
-    hashIntrospectionKey_Impl( const Sequence< Reference<XIdlClass> > & rIdlClasses,
-                                        const Reference<XPropertySetInfo> & rxPropInfo,
-                                        const Reference<XIdlClass> & rxImplClass );
+    css::uno::Reference<css::beans::XPropertySetInfo> properties;
+    css::uno::Reference<css::reflection::XIdlClass> implementation;
+    css::uno::Sequence< css::uno::Reference<css::reflection::XIdlClass> >
+        classes;
 };
 
-hashIntrospectionKey_Impl::hashIntrospectionKey_Impl
-(
-    const Sequence< Reference<XIdlClass> > & rIdlClasses,
-    const Reference<XPropertySetInfo> & rxPropInfo,
-    const Reference<XIdlClass> & rxImplClass
-)
-        : aIdlClasses( rIdlClasses )
-        , xPropInfo( rxPropInfo )
-        , xImplClass( rxImplClass )
-        , nHitCount( 0 )
-{}
-
-
-struct hashIntrospectionAccessCache_Impl
-{
-    size_t operator()(const hashIntrospectionKey_Impl & rObj ) const
-    {
-        return (size_t)rObj.xImplClass.get() ^ (size_t)rObj.xPropInfo.get();
-    }
-
-    bool operator()( const hashIntrospectionKey_Impl & rObj1,
-                     const hashIntrospectionKey_Impl & rObj2 ) const
-    {
-        if( rObj1.xPropInfo != rObj2.xPropInfo
-          || rObj1.xImplClass != rObj2.xImplClass )
-            return false;
-
-        sal_Int32 nCount1 = rObj1.aIdlClasses.getLength();
-        sal_Int32 nCount2 = rObj2.aIdlClasses.getLength();
-        if( nCount1 != nCount2 )
-            return false;
-
-        const Reference<XIdlClass>* pRefs1 = rObj1.aIdlClasses.getConstArray();
-        const Reference<XIdlClass>* pRefs2 = rObj2.aIdlClasses.getConstArray();
-        return memcmp( pRefs1, pRefs2, nCount1 * sizeof( Reference<XIdlClass> ) ) == 0;
-    }
-
-};
-
-typedef boost::unordered_map
-<
-    hashIntrospectionKey_Impl,
-    rtl::Reference< IntrospectionAccessStatic_Impl >,
-    hashIntrospectionAccessCache_Impl,
-    hashIntrospectionAccessCache_Impl
->
-IntrospectionAccessCacheMap;
-
-// For XTypeProvider
-struct hashTypeProviderKey_Impl
-{
-    Reference<XPropertySetInfo>            xPropInfo;
-    Sequence< sal_Int8 >                maImpIdSeq;
-    sal_Int32                            nHitCount;
-
-    void    IncHitCount() const { ((hashTypeProviderKey_Impl*)this)->nHitCount++; }
-    hashTypeProviderKey_Impl() : nHitCount( 0 ) {}
-    hashTypeProviderKey_Impl( const Reference<XPropertySetInfo> & rxPropInfo, const Sequence< sal_Int8 > & aImpIdSeq_ );
-};
-
-hashTypeProviderKey_Impl::hashTypeProviderKey_Impl
-(
-    const Reference<XPropertySetInfo> & rxPropInfo,
-    const Sequence< sal_Int8 > & aImpIdSeq_
-)
-    : xPropInfo( rxPropInfo )
-    , maImpIdSeq( aImpIdSeq_ )
-    , nHitCount( 0 )
-{}
-
-
-struct TypeProviderAccessCache_Impl
-{
-    size_t operator()(const hashTypeProviderKey_Impl & rObj ) const;
-
-    bool operator()( const hashTypeProviderKey_Impl & rObj1,
-                     const hashTypeProviderKey_Impl & rObj2 ) const
-    {
-        if( rObj1.xPropInfo != rObj2.xPropInfo )
-            return false;
-
-        bool bEqual = false;
-        sal_Int32 nLen1 = rObj1.maImpIdSeq.getLength();
-        sal_Int32 nLen2 = rObj2.maImpIdSeq.getLength();
-        if( nLen1 == nLen2 && nLen1 > 0 )
-        {
-            const sal_Int8* pId1 = rObj1.maImpIdSeq.getConstArray();
-            const sal_Int8* pId2 = rObj2.maImpIdSeq.getConstArray();
-            bEqual = (memcmp( pId1, pId2, nLen1 * sizeof( sal_Int8 ) ) == 0 );
+struct ClassKeyLess {
+    bool operator ()(ClassKey const & key1, ClassKey const & key2) const {
+        if (key1.properties.get() < key2.properties.get()) {
+            return true;
         }
-        return bEqual;
+        if (key1.properties.get() > key2.properties.get()) {
+            return false;
+        }
+        if (key1.implementation.get() < key2.implementation.get()) {
+            return true;
+        }
+        if (key1.implementation.get() > key2.implementation.get()) {
+            return false;
+        }
+        if (key1.classes.getLength() < key2.classes.getLength()) {
+            return true;
+        }
+        if (key1.classes.getLength() > key2.classes.getLength()) {
+            return false;
+        }
+        for (sal_Int32 i = 0; i != key1.classes.getLength(); ++i) {
+            if (key1.classes[i].get() < key2.classes[i].get()) {
+                return true;
+            }
+            if (key1.classes[i].get() > key2.classes[i].get()) {
+                return false;
+            }
+        }
+        return false;
     }
 };
 
-size_t TypeProviderAccessCache_Impl::operator()(const hashTypeProviderKey_Impl & rObj ) const
-{
-    const sal_Int32* pBytesAsInt32Array = (const sal_Int32*)rObj.maImpIdSeq.getConstArray();
-    sal_Int32 nLen = rObj.maImpIdSeq.getLength();
-    sal_Int32 nCount32 = nLen / 4;
-    sal_Int32 nMod32 = nLen % 4;
+struct TypeKey {
+    TypeKey(
+        css::uno::Reference<css::beans::XPropertySetInfo> const & theProperties,
+        css::uno::Sequence<sal_Int8> const & theId):
+        properties(theProperties), id(theId)
+    {}
 
-    // XOR with full 32 bit values
-    sal_Int32 nId32 = 0;
-    sal_Int32 i;
-    for( i = 0 ; i < nCount32 ; i++ )
-        nId32 ^= *(pBytesAsInt32Array++);
+    css::uno::Reference<css::beans::XPropertySetInfo> properties;
+    css::uno::Sequence<sal_Int8> id;
+};
 
-    // XOR with remaining byte values
-    if( nMod32 )
-    {
-        const sal_Int8* pBytes = (const sal_Int8*)pBytesAsInt32Array;
-        sal_Int8* pInt8_Id32 = (sal_Int8*)&nId32;
-        for( i = 0 ; i < nMod32 ; i++ )
-            *(pInt8_Id32++) ^= *(pBytes++);
+struct TypeKeyLess {
+    bool operator ()(TypeKey const & key1, TypeKey const & key2) const {
+        if (key1.properties.get() < key2.properties.get()) {
+            return true;
+        }
+        if (key1.properties.get() > key2.properties.get()) {
+            return false;
+        }
+        if (key1.id.getLength() < key2.id.getLength()) {
+            return true;
+        }
+        if (key1.id.getLength() > key2.id.getLength()) {
+            return false;
+        }
+        for (sal_Int32 i = 0; i != key1.id.getLength(); ++i) {
+            if (key1.id[i] < key2.id[i]) {
+                return true;
+            }
+            if (key1.id[i] > key2.id[i]) {
+                return false;
+            }
+        }
+        return false;
+    }
+};
+
+template<typename Key, typename Less> class Cache {
+public:
+    rtl::Reference<IntrospectionAccessStatic_Impl> find(Key const & key) const {
+        typename Map::const_iterator i(map_.find(key));
+        if (i == map_.end()) {
+            return rtl::Reference<IntrospectionAccessStatic_Impl>();
+        } else {
+            if (i->second.hits < std::numeric_limits<unsigned>::max()) {
+                ++i->second.hits;
+            }
+            assert(i->second.access.is());
+            return i->second.access;
+        }
     }
 
-    return (size_t)nId32;
-}
+    void insert(
+        Key const & key,
+        rtl::Reference<IntrospectionAccessStatic_Impl> const & access)
+    {
+        assert(access.is());
+        typename Map::size_type const MAX = 100;
+        assert(map_.size() <= MAX);
+        if (map_.size() == MAX) {
+            typename Map::iterator del(map_.begin());
+            for (typename Map::iterator i(map_.begin()); i != map_.end(); ++i) {
+                if (i->second.hits < del->second.hits) {
+                    del = i;
+                }
+            }
+            map_.erase(del);
+        }
+        bool ins = map_.insert(typename Map::value_type(key, Data(access)))
+            .second;
+        assert(ins); (void)ins;
+    }
 
+    void clear() { map_.clear(); }
 
-typedef boost::unordered_map
-<
-    hashTypeProviderKey_Impl,
-    rtl::Reference< IntrospectionAccessStatic_Impl >,
-    TypeProviderAccessCache_Impl,
-    TypeProviderAccessCache_Impl
->
-TypeProviderAccessCacheMap;
+private:
+    struct Data {
+        explicit Data(
+            rtl::Reference<IntrospectionAccessStatic_Impl> const & theAccess):
+            access(theAccess), hits(1)
+        {}
+
+        rtl::Reference<IntrospectionAccessStatic_Impl> access;
+        mutable unsigned hits;
+    };
+
+    typedef std::map<Key, Data, Less> Map;
+
+    Map map_;
+};
 
 typedef
     cppu::WeakComponentImplHelper2<
@@ -1593,8 +1587,8 @@ public:
 private:
     virtual void SAL_CALL disposing() SAL_OVERRIDE {
         reflection_.clear();
-        mCache.clear();
-        mTypeProviderCache.clear();
+        classCache_.clear();
+        typeCache_.clear();
     }
 
     virtual OUString SAL_CALL getImplementationName()
@@ -1619,8 +1613,8 @@ private:
         throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     css::uno::Reference<css::reflection::XIdlReflection> reflection_;
-    IntrospectionAccessCacheMap mCache;
-    TypeProviderAccessCacheMap mTypeProviderCache;
+    Cache<ClassKey, ClassKeyLess> classCache_;
+    Cache<TypeKey, TypeKeyLess> typeCache_;
 };
 
 css::uno::Reference<css::beans::XIntrospectionAccess> Implementation::inspect(
@@ -1709,91 +1703,25 @@ css::uno::Reference<css::beans::XIntrospectionAccess> Implementation::inspect(
         xImplClass = reflection_->forName(aToInspectObj.getValueTypeName());
     }
 
-    if( xTypeProvider.is() )
-    {
-        Sequence< sal_Int8 > aImpIdSeq = xTypeProvider->getImplementationId();
-        sal_Int32 nIdLen = aImpIdSeq.getLength();
-
-        if( nIdLen )
-        {
-            // cache only, if the descriptor class is set
-            hashTypeProviderKey_Impl aKeySeq( xPropSetInfo, aImpIdSeq );
-
-            TypeProviderAccessCacheMap::iterator aIt = mTypeProviderCache.find( aKeySeq );
-            if( aIt == mTypeProviderCache.end() )
-            {
-                // not found
-                // Neue Instanz anlegen und unter dem gegebenen Key einfuegen
-                pAccess = new IntrospectionAccessStatic_Impl( reflection_ );
-
-                // Groesse begrenzen, alten Eintrag wieder rausschmeissen
-                if( mTypeProviderCache.size() > INTROSPECTION_CACHE_MAX_SIZE )
-                {
-                    // Access mit dem kleinsten HitCount suchen
-                    TypeProviderAccessCacheMap::iterator iter = mTypeProviderCache.begin();
-                    TypeProviderAccessCacheMap::iterator end = mTypeProviderCache.end();
-                    TypeProviderAccessCacheMap::iterator toDelete = iter;
-                    while( iter != end )
-                    {
-                        if( (*iter).first.nHitCount < (*toDelete).first.nHitCount )
-                            toDelete = iter;
-                        ++iter;
-                    }
-                    mTypeProviderCache.erase( toDelete );
-                }
-
-                // Neuer Eintrage rein in die Table
-                aKeySeq.nHitCount = 1;
-                mTypeProviderCache[ aKeySeq ] = pAccess;
-
+    if (xTypeProvider.is()) {
+        css::uno::Sequence<sal_Int8> id(xTypeProvider->getImplementationId());
+        if (id.hasElements()) {
+            TypeKey key(xPropSetInfo, id);
+            pAccess = typeCache_.find(key);
+            if (pAccess.is()) {
+                return new ImplIntrospectionAccess(aToInspectObj, pAccess);
             }
-            else
-            {
-                // Hit-Count erhoehen
-                (*aIt).first.IncHitCount();
-                return new ImplIntrospectionAccess(aToInspectObj, (*aIt).second);
-            }
+            pAccess = new IntrospectionAccessStatic_Impl(reflection_);
+            typeCache_.insert(key, pAccess);
         }
-    }
-    else if( xImplClass.is() )
-    {
-        // cache only, if the descriptor class is set
-        hashIntrospectionKey_Impl    aKeySeq( SupportedClassSeq, xPropSetInfo, xImplClass );
-
-        IntrospectionAccessCacheMap::iterator aIt = mCache.find( aKeySeq );
-        if( aIt == mCache.end() )
-        {
-            // not found
-            // Neue Instanz anlegen und unter dem gegebenen Key einfuegen
-            pAccess = new IntrospectionAccessStatic_Impl( reflection_ );
-
-            // Groesse begrenzen, alten Eintrag wieder rausschmeissen
-            if( mCache.size() > INTROSPECTION_CACHE_MAX_SIZE )
-            {
-                // Access mit dem kleinsten HitCount suchen
-                IntrospectionAccessCacheMap::iterator iter = mCache.begin();
-                IntrospectionAccessCacheMap::iterator end = mCache.end();
-                IntrospectionAccessCacheMap::iterator toDelete = iter;
-                while( iter != end )
-                {
-                    if( (*iter).first.nHitCount < (*toDelete).first.nHitCount )
-                        toDelete = iter;
-                    ++iter;
-                }
-                mCache.erase( toDelete );
-            }
-
-            // Neuer Eintrage rein in die Table
-            aKeySeq.nHitCount = 1;
-            mCache[ aKeySeq ] = pAccess;
-
+    } else if (xImplClass.is()) {
+        ClassKey key(xPropSetInfo, xImplClass, SupportedClassSeq);
+        pAccess = classCache_.find(key);
+        if (pAccess.is()) {
+            return new ImplIntrospectionAccess(aToInspectObj, pAccess);
         }
-        else
-        {
-            // Hit-Count erhoehen
-            (*aIt).first.IncHitCount();
-            return new ImplIntrospectionAccess(aToInspectObj, (*aIt).second);
-        }
+        pAccess = new IntrospectionAccessStatic_Impl(reflection_);
+        classCache_.insert(key, pAccess);
     }
 
     // Kein Access gecached -> neu anlegen
