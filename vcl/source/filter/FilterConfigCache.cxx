@@ -326,9 +326,9 @@ sal_uInt16 FilterConfigCache::GetImportFormatNumber( const OUString& rFormatName
     for (aIter = aImport.begin(), aEnd = aImport.end(); aIter != aEnd; ++aIter)
     {
         if ( aIter->sUIName.equalsIgnoreAsciiCase( rFormatName ) )
-            break;
+            return sal::static_int_cast< sal_uInt16 >(aIter - aImport.begin());
     }
-    return sal::static_int_cast< sal_uInt16 >(aIter == aImport.end() ? GRFILTER_FORMAT_NOTFOUND : aIter - aImport.begin());
+    return GRFILTER_FORMAT_NOTFOUND;
 }
 
 /// get the index of the filter that matches this extension
@@ -352,9 +352,9 @@ sal_uInt16 FilterConfigCache::GetImportFormatNumberForMediaType( const OUString&
     for (aIter = aImport.begin(), aEnd = aImport.end(); aIter != aEnd; ++aIter)
     {
         if ( aIter->sMediaType.equalsIgnoreAsciiCase( rMediaType ) )
-            break;
+            return sal::static_int_cast< sal_uInt16 >(aIter - aImport.begin());
     }
-    return sal::static_int_cast< sal_uInt16 >(aIter == aImport.end() ? GRFILTER_FORMAT_NOTFOUND : aIter - aImport.begin());
+    return GRFILTER_FORMAT_NOTFOUND;
 }
 
 sal_uInt16 FilterConfigCache::GetImportFormatNumberForShortName( const OUString& rShortName )
@@ -364,9 +364,9 @@ sal_uInt16 FilterConfigCache::GetImportFormatNumberForShortName( const OUString&
     for (aIter = aImport.begin(), aEnd = aImport.end(); aIter != aEnd; ++aIter)
     {
         if ( aIter->GetShortName().equalsIgnoreAsciiCase( rShortName ) )
-            break;
+            return sal::static_int_cast< sal_uInt16 >(aIter - aImport.begin());
     }
-    return sal::static_int_cast< sal_uInt16 >(aIter == aImport.end() ? GRFILTER_FORMAT_NOTFOUND : aIter - aImport.begin());
+    return GRFILTER_FORMAT_NOTFOUND;
 }
 
 sal_uInt16 FilterConfigCache::GetImportFormatNumberForTypeName( const OUString& rType )
@@ -375,9 +375,9 @@ sal_uInt16 FilterConfigCache::GetImportFormatNumberForTypeName( const OUString& 
     for (aIter = aImport.begin(), aEnd = aImport.end(); aIter != aEnd; ++aIter)
     {
         if ( aIter->sType.equalsIgnoreAsciiCase( rType ) )
-            break;
+            return sal::static_int_cast< sal_uInt16 >(aIter - aImport.begin());
     }
-    return sal::static_int_cast< sal_uInt16 >(aIter == aImport.end() ? GRFILTER_FORMAT_NOTFOUND : aIter - aImport.begin());
+    return GRFILTER_FORMAT_NOTFOUND;
 }
 
 OUString FilterConfigCache::GetImportFormatName( sal_uInt16 nFormat )
@@ -455,9 +455,9 @@ sal_uInt16 FilterConfigCache::GetExportFormatNumber( const OUString& rFormatName
     for (aIter = aExport.begin(), aEnd = aExport.end(); aIter != aEnd; ++aIter)
     {
         if ( aIter->sUIName.equalsIgnoreAsciiCase( rFormatName ) )
-            break;
+            return sal::static_int_cast< sal_uInt16 >(aIter - aExport.begin());
     }
-    return sal::static_int_cast< sal_uInt16 >(aIter == aExport.end() ? GRFILTER_FORMAT_NOTFOUND : aIter - aExport.begin());
+    return GRFILTER_FORMAT_NOTFOUND;
 }
 
 sal_uInt16 FilterConfigCache::GetExportFormatNumberForMediaType( const OUString& rMediaType )
@@ -466,9 +466,9 @@ sal_uInt16 FilterConfigCache::GetExportFormatNumberForMediaType( const OUString&
     for (aIter = aExport.begin(), aEnd = aExport.end(); aIter != aEnd; ++aIter)
     {
         if ( aIter->sMediaType.equalsIgnoreAsciiCase( rMediaType ) )
-            break;
+            return sal::static_int_cast< sal_uInt16 >(aIter - aExport.begin());
     }
-    return sal::static_int_cast< sal_uInt16 >(aIter == aExport.end() ? GRFILTER_FORMAT_NOTFOUND : aIter - aExport.begin());
+    return GRFILTER_FORMAT_NOTFOUND;
 }
 
 sal_uInt16 FilterConfigCache::GetExportFormatNumberForShortName( const OUString& rShortName )
@@ -478,9 +478,9 @@ sal_uInt16 FilterConfigCache::GetExportFormatNumberForShortName( const OUString&
     for (aIter = aExport.begin(), aEnd = aExport.end(); aIter != aEnd; ++aIter)
     {
         if ( aIter->GetShortName().equalsIgnoreAsciiCase( rShortName ) )
-            break;
+            return sal::static_int_cast< sal_uInt16 >(aIter - aExport.begin());
     }
-    return sal::static_int_cast< sal_uInt16 >(aIter == aExport.end() ? GRFILTER_FORMAT_NOTFOUND : aIter - aExport.begin());
+    return GRFILTER_FORMAT_NOTFOUND;
 }
 
 sal_uInt16 FilterConfigCache::GetExportFormatNumberForTypeName( const OUString& rType )
@@ -489,9 +489,9 @@ sal_uInt16 FilterConfigCache::GetExportFormatNumberForTypeName( const OUString& 
     for (aIter = aExport.begin(), aEnd = aExport.end(); aIter != aEnd; ++aIter)
     {
         if ( aIter->sType.equalsIgnoreAsciiCase( rType ) )
-            break;
+            return sal::static_int_cast< sal_uInt16 >(aIter - aExport.begin());
     }
-    return sal::static_int_cast< sal_uInt16 >(aIter == aExport.end() ? GRFILTER_FORMAT_NOTFOUND : aIter - aExport.begin());
+    return GRFILTER_FORMAT_NOTFOUND;
 }
 
 OUString FilterConfigCache::GetExportFormatName( sal_uInt16 nFormat )
