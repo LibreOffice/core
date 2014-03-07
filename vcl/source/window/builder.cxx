@@ -208,7 +208,7 @@ VclBuilder::VclBuilder(Window *pParent, OUString sUIDir, OUString sUIFile, OStri
     {
         FixedText *pOne = get<FixedText>(aI->m_sID);
         Window *pOther = get<Window>(aI->m_sValue);
-        SAL_WARN_IF(!pOne || !pOther, "vcl", "missing member of Mnemonic Widget Mapping");
+        SAL_WARN_IF(!pOne || !pOther, "vcl", "missing either source " << aI->m_sID << " or target " << aI->m_sValue << " member of Mnemonic Widget Mapping");
         if (pOne && pOther)
             pOne->set_mnemonic_widget(pOther);
     }

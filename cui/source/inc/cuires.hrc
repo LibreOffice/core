@@ -261,7 +261,6 @@
 
 // customize
 #define RID_SVXDLG_CUSTOMIZE                (RID_SVX_START + 291)
-#define RID_SVXPAGE_MENUS                   (RID_SVX_START + 292)
 #define RID_SVXPAGE_TOOLBARS                (RID_SVX_START + 294)
 #define RID_SVXPAGE_CONFIGGROUPBOX          (RID_SVX_START + 304)
 #define RID_SVXDLG_ASSIGNCOMPONENT          (RID_SVX_START + 297)

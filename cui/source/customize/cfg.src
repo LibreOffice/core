@@ -20,12 +20,6 @@
 #include "cfg.hrc"
 #include "helpid.hrc"
 
-#define TEXT_MENU \
-    Text [ en-US ] = "Menu" ;\
-
-#define TEXT_BEGIN_GROUP \
-    Text [ en-US ] = "Add Separator" ;\
-
 #define TEXT_RENAME \
     Text [ en-US ] = "Rename..." ;\
 
@@ -35,213 +29,8 @@
 #define TEXT_DELETE_NODOTS \
     Text [ en-US ] = "Delete" ;\
 
-#define TEXT_MOVE \
-    Text [ en-US ] = "Move..." ;\
-
-#define TEXT_DEFAULT_STYLE \
-    Text [ en-US ] = "Restore Default Settings" ;\
-
-#define TEXT_DEFAULT_COMMAND \
-    Text [ en-US ] = "Restore Default Command" ;\
-
 #define TEXT_TEXT_ONLY \
     Text [ en-US ] = "Text only" ;\
-
-#define TEXT_TOOLBAR_NAME \
-    Text [ en-US ] = "Toolbar Name" ;\
-
-#define TEXT_SAVE_IN \
-    Text [ en-US ] = "Save In" ;\
-
-TabPage RID_SVXPAGE_MENUS
-{
-    Hide = TRUE ;
-    Size = MAP_APPFONT ( 273 , 258 ) ;
-    HelpId = HID_SVX_CONFIG_MENU ;
-    FixedLine GRP_MENUS
-    {
-        Pos = MAP_APPFONT ( 6 , 11 ) ;
-        Size = MAP_APPFONT ( 261 , 8 ) ;
-        Text [ en-US ] = "%PRODUCTNAME %MODULENAME Menus" ;
-    };
-    FixedText FT_MENUS
-    {
-        Pos = MAP_APPFONT ( 9 , 24 ) ;
-        Size = MAP_APPFONT ( 55 , 8 ) ;
-        TEXT_MENU
-    };
-    ListBox LB_MENUS
-    {
-        HelpID = "cui:ListBox:RID_SVXPAGE_MENUS:LB_MENUS";
-        Border = TRUE ;
-        Pos = MAP_APPFONT ( 64 , 22 ) ;
-        Size = MAP_APPFONT ( 108 , 108 ) ;
-        DropDown = TRUE ;
-    };
-    PushButton BTN_NEW
-    {
-        HelpID = "cui:PushButton:RID_SVXPAGE_MENUS:BTN_NEW";
-        Pos = MAP_APPFONT ( 192 , 22 ) ;
-        Size = MAP_APPFONT ( 75 , 14 ) ;
-        TabStop = TRUE ;
-        Text [ en-US ] = "New..." ;
-    };
-    MenuButton BTN_CHANGE
-    {
-        HelpID = "cui:MenuButton:RID_SVXPAGE_MENUS:BTN_CHANGE";
-        Pos = MAP_APPFONT ( 192 , 39 ) ;
-        Size = MAP_APPFONT ( 75 , 14 ) ;
-        TabStop = TRUE ;
-        TEXT_MENU
-    };
-    FixedLine GRP_MENU_SEPARATOR
-    {
-        Pos = MAP_APPFONT ( 6 , 56 ) ;
-        Size = MAP_APPFONT ( 261 , 8 ) ;
-        Text [ en-US ] = "Menu Content" ;
-    };
-    FixedText GRP_MENU_ENTRIES
-    {
-        Pos = MAP_APPFONT ( 9 , 67 ) ;
-        Size = MAP_APPFONT ( 55 , 8 ) ;
-        Group = TRUE ;
-        Text [ en-US ] = "Entries" ;
-    };
-    Control BOX_ENTRIES
-    {
-        Border = TRUE ;
-        Pos = MAP_APPFONT ( 64 , 67 ) ;
-        Size = MAP_APPFONT ( 108 , 115 ) ;
-        TabStop = TRUE ;
-        HelpId = HID_SVX_CONFIG_MENU_CONTENTS ;
-    };
-    PushButton BTN_ADD_COMMANDS
-    {
-        HelpID = "cui:PushButton:RID_SVXPAGE_MENUS:BTN_ADD_COMMANDS";
-        Pos = MAP_APPFONT ( 192 , 67 ) ;
-        Size = MAP_APPFONT ( 75 , 14 ) ;
-        TabStop = TRUE ;
-        Text [ en-US ] = "Add..." ;
-    };
-    MenuButton BTN_CHANGE_ENTRY
-    {
-        HelpID = "cui:MenuButton:RID_SVXPAGE_MENUS:BTN_CHANGE_ENTRY";
-        Pos = MAP_APPFONT ( 192 , 84 ) ;
-        Size = MAP_APPFONT ( 75 , 14 ) ;
-        TabStop = TRUE ;
-        Text [ en-US ] = "Modify" ;
-    };
-    ImageButton BTN_UP
-    {
-        HelpID = "cui:ImageButton:RID_SVXPAGE_MENUS:BTN_UP";
-        Pos = MAP_APPFONT ( 175 , 102 ) ;
-        Size = MAP_APPFONT ( 14 , 14 ) ;
-        TabStop = TRUE ;
-        Symbol = IMAGEBUTTON_ARROW_UP ;
-        Disable = TRUE ;
-    };
-    ImageButton BTN_DOWN
-    {
-        HelpID = "cui:ImageButton:RID_SVXPAGE_MENUS:BTN_DOWN";
-        Pos = MAP_APPFONT ( 175 , 119 ) ;
-        Size = MAP_APPFONT ( 14 , 14 ) ;
-        TabStop = TRUE ;
-        Symbol = IMAGEBUTTON_ARROW_DOWN ;
-        Disable = TRUE ;
-    };
-    FixedText TXT_SAVEIN
-    {
-        Pos = MAP_APPFONT ( 9 , 190 ) ;
-        Size = MAP_APPFONT ( 55 , 8 ) ;
-        Group = TRUE ;
-        TEXT_SAVE_IN
-    };
-    ListBox LB_SAVEIN
-    {
-        HelpID = "cui:ListBox:RID_SVXPAGE_MENUS:LB_SAVEIN";
-        Border = TRUE ;
-        Pos = MAP_APPFONT ( 64 , 188 ) ;
-        Size = MAP_APPFONT ( 108 , 53 ) ;
-        DropDown = TRUE ;
-    };
-    FixedText FT_DESCRIPTION
-    {
-        Pos = MAP_APPFONT ( 6 , 205 ) ;
-        Size = MAP_APPFONT ( 261 , 8 ) ;
-        Text [ en-US ] = "Description" ;
-    };
-    MultiLineEdit ED_DESCRIPTION
-    {
-        HelpID = "cui:MultiLineEdit:RID_SVXPAGE_MENUS:ED_DESCRIPTION";
-        Pos = MAP_APPFONT ( 6 , 216 ) ;
-        Size = MAP_APPFONT ( 261 , 36 ) ;
-        Border = TRUE;
-        VScroll = TRUE;
-        IgnoreTab = TRUE;
-        ReadOnly = TRUE;
-    };
-};
-
-Menu MODIFY_MENU
-{
-    ItemList =
-    {
-        MenuItem
-        {
-            Identifier = ID_MOVE ;
-            TEXT_MOVE
-        };
-        MenuItem
-        {
-            Identifier = ID_RENAME ;
-            TEXT_RENAME
-        };
-        MenuItem
-        {
-            Separator = TRUE ;
-        };
-        MenuItem
-        {
-            Identifier = ID_DELETE ;
-            TEXT_DELETE
-        };
-    };
-};
-
-Menu MODIFY_ENTRY
-{
-    ItemList =
-    {
-        MenuItem
-        {
-            Identifier = ID_ADD_SUBMENU ;
-            Text [ en-US ] = "Add Submenu..." ;
-        };
-        MenuItem
-        {
-            Identifier = ID_BEGIN_GROUP ;
-            TEXT_BEGIN_GROUP
-        };
-        MenuItem
-        {
-            Separator = TRUE ;
-        };
-        MenuItem
-        {
-            Identifier = ID_RENAME ;
-            TEXT_RENAME
-        };
-        MenuItem
-        {
-            Separator = TRUE ;
-        };
-        MenuItem
-        {
-            Identifier = ID_DELETE ;
-            TEXT_DELETE_NODOTS
-        };
-    };
-};
 
 Menu MODIFY_TOOLBAR
 {
@@ -264,7 +53,7 @@ Menu MODIFY_TOOLBAR
         MenuItem
         {
             Identifier = ID_DEFAULT_STYLE ;
-            TEXT_DEFAULT_STYLE
+            Text [ en-US ] = "Restore Default Settings" ;
         };
         MenuItem
         {
@@ -311,7 +100,7 @@ Menu MODIFY_TOOLBAR_CONTENT
         MenuItem
         {
             Identifier = ID_DEFAULT_COMMAND ;
-            TEXT_DEFAULT_COMMAND
+            Text [ en-US ] = "Restore Default Command" ;
         };
         MenuItem
         {
@@ -320,7 +109,7 @@ Menu MODIFY_TOOLBAR_CONTENT
         MenuItem
         {
             Identifier = ID_BEGIN_GROUP ;
-            TEXT_BEGIN_GROUP
+            Text [ en-US ] = "Add Separator" ;
         };
         MenuItem
         {
@@ -550,7 +339,7 @@ String RID_SVXSTR_COMMAND
 
 String RID_SVXSTR_TOOLBAR_NAME
 {
-    TEXT_TOOLBAR_NAME
+    Text [ en-US ] = "Toolbar Name" ;
 };
 
 /* %MENUNAME will be replaced at runtime by the name of the selected menu. */

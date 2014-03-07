@@ -321,7 +321,7 @@ protected:
     bool                m_bIsInternalDrag;
 
 public:
-    SvxMenuEntriesListBox( Window*, const ResId& );
+    SvxMenuEntriesListBox(Window*, SvxConfigPage*);
     ~SvxMenuEntriesListBox();
 
     virtual sal_Int8    AcceptDrop( const AcceptDropEvent& rEvt );
@@ -342,19 +342,6 @@ public:
     void                KeyInput( const KeyEvent& rKeyEvent );
 };
 
-class SvxDescriptionEdit : public ExtMultiLineEdit
-{
-private:
-    Rectangle           m_aRealRect;
-
-public:
-    SvxDescriptionEdit( Window* pParent, const ResId& _rId );
-    inline ~SvxDescriptionEdit() {}
-
-    void                SetNewText( const OUString& _rText );
-    inline void         Clear() { SetNewText( OUString() ); }
-};
-
 class SvxConfigPage : public SfxTabPage
 {
 private:
@@ -372,40 +359,38 @@ protected:
 
     // the top section of the tab page where top level menus and toolbars
     //  are displayed in a listbox
-    FixedLine                           aTopLevelSeparator;
-    FixedText                           aTopLevelLabel;
-    ListBox                             aTopLevelListBox;
-    PushButton                          aNewTopLevelButton;
-    MenuButton                          aModifyTopLevelButton;
+    VclFrame*                           m_pTopLevel;
+    FixedText*                          m_pTopLevelLabel;
+    ListBox*                            m_pTopLevelListBox;
+    PushButton*                         m_pNewTopLevelButton;
+    MenuButton*                         m_pModifyTopLevelButton;
 
     // the contents section where the contents of the selected
     // menu or toolbar are displayed
-    FixedLine                           aContentsSeparator;
-    FixedText                           aContentsLabel;
-    SvTreeListBox*                      aContentsListBox;
+    VclFrame*                           m_pContents;
+    FixedText*                          m_pContentsLabel;
+    VclContainer*                       m_pEntries;
+    SvTreeListBox*                      m_pContentsListBox;
 
-    PushButton                          aAddCommandsButton;
-    MenuButton                          aModifyCommandButton;
+    PushButton*                         m_pAddCommandsButton;
+    MenuButton*                         m_pModifyCommandButton;
 
-    ImageButton                         aMoveUpButton;
-    ImageButton                         aMoveDownButton;
+    PushButton*                         m_pMoveUpButton;
+    PushButton*                         m_pMoveDownButton;
 
-    FixedText                           aSaveInText;
-    ListBox                             aSaveInListBox;
+    ListBox*                            m_pSaveInListBox;
 
-    FixedText                           aDescriptionLabel;
-    SvxDescriptionEdit                  aDescriptionField;
+    VclMultiLineEdit*                   m_pDescriptionField;
 
-    SvxScriptSelectorDialog*            pSelectorDlg;
+    SvxScriptSelectorDialog*            m_pSelectorDlg;
 
     /// the ResourceURL to select when opening the dialog
-    OUString                       m_aURLToSelect;
+    OUString                            m_aURLToSelect;
 
     ::com::sun::star::uno::Reference
         < ::com::sun::star::frame::XFrame > m_xFrame;
 
     SvxConfigPage( Window*, const SfxItemSet& );
-    virtual ~SvxConfigPage();
 
     DECL_LINK( MoveHdl, Button * );
 
@@ -420,8 +405,6 @@ protected:
     virtual void            Init() = 0;
     virtual void            UpdateButtonStates() = 0;
     virtual short           QueryReset() = 0;
-
-    void            PositionContentsListBox();
 
     SvTreeListEntry*    InsertEntry(        SvxConfigEntry* pNewEntryData,
                                         SvTreeListEntry* pTarget = NULL,
@@ -461,8 +444,8 @@ public:
 
     SvxConfigEntry* GetTopLevelSelection()
     {
-        return (SvxConfigEntry*) aTopLevelListBox.GetEntryData(
-            aTopLevelListBox.GetSelectEntryPos() );
+        return (SvxConfigEntry*) m_pTopLevelListBox->GetEntryData(
+            m_pTopLevelListBox->GetSelectEntryPos() );
     }
 
     /** identifies the module in the given frame. If the frame is <NULL/>, a default
@@ -559,9 +542,7 @@ protected:
 
 public:
 
-    SvxToolbarEntriesListBox(
-        Window* pParent, const ResId& );
-
+    SvxToolbarEntriesListBox(Window* pParent, SvxToolbarConfigPage* pPg);
     ~SvxToolbarEntriesListBox();
 
     void            SetChangedListener( const Link& aChangedListener )
@@ -785,10 +766,10 @@ public:
 class SvxIconChangeDialog : public ModalDialog
 {
 private:
-    FixedImage      aFImageInfo;
-    OKButton        aBtnOK;
-    FixedText         aDescriptionLabel;
-    SvxDescriptionEdit aLineEditDescription;
+    FixedImage       aFImageInfo;
+    OKButton         aBtnOK;
+    FixedText        aDescriptionLabel;
+    VclMultiLineEdit aLineEditDescription;
 public:
     SvxIconChangeDialog(Window *pWindow, const OUString& aMessage);
 };
