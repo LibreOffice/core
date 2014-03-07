@@ -664,12 +664,6 @@ LIBO_UDK_4.1 { # symbols available in >= LibO 4.1
         rtl_ustr_toUInt64;
 } LIBO_UDK_4.0;
 
-LIBO_UDK_4.3 { #symbols available in >= LibO 4.3
-    global:
-         rtl_str_hashCode64_WithLength;
-         rtl_ustr_hashCode64_WithLength;
-} LIBO_UDK_4.2;
-
 PRIVATE_1.0 {
     global:
         osl_detail_ObjectRegistry_storeAddresses;

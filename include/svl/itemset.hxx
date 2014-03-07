@@ -151,7 +151,7 @@ public:
     virtual SvStream &          Store( SvStream &, bool bDirect = false ) const;
 
     virtual int                 operator==(const SfxItemSet &) const;
-    virtual sal_uInt64          getHash() const;
+    sal_Int32                   getHash() const;
     virtual OString             stringify() const;
 };
 
