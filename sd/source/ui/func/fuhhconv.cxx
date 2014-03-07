@@ -136,7 +136,7 @@ void FuHangulHanjaConversion::StartConversion( sal_Int16 nSourceLanguage, sal_In
 
     // Due to changing between edit mode, notes mode, and handout mode the
     // view has most likely changed.  Get the new one.
-    mpViewShell = pBase->GetMainViewShell().get();
+    mpViewShell = pBase ? pBase->GetMainViewShell().get() : NULL;
     if (mpViewShell != NULL)
     {
         mpView = mpViewShell->GetView();
