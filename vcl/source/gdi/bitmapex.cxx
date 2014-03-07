@@ -44,6 +44,7 @@
 #include <salinst.hxx>
 #include <svdata.hxx>
 #include <com/sun/star/beans/XFastPropertySet.hpp>
+#include <boost/scoped_ptr.hpp>
 using namespace ::com::sun::star;
 
 BitmapEx::BitmapEx() :
@@ -793,11 +794,10 @@ bool BitmapEx::Create( const ::com::sun::star::uno::Reference<
     {
         // 0 means get BitmapEx
         uno::Any aAny = xFastPropertySet->getFastPropertyValue( 0 );
-        BitmapEx* pBitmapEx = (BitmapEx*) *reinterpret_cast<const sal_Int64*>(aAny.getValue());
+        boost::scoped_ptr<BitmapEx> pBitmapEx((BitmapEx*) *reinterpret_cast<const sal_Int64*>(aAny.getValue()));
         if( pBitmapEx )
         {
             *this = *pBitmapEx;
-            delete pBitmapEx;
             return true;
         }
     }
@@ -839,12 +839,12 @@ namespace
         bool bSmooth)
     {
         Bitmap aDestination(aDestinationSize, 24);
-        BitmapWriteAccess* pWrite = aDestination.AcquireWriteAccess();
+        boost::scoped_ptr<BitmapWriteAccess> pWrite(aDestination.AcquireWriteAccess());
 
         if(pWrite)
         {
             //const Size aContentSizePixel(rSource.GetSizePixel());
-            BitmapReadAccess* pRead = (const_cast< Bitmap& >(rSource)).AcquireReadAccess();
+            boost::scoped_ptr<BitmapReadAccess> pRead((const_cast< Bitmap& >(rSource)).AcquireReadAccess());
 
             if(pRead)
             {
@@ -881,11 +881,7 @@ namespace
                         }
                     }
                 }
-
-                delete pRead;
             }
-
-            delete pWrite;
         }
 
         rSource.AdaptBitCount(aDestination);
@@ -1032,7 +1028,7 @@ BitmapEx BitmapEx::ModifyBitmapEx(const basegfx::BColorModifierStack& rBColorMod
                     // do NOT use erase; for e.g. 8bit Bitmaps, the nearest color to the given
                     // erase color is determined and used -> this may be different from what is
                     // wanted here. Better create a new bitmap with the needed color explicitely
-                    BitmapReadAccess* pReadAccess = aChangedBitmap.AcquireReadAccess();
+                    boost::scoped_ptr<BitmapReadAccess> pReadAccess(aChangedBitmap.AcquireReadAccess());
                     OSL_ENSURE(pReadAccess, "Got no Bitmap ReadAccess ?!?");
 
                     if(pReadAccess)
@@ -1043,7 +1039,6 @@ BitmapEx BitmapEx::ModifyBitmapEx(const basegfx::BColorModifierStack& rBColorMod
                             aChangedBitmap.GetSizePixel(),
                             aChangedBitmap.GetBitCount(),
                             &aNewPalette);
-                        delete pReadAccess;
                     }
                 }
                 else
@@ -1061,7 +1056,7 @@ BitmapEx BitmapEx::ModifyBitmapEx(const basegfx::BColorModifierStack& rBColorMod
         }
         else
         {
-            BitmapWriteAccess* pContent = aChangedBitmap.AcquireWriteAccess();
+            boost::scoped_ptr<BitmapWriteAccess> pContent(aChangedBitmap.AcquireWriteAccess());
 
             if(pContent)
             {
@@ -1137,8 +1132,6 @@ BitmapEx BitmapEx::ModifyBitmapEx(const basegfx::BColorModifierStack& rBColorMod
                         }
                     }
                 }
-
-                delete pContent;
             }
         }
     }

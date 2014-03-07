@@ -23,6 +23,8 @@
 #include "generic/printergfx.hxx"
 #include "vcl/strhelper.hxx"
 
+#include <boost/scoped_ptr.hpp>
+
 namespace psp {
 
 const sal_uInt32 nLineLength = 80;
@@ -489,7 +491,7 @@ PrinterGfx::DrawPS1GrayImage (const PrinterBmp& rBitmap, const Rectangle& rArea)
     WritePS (mpPageBody, pGrayImage);
 
     // image body
-    HexEncoder* pEncoder = new HexEncoder (mpPageBody);
+    boost::scoped_ptr<HexEncoder> pEncoder(new HexEncoder (mpPageBody));
 
     for (long nRow = rArea.Top(); nRow <= rArea.Bottom(); nRow++)
     {
@@ -500,7 +502,7 @@ PrinterGfx::DrawPS1GrayImage (const PrinterBmp& rBitmap, const Rectangle& rArea)
         }
     }
 
-    delete pEncoder;
+    pEncoder.reset();
 
     WritePS (mpPageBody, "\n");
 }
@@ -572,8 +574,8 @@ PrinterGfx::writePS2Colorspace(const PrinterBmp& rBitmap, psp::ImageType nType)
                 nChar += psp::appendStr ("\npsp_ascii85string\n", pImage + nChar);
             WritePS (mpPageBody, pImage);
 
-            ByteEncoder* pEncoder = mbCompressBmp ? new LZWEncoder(mpPageBody)
-                                                  : new Ascii85Encoder(mpPageBody);
+            boost::scoped_ptr<ByteEncoder> pEncoder(mbCompressBmp ? new LZWEncoder(mpPageBody)
+                                                    : new Ascii85Encoder(mpPageBody));
             for (sal_uInt32 i = 0; i < nSize; i++)
             {
                 PrinterColor aColor = rBitmap.GetPaletteColor(i);
@@ -582,7 +584,7 @@ PrinterGfx::writePS2Colorspace(const PrinterBmp& rBitmap, psp::ImageType nType)
                 pEncoder->EncodeByte (aColor.GetGreen());
                 pEncoder->EncodeByte (aColor.GetBlue());
             }
-            delete pEncoder;
+            pEncoder.reset();
 
             WritePS (mpPageBody, "pop ] setcolorspace\n");
         }
@@ -597,8 +599,8 @@ PrinterGfx::DrawPS2GrayImage (const PrinterBmp& rBitmap, const Rectangle& rArea)
     writePS2Colorspace(rBitmap, psp::GrayScaleImage);
     writePS2ImageHeader(rArea, psp::GrayScaleImage);
 
-    ByteEncoder* pEncoder = mbCompressBmp ? new LZWEncoder(mpPageBody)
-                                          : new Ascii85Encoder(mpPageBody);
+    boost::scoped_ptr<ByteEncoder> pEncoder(mbCompressBmp ? new LZWEncoder(mpPageBody)
+                                            : new Ascii85Encoder(mpPageBody));
 
     for (long nRow = rArea.Top(); nRow <= rArea.Bottom(); nRow++)
     {
@@ -608,8 +610,6 @@ PrinterGfx::DrawPS2GrayImage (const PrinterBmp& rBitmap, const Rectangle& rArea)
             pEncoder->EncodeByte (nByte);
         }
     }
-
-    delete pEncoder;
 }
 
 void
@@ -618,8 +618,8 @@ PrinterGfx::DrawPS2MonoImage (const PrinterBmp& rBitmap, const Rectangle& rArea)
     writePS2Colorspace(rBitmap, psp::MonochromeImage);
     writePS2ImageHeader(rArea, psp::MonochromeImage);
 
-    ByteEncoder* pEncoder = mbCompressBmp ? new LZWEncoder(mpPageBody)
-                                          : new Ascii85Encoder(mpPageBody);
+    boost::scoped_ptr<ByteEncoder> pEncoder(mbCompressBmp ? new LZWEncoder(mpPageBody)
+                                            : new Ascii85Encoder(mpPageBody));
 
     for (long nRow = rArea.Top(); nRow <= rArea.Bottom(); nRow++)
     {
@@ -643,8 +643,6 @@ PrinterGfx::DrawPS2MonoImage (const PrinterBmp& rBitmap, const Rectangle& rArea)
         if (nBitPos != 0)
             pEncoder->EncodeByte (nByte);
     }
-
-    delete pEncoder;
 }
 
 void
@@ -653,8 +651,8 @@ PrinterGfx::DrawPS2PaletteImage (const PrinterBmp& rBitmap, const Rectangle& rAr
     writePS2Colorspace(rBitmap, psp::PaletteImage);
     writePS2ImageHeader(rArea, psp::PaletteImage);
 
-    ByteEncoder* pEncoder = mbCompressBmp ? new LZWEncoder(mpPageBody)
-                                          : new Ascii85Encoder(mpPageBody);
+    boost::scoped_ptr<ByteEncoder> pEncoder(mbCompressBmp ? new LZWEncoder(mpPageBody)
+                                            : new Ascii85Encoder(mpPageBody));
 
     for (long nRow = rArea.Top(); nRow <= rArea.Bottom(); nRow++)
     {
@@ -664,8 +662,6 @@ PrinterGfx::DrawPS2PaletteImage (const PrinterBmp& rBitmap, const Rectangle& rAr
             pEncoder->EncodeByte (nByte);
         }
     }
-
-    delete pEncoder;
 }
 
 void
@@ -674,8 +670,8 @@ PrinterGfx::DrawPS2TrueColorImage (const PrinterBmp& rBitmap, const Rectangle& r
     writePS2Colorspace(rBitmap, psp::TrueColorImage);
     writePS2ImageHeader(rArea, psp::TrueColorImage);
 
-    ByteEncoder* pEncoder = mbCompressBmp ? new LZWEncoder(mpPageBody)
-                                          : new Ascii85Encoder(mpPageBody);
+    boost::scoped_ptr<ByteEncoder> pEncoder(mbCompressBmp ? new LZWEncoder(mpPageBody)
+                                            : new Ascii85Encoder(mpPageBody));
 
     for (long nRow = rArea.Top(); nRow <= rArea.Bottom(); nRow++)
     {
@@ -687,8 +683,6 @@ PrinterGfx::DrawPS2TrueColorImage (const PrinterBmp& rBitmap, const Rectangle& r
             pEncoder->EncodeByte (aColor.GetBlue());
         }
     }
-
-    delete pEncoder;
 }
 
 } /* namespace psp */

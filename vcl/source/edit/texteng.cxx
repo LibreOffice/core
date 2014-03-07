@@ -57,6 +57,7 @@
 #include <set>
 #include <vector>
 #include <boost/foreach.hpp>
+#include <boost/scoped_ptr.hpp>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -615,7 +616,7 @@ TextPaM TextEngine::ImpDeleteText( const TextSelection& rSel )
 void TextEngine::ImpRemoveParagraph( sal_uLong nPara )
 {
     TextNode* pNode = mpDoc->GetNodes().GetObject( nPara );
-    TEParaPortion* pPortion = mpTEParaPortions->GetObject( nPara );
+    boost::scoped_ptr<TEParaPortion> pPortion(mpTEParaPortions->GetObject( nPara ));
 
     // the Node is handled by Undo and is deleted if appropriate
     mpDoc->GetNodes().Remove( nPara );
@@ -625,7 +626,7 @@ void TextEngine::ImpRemoveParagraph( sal_uLong nPara )
         delete pNode;
 
     mpTEParaPortions->Remove( nPara );
-    delete pPortion;
+    pPortion.reset();
 
     ImpParagraphRemoved( nPara );
 }

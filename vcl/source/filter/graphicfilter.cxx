@@ -63,6 +63,7 @@
 #include <rtl/instance.hxx>
 #include <vcl/metaact.hxx>
 #include <vector>
+#include <boost/scoped_ptr.hpp>
 
 #include "FilterConfigCache.hxx"
 
@@ -828,7 +829,7 @@ static Graphic ImpGetScaledGraphic( const Graphic& rGraphic, FilterConfigItem& r
 {
     Graphic     aGraphic;
 
-    ResMgr*     pResMgr = ResMgr::CreateResMgr( "svt", Application::GetSettings().GetUILanguageTag() );
+    boost::scoped_ptr<ResMgr> pResMgr(ResMgr::CreateResMgr( "svt", Application::GetSettings().GetUILanguageTag() ));
 
     sal_Int32 nLogicalWidth = rConfigItem.ReadInt32( "LogicalWidth", 0 );
     sal_Int32 nLogicalHeight = rConfigItem.ReadInt32( "LogicalHeight", 0 );
@@ -918,8 +919,6 @@ static Graphic ImpGetScaledGraphic( const Graphic& rGraphic, FilterConfigItem& r
     }
     else
         aGraphic = rGraphic;
-
-    delete pResMgr;
 
     return aGraphic;
 }
@@ -1289,11 +1288,10 @@ sal_uInt16 GraphicFilter::CanImportGraphic( const INetURLObject& rPath,
     DBG_ASSERT( rPath.GetProtocol() != INET_PROT_NOT_VALID, "GraphicFilter::CanImportGraphic() : ProtType == INET_PROT_NOT_VALID" );
 
     OUString    aMainUrl( rPath.GetMainURL( INetURLObject::NO_DECODE ) );
-    SvStream*   pStream = ::utl::UcbStreamHelper::CreateStream( aMainUrl, STREAM_READ | STREAM_SHARE_DENYNONE );
+    boost::scoped_ptr<SvStream> pStream(::utl::UcbStreamHelper::CreateStream( aMainUrl, STREAM_READ | STREAM_SHARE_DENYNONE ));
     if ( pStream )
     {
         nRetValue = CanImportGraphic( aMainUrl, *pStream, nFormat, pDeterminedFormat );
-        delete pStream;
     }
     return nRetValue;
 }
@@ -1320,11 +1318,10 @@ sal_uInt16 GraphicFilter::ImportGraphic( Graphic& rGraphic, const INetURLObject&
     DBG_ASSERT( rPath.GetProtocol() != INET_PROT_NOT_VALID, "GraphicFilter::ImportGraphic() : ProtType == INET_PROT_NOT_VALID" );
 
     OUString    aMainUrl( rPath.GetMainURL( INetURLObject::NO_DECODE ) );
-    SvStream*   pStream = ::utl::UcbStreamHelper::CreateStream( aMainUrl, STREAM_READ | STREAM_SHARE_DENYNONE );
+    boost::scoped_ptr<SvStream> pStream(::utl::UcbStreamHelper::CreateStream( aMainUrl, STREAM_READ | STREAM_SHARE_DENYNONE ));
     if ( pStream )
     {
         nRetValue = ImportGraphic( rGraphic, aMainUrl, *pStream, nFormat, pDeterminedFormat, nImportFlags );
-        delete pStream;
     }
     return nRetValue;
 }
@@ -1816,11 +1813,11 @@ sal_uInt16 GraphicFilter::ExportGraphic( const Graphic& rGraphic, const INetURLO
     bool bAlreadyExists = DirEntryExists( rPath );
 
     OUString    aMainUrl( rPath.GetMainURL( INetURLObject::NO_DECODE ) );
-    SvStream*   pStream = ::utl::UcbStreamHelper::CreateStream( aMainUrl, STREAM_WRITE | STREAM_TRUNC );
+    boost::scoped_ptr<SvStream> pStream(::utl::UcbStreamHelper::CreateStream( aMainUrl, STREAM_WRITE | STREAM_TRUNC ));
     if ( pStream )
     {
         nRetValue = ExportGraphic( rGraphic, aMainUrl, *pStream, nFormat, pFilterData );
-        delete pStream;
+        pStream.reset();
 
         if( ( GRFILTER_OK != nRetValue ) && !bAlreadyExists )
             KillDirEntry( aMainUrl );
