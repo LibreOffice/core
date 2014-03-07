@@ -201,7 +201,6 @@ bool PropertyMap::setAnyProperty( sal_Int32 nPropId, const Any& rValue )
     if( nPropId < 0 )
         return false;
 
-    SAL_WARN_IF(sal_Int32(mpPropNames->size()) <= nPropId, "oox", "invalid PropId");
     maProperties[ nPropId ] = rValue;
     return true;
 }
