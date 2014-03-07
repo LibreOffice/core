@@ -21,10 +21,10 @@
 #define _SORTRESULT_HXX
 
 #include <com/sun/star/beans/XPropertySet.hpp>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#include <com/sun/star/lang/XTypeProvider.hpp>
-#include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#include <com/sun/star/lang/XServiceInfo.hpp>
+#include <com/sun/star/lang/XTypeProvider.hpp>
 #include <com/sun/star/sdbc/XCloseable.hpp>
 #include <com/sun/star/sdbc/XResultSet.hpp>
 #include <com/sun/star/sdbc/XResultSetMetaData.hpp>
@@ -34,11 +34,8 @@
 #include <com/sun/star/ucb/NumberedSortingInfo.hpp>
 #include <com/sun/star/ucb/XAnyCompareFactory.hpp>
 #include <com/sun/star/ucb/ListAction.hpp>
-#include <cppuhelper/weak.hxx>
-#include <osl/mutex.hxx>
-
+#include <cppuhelper/implbase8.hxx>
 #include <deque>
-#include <ucbhelper/macros.hxx>
 
 namespace cppu {
     class OInterfaceContainerHelper;
@@ -116,17 +113,15 @@ public:
 
 
 
-class SortedResultSet:
-                public cppu::OWeakObject,
-                public css::lang::XTypeProvider,
-                public css::lang::XServiceInfo,
-                public css::lang::XComponent,
-                public css::ucb::XContentAccess,
-                public css::sdbc::XResultSet,
-                public css::sdbc::XRow,
-                public css::sdbc::XCloseable,
-                public css::sdbc::XResultSetMetaDataSupplier,
-                public css::beans::XPropertySet
+class SortedResultSet: public cppu::WeakImplHelper8 <
+    css::lang::XServiceInfo,
+    css::lang::XComponent,
+    css::ucb::XContentAccess,
+    css::sdbc::XResultSet,
+    css::sdbc::XRow,
+    css::sdbc::XCloseable,
+    css::sdbc::XResultSetMetaDataSupplier,
+    css::beans::XPropertySet >
 {
     cppu::OInterfaceContainerHelper *mpDisposeEventListeners;
     PropertyChangeListeners_Impl    *mpPropChangeListeners;
@@ -191,19 +186,19 @@ public:
     void                ResortModified( EventList* pList );
     void                ResortNew( EventList* pList );
 
-    // XInterface
-    virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType )
-        throw( css::uno::RuntimeException, std::exception );
-    virtual void SAL_CALL acquire()
-        throw();
-    virtual void SAL_CALL release()
-        throw();
-
-    // XTypeProvider
-    XTYPEPROVIDER_DECL()
-
     // XServiceInfo
-    XSERVICEINFO_NOFACTORY_DECL()
+    virtual OUString SAL_CALL getImplementationName()
+        throw( css::uno::RuntimeException,
+               std::exception );
+    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName )
+        throw( css::uno::RuntimeException,
+               std::exception );
+    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames()
+        throw( css::uno::RuntimeException,
+               std::exception );
+
+    static OUString getImplementationName_Static();
+    static css::uno::Sequence< OUString > getSupportedServiceNames_Static();
 
     // XComponent
     virtual void SAL_CALL

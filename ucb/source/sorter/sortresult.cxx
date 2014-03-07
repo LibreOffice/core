@@ -20,15 +20,16 @@
 
 #include <vector>
 #include <sortresult.hxx>
-#include <cppuhelper/interfacecontainer.hxx>
 #include <com/sun/star/sdbc/DataType.hpp>
 #include <com/sun/star/sdbc/XResultSetMetaData.hpp>
 #include <com/sun/star/sdbc/XResultSetMetaDataSupplier.hpp>
 #include <com/sun/star/ucb/ListActionType.hpp>
 #include <com/sun/star/ucb/XAnyCompare.hpp>
 #include <com/sun/star/ucb/XAnyCompareFactory.hpp>
+#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/interfacecontainer.hxx>
+#include <cppuhelper/supportsservice.hxx>
 #include <osl/diagnose.h>
-
 
 using namespace com::sun::star::beans;
 using namespace com::sun::star::container;
@@ -90,10 +91,8 @@ struct SortListData
 
 
 
-class SRSPropertySetInfo :
-                public OWeakObject,
-                public XTypeProvider,
-                public XPropertySetInfo
+class SRSPropertySetInfo : public cppu::WeakImplHelper1 <
+    XPropertySetInfo >
 {
     Property    maProps[2];
 
@@ -102,17 +101,6 @@ private:
 public:
                 SRSPropertySetInfo();
     virtual     ~SRSPropertySetInfo();
-
-    // XInterface
-    virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType )
-        throw( css::uno::RuntimeException, std::exception );
-    virtual void SAL_CALL acquire()
-        throw();
-    virtual void SAL_CALL release()
-        throw();
-
-    // XTypeProvider
-    XTYPEPROVIDER_DECL()
 
     // XPropertySetInfo
     virtual Sequence< Property > SAL_CALL getProperties()
@@ -208,58 +196,37 @@ SortedResultSet::~SortedResultSet()
 }
 
 
-// XInterface methods.
-
-void SAL_CALL SortedResultSet::acquire()
-    throw()
-{
-    OWeakObject::acquire();
-}
-
-void SAL_CALL SortedResultSet::release()
-    throw()
-{
-    OWeakObject::release();
-}
-
-css::uno::Any SAL_CALL SortedResultSet::queryInterface( const css::uno::Type & rType )
-    throw( css::uno::RuntimeException, std::exception )
-{
-    css::uno::Any aRet = cppu::queryInterface( rType,
-                                               (static_cast< XTypeProvider* >(this)),
-                                               (static_cast< XServiceInfo* >(this)),
-                                               (static_cast< XComponent* >(this)),
-                                               (static_cast< XContentAccess* >(this)),
-                                               (static_cast< XResultSet* >(this)),
-                                               (static_cast< XRow* >(this)),
-                                               (static_cast< XCloseable* >(this)),
-                                               (static_cast< XResultSetMetaDataSupplier* >(this)),
-                                               (static_cast< XPropertySet* >(this))
-                                               );
-    return aRet.hasValue() ? aRet : OWeakObject::queryInterface( rType );
-}
-
-// XTypeProvider methods.
-
-
-XTYPEPROVIDER_IMPL_9( SortedResultSet,
-                      XTypeProvider,
-                      XServiceInfo,
-                      XComponent,
-                      XContentAccess,
-                      XResultSet,
-                      XRow,
-                      XCloseable,
-                      XResultSetMetaDataSupplier,
-                      XPropertySet );
-
-
 // XServiceInfo methods.
 
+OUString SAL_CALL SortedResultSet::getImplementationName()
+    throw( css::uno::RuntimeException, std::exception )
+{
+    return getImplementationName_Static();
+}
 
-XSERVICEINFO_NOFACTORY_IMPL_1( SortedResultSet,
-                               OUString( "com.sun.star.comp.ucb.SortedResultSet" ),
-                               OUString( RESULTSET_SERVICE_NAME ) );
+OUString SortedResultSet::getImplementationName_Static()
+{
+    return OUString( "com.sun.star.comp.ucb.SortedResultSet" );
+}
+
+sal_Bool SAL_CALL SortedResultSet::supportsService( const OUString& ServiceName )
+    throw( css::uno::RuntimeException, std::exception )
+{
+    return cppu::supportsService( this, ServiceName );
+}
+
+css::uno::Sequence< OUString > SAL_CALL SortedResultSet::getSupportedServiceNames()
+    throw( css::uno::RuntimeException, std::exception )
+{
+    return getSupportedServiceNames_Static();
+}
+
+css::uno::Sequence< OUString >SortedResultSet::getSupportedServiceNames_Static()
+{
+    css::uno::Sequence< OUString > aSNS( 1 );
+    aSNS.getArray()[ 0 ] = OUString( RESULTSET_SERVICE_NAME );
+    return aSNS;
+}
 
 
 // XComponent methods.
@@ -2033,39 +2000,6 @@ SRSPropertySetInfo::SRSPropertySetInfo()
 
 SRSPropertySetInfo::~SRSPropertySetInfo()
 {}
-
-
-// XInterface methods.
-
-void SAL_CALL SRSPropertySetInfo::acquire()
-    throw()
-{
-    OWeakObject::acquire();
-}
-
-void SAL_CALL SRSPropertySetInfo::release()
-    throw()
-{
-    OWeakObject::release();
-}
-
-css::uno::Any SAL_CALL SRSPropertySetInfo::queryInterface( const css::uno::Type & rType )
-    throw( css::uno::RuntimeException, std::exception )
-{
-    css::uno::Any aRet = cppu::queryInterface( rType,
-                                               (static_cast< XTypeProvider* >(this)),
-                                               (static_cast< XPropertySetInfo* >(this))
-                                               );
-    return aRet.hasValue() ? aRet : OWeakObject::queryInterface( rType );
-}
-
-// XTypeProvider methods.
-
-
-XTYPEPROVIDER_IMPL_2( SRSPropertySetInfo,
-                      XTypeProvider,
-                      XPropertySetInfo );
-
 
 // XPropertySetInfo methods.
 

@@ -20,11 +20,13 @@
 #include <vector>
 #include <sortdynres.hxx>
 #include <cppuhelper/interfacecontainer.hxx>
+#include <cppuhelper/supportsservice.hxx>
 #include <com/sun/star/ucb/ContentResultSetCapability.hpp>
 #include <com/sun/star/ucb/ListActionType.hpp>
 #include <com/sun/star/ucb/WelcomeDynamicResultSetStruct.hpp>
 #include <com/sun/star/ucb/CachedDynamicResultSetStubFactory.hpp>
 #include <com/sun/star/ucb/XSourceInitialization.hpp>
+#include <ucbhelper/getcomponentcontext.hxx>
 
 using namespace com::sun::star::beans;
 using namespace com::sun::star::lang;

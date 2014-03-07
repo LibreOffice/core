@@ -26,6 +26,7 @@
 #include <com/sun/star/ucb/XDynamicResultSetListener.hpp>
 #include <com/sun/star/ucb/ListenerAlreadySetException.hpp>
 #include <com/sun/star/ucb/XSortedDynamicResultSetFactory.hpp>
+#include <cppuhelper/factory.hxx>
 #include <cppuhelper/implbase1.hxx>
 #include <cppuhelper/implbase2.hxx>
 #include "sortresult.hxx"
