@@ -1835,7 +1835,7 @@ void EditEngine::SetControlWord( sal_uInt32 nWord )
         if ( bSpellingChanged )
         {
             pImpEditEngine->StopOnlineSpellTimer();
-            if ( bSpellingChanged && ( nWord & EE_CNTRL_ONLINESPELLING ) )
+            if (nWord & EE_CNTRL_ONLINESPELLING)
             {
                 // Create WrongList, start timer...
                 sal_Int32 nNodes = pImpEditEngine->GetEditDoc().Count();
@@ -1856,10 +1856,9 @@ void EditEngine::SetControlWord( sal_uInt32 nWord )
                     ContentNode* pNode = pImpEditEngine->GetEditDoc().GetObject( n );
                     const ParaPortion* pPortion = pImpEditEngine->GetParaPortions()[n];
                     bool bWrongs = false;
-                    if (pNode->GetWrongList() != NULL && ( bSpellingChanged || ( nWord & EE_CNTRL_ONLINESPELLING ) ))
+                    if (pNode->GetWrongList() != NULL)
                         bWrongs = !pNode->GetWrongList()->empty();
-                    if ( bSpellingChanged )
-                        pNode->DestroyWrongList();
+                    pNode->DestroyWrongList();
                     if ( bWrongs )
                     {
                         pImpEditEngine->aInvalidRect.Left() = 0;
