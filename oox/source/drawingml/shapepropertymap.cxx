@@ -49,7 +49,8 @@ static const sal_Int32 spnDefaultShapeIds[ SHAPEPROP_END ] =
     PROP_FillBitmapURL, PROP_FillBitmapMode, PROP_FillBitmapSizeX, PROP_FillBitmapSizeY,
     PROP_FillBitmapPositionOffsetX, PROP_FillBitmapPositionOffsetY, PROP_FillBitmapRectanglePoint,
     PROP_FillHatch,
-    PROP_ShadowXDistance
+    PROP_ShadowXDistance,
+    PROP_FillBitmapName
 };
 
 } // namespace
@@ -109,6 +110,9 @@ bool ShapePropertyMap::setAnyProperty( ShapePropertyId ePropId, const Any& rValu
 
         case SHAPEPROP_FillBitmapUrl:
             return setFillBitmapUrl( nPropId, rValue );
+
+        case SHAPEPROP_FillBitmapNameFromUrl:
+            return setFillBitmapNameFromUrl( nPropId, rValue );
 
         default:;   // suppress compiler warnings
     }
@@ -194,6 +198,16 @@ bool ShapePropertyMap::setFillBitmapUrl( sal_Int32 nPropId, const Any& rValue )
         return !aBitmapUrlName.isEmpty() && setProperty( nPropId, aBitmapUrlName );
     }
 
+    return false;
+}
+
+bool ShapePropertyMap::setFillBitmapNameFromUrl( sal_Int32 /*nPropId*/, const Any& rValue )
+{
+    if( rValue.has< OUString >() )
+    {
+        OUString aBitmapUrlName = mrModelObjHelper.insertFillBitmapUrl( rValue.get< OUString >() );
+        return !aBitmapUrlName.isEmpty() && setProperty( PROP_FillBitmapName, aBitmapUrlName );
+    }
     return false;
 }
 
