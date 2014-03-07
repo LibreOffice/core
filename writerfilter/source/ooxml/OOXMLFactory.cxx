@@ -202,6 +202,18 @@ void OOXMLFactory::attributes(OOXMLFastContextHandler * pHandler,
                         pFactory->attributeAction(pHandler, aIt->first, pValue);
                     }
                     break;
+                case RT_UniversalMeasure:
+                    {
+#ifdef DEBUG_FACTORY
+                        debug_logger->element("universalMeasure");
+#endif
+                        OUString aValue(Attribs->getValue(aIt->first));
+                        OOXMLFastHelper<OOXMLUniversalMeasureValue>::newProperty(pHandler, nId, aValue);
+
+                        OOXMLValue::Pointer_t pValue(new OOXMLUniversalMeasureValue(aValue));
+                        pFactory->attributeAction(pHandler, aIt->first, pValue);
+                    }
+                    break;
                 case RT_List:
                     {
 #ifdef DEBUG_FACTORY
