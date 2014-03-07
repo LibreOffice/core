@@ -4220,6 +4220,42 @@ void Test::testAutoFill()
         aTestValue = m_pDoc->GetString( 0, i, 0 );
         CPPUNIT_ASSERT_EQUAL( aTestValue, OUString("January") );
     }
+
+    // Clear column A for a new test.
+    clearRange(m_pDoc, ScRange(0,0,0,0,MAXROW,0));
+    m_pDoc->SetRowHidden(0, MAXROW, 0, false); // Show all rows.
+
+    // Fill A1:A6 with 1,2,3,4,5,6.
+    ScDocFunc& rFunc = getDocShell().GetDocFunc();
+    m_pDoc->SetValue(ScAddress(0,0,0), 1.0);
+    ScRange aRange(0,0,0,0,5,0);
+    aMarkData.SetMarkArea(aRange);
+    rFunc.FillSeries(aRange, &aMarkData, FILL_TO_BOTTOM, FILL_AUTO, FILL_DAY, MAXDOUBLE, 1.0, MAXDOUBLE, true, true);
+    CPPUNIT_ASSERT_EQUAL(1.0, m_pDoc->GetValue(ScAddress(0,0,0)));
+    CPPUNIT_ASSERT_EQUAL(2.0, m_pDoc->GetValue(ScAddress(0,1,0)));
+    CPPUNIT_ASSERT_EQUAL(3.0, m_pDoc->GetValue(ScAddress(0,2,0)));
+    CPPUNIT_ASSERT_EQUAL(4.0, m_pDoc->GetValue(ScAddress(0,3,0)));
+    CPPUNIT_ASSERT_EQUAL(5.0, m_pDoc->GetValue(ScAddress(0,4,0)));
+    CPPUNIT_ASSERT_EQUAL(6.0, m_pDoc->GetValue(ScAddress(0,5,0)));
+
+    // Undo should clear the area except for the top cell.
+    SfxUndoManager* pUndoMgr = m_pDoc->GetUndoManager();
+    CPPUNIT_ASSERT(pUndoMgr);
+    pUndoMgr->Undo();
+
+    CPPUNIT_ASSERT_EQUAL(1.0, m_pDoc->GetValue(ScAddress(0,0,0)));
+    for (SCROW i = 1; i <= 5; ++i)
+        CPPUNIT_ASSERT(m_pDoc->GetCellType(ScAddress(0,i,0)) == CELLTYPE_NONE);
+
+    // Redo should put the serial values back in.
+    pUndoMgr->Redo();
+    CPPUNIT_ASSERT_EQUAL(1.0, m_pDoc->GetValue(ScAddress(0,0,0)));
+    CPPUNIT_ASSERT_EQUAL(2.0, m_pDoc->GetValue(ScAddress(0,1,0)));
+    CPPUNIT_ASSERT_EQUAL(3.0, m_pDoc->GetValue(ScAddress(0,2,0)));
+    CPPUNIT_ASSERT_EQUAL(4.0, m_pDoc->GetValue(ScAddress(0,3,0)));
+    CPPUNIT_ASSERT_EQUAL(5.0, m_pDoc->GetValue(ScAddress(0,4,0)));
+    CPPUNIT_ASSERT_EQUAL(6.0, m_pDoc->GetValue(ScAddress(0,5,0)));
+
     m_pDoc->DeleteTab(0);
 }
 
