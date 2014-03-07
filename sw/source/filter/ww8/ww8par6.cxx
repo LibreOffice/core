@@ -3185,20 +3185,8 @@ void SwWW8ImplReader::Read_Underline( sal_uInt16, const sal_uInt8* pData, short 
                     // 3 = double,  4 = dotted,  5 = hidden
                     // 6 = thick,   7 = dash,    8 = dot(not used)
                     // 9 = dotdash 10 = dotdotdash 11 = wave
-
-        // pruefe auf Sonderfall "fett+unterstrichen"
-        bool bAlsoBold = /*( 6 == b )*/ false;
-        // erst mal ggfs. *bold* einschalten!
-        if( bAlsoBold )
+        switch( *pData )
         {
-            sal_uInt8 nOn = 1;
-            Read_BoldUsw( 0x0835, &nOn, nLen );
-            eUnderline = UNDERLINE_SINGLE;
-        }
-        else
-        {
-            switch( *pData )
-            {
             case 2: bWordLine = true;       // no break;
             case 1: eUnderline = (FontUnderline)UNDERLINE_SINGLE;       break;
             case 3: eUnderline = (FontUnderline)UNDERLINE_DOUBLE;       break;
@@ -3216,7 +3204,6 @@ void SwWW8ImplReader::Read_Underline( sal_uInt16, const sal_uInt8* pData, short 
             case 26:eUnderline = (FontUnderline)UNDERLINE_BOLDDASHDOTDOT;break;
             case 27:eUnderline = (FontUnderline)UNDERLINE_BOLDWAVE;     break;
             case 43:eUnderline = (FontUnderline)UNDERLINE_DOUBLEWAVE;   break;
-            }
         }
     }
 
