@@ -1685,7 +1685,8 @@ bool ScModule::IsModalMode(SfxObjectShell* pDocSh)
         if ( pChildWnd )
         {
             IAnyRefDialog* pRefDlg = dynamic_cast<IAnyRefDialog*>(pChildWnd->GetWindow());
-            bIsModal = pChildWnd->IsVisible() &&
+            assert(pRefDlg);
+            bIsModal = pChildWnd->IsVisible() && pRefDlg &&
                 !( pRefDlg->IsRefInputMode() && pRefDlg->IsDocAllowed(pDocSh) );
         }
         else if(pModalDlg)
