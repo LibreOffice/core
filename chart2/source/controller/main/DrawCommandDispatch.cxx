@@ -176,7 +176,13 @@ void DrawCommandDispatch::setAttributes( SdrObject* pObj )
                 pObj->SetMergedItem( SdrTextVertAdjustItem( SDRTEXTVERTADJUST_CENTER ) );
                 pObj->SetMergedItem( SdrTextHorzAdjustItem( SDRTEXTHORZADJUST_BLOCK ) );
                 pObj->SetMergedItem( SdrTextAutoGrowHeightItem( sal_False ) );
-                ( dynamic_cast< SdrObjCustomShape* >( pObj ) )->MergeDefaultAttributes( &m_aCustomShapeType );
+
+                SdrObjCustomShape* pShape(dynamic_cast< SdrObjCustomShape* >( pObj ));
+                assert(pShape);
+                if(pShape)
+                {
+                    pShape->MergeDefaultAttributes( &m_aCustomShapeType );
+                }
             }
         }
     }
