@@ -290,7 +290,11 @@ hchar_string DateCode::GetString()
 
 // tab(9)
 
-Tab::Tab(void):HBox(CH_TAB)
+Tab::Tab()
+    : HBox(CH_TAB)
+    , width(0)
+    , leader(0)
+    , dummy(0)
 {
 }
 
