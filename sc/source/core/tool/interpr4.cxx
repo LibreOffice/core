@@ -3992,7 +3992,10 @@ StackVar ScInterpreter::Interpret()
                 case ocTrunc            :
                 case ocRoundDown        : ScRoundDown();                break;
                 case ocCeil             : ScCeil();                     break;
+                case ocCeil_MS          :
+                case ocCeil_ISO         : ScCeil_MS();                  break;
                 case ocFloor            : ScFloor();                    break;
+                case ocFloor_MS         : ScFloor_MS();                 break;
                 case ocSumProduct       : ScSumProduct();               break;
                 case ocSumSQ            : ScSumSQ();                    break;
                 case ocSumX2MY2         : ScSumX2MY2();                 break;
