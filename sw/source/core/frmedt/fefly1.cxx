@@ -2090,8 +2090,8 @@ void SwFEShell::SetObjDescription( const OUString& rDescription )
             SwFrmFmt* pFmt = FindFrmFmt( pObj );
             if ( pFmt->Which() == RES_FLYFRMFMT )
             {
-                GetDoc()->SetFlyFrmDescription( *(dynamic_cast<SwFlyFrmFmt*>(pFmt)),
-                                                rDescription );
+                GetDoc()->SetFlyFrmDescription(dynamic_cast<SwFlyFrmFmt&>(*pFmt),
+                                               rDescription);
             }
             else
             {
