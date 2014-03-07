@@ -2268,12 +2268,24 @@ bool SwTextGridItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
             bRet = (rVal >>= nTmp);
             nTmp = MM100_TO_TWIP( nTmp );
             if( bRet && (nTmp >= 0) && ( nTmp <= USHRT_MAX) )
+            {
+                // rhbz#1043551 round up to 5pt -- 0 causes divide-by-zero
+                // in layout; 1pt ties the painting code up in knots for
+                // minutes with bazillion lines...
+#define MIN_TEXTGRID_SIZE 100
                 if( (nMemberId & ~CONVERT_TWIPS) == MID_GRID_BASEHEIGHT )
+                {
+                    nTmp = std::max(nTmp, MIN_TEXTGRID_SIZE);
                     SetBaseHeight( (sal_uInt16)nTmp );
+                }
                 else if( (nMemberId & ~CONVERT_TWIPS) == MID_GRID_BASEWIDTH )
+                {
+                    nTmp = std::max(nTmp, MIN_TEXTGRID_SIZE);
                     SetBaseWidth( (sal_uInt16)nTmp );
+                }
                 else
                     SetRubyHeight( (sal_uInt16)nTmp );
+            }
             else
                 bRet = false;
         }
