@@ -9902,7 +9902,7 @@
     <resource name="CT_OMathJc" resource="Value" generated="yes" tag="math">
       <attribute name="val" tokenid="ooxml:CT_OMathJc_val" action="setValue"/>
     </resource>
-    <resource name="ST_TwipsMeasure" resource="Integer" generated="yes"/>
+    <resource name="ST_TwipsMeasure" resource="UniversalMeasure"/>
     <resource name="CT_TwipsMeasure" resource="Value" generated="yes" tag="math">
       <attribute name="val" tokenid="ooxml:CT_TwipsMeasure_val" action="setValue"/>
       <action name="start" action="setDefaultIntegerValue"/>
@@ -22991,7 +22991,7 @@
       <action name="start" action="setDefaultIntegerValue"/>
     </resource>
     <resource name="ST_UnsignedDecimalNumber" resource="Integer" generated="yes"/>
-    <resource name="ST_TwipsMeasure" resource="Integer"/>
+    <resource name="ST_TwipsMeasure" resource="UniversalMeasure"/>
     <resource name="CT_TwipsMeasure" resource="Value" tag="attribute">
       <attribute name="val" tokenid="ooxml:CT_TwipsMeasure_val" action="setValue"/>
       <action name="start" action="setDefaultIntegerValue"/>

@@ -54,7 +54,8 @@ enum ResourceType_t {
     RT_TextTable,
     RT_PropertyTable,
     RT_Math,
-    RT_Any
+    RT_Any,
+    RT_UniversalMeasure
 };
 
 struct AttributeInfo

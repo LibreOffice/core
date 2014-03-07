@@ -101,6 +101,7 @@ uno::Reference&lt; xml::sax::XFastContextHandler &gt; OOXMLFactory::createFastCh
                 <xsl:if test="generate-id(key('resources', @resource)) = generate-id(.)">
                     <xsl:if test="not(@resource = 'Hex' or 
                                       @resource = 'Integer' or 
+                                      @resource = 'UniversalMeasure' or
                                       @resource = 'Boolean' or
                                       @resource = 'List' or
                                       @resource = 'String')">
