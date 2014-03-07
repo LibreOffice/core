@@ -1425,6 +1425,7 @@ namespace osl_FileBase
         {
             nError1 = FileBase::createTempFile( pUStr_DirURL, 0, pUStr_FileURL );
             bOK = ( pUStr_FileURL != 0);
+            CPPUNIT_ASSERT(bOK);
             ::osl::File testFile( *pUStr_FileURL );
             nError2 = testFile.open( osl_File_OpenFlag_Create );
             deleteTestFile( *pUStr_FileURL );
