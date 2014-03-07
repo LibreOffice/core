@@ -1872,7 +1872,11 @@ void ScModule::AddRefEntry()                        // "Mehrfachselektion"
         if ( pChildWnd )
         {
             IAnyRefDialog* pRefDlg = dynamic_cast<IAnyRefDialog*>(pChildWnd->GetWindow());
-            pRefDlg->AddRefEntry();
+            assert(pRefDlg);
+            if(pRefDlg)
+            {
+                pRefDlg->AddRefEntry();
+            }
         }
         else if(pModalDlg)
             pModalDlg->AddRefEntry();
