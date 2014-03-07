@@ -2889,7 +2889,10 @@ void DocxAttributeOutput::TableRowEnd( sal_uInt32 /*nDepth*/ )
 void DocxAttributeOutput::StartStyles()
 {
     m_pSerializer->startElementNS( XML_w, XML_styles,
-            FSNS( XML_xmlns, XML_w ), "http://schemas.openxmlformats.org/wordprocessingml/2006/main",
+            FSNS( XML_xmlns, XML_w ),   "http://schemas.openxmlformats.org/wordprocessingml/2006/main",
+            FSNS( XML_xmlns, XML_w14 ), "http://schemas.microsoft.com/office/word/2010/wordml",
+            FSNS( XML_xmlns, XML_mc ),  "http://schemas.openxmlformats.org/markup-compatibility/2006",
+            FSNS( XML_mc, XML_Ignorable ), "w14",
             FSEND );
 
     DocDefaults();
