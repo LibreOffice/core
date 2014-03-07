@@ -101,8 +101,15 @@ ifeq ($(filter DESKTOP,$(BUILD_TYPE)),DESKTOP)
 $(eval $(call gb_Module_add_targets,shell,\
 	Executable_lngconvex \
 	Library_syssh \
+))
+
+ifneq ($(OS),WNT)
+
+$(eval $(call gb_Module_add_targets,shell,\
 	StaticLibrary_xmlparser \
 ))
+
+endif
 
 ifneq ($(filter-out MACOSX WNT,$(OS)),)
 
