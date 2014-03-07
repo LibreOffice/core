@@ -670,7 +670,10 @@ OOXMLUniversalMeasureValue::OOXMLUniversalMeasureValue(sal_uInt32 nValue)
 
 OOXMLUniversalMeasureValue::OOXMLUniversalMeasureValue(const OUString& rValue)
 {
-    mnValue = rValue.toInt32();
+    if (rValue.endsWith("pt"))
+        mnValue = rValue.copy(0, rValue.getLength() - 2).toInt32() * 20;
+    else
+        mnValue = rValue.toInt32();
 }
 
 OOXMLUniversalMeasureValue::~OOXMLUniversalMeasureValue()

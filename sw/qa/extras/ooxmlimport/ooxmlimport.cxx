@@ -1903,6 +1903,18 @@ DECLARE_OOXMLIMPORT_TEST(testDMLGroupShapeRunFonts, "dml-groupshape-runfonts.doc
     CPPUNIT_ASSERT_EQUAL(OUString("Arial Unicode MS"), getProperty<OUString>(xRun, "CharFontNameComplex"));
     CPPUNIT_ASSERT_EQUAL(OUString("MS Mincho"), getProperty<OUString>(xRun, "CharFontNameAsian"));
 }
+
+DECLARE_OOXMLIMPORT_TEST(testStrict, "strict.docx")
+{
+    uno::Reference<beans::XPropertySet> xPageStyle(getStyles("PageStyles")->getByName(DEFAULT_STYLE), uno::UNO_QUERY);
+    // This was only 127, pt suffix was ignored, so this got parsed as twips instead of points.
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(TWIP_TO_MM100(72 * 20)), getProperty<sal_Int32>(xPageStyle, "TopMargin"));
+    // This was only 1397, same issue
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(TWIP_TO_MM100(792 * 20)), getProperty<sal_Int32>(xPageStyle, "Height"));
+    // Text was missing, due to not handling the strict namespaces.
+    getParagraph(1, "Hello world!");
+}
+
 #endif
 
 CPPUNIT_PLUGIN_IMPLEMENT();
