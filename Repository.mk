@@ -223,7 +223,7 @@ $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,ooo, \
 	chartcore \
 	chartcontroller \
 	$(if $(filter FREEBSD LINUX MACOSX WNT,$(OS)),chartopengl) \
-	$(if $(filter $(OS),WNT),,cmdmail) \
+	$(if $(filter $(OS),MACOSX WNT),,cmdmail) \
 	cppcanvas \
 	configmgr \
 	ctl \

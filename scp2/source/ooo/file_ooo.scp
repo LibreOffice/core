@@ -200,7 +200,7 @@ End
 
 #endif
 
-#ifdef UNX
+#if defined UNX && ! defined MACOSX
 
 File gid_File_Bin_Uri_Encode
     BIN_FILE_BODY;
@@ -211,14 +211,14 @@ End
 
 #endif
 
-#ifdef UNX
+#if defined UNX && ! defined MACOSX
 File gid_File_Bin_Senddoc
     BIN_FILE_BODY;
     Dir = FILELIST_DIR;
     Name = "shell_senddoc.filelist";
     Styles = (FILELIST, PACKED);
 End
-#else
+#elif defined WNT
 File gid_File_Bin_Senddoc
     BIN_FILE_BODY;
     Dir = gid_Brand_Dir_Program;
