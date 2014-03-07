@@ -220,7 +220,7 @@ $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,ooo, \
 	canvastools \
 	chartcore \
 	chartcontroller \
-	$(if $(filter $(OS),WNT),,cmdmail) \
+	$(if $(filter $(OS),MACOSX WNT),,cmdmail) \
 	cppcanvas \
 	configmgr \
 	ctl \
