@@ -1387,9 +1387,8 @@ SvxTextForwarder* ScAccessiblePreviewHeaderCellTextData::GetTextForwarder()
     if (bDataValid)
         return pForwarder;
 
-    if (!maText.isEmpty() && pEditEngine)
+    if (!maText.isEmpty())
     {
-
         if ( mpViewShell  )
         {
             Size aOutputSize;
@@ -1408,8 +1407,7 @@ SvxTextForwarder* ScAccessiblePreviewHeaderCellTextData::GetTextForwarder()
 
     bDataValid = true;
 
-    if (pEditEngine)
-        pEditEngine->SetNotifyHdl( LINK(this, ScAccessibleCellTextData, NotifyHdl) );
+    pEditEngine->SetNotifyHdl( LINK(this, ScAccessibleCellTextData, NotifyHdl) );
 
     return pForwarder;
 }
