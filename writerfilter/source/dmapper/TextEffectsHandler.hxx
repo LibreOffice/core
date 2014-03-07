@@ -20,6 +20,8 @@
 
 #include <PropertyIds.hxx>
 
+#include <oox/helper/grabbagstack.hxx>
+
 #include <boost/scoped_ptr.hpp>
 #include <boost/optional.hpp>
 
@@ -27,15 +29,13 @@ namespace writerfilter {
 namespace dmapper
 {
 
-class GrabBagStack;
-
 /// Class to process all text effects like glow, textOutline, ...
 class TextEffectsHandler : public LoggedProperties
 {
 private:
-    boost::optional<PropertyIds>    maPropertyId;
-    OUString                        maElementName;
-    boost::scoped_ptr<GrabBagStack> mpGrabBagStack;
+    boost::optional<PropertyIds>         maPropertyId;
+    OUString                             maElementName;
+    boost::scoped_ptr<oox::GrabBagStack> mpGrabBagStack;
 
     void convertElementIdToPropertyId(sal_Int32 aElementId);
 

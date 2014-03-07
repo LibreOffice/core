@@ -9,106 +9,20 @@
  */
 
 #include <TextEffectsHandler.hxx>
+
 #include <rtl/ustrbuf.hxx>
 #include <comphelper/string.hxx>
 #include <ooxml/resourceids.hxx>
 #include "dmapperLoggers.hxx"
-#include <map>
-#include <stack>
-#include <vector>
 
 namespace writerfilter {
 namespace dmapper
 {
 
 using namespace std;
+using namespace oox;
 using namespace css::uno;
 using namespace css::beans;
-
-struct GrabBagStackElement
-{
-    OUString maName;
-    std::vector<beans::PropertyValue> maPropertyList;
-};
-
-/// Tool that is useful for construction of a nested Sequence/PropertyValue hierarchy
-class GrabBagStack
-{
-public:
-    GrabBagStack(OUString aName)
-    {
-        mCurrentElement.maName = aName;
-    }
-
-    virtual ~GrabBagStack()
-    {}
-
-    std::stack<GrabBagStackElement> mStack;
-    GrabBagStackElement mCurrentElement;
-
-    OUString getCurrentName()
-    {
-        return mCurrentElement.maName;
-    }
-
-    PropertyValue getRootProperty()
-    {
-        while(!mStack.empty())
-            pop();
-
-        PropertyValue aProperty;
-        aProperty.Name = mCurrentElement.maName;
-
-        Sequence<PropertyValue> aSequence(mCurrentElement.maPropertyList.size());
-        PropertyValue* pSequence = aSequence.getArray();
-        std::vector<PropertyValue>::iterator i;
-        for (i = mCurrentElement.maPropertyList.begin(); i != mCurrentElement.maPropertyList.end(); ++i)
-            *pSequence++ = *i;
-
-        aProperty.Value = makeAny(aSequence);
-
-        return aProperty;
-    }
-
-    void appendElement(OUString aName, Any aAny)
-    {
-        PropertyValue aValue;
-        aValue.Name = aName;
-        aValue.Value = aAny;
-        mCurrentElement.maPropertyList.push_back(aValue);
-    }
-
-    void push(OUString aKey)
-    {
-        mStack.push(mCurrentElement);
-        mCurrentElement.maName = aKey;
-        mCurrentElement.maPropertyList.clear();
-    }
-
-    void pop()
-    {
-        OUString aName = mCurrentElement.maName;
-        Sequence<PropertyValue> aSequence(mCurrentElement.maPropertyList.size());
-        PropertyValue* pSequence = aSequence.getArray();
-        std::vector<PropertyValue>::iterator i;
-        for (i = mCurrentElement.maPropertyList.begin(); i != mCurrentElement.maPropertyList.end(); ++i)
-            *pSequence++ = *i;
-
-        mCurrentElement = mStack.top();
-        mStack.pop();
-        appendElement(aName, makeAny(aSequence));
-    }
-
-    void addInt32(OUString aElementName, sal_Int32 aIntValue)
-    {
-        appendElement(aElementName, makeAny(aIntValue));
-    }
-
-    void addString(OUString aElementName, OUString aStringValue)
-    {
-        appendElement(aElementName, makeAny(aStringValue));
-    }
-};
 
 namespace
 {
