@@ -936,9 +936,10 @@ void SwWW8ImplReader::StartAnl(const sal_uInt8* pSprm13)
 
     bAnl = true;
 
+    sNumRule = pNumRule ? pNumRule->GetName() : OUString();
     // set NumRules via stack
     pCtrlStck->NewAttr(*pPaM->GetPoint(),
-        SfxStringItem(RES_FLTR_NUMRULE, pNumRule->GetName()));
+        SfxStringItem(RES_FLTR_NUMRULE, sNumRule));
 
     maANLDRules.SetNumRule(pNumRule, nWwNumType);
 }
