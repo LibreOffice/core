@@ -667,7 +667,7 @@ IMPL_LINK( SvxPathTabPage, HeaderSelect_Impl, HeaderBar*, pBar )
 
 IMPL_LINK( SvxPathTabPage, HeaderEndDrag_Impl, HeaderBar*, pBar )
 {
-    if ( pBar && !pBar->GetCurItemId() )
+    if (!pBar || !pBar->GetCurItemId())
         return 0;
 
     if ( !pBar->IsItemMode() )
