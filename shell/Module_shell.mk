@@ -103,12 +103,13 @@ $(eval $(call gb_Module_add_targets,shell,\
 	Executable_lngconvex \
 ))
 
-ifneq ($(OS),WNT)
+ifneq ($(filter-out MACOSX WNT,$(OS)),)
 
 $(eval $(call gb_Module_add_targets,shell,\
 	Executable_gnome_open_url \
 	Executable_uri_encode \
 	Library_cmdmail \
+	Library_recentfile \
 	Library_syssh \
 	Package_scripts \
 	Package_scripts_gnome \
@@ -116,12 +117,6 @@ $(eval $(call gb_Module_add_targets,shell,\
 	Package_senddoc \
 	StaticLibrary_xmlparser \
 ))
-
-ifneq ($(filter-out MACOSX IOS ANDROID,$(OS)),)
-$(eval $(call gb_Module_add_targets,shell,\
-	Library_recentfile \
-))
-endif
 
 endif
 
