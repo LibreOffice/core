@@ -605,7 +605,9 @@ bool XFillBitmapItem::PutValue( const ::com::sun::star::uno::Any& rVal, sal_uInt
     }
     if( bSetURL )
     {
-        maGraphicObject  = GraphicObject::CreateGraphicObjectFromURL(aURL);
+        GraphicObject aGraphicObject  = GraphicObject::CreateGraphicObjectFromURL(aURL);
+        if( aGraphicObject.GetType() != GRAPHIC_NONE )
+            maGraphicObject = aGraphicObject;
     }
     if( bSetBitmap )
     {
