@@ -1299,24 +1299,23 @@ int OpenGLRender::CreateTextTexture(const BitmapEx& rBitmapEx, const awt::Point&
 
     TextInfo aTextInfo;
     aTextInfo.rotation = -(double)rotation / 360.0 * 2* GL_PI;
-    aTextInfo.vertex[0] = rTrans.Line1.Column3 / OPENGL_SCALE_VALUE;
-    aTextInfo.vertex[1] = rTrans.Line2.Column3 / OPENGL_SCALE_VALUE;
+    aTextInfo.vertex[0] = -aSize.Width / 2 / OPENGL_SCALE_VALUE;
+    aTextInfo.vertex[1] = -aSize.Height / 2 / OPENGL_SCALE_VALUE;
     aTextInfo.vertex[2] = m_fZStep;
 
-    aTextInfo.vertex[3] = (rTrans.Line1.Column3 + aSize.Width ) / OPENGL_SCALE_VALUE ;
-    aTextInfo.vertex[4] = rTrans.Line2.Column3 / OPENGL_SCALE_VALUE;
+    aTextInfo.vertex[3] = aSize.Width / 2 / OPENGL_SCALE_VALUE ;
+    aTextInfo.vertex[4] = -aSize.Height / 2 / OPENGL_SCALE_VALUE;
     aTextInfo.vertex[5] = m_fZStep;
 
-    aTextInfo.vertex[6] = (rTrans.Line1.Column3 + aSize.Width) / OPENGL_SCALE_VALUE;
-    aTextInfo.vertex[7] = (rTrans.Line2.Column3 + aSize.Height) / OPENGL_SCALE_VALUE;
+    aTextInfo.vertex[6] = aSize.Width / 2 / OPENGL_SCALE_VALUE;
+    aTextInfo.vertex[7] = aSize.Height / 2 / OPENGL_SCALE_VALUE;
     aTextInfo.vertex[8] = m_fZStep;
 
-    aTextInfo.vertex[9] = rTrans.Line1.Column3 / OPENGL_SCALE_VALUE;
-    aTextInfo.vertex[10] = (rTrans.Line2.Column3 + aSize.Height) / OPENGL_SCALE_VALUE;
+    aTextInfo.vertex[9] = -aSize.Width / 2 / OPENGL_SCALE_VALUE;
+    aTextInfo.vertex[10] = aSize.Height / 2 / OPENGL_SCALE_VALUE;
     aTextInfo.vertex[11] = m_fZStep;
-
-    aTextInfo.bmpWidth = bmpWidth;
-    aTextInfo.bmpHeight = bmpHeight;
+    aTextInfo.nDx = (rTrans.Line1.Column3 + aSize.Width / 2 ) / OPENGL_SCALE_VALUE - bmpWidth/2;
+    aTextInfo.nDy = (rTrans.Line2.Column3 + aSize.Height / 2 ) / OPENGL_SCALE_VALUE - bmpHeight/2;
 
     CHECK_GL_ERROR();
     glGenTextures(1, &aTextInfo.texture);
@@ -1346,11 +1345,7 @@ int OpenGLRender::RenderTextShape()
     for (size_t i = 0; i < listNum; i++)
     {
         TextInfo &textInfo = m_TextInfoList.front();
-        PosVecf3 trans = { (float)-textInfo.bmpWidth/2.0f, (float)-textInfo.bmpHeight/2.0f, 0};
-        if(0.0 != textInfo.rotation)
-        {
-            SAL_WARN("chart2.opengl", "rotation: " << textInfo.rotation);
-        }
+        PosVecf3 trans = { textInfo.nDx, textInfo.nDy, 0};
         PosVecf3 angle = {0.0f, 0.0f, float(textInfo.rotation)};
         PosVecf3 scale = {1.0, 1.0, 1.0f};
         MoveModelf(trans, angle, scale);
