@@ -1,0 +1,89 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a930d6b_f116e0f0",
+        "filename": "sc/Library_sc.mk",
+        "patchSetId": 1
+      },
+      "lineNbr": 612,
+      "author": {
+        "id": 1000233
+      },
+      "writtenOn": "2014-03-07T09:18:40Z",
+      "side": 1,
+      "message": "indentation",
+      "revId": "78b2a288f3c6283fa2a4291e49d98363d6c05f7b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a930d6b_d119e423",
+        "filename": "sc/sdi/cellsh.sdi",
+        "patchSetId": 1
+      },
+      "lineNbr": 407,
+      "author": {
+        "id": 1000233
+      },
+      "writtenOn": "2014-03-07T09:18:40Z",
+      "side": 1,
+      "message": "whitespace",
+      "revId": "78b2a288f3c6283fa2a4291e49d98363d6c05f7b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a930d6b_712bd030",
+        "filename": "sc/source/ui/view/cellsh.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 688,
+      "author": {
+        "id": 1000233
+      },
+      "writtenOn": "2014-03-07T09:18:40Z",
+      "side": 1,
+      "message": "Please remove this trailing whitespace and fix indent next line (aStr).",
+      "revId": "78b2a288f3c6283fa2a4291e49d98363d6c05f7b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a930d6b_911f5c09",
+        "filename": "sc/source/ui/view/scCurrentCellPos.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 6,
+      "author": {
+        "id": 1000233
+      },
+      "writtenOn": "2014-03-07T09:18:40Z",
+      "side": 1,
+      "message": "idem",
+      "revId": "78b2a288f3c6283fa2a4291e49d98363d6c05f7b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a930d6b_b11c5815",
+        "filename": "sc/source/ui/view/scCurrentCellPos.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1000233
+      },
+      "writtenOn": "2014-03-07T09:18:40Z",
+      "side": 1,
+      "message": "idem",
+      "revId": "78b2a288f3c6283fa2a4291e49d98363d6c05f7b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
