@@ -14,6 +14,7 @@
 
 #include <vcl/outdev.hxx>
 #include <vcl/svapp.hxx>
+#include <unotools/datetime.hxx>
 
 #include <DomainMapper_Impl.hxx>
 #include <StyleSheetTable.hxx>
@@ -99,6 +100,14 @@ void SdtHelper::createDateControl(OUString& rDefaultText)
     xPropertySet->setPropertyValue("DateFormat", uno::makeAny(*m_oDateFormat));
     m_oDateFormat.reset();
 
+    util::Date aDate;
+    util::DateTime aDateTime;
+    if(utl::ISO8601parseDateTime(m_sDate.makeStringAndClear(), aDateTime))
+    {
+        utl::extractDate(aDateTime, aDate);
+        xPropertySet->setPropertyValue("Date", uno::makeAny(aDate));
+    }
+
     std::vector<OUString> aItems;
     createControlShape(lcl_getOptimalWidth(m_rDM_Impl.GetStyleSheetTable(), rDefaultText, aItems), xControlModel);
 }
@@ -125,6 +134,11 @@ std::vector<OUString>& SdtHelper::getDropDownItems()
 OUStringBuffer& SdtHelper::getSdtTexts()
 {
     return m_aSdtTexts;
+}
+
+OUStringBuffer& SdtHelper::getDate()
+{
+    return m_sDate;
 }
 
 boost::optional<sal_Int16>& SdtHelper::getDateFormat()

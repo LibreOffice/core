@@ -51,6 +51,8 @@ class SdtHelper
     std::vector<OUString> m_aDropDownItems;
     /// Pieces of the default text -- currently used only by the dropdown control.
     OUStringBuffer m_aSdtTexts;
+    /// Date ISO string contained in the w:date element, used by the date control.
+    OUStringBuffer m_sDate;
     /// Date format, see com/sun/star/awt/UnoControlDateFieldModel.idl
     boost::optional<sal_Int16> m_oDateFormat;
 
@@ -64,6 +66,7 @@ public:
 
     std::vector<OUString>& getDropDownItems();
     OUStringBuffer& getSdtTexts();
+    OUStringBuffer& getDate();
     boost::optional<sal_Int16>& getDateFormat();
     /// If createControlShape() was ever called.
     bool hasElements();

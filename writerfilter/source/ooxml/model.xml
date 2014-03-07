@@ -24563,6 +24563,7 @@
       <element name="listItem" tokenid="ooxml:CT_SdtDropDownList_listItem"/>
     </resource>
     <resource name="CT_SdtDate" resource="Properties" tag="field">
+      <attribute name="fullDate" tokenid="ooxml:CT_SdtDate_fullDate"/>
       <element name="dateFormat" tokenid="ooxml:CT_SdtDate_dateFormat"/>
     </resource>
     <resource name="CT_SdtListItem" resource="Properties" tag="field">
