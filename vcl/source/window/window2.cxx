@@ -138,13 +138,12 @@ bool Window::ImplIsWindowInFront( const Window* pTestWindow ) const
 
     // if TestWindow is before ThisWindow, it is in front
     pTempWindow = pTestWindow;
-    do
+    while ( pTempWindow )
     {
         if ( pTempWindow == pThisWindow )
             return true;
         pTempWindow = pTempWindow->mpWindowImpl->mpNext;
     }
-    while ( pTempWindow );
 
     return false;
 }
