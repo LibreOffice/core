@@ -902,6 +902,15 @@ DECLARE_OOXMLEXPORT_TEST(testAnchorIdForWP14AndW14, "AnchorId.docx")
 
 }
 
+DECLARE_OOXMLEXPORT_TEST(testDkVert, "dkvert.docx")
+{
+    // <a:pattFill prst="dkVert"> was exported as ltVert.
+    uno::Reference<container::XIndexAccess> xGroup(getShape(1), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xShape(xGroup->getByIndex(0), uno::UNO_QUERY);
+    // This was 50.
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(25), getProperty<drawing::Hatch>(xShape, "FillHatch").Distance);
+}
+
 #endif
 
 CPPUNIT_PLUGIN_IMPLEMENT();

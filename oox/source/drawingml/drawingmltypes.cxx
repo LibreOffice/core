@@ -317,7 +317,10 @@ const char* GetHatchPattern( const drawing::Hatch& rHatch )
         {
             case drawing::HatchStyle_SINGLE:
             {
-                if( rHatch.Distance < 75 )
+                // dkVert is imported as Distance = 25, ltVert as Distance = 50, export them accordingly.
+                if( rHatch.Distance < 50 )
+                    sPattern = "dkVert";
+                else if( rHatch.Distance < 75 )
                     sPattern = "ltVert";
                 else
                     sPattern = "vert";
