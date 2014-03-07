@@ -65,6 +65,8 @@ protected:
     void OpenItem( const ThumbnailViewItem *pItem );
     virtual void Paint( const Rectangle& rRect );
 
+    virtual void LoseFocus();
+
     bool isAcceptedFile(const OUString &rURL) const;
 
     long    mnItemMaxSize;
