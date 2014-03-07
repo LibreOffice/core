@@ -74,63 +74,69 @@ ScSelectionTransferObj* ScSelectionTransferObj::CreateFromView( ScTabView* pView
 {
     ScSelectionTransferObj* pRet = NULL;
 
-    if ( pView )
+    try
     {
-        ScSelectionTransferMode eMode = SC_SELTRANS_INVALID;
-
-        SdrView* pSdrView = pView->GetSdrView();
-        if ( pSdrView )
+        if ( pView )
         {
-            //  handle selection on drawing layer
-            const SdrMarkList& rMarkList = pSdrView->GetMarkedObjectList();
-            sal_uLong nMarkCount = rMarkList.GetMarkCount();
-            if ( nMarkCount )
+            ScSelectionTransferMode eMode = SC_SELTRANS_INVALID;
+
+            SdrView* pSdrView = pView->GetSdrView();
+            if ( pSdrView )
             {
-                if ( nMarkCount == 1 )
+                //  handle selection on drawing layer
+                const SdrMarkList& rMarkList = pSdrView->GetMarkedObjectList();
+                sal_uLong nMarkCount = rMarkList.GetMarkCount();
+                if ( nMarkCount )
                 {
-                    SdrObject* pObj = rMarkList.GetMark(0)->GetMarkedSdrObj();
-                    sal_uInt16 nSdrObjKind = pObj->GetObjIdentifier();
-
-                    if ( nSdrObjKind == OBJ_GRAF )
+                    if ( nMarkCount == 1 )
                     {
-                        if ( ((SdrGrafObj*)pObj)->GetGraphic().GetType() == GRAPHIC_BITMAP )
-                            eMode = SC_SELTRANS_DRAW_BITMAP;
-                        else
-                            eMode = SC_SELTRANS_DRAW_GRAPHIC;
+                        SdrObject* pObj = rMarkList.GetMark(0)->GetMarkedSdrObj();
+                        sal_uInt16 nSdrObjKind = pObj->GetObjIdentifier();
+
+                        if ( nSdrObjKind == OBJ_GRAF )
+                        {
+                            if ( ((SdrGrafObj*)pObj)->GetGraphic().GetType() == GRAPHIC_BITMAP )
+                                eMode = SC_SELTRANS_DRAW_BITMAP;
+                            else
+                                eMode = SC_SELTRANS_DRAW_GRAPHIC;
+                        }
+                        else if ( nSdrObjKind == OBJ_OLE2 )
+                            eMode = SC_SELTRANS_DRAW_OLE;
+                        else if ( lcl_IsURLButton( pObj ) )
+                            eMode = SC_SELTRANS_DRAW_BOOKMARK;
                     }
-                    else if ( nSdrObjKind == OBJ_OLE2 )
-                        eMode = SC_SELTRANS_DRAW_OLE;
-                    else if ( lcl_IsURLButton( pObj ) )
-                        eMode = SC_SELTRANS_DRAW_BOOKMARK;
+
+                    if ( eMode == SC_SELTRANS_INVALID )
+                        eMode = SC_SELTRANS_DRAW_OTHER;     // something selected but no special selection
                 }
-
-                if ( eMode == SC_SELTRANS_INVALID )
-                    eMode = SC_SELTRANS_DRAW_OTHER;     // something selected but no special selection
             }
-        }
-        if ( eMode == SC_SELTRANS_INVALID )             // no drawing object selected
-        {
-            ScRange aRange;
-            ScViewData* pViewData = pView->GetViewData();
-            const ScMarkData& rMark = pViewData->GetMarkData();
-            //  allow MultiMarked because GetSimpleArea may be able to merge into a simple range
-            //  (GetSimpleArea modifies a local copy of MarkData)
-            // Also allow simple filtered area.
-            ScMarkType eMarkType;
-            if ( ( rMark.IsMarked() || rMark.IsMultiMarked() ) &&
-                    (((eMarkType = pViewData->GetSimpleArea( aRange )) == SC_MARK_SIMPLE) ||
-                     (eMarkType == SC_MARK_SIMPLE_FILTERED)) )
+            if ( eMode == SC_SELTRANS_INVALID )             // no drawing object selected
             {
-                //  only for "real" selection, cursor alone isn't used
-                if ( aRange.aStart == aRange.aEnd )
-                    eMode = SC_SELTRANS_CELL;
-                else
-                    eMode = SC_SELTRANS_CELLS;
+                ScRange aRange;
+                ScViewData* pViewData = pView->GetViewData();
+                const ScMarkData& rMark = pViewData->GetMarkData();
+                //  allow MultiMarked because GetSimpleArea may be able to merge into a simple range
+                //  (GetSimpleArea modifies a local copy of MarkData)
+                // Also allow simple filtered area.
+                ScMarkType eMarkType;
+                if ( ( rMark.IsMarked() || rMark.IsMultiMarked() ) &&
+                        (((eMarkType = pViewData->GetSimpleArea( aRange )) == SC_MARK_SIMPLE) ||
+                         (eMarkType == SC_MARK_SIMPLE_FILTERED)) )
+                {
+                    //  only for "real" selection, cursor alone isn't used
+                    if ( aRange.aStart == aRange.aEnd )
+                        eMode = SC_SELTRANS_CELL;
+                    else
+                        eMode = SC_SELTRANS_CELLS;
+                }
             }
-        }
 
-        if ( eMode != SC_SELTRANS_INVALID )
-            pRet = new ScSelectionTransferObj( pView, eMode );
+            if ( eMode != SC_SELTRANS_INVALID )
+                pRet = new ScSelectionTransferObj( pView, eMode );
+        }
+    }
+    catch (...)
+    {
     }
 
     return pRet;
