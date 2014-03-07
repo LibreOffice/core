@@ -19,6 +19,7 @@
 <model xmlns:rng="http://relaxng.org/ns/structure/1.0">
   <namespace-alias name="http://www.w3.org/XML/1998/namespace" alias="xml" id="xml"/>
   <namespace-alias name="http://schemas.openxmlformats.org/officeDocument/2006/relationships" alias="relationships" id="officeRel"/>
+  <namespace-alias name="http://purl.oclc.org/ooxml/officeDocument/relationships" alias="relationships" id="officeRel"/>
   <namespace-alias name="urn:schemas-microsoft-com:office:office" alias="office" id="vmlOffice"/>
   <namespace-alias name="http://schemas.openxmlformats.org/officeDocument/2006/relationships/theme" alias="theme" id="officeRelTheme"/>
   <namespace-alias name="http://schemas.openxmlformats.org/drawingml/2006/wordprocessingDrawing" alias="wordprocessingDrawing" id="dmlWordDr"/>

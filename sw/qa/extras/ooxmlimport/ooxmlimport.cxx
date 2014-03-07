@@ -1908,11 +1908,15 @@ DECLARE_OOXMLIMPORT_TEST(testStrict, "strict.docx")
 {
     uno::Reference<beans::XPropertySet> xPageStyle(getStyles("PageStyles")->getByName(DEFAULT_STYLE), uno::UNO_QUERY);
     // This was only 127, pt suffix was ignored, so this got parsed as twips instead of points.
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(TWIP_TO_MM100(72 * 20)), getProperty<sal_Int32>(xPageStyle, "TopMargin"));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(TWIP_TO_MM100(72 * 20)), getProperty<sal_Int32>(xPageStyle, "BottomMargin"));
     // This was only 1397, same issue
     CPPUNIT_ASSERT_EQUAL(sal_Int32(TWIP_TO_MM100(792 * 20)), getProperty<sal_Int32>(xPageStyle, "Height"));
     // Text was missing, due to not handling the strict namespaces.
     getParagraph(1, "Hello world!");
+
+    // Header in the document caused a crash on import.
+    uno::Reference<text::XText> xHeaderText(xPageStyle->getPropertyValue("HeaderText"), uno::UNO_QUERY);
+    getParagraphOfText(1, xHeaderText, "This is a header.");
 }
 
 #endif
