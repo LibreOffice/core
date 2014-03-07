@@ -74,7 +74,7 @@ public:
     /// Create drop-down control from w:sdt's w:dropDownList.
     void createDropDownControl();
     /// Create date control from w:sdt's w:date.
-    void createDateControl(OUString& rDefaultText);
+    void createDateControl(OUString& rContentText);
 };
 
 } // namespace dmapper

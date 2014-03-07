@@ -91,11 +91,11 @@ void SdtHelper::createDropDownControl()
     m_aDropDownItems.clear();
 }
 
-void SdtHelper::createDateControl(OUString& rDefaultText)
+void SdtHelper::createDateControl(OUString& rContentText)
 {
     uno::Reference<awt::XControlModel> xControlModel(m_rDM_Impl.GetTextFactory()->createInstance("com.sun.star.form.component.DateField"), uno::UNO_QUERY);
     uno::Reference<beans::XPropertySet> xPropertySet(xControlModel, uno::UNO_QUERY);
-    xPropertySet->setPropertyValue("HelpText", uno::makeAny(rDefaultText));
+
     xPropertySet->setPropertyValue("Dropdown", uno::makeAny(sal_True));
     xPropertySet->setPropertyValue("DateFormat", uno::makeAny(*m_oDateFormat));
     m_oDateFormat.reset();
@@ -106,10 +106,13 @@ void SdtHelper::createDateControl(OUString& rDefaultText)
     {
         utl::extractDate(aDateTime, aDate);
         xPropertySet->setPropertyValue("Date", uno::makeAny(aDate));
+        xPropertySet->setPropertyValue("HelpText", uno::makeAny(OUString("Click here to enter a date")));
     }
+    else
+        xPropertySet->setPropertyValue("HelpText", uno::makeAny(rContentText));
 
     std::vector<OUString> aItems;
-    createControlShape(lcl_getOptimalWidth(m_rDM_Impl.GetStyleSheetTable(), rDefaultText, aItems), xControlModel);
+    createControlShape(lcl_getOptimalWidth(m_rDM_Impl.GetStyleSheetTable(), rContentText, aItems), xControlModel);
 }
 
 void SdtHelper::createControlShape(awt::Size aSize, uno::Reference<awt::XControlModel> xControlModel)
