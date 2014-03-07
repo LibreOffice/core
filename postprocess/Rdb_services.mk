@@ -328,8 +328,10 @@ $(eval $(call gb_Rdb_add_components,services,\
 	xmlhelp/source/treeview/tvhlp1 \
 	xmlhelp/util/ucpchelp1 \
 	xmlsecurity/util/xsec_xmlsec$(if $(filter WNT,$(OS)),.windows) \
-	$(if $(filter-out WNT,$(OS)),\
+	$(if $(filter-out MACOSX WNT,$(OS)),\
 		shell/source/cmdmail/cmdmail \
+	) \
+	$(if $(filter-out WNT,$(OS)),\
 		shell/source/unix/exec/syssh \
 	) \
 	$(if $(filter-out MACOSX WNT,$(OS)), \
