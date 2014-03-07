@@ -554,7 +554,7 @@ IMPL_LINK( SvBaseLinksDlg, EndEditHdl, sfx2::SvBaseLink*, _pLink )
             pLinkMgr = 0;
             SetManager( pNewMgr );
         }
-        if( pLinkMgr->GetPersist() )
+        if (pLinkMgr && pLinkMgr->GetPersist())
             pLinkMgr->GetPersist()->SetModified();
     }
     return 0;
