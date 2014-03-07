@@ -80,6 +80,7 @@ $(eval $(call gb_UnoApi_add_idlfiles_noheader,udkapi,com/sun/star/util,\
 $(eval $(call gb_UnoApi_add_idlfiles_nohdl,udkapi,com/sun/star/beans,\
 	PropertyBag \
 	Introspection \
+	theIntrospection \
 ))
 $(eval $(call gb_UnoApi_add_idlfiles_nohdl,udkapi,com/sun/star/bridge,\
 	BridgeFactory \

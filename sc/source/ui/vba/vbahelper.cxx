@@ -18,7 +18,7 @@
  */
 #include <cppuhelper/bootstrap.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
-#include <com/sun/star/beans/Introspection.hpp>
+#include <com/sun/star/beans/theIntrospection.hpp>
 #include <com/sun/star/frame/XDispatchProvider.hpp>
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/frame/XFrame.hpp>
@@ -74,7 +74,7 @@ getIntrospectionAccess( const uno::Any& aObject ) throw (uno::RuntimeException)
     if( !xIntrospection.is() )
     {
         uno::Reference< uno::XComponentContext > xContext( comphelper::getProcessComponentContext() );
-        xIntrospection.set( beans::Introspection::create(xContext) );
+        xIntrospection.set( beans::theIntrospection::get(xContext) );
     }
     return xIntrospection->inspect( aObject );
 }

@@ -30,7 +30,7 @@
 #include <com/sun/star/lang/XSingleComponentFactory.hpp>
 #include <com/sun/star/reflection/XIdlClass.hpp>
 #include <com/sun/star/beans/XIntrospectionAccess.hpp>
-#include <com/sun/star/beans/Introspection.hpp>
+#include <com/sun/star/beans/theIntrospection.hpp>
 #include <com/sun/star/beans/MethodConcept.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/table/XCellRange.hpp>
@@ -762,7 +762,7 @@ void ScUnoAddInCollection::ReadFromAddIn( const uno::Reference<uno::XInterface>&
 
         uno::Reference<uno::XComponentContext> xContext = comphelper::getProcessComponentContext();
 
-        uno::Reference<beans::XIntrospection> xIntro = beans::Introspection::create( xContext );
+        uno::Reference<beans::XIntrospection> xIntro = beans::theIntrospection::get( xContext );
         uno::Any aObject;
         aObject <<= xAddIn;
         uno::Reference<beans::XIntrospectionAccess> xAcc = xIntro->inspect(aObject);
@@ -1024,7 +1024,7 @@ void ScUnoAddInCollection::UpdateFromAddIn( const uno::Reference<uno::XInterface
 
     uno::Reference<uno::XComponentContext> xContext = comphelper::getProcessComponentContext();
 
-    uno::Reference<beans::XIntrospection> xIntro = beans::Introspection::create(xContext);
+    uno::Reference<beans::XIntrospection> xIntro = beans::theIntrospection::get(xContext);
     uno::Any aObject;
     aObject <<= xInterface;
     uno::Reference<beans::XIntrospectionAccess> xAcc = xIntro->inspect(aObject);

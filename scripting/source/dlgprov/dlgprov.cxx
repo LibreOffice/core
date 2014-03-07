@@ -25,7 +25,7 @@
 #include <com/sun/star/awt/Toolkit.hpp>
 #include <com/sun/star/awt/XControlContainer.hpp>
 #include <com/sun/star/awt/XWindowPeer.hpp>
-#include <com/sun/star/beans/Introspection.hpp>
+#include <com/sun/star/beans/theIntrospection.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/document/XEmbeddedScripts.hpp>
 #include <com/sun/star/lang/XMultiComponentFactory.hpp>
@@ -566,7 +566,7 @@ static OUString aResourceResolverPropName("ResourceResolver");
         if( !xIntrospection.is() )
         {
             // Get introspection service
-            xIntrospection = Introspection::create( m_xContext );
+            xIntrospection = theIntrospection::get( m_xContext );
         }
 
         // Do introspection

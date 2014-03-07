@@ -25,14 +25,10 @@
 
  module com {  module sun {  module star {  module beans {
 
-/** provides functionality to get information about an object's
-    properties and methods.
-    <p><strong>Important note:</strong>An object can only be
-    inspected completely if it supports the
-    com::sun::star::lang::XTypeProvider interface.</p>
+/** A legacy (single-instance) service variant of theIntrospection singleton.
 
-    <p>For details see method XIntrospection::inspect() .</p>
- */
+    @deprecated Use theIntrospection instead.
+*/
 published service Introspection : com::sun::star::beans::XIntrospection;
 
 

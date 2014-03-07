@@ -24,6 +24,7 @@
 #include <new>
 
 #include "com/sun/star/beans/Introspection.hpp"
+#include "com/sun/star/beans/theIntrospection.hpp"
 #include "com/sun/star/bridge/BridgeFactory.hpp"
 #include "com/sun/star/bridge/UnoUrlResolver.hpp"
 #include "com/sun/star/connection/Acceptor.hpp"
@@ -143,6 +144,7 @@ private:
         }
     }
     css::beans::Introspection::create(context_);
+    css::beans::theIntrospection::get(context_);
     css::bridge::BridgeFactory::create(context_);
     css::bridge::UnoUrlResolver::create(context_);
     css::connection::Acceptor::create(context_);

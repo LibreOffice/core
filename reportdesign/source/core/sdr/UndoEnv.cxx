@@ -32,7 +32,7 @@
 #include <com/sun/star/script/XEventAttacherManager.hpp>
 #include <com/sun/star/container/XChild.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
-#include <com/sun/star/beans/Introspection.hpp>
+#include <com/sun/star/beans/theIntrospection.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/util/XModifyBroadcaster.hpp>
 #include <com/sun/star/beans/XIntrospectionAccess.hpp>
@@ -273,7 +273,7 @@ void SAL_CALL OXUndoEnvironment::propertyChange( const PropertyChangeEvent& _rEv
                 {
                     if ( !m_pImpl->m_xIntrospection.is() )
                     {
-                        m_pImpl->m_xIntrospection = Introspection::create( m_pImpl->m_rModel.getController()->getORB() );
+                        m_pImpl->m_xIntrospection = theIntrospection::get( m_pImpl->m_rModel.getController()->getORB() );
                     }
                     Reference< XIntrospectionAccess > xIntrospection(
                         m_pImpl->m_xIntrospection->inspect( makeAny( _rEvent.Source ) ),

@@ -34,7 +34,7 @@
 
 #include <com/sun/star/lang/WrappedTargetRuntimeException.hpp>
 #include <com/sun/star/beans/XMaterialHolder.hpp>
-#include <com/sun/star/beans/Introspection.hpp>
+#include <com/sun/star/beans/theIntrospection.hpp>
 #include <com/sun/star/script/Converter.hpp>
 #include <com/sun/star/script/InvocationAdapterFactory.hpp>
 #include <com/sun/star/reflection/theCoreReflection.hpp>
@@ -62,7 +62,7 @@ using com::sun::star::script::XInvocationAdapterFactory2;
 using com::sun::star::script::XInvocation;
 using com::sun::star::beans::XMaterialHolder;
 using com::sun::star::beans::XIntrospection;
-using com::sun::star::beans::Introspection;
+using com::sun::star::beans::theIntrospection;
 
 #include <vector>
 
@@ -283,7 +283,7 @@ PyRef stRuntimeImpl::create( const Reference< XComponentContext > &ctx )
 
     c->xAdapterFactory = css::script::InvocationAdapterFactory::create(ctx);
 
-    c->xIntrospection = Introspection::create(ctx);
+    c->xIntrospection = theIntrospection::get(ctx);
 
     Any a = ctx->getValueByName("/singletons/com.sun.star.reflection.theTypeDescriptionManager");
     a >>= c->xTdMgr;

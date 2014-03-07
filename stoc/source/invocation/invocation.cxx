@@ -37,7 +37,7 @@
 #include <com/sun/star/container/XEnumerationAccess.hpp>
 #include <com/sun/star/beans/XExactName.hpp>
 #include <com/sun/star/beans/XMaterialHolder.hpp>
-#include <com/sun/star/beans/Introspection.hpp>
+#include <com/sun/star/beans/theIntrospection.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/beans/MethodConcept.hpp>
@@ -1100,7 +1100,7 @@ InvocationService::InvocationService( const Reference<XComponentContext> & xCtx 
             OUString("com.sun.star.script.Converter"),
             xCtx ),
         UNO_QUERY );
-    xIntrospection = Introspection::create(xCtx);
+    xIntrospection = theIntrospection::get(xCtx);
 }
 
 InvocationService::~InvocationService() {}

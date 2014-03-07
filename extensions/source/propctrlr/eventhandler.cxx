@@ -32,7 +32,7 @@
 #include <com/sun/star/awt/XTabControllerModel.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/beans/UnknownPropertyException.hpp>
-#include <com/sun/star/beans/Introspection.hpp>
+#include <com/sun/star/beans/theIntrospection.hpp>
 #include <com/sun/star/beans/XIntrospectionAccess.hpp>
 #include <com/sun/star/container/NoSuchElementException.hpp>
 #include <com/sun/star/container/XChild.hpp>
@@ -83,7 +83,7 @@ namespace pcr
     using ::com::sun::star::uno::Any;
     using ::com::sun::star::uno::TypeClass_STRING;
     using ::com::sun::star::uno::Type;
-    using ::com::sun::star::beans::Introspection;
+    using ::com::sun::star::beans::theIntrospection;
     using ::com::sun::star::beans::XPropertyChangeListener;
     using ::com::sun::star::beans::Property;
     using ::com::sun::star::beans::PropertyState;
@@ -979,7 +979,7 @@ namespace pcr
             // we use a set to avoid duplicates
             TypeBag aListeners;
 
-            Reference< XIntrospection > xIntrospection = Introspection::create( m_xContext );
+            Reference< XIntrospection > xIntrospection = theIntrospection::get( m_xContext );
 
             // --- model listeners
             lcl_addListenerTypesFor_throw(

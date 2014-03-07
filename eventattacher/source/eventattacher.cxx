@@ -22,7 +22,7 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
 #include <com/sun/star/registry/XRegistryKey.hpp>
-#include <com/sun/star/beans/Introspection.hpp>
+#include <com/sun/star/beans/theIntrospection.hpp>
 #include <com/sun/star/beans/MethodConcept.hpp>
 #include <com/sun/star/script/XEventAttacher2.hpp>
 #include <com/sun/star/script/Converter.hpp>
@@ -389,7 +389,7 @@ Reference< XIntrospection > EventAttacherImpl::getIntrospection() throw( Excepti
     Guard< Mutex > aGuard( m_aMutex );
     if( !m_xIntrospection.is() )
     {
-        m_xIntrospection = Introspection::create( m_xContext );
+        m_xIntrospection = theIntrospection::get( m_xContext );
     }
     return m_xIntrospection;
 }

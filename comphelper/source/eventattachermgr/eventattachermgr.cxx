@@ -21,7 +21,7 @@
 #include <osl/diagnose.h>
 #include <comphelper/eventattachermgr.hxx>
 #include <comphelper/processfactory.hxx>
-#include <com/sun/star/beans/Introspection.hpp>
+#include <com/sun/star/beans/theIntrospection.hpp>
 #include <com/sun/star/io/XObjectInputStream.hpp>
 #include <com/sun/star/io/XPersistObject.hpp>
 #include <com/sun/star/io/XObjectOutputStream.hpp>
@@ -351,7 +351,7 @@ void SAL_CALL AttacherAllListener_Impl::disposing(const EventObject& )
 Reference< XEventAttacherManager > createEventAttacherManager( const Reference< XComponentContext > & rxContext )
     throw( Exception )
 {
-    Reference< XIntrospection > xIntrospection = Introspection::create( rxContext );
+    Reference< XIntrospection > xIntrospection = theIntrospection::get( rxContext );
     return new ImplEventAttacherManager( xIntrospection, rxContext );
 }
 

@@ -21,5 +21,6 @@
     prefix="introspection" xmlns="http://openoffice.org/2010/uno-components">
   <implementation name="com.sun.star.comp.stoc.Introspection">
     <service name="com.sun.star.beans.Introspection"/>
+    <singleton name="com.sun.star.beans.theIntrospection"/>
   </implementation>
 </component>

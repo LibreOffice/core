@@ -26,7 +26,7 @@
 #include <ooo/vba/XVBAToOOEventDescGen.hpp>
 
 #include <com/sun/star/beans/XPropertySet.hpp>
-#include <com/sun/star/beans/Introspection.hpp>
+#include <com/sun/star/beans/theIntrospection.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 
 #include <com/sun/star/lang/XMultiComponentFactory.hpp>
@@ -395,7 +395,7 @@ ScriptEventHelper::getEventListeners()
 {
     std::list< OUString > eventMethods;
 
-    Reference< beans::XIntrospection > xIntrospection = beans::Introspection::create( m_xCtx );
+    Reference< beans::XIntrospection > xIntrospection = beans::theIntrospection::get( m_xCtx );
 
     Reference< beans::XIntrospectionAccess > xIntrospectionAccess =
         xIntrospection->inspect( makeAny( m_xControl ) );

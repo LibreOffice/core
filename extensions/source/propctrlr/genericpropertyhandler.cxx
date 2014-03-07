@@ -23,7 +23,7 @@
 
 #include <com/sun/star/container/XHierarchicalNameAccess.hpp>
 #include <com/sun/star/reflection/XEnumTypeDescription.hpp>
-#include <com/sun/star/beans/Introspection.hpp>
+#include <com/sun/star/beans/theIntrospection.hpp>
 #include <com/sun/star/inspection/PropertyControlType.hpp>
 #include <com/sun/star/inspection/XHyperlinkControl.hpp>
 #include <com/sun/star/awt/XActionListener.hpp>
@@ -338,7 +338,7 @@ namespace pcr
         m_xPropertyState.clear();
 
         // create an introspection adapter for the component
-        Reference< XIntrospection > xIntrospection = Introspection::create( m_xContext );
+        Reference< XIntrospection > xIntrospection = theIntrospection::get( m_xContext );
 
         Reference< XIntrospectionAccess > xIntrospectionAccess( xIntrospection->inspect( makeAny( _rxIntrospectee ) ) );
         if ( !xIntrospectionAccess.is() )

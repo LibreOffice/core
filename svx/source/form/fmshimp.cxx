@@ -50,7 +50,7 @@
 #include <com/sun/star/awt/XCheckBox.hpp>
 #include <com/sun/star/awt/XListBox.hpp>
 #include <com/sun/star/awt/XTextComponent.hpp>
-#include <com/sun/star/beans/Introspection.hpp>
+#include <com/sun/star/beans/theIntrospection.hpp>
 #include <com/sun/star/beans/NamedValue.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/beans/XPropertyState.hpp>
@@ -375,8 +375,8 @@ namespace
         Sequence< Type> aModelListeners;
         Sequence< Type> aControlListeners;
 
-        Reference< XIntrospection> xModelIntrospection = Introspection::create(::comphelper::getProcessComponentContext());
-        Reference< XIntrospection> xControlIntrospection = Introspection::create(::comphelper::getProcessComponentContext());
+        Reference< XIntrospection> xModelIntrospection = theIntrospection::get(::comphelper::getProcessComponentContext());
+        Reference< XIntrospection> xControlIntrospection = theIntrospection::get(::comphelper::getProcessComponentContext());
 
         if (xModel.is())
         {

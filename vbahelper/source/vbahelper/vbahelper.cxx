@@ -31,7 +31,7 @@
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
-#include <com/sun/star/beans/Introspection.hpp>
+#include <com/sun/star/beans/theIntrospection.hpp>
 #include <com/sun/star/util/MeasureUnit.hpp>
 #include <com/sun/star/awt/XWindow.hpp>
 #include <com/sun/star/awt/XDialog.hpp>
@@ -102,7 +102,7 @@ getIntrospectionAccess( const uno::Any& aObject ) throw (uno::RuntimeException)
     if( !xIntrospection.is() )
     {
         uno::Reference< uno::XComponentContext > xContext( comphelper::getProcessComponentContext() );
-        xIntrospection.set( beans::Introspection::create( xContext ) );
+        xIntrospection.set( beans::theIntrospection::get( xContext ) );
     }
     return xIntrospection->inspect( aObject );
 }
