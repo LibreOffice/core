@@ -38,7 +38,7 @@ endif
 ifneq (,$(filter DESKTOP,$(BUILD_TYPE)))
 $(eval $(call gb_Module_add_targets,desktop,\
     Executable_soffice.bin \
-    Executable_unopkg.bin \
+    $(if $(ENABLE_MACOSX_SANDBOX),,Executable_unopkg.bin) \
     Library_migrationoo2 \
     Library_migrationoo3 \
     Library_unopkgapp \

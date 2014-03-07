@@ -599,7 +599,7 @@ File gid_Brand_File_Script_Unopkg
 End
 #endif
 
-#if defined MACOSX && !defined ENABLE_MACOSX_MACLIKE_APP_STRUCTURE
+#if defined MACOSX && !defined ENABLE_MACOSX_MACLIKE_APP_STRUCTURE && !defined ENABLE_MACOSX_SANDBOX
 Unixlink gid_Brand_Unixlink_Unopkg
     BIN_FILE_BODY;
     Dir = gid_Brand_Dir_Program;
@@ -609,12 +609,14 @@ Unixlink gid_Brand_Unixlink_Unopkg
 End
 #endif
 
+#if !defined ENABLE_MACOSX_SANDBOX
 File gid_Brand_File_Bin_Unopkg
     BIN_FILE_BODY;
     Dir = gid_Brand_Dir_Program;
     Styles = (PACKED);
     Name = "unopkg.bin";
 End
+#endif
 
 // Due to Windows DLL search order, OOo executables might pick up a libxml2 DLL
 // from a Windows system directory instead of the one from the URE; to avoid
