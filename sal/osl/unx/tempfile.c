@@ -317,8 +317,7 @@ oslFileError SAL_CALL osl_createTempFile(
             rtl_uString_assign(ppustrTempFileURL, temp_file_url);
         }
 
-        if (temp_file_url)
-            rtl_uString_release(temp_file_url);
+        rtl_uString_release(temp_file_url);
 
         rtl_uString_release(temp_file_name);
     }
