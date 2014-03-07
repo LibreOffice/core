@@ -1923,7 +1923,7 @@ void SAL_CALL SdXImpressDocument::render( sal_Int32 nRenderer, const uno::Any& r
                             pPV, pPDFExtOutDevData );
 
                         // background color for outliner :o
-                        SdPage* pPage = (SdPage*)pPV->GetPage();
+                        SdPage* pPage = pPV ? (SdPage*)pPV->GetPage() : NULL;
                         if( pPage )
                         {
                             SdrOutliner& rOutl = mpDoc->GetDrawOutliner( NULL );
