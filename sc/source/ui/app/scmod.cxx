@@ -1774,7 +1774,8 @@ bool ScModule::IsFormulaMode()
         if ( pChildWnd )
         {
             IAnyRefDialog* pRefDlg = dynamic_cast<IAnyRefDialog*>(pChildWnd->GetWindow());
-            bIsFormula = pChildWnd->IsVisible() && pRefDlg->IsRefInputMode();
+            assert(prefDlg);
+            bIsFormula = pChildWnd->IsVisible() && pRefDlg && pRefDlg->IsRefInputMode();
         }
         else if(pModalDlg)
         {
