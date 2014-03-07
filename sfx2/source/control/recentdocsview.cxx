@@ -302,6 +302,13 @@ void RecentDocsView::Paint( const Rectangle &aRect )
         ThumbnailView::Paint(aRect);
 }
 
+void RecentDocsView::LoseFocus()
+{
+    deselectItems();
+
+    ThumbnailView::LoseFocus();
+}
+
 void RecentDocsView::SetThumbnailSize(long thumbnailSize)
 {
     mnItemMaxSize = thumbnailSize;

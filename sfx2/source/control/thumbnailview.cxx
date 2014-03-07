@@ -918,8 +918,6 @@ void ThumbnailView::GetFocus()
 
 void ThumbnailView::LoseFocus()
 {
-    deselectItems();
-
     Control::LoseFocus();
 
     // Tell the accessible object that we lost the focus.
