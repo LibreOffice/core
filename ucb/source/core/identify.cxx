@@ -31,15 +31,9 @@ using namespace com::sun::star::lang;
 using namespace com::sun::star::ucb;
 
 
-
-
 // ContentIdentifier Implementation.
-
-
-
-ContentIdentifier::ContentIdentifier(
-                        const OUString& ContentId )
-: m_aContentId( ContentId )
+ContentIdentifier::ContentIdentifier( const OUString& ContentId )
+    : m_aContentId( ContentId )
 {
 }
 
@@ -50,46 +44,7 @@ ContentIdentifier::~ContentIdentifier()
 }
 
 
-
-// XInterface methods.
-
-void SAL_CALL ContentIdentifier::acquire()
-    throw()
-{
-    OWeakObject::acquire();
-}
-
-void SAL_CALL ContentIdentifier::release()
-    throw()
-{
-    OWeakObject::release();
-}
-
-css::uno::Any SAL_CALL ContentIdentifier::queryInterface(
-                                const css::uno::Type & rType )
-    throw( css::uno::RuntimeException, std::exception )
-{
-    css::uno::Any aRet = cppu::queryInterface( rType,
-                                               (static_cast< XTypeProvider* >(this)),
-                                               (static_cast< XContentIdentifier* >(this))
-                                               );
-    return aRet.hasValue() ? aRet : OWeakObject::queryInterface( rType );
-}
-
-// XTypeProvider methods.
-
-
-
-XTYPEPROVIDER_IMPL_2( ContentIdentifier,
-                      XTypeProvider,
-                      XContentIdentifier );
-
-
-
 // XContentIdentifier methods.
-
-
-
 // virtual
 OUString SAL_CALL ContentIdentifier::getContentIdentifier()
     throw( RuntimeException, std::exception )

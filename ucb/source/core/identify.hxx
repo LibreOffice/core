@@ -21,39 +21,22 @@
 #define _IDENTIFY_HXX
 
 #include <com/sun/star/ucb/XContentIdentifier.hpp>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#include <com/sun/star/lang/XTypeProvider.hpp>
 #include <rtl/ustrbuf.hxx>
-#include <cppuhelper/weak.hxx>
-#include <ucbhelper/macros.hxx>
+#include <cppuhelper/implbase1.hxx>
 
 
-
-class ContentIdentifier :
-                public cppu::OWeakObject,
-                public com::sun::star::lang::XTypeProvider,
-                  public com::sun::star::ucb::XContentIdentifier
+class ContentIdentifier : public cppu::WeakImplHelper1 <
+    css::ucb::XContentIdentifier >
 {
 public:
     ContentIdentifier( const OUString& ContentId );
     virtual ~ContentIdentifier();
 
-    // XInterface
-    virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType )
-        throw( css::uno::RuntimeException, std::exception );
-    virtual void SAL_CALL acquire()
-        throw();
-    virtual void SAL_CALL release()
-        throw();
-
-    // XTypeProvider
-    XTYPEPROVIDER_DECL()
-
     // XContentIdentifier
     virtual OUString SAL_CALL getContentIdentifier()
-        throw( com::sun::star::uno::RuntimeException, std::exception );
+        throw( css::uno::RuntimeException, std::exception );
     virtual OUString SAL_CALL getContentProviderScheme()
-        throw( com::sun::star::uno::RuntimeException, std::exception );
+        throw( css::uno::RuntimeException, std::exception );
 
 private:
     OUString m_aContentId;
