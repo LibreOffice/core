@@ -792,9 +792,6 @@ void T602ImportFilter::Read602()
                 } else {
                     inschr(0x8d);//inschr(' ');
                     if(ch == 0) node = EEND;
-                    else if(ch == '\n') {
-                        if(!pst.willbeeop) par602(false);
-                        node = EOL; }
                     else if(ch < 32) node = SETCH;
                     else node = WRITE;
                 }
