@@ -20,23 +20,19 @@
 #ifndef INCLUDED_XMLOFF_SINGLEPROPERTYSETINFOCACHE_HXX
 #define INCLUDED_XMLOFF_SINGLEPROPERTYSETINFOCACHE_HXX
 
+#include <sal/config.h>
+
+#include <map>
+
 #include <com/sun/star/beans/XPropertySet.hpp>
 
-#include <boost/unordered_map.hpp>
-#include <xmloff/PropertySetInfoHash.hxx>
-
-typedef boost::unordered_map
-<
-    PropertySetInfoKey,
-    sal_Bool,
-    PropertySetInfoHash,
-    PropertySetInfoHash
->
-SinglePropertySetInfoMap_Impl;
-
-class SinglePropertySetInfoCache : private SinglePropertySetInfoMap_Impl
+class SinglePropertySetInfoCache
 {
+    typedef std::map<css::uno::Reference<css::beans::XPropertySetInfo>, bool>
+        Map;
+
     OUString sName;
+    Map map_;
 
 public:
 
@@ -48,6 +44,7 @@ public:
                 ::com::sun::star::beans::XPropertySet >& rPropSet,
             ::com::sun::star::uno::Reference<
                 ::com::sun::star::beans::XPropertySetInfo >& rPropSetInfo );
+
     inline sal_Bool hasProperty(
             const ::com::sun::star::uno::Reference<
                 ::com::sun::star::beans::XPropertySet>& rPropSet );

@@ -17,12 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <com/sun/star/lang/XTypeProvider.hpp>
 #include <cppuhelper/weakref.hxx>
 #include <xmloff/SinglePropertySetInfoCache.hxx>
 
 using namespace ::com::sun::star::uno;
-using ::com::sun::star::lang::XTypeProvider;
 using ::com::sun::star::beans::XPropertySet;
 using ::com::sun::star::beans::XPropertySetInfo;
 
@@ -32,46 +30,23 @@ sal_Bool SinglePropertySetInfoCache::hasProperty(
 {
     if( !rPropSetInfo.is() )
         rPropSetInfo = rPropSet->getPropertySetInfo();
-    sal_Bool bRet = sal_False, bValid = sal_False;
-    Reference < XTypeProvider > xTypeProv( rPropSet, UNO_QUERY );
-    Sequence< sal_Int8 > aImplId;
-    if( xTypeProv.is() )
+    Map::iterator aIter = map_.find( rPropSetInfo );
+    if( aIter != map_.end() )
     {
-        aImplId = xTypeProv->getImplementationId();
-        if( aImplId.getLength() == 16 )
-        {
-            // The key must not be created outside this block, because it
-            // keeps a reference to the property set info.
-            PropertySetInfoKey aKey( rPropSetInfo, aImplId );
-            iterator aIter = find( aKey );
-            if( aIter != end() )
-            {
-                bRet = (*aIter).second;
-                bValid = sal_True;
-            }
-        }
+        return (*aIter).second;
     }
-    if( !bValid )
+    bool bRet = rPropSetInfo->hasPropertyByName( sName );
+    // Check whether the property set info is destroyed if it is assigned to a
+    // weak reference only; if it is destroyed, then every instance of
+    // getPropertySetInfo returns a new object; Such property set infos must not
+    // be cached:
+    WeakReference < XPropertySetInfo > xWeakInfo( rPropSetInfo );
+    rPropSetInfo = 0;
+    rPropSetInfo = xWeakInfo;
+    if( rPropSetInfo.is() )
     {
-        bRet = rPropSetInfo->hasPropertyByName( sName );
-        if( xTypeProv.is() && aImplId.getLength() == 16 )
-        {
-            // Check whether the property set info is destroyed if it is
-            // assigned to a weak reference only. If it is destroyed, then
-            // every instance of getPropertySetInfo returns a new object.
-            // Such property set infos must not be cached.
-            WeakReference < XPropertySetInfo > xWeakInfo( rPropSetInfo );
-            rPropSetInfo = 0;
-            rPropSetInfo = xWeakInfo;
-            if( rPropSetInfo.is() )
-            {
-                PropertySetInfoKey aKey( rPropSetInfo, aImplId );
-                value_type aValue( aKey, bRet );
-                insert( aValue );
-            }
-        }
+        map_.insert(Map::value_type(rPropSetInfo, bRet));
     }
-
     return bRet;
 }
 
