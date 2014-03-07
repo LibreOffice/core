@@ -33,7 +33,6 @@ protected:
     DECL_LINK( HeaderEndDrag_Impl, HeaderBar* );
     virtual bool                Notify( NotifyEvent& rNEvt );
 public:
-    MacroEventListBox( Window* pParent, const ResId& rId );
     MacroEventListBox( Window* pParent, WinBits nStyle );
 
     virtual void Resize();

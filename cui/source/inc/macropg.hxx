@@ -72,7 +72,6 @@ protected:
     bool bReadOnly, bDocModified, bAppEvents, bInitialized;
     EventDisplayNames aDisplayNames;
 
-    _SvxMacroTabPage( Window* pParent, const ResId& rId, const SfxItemSet& rItemSet );
     _SvxMacroTabPage( Window* pParent, const OString& rID, const OUString& rUIXMLDescription, const SfxItemSet& rItemSet );
 
     void                        EnableButtons();

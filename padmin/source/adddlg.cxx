@@ -846,41 +846,4 @@ OUString AddPrinterDialog::uniquePrinterName( const OUString& rBase )
     return aResult;
 }
 
-OUString AddPrinterDialog::getOldPrinterLocation()
-{
-    static const char* pHome = getenv( "HOME" );
-    OString aFileName;
-
-    rtl_TextEncoding aEncoding = osl_getThreadTextEncoding();
-    if( pHome )
-    {
-        aFileName = OStringBuffer().append(pHome).
-            append("/.Xpdefaults").makeStringAndClear();
-        if (access(aFileName.getStr(), F_OK))
-        {
-            aFileName = OStringBuffer().append(pHome).
-                append("/.sversionrc").makeStringAndClear();
-            Config aSVer(OStringToOUString(aFileName, aEncoding));
-            aSVer.SetGroup( "Versions" );
-            aFileName = aSVer.ReadKey( "StarOffice 5.2" );
-            if (!aFileName.isEmpty())
-                aFileName = aFileName + OString("/share/xp3/Xpdefaults");
-            else if(
-                    (aFileName = aSVer.ReadKey( "StarOffice 5.1" ) ).getLength()
-                    ||
-                    (aFileName = aSVer.ReadKey( "StarOffice 5.0" ) ).getLength()
-                    ||
-                    (aFileName = aSVer.ReadKey( "StarOffice 4.0" ) ).getLength()
-                    )
-            {
-                aFileName = aFileName + OString("/xp3/Xpdefaults");
-            }
-            if (!aFileName.isEmpty() && access(aFileName.getStr(), F_OK))
-                aFileName = OString();
-        }
-    }
-
-    return !aFileName.isEmpty() ? OStringToOUString(aFileName, aEncoding) : OUString();
-}
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

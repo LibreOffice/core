@@ -226,7 +226,6 @@ public:
     ~AddPrinterDialog();
 
     static OUString uniquePrinterName( const OUString& rString );
-    static OUString getOldPrinterLocation();
 
     void enableNext( bool bEnable ) { m_aNextPB.Enable( bEnable ); }
 };

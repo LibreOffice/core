@@ -200,3 +200,4 @@ std::auto_ptr<formula::FormulaTokenArray>::auto_ptr(std::auto_ptr<formula::Formu
 std::auto_ptr<formula::FormulaTokenArray>::auto_ptr(std::auto_ptr_ref<formula::FormulaTokenArray>)
 std::vector<rtl::Reference<oox::xls::(anonymous namespace)::WorkerThread>, std::allocator<rtl::Reference<oox::xls::(anonymous namespace)::WorkerThread> > >::reserve(unsigned long)
 vcl::MapChar(vcl::_TrueTypeFont*, unsigned short, bool)
+writerfilter::ooxml::OOXMLUniversalMeasureValue::OOXMLUniversalMeasureValue(unsigned int)

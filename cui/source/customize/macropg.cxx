@@ -129,17 +129,6 @@ bool MacroEventListBox::Notify( NotifyEvent& rNEvt )
     return nRet;
 }
 
-MacroEventListBox::MacroEventListBox( Window* pParent, const ResId& rId )
-    : Control( pParent, rId )
-    , maHeaderBar( this, WB_BUTTONSTYLE | WB_BOTTOMBORDER )
-    , maListBox( this, WB_HSCROLL | WB_CLIPCHILDREN | WB_TABSTOP )
-{
-    maListBox.SetHelpId( HID_MACRO_HEADERTABLISTBOX );
-
-    // enable the cell focus to show visible focus
-    maListBox.EnableCellFocus();
-}
-
 MacroEventListBox::MacroEventListBox( Window* pParent, WinBits nStyle )
     : Control( pParent, nStyle )
     , maHeaderBar( this, WB_BUTTONSTYLE | WB_BOTTOMBORDER )
@@ -221,18 +210,6 @@ void _SvxMacroTabPage::EnableButtons()
         if( mpImpl->pAssignComponentPB )
             mpImpl->pAssignComponentPB->Enable( !mpImpl->bReadOnly );
     }
-}
-
-_SvxMacroTabPage::_SvxMacroTabPage( Window* pParent, const ResId& rResId, const SfxItemSet& rAttrSet )
-    : SfxTabPage( pParent, rResId, rAttrSet ),
-    m_xAppEvents(0),
-    m_xDocEvents(0),
-    bReadOnly(false),
-    bDocModified(false),
-    bAppEvents(false),
-    bInitialized(false)
-{
-    mpImpl = new _SvxMacroTabPage_Impl( rAttrSet );
 }
 
 _SvxMacroTabPage::_SvxMacroTabPage(Window* pParent, const OString& rID,
