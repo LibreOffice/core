@@ -1437,7 +1437,7 @@ void SwTxtFrm::Prepare( const PrepareHint ePrep, const void* pVoid,
                 if( GetTxtNode()->GetSwAttrSet().GetRegister().GetValue())
                     break;
 
-                GETGRID( FindPageFrm() )
+                SwTextGridItem const*const pGrid(GetGridItem(FindPageFrm()));
                 if ( pGrid && GetTxtNode()->GetSwAttrSet().GetParaGrid().GetValue() )
                     break;
 
@@ -1598,7 +1598,7 @@ void SwTxtFrm::Prepare( const PrepareHint ePrep, const void* pVoid,
         {
             if ( GetValidPrtAreaFlag() )
             {
-                GETGRID( FindPageFrm() )
+                SwTextGridItem const*const pGrid(GetGridItem(FindPageFrm()));
                 if ( pGrid && GetTxtNode()->GetSwAttrSet().GetParaGrid().GetValue() )
                     InvalidatePrt();
             }

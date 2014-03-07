@@ -94,7 +94,8 @@ bool SwTxtGuess::Guess( const SwTxtPortion& rPor, SwTxtFormatInfo &rInf,
         // do not add extra italic value if we have an active character grid
         if ( rInf.SnapToGrid() )
         {
-            GETGRID( rInf.GetTxtFrm()->FindPageFrm() )
+            SwTextGridItem const*const pGrid(
+                    GetGridItem(rInf.GetTxtFrm()->FindPageFrm()));
             bAddItalic = !pGrid || GRID_LINES_CHARS != pGrid->GetGridType();
         }
 

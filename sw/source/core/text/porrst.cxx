@@ -325,7 +325,7 @@ bool SwTxtFrm::FormatEmpty()
     if ( GetTxtNode()->GetSwAttrSet().GetParaGrid().GetValue() &&
             IsInDocBody() )
     {
-        GETGRID( FindPageFrm() )
+        SwTextGridItem const*const pGrid(GetGridItem(FindPageFrm()));
         if ( pGrid )
             nHeight = pGrid->GetBaseHeight() + pGrid->GetRubyHeight();
     }

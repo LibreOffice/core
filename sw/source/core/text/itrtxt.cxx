@@ -284,7 +284,7 @@ sal_uInt16 SwTxtCursor::AdjustBaseLine( const SwLineLayout& rLine,
 
     sal_uInt16 nOfst = rLine.GetRealHeight() - rLine.Height();
 
-    GETGRID( pFrm->FindPageFrm() )
+    SwTextGridItem const*const pGrid(GetGridItem(pFrm->FindPageFrm()));
 
     if ( pGrid && GetInfo().SnapToGrid() )
     {

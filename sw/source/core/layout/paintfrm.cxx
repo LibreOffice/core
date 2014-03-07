@@ -5504,7 +5504,7 @@ void SwPageFrm::PaintGrid( OutputDevice* pOut, SwRect &rRect ) const
 {
     if( !bHasGrid || pRetoucheFly || pRetoucheFly2 )
         return;
-    GETGRID( this )
+    SwTextGridItem const*const pGrid(GetGridItem(this));
     if( pGrid && ( OUTDEV_PRINTER != pOut->GetOutDevType() ?
         pGrid->GetDisplayGrid() : pGrid->GetPrintGrid() ) )
     {
@@ -5522,7 +5522,7 @@ void SwPageFrm::PaintGrid( OutputDevice* pOut, SwRect &rRect ) const
                 bool bCell = GRID_LINES_CHARS == pGrid->GetGridType();
                 long nGrid = pGrid->GetBaseHeight();
                 const SwDoc* pDoc = GetFmt()->GetDoc();
-                long nGridWidth = GETGRIDWIDTH(pGrid,pDoc); //for textgrid refactor
+                long nGridWidth = GetGridWidth(*pGrid, *pDoc);
                 long nRuby = pGrid->GetRubyHeight();
                 long nSum = nGrid + nRuby;
                 const Color *pCol = &pGrid->GetColor();

@@ -741,7 +741,8 @@ void SwTxtCursor::_GetCharRect( SwRect* pOrig, const sal_Int32 nOfst,
                         if( ((SwMultiPortion*)pPor)->IsDouble() )
                             SetPropFont( 50 );
 
-                        GETGRID( GetTxtFrm()->FindPageFrm() )
+                        SwTextGridItem const*const pGrid(
+                                GetGridItem(GetTxtFrm()->FindPageFrm()));
                         const bool bHasGrid = pGrid && GetInfo().SnapToGrid();
                         const sal_uInt16 nRubyHeight = bHasGrid ?
                                                    pGrid->GetRubyHeight() : 0;

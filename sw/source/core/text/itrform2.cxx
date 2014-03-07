@@ -409,13 +409,12 @@ void SwTxtFormatter::BuildPortions( SwTxtFormatInfo &rInf )
     SwLinePortion *pPor = NewPortion( rInf );
 
     // Asian grid stuff
-    GETGRID( pFrm->FindPageFrm() )
+    SwTextGridItem const*const pGrid(GetGridItem(pFrm->FindPageFrm()));
     const bool bHasGrid = pGrid && rInf.SnapToGrid() &&
                               GRID_LINES_CHARS == pGrid->GetGridType();
 
     const SwDoc *pDoc = rInf.GetTxtFrm()->GetNode()->GetDoc();
-    const sal_uInt16 nGridWidth = bHasGrid ?
-                                GETGRIDWIDTH(pGrid,pDoc) : 0;   //for textgrid refactor
+    const sal_uInt16 nGridWidth = (bHasGrid) ? GetGridWidth(*pGrid, *pDoc) : 0;
 
     // used for grid mode only:
     // the pointer is stored, because after formatting of non-asian text,
@@ -1057,7 +1056,8 @@ SwLinePortion *SwTxtFormatter::WhichFirstPortion(SwTxtFormatInfo &rInf)
         // 3. Kerning portions at beginning of line in grid mode
         if ( ! pPor && ! pCurr->GetPortion() )
         {
-            GETGRID( GetTxtFrm()->FindPageFrm() )
+            SwTextGridItem const*const pGrid(
+                    GetGridItem(GetTxtFrm()->FindPageFrm()));
             if ( pGrid )
                 pPor = new SwKernPortion( *pCurr );
         }
@@ -1116,7 +1116,8 @@ SwLinePortion *SwTxtFormatter::WhichFirstPortion(SwTxtFormatInfo &rInf)
         // 9. Kerning portions at beginning of line in grid mode
         if ( !pPor && !pCurr->GetPortion() )
         {
-            GETGRID( GetTxtFrm()->FindPageFrm() )
+            SwTextGridItem const*const pGrid(
+                    GetGridItem(GetTxtFrm()->FindPageFrm()));
             if ( pGrid )
                 pPor = new SwKernPortion( *pCurr );
         }
@@ -1268,7 +1269,8 @@ SwLinePortion *SwTxtFormatter::NewPortion( SwTxtFormatInfo &rInf )
 
                     if ( rInf.SnapToGrid() )
                     {
-                        GETGRID( GetTxtFrm()->FindPageFrm() )
+                        SwTextGridItem const*const pGrid(
+                                GetGridItem(GetTxtFrm()->FindPageFrm()));
                         if ( pGrid )
                         {
                             bRubyTop = ! pGrid->GetRubyTextBelow();
@@ -1716,7 +1718,7 @@ void SwTxtFormatter::CalcRealHeight( bool bNewLine )
     KSHORT nLineHeight = pCurr->Height();
     pCurr->SetClipping( false );
 
-    GETGRID( pFrm->FindPageFrm() )
+    SwTextGridItem const*const pGrid(GetGridItem(pFrm->FindPageFrm()));
     if ( pGrid && GetInfo().SnapToGrid() )
     {
         const sal_uInt16 nGridWidth = pGrid->GetBaseHeight();
@@ -2476,7 +2478,7 @@ void SwTxtFormatter::CalcFlyWidth( SwTxtFormatInfo &rInf )
         if( pFly->Fix() < rInf.Width() )
             rInf.Width( pFly->Fix() );
 
-        GETGRID( pFrm->FindPageFrm() )
+        SwTextGridItem const*const pGrid(GetGridItem(pFrm->FindPageFrm()));
         if ( pGrid )
         {
             const SwPageFrm* pPageFrm = pFrm->FindPageFrm();
@@ -2489,7 +2491,7 @@ void SwTxtFormatter::CalcFlyWidth( SwTxtFormatInfo &rInf )
                                     (pPageFrm->*fnRect->fnGetPrtLeft)();
 
             const SwDoc *pDoc = rInf.GetTxtFrm()->GetNode()->GetDoc();
-            const sal_uInt16 nGridWidth = GETGRIDWIDTH( pGrid, pDoc);   //For textgrid refactor
+            const sal_uInt16 nGridWidth = GetGridWidth(*pGrid, *pDoc);
 
             SwTwips nStartX = GetLeftMargin();
             if ( bVert )

@@ -243,7 +243,7 @@ void SwTxtPainter::DrawTextLine( const SwRect &rPaint, SwSaveClip &rClip,
     // Baseline-Ausgabe auch bei nicht-TxtPortions (vgl. TabPor mit Fill)
     // if no special vertical alignment is used,
     // we calculate Y value for the whole line
-    GETGRID( GetTxtFrm()->FindPageFrm() )
+    SwTextGridItem const*const pGrid(GetGridItem(GetTxtFrm()->FindPageFrm()));
     const bool bAdjustBaseLine =
         GetLineInfo().HasSpecialAlign( GetTxtFrm()->IsVertical() ) ||
         ( 0 != pGrid );

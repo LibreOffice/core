@@ -1506,7 +1506,7 @@ SwTwips SwFlowFrm::_GetUpperSpaceAmountConsideredForPageGrid(
     if ( m_rThis.IsInDocBody() && m_rThis.GetAttrSet()->GetParaGrid().GetValue() )
     {
         const SwPageFrm* pPageFrm = m_rThis.FindPageFrm();
-        GETGRID( pPageFrm )
+        SwTextGridItem const*const pGrid(GetGridItem(pPageFrm));
         if( pGrid )
         {
             const SwFrm* pBodyFrm = pPageFrm->FindBodyCont();

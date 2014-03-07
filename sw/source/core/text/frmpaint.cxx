@@ -527,7 +527,7 @@ bool SwTxtFrm::PaintEmpty( const SwRect &rRect, bool bCheck ) const
                 if ( GetTxtNode()->GetSwAttrSet().GetParaGrid().GetValue() &&
                      IsInDocBody() )
                 {
-                    GETGRID( FindPageFrm() )
+                    SwTextGridItem const*const pGrid(GetGridItem(FindPageFrm()));
                     if ( pGrid )
                     {
                         // center character in grid line

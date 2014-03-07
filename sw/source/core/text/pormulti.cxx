@@ -1341,7 +1341,7 @@ SwSpaceManipulator::~SwSpaceManipulator()
 void SwTxtPainter::PaintMultiPortion( const SwRect &rPaint,
     SwMultiPortion& rMulti, const SwMultiPortion* pEnvPor )
 {
-    GETGRID( pFrm->FindPageFrm() )
+    SwTextGridItem const*const pGrid(GetGridItem(pFrm->FindPageFrm()));
     const bool bHasGrid = pGrid && GetInfo().SnapToGrid();
     sal_uInt16 nRubyHeight = 0;
     bool bRubyTop = false;
@@ -1845,7 +1845,7 @@ bool SwTxtFormatter::BuildMultiPortion( SwTxtFormatInfo &rInf,
     SwLinePortion *pNextSecond = NULL;
     bool bRet = false;
 
-    GETGRID( pFrm->FindPageFrm() )
+    SwTextGridItem const*const pGrid(GetGridItem(pFrm->FindPageFrm()));
     const bool bHasGrid = pGrid && GRID_LINES_CHARS == pGrid->GetGridType();
 
     bool bRubyTop = false;
@@ -2293,7 +2293,8 @@ SwLinePortion* SwTxtFormatter::MakeRestPortion( const SwLineLayout* pLine,
 
             if ( GetInfo().SnapToGrid() )
             {
-                GETGRID( pFrm->FindPageFrm() )
+                SwTextGridItem const*const pGrid(
+                        GetGridItem(pFrm->FindPageFrm()));
                 if ( pGrid )
                 {
                     bRubyTop = ! pGrid->GetRubyTextBelow();

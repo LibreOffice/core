@@ -113,7 +113,8 @@ void SwBodyFrm::Format( const SwBorderAttrs * )
     bool bNoGrid = true;
     if( GetUpper()->IsPageFrm() && ((SwPageFrm*)GetUpper())->HasGrid() )
     {
-        GETGRID( ((SwPageFrm*)GetUpper()) )
+        SwTextGridItem const*const pGrid(
+                GetGridItem(static_cast<SwPageFrm*>(GetUpper())));
         if( pGrid )
         {
             bNoGrid = false;
@@ -125,7 +126,7 @@ void SwBodyFrm::Format( const SwBorderAttrs * )
             {
                 //for textgrid refactor
                 SwDoc *pDoc = GetFmt()->GetDoc();
-                nBorder = nSize % (GETGRIDWIDTH(pGrid, pDoc));
+                nBorder = nSize % (GetGridWidth(*pGrid, *pDoc));
                 nSize -= nBorder;
                 nBorder /= 2;
             }
@@ -174,7 +175,7 @@ SwPageFrm::SwPageFrm( SwFrmFmt *pFmt, SwFrm* pSib, SwPageDesc *pPgDsc ) :
     if( pDesc )
     {
         bHasGrid = sal_True;
-        GETGRID( this )
+        SwTextGridItem const*const pGrid(GetGridItem(this));
         if( !pGrid )
             bHasGrid = sal_False;
     }
@@ -281,7 +282,7 @@ void SwPageFrm::CheckGrid( sal_Bool bInvalidate )
 {
     sal_Bool bOld = bHasGrid;
     bHasGrid = sal_True;
-    GETGRID( this )
+    SwTextGridItem const*const pGrid(GetGridItem(this));
     bHasGrid = 0 != pGrid;
     if( bInvalidate || bOld != bHasGrid )
     {
@@ -2277,6 +2278,25 @@ bool SwPageFrm::IsOverHeaderFooterArea( const Point& rPt, FrameControlType &rCon
     }
 
     return false;
+}
+
+SwTextGridItem const* GetGridItem(SwPageFrm const*const pPage)
+{
+    if (pPage && pPage->HasGrid())
+    {
+        SwTextGridItem const& rGridItem(
+                pPage->GetPageDesc()->GetMaster().GetTextGrid());
+        if (GRID_NONE != rGridItem.GetGridType())
+        {
+            return &rGridItem;
+        }
+    }
+    return 0;
+}
+
+sal_uInt16 GetGridWidth(SwTextGridItem const& rG, SwDoc const& rDoc)
+{
+    return (rDoc.IsSquaredPageMode()) ? rG.GetBaseHeight() : rG.GetBaseWidth();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -430,13 +430,12 @@ inline sal_Bool SwPageFrm::IsInvalidFly() const
     return bInvalidFlyLayout || bInvalidFlyCntnt;
 }
 
-#define GETGRID( pPage ) const SwTextGridItem *pGrid = NULL; \
- {if( pPage && pPage->HasGrid() && GRID_NONE==(pGrid=(SwTextGridItem*)&pPage->\
-     GetPageDesc()->GetMaster().GetFmtAttr(RES_TEXTGRID))->GetGridType() ) \
-    pGrid = NULL;}
 
-#define GETGRIDWIDTH( pGrid , pDoc )  pDoc->IsSquaredPageMode() ? \
-    pGrid->GetBaseHeight(): pGrid->GetBaseWidth()
+class SwTextGridItem;
+
+SwTextGridItem const* GetGridItem(SwPageFrm const*const);
+
+sal_uInt16 GetGridWidth(SwTextGridItem const&, SwDoc const&);
 
 #endif // INCLUDED_SW_SOURCE_CORE_INC_PAGEFRM_HXX
 
