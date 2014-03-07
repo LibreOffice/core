@@ -603,6 +603,11 @@ Sequence< OUString > SvxLinguData_Impl::GetSortedImplNames( sal_Int16 nLang, sal
         case TYPE_GRAMMAR   : pTable = &aCfgGrammarTable; break;
     }
     Sequence< OUString > aRes;
+    if (!pTable)
+    {
+        SAL_WARN( "cui.options", "unknown linguistic type" );
+        return aRes;
+    }
     if (pTable->count( nLang ))
         aRes = (*pTable)[ nLang ];      // add configured services
     sal_Int32 nIdx = aRes.getLength();
