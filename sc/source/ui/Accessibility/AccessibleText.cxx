@@ -1620,7 +1620,7 @@ SvxTextForwarder* ScAccessibleNoteTextData::GetTextForwarder()
     if (mbDataValid)
         return mpForwarder;
 
-    if (!msText.isEmpty() && mpEditEngine)
+    if (!msText.isEmpty())
     {
 
         if ( mpViewShell  )
@@ -1641,8 +1641,7 @@ SvxTextForwarder* ScAccessibleNoteTextData::GetTextForwarder()
 
     mbDataValid = true;
 
-    if (mpEditEngine)
-        mpEditEngine->SetNotifyHdl( LINK(this, ScAccessibleCellTextData, NotifyHdl) );
+    mpEditEngine->SetNotifyHdl( LINK(this, ScAccessibleCellTextData, NotifyHdl) );
 
     return mpForwarder;
 }
