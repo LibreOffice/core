@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a930d6b_b1f538cd",
+        "filename": "include/svx/svdobj.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 414,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2014-03-07T08:57:06Z",
+      "side": 1,
+      "message": "Please don\u0027t mix whiteshapce and functional changes. This newline is not necessary here.",
+      "revId": "67d8063bb0ff89396623862632be96de85c13c36",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a930d6b_d102c4b3",
+        "filename": "oox/source/export/vmlexport.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 192,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2014-03-07T08:57:06Z",
+      "side": 1,
+      "message": "Given that this only uses rStr, can\u0027t this be static?",
+      "revId": "67d8063bb0ff89396623862632be96de85c13c36",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a930d6b_112c4c4a",
+        "filename": "sw/source/filter/ww8/wrtw8nds.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 560,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2014-03-07T08:57:06Z",
+      "side": 1,
+      "message": "And if the VMLExport method will be static, then you can call it here, instead of copy\u0026pasting the logic of the \"is this name a watermark?\" decision.",
+      "revId": "67d8063bb0ff89396623862632be96de85c13c36",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
