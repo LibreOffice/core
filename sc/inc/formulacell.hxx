@@ -76,6 +76,7 @@ struct SC_DLLPUBLIC ScFormulaCellGroup : boost::noncopyable
     void setCode( const ScTokenArray& rCode );
     void compileCode(
         ScDocument& rDoc, const ScAddress& rPos, formula::FormulaGrammar::Grammar eGram );
+    void compileOpenCLKernel();
 
     static int snCount;
     static rtl::Reference<sc::CLBuildKernelThread> sxCompilationThread;

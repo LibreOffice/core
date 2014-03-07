@@ -54,6 +54,8 @@
 
 #include <boost/scoped_ptr.hpp>
 
+#define ENABLE_THREADED_OPENCL_KERNEL_COMPILATION 1
+
 using namespace formula;
 
 #ifdef USE_MEMPOOL
@@ -482,7 +484,16 @@ void ScFormulaCellGroup::compileCode(
     }
 }
 
+void ScFormulaCellGroup::compileOpenCLKernel()
+{
+    if (meCalcState == sc::GroupCalcDisabled)
+        return;
 
+    mpCompiledFormula = sc::FormulaGroupInterpreter::getStatic()->createCompiledFormula(
+        *mpTopCell->GetDocument(), mpTopCell->aPos, *this, *mpCode);
+
+    meKernelState = sc::OpenCLKernelBinaryCreated;
+}
 
 ScFormulaCell::ScFormulaCell( ScDocument* pDoc, const ScAddress& rPos ) :
     eTempGrammar(formula::FormulaGrammar::GRAM_DEFAULT),
@@ -3492,8 +3503,12 @@ ScFormulaCellGroupRef ScFormulaCell::CreateCellGroup( SCROW nLen, bool bInvarian
     mxGroup->mbInvariant = bInvariant;
     mxGroup->mnLength = nLen;
     mxGroup->mpCode = pCode; // Move this to the shared location.
+#if ENABLE_THREADED_OPENCL_KERNEL_COMPILATION
     if (mxGroup->sxCompilationThread.is())
         mxGroup->scheduleCompilation();
+#else
+    mxGroup->compileOpenCLKernel();
+#endif
     return mxGroup;
 }
 

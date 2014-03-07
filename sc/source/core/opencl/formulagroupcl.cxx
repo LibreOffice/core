@@ -3342,7 +3342,7 @@ public:
     virtual ScMatrixRef inverseMatrix( const ScMatrix& rMat ) SAL_OVERRIDE;
     virtual CompiledFormula* createCompiledFormula(ScDocument& rDoc,
                                                    const ScAddress& rTopPos,
-                                                   ScFormulaCellGroupRef& xGroup,
+                                                   ScFormulaCellGroup& rGroup,
                                                    ScTokenArray& rCode) SAL_OVERRIDE;
     virtual bool interpret( ScDocument& rDoc, const ScAddress& rTopPos,
                             ScFormulaCellGroupRef& xGroup, ScTokenArray& rCode ) SAL_OVERRIDE;
@@ -3427,15 +3427,15 @@ DynamicKernel* DynamicKernel::create(ScDocument& /* rDoc */,
 
 CompiledFormula* FormulaGroupInterpreterOpenCL::createCompiledFormula(ScDocument& rDoc,
                                                                       const ScAddress& rTopPos,
-                                                                      ScFormulaCellGroupRef& xGroup,
+                                                                      ScFormulaCellGroup& rGroup,
                                                                       ScTokenArray& rCode)
 {
     ScTokenArray aConvertedCode;
-    ScGroupTokenConverter aConverter(aConvertedCode, rDoc, *xGroup->mpTopCell, rTopPos);
+    ScGroupTokenConverter aConverter(aConvertedCode, rDoc, *rGroup.mpTopCell, rTopPos);
     if (!aConverter.convert(rCode) || aConvertedCode.GetLen() == 0)
         return NULL;
 
-    SymbolTable::nR = xGroup->mnLength;
+    SymbolTable::nR = rGroup.mnLength;
 
     return DynamicKernel::create(rDoc, rTopPos, aConvertedCode);
 }
@@ -3460,7 +3460,7 @@ bool FormulaGroupInterpreterOpenCL::interpret( ScDocument& rDoc,
     else
     {
         assert(xGroup->meCalcState == sc::GroupCalcRunning);
-        pKernel = static_cast<DynamicKernel*>(createCompiledFormula(rDoc, rTopPos, xGroup, rCode));
+        pKernel = static_cast<DynamicKernel*>(createCompiledFormula(rDoc, rTopPos, *xGroup, rCode));
     }
 
     if (!pKernel)
