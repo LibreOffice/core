@@ -465,7 +465,7 @@ sal_Bool ScChildrenShapes::ReplaceChild (::accessibility::AccessibleShape* pCurr
         pReplacement->Init();
 
     sal_Bool bResult(false);
-    if (pCurrentChild && pReplacement)
+    if (pReplacement)
     {
         OSL_ENSURE(pCurrentChild->GetXShape().get() == pReplacement->GetXShape().get(), "XShape changes and should be inserted sorted");
         SortedShapes::iterator aItr;
