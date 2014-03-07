@@ -217,13 +217,14 @@ OUString SAL_CALL ThumbnailViewAcc::getAccessibleName()
     OUString aRet;
 
     if ( mpParent )
-        aRet = mpParent->GetAccessibleName();
-
-    if ( aRet.isEmpty() )
     {
-        Window* pLabel = mpParent->GetAccessibleRelationLabeledBy();
-        if ( pLabel && pLabel != mpParent )
-            aRet = OutputDevice::GetNonMnemonicString( pLabel->GetText() );
+        aRet = mpParent->GetAccessibleName();
+        if (aRet.isEmpty())
+        {
+            Window* pLabel = mpParent->GetAccessibleRelationLabeledBy();
+            if (pLabel && pLabel != mpParent)
+                aRet = OutputDevice::GetNonMnemonicString( pLabel->GetText() );
+        }
     }
 
     return aRet;
