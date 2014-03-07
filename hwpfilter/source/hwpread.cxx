@@ -616,7 +616,11 @@ bool AutoNum::Read(HWPFile & hwpf)
 
 
 // new number(19)
-NewNum::NewNum():HBox(CH_NEW_NUM)
+NewNum::NewNum()
+    : HBox(CH_NEW_NUM)
+    , type(0)
+    , number(0)
+    , dummy(0)
 {
 }
 
