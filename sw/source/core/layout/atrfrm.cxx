@@ -2276,12 +2276,12 @@ bool SwTextGridItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
 #define MIN_TEXTGRID_SIZE 100
                 if( (nMemberId & ~CONVERT_TWIPS) == MID_GRID_BASEHEIGHT )
                 {
-                    nTmp = std::max(nTmp, MIN_TEXTGRID_SIZE);
+                    nTmp = std::max<sal_Int32>(nTmp, MIN_TEXTGRID_SIZE);
                     SetBaseHeight( (sal_uInt16)nTmp );
                 }
                 else if( (nMemberId & ~CONVERT_TWIPS) == MID_GRID_BASEWIDTH )
                 {
-                    nTmp = std::max(nTmp, MIN_TEXTGRID_SIZE);
+                    nTmp = std::max<sal_Int32>(nTmp, MIN_TEXTGRID_SIZE);
                     SetBaseWidth( (sal_uInt16)nTmp );
                 }
                 else
