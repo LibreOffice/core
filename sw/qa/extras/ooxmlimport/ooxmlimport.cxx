@@ -1917,6 +1917,9 @@ DECLARE_OOXMLIMPORT_TEST(testStrict, "strict.docx")
     // Header in the document caused a crash on import.
     uno::Reference<text::XText> xHeaderText(xPageStyle->getPropertyValue("HeaderText"), uno::UNO_QUERY);
     getParagraphOfText(1, xHeaderText, "This is a header.");
+
+    // Picture was missing, this resulted in a lang::IndexOutOfBoundsException.
+    getShape(1);
 }
 
 #endif

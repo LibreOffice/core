@@ -23,10 +23,12 @@
   <namespace-alias name="urn:schemas-microsoft-com:office:office" alias="office" id="vmlOffice"/>
   <namespace-alias name="http://schemas.openxmlformats.org/officeDocument/2006/relationships/theme" alias="theme" id="officeRelTheme"/>
   <namespace-alias name="http://schemas.openxmlformats.org/drawingml/2006/wordprocessingDrawing" alias="wordprocessingDrawing" id="dmlWordDr"/>
+  <namespace-alias name="http://purl.oclc.org/ooxml/drawingml/wordprocessingDrawing" alias="wordprocessingDrawing" id="dmlWordDr"/>
   <namespace-alias name="http://schemas.openxmlformats.org/drawingml/2006/main" alias="drawingml" id="dml"/>
   <namespace-alias name="http://purl.oclc.org/ooxml/drawingml/main" alias="drawingml" id="dml"/>
   <namespace-alias name="urn:schemas-microsoft-com:vml" alias="vml" id="vml"/>
   <namespace-alias name="http://schemas.openxmlformats.org/drawingml/2006/picture" alias="picture" id="dmlPicture"/>
+  <namespace-alias name="http://purl.oclc.org/ooxml/drawingml/picture" alias="picture" id="dmlPicture"/>
   <namespace-alias name="http://schemas.openxmlformats.org/drawingml/2006/diagram" alias="diagram" id="dmlDiagram"/>
   <namespace-alias name="http://schemas.openxmlformats.org/drawingml/2006/lockedCanvas" alias="lockedCanvas" id="dmlLockedCanvas"/>
   <namespace-alias name="http://schemas.microsoft.com/office/word/2010/wordprocessingShape" alias="wps" id="wps"/>
