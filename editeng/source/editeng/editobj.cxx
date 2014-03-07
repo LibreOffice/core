@@ -583,17 +583,17 @@ EditTextObjectImpl::EditTextObjectImpl( EditTextObject* pFront, const EditTextOb
     else
     {
         pPool = EditEngine::CreatePool();
-        bOwnerOfPool =  true;
+        bOwnerOfPool = true;
 
     }
 
-    if(!bOwnerOfPool && pPool)
+    if (!bOwnerOfPool)
     {
         // it is sure now that the pool is an EditEngineItemPool
         pPool->AddSfxItemPoolUser(*mpFront);
     }
 
-    if ( bOwnerOfPool && pPool && r.pPool )
+    if (bOwnerOfPool && r.pPool)
         pPool->SetDefaultMetric( r.pPool->GetMetric( DEF_METRIC ) );
 
     aContents.reserve(r.aContents.size());
