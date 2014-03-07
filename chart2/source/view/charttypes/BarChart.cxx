@@ -86,23 +86,39 @@ drawing::Direction3D BarChart::getPreferredDiagramAspectRatio() const
     if( m_nDimension == 3 )
     {
         aRet = drawing::Direction3D(1.0,-1.0,1.0);
-                BarPositionHelper* pPosHelper = dynamic_cast<BarPositionHelper*>(&( this->getPlottingPositionHelper( MAIN_AXIS_INDEX) ) );
-        drawing::Direction3D aScale( pPosHelper->getScaledLogicWidth() );
-        if(aScale.DirectionX!=0.0)
+        BarPositionHelper* pPosHelper = dynamic_cast<BarPositionHelper*>(&( this->getPlottingPositionHelper( MAIN_AXIS_INDEX) ) );
+        assert(pPosHelper);
+        if(pPosHelper)
         {
-            double fXSlotCount = 1.0;
-            if(!m_aZSlots.empty())
-                fXSlotCount = m_aZSlots.begin()->size();
-
-            aRet.DirectionZ = aScale.DirectionZ/(aScale.DirectionX + aScale.DirectionX*(fXSlotCount-1.0)*pPosHelper->getScaledSlotWidth());
+            drawing::Direction3D aScale( pPosHelper->getScaledLogicWidth() );
+            if(aScale.DirectionX!=0.0)
+            {
+                double fXSlotCount = 1.0;
+                if(!m_aZSlots.empty())
+                {
+                    fXSlotCount = m_aZSlots.begin()->size();
+                }
+                aRet.DirectionZ = aScale.DirectionZ /
+                    (aScale.DirectionX + aScale.DirectionX * (fXSlotCount-1.0) * pPosHelper->getScaledSlotWidth());
+            }
+            else
+            {
+                return VSeriesPlotter::getPreferredDiagramAspectRatio();
+            }
         }
         else
+        {
             return VSeriesPlotter::getPreferredDiagramAspectRatio();
-        if(aRet.DirectionZ<0.05)
-            aRet.DirectionZ=0.05;
-        if(aRet.DirectionZ>10)
-            aRet.DirectionZ=10;
+        }
 
+        if(aRet.DirectionZ<0.05)
+        {
+            aRet.DirectionZ=0.05;
+        }
+        else if(aRet.DirectionZ>10)
+        {
+            aRet.DirectionZ=10;
+        }
         if( m_pMainPosHelper && m_pMainPosHelper->isSwapXAndY() )
         {
             double fTemp = aRet.DirectionX;
