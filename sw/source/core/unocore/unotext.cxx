@@ -1582,7 +1582,10 @@ throw (lang::IllegalArgumentException, uno::RuntimeException, std::exception)
     }
     bool bParaAfterInserted = false;
     bool bParaBeforeInserted = false;
-    if (pStartStartNode != pEndStartNode || pStartStartNode != GetStartNode())
+    if (
+        pStartStartNode && pEndStartNode &&
+        (pStartStartNode != pEndStartNode || pStartStartNode != GetStartNode())
+       )
     {
         // todo: if the start/end is in a table then insert a paragraph
         // before/after, move the start/end nodes, then convert and
