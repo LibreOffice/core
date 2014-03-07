@@ -974,7 +974,7 @@ static bool ExchangeLeftRight( const PropertyMapPtr rContext, DomainMapper_Impl*
     return bExchangeLeftRight;
 }
 
-void DomainMapper::sprmWithProps( Sprm& rSprm, PropertyMapPtr rContext, SprmType /*eSprmType*/ )
+void DomainMapper::sprmWithProps( Sprm& rSprm, PropertyMapPtr rContext )
 {
     OSL_ENSURE(rContext.get(), "PropertyMap has to be valid!");
     if(!rContext.get())

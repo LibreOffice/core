@@ -93,7 +93,7 @@ public:
     virtual void data(const sal_uInt8* buf, size_t len,
                       writerfilter::Reference<Properties>::Pointer_t ref);
 
-    void sprmWithProps( Sprm& sprm, ::boost::shared_ptr<PropertyMap> pContext, SprmType = SPRM_DEFAULT );
+    void sprmWithProps( Sprm& sprm, ::boost::shared_ptr<PropertyMap> pContext );
 
     void PushStyleSheetProperties( ::boost::shared_ptr<PropertyMap> pStyleProperties, bool bAffectTableMngr = false );
     void PopStyleSheetProperties( bool bAffectTableMngr = false );
