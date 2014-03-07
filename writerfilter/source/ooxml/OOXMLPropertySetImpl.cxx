@@ -661,6 +661,40 @@ string OOXMLHexValue::toString() const
     return buffer;
 }
 
+// OOXMLUniversalMeasureValue
+
+OOXMLUniversalMeasureValue::OOXMLUniversalMeasureValue(sal_uInt32 nValue)
+    : mnValue(nValue)
+{
+}
+
+OOXMLUniversalMeasureValue::OOXMLUniversalMeasureValue(const OUString& rValue)
+{
+    if (rValue.endsWith("pt"))
+        mnValue = rValue.copy(0, rValue.getLength() - 2).toInt32() * 20;
+    else
+        mnValue = rValue.toInt32();
+}
+
+OOXMLUniversalMeasureValue::~OOXMLUniversalMeasureValue()
+{
+}
+
+int OOXMLUniversalMeasureValue::getInt() const
+{
+    return mnValue;
+}
+
+OOXMLValue* OOXMLUniversalMeasureValue::clone() const
+{
+    return new OOXMLUniversalMeasureValue(*this);
+}
+
+string OOXMLUniversalMeasureValue::toString() const
+{
+    return OString::number(mnValue).getStr();
+}
+
 /*
   class OOXMLShapeValue
  */

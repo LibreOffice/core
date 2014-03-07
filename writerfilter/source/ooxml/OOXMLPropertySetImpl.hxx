@@ -214,6 +214,21 @@ public:
     virtual OOXMLValue * clone() const;
 };
 
+/// Handles OOXML's ST_UniversalMeasure value.
+class OOXMLUniversalMeasureValue : public OOXMLValue
+{
+protected:
+    sal_uInt32 mnValue;
+public:
+    explicit OOXMLUniversalMeasureValue(sal_uInt32 nValue);
+    explicit OOXMLUniversalMeasureValue(const OUString& rValue);
+    virtual ~OOXMLUniversalMeasureValue();
+
+    virtual int getInt() const;
+    virtual string toString() const;
+    virtual OOXMLValue* clone() const;
+};
+
 class OOXMLShapeValue : public OOXMLValue
 {
 protected:
