@@ -16,6 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
+#ifndef INCLUDED_BRIDGES_SOURCE_CPP_UNO_MINGW_X86_64_SHARE_HXX
+#define INCLUDED_BRIDGES_SOURCE_CPP_UNO_MINGW_X86_64_SHARE_HXX
 
 #include "uno/mapping.h"
 
@@ -95,4 +97,5 @@ void fillUnoException(
     __cxa_exception * header, uno_Any *, uno_Mapping * pCpp2Uno );
 }
 
+#endif
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
