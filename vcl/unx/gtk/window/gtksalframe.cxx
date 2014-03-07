@@ -3033,8 +3033,7 @@ void GtkSalFrame::createNewWindow( XLIB_Window aNewParent, bool bXEmbed, SalX11S
 bool GtkSalFrame::SetPluginParent( SystemParentData* pSysParent )
 {
 #if !GTK_CHECK_VERSION(3,0,0)
-    if( pSysParent ) // this may be the first system child frame now
-        GetGenericData()->ErrorTrapPush(); // permanantly ignore unruly children's errors
+    GetGenericData()->ErrorTrapPush(); // permanantly ignore unruly children's errors
     createNewWindow( pSysParent->aWindow, (pSysParent->nSize > sizeof(long)) ? pSysParent->bXEmbedSupport : false, m_nXScreen );
     return true;
 #else
