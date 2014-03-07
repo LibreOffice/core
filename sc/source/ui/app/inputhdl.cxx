@@ -53,6 +53,7 @@
 #include <comphelper/string.hxx>
 #include <formula/formulahelper.hxx>
 
+#include "scCurrentCellPos.hxx"
 #include "inputwin.hxx"
 #include "tabvwsh.hxx"
 #include "docsh.hxx"
@@ -3587,7 +3588,14 @@ void ScInputHandler::NotifyChange( const ScInputHdlState* pState,
                                 aPosStr = r.Format(SCA_VALID | nFlags, pDoc, aAddrDetails);
                             }
                             else
+                            {
                                 aPosStr = aCursorPos.Format(SCA_VALID | nFlags, pDoc, aAddrDetails);
+                                scCurrentCellPos cellAddr;
+                                cellAddr.setCellAddr(aCursorPos);                       //the value of aCursorPos is used by the statusbar component through the class scCurrentCellPos
+                                ScViewData* pViewData = pActiveViewSh->GetViewData();
+                                SfxBindings& rBindings = pViewData->GetBindings();
+                                rBindings.Invalidate( SID_STATUS_CURPOS );              //statusbar position update
+                             }
                         }
 
                         // Disable the accessible VALUE_CHANGE event

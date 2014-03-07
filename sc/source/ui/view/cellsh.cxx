@@ -16,9 +16,10 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-
+#include "scCurrentCellPos.hxx"
+#include "spelldialog.hxx"
 #include "scitems.hxx"
-
+#include "inputhdl.hxx"
 #include <svl/slstitm.hxx>
 #include <svl/stritem.hxx>
 #include <svl/whiter.hxx>
@@ -675,6 +676,17 @@ void ScCellShell::GetState(SfxItemSet &rSet)
                     OUString aStr = ScGlobal::GetRscString( STR_TABLE ) +
                                     " "   + OUString::number( nTab + 1 ) +
                                     " / " + OUString::number( nTabCount );
+                    rSet.Put( SfxStringItem( nWhich, aStr ) );
+                }
+                break;
+            case SID_STATUS_CURPOS:                 //statusbar current cell position state
+                {
+                    scCurrentCellPos cellAddr;
+                    const ScAddress &addr=cellAddr.getCellAddr();
+                    SCCOL       nRow       = addr.Row();
+                    SCROW       nCol       = addr.Col();
+                    OUString aStr;                      
+                   aStr="Row "+OUString::number(nRow+1)+" : Column "+OUString::number(nCol+1);                                                      
                     rSet.Put( SfxStringItem( nWhich, aStr ) );
                 }
                 break;
