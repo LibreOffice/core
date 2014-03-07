@@ -108,6 +108,11 @@ namespace
             for (; nPos < i_str.getLength(); ++nPos)
             {
                 const sal_Unicode c = i_str[nPos];
+                if (c == 'Z' || c == '+' || c == '-')
+                {
+                    --nPos; // we don't want to skip the tz separator
+                    return true;
+                }
                 if (c == sep)
                     // fractional part allowed only in *last* token
                     return false;
@@ -116,6 +121,11 @@ namespace
                 resFrac += OUString(c);
             }
             OSL_ENSURE(nPos == i_str.getLength(), "impl_getISO8601TimeToken internal error; expected to be at end of string");
+            return true;
+        }
+        if (i_str[nPos] == 'Z' || i_str[nPos] == '+' || i_str[nPos] == '-')
+        {
+            --nPos; // we don't want to skip the tz separator
             return true;
         }
         else
@@ -137,6 +147,33 @@ namespace
             o_bFraction = bFraction;
             return true;
         }
+    }
+    inline bool getISO8601TimeZoneToken(const OUString &i_str, sal_Int32 &io_index, OUString &o_strInt)
+    {
+        const sal_Unicode c0 = '0';
+        const sal_Unicode c9 = '9';
+        const sal_Unicode sep = ':';
+        if (i_str[io_index] == 'Z') // UTC timezone indicator
+        {
+            ++io_index;
+            o_strInt = "Z";
+            return true;
+        }
+        else if (i_str[io_index] == '+' || i_str[io_index] == '-') // other timezones indicator
+        {
+            ++io_index;
+            o_strInt = "";
+            for (; io_index < i_str.getLength(); ++io_index)
+            {
+                const sal_Unicode c = i_str[io_index];
+                if ((c < c0 || c > c9) && c != sep)
+                    return false;
+                o_strInt += OUString(c);
+            }
+            return true;
+        }
+        else
+            return false;
     }
 }
 
@@ -313,14 +350,15 @@ bool ISO8601parseTime(const OUString &aTimeStr, starutil::Time& rTime)
     sal_Int32 n = 0;
     OUString tokInt;
     OUString tokFrac;
+    OUString tokTz;
     bool bFrac = false;
     // hours
     if (bSuccess && (bSuccess = getISO8601TimeToken(aTimeStr, n, tokInt, bFrac, tokFrac)))
     {
         if ( bFrac && n < aTimeStr.getLength())
-            // junk after ISO time
-            bSuccess = false;
-        else if ( (bSuccess = convertNumber<sal_Int32>( nHour, tokInt, 0, 23 )) )
+            // is it junk or the timezone?
+            bSuccess = getISO8601TimeZoneToken(aTimeStr, n, tokTz);
+        if (bSuccess && (bSuccess = convertNumber<sal_Int32>( nHour, tokInt, 0, 23 )) )
         {
             if (bFrac)
             {
@@ -354,9 +392,9 @@ bool ISO8601parseTime(const OUString &aTimeStr, starutil::Time& rTime)
     if (bSuccess && (bSuccess = getISO8601TimeToken(aTimeStr, n, tokInt, bFrac, tokFrac)))
     {
         if ( bFrac && n < aTimeStr.getLength())
-            // junk after ISO time
-            bSuccess = false;
-        else if ( (bSuccess = convertNumber<sal_Int32>( nMin, tokInt, 0, 59 )) )
+            // is it junk or the timezone?
+            bSuccess = getISO8601TimeZoneToken(aTimeStr, n, tokTz);
+        if (bSuccess && (bSuccess = convertNumber<sal_Int32>( nMin, tokInt, 0, 59 )) )
         {
             if (bFrac)
             {
@@ -384,10 +422,10 @@ bool ISO8601parseTime(const OUString &aTimeStr, starutil::Time& rTime)
     if (bSuccess && (bSuccess = getISO8601TimeToken(aTimeStr, n, tokInt, bFrac, tokFrac)))
     {
         if (n < aTimeStr.getLength())
-            // junk after ISO time
-            bSuccess = false;
+            // is it junk or the timezone?
+            bSuccess = getISO8601TimeZoneToken(aTimeStr, n, tokTz);
         // max 60 for leap seconds
-        else if ( (bSuccess = convertNumber<sal_Int32>( nSec, tokInt, 0, 60 )) )
+        if (bSuccess && (bSuccess = convertNumber<sal_Int32>( nSec, tokInt, 0, 60 )) )
         {
             if (bFrac)
             {
@@ -425,6 +463,8 @@ bool ISO8601parseTime(const OUString &aTimeStr, starutil::Time& rTime)
             nMin = 0;
             ++nHour;
         }
+        if(!tokTz.isEmpty())
+            rTime.IsUTC = (tokTz == "Z");
 
         rTime.Hours = (sal_uInt16)nHour;
         rTime.Minutes = (sal_uInt16)nMin;
