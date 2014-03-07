@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <vector>
 #include <sortdynres.hxx>
 #include <cppuhelper/interfacecontainer.hxx>
@@ -27,15 +26,12 @@
 #include <com/sun/star/ucb/CachedDynamicResultSetStubFactory.hpp>
 #include <com/sun/star/ucb/XSourceInitialization.hpp>
 
-
 using namespace com::sun::star::beans;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::sdbc;
 using namespace com::sun::star::ucb;
 using namespace com::sun::star::uno;
 using namespace cppu;
-
-
 
 
 //  The mutex to synchronize access to containers.
@@ -56,10 +52,7 @@ static osl::Mutex& getContainerMutex()
 }
 
 
-
 // SortedDynamicResultSet
-
-
 
 SortedDynamicResultSet::SortedDynamicResultSet(
                         const Reference < XDynamicResultSet > &xOriginal,
@@ -101,48 +94,37 @@ SortedDynamicResultSet::~SortedDynamicResultSet()
     mpTwo = NULL;
 }
 
-
-// XInterface methods.
-void SAL_CALL SortedDynamicResultSet::acquire()
-    throw()
-{
-    OWeakObject::acquire();
-}
-
-void SAL_CALL SortedDynamicResultSet::release()
-    throw()
-{
-    OWeakObject::release();
-}
-
-css::uno::Any SAL_CALL SortedDynamicResultSet::queryInterface( const css::uno::Type & rType )
-    throw( css::uno::RuntimeException, std::exception )
-{
-    css::uno::Any aRet = cppu::queryInterface( rType,
-                                               (static_cast< XTypeProvider* >(this)),
-                                               (static_cast< XServiceInfo* >(this)),
-                                               (static_cast< XComponent* >(this)),
-                                               (static_cast< XDynamicResultSet* >(this))
-                                               );
-    return aRet.hasValue() ? aRet : OWeakObject::queryInterface( rType );
-}
-
-// XTypeProvider methods.
-
-
-XTYPEPROVIDER_IMPL_3( SortedDynamicResultSet,
-                      XTypeProvider,
-                         XServiceInfo,
-                      XDynamicResultSet );
-
-
 // XServiceInfo methods.
 
+OUString SAL_CALL SortedDynamicResultSet::getImplementationName()
+    throw( css::uno::RuntimeException, std::exception )
+{
+    return getImplementationName_Static();
+}
 
-XSERVICEINFO_NOFACTORY_IMPL_1( SortedDynamicResultSet,
-                                   OUString( "com.sun.star.comp.ucb.SortedDynamicResultSet" ),
-                                   OUString( DYNAMIC_RESULTSET_SERVICE_NAME ) );
+OUString SortedDynamicResultSet::getImplementationName_Static()
+{
+    return OUString( "com.sun.star.comp.ucb.SortedDynamicResultSet" );
+}
 
+sal_Bool SAL_CALL SortedDynamicResultSet::supportsService( const OUString& ServiceName )
+    throw( css::uno::RuntimeException, std::exception )
+{
+    return cppu::supportsService( this, ServiceName );
+}
+
+css::uno::Sequence< OUString > SAL_CALL SortedDynamicResultSet::getSupportedServiceNames()
+    throw( css::uno::RuntimeException, std::exception )
+{
+    return getSupportedServiceNames_Static();
+}
+
+css::uno::Sequence< OUString > SortedDynamicResultSet::getSupportedServiceNames_Static()
+{
+    css::uno::Sequence< OUString > aSNS( 1 );
+    aSNS.getArray()[ 0 ] = OUString( DYNAMIC_RESULTSET_SERVICE_NAME );
+    return aSNS;
+}
 
 // XComponent methods.
 
@@ -167,7 +149,6 @@ void SAL_CALL SortedDynamicResultSet::dispose()
     mbUseOne = sal_True;
 }
 
-
 void SAL_CALL SortedDynamicResultSet::addEventListener(
                             const Reference< XEventListener >& Listener )
     throw( RuntimeException, std::exception )
@@ -180,7 +161,6 @@ void SAL_CALL SortedDynamicResultSet::addEventListener(
 
     mpDisposeEventListeners->addInterface( Listener );
 }
-
 
 void SAL_CALL SortedDynamicResultSet::removeEventListener(
                             const Reference< XEventListener >& Listener )
@@ -236,8 +216,7 @@ SortedDynamicResultSet::setListener( const Reference< XDynamicResultSetListener 
 
 
 void SAL_CALL
-SortedDynamicResultSet::connectToCache(
-        const Reference< XDynamicResultSet > & xCache )
+SortedDynamicResultSet::connectToCache( const Reference< XDynamicResultSet > & xCache )
         throw( ListenerAlreadySetException,
                AlreadyInitializedException,
                ServiceNotFoundException,
@@ -272,8 +251,7 @@ SortedDynamicResultSet::connectToCache(
 }
 
 
-sal_Int16 SAL_CALL
-SortedDynamicResultSet::getCapabilities()
+sal_Int16 SAL_CALL SortedDynamicResultSet::getCapabilities()
     throw( RuntimeException, std::exception )
 {
     osl::Guard< osl::Mutex > aGuard( maMutex );
@@ -307,8 +285,7 @@ SortedDynamicResultSet::getCapabilities()
  update call at once is, while he disposes his broadcaster or while he is
  removing himsef as listener (otherwise you deadlock)!!!
 */
-void SAL_CALL
-SortedDynamicResultSet::impl_notify( const ListEvent& Changes )
+void SAL_CALL SortedDynamicResultSet::impl_notify( const ListEvent& Changes )
     throw( RuntimeException )
 {
     osl::Guard< osl::Mutex > aGuard( maMutex );
@@ -436,17 +413,14 @@ SortedDynamicResultSet::impl_notify( const ListEvent& Changes )
     pCurSet->CheckProperties( nOldCount, bWasFinal );
 }
 
-
 // XEventListener
 
-void SAL_CALL
-SortedDynamicResultSet::impl_disposing( const EventObject& )
+void SAL_CALL SortedDynamicResultSet::impl_disposing( const EventObject& )
     throw( RuntimeException )
 {
     mxListener.clear();
     mxOriginal.clear();
 }
-
 
 // private methods
 
@@ -474,10 +448,7 @@ void SortedDynamicResultSet::SendNotify()
     maActions.Clear();
 }
 
-
-
 // SortedDynamicResultSetFactory
-
 
 SortedDynamicResultSetFactory::SortedDynamicResultSetFactory(
                         const Reference< XComponentContext > & rxContext )
@@ -491,52 +462,60 @@ SortedDynamicResultSetFactory::~SortedDynamicResultSetFactory()
 }
 
 
-// XInterface methods.
-void SAL_CALL SortedDynamicResultSetFactory::acquire()
-    throw()
-{
-    OWeakObject::acquire();
-}
-
-void SAL_CALL SortedDynamicResultSetFactory::release()
-    throw()
-{
-    OWeakObject::release();
-}
-
-css::uno::Any SAL_CALL SortedDynamicResultSetFactory::queryInterface( const css::uno::Type & rType )
-    throw( css::uno::RuntimeException, std::exception )
-{
-    css::uno::Any aRet = cppu::queryInterface( rType,
-                                               (static_cast< XTypeProvider* >(this)),
-                                               (static_cast< XServiceInfo* >(this)),
-                                               (static_cast< XSortedDynamicResultSetFactory* >(this))
-                                               );
-    return aRet.hasValue() ? aRet : OWeakObject::queryInterface( rType );
-}
-
-// XTypeProvider methods.
-
-
-XTYPEPROVIDER_IMPL_3( SortedDynamicResultSetFactory,
-                      XTypeProvider,
-                         XServiceInfo,
-                      XSortedDynamicResultSetFactory );
-
-
 // XServiceInfo methods.
 
+OUString SAL_CALL SortedDynamicResultSetFactory::getImplementationName()
+    throw( css::uno::RuntimeException, std::exception )
+{
+    return getImplementationName_Static();
+}
 
-XSERVICEINFO_IMPL_1_CTX( SortedDynamicResultSetFactory,
-                         OUString( "com.sun.star.comp.ucb.SortedDynamicResultSetFactory" ),
-                         OUString( DYNAMIC_RESULTSET_FACTORY_NAME ) );
+OUString SortedDynamicResultSetFactory::getImplementationName_Static()
+{
+    return OUString( "com.sun.star.comp.ucb.SortedDynamicResultSetFactory" );
+}
+
+sal_Bool SAL_CALL SortedDynamicResultSetFactory::supportsService( const OUString& ServiceName )
+    throw( css::uno::RuntimeException, std::exception )
+{
+    return cppu::supportsService( this, ServiceName );
+}
+
+css::uno::Sequence< OUString > SAL_CALL SortedDynamicResultSetFactory::getSupportedServiceNames()
+    throw( css::uno::RuntimeException, std::exception )
+{
+    return getSupportedServiceNames_Static();
+}
+
+static css::uno::Reference< css::uno::XInterface > SAL_CALL
+SortedDynamicResultSetFactory_CreateInstance( const css::uno::Reference<
+                                              css::lang::XMultiServiceFactory> & rSMgr )
+    throw( css::uno::Exception )
+{
+    css::lang::XServiceInfo* pX = (css::lang::XServiceInfo*)
+        new SortedDynamicResultSetFactory( ucbhelper::getComponentContext(rSMgr) );
+    return css::uno::Reference< css::uno::XInterface >::query( pX );
+}
+
+css::uno::Sequence< OUString > SortedDynamicResultSetFactory::getSupportedServiceNames_Static()
+{
+    com::sun::star::uno::Sequence< OUString > aSNS( 1 );
+    aSNS.getArray()[ 0 ] =  OUString( DYNAMIC_RESULTSET_FACTORY_NAME );
+    return aSNS;
+}
 
 
 // Service factory implementation.
-
-
-ONE_INSTANCE_SERVICE_FACTORY_IMPL( SortedDynamicResultSetFactory );
-
+css::uno::Reference< css::lang::XSingleServiceFactory >
+SortedDynamicResultSetFactory::createServiceFactory( const css::uno::Reference< css::lang::XMultiServiceFactory >& rxServiceMgr )
+{
+    return css::uno::Reference< css::lang::XSingleServiceFactory >(
+            cppu::createOneInstanceFactory(
+                    rxServiceMgr,
+                    SortedDynamicResultSetFactory::getImplementationName_Static(),
+                    SortedDynamicResultSetFactory_CreateInstance,
+                    SortedDynamicResultSetFactory::getSupportedServiceNames_Static() ) );
+}
 
 // SortedDynamicResultSetFactory methods.
 
@@ -552,11 +531,7 @@ SortedDynamicResultSetFactory::createSortedDynamicResultSet(
     return xRet;
 }
 
-
-
 // EventList
-
-
 
 void EventList::Clear()
 {
@@ -569,7 +544,6 @@ void EventList::Clear()
     maData.clear();
 }
 
-
 void EventList::AddEvent( sal_IntPtr nType, sal_IntPtr nPos, sal_IntPtr nCount )
 {
     ListAction *pAction = new ListAction;
@@ -580,11 +554,7 @@ void EventList::AddEvent( sal_IntPtr nType, sal_IntPtr nPos, sal_IntPtr nCount )
     Insert( pAction );
 }
 
-
-
 // SortedDynamicResultSetListener
-
-
 
 SortedDynamicResultSetListener::SortedDynamicResultSetListener(
                                 SortedDynamicResultSet *mOwner )
@@ -595,31 +565,6 @@ SortedDynamicResultSetListener::SortedDynamicResultSetListener(
 
 SortedDynamicResultSetListener::~SortedDynamicResultSetListener()
 {
-}
-
-
-// XInterface methods.
-
-void SAL_CALL SortedDynamicResultSetListener::acquire()
-    throw()
-{
-    OWeakObject::acquire();
-}
-
-void SAL_CALL SortedDynamicResultSetListener::release()
-    throw()
-{
-    OWeakObject::release();
-}
-
-css::uno::Any SAL_CALL SortedDynamicResultSetListener::queryInterface( const css::uno::Type & rType )
-    throw( css::uno::RuntimeException, std::exception )
-{
-    css::uno::Any aRet = cppu::queryInterface( rType,
-                                               (static_cast< XEventListener* >(this)),
-                                               (static_cast< XDynamicResultSetListener* >(this))
-                                               );
-    return aRet.hasValue() ? aRet : OWeakObject::queryInterface( rType );
 }
 
 // XEventListener ( base of XDynamicResultSetListener )
@@ -646,7 +591,6 @@ SortedDynamicResultSetListener::notify( const ListEvent& Changes )
     if ( mpOwner )
         mpOwner->impl_notify( Changes );
 }
-
 
 // own methods:
 

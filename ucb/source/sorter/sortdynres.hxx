@@ -20,38 +20,29 @@
 #ifndef _SORTDYNRES_HXX
 #define _SORTDYNRES_HXX
 
-#include <com/sun/star/uno/XComponentContext.hpp>
-#include <com/sun/star/lang/XTypeProvider.hpp>
-#include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/ucb/NumberedSortingInfo.hpp>
 #include <com/sun/star/sdbc/XResultSet.hpp>
 #include <com/sun/star/ucb/XDynamicResultSet.hpp>
 #include <com/sun/star/ucb/XDynamicResultSetListener.hpp>
 #include <com/sun/star/ucb/ListenerAlreadySetException.hpp>
 #include <com/sun/star/ucb/XSortedDynamicResultSetFactory.hpp>
-#include <cppuhelper/weak.hxx>
-#include <osl/mutex.hxx>
-#include <ucbhelper/macros.hxx>
+#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase2.hxx>
 #include "sortresult.hxx"
+
 
 namespace cppu {
     class OInterfaceContainerHelper;
 }
 
-
-
 #define DYNAMIC_RESULTSET_SERVICE_NAME  "com.sun.star.ucb.SortedDynamicResultSet"
 #define DYNAMIC_RESULTSET_FACTORY_NAME  "com.sun.star.ucb.SortedDynamicResultSetFactory"
 
-
 class SortedDynamicResultSetListener;
 
-class SortedDynamicResultSet:
-                public cppu::OWeakObject,
-                public css::lang::XTypeProvider,
-                public css::lang::XServiceInfo,
-                public css::ucb::XDynamicResultSet
+class SortedDynamicResultSet: public cppu::WeakImplHelper2 <
+    css::lang::XServiceInfo,
+    css::ucb::XDynamicResultSet >
 {
     cppu::OInterfaceContainerHelper *mpDisposeEventListeners;
 
@@ -71,12 +62,11 @@ class SortedDynamicResultSet:
 
     EventList                           maActions;
     osl::Mutex                          maMutex;
-    sal_Bool                            mbGotWelcome    :1;
-    sal_Bool                            mbUseOne        :1;
-    sal_Bool                            mbStatic        :1;
+    sal_Bool                            mbGotWelcome:1;
+    sal_Bool                            mbUseOne:1;
+    sal_Bool                            mbStatic:1;
 
 private:
-
     void                SendNotify();
 
 public:
@@ -88,28 +78,20 @@ public:
     ~SortedDynamicResultSet();
 
 
-    // XInterface
-    virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType )
-        throw( css::uno::RuntimeException, std::exception );
-    virtual void SAL_CALL acquire()
-        throw();
-    virtual void SAL_CALL release()
-        throw();
-
-    // XTypeProvider
-
-    XTYPEPROVIDER_DECL()
-
-
     // XServiceInfo
 
-    XSERVICEINFO_NOFACTORY_DECL()
-
+    virtual OUString SAL_CALL getImplementationName()
+        throw( css::uno::RuntimeException, std::exception );
+    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName )
+        throw( css::uno::RuntimeException, std::exception );
+    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames()
+        throw( css::uno::RuntimeException, std::exception );
+    static OUString getImplementationName_Static();
+    static css::uno::Sequence< OUString > getSupportedServiceNames_Static();
 
     // XComponent
 
-    virtual void SAL_CALL
-    dispose() throw( css::uno::RuntimeException, std::exception );
+    virtual void SAL_CALL dispose() throw( css::uno::RuntimeException, std::exception );
 
     virtual void SAL_CALL
     addEventListener( const css::uno::Reference< css::lang::XEventListener >& Listener )
@@ -122,8 +104,7 @@ public:
 
     // XDynamicResultSet
 
-    virtual css::uno::Reference< css::sdbc::XResultSet > SAL_CALL
-    getStaticResultSet(  )
+    virtual css::uno::Reference< css::sdbc::XResultSet > SAL_CALL getStaticResultSet()
         throw( css::ucb::ListenerAlreadySetException, css::uno::RuntimeException, std::exception );
 
     virtual void SAL_CALL
@@ -144,20 +125,15 @@ public:
 
     // own methods:
 
-    virtual void SAL_CALL
-    impl_disposing( const css::lang::EventObject& Source )
+    virtual void SAL_CALL impl_disposing( const css::lang::EventObject& Source )
         throw( css::uno::RuntimeException );
 
-    virtual void SAL_CALL
-    impl_notify( const css::ucb::ListEvent& Changes )
+    virtual void SAL_CALL impl_notify( const css::ucb::ListEvent& Changes )
         throw( css::uno::RuntimeException );
 };
 
-
-
-class SortedDynamicResultSetListener:
-                public cppu::OWeakObject,
-                public css::ucb::XDynamicResultSetListener
+class SortedDynamicResultSetListener: public cppu::WeakImplHelper1 <
+    css::ucb::XDynamicResultSetListener >
 {
     SortedDynamicResultSet  *mpOwner;
     osl::Mutex              maMutex;
@@ -166,28 +142,16 @@ public:
      SortedDynamicResultSetListener( SortedDynamicResultSet *mOwner );
     ~SortedDynamicResultSetListener();
 
-
-    // XInterface
-    virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType )
-        throw( css::uno::RuntimeException, std::exception );
-    virtual void SAL_CALL acquire()
-        throw();
-    virtual void SAL_CALL release()
-        throw();
-
     // XEventListener ( base of XDynamicResultSetListener )
 
     virtual void SAL_CALL
     disposing( const css::lang::EventObject& Source )
         throw( css::uno::RuntimeException, std::exception );
 
-
     // XDynamicResultSetListener
 
-    virtual void SAL_CALL
-    notify( const css::ucb::ListEvent& Changes )
+    virtual void SAL_CALL notify( const css::ucb::ListEvent& Changes )
         throw( css::uno::RuntimeException, std::exception );
-
 
     // own methods:
 
@@ -196,42 +160,35 @@ public:
 
 
 
-class SortedDynamicResultSetFactory:
-                public cppu::OWeakObject,
-                public css::lang::XTypeProvider,
-                public css::lang::XServiceInfo,
-                public css::ucb::XSortedDynamicResultSetFactory
+class SortedDynamicResultSetFactory: public cppu::WeakImplHelper2 <
+    css::lang::XServiceInfo,
+    css::ucb::XSortedDynamicResultSetFactory >
 {
 
     css::uno::Reference< css::uno::XComponentContext >   m_xContext;
 
 public:
-
     SortedDynamicResultSetFactory(
         const css::uno::Reference< css::uno::XComponentContext > & rxContext);
 
     ~SortedDynamicResultSetFactory();
 
 
-    // XInterface
-    virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType )
-        throw( css::uno::RuntimeException, std::exception );
-    virtual void SAL_CALL acquire()
-        throw();
-    virtual void SAL_CALL release()
-        throw();
-
-    // XTypeProvider
-
-    XTYPEPROVIDER_DECL()
-
-
     // XServiceInfo
 
-    XSERVICEINFO_DECL()
-
+    static css::uno::Reference< css::lang::XSingleServiceFactory > createServiceFactory(
+            const css::uno::Reference< css::lang::XMultiServiceFactory >& rxServiceMgr );
 
     // XSortedDynamicResultSetFactory
+
+    virtual OUString SAL_CALL getImplementationName()
+        throw( css::uno::RuntimeException, std::exception );
+    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName )
+        throw( css::uno::RuntimeException, std::exception );
+    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames()
+        throw( css::uno::RuntimeException, std::exception );
+    static OUString getImplementationName_Static();
+    static css::uno::Sequence< OUString > getSupportedServiceNames_Static();
 
     virtual css::uno::Reference< css::ucb::XDynamicResultSet > SAL_CALL
     createSortedDynamicResultSet(
