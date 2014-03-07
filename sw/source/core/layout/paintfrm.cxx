@@ -5886,7 +5886,7 @@ sal_Bool SwPageFrm::IsLeftShadowNeeded() const
                                                 bool bPaintRightShadow,
                                                 bool bRightSidebar )
 {
-    const SwPostItMgr *pMgr = _pViewShell ? _pViewShell->GetPostItMgr() : 0;
+    const SwPostItMgr *pMgr = _pViewShell->GetPostItMgr();
     SwRect aAlignedPageRect( _rPageRect );
     ::SwAlignRect( aAlignedPageRect, _pViewShell );
     SwRect aPagePxRect =
