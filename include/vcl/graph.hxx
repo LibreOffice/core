@@ -198,6 +198,8 @@ public:
     virtual void        Assign( const SvDataCopyStream& );
 
     const SvgDataPtr&   getSvgData() const;
+
+    static css::uno::Sequence<sal_Int8> getUnoTunnelId();
 };
 
 #endif // INCLUDED_VCL_GRAPH_HXX

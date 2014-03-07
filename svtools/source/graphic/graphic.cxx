@@ -251,14 +251,14 @@ const ::Graphic* Graphic::getImplementation( const uno::Reference< uno::XInterfa
     throw()
 {
     uno::Reference< lang::XUnoTunnel > xTunnel( rxIFace, uno::UNO_QUERY );
-    return( xTunnel.is() ? reinterpret_cast< ::Graphic* >( xTunnel->getSomething( getImplementationId_Static() ) ) : NULL );
+    return( xTunnel.is() ? reinterpret_cast< ::Graphic* >( xTunnel->getSomething( ::Graphic::getUnoTunnelId() ) ) : NULL );
 }
 
 
 sal_Int64 SAL_CALL Graphic::getSomething( const uno::Sequence< sal_Int8 >& rId )
     throw( uno::RuntimeException, std::exception )
 {
-    return( ( rId.getLength() == 16 && 0 == memcmp( getImplementationId().getConstArray(), rId.getConstArray(), 16 ) ) ?
+    return( ( rId.getLength() == 16 && 0 == memcmp( ::Graphic::getUnoTunnelId().getConstArray(), rId.getConstArray(), 16 ) ) ?
             reinterpret_cast< sal_Int64 >( mpGraphic ) :
             0 );
 }
