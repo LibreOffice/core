@@ -1595,6 +1595,44 @@ DECLARE_OOXMLIMPORT_TEST(testFdo73389,"fdo73389.docx")
     // This was 9340, i.e. the width of the inner table was too large.
     CPPUNIT_ASSERT_EQUAL(sal_Int32(2842), getProperty<sal_Int32>(xTables->getByIndex(0), "Width"));
 }
+
+DECLARE_OOXMLIMPORT_TEST(testStrict, "strict.docx")
+{
+    uno::Reference<beans::XPropertySet> xPageStyle(getStyles("PageStyles")->getByName(DEFAULT_STYLE), uno::UNO_QUERY);
+    // This was only 127, pt suffix was ignored, so this got parsed as twips instead of points.
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(TWIP_TO_MM100(72 * 20)), getProperty<sal_Int32>(xPageStyle, "BottomMargin"));
+    // This was only 1397, same issue
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(TWIP_TO_MM100(792 * 20)), getProperty<sal_Int32>(xPageStyle, "Height"));
+    // Text was missing, due to not handling the strict namespaces.
+    getParagraph(1, "Hello world!");
+
+    // Header in the document caused a crash on import.
+    uno::Reference<text::XText> xHeaderText(xPageStyle->getPropertyValue("HeaderText"), uno::UNO_QUERY);
+    getParagraphOfText(1, xHeaderText, "This is a header.");
+
+    // Picture was missing.
+    uno::Reference<lang::XServiceInfo> xServiceInfo(getShape(1), uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xServiceInfo->supportsService("com.sun.star.text.TextGraphicObject"));
+
+    // SmartArt was missing.
+    xServiceInfo.set(getShape(2), uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xServiceInfo->supportsService("com.sun.star.drawing.GroupShape"));
+
+    // Chart was missing.
+    xServiceInfo.set(getShape(3), uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xServiceInfo->supportsService("com.sun.star.text.TextEmbeddedObject"));
+
+    // Math was missing.
+    xServiceInfo.set(getShape(4), uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xServiceInfo->supportsService("com.sun.star.text.TextEmbeddedObject"));
+}
+
+DECLARE_OOXMLIMPORT_TEST(testStrictLockedcanvas, "strict-lockedcanvas.docx")
+{
+    // locked canvas shape was missing.
+    getShape(1);
+}
+
 #endif
 
 CPPUNIT_PLUGIN_IMPLEMENT();

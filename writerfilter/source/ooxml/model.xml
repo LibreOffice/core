@@ -19,19 +19,28 @@
 <model xmlns:rng="http://relaxng.org/ns/structure/1.0">
   <namespace-alias name="http://www.w3.org/XML/1998/namespace" alias="xml" id="xml"/>
   <namespace-alias name="http://schemas.openxmlformats.org/officeDocument/2006/relationships" alias="relationships" id="officeRel"/>
+  <namespace-alias name="http://purl.oclc.org/ooxml/officeDocument/relationships" alias="relationships" id="officeRel"/>
   <namespace-alias name="urn:schemas-microsoft-com:office:office" alias="office" id="vmlOffice"/>
   <namespace-alias name="http://schemas.openxmlformats.org/officeDocument/2006/relationships/theme" alias="theme" id="officeRelTheme"/>
   <namespace-alias name="http://schemas.openxmlformats.org/drawingml/2006/wordprocessingDrawing" alias="wordprocessingDrawing" id="dmlWordDr"/>
+  <namespace-alias name="http://purl.oclc.org/ooxml/drawingml/wordprocessingDrawing" alias="wordprocessingDrawing" id="dmlWordDr"/>
   <namespace-alias name="http://schemas.openxmlformats.org/drawingml/2006/main" alias="drawingml" id="dml"/>
+  <namespace-alias name="http://purl.oclc.org/ooxml/drawingml/main" alias="drawingml" id="dml"/>
   <namespace-alias name="urn:schemas-microsoft-com:vml" alias="vml" id="vml"/>
   <namespace-alias name="http://schemas.openxmlformats.org/drawingml/2006/picture" alias="picture" id="dmlPicture"/>
+  <namespace-alias name="http://purl.oclc.org/ooxml/drawingml/picture" alias="picture" id="dmlPicture"/>
   <namespace-alias name="http://schemas.openxmlformats.org/drawingml/2006/diagram" alias="diagram" id="dmlDiagram"/>
+  <namespace-alias name="http://purl.oclc.org/ooxml/drawingml/diagram" alias="diagram" id="dmlDiagram"/>
   <namespace-alias name="http://schemas.openxmlformats.org/drawingml/2006/lockedCanvas" alias="lockedCanvas" id="dmlLockedCanvas"/>
+  <namespace-alias name="http://purl.oclc.org/ooxml/drawingml/lockedCanvas" alias="lockedCanvas" id="dmlLockedCanvas"/>
   <namespace-alias name="http://schemas.microsoft.com/office/word/2010/wordprocessingShape" alias="wps" id="wps"/>
   <namespace-alias name="http://schemas.openxmlformats.org/drawingml/2006/chart" alias="chart" id="dmlChart"/>
+  <namespace-alias name="http://purl.oclc.org/ooxml/drawingml/chart" alias="chart" id="dmlChart"/>
   <namespace-alias name="urn:schemas-microsoft-com:office:word" alias="vml_wordprocessingDrawing" id="vmlWord"/>
   <namespace-alias name="http://schemas.openxmlformats.org/wordprocessingml/2006/main" alias="wordprocessingml" id="doc"/>
+  <namespace-alias name="http://purl.oclc.org/ooxml/wordprocessingml/main" alias="wordprocessingml" id="doc"/>
   <namespace-alias name="http://schemas.openxmlformats.org/officeDocument/2006/math" alias="math" id="officeMath"/>
+  <namespace-alias name="http://purl.oclc.org/ooxml/officeDocument/math" alias="math" id="officeMath"/>
   <namespace-alias name="http://schemas.openxmlformats.org/schemaLibrary/2006/main" alias="schemaLibrary" id="schema"/>
   <namespace-alias name="http://schemas.openxmlformats.org/markup-compatibility/2006" alias="mce" id="mce"/>
   <namespace-alias name="http://sprm" alias="sprm" id="sprm"/>
@@ -8343,7 +8352,7 @@
     <resource name="CT_OMathJc" resource="Value" generated="yes" tag="math">
       <attribute name="val" tokenid="ooxml:CT_OMathJc_val" action="setValue"/>
     </resource>
-    <resource name="ST_TwipsMeasure" resource="Integer" generated="yes"/>
+    <resource name="ST_TwipsMeasure" resource="UniversalMeasure"/>
     <resource name="CT_TwipsMeasure" resource="Value" generated="yes" tag="math">
       <attribute name="val" tokenid="ooxml:CT_TwipsMeasure_val" action="setValue"/>
       <action name="start" action="setDefaultIntegerValue"/>
@@ -21336,12 +21345,12 @@
       <action name="start" action="setDefaultIntegerValue"/>
     </resource>
     <resource name="ST_UnsignedDecimalNumber" resource="Integer" generated="yes"/>
-    <resource name="ST_TwipsMeasure" resource="Integer"/>
+    <resource name="ST_TwipsMeasure" resource="UniversalMeasure"/>
     <resource name="CT_TwipsMeasure" resource="Value" tag="attribute">
       <attribute name="val" tokenid="ooxml:CT_TwipsMeasure_val" action="setValue"/>
       <action name="start" action="setDefaultIntegerValue"/>
     </resource>
-    <resource name="ST_SignedTwipsMeasure" resource="Integer"/>
+    <resource name="ST_SignedTwipsMeasure" resource="UniversalMeasure"/>
     <resource name="CT_SignedTwipsMeasure" resource="Value" tag="attribute">
       <attribute name="val" tokenid="ooxml:CT_SignedTwipsMeasure_val" action="setValue"/>
       <action name="start" action="setDefaultIntegerValue"/>

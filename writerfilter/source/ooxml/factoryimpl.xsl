@@ -101,6 +101,7 @@ uno::Reference&lt; xml::sax::XFastContextHandler &gt; OOXMLFactory::createFastCh
                 <xsl:if test="generate-id(key('resources', @resource)) = generate-id(.)">
                     <xsl:if test="not(@resource = 'Hex' or 
                                       @resource = 'Integer' or 
+                                      @resource = 'UniversalMeasure' or
                                       @resource = 'Boolean' or
                                       @resource = 'List' or
                                       @resource = 'String')">
@@ -196,6 +197,7 @@ uno::Reference&lt; xml::sax::XFastContextHandler &gt; OOXMLFactory::createFastCh
 </xsl:text>
 </xsl:template>
 
+<xsl:key name="namespaces-by-id" match="namespace-alias" use="@id"/>
 <xsl:template name="fasttokentoid">
   <xsl:text>
 namespace tokenmap {
@@ -217,7 +219,7 @@ string fastTokenToId(sal_uInt32 nToken)
 
     switch (nToken &amp; 0xffff0000)
     {</xsl:text>
-    <xsl:for-each select="//namespace-alias">
+    <xsl:for-each select="//namespace-alias[generate-id() = generate-id(key('namespaces-by-id', @id)[1])]">
       <xsl:text>
     case NS_</xsl:text>
     <xsl:value-of select="@alias"/>
