@@ -33,11 +33,11 @@ class SvStream;
 
 struct ImplHatch
 {
-    sal_uLong               mnRefCount;
+    sal_uInt32          mnRefCount;
     Color               maColor;
     HatchStyle          meStyle;
     long                mnDistance;
-    sal_uInt16              mnAngle;
+    sal_uInt16          mnAngle;
 
                         ImplHatch();
                         ImplHatch( const ImplHatch& rImplHatch );

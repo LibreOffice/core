@@ -35,12 +35,12 @@ namespace basegfx { class B2DPolyPolygon; }
 
 struct ImplLineInfo
 {
-    sal_uLong                   mnRefCount;
+    sal_uInt32              mnRefCount;
     LineStyle               meStyle;
     long                    mnWidth;
-    sal_uInt16                  mnDashCount;
+    sal_uInt16              mnDashCount;
     long                    mnDashLen;
-    sal_uInt16                  mnDotCount;
+    sal_uInt16              mnDotCount;
     long                    mnDotLen;
     long                    mnDistance;
 

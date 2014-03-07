@@ -148,7 +148,7 @@ public:
         // arbitrary position would be created, sal_False is returned.
         // (The center point will not be transformed, use Transform(..))
 
-    sal_uLong TransLineWidth(double fW) const;
+    sal_uInt32 TransLineWidth(double fW) const;
         // Transforms the thickness of a line (as good as possible)
 
     double CalcRotAngle() const;

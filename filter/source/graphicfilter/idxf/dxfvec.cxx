@@ -221,7 +221,7 @@ LineInfo DXFTransform::Transform(const DXFLineInfo& aDXFLineInfo) const
     return aLineInfo;
 }
 
-sal_uLong DXFTransform::TransLineWidth(double fW) const
+sal_uInt32 DXFTransform::TransLineWidth(double fW) const
 {
     double fex,fey;
 
@@ -229,7 +229,7 @@ sal_uLong DXFTransform::TransLineWidth(double fW) const
     fey=sqrt(aMY.fx*aMY.fx + aMY.fy*aMY.fy);
     // ###
     // printf("fex=%f fey=%f\n", fex, fey);
-    return (sal_uLong)(fabs(fW)*(fex+fey)/2.0+0.5);
+    return (sal_uInt32)(fabs(fW)*(fex+fey)/2.0+0.5);
 }
 
 
