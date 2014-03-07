@@ -1796,7 +1796,7 @@ OString SdrObject::stringify() const
     SfxItemSet aSet(GetMergedItemSet());
     aSet.InvalidateDefaultItems();
     aSet.Store(aStream, true);
-    aString.append((const char *)aStream.GetBuffer(), aStream.GetEndOfData());
+    aString.append((const char *)aStream.GetData(), aStream.GetEndOfData());
 
     return aString.makeStringAndClear();
 }
