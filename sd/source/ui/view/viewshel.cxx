@@ -1520,7 +1520,8 @@ bool ViewShell::RelocateToParentWindow (::Window* pParentWindow)
 {
     mpParentWindow = pParentWindow;
 
-    mpParentWindow->SetBackground (Wallpaper());
+    if (mpParentWindow)
+        mpParentWindow->SetBackground (Wallpaper());
 
     if (mpContentWindow.get() != NULL)
         mpContentWindow->SetParent(pParentWindow);
