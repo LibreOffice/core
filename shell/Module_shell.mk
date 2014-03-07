@@ -110,14 +110,11 @@ $(eval $(call gb_Module_add_targets,shell,\
 	Executable_gnome_open_url \
 	Executable_uri_encode \
 	Library_cmdmail \
+	Library_recentfile \
 	Package_scripts \
 	Package_scripts_gnome \
 	Package_scripts_kde \
 	Package_senddoc \
-))
-
-$(eval $(call gb_Module_add_targets,shell,\
-	Library_recentfile \
 ))
 
 endif
