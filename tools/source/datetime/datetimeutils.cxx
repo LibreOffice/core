@@ -54,3 +54,23 @@ OString DateTimeToOString( const DateTime& rDateTime )
 
     return aBuffer.makeStringAndClear();
 }
+
+OString DateToOString( const Date& rDate )
+{
+    Time aTime( Time::EMPTY );
+    return DateTimeToOString( DateTime( rDate, aTime ) );
+}
+
+OString DateToDDMMYYYYOString( const Date& rDate )
+{
+    OStringBuffer aBuffer( 25 );
+    lcl_AppendTwoDigits( aBuffer, rDate.GetDay() );
+    aBuffer.append( '/' );
+
+    lcl_AppendTwoDigits( aBuffer, rDate.GetMonth() );
+    aBuffer.append( '/' );
+
+    aBuffer.append( sal_Int32( rDate.GetYear() ) );
+
+    return aBuffer.makeStringAndClear();
+}

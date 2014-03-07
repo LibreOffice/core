@@ -3597,11 +3597,59 @@ void DocxAttributeOutput::WritePostponedFormControl(const SdrObject* pObject)
             uno::Reference<lang::XServiceInfo> xInfo(xControlModel, uno::UNO_QUERY);
             if (xInfo->supportsService("com.sun.star.form.component.DateField"))
             {
+                // gather component properties
+
                 uno::Reference<beans::XPropertySet> xPropertySet(xControlModel, uno::UNO_QUERY);
-                OUString aHelpText = xPropertySet->getPropertyValue("HelpText").get<OUString>();
+
+                OString sDate;
+                OUString aContentText;
+                bool bHasDate = false;
+                css::util::Date aUNODate;
+                if (xPropertySet->getPropertyValue("Date") >>= aUNODate)
+                {
+                    bHasDate = true;
+                    Date aDate(aUNODate.Day, aUNODate.Month, aUNODate.Year);
+                    sDate = DateToOString(aDate);
+                    aContentText = OUString::createFromAscii(DateToDDMMYYYYOString(aDate).getStr());
+                }
+                else
+                    aContentText = xPropertySet->getPropertyValue("HelpText").get<OUString>();
+
+                // output component
+
+                m_pSerializer->startElementNS(XML_w, XML_sdt, FSEND);
+                m_pSerializer->startElementNS(XML_w, XML_sdtPr, FSEND);
+
+                if (bHasDate)
+                    m_pSerializer->startElementNS(XML_w, XML_date,
+                                                  FSNS( XML_w, XML_fullDate ), sDate.getStr(),
+                                                  FSEND);
+                else
+                    m_pSerializer->startElementNS(XML_w, XML_date, FSEND);
+
+                m_pSerializer->singleElementNS(XML_w, XML_dateFormat,
+                                               FSNS(XML_w, XML_val), "dd/MM/yyyy", //TODO: hardwired
+                                               FSEND);
+                m_pSerializer->singleElementNS(XML_w, XML_lid,
+                                               FSNS(XML_w, XML_val), "en-US",      //TODO: hardwired
+                                               FSEND);
+                m_pSerializer->singleElementNS(XML_w, XML_storeMappedDataAs,
+                                               FSNS(XML_w, XML_val), "dateTime",
+                                               FSEND);
+                m_pSerializer->singleElementNS(XML_w, XML_calendar,
+                                               FSNS(XML_w, XML_val), "gregorian",
+                                               FSEND);
+
+                m_pSerializer->endElementNS(XML_w, XML_date);
+                m_pSerializer->endElementNS(XML_w, XML_sdtPr);
+
+                m_pSerializer->startElementNS(XML_w, XML_sdtContent, FSEND);
                 m_pSerializer->startElementNS(XML_w, XML_r, FSEND);
-                RunText(aHelpText);
+                RunText(aContentText);
                 m_pSerializer->endElementNS(XML_w, XML_r);
+                m_pSerializer->endElementNS(XML_w, XML_sdtContent);
+
+                m_pSerializer->endElementNS(XML_w, XML_sdt);
             }
         }
     }

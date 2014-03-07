@@ -15,6 +15,7 @@
 #include <com/sun/star/drawing/FillStyle.hpp>
 #include <com/sun/star/drawing/LineJoint.hpp>
 #include <com/sun/star/drawing/LineStyle.hpp>
+#include <com/sun/star/drawing/XControlShape.hpp>
 #include <com/sun/star/awt/Gradient.hpp>
 #include <com/sun/star/style/TabStop.hpp>
 #include <com/sun/star/view/XViewSettingsSupplier.hpp>
@@ -2046,14 +2047,6 @@ DECLARE_OOXMLEXPORT_TEST(testAutofit, "autofit.docx")
     CPPUNIT_ASSERT_EQUAL(false, bool(getProperty<sal_Bool>(getShape(2), "FrameIsAutomaticHeight")));
 }
 
-DECLARE_OOXMLEXPORT_TEST(testFormControl, "form-control.docx")
-{
-    if (!m_bExported)
-        return;
-    // "[Date]" was missing.
-    getParagraph(1, "Foo [Date] bar.");
-}
-
 DECLARE_OOXMLEXPORT_TEST(testTrackChangesDeletedParagraphMark, "testTrackChangesDeletedParagraphMark.docx")
 {
     xmlDocPtr pXmlDoc = parseExport("word/document.xml");
@@ -2961,6 +2954,23 @@ DECLARE_OOXMLEXPORT_TEST(testGenericTextField, "Unsupportedtextfields.docx")
     xmlNodePtr pXmlNode = pXmlNodes->nodeTab[0];
     OUString contents = OUString::createFromAscii((const char*)((pXmlNode->children[0]).content));
     CPPUNIT_ASSERT(contents.match("PRINTDATE   \\* MERGEFORMAT"));
+}
+
+DECLARE_OOXMLEXPORT_TEST(testDateControl, "date-control.docx")
+{
+    // check XML
+    xmlDocPtr pXmlDoc = parseExport("word/document.xml");
+    if (!pXmlDoc)
+        return;
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:sdt/w:sdtPr/w:date", "fullDate", "2014-03-05T00:00:00Z");
+    assertXPathContent(pXmlDoc, "/w:document/w:body/w:p/w:sdt/w:sdtContent/w:r/w:t", "05/03/2014");
+
+    // check imported control
+    uno::Reference<drawing::XControlShape> xControl(getShape(1), uno::UNO_QUERY);
+    util::Date aDate = getProperty<util::Date>(xControl->getControl(), "Date");
+    CPPUNIT_ASSERT_EQUAL(5,     sal_Int32(aDate.Day));
+    CPPUNIT_ASSERT_EQUAL(3,     sal_Int32(aDate.Month));
+    CPPUNIT_ASSERT_EQUAL(2014,  sal_Int32(aDate.Year));
 }
 
 #endif
