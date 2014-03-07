@@ -1841,6 +1841,8 @@ void Test::testFuncSUM()
     CPPUNIT_ASSERT_MESSAGE ("failed to insert sheet",
                             m_pDoc->InsertTab (0, aTabName));
 
+    sc::AutoCalcSwitch aACSwitch(*m_pDoc, true); // turn on auto calc.
+
     // Single argument case.
     m_pDoc->SetValue(ScAddress(0,0,0), 1);
     m_pDoc->SetValue(ScAddress(0,1,0), 1);
@@ -1864,10 +1866,35 @@ void Test::testFuncSUM()
     m_pDoc->SetString(ScAddress(3,0,0), "=SUM(A1:A2;B1:B2)");
     m_pDoc->SetString(ScAddress(3,1,0), "=SUM(A2:A3;B2:B3)");
     m_pDoc->SetString(ScAddress(3,2,0), "=SUM(A3:A4;B3:B4)");
-    m_pDoc->CalcAll();
     CPPUNIT_ASSERT_EQUAL(30.0, m_pDoc->GetValue(ScAddress(3,0,0)));
     CPPUNIT_ASSERT_EQUAL(35.0, m_pDoc->GetValue(ScAddress(3,1,0)));
     CPPUNIT_ASSERT_EQUAL(20.0, m_pDoc->GetValue(ScAddress(3,2,0)));
+
+    // Clear and start over.
+    clearRange(m_pDoc, ScRange(0,0,0,3,MAXROW,0));
+
+    // SUM needs to take the first error in case the range contains an error.
+    m_pDoc->SetValue(ScAddress(0,0,0), 1.0);
+    m_pDoc->SetValue(ScAddress(0,1,0), 10.0);
+    m_pDoc->SetValue(ScAddress(0,2,0), 100.0);
+    m_pDoc->SetString(ScAddress(0,3,0), "=SUM(A1:A3)");
+    CPPUNIT_ASSERT_EQUAL(111.0, m_pDoc->GetValue(ScAddress(0,3,0)));
+
+    // Set #DIV/0! error to A3. A4 should also inherit this error.
+    m_pDoc->SetString(ScAddress(0,2,0), "=1/0");
+    sal_uInt16 nErr = m_pDoc->GetErrCode(ScAddress(0,2,0));
+    CPPUNIT_ASSERT_MESSAGE("Cell should have a division by zero error.",
+                           nErr == errDivisionByZero);
+    nErr = m_pDoc->GetErrCode(ScAddress(0,3,0));
+    CPPUNIT_ASSERT_MESSAGE("SUM should have also inherited a div-by-zero error.",
+                           nErr == errDivisionByZero);
+
+    // Set #NA! to A2. A4 should now inherit this error.
+    m_pDoc->SetString(ScAddress(0,1,0), "=NA()");
+    nErr = m_pDoc->GetErrCode(ScAddress(0,1,0));
+    CPPUNIT_ASSERT_MESSAGE("A2 should be an error.", nErr);
+    CPPUNIT_ASSERT_MESSAGE("A4 should have inherited the same error as A2.",
+                           nErr == m_pDoc->GetErrCode(ScAddress(0,3,0)));
 
     m_pDoc->DeleteTab(0);
 }
