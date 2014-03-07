@@ -80,53 +80,36 @@ using namespace com::sun::star::io;
 using namespace com::sun::star::sdbc;
 
 
-
-
-
-
 // Content Implementation.
-
-
-
 
 FTPContent::FTPContent( const Reference< XComponentContext >& rxContext,
                         FTPContentProvider* pProvider,
                         const Reference< XContentIdentifier >& Identifier,
                         const FTPURL& aFTPURL)
-    : ContentImplHelper(rxContext,pProvider,Identifier),
-      m_pFCP(pProvider),
-      m_aFTPURL(aFTPURL),
-      m_bInserted(false),
-      m_bTitleSet(false)
+    : ContentImplHelper(rxContext,pProvider,Identifier)
+    , m_pFCP(pProvider)
+    , m_aFTPURL(aFTPURL)
+    , m_bInserted(false)
+    , m_bTitleSet(false)
 {
 }
-
-
 
 FTPContent::FTPContent( const Reference< XComponentContext >& rxContext,
                         FTPContentProvider* pProvider,
                         const Reference< XContentIdentifier >& Identifier,
                         const ContentInfo& Info)
-    : ContentImplHelper(rxContext,pProvider,Identifier),
-      m_pFCP(pProvider),
-      m_aFTPURL(Identifier->getContentIdentifier(),
-                pProvider),
-      m_bInserted(true),
-      m_bTitleSet(false),
-      m_aInfo(Info)
+    : ContentImplHelper(rxContext,pProvider,Identifier)
+    , m_pFCP(pProvider)
+    , m_aFTPURL(Identifier->getContentIdentifier(), pProvider)
+    , m_bInserted(true)
+    , m_bTitleSet(false)
+    , m_aInfo(Info)
 {
 }
-
-
-
-
 
 FTPContent::~FTPContent()
 {
 }
-
-
-
 
 // XInterface methods.
 
@@ -158,37 +141,86 @@ css::uno::Any SAL_CALL FTPContent::queryInterface( const css::uno::Type & rType 
 
 // XTypeProvider methods.
 
+css::uno::Sequence< sal_Int8 > SAL_CALL FTPContent::getImplementationId()
+    throw( css::uno::RuntimeException,
+           std::exception )
+{
+    static cppu::OImplementationId* pId = NULL;
+      if ( !pId )
+      {
+        osl::Guard< osl::Mutex > aGuard( osl::Mutex::getGlobalMutex() );
+          if ( !pId )
+          {
+              static cppu::OImplementationId id( false );
+              pId = &id;
+          }
+      }
+      return (*pId).getImplementationId();
+}
 
-
-XTYPEPROVIDER_IMPL_6( FTPContent,
-                          XTypeProvider,
-                          XServiceInfo,
-                          XContent,
-                      XCommandProcessor,
-                      XContentCreator,
-                      XChild);
+css::uno::Sequence< css::uno::Type > SAL_CALL FTPContent::getTypes()
+    throw( css::uno::RuntimeException,
+           std::exception )
+{
+    static cppu::OTypeCollection* pCollection = NULL;
+    if ( !pCollection )
+    {
+        osl::Guard< osl::Mutex > aGuard( osl::Mutex::getGlobalMutex() );
+        if ( !pCollection )
+        {
+            static cppu::OTypeCollection collection(
+                    getCppuType( static_cast< css::uno::Reference< XTypeProvider >*>(0) ),
+                    getCppuType( static_cast< css::uno::Reference< XServiceInfo>*> (0) ),
+                    getCppuType( static_cast< css::uno::Reference< XContent > *> (0)),
+                    getCppuType( static_cast< css::uno::Reference< XCommandProcessor >*> (0) ),
+                    getCppuType( static_cast< css::uno::Reference< XContentCreator >*> (0)),
+                    getCppuType( static_cast< css::uno::Reference< XChild >*> (0) )
+                );
+            pCollection = &collection;
+        }
+    }
+    return (*pCollection).getTypes();
+}
 
 
 
 // XServiceInfo methods.
 
+OUString SAL_CALL FTPContent::getImplementationName()
+    throw( css::uno::RuntimeException, std::exception )
+{
+    return getImplementationName_Static();
+}
 
+OUString FTPContent::getImplementationName_Static()
+{
+    return OUString( "com.sun.star.comp.FTPContent");
+}
 
-// needed, because the service shall not be creatable!!
-#undef XSERVICEINFO_CREATE_INSTANCE_IMPL
-#define XSERVICEINFO_CREATE_INSTANCE_IMPL( Class )
+sal_Bool SAL_CALL FTPContent::supportsService( const OUString& ServiceName )
+    throw( css::uno::RuntimeException, std::exception )
+{
+    return cppu::supportsService( this, ServiceName );
+}
 
-XSERVICEINFO_IMPL_1( FTPContent,
-                     OUString( "com.sun.star.comp.FTPContent"),
-                     OUString( "com.sun.star.ucb.FTPContent"));
+css::uno::Sequence< OUString > SAL_CALL FTPContent::getSupportedServiceNames()
+    throw( css::uno::RuntimeException, std::exception )
+{
+    return getSupportedServiceNames_Static();
+}
+
+css::uno::Sequence< OUString > FTPContent::getSupportedServiceNames_Static()
+{
+    css::uno::Sequence< OUString > aSNS( 1 );
+    aSNS.getArray()[ 0 ] = OUString( "com.sun.star.ucb.FTPContent");
+    return aSNS;
+}
 
 
 
 
 
 // XContent methods.
-
-
 
 // virtual
 OUString SAL_CALL FTPContent::getContentType()
@@ -197,13 +229,7 @@ OUString SAL_CALL FTPContent::getContentType()
     return OUString(FTP_CONTENT_TYPE);
 }
 
-
-
-
 // XCommandProcessor methods.
-
-
-
 
 //virtual
 void SAL_CALL FTPContent::abort( sal_Int32 /*CommandId*/ )
@@ -211,17 +237,13 @@ void SAL_CALL FTPContent::abort( sal_Int32 /*CommandId*/ )
 {
 }
 
-
-
 /***************************************************************************/
 /*                                                                         */
 /*                     Internal implementation class.                      */
 /*                                                                         */
 /***************************************************************************/
 
-
-class ResultSetFactoryI
-    : public ResultSetFactory
+class ResultSetFactoryI : public ResultSetFactory
 {
 public:
 
@@ -260,13 +282,7 @@ public:
     std::vector<FTPDirentry>                        m_dirvec;
 };
 
-
-
-
-
 // XCommandProcessor methods.
-
-
 
 enum ACTION { NOACTION,
               THROWAUTHENTICATIONREQUEST,
@@ -277,26 +293,25 @@ enum ACTION { NOACTION,
               THROWNOFILE,
               THROWGENERAL };
 
-
 // virtual
-Any SAL_CALL FTPContent::execute(
-    const Command& aCommand,
-    sal_Int32 /*CommandId*/,
-    const Reference<
-    XCommandEnvironment >& Environment
-)
-    throw(
-        Exception,
-        CommandAbortedException,
-        RuntimeException, std::exception
-    )
+Any SAL_CALL FTPContent::execute( const Command& aCommand,
+                                  sal_Int32 /*CommandId*/,
+                                  const Reference<
+                                  XCommandEnvironment >& Environment)
+    throw( Exception,
+           CommandAbortedException,
+           RuntimeException,
+           std::exception)
 {
     ACTION action(NOACTION);
     Any aRet;
 
     while(true)
-        try {
-            if(action == THROWAUTHENTICATIONREQUEST) {
+    {
+        try
+        {
+            if(action == THROWAUTHENTICATIONREQUEST)
+            {
                 // try to get a continuation first
                 OUString aRealm,aPassword,aAccount;
                 m_pFCP->forHost(m_aFTPURL.host(),
@@ -606,7 +621,9 @@ Any SAL_CALL FTPContent::execute(
             }
 
             return aRet;
-        } catch(const curl_exception& e) {
+        }
+        catch(const curl_exception& e)
+        {
             if(e.code() == CURLE_COULDNT_CONNECT)
                 action = THROWINTERACTIVECONNECT;
             else if(e.code() == CURLE_COULDNT_RESOLVE_HOST )
@@ -626,6 +643,7 @@ Any SAL_CALL FTPContent::execute(
                 // nothing known about the cause of the error
                 action = THROWGENERAL;
         }
+    }
 }
 
 #define FTP_FILE OUString( "application/vnd.sun.staroffice.ftp-file")

@@ -22,7 +22,6 @@
 
 #include <vector>
 #include <osl/mutex.hxx>
-#include <ucbhelper/macros.hxx>
 #include <ucbhelper/proxydecider.hxx>
 #include <ucbhelper/providerhelper.hxx>
 #include <com/sun/star/ucb/XContentProviderManager.hpp>
@@ -35,18 +34,12 @@
 #define FTP_CONTENT_PROVIDER_SERVICE_NAME "com.sun.star.ucb.FTPContentProvider"
 #define FTP_CONTENT_TYPE "application/ftp-content"
 
-
 /**
  *  Definition of ftpcontentprovider
  */
-
-
-
-namespace ftp {
-
-
+namespace ftp
+{
     class FTPLoaderThread;
-
 
     class FTPContentProvider:
         public ::ucbhelper::ContentProviderImplHelper,
@@ -54,31 +47,51 @@ namespace ftp {
     {
     public:
 
-        FTPContentProvider(
-            const com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >& rxContext );
+        FTPContentProvider( const css::uno::Reference< css::uno::XComponentContext >& rxContext );
 
         ~FTPContentProvider();
 
         // XInterface
         virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType )
-            throw( css::uno::RuntimeException, std::exception );
+            throw( css::uno::RuntimeException,
+                   std::exception );
         virtual void SAL_CALL acquire()
             throw();
         virtual void SAL_CALL release()
             throw();
 
         // XTypeProvider
-        XTYPEPROVIDER_DECL()
+        virtual css::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId()
+            throw( css::uno::RuntimeException,
+                   std::exception );
+        virtual css::uno::Sequence< css::uno::Type > SAL_CALL getTypes()
+            throw( css::uno::RuntimeException,
+                   std::exception );
 
         // XServiceInfo
-        XSERVICEINFO_DECL()
+        virtual OUString SAL_CALL getImplementationName()
+            throw( css::uno::RuntimeException,
+                   std::exception );
+        virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName )
+            throw( css::uno::RuntimeException,
+                   std::exception );
+        virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames()
+            throw( css::uno::RuntimeException,
+                   std::exception );
+
+        static OUString getImplementationName_Static();
+        static css::uno::Sequence< OUString > getSupportedServiceNames_Static();
+
+        static css::uno::Reference< css::lang::XSingleServiceFactory >
+        createServiceFactory( const css::uno::Reference<
+                              css::lang::XMultiServiceFactory >& rxServiceMgr );
 
         // XContentProvider
-        virtual com::sun::star::uno::Reference< com::sun::star::ucb::XContent > SAL_CALL
-        queryContent(
-            const com::sun::star::uno::Reference< com::sun::star::ucb::XContentIdentifier >& Identifier )
-            throw( com::sun::star::ucb::IllegalIdentifierException,
-                   com::sun::star::uno::RuntimeException, std::exception );
+        virtual css::uno::Reference< css::ucb::XContent > SAL_CALL
+        queryContent( const css::uno::Reference< css::ucb::XContentIdentifier >& Identifier )
+            throw( css::ucb::IllegalIdentifierException,
+                   css::uno::RuntimeException,
+                   std::exception );
 
         // FTPHandleProvider.
 
@@ -96,8 +109,8 @@ namespace ftp {
                              const OUString& password,
                              const OUString& account);
 
-
-        struct ServerInfo {
+        struct ServerInfo
+        {
             OUString host;
             OUString port;
             OUString username;
@@ -114,9 +127,8 @@ namespace ftp {
 
         void init();
 
-        com::sun::star::uno::Reference<com::sun::star::ucb::XContentProvider>
-        getHttpProvider()
-            throw(com::sun::star::uno::RuntimeException);
+        css::uno::Reference<css::ucb::XContentProvider> getHttpProvider()
+            throw(css::uno::RuntimeException);
 
     };  // end class FTPContentProvider
 

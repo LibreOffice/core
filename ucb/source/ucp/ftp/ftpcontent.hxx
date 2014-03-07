@@ -25,7 +25,6 @@
 #include <com/sun/star/ucb/XContentCreator.hpp>
 #include "ftpurl.hxx"
 
-
 namespace com { namespace sun { namespace star { namespace beans {
     struct Property;
     struct PropertyValue;
@@ -39,135 +38,135 @@ namespace com { namespace sun { namespace star { namespace sdbc {
 namespace ftp
 {
 
+class FTPContentProvider;
+
+class FTPContent : public ::ucbhelper::ContentImplHelper,
+                   public css::ucb::XContentCreator
+{
+public:
+
+    FTPContent( const css::uno::Reference<
+                css::uno::XComponentContext >& rxContext,
+                FTPContentProvider* pProvider,
+                const css::uno::Reference<
+                css::ucb::XContentIdentifier >& Identifier,
+                const FTPURL& FtpUrl);
+
+    FTPContent( const css::uno::Reference<
+                css::uno::XComponentContext >& rxContext,
+                FTPContentProvider* pProvider,
+                const css::uno::Reference<
+                css::ucb::XContentIdentifier >& Identifier,
+                const css::ucb::ContentInfo& aInfo);
 
 
-    class FTPContentProvider;
+    virtual ~FTPContent();
 
+    // XInterface
+    virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType )
+        throw( css::uno::RuntimeException, std::exception );
+    virtual void SAL_CALL acquire()
+        throw();
+    virtual void SAL_CALL release()
+        throw();
 
+    // XTypeProvider
+    virtual css::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId()
+        throw( css::uno::RuntimeException,
+               std::exception );
+    virtual css::uno::Sequence< css::uno::Type > SAL_CALL getTypes()
+        throw( css::uno::RuntimeException,
+                   std::exception );
 
-    class FTPContent
-        : public ::ucbhelper::ContentImplHelper,
-          public com::sun::star::ucb::XContentCreator
-    {
-    public:
+    // XServiceInfo
+    virtual OUString SAL_CALL getImplementationName()
+        throw( css::uno::RuntimeException, std::exception );
+    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName )
+        throw( css::uno::RuntimeException, std::exception );
+    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames()
+        throw( css::uno::RuntimeException, std::exception );
 
-        FTPContent( const ::com::sun::star::uno::Reference<
-                    ::com::sun::star::uno::XComponentContext >& rxContext,
-                    FTPContentProvider* pProvider,
-                    const ::com::sun::star::uno::Reference<
-                    ::com::sun::star::ucb::XContentIdentifier >& Identifier,
-                    const FTPURL& FtpUrl);
+    static OUString getImplementationName_Static();
+    static css::uno::Sequence< OUString > getSupportedServiceNames_Static();
 
-        FTPContent( const ::com::sun::star::uno::Reference<
-                    ::com::sun::star::uno::XComponentContext >& rxContext,
-                    FTPContentProvider* pProvider,
-                    const ::com::sun::star::uno::Reference<
-                    ::com::sun::star::ucb::XContentIdentifier >& Identifier,
-                    const com::sun::star::ucb::ContentInfo& aInfo);
+    static css::uno::Reference< css::lang::XSingleServiceFactory >
+    createServiceFactory( const css::uno::Reference<
+            css::lang::XMultiServiceFactory >& rxServiceMgr );
 
+    // XContent
+    virtual OUString SAL_CALL getContentType()
+        throw( css::uno::RuntimeException, std::exception );
 
-        virtual ~FTPContent();
+    // XCommandProcessor
+    virtual css::uno::Any SAL_CALL execute( const css::ucb::Command& aCommand,
+                                            sal_Int32 CommandId,
+                                            const css::uno::Reference<
+                                            css::ucb::XCommandEnvironment >& Environment )
+        throw( css::uno::Exception,
+               css::ucb::CommandAbortedException,
+               css::uno::RuntimeException, std::exception );
 
-        // XInterface
-        virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType )
-            throw( css::uno::RuntimeException, std::exception );
-        virtual void SAL_CALL acquire()
-            throw();
-        virtual void SAL_CALL release()
-            throw();
+    virtual void SAL_CALL abort(sal_Int32 CommandId)
+        throw( css::uno::RuntimeException, std::exception);
 
-        // XTypeProvider
-        XTYPEPROVIDER_DECL()
-
-        // XServiceInfo
-        XSERVICEINFO_DECL()
-
-        // XContent
-        virtual OUString SAL_CALL
-        getContentType()
-            throw( com::sun::star::uno::RuntimeException, std::exception );
-
-        // XCommandProcessor
-        virtual com::sun::star::uno::Any SAL_CALL
-        execute( const com::sun::star::ucb::Command& aCommand,
-                 sal_Int32 CommandId,
-                 const com::sun::star::uno::Reference<
-                 com::sun::star::ucb::XCommandEnvironment >& Environment )
-            throw( com::sun::star::uno::Exception,
-                   com::sun::star::ucb::CommandAbortedException,
-                   com::sun::star::uno::RuntimeException, std::exception );
-
-        virtual void SAL_CALL
-        abort(sal_Int32 CommandId)
-            throw( com::sun::star::uno::RuntimeException, std::exception);
-
-        // XContentCreator
-        virtual com::sun::star::uno::Sequence<
-        com::sun::star::ucb::ContentInfo > SAL_CALL
+    // XContentCreator
+    virtual css::uno::Sequence<
+        css::ucb::ContentInfo > SAL_CALL
         queryCreatableContentsInfo(  )
-            throw (com::sun::star::uno::RuntimeException, std::exception);
+            throw (css::uno::RuntimeException, std::exception);
 
-        virtual com::sun::star::uno::Reference<
-        com::sun::star::ucb::XContent > SAL_CALL
-        createNewContent( const com::sun::star::ucb::ContentInfo& Info )
-            throw (com::sun::star::uno::RuntimeException, std::exception);
+    virtual css::uno::Reference<
+        css::ucb::XContent > SAL_CALL
+        createNewContent( const css::ucb::ContentInfo& Info )
+            throw (css::uno::RuntimeException, std::exception);
 
-        // XChild
+    // XChild
 
-        virtual ::com::sun::star::uno::Reference<
-        ::com::sun::star::uno::XInterface > SAL_CALL
-        getParent(  )
-            throw (::com::sun::star::uno::RuntimeException, std::exception);
+    virtual css::uno::Reference< css::uno::XInterface > SAL_CALL getParent(  )
+        throw (css::uno::RuntimeException, std::exception);
 
-        virtual void SAL_CALL
-        setParent( const ::com::sun::star::uno::Reference<
-                   ::com::sun::star::uno::XInterface >& Parent )
-            throw (::com::sun::star::lang::NoSupportException,
-                   ::com::sun::star::uno::RuntimeException, std::exception);
+    virtual void SAL_CALL setParent( const css::uno::Reference< css::uno::XInterface >& Parent )
+        throw (css::lang::NoSupportException,
+               css::uno::RuntimeException, std::exception);
 
+    static css::uno::Sequence< css::ucb::ContentInfo > queryCreatableContentsInfo_Static()
+        throw (css::uno::RuntimeException);
 
-        static com::sun::star::uno::Sequence<
-        com::sun::star::ucb::ContentInfo >
-        queryCreatableContentsInfo_Static(  )
-            throw (com::sun::star::uno::RuntimeException);
+private:
 
-    private:
+    FTPContentProvider *m_pFCP;
+    FTPURL              m_aFTPURL;
+    bool                m_bInserted;
+    bool                m_bTitleSet;
+    css::ucb::ContentInfo m_aInfo;
 
-        FTPContentProvider *m_pFCP;
-        FTPURL              m_aFTPURL;
-        bool                m_bInserted;
-        bool                m_bTitleSet;
-        com::sun::star::ucb::ContentInfo m_aInfo;
-
-        virtual com::sun::star::uno::Sequence< com::sun::star::beans::Property >
-        getProperties( const com::sun::star::uno::Reference<
-                       com::sun::star::ucb::XCommandEnvironment > & xEnv );
+    virtual css::uno::Sequence< css::beans::Property >
+        getProperties( const css::uno::Reference<
+                       css::ucb::XCommandEnvironment > & xEnv );
 
 
-        virtual com::sun::star::uno::Sequence<
-        com::sun::star::ucb::CommandInfo>
-        getCommands(const com::sun::star::uno::Reference<
-                    com::sun::star::ucb::XCommandEnvironment > & xEnv);
+    virtual css::uno::Sequence< css::ucb::CommandInfo>
+        getCommands(const css::uno::Reference<
+                    css::ucb::XCommandEnvironment > & xEnv);
 
 
-        virtual OUString getParentURL();
+    virtual OUString getParentURL();
 
-        com::sun::star::uno::Reference<com::sun::star::sdbc::XRow>
+    css::uno::Reference<css::sdbc::XRow>
         getPropertyValues(
-            const com::sun::star::uno::Sequence<
-            com::sun::star::beans::Property>& seqProp,
-            const com::sun::star::uno::Reference<
-            com::sun::star::ucb::XCommandEnvironment >& Environment
-        );
+                const css::uno::Sequence<
+                css::beans::Property>& seqProp,
+                const css::uno::Reference<
+                css::ucb::XCommandEnvironment >& Environment
+            );
 
-        com::sun::star::uno::Sequence<com::sun::star::uno::Any>
-        setPropertyValues(
-            const ::com::sun::star::uno::Sequence<
-            ::com::sun::star::beans::PropertyValue>& seqPropVal);
+    css::uno::Sequence<css::uno::Any>
+        setPropertyValues( const css::uno::Sequence<
+                           css::beans::PropertyValue>& seqPropVal);
 
-        void insert(const com::sun::star::ucb::InsertCommandArgument&,
-                    const com::sun::star::uno::Reference<
-                    com::sun::star::ucb::XCommandEnvironment>&);
+    void insert(const css::ucb::InsertCommandArgument&,
+                const css::uno::Reference<
+                css::ucb::XCommandEnvironment>&);
     };
 
 }
