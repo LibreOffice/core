@@ -217,6 +217,7 @@
           </info>
           <value>
             <it>IgnoreAllList</it>
+            <it>standard.dic</it>
             <it>en-US.dic</it>
             <it>en-GB.dic</it>
             <it>sl.dic</it>
