@@ -69,6 +69,11 @@ void CLBuildKernelThread::push(CLBuildKernelWorkItem item)
     osl::MutexGuard guard(maQueueMutex);
     maQueue.push(item);
     maQueueCondition.set();
+
+    // This is only to ensure that the OpenCL parameters are initialized on
+    // the main thread before spawning a worker thread for kernel
+    // pre-compilation.
+    sc::FormulaGroupInterpreter::getStatic();
 }
 
 void CLBuildKernelThread::produce()

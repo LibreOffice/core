@@ -54,7 +54,7 @@
 
 #include <boost/scoped_ptr.hpp>
 
-#define ENABLE_THREADED_OPENCL_KERNEL_COMPILATION 0
+#define ENABLE_THREADED_OPENCL_KERNEL_COMPILATION 1
 
 using namespace formula;
 
