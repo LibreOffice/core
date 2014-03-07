@@ -186,7 +186,7 @@ void MasterPageObserver::Implementation::RegisterDocument (
     SdDrawDocument& rDocument)
 {
     // Gather the names of all the master pages in the given document.
-    MasterPageContainer::data_type aMasterPageSet;
+    MasterPageContainer::mapped_type aMasterPageSet;
     sal_uInt16 nMasterPageCount = rDocument.GetMasterSdPageCount(PK_STANDARD);
     for (sal_uInt16 nIndex=0; nIndex<nMasterPageCount; nIndex++)
     {

@@ -62,7 +62,6 @@ class hash_map
 {
 public:
 	typedef unordered_map<__K,__T,__H,__E,__A> _super;
-	typedef __T data_type;
 
 	hash_map( void) {}
 	hash_map( size_t n) : _super( n) {}
@@ -83,7 +82,6 @@ class hash_multimap
 {
 public:
 	typedef unordered_multimap<__K,__T,__H,__E,__A> _super;
-	typedef __T data_type;
 
 	hash_multimap( void) {}
 	hash_multimap( size_t n) : _super( n) {}
