@@ -1834,11 +1834,14 @@ void ScModule::SetReference( const ScRange& rRef, ScDocument* pDoc,
             }
 
             IAnyRefDialog* pRefDlg = dynamic_cast<IAnyRefDialog*>(pChildWnd->GetWindow());
-
-            //  hide the (color) selection now instead of later from LoseFocus,
-            //  don't abort the ref input that causes this call (bDoneRefMode = sal_False)
-            pRefDlg->HideReference( false );
-            pRefDlg->SetReference( aNew, pDoc );
+            assert(pRefDlg);
+            if(pRefDlg)
+            {
+                //  hide the (color) selection now instead of later from LoseFocus,
+                //  don't abort the ref input that causes this call (bDoneRefMode = sal_False)
+                pRefDlg->HideReference( false );
+                pRefDlg->SetReference( aNew, pDoc );
+            }
         }
         else if(pModalDlg)
         {
