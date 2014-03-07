@@ -1483,12 +1483,23 @@ struct ClassKeyLess {
 struct TypeKey {
     TypeKey(
         css::uno::Reference<css::beans::XPropertySetInfo> const & theProperties,
-        css::uno::Sequence<sal_Int8> const & theId):
-        properties(theProperties), id(theId)
-    {}
+        css::uno::Sequence<css::uno::Type> const & theTypes):
+        properties(theProperties)
+    {
+        //TODO: Could even sort the types lexicographically first, to increase
+        // the chance of matches between different implementations' getTypes(),
+        // but the old scheme of using getImplementationId() would have missed
+        // those matches, too:
+        OUStringBuffer b;
+        for (sal_Int32 i = 0; i != theTypes.getLength(); ++i) {
+            b.append(theTypes[i].getTypeName());
+            b.append('*'); // arbitrary delimiter not used by type grammar
+        }
+        types = b.makeStringAndClear();
+    }
 
     css::uno::Reference<css::beans::XPropertySetInfo> properties;
-    css::uno::Sequence<sal_Int8> id;
+    OUString types;
 };
 
 struct TypeKeyLess {
@@ -1499,21 +1510,7 @@ struct TypeKeyLess {
         if (key1.properties.get() > key2.properties.get()) {
             return false;
         }
-        if (key1.id.getLength() < key2.id.getLength()) {
-            return true;
-        }
-        if (key1.id.getLength() > key2.id.getLength()) {
-            return false;
-        }
-        for (sal_Int32 i = 0; i != key1.id.getLength(); ++i) {
-            if (key1.id[i] < key2.id[i]) {
-                return true;
-            }
-            if (key1.id[i] > key2.id[i]) {
-                return false;
-            }
-        }
-        return false;
+        return key1.types < key2.types;
     }
 };
 
@@ -1704,16 +1701,13 @@ css::uno::Reference<css::beans::XIntrospectionAccess> Implementation::inspect(
     }
 
     if (xTypeProvider.is()) {
-        css::uno::Sequence<sal_Int8> id(xTypeProvider->getImplementationId());
-        if (id.hasElements()) {
-            TypeKey key(xPropSetInfo, id);
-            pAccess = typeCache_.find(key);
-            if (pAccess.is()) {
-                return new ImplIntrospectionAccess(aToInspectObj, pAccess);
-            }
-            pAccess = new IntrospectionAccessStatic_Impl(reflection_);
-            typeCache_.insert(key, pAccess);
+        TypeKey key(xPropSetInfo, xTypeProvider->getTypes());
+        pAccess = typeCache_.find(key);
+        if (pAccess.is()) {
+            return new ImplIntrospectionAccess(aToInspectObj, pAccess);
         }
+        pAccess = new IntrospectionAccessStatic_Impl(reflection_);
+        typeCache_.insert(key, pAccess);
     } else if (xImplClass.is()) {
         ClassKey key(xPropSetInfo, xImplClass, SupportedClassSeq);
         pAccess = classCache_.find(key);
