@@ -194,22 +194,4 @@ OUString MoreButton::GetText() const
     return PushButton::GetText();
 }
 
-void MoreButton::SetMoreText( const OUString& rText )
-{
-    if ( mpMBData )
-        mpMBData->maMoreText = rText;
-
-    if ( !mbState )
-        SetText( rText );
-}
-
-void MoreButton::SetLessText( const OUString& rText )
-{
-    if ( mpMBData )
-        mpMBData->maLessText = rText;
-
-    if ( mbState )
-        SetText( rText );
-}
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

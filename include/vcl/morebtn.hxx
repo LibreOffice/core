@@ -70,9 +70,6 @@ public:
 
     void                SetText( const OUString& rNewText );
     OUString            GetText() const;
-
-    void                SetMoreText( const OUString& rNewText );
-    void                SetLessText( const OUString& rNewText );
 };
 
 inline void MoreButton::SetState( bool bNewState )

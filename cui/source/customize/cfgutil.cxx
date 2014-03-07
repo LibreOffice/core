@@ -249,20 +249,6 @@ void SfxStylesInfo_Impl::getLabel4Style(SfxStyleInfo_Impl& aStyle)
     return lStyles;
 }
 
-SfxConfigFunctionListBox::SfxConfigFunctionListBox(Window* pParent, const ResId& rResId)
-    : SvTreeListBox( pParent, rResId )
-    , pCurEntry( 0 )
-    , pStylesInfo( 0 )
-{
-    SetStyle( GetStyle() | WB_CLIPCHILDREN | WB_HSCROLL | WB_SORT );
-    GetModel()->SetSortMode( SortAscending );
-
-    // Timer for the BallonHelp
-    aTimer.SetTimeout( 200 );
-    aTimer.SetTimeoutHdl(
-        LINK( this, SfxConfigFunctionListBox, TimerHdl ) );
-}
-
 SfxConfigFunctionListBox::SfxConfigFunctionListBox(Window* pParent, WinBits nStyle)
     : SvTreeListBox( pParent, nStyle )
     , pCurEntry( 0 )
@@ -422,14 +408,6 @@ SvxConfigGroupBoxResource_Impl::SvxConfigGroupBoxResource_Impl() :
     m_expandedImage(CUI_RES(BMP_EXPANDED))
 {
     FreeResource();
-}
-
-SfxConfigGroupListBox::SfxConfigGroupListBox(Window* pParent, const ResId& rResId)
-    : SvTreeListBox( pParent, rResId )
-    , pImp(new SvxConfigGroupBoxResource_Impl()), pFunctionListBox(0), pStylesInfo(0)
-{
-    SetStyle( GetStyle() | WB_CLIPCHILDREN | WB_HSCROLL | WB_HASBUTTONS | WB_HASLINES | WB_HASLINESATROOT | WB_HASBUTTONSATROOT );
-    SetNodeBitmaps( pImp->m_collapsedImage, pImp->m_expandedImage );
 }
 
 SfxConfigGroupListBox::SfxConfigGroupListBox(Window* pParent, WinBits nStyle)
