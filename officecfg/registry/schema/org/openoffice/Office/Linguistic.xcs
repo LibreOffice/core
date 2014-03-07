@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  -->
 <!DOCTYPE oor:component-schema SYSTEM "../../../../component-schema.dtd">
-<oor:component-schema xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" oor:name="Linguistic" oor:package="org.openoffice.Office" xml:lang="en-US"> 
+<oor:component-schema xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" oor:name="Linguistic" oor:package="org.openoffice.Office" xml:lang="en-US">
     <info>
 		<author>TL</author>
 		<desc >Contains linguistic (spell checking, hyphenation, thesaurus) related configurations.</desc>
@@ -47,7 +47,7 @@
                 </info>
             </prop>
         </group>
-        
+
         <group oor:name="DictionaryUsingService">
             <info>
                 <desc>A list of all services making use of dictionaries.</desc>
@@ -212,7 +212,7 @@
 						<desc>Specifies the custom dictionaries to be used. The Ignore list (IgnoreAllList (All)) is administered in the RAM only for the current spellcheck.</desc>
 						<label>Custom dictionaries</label>
 					</info>
-					<value oor:separator=";">IgnoreAllList;en-US.dic;en-GB.dic;sl.dic;technical.dic</value>
+					<value oor:separator=";">IgnoreAllList;standard.dic;en-US.dic;en-GB.dic;sl.dic;technical.dic</value>
 				</prop>
 				<prop oor:name="IsUseDictionaryList" oor:type="xs:boolean" oor:nillable="false">
 					<!-- OldLocation: NEW -->
