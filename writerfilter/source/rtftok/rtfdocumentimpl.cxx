@@ -2256,7 +2256,7 @@ int RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
     if (nSprm >= 0)
     {
         RTFValue::Pointer_t pValue(new RTFValue(nSprm));
-        m_aStates.top().aCharacterSprms.set(NS_sprm::LN_CKul, pValue);
+        m_aStates.top().aCharacterAttributes.set(NS_ooxml::LN_CT_Underline_val, pValue);
         return 0;
     }
 
@@ -2562,7 +2562,7 @@ int RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
         case RTF_RTLSECT:
             {
                 RTFValue::Pointer_t pValue(new RTFValue(nKeyword == RTF_LTRSECT ? 0 : 1));
-                m_aStates.top().aParagraphSprms.set(NS_sprm::LN_STextFlow, pValue);
+                m_aStates.top().aParagraphSprms.set(NS_ooxml::LN_EG_SectPrContents_textDirection, pValue);
             }
             break;
         case RTF_LTRPAR:
@@ -2574,10 +2574,7 @@ int RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
             break;
         case RTF_LTRROW:
         case RTF_RTLROW:
-            {
-                RTFValue::Pointer_t pValue(new RTFValue(nKeyword == RTF_LTRROW ? 0 : 1));
-                m_aStates.top().aParagraphSprms.set(NS_sprm::LN_TTextFlow, pValue);
-            }
+            // dmapper does not support these.
             break;
         case RTF_LTRCH:
             // dmapper does not support this.
@@ -2589,7 +2586,7 @@ int RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
         case RTF_ULNONE:
             {
                 RTFValue::Pointer_t pValue(new RTFValue(0));
-                m_aStates.top().aCharacterSprms.set(NS_sprm::LN_CKul, pValue);
+                m_aStates.top().aCharacterAttributes.set(NS_ooxml::LN_CT_Underline_val, pValue);
             }
             break;
         case RTF_NONSHPPICT:
@@ -3211,7 +3208,6 @@ int RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
         case RTF_CF:
             {
                 RTFSprms aAttributes;
-                // NS_sprm::LN_CIco won't work, that would be an index in a static table
                 RTFValue::Pointer_t pValue(new RTFValue(getColorTable(nParam)));
                 aAttributes.set(NS_ooxml::LN_CT_Color_val, pValue);
                 m_aStates.top().aCharacterSprms.set(NS_ooxml::LN_EG_RPrBase_color, RTFValue::Pointer_t(new RTFValue(aAttributes)));
@@ -4035,7 +4031,7 @@ int RTFDocumentImpl::dispatchToggle(RTFKeyword nKeyword, bool bParam, int nParam
     if (nSprm >= 0)
     {
         RTFValue::Pointer_t pValue(new RTFValue((!bParam || nParam != 0) ? nSprm : 0));
-        m_aStates.top().aCharacterSprms.set(NS_sprm::LN_CKul, pValue);
+        m_aStates.top().aCharacterAttributes.set(NS_ooxml::LN_CT_Underline_val, pValue);
         return 0;
     }
 
@@ -4063,7 +4059,6 @@ int RTFDocumentImpl::dispatchToggle(RTFKeyword nKeyword, bool bParam, int nParam
         case RTF_AB: nSprm = NS_ooxml::LN_EG_RPrBase_bCs; break;
         case RTF_I: nSprm = NS_ooxml::LN_EG_RPrBase_i; break;
         case RTF_AI: nSprm = NS_ooxml::LN_EG_RPrBase_iCs; break;
-        case RTF_UL: nSprm = NS_sprm::LN_CKul; break;
         case RTF_OUTL: nSprm = NS_ooxml::LN_EG_RPrBase_outline; break;
         case RTF_SHAD: nSprm = NS_ooxml::LN_EG_RPrBase_shadow; break;
         case RTF_V: nSprm = NS_ooxml::LN_EG_RPrBase_vanish; break;

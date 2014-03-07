@@ -1430,22 +1430,6 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, PropertyMapPtr rContext )
             }
         }
         break;
-    case NS_sprm::LN_CKul: // sprmCKul
-        {
-            // Parameter:  0 = none,    1 = single,  2 = by Word,
-            // 3 = double,  4 = dotted,  5 = hidden
-            // 6 = thick,   7 = dash,    8 = dot(not used)
-            // 9 = dotdash 10 = dotdotdash 11 = wave
-            handleUnderlineType(nIntValue, rContext);
-        }
-        break;
-    case NS_sprm::LN_CIco:
-        {
-            sal_Int32 nColor = 0;
-            if (getColorFromIndex(nIntValue, nColor))
-                rContext->Insert(PROP_CHAR_COLOR, uno::makeAny( nColor ) );
-        }
-        break;  // sprmCIco
     case NS_ooxml::LN_EG_RPrBase_sz:
     case NS_ooxml::LN_EG_RPrBase_szCs:
         {
@@ -1579,7 +1563,6 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, PropertyMapPtr rContext )
     case 0x703a: //undocumented, grid related?
         OSL_FAIL( "TODO: not handled yet"); //nIntValue like 0x008a2373 ?
         break;
-    case NS_sprm::LN_STextFlow:
     case NS_ooxml::LN_EG_SectPrContents_textDirection:
     {
         /* 0 HoriLR 1 Vert TR 2 Vert TR 3 Vert TT 4 HoriLT
@@ -1611,9 +1594,6 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, PropertyMapPtr rContext )
         pTargetContext->Insert(PROP_WRITING_MODE, uno::makeAny( nDirection ) );
     }
     break;  // sprmSTextFlow
-    case 164: // sprmTSetShd
-    case NS_sprm::LN_TTextFlow:
-        break;  // sprmTTextFlow
         // the following are not part of the official documentation
     case 0x6870: //TxtForeColor
         {
