@@ -404,7 +404,6 @@ uno::Reference< drawing::XShape >
 {
     dummy::DummyText* pText = new dummy::DummyText( rText, rPropNames, rPropValues,
             rATransformation, xTarget, 0 );
-    xTarget->add(pText);
     return pText;
 }
 
@@ -453,7 +452,6 @@ uno::Reference< drawing::XShape >
     dummy::DummyText* pText = new dummy::DummyText(aString, aPropNames, aPropValues,
             uno::makeAny(B2DHomMatrixToHomogenMatrix3(aM)), xTarget, nRotation);
     pText->setName(rName);
-    xTarget->add(pText);
     return pText;
 }
 

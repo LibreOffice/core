@@ -60,6 +60,7 @@
 #include <vector>
 #include <map>
 #include <boost/scoped_ptr.hpp>
+#include <boost/unordered_map.hpp>
 
 #if defined( MACOSX )
 #include <OpenGL/gl.h>
@@ -96,6 +97,38 @@ namespace dummy {
 class DummyChart;
 
 struct OpenglContext;
+
+
+class TextCache
+{
+public:
+    struct TextCacheKey
+    {
+        OUString maText;
+        std::map<OUString, com::sun::star::uno::Any> maProperties;
+
+        bool operator==(const TextCacheKey& rKey) const
+        {
+            return maText == rKey.maText && maProperties == rKey.maProperties;
+        }
+    };
+
+    struct TextCacheKeyHash
+    {
+        size_t operator()(const TextCacheKey& rKey) const
+        {
+            return rKey.maText.hashCode();
+        }
+    };
+
+    bool hasEntry(const TextCacheKey& rKey);
+    BitmapEx& getBitmap(const TextCacheKey& rKey);
+    void insertBitmap(const TextCacheKey& rKey, const BitmapEx& rBitmap);
+
+private:
+
+    boost::unordered_map<TextCacheKey, BitmapEx, TextCacheKeyHash> maCache;
+};
 
 class DummyXShape : public cppu::WeakAggImplHelper6<
                     ::com::sun::star::drawing::XShape,
@@ -392,6 +425,7 @@ public:
     virtual void render() SAL_OVERRIDE;
 
     void clear();
+    TextCache& getTextCache();
 
 private:
 
@@ -403,6 +437,7 @@ private:
     bool initOpengl();
     boost::scoped_ptr<Window> mpWindow;
     boost::scoped_ptr<SystemChildWindow> pWindow;
+    TextCache maTextCache;
 public:
     OpenGLRender m_GLRender;
 };

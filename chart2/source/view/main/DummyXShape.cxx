@@ -48,6 +48,21 @@ namespace chart {
 
 namespace dummy {
 
+bool TextCache::hasEntry(const TextCacheKey& rKey)
+{
+    return maCache.find(rKey) != maCache.end();
+}
+
+BitmapEx& TextCache::getBitmap(const TextCacheKey& rKey)
+{
+    return maCache.find(rKey)->second;
+}
+
+void TextCache::insertBitmap(const TextCacheKey& rKey, const BitmapEx& rBitmap)
+{
+    maCache.insert(std::pair<TextCacheKey, BitmapEx>(rKey, rBitmap));
+}
+
 class DummyPropertySetInfo : public cppu::WeakImplHelper1<
                                 com::sun::star::beans::XPropertySetInfo >
 {
@@ -791,22 +806,39 @@ DummyText::DummyText(const OUString& rText, const tNameSequence& rNames,
 {
     setProperties(rNames, rValues, maProperties);
 
-    Font aFont;
-    std::for_each(maProperties.begin(), maProperties.end(), FontAttribSetter(aFont));
-
-    VirtualDevice aDevice(*Application::GetDefaultDevice(), 0, 0);
-    aDevice.Erase();
-    Rectangle aRect;
-    aDevice.SetFont(aFont);
-    aDevice.GetTextBoundRect(aRect, rText);
-    int screenWidth = (aRect.BottomRight().X());
-    int screenHeight = (aRect.BottomRight().Y());
-    aDevice.SetOutputSizePixel(Size(screenWidth * 3, screenHeight));
-    aDevice.SetBackground(Wallpaper(COL_TRANSPARENT));
-    aDevice.DrawText(Point(0, 0), rText);
-    int bmpWidth = aRect.Right() - aRect.Left();
-    int bmpHeight = aRect.Bottom() - aRect.Top();
-    maBitmap = BitmapEx(aDevice.GetBitmapEx(aRect.TopLeft(), Size(bmpWidth, bmpHeight)));
+    xTarget->add(this);
+    DummyChart* pChart = getRootShape();
+    TextCache& rCache = pChart->getTextCache();
+    TextCache::TextCacheKey aKey;
+    aKey.maText = maText;
+    aKey.maProperties = maProperties;
+    int bmpWidth;
+    int bmpHeight;
+    if(rCache.hasEntry(aKey))
+    {
+        maBitmap = rCache.getBitmap(aKey);
+        bmpWidth = maBitmap.GetSizePixel().Width();
+        bmpHeight = maBitmap.GetSizePixel().Height();
+    }
+    else
+    {
+        Font aFont;
+        std::for_each(maProperties.begin(), maProperties.end(), FontAttribSetter(aFont));
+        VirtualDevice aDevice(*Application::GetDefaultDevice(), 0, 0);
+        aDevice.Erase();
+        Rectangle aRect;
+        aDevice.SetFont(aFont);
+        aDevice.GetTextBoundRect(aRect, rText);
+        int screenWidth = (aRect.BottomRight().X());
+        int screenHeight = (aRect.BottomRight().Y());
+        aDevice.SetOutputSizePixel(Size(screenWidth * 3, screenHeight));
+        aDevice.SetBackground(Wallpaper(COL_TRANSPARENT));
+        aDevice.DrawText(Point(0, 0), rText);
+        bmpWidth = aRect.Right() - aRect.Left();
+        bmpHeight = aRect.Bottom() - aRect.Top();
+        maBitmap = BitmapEx(aDevice.GetBitmapEx(aRect.TopLeft(), Size(bmpWidth, bmpHeight)));
+        rCache.insertBitmap(aKey, maBitmap);
+    }
 
     if(rTrans.hasValue())
     {
@@ -1539,6 +1571,11 @@ void DummyChart::clear()
 {
     maUNOShapes.clear();
     maShapes.clear();
+}
+
+TextCache& DummyChart::getTextCache()
+{
+    return maTextCache;
 }
 
 }
