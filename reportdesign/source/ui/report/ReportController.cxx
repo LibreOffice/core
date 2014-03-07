@@ -3172,52 +3172,56 @@ void OReportController::createControl(const Sequence< PropertyValue >& _aArgs,co
 
         pNewControl = pControl;
         OUnoObject* pObj = dynamic_cast<OUnoObject*>(pControl);
-        uno::Reference<beans::XPropertySet> xUnoProp(pObj->GetUnoControlModel(),uno::UNO_QUERY);
-        xShapeProp.set(pObj->getUnoShape(),uno::UNO_QUERY);
-        uno::Reference<beans::XPropertySetInfo> xShapeInfo = xShapeProp->getPropertySetInfo();
-        uno::Reference<beans::XPropertySetInfo> xInfo = xUnoProp->getPropertySetInfo();
-
-        const OUString sProps[] = {   OUString(PROPERTY_NAME)
-                                            ,OUString(PROPERTY_FONTDESCRIPTOR)
-                                            ,OUString(PROPERTY_FONTDESCRIPTORASIAN)
-                                            ,OUString(PROPERTY_FONTDESCRIPTORCOMPLEX)
-                                            ,OUString(PROPERTY_ORIENTATION)
-                                            ,OUString(PROPERTY_BORDER)
-                                            ,OUString(PROPERTY_FORMATSSUPPLIER)
-                                            ,OUString(PROPERTY_BACKGROUNDCOLOR)
-        };
-        for(size_t i = 0; i < sizeof (sProps) / sizeof (sProps[0]); ++i)
+        assert(pObj);
+        if(pObj)
         {
-            if ( xInfo->hasPropertyByName(sProps[i]) && xShapeInfo->hasPropertyByName(sProps[i]) )
-                xUnoProp->setPropertyValue(sProps[i],xShapeProp->getPropertyValue(sProps[i]));
-        }
+            uno::Reference<beans::XPropertySet> xUnoProp(pObj->GetUnoControlModel(),uno::UNO_QUERY);
+            xShapeProp.set(pObj->getUnoShape(),uno::UNO_QUERY);
+            uno::Reference<beans::XPropertySetInfo> xShapeInfo = xShapeProp->getPropertySetInfo();
+            uno::Reference<beans::XPropertySetInfo> xInfo = xUnoProp->getPropertySetInfo();
 
-        if ( xInfo->hasPropertyByName(PROPERTY_BORDER) && xShapeInfo->hasPropertyByName(PROPERTY_CONTROLBORDER) )
-            xUnoProp->setPropertyValue(PROPERTY_BORDER,xShapeProp->getPropertyValue(PROPERTY_CONTROLBORDER));
+            const OUString sProps[] = {   OUString(PROPERTY_NAME)
+                                          ,OUString(PROPERTY_FONTDESCRIPTOR)
+                                          ,OUString(PROPERTY_FONTDESCRIPTORASIAN)
+                                          ,OUString(PROPERTY_FONTDESCRIPTORCOMPLEX)
+                                          ,OUString(PROPERTY_ORIENTATION)
+                                          ,OUString(PROPERTY_BORDER)
+                                          ,OUString(PROPERTY_FORMATSSUPPLIER)
+                                          ,OUString(PROPERTY_BACKGROUNDCOLOR)
+            };
+            for(size_t i = 0; i < sizeof (sProps) / sizeof (sProps[0]); ++i)
+            {
+                if ( xInfo->hasPropertyByName(sProps[i]) && xShapeInfo->hasPropertyByName(sProps[i]) )
+                    xUnoProp->setPropertyValue(sProps[i],xShapeProp->getPropertyValue(sProps[i]));
+            }
+
+            if ( xInfo->hasPropertyByName(PROPERTY_BORDER) && xShapeInfo->hasPropertyByName(PROPERTY_CONTROLBORDER) )
+                xUnoProp->setPropertyValue(PROPERTY_BORDER,xShapeProp->getPropertyValue(PROPERTY_CONTROLBORDER));
 
 
-        if ( xInfo->hasPropertyByName(PROPERTY_DATAFIELD) && !_sFunction.isEmpty() )
-        {
-            ReportFormula aFunctionFormula( ReportFormula::Expression, _sFunction );
-            xUnoProp->setPropertyValue( PROPERTY_DATAFIELD, uno::makeAny( aFunctionFormula.getCompleteFormula() ) );
-        }
+            if ( xInfo->hasPropertyByName(PROPERTY_DATAFIELD) && !_sFunction.isEmpty() )
+            {
+                ReportFormula aFunctionFormula( ReportFormula::Expression, _sFunction );
+                xUnoProp->setPropertyValue( PROPERTY_DATAFIELD, uno::makeAny( aFunctionFormula.getCompleteFormula() ) );
+            }
 
-        sal_Int32 nFormatKey = aMap.getUnpackedValueOrDefault(PROPERTY_FORMATKEY,sal_Int32(0));
-        if ( nFormatKey && xInfo->hasPropertyByName(PROPERTY_FORMATKEY) )
-            xUnoProp->setPropertyValue( PROPERTY_FORMATKEY, uno::makeAny( nFormatKey ) );
+            sal_Int32 nFormatKey = aMap.getUnpackedValueOrDefault(PROPERTY_FORMATKEY,sal_Int32(0));
+            if ( nFormatKey && xInfo->hasPropertyByName(PROPERTY_FORMATKEY) )
+                xUnoProp->setPropertyValue( PROPERTY_FORMATKEY, uno::makeAny( nFormatKey ) );
 
-        OUString sUrl = aMap.getUnpackedValueOrDefault(PROPERTY_IMAGEURL,OUString());
-        if ( !sUrl.isEmpty() && xInfo->hasPropertyByName(PROPERTY_IMAGEURL) )
-            xUnoProp->setPropertyValue( PROPERTY_IMAGEURL, uno::makeAny( sUrl ) );
+            OUString sUrl = aMap.getUnpackedValueOrDefault(PROPERTY_IMAGEURL,OUString());
+            if ( !sUrl.isEmpty() && xInfo->hasPropertyByName(PROPERTY_IMAGEURL) )
+                xUnoProp->setPropertyValue( PROPERTY_IMAGEURL, uno::makeAny( sUrl ) );
 
-        pObj->CreateMediator(sal_True);
+            pObj->CreateMediator(sal_True);
 
-        if ( _nObjectId == OBJ_DLG_FIXEDTEXT ) // special case for fixed text
-            xUnoProp->setPropertyValue(PROPERTY_LABEL,uno::makeAny(OUnoObject::GetDefaultName(pObj)));
-        else if ( _nObjectId == OBJ_DLG_VFIXEDLINE )
-        {
-            awt::Size aOlSize = xShapeProp->getSize();
-            xShapeProp->setSize(awt::Size(aOlSize.Height,aOlSize.Width)); // switch height and width
+            if ( _nObjectId == OBJ_DLG_FIXEDTEXT ) // special case for fixed text
+                xUnoProp->setPropertyValue(PROPERTY_LABEL,uno::makeAny(OUnoObject::GetDefaultName(pObj)));
+            else if ( _nObjectId == OBJ_DLG_VFIXEDLINE )
+            {
+                awt::Size aOlSize = xShapeProp->getSize();
+                xShapeProp->setSize(awt::Size(aOlSize.Height,aOlSize.Width)); // switch height and width
+            }
         }
     }
 
