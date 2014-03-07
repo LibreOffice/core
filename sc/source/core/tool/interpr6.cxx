@@ -210,8 +210,10 @@ namespace {
 class NumericCellAccumulator
 {
     double mfSum;
+    sal_uInt16 mnError;
+
 public:
-    NumericCellAccumulator() : mfSum(0.0) {}
+    NumericCellAccumulator() : mfSum(0.0), mnError(0) {}
 
     void operator() (size_t, double fVal)
     {
@@ -220,11 +222,28 @@ public:
 
     void operator() (size_t, const ScFormulaCell* pCell)
     {
+        if (mnError)
+            // Skip all the rest if we have an error.
+            return;
+
+        double fVal = 0.0;
+        sal_uInt16 nErr = 0;
         ScFormulaCell& rCell = const_cast<ScFormulaCell&>(*pCell);
-        if (rCell.IsValue())
-            mfSum += rCell.GetValue();
+        if (!rCell.GetErrorOrValue(nErr, fVal))
+            // The cell has neither error nor value.  Perhaps string result.
+            return;
+
+        if (nErr)
+        {
+            // Cell has error.
+            mnError = nErr;
+            return;
+        }
+
+        mfSum += fVal;
     }
 
+    sal_uInt16 getError() const { return mnError; }
     double getSum() const { return mfSum; }
 };
 
@@ -299,10 +318,11 @@ class FuncSum : public sc::ColumnSpanSet::ColumnAction
     sc::ColumnBlockConstPosition maPos;
     ScColumn* mpCol;
     double mfSum;
+    sal_uInt16 mnError;
     sal_uInt32 mnNumFmt;
 
 public:
-    FuncSum() : mpCol(0), mfSum(0.0), mnNumFmt(0) {}
+    FuncSum() : mpCol(0), mfSum(0.0), mnError(0), mnNumFmt(0) {}
 
     virtual void startColumn(ScColumn* pCol)
     {
@@ -315,12 +335,20 @@ public:
         if (!bVal)
             return;
 
+        if (mnError)
+            return;
+
         NumericCellAccumulator aFunc;
         maPos.miCellPos = sc::ParseFormulaNumeric(maPos.miCellPos, mpCol->GetCellStore(), nRow1, nRow2, aFunc);
+        mnError = aFunc.getError();
+        if (mnError)
+            return;
+
         mfSum += aFunc.getSum();
         mnNumFmt = mpCol->GetNumberFormat(nRow2);
     };
 
+    sal_uInt16 getError() const { return mnError; }
     double getSum() const { return mfSum; }
     sal_uInt32 getNumberFormat() const { return mnNumFmt; }
 };
@@ -806,6 +834,12 @@ void ScInterpreter::ScSum()
 
                 FuncSum aAction;
                 aSet.executeColumnAction(*pDok, aAction);
+                sal_uInt16 nErr = aAction.getError();
+                if (nErr)
+                {
+                    SetError(nErr);
+                    return;
+                }
                 fRes += aAction.getSum();
 
                 // Get the number format of the last iterated cell.
