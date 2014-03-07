@@ -18,8 +18,9 @@
  -->
 
 <component loader="com.sun.star.loader.SharedLibrary" environment="@CPPU_ENV@"
-    prefix="introspection" xmlns="http://openoffice.org/2010/uno-components">
-  <implementation name="com.sun.star.comp.stoc.Introspection">
+    xmlns="http://openoffice.org/2010/uno-components">
+  <implementation name="com.sun.star.comp.stoc.Introspection"
+      constructor="com_sun_star_comp_stoc_Introspection_get_implementation">
     <service name="com.sun.star.beans.Introspection"/>
     <singleton name="com.sun.star.beans.theIntrospection"/>
   </implementation>

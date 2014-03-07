@@ -35,7 +35,6 @@
 
 #include <com/sun/star/uno/DeploymentException.hpp>
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XEventListener.hpp>
 #include <com/sun/star/reflection/XIdlReflection.hpp>
@@ -74,10 +73,7 @@ using namespace com::sun::star::beans::MethodConcept;
 using namespace cppu;
 using namespace osl;
 
-#define IMPLEMENTATION_NAME "com.sun.star.comp.stoc.Introspection"
-#define SERVICE_NAME        "com.sun.star.beans.Introspection"
-
-namespace stoc_inspect
+namespace
 {
 
 typedef WeakImplHelper3< XIntrospectionAccess, XMaterialHolder, XExactName > IntrospectionAccessHelper;
@@ -1593,9 +1589,6 @@ class ImplIntrospection : public XIntrospection
     // Implementation der Introspection.
     rtl::Reference< IntrospectionAccessStatic_Impl > implInspect(const Any& aToInspectObj);
 
-    // Save XMultiServiceFactory from createComponent
-    Reference<XMultiServiceFactory> m_xSMgr;
-
     // CoreReflection halten
     Reference< XIdlReflection > mxCoreReflection;
 
@@ -1616,7 +1609,7 @@ class ImplIntrospection : public XIntrospection
     TypeProviderAccessCacheMap* mpTypeProviderCache;
 
 public:
-    ImplIntrospection( const Reference<XMultiServiceFactory> & rXSMgr );
+    ImplIntrospection( const Reference<XComponentContext> & context );
 
     // Methoden von XInterface
     virtual Any            SAL_CALL queryInterface( const Type& rType ) throw( RuntimeException, std::exception );
@@ -1631,8 +1624,6 @@ public:
     OUString                     SAL_CALL getImplementationName() throw(std::exception);
     sal_Bool                    SAL_CALL supportsService(const OUString& ServiceName) throw(std::exception);
     Sequence< OUString >         SAL_CALL getSupportedServiceNames(void) throw(std::exception);
-    static OUString SAL_CALL    getImplementationName_Static(  );
-    static Sequence< OUString > SAL_CALL getSupportedServiceNames_Static(void) throw();
 
     // Methoden von XIntrospection
     virtual Reference<XIntrospectionAccess> SAL_CALL inspect(const Any& aToInspectObj)
@@ -1653,16 +1644,15 @@ enum MethodType
 };
 
 // Ctor
-ImplIntrospection::ImplIntrospection( const Reference<XMultiServiceFactory> & rXSMgr )
+ImplIntrospection::ImplIntrospection( const Reference<XComponentContext> & context )
     : OComponentHelper( m_mutex )
-    , m_xSMgr( rXSMgr )
 {
     mnCacheEntryCount = 0;
     mnTPCacheEntryCount = 0;
     mpCache = NULL;
     mpTypeProviderCache = NULL;
 
-    Reference< XPropertySet > xProps( rXSMgr, UNO_QUERY );
+    Reference< XPropertySet > xProps( context->getServiceManager(), UNO_QUERY );
     OSL_ASSERT( xProps.is() );
     if (xProps.is())
     {
@@ -1771,7 +1761,7 @@ Sequence< sal_Int8 > ImplIntrospection::getImplementationId()
 // XServiceInfo
 OUString ImplIntrospection::getImplementationName() throw(std::exception)
 {
-    return getImplementationName_Static();
+    return OUString("com.sun.star.comp.stoc.Introspection");
 }
 
 // XServiceInfo
@@ -1783,25 +1773,10 @@ sal_Bool ImplIntrospection::supportsService(const OUString& ServiceName) throw(s
 // XServiceInfo
 Sequence< OUString > ImplIntrospection::getSupportedServiceNames(void) throw(std::exception)
 {
-    return getSupportedServiceNames_Static();
+    Sequence<OUString> s(1);
+    s[0] = "com.sun.star.beans.Introspection";
+    return s;
 }
-
-
-// Helper XServiceInfo
-OUString ImplIntrospection::getImplementationName_Static(  )
-{
-    return OUString::createFromAscii( IMPLEMENTATION_NAME );
-}
-
-// ORegistryServiceManager_Static
-Sequence< OUString > ImplIntrospection::getSupportedServiceNames_Static(void) throw()
-{
-    Sequence< OUString > aSNS( 1 );
-    aSNS.getArray()[0] = OUString::createFromAscii( SERVICE_NAME );
-    return aSNS;
-}
-
-
 
 // Methoden von XIntrospection
 Reference<XIntrospectionAccess> ImplIntrospection::inspect(const Any& aToInspectObj)
@@ -2841,42 +2816,29 @@ rtl::Reference< IntrospectionAccessStatic_Impl > ImplIntrospection::implInspect(
     return pAccess;
 }
 
+struct Instance {
+    explicit Instance(
+        css::uno::Reference<css::uno::XComponentContext> const & context):
+        instance(new ImplIntrospection(context))
+    {}
 
-Reference< XInterface > SAL_CALL ImplIntrospection_CreateInstance( const Reference< XMultiServiceFactory > & rSMgr )
-    throw( RuntimeException )
+    rtl::Reference<cppu::OWeakObject> instance;
+};
+
+struct Singleton:
+    public rtl::StaticWithArg<
+        Instance, css::uno::Reference<css::uno::XComponentContext>, Singleton>
+{};
+
+}
+
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
+com_sun_star_comp_stoc_Introspection_get_implementation(
+    css::uno::XComponentContext * context,
+    css::uno::Sequence<css::uno::Any> const & arguments)
 {
-    Reference< XInterface > xService = (OWeakObject*)(OComponentHelper*)new ImplIntrospection( rSMgr );
-    return xService;
+    assert(!arguments.hasElements());
+    return cppu::acquire(Singleton::get(context).instance.get());
 }
-
-}
-
-extern "C"
-{
-SAL_DLLPUBLIC_EXPORT void * SAL_CALL introspection_component_getFactory(
-    const sal_Char * pImplName, void * pServiceManager,
-    SAL_UNUSED_PARAMETER void * )
-{
-    void * pRet = 0;
-
-    if (pServiceManager && rtl_str_compare( pImplName, IMPLEMENTATION_NAME ) == 0)
-    {
-        Reference< XSingleServiceFactory > xFactory( createOneInstanceFactory(
-            reinterpret_cast< XMultiServiceFactory * >( pServiceManager ),
-            OUString::createFromAscii( pImplName ),
-            stoc_inspect::ImplIntrospection_CreateInstance,
-            stoc_inspect::ImplIntrospection::getSupportedServiceNames_Static() ) );
-
-        if (xFactory.is())
-        {
-            xFactory->acquire();
-            pRet = xFactory.get();
-        }
-    }
-
-    return pRet;
-}
-}
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

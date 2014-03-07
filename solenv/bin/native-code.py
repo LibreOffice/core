@@ -18,7 +18,6 @@ from optparse import OptionParser
 
 core_factory_list = [
     ("libembobj.a", "embobj_component_getFactory"),
-    ("libintrospectionlo.a", "introspection_component_getFactory"),
     ("libreflectionlo.a", "reflection_component_getFactory"),
     ("libstocserviceslo.a", "stocservices_component_getFactory"),
     ("libchartcontrollerlo.a", "chartcontroller_component_getFactory"),
@@ -100,6 +99,8 @@ core_constructor_list = [
     "com_sun_star_comp_Draw_GraphicExporter_get_implementation",
     "com_sun_star_comp_Svx_GraphicExportHelper_get_implementation",
     "com_sun_star_comp_Svx_GraphicImportHelper_get_implementation",
+# stoc/source/inspect/introspection.component
+    "com_sun_star_comp_stoc_Introspection_get_implementation",
 # toolkit/util/tk.component
     "stardiv_Toolkit_VCLXToolkit_get_implementation",
 # uui/util/uui.component
