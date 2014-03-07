@@ -696,7 +696,7 @@ const SwTable* SwTableFormula::FindTable( SwDoc& rDoc, const OUString& rNm ) con
         SwFrmFmt* pFmt = rTblFmts[ --nFmtCnt ];
         // if we are called from Sw3Writer, a number is dependent on the format name
         SwTableBox* pFBox;
-        if ( rNm.startsWith(pFmt->GetName().getToken(0, 0x0a)) &&
+        if ( rNm.equals(pFmt->GetName().getToken(0, 0x0a)) &&
             0 != ( pTmpTbl = SwTable::FindTable( pFmt ) ) &&
             0 != (pFBox = pTmpTbl->GetTabSortBoxes()[0] ) &&
             pFBox->GetSttNd() &&
