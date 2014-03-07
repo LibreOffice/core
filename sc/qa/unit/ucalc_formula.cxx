@@ -2192,6 +2192,69 @@ void Test::testFuncIFERROR()
     m_pDoc->DeleteTab(0);
 }
 
+void Test::testFuncSHEET()
+{
+    OUString aTabName1("test1");
+    OUString aTabName2("test2");
+    CPPUNIT_ASSERT_MESSAGE ("failed to insert sheet",
+                            m_pDoc->InsertTab (SC_TAB_APPEND, aTabName1));
+
+    m_pDoc->SetString(0, 0, 0, OUString("=SHEETS()"));
+    m_pDoc->CalcFormulaTree(false, false);
+    double original;
+    m_pDoc->GetValue(0, 0, 0, original);
+
+    CPPUNIT_ASSERT_MESSAGE("result of SHEETS() should equal the number of sheets, but doesn't.",
+                           static_cast<SCTAB>(original) == m_pDoc->GetTableCount());
+
+    CPPUNIT_ASSERT_MESSAGE ("failed to insert sheet",
+                            m_pDoc->InsertTab (SC_TAB_APPEND, aTabName2));
+
+    double modified;
+    m_pDoc->GetValue(0, 0, 0, modified);
+    CPPUNIT_ASSERT_MESSAGE("result of SHEETS() did not get updated after sheet insertion.",
+                           modified - original == 1.0);
+
+    SCTAB nTabCount = m_pDoc->GetTableCount();
+    m_pDoc->DeleteTab(--nTabCount);
+
+    m_pDoc->GetValue(0, 0, 0, modified);
+    CPPUNIT_ASSERT_MESSAGE("result of SHEETS() did not get updated after sheet removal.",
+                           modified - original == 0.0);
+
+    m_pDoc->DeleteTab(--nTabCount);
+}
+
+void Test::testFuncNOW()
+{
+    OUString aTabName("foo");
+    CPPUNIT_ASSERT_MESSAGE ("failed to insert sheet",
+                            m_pDoc->InsertTab (0, aTabName));
+
+    double val = 1;
+    m_pDoc->SetValue(0, 0, 0, val);
+    m_pDoc->SetString(0, 1, 0, OUString("=IF(A1>0;NOW();0"));
+    double now1;
+    m_pDoc->GetValue(0, 1, 0, now1);
+    CPPUNIT_ASSERT_MESSAGE("Value of NOW() should be positive.", now1 > 0.0);
+
+    val = 0;
+    m_pDoc->SetValue(0, 0, 0, val);
+    m_pDoc->CalcFormulaTree(false, false);
+    double zero;
+    m_pDoc->GetValue(0, 1, 0, zero);
+    CPPUNIT_ASSERT_MESSAGE("Result should equal the 3rd parameter of IF, which is zero.", zero == 0.0);
+
+    val = 1;
+    m_pDoc->SetValue(0, 0, 0, val);
+    m_pDoc->CalcFormulaTree(false, false);
+    double now2;
+    m_pDoc->GetValue(0, 1, 0, now2);
+    CPPUNIT_ASSERT_MESSAGE("Result should be the value of NOW() again.", (now2 - now1) >= 0.0);
+
+    m_pDoc->DeleteTab(0);
+}
+
 void Test::testFuncNUMBERVALUE()
 {
     // NUMBERVALUE fdo#57180

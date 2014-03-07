@@ -136,6 +136,8 @@ public:
     void testFuncDATEDIF();
     void testFuncINDIRECT();
     void testFuncIFERROR();
+    void testFuncSHEET();
+    void testFuncNOW();
     void testFuncGETPIVOTDATA();
     void testFuncGETPIVOTDATALeafAccess();
 
@@ -143,12 +145,6 @@ public:
     void testExternalRefFunctions();
 
     void testCopyToDocument();
-    /**
-     * Make sure the SHEETS function gets properly updated during sheet
-     * insertion and removal.
-     */
-    void testSheetsFunc();
-    void testVolatileFunc();
 
     void testHorizontalIterator();
     void testValueIterator();
@@ -385,8 +381,8 @@ public:
     CPPUNIT_TEST(testExternalRef);
     CPPUNIT_TEST(testExternalRefFunctions);
     CPPUNIT_TEST(testCopyToDocument);
-    CPPUNIT_TEST(testSheetsFunc);
-    CPPUNIT_TEST(testVolatileFunc);
+    CPPUNIT_TEST(testFuncSHEET);
+    CPPUNIT_TEST(testFuncNOW);
     CPPUNIT_TEST(testHorizontalIterator);
     CPPUNIT_TEST(testValueIterator);
     CPPUNIT_TEST(testFormulaDepTracking);
