@@ -144,7 +144,7 @@
             <menu:menuitem menu:id=".uno:Navigator"/>
             <menu:menuseparator/>
             <menu:menuitem menu:id=".uno:HeaderAndFooter"/>
-            <menu:menu menu:id=".uno:Zoom">
+            <menu:menu menu:id=".uno:ZoomMenu">
               <menu:menupopup>
                 <menu:menuitem menu:id=".uno:ZoomPage"/>
                 <menu:menuitem menu:id=".uno:ZoomPageWidth"/>

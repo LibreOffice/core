@@ -159,7 +159,7 @@
                     <menu:menuitem menu:id=".uno:HelplinesMove"/>
                 </menu:menupopup>
             </menu:menu>
-            <menu:menu menu:id=".uno:Zoom">
+            <menu:menu menu:id=".uno:ZoomMenu">
               <menu:menupopup>
                 <menu:menuitem menu:id=".uno:Zoom50Percent"/>
                 <menu:menuitem menu:id=".uno:Zoom75Percent"/>

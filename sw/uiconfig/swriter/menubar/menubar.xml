@@ -150,7 +150,7 @@
       <menu:menuitem menu:id=".uno:Sidebar"/>
       <menu:menuseparator/>
       <menu:menuitem menu:id=".uno:FullScreen"/>
-      <menu:menu menu:id=".uno:Zoom">
+      <menu:menu menu:id=".uno:ZoomMenu">
         <menu:menupopup>
           <menu:menuitem menu:id=".uno:ZoomPage"/>
           <menu:menuitem menu:id=".uno:ZoomPageWidth"/>
