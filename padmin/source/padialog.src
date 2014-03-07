@@ -463,21 +463,6 @@ String RID_TXT_PRINTERALREADYEXISTS
     Text [ en-US ] = "A printer named \"%s\" already exists. This printer will not be imported.";
 };
 
-String RID_TXT_PRINTERWITHOUTCOMMAND
-{
-    Text [ en-US ] = "The printer \"%s\" has no valid configuration and, therefore, cannot be imported.";
-};
-
-String RID_TXT_DRIVERDOESNOTEXIST
-{
-    Text [ en-US ] = "The driver for the printer \"%s1\" (%s2) is not installed. Therefore the printer cannot be imported.";
-};
-
-String RID_TXT_PRINTERADDFAILED
-{
-    Text [ en-US ] = "The printer \"%s\" could not be added.";
-};
-
 ModalDialog RID_ADD_PRINTER_DIALOG
 {
     HelpID = "padmin:ModalDialog:RID_ADD_PRINTER_DIALOG";
@@ -605,13 +590,6 @@ TabPage RID_ADDP_PAGE_CHOOSEDEV
         Pos = MAP_APPFONT ( 40, 60 );
         Size = MAP_APPFONT( 180, 10 );
         Text [ en-US ] = "Connect a P~DF converter";
-    };
-    RadioButton RID_ADDP_CHDEV_BTN_OLD
-    {
-        HelpID = "padmin:RadioButton:RID_ADDP_PAGE_CHOOSEDEV:RID_ADDP_CHDEV_BTN_OLD";
-        Pos = MAP_APPFONT ( 40, 70 );
-        Size = MAP_APPFONT( 180, 10 );
-        Text [ en-US ] = "~Import printers from a StarOffice installation";
     };
 };
 
@@ -747,39 +725,6 @@ TabPage RID_ADDP_PAGE_COMMAND
     String RID_ADDP_CMD_STR_FAXHELP
     {
         Text [ en-US ] = "The command line for fax connections is executed as follows: for each fax sent, \"(TMP)\" in the command line is replaced by a temporary file and \"(PHONE)\" in the command line is replaced by the fax number. If \"(TMP)\" appears in the command line, the PostScript code will be supplied via a file, otherwise it is passed as standard input (i.e. as a pipe).";
-    };
-};
-
-TabPage RID_ADDP_PAGE_OLDPRINTERS
-{
-    HelpID = "padmin:TabPage:RID_ADDP_PAGE_OLDPRINTERS";
-    Hide = TRUE;
-    Pos = MAP_APPFONT( 0, 30 );
-    Size = MAP_APPFONT( 240, 120 );
-    String RID_ADDP_STR_TITLE
-    {
-        Text [ en-US ] = "Import printers from old versions";
-    };
-    FixedText RID_ADDP_OLD_TXT_PRINTERS
-    {
-        Pos = MAP_APPFONT( 10, 10 );
-        Size = MAP_APPFONT( 165, 25 );
-        WordBreak = TRUE;
-        Text [ en-US ] = "~These printers can be imported. Please select the ones you want to import.";
-    };
-    MultiListBox RID_ADDP_OLD_BOX_PRINTERS
-    {
-        HelpID = "padmin:MultiListBox:RID_ADDP_PAGE_OLDPRINTERS:RID_ADDP_OLD_BOX_PRINTERS";
-        Pos = MAP_APPFONT( 10, 35 );
-        Size = MAP_APPFONT( 165, 80 );
-        Border = TRUE;
-    };
-    PushButton RID_ADDP_OLD_BTN_SELECTALL
-    {
-        HelpID = "padmin:PushButton:RID_ADDP_PAGE_OLDPRINTERS:RID_ADDP_OLD_BTN_SELECTALL";
-        Pos = MAP_APPFONT( 180, 35 );
-        Size = MAP_APPFONT( 50, 12 );
-        Text [ en-US ] = "~Select All";
     };
 };
 

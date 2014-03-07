@@ -56,7 +56,6 @@ class APChooseDevicePage : public APTabPage
     RadioButton             m_aPrinterBtn;
     RadioButton             m_aFaxBtn;
     RadioButton             m_aPDFBtn;
-    RadioButton             m_aOldBtn;
     FixedText               m_aOverTxt;
 public:
     APChooseDevicePage( AddPrinterDialog* pParent );
@@ -65,8 +64,6 @@ public:
     bool isPrinter() { return m_aPrinterBtn.IsChecked(); }
     bool isFax() { return m_aFaxBtn.IsChecked(); }
     bool isPDF() { return m_aPDFBtn.IsChecked(); }
-    bool isOld() { return m_aOldBtn.IsChecked(); }
-
 
     virtual bool check();
     virtual void fill( ::psp::PrinterInfo& rInfo );
@@ -206,7 +203,6 @@ class AddPrinterDialog : public ModalDialog
     APCommandPage*          m_pCommandPage;
     APChooseDriverPage*     m_pChooseDriverPage;
     APNamePage*             m_pNamePage;
-    APOldPrinterPage*       m_pOldPrinterPage;
     APFaxDriverPage*        m_pFaxDriverPage;
     APChooseDriverPage*     m_pFaxSelectDriverPage;
     APNamePage*             m_pFaxNamePage;

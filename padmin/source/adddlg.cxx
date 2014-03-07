@@ -51,22 +51,17 @@ APChooseDevicePage::APChooseDevicePage( AddPrinterDialog* pParent ) :
         m_aPrinterBtn( this, PaResId( RID_ADDP_CHDEV_BTN_PRINTER ) ),
         m_aFaxBtn( this, PaResId( RID_ADDP_CHDEV_BTN_FAX ) ),
         m_aPDFBtn( this, PaResId( RID_ADDP_CHDEV_BTN_PDF ) ),
-        m_aOldBtn( this, PaResId( RID_ADDP_CHDEV_BTN_OLD ) ),
         m_aOverTxt( this, PaResId( RID_ADDP_CHDEV_TXT_OVER ) )
 {
     FreeResource();
     m_aPrinterBtn.Check( true );
     m_aFaxBtn.Check( false );
     m_aPDFBtn.Check( false );
-    m_aOldBtn.Check( false );
-    if( AddPrinterDialog::getOldPrinterLocation().isEmpty() )
-        m_aOldBtn.Enable( false );
     if( ! PrinterInfoManager::get().addOrRemovePossible() )
     {
         m_aPrinterBtn.Check( false );
         m_aFaxBtn.Check( true );
         m_aPrinterBtn.Enable( false );
-        m_aOldBtn.Enable( false );
     }
 }
 
@@ -468,196 +463,6 @@ void APCommandPage::fill( PrinterInfo& rInfo )
     rInfo.m_aCommand = m_aCommandBox.GetText();
 }
 
-
-
-APOldPrinterPage::APOldPrinterPage( AddPrinterDialog* pParent )
-        : APTabPage( pParent, PaResId( RID_ADDP_PAGE_OLDPRINTERS ) ),
-          m_aOldPrinterTxt( this, PaResId( RID_ADDP_OLD_TXT_PRINTERS ) ),
-          m_aOldPrinterBox( this, PaResId( RID_ADDP_OLD_BOX_PRINTERS ) ),
-          m_aSelectAllBtn( this, PaResId( RID_ADDP_OLD_BTN_SELECTALL ) )
-{
-    FreeResource();
-
-    m_aSelectAllBtn.SetClickHdl( LINK( this, APOldPrinterPage, ClickBtnHdl ) );
-    rtl_TextEncoding aEncoding = osl_getThreadTextEncoding();
-
-    OUString aFileName( AddPrinterDialog::getOldPrinterLocation() );
-    Config aConfig( aFileName );
-
-    // read defaults
-    aConfig.SetGroup( "Xprinter,PostScript" );
-    OString aDefPageSize( aConfig.ReadKey( "PageSize" ) );
-    OString aDefOrientation( aConfig.ReadKey( "Orientation" ) );
-    OString aDefMarginLeft( aConfig.ReadKey( "MarginLeft" ) );
-    OString aDefMarginRight( aConfig.ReadKey( "MarginRight" ) );
-    OString aDefMarginTop( aConfig.ReadKey( "MarginTop" ) );
-    OString aDefMarginBottom( aConfig.ReadKey( "MarginBottom" ) );
-    OString aDefScale( aConfig.ReadKey( "Scale" ) );
-
-    aConfig.SetGroup( "devices" );
-    int nDevices = aConfig.GetKeyCount();
-    for( int nKey = 0; nKey < nDevices; nKey++ )
-    {
-        aConfig.SetGroup( "devices" );
-        OString aPrinter(aConfig.GetKeyName(nKey));
-        OString aValue(aConfig.ReadKey(aPrinter));
-        OString aPort(aValue.getToken(1, ','));
-        OString aDriver(aValue.getToken(0, ' '));
-        OString aPS( aValue.getToken(0, ',').getToken(1, ' ') );
-        OString aNewDriver(aDriver);
-        if( aDriver == "GENERIC")
-            aNewDriver = OString("SGENPRT");
-
-        if( aPS != "PostScript" )
-            continue;
-
-        const PPDParser* pParser = PPDParser::getParser(OStringToOUString(aNewDriver, aEncoding));
-        if( pParser == NULL )
-        {
-            OUString aText( PaResId( RID_TXT_DRIVERDOESNOTEXIST ) );
-            aText = aText.replaceFirst( OUString(  "%s1"  ), OStringToOUString(aPrinter, aEncoding) );
-            aText = aText.replaceFirst( OUString(  "%s2"  ), OStringToOUString(aDriver, aEncoding) );
-            InfoBox aBox( this, aText );
-            aBox.Execute();
-            continue;
-        }
-
-        // read the command
-        aConfig.SetGroup( "ports" );
-        OString aCommand( aConfig.ReadKey( aPort ) );
-        if (!aCommand.isEmpty())
-        {
-            OUString aText( PaResId( RID_TXT_PRINTERWITHOUTCOMMAND ) );
-            aText = aText.replaceFirst( OUString(  "%s"  ), OStringToOUString(aPrinter, aEncoding) );
-            InfoBox aBox( this, aText );
-            aBox.Execute();
-            continue;
-        }
-
-
-        OUString aUPrinter( AddPrinterDialog::uniquePrinterName(OStringToOUString(aPrinter, aEncoding)) );
-
-        PrinterInfo aInfo;
-        aInfo.m_aDriverName = OStringToOUString(aNewDriver, aEncoding);
-        aInfo.m_pParser         = pParser;
-        aInfo.m_aContext.setParser( pParser );
-        aInfo.m_aPrinterName    = aUPrinter;
-        aInfo.m_aCommand = OStringToOUString(aCommand, aEncoding);
-
-        // read the printer settings
-        OStringBuffer aGroup(aDriver);
-        aGroup.append(",PostScript,");
-        aGroup.append(aPort);
-        aConfig.SetGroup(aGroup.makeStringAndClear());
-
-        aValue = aConfig.ReadKey( "PageSize", aDefPageSize );
-        int nLeft, nRight, nTop, nBottom;
-        if( !aValue.isEmpty() &&
-            aInfo.m_pParser->getMargins( OStringToOUString(aValue, aEncoding),
-                                         nLeft, nRight, nTop, nBottom ) )
-        {
-            const PPDKey* pKey = aInfo.m_pParser->getKey( OUString(  "PageSize"  ) );
-            const PPDValue* pValue = pKey ? pKey->getValue( OStringToOUString(aValue, aEncoding) ) : NULL;
-            if( pKey && pValue )
-                aInfo.m_aContext.setValue( pKey, pValue );
-            aValue = aConfig.ReadKey( "MarginLeft", aDefMarginLeft );
-            if (!aValue.isEmpty())
-                aInfo.m_nLeftMarginAdjust = aValue.toInt32() - (int)((double)nLeft * 35.27777778 );
-            aValue = aConfig.ReadKey( "MarginRight", aDefMarginRight );
-            if (!aValue.isEmpty())
-                aInfo.m_nRightMarginAdjust = aValue.toInt32() - (int)((double)nRight * 35.27777778 );
-            aValue = aConfig.ReadKey( "MarginTop", aDefMarginTop );
-            if (!aValue.isEmpty())
-                aInfo.m_nTopMarginAdjust = aValue.toInt32() - (int)((double)nTop * 35.27777778 );
-            aValue = aConfig.ReadKey( "MarginBottom", aDefMarginBottom );
-            if (!aValue.isEmpty())
-                aInfo.m_nBottomMarginAdjust = aValue.toInt32() - (int)((double)nBottom * 35.27777778 );
-        }
-
-        aValue = aConfig.ReadKey( "Copies", aDefScale );
-        if (!aValue.isEmpty())
-            aInfo.m_nCopies = aValue.toInt32();
-
-        aValue = aConfig.ReadKey( "Comment" );
-        aInfo.m_aComment = OStringToOUString(aValue, aEncoding);
-
-        aValue = aConfig.ReadKey( "Level" );
-        if (!aValue.isEmpty())
-            aInfo.m_nPSLevel = aValue.toInt32();
-
-        aValue = aConfig.ReadKey( "Orientation", aDefOrientation );
-        if (!aValue.isEmpty())
-            aInfo.m_eOrientation = aValue.equalsIgnoreAsciiCase("landscape") ? orientation::Landscape : orientation::Portrait;
-        int nGroupKeys = aConfig.GetKeyCount();
-        for( int nPPDKey = 0; nPPDKey < nGroupKeys; nPPDKey++ )
-        {
-            OString aPPDKey( aConfig.GetKeyName( nPPDKey ) );
-            // ignore page region
-            // there are some ppd keys in old Xpdefaults that
-            // should never have been writte because they are defaults
-            // PageRegion leads to problems in conjunction
-            // with a not matching PageSize
-            if (aPPDKey.match("PPD_") && aPPDKey != "PPD_PageRegion")
-            {
-                aValue = aConfig.ReadKey( nPPDKey );
-                aPPDKey = aPPDKey.copy(4);
-                const PPDKey* pKey = aInfo.m_pParser->getKey( OStringToOUString(aPPDKey, RTL_TEXTENCODING_ISO_8859_1) );
-                const PPDValue* pValue = pKey ? ( aValue == "*nil" ? NULL : pKey->getValue(OStringToOUString(aValue, RTL_TEXTENCODING_ISO_8859_1)) ) : NULL;
-                if( pKey )
-                    aInfo.m_aContext.setValue( pKey, pValue, true );
-            }
-        }
-
-        m_aOldPrinters.push_back( aInfo );
-        int nPos = m_aOldPrinterBox.InsertEntry( aInfo.m_aPrinterName );
-        m_aOldPrinterBox.SetEntryData( nPos, & m_aOldPrinters.back() );
-    }
-}
-
-APOldPrinterPage::~APOldPrinterPage()
-{
-}
-
-IMPL_LINK( APOldPrinterPage, ClickBtnHdl, PushButton*, pButton )
-{
-    if( pButton == &m_aSelectAllBtn )
-    {
-        for( int i = 0; i < m_aOldPrinterBox.GetEntryCount(); i++ )
-            m_aOldPrinterBox.SelectEntryPos( i );
-    }
-    return 0;
-}
-
-void APOldPrinterPage::addOldPrinters()
-{
-    PrinterInfoManager& rManager( PrinterInfoManager::get() );
-    for( int i = 0; i < m_aOldPrinterBox.GetSelectEntryCount(); i++ )
-    {
-        PrinterInfo* pInfo = (PrinterInfo*)m_aOldPrinterBox.GetEntryData( m_aOldPrinterBox.GetSelectEntryPos( i ) );
-        pInfo->m_aPrinterName = AddPrinterDialog::uniquePrinterName( pInfo->m_aPrinterName );
-        if( ! rManager.addPrinter( pInfo->m_aPrinterName, pInfo->m_aDriverName ) )
-        {
-            OUString aText( PaResId( RID_TXT_PRINTERADDFAILED ) );
-            aText = aText.replaceFirst( OUString(  "%s"  ), pInfo->m_aPrinterName );
-                ErrorBox aBox( this, WB_OK | WB_DEF_OK, aText );
-                aBox.Execute();
-                continue;
-        }
-        rManager.changePrinterInfo( pInfo->m_aPrinterName, *pInfo );
-    }
-}
-
-bool APOldPrinterPage::check()
-{
-    return m_aOldPrinterBox.GetEntryCount() > 0;
-}
-
-void APOldPrinterPage::fill( PrinterInfo& )
-{
-}
-
-
-
 APFaxDriverPage::APFaxDriverPage( AddPrinterDialog* pParent )
         : APTabPage( pParent, PaResId( RID_ADDP_PAGE_FAXDRIVER ) ),
           m_aFaxTxt( this, PaResId( RID_ADDP_FAXDRV_TXT_DRIVER ) ),
@@ -737,7 +542,6 @@ AddPrinterDialog::AddPrinterDialog( Window* pParent )
           m_pCommandPage( NULL ),
           m_pChooseDriverPage( NULL ),
           m_pNamePage( NULL ),
-          m_pOldPrinterPage( NULL ),
           m_pFaxDriverPage( NULL ),
           m_pFaxSelectDriverPage( NULL ),
           m_pFaxNamePage( NULL ),
@@ -765,32 +569,18 @@ AddPrinterDialog::AddPrinterDialog( Window* pParent )
 
 AddPrinterDialog::~AddPrinterDialog()
 {
-    if( m_pChooseDevicePage )
-        delete m_pChooseDevicePage;
-    if( m_pChooseDriverPage )
-        delete m_pChooseDriverPage;
-    if( m_pNamePage )
-        delete m_pNamePage;
-    if( m_pCommandPage )
-        delete m_pCommandPage;
-    if( m_pOldPrinterPage )
-        delete m_pOldPrinterPage;
-    if( m_pFaxDriverPage )
-        delete m_pFaxDriverPage;
-    if( m_pFaxSelectDriverPage )
-        delete m_pFaxSelectDriverPage;
-    if( m_pFaxCommandPage )
-        delete m_pFaxCommandPage;
-    if( m_pFaxNamePage )
-        delete m_pFaxNamePage;
-    if( m_pPdfDriverPage )
-        delete m_pPdfDriverPage;
-    if( m_pPdfSelectDriverPage )
-        delete m_pPdfSelectDriverPage;
-    if( m_pPdfNamePage )
-        delete m_pPdfNamePage;
-    if( m_pPdfCommandPage )
-        delete m_pPdfCommandPage;
+    delete m_pChooseDevicePage;
+    delete m_pChooseDriverPage;
+    delete m_pNamePage;
+    delete m_pCommandPage;
+    delete m_pFaxDriverPage;
+    delete m_pFaxSelectDriverPage;
+    delete m_pFaxCommandPage;
+    delete m_pFaxNamePage;
+    delete m_pPdfDriverPage;
+    delete m_pPdfSelectDriverPage;
+    delete m_pPdfNamePage;
+    delete m_pPdfCommandPage;
 }
 
 void AddPrinterDialog::updateSettings()
@@ -819,15 +609,6 @@ void AddPrinterDialog::advance()
                 m_pChooseDriverPage = new APChooseDriverPage( this );
             m_pCurrentPage = m_pChooseDriverPage;
             m_aPrevPB.Enable( true );
-        }
-        else if( m_pChooseDevicePage->isOld() )
-        {
-            if( ! m_pOldPrinterPage )
-                m_pOldPrinterPage = new APOldPrinterPage( this );
-            m_pCurrentPage = m_pOldPrinterPage;
-            m_aPrevPB.Enable( true );
-            m_aFinishPB.Enable( true );
-            m_aNextPB.Enable( false );
         }
         else if( m_pChooseDevicePage->isFax() )
         {
@@ -940,12 +721,6 @@ void AddPrinterDialog::back()
     {
         m_pCurrentPage = m_pChooseDriverPage;
     }
-    else if( m_pCurrentPage == m_pOldPrinterPage )
-    {
-        m_pCurrentPage = m_pChooseDevicePage;
-        m_aPrevPB.Enable( false );
-        m_aNextPB.Enable( true );
-    }
     else if( m_pCurrentPage == m_pFaxDriverPage )
     {
         m_pCurrentPage = m_pChooseDevicePage;
@@ -991,35 +766,30 @@ void AddPrinterDialog::back()
 void AddPrinterDialog::addPrinter()
 {
     PrinterInfoManager& rManager( PrinterInfoManager::get() );
-    if( ! m_pChooseDevicePage->isOld() )
+    m_aPrinter.m_aPrinterName = uniquePrinterName( m_aPrinter.m_aPrinterName );
+    if( rManager.addPrinter( m_aPrinter.m_aPrinterName, m_aPrinter.m_aDriverName ) )
     {
-        m_aPrinter.m_aPrinterName = uniquePrinterName( m_aPrinter.m_aPrinterName );
-        if( rManager.addPrinter( m_aPrinter.m_aPrinterName, m_aPrinter.m_aDriverName ) )
+        PrinterInfo aInfo( rManager.getPrinterInfo( m_aPrinter.m_aPrinterName ) );
+        aInfo.m_aCommand = m_aPrinter.m_aCommand;
+        if( m_pChooseDevicePage->isPrinter() )
         {
-            PrinterInfo aInfo( rManager.getPrinterInfo( m_aPrinter.m_aPrinterName ) );
-            aInfo.m_aCommand = m_aPrinter.m_aCommand;
-            if( m_pChooseDevicePage->isPrinter() )
-            {
-                if( m_pNamePage->isDefault() )
-                    rManager.setDefaultPrinter( m_aPrinter.m_aPrinterName );
-            }
-            else if( m_pChooseDevicePage->isFax() )
-            {
-                aInfo.m_aFeatures = "fax=";
-                if( m_pFaxNamePage->isFaxSwallow() )
-                    aInfo.m_aFeatures += "swallow";
-            }
-            else if( m_pChooseDevicePage->isPDF() )
-            {
-                OUString aPdf( "pdf=" );
-                aPdf += m_pPdfCommandPage->getPdfDir();
-                aInfo.m_aFeatures = aPdf;
-            }
-            rManager.changePrinterInfo( m_aPrinter.m_aPrinterName, aInfo );
+            if( m_pNamePage->isDefault() )
+                rManager.setDefaultPrinter( m_aPrinter.m_aPrinterName );
         }
+        else if( m_pChooseDevicePage->isFax() )
+        {
+            aInfo.m_aFeatures = "fax=";
+            if( m_pFaxNamePage->isFaxSwallow() )
+                aInfo.m_aFeatures += "swallow";
+        }
+        else if( m_pChooseDevicePage->isPDF() )
+        {
+            OUString aPdf( "pdf=" );
+            aPdf += m_pPdfCommandPage->getPdfDir();
+            aInfo.m_aFeatures = aPdf;
+        }
+        rManager.changePrinterInfo( m_aPrinter.m_aPrinterName, aInfo );
     }
-    else if( m_pOldPrinterPage )
-        m_pOldPrinterPage->addOldPrinters();
 }
 
 IMPL_LINK( AddPrinterDialog, ClickBtnHdl, PushButton*, pButton )

@@ -90,9 +90,6 @@
 #define RID_TXT_TESTPAGE_DATE                    1070
 #define RID_TXT_TESTPAGE_TIME                    1071
 #define RID_TXT_PRINTERALREADYEXISTS            1072
-#define RID_TXT_PRINTERWITHOUTCOMMAND            1073
-#define RID_TXT_PRINTERADDFAILED                1074
-#define RID_TXT_DRIVERDOESNOTEXIST               1075
 #define RID_TXT_TESTPAGE_COMMENT                1076
 #define RID_TXT_TESTPAGE_NAME                    1077
 
@@ -122,7 +119,6 @@
 #define RID_ADDP_CHDEV_BTN_PRINTER              2
 #define RID_ADDP_CHDEV_BTN_FAX                  3
 #define RID_ADDP_CHDEV_BTN_PDF                  4
-#define RID_ADDP_CHDEV_BTN_OLD                  5
 
 #define RID_ADDP_PAGE_CHOOSEDRIVER              2002
 #define RID_ADDP_CHDRV_TXT_DRIVER               1
@@ -151,11 +147,6 @@
 #define RID_ADDP_CMD_EDT_PDFDIR                 7
 #define RID_ADDP_CMD_BTN_PDFDIR                 8
 #define RID_ADDP_CMD_BOX_PDFCOMMAND             9
-
-#define RID_ADDP_PAGE_OLDPRINTERS               2005
-#define RID_ADDP_OLD_TXT_PRINTERS               1
-#define RID_ADDP_OLD_BOX_PRINTERS               2
-#define RID_ADDP_OLD_BTN_SELECTALL              3
 
 #define RID_ADDP_PAGE_FAXDRIVER                 2006
 #define RID_ADDP_FAXDRV_TXT_DRIVER              1
