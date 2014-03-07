@@ -4438,7 +4438,7 @@ StackVar ScInterpreter::Interpret()
                         // This matrix represents a range reference. Apply implicit intersection.
                         double fVal = applyImplicitIntersection(aMat, aPos);
                         if (rtl::math::isNan(fVal))
-                            PushError(errCellNoValue);
+                            PushNoValue();
                         else
                             PushInt(fVal);
                     }
