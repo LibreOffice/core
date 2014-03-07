@@ -26,11 +26,12 @@
 #include <rtl/ustring.hxx>
 #include <sal/types.h>
 #include <vcl/metric.hxx>
+#include <tools/solar.h>
 
 class ImplFontListNameInfo;
 class OutputDevice;
 
-/*************************************************************************
+/*
 
 Beschreibung
 ============
@@ -130,10 +131,7 @@ Point. Der letzte Wert des Array ist 0. Das Array, was zurueckgegeben wird,
 wird von der FontList wieder zerstoert. Nach dem Aufruf der naechsten Methode
 von der FontList, sollte deshalb das Array nicht mehr referenziert werden.
 
-*************************************************************************/
-
-
-// - FontList -
+*/
 
 
 #define FONTLIST_FONTINFO_NOTFOUND  ((sal_uInt16)0xFFFF)
