@@ -16,6 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
+#ifndef INCLUDED_BRIDGES_SOURCE_CPP_UNO_GCC3_LINUX_S390X_SHARE_HXX
+#define INCLUDED_BRIDGES_SOURCE_CPP_UNO_GCC3_LINUX_S390X_SHARE_HXX
 
 #include "uno/mapping.h"
 
@@ -85,3 +87,4 @@ namespace s390x
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
+#endif

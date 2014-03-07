@@ -16,6 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
+#ifndef INCLUDED_BRIDGES_SOURCE_CPP_UNO_MINGW_INTEL_SMALLSTRUCT_HXX
+#define INCLUDED_BRIDGES_SOURCE_CPP_UNO_MINGW_INTEL_SMALLSTRUCT_HXX
 
 #include "typelib/typeclass.h"
 #include "typelib/typedescription.h"
@@ -27,3 +29,4 @@ bool isSmallStruct(typelib_TypeDescription const * type);
 } } }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
+#endif
