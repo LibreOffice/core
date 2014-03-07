@@ -1280,12 +1280,17 @@
           <value>9</value>
         </prop>
       </node>
-      <node oor:name=".uno:Zoom" oor:op="replace">
+      <node oor:name=".uno:ZoomMenu" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">~Zoom...</value>
+          <value xml:lang="en-US">~Zoom</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>1</value>
+        </prop>
+      </node>
+      <node oor:name=".uno:Zoom" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">~Zoom...</value>
         </prop>
       </node>
       <node oor:name=".uno:SpinButton" oor:op="replace">
