@@ -639,7 +639,6 @@ Size ToolbarMenu::implCalcSize()
     Size aMaxImgSz;
     long nMaxTextWidth = 0;
     long nMinMenuItemHeight = nFontHeight+2;
-    sal_Bool bCheckable = sal_False;
 
     const int nEntryCount = mpImpl->maEntryVector.size();
     int nEntry;
@@ -668,8 +667,6 @@ Size ToolbarMenu::implCalcSize()
 
     if ( aMaxImgSz.Width() )
         mpImpl->mnTextPos += std::max( nExtra, 7L );
-    if ( bCheckable )
-        mpImpl->mnTextPos += 16;
 
     // set heights, calc maximum width
     for( nEntry = 0; nEntry < nEntryCount; nEntry++ )
@@ -678,9 +675,6 @@ Size ToolbarMenu::implCalcSize()
 
         if( pEntry )
         {
-            if ( ( pEntry->mnBits ) & ( MIB_RADIOCHECK | MIB_CHECKABLE ) )
-                bCheckable = sal_True;
-
             // Text:
             if( pEntry->mbHasText || pEntry->mbHasImage )
             {
