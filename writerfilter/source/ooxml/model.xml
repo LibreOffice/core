@@ -23,6 +23,7 @@
   <namespace-alias name="http://schemas.openxmlformats.org/officeDocument/2006/relationships/theme" alias="theme" id="officeRelTheme"/>
   <namespace-alias name="http://schemas.openxmlformats.org/drawingml/2006/wordprocessingDrawing" alias="wordprocessingDrawing" id="dmlWordDr"/>
   <namespace-alias name="http://schemas.openxmlformats.org/drawingml/2006/main" alias="drawingml" id="dml"/>
+  <namespace-alias name="http://purl.oclc.org/ooxml/drawingml/main" alias="drawingml" id="dml"/>
   <namespace-alias name="urn:schemas-microsoft-com:vml" alias="vml" id="vml"/>
   <namespace-alias name="http://schemas.openxmlformats.org/drawingml/2006/picture" alias="picture" id="dmlPicture"/>
   <namespace-alias name="http://schemas.openxmlformats.org/drawingml/2006/diagram" alias="diagram" id="dmlDiagram"/>
@@ -32,6 +33,7 @@
   <namespace-alias name="http://schemas.openxmlformats.org/drawingml/2006/chart" alias="chart" id="dmlChart"/>
   <namespace-alias name="urn:schemas-microsoft-com:office:word" alias="vml_wordprocessingDrawing" id="vmlWord"/>
   <namespace-alias name="http://schemas.openxmlformats.org/wordprocessingml/2006/main" alias="wordprocessingml" id="doc"/>
+  <namespace-alias name="http://purl.oclc.org/ooxml/wordprocessingml/main" alias="wordprocessingml" id="doc"/>
   <namespace-alias name="http://schemas.openxmlformats.org/officeDocument/2006/math" alias="math" id="officeMath"/>
   <namespace-alias name="http://schemas.openxmlformats.org/schemaLibrary/2006/main" alias="schemaLibrary" id="schema"/>
   <namespace-alias name="http://schemas.openxmlformats.org/markup-compatibility/2006" alias="mce" id="mce"/>

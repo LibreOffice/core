@@ -51,8 +51,9 @@
   
   <xsl:include href="factorytools.xsl"/>
 
+<xsl:key name="namespaces-by-id" match="namespace-alias" use="@id"/>
 <xsl:template name="namespaceids">
-  <xsl:for-each select="//namespace-alias">
+  <xsl:for-each select="//namespace-alias[generate-id() = generate-id(key('namespaces-by-id', @id)[1])]">
     <xsl:text>
 const sal_uInt32 </xsl:text>
 <xsl:call-template name="namespaceid"/>
