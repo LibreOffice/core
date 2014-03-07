@@ -720,8 +720,11 @@ bool XFillBitmapItem::PutValue( const ::com::sun::star::uno::Any& rVal, sal_uInt
     if( bSetURL )
     {
         GraphicObject aGrafObj( GraphicObject::CreateGraphicObjectFromURL( aURL ) );
-        XOBitmap aBMP( aGrafObj );
-        SetBitmapValue( aBMP );
+        if( aGrafObj.GetType() != GRAPHIC_NONE )
+        {
+            XOBitmap aBMP( aGrafObj );
+            SetBitmapValue( aBMP );
+        }
     }
     if( bSetBitmap )
     {
