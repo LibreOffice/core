@@ -482,6 +482,9 @@ static const XclFunctionInfo saFuncTable_2010[] =
     EXC_FUNCENTRY_V_RX( ocModalValue_Multi, 1, MX,  0,  "MODE.MULT" ),
     EXC_FUNCENTRY_V_VR( ocNegBinomDist_MS,  4,  4,  0,  "NEGBINOM.DIST" ),
     EXC_FUNCENTRY_V_VR( ocZTest_MS,         2,  3,  0,  "Z.TEST" ),
+    EXC_FUNCENTRY_V_VR( ocCeil_MS,          2,  2,  0,  "CEILING.PRECISE" ),
+    EXC_FUNCENTRY_V_VR( ocCeil_ISO,         2,  2,  0,  "ISO.CEILING" ),
+    EXC_FUNCENTRY_V_VR( ocFloor_MS,         2,  2,  0,  "FLOOR.PRECISE" )
 };
 
 /** Functions new in Excel 2013.

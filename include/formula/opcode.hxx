@@ -189,6 +189,9 @@ enum OpCodeEnum
     // Functions with more than one parameters
         ocArcTan2           = SC_OPCODE_ARC_TAN_2,
         ocCeil              = SC_OPCODE_CEIL,
+        ocCeil_MS           = SC_OPCODE_CEIL_MS,
+        ocCeil_ISO          = SC_OPCODE_CEIL_ISO,
+        ocFloor_MS          = SC_OPCODE_FLOOR_MS,
         ocFloor             = SC_OPCODE_FLOOR,
         ocRound             = SC_OPCODE_ROUND,
         ocRoundUp           = SC_OPCODE_ROUND_UP,

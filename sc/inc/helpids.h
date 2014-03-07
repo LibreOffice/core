@@ -701,5 +701,8 @@
 #define HID_FUNC_MODAL_VALUE_MULTI                              "SC_HID_FUNC_MODAL_VALUE_MULTI"
 #define HID_FUNC_NEGBINOMDIST_MS                                "SC_HID_FUNC_NEGBINOMDIST_MS"
 #define HID_FUNC_Z_TEST_MS                                      "SC_HID_FUNC_Z_TEST_MS"
+#define HID_FUNC_CEIL_MS                                        "SC_HID_FUNC_CEIL_MS"
+#define HID_FUNC_CEIL_ISO                                       "SC_HID_FUNC_CEIL_ISO"
+#define HID_FUNC_FLOOR_MS                                       "SC_HID_FUNC_FLOOR_MS"
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
