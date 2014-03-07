@@ -2837,7 +2837,8 @@ com_sun_star_comp_stoc_Introspection_get_implementation(
     css::uno::XComponentContext * context,
     css::uno::Sequence<css::uno::Any> const & arguments)
 {
-    assert(!arguments.hasElements());
+    SAL_WARN_IF(
+        arguments.hasElements(), "stoc", "unexpected singleton arguments");
     return cppu::acquire(Singleton::get(context).instance.get());
 }
 
