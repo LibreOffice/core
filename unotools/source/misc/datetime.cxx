@@ -215,6 +215,23 @@ void typeConvert(const starutil::DateTime& _rDateTime, DateTime& _rOut)
 }
 
 
+void extractDate(const starutil::DateTime& _rDateTime, starutil::Date& _rOut)
+{
+    _rOut.Day = _rDateTime.Day;
+    _rOut.Month = _rDateTime.Month;
+    _rOut.Year = _rDateTime.Year;
+}
+
+
+void extractTime(const starutil::DateTime& _rDateTime, starutil::Time& _rOut)
+{
+    _rOut.Hours = _rDateTime.Hours;
+    _rOut.Minutes =  _rDateTime.Minutes;
+    _rOut.Seconds = _rDateTime.Seconds;
+    _rOut.NanoSeconds = _rDateTime.NanoSeconds;
+}
+
+
 OUString toISO8601(const starutil::DateTime& rDateTime)
 {
     OUStringBuffer rBuffer;
