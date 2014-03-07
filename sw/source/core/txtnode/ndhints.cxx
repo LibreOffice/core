@@ -294,7 +294,7 @@ bool SwpHintsArray::Check(bool bPortionsMerged) const
                 RES_TXTATR_CHARFMT == pHt->Which())
             {
                 // mostly ignore the annoying no-length hints
-                // BuildPortions inserts these in the middle of an exsiting one
+                // BuildPortions inserts these in the middle of an existing one
                 bool const bNoLength(*pHt->GetStart() == *pHt->End());
                 bool bNeedContinuation(!bNoLength && pHt->IsFormatIgnoreEnd());
                 bool bForbidContinuation(!bNoLength && !bNeedContinuation);
