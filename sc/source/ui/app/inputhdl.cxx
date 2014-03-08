@@ -3587,7 +3587,12 @@ void ScInputHandler::NotifyChange( const ScInputHdlState* pState,
                                 aPosStr = r.Format(SCA_VALID | nFlags, pDoc, aAddrDetails);
                             }
                             else
+                            {
                                 aPosStr = aCursorPos.Format(SCA_VALID | nFlags, pDoc, aAddrDetails);
+                                ScViewData* pViewData = pActiveViewSh->GetViewData();
+                                SfxBindings& rBindings = pViewData->GetBindings();
+                                rBindings.Invalidate( SID_STATUS_CURPOS );              //statusbar position update
+                             }
                         }
 
                         // Disable the accessible VALUE_CHANGE event
