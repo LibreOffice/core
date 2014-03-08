@@ -2968,9 +2968,9 @@ DECLARE_OOXMLEXPORT_TEST(testDateControl, "date-control.docx")
     // check imported control
     uno::Reference<drawing::XControlShape> xControl(getShape(1), uno::UNO_QUERY);
     util::Date aDate = getProperty<util::Date>(xControl->getControl(), "Date");
-    CPPUNIT_ASSERT_EQUAL(5,     sal_Int32(aDate.Day));
-    CPPUNIT_ASSERT_EQUAL(3,     sal_Int32(aDate.Month));
-    CPPUNIT_ASSERT_EQUAL(2014,  sal_Int32(aDate.Year));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(5),    sal_Int32(aDate.Day));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(3),    sal_Int32(aDate.Month));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(2014), sal_Int32(aDate.Year));
 }
 
 #endif
