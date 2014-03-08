@@ -74,10 +74,11 @@ DEFINE_XSERVICEINFO_MULTISERVICE_2      (   LanguageSelectionMenuController     
 
 DEFINE_INIT_SERVICE                     (   LanguageSelectionMenuController, {} )
 
-LanguageSelectionMenuController::LanguageSelectionMenuController( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& xContext ) :
-    svt::PopupMenuControllerBase( xContext ),
-    m_bShowMenu( sal_True ),
-    m_aLangGuessHelper( xContext )
+LanguageSelectionMenuController::LanguageSelectionMenuController( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& xContext )
+    : svt::PopupMenuControllerBase(xContext)
+    , m_bShowMenu(sal_True)
+    , m_nScriptType(LS_SCRIPT_LATIN | LS_SCRIPT_ASIAN | LS_SCRIPT_COMPLEX)
+    , m_aLangGuessHelper(xContext)
 {
 }
 
