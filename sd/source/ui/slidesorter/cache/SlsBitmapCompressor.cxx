@@ -145,7 +145,7 @@ Bitmap ResolutionReduction::Decompress (const BitmapReplacement& rBitmapData) co
     const ResolutionReducedReplacement* pData (
         dynamic_cast<const ResolutionReducedReplacement*>(&rBitmapData));
 
-    if ( ! pData->maPreview.IsEmpty())
+    if ( pData && ! pData->maPreview.IsEmpty())
     {
         aResult = pData->maPreview;
         if (pData->maOriginalSize.Width() > mnWidth)
