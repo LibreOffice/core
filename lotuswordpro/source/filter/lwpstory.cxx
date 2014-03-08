@@ -462,7 +462,7 @@ OUString LwpStory::GetContentText(sal_Bool bAllText)
 {
     if (bAllText)//convert all text fribs
     {
-        OUString sText = A2OUSTR("");
+        OUString sText("");
         //process para list
         LwpPara* pPara = dynamic_cast<LwpPara*>(GetFirstPara()->obj());
         while (pPara)
@@ -479,12 +479,12 @@ OUString LwpStory::GetContentText(sal_Bool bAllText)
         if(pObj)
         {
             LwpPara* pPara = dynamic_cast<LwpPara*>(pObj);
-            if (pPara->GetNext()->obj() != NULL)
-                return A2OUSTR("");
+            if (!pPara || pPara->GetNext()->obj() != NULL)
+                return OUString("");
             pPara->SetFoundry(m_pFoundry);
             return pPara->GetContentText();
         }
-        return  A2OUSTR("");
+        return  OUString("");
     }
 
 }
@@ -500,15 +500,15 @@ OUString LwpStory::RegisterFirstFribStyle()
         XFStyleManager* pXFStyleManager = LwpGlobalMgr::GetInstance()->GetXFStyleManager();
         XFTextStyle* pBaseStyle = pXFStyleManager->FindTextStyle(pFirstFrib->GetStyleName());
         if (pBaseStyle == NULL)
-            return A2OUSTR("");
+            return OUString("");
         XFTextStyle* pStyle = new XFTextStyle;
         *pStyle = *pBaseStyle;
-        OUString sName = A2OUSTR("Ruby") + pFirstFrib->GetStyleName();
+        OUString sName = "Ruby" + pFirstFrib->GetStyleName();
         pStyle->SetStyleName(sName);
         pXFStyleManager->AddStyle(pStyle);
         return sName;
     }
-    return A2OUSTR("");
+    return OUString("");
 }
 
 sal_Bool LwpStory::IsBullStyleUsedBefore(const OUString& rStyleName, const sal_uInt8& nPos)
