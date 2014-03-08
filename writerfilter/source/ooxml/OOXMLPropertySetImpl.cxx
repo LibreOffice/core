@@ -660,11 +660,6 @@ string OOXMLHexValue::toString() const
 
 // OOXMLUniversalMeasureValue
 
-OOXMLUniversalMeasureValue::OOXMLUniversalMeasureValue(sal_uInt32 nValue)
-    : mnValue(nValue)
-{
-}
-
 OOXMLUniversalMeasureValue::OOXMLUniversalMeasureValue(const OUString& rValue)
 {
     if (rValue.endsWith("pt"))

@@ -220,7 +220,6 @@ class OOXMLUniversalMeasureValue : public OOXMLValue
 protected:
     sal_uInt32 mnValue;
 public:
-    explicit OOXMLUniversalMeasureValue(sal_uInt32 nValue);
     explicit OOXMLUniversalMeasureValue(const OUString& rValue);
     virtual ~OOXMLUniversalMeasureValue();
 
