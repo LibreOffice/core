@@ -2429,6 +2429,8 @@ void SdrEdgeObj::NbcSetPoint(const Point& rPnt, sal_uInt32 i)
 }
 
 SdrEdgeObjGeoData::SdrEdgeObjGeoData()
+    : bEdgeTrackDirty(false)
+    , bEdgeTrackUserDefined(false)
 {
     pEdgeTrack=new XPolygon;
 }
