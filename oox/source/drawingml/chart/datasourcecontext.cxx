@@ -110,8 +110,9 @@ void DoubleSequenceContext::onCharacters( const OUString& rChars )
 
 
 
-StringSequenceContext::StringSequenceContext( ContextHandler2Helper& rParent, DataSequenceModel& rModel ) :
-    DataSequenceContextBase( rParent, rModel )
+StringSequenceContext::StringSequenceContext( ContextHandler2Helper& rParent, DataSequenceModel& rModel )
+    : DataSequenceContextBase( rParent, rModel )
+    , mnPtIndex(-1)
 {
 }
 
