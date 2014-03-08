@@ -150,7 +150,9 @@ void test::BootstrapFixture::validate(const OUString& rPath, test::ValidationFor
         aValidator = "officeotron ";
     }
     else
-        return;
+    {
+        aValidator = "odfvalidator ";
+    }
 
     utl::TempFile aOutput;
     aOutput.EnableKillingFile();
@@ -182,6 +184,14 @@ void test::BootstrapFixture::validate(const OUString& rPath, test::ValidationFor
                 SAL_WARN("test", aContentOUString);
             }
             CPPUNIT_ASSERT_EQUAL_MESSAGE(aMsg.getStr(), sal_Int32(0), nErrors);
+        }
+    }
+    else if( eFormat == test::ODF && !aContentOUString.isEmpty() )
+    {
+        if( aContentOUString.indexOf("Error") != -1 )
+        {
+            SAL_WARN("test", aContentOUString);
+            CPPUNIT_FAIL("validation errors during export");
         }
     }
 #endif

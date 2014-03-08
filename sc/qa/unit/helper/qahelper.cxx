@@ -616,6 +616,8 @@ ScDocShellRef ScBootstrapFixture::saveAndReload(
     ScDocShellRef xDocSh = load(aTempFile.GetURL(), rFilter, rUserData, rTypeName, nFormatType, nFormat );
     if(nFormatType == XLSX_FORMAT_TYPE)
         validate(aTempFile.GetFileName(), test::OOXML);
+    else if (nFormatType == ODS_FORMAT_TYPE)
+        validate(aTempFile.GetFileName(), test::ODF);
     return xDocSh;
 }
 
