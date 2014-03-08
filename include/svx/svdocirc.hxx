@@ -55,10 +55,6 @@ protected:
     SdrObjKind                  meCircleKind;
     long                        nStartWink;
     long                        nEndWink;
-
-    // bitfield
-    unsigned                    mbPolygonIsLine : 1;
-
 private:
      SVX_DLLPRIVATE basegfx::B2DPolygon ImpCalcXPolyCirc(const SdrObjKind eKind, const Rectangle& rRect1, long nStart, long nEnd) const;
     SVX_DLLPRIVATE void ImpSetCreateParams(SdrDragStat& rStat) const;
