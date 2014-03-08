@@ -52,6 +52,7 @@ SvMetaSlot::SvMetaSlot( SvMetaType * pType )
     , aRecordAbsolute( sal_False, sal_False )
     , pLinkedSlot(0)
     , pNextSlot(0)
+    , nListPos(0)
     , pEnumValue(0)
 {
 }
