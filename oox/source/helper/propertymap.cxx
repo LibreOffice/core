@@ -222,7 +222,6 @@ bool PropertyMap::empty() const
 
 void PropertyMap::assignUsed( const PropertyMap& rPropMap )
 {
-    SAL_WARN_IF(rPropMap.maProperties.size() > maProperties.size(), "oox", "too many properties");
     maProperties.insert(rPropMap.maProperties.begin(), rPropMap.maProperties.end());
 }
 
