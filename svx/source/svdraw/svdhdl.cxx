@@ -1074,15 +1074,15 @@ void SdrHdlColor::SetSize(const Size& rNew)
     }
 }
 
-
 // class SdrHdlGradient
-
 SdrHdlGradient::SdrHdlGradient(const Point& rRef1, const Point& rRef2, sal_Bool bGrad)
-:   SdrHdl(rRef1, bGrad ? HDL_GRAD : HDL_TRNS),
-    pColHdl1(NULL),
-    pColHdl2(NULL),
-    a2ndPos(rRef2),
-    bGradient(bGrad)
+    : SdrHdl(rRef1, bGrad ? HDL_GRAD : HDL_TRNS)
+    , pColHdl1(NULL)
+    , pColHdl2(NULL)
+    , a2ndPos(rRef2)
+    , bGradient(bGrad)
+    , bMoveSingleHandle(false)
+    , bMoveFirstHandle(false)
 {
 }
 
