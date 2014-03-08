@@ -72,7 +72,6 @@ writerfilter_GEN_ooxml_ResourceIds_hxx=$(writerfilter_WORK)/ooxml/resourceids.hx
 writerfilter_GEN_ooxml_Token_tmp=$(writerfilter_WORK)/token.tmp
 writerfilter_GEN_ooxml_Token_xml=$(writerfilter_WORK)/token.xml
 writerfilter_SRC_doctok_Model=$(writerfilter_SRC)/doctok/resources.xmi
-writerfilter_SRC_doctok_ResourceTools_xsl=$(writerfilter_SRC)/doctok/resourcetools.xsl
 writerfilter_SRC_model_NamespacePreprocess=$(writerfilter_SRC)/resourcemodel/namespace_preprocess.pl
 writerfilter_SRC_ooxml_Analyze_model_xsl=$(writerfilter_SRC)/ooxml/analyzemodel.xsl
 writerfilter_SRC_ooxml_FactoryTools_xsl=$(writerfilter_SRC)/ooxml/factorytools.xsl
