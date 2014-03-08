@@ -79,8 +79,8 @@ inline void XFPageCount::ToXml(IXFStream *pStrm)
     IXFAttrList *pAttrList = pStrm->GetAttrList();
     pAttrList->Clear();
 
-    pStrm->StartElement( A2OUSTR("text:page-count") );
-    pStrm->EndElement( A2OUSTR("text:page-count") );
+    pStrm->StartElement( "text:page-count" );
+    pStrm->EndElement( "text:page-count" );
 }
 
 #endif

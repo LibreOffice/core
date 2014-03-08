@@ -82,9 +82,9 @@ void    XFDrawLineStyle::ToXml(IXFStream *pStrm)
     IXFAttrList *pAttrList = pStrm->GetAttrList();
 
     pAttrList->Clear();
-    pAttrList->AddAttribute( A2OUSTR("draw:name"), GetStyleName());
+    pAttrList->AddAttribute( "draw:name", GetStyleName());
     //simple place here:
-    pAttrList->AddAttribute( A2OUSTR("draw:style"), A2OUSTR("rect"));
+    pAttrList->AddAttribute( "draw:style", "rect");
 
     if( m_eLineStyle == enumXFLineDot )
     {
@@ -92,30 +92,30 @@ void    XFDrawLineStyle::ToXml(IXFStream *pStrm)
     }
     else if( m_eLineStyle == enumXFLineDash )
     {
-        pAttrList->AddAttribute( A2OUSTR("draw:dots1"), Int32ToOUString(m_nNumber1));
-        pAttrList->AddAttribute( A2OUSTR(" draw:dots1-length"), DoubleToOUString(m_fLength1) + A2OUSTR("cm"));
+        pAttrList->AddAttribute( "draw:dots1", OUString::number(m_nNumber1));
+        pAttrList->AddAttribute( " draw:dots1-length", DoubleToOUString(m_fLength1) + "cm");
 
-        pAttrList->AddAttribute( A2OUSTR("draw:dots2"), Int32ToOUString(m_nNumber2));
-        pAttrList->AddAttribute( A2OUSTR(" draw:dots2-length"), DoubleToOUString(m_fLength2) + A2OUSTR("cm"));
+        pAttrList->AddAttribute( "draw:dots2", OUString::number(m_nNumber2));
+        pAttrList->AddAttribute( " draw:dots2-length", DoubleToOUString(m_fLength2) + "cm");
     }
     else if( m_eLineStyle == enumXFLineDotDash )
     {
-        pAttrList->AddAttribute( A2OUSTR("draw:dots1"), Int32ToOUString(m_nNumber1));
+        pAttrList->AddAttribute( "draw:dots1", OUString::number(m_nNumber1));
 
-        pAttrList->AddAttribute( A2OUSTR("draw:dots2"), Int32ToOUString(m_nNumber2));
-        pAttrList->AddAttribute( A2OUSTR(" draw:dots2-length"), DoubleToOUString(m_fLength2) + A2OUSTR("cm"));
+        pAttrList->AddAttribute( "draw:dots2", OUString::number(m_nNumber2));
+        pAttrList->AddAttribute( " draw:dots2-length", DoubleToOUString(m_fLength2) + "cm");
     }
     else if( m_eLineStyle == enumXFLineDashDot )
     {
-        pAttrList->AddAttribute( A2OUSTR("draw:dots1"), Int32ToOUString(m_nNumber1));
-        pAttrList->AddAttribute( A2OUSTR(" draw:dots1-length"), DoubleToOUString(m_fLength1) + A2OUSTR("cm"));
+        pAttrList->AddAttribute( "draw:dots1", OUString::number(m_nNumber1));
+        pAttrList->AddAttribute( " draw:dots1-length", DoubleToOUString(m_fLength1) + "cm");
 
-        pAttrList->AddAttribute( A2OUSTR("draw:dots2"), Int32ToOUString(m_nNumber2));
+        pAttrList->AddAttribute( "draw:dots2", OUString::number(m_nNumber2));
     }
 
-    pAttrList->AddAttribute( A2OUSTR("draw:distance"), DoubleToOUString(m_fSpace) + A2OUSTR("cm") );
+    pAttrList->AddAttribute( "draw:distance", DoubleToOUString(m_fSpace) + "cm" );
 
-    pStrm->StartElement( A2OUSTR("draw:stroke-dash") );
-    pStrm->EndElement( A2OUSTR("draw:stroke-dash") );
+    pStrm->StartElement( "draw:stroke-dash" );
+    pStrm->EndElement( "draw:stroke-dash" );
 }
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -94,19 +94,19 @@ inline void XFListItem::ToXml(IXFStream *pStrm)
     pAttrList->Clear();
 
     if( !GetStyleName().isEmpty() )
-        pAttrList->AddAttribute( A2OUSTR("text:style-name"), GetStyleName() );
+        pAttrList->AddAttribute( "text:style-name", GetStyleName() );
 
     if( !m_bIsHeader )
     {
-        pStrm->StartElement( A2OUSTR("text:list-item") );
+        pStrm->StartElement( "text:list-item" );
         XFContentContainer::ToXml(pStrm);
-        pStrm->EndElement( A2OUSTR("text:list-item") );
+        pStrm->EndElement( "text:list-item" );
     }
     else
     {
-        pStrm->StartElement( A2OUSTR("text:list-header") );
+        pStrm->StartElement( "text:list-header" );
         XFContentContainer::ToXml(pStrm);
-        pStrm->EndElement( A2OUSTR("text:list-header") );
+        pStrm->EndElement( "text:list-header" );
     }
 }
 

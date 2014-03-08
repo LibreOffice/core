@@ -77,27 +77,27 @@ void    XFRowStyle::ToXml(IXFStream *pStrm)
     IXFAttrList *pAttrList = pStrm->GetAttrList();
     pAttrList->Clear();
 
-    pAttrList->AddAttribute( A2OUSTR("style:name"), GetStyleName() );
+    pAttrList->AddAttribute( "style:name", GetStyleName() );
     if( !GetParentStyleName().isEmpty() )
-        pAttrList->AddAttribute(A2OUSTR("style:parent-style-name"),GetParentStyleName());
+        pAttrList->AddAttribute("style:parent-style-name",GetParentStyleName());
 
-    pAttrList->AddAttribute( A2OUSTR("style:family"), A2OUSTR("table-row") );
-    pStrm->StartElement( A2OUSTR("style:style") );
+    pAttrList->AddAttribute( "style:family", "table-row" );
+    pStrm->StartElement( "style:style" );
 
     pAttrList->Clear();
     if( m_fMinHeight )
-        pAttrList->AddAttribute( A2OUSTR("style:min-row-height"), DoubleToOUString(m_fMinHeight) + A2OUSTR("cm") );
+        pAttrList->AddAttribute( "style:min-row-height", DoubleToOUString(m_fMinHeight) + "cm" );
     else if( m_fHeight )
-        pAttrList->AddAttribute( A2OUSTR("style:row-height"), DoubleToOUString(m_fHeight) + A2OUSTR("cm") );
+        pAttrList->AddAttribute( "style:row-height", DoubleToOUString(m_fHeight) + "cm" );
 
     if( m_aBackColor.IsValid() && !m_pBGImage )
-        pAttrList->AddAttribute( A2OUSTR("fo:background-color"), m_aBackColor.ToString() );
-    pStrm->StartElement( A2OUSTR("style:properties") );
+        pAttrList->AddAttribute( "fo:background-color", m_aBackColor.ToString() );
+    pStrm->StartElement( "style:properties" );
     if( m_pBGImage )
         m_pBGImage->ToXml(pStrm);
-    pStrm->EndElement( A2OUSTR("style:properties") );
+    pStrm->EndElement( "style:properties" );
 
-    pStrm->EndElement( A2OUSTR("style:style") );
+    pStrm->EndElement( "style:style" );
 }
 
 XFRowStyle& XFRowStyle::operator=(XFRowStyle const &other)

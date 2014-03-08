@@ -176,21 +176,21 @@ OUString   XFCell::GetCellName()
     XFRow *pRow = m_pOwnerRow;
 
     if( !pRow )
-        return A2OUSTR("");
+        return "";
 
     XFTable *pTable = pRow->GetOwnerTable();
 
     if( !pTable )
-        return A2OUSTR("");
+        return "";
 
     OUString name;
     if( pTable->IsSubTable() )
     {
-        name = pTable->GetTableName() + A2OUSTR(".") + Int32ToOUString(m_nCol) + A2OUSTR(".") + Int32ToOUString(pRow->GetRow());
+        name = pTable->GetTableName() + "." + OUString::number(m_nCol) + "." + OUString::number(pRow->GetRow());
     }
     else
     {
-        name = GetTableColName(m_nCol) + Int32ToOUString(pRow->GetRow());
+        name = GetTableColName(m_nCol) + OUString::number(pRow->GetRow());
     }
     return name;
 }
@@ -201,26 +201,26 @@ void    XFCell::ToXml(IXFStream *pStrm)
 
     pAttrList->Clear();
     if( !GetStyleName().isEmpty() )
-        pAttrList->AddAttribute( A2OUSTR("table:style-name"), GetStyleName() );
+        pAttrList->AddAttribute( "table:style-name", GetStyleName() );
     if( m_nColSpaned>1 )
-        pAttrList->AddAttribute( A2OUSTR("table:number-columns-spanned"), Int32ToOUString(m_nColSpaned) );
+        pAttrList->AddAttribute( "table:number-columns-spanned", OUString::number(m_nColSpaned) );
     if( m_nRepeated )
-        pAttrList->AddAttribute( A2OUSTR("table:number-columns-repeated"), Int32ToOUString(m_nRepeated) );
+        pAttrList->AddAttribute( "table:number-columns-repeated", OUString::number(m_nRepeated) );
     if( m_eValueType != enumXFValueTypeNone )
     {
-        pAttrList->AddAttribute( A2OUSTR("table:value-type"), GetValueType(m_eValueType) );
-        pAttrList->AddAttribute( A2OUSTR("table:value"), m_strValue );
+        pAttrList->AddAttribute( "table:value-type", GetValueType(m_eValueType) );
+        pAttrList->AddAttribute( "table:value", m_strValue );
     }
     if( !m_strFormula.isEmpty() )
-        pAttrList->AddAttribute( A2OUSTR("table:formula"), m_strFormula );
+        pAttrList->AddAttribute( "table:formula", m_strFormula );
 
     if( m_bProtect )
-        pAttrList->AddAttribute( A2OUSTR("table:protected"), A2OUSTR("true") );
+        pAttrList->AddAttribute( "table:protected", "true" );
 
     //for test only.
-//  pAttrList->AddAttribute( A2OUSTR("table:cell-name"), GetCellName() );
+//  pAttrList->AddAttribute( "table:cell-name", GetCellName() );
 
-    pStrm->StartElement( A2OUSTR("table:table-cell") );
+    pStrm->StartElement( "table:table-cell" );
 
     if( m_pSubTable )
         m_pSubTable->ToXml(pStrm);
@@ -229,7 +229,7 @@ void    XFCell::ToXml(IXFStream *pStrm)
         XFContentContainer::ToXml(pStrm);
     }
 
-    pStrm->EndElement( A2OUSTR("table:table-cell") );
+    pStrm->EndElement( "table:table-cell" );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

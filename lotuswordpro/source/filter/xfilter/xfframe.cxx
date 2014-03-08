@@ -138,56 +138,56 @@ void    XFFrame::StartFrame(IXFStream *pStrm)
     IXFAttrList *pAttrList = pStrm->GetAttrList();
 
     if( !GetStyleName().isEmpty() )
-        pAttrList->AddAttribute( A2OUSTR("draw:style-name"), GetStyleName() );
+        pAttrList->AddAttribute( "draw:style-name", GetStyleName() );
 
     assert(!m_strName.isEmpty());    //name should not be null.
     if( !m_strName.isEmpty() && m_isTextBox == sal_False)
-        pAttrList->AddAttribute( A2OUSTR("draw:name"), m_strName );
+        pAttrList->AddAttribute( "draw:name", m_strName );
     //anchor type:
     switch( m_eAnchor )
     {
     case enumXFAnchorPara:
-        pAttrList->AddAttribute( A2OUSTR("text:anchor-type"), A2OUSTR("paragraph") );
+        pAttrList->AddAttribute( "text:anchor-type", "paragraph" );
         break;
     case enumXFAnchorPage:
-        pAttrList->AddAttribute( A2OUSTR("text:anchor-type"), A2OUSTR("page") );
-        pAttrList->AddAttribute( A2OUSTR("text:anchor-page-number"), Int32ToOUString(m_nAnchorPage) );
+        pAttrList->AddAttribute( "text:anchor-type", "page" );
+        pAttrList->AddAttribute( "text:anchor-page-number", OUString::number(m_nAnchorPage) );
         break;
     case enumXFAnchorChar:
-        pAttrList->AddAttribute( A2OUSTR("text:anchor-type"), A2OUSTR("char") );
+        pAttrList->AddAttribute( "text:anchor-type", "char" );
         break;
     case enumXFAnchorAsChar:
-        pAttrList->AddAttribute( A2OUSTR("text:anchor-type"), A2OUSTR("as-char") );
+        pAttrList->AddAttribute( "text:anchor-type", "as-char" );
         break;
     case enumXFAnchorFrame:
-        pAttrList->AddAttribute( A2OUSTR("text:anchor-type"), A2OUSTR("frame") );
+        pAttrList->AddAttribute( "text:anchor-type", "frame" );
         break;
     default:
         break;
     }
-    pAttrList->AddAttribute( A2OUSTR("svg:x"), DoubleToOUString(m_aRect.GetX()) + A2OUSTR("cm") );
-    pAttrList->AddAttribute( A2OUSTR("svg:y"), DoubleToOUString(m_aRect.GetY()) + A2OUSTR("cm") );
-    pAttrList->AddAttribute( A2OUSTR("svg:width"), DoubleToOUString(m_aRect.GetWidth()) + A2OUSTR("cm") );
+    pAttrList->AddAttribute( "svg:x", DoubleToOUString(m_aRect.GetX()) + "cm" );
+    pAttrList->AddAttribute( "svg:y", DoubleToOUString(m_aRect.GetY()) + "cm" );
+    pAttrList->AddAttribute( "svg:width", DoubleToOUString(m_aRect.GetWidth()) + "cm" );
     if( m_nFlag& XFFRAME_FLAG_MINHEIGHT )
     {
-        pAttrList->AddAttribute( A2OUSTR("fo:min-height"), DoubleToOUString(m_fMinHeight) + A2OUSTR("cm") );
+        pAttrList->AddAttribute( "fo:min-height", DoubleToOUString(m_fMinHeight) + "cm" );
         if( m_nFlag&XFFRAME_FLAG_MAXHEIGHT )
-            pAttrList->AddAttribute( A2OUSTR("fo:max-height"), DoubleToOUString(m_fMaxHeight) + A2OUSTR("cm") );
+            pAttrList->AddAttribute( "fo:max-height", DoubleToOUString(m_fMaxHeight) + "cm" );
     }
     else
-        pAttrList->AddAttribute( A2OUSTR("svg:height"), DoubleToOUString(m_aRect.GetHeight()) + A2OUSTR("cm") );
+        pAttrList->AddAttribute( "svg:height", DoubleToOUString(m_aRect.GetHeight()) + "cm" );
 
-    pAttrList->AddAttribute( A2OUSTR("draw:z-index"), Int32ToOUString(m_nZIndex) );
+    pAttrList->AddAttribute( "draw:z-index", OUString::number(m_nZIndex) );
 
     if( !m_strNextLink.isEmpty() )
-        pAttrList->AddAttribute( A2OUSTR("draw:chain-next-name"), m_strNextLink );
+        pAttrList->AddAttribute( "draw:chain-next-name", m_strNextLink );
 
-    pStrm->StartElement( A2OUSTR("draw:text-box") );
+    pStrm->StartElement( "draw:text-box" );
 }
 
 void    XFFrame::EndFrame(IXFStream *pStrm)
 {
-    pStrm->EndElement( A2OUSTR("draw:text-box") );
+    pStrm->EndElement( "draw:text-box" );
 }
 
 void    XFFrame::AdjustZIndex()

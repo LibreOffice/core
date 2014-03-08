@@ -136,16 +136,16 @@ inline void XFLineHeight::ToXml(IXFStream *pStrm)
     case enumLHNone:
         return;
     case enumLHHeight:
-        pAttrList->AddAttribute( A2OUSTR("fo:line-height"),DoubleToOUString(m_Value.m_fValue) + A2OUSTR("cm") );
+        pAttrList->AddAttribute( "fo:line-height",DoubleToOUString(m_Value.m_fValue) + "cm" );
         break;
     case enumLHLeast:
-        pAttrList->AddAttribute( A2OUSTR("style:line-height-at-least"),DoubleToOUString(m_Value.m_fValue) + A2OUSTR("cm") );
+        pAttrList->AddAttribute( "style:line-height-at-least",DoubleToOUString(m_Value.m_fValue) + "cm" );
         break;
     case enumLHPercent:
-        pAttrList->AddAttribute( A2OUSTR("fo:line-height"), DoubleToOUString(m_Value.m_nValue) + A2OUSTR("%") );
+        pAttrList->AddAttribute( "fo:line-height", DoubleToOUString(m_Value.m_nValue) + "%" );
         break;
     case enumLHSpace:
-        pAttrList->AddAttribute( A2OUSTR("style:line-spacing"), DoubleToOUString(m_Value.m_fValue) + A2OUSTR("cm") );
+        pAttrList->AddAttribute( "style:line-spacing", DoubleToOUString(m_Value.m_fValue) + "cm" );
         break;
     }
 }

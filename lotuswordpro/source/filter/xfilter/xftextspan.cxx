@@ -114,8 +114,8 @@ void    XFTextSpan::ToXml(IXFStream *pStrm)
 
     pAttrList->Clear();
     if( !style.isEmpty() )
-        pAttrList->AddAttribute( A2OUSTR("text:style-name"), GetStyleName() );
-    pStrm->StartElement( A2OUSTR("text:span") );
+        pAttrList->AddAttribute( "text:style-name", GetStyleName() );
+    pStrm->StartElement( "text:span" );
 
     std::vector<IXFContent*>::iterator it;
     for( it= m_aContents.begin(); it!= m_aContents.end(); ++it )
@@ -125,7 +125,7 @@ void    XFTextSpan::ToXml(IXFStream *pStrm)
             pContent->ToXml(pStrm);
     }
 
-    pStrm->EndElement( A2OUSTR("text:span") );
+    pStrm->EndElement( "text:span" );
 }
 
 void    XFTextSpanStart::ToXml(IXFStream *pStrm)
@@ -137,8 +137,8 @@ void    XFTextSpanStart::ToXml(IXFStream *pStrm)
 
     pAttrList->Clear();
     if( !style.isEmpty() )
-        pAttrList->AddAttribute( A2OUSTR("text:style-name"), GetStyleName() );
-    pStrm->StartElement( A2OUSTR("text:span") );
+        pAttrList->AddAttribute( "text:style-name", GetStyleName() );
+    pStrm->StartElement( "text:span" );
 
     std::vector<IXFContent*>::iterator it;
     for( it= m_aContents.begin(); it!= m_aContents.end(); ++it )
@@ -157,7 +157,7 @@ void    XFTextSpanEnd::ToXml(IXFStream *pStrm)
         if( pContent )
             pContent->ToXml(pStrm);
     }
-    pStrm->EndElement( A2OUSTR("text:span") );
+    pStrm->EndElement( "text:span" );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

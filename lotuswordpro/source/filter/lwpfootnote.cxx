@@ -332,22 +332,22 @@ OUString LwpFootnote::GetTableClass()
     {
         case FN_BASE_FOOTNOTE:
         {
-            strClassName = A2OUSTR(STR_DivisionFootnote);
+            strClassName = STR_DivisionFootnote;
             break;
         }
         case FN_BASE_DOCUMENT:
         {
-            strClassName = A2OUSTR(STR_DocumentEndnote);
+            strClassName = STR_DocumentEndnote;
             break;
         }
         case FN_BASE_DIVISION:
         {
-            strClassName = A2OUSTR(STR_DivisionEndnote);
+            strClassName = STR_DivisionEndnote;
             break;
         }
         case FN_BASE_DIVISIONGROUP:
         {
-            strClassName = A2OUSTR(STR_DivisionGroupEndnote);
+            strClassName = STR_DivisionGroupEndnote;
             break;
         }
     }
@@ -514,13 +514,13 @@ void LwpFootnoteOptions::RegisterEndnoteStyle()
     OUString message = m_EndnoteDocNumbering.GetLeadingText();
     if(message.isEmpty())
     {
-        message = A2OUSTR("[");//default prefix
+        message = "[";//default prefix
     }
     pEndnoteConfig->SetNumPrefix(message);
     message = m_EndnoteDocNumbering.GetTrailingText();
     if(message.isEmpty())
     {
-        message = A2OUSTR("]");//default suffix
+        message = "]";//default suffix
     }
     pEndnoteConfig->SetNumSuffix(message);
     if(m_EndnoteDocNumbering.GetReset() == LwpFootnoteNumberOptions::RESET_PAGE)
@@ -544,7 +544,7 @@ OUString LwpFootnoteOptions::GetContinuedOnMessage()
         return m_ContinuedOnMessage.str();
     }
     // else reture defauls message
-    return A2OUSTR(STRID_FOOTCONTINUEDON);
+    return OUString(STRID_FOOTCONTINUEDON);
 }
 
 /**
@@ -557,7 +557,7 @@ OUString LwpFootnoteOptions::GetContinuedFromMessage()
         return m_ContinuedFromMessage.str();
     }
     // else reture defauls message
-    return A2OUSTR(STRID_FOOTCONTINUEDFROM);
+    return OUString(STRID_FOOTCONTINUEDFROM);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

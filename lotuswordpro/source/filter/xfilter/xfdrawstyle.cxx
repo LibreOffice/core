@@ -170,32 +170,32 @@ void    XFDrawStyle::ToXml(IXFStream *pStrm)
 
     pAttrList->Clear();
 
-    pAttrList->AddAttribute( A2OUSTR("style:name"), GetStyleName() );
-    pAttrList->AddAttribute( A2OUSTR("style:family"), A2OUSTR("graphics") );
-    pStrm->StartElement( A2OUSTR("style:style") );
+    pAttrList->AddAttribute( "style:name", GetStyleName() );
+    pAttrList->AddAttribute( "style:family", "graphics" );
+    pStrm->StartElement( "style:style" );
 
     pAttrList->Clear();
 
     if( m_eWrap == enumXFWrapBackground )
     {
-        pAttrList->AddAttribute( A2OUSTR("style:run-through"), A2OUSTR("background") );
+        pAttrList->AddAttribute( "style:run-through", "background" );
     }
     else
     {
-        pAttrList->AddAttribute( A2OUSTR("style:run-through"), A2OUSTR("foreground") );
+        pAttrList->AddAttribute( "style:run-through", "foreground" );
 
         if( m_eWrap == enumXFWrapNone )
-            pAttrList->AddAttribute( A2OUSTR("style:wrap"), A2OUSTR("none") );
+            pAttrList->AddAttribute( "style:wrap", "none" );
         else if( m_eWrap == enumXFWrapLeft )
-            pAttrList->AddAttribute( A2OUSTR("style:wrap"), A2OUSTR("left") );
+            pAttrList->AddAttribute( "style:wrap", "left" );
         else if( m_eWrap == enumXFWrapRight )
-            pAttrList->AddAttribute( A2OUSTR("style:wrap"), A2OUSTR("right") );
+            pAttrList->AddAttribute( "style:wrap", "right" );
         else if( m_eWrap == enumXFWrapParallel )
-            pAttrList->AddAttribute( A2OUSTR("style:wrap"), A2OUSTR("parallel") );
+            pAttrList->AddAttribute( "style:wrap", "parallel" );
         else if( m_eWrap == enumXFWrapRunThrough )
-            pAttrList->AddAttribute( A2OUSTR("style:wrap"), A2OUSTR("run-through") );
+            pAttrList->AddAttribute( "style:wrap", "run-through" );
         else if( m_eWrap == enumXFWrapBest )
-            pAttrList->AddAttribute( A2OUSTR("style:wrap"), A2OUSTR("dynamic") );
+            pAttrList->AddAttribute( "style:wrap", "dynamic" );
     }
 
     //line style:
@@ -205,144 +205,144 @@ void    XFDrawStyle::ToXml(IXFStream *pStrm)
         if( !m_pLineStyle->IsSolid() )
         {
 //          pAttrList->Clear();
-            pAttrList->AddAttribute( A2OUSTR("draw:stroke"), A2OUSTR("dash") );
-            pAttrList->AddAttribute( A2OUSTR("draw:stroke-dash"), m_pLineStyle->GetStyleName() );
+            pAttrList->AddAttribute( "draw:stroke", "dash" );
+            pAttrList->AddAttribute( "draw:stroke-dash", m_pLineStyle->GetStyleName() );
         }
         else
         {
-            pAttrList->AddAttribute( A2OUSTR("draw:stroke"), A2OUSTR("solid") );
+            pAttrList->AddAttribute( "draw:stroke", "solid" );
         }
 
         if( m_pLineStyle->GetWidth() > 0 )
-            pAttrList->AddAttribute( A2OUSTR("svg:stroke-width"), DoubleToOUString(m_pLineStyle->GetWidth()) + A2OUSTR("cm") );
+            pAttrList->AddAttribute( "svg:stroke-width", DoubleToOUString(m_pLineStyle->GetWidth()) + "cm" );
 
         XFColor color = m_pLineStyle->GetColor();
         if( color.IsValid() )
-            pAttrList->AddAttribute( A2OUSTR("svg:stroke-color"), color.ToString() );
+            pAttrList->AddAttribute( "svg:stroke-color", color.ToString() );
 
         if( m_pLineStyle->GetTransparency()>0 )
-            pAttrList->AddAttribute( A2OUSTR("svg:stroke-opacity"), Int32ToOUString(m_pLineStyle->GetTransparency()) + A2OUSTR("%") );
+            pAttrList->AddAttribute( "svg:stroke-opacity", OUString::number(m_pLineStyle->GetTransparency()) + "%" );
     }
     else
-        pAttrList->AddAttribute( A2OUSTR("draw:stroke"), A2OUSTR("none") );
+        pAttrList->AddAttribute( "draw:stroke", "none" );
     //area style:
     if( m_pAreaStyle )
     {
         if( enumXFAreaSolid == m_pAreaStyle->GetAreaStyle() )
         {
-            pAttrList->AddAttribute( A2OUSTR("draw:fill"), A2OUSTR("solid") );
+            pAttrList->AddAttribute( "draw:fill", "solid" );
             XFColor color = m_pAreaStyle->GetBackColor();
             if( color.IsValid() )
-                pAttrList->AddAttribute( A2OUSTR("draw:fill-color"), color.ToString() );
+                pAttrList->AddAttribute( "draw:fill-color", color.ToString() );
         }
         else if( enumXFAreaHatch == m_pAreaStyle->GetAreaStyle() )
         {
-            pAttrList->AddAttribute( A2OUSTR("draw:fill"), A2OUSTR("hatch") );
-            pAttrList->AddAttribute( A2OUSTR("draw:fill-hatch-name"), m_pAreaStyle->GetStyleName() );
+            pAttrList->AddAttribute( "draw:fill", "hatch" );
+            pAttrList->AddAttribute( "draw:fill-hatch-name", m_pAreaStyle->GetStyleName() );
             XFColor color = m_pAreaStyle->GetBackColor();
             if( color.IsValid() )
             {
-                pAttrList->AddAttribute( A2OUSTR("draw:fill-hatch-solid"), A2OUSTR("true") );
-                pAttrList->AddAttribute( A2OUSTR("draw:fill-color"), color.ToString() );
+                pAttrList->AddAttribute( "draw:fill-hatch-solid", "true" );
+                pAttrList->AddAttribute( "draw:fill-color", color.ToString() );
             }
         }
     }
     else
-        pAttrList->AddAttribute( A2OUSTR("draw:fill"), A2OUSTR("none") );
+        pAttrList->AddAttribute( "draw:fill", "none" );
 
     if( !m_strArrowStart.isEmpty() )
     {
-        pAttrList->AddAttribute( A2OUSTR("draw:marker-start"), m_strArrowStart );
-        pAttrList->AddAttribute( A2OUSTR("draw:marker-start-width"), DoubleToOUString(m_fArrowStartSize)+A2OUSTR("cm") );
+        pAttrList->AddAttribute( "draw:marker-start", m_strArrowStart );
+        pAttrList->AddAttribute( "draw:marker-start-width", DoubleToOUString(m_fArrowStartSize)+"cm" );
         if( m_bArrowStartCenter )
-            pAttrList->AddAttribute( A2OUSTR("draw:draw:marker-start-center"), A2OUSTR("true")  );
+            pAttrList->AddAttribute( "draw:draw:marker-start-center", "true"  );
     }
     if( !m_strArrowEnd.isEmpty() )
     {
-        pAttrList->AddAttribute( A2OUSTR("draw:marker-end"), m_strArrowEnd );
-        pAttrList->AddAttribute( A2OUSTR("draw:marker-end-width"), DoubleToOUString(m_fArrowEndSize)+A2OUSTR("cm") );
+        pAttrList->AddAttribute( "draw:marker-end", m_strArrowEnd );
+        pAttrList->AddAttribute( "draw:marker-end-width", DoubleToOUString(m_fArrowEndSize)+"cm" );
         if( m_bArrowEndCenter )
-            pAttrList->AddAttribute( A2OUSTR("draw:draw:marker-end-center"), A2OUSTR("true")  );
+            pAttrList->AddAttribute( "draw:draw:marker-end-center", "true"  );
     }
     if (m_pFontWorkStyle)
     {
         // style
-        OUString aStr = A2OUSTR("");
+        OUString aStr = "";
         switch (m_pFontWorkStyle->GetStyleType())
         {
         default: // fall through!
         case enumXFFWOff:
             break;
         case enumXFFWRotate:
-            aStr = A2OUSTR("rotate");
+            aStr = "rotate";
             break;
         case enumXFFWUpright:
-            aStr = A2OUSTR("upright");
+            aStr = "upright";
             break;
         case enumXFFWSlantX:
-            aStr = A2OUSTR("slant-x");
+            aStr = "slant-x";
             break;
         case enumXFFWSlantY:
-            aStr = A2OUSTR("slant-y");
+            aStr = "slant-y";
             break;
         }
         if (!aStr.isEmpty())
         {
-            pAttrList->AddAttribute(A2OUSTR("draw:fontwork-style"), aStr);
+            pAttrList->AddAttribute("draw:fontwork-style", aStr);
         }
 
         //adjust
-        aStr = A2OUSTR("");
+        aStr = "";
         switch (m_pFontWorkStyle->GetAdjustType())
         {
         default: // fall througth
         case enumXFFWAdjustAutosize:
-            aStr = A2OUSTR("autosize");
+            aStr = "autosize";
             break;
         case enumXFFWAdjustLeft:
-            aStr = A2OUSTR("left");
+            aStr = "left";
             break;
         case enumXFFWAdjustCenter:
-            aStr = A2OUSTR("center");
+            aStr = "center";
             break;
         case enumXFFWAdustRight:
-            aStr = A2OUSTR("right");
+            aStr = "right";
             break;
         }
         if (!aStr.isEmpty())
         {
-            pAttrList->AddAttribute(A2OUSTR("draw:fontwork-adjust"), aStr);
+            pAttrList->AddAttribute("draw:fontwork-adjust", aStr);
         }
 
         //form
-        aStr = A2OUSTR("");
+        aStr = "";
         switch (m_pFontWorkStyle->GetButtonForm())
         {
         default: // fall through!
         case -1:
             break;
         case 4:
-            aStr = A2OUSTR("top-arc");
+            aStr = "top-arc";
             break;
         case 5:
-            aStr = A2OUSTR("bottom-arc");
+            aStr = "bottom-arc";
             break;
         }
         if (!aStr.isEmpty())
         {
-            pAttrList->AddAttribute(A2OUSTR("draw:fontwork-form"), aStr);
+            pAttrList->AddAttribute("draw:fontwork-form", aStr);
         }
 
         // distance
-        //pAttrList->AddAttribute(A2OUSTR("draw:fontwork-distance"),
-        //  DoubleToOUString(m_pFontWorkStyle->GetFWDistance())+A2OUSTR("cm"));
+        //pAttrList->AddAttribute("draw:fontwork-distance",
+        //  DoubleToOUString(m_pFontWorkStyle->GetFWDistance())+"cm");
     }
 
-    pStrm->StartElement( A2OUSTR("style:properties") );
+    pStrm->StartElement( "style:properties" );
 
-    pStrm->EndElement( A2OUSTR("style:properties") );
+    pStrm->EndElement( "style:properties" );
 
-    pStrm->EndElement( A2OUSTR("style:style") );
+    pStrm->EndElement( "style:style" );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

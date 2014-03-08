@@ -80,14 +80,14 @@ void    XFList::ToXml(IXFStream *pStrm)
 
     pAttrList->Clear();
     if( !GetStyleName().isEmpty() )
-        pAttrList->AddAttribute( A2OUSTR("text:style-name"), GetStyleName() );
+        pAttrList->AddAttribute( "text:style-name", GetStyleName() );
     if( m_bContinueNumber )
-        pAttrList->AddAttribute( A2OUSTR("text:continue-numbering"), A2OUSTR("true") );
+        pAttrList->AddAttribute( "text:continue-numbering", "true" );
 
     if( m_bOrdered )
-        pStrm->StartElement( A2OUSTR("text:ordered-list") );
+        pStrm->StartElement( "text:ordered-list" );
     else
-        pStrm->StartElement( A2OUSTR("text:unordered-list") );
+        pStrm->StartElement( "text:unordered-list" );
 
     if( m_pHeader )
     {
@@ -96,9 +96,9 @@ void    XFList::ToXml(IXFStream *pStrm)
     XFContentContainer::ToXml(pStrm);
 
     if( m_bOrdered )
-        pStrm->EndElement( A2OUSTR("text:ordered-list") );
+        pStrm->EndElement( "text:ordered-list" );
     else
-        pStrm->EndElement( A2OUSTR("text:unordered-list") );
+        pStrm->EndElement( "text:unordered-list" );
 }
 
 void    XFList::StartList(IXFStream *pStrm, sal_Bool bContinueNumber)
@@ -108,22 +108,22 @@ void    XFList::StartList(IXFStream *pStrm, sal_Bool bContinueNumber)
 
     pAttrList->Clear();
     if( !GetStyleName().isEmpty() )
-        pAttrList->AddAttribute( A2OUSTR("text:style-name"), GetStyleName() );
+        pAttrList->AddAttribute( "text:style-name", GetStyleName() );
     if( bContinueNumber )
-        pAttrList->AddAttribute( A2OUSTR("text:continue-numbering"), A2OUSTR("true") );
+        pAttrList->AddAttribute( "text:continue-numbering", "true" );
 
     if( m_bOrdered )
-        pStrm->StartElement( A2OUSTR("text:ordered-list") );
+        pStrm->StartElement( "text:ordered-list" );
     else
-        pStrm->StartElement( A2OUSTR("text:unordered-list") );
+        pStrm->StartElement( "text:unordered-list" );
 }
 
 void    XFList::EndList(IXFStream *pStrm)
 {
     if( m_bOrdered )
-        pStrm->EndElement( A2OUSTR("text:ordered-list") );
+        pStrm->EndElement( "text:ordered-list" );
     else
-        pStrm->EndElement( A2OUSTR("text:unordered-list") );
+        pStrm->EndElement( "text:unordered-list" );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

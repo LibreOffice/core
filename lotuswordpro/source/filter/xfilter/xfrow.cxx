@@ -147,10 +147,10 @@ void    XFRow::ToXml(IXFStream *pStrm)
 
     pAttrList->Clear();
     if( !GetStyleName().isEmpty() )
-        pAttrList->AddAttribute( A2OUSTR("table:style-name"), GetStyleName() );
+        pAttrList->AddAttribute( "table:style-name", GetStyleName() );
     if( m_nRepeat )
-        pAttrList->AddAttribute( A2OUSTR("table:number-rows-repeated"), Int32ToOUString(m_nRepeat) );
-    pStrm->StartElement( A2OUSTR("table:table-row") );
+        pAttrList->AddAttribute( "table:number-rows-repeated", OUString::number(m_nRepeat) );
+    pStrm->StartElement( "table:table-row" );
 
     std::map<sal_Int32,XFCell*>::iterator   it = m_aCells.begin();
     for( ; it!=m_aCells.end(); ++it )
@@ -170,6 +170,6 @@ void    XFRow::ToXml(IXFStream *pStrm)
         lastCol = col;
     }
 
-    pStrm->EndElement( A2OUSTR("table:table-row") );
+    pStrm->EndElement( "table:table-row" );
 }
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

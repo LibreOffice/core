@@ -236,20 +236,10 @@ OUString LwpTools::convertToFileUrl(const OString &fileName)
 
 OUString LwpTools::DateTimeToOUString(LtTm & dt)
 {
-    OUStringBuffer buf;
-    buf.append(dt.tm_year);
-    buf.append( A2OUSTR("-") );
-    buf.append(dt.tm_mon);
-    buf.append( A2OUSTR("-") );
-    buf.append(dt.tm_mday);
-    buf.append( A2OUSTR("T") );
-    buf.append(dt.tm_hour);
-    buf.append( A2OUSTR(":") );
-    buf.append(dt.tm_min);
-    buf.append( A2OUSTR(":") );
-    buf.append(dt.tm_sec);
+    OUString aResult = OUString::number(dt.tm_year) + "-" + OUString::number(dt.tm_mon) + "-" + OUString::number(dt.tm_mday) +
+        "T" + OUString::number(dt.tm_hour) + ":" + OUString::number(dt.tm_min) + ":" + OUString::number(dt.tm_sec);
 
-    return buf.makeStringAndClear();
+    return aResult;
 }
 
 /**
@@ -609,7 +599,7 @@ XFDateStyle* LwpTools::GetSystemDateStyle(sal_Bool bLongFormat)
             }
             case '"':
             {
-                pDateStyle->AddText(OUString(A2OUSTR("'")));
+                pDateStyle->AddText(OUString("'"));
                 break;
             }
             default:
@@ -829,7 +819,7 @@ XFTimeStyle* LwpTools::GetSystemTimeStyle()
             }
             case '"':
             {
-                pTimeStyle->AddText(OUString(A2OUSTR("'")));
+                pTimeStyle->AddText(OUString("'"));
                 break;
             }
             default:

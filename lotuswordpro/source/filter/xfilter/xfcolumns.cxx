@@ -75,12 +75,12 @@ void    XFColumn::ToXml(IXFStream *pStrm)
     IXFAttrList *pAttrList = pStrm->GetAttrList();
     pAttrList->Clear();
 
-    pAttrList->AddAttribute( A2OUSTR("style:rel-width"), Int32ToOUString(m_nRelWidth) + A2OUSTR("*") );
-    pAttrList->AddAttribute( A2OUSTR("fo:margin-left"), DoubleToOUString(m_fMarginLeft) + A2OUSTR("cm") );
-    pAttrList->AddAttribute( A2OUSTR("fo:margin-right"), DoubleToOUString(m_fMarginRight) + A2OUSTR("cm") );
+    pAttrList->AddAttribute( "style:rel-width", OUString::number(m_nRelWidth) + "*" );
+    pAttrList->AddAttribute( "fo:margin-left", DoubleToOUString(m_fMarginLeft) + "cm" );
+    pAttrList->AddAttribute( "fo:margin-right", DoubleToOUString(m_fMarginRight) + "cm" );
 
-    pStrm->StartElement( A2OUSTR("style:column") );
-    pStrm->EndElement( A2OUSTR("style:column") );
+    pStrm->StartElement( "style:column" );
+    pStrm->EndElement( "style:column" );
 }
 
 void    XFColumnSep::SetRelHeight(sal_Int32 height)
@@ -106,26 +106,26 @@ void    XFColumnSep::ToXml(IXFStream *pStrm)
     IXFAttrList *pAttrList = pStrm->GetAttrList();
 
     pAttrList->Clear();
-    pAttrList->AddAttribute( A2OUSTR("style:width"), DoubleToOUString(m_fWidth) + A2OUSTR("cm") );
+    pAttrList->AddAttribute( "style:width", DoubleToOUString(m_fWidth) + "cm" );
     if( m_aColor.IsValid() )
-        pAttrList->AddAttribute( A2OUSTR("style:color"), m_aColor.ToString() );
-    pAttrList->AddAttribute( A2OUSTR("style:height"), Int32ToOUString(m_nRelHeight) + A2OUSTR("%") );
+        pAttrList->AddAttribute( "style:color", m_aColor.ToString() );
+    pAttrList->AddAttribute( "style:height", OUString::number(m_nRelHeight) + "%" );
     //text align:
     if( m_eVertAlign == enumXFAlignTop )
     {
-        pAttrList->AddAttribute(A2OUSTR("style:vertical-align"),A2OUSTR("top"));
+        pAttrList->AddAttribute("style:vertical-align","top");
     }
     else if( m_eVertAlign == enumXFAlignMiddle )
     {
-        pAttrList->AddAttribute(A2OUSTR("style:vertical-align"),A2OUSTR("middle"));
+        pAttrList->AddAttribute("style:vertical-align","middle");
     }
     else if( m_eVertAlign == enumXFAlignBottom )
     {
-        pAttrList->AddAttribute(A2OUSTR("style:vertical-align"),A2OUSTR("bottom"));
+        pAttrList->AddAttribute("style:vertical-align","bottom");
     }
 
-    pStrm->StartElement( A2OUSTR("style:column-sep") );
-    pStrm->EndElement( A2OUSTR("style:column-sep") );
+    pStrm->StartElement( "style:column-sep" );
+    pStrm->EndElement( "style:column-sep" );
 }
 
 void    XFColumns::SetSeparator(XFColumnSep& aSeparator)
@@ -155,13 +155,13 @@ void    XFColumns::ToXml(IXFStream *pStrm)
     IXFAttrList *pAttrList = pStrm->GetAttrList();
     pAttrList->Clear();
 
-    pAttrList->AddAttribute( A2OUSTR("fo:column-count"), Int32ToOUString(m_nCount));
+    pAttrList->AddAttribute( "fo:column-count", OUString::number(m_nCount));
     if( m_nFlag&XFCOLUMNS_FLAG_GAP )
     {
-        pAttrList->AddAttribute( A2OUSTR("fo:column-gap"), DoubleToOUString(m_fGap)+A2OUSTR("cm") );
+        pAttrList->AddAttribute( "fo:column-gap", DoubleToOUString(m_fGap)+"cm" );
     }
 
-    pStrm->StartElement( A2OUSTR("style:columns") );
+    pStrm->StartElement( "style:columns" );
 
     if( m_nFlag&XFCOLUMNS_FLAG_SEPARATOR )  //column-sep:
     {
@@ -176,6 +176,6 @@ void    XFColumns::ToXml(IXFStream *pStrm)
             (*it).ToXml(pStrm);
         }
     }
-    pStrm->EndElement( A2OUSTR("style:columns") );
+    pStrm->EndElement( "style:columns" );
 }
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

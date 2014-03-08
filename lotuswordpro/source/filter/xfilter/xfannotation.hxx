@@ -94,14 +94,14 @@ inline void XFAnnotation::ToXml(IXFStream *pStrm)
     pAttrList->Clear();
 
     if( !m_strDate.isEmpty() )
-        pAttrList->AddAttribute( A2OUSTR("office:create-date"), m_strDate );
+        pAttrList->AddAttribute( "office:create-date", m_strDate );
     if( !m_strAuthor.isEmpty() )
-        pAttrList->AddAttribute( A2OUSTR("office:author"), m_strAuthor);
-    pStrm->StartElement( A2OUSTR("office:annotation") );
+        pAttrList->AddAttribute( "office:author", m_strAuthor);
+    pStrm->StartElement( "office:annotation" );
 
     XFContentContainer::ToXml(pStrm);
 
-    pStrm->EndElement( A2OUSTR("office:annotation") );
+    pStrm->EndElement( "office:annotation" );
 }
 
 #endif

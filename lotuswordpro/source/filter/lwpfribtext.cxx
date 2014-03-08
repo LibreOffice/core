@@ -193,15 +193,15 @@ void LwpFribDocVar::RegisterDefaultTimeStyle()
     XFDateStyle* pDateStyle = new XFDateStyle;//use the default format
 
     pDateStyle->AddMonth();
-    pDateStyle->AddText(A2OUSTR("/"));
+    pDateStyle->AddText("/");
     pDateStyle->AddMonthDay();
-    pDateStyle->AddText(A2OUSTR("/"));
+    pDateStyle->AddText("/");
     pDateStyle->AddYear();
-    pDateStyle->AddText(A2OUSTR(","));
+    pDateStyle->AddText(",");
     pDateStyle->AddHour();
-    pDateStyle->AddText(A2OUSTR(":"));
+    pDateStyle->AddText(":");
     pDateStyle->AddMinute();
-    pDateStyle->AddText(A2OUSTR(":"));
+    pDateStyle->AddText(":");
     pDateStyle->AddSecond(sal_True,0);
 
     XFStyleManager* pXFStyleManager = LwpGlobalMgr::GetInstance()->GetXFStyleManager();
@@ -229,13 +229,13 @@ void LwpFribDocVar::XFConvert(XFContentContainer* pXFPara)
     case FILENAME:
     {
         pContent = new XFFileName;
-        static_cast<XFFileName*>(pContent)->SetType(A2OUSTR("FileName"));
+        static_cast<XFFileName*>(pContent)->SetType("FileName");
         break;
     }
     case PATH:
     {
         pContent = new XFFileName;
-        static_cast<XFFileName*>(pContent)->SetType(A2OUSTR("Path"));
+        static_cast<XFFileName*>(pContent)->SetType("Path");
         break;
     }
     case DESCRIPTION:
@@ -278,109 +278,109 @@ void LwpFribDocVar::XFConvert(XFContentContainer* pXFPara)
     {
 /*      pContent = new XFAnnotation;
         XFTextContent* pSpan = new XFTextContent();
-        pSpan->SetText(A2OUSTR("Document Size is Here"));
+        pSpan->SetText("Document Size is Here");
         XFParagraph* pPara = new XFParagraph;
         pPara->Add(pSpan);
         static_cast<XFAnnotation*>(pContent)->Add(pPara);
         break;
 */
-        OUString text = A2OUSTR("<Document Size>");
+        OUString text = "<Document Size>";
         LwpFrib::ConvertChars(pXFPara,text);
         return;
     }
     case SMARTMASTER:
     {
-        OUString text = A2OUSTR("<Smart master>");
+        OUString text = "<Smart master>";
         LwpFrib::ConvertChars(pXFPara,text);
         return;
     }
     case DIVISIONNAME:
     {
-        OUString text = A2OUSTR("<Division name>");
+        OUString text = "<Division name>";
         LwpFrib::ConvertChars(pXFPara,text);
         return;
     }
     case SECTIONNAME:
     {
-        OUString text = A2OUSTR("<Section name>");
+        OUString text = "<Section name>";
         LwpFrib::ConvertChars(pXFPara,text);
         return;
     }
     case VERSIONCREATEBY:
     {
-        OUString text = A2OUSTR("<Version Creat by>");
+        OUString text = "<Version Creat by>";
         LwpFrib::ConvertChars(pXFPara,text);
         return;
     }
     case VERSIONCREATEDATE:
     {
-        OUString text = A2OUSTR("<Version Creat date>");
+        OUString text = "<Version Creat date>";
         LwpFrib::ConvertChars(pXFPara,text);
         return;
     }
     case VERSIONOTHEREDITORS:
     {
-        OUString text = A2OUSTR("<Version other Editors>");
+        OUString text = "<Version other Editors>";
         LwpFrib::ConvertChars(pXFPara,text);
         return;
     }
     case VERSIONNAME:
     {
-        OUString text = A2OUSTR("<Version Name>");
+        OUString text = "<Version Name>";
         LwpFrib::ConvertChars(pXFPara,text);
         return;
     }
     case VERSIONNUMBER:
     {
-        OUString text = A2OUSTR("<Version Numbers>");
+        OUString text = "<Version Numbers>";
         LwpFrib::ConvertChars(pXFPara,text);
         return;
     }
     case ALLVERSIONNAME:
     {
-        OUString text = A2OUSTR("<All Version Name>");
+        OUString text = "<All Version Name>";
         LwpFrib::ConvertChars(pXFPara,text);
         return;
     }
     case VERSIONREMARK:
     {
-        OUString text = A2OUSTR("<Version Remark>");
+        OUString text = "<Version Remark>";
         LwpFrib::ConvertChars(pXFPara,text);
         return;
     }
     case DOCUMENTCATEGORY:
     {
-        OUString text = A2OUSTR("<Document Category>");
+        OUString text = "<Document Category>";
         LwpFrib::ConvertChars(pXFPara,text);
         return;
     }
     case VERSIONLASTDATE:
     {
-        OUString text = A2OUSTR("<Version Last Modify Date>");
+        OUString text = "<Version Last Modify Date>";
         LwpFrib::ConvertChars(pXFPara,text);
         return;
     }
     case VERSIONLASTEDITOR:
     {
-        OUString text = A2OUSTR("<Version Last Editor>");
+        OUString text = "<Version Last Editor>";
         LwpFrib::ConvertChars(pXFPara,text);
         return;
     }
     case LASTEDIT:
     {
-        OUString text = A2OUSTR("<Last Editor>");
+        OUString text = "<Last Editor>";
         LwpFrib::ConvertChars(pXFPara,text);
         return;
     }
     case OTHEREDITORS:
     {
-        OUString text = A2OUSTR("<Other Editors>");
+        OUString text = "<Other Editors>";
         LwpFrib::ConvertChars(pXFPara,text);
         return;
     }
     case NUMOFREVISION:
     {
-        OUString text = A2OUSTR("<Number of Revision>");
+        OUString text = "<Number of Revision>";
         LwpFrib::ConvertChars(pXFPara,text);
         return;
     }
@@ -453,23 +453,23 @@ void LwpFribPageNumber::XFConvert(XFContentContainer* pXFPara)
     if (m_nNumStyle == 0x0)
         return;
     XFPageNumber* pNum = new XFPageNumber;
-//  pNum->SetSelect(A2OUSTR("current"));
+//  pNum->SetSelect("current");
     switch(m_nNumStyle)
     {
     case 0x01:
-        pNum->SetNumFmt(A2OUSTR("1"));
+        pNum->SetNumFmt("1");
         break;
     case 0x02:
-        pNum->SetNumFmt(A2OUSTR("A"));
+        pNum->SetNumFmt("A");
         break;
     case 0x03:
-        pNum->SetNumFmt(A2OUSTR("a"));
+        pNum->SetNumFmt("a");
         break;
     case 0x04:
-        pNum->SetNumFmt(A2OUSTR("I"));
+        pNum->SetNumFmt("I");
         break;
     case 0x05:
-        pNum->SetNumFmt(A2OUSTR("i"));
+        pNum->SetNumFmt("i");
         break;
     }
     OUString styleName = GetStyleName();

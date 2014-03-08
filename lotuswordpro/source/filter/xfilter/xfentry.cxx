@@ -71,36 +71,36 @@ void    XFEntry::ToXml(IXFStream *pStrm)
     IXFAttrList *pAttrList = pStrm->GetAttrList();
     pAttrList->Clear();
 
-    pAttrList->AddAttribute( A2OUSTR("text:string-value"), m_strValue );
+    pAttrList->AddAttribute( "text:string-value", m_strValue );
 
     if( m_eType == enumXFEntryTOC )
     {
-        pAttrList->AddAttribute( A2OUSTR("text:outline-level"), Int32ToOUString(m_nOutlineLevel) );
-        pStrm->StartElement( A2OUSTR("text:toc-mark") );
+        pAttrList->AddAttribute( "text:outline-level", OUString::number(m_nOutlineLevel) );
+        pStrm->StartElement( "text:toc-mark" );
 //      pStrm->Characters(m_strDisplay);
-        pStrm->EndElement( A2OUSTR("text:toc-mark") );
+        pStrm->EndElement( "text:toc-mark" );
     }
     else if( m_eType == enumXFEntryAlphabetical )
     {
-        pAttrList->AddAttribute( A2OUSTR("text:key1"), m_strKey1 );
+        pAttrList->AddAttribute( "text:key1", m_strKey1 );
         if( !m_strKey2.isEmpty() )
-            pAttrList->AddAttribute( A2OUSTR("text:key2"), m_strKey2 );
+            pAttrList->AddAttribute( "text:key2", m_strKey2 );
 
         if( m_bMainEntry )
-            pAttrList->AddAttribute( A2OUSTR("text:main-etry"), A2OUSTR("true") );
+            pAttrList->AddAttribute( "text:main-etry", "true" );
 
-        pStrm->StartElement( A2OUSTR("text:alphabetical-index-mark") );
+        pStrm->StartElement( "text:alphabetical-index-mark" );
 //      pStrm->Characters(m_strDisplay);
-        pStrm->EndElement( A2OUSTR("text:alphabetical-index-mark") );
+        pStrm->EndElement( "text:alphabetical-index-mark" );
     }
     else if( m_eType == enumXFEntryUserIndex )
     {
-        pAttrList->AddAttribute( A2OUSTR("text:outline-level"), Int32ToOUString(m_nOutlineLevel) );
-        pAttrList->AddAttribute( A2OUSTR("text:index-name"), m_strName );
+        pAttrList->AddAttribute( "text:outline-level", OUString::number(m_nOutlineLevel) );
+        pAttrList->AddAttribute( "text:index-name", m_strName );
 
-        pStrm->StartElement( A2OUSTR("text:user-index-mark") );
+        pStrm->StartElement( "text:user-index-mark" );
 //      pStrm->Characters(m_strDisplay);
-        pStrm->EndElement( A2OUSTR("text:user-index-mark") );
+        pStrm->EndElement( "text:user-index-mark" );
     }
 }
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

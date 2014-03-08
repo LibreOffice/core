@@ -144,7 +144,7 @@ inline sal_Bool LwpDivInfo::HasContents()
 inline sal_Bool LwpDivInfo::IsOleDivision()
 {
     OUString strClassName = GetClassName();
-    if (strClassName.equals(A2OUSTR(STR_OleDivisionClassName)))
+    if (strClassName == STR_OleDivisionClassName)
         return sal_True;
     return sal_False;
 }

@@ -88,41 +88,41 @@ void    XFBGImage::ToXml(IXFStream *pStrm)
 
     if( m_bUserFileLink )
     {
-        pAttrList->AddAttribute( A2OUSTR("xlink:href"), m_strFileName);
+        pAttrList->AddAttribute( "xlink:href", m_strFileName);
     }
 
-    pAttrList->AddAttribute( A2OUSTR("xlink:type"), A2OUSTR("simple") );
-    pAttrList->AddAttribute( A2OUSTR("xlink:actuate"), A2OUSTR("onLoad"));
+    pAttrList->AddAttribute( "xlink:type", "simple" );
+    pAttrList->AddAttribute( "xlink:actuate", "onLoad");
 
     if( m_bPosition )
     {
-        OUString str = GetAlignName(m_eVertAlign) + A2OUSTR(" ");
+        OUString str = GetAlignName(m_eVertAlign) + " ";
         if( m_eHoriAlign == enumXFAlignStart )
-            str += A2OUSTR("left");
+            str += "left";
         else if( m_eHoriAlign == enumXFAlignCenter )
-            str += A2OUSTR("center");
+            str += "center";
         else if( m_eHoriAlign == enumXFAlignEnd )
-            str += A2OUSTR("right");
+            str += "right";
 
-        pAttrList->AddAttribute( A2OUSTR("style:position"), str );
-        pAttrList->AddAttribute( A2OUSTR("style:repeat"), A2OUSTR("no-repeat") );
+        pAttrList->AddAttribute( "style:position", str );
+        pAttrList->AddAttribute( "style:repeat", "no-repeat" );
     }
     else if( m_bRepeate )
-        pAttrList->AddAttribute( A2OUSTR("style:repeat"), A2OUSTR("repeat") );
+        pAttrList->AddAttribute( "style:repeat", "repeat" );
     else if( m_bStretch )
-        pAttrList->AddAttribute( A2OUSTR("style:repeat"), A2OUSTR("stretch") );
+        pAttrList->AddAttribute( "style:repeat", "stretch" );
 
-    pStrm->StartElement( A2OUSTR("style:background-image") );
+    pStrm->StartElement( "style:background-image" );
 
     if( !m_bUserFileLink )
     {
         pAttrList->Clear();
-        pStrm->StartElement( A2OUSTR("office:binary-data") );
+        pStrm->StartElement( "office:binary-data" );
         pStrm->Characters(m_strData);
-        pStrm->EndElement( A2OUSTR("office:binary-data") );
+        pStrm->EndElement( "office:binary-data" );
     }
 
-    pStrm->EndElement( A2OUSTR("style:background-image") );
+    pStrm->EndElement( "style:background-image" );
 }
 
 bool operator==(XFBGImage& img1, XFBGImage& img2)

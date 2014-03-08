@@ -72,7 +72,7 @@ public:
 
     void    SetName(OUString name);
 
-    void    SetTargetFrame(OUString frame=A2OUSTR("_self"));
+    void    SetTargetFrame(OUString frame="_self");
 
     virtual void    ToXml(IXFStream *pStrm);
 
@@ -85,7 +85,7 @@ private:
 
 inline XFHyperlink::XFHyperlink()
 {
-    m_strFrame = A2OUSTR("_self");
+    m_strFrame = "_self";
 }
 
 inline void XFHyperlink::SetHRef(OUString href)
@@ -113,25 +113,25 @@ inline void XFHyperlink::ToXml(IXFStream *pStrm)
     IXFAttrList *pAttrList = pStrm->GetAttrList();
     pAttrList->Clear();
 
-    pAttrList->AddAttribute( A2OUSTR("xlink:type"), A2OUSTR("simple") );
-    pAttrList->AddAttribute( A2OUSTR("xlink:href"), m_strHRef );
+    pAttrList->AddAttribute( "xlink:type", "simple" );
+    pAttrList->AddAttribute( "xlink:href", m_strHRef );
     if( !m_strName.isEmpty() )
-        pAttrList->AddAttribute( A2OUSTR("office:name"), m_strName );
-    pAttrList->AddAttribute( A2OUSTR("office:target-frame-name"), m_strFrame );
-    pAttrList->AddAttribute( A2OUSTR("xlink:show"), A2OUSTR("replace") );
-    pStrm->StartElement( A2OUSTR("text:a") );
+        pAttrList->AddAttribute( "office:name", m_strName );
+    pAttrList->AddAttribute( "office:target-frame-name", m_strFrame );
+    pAttrList->AddAttribute( "xlink:show", "replace" );
+    pStrm->StartElement( "text:a" );
 
     pAttrList->Clear();
     if( !GetStyleName().isEmpty() )
-        pAttrList->AddAttribute( A2OUSTR("text:style-name"), GetStyleName() );
-    pStrm->StartElement( A2OUSTR("text:span") );
+        pAttrList->AddAttribute( "text:style-name", GetStyleName() );
+    pStrm->StartElement( "text:span" );
     if( !m_strText.isEmpty() )
         pStrm->Characters(m_strText);
     else
         pStrm->Characters(m_strHRef);
-    pStrm->EndElement( A2OUSTR("text:span") );
+    pStrm->EndElement( "text:span" );
 
-    pStrm->EndElement( A2OUSTR("text:a") );
+    pStrm->EndElement( "text:a" );
 }
 
 #endif

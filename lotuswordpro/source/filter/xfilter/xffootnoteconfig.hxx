@@ -116,12 +116,12 @@ inline XFFootnoteConfig::XFFootnoteConfig()
 {
     m_nStartValue = 0;
     m_nRestartType = -1;
-    m_strNumFmt = A2OUSTR("1");
+    m_strNumFmt = "1";
     m_bInsertInPage = sal_True;
-    m_strDefaultStyle = A2OUSTR("Footnote");
-    m_strMasterPage = A2OUSTR("Footnote");
-    m_strCitationStyle = A2OUSTR("Footnote Symbol");
-    m_strBodyStyle = A2OUSTR("Footnote anchor");
+    m_strDefaultStyle = "Footnote";
+    m_strMasterPage = "Footnote";
+    m_strCitationStyle = "Footnote Symbol";
+    m_strBodyStyle = "Footnote anchor";
     m_bIsFootnote = sal_True;
 }
 
@@ -198,66 +198,66 @@ inline void XFFootnoteConfig::ToXml(IXFStream *pStrm)
     pAttrList->Clear();
 
     if( !m_strCitationStyle.isEmpty() )
-        pAttrList->AddAttribute( A2OUSTR("text:citation-style-name"), m_strCitationStyle);
+        pAttrList->AddAttribute( "text:citation-style-name", m_strCitationStyle);
 
     if( !m_strBodyStyle.isEmpty() )
-        pAttrList->AddAttribute( A2OUSTR("text:citation-body-style-name"), m_strBodyStyle);
+        pAttrList->AddAttribute( "text:citation-body-style-name", m_strBodyStyle);
 
     if( !m_strNumPrefix.isEmpty() )
-        pAttrList->AddAttribute( A2OUSTR("style:num-prefix"), m_strNumPrefix);
+        pAttrList->AddAttribute( "style:num-prefix", m_strNumPrefix);
 
     if( !m_strNumSuffix.isEmpty() )
-        pAttrList->AddAttribute( A2OUSTR("style:num-suffix"), m_strNumSuffix);
+        pAttrList->AddAttribute( "style:num-suffix", m_strNumSuffix);
 
     if( !m_strNumFmt.isEmpty() )
-        pAttrList->AddAttribute( A2OUSTR("style:num-format"), m_strNumFmt);
+        pAttrList->AddAttribute( "style:num-format", m_strNumFmt);
 
     if( !m_strDefaultStyle.isEmpty() )
-        pAttrList->AddAttribute( A2OUSTR("text:default-style-name"), m_strDefaultStyle);
+        pAttrList->AddAttribute( "text:default-style-name", m_strDefaultStyle);
 
     if( !m_strMasterPage.isEmpty() )
-        pAttrList->AddAttribute( A2OUSTR("text:master-page-name"), m_strMasterPage);
+        pAttrList->AddAttribute( "text:master-page-name", m_strMasterPage);
 
-    pAttrList->AddAttribute( A2OUSTR("text:start-value"), Int32ToOUString(m_nStartValue) );
+    pAttrList->AddAttribute( "text:start-value", OUString::number(m_nStartValue) );
 
     if( m_bIsFootnote )
     {
         if( m_nRestartType == -1 )
-            pAttrList->AddAttribute( A2OUSTR("text:start-numbering-at"), A2OUSTR("document") );
+            pAttrList->AddAttribute( "text:start-numbering-at", "document" );
         else if( m_nRestartType == 0 )
-            pAttrList->AddAttribute( A2OUSTR("text:start-numbering-at"), A2OUSTR("page") );
+            pAttrList->AddAttribute( "text:start-numbering-at", "page" );
         else if( m_nRestartType == 1 )
-            pAttrList->AddAttribute( A2OUSTR("text:start-numbering-at"), A2OUSTR("chapter") );
+            pAttrList->AddAttribute( "text:start-numbering-at", "chapter" );
 
         if( m_bInsertInPage )
-            pAttrList->AddAttribute( A2OUSTR("text:footnotes-position"), A2OUSTR("page") );
+            pAttrList->AddAttribute( "text:footnotes-position", "page" );
         else
-            pAttrList->AddAttribute( A2OUSTR("text:footnotes-position"), A2OUSTR("document") );
+            pAttrList->AddAttribute( "text:footnotes-position", "document" );
     }
 
     if(m_bIsFootnote)
     {
-        pStrm->StartElement( A2OUSTR("text:footnotes-configuration") );
+        pStrm->StartElement( "text:footnotes-configuration" );
         if( !m_strMessageOn.isEmpty() )
         {
-            pStrm->StartElement( A2OUSTR("text:footnote-continuation-notice-forward") );
+            pStrm->StartElement( "text:footnote-continuation-notice-forward" );
             pStrm->Characters(m_strMessageOn);
-            pStrm->EndElement( A2OUSTR("text:footnote-continuation-notice-forward") );
+            pStrm->EndElement( "text:footnote-continuation-notice-forward" );
         }
 
         if( !m_strMessageFrom.isEmpty() )
         {
-            pStrm->StartElement( A2OUSTR("text:footnote-continuation-notice-backward") );
+            pStrm->StartElement( "text:footnote-continuation-notice-backward" );
             pStrm->Characters(m_strMessageFrom);
-            pStrm->EndElement( A2OUSTR("text:footnote-continuation-notice-backward") );
+            pStrm->EndElement( "text:footnote-continuation-notice-backward" );
         }
 
-        pStrm->EndElement( A2OUSTR("text:footnotes-configuration") );
+        pStrm->EndElement( "text:footnotes-configuration" );
     }
     else
     {
-        pStrm->StartElement( A2OUSTR("text:endnotes-configuration") );
-        pStrm->EndElement( A2OUSTR("text:endnotes-configuration") );
+        pStrm->StartElement( "text:endnotes-configuration" );
+        pStrm->EndElement( "text:endnotes-configuration" );
     }
 
 }

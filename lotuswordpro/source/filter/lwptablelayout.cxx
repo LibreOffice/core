@@ -1220,7 +1220,7 @@ void LwpTableLayout::PostProcessParagraph(XFCell *pCell, sal_uInt16 nRowID, sal_
                     }
                 }
 
-                pOverStyle->SetStyleName(A2OUSTR(""));
+                pOverStyle->SetStyleName("");
                 OUString StyleName = pXFStyleManager->AddStyle(pOverStyle)->GetStyleName();
 
                 pXFPara->SetStyleName(StyleName);

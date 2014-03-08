@@ -97,7 +97,7 @@ OUString LwpMarker::GetNamedProperty(OUString name)
     if (pProp)
         return pProp->GetNamedProperty(name);
     else
-        return OUString(A2OUSTR(""));
+        return OUString("");
 }
 
 LwpStoryMarker::LwpStoryMarker(LwpObjectHeader &objHdr, LwpSvStream *pStrm)
@@ -150,7 +150,7 @@ OUString LwpCHBlkMarker::GetPromptText()
         pStory = dynamic_cast<LwpStory*>(m_objPromptStory.obj());
     if (pStory)
         return pStory->GetContentText();
-    return A2OUSTR("");
+    return OUString("");
 }
 
 void LwpCHBlkMarker::ConvertCHBlock(XFContentContainer* pXFPara, sal_uInt8 nType)
@@ -197,16 +197,16 @@ void LwpCHBlkMarker::ProcessPlaceHolder(XFContentContainer* pXFPara,sal_uInt16 n
         switch(nAction)
         {
         case CLICKHERE_CHBEHAVIORTEXT:
-            pHolder->SetType(A2OUSTR("text"));
+            pHolder->SetType("text");
             break;
         case CLICKHERE_CHBEHAVIORTABLE:
-            pHolder->SetType(A2OUSTR("table"));
+            pHolder->SetType("table");
             break;
         case CLICKHERE_CHBEHAVIORPICTURE:
-            pHolder->SetType(A2OUSTR("image"));
+            pHolder->SetType("image");
             break;
         case CLICKHERE_CHBEHAVIOROLEOBJECT:
-            pHolder->SetType(A2OUSTR("object"));
+            pHolder->SetType("object");
             break;
         default:
             break;
@@ -234,7 +234,7 @@ void LwpCHBlkMarker::ProcessOtherCHB(XFContentContainer* pXFPara,sal_uInt8 nType
     if (nType == MARKER_START)
     {
         XFHolderStart* pHolder= new XFHolderStart;
-        pHolder->SetType(A2OUSTR("text"));
+        pHolder->SetType("text");
         if (bHelpFlag)
             pHolder->SetDesc(m_Help.str());
         pHolder->SetPrompt(GetPromptText());
@@ -279,7 +279,7 @@ void LwpCHBlkMarker::ProcessKeylist(XFContentContainer* pXFPara,sal_uInt8 nType)
             pXFPara->Add(pList);
 
             XFHolderStart* pHolder= new XFHolderStart;
-            pHolder->SetType(A2OUSTR("text"));
+            pHolder->SetType("text");
             pHolder->SetPrompt(GetPromptText());
             pXFPara->Add(pHolder);
         }
@@ -305,16 +305,16 @@ sal_Bool LwpCHBlkMarker::IsBubbleHelp()
 
 void LwpCHBlkMarker::EnumAllKeywords()
 {
-    OUString name1(A2OUSTR(""));
-    OUString value1(A2OUSTR(""));
-    OUString name2(A2OUSTR("start"));
+    OUString name1("");
+    OUString value1("");
+    OUString name2("start");
     LwpPropList* pProp = GetPropList();
     if (!pProp)
         return;
     while(!name2.isEmpty())
     {
         name2 = pProp->EnumNamedProperty(name1,value1);
-        if ( name1.match(A2OUSTR("LIST"),0) )
+        if ( name1.match("LIST",0) )
         {
             m_Keylist.push_back(value1);
         }
@@ -354,7 +354,7 @@ OUString LwpBookMark::GetName()
     if (LwpDLNFVList::GetName())
         return LwpDLNFVList::GetName()->str();
     else
-        return OUString(A2OUSTR(""));
+        return OUString("");
 }
 
 LwpFieldMark::LwpFieldMark(LwpObjectHeader &objHdr, LwpSvStream *pStrm)
@@ -394,11 +394,11 @@ void LwpFieldMark::ParseIndex(OUString& sKey1,OUString& sKey2)
     if (index[0]>=0 && index[1]>=0)
         sKey1 = sFormula.copy(index[0]+1,index[1]-index[0]-1);
     else
-        sKey1 = A2OUSTR("");
+        sKey1 = "";
     if (index[2]>=0 && index[3]>=0)
         sKey2 = sFormula.copy(index[2]+1,index[3]-index[2]-1);
     else
-        sKey2 = A2OUSTR("");
+        sKey2 = "";
 }
 
 void LwpFieldMark::ParseTOC(OUString& sLevel,OUString& sText)
@@ -416,11 +416,11 @@ void LwpFieldMark::ParseTOC(OUString& sLevel,OUString& sText)
     if (index[0]>=0 && index[1]>=0)
         sLevel = sFormula.copy(index[0]+1,index[1]-index[0]-1);
     else
-        sLevel = A2OUSTR("");
+        sLevel = "";
     if (index[2]>=0 && index[3]>=0)
         sText = sFormula.copy(index[2]+1,index[3]-index[2]-1);
     else
-        sText = A2OUSTR("");
+        sText = "";
 }
 
 sal_Bool LwpFieldMark::IsFormulaInsert()
@@ -440,7 +440,7 @@ sal_Bool LwpFieldMark::IsDateTimeField(sal_uInt8& type,OUString& formula)
     index = sFormula.indexOf(ch1,0);
     if (index < 0)
     {
-        if (sFormula == A2OUSTR("TotalEditingTime"))
+        if (sFormula == "TotalEditingTime")
         {
             type = DATETIME_TOTALTIME;
             return sal_True;
@@ -449,26 +449,26 @@ sal_Bool LwpFieldMark::IsDateTimeField(sal_uInt8& type,OUString& formula)
     }
 
     tag = sFormula.copy(0,index);
-    if (tag == A2OUSTR("Now()"))
+    if (tag == "Now()")
     {
         type = DATETIME_NOW;
         formula = sFormula.copy(index+1,sFormula.getLength()-index-1);
         return sal_True;
     }
-    else if (tag == A2OUSTR("CreateDate"))
+    else if (tag == "CreateDate")
     {
         type = DATETIME_CREATE;
         formula = sFormula.copy(index+1,sFormula.getLength()-index-1);
         return sal_True;
     }
-    else if (tag == A2OUSTR("EditDate"))
+    else if (tag == "EditDate")
     {
         type = DATETIME_LASTEDIT;
         formula = sFormula.copy(index+1,sFormula.getLength()-index-1);
         return sal_True;
     }
-    else if (tag == A2OUSTR("YesterdaysDate") || tag == A2OUSTR("TomorrowsDate")
-            || tag == A2OUSTR("TodaysDate"))
+    else if (tag == "YesterdaysDate" || tag == "TomorrowsDate"
+            || tag == "TodaysDate")
     {
         type = DATETIME_SKIP;
         return sal_True;
@@ -500,13 +500,13 @@ sal_Bool LwpFieldMark::IsCrossRefField(sal_uInt8& nType, OUString& sMarkName)
     }
 
     tag = sFormula.copy(0,index);
-    if (tag == A2OUSTR("PageRef"))
+    if (tag == "PageRef")
     {
         sMarkName = sFormula.copy(index+1,sFormula.getLength()-index-1);
         nType = CROSSREF_PAGE;
         return sal_True;
     }
-    else if (tag == A2OUSTR("ParaRef"))
+    else if (tag == "ParaRef")
     {
         sMarkName = sFormula.copy(index+1,sFormula.getLength()-index-1);
         nType = CROSSREF_PARANUMBER;
@@ -520,22 +520,22 @@ sal_Bool LwpFieldMark::IsDocPowerField(sal_uInt8& nType,OUString& sFormula)
 {
     sFormula = m_Formula.str();
 
-    if (sFormula == A2OUSTR("Description"))
+    if (sFormula == "Description")
     {
         nType = DOC_DESCRIPTION;
         return sal_True;
     }
-    else if (sFormula == A2OUSTR("NumPages"))
+    else if (sFormula == "NumPages")
     {
         nType = DOC_NUMPAGES;
         return sal_True;
     }
-    else if (sFormula == A2OUSTR("NumChars"))
+    else if (sFormula == "NumChars")
     {
         nType = DOC_NUMCHARS;
         return sal_True;
     }
-    else if (sFormula == A2OUSTR("NumWords"))
+    else if (sFormula == "NumWords")
     {
         nType = DOC_NUMWORDS;
         return sal_True;

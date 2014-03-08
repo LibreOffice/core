@@ -208,7 +208,7 @@ OUString LwpNoteLayout::GetAuthor()
 {
     if(m_UserName.HasValue())
     {
-        if(m_UserName.str() != A2OUSTR(" "))
+        if(m_UserName.str() != OUString(" "))
         {
             return m_UserName.str();
         }

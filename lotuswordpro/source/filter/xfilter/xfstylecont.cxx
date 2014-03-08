@@ -128,7 +128,7 @@ IXFStyle*   XFStyleContainer::AddStyle(IXFStyle *pStyle)
     {
         if( pStyle->GetStyleName().isEmpty() )
         {
-            name = m_strStyleNamePrefix + Int32ToOUString(m_aStyles.size()+1);
+            name = m_strStyleNamePrefix + OUString::number(m_aStyles.size()+1);
             pStyle->SetStyleName(name);
         }
         else
@@ -137,7 +137,7 @@ IXFStyle*   XFStyleContainer::AddStyle(IXFStyle *pStyle)
             //for name conflict
             if(FindStyle( name))
             {
-                name = name + Int32ToOUString(m_aStyles.size()+1);
+                name = name + OUString::number(m_aStyles.size()+1);
                 pStyle->SetStyleName(name);
             }
         }

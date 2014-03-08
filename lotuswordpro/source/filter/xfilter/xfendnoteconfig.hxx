@@ -69,10 +69,10 @@ public:
     {
         m_bIsFootnote = sal_False;
         m_bInsertInPage = sal_False;
-        m_strDefaultStyle = A2OUSTR("Endnote");
-        m_strMasterPage = A2OUSTR("Endnote");
-        m_strCitationStyle = A2OUSTR("Endnote Symbol");
-        m_strBodyStyle = A2OUSTR("Endnote anchor");
+        m_strDefaultStyle = "Endnote";
+        m_strMasterPage = "Endnote";
+        m_strCitationStyle = "Endnote Symbol";
+        m_strBodyStyle = "Endnote anchor";
     }
 };
 

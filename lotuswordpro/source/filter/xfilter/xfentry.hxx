@@ -95,7 +95,7 @@ public:
     /**
      * @descr   Set entry key. The keys is available only for enumXFEntryAlphabetical.
      */
-    void    SetKey(const OUString& key1, const OUString& key2=A2OUSTR(""));
+    void    SetKey(const OUString& key1, const OUString& key2="");
 
     /**
      * @descr   Set whether it's a main entry. This is available only for enumXFEntryAlphabetical.
@@ -140,7 +140,7 @@ inline void XFEntry::SetEntryName(const OUString& name)
     m_strName = name;
 }
 
-inline void XFEntry::SetKey(const OUString& key1, const OUString& key2/* =A2OUSTR */)
+inline void XFEntry::SetKey(const OUString& key1, const OUString& key2)
 {
     m_strKey1 = key1;
     m_strKey2 = key2;

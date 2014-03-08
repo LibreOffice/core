@@ -204,9 +204,9 @@ public:
 
     void    SetListBullet(sal_Int32 level,
                             UChar32 bullet_char,
-                            OUString fontname = A2OUSTR(""),
-                            OUString prefix = A2OUSTR(""),
-                            OUString suffix = A2OUSTR("")
+                            OUString fontname = "",
+                            OUString prefix = "",
+                            OUString suffix = ""
                             );
 
     void    SetListNumber( sal_Int32 level, XFNumFmt& numFmt,   sal_Int16 nStartValue = 1 );

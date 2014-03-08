@@ -94,7 +94,7 @@ OUString LwpPropList::GetNamedProperty(OUString name)
     {
         return pProp->GetValue().str();
     }
-    return OUString(A2OUSTR(""));
+    return OUString("");
 }
 
 LwpPropListElement* LwpPropList::FindPropByName(OUString name)
@@ -134,7 +134,7 @@ OUString LwpPropList::EnumNamedProperty(OUString& name,OUString& value)
             return  pElement->GetName().str();
         }
         else
-            return A2OUSTR("");
+            return OUString("");
 
     }
     else
@@ -147,7 +147,7 @@ OUString LwpPropList::EnumNamedProperty(OUString& name,OUString& value)
             if(pElement)
                 return  pElement->GetName().str();
         }
-        return A2OUSTR("");
+        return OUString("");
     }
 }
 

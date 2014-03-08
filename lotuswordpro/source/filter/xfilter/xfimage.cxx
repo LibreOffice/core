@@ -91,55 +91,55 @@ void    XFImage::ToXml(IXFStream *pStrm)
     IXFAttrList *pAttrList = pStrm->GetAttrList();
 
     if( !GetStyleName().isEmpty() )
-        pAttrList->AddAttribute( A2OUSTR("draw:style-name"), GetStyleName() );
+        pAttrList->AddAttribute( "draw:style-name", GetStyleName() );
 
     assert(!m_strName.isEmpty());    //name should not be null.
     if( !m_strName.isEmpty() )
-        pAttrList->AddAttribute( A2OUSTR("draw:name"), m_strName );
+        pAttrList->AddAttribute( "draw:name", m_strName );
     //anchor type:
     switch( m_eAnchor )
     {
     case enumXFAnchorPara:
-        pAttrList->AddAttribute( A2OUSTR("text:anchor-type"), A2OUSTR("paragraph") );
+        pAttrList->AddAttribute( "text:anchor-type", "paragraph" );
         break;
     case enumXFAnchorPage:
-        pAttrList->AddAttribute( A2OUSTR("text:anchor-type"), A2OUSTR("page") );
-        pAttrList->AddAttribute( A2OUSTR("text:anchor-page-number"), Int32ToOUString(m_nAnchorPage) );
+        pAttrList->AddAttribute( "text:anchor-type", "page" );
+        pAttrList->AddAttribute( "text:anchor-page-number", OUString::number(m_nAnchorPage) );
         break;
     case enumXFAnchorChar:
-        pAttrList->AddAttribute( A2OUSTR("text:anchor-type"), A2OUSTR("char") );
+        pAttrList->AddAttribute( "text:anchor-type", "char" );
         break;
     case enumXFAnchorAsChar:
-        pAttrList->AddAttribute( A2OUSTR("text:anchor-type"), A2OUSTR("as-char") );
+        pAttrList->AddAttribute( "text:anchor-type", "as-char" );
         break;
     case enumXFAnchorFrame:
-        pAttrList->AddAttribute( A2OUSTR("text:anchor-type"), A2OUSTR("frame") );
+        pAttrList->AddAttribute( "text:anchor-type", "frame" );
         break;
     default:
         break;
     }
-    pAttrList->AddAttribute( A2OUSTR("svg:x"), DoubleToOUString(m_aRect.GetX()) + A2OUSTR("cm") );
-    pAttrList->AddAttribute( A2OUSTR("svg:y"), DoubleToOUString(m_aRect.GetY()) + A2OUSTR("cm") );
-    pAttrList->AddAttribute( A2OUSTR("svg:width"), DoubleToOUString(m_aRect.GetWidth()) + A2OUSTR("cm") );
-    pAttrList->AddAttribute( A2OUSTR("svg:height"), DoubleToOUString(m_aRect.GetHeight()) + A2OUSTR("cm") );
-    pAttrList->AddAttribute( A2OUSTR("draw:z-index"), Int32ToOUString(m_nZIndex) );
+    pAttrList->AddAttribute( "svg:x", DoubleToOUString(m_aRect.GetX()) + "cm" );
+    pAttrList->AddAttribute( "svg:y", DoubleToOUString(m_aRect.GetY()) + "cm" );
+    pAttrList->AddAttribute( "svg:width", DoubleToOUString(m_aRect.GetWidth()) + "cm" );
+    pAttrList->AddAttribute( "svg:height", DoubleToOUString(m_aRect.GetHeight()) + "cm" );
+    pAttrList->AddAttribute( "draw:z-index", OUString::number(m_nZIndex) );
 
     if( m_bUseLink )
     {
-        pAttrList->AddAttribute( A2OUSTR("xlink:href"), m_strImageFile );
-        pAttrList->AddAttribute( A2OUSTR("xlink:type"), A2OUSTR("simple") );
-        pAttrList->AddAttribute( A2OUSTR("xlink:show"), A2OUSTR("embed") );
-        pAttrList->AddAttribute( A2OUSTR("xlink:actuate"), A2OUSTR("onLoad") );
+        pAttrList->AddAttribute( "xlink:href", m_strImageFile );
+        pAttrList->AddAttribute( "xlink:type", "simple" );
+        pAttrList->AddAttribute( "xlink:show", "embed" );
+        pAttrList->AddAttribute( "xlink:actuate", "onLoad" );
     }
 
-    pStrm->StartElement( A2OUSTR("draw:image") );
+    pStrm->StartElement( "draw:image" );
     if( !m_bUseLink )
     {
         pAttrList->Clear();
-        pStrm->StartElement( A2OUSTR("office:binary-data") );
+        pStrm->StartElement( "office:binary-data" );
         pStrm->Characters(m_strData);
-        pStrm->EndElement( A2OUSTR("office:binary-data") );
+        pStrm->EndElement( "office:binary-data" );
     }
-    pStrm->EndElement( A2OUSTR("draw:image") );
+    pStrm->EndElement( "draw:image" );
 }
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

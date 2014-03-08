@@ -177,9 +177,9 @@ sal_Bool LwpDocument::IsSkippedDivision()
         return sal_True;
     //skip endnote division
     OUString strClassName = pDiv->GetClassName();
-    if (strClassName.equals(A2OUSTR(STR_DivisionEndnote))
-        || strClassName.equals(A2OUSTR(STR_DivisionGroupEndnote))
-        || strClassName.equals(A2OUSTR(STR_DocumentEndnote)))
+    if ((strClassName == STR_DivisionEndnote)
+        || (strClassName == STR_DivisionGroupEndnote)
+        || (strClassName == STR_DocumentEndnote))
     {
         LwpPageLayout* pPageLayout = dynamic_cast<LwpPageLayout*>(pDiv->GetInitialLayoutID()->obj(VO_PAGELAYOUT));
         if(pPageLayout)
@@ -342,7 +342,7 @@ void LwpDocument::RegisterFootnoteStyles()
         LwpFootnoteOptions* pFootnoteOpts = dynamic_cast<LwpFootnoteOptions*>(m_FootnoteOpts.obj());
         if (pFootnoteOpts)
         {
-            pFootnoteOpts->SetMasterPage(A2OUSTR("Endnote"));
+            pFootnoteOpts->SetMasterPage("Endnote");
             pFootnoteOpts->RegisterStyle();
         }
     }
@@ -433,11 +433,11 @@ sal_uInt16 LwpDocument::GetEndnoteType()
     if (!pDivInfo)
         return FN_DONTCARE;
     OUString strClassName = pDivInfo->GetClassName();
-    if (strClassName.equals(A2OUSTR(STR_DivisionEndnote)))
+    if (strClassName == STR_DivisionEndnote)
         return FN_DIVISION_SEPARATE;
-    if (strClassName.equals(A2OUSTR(STR_DivisionGroupEndnote)))
+    if (strClassName == STR_DivisionGroupEndnote)
         return FN_DIVISIONGROUP_SEPARATE;
-    if (strClassName.equals(A2OUSTR(STR_DocumentEndnote)))
+    if (strClassName == STR_DocumentEndnote)
         return FN_DOCUMENT_SEPARATE;
     return FN_DONTCARE;
 }
@@ -755,10 +755,10 @@ void LwpDocument::XFConvertFrameInPage(XFContentContainer * pCont)
 void LwpDocument::ChangeStyleName()
 {
     XFStyleManager* pXFStyleManager = LwpGlobalMgr::GetInstance()->GetXFStyleManager();
-    XFTextStyle* pStyle = dynamic_cast<XFTextStyle*>(pXFStyleManager->FindStyle(A2OUSTR("ClickHere")));
+    XFTextStyle* pStyle = dynamic_cast<XFTextStyle*>(pXFStyleManager->FindStyle("ClickHere"));
     if (pStyle)
     {
-        pStyle->SetStyleName(A2OUSTR("Placeholder"));
+        pStyle->SetStyleName("Placeholder");
     }
 }
 LwpDocSock::LwpDocSock(LwpObjectHeader& objHdr, LwpSvStream* pStrm)

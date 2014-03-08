@@ -201,7 +201,7 @@ void Lwp9Reader::ParseDocument()
 
     //Parse document content
     m_pStream->GetAttrList()->Clear();
-    m_pStream->StartElement( A2OUSTR("office:body") );
+    m_pStream->StartElement( "office:body" );
 
     //Parse change list, add by
     LwpGlobalMgr* pGlobal = LwpGlobalMgr::GetInstance();
@@ -209,7 +209,7 @@ void Lwp9Reader::ParseDocument()
     pChangeMgr->ConvertAllChange(m_pStream);
 
     doc->Parse(m_pStream);
-    m_pStream->EndElement(OUString("office:body"));
+    m_pStream->EndElement("office:body");
 
     WriteDocEnd();
 }
@@ -223,29 +223,29 @@ void Lwp9Reader::WriteDocHeader()
 
     IXFAttrList *pAttrList = m_pStream->GetAttrList();
 
-    pAttrList->AddAttribute( A2OUSTR("xmlns:office"), A2OUSTR("http://openoffice.org/2000/office") );
-    pAttrList->AddAttribute( A2OUSTR("xmlns:style"), A2OUSTR("http://openoffice.org/2000/style") );
-    pAttrList->AddAttribute( A2OUSTR("xmlns:text"), A2OUSTR("http://openoffice.org/2000/text") );
-    pAttrList->AddAttribute( A2OUSTR("xmlns:table"), A2OUSTR("http://openoffice.org/2000/table") );
-    pAttrList->AddAttribute( A2OUSTR("xmlns:draw"), A2OUSTR("http://openoffice.org/2000/drawing") );
+    pAttrList->AddAttribute( "xmlns:office", "http://openoffice.org/2000/office" );
+    pAttrList->AddAttribute( "xmlns:style", "http://openoffice.org/2000/style" );
+    pAttrList->AddAttribute( "xmlns:text", "http://openoffice.org/2000/text" );
+    pAttrList->AddAttribute( "xmlns:table", "http://openoffice.org/2000/table" );
+    pAttrList->AddAttribute( "xmlns:draw", "http://openoffice.org/2000/drawing" );
 
-    pAttrList->AddAttribute( A2OUSTR("xmlns:fo"), A2OUSTR("http://www.w3.org/1999/XSL/Format") );
-    pAttrList->AddAttribute( A2OUSTR("xmlns:xlink"), A2OUSTR("http://www.w3.org/1999/xlink") );
-    pAttrList->AddAttribute( A2OUSTR("xmlns:number"), A2OUSTR("http://openoffice.org/2000/datastyle") );
-    pAttrList->AddAttribute( A2OUSTR("xmlns:svg"), A2OUSTR("http://www.w3.org/2000/svg") );
-    pAttrList->AddAttribute( A2OUSTR("xmlns:chart"), A2OUSTR("http://openoffice.org/2000/chart") );
+    pAttrList->AddAttribute( "xmlns:fo", "http://www.w3.org/1999/XSL/Format" );
+    pAttrList->AddAttribute( "xmlns:xlink", "http://www.w3.org/1999/xlink" );
+    pAttrList->AddAttribute( "xmlns:number", "http://openoffice.org/2000/datastyle" );
+    pAttrList->AddAttribute( "xmlns:svg", "http://www.w3.org/2000/svg" );
+    pAttrList->AddAttribute( "xmlns:chart", "http://openoffice.org/2000/chart" );
 
-    pAttrList->AddAttribute( A2OUSTR("xmlns:dr3d"), A2OUSTR("http://openoffice.org/2000/dr3d") );
-    pAttrList->AddAttribute( A2OUSTR("xmlns:math"), A2OUSTR("http://www.w3.org/1998/Math/MathML") );
-    pAttrList->AddAttribute( A2OUSTR("xmlns:form"), A2OUSTR("http://openoffice.org/2000/form") );
-    pAttrList->AddAttribute( A2OUSTR("xmlns:script"), A2OUSTR("http://openoffice.org/2000/script") );
-    pAttrList->AddAttribute( A2OUSTR("xmlns:dc"), A2OUSTR("http://purl.org/dc/elements/1.1/") );
+    pAttrList->AddAttribute( "xmlns:dr3d", "http://openoffice.org/2000/dr3d" );
+    pAttrList->AddAttribute( "xmlns:math", "http://www.w3.org/1998/Math/MathML" );
+    pAttrList->AddAttribute( "xmlns:form", "http://openoffice.org/2000/form" );
+    pAttrList->AddAttribute( "xmlns:script", "http://openoffice.org/2000/script" );
+    pAttrList->AddAttribute( "xmlns:dc", "http://purl.org/dc/elements/1.1/" );
 
-    pAttrList->AddAttribute( A2OUSTR("xmlns:meta"), A2OUSTR("http://openoffice.org/2000/meta") );
-    pAttrList->AddAttribute( A2OUSTR("office:class"), A2OUSTR("text"));
-    pAttrList->AddAttribute( A2OUSTR("office:version"), A2OUSTR("1.0"));
+    pAttrList->AddAttribute( "xmlns:meta", "http://openoffice.org/2000/meta" );
+    pAttrList->AddAttribute( "office:class", "text");
+    pAttrList->AddAttribute( "office:version", "1.0");
 
-    m_pStream->StartElement( OUString("office:document") );
+    m_pStream->StartElement( "office:document" );
     pAttrList->Clear();
 
 }
@@ -254,7 +254,7 @@ void Lwp9Reader::WriteDocHeader()
  */
 void Lwp9Reader::WriteDocEnd()
 {
-    m_pStream->EndElement(OUString("office:document"));
+    m_pStream->EndElement("office:document");
     m_pStream->EndDocument();
 }
 

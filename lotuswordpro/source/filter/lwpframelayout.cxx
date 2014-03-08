@@ -129,9 +129,9 @@ void  LwpFrame::RegisterStyle(XFFrameStyle* pFrameStyle)
     if(!aFrameName.isEmpty())
     {
         //cause the bug of SODC, the linkframe name can not be "Frame1", so I change the frame name
-        /*if(aFrameName.equals(A2OUSTR("Frame1")))
+        /*if(aFrameName.equals("Frame1"))
         {
-            aFrameName = A2OUSTR("Frame1_COPY");
+            aFrameName = "Frame1_COPY";
         }
         pXFFrame->SetName(aFrameName);*/
         pXFFrame->SetName(m_StyleName);

@@ -205,17 +205,17 @@ void XFCellStyle::ToXml(IXFStream *pStrm)
 
     pAttrList->Clear();
     if( !style.isEmpty() )
-        pAttrList->AddAttribute(A2OUSTR("style:name"),GetStyleName());
+        pAttrList->AddAttribute("style:name",GetStyleName());
     if( !GetParentStyleName().isEmpty() )
-        pAttrList->AddAttribute(A2OUSTR("style:parent-style-name"),GetParentStyleName());
+        pAttrList->AddAttribute("style:parent-style-name",GetParentStyleName());
 
-    pAttrList->AddAttribute(A2OUSTR("style:family"), A2OUSTR("table-cell"));
+    pAttrList->AddAttribute("style:family", "table-cell");
     if( !m_strParentStyleName.isEmpty() )
-        pAttrList->AddAttribute(A2OUSTR("style:parent-style-name"),m_strParentStyleName);
+        pAttrList->AddAttribute("style:parent-style-name",m_strParentStyleName);
     if( !m_strDataStyle.isEmpty() )
-        pAttrList->AddAttribute( A2OUSTR("style:data-style-name"), m_strDataStyle );
+        pAttrList->AddAttribute( "style:data-style-name", m_strDataStyle );
 
-    pStrm->StartElement(A2OUSTR("style:style"));
+    pStrm->StartElement("style:style");
 
     //Paragraph properties:
     pAttrList->Clear();
@@ -223,7 +223,7 @@ void XFCellStyle::ToXml(IXFStream *pStrm)
     //text indent:
     if( m_fTextIndent>FLOAT_MIN )
     {
-        pAttrList->AddAttribute(A2OUSTR("fo:text-indent"), DoubleToOUString(m_fTextIndent) + A2OUSTR("cm") );
+        pAttrList->AddAttribute("fo:text-indent", DoubleToOUString(m_fTextIndent) + "cm" );
     }
     //padding:
     m_aPadding.ToXml(pStrm);
@@ -233,15 +233,15 @@ void XFCellStyle::ToXml(IXFStream *pStrm)
     //text horizontal align:
     if( m_eHoriAlign != enumXFAlignNone )
     {
-        pAttrList->AddAttribute(A2OUSTR("fo:text-align"), GetAlignName(m_eHoriAlign) );
+        pAttrList->AddAttribute("fo:text-align", GetAlignName(m_eHoriAlign) );
     }
     //text vertical align
     if( m_eVertAlign != enumXFAlignNone )
-        pAttrList->AddAttribute( A2OUSTR("fo:vertical-align"), GetAlignName(m_eVertAlign) );
+        pAttrList->AddAttribute( "fo:vertical-align", GetAlignName(m_eVertAlign) );
 
     //wrap text:
     if( m_bWrapText )
-        pAttrList->AddAttribute( A2OUSTR("fo:wrap-option"), A2OUSTR("wrap") );
+        pAttrList->AddAttribute( "fo:wrap-option", "wrap" );
 
     //shadow:
     m_aShadow.ToXml(pStrm);
@@ -252,20 +252,20 @@ void XFCellStyle::ToXml(IXFStream *pStrm)
     //background color:
     if( m_aBackColor.IsValid() && !m_pBackImage )
     {
-        pAttrList->AddAttribute(A2OUSTR("fo:background-color"), m_aBackColor.ToString() );
+        pAttrList->AddAttribute("fo:background-color", m_aBackColor.ToString() );
     }
     //Font properties:
     if( m_pFont )
         m_pFont->ToXml(pStrm);
 
-    pStrm->StartElement(A2OUSTR("style:properties"));
+    pStrm->StartElement("style:properties");
 
     if( m_pBackImage )
         m_pBackImage->ToXml(pStrm);
 
-    pStrm->EndElement(A2OUSTR("style:properties"));
+    pStrm->EndElement("style:properties");
 
-    pStrm->EndElement(A2OUSTR("style:style"));
+    pStrm->EndElement("style:style");
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -180,7 +180,7 @@ void LwpFribSection::ParseSection()
                 bRunin = sal_True;
             if (pIndexSection->IsFormatSeparator())
                 bSeparator = sal_True;
-            pIndex->SetDefaultAlphaIndex(A2OUSTR(""),bRunin,bSeparator);
+            pIndex->SetDefaultAlphaIndex("",bRunin,bSeparator);
             */
             SetDefaultAlphaIndex(pIndex);
 
@@ -198,50 +198,50 @@ void LwpFribSection::ParseSection()
 void LwpFribSection::SetDefaultAlphaIndex(XFIndex * pXFIndex)
 {
     LwpFoundry* pFoundry = m_pPara->GetFoundry();
-    OUString styleName = pFoundry->FindActuralStyleName(A2OUSTR("Separator"));
+    OUString styleName = pFoundry->FindActuralStyleName("Separator");
 
     LwpIndexSection* pIndexSection = static_cast<LwpIndexSection*>(m_Section.obj());
     XFIndexTemplate * pTemplateSep = new XFIndexTemplate();
     if (pIndexSection->IsFormatSeparator())
     {
         pXFIndex->SetSeparator(sal_True);
-        pTemplateSep->AddEntry(enumXFIndexTemplateText,A2OUSTR(""));
+        pTemplateSep->AddEntry(enumXFIndexTemplateText,"");
     }
-    //pXFIndex->AddTemplate(A2OUSTR("separator"),A2OUSTR("Separator"),pTemplateSep);
-    pXFIndex->AddTemplate(A2OUSTR("separator"),styleName,pTemplateSep);
+    //pXFIndex->AddTemplate("separator","Separator",pTemplateSep);
+    pXFIndex->AddTemplate("separator",styleName,pTemplateSep);
 
-    styleName = pFoundry->FindActuralStyleName(A2OUSTR("Primary"));
+    styleName = pFoundry->FindActuralStyleName("Primary");
 
     XFIndexTemplate * pTemplate1 = new XFIndexTemplate();
-    pTemplate1->AddEntry(enumXFIndexTemplateText,A2OUSTR(""));
-    pTemplate1->AddEntry(enumXFIndexTemplateTab,A2OUSTR(""));
-    pTemplate1->AddEntry(enumXFIndexTemplatePage,A2OUSTR(""));
-    //pXFIndex->AddTemplate(Int32ToOUString(1),A2OUSTR("Primary"),pTemplate1);
-    pXFIndex->AddTemplate(Int32ToOUString(1),styleName,pTemplate1);
+    pTemplate1->AddEntry(enumXFIndexTemplateText,"");
+    pTemplate1->AddEntry(enumXFIndexTemplateTab,"");
+    pTemplate1->AddEntry(enumXFIndexTemplatePage,"");
+    //pXFIndex->AddTemplate(OUString::number(1),"Primary",pTemplate1);
+    pXFIndex->AddTemplate(OUString::number(1),styleName,pTemplate1);
 
     XFIndexTemplate * pTemplate2 = new XFIndexTemplate();
-    pTemplate2->AddEntry(enumXFIndexTemplateText,A2OUSTR(""));
-    pTemplate2->AddEntry(enumXFIndexTemplateTab,A2OUSTR(""));
-    pTemplate2->AddEntry(enumXFIndexTemplatePage,A2OUSTR(""));
+    pTemplate2->AddEntry(enumXFIndexTemplateText,"");
+    pTemplate2->AddEntry(enumXFIndexTemplateTab,"");
+    pTemplate2->AddEntry(enumXFIndexTemplatePage,"");
     XFIndexTemplate * pTemplate3 = new XFIndexTemplate();
-    pTemplate3->AddEntry(enumXFIndexTemplateText,A2OUSTR(""));
-    pTemplate3->AddEntry(enumXFIndexTemplateTab,A2OUSTR(""));
-    pTemplate3->AddEntry(enumXFIndexTemplatePage,A2OUSTR(""));
+    pTemplate3->AddEntry(enumXFIndexTemplateText,"");
+    pTemplate3->AddEntry(enumXFIndexTemplateTab,"");
+    pTemplate3->AddEntry(enumXFIndexTemplatePage,"");
 
     if (pIndexSection->IsFormatRunin())
     {
-        //pXFIndex->AddTemplate(Int32ToOUString(2),A2OUSTR("Primary"),pTemplate2);
-        //pXFIndex->AddTemplate(Int32ToOUString(3),A2OUSTR("Primary"),pTemplate3);
-        pXFIndex->AddTemplate(Int32ToOUString(2),styleName,pTemplate2);
-        pXFIndex->AddTemplate(Int32ToOUString(3),styleName,pTemplate3);
+        //pXFIndex->AddTemplate(OUString::number(2),"Primary",pTemplate2);
+        //pXFIndex->AddTemplate(OUString::number(3),"Primary",pTemplate3);
+        pXFIndex->AddTemplate(OUString::number(2),styleName,pTemplate2);
+        pXFIndex->AddTemplate(OUString::number(3),styleName,pTemplate3);
     }
     else
     {
-        //pXFIndex->AddTemplate(Int32ToOUString(2),A2OUSTR("Secondary"),pTemplate2);
-        //pXFIndex->AddTemplate(Int32ToOUString(3),A2OUSTR("Secondary"),pTemplate3);
-        styleName = pFoundry->FindActuralStyleName(A2OUSTR("Secondary"));
-        pXFIndex->AddTemplate(Int32ToOUString(2),styleName,pTemplate2);
-        pXFIndex->AddTemplate(Int32ToOUString(3),styleName,pTemplate3);
+        //pXFIndex->AddTemplate(OUString::number(2),"Secondary",pTemplate2);
+        //pXFIndex->AddTemplate(OUString::number(3),"Secondary",pTemplate3);
+        styleName = pFoundry->FindActuralStyleName("Secondary");
+        pXFIndex->AddTemplate(OUString::number(2),styleName,pTemplate2);
+        pXFIndex->AddTemplate(OUString::number(3),styleName,pTemplate3);
     }
 }
 
@@ -270,7 +270,7 @@ sal_Bool LwpMasterPage::RegisterMasterPage(LwpFrib* pFrib)
 
     XFParaStyle* pOverStyle = new XFParaStyle;
     *pOverStyle = *(m_pPara->GetXFParaStyle());
-    pOverStyle->SetStyleName(A2OUSTR(""));
+    pOverStyle->SetStyleName("");
 
     LwpLayout::UseWhenType eUserType = m_pLayout->GetUseWhenType();
     switch(eUserType)
@@ -444,7 +444,7 @@ void LwpMasterPage::RegisterFillerPageStyle()
         {
             XFParaStyle* pPagebreakStyle = new XFParaStyle;
             *pPagebreakStyle = *(m_pPara->GetXFParaStyle());
-            pPagebreakStyle->SetStyleName(A2OUSTR(""));
+            pPagebreakStyle->SetStyleName("");
             pPagebreakStyle->SetBreaks(enumXFBreakAftPage);
             XFStyleManager* pXFStyleManager = LwpGlobalMgr::GetInstance()->GetXFStyleManager();
             m_FillerPageStyleName= pXFStyleManager->AddStyle(pPagebreakStyle)->GetStyleName();

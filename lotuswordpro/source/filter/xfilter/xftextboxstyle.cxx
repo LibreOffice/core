@@ -77,28 +77,28 @@ void    XFTextBoxStyle::ToXml(IXFStream *pStrm)
     IXFAttrList *pAttrList = pStrm->GetAttrList();
 
     pAttrList->Clear();
-    pAttrList->AddAttribute( A2OUSTR("style:name"), GetStyleName() );
+    pAttrList->AddAttribute( OUString("style:name"), GetStyleName() );
     if( !GetParentStyleName().isEmpty() )
-        pAttrList->AddAttribute(A2OUSTR("style:parent-style-name"),GetParentStyleName());
-    pAttrList->AddAttribute( A2OUSTR("style:family"), A2OUSTR("graphics") );
+        pAttrList->AddAttribute(OUString("style:parent-style-name"),GetParentStyleName());
+    pAttrList->AddAttribute( OUString("style:family"), OUString("graphics") );
     //parent style name ignore now.
-    pStrm->StartElement( A2OUSTR("style:style") );
+    pStrm->StartElement( OUString("style:style") );
 
     pAttrList->Clear();
-    pAttrList->AddAttribute( A2OUSTR("draw:stroke"), A2OUSTR("none") );
-    pAttrList->AddAttribute( A2OUSTR("svg:stroke-color"), A2OUSTR("#000000") );
-    pAttrList->AddAttribute( A2OUSTR("draw:fill"), A2OUSTR("none") );
-    pAttrList->AddAttribute( A2OUSTR("draw:fill-color"), A2OUSTR("#ffffff") );
-    pAttrList->AddAttribute( A2OUSTR("draw:auto-grow-height"), A2OUSTR("true") );
-    pAttrList->AddAttribute( A2OUSTR("style:run-through"), A2OUSTR("foreground") );
-    pAttrList->AddAttribute( A2OUSTR("style:wrap"), A2OUSTR("run-through") );
-    pAttrList->AddAttribute( A2OUSTR("style:wrap"), A2OUSTR("run-through") );
-    pAttrList->AddAttribute( A2OUSTR("style:number-wrapped-paragraphs"), A2OUSTR("no-limit") );
-    pAttrList->AddAttribute( A2OUSTR("style:wrap-contour"), A2OUSTR("false") );
+    pAttrList->AddAttribute( OUString("draw:stroke"), OUString("none") );
+    pAttrList->AddAttribute( OUString("svg:stroke-color"), OUString("#000000") );
+    pAttrList->AddAttribute( OUString("draw:fill"), OUString("none") );
+    pAttrList->AddAttribute( OUString("draw:fill-color"), OUString("#ffffff") );
+    pAttrList->AddAttribute( OUString("draw:auto-grow-height"), OUString("true") );
+    pAttrList->AddAttribute( OUString("style:run-through"), OUString("foreground") );
+    pAttrList->AddAttribute( OUString("style:wrap"), OUString("run-through") );
+    pAttrList->AddAttribute( OUString("style:wrap"), OUString("run-through") );
+    pAttrList->AddAttribute( OUString("style:number-wrapped-paragraphs"), OUString("no-limit") );
+    pAttrList->AddAttribute( OUString("style:wrap-contour"), OUString("false") );
 
-    pStrm->StartElement( A2OUSTR("style:properties") );
-    pStrm->EndElement( A2OUSTR("style:properties") );
+    pStrm->StartElement( OUString("style:properties") );
+    pStrm->EndElement( OUString("style:properties") );
 
-    pStrm->EndElement( A2OUSTR("style:style") );
+    pStrm->EndElement( OUString("style:style") );
 }
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

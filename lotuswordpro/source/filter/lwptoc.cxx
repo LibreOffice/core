@@ -153,7 +153,7 @@ void  LwpTocSuperLayout::XFConvert(XFContentContainer* pCont)
         if(!pLevel)
         {
             // add an blank template so that SODC won't add default style to this level
-            pToc->AddTemplate(Int32ToOUString(i),  OUString(), pTemplate);
+            pToc->AddTemplate(OUString::number(i),  OUString(), pTemplate);
             continue;
         }
 
@@ -163,7 +163,7 @@ void  LwpTocSuperLayout::XFConvert(XFContentContainer* pCont)
             // One level has 1 template
             if (!bInserted)
             {
-                pTemplate->SetLevel(Int32ToOUString(i));
+                pTemplate->SetLevel(OUString::number(i));
                 if(pLevel->GetUseLeadingText())
                 {
                     pTemplate->AddEntry(enumXFIndexTemplateChapter, pLevel->GetSearchStyle());
@@ -199,24 +199,24 @@ void  LwpTocSuperLayout::XFConvert(XFContentContainer* pCont)
                     }
                     else
                     {
-                        char sSep[8];
+                        OUString sSep;
                         switch(nLeaderType)
                         {
                         default: // go through
                         case NONE: // no leaders
-                            strcpy(sSep, "  ");
+                            sSep = "  ";
                             break;
                         case SEPARATORCOMMA:
-                            strcpy(sSep, ", ");
+                            sSep = ", ";
                             break;
                         case SEPARATORDOTS:
-                            strcpy(sSep, "...");
+                            sSep = "...";
                             break;
                         }
-                        pTemplate->AddTextEntry(A2OUSTR(sSep), m_TabStyleName);
+                        pTemplate->AddTextEntry(sSep, m_TabStyleName);
                     }
                     //"TOC Page Number Text Style" style always exists in Word Pro file
-                    pTemplate->AddEntry(enumXFIndexTemplatePage, A2OUSTR("TOC Page Number Text Style"));
+                    pTemplate->AddEntry(enumXFIndexTemplatePage, "TOC Page Number Text Style");
                 }
 
                 pToc->AddTemplate(Int16ToOUString(i),  m_pFoundry->FindActuralStyleName(pLevel->GetSearchStyle()), pTemplate);

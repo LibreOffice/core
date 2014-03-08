@@ -74,32 +74,32 @@ void    XFTimePart::ToXml(IXFStream *pStrm)
     case enumXFDateHour:
         pAttrList->Clear();
         if( m_bLongFmt )
-            pAttrList->AddAttribute( A2OUSTR("number:style"), A2OUSTR("long") );
-        pStrm->StartElement( A2OUSTR("number:hours") );
-        pStrm->EndElement( A2OUSTR("number:hours") );
+            pAttrList->AddAttribute( "number:style", "long" );
+        pStrm->StartElement( "number:hours" );
+        pStrm->EndElement( "number:hours" );
         break;
     case enumXFDateMinute:
         pAttrList->Clear();
         if( m_bLongFmt )
-            pAttrList->AddAttribute( A2OUSTR("number:style"), A2OUSTR("long") );
+            pAttrList->AddAttribute( "number:style", "long" );
         if( m_nDecimalPos>0 )
-            pAttrList->AddAttribute( A2OUSTR("number:decimal-places"), Int32ToOUString(m_nDecimalPos) );
+            pAttrList->AddAttribute( "number:decimal-places", OUString::number(m_nDecimalPos) );
 
-        pStrm->StartElement( A2OUSTR("number:minutes") );
-        pStrm->EndElement( A2OUSTR("number:minutes") );
+        pStrm->StartElement( "number:minutes" );
+        pStrm->EndElement( "number:minutes" );
         break;
     case enumXFDateSecond:
         pAttrList->Clear();
         if( m_bLongFmt )
-            pAttrList->AddAttribute( A2OUSTR("number:style"), A2OUSTR("long") );
-        pStrm->StartElement( A2OUSTR("number:seconds") );
-        pStrm->EndElement( A2OUSTR("number:seconds") );
+            pAttrList->AddAttribute( "number:style", "long" );
+        pStrm->StartElement( "number:seconds" );
+        pStrm->EndElement( "number:seconds" );
         break;
     case enumXFDateText:
         pAttrList->Clear();
-        pStrm->StartElement( A2OUSTR("number:text") );
+        pStrm->StartElement( "number:text" );
         pStrm->Characters( m_strText );
-        pStrm->EndElement( A2OUSTR("number:text") );
+        pStrm->EndElement( "number:text" );
         break;
     default:
         break;
@@ -127,13 +127,13 @@ void    XFTimeStyle::ToXml(IXFStream *pStrm)
     IXFAttrList *pAttrList = pStrm->GetAttrList();
 
     pAttrList->Clear();
-    pAttrList->AddAttribute( A2OUSTR("style:name"), GetStyleName() );
+    pAttrList->AddAttribute( "style:name", GetStyleName() );
     if( !GetParentStyleName().isEmpty() )
-        pAttrList->AddAttribute(A2OUSTR("style:parent-style-name"),GetParentStyleName());
-    pAttrList->AddAttribute( A2OUSTR("style:family"), A2OUSTR("data-style") );
+        pAttrList->AddAttribute("style:parent-style-name",GetParentStyleName());
+    pAttrList->AddAttribute( "style:family", "data-style" );
     if (!m_bTruncate)
-        pAttrList->AddAttribute( A2OUSTR("number:truncate-on-overflow"), A2OUSTR("false") );
-    pStrm->StartElement( A2OUSTR("number:time-style") );
+        pAttrList->AddAttribute( "number:truncate-on-overflow", "false" );
+    pStrm->StartElement( "number:time-style" );
 
     std::vector<XFTimePart>::iterator it;
     for( it = m_aParts.begin(); it != m_aParts.end(); ++it )
@@ -143,9 +143,9 @@ void    XFTimeStyle::ToXml(IXFStream *pStrm)
     if( m_bAmPm )
     {
         pAttrList->Clear();
-        pStrm->StartElement( A2OUSTR("number:am-pm") );
-        pStrm->EndElement( A2OUSTR("number:am-pm") );
+        pStrm->StartElement( "number:am-pm" );
+        pStrm->EndElement( "number:am-pm" );
     }
-    pStrm->EndElement( A2OUSTR("number:time-style") );
+    pStrm->EndElement( "number:time-style" );
 }
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

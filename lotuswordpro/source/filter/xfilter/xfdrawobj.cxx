@@ -80,54 +80,54 @@ void XFDrawObject::ToXml(IXFStream *pStrm)
     IXFAttrList *pAttrList = pStrm->GetAttrList();
 
     if( !GetStyleName().isEmpty() )
-        pAttrList->AddAttribute( A2OUSTR("draw:style-name"), GetStyleName() );
+        pAttrList->AddAttribute( "draw:style-name", GetStyleName() );
 
     assert(!m_strName.isEmpty());    //name should not be null.
     if( !m_strName.isEmpty() )
-        pAttrList->AddAttribute( A2OUSTR("draw:name"), m_strName );
+        pAttrList->AddAttribute( "draw:name", m_strName );
     //anchor type:
     switch( m_eAnchor )
     {
     case enumXFAnchorPara:
-        pAttrList->AddAttribute( A2OUSTR("text:anchor-type"), A2OUSTR("paragraph") );
+        pAttrList->AddAttribute( "text:anchor-type", "paragraph" );
         break;
     case enumXFAnchorPage:
-        pAttrList->AddAttribute( A2OUSTR("text:anchor-type"), A2OUSTR("page") );
+        pAttrList->AddAttribute( "text:anchor-type", "page" );
         break;
     case enumXFAnchorChar:
-        pAttrList->AddAttribute( A2OUSTR("text:anchor-type"), A2OUSTR("char") );
+        pAttrList->AddAttribute( "text:anchor-type", "char" );
         break;
     case enumXFAnchorAsChar:
-        pAttrList->AddAttribute( A2OUSTR("text:anchor-type"), A2OUSTR("as-char") );
+        pAttrList->AddAttribute( "text:anchor-type", "as-char" );
         break;
     case enumXFAnchorFrame:
-        pAttrList->AddAttribute( A2OUSTR("text:anchor-type"), A2OUSTR("frame") );
+        pAttrList->AddAttribute( "text:anchor-type", "frame" );
         break;
     default:
         break;
     }
-    pAttrList->AddAttribute( A2OUSTR("draw:z-index"), Int32ToOUString(m_nZIndex) );
+    pAttrList->AddAttribute( "draw:z-index", OUString::number(m_nZIndex) );
 
-    pAttrList->AddAttribute( A2OUSTR("svg:x"), DoubleToOUString(m_aRect.GetX()) + A2OUSTR("cm") );
-    pAttrList->AddAttribute( A2OUSTR("svg:y"), DoubleToOUString(m_aRect.GetY()) + A2OUSTR("cm") );
-    pAttrList->AddAttribute( A2OUSTR("svg:width"), DoubleToOUString(m_aRect.GetWidth()) + A2OUSTR("cm") );
-    pAttrList->AddAttribute( A2OUSTR("svg:height"), DoubleToOUString(m_aRect.GetHeight()) + A2OUSTR("cm") );
+    pAttrList->AddAttribute( "svg:x", DoubleToOUString(m_aRect.GetX()) + "cm" );
+    pAttrList->AddAttribute( "svg:y", DoubleToOUString(m_aRect.GetY()) + "cm" );
+    pAttrList->AddAttribute( "svg:width", DoubleToOUString(m_aRect.GetWidth()) + "cm" );
+    pAttrList->AddAttribute( "svg:height", DoubleToOUString(m_aRect.GetHeight()) + "cm" );
 
     //transform
     OUString   strTransform;
     if( m_nFlag&XFDRAWOBJECT_FLAG_ROTATE )
-        strTransform = A2OUSTR("rotate (") + DoubleToOUString(m_fRotate) + A2OUSTR(") ");
+        strTransform = "rotate (" + DoubleToOUString(m_fRotate) + ") ";
     if( m_nFlag&XFDRAWOBJECT_FLAG_TRANLATE )
-        strTransform += A2OUSTR("translate (") + DoubleToOUString(m_aRotatePoint.GetX()) + A2OUSTR("cm ") + DoubleToOUString(m_aRotatePoint.GetY()) + A2OUSTR("cm) ");
+        strTransform += "translate (" + DoubleToOUString(m_aRotatePoint.GetX()) + "cm " + DoubleToOUString(m_aRotatePoint.GetY()) + "cm) ";
     if( m_nFlag&XFDRAWOBJECT_FLAG_SCALE )
-        strTransform += A2OUSTR("scale (") + DoubleToOUString(m_fScaleX) + A2OUSTR("cm ") + DoubleToOUString(m_fScaleY) + A2OUSTR("cm) ");
+        strTransform += "scale (" + DoubleToOUString(m_fScaleX) + "cm " + DoubleToOUString(m_fScaleY) + "cm) ";
     if( m_nFlag&XFDRAWOBJECT_FLAG_SKEWX )
-        strTransform += A2OUSTR("skewX (") + DoubleToOUString(m_fSkewX) + A2OUSTR(" ");
+        strTransform += "skewX (" + DoubleToOUString(m_fSkewX) + " ";
     if( m_nFlag&XFDRAWOBJECT_FLAG_SKEWY )
-        strTransform += A2OUSTR("skewY (") + DoubleToOUString(m_fSkewY) + A2OUSTR(" ");
+        strTransform += "skewY (" + DoubleToOUString(m_fSkewY) + " ";
     strTransform = strTransform.trim();
 
     if( !strTransform.isEmpty() )
-        pAttrList->AddAttribute( A2OUSTR("draw:transform"), strTransform );
+        pAttrList->AddAttribute( "draw:transform", strTransform );
 }
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

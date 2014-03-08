@@ -116,12 +116,12 @@ void    XFTextStyle::ToXml(IXFStream *strm)
 
     pAttrList->Clear();
     if( !style.isEmpty() )
-        pAttrList->AddAttribute(OUString("style:name"),GetStyleName());
+        pAttrList->AddAttribute("style:name", GetStyleName());
     if( !GetParentStyleName().isEmpty() )
-        pAttrList->AddAttribute(A2OUSTR("style:parent-style-name"),GetParentStyleName());
+        pAttrList->AddAttribute("style:parent-style-name", GetParentStyleName());
 
-    pAttrList->AddAttribute(OUString("style:family"),A2OUSTR("text") );
-    strm->StartElement(OUString("style:style"));
+    pAttrList->AddAttribute("style:family", "text" );
+    strm->StartElement("style:style");
 
     //Font properties:
     pAttrList->Clear();
@@ -129,10 +129,10 @@ void    XFTextStyle::ToXml(IXFStream *strm)
     if( m_pFont )
         m_pFont->ToXml(strm);
 
-    strm->StartElement(OUString("style:properties"));
-    strm->EndElement(OUString("style:properties"));
+    strm->StartElement("style:properties");
+    strm->EndElement("style:properties");
 
-    strm->EndElement(OUString("style:style"));
+    strm->EndElement("style:style");
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

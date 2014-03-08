@@ -103,7 +103,7 @@ LwpChangeMgr::~LwpChangeMgr()
 void LwpChangeMgr::AddChangeFrib(LwpFrib* pFrib)
 {
     m_nCounter++;
-    OUString sID = A2OUSTR("ct")+ Int32ToOUString(m_nCounter);
+    OUString sID = "ct"+ OUString::number(m_nCounter);
     m_pFribMap->insert(std::pair<LwpFrib*,OUString>(pFrib,sID));
 }
 
@@ -112,7 +112,7 @@ OUString LwpChangeMgr::GetChangeID(LwpFrib* pFrib)
     std::map<LwpFrib*,OUString>::iterator iter;
     iter = m_pFribMap->find(pFrib);
     if (iter == m_pFribMap->end())
-        return A2OUSTR("");
+        return "";
     else
         return iter->second;
 }
@@ -143,12 +143,12 @@ void LwpChangeMgr::ConvertAllChange(IXFStream* pStream)
     if (m_ChangeList.empty())
             return;
     // Add for disable change tracking
-    pStream->GetAttrList()->AddAttribute( A2OUSTR("text:track-changes"),A2OUSTR("false"));
-    pStream->StartElement( A2OUSTR("text:tracked-changes") );
+    pStream->GetAttrList()->AddAttribute( "text:track-changes","false");
+    pStream->StartElement( "text:tracked-changes" );
     for (iter1=m_ChangeList.begin();iter1 !=m_ChangeList.end();++iter1)
         (*iter1)->ToXml(pStream);
 
-    pStream->EndElement(A2OUSTR("text:tracked-changes"));
+    pStream->EndElement("text:tracked-changes");
 
     for (iter1=m_ChangeList.begin();iter1 !=m_ChangeList.end();++iter1)
     {

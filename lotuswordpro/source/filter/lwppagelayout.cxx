@@ -402,7 +402,7 @@ OUString LwpPageLayout::RegisterEndnoteStyle()
 
     //Add master page
     XFMasterPage* mp1 = new XFMasterPage();
-    mp1->SetStyleName(A2OUSTR("Endnote"));
+    mp1->SetStyleName("Endnote");
     mp1->SetPageMaster(pmname);
 
     //Set footer style

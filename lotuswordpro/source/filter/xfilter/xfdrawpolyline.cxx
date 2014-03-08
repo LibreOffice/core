@@ -71,10 +71,10 @@ void XFDrawPolyline::ToXml(IXFStream *pStrm)
     pAttrList->Clear();
     //view-box:
     XFRect  rect = CalcViewBox();
-    OUString strViewBox = A2OUSTR("0 0 ");
-    strViewBox += DoubleToOUString(rect.GetWidth()*1000) + A2OUSTR(" ");
+    OUString strViewBox = "0 0 ";
+    strViewBox += DoubleToOUString(rect.GetWidth()*1000) + " ";
     strViewBox += DoubleToOUString(rect.GetHeight()*1000);
-    pAttrList->AddAttribute( A2OUSTR("svg:viewBox"), strViewBox);
+    pAttrList->AddAttribute( "svg:viewBox", strViewBox);
 
     //points
     OUString   strPoints;
@@ -83,17 +83,17 @@ void XFDrawPolyline::ToXml(IXFStream *pStrm)
         XFPoint pt = *it;
         double  x = (pt.GetX()-rect.GetX())*1000;
         double  y = (pt.GetY()-rect.GetY())*1000;
-        strPoints += DoubleToOUString(x) + A2OUSTR(",") + DoubleToOUString(y) + A2OUSTR(" ");
+        strPoints += DoubleToOUString(x) + "," + DoubleToOUString(y) + " ";
     }
     strPoints = strPoints.trim();
-    pAttrList->AddAttribute( A2OUSTR("draw:points"), strPoints);
+    pAttrList->AddAttribute( "draw:points", strPoints);
 
     SetPosition(rect.GetX(),rect.GetY(),rect.GetWidth(),rect.GetHeight());
     XFDrawObject::ToXml(pStrm);
 
-    pStrm->StartElement( A2OUSTR("draw:polyline") );
+    pStrm->StartElement( "draw:polyline" );
     ContentToXml(pStrm);
-    pStrm->EndElement( A2OUSTR("draw:polyline") );
+    pStrm->EndElement( "draw:polyline" );
 }
 
 XFRect  XFDrawPolyline::CalcViewBox()

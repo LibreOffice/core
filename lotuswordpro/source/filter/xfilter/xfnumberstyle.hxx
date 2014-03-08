@@ -183,9 +183,9 @@ inline void XFNumberStyle::SetCurrencySymbol(sal_Bool post, OUString symbol, sal
     if( bShowSpace )
     {
         if( post )
-            m_strCurrencySymbol = A2OUSTR(" ") + m_strCurrencySymbol;
+            m_strCurrencySymbol = " " + m_strCurrencySymbol;
         else
-            m_strCurrencySymbol += A2OUSTR(" ");
+            m_strCurrencySymbol += " ";
     }
 }
 

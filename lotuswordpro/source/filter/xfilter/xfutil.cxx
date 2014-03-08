@@ -64,16 +64,6 @@
 #include <rtl/ustrbuf.hxx>
 #include <sstream>
 
-OUString Int32ToOUString(sal_Int32 num)
-{
-    /*std::stringstream sstrm;
-
-    sstrm<<(int)num;
-    return OUString::createFromAscii(sstrm.str().c_str());
-    */
-    return OUString::number(num);
-}
-
 OUString Int16ToOUString(sal_Int16 num)
 {
     /*std::stringstream sstrm;
@@ -111,22 +101,11 @@ OUString   DoubleToOUString(double num, sal_Int32 /*precision*/)
 
 OUString   DateTimeToOUString(XFDateTime& dt)
 {
-    OUStringBuffer buf;
-    buf.append(dt.nYear);
-    buf.append( A2OUSTR("-") );
-    buf.append(dt.nMonth);
-    buf.append( A2OUSTR("-") );
-    buf.append(dt.nDay);
-    buf.append( A2OUSTR("T") );
-    buf.append(dt.nHour);
-    buf.append( A2OUSTR(":") );
-    buf.append(dt.nMinute);
-    buf.append( A2OUSTR(":") );
-    buf.append(dt.nSecond);
-    buf.append( A2OUSTR(".") );
-    buf.append(dt.nMillSecond);
+    OUString aResult = OUString::number(dt.nYear) + "-" + OUString::number(dt.nMonth) + "-" + OUString::number(dt.nDay) +
+        "T" + OUString::number(dt.nHour) + ":" + OUString::number(dt.nMinute) + ":" + OUString::number(dt.nSecond) + "." +
+        OUString::number(dt.nMillSecond);
 
-    return buf.makeStringAndClear();
+    return aResult;
 }
 
 OUString   GetTableColName(sal_Int32 col)
@@ -139,7 +118,7 @@ OUString   GetTableColName(sal_Int32 col)
     {
         ch = 'A' + col -1;
         strOut += ch;
-        return A2OUSTR(strOut.c_str());
+        return OUString::createFromAscii(strOut.c_str());
     }
 
     while( col>26 )
@@ -152,7 +131,7 @@ OUString   GetTableColName(sal_Int32 col)
 
     ch = 'A' + remain -1;
     strOut += ch;
-    return A2OUSTR(strOut.c_str());
+    return OUString::createFromAscii(strOut.c_str());
 }
 
 //tool functions:
@@ -161,61 +140,61 @@ OUString   GetUnderlineName(enumXFUnderline type)
     switch(type)
     {
     case enumXFUnderlineNone:
-        return A2OUSTR("none");
+        return OUString("none");
         break;
     case enumXFUnderlineSingle:
-        return A2OUSTR("single");
+        return OUString("single");
         break;
     case enumXFUnderlineDouble:
-        return A2OUSTR("double");
+        return OUString("double");
         break;
     case enumXFUnderlineDotted:
-        return A2OUSTR("dotted");
+        return OUString("dotted");
         break;
     case enumXFUnderlineDash:
-        return A2OUSTR("dash");
+        return OUString("dash");
         break;
     case enumXFUnderlineLongDash:
-        return A2OUSTR("long-dash");
+        return OUString("long-dash");
         break;
     case enumXFUnderlineDotDash:
-        return A2OUSTR("dot-dash");
+        return OUString("dot-dash");
         break;
     case enumXFUnderlineDotDotDash:
-        return A2OUSTR("dot-dot-dash");
+        return OUString("dot-dot-dash");
         break;
     case enumXFUnderlineWave:
-        return A2OUSTR("wave");
+        return OUString("wave");
         break;
     case enumXFUnderlineBold:
-        return A2OUSTR("bold");
+        return OUString("bold");
         break;
     case enumXFUnderlineBoldDotted:
-        return A2OUSTR("bold-dotted");
+        return OUString("bold-dotted");
         break;
     case enumXFUnderlineBoldDash:
-        return A2OUSTR("bold-dash");
+        return OUString("bold-dash");
         break;
     case enumXFUnderlineBoldLongDash:
-        return A2OUSTR("bold-long-dash");
+        return OUString("bold-long-dash");
         break;
     case enumXFUnderlineBoldDotDash:
-        return A2OUSTR("bold-dot-dash");
+        return OUString("bold-dot-dash");
         break;
     case enumXFUnderlineBoldDotDotDash:
-        return A2OUSTR("bold-dot-dot-dash");
+        return OUString("bold-dot-dot-dash");
         break;
     case enumXFUnderlineBoldWave:
-        return A2OUSTR("bold-wave");
+        return OUString("bold-wave");
         break;
     case enumXFUnderlineDoubleWave:
-        return A2OUSTR("double-wave");
+        return OUString("double-wave");
         break;
     case enumXFUnderlineSmallWave:
-        return A2OUSTR("samll-wave");
+        return OUString("samll-wave");
         break;
     }
-    return A2OUSTR("");
+    return OUString("");
 }
 
 OUString   GetReliefName(enumXFRelief type)
@@ -223,15 +202,15 @@ OUString   GetReliefName(enumXFRelief type)
     switch(type)
     {
         case enumXFReliefEngraved:
-            return A2OUSTR("engraved");
+            return OUString("engraved");
             break;
         case enumXFReliefEmbossed:
-            return A2OUSTR("embossed");
+            return OUString("embossed");
             break;
         default:
             break;
     }
-    return A2OUSTR("");
+    return OUString("");
 }
 
 OUString   GetCrossoutName(enumXFCrossout type)
@@ -239,66 +218,66 @@ OUString   GetCrossoutName(enumXFCrossout type)
     switch(type)
     {
     case enumXFCrossoutSignel:
-        return A2OUSTR("single-line");
+        return OUString("single-line");
         break;
     case enumXFCrossoutDouble:
-        return A2OUSTR("double-line");
+        return OUString("double-line");
         break;
     case enumXFCrossoutThick:
-        return A2OUSTR("thick-line");
+        return OUString("thick-line");
         break;
     case enumXFCrossoutSlash:
-        return A2OUSTR("slash");
+        return OUString("slash");
         break;
     case enumXFCrossoutX:
-        return A2OUSTR("X");
+        return OUString("X");
         break;
     default:
         break;
     }
-    return A2OUSTR("");
+    return OUString("");
 }
 
 OUString   GetTransformName(enumXFTransform type)
 {
     switch(type) {
     case enumXFTransformUpper:
-        return A2OUSTR("uppercase");
+        return OUString("uppercase");
         break;
     case enumXFTransformLower:
-        return A2OUSTR("lowercase");
+        return OUString("lowercase");
         break;
     case enumXFTransformCapitalize:
-        return A2OUSTR("capitalize");
+        return OUString("capitalize");
         break;
     case enumXFTransformSmallCaps:
-        return A2OUSTR("small-caps");
+        return OUString("small-caps");
         break;
     default:
         break;
     }
-    return A2OUSTR("");
+    return OUString("");
 }
 
 OUString   GetEmphasizeName(enumXFEmphasize type)
 {
     switch(type) {
     case enumXFEmphasizeDot:
-        return A2OUSTR("dot");
+        return OUString("dot");
         break;
     case enumXFEmphasizeCircle:
-        return A2OUSTR("circle");
+        return OUString("circle");
         break;
     case enumXFEmphasizeDisc:
-        return A2OUSTR("disc");
+        return OUString("disc");
         break;
     case enumXFEmphasizeAccent:
-        return A2OUSTR("accent");
+        return OUString("accent");
         break;
     default:
         break;
     }
-    return A2OUSTR("");
+    return OUString("");
 }
 
 OUString   GetTextDirName(enumXFTextDir dir)
@@ -306,33 +285,33 @@ OUString   GetTextDirName(enumXFTextDir dir)
     switch(dir)
     {
     case enumXFTextDirLR:
-        return A2OUSTR("lr");
+        return OUString("lr");
         break;
     case enumXFTextDirLR_TB:
-        return A2OUSTR("lr-tb");
+        return OUString("lr-tb");
         break;
     case enumXFTextDirPage:
-        return A2OUSTR("page");
+        return OUString("page");
         break;
     case enumXFTextDirRL:
-        return A2OUSTR("rl");
+        return OUString("rl");
         break;
     case enumXFTextDirRL_TB:
-        return A2OUSTR("rl-tb");
+        return OUString("rl-tb");
         break;
     case enumXFTextDirTB:
-        return A2OUSTR("tb");
+        return OUString("tb");
         break;
     case enumXFTextDirTB_LR:
-        return A2OUSTR("tb-lr");
+        return OUString("tb-lr");
         break;
     case enumXFTextDirTB_RL:
-        return A2OUSTR("tb-rl");
+        return OUString("tb-rl");
         break;
     default:
         break;
     }
-    return A2OUSTR("");
+    return OUString("");
 }
 
 OUString   GetFrameXPos(enumXFFrameXPos pos)
@@ -340,21 +319,21 @@ OUString   GetFrameXPos(enumXFFrameXPos pos)
     switch(pos)
     {
     case enumXFFrameXPosLeft:
-        return A2OUSTR("left");
+        return OUString("left");
         break;
     case enumXFFrameXPosRight:
-        return A2OUSTR("right");
+        return OUString("right");
         break;
     case enumXFFrameXPosCenter:
-        return A2OUSTR("center");
+        return OUString("center");
         break;
     case enumXFFrameXPosFromLeft:
-        return A2OUSTR("from-left");
+        return OUString("from-left");
         break;
     default:
         break;
     }
-    return A2OUSTR("");
+    return OUString("");
 }
 
 OUString   GetFrameXRel(enumXFFrameXRel rel)
@@ -362,48 +341,48 @@ OUString   GetFrameXRel(enumXFFrameXRel rel)
     switch(rel)
     {
     case enumXFFrameXRelPage:
-        return A2OUSTR("page");
+        return OUString("page");
         break;
     case enumXFFrameXRelPageContent:
-        return A2OUSTR("page-content");
+        return OUString("page-content");
         break;
     case enumXFFrameXRelPageEndMargin:
-        return A2OUSTR("page-end-margin");
+        return OUString("page-end-margin");
         break;
     case enumXFFrameXRelPageStartMargin:
-        return A2OUSTR("page-start-margin");
+        return OUString("page-start-margin");
         break;
     case enumXFFrameXRelPara:
-        return A2OUSTR("paragraph");
+        return OUString("paragraph");
         break;
     case enumXFFrameXRelParaContent:
-        return A2OUSTR("paragraph-content");
+        return OUString("paragraph-content");
         break;
     case enumXFFrameXRelParaEndMargin:
-        return A2OUSTR("paragraph-end-margin");
+        return OUString("paragraph-end-margin");
         break;
     case enumXFFrameXRelParaStartMargin:
-        return A2OUSTR("paragraph-start-margin");
+        return OUString("paragraph-start-margin");
         break;
     case enumXFFrameXRelChar:
-        return A2OUSTR("char");
+        return OUString("char");
         break;
     case enumXFFrameXRelFrame:
-        return A2OUSTR("frame");
+        return OUString("frame");
         break;
     case enumXFFrameXRelFrameContent:
-        return A2OUSTR("frame-content");
+        return OUString("frame-content");
         break;
     case enumXFFrameXRelFrameEndMargin:
-        return A2OUSTR("frame-end-margin");
+        return OUString("frame-end-margin");
         break;
     case enumXFFrameXRelFrameStartMargin:
-        return A2OUSTR("frame-start-margin");
+        return OUString("frame-start-margin");
         break;
     default:
         break;
     }
-    return A2OUSTR("");
+    return OUString("");
 }
 
 OUString   GetFrameYPos(enumXFFrameYPos pos)
@@ -411,17 +390,17 @@ OUString   GetFrameYPos(enumXFFrameYPos pos)
     switch(pos)
     {
     case enumXFFrameYPosTop:
-        return A2OUSTR("top");
+        return OUString("top");
     case enumXFFrameYPosMiddle:
-        return A2OUSTR("middle");
+        return OUString("middle");
     case enumXFFrameYPosBottom:
-        return A2OUSTR("bottom");
+        return OUString("bottom");
     case enumXFFrameYPosFromTop:
-        return A2OUSTR("from-top");
+        return OUString("from-top");
     case enumXFFrameYPosBelow:
-        return A2OUSTR("below");
+        return OUString("below");
     }
-    return A2OUSTR("");
+    return OUString("");
 }
 
 OUString   GetFrameYRel(enumXFFrameYRel rel)
@@ -429,61 +408,61 @@ OUString   GetFrameYRel(enumXFFrameYRel rel)
     switch(rel)
     {
     case enumXFFrameYRelBaseLine:
-        return A2OUSTR("baseline");
+        return OUString("baseline");
     case enumXFFrameYRelChar:
-        return A2OUSTR("char");
+        return OUString("char");
     case enumXFFrameYRelFrame:
-        return A2OUSTR("frame");
+        return OUString("frame");
     case enumXFFrameYRelFrameContent:
-        return A2OUSTR("frame-content");
+        return OUString("frame-content");
     case enumXFFrameYRelLine:
-        return A2OUSTR("line");
+        return OUString("line");
     case enumXFFrameYRelPage:
-        return A2OUSTR("page");
+        return OUString("page");
     case enumXFFrameYRelPageContent:
-        return A2OUSTR("page-content");
+        return OUString("page-content");
     case enumXFFrameYRelPara:
-        return A2OUSTR("paragraph");
+        return OUString("paragraph");
     case enumXFFrameYRelParaContent:
-        return A2OUSTR("paragraph-content");
+        return OUString("paragraph-content");
     case enumXFFrameYRelText:
-        return A2OUSTR("text");
+        return OUString("text");
     }
-    return A2OUSTR("");
+    return OUString("");
 }
 
 OUString   GetAlignName(enumXFAlignType align)
 {
     if( align == enumXFAlignStart )
-        return A2OUSTR("start");
+        return OUString("start");
     else if( align == enumXFAlignCenter )
-        return A2OUSTR("center");
+        return OUString("center");
     else if( align == enumXFAlignEnd )
-        return A2OUSTR("end");
+        return OUString("end");
     else if( align == enumXFAlignJustify )
-        return A2OUSTR("justify");
+        return OUString("justify");
     else if( align == enumXFAlignBottom )
-        return A2OUSTR("bottom");
+        return OUString("bottom");
     else if( align == enumXFAlignTop )
-        return A2OUSTR("top");
+        return OUString("top");
     else if( align == enumXFAlignMiddle )
-        return A2OUSTR("middle");
+        return OUString("middle");
     else if( align == enumXFALignMargins )
-        return A2OUSTR("margins");
+        return OUString("margins");
 
-    return A2OUSTR("");
+    return OUString("");
 }
 
 OUString   GetDrawKind(enumXFDrawKind kind)
 {
     if( kind == enumXFDrawKindFull )
-        return A2OUSTR("full");
+        return OUString("full");
     else if( kind == enumXFDrawKindSection )
-        return A2OUSTR("section");
+        return OUString("section");
     else if( kind == enumXFDrawKindCut )
-        return A2OUSTR("cut");
+        return OUString("cut");
     else    //( kind == enumXFDrawKindArc )
-        return A2OUSTR("arc");
+        return OUString("arc");
 }
 
 OUString   GetPageUsageName(enumXFPageUsage usage)
@@ -492,19 +471,19 @@ OUString   GetPageUsageName(enumXFPageUsage usage)
     switch(usage)
     {
     case enumXFPageUsageAll:
-        sRet = A2OUSTR("all");
+        sRet = "all";
         break;
     case enumXFPageUsageLeft:
-        sRet = A2OUSTR("left");
+        sRet = "left";
         break;
     case enumXFPageUsageRight:
-        sRet = A2OUSTR("right");
+        sRet = "right";
         break;
     case enumXFPageUsageMirror:
-        sRet = A2OUSTR("mirrored");
+        sRet = "mirrored";
         break;
     default:
-        sRet = A2OUSTR("mirrored");
+        sRet = "mirrored";
         break;
     }
     return sRet;
@@ -516,28 +495,28 @@ OUString   GetValueType(enumXFValueType type)
     switch(type)
     {
     case enumXFValueTypeBoolean:
-        sRet = A2OUSTR("boolean");
+        sRet = "boolean";
         break;
     case enumXFValueTypeCurrency:
-        sRet = A2OUSTR("currency");
+        sRet = "currency";
         break;
     case enumXFValueTypeDate:
-        sRet = A2OUSTR("date");
+        sRet = "date";
         break;
     case enumXFValueTypeFloat:
-        sRet = A2OUSTR("float");
+        sRet = "float";
         break;
     case enumXFValueTypePercentage:
-        sRet = A2OUSTR("percentage");
+        sRet = "percentage";
         break;
     case enumXFValueTypeString:
-        sRet = A2OUSTR("string");
+        sRet = "string";
         break;
     case enumXFValueTypeTime:
-        sRet = A2OUSTR("time");
+        sRet = "time";
         break;
     default:
-        sRet = A2OUSTR("mirrored");
+        sRet = "mirrored";
         break;
     }
     return sRet;
@@ -548,15 +527,15 @@ OUString   GetColorMode(enumXFColorMode mode)
     switch(mode)
     {
     case enumXFColorStandard:
-        return A2OUSTR("standard");
+        return OUString("standard");
     case enumXFColorGreyscale:
-        return A2OUSTR("greyscale");
+        return OUString("greyscale");
     case enumXFColorWatermark:
-        return A2OUSTR("watermark");
+        return OUString("watermark");
     case enumXFColorMono:
-        return A2OUSTR("mono");
+        return OUString("mono");
     }
-    return A2OUSTR("");
+    return OUString("");
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -78,17 +78,17 @@ void    XFDate::ToXml(IXFStream *pStrm)
 
     pAttrList->Clear();
     if( !GetStyleName().isEmpty() )
-        pAttrList->AddAttribute( A2OUSTR("style:data-style-name"), GetStyleName() );
+        pAttrList->AddAttribute( "style:data-style-name", GetStyleName() );
     if (m_bValued)
-        pAttrList->AddAttribute( A2OUSTR("text:date-value"), m_strDate );
+        pAttrList->AddAttribute( "text:date-value", m_strDate );
 
     if( m_bFixed )
-        pAttrList->AddAttribute( A2OUSTR("text:fixed"), A2OUSTR("true") );
+        pAttrList->AddAttribute( "text:fixed", "true" );
 
-    pStrm->StartElement( A2OUSTR("text:date") );
+    pStrm->StartElement( "text:date" );
     if (!m_strText.isEmpty())
         pStrm->Characters(m_strText);
-    pStrm->EndElement( A2OUSTR("text:date") );
+    pStrm->EndElement( "text:date" );
 }
 
 void XFDateStart::ToXml(IXFStream *pStrm)
@@ -97,22 +97,22 @@ void XFDateStart::ToXml(IXFStream *pStrm)
 
     pAttrList->Clear();
     if( !GetStyleName().isEmpty() )
-        pAttrList->AddAttribute( A2OUSTR("style:data-style-name"), GetStyleName() );
+        pAttrList->AddAttribute( "style:data-style-name", GetStyleName() );
 /*  if (m_bValued)
-        pAttrList->AddAttribute( A2OUSTR("text:date-value"), DateTimeToOUString(m_aDateTime) );
+        pAttrList->AddAttribute( "text:date-value", DateTimeToOUString(m_aDateTime) );
     if( m_bFixed )
-        pAttrList->AddAttribute( A2OUSTR("text:fixed"), A2OUSTR("true") );
+        pAttrList->AddAttribute( "text:fixed", "true" );
 
-    pStrm->StartElement( A2OUSTR("text:date") );
+    pStrm->StartElement( "text:date" );
     if (m_strText.getLength()>0)
         pStrm->Characters(m_strText);
 */
-    pStrm->StartElement( A2OUSTR("text:date") );
+    pStrm->StartElement( "text:date" );
 }
 
 void XFDateEnd::ToXml(IXFStream *pStrm)
 {
-    pStrm->EndElement( A2OUSTR("text:date") );
+    pStrm->EndElement( "text:date" );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

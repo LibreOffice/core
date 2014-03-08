@@ -137,15 +137,15 @@ void    XFHeaderStyle::ToXml(IXFStream *pStrm)
     pAttrList->Clear();
 
     if( m_bIsFooter )
-        pStrm->StartElement( A2OUSTR("style:footer-style") );
+        pStrm->StartElement( "style:footer-style" );
     else
-        pStrm->StartElement( A2OUSTR("style:header-style") );
+        pStrm->StartElement( "style:header-style" );
 
     //height
     if( m_fMinHeight>0 )
-        pAttrList->AddAttribute( A2OUSTR("fo:min-height"), DoubleToOUString(m_fMinHeight) + A2OUSTR("cm") );
+        pAttrList->AddAttribute( "fo:min-height", DoubleToOUString(m_fMinHeight) + "cm" );
     else if( m_fHeight>0 )
-        pAttrList->AddAttribute( A2OUSTR("svg:height"), DoubleToOUString(m_fHeight) + A2OUSTR("cm") );
+        pAttrList->AddAttribute( "svg:height", DoubleToOUString(m_fHeight) + "cm" );
 
     m_aMargin.ToXml(pStrm);
     if(m_pShadow)
@@ -155,25 +155,25 @@ void    XFHeaderStyle::ToXml(IXFStream *pStrm)
         m_pBorders->ToXml(pStrm);
 
     if( m_aBackColor.IsValid() )
-        pAttrList->AddAttribute( A2OUSTR("fo:background-color"), m_aBackColor.ToString() );
+        pAttrList->AddAttribute( "fo:background-color", m_aBackColor.ToString() );
 
     if( m_bDynamicSpace )
-        pAttrList->AddAttribute( A2OUSTR("style:dynamic-spacing"), A2OUSTR("true") );
+        pAttrList->AddAttribute( "style:dynamic-spacing", "true" );
     else
-        pAttrList->AddAttribute( A2OUSTR("style:dynamic-spacing"), A2OUSTR("false") );
+        pAttrList->AddAttribute( "style:dynamic-spacing", "false" );
 
-    pStrm->StartElement( A2OUSTR("style:properties") );
+    pStrm->StartElement( "style:properties" );
 
     // background image
     if( m_pBGImage )
         m_pBGImage->ToXml(pStrm);
 
-    pStrm->EndElement( A2OUSTR("style:properties") );
+    pStrm->EndElement( "style:properties" );
 
     if( m_bIsFooter )
-        pStrm->EndElement( A2OUSTR("style:footer-style") );
+        pStrm->EndElement( "style:footer-style" );
     else
-        pStrm->EndElement( A2OUSTR("style:header-style") );
+        pStrm->EndElement( "style:header-style" );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

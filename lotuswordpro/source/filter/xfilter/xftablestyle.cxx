@@ -91,34 +91,34 @@ void    XFTableStyle::ToXml(IXFStream *pStrm)
     IXFAttrList *pAttrList = pStrm->GetAttrList();
     pAttrList->Clear();
 
-    pAttrList->AddAttribute( A2OUSTR("style:name"), GetStyleName() );
+    pAttrList->AddAttribute( OUString("style:name"), GetStyleName() );
     if( !GetParentStyleName().isEmpty() )
-        pAttrList->AddAttribute(A2OUSTR("style:parent-style-name"),GetParentStyleName());
-    pAttrList->AddAttribute( A2OUSTR("style:family"), A2OUSTR("table") );
-    pStrm->StartElement( A2OUSTR("style:style") );
+        pAttrList->AddAttribute(OUString("style:parent-style-name"),GetParentStyleName());
+    pAttrList->AddAttribute( OUString("style:family"), OUString("table") );
+    pStrm->StartElement( OUString("style:style") );
 
     pAttrList->Clear();
-    pAttrList->AddAttribute( A2OUSTR("style:width"), DoubleToOUString(m_fWidth) + A2OUSTR("cm") );
+    pAttrList->AddAttribute( OUString("style:width"), DoubleToOUString(m_fWidth) + OUString("cm") );
     //text align:
     if( m_eAlign == enumXFAlignStart )
     {
-        pAttrList->AddAttribute(A2OUSTR("table:align"),A2OUSTR("left"));
+        pAttrList->AddAttribute(OUString("table:align"),OUString("left"));
     }
     else if( m_eAlign == enumXFAlignCenter )
     {
-        pAttrList->AddAttribute(A2OUSTR("table:align"),A2OUSTR("center"));
+        pAttrList->AddAttribute(OUString("table:align"),OUString("center"));
     }
     else if( m_eAlign == enumXFAlignEnd )
     {
-        pAttrList->AddAttribute(A2OUSTR("table:align"),A2OUSTR("right"));
+        pAttrList->AddAttribute(OUString("table:align"),OUString("right"));
     }
     else if( m_eAlign == enumXFALignMargins )
     {
-        pAttrList->AddAttribute(A2OUSTR("table:align"),A2OUSTR("margins"));
+        pAttrList->AddAttribute(OUString("table:align"),OUString("margins"));
     }
     //background color:
     if( m_aBackColor.IsValid() && !m_pBGImage )
-        pAttrList->AddAttribute(A2OUSTR("fo:background-color"), m_aBackColor.ToString() );
+        pAttrList->AddAttribute(OUString("fo:background-color"), m_aBackColor.ToString() );
     //shadow:
     m_aShadow.ToXml(pStrm);
     //margin:
@@ -126,12 +126,12 @@ void    XFTableStyle::ToXml(IXFStream *pStrm)
     //breaks:
     m_aBreaks.ToXml(pStrm);
 
-    pStrm->StartElement( A2OUSTR("style:properties") );
+    pStrm->StartElement( OUString("style:properties") );
     if( m_pBGImage )
         m_pBGImage->ToXml(pStrm);
 
-    pStrm->EndElement( A2OUSTR("style:properties") );
+    pStrm->EndElement( OUString("style:properties") );
 
-    pStrm->EndElement( A2OUSTR("style:style") );
+    pStrm->EndElement( OUString("style:style") );
 }
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

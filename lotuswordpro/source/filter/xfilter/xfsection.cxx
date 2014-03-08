@@ -79,28 +79,28 @@ void    XFSection::ToXml(IXFStream *pStrm)
     pAttrList->Clear();
     OUString style = GetStyleName();
     if( !style.isEmpty() )
-        pAttrList->AddAttribute( A2OUSTR("text:style-name"), style);
+        pAttrList->AddAttribute( OUString("text:style-name"), style);
     //section name
     if( !m_strSectionName.isEmpty() )
-        pAttrList->AddAttribute( A2OUSTR("text:name"), m_strSectionName);
+        pAttrList->AddAttribute( OUString("text:name"), m_strSectionName);
     if( m_bProtected )
-        pAttrList->AddAttribute( A2OUSTR("text:protected"), A2OUSTR("true") );
+        pAttrList->AddAttribute( OUString("text:protected"), OUString("true") );
     if( m_bHiden )
-        pAttrList->AddAttribute( A2OUSTR("text:display"), A2OUSTR("none") );
+        pAttrList->AddAttribute( OUString("text:display"), OUString("none") );
 
-    pStrm->StartElement( A2OUSTR("text:section") );
+    pStrm->StartElement( OUString("text:section") );
     if( !m_strSourceLink.isEmpty() )
     {
         pAttrList->Clear();
-        pAttrList->AddAttribute( A2OUSTR("xlink:href"), m_strSourceLink);
-        pAttrList->AddAttribute( A2OUSTR("text:filter-name"), A2OUSTR("wordpro"));
-        pStrm->StartElement( A2OUSTR("text:section-source") );
-        pStrm->EndElement( A2OUSTR("text:section-source") );
+        pAttrList->AddAttribute( OUString("xlink:href"), m_strSourceLink);
+        pAttrList->AddAttribute( OUString("text:filter-name"), OUString("wordpro"));
+        pStrm->StartElement( OUString("text:section-source") );
+        pStrm->EndElement( OUString("text:section-source") );
     }
 
     XFContentContainer::ToXml(pStrm);
 
-    pStrm->EndElement( A2OUSTR("text:section") );
+    pStrm->EndElement( OUString("text:section") );
 
 }
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

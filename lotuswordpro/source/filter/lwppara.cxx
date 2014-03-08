@@ -332,7 +332,7 @@ sal_Bool LwpPara::RegisterMasterPage(XFParaStyle* pBaseStyle)
         //register master page style
         XFParaStyle* pOverStyle = new XFParaStyle();
         *pOverStyle = *pBaseStyle;
-        pOverStyle->SetStyleName( A2OUSTR(""));
+        pOverStyle->SetStyleName( "");
         pOverStyle->SetMasterPage(pLayout->GetStyleName());
         if (!m_ParentStyleName.isEmpty())
                     pOverStyle->SetParentStyleName(m_ParentStyleName);
@@ -374,7 +374,7 @@ void LwpPara::RegisterStyle()
     {
         pOverStyle = new XFParaStyle;
         *pOverStyle = *pBaseStyle;
-        pOverStyle->SetStyleName(A2OUSTR(""));
+        pOverStyle->SetStyleName("");
         LwpParaProperty* pProps = m_pProps;
         sal_uInt32 PropType;
         LwpParaStyle* pParaStyle = dynamic_cast<LwpParaStyle*>(m_ParaStyle.obj());
@@ -768,7 +768,7 @@ void LwpPara::RegisterStyle()
     {
         XFParaStyle* pParaStyle = new XFParaStyle;
         *pParaStyle = *GetXFParaStyle();
-        //pOverStyle->SetStyleName(A2OUSTR(""));
+        //pOverStyle->SetStyleName("");
         this->RegisterTabStyle(pParaStyle);
         if (!m_ParentStyleName.isEmpty())
                     pParaStyle->SetParentStyleName(m_ParentStyleName);
@@ -816,7 +816,7 @@ XFSection* LwpPara::CreateXFSection()
 {
     XFSection* pXFSection = new XFSection();
     pXFSection->SetStyleName(m_SectionStyleName);
-    m_SectionStyleName = A2OUSTR("");
+    m_SectionStyleName = "";
     return pXFSection;
 }
 

@@ -102,43 +102,43 @@ void XFRubyStyle::ToXml(IXFStream *pStrm)
 
     pAttrList->Clear();
     if( !style.isEmpty() )
-        pAttrList->AddAttribute(A2OUSTR("style:name"),GetStyleName());
-    pAttrList->AddAttribute(A2OUSTR("style:family"), A2OUSTR("ruby"));
-    pStrm->StartElement(A2OUSTR("style:style"));
+        pAttrList->AddAttribute("style:name", GetStyleName());
+    pAttrList->AddAttribute("style:family", "ruby");
+    pStrm->StartElement("style:style");
 
     pAttrList->Clear();
 
     OUString sPos;
     if (m_eAlign == enumXFRubyLeft)
     {
-        sPos = A2OUSTR("left");
+        sPos ="left";
     }
     else if(m_eAlign == enumXFRubyRight)
     {
-        sPos =  A2OUSTR("right");
+        sPos = "right";
     }
     else if(m_eAlign == enumXFRubyCenter)
     {
-        sPos =  A2OUSTR("center");
+        sPos = "center";
     }
     if (!sPos.isEmpty())
-        pAttrList->AddAttribute(A2OUSTR("style:ruby-align"),sPos);
+        pAttrList->AddAttribute("style:ruby-align", sPos);
 
     OUString sAlign;
     if (m_ePos == enumXFRubyTop)
     {
-        sAlign = A2OUSTR("above");
+        sAlign = "above";
     }
     else if(m_ePos == enumXFRubyBottom)
     {
-        sAlign =  A2OUSTR("below");
+        sAlign = "below";
     }
     if (!sAlign.isEmpty())
-        pAttrList->AddAttribute(A2OUSTR("style:ruby-position"),sAlign);
+        pAttrList->AddAttribute("style:ruby-position", sAlign);
 
-    pStrm->StartElement(A2OUSTR("style:properties"));
-    pStrm->EndElement(A2OUSTR("style:properties"));
-    pStrm->EndElement(A2OUSTR("style:style"));
+    pStrm->StartElement("style:properties");
+    pStrm->EndElement("style:properties");
+    pStrm->EndElement("style:style");
 }
 
 #endif

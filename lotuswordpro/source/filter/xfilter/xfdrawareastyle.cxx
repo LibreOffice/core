@@ -78,20 +78,20 @@ void    XFDrawAreaStyle::ToXml(IXFStream *pStrm)
 
     pAttrList->Clear();
 
-    pAttrList->AddAttribute( A2OUSTR("draw:name"), GetStyleName() );
+    pAttrList->AddAttribute( "draw:name", GetStyleName() );
 
     if( m_eLineStyle == enumXFAreaLineSingle )
-        pAttrList->AddAttribute( A2OUSTR("draw:style"), A2OUSTR("single") );
+        pAttrList->AddAttribute( "draw:style", "single" );
     else if( m_eLineStyle == enumXFAreaLineCrossed )
-        pAttrList->AddAttribute( A2OUSTR("draw:style"), A2OUSTR("double") );
+        pAttrList->AddAttribute( "draw:style", "double" );
     else if( m_eLineStyle == enumXFAreaLineTriple )
-        pAttrList->AddAttribute( A2OUSTR("draw:style"), A2OUSTR("triple") );
+        pAttrList->AddAttribute( "draw:style", "triple" );
 
-    pAttrList->AddAttribute( A2OUSTR("draw:color"), m_aLineColor.ToString() );
-    pAttrList->AddAttribute( A2OUSTR("draw:rotation"), Int32ToOUString(m_nAngle*10) );
-    pAttrList->AddAttribute( A2OUSTR("draw:distance"), DoubleToOUString(m_fSpace)+A2OUSTR("cm") );
+    pAttrList->AddAttribute( "draw:color", m_aLineColor.ToString() );
+    pAttrList->AddAttribute( "draw:rotation", OUString::number(m_nAngle*10) );
+    pAttrList->AddAttribute( "draw:distance", DoubleToOUString(m_fSpace)+"cm" );
 
-    pStrm->StartElement( A2OUSTR("draw:hatch") );
-    pStrm->EndElement( A2OUSTR("draw:hatch") );
+    pStrm->StartElement( "draw:hatch" );
+    pStrm->EndElement( "draw:hatch" );
 }
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

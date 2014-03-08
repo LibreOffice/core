@@ -78,7 +78,7 @@ void LwpFribColumnBreak::RegisterBreakStyle(LwpPara * pPara)
 
     XFParaStyle* pOverStyle = new XFParaStyle;
     *pOverStyle = *pBaseStyle;
-    pOverStyle->SetStyleName(A2OUSTR(""));
+    pOverStyle->SetStyleName("");
 
     //Old code
     //if (static_cast<LwpStory*>(pPara->GetStoryID()->obj())
@@ -139,7 +139,7 @@ void LwpFribPageBreak::RegisterBreakStyle(LwpPara* pPara)
 
     XFParaStyle* pOverStyle = new XFParaStyle;
     *pOverStyle = *pBaseStyle;
-    pOverStyle->SetStyleName(A2OUSTR(""));
+    pOverStyle->SetStyleName("");
     pOverStyle->SetMasterPage(pBaseStyle->GetMasterPage());
 
     if (!GetNext() || GetNext()->GetType()==FRIB_TAG_EOP)

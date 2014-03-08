@@ -74,8 +74,8 @@ inline void XFTabStop::ToXml(IXFStream *pStrm)
     IXFAttrList *pAttrList = pStrm->GetAttrList();
 
     pAttrList->Clear();
-    pStrm->StartElement( A2OUSTR("text:tab-stop") );
-    pStrm->EndElement( A2OUSTR("text:tab-stop") );
+    pStrm->StartElement( OUString("text:tab-stop") );
+    pStrm->EndElement( OUString("text:tab-stop") );
 }
 
 #endif

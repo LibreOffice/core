@@ -72,7 +72,7 @@ OUString XFSvgPathEntry::ToString()
     for( it = m_aPoints.begin(); it != m_aPoints.end(); ++it )
     {
         XFPoint aPt= *it;
-        str += DoubleToOUString(aPt.GetX()*1000) + A2OUSTR(" ") + DoubleToOUString(aPt.GetY()*1000) + A2OUSTR(" ");
+        str += DoubleToOUString(aPt.GetX()*1000) + " " + DoubleToOUString(aPt.GetY()*1000) + " ";
     }
     return str.trim();
 }
@@ -86,9 +86,9 @@ void    XFDrawPath::MoveTo(XFPoint pt, sal_Bool absPosition)
     XFSvgPathEntry  entry;
 
     if( absPosition )
-        entry.SetCommand(A2OUSTR("M"));
+        entry.SetCommand("M");
     else
-        entry.SetCommand(A2OUSTR("m"));
+        entry.SetCommand("m");
     entry.AddPoint(pt);
     m_aPaths.push_back(entry);
 }
@@ -98,9 +98,9 @@ void    XFDrawPath::LineTo(XFPoint pt, sal_Bool absPosition)
     XFSvgPathEntry  entry;
 
     if( absPosition )
-        entry.SetCommand(A2OUSTR("L"));
+        entry.SetCommand("L");
     else
-        entry.SetCommand(A2OUSTR("l"));
+        entry.SetCommand("l");
     entry.AddPoint(pt);
     m_aPaths.push_back(entry);
 }
@@ -110,9 +110,9 @@ void    XFDrawPath::CurveTo(XFPoint dest, XFPoint ctrl1, XFPoint ctrl2, sal_Bool
     XFSvgPathEntry  entry;
 
     if( absPosition )
-        entry.SetCommand(A2OUSTR("C"));
+        entry.SetCommand("C");
     else
-        entry.SetCommand(A2OUSTR("c"));
+        entry.SetCommand("c");
     entry.AddPoint(ctrl1);
     entry.AddPoint(ctrl2);
     entry.AddPoint(dest);
@@ -125,9 +125,9 @@ void    XFDrawPath::ClosePath(sal_Bool absPosition)
     XFSvgPathEntry  entry;
 
     if( absPosition )
-        entry.SetCommand(A2OUSTR("Z"));
+        entry.SetCommand("Z");
     else
-        entry.SetCommand(A2OUSTR("z"));
+        entry.SetCommand("z");
 
     m_aPaths.push_back(entry);
 }
@@ -140,10 +140,10 @@ void    XFDrawPath::ToXml(IXFStream *pStrm)
     //view-box:
     XFRect  rect = m_aRect;
 
-    OUString strViewBox = A2OUSTR("0 0 ");
-    strViewBox += DoubleToOUString(rect.GetWidth()*1000) + A2OUSTR(" ");
+    OUString strViewBox = "0 0 ";
+    strViewBox += DoubleToOUString(rect.GetWidth()*1000) + " ";
     strViewBox += DoubleToOUString(rect.GetHeight()*1000);
-    pAttrList->AddAttribute( A2OUSTR("svg:viewBox"), strViewBox);
+    pAttrList->AddAttribute( "svg:viewBox", strViewBox);
 
     //points
     OUString   strPath;
@@ -154,14 +154,14 @@ void    XFDrawPath::ToXml(IXFStream *pStrm)
         strPath += aSvg.ToString();
     }
     strPath = strPath.trim();
-    pAttrList->AddAttribute( A2OUSTR("svg:d"), strPath);
+    pAttrList->AddAttribute( "svg:d", strPath);
 
     SetPosition(rect);
     XFDrawObject::ToXml(pStrm);
 
-    pStrm->StartElement( A2OUSTR("draw:path") );
+    pStrm->StartElement( "draw:path" );
     ContentToXml(pStrm);
-    pStrm->EndElement( A2OUSTR("draw:path") );
+    pStrm->EndElement( "draw:path" );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

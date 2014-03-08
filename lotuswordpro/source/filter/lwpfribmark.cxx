@@ -115,7 +115,7 @@ void LwpFribCHBlock::XFConvert(XFContentContainer* pXFPara,LwpStory* pStory)
             if (pHyperlink)
             {
                 pHyperlink->SetHyperlinkFlag(sal_True);
-                pHyperlink->SetHyperlink(pMarker->GetNamedProperty(A2OUSTR("URL")));
+                pHyperlink->SetHyperlink(pMarker->GetNamedProperty("URL"));
             }
         }
         else if (type == MARKER_END)//or none
@@ -266,7 +266,7 @@ void LwpFribField::XFConvert(XFContentContainer* pXFPara)
         if (pFieldMark->IsFormulaInsert())
         {
             XFTextContent *pSpan = new XFTextContent();
-            pSpan->SetText(A2OUSTR(">"));
+            pSpan->SetText(">");
             pXFPara->Add(pSpan);
         }
         if (fieldType == LwpFieldMark::FLD_FIELD)
@@ -350,7 +350,7 @@ void LwpFribField::XFConvert(XFContentContainer* pXFPara)
     if (pFieldMark->IsFormulaInsert())
     {
         XFTextContent *pSpan = new XFTextContent();
-        pSpan->SetText(A2OUSTR("<"));
+        pSpan->SetText("<");
         pXFPara->Add(pSpan);
     }
 
@@ -385,7 +385,7 @@ void LwpFribField::RegisterStyle(LwpFoundry* pFoundry)
 void LwpFribField::RegisterTimeField(LwpFieldMark* pFieldMark)
 {
     OUString sFormula = pFieldMark->GetFormula();//now bookmark maybe not all register to bookmarkmgr,
-    if (sFormula == A2OUSTR("TotalEditingTime"))//so check field type now is not correct.
+    if (sFormula == "TotalEditingTime")//so check field type now is not correct.
         RegisterTotalTimeStyle();
     else
     {
@@ -397,7 +397,7 @@ void LwpFribField::RegisterTimeField(LwpFieldMark* pFieldMark)
             return;
 
         tag = sFormula.copy(0,index);
-        if (tag == A2OUSTR("Now()") || tag == A2OUSTR("CreateDate") ||  tag == A2OUSTR("EditDate"))
+        if (tag == "Now()" || tag == "CreateDate" ||  tag == "EditDate")
             RegisterDateTimeStyle(sFormula.copy(index+1,sFormula.getLength()-index-1));
     }
 }
@@ -420,248 +420,248 @@ void LwpFribField::RegisterDateTimeStyle(OUString sFormula)
         return;
     if (sFormula[1] == 'F')
     {
-        if (sFormula == A2OUSTR("%FLSystemShortDate"))
+        if (sFormula == "%FLSystemShortDate")
         {
             pDateStyle = LwpTools::GetSystemDateStyle(sal_False);
         }
-        else if (sFormula == A2OUSTR("%FLSystemLongDate"))
+        else if (sFormula == "%FLSystemLongDate")
         {
             pDateStyle = LwpTools::GetSystemDateStyle(sal_True);
         }
-        else if (sFormula == A2OUSTR("%FLISODate1") || sFormula == A2OUSTR("%FLYYYY/MM/DD") )
+        else if (sFormula == "%FLISODate1" || sFormula == "%FLYYYY/MM/DD" )
         {
             pDateStyle = new XFDateStyle;
             pDateStyle->AddYear();
-            pDateStyle->AddText(A2OUSTR("/"));
+            pDateStyle->AddText("/");
             pDateStyle->AddMonth();
-            pDateStyle->AddText(A2OUSTR("/"));
+            pDateStyle->AddText("/");
             pDateStyle->AddMonthDay();
         }
-        else if (sFormula == A2OUSTR("%FLISODate2") || sFormula == A2OUSTR("%FLYYYY/MM/DD HH:mm:SS") )
+        else if (sFormula == "%FLISODate2" || sFormula == "%FLYYYY/MM/DD HH:mm:SS" )
         {
             pDateStyle = new XFDateStyle;
             pDateStyle->AddYear();
-            pDateStyle->AddText(A2OUSTR("/"));
+            pDateStyle->AddText("/");
             pDateStyle->AddMonth();
-            pDateStyle->AddText(A2OUSTR("/"));
+            pDateStyle->AddText("/");
             pDateStyle->AddMonthDay();
-            pDateStyle->AddText(A2OUSTR(" "));
+            pDateStyle->AddText(" ");
             pDateStyle->AddHour();
-            pDateStyle->AddText(A2OUSTR(":"));
+            pDateStyle->AddText(":");
             pDateStyle->AddMinute();
-            pDateStyle->AddText(A2OUSTR(":"));
+            pDateStyle->AddText(":");
             pDateStyle->AddSecond(sal_True,0);
         }
-        else if (sFormula == A2OUSTR("%FLM/D/YY"))
+        else if (sFormula == "%FLM/D/YY")
         {
             pDateStyle = new XFDateStyle;
             pDateStyle->AddMonth(sal_False);
-            pDateStyle->AddText(A2OUSTR("/"));
+            pDateStyle->AddText("/");
             pDateStyle->AddMonthDay(sal_False);
-            pDateStyle->AddText(A2OUSTR("/"));
+            pDateStyle->AddText("/");
             pDateStyle->AddYear(sal_False);
         }
-        else if (sFormula == A2OUSTR("%FLMonth D, YYYY"))
+        else if (sFormula == "%FLMonth D, YYYY")
         {
             pDateStyle = new XFDateStyle;
             pDateStyle->AddMonth(sal_True,sal_True);
-            pDateStyle->AddText(A2OUSTR(" "));
+            pDateStyle->AddText(" ");
             pDateStyle->AddMonthDay(sal_False);
-            pDateStyle->AddText(A2OUSTR(", "));
+            pDateStyle->AddText(", ");
             pDateStyle->AddYear();
         }
-        else if (sFormula == A2OUSTR("%FLWeekday, Month D, YYYY"))
+        else if (sFormula == "%FLWeekday, Month D, YYYY")
         {
             pDateStyle = new XFDateStyle;
             pDateStyle->AddWeekDay();
-            pDateStyle->AddText(A2OUSTR(", "));
+            pDateStyle->AddText(", ");
             pDateStyle->AddMonth(sal_True,sal_True);
-            pDateStyle->AddText(A2OUSTR(" "));
+            pDateStyle->AddText(" ");
             pDateStyle->AddMonthDay(sal_False);
-            pDateStyle->AddText(A2OUSTR(", "));
+            pDateStyle->AddText(", ");
             pDateStyle->AddYear();
         }
-        else if (sFormula == A2OUSTR("%FLMn D, YYYY"))
+        else if (sFormula == "%FLMn D, YYYY")
         {
             pDateStyle = new XFDateStyle;
             pDateStyle->AddMonth(sal_False,sal_True);
-            pDateStyle->AddText(A2OUSTR(" "));
+            pDateStyle->AddText(" ");
             pDateStyle->AddMonthDay(sal_False);
-            pDateStyle->AddText(A2OUSTR(", "));
+            pDateStyle->AddText(", ");
             pDateStyle->AddYear();
         }
-        else if (sFormula == A2OUSTR("%FLWday, Mn D, YYYY"))
+        else if (sFormula == "%FLWday, Mn D, YYYY")
         {
             pDateStyle = new XFDateStyle;
             pDateStyle->AddWeekDay(sal_False);
-            pDateStyle->AddText(A2OUSTR(", "));
+            pDateStyle->AddText(", ");
             pDateStyle->AddMonth(sal_False,sal_True);
-            pDateStyle->AddText(A2OUSTR(" "));
+            pDateStyle->AddText(" ");
             pDateStyle->AddMonthDay(sal_False);
-            pDateStyle->AddText(A2OUSTR(", "));
+            pDateStyle->AddText(", ");
             pDateStyle->AddYear();
         }
-        else if (sFormula == A2OUSTR("%FLMn D"))
+        else if (sFormula == "%FLMn D")
         {
             pDateStyle = new XFDateStyle;
             pDateStyle->AddMonth(sal_False,sal_True);
-            pDateStyle->AddText(A2OUSTR(" "));
+            pDateStyle->AddText(" ");
             pDateStyle->AddMonthDay(sal_False);
         }
-        else if (sFormula == A2OUSTR("%FLWeekday, Mn D"))
+        else if (sFormula == "%FLWeekday, Mn D")
         {
             pDateStyle = new XFDateStyle;
             pDateStyle->AddWeekDay();
-            pDateStyle->AddText(A2OUSTR(", "));
+            pDateStyle->AddText(", ");
             pDateStyle->AddMonth(sal_False,sal_True);
-            pDateStyle->AddText(A2OUSTR(" "));
+            pDateStyle->AddText(" ");
             pDateStyle->AddMonthDay(sal_False);
         }
-        else if (sFormula == A2OUSTR("%FLMn D, YY"))
+        else if (sFormula == "%FLMn D, YY")
         {
             pDateStyle = new XFDateStyle;
             pDateStyle->AddMonth(sal_False,sal_True);
-            pDateStyle->AddText(A2OUSTR(" "));
+            pDateStyle->AddText(" ");
             pDateStyle->AddMonthDay(sal_False);
-            pDateStyle->AddText(A2OUSTR(", "));
+            pDateStyle->AddText(", ");
             pDateStyle->AddYear(sal_False);
         }
-        else if (sFormula == A2OUSTR("%FLM/D"))
+        else if (sFormula == "%FLM/D")
         {
             pDateStyle = new XFDateStyle;
             pDateStyle->AddMonth(sal_False);
-            pDateStyle->AddText(A2OUSTR("/"));
+            pDateStyle->AddText("/");
             pDateStyle->AddMonthDay(sal_False);
         }
-        else if (sFormula == A2OUSTR("%FLM/YY"))
+        else if (sFormula == "%FLM/YY")
         {
             pDateStyle = new XFDateStyle;
             pDateStyle->AddMonth(sal_False);
-            pDateStyle->AddText(A2OUSTR("/"));
+            pDateStyle->AddText("/");
             pDateStyle->AddYear(sal_False);
         }
-        else if (sFormula == A2OUSTR("%FLMn YY"))
+        else if (sFormula == "%FLMn YY")
         {
             pDateStyle = new XFDateStyle;
             pDateStyle->AddMonth(sal_False,sal_True);
-            pDateStyle->AddText(A2OUSTR(" "));
+            pDateStyle->AddText(" ");
             pDateStyle->AddYear(sal_False);
         }
-        else if (sFormula == A2OUSTR("%FLWeekday"))
+        else if (sFormula == "%FLWeekday")
         {
             pDateStyle = new XFDateStyle;
             pDateStyle->AddWeekDay();
         }
-        else if (sFormula == A2OUSTR("%FLWday"))
+        else if (sFormula == "%FLWday")
         {
             pDateStyle = new XFDateStyle;
             pDateStyle->AddWeekDay(sal_False);
         }
-        else if (sFormula == A2OUSTR("%FLMonth"))
+        else if (sFormula == "%FLMonth")
         {
             pDateStyle = new XFDateStyle;
             pDateStyle->AddMonth(sal_True,sal_True);
         }
-        else if (sFormula == A2OUSTR("%FLMn"))
+        else if (sFormula == "%FLMn")
         {
             pDateStyle = new XFDateStyle;
             pDateStyle->AddMonth(sal_False,sal_True);
         }
-        else if (sFormula == A2OUSTR("%FLD"))
+        else if (sFormula == "%FLD")
         {
             pDateStyle = new XFDateStyle;
             pDateStyle->AddMonthDay(sal_False);
         }
-        else if (sFormula == A2OUSTR("%FLM"))
+        else if (sFormula == "%FLM")
         {
             pDateStyle = new XFDateStyle;
             pDateStyle->AddMonth(sal_False);
         }
-        else if (sFormula == A2OUSTR("%FLYYYY") )
+        else if (sFormula == "%FLYYYY" )
         {
             pDateStyle = new XFDateStyle;
             pDateStyle->AddYear();
         }
-        else if (sFormula == A2OUSTR("%FLYY"))
+        else if (sFormula == "%FLYY")
         {
             pDateStyle = new XFDateStyle;
             pDateStyle->AddYear(sal_False);
         }
         //chinese version begin
-        else if (sFormula == A2OUSTR("%FLYY/M/D"))
+        else if (sFormula == "%FLYY/M/D")
         {
             pDateStyle = new XFDateStyle;
             pDateStyle->AddYear(sal_False);
-            pDateStyle->AddText(A2OUSTR("-"));
+            pDateStyle->AddText("-");
             pDateStyle->AddMonth(sal_False);
-            pDateStyle->AddText(A2OUSTR("-"));
+            pDateStyle->AddText("-");
             pDateStyle->AddMonthDay(sal_False);
         }
-        else if(sFormula == A2OUSTR("%FLYYYY Month D"))
+        else if(sFormula == "%FLYYYY Month D")
         {
             pDateStyle = new XFDateStyle;
             pDateStyle->AddYear();
-            pDateStyle->AddText(A2OUSTR(" "));
+            pDateStyle->AddText(" ");
             pDateStyle->AddMonth(sal_True,sal_True);
-            pDateStyle->AddText(A2OUSTR(" "));
+            pDateStyle->AddText(" ");
             pDateStyle->AddMonthDay(sal_False);
         }
-        else if(sFormula == A2OUSTR("%FLWeekday, YYYY Month D"))
+        else if(sFormula == "%FLWeekday, YYYY Month D")
         {
             pDateStyle = new XFDateStyle;
             pDateStyle->AddWeekDay();
-            pDateStyle->AddText(A2OUSTR(","));
+            pDateStyle->AddText(",");
             pDateStyle->AddYear();
-            pDateStyle->AddText(A2OUSTR(" "));
+            pDateStyle->AddText(" ");
             pDateStyle->AddMonth(sal_True,sal_True);
-            pDateStyle->AddText(A2OUSTR(" "));
+            pDateStyle->AddText(" ");
             pDateStyle->AddMonthDay(sal_False);
         }
-        else if(sFormula == A2OUSTR("%FLYYYY Mn D"))
+        else if(sFormula == "%FLYYYY Mn D")
         {
             pDateStyle = new XFDateStyle;
             pDateStyle->AddYear();
-            pDateStyle->AddText(A2OUSTR(" "));
+            pDateStyle->AddText(" ");
             pDateStyle->AddMonth(sal_False,sal_True);
-            pDateStyle->AddText(A2OUSTR(" "));
+            pDateStyle->AddText(" ");
             pDateStyle->AddMonthDay(sal_False);
         }
-        else if(sFormula == A2OUSTR("%FLWday, YYYY Mn D"))
+        else if(sFormula == "%FLWday, YYYY Mn D")
         {
             pDateStyle = new XFDateStyle;
             pDateStyle->AddWeekDay(sal_False);
-            pDateStyle->AddText(A2OUSTR(","));
+            pDateStyle->AddText(",");
             pDateStyle->AddYear();
-            pDateStyle->AddText(A2OUSTR(" "));
+            pDateStyle->AddText(" ");
             pDateStyle->AddMonth(sal_True,sal_True);
-            pDateStyle->AddText(A2OUSTR(" "));
+            pDateStyle->AddText(" ");
             pDateStyle->AddMonthDay(sal_False);
         }
         //next 2 are the same with english version
-        else if (sFormula == A2OUSTR("%FLYY Mn D"))
+        else if (sFormula == "%FLYY Mn D")
         {
             pDateStyle = new XFDateStyle;
             pDateStyle->AddYear(sal_False);
-            pDateStyle->AddText(A2OUSTR(" "));
+            pDateStyle->AddText(" ");
             pDateStyle->AddMonth(sal_False,sal_True);
-            pDateStyle->AddText(A2OUSTR(" "));
+            pDateStyle->AddText(" ");
             pDateStyle->AddMonthDay(sal_False);
         }
-        else if (sFormula == A2OUSTR("%FLYY/M"))
+        else if (sFormula == "%FLYY/M")
         {
             pDateStyle = new XFDateStyle;
             pDateStyle->AddMonth(sal_False);
-            pDateStyle->AddText(A2OUSTR("-"));
+            pDateStyle->AddText("-");
             pDateStyle->AddMonth(sal_False);
         }
-        else if (sFormula == A2OUSTR("%FLYY Mn"))
+        else if (sFormula == "%FLYY Mn")
         {
             pDateStyle = new XFDateStyle;
             pDateStyle->AddMonth(sal_False);
-            pDateStyle->AddText(A2OUSTR(" "));
+            pDateStyle->AddText(" ");
             pDateStyle->AddMonth(sal_False,sal_True);
         }
-        else if (sFormula == A2OUSTR("%FLeeeeoa") || sFormula == A2OUSTR("%FLffffooaa") || sFormula == A2OUSTR("%FLEEEEOA"))
+        else if (sFormula == "%FLeeeeoa" || sFormula == "%FLffffooaa" || sFormula == "%FLEEEEOA")
         {
             pDateStyle = new XFDateStyle;
             OUString sText;
@@ -675,7 +675,7 @@ void LwpFribField::RegisterDateTimeStyle(OUString sFormula)
             sText = OUString(0x65e5);
             pDateStyle->AddText(sText);
         }
-        else if (sFormula == A2OUSTR("%FLoa") || sFormula == A2OUSTR("%FLooaa") || sFormula == A2OUSTR("%FLOA") )
+        else if (sFormula == "%FLoa" || sFormula == "%FLooaa" || sFormula == "%FLOA" )
         {
             pDateStyle = new XFDateStyle;
             OUString sText;
@@ -686,289 +686,289 @@ void LwpFribField::RegisterDateTimeStyle(OUString sFormula)
             sText = OUString(0x65e5);
             pDateStyle->AddText(sText);
         }
-        else if (sFormula == A2OUSTR("%FLYYYY/M/D") || sFormula == A2OUSTR("%FLGGGG/od/ad"))
+        else if (sFormula == "%FLYYYY/M/D" || sFormula == "%FLGGGG/od/ad")
         {
             pDateStyle = new XFDateStyle;
             pDateStyle->AddYear();
-            pDateStyle->AddText(A2OUSTR("-"));
+            pDateStyle->AddText("-");
             pDateStyle->AddMonth(sal_False);
-            pDateStyle->AddText(A2OUSTR("-"));
+            pDateStyle->AddText("-");
             pDateStyle->AddMonthDay(sal_False);
         }
-        else if (sFormula == A2OUSTR("%FLYY.M.D") )
+        else if (sFormula == "%FLYY.M.D" )
         {
             pDateStyle = new XFDateStyle;
             pDateStyle->AddYear(sal_False);
-            pDateStyle->AddText(A2OUSTR("."));
+            pDateStyle->AddText(".");
             pDateStyle->AddMonth(sal_False);
-            pDateStyle->AddText(A2OUSTR("."));
+            pDateStyle->AddText(".");
             pDateStyle->AddMonthDay(sal_False);
         }
         //chinese version end
         //other version begin
-        else if (sFormula == A2OUSTR("%FLWeekday, Month DD, YYYY") )
+        else if (sFormula == "%FLWeekday, Month DD, YYYY" )
         {
             pDateStyle = new XFDateStyle;
             pDateStyle->AddWeekDay();
-            pDateStyle->AddText(A2OUSTR(", "));
+            pDateStyle->AddText(", ");
             pDateStyle->AddMonth(sal_True,sal_True);
-            pDateStyle->AddText(A2OUSTR(" "));
+            pDateStyle->AddText(" ");
             pDateStyle->AddMonthDay();
-            pDateStyle->AddText(A2OUSTR(", "));
+            pDateStyle->AddText(", ");
             pDateStyle->AddYear();
         }
-        else if (sFormula == A2OUSTR("%FLYYYY/MM/DD") )
+        else if (sFormula == "%FLYYYY/MM/DD" )
         {
             pDateStyle = new XFDateStyle;
             pDateStyle->AddWeekDay();
-            pDateStyle->AddText(A2OUSTR(", "));
+            pDateStyle->AddText(", ");
             pDateStyle->AddMonth(sal_True,sal_True);
-            pDateStyle->AddText(A2OUSTR(" "));
+            pDateStyle->AddText(" ");
             pDateStyle->AddMonthDay();
-            pDateStyle->AddText(A2OUSTR(", "));
+            pDateStyle->AddText(", ");
             pDateStyle->AddYear();
         }
-        else if (sFormula == A2OUSTR("%FLD/M/YY") )
+        else if (sFormula == "%FLD/M/YY" )
         {
             pDateStyle = new XFDateStyle;
             pDateStyle->AddMonthDay(sal_False);
-            pDateStyle->AddText(A2OUSTR("/"));
+            pDateStyle->AddText("/");
             pDateStyle->AddMonth(sal_False);
-            pDateStyle->AddText(A2OUSTR("/"));
+            pDateStyle->AddText("/");
             pDateStyle->AddYear(sal_False);
         }
-        else if (sFormula == A2OUSTR("%FLD Month YYYY"))
+        else if (sFormula == "%FLD Month YYYY")
         {
             pDateStyle = new XFDateStyle;
             pDateStyle->AddMonthDay(sal_False);
-            pDateStyle->AddText(A2OUSTR(" "));
+            pDateStyle->AddText(" ");
             pDateStyle->AddMonth(sal_True,sal_True);
-            pDateStyle->AddText(A2OUSTR(" "));
+            pDateStyle->AddText(" ");
             pDateStyle->AddYear();
         }
-        else if (sFormula == A2OUSTR("%FLDD Month YYYY"))
+        else if (sFormula == "%FLDD Month YYYY")
         {
             pDateStyle = new XFDateStyle;
             pDateStyle->AddMonthDay();
-            pDateStyle->AddText(A2OUSTR(" "));
+            pDateStyle->AddText(" ");
             pDateStyle->AddMonth(sal_True,sal_True);
-            pDateStyle->AddText(A2OUSTR(" "));
+            pDateStyle->AddText(" ");
             pDateStyle->AddYear();
         }
-        else if (sFormula == A2OUSTR("%FLWeekday, D Month YYYY"))
+        else if (sFormula == "%FLWeekday, D Month YYYY")
         {
             pDateStyle = new XFDateStyle;
             pDateStyle->AddWeekDay();
-            pDateStyle->AddText(A2OUSTR(", "));
+            pDateStyle->AddText(", ");
             pDateStyle->AddMonthDay(sal_False);
-            pDateStyle->AddText(A2OUSTR(" "));
+            pDateStyle->AddText(" ");
             pDateStyle->AddMonth(sal_True,sal_True);
-            pDateStyle->AddText(A2OUSTR(" "));
+            pDateStyle->AddText(" ");
             pDateStyle->AddYear();
         }
-        else if (sFormula == A2OUSTR("%FLWeekday, DD Month YYYY"))
+        else if (sFormula == "%FLWeekday, DD Month YYYY")
         {
             pDateStyle = new XFDateStyle;
             pDateStyle->AddWeekDay();
-            pDateStyle->AddText(A2OUSTR(", "));
+            pDateStyle->AddText(", ");
             pDateStyle->AddMonthDay();
-            pDateStyle->AddText(A2OUSTR(" "));
+            pDateStyle->AddText(" ");
             pDateStyle->AddMonth(sal_True,sal_True);
-            pDateStyle->AddText(A2OUSTR(" "));
+            pDateStyle->AddText(" ");
             pDateStyle->AddYear();
         }
-        else if (sFormula == A2OUSTR("%FLD Mn YYYY"))
+        else if (sFormula == "%FLD Mn YYYY")
         {
             pDateStyle = new XFDateStyle;
             pDateStyle->AddMonthDay(sal_False);
-            pDateStyle->AddText(A2OUSTR(" "));
+            pDateStyle->AddText(" ");
             pDateStyle->AddMonth(sal_False,sal_True);
-            pDateStyle->AddText(A2OUSTR(" "));
+            pDateStyle->AddText(" ");
             pDateStyle->AddYear();
         }
-        else if (sFormula == A2OUSTR("%FLWday, D Mn YYYY"))
+        else if (sFormula == "%FLWday, D Mn YYYY")
         {
             pDateStyle = new XFDateStyle;
             pDateStyle->AddWeekDay(sal_False);
-            pDateStyle->AddText(A2OUSTR(", "));
+            pDateStyle->AddText(", ");
             pDateStyle->AddMonthDay(sal_False);
-            pDateStyle->AddText(A2OUSTR(" "));
+            pDateStyle->AddText(" ");
             pDateStyle->AddMonth(sal_False,sal_True);
-            pDateStyle->AddText(A2OUSTR(" "));
+            pDateStyle->AddText(" ");
             pDateStyle->AddYear();
         }
-        else if (sFormula == A2OUSTR("%FLWday, DD Mn YYYY"))
+        else if (sFormula == "%FLWday, DD Mn YYYY")
         {
             pDateStyle = new XFDateStyle;
             pDateStyle->AddWeekDay(sal_False);
-            pDateStyle->AddText(A2OUSTR(", "));
+            pDateStyle->AddText(", ");
             pDateStyle->AddMonthDay();
-            pDateStyle->AddText(A2OUSTR(" "));
+            pDateStyle->AddText(" ");
             pDateStyle->AddMonth(sal_False,sal_True);
-            pDateStyle->AddText(A2OUSTR(" "));
+            pDateStyle->AddText(" ");
             pDateStyle->AddYear();
         }
-        else if (sFormula == A2OUSTR("%FLD Mn"))
+        else if (sFormula == "%FLD Mn")
         {
             pDateStyle = new XFDateStyle;
             pDateStyle->AddMonthDay(sal_False);
-            pDateStyle->AddText(A2OUSTR(" "));
+            pDateStyle->AddText(" ");
             pDateStyle->AddMonth(sal_False,sal_True);
         }
-        else if (sFormula == A2OUSTR("%FLDD Mn"))
+        else if (sFormula == "%FLDD Mn")
         {
             pDateStyle = new XFDateStyle;
             pDateStyle->AddMonthDay();
-            pDateStyle->AddText(A2OUSTR(" "));
+            pDateStyle->AddText(" ");
             pDateStyle->AddMonth(sal_False,sal_True);
         }
-        else if (sFormula == A2OUSTR("%FLWeekday, D Mn"))
+        else if (sFormula == "%FLWeekday, D Mn")
         {
             pDateStyle = new XFDateStyle;
             pDateStyle->AddWeekDay();
-            pDateStyle->AddText(A2OUSTR(", "));
+            pDateStyle->AddText(", ");
             pDateStyle->AddMonthDay(sal_False);
-            pDateStyle->AddText(A2OUSTR(" "));
+            pDateStyle->AddText(" ");
             pDateStyle->AddMonth(sal_False,sal_True);
         }
-        else if (sFormula == A2OUSTR("%FLWeekday, DD Mn"))
+        else if (sFormula == "%FLWeekday, DD Mn")
         {
             pDateStyle = new XFDateStyle;
             pDateStyle->AddWeekDay();
-            pDateStyle->AddText(A2OUSTR(", "));
+            pDateStyle->AddText(", ");
             pDateStyle->AddMonthDay();
-            pDateStyle->AddText(A2OUSTR(" "));
+            pDateStyle->AddText(" ");
             pDateStyle->AddMonth(sal_False,sal_True);
         }
-        else if (sFormula == A2OUSTR("%FLD Mn YY"))
+        else if (sFormula == "%FLD Mn YY")
         {
             pDateStyle = new XFDateStyle;
             pDateStyle->AddMonthDay(sal_False);
-            pDateStyle->AddText(A2OUSTR(" "));
+            pDateStyle->AddText(" ");
             pDateStyle->AddMonth(sal_False,sal_True);
-            pDateStyle->AddText(A2OUSTR(" "));
+            pDateStyle->AddText(" ");
             pDateStyle->AddYear(sal_False);
         }
-        else if (sFormula == A2OUSTR("%FLDD Mn YY"))
+        else if (sFormula == "%FLDD Mn YY")
         {
             pDateStyle = new XFDateStyle;
             pDateStyle->AddMonthDay();
-            pDateStyle->AddText(A2OUSTR(" "));
+            pDateStyle->AddText(" ");
             pDateStyle->AddMonth(sal_False,sal_True);
-            pDateStyle->AddText(A2OUSTR(" "));
+            pDateStyle->AddText(" ");
             pDateStyle->AddYear(sal_False);
         }
-        else if (sFormula == A2OUSTR("%FLD/M"))
+        else if (sFormula == "%FLD/M")
         {
             pDateStyle = new XFDateStyle;
             pDateStyle->AddMonthDay(sal_False);
-            pDateStyle->AddText(A2OUSTR("/"));
+            pDateStyle->AddText("/");
             pDateStyle->AddMonth(sal_False);
         }
-        else if (sFormula == A2OUSTR("%FLDD/MM"))
+        else if (sFormula == "%FLDD/MM")
         {
             pDateStyle = new XFDateStyle;
             pDateStyle->AddMonthDay();
-            pDateStyle->AddText(A2OUSTR("/"));
+            pDateStyle->AddText("/");
             pDateStyle->AddMonth();
         }
-        else if(sFormula == A2OUSTR("%FLDD/MM/YY"))
+        else if(sFormula == "%FLDD/MM/YY")
         {
             pDateStyle = new XFDateStyle;
             pDateStyle->AddMonthDay();
-            pDateStyle->AddText(A2OUSTR("/"));
+            pDateStyle->AddText("/");
             pDateStyle->AddMonth();
-            pDateStyle->AddText(A2OUSTR("/"));
+            pDateStyle->AddText("/");
             pDateStyle->AddYear(sal_False);
         }
-        else if (sFormula == A2OUSTR("%FLMM/YY"))
+        else if (sFormula == "%FLMM/YY")
         {
             pDateStyle = new XFDateStyle;
             pDateStyle->AddMonth();
-            pDateStyle->AddText(A2OUSTR("/"));
+            pDateStyle->AddText("/");
             pDateStyle->AddYear(sal_False);
         }
         //other version end
     //TIME
-        else if (sFormula == A2OUSTR("%FLSystemTime"))
+        else if (sFormula == "%FLSystemTime")
         {
             pTimeStyle = LwpTools::GetSystemTimeStyle();
         }
-        else if (sFormula == A2OUSTR("%FLISOTime1") || sFormula == A2OUSTR("%FLH:mm:SS"))
+        else if (sFormula == "%FLISOTime1" || sFormula == "%FLH:mm:SS")
         {
             pTimeStyle = new XFTimeStyle;
             pTimeStyle->AddHour();
-            pTimeStyle->AddText(A2OUSTR(":"));
+            pTimeStyle->AddText(":");
             pTimeStyle->AddMinute();
-            pTimeStyle->AddText(A2OUSTR(":"));
+            pTimeStyle->AddText(":");
             pTimeStyle->AddSecond(sal_True,0);
         }
-        else if (sFormula == A2OUSTR("%FLH:mm ampm"))
+        else if (sFormula == "%FLH:mm ampm")
         {
             pTimeStyle = new XFTimeStyle;
             pTimeStyle->AddHour(sal_False);
-            pTimeStyle->AddText(A2OUSTR(":"));
+            pTimeStyle->AddText(":");
             pTimeStyle->AddMinute();
-            pTimeStyle->AddText(A2OUSTR(" "));
+            pTimeStyle->AddText(" ");
             pTimeStyle->SetAmPm(sal_True);
         }
-        else if (sFormula == A2OUSTR("%FLH:mm"))
+        else if (sFormula == "%FLH:mm")
         {
             pTimeStyle = new XFTimeStyle;
             pTimeStyle->AddHour(sal_False);
-            pTimeStyle->AddText(A2OUSTR(":"));
+            pTimeStyle->AddText(":");
             pTimeStyle->AddMinute();
         }
-        else if (sFormula == A2OUSTR("%FLH:mm:SS ampm"))
+        else if (sFormula == "%FLH:mm:SS ampm")
         {
             pTimeStyle = new XFTimeStyle;
             pTimeStyle->AddHour(sal_False);
-            pTimeStyle->AddText(A2OUSTR(":"));
+            pTimeStyle->AddText(":");
             pTimeStyle->AddMinute();
-            pTimeStyle->AddText(A2OUSTR(":"));
+            pTimeStyle->AddText(":");
             pTimeStyle->AddSecond(sal_True,0);
-            pTimeStyle->AddText(A2OUSTR(" "));
+            pTimeStyle->AddText(" ");
             pTimeStyle->SetAmPm(sal_True);
         }
-        else if (sFormula == A2OUSTR("%FLH:mm:SS"))
+        else if (sFormula == "%FLH:mm:SS")
         {
             pTimeStyle = new XFTimeStyle;
             pTimeStyle->AddHour(sal_False);
-            pTimeStyle->AddText(A2OUSTR(":"));
+            pTimeStyle->AddText(":");
             pTimeStyle->AddMinute();
-            pTimeStyle->AddText(A2OUSTR(":"));
+            pTimeStyle->AddText(":");
             pTimeStyle->AddSecond(sal_True,0);
         }
-        else if (sFormula == A2OUSTR("%FLH ampm"))
+        else if (sFormula == "%FLH ampm")
         {
             pTimeStyle = new XFTimeStyle;
             pTimeStyle->AddHour(sal_False);
-            pTimeStyle->AddText(A2OUSTR(" "));
+            pTimeStyle->AddText(" ");
             pTimeStyle->SetAmPm(sal_True);
         }
-        else if (sFormula == A2OUSTR("%FLH"))
+        else if (sFormula == "%FLH")
         {
             pTimeStyle = new XFTimeStyle;
             pTimeStyle->AddHour(sal_False);
         }
-        else if (sFormula == A2OUSTR("%FLmm"))
+        else if (sFormula == "%FLmm")
         {
             pTimeStyle = new XFTimeStyle;
             pTimeStyle->AddMinute();
         }
-        else if (sFormula == A2OUSTR("%FLSS"))
+        else if (sFormula == "%FLSS")
         {
             pTimeStyle = new XFTimeStyle;
             pTimeStyle->AddSecond(sal_True,0);
         }
-        else if (sFormula == A2OUSTR("%FLampm"))
+        else if (sFormula == "%FLampm")
         {
             pTimeStyle = new XFTimeStyle;
             pTimeStyle->SetAmPm(sal_True);
         }
         //chinese version begin
-        else     if (sFormula == A2OUSTR("%FLjF") || sFormula == A2OUSTR("%FLJFF")
-            || sFormula == A2OUSTR("%FLjjF") || sFormula == A2OUSTR("%FLJJFF ") )
+        else     if (sFormula == "%FLjF" || sFormula == "%FLJFF"
+            || sFormula == "%FLjjF" || sFormula == "%FLJJFF " )
         {
             pTimeStyle = new XFTimeStyle;
             pTimeStyle->AddHour(sal_False);
@@ -979,7 +979,7 @@ void LwpFribField::RegisterDateTimeStyle(OUString sFormula)
             sText = OUString(0x5206);
             pTimeStyle->AddText(sText);
         }
-        else if (sFormula == A2OUSTR("%FLjjjF") || sFormula == A2OUSTR("%FLJJJFF") )
+        else if (sFormula == "%FLjjjF" || sFormula == "%FLJJJFF" )
         {
             pTimeStyle = new XFTimeStyle;
             pTimeStyle->SetAmPm(sal_True);
@@ -993,187 +993,187 @@ void LwpFribField::RegisterDateTimeStyle(OUString sFormula)
         }
         //chinese version end
         //other version begin
-        else if (sFormula == A2OUSTR("%FLHH:mm ampm"))
+        else if (sFormula == "%FLHH:mm ampm")
         {
             pTimeStyle = new XFTimeStyle;
             pTimeStyle->AddHour();
-            pTimeStyle->AddText(A2OUSTR(":"));
+            pTimeStyle->AddText(":");
             pTimeStyle->AddMinute();
-            pTimeStyle->AddText(A2OUSTR(" "));
+            pTimeStyle->AddText(" ");
             pTimeStyle->SetAmPm(sal_True);
         }
-        else if (sFormula == A2OUSTR("%FLHH ampm"))
+        else if (sFormula == "%FLHH ampm")
         {
             pTimeStyle = new XFTimeStyle;
             pTimeStyle->AddHour();
-            pTimeStyle->AddText(A2OUSTR(" "));
+            pTimeStyle->AddText(" ");
             pTimeStyle->SetAmPm(sal_True);
         }
-        else if (sFormula == A2OUSTR("%FLHH:mm:SS ampm"))
+        else if (sFormula == "%FLHH:mm:SS ampm")
         {
             pTimeStyle = new XFTimeStyle;
             pTimeStyle->AddHour();
-            pTimeStyle->AddText(A2OUSTR(":"));
+            pTimeStyle->AddText(":");
             pTimeStyle->AddMinute();
-            pTimeStyle->AddText(A2OUSTR(":"));
+            pTimeStyle->AddText(":");
             pTimeStyle->AddSecond(sal_True,0);
-            pTimeStyle->AddText(A2OUSTR(" "));
+            pTimeStyle->AddText(" ");
             pTimeStyle->SetAmPm(sal_True);
         }
-        else if (sFormula == A2OUSTR("%FLHH:mm"))
+        else if (sFormula == "%FLHH:mm")
         {
             pTimeStyle = new XFTimeStyle;
             pTimeStyle->AddHour();
-            pTimeStyle->AddText(A2OUSTR(":"));
+            pTimeStyle->AddText(":");
             pTimeStyle->AddMinute();
         }
-        else if (sFormula == A2OUSTR("%FLHH:mm:SS"))
+        else if (sFormula == "%FLHH:mm:SS")
         {
             pTimeStyle = new XFTimeStyle;
             pTimeStyle->AddHour();
-            pTimeStyle->AddText(A2OUSTR(":"));
+            pTimeStyle->AddText(":");
             pTimeStyle->AddMinute();
-            pTimeStyle->AddText(A2OUSTR(":"));
+            pTimeStyle->AddText(":");
             pTimeStyle->AddSecond(sal_True,0);
         }
         //other version end
     }
     else if(sFormula[1] == 'D')
     {
-        if (sFormula == A2OUSTR("%Da"))
+        if (sFormula == "%Da")
         {
             pDateStyle = LwpTools::GetSystemDateStyle(sal_False);
         }
-        else if (sFormula == A2OUSTR("%DB") || sFormula == A2OUSTR("%Db"))
+        else if (sFormula == "%DB" || sFormula == "%Db")
         {
             pDateStyle = new XFDateStyle;
             pDateStyle->AddMonth(sal_True,sal_True);
-            pDateStyle->AddText(A2OUSTR(" "));
+            pDateStyle->AddText(" ");
             pDateStyle->AddMonthDay(sal_False);
-            pDateStyle->AddText(A2OUSTR(", "));
+            pDateStyle->AddText(", ");
             pDateStyle->AddYear();
         }
-        else if (sFormula == A2OUSTR("%Dc") || sFormula == A2OUSTR("%DC"))
+        else if (sFormula == "%Dc" || sFormula == "%DC")
         {
             pDateStyle = new XFDateStyle;
             pDateStyle->AddMonthDay(sal_False);
-            pDateStyle->AddText(A2OUSTR(" "));
+            pDateStyle->AddText(" ");
             pDateStyle->AddMonth(sal_True,sal_True);
-            pDateStyle->AddText(A2OUSTR(" "));
+            pDateStyle->AddText(" ");
             pDateStyle->AddYear();
         }
-        else if (sFormula == A2OUSTR("%Dd") || sFormula == A2OUSTR("%DD"))
+        else if (sFormula == "%Dd" || sFormula == "%DD")
         {
             pDateStyle = new XFDateStyle;
             pDateStyle->AddWeekDay();
-            pDateStyle->AddText(A2OUSTR(", "));
+            pDateStyle->AddText(", ");
             pDateStyle->AddMonth(sal_True,sal_True);
-            pDateStyle->AddText(A2OUSTR(" "));
+            pDateStyle->AddText(" ");
             pDateStyle->AddMonthDay(sal_False);
-            pDateStyle->AddText(A2OUSTR(", "));
+            pDateStyle->AddText(", ");
             pDateStyle->AddYear();
         }
-        else if (sFormula == A2OUSTR("%DE") || sFormula == A2OUSTR("%De"))
+        else if (sFormula == "%DE" || sFormula == "%De")
         {
             pDateStyle = new XFDateStyle;
             pDateStyle->AddMonth(sal_True,sal_True);
-            pDateStyle->AddText(A2OUSTR(" "));
+            pDateStyle->AddText(" ");
             pDateStyle->AddMonthDay(sal_False);
         }
-        else if (sFormula == A2OUSTR("%Df") || sFormula == A2OUSTR("%DF"))
+        else if (sFormula == "%Df" || sFormula == "%DF")
         {
             pDateStyle = new XFDateStyle;
             pDateStyle->AddWeekDay();
-            pDateStyle->AddText(A2OUSTR(" "));
+            pDateStyle->AddText(" ");
             pDateStyle->AddMonth(sal_True,sal_True);
-            pDateStyle->AddText(A2OUSTR(" "));
+            pDateStyle->AddText(" ");
             pDateStyle->AddMonthDay(sal_False);
         }
-        else if (sFormula == A2OUSTR("%Dg"))
+        else if (sFormula == "%Dg")
         {
             pDateStyle = new XFDateStyle;
             pDateStyle->AddMonth(sal_False);
-            pDateStyle->AddText(A2OUSTR("/"));
+            pDateStyle->AddText("/");
             pDateStyle->AddMonthDay(sal_False);
         }
-        else if (sFormula == A2OUSTR("%Dh"))
+        else if (sFormula == "%Dh")
         {
             pDateStyle = new XFDateStyle;
             pDateStyle->AddMonth(sal_False);
-            pDateStyle->AddText(A2OUSTR("/"));
+            pDateStyle->AddText("/");
             pDateStyle->AddMonthDay(sal_False);
-            pDateStyle->AddText(A2OUSTR("/"));
+            pDateStyle->AddText("/");
             pDateStyle->AddYear();
         }
-        else if (sFormula == A2OUSTR("%Di") || sFormula == A2OUSTR("%DI"))
+        else if (sFormula == "%Di" || sFormula == "%DI")
         {
             pDateStyle = new XFDateStyle;
             pDateStyle->AddMonthDay(sal_False);
-            pDateStyle->AddText(A2OUSTR("."));
+            pDateStyle->AddText(".");
             pDateStyle->AddMonth(sal_True,sal_True);
         }
-        else if (sFormula == A2OUSTR("%Dj") || sFormula == A2OUSTR("%DJ"))
+        else if (sFormula == "%Dj" || sFormula == "%DJ")
         {
             pDateStyle = new XFDateStyle;
             pDateStyle->AddMonthDay(sal_False);
-            pDateStyle->AddText(A2OUSTR("."));
+            pDateStyle->AddText(".");
             pDateStyle->AddMonth(sal_True,sal_True);
-            pDateStyle->AddText(A2OUSTR(" "));
+            pDateStyle->AddText(" ");
             pDateStyle->AddYear();
         }
-        else if (sFormula == A2OUSTR("%Dk") || sFormula == A2OUSTR("%DK"))
+        else if (sFormula == "%Dk" || sFormula == "%DK")
         {
             pDateStyle = new XFDateStyle;
             pDateStyle->AddYear();
-            pDateStyle->AddText(A2OUSTR(" "));
+            pDateStyle->AddText(" ");
             pDateStyle->AddMonth(sal_True,sal_True);
-            pDateStyle->AddText(A2OUSTR(" "));
+            pDateStyle->AddText(" ");
             pDateStyle->AddMonthDay(sal_False);
         }
-        else if (sFormula == A2OUSTR("%DL") || sFormula == A2OUSTR("%Dl"))
+        else if (sFormula == "%DL" || sFormula == "%Dl")
         {
             pDateStyle = new XFDateStyle;
             pDateStyle->AddMonth(sal_True,sal_True);
-            pDateStyle->AddText(A2OUSTR(","));
+            pDateStyle->AddText(",");
             pDateStyle->AddYear();
         }
-        else if (sFormula == A2OUSTR("%Dm"))
+        else if (sFormula == "%Dm")
         {
             pDateStyle = new XFDateStyle;
             pDateStyle->AddMonthDay();
-            pDateStyle->AddText(A2OUSTR("/"));
+            pDateStyle->AddText("/");
             pDateStyle->AddMonth();
-            pDateStyle->AddText(A2OUSTR("/"));
+            pDateStyle->AddText("/");
             pDateStyle->AddYear();
         }
     }
     else if (sFormula[1] == 'T')
     {
-        if (sFormula == A2OUSTR("%T1"))
+        if (sFormula == "%T1")
         {
             pTimeStyle = new XFTimeStyle;
             pTimeStyle->AddHour();
-            pTimeStyle->AddText(A2OUSTR(":"));
+            pTimeStyle->AddText(":");
             pTimeStyle->AddMinute();
         }
-        else if (sFormula == A2OUSTR("%T2") || sFormula == A2OUSTR("%T6")
-         || sFormula == A2OUSTR("%T4") || sFormula == A2OUSTR("%T8") )
+        else if (sFormula == "%T2" || sFormula == "%T6"
+         || sFormula == "%T4" || sFormula == "%T8" )
         {
             pTimeStyle = new XFTimeStyle;
             pTimeStyle->AddHour(sal_False);
-            pTimeStyle->AddText(A2OUSTR(":"));
+            pTimeStyle->AddText(":");
             pTimeStyle->AddMinute();
-            pTimeStyle->AddText(A2OUSTR(":"));
+            pTimeStyle->AddText(":");
             pTimeStyle->SetAmPm(sal_True);
         }
-        else if (sFormula == A2OUSTR("%T3") || sFormula == A2OUSTR("%T7")
-         || sFormula == A2OUSTR("%T5") || sFormula == A2OUSTR("%T9"))
+        else if (sFormula == "%T3" || sFormula == "%T7"
+         || sFormula == "%T5" || sFormula == "%T9")
         {
             pTimeStyle = new XFTimeStyle;
             pTimeStyle->AddHour();
-            pTimeStyle->AddText(A2OUSTR(":"));
+            pTimeStyle->AddText(":");
             pTimeStyle->AddMinute();
-            pTimeStyle->AddText(A2OUSTR(":"));
+            pTimeStyle->AddText(":");
             pTimeStyle->SetAmPm(sal_True);
         }
     }

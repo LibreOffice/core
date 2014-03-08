@@ -103,23 +103,23 @@ inline void XFFootNote::ToXml(IXFStream *pStrm)
     IXFAttrList *pAttrList = pStrm->GetAttrList();
     pAttrList->Clear();
 
-    pAttrList->AddAttribute( A2OUSTR("text:id"), m_strID );
-    pStrm->StartElement( A2OUSTR("text:footnote") );
+    pAttrList->AddAttribute( "text:id", m_strID );
+    pStrm->StartElement( "text:footnote" );
 
     pAttrList->Clear();
     if( !m_strLabel.isEmpty() )
-        pAttrList->AddAttribute( A2OUSTR("text:label"), m_strLabel );
-    pStrm->StartElement( A2OUSTR("text:footnote-citation") );
+        pAttrList->AddAttribute( "text:label", m_strLabel );
+    pStrm->StartElement( "text:footnote-citation" );
     if( !m_strLabel.isEmpty() )
         pStrm->Characters(m_strLabel);
-    pStrm->EndElement( A2OUSTR("text:footnote-citation") );
+    pStrm->EndElement( "text:footnote-citation" );
 
     pAttrList->Clear();
-    pStrm->StartElement( A2OUSTR("text:footnote-body") );
+    pStrm->StartElement( "text:footnote-body" );
     XFContentContainer::ToXml(pStrm);
-    pStrm->EndElement( A2OUSTR("text:footnote-body") );
+    pStrm->EndElement( "text:footnote-body" );
 
-    pStrm->EndElement( A2OUSTR("text:footnote") );
+    pStrm->EndElement( "text:footnote" );
 }
 
 #endif

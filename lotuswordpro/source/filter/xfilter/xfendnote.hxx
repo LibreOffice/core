@@ -103,23 +103,23 @@ inline void XFEndNote::ToXml(IXFStream *pStrm)
     IXFAttrList *pAttrList = pStrm->GetAttrList();
     pAttrList->Clear();
 
-    pAttrList->AddAttribute( A2OUSTR("text:id"), m_strID );
-    pStrm->StartElement( A2OUSTR("text:endnote") );
+    pAttrList->AddAttribute( "text:id", m_strID );
+    pStrm->StartElement( "text:endnote" );
 
     pAttrList->Clear();
     if( !m_strLabel.isEmpty() )
-        pAttrList->AddAttribute( A2OUSTR("text:label"), m_strLabel );
-    pStrm->StartElement( A2OUSTR("text:endnote-citation") );
+        pAttrList->AddAttribute( "text:label", m_strLabel );
+    pStrm->StartElement( "text:endnote-citation" );
     if( !m_strLabel.isEmpty())
         pStrm->Characters(m_strLabel);
-    pStrm->EndElement( A2OUSTR("text:endnote-citation") );
+    pStrm->EndElement( "text:endnote-citation" );
 
     pAttrList->Clear();
-    pStrm->StartElement( A2OUSTR("text:endnote-body") );
+    pStrm->StartElement( "text:endnote-body" );
     XFContentContainer::ToXml(pStrm);
-    pStrm->EndElement( A2OUSTR("text:endnote-body") );
+    pStrm->EndElement( "text:endnote-body" );
 
-    pStrm->EndElement( A2OUSTR("text:endnote") );
+    pStrm->EndElement( "text:endnote" );
 }
 
 #endif

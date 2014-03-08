@@ -106,13 +106,13 @@ void    XFMasterPage::ToXml(IXFStream *pStrm)
     IXFAttrList     *pAttrList = pStrm->GetAttrList();
 
     pAttrList->Clear();
-    pAttrList->AddAttribute( A2OUSTR("style:name"), m_strStyleName );
-    pAttrList->AddAttribute( A2OUSTR("style:page-master-name"), m_strPageMaster );
-    pStrm->StartElement( A2OUSTR("style:master-page") );
+    pAttrList->AddAttribute( "style:name", m_strStyleName );
+    pAttrList->AddAttribute( "style:page-master-name", m_strPageMaster );
+    pStrm->StartElement( "style:master-page" );
     if( m_pHeader )
         m_pHeader->ToXml(pStrm);
     if( m_pFooter )
         m_pFooter->ToXml(pStrm);
-    pStrm->EndElement( A2OUSTR("style:master-page") );
+    pStrm->EndElement( "style:master-page" );
 }
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

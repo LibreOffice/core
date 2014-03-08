@@ -120,8 +120,8 @@ OUString   XFBorder::GetLineWidth()
     if( m_bDouble )
     {
         str = FloatToOUString(m_fWidthInner);
-        str += A2OUSTR("cm ") + DoubleToOUString(m_fWidthSpace);
-        str += A2OUSTR("cm ") + DoubleToOUString(m_fWidthOuter) + A2OUSTR("cm");
+        str += "cm " + DoubleToOUString(m_fWidthSpace);
+        str += "cm " + DoubleToOUString(m_fWidthOuter) + "cm";
     }
     return str;
 }
@@ -138,8 +138,8 @@ OUString   XFBorder::ToString()
             return str;
         }
 
-        str = DoubleToOUString(width) + A2OUSTR("cm");
-        str += A2OUSTR(" double ") + m_aColor.ToString();
+        str = DoubleToOUString(width) + "cm";
+        str += " double " + m_aColor.ToString();
     }
     else
     {
@@ -148,8 +148,8 @@ OUString   XFBorder::ToString()
         {
             return str;
         }
-        str = DoubleToOUString(width) + A2OUSTR("cm");
-        str += A2OUSTR(" solid ") + m_aColor.ToString();
+        str = DoubleToOUString(width) + "cm";
+        str += " solid " + m_aColor.ToString();
     }
     return str;
 }
@@ -336,33 +336,33 @@ void    XFBorders::ToXml(IXFStream *pStrm)
     IXFAttrList *pAttrList = pStrm->GetAttrList();
 
     if( !m_aBorderLeft.GetLineWidth().isEmpty() )
-        pAttrList->AddAttribute( A2OUSTR("style:border-line-width-left"), m_aBorderLeft.GetLineWidth() );
+        pAttrList->AddAttribute( "style:border-line-width-left", m_aBorderLeft.GetLineWidth() );
     if( !m_aBorderRight.GetLineWidth().isEmpty() )
-        pAttrList->AddAttribute( A2OUSTR("style:border-line-width-right"), m_aBorderRight.GetLineWidth() );
+        pAttrList->AddAttribute( "style:border-line-width-right", m_aBorderRight.GetLineWidth() );
     if( !m_aBorderTop.GetLineWidth().isEmpty() )
-        pAttrList->AddAttribute( A2OUSTR("style:border-line-width-top"), m_aBorderTop.GetLineWidth() );
+        pAttrList->AddAttribute( "style:border-line-width-top", m_aBorderTop.GetLineWidth() );
     if( !m_aBorderBottom.GetLineWidth().isEmpty() )
-        pAttrList->AddAttribute( A2OUSTR("style:border-line-width-bottom"), m_aBorderBottom.GetLineWidth() );
+        pAttrList->AddAttribute( "style:border-line-width-bottom", m_aBorderBottom.GetLineWidth() );
 
     if( !m_aBorderLeft.ToString().isEmpty() )
-        pAttrList->AddAttribute( A2OUSTR("fo:border-left"), m_aBorderLeft.ToString() );
+        pAttrList->AddAttribute( "fo:border-left", m_aBorderLeft.ToString() );
     else
-        pAttrList->AddAttribute( A2OUSTR("fo:border-left"), A2OUSTR("none") );
+        pAttrList->AddAttribute( "fo:border-left", "none" );
 
     if( !m_aBorderRight.ToString().isEmpty() )
-        pAttrList->AddAttribute( A2OUSTR("fo:border-right"), m_aBorderRight.ToString() );
+        pAttrList->AddAttribute( "fo:border-right", m_aBorderRight.ToString() );
     else
-        pAttrList->AddAttribute( A2OUSTR("fo:border-right"), A2OUSTR("none") );
+        pAttrList->AddAttribute( "fo:border-right", "none" );
 
     if( !m_aBorderTop.ToString().isEmpty() )
-        pAttrList->AddAttribute( A2OUSTR("fo:border-top"), m_aBorderTop.ToString() );
+        pAttrList->AddAttribute( "fo:border-top", m_aBorderTop.ToString() );
     else
-        pAttrList->AddAttribute( A2OUSTR("fo:border-top"), A2OUSTR("none") );
+        pAttrList->AddAttribute( "fo:border-top", "none" );
 
     if( !m_aBorderBottom.ToString().isEmpty() )
-        pAttrList->AddAttribute( A2OUSTR("fo:border-bottom"), m_aBorderBottom.ToString() );
+        pAttrList->AddAttribute( "fo:border-bottom", m_aBorderBottom.ToString() );
     else
-        pAttrList->AddAttribute( A2OUSTR("fo:border-bottom"), A2OUSTR("none") );
+        pAttrList->AddAttribute( "fo:border-bottom", "none" );
 
 }
 

@@ -293,36 +293,17 @@ void LwpDocData::Read()
 }
 OUString   LwpDocData::DateTimeToOUString(LtTm& dt)
 {
-    OUStringBuffer buf;
-    buf.append((sal_Int32)dt.tm_year);
-    buf.append( A2OUSTR("-") );
-    buf.append((sal_Int32)dt.tm_mon);
-    buf.append( A2OUSTR("-") );
-    buf.append((sal_Int32)dt.tm_mday);
-    buf.append( A2OUSTR("T") );
-    buf.append((sal_Int32)dt.tm_hour);
-    buf.append( A2OUSTR(":") );
-    buf.append((sal_Int32)dt.tm_min);
-    buf.append( A2OUSTR(":") );
-    buf.append((sal_Int32)dt.tm_sec);
-    buf.append( A2OUSTR(".") );
-    buf.append((sal_Int32)0);
+    OUString aResult = OUString::number(dt.tm_year) + "-" + OUString::number(dt.tm_mon) + "-" + OUString::number(dt.tm_mday) +
+        "T" + OUString::number(dt.tm_hour) + ":" + OUString::number(dt.tm_min) + ":" + OUString::number(dt.tm_sec) + ".0";
 
-    return buf.makeStringAndClear();
+    return aResult;
 }
 OUString   LwpDocData::TimeToOUString(LtTm& dt)
 {
     //PT3H43M44S
-    OUStringBuffer buf;
-    buf.append( A2OUSTR("PT") );
-    buf.append((sal_Int32)dt.tm_hour);
-    buf.append( A2OUSTR("H") );
-    buf.append((sal_Int32)dt.tm_min);
-    buf.append( A2OUSTR("M") );
-    buf.append((sal_Int32)dt.tm_sec);
-    buf.append( A2OUSTR("S") );
+    OUString aResult = "PT" + OUString::number(dt.tm_hour) + "H" + OUString::number(dt.tm_min) + "M" + OUString::number(dt.tm_sec) + "S";
 
-    return buf.makeStringAndClear();
+    return aResult;
 }
 void LwpDocData::Parse(IXFStream *pOutputStream)
 {

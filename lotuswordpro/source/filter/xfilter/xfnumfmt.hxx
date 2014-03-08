@@ -132,12 +132,12 @@ public:
         IXFAttrList *pAttrList = pStrm->GetAttrList();
 
         if( !m_strPrefix.isEmpty() )
-            pAttrList->AddAttribute( A2OUSTR("style:num-prefix"), m_strPrefix );
+            pAttrList->AddAttribute( "style:num-prefix", m_strPrefix );
         if( !m_strSuffix.isEmpty() )
-            pAttrList->AddAttribute( A2OUSTR("style:num-suffix"), m_strSuffix );
-        pAttrList->AddAttribute( A2OUSTR("style:num-format"), m_strFormat );
+            pAttrList->AddAttribute( "style:num-suffix", m_strSuffix );
+        pAttrList->AddAttribute( "style:num-format", m_strFormat );
         if( m_nStartValue != 0 )
-            pAttrList->AddAttribute( A2OUSTR("text:start-value"), Int16ToOUString(m_nStartValue) );
+            pAttrList->AddAttribute( "text:start-value", Int16ToOUString(m_nStartValue) );
     }
 private:
     OUString   m_strPrefix;

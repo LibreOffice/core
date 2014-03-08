@@ -407,14 +407,14 @@ void    XFParaStyle::ToXml(IXFStream *pStrm)
 
     pAttrList->Clear();
     if( !style.isEmpty() )
-        pAttrList->AddAttribute(A2OUSTR("style:name"),GetStyleName());
-    pAttrList->AddAttribute(A2OUSTR("style:family"), A2OUSTR("paragraph"));
+        pAttrList->AddAttribute("style:name",GetStyleName());
+    pAttrList->AddAttribute("style:family", "paragraph");
     if( !GetParentStyleName().isEmpty() )
-        pAttrList->AddAttribute(A2OUSTR("style:parent-style-name"),GetParentStyleName());
+        pAttrList->AddAttribute("style:parent-style-name",GetParentStyleName());
 
     if( !m_strMasterPage.isEmpty() )
-        pAttrList->AddAttribute(A2OUSTR("style:master-page-name"),m_strMasterPage);
-    pStrm->StartElement(A2OUSTR("style:style"));
+        pAttrList->AddAttribute("style:master-page-name",m_strMasterPage);
+    pStrm->StartElement("style:style");
 
     //Paragraph properties:
     pAttrList->Clear();
@@ -422,7 +422,7 @@ void    XFParaStyle::ToXml(IXFStream *pStrm)
     //text indent:
     if( m_fTextIndent )
     {
-        pAttrList->AddAttribute(A2OUSTR("fo:text-indent"), DoubleToOUString(m_fTextIndent) + A2OUSTR("cm") );
+        pAttrList->AddAttribute("fo:text-indent", DoubleToOUString(m_fTextIndent) + "cm" );
     }
     //padding:
     m_aPadding.ToXml(pStrm);
@@ -432,26 +432,26 @@ void    XFParaStyle::ToXml(IXFStream *pStrm)
     //text align:
     if( m_eAlignType != enumXFAlignNone )
     {
-        pAttrList->AddAttribute(A2OUSTR("fo:text-align"), GetAlignName(m_eAlignType) );
+        pAttrList->AddAttribute("fo:text-align", GetAlignName(m_eAlignType) );
     }
     //last line align:
     if( m_eLastLineAlign != enumXFAlignNone )
     {
-        pAttrList->AddAttribute(A2OUSTR("fo:fo:text-align-last"), GetAlignName(m_eLastLineAlign) );
+        pAttrList->AddAttribute("fo:fo:text-align-last", GetAlignName(m_eLastLineAlign) );
         if( m_bJustSingleWord )
-            pAttrList->AddAttribute(A2OUSTR("style:justify-single-word"), A2OUSTR("true") );
+            pAttrList->AddAttribute("style:justify-single-word", "true" );
     }
     //line number:
     if( m_bNumberLines )
     {
-        pAttrList->AddAttribute( A2OUSTR("text:number-lines"), A2OUSTR("true") );
-        pAttrList->AddAttribute( A2OUSTR("text:line-number"), Int32ToOUString(m_nLineNumberRestart) );
+        pAttrList->AddAttribute( "text:number-lines", "true" );
+        pAttrList->AddAttribute( "text:line-number", OUString::number(m_nLineNumberRestart) );
     }
     else
     {
-        pAttrList->AddAttribute( A2OUSTR("text:number-lines"), A2OUSTR("false") );
+        pAttrList->AddAttribute( "text:number-lines", "false" );
         assert(m_nLineNumberRestart>0);
-        pAttrList->AddAttribute( A2OUSTR("text:line-number"), A2OUSTR("0") );
+        pAttrList->AddAttribute( "text:line-number", "0" );
     }
 
     //shadow:
@@ -465,7 +465,7 @@ void    XFParaStyle::ToXml(IXFStream *pStrm)
     //background color:
     if( m_nFlag&XFPARA_FLAG_BACKCOLOR && m_aBackColor.IsValid() )
     {
-        pAttrList->AddAttribute(A2OUSTR("fo:background-color"), m_aBackColor.ToString() );
+        pAttrList->AddAttribute("fo:background-color", m_aBackColor.ToString() );
     }
     //Font properties:
     if( m_pFont )
@@ -473,14 +473,14 @@ void    XFParaStyle::ToXml(IXFStream *pStrm)
 
     //page number:
     if( m_nPageNumber )
-        pAttrList->AddAttribute(A2OUSTR("fo:page-number"), Int32ToOUString(m_nPageNumber) );
+        pAttrList->AddAttribute("fo:page-number", OUString::number(m_nPageNumber) );
     //page breaks:
     m_aBreaks.ToXml(pStrm);
 
     if( m_bKeepWithNext )
-        pAttrList->AddAttribute(A2OUSTR("fo:fo:keep-with-next"), A2OUSTR("true") );
+        pAttrList->AddAttribute("fo:fo:keep-with-next", "true" );
 
-    pStrm->StartElement(A2OUSTR("style:properties"));
+    pStrm->StartElement("style:properties");
 
     //dropcap:
     m_aDropcap.ToXml(pStrm);
@@ -489,18 +489,18 @@ void    XFParaStyle::ToXml(IXFStream *pStrm)
     if( m_aTabs.GetCount() > 0 )
     {
         pAttrList->Clear();
-        pStrm->StartElement( A2OUSTR("style:tab-stops") );
+        pStrm->StartElement( "style:tab-stops" );
         m_aTabs.ToXml(pStrm);
-        pStrm->EndElement( A2OUSTR("style:tab-stops") );
+        pStrm->EndElement( "style:tab-stops" );
     }
 
     //background color:
     if( m_pBGImage )
         m_pBGImage->ToXml(pStrm);
 
-    pStrm->EndElement(A2OUSTR("style:properties"));
+    pStrm->EndElement("style:properties");
 
-    pStrm->EndElement(A2OUSTR("style:style"));
+    pStrm->EndElement("style:style");
 }
 
 XFDefaultParaStyle::XFDefaultParaStyle()
@@ -517,17 +517,17 @@ void XFDefaultParaStyle::ToXml(IXFStream * pStrm)
 {
     IXFAttrList *pAttrList = pStrm->GetAttrList();
     pAttrList->Clear();
-    pAttrList->AddAttribute(A2OUSTR("style:family"), A2OUSTR("paragraph"));
-    pStrm->StartElement(A2OUSTR("style:default-style"));
+    pAttrList->AddAttribute("style:family", "paragraph");
+    pStrm->StartElement("style:default-style");
 
     //Paragraph properties:
     pAttrList->Clear();
 
-    pAttrList->AddAttribute(A2OUSTR("style:tab-stop-distance"), DoubleToOUString(m_fTabDistance) + A2OUSTR("cm") );
+    pAttrList->AddAttribute("style:tab-stop-distance", DoubleToOUString(m_fTabDistance) + "cm" );
 
-    pStrm->StartElement(A2OUSTR("style:properties"));
-    pStrm->EndElement(A2OUSTR("style:properties"));
-    pStrm->EndElement(A2OUSTR("style:default-style"));
+    pStrm->StartElement("style:properties");
+    pStrm->EndElement("style:properties");
+    pStrm->EndElement("style:default-style");
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

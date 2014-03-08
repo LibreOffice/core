@@ -162,28 +162,28 @@ inline void XFPadding::ToXml(IXFStream *pStrm)
 
     if( (m_fLeft == m_fRight) && (m_fLeft == m_fTop) && (m_fLeft== m_fBottom ) && m_nFlag == 0x00000015 )
     {
-        pAttrList->AddAttribute( A2OUSTR("fo:padding"), DoubleToOUString(m_fLeft) + A2OUSTR("cm") );
+        pAttrList->AddAttribute( "fo:padding", DoubleToOUString(m_fLeft) + "cm" );
         return;
     }
     //margin left:
     if( m_nFlag&XFPADDING_FLAG_LEFT )
     {
-        pAttrList->AddAttribute( A2OUSTR("fo:padding-left"), DoubleToOUString(m_fLeft) + A2OUSTR("cm") );
+        pAttrList->AddAttribute( "fo:padding-left", DoubleToOUString(m_fLeft) + "cm" );
     }
     //margin right:
     if( m_nFlag&XFPADDING_FLAG_RIGHT )
     {
-        pAttrList->AddAttribute(A2OUSTR("fo:padding-right"), DoubleToOUString(m_fRight) + A2OUSTR("cm") );
+        pAttrList->AddAttribute("fo:padding-right", DoubleToOUString(m_fRight) + "cm" );
     }
     //margin top:
     if( m_nFlag&XFPADDING_FLAG_TOP )
     {
-        pAttrList->AddAttribute(A2OUSTR("fo:padding-top"), DoubleToOUString(m_fTop) + A2OUSTR("cm") );
+        pAttrList->AddAttribute("fo:padding-top", DoubleToOUString(m_fTop) + "cm" );
     }
     //margin bottom:
     if( m_nFlag&XFPADDING_FLAG_BOTTOM )
     {
-        pAttrList->AddAttribute(A2OUSTR("fo:padding-bottom"), DoubleToOUString(m_fBottom) + A2OUSTR("cm") );
+        pAttrList->AddAttribute("fo:padding-bottom", DoubleToOUString(m_fBottom) + "cm" );
     }
 }
 

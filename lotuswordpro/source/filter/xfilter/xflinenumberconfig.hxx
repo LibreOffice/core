@@ -76,7 +76,7 @@ public:
 
     void    SetSeparator(sal_Int32 increment, OUString separator);
 
-    void    SetNumberFormat(OUString numfmt = A2OUSTR("1"));
+    void    SetNumberFormat(OUString numfmt = "1");
 
     void    SetTextStyle(OUString style);
 
@@ -163,45 +163,45 @@ inline void XFLineNumberConfig::ToXml(IXFStream *pStrm)
     IXFAttrList *pAttrList = pStrm->GetAttrList();
 
     if( !m_strTextStyle.isEmpty() )
-        pAttrList->AddAttribute( A2OUSTR("text:style-name"), m_strTextStyle );
-    pAttrList->AddAttribute( A2OUSTR("text:offset"), DoubleToOUString(m_fOffset) + A2OUSTR("cm") );
-    pAttrList->AddAttribute( A2OUSTR("style:num-format"), m_strNumFmt );
+        pAttrList->AddAttribute( "text:style-name", m_strTextStyle );
+    pAttrList->AddAttribute( "text:offset", DoubleToOUString(m_fOffset) + "cm" );
+    pAttrList->AddAttribute( "style:num-format", m_strNumFmt );
     //position:
     if( m_ePosition == enumXFLineNumberLeft )
-        pAttrList->AddAttribute( A2OUSTR("text:number-position"), A2OUSTR("left") );
+        pAttrList->AddAttribute( "text:number-position", "left" );
     else if( m_ePosition == enumXFLineNumberRight )
-        pAttrList->AddAttribute( A2OUSTR("text:number-position"), A2OUSTR("right") );
+        pAttrList->AddAttribute( "text:number-position", "right" );
     else if( m_ePosition == enumXFLineNumberInner )
-        pAttrList->AddAttribute( A2OUSTR("text:number-position"), A2OUSTR("inner") );
+        pAttrList->AddAttribute( "text:number-position", "inner" );
     else if( m_ePosition == enumXFLineNumberOuter )
-        pAttrList->AddAttribute( A2OUSTR("text:number-position"), A2OUSTR("outer") );
+        pAttrList->AddAttribute( "text:number-position", "outer" );
 
-    pAttrList->AddAttribute( A2OUSTR("text:increment"), Int32ToOUString(m_nIncrement) );
+    pAttrList->AddAttribute( "text:increment", OUString::number(m_nIncrement) );
 
     if( m_bRestartOnPage )
-        pAttrList->AddAttribute( A2OUSTR("text:restart-on-page"), A2OUSTR("true") );
+        pAttrList->AddAttribute( "text:restart-on-page", "true" );
     else
-        pAttrList->AddAttribute( A2OUSTR("text:restart-on-page"), A2OUSTR("false") );
+        pAttrList->AddAttribute( "text:restart-on-page", "false" );
 
     if( m_bCountEmptyLines )
-        pAttrList->AddAttribute( A2OUSTR("text:count-empty-lines"), A2OUSTR("true") );
+        pAttrList->AddAttribute( "text:count-empty-lines", "true" );
     else
-        pAttrList->AddAttribute( A2OUSTR("text:count-empty-lines"), A2OUSTR("false") );
+        pAttrList->AddAttribute( "text:count-empty-lines", "false" );
 
     if( m_bCountFrameLines )
-        pAttrList->AddAttribute( A2OUSTR("text:count-in-floating-frames"), A2OUSTR("true") );
+        pAttrList->AddAttribute( "text:count-in-floating-frames", "true" );
     else
-        pAttrList->AddAttribute( A2OUSTR("text:count-in-floating-frames"), A2OUSTR("false") );
+        pAttrList->AddAttribute( "text:count-in-floating-frames", "false" );
 
-    pStrm->StartElement( A2OUSTR("text:linenumbering-configuration") );
+    pStrm->StartElement( "text:linenumbering-configuration" );
 
     pAttrList->Clear();
-    pAttrList->AddAttribute( A2OUSTR("text:increment"), Int32ToOUString(m_nSepIncrement) );
-    pStrm->StartElement( A2OUSTR("text:linenumbering-separator") );
+    pAttrList->AddAttribute( "text:increment", OUString::number(m_nSepIncrement) );
+    pStrm->StartElement( "text:linenumbering-separator" );
     pStrm->Characters(m_strSeparator);
-    pStrm->EndElement( A2OUSTR("text:linenumbering-separator") );
+    pStrm->EndElement( "text:linenumbering-separator" );
 
-    pStrm->EndElement( A2OUSTR("text:linenumbering-configuration") );
+    pStrm->EndElement( "text:linenumbering-configuration" );
 }
 
 #endif

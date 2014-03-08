@@ -78,38 +78,45 @@ int XFGlobal::s_nImageID = 1;
 OUString XFGlobal::GenSectionName()
 {
     //give it a initial name:
-    return A2OUSTR("sect") + Int32ToOUString(s_nSectionID++);
+    OUString sResult = "sect" + OUString::number(s_nSectionID++);
+    return sResult;
 }
 
 OUString XFGlobal::GenFrameName()
 {
     //give it a initial name:
-    return A2OUSTR("frame") + Int32ToOUString(s_nFrameID++);
+    OUString sResult = "frame" + OUString::number(s_nFrameID++);
+    return sResult;
 }
 
 OUString XFGlobal::GenTableName()
 {
-    return A2OUSTR("table") + Int32ToOUString(s_nFrameID++);
+    OUString sResult = "table" + OUString::number(s_nFrameID++);
+    return sResult;
 }
 
 OUString XFGlobal::GenNoteName()
 {
-    return A2OUSTR("ftn") + Int32ToOUString(s_nNoteID++);
+    OUString sResult = "ftn" + OUString::number(s_nNoteID++);
+    return sResult;
 }
 
 OUString XFGlobal::GenStrokeDashName()
 {
-    return A2OUSTR("stroke dash ") + Int32ToOUString(s_nStrokeDashID++);
+    OUString sResult = "stroke dash " + OUString::number(s_nStrokeDashID++);
+    return sResult;
 }
 
 OUString XFGlobal::GenAreaName()
 {
-    return A2OUSTR("draw area") + Int32ToOUString(s_nAreaID++);
+    OUString sResult = "draw area" + OUString::number(s_nAreaID++);
+    return sResult;
 }
 
 OUString XFGlobal::GenImageName()
 {
-    return A2OUSTR("Graphic") + Int32ToOUString(s_nImageID++);
+    OUString sResult = "Graphic" + OUString::number(s_nImageID++);
+    return sResult;
 }
 
 void    XFGlobal::Reset()

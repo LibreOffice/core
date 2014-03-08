@@ -76,9 +76,9 @@ public:
     {
         IXFAttrList *pAttrList = pStrm->GetAttrList();
         pAttrList->Clear();
-        pStrm->StartElement( A2OUSTR("style:footer") );
+        pStrm->StartElement( "style:footer" );
         XFContentContainer::ToXml(pStrm);
-        pStrm->EndElement( A2OUSTR("style:footer") );
+        pStrm->EndElement( "style:footer" );
     }
 };
 

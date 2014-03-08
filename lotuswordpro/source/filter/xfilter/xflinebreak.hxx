@@ -74,8 +74,8 @@ inline void XFLineBreak::ToXml(IXFStream *pStrm)
     IXFAttrList *pAttrList = pStrm->GetAttrList();
 
     pAttrList->Clear();
-    pStrm->StartElement( A2OUSTR("text:line-break") );
-    pStrm->EndElement( A2OUSTR("text:line-break") );
+    pStrm->StartElement( "text:line-break" );
+    pStrm->EndElement( "text:line-break" );
 }
 
 #endif

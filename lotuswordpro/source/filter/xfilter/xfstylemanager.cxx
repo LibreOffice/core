@@ -60,11 +60,11 @@
 #include "xfstylemanager.hxx"
 #include "ixfstyle.hxx"
 
-XFStyleManager::XFStyleManager() : s_aStdArrowStyles( A2OUSTR("arrow") ), s_aTextStyles( A2OUSTR("T") ),
-    s_aParaStyles( A2OUSTR("P") ),s_aListStyles( A2OUSTR("L") ),s_aSectionStyles( A2OUSTR("Sect") ),
-    s_aPageMasters( A2OUSTR("PM") ),s_aMasterpages( A2OUSTR("MP") ),s_aDateStyles( A2OUSTR("N") ),
-    s_aGraphicsStyles( A2OUSTR("fr") ),s_aTableStyles( A2OUSTR("table") ),s_aTableCellStyles( A2OUSTR("cell") ),
-    s_aTableRowStyles( A2OUSTR("row") ),s_aTableColStyles( A2OUSTR("col") ),s_pOutlineStyle(NULL)
+XFStyleManager::XFStyleManager() : s_aStdArrowStyles( OUString("arrow") ), s_aTextStyles( OUString("T") ),
+    s_aParaStyles( OUString("P") ),s_aListStyles( OUString("L") ),s_aSectionStyles( OUString("Sect") ),
+    s_aPageMasters( OUString("PM") ),s_aMasterpages( OUString("MP") ),s_aDateStyles( OUString("N") ),
+    s_aGraphicsStyles( OUString("fr") ),s_aTableStyles( OUString("table") ),s_aTableCellStyles( OUString("cell") ),
+    s_aTableRowStyles( OUString("row") ),s_aTableColStyles( OUString("col") ),s_pOutlineStyle(NULL)
 {
 }
 
@@ -311,7 +311,7 @@ void    XFStyleManager::ToXml(IXFStream *pStrm)
     IXFAttrList *pAttrList = pStrm->GetAttrList();
 
     pAttrList->Clear();
-    pStrm->StartElement( A2OUSTR("office:font-decls") );
+    pStrm->StartElement( OUString("office:font-decls") );
 
     //font declarations:
     for( itDecl = s_aFontDecls.begin(); itDecl != s_aFontDecls.end(); ++itDecl )
@@ -319,21 +319,21 @@ void    XFStyleManager::ToXml(IXFStream *pStrm)
         XFFontDecl &f = *itDecl;
 
         pAttrList->Clear();
-        pAttrList->AddAttribute( A2OUSTR("style:name"), f.GetFontName() );
-        pAttrList->AddAttribute( A2OUSTR("fo:font-family"), f.GetFontFamily() );
+        pAttrList->AddAttribute( OUString("style:name"), f.GetFontName() );
+        pAttrList->AddAttribute( OUString("fo:font-family"), f.GetFontFamily() );
         if( f.GetFontPitchFixed() )
-            pAttrList->AddAttribute( A2OUSTR("style:font-pitch"), A2OUSTR("fixed") );
+            pAttrList->AddAttribute( OUString("style:font-pitch"), OUString("fixed") );
         else
-            pAttrList->AddAttribute( A2OUSTR("style:font-pitch"), A2OUSTR("variable") );
-        pStrm->StartElement( A2OUSTR("style:font-decl") );
-        pStrm->EndElement( A2OUSTR("style:font-decl") );
+            pAttrList->AddAttribute( OUString("style:font-pitch"), OUString("variable") );
+        pStrm->StartElement( OUString("style:font-decl") );
+        pStrm->EndElement( OUString("style:font-decl") );
     }
 
-    pStrm->EndElement( A2OUSTR("office:font-decls") );
+    pStrm->EndElement( OUString("office:font-decls") );
 
     //office:styles:
     pAttrList->Clear();
-    pStrm->StartElement( A2OUSTR("office:styles") );
+    pStrm->StartElement( OUString("office:styles") );
 
     s_aStdParaStyles.ToXml(pStrm);
     s_aStdTextStyles.ToXml(pStrm);
@@ -349,11 +349,11 @@ void    XFStyleManager::ToXml(IXFStream *pStrm)
     if( s_pOutlineStyle )
         s_pOutlineStyle->ToXml(pStrm);
 
-    pStrm->EndElement( A2OUSTR("office:styles") );
+    pStrm->EndElement( OUString("office:styles") );
 
     //automatic styles:
     pAttrList->Clear();
-    pStrm->StartElement( A2OUSTR("office:automatic-styles") );
+    pStrm->StartElement( OUString("office:automatic-styles") );
 
     s_aTableStyles.ToXml(pStrm);
     s_aTableCellStyles.ToXml(pStrm);
@@ -367,15 +367,15 @@ void    XFStyleManager::ToXml(IXFStream *pStrm)
     //graphics:
     s_aGraphicsStyles.ToXml(pStrm);
 
-    pStrm->EndElement( A2OUSTR("office:automatic-styles") );
+    pStrm->EndElement( OUString("office:automatic-styles") );
 
     //master:styles
     pAttrList->Clear();
-    pStrm->StartElement( A2OUSTR("office:master-styles") );
+    pStrm->StartElement( OUString("office:master-styles") );
     //masters pages:
     s_aMasterpages.ToXml(pStrm);
 
-    pStrm->EndElement( A2OUSTR("office:master-styles") );
+    pStrm->EndElement( OUString("office:master-styles") );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

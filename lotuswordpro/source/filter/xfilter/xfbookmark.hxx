@@ -92,16 +92,16 @@ public:
         IXFAttrList *pAttrList = pStrm->GetAttrList();
         pAttrList->Clear();
 
-        pAttrList->AddAttribute( A2OUSTR("text:name"), m_strName );
+        pAttrList->AddAttribute( "text:name", m_strName );
         if( m_bStart )
         {
-            pStrm->StartElement( A2OUSTR("text:bookmark-start") );
-            pStrm->EndElement( A2OUSTR("text:bookmark-start") );
+            pStrm->StartElement( "text:bookmark-start" );
+            pStrm->EndElement( "text:bookmark-start" );
         }
         else
         {
-            pStrm->StartElement( A2OUSTR("text:bookmark-end") );
-            pStrm->EndElement( A2OUSTR("text:bookmark-end") );
+            pStrm->StartElement( "text:bookmark-end" );
+            pStrm->EndElement( "text:bookmark-end" );
         }
     }
 

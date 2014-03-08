@@ -72,30 +72,30 @@ void    RegisteArrowStyles()
         return;
     //reversed arrow:
     XFArrowStyle *pArrowStyle100 = new XFArrowStyle();
-    pArrowStyle100->SetArrowName( A2OUSTR("arrow100") );
-    pArrowStyle100->SetViewbox(A2OUSTR("0 0 140 200"));
-    pArrowStyle100->SetSVGPath(A2OUSTR("M0 180 L70 0 L140 180 L120 180 L70 30 L20 180 L0 180"));
+    pArrowStyle100->SetArrowName( "arrow100" );
+    pArrowStyle100->SetViewbox("0 0 140 200");
+    pArrowStyle100->SetSVGPath("M0 180 L70 0 L140 180 L120 180 L70 30 L20 180 L0 180");
     pXFStyleManager->AddStyle(pArrowStyle100);
 
     //reversed arrow:
     XFArrowStyle *pArrowStyle1 = new XFArrowStyle();
-    pArrowStyle1->SetArrowName( A2OUSTR("reverse arrow") );
-    pArrowStyle1->SetViewbox(A2OUSTR("0 0 140 200"));
-    pArrowStyle1->SetSVGPath(A2OUSTR("M0 0 L70 200 L140 0"));
+    pArrowStyle1->SetArrowName( "reverse arrow" );
+    pArrowStyle1->SetViewbox("0 0 140 200");
+    pArrowStyle1->SetSVGPath("M0 0 L70 200 L140 0");
     pXFStyleManager->AddStyle(pArrowStyle1);
 
     //reversed concave arrow
     XFArrowStyle *pArrowStyle2 = new XFArrowStyle();
-    pArrowStyle2->SetArrowName( A2OUSTR("reverse concave arrow") );
-    pArrowStyle2->SetViewbox(A2OUSTR("0 0 140 200"));
-    pArrowStyle2->SetSVGPath(A2OUSTR("M0 0 L80 200 L160 0 L80 100"));
+    pArrowStyle2->SetArrowName( "reverse concave arrow" );
+    pArrowStyle2->SetViewbox("0 0 140 200");
+    pArrowStyle2->SetSVGPath("M0 0 L80 200 L160 0 L80 100");
     pXFStyleManager->AddStyle(pArrowStyle2);
 
     //reversed line arrow
     XFArrowStyle *pArrowStyle3 = new XFArrowStyle();
-    pArrowStyle3->SetArrowName( A2OUSTR("reverse line arrow") );
-    pArrowStyle3->SetViewbox(A2OUSTR("0 0 140 200"));
-    pArrowStyle3->SetSVGPath(A2OUSTR("M0 0 L70 200 L140 0L110 0 L70 160 L20 0 L0 0"));
+    pArrowStyle3->SetArrowName( "reverse line arrow" );
+    pArrowStyle3->SetViewbox("0 0 140 200");
+    pArrowStyle3->SetSVGPath("M0 0 L70 200 L140 0L110 0 L70 160 L20 0 L0 0");
     pXFStyleManager->AddStyle(pArrowStyle3);
 }
 

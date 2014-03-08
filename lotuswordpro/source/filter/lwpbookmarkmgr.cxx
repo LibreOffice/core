@@ -66,7 +66,7 @@ void LwpBookmarkMgr::AddXFBookmarkStart(OUString sName,XFBookmarkStart* pMark)
     else //have exist the same bookmark name
     {
         XFBookmarkStart* pFind = iter->second;
-        OUString totalName = pFind->GetDivision() + A2OUSTR(":");
+        OUString totalName = pFind->GetDivision() + ":";
         totalName += pFind->GetName();
         pFind->SetName(totalName);
         m_MapStart[totalName] = pFind;
@@ -84,7 +84,7 @@ void LwpBookmarkMgr::AddXFBookmarkEnd(OUString sName,XFBookmarkEnd* pMark)
     else //have exist the same bookmark name
     {
         XFBookmarkEnd* pFind = iter->second;
-        OUString totalName = pFind->GetDivision() + A2OUSTR(":");
+        OUString totalName = pFind->GetDivision() + ":";
         totalName += pFind->GetName();
         pFind->SetName(totalName);
         m_MapEnd[totalName] = pFind;

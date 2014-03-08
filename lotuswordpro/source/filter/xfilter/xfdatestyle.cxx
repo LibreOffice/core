@@ -75,84 +75,84 @@ void    XFDatePart::ToXml(IXFStream *pStrm)
     case enumXFDateYear:
         pAttrList->Clear();
         if( m_bLongFmt )
-            pAttrList->AddAttribute( A2OUSTR("number:style"), A2OUSTR("long") );
-        pStrm->StartElement( A2OUSTR("number:year") );
-        pStrm->EndElement( A2OUSTR("number:year") );
+            pAttrList->AddAttribute( "number:style", "long" );
+        pStrm->StartElement( "number:year" );
+        pStrm->EndElement( "number:year" );
         break;
     case enumXFDateMonth:
         pAttrList->Clear();
         if( m_bTexture )
-            pAttrList->AddAttribute( A2OUSTR("number:textual"), A2OUSTR("true") );
+            pAttrList->AddAttribute( "number:textual", "true" );
         if( m_bLongFmt )
-            pAttrList->AddAttribute( A2OUSTR("number:style"), A2OUSTR("long") );
-        pStrm->StartElement( A2OUSTR("number:month") );
-        pStrm->EndElement( A2OUSTR("number:month") );
+            pAttrList->AddAttribute( "number:style", "long" );
+        pStrm->StartElement( "number:month" );
+        pStrm->EndElement( "number:month" );
         break;
     case enumXFDateMonthDay:
         pAttrList->Clear();
         if( m_bLongFmt )
-            pAttrList->AddAttribute( A2OUSTR("number:style"), A2OUSTR("long") );
-        pStrm->StartElement( A2OUSTR("number:day") );
-        pStrm->EndElement( A2OUSTR("number:day") );
+            pAttrList->AddAttribute( "number:style", "long" );
+        pStrm->StartElement( "number:day" );
+        pStrm->EndElement( "number:day" );
         break;
     case enumXFDateWeekDay:
         pAttrList->Clear();
         if( m_bLongFmt )
-            pAttrList->AddAttribute( A2OUSTR("number:style"), A2OUSTR("long") );
-        pStrm->StartElement( A2OUSTR("number:day-of-week") );
-        pStrm->EndElement( A2OUSTR("number:day-of-week") );
+            pAttrList->AddAttribute( "number:style", "long" );
+        pStrm->StartElement( "number:day-of-week" );
+        pStrm->EndElement( "number:day-of-week" );
         break;
     case enumXFDateYearWeek:
         pAttrList->Clear();
-        pStrm->StartElement( A2OUSTR("number:week-of-year") );
-        pStrm->EndElement( A2OUSTR("number:week-of-year") );
+        pStrm->StartElement( "number:week-of-year" );
+        pStrm->EndElement( "number:week-of-year" );
         break;
     case enumXFDateEra:
         pAttrList->Clear();
         if( m_bLongFmt )
-            pAttrList->AddAttribute( A2OUSTR("number:style"), A2OUSTR("long") );
-        pStrm->StartElement( A2OUSTR("number:era") );
-        pStrm->EndElement( A2OUSTR("number:era") );
+            pAttrList->AddAttribute( "number:style", "long" );
+        pStrm->StartElement( "number:era" );
+        pStrm->EndElement( "number:era" );
         break;
     case enumXFDateQuarter:
         pAttrList->Clear();
         if( m_bLongFmt )
-            pAttrList->AddAttribute( A2OUSTR("number:style"), A2OUSTR("long") );
-        pStrm->StartElement( A2OUSTR("number:quarter") );
-        pStrm->EndElement( A2OUSTR("number:quarter") );
+            pAttrList->AddAttribute( "number:style", "long" );
+        pStrm->StartElement( "number:quarter" );
+        pStrm->EndElement( "number:quarter" );
         break;
     case enumXFDateHour:
         pAttrList->Clear();
         if( m_bLongFmt )
-            pAttrList->AddAttribute( A2OUSTR("number:style"), A2OUSTR("long") );
-        pStrm->StartElement( A2OUSTR("number:hours") );
-        pStrm->EndElement( A2OUSTR("number:hours") );
+            pAttrList->AddAttribute( "number:style", "long" );
+        pStrm->StartElement( "number:hours" );
+        pStrm->EndElement( "number:hours" );
         break;
     case enumXFDateMinute:
         pAttrList->Clear();
         if( m_bLongFmt )
-            pAttrList->AddAttribute( A2OUSTR("number:style"), A2OUSTR("long") );
-        pStrm->StartElement( A2OUSTR("number:minutes") );
-        pStrm->EndElement( A2OUSTR("number:minutes") );
+            pAttrList->AddAttribute( "number:style", "long" );
+        pStrm->StartElement( "number:minutes" );
+        pStrm->EndElement( "number:minutes" );
         break;
     case enumXFDateSecond:
         pAttrList->Clear();
         if( m_bLongFmt )
-            pAttrList->AddAttribute( A2OUSTR("number:style"), A2OUSTR("long") );
+            pAttrList->AddAttribute( "number:style", "long" );
         if( m_nDecimalPos )
-            pAttrList->AddAttribute( A2OUSTR("number:decimal-places"), Int32ToOUString(m_nDecimalPos) );
-        pStrm->StartElement( A2OUSTR("number:seconds") );
-        pStrm->EndElement( A2OUSTR("number:seconds") );
+            pAttrList->AddAttribute( "number:decimal-places", OUString::number(m_nDecimalPos) );
+        pStrm->StartElement( "number:seconds" );
+        pStrm->EndElement( "number:seconds" );
         break;
     case enumXFDateAmPm:
-        pStrm->StartElement( A2OUSTR("number:am-pm") );
-        pStrm->EndElement( A2OUSTR("number:am-pm") );
+        pStrm->StartElement( "number:am-pm" );
+        pStrm->EndElement( "number:am-pm" );
         break;
     case enumXFDateText:
         pAttrList->Clear();
-        pStrm->StartElement( A2OUSTR("number:text") );
+        pStrm->StartElement( "number:text" );
         pStrm->Characters( m_strText );
-        pStrm->EndElement( A2OUSTR("number:text") );
+        pStrm->EndElement( "number:text" );
         break;
     }
 }
@@ -177,14 +177,14 @@ void    XFDateStyle::ToXml(IXFStream *pStrm)
     IXFAttrList *pAttrList = pStrm->GetAttrList();
 
     pAttrList->Clear();
-    pAttrList->AddAttribute( A2OUSTR("style:name"), GetStyleName() );
-    pAttrList->AddAttribute( A2OUSTR("style:family"), A2OUSTR("data-style") );
+    pAttrList->AddAttribute( "style:name", GetStyleName() );
+    pAttrList->AddAttribute( "style:family", "data-style" );
 
-    pStrm->StartElement( A2OUSTR("number:date-style") );
+    pStrm->StartElement( "number:date-style" );
 
     m_aParts.ToXml(pStrm);
 
-    pStrm->EndElement( A2OUSTR("number:date-style") );
+    pStrm->EndElement( "number:date-style" );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

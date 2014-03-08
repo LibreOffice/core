@@ -93,17 +93,17 @@ public:
     /**
      * @descr   Add a entry in the template.
      */
-    void    AddEntry(enumXFIndexTemplate entry, OUString styleName = A2OUSTR(""));
+    void    AddEntry(enumXFIndexTemplate entry, OUString styleName = "");
 
     /**
      * @descr   Add a tab entry in the template.
      */
-    void    AddTabEntry(enumXFTab type, double len, sal_Unicode leader = '*', sal_Unicode delimiter='.', OUString styleName = A2OUSTR(""));
+    void    AddTabEntry(enumXFTab type, double len, sal_Unicode leader = '*', sal_Unicode delimiter='.', OUString styleName = "");
 
     /**
      * @descr   Add a entry in the template.
      */
-    void    AddTextEntry(OUString sSpan, OUString styleName = A2OUSTR(""));
+    void    AddTextEntry(OUString sSpan, OUString styleName = "");
 
     /**
      * @descr   clear all index template parts.
@@ -189,7 +189,7 @@ inline XFIndexTemplate::XFIndexTemplate()
     : m_eTabType(enumXFTabNone)
     , m_fTabLength(0.0)
 {
-    m_nLevel = Int32ToOUString(0);
+    m_nLevel = OUString::number(0);
 }
 
 inline void XFIndexTemplate::SetLevel(OUString level)

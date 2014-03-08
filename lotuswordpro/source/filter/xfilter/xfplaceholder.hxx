@@ -108,10 +108,10 @@ inline void XFHolderStart::ToXml(IXFStream *pStrm)
 {
     IXFAttrList *pAttrList = pStrm->GetAttrList();
     pAttrList->Clear();
-    pAttrList->AddAttribute( A2OUSTR("text:placeholder-type"),m_strType);
+    pAttrList->AddAttribute( "text:placeholder-type",m_strType);
     if (!m_strDesc.isEmpty())
-        pAttrList->AddAttribute( A2OUSTR("text:description"), m_strDesc);
-    pStrm->StartElement( A2OUSTR("text:placeholder") );
+        pAttrList->AddAttribute( "text:description", m_strDesc);
+    pStrm->StartElement( "text:placeholder" );
     if( !m_strText.isEmpty())
         pStrm->Characters(m_strText);
 }
@@ -134,7 +134,7 @@ XFHolderEnd::~XFHolderEnd()
 
 inline void XFHolderEnd::ToXml(IXFStream *pStrm)
 {
-    pStrm->EndElement( A2OUSTR("text:placeholder") );
+    pStrm->EndElement( "text:placeholder" );
 }
 
 #endif

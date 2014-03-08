@@ -112,7 +112,7 @@ inline void XFDropcap::Reset()
     m_nCharCount = 0;
     m_nLines = 0;
     m_fDistance = 0;
-    m_strStyleName = A2OUSTR("");
+    m_strStyleName = "";
 }
 
 inline void XFDropcap::ToXml(IXFStream *pStrm)
@@ -122,13 +122,13 @@ inline void XFDropcap::ToXml(IXFStream *pStrm)
 
     if( m_nCharCount < 1 || m_nLines < 2 )
         return;
-    pAttrList->AddAttribute(A2OUSTR("style:length"), Int32ToOUString(m_nCharCount) );
-    pAttrList->AddAttribute(A2OUSTR("style:lines"), Int32ToOUString(m_nLines) );
-    pAttrList->AddAttribute(A2OUSTR("style:distance"), DoubleToOUString(m_fDistance) + A2OUSTR("cm") );
+    pAttrList->AddAttribute("style:length", OUString::number(m_nCharCount) );
+    pAttrList->AddAttribute("style:lines", OUString::number(m_nLines) );
+    pAttrList->AddAttribute("style:distance", DoubleToOUString(m_fDistance) + "cm" );
     if( !m_strStyleName.isEmpty() )
-        pAttrList->AddAttribute(A2OUSTR("style:style-name"), m_strStyleName );
-    pStrm->StartElement( A2OUSTR("style:drop-cap") );
-    pStrm->EndElement( A2OUSTR("style:drop-cap") );
+        pAttrList->AddAttribute("style:style-name", m_strStyleName );
+    pStrm->StartElement( "style:drop-cap" );
+    pStrm->EndElement( "style:drop-cap" );
 }
 
 inline bool operator==(XFDropcap& dc1, XFDropcap& dc2)

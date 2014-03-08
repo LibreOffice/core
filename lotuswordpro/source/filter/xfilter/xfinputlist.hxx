@@ -92,21 +92,21 @@ inline void XFInputList::ToXml(IXFStream *pStrm)
     IXFAttrList *pAttrList = pStrm->GetAttrList();
     pAttrList->Clear();
 
-    pAttrList->AddAttribute( A2OUSTR("text:name"), m_strName );
-    pStrm->StartElement( A2OUSTR("text:drop-down") );
+    pAttrList->AddAttribute( "text:name", m_strName );
+    pStrm->StartElement( "text:drop-down" );
 
     pAttrList->Clear();
-    pAttrList->AddAttribute( A2OUSTR("text:value"), A2OUSTR(" ") );
-    pStrm->StartElement( A2OUSTR("text:label") );
-    pStrm->EndElement( A2OUSTR("text:label") );
+    pAttrList->AddAttribute( "text:value", " " );
+    pStrm->StartElement( "text:label" );
+    pStrm->EndElement( "text:label" );
     for(sal_uInt32 i=0; i< m_list.size();i++)
     {
         pAttrList->Clear();
-        pAttrList->AddAttribute( A2OUSTR("text:value"), m_list[i] );
-        pStrm->StartElement( A2OUSTR("text:label") );
-        pStrm->EndElement( A2OUSTR("text:label") );
+        pAttrList->AddAttribute( "text:value", m_list[i] );
+        pStrm->StartElement( "text:label" );
+        pStrm->EndElement( "text:label" );
     }
-    pStrm->EndElement( A2OUSTR("text:drop-down") );
+    pStrm->EndElement( "text:drop-down" );
 }
 
 #endif

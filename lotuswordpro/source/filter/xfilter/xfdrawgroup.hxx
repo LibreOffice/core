@@ -103,11 +103,11 @@ inline void XFDrawGroup::ToXml(IXFStream *pStrm)
     pAttrList->Clear();
     XFDrawObject::ToXml(pStrm);
 
-    pStrm->StartElement( A2OUSTR("draw:g") );
+    pStrm->StartElement( "draw:g" );
 
     m_aChildren.ToXml(pStrm);
 
-    pStrm->EndElement( A2OUSTR("draw:g") );
+    pStrm->EndElement( "draw:g" );
 
 }
 

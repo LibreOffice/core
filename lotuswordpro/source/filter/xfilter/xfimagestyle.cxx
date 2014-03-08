@@ -84,12 +84,12 @@ void XFImageStyle::ToXml(IXFStream *pStrm)
     IXFAttrList *pAttrList = pStrm->GetAttrList();
 
     pAttrList->Clear();
-    pAttrList->AddAttribute( A2OUSTR("style:name"), GetStyleName() );
+    pAttrList->AddAttribute( "style:name", GetStyleName() );
     if( !GetParentStyleName().isEmpty() )
-        pAttrList->AddAttribute(A2OUSTR("style:parent-style-name"),GetParentStyleName());
-    pAttrList->AddAttribute( A2OUSTR("style:family"), A2OUSTR("graphics") );
+        pAttrList->AddAttribute("style:parent-style-name",GetParentStyleName());
+    pAttrList->AddAttribute( "style:family", "graphics" );
     //parent style name ignore now.
-    pStrm->StartElement( A2OUSTR("style:style") );
+    pStrm->StartElement( "style:style" );
 
     m_aMargins.ToXml(pStrm);
 
@@ -97,28 +97,28 @@ void XFImageStyle::ToXml(IXFStream *pStrm)
 
     if( m_eWrap == enumXFWrapBackground )
     {
-        pAttrList->AddAttribute( A2OUSTR("style:run-through"), A2OUSTR("background") );
+        pAttrList->AddAttribute( "style:run-through", "background" );
     }
     else
     {
-        pAttrList->AddAttribute( A2OUSTR("style:run-through"), A2OUSTR("foreground") );
+        pAttrList->AddAttribute( "style:run-through", "foreground" );
 
         if( m_eWrap == enumXFWrapNone )
-            pAttrList->AddAttribute( A2OUSTR("style:wrap"), A2OUSTR("none") );
+            pAttrList->AddAttribute( "style:wrap", "none" );
         else if( m_eWrap == enumXFWrapLeft )
-            pAttrList->AddAttribute( A2OUSTR("style:wrap"), A2OUSTR("left") );
+            pAttrList->AddAttribute( "style:wrap", "left" );
         else if( m_eWrap == enumXFWrapRight )
-            pAttrList->AddAttribute( A2OUSTR("style:wrap"), A2OUSTR("right") );
+            pAttrList->AddAttribute( "style:wrap", "right" );
         else if( m_eWrap == enumXFWrapParallel )
-            pAttrList->AddAttribute( A2OUSTR("style:wrap"), A2OUSTR("parallel") );
+            pAttrList->AddAttribute( "style:wrap", "parallel" );
         else if( m_eWrap == enumXFWrapRunThrough )
-            pAttrList->AddAttribute( A2OUSTR("style:wrap"), A2OUSTR("run-through") );
+            pAttrList->AddAttribute( "style:wrap", "run-through" );
         else if( m_eWrap == enumXFWrapBest )
-            pAttrList->AddAttribute( A2OUSTR("style:wrap"), A2OUSTR("dynamic") );
+            pAttrList->AddAttribute( "style:wrap", "dynamic" );
     }
     //background
     if( m_aBackColor.IsValid() )
-        pAttrList->AddAttribute( A2OUSTR("fo:background-color"), m_aBackColor.ToString() );
+        pAttrList->AddAttribute( "fo:background-color", m_aBackColor.ToString() );
     //pad
     m_aPad.ToXml(pStrm);
     //margin:
@@ -127,31 +127,31 @@ void XFImageStyle::ToXml(IXFStream *pStrm)
     if( m_bHoriFlip || m_bVertFlip )
     {
         if( m_bHoriFlip && m_bVertFlip )
-            pAttrList->AddAttribute( A2OUSTR("style:mirror"), A2OUSTR("horizontal-on-right-pages vertical") );
+            pAttrList->AddAttribute( "style:mirror", "horizontal-on-right-pages vertical" );
         else if( m_bHoriFlip && !m_bVertFlip )
-            pAttrList->AddAttribute( A2OUSTR("style:mirror"), A2OUSTR("horizontal-on-right-pages") );
+            pAttrList->AddAttribute( "style:mirror", "horizontal-on-right-pages" );
         else if( !m_bHoriFlip && m_bVertFlip )
-            pAttrList->AddAttribute( A2OUSTR("style:mirror"), A2OUSTR("vertical") );
+            pAttrList->AddAttribute( "style:mirror", "vertical" );
     }
     //color adjust
     if( m_nAdjustRed )
-        pAttrList->AddAttribute( A2OUSTR("draw:red"), Int32ToOUString(m_nAdjustRed) + A2OUSTR("%") );
+        pAttrList->AddAttribute( "draw:red", OUString::number(m_nAdjustRed) + "%" );
     if( m_nAdjustGreen )
-        pAttrList->AddAttribute( A2OUSTR("draw:green"), Int32ToOUString(m_nAdjustGreen) + A2OUSTR("%") );
+        pAttrList->AddAttribute( "draw:green", OUString::number(m_nAdjustGreen) + "%" );
     if( m_nAdjustBlue )
-        pAttrList->AddAttribute( A2OUSTR("draw:blue"), Int32ToOUString(m_nAdjustBlue) + A2OUSTR("%") );
+        pAttrList->AddAttribute( "draw:blue", OUString::number(m_nAdjustBlue) + "%" );
 
     if( m_nGamma )
-        pAttrList->AddAttribute( A2OUSTR("draw:gamma"), Int32ToOUString(m_nGamma) );
+        pAttrList->AddAttribute( "draw:gamma", OUString::number(m_nGamma) );
     if( m_nBrightness )
-        pAttrList->AddAttribute( A2OUSTR("draw:luminance"), Int32ToOUString(m_nBrightness) + A2OUSTR("%") );
+        pAttrList->AddAttribute( "draw:luminance", OUString::number(m_nBrightness) + "%" );
     if( m_nContrast )
-        pAttrList->AddAttribute( A2OUSTR("draw:contrast"), Int32ToOUString(m_nContrast) + A2OUSTR("%") );
+        pAttrList->AddAttribute( "draw:contrast", OUString::number(m_nContrast) + "%" );
 
     if( m_nTransparent )
-        pAttrList->AddAttribute( A2OUSTR("draw:transparency"), Int32ToOUString(m_nTransparent) + A2OUSTR("%") );
+        pAttrList->AddAttribute( "draw:transparency", OUString::number(m_nTransparent) + "%" );
 
-    pAttrList->AddAttribute(A2OUSTR("draw:color-mode"), GetColorMode(m_eColorMode));
+    pAttrList->AddAttribute("draw:color-mode", GetColorMode(m_eColorMode));
     //border
     if( m_pBorders )
         m_pBorders->ToXml(pStrm);
@@ -160,49 +160,49 @@ void XFImageStyle::ToXml(IXFStream *pStrm)
         m_pShadow->ToXml(pStrm);
 
     if( m_bPrintable )
-        pAttrList->AddAttribute( A2OUSTR("style:print-content"), A2OUSTR("true") );
+        pAttrList->AddAttribute( "style:print-content", "true" );
     //protect:
     if( m_bProtectContent || m_bProtectSize || m_bProtectPos )
     {
         OUString protect;
         if( m_bProtectContent )
-            protect += A2OUSTR("content");
+            protect += "content";
         if( m_bProtectSize )
         {
             if( !protect.isEmpty() )
-                protect += A2OUSTR(" ");
-            protect += A2OUSTR("size");
+                protect += " ";
+            protect += "size";
         }
         if( m_bProtectPos )
         {
             if( !protect.isEmpty() )
-                protect += A2OUSTR(" ");
-            protect += A2OUSTR("position");
+                protect += " ";
+            protect += "position";
         }
-        pAttrList->AddAttribute( A2OUSTR("style:protect"), protect );
+        pAttrList->AddAttribute( "style:protect", protect );
     }
     //vertical pos and horizon pos:
-    pAttrList->AddAttribute( A2OUSTR("style:vertical-pos"), GetFrameYPos(m_eYPos) );
-    pAttrList->AddAttribute( A2OUSTR("style:vertical-rel"), GetFrameYRel(m_eYRel) );
-    pAttrList->AddAttribute( A2OUSTR("style:horizontal-pos"), GetFrameXPos(m_eXPos) );
-    pAttrList->AddAttribute( A2OUSTR("style:horizontal-rel"), GetFrameXRel(m_eXRel) );
+    pAttrList->AddAttribute( "style:vertical-pos", GetFrameYPos(m_eYPos) );
+    pAttrList->AddAttribute( "style:vertical-rel", GetFrameYRel(m_eYRel) );
+    pAttrList->AddAttribute( "style:horizontal-pos", GetFrameXPos(m_eXPos) );
+    pAttrList->AddAttribute( "style:horizontal-rel", GetFrameXRel(m_eXRel) );
 
     //clip:
     if( FABS(m_fClipLeft)>FLOAT_MIN || FABS(m_fClipRight)>FLOAT_MIN || FABS(m_fClipTop)>FLOAT_MIN || FABS(m_fClipBottom)>FLOAT_MIN )
     {
-        OUString clip = A2OUSTR("rect(");
-        clip += DoubleToOUString(m_fClipTop) + A2OUSTR("cm ");
-        clip += DoubleToOUString(m_fClipRight) + A2OUSTR("cm ");
-        clip += DoubleToOUString(m_fClipBottom) + A2OUSTR("cm ");
-        clip += DoubleToOUString(m_fClipLeft) + A2OUSTR("cm");
-        clip += A2OUSTR(")");
-        pAttrList->AddAttribute(A2OUSTR("fo:clip"),clip);
+        OUString clip = "rect(";
+        clip += DoubleToOUString(m_fClipTop) + "cm ";
+        clip += DoubleToOUString(m_fClipRight) + "cm ";
+        clip += DoubleToOUString(m_fClipBottom) + "cm ";
+        clip += DoubleToOUString(m_fClipLeft) + "cm";
+        clip += ")";
+        pAttrList->AddAttribute("fo:clip",clip);
     }
 
-    pStrm->StartElement( A2OUSTR("style:properties") );
-    pStrm->EndElement( A2OUSTR("style:properties") );
+    pStrm->StartElement( "style:properties" );
+    pStrm->EndElement( "style:properties" );
 
-    pStrm->EndElement( A2OUSTR("style:style") );
+    pStrm->EndElement( "style:style" );
 
 }
 

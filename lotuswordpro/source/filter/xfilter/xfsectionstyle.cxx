@@ -103,39 +103,39 @@ void XFSectionStyle::ToXml(IXFStream *pStrm)
     IXFAttrList *pAttrList = pStrm->GetAttrList();
 
     pAttrList->Clear();
-    pAttrList->AddAttribute( A2OUSTR("style:name"), GetStyleName() );
-    pAttrList->AddAttribute( A2OUSTR("style:family"), A2OUSTR("section") );
+    pAttrList->AddAttribute( OUString("style:name"), GetStyleName() );
+    pAttrList->AddAttribute( OUString("style:family"), OUString("section") );
 
-    pStrm->StartElement( A2OUSTR("style:style") );
+    pStrm->StartElement( OUString("style:style") );
 
     pAttrList->Clear();
     if( m_fMarginLeft != 0 )
     {
-        pAttrList->AddAttribute( A2OUSTR("fo:margin-left"), DoubleToOUString(m_fMarginLeft) + A2OUSTR("cm") );
+        pAttrList->AddAttribute( OUString("fo:margin-left"), DoubleToOUString(m_fMarginLeft) + OUString("cm") );
     }
     if( m_fMarginRight != 0 )
     {
-        pAttrList->AddAttribute( A2OUSTR("fo:margin-right"), DoubleToOUString(m_fMarginRight) + A2OUSTR("cm") );
+        pAttrList->AddAttribute( OUString("fo:margin-right"), DoubleToOUString(m_fMarginRight) + OUString("cm") );
     }
     if( m_aBackColor.IsValid() && !m_pBackImage )
     {
-        pAttrList->AddAttribute( A2OUSTR("fo:background-color"), m_aBackColor.ToString() );
+        pAttrList->AddAttribute( OUString("fo:background-color"), m_aBackColor.ToString() );
     }
     else
     {
-        pAttrList->AddAttribute( A2OUSTR("fo:background-color"), A2OUSTR("transparent") );
+        pAttrList->AddAttribute( OUString("fo:background-color"), OUString("transparent") );
     }
 
-    pStrm->StartElement( A2OUSTR("style:properties") );
+    pStrm->StartElement( OUString("style:properties") );
 
     if( m_pColumns )
         m_pColumns->ToXml(pStrm);
     if( m_pBackImage )
         m_pBackImage->ToXml(pStrm);
 
-    pStrm->EndElement( A2OUSTR("style:properties") );
+    pStrm->EndElement( OUString("style:properties") );
 
-    pStrm->EndElement( A2OUSTR("style:style") );
+    pStrm->EndElement( OUString("style:style") );
 
 }
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

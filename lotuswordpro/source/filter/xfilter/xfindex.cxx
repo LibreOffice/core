@@ -132,49 +132,49 @@ void    XFIndex::ToXml(IXFStream *pStrm)
 
     if(m_eType == enumXFIndexTOC )
     {
-        strIndexName = A2OUSTR("text:table-of-content");
-        strSourceName = A2OUSTR("text:table-of-content-source");
-        strTplName = A2OUSTR("text:table-of-content-entry-template");
+        strIndexName = "text:table-of-content";
+        strSourceName = "text:table-of-content-source";
+        strTplName = "text:table-of-content-entry-template";
     }
     else if( m_eType == enumXFIndexAlphabetical )
     {
-        strIndexName = A2OUSTR("text:alphabetical-index");
-        strSourceName = A2OUSTR("text:alphabetical-index-source");
-        strTplName = A2OUSTR("text:alphabetical-index-entry-template");
+        strIndexName = "text:alphabetical-index";
+        strSourceName = "text:alphabetical-index-source";
+        strTplName = "text:alphabetical-index-entry-template";
     }
     else if( m_eType == enumXFIndexUserIndex )
     {
-        strIndexName = A2OUSTR("text:user-index");
-        strSourceName = A2OUSTR("text:text:user-index-source");
-        strTplName = A2OUSTR("text:user-index-entry-template");
+        strIndexName = "text:user-index";
+        strSourceName = "text:text:user-index-source";
+        strTplName = "text:user-index-entry-template";
     }
     else if( m_eType == enumXFIndexObject )
     {
-        strIndexName = A2OUSTR("text:object-index");
-        strSourceName = A2OUSTR("text:object-index-source");
-        strTplName = A2OUSTR("text:object-index-entry-template");
+        strIndexName = "text:object-index";
+        strSourceName = "text:object-index-source";
+        strTplName = "text:object-index-entry-template";
     }
     else if( m_eType == enumXFIndexIllustration )
     {
-        strIndexName = A2OUSTR("text:illustration-index");
-        strSourceName = A2OUSTR("text:illustration-index-source");
-        strTplName = A2OUSTR("text:illustration-index-entry-template");
+        strIndexName = "text:illustration-index";
+        strSourceName = "text:illustration-index-source";
+        strTplName = "text:illustration-index-entry-template";
     }
     else if( m_eType == enumXFIndexTableIndex )
     {
-        strIndexName = A2OUSTR("text:table-index");
-        strSourceName = A2OUSTR("text:table-index-source");
-        strTplName = A2OUSTR("text:table-index-entry-template");
+        strIndexName = "text:table-index";
+        strSourceName = "text:table-index-source";
+        strTplName = "text:table-index-entry-template";
     }
 
     if( !GetStyleName().isEmpty() )
-        pAttrList->AddAttribute( A2OUSTR("text:style-name"), GetStyleName() );
+        pAttrList->AddAttribute( "text:style-name", GetStyleName() );
     if( m_bProtect )
-        pAttrList->AddAttribute( A2OUSTR("text:protected"), A2OUSTR("true") );
+        pAttrList->AddAttribute( "text:protected", "true" );
     else
-        pAttrList->AddAttribute( A2OUSTR("text:protected"), A2OUSTR("false") );
+        pAttrList->AddAttribute( "text:protected", "false" );
 
-    pAttrList->AddAttribute( A2OUSTR("text:name"), m_strTitle );
+    pAttrList->AddAttribute( "text:name", m_strTitle );
     pStrm->StartElement( strIndexName );
 
     //text:table-of-content-source:
@@ -182,21 +182,21 @@ void    XFIndex::ToXml(IXFStream *pStrm)
 
     if(m_eType == enumXFIndexTOC )
     {
-        pAttrList->AddAttribute( A2OUSTR("text:outline-level"), Int32ToOUString(10));
-        pAttrList->AddAttribute( A2OUSTR("text:use-index-source-styles"), A2OUSTR("true"));
-        pAttrList->AddAttribute( A2OUSTR("text:use-index-marks"), A2OUSTR("true"));
-        pAttrList->AddAttribute( A2OUSTR("text:use-outline-level"), A2OUSTR("false"));
+        pAttrList->AddAttribute( "text:outline-level", OUString::number(10));
+        pAttrList->AddAttribute( "text:use-index-source-styles", "true");
+        pAttrList->AddAttribute( "text:use-index-marks", "true");
+        pAttrList->AddAttribute( "text:use-outline-level", "false");
     }
     if (m_bSeparator)
-        pAttrList->AddAttribute( A2OUSTR("text:alphabetical-separators"), A2OUSTR("true") );
+        pAttrList->AddAttribute( "text:alphabetical-separators", "true" );
 
     pStrm->StartElement( strSourceName );
     //title template:
     pAttrList->Clear();
 
-    pStrm->StartElement( A2OUSTR("text:index-title-template") );
+    pStrm->StartElement( "text:index-title-template" );
     pStrm->Characters( m_strTitle );
-    pStrm->EndElement( A2OUSTR("text:index-title-template") );
+    pStrm->EndElement( "text:index-title-template" );
 
     //entry templates:
     std::vector<XFIndexTemplate *>::iterator it;
@@ -218,18 +218,18 @@ void    XFIndex::ToXml(IXFStream *pStrm)
             }
 
             pAttrList->Clear();
-            pAttrList->AddAttribute( A2OUSTR("text:outline-level"), Int32ToOUString(i));
-            pStrm->StartElement( A2OUSTR("text:index-source-styles") );
+            pAttrList->AddAttribute( "text:outline-level", OUString::number(i));
+            pStrm->StartElement( "text:index-source-styles" );
 
             std::vector<OUString>::iterator it_str;
             for (it_str = m_aTOCSource[i].begin(); it_str != m_aTOCSource[i].end(); ++it_str)
             {
                 pAttrList->Clear();
-                pAttrList->AddAttribute( A2OUSTR("text:style-name"), *it_str);
-                pStrm->StartElement( A2OUSTR("text:index-source-style") );
-                pStrm->EndElement( A2OUSTR("text:index-source-style") );
+                pAttrList->AddAttribute( "text:style-name", *it_str);
+                pStrm->StartElement( "text:index-source-style" );
+                pStrm->EndElement( "text:index-source-style" );
             }
-            pStrm->EndElement( A2OUSTR("text:index-source-styles") );
+            pStrm->EndElement( "text:index-source-styles" );
         }
     }
 
@@ -237,19 +237,19 @@ void    XFIndex::ToXml(IXFStream *pStrm)
 
     //index-body:
     pAttrList->Clear();
-    pStrm->StartElement( A2OUSTR("text:index-body") );
+    pStrm->StartElement( "text:index-body" );
     //index-title:
     if(!m_strTitle.isEmpty())
     {
-        pAttrList->AddAttribute( A2OUSTR("text:name"), m_strTitle + A2OUSTR("_Head") );
-        pStrm->StartElement( A2OUSTR("text:index-title") );
+        pAttrList->AddAttribute( "text:name", m_strTitle + "_Head" );
+        pStrm->StartElement( "text:index-title" );
         if( m_pTitle )
             m_pTitle->ToXml(pStrm);
-        pStrm->EndElement( A2OUSTR("text:index-title") );
+        pStrm->EndElement( "text:index-title" );
     }
 
     XFContentContainer::ToXml(pStrm);
-    pStrm->EndElement( A2OUSTR("text:index-body") );
+    pStrm->EndElement( "text:index-body" );
 
     pStrm->EndElement( strIndexName );
 }
@@ -259,10 +259,10 @@ void XFIndexTemplate::ToXml(IXFStream *pStrm)
     IXFAttrList *pAttrList = pStrm->GetAttrList();
     pAttrList->Clear();
 
-    pAttrList->AddAttribute( A2OUSTR("text:outline-level"), m_nLevel );
-    pAttrList->AddAttribute( A2OUSTR("text:style-name"), m_strStyle );
+    pAttrList->AddAttribute( "text:outline-level", m_nLevel );
+    pAttrList->AddAttribute( "text:style-name", m_strStyle );
     if( m_strTagName.isEmpty() )
-        m_strTagName = A2OUSTR("text:table-of-content-entry-template");
+        m_strTagName = "text:table-of-content-entry-template";
     pStrm->StartElement( m_strTagName );
 
     for( size_t i=0; i<m_aEntries.size(); i++ )
@@ -273,77 +273,77 @@ void XFIndexTemplate::ToXml(IXFStream *pStrm)
         {
         case enumXFIndexTemplateChapter:
             if(!m_aEntries[i].second.isEmpty())
-                pAttrList->AddAttribute( A2OUSTR("text:style-name"), m_aEntries[i].second );
+                pAttrList->AddAttribute( "text:style-name", m_aEntries[i].second );
 
-            pStrm->StartElement( A2OUSTR("text:index-entry-chapter-number") );
-            pStrm->EndElement( A2OUSTR("text:index-entry-chapter-number") );
+            pStrm->StartElement( "text:index-entry-chapter-number" );
+            pStrm->EndElement( "text:index-entry-chapter-number" );
             break;
         case enumXFIndexTemplateText:
             if(!m_aEntries[i].second.isEmpty())
-                pAttrList->AddAttribute( A2OUSTR("text:style-name"), m_aEntries[i].second );
+                pAttrList->AddAttribute( "text:style-name", m_aEntries[i].second );
 
-            pStrm->StartElement( A2OUSTR("text:index-entry-text") );
-            pStrm->EndElement( A2OUSTR("text:index-entry-text") );
+            pStrm->StartElement( "text:index-entry-text" );
+            pStrm->EndElement( "text:index-entry-text" );
             break;
         case enumXFIndexTemplateTab:
             if( m_eTabType != enumXFTabRight )
-                pAttrList->AddAttribute( A2OUSTR("style:position"), DoubleToOUString(m_fTabLength) + A2OUSTR("cm") );
+                pAttrList->AddAttribute( "style:position", DoubleToOUString(m_fTabLength) + "cm" );
 
             if(!m_aEntries[i].second.isEmpty())
-                pAttrList->AddAttribute( A2OUSTR("text:style-name"), m_aEntries[i].second );
+                pAttrList->AddAttribute( "text:style-name", m_aEntries[i].second );
 
             switch(m_eTabType)
             {
             case enumXFTabLeft:
-                pAttrList->AddAttribute( A2OUSTR("style:type"), A2OUSTR("left") );
+                pAttrList->AddAttribute( "style:type", "left" );
                 break;
             case enumXFTabCenter:
-                pAttrList->AddAttribute( A2OUSTR("style:type"), A2OUSTR("center") );
+                pAttrList->AddAttribute( "style:type", "center" );
                 break;
             case enumXFTabRight:
-                pAttrList->AddAttribute( A2OUSTR("style:type"), A2OUSTR("right") );
+                pAttrList->AddAttribute( "style:type", "right" );
                 break;
             case enumXFTabChar:
-                pAttrList->AddAttribute( A2OUSTR("style:type"), A2OUSTR("char") );
+                pAttrList->AddAttribute( "style:type", "char" );
                 break;
             default:
                 break;
             }
             //delimiter:
             if( m_eTabType == enumXFTabChar )
-                pAttrList->AddAttribute( A2OUSTR("style:char"), m_strTabDelimiter );
+                pAttrList->AddAttribute( "style:char", m_strTabDelimiter );
             //leader char:
             if( !m_strTabLeader.isEmpty() )
-                pAttrList->AddAttribute( A2OUSTR("style:leader-char"), m_strTabLeader );
+                pAttrList->AddAttribute( "style:leader-char", m_strTabLeader );
 
-            pStrm->StartElement( A2OUSTR("text:index-entry-tab-stop") );
-            pStrm->EndElement( A2OUSTR("text:index-entry-tab-stop") );
+            pStrm->StartElement( "text:index-entry-tab-stop" );
+            pStrm->EndElement( "text:index-entry-tab-stop" );
             break;
         case enumXFIndexTemplatePage:
             if(!m_aEntries[i].second.isEmpty())
-                pAttrList->AddAttribute( A2OUSTR("text:style-name"), m_aEntries[i].second );
+                pAttrList->AddAttribute( "text:style-name", m_aEntries[i].second );
 
-            pStrm->StartElement( A2OUSTR("text:index-entry-page-number") );
-            pStrm->EndElement( A2OUSTR("text:index-entry-page-number") );
+            pStrm->StartElement( "text:index-entry-page-number" );
+            pStrm->EndElement( "text:index-entry-page-number" );
             break;
         case enumXFIndexTemplateLinkStart:
-            pStrm->StartElement( A2OUSTR("text:index-entry-link-start") );
-            pStrm->EndElement( A2OUSTR("text:index-entry-link-start") );
+            pStrm->StartElement( "text:index-entry-link-start" );
+            pStrm->EndElement( "text:index-entry-link-start" );
             break;
         case enumXFIndexTemplateLinkEnd:
-            pStrm->StartElement( A2OUSTR("text:index-entry-link-end") );
-            pStrm->EndElement( A2OUSTR("text:index-entry-link-end") );
+            pStrm->StartElement( "text:index-entry-link-end" );
+            pStrm->EndElement( "text:index-entry-link-end" );
             break;
         case enumXFIndexTemplateSpan:
             pAttrList->Clear();
-            pAttrList->AddAttribute(A2OUSTR("text:style-name"), GetStyleName());
-            pStrm->StartElement( A2OUSTR("text:index-entry-span") );
+            pAttrList->AddAttribute("text:style-name", GetStyleName());
+            pStrm->StartElement( "text:index-entry-span" );
             pStrm->Characters(m_aTextEntries[i]);
-            pStrm->EndElement( A2OUSTR("text:index-entry-span") );
+            pStrm->EndElement( "text:index-entry-span" );
             break;
         case enumXFIndexTemplateBibliography:
-            pStrm->StartElement( A2OUSTR("text:index-entry-bibliography") );
-            pStrm->EndElement( A2OUSTR("text:index-entry-bibliography") );
+            pStrm->StartElement( "text:index-entry-bibliography" );
+            pStrm->EndElement( "text:index-entry-bibliography" );
             break;
         default:
             break;
