@@ -435,7 +435,7 @@ void CompareData::CheckForChangesInLine( const CompareData& ,
 }
 
 Hash::Hash( sal_uLong nSize )
-    : nCount( 1 )
+    : nCount(1)
 {
 
 static const sal_uLong primes[] =
@@ -471,6 +471,7 @@ static const sal_uLong primes[] =
     pDataArr[0].nNext = 0;
     pDataArr[0].nHash = 0,
     pDataArr[0].pLine = 0;
+    nPrime = primes[0];
 
     for( i = 0; primes[i] < nSize / 3;  i++)
         if( !primes[i] )
