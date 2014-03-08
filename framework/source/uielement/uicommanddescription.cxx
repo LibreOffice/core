@@ -618,11 +618,13 @@ UICommandDescription::UICommandDescription( const Reference< XComponentContext >
     if ( pIter != m_aUICommandsHashMap.end() )
         pIter->second = m_xGenericUICommands;
 }
-UICommandDescription::UICommandDescription( const Reference< XComponentContext >& rxContext, bool ) :
-    UICommandDescription_BASE(*static_cast<osl::Mutex *>(this)),
-    m_xContext( rxContext )
+UICommandDescription::UICommandDescription(const Reference< XComponentContext >& rxContext, bool)
+    : UICommandDescription_BASE(*static_cast<osl::Mutex *>(this))
+    , m_bConfigRead(false)
+    , m_xContext(rxContext)
 {
 }
+
 UICommandDescription::~UICommandDescription()
 {
     osl::MutexGuard g(rBHelper.rMutex);
