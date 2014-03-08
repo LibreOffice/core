@@ -184,7 +184,12 @@ class ToolbarLayoutManager : public ::cppu::WeakImplHelper3< ::com::sun::star::a
         typedef std::vector< UIElement > UIElementVector;
         struct SingleRowColumnWindowData
         {
-            SingleRowColumnWindowData() : nVarSize( 0 ), nStaticSize( 0 ), nSpace( 0 ) {}
+            SingleRowColumnWindowData()
+                : nVarSize(0)
+                , nStaticSize(0)
+                , nSpace(0)
+                , nRowColumn(0)
+            {}
 
             std::vector< OUString >                                                      aUIElementNames;
             std::vector< ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow > > aRowColumnWindows;
