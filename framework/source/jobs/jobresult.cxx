@@ -37,6 +37,7 @@ namespace framework{
 */
 JobResult::JobResult()
     : ThreadHelpBase(&Application::GetSolarMutex())
+    , m_bDeactivate(false)
 {
     // reset the flag mask!
     // It will reset the accessible state of this object.
