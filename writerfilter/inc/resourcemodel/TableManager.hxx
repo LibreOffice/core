@@ -24,7 +24,6 @@
 
 #include <resourcemodel/WW8ResourceModel.hxx>
 
-#include <doctok/sprmids.hxx>
 #include <ooxml/resourceids.hxx>
 
 #include <boost/shared_ptr.hpp>

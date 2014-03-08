@@ -28,7 +28,6 @@
 #include "DomainMapperTableManager.hxx"
 
 #include <ooxml/resourceids.hxx>
-#include <doctok/sprmids.hxx>
 
 #include <com/sun/star/text/SizeType.hpp>
 #include <com/sun/star/text/VertOrientation.hpp>

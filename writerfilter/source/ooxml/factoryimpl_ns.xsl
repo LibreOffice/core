@@ -898,7 +898,6 @@ string </xsl:text>
   <xsl:template match="/">
     <xsl:variable name="ns" select="substring-before(substring-after($file, 'OOXMLFactory_'), '.cxx')"/>
     <xsl:text>
-#include "doctok/sprmids.hxx"
 #include "ooxml/resourceids.hxx"
 #include "OOXMLFactory_values.hxx"
 #include "OOXMLFactory_</xsl:text>

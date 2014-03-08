@@ -21,7 +21,6 @@
 #include "StyleSheetTable.hxx"
 #include "PropertyIds.hxx"
 
-#include <doctok/sprmids.hxx>
 #include <ooxml/resourceids.hxx>
 
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>

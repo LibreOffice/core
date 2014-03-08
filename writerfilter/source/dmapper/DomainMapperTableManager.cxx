@@ -31,7 +31,6 @@
 #include <com/sun/star/text/VertOrientation.hpp>
 #include <com/sun/star/text/WritingMode2.hpp>
 #include <ooxml/resourceids.hxx>
-#include <doctok/sprmids.hxx>
 #include <dmapperLoggers.hxx>
 
 namespace writerfilter {

@@ -41,7 +41,6 @@
 #include <sfx2/sfxbasemodel.hxx>
 
 #include <oox/mathml/import.hxx>
-#include <doctok/sprmids.hxx>
 #include <ooxml/resourceids.hxx>
 #include <ooxml/OOXMLFastTokens.hxx>
 #include <oox/token/namespaces.hxx>

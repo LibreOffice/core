@@ -160,7 +160,6 @@
 #include <cppuhelper/implbase1.hxx>
 #include <cppuhelper/implementationentry.hxx>
 #include <cppuhelper/supportsservice.hxx>
-#include <doctok/sprmids.hxx>
 #include <editeng/borderline.hxx>
 #include <filter/msfilter/escherex.hxx>
 #include <filter/msfilter/util.hxx>

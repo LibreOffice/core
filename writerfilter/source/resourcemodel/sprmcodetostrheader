@@ -18,7 +18,6 @@
 
 #include <ooxml/resourceids.hxx>
 #include <resourcemodel/QNameToString.hxx>
-#include <doctok/sprmids.hxx>
 
 namespace writerfilter
 {

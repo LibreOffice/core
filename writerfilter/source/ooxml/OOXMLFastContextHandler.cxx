@@ -27,7 +27,6 @@
 #include <resourcemodel/XPathLogger.hxx>
 #include <resourcemodel/util.hxx>
 #include <ooxml/resourceids.hxx>
-#include <doctok/sprmids.hxx>
 #include <oox/token/namespaces.hxx>
 #include <ooxml/OOXMLnamespaceids.hxx>
 #include <dmapper/DomainMapper.hxx>
