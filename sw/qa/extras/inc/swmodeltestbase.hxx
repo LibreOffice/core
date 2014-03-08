@@ -444,13 +444,25 @@ protected:
         uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
         uno::Sequence<beans::PropertyValue> aArgs(1);
         aArgs[0].Name = "FilterName";
-        aArgs[0].Value <<= OUString::createFromAscii(pFilter);
+        OUString aFilterName = OUString::createFromAscii(pFilter);
+        aArgs[0].Value <<= aFilterName;
         m_aTempFile.EnableKillingFile();
         xStorable->storeToURL(m_aTempFile.GetURL(), aArgs);
         uno::Reference<lang::XComponent> xComponent(xStorable, uno::UNO_QUERY);
         xComponent->dispose();
         m_bExported = true;
         mxComponent = loadFromDesktop(m_aTempFile.GetURL(), "com.sun.star.text.TextDocument");
+        if(aFilterName == "Office Open XML Text")
+        {
+            // too many validation errors right now
+            // validate(m_aTempFile.GetFileName(), test::OOXML);
+        }
+        else if(aFilterName == "writer8")
+        {
+            // still a few validation errors
+            // validate(m_aTempFile.GetFileName(), test::ODF);
+        }
+
         if (mpXmlBuffer)
         {
             xmlBufferFree(mpXmlBuffer);
