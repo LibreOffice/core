@@ -3595,9 +3595,8 @@ void DomainMapper_Impl::CloseFieldCommand()
                 /* Unsupported fields will be handled here for docx file.
                  * To handle unsupported fields used fieldmark API.
                  */
-                static const OUString sAPI_unsupportedfield( "com.sun.star.text.Fieldmark");
                 OUString aCode( pContext->GetCommand().trim() );
-                xFieldInterface = m_xTextFactory->createInstance(sAPI_unsupportedfield);
+                xFieldInterface = m_xTextFactory->createInstance("com.sun.star.text.Fieldmark");
                 const uno::Reference<text::XTextContent> xTextContent(xFieldInterface, uno::UNO_QUERY_THROW);
                 uno::Reference< text::XTextAppend >  xTextAppend;
                 xTextAppend = m_aTextAppendStack.top().xTextAppend;
