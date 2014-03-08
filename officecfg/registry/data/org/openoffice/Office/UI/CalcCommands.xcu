@@ -252,6 +252,11 @@
           <value xml:lang="en-US">Position in Document</value>
         </prop>
       </node>
+      <node oor:name=".uno:StatusCurPos" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">Position</value>
+        </prop>
+      </node>
       <node oor:name=".uno:StatusPageStyle" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">Page Format</value>
