@@ -147,10 +147,11 @@ private:
 };
 
 OMarkableOutputStream::OMarkableOutputStream( )
+    : m_bValidStream(false)
+    , m_nCurrentPos(0)
+    , m_nCurrentMark(0)
 {
     m_pBuffer = new MemRingBuffer;
-    m_nCurrentPos = 0;
-    m_nCurrentMark = 0;
 }
 
 OMarkableOutputStream::~OMarkableOutputStream()
