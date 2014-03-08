@@ -17,8 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include "spelldialog.hxx"
 #include "scitems.hxx"
-
+#include "inputhdl.hxx"
 #include <svl/slstitm.hxx>
 #include <svl/stritem.hxx>
 #include <svl/whiter.hxx>
@@ -675,6 +676,13 @@ void ScCellShell::GetState(SfxItemSet &rSet)
                     OUString aStr = ScGlobal::GetRscString( STR_TABLE ) +
                                     " "   + OUString::number( nTab + 1 ) +
                                     " / " + OUString::number( nTabCount );
+                    rSet.Put( SfxStringItem( nWhich, aStr ) );
+                }
+                break;
+            case SID_STATUS_CURPOS:                 //statusbar current cell position state
+                {
+                    OUString aStr;
+                    aStr=ScGlobal::GetRscString( STR_ROW ) +" "+ OUString::number(pData->GetCurY()+1)+" : "+ScGlobal::GetRscString( STR_COLUMN)+" "+OUString::number(pData->GetCurX()+1);
                     rSet.Put( SfxStringItem( nWhich, aStr ) );
                 }
                 break;
