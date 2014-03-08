@@ -262,6 +262,7 @@ DefinedName::DefinedName( const WorkbookHelper& rHelper ) :
     DefinedNameBase( rHelper ),
     mpScRangeData(NULL),
     mnTokenIndex( -1 ),
+    mnCalcSheet( 0 ),
     mcBuiltinId( BIFF_DEFNAME_UNKNOWN ),
     mnFmlaSize( 0 )
 {
