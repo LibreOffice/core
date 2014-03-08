@@ -620,17 +620,18 @@ void DrawingML::WriteOutline( Reference< XPropertySet > rXPropSet )
 
     if( bDashSet && aStyleLineStyle != drawing::LineStyle_DASH ) {
         // line style is a dash and it was not set by the shape style
+        // TODO: the XML_d and XML_sp values seem insane
         mpFS->startElementNS( XML_a, XML_custDash, FSEND );
         int i;
         for( i = 0; i < aLineDash.Dots; i ++ )
             mpFS->singleElementNS( XML_a, XML_ds,
-                                   XML_d, aLineDash.DotLen ? I64S( aLineDash.DotLen*1000 ) : "100000",
-                                   XML_sp, I64S( aLineDash.Distance*1000 ),
+                                   XML_d, aLineDash.DotLen ? writePercentage( aLineDash.DotLen*1000 ) : "100000%",
+                                   XML_sp, writePercentage( aLineDash.Distance*1000 ),
                                    FSEND );
         for( i = 0; i < aLineDash.Dashes; i ++ )
             mpFS->singleElementNS( XML_a, XML_ds,
-                                   XML_d, aLineDash.DashLen ? I64S( aLineDash.DashLen*1000 ) : "100000",
-                                   XML_sp, I64S( aLineDash.Distance*1000 ),
+                                   XML_d, aLineDash.DashLen ? writePercentage( aLineDash.DashLen*1000 ) : "100000%",
+                                   XML_sp, writePercentage( aLineDash.Distance*1000 ),
                                    FSEND );
         mpFS->endElementNS( XML_a, XML_custDash );
     }

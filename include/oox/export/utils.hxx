@@ -48,6 +48,12 @@ static inline sal_Int64 TwipsToEMU( sal_Int32 nTwips )
     return sal_Int64( nTwips ) * 635;
 }
 
+template <typename T>
+OString writePercentage(T number)
+{
+    return OString::number(number) + "%";
+}
+
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
