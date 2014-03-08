@@ -241,7 +241,7 @@ void ScImportExport::EndPaste(bool bAutoRowHeight)
     bool bHeight = bAutoRowHeight && pDocSh && pDocSh->AdjustRowHeight(
                     aRange.aStart.Row(), aRange.aEnd.Row(), aRange.aStart.Tab() );
 
-    if( pUndoDoc && pDoc->IsUndoEnabled() )
+    if( pUndoDoc && pDoc->IsUndoEnabled() && pDocSh )
     {
         ScDocument* pRedoDoc = new ScDocument( SCDOCMODE_UNDO );
         pRedoDoc->InitUndo( pDoc, aRange.aStart.Tab(), aRange.aEnd.Tab() );
