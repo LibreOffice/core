@@ -1218,7 +1218,9 @@ void ChartExport::exportGradientFill( Reference< XPropertySet > xPropSet )
             uno::Any rValue = xGradient->getByName( sFillGradientName );
             if( (rValue >>= aGradient) )
             {
+                mpFS->startElementNS( XML_a, XML_gradFill, FSEND );
                 WriteGradientFill( aGradient );
+                mpFS->endElementNS( XML_a, XML_gradFill );
             }
         }
         catch (const uno::Exception & rEx)
