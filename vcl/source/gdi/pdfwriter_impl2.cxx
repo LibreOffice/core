@@ -40,6 +40,7 @@
 #include "cppuhelper/implbase1.hxx"
 
 #include <rtl/digest.h>
+#include <boost/scoped_ptr.hpp>
 
 using namespace vcl;
 using namespace rtl;
@@ -249,10 +250,11 @@ void PDFWriterImpl::playMetafile( const GDIMetaFile& i_rMtf, vcl::PDFExtOutDevDa
 {
     bool bAssertionFired( false );
 
-    VirtualDevice* pPrivateDevice = NULL;
+    boost::scoped_ptr<VirtualDevice> pPrivateDevice;
     if( ! pDummyVDev )
     {
-        pPrivateDevice = pDummyVDev = new VirtualDevice();
+        pPrivateDevice.reset(new VirtualDevice());
+        pDummyVDev = pPrivateDevice.get();
         pDummyVDev->EnableOutput( false );
         pDummyVDev->SetMapMode( i_rMtf.GetPrefMapMode() );
     }
@@ -435,7 +437,7 @@ void PDFWriterImpl::playMetafile( const GDIMetaFile& i_rMtf, vcl::PDFExtOutDevDa
                         if ( nPixelX && nPixelY )
                         {
                             Size aDstSizePixel( nPixelX, nPixelY );
-                            VirtualDevice* pVDev = new VirtualDevice;
+                            boost::scoped_ptr<VirtualDevice> pVDev(new VirtualDevice);
                             if( pVDev->SetOutputSizePixel( aDstSizePixel ) )
                             {
                                 Bitmap          aPaint, aMask;
@@ -458,7 +460,7 @@ void PDFWriterImpl::playMetafile( const GDIMetaFile& i_rMtf, vcl::PDFExtOutDevDa
 
                                 // create paint bitmap
                                 aTmpMtf.WindStart();
-                                aTmpMtf.Play( pVDev, aPoint, aDstSize );
+                                aTmpMtf.Play( pVDev.get(), aPoint, aDstSize );
                                 aTmpMtf.WindStart();
 
                                 pVDev->EnableMapMode( false );
@@ -472,7 +474,7 @@ void PDFWriterImpl::playMetafile( const GDIMetaFile& i_rMtf, vcl::PDFExtOutDevDa
                                 pVDev->SetDrawMode( DRAWMODE_WHITELINE | DRAWMODE_WHITEFILL | DRAWMODE_WHITETEXT |
                                                     DRAWMODE_WHITEBITMAP | DRAWMODE_WHITEGRADIENT );
                                 aTmpMtf.WindStart();
-                                aTmpMtf.Play( pVDev, aPoint, aDstSize );
+                                aTmpMtf.Play( pVDev.get(), aPoint, aDstSize );
                                 aTmpMtf.WindStart();
                                 pVDev->EnableMapMode( false );
                                 aMask = pVDev->GetBitmap( aPoint, aDstSizePixel );
@@ -487,7 +489,6 @@ void PDFWriterImpl::playMetafile( const GDIMetaFile& i_rMtf, vcl::PDFExtOutDevDa
                                 aAlpha = pVDev->GetBitmap( aPoint, aDstSizePixel );
                                 implWriteBitmapEx( rPos, rSize, BitmapEx( aPaint, aAlpha ), pDummyVDev, i_rContext );
                             }
-                            delete pVDev;
                         }
                     }
                 }
@@ -1063,8 +1064,6 @@ void PDFWriterImpl::playMetafile( const GDIMetaFile& i_rMtf, vcl::PDFExtOutDevDa
             i++;
         }
     }
-
-    delete pPrivateDevice;
 }
 
 // Encryption methods

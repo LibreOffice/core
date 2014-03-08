@@ -48,6 +48,7 @@
 #include <valgrind/memcheck.h>
 #endif
 
+#include <boost/scoped_ptr.hpp>
 
 // - SalBitmap -
 
@@ -426,8 +427,8 @@ XImage* X11SalBitmap::ImplCreateXImage(
         {
             BitmapBuffer*   pDstBuf;
             sal_uLong           nDstFormat = BMP_FORMAT_TOP_DOWN;
-            BitmapPalette*  pPal = NULL;
-            ColorMask*      pMask = NULL;
+            boost::scoped_ptr<BitmapPalette> pPal;
+            boost::scoped_ptr<ColorMask> pMask;
 
             switch( pImage->bits_per_pixel )
             {
@@ -466,7 +467,7 @@ XImage* X11SalBitmap::ImplCreateXImage(
 
                     #endif
 
-                    pMask = new ColorMask( pImage->red_mask, pImage->green_mask, pImage->blue_mask );
+                    pMask.reset(new ColorMask( pImage->red_mask, pImage->green_mask, pImage->blue_mask ));
                 }
                 break;
 
@@ -497,13 +498,13 @@ XImage* X11SalBitmap::ImplCreateXImage(
 
             if( pImage->depth == 1 )
             {
-                pPal = new BitmapPalette( 2 );
+                pPal.reset(new BitmapPalette( 2 ));
                 (*pPal)[ 0 ] = Color( COL_BLACK );
                 (*pPal)[ 1 ] = Color( COL_WHITE );
             }
             else if( pImage->depth == 8 && mbGrey )
             {
-                pPal = new BitmapPalette( 256 );
+                pPal.reset(new BitmapPalette( 256 ));
 
                 for( sal_uInt16 i = 0; i < 256; i++ )
                 {
@@ -522,7 +523,7 @@ XImage* X11SalBitmap::ImplCreateXImage(
                                             , (sal_uLong)(1 << pImage->depth)
                                             );
 
-                pPal = new BitmapPalette( nCols );
+                pPal.reset(new BitmapPalette( nCols ));
 
                 for( sal_uInt16 i = 0; i < nCols; i++ )
                 {
@@ -535,9 +536,9 @@ XImage* X11SalBitmap::ImplCreateXImage(
                 }
             }
 
-            pDstBuf = StretchAndConvert( *mpDIB, rTwoRect, nDstFormat, pPal, pMask );
-            delete pPal;
-            delete pMask;
+            pDstBuf = StretchAndConvert( *mpDIB, rTwoRect, nDstFormat, pPal.get(), pMask.get() );
+            pPal.reset();
+            pMask.reset();
 
             if( pDstBuf && pDstBuf->mpBits )
             {

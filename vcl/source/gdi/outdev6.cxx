@@ -41,6 +41,7 @@
 #include <basegfx/matrix/b2dhommatrix.hxx>
 
 #include <math.h>
+#include <boost/scoped_ptr.hpp>
 
 namespace {
 
@@ -679,10 +680,10 @@ void OutputDevice::DrawTransparent( const GDIMetaFile& rMtf, const Point& rPos,
 
         if( !aDstRect.IsEmpty() )
         {
-            VirtualDevice* pVDev = new VirtualDevice;
+            boost::scoped_ptr<VirtualDevice> pVDev(new VirtualDevice);
 
-            ((OutputDevice*)pVDev)->mnDPIX = mnDPIX;
-            ((OutputDevice*)pVDev)->mnDPIY = mnDPIY;
+            ((OutputDevice*)pVDev.get())->mnDPIX = mnDPIX;
+            ((OutputDevice*)pVDev.get())->mnDPIY = mnDPIY;
 
             if( pVDev->SetOutputSizePixel( aDstRect.GetSize() ) )
             {
@@ -718,7 +719,7 @@ void OutputDevice::DrawTransparent( const GDIMetaFile& rMtf, const Point& rPos,
                     // draw MetaFile to buffer
                     pVDev->EnableMapMode(bBufferMapModeEnabled);
                     ((GDIMetaFile&)rMtf).WindStart();
-                    ((GDIMetaFile&)rMtf).Play(pVDev, rPos, rSize);
+                    ((GDIMetaFile&)rMtf).Play(pVDev.get(), rPos, rSize);
                     ((GDIMetaFile&)rMtf).WindStart();
 
                     // get content bitmap from buffer
@@ -733,7 +734,7 @@ void OutputDevice::DrawTransparent( const GDIMetaFile& rMtf, const Point& rPos,
                     pVDev->EnableMapMode(false);
                     const AlphaMask aAlpha(pVDev->GetBitmap(aPoint, pVDev->GetOutputSizePixel()));
 
-                    delete pVDev;
+                    pVDev.reset();
 
                     // draw masked content to target and restore MapMode
                     DrawBitmapEx(aDstRect.TopLeft(), BitmapEx(aPaint, aAlpha));
@@ -753,7 +754,7 @@ void OutputDevice::DrawTransparent( const GDIMetaFile& rMtf, const Point& rPos,
 
                     // create paint bitmap
                     ( (GDIMetaFile&) rMtf ).WindStart();
-                    ( (GDIMetaFile&) rMtf ).Play( pVDev, rPos, rSize );
+                    ( (GDIMetaFile&) rMtf ).Play( pVDev.get(), rPos, rSize );
                     ( (GDIMetaFile&) rMtf ).WindStart();
                     pVDev->EnableMapMode( false );
                     aPaint = pVDev->GetBitmap( Point(), pVDev->GetOutputSizePixel() );
@@ -766,7 +767,7 @@ void OutputDevice::DrawTransparent( const GDIMetaFile& rMtf, const Point& rPos,
                     pVDev->SetDrawMode( DRAWMODE_WHITELINE | DRAWMODE_WHITEFILL | DRAWMODE_WHITETEXT |
                                         DRAWMODE_WHITEBITMAP | DRAWMODE_WHITEGRADIENT );
                     ( (GDIMetaFile&) rMtf ).WindStart();
-                    ( (GDIMetaFile&) rMtf ).Play( pVDev, rPos, rSize );
+                    ( (GDIMetaFile&) rMtf ).Play( pVDev.get(), rPos, rSize );
                     ( (GDIMetaFile&) rMtf ).WindStart();
                     pVDev->EnableMapMode( false );
                     aMask = pVDev->GetBitmap( Point(), pVDev->GetOutputSizePixel() );
@@ -781,15 +782,13 @@ void OutputDevice::DrawTransparent( const GDIMetaFile& rMtf, const Point& rPos,
 
                     aAlpha = pVDev->GetBitmap( Point(), pVDev->GetOutputSizePixel() );
 
-                    delete pVDev;
+                    pVDev.reset();
 
                     EnableMapMode( false );
                     DrawBitmapEx( aDstRect.TopLeft(), BitmapEx( aPaint, aAlpha ) );
                     EnableMapMode( bOldMap );
                 }
             }
-            else
-                delete pVDev;
         }
 
         mpMetaFile = pOldMetaFile;

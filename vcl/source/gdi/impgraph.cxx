@@ -37,6 +37,7 @@
 #include <impgraph.hxx>
 #include <com/sun/star/ucb/CommandAbortedException.hpp>
 #include <vcl/dibtools.hxx>
+#include <boost/scoped_ptr.hpp>
 
 #define GRAPHIC_MAXPARTLEN          256000L
 #define GRAPHIC_MTFTOBMP_MAXEXT     2048
@@ -1097,10 +1098,10 @@ bool ImpGraphic::ImplReadEmbedded( SvStream& rIStm, bool bSwap )
 
                 if( !aTmpURL.GetMainURL( INetURLObject::NO_DECODE ).isEmpty() )
                 {
-                    SvStream* pOStm = NULL;
+                    boost::scoped_ptr<SvStream> pOStm;
                     try
                     {
-                        pOStm = ::utl::UcbStreamHelper::CreateStream( aTmpURL.GetMainURL( INetURLObject::NO_DECODE ), STREAM_READWRITE | STREAM_SHARE_DENYWRITE );
+                        pOStm.reset(::utl::UcbStreamHelper::CreateStream( aTmpURL.GetMainURL( INetURLObject::NO_DECODE ), STREAM_READWRITE | STREAM_SHARE_DENYWRITE ));
                     }
                     catch( const ::com::sun::star::uno::Exception& )
                     {
@@ -1131,7 +1132,7 @@ bool ImpGraphic::ImplReadEmbedded( SvStream& rIStm, bool bSwap )
 
                             rtl_freeMemory( pBuffer );
                             sal_uLong nReadErr = rIStm.GetError(), nWriteErr = pOStm->GetError();
-                            delete pOStm, pOStm = NULL;
+                            pOStm.reset();
 
                             if( !nReadErr && !nWriteErr )
                             {
@@ -1165,8 +1166,6 @@ bool ImpGraphic::ImplReadEmbedded( SvStream& rIStm, bool bSwap )
                                 }
                             }
                         }
-
-                        delete pOStm;
                     }
                 }
             }
@@ -1309,10 +1308,10 @@ bool ImpGraphic::ImplSwapOut()
 
             if( !aTmpURL.GetMainURL( INetURLObject::NO_DECODE ).isEmpty() )
             {
-                SvStream* pOStm = NULL;
+                boost::scoped_ptr<SvStream> pOStm;
                 try
                 {
-                    pOStm = ::utl::UcbStreamHelper::CreateStream( aTmpURL.GetMainURL( INetURLObject::NO_DECODE ), STREAM_READWRITE | STREAM_SHARE_DENYWRITE );
+                    pOStm.reset(::utl::UcbStreamHelper::CreateStream( aTmpURL.GetMainURL( INetURLObject::NO_DECODE ), STREAM_READWRITE | STREAM_SHARE_DENYWRITE ));
                 }
                 catch( const ::com::sun::star::uno::Exception& )
                 {
@@ -1322,7 +1321,7 @@ bool ImpGraphic::ImplSwapOut()
                     pOStm->SetVersion( SOFFICE_FILEFORMAT_50 );
                     pOStm->SetCompressMode( COMPRESSMODE_NATIVE );
 
-                    if( ( bRet = ImplSwapOut( pOStm ) ) )
+                    if( ( bRet = ImplSwapOut( pOStm.get() ) ) )
                     {
                         mpSwapFile = new ImpSwapFile;
                         mpSwapFile->nRefCount = 1;
@@ -1330,7 +1329,7 @@ bool ImpGraphic::ImplSwapOut()
                     }
                     else
                     {
-                        delete pOStm, pOStm = NULL;
+                        pOStm.reset();
 
                         try
                         {
@@ -1354,8 +1353,6 @@ bool ImpGraphic::ImplSwapOut()
                         {
                         }
                     }
-
-                    delete pOStm;
                 }
             }
         }
@@ -1412,10 +1409,10 @@ bool ImpGraphic::ImplSwapIn()
 
         if( !aSwapURL.isEmpty() )
         {
-            SvStream* pIStm = NULL;
+            boost::scoped_ptr<SvStream> pIStm;
             try
             {
-                pIStm = ::utl::UcbStreamHelper::CreateStream( aSwapURL, STREAM_READWRITE | STREAM_SHARE_DENYWRITE );
+                pIStm.reset(::utl::UcbStreamHelper::CreateStream( aSwapURL, STREAM_READWRITE | STREAM_SHARE_DENYWRITE ));
             }
             catch( const ::com::sun::star::uno::Exception& )
             {
@@ -1429,8 +1426,8 @@ bool ImpGraphic::ImplSwapIn()
                 if( !mpSwapFile )
                     pIStm->Seek( mnDocFilePos );
 
-                bRet = ImplSwapIn( pIStm );
-                delete pIStm;
+                bRet = ImplSwapIn( pIStm.get() );
+                pIStm.reset();
 
                 if( mpSwapFile )
                 {

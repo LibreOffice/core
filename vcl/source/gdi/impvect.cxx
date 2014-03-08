@@ -27,6 +27,7 @@
 #include <vcl/wrkwin.hxx>
 #include <vcl/virdev.hxx>
 #include <impvect.hxx>
+#include <boost/scoped_ptr.hpp>
 
 #define VECT_POLY_MAX 8192
 
@@ -646,7 +647,7 @@ bool ImplVectorizer::ImplVectorize( const Bitmap& rColorBmp, GDIMetaFile& rMtf,
 
     VECT_PROGRESS( pProgress, 0 );
 
-    Bitmap*             pBmp = new Bitmap( rColorBmp );
+    boost::scoped_ptr<Bitmap> pBmp(new Bitmap( rColorBmp ));
     BitmapReadAccess*   pRAcc = pBmp->AcquireReadAccess();
 
     if( pRAcc )
@@ -690,15 +691,15 @@ bool ImplVectorizer::ImplVectorize( const Bitmap& rColorBmp, GDIMetaFile& rMtf,
             const BitmapColor   aBmpCol( pRAcc->GetPaletteColor( pColorSet[ i ].mnIndex ) );
             const Color         aFindColor( aBmpCol.GetRed(), aBmpCol.GetGreen(), aBmpCol.GetBlue() );
 //          const sal_uInt8         cLum = aFindColor.GetLuminance();
-            ImplVectMap*        pMap = ImplExpand( pRAcc, aFindColor );
+            boost::scoped_ptr<ImplVectMap> pMap(ImplExpand( pRAcc, aFindColor ));
 
             VECT_PROGRESS( pProgress, FRound( fPercent += fPercentStep_2 ) );
 
             if( pMap )
             {
                 aPolyPoly.Clear();
-                ImplCalculate( pMap, aPolyPoly, cReduce, nFlags );
-                delete pMap;
+                ImplCalculate( pMap.get(), aPolyPoly, cReduce, nFlags );
+                pMap.reset();
 
                 if( aPolyPoly.Count() )
                 {
@@ -736,7 +737,7 @@ bool ImplVectorizer::ImplVectorize( const Bitmap& rColorBmp, GDIMetaFile& rMtf,
     }
 
     pBmp->ReleaseAccess( pRAcc );
-    delete pBmp;
+    pBmp.reset();
     VECT_PROGRESS( pProgress, 100 );
 
     return bRet;
@@ -746,9 +747,8 @@ bool ImplVectorizer::ImplVectorize( const Bitmap& rMonoBmp,
                                     PolyPolygon& rPolyPoly,
                                     sal_uLong nFlags, const Link* pProgress )
 {
-    Bitmap*             pBmp = new Bitmap( rMonoBmp );
+    boost::scoped_ptr<Bitmap> pBmp(new Bitmap( rMonoBmp ));
     BitmapReadAccess*   pRAcc;
-    ImplVectMap*        pMap;
     bool                bRet = false;
 
     VECT_PROGRESS( pProgress, 10 );
@@ -759,17 +759,17 @@ bool ImplVectorizer::ImplVectorize( const Bitmap& rMonoBmp,
     VECT_PROGRESS( pProgress, 30 );
 
     pRAcc = pBmp->AcquireReadAccess();
-    pMap = ImplExpand( pRAcc, COL_BLACK );
+    boost::scoped_ptr<ImplVectMap> pMap(ImplExpand( pRAcc, COL_BLACK ));
     pBmp->ReleaseAccess( pRAcc );
-    delete pBmp;
+    pBmp.reset();
 
     VECT_PROGRESS( pProgress, 60 );
 
     if( pMap )
     {
         rPolyPoly.Clear();
-        ImplCalculate( pMap, rPolyPoly, 0, nFlags );
-        delete pMap;
+        ImplCalculate( pMap.get(), rPolyPoly, 0, nFlags );
+        pMap.reset();
         ImplLimitPolyPoly( rPolyPoly );
 
         if( nFlags & BMP_VECTORIZE_REDUCE_EDGES )

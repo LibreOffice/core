@@ -28,6 +28,7 @@
 #include <vcl/gfxlink.hxx>
 #include <vcl/cvtgrf.hxx>
 #include <com/sun/star/ucb/CommandAbortedException.hpp>
+#include <boost/scoped_ptr.hpp>
 
 GfxLink::GfxLink() :
     meType      ( GFX_LINK_TYPE_NONE ),
@@ -346,12 +347,12 @@ ImpSwap::ImpSwap( sal_uInt8* pData, sal_uLong nDataSize ) :
         maURL = aTempFile.GetURL();
         if( !maURL.isEmpty() )
         {
-            SvStream* pOStm = ::utl::UcbStreamHelper::CreateStream( maURL, STREAM_READWRITE | STREAM_SHARE_DENYWRITE );
+            boost::scoped_ptr<SvStream> pOStm(::utl::UcbStreamHelper::CreateStream( maURL, STREAM_READWRITE | STREAM_SHARE_DENYWRITE ));
             if( pOStm )
             {
                 pOStm->Write( pData, mnDataSize );
                 bool bError = ( ERRCODE_NONE != pOStm->GetError() );
-                delete pOStm;
+                pOStm.reset();
 
                 if( bError )
                 {
@@ -375,7 +376,7 @@ sal_uInt8* ImpSwap::GetData() const
 
     if( IsSwapped() )
     {
-        SvStream* pIStm = ::utl::UcbStreamHelper::CreateStream( maURL, STREAM_READWRITE );
+        boost::scoped_ptr<SvStream> pIStm(::utl::UcbStreamHelper::CreateStream( maURL, STREAM_READWRITE ));
         if( pIStm )
         {
             pData = new sal_uInt8[ mnDataSize ];
@@ -386,7 +387,7 @@ sal_uInt8* ImpSwap::GetData() const
             {
                 bError = true;
             }
-            delete pIStm;
+            pIStm.reset();
 
             if( bError )
                 delete[] pData, pData = NULL;

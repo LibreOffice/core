@@ -43,6 +43,7 @@
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
+#include <boost/scoped_ptr.hpp>
 
 #define HATCH_MAXPOINTS             1024
 #define GRADIENT_DEFAULT_STEPCOUNT  0
@@ -363,7 +364,7 @@ void OutputDevice::ImplDrawComplexGradient( const Rectangle& rRect,
     // can print polygons on top of each other.
     // Also virtual devices are excluded, as some drivers are too slow.
 
-    PolyPolygon*    pPolyPoly;
+    boost::scoped_ptr<PolyPolygon> pPolyPoly;
     Rectangle       aRect;
     Point           aCenter;
     Color           aStartCol( rGradient.GetStartColor() );
@@ -383,9 +384,7 @@ void OutputDevice::ImplDrawComplexGradient( const Rectangle& rRect,
     rGradient.GetBoundRect( rRect, aRect, aCenter );
 
     if( (meRasterOp != ROP_OVERPAINT) || (meOutDevType != OUTDEV_WINDOW) || bMtf )
-        pPolyPoly = new PolyPolygon( 2 );
-    else
-        pPolyPoly = NULL;
+        pPolyPoly.reset(new PolyPolygon( 2 ));
 
     long nMinRect = std::min( aRect.GetWidth(), aRect.GetHeight() );
 
@@ -484,7 +483,7 @@ void OutputDevice::ImplDrawComplexGradient( const Rectangle& rRect,
         aPoly.Rotate( aCenter, nAngle );
 
         // adapt colour accordingly
-        const long nStepIndex = ( ( pPolyPoly != NULL ) ? i : ( i + 1 ) );
+        const long nStepIndex = ( ( pPolyPoly ) ? i : ( i + 1 ) );
         nRed = ImplGetGradientColorValue( nStartRed + ( ( nRedSteps * nStepIndex ) / nSteps ) );
         nGreen = ImplGetGradientColorValue( nStartGreen + ( ( nGreenSteps * nStepIndex ) / nSteps ) );
         nBlue = ImplGetGradientColorValue( nStartBlue + ( ( nBlueSteps * nStepIndex ) / nSteps ) );
@@ -554,8 +553,6 @@ void OutputDevice::ImplDrawComplexGradient( const Rectangle& rRect,
                    ImplDrawPolygon( rPoly, pClipPolyPoly );
             }
         }
-
-        delete pPolyPoly;
     }
 }
 
@@ -856,19 +853,19 @@ void OutputDevice::DrawGradient( const PolyPolygon& rPolyPoly,
 
             if( !aDstRect.IsEmpty() )
             {
-                VirtualDevice*  pVDev;
+                boost::scoped_ptr<VirtualDevice> pVDev;
                 const Size      aDstSize( aDstRect.GetSize() );
 
                 if( HasAlpha() )
                 {
                     // #110958# Pay attention to alpha VDevs here, otherwise,
                     // background will be wrong: Temp VDev has to have alpha, too.
-                    pVDev = new VirtualDevice( *this, 0, GetAlphaBitCount() > 1 ? 0 : 1 );
+                    pVDev.reset(new VirtualDevice( *this, 0, GetAlphaBitCount() > 1 ? 0 : 1 ));
                 }
                 else
                 {
                     // nothing special here. Plain VDev
-                    pVDev = new VirtualDevice();
+                    pVDev.reset(new VirtualDevice());
                 }
 
                 if( pVDev->SetOutputSizePixel( aDstSize) )
@@ -894,8 +891,6 @@ void OutputDevice::DrawGradient( const PolyPolygon& rPolyPoly,
 
                     EnableMapMode( bOldMap );
                 }
-
-                delete pVDev;
             }
         }
     }

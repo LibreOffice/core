@@ -37,6 +37,7 @@
 
 #include "vcl/bmpacc.hxx"
 #include <outdata.hxx>
+#include <boost/scoped_ptr.hpp>
 
 #undef SALGDI2_TESTTRANS
 
@@ -400,10 +401,10 @@ void X11SalGraphics::copyBits( const SalTwoRect& rPosAry,
         // #i60699# No chance to handle graphics exposures - we copy
         // to a temp bitmap first, into which no repaints are
         // technically possible.
-        SalBitmap *pDDB = pSrcGraphics->getBitmap( rPosAry.mnSrcX,
-                                                   rPosAry.mnSrcY,
-                                                   rPosAry.mnSrcWidth,
-                                                   rPosAry.mnSrcHeight );
+        boost::scoped_ptr<SalBitmap> pDDB(pSrcGraphics->getBitmap( rPosAry.mnSrcX,
+                                                                   rPosAry.mnSrcY,
+                                                                   rPosAry.mnSrcWidth,
+                                                                   rPosAry.mnSrcHeight ));
 
         if( !pDDB )
         {
@@ -415,8 +416,6 @@ void X11SalGraphics::copyBits( const SalTwoRect& rPosAry,
 
         aPosAry.mnSrcX = 0, aPosAry.mnSrcY = 0;
         drawBitmap( aPosAry, *pDDB );
-
-        delete pDDB;
     }
     else {
         stderr0( "X11SalGraphics::CopyBits from Printer not yet implemented\n" );

@@ -22,6 +22,7 @@
 #include <vcl/virdev.hxx>
 #include <vcl/window.hxx>
 #include <tools/helpers.hxx>
+#include <boost/scoped_ptr.hpp>
 
 ImplAnimView::ImplAnimView( Animation* pParent, OutputDevice* pOut,
                             const Point& rPt, const Size& rSz,
@@ -155,7 +156,7 @@ void ImplAnimView::ImplGetPosSize( const AnimationBitmap& rAnm, Point& rPosPix, 
 void ImplAnimView::ImplDrawToPos( sal_uLong nPos )
 {
     VirtualDevice   aVDev;
-    Region*         pOldClip = !maClip.IsNull() ? new Region( mpOut->GetClipRegion() ) : NULL;
+    boost::scoped_ptr<Region> pOldClip(!maClip.IsNull() ? new Region( mpOut->GetClipRegion() ) : NULL);
 
     aVDev.SetOutputSizePixel( maSzPix, false );
     nPos = std::min( nPos, (sal_uLong) mpParent->Count() - 1UL );
@@ -169,10 +170,7 @@ void ImplAnimView::ImplDrawToPos( sal_uLong nPos )
     mpOut->DrawOutDev( maDispPt, maDispSz, Point(), maSzPix, aVDev );
 
     if( pOldClip )
-    {
         mpOut->SetClipRegion( *pOldClip );
-        delete pOldClip;
-    }
 }
 
 void ImplAnimView::ImplDraw( sal_uLong nPos )
@@ -269,7 +267,7 @@ void ImplAnimView::ImplDraw( sal_uLong nPos, VirtualDevice* pVDev )
 
         if( !pVDev )
         {
-            Region* pOldClip = !maClip.IsNull() ? new Region( mpOut->GetClipRegion() ) : NULL;
+            boost::scoped_ptr<Region> pOldClip(!maClip.IsNull() ? new Region( mpOut->GetClipRegion() ) : NULL);
 
             if( pOldClip )
                 mpOut->SetClipRegion( maClip );
@@ -279,7 +277,7 @@ void ImplAnimView::ImplDraw( sal_uLong nPos, VirtualDevice* pVDev )
             if( pOldClip )
             {
                 mpOut->SetClipRegion( *pOldClip );
-                delete pOldClip;
+                pOldClip.reset();
             }
 
             delete pDev;
