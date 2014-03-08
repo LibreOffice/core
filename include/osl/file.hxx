@@ -432,10 +432,11 @@ public:
         Set of flags decribing the demanded information.
     */
 
-    VolumeInfo( sal_uInt32 nMask ): _nMask( nMask )
+    VolumeInfo( sal_uInt32 nMask )
+        : _nMask( nMask )
     {
+        memset( &_aInfo, 0, sizeof( oslVolumeInfo ));
         _aInfo.uStructSize = sizeof( oslVolumeInfo );
-        memset( &_aInfo.uValidFields, 0, sizeof( oslVolumeInfo ) - sizeof( sal_uInt32 ) );
         _aInfo.pDeviceHandle = &_aDevice._aHandle;
     }
 
