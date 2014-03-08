@@ -112,8 +112,9 @@ public:
         : com::sun::star::uno::XWeak()
         , m_refCount( 0 )
         , m_pWeakConnectionPoint( 0 )
+        , m_pReserved(0)
         {
-        (void) rObj;
+            (void) rObj;
         }
     /** Dummy assignment operator. Does not affect reference count.
 
