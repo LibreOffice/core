@@ -29,66 +29,22 @@ using namespace com::sun::star;
 
 namespace ucbhelper
 {
-
-
-
-
 // ActiveDataStreamer Implementation.
-
-
-
-
-
-
-// XInterface methods
-
-void SAL_CALL ActiveDataStreamer::acquire()
-    throw()
-{
-    OWeakObject::acquire();
-}
-
-void SAL_CALL ActiveDataStreamer::release()
-    throw()
-{
-    OWeakObject::release();
-}
-
-css::uno::Any SAL_CALL ActiveDataStreamer::queryInterface( const css::uno::Type & rType )
-    throw( css::uno::RuntimeException, std::exception )
-{
-    css::uno::Any aRet = cppu::queryInterface( rType,
-                                               (static_cast< lang::XTypeProvider* >(this)),
-                                               (static_cast< io::XActiveDataStreamer* >(this))
-                                               );
-    return aRet.hasValue() ? aRet : OWeakObject::queryInterface( rType );
-}
-
-// XTypeProvider methods
-
-
-
-XTYPEPROVIDER_IMPL_2( ActiveDataStreamer,
-                      lang::XTypeProvider,
-                      io::XActiveDataStreamer );
-
-
 
 // XActiveDataStreamer methods.
 
-
-
 // virtual
 void SAL_CALL ActiveDataStreamer::setStream( const uno::Reference< io::XStream >& xStream )
-    throw( uno::RuntimeException, std::exception )
+    throw( uno::RuntimeException,
+           std::exception )
 {
     m_xStream = xStream;
 }
 
-
 // virtual
 uno::Reference< io::XStream > SAL_CALL ActiveDataStreamer::getStream()
-    throw( uno::RuntimeException, std::exception )
+    throw( uno::RuntimeException,
+           std::exception )
 {
     return m_xStream;
 }
