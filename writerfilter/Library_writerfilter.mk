@@ -154,7 +154,6 @@ $(eval $(call gb_Library_add_exception_objects,writerfilter,\
 $(eval $(call gb_Library_add_generated_exception_objects,writerfilter,\
     $(patsubst %,CustomTarget/writerfilter/source/OOXMLFactory_%,$(writerfilter_OOXMLNAMESPACES)) \
     CustomTarget/writerfilter/source/OOXMLFactory_generated \
-    CustomTarget/writerfilter/source/sprmcodetostr \
     CustomTarget/writerfilter/source/ooxml/qnametostr \
 ))
 

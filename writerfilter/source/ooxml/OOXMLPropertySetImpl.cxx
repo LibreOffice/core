@@ -111,9 +111,6 @@ string OOXMLPropertyImpl::getName() const
     string sResult = (*QNameToString::Instance())(mId);
 
     if (sResult.length() == 0)
-        sResult = (*SprmIdToString::Instance())(mId);
-
-    if (sResult.length() == 0)
         sResult = fastTokenToId(mId);
 
     if (sResult.length() == 0)
