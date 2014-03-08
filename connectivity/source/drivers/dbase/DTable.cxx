@@ -2624,10 +2624,10 @@ sal_Bool ODbaseTable::seekRow(IResultSetHelper::Movement eCursorPosition, sal_In
         goto Error;
     else
     {
-        sal_uInt16 nEntryLen = m_aHeader.db_slng;
+        sal_Size nEntryLen = m_aHeader.db_slng;
 
         OSL_ENSURE(m_nFilePos >= 1,"SdbDBFCursor::FileFetchRow: ungueltige Record-Position");
-        sal_Size nPos = m_aHeader.db_kopf + (sal_Int32)(m_nFilePos-1) * nEntryLen;
+        sal_Size nPos = m_aHeader.db_kopf + (sal_Size)(m_nFilePos-1) * nEntryLen;
 
         m_pFileStream->Seek(nPos);
         if (m_pFileStream->GetError() != ERRCODE_NONE)
