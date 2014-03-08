@@ -357,229 +357,228 @@ void ScViewFunc::EnterData( SCCOL nCol, SCROW nRow, SCTAB nTab,
     ScDocShellModificator aModificator( *pDocSh );
 
     ScEditableTester aTester( pDoc, nCol,nRow, nCol,nRow, rMark );
-    if (aTester.IsEditable())
+    if (!aTester.IsEditable())
     {
-        if ( bRecord )
-            rFunc.EnterListAction( STR_UNDO_ENTERDATA );
+        ErrorMessage(aTester.GetMessageId());
+        PaintArea(nCol, nRow, nCol, nRow);        // possibly the edit-engine is still painted there
+        return;
+    }
 
-        bool bFormula = false;
+    if ( bRecord )
+        rFunc.EnterListAction( STR_UNDO_ENTERDATA );
 
-        // a single '=' character is handled as string (needed for special filters)
-        if ( rString.getLength() > 1 )
+    bool bFormula = false;
+
+    // a single '=' character is handled as string (needed for special filters)
+    if ( rString.getLength() > 1 )
+    {
+        if ( rString[0] == '=' )
         {
-            if ( rString[0] == '=' )
+            // handle as formula
+            bFormula = true;
+        }
+        else if ( rString[0] == '+' || rString[0] == '-' )
+        {
+            // if there is more than one leading '+' or '-' character, remove the additional ones
+            sal_Int32 nIndex = 1;
+            sal_Int32 nLen = rString.getLength();
+            while ( nIndex < nLen && ( rString[ nIndex ] == '+' || rString[ nIndex ] == '-' ) )
             {
-                // handle as formula
-                bFormula = true;
+                ++nIndex;
             }
-            else if ( rString[0] == '+' || rString[0] == '-' )
-            {
-                // if there is more than one leading '+' or '-' character, remove the additional ones
-                sal_Int32 nIndex = 1;
-                sal_Int32 nLen = rString.getLength();
-                while ( nIndex < nLen && ( rString[ nIndex ] == '+' || rString[ nIndex ] == '-' ) )
-                {
-                    ++nIndex;
-                }
-                OUString aString = rString.replaceAt( 1, nIndex - 1, "" );
+            OUString aString = rString.replaceAt( 1, nIndex - 1, "" );
 
-                // if the remaining part without the leading '+' or '-' character
-                // is non-empty and not a number, handle as formula
-                if ( aString.getLength() > 1 )
+            // if the remaining part without the leading '+' or '-' character
+            // is non-empty and not a number, handle as formula
+            if ( aString.getLength() > 1 )
+            {
+                sal_uInt32 nFormat = 0;
+                pDoc->GetNumberFormat( nCol, nRow, nTab, nFormat );
+                SvNumberFormatter* pFormatter = pDoc->GetFormatTable();
+                double fNumber = 0;
+                if ( !pFormatter->IsNumberFormat( aString, nFormat, fNumber ) )
                 {
-                    sal_uInt32 nFormat = 0;
-                    pDoc->GetNumberFormat( nCol, nRow, nTab, nFormat );
-                    SvNumberFormatter* pFormatter = pDoc->GetFormatTable();
-                    double fNumber = 0;
-                    if ( !pFormatter->IsNumberFormat( aString, nFormat, fNumber ) )
-                    {
-                        bFormula = true;
-                    }
+                    bFormula = true;
                 }
             }
         }
+    }
 
-        bool bNumFmtChanged = false;
-        if ( bFormula )
-        {   // formula, compile with autoCorrection
-            i = rMark.GetFirstSelected();
-            ScAddress aPos( nCol, nRow, i );
-            ScCompiler aComp( pDoc, aPos);
-            aComp.SetGrammar(pDoc->GetGrammar());
+    bool bNumFmtChanged = false;
+    if ( bFormula )
+    {   // formula, compile with autoCorrection
+        i = rMark.GetFirstSelected();
+        ScAddress aPos( nCol, nRow, i );
+        ScCompiler aComp( pDoc, aPos);
+        aComp.SetGrammar(pDoc->GetGrammar());
 //2do: enable/disable autoCorrection via calcoptions
-            aComp.SetAutoCorrection( true );
-            if ( rString[0] == '+' || rString[0] == '-' )
-            {
-                aComp.SetExtendedErrorDetection( ScCompiler::EXTENDED_ERROR_DETECTION_NAME_BREAK );
+        aComp.SetAutoCorrection( true );
+        if ( rString[0] == '+' || rString[0] == '-' )
+        {
+            aComp.SetExtendedErrorDetection( ScCompiler::EXTENDED_ERROR_DETECTION_NAME_BREAK );
+        }
+        OUString aFormula( rString );
+        ScTokenArray* pArr;
+        bool bAgain;
+        do
+        {
+            bAgain = false;
+            bool bAddEqual = false;
+            ScTokenArray* pArrFirst = pArr = aComp.CompileString( aFormula );
+            bool bCorrected = aComp.IsCorrected();
+            if ( bCorrected )
+            {   // try to parse with first parser-correction
+                pArr = aComp.CompileString( aComp.GetCorrectedFormula() );
             }
-            OUString aFormula( rString );
-            ScTokenArray* pArr;
-            bool bAgain;
-            do
+            if ( !pArr->GetCodeError() )
             {
-                bAgain = false;
-                bool bAddEqual = false;
-                ScTokenArray* pArrFirst = pArr = aComp.CompileString( aFormula );
-                bool bCorrected = aComp.IsCorrected();
-                if ( bCorrected )
-                {   // try to parse with first parser-correction
-                    pArr = aComp.CompileString( aComp.GetCorrectedFormula() );
-                }
-                if ( !pArr->GetCodeError() )
-                {
-                    bAddEqual = true;
-                    aComp.CompileTokenArray();
-                    bCorrected |= aComp.IsCorrected();
-                }
-                if ( bCorrected )
-                {
-                    OUString aCorrectedFormula;
-                    if ( bAddEqual )
-                    {
-                        aCorrectedFormula = "=" + aComp.GetCorrectedFormula();
-                    }
-                    else
-                        aCorrectedFormula = aComp.GetCorrectedFormula();
-                    short nResult;
-                    if ( aCorrectedFormula.getLength() == 1 )
-                        nResult = RET_NO;   // empty formula, just '='
-                    else
-                    {
-                        OUString aMessage( ScResId( SCSTR_FORMULA_AUTOCORRECTION ) );
-                        aMessage += aCorrectedFormula;
-                        nResult = QueryBox( GetViewData()->GetDialogParent(),
-                                                WinBits(WB_YES_NO | WB_DEF_YES),
-                                                aMessage ).Execute();
-                    }
-                    if ( nResult == RET_YES )
-                    {
-                        aFormula = aCorrectedFormula;
-                        if ( pArr != pArrFirst )
-                            delete pArrFirst;
-                        bAgain = true;
-                    }
-                    else
-                    {
-                        if ( pArr != pArrFirst )
-                        {
-                            delete pArr;
-                            pArr = pArrFirst;
-                        }
-                    }
-                }
-            } while ( bAgain );
-            // to be used in multiple tabs, the formula must be compiled anew
-            // via ScFormulaCell copy-ctor because of RangeNames,
-            // the same code-array for all cells is not possible.
-            // If the array has an error, (it) must be RPN-erased in the newly generated
-            // cellst and the error be set explicitly, so that
-            // via FormulaCell copy-ctor and Interpreter it will be, when possible,
-            // ironed out again, too intelligent.. e.g.: =1))
-            sal_uInt16 nError = pArr->GetCodeError();
-            if ( !nError )
-            {
-                //  update list of recent functions with all functions that
-                //  are not within parentheses
-
-                ScModule* pScMod = SC_MOD();
-                ScAppOptions aAppOpt = pScMod->GetAppOptions();
-                bool bOptChanged = false;
-
-                formula::FormulaToken** ppToken = pArr->GetArray();
-                sal_uInt16 nTokens = pArr->GetLen();
-                sal_uInt16 nLevel = 0;
-                for (sal_uInt16 nTP=0; nTP<nTokens; nTP++)
-                {
-                    formula::FormulaToken* pTok = ppToken[nTP];
-                    OpCode eOp = pTok->GetOpCode();
-                    if ( eOp == ocOpen )
-                        ++nLevel;
-                    else if ( eOp == ocClose && nLevel )
-                        --nLevel;
-                    if ( nLevel == 0 && pTok->IsFunction() &&
-                            lcl_AddFunction( aAppOpt, sal::static_int_cast<sal_uInt16>( eOp ) ) )
-                        bOptChanged = true;
-                }
-
-                if ( bOptChanged )
-                {
-                    pScMod->SetAppOptions(aAppOpt);
-                    pScMod->RecentFunctionsChanged();
-                }
+                bAddEqual = true;
+                aComp.CompileTokenArray();
+                bCorrected |= aComp.IsCorrected();
             }
-
-            ScFormulaCell aCell(pDoc, aPos, *pArr, formula::FormulaGrammar::GRAM_DEFAULT, MM_NONE);
-            delete pArr;
-
-            SvNumberFormatter* pFormatter = pDoc->GetFormatTable();
-            ScMarkData::iterator itr = rMark.begin(), itrEnd = rMark.end();
-            for (; itr != itrEnd; ++itr)
+            if ( bCorrected )
             {
-                i = *itr;
-                aPos.SetTab( i );
-                sal_uLong nIndex = (sal_uLong) ((SfxUInt32Item*) pDoc->GetAttr(
-                    nCol, nRow, i, ATTR_VALUE_FORMAT ))->GetValue();
-                if ( pFormatter->GetType( nIndex ) == NUMBERFORMAT_TEXT ||
-                     ( ( rString[0] == '+' || rString[0] == '-' ) && nError && rString == aFormula ) )
+                OUString aCorrectedFormula;
+                if ( bAddEqual )
                 {
-                    if ( pData )
-                    {
-                        // A clone of pData will be stored in the cell.
-                        rFunc.SetEditCell(aPos, *pData, true);
-                    }
-                    else
-                        rFunc.SetStringCell(aPos, aFormula, true);
+                    aCorrectedFormula = "=" + aComp.GetCorrectedFormula();
+                }
+                else
+                    aCorrectedFormula = aComp.GetCorrectedFormula();
+                short nResult;
+                if ( aCorrectedFormula.getLength() == 1 )
+                    nResult = RET_NO;   // empty formula, just '='
+                else
+                {
+                    OUString aMessage( ScResId( SCSTR_FORMULA_AUTOCORRECTION ) );
+                    aMessage += aCorrectedFormula;
+                    nResult = QueryBox( GetViewData()->GetDialogParent(),
+                                            WinBits(WB_YES_NO | WB_DEF_YES),
+                                            aMessage ).Execute();
+                }
+                if ( nResult == RET_YES )
+                {
+                    aFormula = aCorrectedFormula;
+                    if ( pArr != pArrFirst )
+                        delete pArrFirst;
+                    bAgain = true;
                 }
                 else
                 {
-                    ScFormulaCell* pCell = new ScFormulaCell( aCell, *pDoc, aPos );
-                    if ( nError )
+                    if ( pArr != pArrFirst )
                     {
-                        pCell->GetCode()->DelRPN();
-                        pCell->SetErrCode( nError );
-                        if(pCell->GetCode()->IsHyperLink())
-                            pCell->GetCode()->SetHyperLink(false);
+                        delete pArr;
+                        pArr = pArrFirst;
                     }
-                    rFunc.SetFormulaCell(aPos, pCell, true);
                 }
             }
-        }
-        else
+        } while ( bAgain );
+        // to be used in multiple tabs, the formula must be compiled anew
+        // via ScFormulaCell copy-ctor because of RangeNames,
+        // the same code-array for all cells is not possible.
+        // If the array has an error, (it) must be RPN-erased in the newly generated
+        // cellst and the error be set explicitly, so that
+        // via FormulaCell copy-ctor and Interpreter it will be, when possible,
+        // ironed out again, too intelligent.. e.g.: =1))
+        sal_uInt16 nError = pArr->GetCodeError();
+        if ( !nError )
         {
-            ScMarkData::iterator itr = rMark.begin(), itrEnd = rMark.end();
-            for ( ; itr != itrEnd; ++itr )
+            //  update list of recent functions with all functions that
+            //  are not within parentheses
+
+            ScModule* pScMod = SC_MOD();
+            ScAppOptions aAppOpt = pScMod->GetAppOptions();
+            bool bOptChanged = false;
+
+            formula::FormulaToken** ppToken = pArr->GetArray();
+            sal_uInt16 nTokens = pArr->GetLen();
+            sal_uInt16 nLevel = 0;
+            for (sal_uInt16 nTP=0; nTP<nTokens; nTP++)
             {
-                bool bNumFmtSet = false;
-                rFunc.SetNormalString( bNumFmtSet, ScAddress( nCol, nRow, *itr ), rString, false );
-                if (bNumFmtSet)
-                {
-                    /* FIXME: if set on any sheet results in changed only on
-                     * sheet nTab for TestFormatArea() and DoAutoAttributes() */
-                    bNumFmtChanged = true;
-                }
+                formula::FormulaToken* pTok = ppToken[nTP];
+                OpCode eOp = pTok->GetOpCode();
+                if ( eOp == ocOpen )
+                    ++nLevel;
+                else if ( eOp == ocClose && nLevel )
+                    --nLevel;
+                if ( nLevel == 0 && pTok->IsFunction() &&
+                        lcl_AddFunction( aAppOpt, sal::static_int_cast<sal_uInt16>( eOp ) ) )
+                    bOptChanged = true;
+            }
+
+            if ( bOptChanged )
+            {
+                pScMod->SetAppOptions(aAppOpt);
+                pScMod->RecentFunctionsChanged();
             }
         }
 
-        bool bAutoFormat = TestFormatArea(nCol, nRow, nTab, bNumFmtChanged);
+        ScFormulaCell aCell(pDoc, aPos, *pArr, formula::FormulaGrammar::GRAM_DEFAULT, MM_NONE);
+        delete pArr;
 
-        if (bAutoFormat)
-            DoAutoAttributes(nCol, nRow, nTab, bNumFmtChanged, bRecord);
-
-        pDocSh->UpdateOle(GetViewData());
-
-        HelperNotifyChanges::NotifyIfChangesListeners(*pDocSh, rMark, nCol, nRow);
-
-        if ( bRecord )
-            rFunc.EndListAction();
-
-        aModificator.SetDocumentModified();
-        lcl_PostRepaintCondFormat( pDoc->GetCondFormat( nCol, nRow, nTab ), pDocSh );
+        SvNumberFormatter* pFormatter = pDoc->GetFormatTable();
+        ScMarkData::iterator itr = rMark.begin(), itrEnd = rMark.end();
+        for (; itr != itrEnd; ++itr)
+        {
+            i = *itr;
+            aPos.SetTab( i );
+            sal_uLong nIndex = (sal_uLong) ((SfxUInt32Item*) pDoc->GetAttr(
+                nCol, nRow, i, ATTR_VALUE_FORMAT ))->GetValue();
+            if ( pFormatter->GetType( nIndex ) == NUMBERFORMAT_TEXT ||
+                 ( ( rString[0] == '+' || rString[0] == '-' ) && nError && rString == aFormula ) )
+            {
+                if ( pData )
+                {
+                    // A clone of pData will be stored in the cell.
+                    rFunc.SetEditCell(aPos, *pData, true);
+                }
+                else
+                    rFunc.SetStringCell(aPos, aFormula, true);
+            }
+            else
+            {
+                ScFormulaCell* pCell = new ScFormulaCell( aCell, *pDoc, aPos );
+                if ( nError )
+                {
+                    pCell->GetCode()->DelRPN();
+                    pCell->SetErrCode( nError );
+                    if(pCell->GetCode()->IsHyperLink())
+                        pCell->GetCode()->SetHyperLink(false);
+                }
+                rFunc.SetFormulaCell(aPos, pCell, true);
+            }
+        }
     }
     else
     {
-        ErrorMessage(aTester.GetMessageId());
-        PaintArea( nCol, nRow, nCol, nRow );        // possibly the edit-engine is still painted there
+        ScMarkData::iterator itr = rMark.begin(), itrEnd = rMark.end();
+        for ( ; itr != itrEnd; ++itr )
+        {
+            bool bNumFmtSet = false;
+            rFunc.SetNormalString( bNumFmtSet, ScAddress( nCol, nRow, *itr ), rString, false );
+            if (bNumFmtSet)
+            {
+                /* FIXME: if set on any sheet results in changed only on
+                 * sheet nTab for TestFormatArea() and DoAutoAttributes() */
+                bNumFmtChanged = true;
+            }
+        }
     }
+
+    bool bAutoFormat = TestFormatArea(nCol, nRow, nTab, bNumFmtChanged);
+
+    if (bAutoFormat)
+        DoAutoAttributes(nCol, nRow, nTab, bNumFmtChanged, bRecord);
+
+    pDocSh->UpdateOle(GetViewData());
+
+    HelperNotifyChanges::NotifyIfChangesListeners(*pDocSh, rMark, nCol, nRow);
+
+    if ( bRecord )
+        rFunc.EndListAction();
+
+    aModificator.SetDocumentModified();
+    lcl_PostRepaintCondFormat( pDoc->GetCondFormat( nCol, nRow, nTab ), pDocSh );
 }
 
 // enter value in single cell (on nTab only)
