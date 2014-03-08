@@ -130,7 +130,9 @@ Bookmark::~Bookmark(void)
 
 
 // date format(7)
-DateFormat::DateFormat(void):HBox(CH_DATE_FORM)
+DateFormat::DateFormat()
+    : HBox(CH_DATE_FORM)
+    , dummy(0)
 {
 }
 
