@@ -4031,12 +4031,12 @@ void DocxAttributeOutput::StartStyle( const OUString& rName, StyleType eType,
         m_pSerializer->singleElementNS(XML_w, XML_uiPriority,
                 FSNS(XML_w, XML_val), OUStringToOString(aUiPriority, RTL_TEXTENCODING_UTF8).getStr(),
                 FSEND);
-    if (bQFormat)
-        m_pSerializer->singleElementNS(XML_w, XML_qFormat, FSEND);
     if (bSemiHidden)
         m_pSerializer->singleElementNS(XML_w, XML_semiHidden, FSEND);
     if (bUnhideWhenUsed)
         m_pSerializer->singleElementNS(XML_w, XML_unhideWhenUsed, FSEND);
+    if (bQFormat)
+        m_pSerializer->singleElementNS(XML_w, XML_qFormat, FSEND);
     if (bLocked)
         m_pSerializer->singleElementNS(XML_w, XML_locked, FSEND);
     if (!aRsid.isEmpty())
