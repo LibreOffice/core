@@ -1652,6 +1652,7 @@ Pointer ImpPathForDragAndCreate::GetCreatePointer() const
 /*************************************************************************/
 
 SdrPathObjGeoData::SdrPathObjGeoData()
+    : meKind(OBJ_NONE)
 {
 }
 
