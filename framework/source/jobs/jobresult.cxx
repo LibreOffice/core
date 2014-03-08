@@ -90,6 +90,7 @@ JobResult::JobResult()
 */
 JobResult::JobResult( /*IN*/ const css::uno::Any& aResult )
     : ThreadHelpBase(&Application::GetSolarMutex())
+    , m_bDeactivate(false)
 {
     // safe the pure result
     // May someone need it later ...
