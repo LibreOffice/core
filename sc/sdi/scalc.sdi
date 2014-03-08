@@ -7002,6 +7002,31 @@ SfxStringItem StatusDocPos SID_STATUS_DOCPOS
     ToolBoxConfig = FALSE,
     GroupId = GID_VIEW;
 ]
+//--------------------------------------------------------------------------
+SfxStringItem StatusCurPos SID_STATUS_CURPOS
+[
+    /* flags: */
+    AutoUpdate = FALSE,
+    Cachable = Cachable,
+    FastCall = FALSE,
+    HasCoreId = FALSE,
+    HasDialog = FALSE,
+    ReadOnlyDoc = TRUE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+    Synchron;
+
+    Readonly = TRUE,
+
+    /* config: */
+    AccelConfig = FALSE,
+    MenuConfig = FALSE,
+    StatusBarConfig = TRUE,
+    ToolBoxConfig = FALSE,
+    GroupId = GID_VIEW;
+]
 
 //--------------------------------------------------------------------------
 SfxStringItem StatusFunction SID_STATUS_SUM
