@@ -561,12 +561,12 @@ private:
 };
 
 OMarkableInputStream::OMarkableInputStream()
+    : m_bValidStream(false)
+    , m_nCurrentPos(0)
+    , m_nCurrentMark(0)
 {
-    m_nCurrentPos = 0;
-    m_nCurrentMark = 0;
     m_pBuffer = new MemRingBuffer;
 }
-
 
 OMarkableInputStream::~OMarkableInputStream()
 {
