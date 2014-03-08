@@ -1,0 +1,123 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a930d6b_5135f444",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2014-03-08T18:12:42Z",
+      "side": 1,
+      "message": "the reference to a bug report has to have the form fdo#xyz with xyz being 64920 in your case",
+      "revId": "63f3c6de6b4e66c646211f19ae3b86749205f3f9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a930d6b_31306856",
+        "filename": "sc/Library_sc.mk",
+        "patchSetId": 2
+      },
+      "lineNbr": 611,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2014-03-08T18:12:42Z",
+      "side": 1,
+      "message": "We don\u0027t need that file.",
+      "revId": "63f3c6de6b4e66c646211f19ae3b86749205f3f9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a930d6b_91f75c8c",
+        "filename": "sc/inc/scCurrentCellPos.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2014-03-08T18:12:42Z",
+      "side": 1,
+      "message": "This whole class is unnecessary.",
+      "revId": "63f3c6de6b4e66c646211f19ae3b86749205f3f9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a930d6b_d1f1e496",
+        "filename": "sc/source/ui/app/inputhdl.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 3592,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2014-03-08T18:12:42Z",
+      "side": 1,
+      "message": "get rid of scCurrentCellPos. The current cell position is already stored and we don\u0027t want it in a static variable. That will break in so many ways that I won\u0027t even start to name them.",
+      "revId": "63f3c6de6b4e66c646211f19ae3b86749205f3f9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a930d6b_f1eee0b3",
+        "filename": "sc/source/ui/view/cellsh.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 684,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2014-03-08T18:12:42Z",
+      "side": 1,
+      "message": "The current cell position can be obtained through ScViewData::GetCurX and ScViewData::GetCurY",
+      "revId": "63f3c6de6b4e66c646211f19ae3b86749205f3f9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a930d6b_112b6cec",
+        "filename": "sc/source/ui/view/cellsh.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 688,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2014-03-08T18:12:42Z",
+      "side": 1,
+      "message": "We can not hardcode english strings into the source code. They need to be added to a src/hrc file and loaded through our wrappers for internationalization.",
+      "revId": "63f3c6de6b4e66c646211f19ae3b86749205f3f9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a930d6b_b1f45888",
+        "filename": "sc/source/ui/view/scCurrentCellPos.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2014-03-08T18:12:42Z",
+      "side": 1,
+      "message": "see comment for header file",
+      "revId": "63f3c6de6b4e66c646211f19ae3b86749205f3f9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
