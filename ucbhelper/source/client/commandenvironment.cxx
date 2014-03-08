@@ -37,34 +37,20 @@ using namespace com::sun::star::uno;
 
 namespace ucbhelper
 {
-
-
-
-
 // struct CommandEnvironment_Impl.
-
-
-
 
 struct CommandEnvironment_Impl
 {
     Reference< XInteractionHandler > m_xInteractionHandler;
-    Reference< XProgressHandler >    m_xProgressHandler;
+    Reference< XProgressHandler > m_xProgressHandler;
 
-    CommandEnvironment_Impl(
-        const Reference< XInteractionHandler >& rxInteractionHandler,
-        const Reference< XProgressHandler >& rxProgressHandler )
-    : m_xInteractionHandler( rxInteractionHandler ),
-      m_xProgressHandler( rxProgressHandler ) {}
+    CommandEnvironment_Impl( const Reference< XInteractionHandler >& rxInteractionHandler,
+                             const Reference< XProgressHandler >& rxProgressHandler )
+        : m_xInteractionHandler( rxInteractionHandler )
+        , m_xProgressHandler( rxProgressHandler ) {}
 };
 
-
-
-
 // CommandEnvironment Implementation.
-
-
-
 
 CommandEnvironment::CommandEnvironment(
         const Reference< XInteractionHandler >& rxInteractionHandler,
@@ -74,65 +60,23 @@ CommandEnvironment::CommandEnvironment(
                                            rxProgressHandler );
 }
 
-
 // virtual
 CommandEnvironment::~CommandEnvironment()
 {
     delete m_pImpl;
 }
 
-
-
-// XInterface methods
-
-void SAL_CALL CommandEnvironment::acquire()
-    throw()
-{
-    OWeakObject::acquire();
-}
-
-void SAL_CALL CommandEnvironment::release()
-    throw()
-{
-    OWeakObject::release();
-}
-
-css::uno::Any SAL_CALL CommandEnvironment::queryInterface( const css::uno::Type & rType )
-    throw( css::uno::RuntimeException, std::exception )
-{
-    css::uno::Any aRet = cppu::queryInterface( rType,
-                                               (static_cast< XTypeProvider* >(this)),
-                                               (static_cast< XCommandEnvironment* >(this))
-                                               );
-    return aRet.hasValue() ? aRet : OWeakObject::queryInterface( rType );
-}
-
-// XTypeProvider methods
-
-
-
-XTYPEPROVIDER_IMPL_2( CommandEnvironment,
-                      XTypeProvider,
-                      XCommandEnvironment );
-
-
-
 // XCommandEnvironemnt methods.
 
-
-
 // virtual
-Reference< XInteractionHandler > SAL_CALL
-CommandEnvironment::getInteractionHandler()
+Reference< XInteractionHandler > SAL_CALL CommandEnvironment::getInteractionHandler()
     throw ( RuntimeException, std::exception )
 {
     return m_pImpl->m_xInteractionHandler;
 }
 
-
 // virtual
-Reference< XProgressHandler > SAL_CALL
-CommandEnvironment::getProgressHandler()
+Reference< XProgressHandler > SAL_CALL CommandEnvironment::getProgressHandler()
     throw ( RuntimeException, std::exception )
 {
     return m_pImpl->m_xProgressHandler;

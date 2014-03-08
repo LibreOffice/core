@@ -20,27 +20,21 @@
 #ifndef INCLUDED_UCBHELPER_COMMANDENVIRONMENT_HXX
 #define INCLUDED_UCBHELPER_COMMANDENVIRONMENT_HXX
 
-#include <com/sun/star/lang/XTypeProvider.hpp>
 #include <com/sun/star/ucb/XCommandEnvironment.hpp>
-#include <cppuhelper/weak.hxx>
-#include <ucbhelper/macros.hxx>
 #include <ucbhelper/ucbhelperdllapi.h>
+#include <cppuhelper/implbase1.hxx>
 
 namespace ucbhelper
 {
-
 struct CommandEnvironment_Impl;
-
-
 
 /**
   * This class implements the interface
   * com::sun::star::ucb::XCommandEnvironement. Instances of this class can
   * be used to supply environments to commands executed by UCB contents.
   */
-class UCBHELPER_DLLPUBLIC CommandEnvironment : public cppu::OWeakObject,
-                           public com::sun::star::lang::XTypeProvider,
-                           public com::sun::star::ucb::XCommandEnvironment
+class UCBHELPER_DLLPUBLIC CommandEnvironment :
+            public cppu::WeakImplHelper1< css::ucb::XCommandEnvironment >
 {
     CommandEnvironment_Impl* m_pImpl;
 
@@ -57,39 +51,21 @@ public:
       * @param rxProgressHandler is the implementation of a Progress
       *        Handler or an empty reference.
       */
-    CommandEnvironment(
-            const com::sun::star::uno::Reference<
-                com::sun::star::task::XInteractionHandler >&
-                    rxInteractionHandler,
-            const com::sun::star::uno::Reference<
-                com::sun::star::ucb::XProgressHandler >&
-                    rxProgressHandler );
+    CommandEnvironment( const css::uno::Reference< css::task::XInteractionHandler >& rxInteractionHandler,
+                        const css::uno::Reference< css::ucb::XProgressHandler >& rxProgressHandler );
     /**
       * Destructor.
       */
     virtual ~CommandEnvironment();
 
-    // XInterface
-    virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType )
-        throw( css::uno::RuntimeException, std::exception );
-    virtual void SAL_CALL acquire()
-        throw();
-    virtual void SAL_CALL release()
-        throw();
-
-    // XTypeProvider
-    XTYPEPROVIDER_DECL()
-
      // XCommandEnvironemnt
-    virtual com::sun::star::uno::Reference<
-                com::sun::star::task::XInteractionHandler > SAL_CALL
-    getInteractionHandler()
-        throw ( com::sun::star::uno::RuntimeException, std::exception );
+    virtual css::uno::Reference< css::task::XInteractionHandler > SAL_CALL getInteractionHandler()
+        throw ( css::uno::RuntimeException,
+                std::exception );
 
-    virtual com::sun::star::uno::Reference<
-                com::sun::star::ucb::XProgressHandler > SAL_CALL
-    getProgressHandler()
-        throw ( com::sun::star::uno::RuntimeException, std::exception );
+    virtual css::uno::Reference< css::ucb::XProgressHandler > SAL_CALL getProgressHandler()
+        throw ( css::uno::RuntimeException,
+                std::exception );
 };
 
 } /* namespace ucbhelper */
