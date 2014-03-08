@@ -4024,6 +4024,9 @@ void DocxAttributeOutput::StartStyle( const OUString& rName, StyleType eType,
                 FSNS(XML_w, XML_val), OUStringToOString(aLink, RTL_TEXTENCODING_UTF8).getStr(),
                 FSEND);
 
+    if ( bAutoUpdate )
+        m_pSerializer->singleElementNS( XML_w, XML_autoRedefine, FSEND );
+
     if (!aUiPriority.isEmpty())
         m_pSerializer->singleElementNS(XML_w, XML_uiPriority,
                 FSNS(XML_w, XML_val), OUStringToOString(aUiPriority, RTL_TEXTENCODING_UTF8).getStr(),
@@ -4040,9 +4043,6 @@ void DocxAttributeOutput::StartStyle( const OUString& rName, StyleType eType,
         m_pSerializer->singleElementNS(XML_w, XML_rsid,
                 FSNS(XML_w, XML_val), OUStringToOString(aRsid, RTL_TEXTENCODING_UTF8).getStr(),
                 FSEND);
-
-    if ( bAutoUpdate )
-        m_pSerializer->singleElementNS( XML_w, XML_autoRedefine, FSEND );
 }
 
 void DocxAttributeOutput::EndStyle()
