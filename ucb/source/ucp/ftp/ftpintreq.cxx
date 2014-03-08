@@ -36,47 +36,9 @@ XInteractionApproveImpl::XInteractionApproveImpl()
 {
 }
 
-
-void SAL_CALL
-XInteractionApproveImpl::acquire( void )
-    throw()
-{
-    OWeakObject::acquire();
-}
-
-
-void SAL_CALL
-XInteractionApproveImpl::release( void )
-    throw()
-{
-    OWeakObject::release();
-}
-
-
-
-Any SAL_CALL
-XInteractionApproveImpl::queryInterface( const Type& rType )
-    throw( RuntimeException, std::exception )
-{
-    Any aRet = cppu::queryInterface(
-        rType,
-        (static_cast< lang::XTypeProvider* >(this)),
-        (static_cast< XInteractionApprove* >(this)) );
-    return aRet.hasValue() ? aRet : OWeakObject::queryInterface( rType );
-}
-
-
-
-//  XTypeProvider
-
-
-XTYPEPROVIDER_IMPL_2( XInteractionApproveImpl,
-                      XTypeProvider,
-                      XInteractionApprove )
-
-
 void SAL_CALL XInteractionApproveImpl::select()
-    throw (RuntimeException, std::exception)
+    throw (RuntimeException,
+           std::exception)
 {
     m_bSelected = true;
 }
@@ -95,107 +57,28 @@ XInteractionDisapproveImpl::XInteractionDisapproveImpl()
 {
 }
 
-
-void SAL_CALL
-XInteractionDisapproveImpl::acquire( void )
-    throw()
-{
-    OWeakObject::acquire();
-}
-
-
-void SAL_CALL
-XInteractionDisapproveImpl::release( void )
-    throw()
-{
-    OWeakObject::release();
-}
-
-
-
-Any SAL_CALL
-XInteractionDisapproveImpl::queryInterface( const Type& rType )
-    throw( RuntimeException, std::exception )
-{
-    Any aRet = cppu::queryInterface(
-        rType,
-        (static_cast< lang::XTypeProvider* >(this)),
-        (static_cast< XInteractionDisapprove* >(this)) );
-    return aRet.hasValue() ? aRet : OWeakObject::queryInterface( rType );
-}
-
-
-
-//  XTypeProvider
-
-
-XTYPEPROVIDER_IMPL_2( XInteractionDisapproveImpl,
-                      XTypeProvider,
-                      XInteractionDisapprove )
-
-
 void SAL_CALL XInteractionDisapproveImpl::select()
-    throw (RuntimeException, std::exception)
-
+    throw (RuntimeException,
+           std::exception)
 {
     m_bSelected = true;
 }
 
-
 // XInteractionRequestImpl
 
 XInteractionRequestImpl::XInteractionRequestImpl(const OUString& aName)
-    : p1( new XInteractionApproveImpl ),
-      p2( new XInteractionDisapproveImpl ),
-      m_aName(aName),
-      m_aSeq( 2 )
+    : p1( new XInteractionApproveImpl )
+    , p2( new XInteractionDisapproveImpl )
+    , m_aName(aName)
+    , m_aSeq( 2 )
 {
     m_aSeq[0] = Reference<XInteractionContinuation>(p1);
     m_aSeq[1] = Reference<XInteractionContinuation>(p2);
 }
 
-
-void SAL_CALL
-XInteractionRequestImpl::acquire( void )
-    throw()
-{
-    OWeakObject::acquire();
-}
-
-
-
-void SAL_CALL
-XInteractionRequestImpl::release( void )
-    throw()
-{
-    OWeakObject::release();
-}
-
-
-
-Any SAL_CALL
-XInteractionRequestImpl::queryInterface( const Type& rType )
-    throw( RuntimeException, std::exception )
-{
-    Any aRet = cppu::queryInterface(
-        rType,
-        (static_cast< lang::XTypeProvider* >(this)),
-        (static_cast< XInteractionRequest* >(this)) );
-    return aRet.hasValue() ? aRet : OWeakObject::queryInterface( rType );
-}
-
-
-
-//  XTypeProvider
-
-
-XTYPEPROVIDER_IMPL_2( XInteractionRequestImpl,
-                      XTypeProvider,
-                      XInteractionRequest )
-
-
 Any SAL_CALL XInteractionRequestImpl::getRequest(  )
-    throw (RuntimeException, std::exception)
+    throw (RuntimeException,
+           std::exception)
 {
     Any aAny;
     UnsupportedNameClashException excep;
@@ -204,14 +87,12 @@ Any SAL_CALL XInteractionRequestImpl::getRequest(  )
     return aAny;
 }
 
-
-Sequence<Reference<XInteractionContinuation > > SAL_CALL
-XInteractionRequestImpl::getContinuations(  )
-    throw (RuntimeException, std::exception)
+Sequence<Reference<XInteractionContinuation > > SAL_CALL XInteractionRequestImpl::getContinuations()
+    throw (RuntimeException,
+           std::exception)
 {
     return m_aSeq;
 }
-
 
 bool XInteractionRequestImpl::approved() const
 {

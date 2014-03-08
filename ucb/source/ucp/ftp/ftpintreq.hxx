@@ -28,42 +28,21 @@
 #include <com/sun/star/task/XInteractionDisapprove.hpp>
 #include <com/sun/star/task/XInteractionApprove.hpp>
 #include <com/sun/star/task/XInteractionRequest.hpp>
+#include <cppuhelper/implbase1.hxx>
 
 
 namespace ftp {
 
-
-    class XInteractionApproveImpl
-        : public cppu::OWeakObject,
-          public com::sun::star::lang::XTypeProvider,
-          public com::sun::star::task::XInteractionApprove
+    class XInteractionApproveImpl : public cppu::WeakImplHelper1 <
+        css::task::XInteractionApprove >
     {
     public:
 
         XInteractionApproveImpl();
 
-        virtual com::sun::star::uno::Any SAL_CALL
-        queryInterface(
-            const com::sun::star::uno::Type& rType )
-            throw( com::sun::star::uno::RuntimeException, std::exception);
-
-        virtual void SAL_CALL
-        acquire(
-            void )
-            throw();
-
-        virtual void SAL_CALL
-        release(
-            void )
-            throw();
-
-
-        // XTypeProvider
-
-        XTYPEPROVIDER_DECL()
-
         virtual void SAL_CALL select()
-            throw (com::sun::star::uno::RuntimeException, std::exception);
+            throw (css::uno::RuntimeException,
+                   std::exception);
 
         bool isSelected() const;
 
@@ -75,34 +54,12 @@ namespace ftp {
 
 
 
-    class XInteractionDisapproveImpl
-        : public cppu::OWeakObject,
-          public com::sun::star::lang::XTypeProvider,
-          public com::sun::star::task::XInteractionDisapprove
+    class XInteractionDisapproveImpl : public cppu::WeakImplHelper1 <
+        css::task::XInteractionDisapprove >
     {
     public:
 
         XInteractionDisapproveImpl();
-
-        virtual com::sun::star::uno::Any SAL_CALL
-        queryInterface(
-            const com::sun::star::uno::Type& rType )
-            throw( com::sun::star::uno::RuntimeException, std::exception);
-
-        virtual void SAL_CALL
-        acquire(
-            void )
-            throw();
-
-        virtual void SAL_CALL
-        release(
-            void )
-            throw();
-
-
-        // XTypeProvider
-
-        XTYPEPROVIDER_DECL()
 
         virtual void SAL_CALL select()
             throw (com::sun::star::uno::RuntimeException, std::exception);
@@ -114,44 +71,21 @@ namespace ftp {
 
 
 
-    class XInteractionRequestImpl
-        : public cppu::OWeakObject,
-          public com::sun::star::lang::XTypeProvider,
-          public com::sun::star::task::XInteractionRequest
+    class XInteractionRequestImpl : public cppu::WeakImplHelper1<
+        css::task::XInteractionRequest >
     {
     public:
 
         XInteractionRequestImpl(const OUString& aName);
 
-        virtual com::sun::star::uno::Any SAL_CALL
-        queryInterface(
-            const com::sun::star::uno::Type& rType )
-            throw( com::sun::star::uno::RuntimeException, std::exception);
+        com::sun::star::uno::Any SAL_CALL getRequest(  )
+            throw (css::uno::RuntimeException,
+                   std::exception);
 
-        virtual void SAL_CALL
-        acquire(
-            void )
-            throw();
-
-        virtual void SAL_CALL
-        release(
-            void )
-            throw();
-
-
-        // XTypeProvider
-
-        XTYPEPROVIDER_DECL()
-
-        com::sun::star::uno::Any SAL_CALL
-        getRequest(  )
-            throw (com::sun::star::uno::RuntimeException, std::exception);
-
-        com::sun::star::uno::Sequence<
-            com::sun::star::uno::Reference<
-            com::sun::star::task::XInteractionContinuation > > SAL_CALL
+        css::uno::Sequence< css::uno::Reference< css::task::XInteractionContinuation > > SAL_CALL
         getContinuations(  )
-            throw (com::sun::star::uno::RuntimeException, std::exception);
+            throw (css::uno::RuntimeException,
+                   std::exception);
 
         bool approved() const;
 
@@ -162,9 +96,7 @@ namespace ftp {
 
         OUString m_aName;
 
-        com::sun::star::uno::Sequence<
-            com::sun::star::uno::Reference<
-            com::sun::star::task::XInteractionContinuation > > m_aSeq;
+        css::uno::Sequence< css::uno::Reference< css::task::XInteractionContinuation > > m_aSeq;
     };
 
 }
