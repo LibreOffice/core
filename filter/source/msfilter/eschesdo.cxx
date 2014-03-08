@@ -1188,8 +1188,8 @@ void ImplEESdrObject::Init( ImplEESdrWriter& rEx )
     {
         // detect name first to make below test (is group) work
         mType = OUString( mXShape->getShapeType() );
-        mType.startsWith( "com.sun.star.", &mType );  // strip "com.sun.star."
-        mType.endsWith( "Shape", &mType );  // strip "Shape"
+        (void)mType.startsWith( "com.sun.star.", &mType );  // strip "com.sun.star."
+        (void)mType.endsWith( "Shape", &mType );  // strip "Shape"
 
         if(GetType() == "drawing.Group")
         {
