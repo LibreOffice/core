@@ -101,7 +101,11 @@ public:
 };
 
 inline SvToken::SvToken()
-    : nType( SVTOKEN_EMPTY ) {}
+    : nLine(0)
+    , nColumn(0)
+    , nType( SVTOKEN_EMPTY )
+{
+}
 
 inline SvToken::SvToken( sal_uLong n )
     : nType( SVTOKEN_INTEGER ), nLong( n ) {}
