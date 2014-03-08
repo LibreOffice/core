@@ -11,7 +11,6 @@ Import filter for docx, doc and rtf.
 
 == Source contents ==
  * dmapper: the domain mapper, hiding UNO from the tokenizers, used by DOCX and RTF import
- * doctok: incomplete and unused ww8 (.doc) tokenizer
  * filter: the UNO filter service implementations, invoked by UNO and calling
    the dmapper + one of the tokenizers
  * ooxml: the docx tokenizer
