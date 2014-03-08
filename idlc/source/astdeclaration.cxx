@@ -49,6 +49,7 @@ AstDeclaration::AstDeclaration(NodeType type, const OString& name, AstScope* pSc
     , m_bIsAdded(false)
     , m_bInMainFile(false)
     , m_bPredefined(false)
+    , m_lineNumber(0)
 {
     if ( m_pScope )
     {
