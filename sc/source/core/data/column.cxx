@@ -3121,8 +3121,12 @@ public:
     {
         sal_uInt32 nFormat = mrCol.GetNumberFormat(nRow);
         if( (nFormat % SV_COUNTRY_LANGUAGE_OFFSET) != 0)
+            // Non-default number format is set.
             pCell->SetNeedNumberFormat(false);
-        else
+        else if (pCell->NeedsNumberFormat())
+            pCell->SetDirtyVar();
+
+        if (pCell->GetMatrixFlag())
             pCell->SetDirtyVar();
 
         pCell->CompileXML(mrCxt, mrProgress);

@@ -4486,9 +4486,6 @@ StackVar ScInterpreter::Interpret()
     }
     else
         nRetFmtType = NUMBERFORMAT_NUMBER;
-    // inherit the format index only for currency formats
-    if ( nRetFmtType != NUMBERFORMAT_CURRENCY )
-        nRetFmtIndex = 0;
 
     if (nGlobalError && GetStackType() != svError )
         PushError( nGlobalError);

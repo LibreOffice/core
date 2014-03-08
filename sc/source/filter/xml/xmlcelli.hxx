@@ -94,6 +94,7 @@ class ScXMLTableRowCellContext : public ScXMLImportContext
     bool mbCheckWithCompilerForError;
     bool mbEditEngineHasText;
     bool mbHasFormatRuns;
+    bool mbHasStyle;
 
     sal_Int16 GetCellType(const OUString& sOUValue) const;
 

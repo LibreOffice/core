@@ -210,6 +210,7 @@ public:
     void SetNeedsListening( bool bVar );
     void SetNeedsDirty( bool bVar );
     void SetNeedNumberFormat( bool bVal );
+    bool NeedsNumberFormat() const;
     short GetFormatType() const;
     void            Compile(const OUString& rFormula,
                             bool bNoListening = false,

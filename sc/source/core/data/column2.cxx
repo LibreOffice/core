@@ -2749,12 +2749,7 @@ void ScColumn::SetFormulaResults( SCROW nRow, const formula::FormulaTokenRef* pR
 
 void ScColumn::SetNumberFormat( SCROW nRow, sal_uInt32 nNumberFormat )
 {
-    short eOldType = pDocument->GetFormatTable()->GetType(
-        (sal_uLong)((SfxUInt32Item*)GetAttr(nRow, ATTR_VALUE_FORMAT))->GetValue());
-
-    short eNewType = pDocument->GetFormatTable()->GetType(nNumberFormat);
-    if (!pDocument->GetFormatTable()->IsCompatible(eOldType, eNewType))
-        ApplyAttr(nRow, SfxUInt32Item(ATTR_VALUE_FORMAT, nNumberFormat));
+    ApplyAttr(nRow, SfxUInt32Item(ATTR_VALUE_FORMAT, nNumberFormat));
 }
 
 const ScFormulaCell* ScColumn::FetchFormulaCell( SCROW nRow ) const

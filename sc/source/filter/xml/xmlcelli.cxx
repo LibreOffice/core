@@ -163,7 +163,8 @@ ScXMLTableRowCellContext::ScXMLTableRowCellContext( ScXMLImport& rImport,
     mbPossibleErrorCell(false),
     mbCheckWithCompilerForError(false),
     mbEditEngineHasText(false),
-    mbHasFormatRuns(false)
+    mbHasFormatRuns(false),
+    mbHasStyle(false)
 {
     rtl::math::setNan(&fValue); // NaN by default
 
@@ -185,6 +186,7 @@ ScXMLTableRowCellContext::ScXMLTableRowCellContext( ScXMLImport& rImport,
         {
             case XML_TOK_TABLE_ROW_CELL_ATTR_STYLE_NAME:
                 pStyleName = new OUString(sValue);
+                mbHasStyle = true;
             break;
             case XML_TOK_TABLE_ROW_CELL_ATTR_CONTENT_VALIDATION_NAME:
                 OSL_ENSURE(!maContentValidationName, "here should be only one Validation Name");
@@ -1376,7 +1378,9 @@ void ScXMLTableRowCellContext::PutFormulaCell( const ScAddress& rCellPos )
             ScFormulaCell* pNewCell = new ScFormulaCell(pDoc, rCellPos, *pCode, eGrammar, MM_NONE);
             SetFormulaCell(pNewCell);
             rDoc.setFormulaCell(rCellPos, pNewCell);
-            pNewCell->SetNeedNumberFormat( true );
+
+            // Re-calculate to get number format only when style is not set.
+            pNewCell->SetNeedNumberFormat(!mbHasStyle);
         }
         else if ( aText[0] == '\'' && aText.getLength() > 1 )
         {

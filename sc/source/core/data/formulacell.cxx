@@ -976,6 +976,12 @@ void ScFormulaCell::SetNeedsDirty( bool bVar )
 }
 
 void ScFormulaCell::SetNeedNumberFormat( bool bVal ) { mbNeedsNumberFormat = bVal; }
+
+bool ScFormulaCell::NeedsNumberFormat() const
+{
+    return mbNeedsNumberFormat;
+}
+
 short ScFormulaCell::GetFormatType() const { return nFormatType; }
 
 void ScFormulaCell::Compile( const OUString& rFormula, bool bNoListening,
