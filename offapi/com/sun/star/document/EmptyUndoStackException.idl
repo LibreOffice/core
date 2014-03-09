@@ -36,7 +36,7 @@ module com { module sun { module star { module document {
     of undo actions, and this requirement is not fullfilled.
     @since OpenOffice 3.4
  */
-published exception EmptyUndoStackException : ::com::sun::star::util::InvalidStateException
+exception EmptyUndoStackException : ::com::sun::star::util::InvalidStateException
 {
 };
 

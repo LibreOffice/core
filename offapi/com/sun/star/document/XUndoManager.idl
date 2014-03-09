@@ -37,8 +37,8 @@
 
 module com { module sun { module star { module document {
 
-published interface XUndoAction;
-published interface XUndoManagerListener;
+interface XUndoAction;
+interface XUndoManagerListener;
 
 //==================================================================================================================
 
@@ -75,7 +75,7 @@ published interface XUndoManagerListener;
 
     @since OpenOffice 3.4
  */
-published interface XUndoManager
+interface XUndoManager
 {
     /** allows <a href="#locking">locking</a> the undo manager.
     */

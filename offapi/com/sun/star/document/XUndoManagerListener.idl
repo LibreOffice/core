@@ -38,7 +38,7 @@ module com { module sun { module star { module document {
     @see XUndoManager
     @since OpenOffice 3.4
  */
-published interface XUndoManagerListener : ::com::sun::star::lang::XEventListener
+interface XUndoManagerListener : ::com::sun::star::lang::XEventListener
 {
     /** is called when an undo action is added to the undo stack.
 

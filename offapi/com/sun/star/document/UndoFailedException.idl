@@ -38,7 +38,7 @@ module com { module sun { module star { module document {
     @see XUndoManager::undo
     @since OpenOffice 3.4
  */
-published exception UndoFailedException : ::com::sun::star::uno::Exception
+exception UndoFailedException : ::com::sun::star::uno::Exception
 {
     /** describes the reason why the operation failed. Usually, this member will carry an exception.
     */

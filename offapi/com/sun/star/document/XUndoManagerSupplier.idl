@@ -30,7 +30,7 @@
 
 module com { module sun { module star { module document {
 
-published interface XUndoManager;
+interface XUndoManager;
 
 //==================================================================================================================
 
@@ -38,7 +38,7 @@ published interface XUndoManager;
 
     @since OpenOffice 3.4
  */
-published interface XUndoManagerSupplier
+interface XUndoManagerSupplier
 {
     /** returns the Undo manager associated with the component.
     */
