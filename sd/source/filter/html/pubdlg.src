@@ -338,7 +338,7 @@ ModalDialog DLG_PUBLISHING
     {
         Pos = MAP_APPFONT ( 6, 9 ) ;
         Size = MAP_APPFONT ( 124, 8 ) ;
-        Text [ en-US ] = "Save Image as";
+        Text [ en-US ] = "Save Images as";
     };
 
     RadioButton PAGE3_PNG
