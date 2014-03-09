@@ -1123,11 +1123,10 @@ void ScDocument::FillInfo(
         rArray.MirrorSelfX( true, false );
 }
 
-
-
-ScTableInfo::ScTableInfo() :
-    mpRowInfo( new RowInfo[ ROWINFO_MAX ] ),
-    mbPageMode( false )
+ScTableInfo::ScTableInfo()
+    : mpRowInfo(new RowInfo[ROWINFO_MAX])
+    , mnArrCount(0)
+    , mbPageMode(false)
 {
     for( sal_uInt16 nIdx = 0; nIdx < ROWINFO_MAX; ++nIdx )
         mpRowInfo[ nIdx ].pCellInfo = 0;
@@ -1139,7 +1138,5 @@ ScTableInfo::~ScTableInfo()
         delete [] mpRowInfo[ nIdx ].pCellInfo;
     delete [] mpRowInfo;
 }
-
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
