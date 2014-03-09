@@ -129,7 +129,6 @@ Bookmark::~Bookmark(void)
 {
 }
 
-
 // date format(7)
 DateFormat::DateFormat()
     : HBox(CH_DATE_FORM)
@@ -137,13 +136,13 @@ DateFormat::DateFormat()
 {
 }
 
-
 // date code(8)
-
-DateCode::DateCode(void):HBox(CH_DATE_CODE)
+DateCode::DateCode()
+    : HBox(CH_DATE_CODE)
+    , dummy(0)
+    , key(0)
 {
 }
-
 
 #define _DATECODE_WEEK_DEFINES_
 #include "datecode.h"
