@@ -637,12 +637,15 @@ bool NewNum::Read(HWPFile & hwpf)
     return !hwpf.State();
 }
 
-
 // show page number (20)
-ShowPageNum::ShowPageNum():HBox(CH_SHOW_PAGE_NUM)
+ShowPageNum::ShowPageNum()
+    : HBox(CH_SHOW_PAGE_NUM)
+    , where(0)
+    , m_nPageNumber(0)
+    , shape(0)
+    , dummy(0)
 {
 }
-
 
 bool ShowPageNum::Read(HWPFile & hwpf)
 {
