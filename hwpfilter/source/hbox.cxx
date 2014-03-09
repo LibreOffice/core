@@ -117,12 +117,13 @@ FieldCode::~FieldCode(void)
           delete m_pDate;
 }
 
-
 // book mark(6)
-Bookmark::Bookmark(void):HBox(CH_BOOKMARK)
+Bookmark::Bookmark()
+    : HBox(CH_BOOKMARK)
+    , dummy(0)
+    , type(0)
 {
 }
-
 
 Bookmark::~Bookmark(void)
 {
