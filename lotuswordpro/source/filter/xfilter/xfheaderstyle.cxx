@@ -143,9 +143,9 @@ void    XFHeaderStyle::ToXml(IXFStream *pStrm)
 
     //height
     if( m_fMinHeight>0 )
-        pAttrList->AddAttribute( "fo:min-height", DoubleToOUString(m_fMinHeight) + "cm" );
+        pAttrList->AddAttribute( "fo:min-height", OUString::number(m_fMinHeight) + "cm" );
     else if( m_fHeight>0 )
-        pAttrList->AddAttribute( "svg:height", DoubleToOUString(m_fHeight) + "cm" );
+        pAttrList->AddAttribute( "svg:height", OUString::number(m_fHeight) + "cm" );
 
     m_aMargin.ToXml(pStrm);
     if(m_pShadow)

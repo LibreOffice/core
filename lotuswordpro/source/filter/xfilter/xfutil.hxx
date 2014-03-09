@@ -69,8 +69,6 @@ OUString   Int16ToOUString(sal_Int16 num);
 
 OUString   FloatToOUString(float num, sal_Int32 precision=6);
 
-OUString   DoubleToOUString(double num, sal_Int32 precision=6);
-
 OUString   DateTimeToOUString(XFDateTime& dt);
 
 OUString   GetTableColName(sal_Int32 col);

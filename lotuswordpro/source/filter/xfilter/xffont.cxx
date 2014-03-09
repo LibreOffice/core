@@ -383,12 +383,12 @@ void XFFont::ToXml(IXFStream *pStrm)
     //char space:
     if( (m_nFlag & XFFONT_FLAG_CHARSPACE) && m_fCharSpace != 0 )
     {
-        pAttrList->AddAttribute("fo:letter-spacing", DoubleToOUString(m_fCharSpace)+"cm" );
+        pAttrList->AddAttribute("fo:letter-spacing", OUString::number(m_fCharSpace)+"cm" );
     }
 
     if( (m_nFlag&XFFONT_FLAG_WIDTHSCALE) && m_nWidthScale != 100 )
     {
-        pAttrList->AddAttribute("style:text-scale", DoubleToOUString(m_nWidthScale)+"%" );
+        pAttrList->AddAttribute("style:text-scale", OUString::number(m_nWidthScale)+"%" );
     }
 
     //Color:

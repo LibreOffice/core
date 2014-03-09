@@ -72,7 +72,7 @@ XFShadow::~XFShadow()
 OUString XFShadow::ToString()
 {
     OUString   buf;
-    OUString   strOff = DoubleToOUString(m_fOffset);
+    OUString   strOff = OUString::number(m_fOffset);
 
     buf = m_aColor.ToString();
     switch(m_ePosition)

@@ -84,7 +84,7 @@ void    XFColStyle::ToXml(IXFStream *pStrm)
     pStrm->StartElement( "style:style" );
 
     pAttrList->Clear();
-    pAttrList->AddAttribute( "style:column-width", DoubleToOUString(m_fWidth) + "cm" );
+    pAttrList->AddAttribute( "style:column-width", OUString::number(m_fWidth) + "cm" );
     pStrm->StartElement( "style:properties" );
     pStrm->EndElement( "style:properties" );
 

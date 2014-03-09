@@ -91,15 +91,15 @@ void XFListlevelNumber::ToXml(IXFStream *pStrm)
     pAttrList->Clear();
     if( m_fIndent > FLOAT_MIN )
     {
-        pAttrList->AddAttribute( "text:space-before", DoubleToOUString(m_fIndent) + "cm" );
+        pAttrList->AddAttribute( "text:space-before", OUString::number(m_fIndent) + "cm" );
     }
     if( m_fMinLabelWidth > FLOAT_MIN )
     {
-        pAttrList->AddAttribute( "text:min-label-width", DoubleToOUString(m_fMinLabelWidth) + "cm" );
+        pAttrList->AddAttribute( "text:min-label-width", OUString::number(m_fMinLabelWidth) + "cm" );
     }
     if( m_fMinLabelDistance > FLOAT_MIN )
     {
-        pAttrList->AddAttribute( "text:min-label-distance", DoubleToOUString(m_fMinLabelDistance) + "cm" );
+        pAttrList->AddAttribute( "text:min-label-distance", OUString::number(m_fMinLabelDistance) + "cm" );
     }
     pAttrList->AddAttribute( "fo:text-align", GetAlignName(m_eAlign) );
 
@@ -127,15 +127,15 @@ void    XFListLevelBullet::ToXml(IXFStream *pStrm)
     pAttrList->Clear();
     if( m_fIndent != 0 )
     {
-        pAttrList->AddAttribute( "text:space-before", DoubleToOUString(m_fIndent) + "cm" );
+        pAttrList->AddAttribute( "text:space-before", OUString::number(m_fIndent) + "cm" );
     }
     if( m_fMinLabelWidth != 0 )
     {
-        pAttrList->AddAttribute( "text:min-label-width", DoubleToOUString(m_fMinLabelWidth) + "cm" );
+        pAttrList->AddAttribute( "text:min-label-width", OUString::number(m_fMinLabelWidth) + "cm" );
     }
     if( m_fMinLabelDistance != 0 )
     {
-        pAttrList->AddAttribute( "text:min-label-distance", DoubleToOUString(m_fMinLabelDistance) + "cm" );
+        pAttrList->AddAttribute( "text:min-label-distance", OUString::number(m_fMinLabelDistance) + "cm" );
     }
 
     pAttrList->AddAttribute( "fo:text-align", GetAlignName(m_eAlign) );

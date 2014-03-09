@@ -111,11 +111,11 @@ void XFSectionStyle::ToXml(IXFStream *pStrm)
     pAttrList->Clear();
     if( m_fMarginLeft != 0 )
     {
-        pAttrList->AddAttribute( OUString("fo:margin-left"), DoubleToOUString(m_fMarginLeft) + OUString("cm") );
+        pAttrList->AddAttribute( OUString("fo:margin-left"), OUString::number(m_fMarginLeft) + OUString("cm") );
     }
     if( m_fMarginRight != 0 )
     {
-        pAttrList->AddAttribute( OUString("fo:margin-right"), DoubleToOUString(m_fMarginRight) + OUString("cm") );
+        pAttrList->AddAttribute( OUString("fo:margin-right"), OUString::number(m_fMarginRight) + OUString("cm") );
     }
     if( m_aBackColor.IsValid() && !m_pBackImage )
     {

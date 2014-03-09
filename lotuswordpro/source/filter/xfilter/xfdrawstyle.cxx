@@ -214,7 +214,7 @@ void    XFDrawStyle::ToXml(IXFStream *pStrm)
         }
 
         if( m_pLineStyle->GetWidth() > 0 )
-            pAttrList->AddAttribute( "svg:stroke-width", DoubleToOUString(m_pLineStyle->GetWidth()) + "cm" );
+            pAttrList->AddAttribute( "svg:stroke-width", OUString::number(m_pLineStyle->GetWidth()) + "cm" );
 
         XFColor color = m_pLineStyle->GetColor();
         if( color.IsValid() )
@@ -253,14 +253,14 @@ void    XFDrawStyle::ToXml(IXFStream *pStrm)
     if( !m_strArrowStart.isEmpty() )
     {
         pAttrList->AddAttribute( "draw:marker-start", m_strArrowStart );
-        pAttrList->AddAttribute( "draw:marker-start-width", DoubleToOUString(m_fArrowStartSize)+"cm" );
+        pAttrList->AddAttribute( "draw:marker-start-width", OUString::number(m_fArrowStartSize)+"cm" );
         if( m_bArrowStartCenter )
             pAttrList->AddAttribute( "draw:draw:marker-start-center", "true"  );
     }
     if( !m_strArrowEnd.isEmpty() )
     {
         pAttrList->AddAttribute( "draw:marker-end", m_strArrowEnd );
-        pAttrList->AddAttribute( "draw:marker-end-width", DoubleToOUString(m_fArrowEndSize)+"cm" );
+        pAttrList->AddAttribute( "draw:marker-end-width", OUString::number(m_fArrowEndSize)+"cm" );
         if( m_bArrowEndCenter )
             pAttrList->AddAttribute( "draw:draw:marker-end-center", "true"  );
     }
@@ -335,7 +335,7 @@ void    XFDrawStyle::ToXml(IXFStream *pStrm)
 
         // distance
         //pAttrList->AddAttribute("draw:fontwork-distance",
-        //  DoubleToOUString(m_pFontWorkStyle->GetFWDistance())+"cm");
+        //  OUString::number(m_pFontWorkStyle->GetFWDistance())+"cm");
     }
 
     pStrm->StartElement( "style:properties" );

@@ -98,7 +98,7 @@ void    XFTableStyle::ToXml(IXFStream *pStrm)
     pStrm->StartElement( OUString("style:style") );
 
     pAttrList->Clear();
-    pAttrList->AddAttribute( OUString("style:width"), DoubleToOUString(m_fWidth) + OUString("cm") );
+    pAttrList->AddAttribute( OUString("style:width"), OUString::number(m_fWidth) + OUString("cm") );
     //text align:
     if( m_eAlign == enumXFAlignStart )
     {

@@ -96,21 +96,21 @@ void XFDrawLine::ToXml(IXFStream *pStrm)
     }
     pAttrList->AddAttribute( "draw:z-index", OUString::number(m_nZIndex) );
 
-    pAttrList->AddAttribute( "svg:x1", DoubleToOUString(m_aPoint1.GetX()) + "cm" );
-    pAttrList->AddAttribute( "svg:y1", DoubleToOUString(m_aPoint1.GetY()) + "cm" );
-    pAttrList->AddAttribute( "svg:x2", DoubleToOUString(m_aPoint2.GetX()) + "cm" );
-    pAttrList->AddAttribute( "svg:y2", DoubleToOUString(m_aPoint2.GetY()) + "cm" );
+    pAttrList->AddAttribute( "svg:x1", OUString::number(m_aPoint1.GetX()) + "cm" );
+    pAttrList->AddAttribute( "svg:y1", OUString::number(m_aPoint1.GetY()) + "cm" );
+    pAttrList->AddAttribute( "svg:x2", OUString::number(m_aPoint2.GetX()) + "cm" );
+    pAttrList->AddAttribute( "svg:y2", OUString::number(m_aPoint2.GetY()) + "cm" );
 
     //transform
     OUString   strTransform;
     if( m_nFlag&XFDRAWOBJECT_FLAG_ROTATE )
-        strTransform = "rotate (" + DoubleToOUString(m_fRotate) + ") ";
+        strTransform = "rotate (" + OUString::number(m_fRotate) + ") ";
     if( m_nFlag&XFDRAWOBJECT_FLAG_TRANLATE )
-        strTransform += "translate (" + DoubleToOUString(m_aRotatePoint.GetX()) + "cm " + DoubleToOUString(m_aRotatePoint.GetY()) + "cm) ";
+        strTransform += "translate (" + OUString::number(m_aRotatePoint.GetX()) + "cm " + OUString::number(m_aRotatePoint.GetY()) + "cm) ";
     if( m_nFlag&XFDRAWOBJECT_FLAG_SKEWX )
-        strTransform += "skewX (" + DoubleToOUString(m_fSkewX) + " ";
+        strTransform += "skewX (" + OUString::number(m_fSkewX) + " ";
     if( m_nFlag&XFDRAWOBJECT_FLAG_SKEWY )
-        strTransform += "skewY (" + DoubleToOUString(m_fSkewY) + " ";
+        strTransform += "skewY (" + OUString::number(m_fSkewY) + " ";
     strTransform = strTransform.trim();
 
     if( !strTransform.isEmpty() )

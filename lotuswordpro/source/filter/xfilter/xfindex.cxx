@@ -287,7 +287,7 @@ void XFIndexTemplate::ToXml(IXFStream *pStrm)
             break;
         case enumXFIndexTemplateTab:
             if( m_eTabType != enumXFTabRight )
-                pAttrList->AddAttribute( "style:position", DoubleToOUString(m_fTabLength) + "cm" );
+                pAttrList->AddAttribute( "style:position", OUString::number(m_fTabLength) + "cm" );
 
             if(!m_aEntries[i].second.isEmpty())
                 pAttrList->AddAttribute( "text:style-name", m_aEntries[i].second );

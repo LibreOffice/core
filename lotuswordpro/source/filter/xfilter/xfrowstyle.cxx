@@ -86,9 +86,9 @@ void    XFRowStyle::ToXml(IXFStream *pStrm)
 
     pAttrList->Clear();
     if( m_fMinHeight )
-        pAttrList->AddAttribute( "style:min-row-height", DoubleToOUString(m_fMinHeight) + "cm" );
+        pAttrList->AddAttribute( "style:min-row-height", OUString::number(m_fMinHeight) + "cm" );
     else if( m_fHeight )
-        pAttrList->AddAttribute( "style:row-height", DoubleToOUString(m_fHeight) + "cm" );
+        pAttrList->AddAttribute( "style:row-height", OUString::number(m_fHeight) + "cm" );
 
     if( m_aBackColor.IsValid() && !m_pBGImage )
         pAttrList->AddAttribute( "fo:background-color", m_aBackColor.ToString() );

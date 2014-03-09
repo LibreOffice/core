@@ -190,12 +190,10 @@ void XFImageStyle::ToXml(IXFStream *pStrm)
     //clip:
     if( FABS(m_fClipLeft)>FLOAT_MIN || FABS(m_fClipRight)>FLOAT_MIN || FABS(m_fClipTop)>FLOAT_MIN || FABS(m_fClipBottom)>FLOAT_MIN )
     {
-        OUString clip = "rect(";
-        clip += DoubleToOUString(m_fClipTop) + "cm ";
-        clip += DoubleToOUString(m_fClipRight) + "cm ";
-        clip += DoubleToOUString(m_fClipBottom) + "cm ";
-        clip += DoubleToOUString(m_fClipLeft) + "cm";
-        clip += ")";
+        OUString clip = "rect(" + OUString::number(m_fClipTop) + "cm " +
+            OUString::number(m_fClipRight) + "cm " +
+            OUString::number(m_fClipBottom) + "cm " +
+            OUString::number(m_fClipLeft) + "cm" + ")";
         pAttrList->AddAttribute("fo:clip",clip);
     }
 

@@ -65,37 +65,37 @@ XFTabStyle::XFTabStyle()
     m_fLength = 0;
 }
 
-void    XFTabStyle::ToXml(IXFStream *pStrm)
+void XFTabStyle::ToXml(IXFStream *pStrm)
 {
     IXFAttrList *pAttrList = pStrm->GetAttrList();
     pAttrList->Clear();
 
-    pAttrList->AddAttribute( OUString("style:position"), DoubleToOUString(m_fLength) + OUString("cm") );
+    pAttrList->AddAttribute( "style:position", OUString::number(m_fLength) + OUString("cm") );
     switch(m_eType)
     {
     case enumXFTabLeft:
-        pAttrList->AddAttribute( OUString("style:type"), OUString("left") );
+        pAttrList->AddAttribute( "style:type", "left" );
         break;
     case enumXFTabCenter:
-        pAttrList->AddAttribute( OUString("style:type"), OUString("center") );
+        pAttrList->AddAttribute( "style:type", "center" );
         break;
     case enumXFTabRight:
-        pAttrList->AddAttribute( OUString("style:type"), OUString("right") );
+        pAttrList->AddAttribute( "style:type", "right" );
         break;
     case enumXFTabChar:
-        pAttrList->AddAttribute( OUString("style:type"), OUString("char") );
+        pAttrList->AddAttribute( "style:type", "char" );
         break;
     default:
         break;
     }
     //delimiter:
     if( m_eType == enumXFTabChar )
-        pAttrList->AddAttribute( OUString("style:char"), m_strDelimiter );
+        pAttrList->AddAttribute( "style:char", m_strDelimiter );
     //leader char:
     if( !m_strLeader.isEmpty() )
-        pAttrList->AddAttribute( OUString("style:leader-char"), m_strLeader );
+        pAttrList->AddAttribute( "style:leader-char", m_strLeader );
 
-    pStrm->StartElement( OUString("style:tab-stop") );
-    pStrm->EndElement( OUString("style:tab-stop") );
+    pStrm->StartElement( "style:tab-stop" );
+    pStrm->EndElement( "style:tab-stop" );
 }
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

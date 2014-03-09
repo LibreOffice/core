@@ -120,8 +120,8 @@ OUString   XFBorder::GetLineWidth()
     if( m_bDouble )
     {
         str = FloatToOUString(m_fWidthInner);
-        str += "cm " + DoubleToOUString(m_fWidthSpace);
-        str += "cm " + DoubleToOUString(m_fWidthOuter) + "cm";
+        str += "cm " + OUString::number(m_fWidthSpace);
+        str += "cm " + OUString::number(m_fWidthOuter) + "cm";
     }
     return str;
 }
@@ -138,7 +138,7 @@ OUString   XFBorder::ToString()
             return str;
         }
 
-        str = DoubleToOUString(width) + "cm";
+        str = OUString::number(width) + "cm";
         str += " double " + m_aColor.ToString();
     }
     else
@@ -148,7 +148,7 @@ OUString   XFBorder::ToString()
         {
             return str;
         }
-        str = DoubleToOUString(width) + "cm";
+        str = OUString::number(width) + "cm";
         str += " solid " + m_aColor.ToString();
     }
     return str;

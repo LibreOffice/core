@@ -72,8 +72,8 @@ void XFDrawPolygon::ToXml(IXFStream *pStrm)
     //view-box:
     XFRect  rect = CalcViewBox();
     OUString strViewBox = "0 0 ";
-    strViewBox += DoubleToOUString(rect.GetWidth()*1000) + " ";
-    strViewBox += DoubleToOUString(rect.GetHeight()*1000);
+    strViewBox += OUString::number(rect.GetWidth()*1000) + " ";
+    strViewBox += OUString::number(rect.GetHeight()*1000);
     pAttrList->AddAttribute( "svg:viewBox", strViewBox);
 
     //points
@@ -83,7 +83,7 @@ void XFDrawPolygon::ToXml(IXFStream *pStrm)
         XFPoint pt = *it;
         double  x = (pt.GetX()-rect.GetX())*1000;
         double  y = (pt.GetY()-rect.GetY())*1000;
-        strPoints += DoubleToOUString(x) + " " + DoubleToOUString(y) + " ";
+        strPoints += OUString::number(x) + " " + OUString::number(y) + " ";
     }
     strPoints = strPoints.trim();
     pAttrList->AddAttribute( "draw:points", strPoints);

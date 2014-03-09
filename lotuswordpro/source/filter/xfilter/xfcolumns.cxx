@@ -76,8 +76,8 @@ void    XFColumn::ToXml(IXFStream *pStrm)
     pAttrList->Clear();
 
     pAttrList->AddAttribute( "style:rel-width", OUString::number(m_nRelWidth) + "*" );
-    pAttrList->AddAttribute( "fo:margin-left", DoubleToOUString(m_fMarginLeft) + "cm" );
-    pAttrList->AddAttribute( "fo:margin-right", DoubleToOUString(m_fMarginRight) + "cm" );
+    pAttrList->AddAttribute( "fo:margin-left", OUString::number(m_fMarginLeft) + "cm" );
+    pAttrList->AddAttribute( "fo:margin-right", OUString::number(m_fMarginRight) + "cm" );
 
     pStrm->StartElement( "style:column" );
     pStrm->EndElement( "style:column" );
@@ -106,7 +106,7 @@ void    XFColumnSep::ToXml(IXFStream *pStrm)
     IXFAttrList *pAttrList = pStrm->GetAttrList();
 
     pAttrList->Clear();
-    pAttrList->AddAttribute( "style:width", DoubleToOUString(m_fWidth) + "cm" );
+    pAttrList->AddAttribute( "style:width", OUString::number(m_fWidth) + "cm" );
     if( m_aColor.IsValid() )
         pAttrList->AddAttribute( "style:color", m_aColor.ToString() );
     pAttrList->AddAttribute( "style:height", OUString::number(m_nRelHeight) + "%" );
@@ -158,7 +158,7 @@ void    XFColumns::ToXml(IXFStream *pStrm)
     pAttrList->AddAttribute( "fo:column-count", OUString::number(m_nCount));
     if( m_nFlag&XFCOLUMNS_FLAG_GAP )
     {
-        pAttrList->AddAttribute( "fo:column-gap", DoubleToOUString(m_fGap)+"cm" );
+        pAttrList->AddAttribute( "fo:column-gap", OUString::number(m_fGap)+"cm" );
     }
 
     pStrm->StartElement( "style:columns" );

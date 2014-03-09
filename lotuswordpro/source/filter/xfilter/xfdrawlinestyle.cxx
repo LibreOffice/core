@@ -93,27 +93,27 @@ void    XFDrawLineStyle::ToXml(IXFStream *pStrm)
     else if( m_eLineStyle == enumXFLineDash )
     {
         pAttrList->AddAttribute( "draw:dots1", OUString::number(m_nNumber1));
-        pAttrList->AddAttribute( " draw:dots1-length", DoubleToOUString(m_fLength1) + "cm");
+        pAttrList->AddAttribute( " draw:dots1-length", OUString::number(m_fLength1) + "cm");
 
         pAttrList->AddAttribute( "draw:dots2", OUString::number(m_nNumber2));
-        pAttrList->AddAttribute( " draw:dots2-length", DoubleToOUString(m_fLength2) + "cm");
+        pAttrList->AddAttribute( " draw:dots2-length", OUString::number(m_fLength2) + "cm");
     }
     else if( m_eLineStyle == enumXFLineDotDash )
     {
         pAttrList->AddAttribute( "draw:dots1", OUString::number(m_nNumber1));
 
         pAttrList->AddAttribute( "draw:dots2", OUString::number(m_nNumber2));
-        pAttrList->AddAttribute( " draw:dots2-length", DoubleToOUString(m_fLength2) + "cm");
+        pAttrList->AddAttribute( " draw:dots2-length", OUString::number(m_fLength2) + "cm");
     }
     else if( m_eLineStyle == enumXFLineDashDot )
     {
         pAttrList->AddAttribute( "draw:dots1", OUString::number(m_nNumber1));
-        pAttrList->AddAttribute( " draw:dots1-length", DoubleToOUString(m_fLength1) + "cm");
+        pAttrList->AddAttribute( " draw:dots1-length", OUString::number(m_fLength1) + "cm");
 
         pAttrList->AddAttribute( "draw:dots2", OUString::number(m_nNumber2));
     }
 
-    pAttrList->AddAttribute( "draw:distance", DoubleToOUString(m_fSpace) + "cm" );
+    pAttrList->AddAttribute( "draw:distance", OUString::number(m_fSpace) + "cm" );
 
     pStrm->StartElement( "draw:stroke-dash" );
     pStrm->EndElement( "draw:stroke-dash" );

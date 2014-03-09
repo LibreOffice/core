@@ -72,7 +72,7 @@ OUString XFSvgPathEntry::ToString()
     for( it = m_aPoints.begin(); it != m_aPoints.end(); ++it )
     {
         XFPoint aPt= *it;
-        str += DoubleToOUString(aPt.GetX()*1000) + " " + DoubleToOUString(aPt.GetY()*1000) + " ";
+        str += OUString::number(aPt.GetX()*1000) + " " + OUString::number(aPt.GetY()*1000) + " ";
     }
     return str.trim();
 }
@@ -141,8 +141,8 @@ void    XFDrawPath::ToXml(IXFStream *pStrm)
     XFRect  rect = m_aRect;
 
     OUString strViewBox = "0 0 ";
-    strViewBox += DoubleToOUString(rect.GetWidth()*1000) + " ";
-    strViewBox += DoubleToOUString(rect.GetHeight()*1000);
+    strViewBox += OUString::number(rect.GetWidth()*1000) + " ";
+    strViewBox += OUString::number(rect.GetHeight()*1000);
     pAttrList->AddAttribute( "svg:viewBox", strViewBox);
 
     //points

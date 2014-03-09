@@ -108,23 +108,23 @@ void XFDrawObject::ToXml(IXFStream *pStrm)
     }
     pAttrList->AddAttribute( "draw:z-index", OUString::number(m_nZIndex) );
 
-    pAttrList->AddAttribute( "svg:x", DoubleToOUString(m_aRect.GetX()) + "cm" );
-    pAttrList->AddAttribute( "svg:y", DoubleToOUString(m_aRect.GetY()) + "cm" );
-    pAttrList->AddAttribute( "svg:width", DoubleToOUString(m_aRect.GetWidth()) + "cm" );
-    pAttrList->AddAttribute( "svg:height", DoubleToOUString(m_aRect.GetHeight()) + "cm" );
+    pAttrList->AddAttribute( "svg:x", OUString::number(m_aRect.GetX()) + "cm" );
+    pAttrList->AddAttribute( "svg:y", OUString::number(m_aRect.GetY()) + "cm" );
+    pAttrList->AddAttribute( "svg:width", OUString::number(m_aRect.GetWidth()) + "cm" );
+    pAttrList->AddAttribute( "svg:height", OUString::number(m_aRect.GetHeight()) + "cm" );
 
     //transform
     OUString   strTransform;
     if( m_nFlag&XFDRAWOBJECT_FLAG_ROTATE )
-        strTransform = "rotate (" + DoubleToOUString(m_fRotate) + ") ";
+        strTransform = "rotate (" + OUString::number(m_fRotate) + ") ";
     if( m_nFlag&XFDRAWOBJECT_FLAG_TRANLATE )
-        strTransform += "translate (" + DoubleToOUString(m_aRotatePoint.GetX()) + "cm " + DoubleToOUString(m_aRotatePoint.GetY()) + "cm) ";
+        strTransform += "translate (" + OUString::number(m_aRotatePoint.GetX()) + "cm " + OUString::number(m_aRotatePoint.GetY()) + "cm) ";
     if( m_nFlag&XFDRAWOBJECT_FLAG_SCALE )
-        strTransform += "scale (" + DoubleToOUString(m_fScaleX) + "cm " + DoubleToOUString(m_fScaleY) + "cm) ";
+        strTransform += "scale (" + OUString::number(m_fScaleX) + "cm " + OUString::number(m_fScaleY) + "cm) ";
     if( m_nFlag&XFDRAWOBJECT_FLAG_SKEWX )
-        strTransform += "skewX (" + DoubleToOUString(m_fSkewX) + " ";
+        strTransform += "skewX (" + OUString::number(m_fSkewX) + " ";
     if( m_nFlag&XFDRAWOBJECT_FLAG_SKEWY )
-        strTransform += "skewY (" + DoubleToOUString(m_fSkewY) + " ";
+        strTransform += "skewY (" + OUString::number(m_fSkewY) + " ";
     strTransform = strTransform.trim();
 
     if( !strTransform.isEmpty() )

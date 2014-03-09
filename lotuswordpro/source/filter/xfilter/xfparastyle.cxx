@@ -422,7 +422,7 @@ void    XFParaStyle::ToXml(IXFStream *pStrm)
     //text indent:
     if( m_fTextIndent )
     {
-        pAttrList->AddAttribute("fo:text-indent", DoubleToOUString(m_fTextIndent) + "cm" );
+        pAttrList->AddAttribute("fo:text-indent", OUString::number(m_fTextIndent) + "cm" );
     }
     //padding:
     m_aPadding.ToXml(pStrm);
@@ -523,7 +523,7 @@ void XFDefaultParaStyle::ToXml(IXFStream * pStrm)
     //Paragraph properties:
     pAttrList->Clear();
 
-    pAttrList->AddAttribute("style:tab-stop-distance", DoubleToOUString(m_fTabDistance) + "cm" );
+    pAttrList->AddAttribute("style:tab-stop-distance", OUString::number(m_fTabDistance) + "cm" );
 
     pStrm->StartElement("style:properties");
     pStrm->EndElement("style:properties");

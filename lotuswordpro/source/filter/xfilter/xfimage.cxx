@@ -118,10 +118,10 @@ void    XFImage::ToXml(IXFStream *pStrm)
     default:
         break;
     }
-    pAttrList->AddAttribute( "svg:x", DoubleToOUString(m_aRect.GetX()) + "cm" );
-    pAttrList->AddAttribute( "svg:y", DoubleToOUString(m_aRect.GetY()) + "cm" );
-    pAttrList->AddAttribute( "svg:width", DoubleToOUString(m_aRect.GetWidth()) + "cm" );
-    pAttrList->AddAttribute( "svg:height", DoubleToOUString(m_aRect.GetHeight()) + "cm" );
+    pAttrList->AddAttribute( "svg:x", OUString::number(m_aRect.GetX()) + "cm" );
+    pAttrList->AddAttribute( "svg:y", OUString::number(m_aRect.GetY()) + "cm" );
+    pAttrList->AddAttribute( "svg:width", OUString::number(m_aRect.GetWidth()) + "cm" );
+    pAttrList->AddAttribute( "svg:height", OUString::number(m_aRect.GetHeight()) + "cm" );
     pAttrList->AddAttribute( "draw:z-index", OUString::number(m_nZIndex) );
 
     if( m_bUseLink )

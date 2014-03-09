@@ -89,7 +89,7 @@ void    XFDrawAreaStyle::ToXml(IXFStream *pStrm)
 
     pAttrList->AddAttribute( "draw:color", m_aLineColor.ToString() );
     pAttrList->AddAttribute( "draw:rotation", OUString::number(m_nAngle*10) );
-    pAttrList->AddAttribute( "draw:distance", DoubleToOUString(m_fSpace)+"cm" );
+    pAttrList->AddAttribute( "draw:distance", OUString::number(m_fSpace)+"cm" );
 
     pStrm->StartElement( "draw:hatch" );
     pStrm->EndElement( "draw:hatch" );

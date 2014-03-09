@@ -164,7 +164,7 @@ inline void XFLineNumberConfig::ToXml(IXFStream *pStrm)
 
     if( !m_strTextStyle.isEmpty() )
         pAttrList->AddAttribute( "text:style-name", m_strTextStyle );
-    pAttrList->AddAttribute( "text:offset", DoubleToOUString(m_fOffset) + "cm" );
+    pAttrList->AddAttribute( "text:offset", OUString::number(m_fOffset) + "cm" );
     pAttrList->AddAttribute( "style:num-format", m_strNumFmt );
     //position:
     if( m_ePosition == enumXFLineNumberLeft )

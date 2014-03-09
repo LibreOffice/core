@@ -87,18 +87,6 @@ OUString   FloatToOUString(float num, sal_Int32 /*precision*/)
     return OUString::number(num);
 }
 
-OUString   DoubleToOUString(double num, sal_Int32 /*precision*/)
-{
-    /*std::stringstream sstrm;
-    std::string         strRet;
-
-    sstrm.precision(precision);
-    sstrm<<num;
-    return OUString::createFromAscii(sstrm.str().c_str());
-    */
-    return OUString::number(num);
-}
-
 OUString   DateTimeToOUString(XFDateTime& dt)
 {
     OUString aResult = OUString::number(dt.nYear) + "-" + OUString::number(dt.nMonth) + "-" + OUString::number(dt.nDay) +

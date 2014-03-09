@@ -220,9 +220,9 @@ void    XFPageMaster::ToXml(IXFStream *pStream)
     //style:properties
     pAttrList->Clear();
     if( m_fPageWidth != 0 )
-        pAttrList->AddAttribute( "fo:page-width", DoubleToOUString(m_fPageWidth) + "cm" );
+        pAttrList->AddAttribute( "fo:page-width", OUString::number(m_fPageWidth) + "cm" );
     if( m_fPageHeight != 0 )
-        pAttrList->AddAttribute( "fo:page-height", DoubleToOUString(m_fPageHeight) + "cm" );
+        pAttrList->AddAttribute( "fo:page-height", OUString::number(m_fPageHeight) + "cm" );
 
     m_aMargin.ToXml(pStream);
 
@@ -253,9 +253,9 @@ void    XFPageMaster::ToXml(IXFStream *pStream)
     if( m_eSepAlign || m_nSepLengthPercent>0 || m_fSepSpaceAbove>0 || m_fSepSpaceBelow>0 )
     {
         pAttrList->Clear();
-        pAttrList->AddAttribute( "style:width", DoubleToOUString(m_fSepWidth) + "cm" );
-        pAttrList->AddAttribute( "style:distance-before-sep", DoubleToOUString(m_fSepSpaceAbove) + "cm" );
-        pAttrList->AddAttribute( "style:distance-after-sep", DoubleToOUString(m_fSepSpaceBelow) + "cm" );
+        pAttrList->AddAttribute( "style:width", OUString::number(m_fSepWidth) + "cm" );
+        pAttrList->AddAttribute( "style:distance-before-sep", OUString::number(m_fSepSpaceAbove) + "cm" );
+        pAttrList->AddAttribute( "style:distance-after-sep", OUString::number(m_fSepSpaceBelow) + "cm" );
         pAttrList->AddAttribute( "style:color", m_aSepColor.ToString() );
         if( m_eSepAlign == enumXFAlignStart )
             pAttrList->AddAttribute( "style:adjustment", "left" );
