@@ -775,7 +775,7 @@ IMPL_LINK_NOARG( DataSourceTabPage, AddMappingHdl )
     short aRet = aDlg.Execute();
     if(aRet == RET_OK)
     {
-        OUString aNewMappingName = aDlg.getSelectedEntry();
+        OUString aNewMappingName = DialogModel::ConvertRoleFromUIToInternal(aDlg.getSelectedEntry());
         if(!aNewMappingName.isEmpty())
             m_pLB_ROLE->InsertEntry( lcl_GetRoleLBEntry( aNewMappingName, OUString()));
     }

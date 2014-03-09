@@ -742,6 +742,11 @@ OUString DialogModel::ConvertRoleFromInternalToUI( const OUString & rRoleString 
     return lcl_ConvertRole( rRoleString, true );
 }
 
+OUString DialogModel::ConvertRoleFromUIToInternal( const OUString & rRoleString )
+{
+    return lcl_ConvertRole( rRoleString, false );
+}
+
 OUString DialogModel::GetRoleDataLabel()
 {
     return ::chart::SchResId(STR_OBJECT_DATALABELS).toString();
