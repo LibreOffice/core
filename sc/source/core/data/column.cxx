@@ -81,6 +81,7 @@ ScColumn::ScColumn() :
     maBroadcasters(MAXROWCOUNT),
     maCells(MAXROWCOUNT),
     nCol( 0 ),
+    nTab( 0 ),
     pAttrArray( NULL ),
     pDocument( NULL ),
     mbDirtyGroups(true)
