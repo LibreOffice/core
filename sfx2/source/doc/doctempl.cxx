@@ -1212,7 +1212,7 @@ sal_Bool SfxDocumentTemplates::GetLogicNames
             for ( sal_uIntPtr j=0; !bFound && (j<nChildCount); j++ )
             {
                 pEntry = pData->GetEntry( j );
-                if ( pEntry->GetTargetURL() == aPath )
+                if ( pEntry && pEntry->GetTargetURL() == aPath )
                 {
                     bFound = sal_True;
                 }
