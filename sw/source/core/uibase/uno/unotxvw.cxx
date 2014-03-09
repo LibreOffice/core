@@ -1630,7 +1630,7 @@ sal_Bool SwXTextViewCursor::goDown(sal_Int16 nCount, sal_Bool bExpand)
             throw  uno::RuntimeException("no text selection", static_cast < cppu::OWeakObject * > ( this ) );
 
         for( sal_uInt16 i = 0; i < nCount; i++ )
-            bRet = m_pView->GetWrtShell().Down( bExpand, 1, sal_True );
+            bRet = m_pView->GetWrtShell().Down( bExpand, 1, true );
     }
     else
         throw uno::RuntimeException();
@@ -1648,7 +1648,7 @@ sal_Bool SwXTextViewCursor::goUp(sal_Int16 nCount, sal_Bool bExpand)
             throw  uno::RuntimeException("no text selection", static_cast < cppu::OWeakObject * > ( this ) );
 
         for( sal_uInt16 i = 0; i < nCount; i++ )
-            bRet = m_pView->GetWrtShell().Up( bExpand, 1, sal_True );
+            bRet = m_pView->GetWrtShell().Up( bExpand, 1, true );
     }
     else
         throw uno::RuntimeException();

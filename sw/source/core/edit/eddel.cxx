@@ -170,7 +170,7 @@ long SwEditShell::Copy( SwEditShell* pDestShell )
                 if( nMove )
                 {
                     SwCursor aCrsr( *pPos, 0, false);
-                    if( aCrsr.UpDown( sal_False, nMove, 0, 0 ) )
+                    if( aCrsr.UpDown( false, nMove, 0, 0 ) )
                     {
                         pInsertPos.reset( new SwPosition( *aCrsr.GetPoint() ) );
                         aInsertList.push_back( pInsertPos );

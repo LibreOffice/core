@@ -156,7 +156,7 @@ public:
 
     virtual sal_Bool LeftRight( sal_Bool bLeft, sal_uInt16 nCnt, sal_uInt16 nMode,
         sal_Bool bAllowVisual, sal_Bool bSkipHidden, sal_Bool bInsertCrsr );
-    sal_Bool UpDown( sal_Bool bUp, sal_uInt16 nCnt, Point* pPt, long nUpDownX );
+    bool UpDown( bool bUp, sal_uInt16 nCnt, Point* pPt, long nUpDownX );
     sal_Bool LeftRightMargin( sal_Bool bLeftMargin, sal_Bool bAPI = sal_False );
     sal_Bool IsAtLeftRightMargin( sal_Bool bLeftMargin, sal_Bool bAPI = sal_False ) const;
     sal_Bool SttEndDoc( sal_Bool bSttDoc );

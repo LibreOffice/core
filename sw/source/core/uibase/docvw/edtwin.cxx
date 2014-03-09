@@ -617,9 +617,9 @@ IMPL_LINK_NOARG(SwEditWin, TimerHandler)
             // take the center point of VisArea to
             // decide in which direction the user want.
             if( aModPt.Y() < ( rVisArea.Top() + rVisArea.Height() / 2 ) )
-                rSh.Up( sal_True, 1 );
+                rSh.Up( true, 1 );
             else
-                rSh.Down( sal_True, 1 );
+                rSh.Down( true, 1 );
         }
     }
 

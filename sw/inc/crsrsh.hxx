@@ -254,7 +254,7 @@ private:
 
     // private method(s) accessed from public inline method(s) must be exported.
                   sal_Bool LeftRight( sal_Bool, sal_uInt16, sal_uInt16, sal_Bool );
-    SAL_DLLPRIVATE sal_Bool UpDown( sal_Bool, sal_uInt16 );
+    SAL_DLLPRIVATE bool UpDown( bool, sal_uInt16 );
     SAL_DLLPRIVATE sal_Bool LRMargin( sal_Bool, sal_Bool bAPI = sal_False );
     SAL_DLLPRIVATE sal_Bool IsAtLRMargin( sal_Bool, sal_Bool bAPI = sal_False ) const;
 
@@ -361,8 +361,8 @@ public:
         { return LeftRight( sal_True, nCnt, nMode, bAllowVisual ); }
     sal_Bool Right( sal_uInt16 nCnt, sal_uInt16 nMode, sal_Bool bAllowVisual = sal_False )
         { return LeftRight( sal_False, nCnt, nMode, bAllowVisual ); }
-    sal_Bool Up( sal_uInt16 nCnt = 1 )      { return UpDown( sal_True, nCnt ); }
-    sal_Bool Down( sal_uInt16 nCnt = 1 )    { return UpDown( sal_False, nCnt ); }
+    bool Up( sal_uInt16 nCnt = 1 )      { return UpDown( true, nCnt ); }
+    bool Down( sal_uInt16 nCnt = 1 )    { return UpDown( false, nCnt ); }
     sal_Bool LeftMargin()               { return LRMargin( sal_True ); }
     sal_Bool RightMargin(sal_Bool bAPI = sal_False) { return LRMargin( sal_False, bAPI ); }
     sal_Bool SttEndDoc( sal_Bool bStt );

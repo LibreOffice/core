@@ -1701,7 +1701,7 @@ sal_Bool SwXTextTableCursor::goUp(sal_Int16 Count, sal_Bool Expand) throw( uno::
     {
         SwUnoTableCrsr* pTblCrsr = dynamic_cast<SwUnoTableCrsr*>(pUnoCrsr);
         lcl_CrsrSelect( pTblCrsr, Expand );
-        bRet = pTblCrsr->UpDown(sal_True, Count, 0, 0);
+        bRet = pTblCrsr->UpDown(true, Count, 0, 0);
     }
     return bRet;
 }
@@ -1715,7 +1715,7 @@ sal_Bool SwXTextTableCursor::goDown(sal_Int16 Count, sal_Bool Expand) throw( uno
     {
         SwUnoTableCrsr* pTblCrsr = dynamic_cast<SwUnoTableCrsr*>(pUnoCrsr);
         lcl_CrsrSelect( pTblCrsr, Expand );
-        bRet = pTblCrsr->UpDown(sal_False, Count, 0, 0);
+        bRet = pTblCrsr->UpDown(false, Count, 0, 0);
     }
     return bRet;
 }

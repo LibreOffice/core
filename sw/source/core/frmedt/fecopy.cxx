@@ -760,7 +760,7 @@ sal_Bool SwFEShell::Paste( SwDoc* pClpDoc, sal_Bool bIncludingPageFrames )
                     SwCursor aCrsr( aStartPos, 0, false);
                     // Check if we find another insert position by moving
                     // down the last given position
-                    if( aCrsr.UpDown( sal_False, ++nMove, 0, 0 ) )
+                    if( aCrsr.UpDown( false, ++nMove, 0, 0 ) )
                         aInsertPos = *aCrsr.GetPoint();
                     else // if there is no paragraph we have to create it
                         bCompletePara = nCount > 0;

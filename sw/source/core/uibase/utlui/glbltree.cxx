@@ -973,7 +973,7 @@ void    SwGlobalTree::ExcecuteContextMenuAction( sal_uInt16 nSelectedPopupEntry 
             else
             {
                 pActiveShell->SplitNode(); // Empty document
-                pActiveShell->Up( sal_False, 1 );
+                pActiveShell->Up( false, 1 );
             }
             pActiveShell->GetView().GetEditWin().GrabFocus();
         }

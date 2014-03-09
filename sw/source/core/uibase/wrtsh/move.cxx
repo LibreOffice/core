@@ -128,23 +128,21 @@ sal_Bool SwWrtShell::Right( sal_uInt16 nMode, sal_Bool bSelect,
     }
 }
 
-sal_Bool SwWrtShell::Up( sal_Bool bSelect, sal_uInt16 nCount, sal_Bool bBasicCall )
+bool SwWrtShell::Up( bool bSelect, sal_uInt16 nCount, bool bBasicCall )
 {
     if ( !bSelect && !bBasicCall && IsCrsrReadonly()  && !GetViewOptions()->IsSelectionInReadonly())
     {
         Point aTmp( VisArea().Pos() );
         aTmp.Y() -= VisArea().Height() * nReadOnlyScrollOfst / 100;
         rView.SetVisArea( aTmp );
-        return sal_True;
+        return true;
     }
-    else
-    {
-        ShellMoveCrsr aTmp( this, bSelect );
-        return SwCrsrShell::Up( nCount );
-    }
+
+    ShellMoveCrsr aTmp( this, bSelect );
+    return SwCrsrShell::Up( nCount );
 }
 
-sal_Bool SwWrtShell::Down( sal_Bool bSelect, sal_uInt16 nCount, sal_Bool bBasicCall )
+bool SwWrtShell::Down( bool bSelect, sal_uInt16 nCount, bool bBasicCall )
 {
     if ( !bSelect && !bBasicCall && IsCrsrReadonly() && !GetViewOptions()->IsSelectionInReadonly())
     {
@@ -152,13 +150,11 @@ sal_Bool SwWrtShell::Down( sal_Bool bSelect, sal_uInt16 nCount, sal_Bool bBasicC
         aTmp.Y() += VisArea().Height() * nReadOnlyScrollOfst / 100;
         aTmp.Y() = rView.SetVScrollMax( aTmp.Y() );
         rView.SetVisArea( aTmp );
-        return sal_True;
+        return true;
     }
-    else
-    {
-        ShellMoveCrsr aTmp( this, bSelect );
-        return SwCrsrShell::Down( nCount );
-    }
+
+    ShellMoveCrsr aTmp( this, bSelect );
+    return SwCrsrShell::Down( nCount );
 }
 
 sal_Bool SwWrtShell::LeftMargin( sal_Bool bSelect, sal_Bool bBasicCall )

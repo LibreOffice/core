@@ -193,10 +193,8 @@ typedef sal_Bool (SwWrtShell:: *FNSimpleMove)();
                             sal_uInt16 nCount, sal_Bool bBasicCall, sal_Bool bVisual = sal_False );
     sal_Bool Right      ( sal_uInt16 nMode, sal_Bool bSelect,
                             sal_uInt16 nCount, sal_Bool bBasicCall, sal_Bool bVisual = sal_False );
-    sal_Bool Up         ( sal_Bool bSelect = sal_False, sal_uInt16 nCount = 1,
-                            sal_Bool bBasicCall = sal_False );
-    sal_Bool Down       ( sal_Bool bSelect = sal_False, sal_uInt16 nCount = 1,
-                            sal_Bool bBasicCall = sal_False );
+    bool Up         ( bool bSelect = false, sal_uInt16 nCount = 1, bool bBasicCall = false );
+    bool Down       ( bool bSelect = false, sal_uInt16 nCount = 1, bool bBasicCall = false );
     sal_Bool NxtWrd     ( sal_Bool bSelect = sal_False ) { return SimpleMove( &SwWrtShell::_NxtWrd, bSelect ); }
     sal_Bool PrvWrd     ( sal_Bool bSelect = sal_False ) { return SimpleMove( &SwWrtShell::_PrvWrd, bSelect ); }
 

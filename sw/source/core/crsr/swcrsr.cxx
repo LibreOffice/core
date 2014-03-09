@@ -1750,7 +1750,7 @@ void SwCursor::DoSetBidiLevelUpDown()
     }
 }
 
-sal_Bool SwCursor::UpDown( sal_Bool bUp, sal_uInt16 nCnt,
+bool SwCursor::UpDown( bool bUp, sal_uInt16 nCnt,
                             Point* pPt, long nUpDownX )
 {
     SwTableCursor* pTblCrsr = dynamic_cast<SwTableCursor*>(this);
@@ -1766,7 +1766,7 @@ sal_Bool SwCursor::UpDown( sal_Bool bUp, sal_uInt16 nCnt,
         bAdjustTableCrsr = true;
     }
 
-    sal_Bool bRet = sal_False;
+    bool bRet = false;
     Point aPt;
     if( pPt )
         aPt = *pPt;
@@ -1790,7 +1790,7 @@ sal_Bool SwCursor::UpDown( sal_Bool bUp, sal_uInt16 nCnt,
         // It is allowed to move footnotes in other footnotes but not sections
         const bool bChkRange = pFrm->IsInFtn() && !HasMark();
         const SwPosition aOldPos( *GetPoint() );
-        sal_Bool bInReadOnly = IsReadOnlyAvailable();
+        const bool bInReadOnly = IsReadOnlyAvailable();
 
         if ( bAdjustTableCrsr && !bUp )
         {

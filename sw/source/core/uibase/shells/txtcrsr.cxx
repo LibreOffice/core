@@ -49,7 +49,7 @@ void SwTextShell::ExecBasicMove(SfxRequest &rReq)
     SwWrtShell &rSh = GetShell();
     GetView().GetEditWin().FlushInBuffer();
     const SfxItemSet *pArgs = rReq.GetArgs();
-    sal_Bool bSelect = sal_False;
+    bool bSelect = false;
     sal_Int32 nCount = 1;
     if(pArgs)
     {
@@ -61,10 +61,10 @@ void SwTextShell::ExecBasicMove(SfxRequest &rReq)
     }
     switch(rReq.GetSlot())
     {
-        case FN_CHAR_LEFT_SEL:  rReq.SetSlot( FN_CHAR_LEFT );  bSelect = sal_True; break;
-        case FN_CHAR_RIGHT_SEL: rReq.SetSlot( FN_CHAR_RIGHT ); bSelect = sal_True; break;
-        case FN_LINE_UP_SEL:    rReq.SetSlot( FN_LINE_UP );    bSelect = sal_True; break;
-        case FN_LINE_DOWN_SEL:  rReq.SetSlot( FN_LINE_DOWN );  bSelect = sal_True; break;
+        case FN_CHAR_LEFT_SEL:  rReq.SetSlot( FN_CHAR_LEFT );  bSelect = true; break;
+        case FN_CHAR_RIGHT_SEL: rReq.SetSlot( FN_CHAR_RIGHT ); bSelect = true; break;
+        case FN_LINE_UP_SEL:    rReq.SetSlot( FN_LINE_UP );    bSelect = true; break;
+        case FN_LINE_DOWN_SEL:  rReq.SetSlot( FN_LINE_DOWN );  bSelect = true; break;
     }
 
     uno::Reference< frame::XDispatchRecorder > xRecorder =

@@ -498,7 +498,7 @@ bool SwCrsrShell::bColumnChange()
     }
 }
 
-sal_Bool SwCrsrShell::UpDown( sal_Bool bUp, sal_uInt16 nCnt )
+bool SwCrsrShell::UpDown( bool bUp, sal_uInt16 nCnt )
 {
     SET_CURR_SHELL( this );
     SwCallLink aLk( *this ); // watch Crsr-Moves; call Link if needed
@@ -506,9 +506,9 @@ sal_Bool SwCrsrShell::UpDown( sal_Bool bUp, sal_uInt16 nCnt )
     sal_Bool bTableMode = IsTableMode();
     SwShellCrsr* pTmpCrsr = getShellCrsr( true );
 
-    sal_Bool bRet = pTmpCrsr->UpDown( bUp, nCnt );
+    bool bRet = pTmpCrsr->UpDown( bUp, nCnt );
     // #i40019# UpDown should always reset the bInFrontOfLabel flag:
-    bRet = SetInFrontOfLabel(false) || bRet;
+    bRet |= SetInFrontOfLabel(false);
 
     if( m_pBlockCrsr )
         m_pBlockCrsr->clearPoints();

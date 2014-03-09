@@ -623,7 +623,7 @@ void SwShellCrsr::SaveTblBoxCntnt( const SwPosition* pPos )
     ((SwCrsrShell*)GetShell())->SaveTblBoxCntnt( pPos );
 }
 
-sal_Bool SwShellCrsr::UpDown( sal_Bool bUp, sal_uInt16 nCnt )
+bool SwShellCrsr::UpDown( bool bUp, sal_uInt16 nCnt )
 {
     return SwCursor::UpDown( bUp, nCnt,
                             &GetPtPos(), GetShell()->GetUpDownX() );

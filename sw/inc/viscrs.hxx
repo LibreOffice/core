@@ -149,7 +149,7 @@ public:
     virtual short MaxReplaceArived(); //returns RET_YES/RET_CANCEL/RET_NO
     virtual void SaveTblBoxCntnt( const SwPosition* pPos = 0 );
 
-    sal_Bool UpDown( sal_Bool bUp, sal_uInt16 nCnt = 1 );
+    bool UpDown( bool bUp, sal_uInt16 nCnt = 1 );
 
     // sal_True: Cursor can be set to this position.
     virtual sal_Bool IsAtValidPos( sal_Bool bPoint = sal_True ) const;

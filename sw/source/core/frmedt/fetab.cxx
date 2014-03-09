@@ -2196,8 +2196,6 @@ static bool lcl_GoTableRow( SwCrsrShell* pShell, bool bUp )
 {
     OSL_ENSURE( pShell != NULL, "need shell" );
 
-    bool bRet = false;
-
     SwPaM* pPam = pShell->GetCrsr();
     const SwStartNode* pTableBox = pPam->GetNode()->FindTableBoxStartNode();
     OSL_ENSURE( pTableBox != NULL, "I'm living in a box... NOT!" );
@@ -2212,9 +2210,7 @@ static bool lcl_GoTableRow( SwCrsrShell* pShell, bool bUp )
     pShell->MoveSection( fnSectionCurr, fnPosSect );
 
     // and go up/down into next content
-    bRet = bUp ? pShell->Up() : pShell->Down();
-
-    return bRet;
+    return bUp ? pShell->Up() : pShell->Down();
 }
 
     // aender eine  Zellenbreite/-Hoehe/Spaltenbreite/Zeilenhoehe
