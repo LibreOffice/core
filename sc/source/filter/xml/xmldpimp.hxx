@@ -121,8 +121,6 @@ class ScXMLDataPilotTableContext : public SvXMLImportContext
     const ScXMLImport& GetScImport() const { return (const ScXMLImport&)GetImport(); }
     ScXMLImport& GetScImport() { return (ScXMLImport&)GetImport(); }
 
-    void ProcessSelectedPages();
-
 public:
 
     ScXMLDataPilotTableContext( ScXMLImport& rImport, sal_uInt16 nPrfx,

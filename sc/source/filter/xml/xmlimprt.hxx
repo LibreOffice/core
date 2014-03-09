@@ -55,6 +55,10 @@ class XMLNumberFormatAttributesExportHelper;
 class ScEditEngineDefaulter;
 class ScDocumentImport;
 
+namespace sc {
+    struct PivotTableSources;
+}
+
 enum ScXMLDocTokens
 {
     XML_TOK_DOC_FONTDECLS,
@@ -807,6 +811,8 @@ class ScXMLImport: public SvXMLImport, boost::noncopyable
     boost::scoped_ptr<ScDocumentImport> mpDocImport;
     boost::scoped_ptr<ScCompiler> mpComp; // For error-checking of cached string cell values.
     boost::scoped_ptr<ScEditEngineDefaulter> mpEditEngine;
+    boost::scoped_ptr<sc::PivotTableSources> mpPivotSources;
+
     mutable boost::scoped_ptr<ScXMLEditAttributeMap> mpEditAttrMap;
     ScXMLChangeTrackingImportHelper*    pChangeTrackingImportHelper;
     ScMyViewContextList                 aViewContextList;
@@ -1077,6 +1083,8 @@ public:
     const SvXMLTokenMap& GetCellTextSpanAttrTokenMap();
     const SvXMLTokenMap& GetCellTextURLAttrTokenMap();
     const SvXMLTokenMap& GetCellTextSAttrTokenMap();
+
+    sc::PivotTableSources& GetPivotTableSources();
 
     void AddNamedExpression(ScMyNamedExpression* pMyNamedExpression)
     {
