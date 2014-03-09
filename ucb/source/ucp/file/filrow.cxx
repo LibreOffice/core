@@ -88,40 +88,6 @@ XRow_impl::~XRow_impl()
 }
 
 
-void SAL_CALL
-XRow_impl::acquire(
-           void )
-  throw()
-{
-  OWeakObject::acquire();
-}
-
-void SAL_CALL
-XRow_impl::release(
-           void )
-  throw()
-{
-  OWeakObject::release();
-}
-
-
-uno::Any SAL_CALL
-XRow_impl::queryInterface(
-              const uno::Type& rType )
-  throw( uno::RuntimeException, std::exception )
-{
-  uno::Any aRet = cppu::queryInterface( rType,
-                    (static_cast< lang::XTypeProvider* >(this)),
-                    (static_cast< sdbc::XRow* >(this)) );
-  return aRet.hasValue() ? aRet : OWeakObject::queryInterface( rType );
-}
-
-
-XTYPEPROVIDER_IMPL_2( XRow_impl,
-                         lang::XTypeProvider,
-                      sdbc::XRow )
-
-
 sal_Bool SAL_CALL
 XRow_impl::wasNull(
            void )

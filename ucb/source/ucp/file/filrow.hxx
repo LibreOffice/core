@@ -19,46 +19,21 @@
 #ifndef _FILROW_HXX_
 #define _FILROW_HXX_
 
-#include <ucbhelper/macros.hxx>
-
-#include "osl/mutex.hxx"
-#include <cppuhelper/weak.hxx>
 #include <com/sun/star/sdbc/XRow.hpp>
 #include <com/sun/star/script/XTypeConverter.hpp>
-#include <com/sun/star/lang/XTypeProvider.hpp>
 #include <com/sun/star/ucb/XContentProvider.hpp>
+#include <cppuhelper/implbase1.hxx>
 
 namespace fileaccess {
 
     class shell;
 
-    class XRow_impl:
-        public cppu::OWeakObject,
-        public com::sun::star::lang::XTypeProvider,
-        public com::sun::star::sdbc::XRow
+    class XRow_impl: public cppu::WeakImplHelper1<
+        css::sdbc::XRow >
     {
     public:
         XRow_impl( shell* pShell,const com::sun::star::uno::Sequence< com::sun::star::uno::Any >& __m_aValueMap );
         ~XRow_impl();
-
-        virtual com::sun::star::uno::Any SAL_CALL
-        queryInterface(
-            const com::sun::star::uno::Type& aType )
-            throw( com::sun::star::uno::RuntimeException, std::exception);
-
-        virtual void SAL_CALL
-        acquire(
-            void )
-            throw();
-
-        virtual void SAL_CALL
-        release(
-            void )
-            throw();
-
-        // XTypeProvider
-
-        XTYPEPROVIDER_DECL()
 
         virtual sal_Bool SAL_CALL
         wasNull(
