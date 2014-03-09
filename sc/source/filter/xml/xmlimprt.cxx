@@ -3232,7 +3232,9 @@ void SAL_CALL ScXMLImport::endDocument()
             SetLabelRanges();
             SetNamedRanges();
             SetSheetNamedRanges();
-            GetPivotTableSources().process();
+            if (mpPivotSources)
+                // Process pivot table sources after the named ranges have been set.
+                mpPivotSources->process();
         }
         GetProgressBarHelper()->End();  // make room for subsequent SfxProgressBars
         if (pDoc)
