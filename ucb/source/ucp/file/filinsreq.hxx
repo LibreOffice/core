@@ -21,14 +21,12 @@
 #ifndef _FILINSREQ_HXX_
 #define _FILINSREQ_HXX_
 
-#include <cppuhelper/weak.hxx>
-#include <ucbhelper/macros.hxx>
 #include <rtl/ustring.hxx>
 #include <com/sun/star/uno/XInterface.hpp>
-#include <com/sun/star/lang/XTypeProvider.hpp>
 #include <com/sun/star/task/XInteractionAbort.hpp>
 #include <com/sun/star/ucb/XInteractionSupplyName.hpp>
 #include <com/sun/star/task/XInteractionRequest.hpp>
+#include <cppuhelper/implbase1.hxx>
 
 
 namespace fileaccess {
@@ -37,10 +35,8 @@ namespace fileaccess {
     class shell;
 
 
-    class XInteractionSupplyNameImpl
-        : public cppu::OWeakObject,
-          public com::sun::star::lang::XTypeProvider,
-          public com::sun::star::ucb::XInteractionSupplyName
+class XInteractionSupplyNameImpl : public cppu::WeakImplHelper1<
+    css::ucb::XInteractionSupplyName >
     {
     public:
 
@@ -48,27 +44,6 @@ namespace fileaccess {
             : m_bSelected(false)
         {
         }
-
-        virtual com::sun::star::uno::Any SAL_CALL
-        queryInterface(
-            const com::sun::star::uno::Type& rType )
-            throw( com::sun::star::uno::RuntimeException, std::exception);
-
-        virtual void SAL_CALL
-        acquire(
-            void )
-            throw();
-
-        virtual void SAL_CALL
-        release(
-            void )
-            throw();
-
-
-        // XTypeProvider
-
-        XTYPEPROVIDER_DECL()
-
 
         virtual void SAL_CALL select()
             throw (::com::sun::star::uno::RuntimeException, std::exception)
@@ -100,10 +75,8 @@ namespace fileaccess {
 
 
 
-    class XInteractionAbortImpl
-        : public cppu::OWeakObject,
-          public com::sun::star::lang::XTypeProvider,
-          public com::sun::star::task::XInteractionAbort
+    class XInteractionAbortImpl : public cppu::WeakImplHelper1<
+        css::task::XInteractionAbort >
     {
     public:
 
@@ -111,27 +84,6 @@ namespace fileaccess {
             : m_bSelected(false)
         {
         }
-
-        virtual com::sun::star::uno::Any SAL_CALL
-        queryInterface(
-            const com::sun::star::uno::Type& rType )
-            throw( com::sun::star::uno::RuntimeException, std::exception);
-
-        virtual void SAL_CALL
-        acquire(
-            void )
-            throw();
-
-        virtual void SAL_CALL
-        release(
-            void )
-            throw();
-
-
-        // XTypeProvider
-
-        XTYPEPROVIDER_DECL()
-
 
         virtual void SAL_CALL select()
             throw (::com::sun::star::uno::RuntimeException, std::exception)
@@ -152,10 +104,8 @@ namespace fileaccess {
 
 
 
-    class XInteractionRequestImpl
-        : public cppu::OWeakObject,
-          public com::sun::star::lang::XTypeProvider,
-          public com::sun::star::task::XInteractionRequest
+    class XInteractionRequestImpl : public cppu::WeakImplHelper1<
+        css::task::XInteractionRequest >
     {
     public:
 
@@ -165,26 +115,6 @@ namespace fileaccess {
             com::sun::star::uno::XInterface>& xOrigin,
             shell* pShell,
             sal_Int32 CommandId);
-
-        virtual com::sun::star::uno::Any SAL_CALL
-        queryInterface(
-            const com::sun::star::uno::Type& rType )
-            throw( com::sun::star::uno::RuntimeException, std::exception);
-
-        virtual void SAL_CALL
-        acquire(
-            void )
-            throw();
-
-        virtual void SAL_CALL
-        release(
-            void )
-            throw();
-
-
-        // XTypeProvider
-
-        XTYPEPROVIDER_DECL()
 
         ::com::sun::star::uno::Any SAL_CALL getRequest(  )
             throw (::com::sun::star::uno::RuntimeException, std::exception);
