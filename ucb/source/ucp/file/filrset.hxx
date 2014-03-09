@@ -20,13 +20,9 @@
 #define _FILRSET_HXX_
 
 #include <vector>
-#include <ucbhelper/macros.hxx>
 #include <osl/file.hxx>
 
-#include "osl/mutex.hxx"
-#include <cppuhelper/weak.hxx>
 #include <cppuhelper/interfacecontainer.hxx>
-#include <com/sun/star/lang/XTypeProvider.hpp>
 #include <com/sun/star/ucb/XContentAccess.hpp>
 #include <com/sun/star/sdbc/XCloseable.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -39,6 +35,7 @@
 #include <com/sun/star/beans/Property.hpp>
 #include "filrow.hxx"
 #include "filnot.hxx"
+#include <cppuhelper/implbase8.hxx>
 
 
 
@@ -46,18 +43,15 @@ namespace fileaccess {
 
     class Notifier;
 
-    class XResultSet_impl
-        : public cppu::OWeakObject,
-          public com::sun::star::lang::XTypeProvider,
-          public com::sun::star::lang::XEventListener,
-          public com::sun::star::sdbc::XRow,
-          public com::sun::star::sdbc::XResultSet,
-          public com::sun::star::ucb::XDynamicResultSet,
-          public com::sun::star::sdbc::XCloseable,
-          public com::sun::star::sdbc::XResultSetMetaDataSupplier,
-          public com::sun::star::beans::XPropertySet,
-          public com::sun::star::ucb::XContentAccess,
-          public Notifier
+class XResultSet_impl : public Notifier,
+        public cppu::WeakImplHelper8< css::lang::XEventListener,
+                                      css::sdbc::XRow,
+                                      css::sdbc::XResultSet,
+                                      css::ucb::XDynamicResultSet,
+                                      css::sdbc::XCloseable,
+                                      css::sdbc::XResultSetMetaDataSupplier,
+                                      css::beans::XPropertySet,
+                                      css::ucb::XContentAccess >
     {
     public:
 
@@ -101,28 +95,6 @@ namespace fileaccess {
 
         sal_Int32 SAL_CALL CtorSuccess();
         sal_Int32 SAL_CALL getMinorError();
-
-        // XInterface
-        virtual com::sun::star::uno::Any SAL_CALL
-        queryInterface(
-            const com::sun::star::uno::Type& aType )
-            throw( com::sun::star::uno::RuntimeException, std::exception);
-
-        virtual void SAL_CALL
-        acquire(
-            void )
-            throw();
-
-        virtual void SAL_CALL
-        release(
-            void )
-            throw();
-
-
-        // XTypeProvider
-
-        XTYPEPROVIDER_DECL()
-
 
         // XEventListener
         virtual void SAL_CALL

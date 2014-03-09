@@ -107,64 +107,11 @@ sal_Int32 SAL_CALL XResultSet_impl::getMinorError()
 
 
 void SAL_CALL
-XResultSet_impl::acquire(
-    void )
-    throw()
-{
-    OWeakObject::acquire();
-}
-
-
-void SAL_CALL
-XResultSet_impl::release(
-    void )
-    throw()
-{
-    OWeakObject::release();
-}
-
-
-
-uno::Any SAL_CALL
-XResultSet_impl::queryInterface(
-    const uno::Type& rType )
-    throw( uno::RuntimeException, std::exception )
-{
-    uno::Any aRet = cppu::queryInterface(
-        rType,
-        (static_cast< lang::XComponent* >(this)),
-        (static_cast< lang::XTypeProvider* >(this)),
-        (static_cast< lang::XEventListener* >(this)),
-        (static_cast< sdbc::XRow* >(this)),
-        (static_cast< sdbc::XResultSet* >(this)),
-        (static_cast< sdbc::XCloseable* >(this)),
-        (static_cast< sdbc::XResultSetMetaDataSupplier* >(this)),
-        (static_cast< beans::XPropertySet* >(this)),
-        (static_cast< ucb::XContentAccess* >(this)),
-        (static_cast< ucb::XDynamicResultSet* >(this)) );
-    return aRet.hasValue() ? aRet : OWeakObject::queryInterface( rType );
-}
-
-
-void SAL_CALL
 XResultSet_impl::disposing( const lang::EventObject& )
     throw( uno::RuntimeException, std::exception )
 {
     // To do, but what
 }
-
-
-XTYPEPROVIDER_IMPL_10( XResultSet_impl,
-                       lang::XTypeProvider,
-                       lang::XTypeProvider,
-                       lang::XEventListener,
-                       sdbc::XRow,
-                       sdbc::XResultSet,
-                       XDynamicResultSet,
-                       sdbc::XCloseable,
-                       sdbc::XResultSetMetaDataSupplier,
-                       beans::XPropertySet,
-                       ucb::XContentAccess )
 
 
 void SAL_CALL
