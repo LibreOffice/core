@@ -2128,10 +2128,17 @@ void SwUndoTblMerge::SaveCollection( const SwTableBox& rBox )
 
 SwUndoTblNumFmt::SwUndoTblNumFmt( const SwTableBox& rBox,
                                     const SfxItemSet* pNewSet )
-    : SwUndo( UNDO_TBLNUMFMT ),
-    pBoxSet( 0 ), pHistory( 0 ), nFmtIdx( NUMBERFORMAT_TEXT )
+    : SwUndo(UNDO_TBLNUMFMT)
+    , pBoxSet(0)
+    , pHistory(0)
+    , nFmtIdx(NUMBERFORMAT_TEXT)
+    , nNewFmtIdx(0)
+    , fNum(0.0)
+    , fNewNum(0.0)
+    , bNewFmt(sal_False)
+    , bNewFml(sal_False)
+    , bNewValue(sal_False)
 {
-    bNewFmt = bNewFml = bNewValue = sal_False;
     nNode = rBox.GetSttIdx();
 
     nNdPos = rBox.IsValidNumTxtNd( 0 == pNewSet );
