@@ -53,6 +53,16 @@ OUString SAL_CALL BarChartType::getChartType()
     return CHART2_SERVICE_NAME_CHARTTYPE_BAR;
 }
 
+uno::Sequence< OUString > BarChartType::getSupportedPropertyRoles()
+    throw (uno::RuntimeException, std::exception)
+{
+    uno::Sequence< OUString > aPropRoles(2);
+    aPropRoles[0] = "FillColor";
+    aPropRoles[1] = "BorderColor";
+
+    return aPropRoles;
+}
+
 uno::Sequence< OUString > BarChartType::getSupportedServiceNames_Static()
 {
     uno::Sequence< OUString > aServices( 2 );

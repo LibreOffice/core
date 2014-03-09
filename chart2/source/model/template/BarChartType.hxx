@@ -44,6 +44,9 @@ protected:
     // ____ XChartType ____
     virtual OUString SAL_CALL getChartType()
         throw (::com::sun::star::uno::RuntimeException, std::exception);
+    virtual com::sun::star::uno::Sequence< OUString > SAL_CALL
+        getSupportedPropertyRoles()
+        throw (::com::sun::star::uno::RuntimeException, std::exception);
 
     // ____ XCloneable ____
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::util::XCloneable > SAL_CALL createClone()

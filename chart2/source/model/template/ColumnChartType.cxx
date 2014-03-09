@@ -152,6 +152,16 @@ OUString SAL_CALL ColumnChartType::getChartType()
     return CHART2_SERVICE_NAME_CHARTTYPE_COLUMN;
 }
 
+uno::Sequence< OUString > ColumnChartType::getSupportedPropertyRoles()
+    throw (uno::RuntimeException, std::exception)
+{
+    uno::Sequence< OUString > aPropRoles(2);
+    aPropRoles[0] = "FillColor";
+    aPropRoles[1] = "BorderColor";
+
+    return aPropRoles;
+}
+
 // ____ OPropertySet ____
 uno::Any ColumnChartType::GetDefaultValue( sal_Int32 nHandle ) const
     throw(beans::UnknownPropertyException)

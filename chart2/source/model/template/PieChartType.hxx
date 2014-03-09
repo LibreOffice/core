@@ -49,6 +49,9 @@ protected:
         createCoordinateSystem( ::sal_Int32 DimensionCount )
         throw (::com::sun::star::lang::IllegalArgumentException,
                ::com::sun::star::uno::RuntimeException, std::exception);
+    virtual com::sun::star::uno::Sequence< OUString > SAL_CALL
+        getSupportedPropertyRoles()
+        throw (::com::sun::star::uno::RuntimeException, std::exception);
 
     // ____ OPropertySet ____
     virtual ::com::sun::star::uno::Any GetDefaultValue( sal_Int32 nHandle ) const

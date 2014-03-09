@@ -195,6 +195,16 @@ Reference< chart2::XCoordinateSystem > SAL_CALL
     return xResult;
 }
 
+uno::Sequence< OUString > PieChartType::getSupportedPropertyRoles()
+    throw (uno::RuntimeException, std::exception)
+{
+    uno::Sequence< OUString > aPropRoles(2);
+    aPropRoles[0] = "FillColor";
+    aPropRoles[1] = "BorderColor";
+
+    return aPropRoles;
+}
+
 // ____ OPropertySet ____
 uno::Any PieChartType::GetDefaultValue( sal_Int32 nHandle ) const
     throw(beans::UnknownPropertyException)
