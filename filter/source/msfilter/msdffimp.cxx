@@ -4887,7 +4887,9 @@ SdrObject* SvxMSDffManager::ProcessObj(SvStream& rSt,
     {
         SvxMSDffImportData& rImportData = *(SvxMSDffImportData*)pData;
         SvxMSDffImportRec* pImpRec = new SvxMSDffImportRec;
+        bool bDeleteImpRec = true;
         SvxMSDffImportRec* pTextImpRec = pImpRec;
+        bool bDeleteTextImpRec = false;
 
         // fill Import Record with data
         pImpRec->nShapeId   = rObjData.nShapeId;
@@ -5083,6 +5085,7 @@ SdrObject* SvxMSDffManager::ProcessObj(SvStream& rSt,
 
             pTextObj = new SdrRectObj(OBJ_TEXT, rTextRect);
             pTextImpRec = new SvxMSDffImportRec(*pImpRec);
+            bDeleteTextImpRec = true;
 
             // the vertical paragraph indents are part of the BoundRect,
             // here we 'remove' them by calculating
@@ -5362,6 +5365,9 @@ SdrObject* SvxMSDffManager::ProcessObj(SvStream& rSt,
             {
                 pImpRec->pObj = pOrgObj;
                 rImportData.aRecords.insert( pImpRec );
+                bDeleteImpRec = false;
+                if (pImpRec == pTextImpRec)
+                    bDeleteTextImpRec = false;
             }
 
             if( pTextObj && (pOrgObj != pTextObj) )
@@ -5370,6 +5376,9 @@ SdrObject* SvxMSDffManager::ProcessObj(SvStream& rSt,
                 pImpRec->nShapeId |= 0x8000000;
                 pTextImpRec->pObj = pTextObj;
                 rImportData.aRecords.insert( pTextImpRec );
+                bDeleteTextImpRec = false;
+                if (pTextImpRec == pImpRec)
+                    bDeleteImpRec = false;
             }
 
             // entry in the z-order-list in order to complement the pointer to this object
@@ -5383,12 +5392,12 @@ SdrObject* SvxMSDffManager::ProcessObj(SvStream& rSt,
                                 ( ( (sal_uLong)pImpRec->aTextId.nTxBxS ) << 16 )
                                     + pImpRec->aTextId.nSequence, pObj );
         }
-        else
-        {
-            if (pTextImpRec != pImpRec)
-                delete pTextImpRec;
+
+        if (bDeleteImpRec)
             delete pImpRec;
-        }
+
+        if (bDeleteTextImpRec)
+            delete pTextImpRec;
     }
 
     return pObj;
