@@ -13,11 +13,28 @@ namespace chart {
 
 namespace {
 
-static long pListBoxTabs[] =
+long pListBoxTabs[] =
 {
     3,
-    0, 0, 75
+    0, 75, 150
 };
+
+std::vector<OUString> getEntries()
+{
+    const char* pEntries[] =
+    {
+        "FillColor\tColor",
+        "BorderColor\tColor"
+    };
+
+    std::vector<OUString> aRet;
+    for(size_t i = 0; i < SAL_N_ELEMENTS(pEntries); ++i)
+    {
+        aRet.push_back(OUString::createFromAscii(pEntries[i]));
+    }
+
+    return aRet;
+}
 
 }
 
@@ -26,8 +43,42 @@ PropertyMappingDlg::PropertyMappingDlg(Window* pParent)
         "modules/schart/ui/dlg_PropertyMapping.ui")
 {
     get(mpMappingTable, "LST_PROPERTY_MAPPING");
+    get(mpBtnOk, "ok");
+    get(mpBtnCancel, "cancel");
 
     mpMappingTable->SetTabs( pListBoxTabs, MAP_APPFONT );
+    std::vector<OUString> aEntries = getEntries();
+    for(std::vector<OUString>::const_iterator itr = aEntries.begin(),
+            itrEnd = aEntries.end(); itr != itrEnd; ++itr)
+    {
+        mpMappingTable->InsertEntry(*itr);
+    }
+    mpBtnOk->SetClickHdl( LINK( this, PropertyMappingDlg, OkBtnHdl ) );
+    mpBtnCancel->SetClickHdl( LINK( this, PropertyMappingDlg, CancelBtnHdl ) );
+}
+
+OUString PropertyMappingDlg::getSelectedEntry()
+{
+    if(mpMappingTable->GetSelectionCount())
+    {
+        SvTreeListEntry* pEntry = mpMappingTable->FirstSelected();
+        OUString aText = mpMappingTable->GetEntryText(pEntry, 0);
+        return aText;
+    }
+
+    return OUString();
+}
+
+IMPL_LINK_NOARG(PropertyMappingDlg, OkBtnHdl)
+{
+    EndDialog(RET_OK);
+    return 0;
+}
+
+IMPL_LINK_NOARG(PropertyMappingDlg, CancelBtnHdl)
+{
+    EndDialog(RET_CANCEL);
+    return 0;
 }
 
 }

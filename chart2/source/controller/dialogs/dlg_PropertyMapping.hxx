@@ -11,6 +11,7 @@
 #define CHART2_PROPERTY_MAPPING_HXX
 
 #include <vcl/dialog.hxx>
+#include <vcl/button.hxx>
 #include <svtools/svtabbx.hxx>
 
 namespace chart {
@@ -25,7 +26,12 @@ public:
 
 private:
 
+    DECL_LINK( OkBtnHdl, void* );
+    DECL_LINK( CancelBtnHdl, void* );
+
     SvTabListBox* mpMappingTable;
+    Button* mpBtnOk;
+    Button* mpBtnCancel;
 };
 
 }
