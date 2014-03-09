@@ -19,8 +19,6 @@
  *
  *************************************************************/
 
-
-
 #ifndef __com_sun_star_document_XUndoManager_idl__
 #define __com_sun_star_document_XUndoManager_idl__
 
@@ -33,14 +31,10 @@
 #include <com/sun/star/lang/IllegalArgumentException.idl>
 #include <com/sun/star/lang/WrappedTargetException.idl>
 
-//==================================================================================================================
-
 module com { module sun { module star { module document {
 
 interface XUndoAction;
 interface XUndoManagerListener;
-
-//==================================================================================================================
 
 /** provides access to the undo/redo stacks of a document
 
@@ -327,10 +321,6 @@ interface XUndoManager
             );
 };
 
-//==================================================================================================================
-
 }; }; }; };
-
-//==================================================================================================================
 
 #endif

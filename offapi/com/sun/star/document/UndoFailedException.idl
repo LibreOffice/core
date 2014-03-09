@@ -19,18 +19,12 @@
  *
  *************************************************************/
 
-
-
 #ifndef __com_sun_star_document_UndoFailedException_idl__
 #define __com_sun_star_document_UndoFailedException_idl__
 
 #include <com/sun/star/uno/Exception.idl>
 
-//==================================================================================================================
-
 module com { module sun { module star { module document {
-
-//==================================================================================================================
 
 /** thrown when reverting to re-applying an undoable action fails.
 
@@ -45,10 +39,6 @@ exception UndoFailedException : ::com::sun::star::uno::Exception
     any Reason;
 };
 
-//==================================================================================================================
-
 }; }; }; };
-
-//==================================================================================================================
 
 #endif

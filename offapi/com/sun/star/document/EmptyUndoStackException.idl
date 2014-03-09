@@ -19,18 +19,12 @@
  *
  *************************************************************/
 
-
-
 #ifndef __com_sun_star_document_EmptyUndoStackException_idl__
 #define __com_sun_star_document_EmptyUndoStackException_idl__
 
 #include <com/sun/star/util/InvalidStateException.idl>
 
-//==================================================================================================================
-
 module com { module sun { module star { module document {
-
-//==================================================================================================================
 
 /** is raised when an operation is attemption at an XUndoManager which requires a non-empty stack
     of undo actions, and this requirement is not fullfilled.
@@ -40,10 +34,6 @@ exception EmptyUndoStackException : ::com::sun::star::util::InvalidStateExceptio
 {
 };
 
-//==================================================================================================================
-
 }; }; }; };
-
-//==================================================================================================================
 
 #endif
