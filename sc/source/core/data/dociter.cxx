@@ -350,18 +350,19 @@ bool ScDBQueryDataIterator::IsQueryValid(
     return rDoc.maTabs[nTab]->ValidQuery(nRow, rParam, pCell);
 }
 
-
-
-ScDBQueryDataIterator::DataAccessInternal::DataAccessInternal(const ScDBQueryDataIterator* pParent, ScDBQueryParamInternal* pParam, ScDocument* pDoc) :
-    DataAccess(pParent),
-    mpCells(NULL),
-    mpParam(pParam),
-    mpDoc(pDoc),
-    bCalcAsShown( pDoc->GetDocOptions().IsCalcAsShown() )
+ScDBQueryDataIterator::DataAccessInternal::DataAccessInternal(const ScDBQueryDataIterator* pParent, ScDBQueryParamInternal* pParam, ScDocument* pDoc)
+    : DataAccess(pParent)
+    , mpCells(NULL)
+    , mpParam(pParam)
+    , mpDoc(pDoc)
+    , pAttrArray(0)
+    , nNumFormat(0) // Initialized in GetNumberFormat
+    , nCol(mpParam->mnField)
+    , nRow(mpParam->nRow1)
+    , nAttrEndRow(0)
+    , nTab(mpParam->nTab)
+    , bCalcAsShown(pDoc->GetDocOptions().IsCalcAsShown())
 {
-    nCol = mpParam->mnField;
-    nRow = mpParam->nRow1;
-    nTab = mpParam->nTab;
     SCSIZE i;
     SCSIZE nCount = mpParam->GetEntryCount();
     for (i=0; (i<nCount) && (mpParam->GetEntry(i).bDoQuery); i++)
@@ -375,9 +376,6 @@ ScDBQueryDataIterator::DataAccessInternal::DataAccessInternal(const ScDBQueryDat
             rItem.maString.getString(), nIndex, rItem.mfVal);
         rItem.meType = bNumber ? ScQueryEntry::ByValue : ScQueryEntry::ByString;
     }
-    nNumFormat = 0; // Initialized in GetNumberFormat
-    pAttrArray = 0;
-    nAttrEndRow = 0;
 }
 
 ScDBQueryDataIterator::DataAccessInternal::~DataAccessInternal()
