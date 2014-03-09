@@ -103,7 +103,6 @@ class SfxFrameStatusListener : public svt::FrameStatusListener
 class SFX2_DLLPUBLIC SfxPopupWindow: public FloatingWindow, public SfxStatusListenerInterface
 {
     sal_Bool                                                                             m_bFloating;
-    sal_uIntPtr                                                                            m_nEventId;
     sal_Bool                                                                             m_bCascading;
     Link                                                                             m_aDeleteLink;
     sal_uInt16                                                                           m_nId;
