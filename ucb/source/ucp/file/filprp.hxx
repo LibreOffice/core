@@ -19,48 +19,23 @@
 #ifndef _FILPRP_HXX_
 #define _FILPRP_HXX_
 
-#include <ucbhelper/macros.hxx>
-#include <cppuhelper/weak.hxx>
 #include <com/sun/star/beans/XPropertySetInfo.hpp>
 #include <com/sun/star/ucb/XContentProvider.hpp>
-#include <com/sun/star/lang/XTypeProvider.hpp>
+#include <cppuhelper/implbase1.hxx>
 
 
 namespace fileaccess {
 
     class shell;
 
-    class XPropertySetInfo_impl
-        : public cppu::OWeakObject,
-          public com::sun::star::lang::XTypeProvider,
-          public com::sun::star::beans::XPropertySetInfo
+class XPropertySetInfo_impl : public cppu::WeakImplHelper1<
+    css::beans::XPropertySetInfo >
     {
     public:
         XPropertySetInfo_impl( shell* pMyShell,const OUString& aUnqPath );
         XPropertySetInfo_impl( shell* pMyShell,const com::sun::star::uno::Sequence< com::sun::star::beans::Property >& seq );
 
         virtual ~XPropertySetInfo_impl();
-
-        // XInterface
-        virtual com::sun::star::uno::Any SAL_CALL
-        queryInterface(
-            const com::sun::star::uno::Type& aType )
-            throw( com::sun::star::uno::RuntimeException, std::exception);
-
-        virtual void SAL_CALL
-        acquire(
-            void )
-            throw();
-
-        virtual void SAL_CALL
-        release(
-            void )
-            throw();
-
-
-        // XTypeProvider
-
-        XTYPEPROVIDER_DECL()
 
         virtual com::sun::star::uno::Sequence< com::sun::star::beans::Property > SAL_CALL
         getProperties(

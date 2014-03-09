@@ -75,42 +75,6 @@ XPropertySetInfo_impl::~XPropertySetInfo_impl()
 }
 
 
-void SAL_CALL
-XPropertySetInfo_impl::acquire(
-                  void )
-  throw()
-{
-  OWeakObject::acquire();
-}
-
-
-void SAL_CALL
-XPropertySetInfo_impl::release(
-              void )
-  throw()
-{
-  OWeakObject::release();
-}
-
-
-
-XTYPEPROVIDER_IMPL_2( XPropertySetInfo_impl,
-                         lang::XTypeProvider,
-                      beans::XPropertySetInfo )
-
-
-Any SAL_CALL
-XPropertySetInfo_impl::queryInterface(
-                     const Type& rType )
-  throw( RuntimeException, std::exception )
-{
-  Any aRet = cppu::queryInterface( rType,
-                    (static_cast< lang::XTypeProvider* >(this)),
-                    (static_cast< beans::XPropertySetInfo* >(this)) );
-  return aRet.hasValue() ? aRet : OWeakObject::queryInterface( rType );
-}
-
-
 beans::Property SAL_CALL
 XPropertySetInfo_impl::getPropertyByName(
                      const OUString& aName )
