@@ -65,6 +65,10 @@ namespace svt
 
 
     HyperLabelImpl::HyperLabelImpl()
+        : ID(0)
+        , Index(0)
+        , bInteractive(false)
+        , m_bHyperMode(false)
     {
     }
 
