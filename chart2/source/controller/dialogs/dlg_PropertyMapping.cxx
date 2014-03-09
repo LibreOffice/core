@@ -23,23 +23,6 @@ long pListBoxTabs[] =
     0, 75, 150
 };
 
-std::vector<OUString> getEntries()
-{
-    const char* pEntries[] =
-    {
-        "FillColor\tColor",
-        "BorderColor\tColor"
-    };
-
-    std::vector<OUString> aRet;
-    for(size_t i = 0; i < SAL_N_ELEMENTS(pEntries); ++i)
-    {
-        aRet.push_back(OUString::createFromAscii(pEntries[i]));
-    }
-
-    return aRet;
-}
-
 }
 
 PropertyMappingDlg::PropertyMappingDlg(Window* pParent, uno::Reference< chart2::XChartType > xChartType )
