@@ -659,12 +659,14 @@ bool ShowPageNum::Read(HWPFile & hwpf)
     return !hwpf.State();
 }
 
-
 /* 홀수쪽시작/감추기 (21) */
-PageNumCtrl::PageNumCtrl():HBox(CH_PAGE_NUM_CTRL)
+PageNumCtrl::PageNumCtrl()
+    : HBox(CH_PAGE_NUM_CTRL)
+    , kind(0)
+    , what(0)
+    , dummy(0)
 {
 }
-
 
 bool PageNumCtrl::Read(HWPFile & hwpf)
 {
