@@ -1617,14 +1617,16 @@ void SdrTextObj::SetVerticalWriting(bool bVertical)
             case SDRTEXTHORZADJUST_BLOCK: aNewSet.Put(SdrTextVertAdjustItem(SDRTEXTVERTADJUST_BLOCK)); break;
         }
 
-        SetObjectItemSet(aNewSet);
-
         pOutlinerParaObject = GetOutlinerParaObject();
         if( pOutlinerParaObject )
         {
-            // set ParaObject orientation accordingly
+            // Set ParaObject orientation accordingly. This _must_ be
+            // done before applying the updated item set, otherwise we
+            // get stuck in a loop leading to eventual stack overflow.
             pOutlinerParaObject->SetVertical(bVertical);
         }
+
+        SetObjectItemSet(aNewSet);
 
         // restore object size
         SetSnapRect(aObjectRect);
