@@ -1149,6 +1149,7 @@ void checkCellValidity( const ScAddress& rValBaseAddr, const ScRange& rRange, co
     //get from the document the data validation entry we are checking against
     const SfxUInt32Item* pItem = static_cast<const SfxUInt32Item*>(pDoc->GetAttr(nBCol, nBRow, nTab, ATTR_VALIDDATA) );
     const ScValidationData* pValData = pDoc->GetValidationEntry( pItem->GetValue() );
+    CPPUNIT_ASSERT(pValData);
 
     //check that each cell in the expected range is associated with the data validation entry
     for(SCCOL i = rRange.aStart.Col(); i <= rRange.aEnd.Col(); ++i)
