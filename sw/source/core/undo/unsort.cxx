@@ -45,8 +45,11 @@ SwSortUndoElement::~SwSortUndoElement()
 }
 
 SwUndoSort::SwUndoSort(const SwPaM& rRg, const SwSortOptions& rOpt)
-    : SwUndo(UNDO_SORT_TXT), SwUndRng(rRg), pUndoTblAttr( 0 ),
-    pRedlData( 0 )
+    : SwUndo(UNDO_SORT_TXT)
+    , SwUndRng(rRg)
+    , pUndoTblAttr(0)
+    , pRedlData(0)
+    , nTblNd(0)
 {
     pSortOpt = new SwSortOptions(rOpt);
 }
