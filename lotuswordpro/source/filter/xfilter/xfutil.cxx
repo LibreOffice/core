@@ -64,17 +64,6 @@
 #include <rtl/ustrbuf.hxx>
 #include <sstream>
 
-OUString Int16ToOUString(sal_Int16 num)
-{
-    /*std::stringstream sstrm;
-
-    sstrm<<(int)num;
-    return OUString::createFromAscii(sstrm.str().c_str());
-    */
-    sal_Int32 nNum = static_cast<sal_Int32>(num);
-    return OUString::number(nNum);
-}
-
 OUString   FloatToOUString(float num, sal_Int32 /*precision*/)
 {
     /*std::stringstream sstrm;

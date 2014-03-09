@@ -137,7 +137,7 @@ public:
             pAttrList->AddAttribute( "style:num-suffix", m_strSuffix );
         pAttrList->AddAttribute( "style:num-format", m_strFormat );
         if( m_nStartValue != 0 )
-            pAttrList->AddAttribute( "text:start-value", Int16ToOUString(m_nStartValue) );
+            pAttrList->AddAttribute( "text:start-value", OUString::number((sal_Int32)m_nStartValue) );
     }
 private:
     OUString   m_strPrefix;

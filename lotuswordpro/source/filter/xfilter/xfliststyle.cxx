@@ -79,11 +79,11 @@ void XFListlevelNumber::ToXml(IXFStream *pStrm)
     IXFAttrList *pAttrList = pStrm->GetAttrList();
 
     pAttrList->Clear();
-    pAttrList->AddAttribute( "text:level", Int16ToOUString(m_nLevel) );
+    pAttrList->AddAttribute( "text:level", OUString::number((sal_Int32)m_nLevel) );
     //text:style-name,ignore now.
     m_aNumFmt.ToXml(pStrm);
     if( m_nDisplayLevel )
-        pAttrList->AddAttribute( "text:display-levels", Int16ToOUString(m_nDisplayLevel) );
+        pAttrList->AddAttribute( "text:display-levels", OUString::number((sal_Int32)m_nDisplayLevel) );
 
     pStrm->StartElement( "text:list-level-style-number" );
 
@@ -114,7 +114,7 @@ void    XFListLevelBullet::ToXml(IXFStream *pStrm)
     IXFAttrList *pAttrList = pStrm->GetAttrList();
 
     pAttrList->Clear();
-    pAttrList->AddAttribute( "text:level", Int16ToOUString(m_nLevel) );
+    pAttrList->AddAttribute( "text:level", OUString::number((sal_Int32)m_nLevel) );
     //text:style-name,ignore now.
     m_aNumFmt.ToXml(pStrm);
     //bullet-char

@@ -219,7 +219,7 @@ void  LwpTocSuperLayout::XFConvert(XFContentContainer* pCont)
                     pTemplate->AddEntry(enumXFIndexTemplatePage, "TOC Page Number Text Style");
                 }
 
-                pToc->AddTemplate(Int16ToOUString(i),  m_pFoundry->FindActuralStyleName(pLevel->GetSearchStyle()), pTemplate);
+                pToc->AddTemplate(OUString::number((sal_Int32)i),  m_pFoundry->FindActuralStyleName(pLevel->GetSearchStyle()), pTemplate);
                 bInserted = sal_True;
             }
 

@@ -176,7 +176,7 @@ void    XFFrameStyle::ToXml(IXFStream *pStrm)
     if( m_aBackColor.IsValid() )
     {
         pAttrList->AddAttribute( "fo:background-color", m_aBackColor.ToString() );
-        pAttrList->AddAttribute( "style:background-transparency", Int16ToOUString(m_nTransparency) + "%");
+        pAttrList->AddAttribute( "style:background-transparency", OUString::number((sal_Int32)m_nTransparency) + "%");
     }
 
     //pad
