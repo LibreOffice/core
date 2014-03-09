@@ -60,11 +60,11 @@
 #include "xfstylemanager.hxx"
 #include "ixfstyle.hxx"
 
-XFStyleManager::XFStyleManager() : s_aStdArrowStyles( OUString("arrow") ), s_aTextStyles( OUString("T") ),
-    s_aParaStyles( OUString("P") ),s_aListStyles( OUString("L") ),s_aSectionStyles( OUString("Sect") ),
-    s_aPageMasters( OUString("PM") ),s_aMasterpages( OUString("MP") ),s_aDateStyles( OUString("N") ),
-    s_aGraphicsStyles( OUString("fr") ),s_aTableStyles( OUString("table") ),s_aTableCellStyles( OUString("cell") ),
-    s_aTableRowStyles( OUString("row") ),s_aTableColStyles( OUString("col") ),s_pOutlineStyle(NULL)
+XFStyleManager::XFStyleManager() : s_aStdArrowStyles( "arrow" ), s_aTextStyles( "T" ),
+    s_aParaStyles( "P" ),s_aListStyles( "L" ),s_aSectionStyles( "Sect" ),
+    s_aPageMasters( "PM" ),s_aMasterpages( "MP" ),s_aDateStyles( "N" ),
+    s_aGraphicsStyles( "fr" ),s_aTableStyles( "table" ),s_aTableCellStyles( "cell" ),
+    s_aTableRowStyles( "row" ),s_aTableColStyles( "col" ),s_pOutlineStyle(NULL)
 {
 }
 
@@ -311,7 +311,7 @@ void    XFStyleManager::ToXml(IXFStream *pStrm)
     IXFAttrList *pAttrList = pStrm->GetAttrList();
 
     pAttrList->Clear();
-    pStrm->StartElement( OUString("office:font-decls") );
+    pStrm->StartElement( "office:font-decls" );
 
     //font declarations:
     for( itDecl = s_aFontDecls.begin(); itDecl != s_aFontDecls.end(); ++itDecl )
@@ -319,21 +319,21 @@ void    XFStyleManager::ToXml(IXFStream *pStrm)
         XFFontDecl &f = *itDecl;
 
         pAttrList->Clear();
-        pAttrList->AddAttribute( OUString("style:name"), f.GetFontName() );
-        pAttrList->AddAttribute( OUString("fo:font-family"), f.GetFontFamily() );
+        pAttrList->AddAttribute( "style:name", f.GetFontName() );
+        pAttrList->AddAttribute( "fo:font-family", f.GetFontFamily() );
         if( f.GetFontPitchFixed() )
-            pAttrList->AddAttribute( OUString("style:font-pitch"), OUString("fixed") );
+            pAttrList->AddAttribute( "style:font-pitch", "fixed" );
         else
-            pAttrList->AddAttribute( OUString("style:font-pitch"), OUString("variable") );
-        pStrm->StartElement( OUString("style:font-decl") );
-        pStrm->EndElement( OUString("style:font-decl") );
+            pAttrList->AddAttribute( "style:font-pitch", "variable" );
+        pStrm->StartElement( "style:font-decl" );
+        pStrm->EndElement( "style:font-decl" );
     }
 
-    pStrm->EndElement( OUString("office:font-decls") );
+    pStrm->EndElement( "office:font-decls" );
 
     //office:styles:
     pAttrList->Clear();
-    pStrm->StartElement( OUString("office:styles") );
+    pStrm->StartElement( "office:styles" );
 
     s_aStdParaStyles.ToXml(pStrm);
     s_aStdTextStyles.ToXml(pStrm);
@@ -349,11 +349,11 @@ void    XFStyleManager::ToXml(IXFStream *pStrm)
     if( s_pOutlineStyle )
         s_pOutlineStyle->ToXml(pStrm);
 
-    pStrm->EndElement( OUString("office:styles") );
+    pStrm->EndElement( "office:styles" );
 
     //automatic styles:
     pAttrList->Clear();
-    pStrm->StartElement( OUString("office:automatic-styles") );
+    pStrm->StartElement( "office:automatic-styles" );
 
     s_aTableStyles.ToXml(pStrm);
     s_aTableCellStyles.ToXml(pStrm);
@@ -367,15 +367,15 @@ void    XFStyleManager::ToXml(IXFStream *pStrm)
     //graphics:
     s_aGraphicsStyles.ToXml(pStrm);
 
-    pStrm->EndElement( OUString("office:automatic-styles") );
+    pStrm->EndElement( "office:automatic-styles" );
 
     //master:styles
     pAttrList->Clear();
-    pStrm->StartElement( OUString("office:master-styles") );
+    pStrm->StartElement( "office:master-styles" );
     //masters pages:
     s_aMasterpages.ToXml(pStrm);
 
-    pStrm->EndElement( OUString("office:master-styles") );
+    pStrm->EndElement( "office:master-styles" );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

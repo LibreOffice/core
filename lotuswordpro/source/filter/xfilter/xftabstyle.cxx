@@ -70,7 +70,7 @@ void XFTabStyle::ToXml(IXFStream *pStrm)
     IXFAttrList *pAttrList = pStrm->GetAttrList();
     pAttrList->Clear();
 
-    pAttrList->AddAttribute( "style:position", OUString::number(m_fLength) + OUString("cm") );
+    pAttrList->AddAttribute( "style:position", OUString::number(m_fLength) + "cm" );
     switch(m_eType)
     {
     case enumXFTabLeft:

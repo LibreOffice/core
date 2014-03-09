@@ -107,8 +107,8 @@ void    XFTextContent::ToXml(IXFStream *pStrm)
             IXFAttrList *pAttrList = pStrm->GetAttrList();
             pAttrList->Clear();
             pAttrList->AddAttribute( "text:c", OUString::number(j-nIndex) );
-            pStrm->StartElement( OUString("text:s") );
-            pStrm->EndElement( OUString("text:s") );
+            pStrm->StartElement( "text:s" );
+            pStrm->EndElement( "text:s" );
 
             i+=j;
         }

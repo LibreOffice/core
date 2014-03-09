@@ -91,34 +91,34 @@ void    XFTableStyle::ToXml(IXFStream *pStrm)
     IXFAttrList *pAttrList = pStrm->GetAttrList();
     pAttrList->Clear();
 
-    pAttrList->AddAttribute( OUString("style:name"), GetStyleName() );
+    pAttrList->AddAttribute( "style:name", GetStyleName() );
     if( !GetParentStyleName().isEmpty() )
-        pAttrList->AddAttribute(OUString("style:parent-style-name"),GetParentStyleName());
-    pAttrList->AddAttribute( OUString("style:family"), OUString("table") );
-    pStrm->StartElement( OUString("style:style") );
+        pAttrList->AddAttribute("style:parent-style-name",GetParentStyleName());
+    pAttrList->AddAttribute( "style:family", "table" );
+    pStrm->StartElement( "style:style" );
 
     pAttrList->Clear();
-    pAttrList->AddAttribute( OUString("style:width"), OUString::number(m_fWidth) + OUString("cm") );
+    pAttrList->AddAttribute( "style:width", OUString::number(m_fWidth) + "cm" );
     //text align:
     if( m_eAlign == enumXFAlignStart )
     {
-        pAttrList->AddAttribute(OUString("table:align"),OUString("left"));
+        pAttrList->AddAttribute("table:align","left");
     }
     else if( m_eAlign == enumXFAlignCenter )
     {
-        pAttrList->AddAttribute(OUString("table:align"),OUString("center"));
+        pAttrList->AddAttribute("table:align","center");
     }
     else if( m_eAlign == enumXFAlignEnd )
     {
-        pAttrList->AddAttribute(OUString("table:align"),OUString("right"));
+        pAttrList->AddAttribute("table:align","right");
     }
     else if( m_eAlign == enumXFALignMargins )
     {
-        pAttrList->AddAttribute(OUString("table:align"),OUString("margins"));
+        pAttrList->AddAttribute("table:align","margins");
     }
     //background color:
     if( m_aBackColor.IsValid() && !m_pBGImage )
-        pAttrList->AddAttribute(OUString("fo:background-color"), m_aBackColor.ToString() );
+        pAttrList->AddAttribute("fo:background-color", m_aBackColor.ToString() );
     //shadow:
     m_aShadow.ToXml(pStrm);
     //margin:
@@ -126,12 +126,12 @@ void    XFTableStyle::ToXml(IXFStream *pStrm)
     //breaks:
     m_aBreaks.ToXml(pStrm);
 
-    pStrm->StartElement( OUString("style:properties") );
+    pStrm->StartElement( "style:properties" );
     if( m_pBGImage )
         m_pBGImage->ToXml(pStrm);
 
-    pStrm->EndElement( OUString("style:properties") );
+    pStrm->EndElement( "style:properties" );
 
-    pStrm->EndElement( OUString("style:style") );
+    pStrm->EndElement( "style:style" );
 }
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

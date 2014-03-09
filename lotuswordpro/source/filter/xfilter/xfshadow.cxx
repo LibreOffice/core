@@ -74,22 +74,22 @@ OUString XFShadow::ToString()
     OUString   buf;
     OUString   strOff = OUString::number(m_fOffset);
 
-    buf = m_aColor.ToString();
     switch(m_ePosition)
     {
     case enumXFShadowRightBottom:
-        buf += OUString(" ") + strOff + OUString("cm") + OUString(" ") + strOff + OUString("cm");
+        buf = m_aColor.ToString() + " " + strOff + "cm" + " " + strOff + "cm";
         break;
     case enumXFShadowRightTop:
-        buf += OUString(" ") + strOff + OUString("cm") + OUString(" -") + strOff + OUString("cm");
+        buf = m_aColor.ToString() + " " + strOff + "cm" + " -" + strOff + "cm";
         break;
     case enumXFShadowLeftBottom:
-        buf += OUString(" -") + strOff + OUString("cm") + OUString(" ") + strOff + OUString("cm");
+        buf = m_aColor.ToString() + " -" + strOff + "cm" + " " + strOff + "cm";
         break;
     case enumXFShadowLeftTop:
-        buf += OUString(" -") + strOff + OUString("cm") + OUString(" -") + strOff + OUString("cm");
+        buf = m_aColor.ToString() + " -" + strOff + "cm" + " -" + strOff + "cm";
         break;
     default:
+        buf = m_aColor.ToString();
         break;
     }
 
@@ -102,7 +102,7 @@ void    XFShadow::ToXml(IXFStream *pStrm)
     if( m_ePosition == enumXFShadowNone )
         return;
     else
-        pAttrList->AddAttribute( OUString("style:shadow"), ToString() );
+        pAttrList->AddAttribute( "style:shadow", ToString() );
 }
 
 sal_Bool operator==(XFShadow& s1, XFShadow& s2)

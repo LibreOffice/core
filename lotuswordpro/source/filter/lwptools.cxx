@@ -599,7 +599,7 @@ XFDateStyle* LwpTools::GetSystemDateStyle(sal_Bool bLongFormat)
             }
             case '"':
             {
-                pDateStyle->AddText(OUString("'"));
+                pDateStyle->AddText("'");
                 break;
             }
             default:
@@ -819,7 +819,7 @@ XFTimeStyle* LwpTools::GetSystemTimeStyle()
             }
             case '"':
             {
-                pTimeStyle->AddText(OUString("'"));
+                pTimeStyle->AddText("'");
                 break;
             }
             default:

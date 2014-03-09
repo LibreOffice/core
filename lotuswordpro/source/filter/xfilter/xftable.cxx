@@ -206,15 +206,15 @@ void    XFTable::ToXml(IXFStream *pStrm)
     pAttrList->Clear();
     //sub table shouldn't use table name.
     if( !m_bSubTable )
-        pAttrList->AddAttribute( OUString("table:name"), m_strName);
+        pAttrList->AddAttribute( "table:name", m_strName);
 
     if( !GetStyleName().isEmpty() )
-        pAttrList->AddAttribute( OUString("table:style-name"), GetStyleName() );
+        pAttrList->AddAttribute( "table:style-name", GetStyleName() );
 
     if( m_bSubTable )
-        pStrm->StartElement( OUString("table:sub-table") );
+        pStrm->StartElement( "table:sub-table" );
     else
-        pStrm->StartElement( OUString("table:table") );
+        pStrm->StartElement( "table:table" );
 
     //output columns:
     {
@@ -232,29 +232,29 @@ void    XFTable::ToXml(IXFStream *pStrm)
                 {
                     if( !m_strDefColStyle.isEmpty() )
                     {
-                        pAttrList->AddAttribute( OUString("table:style-name"), m_strDefColStyle );
+                        pAttrList->AddAttribute( "table:style-name", m_strDefColStyle );
                     }
-                    pAttrList->AddAttribute( OUString("table:number-columns-repeated"), OUString::number(col-lastCol-1) );
+                    pAttrList->AddAttribute( "table:number-columns-repeated", OUString::number(col-lastCol-1) );
                 }
-                pStrm->StartElement( OUString("table:table-column") );
-                pStrm->EndElement( OUString("table:table-column") );
+                pStrm->StartElement( "table:table-column" );
+                pStrm->EndElement( "table:table-column" );
             }
 
             if( !style.isEmpty() )
             {
-                pAttrList->AddAttribute( OUString("table:style-name"), style );
+                pAttrList->AddAttribute( "table:style-name", style );
             }
-            pStrm->StartElement( OUString("table:table-column") );
-            pStrm->EndElement( OUString("table:table-column") );
+            pStrm->StartElement( "table:table-column" );
+            pStrm->EndElement( "table:table-column" );
             lastCol = col;
         }
     }
 
     if( m_aHeaderRows.GetCount()>0 )
     {
-        pStrm->StartElement( OUString("table:table-header-rows") );
+        pStrm->StartElement( "table:table-header-rows" );
         m_aHeaderRows.ToXml(pStrm);
-        pStrm->EndElement( OUString("table:table-header-rows") );
+        pStrm->EndElement( "table:table-header-rows" );
     }
     //output rows:
     {
@@ -284,8 +284,8 @@ void    XFTable::ToXml(IXFStream *pStrm)
     }
 
     if( m_bSubTable )
-        pStrm->EndElement( OUString("table:sub-table") );
+        pStrm->EndElement( "table:sub-table" );
     else
-        pStrm->EndElement( OUString("table:table") );
+        pStrm->EndElement( "table:table" );
 }
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -172,7 +172,7 @@ void LwpSilverBullet::RegisterStyle()
                     }
 
                     pListStyle->SetListBullet(nPos, this->GetNumCharByStyleID(pParaNumber).toChar(),
-                        OUString("Times New Roman"), aPrefix, aSuffix);
+                        "Times New Roman", aPrefix, aSuffix);
                 }
 
                 pListStyle->SetListPosition(nPos, 0.0, 0.635, 0.0);
