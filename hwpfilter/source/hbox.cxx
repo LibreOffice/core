@@ -93,17 +93,18 @@ SkipData::~SkipData(void)
 
 
 // FieldCode [5]
-FieldCode::FieldCode(void) : HBox(CH_FIELD)
+FieldCode::FieldCode()
+    : HBox(CH_FIELD)
+    , location_info(0)
+    , str1(NULL)
+    , str2(NULL)
+    , str3(NULL)
+    , bin(NULL);
+    , m_pDate(NULL)
 {
-    str1 = 0;
-    str2 = 0;
-    str3 = 0;
-    bin = 0;
     reserved1 = new char[4];
     reserved2 = new char[22];
-     m_pDate = 0L;
 }
-
 
 FieldCode::~FieldCode(void)
 {
@@ -113,8 +114,7 @@ FieldCode::~FieldCode(void)
     delete[] bin;
     delete[] reserved1;
     delete[] reserved2;
-     if( m_pDate )
-          delete m_pDate;
+    delete m_pDate;
 }
 
 // book mark(6)
