@@ -223,12 +223,6 @@ uno::Sequence< OUString > SAL_CALL ScatterChartType::getSupportedMandatoryRoles(
     return aMandRolesSeq;
 }
 
-uno::Sequence< OUString > SAL_CALL ScatterChartType::getSupportedOptionalRoles()
-    throw (uno::RuntimeException, std::exception)
-{
-    return uno::Sequence< OUString >();
-}
-
 // ____ OPropertySet ____
 uno::Any ScatterChartType::GetDefaultValue( sal_Int32 nHandle ) const
     throw(beans::UnknownPropertyException)

@@ -52,9 +52,6 @@ protected:
     virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL
         getSupportedMandatoryRoles()
         throw (::com::sun::star::uno::RuntimeException, std::exception);
-    virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL
-        getSupportedOptionalRoles()
-        throw (::com::sun::star::uno::RuntimeException, std::exception);
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XCoordinateSystem > SAL_CALL
         createCoordinateSystem( ::sal_Int32 DimensionCount )
         throw (::com::sun::star::lang::IllegalArgumentException,
