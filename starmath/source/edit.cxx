@@ -422,6 +422,8 @@ void SmEditWindow::KeyInput(const KeyEvent& rKEvt)
         StartCursorMove();
 
         bool autoClose = false;
+        if (!pEditView)
+            CreateEditView();
         ESelection aSelection = pEditView->GetSelection();
         // as we don't support RTL in Math, we need to swap values from selection when they were done
         // in RTL form
@@ -459,8 +461,6 @@ void SmEditWindow::KeyInput(const KeyEvent& rKEvt)
                 autoClose = true;
         }
 
-        if (!pEditView)
-            CreateEditView();
         if ( !pEditView->PostKeyEvent(rKEvt) )
         {
             SmViewShell *pView = GetView();
