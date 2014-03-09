@@ -32,6 +32,8 @@
 #include "rangeutl.hxx"
 #include "dpoutputgeometry.hxx"
 
+#include "pivotsource.hxx"
+
 #include <xmloff/xmltkmap.hxx>
 #include <xmloff/nmspmap.hxx>
 #include <xmloff/xmltoken.hxx>
@@ -477,6 +479,9 @@ void ScXMLDataPilotTableContext::EndElement()
     pDPObject->SetTag(sApplicationData);
     pDPObject->SetOutRange(aTargetRangeAddress);
     pDPObject->SetHeaderLayout(bHeaderGridLayout);
+
+    sc::PivotTableSources& rPivotSources = GetScImport().GetPivotTableSources();
+
     switch (nSourceType)
     {
         case SQL :
@@ -486,7 +491,7 @@ void ScXMLDataPilotTableContext::EndElement()
             aImportDesc.aObject = sSourceObject;
             aImportDesc.nType = sheet::DataImportMode_SQL;
             aImportDesc.bNative = bIsNative;
-            pDPObject->SetImportDesc(aImportDesc);
+            rPivotSources.appendDBSource(pDPObject, aImportDesc);
         }
         break;
         case TABLE :
@@ -495,7 +500,7 @@ void ScXMLDataPilotTableContext::EndElement()
             aImportDesc.aDBName = sDatabaseName;
             aImportDesc.aObject = sSourceObject;
             aImportDesc.nType = sheet::DataImportMode_TABLE;
-            pDPObject->SetImportDesc(aImportDesc);
+            rPivotSources.appendDBSource(pDPObject, aImportDesc);
         }
         break;
         case QUERY :
@@ -504,14 +509,14 @@ void ScXMLDataPilotTableContext::EndElement()
             aImportDesc.aDBName = sDatabaseName;
             aImportDesc.aObject = sSourceObject;
             aImportDesc.nType = sheet::DataImportMode_QUERY;
-            pDPObject->SetImportDesc(aImportDesc);
+            rPivotSources.appendDBSource(pDPObject, aImportDesc);
         }
         break;
         case SERVICE :
         {
-            ScDPServiceDesc aServiceDesk(sServiceName, sServiceSourceName, sServiceSourceObject,
+            ScDPServiceDesc aServiceDesc(sServiceName, sServiceSourceName, sServiceSourceObject,
                                 sServiceUsername, sServicePassword);
-            pDPObject->SetServiceData(aServiceDesk);
+            rPivotSources.appendServiceSource(pDPObject, aServiceDesc);
         }
         break;
         case CELLRANGE :
@@ -525,11 +530,13 @@ void ScXMLDataPilotTableContext::EndElement()
                 else
                     aSheetDesc.SetSourceRange(aSourceCellRangeAddress);
                 aSheetDesc.SetQueryParam(aSourceQueryParam);
-                pDPObject->SetSheetDesc(aSheetDesc);
+                rPivotSources.appendSheetSource(pDPObject, aSheetDesc);
             }
         }
         break;
     }
+
+    rPivotSources.appendSelectedPages(pDPObject, maSelectedPages);
 
     pDPSave->SetRowGrand(maRowGrandTotal.mbVisible);
     pDPSave->SetColumnGrand(maColGrandTotal.mbVisible);
@@ -553,34 +560,8 @@ void ScXMLDataPilotTableContext::EndElement()
     if ( pDPCollection->GetByName(pDPObject->GetName()) )
         pDPObject->SetName( OUString() );     // ignore the invalid name, create a new name in AfterXMLLoading
 
-    ProcessSelectedPages();
-
     pDPCollection->InsertNewTable(pDPObject);
     SetButtons();
-}
-
-void ScXMLDataPilotTableContext::ProcessSelectedPages()
-{
-    // Set selected pages after building all dimension members.
-    if (!pDPObject)
-        return;
-
-    pDPObject->BuildAllDimensionMembers();
-    ScDPSaveData* pSaveData = pDPObject->GetSaveData();
-    if (!pSaveData)
-        return;
-
-    SelectedPagesType::const_iterator it = maSelectedPages.begin(), itEnd = maSelectedPages.end();
-    for (; it != itEnd; ++it)
-    {
-        const OUString& rDimName = it->first;
-        const OUString& rSelected = it->second;
-        ScDPSaveDimension* pDim = pSaveData->GetExistingDimensionByName(rDimName);
-        if (!pDim)
-            continue;
-
-        pDim->SetCurrentPage(&rSelected);
-    }
 }
 
 void ScXMLDataPilotTableContext::SetGrandTotal(

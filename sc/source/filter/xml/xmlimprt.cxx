@@ -67,6 +67,7 @@
 #include "editutil.hxx"
 #include "editattributemap.hxx"
 #include "documentimport.hxx"
+#include "pivotsource.hxx"
 
 #include <comphelper/extract.hxx>
 
@@ -1961,6 +1962,14 @@ sc::ImportPostProcessData* ScXMLImport::GetPostProcessData()
     return mpPostProcessData;
 }
 
+sc::PivotTableSources& ScXMLImport::GetPivotTableSources()
+{
+    if (!mpPivotSources)
+        mpPivotSources.reset(new sc::PivotTableSources);
+
+    return *mpPivotSources;
+}
+
 SvXMLImportContext *ScXMLImport::CreateContext( sal_uInt16 nPrefix,
                                                const OUString& rLocalName,
                                                const uno::Reference<xml::sax::XAttributeList>& xAttrList )
@@ -3243,6 +3252,9 @@ throw( ::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeE
             SetLabelRanges();
             SetNamedRanges();
             SetSheetNamedRanges();
+            if (mpPivotSources)
+                // Process pivot table sources after the named ranges have been set.
+                mpPivotSources->process();
         }
         GetProgressBarHelper()->End();  // make room for subsequent SfxProgressBars
         if (pDoc)
