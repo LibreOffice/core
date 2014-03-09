@@ -28,6 +28,7 @@ module com { module sun { module star { module document {
 
 /** is thrown when an operation is attempted at an XUndoManager which requires all undo
     contexts to be closed, but this requirement is not fullfilled.
+    @since OOo 3.4
  */
 exception UndoContextNotClosedException : ::com::sun::star::util::InvalidStateException
 {

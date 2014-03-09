@@ -66,6 +66,8 @@ interface XUndoManagerListener;
     <p>An Undo manager can be locked and unlocked, using the XLockable::lock() and
     XLockable::unlock() methods. When it is locked, then every attempt to add an undo action, or to
     enter or leave an Undo context, will be silently ignored.</p>
+
+    @since OOo 3.4
  */
 interface XUndoManager
 {

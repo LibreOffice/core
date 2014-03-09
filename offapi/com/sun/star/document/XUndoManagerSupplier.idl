@@ -29,6 +29,8 @@ interface XUndoManager;
 
 
 /** provides access to an XUndoManager.
+
+    @since OOo 3.4
  */
 interface XUndoManagerSupplier
 {

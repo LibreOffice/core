@@ -28,6 +28,7 @@ module com { module sun { module star { module document {
 
 
 /** represents a single (undoable) action on a document
+    @since OOo 3.4
  */
 interface XUndoAction
 {
