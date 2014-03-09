@@ -33,6 +33,11 @@ $(eval $(call gb_SrsTarget_set_include,sw/res,\
     $$(INCLUDE) \
     -I$(SRCDIR)/sw/inc \
     -I$(SRCDIR)/sw/source/core/inc \
+	-I$(SRCDIR)/sw/source/core/uibase/inc \
+    -I$(SRCDIR)/sw/source/core/uibase/docvw \
+    -I$(SRCDIR)/sw/source/core/uibase/envelp \
+    -I$(SRCDIR)/sw/source/core/uibase/index \
+    -I$(SRCDIR)/sw/source/core/uibase/sidebar \
     -I$(SRCDIR)/sw/source/core/undo \
     -I$(SRCDIR)/sw/source/core/unocore \
     -I$(SRCDIR)/sw/source/ui/chrdlg \
@@ -65,6 +70,20 @@ $(eval $(call gb_SrsTarget_add_files,sw/res,\
     sw/source/core/layout/pagefrm.src \
     sw/source/core/undo/undo.src \
     sw/source/core/unocore/unocore.src \
+    sw/source/core/uibase/dialog/regionsw.src \
+    sw/source/core/uibase/docvw/docvw.src \
+    sw/source/core/uibase/lingu/olmenu.src \
+    sw/source/core/uibase/misc/redlndlg.src \
+    sw/source/core/uibase/ribbar/inputwin.src \
+    sw/source/core/uibase/ribbar/workctrl.src \
+    sw/source/core/uibase/smartmenu/stmenu.src \
+    sw/source/core/uibase/uiview/view.src \
+    sw/source/core/uibase/utlui/attrdesc.src \
+    sw/source/core/uibase/utlui/navipi.src \
+    sw/source/core/uibase/utlui/initui.src \
+    sw/source/core/uibase/wrtsh/wrtsh.src \
+    sw/source/core/uibase/utlui/unotools.src \
+    sw/source/core/uibase/dbui/mailmergechildwindow.src \
     sw/source/ui/app/app.src \
     sw/source/ui/app/error.src \
     sw/source/ui/app/mn.src \
@@ -74,7 +93,6 @@ $(eval $(call gb_SrsTarget_add_files,sw/res,\
     sw/source/ui/dbui/createaddresslistdialog.src \
     sw/source/ui/dbui/dbtablepreviewdialog.src \
     sw/source/ui/dbui/dbui.src \
-    sw/source/ui/dbui/mailmergechildwindow.src \
     sw/source/ui/dbui/mailmergewizard.src \
     sw/source/ui/dbui/mmaddressblockpage.src \
     sw/source/ui/dbui/mmgreetingspage.src \
@@ -84,11 +102,9 @@ $(eval $(call gb_SrsTarget_add_files,sw/res,\
     sw/source/ui/dbui/mmpreparemergepage.src \
     sw/source/ui/dbui/selectdbtabledialog.src \
     sw/source/ui/dialog/dialog.src \
-    sw/source/ui/dialog/regionsw.src \
     sw/source/ui/dochdl/dochdl.src \
     sw/source/ui/docvw/annotation.src \
     sw/source/ui/docvw/access.src \
-    sw/source/ui/docvw/docvw.src \
     sw/source/ui/envelp/envelp.src \
     sw/source/ui/envelp/label.src \
     sw/source/ui/envelp/labfmt.src \
@@ -98,29 +114,18 @@ $(eval $(call gb_SrsTarget_add_files,sw/res,\
     sw/source/ui/globdoc/globdoc.src \
     sw/source/ui/index/cnttab.src \
     sw/source/ui/index/idxmrk.src \
-    sw/source/ui/lingu/olmenu.src \
     sw/source/ui/misc/glossary.src \
     sw/source/ui/misc/numberingtypelistbox.src \
-    sw/source/ui/misc/redlndlg.src \
     sw/source/ui/misc/srtdlg.src \
     sw/source/ui/misc/swruler.src \
-    sw/source/ui/ribbar/inputwin.src \
     sw/source/ui/ribbar/tbxanchr.src \
-    sw/source/ui/ribbar/workctrl.src \
     sw/source/ui/shells/shells.src \
     sw/source/ui/sidebar/PagePropertyPanel.src \
-    sw/source/ui/smartmenu/stmenu.src \
     sw/source/ui/table/table.src \
     sw/source/ui/table/tabledlg.src \
-    sw/source/ui/uiview/view.src \
-    sw/source/ui/utlui/attrdesc.src \
-    sw/source/ui/utlui/initui.src \
-    sw/source/ui/utlui/navipi.src \
     sw/source/ui/utlui/poolfmt.src \
-    sw/source/ui/utlui/unotools.src \
     sw/source/ui/utlui/utlui.src \
     sw/source/ui/web/web.src \
-    sw/source/ui/wrtsh/wrtsh.src \
 ))
 
 $(eval $(call gb_SrsTarget_add_nonlocalizable_files,sw/res,\
@@ -128,7 +133,7 @@ $(eval $(call gb_SrsTarget_add_nonlocalizable_files,sw/res,\
 ))
 
 $(eval $(call gb_SrsTarget_add_templates,sw/res,\
-    sw/source/ui/inc/redline_tmpl.hrc \
+    sw/source/core/uibase/inc/redline_tmpl.hrc \
 ))
 
 # vim: set noet sw=4 ts=4:

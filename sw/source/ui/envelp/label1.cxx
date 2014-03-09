@@ -24,7 +24,7 @@
 #include <swtypes.hxx>
 #include <wrtsh.hxx>
 #include <initui.hxx>
-#include <labimp.hxx>
+#include <../../core/uibase/envelp/labimp.hxx>
 #include <labfmt.hxx>
 #include <labprt.hxx>
 #include <unotools.hxx>
@@ -33,7 +33,7 @@
 #include <cmdid.h>
 #include <helpid.h>
 #include <globals.hrc>
-#include <label.hrc>
+#include <../../core/uibase/envelp/label.hrc>
 
 //impl in envimg.cxx
 extern SW_DLLPUBLIC OUString MakeSender();

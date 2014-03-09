@@ -28,8 +28,8 @@
 #include "ndole.hxx"
 #include <doc.hxx>
 #include <docsh.hxx>
-#include <../../ui/inc/wrtsh.hxx>
-#include <../../ui/inc/view.hxx>
+#include <../uibase/inc/wrtsh.hxx>
+#include <../uibase/inc/view.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::lang;

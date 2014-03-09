@@ -18,7 +18,7 @@ $(eval $(call gb_Executable_use_api,tiledrendering,\
 
 $(eval $(call gb_Executable_set_include,tiledrendering,\
     -I$(SRCDIR)/sw/inc \
-    -I$(SRCDIR)/sw/source/ui/inc \
+    -I$(SRCDIR)/sw/source/core/uibase/inc \
     $$(INCLUDE) \
 ))
 

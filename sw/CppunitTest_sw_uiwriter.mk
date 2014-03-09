@@ -38,6 +38,7 @@ $(eval $(call gb_CppunitTest_use_externals,sw_uiwriter,\
 $(eval $(call gb_CppunitTest_set_include,sw_uiwriter,\
     -I$(SRCDIR)/sw/inc \
     -I$(SRCDIR)/sw/source/core/inc \
+    -I$(SRCDIR)/sw/source/core/uibase/inc \
     -I$(SRCDIR)/sw/source/ui/inc \
     -I$(SRCDIR)/sw/qa/extras/inc \
     $$(INCLUDE) \

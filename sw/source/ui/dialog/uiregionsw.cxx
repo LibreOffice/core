@@ -54,7 +54,7 @@
 
 #include <helpid.h>
 #include <cmdid.h>
-#include <regionsw.hrc>
+#include <../../core/uibase/dialog/regionsw.hrc>
 #include <comcore.hrc>
 #include <globals.hrc>
 #include <sfx2/bindings.hxx>

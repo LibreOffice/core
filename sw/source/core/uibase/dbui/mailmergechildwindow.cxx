@@ -27,7 +27,7 @@
 #include <vcl/layout.hxx>
 #include <vcl/svapp.hxx>
 #include <mailmergechildwindow.hxx>
-#include <mmoutputpage.hxx>
+#include <../../../ui/dbui/mmoutputpage.hxx>
 #include <mmconfigitem.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/string.hxx>

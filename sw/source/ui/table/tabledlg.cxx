@@ -45,7 +45,7 @@
 #include <uitool.hxx>
 #include <frmatr.hxx>
 #include <tabledlg.hxx>
-#include <tablepg.hxx>
+#include <../../core/uibase/table/tablepg.hxx>
 #include <tablemgr.hxx>
 #include <pagedesc.hxx>
 #include <uiitems.hxx>

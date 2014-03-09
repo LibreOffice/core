@@ -31,7 +31,7 @@
 #include "envelp.hrc"
 #include "dochdl.hrc"
 #include <index.hrc>
-#include <regionsw.hrc>
+#include <../../core/uibase/dialog/regionsw.hrc>
 
 #include <wordcountdialog.hxx>
 #include "abstract.hxx"
