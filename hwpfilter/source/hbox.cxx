@@ -354,12 +354,20 @@ hunit TxtBox::Height(CharShape * csty)
 
 // picture(11)
 
-Picture::Picture(void):FBox(CH_PICTURE)
+Picture::Picture()
+    : FBox(CH_PICTURE)
+    , dummy(0)
+    , follow_block_size(0)
+    , dummy1(0)
+    , dummy2(0)
+    , reserved1(0)
+    , cap_pos(0)
+    , num(0)
+    , pictype(0)
+    , follow(0)
+    , ishyper(false)
 {
-    follow = 0;
-    ishyper = false;
 }
-
 
 Picture::~Picture(void)
 {
