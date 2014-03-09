@@ -528,10 +528,10 @@ void ScDBQueryDataIterator::DataAccessInternal::incPos()
         incBlock();
 }
 
-
-ScDBQueryDataIterator::DataAccessMatrix::DataAccessMatrix(const ScDBQueryDataIterator* pParent, ScDBQueryParamMatrix* pParam) :
-    DataAccess(pParent),
-    mpParam(pParam)
+ScDBQueryDataIterator::DataAccessMatrix::DataAccessMatrix(const ScDBQueryDataIterator* pParent, ScDBQueryParamMatrix* pParam)
+    : DataAccess(pParent)
+    , mpParam(pParam)
+    , mnCurRow(0)
 {
     SCSIZE nC, nR;
     mpParam->mpMatrix->GetDimensions(nC, nR);
