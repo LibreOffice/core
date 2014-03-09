@@ -2875,8 +2875,7 @@ void SchXMLExportHelper_Impl::exportSeries(
                         nSeriesLength, xNewDiagram, bExportContent );
 
                     // close series element
-                    if( pSeries )
-                        delete pSeries;
+                    delete pSeries;
                 }
             }
             aPropertyStates.clear();
