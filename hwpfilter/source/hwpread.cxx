@@ -527,12 +527,12 @@ bool Line::Read(HWPFile & hwpf)
     return !hwpf.State();
 }
 
-
 // hidden(15)
-Hidden::Hidden():HBox(CH_HIDDEN)
+Hidden::Hidden()
+    : HBox(CH_HIDDEN)
+    , dummy(0)
 {
 }
-
 
 bool Hidden::Read(HWPFile & hwpf)
 {
