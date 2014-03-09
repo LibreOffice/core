@@ -60,7 +60,6 @@ $(eval $(call gb_CppunitTest_use_externals,sw_uwriter,\
 ))
 
 $(eval $(call gb_CppunitTest_set_include,sw_uwriter,\
-    -I$(SRCDIR)/sw/source/ui/inc \
     -I$(SRCDIR)/sw/source/core/inc \
     -I$(SRCDIR)/sw/inc \
     $$(INCLUDE) \

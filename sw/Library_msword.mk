@@ -29,7 +29,6 @@ $(eval $(call gb_Library_set_precompiled_header,msword,$(SRCDIR)/sw/inc/pch/prec
 
 $(eval $(call gb_Library_set_include,msword,\
     -I$(SRCDIR)/sw/source/core/inc \
-    -I$(SRCDIR)/sw/source/ui/inc \
     -I$(SRCDIR)/sw/source/filter/inc \
     -I$(SRCDIR)/sw/inc \
     $$(INCLUDE) \

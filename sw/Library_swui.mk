@@ -24,7 +24,6 @@ $(eval $(call gb_Library_set_include,swui,\
     -I$(SRCDIR)/sw/source/core/inc \
     -I$(SRCDIR)/sw/source/core/uibase/inc \
     -I$(SRCDIR)/sw/source/filter/inc \
-    -I$(SRCDIR)/sw/source/ui/inc \
     -I$(WORKDIR)/SdiTarget/sw/sdi \
     $$(INCLUDE) \
 ))

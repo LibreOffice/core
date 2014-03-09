@@ -54,7 +54,6 @@ $(eval $(call gb_CppunitTest_use_libraries,sw_macros_test, \
 ))
 
 $(eval $(call gb_CppunitTest_set_include,sw_macros_test,\
-    -I$(SRCDIR)/sw/source/ui/inc \
     -I$(SRCDIR)/sw/inc \
     $$(INCLUDE) \
 ))
