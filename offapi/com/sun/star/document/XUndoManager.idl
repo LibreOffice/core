@@ -72,6 +72,8 @@ published interface XUndoManagerListener;
     <p>An Undo manager can be locked and unlocked, using the <member>XLockable::lock</member> and
     <member>XLockable::unlock</member> methods. When it is locked, then every attempt to add an undo action, or to
     enter or leave an Undo context, will be silently ignored.</p>
+
+    @since OpenOffice 3.4
  */
 published interface XUndoManager
 {

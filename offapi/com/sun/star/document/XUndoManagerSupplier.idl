@@ -35,6 +35,8 @@ published interface XUndoManager;
 //==================================================================================================================
 
 /** provides access to an XUndoManager.
+
+    @since OpenOffice 3.4
  */
 published interface XUndoManagerSupplier
 {

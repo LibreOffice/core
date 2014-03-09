@@ -36,6 +36,7 @@ module com { module sun { module star { module document {
 
     @see XUndoAction::undo
     @see XUndoManager::undo
+    @since OpenOffice 3.4
  */
 published exception UndoFailedException : ::com::sun::star::uno::Exception
 {
