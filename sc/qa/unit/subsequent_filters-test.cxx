@@ -142,6 +142,7 @@ public:
     void testCellAnchoredShapesODS();
 
     void testPivotTableBasicODS();
+    void testPivotTableNamedRangeSourceODS();
     void testPivotTableSharedCacheGroupODS();
     void testGetPivotDataXLS();
 
@@ -210,6 +211,7 @@ public:
     CPPUNIT_TEST(testCellAnchoredShapesODS);
 
     CPPUNIT_TEST(testPivotTableBasicODS);
+    CPPUNIT_TEST(testPivotTableNamedRangeSourceODS);
     CPPUNIT_TEST(testPivotTableSharedCacheGroupODS);
     CPPUNIT_TEST(testGetPivotDataXLS);
     CPPUNIT_TEST(testRowHeightODS);
@@ -1683,6 +1685,33 @@ void ScFiltersTest::testPivotTableBasicODS()
     CPPUNIT_ASSERT_EQUAL_MESSAGE(
         "Function for the data field should be COUNT.",
         sal_uInt16(sheet::GeneralFunction_COUNT), pDim->GetFunction());
+
+    xDocSh->DoClose();
+}
+
+void ScFiltersTest::testPivotTableNamedRangeSourceODS()
+{
+    ScDocShellRef xDocSh = loadDoc("pivot-table-named-range-source.", ODS);
+    CPPUNIT_ASSERT_MESSAGE("Failed to load pivot-table-named-range-source.ods", xDocSh.Is());
+
+    ScDocument* pDoc = xDocSh->GetDocument();
+
+    ScDPCollection* pDPs = pDoc->GetDPCollection();
+    CPPUNIT_ASSERT(pDPs->GetCount() == 1);
+
+    ScDPObject* pDP = (*pDPs)[0];
+    CPPUNIT_ASSERT(pDP);
+
+    // Make sure this pivot table is based on a named range source.
+    const ScSheetSourceDesc* pDesc = pDP->GetSheetDesc();
+    CPPUNIT_ASSERT(pDesc);
+    CPPUNIT_ASSERT_EQUAL(OUString("MyRange"), pDesc->GetRangeName());
+
+    sal_uInt16 nOrient;
+    long nDim = pDP->GetHeaderDim(ScAddress(0,1,1), nOrient);
+    CPPUNIT_ASSERT_MESSAGE("Failed to detect header dimension.", nDim == 0);
+    CPPUNIT_ASSERT_MESSAGE("This dimension should be a page dimension.",
+                           nOrient == sheet::DataPilotFieldOrientation_PAGE);
 
     xDocSh->DoClose();
 }
