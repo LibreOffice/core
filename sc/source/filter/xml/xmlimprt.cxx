@@ -3250,7 +3250,9 @@ throw( ::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeE
             SetLabelRanges();
             SetNamedRanges();
             SetSheetNamedRanges();
-            GetPivotTableSources().process();
+            if (mpPivotSources)
+                // Process pivot table sources after the named ranges have been set.
+                mpPivotSources->process();
         }
         GetProgressBarHelper()->End();  // make room for subsequent SfxProgressBars
         if (pDoc)
