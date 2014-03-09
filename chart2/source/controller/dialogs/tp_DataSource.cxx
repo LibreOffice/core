@@ -470,6 +470,12 @@ void DataSourceTabPage::fillRoleListBox()
         }
 
         m_pLB_ROLE->SetUpdateMode( sal_True );
+
+        if(pSeriesEntry->m_xChartType
+                ->getSupportedPropertyRoles().getLength() == 0)
+            m_pBtn_AddMapping->Disable();
+        else
+            m_pBtn_AddMapping->Enable();
     }
 }
 
