@@ -226,19 +226,15 @@ static void ensureContentProviderForURL( const Reference< XUniversalContentBroke
 }
 
 
-static Reference< XContentIdentifier > getContentIdentifier(
+static Reference< XContentIdentifier > getContentIdentifierThrow(
                                     const Reference< XUniversalContentBroker > & rBroker,
-                                    const OUString & rURL,
-                                    bool bThrow )
-    throw ( ContentCreationException, RuntimeException )
+                                    const OUString & rURL)
+    throw (ContentCreationException, RuntimeException)
 {
     Reference< XContentIdentifier > xId
         = rBroker->createContentIdentifier( rURL );
 
-    if ( xId.is() )
-        return xId;
-
-    if ( bThrow )
+    if (!xId.is())
     {
         ensureContentProviderForURL( rBroker, rURL );
 
@@ -248,7 +244,15 @@ static Reference< XContentIdentifier > getContentIdentifier(
             ContentCreationError_IDENTIFIER_CREATION_FAILED );
     }
 
-    return Reference< XContentIdentifier >();
+    return xId;
+}
+
+static Reference< XContentIdentifier > getContentIdentifierNoThrow(
+                                    const Reference< XUniversalContentBroker > & rBroker,
+                                    const OUString & rURL)
+    throw (RuntimeException)
+{
+    return rBroker->createContentIdentifier(rURL);
 }
 
 
@@ -309,7 +313,7 @@ Content::Content( const OUString& rURL,
         UniversalContentBroker::create( rCtx ) );
 
     Reference< XContentIdentifier > xId
-        = getContentIdentifier( pBroker, rURL, true );
+        = getContentIdentifierThrow(pBroker, rURL);
 
     Reference< XContent > xContent = getContent( pBroker, xId, true );
 
@@ -342,7 +346,7 @@ bool Content::create( const OUString& rURL,
         UniversalContentBroker::create( rCtx ) );
 
     Reference< XContentIdentifier > xId
-        = getContentIdentifier( pBroker, rURL, false );
+        = getContentIdentifierNoThrow(pBroker, rURL);
     if ( !xId.is() )
         return false;
 
