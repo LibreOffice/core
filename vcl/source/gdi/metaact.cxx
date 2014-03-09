@@ -1258,8 +1258,8 @@ void MetaTextAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
     WRITE_BASE_COMPAT( rOStm, 2, pData );
     WritePair( rOStm, maPt );
     rOStm.WriteUniOrByteString( maStr, pData->meActualCharSet );
-    rOStm.WriteInt32(mnIndex);
-    rOStm.WriteInt32(mnLen);
+    rOStm.WriteUInt16(mnIndex);
+    rOStm.WriteUInt16(mnLen);
 
     write_uInt16_lenPrefixed_uInt16s_FromOUString(rOStm, maStr); // version 2
 }
@@ -1271,8 +1271,11 @@ void MetaTextAction::Read( SvStream& rIStm, ImplMetaReadData* pData )
     COMPAT( rIStm );
     ReadPair( rIStm, maPt );
     maStr = rIStm.ReadUniOrByteString(pData->meActualCharSet);
-    rIStm  .ReadInt32( mnIndex );
-    rIStm  .ReadInt32( mnLen );
+    sal_uInt16 nTmp(0);
+    rIStm.ReadUInt16(nTmp);
+    mnIndex = nTmp;
+    rIStm.ReadUInt16(nTmp);
+    mnLen = nTmp;
 
     if ( aCompat.GetVersion() >= 2 )                            // Version 2
         maStr = read_uInt16_lenPrefixed_uInt16s_ToOUString(rIStm);
@@ -1395,9 +1398,9 @@ void MetaTextArrayAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
     WRITE_BASE_COMPAT( rOStm, 2, pData );
     WritePair( rOStm, maStartPt );
     rOStm.WriteUniOrByteString( maStr, pData->meActualCharSet );
-    rOStm.WriteInt32(mnIndex);
-    rOStm.WriteInt32(mnLen);
-    rOStm.WriteInt32(nAryLen);
+    rOStm.WriteUInt16(mnIndex);
+    rOStm.WriteUInt16(mnLen);
+    rOStm.WriteUInt16(nAryLen);
 
     for (sal_Int32 i = 0; i < nAryLen; ++i)
         rOStm.WriteInt32( mpDXAry[ i ] );
@@ -1416,9 +1419,13 @@ void MetaTextArrayAction::Read( SvStream& rIStm, ImplMetaReadData* pData )
     COMPAT( rIStm );
     ReadPair( rIStm, maStartPt );
     maStr = rIStm.ReadUniOrByteString(pData->meActualCharSet);
-    rIStm  .ReadInt32( mnIndex );
-    rIStm  .ReadInt32( mnLen );
-    rIStm  .ReadInt32( nAryLen );
+    sal_uInt16 nTmp(0);
+    rIStm.ReadUInt16(nTmp);
+    mnIndex = nTmp;
+    rIStm.ReadUInt16(nTmp);
+    mnLen = nTmp;
+    rIStm.ReadUInt16(nTmp);
+    nAryLen = nTmp;
 
     if ( mnIndex + mnLen > maStr.getLength() )
     {
@@ -1533,8 +1540,8 @@ void MetaStretchTextAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
     WritePair( rOStm, maPt );
     rOStm.WriteUniOrByteString( maStr, pData->meActualCharSet );
     rOStm.WriteUInt32( mnWidth );
-    rOStm.WriteInt32( mnIndex );
-    rOStm.WriteInt32( mnLen );
+    rOStm.WriteUInt16( mnIndex );
+    rOStm.WriteUInt16( mnLen );
 
     write_uInt16_lenPrefixed_uInt16s_FromOUString(rOStm, maStr); // version 2
 }
@@ -1546,9 +1553,12 @@ void MetaStretchTextAction::Read( SvStream& rIStm, ImplMetaReadData* pData )
     COMPAT( rIStm );
     ReadPair( rIStm, maPt );
     maStr = rIStm.ReadUniOrByteString(pData->meActualCharSet);
-    rIStm  .ReadUInt32( mnWidth );
-    rIStm  .ReadInt32( mnIndex );
-    rIStm  .ReadInt32( mnLen );
+    rIStm.ReadUInt32( mnWidth );
+    sal_uInt16 nTmp(0);
+    rIStm.ReadUInt16(nTmp);
+    mnIndex = nTmp;
+    rIStm.ReadUInt16(nTmp);
+    mnLen = nTmp;
 
     if ( aCompat.GetVersion() >= 2 )                            // Version 2
         maStr = read_uInt16_lenPrefixed_uInt16s_ToOUString(rIStm);

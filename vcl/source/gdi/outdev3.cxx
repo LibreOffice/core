@@ -5680,6 +5680,9 @@ ImplLayoutArgs OutputDevice::ImplPrepareLayoutArgs( OUString& rStr,
                                        const sal_Int32 nMinIndex, const sal_Int32 nLen,
                                        long nPixelWidth, const sal_Int32* pDXArray ) const
 {
+    assert(nMinIndex >= 0);
+    assert(nLen >= 0);
+
     // get string length for calculating extents
     sal_Int32 nEndIndex = rStr.getLength();
     if( nMinIndex + nLen < nEndIndex )
