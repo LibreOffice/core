@@ -21,10 +21,7 @@
 
 #include <osl/mutex.hxx>
 #include <rtl/ustring.hxx>
-#include <cppuhelper/weak.hxx>
-#include <ucbhelper/macros.hxx>
 #include <com/sun/star/uno/XInterface.hpp>
-#include <com/sun/star/lang/XTypeProvider.hpp>
 #include <com/sun/star/io/XSeekable.hpp>
 #include <com/sun/star/io/XTruncate.hpp>
 #include <com/sun/star/io/XInputStream.hpp>
@@ -32,6 +29,7 @@
 #include <com/sun/star/io/XStream.hpp>
 #include "com/sun/star/io/XAsyncOutputMonitor.hpp"
 #include <com/sun/star/ucb/XContentProvider.hpp>
+#include <cppuhelper/implbase6.hxx>
 
 #include "filrec.hxx"
 
@@ -40,15 +38,13 @@ namespace fileaccess {
     // forward:
     class shell;
 
-    class XStream_impl
-        : public cppu::OWeakObject,
-          public com::sun::star::lang::XTypeProvider,
-          public com::sun::star::io::XStream,
-          public com::sun::star::io::XSeekable,
-          public com::sun::star::io::XInputStream,
-          public com::sun::star::io::XOutputStream,
-          public com::sun::star::io::XTruncate,
-          public com::sun::star::io::XAsyncOutputMonitor
+class XStream_impl :  public cppu::WeakImplHelper6<
+    css::io::XStream,
+    css::io::XSeekable,
+    css::io::XInputStream,
+    css::io::XOutputStream,
+    css::io::XTruncate,
+    css::io::XAsyncOutputMonitor >
     {
 
     public:
@@ -63,30 +59,6 @@ namespace fileaccess {
         sal_Int32 SAL_CALL getMinorError();
 
         virtual ~XStream_impl();
-
-
-        // OWeakObject
-
-        virtual com::sun::star::uno::Any SAL_CALL
-        queryInterface(
-            const com::sun::star::uno::Type& rType )
-            throw( com::sun::star::uno::RuntimeException, std::exception);
-
-        virtual void SAL_CALL
-        acquire(
-            void )
-            throw();
-
-        virtual void SAL_CALL
-        release(
-            void )
-            throw();
-
-
-        // XTypeProvider
-
-        XTYPEPROVIDER_DECL()
-
 
         // XStream
 

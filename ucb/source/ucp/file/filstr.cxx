@@ -40,58 +40,6 @@ using namespace com::sun::star::ucb;
 /*                                                                            */
 /******************************************************************************/
 
-
-uno::Any SAL_CALL
-XStream_impl::queryInterface(
-    const uno::Type& rType )
-    throw( uno::RuntimeException, std::exception)
-{
-    uno::Any aRet = cppu::queryInterface( rType,
-                                          (static_cast< lang::XTypeProvider* >(this)),
-                                          (static_cast< io::XStream* >(this)),
-                                          (static_cast< io::XInputStream* >(this)),
-                                          (static_cast< io::XOutputStream* >(this)),
-                                          (static_cast< io::XSeekable* >(this)),
-                                          (static_cast< io::XTruncate* >(this)),
-                                          (static_cast< io::XAsyncOutputMonitor* >(this)) );
-    return aRet.hasValue() ? aRet : OWeakObject::queryInterface( rType );
-}
-
-
-void SAL_CALL
-XStream_impl::acquire(
-    void )
-    throw()
-{
-    OWeakObject::acquire();
-}
-
-
-void SAL_CALL
-XStream_impl::release(
-    void )
-    throw()
-{
-    OWeakObject::release();
-}
-
-
-
-//  XTypeProvider
-
-
-
-XTYPEPROVIDER_IMPL_7( XStream_impl,
-                      lang::XTypeProvider,
-                      io::XStream,
-                      io::XSeekable,
-                      io::XInputStream,
-                      io::XOutputStream,
-                      io::XTruncate,
-                      io::XAsyncOutputMonitor )
-
-
-
 XStream_impl::XStream_impl( shell* pMyShell,const OUString& aUncPath, sal_Bool bLock )
     : m_bInputStreamCalled( false ),
       m_bOutputStreamCalled( false ),
