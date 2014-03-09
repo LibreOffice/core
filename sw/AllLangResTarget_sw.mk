@@ -50,7 +50,6 @@ $(eval $(call gb_SrsTarget_set_include,sw/res,\
     -I$(SRCDIR)/sw/source/ui/fmtui \
     -I$(SRCDIR)/sw/source/ui/frmdlg \
     -I$(SRCDIR)/sw/source/ui/globdoc \
-    -I$(SRCDIR)/sw/source/ui/inc \
     -I$(SRCDIR)/sw/source/ui/index \
     -I$(SRCDIR)/sw/source/ui/lingu \
     -I$(SRCDIR)/sw/source/ui/misc \
