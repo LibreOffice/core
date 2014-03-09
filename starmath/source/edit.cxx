@@ -142,8 +142,8 @@ SmEditWindow::~SmEditWindow()
             pEditEngine->SetStatusEventHdl( Link() );
             pEditEngine->RemoveView( pEditView );
         }
+        delete pEditView;
     }
-    delete pEditView;
     delete pHScrollBar;
     delete pVScrollBar;
     delete pScrollBox;
