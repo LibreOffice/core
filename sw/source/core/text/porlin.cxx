@@ -76,6 +76,7 @@ SwLinePortion::SwLinePortion( ) :
     pPortion( NULL ),
     nLineLength( 0 ),
     nAscent( 0 ),
+    nWhichPor( POR_LIN ),
     m_bJoinBorderWithPrev(false),
     m_bJoinBorderWithNext(false)
 {
