@@ -29,6 +29,7 @@
 #include <vcl/svapp.hxx>
 #include <vcl/tabctrl.hxx>
 #include <vcl/tabpage.hxx>
+#include <vcl/throbber.hxx>
 #include <vcl/toolbox.hxx>
 #include <vcl/vclmedit.hxx>
 #include <vcl/settings.hxx>
@@ -1483,6 +1484,10 @@ Window *VclBuilder::makeObject(Window *pParent, const OString &name, const OStri
         pWindow = new VclMultiLineEdit(pRealParent, nWinStyle);
         if (pRealParent != pParent)
             cleanupWidgetOwnScrolling(pParent, pWindow, rMap);
+    }
+    else if (name == "GtkSpinner")
+    {
+        pWindow = new Throbber(pParent, WB_3DLOOK);
     }
     else if (name == "GtkToolbar")
     {
