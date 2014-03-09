@@ -22,8 +22,7 @@
 // this includes no link dependency
 #include <svl/solar.hrc>
 
-//next free is 303
-
+//next free is 305
 
 //chart types
 //see Strings_ChartTypes.src
@@ -111,6 +110,8 @@
 #define STR_DATA_ROLE_MAX                   (RID_APP_START + 249)
 #define STR_DATA_ROLE_CATEGORIES            (RID_APP_START + 260)
 #define STR_DATA_ROLE_SIZE                  (RID_APP_START + 284)
+#define STR_PROPERTY_ROLE_FILLCOLOR         (RID_APP_START + 303)
+#define STR_PROPERTY_ROLE_BORDERCOLOR       (RID_APP_START + 304)
 
 #define STR_DATA_UNNAMED_SERIES             (RID_APP_START + 250)
 #define STR_DATA_UNNAMED_SERIES_WITH_INDEX  (RID_APP_START + 251)

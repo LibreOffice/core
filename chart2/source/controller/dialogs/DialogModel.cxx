@@ -94,6 +94,8 @@ OUString lcl_ConvertRole( const OUString & rRoleString, bool bFromInternalToUI )
         aTranslationMap[ "values-x" ] =     ::chart::SchResId( STR_DATA_ROLE_X ).toString();
         aTranslationMap[ "values-y" ] =     ::chart::SchResId( STR_DATA_ROLE_Y ).toString();
         aTranslationMap[ "values-size" ] =  ::chart::SchResId( STR_DATA_ROLE_SIZE ).toString();
+        aTranslationMap[ "FillColor" ] =    ::chart::SchResId( STR_PROPERTY_ROLE_FILLCOLOR ).toString();
+        aTranslationMap[ "BorderColor" ] =  ::chart::SchResId( STR_PROPERTY_ROLE_BORDERCOLOR ).toString();
     }
 
     if( bFromInternalToUI )
@@ -216,7 +218,7 @@ struct lcl_RolesWithRangeAppend : public
                 {
                     OUString aRole;
                     Reference< beans::XPropertySet > xProp( xSeq, uno::UNO_QUERY_THROW );
-                    if( xProp->getPropertyValue( "Role") >>= aRole )
+                    if( xProp->getPropertyValue( "Role" ) >>= aRole )
                     {
                         m_rDestCnt.insert(
                             tContainerType::value_type(
