@@ -311,6 +311,9 @@
     <glade-widget-class title="LicenseView" name="deploymentgui-LicenseView"
                         generic-name="LicenseView" parent="GtkTextView"
                         icon-name="widget-gtk-textview"/>
+    <glade-widget-class title="Update Check List Box" name="deploymentgui-UpdateCheckListBox"
+                        generic-name="Update Check List Box" parent="GtkTreeView"
+                        icon-name="widget-gtk-treeview"/>
     <glade-widget-class title="SvtValueSet" name="svtlo-ValueSet"
                         generic-name="Set of Value Options" parent="GtkDrawingArea"
                         icon-name="widget-gtk-drawingarea"/>

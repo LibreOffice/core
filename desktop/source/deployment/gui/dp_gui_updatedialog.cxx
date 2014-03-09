@@ -495,25 +495,11 @@ UpdateDialog::UpdateDialog(
     Window * parent,
     const std::vector<uno::Reference< deployment::XPackage > > &vExtensionList,
     std::vector< dp_gui::UpdateData > * updateData):
-    ModalDialog(parent,DpGuiResId(RID_DLG_UPDATE)),
+    ModalDialog(parent,"ExtensionUpdateDialog", "desktop/ui/extensionupdate.ui"),
     m_context(context),
-    m_checking(this, DpGuiResId(RID_DLG_UPDATE_CHECKING)),
-    m_throbber(this, DpGuiResId(RID_DLG_UPDATE_THROBBER)),
-    m_update(this, DpGuiResId(RID_DLG_UPDATE_UPDATE)),
-    m_updates(
-        *this, DpGuiResId(RID_DLG_UPDATE_UPDATES),
-        Image(DpGuiResId(RID_DLG_UPDATE_NORMALALERT))),
-    m_all(this, DpGuiResId(RID_DLG_UPDATE_ALL)),
-    m_description(this, DpGuiResId(RID_DLG_UPDATE_DESCRIPTION)),
-    m_PublisherLabel(this, DpGuiResId(RID_DLG_UPDATE_PUBLISHER_LABEL)),
-    m_PublisherLink(this, DpGuiResId(RID_DLG_UPDATE_PUBLISHER_LINK)),
-    m_ReleaseNotesLabel(this, DpGuiResId(RID_DLG_UPDATE_RELEASENOTES_LABEL)),
-    m_ReleaseNotesLink(this, DpGuiResId(RID_DLG_UPDATE_RELEASENOTES_LINK)),
-    m_descriptions(this, DpGuiResId(RID_DLG_UPDATE_DESCRIPTIONS)),
-    m_line(this, DpGuiResId(RID_DLG_UPDATE_LINE)),
-    m_help(this, DpGuiResId(RID_DLG_UPDATE_HELP)),
-    m_ok(this, DpGuiResId(RID_DLG_UPDATE_OK)),
-    m_close(this, DpGuiResId(RID_DLG_UPDATE_CLOSE)),
+//////    m_updates( //FIXME later
+//////        *this, DpGuiResId(RID_DLG_UPDATE_UPDATES),
+//////        Image(DpGuiResId(RID_DLG_UPDATE_NORMALALERT))),
     m_error(DPGUI_RESSTR(RID_DLG_UPDATE_ERROR)),
     m_none(DPGUI_RESSTR(RID_DLG_UPDATE_NONE)),
     m_noInstallable(DPGUI_RESSTR(RID_DLG_UPDATE_NOINSTALLABLE)),
@@ -530,8 +516,6 @@ UpdateDialog::UpdateDialog(
     m_thread(
         new UpdateDialog::Thread(
             context, *this, vExtensionList)),
-    m_nFirstLineDelta(0),
-    m_nOneLineMissing(0),
     m_nLastID(1),
     m_bModified( false )
     // TODO: check!
@@ -539,6 +523,17 @@ UpdateDialog::UpdateDialog(
 //    m_extensionManagerDialog(extensionManagerDialog)
 {
     OSL_ASSERT(updateData != NULL);
+
+    get(m_pChecking, "updateCheckingLabel");
+    get(m_pDescriptionFrame, "descriptionFrame");
+    get(m_pShowAllUpdates, "showAllUpdates");
+    get(m_pPublisherLink, "publisherLink");
+    get(m_pReleaseNotesLink, "releaseNotesLink");
+    get(m_pDescriptions, "descriptionTextBox");
+    get(m_pOk, "install");
+    get(m_throbber, "spinner");
+    get(m_updates, "updatelist");
+    m_updates->Init(this);
 
     m_xExtensionManager = deployment::ExtensionManager::get( context );
 
@@ -550,13 +545,23 @@ UpdateDialog::UpdateDialog(
     } catch (const uno::Exception & e) {
         throw uno::RuntimeException(e.Message, e.Context);
     }
-    m_updates.SetSelectHdl(LINK(this, UpdateDialog, selectionHandler));
-    m_all.SetToggleHdl(LINK(this, UpdateDialog, allHandler));
-    m_ok.SetClickHdl(LINK(this, UpdateDialog, okHandler));
-    m_close.SetClickHdl(LINK(this, UpdateDialog, closeHandler));
+
+    m_updates->SetSelectHdl(LINK(this, UpdateDialog, selectionHandler));
+    m_pShowAllUpdates->SetToggleHdl(LINK(this, UpdateDialog, allHandler));
+    m_pOk->SetClickHdl(LINK(this, UpdateDialog, okHandler));
+
+    PushButton* pClose;
+    get(pClose, "close");
+    pClose->SetClickHdl(LINK(this, UpdateDialog, closeHandler));
+
     if ( ! dp_misc::office_is_running())
-        m_help.Disable();
-    FreeResource();
+    {
+        HelpButton* pHelp;
+        get(pHelp, "help");
+        pHelp->Disable();
+    }
+    // TODO Check when it use is necessary (extra strings in .src)
+////////    FreeResource();
 
     initDescription();
     getIgnoredUpdates();
@@ -584,23 +589,29 @@ bool UpdateDialog::Close() {
 }
 
 short UpdateDialog::Execute() {
-    m_throbber.start();
+    m_throbber->start();
     m_thread->launch();
     return ModalDialog::Execute();
 }
 
-
-
-
-UpdateDialog::CheckListBox::CheckListBox( UpdateDialog & dialog, ResId const & resource,
-                                          Image const & normalStaticImage ):
-    SvxCheckListBox( &dialog, resource, normalStaticImage ),
+UpdateDialog::CheckListBox::CheckListBox(Window *pParent, WinBits nStyle):
+//////                                          Image const & normalStaticImage ): // FIXME later
+    SvxCheckListBox(pParent, nStyle),
+////////    SvxCheckListBox( &dialog, resource, normalStaticImage ), // FIXME later
     m_ignoreUpdate( DPGUI_RESSTR( RID_DLG_UPDATE_IGNORE ) ),
     m_ignoreAllUpdates( DPGUI_RESSTR( RID_DLG_UPDATE_IGNORE_ALL ) ),
     m_enableUpdate( DPGUI_RESSTR( RID_DLG_UPDATE_ENABLE ) ),
-    m_dialog(dialog)
+    m_dialog(NULL)
 {}
 
+extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeUpdateCheckListBox(Window *pParent, VclBuilder::stringmap &rMap)
+{
+    WinBits nWinStyle = WB_CLIPCHILDREN|WB_LEFT|WB_VCENTER|WB_3DLOOK|WB_SIMPLEMODE;
+    OString sBorder = VclBuilder::extractCustomProperty(rMap);
+    if (!sBorder.isEmpty())
+        nWinStyle |= WB_BORDER;
+    return new UpdateDialog::CheckListBox(pParent, nWinStyle);
+}
 
 UpdateDialog::CheckListBox::~CheckListBox() {}
 
@@ -623,7 +634,7 @@ void UpdateDialog::CheckListBox::MouseButtonDown( MouseEvent const & event )
         handlePopupMenu( event.GetPosPixel() );
     }
 
-    m_dialog.enableOk();
+    m_dialog->enableOk();
 }
 
 
@@ -631,12 +642,12 @@ void UpdateDialog::CheckListBox::MouseButtonUp(MouseEvent const & event) {
     // When clicking on an entry's checkbox in an SvxCheckListBox, the entry's
     // checkbox is toggled on mouse button up:
     SvxCheckListBox::MouseButtonUp(event);
-    m_dialog.enableOk();
+    m_dialog->enableOk();
 }
 
 void UpdateDialog::CheckListBox::KeyInput(KeyEvent const & event) {
     SvxCheckListBox::KeyInput(event);
-    m_dialog.enableOk();
+    m_dialog->enableOk();
 }
 
 
@@ -668,12 +679,12 @@ void UpdateDialog::CheckListBox::handlePopupMenu( const Point &rPos )
                 if ( p->m_eKind == ENABLED_UPDATE )
                 {
                     RemoveEntry( nEntryPos );
-                    m_dialog.addAdditional( p, SvLBoxButtonKind_disabledCheckbox );
+                    m_dialog->addAdditional( p, SvLBoxButtonKind_disabledCheckbox );
                 }
                 if ( aCmd == CMD_IGNORE_UPDATE )
-                    m_dialog.setIgnoredUpdate( p, true, false );
+                    m_dialog->setIgnoredUpdate( p, true, false );
                 else
-                    m_dialog.setIgnoredUpdate( p, true, true );
+                    m_dialog->setIgnoredUpdate( p, true, true );
                 // TODO: reselect entry to display new description!
             }
             else if ( aCmd == CMD_ENABLE_UPDATE )
@@ -682,9 +693,9 @@ void UpdateDialog::CheckListBox::handlePopupMenu( const Point &rPos )
                 if ( p->m_eKind == ENABLED_UPDATE )
                 {
                     RemoveEntry( nEntryPos );
-                    m_dialog.insertItem( p, SvLBoxButtonKind_enabledCheckbox );
+                    m_dialog->insertItem( p, SvLBoxButtonKind_enabledCheckbox );
                 }
-                m_dialog.setIgnoredUpdate( p, false, false );
+                m_dialog->setIgnoredUpdate( p, false, false );
             }
         }
     }
@@ -695,12 +706,12 @@ void UpdateDialog::CheckListBox::handlePopupMenu( const Point &rPos )
 
 sal_uInt16 UpdateDialog::insertItem( UpdateDialog::Index *pEntry, SvLBoxButtonKind kind )
 {
-    m_updates.InsertEntry( pEntry->m_aName, TREELIST_APPEND, static_cast< void * >( pEntry ), kind );
+    m_updates->InsertEntry( pEntry->m_aName, TREELIST_APPEND, static_cast< void * >( pEntry ), kind );
 
-    for ( sal_uInt16 i = m_updates.getItemCount(); i != 0 ; )
+    for ( sal_uInt16 i = m_updates->getItemCount(); i != 0 ; )
     {
         i -= 1;
-        UpdateDialog::Index const * p = static_cast< UpdateDialog::Index const * >( m_updates.GetEntryData( i ) );
+        UpdateDialog::Index const * p = static_cast< UpdateDialog::Index const * >( m_updates->GetEntryData( i ) );
         if ( p == pEntry )
             return i;
     }
@@ -711,14 +722,14 @@ sal_uInt16 UpdateDialog::insertItem( UpdateDialog::Index *pEntry, SvLBoxButtonKi
 
 void UpdateDialog::addAdditional( UpdateDialog::Index * index, SvLBoxButtonKind kind )
 {
-    m_all.Enable();
-    if (m_all.IsChecked())
+    m_pShowAllUpdates->Enable();
+    if (m_pShowAllUpdates->IsChecked())
     {
         insertItem( index, kind );
-        m_update.Enable();
-        m_updates.Enable();
-        m_description.Enable();
-        m_descriptions.Enable();
+//        m_update.Enable(); // TODO Enable whole frame
+        m_updates->Enable();
+//        m_description.Enable();
+        m_pDescriptions->Enable();
     }
 }
 
@@ -738,15 +749,15 @@ void UpdateDialog::addEnabledUpdate( OUString const & name,
     if ( ! isIgnoredUpdate( pEntry ) )
     {
         sal_uInt16 nPos = insertItem( pEntry, SvLBoxButtonKind_enabledCheckbox );
-        m_updates.CheckEntryPos( nPos );
+        m_updates->CheckEntryPos( nPos );
     }
     else
         addAdditional( pEntry, SvLBoxButtonKind_disabledCheckbox );
 
-    m_update.Enable();
-    m_updates.Enable();
-    m_description.Enable();
-    m_descriptions.Enable();
+//    m_update.Enable(); // TODO Enable whole frame
+    m_updates->Enable();
+//    m_description.Enable();
+    m_pDescriptions->Enable();
 }
 
 
@@ -781,27 +792,27 @@ void UpdateDialog::addSpecificError( UpdateDialog::SpecificError & data )
 }
 
 void UpdateDialog::checkingDone() {
-    m_checking.Hide();
-    m_throbber.stop();
-    m_throbber.Hide();
-    if (m_updates.getItemCount() == 0)
+    m_pChecking->Hide();
+    m_throbber->stop();
+    m_throbber->Hide();
+    if (m_updates->getItemCount() == 0)
     {
         clearDescription();
-        m_description.Enable();
-        m_descriptions.Enable();
+//        m_description.Enable(); // TODO Enable whole frame
+        m_pDescriptions->Enable();
 
         if ( m_disabledUpdates.empty() && m_specificErrors.empty() && m_ignoredUpdates.empty() )
-            showDescription( m_none, false );
+            showDescription( m_none );
         else
-            showDescription( m_noInstallable, false );
+            showDescription( m_noInstallable );
     }
 
     enableOk();
 }
 
 void UpdateDialog::enableOk() {
-    if (!m_checking.IsVisible()) {
-        m_ok.Enable(m_updates.GetCheckedEntryCount() != 0);
+    if (!m_pChecking->IsVisible()) {
+        m_pOk->Enable(m_updates->GetCheckedEntryCount() != 0);
     }
 }
 
@@ -875,11 +886,11 @@ void UpdateDialog::notifyMenubar( bool bPrepareOnly, bool bRecheckOnly )
     if ( ! bRecheckOnly )
     {
         sal_Int32 nCount = 0;
-        for ( sal_Int16 i = 0; i < m_updates.getItemCount(); ++i )
+        for ( sal_Int16 i = 0; i < m_updates->getItemCount(); ++i )
         {
             uno::Sequence< OUString > aItem(2);
 
-            UpdateDialog::Index const * p = static_cast< UpdateDialog::Index const * >(m_updates.GetEntryData(i));
+            UpdateDialog::Index const * p = static_cast< UpdateDialog::Index const * >(m_updates->GetEntryData(i));
 
             if ( p->m_eKind == ENABLED_UPDATE )
             {
@@ -906,70 +917,35 @@ void UpdateDialog::notifyMenubar( bool bPrepareOnly, bool bRecheckOnly )
 
 void UpdateDialog::initDescription()
 {
-    m_PublisherLabel.Hide();
-    m_PublisherLink.Hide();
-    m_ReleaseNotesLabel.Hide();
-    m_ReleaseNotesLink.Hide();
-    m_descriptions.Hide();
+//    m_PublisherLabel.Hide(); // TODO Hide whole frame
+    m_pPublisherLink->Hide();
+//    m_ReleaseNotesLabel.Hide();
+    m_pReleaseNotesLink->Hide();
+//////    m_pDescriptions->Hide();
 
     Link aLink = LINK( this, UpdateDialog, hyperlink_clicked );
-    m_PublisherLink.SetClickHdl( aLink );
-    m_ReleaseNotesLink.SetClickHdl( aLink );
+    m_pPublisherLink->SetClickHdl( aLink );
+    m_pReleaseNotesLink->SetClickHdl( aLink );
 
-    long nTextWidth = m_PublisherLabel.GetCtrlTextWidth( m_PublisherLabel.GetText() );
-    long nTemp = m_ReleaseNotesLabel.GetTextWidth( m_ReleaseNotesLabel.GetText() );
-    if ( nTemp > nTextWidth )
-        nTextWidth = nTemp;
-    nTextWidth = nTextWidth * 110 / 100;
-
-    Size aNewSize = m_PublisherLabel.GetSizePixel();
-    if ( nTextWidth > aNewSize.Width() )
-    {
-        long nDelta = nTextWidth - aNewSize.Width();
-        aNewSize.Width() = nTextWidth;
-        m_PublisherLabel.SetSizePixel( aNewSize );
-        m_ReleaseNotesLabel.SetSizePixel( aNewSize );
-
-        aNewSize = m_PublisherLink.GetSizePixel();
-        aNewSize.Width() = aNewSize.Width() - nDelta;
-        Point aNewPos = m_PublisherLink.GetPosPixel();
-        aNewPos.X() = aNewPos.X() + nDelta;
-        m_PublisherLink.SetPosSizePixel( aNewPos, aNewSize );
-        aNewPos.Y() = m_ReleaseNotesLink.GetPosPixel().Y();
-        m_ReleaseNotesLink.SetPosSizePixel( aNewPos, aNewSize );
-    }
-
-    m_aFirstLinePos = m_descriptions.GetPosPixel();
-    m_aFirstLineSize = m_descriptions.GetSizePixel();
-    Size aMarginSize = LogicToPixel( Size( RSC_SP_CTRL_GROUP_X, RSC_SP_CTRL_GROUP_Y ), MAP_APPFONT );
-    Point aThirdLinePos = m_ReleaseNotesLabel.GetPosPixel();
-    aThirdLinePos.Y() = aThirdLinePos.Y() + m_ReleaseNotesLabel.GetSizePixel().Height() + aMarginSize.Height();
-    m_nFirstLineDelta = aThirdLinePos.Y() - m_aFirstLinePos.Y();
-    m_nOneLineMissing = m_ReleaseNotesLabel.GetPosPixel().Y() - m_PublisherLabel.GetPosPixel().Y();
 }
 
 void UpdateDialog::clearDescription()
 {
     OUString sEmpty;
-    m_PublisherLabel.Hide();
-    m_PublisherLink.Hide();
-    m_PublisherLink.SetText( sEmpty );
-    m_PublisherLink.SetURL( sEmpty );
-    m_ReleaseNotesLabel.Hide();
-    m_ReleaseNotesLink.Hide();
-    m_ReleaseNotesLink.SetURL( sEmpty );
-    if ( m_PublisherLabel.GetPosPixel().Y() == m_ReleaseNotesLabel.GetPosPixel().Y() )
-    {
-        Point aNewPos = m_ReleaseNotesLabel.GetPosPixel();
-        aNewPos.Y() += m_nOneLineMissing;
-        m_ReleaseNotesLabel.SetPosPixel( aNewPos );
-        aNewPos = m_ReleaseNotesLink.GetPosPixel();
-        aNewPos.Y() += m_nOneLineMissing;
-        m_ReleaseNotesLink.SetPosPixel( aNewPos );
-    }
-    m_descriptions.Hide();
-    m_descriptions.Clear();
-    m_descriptions.SetPosSizePixel( m_aFirstLinePos, m_aFirstLineSize );
+//    m_PublisherLabel.Hide(); // TODO Hide whole frame
+    m_pPublisherLink->Hide();
+    m_pPublisherLink->SetText( sEmpty );
+    m_pPublisherLink->SetURL( sEmpty );
+//    m_ReleaseNotesLabel.Hide();
+    m_pReleaseNotesLink->Hide();
+    m_pReleaseNotesLink->SetURL( sEmpty );
+    m_pDescriptions->Hide();
+    m_pDescriptions->SetText( OUString() );
+    // TODO Check if it really necessary
+//    ScrollBar*  pVScrBar = m_pDescriptions->GetVScrollBar();
+//    if ( pVScrBar )
+//        pVScrBar->Hide();
+//    m_pDescriptions->SetPosSizePixel( m_aFirstLinePos, m_aFirstLineSize );
 }
 
 bool UpdateDialog::showDescription(uno::Reference< xml::dom::XNode > const & aUpdateInfo)
@@ -997,51 +973,31 @@ bool UpdateDialog::showDescription(std::pair< OUString, OUString > const & pairP
         // nothing to show
         return false;
 
-    bool bPublisher = false;
     if ( !sPub.isEmpty() )
     {
-        m_PublisherLabel.Show();
-        m_PublisherLink.Show();
-        m_PublisherLink.SetText( sPub );
-        m_PublisherLink.SetURL( sURL );
-        bPublisher = true;
+//        m_PublisherLabel.Show(); // TODO Show whole publish container
+        m_pPublisherLink->Show();
+        m_pPublisherLink->SetText( sPub );
+        m_pPublisherLink->SetURL( sURL );
     }
 
     if ( !sReleaseNotes.isEmpty() )
     {
-        if ( !bPublisher )
-        {
-            m_ReleaseNotesLabel.SetPosPixel( m_PublisherLabel.GetPosPixel() );
-            m_ReleaseNotesLink.SetPosPixel( m_PublisherLink.GetPosPixel() );
-        }
-        m_ReleaseNotesLabel.Show();
-        m_ReleaseNotesLink.Show();
-        m_ReleaseNotesLink.SetURL( sReleaseNotes );
+//        m_ReleaseNotesLabel.Show();// TODO Show whole release notes container
+        m_pReleaseNotesLink->Show();
+        m_pReleaseNotesLink->SetURL( sReleaseNotes );
     }
     return true;
 }
 
-bool UpdateDialog::showDescription( const OUString& rDescription, bool bWithPublisher )
+bool UpdateDialog::showDescription( const OUString& rDescription )
 {
     if ( rDescription.isEmpty() )
         // nothing to show
         return false;
 
-    if ( bWithPublisher )
-    {
-        bool bOneLineMissing = !m_ReleaseNotesLabel.IsVisible() || !m_PublisherLabel.IsVisible();
-        Point aNewPos = m_aFirstLinePos;
-        aNewPos.Y() += m_nFirstLineDelta;
-        if ( bOneLineMissing )
-            aNewPos.Y() -= m_nOneLineMissing;
-        Size aNewSize = m_aFirstLineSize;
-        aNewSize.Height() -= m_nFirstLineDelta;
-        if ( bOneLineMissing )
-            aNewSize.Height() += m_nOneLineMissing;
-        m_descriptions.SetPosSizePixel( aNewPos, aNewSize );
-    }
-    m_descriptions.Show();
-    m_descriptions.SetText( rDescription );
+    m_pDescriptions->Show();
+    m_pDescriptions->SetText( rDescription );
     return true;
 }
 
@@ -1205,9 +1161,8 @@ void UpdateDialog::setIgnoredUpdate( UpdateDialog::Index *pIndex, bool bIgnore, 
 IMPL_LINK_NOARG(UpdateDialog, selectionHandler)
 {
     OUStringBuffer b;
-    bool bInserted = false;
     UpdateDialog::Index const * p = static_cast< UpdateDialog::Index const * >(
-        m_updates.GetEntryData(m_updates.GetSelectEntryPos()));
+        m_updates->GetEntryData(m_updates->GetSelectEntryPos()));
     clearDescription();
 
     if ( p != NULL )
@@ -1219,9 +1174,9 @@ IMPL_LINK_NOARG(UpdateDialog, selectionHandler)
             case ENABLED_UPDATE:
             {
                 if ( m_enabledUpdates[ pos ].aUpdateSource.is() )
-                    bInserted = showDescription( m_enabledUpdates[ pos ].aUpdateSource );
+                    showDescription( m_enabledUpdates[ pos ].aUpdateSource );
                 else
-                    bInserted = showDescription( m_enabledUpdates[ pos ].aUpdateInfo );
+                    showDescription( m_enabledUpdates[ pos ].aUpdateInfo );
 
                 if ( p->m_bIgnored )
                     b.append( m_ignoredUpdate );
@@ -1231,7 +1186,7 @@ IMPL_LINK_NOARG(UpdateDialog, selectionHandler)
             case DISABLED_UPDATE:
             {
                 if ( !m_disabledUpdates.empty() )
-                    bInserted = showDescription( m_disabledUpdates[pos].aUpdateInfo );
+                    showDescription( m_disabledUpdates[pos].aUpdateInfo );
 
                 if ( p->m_bIgnored )
                     b.append( m_ignoredUpdate );
@@ -1298,18 +1253,18 @@ IMPL_LINK_NOARG(UpdateDialog, selectionHandler)
     if ( b.isEmpty() )
         b.append( m_noDescription );
 
-    showDescription( b.makeStringAndClear(), bInserted );
+    showDescription( b.makeStringAndClear() );
     return 0;
 }
 
 IMPL_LINK_NOARG(UpdateDialog, allHandler)
 {
-    if (m_all.IsChecked())
+    if (m_pShowAllUpdates->IsChecked())
     {
-        m_update.Enable();
-        m_updates.Enable();
-        m_description.Enable();
-        m_descriptions.Enable();
+//        m_update.Enable();// TODO Enable frames
+        m_updates->Enable();
+//        m_description.Enable();
+        m_pDescriptions->Enable();
 
         for (std::vector< UpdateDialog::Index* >::iterator i( m_ListboxEntries.begin() );
              i != m_ListboxEntries.end(); ++i )
@@ -1320,26 +1275,26 @@ IMPL_LINK_NOARG(UpdateDialog, allHandler)
     }
     else
     {
-        for ( sal_uInt16 i = 0; i < m_updates.getItemCount(); )
+        for ( sal_uInt16 i = 0; i < m_updates->getItemCount(); )
         {
-            UpdateDialog::Index const * p = static_cast< UpdateDialog::Index const * >( m_updates.GetEntryData(i) );
+            UpdateDialog::Index const * p = static_cast< UpdateDialog::Index const * >( m_updates->GetEntryData(i) );
             if ( p->m_bIgnored || ( p->m_eKind != ENABLED_UPDATE ) )
             {
-                m_updates.RemoveEntry(i);
+                m_updates->RemoveEntry(i);
             } else {
                 ++i;
             }
         }
 
-        if (m_updates.getItemCount() == 0)
+        if (m_updates->getItemCount() == 0)
         {
             clearDescription();
-            m_update.Disable();
-            m_updates.Disable();
-            if (m_checking.IsVisible())
-                m_description.Disable();
+//            m_update.Disable();// TODO Disable frame
+            m_updates->Disable();
+            if (m_pChecking->IsVisible())
+;//                m_description.Disable();// TODO Disable frame
             else
-                showDescription(m_noInstallable,false);
+                showDescription(m_noInstallable);
         }
     }
     return 0;
@@ -1358,11 +1313,11 @@ IMPL_LINK_NOARG(UpdateDialog, okHandler)
     }
 
 
-    for (sal_uInt16 i = 0; i < m_updates.getItemCount(); ++i) {
+    for (sal_uInt16 i = 0; i < m_updates->getItemCount(); ++i) {
         UpdateDialog::Index const * p =
             static_cast< UpdateDialog::Index const * >(
-                m_updates.GetEntryData(i));
-        if (p->m_eKind == ENABLED_UPDATE && m_updates.IsChecked(i)) {
+                m_updates->GetEntryData(i));
+        if (p->m_eKind == ENABLED_UPDATE && m_updates->IsChecked(i)) {
             m_updateData.push_back( m_enabledUpdates[ p->m_nIndex ] );
         }
     }

@@ -32,9 +32,9 @@
 #include "tools/link.hxx"
 #include <vcl/button.hxx>
 #include <vcl/dialog.hxx>
-#include <vcl/fixed.hxx>
 #include <vcl/fixedhyper.hxx>
 #include <vcl/throbber.hxx>
+#include <vcl/layout.hxx>
 
 #include "descedit.hxx"
 #include "dp_gui_updatedata.hxx"
@@ -106,11 +106,16 @@ private:
     class Thread;
     friend class Thread;
 
+public:
     class CheckListBox: public SvxCheckListBox {
     public:
-        CheckListBox(
-            UpdateDialog & dialog, ResId const & resource,
-            Image const & normalStaticImage);
+        CheckListBox(Window* pParent, WinBits nStyle);
+        void Init(UpdateDialog* dialog)
+        {
+            m_dialog = dialog;
+        }
+//////, ResId const & resource,
+////////            Image const & normalStaticImage); // FIXME later
 
         virtual ~CheckListBox();
 
@@ -129,10 +134,10 @@ private:
         OUString m_ignoreUpdate;
         OUString m_ignoreAllUpdates;
         OUString m_enableUpdate;
-        UpdateDialog & m_dialog;
+        UpdateDialog* m_dialog;
     };
 
-
+private:
     friend class CheckListBox;
 
     sal_uInt16 insertItem( UpdateDialog::Index *pIndex, SvLBoxButtonKind kind );
@@ -159,7 +164,7 @@ private:
                          OUString const & sReleaseNotes);
     bool showDescription( ::com::sun::star::uno::Reference<
         ::com::sun::star::xml::dom::XNode > const & aUpdateInfo);
-    bool showDescription( const OUString& rDescription, bool bWithPublisher );
+    bool showDescription( const OUString& rDescription );
     bool isReadOnly( const ::com::sun::star::uno::Reference< ::com::sun::star::deployment::XPackage > &xPackage ) const;
 
     DECL_LINK(selectionHandler, void *);
@@ -170,21 +175,15 @@ private:
 
     com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >
         m_context;
-    FixedText m_checking;
-    Throbber m_throbber;
-    FixedText m_update;
-    UpdateDialog::CheckListBox m_updates;
-    CheckBox m_all;
-    FixedLine m_description;
-    FixedText m_PublisherLabel;
-    FixedHyperlink m_PublisherLink;
-    FixedText m_ReleaseNotesLabel;
-    FixedHyperlink m_ReleaseNotesLink;
-    dp_gui::DescriptionEdit m_descriptions;
-    FixedLine m_line;
-    HelpButton m_help;
-    PushButton m_ok;
-    PushButton m_close;
+    FixedText* m_pChecking;
+    Throbber* m_throbber;
+    UpdateDialog::CheckListBox* m_updates;
+    VclFrame* m_pDescriptionFrame;
+    CheckBox* m_pShowAllUpdates;
+    FixedHyperlink* m_pPublisherLink;
+    FixedHyperlink* m_pReleaseNotesLink;
+    MultiLineEdit* m_pDescriptions;
+    PushButton* m_pOk;
     OUString m_error;
     OUString m_none;
     OUString m_noInstallable;
@@ -206,10 +205,6 @@ private:
     rtl::Reference< UpdateDialog::Thread > m_thread;
     ::com::sun::star::uno::Reference< ::com::sun::star::deployment::XExtensionManager > m_xExtensionManager;
 
-    Point   m_aFirstLinePos;
-    Size    m_aFirstLineSize;
-    long    m_nFirstLineDelta;
-    long    m_nOneLineMissing;
     sal_uInt16  m_nLastID;
     bool    m_bModified;
 };
