@@ -9,6 +9,8 @@
 
 #include "dlg_PropertyMapping.hxx"
 
+#include "DialogModel.hxx"
+
 using namespace com::sun::star;
 
 namespace chart {
@@ -40,7 +42,8 @@ std::vector<OUString> getEntries()
 
 }
 
-PropertyMappingDlg::PropertyMappingDlg(Window* pParent, uno::Reference< chart2::XChartType > xChartType )
+PropertyMappingDlg::PropertyMappingDlg(Window* pParent, uno::Reference< chart2::XChartType > xChartType,
+        DialogModel& rDialogModel)
     : ModalDialog(pParent, "PropertyMappingDialog",
         "modules/schart/ui/dlg_PropertyMapping.ui")
 {
@@ -52,7 +55,8 @@ PropertyMappingDlg::PropertyMappingDlg(Window* pParent, uno::Reference< chart2::
     uno::Sequence< OUString > aPropRoles = xChartType->getSupportedPropertyRoles();
     for(sal_Int32 i = 0, n = aPropRoles.getLength(); i < n; ++i)
     {
-        mpMappingTable->InsertEntry(aPropRoles[i]);
+        OUString aUIString = rDialogModel.ConvertRoleFromInternalToUI(aPropRoles[i]);
+        mpMappingTable->InsertEntry(aUIString);
     }
     mpBtnOk->SetClickHdl( LINK( this, PropertyMappingDlg, OkBtnHdl ) );
     mpBtnCancel->SetClickHdl( LINK( this, PropertyMappingDlg, CancelBtnHdl ) );

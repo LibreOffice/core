@@ -765,7 +765,7 @@ IMPL_LINK_NOARG( DataSourceTabPage, AddMappingHdl )
     if(!pSeriesEntry)
         return 0;
 
-    PropertyMappingDlg aDlg(this, pSeriesEntry->m_xChartType);
+    PropertyMappingDlg aDlg(this, pSeriesEntry->m_xChartType, m_rDialogModel);
     short aRet = aDlg.Execute();
     if(aRet == RET_OK)
     {

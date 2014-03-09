@@ -18,12 +18,14 @@
 
 namespace chart {
 
+class DialogModel;
+
 class PropertyMappingDlg : public ModalDialog
 {
 public:
 
     PropertyMappingDlg(Window* pParent, com::sun::star::uno::Reference<
-            com::sun::star::chart2::XChartType > xChartType);
+            com::sun::star::chart2::XChartType > xChartType, DialogModel& rDialogModel);
 
     OUString getSelectedEntry();
 
