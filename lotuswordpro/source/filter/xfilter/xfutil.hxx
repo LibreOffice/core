@@ -65,8 +65,6 @@
 #include <rtl/ustring.hxx>
 #include <string>
 
-OUString   FloatToOUString(float num, sal_Int32 precision=6);
-
 OUString   DateTimeToOUString(XFDateTime& dt);
 
 OUString   GetTableColName(sal_Int32 col);
