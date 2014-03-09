@@ -99,7 +99,7 @@ FieldCode::FieldCode()
     , str1(NULL)
     , str2(NULL)
     , str3(NULL)
-    , bin(NULL);
+    , bin(NULL)
     , m_pDate(NULL)
 {
     reserved1 = new char[4];

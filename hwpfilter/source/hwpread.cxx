@@ -812,7 +812,9 @@ bool KeepSpace::Read(HWPFile & hwpf)
 
 
 /* °íÁ¤Æø ºóÄ­(31) */
-FixedSpace::FixedSpace():HBox(CH_FIXED_SPACE)
+FixedSpace::FixedSpace()
+    : HBox(CH_FIXED_SPACE)
+    , dummy(0)
 {
 }
 
