@@ -542,13 +542,16 @@ bool Hidden::Read(HWPFile & hwpf)
     return !hwpf.State();
 }
 
-
 // header/footer(16)
-HeaderFooter::HeaderFooter():HBox(CH_HEADER_FOOTER)
+HeaderFooter::HeaderFooter()
+    : HBox(CH_HEADER_FOOTER)
+    , dummy(0)
+    , type(0)
+    , where(0)
+    , linenumber(0)
+    , m_nPageNumber(0)
 {
-    linenumber = 0;
 }
-
 
 bool HeaderFooter::Read(HWPFile & hwpf)
 {
