@@ -305,6 +305,7 @@ $(eval $(call gb_Library_add_exception_objects,sc,\
     sc/source/filter/xml/celltextparacontext \
     sc/source/filter/xml/editattributemap \
     sc/source/filter/xml/importcontext \
+    sc/source/filter/xml/pivotsource \
     sc/source/filter/xml/sheetdata \
     sc/source/filter/xml/xmlannoi \
     sc/source/filter/xml/xmlbodyi \

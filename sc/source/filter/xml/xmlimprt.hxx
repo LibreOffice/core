@@ -58,6 +58,7 @@ class ScDocumentImport;
 namespace sc {
 
 struct ImportPostProcessData;
+struct PivotTableSources;
 
 }
 
@@ -827,6 +828,8 @@ class ScXMLImport: public SvXMLImport, boost::noncopyable
     boost::scoped_ptr<ScDocumentImport> mpDocImport;
     boost::scoped_ptr<ScCompiler> mpComp; // For error-checking of cached string cell values.
     boost::scoped_ptr<ScEditEngineDefaulter> mpEditEngine;
+    boost::scoped_ptr<sc::PivotTableSources> mpPivotSources;
+
     mutable boost::scoped_ptr<ScXMLEditAttributeMap> mpEditAttrMap;
     ScXMLChangeTrackingImportHelper*    pChangeTrackingImportHelper;
     ScMyViewContextList                 aViewContextList;
@@ -1104,6 +1107,8 @@ public:
 
     void SetPostProcessData( sc::ImportPostProcessData* p );
     sc::ImportPostProcessData* GetPostProcessData();
+
+    sc::PivotTableSources& GetPivotTableSources();
 
     void AddNamedExpression(ScMyNamedExpression* pMyNamedExpression)
     {
