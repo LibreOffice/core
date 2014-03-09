@@ -37,7 +37,7 @@ interface XUndoManagerListener;
 
 
 /** provides access to the undo/redo stacks of a document
-
+    <p></p>
     <h3>Undo</h3>
     <p>Changes to a document usually result in recording of information how to undo those changes, if desired. A so-called
     undo action records the information how to undo a single change. Undo actions are maintained in a stack, so that
