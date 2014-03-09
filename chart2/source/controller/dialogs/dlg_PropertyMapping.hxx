@@ -14,13 +14,16 @@
 #include <vcl/button.hxx>
 #include <svtools/svtabbx.hxx>
 
+#include <com/sun/star/chart2/XChartType.hpp>
+
 namespace chart {
 
 class PropertyMappingDlg : public ModalDialog
 {
 public:
 
-    PropertyMappingDlg(Window* pParent);
+    PropertyMappingDlg(Window* pParent, com::sun::star::uno::Reference<
+            com::sun::star::chart2::XChartType > xChartType);
 
     OUString getSelectedEntry();
 

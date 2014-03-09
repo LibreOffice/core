@@ -761,7 +761,11 @@ IMPL_LINK( DataSourceTabPage, RangeUpdateDataHdl, Edit*, pEdit )
 
 IMPL_LINK_NOARG( DataSourceTabPage, AddMappingHdl )
 {
-    PropertyMappingDlg aDlg(this);
+    SeriesEntry * pSeriesEntry = dynamic_cast< SeriesEntry * >( m_pLB_SERIES->FirstSelected());
+    if(!pSeriesEntry)
+        return 0;
+
+    PropertyMappingDlg aDlg(this, pSeriesEntry->m_xChartType);
     short aRet = aDlg.Execute();
     if(aRet == RET_OK)
     {

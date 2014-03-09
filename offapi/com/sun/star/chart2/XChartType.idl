@@ -72,6 +72,12 @@ interface XChartType : com::sun::star::uno::XInterface
      */
     sequence< string >   getSupportedOptionalRoles();
 
+    /** Returns a sequence with supported property mapping roles.
+
+        <p>An example for a property mappong role is FillColor.</p>
+    */
+    sequence< string >  getSupportedPropertyRoles();
+
     /** Returns the role of the XLabeledDataSequence of
         which the label will be taken to identify the
         DataSeries in dialogs or the legend.

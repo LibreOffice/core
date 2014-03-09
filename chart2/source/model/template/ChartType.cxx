@@ -122,6 +122,12 @@ Sequence< OUString > SAL_CALL ChartType::getSupportedOptionalRoles()
     return Sequence< OUString >();
 }
 
+Sequence< OUString > SAL_CALL ChartType::getSupportedPropertyRoles()
+    throw (uno::RuntimeException, std::exception)
+{
+    return Sequence< OUString >();
+}
+
 OUString SAL_CALL ChartType::getRoleOfSequenceForSeriesLabel()
     throw (uno::RuntimeException, std::exception)
 {

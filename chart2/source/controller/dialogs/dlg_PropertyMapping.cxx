@@ -9,6 +9,8 @@
 
 #include "dlg_PropertyMapping.hxx"
 
+using namespace com::sun::star;
+
 namespace chart {
 
 namespace {
@@ -38,7 +40,7 @@ std::vector<OUString> getEntries()
 
 }
 
-PropertyMappingDlg::PropertyMappingDlg(Window* pParent)
+PropertyMappingDlg::PropertyMappingDlg(Window* pParent, uno::Reference< chart2::XChartType > xChartType )
     : ModalDialog(pParent, "PropertyMappingDialog",
         "modules/schart/ui/dlg_PropertyMapping.ui")
 {
@@ -47,11 +49,10 @@ PropertyMappingDlg::PropertyMappingDlg(Window* pParent)
     get(mpBtnCancel, "cancel");
 
     mpMappingTable->SetTabs( pListBoxTabs, MAP_APPFONT );
-    std::vector<OUString> aEntries = getEntries();
-    for(std::vector<OUString>::const_iterator itr = aEntries.begin(),
-            itrEnd = aEntries.end(); itr != itrEnd; ++itr)
+    uno::Sequence< OUString > aPropRoles = xChartType->getSupportedPropertyRoles();
+    for(sal_Int32 i = 0, n = aPropRoles.getLength(); i < n; ++i)
     {
-        mpMappingTable->InsertEntry(*itr);
+        mpMappingTable->InsertEntry(aPropRoles[i]);
     }
     mpBtnOk->SetClickHdl( LINK( this, PropertyMappingDlg, OkBtnHdl ) );
     mpBtnCancel->SetClickHdl( LINK( this, PropertyMappingDlg, CancelBtnHdl ) );

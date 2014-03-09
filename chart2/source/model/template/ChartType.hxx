@@ -80,6 +80,9 @@ protected:
         throw (::com::sun::star::uno::RuntimeException, std::exception);
     virtual OUString SAL_CALL getRoleOfSequenceForSeriesLabel()
         throw (::com::sun::star::uno::RuntimeException, std::exception);
+    virtual com::sun::star::uno::Sequence< OUString > SAL_CALL
+        getSupportedPropertyRoles()
+        throw (::com::sun::star::uno::RuntimeException, std::exception);
 
     // ____ XDataSeriesContainer ____
     virtual void SAL_CALL addDataSeries(
