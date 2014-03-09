@@ -42,8 +42,7 @@ std::vector<OUString> getEntries()
 
 }
 
-PropertyMappingDlg::PropertyMappingDlg(Window* pParent, uno::Reference< chart2::XChartType > xChartType,
-        DialogModel& rDialogModel)
+PropertyMappingDlg::PropertyMappingDlg(Window* pParent, uno::Reference< chart2::XChartType > xChartType )
     : ModalDialog(pParent, "PropertyMappingDialog",
         "modules/schart/ui/dlg_PropertyMapping.ui")
 {
@@ -55,7 +54,7 @@ PropertyMappingDlg::PropertyMappingDlg(Window* pParent, uno::Reference< chart2::
     uno::Sequence< OUString > aPropRoles = xChartType->getSupportedPropertyRoles();
     for(sal_Int32 i = 0, n = aPropRoles.getLength(); i < n; ++i)
     {
-        OUString aUIString = rDialogModel.ConvertRoleFromInternalToUI(aPropRoles[i]);
+        OUString aUIString = DialogModel::ConvertRoleFromInternalToUI(aPropRoles[i]);
         mpMappingTable->InsertEntry(aUIString);
     }
     mpBtnOk->SetClickHdl( LINK( this, PropertyMappingDlg, OkBtnHdl ) );

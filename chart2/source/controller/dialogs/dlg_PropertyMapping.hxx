@@ -25,7 +25,7 @@ class PropertyMappingDlg : public ModalDialog
 public:
 
     PropertyMappingDlg(Window* pParent, com::sun::star::uno::Reference<
-            com::sun::star::chart2::XChartType > xChartType, DialogModel& rDialogModel);
+            com::sun::star::chart2::XChartType > xChartType);
 
     OUString getSelectedEntry();
 
