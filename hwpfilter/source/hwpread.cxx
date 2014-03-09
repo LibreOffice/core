@@ -460,13 +460,19 @@ bool Picture::Read(HWPFile & hwpf)
     return !hwpf.State();
 }
 
-
 // line(15)
-
-Line::Line():FBox(CH_LINE)
+Line::Line()
+    : FBox(CH_LINE)
+    , dummy(0)
+    , sx(0)
+    , sy(0)
+    , ex(0)
+    , ey(0)
+    , width(0)
+    , shade(0)
+    , color(0)
 {
 }
-
 
 bool Line::Read(HWPFile & hwpf)
 {
