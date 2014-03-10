@@ -45,7 +45,7 @@
 
 #include <salgdi.hxx>
 
-#include <freetype/ftsynth.h>
+#include <freetype2/ftsynth.h>
 
 // Module
 #include "gcach_ftyp.hxx"
