@@ -245,16 +245,11 @@ uno::Sequence< ::com::sun::star::uno::Type>
     return aTypeSequence;
 }
 
-namespace
-{
-    class theAccessibleRelationSetHelperUnoTunnelId : public rtl::Static< UnoTunnelIdInit, theAccessibleRelationSetHelperUnoTunnelId > {};
-}
-
 uno::Sequence<sal_Int8> SAL_CALL
     AccessibleRelationSetHelper::getImplementationId (void)
     throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
-    return theAccessibleRelationSetHelperUnoTunnelId::get().getSeq();
+    return css::uno::Sequence<sal_Int8>();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
