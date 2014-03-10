@@ -1929,6 +1929,10 @@ DECLARE_OOXMLIMPORT_TEST(testStrict, "strict.docx")
     // Chart was missing.
     xServiceInfo.set(getShape(3), uno::UNO_QUERY);
     CPPUNIT_ASSERT(xServiceInfo->supportsService("com.sun.star.text.TextEmbeddedObject"));
+
+    // Math was missing.
+    xServiceInfo.set(getShape(4), uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xServiceInfo->supportsService("com.sun.star.text.TextEmbeddedObject"));
 }
 
 DECLARE_OOXMLIMPORT_TEST(testStrictLockedcanvas, "strict-lockedcanvas.docx")

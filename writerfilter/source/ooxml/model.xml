@@ -41,6 +41,7 @@
   <namespace-alias name="http://schemas.openxmlformats.org/wordprocessingml/2006/main" alias="wordprocessingml" id="doc"/>
   <namespace-alias name="http://purl.oclc.org/ooxml/wordprocessingml/main" alias="wordprocessingml" id="doc"/>
   <namespace-alias name="http://schemas.openxmlformats.org/officeDocument/2006/math" alias="math" id="officeMath"/>
+  <namespace-alias name="http://purl.oclc.org/ooxml/officeDocument/math" alias="math" id="officeMath"/>
   <namespace-alias name="http://schemas.openxmlformats.org/schemaLibrary/2006/main" alias="schemaLibrary" id="schema"/>
   <namespace-alias name="http://schemas.openxmlformats.org/markup-compatibility/2006" alias="mce" id="mce"/>
   <namespace-alias name="http://schemas.microsoft.com/office/word/2010/wordprocessingDrawing" alias="wp14" id="wp14"/>
