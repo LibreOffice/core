@@ -45,7 +45,7 @@ SalVirtualDevice* AquaSalInstance::CreateVirtualDevice( SalGraphics* pGraphics,
     if( pData )
         return new AquaSalVirtualDevice( static_cast< AquaSalGraphics* >( pGraphics ), nDX, nDY, nBitCount, pData );
     else
-        return new SvpSalVirtualDevice( nBitCount );
+        return new AquaSalVirtualDevice( NULL, nDX, nDY, nBitCount, NULL );
 #else
     return new AquaSalVirtualDevice( static_cast< AquaSalGraphics* >( pGraphics ), nDX, nDY, nBitCount, pData );
 #endif
@@ -66,26 +66,19 @@ AquaSalVirtualDevice::AquaSalVirtualDevice( AquaSalGraphics* pGraphic, long nDX,
 ,   mnBitmapDepth( 0 )
 ,   mxLayer( NULL )
 {
+    SAL_INFO( "vcl.virdev", "AquaSalVirtualDevice::AquaSalVirtualDevice() this=" << this << " size=(" << nDX << "x" << nDY << ") bitcount=" << nBitCount << " pData=" << pData << " context=" << (pData ? pData->rCGContext : 0) );
     if( pGraphic && pData && pData->rCGContext )
     {
         // Create virtual device based on existing SystemGraphicsData
         // We ignore nDx and nDY, as the desired size comes from the SystemGraphicsData.
         // WTF does the above mean, SystemGraphicsData has no size field(s).
-        mbForeignContext = true;        // the mxContext is from pData
+        mbForeignContext = true;        // the mxContext is from pData (what "mxContext"? there is no such field anywhere in vcl;)
         mpGraphics = new AquaSalGraphics( /*pGraphic*/ );
-#ifdef IOS
-        // Note: we should *not* create a CGLayer and assign it to
-        // mxLayer here. Don't confuse CGLayer and CALayer. A CGLayer
-        // is basically a fancy off-screen bitmap not related to
-        // anything being displayed at all. The CGContext passed in
-        // here refers to something actively part of the compositor
-        // stack and being dislayed on the device, and *there*
-        // CALayers are involved, sure. The use of mxLayer in this
-        // code is for "traditional" LO virtual devices, off-screen
-        // bitmaps. I think. On the other hand, the use of
-        // VirtualDevice with a "foreign" CGContext for OS X is
-        // actually dead code...
-#endif
+        if (nDX == 0)
+            nDX = 1;
+        if (nDY == 0)
+            nDY = 1;
+        mxLayer = CGLayerCreateWithContext( pData->rCGContext, CGSizeMake( nDX, nDY), NULL );
         mpGraphics->SetVirDevGraphics( mxLayer, pData->rCGContext );
     }
     else
@@ -117,6 +110,7 @@ AquaSalVirtualDevice::AquaSalVirtualDevice( AquaSalGraphics* pGraphic, long nDX,
 
 AquaSalVirtualDevice::~AquaSalVirtualDevice()
 {
+    SAL_INFO( "vcl.virdev", "AquaSalVirtualDevice::~AquaSalVirtualDevice() this=" << this );
     if( mpGraphics )
     {
         mpGraphics->SetVirDevGraphics( NULL, NULL );
@@ -130,6 +124,8 @@ AquaSalVirtualDevice::~AquaSalVirtualDevice()
 
 void AquaSalVirtualDevice::Destroy()
 {
+    SAL_INFO( "vcl.virdev", "AquaSalVirtualDevice::Destroy() this=" << this << " mbForeignContext=" << mbForeignContext );
+
     if( mbForeignContext ) {
         // Do not delete mxContext that we have received from outside VCL
         mxLayer = NULL;
@@ -175,11 +171,7 @@ void AquaSalVirtualDevice::ReleaseGraphics( SalGraphics* )
 
 bool AquaSalVirtualDevice::SetSize( long nDX, long nDY )
 {
-#ifdef IOS
-    (void) nDX;
-    (void) nDY;
-    assert(mbForeignContext);
-#endif
+    SAL_INFO( "vcl.virdev", "AquaSalVirtualDevice::SetSize() this=" << this << " (" << nDX << "x" << nDY << ")" << " mbForeignContext=" << mbForeignContext );
 
     if( mbForeignContext )
     {
@@ -187,9 +179,6 @@ bool AquaSalVirtualDevice::SetSize( long nDX, long nDY )
         return true;
     }
 
-#ifdef IOS
-    return false;
-#else
     if( mxLayer )
     {
         const CGSize aSize = CGLayerGetSize( mxLayer );
@@ -218,6 +207,7 @@ bool AquaSalVirtualDevice::SetSize( long nDX, long nDY )
     }
     else
     {
+#ifdef MACOSX
         // default to a NSView target context
         AquaSalFrame* pSalFrame = mpGraphics->getGraphicsFrame();
         if( !pSalFrame || !AquaSalFrame::isAlive( pSalFrame ))
@@ -260,9 +250,20 @@ bool AquaSalVirtualDevice::SetSize( long nDX, long nDY )
                 xCGContext = mxBitmapContext;
             }
         }
+#else
+        mnBitmapDepth = 32;
+        const CGColorSpaceRef aCGColorSpace = GetSalData()->mxRGBSpace;
+        const CGBitmapInfo aCGBmpInfo = kCGImageAlphaNoneSkipFirst;
+        const int nBytesPerRow = (mnBitmapDepth * nDX) / 8;
+
+        void* pRawData = rtl_allocateMemory( nBytesPerRow * nDY );
+        mxBitmapContext = CGBitmapContextCreate( pRawData, nDX, nDY,
+                                                 8, nBytesPerRow, aCGColorSpace, aCGBmpInfo );
+        xCGContext = mxBitmapContext;
+#endif
     }
 
-    DBG_ASSERT( xCGContext, "no context" );
+    SAL_WARN_IF( !xCGContext, "vcl.quartz", "No context" );
 
     const CGSize aNewSize = { static_cast<CGFloat>(nDX), static_cast<CGFloat>(nDY) };
     mxLayer = CGLayerCreateWithContext( xCGContext, aNewSize, NULL );
@@ -275,7 +276,6 @@ bool AquaSalVirtualDevice::SetSize( long nDX, long nDY )
     }
 
     return (mxLayer != NULL);
-#endif
 }
 
 

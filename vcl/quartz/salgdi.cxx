@@ -283,10 +283,14 @@ AquaSalGraphics::AquaSalGraphics()
     , mbPrinter( false )
     , mbVirDev( false )
 #endif
-{}
+{
+    SAL_INFO( "vcl.quartz", "AquaSalGraphics::AquaSalGraphics() this=" << this );
+}
 
 AquaSalGraphics::~AquaSalGraphics()
 {
+    SAL_INFO( "vcl.quartz", "AquaSalGraphics::~AquaSalGraphics() this=" << this );
+
     CGPathRelease( mxClipPath );
     delete mpTextStyle;
 
@@ -821,9 +825,16 @@ SystemFontData AquaSalGraphics::GetSysFontData( int /* nFallbacklevel */ ) const
 bool SvpSalGraphics::CheckContext()
 {
     if (mbForeignContext)
+    {
+        SAL_INFO("vcl.ios", "CheckContext() this=" << this << ", mbForeignContext, return true");
         return true;
+    }
+
     if(m_aDevice == NULL) // fix tiledrendering crash when changing content size
+    {
+        SAL_INFO( "vcl.ios", "CheckContext() this=" << this << ",  m_aDevice==NULL, return false");
         return false;
+    }
 
     const basegfx::B2IVector size = m_aDevice->getSize();
     const basegfx::B2IVector bufferSize = m_aDevice->getBufferSize();

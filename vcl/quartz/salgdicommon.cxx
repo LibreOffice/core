@@ -326,7 +326,7 @@ void AquaSalGraphics::copyBits( const SalTwoRect& rPosAry, SalGraphics *pSrcGrap
     ApplyXorContext();
     pSrc->ApplyXorContext();
 
-    DBG_ASSERT( pSrc->mxLayer!=NULL, "AquaSalGraphics::copyBits() from non-layered graphics" );
+    SAL_WARN_IF( !pSrc->mxLayer, "vcl.quartz", "AquaSalGraphics::copyBits() from non-layered graphics this=" << this );
 
     const CGPoint aDstPoint = CGPointMake(+rPosAry.mnDestX - rPosAry.mnSrcX, rPosAry.mnDestY - rPosAry.mnSrcY);
     if( (rPosAry.mnSrcWidth == rPosAry.mnDestWidth &&
@@ -444,14 +444,14 @@ void AquaSalGraphics::ApplyXorContext()
 void AquaSalGraphics::copyArea( long nDstX, long nDstY,long nSrcX, long nSrcY,
                                 long nSrcWidth, long nSrcHeight, sal_uInt16 /*nFlags*/ )
 {
+    SAL_WARN_IF( !mxLayer, "vcl.quartz", "AquaSalGraphics::copyArea() for non-layered graphics this=" << this );
+
 #ifdef IOS
     if( !mxLayer )
         return;
 #endif
 
     ApplyXorContext();
-
-    DBG_ASSERT( mxLayer!=NULL, "AquaSalGraphics::copyArea() for non-layered graphics" );
 
     // in XOR mode the drawing context is redirected to the XOR mask
     // copyArea() always works on the target context though
@@ -1119,7 +1119,6 @@ void AquaSalGraphics::drawRect( long nX, long nY, long nWidth, long nHeight )
     RefreshRect( nX, nY, nWidth, nHeight );
 }
 
-
 void AquaSalGraphics::drawPolyLine( sal_uInt32 nPoints, const SalPoint *pPtAry )
 {
     if( nPoints < 1 )
@@ -1157,46 +1156,7 @@ sal_uInt16 AquaSalGraphics::GetBitCount() const
 
 SalBitmap* AquaSalGraphics::getBitmap( long  nX, long  nY, long  nDX, long  nDY )
 {
-#ifdef IOS
-    if (!mbForeignContext && m_aDevice != NULL)
-    {
-        // on ios virtual device are Svp so use Svp bitmap to get the content
-        basegfx::B2IBox aRect( nX, nY, nX+nDX, nY+nDY );
-        basebmp::BitmapDeviceSharedPtr aSubSet = basebmp::subsetBitmapDevice(m_aDevice , aRect );
-
-        SvpSalBitmap* pSalBitmap = new SvpSalBitmap;
-        pSalBitmap->setBitmap(aSubSet);
-        BitmapBuffer* pBuffer = pSalBitmap->AcquireBuffer(true);
-        QuartzSalBitmap* pBitmap = new QuartzSalBitmap;
-        if( !pBitmap->Create(*pBuffer))
-        {
-            delete pBitmap;
-            pBitmap = NULL;
-        }
-        pSalBitmap->ReleaseBuffer(pBuffer, true);
-        delete pSalBitmap;
-        return pBitmap;
-    }
-    else if (mbForeignContext)
-    {
-        //if using external context like on ios, check if we can get a backing image and copy it
-        CGImageRef backImage = CGBitmapContextCreateImage(mrContext);
-        if (backImage)
-        {
-            QuartzSalBitmap* pBitmap = new QuartzSalBitmap;
-            if( !pBitmap->Create(backImage, mnBitmapDepth, nX, nY, nDX, nDY))
-            {
-                delete pBitmap;
-                pBitmap = NULL;
-            }
-            CGImageRelease(backImage);
-            return pBitmap;
-        }
-        return NULL;
-    }
-#endif
-
-    DBG_ASSERT( mxLayer, "AquaSalGraphics::getBitmap() with no layer" );
+    SAL_WARN_IF( !mxLayer, "vcl.quartz", "AquaSalGraphics::getBitmap() with no layer this=" << this );
 
     ApplyXorContext();
 
@@ -1477,6 +1437,7 @@ void AquaSalGraphics::Pattern50Fill()
                                                               CGAffineTransformIdentity, 4, 4,
                                                               kCGPatternTilingConstantSpacing,
                                                               false, &aCallback );
+    SAL_WARN_IF( !mrContext, "vcl.quartz", "mrContext is NULL" );
     CGContextSetFillColorSpace( mrContext, mxP50Space );
     CGContextSetFillPattern( mrContext, mxP50Pattern, aFillCol );
     CGContextFillPath( mrContext );
@@ -1687,10 +1648,13 @@ XorEmulation::XorEmulation()
 ,   m_pTempBuffer( NULL )
 ,   m_nBufferLongs( 0 )
 ,   m_bIsEnabled( false )
-{}
+{
+    SAL_INFO( "vcl.quartz", "XorEmulation::XorEmulation() this=" << this );
+}
 
 XorEmulation::~XorEmulation()
 {
+    SAL_INFO( "vcl.quartz", "XorEmulation::~XorEmulation() this=" << this );
     Disable();
     SetTarget( 0, 0, 0, NULL, NULL );
 }
@@ -1698,6 +1662,8 @@ XorEmulation::~XorEmulation()
 void XorEmulation::SetTarget( int nWidth, int nHeight, int nTargetDepth,
                               CGContextRef xTargetContext, CGLayerRef xTargetLayer )
 {
+    SAL_INFO( "vcl.quartz", "XorEmulation::SetTarget() this=" << this << " (" << nWidth << "x" << nHeight << ") depth=" << nTargetDepth << " context=" << xTargetContext << " layer=" << xTargetLayer );
+
     // prepare to replace old mask+temp context
     if( m_xMaskContext )
     {
@@ -1751,6 +1717,8 @@ void XorEmulation::SetTarget( int nWidth, int nHeight, int nTargetDepth,
                                             nWidth, nHeight,
                                             nBitsPerComponent, nBytesPerRow,
                                             aCGColorSpace, aCGBmpInfo );
+    SAL_WARN_IF( !m_xMaskContext, "vcl.quartz", "mask context creation failed" );
+
     // reset the XOR mask to black
     memset( m_pMaskBuffer, 0, m_nBufferLongs * sizeof(sal_uLong) );
 
@@ -1766,6 +1734,7 @@ void XorEmulation::SetTarget( int nWidth, int nHeight, int nTargetDepth,
                                                 nWidth, nHeight,
                                                 nBitsPerComponent, nBytesPerRow,
                                                 aCGColorSpace, aCGBmpInfo );
+        SAL_WARN_IF( !m_xTempContext, "vcl.quartz", "temp context creation failed" );
     }
 
     // initialize XOR mask context for drawing
@@ -1792,6 +1761,8 @@ void XorEmulation::SetTarget( int nWidth, int nHeight, int nTargetDepth,
 
 bool XorEmulation::UpdateTarget()
 {
+    SAL_INFO( "vcl.quartz", "XorEmulation::UpdateTarget() this=" << this );
+
     if( !IsEnabled() )
     {
         return false;
@@ -1799,6 +1770,7 @@ bool XorEmulation::UpdateTarget()
     // update the temp bitmap buffer if needed
     if( m_xTempContext )
     {
+        SAL_WARN_IF( m_xTargetContext == NULL, "vcl.quartz", "Target layer is NULL");
         CGContextDrawLayerAtPoint( m_xTempContext, CGPointZero, m_xTargetLayer );
     }
     // do a manual XOR with the XorMask

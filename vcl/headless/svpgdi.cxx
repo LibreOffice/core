@@ -746,9 +746,26 @@ bool SvpSalGraphics::supportsOperation( OutDevSupportType ) const
 
 void SvpSalGraphics::SetVirDevGraphics( CGLayerRef xLayer, CGContextRef xContext, int /* nBitmapDepth */ )
 {
+    SAL_INFO( "vcl.ios", "SetVirDevGraphics() this=" << this << " layer=" << xLayer << " context=" << xContext );
+
     mxLayer = xLayer;
     mrContext = xContext;
     mbForeignContext = xContext != NULL;
+
+    if( !mxLayer && !mrContext )
+        return;
+
+    if( !mxLayer )
+    {
+        mnWidth = CGBitmapContextGetWidth( mrContext );
+        mnHeight = CGBitmapContextGetHeight( mrContext );
+    }
+    else
+    {
+        const CGSize aSize = CGLayerGetSize( mxLayer );
+        mnWidth = static_cast<int>(aSize.width);
+        mnHeight = static_cast<int>(aSize.height);
+    }
 };
 
 void  SvpSalGraphics::RefreshRect(float lX, float lY, float lWidth, float lHeight)

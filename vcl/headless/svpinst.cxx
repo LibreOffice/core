@@ -227,7 +227,7 @@ SalVirtualDevice* SvpSalInstance::CreateVirtualDevice( SalGraphics* pGraphics,
         return new AquaSalVirtualDevice( static_cast< AquaSalGraphics* >( pGraphics ), nDX, nDY, nBitCount, pData );
     else
     {
-        SvpSalVirtualDevice* pNew = new SvpSalVirtualDevice( nBitCount );
+        AquaSalVirtualDevice* pNew = new AquaSalVirtualDevice( NULL, nDX, nDY, nBitCount, NULL );
         pNew->SetSize( nDX, nDY );
         return pNew;
     }

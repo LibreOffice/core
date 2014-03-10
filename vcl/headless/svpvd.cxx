@@ -17,6 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#ifndef IOS
+
 #include "headless/svpbmp.hxx"
 #include "headless/svpvd.hxx"
 #include "headless/svpgdi.hxx"
@@ -112,5 +114,7 @@ void SvpSalVirtualDevice::GetSize( long& rWidth, long& rHeight )
     else
         rWidth = rHeight = 0;
 }
+
+#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
