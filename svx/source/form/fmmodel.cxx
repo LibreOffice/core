@@ -59,7 +59,7 @@ struct FmFormModelImplData
 |*
 \************************************************************************/
 FmFormModel::FmFormModel(SfxItemPool* pPool, SfxObjectShell* pPers)
-    : SdrModel(pPool, pPers, LOADREFCOUNTS)
+    : SdrModel(pPool, pPers, false, LOADREFCOUNTS)
     , m_pImpl(NULL)
     , m_pObjShell(0)
     , m_bOpenInDesignMode(false)
@@ -76,7 +76,7 @@ FmFormModel::FmFormModel(SfxItemPool* pPool, SfxObjectShell* pPers)
 |*
 \************************************************************************/
 FmFormModel::FmFormModel(const OUString& rPath, SfxItemPool* pPool, SfxObjectShell* pPers)
-    : SdrModel(rPath, pPool, pPers)
+    : SdrModel(rPath, pPool, pPers, false, LOADREFCOUNTS)
     , m_pImpl(NULL)
     , m_pObjShell(0)
     , m_bOpenInDesignMode(false)

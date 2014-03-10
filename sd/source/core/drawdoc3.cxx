@@ -1036,7 +1036,7 @@ sal_Bool SdDrawDocument::InsertBookmarkAsObject(
                         pPV = pBMView->ShowSdrPage(pPage);
                 }
 
-                pBMView->MarkObj(pObj, pPV, sal_False);
+                pBMView->MarkObj(pObj, pPV, false);
             }
         }
     }

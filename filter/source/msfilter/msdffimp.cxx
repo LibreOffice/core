@@ -4594,7 +4594,7 @@ SdrObject* SvxMSDffManager::ImportShape( const DffRecordHeader& rHd, SvStream& r
                             Point aRight( aLeft.X() + 1000, aLeft.Y() );
                             pRet->NbcMirror( aLeft, aRight );
                         }
-                        basegfx::B2DPolyPolygon aPoly( SdrObjCustomShape::GetLineGeometry( (SdrObjCustomShape*)pRet, sal_True ) );
+                        basegfx::B2DPolyPolygon aPoly( SdrObjCustomShape::GetLineGeometry( (SdrObjCustomShape*)pRet, true ) );
                         SdrObject::Free( pRet );
 
                         pRet = new SdrEdgeObj();
@@ -5218,7 +5218,7 @@ SdrObject* SvxMSDffManager::ProcessObj(SvStream& rSt,
             pTextObj->SetModel(pSdrModel);
 
             if (bVerticalText)
-                pTextObj->SetVerticalWriting(sal_True);
+                pTextObj->SetVerticalWriting(true);
 
             if (nTextRotationAngle)
             {

@@ -67,7 +67,7 @@ rtl::Reference<FuPoor> FuEditGluePoints::Create( ViewShell* pViewSh, ::sd::Windo
 void FuEditGluePoints::DoExecute( SfxRequest& rReq )
 {
     FuDraw::DoExecute( rReq );
-    mpView->SetInsGluePointMode(sal_False);
+    mpView->SetInsGluePointMode(false);
     mpViewShell->GetViewShellBase().GetToolBarManager()->AddToolBar(
         ToolBarManager::TBG_FUNCTION,
         ToolBarManager::msGluePointsToolBar);
@@ -78,7 +78,7 @@ FuEditGluePoints::~FuEditGluePoints()
 {
     mpView->BrkAction();
     mpView->UnmarkAllGluePoints();
-    mpView->SetInsGluePointMode(sal_False);
+    mpView->SetInsGluePointMode(false);
 }
 
 
@@ -384,7 +384,7 @@ void FuEditGluePoints::Activate()
 
 void FuEditGluePoints::Deactivate()
 {
-    mpView->SetGluePointEditMode( sal_False );
+    mpView->SetGluePointEditMode( false );
     FuDraw::Deactivate();
 }
 
@@ -438,37 +438,37 @@ void FuEditGluePoints::ReceiveRequest(SfxRequest& rReq)
 
         case SID_GLUE_HORZALIGN_CENTER:
         {
-            mpView->SetMarkedGluePointsAlign(sal_False, SDRHORZALIGN_CENTER);
+            mpView->SetMarkedGluePointsAlign(false, SDRHORZALIGN_CENTER);
         }
         break;
 
         case SID_GLUE_HORZALIGN_LEFT:
         {
-            mpView->SetMarkedGluePointsAlign(sal_False, SDRHORZALIGN_LEFT);
+            mpView->SetMarkedGluePointsAlign(false, SDRHORZALIGN_LEFT);
         }
         break;
 
         case SID_GLUE_HORZALIGN_RIGHT:
         {
-            mpView->SetMarkedGluePointsAlign(sal_False, SDRHORZALIGN_RIGHT);
+            mpView->SetMarkedGluePointsAlign(false, SDRHORZALIGN_RIGHT);
         }
         break;
 
         case SID_GLUE_VERTALIGN_CENTER:
         {
-            mpView->SetMarkedGluePointsAlign(sal_True, SDRVERTALIGN_CENTER);
+            mpView->SetMarkedGluePointsAlign(true, SDRVERTALIGN_CENTER);
         }
         break;
 
         case SID_GLUE_VERTALIGN_TOP:
         {
-            mpView->SetMarkedGluePointsAlign(sal_True, SDRVERTALIGN_TOP);
+            mpView->SetMarkedGluePointsAlign(true, SDRVERTALIGN_TOP);
         }
         break;
 
         case SID_GLUE_VERTALIGN_BOTTOM:
         {
-            mpView->SetMarkedGluePointsAlign(sal_True, SDRVERTALIGN_BOTTOM);
+            mpView->SetMarkedGluePointsAlign(true, SDRVERTALIGN_BOTTOM);
         }
         break;
     }

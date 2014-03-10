@@ -119,12 +119,12 @@ protected:
     void ImpBroadcastEdgesOfMarkedNodes();
 
     // Konvertierung der markierten Objekte in Poly bzw. Bezier.
-    void ImpConvertTo(sal_Bool bPath, sal_Bool bLineToArea);
+    void ImpConvertTo(bool bPath, bool bLineToArea);
 
     // Konvertiert ein Obj, wirft bei Erfolg das alte as seiner Liste und
     // fuegt das neue an dessen Position ein. Inkl Undo. Es wird weder ein
     // MarkEntry noch ein ModelChgBroadcast generiert.
-    SdrObject* ImpConvertOneObj(SdrObject* pObj, sal_Bool bPath, sal_Bool bLineToArea);
+    SdrObject* ImpConvertOneObj(SdrObject* pObj, bool bPath, bool bLineToArea);
 
     // Setzen der beiden Flags bToTopPossible und bToBtmPossible.
     // bToTopPossibleDirty und bToBtmPossibleDirty werden dabei gleichzeitig
@@ -135,20 +135,20 @@ protected:
     void ImpCopyAttributes(const SdrObject* pSource, SdrObject* pDest) const;
 
     // fuer CombineMarkedObjects
-    sal_Bool ImpCanConvertForCombine1(const SdrObject* pObj) const;
-    sal_Bool ImpCanConvertForCombine(const SdrObject* pObj) const;
-    basegfx::B2DPolyPolygon ImpGetPolyPolygon1(const SdrObject* pObj, sal_Bool bCombine) const;
-    basegfx::B2DPolyPolygon ImpGetPolyPolygon(const SdrObject* pObj, sal_Bool bCombine) const;
+    bool ImpCanConvertForCombine1(const SdrObject* pObj) const;
+    bool ImpCanConvertForCombine(const SdrObject* pObj) const;
+    basegfx::B2DPolyPolygon ImpGetPolyPolygon1(const SdrObject* pObj, bool bCombine) const;
+    basegfx::B2DPolyPolygon ImpGetPolyPolygon(const SdrObject* pObj, bool bCombine) const;
     basegfx::B2DPolygon ImpCombineToSinglePolygon(const basegfx::B2DPolyPolygon& rPolyPolygon) const;
 
     // fuer DismantleMarkedObjects
-    sal_Bool ImpCanDismantle(const basegfx::B2DPolyPolygon& rPpolyPpolygon, sal_Bool bMakeLines) const;
-    sal_Bool ImpCanDismantle(const SdrObject* pObj, sal_Bool bMakeLines) const;
-    void ImpDismantleOneObject(const SdrObject* pObj, SdrObjList& rOL, sal_uIntPtr& rPos, SdrPageView* pPV, sal_Bool bMakeLines);
+    bool ImpCanDismantle(const basegfx::B2DPolyPolygon& rPpolyPpolygon, bool bMakeLines) const;
+    bool ImpCanDismantle(const SdrObject* pObj, bool bMakeLines) const;
+    void ImpDismantleOneObject(const SdrObject* pObj, SdrObjList& rOL, sal_uIntPtr& rPos, SdrPageView* pPV, bool bMakeLines);
     void ImpCrookObj(SdrObject* pO, const Point& rRef, const Point& rRad, SdrCrookMode eMode,
-        sal_Bool bVertical, sal_Bool bNoContortion, sal_Bool bRotate, const Rectangle& rMarkRect);
-    void ImpDistortObj(SdrObject* pO, const Rectangle& rRef, const XPolygon& rDistortedRect, sal_Bool bNoContortion);
-    sal_Bool ImpDelLayerCheck(SdrObjList* pOL, SdrLayerID nDelID) const;
+        bool bVertical, bool bNoContortion, bool bRotate, const Rectangle& rMarkRect);
+    void ImpDistortObj(SdrObject* pO, const Rectangle& rRef, const XPolygon& rDistortedRect, bool bNoContortion);
+    bool ImpDelLayerCheck(SdrObjList* pOL, SdrLayerID nDelID) const;
     void ImpDelLayerDelObjs(SdrObjList* pOL, SdrLayerID nDelID);
 
     // Entfernt alle Obj der MarkList aus ihren ObjLists inkl Undo.
@@ -201,24 +201,24 @@ public:
     void ForceMarkedObjToAnotherPage();
     void ForceMarkedToAnotherPage()   { ForceMarkedObjToAnotherPage(); }
 
-    sal_Bool IsReadOnly() const { ForcePossibilities(); return bReadOnly; }
+    bool IsReadOnly() const { ForcePossibilities(); return bReadOnly; }
 
     // Loeschen aller markierten Objekte
     void DeleteMarkedObj();
-    sal_Bool IsDeleteMarkedObjPossible() const { ForcePossibilities(); return bDeletePossible; }
+    bool IsDeleteMarkedObjPossible() const { ForcePossibilities(); return bDeletePossible; }
 
     // Logisch- umschliessendes Rect aller markierten Objekte setzen.
     // Das das wirklich geschieht ist nicht garantiert, denn eine
     // waagerechte Linie hat z.B. immer eine Hoehe von 0.
-    void SetMarkedObjRect(const Rectangle& rRect, sal_Bool bCopy=sal_False);
+    void SetMarkedObjRect(const Rectangle& rRect, bool bCopy=false);
     void MoveMarkedObj(const Size& rSiz, bool bCopy=false);
     void ResizeMarkedObj(const Point& rRef, const Fraction& xFact, const Fraction& yFact, bool bCopy=false);
     void ResizeMultMarkedObj(const Point& rRef, const Fraction& xFact, const Fraction& yFact, const bool bCopy, const bool bWdh, const bool bHgt);
     long GetMarkedObjRotate() const;
     void RotateMarkedObj(const Point& rRef, long nWink, bool bCopy=false);
     void MirrorMarkedObj(const Point& rRef1, const Point& rRef2, bool bCopy=false);
-    void MirrorMarkedObjHorizontal(sal_Bool bCopy=sal_False);
-    void MirrorMarkedObjVertical(sal_Bool bCopy=sal_False);
+    void MirrorMarkedObjHorizontal(bool bCopy=false);
+    void MirrorMarkedObjVertical(bool bCopy=false);
     long GetMarkedObjShear() const;
     void ShearMarkedObj(const Point& rRef, long nWink, bool bVShear=false, bool bCopy=false);
     void CrookMarkedObj(const Point& rRef, const Point& rRad, SdrCrookMode eMode, bool bVertical=false, bool bNoContortion=false, bool bCopy=false);
@@ -226,28 +226,28 @@ public:
 
     // Markierte Objekte kopieren und anstelle der alten markieren
     void CopyMarkedObj();
-    void SetAllMarkedRect(const Rectangle& rRect, sal_Bool bCopy=sal_False) { SetMarkedObjRect(rRect,bCopy); }
-    void MoveAllMarked(const Size& rSiz, sal_Bool bCopy=sal_False) { MoveMarkedObj   (rSiz,bCopy); }
-    void ResizeAllMarked(const Point& rRef, const Fraction& xFact, const Fraction& yFact, sal_Bool bCopy=sal_False) { ResizeMarkedObj (rRef,xFact,yFact,bCopy); }
+    void SetAllMarkedRect(const Rectangle& rRect, bool bCopy=false) { SetMarkedObjRect(rRect,bCopy); }
+    void MoveAllMarked(const Size& rSiz, bool bCopy=false) { MoveMarkedObj   (rSiz,bCopy); }
+    void ResizeAllMarked(const Point& rRef, const Fraction& xFact, const Fraction& yFact, bool bCopy=false) { ResizeMarkedObj (rRef,xFact,yFact,bCopy); }
     long GetAllMarkedRotate() const { return GetMarkedObjRotate(); }
-    void RotateAllMarked(const Point& rRef, long nWink, sal_Bool bCopy=sal_False) { RotateMarkedObj(rRef,nWink,bCopy); }
-    void MirrorAllMarked(const Point& rRef1, const Point& rRef2, sal_Bool bCopy=sal_False) { MirrorMarkedObj(rRef1,rRef2,bCopy); }
-    void MirrorAllMarkedHorizontal(sal_Bool bCopy=sal_False) { MirrorMarkedObjHorizontal(bCopy); }
-    void MirrorAllMarkedVertical(sal_Bool bCopy=sal_False) { MirrorMarkedObjVertical(bCopy); }
+    void RotateAllMarked(const Point& rRef, long nWink, bool bCopy=false) { RotateMarkedObj(rRef,nWink,bCopy); }
+    void MirrorAllMarked(const Point& rRef1, const Point& rRef2, bool bCopy=false) { MirrorMarkedObj(rRef1,rRef2,bCopy); }
+    void MirrorAllMarkedHorizontal(bool bCopy=false) { MirrorMarkedObjHorizontal(bCopy); }
+    void MirrorAllMarkedVertical(bool bCopy=false) { MirrorMarkedObjVertical(bCopy); }
     long GetAllMarkedShear() const { return GetMarkedObjShear(); }
-    void ShearAllMarked(const Point& rRef, long nWink, sal_Bool bVShear=sal_False, sal_Bool bCopy=sal_False) { ShearMarkedObj(rRef,nWink,bVShear,bCopy); }
-    void CrookAllMarked(const Point& rRef, const Point& rRad, SdrCrookMode eMode, sal_Bool bVertical=sal_False, sal_Bool bNoContortion=sal_False, sal_Bool bCopy=sal_False) { CrookMarkedObj(rRef,rRad,eMode,bVertical,bNoContortion,bCopy); }
+    void ShearAllMarked(const Point& rRef, long nWink, bool bVShear=false, bool bCopy=false) { ShearMarkedObj(rRef,nWink,bVShear,bCopy); }
+    void CrookAllMarked(const Point& rRef, const Point& rRad, SdrCrookMode eMode, bool bVertical=false, bool bNoContortion=false, bool bCopy=false) { CrookMarkedObj(rRef,rRad,eMode,bVertical,bNoContortion,bCopy); }
     void CopyMarked() { CopyMarkedObj(); }
-    sal_Bool IsMoveAllowed() const { ForcePossibilities(); return bMoveAllowed && !bMoveProtect; }
-    sal_Bool IsResizeAllowed(sal_Bool bProp=sal_False) const;
-    sal_Bool IsRotateAllowed(sal_Bool b90Deg=sal_False) const;
-    sal_Bool IsMirrorAllowed(sal_Bool b45Deg=sal_False, sal_Bool b90Deg=sal_False) const;
-    sal_Bool IsTransparenceAllowed() const;
-    sal_Bool IsGradientAllowed() const;
-    sal_Bool IsShearAllowed() const;
-    sal_Bool IsEdgeRadiusAllowed() const;
-    sal_Bool IsCrookAllowed(sal_Bool bNoContortion=sal_False) const;
-    sal_Bool IsDistortAllowed(sal_Bool bNoContortion=sal_False) const;
+    bool IsMoveAllowed() const { ForcePossibilities(); return bMoveAllowed && !bMoveProtect; }
+    bool IsResizeAllowed(bool bProp=false) const;
+    bool IsRotateAllowed(bool b90Deg=false) const;
+    bool IsMirrorAllowed(bool b45Deg=false, bool b90Deg=false) const;
+    bool IsTransparenceAllowed() const;
+    bool IsGradientAllowed() const;
+    bool IsShearAllowed() const;
+    bool IsEdgeRadiusAllowed() const;
+    bool IsCrookAllowed(bool bNoContortion=false) const;
+    bool IsDistortAllowed(bool bNoContortion=false) const;
 
     // Vereinigen mehrerer Objekte zu einem PolyPolygon:
     // - Rechtecke/Kreise/Text... werden implizit gewandelt.
@@ -259,7 +259,7 @@ public:
     //   eine Bitmap oder ein OLE-Objekt, wird die gesamte Gruppe nicht
     //   beruecksichtigt.
     // bNoPolyPoly=TRUE: Alles wird zu einem einzigen Polygon zusammengefasst
-    void CombineMarkedObjects(sal_Bool bNoPolyPoly = sal_True);
+    void CombineMarkedObjects(bool bNoPolyPoly = true);
 
     // for combining multiple polygons, with direct support of the modes
     // SID_POLY_MERGE, SID_POLY_SUBSTRACT, SID_POLY_INTERSECT
@@ -273,9 +273,9 @@ public:
     // Memberobjekten um PathObjs handelt.
     // bMakeLines=TRUE: alle Polygone werden in einzelne Linien bzw.
     //                  Beziersegmente zerlegt
-    void DismantleMarkedObjects(sal_Bool bMakeLines=sal_False);
-    sal_Bool IsCombinePossible(sal_Bool bNoPolyPoly=sal_False) const;
-    sal_Bool IsDismantlePossible(sal_Bool bMakeLines=sal_False) const;
+    void DismantleMarkedObjects(bool bMakeLines=false);
+    bool IsCombinePossible(bool bNoPolyPoly=false) const;
+    bool IsDismantlePossible(bool bMakeLines=false) const;
 
     // Ein neues bereits fertig konstruiertes Obj einfuegen. Das Obj gehoert
     // anschliessend dem Model. Nach dem Einfuegen wird das neue Objekt
@@ -284,7 +284,7 @@ public:
     // wenn der Ziel-Layer gesperrt oder nicht sichtbar ist. In diesem Fall
     // returniert die Methode mit FALSE.
     // Die Methode generiert u.a. auch eine Undo-Action.
-    sal_Bool InsertObjectAtView(SdrObject* pObj, SdrPageView& rPV, sal_uIntPtr nOptions=0);
+    bool InsertObjectAtView(SdrObject* pObj, SdrPageView& rPV, sal_uIntPtr nOptions=0);
 
     // Ein Zeichenobjekt durch ein neues ersetzen. *pNewObj gehoert
     // anschliessend mir, *pOldObj wandert ins Undo.
@@ -294,13 +294,13 @@ public:
     // ReplaceObject(...);
 
     // EndUndo();
-    void ReplaceObjectAtView(SdrObject* pOldObj, SdrPageView& rPV, SdrObject* pNewObj, sal_Bool bMark=sal_True);
+    void ReplaceObjectAtView(SdrObject* pOldObj, SdrPageView& rPV, SdrObject* pNewObj, bool bMark=true);
 
-    void SetNotPersistAttrToMarked(const SfxItemSet& rAttr, sal_Bool bReplaceAll);
-    void MergeNotPersistAttrFromMarked(SfxItemSet& rAttr, sal_Bool bOnlyHardAttr) const;
-    void MergeAttrFromMarked(SfxItemSet& rAttr, sal_Bool bOnlyHardAttr) const;
-    SfxItemSet GetAttrFromMarked(sal_Bool bOnlyHardAttr) const;
-    void SetAttrToMarked(const SfxItemSet& rAttr, sal_Bool bReplaceAll);
+    void SetNotPersistAttrToMarked(const SfxItemSet& rAttr, bool bReplaceAll);
+    void MergeNotPersistAttrFromMarked(SfxItemSet& rAttr, bool bOnlyHardAttr) const;
+    void MergeAttrFromMarked(SfxItemSet& rAttr, bool bOnlyHardAttr) const;
+    SfxItemSet GetAttrFromMarked(bool bOnlyHardAttr) const;
+    void SetAttrToMarked(const SfxItemSet& rAttr, bool bReplaceAll);
 
     // Geometrische Attribute (Position, Groesse, Drehwinkel)
     // Bei der Position wird ein evtl. gesetzter PageOrigin beruecksichtigt.
@@ -315,14 +315,14 @@ public:
     SfxStyleSheet* GetStyleSheetFromMarked() const;
 
     // z.Zt. noch ohne Undo :(
-    void SetStyleSheetToMarked(SfxStyleSheet* pStyleSheet, sal_Bool bDontRemoveHardAttr);
+    void SetStyleSheetToMarked(SfxStyleSheet* pStyleSheet, bool bDontRemoveHardAttr);
 
     /* new interface src537 */
-    sal_Bool GetAttributes(SfxItemSet& rTargetSet, sal_Bool bOnlyHardAttr) const;
+    bool GetAttributes(SfxItemSet& rTargetSet, bool bOnlyHardAttr) const;
 
-    sal_Bool SetAttributes(const SfxItemSet& rSet, sal_Bool bReplaceAll);
-    SfxStyleSheet* GetStyleSheet() const; // SfxStyleSheet* GetStyleSheet(sal_Bool& rOk) const;
-    sal_Bool SetStyleSheet(SfxStyleSheet* pStyleSheet, sal_Bool bDontRemoveHardAttr);
+    bool SetAttributes(const SfxItemSet& rSet, bool bReplaceAll);
+    SfxStyleSheet* GetStyleSheet() const; // SfxStyleSheet* GetStyleSheet(bool& rOk) const;
+    bool SetStyleSheet(SfxStyleSheet* pStyleSheet, bool bDontRemoveHardAttr);
 
     // Alle markierten Objekte zu einer Gruppe zusammenfassen.
     // Anschliessend wird die neue Gruppe markiert. Bei einer
@@ -340,25 +340,25 @@ public:
     // zusaetzlich markiert.
     void UnGroupMarked();
 
-    sal_Bool IsGroupPossible() const { ForcePossibilities(); return bGroupPossible; }
-    sal_Bool IsUnGroupPossible() const { ForcePossibilities(); return bUnGroupPossible; }
-    sal_Bool IsGroupEnterPossible() const { ForcePossibilities(); return bGrpEnterPossible; }
+    bool IsGroupPossible() const { ForcePossibilities(); return bGroupPossible; }
+    bool IsUnGroupPossible() const { ForcePossibilities(); return bUnGroupPossible; }
+    bool IsGroupEnterPossible() const { ForcePossibilities(); return bGrpEnterPossible; }
 
-    // Markierte Objekte in Polygone/Bezierkurven verwandeln. Die sal_Bool-
+    // Markierte Objekte in Polygone/Bezierkurven verwandeln. Die bool-
     // Funktionen returnen sal_True, wenn wenigstens eins der markierten
     // Objekte gewandelt werden kann. Memberobjekte von Gruppenobjekten
     // werden ebenfalls gewandelt. Naehere Beschreibung siehe SdrObj.HXX.
-    sal_Bool IsConvertToPathObjPossible(sal_Bool bLineToArea) const { ForcePossibilities(); return sal_Bool(bLineToArea ? bCanConvToPathLineToArea : bCanConvToPath); }
-    sal_Bool IsConvertToPolyObjPossible(sal_Bool bLineToArea) const { ForcePossibilities(); return sal_Bool(bLineToArea ? bCanConvToPolyLineToArea : bCanConvToPoly); }
-    sal_Bool IsConvertToContourPossible() const { ForcePossibilities(); return bCanConvToContour; }
-    void ConvertMarkedToPathObj(sal_Bool bLineToArea);
-    void ConvertMarkedToPolyObj(sal_Bool bLineToArea);
+    bool IsConvertToPathObjPossible(bool bLineToArea) const { ForcePossibilities(); return bLineToArea ? bCanConvToPathLineToArea : bCanConvToPath; }
+    bool IsConvertToPolyObjPossible(bool bLineToArea) const { ForcePossibilities(); return bLineToArea ? bCanConvToPolyLineToArea : bCanConvToPoly; }
+    bool IsConvertToContourPossible() const { ForcePossibilities(); return bCanConvToContour; }
+    void ConvertMarkedToPathObj(bool bLineToArea);
+    void ConvertMarkedToPolyObj(bool bLineToArea);
 
     // Alle markierten Objekte untereinander ausrichten. Normalerweise werden
     // das SnapRect der Obj verwendet. Ist bBoundRects=sal_True, werden stattdessen
     // die BoundRects ausgerichtet.
-    void AlignMarkedObjects(SdrHorAlign eHor, SdrVertAlign eVert, sal_Bool bBoundRects=sal_False);
-    sal_Bool IsAlignPossible() const;
+    void AlignMarkedObjects(SdrHorAlign eHor, SdrVertAlign eVert, bool bBoundRects=false);
+    bool IsAlignPossible() const;
 
     // Markierte Objekte etwas nach "oben" holen
     void MovMarkedToTop();
@@ -389,9 +389,9 @@ public:
     // sal_True liefert, MovMarkedToTop() jedoch nichts aendert (z.B. bei
     // Mehrfachselektion), weil eine von der abgeleiteten View ueber
     // GetMaxToTopObj() auferlegte Restriktion dies verhindert.
-    sal_Bool IsToTopPossible() const { ForcePossibilities(); return bToTopPossible; }
-    sal_Bool IsToBtmPossible() const { ForcePossibilities(); return bToBtmPossible; }
-    sal_Bool IsReverseOrderPossible() const { ForcePossibilities(); return bReverseOrderPossible; }
+    bool IsToTopPossible() const { ForcePossibilities(); return bToTopPossible; }
+    bool IsToBtmPossible() const { ForcePossibilities(); return bToBtmPossible; }
+    bool IsReverseOrderPossible() const { ForcePossibilities(); return bReverseOrderPossible; }
 
     // Ueber diese Methoden stellt die View fest, wie weit ein Objekt
     // nach vorn bzw. nach hinten gestellt werden darf (Z-Order). Das
@@ -410,14 +410,14 @@ public:
     // liefern, konvertiert diese Methode das Metafile in Drawingobjekte.
     // Die SdrGrafObjs/SdrOle2Objs werden dann durch die neue Objekte ersetzt.
     void DoImportMarkedMtf(SvdProgressInfo *pProgrInfo=NULL);
-    sal_Bool IsImportMtfPossible() const { ForcePossibilities(); return bImportMtfPossible; }
+    bool IsImportMtfPossible() const { ForcePossibilities(); return bImportMtfPossible; }
 
     // Wird der Modus VirtualObjectBundling eingeschaltet, werden beim
     // ToTop/ToBtm virtuelle Objekte die dasselbe Objekt referenzieren
     // in ihrer Z-Order buendig zusammengehalten (Writer).
     // Defaulteinstellung ist sal_False=ausgeschaltet.
-    void SetVirtualObjectBundling(sal_Bool bOn) { bBundleVirtObj=bOn; }
-    sal_Bool IsVirtualObjectBundling() const { return bBundleVirtObj; }
+    void SetVirtualObjectBundling(bool bOn) { bBundleVirtObj=bOn; }
+    bool IsVirtualObjectBundling() const { return bBundleVirtObj; }
 
     // von der SdrMarkView ueberladen fuer den internen gebrauch
     virtual void MarkListHasChanged();

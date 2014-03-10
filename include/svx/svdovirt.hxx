@@ -127,7 +127,7 @@ public:
     virtual sal_uInt32 GetSnapPointCount() const;
     virtual Point GetSnapPoint(sal_uInt32 i) const;
 
-    virtual sal_Bool IsPolyObj() const;
+    virtual bool IsPolyObj() const;
     virtual sal_uInt32 GetPointCount() const;
     virtual Point GetPoint(sal_uInt32 i) const;
     virtual void NbcSetPoint(const Point& rPnt, sal_uInt32 i);

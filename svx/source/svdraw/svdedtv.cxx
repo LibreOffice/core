@@ -120,9 +120,9 @@ SdrLayer* SdrEditView::InsertNewLayer(const OUString& rName, sal_uInt16 nPos)
 #include <svx/svdogrp.hxx>
 #include <svx/scene3d.hxx>
 
-sal_Bool SdrEditView::ImpDelLayerCheck(SdrObjList* pOL, SdrLayerID nDelID) const
+bool SdrEditView::ImpDelLayerCheck(SdrObjList* pOL, SdrLayerID nDelID) const
 {
-    sal_Bool bDelAll(sal_True);
+    bool bDelAll(true);
     sal_uInt32 nObjAnz(pOL->GetObjCount());
 
     for(sal_uInt32 nObjNum(nObjAnz); nObjNum > 0 && bDelAll;)
@@ -136,14 +136,14 @@ sal_Bool SdrEditView::ImpDelLayerCheck(SdrObjList* pOL, SdrLayerID nDelID) const
         {
             if(!ImpDelLayerCheck(pSubOL, nDelID))
             {
-                bDelAll = sal_False;
+                bDelAll = false;
             }
         }
         else
         {
             if(pObj->GetLayer() != nDelID)
             {
-                bDelAll = sal_False;
+                bDelAll = false;
             }
         }
     }
@@ -373,86 +373,86 @@ void SdrEditView::ModelHasChanged()
     bPossibilitiesDirty=true;
 }
 
-sal_Bool SdrEditView::IsResizeAllowed(sal_Bool bProp) const
+bool SdrEditView::IsResizeAllowed(bool bProp) const
 {
     ForcePossibilities();
-    if (bResizeProtect) return sal_False;
+    if (bResizeProtect) return false;
     if (bProp) return bResizePropAllowed;
     return bResizeFreeAllowed;
 }
 
-sal_Bool SdrEditView::IsRotateAllowed(sal_Bool b90Deg) const
+bool SdrEditView::IsRotateAllowed(bool b90Deg) const
 {
     ForcePossibilities();
-    if (bMoveProtect) return sal_False;
+    if (bMoveProtect) return false;
     if (b90Deg) return bRotate90Allowed;
     return bRotateFreeAllowed;
 }
 
-sal_Bool SdrEditView::IsMirrorAllowed(sal_Bool b45Deg, sal_Bool b90Deg) const
+bool SdrEditView::IsMirrorAllowed(bool b45Deg, bool b90Deg) const
 {
     ForcePossibilities();
-    if (bMoveProtect) return sal_False;
+    if (bMoveProtect) return false;
     if (b90Deg) return bMirror90Allowed;
     if (b45Deg) return bMirror45Allowed;
     return bMirrorFreeAllowed && !bMoveProtect;
 }
 
-sal_Bool SdrEditView::IsTransparenceAllowed() const
+bool SdrEditView::IsTransparenceAllowed() const
 {
     ForcePossibilities();
     return bTransparenceAllowed;
 }
 
-sal_Bool SdrEditView::IsGradientAllowed() const
+bool SdrEditView::IsGradientAllowed() const
 {
     ForcePossibilities();
     return bGradientAllowed;
 }
 
-sal_Bool SdrEditView::IsShearAllowed() const
+bool SdrEditView::IsShearAllowed() const
 {
     ForcePossibilities();
-    if (bResizeProtect) return sal_False;
+    if (bResizeProtect) return false;
     return bShearAllowed;
 }
 
-sal_Bool SdrEditView::IsEdgeRadiusAllowed() const
+bool SdrEditView::IsEdgeRadiusAllowed() const
 {
     ForcePossibilities();
     return bEdgeRadiusAllowed;
 }
 
-sal_Bool SdrEditView::IsCrookAllowed(sal_Bool bNoContortion) const
+bool SdrEditView::IsCrookAllowed(bool bNoContortion) const
 {
     // CrookMode missing here (no rotations allowed when shearing ...)
     ForcePossibilities();
     if (bNoContortion) {
-        if (!bRotateFreeAllowed) return sal_False;
+        if (!bRotateFreeAllowed) return false;
         return !bMoveProtect && bMoveAllowed;
     } else {
         return !bResizeProtect && bContortionPossible;
     }
 }
 
-sal_Bool SdrEditView::IsDistortAllowed(sal_Bool bNoContortion) const
+bool SdrEditView::IsDistortAllowed(bool bNoContortion) const
 {
     ForcePossibilities();
     if (bNoContortion) {
-        return sal_False;
+        return false;
     } else {
         return !bResizeProtect && bContortionPossible;
     }
 }
 
-sal_Bool SdrEditView::IsCombinePossible(sal_Bool bNoPolyPoly) const
+bool SdrEditView::IsCombinePossible(bool bNoPolyPoly) const
 {
     ForcePossibilities();
     if (bNoPolyPoly) return bCombineNoPolyPolyPossible;
     else return bCombinePossible;
 }
 
-sal_Bool SdrEditView::IsDismantlePossible(sal_Bool bMakeLines) const
+bool SdrEditView::IsDismantlePossible(bool bMakeLines) const
 {
     ForcePossibilities();
     if (bMakeLines) return bDismantleMakeLinesPossible;
@@ -597,8 +597,8 @@ void SdrEditView::CheckPossibilities()
                     bCombineNoPolyPolyPossible = bCombinePossible;
                 }
 
-                if (!bDismantlePossible) bDismantlePossible = ImpCanDismantle(pObj, sal_False);
-                if (!bDismantleMakeLinesPossible) bDismantleMakeLinesPossible = ImpCanDismantle(pObj, sal_True);
+                if (!bDismantlePossible) bDismantlePossible = ImpCanDismantle(pObj, false);
+                if (!bDismantleMakeLinesPossible) bDismantleMakeLinesPossible = ImpCanDismantle(pObj, true);
                 // check OrthoDesiredOnMarked
                 if (!bOrthoDesiredOnMarked && !aInfo.bNoOrthoDesired) bOrthoDesiredOnMarked=true;
                 // check ImportMtf
@@ -953,19 +953,19 @@ void SdrEditView::CopyMarkedObj()
 
 
 
-sal_Bool SdrEditView::InsertObjectAtView(SdrObject* pObj, SdrPageView& rPV, sal_uIntPtr nOptions)
+bool SdrEditView::InsertObjectAtView(SdrObject* pObj, SdrPageView& rPV, sal_uIntPtr nOptions)
 {
     if ((nOptions & SDRINSERT_SETDEFLAYER)!=0) {
         SdrLayerID nLayer=rPV.GetPage()->GetLayerAdmin().GetLayerID(aAktLayer,true);
         if (nLayer==SDRLAYER_NOTFOUND) nLayer=0;
         if (rPV.GetLockedLayers().IsSet(nLayer) || !rPV.GetVisibleLayers().IsSet(nLayer)) {
             SdrObject::Free( pObj ); // Layer locked or invisible
-            return sal_False;
+            return false;
         }
         pObj->NbcSetLayer(nLayer);
     }
     if ((nOptions & SDRINSERT_SETDEFATTR)!=0) {
-        if (pDefaultStyleSheet!=NULL) pObj->NbcSetStyleSheet(pDefaultStyleSheet, sal_False);
+        if (pDefaultStyleSheet!=NULL) pObj->NbcSetStyleSheet(pDefaultStyleSheet, false);
         pObj->SetMergedItemSet(aDefaultAttr);
     }
     if (!pObj->IsInserted()) {
@@ -983,10 +983,10 @@ sal_Bool SdrEditView::InsertObjectAtView(SdrObject* pObj, SdrPageView& rPV, sal_
         if ((nOptions & SDRINSERT_ADDMARK)==0) UnmarkAllObj();
         MarkObj(pObj,&rPV);
     }
-    return sal_True;
+    return true;
 }
 
-void SdrEditView::ReplaceObjectAtView(SdrObject* pOldObj, SdrPageView& rPV, SdrObject* pNewObj, sal_Bool bMark)
+void SdrEditView::ReplaceObjectAtView(SdrObject* pOldObj, SdrPageView& rPV, SdrObject* pNewObj, bool bMark)
 {
     if(IsTextEdit())
     {
@@ -1016,7 +1016,7 @@ void SdrEditView::ReplaceObjectAtView(SdrObject* pOldObj, SdrPageView& rPV, SdrO
         AddUndo(GetModel()->GetSdrUndoFactory().CreateUndoReplaceObject(*pOldObj,*pNewObj));
 
     if( IsObjMarked( pOldObj ) )
-        MarkObj( pOldObj, &rPV, sal_True /*unmark!*/ );
+        MarkObj( pOldObj, &rPV, true /*unmark!*/ );
 
     pOL->ReplaceObject(pNewObj,pOldObj->GetOrdNum());
 

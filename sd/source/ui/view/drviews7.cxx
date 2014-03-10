@@ -230,7 +230,7 @@ void DrawViewShell::GetMenuState( SfxItemSet &rSet )
         rSet.DisableItem( SID_DRAW_TEXT_VERTICAL );
     }
 
-    bool bConvertToPathPossible = mpDrawView->IsConvertToPathObjPossible(sal_False);
+    bool bConvertToPathPossible = mpDrawView->IsConvertToPathObjPossible(false);
 
     const SdrMarkList& rMarkList = mpDrawView->GetMarkedObjectList();
     const sal_uLong nMarkCount = rMarkList.GetMarkCount();
@@ -447,12 +447,12 @@ void DrawViewShell::GetMenuState( SfxItemSet &rSet )
         else
         {
             // horizontal alignment
-            sal_uInt16 nHorz = mpDrawView->GetMarkedGluePointsAlign( sal_False );
+            sal_uInt16 nHorz = mpDrawView->GetMarkedGluePointsAlign( false );
             rSet.Put( SfxBoolItem( SID_GLUE_HORZALIGN_CENTER, nHorz == SDRHORZALIGN_CENTER ) );
             rSet.Put( SfxBoolItem( SID_GLUE_HORZALIGN_LEFT,   nHorz == SDRHORZALIGN_LEFT ) );
             rSet.Put( SfxBoolItem( SID_GLUE_HORZALIGN_RIGHT,  nHorz == SDRHORZALIGN_RIGHT ) );
             // vertical alignment
-            sal_uInt16 nVert = mpDrawView->GetMarkedGluePointsAlign( sal_True );
+            sal_uInt16 nVert = mpDrawView->GetMarkedGluePointsAlign( true );
             rSet.Put( SfxBoolItem( SID_GLUE_VERTALIGN_CENTER, nVert == SDRVERTALIGN_CENTER ) );
             rSet.Put( SfxBoolItem( SID_GLUE_VERTALIGN_TOP,    nVert == SDRVERTALIGN_TOP ) );
             rSet.Put( SfxBoolItem( SID_GLUE_VERTALIGN_BOTTOM, nVert == SDRVERTALIGN_BOTTOM ) );
@@ -505,7 +505,7 @@ void DrawViewShell::GetMenuState( SfxItemSet &rSet )
     else
         rSet.Put(SfxBoolItem(SID_GLUE_EDITMODE, false));
 
-    if( !mpDrawView->IsMirrorAllowed( sal_True, sal_True ) )
+    if( !mpDrawView->IsMirrorAllowed( true, true ) )
     {
         rSet.DisableItem( SID_HORIZONTAL );
         rSet.DisableItem( SID_VERTICAL );
@@ -655,10 +655,10 @@ void DrawViewShell::GetMenuState( SfxItemSet &rSet )
         return;
     }
 
-    if( !( mpDrawView->IsConvertToPolyObjPossible(sal_False) || mpDrawView->IsVectorizeAllowed() ) )
+    if( !( mpDrawView->IsConvertToPolyObjPossible(false) || mpDrawView->IsVectorizeAllowed() ) )
         rSet.DisableItem(SID_CHANGEPOLYGON);
 
-    if( !( mpDrawView->IsConvertToPolyObjPossible(sal_False) || mpDrawView->IsConvertToContourPossible() ) )
+    if( !( mpDrawView->IsConvertToPolyObjPossible(false) || mpDrawView->IsConvertToContourPossible() ) )
         rSet.DisableItem(SID_CONVERT_TO_CONTOUR);
 
     if ( !mpDrawView->IsConvertTo3DObjPossible() )

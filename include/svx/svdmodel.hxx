@@ -265,7 +265,7 @@ private:
     SVX_DLLPRIVATE bool operator==(const SdrModel& rCmpModel) const;
     SVX_DLLPRIVATE void ImpPostUndoAction(SdrUndoAction* pUndo);
     SVX_DLLPRIVATE void ImpSetUIUnit();
-    SVX_DLLPRIVATE void ImpSetOutlinerDefaults( SdrOutliner* pOutliner, sal_Bool bInit = sal_False );
+    SVX_DLLPRIVATE void ImpSetOutlinerDefaults( SdrOutliner* pOutliner, bool bInit = false );
     SVX_DLLPRIVATE void ImpReformatAllTextObjects();
     SVX_DLLPRIVATE void ImpReformatAllEdgeObjects();    // #103122#
     SVX_DLLPRIVATE void ImpCreateTables();
@@ -291,12 +291,11 @@ public:
     // Zeichenobjekte verwenden moechte. Setzt man degegen nur vom abstrakten
     // Basisobjekt SdrObject abgeleitete Objekte ein, so ist man frei in der
     // Wahl des Pools.
-    explicit SdrModel(SfxItemPool* pPool=NULL, ::comphelper::IEmbeddedHelper* pPers=NULL, sal_Bool bLoadRefCounts = LOADREFCOUNTS);
-    explicit SdrModel(const OUString& rPath, SfxItemPool* pPool=NULL, ::comphelper::IEmbeddedHelper* pPers=NULL, sal_Bool bLoadRefCounts = LOADREFCOUNTS);
-    SdrModel(SfxItemPool* pPool, ::comphelper::IEmbeddedHelper* pPers, bool bUseExtColorTable, sal_Bool bLoadRefCounts = LOADREFCOUNTS);
-    SdrModel(const OUString& rPath, SfxItemPool* pPool, ::comphelper::IEmbeddedHelper* pPers, bool bUseExtColorTable, sal_Bool bLoadRefCounts = LOADREFCOUNTS);
+    explicit SdrModel();
+    explicit SdrModel(SfxItemPool* pPool, ::comphelper::IEmbeddedHelper* pPers, bool bUseExtColorTable, bool bLoadRefCounts);
+    explicit SdrModel(const OUString& rPath, SfxItemPool* pPool, ::comphelper::IEmbeddedHelper* pPers, bool bUseExtColorTable, bool bLoadRefCounts);
     virtual ~SdrModel();
-    void ClearModel(sal_Bool bCalledFromDestructor);
+    void ClearModel(bool bCalledFromDestructor);
 
     // Hier kann man erfragen, ob das Model gerade eingrstreamt wird
     bool IsLoading() const                  { return false /*BFS01 bLoading */; }
@@ -620,8 +619,8 @@ public:
     SfxStyleSheetBasePool* GetStyleSheetPool() const         { return mxStyleSheetPool.get(); }
     void SetStyleSheetPool(SfxStyleSheetBasePool* pPool)     { mxStyleSheetPool=pPool; }
 
-    void    SetStarDrawPreviewMode(sal_Bool bPreview);
-    sal_Bool    IsStarDrawPreviewMode() { return bStarDrawPreviewMode; }
+    void    SetStarDrawPreviewMode(bool bPreview);
+    bool    IsStarDrawPreviewMode() { return bStarDrawPreviewMode; }
 
     bool GetDisableTextEditUsesCommonUndoManager() const { return mbDisableTextEditUsesCommonUndoManager; }
     void SetDisableTextEditUsesCommonUndoManager(bool bNew) { mbDisableTextEditUsesCommonUndoManager = bNew; }
@@ -640,18 +639,18 @@ public:
     void SetCharCompressType( sal_uInt16 nType );
     sal_uInt16 GetCharCompressType() const { return mnCharCompressType; }
 
-    void SetKernAsianPunctuation( sal_Bool bEnabled );
-    sal_Bool IsKernAsianPunctuation() const { return (sal_Bool)mbKernAsianPunctuation; }
+    void SetKernAsianPunctuation( bool bEnabled );
+    bool IsKernAsianPunctuation() const { return mbKernAsianPunctuation; }
 
-    void SetAddExtLeading( sal_Bool bEnabled );
-    sal_Bool IsAddExtLeading() const { return (sal_Bool)mbAddExtLeading; }
+    void SetAddExtLeading( bool bEnabled );
+    bool IsAddExtLeading() const { return mbAddExtLeading; }
 
     void ReformatAllTextObjects();
 
     SdrOutliner* createOutliner( sal_uInt16 nOutlinerMode );
     void disposeOutliner( SdrOutliner* pOutliner );
 
-    sal_Bool IsWriter() const { return !bMyPool; }
+    bool IsWriter() const { return !bMyPool; }
 
     /** returns the numbering type that is used to format page fields in drawing shapes */
     virtual SvxNumType GetPageNumType() const;
@@ -702,7 +701,7 @@ typedef tools::WeakReference< SdrModel > SdrModelWeakRef;
 +---+---+ +---+---+  +----+----+ +----+----+  +-----+------+ +------+-----+
 |SdrObj | |SdrObj |  |SdrLayer | |SdrLayer |  |SdrLayerSet | |SdrLayerSet |
 +-------+ +-------+  +---------+ +---------+  +------------+ +------------+
-This class: SdrModel is the head of the data modells for the StarView Drawing Engine.
+This class: SdrModel is the head of the data models for the StarView Drawing Engine.
 
 ///////////////////////////////////////////////////////////////////////////////////////////////// */
 

@@ -80,7 +80,7 @@ namespace
         ::com::sun::star::lang::Locale              maLocale;
 
         // bitfield
-        unsigned                                    mbRTL : 1;
+        bool                                        mbRTL : 1;
 
     public:
         impPathTextPortion(DrawPortionInfo& rInfo)

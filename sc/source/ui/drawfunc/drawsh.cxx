@@ -121,7 +121,7 @@ void ScDrawShell::ExecDrawAttr( SfxRequest& rReq )
         case SID_TEXT_STANDARD: // Harte Textattributierung loeschen
             {
                 SfxItemSet aEmptyAttr(GetPool(), EE_ITEMS_START, EE_ITEMS_END);
-                pView->SetAttributes(aEmptyAttr, sal_True);
+                pView->SetAttributes(aEmptyAttr, true);
             }
             break;
 

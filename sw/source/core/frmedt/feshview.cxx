@@ -1046,7 +1046,7 @@ void SwFEShell::EndTextEdit()
     }
     if ( !pObj->GetUpGroup() )
     {
-        if ( SDRENDTEXTEDIT_SHOULDBEDELETED == pView->SdrEndTextEdit(sal_True) )
+        if ( SDRENDTEXTEDIT_SHOULDBEDELETED == pView->SdrEndTextEdit(true) )
         {
             if ( pView->GetMarkedObjectList().GetMarkCount() > 1 )
             {
@@ -1115,7 +1115,7 @@ bool SwFEShell::IsObjSelectable( const Point& rPt )
         sal_uInt16 nOld = pDView->GetHitTolerancePixel();
         pDView->SetHitTolerancePixel( pDView->GetMarkHdlSizePixel()/2 );
 
-        bRet = 0 != pDView->PickObj( rPt, pDView->getHitTolLog(), pObj, pPV, SDRSEARCH_PICKMARKABLE );
+        bRet = pDView->PickObj( rPt, pDView->getHitTolLog(), pObj, pPV, SDRSEARCH_PICKMARKABLE );
         pDView->SetHitTolerancePixel( nOld );
     }
     return bRet;
@@ -1913,12 +1913,12 @@ sal_Bool SwFEShell::ImpEndCreate()
             if ( pMarkObj )
             {
                 Imp()->GetDrawView()->MarkObj( pMarkObj, Imp()->GetPageView(),
-                                                sal_False, sal_False );
+                                                false, false );
             }
             else
             {
                 Imp()->GetDrawView()->MarkObj( &rSdrObj, Imp()->GetPageView(),
-                                                sal_False, sal_False );
+                                                false, false );
             }
         }
     }

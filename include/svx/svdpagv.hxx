@@ -71,8 +71,8 @@ private:
 
     Rectangle     aMarkBound; // wird
     Rectangle     aMarkSnap;  // von
-    sal_Bool mbHasMarked;
-    sal_Bool mbVisible;
+    bool          mbHasMarked;
+    bool          mbVisible;
 
     SetOfByte    aLayerVisi;   // Menge der sichtbaren Layer
     SetOfByte    aLayerLock;   // Menge der nicht editierbaren Layer
@@ -157,7 +157,7 @@ public:
     */
     void    SetDesignMode( bool _bDesignMode ) const;
 
-    sal_Bool IsVisible() const { return mbVisible; }
+    bool IsVisible() const { return mbVisible; }
 
     // Invalidiert den gesamten Bereich der Page
     void InvalidateAllWin();
@@ -187,8 +187,8 @@ public:
     // Betretene Gruppe und Liste setzen
     void SetAktGroupAndList(SdrObject* pNewGroup, SdrObjList* pNewList);
 
-    sal_Bool HasMarkedObjPageView() const { return mbHasMarked; }
-    void SetHasMarkedObj(sal_Bool bOn) { mbHasMarked = bOn; }
+    bool HasMarkedObjPageView() const { return mbHasMarked; }
+    void SetHasMarkedObj(bool bOn) { mbHasMarked = bOn; }
 
     const Rectangle& MarkBound() const { return aMarkBound; }
     const Rectangle& MarkSnap() const { return aMarkSnap; }
@@ -198,14 +198,14 @@ public:
     void SetLayerVisible(const OUString& rName, bool bShow = true) { SetLayer(rName, aLayerVisi, bShow); if(!bShow) AdjHdl(); InvalidateAllWin(); }
     bool IsLayerVisible(const OUString& rName) const { return IsLayer(rName, aLayerVisi); }
 
-    void SetLayerLocked(const OUString& rName, sal_Bool bLock = sal_True) { SetLayer(rName, aLayerLock, bLock); if(bLock) AdjHdl(); }
-    sal_Bool IsLayerLocked(const OUString& rName) const { return IsLayer(rName,aLayerLock); }
+    void SetLayerLocked(const OUString& rName, bool bLock = true) { SetLayer(rName, aLayerLock, bLock); if(bLock) AdjHdl(); }
+    bool IsLayerLocked(const OUString& rName) const { return IsLayer(rName,aLayerLock); }
 
-    void SetLayerPrintable(const OUString& rName, sal_Bool bPrn = sal_True) { SetLayer(rName, aLayerPrn, bPrn); }
-    sal_Bool IsLayerPrintable(const OUString& rName) const { return IsLayer(rName, aLayerPrn); }
+    void SetLayerPrintable(const OUString& rName, bool bPrn = true) { SetLayer(rName, aLayerPrn, bPrn); }
+    bool IsLayerPrintable(const OUString& rName) const { return IsLayer(rName, aLayerPrn); }
 
     // PV stellt eine RefPage oder eine SubList eines RefObj dar oder Model ist ReadOnly
-    sal_Bool IsReadOnly() const;
+    bool IsReadOnly() const;
 
     // der Origin bezieht sich immer auf die obere linke Ecke der Page
     const Point& GetPageOrigin() const { return aPgOrg; }
@@ -234,13 +234,13 @@ public:
     // Liefert sal_True, wenn Layer des Obj sichtbar und nicht gesperrt.
     // Beim Gruppenobjekt muss wenigstens ein Member sichtbar sein,
     // gesperrt sein darf keiner.
-    sal_Bool IsObjMarkable(SdrObject* pObj) const;
+    bool IsObjMarkable(SdrObject* pObj) const;
 
     // Betreten (Editieren) einer Objektgruppe. Anschliessend liegen alle
     // Memberobjekte der Gruppe im direkten Zugriff. Alle anderen Objekte
     // koennen waerendessen nicht bearbeitet werden (bis zum naechsten
     // LeaveGroup()). (wie MsDos chdir bla).
-    sal_Bool EnterGroup(SdrObject* pObj);
+    bool EnterGroup(SdrObject* pObj);
 
     // Verlassen einer betretenen Objektgruppe. (wie MsDos chdir ..)
     void LeaveOneGroup();

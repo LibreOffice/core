@@ -91,7 +91,7 @@ void ScDrawView::Construct()
             SetLayerLocked( pLayer->GetName(), bProt || !bEx );
         pLayer = rAdmin.GetLayerPerID(SC_LAYER_INTERN);
         if (pLayer)
-            SetLayerLocked( pLayer->GetName(), sal_True );
+            SetLayerLocked( pLayer->GetName(), true );
         pLayer = rAdmin.GetLayerPerID(SC_LAYER_FRONT);
         if (pLayer)
         {
@@ -108,7 +108,7 @@ void ScDrawView::Construct()
             SetLayerVisible( pLayer->GetName(), false);
         }
 
-        SetSwapAsynchron(sal_True);
+        SetSwapAsynchron(true);
     }
     else
     {
@@ -540,16 +540,16 @@ void ScDrawView::MarkListHasChanged()
 
 }
 
-sal_Bool ScDrawView::SdrBeginTextEdit(
+bool ScDrawView::SdrBeginTextEdit(
     SdrObject* pObj,
     SdrPageView* pPV,
     ::Window* pWinL,
-    sal_Bool bIsNewObj,
+    bool bIsNewObj,
     SdrOutliner* pGivenOutliner,
     OutlinerView* pGivenOutlinerView,
-    sal_Bool bDontDeleteOutliner,
-    sal_Bool bOnlyOneView,
-    sal_Bool bGrabFocus )
+    bool bDontDeleteOutliner,
+    bool bOnlyOneView,
+    bool bGrabFocus )
 {
     const sal_Bool bRet = FmFormView::SdrBeginTextEdit(
         pObj, pPV, pWinL, bIsNewObj,
@@ -573,7 +573,7 @@ sal_Bool ScDrawView::SdrBeginTextEdit(
 }
 
 
-SdrEndTextEditKind ScDrawView::SdrEndTextEdit( sal_Bool bDontDeleteReally )
+SdrEndTextEditKind ScDrawView::SdrEndTextEdit( bool bDontDeleteReally )
 {
     const SdrEndTextEditKind eRet = FmFormView::SdrEndTextEdit( bDontDeleteReally );
 
@@ -707,7 +707,7 @@ bool ScDrawView::SelectCurrentViewObject( const OUString& rName )
         {
             SdrLayer* pLayer = GetModel()->GetLayerAdmin().GetLayerPerID(SC_LAYER_BACK);
             if (pLayer)
-                SetLayerLocked( pLayer->GetName(), sal_False );
+                SetLayerLocked( pLayer->GetName(), false );
         }
         SdrPageView* pPV = GetSdrPageView();
               bUnMark = IsObjMarked(pFound);

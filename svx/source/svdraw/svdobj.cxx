@@ -535,7 +535,7 @@ SdrObjPlusData* SdrObject::NewPlusData() const
     return new SdrObjPlusData;
 }
 
-void SdrObject::SetRectsDirty(sal_Bool bNotMyself)
+void SdrObject::SetRectsDirty(bool bNotMyself)
 {
     if (!bNotMyself) {
         SetBoundRectDirty();
@@ -1773,7 +1773,7 @@ Point SdrObject::GetSnapPoint(sal_uInt32 i) const
     return GetPoint(i);
 }
 
-sal_Bool SdrObject::IsPolyObj() const
+bool SdrObject::IsPolyObj() const
 {
     return false;
 }
@@ -1843,7 +1843,7 @@ OString SdrObject::stringify() const
     return aString.makeStringAndClear();
 }
 
-sal_Bool SdrObject::BegTextEdit(SdrOutliner& /*rOutl*/)
+bool SdrObject::BegTextEdit(SdrOutliner& /*rOutl*/)
 {
     return false;
 }
@@ -2367,7 +2367,7 @@ void SdrObject::SetStyleSheet(SfxStyleSheet* pNewStyleSheet, bool bDontRemoveHar
     SendUserCall(SDRUSERCALL_CHGATTR, aBoundRect0);
 }
 
-void SdrObject::NbcSetStyleSheet(SfxStyleSheet* pNewStyleSheet, sal_Bool bDontRemoveHardAttr)
+void SdrObject::NbcSetStyleSheet(SfxStyleSheet* pNewStyleSheet, bool bDontRemoveHardAttr)
 {
     // only allow graphic and presentation styles for shapes
     if( pNewStyleSheet && (pNewStyleSheet->GetFamily() == SFX_STYLE_FAMILY_PARA) && (pNewStyleSheet->GetFamily() == SFX_STYLE_FAMILY_PAGE) )
@@ -2842,7 +2842,7 @@ SdrObject* SdrObject::ConvertToPolyObj(bool bBezier, bool bLineToArea) const
 
 
 
-SdrObject* SdrObject::DoConvertToPolyObj(sal_Bool /*bBezier*/, bool /*bAddText*/) const
+SdrObject* SdrObject::DoConvertToPolyObj(bool /*bBezier*/, bool /*bAddText*/) const
 {
     return NULL;
 }
@@ -3175,7 +3175,7 @@ void SdrObject::notifyShapePropertyChange( const ::svx::ShapeProperty _eProperty
 
 // gets base transformation and rectangle of object. If it's an SdrPathObj it fills the PolyPolygon
 // with the base geometry and returns TRUE. Otherwise it returns FALSE.
-sal_Bool SdrObject::TRGetBaseGeometry(basegfx::B2DHomMatrix& rMatrix, basegfx::B2DPolyPolygon& /*rPolyPolygon*/) const
+bool SdrObject::TRGetBaseGeometry(basegfx::B2DHomMatrix& rMatrix, basegfx::B2DPolyPolygon& /*rPolyPolygon*/) const
 {
     // any kind of SdrObject, just use SnapRect
     Rectangle aRectangle(GetSnapRect());

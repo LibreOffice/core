@@ -114,7 +114,7 @@ using namespace ::com::sun::star;
 
 SdrItemPool::SdrItemPool(
     SfxItemPool* _pMaster,
-    sal_Bool bLoadRefCounts)
+    bool bLoadRefCounts)
 :   XOutdevItemPool(_pMaster, SDRATTR_START, SDRATTR_END, bLoadRefCounts)
 {
     // prepare some constants

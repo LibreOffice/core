@@ -314,7 +314,7 @@ void SAL_CALL SdrLightEmbeddedClient_Impl::saveObject()
     xPersist->storeOwn();
 
     if ( xModifiable.is() )
-        xModifiable->setModified( sal_True );
+        xModifiable->setModified( true );
 }
 
 
@@ -547,7 +547,7 @@ void SAL_CALL SdrLightEmbeddedClient_Impl::changedPlacement( const awt::Rectangl
     {
         // the calculation of the object area has not changed the object size
         // it should be done here then
-        //SfxBooleanFlagGuard aGuard( m_bResizeNoScale, sal_True );
+        //SfxBooleanFlagGuard aGuard( m_bResizeNoScale, true );
 
         // new size of the object area without scaling
         Size aNewObjSize( Fraction( aNewLogicRect.GetWidth() ) / m_aScaleWidth,
@@ -614,7 +614,7 @@ SdrEmbedObjectLink::SdrEmbedObjectLink(SdrOle2Obj* pObject):
     ::sfx2::SvBaseLink( ::sfx2::LINKUPDATE_ONCALL, SOT_FORMATSTR_ID_SVXB ),
     pObj(pObject)
 {
-    SetSynchron( sal_False );
+    SetSynchron( false );
 }
 
 
@@ -899,9 +899,9 @@ void SdrOle2Obj::Connect()
 
 
 
-sal_Bool SdrOle2Obj::UpdateLinkURL_Impl()
+bool SdrOle2Obj::UpdateLinkURL_Impl()
 {
-    sal_Bool bResult = sal_False;
+    bool bResult = false;
 
     if ( mpImpl->mpObjectLink )
     {
@@ -930,7 +930,7 @@ sal_Bool SdrOle2Obj::UpdateLinkURL_Impl()
                         xPersObj->reload( aArgs, uno::Sequence< beans::PropertyValue >() );
 
                         mpImpl->maLinkURL = aNewLinkURL;
-                        bResult = sal_True;
+                        bResult = true;
 
                         if ( nCurState != embed::EmbedStates::LOADED )
                             xObjRef->changeState( nCurState );
@@ -1132,7 +1132,7 @@ void SdrOle2Obj::Connect_Impl()
             pModel->GetRefDevice()->GetOutDevType() == OUTDEV_PRINTER)
         {
             // Kein RefDevice oder RefDevice kein Printer
-            sal_Bool bModified = (*ppObjRef)->IsModified();
+            bool bModified = (*ppObjRef)->IsModified();
             Printer* pPrinter = (Printer*) pModel->GetRefDevice();
             (*ppObjRef)->OnDocumentPrinterChanged( pPrinter );
             (*ppObjRef)->SetModified( bModified );
@@ -1241,7 +1241,7 @@ void SdrOle2Obj::Disconnect_Impl()
                 {
                     try
                     {
-                        xClose->close( sal_True );
+                        xClose->close( true );
                     }
                     catch ( util::CloseVetoException& )
                     {
@@ -1353,7 +1353,7 @@ SdrObject* SdrOle2Obj::createSdrGrafObjReplacement(bool bAddText, bool /* bUseHC
     }
 }
 
-SdrObject* SdrOle2Obj::DoConvertToPolyObj(sal_Bool bBezier, bool bAddText) const
+SdrObject* SdrOle2Obj::DoConvertToPolyObj(bool bBezier, bool bAddText) const
 {
     // #i118485# missing converter added
     if(GetModel())
@@ -1915,21 +1915,21 @@ void SdrOle2Obj::NbcMove(const Size& rSize)
 
 
 
-sal_Bool SdrOle2Obj::CanUnloadRunningObj( const uno::Reference< embed::XEmbeddedObject >& xObj, sal_Int64 nAspect )
+bool SdrOle2Obj::CanUnloadRunningObj( const uno::Reference< embed::XEmbeddedObject >& xObj, sal_Int64 nAspect )
 {
-    sal_Bool bResult = sal_False;
+    bool bResult = false;
 
     sal_Int32 nState = xObj->getCurrentState();
     if ( nState == embed::EmbedStates::LOADED )
     {
         // the object is already unloaded
-        bResult = sal_True;
+        bResult = true;
     }
     else
     {
         uno::Reference < util::XModifiable > xModifiable( xObj->getComponent(), uno::UNO_QUERY );
         if ( !xModifiable.is() )
-            bResult = sal_True;
+            bResult = true;
         else
         {
             sal_Int64 nMiscStatus = xObj->getStatus( nAspect );
@@ -1939,7 +1939,7 @@ sal_Bool SdrOle2Obj::CanUnloadRunningObj( const uno::Reference< embed::XEmbedded
             !( xModifiable.is() && xModifiable->isModified() ) &&
             !( nState == embed::EmbedStates::INPLACE_ACTIVE || nState == embed::EmbedStates::UI_ACTIVE || nState == embed::EmbedStates::ACTIVE ) )
             {
-                bResult = sal_True;
+                bResult = true;
             }
         }
     }
@@ -1949,16 +1949,16 @@ sal_Bool SdrOle2Obj::CanUnloadRunningObj( const uno::Reference< embed::XEmbedded
 
 
 
-sal_Bool SdrOle2Obj::Unload( const uno::Reference< embed::XEmbeddedObject >& xObj, sal_Int64 nAspect )
+bool SdrOle2Obj::Unload( const uno::Reference< embed::XEmbeddedObject >& xObj, sal_Int64 nAspect )
 {
-    sal_Bool bResult = sal_False;
+    bool bResult = false;
 
     if ( CanUnloadRunningObj( xObj, nAspect ) )
     {
         try
         {
             xObj->changeState( embed::EmbedStates::LOADED );
-            bResult = sal_True;
+            bResult = true;
         }
         catch( ::com::sun::star::uno::Exception& )
         {
@@ -1976,9 +1976,9 @@ sal_Bool SdrOle2Obj::Unload( const uno::Reference< embed::XEmbeddedObject >& xOb
 
 
 
-sal_Bool SdrOle2Obj::Unload()
+bool SdrOle2Obj::Unload()
 {
-    sal_Bool bUnloaded = sal_False;
+    bool bUnloaded = false;
 
     if( xObjRef.is() )
     {
@@ -1988,11 +1988,11 @@ sal_Bool SdrOle2Obj::Unload()
         //sal_uIntPtr nRefCount = (*ppObjRef)->GetRefCount();
         // prevent Unload if there are external references
         //if( nRefCount > 2 )
-        //    return sal_False;
+        //    return false;
         //DBG_ASSERT( nRefCount == 2, "Wrong RefCount for unload" );
     }
     else
-        bUnloaded = sal_True;
+        bUnloaded = true;
 
     if ( pModel && xObjRef.is() )
     {
@@ -2031,7 +2031,7 @@ void SdrOle2Obj::GetObjRef_Impl()
             if( !IsEmptyPresObj() )
             {
                 // remember modified status of model
-                const sal_Bool bWasChanged(pModel ? pModel->IsChanged() : sal_False);
+                const bool bWasChanged = pModel && pModel->IsChanged();
 
                 // perhaps preview not valid anymore
                 // This line changes the modified state of the model
@@ -2059,9 +2059,9 @@ void SdrOle2Obj::GetObjRef_Impl()
                         //TODO/LATER: printerchange notification
                         /*
                         // prevent SetModified (don't want no update here)
-                        sal_Bool bWasEnabled = (*ppObjRef)->IsEnableSetModified();
+                        bool bWasEnabled = (*ppObjRef)->IsEnableSetModified();
                         if ( bWasEnabled )
-                            (*ppObjRef)->EnableSetModified( sal_False );
+                            (*ppObjRef)->EnableSetModified( false );
 
                         // Kein RefDevice oder RefDevice kein Printer
                         Printer* pPrinter = (Printer*) pModel->GetRefDevice();
@@ -2107,7 +2107,7 @@ uno::Reference< frame::XModel > SdrOle2Obj::getXModel() const
 
 
 
-sal_Bool SdrOle2Obj::IsChart() const
+bool SdrOle2Obj::IsChart() const
 {
     if ( !m_bTypeAsked )
     {
@@ -2130,7 +2130,7 @@ void SdrOle2Obj::SetGraphicToObj( const uno::Reference< io::XInputStream >& xGrS
 }
 
 
-sal_Bool SdrOle2Obj::IsCalc() const
+bool SdrOle2Obj::IsCalc() const
 {
     if ( !xObjRef.is() )
         return false;
@@ -2144,10 +2144,10 @@ sal_Bool SdrOle2Obj::IsCalc() const
         || SvGlobalName(SO3_SC_OLE_EMBED_CLASSID_8) == aObjClsId
         || SvGlobalName(SO3_SC_CLASSID) == aObjClsId )
     {
-        return sal_True;
+        return true;
     }
 
-    return sal_False;
+    return false;
 }
 
 
@@ -2160,12 +2160,12 @@ uno::Reference< frame::XModel > SdrOle2Obj::GetParentXModel() const
 }
 
 
-sal_Bool SdrOle2Obj::CalculateNewScaling( Fraction& aScaleWidth, Fraction& aScaleHeight, Size& aObjAreaSize )
+bool SdrOle2Obj::CalculateNewScaling( Fraction& aScaleWidth, Fraction& aScaleHeight, Size& aObjAreaSize )
 {
     // TODO/LEAN: to avoid rounding errors scaling always uses the VisArea.
     // If we don't cache it for own objects also we must load the object here
     if ( !xObjRef.is() || !pModel )
-        return sal_False;
+        return false;
 
     MapMode aMapMode( pModel->GetScaleUnit() );
     aObjAreaSize = xObjRef.GetSize( &aMapMode );
@@ -2178,11 +2178,11 @@ sal_Bool SdrOle2Obj::CalculateNewScaling( Fraction& aScaleWidth, Fraction& aScal
     Kuerzen(aScaleHeight, 10);
     Kuerzen(aScaleWidth,  10);
 
-    return sal_True;
+    return true;
 }
 
 
-sal_Bool SdrOle2Obj::AddOwnLightClient()
+bool SdrOle2Obj::AddOwnLightClient()
 {
     // The Own Light Client must be registered in object only using this method!
     if ( !SfxInPlaceClient::GetClient( dynamic_cast<SfxObjectShell*>(pModel->GetPersist()), xObjRef.GetObject() )
@@ -2200,17 +2200,17 @@ sal_Bool SdrOle2Obj::AddOwnLightClient()
                 mpImpl->pLightClient->SetSizeScale( aScaleWidth, aScaleHeight );
                 try {
                     xObjRef->setClientSite( mpImpl->pLightClient );
-                    return sal_True;
+                    return true;
                 } catch( uno::Exception& )
                 {}
             }
 
         }
 
-        return sal_False;
+        return false;
     }
 
-       return sal_True;
+    return true;
 }
 
 

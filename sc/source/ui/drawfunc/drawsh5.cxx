@@ -408,7 +408,7 @@ void ScDrawShell::ExecDrawFunc( SfxRequest& rReq )
                 rBindings.Invalidate( SID_OBJECT_MIRROR );
                 if (eMode == SDRDRAG_ROTATE && !pView->IsFrameDragSingles())
                 {
-                    pView->SetFrameDragSingles( sal_True );
+                    pView->SetFrameDragSingles( true );
                     rBindings.Invalidate( SID_BEZIER_EDIT );
                 }
             }
@@ -425,7 +425,7 @@ void ScDrawShell::ExecDrawFunc( SfxRequest& rReq )
                 rBindings.Invalidate( SID_OBJECT_MIRROR );
                 if (eMode == SDRDRAG_MIRROR && !pView->IsFrameDragSingles())
                 {
-                    pView->SetFrameDragSingles( sal_True );
+                    pView->SetFrameDragSingles( true );
                     rBindings.Invalidate( SID_BEZIER_EDIT );
                 }
             }

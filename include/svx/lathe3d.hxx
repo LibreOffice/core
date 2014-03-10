@@ -94,7 +94,7 @@ private:
 
     virtual E3dLatheObj* Clone() const;
 
-    virtual SdrObject* DoConvertToPolyObj(sal_Bool bBezier, bool bAddText) const;
+    virtual SdrObject* DoConvertToPolyObj(bool bBezier, bool bAddText) const;
 
     // TakeObjName...() is for the display in the UI, for example "3 frames selected".
     virtual OUString TakeObjNameSingul() const;

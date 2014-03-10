@@ -564,14 +564,14 @@ void SdrEditView::ImpCopyAttributes(const SdrObject* pSource, SdrObject* pDest) 
         pDest->SetMergedItemSet(aSet);
 
         pDest->NbcSetLayer(pSource->GetLayer());
-        pDest->NbcSetStyleSheet(pSource->GetStyleSheet(), sal_True);
+        pDest->NbcSetStyleSheet(pSource->GetStyleSheet(), true);
     }
 }
 
-sal_Bool SdrEditView::ImpCanConvertForCombine1(const SdrObject* pObj) const
+bool SdrEditView::ImpCanConvertForCombine1(const SdrObject* pObj) const
 {
     // new condition IsLine() to be able to combine simple Lines
-    sal_Bool bIsLine(sal_False);
+    bool bIsLine(false);
 
     const SdrPathObj* pPath = PTR_CAST(SdrPathObj,pObj);
 
@@ -586,7 +586,7 @@ sal_Bool SdrEditView::ImpCanConvertForCombine1(const SdrObject* pObj) const
     return (aInfo.bCanConvToPath || aInfo.bCanConvToPoly || bIsLine);
 }
 
-sal_Bool SdrEditView::ImpCanConvertForCombine(const SdrObject* pObj) const
+bool SdrEditView::ImpCanConvertForCombine(const SdrObject* pObj) const
 {
     SdrObjList* pOL = pObj->GetSubList();
 
@@ -601,7 +601,7 @@ sal_Bool SdrEditView::ImpCanConvertForCombine(const SdrObject* pObj) const
             // all members of a group have to be convertible
             if(!ImpCanConvertForCombine1(pObj1))
             {
-                return sal_False;
+                return false;
             }
         }
     }
@@ -609,14 +609,14 @@ sal_Bool SdrEditView::ImpCanConvertForCombine(const SdrObject* pObj) const
     {
         if(!ImpCanConvertForCombine1(pObj))
         {
-            return sal_False;
+            return false;
         }
     }
 
-    return sal_True;
+    return true;
 }
 
-basegfx::B2DPolyPolygon SdrEditView::ImpGetPolyPolygon1(const SdrObject* pObj, sal_Bool bCombine) const
+basegfx::B2DPolyPolygon SdrEditView::ImpGetPolyPolygon1(const SdrObject* pObj, bool bCombine) const
 {
     basegfx::B2DPolyPolygon aRetval;
     SdrPathObj* pPath = PTR_CAST(SdrPathObj, pObj);
@@ -665,7 +665,7 @@ basegfx::B2DPolyPolygon SdrEditView::ImpGetPolyPolygon1(const SdrObject* pObj, s
     return aRetval;
 }
 
-basegfx::B2DPolyPolygon SdrEditView::ImpGetPolyPolygon(const SdrObject* pObj, sal_Bool bCombine) const
+basegfx::B2DPolyPolygon SdrEditView::ImpGetPolyPolygon(const SdrObject* pObj, bool bCombine) const
 {
     SdrObjList* pOL = pObj->GetSubList();
 
@@ -1020,8 +1020,8 @@ void SdrEditView::MergeMarkedObjects(SdrMergeMode eMode)
         // since now basegfx::tools::adaptiveSubdivide() is used, it is no longer
         // necessary to use ConvertMarkedToPolyObj which will subdivide curves using the old
         // mechanisms. In a next step the polygon clipper will even be able to clip curves...
-        // ConvertMarkedToPolyObj(sal_True);
-        ConvertMarkedToPathObj(sal_True);
+        // ConvertMarkedToPolyObj(true);
+        ConvertMarkedToPathObj(true);
         OSL_ENSURE(AreObjectsMarked(), "no more objects selected after preparations (!)");
 
         for(sal_uInt32 a=0;a<GetMarkedObjectCount();a++)
@@ -1139,7 +1139,7 @@ void SdrEditView::MergeMarkedObjects(SdrMergeMode eMode)
             pInsOL->InsertObject(pPath, nInsPos, &aReason);
             if( bUndo )
                 AddUndo(GetModel()->GetSdrUndoFactory().CreateUndoNewObject(*pPath));
-            MarkObj(pPath, pInsPV, sal_False, sal_True);
+            MarkObj(pPath, pInsPV, false, true);
         }
 
         aRemove.ForceSort();
@@ -1174,7 +1174,7 @@ void SdrEditView::MergeMarkedObjects(SdrMergeMode eMode)
     }
 }
 
-void SdrEditView::CombineMarkedObjects(sal_Bool bNoPolyPoly)
+void SdrEditView::CombineMarkedObjects(bool bNoPolyPoly)
 {
     // #105899# Start of Combine-Undo put to front, else ConvertMarkedToPolyObj would
     // create a 2nd Undo-action and Undo-Comment.
@@ -1195,8 +1195,8 @@ void SdrEditView::CombineMarkedObjects(sal_Bool bNoPolyPoly)
     // using ConvertMarkedToPathObj without changing the previous fix.
 
     // #i21250#
-    // Instead of simply passing sal_True as LineToArea, use bNoPolyPoly as info
-    // if this command is a 'Combine' or a 'Connect' command. On Connect it's sal_True.
+    // Instead of simply passing true as LineToArea, use bNoPolyPoly as info
+    // if this command is a 'Combine' or a 'Connect' command. On Connect it's true.
     // To not concert line segments with a set line width to polygons in that case,
     // use this info. Do not convert LineToArea on Connect commands.
     // ConvertMarkedToPathObj(!bNoPolyPoly);
@@ -1207,9 +1207,9 @@ void SdrEditView::CombineMarkedObjects(sal_Bool bNoPolyPoly)
     // used for merge.
     // LineToArea is never necessary, both commands are able to take over the
     // set line style and to display it correctly. Thus, i will use a
-    // ConvertMarkedToPathObj with a sal_False in any case. Only drawback is that
+    // ConvertMarkedToPathObj with a false in any case. Only drawback is that
     // simple polygons will be changed to curves, but with no information loss.
-    ConvertMarkedToPathObj(sal_False /* bLineToArea */);
+    ConvertMarkedToPathObj(false /* bLineToArea */);
 
     // continue as before
     basegfx::B2DPolyPolygon aPolyPolygon;
@@ -1243,7 +1243,7 @@ void SdrEditView::CombineMarkedObjects(sal_Bool bNoPolyPoly)
             // unfortunately ConvertMarkedToPathObj has converted all
             // involved polygon data to curve segments, even if not necessary.
             // It is better to try to reduce to more simple polygons.
-            basegfx::B2DPolyPolygon aTmpPoly(basegfx::tools::simplifyCurveSegments(ImpGetPolyPolygon(pObj, sal_True)));
+            basegfx::B2DPolyPolygon aTmpPoly(basegfx::tools::simplifyCurveSegments(ImpGetPolyPolygon(pObj, true)));
             aPolyPolygon.insert(0L, aTmpPoly);
 
             if(!pInsOL)
@@ -1332,7 +1332,7 @@ void SdrEditView::CombineMarkedObjects(sal_Bool bNoPolyPoly)
         // in the UNDO there is no problem, but as soon as they get deleted, the
         // MarkList will contain deleted objects -> GPF.
         UnmarkAllObj(pInsPV);
-        MarkObj(pPath, pInsPV, sal_False, sal_True);
+        MarkObj(pPath, pInsPV, false, true);
     }
 
     // build an UndoComment from the objects actually used
@@ -1350,15 +1350,15 @@ void SdrEditView::CombineMarkedObjects(sal_Bool bNoPolyPoly)
 // Dismantle
 
 
-sal_Bool SdrEditView::ImpCanDismantle(const basegfx::B2DPolyPolygon& rPpolyPolygon, sal_Bool bMakeLines) const
+bool SdrEditView::ImpCanDismantle(const basegfx::B2DPolyPolygon& rPpolyPolygon, bool bMakeLines) const
 {
-    sal_Bool bCan(sal_False);
+    bool bCan(false);
     const sal_uInt32 nPolygonCount(rPpolyPolygon.count());
 
     if(nPolygonCount >= 2L)
     {
         // #i69172# dismantle makes sense with 2 or more polygons in a polyPolygon
-        bCan = sal_True;
+        bCan = true;
     }
     else if(bMakeLines && 1L == nPolygonCount)
     {
@@ -1368,17 +1368,17 @@ sal_Bool SdrEditView::ImpCanDismantle(const basegfx::B2DPolyPolygon& rPpolyPolyg
 
         if(nPointCount > 2L)
         {
-            bCan = sal_True;
+            bCan = true;
         }
     }
 
     return bCan;
 }
 
-sal_Bool SdrEditView::ImpCanDismantle(const SdrObject* pObj, sal_Bool bMakeLines) const
+bool SdrEditView::ImpCanDismantle(const SdrObject* pObj, bool bMakeLines) const
 {
     bool bOtherObjs(false);    // true=objects other than PathObj's existent
-    bool bMin1PolyPoly(false); // sal_True=at least 1 PolyPolygon with more than one Polygon existent
+    bool bMin1PolyPoly(false); // true=at least 1 PolyPolygon with more than one Polygon existent
     SdrObjList* pOL = pObj->GetSubList();
 
     if(pOL)
@@ -1452,7 +1452,7 @@ sal_Bool SdrEditView::ImpCanDismantle(const SdrObject* pObj, sal_Bool bMakeLines
     return bMin1PolyPoly && !bOtherObjs;
 }
 
-void SdrEditView::ImpDismantleOneObject(const SdrObject* pObj, SdrObjList& rOL, sal_uIntPtr& rPos, SdrPageView* pPV, sal_Bool bMakeLines)
+void SdrEditView::ImpDismantleOneObject(const SdrObject* pObj, SdrObjList& rOL, sal_uIntPtr& rPos, SdrPageView* pPV, bool bMakeLines)
 {
     const SdrPathObj* pSrcPath = PTR_CAST(SdrPathObj, pObj);
     const SdrObjCustomShape* pCustomShape = PTR_CAST(SdrObjCustomShape, pObj);
@@ -1480,7 +1480,7 @@ void SdrEditView::ImpDismantleOneObject(const SdrObject* pObj, SdrObjList& rOL, 
                 rOL.InsertObject(pPath, rPos, &aReason);
                 if( bUndo )
                     AddUndo(GetModel()->GetSdrUndoFactory().CreateUndoNewObject(*pPath, true));
-                MarkObj(pPath, pPV, sal_False, sal_True);
+                MarkObj(pPath, pPV, false, true);
                 rPos++;
             }
             else
@@ -1515,7 +1515,7 @@ void SdrEditView::ImpDismantleOneObject(const SdrObject* pObj, SdrObjList& rOL, 
                     rOL.InsertObject(pPath, rPos, &aReason);
                     if( bUndo )
                         AddUndo(GetModel()->GetSdrUndoFactory().CreateUndoNewObject(*pPath, true));
-                    MarkObj(pPath, pPV, sal_False, sal_True);
+                    MarkObj(pPath, pPV, false, true);
                     rPos++;
                 }
             }
@@ -1551,7 +1551,7 @@ void SdrEditView::ImpDismantleOneObject(const SdrObject* pObj, SdrObjList& rOL, 
                 rOL.InsertObject(pCandidate, rPos, &aReason);
                 if( bUndo )
                     AddUndo(GetModel()->GetSdrUndoFactory().CreateUndoNewObject(*pCandidate, true));
-                MarkObj(pCandidate, pPV, sal_False, sal_True);
+                MarkObj(pCandidate, pPV, false, true);
 
                 if(pCustomShape->HasText() && !pCustomShape->IsTextPath())
                 {
@@ -1596,14 +1596,14 @@ void SdrEditView::ImpDismantleOneObject(const SdrObject* pObj, SdrObjList& rOL, 
                     rOL.InsertObject(pTextObj, rPos + 1, &aReason);
                     if( bUndo )
                         AddUndo(GetModel()->GetSdrUndoFactory().CreateUndoNewObject(*pTextObj, true));
-                    MarkObj(pTextObj, pPV, sal_False, sal_True);
+                    MarkObj(pTextObj, pPV, false, true);
                 }
             }
         }
     }
 }
 
-void SdrEditView::DismantleMarkedObjects(sal_Bool bMakeLines)
+void SdrEditView::DismantleMarkedObjects(bool bMakeLines)
 {
     // temporary MarkList
     SdrMarkList aRemoveMerker;
@@ -1844,7 +1844,7 @@ void SdrEditView::UnGroupMarked()
                 nDstCnt++;
                 // No SortCheck when inserting into MarkList, because that would
                 // provoke a RecalcOrdNums() each time because of pObj->GetOrdNum():
-                aNewMark.InsertEntry(SdrMark(pObj,pM->GetPageView()),sal_False);
+                aNewMark.InsertEntry(SdrMark(pObj,pM->GetPageView()),false);
             }
 
             if( bUndo )
@@ -1875,7 +1875,7 @@ void SdrEditView::UnGroupMarked()
 
     if (nCount!=0)
     {
-        GetMarkedObjectListWriteAccess().Merge(aNewMark,sal_True); // Because of the sorting above, aNewMark is reversed
+        GetMarkedObjectListWriteAccess().Merge(aNewMark,true); // Because of the sorting above, aNewMark is reversed
         MarkListHasChanged();
     }
 }
@@ -1884,7 +1884,7 @@ void SdrEditView::UnGroupMarked()
 // ConvertToPoly
 
 
-SdrObject* SdrEditView::ImpConvertOneObj(SdrObject* pObj, sal_Bool bPath, sal_Bool bLineToArea)
+SdrObject* SdrEditView::ImpConvertOneObj(SdrObject* pObj, bool bPath, bool bLineToArea)
 {
     SdrObject* pNewObj = pObj->ConvertToPolyObj(bPath, bLineToArea);
     if (pNewObj!=NULL)
@@ -1906,7 +1906,7 @@ SdrObject* SdrEditView::ImpConvertOneObj(SdrObject* pObj, sal_Bool bPath, sal_Bo
     return pNewObj;
 }
 
-void SdrEditView::ImpConvertTo(sal_Bool bPath, sal_Bool bLineToArea)
+void SdrEditView::ImpConvertTo(bool bPath, bool bLineToArea)
 {
     bool bMrkChg=false;
     if (AreObjectsMarked()) {
@@ -1959,14 +1959,14 @@ void SdrEditView::ImpConvertTo(sal_Bool bPath, sal_Bool bLineToArea)
     }
 }
 
-void SdrEditView::ConvertMarkedToPathObj(sal_Bool bLineToArea)
+void SdrEditView::ConvertMarkedToPathObj(bool bLineToArea)
 {
-    ImpConvertTo(sal_True, bLineToArea);
+    ImpConvertTo(true, bLineToArea);
 }
 
-void SdrEditView::ConvertMarkedToPolyObj(sal_Bool bLineToArea)
+void SdrEditView::ConvertMarkedToPolyObj(bool bLineToArea)
 {
-    ImpConvertTo(sal_False, bLineToArea);
+    ImpConvertTo(false, bLineToArea);
 }
 
 

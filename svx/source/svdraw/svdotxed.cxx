@@ -35,12 +35,12 @@ bool SdrTextObj::HasTextEdit() const
     return true;
 }
 
-sal_Bool SdrTextObj::BegTextEdit(SdrOutliner& rOutl)
+bool SdrTextObj::BegTextEdit(SdrOutliner& rOutl)
 {
-    if (pEdtOutl!=NULL) return sal_False; // Textedit might already run in another View!
+    if (pEdtOutl!=NULL) return false; // Textedit might already run in another View!
     pEdtOutl=&rOutl;
 
-    mbInEditMode = sal_True;
+    mbInEditMode = true;
 
     sal_uInt16 nOutlinerMode = OUTLINERMODE_OUTLINEOBJECT;
     if ( !IsOutlText() )
@@ -115,7 +115,7 @@ sal_Bool SdrTextObj::BegTextEdit(SdrOutliner& rOutl)
     rOutl.UpdateFields();
     rOutl.ClearModifyFlag();
 
-    return sal_True;
+    return true;
 }
 
 void SdrTextObj::TakeTextEditArea(Size* pPaperMin, Size* pPaperMax, Rectangle* pViewInit, Rectangle* pViewMin) const
@@ -264,7 +264,7 @@ void SdrTextObj::EndTextEdit(SdrOutliner& rOutl)
         // need to end edit mode early since SetOutlinerParaObject already
         // uses GetCurrentBoundRect() which needs to take the text into account
         // to work correct
-        mbInEditMode = sal_False;
+        mbInEditMode = false;
         SetOutlinerParaObject(pNewText);
     }
 
@@ -274,7 +274,7 @@ void SdrTextObj::EndTextEdit(SdrOutliner& rOutl)
     nStat &= ~EE_CNTRL_AUTOPAGESIZE;
     rOutl.SetControlWord(nStat);
 
-    mbInEditMode = sal_False;
+    mbInEditMode = false;
 }
 
 sal_uInt16 SdrTextObj::GetOutlinerViewAnchorMode() const
@@ -327,7 +327,7 @@ void SdrTextObj::ImpSetTextEditParams() const
         if (bContourFrame) {
             Rectangle aAnchorRect;
             TakeTextAnchorRect(aAnchorRect);
-            ImpSetContourPolygon(*pEdtOutl,aAnchorRect, sal_True);
+            ImpSetContourPolygon(*pEdtOutl,aAnchorRect, true);
         }
         if (bUpdMerk) pEdtOutl->SetUpdateMode(true);
     }

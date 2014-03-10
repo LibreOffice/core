@@ -205,7 +205,7 @@ static bool ImpVerticalSwitch( const SdrObjCustomShape& rCustoShape )
 SdrObject* ImpCreateShadowObjectClone(const SdrObject& rOriginal, const SfxItemSet& rOriginalSet)
 {
     SdrObject* pRetval = 0L;
-    const sal_Bool bShadow(((SdrShadowItem&)rOriginalSet.Get(SDRATTR_SHADOW)).GetValue());
+    const bool bShadow(((SdrShadowItem&)rOriginalSet.Get(SDRATTR_SHADOW)).GetValue());
 
     if(bShadow)
     {
@@ -458,7 +458,7 @@ const SdrObject* SdrObjCustomShape::GetSdrObjectShadowFromCustomShape() const
         if(pSdrObject)
         {
             const SfxItemSet& rOriginalSet = GetObjectItemSet();
-            const sal_Bool bShadow(((SdrShadowItem&)rOriginalSet.Get( SDRATTR_SHADOW )).GetValue());
+            const bool bShadow(((SdrShadowItem&)rOriginalSet.Get( SDRATTR_SHADOW )).GetValue());
 
             if(bShadow)
             {
@@ -472,10 +472,10 @@ const SdrObject* SdrObjCustomShape::GetSdrObjectShadowFromCustomShape() const
     return mpLastShadowGeometry;
 }
 
-sal_Bool SdrObjCustomShape::IsTextPath() const
+bool SdrObjCustomShape::IsTextPath() const
 {
     const OUString sTextPath( "TextPath" );
-    sal_Bool bTextPathOn = sal_False;
+    bool bTextPathOn = false;
     SdrCustomShapeGeometryItem& rGeometryItem = (SdrCustomShapeGeometryItem&)GetMergedItem( SDRATTR_CUSTOMSHAPE_GEOMETRY );
     Any* pAny = rGeometryItem.GetPropertyValueByName( sTextPath, sTextPath );
     if ( pAny )
@@ -483,9 +483,9 @@ sal_Bool SdrObjCustomShape::IsTextPath() const
     return bTextPathOn;
 }
 
-sal_Bool SdrObjCustomShape::UseNoFillStyle() const
+bool SdrObjCustomShape::UseNoFillStyle() const
 {
-    sal_Bool bRet = sal_False;
+    bool bRet = false;
     OUString sShapeType;
     const OUString sType( "Type" );
     SdrCustomShapeGeometryItem& rGeometryItem( (SdrCustomShapeGeometryItem&)GetMergedItem( SDRATTR_CUSTOMSHAPE_GEOMETRY ) );
@@ -497,9 +497,9 @@ sal_Bool SdrObjCustomShape::UseNoFillStyle() const
     return bRet;
 }
 
-sal_Bool SdrObjCustomShape::IsMirroredX() const
+bool SdrObjCustomShape::IsMirroredX() const
 {
-    sal_Bool bMirroredX = sal_False;
+    bool bMirroredX = false;
     SdrCustomShapeGeometryItem aGeometryItem( (SdrCustomShapeGeometryItem&)GetMergedItem( SDRATTR_CUSTOMSHAPE_GEOMETRY ) );
     const OUString sMirroredX( "MirroredX" );
     com::sun::star::uno::Any* pAny = aGeometryItem.GetPropertyValueByName( sMirroredX );
@@ -507,9 +507,9 @@ sal_Bool SdrObjCustomShape::IsMirroredX() const
         *pAny >>= bMirroredX;
     return bMirroredX;
 }
-sal_Bool SdrObjCustomShape::IsMirroredY() const
+bool SdrObjCustomShape::IsMirroredY() const
 {
-    sal_Bool bMirroredY = sal_False;
+    bool bMirroredY = false;
     SdrCustomShapeGeometryItem aGeometryItem( (SdrCustomShapeGeometryItem&)GetMergedItem( SDRATTR_CUSTOMSHAPE_GEOMETRY ) );
     const OUString sMirroredY( "MirroredY" );
     com::sun::star::uno::Any* pAny = aGeometryItem.GetPropertyValueByName( sMirroredY );
@@ -517,7 +517,7 @@ sal_Bool SdrObjCustomShape::IsMirroredY() const
         *pAny >>= bMirroredY;
     return bMirroredY;
 }
-void SdrObjCustomShape::SetMirroredX( const sal_Bool bMirrorX )
+void SdrObjCustomShape::SetMirroredX( const bool bMirrorX )
 {
     SdrCustomShapeGeometryItem aGeometryItem( (SdrCustomShapeGeometryItem&)GetMergedItem( SDRATTR_CUSTOMSHAPE_GEOMETRY ) );
     const OUString sMirroredX( "MirroredX" );
@@ -527,7 +527,7 @@ void SdrObjCustomShape::SetMirroredX( const sal_Bool bMirrorX )
     aGeometryItem.SetPropertyValue( aPropVal );
     SetMergedItem( aGeometryItem );
 }
-void SdrObjCustomShape::SetMirroredY( const sal_Bool bMirrorY )
+void SdrObjCustomShape::SetMirroredY( const bool bMirrorY )
 {
     SdrCustomShapeGeometryItem aGeometryItem( (SdrCustomShapeGeometryItem&)GetMergedItem( SDRATTR_CUSTOMSHAPE_GEOMETRY ) );
     const OUString sMirroredY( "MirroredY" );
@@ -567,9 +567,9 @@ double SdrObjCustomShape::GetExtraTextRotation( const bool bPreRotation ) const
     return fExtraTextRotateAngle;
 }
 
-sal_Bool SdrObjCustomShape::GetTextBounds( Rectangle& rTextBound ) const
+bool SdrObjCustomShape::GetTextBounds( Rectangle& rTextBound ) const
 {
-    sal_Bool bRet = sal_False;
+    bool bRet = false;
 
     Reference< XCustomShapeEngine > xCustomShapeEngine( GetCustomShapeEngine() );
     if ( xCustomShapeEngine.is() )
@@ -578,12 +578,12 @@ sal_Bool SdrObjCustomShape::GetTextBounds( Rectangle& rTextBound ) const
         if ( aR.Width > 1 && aR.Height > 1 )
         {
             rTextBound = Rectangle( Point( aR.X, aR.Y ), Size( aR.Width, aR.Height ) );
-            bRet = sal_True;
+            bRet = true;
         }
     }
     return bRet;
 }
-basegfx::B2DPolyPolygon SdrObjCustomShape::GetLineGeometry( const SdrObjCustomShape* pCustomShape, const sal_Bool bBezierAllowed )
+basegfx::B2DPolyPolygon SdrObjCustomShape::GetLineGeometry( const SdrObjCustomShape* pCustomShape, const bool bBezierAllowed )
 {
     basegfx::B2DPolyPolygon aRetval;
     Reference< XCustomShapeEngine > xCustomShapeEngine( pCustomShape->GetCustomShapeEngine() );
@@ -751,21 +751,21 @@ static void lcl_ShapePropertiesFromDFF( const SvxMSDffHandle* pData, com::sun::s
     if ( nFlags & MSDFF_HANDLE_FLAGS_MIRRORED_X )
     {
         const OUString sMirroredX( "MirroredX" );
-        sal_Bool bMirroredX = sal_True;
+        bool bMirroredX = true;
         rPropValues[ n ].Name = sMirroredX;
         rPropValues[ n++ ].Value <<= bMirroredX;
     }
     if ( nFlags & MSDFF_HANDLE_FLAGS_MIRRORED_Y )
     {
         const OUString sMirroredY( "MirroredY" );
-        sal_Bool bMirroredY = sal_True;
+        bool bMirroredY = true;
         rPropValues[ n ].Name = sMirroredY;
         rPropValues[ n++ ].Value <<= bMirroredY;
     }
     if ( nFlags & MSDFF_HANDLE_FLAGS_SWITCHED )
     {
         const OUString sSwitched( "Switched" );
-        sal_Bool bSwitched = sal_True;
+        bool bSwitched = true;
         rPropValues[ n ].Name = sSwitched;
         rPropValues[ n++ ].Value <<= bSwitched;
     }
@@ -855,7 +855,7 @@ SdrObjCustomShape::SdrObjCustomShape() :
     mpLastShadowGeometry(0L)
 {
     bClosedObj = true; // custom shapes may be filled
-    bTextFrame = sal_True;
+    bTextFrame = true;
 }
 
 SdrObjCustomShape::~SdrObjCustomShape()
@@ -1106,9 +1106,9 @@ void SdrObjCustomShape::MergeDefaultAttributes( const OUString* pType )
     SetMergedItem( aGeometryItem );
 }
 
-sal_Bool SdrObjCustomShape::IsDefaultGeometry( const DefaultType eDefaultType ) const
+bool SdrObjCustomShape::IsDefaultGeometry( const DefaultType eDefaultType ) const
 {
-    sal_Bool bIsDefaultGeometry = sal_False;
+    bool bIsDefaultGeometry = false;
 
     PropertyValue aPropVal;
     OUString sShapeType;
@@ -1134,7 +1134,7 @@ sal_Bool SdrObjCustomShape::IsDefaultGeometry( const DefaultType eDefaultType ) 
             {
                 if ( ( aViewBox.Width == pDefCustomShape->nCoordWidth )
                     && ( aViewBox.Height == pDefCustomShape->nCoordHeight ) )
-                    bIsDefaultGeometry = sal_True;
+                    bIsDefaultGeometry = true;
             }
         }
         break;
@@ -1156,11 +1156,11 @@ sal_Bool SdrObjCustomShape::IsDefaultGeometry( const DefaultType eDefaultType ) 
                         EnhancedCustomShape2d::SetEnhancedCustomShapeParameter( seqCoordinates2[ i ].Second, pDefCustomShape->pVertices[ i ].nValB );
                     }
                     if ( seqCoordinates1 == seqCoordinates2 )
-                        bIsDefaultGeometry = sal_True;
+                        bIsDefaultGeometry = true;
                 }
             }
             else if ( pDefCustomShape && ( ( pDefCustomShape->nVertices == 0 ) || ( pDefCustomShape->pVertices == 0 ) ) )
-                bIsDefaultGeometry = sal_True;
+                bIsDefaultGeometry = true;
         }
         break;
 
@@ -1181,11 +1181,11 @@ sal_Bool SdrObjCustomShape::IsDefaultGeometry( const DefaultType eDefaultType ) 
                         EnhancedCustomShape2d::SetEnhancedCustomShapeParameter( seqGluePoints2[ i ].Second, pDefCustomShape->pGluePoints[ i ].nValB );
                     }
                     if ( seqGluePoints1 == seqGluePoints2 )
-                        bIsDefaultGeometry = sal_True;
+                        bIsDefaultGeometry = true;
                 }
             }
             else if ( pDefCustomShape && ( pDefCustomShape->nGluePoints == 0 ) )
-                bIsDefaultGeometry = sal_True;
+                bIsDefaultGeometry = true;
         }
         break;
 
@@ -1212,7 +1212,7 @@ sal_Bool SdrObjCustomShape::IsDefaultGeometry( const DefaultType eDefaultType ) 
                                 lcl_ShapeSegmentFromBinary( rSegInfo, nSDat );
                             }
                             if ( seqSegments1 == seqSegments2 )
-                                bIsDefaultGeometry = sal_True;
+                                bIsDefaultGeometry = true;
                         }
                     }
                     else
@@ -1224,13 +1224,13 @@ sal_Bool SdrObjCustomShape::IsDefaultGeometry( const DefaultType eDefaultType ) 
                                 && ( seqSegments1[ 1 ].Command == EnhancedCustomShapeSegmentCommand::LINETO )
                                 && ( seqSegments1[ 2 ].Command == EnhancedCustomShapeSegmentCommand::CLOSESUBPATH )
                                 && ( seqSegments1[ 3 ].Command == EnhancedCustomShapeSegmentCommand::ENDSUBPATH ) )
-                                bIsDefaultGeometry = sal_True;
+                                bIsDefaultGeometry = true;
                         }
                     }
                 }
             }
             else if ( pDefCustomShape && ( ( pDefCustomShape->nElements == 0 ) || ( pDefCustomShape->pElements == 0 ) ) )
-                bIsDefaultGeometry = sal_True;
+                bIsDefaultGeometry = true;
         }
         break;
 
@@ -1244,11 +1244,11 @@ sal_Bool SdrObjCustomShape::IsDefaultGeometry( const DefaultType eDefaultType ) 
                 if ( *pAny >>= nStretchX )
                 {
                     if ( pDefCustomShape->nXRef == nStretchX )
-                        bIsDefaultGeometry = sal_True;
+                        bIsDefaultGeometry = true;
                 }
             }
             else if ( pDefCustomShape && ( pDefCustomShape->nXRef == DEFAULT_MINIMUM_SIGNED_COMPARE ) )
-                bIsDefaultGeometry = sal_True;
+                bIsDefaultGeometry = true;
         }
         break;
 
@@ -1262,11 +1262,11 @@ sal_Bool SdrObjCustomShape::IsDefaultGeometry( const DefaultType eDefaultType ) 
                 if ( *pAny >>= nStretchY )
                 {
                     if ( pDefCustomShape->nYRef == nStretchY )
-                        bIsDefaultGeometry = sal_True;
+                        bIsDefaultGeometry = true;
                 }
             }
             else if ( pDefCustomShape && ( pDefCustomShape->nYRef == DEFAULT_MINIMUM_SIGNED_COMPARE ) )
-                bIsDefaultGeometry = sal_True;
+                bIsDefaultGeometry = true;
         }
         break;
 
@@ -1287,11 +1287,11 @@ sal_Bool SdrObjCustomShape::IsDefaultGeometry( const DefaultType eDefaultType ) 
                         seqEquations2[ i ] = EnhancedCustomShape2d::GetEquation( pData->nFlags, pData->nVal[ 0 ], pData->nVal[ 1 ], pData->nVal[ 2 ] );
 
                     if ( seqEquations1 == seqEquations2 )
-                        bIsDefaultGeometry = sal_True;
+                        bIsDefaultGeometry = true;
                 }
             }
             else if ( pDefCustomShape && ( ( pDefCustomShape->nCalculation == 0 ) || ( pDefCustomShape->pCalculation == 0 ) ) )
-                bIsDefaultGeometry = sal_True;
+                bIsDefaultGeometry = true;
         }
         break;
 
@@ -1315,11 +1315,11 @@ sal_Bool SdrObjCustomShape::IsDefaultGeometry( const DefaultType eDefaultType ) 
                         EnhancedCustomShape2d::SetEnhancedCustomShapeParameter( seqTextFrames2[ i ].BottomRight.Second, pRectangles->nPairB.nValB );
                     }
                     if ( seqTextFrames1 == seqTextFrames2 )
-                        bIsDefaultGeometry = sal_True;
+                        bIsDefaultGeometry = true;
                 }
             }
             else if ( pDefCustomShape && ( ( pDefCustomShape->nTextRect == 0 ) || ( pDefCustomShape->pTextRect == 0 ) ) )
-                bIsDefaultGeometry = sal_True;
+                bIsDefaultGeometry = true;
         }
         break;
 
@@ -1344,11 +1344,11 @@ sal_Bool SdrObjCustomShape::IsDefaultGeometry( const DefaultType eDefaultType ) 
                         lcl_ShapePropertiesFromDFF( pData, rPropValues );
                     }
                     if ( seqHandles1 == seqHandles2 )
-                        bIsDefaultGeometry = sal_True;
+                        bIsDefaultGeometry = true;
                 }
             }
             else if ( pDefCustomShape && ( ( pDefCustomShape->nHandles == 0 ) || ( pDefCustomShape->pHandles == 0 ) ) )
-                bIsDefaultGeometry = sal_True;
+                bIsDefaultGeometry = true;
         }
         break;
     }
@@ -1564,12 +1564,12 @@ void SdrObjCustomShape::NbcResize( const Point& rRef, const Fraction& rxFact, co
         if ( ( ( xFact.GetNumerator() < 0 ) && ( xFact.GetDenominator() > 0 ) ) ||
             ( ( xFact.GetNumerator() > 0 ) && ( xFact.GetDenominator() < 0 ) ) )
         {
-            SetMirroredX( IsMirroredX() == sal_False );
+            SetMirroredX( IsMirroredX() == false );
         }
         if ( ( ( yFact.GetNumerator() < 0 ) && ( yFact.GetDenominator() > 0 ) ) ||
             ( ( yFact.GetNumerator() > 0 ) && ( yFact.GetDenominator() < 0 ) ) )
         {
-            SetMirroredY( IsMirroredY() == sal_False );
+            SetMirroredY( IsMirroredY() == false );
         }
     }
 
@@ -1599,8 +1599,8 @@ void SdrObjCustomShape::NbcResize( const Point& rRef, const Fraction& rxFact, co
 }
 void SdrObjCustomShape::NbcRotate( const Point& rRef, long nWink, double sn, double cs )
 {
-    sal_Bool bMirroredX = IsMirroredX();
-    sal_Bool bMirroredY = IsMirroredY();
+    bool bMirroredX = IsMirroredX();
+    bool bMirroredY = IsMirroredY();
 
     fObjectRotation = fmod( fObjectRotation, 360.0 );
     if ( fObjectRotation < 0 )
@@ -1777,8 +1777,8 @@ void SdrObjCustomShape::ImpCheckCustomGluePointsAreAdded()
                     aNewList.Insert(aCopy);
                 }
 
-                sal_Bool bMirroredX = IsMirroredX();
-                sal_Bool bMirroredY = IsMirroredY();
+                bool bMirroredX = IsMirroredX();
+                bool bMirroredY = IsMirroredY();
 
                 long nShearWink = aGeo.nShearWink;
                 double fTan = aGeo.nTan;
@@ -1957,8 +1957,8 @@ bool SdrObjCustomShape::beginSpecialDrag(SdrDragStat& rDrag) const
 void SdrObjCustomShape::DragResizeCustomShape( const Rectangle& rNewRect, SdrObjCustomShape* pObj ) const
 {
     Rectangle   aOld( pObj->aRect );
-    sal_Bool    bOldMirroredX( pObj->IsMirroredX() );
-    sal_Bool    bOldMirroredY( pObj->IsMirroredY() );
+    bool    bOldMirroredX( pObj->IsMirroredX() );
+    bool    bOldMirroredY( pObj->IsMirroredY() );
 
     Rectangle aNewRect( rNewRect );
     aNewRect.Justify();
@@ -2068,7 +2068,7 @@ void SdrObjCustomShape::DragMoveCustomShapeHdl( const Point aDestination, const 
                     pObj->aRect.Move( nXDiff, nYDiff );
                     pObj->aOutRect.Move( nXDiff, nYDiff );
                     pObj->maSnapRect.Move( nXDiff, nYDiff );
-                    pObj->SetRectsDirty(sal_True);
+                    pObj->SetRectsDirty(true);
                     pObj->InvalidateRenderGeometry();
 
                     for (std::vector< SdrCustomShapeInteraction >::const_iterator aIter( aInteractionHandles.begin() ), aEnd( aInteractionHandles.end() ) ;
@@ -2222,7 +2222,7 @@ bool SdrObjCustomShape::EndCreate( SdrDragStat& rStat, SdrCreateCmd eCmd )
 
 basegfx::B2DPolyPolygon SdrObjCustomShape::TakeCreatePoly(const SdrDragStat& /*rDrag*/) const
 {
-    return GetLineGeometry( this, sal_False );
+    return GetLineGeometry( this, false );
 }
 
 
@@ -2250,7 +2250,7 @@ bool SdrObjCustomShape::IsAutoGrowWidth() const
    is that the SdrAutoGrowWidthItem and SdrAutoGrowHeightItem are not exchanged if the vertical writing
    mode has been changed */
 
-void SdrObjCustomShape::SetVerticalWriting( sal_Bool bVertical )
+void SdrObjCustomShape::SetVerticalWriting( bool bVertical )
 {
     ForceOutlinerParaObject();
 
@@ -2546,7 +2546,7 @@ bool SdrObjCustomShape::AdjustTextFrameWidthAndHeight(bool bHgt, bool bWdt)
     }
     return bRet;
 }
-sal_Bool SdrObjCustomShape::BegTextEdit( SdrOutliner& rOutl )
+bool SdrObjCustomShape::BegTextEdit( SdrOutliner& rOutl )
 {
     return SdrTextObj::BegTextEdit( rOutl );
 }
@@ -2803,7 +2803,7 @@ void SdrObjCustomShape::NbcSetOutlinerParaObject(OutlinerParaObject* pTextObject
 {
     SdrTextObj::NbcSetOutlinerParaObject( pTextObject );
     SetBoundRectDirty();
-    SetRectsDirty(sal_True);
+    SetRectsDirty(true);
     InvalidateRenderGeometry();
 }
 
@@ -2845,7 +2845,7 @@ OUString SdrObjCustomShape::TakeObjNamePlural() const
 
 basegfx::B2DPolyPolygon SdrObjCustomShape::TakeXorPoly() const
 {
-    return GetLineGeometry( (SdrObjCustomShape*)this, sal_False );
+    return GetLineGeometry( (SdrObjCustomShape*)this, false );
 }
 
 basegfx::B2DPolyPolygon SdrObjCustomShape::TakeContour() const
@@ -2856,7 +2856,7 @@ basegfx::B2DPolyPolygon SdrObjCustomShape::TakeContour() const
     return basegfx::B2DPolyPolygon();
 }
 
-SdrObject* SdrObjCustomShape::DoConvertToPolyObj(sal_Bool bBezier, bool bAddText) const
+SdrObject* SdrObjCustomShape::DoConvertToPolyObj(bool bBezier, bool bAddText) const
 {
     // #i37011#
     SdrObject* pRetval = 0L;
@@ -2883,7 +2883,7 @@ SdrObject* SdrObjCustomShape::DoConvertToPolyObj(sal_Bool bBezier, bool bAddText
 
         if(pRetval)
         {
-            const sal_Bool bShadow(((SdrShadowItem&)GetMergedItem(SDRATTR_SHADOW)).GetValue());
+            const bool bShadow(((SdrShadowItem&)GetMergedItem(SDRATTR_SHADOW)).GetValue());
             if(bShadow)
             {
                 pRetval->SetMergedItem(SdrShadowItem(true));
@@ -2899,7 +2899,7 @@ SdrObject* SdrObjCustomShape::DoConvertToPolyObj(sal_Bool bBezier, bool bAddText
     return pRetval;
 }
 
-void SdrObjCustomShape::NbcSetStyleSheet( SfxStyleSheet* pNewStyleSheet, sal_Bool bDontRemoveHardAttr )
+void SdrObjCustomShape::NbcSetStyleSheet( SfxStyleSheet* pNewStyleSheet, bool bDontRemoveHardAttr )
 {
     // #i40944#
     InvalidateRenderGeometry();
@@ -3058,7 +3058,7 @@ void SdrObjCustomShape::TRSetBaseGeometry(const basegfx::B2DHomMatrix& rMatrix, 
 }
 
 // taking fObjectRotation instead of aGeo.nWink
-sal_Bool SdrObjCustomShape::TRGetBaseGeometry(basegfx::B2DHomMatrix& rMatrix, basegfx::B2DPolyPolygon& /*rPolyPolygon*/) const
+bool SdrObjCustomShape::TRGetBaseGeometry(basegfx::B2DHomMatrix& rMatrix, basegfx::B2DPolyPolygon& /*rPolyPolygon*/) const
 {
     // get turn and shear
     double fRotate = fObjectRotation * F_PI180;
@@ -3067,8 +3067,8 @@ sal_Bool SdrObjCustomShape::TRGetBaseGeometry(basegfx::B2DHomMatrix& rMatrix, ba
     // get aRect, this is the unrotated snaprect
     Rectangle aRectangle(aRect);
 
-    sal_Bool bMirroredX = IsMirroredX();
-    sal_Bool bMirroredY = IsMirroredY();
+    bool bMirroredX = IsMirroredX();
+    bool bMirroredY = IsMirroredY();
     if ( bMirroredX || bMirroredY )
     {   // we have to retrieve the unmirrored rect
 
@@ -3165,7 +3165,7 @@ sal_Bool SdrObjCustomShape::TRGetBaseGeometry(basegfx::B2DHomMatrix& rMatrix, ba
         basegfx::fTools::equalZero(fRotate) ? 0.0 : -fRotate,
         aTranslate);
 
-    return sal_False;
+    return false;
 }
 
 sdr::contact::ViewContact* SdrObjCustomShape::CreateObjectSpecificViewContact()

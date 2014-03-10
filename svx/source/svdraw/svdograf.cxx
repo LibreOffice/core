@@ -1062,7 +1062,7 @@ GDIMetaFile SdrGrafObj::getMetafileFromEmbeddedSvg() const
     return aRetval;
 }
 
-SdrObject* SdrGrafObj::DoConvertToPolyObj(sal_Bool bBezier, bool bAddText ) const
+SdrObject* SdrGrafObj::DoConvertToPolyObj(bool bBezier, bool bAddText ) const
 {
     SdrObject* pRetval = NULL;
     GraphicType aGraphicType(GetGraphicType());

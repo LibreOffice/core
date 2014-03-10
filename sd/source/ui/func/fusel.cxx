@@ -375,7 +375,7 @@ sal_Bool FuSelection::MouseButtonDown(const MouseEvent& rMEvt)
                                 bToggle = sal_True;
                             }
 
-                            bMarked = mpView->MarkObj(aMDPos, nHitLog, bToggle, sal_False);
+                            bMarked = mpView->MarkObj(aMDPos, nHitLog, bToggle, false);
                         }
                     }
 
@@ -520,7 +520,7 @@ sal_Bool FuSelection::MouseButtonDown(const MouseEvent& rMEvt)
                 }
                 else
                 {
-                    bMarked = mpView->MarkObj(aMDPos, nHitLog, rMEvt.IsShift(), sal_False);
+                    bMarked = mpView->MarkObj(aMDPos, nHitLog, rMEvt.IsShift(), false);
                 }
             }
 
@@ -883,7 +883,7 @@ sal_Bool FuSelection::MouseButtonUp(const MouseEvent& rMEvt)
                  std::abs(aPnt.Y() - aMDPos.Y()) < nDrgLog)
         {
             // Enter group
-            mpView->MarkObj(aPnt, nHitLog, sal_False, rMEvt.IsMod1());
+            mpView->MarkObj(aPnt, nHitLog, false, rMEvt.IsMod1());
         }
 
 
@@ -1176,11 +1176,11 @@ void FuSelection::SetEditMode(sal_uInt16 nMode)
 
     if (nEditMode == SID_BEZIER_INSERT)
     {
-        mpView->SetInsObjPointMode(sal_True);
+        mpView->SetInsObjPointMode(true);
     }
     else
     {
-        mpView->SetInsObjPointMode(sal_False);
+        mpView->SetInsObjPointMode(false);
     }
 
     ForcePointer();
@@ -1355,7 +1355,7 @@ sal_Bool FuSelection::AnimateObj(SdrObject* pObj, const Point& rPos)
                 {
                     // Assign verb
                     mpView->UnmarkAll();
-                    mpView->MarkObj(pObj, mpView->GetSdrPageView(), sal_False, sal_False);
+                    mpView->MarkObj(pObj, mpView->GetSdrPageView(), false, false);
                     pDrViewSh->DoVerb((sal_Int16)pInfo->mnVerb);
                     bAnimated = sal_True;
                 }

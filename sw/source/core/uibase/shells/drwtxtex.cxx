@@ -490,7 +490,7 @@ void SwDrawTextShell::Execute( SfxRequest &rReq )
                 SdrPageView* pTmpPV = pSdrView->GetSdrPageView();
                 SdrView* pTmpView = pSdrView;
 
-                pSdrView->SdrEndTextEdit(sal_True);
+                pSdrView->SdrEndTextEdit(true);
 
                 SfxItemSet aAttr( *aNewAttr.GetPool(),
                             SDRATTR_TEXTDIRECTION,
@@ -514,7 +514,7 @@ void SwDrawTextShell::Execute( SfxRequest &rReq )
             SdrPageView* pTmpPV = pSdrView->GetSdrPageView();
             SdrView* pTmpView = pSdrView;
 
-            pSdrView->SdrEndTextEdit(sal_True);
+            pSdrView->SdrEndTextEdit(true);
             bool bLeftToRight = nSlot == SID_ATTR_PARA_LEFT_TO_RIGHT;
 
             const SfxPoolItem* pPoolItem;

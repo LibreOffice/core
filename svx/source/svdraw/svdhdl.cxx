@@ -277,9 +277,9 @@ SdrHdl::SdrHdl():
     nPolyNum(0),
     nPPntNum(0),
     nSourceHdlNum(0),
-    bSelect(sal_False),
-    b1PixMore(sal_False),
-    bPlusHdl(sal_False),
+    bSelect(false),
+    b1PixMore(false),
+    bPlusHdl(false),
     mbMoveOutside(false),
     mbMouseOver(false)
 {
@@ -296,9 +296,9 @@ SdrHdl::SdrHdl(const Point& rPnt, SdrHdlKind eNewKind):
     nPolyNum(0),
     nPPntNum(0),
     nSourceHdlNum(0),
-    bSelect(sal_False),
-    b1PixMore(sal_False),
-    bPlusHdl(sal_False),
+    bSelect(false),
+    b1PixMore(false),
+    bPlusHdl(false),
     mbMoveOutside(false),
     mbMouseOver(false)
 {
@@ -309,7 +309,7 @@ SdrHdl::~SdrHdl()
     GetRidOfIAObject();
 }
 
-void SdrHdl::Set1PixMore(sal_Bool bJa)
+void SdrHdl::Set1PixMore(bool bJa)
 {
     if(b1PixMore != bJa)
     {
@@ -354,7 +354,7 @@ void SdrHdl::SetPos(const Point& rPnt)
     }
 }
 
-void SdrHdl::SetSelected(sal_Bool bJa)
+void SdrHdl::SetSelected(bool bJa)
 {
     if(bSelect != bJa)
     {
@@ -413,7 +413,7 @@ void SdrHdl::CreateB2dIAObject()
         BitmapColorIndex eColIndex = LightGreen;
         BitmapMarkerKind eKindOfMarker = Rect_7x7;
 
-        sal_Bool bRot = pHdlList->IsRotateShear();
+        bool bRot = pHdlList->IsRotateShear();
         if(pObj)
             eColIndex = (bSelect) ? Cyan : LightCyan;
         if(bRot)
@@ -863,7 +863,7 @@ Pointer SdrHdl::GetPointer() const
     return Pointer(ePtr);
 }
 
-sal_Bool SdrHdl::IsFocusHdl() const
+bool SdrHdl::IsFocusHdl() const
 {
     switch(eKind)
     {
@@ -878,9 +878,9 @@ sal_Bool SdrHdl::IsFocusHdl() const
         {
             // if it's an activated TextEdit, it's moved to extended points
             if(pHdlList && pHdlList->IsMoveOutside())
-                return sal_False;
+                return false;
             else
-                return sal_True;
+                return true;
         }
 
         case HDL_MOVE:      // handle to move object
@@ -897,12 +897,12 @@ sal_Bool SdrHdl::IsFocusHdl() const
 
         case HDL_USER:
         {
-            return sal_True;
+            return true;
         }
 
         default:
         {
-            return sal_False;
+            return false;
         }
     }
 }
@@ -918,10 +918,10 @@ void SdrHdl::onMouseLeave()
 
 // class SdrHdlColor
 
-SdrHdlColor::SdrHdlColor(const Point& rRef, Color aCol, const Size& rSize, sal_Bool bLum)
+SdrHdlColor::SdrHdlColor(const Point& rRef, Color aCol, const Size& rSize, bool bLum)
 :   SdrHdl(rRef, HDL_COLR),
     aMarkerSize(rSize),
-    bUseLuminance(bLum)
+    bUseLuminance(bLum ? 1 : 0)
 {
     if(IsUseLuminance())
         aCol = GetLuminance(aCol);
@@ -1043,7 +1043,7 @@ void SdrHdlColor::CallColorChangeLink()
     aColorChangeHdl.Call(this);
 }
 
-void SdrHdlColor::SetColor(Color aNew, sal_Bool bCallLink)
+void SdrHdlColor::SetColor(Color aNew, bool bCallLink)
 {
     if(IsUseLuminance())
         aNew = GetLuminance(aNew);
@@ -1075,7 +1075,7 @@ void SdrHdlColor::SetSize(const Size& rNew)
 }
 
 // class SdrHdlGradient
-SdrHdlGradient::SdrHdlGradient(const Point& rRef1, const Point& rRef2, sal_Bool bGrad)
+SdrHdlGradient::SdrHdlGradient(const Point& rRef1, const Point& rRef2, bool bGrad)
     : SdrHdl(rRef1, bGrad ? HDL_GRAD : HDL_TRNS)
     , pColHdl1(NULL)
     , pColHdl2(NULL)
@@ -1182,11 +1182,11 @@ void SdrHdlGradient::CreateB2dIAObject()
 IMPL_LINK(SdrHdlGradient, ColorChangeHdl, SdrHdl*, /*pHdl*/)
 {
     if(GetObj())
-        FromIAOToItem(GetObj(), sal_True, sal_True);
+        FromIAOToItem(GetObj(), true, true);
     return 0;
 }
 
-void SdrHdlGradient::FromIAOToItem(SdrObject* _pObj, sal_Bool bSetItemOnObject, sal_Bool bUndo)
+void SdrHdlGradient::FromIAOToItem(SdrObject* _pObj, bool bSetItemOnObject, bool bUndo)
 {
     // from IAO positions and colors to gradient
     const SfxItemSet& rSet = _pObj->GetMergedItemSet();
@@ -1528,13 +1528,13 @@ Pointer ImpEdgeHdl::GetPointer() const
         return Pointer(POINTER_SSIZE);
 }
 
-sal_Bool ImpEdgeHdl::IsHorzDrag() const
+bool ImpEdgeHdl::IsHorzDrag() const
 {
     SdrEdgeObj* pEdge=PTR_CAST(SdrEdgeObj,pObj);
     if (pEdge==NULL)
-        return sal_False;
+        return false;
     if (nObjHdlNum<=1)
-        return sal_False;
+        return false;
 
     SdrEdgeKind eEdgeKind = ((SdrEdgeKindItem&)(pEdge->GetObjectItem(SDRATTR_EDGEKIND))).GetValue();
 
@@ -1547,11 +1547,11 @@ sal_Bool ImpEdgeHdl::IsHorzDrag() const
     {
         long nWink=nObjHdlNum==2 ? rInfo.nAngle1 : rInfo.nAngle2;
         if (nWink==0 || nWink==18000)
-            return sal_True;
+            return true;
         else
-            return sal_False;
+            return false;
     }
-    return sal_False;
+    return false;
 }
 
 
@@ -1844,7 +1844,7 @@ extern "C" int SAL_CALL ImplSortHdlFunc( const void* pVoid1, const void* pVoid2 
 
 
 
-void SdrHdlList::TravelFocusHdl(sal_Bool bForward)
+void SdrHdlList::TravelFocusHdl(bool bForward)
 {
     // security correction
     if(mnFocusIndex != CONTAINER_ENTRY_NOTFOUND && mnFocusIndex >= GetHdlCount())
@@ -2031,9 +2031,9 @@ SdrHdlList::SdrHdlList(SdrMarkView* pV)
     aList()
 {
     nHdlSize = 3;
-    bRotateShear = sal_False;
-    bMoveOutside = sal_False;
-    bDistortShear = sal_False;
+    bRotateShear = false;
+    bMoveOutside = false;
+    bDistortShear = false;
 }
 
 SdrHdlList::~SdrHdlList()
@@ -2057,12 +2057,12 @@ void SdrHdlList::SetHdlSize(sal_uInt16 nSiz)
     }
 }
 
-void SdrHdlList::SetMoveOutside(sal_Bool bOn)
+void SdrHdlList::SetMoveOutside(bool bOn)
 {
     if(bMoveOutside != bOn)
     {
         // remember new value
-        bMoveOutside = bOn;
+        bMoveOutside = bOn ? 1 : 0;
 
         // propagate change to IAOs
         for(sal_uIntPtr i=0; i<GetHdlCount(); i++)
@@ -2073,14 +2073,14 @@ void SdrHdlList::SetMoveOutside(sal_Bool bOn)
     }
 }
 
-void SdrHdlList::SetRotateShear(sal_Bool bOn)
+void SdrHdlList::SetRotateShear(bool bOn)
 {
     bRotateShear = bOn;
 }
 
-void SdrHdlList::SetDistortShear(sal_Bool bOn)
+void SdrHdlList::SetDistortShear(bool bOn)
 {
-    bDistortShear = bOn;
+    bDistortShear = bOn ? 1 : 0;
 }
 
 SdrHdl* SdrHdlList::RemoveHdl(sal_uIntPtr nNum)
@@ -2115,8 +2115,8 @@ void SdrHdlList::Clear()
     }
     aList.clear();
 
-    bRotateShear=sal_False;
-    bDistortShear=sal_False;
+    bRotateShear=false;
+    bDistortShear=false;
 }
 
 void SdrHdlList::Sort()
@@ -2154,7 +2154,7 @@ sal_uIntPtr SdrHdlList::GetHdlNum(const SdrHdl* pHdl) const
     return it - aList.begin();
 }
 
-void SdrHdlList::AddHdl(SdrHdl* pHdl, sal_Bool bAtBegin)
+void SdrHdlList::AddHdl(SdrHdl* pHdl, bool bAtBegin)
 {
     if (pHdl!=NULL)
     {
@@ -2170,7 +2170,7 @@ void SdrHdlList::AddHdl(SdrHdl* pHdl, sal_Bool bAtBegin)
     }
 }
 
-SdrHdl* SdrHdlList::IsHdlListHit(const Point& rPnt, sal_Bool bBack, sal_Bool bNext, SdrHdl* pHdl0) const
+SdrHdl* SdrHdlList::IsHdlListHit(const Point& rPnt, bool bBack, bool bNext, SdrHdl* pHdl0) const
 {
    SdrHdl* pRet=NULL;
    sal_uIntPtr nAnz=GetHdlCount();
@@ -2183,7 +2183,7 @@ SdrHdl* SdrHdlList::IsHdlListHit(const Point& rPnt, sal_Bool bBack, sal_Bool bNe
        if (bNext)
        {
            if (pHdl==pHdl0)
-               bNext=sal_False;
+               bNext=false;
        }
        else
        {

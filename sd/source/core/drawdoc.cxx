@@ -390,7 +390,7 @@ SdDrawDocument::~SdDrawDocument()
     CloseBookmarkDoc();
     SetAllocDocSh(false);
 
-    ClearModel(sal_True);
+    ClearModel(true);
 
     if (pLinkManager)
     {
@@ -748,7 +748,7 @@ void SdDrawDocument::NewOrLoadCompleted( SdPage* pPage, SdStyleSheetPool* pSPool
 
                             if( iter == aOutlineList.begin())
                                 // text frame listens to stylesheet of layer 1
-                                pObj->NbcSetStyleSheet(pSheet, sal_True);
+                                pObj->NbcSetStyleSheet(pSheet, true);
                         }
                     }
                 }
@@ -762,7 +762,7 @@ void SdDrawDocument::NewOrLoadCompleted( SdPage* pPage, SdStyleSheetPool* pSPool
                     {
                         sd::Outliner* pInternalOutl = GetInternalOutliner(sal_True);
                         pPage->SetObjText( (SdrTextObj*) pObj, pInternalOutl, ePresObjKind, aString );
-                        pObj->NbcSetStyleSheet( pPage->GetStyleSheetForPresObj( ePresObjKind ), sal_True );
+                        pObj->NbcSetStyleSheet( pPage->GetStyleSheetForPresObj( ePresObjKind ), true );
                         pInternalOutl->Clear();
                     }
                 }

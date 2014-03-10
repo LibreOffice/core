@@ -221,7 +221,7 @@ bool FuText::MouseButtonDown(const MouseEvent& rMEvt)
                 pO->SetVertical( bVertical );
 
                 //!??   ohne uebergebenen Outliner stimmen die Defaults nicht ???!?
-                if ( pView->SdrBeginTextEdit(pObj, pPV, pWindow, sal_True, pO) )
+                if ( pView->SdrBeginTextEdit(pObj, pPV, pWindow, true, pO) )
                 {
                     //  EditEngine-UndoManager anmelden
                     pViewShell->SetDrawTextUndo( &pO->GetUndoManager() );
@@ -504,7 +504,7 @@ bool FuText::MouseButtonUp(const MouseEvent& rMEvt)
                         SdrTextObj* pText = (SdrTextObj*)pObj;
                         SfxItemSet aSet(pDrDoc->GetItemPool());
 
-                        pText->SetVerticalWriting(sal_True);
+                        pText->SetVerticalWriting(true);
 
                         aSet.Put(SdrTextAutoGrowWidthItem(true));
                         aSet.Put(SdrTextAutoGrowHeightItem(false));
@@ -754,7 +754,7 @@ void FuText::SetInEditMode(SdrObject* pObj, const Point* pMousePixel,
                 pO->SetVertical( bVertical );
 
                 //!??   ohne uebergebenen Outliner stimmen die Defaults nicht ???!?
-                if ( pView->SdrBeginTextEdit(pObj, pPV, pWindow, sal_True, pO) )
+                if ( pView->SdrBeginTextEdit(pObj, pPV, pWindow, true, pO) )
                 {
                     //  EditEngine-UndoManager anmelden
                     pViewShell->SetDrawTextUndo( &pO->GetUndoManager() );

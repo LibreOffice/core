@@ -92,7 +92,7 @@ public:
 
     virtual void         ObjOrderChanged( SdrObject* pObj, sal_uLong nOldPos,
                                             sal_uLong nNewPos );
-    virtual sal_Bool TakeDragLimit(SdrDragMode eMode, Rectangle& rRect) const;
+    virtual bool TakeDragLimit(SdrDragMode eMode, Rectangle& rRect) const;
     virtual void MakeVisible( const Rectangle&, Window &rWin );
     virtual void CheckPossibilities();
 

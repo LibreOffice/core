@@ -116,7 +116,7 @@ public:
     virtual SdrGluePoint GetVertexGluePoint(sal_uInt16 nNum) const;
     virtual SdrGluePoint GetCornerGluePoint(sal_uInt16 nNum) const;
 
-    virtual SdrObject* DoConvertToPolyObj(sal_Bool bBezier, bool bAddText) const;
+    virtual SdrObject* DoConvertToPolyObj(bool bBezier, bool bAddText) const;
 
     virtual void Notify(SfxBroadcaster& rBC, const SfxHint& rHint);
 };

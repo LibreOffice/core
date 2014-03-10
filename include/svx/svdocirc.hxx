@@ -115,7 +115,7 @@ public:
     virtual void NbcResize(const Point& rRef, const Fraction& xFact, const Fraction& yFact);
     virtual void NbcMirror(const Point& rRef1, const Point& rRef2);
     virtual void NbcShear (const Point& rRef, long nWink, double tn, bool bVShear);
-    virtual SdrObject* DoConvertToPolyObj(sal_Bool bBezier, bool bAddText) const;
+    virtual SdrObject* DoConvertToPolyObj(bool bBezier, bool bAddText) const;
 
 protected:
     virtual SdrObjGeoData* NewGeoData() const;

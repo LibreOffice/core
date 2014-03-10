@@ -4779,7 +4779,7 @@ sal_uInt32 EscherConnectorListEntry::GetConnectorRule( sal_Bool bFirst )
                 }
                 else if ( nGluePointType == com::sun::star::drawing::EnhancedCustomShapeGluePointType::SEGMENTS )
                 {
-                    SdrObject* pPoly = pCustoShape->DoConvertToPolyObj( sal_True, true );
+                    SdrObject* pPoly = pCustoShape->DoConvertToPolyObj( true, true );
                     if ( pPoly && pPoly->ISA( SdrPathObj ) )
                     {
                         sal_Int16 a, b, nIndex = 0;

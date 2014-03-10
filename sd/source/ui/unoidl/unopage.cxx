@@ -403,7 +403,7 @@ SdrObject * SdGenericDrawPage::_CreateSdrObject( const Reference< drawing::XShap
         {
             SdDrawDocument* pDoc = (SdDrawDocument*)GetPage()->GetModel();
             if( pDoc )
-                pObj->NbcSetStyleSheet( pDoc->GetDefaultStyleSheet(), sal_True );
+                pObj->NbcSetStyleSheet( pDoc->GetDefaultStyleSheet(), true );
         }
         return pObj;
     }
@@ -500,7 +500,7 @@ SdrObject * SdGenericDrawPage::_CreateSdrObject( const Reference< drawing::XShap
         {
             SdDrawDocument* pDoc = (SdDrawDocument*)GetPage()->GetModel();
             if( pDoc )
-                pPresObj->NbcSetStyleSheet( pDoc->GetDefaultStyleSheet(), sal_True );
+                pPresObj->NbcSetStyleSheet( pDoc->GetDefaultStyleSheet(), true );
             GetPage()->InsertPresObj( pPresObj, eObjKind );
         }
     }
@@ -1563,7 +1563,7 @@ Reference< drawing::XShape > SAL_CALL SdGenericDrawPage::combine( const Referenc
 
     _SelectObjectsInView( xShapes, pPageView );
 
-    mpView->CombineMarkedObjects( sal_False );
+    mpView->CombineMarkedObjects( false );
 
     mpView->AdjustMarkHdl();
     const SdrMarkList& rMarkList = mpView->GetMarkedObjectList();
@@ -1594,7 +1594,7 @@ void SAL_CALL SdGenericDrawPage::split( const Reference< drawing::XShape >& xGro
 
     SdrPageView* pPageView = mpView->ShowSdrPage( GetPage() );
     _SelectObjectInView( xGroup, pPageView );
-    mpView->DismantleMarkedObjects( sal_False );
+    mpView->DismantleMarkedObjects( false );
     mpView->HideSdrPage();
 
     GetModel()->SetModified();
@@ -1616,7 +1616,7 @@ Reference< drawing::XShape > SAL_CALL SdGenericDrawPage::bind( const Reference< 
 
     _SelectObjectsInView( xShapes, pPageView );
 
-    mpView->CombineMarkedObjects( sal_True );
+    mpView->CombineMarkedObjects( true );
 
     mpView->AdjustMarkHdl();
     const SdrMarkList& rMarkList = mpView->GetMarkedObjectList();
@@ -1647,7 +1647,7 @@ void SAL_CALL SdGenericDrawPage::unbind( const Reference< drawing::XShape >& xSh
 
     SdrPageView* pPageView = mpView->ShowSdrPage( GetPage() );
     _SelectObjectInView( xShape, pPageView );
-    mpView->DismantleMarkedObjects( sal_True );
+    mpView->DismantleMarkedObjects( true );
     mpView->HideSdrPage();
 
     GetModel()->SetModified();

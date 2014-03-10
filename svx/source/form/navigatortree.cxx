@@ -2092,10 +2092,10 @@ namespace svxform
                 continue;
 
             Reference< XFormComponent > xControlModel( pFormObject->GetUnoControlModel(),UNO_QUERY );
-            if ( xControlModel.is() && aObjects.find(xControlModel) != aObjects.end() && bMark != pFormView->IsObjMarked( pSdrObject ) )
+            if ( xControlModel.is() && aObjects.find(xControlModel) != aObjects.end() && bMark != (pFormView->IsObjMarked( pSdrObject ) ? 1 : 0) )
             {
                 // unfortunately, the writer doesn't like marking an already-marked object, again, so reset the mark first
-                pFormView->MarkObj( pSdrObject, pPageView, !bMark, sal_False );
+                pFormView->MarkObj( pSdrObject, pPageView, !bMark, false );
             }
         } // while ( aIter.IsMore() )
         if ( bMark )
@@ -2161,9 +2161,9 @@ namespace svxform
                 continue;
 
             // mark the object
-            if ( bMark != pFormView->IsObjMarked( pSdrObject ) )
+            if ( bMark != (pFormView->IsObjMarked( pSdrObject ) ? 1 : 0) )
                 // unfortunately, the writer doesn't like marking an already-marked object, again, so reset the mark first
-                pFormView->MarkObj( pSdrObject, pPageView, !bMark, sal_False );
+                pFormView->MarkObj( pSdrObject, pPageView, !bMark, false );
 
             if ( !bMarkHandles || !bMark )
                 continue;

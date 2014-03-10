@@ -29,7 +29,7 @@ DBG_NAME(DlgEdModel)
 TYPEINIT1(DlgEdModel,SdrModel);
 
 DlgEdModel::DlgEdModel()
-    :SdrModel(NULL, NULL)
+    :SdrModel()
 {
     DBG_CTOR(DlgEdModel,0);
 }

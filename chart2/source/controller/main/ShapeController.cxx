@@ -262,7 +262,7 @@ void ShapeController::executeDispatch_FormatLine()
             sal_Bool bHasMarked = pDrawViewWrapper->AreObjectsMarked();
             if ( bHasMarked )
             {
-                pDrawViewWrapper->MergeAttrFromMarked( aAttr, sal_False );
+                pDrawViewWrapper->MergeAttrFromMarked( aAttr, false );
             }
             SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
             if ( pFact )
@@ -275,11 +275,11 @@ void ShapeController::executeDispatch_FormatLine()
                     const SfxItemSet* pOutAttr = pDlg->GetOutputItemSet();
                     if ( bHasMarked )
                     {
-                        pDrawViewWrapper->SetAttrToMarked( *pOutAttr, sal_False );
+                        pDrawViewWrapper->SetAttrToMarked( *pOutAttr, false );
                     }
                     else
                     {
-                        pDrawViewWrapper->SetDefaultAttr( *pOutAttr, sal_False );
+                        pDrawViewWrapper->SetDefaultAttr( *pOutAttr, false );
                     }
                 }
             }
@@ -301,7 +301,7 @@ void ShapeController::executeDispatch_FormatArea()
             sal_Bool bHasMarked = pDrawViewWrapper->AreObjectsMarked();
             if ( bHasMarked )
             {
-                pDrawViewWrapper->MergeAttrFromMarked( aAttr, sal_False );
+                pDrawViewWrapper->MergeAttrFromMarked( aAttr, false );
             }
             SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
             if ( pFact )
@@ -318,11 +318,11 @@ void ShapeController::executeDispatch_FormatArea()
                         const SfxItemSet* pOutAttr = pDlg->GetOutputItemSet();
                         if ( bHasMarked )
                         {
-                            pDrawViewWrapper->SetAttrToMarked( *pOutAttr, sal_False );
+                            pDrawViewWrapper->SetAttrToMarked( *pOutAttr, false );
                         }
                         else
                         {
-                            pDrawViewWrapper->SetDefaultAttr( *pOutAttr, sal_False );
+                            pDrawViewWrapper->SetDefaultAttr( *pOutAttr, false );
                         }
                     }
                 }
@@ -344,7 +344,7 @@ void ShapeController::executeDispatch_TextAttributes()
             sal_Bool bHasMarked = pDrawViewWrapper->AreObjectsMarked();
             if ( bHasMarked )
             {
-                pDrawViewWrapper->MergeAttrFromMarked( aAttr, sal_False );
+                pDrawViewWrapper->MergeAttrFromMarked( aAttr, false );
             }
             SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
             if ( pFact )
@@ -360,7 +360,7 @@ void ShapeController::executeDispatch_TextAttributes()
                     }
                     else
                     {
-                        pDrawViewWrapper->SetDefaultAttr( *pOutAttr, sal_False );
+                        pDrawViewWrapper->SetDefaultAttr( *pOutAttr, false );
                     }
                 }
             }

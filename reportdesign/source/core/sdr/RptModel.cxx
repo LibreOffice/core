@@ -48,7 +48,7 @@ TYPEINIT1(OReportModel,SdrModel);
 
 
 OReportModel::OReportModel(::reportdesign::OReportDefinition* _pReportDefinition) :
-    SdrModel(SvtPathOptions().GetPalettePath(),NULL,_pReportDefinition)
+    SdrModel(SvtPathOptions().GetPalettePath(),NULL,_pReportDefinition, false, false)
     ,m_pController(NULL)
     ,m_pReportDefinition(_pReportDefinition)
 {

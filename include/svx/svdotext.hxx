@@ -148,7 +148,7 @@ private:
     }
 
     // This method is only allowed for sdr::properties::TextProperties
-    SVX_DLLPRIVATE void SetPortionInfoChecked(sal_Bool bNew)
+    SVX_DLLPRIVATE void SetPortionInfoChecked(bool bNew)
     {
         bPortionInfoChecked = bNew;
     }
@@ -218,15 +218,15 @@ protected:
     // wird dann hoizontal und vertikal an aRect zentriert. Bei bTextFrame=
     // sal_True wird der Text in aRect hineinformatiert. Der eigentliche Textrahmen
     // ist durch ein SdrRectObj mit bTextFrame=sal_True realisiert.
-    sal_Bool                        bTextFrame : 1;
-    sal_Bool                        bPortionInfoChecked : 1; // Fuer Optimierung von Textobjekten
-    sal_Bool                        bNoShear : 1;            // Obj darf nicht gesheart werden   (->Graf+Ole+TextFrame)
-    sal_Bool                        bNoRotate : 1;           // Obj darf nicht gedreht werden    (->Ole)
-    sal_Bool                        bNoMirror : 1;           // Obj darf nicht gespiegelt werden (->Ole,TextFrame)
-    sal_Bool                        bTextSizeDirty : 1;
+    bool                        bTextFrame : 1;
+    bool                        bPortionInfoChecked : 1; // Fuer Optimierung von Textobjekten
+    bool                        bNoShear : 1;            // Obj darf nicht gesheart werden   (->Graf+Ole+TextFrame)
+    bool                        bNoRotate : 1;           // Obj darf nicht gedreht werden    (->Ole)
+    bool                        bNoMirror : 1;           // Obj darf nicht gespiegelt werden (->Ole,TextFrame)
+    bool                        bTextSizeDirty : 1;
 
     // #101684#
-    sal_Bool                        mbInEditMode : 1;   // Is this text object in edit mode?
+    bool                        mbInEditMode : 1;   // Is this text object in edit mode?
 
     // Fuer Objekt mit freier Groesse im Draw (Mengentext). Das Flag wird vom
     // der App beim Create gesetzt.
@@ -237,18 +237,18 @@ protected:
     // Resize in der Breite kann sein:
     // - Interaktives Resize in Einfach- oder Mehrfachselektion
     // - Positions+Groesse Dialog
-    sal_Bool                        bDisableAutoWidthOnDragging : 1;
+    bool                        bDisableAutoWidthOnDragging : 1;
 
     // #111096#
     // Allow text suppression
-    sal_Bool                        mbTextHidden : 1;
+    bool                        mbTextHidden : 1;
 
     // #111096#
     // Flag for allowing text animation. Default is sal_true.
-    sal_Bool                        mbTextAnimationAllowed : 1;
+    bool                        mbTextAnimationAllowed : 1;
 
     // flag for preventing recursive onEditOutlinerStatusEvent calls
-    sal_Bool                        mbInDownScale : 1;
+    bool                        mbInDownScale : 1;
 
     SdrOutliner& ImpGetDrawOutliner() const;
 
@@ -273,7 +273,7 @@ private:
 
 protected:
     bool ImpCanConvTextToCurve() const;
-    SdrObject* ImpConvertMakeObj(const basegfx::B2DPolyPolygon& rPolyPolygon, sal_Bool bClosed, sal_Bool bBezier, sal_Bool bNoSetAttr = sal_False) const;
+    SdrObject* ImpConvertMakeObj(const basegfx::B2DPolyPolygon& rPolyPolygon, bool bClosed, bool bBezier, bool bNoSetAttr = false) const;
     SdrObject* ImpConvertAddText(SdrObject* pObj, bool bBezier) const;
     void ImpSetTextStyleSheetListeners();
     void ImpSetCharStretching(SdrOutliner& rOutliner, const Size& rTextSize, const Size& rShapeSize, Fraction& rFitXKorreg) const;
@@ -281,10 +281,10 @@ protected:
     void ImpCheckShear();
     Rectangle ImpDragCalcRect(const SdrDragStat& rDrag) const;
     void ImpSetTextEditParams() const;
-    void SetTextSizeDirty() { bTextSizeDirty=sal_True; }
+    void SetTextSizeDirty() { bTextSizeDirty=true; }
 
     // rAnchorRect ist InOut-Parameter!
-    void ImpSetContourPolygon( SdrOutliner& rOutliner, Rectangle& rAnchorRect, sal_Bool bLineWidth ) const;
+    void ImpSetContourPolygon( SdrOutliner& rOutliner, Rectangle& rAnchorRect, bool bLineWidth ) const;
 
     virtual SdrObjGeoData* NewGeoData() const;
     virtual void SaveGeoData(SdrObjGeoData& rGeo) const;
@@ -307,7 +307,7 @@ public:
     TYPEINFO();
 
     // #101684#
-    sal_Bool IsInEditMode() const { return mbInEditMode; }
+    bool IsInEditMode() const { return mbInEditMode; }
 
     // via eCharSet kann der CharSet der vorliegenden Datei uebergeben werden.
     // Bei RTL_TEXTENCODING_DONTKNOW wird der CharSet der aktuellen Plattform verwendet.
@@ -340,7 +340,7 @@ public:
     virtual bool HasText() const;
 
     bool HasEditText() const;
-    sal_Bool IsTextEditActive() const { return (pEdtOutl != 0L); }
+    bool IsTextEditActive() const { return (pEdtOutl != 0L); }
 
     /** returns the currently active text. */
     virtual SdrText* getActiveText() const;
@@ -460,7 +460,7 @@ public:
     virtual void NbcShear(const Point& rRef, long nWink, double tn, bool bVShear);
 
     virtual bool HasTextEdit() const;
-    virtual sal_Bool BegTextEdit(SdrOutliner& rOutl);
+    virtual bool BegTextEdit(SdrOutliner& rOutl);
     virtual void TakeTextEditArea(Size* pPaperMin, Size* pPaperMax, Rectangle* pViewInit, Rectangle* pViewMin) const;
     virtual void EndTextEdit(SdrOutliner& rOutl);
     virtual sal_uInt16 GetOutlinerViewAnchorMode() const;
@@ -476,7 +476,7 @@ public:
     virtual bool CalcFieldValue(const SvxFieldItem& rField, sal_Int32 nPara, sal_uInt16 nPos,
         bool bEdit, Color*& rpTxtColor, Color*& rpFldColor, OUString& rRet) const;
 
-    virtual SdrObject* DoConvertToPolyObj(sal_Bool bBezier, bool bAddText) const;
+    virtual SdrObject* DoConvertToPolyObj(bool bBezier, bool bAddText) const;
 
     void SetTextEditOutliner(SdrOutliner* pOutl) { pEdtOutl=pOutl; }
 
@@ -512,8 +512,8 @@ public:
      */
     void UpdateOutlinerFormatting( SdrOutliner& rOutl, Rectangle& rPaintRect ) const;
     void ForceOutlinerParaObject();
-    virtual sal_Bool IsVerticalWriting() const;
-    virtual void SetVerticalWriting(sal_Bool bVertical);
+    virtual bool IsVerticalWriting() const;
+    virtual void SetVerticalWriting(bool bVertical);
 
     /** called from the SdrObjEditView during text edit when the status of the edit outliner changes */
     virtual void onEditOutlinerStatusEvent( EditStatus* pEditStatus );
@@ -528,7 +528,7 @@ public:
 
     // gets base transformation and rectangle of object. If it's an SdrPathObj it fills the PolyPolygon
     // with the base geometry and returns TRUE. Otherwise it returns FALSE.
-    virtual sal_Bool TRGetBaseGeometry(basegfx::B2DHomMatrix& rMatrix, basegfx::B2DPolyPolygon& rPolyPolygon) const;
+    virtual bool TRGetBaseGeometry(basegfx::B2DHomMatrix& rMatrix, basegfx::B2DPolyPolygon& rPolyPolygon) const;
 
     // sets the base geometry of the object using infos contained in the homogen 3x3 matrix.
     // If it's an SdrPathObj it will use the provided geometry information. The Polygon has
@@ -547,7 +547,7 @@ public:
 
     // #111096#
     // Access to TextAnimationAllowed flag
-    void SetTextAnimationAllowed(sal_Bool bNew);
+    void SetTextAnimationAllowed(bool bNew);
 
     // #i8824#
     // Set single item at the local ItemSet. *Does not use* AllowItemChange(),

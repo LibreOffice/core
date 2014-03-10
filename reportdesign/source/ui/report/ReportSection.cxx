@@ -192,7 +192,7 @@ void OReportSection::fill()
     // without the following call, no grid is painted
     m_pView->ShowSdrPage( m_pPage );
 
-    m_pView->SetMoveSnapOnlyTopLeft( sal_True );
+    m_pView->SetMoveSnapOnlyTopLeft( true );
     ODesignView* pDesignView = m_pParent->getViewsWindow()->getView()->getReportView();
 
     // #i93595# Adapted grid to a more coarse grid and subdivisions for better visualisation. This
@@ -209,7 +209,7 @@ void OReportSection::fill()
 
     m_pView->SetGridSnap( pDesignView->isGridSnap() );
     m_pView->SetGridFront( false );
-    m_pView->SetDragStripes( sal_True );
+    m_pView->SetDragStripes( true );
     m_pView->SetPageVisible();
     sal_Int32 nColor = m_xSection->getBackColor();
     if ( nColor == (sal_Int32)COL_TRANSPARENT )

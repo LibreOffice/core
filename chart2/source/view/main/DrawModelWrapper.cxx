@@ -103,7 +103,7 @@ namespace chart
 {
 
 DrawModelWrapper::DrawModelWrapper( const uno::Reference<uno::XComponentContext>& /*xContext*/ )
-        : SdrModel( SvtPathOptions().GetPalettePath() )
+        : SdrModel( SvtPathOptions().GetPalettePath(), NULL, NULL, false, false )
         , m_pChartItemPool(0)
         , m_xMainDrawPage(0)
         , m_xHiddenDrawPage(0)

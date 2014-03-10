@@ -428,7 +428,7 @@ protected:
     // This is needed for instance for NbcMove, because usually one moves SnapRect and aOutRect
     // at the same time to avoid recomputation.
 public:
-    virtual void SetRectsDirty(sal_Bool bNotMyself = false);
+    virtual void SetRectsDirty(bool bNotMyself = false);
 protected:
 
     // override if the class inherits from SdrObjPlusData:
@@ -725,7 +725,7 @@ public:
     // The points of those objects are selected (if necessary multiselection),
     // deleted, inserted, or as a multiselection moved or rotated...
     // Only such objects can have PlusHandles (e.g. the weights of an Bezier curve).
-    virtual sal_Bool IsPolyObj() const;
+    virtual bool IsPolyObj() const;
     virtual sal_uInt32 GetPointCount() const;
     virtual Point GetPoint(sal_uInt32 i) const;
     void SetPoint(const Point& rPnt, sal_uInt32 i);
@@ -764,13 +764,13 @@ public:
     // if bDontRemoveHardAttr is false, set all attributes, which were set in the style sheet, to their default value
     // if true, all hard attributes keep their values
     void SetStyleSheet(SfxStyleSheet* pNewStyleSheet, bool bDontRemoveHardAttr);
-    virtual void NbcSetStyleSheet(SfxStyleSheet* pNewStyleSheet, sal_Bool bDontRemoveHardAttr);
+    virtual void NbcSetStyleSheet(SfxStyleSheet* pNewStyleSheet, bool bDontRemoveHardAttr);
     SfxStyleSheet* GetStyleSheet() const;
 
     virtual bool HasTextEdit() const;
 
     // returns true if TextEditMode started
-    virtual sal_Bool BegTextEdit(SdrOutliner& rOutl);
+    virtual bool BegTextEdit(SdrOutliner& rOutl);
     virtual void EndTextEdit(SdrOutliner& rOutl);
 
     // keep text in outliner's format
@@ -870,7 +870,7 @@ public:
     // In the case of the conversion from TextObj to PathObj,
     // both modi (bLineToArea=true/false) would be identical.
     // The methods' default implementations report "I'm unable to do this" (false/null).
-    virtual SdrObject* DoConvertToPolyObj(sal_Bool bBezier, bool bAddText) const;
+    virtual SdrObject* DoConvertToPolyObj(bool bBezier, bool bAddText) const;
     SdrObject* ConvertToPolyObj(bool bBezier, bool bLineToArea) const;
 
     // convert this path object to contour object; bForceLineDash converts even
@@ -964,7 +964,7 @@ public:
     //
     // gets base transformation and rectangle of object. If it's an SdrPathObj it fills the PolyPolygon
     // with the base geometry and returns TRUE. Otherwise it returns FALSE.
-    virtual sal_Bool TRGetBaseGeometry(basegfx::B2DHomMatrix& rMatrix, basegfx::B2DPolyPolygon& rPolyPolygon) const;
+    virtual bool TRGetBaseGeometry(basegfx::B2DHomMatrix& rMatrix, basegfx::B2DPolyPolygon& rPolyPolygon) const;
 
     // sets the base geometry of the object using infos contained in the homogen 3x3 matrix.
     // If it's an SdrPathObj it will use the provided geometry information. The Polygon has

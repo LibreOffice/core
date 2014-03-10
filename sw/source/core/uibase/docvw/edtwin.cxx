@@ -1279,7 +1279,7 @@ void SwEditWin::ChangeDrawing( sal_uInt8 nDir )
                         if(!bWasNoSnap)
                             ((SdrDragStat&)rDragStat).SetNoSnap(true);
                         if(bWasSnapEnabled)
-                            pSdrView->SetSnapEnabled(sal_False);
+                            pSdrView->SetSnapEnabled(false);
 
                         pSdrView->MovAction(aEndPoint);
                         pSdrView->EndDragObj();

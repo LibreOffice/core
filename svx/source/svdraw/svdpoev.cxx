@@ -41,8 +41,8 @@ void SdrPolyEditView::ImpResetPolyPossibilityFlags()
 {
     eMarkedPointsSmooth=SDRPATHSMOOTH_DONTCARE;
     eMarkedSegmentsKind=SDRPATHSEGMENT_DONTCARE;
-    bSetMarkedPointsSmoothPossible=sal_False;
-    bSetMarkedSegmentsKindPossible=sal_False;
+    bSetMarkedPointsSmoothPossible=false;
+    bSetMarkedSegmentsKindPossible=false;
 }
 
 void SdrPolyEditView::ImpClearVars()
@@ -385,7 +385,7 @@ void SdrPolyEditView::RipUpAtMarkedPoints()
                         pM->GetPageView()->GetObjList()->InsertObject(pNeuObj, pObj->GetOrdNum() + 1, &aReason);
                         if( bUndo )
                             AddUndo(GetModel()->GetSdrUndoFactory().CreateUndoNewObject(*pNeuObj));
-                        MarkObj(pNeuObj, pM->GetPageView(), sal_False, sal_True);
+                        MarkObj(pNeuObj, pM->GetPageView(), false, true);
                     }
 
                     if(nNewPt0Idx)

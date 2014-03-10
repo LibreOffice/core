@@ -166,7 +166,7 @@ public:
     AnnotationHdl( const SmartTagReference& xTag, const Reference< XAnnotation >& xAnnotation, const Point& rPnt );
     virtual ~AnnotationHdl();
     virtual void CreateB2dIAObject();
-    virtual sal_Bool IsFocusHdl() const;
+    virtual bool IsFocusHdl() const;
     virtual Pointer GetSdrDragPointer() const;
     virtual bool isMarkable() const;
 
@@ -257,9 +257,9 @@ void AnnotationHdl::CreateB2dIAObject()
 
 
 
-sal_Bool AnnotationHdl::IsFocusHdl() const
+bool AnnotationHdl::IsFocusHdl() const
 {
-    return sal_True;
+    return true;
 }
 
 

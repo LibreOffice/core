@@ -579,7 +579,7 @@ SdrGluePoint SdrRectObj::GetCornerGluePoint(sal_uInt16 nPosNum) const
     return aGP;
 }
 
-SdrObject* SdrRectObj::DoConvertToPolyObj(sal_Bool bBezier, bool bAddText) const
+SdrObject* SdrRectObj::DoConvertToPolyObj(bool bBezier, bool bAddText) const
 {
     XPolygon aXP(ImpCalcXPoly(aRect,GetEckenradius()));
     { // TODO: this is only for the moment, until we have the new TakeContour()
@@ -596,7 +596,7 @@ SdrObject* SdrRectObj::DoConvertToPolyObj(sal_Bool bBezier, bool bAddText) const
     // when used with bAddText==false from other converters
     if((bAddText && !IsTextFrame()) || HasFill() || HasLine())
     {
-        pRet = ImpConvertMakeObj(aPolyPolygon, sal_True, bBezier);
+        pRet = ImpConvertMakeObj(aPolyPolygon, true, bBezier);
     }
 
     if(bAddText)

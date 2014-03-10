@@ -559,7 +559,7 @@ namespace sdr
 
                     if(SFX_HINT_DATACHANGED == nId)
                     {
-                        rObj.SetPortionInfoChecked(sal_False);
+                        rObj.SetPortionInfoChecked(false);
 
                         sal_Int32 nText = rTextProvider.getTextCount();
                         while( --nText > 0 )
@@ -583,7 +583,7 @@ namespace sdr
 
                     if(SFX_HINT_DYING == nId)
                     {
-                        rObj.SetPortionInfoChecked(sal_False);
+                        rObj.SetPortionInfoChecked(false);
                         sal_Int32 nText = rTextProvider.getTextCount();
                         while( --nText > 0 )
                         {

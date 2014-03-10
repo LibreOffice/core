@@ -525,7 +525,7 @@ public:
     virtual void SetModel(SdrModel* pNewModel);
 
     // New MasterPage interface
-    sal_Bool TRG_HasMasterPage() const { return (0L != mpMasterPageDescriptor); }
+    bool TRG_HasMasterPage() const { return (0L != mpMasterPageDescriptor); }
     void TRG_SetMasterPage(SdrPage& rNew);
     void TRG_ClearMasterPage();
     SdrPage& TRG_GetMasterPage() const;

@@ -1480,7 +1480,7 @@ void ImplSdPPTImport::ImportPageEffect( SdPage* pPage, const sal_Bool bNewAnimat
                 if(pPage->TRG_HasMasterPage())
                 {
                     SetOfByte aVisibleLayers = pPage->TRG_GetMasterPageVisibleLayers();
-                    aVisibleLayers.Set(mnBackgroundObjectsLayerID, sal_False);
+                    aVisibleLayers.Set(mnBackgroundObjectsLayerID, false);
                     pPage->TRG_SetMasterPageVisibleLayers(aVisibleLayers);
                 }
             }
@@ -2169,7 +2169,7 @@ SdrObject* ImplSdPPTImport::ApplyTextObj( PPTTextObj* pTextObj, SdrTextObj* pObj
         {
             pSheet = pPage->GetStyleSheetForPresObj( PRESOBJ_TITLE );
             if ( pSheet )
-                ((SdrAttrObj*)pText)->SdrAttrObj::NbcSetStyleSheet( pSheet, sal_True );
+                ((SdrAttrObj*)pText)->SdrAttrObj::NbcSetStyleSheet( pSheet, true );
             DBG_ASSERT( pSheet, "ImplSdPPTImport::ApplyTextObj -> could not get stylesheet for titleobject (SJ)" );
         }
         break;
@@ -2177,7 +2177,7 @@ SdrObject* ImplSdPPTImport::ApplyTextObj( PPTTextObj* pTextObj, SdrTextObj* pObj
         {
             pSheet = pPage->GetStyleSheetForPresObj( PRESOBJ_TEXT );
             if ( pSheet )
-                ((SdrAttrObj*)pText)->SdrAttrObj::NbcSetStyleSheet( pSheet, sal_True );
+                ((SdrAttrObj*)pText)->SdrAttrObj::NbcSetStyleSheet( pSheet, true );
             DBG_ASSERT( pSheet, "ImplSdPPTImport::ApplyTextObj -> could not get stylesheet for subtitleobject (SJ)" );
         }
         break;
@@ -2197,7 +2197,7 @@ SdrObject* ImplSdPPTImport::ApplyTextObj( PPTTextObj* pTextObj, SdrTextObj* pObj
             }
             DBG_ASSERT( pSheet, "ImplSdPPTImport::ApplyTextObj -> could not get stylesheet for outlinerobject (SJ)" );
             if ( pSheet )
-                ((SdrAttrObj*)pText)->SdrAttrObj::NbcSetStyleSheet( pSheet, sal_True );
+                ((SdrAttrObj*)pText)->SdrAttrObj::NbcSetStyleSheet( pSheet, true );
             ppStyleSheetAry = &pStyleSheetAry[ 0 ];
         }
         break;
@@ -2208,7 +2208,7 @@ SdrObject* ImplSdPPTImport::ApplyTextObj( PPTTextObj* pTextObj, SdrTextObj* pObj
             {
                 pSheet = pPage->GetStyleSheetForPresObj( PRESOBJ_TITLE );
                 if ( pSheet )
-                    ((SdrAttrObj*)pText)->SdrAttrObj::NbcSetStyleSheet( pSheet, sal_True );
+                    ((SdrAttrObj*)pText)->SdrAttrObj::NbcSetStyleSheet( pSheet, true );
                 DBG_ASSERT( pSheet, "ImplSdPPTImport::ApplyTextObj -> could not get stylesheet for titleobject (SJ)" );
             }
             else
@@ -2216,7 +2216,7 @@ SdrObject* ImplSdPPTImport::ApplyTextObj( PPTTextObj* pTextObj, SdrTextObj* pObj
                 pSheet = pPage->GetStyleSheetForPresObj( PRESOBJ_NOTES );
                 DBG_ASSERT( pSheet, "ImplSdPPTImport::ApplyTextObj -> could not get stylesheet for notesobj (SJ)" );
                 if ( pSheet )
-                    ((SdrAttrObj*)pText)->SdrAttrObj::NbcSetStyleSheet( pSheet, sal_True );
+                    ((SdrAttrObj*)pText)->SdrAttrObj::NbcSetStyleSheet( pSheet, true );
             }
         }
         break;
@@ -2280,7 +2280,7 @@ SdrObject* ImplSdPPTImport::ApplyTextObj( PPTTextObj* pTextObj, SdrTextObj* pObj
                             rItemSet.Put( pText->GetMergedItemSet() );
                         }
                     }
-                    pText->NbcSetStyleSheet( pSheet2, sal_False );
+                    pText->NbcSetStyleSheet( pSheet2, false );
                 }
 
                 SfxItemSet aTempAttr( mpDoc->GetPool() );

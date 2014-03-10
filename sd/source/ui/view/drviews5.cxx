@@ -235,7 +235,7 @@ void DrawViewShell::ReadFrameViewData(FrameView* pView)
     if (mpDrawView->IsSolidDragging() != pView->IsSolidDragging() )
         mpDrawView->SetSolidDragging( pView->IsSolidDragging() );
 
-    if (mpDrawView->IsQuickTextEditMode() != pView->IsQuickEdit())
+    if ((mpDrawView->IsQuickTextEditMode() ? 1 : 0) != pView->IsQuickEdit())
         mpDrawView->SetQuickTextEditMode( pView->IsQuickEdit() );
 
     // #i26631#

@@ -100,7 +100,7 @@ sal_Bool ConstRectangle::MouseButtonUp(const MouseEvent& rMEvt)
                 SdrTextObj* pText = (SdrTextObj*)pObj;
                 SfxItemSet aSet(pSdrView->GetModel()->GetItemPool());
 
-                pText->SetVerticalWriting(sal_True);
+                pText->SetVerticalWriting(true);
 
                 aSet.Put(SdrTextAutoGrowWidthItem(true));
                 aSet.Put(SdrTextAutoGrowHeightItem(false));

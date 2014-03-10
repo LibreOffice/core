@@ -387,7 +387,7 @@ void SwView::ExecDraw(SfxRequest& rReq)
     }
 
     if(bEndTextEdit && pSdrView && pSdrView->IsTextEdit())
-        pSdrView->SdrEndTextEdit( sal_True );
+        pSdrView->SdrEndTextEdit( true );
 
     AttrChangedNotify(m_pWrtShell);
 }
@@ -558,7 +558,7 @@ sal_Bool SwView::BeginTextEdit(SdrObject* pObj, SdrPageView* pPV, Window* pWin,
     // set in each case, thus it will be correct for all objects
     ((SdrTextObj*)pToBeActivated)->SetTextEditOffset(aNewTextEditOffset);
 
-    sal_Bool bRet(pSdrView->SdrBeginTextEdit( pToBeActivated, pPV, pWin, sal_True, pOutliner, 0, sal_False, sal_False, sal_False ));
+    bool bRet(pSdrView->SdrBeginTextEdit( pToBeActivated, pPV, pWin, true, pOutliner, 0, false, false, false ));
 
     // #i7672#
     // Since SdrBeginTextEdit actually creates the OutlinerView and thus also
@@ -594,7 +594,7 @@ bool SwView::IsTextTool() const
     OSL_ENSURE( pSdrView, "IsTextTool without DrawView?" );
 
     if (pSdrView->IsCreateMode())
-        pSdrView->SetCreateMode(sal_False);
+        pSdrView->SetCreateMode(false);
 
     pSdrView->TakeCurrentObj(nId,nInvent);
     return (nInvent==SdrInventor);

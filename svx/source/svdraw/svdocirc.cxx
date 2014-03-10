@@ -808,7 +808,7 @@ void SdrCircObj::NbcMove(const Size& aSiz)
     MoveRect(aOutRect,aSiz);
     MoveRect(maSnapRect,aSiz);
     SetXPolyDirty();
-    SetRectsDirty(sal_True);
+    SetRectsDirty(true);
 }
 
 void SdrCircObj::NbcResize(const Point& rRef, const Fraction& xFact, const Fraction& yFact)
@@ -1144,7 +1144,7 @@ void SdrCircObj::ImpSetCircInfoToAttr()
     }
 }
 
-SdrObject* SdrCircObj::DoConvertToPolyObj(sal_Bool bBezier, bool bAddText) const
+SdrObject* SdrCircObj::DoConvertToPolyObj(bool bBezier, bool bAddText) const
 {
     const sal_Bool bFill(OBJ_CARC == meCircleKind ? sal_False : sal_True);
     const basegfx::B2DPolygon aCircPolygon(ImpCalcXPolyCirc(meCircleKind, aRect, nStartWink, nEndWink));

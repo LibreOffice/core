@@ -197,9 +197,9 @@ void OLEObjCache::RemoveObj(SdrOle2Obj* pObj)
         erase( it );
 }
 
-sal_Bool OLEObjCache::UnloadObj(SdrOle2Obj* pObj)
+bool OLEObjCache::UnloadObj(SdrOle2Obj* pObj)
 {
-    sal_Bool bUnloaded = sal_False;
+    bool bUnloaded = false;
     if (pObj)
     {
         //#i80528# The old mechanism is completely useless, only taking into account if
@@ -460,10 +460,10 @@ namespace sdr
 
 
 
-sal_Bool SearchOutlinerItems(const SfxItemSet& rSet, sal_Bool bInklDefaults, sal_Bool* pbOnlyEE)
+bool SearchOutlinerItems(const SfxItemSet& rSet, bool bInklDefaults, bool* pbOnlyEE)
 {
-    sal_Bool bHas=sal_False;
-    sal_Bool bOnly=sal_True;
+    bool bHas=false;
+    bool bOnly=true;
     bool bLookOnly=pbOnlyEE!=NULL;
     SfxWhichIter aIter(rSet);
     sal_uInt16 nWhich=aIter.FirstWhich();
@@ -473,12 +473,12 @@ sal_Bool SearchOutlinerItems(const SfxItemSet& rSet, sal_Bool bInklDefaults, sal
         // Disabled and DontCare are regarded as holes in the Which range.
         SfxItemState eState=rSet.GetItemState(nWhich);
         if ((eState==SFX_ITEM_DEFAULT && bInklDefaults) || eState==SFX_ITEM_SET) {
-            if (nWhich<EE_ITEMS_START || nWhich>EE_ITEMS_END) bOnly=sal_False;
-            else bHas=sal_True;
+            if (nWhich<EE_ITEMS_START || nWhich>EE_ITEMS_END) bOnly=false;
+            else bHas=true;
         }
         nWhich=aIter.NextWhich();
     }
-    if (!bHas) bOnly=sal_False;
+    if (!bHas) bOnly=false;
     if (pbOnlyEE!=NULL) *pbOnlyEE=bOnly;
     return bHas;
 }
@@ -572,7 +572,7 @@ void SvdProgressInfo::Init( sal_uIntPtr _nSumActionCount, sal_uIntPtr _nObjCount
     nObjCount = _nObjCount;
 }
 
-sal_Bool SvdProgressInfo::ReportActions( sal_uIntPtr nAnzActions )
+bool SvdProgressInfo::ReportActions( sal_uIntPtr nAnzActions )
 {
     nSumCurAction += nAnzActions;
     nCurAction += nAnzActions;
@@ -582,7 +582,7 @@ sal_Bool SvdProgressInfo::ReportActions( sal_uIntPtr nAnzActions )
     return pLink->Call(NULL) == 1L;
 }
 
-sal_Bool SvdProgressInfo::ReportInserts( sal_uIntPtr nAnzInserts )
+bool SvdProgressInfo::ReportInserts( sal_uIntPtr nAnzInserts )
 {
     nSumCurAction += nAnzInserts;
     nCurInsert += nAnzInserts;
@@ -590,7 +590,7 @@ sal_Bool SvdProgressInfo::ReportInserts( sal_uIntPtr nAnzInserts )
     return pLink->Call(NULL) == 1L;
 }
 
-sal_Bool SvdProgressInfo::ReportRescales( sal_uIntPtr nAnzRescales )
+bool SvdProgressInfo::ReportRescales( sal_uIntPtr nAnzRescales )
 {
     nSumCurAction += nAnzRescales;
     return pLink->Call(NULL) == 1L;
@@ -606,7 +606,7 @@ void SvdProgressInfo::SetInsertCount( sal_uIntPtr _nInsertCount )
     nInsertCount = _nInsertCount;
 }
 
-sal_Bool SvdProgressInfo::SetNextObject()
+bool SvdProgressInfo::SetNextObject()
 {
     nActionCount = 0;
     nCurAction   = 0;

@@ -279,7 +279,7 @@ void IMapWindow::InitSdrModel()
     aSet.Put( XFillColorItem( "", TRANSCOL ) );
     aSet.Put( XFillTransparenceItem( 50 ) );
     pView->SetAttributes( aSet );
-    pView->SetFrameDragSingles( sal_True );
+    pView->SetFrameDragSingles( true );
 }
 
 void IMapWindow::SdrObjCreated( const SdrObject& rObj )
@@ -591,7 +591,7 @@ void IMapWindow::SetCurrentObjState( sal_Bool bActive )
             aSet.Put( XLineColorItem( "", Color( COL_BLACK ) ) );
         }
 
-        pView->SetAttributes( aSet, sal_False );
+        pView->SetAttributes( aSet, false );
     }
 }
 
@@ -816,7 +816,7 @@ void IMapWindow::SelectFirstObject()
     {
         GrabFocus();
         pView->UnmarkAllObj();
-        pView->MarkNextObj(sal_True);
+        pView->MarkNextObj(true);
     }
 }
 
@@ -825,7 +825,7 @@ void IMapWindow::StartPolyEdit()
     GrabFocus();
 
     if( !pView->AreObjectsMarked() )
-        pView->MarkNextObj(sal_True);
+        pView->MarkNextObj(true);
 
     const SdrHdlList& rHdlList = pView->GetHdlList();
     SdrHdl* pHdl = rHdlList.GetFocusHdl();

@@ -277,7 +277,7 @@ sal_Bool DrawDocShell::Load( SfxMedium& rMedium )
     {
         if( (  SFX_ITEM_SET == pSet->GetItemState(SID_PREVIEW ) ) && ( (SfxBoolItem&) ( pSet->Get( SID_PREVIEW ) ) ).GetValue() )
         {
-            mpDoc->SetStarDrawPreviewMode( sal_True );
+            mpDoc->SetStarDrawPreviewMode( true );
         }
 
         if( SFX_ITEM_SET == pSet->GetItemState(SID_DOC_STARTPRESENTATION)&&
@@ -419,7 +419,7 @@ sal_Bool DrawDocShell::ConvertFrom( SfxMedium& rMedium )
     {
         if( (  SFX_ITEM_SET == pSet->GetItemState(SID_PREVIEW ) ) && ( (SfxBoolItem&) ( pSet->Get( SID_PREVIEW ) ) ).GetValue() )
         {
-            mpDoc->SetStarDrawPreviewMode( sal_True );
+            mpDoc->SetStarDrawPreviewMode( true );
         }
 
         if( SFX_ITEM_SET == pSet->GetItemState(SID_DOC_STARTPRESENTATION)&&
@@ -829,7 +829,7 @@ sal_Bool DrawDocShell::GotoBookmark(const OUString& rBookmark)
                     pDrawViewShell->GetView()->UnmarkAll();
                     pDrawViewShell->GetView()->MarkObj(
                         pObj,
-                        pDrawViewShell->GetView()->GetSdrPageView(), sal_False);
+                        pDrawViewShell->GetView()->GetSdrPageView(), false);
                 }
             }
         }

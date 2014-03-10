@@ -152,11 +152,11 @@ SdrPageView::SdrPageView(SdrPage* pPage1, SdrView& rNewView)
         aPgOrg.X()=mpPage->GetLftBorder();
         aPgOrg.Y()=mpPage->GetUppBorder();
     }
-    mbHasMarked = sal_False;
+    mbHasMarked = false;
     aLayerVisi.SetAll();
     aLayerPrn.SetAll();
 
-    mbVisible = sal_False;
+    mbVisible = false;
     pAktList = NULL;
     pAktGroup = NULL;
     SetAktGroupAndList(NULL, mpPage);
@@ -221,7 +221,7 @@ void SdrPageView::ModelHasChanged()
     if (GetAktGroup()!=NULL) CheckAktGroup();
 }
 
-sal_Bool SdrPageView::IsReadOnly() const
+bool SdrPageView::IsReadOnly() const
 {
     return (0L == GetPage() || GetView().GetModel()->IsReadOnly() || GetPage()->IsReadOnly() || GetObjList()->IsReadOnly());
 }
@@ -230,7 +230,7 @@ void SdrPageView::Show()
 {
     if(!IsVisible())
     {
-        mbVisible = sal_True;
+        mbVisible = true;
         InvalidateAllWin();
 
         for(sal_uInt32 a(0L); a < GetView().PaintWindowCount(); a++)
@@ -245,7 +245,7 @@ void SdrPageView::Hide()
     if(IsVisible())
     {
         InvalidateAllWin();
-        mbVisible = sal_False;
+        mbVisible = false;
         ClearPageWindows();
     }
 }
@@ -649,20 +649,20 @@ bool SdrPageView::IsLayer(const OUString& rName, const SetOfByte& rBS) const
     return bRet;
 }
 
-sal_Bool SdrPageView::IsObjMarkable(SdrObject* pObj) const
+bool SdrPageView::IsObjMarkable(SdrObject* pObj) const
 {
     if(pObj)
     {
         // excluded from selection?
         if(pObj->IsMarkProtect())
         {
-            return sal_False;
+            return false;
         }
 
         // only visible are selectable
         if( !pObj->IsVisible() )
         {
-            return sal_False;
+            return false;
         }
 
         if(pObj->ISA(SdrObjGroup))
@@ -673,7 +673,7 @@ sal_Bool SdrPageView::IsObjMarkable(SdrObject* pObj) const
 
             if(pObjList && pObjList->GetObjCount())
             {
-                sal_Bool bGroupIsMarkable(sal_False);
+                bool bGroupIsMarkable(false);
 
                 for(sal_uInt32 a(0L); !bGroupIsMarkable && a < pObjList->GetObjCount(); a++)
                 {
@@ -682,7 +682,7 @@ sal_Bool SdrPageView::IsObjMarkable(SdrObject* pObj) const
                     // call recursively
                     if(IsObjMarkable(pCandidate))
                     {
-                        bGroupIsMarkable = sal_True;
+                        bGroupIsMarkable = true;
                     }
                 }
 
@@ -692,7 +692,7 @@ sal_Bool SdrPageView::IsObjMarkable(SdrObject* pObj) const
             {
                 // #i43302#
                 // Allow empty groups to be selected to be able to delete them
-                return sal_True;
+                return true;
             }
         }
         else
@@ -703,7 +703,7 @@ sal_Bool SdrPageView::IsObjMarkable(SdrObject* pObj) const
         }
     }
 
-    return sal_False;
+    return false;
 }
 
 void SdrPageView::SetPageOrigin(const Point& rOrg)
@@ -793,13 +793,13 @@ void SdrPageView::SetAktGroupAndList(SdrObject* pNewGroup, SdrObjList* pNewList)
     }
 }
 
-sal_Bool SdrPageView::EnterGroup(SdrObject* pObj)
+bool SdrPageView::EnterGroup(SdrObject* pObj)
 {
-    sal_Bool bRet(sal_False);
+    bool bRet(false);
 
     if(pObj && pObj->IsGroupObject())
     {
-        sal_Bool bGlueInvalidate(GetView().ImpIsGlueVisible());
+        bool bGlueInvalidate(GetView().ImpIsGlueVisible());
 
         if(bGlueInvalidate)
         {
@@ -839,7 +839,7 @@ sal_Bool SdrPageView::EnterGroup(SdrObject* pObj)
             GetView().GlueInvalidate();
         }
 
-        bRet = sal_True;
+        bRet = true;
     }
 
     return bRet;
@@ -849,7 +849,7 @@ void SdrPageView::LeaveOneGroup()
 {
     if(GetAktGroup())
     {
-        sal_Bool bGlueInvalidate = (GetView().ImpIsGlueVisible());
+        bool bGlueInvalidate = (GetView().ImpIsGlueVisible());
 
         if(bGlueInvalidate)
             GetView().GlueInvalidate();
@@ -887,7 +887,7 @@ void SdrPageView::LeaveAllGroup()
 {
     if(GetAktGroup())
     {
-        sal_Bool bGlueInvalidate = (GetView().ImpIsGlueVisible());
+        bool bGlueInvalidate = (GetView().ImpIsGlueVisible());
 
         if(bGlueInvalidate)
             GetView().GlueInvalidate();

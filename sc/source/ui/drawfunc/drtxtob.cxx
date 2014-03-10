@@ -785,7 +785,7 @@ void ScDrawTextObjectBar::ExecuteAttr( SfxRequest &rReq )
                     pOutView->Paint( Rectangle() );
 
                 SfxItemSet aEmptyAttr( *aEditAttr.GetPool(), EE_ITEMS_START, EE_ITEMS_END );
-                pView->SetAttributes( aEmptyAttr, sal_True );
+                pView->SetAttributes( aEmptyAttr, true );
 
                 if ( pOutView )
                 {

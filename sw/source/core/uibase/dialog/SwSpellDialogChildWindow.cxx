@@ -136,7 +136,7 @@ static void lcl_LeaveDrawText(SwWrtShell& rSh)
 {
     if(rSh.GetDrawView())
     {
-        rSh.GetDrawView()->SdrEndTextEdit( sal_True );
+        rSh.GetDrawView()->SdrEndTextEdit( true );
         Point aPt(LONG_MIN, LONG_MIN);
         // go out of the frame
         rSh.SelectObj(aPt, SW_LEAVE_FRAME);
@@ -791,7 +791,7 @@ bool SwSpellDialogChildWindow::FindNextDrawTextError_Impl(SwWrtShell& rSh)
                 {
                     // now the current one has to be deselected
                     if(pCurrentTextObj)
-                        pDrView->SdrEndTextEdit( sal_True );
+                        pDrView->SdrEndTextEdit( true );
                     // and the found one should be activated
                     rSh.MakeVisible(pTextObj->GetLogicRect());
                     Point aTmp( 0,0 );

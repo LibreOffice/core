@@ -106,7 +106,7 @@ void SdrTextObj::NbcMove(const Size& rSiz)
     MoveRect(aRect,rSiz);
     MoveRect(aOutRect,rSiz);
     MoveRect(maSnapRect,rSiz);
-    SetRectsDirty(sal_True);
+    SetRectsDirty(true);
 }
 
 void SdrTextObj::NbcResize(const Point& rRef, const Fraction& xFact, const Fraction& yFact)
@@ -420,7 +420,7 @@ SdrObject* SdrTextObj::ImpConvertContainedTextToSdrPathObjs(bool bToPoly) const
 
 
 
-SdrObject* SdrTextObj::DoConvertToPolyObj(sal_Bool bBezier, bool bAddText) const
+SdrObject* SdrTextObj::DoConvertToPolyObj(bool bBezier, bool bAddText) const
 {
     if(bAddText)
     {
@@ -435,7 +435,7 @@ bool SdrTextObj::ImpCanConvTextToCurve() const
     return !IsOutlText();
 }
 
-SdrObject* SdrTextObj::ImpConvertMakeObj(const basegfx::B2DPolyPolygon& rPolyPolygon, sal_Bool bClosed, sal_Bool bBezier, sal_Bool bNoSetAttr) const
+SdrObject* SdrTextObj::ImpConvertMakeObj(const basegfx::B2DPolyPolygon& rPolyPolygon, bool bClosed, bool bBezier, bool bNoSetAttr) const
 {
     SdrObjKind ePathKind = bClosed ? OBJ_PATHFILL : OBJ_PATHLINE;
     basegfx::B2DPolyPolygon aB2DPolyPolygon(rPolyPolygon);
@@ -471,7 +471,7 @@ SdrObject* SdrTextObj::ImpConvertMakeObj(const basegfx::B2DPolyPolygon& rPolyPol
                 pPathObj->ClearMergedItem();
                 pPathObj->SetMergedItemSet(GetObjectItemSet());
                 pPathObj->GetProperties().BroadcastItemChange(aC);
-                pPathObj->NbcSetStyleSheet(GetStyleSheet(), sal_True);
+                pPathObj->NbcSetStyleSheet(GetStyleSheet(), true);
             }
         }
     }

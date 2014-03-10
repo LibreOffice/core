@@ -154,7 +154,7 @@ namespace
 
 TYPEINIT1(SdrUnoObj, SdrRectObj);
 
-SdrUnoObj::SdrUnoObj(const OUString& rModelName, sal_Bool _bOwnUnoControlModel)
+SdrUnoObj::SdrUnoObj(const OUString& rModelName, bool _bOwnUnoControlModel)
 :   m_pImpl( new SdrUnoObjDataHolder ),
     bOwnUnoControlModel( _bOwnUnoControlModel )
 {
@@ -169,7 +169,7 @@ SdrUnoObj::SdrUnoObj(const OUString& rModelName, sal_Bool _bOwnUnoControlModel)
 
 SdrUnoObj::SdrUnoObj(const OUString& rModelName,
                      const uno::Reference< lang::XMultiServiceFactory >& rxSFac,
-                     sal_Bool _bOwnUnoControlModel)
+                     bool _bOwnUnoControlModel)
 :   m_pImpl( new SdrUnoObjDataHolder ),
     bOwnUnoControlModel( _bOwnUnoControlModel )
 {

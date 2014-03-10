@@ -977,7 +977,7 @@ void  DrawViewShell::GetRulerState(SfxItemSet& rSet)
             rSet.DisableItem( EE_PARA_TABS );
             rSet.DisableItem( SID_RULER_TEXT_RIGHT_TO_LEFT );
 
-            if( mpDrawView->IsResizeAllowed(sal_True) )
+            if( mpDrawView->IsResizeAllowed(true) )
             {
                 Rectangle aResizeRect( maMarkRect );
 

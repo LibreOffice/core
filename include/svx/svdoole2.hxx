@@ -154,10 +154,10 @@ public:
     virtual void NbcSetLogicRect(const Rectangle& rRect);
     virtual void SetGeoData(const SdrObjGeoData& rGeo);
 
-    static sal_Bool CanUnloadRunningObj( const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XEmbeddedObject >& xObj,
+    static bool CanUnloadRunningObj( const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XEmbeddedObject >& xObj,
                                          sal_Int64 nAspect );
-    static sal_Bool Unload( const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XEmbeddedObject >& xObj, sal_Int64 nAspect );
-    sal_Bool Unload();
+    static bool Unload( const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XEmbeddedObject >& xObj, sal_Int64 nAspect );
+    bool Unload();
     void Connect();
     void Disconnect();
     void ObjectLoaded();
@@ -165,10 +165,10 @@ public:
     ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel > getXModel() const;
 
     // #109985#
-    sal_Bool IsChart() const;
-    sal_Bool IsCalc() const;
+    bool IsChart() const;
+    bool IsCalc() const;
 
-    sal_Bool UpdateLinkURL_Impl();
+    bool UpdateLinkURL_Impl();
     void BreakFileLink_Impl();
     void DisconnectFileLink_Impl();
     void CheckFileLink_Impl();
@@ -179,8 +179,8 @@ public:
                           const OUString& aMediaType );
 
     ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel > GetParentXModel()  const;
-    sal_Bool CalculateNewScaling( Fraction& aScaleWidth, Fraction& aScaleHeight, Size& aObjAreaSize );
-    sal_Bool AddOwnLightClient();
+    bool CalculateNewScaling( Fraction& aScaleWidth, Fraction& aScaleHeight, Size& aObjAreaSize );
+    bool AddOwnLightClient();
 
     // handy to get the empty replacement graphic without accessing all the old stuff
     static Graphic GetEmptyOLEReplacementGraphic();
@@ -188,7 +188,7 @@ public:
     void SetWindow(const com::sun::star::uno::Reference < com::sun::star::awt::XWindow >& _xWindow);
 
     // #i118485# missing converter added
-    virtual SdrObject* DoConvertToPolyObj(sal_Bool bBezier, bool bAddText) const;
+    virtual SdrObject* DoConvertToPolyObj(bool bBezier, bool bAddText) const;
 };
 
 #endif // INCLUDED_SVX_SVDOOLE2_HXX

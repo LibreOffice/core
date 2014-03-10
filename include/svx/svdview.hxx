@@ -179,20 +179,20 @@ public:
     //      pSdrView->DoMouseEvent(aVEvt);
     //      SetPointer(GetPreferredPointer(...))
     //      CaptureMouse(...)
-    void EnableExtendedMouseEventDispatcher(sal_Bool bOn) { bNoExtendedMouseDispatcher = !bOn; }
-    sal_Bool IsExtendedMouseEventDispatcherEnabled() const { return bNoExtendedMouseDispatcher; }
+    void EnableExtendedMouseEventDispatcher(bool bOn) { bNoExtendedMouseDispatcher = !bOn; }
+    bool IsExtendedMouseEventDispatcherEnabled() const { return bNoExtendedMouseDispatcher; }
 
-    void EnableExtendedKeyInputDispatcher(sal_Bool bOn) { bNoExtendedKeyDispatcher=!bOn; }
-    sal_Bool IsExtendedKeyInputDispatcherEnabled() const { return bNoExtendedKeyDispatcher; }
+    void EnableExtendedKeyInputDispatcher(bool bOn) { bNoExtendedKeyDispatcher=!bOn; }
+    bool IsExtendedKeyInputDispatcherEnabled() const { return bNoExtendedKeyDispatcher; }
 
-    void EnableExtendedCommandEventDispatcher(sal_Bool bOn) { bNoExtendedCommandDispatcher=!bOn; }
-    sal_Bool IsExtendedCommandEventDispatcherEnabled() const { return bNoExtendedCommandDispatcher; }
+    void EnableExtendedCommandEventDispatcher(bool bOn) { bNoExtendedCommandDispatcher=!bOn; }
+    bool IsExtendedCommandEventDispatcherEnabled() const { return bNoExtendedCommandDispatcher; }
 
-    void EnableTextEditOnObjectsWithoutTextIfTextTool(sal_Bool bOn) { bTextEditOnObjectsWithoutTextIfTextTool=bOn; }
-    sal_Bool IsEnableTextEditOnObjectsWithoutTextIfTextToolEnabled() const { return bTextEditOnObjectsWithoutTextIfTextTool; }
+    void EnableTextEditOnObjectsWithoutTextIfTextTool(bool bOn) { bTextEditOnObjectsWithoutTextIfTextTool=bOn; }
+    bool IsEnableTextEditOnObjectsWithoutTextIfTextToolEnabled() const { return bTextEditOnObjectsWithoutTextIfTextTool; }
 
-    void SetMasterPagePaintCaching(sal_Bool bOn);
-    sal_Bool IsMasterPagePaintCaching() const { return mbMasterPagePaintCaching; }
+    void SetMasterPagePaintCaching(bool bOn);
+    bool IsMasterPagePaintCaching() const { return mbMasterPagePaintCaching; }
 
     sal_Bool KeyInput(const KeyEvent& rKEvt, Window* pWin);
     virtual sal_Bool MouseButtonDown(const MouseEvent& rMEvt, Window* pWin);
@@ -202,21 +202,21 @@ public:
 
     virtual void ConfigurationChanged( utl::ConfigurationBroadcaster*, sal_uInt32 );
 
-    sal_Bool SetAttributes(const SfxItemSet& rSet, sal_Bool bReplaceAll=sal_False) { return SdrCreateView::SetAttributes(rSet,bReplaceAll); }
-    sal_Bool SetStyleSheet(SfxStyleSheet* pStyleSheet, sal_Bool bDontRemoveHardAttr=sal_False) { return SdrCreateView::SetStyleSheet(pStyleSheet,bDontRemoveHardAttr); }
+    bool SetAttributes(const SfxItemSet& rSet, bool bReplaceAll=false) { return SdrCreateView::SetAttributes(rSet,bReplaceAll); }
+    bool SetStyleSheet(SfxStyleSheet* pStyleSheet, bool bDontRemoveHardAttr=false) { return SdrCreateView::SetStyleSheet(pStyleSheet,bDontRemoveHardAttr); }
 
     /* new interface src537 */
-    sal_Bool GetAttributes(SfxItemSet& rTargetSet, sal_Bool bOnlyHardAttr=sal_False) const;
+    bool GetAttributes(SfxItemSet& rTargetSet, bool bOnlyHardAttr=false) const;
 
     SfxStyleSheet* GetStyleSheet() const;
 
     // unvollstaendige Implementation:
     // Das OutputDevice ist notwendig, damit ich die HandleSize ermitteln kann.
     // Bei NULL wird das 1. angemeldete Win verwendet.
-    Pointer GetPreferredPointer(const Point& rMousePos, const OutputDevice* pOut, sal_uInt16 nModifier=0, sal_Bool bLeftDown=sal_False) const;
+    Pointer GetPreferredPointer(const Point& rMousePos, const OutputDevice* pOut, sal_uInt16 nModifier=0, bool bLeftDown=false) const;
     SdrHitKind PickAnything(const MouseEvent& rMEvt, sal_uInt16 nMouseDownOrMoveOrUp, SdrViewEvent& rVEvt) const;
     SdrHitKind PickAnything(const Point& rLogicPos, SdrViewEvent& rVEvt) const;
-    sal_Bool DoMouseEvent(const SdrViewEvent& rVEvt);
+    bool DoMouseEvent(const SdrViewEvent& rVEvt);
     virtual SdrViewContext GetContext() const;
 
     // Die Methoden beruecksichtigen den jeweiligen Kontex:
@@ -237,7 +237,7 @@ public:
     //   bAddMark=TRUE: zur bestehenden Selektion hinzumarkieren (->Shift)
     //   bUnmark=TRUE: Bereits selektierte Objekte/Punkte/Klebepunkte die innerhalb
     //                 des aufgezogenen Rahmens liegen werden deselektiert.
-    sal_Bool BegMark(const Point& rPnt, sal_Bool bAddMark=sal_False, sal_Bool bUnmark=sal_False);
+    bool BegMark(const Point& rPnt, bool bAddMark=false, bool bUnmark=false);
 
     // Folgende Actions sind moeglich:
     //   - ObjectCreating

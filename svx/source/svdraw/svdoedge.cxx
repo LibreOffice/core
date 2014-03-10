@@ -1018,7 +1018,7 @@ XPolygon SdrEdgeObj::ImpCalcEdgeTrack(const Point& rPt1, long nAngle1, const Rec
                     if (aBewR1.Right()>aBewR2.Left()) {
                         /* Cases 2.8, 2.9:
                              Case 2.8: always going around on the outside
-                             (bDirect=sal_False).
+                             (bDirect=false).
 
                              Case 2.9 could also be a direct connection (in the
                              case that the BewareRects overlap only slightly and
@@ -1079,7 +1079,7 @@ XPolygon SdrEdgeObj::ImpCalcEdgeTrack(const Point& rPt1, long nAngle1, const Rec
                     // overlap on y axis; cases 2.1, 2.8, 2.9
                     if (aBewR1.Bottom()>aBewR2.Top()) {
                         /* Cases 2.8, 2.9
-                           Case 2.8 always going around on the outside (bDirect=sal_False).
+                           Case 2.8 always going around on the outside (bDirect=false).
 
                            Case 2.9 could also be a direct connection (in the
                            case that the BewareRects overlap only slightly and
@@ -1753,10 +1753,10 @@ SdrHdl* SdrEdgeObj::GetHdl(sal_uInt32 nHdlNum) const
     if (nPntAnz!=0) {
         if (nHdlNum==0) {
             pHdl=new ImpEdgeHdl((*pEdgeTrack)[0],HDL_POLY);
-            if (aCon1.pObj!=NULL && aCon1.bBestVertex) pHdl->Set1PixMore(sal_True);
+            if (aCon1.pObj!=NULL && aCon1.bBestVertex) pHdl->Set1PixMore(true);
         } else if (nHdlNum==1) {
             pHdl=new ImpEdgeHdl((*pEdgeTrack)[sal_uInt16(nPntAnz-1)],HDL_POLY);
-            if (aCon2.pObj!=NULL && aCon2.bBestVertex) pHdl->Set1PixMore(sal_True);
+            if (aCon2.pObj!=NULL && aCon2.bBestVertex) pHdl->Set1PixMore(true);
         } else {
             SdrEdgeKind eKind=((SdrEdgeKindItem&)(GetObjectItem(SDRATTR_EDGEKIND))).GetValue();
             if (eKind==SDREDGE_ORTHOLINES || eKind==SDREDGE_BEZIER) {
@@ -2368,11 +2368,11 @@ void SdrEdgeObj::NbcShear(const Point& rRef, long nWink, double tn, bool bVShear
     }
 }
 
-SdrObject* SdrEdgeObj::DoConvertToPolyObj(sal_Bool bBezier, bool bAddText) const
+SdrObject* SdrEdgeObj::DoConvertToPolyObj(bool bBezier, bool bAddText) const
 {
     basegfx::B2DPolyPolygon aPolyPolygon;
     aPolyPolygon.append(pEdgeTrack->getB2DPolygon());
-    SdrObject* pRet = ImpConvertMakeObj(aPolyPolygon, sal_False, bBezier);
+    SdrObject* pRet = ImpConvertMakeObj(aPolyPolygon, false, bBezier);
 
     if(bAddText)
     {
@@ -2395,9 +2395,9 @@ Point SdrEdgeObj::GetSnapPoint(sal_uInt32 i) const
     else return (*pEdgeTrack)[nAnz-1];
 }
 
-sal_Bool SdrEdgeObj::IsPolyObj() const
+bool SdrEdgeObj::IsPolyObj() const
 {
-    return sal_False;
+    return false;
 }
 
 sal_uInt32 SdrEdgeObj::GetPointCount() const
@@ -2477,7 +2477,7 @@ void SdrEdgeObj::RestGeoData(const SdrObjGeoData& rGeo)
     aEdgeInfo      =rEGeo.aEdgeInfo;
 }
 
-Point SdrEdgeObj::GetTailPoint( sal_Bool bTail ) const
+Point SdrEdgeObj::GetTailPoint( bool bTail ) const
 {
     if( pEdgeTrack && pEdgeTrack->GetPointCount()!=0)
     {
@@ -2502,7 +2502,7 @@ Point SdrEdgeObj::GetTailPoint( sal_Bool bTail ) const
 
 }
 
-void SdrEdgeObj::SetTailPoint( sal_Bool bTail, const Point& rPt )
+void SdrEdgeObj::SetTailPoint( bool bTail, const Point& rPt )
 {
     ImpSetTailPoint( bTail, rPt );
     SetChanged();
@@ -2513,7 +2513,7 @@ void SdrEdgeObj::SetTailPoint( sal_Bool bTail, const Point& rPt )
     0 <= nId <= 3 : One of the default points is chosen
     nId >= 4 :      A user defined glue point is chosen
 */
-void SdrEdgeObj::setGluePointIndex( sal_Bool bTail, sal_Int32 nIndex /* = -1 */ )
+void SdrEdgeObj::setGluePointIndex( bool bTail, sal_Int32 nIndex /* = -1 */ )
 {
     Rectangle aBoundRect0; if (pUserCall!=NULL) aBoundRect0=GetCurrentBoundRect();
 
@@ -2547,7 +2547,7 @@ void SdrEdgeObj::setGluePointIndex( sal_Bool bTail, sal_Int32 nIndex /* = -1 */ 
 
 /** this method is used by the api to return a glue point id for a connection.
     See setGluePointId for possible return values */
-sal_Int32 SdrEdgeObj::getGluePointIndex( sal_Bool bTail )
+sal_Int32 SdrEdgeObj::getGluePointIndex( bool bTail )
 {
     SdrObjConnection& rConn1 = GetConnection( bTail );
     sal_Int32 nId = -1;
@@ -2570,7 +2570,7 @@ void SdrEdgeObj::NbcSetAnchorPos(const Point& rPnt)
     ImpDirtyEdgeTrack();
 }
 
-sal_Bool SdrEdgeObj::TRGetBaseGeometry(basegfx::B2DHomMatrix& rMatrix, basegfx::B2DPolyPolygon& rPolyPolygon) const
+bool SdrEdgeObj::TRGetBaseGeometry(basegfx::B2DHomMatrix& rMatrix, basegfx::B2DPolyPolygon& rPolyPolygon) const
 {
     // use base method from SdrObject, it's not rotatable and
     // a call to GetSnapRect() is used. That's what we need for Connector.

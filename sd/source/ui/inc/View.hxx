@@ -119,11 +119,11 @@ public:
     inline SdDrawDocument& GetDoc (void) const;
     inline ViewShell* GetViewShell (void) const;
 
-    virtual sal_Bool SdrBeginTextEdit(SdrObject* pObj, SdrPageView* pPV = 0L, ::Window* pWin = 0L, sal_Bool bIsNewObj = sal_False,
+    virtual bool SdrBeginTextEdit(SdrObject* pObj, SdrPageView* pPV = 0L, ::Window* pWin = 0L, bool bIsNewObj = false,
         SdrOutliner* pGivenOutliner = 0L, OutlinerView* pGivenOutlinerView = 0L,
-        sal_Bool bDontDeleteOutliner = sal_False, sal_Bool bOnlyOneView = sal_False, sal_Bool bGrabFocus = sal_True);
+        bool bDontDeleteOutliner = false, bool bOnlyOneView = false, bool bGrabFocus = true);
 
-    virtual SdrEndTextEditKind SdrEndTextEdit(sal_Bool bDontDeleteReally = sal_False);
+    virtual SdrEndTextEditKind SdrEndTextEdit(bool bDontDeleteReally = false);
 
     bool RestoreDefaultText( SdrTextObj* pTextObj );
 
@@ -170,7 +170,7 @@ public:
     virtual void onAccessibilityOptionsChanged();
 
     virtual SdrModel*   GetMarkedObjModel() const;
-    virtual sal_Bool        Paste(const SdrModel& rMod, const Point& rPos, SdrObjList* pLst=NULL, sal_uInt32 nOptions=0);
+    virtual bool        Paste(const SdrModel& rMod, const Point& rPos, SdrObjList* pLst=NULL, sal_uInt32 nOptions=0);
     using SdrExchangeView::Paste;
 
     /** returns true if we have an undo manager and there is an open list undo action */
@@ -183,12 +183,12 @@ public:
     void updateHandles();
 
     virtual SdrViewContext GetContext() const;
-    virtual sal_Bool HasMarkablePoints() const;
+    virtual bool HasMarkablePoints() const;
     virtual sal_uLong GetMarkablePointCount() const;
-    virtual sal_Bool HasMarkedPoints() const;
+    virtual bool HasMarkedPoints() const;
     virtual sal_uLong GetMarkedPointCount() const;
-    virtual sal_Bool IsPointMarkable(const SdrHdl& rHdl) const;
-    virtual sal_Bool MarkPoint(SdrHdl& rHdl, sal_Bool bUnmark=sal_False);
+    virtual bool IsPointMarkable(const SdrHdl& rHdl) const;
+    virtual bool MarkPoint(SdrHdl& rHdl, bool bUnmark=false);
     virtual void CheckPossibilities();
     virtual sal_Bool MarkPoints(const ::Rectangle* pRect, sal_Bool bUnmark);
     using SdrMarkView::MarkPoints;

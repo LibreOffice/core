@@ -532,7 +532,7 @@ void SwDrawShell::ExecFormText(SfxRequest& rReq)
 
         if ( pDrView->IsTextEdit() )
         {
-            pDrView->SdrEndTextEdit( sal_True );
+            pDrView->SdrEndTextEdit( true );
             GetView().AttrChangedNotify(&rSh);
         }
 

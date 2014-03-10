@@ -50,7 +50,7 @@ static void ImplUnmarkObject( SdrObject* pObj )
     SdrViewIter aIter( pObj );
     for ( SdrView* pView = aIter.FirstView(); pView; pView = aIter.NextView() )
     {
-        pView->MarkObj( pObj, pView->GetSdrPageView(), sal_True );
+        pView->MarkObj( pObj, pView->GetSdrPageView(), true );
     }
 }
 
@@ -150,12 +150,12 @@ bool SdrUndoGroup::CanSdrRepeat(SdrView& rView) const
     {
     case SDRREPFUNC_OBJ_NONE            :  return false;
     case SDRREPFUNC_OBJ_DELETE          :  return rView.AreObjectsMarked();
-    case SDRREPFUNC_OBJ_COMBINE_POLYPOLY:  return rView.IsCombinePossible(sal_False);
-    case SDRREPFUNC_OBJ_COMBINE_ONEPOLY :  return rView.IsCombinePossible(sal_True);
-    case SDRREPFUNC_OBJ_DISMANTLE_POLYS :  return rView.IsDismantlePossible(sal_False);
-    case SDRREPFUNC_OBJ_DISMANTLE_LINES :  return rView.IsDismantlePossible(sal_True);
-    case SDRREPFUNC_OBJ_CONVERTTOPOLY   :  return rView.IsConvertToPolyObjPossible(sal_False);
-    case SDRREPFUNC_OBJ_CONVERTTOPATH   :  return rView.IsConvertToPathObjPossible(sal_False);
+    case SDRREPFUNC_OBJ_COMBINE_POLYPOLY:  return rView.IsCombinePossible(false);
+    case SDRREPFUNC_OBJ_COMBINE_ONEPOLY :  return rView.IsCombinePossible(true);
+    case SDRREPFUNC_OBJ_DISMANTLE_POLYS :  return rView.IsDismantlePossible(false);
+    case SDRREPFUNC_OBJ_DISMANTLE_LINES :  return rView.IsDismantlePossible(true);
+    case SDRREPFUNC_OBJ_CONVERTTOPOLY   :  return rView.IsConvertToPolyObjPossible(false);
+    case SDRREPFUNC_OBJ_CONVERTTOPATH   :  return rView.IsConvertToPathObjPossible(false);
     case SDRREPFUNC_OBJ_GROUP           :  return rView.IsGroupPossible();
     case SDRREPFUNC_OBJ_UNGROUP         :  return rView.IsUnGroupPossible();
     case SDRREPFUNC_OBJ_PUTTOTOP        :  return rView.IsToTopPossible();
@@ -175,12 +175,12 @@ void SdrUndoGroup::SdrRepeat(SdrView& rView)
     {
     case SDRREPFUNC_OBJ_NONE            :  break;
     case SDRREPFUNC_OBJ_DELETE          :  rView.DeleteMarked();                break;
-    case SDRREPFUNC_OBJ_COMBINE_POLYPOLY:  rView.CombineMarkedObjects(sal_False);   break;
-    case SDRREPFUNC_OBJ_COMBINE_ONEPOLY :  rView.CombineMarkedObjects(sal_True);    break;
-    case SDRREPFUNC_OBJ_DISMANTLE_POLYS :  rView.DismantleMarkedObjects(sal_False); break;
-    case SDRREPFUNC_OBJ_DISMANTLE_LINES :  rView.DismantleMarkedObjects(sal_True);  break;
-    case SDRREPFUNC_OBJ_CONVERTTOPOLY   :  rView.ConvertMarkedToPolyObj(sal_False); break;
-    case SDRREPFUNC_OBJ_CONVERTTOPATH   :  rView.ConvertMarkedToPathObj(sal_False); break;
+    case SDRREPFUNC_OBJ_COMBINE_POLYPOLY:  rView.CombineMarkedObjects(false);   break;
+    case SDRREPFUNC_OBJ_COMBINE_ONEPOLY :  rView.CombineMarkedObjects(true);    break;
+    case SDRREPFUNC_OBJ_DISMANTLE_POLYS :  rView.DismantleMarkedObjects(false); break;
+    case SDRREPFUNC_OBJ_DISMANTLE_LINES :  rView.DismantleMarkedObjects(true);  break;
+    case SDRREPFUNC_OBJ_CONVERTTOPOLY   :  rView.ConvertMarkedToPolyObj(false); break;
+    case SDRREPFUNC_OBJ_CONVERTTOPATH   :  rView.ConvertMarkedToPathObj(false); break;
     case SDRREPFUNC_OBJ_GROUP           :  rView.GroupMarked();                 break;
     case SDRREPFUNC_OBJ_UNGROUP         :  rView.UnGroupMarked();               break;
     case SDRREPFUNC_OBJ_PUTTOTOP        :  rView.PutMarkedToTop();              break;
@@ -527,7 +527,7 @@ void SdrUndoAttrObj::SdrRepeat(SdrView& rView)
 {
     if(pRepeatSet)
     {
-        rView.SetAttrToMarked(*pRepeatSet, sal_False);
+        rView.SetAttrToMarked(*pRepeatSet, false);
     }
 }
 
@@ -1164,7 +1164,7 @@ SdrUndoObjSetText::SdrUndoObjSetText(SdrObject& rNewObj, sal_Int32 nText)
     , pOldText(NULL)
     , pNewText(NULL)
     , bNewTextAvailable(false)
-    , bEmptyPresObj(sal_False)
+    , bEmptyPresObj(false)
     , mnText(nText)
 {
     SdrText* pText = static_cast< SdrTextObj*>( &rNewObj )->getText(mnText);
@@ -1739,7 +1739,7 @@ OUString SdrUndoPageRemoveMasterPage::GetComment() const
 
 SdrUndoPageChangeMasterPage::SdrUndoPageChangeMasterPage(SdrPage& rChangedPage)
 :   SdrUndoPageMasterPage(rChangedPage),
-    mbNewHadMasterPage(sal_False)
+    mbNewHadMasterPage(false)
 {
 }
 
@@ -1748,7 +1748,7 @@ void SdrUndoPageChangeMasterPage::Undo()
     // remember values from new page
     if(mrPage.TRG_HasMasterPage())
     {
-        mbNewHadMasterPage = sal_True;
+        mbNewHadMasterPage = true;
         maNewSet = mrPage.TRG_GetMasterPageVisibleLayers();
         maNewMasterPageNumber = mrPage.TRG_GetMasterPage().GetPageNum();
     }

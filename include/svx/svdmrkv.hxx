@@ -159,15 +159,15 @@ protected:
     virtual SdrObject* CheckSingleSdrObjectHit(const Point& rPnt, sal_uInt16 nTol, SdrObject* pObj, SdrPageView* pPV, sal_uIntPtr nOptions, const SetOfByte* pMVisLay) const;
     virtual SdrObject* CheckSingleSdrObjectHit(const Point& rPnt, sal_uInt16 nTol, SdrObjList* pOL, SdrPageView* pPV, sal_uIntPtr nOptions, const SetOfByte* pMVisLay, SdrObject*& rpRootObj) const;
     virtual SdrObject* CheckSingleSdrObjectHit(const Point& rPnt, sal_uInt16 nTol, SdrObjList* pOL, SdrPageView* pPV, sal_uIntPtr nOptions, const SetOfByte* pMVisLay, SdrObject*& rpRootObj,const SdrMarkList * pMarkList) const;
-    sal_Bool ImpIsFrameHandles() const;
+    bool ImpIsFrameHandles() const;
     void ImpTakeDescriptionStr(sal_uInt16 nStrCacheID, OUString& rStr, sal_uInt16 nVal=0, sal_uInt16 nOpt=0) const;
 
     // Generates a string including degrees symbol, from an angel specification in 1/100deg
-    sal_Bool ImpMarkPoint(SdrHdl* pHdl, SdrMark* pMark, sal_Bool bUnmark);
-    virtual sal_Bool MarkPoints(const Rectangle* pRect, sal_Bool bUnmark);
-    sal_Bool MarkGluePoints(const Rectangle* pRect, sal_Bool bUnmark);
+    bool ImpMarkPoint(SdrHdl* pHdl, SdrMark* pMark, bool bUnmark);
+    virtual bool MarkPoints(const Rectangle* pRect, bool bUnmark);
+    bool MarkGluePoints(const Rectangle* pRect, bool bUnmark);
 
-    void SetMoveOutside(sal_Bool bOn);
+    void SetMoveOutside(bool bOn);
 
 protected:
     // #i71538# make constructors of SdrView sub-components protected to avoid incomplete incarnations which may get casted to SdrView
@@ -175,7 +175,7 @@ protected:
     virtual ~SdrMarkView();
 
 public:
-    virtual sal_Bool IsAction() const;
+    virtual bool IsAction() const;
     virtual void MovAction(const Point& rPnt);
     virtual void EndAction();
     virtual void BckAction();
@@ -184,27 +184,27 @@ public:
 
     virtual void ClearPageView();
     virtual void HideSdrPage();
-    virtual sal_Bool IsObjMarkable(SdrObject* pObj, SdrPageView* pPV) const;
+    virtual bool IsObjMarkable(SdrObject* pObj, SdrPageView* pPV) const;
 
     // Returns sal_True if objects, points or glue points are selected by drawing a frame
     // (as long as the frame is drawn).
-    sal_Bool IsMarking() const { return IsMarkObj() || IsMarkPoints() || IsMarkGluePoints(); }
+    bool IsMarking() const { return IsMarkObj() || IsMarkPoints() || IsMarkGluePoints(); }
 
     // Marking objects by drawing of a selection frame
-    sal_Bool BegMarkObj(const Point& rPnt, sal_Bool bUnmark = sal_False);
+    bool BegMarkObj(const Point& rPnt, bool bUnmark = false);
     void MovMarkObj(const Point& rPnt);
-    sal_Bool EndMarkObj();
+    bool EndMarkObj();
     void BrkMarkObj();
-    sal_Bool IsMarkObj() const { return (0L != mpMarkObjOverlay); }
+    bool IsMarkObj() const { return (0L != mpMarkObjOverlay); }
 
     // DragModes: SDRDRAG_CREATE,SDRDRAG_MOVE,SDRDRAG_RESIZE,SDRDRAG_ROTATE,SDRDRAG_MIRROR,SDRDRAG_SHEAR,SDRDRAG_CROOK
     // Move==Resize
     // The interface might maybe be changed in the future because of Ortho-Drag
     void SetDragMode(SdrDragMode eMode);
     SdrDragMode GetDragMode() const { return eDragMode; }
-    sal_Bool ChkDragMode(SdrDragMode eMode) const;
+    bool ChkDragMode(SdrDragMode eMode) const;
     void SetFrameHandles(bool bOn);
-    sal_Bool IsFrameHandles() const { return bForceFrameHandles; }
+    bool IsFrameHandles() const { return bForceFrameHandles; }
 
     sal_uIntPtr GetMarkableObjCount() const;
 
@@ -215,20 +215,20 @@ public:
     void SetEditMode(SdrViewEditMode eMode);
     SdrViewEditMode GetEditMode() const { return eEditMode; }
 
-    void SetEditMode(sal_Bool bOn=sal_True) { SetEditMode(bOn?SDREDITMODE_EDIT:SDREDITMODE_CREATE); }
-    sal_Bool IsEditMode() const { return eEditMode==SDREDITMODE_EDIT; }
-    void SetCreateMode(sal_Bool bOn=sal_True) { SetEditMode(bOn?SDREDITMODE_CREATE:SDREDITMODE_EDIT); }
-    sal_Bool IsCreateMode() const { return eEditMode==SDREDITMODE_CREATE; }
-    void SetGluePointEditMode(sal_Bool bOn=sal_True) { SetEditMode(bOn?SDREDITMODE_GLUEPOINTEDIT:eEditMode0); }
-    sal_Bool IsGluePointEditMode() const { return eEditMode==SDREDITMODE_GLUEPOINTEDIT; }
+    void SetEditMode(bool bOn=true) { SetEditMode(bOn?SDREDITMODE_EDIT:SDREDITMODE_CREATE); }
+    bool IsEditMode() const { return eEditMode==SDREDITMODE_EDIT; }
+    void SetCreateMode(bool bOn=true) { SetEditMode(bOn?SDREDITMODE_CREATE:SDREDITMODE_EDIT); }
+    bool IsCreateMode() const { return eEditMode==SDREDITMODE_CREATE; }
+    void SetGluePointEditMode(bool bOn=true) { SetEditMode(bOn?SDREDITMODE_GLUEPOINTEDIT:eEditMode0); }
+    bool IsGluePointEditMode() const { return eEditMode==SDREDITMODE_GLUEPOINTEDIT; }
 
     void SetDesignMode(bool bOn = true);
-    sal_Bool IsDesignMode() const { return bDesignMode; }
+    bool IsDesignMode() const { return bDesignMode; }
 
-    void SetFrameDragSingles(sal_Bool bOn=sal_True) { SetFrameHandles(bOn); }
-    sal_Bool IsFrameDragSingles() const { return IsFrameHandles(); }
+    void SetFrameDragSingles(bool bOn=true) { SetFrameHandles(bOn); }
+    bool IsFrameDragSingles() const { return IsFrameHandles(); }
 
-    sal_Bool HasMarkableObj() const;
+    bool HasMarkableObj() const;
 
 
 // migrate selections
@@ -247,12 +247,12 @@ public:
     SdrObject* GetMarkedObjectByIndex(sal_uIntPtr nNum) const { return (GetMarkedObjectList().GetMark(nNum))->GetMarkedSdrObj(); }
     sal_uIntPtr GetMarkedObjectCount() const { return GetMarkedObjectList().GetMarkCount(); }
     void SortMarkedObjects() const { GetMarkedObjectList().ForceSort(); }
-    sal_Bool AreObjectsMarked() const { return (0L != GetMarkedObjectList().GetMarkCount()); }
+    bool AreObjectsMarked() const { return (0L != GetMarkedObjectList().GetMarkCount()); }
     OUString GetDescriptionOfMarkedObjects() const { return GetMarkedObjectList().GetMarkDescription(); }
     OUString GetDescriptionOfMarkedPoints() const { return GetMarkedObjectList().GetPointMarkDescription(); }
     OUString GetDescriptionOfMarkedGluePoints() const { return GetMarkedObjectList().GetGluePointMarkDescription(); }
-    sal_Bool GetBoundRectFromMarkedObjects(SdrPageView* pPageView, Rectangle& rRect) const { return GetMarkedObjectList().TakeBoundRect(pPageView, rRect); }
-    sal_Bool GetSnapRectFromMarkedObjects(SdrPageView* pPageView, Rectangle& rRect) const { return GetMarkedObjectList().TakeSnapRect(pPageView, rRect); }
+    bool GetBoundRectFromMarkedObjects(SdrPageView* pPageView, Rectangle& rRect) const { return GetMarkedObjectList().TakeBoundRect(pPageView, rRect); }
+    bool GetSnapRectFromMarkedObjects(SdrPageView* pPageView, Rectangle& rRect) const { return GetMarkedObjectList().TakeSnapRect(pPageView, rRect); }
 
     // Get a list of all those links which are connected to marked nodes,
     // but which are not marked themselves.
@@ -269,8 +269,8 @@ public:
     void showMarkHandles();
     bool areMarkHandlesHidden() const { return mbMarkHandlesHidden; }
 
-    sal_Bool IsMarkedHit(const Point& rPnt, short nTol=-2) const { return IsMarkedObjHit(rPnt,nTol); }
-    sal_Bool IsMarkedObjHit(const Point& rPnt, short nTol=-2) const;
+    bool IsMarkedHit(const Point& rPnt, short nTol=-2) const { return IsMarkedObjHit(rPnt,nTol); }
+    bool IsMarkedObjHit(const Point& rPnt, short nTol=-2) const;
 
     // Pick: Supported options for nOptions are SEARCH_NEXT, SEARCH_BACKWARD (ni)
     SdrHdl* PickHandle(const Point& rPnt, sal_uIntPtr nOptions=0, SdrHdl* pHdl0=NULL) const;
@@ -279,37 +279,37 @@ public:
     // SDRSEARCH_DEEP SDRSEARCH_ALSOONMASTER SDRSEARCH_TESTMARKABLE SDRSEARCH_TESTTEXTEDIT
     // SDRSEARCH_WITHTEXT SDRSEARCH_TESTTEXTAREA SDRSEARCH_BACKWARD SDRSEARCH_MARKED
     // SDRSEARCH_WHOLEPAGE
-    virtual sal_Bool PickObj(const Point& rPnt, short nTol, SdrObject*& rpObj, SdrPageView*& rpPV, sal_uIntPtr nOptions, SdrObject** ppRootObj, sal_uIntPtr* pnMarkNum=NULL, sal_uInt16* pnPassNum=NULL) const;
-    virtual sal_Bool PickObj(const Point& rPnt, short nTol, SdrObject*& rpObj, SdrPageView*& rpPV, sal_uIntPtr nOptions=0) const;
-    // sal_Bool PickObj(const Point& rPnt, SdrObject*& rpObj, SdrPageView*& rpPV, sal_uIntPtr nOptions=0) const { return PickObj(rPnt,nHitTolLog,rpObj,rpPV,nOptions); }
-    sal_Bool MarkObj(const Point& rPnt, short nTol=-2, sal_Bool bToggle=sal_False, sal_Bool bDeep=sal_False);
+    virtual bool PickObj(const Point& rPnt, short nTol, SdrObject*& rpObj, SdrPageView*& rpPV, sal_uIntPtr nOptions, SdrObject** ppRootObj, sal_uIntPtr* pnMarkNum=NULL, sal_uInt16* pnPassNum=NULL) const;
+    virtual bool PickObj(const Point& rPnt, short nTol, SdrObject*& rpObj, SdrPageView*& rpPV, sal_uIntPtr nOptions=0) const;
+    // bool PickObj(const Point& rPnt, SdrObject*& rpObj, SdrPageView*& rpPV, sal_uIntPtr nOptions=0) const { return PickObj(rPnt,nHitTolLog,rpObj,rpPV,nOptions); }
+    bool MarkObj(const Point& rPnt, short nTol=-2, bool bToggle=false, bool bDeep=false);
 
     // Pick: Supported options for nOptions are SDRSEARCH_PASS2BOUND und SDRSEARCH_PASS3NEAREST
-    sal_Bool PickMarkedObj(const Point& rPnt, SdrObject*& rpObj, SdrPageView*& rpPV, sal_uIntPtr* pnMarkNum=NULL, sal_uIntPtr nOptions=0) const;
+    bool PickMarkedObj(const Point& rPnt, SdrObject*& rpObj, SdrPageView*& rpPV, sal_uIntPtr* pnMarkNum=NULL, sal_uIntPtr nOptions=0) const;
 
     // Selects the most upper of the marked objects (O1) and scans from there
     // towards bottom direction, selecting the first non-marked object (O2).
     // In case of success the marking of O1 is deleted, a marking is created at
     // O2 and TRUE is returned. With the parameter bPrev=sal_True the scan
     // direction is turned to the other direction.
-    sal_Bool MarkNextObj(sal_Bool bPrev=sal_False);
+    bool MarkNextObj(bool bPrev=false);
 
     // Selects the most upper of the marked objects which is hit by rPnt/nTol
     // and scans from there to bottom direction, selecting the first non-marked
     // object (O2). In case of success the marking of O1 is deleted, a marking
     // is created at O2 and sal_True is returned. With the parameter
     // bPrev=sal_True the scan direction is turned to the other direction.
-    sal_Bool MarkNextObj(const Point& rPnt, short nTol=-2, sal_Bool bPrev=sal_False);
+    bool MarkNextObj(const Point& rPnt, short nTol=-2, bool bPrev=false);
 
     // Mark all objects within a rectangular area
     // Just objects are marked which are inclosed completely
-    sal_Bool MarkObj(const Rectangle& rRect, sal_Bool bUnmark=sal_False);
-    void MarkObj(SdrObject* pObj, SdrPageView* pPV, sal_Bool bUnmark=sal_False, sal_Bool bImpNoSetMarkHdl=sal_False);
+    bool MarkObj(const Rectangle& rRect, bool bUnmark=false);
+    void MarkObj(SdrObject* pObj, SdrPageView* pPV, bool bUnmark=false, bool bImpNoSetMarkHdl=false);
     void MarkAllObj(SdrPageView* pPV=NULL); // pPage=NULL => all displayed pages
     void UnmarkAllObj(SdrPageView* pPV=NULL); // pPage=NULL => all displayed pages
 
     // This function is time-consuming intensive, as the MarkList has to be scanned.
-    sal_Bool IsObjMarked(SdrObject* pObj) const;
+    bool IsObjMarked(SdrObject* pObj) const;
     // void MarkAll(SdrPageView* pPV=NULL) { MarkAllObj(pPV); } -> replace with inline
     void UnMarkAll(SdrPageView* pPV=NULL) { UnmarkAllObj(pPV); }
 
@@ -320,33 +320,33 @@ public:
     sal_uInt16 GetMarkHdlSizePixel() const;
     void SetMarkHdlSizePixel(sal_uInt16 nSiz);
 
-    virtual sal_Bool HasMarkablePoints() const;
+    virtual bool HasMarkablePoints() const;
     virtual sal_uIntPtr GetMarkablePointCount() const;
-    virtual sal_Bool HasMarkedPoints() const;
+    virtual bool HasMarkedPoints() const;
     virtual sal_uIntPtr GetMarkedPointCount() const;
 
     // There might be points which can't be marked:
-    virtual sal_Bool IsPointMarkable(const SdrHdl& rHdl) const;
-    virtual sal_Bool MarkPoint(SdrHdl& rHdl, sal_Bool bUnmark=sal_False);
+    virtual bool IsPointMarkable(const SdrHdl& rHdl) const;
+    virtual bool MarkPoint(SdrHdl& rHdl, bool bUnmark=false);
 
     /** should only be used from outside svx for special ui elements */
-    sal_Bool MarkPointHelper(SdrHdl* pHdl, SdrMark* pMark, sal_Bool bUnmark);
+    bool MarkPointHelper(SdrHdl* pHdl, SdrMark* pMark, bool bUnmark);
 
     // Mark all points within this rectangular alle Punkte (View coordinates)
-    sal_Bool MarkPoints(const Rectangle& rRect, sal_Bool bUnmark=sal_False) { return MarkPoints(&rRect,bUnmark); }
-    sal_Bool UnmarkPoint(SdrHdl& rHdl) { return MarkPoint(rHdl,sal_True); }
-    sal_Bool UnMarkPoint(SdrHdl& rHdl) { return MarkPoint(rHdl,sal_True); }
-    sal_Bool IsPointMarked(const SdrHdl& rHdl) const { ForceUndirtyMrkPnt(); return &rHdl!=NULL && rHdl.IsSelected(); }
-    sal_Bool MarkAllPoints() { return MarkPoints(NULL,sal_False); }
-    sal_Bool UnmarkAllPoints() { return MarkPoints(NULL,sal_True); }
-    sal_Bool UnMarkAllPoints() { return MarkPoints(NULL,sal_True); }
+    bool MarkPoints(const Rectangle& rRect, bool bUnmark=false) { return MarkPoints(&rRect,bUnmark); }
+    bool UnmarkPoint(SdrHdl& rHdl) { return MarkPoint(rHdl,true); }
+    bool UnMarkPoint(SdrHdl& rHdl) { return MarkPoint(rHdl,true); }
+    bool IsPointMarked(const SdrHdl& rHdl) const { ForceUndirtyMrkPnt(); return &rHdl!=NULL && rHdl.IsSelected(); }
+    bool MarkAllPoints() { return MarkPoints(NULL,false); }
+    bool UnmarkAllPoints() { return MarkPoints(NULL,true); }
+    bool UnMarkAllPoints() { return MarkPoints(NULL,true); }
 
     // Selects the first marked point (P1) which is hit by rPnt
     // and from there it searches the first non-marked point(P2).
     // In case of success the marking of
     // P1 is deleted, a mark is set at P2 and sal_True is returned.
     // With the parameter bPrev=sal_True the scan direction is turned to the other direction.
-    sal_Bool MarkNextPoint(const Point& rPnt, sal_Bool bPrev=sal_False);
+    bool MarkNextPoint(const Point& rPnt, bool bPrev=false);
 
     // Search for the number of the suitable handle. In case of empty search result,
     // CONTAINER_ENTRY_NOTFOUND is returned.
@@ -356,23 +356,23 @@ public:
 
     // Draw a selection frame for marking of points.
     // This routine will just be started in case that HasMarkablePoints() returns sal_True.
-    sal_Bool BegMarkPoints(const Point& rPnt, sal_Bool bUnmark = sal_False);
+    bool BegMarkPoints(const Point& rPnt, bool bUnmark = false);
     void MovMarkPoints(const Point& rPnt);
-    sal_Bool EndMarkPoints();
+    bool EndMarkPoints();
     void BrkMarkPoints();
-    sal_Bool IsMarkPoints() const { return (0L != mpMarkPointsOverlay); }
+    bool IsMarkPoints() const { return (0L != mpMarkPointsOverlay); }
 
     // Select that additional handles are displayed permanently.
     void SetPlusHandlesAlwaysVisible(bool bOn);
-    sal_Bool IsPlusHandlesAlwaysVisible() const { return bPlusHdlAlways; }
+    bool IsPlusHandlesAlwaysVisible() const { return bPlusHdlAlways; }
 
     // Are Handles visible during TextEdit (in double size)?
     // Persistent, default=FALSE
-    void SetMarkHdlWhenTextEdit(sal_Bool bOn) { bMarkHdlWhenTextEdit=bOn; }
-    sal_Bool IsMarkHdlWhenTextEdit() const { return bMarkHdlWhenTextEdit; }
+    void SetMarkHdlWhenTextEdit(bool bOn) { bMarkHdlWhenTextEdit=bOn; }
+    bool IsMarkHdlWhenTextEdit() const { return bMarkHdlWhenTextEdit; }
 
-    sal_Bool HasMarkableGluePoints() const;
-    sal_Bool HasMarkedGluePoints() const;
+    bool HasMarkableGluePoints() const;
+    bool HasMarkedGluePoints() const;
 
     // A gluepoint is clearly identified by the SdrObject
     // (to which it belongs) as well as by a sal_uInt16 nId (as each SdrObject may consist of
@@ -385,38 +385,38 @@ public:
     // Attention: With each change of the glue point status the handle list is re-calculated.
     // All previously saved SdrHdl* became invalid by this, the same with the point IDs!
     // Pick: Supported options for nOptions are SEARCH_NEXT, SEARCH_BACKWARD
-    sal_Bool PickGluePoint(const Point& rPnt, SdrObject*& rpObj, sal_uInt16& rnId, SdrPageView*& rpPV, sal_uIntPtr nOptions=0) const;
-    sal_Bool MarkGluePoint(const SdrObject* pObj, sal_uInt16 nId, const SdrPageView* pPV, sal_Bool bUnmark=sal_False);
-    sal_Bool UnmarkGluePoint(const SdrObject* pObj, sal_uInt16 nId, const SdrPageView* pPV) { return MarkGluePoint(pObj,nId,pPV,sal_True); }
-    sal_Bool IsGluePointMarked(const SdrObject* pObj, sal_uInt16 nId) const;
+    bool PickGluePoint(const Point& rPnt, SdrObject*& rpObj, sal_uInt16& rnId, SdrPageView*& rpPV, sal_uIntPtr nOptions=0) const;
+    bool MarkGluePoint(const SdrObject* pObj, sal_uInt16 nId, const SdrPageView* pPV, bool bUnmark=false);
+    bool UnmarkGluePoint(const SdrObject* pObj, sal_uInt16 nId, const SdrPageView* pPV) { return MarkGluePoint(pObj,nId,pPV,true); }
+    bool IsGluePointMarked(const SdrObject* pObj, sal_uInt16 nId) const;
 
     // Get the Hdl (handle) of a marked GluePoint. Non-marked
     // GluePoints don`t have handles
     SdrHdl* GetGluePointHdl(const SdrObject* pObj, sal_uInt16 nId) const;
-    sal_Bool IsGluePoint(const SdrHdl& rHdl) const { return &rHdl!=NULL && rHdl.GetKind()==HDL_GLUE; }
+    bool IsGluePoint(const SdrHdl& rHdl) const { return &rHdl!=NULL && rHdl.GetKind()==HDL_GLUE; }
 
     // Mark all points within this rectangular (View coordinates)
-    sal_Bool MarkGluePoints(const Rectangle& rRect) { return MarkGluePoints(&rRect,sal_False); }
-    sal_Bool UnmarkGluePoints(const Rectangle& rRect) { return MarkGluePoints(&rRect,sal_True); }
-    sal_Bool MarkAllGluePoints() { return MarkGluePoints(NULL,sal_False); }
-    sal_Bool UnmarkAllGluePoints() { return MarkGluePoints(NULL,sal_True); }
+    bool MarkGluePoints(const Rectangle& rRect) { return MarkGluePoints(&rRect,false); }
+    bool UnmarkGluePoints(const Rectangle& rRect) { return MarkGluePoints(&rRect,true); }
+    bool MarkAllGluePoints() { return MarkGluePoints(NULL,false); }
+    bool UnmarkAllGluePoints() { return MarkGluePoints(NULL,true); }
 
     // Selects the first marked point (P1) which is hit by rPnt
     // and from there it searches the first non-marked point(P2).
     // In case of success the marking of
     // P1 is deleted, a mark is set at P2 and sal_True is returned.
     // With the parameter bPrev=sal_True the scan direction is turned to the other direction.
-    sal_Bool MarkNextGluePoint(const Point& rPnt, sal_Bool bPrev=sal_False);
+    bool MarkNextGluePoint(const Point& rPnt, bool bPrev=false);
 
     // Draw a selection frame for glue point marking.
     // This routine will just be started in case that HasMarkablePoints() returns sal_True.
     // The GlueEditMode sal_True is disregarded.
-    // sal_Bool BegMarkGluePoints(const Point& rPnt, OutputDevice* pOut);
-    sal_Bool BegMarkGluePoints(const Point& rPnt, sal_Bool bUnmark = sal_False);
+    // bool BegMarkGluePoints(const Point& rPnt, OutputDevice* pOut);
+    bool BegMarkGluePoints(const Point& rPnt, bool bUnmark = false);
     void MovMarkGluePoints(const Point& rPnt);
-    sal_Bool EndMarkGluePoints();
+    bool EndMarkGluePoints();
     void BrkMarkGluePoints();
-    sal_Bool IsMarkGluePoints() const { return (0L != mpMarkGluePointsOverlay); }
+    bool IsMarkGluePoints() const { return (0L != mpMarkGluePointsOverlay); }
 
     // bRestraintPaint=sal_False causes the handles not to be drawn immediately.
     // AdjustMarkHdl is just called in case of changes; usually this causes an Invalidate
@@ -444,7 +444,7 @@ public:
     // objects may not be processed in the meantime (until the next
     // LeaveGroup()). With markings which overlaps pages, every page is processed
     // separately. The method returns sal_True, if at least one group was entered.
-    sal_Bool EnterMarkedGroup();
+    bool EnterMarkedGroup();
 
     // Get the center point of the last Crook-Dragging. Den kann man
     // bei einem anschliessenden Rotate sinnvoll als Drehmittelpunkt setzen.

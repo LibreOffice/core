@@ -1420,7 +1420,7 @@ void AssistentDlgImpl::UpdateUserData()
             if( pObj )
             {
                 pPage->SetObjText( pObj, NULL, PRESOBJ_TITLE, aTopic );
-                pObj->NbcSetStyleSheet( pPage->GetStyleSheetForPresObj( PRESOBJ_TITLE ), sal_True );
+                pObj->NbcSetStyleSheet( pPage->GetStyleSheetForPresObj( PRESOBJ_TITLE ), true );
                 pObj->SetEmptyPresObj(false);
             }
 
@@ -1437,7 +1437,7 @@ void AssistentDlgImpl::UpdateUserData()
             if( pObj )
             {
                 pPage->SetObjText( pObj, NULL, PRESOBJ_OUTLINE, aStrTmp );
-                pObj->NbcSetStyleSheet( pPage->GetStyleSheetForPresObj( PRESOBJ_OUTLINE ), sal_True );
+                pObj->NbcSetStyleSheet( pPage->GetStyleSheetForPresObj( PRESOBJ_OUTLINE ), true );
                 pObj->SetEmptyPresObj(false);
             }
             else
@@ -1446,7 +1446,7 @@ void AssistentDlgImpl::UpdateUserData()
                 if( pObj )
                 {
                     pPage->SetObjText( pObj, NULL, PRESOBJ_TEXT, aStrTmp );
-                    pObj->NbcSetStyleSheet( pPage->GetStyleSheetForPresObj( PRESOBJ_TEXT ), sal_True );
+                    pObj->NbcSetStyleSheet( pPage->GetStyleSheetForPresObj( PRESOBJ_TEXT ), true );
                     pObj->SetEmptyPresObj(false);
                 }
             }

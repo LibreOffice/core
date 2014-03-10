@@ -1252,7 +1252,7 @@ void OViewsWindow::EndDragObj(sal_Bool _bControlKeyPressed, const OSectionView* 
                 rReportSection.Copy(aAllreadyCopiedObjects,true);
             }
             else
-                pInSection->EndDragObj(sal_False);
+                pInSection->EndDragObj(false);
         }
 
         if ( aAllreadyCopiedObjects.getLength() )
@@ -1596,7 +1596,7 @@ void OViewsWindow::handleKey(const KeyCode& _rCode)
                         if ( !bWasNoSnap )
                             ((SdrDragStat&)rDragStat).SetNoSnap( true );
                         if ( bWasSnapEnabled )
-                            rView.SetSnapEnabled( sal_False );
+                            rView.SetSnapEnabled( false );
 
                         Rectangle aNewRect;
                         bool bCheck = false;

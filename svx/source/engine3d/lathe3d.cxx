@@ -115,7 +115,7 @@ E3dLatheObj* E3dLatheObj::Clone() const
 
 // Convert the object to group object consisting of n polygons
 
-SdrObject *E3dLatheObj::DoConvertToPolyObj(sal_Bool /*bBezier*/, bool /*bAddText*/) const
+SdrObject *E3dLatheObj::DoConvertToPolyObj(bool /*bBezier*/, bool /*bAddText*/) const
 {
     return NULL;
 }

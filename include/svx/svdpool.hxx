@@ -32,7 +32,7 @@ class XFillAttrSetItem;
 class SVX_DLLPUBLIC SdrItemPool : public XOutdevItemPool
 {
 public:
-    SdrItemPool(SfxItemPool* pMaster = 0L, sal_Bool bLoadRefCounts = sal_True);
+    SdrItemPool(SfxItemPool* pMaster = 0L, bool bLoadRefCounts = true);
     SdrItemPool(const SdrItemPool& rPool);
 protected:
     virtual ~SdrItemPool();

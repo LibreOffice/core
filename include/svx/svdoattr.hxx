@@ -66,10 +66,10 @@ public:
     TYPEINFO();
 
     // Detects if bFilledObj && Fill != FillNone
-    sal_Bool HasFill() const;
+    bool HasFill() const;
 
     // Detects if Line != LineNone
-    sal_Bool HasLine() const;
+    bool HasLine() const;
 
     virtual const Rectangle& GetSnapRect() const;
 

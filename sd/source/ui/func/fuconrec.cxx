@@ -214,7 +214,7 @@ sal_Bool FuConstructRectangle::MouseButtonDown(const MouseEvent& rMEvt)
             pObj->SetMergedItemSet(aAttr);
 
             if( nSlotId == SID_DRAW_CAPTION_VERTICAL )
-                ( (SdrTextObj*) pObj)->SetVerticalWriting( sal_True );
+                ( (SdrTextObj*) pObj)->SetVerticalWriting( true );
         }
     }
     return bReturn;
@@ -890,8 +890,8 @@ SdrObject* FuConstructRectangle::CreateDefaultObject(const sal_uInt16 nID, const
             {
                 if(pObj->ISA(SdrEdgeObj))
                 {
-                    ((SdrEdgeObj*)pObj)->SetTailPoint(sal_False, aStart);
-                    ((SdrEdgeObj*)pObj)->SetTailPoint(sal_True, aEnd);
+                    ((SdrEdgeObj*)pObj)->SetTailPoint(false, aStart);
+                    ((SdrEdgeObj*)pObj)->SetTailPoint(true, aEnd);
                 }
                 else
                 {

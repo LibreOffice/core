@@ -2732,7 +2732,7 @@ void  SwContentTree::KeyInput(const KeyEvent& rEvent)
                                             SdrPageView* pPV = pDrawView->GetSdrPageView/*GetPageViewPvNum*/(/*0*/);
                                             if (pPV)
                                             {
-                                                pDrawView->MarkObj(pTemp, pPV, sal_True);
+                                                pDrawView->MarkObj(pTemp, pPV, true);
                                             }
                                         }
                                 }

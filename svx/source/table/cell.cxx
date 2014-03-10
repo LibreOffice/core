@@ -301,7 +301,7 @@ namespace sdr
         {
             if(pNewItem && (SDRATTR_TEXTDIRECTION == nWhich))
             {
-                sal_Bool bVertical(com::sun::star::text::WritingMode_TB_RL == ((SvxWritingModeItem*)pNewItem)->GetValue());
+                bool bVertical(com::sun::star::text::WritingMode_TB_RL == ((SvxWritingModeItem*)pNewItem)->GetValue());
 
                 sdr::table::SdrTableObj& rObj = (sdr::table::SdrTableObj&)GetSdrObject();
                 if( rObj.IsVerticalWriting() != bVertical )

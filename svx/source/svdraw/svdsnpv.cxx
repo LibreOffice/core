@@ -222,7 +222,7 @@ SdrSnapView::~SdrSnapView()
 
 
 
-sal_Bool SdrSnapView::IsAction() const
+bool SdrSnapView::IsAction() const
 {
     return IsSetPageOrg() || IsDragHelpLine() || SdrPaintView::IsAction();
 }
@@ -424,7 +424,7 @@ sal_uInt16 SdrSnapView::SnapPos(Point& rPnt, const SdrPageView* pPV) const
             dy = 0;
         }
     }
-    sal_Bool bRet=SDRSNAP_NOTSNAPPED;
+    sal_uInt16 bRet=SDRSNAP_NOTSNAPPED;
     if (dx==NOT_SNAPPED) dx=0; else bRet|=SDRSNAP_XSNAPPED;
     if (dy==NOT_SNAPPED) dy=0; else bRet|=SDRSNAP_YSNAPPED;
     rPnt.X()=x+dx;
@@ -461,7 +461,7 @@ void SdrSnapView::CheckSnap(const Point& rPt, const SdrPageView* pPV, long& nBes
 
 
 
-sal_Bool SdrSnapView::BegSetPageOrg(const Point& rPnt)
+bool SdrSnapView::BegSetPageOrg(const Point& rPnt)
 {
     BrkAction();
 
@@ -470,7 +470,7 @@ sal_Bool SdrSnapView::BegSetPageOrg(const Point& rPnt)
     mpPageOriginOverlay = new ImplPageOriginOverlay(*this, aStartPos);
     aDragStat.Reset(GetSnapPos(rPnt,NULL));
 
-    return sal_True;
+    return true;
 }
 
 void SdrSnapView::MovSetPageOrg(const Point& rPnt)
@@ -484,9 +484,9 @@ void SdrSnapView::MovSetPageOrg(const Point& rPnt)
     }
 }
 
-sal_Bool SdrSnapView::EndSetPageOrg()
+bool SdrSnapView::EndSetPageOrg()
 {
-    sal_Bool bRet(sal_False);
+    bool bRet(false);
 
     if(IsSetPageOrg())
     {
@@ -496,7 +496,7 @@ sal_Bool SdrSnapView::EndSetPageOrg()
         {
             Point aPnt(aDragStat.GetNow());
             pPV->SetPageOrigin(aPnt);
-            bRet = sal_True;
+            bRet = true;
         }
 
         // cleanup
@@ -518,7 +518,7 @@ void SdrSnapView::BrkSetPageOrg()
 
 
 
-sal_Bool SdrSnapView::PickHelpLine(const Point& rPnt, short nTol, const OutputDevice& rOut, sal_uInt16& rnHelpLineNum, SdrPageView*& rpPV) const
+bool SdrSnapView::PickHelpLine(const Point& rPnt, short nTol, const OutputDevice& rOut, sal_uInt16& rnHelpLineNum, SdrPageView*& rpPV) const
 {
     rpPV=NULL;
     nTol=ImpGetHitTolLogic(nTol,&rOut);
@@ -531,16 +531,16 @@ sal_Bool SdrSnapView::PickHelpLine(const Point& rPnt, short nTol, const OutputDe
         if (nIndex!=SDRHELPLINE_NOTFOUND) {
             rpPV=pPV;
             rnHelpLineNum=nIndex;
-            return sal_True;
+            return true;
         }
     }
-    return sal_False;
+    return false;
 }
 
 // start HelpLine drag for new HelpLine
-sal_Bool SdrSnapView::BegDragHelpLine(sal_uInt16 nHelpLineNum, SdrPageView* pPV)
+bool SdrSnapView::BegDragHelpLine(sal_uInt16 nHelpLineNum, SdrPageView* pPV)
 {
-    sal_Bool bRet(sal_False);
+    bool bRet(false);
 
     if(!bHlplFixed)
     {
@@ -559,7 +559,7 @@ sal_Bool SdrSnapView::BegDragHelpLine(sal_uInt16 nHelpLineNum, SdrPageView* pPV)
             aDragStat.Reset(GetSnapPos(aHelpLinePos, pPV));
             aDragStat.SetMinMove(ImpGetMinMovLogic(-3, 0L));
 
-            bRet = sal_True;
+            bRet = true;
         }
     }
 
@@ -567,9 +567,9 @@ sal_Bool SdrSnapView::BegDragHelpLine(sal_uInt16 nHelpLineNum, SdrPageView* pPV)
 }
 
 // start HelpLine drag with existing HelpLine
-sal_Bool SdrSnapView::BegDragHelpLine(const Point& rPnt, SdrHelpLineKind eNewKind)
+bool SdrSnapView::BegDragHelpLine(const Point& rPnt, SdrHelpLineKind eNewKind)
 {
-    sal_Bool bRet(sal_False);
+    bool bRet(false);
 
     BrkAction();
 
@@ -579,7 +579,7 @@ sal_Bool SdrSnapView::BegDragHelpLine(const Point& rPnt, SdrHelpLineKind eNewKin
         basegfx::B2DPoint aStartPos(rPnt.X(), rPnt.Y());
         mpHelpLineOverlay = new ImplHelpLineOverlay(*this, aStartPos, 0L, 0, eNewKind);
         aDragStat.Reset(GetSnapPos(rPnt, 0L));
-        bRet = sal_True;
+        bRet = true;
     }
 
     return bRet;
@@ -616,9 +616,9 @@ void SdrSnapView::MovDragHelpLine(const Point& rPnt)
     }
 }
 
-sal_Bool SdrSnapView::EndDragHelpLine()
+bool SdrSnapView::EndDragHelpLine()
 {
-    sal_Bool bRet(sal_False);
+    bool bRet(false);
 
     if(IsDragHelpLine())
     {
@@ -635,7 +635,7 @@ sal_Bool SdrSnapView::EndDragHelpLine()
                 aChangedHelpLine.SetPos(aPnt);
                 pPageView->SetHelpLine(mpHelpLineOverlay->GetHelpLineNumber(), aChangedHelpLine);
 
-                bRet = sal_True;
+                bRet = true;
             }
             else
             {
@@ -648,7 +648,7 @@ sal_Bool SdrSnapView::EndDragHelpLine()
                     SdrHelpLine aNewHelpLine(mpHelpLineOverlay->GetHelpLineKind(), aPnt);
                     pPageView->InsertHelpLine(aNewHelpLine);
 
-                    bRet = sal_True;
+                    bRet = true;
                 }
             }
         }

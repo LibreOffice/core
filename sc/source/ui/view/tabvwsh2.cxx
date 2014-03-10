@@ -213,7 +213,7 @@ void ScTabViewShell::ExecDraw(SfxRequest& rReq)
         {
             // select first object
             pView->UnmarkAllObj();
-            pView->MarkNextObj(sal_True);
+            pView->MarkNextObj(true);
 
             // ...and make it visible
             if(pView->AreObjectsMarked())

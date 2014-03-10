@@ -91,7 +91,7 @@ protected:
     virtual ~SdrSnapView();
 
 public:
-    virtual sal_Bool IsAction() const;
+    virtual bool IsAction() const;
     virtual void MovAction(const Point& rPnt);
     virtual void EndAction();
     virtual void BckAction();
@@ -120,66 +120,66 @@ public:
     void CheckSnap(const Point& rPt, const SdrPageView* pPV, long& nBestXSnap, long& nBestYSnap, bool& bXSnapped, bool& bYSnapped) const;
 
     // Alle Fangeinstellungen sind Persistent.
-    sal_Bool IsSnapEnabled() const { return bSnapEnab; }
-    sal_Bool IsGridSnap() const { return bGridSnap; } // Fang auf Rastergitter
-    sal_Bool IsBordSnap() const { return bBordSnap; } // Fang auf Seitenraender
-    sal_Bool IsHlplSnap() const { return bHlplSnap; } // Fang auf Hilfslinien
-    sal_Bool IsOFrmSnap() const { return bOFrmSnap; } // Fang auf LogFram von umgebenden Zeichenobjekten
-    sal_Bool IsOPntSnap() const { return bOPntSnap; } // Fang auf ausgepraegte Punkte von umgebenden Zeichenobjekten
-    sal_Bool IsOConSnap() const { return bOConSnap; } // Fang auf Konnektoren der Zeichenobjekte
-    void SetSnapEnabled(sal_Bool bOn) { bSnapEnab=bOn; }
-    void SetGridSnap(sal_Bool bOn) { bGridSnap=bOn; }
-    void SetBordSnap(sal_Bool bOn) { bBordSnap=bOn; }
-    void SetHlplSnap(sal_Bool bOn) { bHlplSnap=bOn; }
-    void SetOFrmSnap(sal_Bool bOn) { bOFrmSnap=bOn; }
-    void SetOPntSnap(sal_Bool bOn) { bOPntSnap=bOn; }
-    void SetOConSnap(sal_Bool bOn) { bOConSnap=bOn; }
+    bool IsSnapEnabled() const { return bSnapEnab; }
+    bool IsGridSnap() const { return bGridSnap; } // Fang auf Rastergitter
+    bool IsBordSnap() const { return bBordSnap; } // Fang auf Seitenraender
+    bool IsHlplSnap() const { return bHlplSnap; } // Fang auf Hilfslinien
+    bool IsOFrmSnap() const { return bOFrmSnap; } // Fang auf LogFram von umgebenden Zeichenobjekten
+    bool IsOPntSnap() const { return bOPntSnap; } // Fang auf ausgepraegte Punkte von umgebenden Zeichenobjekten
+    bool IsOConSnap() const { return bOConSnap; } // Fang auf Konnektoren der Zeichenobjekte
+    void SetSnapEnabled(bool bOn) { bSnapEnab=bOn; }
+    void SetGridSnap(bool bOn) { bGridSnap=bOn; }
+    void SetBordSnap(bool bOn) { bBordSnap=bOn; }
+    void SetHlplSnap(bool bOn) { bHlplSnap=bOn; }
+    void SetOFrmSnap(bool bOn) { bOFrmSnap=bOn; }
+    void SetOPntSnap(bool bOn) { bOPntSnap=bOn; }
+    void SetOConSnap(bool bOn) { bOConSnap=bOn; }
 
     // Normalerweise werden beim Move-Dragging von Zeichenobjekten alle
     // 4 Ecken des Object-SnapRects gefangen. Folgende Einstellmoeglichkeit,
     // wenn man nur auf die linke obere Ecke fangen will (z.B. DialogEditor):
     // Persistent, Default=FALSE.
-    void SetMoveSnapOnlyTopLeft(sal_Bool bOn) { bMoveSnapOnlyTopLeft=bOn; }
-    sal_Bool IsMoveSnapOnlyTopLeft() const { return bMoveSnapOnlyTopLeft; }
+    void SetMoveSnapOnlyTopLeft(bool bOn) { bMoveSnapOnlyTopLeft=bOn; }
+    bool IsMoveSnapOnlyTopLeft() const { return bMoveSnapOnlyTopLeft; }
 
     // Hilfslinien fixiert (nicht verschiebbar)
     // Persistent, Default=FALSE.
-    sal_Bool IsHlplFixed() const { return bHlplFixed; }
-    void SetHlplFixed(sal_Bool bOn) { bHlplFixed=bOn; }
+    bool IsHlplFixed() const { return bHlplFixed; }
+    void SetHlplFixed(bool bOn) { bHlplFixed=bOn; }
 
-    sal_Bool IsMoveMFrmSnap() const { return bMoveMFrmSnap; } // Fang des LogFram aller markierten Objekte
-    sal_Bool IsMoveOFrmSnap() const { return bMoveOFrmSnap; } // Fang aller LogFram der markierten Objekte
-    sal_Bool IsMoveOPntSnap() const { return bMoveOPntSnap; } // Fang ausgepraegter Punkte der markierten Objekte
-    sal_Bool IsMoveOConSnap() const { return bMoveOConSnap; } // Fang der Konnektoren der markierten Objekte
+    bool IsMoveMFrmSnap() const { return bMoveMFrmSnap; } // Fang des LogFram aller markierten Objekte
+    bool IsMoveOFrmSnap() const { return bMoveOFrmSnap; } // Fang aller LogFram der markierten Objekte
+    bool IsMoveOPntSnap() const { return bMoveOPntSnap; } // Fang ausgepraegter Punkte der markierten Objekte
+    bool IsMoveOConSnap() const { return bMoveOConSnap; } // Fang der Konnektoren der markierten Objekte
 
-    void SetMoveMFrmSnap(sal_Bool bOn) { bMoveMFrmSnap=bOn; }
-    void SetMoveOFrmSnap(sal_Bool bOn) { bMoveOFrmSnap=bOn; }
-    void SetMoveOPntSnap(sal_Bool bOn) { bMoveOPntSnap=bOn; }
-    void SetMoveOConSnap(sal_Bool bOn) { bMoveOConSnap=bOn; }
+    void SetMoveMFrmSnap(bool bOn) { bMoveMFrmSnap=bOn; }
+    void SetMoveOFrmSnap(bool bOn) { bMoveOFrmSnap=bOn; }
+    void SetMoveOPntSnap(bool bOn) { bMoveOPntSnap=bOn; }
+    void SetMoveOConSnap(bool bOn) { bMoveOConSnap=bOn; }
 
     // #114409#-1 Migrate PageOrigin
-    sal_Bool BegSetPageOrg(const Point& rPnt);
+    bool BegSetPageOrg(const Point& rPnt);
     void MovSetPageOrg(const Point& rPnt);
-    sal_Bool EndSetPageOrg();
+    bool EndSetPageOrg();
     void BrkSetPageOrg();
-    sal_Bool IsSetPageOrg() const { return (0L != mpPageOriginOverlay); }
+    bool IsSetPageOrg() const { return (0L != mpPageOriginOverlay); }
 
     // HitTest. Bei sal_True steht in rnHelpLineNum die Nummer der Hilfslinie und in rpPV
     // die zugehoerige PageView.
-    sal_Bool PickHelpLine(const Point& rPnt, short nTol, const OutputDevice& rOut, sal_uInt16& rnHelpLineNum, SdrPageView*& rpPV) const;
+    bool PickHelpLine(const Point& rPnt, short nTol, const OutputDevice& rOut, sal_uInt16& rnHelpLineNum, SdrPageView*& rpPV) const;
 
     // Verschieben einer vorhandenen Hilfslinie. nHelpLineNum und pPV von PickHelpLine verwenden.
-    sal_Bool BegDragHelpLine(sal_uInt16 nHelpLineNum, SdrPageView* pPV);
+    bool BegDragHelpLine(sal_uInt16 nHelpLineNum, SdrPageView* pPV);
     // Interaktives einfuegen einer neuen Hilfslinie
-    sal_Bool BegDragHelpLine(const Point& rPnt, SdrHelpLineKind eNewKind);
+    bool BegDragHelpLine(const Point& rPnt, SdrHelpLineKind eNewKind);
     Pointer GetDraggedHelpLinePointer() const;
 
     // Aendern des Hilfslinientyps waerend des draggens
     // void SetDraggedHelpLineKind(SdrHelpLineKind eNewKind);
     void MovDragHelpLine(const Point& rPnt);
-    sal_Bool EndDragHelpLine();
+    bool EndDragHelpLine();
     void BrkDragHelpLine();
-    sal_Bool IsDragHelpLine() const { return (0L != mpHelpLineOverlay); }
+    bool IsDragHelpLine() const { return (0L != mpHelpLineOverlay); }
 
     // SnapAngle ist fuer Winkel im Kreis, RotateDragging, ...
     // Der Winkelfang wird unterdrueckt, wenn er mit
@@ -193,8 +193,8 @@ public:
     // - Shear (Dragging)
     // - Kreisbogen/-sektor/-abschnitt Winkel (Create und Dragging)
     // Persistent.
-    void SetAngleSnapEnabled(sal_Bool bOn) { bAngleSnapEnab=bOn; }
-    sal_Bool IsAngleSnapEnabled() const { return bAngleSnapEnab; }
+    void SetAngleSnapEnabled(bool bOn) { bAngleSnapEnab=bOn; }
+    bool IsAngleSnapEnabled() const { return bAngleSnapEnab; }
     void SetSnapAngle(long nWink) { nSnapAngle=nWink; }
     long GetSnapAngle() const { return nSnapAngle; }
 
@@ -238,16 +238,16 @@ public:
     // nur das Zentrum der markierten Objekte transformiert. Groesse, Form
     // und Drehwinkel der Objekte bleiben erhalten, nur ihre Positionen
     // aendern sich. Persistent. Default=FALSE. (ni)
-    void SetMoveOnlyDragging(sal_Bool bOn) { bMoveOnlyDragging=bOn; }
-    sal_Bool IsMoveOnlyDragging() const { return bMoveOnlyDragging; }
+    void SetMoveOnlyDragging(bool bOn) { bMoveOnlyDragging=bOn; }
+    bool IsMoveOnlyDragging() const { return bMoveOnlyDragging; }
 
     // Slant anstelle von Shear anwenden. Persistent. Default=FALSE.
-    void SetSlantButShear(sal_Bool bOn) { bSlantButShear=bOn; }
-    sal_Bool IsSlantButShear() const { return bSlantButShear; }
+    void SetSlantButShear(bool bOn) { bSlantButShear=bOn; }
+    bool IsSlantButShear() const { return bSlantButShear; }
 
     // Objekte bei Crook nicht verzerren. Persistent. Default=FALSE. (ni)
-    void SetCrookNoContortion(sal_Bool bOn) { bCrookNoContortion=bOn; }
-    sal_Bool IsCrookNoContortion() const { return bCrookNoContortion; }
+    void SetCrookNoContortion(bool bOn) { bCrookNoContortion=bOn; }
+    bool IsCrookNoContortion() const { return bCrookNoContortion; }
 
     // Crook-Modus. Persistent. Default=SDRCROOK_ROTATE. (ni)
     void SetCrookMode(SdrCrookMode eMode) { eCrookMode=eMode; }
@@ -256,8 +256,8 @@ public:
     // Special fuer IBM: Beim Draggen eines Polygonpunkts wird dieser
     // geloescht, wenn seine beiden angrenzenden Linien eh' fast eine
     // durchgehende Linie sind.
-    void SetEliminatePolyPoints(sal_Bool bOn) { bEliminatePolyPoints=bOn; }
-    sal_Bool IsEliminatePolyPoints() const { return bEliminatePolyPoints; }
+    void SetEliminatePolyPoints(bool bOn) { bEliminatePolyPoints=bOn; }
+    bool IsEliminatePolyPoints() const { return bEliminatePolyPoints; }
     void SetEliminatePolyPointLimitAngle(long nAngle) { nEliminatePolyPointLimitAngle=nAngle; }
     long GetEliminatePolyPointLimitAngle() const { return nEliminatePolyPointLimitAngle; }
 };

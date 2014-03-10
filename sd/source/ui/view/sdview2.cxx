@@ -719,7 +719,7 @@ sal_Int8 View::ExecuteDrop( const ExecuteDropEvent& rEvt, DropTargetHelper& rTar
 
                                 ReadXFillExchangeData( *xStm, aFillData );
                                 const Color aColor( ( (XFillColorItem&) aFillData.GetXFillAttrSetItem()->GetItemSet().Get( XATTR_FILLCOLOR ) ).GetColorValue() );
-                                static_cast< SdrHdlColor* >( pIAOHandle )->SetColor( aColor, sal_True );
+                                static_cast< SdrHdlColor* >( pIAOHandle )->SetColor( aColor, true );
                                 nRet = nDropAction;
                             }
                         }
@@ -979,7 +979,7 @@ SdrModel* View::GetMarkedObjModel() const
     return FmFormView::GetMarkedObjModel();;
 }
 
-sal_Bool View::Paste(const SdrModel& rMod, const Point& rPos, SdrObjList* pLst /* =NULL */, sal_uInt32 nOptions /* =0 */)
+bool View::Paste(const SdrModel& rMod, const Point& rPos, SdrObjList* pLst /* =NULL */, sal_uInt32 nOptions /* =0 */)
 {
     return FmFormView::Paste( rMod, rPos, pLst,nOptions );;
 }

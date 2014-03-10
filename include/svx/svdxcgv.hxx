@@ -33,10 +33,10 @@ protected:
 
     void                ImpGetPasteObjList(Point& rPos, SdrObjList*& rpLst);
     void                ImpPasteObject(SdrObject* pObj, SdrObjList& rLst, const Point& rCenter, const Size& rSiz, const MapMode& rMap, sal_uInt32 nOptions);
-    sal_Bool                ImpGetPasteLayer(const SdrObjList* pObjList, SdrLayerID& rLayer) const;
+    bool                ImpGetPasteLayer(const SdrObjList* pObjList, SdrLayerID& rLayer) const;
 
     // liefert True, wenn rPt geaendert wurde
-    sal_Bool                ImpLimitToWorkArea(Point& rPt) const;
+    bool                ImpLimitToWorkArea(Point& rPt) const;
 
 protected:
     // #i71538# make constructors of SdrView sub-components protected to avoid incomplete incarnations which may get casted to SdrView
@@ -103,16 +103,16 @@ public:
     // View angezeigt wird.
     // Gueltige Werte fuer nOptions sind SDRINSERT_DONTMARK und
     // SDRINSERT_ADDMARK (siehe svdedtv.hxx).
-    virtual sal_Bool    Paste(const SdrModel& rMod, const Point& rPos, SdrObjList* pLst=NULL, sal_uInt32 nOptions=0);
-    sal_Bool            Paste(const OUString& rStr, const Point& rPos, SdrObjList* pLst=NULL, sal_uInt32 nOptions=0);
-    sal_Bool            Paste(SvStream& rInput, const OUString& rBaseURL, sal_uInt16 eFormat, const Point& rPos, SdrObjList* pLst=NULL, sal_uInt32 nOptions=0);
+    virtual bool    Paste(const SdrModel& rMod, const Point& rPos, SdrObjList* pLst=NULL, sal_uInt32 nOptions=0);
+    bool            Paste(const OUString& rStr, const Point& rPos, SdrObjList* pLst=NULL, sal_uInt32 nOptions=0);
+    bool            Paste(SvStream& rInput, const OUString& rBaseURL, sal_uInt16 eFormat, const Point& rPos, SdrObjList* pLst=NULL, sal_uInt32 nOptions=0);
 
-    sal_Bool            Cut( sal_uIntPtr nFormat = SDR_ANYFORMAT );
+    bool            Cut( sal_uIntPtr nFormat = SDR_ANYFORMAT );
 
-    sal_Bool            Yank( sal_uIntPtr nFormat = SDR_ANYFORMAT );
+    bool            Yank( sal_uIntPtr nFormat = SDR_ANYFORMAT );
 
-    sal_Bool            Paste( Window* pWin = NULL, sal_uIntPtr nFormat = SDR_ANYFORMAT );
-    sal_Bool            PasteClipboard( OutputDevice* pOut = NULL, sal_uIntPtr nFormat = SDR_ANYFORMAT, sal_uInt32 nOptions = 0 );
+    bool            Paste( Window* pWin = NULL, sal_uIntPtr nFormat = SDR_ANYFORMAT );
+    bool            PasteClipboard( OutputDevice* pOut = NULL, sal_uIntPtr nFormat = SDR_ANYFORMAT, sal_uInt32 nOptions = 0 );
 };
 
 #endif // INCLUDED_SVX_SVDXCGV_HXX

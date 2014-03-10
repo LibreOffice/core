@@ -88,7 +88,7 @@ void SwDrawShell::ExecDrawDlg(SfxRequest& rReq)
                 if (bHasMarked)
                     pView->SetAttributes(*pDlg->GetOutputItemSet());
                 else
-                    pView->SetDefaultAttr(*pDlg->GetOutputItemSet(), sal_False);
+                    pView->SetDefaultAttr(*pDlg->GetOutputItemSet(), false);
                 pSh->EndAction();
 
                 static sal_uInt16 aInval[] =
@@ -131,9 +131,9 @@ void SwDrawShell::ExecDrawDlg(SfxRequest& rReq)
             {
                 pSh->StartAction();
                 if(bHasMarked)
-                    pView->SetAttrToMarked(*pDlg->GetOutputItemSet(), sal_False);
+                    pView->SetAttrToMarked(*pDlg->GetOutputItemSet(), false);
                 else
-                    pView->SetDefaultAttr(*pDlg->GetOutputItemSet(), sal_False);
+                    pView->SetDefaultAttr(*pDlg->GetOutputItemSet(), false);
                 pSh->EndAction();
 
                 static sal_uInt16 aInval[] =
@@ -180,9 +180,9 @@ void SwDrawShell::ExecDrawAttrArgs(SfxRequest& rReq)
     if (pArgs)
     {
         if(pView->AreObjectsMarked())
-            pView->SetAttrToMarked(*rReq.GetArgs(), sal_False);
+            pView->SetAttrToMarked(*rReq.GetArgs(), false);
         else
-            pView->SetDefaultAttr(*rReq.GetArgs(), sal_False);
+            pView->SetDefaultAttr(*rReq.GetArgs(), false);
     }
     else
     {

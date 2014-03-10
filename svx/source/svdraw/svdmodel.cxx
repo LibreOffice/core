@@ -204,46 +204,37 @@ void SdrModel::ImpCtor(SfxItemPool* pPool, ::comphelper::IEmbeddedHelper* _pEmbe
     // can't create DrawOutliner OnDemand, because I can't get the Pool,
     // then (only from 302 onwards!)
     pDrawOutliner = SdrMakeOutliner( OUTLINERMODE_TEXTOBJECT, this );
-    ImpSetOutlinerDefaults(pDrawOutliner, sal_True);
+    ImpSetOutlinerDefaults(pDrawOutliner, true);
 
     pHitTestOutliner = SdrMakeOutliner( OUTLINERMODE_TEXTOBJECT, this );
-    ImpSetOutlinerDefaults(pHitTestOutliner, sal_True);
+    ImpSetOutlinerDefaults(pHitTestOutliner, true);
 
     ImpCreateTables();
 }
 
-SdrModel::SdrModel(SfxItemPool* pPool, ::comphelper::IEmbeddedHelper* pPers, sal_Bool bLoadRefCounts):
+SdrModel::SdrModel():
     aReadDate( DateTime::EMPTY ),
     maMaPag(),
     maPages()
 {
-    ImpCtor(pPool, pPers, false, (bool)bLoadRefCounts);
+    ImpCtor(NULL, NULL, false, LOADREFCOUNTS);
 }
 
-SdrModel::SdrModel(const OUString& rPath, SfxItemPool* pPool, ::comphelper::IEmbeddedHelper* pPers, sal_Bool bLoadRefCounts):
+SdrModel::SdrModel(SfxItemPool* pPool, ::comphelper::IEmbeddedHelper* pPers, bool bUseExtColorTable, bool bLoadRefCounts):
+    aReadDate( DateTime::EMPTY ),
+    maMaPag(),
+    maPages()
+{
+    ImpCtor(pPool,pPers,bUseExtColorTable, bLoadRefCounts);
+}
+
+SdrModel::SdrModel(const OUString& rPath, SfxItemPool* pPool, ::comphelper::IEmbeddedHelper* pPers, bool bUseExtColorTable, bool bLoadRefCounts):
     aReadDate( DateTime::EMPTY ),
     maMaPag(),
     maPages(),
     aTablePath(rPath)
 {
-    ImpCtor(pPool, pPers, false, (bool)bLoadRefCounts);
-}
-
-SdrModel::SdrModel(SfxItemPool* pPool, ::comphelper::IEmbeddedHelper* pPers, bool bUseExtColorTable, sal_Bool bLoadRefCounts):
-    aReadDate( DateTime::EMPTY ),
-    maMaPag(),
-    maPages()
-{
-    ImpCtor(pPool,pPers,bUseExtColorTable, (bool)bLoadRefCounts);
-}
-
-SdrModel::SdrModel(const OUString& rPath, SfxItemPool* pPool, ::comphelper::IEmbeddedHelper* pPers, bool bUseExtColorTable, sal_Bool bLoadRefCounts):
-    aReadDate( DateTime::EMPTY ),
-    maMaPag(),
-    maPages(),
-    aTablePath(rPath)
-{
-    ImpCtor(pPool,pPers,bUseExtColorTable, (bool)bLoadRefCounts);
+    ImpCtor(pPool,pPers,bUseExtColorTable, bLoadRefCounts);
 }
 
 SdrModel::SdrModel(const SdrModel& /*rSrcModel*/):
@@ -278,7 +269,7 @@ SdrModel::~SdrModel()
 #endif
     delete pAktUndoGroup;
 
-    ClearModel(sal_True);
+    ClearModel(true);
 
     delete pLayerAdmin;
 
@@ -691,7 +682,7 @@ void SdrModel::ImpCreateTables()
     }
 }
 
-void SdrModel::ClearModel(sal_Bool bCalledFromDestructor)
+void SdrModel::ClearModel(bool bCalledFromDestructor)
 {
     if(bCalledFromDestructor)
     {
@@ -795,7 +786,7 @@ const SdrTextObj* SdrModel::GetFormattingTextObj() const
     return NULL;
 }
 
-void SdrModel::ImpSetOutlinerDefaults( SdrOutliner* pOutliner, sal_Bool bInit )
+void SdrModel::ImpSetOutlinerDefaults( SdrOutliner* pOutliner, bool bInit )
 {
     /**************************************************************************
     * Initialization of the Outliners for drawing text and HitTest
@@ -1775,7 +1766,7 @@ void SdrModel::Merge(SdrModel& rSourceModel,
     if (bUndo) EndUndo();
 }
 
-void SdrModel::SetStarDrawPreviewMode(sal_Bool bPreview)
+void SdrModel::SetStarDrawPreviewMode(bool bPreview)
 {
     if (!bPreview && bStarDrawPreviewMode && GetPageCount())
     {
@@ -1913,9 +1904,9 @@ void SdrModel::SetCharCompressType( sal_uInt16 nType )
     }
 }
 
-void SdrModel::SetKernAsianPunctuation( sal_Bool bEnabled )
+void SdrModel::SetKernAsianPunctuation( bool bEnabled )
 {
-    if( mbKernAsianPunctuation != (bool) bEnabled )
+    if( mbKernAsianPunctuation != bEnabled )
     {
         mbKernAsianPunctuation = bEnabled;
         ImpSetOutlinerDefaults( pDrawOutliner );
@@ -1923,9 +1914,9 @@ void SdrModel::SetKernAsianPunctuation( sal_Bool bEnabled )
     }
 }
 
-void SdrModel::SetAddExtLeading( sal_Bool bEnabled )
+void SdrModel::SetAddExtLeading( bool bEnabled )
 {
-    if( mbAddExtLeading != (bool) bEnabled )
+    if( mbAddExtLeading != bEnabled )
     {
         mbAddExtLeading = bEnabled;
         ImpSetOutlinerDefaults( pDrawOutliner );

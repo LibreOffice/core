@@ -62,7 +62,7 @@ public:
     E3dCubeObj();
 
     virtual sal_uInt16 GetObjIdentifier() const;
-    virtual SdrObject* DoConvertToPolyObj(sal_Bool bBezier, bool bAddText) const;
+    virtual SdrObject* DoConvertToPolyObj(bool bBezier, bool bAddText) const;
 
     virtual E3dCubeObj* Clone() const;
 

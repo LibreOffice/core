@@ -60,15 +60,15 @@ protected:
 
 protected:
     // helper functions for GET, SET, INS etc. PNT
-    void ImpSetClosed(sal_Bool bClose);
+    void ImpSetClosed(bool bClose);
     void ImpForceKind();
     void ImpForceLineWink();
     ImpPathForDragAndCreate& impGetDAC() const;
     void impDeleteDAC() const;
 
 public:
-    static sal_Bool ImpFindPolyPnt(const basegfx::B2DPolyPolygon& rPoly, sal_uInt32 nAbsPnt, sal_uInt32& rPolyNum, sal_uInt32& rPointNum);
-    virtual void SetRectsDirty(sal_Bool bNotMyself = sal_False);
+    static bool ImpFindPolyPnt(const basegfx::B2DPolyPolygon& rPoly, sal_uInt32 nAbsPnt, sal_uInt32& rPolyNum, sal_uInt32& rPointNum);
+    virtual void SetRectsDirty(bool bNotMyself = false);
     double GetBrightness() { return mdBrightness; }
 
 public:
@@ -122,14 +122,14 @@ public:
     virtual sal_uInt32 GetSnapPointCount() const;
     virtual Point GetSnapPoint(sal_uInt32 i) const;
 
-    virtual sal_Bool IsPolyObj() const;
+    virtual bool IsPolyObj() const;
     virtual sal_uInt32 GetPointCount() const;
     virtual Point GetPoint(sal_uInt32 nHdlNum) const;
     virtual void NbcSetPoint(const Point& rPnt, sal_uInt32 nHdlNum);
 
     // insert point
-    sal_uInt32 NbcInsPointOld(const Point& rPos, sal_Bool bNewObj, sal_Bool bHideHim);
-    sal_uInt32 NbcInsPoint(sal_uInt32 i, const Point& rPos, sal_Bool bNewObj, sal_Bool bHideHim);
+    sal_uInt32 NbcInsPointOld(const Point& rPos, bool bNewObj, bool bHideHim);
+    sal_uInt32 NbcInsPoint(sal_uInt32 i, const Point& rPos, bool bNewObj, bool bHideHim);
 
     // rip at given point
     SdrObject* RipPoint(sal_uInt32 nHdlNum, sal_uInt32& rNewPt0Index);
@@ -140,7 +140,7 @@ protected:
     virtual void RestGeoData(const SdrObjGeoData& rGeo);
 
 public:
-    virtual SdrObject* DoConvertToPolyObj(sal_Bool bBezier, bool bAddText) const;
+    virtual SdrObject* DoConvertToPolyObj(bool bBezier, bool bAddText) const;
 
     // Bezier-polygon getter/setter
     const basegfx::B2DPolyPolygon& GetPathPoly() const { return maPathPolygon; }
@@ -148,11 +148,11 @@ public:
     void NbcSetPathPoly(const basegfx::B2DPolyPolygon& rPathPoly);
 
     // special functions for Bezier-polygon handling
-    sal_Bool IsClosed() const { return meKind==OBJ_POLY || meKind==OBJ_PATHPOLY || meKind==OBJ_PATHFILL || meKind==OBJ_FREEFILL || meKind==OBJ_SPLNFILL; }
-    sal_Bool IsLine() const { return meKind==OBJ_PLIN || meKind==OBJ_PATHPLIN || meKind==OBJ_PATHLINE || meKind==OBJ_FREELINE || meKind==OBJ_SPLNLINE || meKind==OBJ_LINE; }
-    sal_Bool IsFreeHand() const { return meKind==OBJ_FREELINE || meKind==OBJ_FREEFILL; }
-    sal_Bool IsBezier() const { return meKind==OBJ_PATHLINE || meKind==OBJ_PATHFILL; }
-    sal_Bool IsSpline() const { return meKind==OBJ_SPLNLINE || meKind==OBJ_SPLNFILL; }
+    bool IsClosed() const { return meKind==OBJ_POLY || meKind==OBJ_PATHPOLY || meKind==OBJ_PATHFILL || meKind==OBJ_FREEFILL || meKind==OBJ_SPLNFILL; }
+    bool IsLine() const { return meKind==OBJ_PLIN || meKind==OBJ_PATHPLIN || meKind==OBJ_PATHLINE || meKind==OBJ_FREELINE || meKind==OBJ_SPLNLINE || meKind==OBJ_LINE; }
+    bool IsFreeHand() const { return meKind==OBJ_FREELINE || meKind==OBJ_FREEFILL; }
+    bool IsBezier() const { return meKind==OBJ_PATHLINE || meKind==OBJ_PATHFILL; }
+    bool IsSpline() const { return meKind==OBJ_SPLNLINE || meKind==OBJ_SPLNFILL; }
 
     // close/open path
     // if opening, move end point by "nOpenDistance"
@@ -165,7 +165,7 @@ public:
     //
     // gets base transformation and rectangle of object. If it's an SdrPathObj it fills the PolyPolygon
     // with the base geometry and returns TRUE. Otherwise it returns FALSE.
-    virtual sal_Bool TRGetBaseGeometry(basegfx::B2DHomMatrix& rMatrix, basegfx::B2DPolyPolygon& rPolyPolygon) const;
+    virtual bool TRGetBaseGeometry(basegfx::B2DHomMatrix& rMatrix, basegfx::B2DPolyPolygon& rPolyPolygon) const;
     // sets the base geometry of the object using infos contained in the homogen 3x3 matrix.
     // If it's an SdrPathObj it will use the provided geometry information. The Polygon has
     // to use (0,0) as upper left and will be scaled to the given size in the matrix.

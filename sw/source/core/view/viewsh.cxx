@@ -2121,13 +2121,13 @@ void SwViewShell::ImplApplyViewOptions( const SwViewOption &rOpt )
             MakeDrawView();
 
         SwDrawView *pDView = Imp()->GetDrawView();
-        if ( pDView->IsDragStripes() != rOpt.IsCrossHair() )
+        if ( (pDView->IsDragStripes() ? 1 : 0) != rOpt.IsCrossHair() )
             pDView->SetDragStripes( rOpt.IsCrossHair() );
 
-        if ( pDView->IsGridSnap() != rOpt.IsSnap() )
+        if ( (pDView->IsGridSnap() ? 1 : 0) != rOpt.IsSnap() )
             pDView->SetGridSnap( rOpt.IsSnap() );
 
-        if ( pDView->IsGridVisible() != rOpt.IsGridVisible() )
+        if ( (pDView->IsGridVisible() ? 1 : 0) != rOpt.IsGridVisible() )
             pDView->SetGridVisible( rOpt.IsGridVisible() );
 
         const Size &rSz = rOpt.GetSnapSize();

@@ -141,7 +141,7 @@ sal_Bool FuFormatPaintBrush::MouseButtonDown(const MouseEvent& rMEvt)
         {
             sal_uInt16 nHitLog = sal_uInt16 ( mpWindow->PixelToLogic(Size(HITPIX,0)).Width() );
             sal_Bool bToggle = sal_False;
-            mpView->MarkObj(mpWindow->PixelToLogic( rMEvt.GetPosPixel() ), nHitLog, bToggle, sal_False);
+            mpView->MarkObj(mpWindow->PixelToLogic( rMEvt.GetPosPixel() ), nHitLog, bToggle, false);
             return sal_True;
         }
     }
@@ -219,7 +219,7 @@ void FuFormatPaintBrush::Activate()
     if( !mbOldIsQuickTextEditMode  )
     {
         mpViewShell->GetFrameView()->SetQuickEdit(sal_True);
-        mpView->SetQuickTextEditMode(sal_True);
+        mpView->SetQuickTextEditMode(true);
     }
 }
 
@@ -228,7 +228,7 @@ void FuFormatPaintBrush::Deactivate()
     if( !mbOldIsQuickTextEditMode  )
     {
         mpViewShell->GetFrameView()->SetQuickEdit(sal_False);
-        mpView->SetQuickTextEditMode(sal_False);
+        mpView->SetQuickTextEditMode(false);
     }
 }
 

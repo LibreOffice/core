@@ -61,14 +61,14 @@ FrameView::FrameView(SdDrawDocument* pDrawDoc, FrameView* pFrameView /* = NULK *
 {
     EndListening(*pDrawDoc);
 
-    EnableExtendedKeyInputDispatcher(sal_False);
-    EnableExtendedMouseEventDispatcher(sal_False);
-    EnableExtendedCommandEventDispatcher(sal_False);
+    EnableExtendedKeyInputDispatcher(false);
+    EnableExtendedMouseEventDispatcher(false);
+    EnableExtendedCommandEventDispatcher(false);
 
     SetGridFront( false );
     SetHlplFront( false );
-    SetOConSnap( sal_False );
-    SetFrameDragSingles( sal_True );
+    SetOConSnap( false );
+    SetFrameDragSingles( true );
     SetSlidesPerRow(4);
 
     if( NULL == pFrameView )
@@ -219,7 +219,7 @@ FrameView::FrameView(SdDrawDocument* pDrawDoc, FrameView* pFrameView /* = NULK *
         meHandoutEditMode = EM_MASTERPAGE;
         SetViewShEditModeOnLoad(EM_PAGE);
         mbLayerMode = sal_False;
-        SetEliminatePolyPoints(sal_False);
+        SetEliminatePolyPoints(false);
         mbDoubleClickTextEdit = sal_False;
         mbClickChangeRotation = sal_False;
         mnSlidesPerRow = 4;

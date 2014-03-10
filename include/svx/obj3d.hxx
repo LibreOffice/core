@@ -138,7 +138,7 @@ protected:
 public:
     TYPEINFO();
     virtual void RecalcSnapRect();
-    virtual void SetRectsDirty(sal_Bool bNotMyself = sal_False);
+    virtual void SetRectsDirty(bool bNotMyself = false);
 
     virtual ~E3dObject();
 

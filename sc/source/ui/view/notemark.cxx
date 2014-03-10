@@ -80,7 +80,7 @@ IMPL_LINK_NOARG(ScNoteMarker, TimeHdl)
     {
         SvtPathOptions aPathOpt;
         OUString aPath = aPathOpt.GetPalettePath();
-        pModel = new SdrModel(aPath);
+        pModel = new SdrModel(aPath, NULL, NULL, false, false);
         pModel->SetScaleUnit(MAP_100TH_MM);
         SfxItemPool& rPool = pModel->GetItemPool();
         rPool.SetDefaultMetric(SFX_MAPUNIT_100TH_MM);

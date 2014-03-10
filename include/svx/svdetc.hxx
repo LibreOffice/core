@@ -29,7 +29,7 @@
 
 
 // ExchangeFormat-Id der DrawingEngine holen. Daten koennen dann per
-//   static sal_Bool CopyData(pData,nLen,nFormat);
+//   static bool CopyData(pData,nLen,nFormat);
 // bereitgestellt werden, wobei pData/nLen einen SvMemoryStream beschreiben in
 // dem ein SdrModel gestreamt wird an dem fuer die Zeitdauer des Streamens das
 // Flag SdrModel::SetStreamingSdrModel(sal_True) gesetzt wird.
@@ -112,7 +112,7 @@ SVX_DLLPUBLIC bool GetDraftFillColor(const SfxItemSet& rSet, Color& rCol);
 
 // Ein ItemSet auf Outliner- bzw. EditEngine-Items durchsuchen
 // Liefert sal_True, wenn der Set solchen Items enthaelt.
-sal_Bool SearchOutlinerItems(const SfxItemSet& rSet, sal_Bool bInklDefaults, sal_Bool* pbOnlyEE=NULL);
+bool SearchOutlinerItems(const SfxItemSet& rSet, bool bInklDefaults, bool* pbOnlyEE=NULL);
 
 // zurueck erhaelt man einen neuen WhichTable den
 // man dann irgendwann mit delete platthauen muss.
@@ -148,13 +148,13 @@ public:
 
     void Init( sal_uIntPtr _nSumActionCount, sal_uIntPtr _nObjCount );
 
-    sal_Bool SetNextObject();
+    bool SetNextObject();
 
     void SetActionCount( sal_uIntPtr _nActionCount );
     void SetInsertCount( sal_uIntPtr _nInsertCount );
 
-    sal_Bool ReportActions( sal_uIntPtr nAnzActions );
-    sal_Bool ReportInserts( sal_uIntPtr nAnzInserts );
+    bool ReportActions( sal_uIntPtr nAnzActions );
+    bool ReportInserts( sal_uIntPtr nAnzInserts );
 
     sal_uIntPtr GetSumActionCount() const { return nSumActionCount; };
     sal_uIntPtr GetSumCurAction() const { return nSumCurAction; };
@@ -167,7 +167,7 @@ public:
     sal_uIntPtr GetInsertCount() const { return nInsertCount; };
     sal_uIntPtr GetCurInsert() const { return nCurInsert; };
 
-    sal_Bool ReportRescales( sal_uIntPtr nAnzRescales );
+    bool ReportRescales( sal_uIntPtr nAnzRescales );
 };
 
 
@@ -201,7 +201,7 @@ class OLEObjCache : public std::vector<SdrOle2Obj*>
     AutoTimer*          pTimer;
 
     void UnloadOnDemand();
-    sal_Bool UnloadObj( SdrOle2Obj* pObj );
+    bool UnloadObj( SdrOle2Obj* pObj );
     DECL_LINK( UnloadCheckHdl, AutoTimer* );
 
 public:

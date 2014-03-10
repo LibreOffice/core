@@ -46,8 +46,8 @@ protected:
     SdrUShortCont*                                      mpPoints;     // Selected Points
     SdrUShortCont*                                      mpLines;      // Selected Line
     SdrUShortCont*                                      mpGluePoints; // Selected Gluepoints (their Id's)
-    sal_Bool                                            mbCon1;       // for Connectors
-    sal_Bool                                            mbCon2;       // for Connectors
+    bool                                                mbCon1;       // for Connectors
+    bool                                                mbCon2;       // for Connectors
     sal_uInt16                                          mnUser;       // E.g. for CopyObjects, also copy Edges
 
 public:
@@ -59,8 +59,8 @@ public:
     virtual void ObjectInDestruction(const SdrObject& rObject);
 
     SdrMark& operator=(const SdrMark& rMark);
-    sal_Bool operator==(const SdrMark& rMark) const;
-    sal_Bool operator!=(const SdrMark& rMark) const
+    bool operator==(const SdrMark& rMark) const;
+    bool operator!=(const SdrMark& rMark) const
     {
         return !(operator==(rMark));
     }
@@ -78,22 +78,22 @@ public:
         mpPageView = pNewPageView;
     }
 
-    void SetCon1(sal_Bool bOn)
+    void SetCon1(bool bOn)
     {
         mbCon1 = bOn;
     }
 
-    sal_Bool IsCon1() const
+    bool IsCon1() const
     {
         return mbCon1;
     }
 
-    void SetCon2(sal_Bool bOn)
+    void SetCon2(bool bOn)
     {
         mbCon2 = bOn;
     }
 
-    sal_Bool IsCon2() const
+    bool IsCon2() const
     {
         return mbCon2;
     }
@@ -172,25 +172,25 @@ protected:
     OUString                                            maPointName;
     OUString                                            maGluePointName;
 
-    sal_Bool                                            mbPointNameOk;
-    sal_Bool                                            mbGluePointNameOk;
-    sal_Bool                                            mbNameOk;
-    sal_Bool                                            mbSorted;
+    bool                                                mbPointNameOk;
+    bool                                                mbGluePointNameOk;
+    bool                                                mbNameOk;
+    bool                                                mbSorted;
 
 private:
-    SVX_DLLPRIVATE sal_Bool operator==(const SdrMarkList& rCmpMarkList) const;
+    SVX_DLLPRIVATE bool operator==(const SdrMarkList& rCmpMarkList) const;
     SVX_DLLPRIVATE void ImpForceSort();
 
 private:
-    SVX_DLLPRIVATE const OUString& GetPointMarkDescription(sal_Bool bGlue) const;
+    SVX_DLLPRIVATE const OUString& GetPointMarkDescription(bool bGlue) const;
 
 public:
     SdrMarkList()
     :   maList(),
-        mbPointNameOk(sal_False),
-        mbGluePointNameOk(sal_False),
-        mbNameOk(sal_False),
-        mbSorted(sal_True)
+        mbPointNameOk(false),
+        mbGluePointNameOk(false),
+        mbNameOk(false),
+        mbSorted(true)
     {
     }
 
@@ -209,7 +209,7 @@ public:
     void ForceSort() const;
     void SetUnsorted()
     {
-        mbSorted = sal_False;
+        mbSorted = false;
     }
 
     sal_uLong GetMarkCount() const
@@ -219,18 +219,18 @@ public:
 
     SdrMark* GetMark(sal_uLong nNum) const;
     sal_uLong FindObject(const SdrObject* pObj) const;
-    void InsertEntry(const SdrMark& rMark, sal_Bool bChkSort = sal_True);
+    void InsertEntry(const SdrMark& rMark, bool bChkSort = true);
     void DeleteMark(sal_uLong nNum);
     void ReplaceMark(const SdrMark& rNewMark, sal_uLong nNum);
-    void Merge(const SdrMarkList& rSrcList, sal_Bool bReverse = sal_False);
-    sal_Bool DeletePageView(const SdrPageView& rPV);
-    sal_Bool InsertPageView(const SdrPageView& rPV);
+    void Merge(const SdrMarkList& rSrcList, bool bReverse = false);
+    bool DeletePageView(const SdrPageView& rPV);
+    bool InsertPageView(const SdrPageView& rPV);
 
     void SetNameDirty()
     {
-        mbNameOk = sal_False;
-        mbPointNameOk = sal_False;
-        mbGluePointNameOk = sal_False;
+        mbNameOk = false;
+        mbPointNameOk = false;
+        mbGluePointNameOk = false;
     }
 
     // A verbal description of selected objects e.g.:
@@ -238,17 +238,17 @@ public:
     const OUString& GetMarkDescription() const;
     const OUString& GetPointMarkDescription() const
     {
-        return GetPointMarkDescription(sal_False);
+        return GetPointMarkDescription(false);
     }
 
     const OUString& GetGluePointMarkDescription() const
     {
-        return GetPointMarkDescription(sal_True);
+        return GetPointMarkDescription(true);
     }
 
     // pPage=0L: Selection of everything! Respect Pages
-    sal_Bool TakeBoundRect(SdrPageView* pPageView, Rectangle& rRect) const;
-    sal_Bool TakeSnapRect(SdrPageView* pPageView, Rectangle& rRect) const;
+    bool TakeBoundRect(SdrPageView* pPageView, Rectangle& rRect) const;
+    bool TakeSnapRect(SdrPageView* pPageView, Rectangle& rRect) const;
 
     // Es werden saemtliche Entries kopiert!
     void operator=(const SdrMarkList& rLst);
@@ -267,7 +267,7 @@ namespace sdr
         std::vector<SdrObject*>     maAllMarkedObjects;
 
         // bitfield
-        unsigned                    mbEdgesOfMarkedNodesDirty : 1;
+        bool                        mbEdgesOfMarkedNodesDirty : 1;
 
         SVX_DLLPRIVATE void ImpForceEdgesOfMarkedNodes();
         SVX_DLLPRIVATE void ImplCollectCompleteSelection(SdrObject* pObj);

@@ -213,7 +213,7 @@ IMPL_LINK_NOARG(SwView, FormControlActivated)
         // if we're editing text currently, cancel this
         SdrView *pSdrView = m_pWrtShell ? m_pWrtShell->GetDrawView() : NULL;
         if ( pSdrView && pSdrView->IsTextEdit() )
-            pSdrView->SdrEndTextEdit( sal_True );
+            pSdrView->SdrEndTextEdit( true );
 
         const_cast< SwView* >( this )->AttrChangedNotify( m_pWrtShell );
     }
@@ -1049,7 +1049,7 @@ SwView::~SwView()
     // the last view must end the text edit
     SdrView *pSdrView = m_pWrtShell ? m_pWrtShell->GetDrawView() : 0;
     if( pSdrView && pSdrView->IsTextEdit() )
-        pSdrView->SdrEndTextEdit( sal_True );
+        pSdrView->SdrEndTextEdit( true );
 
     SetWindow( 0 );
 

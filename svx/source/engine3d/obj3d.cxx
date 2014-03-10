@@ -225,7 +225,7 @@ SdrAttrObj* E3dObject::GetBreakObj()
 
 // SetRectsDirty must be done through the local SdrSubList
 
-void E3dObject::SetRectsDirty(sal_Bool bNotMyself)
+void E3dObject::SetRectsDirty(bool bNotMyself)
 {
     // call parent
     SdrAttrObj::SetRectsDirty(bNotMyself);

@@ -156,7 +156,7 @@ void FuText::disposing()
 {
     if(mpView)
     {
-        if(mpView->SdrEndTextEdit(sal_False) == SDRENDTEXTEDIT_DELETED)
+        if(mpView->SdrEndTextEdit(false) == SDRENDTEXTEDIT_DELETED)
             mxTextObj.reset( 0 );
 
         // reset the RequestHandler of the used Outliner to the handler of the document
@@ -254,7 +254,7 @@ sal_Bool FuText::MouseButtonDown(const MouseEvent& rMEvt)
 
     sal_Bool bReturn = FuDraw::MouseButtonDown(rMEvt);
 
-    mpView->SetMarkHdlWhenTextEdit(sal_True);
+    mpView->SetMarkHdlWhenTextEdit(true);
     SdrViewEvent aVEvt;
     SdrHitKind eHit = mpView->PickAnything(rMEvt, SDRMOUSEBUTTONDOWN, aVEvt);
 
@@ -777,7 +777,7 @@ sal_Bool FuText::MouseButtonUp(const MouseEvent& rMEvt)
             sal_Bool bSnapEnabled = mpView->IsSnapEnabled();
 
             if (bSnapEnabled)
-                mpView->SetSnapEnabled(sal_False);
+                mpView->SetSnapEnabled(false);
 
             aPnt.X() += nDrgLog + nDrgLog;
             aPnt.Y() += nDrgLog + nDrgLog;
@@ -907,7 +907,7 @@ sal_Bool FuText::MouseButtonUp(const MouseEvent& rMEvt)
 sal_Bool FuText::KeyInput(const KeyEvent& rKEvt)
 {
     sal_Bool bReturn = sal_False;
-    mpView->SetMarkHdlWhenTextEdit(sal_True);
+    mpView->SetMarkHdlWhenTextEdit(true);
 
     KeyCode nCode = rKEvt.GetKeyCode();
     sal_Bool bShift = nCode.IsShift();
@@ -1059,7 +1059,7 @@ void FuText::SetInEditMode(const MouseEvent& rMEvt, sal_Bool bQuickDrag)
                 SdrOutliner* pOutl = SdrMakeOutliner( OUTLINERMODE_OUTLINEOBJECT, mpDoc );
 
                 if (bEmptyOutliner)
-                    mpView->SdrEndTextEdit(sal_True);
+                    mpView->SdrEndTextEdit(true);
 
                 SdrTextObj* pTextObj = GetTextObj();
                 if( pTextObj )
@@ -1075,7 +1075,7 @@ void FuText::SetInEditMode(const MouseEvent& rMEvt, sal_Bool bQuickDrag)
                         pTextObj->setActiveText( pTextObj->CheckTextHit(aPnt ) );
                     }
 
-                    if (mpView->SdrBeginTextEdit(pTextObj, pPV, mpWindow, sal_True, pOutl) && mxTextObj->GetObjInventor() == SdrInventor)
+                    if (mpView->SdrBeginTextEdit(pTextObj, pPV, mpWindow, true, pOutl) && mxTextObj->GetObjInventor() == SdrInventor)
                     {
                         bFirstObjCreated = sal_True;
                         DeleteDefaultText();

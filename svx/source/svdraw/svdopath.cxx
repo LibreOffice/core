@@ -1824,7 +1824,7 @@ void SdrPathObj::ImpForceKind()
     }
 }
 
-void SdrPathObj::ImpSetClosed(sal_Bool bClose)
+void SdrPathObj::ImpSetClosed(bool bClose)
 {
     if(bClose)
     {
@@ -2153,7 +2153,7 @@ SdrHdl* SdrPathObj::GetPlusHdl(const SdrHdl& rHdl, sal_uInt32 nPlusNum) const
                 }
 
                 pHdl->SetSourceHdlNum(rHdl.GetSourceHdlNum());
-                pHdl->SetPlusHdl(sal_True);
+                pHdl->SetPlusHdl(true);
             }
         }
     }
@@ -2488,9 +2488,9 @@ Point SdrPathObj::GetSnapPoint(sal_uInt32 nSnapPnt) const
     return Point(FRound(aB2DPoint.getX()), FRound(aB2DPoint.getY()));
 }
 
-sal_Bool SdrPathObj::IsPolyObj() const
+bool SdrPathObj::IsPolyObj() const
 {
-    return sal_True;
+    return true;
 }
 
 sal_uInt32 SdrPathObj::GetPointCount() const
@@ -2548,13 +2548,13 @@ void SdrPathObj::NbcSetPoint(const Point& rPnt, sal_uInt32 nHdlNum)
     }
 }
 
-sal_uInt32 SdrPathObj::NbcInsPointOld(const Point& rPos, sal_Bool bNewObj, sal_Bool bHideHim)
+sal_uInt32 SdrPathObj::NbcInsPointOld(const Point& rPos, bool bNewObj, bool bHideHim)
 {
     sal_uInt32 nNewHdl;
 
     if(bNewObj)
     {
-        nNewHdl = NbcInsPoint(0L, rPos, sal_True, bHideHim);
+        nNewHdl = NbcInsPoint(0L, rPos, true, bHideHim);
     }
     else
     {
@@ -2573,14 +2573,14 @@ sal_uInt32 SdrPathObj::NbcInsPointOld(const Point& rPos, sal_Bool bNewObj, sal_B
             nPolyIndex += GetPathPoly().getB2DPolygon(a).count();
         }
 
-        nNewHdl = NbcInsPoint(nPolyIndex, rPos, sal_False, bHideHim);
+        nNewHdl = NbcInsPoint(nPolyIndex, rPos, false, bHideHim);
     }
 
     ImpForceKind();
     return nNewHdl;
 }
 
-sal_uInt32 SdrPathObj::NbcInsPoint(sal_uInt32 /*nHdlNum*/, const Point& rPos, sal_Bool bNewObj, sal_Bool /*bHideHim*/)
+sal_uInt32 SdrPathObj::NbcInsPoint(sal_uInt32 /*nHdlNum*/, const Point& rPos, bool bNewObj, bool /*bHideHim*/)
 {
     sal_uInt32 nNewHdl;
 
@@ -2741,7 +2741,7 @@ SdrObject* SdrPathObj::RipPoint(sal_uInt32 nHdlNum, sal_uInt32& rNewPt0Index)
     return pNewObj;
 }
 
-SdrObject* SdrPathObj::DoConvertToPolyObj(sal_Bool bBezier, bool bAddText) const
+SdrObject* SdrPathObj::DoConvertToPolyObj(bool bBezier, bool bAddText) const
 {
     // #i89784# check for FontWork with activated HideContour
     const drawinglayer::attribute::SdrTextAttribute aText(
@@ -2841,7 +2841,7 @@ void SdrPathObj::ToggleClosed()
 }
 
 // for friend class SdrPolyEditView in some compilers:
-void SdrPathObj::SetRectsDirty(sal_Bool bNotMyself)
+void SdrPathObj::SetRectsDirty(bool bNotMyself)
 {
     SdrTextObj::SetRectsDirty(bNotMyself);
 }
@@ -2875,7 +2875,7 @@ void SdrPathObj::impDeleteDAC() const
 
 // gets base transformation and rectangle of object. If it's an SdrPathObj it fills the PolyPolygon
 // with the base geometry and returns TRUE. Otherwise it returns FALSE.
-sal_Bool SdrPathObj::TRGetBaseGeometry(basegfx::B2DHomMatrix& rMatrix, basegfx::B2DPolyPolygon& rPolyPolygon) const
+bool SdrPathObj::TRGetBaseGeometry(basegfx::B2DHomMatrix& rMatrix, basegfx::B2DPolyPolygon& rPolyPolygon) const
 {
     double fRotate(0.0);
     double fShearX(0.0);
@@ -3001,7 +3001,7 @@ sal_Bool SdrPathObj::TRGetBaseGeometry(basegfx::B2DHomMatrix& rMatrix, basegfx::
         basegfx::fTools::equalZero(fRotate) ? 0.0 : -fRotate,
         aTranslate);
 
-    return sal_True;
+    return true;
 }
 
 // Sets the base geometry of the object using infos contained in the homogeneous 3x3 matrix.

@@ -52,7 +52,7 @@ void SwBaseShell::InsertURLButton(const OUString& rURL, const OUString& rTarget,
     // OBJ_FM_BUTTON
     pSdrView->SetDesignMode(true);
     pSdrView->SetCurrentObj(OBJ_FM_BUTTON);
-    pSdrView->SetEditMode(sal_False);
+    pSdrView->SetEditMode(false);
 
     Point aStartPos(rSh.GetCharRect().Pos() + Point(0, 1));
 

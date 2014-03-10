@@ -1491,7 +1491,7 @@ void SwFEShell::Paste( SvStream& rStrm, sal_uInt16 nAction, const Point* pPt )
                     aSet.Put(pClpObj->GetMergedItemSet());
                 }
 
-                pView->SetAttributes( aSet, sal_False );
+                pView->SetAttributes( aSet, false );
             }
             break;
 

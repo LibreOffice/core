@@ -90,7 +90,7 @@ SdrHHCWrapper::~SdrHHCWrapper()
     {
         SdrView *pSdrView = pView->GetWrtShell().GetDrawView();
         OSL_ENSURE( pSdrView, "SdrHHCWrapper without DrawView?" );
-        pSdrView->SdrEndTextEdit( sal_True );
+        pSdrView->SdrEndTextEdit( true );
         SetUpdateMode(false);
         pOutlView->SetOutputArea( Rectangle( Point(), Size(1, 1) ) );
     }
@@ -111,7 +111,7 @@ bool SdrHHCWrapper::ConvertNextDocument()
     {
         SdrView *pSdrView = pView->GetWrtShell().GetDrawView();
         OSL_ENSURE( pSdrView, "SdrHHCWrapper without DrawView?" );
-        pSdrView->SdrEndTextEdit( sal_True );
+        pSdrView->SdrEndTextEdit( true );
         SetUpdateMode(false);
         pOutlView->SetOutputArea( Rectangle( Point(), Size(1, 1) ) );
         SetPaperSize( Size(1, 1) );
@@ -154,7 +154,7 @@ bool SdrHHCWrapper::ConvertNextDocument()
                     SetUpdateMode(true);
                     pView->GetWrtShell().MakeVisible(pTextObj->GetLogicRect());
 
-                    pSdrView->SdrBeginTextEdit(pTextObj, pPV, &pView->GetEditWin(), sal_False, this, pOutlView, sal_True, sal_True);
+                    pSdrView->SdrBeginTextEdit(pTextObj, pPV, &pView->GetEditWin(), false, this, pOutlView, true, true);
                 }
                 else
                     SetUpdateMode(false);

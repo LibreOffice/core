@@ -216,7 +216,7 @@ void SwDrawTextShell::ExecFormText(SfxRequest& rReq)
             //#111733# Sometimes SdrEndTextEdit() initiates the change in selection and
             // 'this' is not valid anymore
             SwView& rTempView = GetView();
-            pDrView->SdrEndTextEdit(sal_True);
+            pDrView->SdrEndTextEdit(true);
             //this removes the current shell from the dispatcher stack!!
             rTempView.AttrChangedNotify(&rSh);
         }

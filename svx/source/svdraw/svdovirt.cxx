@@ -532,7 +532,7 @@ Point SdrVirtObj::GetSnapPoint(sal_uInt32 i) const
     return aP;
 }
 
-sal_Bool SdrVirtObj::IsPolyObj() const
+bool SdrVirtObj::IsPolyObj() const
 {
     return rRefObj.IsPolyObj();
 }

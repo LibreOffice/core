@@ -52,7 +52,7 @@ public:
     void    BlockPageOrderChangedHint(sal_Bool bBlock);
 
     sal_Bool    SetStyleSheet(SfxStyleSheet* pStyleSheet, sal_Bool bDontRemoveHardAttr = sal_False);
-    virtual sal_Bool IsObjMarkable(SdrObject* pObj, SdrPageView* pPV) const;
+    virtual bool IsObjMarkable(SdrObject* pObj, SdrPageView* pPV) const;
 
     virtual void MakeVisible(const Rectangle& rRect, ::Window& rWin);
     virtual void HideSdrPage(); // SdrPageView* pPV);

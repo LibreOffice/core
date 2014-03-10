@@ -698,7 +698,7 @@ void SwDoc::PrtDataChanged()
     }
     if ( bDraw && mpDrawModel )
     {
-        const sal_Bool bTmpAddExtLeading = get(IDocumentSettingAccess::ADD_EXT_LEADING);
+        const bool bTmpAddExtLeading = get(IDocumentSettingAccess::ADD_EXT_LEADING);
         if ( bTmpAddExtLeading != mpDrawModel->IsAddExtLeading() )
             mpDrawModel->SetAddExtLeading( bTmpAddExtLeading );
 

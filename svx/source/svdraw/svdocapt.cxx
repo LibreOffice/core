@@ -194,16 +194,16 @@ TYPEINIT1(SdrCaptionObj,SdrRectObj);
 SdrCaptionObj::SdrCaptionObj():
     SdrRectObj(OBJ_TEXT),
     aTailPoly(3),  // default size: 3 points = 2 lines
-    mbSpecialTextBoxShadow(sal_False),
-    mbFixedTail(sal_False)
+    mbSpecialTextBoxShadow(false),
+    mbFixedTail(false)
 {
 }
 
 SdrCaptionObj::SdrCaptionObj(const Rectangle& rRect, const Point& rTail):
     SdrRectObj(OBJ_TEXT,rRect),
     aTailPoly(3),  // default size: 3 points = 2 lines
-    mbSpecialTextBoxShadow(sal_False),
-    mbFixedTail(sal_False)
+    mbSpecialTextBoxShadow(false),
+    mbFixedTail(false)
 {
     aTailPoly[0]=maFixedTailPos=rTail;
 }
@@ -738,10 +738,10 @@ void SdrCaptionObj::RestGeoData(const SdrObjGeoData& rGeo)
     aTailPoly=rCGeo.aTailPoly;
 }
 
-SdrObject* SdrCaptionObj::DoConvertToPolyObj(sal_Bool bBezier, bool bAddText) const
+SdrObject* SdrCaptionObj::DoConvertToPolyObj(bool bBezier, bool bAddText) const
 {
     SdrObject* pRect=SdrRectObj::DoConvertToPolyObj(bBezier, bAddText);
-    SdrObject* pTail = ImpConvertMakeObj(basegfx::B2DPolyPolygon(aTailPoly.getB2DPolygon()), sal_False, bBezier);
+    SdrObject* pTail = ImpConvertMakeObj(basegfx::B2DPolyPolygon(aTailPoly.getB2DPolygon()), false, bBezier);
     SdrObject* pRet=(pTail!=NULL) ? pTail : pRect;
     if (pTail!=NULL && pRect!=NULL) {
         bool bInsRect = true;

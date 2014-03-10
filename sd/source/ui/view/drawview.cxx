@@ -492,7 +492,7 @@ void DrawView::PresPaint(const Region& rRegion)
  * in slide show).
  */
 
-sal_Bool DrawView::IsObjMarkable(SdrObject* pObj, SdrPageView* pPV) const
+bool DrawView::IsObjMarkable(SdrObject* pObj, SdrPageView* pPV) const
 {
     return FmFormView::IsObjMarkable(pObj, pPV);
 }

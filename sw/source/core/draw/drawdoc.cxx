@@ -121,7 +121,7 @@ SwDrawDocument::~SwDrawDocument()
 {
     Broadcast(SdrHint(HINT_MODELCLEARED));
 
-    ClearModel(sal_True);
+    ClearModel(true);
 }
 
 /** Create a new page (SdPage) and return a pointer to it back.

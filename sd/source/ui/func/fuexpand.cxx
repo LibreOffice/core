@@ -203,7 +203,7 @@ void FuExpandPage::DoExecute( SfxRequest& )
                     pTextObj->SetEmptyPresObj(false);
 
                     SfxStyleSheet* pSheet = pPage->GetStyleSheetForPresObj(PRESOBJ_TITLE);
-                    pTextObj->NbcSetStyleSheet(pSheet, sal_False);
+                    pTextObj->NbcSetStyleSheet(pSheet, false);
 
                     sal_Int32 nChildCount = pOutl->GetChildCount(pPara);
 

@@ -416,7 +416,7 @@ protected:
     OutlinerParaObject*         pOldText;
     OutlinerParaObject*         pNewText;
     bool                        bNewTextAvailable;
-    sal_Bool                        bEmptyPresObj;
+    bool                        bEmptyPresObj;
     sal_Int32                   mnText;
 
 public:
@@ -677,7 +677,7 @@ public:
 class SdrUndoPageMasterPage : public SdrUndoPage
 {
 protected:
-    sal_Bool                    mbOldHadMasterPage;
+    bool                        mbOldHadMasterPage;
     SetOfByte                   maOldSet;
     sal_uInt16                  maOldMasterPageNumber;
 
@@ -712,7 +712,7 @@ public:
 class SVX_DLLPUBLIC SdrUndoPageChangeMasterPage : public SdrUndoPageMasterPage
 {
 protected:
-    sal_Bool                    mbNewHadMasterPage;
+    bool                        mbNewHadMasterPage;
     SetOfByte                   maNewSet;
     sal_uInt16                  maNewMasterPageNumber;
 

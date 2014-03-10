@@ -174,7 +174,7 @@ public:
     // #i121917#
     virtual bool HasText() const;
 
-    sal_Bool IsTextEditActive() const { return (pEdtOutl != 0L); }
+    bool IsTextEditActive() const { return (pEdtOutl != 0L); }
     bool IsTextEditActive( const sdr::table::CellPos& rPos );
 
     /** returns true only if we are in edit mode and the user actually changed anything */
@@ -243,7 +243,7 @@ public:
     virtual void NbcMove(const Size& rSiz);
     virtual void NbcResize(const Point& rRef, const Fraction& xFact, const Fraction& yFact);
 
-    virtual sal_Bool BegTextEdit(SdrOutliner& rOutl);
+    virtual bool BegTextEdit(SdrOutliner& rOutl);
     virtual void EndTextEdit(SdrOutliner& rOutl);
     virtual void TakeTextEditArea(Size* pPaperMin, Size* pPaperMax, Rectangle* pViewInit, Rectangle* pViewMin) const;
     virtual void TakeTextEditArea(const sdr::table::CellPos& rPos, Size* pPaperMin, Size* pPaperMax, Rectangle* pViewInit, Rectangle* pViewMin) const;
@@ -259,8 +259,8 @@ public:
 
     void SetTextEditOutliner(SdrOutliner* pOutl) { pEdtOutl=pOutl; }
 
-    virtual sal_Bool IsVerticalWriting() const;
-    virtual void SetVerticalWriting(sal_Bool bVertical);
+    virtual bool IsVerticalWriting() const;
+    virtual void SetVerticalWriting(bool bVertical);
 
     com::sun::star::text::WritingMode GetWritingMode() const;
 
@@ -277,7 +277,7 @@ public:
 
     // gets base transformation and rectangle of object. If it's an SdrPathObj it fills the PolyPolygon
     // with the base geometry and returns TRUE. Otherwise it returns FALSE.
-    virtual sal_Bool TRGetBaseGeometry(basegfx::B2DHomMatrix& rMatrix, basegfx::B2DPolyPolygon& rPolyPolygon) const;
+    virtual bool TRGetBaseGeometry(basegfx::B2DHomMatrix& rMatrix, basegfx::B2DPolyPolygon& rPolyPolygon) const;
 
     // sets the base geometry of the object using infos contained in the homogen 3x3 matrix.
     // If it's an SdrPathObj it will use the provided geometry information. The Polygon has

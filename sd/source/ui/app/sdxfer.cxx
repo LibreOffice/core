@@ -676,7 +676,7 @@ void SdTransferable::SetPageBookmarks( const std::vector<OUString> &rPageBookmar
         if( mpSdViewIntern )
             mpSdViewIntern->HideSdrPage();
 
-        mpSdDrawDocument->ClearModel(sal_False);
+        mpSdDrawDocument->ClearModel(false);
 
         mpPageDocShell = NULL;
 

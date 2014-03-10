@@ -81,8 +81,8 @@ void FuDraw::DoModifiers(const MouseEvent& rMEvt)
     sal_Bool bAlt   = rMEvt.IsMod2();
 
     bool bOrtho     = bShift;
-    sal_Bool bAngleSnap = bShift;
-    sal_Bool bCenter    = bAlt;
+    bool bAngleSnap = bShift;
+    bool bCenter    = bAlt;
 
     // #i33136#
     if(doConstructOrthogonal())
@@ -107,7 +107,7 @@ void FuDraw::ResetModifiers()
     ScViewData* pViewData = pViewShell->GetViewData();
     const ScViewOptions& rOpt = pViewData->GetOptions();
     const ScGridOptions& rGrid = rOpt.GetGridOptions();
-    sal_Bool bGridOpt = rGrid.GetUseGridSnap();
+    bool bGridOpt = rGrid.GetUseGridSnap();
 
     if (pView->IsOrtho())
         pView->SetOrtho(false);
@@ -392,7 +392,7 @@ bool FuDraw::KeyInput(const KeyEvent& rKEvt)
                 {
                     // mark first object
                     pView->UnmarkAllObj();
-                    pView->MarkNextObj(sal_True);
+                    pView->MarkNextObj(true);
 
                     // II
                     if(pView->AreObjectsMarked())

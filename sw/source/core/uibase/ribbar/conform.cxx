@@ -46,13 +46,13 @@ sal_Bool ConstFormControl::MouseButtonDown(const MouseEvent& rMEvt)
 
     if (rMEvt.IsMod2())
     {
-        pSdrView->SetCreate1stPointAsCenter(sal_True);
-        pSdrView->SetResizeAtCenter(sal_True);
+        pSdrView->SetCreate1stPointAsCenter(true);
+        pSdrView->SetResizeAtCenter(true);
     }
     else
     {
-        pSdrView->SetCreate1stPointAsCenter(sal_False);
-        pSdrView->SetResizeAtCenter(sal_False);
+        pSdrView->SetCreate1stPointAsCenter(false);
+        pSdrView->SetResizeAtCenter(false);
     }
 
     SdrViewEvent aVEvt;

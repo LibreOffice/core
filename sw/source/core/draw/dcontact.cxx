@@ -1608,7 +1608,7 @@ void SwDrawContact::DisconnectFromLayout( bool _bMoveMasterToInvisibleLayer )
         for( SdrView* pView = aIter.FirstView(); pView;
                     pView = aIter.NextView() )
         {
-            pView->MarkObj( GetMaster(), pView->GetSdrPageView(), sal_True );
+            pView->MarkObj( GetMaster(), pView->GetSdrPageView(), true );
         }
 
         // Instead of removing 'master' object from drawing page, move the

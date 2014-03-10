@@ -69,7 +69,7 @@ sal_uInt16 E3dCubeObj::GetObjIdentifier() const
 
 // Convert the object into a group object consisting of 6 polygons
 
-SdrObject *E3dCubeObj::DoConvertToPolyObj(sal_Bool /*bBezier*/, bool /*bAddText*/) const
+SdrObject *E3dCubeObj::DoConvertToPolyObj(bool /*bBezier*/, bool /*bAddText*/) const
 {
     return NULL;
 }

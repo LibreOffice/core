@@ -73,16 +73,16 @@ class SVX_DLLPUBLIC SdrViewIter
     sal_uInt32                                          mnOutDevNum;
 
     // bitfield
-    unsigned                                            mbNoMasterPage : 1;
+    bool                                                mbNoMasterPage : 1;
 
 private:
     SVX_DLLPRIVATE void          ImpInitVars();
     SVX_DLLPRIVATE SdrView*      ImpFindView();
-    SVX_DLLPRIVATE sal_Bool      ImpCheckPageView(SdrPageView* pPV) const;
+    SVX_DLLPRIVATE bool          ImpCheckPageView(SdrPageView* pPV) const;
 
 public:
-    SdrViewIter(const SdrPage* pPage, sal_Bool bNoMasterPage = sal_False);
-    SdrViewIter(const SdrObject* pObject, sal_Bool bNoMasterPage = sal_False);
+    SdrViewIter(const SdrPage* pPage, bool bNoMasterPage = false);
+    SdrViewIter(const SdrObject* pObject, bool bNoMasterPage = false);
 
     SdrView* FirstView();
     SdrView* NextView();

@@ -133,46 +133,46 @@ sal_Bool FuDraw::MouseButtonDown(const MouseEvent& rMEvt)
         }
 
         if (!mpView->IsSnapEnabled())
-            mpView->SetSnapEnabled(sal_True);
-        sal_Bool bSnapModPressed = rMEvt.IsMod1();
+            mpView->SetSnapEnabled(true);
+        bool bSnapModPressed = rMEvt.IsMod1();
 
-        sal_Bool bGridSnap = pFrameView->IsGridSnap();
+        bool bGridSnap = pFrameView->IsGridSnap();
         bGridSnap = (bSnapModPressed != bGridSnap);
 
         if (mpView->IsGridSnap() != bGridSnap)
             mpView->SetGridSnap(bGridSnap);
 
-        sal_Bool bBordSnap = pFrameView->IsBordSnap();
+        bool bBordSnap = pFrameView->IsBordSnap();
         bBordSnap = (bSnapModPressed != bBordSnap);
 
         if (mpView->IsBordSnap() != bBordSnap)
             mpView->SetBordSnap(bBordSnap);
 
-        sal_Bool bHlplSnap = pFrameView->IsHlplSnap();
+        bool bHlplSnap = pFrameView->IsHlplSnap();
         bHlplSnap = (bSnapModPressed != bHlplSnap);
 
         if (mpView->IsHlplSnap() != bHlplSnap)
             mpView->SetHlplSnap(bHlplSnap);
 
-        sal_Bool bOFrmSnap = pFrameView->IsOFrmSnap();
+        bool bOFrmSnap = pFrameView->IsOFrmSnap();
         bOFrmSnap = (bSnapModPressed != bOFrmSnap);
 
         if (mpView->IsOFrmSnap() != bOFrmSnap)
             mpView->SetOFrmSnap(bOFrmSnap);
 
-        sal_Bool bOPntSnap = pFrameView->IsOPntSnap();
+        bool bOPntSnap = pFrameView->IsOPntSnap();
         bOPntSnap = (bSnapModPressed != bOPntSnap);
 
         if (mpView->IsOPntSnap() != bOPntSnap)
             mpView->SetOPntSnap(bOPntSnap);
 
-        sal_Bool bOConSnap = pFrameView->IsOConSnap();
+        bool bOConSnap = pFrameView->IsOConSnap();
         bOConSnap = (bSnapModPressed != bOConSnap);
 
         if (mpView->IsOConSnap() != bOConSnap)
             mpView->SetOConSnap(bOConSnap);
 
-        sal_Bool bAngleSnap = rMEvt.IsShift() == !pFrameView->IsAngleSnapEnabled();
+        bool bAngleSnap = rMEvt.IsShift() == !pFrameView->IsAngleSnapEnabled();
 
         if (mpView->IsAngleSnapEnabled() != bAngleSnap)
             mpView->SetAngleSnapEnabled(bAngleSnap);
@@ -180,7 +180,7 @@ sal_Bool FuDraw::MouseButtonDown(const MouseEvent& rMEvt)
         if (mpView->IsOrtho() != bOrtho)
             mpView->SetOrtho(bOrtho);
 
-        sal_Bool bCenter = rMEvt.IsMod2();
+        bool bCenter = rMEvt.IsMod2();
 
         if ( mpView->IsCreate1stPointAsCenter() != bCenter ||
              mpView->IsResizeAtCenter() != bCenter )
@@ -249,46 +249,46 @@ sal_Bool FuDraw::MouseMove(const MouseEvent& rMEvt)
             bOrtho = rMEvt.IsShift() != pFrameView->IsOrtho();
         }
 
-        sal_Bool bSnapModPressed = rMEvt.IsMod2();
+        bool bSnapModPressed = rMEvt.IsMod2();
         mpView->SetDragWithCopy(rMEvt.IsMod1() && pFrameView->IsDragWithCopy());
 
-        sal_Bool bGridSnap = pFrameView->IsGridSnap();
+        bool bGridSnap = pFrameView->IsGridSnap();
         bGridSnap = (bSnapModPressed != bGridSnap);
 
         if (mpView->IsGridSnap() != bGridSnap)
             mpView->SetGridSnap(bGridSnap);
 
-        sal_Bool bBordSnap = pFrameView->IsBordSnap();
+        bool bBordSnap = pFrameView->IsBordSnap();
         bBordSnap = (bSnapModPressed != bBordSnap);
 
         if (mpView->IsBordSnap() != bBordSnap)
             mpView->SetBordSnap(bBordSnap);
 
-        sal_Bool bHlplSnap = pFrameView->IsHlplSnap();
+        bool bHlplSnap = pFrameView->IsHlplSnap();
         bHlplSnap = (bSnapModPressed != bHlplSnap);
 
         if (mpView->IsHlplSnap() != bHlplSnap)
             mpView->SetHlplSnap(bHlplSnap);
 
-        sal_Bool bOFrmSnap = pFrameView->IsOFrmSnap();
+        bool bOFrmSnap = pFrameView->IsOFrmSnap();
         bOFrmSnap = (bSnapModPressed != bOFrmSnap);
 
         if (mpView->IsOFrmSnap() != bOFrmSnap)
             mpView->SetOFrmSnap(bOFrmSnap);
 
-        sal_Bool bOPntSnap = pFrameView->IsOPntSnap();
+        bool bOPntSnap = pFrameView->IsOPntSnap();
         bOPntSnap = (bSnapModPressed != bOPntSnap);
 
         if (mpView->IsOPntSnap() != bOPntSnap)
             mpView->SetOPntSnap(bOPntSnap);
 
-        sal_Bool bOConSnap = pFrameView->IsOConSnap();
+        bool bOConSnap = pFrameView->IsOConSnap();
         bOConSnap = (bSnapModPressed != bOConSnap);
 
         if (mpView->IsOConSnap() != bOConSnap)
             mpView->SetOConSnap(bOConSnap);
 
-        sal_Bool bAngleSnap = rMEvt.IsShift() == !pFrameView->IsAngleSnapEnabled();
+        bool bAngleSnap = rMEvt.IsShift() == !pFrameView->IsAngleSnapEnabled();
 
         if (mpView->IsAngleSnapEnabled() != bAngleSnap)
             mpView->SetAngleSnapEnabled(bAngleSnap);
@@ -296,7 +296,7 @@ sal_Bool FuDraw::MouseMove(const MouseEvent& rMEvt)
         if (mpView->IsOrtho() != bOrtho)
             mpView->SetOrtho(bOrtho);
 
-        sal_Bool bCenter = rMEvt.IsMod2();
+        bool bCenter = rMEvt.IsMod2();
 
         if ( mpView->IsCreate1stPointAsCenter() != bCenter ||
              mpView->IsResizeAtCenter() != bCenter )
@@ -342,9 +342,9 @@ sal_Bool FuDraw::MouseButtonUp(const MouseEvent& rMEvt)
     FrameView* pFrameView = mpViewShell->GetFrameView();
     mpView->SetOrtho( pFrameView->IsOrtho() );
     mpView->SetAngleSnapEnabled( pFrameView->IsAngleSnapEnabled() );
-    mpView->SetSnapEnabled(sal_True);
-    mpView->SetCreate1stPointAsCenter(sal_False);
-    mpView->SetResizeAtCenter(sal_False);
+    mpView->SetSnapEnabled(true);
+    mpView->SetCreate1stPointAsCenter(false);
+    mpView->SetResizeAtCenter(false);
     mpView->SetDragWithCopy(pFrameView->IsDragWithCopy());
     mpView->SetGridSnap(pFrameView->IsGridSnap());
     mpView->SetBordSnap(pFrameView->IsBordSnap());
@@ -452,7 +452,7 @@ sal_Bool FuDraw::KeyInput(const KeyEvent& rKEvt)
             {
                 // mark last object
                 mpView->UnmarkAllObj();
-                mpView->MarkNextObj(sal_False);
+                mpView->MarkNextObj(false);
 
                 if(mpView->AreObjectsMarked())
                     mpView->MakeVisible(mpView->GetAllMarkedRect(), *mpWindow);
@@ -470,7 +470,7 @@ sal_Bool FuDraw::KeyInput(const KeyEvent& rKEvt)
             {
                 // mark first object
                 mpView->UnmarkAllObj();
-                mpView->MarkNextObj(sal_True);
+                mpView->MarkNextObj(true);
 
                 if(mpView->AreObjectsMarked())
                     mpView->MakeVisible(mpView->GetAllMarkedRect(), *mpWindow);
@@ -777,7 +777,7 @@ void FuDraw::DoubleClick(const MouseEvent& rMEvt)
             {
                 // hit group -> select subobject
                 mpView->UnMarkAll();
-                mpView->MarkObj(aMDPos, nHitLog, rMEvt.IsShift(), sal_True);
+                mpView->MarkObj(aMDPos, nHitLog, rMEvt.IsShift(), true);
             }
         }
     }

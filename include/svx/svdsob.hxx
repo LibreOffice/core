@@ -37,17 +37,17 @@ protected:
     sal_uInt8 aData[32];
 
 public:
-    explicit SetOfByte(sal_Bool bInitVal = sal_False)
+    explicit SetOfByte(bool bInitVal = false)
     {
         memset(aData, bInitVal ? 0xFF : 0x00, sizeof(aData));
     }
 
-    sal_Bool operator==(const SetOfByte& rCmpSet) const
+    bool operator==(const SetOfByte& rCmpSet) const
     {
         return (memcmp(aData, rCmpSet.aData, sizeof(aData)) == 0);
     }
 
-    sal_Bool operator!=(const SetOfByte& rCmpSet) const
+    bool operator!=(const SetOfByte& rCmpSet) const
     {
         return (memcmp(aData, rCmpSet.aData, sizeof(aData))!=0);
     }
@@ -62,7 +62,7 @@ public:
         aData[a/8] &= ~(1<<a%8);
     }
 
-    void Set(sal_uInt8 a, sal_Bool b)
+    void Set(sal_uInt8 a, bool b)
     {
         if(b)
             Set(a);
@@ -70,7 +70,7 @@ public:
             Clear(a);
     }
 
-    sal_Bool IsSet(sal_uInt8 a) const
+    bool IsSet(sal_uInt8 a) const
     {
         return (aData[a/8] & 1<<a%8) != 0;
     }
@@ -85,7 +85,7 @@ public:
         memset(aData, 0x00, sizeof(aData));
     }
 
-    sal_Bool IsEmpty() const;
+    bool IsEmpty() const;
 
     void operator&=(const SetOfByte& r2ndSet);
     void operator|=(const SetOfByte& r2ndSet);

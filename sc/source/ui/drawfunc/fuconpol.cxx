@@ -73,7 +73,7 @@ bool FuConstPolygon::MouseButtonDown(const MouseEvent& rMEvt)
     }
     else
     {
-        pView->EnableExtendedMouseEventDispatcher(sal_True);
+        pView->EnableExtendedMouseEventDispatcher(true);
     }
 
     if ( pView->MouseButtonDown(rMEvt, pWindow) )
@@ -150,7 +150,7 @@ bool FuConstPolygon::KeyInput(const KeyEvent& rKEvt)
 
 void FuConstPolygon::Activate()
 {
-    pView->EnableExtendedMouseEventDispatcher(sal_True);
+    pView->EnableExtendedMouseEventDispatcher(true);
 
     SdrObjKind eKind;
 

@@ -173,7 +173,7 @@ void FmFormView::MarkListHasChanged()
                 pImpl->m_xWindow->removeFocusListener(pImpl);
                 pImpl->m_xWindow = NULL;
             }
-            SetMoveOutside(sal_False);
+            SetMoveOutside(false);
             //OLMRefreshAllIAOManagers();
         }
 
@@ -229,7 +229,7 @@ void FmFormView::DeleteWindowFromPaintView(OutputDevice* pNewWin)
 
 void FmFormView::ChangeDesignMode(bool bDesign)
 {
-    if ((bDesign ? 1 : 0) == IsDesignMode())
+    if (bDesign == IsDesignMode())
         return;
 
     FmFormModel* pModel = PTR_CAST(FmFormModel, GetModel());
@@ -380,7 +380,7 @@ SdrModel* FmFormView::GetMarkedObjModel() const
 }
 
 
-sal_Bool FmFormView::Paste(const SdrModel& rMod, const Point& rPos, SdrObjList* pLst, sal_uInt32 nOptions)
+bool FmFormView::Paste(const SdrModel& rMod, const Point& rPos, SdrObjList* pLst, sal_uInt32 nOptions)
 {
     return E3dView::Paste(rMod, rPos, pLst, nOptions);
 }
@@ -515,7 +515,7 @@ sal_Bool FmFormView::KeyInput(const KeyEvent& rKEvt, Window* pWin)
                     pImpl->m_xWindow = xWindow;
                     // add as listener to get notified when ESC will be pressed inside the grid
                     pImpl->m_xWindow->addFocusListener(pImpl);
-                    SetMoveOutside(sal_True);
+                    SetMoveOutside(true);
                     //OLMRefreshAllIAOManagers();
                     xWindow->setFocus();
                     bDone = sal_True;

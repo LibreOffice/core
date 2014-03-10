@@ -86,7 +86,7 @@ public:
 
     // Access to the default attributes.
     E3dDefaultAttributes& Get3DDefaultAttributes() { return a3DDefaultAttr; }
-    virtual sal_Bool BegDragObj(const Point& rPnt, OutputDevice* pOut = NULL, SdrHdl* pHdl = NULL, short nMinMov = -3, SdrDragMethod* pForcedMeth = NULL);
+    virtual bool BegDragObj(const Point& rPnt, OutputDevice* pOut = NULL, SdrHdl* pHdl = NULL, short nMinMov = -3, SdrDragMethod* pForcedMeth = NULL);
     virtual void CheckPossibilities();
 
     // Get/Set Event
@@ -98,7 +98,7 @@ public:
 
     // On Paste: We need to insert the objects of the Scene, but not the Scene itself
     using SdrView::Paste;
-    virtual sal_Bool Paste(const SdrModel& rMod, const Point& rPos, SdrObjList* pLst=NULL, sal_uInt32 nOptions=0);
+    virtual bool Paste(const SdrModel& rMod, const Point& rPos, SdrObjList* pLst=NULL, sal_uInt32 nOptions=0);
 
     // #83403# Service routine used from local Clone() and from SdrCreateView::EndCreateObj(...)
     bool ImpCloneAll3DObjectsToDestScene(E3dScene* pSrcScene, E3dScene* pDstScene, Point aOffset);

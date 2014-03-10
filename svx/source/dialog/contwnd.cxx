@@ -85,7 +85,7 @@ void ContourWindow::SetPolyPolygon( const PolyPolygon& rPolyPoly )
     if ( nPolyCount )
     {
         pView->MarkAll();
-        pView->CombineMarkedObjects( sal_False );
+        pView->CombineMarkedObjects( false );
     }
 
     pModel->SetChanged( false );
@@ -123,13 +123,13 @@ void ContourWindow::InitSdrModel()
     aSet.Put( XFillColorItem( "", TRANSCOL ) );
     aSet.Put( XFillTransparenceItem( 50 ) );
     pView->SetAttributes( aSet );
-    pView->SetFrameDragSingles( sal_True );
+    pView->SetFrameDragSingles( true );
 }
 
 void ContourWindow::SdrObjCreated( const SdrObject&  )
 {
     pView->MarkAll();
-    pView->CombineMarkedObjects( sal_False );
+    pView->CombineMarkedObjects( false );
 }
 
 bool ContourWindow::IsContourChanged() const

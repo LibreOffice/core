@@ -654,14 +654,14 @@ bool DlgEdFunc::setMovementPointer(const MouseEvent& rMEvt)
 DlgEdFuncInsert::DlgEdFuncInsert( OReportSection* _pParent ) :
     DlgEdFunc( _pParent )
 {
-    m_rView.SetCreateMode( sal_True );
+    m_rView.SetCreateMode( true );
 }
 
 
 
 DlgEdFuncInsert::~DlgEdFuncInsert()
 {
-    m_rView.SetEditMode( sal_True );
+    m_rView.SetEditMode( true );
 }
 
 
@@ -726,7 +726,7 @@ sal_Bool DlgEdFuncInsert::MouseButtonUp( const MouseEvent& rMEvt )
         {
             m_pParent->getSectionWindow()->getViewsWindow()->BrkAction();
             // BrkAction disables the create mode
-            m_rView.SetCreateMode( sal_True );
+            m_rView.SetCreateMode( true );
             return sal_True;
         }
 
@@ -859,7 +859,7 @@ sal_Bool DlgEdFuncSelect::MouseButtonDown( const MouseEvent& rMEvt )
         }
         else
         {
-            m_rView.SdrBeginTextEdit( aVEvt.pRootObj,m_rView.GetSdrPageView(),m_pParent,sal_False );
+            m_rView.SdrBeginTextEdit( aVEvt.pRootObj,m_rView.GetSdrPageView(),m_pParent, false );
         }
     }
 

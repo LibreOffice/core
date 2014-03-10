@@ -253,7 +253,7 @@ public:
     SdPathHdl( const SmartTagReference& xTag, SdrPathObj* mpPathObj );
     virtual ~SdPathHdl();
     virtual void CreateB2dIAObject();
-    virtual sal_Bool IsFocusHdl() const;
+    virtual bool IsFocusHdl() const;
     virtual Pointer GetSdrDragPointer() const;
     virtual bool isMarkable() const;
 
@@ -319,9 +319,9 @@ void SdPathHdl::CreateB2dIAObject()
 
 
 
-sal_Bool SdPathHdl::IsFocusHdl() const
+bool SdPathHdl::IsFocusHdl() const
 {
-    return sal_False;
+    return false;
 }
 
 
@@ -517,7 +517,7 @@ bool MotionPathTag::MouseButtonDown( const MouseEvent& rMEvt, SmartHdl& rHdl )
 
                 bool bClosed0(mpPathObj->IsClosedObj());
 
-                sal_uInt32 nInsPointNum = mpPathObj->NbcInsPointOld(aPt, bNewObj, sal_True);
+                sal_uInt32 nInsPointNum = mpPathObj->NbcInsPointOld(aPt, bNewObj, true);
 
                 if(bClosed0 != mpPathObj->IsClosedObj())
                 {
@@ -794,7 +794,7 @@ bool MotionPathTag::OnMove( const KeyEvent& rKEvt )
                 if(!bWasNoSnap)
                     ((SdrDragStat&)mrView.GetDragStat()).SetNoSnap(true);
                 if(bWasSnapEnabled)
-                    mrView.SetSnapEnabled(sal_False);
+                    mrView.SetSnapEnabled(false);
 
                 mrView.MovAction(aEndPoint);
                 mrView.EndDragObj();
@@ -879,7 +879,7 @@ sal_Bool MotionPathTag::MarkPoints(const Rectangle* pRect, sal_Bool bUnmark )
         {
             SmartHdl* pHdl = dynamic_cast< SmartHdl* >( mrView.GetHdl( sal::static_int_cast< sal_uLong >( nHdlNum-- ) ) );
 
-            if( pHdl && (pHdl->getTag().get() == this) && mrView.IsPointMarkable(*pHdl) && pHdl->IsSelected()==bUnmark)
+            if( pHdl && (pHdl->getTag().get() == this) && mrView.IsPointMarkable(*pHdl) && (pHdl->IsSelected() ? 1 : 0)==bUnmark)
             {
                 Point aPos(pHdl->GetPos());
                 if( pRect==NULL || pRect->IsInside(aPos))
@@ -970,7 +970,7 @@ void MotionPathTag::addCustomHandles( SdrHdlList& rHandlerList )
 
         if( isSelected() )
         {
-            mrView.GetSdrPageView()->SetHasMarkedObj(sal_True);
+            mrView.GetSdrPageView()->SetHasMarkedObj(true);
 
             if( !mrView.IsFrameDragSingles() )
             {
@@ -1006,7 +1006,7 @@ void MotionPathTag::addCustomHandles( SdrHdlList& rHandlerList )
                             {
                                 pPlusHdl->SetObj(mpPathObj);
                                 pPlusHdl->SetPageView(mrView.GetSdrPageView());
-                                pPlusHdl->SetPlusHdl(sal_True);
+                                pPlusHdl->SetPlusHdl(true);
                                 rHandlerList.AddHdl(pPlusHdl);
                             }
                         }

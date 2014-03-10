@@ -439,7 +439,7 @@ bool SdrTableObjImpl::ApplyCellStyles()
                     if( xCell.is() && ( xCell->GetStyleSheet() != pStyle ) )
                     {
                         bChanges = true;
-                        xCell->SetStyleSheet( pStyle, sal_True );
+                        xCell->SetStyleSheet( pStyle, true );
                     }
                 }
             }
@@ -690,7 +690,7 @@ void SdrTableObjImpl::UpdateCells( Rectangle& rArea )
     {
         TableModelNotifyGuard aGuard( mxTable.get() );
         mpLayouter->updateCells( rArea );
-        mxTable->setModified(sal_True);
+        mxTable->setModified(true);
     }
 }
 
@@ -1815,14 +1815,14 @@ Point SdrTableObj::GetSnapPoint(sal_uInt32 i) const
 
 
 
-sal_Bool SdrTableObj::BegTextEdit(SdrOutliner& rOutl)
+bool SdrTableObj::BegTextEdit(SdrOutliner& rOutl)
 {
     if( pEdtOutl != NULL )
-        return sal_False;
+        return false;
 
     pEdtOutl=&rOutl;
 
-    mbInEditMode = sal_True;
+    mbInEditMode = true;
 
     rOutl.Init( OUTLINERMODE_TEXTOBJECT );
     rOutl.SetRefDevice( pModel->GetRefDevice() );
@@ -1852,7 +1852,7 @@ sal_Bool SdrTableObj::BegTextEdit(SdrOutliner& rOutl)
     rOutl.UpdateFields();
     rOutl.ClearModifyFlag();
 
-    return sal_True;
+    return true;
 }
 
 
@@ -1899,7 +1899,7 @@ void SdrTableObj::EndTextEdit(SdrOutliner& rOutl)
     nStat &= ~EE_CNTRL_AUTOPAGESIZE;
     rOutl.SetControlWord(nStat);
 
-    mbInEditMode = sal_False;
+    mbInEditMode = false;
 }
 
 
@@ -2043,7 +2043,7 @@ void SdrTableObj::ReformatText()
 
 
 
-sal_Bool SdrTableObj::IsVerticalWriting() const
+bool SdrTableObj::IsVerticalWriting() const
 {
     const SvxWritingModeItem* pModeItem = dynamic_cast< const SvxWritingModeItem* >( &GetObjectItem( SDRATTR_TEXTDIRECTION ) );
     return pModeItem && pModeItem->GetValue() == com::sun::star::text::WritingMode_TB_RL;
@@ -2051,7 +2051,7 @@ sal_Bool SdrTableObj::IsVerticalWriting() const
 
 
 
-void SdrTableObj::SetVerticalWriting(sal_Bool bVertical )
+void SdrTableObj::SetVerticalWriting(bool bVertical )
 {
     if( bVertical != IsVerticalWriting() )
     {
@@ -2091,7 +2091,7 @@ WritingMode SdrTableObj::GetWritingMode() const
 
 // gets base transformation and rectangle of object. If it's an SdrPathObj it fills the PolyPolygon
 // with the base geometry and returns TRUE. Otherwise it returns FALSE.
-sal_Bool SdrTableObj::TRGetBaseGeometry(basegfx::B2DHomMatrix& rMatrix, basegfx::B2DPolyPolygon& rPolyPolygon ) const
+bool SdrTableObj::TRGetBaseGeometry(basegfx::B2DHomMatrix& rMatrix, basegfx::B2DPolyPolygon& rPolyPolygon ) const
 {
     return SdrTextObj::TRGetBaseGeometry( rMatrix, rPolyPolygon );
 }

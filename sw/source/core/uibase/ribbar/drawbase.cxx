@@ -56,7 +56,7 @@ SwDrawBase::SwDrawBase(SwWrtShell* pSwWrtShell, SwEditWin* pWindow, SwView* pSwV
 SwDrawBase::~SwDrawBase()
 {
     if (m_pView->GetWrtShellPtr()) // In the view-dtor could the wrtsh already been deleted...
-        m_pSh->GetDrawView()->SetEditMode(sal_True);
+        m_pSh->GetDrawView()->SetEditMode(true);
 }
 
 sal_Bool SwDrawBase::MouseButtonDown(const MouseEvent& rMEvt)
@@ -71,13 +71,13 @@ sal_Bool SwDrawBase::MouseButtonDown(const MouseEvent& rMEvt)
 
     if (rMEvt.IsMod2())
     {
-        pSdrView->SetCreate1stPointAsCenter(sal_True);
-        pSdrView->SetResizeAtCenter(sal_True);
+        pSdrView->SetCreate1stPointAsCenter(true);
+        pSdrView->SetResizeAtCenter(true);
     }
     else
     {
-        pSdrView->SetCreate1stPointAsCenter(sal_False);
-        pSdrView->SetResizeAtCenter(sal_False);
+        pSdrView->SetCreate1stPointAsCenter(false);
+        pSdrView->SetResizeAtCenter(false);
     }
 
     SdrViewEvent aVEvt;
@@ -426,7 +426,7 @@ void SwDrawBase::Activate(const sal_uInt16 nSlot)
     SdrView *pSdrView = m_pSh->GetDrawView();
 
     pSdrView->SetCurrentObj( static_cast< sal_uInt16 >(m_pWin->GetSdrDrawMode()) );
-    pSdrView->SetEditMode(sal_False);
+    pSdrView->SetEditMode(false);
 
     SetDrawPointer();
     m_pSh->NoEdit();
@@ -436,7 +436,7 @@ void SwDrawBase::Deactivate()
 {
     SdrView *pSdrView = m_pSh->GetDrawView();
     pSdrView->SetOrtho(false);
-    pSdrView->SetAngleSnapEnabled(sal_False);
+    pSdrView->SetAngleSnapEnabled(false);
 
     if (m_pWin->IsDrawAction() && m_pSh->IsDrawCreate())
         m_pSh->BreakCreate();

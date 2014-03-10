@@ -140,7 +140,7 @@ void ScDrawShell::GetDrawFuncState( SfxItemSet& rSet )      // Funktionen disabl
 
     //  call IsMirrorAllowed first to make sure ForcePossibilities (and thus CheckMarked)
     //  is called before GetMarkCount, so the nMarkCount value is valid for the rest of this method.
-    if (!pView->IsMirrorAllowed(sal_True,sal_True))
+    if (!pView->IsMirrorAllowed(true,true))
     {
         rSet.DisableItem( SID_MIRROR_HORIZONTAL );
         rSet.DisableItem( SID_MIRROR_VERTICAL );

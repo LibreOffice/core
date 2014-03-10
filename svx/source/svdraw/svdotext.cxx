@@ -91,21 +91,21 @@ SdrTextObj::SdrTextObj()
     pFormTextBoundRect(NULL),
     eTextKind(OBJ_TEXT)
 {
-    bTextSizeDirty=sal_False;
-    bTextFrame=sal_False;
-    bNoShear=sal_False;
-    bNoRotate=sal_False;
-    bNoMirror=sal_False;
-    bDisableAutoWidthOnDragging=sal_False;
+    bTextSizeDirty=false;
+    bTextFrame=false;
+    bNoShear=false;
+    bNoRotate=false;
+    bNoMirror=false;
+    bDisableAutoWidthOnDragging=false;
 
-    mbInEditMode = sal_False;
-    mbTextHidden = sal_False;
-    mbTextAnimationAllowed = sal_True;
+    mbInEditMode = false;
+    mbTextHidden = false;
+    mbTextAnimationAllowed = true;
     maTextEditOffset = Point(0, 0);
 
     // #i25616#
     mbSupportTextIndentingOnLineWidthChange = true;
-    mbInDownScale = sal_False;
+    mbInDownScale = false;
 }
 
 SdrTextObj::SdrTextObj(const Rectangle& rNewRect)
@@ -116,18 +116,18 @@ SdrTextObj::SdrTextObj(const Rectangle& rNewRect)
     pFormTextBoundRect(NULL),
     eTextKind(OBJ_TEXT)
 {
-    bTextSizeDirty=sal_False;
-    bTextFrame=sal_False;
-    bNoShear=sal_False;
-    bNoRotate=sal_False;
-    bNoMirror=sal_False;
-    bDisableAutoWidthOnDragging=sal_False;
+    bTextSizeDirty=false;
+    bTextFrame=false;
+    bNoShear=false;
+    bNoRotate=false;
+    bNoMirror=false;
+    bDisableAutoWidthOnDragging=false;
     ImpJustifyRect(aRect);
 
-    mbInEditMode = sal_False;
-    mbTextHidden = sal_False;
-    mbTextAnimationAllowed = sal_True;
-    mbInDownScale = sal_False;
+    mbInEditMode = false;
+    mbTextHidden = false;
+    mbTextAnimationAllowed = true;
+    mbInDownScale = false;
     maTextEditOffset = Point(0, 0);
 
     // #i25616#
@@ -141,17 +141,17 @@ SdrTextObj::SdrTextObj(SdrObjKind eNewTextKind)
     pFormTextBoundRect(NULL),
     eTextKind(eNewTextKind)
 {
-    bTextSizeDirty=sal_False;
-    bTextFrame=sal_True;
-    bNoShear=sal_True;
-    bNoRotate=sal_False;
-    bNoMirror=sal_True;
-    bDisableAutoWidthOnDragging=sal_False;
+    bTextSizeDirty=false;
+    bTextFrame=true;
+    bNoShear=true;
+    bNoRotate=false;
+    bNoMirror=true;
+    bDisableAutoWidthOnDragging=false;
 
-    mbInEditMode = sal_False;
-    mbTextHidden = sal_False;
-    mbTextAnimationAllowed = sal_True;
-    mbInDownScale = sal_False;
+    mbInEditMode = false;
+    mbTextHidden = false;
+    mbTextAnimationAllowed = true;
+    mbInDownScale = false;
     maTextEditOffset = Point(0, 0);
 
     // #i25616#
@@ -166,18 +166,18 @@ SdrTextObj::SdrTextObj(SdrObjKind eNewTextKind, const Rectangle& rNewRect)
     pFormTextBoundRect(NULL),
     eTextKind(eNewTextKind)
 {
-    bTextSizeDirty=sal_False;
-    bTextFrame=sal_True;
-    bNoShear=sal_True;
-    bNoRotate=sal_False;
-    bNoMirror=sal_True;
-    bDisableAutoWidthOnDragging=sal_False;
+    bTextSizeDirty=false;
+    bTextFrame=true;
+    bNoShear=true;
+    bNoRotate=false;
+    bNoMirror=true;
+    bDisableAutoWidthOnDragging=false;
     ImpJustifyRect(aRect);
 
-    mbInEditMode = sal_False;
-    mbTextHidden = sal_False;
-    mbTextAnimationAllowed = sal_True;
-    mbInDownScale = sal_False;
+    mbInEditMode = false;
+    mbTextHidden = false;
+    mbTextAnimationAllowed = true;
+    mbInDownScale = false;
     maTextEditOffset = Point(0, 0);
 
     // #i25616#
@@ -237,7 +237,7 @@ void SdrTextObj::NbcSetText(const OUString& rStr)
     rOutliner.Clear();
     NbcSetOutlinerParaObject(pNewText);
     aTextSize=aSiz;
-    bTextSizeDirty=sal_False;
+    bTextSizeDirty=false;
 }
 
 void SdrTextObj::SetText(const OUString& rStr)
@@ -260,7 +260,7 @@ void SdrTextObj::NbcSetText(SvStream& rInput, const OUString& rBaseURL, sal_uInt
     rOutliner.Clear();
     NbcSetOutlinerParaObject(pNewText);
     aTextSize=aSiz;
-    bTextSizeDirty=sal_False;
+    bTextSizeDirty=false;
 }
 
 void SdrTextObj::SetText(SvStream& rInput, const OUString& rBaseURL, sal_uInt16 eFormat)
@@ -288,7 +288,7 @@ const Size& SdrTextObj::GetTextSize() const
         }
         // casting to nonconst twice
         ((SdrTextObj*)this)->aTextSize=aSiz;
-        ((SdrTextObj*)this)->bTextSizeDirty=sal_False;
+        ((SdrTextObj*)this)->bTextSizeDirty=false;
     }
     return aTextSize;
 }
@@ -299,7 +299,7 @@ bool SdrTextObj::IsAutoGrowHeight() const
         return false; // AutoGrow only together with TextFrames
 
     const SfxItemSet& rSet = GetObjectItemSet();
-    sal_Bool bRet = ((SdrTextAutoGrowHeightItem&)(rSet.Get(SDRATTR_TEXT_AUTOGROWHEIGHT))).GetValue();
+    bool bRet = ((SdrTextAutoGrowHeightItem&)(rSet.Get(SDRATTR_TEXT_AUTOGROWHEIGHT))).GetValue();
 
     if(bRet)
     {
@@ -311,7 +311,7 @@ bool SdrTextObj::IsAutoGrowHeight() const
 
             if(eDirection == SDRTEXTANI_UP || eDirection == SDRTEXTANI_DOWN)
             {
-                bRet = sal_False;
+                bRet = false;
             }
         }
     }
@@ -324,9 +324,9 @@ bool SdrTextObj::IsAutoGrowWidth() const
         return false; // AutoGrow only together with TextFrames
 
     const SfxItemSet& rSet = GetObjectItemSet();
-    sal_Bool bRet = ((SdrTextAutoGrowHeightItem&)(rSet.Get(SDRATTR_TEXT_AUTOGROWWIDTH))).GetValue();
+    bool bRet = ((SdrTextAutoGrowHeightItem&)(rSet.Get(SDRATTR_TEXT_AUTOGROWWIDTH))).GetValue();
 
-    sal_Bool bInEditMOde = IsInEditMode();
+    bool bInEditMOde = IsInEditMode();
 
     if(!bInEditMOde && bRet)
     {
@@ -338,7 +338,7 @@ bool SdrTextObj::IsAutoGrowWidth() const
 
             if(eDirection == SDRTEXTANI_LEFT || eDirection == SDRTEXTANI_RIGHT)
             {
-                bRet = sal_False;
+                bRet = false;
             }
         }
     }
@@ -357,7 +357,7 @@ SdrTextHorzAdjust SdrTextObj::GetTextHorizontalAdjust(const SfxItemSet& rSet) co
 
     SdrTextHorzAdjust eRet = ((SdrTextHorzAdjustItem&)(rSet.Get(SDRATTR_TEXT_HORZADJUST))).GetValue();
 
-    sal_Bool bInEditMode = IsInEditMode();
+    bool bInEditMode = IsInEditMode();
 
     if(!bInEditMode && eRet == SDRTEXTHORZADJUST_BLOCK)
     {
@@ -389,7 +389,7 @@ SdrTextVertAdjust SdrTextObj::GetTextVerticalAdjust(const SfxItemSet& rSet) cons
 
     // Take care for vertical text animation here
     SdrTextVertAdjust eRet = ((SdrTextVertAdjustItem&)(rSet.Get(SDRATTR_TEXT_VERTADJUST))).GetValue();
-    sal_Bool bInEditMode = IsInEditMode();
+    bool bInEditMode = IsInEditMode();
 
     // Take care for vertical text animation here
     if(!bInEditMode && eRet == SDRTEXTVERTADJUST_BLOCK)
@@ -552,7 +552,7 @@ bool SdrTextObj::NbcSetMinTextFrameHeight(long nHgt)
         // bDisableAutoHeightOnDragging if vertical.
         if(IsVerticalWriting() && bDisableAutoWidthOnDragging)
         {
-            bDisableAutoWidthOnDragging = sal_False;
+            bDisableAutoWidthOnDragging = false;
             SetObjectItem(SdrTextAutoGrowHeightItem(false));
         }
 
@@ -571,7 +571,7 @@ bool SdrTextObj::NbcSetMinTextFrameWidth(long nWdt)
         // when not vertical.
         if(!IsVerticalWriting() && bDisableAutoWidthOnDragging)
         {
-            bDisableAutoWidthOnDragging = sal_False;
+            bDisableAutoWidthOnDragging = false;
             SetObjectItem(SdrTextAutoGrowWidthItem(false));
         }
 
@@ -580,7 +580,7 @@ bool SdrTextObj::NbcSetMinTextFrameWidth(long nWdt)
     return false;
 }
 
-void SdrTextObj::ImpSetContourPolygon( SdrOutliner& rOutliner, Rectangle& rAnchorRect, sal_Bool bLineWidth ) const
+void SdrTextObj::ImpSetContourPolygon( SdrOutliner& rOutliner, Rectangle& rAnchorRect, bool bLineWidth ) const
 {
     basegfx::B2DPolyPolygon aXorPolyPolygon(TakeXorPoly());
     basegfx::B2DPolyPolygon* pContourPolyPolygon = 0L;
@@ -603,7 +603,7 @@ void SdrTextObj::ImpSetContourPolygon( SdrOutliner& rOutliner, Rectangle& rAncho
 
         // test if shadow needs to be avoided for TakeContour()
         const SfxItemSet& rSet = GetObjectItemSet();
-        sal_Bool bShadowOn = ((SdrShadowItem&)(rSet.Get(SDRATTR_SHADOW))).GetValue();
+        bool bShadowOn = ((SdrShadowItem&)(rSet.Get(SDRATTR_SHADOW))).GetValue();
 
         // #i33696#
         // Remember TextObject currently set at the DrawOutliner, it WILL be
@@ -710,7 +710,7 @@ void SdrTextObj::TakeTextRect( SdrOutliner& rOutliner, Rectangle& rTextRect, boo
             long nWdt=nAnkWdt;
             long nHgt=nAnkHgt;
 
-            sal_Bool bInEditMode = IsInEditMode();
+            bool bInEditMode = IsInEditMode();
 
             if (!bInEditMode && (eAniKind==SDRTEXTANI_SCROLL || eAniKind==SDRTEXTANI_ALTERNATE || eAniKind==SDRTEXTANI_SLIDE))
             {
@@ -1387,7 +1387,7 @@ void SdrTextObj::NbcSetOutlinerParaObjectForText( OutlinerParaObject* pTextObjec
     if (!IsTextFrame())
     {
         // the SnapRect keeps its size
-        SetRectsDirty(sal_True);
+        SetRectsDirty(true);
     }
 
     // always invalidate BoundRect on change
@@ -1412,7 +1412,7 @@ void SdrTextObj::NbcReformatText()
         {
             // the SnapRect keeps its size
             SetBoundRectDirty();
-            SetRectsDirty(sal_True);
+            SetRectsDirty(true);
         }
         SetTextSizeDirty();
         ActionChanged();
@@ -1485,7 +1485,7 @@ void SdrTextObj::ForceOutlinerParaObject()
     }
 }
 
-sal_Bool SdrTextObj::IsVerticalWriting() const
+bool SdrTextObj::IsVerticalWriting() const
 {
     if(pEdtOutl)
     {
@@ -1498,10 +1498,10 @@ sal_Bool SdrTextObj::IsVerticalWriting() const
         return pOutlinerParaObject->IsVertical();
     }
 
-    return sal_False;
+    return false;
 }
 
-void SdrTextObj::SetVerticalWriting(sal_Bool bVertical)
+void SdrTextObj::SetVerticalWriting(bool bVertical)
 {
     OutlinerParaObject* pOutlinerParaObject = GetOutlinerParaObject();
     if( !pOutlinerParaObject && bVertical )
@@ -1516,8 +1516,8 @@ void SdrTextObj::SetVerticalWriting(sal_Bool bVertical)
     {
         // get item settings
         const SfxItemSet& rSet = GetObjectItemSet();
-        sal_Bool bAutoGrowWidth = ((SdrTextAutoGrowWidthItem&)rSet.Get(SDRATTR_TEXT_AUTOGROWWIDTH)).GetValue();
-        sal_Bool bAutoGrowHeight = ((SdrTextAutoGrowHeightItem&)rSet.Get(SDRATTR_TEXT_AUTOGROWHEIGHT)).GetValue();
+        bool bAutoGrowWidth = ((SdrTextAutoGrowWidthItem&)rSet.Get(SDRATTR_TEXT_AUTOGROWWIDTH)).GetValue();
+        bool bAutoGrowHeight = ((SdrTextAutoGrowHeightItem&)rSet.Get(SDRATTR_TEXT_AUTOGROWHEIGHT)).GetValue();
 
         // Also exchange hor/ver adjust items
         SdrTextHorzAdjust eHorz = ((SdrTextHorzAdjustItem&)(rSet.Get(SDRATTR_TEXT_HORZADJUST))).GetValue();
@@ -1578,7 +1578,7 @@ void SdrTextObj::SetVerticalWriting(sal_Bool bVertical)
 
 // gets base transformation and rectangle of object. If it's an SdrPathObj it fills the PolyPolygon
 // with the base geometry and returns TRUE. Otherwise it returns FALSE.
-sal_Bool SdrTextObj::TRGetBaseGeometry(basegfx::B2DHomMatrix& rMatrix, basegfx::B2DPolyPolygon& /*rPolyPolygon*/) const
+bool SdrTextObj::TRGetBaseGeometry(basegfx::B2DHomMatrix& rMatrix, basegfx::B2DPolyPolygon& /*rPolyPolygon*/) const
 {
     // get turn and shear
     double fRotate = (aGeo.nDrehWink / 100.0) * F_PI180;
@@ -1632,7 +1632,7 @@ sal_Bool SdrTextObj::TRGetBaseGeometry(basegfx::B2DHomMatrix& rMatrix, basegfx::
         basegfx::fTools::equalZero(fRotate) ? 0.0 : -fRotate,
         aTranslate);
 
-    return sal_False;
+    return false;
 }
 
 // sets the base geometry of the object using infos contained in the homogeneous 3x3 matrix.
@@ -1879,7 +1879,7 @@ bool SdrTextObj::IsFitToSize() const
     return (eFit==SDRTEXTFIT_PROPORTIONAL || eFit==SDRTEXTFIT_ALLLINES);
 }
 
-void SdrTextObj::SetTextAnimationAllowed(sal_Bool bNew)
+void SdrTextObj::SetTextAnimationAllowed(bool bNew)
 {
     if(mbTextAnimationAllowed != bNew)
     {
@@ -1903,13 +1903,13 @@ void SdrTextObj::onEditOutlinerStatusEvent( EditStatus* pEditStatus )
         else if (IsAutoFit() && !mbInDownScale)
         {
             OSL_ASSERT(pEdtOutl);
-            mbInDownScale = sal_True;
+            mbInDownScale = true;
 
             // sucks that we cannot disable paints via
             // pEdtOutl->SetUpdateMode(FALSE) - but EditEngine skips
             // formatting as well, then.
             ImpAutoFitText(*pEdtOutl);
-            mbInDownScale = sal_False;
+            mbInDownScale = false;
         }
     }
 }
@@ -1965,20 +1965,20 @@ void SdrTextObj::SetObjectItemNoBroadcast(const SfxPoolItem& rItem)
 // The concept of the text object:
 // ~~~~~~~~~~~~~~~~~~~~~~~~
 // Attributes/Variations:
-// - sal_Bool text frame / graphics object with caption
-// - sal_Bool FontWork                 (if it is not a text frame and not a ContourTextFrame)
-// - sal_Bool ContourTextFrame         (if it is not a text frame and not Fontwork)
+// - bool text frame / graphics object with caption
+// - bool FontWork                 (if it is not a text frame and not a ContourTextFrame)
+// - bool ContourTextFrame         (if it is not a text frame and not Fontwork)
 // - long rotation angle               (if it is not FontWork)
 // - long text frame margins           (if it is not FontWork)
-// - sal_Bool FitToSize                (if it is not FontWork)
-// - sal_Bool AutoGrowingWidth/Height  (if it is not FitToSize and not FontWork)
+// - bool FitToSize                (if it is not FontWork)
+// - bool AutoGrowingWidth/Height  (if it is not FitToSize and not FontWork)
 // - long Min/MaxFrameWidth/Height     (if AutoGrowingWidth/Height)
 // - enum horizontal text anchoring left,center,right,justify/block,Stretch(ni)
 // - enum vertical text anchoring top, middle, bottom, block, stretch(ni)
 // - enum ticker text                  (if it is not FontWork)
 
-// Every derived object is either a text frame (bTextFrame=sal_True)
-// or a drawing object with a caption (bTextFrame=sal_False).
+// Every derived object is either a text frame (bTextFrame=true)
+// or a drawing object with a caption (bTextFrame=false).
 
 // Default anchoring for text frames:
 //   SDRTEXTHORZADJUST_BLOCK, SDRTEXTVERTADJUST_TOP
@@ -2007,8 +2007,8 @@ void SdrTextObj::SetObjectItemNoBroadcast(const SfxPoolItem& rItem)
 // ContourTextFrame:
 // - long rotation angle
 // - long text frame margins (maybe later)
-// - sal_Bool FitToSize (maybe later)
-// - sal_Bool AutoGrowingWidth/Height (maybe much later)
+// - bool FitToSize (maybe later)
+// - bool AutoGrowingWidth/Height (maybe much later)
 // - long Min/MaxFrameWidth/Height (maybe much later)
 // - enum horizontal text anchoring (maybe later, for now: left, centered)
 // - enum vertical text anchoring (maybe later, for now: top)

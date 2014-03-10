@@ -364,7 +364,7 @@ void FuInsertOLE::DoExecute( SfxRequest& rReq )
 
             bool bRet = true;
             if( pPickObj )
-                mpView->ReplaceObjectAtView(pPickObj, *pPV, pOleObj, sal_True );
+                mpView->ReplaceObjectAtView(pPickObj, *pPV, pOleObj, true );
             else
                 bRet = mpView->InsertObjectAtView(pOleObj, *pPV, SDRINSERT_SETDEFLAYER);
 

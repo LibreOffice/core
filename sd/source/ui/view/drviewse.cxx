@@ -339,7 +339,7 @@ void DrawViewShell::FuPermanent(SfxRequest& rReq)
                     {
                         // implicit transformation into bezier
                         WaitObject aWait( (Window*)GetActiveWindow() );
-                        mpDrawView->ConvertMarkedToPathObj(sal_False);
+                        mpDrawView->ConvertMarkedToPathObj(false);
                     }
                 }
             }
@@ -376,7 +376,7 @@ void DrawViewShell::FuPermanent(SfxRequest& rReq)
                     {
                         // implicit transformation into bezier
                         WaitObject aWait( (Window*)GetActiveWindow() );
-                        mpDrawView->ConvertMarkedToPathObj(sal_False);
+                        mpDrawView->ConvertMarkedToPathObj(false);
                     }
                 }
             }
@@ -569,7 +569,7 @@ void DrawViewShell::FuPermanent(SfxRequest& rReq)
         {
             // select first object
             GetView()->UnmarkAllObj();
-            GetView()->MarkNextObj(sal_True);
+            GetView()->MarkNextObj(true);
 
             // ...and make it visible
             if(GetView()->AreObjectsMarked())

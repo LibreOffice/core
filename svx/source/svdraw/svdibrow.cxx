@@ -1120,7 +1120,7 @@ void SdrItemBrowser::Undirty()
     if(pView->AreObjectsMarked())
     {
         SfxItemSet a2ndSet(pView->GetModel()->GetItemPool());
-        pView->GetAttributes(a2ndSet, sal_True);
+        pView->GetAttributes(a2ndSet, true);
 
         SetAttributes(&aSet,&a2ndSet);
     }

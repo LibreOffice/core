@@ -413,7 +413,7 @@ bool SwDoc::DeleteSelection( SwDrawView& rDrawView )
                 if( pFrmFmt &&
                     FLY_AS_CHAR == pFrmFmt->GetAnchor().GetAnchorId() )
                 {
-                    rDrawView.MarkObj( pObj, rDrawView.Imp().GetPageView(), sal_True );
+                    rDrawView.MarkObj( pObj, rDrawView.Imp().GetPageView(), true );
                     --i;
                     DelLayoutFmt( pFrmFmt );
                 }

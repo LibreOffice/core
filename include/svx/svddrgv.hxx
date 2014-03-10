@@ -71,7 +71,7 @@ protected:
     virtual void SetMarkHandles();
     void ShowDragObj();
     void HideDragObj();
-    sal_Bool ImpBegInsObjPoint(sal_Bool bIdxZwang, sal_uInt32 nIdx, const Point& rPnt, sal_Bool bNewObj, OutputDevice* pOut);
+    bool ImpBegInsObjPoint(bool bIdxZwang, sal_uInt32 nIdx, const Point& rPnt, bool bNewObj, OutputDevice* pOut);
 
 protected:
     // #i71538# make constructors of SdrView sub-components protected to avoid incomplete incarnations which may get casted to SdrView
@@ -79,7 +79,7 @@ protected:
     virtual ~SdrDragView();
 
 public:
-    virtual sal_Bool IsAction() const;
+    virtual bool IsAction() const;
     virtual void MovAction(const Point& rPnt);
     virtual void EndAction();
     virtual void BckAction();
@@ -96,68 +96,68 @@ public:
     // Bei Returncode sal_False konnte ich die Position nicht bestimmen
     // (z.B. Punktverschiebung, Mehrfachselektion, Schieben der
     // Spiegelschse, ...)
-    sal_Bool TakeDragObjAnchorPos(Point& rPos, sal_Bool bTopRight = sal_False ) const;
+    bool TakeDragObjAnchorPos(Point& rPos, bool bTopRight = false ) const;
 
     // Wird pForcedMeth uebergeben, so wird pHdl, ... nicht ausgewerten, sondern diese
     // Drag-Methode verwendet. Die Instanz geht dabei ins Eigentum der View ueber und
     // wird zum Ende des Draggings destruiert.
-    virtual sal_Bool BegDragObj(const Point& rPnt, OutputDevice* pOut=NULL, SdrHdl* pHdl=NULL, short nMinMov=-3, SdrDragMethod* pForcedMeth=NULL);
+    virtual bool BegDragObj(const Point& rPnt, OutputDevice* pOut=NULL, SdrHdl* pHdl=NULL, short nMinMov=-3, SdrDragMethod* pForcedMeth=NULL);
     void MovDragObj(const Point& rPnt);
-    sal_Bool EndDragObj(sal_Bool bCopy=sal_False);
+    bool EndDragObj(bool bCopy=false);
     void BrkDragObj();
-    sal_Bool IsDragObj() const { return mpCurrentSdrDragMethod && !bInsPolyPoint && !bInsGluePoint; }
+    bool IsDragObj() const { return mpCurrentSdrDragMethod && !bInsPolyPoint && !bInsGluePoint; }
     SdrHdl* GetDragHdl() const { return pDragHdl; }
     SdrDragMethod* GetDragMethod() const { return mpCurrentSdrDragMethod; }
-    sal_Bool IsDraggingPoints() const { return eDragHdl==HDL_POLY; }
-    sal_Bool IsDraggingGluePoints() const { return eDragHdl==HDL_GLUE; }
+    bool IsDraggingPoints() const { return eDragHdl==HDL_POLY; }
+    bool IsDraggingGluePoints() const { return eDragHdl==HDL_GLUE; }
 
     // Wer das beim BegDrag oder mittendrin schon festlegen will.
     // (Wird bei jedem BegDrag auf sal_False zurueckgesetzt, also nach
     // BegDrag setzen.)
-    void SetDragWithCopy(sal_Bool bOn) { bDragWithCopy = bOn; }
-    sal_Bool IsDragWithCopy() const { return bDragWithCopy; }
+    void SetDragWithCopy(bool bOn) { bDragWithCopy = bOn; }
+    bool IsDragWithCopy() const { return bDragWithCopy; }
 
-    void SetInsertGluePoint(sal_Bool bOn) { bInsGluePoint = bOn; }
-    sal_Bool IsInsertGluePoint() const { return bInsGluePoint; }
+    void SetInsertGluePoint(bool bOn) { bInsGluePoint = bOn; }
+    bool IsInsertGluePoint() const { return bInsGluePoint; }
 
     // Interaktives einfuegen eines neuen Punktes. nIdx=0 => vor dem ersten Punkt.
     bool IsInsObjPointPossible() const;
-    sal_Bool BegInsObjPoint(const Point& rPnt, sal_Bool bNewObj) { return ImpBegInsObjPoint(sal_False, 0L, rPnt, bNewObj, 0L); }
+    bool BegInsObjPoint(const Point& rPnt, bool bNewObj) { return ImpBegInsObjPoint(false, 0L, rPnt, bNewObj, 0L); }
     void MovInsObjPoint(const Point& rPnt) { MovDragObj(rPnt); }
-    sal_Bool EndInsObjPoint(SdrCreateCmd eCmd);
+    bool EndInsObjPoint(SdrCreateCmd eCmd);
     void BrkInsObjPoint() { BrkDragObj(); }
-    sal_Bool IsInsObjPoint() const { return mpCurrentSdrDragMethod && bInsPolyPoint; }
+    bool IsInsObjPoint() const { return mpCurrentSdrDragMethod && bInsPolyPoint; }
 
     // Fuer die App zum Verwalten des Status. GetPreferredPointer() wird
     // spaeter vielleicht einen passenden Pointer dafuer liefern
-    void SetInsObjPointMode(sal_Bool bOn) { bInsObjPointMode = bOn; }
-    sal_Bool IsInsObjPointMode() const { return bInsObjPointMode; }
+    void SetInsObjPointMode(bool bOn) { bInsObjPointMode = bOn; }
+    bool IsInsObjPointMode() const { return bInsObjPointMode; }
 
-    sal_Bool IsInsGluePointPossible() const;
-    sal_Bool BegInsGluePoint(const Point& rPnt);
+    bool IsInsGluePointPossible() const;
+    bool BegInsGluePoint(const Point& rPnt);
     void MovInsGluePoint(const Point& rPnt) { MovDragObj(rPnt); }
-    sal_Bool EndInsGluePoint() { return EndDragObj(); }
+    bool EndInsGluePoint() { return EndDragObj(); }
     void BrkInsGluePoint() { BrkDragObj(); }
-    sal_Bool IsInsGluePoint() const { return mpCurrentSdrDragMethod && bInsGluePoint; }
+    bool IsInsGluePoint() const { return mpCurrentSdrDragMethod && bInsGluePoint; }
 
     // Fuer die App zum Verwalten des Status. GetPreferredPointer() wird
     // spaeter vielleicht einen passenden Pointer dafuer liefern
-    void SetInsGluePointMode(sal_Bool bOn) { bInsGluePointMode = bOn; }
-    sal_Bool IsInsGluePointMode() const { return bInsGluePointMode; }
+    void SetInsGluePointMode(bool bOn) { bInsGluePointMode = bOn; }
+    bool IsInsGluePointMode() const { return bInsGluePointMode; }
 
     // Begrenzungslinien ueber's gesamte Win waehrend des Draggens
     // Persistent. Default=FALSE.
-    void SetDragStripes(sal_Bool bOn);
-    sal_Bool IsDragStripes() const { return bDragStripes; }
+    void SetDragStripes(bool bOn);
+    bool IsDragStripes() const { return bDragStripes; }
 
     // Handles waehrend des Draggens verstecken
-    //HMHvoid SetDragHdlHide(sal_Bool bOn);
+    //HMHvoid SetDragHdlHide(bool bOn);
     //HMHBOOL IsDragHdlHide() const { return bNoDragHdl; }
 
     // Beim Draggen von Polygonpunkten und Klebepunkten
     // die Maus verstecken. Default=FALSE
-    void SetMouseHideWhileDraggingPoints(sal_Bool bOn) { bMouseHideWhileDraggingPoints = bOn; }
-    sal_Bool IsMouseHideWhileDraggingPoints() const { return bMouseHideWhileDraggingPoints; }
+    void SetMouseHideWhileDraggingPoints(bool bOn) { bMouseHideWhileDraggingPoints = bOn; }
+    bool IsMouseHideWhileDraggingPoints() const { return bMouseHideWhileDraggingPoints; }
 
     // Beim Draggen werden i.d.R. die Konturen der markierten Objekte
     // als Xor-Polygone dargestellt. Wird dieses Flag hier gesetzt,
@@ -166,8 +166,8 @@ public:
     // hat diese Einstellung keine Auswirkung.
     // Auch waerend des Draggens umschaltbar.
     // Default=Off
-    void SetNoDragXorPolys(sal_Bool bOn);
-    sal_Bool IsNoDragXorPolys() const { return bNoDragXorPolys; }
+    void SetNoDragXorPolys(bool bOn);
+    bool IsNoDragXorPolys() const { return bNoDragXorPolys; }
 
     // Uebersteigt die Anzahl der markierten Objekte den hier eingestellten
     // Wert, wird implizit (temporaer) auf NoDragPolys geschaltet.
@@ -190,13 +190,13 @@ public:
     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     // Verbinder an Objektscheitelpunkte ankleben
     // Default=sal_True=Ja
-    void SetAutoVertexConnectors(sal_Bool bOn) { bAutoVertexCon = bOn; }
-    sal_Bool IsAutoVertexConnectors() const { return bAutoVertexCon; }
+    void SetAutoVertexConnectors(bool bOn) { bAutoVertexCon = bOn; }
+    bool IsAutoVertexConnectors() const { return bAutoVertexCon; }
 
     // Verbinder an Objektecken ankleben
     // Default=sal_False=Nein
-    void SetAutoCornerConnectors(sal_Bool bOn) { bAutoCornerCon = bOn; }
-    sal_Bool IsAutoCornerConnectors() const { return bAutoCornerCon; }
+    void SetAutoCornerConnectors(bool bOn) { bAutoCornerCon = bOn; }
+    bool IsAutoCornerConnectors() const { return bAutoCornerCon; }
 
     // Dragging von verbundenen Objekten (Nodes):
     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -205,7 +205,7 @@ public:
     // Gummibaender sondern komplette Neuberechnunen sind beim Draggen sichtbar.
     // Diese detalierte Darstellung ist eh nur beim MoveDrag moeglich.
     // Defaultwert ist 10
-    sal_Bool IsDetailedEdgeDragging() const { return bDetailedEdgeDragging; }
+    bool IsDetailedEdgeDragging() const { return bDetailedEdgeDragging; }
 
     sal_uInt16 GetDetailedEdgeDraggingLimit() const { return nDetailedEdgeDraggingLimit; }
 
@@ -214,7 +214,7 @@ public:
     // Gemeint sind hier die "Gummibaender", die weniger Rechenzeit benoetigen
     // als die kompletten Neuberechnungen beim DetailedEdgeDragging.
     // Defaultwert ist 100
-    sal_Bool IsRubberEdgeDragging() const { return bRubberEdgeDragging; }
+    bool IsRubberEdgeDragging() const { return bRubberEdgeDragging; }
 
     // Verbinderhandling also zu deutsch wie folgt (bei Defaulteinstellungen):
     // - Sind bis max 10 Verbinder betroffen werden diese bei jedem
@@ -230,25 +230,25 @@ public:
     // markierte Objekt immer ein Moven ein, unabhaengig vom gesetzten DragMode.
     // Dieses Flag ist persistent und sollte von der App fuer den Anwender
     // konfigurierbar sein!
-    void SetMarkedHitMovesAlways(sal_Bool bOn) { bMarkedHitMovesAlways = bOn; }
-    sal_Bool IsMarkedHitMovesAlways() const { return bMarkedHitMovesAlways; }
+    void SetMarkedHitMovesAlways(bool bOn) { bMarkedHitMovesAlways = bOn; }
+    bool IsMarkedHitMovesAlways() const { return bMarkedHitMovesAlways; }
 
     // Beim Draggen der Spiegelachse das Spiegelbild der markierten Objekte
     // als Xor darstellen? Persistent. Noch nicht implementiert. Default TRUE.
-    void SetMirrRefDragObj(sal_Bool bOn) { bMirrRefDragObj = bOn; }
-    sal_Bool IsMirrRefDragObj() const { return bMirrRefDragObj; }
+    void SetMirrRefDragObj(bool bOn) { bMirrRefDragObj = bOn; }
+    bool IsMirrRefDragObj() const { return bMirrRefDragObj; }
 
-    sal_Bool IsOrthoDesired() const;
+    bool IsOrthoDesired() const;
 
     // Beim Resize die Mitte als Referenz
     // Default=FALSE.
-    sal_Bool IsResizeAtCenter() const { return bResizeAtCenter; }
-    void SetResizeAtCenter(sal_Bool bOn) { bResizeAtCenter = bOn; }
+    bool IsResizeAtCenter() const { return bResizeAtCenter; }
+    void SetResizeAtCenter(bool bOn) { bResizeAtCenter = bOn; }
 
     // Symmetrisches Crook
     // Default=FALSE.
-    sal_Bool IsCrookAtCenter() const { return bCrookAtCenter; }
-    void SetCrookAtCenter(sal_Bool bOn) { bCrookAtCenter = bOn; }
+    bool IsCrookAtCenter() const { return bCrookAtCenter; }
+    void SetCrookAtCenter(bool bOn) { bCrookAtCenter = bOn; }
 
     // Begrenzung des Arbeitsbereichs. Die Begrenzung bezieht sich auf die
     // View, nicht auf die einzelnen PageViews. Von der View wird diese
@@ -276,7 +276,7 @@ public:
     // Rundungsfehler auftreten koennen, wodurch das LimitRect minnimal
     // ueberschritten werden koennte...
     // Implementiert fuer Move und Resize.
-    virtual sal_Bool TakeDragLimit(SdrDragMode eMode, Rectangle& rRect) const;
+    virtual bool TakeDragLimit(SdrDragMode eMode, Rectangle& rRect) const;
 };
 
 #endif // INCLUDED_SVX_SVDDRGV_HXX

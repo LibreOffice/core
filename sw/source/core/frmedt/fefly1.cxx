@@ -255,7 +255,7 @@ void SwFEShell::SelectFlyFrm( SwFlyFrm& rFrm, sal_Bool bNew )
             pImpl->GetDrawView()->UnmarkAll();
 
         pImpl->GetDrawView()->MarkObj( rFrm.GetVirtDrawObj(),
-                                      pImpl->GetPageView(), sal_False, sal_False );
+                                      pImpl->GetPageView(), false, false );
         KillPams();
         ClearMark();
         SelFlyGrabCrsr();
@@ -934,7 +934,7 @@ void SwFEShell::InsertDrawObj( SdrObject& rDrawObj,
     {
         // select drawing object
         Imp()->GetDrawView()->MarkObj( &rDrawObj, Imp()->GetPageView(),
-                                       sal_False, sal_False );
+                                       false, false );
     }
     else
     {

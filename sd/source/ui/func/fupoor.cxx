@@ -654,7 +654,7 @@ sal_Bool FuPoor::KeyInput(const KeyEvent& rKEvt)
                     {
                         // Suppress default connects to inside object and object center
                         bOldSuppress = pEdgeObj->GetSuppressDefaultConnect();
-                        pEdgeObj->SetSuppressDefaultConnect(sal_True);
+                        pEdgeObj->SetSuppressDefaultConnect(true);
                     }
 
                     if(bIsMoveOfConnectedHandle)
@@ -760,7 +760,7 @@ sal_Bool FuPoor::KeyInput(const KeyEvent& rKEvt)
                                 if(!bWasNoSnap)
                                     ((SdrDragStat&)rDragStat).SetNoSnap(true);
                                 if(bWasSnapEnabled)
-                                    mpView->SetSnapEnabled(sal_False);
+                                    mpView->SetSnapEnabled(false);
 
                                 mpView->MovAction(aEndPoint);
                                 mpView->EndDragObj();

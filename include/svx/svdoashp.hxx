@@ -49,8 +49,8 @@ class SdrAShapeObjGeoData : public SdrTextObjGeoData
 {
     public:
 
-    sal_Bool    bMirroredX;
-    sal_Bool    bMirroredY;
+    bool        bMirroredX;
+    bool        bMirroredY;
     double      fObjectRotation;
 
     com::sun::star::uno::Sequence< com::sun::star::drawing::EnhancedCustomShapeAdjustmentValue >
@@ -125,9 +125,9 @@ public:
     // #i37011#
     const SdrObject* GetSdrObjectFromCustomShape() const;
     const SdrObject* GetSdrObjectShadowFromCustomShape() const;
-    sal_Bool GetTextBounds( Rectangle& rTextBound ) const;
-    sal_Bool IsTextPath() const;
-    static basegfx::B2DPolyPolygon GetLineGeometry( const SdrObjCustomShape* pCustomShape, const sal_Bool bBezierAllowed );
+    bool GetTextBounds( Rectangle& rTextBound ) const;
+    bool IsTextPath() const;
+    static basegfx::B2DPolyPolygon GetLineGeometry( const SdrObjCustomShape* pCustomShape, const bool bBezierAllowed );
 
 protected:
 
@@ -135,13 +135,13 @@ protected:
 
 public:
 
-    sal_Bool UseNoFillStyle() const;
+    bool UseNoFillStyle() const;
 
-    sal_Bool IsMirroredX() const;
-    sal_Bool IsMirroredY() const;
-    bool     IsPostRotate() const;
-    void SetMirroredX( const sal_Bool bMirroredX );
-    void SetMirroredY( const sal_Bool bMirroredY );
+    bool IsMirroredX() const;
+    bool IsMirroredY() const;
+    bool IsPostRotate() const;
+    void SetMirroredX( const bool bMirroredX );
+    void SetMirroredY( const bool bMirroredY );
 
     double GetObjectRotation() const;
     double GetExtraTextRotation( const bool bPreRotation = false ) const;
@@ -168,7 +168,7 @@ public:
         DEFAULT_HANDLES,
         DEFAULT_TEXTFRAMES
     };
-    sal_Bool IsDefaultGeometry( const DefaultType eDefaultType ) const;
+    bool IsDefaultGeometry( const DefaultType eDefaultType ) const;
 
     virtual sal_uInt16 GetObjIdentifier() const;
     virtual void TakeObjInfo(SdrObjTransformInfoRec& rInfo) const;
@@ -197,7 +197,7 @@ public:
 
     virtual SdrGluePoint GetVertexGluePoint(sal_uInt16 nNum) const;
 
-    virtual void NbcSetStyleSheet( SfxStyleSheet* pNewStyleSheet, sal_Bool bDontRemoveHardAttr );
+    virtual void NbcSetStyleSheet( SfxStyleSheet* pNewStyleSheet, bool bDontRemoveHardAttr );
 
     // special drag methods
     virtual bool hasSpecialDrag() const;
@@ -213,8 +213,8 @@ public:
     virtual bool AdjustTextFrameWidthAndHeight(bool bHgt = true, bool bWdt = true);
     virtual bool IsAutoGrowHeight() const;
     virtual bool IsAutoGrowWidth() const;
-    virtual void SetVerticalWriting( sal_Bool bVertical );
-    virtual sal_Bool BegTextEdit( SdrOutliner& rOutl );
+    virtual void SetVerticalWriting( bool bVertical );
+    virtual bool BegTextEdit( SdrOutliner& rOutl );
     virtual void TakeTextEditArea(Size* pPaperMin, Size* pPaperMax, Rectangle* pViewInit, Rectangle* pViewMin) const;
     virtual void EndTextEdit( SdrOutliner& rOutl );
     virtual void TakeTextAnchorRect( Rectangle& rAnchorRect ) const;
@@ -233,7 +233,7 @@ public:
 
     virtual void NbcSetOutlinerParaObject(OutlinerParaObject* pTextObject);
 
-    virtual SdrObject* DoConvertToPolyObj(sal_Bool bBezier, bool bAddText) const;
+    virtual SdrObject* DoConvertToPolyObj(bool bBezier, bool bAddText) const;
 
     virtual void SetPage( SdrPage* pNewPage );
 
@@ -242,7 +242,7 @@ public:
     virtual void          RestGeoData(const SdrObjGeoData &rGeo);
 
     // need to take fObjectRotation instead of aGeo.nWink, replace it temporary
-    virtual sal_Bool TRGetBaseGeometry(basegfx::B2DHomMatrix& rMatrix, basegfx::B2DPolyPolygon& rPolyPolygon) const;
+    virtual bool TRGetBaseGeometry(basegfx::B2DHomMatrix& rMatrix, basegfx::B2DPolyPolygon& rPolyPolygon) const;
     virtual void TRSetBaseGeometry(const basegfx::B2DHomMatrix& rMatrix, const basegfx::B2DPolyPolygon& rPolyPolygon);
 
     virtual const SdrGluePointList* GetGluePointList() const;

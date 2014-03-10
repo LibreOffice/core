@@ -53,7 +53,7 @@ class SVX_DLLPUBLIC SdrUnoObj : public SdrRectObj
 
     OUString                    aUnoControlModelTypeName;
     OUString                    aUnoControlTypeName;
-    sal_Bool                        bOwnUnoControlModel;
+    bool                        bOwnUnoControlModel;
 
 protected:
     ::com::sun::star::uno::Reference< com::sun::star::awt::XControlModel > xUnoControlModel; // kann auch von aussen gesetzt werden
@@ -66,10 +66,10 @@ private:
 public:
     TYPEINFO();
 
-    explicit SdrUnoObj(const OUString& rModelName, sal_Bool bOwnsModel = sal_True);
+    explicit SdrUnoObj(const OUString& rModelName, bool bOwnsModel = true);
     SdrUnoObj(const OUString& rModelName,
         const ::com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory >& rxSFac,
-        sal_Bool bOwnsModel = sal_True);
+        bool bOwnsModel = true);
     virtual ~SdrUnoObj();
 
     virtual void SetPage(SdrPage* pNewPage);

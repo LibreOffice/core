@@ -201,7 +201,7 @@ void SdrPaintView::ImpClearVars()
     aComeBackTimer.SetTimeoutHdl(LINK(this,SdrPaintView,ImpComeBackHdl));
 
     if (pMod)
-        SetDefaultStyleSheet(pMod->GetDefaultStyleSheet(), sal_True);
+        SetDefaultStyleSheet(pMod->GetDefaultStyleSheet(), true);
 
     maGridColor = Color( COL_BLACK );
 }
@@ -344,7 +344,7 @@ void SdrPaintView::ModelHasChanged()
 
 
 
-sal_Bool SdrPaintView::IsAction() const
+bool SdrPaintView::IsAction() const
 {
     return false;
 }
@@ -370,7 +370,7 @@ void SdrPaintView::TakeActionRect(Rectangle&) const
 }
 
 
-// info about TextEdit. Default is sal_False.
+// info about TextEdit. Default is false.
 bool SdrPaintView::IsTextEdit() const
 {
     return false;
@@ -526,7 +526,7 @@ bool SdrPaintView::IsLayerVisible(const OUString& rName) const
     return false;
 }
 
-void SdrPaintView::SetLayerLocked(const OUString& rName, sal_Bool bLock)
+void SdrPaintView::SetLayerLocked(const OUString& rName, bool bLock)
 {
     if(mpPageView)
     {
@@ -544,7 +544,7 @@ bool SdrPaintView::IsLayerLocked(const OUString& rName) const
     return false;
 }
 
-void SdrPaintView::SetLayerPrintable(const OUString& rName, sal_Bool bPrn)
+void SdrPaintView::SetLayerPrintable(const OUString& rName, bool bPrn)
 {
     if(mpPageView)
     {
@@ -927,7 +927,7 @@ void SdrPaintView::InvalidateAllWin()
     }
 }
 
-void SdrPaintView::InvalidateAllWin(const Rectangle& rRect, sal_Bool bPlus1Pix)
+void SdrPaintView::InvalidateAllWin(const Rectangle& rRect, bool bPlus1Pix)
 {
     const sal_uInt32 nWindowCount(PaintWindowCount());
 
@@ -1000,7 +1000,7 @@ bool SdrPaintView::IsGroupEntered() const
     return false;
 }
 
-void SdrPaintView::SetNotPersistDefaultAttr(const SfxItemSet& rAttr, sal_Bool /*bReplaceAll*/)
+void SdrPaintView::SetNotPersistDefaultAttr(const SfxItemSet& rAttr, bool /*bReplaceAll*/)
 {
     // bReplaceAll has no effect here at all.
     bool bMeasure=ISA(SdrView) && ((SdrView*)this)->IsMeasureTool();
@@ -1019,7 +1019,7 @@ void SdrPaintView::SetNotPersistDefaultAttr(const SfxItemSet& rAttr, sal_Bool /*
     }
 }
 
-void SdrPaintView::MergeNotPersistDefaultAttr(SfxItemSet& rAttr, sal_Bool /*bOnlyHardAttr*/) const
+void SdrPaintView::MergeNotPersistDefaultAttr(SfxItemSet& rAttr, bool /*bOnlyHardAttr*/) const
 {
     // bOnlyHardAttr has no effect here at all.
     bool bMeasure=ISA(SdrView) && ((SdrView*)this)->IsMeasureTool();
@@ -1031,7 +1031,7 @@ void SdrPaintView::MergeNotPersistDefaultAttr(SfxItemSet& rAttr, sal_Bool /*bOnl
     }
 }
 
-void SdrPaintView::SetDefaultAttr(const SfxItemSet& rAttr, sal_Bool bReplaceAll)
+void SdrPaintView::SetDefaultAttr(const SfxItemSet& rAttr, bool bReplaceAll)
 {
 #ifdef DBG_UTIL
     {
@@ -1061,7 +1061,7 @@ void SdrPaintView::SetDefaultAttr(const SfxItemSet& rAttr, sal_Bool bReplaceAll)
 #endif
 }
 
-void SdrPaintView::SetDefaultStyleSheet(SfxStyleSheet* pStyleSheet, sal_Bool bDontRemoveHardAttr)
+void SdrPaintView::SetDefaultStyleSheet(SfxStyleSheet* pStyleSheet, bool bDontRemoveHardAttr)
 {
     if (pDefaultStyleSheet)
         EndListening(*pDefaultStyleSheet);
@@ -1084,7 +1084,7 @@ void SdrPaintView::SetDefaultStyleSheet(SfxStyleSheet* pStyleSheet, sal_Bool bDo
 #endif
 }
 
-sal_Bool SdrPaintView::GetAttributes(SfxItemSet& rTargetSet, sal_Bool bOnlyHardAttr) const
+bool SdrPaintView::GetAttributes(SfxItemSet& rTargetSet, bool bOnlyHardAttr) const
 {
     if(bOnlyHardAttr || !pDefaultStyleSheet)
     {
@@ -1097,13 +1097,13 @@ sal_Bool SdrPaintView::GetAttributes(SfxItemSet& rTargetSet, sal_Bool bOnlyHardA
         rTargetSet.Put(aDefaultAttr, false);
     }
     MergeNotPersistDefaultAttr(rTargetSet, bOnlyHardAttr);
-    return sal_True;
+    return true;
 }
 
-sal_Bool SdrPaintView::SetAttributes(const SfxItemSet& rSet, sal_Bool bReplaceAll)
+bool SdrPaintView::SetAttributes(const SfxItemSet& rSet, bool bReplaceAll)
 {
     SetDefaultAttr(rSet,bReplaceAll);
-    return sal_True;
+    return true;
 }
 
 SfxStyleSheet* SdrPaintView::GetStyleSheet() const
@@ -1111,16 +1111,16 @@ SfxStyleSheet* SdrPaintView::GetStyleSheet() const
     return GetDefaultStyleSheet();
 }
 
-sal_Bool SdrPaintView::SetStyleSheet(SfxStyleSheet* pStyleSheet, sal_Bool bDontRemoveHardAttr)
+bool SdrPaintView::SetStyleSheet(SfxStyleSheet* pStyleSheet, bool bDontRemoveHardAttr)
 {
     SetDefaultStyleSheet(pStyleSheet,bDontRemoveHardAttr);
-    return sal_True;
+    return true;
 }
 
 
 
 #ifdef DBG_UTIL
-void SdrPaintView::ShowItemBrowser(sal_Bool bShow)
+void SdrPaintView::ShowItemBrowser(bool bShow)
 {
     if (bShow) {
         if (pItemBrowser==NULL) {
@@ -1192,7 +1192,7 @@ void SdrPaintView::DoConnect(SdrOle2Obj* /*pOleObj*/)
 {
 }
 
-void SdrPaintView::SetAnimationEnabled( sal_Bool bEnable )
+void SdrPaintView::SetAnimationEnabled( bool bEnable )
 {
     SetAnimationMode( bEnable ? SDR_ANIMATION_ANIMATE : SDR_ANIMATION_DISABLE );
 }
@@ -1318,7 +1318,7 @@ void SdrPaintView::SetBufferedOverlayAllowed(bool bNew)
     }
 }
 
-sal_Bool SdrPaintView::IsPagePaintingAllowed() const
+bool SdrPaintView::IsPagePaintingAllowed() const
 {
     return mbPagePaintingAllowed;
 }

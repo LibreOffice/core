@@ -115,7 +115,7 @@ SfxItemSet E3dView::Get3DAttributes(E3dScene* pInScene, sal_Bool /*bOnly3DAttr*/
     else
     {
         // get attributes from all selected objects
-        MergeAttrFromMarked(aSet, sal_False);
+        MergeAttrFromMarked(aSet, false);
 
         // calc flags for SID_ATTR_3D_INTERN
         const SdrMarkList& rMarkList = GetMarkedObjectList();

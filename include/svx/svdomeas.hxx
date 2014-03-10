@@ -77,7 +77,7 @@ protected:
     void ImpCalcGeometrics(const ImpMeasureRec& rRec, ImpMeasurePoly& rPol) const;
     basegfx::B2DPolyPolygon ImpCalcXPoly(const ImpMeasurePoly& rPol) const;
     void ImpEvalDrag(ImpMeasureRec& rRec, const SdrDragStat& rDrag) const;
-    void SetTextDirty() { bTextDirty=true; SetTextSizeDirty(); if (!aOutRect.IsEmpty()) { SetBoundRectDirty(); SetRectsDirty(sal_True); } }
+    void SetTextDirty() { bTextDirty=true; SetTextSizeDirty(); if (!aOutRect.IsEmpty()) { SetBoundRectDirty(); SetRectsDirty(true); } }
     void UndirtyText() const;
 
     virtual SdrObjGeoData* NewGeoData() const;
@@ -127,14 +127,14 @@ public:
     virtual sal_uInt32 GetSnapPointCount() const;
     virtual Point GetSnapPoint(sal_uInt32 i) const;
 
-    virtual sal_Bool IsPolyObj() const;
+    virtual bool IsPolyObj() const;
     virtual sal_uInt32 GetPointCount() const;
     virtual Point GetPoint(sal_uInt32 i) const;
     virtual void NbcSetPoint(const Point& rPnt, sal_uInt32 i);
 
-    virtual SdrObject* DoConvertToPolyObj(sal_Bool bBezier, bool bAddText) const;
+    virtual SdrObject* DoConvertToPolyObj(bool bBezier, bool bAddText) const;
 
-    virtual sal_Bool BegTextEdit(SdrOutliner& rOutl);
+    virtual bool BegTextEdit(SdrOutliner& rOutl);
     virtual const Size& GetTextSize() const;
     virtual void TakeTextRect( SdrOutliner& rOutliner, Rectangle& rTextRect, bool bNoEditText = false,
         Rectangle* pAnchorRect=NULL, bool bLineWidth = true ) const;
@@ -148,7 +148,7 @@ public:
         bool bEdit, Color*& rpTxtColor, Color*& rpFldColor, OUString& rRet) const;
 
     // #i97878#
-    virtual sal_Bool TRGetBaseGeometry(basegfx::B2DHomMatrix& rMatrix, basegfx::B2DPolyPolygon& rPolyPolygon) const;
+    virtual bool TRGetBaseGeometry(basegfx::B2DHomMatrix& rMatrix, basegfx::B2DPolyPolygon& rPolyPolygon) const;
     virtual void TRSetBaseGeometry(const basegfx::B2DHomMatrix& rMatrix, const basegfx::B2DPolyPolygon& rPolyPolygon);
 };
 

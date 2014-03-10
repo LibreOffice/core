@@ -291,7 +291,7 @@ ScDrawLayer::~ScDrawLayer()
 {
     Broadcast(SdrHint(HINT_MODELCLEARED));
 
-    ClearModel(sal_True);
+    ClearModel(true);
 
     delete pUndoGroup;
     if( !--nInst )

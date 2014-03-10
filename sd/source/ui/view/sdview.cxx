@@ -126,13 +126,13 @@ View::View(SdDrawDocument& rDrawDoc, OutputDevice* pOutDev,
     // #i74769#, #i75172# Use default from the configuration
     SetBufferedOutputAllowed(getOptionsDrawinglayer().IsPaintBuffer_DrawImpress());
 
-    EnableExtendedKeyInputDispatcher(sal_False);
-    EnableExtendedMouseEventDispatcher(sal_False);
-    EnableExtendedCommandEventDispatcher(sal_False);
+    EnableExtendedKeyInputDispatcher(false);
+    EnableExtendedMouseEventDispatcher(false);
+    EnableExtendedCommandEventDispatcher(false);
 
-    SetUseIncompatiblePathCreateInterface(sal_False);
-    SetMarkHdlWhenTextEdit(sal_True);
-    EnableTextEditOnObjectsWithoutTextIfTextTool(sal_True);
+    SetUseIncompatiblePathCreateInterface(false);
+    SetMarkHdlWhenTextEdit(true);
+    EnableTextEditOnObjectsWithoutTextIfTextTool(true);
 
     SetMinMoveDistancePixel(2);
     SetHitTolerancePixel(2);
@@ -653,11 +653,11 @@ static void SetSpellOptions( const SdDrawDocument& rDoc, sal_uLong& rCntrl )
         rCntrl &= ~EE_CNTRL_ONLINESPELLING;
 }
 
-sal_Bool View::SdrBeginTextEdit(
+bool View::SdrBeginTextEdit(
     SdrObject* pObj, SdrPageView* pPV, ::Window* pWin,
-    sal_Bool bIsNewObj,
+    bool bIsNewObj,
     SdrOutliner* pOutl, OutlinerView* pGivenOutlinerView,
-    sal_Bool bDontDeleteOutliner, sal_Bool bOnlyOneView, sal_Bool bGrabFocus )
+    bool bDontDeleteOutliner, bool bOnlyOneView, bool bGrabFocus )
 {
     GetViewShell()->GetViewShellBase().GetEventMultiplexer()->MultiplexEvent(
         sd::tools::EventMultiplexerEvent::EID_BEGIN_TEXT_EDIT, (void*)pObj );
@@ -735,7 +735,7 @@ sal_Bool View::SdrBeginTextEdit(
 }
 
 /** ends current text editing */
-SdrEndTextEditKind View::SdrEndTextEdit(sal_Bool bDontDeleteReally )
+SdrEndTextEditKind View::SdrEndTextEdit(bool bDontDeleteReally )
 {
     SdrObjectWeakRef xObj( GetTextEditObject() );
 
@@ -1115,7 +1115,7 @@ SdrViewContext View::GetContext() const
         return FmFormView::GetContext();
 }
 
-sal_Bool View::HasMarkablePoints() const
+bool View::HasMarkablePoints() const
 {
     if( maSmartTags.HasMarkablePoints() )
         return true;
@@ -1130,7 +1130,7 @@ sal_uLong View::GetMarkablePointCount() const
     return nCount;
 }
 
-sal_Bool View::HasMarkedPoints() const
+bool View::HasMarkedPoints() const
 {
     if( maSmartTags.HasMarkedPoints() )
         return true;
@@ -1145,7 +1145,7 @@ sal_uLong View::GetMarkedPointCount() const
     return nCount;
 }
 
-sal_Bool View::IsPointMarkable(const SdrHdl& rHdl) const
+bool View::IsPointMarkable(const SdrHdl& rHdl) const
 {
     if( maSmartTags.IsPointMarkable( rHdl ) )
         return true;
@@ -1153,7 +1153,7 @@ sal_Bool View::IsPointMarkable(const SdrHdl& rHdl) const
         return FmFormView::IsPointMarkable( rHdl );
 }
 
-sal_Bool View::MarkPoint(SdrHdl& rHdl, sal_Bool bUnmark )
+bool View::MarkPoint(SdrHdl& rHdl, bool bUnmark )
 {
     if( maSmartTags.MarkPoint( rHdl, bUnmark ) )
         return true;

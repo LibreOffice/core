@@ -40,7 +40,7 @@ void SdrViewIter::ImpInitVars()
 
 
 
-SdrViewIter::SdrViewIter(const SdrPage* pPage, sal_Bool bNoMasterPage)
+SdrViewIter::SdrViewIter(const SdrPage* pPage, bool bNoMasterPage)
 {
     mpPage = pPage;
     mpModel = (pPage) ? pPage->GetModel() : 0L;
@@ -51,7 +51,7 @@ SdrViewIter::SdrViewIter(const SdrPage* pPage, sal_Bool bNoMasterPage)
 
 
 
-SdrViewIter::SdrViewIter(const SdrObject* pObject, sal_Bool bNoMasterPage)
+SdrViewIter::SdrViewIter(const SdrObject* pObject, bool bNoMasterPage)
 {
     mpObject = pObject;
     mpModel = (pObject) ? pObject->GetModel() : 0L;
@@ -69,11 +69,11 @@ SdrViewIter::SdrViewIter(const SdrObject* pObject, sal_Bool bNoMasterPage)
 
 
 
-sal_Bool SdrViewIter::ImpCheckPageView(SdrPageView* pPV) const
+bool SdrViewIter::ImpCheckPageView(SdrPageView* pPV) const
 {
     if(mpPage)
     {
-        sal_Bool bMaster(mpPage->IsMasterPage());
+        bool bMaster(mpPage->IsMasterPage());
         SdrPage* pPg = pPV->GetPage();
 
         if(pPg == mpPage)
@@ -89,7 +89,7 @@ sal_Bool SdrViewIter::ImpCheckPageView(SdrPageView* pPV) const
             }
             else
             {
-                return sal_True;
+                return true;
             }
         }
         else
@@ -114,24 +114,24 @@ sal_Bool SdrViewIter::ImpCheckPageView(SdrPageView* pPV) const
 
                             if(!aObjLay.IsEmpty())
                             {
-                                return sal_True;
+                                return true;
                             } // else, look at the next master page of this page...
                         }
                         else
                         {
-                            return sal_True;
+                            return true;
                         }
                     }
                 }
             }
 
             // master page forbidden or no fitting master page found
-            return sal_False;
+            return false;
         }
     }
     else
     {
-        return sal_True;
+        return true;
     }
 }
 

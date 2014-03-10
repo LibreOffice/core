@@ -531,7 +531,7 @@ void SvxTableController::onInsert( sal_uInt16 nSId, const SfxItemSet* pArgs )
         }
 
         if( pTableObj->IsTextEditActive() )
-            mpView->SdrEndTextEdit(sal_True);
+            mpView->SdrEndTextEdit(true);
 
         RemoveSelection();
 
@@ -636,7 +636,7 @@ void SvxTableController::onDelete( sal_uInt16 nSId )
         getSelectedCells( aStart, aEnd );
 
         if( pTableObj->IsTextEditActive() )
-            mpView->SdrEndTextEdit(sal_True);
+            mpView->SdrEndTextEdit(true);
 
         RemoveSelection();
 
@@ -1024,7 +1024,7 @@ void SvxTableController::MergeMarkedCells()
     if( pTableObj )
     {
         if( pTableObj->IsTextEditActive() )
-            mpView->SdrEndTextEdit(sal_True);
+            mpView->SdrEndTextEdit(true);
 
         TableModelNotifyGuard aGuard( mxTable.get() );
         MergeRange( aStart.mnCol, aStart.mnRow, aEnd.mnCol, aEnd.mnRow );
@@ -1058,7 +1058,7 @@ void SvxTableController::SplitMarkedCells()
             if( pTableObj )
             {
                 if( pTableObj->IsTextEditActive() )
-                    mpView->SdrEndTextEdit(sal_True);
+                    mpView->SdrEndTextEdit(true);
 
                 TableModelNotifyGuard aGuard( mxTable.get() );
 
@@ -1537,7 +1537,7 @@ bool SvxTableController::executeAction( sal_uInt16 nAction, bool bSelect, Window
 void SvxTableController::gotoCell( const CellPos& rPos, bool bSelect, Window* pWindow, sal_uInt16 nAction )
 {
     if( mxTableObj.is() && static_cast<SdrTableObj*>(mxTableObj.get())->IsTextEditActive() )
-        mpView->SdrEndTextEdit(sal_True);
+        mpView->SdrEndTextEdit(true);
 
     if( bSelect )
     {
@@ -1683,7 +1683,7 @@ void SvxTableController::EditCell( const CellPos& rPos, ::Window* pWindow, const
         if( pTableObj != mpView->GetTextEditObject() || bEmptyOutliner || !pTableObj->IsTextEditActive( aPos ) )
         {
             if( pTableObj->IsTextEditActive() )
-                mpView->SdrEndTextEdit(sal_True);
+                mpView->SdrEndTextEdit(true);
 
             pTableObj->setActiveCell( aPos );
 
@@ -1692,7 +1692,7 @@ void SvxTableController::EditCell( const CellPos& rPos, ::Window* pWindow, const
             if( pTableObj->IsVerticalWriting() )
                 pOutl->SetVertical( true );
 
-            if(mpView->SdrBeginTextEdit(pTableObj, pPV, pWindow, sal_True, pOutl))
+            if(mpView->SdrBeginTextEdit(pTableObj, pPV, pWindow, true, pOutl))
             {
                 maCursorLastPos = maCursorFirstPos = rPos;
 
@@ -2451,7 +2451,7 @@ bool SvxTableController::PasteObject( SdrTableObj* pPasteTableObj )
     getSelectedCells( aStart, aEnd );
 
     if( mpView->IsTextEdit() )
-        mpView->SdrEndTextEdit(sal_True);
+        mpView->SdrEndTextEdit(true);
 
     sal_Int32 nColumns = mxTable->getColumnCount();
     sal_Int32 nRows = mxTable->getRowCount();

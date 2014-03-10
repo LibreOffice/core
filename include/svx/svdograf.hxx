@@ -47,7 +47,7 @@ namespace sdr
 class SdrGrafObjGeoData : public SdrTextObjGeoData
 {
 public:
-    sal_Bool                    bMirrored;
+    bool                    bMirrored;
 
     SdrGrafObjGeoData()
     :   bMirrored(false)
@@ -180,7 +180,7 @@ public:
     bool isEmbeddedSvg() const;
     GDIMetaFile getMetafileFromEmbeddedSvg() const;
 
-    virtual SdrObject*      DoConvertToPolyObj(sal_Bool bBezier, bool bAddText) const;
+    virtual SdrObject*      DoConvertToPolyObj(bool bBezier, bool bAddText) const;
 
     virtual void            AdjustToMaxRect( const Rectangle& rMaxRect, bool bShrinkOnly = false );
 

@@ -24,15 +24,15 @@
 #include "svx/svdglob.hxx"
 #include "svx/svdstr.hrc"
 
-sal_Bool SetOfByte::IsEmpty() const
+bool SetOfByte::IsEmpty() const
 {
     for(sal_uInt16 i(0); i < 32; i++)
     {
         if(aData[i] != 0)
-            return sal_False;
+            return false;
     }
 
-    return sal_True;
+    return true;
 }
 
 void SetOfByte::operator&=(const SetOfByte& r2ndSet)

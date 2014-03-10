@@ -41,7 +41,7 @@ class SdrHelpLine {
     // #i27493#
     // Helper method to draw a hor or ver two-colored dashed line
     void ImpDrawDashedTwoColorLine(OutputDevice& rOut, sal_Int32 nStart, sal_Int32 nEnd, sal_Int32 nFixPos,
-        sal_Int32 nStepWidth, Color aColA, Color aColB, sal_Bool bHorizontal) const;
+        sal_Int32 nStepWidth, Color aColA, Color aColB, bool bHorizontal) const;
 
 public:
     explicit SdrHelpLine(SdrHelpLineKind eNewKind=SDRHELPLINE_POINT): eKind(eNewKind) {}

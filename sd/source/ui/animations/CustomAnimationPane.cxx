@@ -2245,7 +2245,7 @@ void CustomAnimationPane::markShapesFromSelectedEffects()
                 Reference< XShape > xShape( pEffect->getTargetShape() );
                 SdrObject* pObj = GetSdrObjectFromXShape( xShape );
                 if( pObj )
-                    pView->MarkObj(pObj, pView->GetSdrPageView(), sal_False, sal_False);
+                    pView->MarkObj(pObj, pView->GetSdrPageView(), false, false);
             }
         }
     }

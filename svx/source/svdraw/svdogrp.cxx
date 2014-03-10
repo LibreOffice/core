@@ -766,7 +766,7 @@ void SdrObjGroup::ReformatText()
     pSub->ReformatAllTextObjects();
 }
 
-SdrObject* SdrObjGroup::DoConvertToPolyObj(sal_Bool bBezier, bool bAddText) const
+SdrObject* SdrObjGroup::DoConvertToPolyObj(bool bBezier, bool bAddText) const
 {
     SdrObject* pGroup = new SdrObjGroup;
     pGroup->SetModel(GetModel());

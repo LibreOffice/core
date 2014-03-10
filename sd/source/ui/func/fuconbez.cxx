@@ -109,11 +109,11 @@ sal_Bool FuConstructBezierPolygon::MouseButtonDown(const MouseEvent& rMEvt)
     {
         // here, we do not allow text input
         aVEvt.eEvent = SDREVENT_BEGDRAGOBJ;
-        mpView->EnableExtendedMouseEventDispatcher(sal_False);
+        mpView->EnableExtendedMouseEventDispatcher(false);
     }
     else
     {
-        mpView->EnableExtendedMouseEventDispatcher(sal_True);
+        mpView->EnableExtendedMouseEventDispatcher(true);
     }
 
     if (eHit == SDRHIT_MARKEDOBJECT && nEditMode == SID_BEZIER_INSERT)
@@ -238,7 +238,7 @@ sal_Bool FuConstructBezierPolygon::KeyInput(const KeyEvent& rKEvt)
 
 void FuConstructBezierPolygon::Activate()
 {
-    mpView->EnableExtendedMouseEventDispatcher(sal_True);
+    mpView->EnableExtendedMouseEventDispatcher(true);
 
     SdrObjKind eKind;
 
@@ -297,7 +297,7 @@ void FuConstructBezierPolygon::Activate()
 
 void FuConstructBezierPolygon::Deactivate()
 {
-    mpView->EnableExtendedMouseEventDispatcher(sal_False);
+    mpView->EnableExtendedMouseEventDispatcher(false);
 
     FuConstruct::Deactivate();
 }

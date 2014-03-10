@@ -79,9 +79,9 @@ void SwViewImp::Init( const SwViewOption *pNewOpt )
         pDrawView->SetWorkArea( pRoot->Frm().SVRect() );
 
     if ( GetShell()->IsPreview() )
-        pDrawView->SetAnimationEnabled( sal_False );
+        pDrawView->SetAnimationEnabled( false );
 
-    pDrawView->SetUseIncompatiblePathCreateInterface( sal_False );
+    pDrawView->SetUseIncompatiblePathCreateInterface( false );
 
     // set handle size to 9 pixels, always
     pDrawView->SetMarkHdlSizePixel(9);

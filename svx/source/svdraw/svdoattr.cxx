@@ -131,7 +131,7 @@ void SdrAttrObj::Notify(SfxBroadcaster& /*rBC*/, const SfxHint& rHint)
     {
         Rectangle aBoundRect = GetLastBoundRect();
         SetBoundRectDirty();
-        SetRectsDirty(sal_True);
+        SetRectsDirty(true);
 
         // This may have led to object change
         SetChanged();
@@ -152,12 +152,12 @@ sal_Int32 SdrAttrObj::ImpGetLineWdt() const
     return nRetval;
 }
 
-sal_Bool SdrAttrObj::HasFill() const
+bool SdrAttrObj::HasFill() const
 {
     return bClosedObj && ((XFillStyleItem&)(GetProperties().GetObjectItemSet().Get(XATTR_FILLSTYLE))).GetValue()!=XFILL_NONE;
 }
 
-sal_Bool SdrAttrObj::HasLine() const
+bool SdrAttrObj::HasLine() const
 {
     return ((XLineStyleItem&)(GetProperties().GetObjectItemSet().Get(XATTR_LINESTYLE))).GetValue()!=XLINE_NONE;
 }

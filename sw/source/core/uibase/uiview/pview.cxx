@@ -1084,7 +1084,7 @@ void  SwPagePreview::StateUndo(SfxItemSet& rSet)
 void SwPagePreview::Init(const SwViewOption * pPrefs)
 {
     if ( GetViewShell()->HasDrawView() )
-        GetViewShell()->GetDrawView()->SetAnimationEnabled( sal_False );
+        GetViewShell()->GetDrawView()->SetAnimationEnabled( false );
 
     bNormalPrint = sal_True;
 

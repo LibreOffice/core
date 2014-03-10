@@ -160,7 +160,7 @@ void DrawViewShell::FuTable(SfxRequest& rReq)
         }
 
         ::sdr::table::SdrTableObj* pObj = new ::sdr::table::SdrTableObj( GetDoc(), aRect, nColumns, nRows );
-        pObj->NbcSetStyleSheet( GetDoc()->GetDefaultStyleSheet(), sal_True );
+        pObj->NbcSetStyleSheet( GetDoc()->GetDefaultStyleSheet(), true );
         apply_table_style( pObj, GetDoc(), sTableStyle );
         SdrPageView* pPV = mpView->GetSdrPageView();
 
@@ -186,7 +186,7 @@ void DrawViewShell::FuTable(SfxRequest& rReq)
 
         GetParentWindow()->GrabFocus();
         if( pPickObj )
-            mpView->ReplaceObjectAtView(pPickObj, *pPV, pObj, sal_True );
+            mpView->ReplaceObjectAtView(pPickObj, *pPV, pObj, true );
         else
             mpView->InsertObjectAtView(pObj, *pPV, SDRINSERT_SETDEFLAYER);
 
@@ -261,7 +261,7 @@ void CreateTableFromRTF( SvStream& rStream, SdDrawDocument* pModel )
             Point aPos;
             Rectangle aRect (aPos, aSize);
             ::sdr::table::SdrTableObj* pObj = new ::sdr::table::SdrTableObj( pModel, aRect, 1, 1 );
-            pObj->NbcSetStyleSheet( pModel->GetDefaultStyleSheet(), sal_True );
+            pObj->NbcSetStyleSheet( pModel->GetDefaultStyleSheet(), true );
             OUString sTableStyle;
             apply_table_style( pObj, pModel, sTableStyle );
 

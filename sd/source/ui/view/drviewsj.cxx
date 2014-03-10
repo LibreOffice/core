@@ -219,7 +219,7 @@ void DrawViewShell::GetMenuStateSel( SfxItemSet &rSet )
             }
 
             if ( nInv == E3dInventor                          ||
-                 (!mpDrawView->IsConvertToPathObjPossible(sal_False) &&
+                 (!mpDrawView->IsConvertToPathObjPossible(false) &&
                   !mpDrawView->IsShearAllowed()                  &&
                   !mpDrawView->IsDistortAllowed()) )
             {
@@ -247,12 +247,12 @@ void DrawViewShell::GetMenuStateSel( SfxItemSet &rSet )
         if( SFX_ITEM_AVAILABLE == rSet.GetItemState( SID_DISMANTLE ) ||
             SFX_ITEM_AVAILABLE == rSet.GetItemState( SID_BREAK ) )
         {
-            if ( !mpDrawView->IsDismantlePossible(sal_False) )
+            if ( !mpDrawView->IsDismantlePossible(false) )
             {
                 rSet.DisableItem( SID_DISMANTLE );
             }
 
-            if ( !mpDrawView->IsDismantlePossible(sal_True) &&
+            if ( !mpDrawView->IsDismantlePossible(true) &&
                  !mpDrawView->IsImportMtfPossible()     &&
                  !mpDrawView->IsBreak3DObjPossible() )
             {
@@ -383,7 +383,7 @@ void DrawViewShell::GetMenuStateSel( SfxItemSet &rSet )
             }
 
             if (b3dObj                                        ||
-                 (!mpDrawView->IsConvertToPathObjPossible(sal_False) &&
+                 (!mpDrawView->IsConvertToPathObjPossible(false) &&
                   !mpDrawView->IsShearAllowed()                  &&
                   !mpDrawView->IsDistortAllowed()) )
             {
@@ -429,24 +429,24 @@ void DrawViewShell::GetMenuStateSel( SfxItemSet &rSet )
             }
         }
 
-        if ( !mpDrawView->IsDismantlePossible(sal_False) )
+        if ( !mpDrawView->IsDismantlePossible(false) )
         {
             rSet.DisableItem( SID_DISMANTLE );
         }
-        if ( !mpDrawView->IsDismantlePossible(sal_True) &&
+        if ( !mpDrawView->IsDismantlePossible(true) &&
              !mpDrawView->IsImportMtfPossible()     &&
              !mpDrawView->IsBreak3DObjPossible() )
         {
             rSet.DisableItem( SID_BREAK );
         }
-        if ( !mpDrawView->IsCombinePossible(sal_False) )
+        if ( !mpDrawView->IsCombinePossible(false) )
         {
             rSet.DisableItem( SID_COMBINE );
             rSet.DisableItem(SID_POLY_MERGE);
             rSet.DisableItem(SID_POLY_SUBSTRACT);
             rSet.DisableItem(SID_POLY_INTERSECT);
         }
-        if ( !mpDrawView->IsCombinePossible(sal_True) )
+        if ( !mpDrawView->IsCombinePossible(true) )
         {
             rSet.DisableItem( SID_CONNECT );
         }

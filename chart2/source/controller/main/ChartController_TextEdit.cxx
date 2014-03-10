@@ -76,11 +76,11 @@ void ChartController::StartTextEdit( const Point* pMousePixel )
     sal_Bool bEdit = m_pDrawViewWrapper->SdrBeginTextEdit( pTextObj
                     , m_pDrawViewWrapper->GetPageView()
                     , m_pChartWindow
-                    , sal_False //bIsNewObj
+                    , false //bIsNewObj
                     , pOutliner
                     , 0L //pOutlinerView
-                    , sal_True //bDontDeleteOutliner
-                    , sal_True //bOnlyOneView
+                    , true //bDontDeleteOutliner
+                    , true //bOnlyOneView
                     );
     if(bEdit)
     {

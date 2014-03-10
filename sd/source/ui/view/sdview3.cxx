@@ -526,7 +526,7 @@ sal_Bool View::InsertData( const TransferableDataHelper& rDataHelper,
                                                             Point aPosition = rGluePoint.GetAbsolutePos(*pConnObj);
                                                             aPosition.X() += aVector.A();
                                                             aPosition.Y() += aVector.B();
-                                                            pCloneEdge->SetTailPoint(sal_False, aPosition);
+                                                            pCloneEdge->SetTailPoint(false, aPosition);
                                                         }
                                                     }
                                                 }
@@ -558,7 +558,7 @@ sal_Bool View::InsertData( const TransferableDataHelper& rDataHelper,
                                                             Point aPosition = rGluePoint.GetAbsolutePos(*pConnObj);
                                                             aPosition.X() += aVector.A();
                                                             aPosition.Y() += aVector.B();
-                                                            pCloneEdge->SetTailPoint(sal_True, aPosition);
+                                                            pCloneEdge->SetTailPoint(true, aPosition);
                                                         }
                                                     }
                                                 }

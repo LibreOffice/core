@@ -662,7 +662,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
                 if( rReq.GetSlot() == SID_CHANGEBEZIER )
                 {
                     WaitObject aWait( (Window*)GetActiveWindow() );
-                    mpDrawView->ConvertMarkedToPathObj(sal_False);
+                    mpDrawView->ConvertMarkedToPathObj(false);
                 }
                 else
                 {
@@ -705,7 +705,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
             else
             {
                 WaitObject aWait( (Window*)GetActiveWindow() );
-                mpDrawView->ConvertMarkedToPathObj(sal_True);
+                mpDrawView->ConvertMarkedToPathObj(true);
 
                 Invalidate(SID_CONVERT_TO_CONTOUR);
             }
@@ -889,7 +889,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
 
                                 if( nLevel == 1 )
                                     // text frame listens on StyleSheet of level1
-                                    pObj->NbcSetStyleSheet(pSheet, sal_False);
+                                    pObj->NbcSetStyleSheet(pSheet, false);
 
                             }
                         }
@@ -2161,7 +2161,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
             else
             {
                 WaitObject aWait( (Window*)GetActiveWindow() );
-                mpDrawView->CombineMarkedObjects(sal_False);
+                mpDrawView->CombineMarkedObjects(false);
             }
             Cancel();
             rReq.Done ();
@@ -2249,10 +2249,10 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
 
         case SID_DISMANTLE:  // BASIC
         {
-            if ( mpDrawView->IsDismantlePossible(sal_False) )
+            if ( mpDrawView->IsDismantlePossible(false) )
             {
                 WaitObject aWait( (Window*)GetActiveWindow() );
-                mpDrawView->DismantleMarkedObjects(sal_False);
+                mpDrawView->DismantleMarkedObjects(false);
             }
             Cancel();
             rReq.Done ();
@@ -2269,7 +2269,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
             else
             {
                 WaitObject aWait( (Window*)GetActiveWindow() );
-                mpDrawView->CombineMarkedObjects(sal_True);
+                mpDrawView->CombineMarkedObjects(true);
             }
             Cancel();
             rReq.Done ();
@@ -2288,10 +2288,10 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
                 WaitObject aWait( (Window*)GetActiveWindow() );
                 mpDrawView->Break3DObj();
             }
-            else if ( mpDrawView->IsDismantlePossible(sal_True) )
+            else if ( mpDrawView->IsDismantlePossible(true) )
             {
                 WaitObject aWait( (Window*)GetActiveWindow() );
-                mpDrawView->DismantleMarkedObjects(sal_True);
+                mpDrawView->DismantleMarkedObjects(true);
             }
             else if ( mpDrawView->IsImportMtfPossible() )
             {

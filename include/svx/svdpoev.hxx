@@ -30,8 +30,8 @@ class SVX_DLLPUBLIC SdrPolyEditView: public SdrEditView, public IPolyPolygonEdit
     friend class                SdrEditView;
 
 protected:
-    sal_Bool                        bSetMarkedPointsSmoothPossible : 1;
-    sal_Bool                        bSetMarkedSegmentsKindPossible : 1;
+    bool                        bSetMarkedPointsSmoothPossible : 1;
+    bool                        bSetMarkedSegmentsKindPossible : 1;
 
     SdrPathSmoothKind           eMarkedPointsSmooth;
     SdrPathSegmentKind          eMarkedSegmentsKind;

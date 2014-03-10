@@ -1754,14 +1754,14 @@ void FmXFormView::saveMarkList( sal_Bool _bSmartUnmark )
                         if ( !bMixed )
                         {
                             // all objects in the group are form objects
-                            m_pView->MarkObj( pMark->GetMarkedSdrObj(), pMark->GetPageView(), sal_True /* unmark! */ );
+                            m_pView->MarkObj( pMark->GetMarkedSdrObj(), pMark->GetPageView(), true /* unmark! */ );
                         }
                     }
                     else
                     {
                         if ( pObj->GetObjInventor() == FmFormInventor )
                         {   // this is a form layer object
-                            m_pView->MarkObj( pMark->GetMarkedSdrObj(), pMark->GetPageView(), sal_True /* unmark! */ );
+                            m_pView->MarkObj( pMark->GetMarkedSdrObj(), pMark->GetPageView(), true /* unmark! */ );
                         }
                     }
                 }

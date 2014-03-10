@@ -411,7 +411,7 @@ SdrObject* SdPage::CreatePresObj(PresObjKind eObjKind, sal_Bool bVertical, const
             // Tell the object EARLY that it is vertical to have the
             // defaults for AutoGrowWidth/Height reversed
             if(bVertical)
-                ((SdrTextObj*)pSdrObj)->SetVerticalWriting(sal_True);
+                ((SdrTextObj*)pSdrObj)->SetVerticalWriting(true);
 
             SfxItemSet aTempAttr( ((SdDrawDocument*) pModel)->GetPool() );
             if( bVertical )
@@ -2227,7 +2227,7 @@ SdrObject* SdPage::InsertAutoLayoutShape( SdrObject* pObj, PresObjKind eObjKind,
         SdrTextObj* pTextObject = dynamic_cast< SdrTextObj* >(pObj);
         if( pTextObject )
         {
-            if( pTextObject->IsVerticalWriting() != (bVertical ? sal_True : sal_False) )
+            if( pTextObject->IsVerticalWriting() != bVertical )
             {
                 pTextObject->SetVerticalWriting( bVertical );
 
@@ -2897,7 +2897,7 @@ bool SdPage::RestoreDefaultText( SdrObject* pObj )
                 }
 
                 pTextObj->SetTextEditOutliner( NULL );  // to make stylesheet settings work
-                pTextObj->NbcSetStyleSheet( GetStyleSheetForPresObj(ePresObjKind), sal_True );
+                pTextObj->NbcSetStyleSheet( GetStyleSheetForPresObj(ePresObjKind), true );
                 pTextObj->SetEmptyPresObj(true);
                 bRet = true;
             }

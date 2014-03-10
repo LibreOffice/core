@@ -1377,7 +1377,7 @@ void Outliner::EnterEditMode (sal_Bool bGrabFocus)
             mpTextObj->setActiveText( mnText );
 
         // Turn on the edit mode for the text object.
-        mpView->SdrBeginTextEdit(mpTextObj, pPV, mpWindow, sal_True, this, pOutlinerView, sal_True, sal_True, bGrabFocus);
+        mpView->SdrBeginTextEdit(mpTextObj, pPV, mpWindow, true, this, pOutlinerView, true, true, bGrabFocus);
 
         SetUpdateMode(true);
         mbFoundObject = true;
@@ -1522,7 +1522,7 @@ void Outliner::SetViewShell (const ::boost::shared_ptr<ViewShell>& rpViewShell)
 void Outliner::HandleChangedSelection (void)
 {
     maMarkListCopy.clear();
-    mbRestrictSearchToSelection = (mpView->AreObjectsMarked()==sal_True);
+    mbRestrictSearchToSelection = mpView->AreObjectsMarked();
     if (mbRestrictSearchToSelection)
     {
         // Make a copy of the current mark list.

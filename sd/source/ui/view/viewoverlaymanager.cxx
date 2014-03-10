@@ -139,7 +139,7 @@ public:
     ImageButtonHdl( const SmartTagReference& xTag, /* sal_uInt16 nSID, const Image& rImage, const Image& rImageMO, */ const Point& rPnt );
     virtual ~ImageButtonHdl();
     virtual void CreateB2dIAObject();
-    virtual sal_Bool IsFocusHdl() const;
+    virtual bool IsFocusHdl() const;
     virtual Pointer GetPointer() const;
     virtual bool isMarkable() const;
 
@@ -283,7 +283,7 @@ void ImageButtonHdl::CreateB2dIAObject()
 
 
 
-sal_Bool ImageButtonHdl::IsFocusHdl() const
+bool ImageButtonHdl::IsFocusHdl() const
 {
     return false;
 }
@@ -333,7 +333,7 @@ bool ChangePlaceholderTag::MouseButtonDown( const MouseEvent& /*rMEvt*/, SmartHd
             {
                 SdrPageView* pPV = mrView.GetSdrPageView();
                 mrView.UnmarkAllObj(pPV );
-                mrView.MarkObj(mxPlaceholderObj.get(), pPV, sal_False);
+                mrView.MarkObj(mxPlaceholderObj.get(), pPV, false);
             }
         }
 

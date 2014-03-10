@@ -61,8 +61,8 @@ protected:
 
 private:
     Polygon                     aTailPoly;  // the whole tail polygon
-    sal_Bool                    mbSpecialTextBoxShadow; // for calc special shadow, default FALSE
-    sal_Bool                    mbFixedTail; // for calc note box fixed tail, default FALSE
+    bool                        mbSpecialTextBoxShadow; // for calc special shadow, default FALSE
+    bool                        mbFixedTail; // for calc note box fixed tail, default FALSE
     Point                       maFixedTailPos; // for calc note box fixed tail position.
 
 private:
@@ -85,11 +85,11 @@ public:
     virtual SdrCaptionObj* Clone() const;
 
     // for calc: special shadow only for text box
-    void SetSpecialTextBoxShadow() { mbSpecialTextBoxShadow = sal_True; }
-    sal_Bool GetSpecialTextBoxShadow() const { return mbSpecialTextBoxShadow; }
+    void SetSpecialTextBoxShadow() { mbSpecialTextBoxShadow = true; }
+    bool GetSpecialTextBoxShadow() const { return mbSpecialTextBoxShadow; }
 
     // for calc: fixed note tail position.
-    void SetFixedTail() { mbFixedTail = sal_True; }
+    void SetFixedTail() { mbFixedTail = true; }
 
     virtual OUString TakeObjNameSingul() const;
     virtual OUString TakeObjNamePlural() const;
@@ -138,7 +138,7 @@ protected:
     virtual void RestGeoData(const SdrObjGeoData& rGeo);
 
 public:
-    virtual SdrObject* DoConvertToPolyObj(sal_Bool bBezier, bool bAddText) const;
+    virtual SdrObject* DoConvertToPolyObj(bool bBezier, bool bAddText) const;
 
     const Point& GetTailPos() const;
     void SetTailPos(const Point& rPos);

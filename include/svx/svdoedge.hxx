@@ -67,14 +67,14 @@ public:
     void ResetVars();
     bool TakeGluePoint(SdrGluePoint& rGP, bool bSetAbsolutePos) const;
 
-    inline void SetBestConnection( sal_Bool rB ) { bBestConn = rB; };
-    inline void SetBestVertex( sal_Bool rB ) { bBestVertex = rB; };
-    inline void SetAutoVertex( sal_Bool rB ) { bAutoVertex = rB; };
+    inline void SetBestConnection( bool rB ) { bBestConn = rB; };
+    inline void SetBestVertex( bool rB ) { bBestVertex = rB; };
+    inline void SetAutoVertex( bool rB ) { bAutoVertex = rB; };
     inline void SetConnectorId( sal_uInt16 nId ) { nConId = nId; };
 
-    inline sal_Bool IsBestConnection() const { return bBestConn; };
-    inline sal_Bool IsBestVertex() const { return bBestVertex; };
-    inline sal_Bool IsAutoVertex() const { return bAutoVertex; };
+    inline bool IsBestConnection() const { return bBestConn; };
+    inline bool IsBestVertex() const { return bBestVertex; };
+    inline bool IsAutoVertex() const { return bAutoVertex; };
     inline sal_uInt16 GetConnectorId() const { return nConId; };
     inline SdrObject* GetObject() const { return pObj; }
 };
@@ -133,8 +133,8 @@ public:
     SdrObjConnection            aCon1;  // Verbindungszustand des Linienanfangs
     SdrObjConnection            aCon2;  // Verbindungszustand des Linienendes
     XPolygon*                   pEdgeTrack;
-    sal_Bool                    bEdgeTrackDirty;// sal_True=Verbindungsverlauf muss neu berechnet werden.
-    sal_Bool                    bEdgeTrackUserDefined;
+    bool                        bEdgeTrackDirty;// sal_True=Verbindungsverlauf muss neu berechnet werden.
+    bool                        bEdgeTrackUserDefined;
     SdrEdgeInfoRec              aEdgeInfo;
 
 public:
@@ -189,11 +189,11 @@ protected:
 public:
     // #109007#
     // Interface to default connect suppression
-    void SetSuppressDefaultConnect(sal_Bool bNew) { mbSuppressDefaultConnect = bNew; }
-    sal_Bool GetSuppressDefaultConnect() const { return mbSuppressDefaultConnect; }
+    void SetSuppressDefaultConnect(bool bNew) { mbSuppressDefaultConnect = bNew; }
+    bool GetSuppressDefaultConnect() const { return mbSuppressDefaultConnect; }
 
     // #110649#
-    sal_Bool IsBoundRectCalculationRunning() const { return mbBoundRectCalculationRunning; }
+    bool IsBoundRectCalculationRunning() const { return mbBoundRectCalculationRunning; }
 
 protected:
     virtual void Notify(SfxBroadcaster& rBC, const SfxHint& rHint);
@@ -281,11 +281,11 @@ public:
     virtual void BrkCreate(SdrDragStat& rStat);
     virtual basegfx::B2DPolyPolygon TakeCreatePoly(const SdrDragStat& rDrag) const;
     virtual Pointer GetCreatePointer() const;
-    virtual SdrObject* DoConvertToPolyObj(sal_Bool bBezier, bool bAddText) const;
+    virtual SdrObject* DoConvertToPolyObj(bool bBezier, bool bAddText) const;
 
     virtual sal_uInt32 GetSnapPointCount() const;
     virtual Point GetSnapPoint(sal_uInt32 i) const;
-    virtual sal_Bool IsPolyObj() const;
+    virtual bool IsPolyObj() const;
     virtual sal_uInt32 GetPointCount() const;
     virtual Point GetPoint(sal_uInt32 i) const;
     virtual void NbcSetPoint(const Point& rPnt, sal_uInt32 i);
@@ -301,12 +301,12 @@ public:
     void Reformat();
 
     // helper methods for the StarOffice api
-    Point GetTailPoint( sal_Bool bTail ) const;
-    void SetTailPoint( sal_Bool bTail, const Point& rPt );
-    void setGluePointIndex( sal_Bool bTail, sal_Int32 nId = -1 );
-    sal_Int32 getGluePointIndex( sal_Bool bTail );
+    Point GetTailPoint( bool bTail ) const;
+    void SetTailPoint( bool bTail, const Point& rPt );
+    void setGluePointIndex( bool bTail, sal_Int32 nId = -1 );
+    sal_Int32 getGluePointIndex( bool bTail );
 
-    virtual sal_Bool TRGetBaseGeometry(basegfx::B2DHomMatrix& rMatrix, basegfx::B2DPolyPolygon& rPolyPolygon) const;
+    virtual bool TRGetBaseGeometry(basegfx::B2DHomMatrix& rMatrix, basegfx::B2DPolyPolygon& rPolyPolygon) const;
     virtual void TRSetBaseGeometry(const basegfx::B2DHomMatrix& rMatrix, const basegfx::B2DPolyPolygon& rPolyPolygon);
 
     // for geometry access
@@ -327,11 +327,11 @@ public:
 //      Objektaustrittswinkel.
 //      Der Winkel, in dem die Verbindungslinie aus dem Objekt austreten darf.
 //
-//  sal_Bool   EdgeEscAsRay        Default FALSE
+//  bool   EdgeEscAsRay        Default FALSE
 //      sal_True= die Verbindungslinie tritt aus dem Obj Strahlenfoermig aus.
 //      Also Winkelvorgabe durch die Strecke ObjMitte/Konnektor.
 //
-//  sal_Bool   EdgeEscUseObjAngle  Default FALSE
+//  bool   EdgeEscUseObjAngle  Default FALSE
 //      Objektdrehwinkelberuecksichtigung.
 //      sal_True= Bei der Bestimmung des Objektaustrittswinkels wird der
 //      Drehwinkel des Objekts als Offset beruecksichtigt.

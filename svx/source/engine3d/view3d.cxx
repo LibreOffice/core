@@ -397,7 +397,7 @@ SdrModel* E3dView::GetMarkedObjModel() const
 
             if(pScene && !IsObjMarked(pScene) && GetSdrPageView())
             {
-                ((E3dView*)this)->MarkObj(pScene, GetSdrPageView(), sal_False, sal_True);
+                ((E3dView*)this)->MarkObj(pScene, GetSdrPageView(), false, true);
             }
         }
     }
@@ -441,9 +441,9 @@ SdrModel* E3dView::GetMarkedObjModel() const
 // When pasting objects have to integrated if a scene is inserted, but
 // not the scene itself
 
-sal_Bool E3dView::Paste(const SdrModel& rMod, const Point& rPos, SdrObjList* pLst, sal_uInt32 nOptions)
+bool E3dView::Paste(const SdrModel& rMod, const Point& rPos, SdrObjList* pLst, sal_uInt32 nOptions)
 {
-    sal_Bool bRetval = sal_False;
+    bool bRetval = false;
 
     // Get list
     Point aPos(rPos);
@@ -451,7 +451,7 @@ sal_Bool E3dView::Paste(const SdrModel& rMod, const Point& rPos, SdrObjList* pLs
     ImpGetPasteObjList(aPos, pDstList);
 
     if(!pDstList)
-        return sal_False;
+        return false;
 
     // Get owner of the list
     SdrObject* pOwner = pDstList->GetOwnerObj();
@@ -587,7 +587,7 @@ bool E3dView::ImpCloneAll3DObjectsToDestScene(E3dScene* pSrcScene, E3dScene* pDs
                     pNewCompoundObj->SetModel(pDstScene->GetModel());
                     pNewCompoundObj->SetPage(pDstScene->GetPage());
                     pNewCompoundObj->NbcSetLayer(pCompoundObj->GetLayer());
-                    pNewCompoundObj->NbcSetStyleSheet(pCompoundObj->GetStyleSheet(), sal_True);
+                    pNewCompoundObj->NbcSetStyleSheet(pCompoundObj->GetStyleSheet(), true);
                     pDstScene->Insert3DObj(pNewCompoundObj);
                     bRetval = true;
 
@@ -619,8 +619,8 @@ bool E3dView::IsConvertTo3DObjPossible() const
 
     bRetval = !bAny3D
         && (
-           IsConvertToPolyObjPossible(sal_False)
-        || IsConvertToPathObjPossible(sal_False)
+           IsConvertToPolyObjPossible(false)
+        || IsConvertToPathObjPossible(false)
         || IsImportMtfPossible());
     return bRetval;
 }
@@ -759,7 +759,7 @@ void E3dView::ImpCreateSingle3DObjectFlat(E3dScene* pScene, SdrObject* pObj, boo
 
             p3DObj->SetMergedItemSet(aSet);
 
-            p3DObj->NbcSetStyleSheet(pObj->GetStyleSheet(), sal_True);
+            p3DObj->NbcSetStyleSheet(pObj->GetStyleSheet(), true);
 
             // Insert a new extrude object
             pScene->Insert3DObj(p3DObj);
@@ -968,8 +968,8 @@ void E3dView::ConvertMarkedObjTo3D(bool bExtrude, basegfx::B2DPoint aPnt1, baseg
             // all the old objects
             SdrObject* pRepObj = GetMarkedObjectByIndex(0);
             SdrPageView* pPV = GetSdrPageViewOfMarkedByIndex(0);
-            MarkObj(pRepObj, pPV, sal_True);
-            ReplaceObjectAtView(pRepObj, *pPV, pScene, sal_False);
+            MarkObj(pRepObj, pPV, true);
+            ReplaceObjectAtView(pRepObj, *pPV, pScene, false);
             DeleteMarked();
             MarkObj(pScene, pPV);
 
@@ -1184,7 +1184,7 @@ void E3dView::DoDepthArrange(E3dScene* pScene, double fDepth)
 
 // Start drag, create for 3D objects before possibly drag method
 
-sal_Bool E3dView::BegDragObj(const Point& rPnt, OutputDevice* pOut,
+bool E3dView::BegDragObj(const Point& rPnt, OutputDevice* pOut,
     SdrHdl* pHdl, short nMinMov,
     SdrDragMethod* pForcedMeth)
 {

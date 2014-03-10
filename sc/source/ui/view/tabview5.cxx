@@ -318,7 +318,7 @@ void ScTabView::UpdateLayerLocks()
             pDrawView->SetLayerLocked( pLayer->GetName(), bProt || !bEx || bShared );
         pLayer = rAdmin.GetLayerPerID(SC_LAYER_INTERN);
         if (pLayer)
-            pDrawView->SetLayerLocked( pLayer->GetName(), sal_True );
+            pDrawView->SetLayerLocked( pLayer->GetName(), true );
         pLayer = rAdmin.GetLayerPerID(SC_LAYER_FRONT);
         if (pLayer)
             pDrawView->SetLayerLocked( pLayer->GetName(), bProt || bShared );

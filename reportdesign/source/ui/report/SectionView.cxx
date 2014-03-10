@@ -46,7 +46,7 @@ OSectionView::OSectionView( SdrModel* pModel, OReportSection* _pSectionWindow, O
     SetBufferedOverlayAllowed(true);
     SetPageBorderVisible(false);
     SetBordVisible();
-    SetQuickTextEditMode(sal_False);
+    SetQuickTextEditMode(false);
 }
 
 
@@ -155,7 +155,7 @@ void OSectionView::ObjectRemovedInAliveMode( const SdrObject* _pObject )
         {
             SdrPageView*    pPgView = GetSdrPageView();
             BrkAction();
-            MarkObj( pSdrObj, pPgView, sal_True );
+            MarkObj( pSdrObj, pPgView, true );
             break;
         }
     }

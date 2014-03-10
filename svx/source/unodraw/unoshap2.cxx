@@ -273,7 +273,7 @@ void SAL_CALL SvxShapeGroup::remove( const uno::Reference< drawing::XShape >& xS
         {
             if(CONTAINER_ENTRY_NOTFOUND != pView->TryToFindMarkedObject(pSdrShape))
             {
-                pView->MarkObj(pSdrShape, pView->GetSdrPageView(), sal_True, sal_False);
+                pView->MarkObj(pSdrShape, pView->GetSdrPageView(), true, false);
             }
         }
 
@@ -1903,13 +1903,13 @@ void SAL_CALL SvxCustomShape::setPropertyValue( const OUString& aPropertyName, c
 
     bool bCustomShapeGeometry = pObject && aPropertyName == "CustomShapeGeometry";
 
-    sal_Bool bMirroredX = sal_False;
-    sal_Bool bMirroredY = sal_False;
+    bool bMirroredX = false;
+    bool bMirroredY = false;
 
     if ( bCustomShapeGeometry )
     {
-        bMirroredX = ( ((SdrObjCustomShape*)pObject)->IsMirroredX() );
-        bMirroredY = ( ((SdrObjCustomShape*)pObject)->IsMirroredY() );
+        bMirroredX = ((SdrObjCustomShape*)pObject)->IsMirroredX();
+        bMirroredY = ((SdrObjCustomShape*)pObject)->IsMirroredY();
     }
 
     SvxShape::setPropertyValue( aPropertyName, aValue );

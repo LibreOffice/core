@@ -62,13 +62,13 @@ class SwSdrHdl : public SdrHdl
 public:
     SwSdrHdl(const Point& rPnt, bool bTopRight ) :
         SdrHdl( rPnt, bTopRight ? HDL_ANCHOR_TR : HDL_ANCHOR ) {}
-    virtual sal_Bool IsFocusHdl() const;
+    virtual bool IsFocusHdl() const;
 };
 
-sal_Bool SwSdrHdl::IsFocusHdl() const
+bool SwSdrHdl::IsFocusHdl() const
 {
     if( HDL_ANCHOR == eKind || HDL_ANCHOR_TR == eKind )
-        return sal_True;
+        return true;
     return SdrHdl::IsFocusHdl();
 }
 
@@ -101,13 +101,13 @@ SwDrawView::SwDrawView( SwViewImp &rI, SdrModel *pMd, OutputDevice *pOutDev) :
     SetGridVisible( false );
     SetHlplVisible( false );
     SetGlueVisible( false );
-    SetFrameDragSingles( sal_True );
-    SetVirtualObjectBundling( sal_True );
-    SetSwapAsynchron( sal_True );
+    SetFrameDragSingles( true );
+    SetVirtualObjectBundling( true );
+    SetSwapAsynchron( true );
 
-    EnableExtendedKeyInputDispatcher( sal_False );
-    EnableExtendedMouseEventDispatcher( sal_False );
-    EnableExtendedCommandEventDispatcher( sal_False );
+    EnableExtendedKeyInputDispatcher( false );
+    EnableExtendedMouseEventDispatcher( false );
+    EnableExtendedCommandEventDispatcher( false );
 
     SetHitTolerancePixel( GetMarkHdlSizePixel()/2 );
 
@@ -650,11 +650,11 @@ void SwDrawView::ObjOrderChanged( SdrObject* pObj, sal_uLong nOldPos,
     _MoveRepeatedObjs( *pMovedAnchoredObj, aMovedChildObjs );
 }
 
-sal_Bool SwDrawView::TakeDragLimit( SdrDragMode eMode,
+bool SwDrawView::TakeDragLimit( SdrDragMode eMode,
                                             Rectangle& rRect ) const
 {
     const SdrMarkList &rMrkList = GetMarkedObjectList();
-    sal_Bool bRet = sal_False;
+    bool bRet = false;
     if( 1 == rMrkList.GetMarkCount() )
     {
         const SdrObject *pObj = rMrkList.GetMark( 0 )->GetMarkedSdrObj();
@@ -662,7 +662,7 @@ sal_Bool SwDrawView::TakeDragLimit( SdrDragMode eMode,
         if( ::CalcClipRect( pObj, aRect, eMode == SDRDRAG_MOVE ) )
         {
             rRect = aRect.SVRect();
-             bRet = sal_True;
+            bRet = true;
         }
     }
     return bRet;

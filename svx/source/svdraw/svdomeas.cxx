@@ -636,7 +636,7 @@ void SdrMeasureObj::UndirtyText() const
         rOutliner.Clear();
         // cast to nonconst three times
         ((SdrMeasureObj*)this)->aTextSize=aSiz;
-        ((SdrMeasureObj*)this)->bTextSizeDirty=sal_False;
+        ((SdrMeasureObj*)this)->bTextSizeDirty=false;
         ((SdrMeasureObj*)this)->bTextDirty=false;
     }
 }
@@ -1111,9 +1111,9 @@ Point SdrMeasureObj::GetSnapPoint(sal_uInt32 i) const
     else return aPt2;
 }
 
-sal_Bool SdrMeasureObj::IsPolyObj() const
+bool SdrMeasureObj::IsPolyObj() const
 {
-    return sal_True;
+    return true;
 }
 
 sal_uInt32 SdrMeasureObj::GetPointCount() const
@@ -1158,7 +1158,7 @@ void SdrMeasureObj::RestGeoData(const SdrObjGeoData& rGeo)
     SetTextDirty();
 }
 
-SdrObject* SdrMeasureObj::DoConvertToPolyObj(sal_Bool bBezier, bool bAddText) const
+SdrObject* SdrMeasureObj::DoConvertToPolyObj(bool bBezier, bool bAddText) const
 {
     // get XOR Poly as base
     XPolyPolygon aTmpPolyPolygon(TakeXorPoly());
@@ -1277,7 +1277,7 @@ SdrObject* SdrMeasureObj::DoConvertToPolyObj(sal_Bool bBezier, bool bAddText) co
     }
 }
 
-sal_Bool SdrMeasureObj::BegTextEdit(SdrOutliner& rOutl)
+bool SdrMeasureObj::BegTextEdit(SdrOutliner& rOutl)
 {
     UndirtyText();
     return SdrTextObj::BegTextEdit(rOutl);
@@ -1383,7 +1383,7 @@ sal_uInt16 SdrMeasureObj::GetOutlinerViewAnchorMode() const
 // implemented since currently it is derived from SdrTextObj which uses
 // a functionality based on SnapRect which is not useful here
 
-sal_Bool SdrMeasureObj::TRGetBaseGeometry(basegfx::B2DHomMatrix& rMatrix, basegfx::B2DPolyPolygon& /*rPolyPolygon*/) const
+bool SdrMeasureObj::TRGetBaseGeometry(basegfx::B2DHomMatrix& rMatrix, basegfx::B2DPolyPolygon& /*rPolyPolygon*/) const
 {
     // handle the same as a simple line since the definition is based on two points
     const basegfx::B2DRange aRange(aPt1.X(), aPt1.Y(), aPt2.X(), aPt2.Y());
@@ -1427,7 +1427,7 @@ sal_Bool SdrMeasureObj::TRGetBaseGeometry(basegfx::B2DHomMatrix& rMatrix, basegf
     // build return value matrix
     rMatrix = basegfx::tools::createScaleTranslateB2DHomMatrix(aScale, aTranslate);
 
-    return sal_True;
+    return true;
 }
 
 void SdrMeasureObj::TRSetBaseGeometry(const basegfx::B2DHomMatrix& rMatrix, const basegfx::B2DPolyPolygon& /*rPolyPolygon*/)

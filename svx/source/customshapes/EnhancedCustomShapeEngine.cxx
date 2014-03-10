@@ -352,7 +352,7 @@ Reference< drawing::XShape > SAL_CALL EnhancedCustomShapeEngine::render()
                 double a = nRotateAngle * F_PI18000;
                 pRenderedShape->NbcRotate( pSdrObjCustomShape->GetSnapRect().Center(), nRotateAngle, sin( a ), cos( a ) );
             }
-            pRenderedShape->NbcSetStyleSheet( pSdrObjCustomShape->GetStyleSheet(), sal_True );
+            pRenderedShape->NbcSetStyleSheet( pSdrObjCustomShape->GetStyleSheet(), true );
             pRenderedShape->RecalcSnapRect();
         }
 
