@@ -117,15 +117,10 @@ uno::Sequence< uno::Type > SAL_CALL Svx3DSceneObject::getTypes()
     return SvxShape::getTypes();
 }
 
-namespace
-{
-    class theSvx3DSceneObjectImplementationId : public rtl::Static< UnoTunnelIdInit, theSvx3DSceneObjectImplementationId > {};
-}
-
 uno::Sequence< sal_Int8 > SAL_CALL Svx3DSceneObject::getImplementationId()
     throw (uno::RuntimeException, std::exception)
 {
-    return theSvx3DSceneObjectImplementationId::get().getSeq();
+    return css::uno::Sequence<sal_Int8>();
 }
 
 

@@ -40,17 +40,7 @@ SvxFmDrawPage::~SvxFmDrawPage() throw ()
 
 ::com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL SvxFmDrawPage::getImplementationId() throw(::com::sun::star::uno::RuntimeException, std::exception)
 {
-    static ::cppu::OImplementationId* pId = 0;
-    if (! pId)
-    {
-        ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
-        if (! pId)
-        {
-            static ::cppu::OImplementationId aId;
-            pId = &aId;
-        }
-    }
-    return pId->getImplementationId();
+    return css::uno::Sequence<sal_Int8>();
 }
 
 Any SAL_CALL SvxFmDrawPage::queryAggregation( const ::com::sun::star::uno::Type& _rType ) throw(RuntimeException, std::exception)

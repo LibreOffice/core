@@ -581,8 +581,7 @@ Sequence< OUString > SAL_CALL SvxGraphCtrlAccessibleContext::getSupportedService
 //=====  XTypeProvider  =======================================================
 Sequence<sal_Int8> SAL_CALL SvxGraphCtrlAccessibleContext::getImplementationId( void ) throw( RuntimeException, std::exception )
 {
-    ::SolarMutexGuard aGuard;
-    return getUniqueId();
+    return css::uno::Sequence<sal_Int8>();
 }
 
 //=====  XServiceName  ========================================================
@@ -828,26 +827,6 @@ Rectangle SvxGraphCtrlAccessibleContext::GetBoundingBox( void ) throw( RuntimeEx
 
     return aBounds;
 }
-
-
-
-Sequence< sal_Int8 > SvxGraphCtrlAccessibleContext::getUniqueId( void )
-{
-    // no guard because it's private -> has to guarded when using it!
-    static OImplementationId*   pId = 0;
-    if( !pId )
-    {
-        ::SolarMutexGuard aGuard;
-        if( !pId)
-        {
-            static OImplementationId    aId;
-            pId = &aId;
-        }
-    }
-    return pId->getImplementationId();
-}
-
-
 
 void SvxGraphCtrlAccessibleContext::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
 {

@@ -543,7 +543,7 @@ Sequence< OUString > SAL_CALL SvxRectCtlAccessibleContext::getSupportedServiceNa
 
 Sequence< sal_Int8 > SAL_CALL SvxRectCtlAccessibleContext::getImplementationId( void ) throw( RuntimeException, std::exception )
 {
-    return getUniqueId();
+    return css::uno::Sequence<sal_Int8>();
 }
 
 //=====  XAccessibleSelection =============================================
@@ -759,21 +759,6 @@ Rectangle SvxRectCtlAccessibleContext::GetBoundingBox( void ) throw( RuntimeExce
     ThrowExceptionIfNotAlive();
 
     return Rectangle( mpRepr->GetPosPixel(), mpRepr->GetSizePixel() );
-}
-
-Sequence< sal_Int8 > SvxRectCtlAccessibleContext::getUniqueId( void )
-{
-    static OImplementationId*   pId = 0;
-    if( !pId )
-    {
-        MutexGuard                      aGuard( Mutex::getGlobalMutex() );
-        if( !pId)
-        {
-            static OImplementationId    aId;
-            pId = &aId;
-        }
-    }
-    return pId->getImplementationId();
 }
 
 void SvxRectCtlAccessibleContext::ThrowExceptionIfNotAlive( void ) throw( lang::DisposedException )
@@ -1154,17 +1139,7 @@ Sequence< OUString > SAL_CALL SvxRectCtlChildAccessibleContext::getSupportedServ
 //=====  XTypeProvider  =======================================================
 Sequence< sal_Int8 > SAL_CALL SvxRectCtlChildAccessibleContext::getImplementationId( void ) throw( RuntimeException, std::exception )
 {
-    static OImplementationId*   pId = 0;
-    if( !pId )
-    {
-        MutexGuard                      aGuard( Mutex::getGlobalMutex() );
-        if( !pId)
-        {
-            static OImplementationId    aId;
-            pId = &aId;
-        }
-    }
-    return pId->getImplementationId();
+    return css::uno::Sequence<sal_Int8>();
 }
 
 //=====  internal  ============================================================

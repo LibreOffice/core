@@ -185,8 +185,6 @@ public:
     */
     void setModelAndView (SdrModel* pModel, SdrView* pView);
 
-private:
-    static ::com::sun::star::uno::Sequence< sal_Int8 > getUniqueId( void );
 protected:
 
     /** Return the object's current bounding box relative to the desktop,

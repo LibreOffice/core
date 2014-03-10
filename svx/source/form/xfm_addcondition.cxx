@@ -106,17 +106,7 @@ namespace svxform
 
     Sequence<sal_Int8> SAL_CALL OAddConditionDialog::getImplementationId(  ) throw(RuntimeException, std::exception)
     {
-        static ::cppu::OImplementationId * pId = 0;
-        if (! pId)
-        {
-            ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
-            if (! pId)
-            {
-                static ::cppu::OImplementationId aId;
-                pId = &aId;
-            }
-        }
-        return pId->getImplementationId();
+        return css::uno::Sequence<sal_Int8>();
     }
 
 

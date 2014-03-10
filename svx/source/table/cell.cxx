@@ -855,17 +855,7 @@ Sequence< Type > SAL_CALL Cell::getTypes(  ) throw (RuntimeException, std::excep
 
 Sequence< sal_Int8 > SAL_CALL Cell::getImplementationId(  ) throw (RuntimeException, std::exception)
 {
-    static ::cppu::OImplementationId* pId = 0;
-    if (! pId)
-    {
-        ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
-        if (! pId)
-        {
-            static ::cppu::OImplementationId aId;
-            pId = &aId;
-        }
-    }
-    return pId->getImplementationId();
+    return css::uno::Sequence<sal_Int8>();
 }
 
 // XServiceInfo

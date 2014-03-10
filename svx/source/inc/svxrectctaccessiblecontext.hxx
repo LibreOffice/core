@@ -255,8 +255,6 @@ public:
     void selectChild( RECT_POINT ePoint, sal_Bool bFireFocus = sal_True );
     void FireChildFocus( RECT_POINT eButton );
 
-private:
-    static ::com::sun::star::uno::Sequence< sal_Int8 > getUniqueId( void );
 protected:
 
     /// @Return the object's current bounding box relative to the desktop.

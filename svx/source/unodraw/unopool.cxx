@@ -382,15 +382,10 @@ uno::Sequence< uno::Type > SAL_CALL SvxUnoDrawPool::getTypes()
     return aTypes;
 }
 
-namespace
-{
-    class theSvxUnoDrawPoolImplementationId : public rtl::Static< UnoTunnelIdInit, theSvxUnoDrawPoolImplementationId > {};
-}
-
 uno::Sequence< sal_Int8 > SAL_CALL SvxUnoDrawPool::getImplementationId()
     throw (uno::RuntimeException, std::exception)
 {
-    return theSvxUnoDrawPoolImplementationId::get().getSeq();
+    return css::uno::Sequence<sal_Int8>();
 }
 
 // XServiceInfo

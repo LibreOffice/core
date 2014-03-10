@@ -1024,24 +1024,7 @@ uno::Sequence< uno::Type > SAL_CALL SvxShape::_getTypes()
 uno::Sequence< sal_Int8 > SAL_CALL SvxShape::getImplementationId()
     throw (uno::RuntimeException, std::exception)
 {
-    static ::cppu::OImplementationId* pID = NULL ;
-
-    if ( pID == NULL )
-    {
-        // Ready for multithreading; get global mutex for first call of this method only! see before
-        MutexGuard aGuard( osl::Mutex::getGlobalMutex() ) ;
-
-        // Control these pointer again ... it can be, that another instance will be faster then these!
-        if ( pID == NULL )
-        {
-            // Create a new static ID ...
-            static ::cppu::OImplementationId aID( false ) ;
-            // ... and set his address to static pointer!
-            pID = &aID ;
-        }
-    }
-
-    return pID->getImplementationId() ;
+    return css::uno::Sequence<sal_Int8>();
 }
 
 
@@ -4095,24 +4078,7 @@ sal_Int64 SAL_CALL SvxShapeText::getSomething( const ::com::sun::star::uno::Sequ
 uno::Sequence< sal_Int8 > SAL_CALL SvxShapeText::getImplementationId()
     throw( uno::RuntimeException, std::exception )
 {
-    static ::cppu::OImplementationId* pID = NULL ;
-
-    if ( pID == NULL )
-    {
-        // Ready for multithreading; get global mutex for first call of this method only! see before
-        MutexGuard aGuard( osl::Mutex::getGlobalMutex() ) ;
-
-        // Control these pointer again ... it can be, that another instance will be faster then these!
-        if ( pID == NULL )
-        {
-            // Create a new static ID ...
-            static ::cppu::OImplementationId aID( false ) ;
-            // ... and set his address to static pointer!
-            pID = &aID ;
-        }
-    }
-
-    return pID->getImplementationId() ;
+    return css::uno::Sequence<sal_Int8>();
 }
 
 

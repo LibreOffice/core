@@ -123,15 +123,10 @@ uno::Sequence< uno::Type > SAL_CALL GalleryTheme::getTypes()
     return aTypes;
 }
 
-namespace
-{
-    class theGalleryThemeImplementationId : public rtl::Static< UnoTunnelIdInit, theGalleryThemeImplementationId > {};
-}
-
 uno::Sequence< sal_Int8 > SAL_CALL GalleryTheme::getImplementationId()
     throw(uno::RuntimeException, std::exception)
 {
-    return theGalleryThemeImplementationId::get().getSeq();
+    return css::uno::Sequence<sal_Int8>();
 }
 
 

@@ -310,14 +310,9 @@ uno::Sequence< uno::Type > SAL_CALL SvxUnoDrawingModel::getTypes(  ) throw(uno::
     return maTypeSequence;
 }
 
-namespace
-{
-    class theSvxUnoDrawingModelImplementationId : public rtl::Static< UnoTunnelIdInit, theSvxUnoDrawingModelImplementationId > {};
-}
-
 uno::Sequence< sal_Int8 > SAL_CALL SvxUnoDrawingModel::getImplementationId(  ) throw(uno::RuntimeException, std::exception)
 {
-    return theSvxUnoDrawingModelImplementationId::get().getSeq();
+    return css::uno::Sequence<sal_Int8>();
 }
 
 void SAL_CALL SvxUnoDrawingModel::lockControllers(  )

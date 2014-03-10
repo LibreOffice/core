@@ -80,15 +80,10 @@ uno::Sequence< uno::Type > SAL_CALL GalleryThemeProvider::getTypes()
     return aTypes;
 }
 
-namespace
-{
-    class theGalleryThemeProviderImplementationId : public rtl::Static< UnoTunnelIdInit, theGalleryThemeProviderImplementationId > {};
-}
-
 uno::Sequence< sal_Int8 > SAL_CALL GalleryThemeProvider::getImplementationId()
     throw(uno::RuntimeException, std::exception)
 {
-    return theGalleryThemeProviderImplementationId::get().getSeq();
+    return css::uno::Sequence<sal_Int8>();
 }
 
 void SAL_CALL GalleryThemeProvider::initialize( const uno::Sequence< uno::Any >& rArguments )

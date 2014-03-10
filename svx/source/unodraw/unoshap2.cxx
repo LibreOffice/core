@@ -131,15 +131,10 @@ uno::Sequence< uno::Type > SAL_CALL SvxShapeGroup::getTypes()
     return SvxShape::getTypes();
 }
 
-namespace
-{
-    class theSvxShapeGroupImplementationId : public rtl::Static< UnoTunnelIdInit, theSvxShapeGroupImplementationId > {};
-}
-
 uno::Sequence< sal_Int8 > SAL_CALL SvxShapeGroup::getImplementationId()
     throw (uno::RuntimeException, std::exception)
 {
-    return theSvxShapeGroupImplementationId::get().getSeq();
+    return css::uno::Sequence<sal_Int8>();
 }
 
 // ::com::sun::star::drawing::XShape
@@ -426,15 +421,10 @@ uno::Sequence< uno::Type > SAL_CALL SvxShapeConnector::getTypes()
     return SvxShape::getTypes();
 }
 
-namespace
-{
-    class theSvxShapeConnectorImplementationId : public rtl::Static< UnoTunnelIdInit, theSvxShapeConnectorImplementationId > {};
-}
-
 uno::Sequence< sal_Int8 > SAL_CALL SvxShapeConnector::getImplementationId()
     throw (uno::RuntimeException, std::exception)
 {
-    return theSvxShapeConnectorImplementationId::get().getSeq();
+    return css::uno::Sequence<sal_Int8>();
 }
 
 // ::com::sun::star::drawing::XShape
@@ -590,15 +580,10 @@ uno::Sequence< uno::Type > SAL_CALL SvxShapeControl::getTypes()
     return SvxShape::getTypes();
 }
 
-namespace
-{
-    class theSvxShapeControlImplementationId : public rtl::Static< UnoTunnelIdInit, theSvxShapeControlImplementationId > {};
-}
-
 uno::Sequence< sal_Int8 > SAL_CALL SvxShapeControl::getImplementationId()
     throw (uno::RuntimeException, std::exception)
 {
-    return theSvxShapeControlImplementationId::get().getSeq();
+    return css::uno::Sequence<sal_Int8>();
 }
 
 // ::com::sun::star::drawing::XShape
@@ -1790,15 +1775,10 @@ uno::Sequence< uno::Type > SAL_CALL SvxCustomShape::getTypes()
     return SvxShapeText::getTypes();
 }
 
-namespace
-{
-    class theSvxCustomShapeImplementationId : public rtl::Static< UnoTunnelIdInit, theSvxCustomShapeImplementationId > {};
-}
-
 uno::Sequence< sal_Int8 > SAL_CALL SvxCustomShape::getImplementationId()
     throw (uno::RuntimeException, std::exception)
 {
-    return theSvxCustomShapeImplementationId::get().getSeq();
+    return css::uno::Sequence<sal_Int8>();
 }
 
 // ::com::sun::star::drawing::XShape
