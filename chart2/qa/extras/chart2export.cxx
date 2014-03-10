@@ -49,6 +49,7 @@ public:
     void testShapeFollowedByChart();
     void testPieChartDataLabels();
     void testSeriesIdxOrder();
+    void testChartCrash();
 
     CPPUNIT_TEST_SUITE(Chart2ExportTest);
     CPPUNIT_TEST(test);
@@ -70,6 +71,7 @@ public:
     CPPUNIT_TEST(testShapeFollowedByChart);
     CPPUNIT_TEST(testPieChartDataLabels);
     CPPUNIT_TEST(testSeriesIdxOrder);
+    CPPUNIT_TEST(testChartCrash);
     CPPUNIT_TEST_SUITE_END();
 
 protected:
@@ -620,6 +622,14 @@ void Chart2ExportTest::testSeriesIdxOrder()
     assertXPath(pXmlDoc, "/c:chartSpace[1]/c:chart[1]/c:plotArea[1]/c:lineChart[1]/c:ser[1]/c:idx[1]", "val", "1");
     assertXPath(pXmlDoc, "/c:chartSpace[1]/c:chart[1]/c:plotArea[1]/c:lineChart[1]/c:ser[1]/c:order[1]", "val", "1");
 }
+
+void Chart2ExportTest::testChartCrash()
+{
+    load("/chart2/qa/extras/data/docx/", "FDO75975.docx");
+    xmlDocPtr pXmlDoc = parseExport("word/charts/chart", "Office Open XML Text");
+    CPPUNIT_ASSERT(pXmlDoc);
+}
+
 CPPUNIT_TEST_SUITE_REGISTRATION(Chart2ExportTest);
 
 CPPUNIT_PLUGIN_IMPLEMENT();

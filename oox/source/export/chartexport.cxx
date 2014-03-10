@@ -2307,7 +2307,7 @@ void ChartExport::_exportAxis(
     {
         pFS->startElement( FSNS( XML_c, XML_minorGridlines ),
             FSEND );
-        exportShapeProps( xMajorGrid );
+        exportShapeProps( xMinorGrid );
         pFS->endElement( FSNS( XML_c, XML_minorGridlines ) );
     }
 
