@@ -90,17 +90,7 @@ Sequence< Type > SAL_CALL Controller::getTypes() throw(RuntimeException, std::ex
 
 Sequence< sal_Int8 > SAL_CALL Controller::getImplementationId() throw(RuntimeException, std::exception)
 {
-    static ::cppu::OImplementationId * pId = 0;
-    if ( !pId )
-    {
-        ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
-        if ( !pId )
-        {
-            static ::cppu::OImplementationId aId;
-            pId = &aId;
-        }
-    }
-    return pId->getImplementationId();
+    return css::uno::Sequence<sal_Int8>();
 }
 
 // XPropertySet
