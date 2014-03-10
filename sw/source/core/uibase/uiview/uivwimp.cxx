@@ -52,17 +52,20 @@ using namespace ::com::sun::star::scanner;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::datatransfer::clipboard;
 
-SwView_Impl::SwView_Impl(SwView* pShell) :
-        pxXTextView(new uno::Reference<view::XSelectionSupplier>),
-        pView(pShell),
-        eShellMode(SHELL_MODE_TEXT),
-        pConfigItem(0),
-        nMailMergeRestartPage(0),
-        bMailMergeSourceView(sal_True),
-        m_pDocInserter(NULL),
-        m_pRequest(NULL),
-        m_bSelectObject(false),
-        m_bEditingPositionSet(false)
+SwView_Impl::SwView_Impl(SwView* pShell)
+    : pxXTextView(new uno::Reference<view::XSelectionSupplier>)
+    , pView(pShell)
+    , pScanEvtLstnr(0)
+    , pClipEvtLstnr(0)
+    , eShellMode(SHELL_MODE_TEXT)
+    , pConfigItem(0)
+    , nMailMergeRestartPage(0)
+    , bMailMergeSourceView(sal_True)
+    , m_pDocInserter(NULL)
+    , m_pRequest(NULL)
+    , m_nParam(0)
+    , m_bSelectObject(false)
+    , m_bEditingPositionSet(false)
 {
     *pxXTextView = new SwXTextView(pView);
     xDisProvInterceptor = new SwXDispatchProviderInterceptor(*pView);
