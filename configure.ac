@@ -8381,7 +8381,7 @@ if test "x$enable_postgresql_sdbc" != "xno"; then
         CPPFLAGS=$save_CPPFLAGS
         LIBS=$save_LIBS
     fi
-    BUILD_POSTGRESQL_SDBC=YES
+    BUILD_POSTGRESQL_SDBC=TRUE
 fi
 AC_SUBST(WITH_KRB5)
 AC_SUBST(WITH_GSSAPI)

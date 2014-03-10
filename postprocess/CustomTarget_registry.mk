@@ -430,7 +430,7 @@ postprocess_FILES_xsltfilter := \
 	$(call gb_XcuFilterFiltersTarget_get_target,fcfg_xslt_filters.xcu) \
 	$(call gb_XcuFilterTypesTarget_get_target,fcfg_xslt_types.xcu)
 
-ifeq ($(BUILD_POSTGRESQL_SDBC),YES)
+ifneq ($(BUILD_POSTGRESQL_SDBC),)
 postprocess_XCDS += postgresql.xcd
 postprocess_DEPS_postgresql := main
 postprocess_FILES_postgresql := $(call gb_XcuModuleTarget_get_target,connectivity/registry/postgresql)/org/openoffice/Office/DataAccess/Drivers-postgresql.xcu

@@ -92,7 +92,7 @@ $(eval $(call gb_Module_add_targets,connectivity,\
 ))
 endif
 
-ifeq ($(BUILD_POSTGRESQL_SDBC),YES)
+ifneq ($(BUILD_POSTGRESQL_SDBC),)
 $(eval $(call gb_Module_add_targets,connectivity,\
 	Configuration_postgresql \
 	Library_postgresql-sdbc \
