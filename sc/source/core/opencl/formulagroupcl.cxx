@@ -1964,10 +1964,7 @@ public:
             {
                 if (i)
                     ss << ", ";
-                if (!nested)
-                    mvSubArguments[i]->GenDeclRef(ss);
-                else
-                    ss << mvSubArguments[i]->GenSlidingWindowDeclRef(true);
+                mvSubArguments[i]->GenDeclRef(ss);
             }
             ss << ")";
         } else {
