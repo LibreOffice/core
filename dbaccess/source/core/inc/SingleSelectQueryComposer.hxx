@@ -211,8 +211,6 @@ namespace dbaccess
         // ::com::sun::star::lang::XTypeProvider
         DECLARE_TYPEPROVIDER( );
 
-        // com::sun::star::lang::XUnoTunnel
-        virtual sal_Int64 SAL_CALL getSomething( const ::com::sun::star::uno::Sequence< sal_Int8 >& aIdentifier ) throw(::com::sun::star::uno::RuntimeException);
         // ::com::sun::star::uno::XInterface
         DECLARE_XINTERFACE( )
 

@@ -300,16 +300,6 @@ IMPLEMENT_SERVICE_INFO1(OSingleSelectQueryComposer,"org.openoffice.comp.dba.OSin
 IMPLEMENT_TYPEPROVIDER3(OSingleSelectQueryComposer,OSubComponent,OSingleSelectQueryComposer_BASE,OPropertyContainer)
 IMPLEMENT_PROPERTYCONTAINER_DEFAULTS(OSingleSelectQueryComposer)
 
-// com::sun::star::lang::XUnoTunnel
-sal_Int64 SAL_CALL OSingleSelectQueryComposer::getSomething( const Sequence< sal_Int8 >& rId ) throw(RuntimeException)
-{
-    SAL_INFO("dbaccess", "OSingleSelectQueryComposer::getSomething" );
-    if (rId.getLength() == 16 && 0 == memcmp(getImplementationId().getConstArray(),  rId.getConstArray(), 16 ) )
-        return reinterpret_cast<sal_Int64>(this);
-
-    return sal_Int64(0);
-}
-
 // XSingleSelectQueryAnalyzer
 OUString SAL_CALL OSingleSelectQueryComposer::getQuery(  ) throw(RuntimeException, std::exception)
 {
