@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "1a930d6b_d44ab254",
+        "filename": "bridges/source/cpp_uno/gcc3_aix_powerpc/share.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1000650
+      },
+      "writtenOn": "2014-03-10T20:10:39Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1a930d6b_d1056415",
+      "revId": "55443c09cc58987771d5e05cb838dcdec8cb1a84",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1a930d6b_f102600a",
         "filename": "bridges/source/cpp_uno/gcc3_macosx_x86-64/share.hxx",
         "patchSetId": 2
@@ -36,6 +54,24 @@
     },
     {
       "key": {
+        "uuid": "1a930d6b_f447ae49",
+        "filename": "bridges/source/cpp_uno/gcc3_macosx_x86-64/share.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1000650
+      },
+      "writtenOn": "2014-03-10T20:10:39Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1a930d6b_f102600a",
+      "revId": "55443c09cc58987771d5e05cb838dcdec8cb1a84",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1a930d6b_b108d82e",
         "filename": "bridges/source/cpp_uno/msvc_win32_x86-64/mscx.hxx",
         "patchSetId": 2
@@ -47,6 +83,24 @@
       "writtenOn": "2014-03-10T17:09:39Z",
       "side": 1,
       "message": "C++ client code should not use identifiers containing two underscores in a row (which is just a typo here)",
+      "revId": "55443c09cc58987771d5e05cb838dcdec8cb1a84",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a930d6b_14743a9b",
+        "filename": "bridges/source/cpp_uno/msvc_win32_x86-64/mscx.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1000650
+      },
+      "writtenOn": "2014-03-10T20:10:39Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1a930d6b_b108d82e",
       "revId": "55443c09cc58987771d5e05cb838dcdec8cb1a84",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
