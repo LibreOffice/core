@@ -526,8 +526,7 @@ public:
     virtual Sequence< sal_Int8 > SAL_CALL getImplementationId()
         throw ( com::sun::star::uno::RuntimeException, std::exception )
     {
-        return m_xWrappedTypeProv->getImplementationId();
-
+        return css::uno::Sequence<sal_Int8>();
     }
 };
 

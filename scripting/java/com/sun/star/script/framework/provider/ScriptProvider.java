@@ -300,7 +300,7 @@ public abstract class ScriptProvider
      */
     public byte[] getImplementationId()
     {
-        return this.getClass().getName().getBytes();
+        return new byte[0];
     }
 
     /**
