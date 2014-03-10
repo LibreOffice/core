@@ -4653,6 +4653,7 @@ void VCLXFormattedSpinField::ImplGetPropertyIds( std::list< sal_uInt16 > &rIds )
 }
 
 VCLXFormattedSpinField::VCLXFormattedSpinField()
+    : mpFormatter(NULL)
 {
 }
 
