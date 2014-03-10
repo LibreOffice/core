@@ -165,30 +165,7 @@ Sequence< Type > SAL_CALL BaseControl::getTypes() throw( RuntimeException, std::
 
 Sequence< sal_Int8 > SAL_CALL BaseControl::getImplementationId() throw( RuntimeException, std::exception )
 {
-    // Create one Id for all instances of this class.
-    // Use ethernet address to do this! (sal_True)
-
-    // Optimize this method
-    // We initialize a static variable only one time. And we don't must use a mutex at every call!
-    // For the first call; pID is NULL - for the second call pID is different from NULL!
-    static OImplementationId* pID = NULL ;
-
-    if ( pID == NULL )
-    {
-        // Ready for multithreading; get global mutex for first call of this method only! see before
-        MutexGuard aGuard( Mutex::getGlobalMutex() );
-
-        // Control these pointer again ... it can be, that another instance will be faster then these!
-        if ( pID == NULL )
-        {
-            // Create a new static ID ...
-            static OImplementationId aID( false );
-            // ... and set his address to static pointer!
-            pID = &aID ;
-        }
-    }
-
-    return pID->getImplementationId();
+    return css::uno::Sequence<sal_Int8>();
 }
 
 
