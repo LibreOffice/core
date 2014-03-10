@@ -105,6 +105,19 @@ boost::shared_ptr<utl::TempFile> ChartTest::reload(const OUString& rFilterName)
     mxComponent->dispose();
     mxComponent = loadFromDesktop(pTempFile->GetURL(), maServiceName);
     std::cout << pTempFile->GetURL();
+    if(rFilterName == "Calc Office Open XML")
+    {
+        validate(pTempFile->GetFileName(), test::OOXML);
+    }
+    else if(rFilterName == "Office Open XML Text")
+    {
+        // validate(pTempFile->GetFileName(), test::OOXML);
+    }
+    else if(rFilterName == "calc8")
+    {
+        // validate(pTempFile->GetFileName(), test::ODF);
+    }
+
     CPPUNIT_ASSERT(mxComponent.is());
     return pTempFile;
 }
