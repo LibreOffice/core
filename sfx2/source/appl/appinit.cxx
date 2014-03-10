@@ -226,12 +226,6 @@ bool SfxApplication::Initialize_Impl()
     Application::EnableAutoMnemonic ( aLocalisation.IsAutoMnemonic() );
     Application::SetDialogScaleX    ( (short)(aLocalisation.GetDialogScale()) );
 
-
-#ifdef DBG_UTIL
-    // The SimplerErrorHandler is for debugging. In the Product errors
-    // not processed are given to SFX as Errorcode 1.
-    pAppData_Impl->m_pSimpleErrorHdl = new SimpleErrorHandler;
-#endif
     pAppData_Impl->m_pToolsErrorHdl = new SfxErrorHandler(
         RID_ERRHDL, ERRCODE_AREA_TOOLS, ERRCODE_AREA_LIB1);
 

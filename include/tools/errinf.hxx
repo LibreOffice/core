@@ -165,16 +165,6 @@ public:
     static void         RegisterDisplay( WindowDisplayErrorFunc* );
 };
 
-class TOOLS_DLLPUBLIC SimpleErrorHandler : private ErrorHandler
-{
-protected:
-    virtual bool        CreateString( const ErrorInfo*, OUString &,
-                                      sal_uInt16 &nMask ) const;
-
-public:
-                        SimpleErrorHandler();
-};
-
 #endif
 #endif
 

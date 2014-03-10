@@ -91,9 +91,6 @@ public:
     ResMgr*                             pBasicResMgr;
 #endif
     ResMgr*                             pSvtResMgr;
-#ifdef DBG_UTIL
-    SimpleErrorHandler *m_pSimpleErrorHdl;
-#endif
     SfxErrorHandler *m_pToolsErrorHdl;
     SfxErrorHandler *m_pSoErrorHdl;
 #ifndef DISABLE_SCRIPTING

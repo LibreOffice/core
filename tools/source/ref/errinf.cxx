@@ -372,36 +372,4 @@ bool ErrHdl_Impl::CreateString( const ErrorHandler *pStart,
     return false;
 }
 
-bool SimpleErrorHandler::CreateString(
-    const ErrorInfo *pInfo, OUString &rStr, sal_uInt16 &) const
-{
-    sal_uIntPtr nId = pInfo->GetErrorCode();
-    OStringBuffer aStr("Id ");
-    aStr.append(static_cast<sal_Int32>(nId));
-    aStr.append(" only handled by SimpleErrorHandler");
-    aStr.append("\nErrorCode: ");
-    aStr.append(static_cast<sal_Int32>(
-        nId & ((1L <<  ERRCODE_CLASS_SHIFT)  - 1 )));
-    aStr.append("\nErrorClass: ");
-    aStr.append(static_cast<sal_Int32>(
-        (nId & ERRCODE_CLASS_MASK) >> ERRCODE_CLASS_SHIFT));
-    aStr.append("\nErrorArea: ");
-    aStr.append(static_cast<sal_Int32>((nId & ERRCODE_ERROR_MASK &
-            ~((1 << ERRCODE_AREA_SHIFT ) -1 ) ) >> ERRCODE_AREA_SHIFT));
-    DynamicErrorInfo *pDyn=PTR_CAST(DynamicErrorInfo,pInfo);
-    if(pDyn)
-    {
-        aStr.append("\nDId ");
-        aStr.append(static_cast<sal_Int32>(*pDyn));
-    }
-    rStr = OStringToOUString(aStr.makeStringAndClear(),
-        RTL_TEXTENCODING_ASCII_US);
-    return true;
-}
-
-SimpleErrorHandler::SimpleErrorHandler()
- : ErrorHandler()
-{
-}
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
