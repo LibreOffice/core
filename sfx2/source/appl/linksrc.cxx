@@ -178,7 +178,12 @@ struct SvLinkSource_Impl
                            m_xInputStreamToLoadFrom;
     sal_Bool               m_bIsReadOnly;
 
-    SvLinkSource_Impl() : pTimer( 0 ), nTimeout( 3000 ) {}
+    SvLinkSource_Impl()
+        : pTimer(0)
+        , nTimeout(3000)
+        , m_bIsReadOnly(false)
+    {
+    }
     ~SvLinkSource_Impl();
 
     void Closed();
