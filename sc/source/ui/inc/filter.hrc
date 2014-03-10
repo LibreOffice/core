@@ -17,38 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 #include "sc.hrc"
-// General
-
-#define BTN_OK              1
-#define BTN_CANCEL          1
-#define BTN_HELP            1
-#define BTN_MORE            1
-
-#define BTN_UNIQUE          1
-#define BTN_CASE            2
-#define BTN_REGEXP          3
-#define FL_OPTIONS          9
-#define FT_DBAREA_LABEL     10
-#define FT_DBAREA           11
-
-// Filter:
-#define FT_OP               20
-#define FT_FIELD            21
-#define FT_COND             22
-#define FT_VAL              23
-#define LB_FIELD1           24
-#define LB_FIELD2           25
-#define LB_FIELD3           26
-#define LB_OP1              27
-#define LB_OP2              28
-#define LB_COND1            29
-#define LB_COND2            30
-#define LB_COND3            31
-#define ED_VAL1             32
-#define ED_VAL2             33
-#define ED_VAL3             34
-#define FL_CRITERIA         35
-#define LB_OP3              37
 
 // Special filter
 #define STR_COPY_AREA_TO 5054
