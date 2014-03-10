@@ -268,7 +268,6 @@ void TextEffectsContext::onEndElement()
 {
     mpGrabBagStack->pop();
     OUString aCurrentElementName = mpGrabBagStack->getCurrentName();
-    OUString aPropertyName;
 
     if (mpGrabBagStack->isStackEmpty())
     {
