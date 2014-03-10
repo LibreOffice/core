@@ -146,7 +146,7 @@ Sequence<Type > Key::getTypes() throw( RuntimeException, std::exception )
 
 Sequence< sal_Int8> Key::getImplementationId() throw( RuntimeException, std::exception )
 {
-    return getStatics().refl.key.implementationId;
+    return css::uno::Sequence<sal_Int8>();
 }
 
 Any Key::queryInterface( const Type & reqType ) throw (RuntimeException, std::exception)
@@ -214,7 +214,7 @@ Sequence<Type > KeyDescriptor::getTypes() throw( RuntimeException, std::exceptio
 
 Sequence< sal_Int8> KeyDescriptor::getImplementationId() throw( RuntimeException, std::exception )
 {
-    return getStatics().refl.keyDescriptor.implementationId;
+    return css::uno::Sequence<sal_Int8>();
 }
 
 Any KeyDescriptor::queryInterface( const Type & reqType ) throw (RuntimeException, std::exception)

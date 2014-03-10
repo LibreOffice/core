@@ -197,7 +197,7 @@ Sequence<Type > View::getTypes() throw( RuntimeException, std::exception )
 
 Sequence< sal_Int8> View::getImplementationId() throw( RuntimeException, std::exception )
 {
-    return getStatics().refl.view.implementationId;
+    return css::uno::Sequence<sal_Int8>();
 }
 
 Any View::queryInterface( const Type & reqType ) throw (RuntimeException, std::exception)

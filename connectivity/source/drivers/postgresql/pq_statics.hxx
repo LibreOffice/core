@@ -40,8 +40,6 @@
 #include <boost/unordered_map.hpp>
 #include <vector>
 
-#include <rtl/uuid.h>
-
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/sdbc/DataType.hpp>
@@ -121,15 +119,11 @@ typedef ::boost::unordered_map
 struct ImplementationStatics
 {
     ImplementationStatics() :
-        implementationId(16),
         pProps(0)
-    {
-        rtl_createUuid( (sal_uInt8*)implementationId.getArray(), 0 , sal_False );
-    }
+    {}
 
     OUString implName;
     com::sun::star::uno::Sequence< OUString > serviceNames;
-    com::sun::star::uno::Sequence< sal_Int8 > implementationId;
     cppu::IPropertyArrayHelper *pProps;
     com::sun::star::uno::Sequence< com::sun::star::uno::Type > types;
 };

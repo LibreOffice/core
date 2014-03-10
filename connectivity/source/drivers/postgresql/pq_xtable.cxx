@@ -305,7 +305,7 @@ Sequence<Type > Table::getTypes() throw( RuntimeException, std::exception )
 
 Sequence< sal_Int8> Table::getImplementationId() throw( RuntimeException, std::exception )
 {
-    return getStatics().refl.table.implementationId;
+    return css::uno::Sequence<sal_Int8>();
 }
 
 Any Table::queryInterface( const Type & reqType ) throw (RuntimeException, std::exception)
@@ -417,7 +417,7 @@ Sequence<Type > TableDescriptor::getTypes() throw( RuntimeException, std::except
 
 Sequence< sal_Int8> TableDescriptor::getImplementationId() throw( RuntimeException, std::exception )
 {
-    return getStatics().refl.tableDescriptor.implementationId;
+    return css::uno::Sequence<sal_Int8>();
 }
 
 Any TableDescriptor::queryInterface( const Type & reqType ) throw (RuntimeException, std::exception)

@@ -287,17 +287,7 @@ Sequence< Type > PreparedStatement::getTypes() throw ( RuntimeException, std::ex
 
 Sequence< sal_Int8> PreparedStatement::getImplementationId() throw ( RuntimeException, std::exception )
 {
-    static cppu::OImplementationId *pId;
-    if( ! pId )
-    {
-        MutexGuard guard( osl::Mutex::getGlobalMutex() );
-        if( ! pId )
-        {
-            static cppu::OImplementationId id(false);
-            pId = &id;
-        }
-    }
-    return pId->getImplementationId();
+    return css::uno::Sequence<sal_Int8>();
 }
 
 void PreparedStatement::close(  ) throw (SQLException, RuntimeException, std::exception)

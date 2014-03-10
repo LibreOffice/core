@@ -170,17 +170,7 @@ com::sun::star::uno::Sequence< com::sun::star::uno::Type > UpdateableResultSet::
 com::sun::star::uno::Sequence< sal_Int8> UpdateableResultSet::getImplementationId()
         throw( com::sun::star::uno::RuntimeException, std::exception )
 {
-    static cppu::OImplementationId *pId;
-    if( ! pId )
-    {
-        MutexGuard guard( osl::Mutex::getGlobalMutex() );
-        if( ! pId )
-        {
-            static cppu::OImplementationId id(false);
-            pId = &id;
-        }
-    }
-    return pId->getImplementationId();
+    return css::uno::Sequence<sal_Int8>();
 }
 
 OUString UpdateableResultSet::buildWhereClause()

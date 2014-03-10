@@ -144,7 +144,7 @@ Sequence<Type > Index::getTypes() throw( RuntimeException, std::exception )
 
 Sequence< sal_Int8> Index::getImplementationId() throw( RuntimeException, std::exception )
 {
-    return getStatics().refl.index.implementationId;
+    return css::uno::Sequence<sal_Int8>();
 }
 
 Any Index::queryInterface( const Type & reqType ) throw (RuntimeException, std::exception)
@@ -217,7 +217,7 @@ Sequence<Type > IndexDescriptor::getTypes() throw( RuntimeException, std::except
 
 Sequence< sal_Int8> IndexDescriptor::getImplementationId() throw( RuntimeException, std::exception )
 {
-    return getStatics().refl.indexDescriptor.implementationId;
+    return css::uno::Sequence<sal_Int8>();
 }
 
 Any IndexDescriptor::queryInterface( const Type & reqType ) throw (RuntimeException, std::exception)

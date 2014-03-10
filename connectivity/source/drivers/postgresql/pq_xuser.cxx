@@ -125,7 +125,7 @@ Sequence<Type > User::getTypes() throw( RuntimeException, std::exception )
 
 Sequence< sal_Int8> User::getImplementationId() throw( RuntimeException, std::exception )
 {
-    return getStatics().refl.user.implementationId;
+    return css::uno::Sequence<sal_Int8>();
 }
 
 Any User::queryInterface( const Type & reqType ) throw (RuntimeException, std::exception)
