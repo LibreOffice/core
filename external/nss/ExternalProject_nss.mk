@@ -41,9 +41,9 @@ $(call gb_ExternalProject_get_state_target,nss,build): $(call gb_ExternalProject
 	$(call gb_ExternalProject_run,build,\
 		$(MAKE) -j1 nss_build_all \
 			NS_USE_GCC=1 \
-			CC="$(CC) $(if $(filter YES,$(MINGW_SHARED_GCCLIB)),-shared-libgcc)" \
-			CXX="$(CXX) $(if $(filter YES,$(MINGW_SHARED_GCCLIB)),-shared-libgcc)" \
-			OS_LIBS="-ladvapi32 -lws2_32 -lmswsock -lwinmm $(if $(filter YES,$(MINGW_SHARED_GXXLIB)),$(MINGW_SHARED_LIBSTDCPP))" \
+			CC="$(CC) $(if $(MINGW_SHARED_GCCLIB),-shared-libgcc)" \
+			CXX="$(CXX) $(if $(MINGW_SHARED_GCCLIB),-shared-libgcc)" \
+			OS_LIBS="-ladvapi32 -lws2_32 -lmswsock -lwinmm $(if $(MINGW_SHARED_GXXLIB),$(MINGW_SHARED_LIBSTDCPP))" \
 			LDFLAGS="" \
 			PATH="$(PATH)" \
 			RANLIB="$(RANLIB)" \

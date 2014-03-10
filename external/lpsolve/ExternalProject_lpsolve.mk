@@ -18,8 +18,8 @@ ifeq ($(COM),GCC)
 $(call gb_ExternalProject_get_state_target,lpsolve,build):
 	$(call gb_ExternalProject_run,build,\
 		$(if $(filter WNT,$(OS_FOR_BUILD)), \
-		$(if $(filter YES,$(MINGW_SHARED_GCCLIB)) lpsolve_LDFLAGS="-shared-libgcc") \
-		$(if $(filter YES,$(MINGW_SHARED_GXXLIB)) lpsolve_LIBS="$(MINGW_SHARED_LIBSTDCPP)") \
+		$(if $(MINGW_SHARED_GCCLIB) lpsolve_LDFLAGS="-shared-libgcc") \
+		$(if $(MINGW_SHARED_GXXLIB) lpsolve_LIBS="$(MINGW_SHARED_LIBSTDCPP)") \
 		cmd /c cgcc.bat, sh ccc) \
 	,lpsolve55)
 else # $(COM)!=GCC

@@ -20,8 +20,8 @@ $(call gb_ExternalProject_get_state_target,xslt,build):
 	$(call gb_ExternalProject_run,build,\
 		./configure --without-crypto --without-python --disable-static \
 			$(if $(CROSS_COMPILING),--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM)) \
-			CC="$(CC) -mthreads $(if $(filter YES,$(MINGW_SHARED_GCCLIB)),-shared-libgcc)" \
-			$(if $(filter YES,$(MINGW_SHARED_GXXLIB)),LIBS="$(MINGW_SHARED_LIBSTDCPP)") \
+			CC="$(CC) -mthreads $(if $(MINGW_SHARED_GCCLIB),-shared-libgcc)" \
+			$(if $(MINGW_SHARED_GXXLIB),LIBS="$(MINGW_SHARED_LIBSTDCPP)") \
 			LDFLAGS="-Wl$(COMMA)--no-undefined -Wl$(COMMA)--enable-runtime-pseudo-reloc-v2" \
 			OBJDUMP=objdump \
 		&& chmod 777 xslt-config \

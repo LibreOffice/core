@@ -5709,10 +5709,10 @@ using namespace std;
 ]], [[ try { throw 42; } catch (int e) { cout << "Yep, " << e << endl; } ]])],[
             MINGW_GCCDLL=`$OBJDUMP -p conftest.exe | grep 'DLL Name: libgcc' | $SED -e 's@.*DLL Name: @@'`
             if test -n "$MINGW_GCCDLL"; then
-                MINGW_SHARED_GCCLIB=YES
+                MINGW_SHARED_GCCLIB=TRUE
                 AC_MSG_RESULT([ $MINGW_GCCDLL])
             else
-                MINGW_SHARED_GCCLIB=NO
+                MINGW_SHARED_GCCLIB=
                 AC_MSG_RESULT([no])
             fi
        ],[ AC_MSG_RESULT([no])
@@ -5733,10 +5733,10 @@ using namespace std;
                     mingw_gxxdll_root=${mingw_gxxdll_root%-[[0-9]]}
                 fi
                 MINGW_SHARED_LIBSTDCPP=-l$mingw_gxxdll_root
-                MINGW_SHARED_GXXLIB=YES
+                MINGW_SHARED_GXXLIB=TRUE
                 AC_MSG_RESULT([$MINGW_GXXDLL])
             else
-                MINGW_SHARED_GXXLIB=NO
+                MINGW_SHARED_GXXLIB=
                 AC_MSG_RESULT([no])
             fi
        ],[ AC_MSG_RESULT([no])

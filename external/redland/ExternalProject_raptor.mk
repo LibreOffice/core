@@ -18,7 +18,7 @@ $(eval $(call gb_ExternalProject_register_targets,raptor,\
 ifeq ($(OS),WNT)
 $(call gb_ExternalProject_get_state_target,raptor,build):
 	$(call gb_ExternalProject_run,build,\
-		CC="$(CC) -mthreads $(if $(filter YES,$(MINGW_SHARED_GCCLIB)),-shared-libgcc)" \
+		CC="$(CC) -mthreads $(if $(MINGW_SHARED_GCCLIB),-shared-libgcc)" \
 		LDFLAGS="-Wl$(COMMA)--no-undefined -Wl$(COMMA)--enable-runtime-pseudo-reloc-v2 -Wl$(COMMA)--export-all-symbols $(subst ;, -L,$(ILIB))" \
 		OBJDUMP="$(HOST_PLATFORM)-objdump" \
 		$(if $(and $(SYSTEM_LIBXML),$(filter GCC,$(COM))),PATH="$(MINGW_SYSROOT)/bin:$$PATH") \

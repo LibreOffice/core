@@ -21,8 +21,8 @@ $(call gb_ExternalProject_get_state_target,xml2,build):
 			--without-lzma \
 			--disable-static --without-debug lt_cv_cc_dll_switch="-shared" \
 			$(if $(CROSS_COMPILING),--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM)) \
-			CC="$(CC) -mthreads $(if $(filter YES,$(MINGW_SHARED_GCCLIB)),-shared-libgcc)" \
-			LIBS="-lws2_32 $(if $(filter YES,$(MINGW_SHARED_GXXLIB)),$(MINGW_SHARED_LIBSTDCPP))" \
+			CC="$(CC) -mthreads $(if $(MINGW_SHARED_GCCLIB),-shared-libgcc)" \
+			LIBS="-lws2_32 $(if $(MINGW_SHARED_GXXLIB),$(MINGW_SHARED_LIBSTDCPP))" \
 			LDFLAGS="-Wl$(COMMA)--no-undefined -Wl$(COMMA)--enable-runtime-pseudo-reloc-v2" \
 			OBJDUMP=objdump \
 		&& $(MAKE) \

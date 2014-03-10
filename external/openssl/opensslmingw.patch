@@ -53,8 +53,8 @@
  if errorlevel 1 goto end
 +dlltool --dllname ssleay32.dll --output-lib out/libssl.a --input-def ms/ssleay32.def
 +if errorlevel 1 goto end
-+if "%MINGW_SHARED_GXXLIB%"=="YES" goto shared_gxxlib
-+if "%MINGW_SHARED_GCCLIB%"=="YES" goto shared_gcclib
++if "%MINGW_SHARED_GXXLIB%"=="TRUE" goto shared_gxxlib
++if "%MINGW_SHARED_GCCLIB%"=="TRUE" goto shared_gcclib
 +gcc --shared --enable-pseudo-reloc -Wl,-Map,out/libeay32.map ms/libeay32.def -o out/libeay32.dll out/libcrypto_static.a -lwsock32 -lgdi32 
 +if errorlevel 1 goto end
 +gcc --shared --enable-pseudo-reloc -Wl,-Map,out/ssleay32.map -Lout ms/ssleay32.def -o out/ssleay32.dll out/libssl_static.a -lcrypto 

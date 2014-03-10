@@ -28,9 +28,9 @@ $(call gb_ExternalProject_get_state_target,xmlsec,build) :
 		&& ./configure --build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM) \
 			--without-libxslt --without-openssl --without-gnutls --disable-crypto-dl \
 			$(if $(SYSTEM_NSS),,--disable-pkgconfig) \
-			CC="$(CC) -mthreads $(if $(filter YES,$(MINGW_SHARED_GCCLIB)),-shared-libgcc)" \
+			CC="$(CC) -mthreads $(if $(MINGW_SHARED_GCCLIB),-shared-libgcc)" \
 			LDFLAGS="-Wl$(COMMA)--no-undefined $(ILIB:;= -L)" \
-			LIBS="$(if $(filter YES,$(MINGW_SHARED_GXXLIB)),$(MINGW_SHARED__LIBSTDCPP))" \
+			LIBS="$(if $(MINGW_SHARED_GXXLIB),$(MINGW_SHARED__LIBSTDCPP))" \
 			lt_cv_deplibs_check_method=pass_all \
 		&& $(MAKE) \
 	)
