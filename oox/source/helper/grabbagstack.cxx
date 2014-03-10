@@ -30,6 +30,11 @@ OUString GrabBagStack::getCurrentName()
     return mCurrentElement.maName;
 }
 
+bool GrabBagStack::isStackEmpty()
+{
+    return mStack.empty();
+}
+
 PropertyValue GrabBagStack::getRootProperty()
 {
     while(!mStack.empty())

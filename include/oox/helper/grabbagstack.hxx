@@ -47,6 +47,7 @@ public:
     void pop();
     void addInt32(OUString aElementName, sal_Int32 aIntValue);
     void addString(OUString aElementName, OUString aStringValue);
+    bool isStackEmpty();
 };
 
 } // namespace oox
