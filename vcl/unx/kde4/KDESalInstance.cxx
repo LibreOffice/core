@@ -32,10 +32,14 @@ SalFrame* KDESalInstance::CreateFrame( SalFrame *pParent, sal_uLong nState )
 }
 
 uno::Reference< ui::dialogs::XFilePicker2 > KDESalInstance::createFilePicker(
-        const uno::Reference< uno::XComponentContext >& xMSF )
+    const uno::Reference< uno::XComponentContext >& xMSF )
 {
-    return uno::Reference< ui::dialogs::XFilePicker2 >(
-        static_cast<KDEXLib*>( mpXLib )->createFilePicker(xMSF) );
+    KDEXLib* kdeXLib = static_cast<KDEXLib*>( mpXLib );
+    if (kdeXLib->haveQt4SocketExcludeFix())
+        return uno::Reference< ui::dialogs::XFilePicker2 >(
+            kdeXLib->createFilePicker(xMSF) );
+    else
+        return X11SalInstance::createFilePicker( xMSF );
 }
 
 int KDESalInstance::getFrameWidth()

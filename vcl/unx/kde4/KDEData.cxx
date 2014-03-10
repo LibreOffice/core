@@ -27,6 +27,7 @@
 #include "KDEData.hxx"
 
 #include "KDEXLib.hxx"
+#include "KDESalDisplay.hxx"
 
 
 KDEData::~KDEData()
@@ -37,6 +38,7 @@ void KDEData::Init()
 {
     pXLib_ = new KDEXLib();
     pXLib_->Init();
+    SetDisplay( SalKDEDisplay::self() );
 }
 
 void KDEData::initNWF()

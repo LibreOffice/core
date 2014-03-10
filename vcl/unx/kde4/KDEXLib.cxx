@@ -19,7 +19,6 @@
 
 #include "VCLKDEApplication.hxx"
 
-#include "KDE4FilePicker.hxx"
 #include "KDESalInstance.hxx"
 
 #include <kapplication.h>
@@ -45,15 +44,17 @@
 
 #include <config_kde4.h>
 
+#if KDE_HAVE_GLIB
+#include "KDE4FilePicker.hxx"
+#include "tst_exclude_socket_notifiers.moc"
+#endif
+
 KDEXLib::KDEXLib() :
     SalXLib(),  m_bStartupDone(false), m_pApplication(0),
     m_pFreeCmdLineArgs(0), m_pAppCmdLineArgs(0), m_nFakeCmdLineArgs( 0 ),
-    m_frameWidth( -1 ), m_isGlibEventLoopType(false)
+    m_frameWidth( -1 ), m_isGlibEventLoopType(false),
+    m_haveQt4SocketExcludeFix(false)
 {
-#if KDE_HAVE_GLIB
-    m_isGlibEventLoopType = QAbstractEventDispatcher::instance()->inherits( "QEventDispatcherGlib" );
-#endif
-
     // the timers created here means they belong to the main thread.
     // As the timeoutTimer runs the LO event queue, which may block on a dialog,
     // the timer has to use a Qt::QueuedConnection, otherwise the nested event
@@ -168,6 +169,14 @@ void KDEXLib::Init()
     m_pApplication = new VCLKDEApplication();
     kapp->disableSessionManagement();
     KApplication::setQuitOnLastWindowClosed(false);
+
+#if KDE_HAVE_GLIB
+    m_isGlibEventLoopType = QAbstractEventDispatcher::instance()->inherits( "QEventDispatcherGlib" );
+    if (m_isGlibEventLoopType && (0 == tst_processEventsExcludeSocket()))
+        // See http://bugreports.qt.nokia.com/browse/QTBUG-37380
+        m_haveQt4SocketExcludeFix = true;
+#endif
+
     setupEventLoop();
 
     Display* pDisp = QX11Info::display();
@@ -188,9 +197,8 @@ void KDEXLib::Init()
 #include <glib.h>
 
 static GPollFunc old_gpoll = NULL;
-static gint gpoll_wrapper( GPollFD*, guint, gint );
 
-gint gpoll_wrapper( GPollFD* ufds, guint nfds, gint timeout )
+static gint gpoll_wrapper( GPollFD* ufds, guint nfds, gint timeout )
 {
     SalYieldMutexReleaser release; // release YieldMutex (and re-acquire at block end)
     return old_gpoll( ufds, nfds, timeout );
@@ -215,6 +223,8 @@ void KDEXLib::setupEventLoop()
     {
         old_gpoll = g_main_context_get_poll_func( NULL );
         g_main_context_set_poll_func( NULL, gpoll_wrapper );
+        if( m_haveQt4SocketExcludeFix )
+            m_pApplication->clipboard()->setProperty( "useEventLoopWhenWaiting", true );
         return;
     }
 #endif
@@ -367,11 +377,15 @@ using namespace com::sun::star;
 uno::Reference< ui::dialogs::XFilePicker2 > KDEXLib::createFilePicker(
         const uno::Reference< uno::XComponentContext >& xMSF )
 {
+#if KDE_HAVE_GLIB
     if( qApp->thread() != QThread::currentThread()) {
         SalYieldMutexReleaser aReleaser;
         return Q_EMIT createFilePickerSignal( xMSF );
     }
     return uno::Reference< ui::dialogs::XFilePicker2 >( new KDE4FilePicker( xMSF ) );
+#else
+    return NULL;
+#endif
 }
 
 #define Region QtXRegion

@@ -53,6 +53,7 @@ class KDEXLib : public QObject, public SalXLib
         QTimer userEventTimer;
         int m_frameWidth;
         bool m_isGlibEventLoopType;
+        bool m_haveQt4SocketExcludeFix;
 
     private:
         void setupEventLoop();
@@ -87,6 +88,7 @@ class KDEXLib : public QObject, public SalXLib
         virtual void PostUserEvent();
 
         void doStartup();
+        bool haveQt4SocketExcludeFix() { return m_haveQt4SocketExcludeFix; }
 
     public Q_SLOTS:
         com::sun::star::uno::Reference< com::sun::star::ui::dialogs::XFilePicker2 >
