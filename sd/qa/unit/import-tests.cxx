@@ -60,6 +60,7 @@ public:
     void testN821567();
     void testFdo68594();
     void testFdo72998();
+    void testStrictOOXML();
 
     CPPUNIT_TEST_SUITE(SdFiltersTest);
     CPPUNIT_TEST(testDocumentLayout);
@@ -76,6 +77,7 @@ public:
     CPPUNIT_TEST(testN821567);
     CPPUNIT_TEST(testFdo68594);
     CPPUNIT_TEST(testFdo72998);
+    CPPUNIT_TEST(testStrictOOXML);
 
     CPPUNIT_TEST_SUITE_END();
 };
@@ -536,6 +538,20 @@ void SdFiltersTest::testFdo71075()
     uno::Sequence< double > aValues( xNumSeq->getNumericalData());
     for(sal_Int32 i=0;i<xValueSeq->getData().getLength();i++)
         CPPUNIT_ASSERT_MESSAGE( "Invalid Series count", aValues.getConstArray()[i] == values[i]);
+}
+
+void SdFiltersTest::testStrictOOXML()
+{
+    ::sd::DrawDocShellRef xDocShRef = loadURL(getURLFromSrc("/sd/qa/unit/data/strict_ooxml.pptx"));
+    CPPUNIT_ASSERT_MESSAGE( "failed to load", xDocShRef.Is() );
+    CPPUNIT_ASSERT_MESSAGE( "not in destruction", !xDocShRef->IsInDestruction() );
+
+    SdDrawDocument *pDoc = xDocShRef->GetDoc();
+    CPPUNIT_ASSERT_MESSAGE( "no document", pDoc != NULL );
+    uno::Reference< drawing::XDrawPagesSupplier > xDoc(xDocShRef->GetDoc()->getUnoModel(), uno::UNO_QUERY_THROW );
+    uno::Reference< drawing::XDrawPage > xPage(xDoc->getDrawPages()->getByIndex(0), uno::UNO_QUERY_THROW );
+    uno::Reference< drawing::XShape > xShape(xPage->getByIndex(0), uno::UNO_QUERY_THROW );
+    CPPUNIT_ASSERT_MESSAGE( "failed to load shape", xShape.is() );
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SdFiltersTest);
