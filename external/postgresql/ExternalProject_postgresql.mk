@@ -56,8 +56,8 @@ $(call gb_ExternalProject_get_state_target,postgresql,build) :
 			--without-readline --disable-shared --with-ldap \
 			$(if $(CROSS_COMPILING),--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM)) \
 			$(if $(DISABLE_OPENSSL),,--with-openssl \
-				$(if $(filter YES,$(WITH_KRB5)), --with-krb5) \
-				$(if $(filter YES,$(WITH_GSSAPI)),--with-gssapi)) \
+				$(if $(WITH_KRB5), --with-krb5) \
+				$(if $(WITH_GSSAPI),--with-gssapi)) \
 			CPPFLAGS="$(postgresql_CPPFLAGS)" \
 			LDFLAGS="$(postgresql_LDFLAGS)" \
 			EXTRA_LDAP_LIBS="-llber -lssl3 -lsmime3 -lnss3 -lnssutil3 -lplds4 -lplc4 -lnspr4" \

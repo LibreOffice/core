@@ -56,8 +56,8 @@ ifeq ($(SYSTEM_POSTGRESQL),)
 ifneq ($(OS)$(COM),WNTMSC)
 
 $(eval $(call gb_Library_add_libs,postgresql-sdbc-impl,\
-	$(if $(filter YES,$(WITH_GSSAPI)),$(GSSAPI_LIBS)) \
-	$(if $(filter YES,$(WITH_KRB5)),$(KRB5_LIBS)) \
+	$(if $(WITH_GSSAPI),$(GSSAPI_LIBS)) \
+	$(if $(WITH_KRB5),$(KRB5_LIBS)) \
 	$(if $(filter-out MACOSX,$(OS)),-ldl) \
 	$(if $(filter-out MACOSX,$(OS)),-lpthread) \
 ))
