@@ -2098,16 +2098,11 @@ uno::Sequence< uno::Type > SAL_CALL ScAccessibleDocument::getTypes()
     return comphelper::concatSequences(ScAccessibleDocumentImpl::getTypes(), ScAccessibleContextBase::getTypes());
 }
 
-namespace
-{
-    class theScAccessibleDocumentImplementationId : public rtl::Static< UnoTunnelIdInit, theScAccessibleDocumentImplementationId > {};
-}
-
 uno::Sequence<sal_Int8> SAL_CALL
     ScAccessibleDocument::getImplementationId(void)
     throw (uno::RuntimeException, std::exception)
 {
-    return theScAccessibleDocumentImplementationId::get().getSeq();
+    return css::uno::Sequence<sal_Int8>();
 }
 
 ///=====  IAccessibleViewForwarder  ========================================

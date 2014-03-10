@@ -1796,15 +1796,10 @@ uno::Sequence<uno::Type> SAL_CALL ScCellRangesBase::getTypes() throw(uno::Runtim
     return aTypes;
 }
 
-namespace
-{
-    class theScCellRangesBaseImplementationId : public rtl::Static< UnoTunnelIdInit, theScCellRangesBaseImplementationId > {};
-}
-
 uno::Sequence<sal_Int8> SAL_CALL ScCellRangesBase::getImplementationId()
                                                     throw(uno::RuntimeException, std::exception)
 {
-    return theScCellRangesBaseImplementationId::get().getSeq();
+    return css::uno::Sequence<sal_Int8>();
 }
 
 
@@ -4218,15 +4213,10 @@ uno::Sequence<uno::Type> SAL_CALL ScCellRangesObj::getTypes() throw(uno::Runtime
     return aTypes;
 }
 
-namespace
-{
-    class theScCellRangesObjImplementationId : public rtl::Static< UnoTunnelIdInit, theScCellRangesObjImplementationId > {};
-}
-
 uno::Sequence<sal_Int8> SAL_CALL ScCellRangesObj::getImplementationId()
                                                     throw(uno::RuntimeException, std::exception)
 {
-    return theScCellRangesObjImplementationId::get().getSeq();
+    return css::uno::Sequence<sal_Int8>();
 }
 
 // XCellRanges
@@ -4882,15 +4872,10 @@ uno::Sequence<uno::Type> SAL_CALL ScCellRangeObj::getTypes() throw(uno::RuntimeE
     return aTypes;
 }
 
-namespace
-{
-    class theScCellRangeObjImplementationId : public rtl::Static< UnoTunnelIdInit, theScCellRangeObjImplementationId > {};
-}
-
 uno::Sequence<sal_Int8> SAL_CALL ScCellRangeObj::getImplementationId()
                                                     throw(uno::RuntimeException, std::exception)
 {
-    return theScCellRangeObjImplementationId::get().getSeq();
+    return css::uno::Sequence<sal_Int8>();
 }
 
 // XCellRange
@@ -6174,14 +6159,9 @@ uno::Sequence<uno::Type> SAL_CALL ScCellObj::getTypes() throw(uno::RuntimeExcept
     return aTypes;
 }
 
-namespace
-{
-    class theScCellObjImplementationId : public rtl::Static< UnoTunnelIdInit, theScCellObjImplementationId > {};
-}
-
 uno::Sequence<sal_Int8> SAL_CALL ScCellObj::getImplementationId() throw(uno::RuntimeException, std::exception)
 {
-    return theScCellObjImplementationId::get().getSeq();
+    return css::uno::Sequence<sal_Int8>();
 }
 
 //  Hilfsfunktionen
@@ -6966,14 +6946,9 @@ uno::Sequence<uno::Type> SAL_CALL ScTableSheetObj::getTypes() throw(uno::Runtime
     return aTypes;
 }
 
-namespace
-{
-    class theScTableSheetObjImplementationId : public rtl::Static< UnoTunnelIdInit, theScTableSheetObjImplementationId > {};
-}
-
 uno::Sequence<sal_Int8> SAL_CALL ScTableSheetObj::getImplementationId() throw(uno::RuntimeException, std::exception)
 {
-    return theScTableSheetObjImplementationId::get().getSeq();
+    return css::uno::Sequence<sal_Int8>();
 }
 
 //  Hilfsfunktionen
@@ -8783,14 +8758,9 @@ uno::Sequence<uno::Type> SAL_CALL ScTableColumnObj::getTypes() throw(uno::Runtim
     return aTypes;
 }
 
-namespace
-{
-    class theScTableColumnObjImplementationId : public rtl::Static< UnoTunnelIdInit, theScTableColumnObjImplementationId > {};
-}
-
 uno::Sequence<sal_Int8> SAL_CALL ScTableColumnObj::getImplementationId() throw(uno::RuntimeException, std::exception)
 {
-    return theScTableColumnObjImplementationId::get().getSeq();
+    return css::uno::Sequence<sal_Int8>();
 }
 
 // XNamed

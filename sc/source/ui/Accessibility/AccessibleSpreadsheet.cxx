@@ -1327,16 +1327,11 @@ uno::Sequence< OUString> SAL_CALL
 
 //=====  XTypeProvider  =======================================================
 
-namespace
-{
-    class theScAccessibleSpreadsheetImplementationId : public rtl::Static< UnoTunnelIdInit, theScAccessibleSpreadsheetImplementationId > {};
-}
-
 uno::Sequence<sal_Int8> SAL_CALL
     ScAccessibleSpreadsheet::getImplementationId(void)
     throw (uno::RuntimeException, std::exception)
 {
-    return theScAccessibleSpreadsheetImplementationId::get().getSeq();
+    return css::uno::Sequence<sal_Int8>();
 }
 
 ///=====  XAccessibleEventBroadcaster  =====================================

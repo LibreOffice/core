@@ -203,16 +203,11 @@ uno::Sequence< OUString> SAL_CALL
 
 //=====  XTypeProvider  =======================================================
 
-namespace
-{
-    class theScAccessiblePageHeaderAreaImplementationId : public rtl::Static< UnoTunnelIdInit, theScAccessiblePageHeaderAreaImplementationId > {};
-}
-
 uno::Sequence<sal_Int8> SAL_CALL
     ScAccessiblePageHeaderArea::getImplementationId(void)
     throw (uno::RuntimeException, std::exception)
 {
-    return theScAccessiblePageHeaderAreaImplementationId::get().getSeq();
+    return css::uno::Sequence<sal_Int8>();
 }
 
 //===== internal ==============================================================

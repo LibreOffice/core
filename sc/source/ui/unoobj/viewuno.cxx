@@ -176,15 +176,10 @@ uno::Sequence<uno::Type> SAL_CALL ScViewPaneBase::getTypes() throw(uno::RuntimeE
     return aTypes;
 }
 
-namespace
-{
-    class theScViewPaneBaseImplementationId : public rtl::Static< UnoTunnelIdInit, theScViewPaneBaseImplementationId > {};
-}
-
 uno::Sequence<sal_Int8> SAL_CALL ScViewPaneBase::getImplementationId()
                                                     throw(uno::RuntimeException, std::exception)
 {
-    return theScViewPaneBaseImplementationId::get().getSeq();
+    return css::uno::Sequence<sal_Int8>();
 }
 
 // XViewPane
@@ -639,15 +634,10 @@ uno::Sequence<uno::Type> SAL_CALL ScTabViewObj::getTypes() throw(uno::RuntimeExc
     return aTypes;
 }
 
-namespace
-{
-    class theScTabViewObjImplementationId : public rtl::Static< UnoTunnelIdInit, theScTabViewObjImplementationId > {};
-}
-
 uno::Sequence<sal_Int8> SAL_CALL ScTabViewObj::getImplementationId()
                                                 throw(uno::RuntimeException, std::exception)
 {
-    return theScTabViewObjImplementationId::get().getSeq();
+    return css::uno::Sequence<sal_Int8>();
 }
 
 // XDocumentView

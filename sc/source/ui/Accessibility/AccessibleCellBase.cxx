@@ -299,16 +299,11 @@ uno::Sequence< uno::Type > SAL_CALL ScAccessibleCellBase::getTypes()
     return comphelper::concatSequences(ScAccessibleCellBaseImpl::getTypes(), ScAccessibleContextBase::getTypes());
 }
 
-namespace
-{
-    class theScAccessibleCellBaseImplementationId : public rtl::Static< UnoTunnelIdInit, theScAccessibleCellBaseImplementationId > {};
-}
-
 uno::Sequence<sal_Int8> SAL_CALL
     ScAccessibleCellBase::getImplementationId(void)
     throw (uno::RuntimeException, std::exception)
 {
-    return theScAccessibleCellBaseImplementationId::get().getSeq();
+    return css::uno::Sequence<sal_Int8>();
 }
 
 bool ScAccessibleCellBase::IsEditable(

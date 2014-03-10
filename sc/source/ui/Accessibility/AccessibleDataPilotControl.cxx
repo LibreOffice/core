@@ -518,15 +518,10 @@ OUString SAL_CALL ScAccessibleDataPilotControl::getImplementationName(void)
 
     ///=====  XTypeProvider  ===================================================
 
-namespace
-{
-    class theScAccessibleDataPilotControlImplementationId : public rtl::Static< UnoTunnelIdInit, theScAccessibleDataPilotControlImplementationId > {};
-}
-
 uno::Sequence<sal_Int8> SAL_CALL ScAccessibleDataPilotControl::getImplementationId(void)
         throw (uno::RuntimeException, std::exception)
 {
-    return theScAccessibleDataPilotControlImplementationId::get().getSeq();
+    return css::uno::Sequence<sal_Int8>();
 }
 
     //=====  internal  ========================================================
@@ -748,15 +743,10 @@ OUString SAL_CALL ScAccessibleDataPilotButton::getImplementationName(void)
 
     ///=====  XTypeProvider  ===================================================
 
-namespace
-{
-    class theScAccessibleDataPilotButtonImplementationId : public rtl::Static< UnoTunnelIdInit, theScAccessibleDataPilotButtonImplementationId > {};
-}
-
 uno::Sequence<sal_Int8> SAL_CALL ScAccessibleDataPilotButton::getImplementationId(void)
         throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
-    return theScAccessibleDataPilotButtonImplementationId::get().getSeq();
+    return css::uno::Sequence<sal_Int8>();
 }
 
 OUString SAL_CALL ScAccessibleDataPilotButton::createAccessibleDescription(void)

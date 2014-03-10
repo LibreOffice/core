@@ -1475,15 +1475,10 @@ uno::Sequence<uno::Type> SAL_CALL ScEditFieldObj::getTypes() throw(uno::RuntimeE
     return aTypes;
 }
 
-namespace
-{
-    class theScEditFieldObjImplementationId : public rtl::Static<UnoTunnelIdInit, theScEditFieldObjImplementationId> {};
-}
-
 uno::Sequence<sal_Int8> SAL_CALL ScEditFieldObj::getImplementationId()
                                                     throw(uno::RuntimeException, std::exception)
 {
-    return theScEditFieldObjImplementationId::get().getSeq();
+    return css::uno::Sequence<sal_Int8>();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

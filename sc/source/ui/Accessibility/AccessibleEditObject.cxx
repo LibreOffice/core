@@ -332,16 +332,11 @@ OUString SAL_CALL ScAccessibleEditObject::getImplementationName(void)
 
 //=====  XTypeProvider  =======================================================
 
-namespace
-{
-    class theScAccessibleEditObjectImplementationId : public rtl::Static< UnoTunnelIdInit, theScAccessibleEditObjectImplementationId > {};
-}
-
 uno::Sequence<sal_Int8> SAL_CALL
     ScAccessibleEditObject::getImplementationId(void)
     throw (uno::RuntimeException, std::exception)
 {
-    return theScAccessibleEditObjectImplementationId::get().getSeq();
+    return css::uno::Sequence<sal_Int8>();
 }
 
     //====  internal  =========================================================

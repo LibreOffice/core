@@ -1610,16 +1610,11 @@ uno::Sequence< OUString> SAL_CALL ScAccessibleDocumentPagePreview::getSupportedS
 
 //=====  XTypeProvider  =======================================================
 
-namespace
-{
-    class theScAccessibleDocumentPagePreviewImplementationId : public rtl::Static< UnoTunnelIdInit, theScAccessibleDocumentPagePreviewImplementationId > {};
-}
-
 uno::Sequence<sal_Int8> SAL_CALL
     ScAccessibleDocumentPagePreview::getImplementationId(void)
     throw (uno::RuntimeException, std::exception)
 {
-    return theScAccessibleDocumentPagePreviewImplementationId::get().getSeq();
+    return css::uno::Sequence<sal_Int8>();
 }
 
 //=====  internal  ========================================================

@@ -551,15 +551,10 @@ uno::Sequence<uno::Type> SAL_CALL ScModelObj::getTypes() throw(uno::RuntimeExcep
     return aTypes;
 }
 
-namespace
-{
-    class theScModelObjImplementationId : public rtl::Static< UnoTunnelIdInit, theScModelObjImplementationId > {};
-}
-
 uno::Sequence<sal_Int8> SAL_CALL ScModelObj::getImplementationId()
                                                     throw(uno::RuntimeException, std::exception)
 {
-    return theScModelObjImplementationId::get().getSeq();
+    return css::uno::Sequence<sal_Int8>();
 }
 
 void ScModelObj::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )

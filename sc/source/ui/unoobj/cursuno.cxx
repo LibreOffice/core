@@ -90,14 +90,9 @@ uno::Sequence<uno::Type> SAL_CALL ScCellCursorObj::getTypes() throw(uno::Runtime
     return aTypes;
 }
 
-namespace
-{
-    class theScCellCursorObjImplementationId : public rtl::Static< UnoTunnelIdInit, theScCellCursorObjImplementationId > {};
-}
-
 uno::Sequence<sal_Int8> SAL_CALL ScCellCursorObj::getImplementationId() throw(uno::RuntimeException, std::exception)
 {
-    return theScCellCursorObjImplementationId::get().getSeq();
+    return css::uno::Sequence<sal_Int8>();
 }
 
 // XSheetCellCursor

@@ -199,16 +199,11 @@ uno::Sequence<OUString> SAL_CALL ScAccessiblePreviewCell::getSupportedServiceNam
 
 //=====  XTypeProvider  =======================================================
 
-namespace
-{
-    class theScAccessiblePreviewCellImplementationId : public rtl::Static< UnoTunnelIdInit, theScAccessiblePreviewCellImplementationId > {};
-}
-
 uno::Sequence<sal_Int8> SAL_CALL
     ScAccessiblePreviewCell::getImplementationId(void)
     throw (uno::RuntimeException, std::exception)
 {
-    return theScAccessiblePreviewCellImplementationId::get().getSeq();
+    return css::uno::Sequence<sal_Int8>();
 }
 
 //====  internal  =========================================================

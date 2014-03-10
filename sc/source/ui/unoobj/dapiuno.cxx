@@ -650,15 +650,10 @@ Sequence< uno::Type > SAL_CALL ScDataPilotDescriptorBase::getTypes()
     return aTypes;
 }
 
-namespace
-{
-    class theScDataPilotDescriptorBaseImplementationId : public rtl::Static< UnoTunnelIdInit, theScDataPilotDescriptorBaseImplementationId > {};
-}
-
 Sequence<sal_Int8> SAL_CALL ScDataPilotDescriptorBase::getImplementationId()
                                                     throw(RuntimeException, std::exception)
 {
-    return theScDataPilotDescriptorBaseImplementationId::get().getSeq();
+    return css::uno::Sequence<sal_Int8>();
 }
 
 void ScDataPilotDescriptorBase::Notify( SfxBroadcaster&, const SfxHint& rHint )
@@ -1161,15 +1156,10 @@ Sequence< uno::Type > SAL_CALL ScDataPilotTableObj::getTypes() throw(RuntimeExce
     return aTypes;
 }
 
-namespace
-{
-    class theScDataPilotTableObjImplementationId : public rtl::Static< UnoTunnelIdInit, theScDataPilotTableObjImplementationId > {};
-}
-
 Sequence<sal_Int8> SAL_CALL ScDataPilotTableObj::getImplementationId()
                                                     throw(RuntimeException, std::exception)
 {
-    return theScDataPilotTableObjImplementationId::get().getSeq();
+    return css::uno::Sequence<sal_Int8>();
 }
 
 

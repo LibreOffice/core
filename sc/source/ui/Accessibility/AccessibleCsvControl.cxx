@@ -758,14 +758,9 @@ Sequence< ::com::sun::star::uno::Type > SAL_CALL ScAccessibleCsvRuler::getTypes(
     return ::comphelper::concatSequences( ScAccessibleCsvControl::getTypes(), aSeq );
 }
 
-namespace
-{
-    class theScAccessibleCsvRulerImplementationId : public rtl::Static< UnoTunnelIdInit, theScAccessibleCsvRulerImplementationId > {};
-}
-
 Sequence< sal_Int8 > SAL_CALL ScAccessibleCsvRuler::getImplementationId() throw( RuntimeException, std::exception )
 {
-    return theScAccessibleCsvRulerImplementationId::get().getSeq();
+    return css::uno::Sequence<sal_Int8>();
 }
 
 
@@ -1269,14 +1264,9 @@ Sequence< ::com::sun::star::uno::Type > SAL_CALL ScAccessibleCsvGrid::getTypes()
     return ::comphelper::concatSequences( ScAccessibleCsvControl::getTypes(), aSeq );
 }
 
-namespace
-{
-    class theScAccessibleCsvGridImplementationId  : public rtl::Static< UnoTunnelIdInit, theScAccessibleCsvGridImplementationId > {};
-}
-
 Sequence< sal_Int8 > SAL_CALL ScAccessibleCsvGrid::getImplementationId() throw( RuntimeException, std::exception )
 {
-    return theScAccessibleCsvGridImplementationId::get().getSeq();
+    return css::uno::Sequence<sal_Int8>();
 }
 
 

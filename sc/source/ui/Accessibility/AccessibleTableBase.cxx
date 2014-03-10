@@ -464,16 +464,11 @@ uno::Sequence< uno::Type > SAL_CALL ScAccessibleTableBase::getTypes()
     return comphelper::concatSequences(ScAccessibleTableBaseImpl::getTypes(), ScAccessibleContextBase::getTypes());
 }
 
-namespace
-{
-    class theScAccessibleTableBaseImplementationId : public rtl::Static< UnoTunnelIdInit, theScAccessibleTableBaseImplementationId > {};
-}
-
 uno::Sequence<sal_Int8> SAL_CALL
     ScAccessibleTableBase::getImplementationId(void)
     throw (uno::RuntimeException, std::exception)
 {
-    return theScAccessibleTableBaseImplementationId::get().getSeq();
+    return css::uno::Sequence<sal_Int8>();
 }
 
 void ScAccessibleTableBase::CommitTableModelChange(sal_Int32 nStartRow, sal_Int32 nStartCol, sal_Int32 nEndRow, sal_Int32 nEndCol, sal_uInt16 nId)

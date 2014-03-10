@@ -316,16 +316,11 @@ uno::Sequence< uno::Type > SAL_CALL ScAccessiblePreviewHeaderCell::getTypes()
     return comphelper::concatSequences(ScAccessiblePreviewHeaderCellImpl::getTypes(), ScAccessibleContextBase::getTypes());
 }
 
-namespace
-{
-    class theScAccessiblePreviewHeaderCellImplementationId : public rtl::Static< UnoTunnelIdInit, theScAccessiblePreviewHeaderCellImplementationId > {};
-}
-
 uno::Sequence<sal_Int8> SAL_CALL
     ScAccessiblePreviewHeaderCell::getImplementationId(void)
     throw (uno::RuntimeException, std::exception)
 {
-    return theScAccessiblePreviewHeaderCellImplementationId::get().getSeq();
+    return css::uno::Sequence<sal_Int8>();
 }
 
 //====  internal  =========================================================

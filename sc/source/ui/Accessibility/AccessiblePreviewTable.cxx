@@ -594,15 +594,10 @@ uno::Sequence< uno::Type > SAL_CALL ScAccessiblePreviewTable::getTypes()
     return comphelper::concatSequences(ScAccessiblePreviewTableImpl::getTypes(), ScAccessibleContextBase::getTypes());
 }
 
-namespace
-{
-    class theScAccessiblePreviewTableImplementationId : public rtl::Static< UnoTunnelIdInit, theScAccessiblePreviewTableImplementationId > {};
-}
-
 uno::Sequence<sal_Int8> SAL_CALL ScAccessiblePreviewTable::getImplementationId()
                                                     throw(uno::RuntimeException, std::exception)
 {
-    return theScAccessiblePreviewTableImplementationId::get().getSeq();
+    return css::uno::Sequence<sal_Int8>();
 }
 
 //====  internal  =========================================================

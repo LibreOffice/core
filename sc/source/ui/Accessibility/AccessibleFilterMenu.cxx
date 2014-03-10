@@ -262,8 +262,7 @@ void SAL_CALL ScAccessibleFilterMenu::release() throw ()
 Sequence<sal_Int8> ScAccessibleFilterMenu::getImplementationId()
     throw (RuntimeException, std::exception)
 {
-    Sequence<sal_Int8> aId(16);
-    return aId;
+    return css::uno::Sequence<sal_Int8>();
 }
 
 Rectangle ScAccessibleFilterMenu::GetBoundingBoxOnScreen() const
