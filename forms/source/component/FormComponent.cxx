@@ -174,7 +174,7 @@ Any SAL_CALL OControl::queryAggregation( const Type& _rType ) throw(RuntimeExcep
 
 Sequence<sal_Int8> SAL_CALL OControl::getImplementationId() throw(RuntimeException, std::exception)
 {
-    return OImplementationIds::getImplementationId(getTypes());
+    return css::uno::Sequence<sal_Int8>();
 }
 
 Sequence<Type> SAL_CALL OControl::getTypes() throw(RuntimeException, std::exception)
@@ -424,7 +424,7 @@ void OBoundControl::disposing()
 // OControlModel
 Sequence<sal_Int8> SAL_CALL OControlModel::getImplementationId() throw(RuntimeException, std::exception)
 {
-    return OImplementationIds::getImplementationId(getTypes());
+    return css::uno::Sequence<sal_Int8>();
 }
 
 Sequence<Type> SAL_CALL OControlModel::getTypes() throw(RuntimeException, std::exception)

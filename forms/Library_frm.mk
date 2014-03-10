@@ -104,7 +104,6 @@ $(eval $(call gb_Library_add_exception_objects,frm,\
     forms/source/helper/windowstateguard \
     forms/source/misc/componenttools \
     forms/source/misc/frm_module \
-    forms/source/misc/ids \
     forms/source/misc/InterfaceContainer \
     forms/source/misc/limitedformats \
     forms/source/misc/listenercontainers \

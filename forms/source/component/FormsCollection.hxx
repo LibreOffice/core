@@ -18,7 +18,6 @@
  */
 
 #include "InterfaceContainer.hxx"
-#include "ids.hxx"
 #include <cppuhelper/component.hxx>
 #include <cppuhelper/implbase2.hxx>
 #include <comphelper/uno3.hxx>
@@ -48,7 +47,6 @@ class OFormsCollection
         ,public OFormsCollection_BASE
 {
     ::osl::Mutex                m_aMutex;
-    OImplementationIdsRef       m_aHoldIdHelper;
     ::comphelper::InterfaceRef  m_xParent;          // Parent
 
 public:

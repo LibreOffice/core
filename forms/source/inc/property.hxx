@@ -31,6 +31,7 @@
 #include <cppuhelper/proptypehlp.hxx>
 #include <comphelper/property.hxx>
 #include <comphelper/propagg.hxx>
+#include <tools/debug.hxx>
 
 using namespace comphelper;
 

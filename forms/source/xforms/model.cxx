@@ -699,7 +699,7 @@ sal_Int64 Model::getSomething( const IntSequence_t& xId )
 Sequence<sal_Int8> Model::getImplementationId()
     throw( RuntimeException )
 {
-    return getUnoTunnelID();
+    return css::uno::Sequence<sal_Int8>();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

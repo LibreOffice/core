@@ -21,7 +21,6 @@
 #define INCLUDED_FORMS_SOURCE_INC_FORMCOMPONENT_HXX
 
 #include "cloneable.hxx"
-#include "ids.hxx"
 #include "property.hrc"
 #include "property.hxx"
 #include "propertybaghelper.hxx"
@@ -164,7 +163,6 @@ class OControl  :public ::cppu::OComponentHelper
 {
 protected:
     ::osl::Mutex                                m_aMutex;
-    OImplementationIdsRef                       m_aHoldIdHelper;
     ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl >
                                                 m_xControl;
     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XAggregation>
@@ -353,7 +351,6 @@ protected:
     oslInterlockedCount             m_lockCount;
 
     InterfaceRef                    m_xParent;                  // ParentComponent
-    OImplementationIdsRef           m_aHoldIdHelper;
     PropertyBagHelper               m_aPropertyBagHelper;
 
     const css::uno::Reference<css::uno::XComponentContext>&

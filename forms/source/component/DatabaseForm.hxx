@@ -67,7 +67,6 @@
 #include <connectivity/warningscontainer.hxx>
 
 #include "listenercontainers.hxx"
-#include "ids.hxx"
 #include <comphelper/propmultiplex.hxx>
 #include <comphelper/uno3.hxx>
 #include <comphelper/proparrhlp.hxx>
@@ -159,8 +158,6 @@ class ODatabaseForm :public OFormComponents
                     ,public IPropertyBagHelperContext
 {
     friend class OFormSubmitResetThread;
-
-    OImplementationIdsRef               m_aHoldIdHelper;
 
         // listener administration
     ::cppu::OInterfaceContainerHelper   m_aLoadListeners;

@@ -23,7 +23,6 @@
 #include "property.hrc"
 #include "property.hxx"
 #include "componenttools.hxx"
-#include "ids.hxx"
 #include "findpos.hxx"
 #include <com/sun/star/io/XPersistObject.hpp>
 #include <com/sun/star/io/XObjectOutputStream.hpp>
@@ -147,7 +146,7 @@ sal_Int64 SAL_CALL OGridColumn::getSomething( const Sequence<sal_Int8>& _rIdenti
 
 Sequence<sal_Int8> SAL_CALL OGridColumn::getImplementationId() throw(RuntimeException, std::exception)
 {
-    return OImplementationIds::getImplementationId(getTypes());
+    return css::uno::Sequence<sal_Int8>();
 }
 
 

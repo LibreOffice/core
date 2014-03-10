@@ -221,7 +221,7 @@ Reference< XInterface > SAL_CALL ODatabaseForm::Create( const Reference< XMultiS
 
 Sequence<sal_Int8> SAL_CALL ODatabaseForm::getImplementationId() throw(RuntimeException, std::exception)
 {
-    return OImplementationIds::getImplementationId(getTypes());
+    return css::uno::Sequence<sal_Int8>();
 }
 
 

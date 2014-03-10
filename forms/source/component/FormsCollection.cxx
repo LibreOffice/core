@@ -52,7 +52,7 @@ OUString SAL_CALL OFormsCollection::getServiceName() throw(RuntimeException, std
 
 Sequence< sal_Int8 > SAL_CALL OFormsCollection::getImplementationId(  ) throw(RuntimeException, std::exception)
 {
-    return OImplementationIds::getImplementationId(getTypes());
+    return css::uno::Sequence<sal_Int8>();
 }
 
 
