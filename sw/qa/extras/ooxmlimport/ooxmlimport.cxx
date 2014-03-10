@@ -1918,8 +1918,13 @@ DECLARE_OOXMLIMPORT_TEST(testStrict, "strict.docx")
     uno::Reference<text::XText> xHeaderText(xPageStyle->getPropertyValue("HeaderText"), uno::UNO_QUERY);
     getParagraphOfText(1, xHeaderText, "This is a header.");
 
-    // Picture was missing, this resulted in a lang::IndexOutOfBoundsException.
-    getShape(1);
+    // Picture was missing.
+    uno::Reference<lang::XServiceInfo> xServiceInfo(getShape(1), uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xServiceInfo->supportsService("com.sun.star.text.TextGraphicObject"));
+
+    // Chart was missing.
+    xServiceInfo.set(getShape(2), uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xServiceInfo->supportsService("com.sun.star.text.TextEmbeddedObject"));
 }
 
 #endif
