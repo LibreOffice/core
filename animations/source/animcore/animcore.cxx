@@ -51,7 +51,6 @@
 #include <cppuhelper/weakref.hxx>
 
 #include <cppuhelper/implbase1.hxx>
-#include <rtl/uuid.h>
 
 #include <osl/mutex.hxx>
 #include <list>
@@ -295,7 +294,6 @@ private:
 
     // for XTypeProvider
     static Sequence< Type >* mpTypes[12];
-    static Sequence< sal_Int8 >* mpId[12];
 
     // attributes for the XAnimationNode interface implementation
     Any maBegin, maDuration, maEnd, maEndSync, maRepeatCount, maRepeatDuration;
@@ -405,7 +403,6 @@ Any SAL_CALL TimeContainerEnumeration::nextElement()
 
 
 Sequence< Type >* AnimationNode::mpTypes[] = { NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL };
-Sequence< sal_Int8 >* AnimationNode::mpId[] = { NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL };
 
 AnimationNode::AnimationNode( sal_Int16 nNodeType )
 :   maChangeListener(maMutex),
@@ -643,10 +640,6 @@ void AnimationNode::initTypeProvider( sal_Int16 nNodeType ) throw()
 
     if(! mpTypes[nNodeType] )
     {
-        // create id
-        mpId[nNodeType] = new Sequence< sal_Int8 >( 16 );
-        rtl_createUuid( (sal_uInt8 *)mpId[nNodeType]->getArray(), 0, sal_True );
-
         static const sal_Int32 type_numbers[] =
         {
             7, // CUSTOM
@@ -728,9 +721,7 @@ Sequence< Type > AnimationNode::getTypes() throw (RuntimeException, std::excepti
 
 Sequence< sal_Int8 > AnimationNode::getImplementationId() throw (RuntimeException, std::exception)
 {
-    if (! mpId[mnNodeType])
-        initTypeProvider(mnNodeType);
-    return *mpId[mnNodeType];
+    return css::uno::Sequence<sal_Int8>();
 }
 
 
