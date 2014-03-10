@@ -23,6 +23,7 @@
 #include <vcl/msgbox.hxx>
 #include <vcl/svapp.hxx>
 
+#include <svl/grabbagitem.hxx>
 #include <editeng/svxfont.hxx>
 #include <editeng/flditem.hxx>
 #include <editeng/fontitem.hxx>
@@ -448,6 +449,14 @@ EditCharAttribRelief::EditCharAttribRelief( const SvxCharReliefItem& rAttr, sal_
 void EditCharAttribRelief::SetFont( SvxFont& rFont, OutputDevice* )
 {
     rFont.SetRelief( (FontRelief)((const SvxCharReliefItem*)GetItem())->GetValue() );
+}
+
+// class EditCharAttribGrabBag
+
+EditCharAttribGrabBag::EditCharAttribGrabBag( const SfxGrabBagItem& rAttr, sal_uInt16 _nStart, sal_uInt16 _nEnd )
+    : EditCharAttrib( rAttr, _nStart, _nEnd )
+{
+    DBG_ASSERT( rAttr.Which() == EE_CHAR_GRABBAG, "Not a grab bage attribute!" );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

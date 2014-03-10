@@ -215,6 +215,7 @@ const SfxItemInfo aItemInfos[EDITITEMCOUNT] = {
         { 0, SFX_ITEM_POOLABLE },                           // EE_CHAR_XMLATTRIBS
         { SID_ATTR_CHAR_OVERLINE, SFX_ITEM_POOLABLE },
         { SID_ATTR_CHAR_CASEMAP, SFX_ITEM_POOLABLE },       // EE_CHAR_CASEMAP
+        { 0, SFX_ITEM_POOLABLE },                           // EE_CHAR_GRABBAG
         { 0, SFX_ITEM_POOLABLE },                           // EE_FEATURE_TAB
         { 0, SFX_ITEM_POOLABLE },                           // EE_FEATURE_LINEBR
         { SID_ATTR_CHAR_CHARSETCOLOR, SFX_ITEM_POOLABLE },  // EE_FEATURE_NOTCONV
@@ -252,6 +253,16 @@ const sal_uInt16 aV5Map[] = {
     4024, 4025, 4026, 4027, 4028, 4029, 4030, 4031, 4032, 4033,
     /* EE_CHAR_OVERLINE inserted here */
     4035, 4036, 4037, 4038
+};
+
+const sal_uInt16 aV6Map[] = {
+    3994, 3995, 3996, 3997, 3998, 3999, 4000, 4001, 4002, 4003,
+    4004, 4005, 4006, 4007, 4008, 4009, 4010, 4011, 4012, 4013,
+    4014, 4015, 4016, 4017, 4018, 4019, 4020, 4021, 4022, 4023,
+    4024, 4025, 4026, 4027, 4028, 4029, 4030, 4031, 4032, 4033,
+    4035, 4036, 4037, 4038,
+    /* EE_CHAR_GRABBAG inserted here */
+    4039
 };
 
 EditCharAttrib* MakeCharAttrib( SfxItemPool& rPool, const SfxPoolItem& rAttr, sal_Int32 nS, sal_Int32 nE )
@@ -370,6 +381,11 @@ EditCharAttrib* MakeCharAttrib( SfxItemPool& rPool, const SfxPoolItem& rAttr, sa
         case EE_CHAR_CASEMAP:
         {
             pNew = new EditCharAttribCaseMap( (const SvxCaseMapItem&)rNew, nS, nE );
+        }
+        break;
+        case EE_CHAR_GRABBAG:
+        {
+            pNew = new EditCharAttribGrabBag( (const SfxGrabBagItem&)rNew, nS, nE );
         }
         break;
         case EE_FEATURE_TAB:
@@ -2985,6 +3001,7 @@ EditEngineItemPool::EditEngineItemPool( sal_Bool bPersistenRefCounts )
     SetVersionMap( 3, 3997, 4020, aV3Map );
     SetVersionMap( 4, 3994, 4022, aV4Map );
     SetVersionMap( 5, 3994, 4037, aV5Map );
+    SetVersionMap( 6, 3994, 4038, aV6Map );
 
     SfxPoolItem** ppDefItems = EE_DLL().GetGlobalData()->GetDefItems();
     SetDefaults( ppDefItems );

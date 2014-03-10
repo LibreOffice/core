@@ -155,13 +155,12 @@ SfxPoolItem** GlobalEditData::GetDefItems()
         ppDefItems[46] = new SvXMLAttrContainerItem( EE_CHAR_XMLATTRIBS );
         ppDefItems[47] = new SvxOverlineItem( UNDERLINE_NONE, EE_CHAR_OVERLINE );
         ppDefItems[48] = new SvxCaseMapItem( SVX_CASEMAP_NOT_MAPPED, EE_CHAR_CASEMAP );
-
+        ppDefItems[49] = new SfxGrabBagItem( EE_CHAR_GRABBAG );
         // Features
-        ppDefItems[49] = new SfxVoidItem( EE_FEATURE_TAB );
-        ppDefItems[50] = new SfxVoidItem( EE_FEATURE_LINEBR );
-        ppDefItems[51] = new SvxCharSetColorItem( Color( COL_RED ), RTL_TEXTENCODING_DONTKNOW, EE_FEATURE_NOTCONV );
-        ppDefItems[52] = new SvxFieldItem( SvxFieldData(), EE_FEATURE_FIELD );
-        ppDefItems[53] = new SfxGrabBagItem( EE_CHAR_GRABBAG );
+        ppDefItems[50] = new SfxVoidItem( EE_FEATURE_TAB );
+        ppDefItems[51] = new SfxVoidItem( EE_FEATURE_LINEBR );
+        ppDefItems[52] = new SvxCharSetColorItem( Color( COL_RED ), RTL_TEXTENCODING_DONTKNOW, EE_FEATURE_NOTCONV );
+        ppDefItems[53] = new SvxFieldItem( SvxFieldData(), EE_FEATURE_FIELD );
 
         DBG_ASSERT( EDITITEMCOUNT == 54, "ITEMCOUNT geaendert, DefItems nicht angepasst!" );
 

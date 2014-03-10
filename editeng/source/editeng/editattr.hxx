@@ -48,6 +48,7 @@ class SvxCharReliefItem;
 class SfxVoidItem;
 class OutputDevice;
 class SvxCaseMapItem;
+class SfxGrabBagItem;
 
 #define CH_FEATURE_OLD  (sal_uInt8)         0xFF
 #define CH_FEATURE      (sal_Unicode)   0x01
@@ -401,6 +402,14 @@ public:
     EditCharAttribWordLineMode( const SvxWordLineModeItem& rAttr, sal_uInt16 nStart, sal_uInt16 nEnd );
 
     virtual void    SetFont( SvxFont& rFont, OutputDevice* pOutDev );
+};
+
+// class EditCharAttribGrabBag
+
+class EditCharAttribGrabBag: public EditCharAttrib
+{
+public:
+    EditCharAttribGrabBag( const SfxGrabBagItem& rAttr, sal_uInt16 nStart, sal_uInt16 nEnd );
 };
 
 
