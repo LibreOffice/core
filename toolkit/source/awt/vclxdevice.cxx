@@ -42,9 +42,10 @@
 //  class VCLXDevice
 
 VCLXDevice::VCLXDevice()
+    : mpOutputDevice(NULL)
+    , pDummy(NULL)
+    , nFlags(0)
 {
-    mpOutputDevice = NULL;
-    nFlags = 0;
 }
 
 VCLXDevice::~VCLXDevice()
