@@ -243,15 +243,15 @@ def _unohelper_getHandle( self):
             t = uno.getTypeByName( x )
             types.append( t )
 
-        ret = tuple(types) , uno.generateUuid()
+        ret = tuple(types)
         _g_typeTable[self.__class__] = ret
     return ret
 
 class Base(XTypeProvider):
     def getTypes( self ):
-        return _unohelper_getHandle( self )[0]
+        return _unohelper_getHandle( self )
     def getImplementationId(self):
-        return _unohelper_getHandle( self )[1]
+        return ()
 
 class CurrentContext(XCurrentContext, Base ):
     """a current context implementation, which first does a lookup in the given
