@@ -167,12 +167,6 @@ XclExpPivotTableManager& XclExpRoot::GetPivotTableManager() const
     return *mrExpData.mxPTableMgr;
 }
 
-ScCompiler::OpCodeMapPtr XclExpRoot::GetOpCodeMap() const
-{
-    OSL_ENSURE( mrExpData.mxOpCodeMap, "XclExpRoot::GetOpCodeMap - missing object (wrong BIFF?)" );
-    return mrExpData.mxOpCodeMap;
-}
-
 void XclExpRoot::InitializeConvert()
 {
     mrExpData.mxTabInfo.reset( new XclExpTabInfo( GetRoot() ) );
