@@ -1077,7 +1077,7 @@ IMPL_LINK_NOARG(SwRedlineAcceptDlg, CommandHdl)
                                     rRedline.GetRedlineData().GetTimeStamp() ),
                                     SID_ATTR_POSTIT_DATE ));
 
-                        AbstractSvxPostItDialog* pDlg = pFact->CreateSvxPostItDialog( pParentDlg, aSet, sal_False );
+                        AbstractSvxPostItDialog* pDlg = pFact->CreateSvxPostItDialog( pParentDlg, aSet, false );
                         OSL_ENSURE(pDlg, "Dialogdiet fail!");
 
                         pDlg->HideAuthor();

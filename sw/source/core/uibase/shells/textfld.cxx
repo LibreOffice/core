@@ -851,7 +851,7 @@ IMPL_LINK( SwTextShell, RedlineNextHdl, AbstractSvxPostItDialog *, pBtn )
             pSh->EndAction();
         }
 
-        pDlg->EnableTravel(bEnable, sal_True);
+        pDlg->EnableTravel(bEnable, true);
 
         if( pSh->IsCrsrPtAtEnd() )
             pSh->SwapPam();
@@ -901,7 +901,7 @@ IMPL_LINK( SwTextShell, RedlinePrevHdl, AbstractSvxPostItDialog *, pBtn )
             pSh->EndAction();
         }
 
-        pDlg->EnableTravel(sal_True, bEnable);
+        pDlg->EnableTravel(true, bEnable);
 
         pRedline = pSh->GetCurrRedline();
         OUString sComment = convertLineEnd(pRedline->GetComment(), GetSystemLineEnd());

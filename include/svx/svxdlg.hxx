@@ -84,7 +84,7 @@ class AbstractSpellDialog : public VclAbstractDialog
 {
  public:
     virtual void        SetLanguage( sal_uInt16 nLang ) = 0;
-    virtual sal_Bool    Close() = 0;
+    virtual bool        Close() = 0;
     virtual void        Invalidate() = 0;
     virtual Window*     GetWindow()  = 0;
     virtual SfxBindings& GetBindings() = 0;
@@ -132,8 +132,8 @@ public:
 class AbstractSvxHlinkDlgMarkWnd :public VclAbstractDialog
 {
 public:
-    virtual sal_Bool    MoveTo ( Point aNewPos )const = 0;
-    virtual sal_Bool    ConnectToDialog( sal_Bool bDoit = sal_True )const = 0;
+    virtual bool    MoveTo ( Point aNewPos )const = 0;
+    virtual bool    ConnectToDialog( bool bDoit = true )const = 0;
     virtual void    RefreshTree ( OUString aStrURL ) = 0;
     virtual void    SelectEntry ( OUString aStrMark ) = 0;
     virtual sal_uInt16  SetError( sal_uInt16 nError) = 0;
@@ -141,7 +141,7 @@ public:
     virtual void    SetSizePixel( const Size& rNewSize ) = 0;
     virtual Size    GetSizePixel() const = 0;
     virtual void    Hide() = 0;
-    virtual sal_Bool    IsVisible() const = 0;
+    virtual bool    IsVisible() const = 0;
     virtual void    Invalidate( sal_uInt16 nFlags = 0 ) = 0;
 };
 
@@ -159,7 +159,7 @@ public:
     virtual sal_uInt16  GetOther() =0 ;
     virtual sal_uInt16  GetShorter() =0 ;
     virtual sal_uInt16  GetLonger() =0 ;
-    virtual sal_Bool    IsRelaxed() =0 ;
+    virtual bool        IsRelaxed() =0 ;
 };
 
 class AbstractSvxJSearchOptionsDialog :public VclAbstractDialog
@@ -236,7 +236,7 @@ class AbstractSvxHpLinkDlg : public VclAbstractDialog
 {
 public:
     virtual Window*     GetWindow()  = 0;
-    virtual sal_Bool    QueryClose() = 0;
+    virtual bool       QueryClose() = 0;
 };
 
 class AbstractFmSearchDialog :public VclAbstractDialog
@@ -276,14 +276,14 @@ public:
     virtual const SfxItemSet*   GetOutputItemSet() const = 0;
     virtual void                SetPrevHdl( const Link& rLink ) = 0;
     virtual void                SetNextHdl( const Link& rLink ) = 0;
-    virtual void                EnableTravel(sal_Bool bNext, sal_Bool bPrev) = 0;
+    virtual void                EnableTravel(bool bNext, bool bPrev) = 0;
     virtual OUString            GetNote()  = 0;
     virtual void                SetNote(const OUString& rTxt)  = 0;
     virtual void                ShowLastAuthor(const OUString& rAuthor, const OUString& rDate) = 0;
     virtual void                DontChangeAuthor() = 0;
     virtual void                HideAuthor() = 0;
-    virtual void                SetReadonlyPostIt(sal_Bool bDisable) = 0;
-    virtual sal_Bool                IsOkEnabled() const  = 0;
+    virtual void                SetReadonlyPostIt(bool bDisable) = 0;
+    virtual bool                IsOkEnabled() const  = 0;
     virtual Window *            GetWindow() = 0;
 };
 
@@ -364,13 +364,13 @@ public:
                                             SearchAttrItemList& rLst,
                                             const sal_uInt16* pWhRanges)=0;
     virtual AbstractSvxSearchSimilarityDialog * CreateSvxSearchSimilarityDialog( Window* pParent,
-                                                            sal_Bool bRelax,
+                                                            bool bRelax,
                                                             sal_uInt16 nOther,
                                                             sal_uInt16 nShorter,
                                                             sal_uInt16 nLonger ) = 0;
     virtual SfxAbstractTabDialog* CreateSvxBorderBackgroundDlg( Window* pParent,
                                             const SfxItemSet& rCoreSet,
-                                            sal_Bool bEnableSelector = sal_False) = 0;
+                                            bool bEnableSelector = false) = 0;
     virtual AbstractSvxTransformTabDialog* CreateSvxTransformTabDialog( Window* pParent,
                                                                 const SfxItemSet* pAttr,
                                                                 const SdrView* pView,
@@ -402,8 +402,8 @@ public:
                                             const OUString& rText, const OUString& rDesc,
                                             Image* pImg = NULL ) = 0;
 
-    virtual AbstractSvxMultiPathDialog *    CreateSvxMultiPathDialog( Window* pParent, sal_Bool bEmptyAllowed = sal_False ) = 0 ;
-    virtual AbstractSvxMultiFileDialog *    CreateSvxMultiFileDialog( Window* pParent, sal_Bool bEmptyAllowed = sal_False ) = 0 ;
+    virtual AbstractSvxMultiPathDialog *    CreateSvxMultiPathDialog( Window* pParent, bool bEmptyAllowed = false ) = 0 ;
+    virtual AbstractSvxMultiFileDialog *    CreateSvxMultiFileDialog( Window* pParent, bool bEmptyAllowed = false ) = 0 ;
     virtual AbstractSvxHpLinkDlg *  CreateSvxHpLinkDlg (Window* pParent,
                                             SfxBindings* pBindings,
                                             sal_uInt32 nResId)=0;
@@ -426,10 +426,10 @@ public:
                                                 double nRadius)=0;
     virtual AbstractGraphicFilterDialog *   CreateGraphicFilterSolarize (Window* pParent,
                                                 const Graphic& rGraphic,
-                                                sal_uInt8 nGreyThreshold, sal_Bool bInvert)=0;
+                                                sal_uInt8 nGreyThreshold, bool bInvert)=0;
     virtual AbstractGraphicFilterDialog *   CreateGraphicFilterMosaic (Window* pParent,
                                                 const Graphic& rGraphic,
-                                                sal_uInt16 nTileWidth, sal_uInt16 nTileHeight, sal_Bool bEnhanceEdges)=0;
+                                                sal_uInt16 nTileWidth, sal_uInt16 nTileHeight, bool bEnhanceEdges)=0;
     virtual AbstractSvxAreaTabDialog*       CreateSvxAreaTabDialog( Window* pParent,
                                                             const SfxItemSet* pAttr,
                                                             SdrModel* pModel,
@@ -437,7 +437,7 @@ public:
     virtual SfxAbstractTabDialog*           CreateSvxLineTabDialog( Window* pParent, const SfxItemSet* pAttr, //add forSvxLineTabDialog
                                                                  SdrModel* pModel,
                                                                  const SdrObject* pObj = NULL,
-                                                                sal_Bool bHasObj = sal_True )=0;
+                                                                 bool bHasObj = true )=0;
     virtual VclAbstractDialog*              CreateSfxDialog( Window* pParent, const SfxBindings& rBindings, sal_uInt32 nResId ) = 0;
     virtual SfxAbstractDialog*              CreateSfxDialog( Window* pParent,
                                                                         const SfxItemSet& rAttr,
@@ -451,7 +451,7 @@ public:
                                                                         )=0;
     virtual AbstractSvxPostItDialog*        CreateSvxPostItDialog( Window* pParent,
                                                                         const SfxItemSet& rCoreSet,
-                                                                        sal_Bool bPrevNext = sal_False) = 0;
+                                                                        bool bPrevNext = false) = 0;
     virtual VclAbstractDialog*          CreateSvxScriptOrgDialog( Window* pParent, const OUString& rLanguage ) = 0;
 
     virtual CreateSvxDistributePage     GetSvxDistributePageCreatorFunc() = 0;
