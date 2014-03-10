@@ -2133,7 +2133,7 @@ sal_Int64 SAL_CALL OReportDefinition::getSomething( const uno::Sequence< sal_Int
 
 uno::Sequence< sal_Int8 > SAL_CALL OReportDefinition::getImplementationId(  ) throw (uno::RuntimeException, std::exception)
 {
-    return OReportDefinition::getUnoTunnelImplementationId();
+    return css::uno::Sequence<sal_Int8>();
 }
 
 uno::Sequence< sal_Int8 > OReportDefinition::getUnoTunnelImplementationId()
