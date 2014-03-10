@@ -3694,7 +3694,7 @@ void DocxAttributeOutput::WritePostponedFormControl(const SdrObject* pObject)
 
                 uno::Reference<beans::XPropertySet> xPropertySet(xControlModel, uno::UNO_QUERY);
                 OUString sText = xPropertySet->getPropertyValue("Text").get<OUString>();
-                uno::Sequence<OUString> aItems = xPropertySet->getPropertyValue("StringItemList").get<uno::Sequence<OUString>>();
+                uno::Sequence<OUString> aItems = xPropertySet->getPropertyValue("StringItemList").get< uno::Sequence<OUString> >();
 
                 // output component
 
