@@ -261,8 +261,12 @@ sal_Int16 SAL_CALL KDE4FilePicker::execute()
     _dialog->filterWidget()->setEditable(false);
 
     // We're entering a nested loop.
-    // Release the yield mutex to prevent deadlocks.
-    int result = _dialog->exec();
+    int result;
+    {
+        // Release the yield mutex to prevent deadlocks.
+        SalYieldMutexReleaser aReleaser;
+        result = _dialog->exec();
+    }
 
     // HACK: KFileDialog uses KConfig("kdeglobals") for saving some settings
     // (such as the auto-extension flag), but that doesn't update KGlobal::config()
