@@ -654,7 +654,8 @@ namespace sw {
 Meta::Meta(SwFmtMeta * const i_pFmt)
     : ::sfx2::Metadatable()
     , SwModify()
-    , m_pFmt( i_pFmt )
+    , m_pFmt(i_pFmt)
+    , m_pTxtNode(0)
 {
 }
 
