@@ -187,6 +187,7 @@ $(eval $(call gb_Library_add_exception_objects,oox,\
     oox/source/drawingml/textbodyproperties \
     oox/source/drawingml/textcharacterpropertiescontext \
     oox/source/drawingml/textcharacterproperties \
+    oox/source/drawingml/texteffectscontext \
     oox/source/drawingml/textfieldcontext \
     oox/source/drawingml/textfield \
     oox/source/drawingml/textfont \

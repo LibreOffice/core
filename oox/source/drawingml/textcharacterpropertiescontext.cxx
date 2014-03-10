@@ -22,6 +22,7 @@
 #include "oox/helper/attributelist.hxx"
 #include "oox/drawingml/drawingmltypes.hxx"
 #include "oox/drawingml/colorchoicecontext.hxx"
+#include "oox/drawingml/texteffectscontext.hxx"
 #include "oox/drawingml/lineproperties.hxx"
 #include "oox/drawingml/textparagraphproperties.hxx"
 #include "oox/core/relations.hxx"
@@ -192,6 +193,22 @@ ContextHandlerRef TextCharacterPropertiesContext::onCreateContext( sal_Int32 aEl
                     mrTextCharacterProperties.moCaseMap = XML_small;
                 else
                     mrTextCharacterProperties.moCaseMap = XML_none;
+            }
+            break;
+        case OOX_TOKEN(w14, glow):
+        case OOX_TOKEN(w14, shadow):
+        case OOX_TOKEN(w14, reflection):
+        case OOX_TOKEN(w14, textOutline):
+        case OOX_TOKEN(w14, textFill):
+        case OOX_TOKEN(w14, scene3d):
+        case OOX_TOKEN(w14, props3d):
+        case OOX_TOKEN(w14, ligatures):
+        case OOX_TOKEN(w14, numForm):
+        case OOX_TOKEN(w14, numSpacing):
+        case OOX_TOKEN(w14, stylisticSets):
+        case OOX_TOKEN(w14, cntxtAlts):
+            {
+                return new TextEffectsContext( *this, aElementToken, mrTextCharacterProperties.maTextEffectsProperties );
             }
             break;
         default:

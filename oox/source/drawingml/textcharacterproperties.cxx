@@ -63,6 +63,8 @@ void TextCharacterProperties::assignUsed( const TextCharacterProperties& rSource
     moItalic.assignIfUsed( rSourceProps.moItalic );
     moUnderlineLineFollowText.assignIfUsed( rSourceProps.moUnderlineLineFollowText );
     moUnderlineFillFollowText.assignIfUsed( rSourceProps.moUnderlineFillFollowText );
+
+    maTextEffectsProperties = rSourceProps.maTextEffectsProperties;
 }
 
 void TextCharacterProperties::pushToPropMap( PropertyMap& rPropMap, const XmlFilterBase& rFilter, bool bUseOptional ) const
@@ -159,11 +161,30 @@ void TextCharacterProperties::pushToPropMap( PropertyMap& rPropMap, const XmlFil
     }
 }
 
-    void TextCharacterProperties::pushToPropSet( PropertySet& rPropSet, const XmlFilterBase& rFilter, bool bUseOptional ) const
+void pushToGrabBag( PropertySet& rPropSet, const std::vector<PropertyValue>& aVectorOfProperyValues )
+{
+    Sequence<PropertyValue> aGrabBag;
+    Any aAnyGrabBag = rPropSet.getAnyProperty(PROP_CharInteropGrabBag);
+    aAnyGrabBag >>= aGrabBag;
+
+    sal_Int32 nLength = aGrabBag.getLength();
+    aGrabBag.realloc(nLength + aVectorOfProperyValues.size());
+
+    for (size_t i = 0; i < aVectorOfProperyValues.size(); i++)
+    {
+        PropertyValue aPropertyValue = aVectorOfProperyValues[i];
+        aGrabBag[nLength + i] = aPropertyValue;
+    }
+
+    rPropSet.setAnyProperty(PROP_CharInteropGrabBag, makeAny(aGrabBag));
+}
+
+void TextCharacterProperties::pushToPropSet( PropertySet& rPropSet, const XmlFilterBase& rFilter, bool bUseOptional ) const
 {
     PropertyMap aPropMap;
     pushToPropMap( aPropMap, rFilter, bUseOptional );
     rPropSet.setProperties( aPropMap );
+    pushToGrabBag(rPropSet, maTextEffectsProperties);
 }
 
 float TextCharacterProperties::getCharHeightPoints( float fDefault ) const

@@ -71,6 +71,7 @@ CharFontPitchComplex
 CharHeight
 CharHeightAsian
 CharHeightComplex
+CharInteropGrabBag
 CharKerning
 CharLocale
 CharLocaleAsian

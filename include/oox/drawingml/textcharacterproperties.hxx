@@ -57,6 +57,8 @@ struct TextCharacterProperties
     OptValue< bool >    moUnderlineLineFollowText;
     OptValue< bool >    moUnderlineFillFollowText;
 
+    std::vector<css::beans::PropertyValue> maTextEffectsProperties;
+
     /** Overwrites all members that are explicitly set in rSourceProps. */
     void                assignUsed( const TextCharacterProperties& rSourceProps );
 
