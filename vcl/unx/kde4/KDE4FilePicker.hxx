@@ -40,7 +40,6 @@
 class KFileDialog;
 class QWidget;
 class QLayout;
-class KDEXLib;
 
 class ResMgr;
 
@@ -83,10 +82,8 @@ protected:
 
     bool allowRemoteUrls;
 
-    KDEXLib* _mXLib;
-
 public:
-    KDE4FilePicker( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >&, KDEXLib* );
+    KDE4FilePicker( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& );
     virtual ~KDE4FilePicker();
 
     // XFilePickerNotifier
