@@ -449,6 +449,93 @@ void Test::testSharedFormulasRefUpdateRange()
     m_pDoc->DeleteTab(0);
 }
 
+void Test::testSharedFormulasRefUpdateExternal()
+{
+    sc::AutoCalcSwitch aACSwitch(*m_pDoc, true); // turn on auto calc.
+    m_pDoc->InsertTab(0, "Formula");
+
+    // Launch an external document shell.
+    ScDocShellRef xExtDocSh = new ScDocShell;
+    OUString aExtDocName("file:///extdata.fake");
+
+    SfxMedium* pMed = new SfxMedium(aExtDocName, STREAM_STD_READWRITE);
+    xExtDocSh->DoInitNew(pMed);
+    ScDocument* pExtDoc = xExtDocSh->GetDocument();
+
+    // Populate A1:A3.
+    pExtDoc->InsertTab(0, "Data");
+    pExtDoc->SetString(ScAddress(0,0,0), "A");
+    pExtDoc->SetString(ScAddress(0,1,0), "B");
+    pExtDoc->SetString(ScAddress(0,2,0), "C");
+
+    // Insert formula cells in A7:A10 of the host document, referencing A1:A3
+    // of the external document.
+    m_pDoc->SetString(ScAddress(0,6,0), "='file:///extdata.fake'#$Data.A1");
+    m_pDoc->SetString(ScAddress(0,7,0), "='file:///extdata.fake'#$Data.A2");
+    m_pDoc->SetString(ScAddress(0,8,0), "='file:///extdata.fake'#$Data.A3");
+    m_pDoc->SetString(ScAddress(0,9,0), "=COUNTA('file:///extdata.fake'#$Data.A1:A3)");
+
+    // Check the formula results.
+    CPPUNIT_ASSERT_EQUAL(OUString("A"), m_pDoc->GetString(ScAddress(0,6,0)));
+    CPPUNIT_ASSERT_EQUAL(OUString("B"), m_pDoc->GetString(ScAddress(0,7,0)));
+    CPPUNIT_ASSERT_EQUAL(OUString("C"), m_pDoc->GetString(ScAddress(0,8,0)));
+    CPPUNIT_ASSERT_EQUAL(3.0, m_pDoc->GetValue(ScAddress(0,9,0)));
+
+    // Check the formulas too.
+    if (!checkFormula(*m_pDoc, ScAddress(0,6,0), "'file:///extdata.fake'#$Data.A1"))
+        CPPUNIT_FAIL("Wrong formula!");
+    if (!checkFormula(*m_pDoc, ScAddress(0,7,0), "'file:///extdata.fake'#$Data.A2"))
+        CPPUNIT_FAIL("Wrong formula!");
+    if (!checkFormula(*m_pDoc, ScAddress(0,8,0), "'file:///extdata.fake'#$Data.A3"))
+        CPPUNIT_FAIL("Wrong formula!");
+    if (!checkFormula(*m_pDoc, ScAddress(0,9,0), "COUNTA('file:///extdata.fake'#$Data.A1:A3)"))
+        CPPUNIT_FAIL("Wrong formula!");
+
+    // Delete rows 1 and 2. This should not change the references in the formula cells below.
+    ScDocFunc& rDocFunc = getDocShell().GetDocFunc();
+    ScMarkData aMark;
+    aMark.SelectOneTable(0);
+    rDocFunc.DeleteCells(ScRange(0,0,0,MAXCOL,1,0), &aMark, DEL_CELLSUP, true, true);
+
+    // Check the shifted formula cells now in A5:A8.
+    if (!checkFormula(*m_pDoc, ScAddress(0,4,0), "'file:///extdata.fake'#$Data.A1"))
+        CPPUNIT_FAIL("Wrong formula!");
+    if (!checkFormula(*m_pDoc, ScAddress(0,5,0), "'file:///extdata.fake'#$Data.A2"))
+        CPPUNIT_FAIL("Wrong formula!");
+    if (!checkFormula(*m_pDoc, ScAddress(0,6,0), "'file:///extdata.fake'#$Data.A3"))
+        CPPUNIT_FAIL("Wrong formula!");
+    if (!checkFormula(*m_pDoc, ScAddress(0,7,0), "COUNTA('file:///extdata.fake'#$Data.A1:A3)"))
+        CPPUNIT_FAIL("Wrong formula!");
+
+    // Undo and check the formulas again.
+    SfxUndoManager* pUndoMgr = m_pDoc->GetUndoManager();
+    CPPUNIT_ASSERT(pUndoMgr);
+    pUndoMgr->Undo();
+    if (!checkFormula(*m_pDoc, ScAddress(0,6,0), "'file:///extdata.fake'#$Data.A1"))
+        CPPUNIT_FAIL("Wrong formula!");
+    if (!checkFormula(*m_pDoc, ScAddress(0,7,0), "'file:///extdata.fake'#$Data.A2"))
+        CPPUNIT_FAIL("Wrong formula!");
+    if (!checkFormula(*m_pDoc, ScAddress(0,8,0), "'file:///extdata.fake'#$Data.A3"))
+        CPPUNIT_FAIL("Wrong formula!");
+    if (!checkFormula(*m_pDoc, ScAddress(0,9,0), "COUNTA('file:///extdata.fake'#$Data.A1:A3)"))
+        CPPUNIT_FAIL("Wrong formula!");
+
+    // Redo the row deletion and check the formulas again.
+    pUndoMgr->Redo();
+    if (!checkFormula(*m_pDoc, ScAddress(0,4,0), "'file:///extdata.fake'#$Data.A1"))
+        CPPUNIT_FAIL("Wrong formula!");
+    if (!checkFormula(*m_pDoc, ScAddress(0,5,0), "'file:///extdata.fake'#$Data.A2"))
+        CPPUNIT_FAIL("Wrong formula!");
+    if (!checkFormula(*m_pDoc, ScAddress(0,6,0), "'file:///extdata.fake'#$Data.A3"))
+        CPPUNIT_FAIL("Wrong formula!");
+    if (!checkFormula(*m_pDoc, ScAddress(0,7,0), "COUNTA('file:///extdata.fake'#$Data.A1:A3)"))
+        CPPUNIT_FAIL("Wrong formula!");
+
+    xExtDocSh->DoClose();
+
+    m_pDoc->DeleteTab(0);
+}
+
 void Test::testSharedFormulasDeleteRows()
 {
     m_pDoc->InsertTab(0, "Test");
