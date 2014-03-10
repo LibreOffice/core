@@ -70,6 +70,9 @@ long DdeConnection::GetError()
 }
 
 DdeConnection::DdeConnection( const OUString&, const OUString& )
+    : pService(NULL)
+    , pTopic(NULL)
+    , pImp(NULL)
 {
 }
 
