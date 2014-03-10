@@ -108,16 +108,6 @@ Sequence< sal_Int8 > SAL_CALL OQueryComposer::getImplementationId() throw (Runti
     return pId->getImplementationId();
 }
 
-// com::sun::star::lang::XUnoTunnel
-sal_Int64 SAL_CALL OQueryComposer::getSomething( const Sequence< sal_Int8 >& rId ) throw(RuntimeException)
-{
-    SAL_INFO("dbaccess", "OQueryComposer::getSomething" );
-    if (rId.getLength() == 16 && 0 == memcmp(getImplementationId().getConstArray(),  rId.getConstArray(), 16 ) )
-        return reinterpret_cast<sal_Int64>(this);
-
-    return 0;
-}
-
 Any SAL_CALL OQueryComposer::queryInterface( const Type & rType ) throw(RuntimeException, std::exception)
 {
     //SAL_INFO("dbaccess", "OQueryComposer::queryInterface" );
