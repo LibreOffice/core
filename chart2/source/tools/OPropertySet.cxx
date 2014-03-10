@@ -121,16 +121,11 @@ Sequence< uno::Type > SAL_CALL
     return aTypeList;
 }
 
-namespace
-{
-    class theOPropertySetImplementationId : public rtl::Static< UnoTunnelIdInit, theOPropertySetImplementationId > {};
-}
-
 Sequence< sal_Int8 > SAL_CALL
     OPropertySet::getImplementationId()
     throw (uno::RuntimeException, std::exception)
 {
-    return theOPropertySetImplementationId::get().getSeq();
+    return css::uno::Sequence<sal_Int8>();
 }
 
 // ____ XPropertyState ____

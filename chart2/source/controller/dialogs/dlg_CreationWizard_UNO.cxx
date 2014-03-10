@@ -141,14 +141,9 @@ uno::Sequence< uno::Type > CreationWizardUnoDlg::getTypes() throw(uno::RuntimeEx
     return aTypeList;
 }
 
-namespace
-{
-    class theCreationWizardUnoDlgImplementationId : public rtl::Static< UnoTunnelIdInit, theCreationWizardUnoDlgImplementationId > {};
-}
-
 uno::Sequence< sal_Int8 > SAL_CALL CreationWizardUnoDlg::getImplementationId( void ) throw( uno::RuntimeException, std::exception )
 {
-    return theCreationWizardUnoDlgImplementationId::get().getSeq();
+    return css::uno::Sequence<sal_Int8>();
 }
 
 // XTerminateListener

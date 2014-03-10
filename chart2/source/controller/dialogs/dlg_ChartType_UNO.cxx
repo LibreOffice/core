@@ -69,8 +69,7 @@ uno::Sequence< OUString > ChartTypeUnoDlg::getSupportedServiceNames_Static()
 }
 uno::Sequence< sal_Int8 > SAL_CALL ChartTypeUnoDlg::getImplementationId( void ) throw( uno::RuntimeException, std::exception )
 {
-    static ::cppu::OImplementationId aId;
-    return aId.getImplementationId();
+    return css::uno::Sequence<sal_Int8>();
 }
 void ChartTypeUnoDlg::implInitialize(const uno::Any& _rValue)
 {
