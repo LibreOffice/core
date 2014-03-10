@@ -52,17 +52,6 @@ OUString SWFDialog_getImplementationName ()
     return OUString ( SERVICE_NAME );
 }
 
-
-
-Sequence< sal_Int8 > SAL_CALL SWFDialog_getImplementationId()
-    throw(RuntimeException)
-{
-    static ::cppu::OImplementationId aId;
-    return aId.getImplementationId();
-}
-
-
-
 Sequence< OUString > SAL_CALL SWFDialog_getSupportedServiceNames()
     throw (RuntimeException)
 {
@@ -135,7 +124,7 @@ void SAL_CALL SWFDialog::release()
 Sequence< sal_Int8 > SAL_CALL SWFDialog::getImplementationId()
     throw(RuntimeException, std::exception)
 {
-    return SWFDialog_getImplementationId();
+    return css::uno::Sequence<sal_Int8>();
 }
 
 

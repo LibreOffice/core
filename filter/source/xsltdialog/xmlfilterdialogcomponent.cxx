@@ -216,8 +216,7 @@ namespace { struct lcl_ImplId : public rtl::Static< ::cppu::OImplementationId, l
 
 Sequence< sal_Int8 > SAL_CALL XMLFilterDialogComponent::getImplementationId( void ) throw( RuntimeException, std::exception )
 {
-    ::cppu::OImplementationId &rID = lcl_ImplId::get();
-    return rID.getImplementationId();
+    return css::uno::Sequence<sal_Int8>();
 }
 
 

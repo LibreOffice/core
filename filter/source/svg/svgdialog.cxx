@@ -52,18 +52,6 @@ OUString SVGDialog_getImplementationName ()
     return OUString ( SVG_DIALOG_IMPLEMENTATION_NAME );
 }
 
-
-
-Sequence< sal_Int8 > SAL_CALL SVGDialog_getImplementationId()
-    throw(RuntimeException)
-{
-    static const ::cppu::OImplementationId aId;
-
-    return( aId.getImplementationId() );
-}
-
-
-
 Sequence< OUString > SAL_CALL SVGDialog_getSupportedServiceNames()
     throw (RuntimeException)
 {
@@ -134,7 +122,7 @@ void SAL_CALL SVGDialog::release()
 Sequence< sal_Int8 > SAL_CALL SVGDialog::getImplementationId()
     throw(RuntimeException, std::exception)
 {
-    return SVGDialog_getImplementationId();
+    return css::uno::Sequence<sal_Int8>();
 }
 
 

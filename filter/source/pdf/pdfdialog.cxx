@@ -46,17 +46,6 @@ OUString PDFDialog_getImplementationName ()
     return OUString ( "com.sun.star.comp.PDF.PDFDialog" );
 }
 
-
-
-Sequence< sal_Int8 > SAL_CALL PDFDialog_getImplementationId()
-    throw(RuntimeException)
-{
-    static ::cppu::OImplementationId aId;
-    return aId.getImplementationId();
-}
-
-
-
 Sequence< OUString > SAL_CALL PDFDialog_getSupportedServiceNames()
     throw (RuntimeException)
 {
@@ -98,7 +87,7 @@ PDFDialog::~PDFDialog()
 Sequence< sal_Int8 > SAL_CALL PDFDialog::getImplementationId()
     throw(RuntimeException, std::exception)
 {
-    return PDFDialog_getImplementationId();
+    return css::uno::Sequence<sal_Int8>();
 }
 
 
