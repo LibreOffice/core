@@ -2050,8 +2050,7 @@ namespace { struct lcl_ImplId : public rtl::Static< ::cppu::OImplementationId, l
 uno::Sequence< sal_Int8 > SAL_CALL OWriteStream::getImplementationId()
         throw( uno::RuntimeException, std::exception )
 {
-    ::cppu::OImplementationId &rId = lcl_ImplId::get();
-    return rId.getImplementationId();
+    return css::uno::Sequence<sal_Int8>();
 }
 
 sal_Int32 SAL_CALL OWriteStream::readBytes( uno::Sequence< sal_Int8 >& aData, sal_Int32 nBytesToRead )

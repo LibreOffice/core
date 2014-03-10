@@ -2334,8 +2334,7 @@ namespace { struct lcl_ImplId : public rtl::Static< ::cppu::OImplementationId, l
 uno::Sequence< sal_Int8 > SAL_CALL OStorage::getImplementationId()
         throw( uno::RuntimeException, std::exception )
 {
-    ::cppu::OImplementationId &rID = lcl_ImplId::get();
-    return rID.getImplementationId();
+    return css::uno::Sequence<sal_Int8>();
 }
 
 //  XStorage
