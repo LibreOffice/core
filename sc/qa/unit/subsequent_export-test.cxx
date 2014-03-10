@@ -88,6 +88,7 @@ public:
     void testCellBordersXLSX();
 
     void testSharedFormulaExportXLS();
+    void testSharedFormulaExportXLSX();
 
     CPPUNIT_TEST_SUITE(ScExportTest);
     CPPUNIT_TEST(test);
@@ -113,6 +114,7 @@ public:
     CPPUNIT_TEST(testCellBordersXLS);
     CPPUNIT_TEST(testCellBordersXLSX);
     CPPUNIT_TEST(testSharedFormulaExportXLS);
+    CPPUNIT_TEST(testSharedFormulaExportXLSX);
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -1169,6 +1171,78 @@ void ScExportTest::testSharedFormulaExportXLS()
     pDoc = xDocSh2->GetDocument();
 
     // Check the content of the reloaded. This should be identical.
+    bRes = aTest.checkContent(pDoc);
+    CPPUNIT_ASSERT_MESSAGE("Content check on the reloaded document failed.", bRes);
+
+    xDocSh2->DoClose();
+}
+
+void ScExportTest::testSharedFormulaExportXLSX()
+{
+    struct
+    {
+        bool checkContent( ScDocument* pDoc )
+        {
+            // B2:B7 should show 1,2,3,4,5,6.
+            double fExpected = 1.0;
+            for (SCROW i = 1; i <= 6; ++i, ++fExpected)
+            {
+                ScAddress aPos(1,i,0);
+                double fVal = pDoc->GetValue(aPos);
+                if (fVal != fExpected)
+                {
+                    cerr << "Wrong value in B" << (i+1) << ": expected=" << fExpected << ", actual=" << fVal << endl;
+                    return false;
+                }
+            }
+
+            // C2:C7 should show 10,20,....,60.
+            fExpected = 10.0;
+            for (SCROW i = 1; i <= 6; ++i, fExpected+=10.0)
+            {
+                ScAddress aPos(2,i,0);
+                double fVal = pDoc->GetValue(aPos);
+                if (fVal != fExpected)
+                {
+                    cerr << "Wrong value in C" << (i+1) << ": expected=" << fExpected << ", actual=" << fVal << endl;
+                    return false;
+                }
+            }
+
+            // D2:D7 should show 1,2,...,6.
+            fExpected = 1.0;
+            for (SCROW i = 1; i <= 6; ++i, ++fExpected)
+            {
+                ScAddress aPos(3,i,0);
+                double fVal = pDoc->GetValue(aPos);
+                if (fVal != fExpected)
+                {
+                    cerr << "Wrong value in D" << (i+1) << ": expected=" << fExpected << ", actual=" << fVal << endl;
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
+    } aTest;
+
+    ScDocShellRef xDocSh = loadDoc("shared-formula/3d-reference.", XLSX);
+    CPPUNIT_ASSERT_MESSAGE("Failed to load file.", xDocSh.Is());
+    ScDocument* pDoc = xDocSh->GetDocument();
+    pDoc->CalcAll(); // Recalculate to flush all cached results.
+
+    bool bRes = aTest.checkContent(pDoc);
+    CPPUNIT_ASSERT_MESSAGE("Content check on the initial document failed.", bRes);
+
+    // Save and reload, and check the content again.
+    ScDocShellRef xDocSh2 = saveAndReload(xDocSh, XLSX);
+    xDocSh->DoClose();
+
+    CPPUNIT_ASSERT_MESSAGE("Failed to load file.", xDocSh2.Is());
+    pDoc = xDocSh2->GetDocument();
+    pDoc->CalcAll(); // Recalculate to flush all cached results.
+
     bRes = aTest.checkContent(pDoc);
     CPPUNIT_ASSERT_MESSAGE("Content check on the reloaded document failed.", bRes);
 
