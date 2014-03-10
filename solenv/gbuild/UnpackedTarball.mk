@@ -253,7 +253,7 @@ endef
 #
 # gb_UnpackedTarball_set_tarball unpacked tarball-name
 define gb_UnpackedTarball_set_tarball
-$(if $(findstring YES,$(USE_LIBRARY_BIN_TAR)),
+$(if $(USE_LIBRARY_BIN_TAR),
 $(if $(4),
 $(if $(shell "$(SRCDIR)/solenv/bin/bin_library_info.sh" -l "$(gb_UnpackedTarget_TARFILE_LOCATION)" -o "$(4)" -b "$(BUILDDIR)" -s "$(SRCDIR)" -t "$(2)" -m verify -p "$(OS)_$(CPUNAME)"),
 $(call gb_UnpackedTarball_set_tarball_internal,$(1),$(shell "$(SRCDIR)/solenv/bin/bin_library_info.sh" -l "$(gb_UnpackedTarget_TARFILE_LOCATION)" -o "$(4)" -b "$(BUILDDIR)" -s "$(SRCDIR)" -t "$(2)" -m verify -p "$(OS)_$(CPUNAME)"),$(3),$(4),in),\

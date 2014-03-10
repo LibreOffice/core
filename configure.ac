@@ -2090,9 +2090,9 @@ dnl Do we want to use pre-build binary tarball for recompile
 dnl ===================================================================
 
 if test "$enable_library_bin_tar" = "yes" ; then
-   USE_LIBRARY_BIN_TAR=YES
+   USE_LIBRARY_BIN_TAR=TRUE
 else
-   USE_LIBRARY_BIN_TAR=NO
+   USE_LIBRARY_BIN_TAR=
 fi
 AC_SUBST(USE_LIBRARY_BIN_TAR)
 
