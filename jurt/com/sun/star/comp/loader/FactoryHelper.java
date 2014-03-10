@@ -74,9 +74,6 @@ public class FactoryHelper {
         protected Constructor<?>       _constructor;
         protected String               _implName;
         protected String               _serviceName;
-        // keeps the Id for XTypeProvider
-        protected static Object _mutex= new Object();
-        private static byte[] _implementationId;
 
         protected Factory(Class<?> implClass,
                           String serviceName,
@@ -387,25 +384,7 @@ public class FactoryHelper {
         //XTypeProvider
         public byte[] getImplementationId()
         {
-            synchronized (_mutex)
-            {
-                if (_implementationId == null)
-                {
-                    int hash = hashCode();
-                    String sName= getClass().getName();
-                    byte[] arName= sName.getBytes();
-                    int nNameLength= arName.length;
-
-                    _implementationId= new byte[ 4 + nNameLength];
-                    _implementationId[0]= (byte)(hash & 0xff);
-                    _implementationId[1]= (byte)((hash >>> 8) & 0xff);
-                    _implementationId[2]= (byte)((hash >>> 16) & 0xff);
-                    _implementationId[3]= (byte)((hash >>>24) & 0xff);
-
-                    System.arraycopy(arName, 0, _implementationId, 4, nNameLength);
-                }
-            }
-            return _implementationId;
+            return new byte[0];
         }
         //XTypeProvider
         public com.sun.star.uno.Type[] getTypes()

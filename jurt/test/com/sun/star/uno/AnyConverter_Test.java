@@ -874,7 +874,7 @@ class ATypeProvider implements com.sun.star.lang.XTypeProvider
 
     public byte[] getImplementationId()
     {
-        return new byte[]{1,2,3};
+        return new byte[0];
     }
 
     public com.sun.star.uno.Type[] getTypes()
