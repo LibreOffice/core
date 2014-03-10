@@ -128,33 +128,9 @@ public class CallFormWizard
             return (booleanSupportsService);
         }
 
-        /** This method returns an array of bytes, that can be used to
-         * unambiguously distinguish between two sets of types, e.g.
-         * to realise hashing functionality when the object is introspected.
-         * Two objects that return the same ID also have to return
-         * the same set of types in getTypes(). If an unique
-         * implementation Id cannot be provided this method has to
-         * return an empty sequence. Important: If the object
-         * aggregates other objects the ID has to be unique for the
-         * whole combination of objects.
-         * @return Array of bytes, in order to distinguish between two sets.
-         */
         public byte[] getImplementationId()
         {
-            byte[] byteReturn =
-            {
-            };
-
-            try
-            {
-                byteReturn = (PropertyNames.EMPTY_STRING + this.hashCode()).getBytes();
-            }
-            catch (Exception exception)
-            {
-                System.err.println(exception);
-            }
-
-            return (byteReturn);
+            return new byte[0];
         }
 
         /** Return the class name of the component.
