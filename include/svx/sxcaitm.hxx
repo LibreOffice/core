@@ -31,7 +31,7 @@
 
 class SdrCaptionFixedAngleItem: public SdrOnOffItem {
 public:
-    SdrCaptionFixedAngleItem(sal_Bool bFix=sal_True): SdrOnOffItem(SDRATTR_CAPTIONFIXEDANGLE,bFix) {}
+    SdrCaptionFixedAngleItem(bool bFix=true): SdrOnOffItem(SDRATTR_CAPTIONFIXEDANGLE,bFix) {}
     SdrCaptionFixedAngleItem(SvStream& rIn) : SdrOnOffItem(SDRATTR_CAPTIONFIXEDANGLE,rIn)  {}
 };
 

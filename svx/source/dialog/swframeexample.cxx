@@ -45,7 +45,7 @@ SvxSwFrameExample::SvxSwFrameExample( Window *pParent, WinBits nStyle ) :
     nVRel       (RelOrientation::PRINT_AREA),
     nWrap       (WrapTextMode_NONE),
     nAnchor     (TextContentAnchorType_AT_PAGE),
-    bTrans      (sal_False),
+    bTrans      (false),
     aRelPos     (Point(0,0))
 {
     InitColors_Impl();

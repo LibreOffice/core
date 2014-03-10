@@ -62,14 +62,14 @@ public:
 
 class SVX_DLLPUBLIC Svx3DDoubleSidedItem : public SfxBoolItem {
 public:
-    Svx3DDoubleSidedItem(sal_Bool bVal = 0);
+    Svx3DDoubleSidedItem(bool bVal = false);
 };
 
 // #i28528#
 // Added extra Item (Bool) for chart2 to be able to show reduced line geometry
 class Svx3DReducedLineGeometryItem : public SfxBoolItem {
 public:
-    Svx3DReducedLineGeometryItem(sal_Bool bVal = 0);
+    Svx3DReducedLineGeometryItem(bool bVal = false);
     virtual SfxPoolItem* Create(SvStream& rIn, sal_uInt16 nItemVersion) const;
     virtual sal_uInt16 GetVersion(sal_uInt16 nFileFormatVersion) const;
 };
@@ -86,7 +86,7 @@ public:
 
 class Svx3DNormalsInvertItem : public SfxBoolItem {
 public:
-    SVX_DLLPUBLIC Svx3DNormalsInvertItem(sal_Bool bVal = 0);
+    SVX_DLLPUBLIC Svx3DNormalsInvertItem(bool bVal = false);
 };
 
 class SVX_DLLPUBLIC Svx3DTextureProjectionXItem : public SfxUInt16Item {
@@ -111,7 +111,7 @@ public:
 
 class Svx3DShadow3DItem : public SfxBoolItem {
 public:
-    SVX_DLLPUBLIC Svx3DShadow3DItem(sal_Bool bVal = 0);
+    SVX_DLLPUBLIC Svx3DShadow3DItem(bool bVal = false);
 };
 
 class Svx3DMaterialColorItem : public SvxColorItem {
@@ -156,7 +156,7 @@ public:
 
 class Svx3DTextureFilterItem : public SfxBoolItem {
 public:
-    SVX_DLLPUBLIC Svx3DTextureFilterItem(sal_Bool bVal = 0);
+    SVX_DLLPUBLIC Svx3DTextureFilterItem(bool bVal = false);
 };
 
 // Svx3D _3DSCENE_ Items
@@ -182,7 +182,7 @@ public:
 
 class Svx3DTwoSidedLightingItem : public SfxBoolItem {
 public:
-    SVX_DLLPUBLIC Svx3DTwoSidedLightingItem(sal_Bool bVal = 0);
+    SVX_DLLPUBLIC Svx3DTwoSidedLightingItem(bool bVal = false);
 };
 
 class SVX_DLLPUBLIC Svx3DLightcolor1Item : public SvxColorItem {
@@ -232,42 +232,42 @@ public:
 
 class SVX_DLLPUBLIC Svx3DLightOnOff1Item : public SfxBoolItem {
 public:
-    Svx3DLightOnOff1Item(sal_Bool bVal = 1);
+    Svx3DLightOnOff1Item(bool bVal = true);
 };
 
 class SVX_DLLPUBLIC Svx3DLightOnOff2Item : public SfxBoolItem {
 public:
-    Svx3DLightOnOff2Item(sal_Bool bVal = 0);
+    Svx3DLightOnOff2Item(bool bVal = false);
 };
 
 class SVX_DLLPUBLIC Svx3DLightOnOff3Item : public SfxBoolItem {
 public:
-    Svx3DLightOnOff3Item(sal_Bool bVal = 0);
+    Svx3DLightOnOff3Item(bool bVal = false);
 };
 
 class SVX_DLLPUBLIC Svx3DLightOnOff4Item : public SfxBoolItem {
 public:
-    Svx3DLightOnOff4Item(sal_Bool bVal = 0);
+    Svx3DLightOnOff4Item(bool bVal = false);
 };
 
 class SVX_DLLPUBLIC Svx3DLightOnOff5Item : public SfxBoolItem {
 public:
-    Svx3DLightOnOff5Item(sal_Bool bVal = 0);
+    Svx3DLightOnOff5Item(bool bVal = false);
 };
 
 class SVX_DLLPUBLIC Svx3DLightOnOff6Item : public SfxBoolItem {
 public:
-    Svx3DLightOnOff6Item(sal_Bool bVal = 0);
+    Svx3DLightOnOff6Item(bool bVal = false);
 };
 
 class SVX_DLLPUBLIC Svx3DLightOnOff7Item : public SfxBoolItem {
 public:
-    Svx3DLightOnOff7Item(sal_Bool bVal = 0);
+    Svx3DLightOnOff7Item(bool bVal = false);
 };
 
 class SVX_DLLPUBLIC Svx3DLightOnOff8Item : public SfxBoolItem {
 public:
-    Svx3DLightOnOff8Item(sal_Bool bVal = 0);
+    Svx3DLightOnOff8Item(bool bVal = false);
 };
 
 class SVX_DLLPUBLIC Svx3DLightDirection1Item : public SvxB3DVectorItem {
@@ -329,7 +329,7 @@ public:
 // #107245# Item to replace bExtrudeSmoothed and bLatheSmoothed
 class Svx3DSmoothNormalsItem : public SfxBoolItem {
 public:
-    Svx3DSmoothNormalsItem(sal_Bool bVal = 1);
+    Svx3DSmoothNormalsItem(bool bVal = true);
     virtual SfxPoolItem* Create(SvStream& rIn, sal_uInt16 nItemVersion) const;
     virtual sal_uInt16 GetVersion(sal_uInt16 nFileFormatVersion) const;
 };
@@ -337,7 +337,7 @@ public:
 // #107245# Item to replace bExtrudeSmoothFrontBack and bLatheSmoothFrontBack
 class Svx3DSmoothLidsItem : public SfxBoolItem {
 public:
-    Svx3DSmoothLidsItem(sal_Bool bVal = 0);
+    Svx3DSmoothLidsItem(bool bVal = false);
     virtual SfxPoolItem* Create(SvStream& rIn, sal_uInt16 nItemVersion) const;
     virtual sal_uInt16 GetVersion(sal_uInt16 nFileFormatVersion) const;
 };
@@ -345,7 +345,7 @@ public:
 // #107245# Item to replace bExtrudeCharacterMode and bLatheCharacterMode
 class Svx3DCharacterModeItem : public SfxBoolItem {
 public:
-    Svx3DCharacterModeItem(sal_Bool bVal = 0);
+    Svx3DCharacterModeItem(bool bVal = false);
     virtual SfxPoolItem* Create(SvStream& rIn, sal_uInt16 nItemVersion) const;
     virtual sal_uInt16 GetVersion(sal_uInt16 nFileFormatVersion) const;
 };
@@ -353,7 +353,7 @@ public:
 // #107245# Item to replace bExtrudeCloseFront and bLatheCloseFront
 class SVX_DLLPUBLIC Svx3DCloseFrontItem : public SfxBoolItem {
 public:
-    Svx3DCloseFrontItem(sal_Bool bVal = 1);
+    Svx3DCloseFrontItem(bool bVal = true);
     SVX_DLLPRIVATE virtual SfxPoolItem* Create(SvStream& rIn, sal_uInt16 nItemVersion) const;
     SVX_DLLPRIVATE virtual sal_uInt16 GetVersion(sal_uInt16 nFileFormatVersion) const;
 };
@@ -361,7 +361,7 @@ public:
 // #107245# Item to replace bExtrudeCloseBack and bLatheCloseBack
 class SVX_DLLPUBLIC Svx3DCloseBackItem : public SfxBoolItem {
 public:
-    Svx3DCloseBackItem(sal_Bool bVal = 1);
+    Svx3DCloseBackItem(bool bVal = true);
     SVX_DLLPRIVATE virtual SfxPoolItem* Create(SvStream& rIn, sal_uInt16 nItemVersion) const;
     SVX_DLLPRIVATE virtual sal_uInt16 GetVersion(sal_uInt16 nFileFormatVersion) const;
 };

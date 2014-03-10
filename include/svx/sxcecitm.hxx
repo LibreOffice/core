@@ -52,7 +52,7 @@ public:
 
 class SdrCaptionEscIsRelItem: public SdrYesNoItem {
 public:
-    SdrCaptionEscIsRelItem(sal_Bool bRel=sal_True): SdrYesNoItem(SDRATTR_CAPTIONESCISREL,bRel) {}
+    SdrCaptionEscIsRelItem(bool bRel=true): SdrYesNoItem(SDRATTR_CAPTIONESCISREL,bRel) {}
     SdrCaptionEscIsRelItem(SvStream& rIn) : SdrYesNoItem(SDRATTR_CAPTIONESCISREL,rIn)  {}
 };
 

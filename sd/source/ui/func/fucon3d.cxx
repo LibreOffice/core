@@ -121,7 +121,7 @@ E3dCompoundObject* FuConstruct3dObject::ImpCreateBasic3DShape()
 
             /* this is an open object, therefore it has to be handled double-
                sided by default */
-            p3DObj->SetMergedItem(Svx3DDoubleSidedItem(sal_True));
+            p3DObj->SetMergedItem(Svx3DDoubleSidedItem(true));
             break;
         }
 

@@ -56,7 +56,7 @@ Svx3DEndAngleItem::Svx3DEndAngleItem(sal_uInt32 nVal)
 :   SfxUInt32Item(SDRATTR_3DOBJ_END_ANGLE, nVal)
 {}
 
-Svx3DDoubleSidedItem::Svx3DDoubleSidedItem(sal_Bool bVal)
+Svx3DDoubleSidedItem::Svx3DDoubleSidedItem(bool bVal)
 :   SfxBoolItem(SDRATTR_3DOBJ_DOUBLE_SIDED, bVal)
 {}
 
@@ -64,7 +64,7 @@ Svx3DDoubleSidedItem::Svx3DDoubleSidedItem(sal_Bool bVal)
 // #i28528#
 // Added extra Item (Bool) for chart2 to be able to show reduced line geometry
 
-Svx3DReducedLineGeometryItem::Svx3DReducedLineGeometryItem(sal_Bool bVal)
+Svx3DReducedLineGeometryItem::Svx3DReducedLineGeometryItem(bool bVal)
 :   SfxBoolItem(SDRATTR_3DOBJ_REDUCED_LINE_GEOMETRY, bVal)
 {}
 
@@ -92,7 +92,7 @@ Svx3DNormalsKindItem::Svx3DNormalsKindItem(sal_uInt16 nVal)
 :   SfxUInt16Item(SDRATTR_3DOBJ_NORMALS_KIND, nVal)
 {}
 
-Svx3DNormalsInvertItem::Svx3DNormalsInvertItem(sal_Bool bVal)
+Svx3DNormalsInvertItem::Svx3DNormalsInvertItem(bool bVal)
 :   SfxBoolItem(SDRATTR_3DOBJ_NORMALS_INVERT, bVal)
 {}
 
@@ -104,7 +104,7 @@ Svx3DTextureProjectionYItem::Svx3DTextureProjectionYItem(sal_uInt16 nVal)
 :   SfxUInt16Item(SDRATTR_3DOBJ_TEXTURE_PROJ_Y, nVal)
 {}
 
-Svx3DShadow3DItem::Svx3DShadow3DItem(sal_Bool bVal)
+Svx3DShadow3DItem::Svx3DShadow3DItem(bool bVal)
 :   SfxBoolItem(SDRATTR_3DOBJ_SHADOW_3D, bVal)
 {}
 
@@ -132,7 +132,7 @@ Svx3DTextureModeItem::Svx3DTextureModeItem(sal_uInt16 nVal)
 :   SfxUInt16Item(SDRATTR_3DOBJ_TEXTURE_MODE, nVal)
 {}
 
-Svx3DTextureFilterItem::Svx3DTextureFilterItem(sal_Bool bVal)
+Svx3DTextureFilterItem::Svx3DTextureFilterItem(bool bVal)
 :   SfxBoolItem(SDRATTR_3DOBJ_TEXTURE_FILTER, bVal)
 {}
 
@@ -148,7 +148,7 @@ Svx3DFocalLengthItem::Svx3DFocalLengthItem(sal_uInt32 nVal)
 :   SfxUInt32Item(SDRATTR_3DSCENE_FOCAL_LENGTH, nVal)
 {}
 
-Svx3DTwoSidedLightingItem::Svx3DTwoSidedLightingItem(sal_Bool bVal)
+Svx3DTwoSidedLightingItem::Svx3DTwoSidedLightingItem(bool bVal)
 :   SfxBoolItem(SDRATTR_3DSCENE_TWO_SIDED_LIGHTING, bVal)
 {}
 
@@ -188,35 +188,35 @@ Svx3DAmbientcolorItem::Svx3DAmbientcolorItem(const Color& rCol)
 :   SvxColorItem(rCol, SDRATTR_3DSCENE_AMBIENTCOLOR)
 {}
 
-Svx3DLightOnOff1Item::Svx3DLightOnOff1Item(sal_Bool bVal)
+Svx3DLightOnOff1Item::Svx3DLightOnOff1Item(bool bVal)
 :   SfxBoolItem(SDRATTR_3DSCENE_LIGHTON_1, bVal)
 {}
 
-Svx3DLightOnOff2Item::Svx3DLightOnOff2Item(sal_Bool bVal)
+Svx3DLightOnOff2Item::Svx3DLightOnOff2Item(bool bVal)
 :   SfxBoolItem(SDRATTR_3DSCENE_LIGHTON_2, bVal)
 {}
 
-Svx3DLightOnOff3Item::Svx3DLightOnOff3Item(sal_Bool bVal)
+Svx3DLightOnOff3Item::Svx3DLightOnOff3Item(bool bVal)
 :   SfxBoolItem(SDRATTR_3DSCENE_LIGHTON_3, bVal)
 {}
 
-Svx3DLightOnOff4Item::Svx3DLightOnOff4Item(sal_Bool bVal)
+Svx3DLightOnOff4Item::Svx3DLightOnOff4Item(bool bVal)
 :   SfxBoolItem(SDRATTR_3DSCENE_LIGHTON_4, bVal)
 {}
 
-Svx3DLightOnOff5Item::Svx3DLightOnOff5Item(sal_Bool bVal)
+Svx3DLightOnOff5Item::Svx3DLightOnOff5Item(bool bVal)
 :   SfxBoolItem(SDRATTR_3DSCENE_LIGHTON_5, bVal)
 {}
 
-Svx3DLightOnOff6Item::Svx3DLightOnOff6Item(sal_Bool bVal)
+Svx3DLightOnOff6Item::Svx3DLightOnOff6Item(bool bVal)
 :   SfxBoolItem(SDRATTR_3DSCENE_LIGHTON_6, bVal)
 {}
 
-Svx3DLightOnOff7Item::Svx3DLightOnOff7Item(sal_Bool bVal)
+Svx3DLightOnOff7Item::Svx3DLightOnOff7Item(bool bVal)
 :   SfxBoolItem(SDRATTR_3DSCENE_LIGHTON_7, bVal)
 {}
 
-Svx3DLightOnOff8Item::Svx3DLightOnOff8Item(sal_Bool bVal)
+Svx3DLightOnOff8Item::Svx3DLightOnOff8Item(bool bVal)
 :   SfxBoolItem(SDRATTR_3DSCENE_LIGHTON_8, bVal)
 {}
 
@@ -263,7 +263,7 @@ Svx3DShadeModeItem::Svx3DShadeModeItem(sal_uInt16 nVal)
 
 // #107245#
 
-Svx3DSmoothNormalsItem::Svx3DSmoothNormalsItem(sal_Bool bVal)
+Svx3DSmoothNormalsItem::Svx3DSmoothNormalsItem(bool bVal)
 :   SfxBoolItem(SDRATTR_3DOBJ_SMOOTH_NORMALS, bVal)
 {}
 
@@ -288,7 +288,7 @@ SfxPoolItem* Svx3DSmoothNormalsItem::Create(SvStream& rIn, sal_uInt16 nItemVersi
 
 // #107245#
 
-Svx3DSmoothLidsItem::Svx3DSmoothLidsItem(sal_Bool bVal)
+Svx3DSmoothLidsItem::Svx3DSmoothLidsItem(bool bVal)
 :   SfxBoolItem(SDRATTR_3DOBJ_SMOOTH_LIDS, bVal)
 {}
 
@@ -313,7 +313,7 @@ SfxPoolItem* Svx3DSmoothLidsItem::Create(SvStream& rIn, sal_uInt16 nItemVersion)
 
 // #107245#
 
-Svx3DCharacterModeItem::Svx3DCharacterModeItem(sal_Bool bVal)
+Svx3DCharacterModeItem::Svx3DCharacterModeItem(bool bVal)
 :   SfxBoolItem(SDRATTR_3DOBJ_CHARACTER_MODE, bVal)
 {}
 
@@ -338,7 +338,7 @@ SfxPoolItem* Svx3DCharacterModeItem::Create(SvStream& rIn, sal_uInt16 nItemVersi
 
 // #107245#
 
-Svx3DCloseFrontItem::Svx3DCloseFrontItem(sal_Bool bVal)
+Svx3DCloseFrontItem::Svx3DCloseFrontItem(bool bVal)
 :   SfxBoolItem(SDRATTR_3DOBJ_CLOSE_FRONT, bVal)
 {}
 
@@ -363,7 +363,7 @@ SfxPoolItem* Svx3DCloseFrontItem::Create(SvStream& rIn, sal_uInt16 nItemVersion)
 
 // #107245#
 
-Svx3DCloseBackItem::Svx3DCloseBackItem(sal_Bool bVal)
+Svx3DCloseBackItem::Svx3DCloseBackItem(bool bVal)
 :   SfxBoolItem(SDRATTR_3DOBJ_CLOSE_BACK, bVal)
 {}
 

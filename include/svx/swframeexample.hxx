@@ -57,7 +57,7 @@ class SVX_DLLPUBLIC SvxSwFrameExample : public Window
 
     short       nWrap;
     short       nAnchor;
-    sal_Bool        bTrans;
+    bool        bTrans;
 
     Point       aRelPos;
 
@@ -78,13 +78,13 @@ public:
 
     inline void SetWrap(sal_uInt16 nW)          { nWrap     = nW; }
 
-    inline void SetHAlign(short nH)      { nHAlign   = nH; }
+    inline void SetHAlign(short nH)          { nHAlign   = nH; }
     inline void SetHoriRel(short nR)         { nHRel     = nR; }
 
-    inline void SetVAlign(short nV)      { nVAlign   = nV; }
+    inline void SetVAlign(short nV)          { nVAlign   = nV; }
     inline void SetVertRel(short nR)         { nVRel     = nR; }
 
-    inline void SetTransparent(sal_Bool bT)     { bTrans    = bT; }
+    inline void SetTransparent(bool bT)      { bTrans    = bT; }
     inline void SetAnchor(short nA)          { nAnchor   = nA; }
 
     void SetRelPos(const Point& rP);
