@@ -71,8 +71,7 @@ namespace pcr
 
     Sequence<sal_Int8> SAL_CALL OTabOrderDialog::getImplementationId(  ) throw(RuntimeException, std::exception)
     {
-        static ::cppu::OImplementationId aId;
-        return aId.getImplementationId();
+        return css::uno::Sequence<sal_Int8>();
     }
 
 

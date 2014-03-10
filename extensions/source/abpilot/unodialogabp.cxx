@@ -83,17 +83,7 @@ namespace abp
 
     Sequence<sal_Int8> SAL_CALL OABSPilotUno::getImplementationId(  ) throw(RuntimeException, std::exception)
     {
-        static ::cppu::OImplementationId* s_pId;
-        if ( !s_pId )
-        {
-            ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
-            if ( !s_pId )
-            {
-                static ::cppu::OImplementationId s_aId;
-                s_pId = &s_aId;
-            }
-        }
-        return s_pId->getImplementationId();
+        return css::uno::Sequence<sal_Int8>();
     }
 
 

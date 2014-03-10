@@ -653,17 +653,7 @@ Sequence< Type > SAL_CALL OleServer_Impl::getTypes( ) throw(RuntimeException)
 }
 Sequence< sal_Int8 > SAL_CALL OleServer_Impl::getImplementationId() throw(RuntimeException)
 {
-    static OImplementationId *pId = 0;
-    if( ! pId )
-    {
-        MutexGuard guard( Mutex::getGlobalMutex() );
-        if( ! pId )
-        {
-            static OImplementationId id( false );
-            pId = &id;
-        }
-    }
-    return (*pId).getImplementationId();
+    return css::uno::Sequence<sal_Int8>();
 }
 
 

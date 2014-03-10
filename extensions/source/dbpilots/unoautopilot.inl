@@ -32,8 +32,7 @@ OUnoAutoPilot<TYPE, SERVICEINFO>::OUnoAutoPilot(const ::com::sun::star::uno::Ref
 template <class TYPE, class SERVICEINFO>
 ::com::sun::star::uno::Sequence<sal_Int8> SAL_CALL OUnoAutoPilot<TYPE, SERVICEINFO>::getImplementationId(  ) throw(::com::sun::star::uno::RuntimeException, std::exception)
 {
-    static ::cppu::OImplementationId aId;
-    return aId.getImplementationId();
+    return css::uno::Sequence<sal_Int8>();
 }
 
 
