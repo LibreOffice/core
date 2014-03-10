@@ -28,6 +28,7 @@
 #include <com/sun/star/packages/zip/ZipConstants.hpp>
 #include <com/sun/star/embed/StorageFormats.hpp>
 #include <cppuhelper/supportsservice.hxx>
+#include <cppuhelper/typeprovider.hxx>
 #include <osl/diagnose.h>
 #include <osl/time.h>
 #include <rtl/digest.h>
@@ -57,7 +58,7 @@ using namespace ::com::sun::star;
 #define THROW_WHERE ""
 #endif
 
-namespace { struct lcl_CachedImplId : public rtl::Static< uno::Sequence < sal_Int8 >, lcl_CachedImplId > {}; }
+namespace { struct lcl_CachedImplId : public rtl::Static< cppu::OImplementationId, lcl_CachedImplId > {}; }
 
 ZipPackageFolder::ZipPackageFolder ( sal_Int32 nFormat,
                                      sal_Bool bAllowRemoveOnInsert )
@@ -74,9 +75,6 @@ ZipPackageFolder::ZipPackageFolder ( sal_Int32 nFormat,
     aEntry.nCompressedSize = 0;
     aEntry.nSize        = 0;
     aEntry.nOffset      = -1;
-    uno::Sequence < sal_Int8 > &rCachedImplId = lcl_CachedImplId::get();
-    if ( !rCachedImplId.getLength() )
-        rCachedImplId = getImplementationId();
 }
 
 ZipPackageFolder::~ZipPackageFolder()
@@ -178,9 +176,9 @@ void ZipPackageFolder::copyZipEntry( ZipEntry &rDest, const ZipEntry &rSource)
     rDest.nExtraLen         = rSource.nExtraLen;
 }
 
-const ::com::sun::star::uno::Sequence < sal_Int8 >& ZipPackageFolder::static_getImplementationId()
+::com::sun::star::uno::Sequence < sal_Int8 > ZipPackageFolder::static_getImplementationId()
 {
-    return lcl_CachedImplId::get();
+    return lcl_CachedImplId::get().getImplementationId();
 }
 
     // XNameContainer

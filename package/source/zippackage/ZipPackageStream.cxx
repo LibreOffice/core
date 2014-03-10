@@ -42,6 +42,7 @@
 #include <comphelper/seekableinput.hxx>
 #include <comphelper/storagehelper.hxx>
 #include <cppuhelper/supportsservice.hxx>
+#include <cppuhelper/typeprovider.hxx>
 
 #include <rtl/instance.hxx>
 
@@ -60,11 +61,11 @@ using namespace cppu;
 #define THROW_WHERE ""
 #endif
 
-namespace { struct lcl_CachedImplId : public rtl::Static< Sequence < sal_Int8 >, lcl_CachedImplId > {}; }
+namespace { struct lcl_CachedImplId : public rtl::Static< cppu::OImplementationId, lcl_CachedImplId > {}; }
 
-const ::com::sun::star::uno::Sequence < sal_Int8 >& ZipPackageStream::static_getImplementationId()
+::com::sun::star::uno::Sequence < sal_Int8 > ZipPackageStream::static_getImplementationId()
 {
-    return lcl_CachedImplId::get();
+    return lcl_CachedImplId::get().getImplementationId();
 }
 
 ZipPackageStream::ZipPackageStream ( ZipPackage & rNewPackage,
@@ -103,10 +104,6 @@ ZipPackageStream::ZipPackageStream ( ZipPackage & rNewPackage,
     aEntry.nOffset      = -1;
     aEntry.nPathLen     = -1;
     aEntry.nExtraLen    = -1;
-
-    Sequence < sal_Int8 > &rCachedImplId = lcl_CachedImplId::get();
-    if ( !rCachedImplId.getLength() )
-        rCachedImplId = getImplementationId();
 }
 
 ZipPackageStream::~ZipPackageStream( void )
