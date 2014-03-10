@@ -147,17 +147,7 @@ InteractionRequest::queryInterface( const uno::Type & rType )
 uno::Sequence< sal_Int8 > SAL_CALL InteractionRequest::getImplementationId()
     throw( uno::RuntimeException, std::exception )
 {
-    static cppu::OImplementationId* pId = NULL;
-      if ( !pId )
-      {
-        osl::Guard< osl::Mutex > aGuard( osl::Mutex::getGlobalMutex() );
-          if ( !pId )
-          {
-              static cppu::OImplementationId id( false );
-              pId = &id;
-          }
-      }
-      return (*pId).getImplementationId();
+    return css::uno::Sequence<sal_Int8>();
 }
 
 
@@ -299,17 +289,7 @@ InteractionAbort::queryInterface( const uno::Type & rType )
 uno::Sequence< sal_Int8 > SAL_CALL InteractionAbort::getImplementationId()
     throw( uno::RuntimeException, std::exception )
 {
-    static cppu::OImplementationId* pId = NULL;
-      if ( !pId )
-      {
-        osl::Guard< osl::Mutex > aGuard( osl::Mutex::getGlobalMutex() );
-          if ( !pId )
-          {
-              static cppu::OImplementationId id( false );
-              pId = &id;
-          }
-      }
-      return (*pId).getImplementationId();
+    return css::uno::Sequence<sal_Int8>();
 }
 
 
@@ -401,17 +381,7 @@ InteractionRetry::queryInterface( const uno::Type & rType )
 uno::Sequence< sal_Int8 > SAL_CALL InteractionRetry::getImplementationId()
     throw( uno::RuntimeException, std::exception )
 {
-    static cppu::OImplementationId* pId = NULL;
-      if ( !pId )
-      {
-        osl::Guard< osl::Mutex > aGuard( osl::Mutex::getGlobalMutex() );
-          if ( !pId )
-          {
-              static cppu::OImplementationId id( false );
-              pId = &id;
-          }
-      }
-      return (*pId).getImplementationId();
+    return css::uno::Sequence<sal_Int8>();
 }
 
 
@@ -503,17 +473,7 @@ InteractionApprove::queryInterface( const uno::Type & rType )
 uno::Sequence< sal_Int8 > SAL_CALL InteractionApprove::getImplementationId()
     throw( uno::RuntimeException, std::exception )
 {
-    static cppu::OImplementationId* pId = NULL;
-      if ( !pId )
-      {
-        osl::Guard< osl::Mutex > aGuard( osl::Mutex::getGlobalMutex() );
-          if ( !pId )
-          {
-              static cppu::OImplementationId id( false );
-              pId = &id;
-          }
-      }
-      return (*pId).getImplementationId();
+    return css::uno::Sequence<sal_Int8>();
 }
 
 
@@ -605,17 +565,7 @@ InteractionDisapprove::queryInterface( const uno::Type & rType )
 uno::Sequence< sal_Int8 > SAL_CALL InteractionDisapprove::getImplementationId()
     throw( uno::RuntimeException, std::exception )
 {
-    static cppu::OImplementationId* pId = NULL;
-      if ( !pId )
-      {
-        osl::Guard< osl::Mutex > aGuard( osl::Mutex::getGlobalMutex() );
-          if ( !pId )
-          {
-              static cppu::OImplementationId id( false );
-              pId = &id;
-          }
-      }
-      return (*pId).getImplementationId();
+    return css::uno::Sequence<sal_Int8>();
 }
 
 
@@ -709,17 +659,7 @@ uno::Sequence< sal_Int8 > SAL_CALL
 InteractionSupplyAuthentication::getImplementationId()
     throw( uno::RuntimeException, std::exception )
 {
-    static cppu::OImplementationId* pId = NULL;
-      if ( !pId )
-      {
-        osl::Guard< osl::Mutex > aGuard( osl::Mutex::getGlobalMutex() );
-          if ( !pId )
-          {
-              static cppu::OImplementationId id( false );
-              pId = &id;
-          }
-      }
-      return (*pId).getImplementationId();
+    return css::uno::Sequence<sal_Int8>();
 }
 
 
@@ -973,17 +913,7 @@ InteractionSupplyName::queryInterface( const uno::Type & rType )
 uno::Sequence< sal_Int8 > SAL_CALL InteractionSupplyName::getImplementationId()
     throw( uno::RuntimeException, std::exception )
 {
-    static cppu::OImplementationId* pId = NULL;
-      if ( !pId )
-      {
-        osl::Guard< osl::Mutex > aGuard( osl::Mutex::getGlobalMutex() );
-          if ( !pId )
-          {
-              static cppu::OImplementationId id( false );
-              pId = &id;
-          }
-      }
-      return (*pId).getImplementationId();
+    return css::uno::Sequence<sal_Int8>();
 }
 
 
@@ -1090,17 +1020,7 @@ uno::Sequence< sal_Int8 > SAL_CALL
 InteractionReplaceExistingData::getImplementationId()
     throw( uno::RuntimeException, std::exception )
 {
-    static cppu::OImplementationId* pId = NULL;
-      if ( !pId )
-      {
-        osl::Guard< osl::Mutex > aGuard( osl::Mutex::getGlobalMutex() );
-          if ( !pId )
-          {
-              static cppu::OImplementationId id( false );
-              pId = &id;
-          }
-      }
-      return (*pId).getImplementationId();
+    return css::uno::Sequence<sal_Int8>();
 }
 
 
