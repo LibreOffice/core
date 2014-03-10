@@ -956,10 +956,10 @@ void resetCrsrPropertyValue(const SfxItemPropertySimpleEntry& rEntry, SwPaM& rPa
     }
 }
 
-void InsertFile(SwUnoCrsr* pUnoCrsr,
-    const OUString& rURL,
-    const uno::Sequence< beans::PropertyValue >& rOptions
-    ) throw( lang::IllegalArgumentException, io::IOException, uno::RuntimeException )
+void InsertFile(SwUnoCrsr* pUnoCrsr, const OUString& rURL,
+    const uno::Sequence< beans::PropertyValue >& rOptions)
+    throw (lang::IllegalArgumentException, io::IOException,
+           uno::RuntimeException, std::exception)
 {
     SfxMedium* pMed = 0;
     SwDoc* pDoc = pUnoCrsr->GetDoc();

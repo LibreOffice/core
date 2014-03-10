@@ -97,8 +97,11 @@ namespace SwUnoCursorHelper
     void                        resetCrsrPropertyValue(const SfxItemPropertySimpleEntry& rEntry, SwPaM& rPam);
     void                        InsertFile(SwUnoCrsr* pUnoCrsr,
                                     const OUString& rURL,
-                                    const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& rOptions
-                                    ) throw( com::sun::star::lang::IllegalArgumentException, com::sun::star::io::IOException, com::sun::star::uno::RuntimeException );
+                                    const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& rOptions)
+        throw (com::sun::star::lang::IllegalArgumentException,
+               com::sun::star::io::IOException,
+               com::sun::star::uno::RuntimeException,
+               std::exception);
 
     void                        getNumberingProperty(
                                     SwPaM& rPam,
