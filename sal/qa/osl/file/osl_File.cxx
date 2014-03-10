@@ -1354,8 +1354,16 @@ namespace osl_FileBase
         ::rtl::OUString *pUStr_DirURL;
         ::rtl::OUString *pUStr_FileURL;
 
-        public:
-        createTempFile() :nError1(FileBase::E_None),nError2(FileBase::E_None) {}
+    public:
+        createTempFile()
+            : nError1(FileBase::E_None)
+            , nError2(FileBase::E_None)
+            , bOK(false)
+            , pHandle(NULL)
+            , pUStr_DirURL(NULL)
+            , pUStr_FileURL(NULL)
+        {
+        }
 
         // initialization
         void setUp()
