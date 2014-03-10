@@ -60,6 +60,8 @@ class SdtHelper
 
     /// Create and append the drawing::XControlShape, containing the various models.
     void createControlShape(com::sun::star::awt::Size aSize, com::sun::star::uno::Reference<com::sun::star::awt::XControlModel>);
+    void createControlShape(com::sun::star::awt::Size aSize, com::sun::star::uno::Reference<com::sun::star::awt::XControlModel>,
+                            com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue> rGrabBag);
 public:
     SdtHelper(DomainMapper_Impl& rDM_Impl);
     virtual ~SdtHelper();

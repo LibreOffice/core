@@ -12,6 +12,7 @@
 #include <com/sun/star/drawing/XControlShape.hpp>
 #include <com/sun/star/text/VertOrientation.hpp>
 
+#include <editeng/unoprnms.hxx>
 #include <vcl/outdev.hxx>
 #include <vcl/svapp.hxx>
 #include <unotools/datetime.hxx>
@@ -120,11 +121,25 @@ void SdtHelper::createDateControl(OUString& rContentText)
     else
         xPropertySet->setPropertyValue("HelpText", uno::makeAny(rContentText));
 
+    // append date format to grab bag
+    uno::Sequence<beans::PropertyValue> aGrabBag(3);
+    aGrabBag[0].Name = "OriginalDate";
+    aGrabBag[0].Value = uno::makeAny(aDate);
+    aGrabBag[1].Name = "OriginalContent";
+    aGrabBag[1].Value = uno::makeAny(rContentText);
+    aGrabBag[2].Name = "DateFormat";
+    aGrabBag[2].Value = uno::makeAny(sDateFormat);
+
     std::vector<OUString> aItems;
-    createControlShape(lcl_getOptimalWidth(m_rDM_Impl.GetStyleSheetTable(), rContentText, aItems), xControlModel);
+    createControlShape(lcl_getOptimalWidth(m_rDM_Impl.GetStyleSheetTable(), rContentText, aItems), xControlModel, aGrabBag);
 }
 
 void SdtHelper::createControlShape(awt::Size aSize, uno::Reference<awt::XControlModel> xControlModel)
+{
+    createControlShape(aSize, xControlModel, uno::Sequence<beans::PropertyValue>());
+}
+
+void SdtHelper::createControlShape(awt::Size aSize, uno::Reference<awt::XControlModel> xControlModel, uno::Sequence<beans::PropertyValue> rGrabBag)
 {
     uno::Reference<drawing::XControlShape> xControlShape(m_rDM_Impl.GetTextFactory()->createInstance("com.sun.star.drawing.ControlShape"), uno::UNO_QUERY);
     xControlShape->setSize(aSize);
@@ -132,6 +147,9 @@ void SdtHelper::createControlShape(awt::Size aSize, uno::Reference<awt::XControl
 
     uno::Reference<beans::XPropertySet> xPropertySet(xControlShape, uno::UNO_QUERY);
     xPropertySet->setPropertyValue("VertOrient", uno::makeAny(text::VertOrientation::CENTER));
+
+    if(rGrabBag.hasElements())
+        xPropertySet->setPropertyValue(UNO_NAME_MISC_OBJ_INTEROPGRABBAG, uno::makeAny(rGrabBag));
 
     uno::Reference<text::XTextContent> xTextContent(xControlShape, uno::UNO_QUERY);
     m_rDM_Impl.appendTextContent(xTextContent, uno::Sequence< beans::PropertyValue >());

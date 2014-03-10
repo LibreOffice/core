@@ -618,6 +618,7 @@ SfxItemPropertyMapEntry const * ImplGetSvxControlShapePropertyMap()
         // #i112587#
         { OUString(UNO_NAME_MISC_OBJ_PRINTABLE),    SDRATTR_OBJPRINTABLE            , ::getBooleanCppuType(),                      0,  0},
         { OUString("Visible"),                      SDRATTR_OBJVISIBLE              , ::getBooleanCppuType(),                      0,  0},
+        { OUString(UNO_NAME_MISC_OBJ_INTEROPGRABBAG),   OWN_ATTR_INTEROPGRABBAG,    ::getCppuType((::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >*)0),  0,  0},
         { OUString(), 0, css::uno::Type(), 0, 0 }
     };
 

@@ -3599,6 +3599,25 @@ void DocxAttributeOutput::WritePostponedFormControl(const SdrObject* pObject)
             {
                 // gather component properties
 
+                Date aOriginalDate(Date::EMPTY);
+                OUString sOriginalContent, sDateFormat;
+                uno::Sequence<beans::PropertyValue> aGrabBag;
+                uno::Reference<beans::XPropertySet> xShapePropertySet(pFormObj->getUnoShape(), uno::UNO_QUERY);
+                if (xShapePropertySet->getPropertyValue(UNO_NAME_MISC_OBJ_INTEROPGRABBAG) >>= aGrabBag)
+                    for (sal_Int32 i=0; i < aGrabBag.getLength(); ++i)
+                        if (aGrabBag[i].Name == "DateFormat")
+                            aGrabBag[i].Value >>= sDateFormat;
+                        else if (aGrabBag[i].Name == "OriginalContent")
+                            aGrabBag[i].Value >>= sOriginalContent;
+                        else if (aGrabBag[i].Name == "OriginalDate")
+                        {
+                            css::util::Date aUNODate;
+                            aGrabBag[i].Value >>= aUNODate;
+                            aOriginalDate.SetDay(aUNODate.Day);
+                            aOriginalDate.SetMonth(aUNODate.Month);
+                            aOriginalDate.SetYear(aUNODate.Year);
+                        }
+
                 uno::Reference<beans::XPropertySet> xPropertySet(xControlModel, uno::UNO_QUERY);
 
                 OString sDate;
@@ -3610,7 +3629,17 @@ void DocxAttributeOutput::WritePostponedFormControl(const SdrObject* pObject)
                     bHasDate = true;
                     Date aDate(aUNODate.Day, aUNODate.Month, aUNODate.Year);
                     sDate = DateToOString(aDate);
-                    aContentText = OUString::createFromAscii(DateToDDMMYYYYOString(aDate).getStr());
+
+                    if (aOriginalDate == aDate)
+                    {
+                        aContentText = sOriginalContent;
+                        // sDateFormat was extracted from the grab bag
+                    }
+                    else
+                    {
+                        aContentText = OUString::createFromAscii(DateToDDMMYYYYOString(aDate).getStr());
+                        sDateFormat = "dd/MM/yyyy";
+                    }
                 }
                 else
                     aContentText = xPropertySet->getPropertyValue("HelpText").get<OUString>();
@@ -3628,7 +3657,8 @@ void DocxAttributeOutput::WritePostponedFormControl(const SdrObject* pObject)
                     m_pSerializer->startElementNS(XML_w, XML_date, FSEND);
 
                 m_pSerializer->singleElementNS(XML_w, XML_dateFormat,
-                                               FSNS(XML_w, XML_val), "dd/MM/yyyy", //TODO: hardwired
+                                               FSNS(XML_w, XML_val),
+                                               rtl::OUStringToOString( sDateFormat, RTL_TEXTENCODING_UTF8 ).getStr(),
                                                FSEND);
                 m_pSerializer->singleElementNS(XML_w, XML_lid,
                                                FSNS(XML_w, XML_val), "en-US",      //TODO: hardwired

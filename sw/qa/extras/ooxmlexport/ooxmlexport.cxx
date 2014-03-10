@@ -2963,7 +2963,8 @@ DECLARE_OOXMLEXPORT_TEST(testDateControl, "date-control.docx")
     if (!pXmlDoc)
         return;
     assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:sdt/w:sdtPr/w:date", "fullDate", "2014-03-05T00:00:00Z");
-    assertXPathContent(pXmlDoc, "/w:document/w:body/w:p/w:sdt/w:sdtContent/w:r/w:t", "05/03/2014");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:sdt/w:sdtPr/w:date/w:dateFormat", "val", "dddd, dd' de 'MMMM' de 'yyyy");
+    assertXPathContent(pXmlDoc, "/w:document/w:body/w:p/w:sdt/w:sdtContent/w:r/w:t", "miércoles, 05 de marzo de 2014");
 
     // check imported control
     uno::Reference<drawing::XControlShape> xControl(getShape(1), uno::UNO_QUERY);
