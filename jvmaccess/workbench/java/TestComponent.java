@@ -46,13 +46,7 @@ public final class TestComponent implements XTypeProvider, XServiceInfo, XMain {
     }
 
     public byte[] getImplementationId() {
-        byte[] id = new byte[16];
-        int n = hashCode();
-        id[0] = (byte) (n & 0xFF);
-        id[1] = (byte) ((n >> 8) & 0xFF);
-        id[2] = (byte) ((n >> 16) & 0xFF);
-        id[3] = (byte) ((n >> 24) & 0xFF);
-        return id;
+        return new byte[0];
     }
 
     public String getImplementationName() {
