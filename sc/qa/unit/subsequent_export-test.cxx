@@ -89,6 +89,7 @@ public:
 
     void testSharedFormulaExportXLS();
     void testSharedFormulaExportXLSX();
+    void testSharedFormulaStringResultExportXLSX();
 
     CPPUNIT_TEST_SUITE(ScExportTest);
     CPPUNIT_TEST(test);
@@ -115,6 +116,7 @@ public:
     CPPUNIT_TEST(testCellBordersXLSX);
     CPPUNIT_TEST(testSharedFormulaExportXLS);
     CPPUNIT_TEST(testSharedFormulaExportXLSX);
+    CPPUNIT_TEST(testSharedFormulaStringResultExportXLSX);
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -1242,6 +1244,74 @@ void ScExportTest::testSharedFormulaExportXLSX()
     CPPUNIT_ASSERT_MESSAGE("Failed to load file.", xDocSh2.Is());
     pDoc = xDocSh2->GetDocument();
     pDoc->CalcAll(); // Recalculate to flush all cached results.
+
+    bRes = aTest.checkContent(pDoc);
+    CPPUNIT_ASSERT_MESSAGE("Content check on the reloaded document failed.", bRes);
+
+    xDocSh2->DoClose();
+}
+
+void ScExportTest::testSharedFormulaStringResultExportXLSX()
+{
+    struct
+    {
+        bool checkContent( ScDocument* pDoc )
+        {
+            {
+                // B2:B7 should show A,B,....,F.
+                const char* expected[] = { "A", "B", "C", "D", "E", "F" };
+                for (SCROW i = 0; i <= 5; ++i)
+                {
+                    ScAddress aPos(1,i+1,0);
+                    OUString aStr = pDoc->GetString(aPos);
+                    OUString aExpected = OUString::createFromAscii(expected[i]);
+                    if (aStr != aExpected)
+                    {
+                        cerr << "Wrong value in B" << (i+2) << ": expected='" << aExpected << "', actual='" << aStr << "'" << endl;
+                        return false;
+                    }
+                }
+            }
+
+            {
+                // C2:C7 should show AA,BB,....,FF.
+                const char* expected[] = { "AA", "BB", "CC", "DD", "EE", "FF" };
+                for (SCROW i = 0; i <= 5; ++i)
+                {
+                    ScAddress aPos(2,i+1,0);
+                    OUString aStr = pDoc->GetString(aPos);
+                    OUString aExpected = OUString::createFromAscii(expected[i]);
+                    if (aStr != aExpected)
+                    {
+                        cerr << "Wrong value in C" << (i+2) << ": expected='" << aExpected << "', actual='" << aStr << "'" << endl;
+                        return false;
+                    }
+                }
+            }
+
+            return true;
+        }
+
+    } aTest;
+
+    ScDocShellRef xDocSh = loadDoc("shared-formula/text-results.", XLSX);
+    CPPUNIT_ASSERT_MESSAGE("Failed to load file.", xDocSh.Is());
+    ScDocument* pDoc = xDocSh->GetDocument();
+
+    // Check content without re-calculation, to test cached formula results.
+    bool bRes = aTest.checkContent(pDoc);
+    CPPUNIT_ASSERT_MESSAGE("Content check on the initial document failed.", bRes);
+
+    // Now, re-calculate and check the results.
+    pDoc->CalcAll();
+    bRes = aTest.checkContent(pDoc);
+    CPPUNIT_ASSERT_MESSAGE("Content check on the initial recalculated document failed.", bRes);
+
+    // Reload and check again.
+    ScDocShellRef xDocSh2 = saveAndReload(xDocSh, XLSX);
+    xDocSh->DoClose();
+    CPPUNIT_ASSERT_MESSAGE("Failed to re-load file.", xDocSh2.Is());
+    pDoc = xDocSh2->GetDocument();
 
     bRes = aTest.checkContent(pDoc);
     CPPUNIT_ASSERT_MESSAGE("Content check on the reloaded document failed.", bRes);
