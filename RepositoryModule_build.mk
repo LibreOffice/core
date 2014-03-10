@@ -56,7 +56,7 @@ $(eval $(call gb_Module_add_moduledirs,cross_toolset,\
 	ure \
 	xmlreader \
 	$(call gb_Helper_optional_for_host,DESKTOP, \
-		$(if $(filter YES,$(WITH_GALLERY_BUILD)), \
+		$(if $(WITH_GALLERY_BUILD), \
 			avmedia \
 			basebmp \
 			basic \

@@ -1371,9 +1371,8 @@ AC_ARG_WITH(linked-git,
 AC_ARG_WITH(galleries,
     AS_HELP_STRING([--with-galleries],
         [Specify how galleries should be built. It is possible either to
-         build these internally from source ("build"), or to (optionally
-         download and) unpack them them from a package ("package"), or
-         to disable them ("no")]),
+         build these internally from source ("build"),
+         or to disable them ("no")]),
 )
 
 AC_ARG_WITH(theme,
@@ -2401,11 +2400,8 @@ dnl ===================================================================
 AC_MSG_CHECKING([how to build and package galleries])
 if test -n "${with_galleries}"; then
     if test "$with_galleries" = "build"; then
-        WITH_GALLERY_BUILD=YES
+        WITH_GALLERY_BUILD=TRUE
         AC_MSG_RESULT([build from source images internally])
-    elif test "$with_galleries" = "package"; then
-        WITH_GALLERY_BUILD=PACKAGE
-        AC_MSG_ERROR([FIXME - implement build from pre-compiled package])
     elif test "$with_galleries" = "no"; then
         WITH_GALLERY_BUILD=
         AC_MSG_RESULT([disable non-internal gallery build])
@@ -2414,7 +2410,7 @@ if test -n "${with_galleries}"; then
     fi
 else
     if test $_os != iOS -a $_os != Android; then
-        WITH_GALLERY_BUILD=YES
+        WITH_GALLERY_BUILD=TRUE
         AC_MSG_RESULT([internal src images for desktop])
     else
         WITH_GALLERY_BUILD=

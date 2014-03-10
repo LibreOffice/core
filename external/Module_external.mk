@@ -92,7 +92,7 @@ $(eval $(call gb_Module_add_moduledirs,external,\
 	$(call gb_Helper_optional,XSLTML,xsltml) \
 	$(call gb_Helper_optional,ZLIB,zlib) \
 	$(call gb_Helper_optional_for_host,DESKTOP, \
-		$(if $(filter YES,$(WITH_GALLERY_BUILD)), \
+		$(if $(WITH_GALLERY_BUILD), \
 			$(call gb_Helper_optional,HARFBUZZ,harfbuzz) \
 			$(call gb_Helper_optional,LCMS2,lcms2) \
 			$(call gb_Helper_optional,NSS,nss) \
