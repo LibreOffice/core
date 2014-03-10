@@ -53,10 +53,19 @@ class DBSaveData
 public:
     DBSaveData( Edit& rEd, CheckBox& rHdr, CheckBox& rSize, CheckBox& rFmt,
                             CheckBox& rStrip, ScRange& rArea )
-        : rEdAssign(rEd),
-          rBtnHeader(rHdr), rBtnSize(rSize), rBtnFormat(rFmt), rBtnStrip(rStrip),
-          rCurArea(rArea),
-          bHeader(false), bSize(false), bFormat(false), bDirty(false) {}
+        : rEdAssign(rEd)
+        , rBtnHeader(rHdr)
+        , rBtnSize(rSize)
+        , rBtnFormat(rFmt)
+        , rBtnStrip(rStrip)
+        , rCurArea(rArea)
+        , bHeader(false)
+        , bSize(false)
+        , bFormat(false)
+        , bStrip(false)
+        , bDirty(false)
+    {
+    }
     void Save();
     void Restore();
 
