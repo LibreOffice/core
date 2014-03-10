@@ -125,7 +125,6 @@ RMCXTLIB=-lrmcxt
 .ENDIF			# "$(GUI)$(COM)"=="WNTGCC"
 BTSTRPLIB=-lbtstrp
 BTSTRPDTLIB=-lbootstrpdt$(DLLPOSTFIX)
-SOLDEPLIB=-lsoldep$(DLLPOSTFIX)
 TRANSEXLIB=-ltransex
 OTXLIB=-lotx_ind
 OSXLIB=-losx
@@ -393,7 +392,6 @@ FWELIB=ifwe.lib
 FWILIB=ifwi.lib
 BTSTRPLIB=btstrp.lib
 BTSTRPDTLIB=bootstrpdt.lib
-SOLDEPLIB=soldep.lib
 TRANSEXLIB=transex.lib
 ICOLIB=icom.lib
 SVTOOLLIB=svtool.lib

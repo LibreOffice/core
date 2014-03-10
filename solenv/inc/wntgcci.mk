@@ -94,7 +94,6 @@ MODULES_WITH_WARNINGS := \
     extensions \
     lingu \
     r_tools \
-    soldep \
     starmath \
     sw \
     xmlsecurity
