@@ -389,16 +389,11 @@ void SvxNumberFormatShell::GetOptions( const OUString&  rFormat,
 
     if(nFmtKey != NUMBERFORMAT_ENTRY_NOT_FOUND)
     {
-        if ( nFmtKey != NUMBERFORMAT_ENTRY_NOT_FOUND )
-        {
-            pFormatter->GetFormatSpecialInfo( nFmtKey,
-                                              rThousand, rNegRed,
-                                              rPrecision, rLeadingZeroes );
+        pFormatter->GetFormatSpecialInfo( nFmtKey,
+                                          rThousand, rNegRed,
+                                          rPrecision, rLeadingZeroes );
 
-            CategoryToPos_Impl( pFormatter->GetType( nFmtKey ), rCatLbPos );
-        }
-        else
-            rCatLbPos = CAT_USERDEFINED;
+        CategoryToPos_Impl( pFormatter->GetType( nFmtKey ), rCatLbPos );
     }
     else
     {
