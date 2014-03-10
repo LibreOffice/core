@@ -58,13 +58,14 @@ friend class ErrorInfo;
 };
 
 EDcrData::EDcrData()
+    : pFirstHdl(0)
+    , pFirstCtx(0)
+    , pDsp(0)
+    , bIsWindowDsp(false)
+    , nNextDcr(0)
 {
     for(sal_uInt16 n=0;n<ERRCODE_DYNAMIC_COUNT;n++)
         ppDcr[n]=0;
-    nNextDcr=0;
-    pFirstHdl=0;
-    pDsp=0;
-    pFirstCtx=0;
 }
 
 EDcrData *EDcrData::GetData()
