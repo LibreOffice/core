@@ -145,17 +145,7 @@ css::uno::Sequence< sal_Int8 > SAL_CALL FTPContent::getImplementationId()
     throw( css::uno::RuntimeException,
            std::exception )
 {
-    static cppu::OImplementationId* pId = NULL;
-      if ( !pId )
-      {
-        osl::Guard< osl::Mutex > aGuard( osl::Mutex::getGlobalMutex() );
-          if ( !pId )
-          {
-              static cppu::OImplementationId id( false );
-              pId = &id;
-          }
-      }
-      return (*pId).getImplementationId();
+    return css::uno::Sequence<sal_Int8>();
 }
 
 css::uno::Sequence< css::uno::Type > SAL_CALL FTPContent::getTypes()

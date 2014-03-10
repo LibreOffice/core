@@ -207,7 +207,7 @@ uno::Sequence< uno::Type > SAL_CALL Storage::getTypes()
 uno::Sequence< sal_Int8 > SAL_CALL Storage::getImplementationId()
     throw ( uno::RuntimeException, std::exception )
 {
-    return m_xWrappedTypeProv->getImplementationId();
+    return css::uno::Sequence<sal_Int8>();
 }
 
 
@@ -670,7 +670,7 @@ uno::Sequence< uno::Type > SAL_CALL OutputStream::getTypes()
 uno::Sequence< sal_Int8 > SAL_CALL OutputStream::getImplementationId()
     throw ( uno::RuntimeException, std::exception )
 {
-    return m_xWrappedTypeProv->getImplementationId();
+    return css::uno::Sequence<sal_Int8>();
 }
 
 
@@ -865,7 +865,7 @@ uno::Sequence< uno::Type > SAL_CALL Stream::getTypes()
 uno::Sequence< sal_Int8 > SAL_CALL Stream::getImplementationId()
     throw ( uno::RuntimeException, std::exception )
 {
-    return m_xWrappedTypeProv->getImplementationId();
+    return css::uno::Sequence<sal_Int8>();
 }
 
 
