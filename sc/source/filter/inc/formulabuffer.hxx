@@ -77,13 +77,19 @@ public:
         TokenRangeAddressItem( const TokenAddressItem& rTokenAndAddress, const ::com::sun::star::table::CellRangeAddress& rCellRangeAddress ) : maTokenAndAddress( rTokenAndAddress ), maCellRangeAddress( rCellRangeAddress ) {}
     };
 
+    struct FormulaValue
+    {
+        com::sun::star::table::CellAddress maCellAddress;
+        OUString maValueStr;
+        sal_Int32 mnCellType;
+    };
     typedef std::pair<com::sun::star::table::CellAddress, double> ValueAddressPair;
 
     struct SheetItem
     {
         std::vector<TokenAddressItem>* mpCellFormulas;
         std::vector<TokenRangeAddressItem>* mpArrayFormulas;
-        std::vector<ValueAddressPair>* mpCellFormulaValues;
+        std::vector<FormulaValue>* mpCellFormulaValues;
         std::vector<SharedFormulaEntry>* mpSharedFormulaEntries;
         std::vector<SharedFormulaDesc>* mpSharedFormulaIDs;
 
@@ -98,7 +104,7 @@ private:
     typedef ::std::vector< std::vector<SharedFormulaDesc> > SheetToSharedFormulaid;
     // sheet -> stuff needed to create shared formulae
     typedef ::std::vector< std::vector<SharedFormulaEntry> >  SheetToFormulaEntryArray;
-    typedef ::std::vector< std::vector<ValueAddressPair> > FormulaValueArray;
+    typedef ::std::vector< std::vector<FormulaValue> > FormulaValueArray;
 
     osl::Mutex maMtxData;
     FormulaDataArray         maCellFormulas;
@@ -118,8 +124,9 @@ public:
         const ::com::sun::star::table::CellAddress& rAddress, sal_Int32 nSharedId,
         const OUString& rCellValue, sal_Int32 nValueType );
 
-    void                setCellFormulaValue( const ::css::table::CellAddress& rAddress,
-                                             double fValue );
+    void setCellFormulaValue(
+        const css::table::CellAddress& rAddress, const OUString& rValueStr, sal_Int32 nCellType );
+
     void                setCellArrayFormula( const ::css::table::CellRangeAddress& rRangeAddress,
                                              const ::css::table::CellAddress& rTokenAddress,
                                              const OUString& );

@@ -325,8 +325,9 @@ public:
         const com::sun::star::table::CellRangeAddress& rRange,
         sal_Int32 nSharedId, const OUString& rTokens );
 
-    void                setCellFormulaValue( const ::com::sun::star::table::CellAddress& rAddress,
-                            double fValue  );
+    void setCellFormulaValue(
+        const css::table::CellAddress& rAddress, const OUString& rValueStr, sal_Int32 nCellType );
+
 private:
     WorksheetGlobals&   mrSheetGlob;
 };

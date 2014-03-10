@@ -161,8 +161,8 @@ void SheetDataContext::onEndElement()
 
                 // If a number cell has some preloaded value, stick it into the buffer
                 // but do this only for real cell formulas (not array, shared etc.)
-                if( !( maCellValue.isEmpty() ) && ( maCellData.mnCellType == XML_n ) )
-                    setCellFormulaValue( maCellData.maCellAddr, maCellValue.toDouble() );
+                if (!maCellValue.isEmpty())
+                    setCellFormulaValue(maCellData.maCellAddr, maCellValue, maCellData.mnCellType);
                 break;
 
             case XML_shared:

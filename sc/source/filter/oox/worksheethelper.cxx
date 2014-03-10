@@ -1567,10 +1567,10 @@ void WorksheetHelper::putValue( const CellAddress& rAddress, double fValue )
     getDocImport().setNumericCell(aAddress, fValue);
 }
 
-void WorksheetHelper::setCellFormulaValue( const ::com::sun::star::table::CellAddress& rAddress,
-                            double fValue  )
+void WorksheetHelper::setCellFormulaValue(
+    const css::table::CellAddress& rAddress, const OUString& rValueStr, sal_Int32 nCellType )
 {
-    getFormulaBuffer().setCellFormulaValue( rAddress, fValue );
+    getFormulaBuffer().setCellFormulaValue(rAddress, rValueStr, nCellType);
 }
 
 void WorksheetHelper::putString( const CellAddress& rAddress, const OUString& rText )
