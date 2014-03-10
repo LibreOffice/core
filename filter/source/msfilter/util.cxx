@@ -599,7 +599,7 @@ EquationResult Read_SubF_Combined(WW8ReadFieldParams& rReadParam)
         {
             break;
         }
-        rReadParam.SkipToNextToken();
+        (void)rReadParam.SkipToNextToken();
         // intentional fall-through
     case -2:
         {
