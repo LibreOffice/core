@@ -56,26 +56,7 @@ ________________________________________________________________________________
 #define PRIVATE_DEFINE_XTYPEPROVIDER_GETIMPLEMENTATIONID( CLASS )                                                                               \
     ::com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL CLASS::getImplementationId() throw( ::com::sun::star::uno::RuntimeException, std::exception )          \
     {                                                                                                                                           \
-        /* Create one Id for all instances of this class.                                               */                                      \
-        /* Use ethernet address to do this! (sal_True)                                                  */                                      \
-        /* Optimize this method                                                                         */                                      \
-        /* We initialize a static variable only one time. And we don't must use a mutex at every call!  */                                      \
-        /* For the first call; pID is NULL - for the second call pID is different from NULL!            */                                      \
-        static ::cppu::OImplementationId* pID = NULL ;                                                                                          \
-        if ( pID == NULL )                                                                                                                      \
-        {                                                                                                                                       \
-            /* Ready for multithreading; get global mutex for first call of this method only! see before   */                                   \
-            ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );                                                                         \
-            /* Control these pointer again ... it can be, that another instance will be faster then these! */                                   \
-            if ( pID == NULL )                                                                                                                  \
-            {                                                                                                                                   \
-                /* Create a new static ID ... */                                                                                                \
-                static ::cppu::OImplementationId aID( false );                                                                                  \
-                /* ... and set his address to static pointer! */                                                                                \
-                pID = &aID ;                                                                                                                    \
-            }                                                                                                                                   \
-        }                                                                                                                                       \
-        return pID->getImplementationId();                                                                                                      \
+        return css::uno::Sequence<sal_Int8>();                                                                                                  \
     }
 
 
