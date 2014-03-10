@@ -342,21 +342,7 @@ uno::Sequence< uno::Type > SAL_CALL FSStorage::getTypes()
 uno::Sequence< sal_Int8 > SAL_CALL FSStorage::getImplementationId()
         throw( uno::RuntimeException, std::exception )
 {
-    static ::cppu::OImplementationId* pID = NULL ;
-
-    if ( pID == NULL )
-    {
-        ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() ) ;
-
-        if ( pID == NULL )
-        {
-            static ::cppu::OImplementationId aID( false ) ;
-            pID = &aID ;
-        }
-    }
-
-    return pID->getImplementationId() ;
-
+    return css::uno::Sequence<sal_Int8>();
 }
 
 //  XStorage
