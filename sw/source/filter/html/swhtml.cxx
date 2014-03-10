@@ -4148,6 +4148,7 @@ void SwHTMLParser::NewTxtFmtColl( int nToken, sal_uInt16 nColl )
         // Fuer dem Fall, dass ein CLASS angegeben ist, loeschen wir
         // es damit wir nicht die CLASS der PRE-Vorlage bekommen.
         aClass = aEmptyOUStr;
+        // fall-through
     case HTML_BLOCKQUOTE_ON:
     case HTML_BLOCKQUOTE30_ON:
     case HTML_PREFORMTXT_ON:
