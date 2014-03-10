@@ -290,7 +290,7 @@ public class TestComponent {
         }
 
         public byte[] getImplementationId() throws com.sun.star.uno.RuntimeException {
-            return toString().getBytes();
+            return new byte[0];
         }
     }
 
@@ -970,7 +970,7 @@ public class TestComponent {
         }
 
         public byte[] getImplementationId() throws com.sun.star.uno.RuntimeException {
-            return toString().getBytes();
+            return new byte[0];
         }
 
         //XBridgeTest2
