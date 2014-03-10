@@ -122,17 +122,21 @@ ContextHandlerRef GraphicalObjectFrameContext::onCreateContext( sal_Int32 aEleme
         case XML_graphicData :          // CT_GraphicalObjectData
         {
             OUString sUri( rAttribs.getString( XML_uri ).get() );
-            if ( sUri == "http://schemas.openxmlformats.org/presentationml/2006/ole" )
+            if ( sUri == "http://schemas.openxmlformats.org/presentationml/2006/ole" ||
+                    sUri == "http://purl.oclc.org/ooxml/presentationml/ole" )
                 return new OleObjectGraphicDataContext( *this, mpShapePtr );
-            else if ( sUri == "http://schemas.openxmlformats.org/drawingml/2006/diagram" )
+            else if ( sUri == "http://schemas.openxmlformats.org/drawingml/2006/diagram" ||
+                    sUri == "http://purl.oclc.org/ooxml/drawingml/diagram" )
                 return new DiagramGraphicDataContext( *this, mpShapePtr );
-            else if ( sUri == "http://schemas.openxmlformats.org/drawingml/2006/chart" )
+            else if ( sUri == "http://schemas.openxmlformats.org/drawingml/2006/chart" ||
+                    sUri == "http://purl.oclc.org/ooxml/drawingml/chart" )
                 return new ChartGraphicDataContext( *this, mpShapePtr, mbEmbedShapesInChart );
-            else if ( sUri.equalsAscii( "http://schemas.openxmlformats.org/drawingml/2006/table" ) )
+            else if ( sUri == "http://schemas.openxmlformats.org/drawingml/2006/table" ||
+                    sUri == "http://purl.oclc.org/ooxml/drawingml/table" )
                 return new table::TableContext( *this, mpShapePtr );
             else
             {
-                OSL_TRACE( "OOX: Ignore graphicsData of %s", OUSTRING_TO_CSTR( sUri ) );
+                SAL_WARN("oox", "OOX: Ignore graphicsData of :" << sUri );
                 return 0;
             }
         }
