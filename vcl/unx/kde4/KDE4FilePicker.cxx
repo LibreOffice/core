@@ -38,7 +38,6 @@
 
 #include "KDE4FilePicker.hxx"
 #include "FPServiceInfo.hxx"
-#include "KDEXLib.hxx"
 
 /* ********* Hack, but needed because of conflicting types... */
 #define Region QtXRegion
@@ -114,11 +113,10 @@ QString toQString(const OUString& s)
 // KDE4FilePicker
 //////////////////////////////////////////////////////////////////////////
 
-KDE4FilePicker::KDE4FilePicker( const uno::Reference<uno::XComponentContext>&, KDEXLib *xlib )
+KDE4FilePicker::KDE4FilePicker( const uno::Reference<uno::XComponentContext>& )
     : KDE4FilePicker_Base(_helperMutex)
     , _resMgr( ResMgr::CreateResMgr("fps_office") )
     , allowRemoteUrls( false )
-    , _mXLib( xlib )
 {
     _extraControls = new QWidget();
     _layout = new QGridLayout(_extraControls);
@@ -263,11 +261,8 @@ sal_Int16 SAL_CALL KDE4FilePicker::execute()
     _dialog->filterWidget()->setEditable(false);
 
     // We're entering a nested loop.
-    // Prevent yield calls, which would crash LO.
-
-    _mXLib->freezeYield( true );
+    // Release the yield mutex to prevent deadlocks.
     int result = _dialog->exec();
-    _mXLib->freezeYield( false );
 
     // HACK: KFileDialog uses KConfig("kdeglobals") for saving some settings
     // (such as the auto-extension flag), but that doesn't update KGlobal::config()
