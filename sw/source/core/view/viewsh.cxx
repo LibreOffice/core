@@ -864,11 +864,7 @@ void SwViewShell::Reformat()
     // we go for safe: get rid of the old font information,
     // when the printer resolution or zoom factor changes.
     // Init() and Reformat() are the safest locations.
-#ifdef FNTMET
-    aFntMetList.Flush();
-#else
     pFntCache->Flush( );
-#endif
 
     if( GetLayout()->IsCallbackActionEnabled() )
     {
