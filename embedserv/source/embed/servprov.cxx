@@ -174,17 +174,7 @@ EmbedServer_Impl::getTypes( )
 
 uno::Sequence< sal_Int8 > SAL_CALL EmbedServer_Impl::getImplementationId() throw(uno::RuntimeException)
 {
-    static ::cppu::OImplementationId *pId = 0;
-    if( ! pId )
-    {
-        ::osl::MutexGuard guard( ::osl::Mutex::getGlobalMutex() );
-        if( ! pId )
-        {
-            static ::cppu::OImplementationId id( false );
-            pId = &id;
-        }
-    }
-    return (*pId).getImplementationId();
+    return css::uno::Sequence<sal_Int8>();
 }
 
 
