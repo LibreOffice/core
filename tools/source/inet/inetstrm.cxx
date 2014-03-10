@@ -145,11 +145,13 @@ int INetOStream::Write(const sal_Char* pData, sal_uIntPtr nSize)
 // INetMessageIStream
 
 INetMessageIStream::INetMessageIStream(sal_uIntPtr nBufferSize)
-    : pSourceMsg       (NULL),
-      bHeaderGenerated (false),
-      nBufSiz          (nBufferSize),
-      pMsgStrm         (NULL),
-      pMsgBuffer       (new SvMemoryStream)
+    : pSourceMsg(NULL)
+    , bHeaderGenerated(false)
+    , nBufSiz(nBufferSize)
+    , pMsgStrm(NULL)
+    , pMsgBuffer(new SvMemoryStream)
+    , pMsgRead(NULL)
+    , pMsgWrite(NULL)
 {
     pMsgBuffer->SetStreamCharSet(RTL_TEXTENCODING_ASCII_US);
     pBuffer = new sal_Char[nBufSiz];
