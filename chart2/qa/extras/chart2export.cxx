@@ -50,6 +50,7 @@ public:
     void testPieChartDataLabels();
     void testSeriesIdxOrder();
     void testErrorBarDataRangeODS();
+    void testChartCrash();
 
     CPPUNIT_TEST_SUITE(Chart2ExportTest);
     CPPUNIT_TEST(test);
@@ -72,6 +73,7 @@ public:
     CPPUNIT_TEST(testPieChartDataLabels);
     CPPUNIT_TEST(testSeriesIdxOrder);
     CPPUNIT_TEST(testErrorBarDataRangeODS);
+    CPPUNIT_TEST(testChartCrash);
     CPPUNIT_TEST_SUITE_END();
 
 protected:
@@ -651,6 +653,13 @@ void Chart2ExportTest::testErrorBarDataRangeODS()
     OUString aNegRange;
     aAny >>= aNegRange;
     CPPUNIT_ASSERT_EQUAL(OUString("$Sheet1.$C$1:$C$3"), aNegRange);
+}
+
+void Chart2ExportTest::testChartCrash()
+{
+    load("/chart2/qa/extras/data/docx/", "FDO75975.docx");
+    xmlDocPtr pXmlDoc = parseExport("word/charts/chart", "Office Open XML Text");
+    CPPUNIT_ASSERT(pXmlDoc);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Chart2ExportTest);
