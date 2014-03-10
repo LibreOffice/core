@@ -109,9 +109,7 @@ public:
 
     virtual Sequence< sal_Int8 > SAL_CALL getImplementationId() throw (RuntimeException, std::exception)
     {
-        if( !m_xAggregateTypeProv.is() )
-            throw RuntimeException();
-        return m_xAggregateTypeProv->getImplementationId();
+        return css::uno::Sequence<sal_Int8>();
     }
 
     virtual Reference< XIntrospectionAccess > SAL_CALL getIntrospection(  ) throw (RuntimeException, std::exception);

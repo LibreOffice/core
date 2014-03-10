@@ -3217,19 +3217,7 @@ Sequence< Type > SfxLibrary::getTypes()
 Sequence< sal_Int8 > SfxLibrary::getImplementationId()
     throw( RuntimeException, std::exception )
 {
-    static OImplementationId * s_pId_NameContainer = 0;
-    {
-        if( !s_pId_NameContainer )
-        {
-            MutexGuard aGuard( Mutex::getGlobalMutex() );
-            if( !s_pId_NameContainer )
-            {
-                static OImplementationId s_aId_NameContainer;
-                s_pId_NameContainer = &s_aId_NameContainer;
-            }
-        }
-        return s_pId_NameContainer->getImplementationId();
-    }
+    return css::uno::Sequence<sal_Int8>();
 }
 
 // Methods XContainer
