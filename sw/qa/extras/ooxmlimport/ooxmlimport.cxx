@@ -1931,6 +1931,12 @@ DECLARE_OOXMLIMPORT_TEST(testStrict, "strict.docx")
     CPPUNIT_ASSERT(xServiceInfo->supportsService("com.sun.star.text.TextEmbeddedObject"));
 }
 
+DECLARE_OOXMLIMPORT_TEST(testStrictLockedcanvas, "strict-lockedcanvas.docx")
+{
+    // locked canvas shape was missing.
+    getShape(1);
+}
+
 #endif
 
 CPPUNIT_PLUGIN_IMPLEMENT();
