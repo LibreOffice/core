@@ -38,7 +38,6 @@ public class WeakBase implements XWeak, XTypeProvider
     // They have to be notified when this object dies
     private WeakAdapter m_adapter;
 
-    protected static Map<Class<?>,byte[]> _mapImplementationIds = new HashMap<Class<?>,byte[]>();
     protected static Map<Class<?>,Type[]> _mapTypes = new HashMap<Class<?>,Type[]>();
 
     /** Method of XWeak. The returned XAdapter implementation can be used to keap
@@ -94,39 +93,10 @@ public class WeakBase implements XWeak, XTypeProvider
         return arTypes;
     }
 
-    /** Method of XTypeProvider. It provides an identifier that represents the set of UNO
-     * interfaces implemented by this class. All instances of this class
-     * which run in the same Java Virtual Machine return the same array. (This only works as long
-     * the ClassLoader preserves the class even if no instance exist.)
-     *@return identifier as array of bytes
+    /** Obsolete method of XTypeProvider.
      */
     public byte[] getImplementationId()
     {
-        byte[] id= null;
-        synchronized (_mapImplementationIds)
-        {
-            id= _mapImplementationIds.get(getClass());
-
-            if (id == null)
-            {
-                int hash = hashCode();
-                String sName= getClass().getName();
-                byte[] arName= sName.getBytes();
-                int nNameLength= arName.length;
-
-                id= new byte[ 4 + nNameLength];
-                id[0]= (byte)(hash & 0xff);
-                id[1]= (byte)((hash >>> 8) & 0xff);
-                id[2]= (byte)((hash >>> 16) & 0xff);
-                id[3]= (byte)((hash >>>24) & 0xff);
-
-                for (int i= 0; i < nNameLength; i++)
-                {
-                    id[4 + i]= arName[i];
-                }
-                _mapImplementationIds.put(getClass(), id);
-            }
-        }
-        return id;
+        return new byte[0];
     }
 }
