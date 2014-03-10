@@ -162,3 +162,25 @@
          }
  
          ////////////////////////////////////////////////////////////////////////
+--- misc/build/boost_1_55_0/boost/bind/arg.hpp	2011-02-02 14:56:49 +0100
++++ misc/build/boost_1_55_0/boost/bind/arg.hpp	2014-02-10 14:56:49 +0100
+@@ -34,7 +34,8 @@
+     template< class T > arg( T const & /* t */ )
+     {
+         // static assert I == is_placeholder<T>::value
+-        typedef char T_must_be_placeholder[ I == is_placeholder<T>::value? 1: -1 ];
++        char X_must_be_placeholder[ I == is_placeholder<T>::value? 1: -1 ];
++        (void)&X_must_be_placeholder[0];
+     }
+ };
+ 
+--- misc/boost_1_55_0/boost/tuple/detail/tuple_basic.hpp	2011-01-02 21:25:11 +0100
++++ misc/build/boost_1_55_0/boost/tuple/detail/tuple_basic.hpp	2014-02-10 14:56:13 +0100
+@@ -225,7 +225,6 @@
+ get(const cons<HT, TT>& c BOOST_APPEND_EXPLICIT_TEMPLATE_NON_TYPE(int, N)) {
+   typedef BOOST_DEDUCED_TYPENAME detail::drop_front<N>::BOOST_NESTED_TEMPLATE
+       apply<cons<HT, TT> > impl;
+-  typedef BOOST_DEDUCED_TYPENAME impl::type cons_element;
+   return impl::call(c).head;
+ }
+ 
