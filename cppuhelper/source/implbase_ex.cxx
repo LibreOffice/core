@@ -253,25 +253,10 @@ Any SAL_CALL ImplHelper_queryNoXInterface(
     }
 }
 
-Sequence< sal_Int8 > SAL_CALL ImplHelper_getImplementationId( class_data * cd )
-    SAL_THROW( (RuntimeException) )
+css::uno::Sequence<sal_Int8> ImplHelper_getImplementationId(
+    SAL_UNUSED_PARAMETER class_data *) SAL_THROW((css::uno::RuntimeException))
 {
-    if (! cd->m_createdId)
-    {
-        sal_uInt8 * id = (sal_uInt8 *)alloca( 16 );
-        ::rtl_createUuid( (sal_uInt8 *)id, 0, sal_True );
-
-        MutexGuard guard( getImplHelperInitMutex() );
-        if (! cd->m_createdId)
-        {
-            memcpy( cd->m_id, id, 16 );
-            cd->m_createdId = sal_True;
-        }
-    }
-
-    sal_Sequence * seq = 0;
-    ::rtl_byte_sequence_constructFromArray( &seq, cd->m_id, 16 );
-    return Sequence< sal_Int8 >( seq, SAL_NO_ACQUIRE );
+    return css::uno::Sequence<sal_Int8>();
 }
 
 Sequence< Type > SAL_CALL ImplHelper_getTypes(

@@ -175,7 +175,7 @@ public:
         { return _aTypes; }
 };
 
-/** Helper class to implement com::sun::star::lang::XTypeProvider.  Construct a static object
+/** Helper class to implement IDs for XUnoTunnel.  Construct a static object
     of this class for your UNO object's implementation id.
 */
 class CPPUHELPER_DLLPUBLIC OImplementationId
@@ -219,7 +219,7 @@ public:
         : _pSeq( new ::com::sun::star::uno::Sequence< sal_Int8 >( rId.getImplementationId() ) )
         {}
 
-    /** Called upon XTypeProvider::getImplementationId().
+    /** Get implementation id.
 
         @return implementation id
     */

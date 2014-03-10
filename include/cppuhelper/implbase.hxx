@@ -74,7 +74,8 @@ struct CPPUHELPER_DLLPUBLIC ClassDataBase
     /** pointer to types sequence (com.sun.star.lang.XTypeProvider)
     */
     ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > * pTypes;
-    /** pointer to class id (com.sun.star.lang.XTypeProvider)
+    /** obsolete pointer to class id (com.sun.star.lang.XTypeProvider), will
+        always be null
     */
     ::com::sun::star::uno::Sequence< sal_Int8 > * pId;
 

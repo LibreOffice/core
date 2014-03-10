@@ -22,7 +22,6 @@
 #include <osl/diagnose.h>
 #include <rtl/instance.hxx>
 #include <rtl/string.hxx>
-#include <rtl/uuid.h>
 
 #include <com/sun/star/lang/XComponent.hpp>
 #include "com/sun/star/uno/RuntimeException.hpp"
@@ -106,10 +105,6 @@ void ClassData::initTypeProvider() SAL_THROW(())
     ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
     if (! pTypes)
     {
-        // create id
-        pId = new Sequence< sal_Int8 >( 16 );
-        rtl_createUuid( (sal_uInt8 *)pId->getArray(), 0, sal_True );
-
         // collect types
         Sequence< Type > * types = new Sequence< Type >(
             nType2Offset + 1 + (nClassCode == 4 ? 2 : nClassCode) );
@@ -151,9 +146,7 @@ Sequence< Type > ClassData::getTypes() SAL_THROW(())
 
 Sequence< sal_Int8 > ClassData::getImplementationId() SAL_THROW(())
 {
-    if (! pTypes)
-        initTypeProvider();
-    return *pId;
+    return css::uno::Sequence<sal_Int8>();
 }
 
 

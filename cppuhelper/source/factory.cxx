@@ -365,16 +365,10 @@ Sequence< Type > OFactoryComponentHelper::getTypes()
     return Sequence< Type >( ar, m_fptr ? 4 : 3 );
 }
 
-namespace
-{
-    class theOFactoryComponentHelperImplementationId :
-        public rtl::Static<OImplementationId, theOFactoryComponentHelperImplementationId>{};
-}
-
 Sequence< sal_Int8 > OFactoryComponentHelper::getImplementationId()
     throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
-    return theOFactoryComponentHelperImplementationId::get().getImplementationId();
+    return css::uno::Sequence<sal_Int8>();
 }
 
 // XSingleServiceFactory
