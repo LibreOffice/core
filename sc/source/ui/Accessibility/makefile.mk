@@ -25,6 +25,7 @@ PRJ=..$/..$/..
 
 PRJNAME=sc
 TARGET=accessibility
+ENABLE_EXCEPTIONS=TRUE
 
 # --- Settings -----------------------------------------------------
 

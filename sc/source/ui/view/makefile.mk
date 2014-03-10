@@ -24,6 +24,7 @@ PRJ=..$/..$/..
 
 PRJNAME=sc
 TARGET=view
+ENABLE_EXCEPTIONS=TRUE
 
 # --- Settings -----------------------------------------------------
 
@@ -33,7 +34,6 @@ TARGET=view
 .INCLUDE :  $(PRJ)$/util$/makefile.pmk
 
 # --- Files --------------------------------------------------------
-# drawattr.cxx fuer IDL (enums), sollte in den Svx gehen??
 
 
 SLOFILES =  \

@@ -26,6 +26,7 @@ PRJ=..$/..$/..
 PRJNAME=sc
 TARGET=dbgui
 LIBTARGET=no
+ENABLE_EXCEPTIONS=TRUE
 
 # --- Settings -----------------------------------------------------
 

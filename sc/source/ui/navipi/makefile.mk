@@ -25,6 +25,7 @@ PRJ=..$/..$/..
 
 PRJNAME=sc
 TARGET=navipi
+ENABLE_EXCEPTIONS=TRUE
 
 # --- Settings -----------------------------------------------------
 

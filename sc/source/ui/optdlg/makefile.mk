@@ -25,6 +25,7 @@ PRJ=..$/..$/..
 
 PRJNAME=sc
 TARGET=optdlg
+ENABLE_EXCEPTIONS=TRUE
 
 # --- Settings -----------------------------------------------------
 

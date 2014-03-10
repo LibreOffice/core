@@ -31,6 +31,7 @@ PROJECTPCH=filt_pch
 PROJECTPCHSOURCE=..\pch\filt_pch
 
 AUTOSEG=true
+ENABLE_EXCEPTIONS=TRUE
 
 # --- Settings -----------------------------------------------------
 

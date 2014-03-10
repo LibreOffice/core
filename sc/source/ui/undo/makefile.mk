@@ -25,6 +25,7 @@ PRJ=..$/..$/..
 
 PRJNAME=sc
 TARGET=undo
+ENABLE_EXCEPTIONS=TRUE
 
 # --- Settings -----------------------------------------------------
 

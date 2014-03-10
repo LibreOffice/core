@@ -25,6 +25,7 @@ PRJ=..$/..$/..
 
 PRJNAME=sc
 TARGET=formdlgs
+ENABLE_EXCEPTIONS=TRUE
 
 # --- Settings -----------------------------------------------------
 
