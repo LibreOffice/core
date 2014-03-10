@@ -751,7 +751,17 @@ void DXF2GDIMetaFile::DrawEntities(const DXFEntities & rEntities,
 }
 
 
-DXF2GDIMetaFile::DXF2GDIMetaFile():pVirDev(NULL), pDXF(NULL), nBlockColor(0), nParentLayerColor(0)
+DXF2GDIMetaFile::DXF2GDIMetaFile()
+    : pVirDev(NULL)
+    , pDXF(NULL)
+    , bStatus(false)
+    , OptPointsPerCircle(0)
+    , nMinPercent(0)
+    , nMaxPercent(0)
+    , nLastPercent(0)
+    , nMainEntitiesCount(0)
+    , nBlockColor(0)
+    , nParentLayerColor(0)
 {
 }
 
