@@ -2270,11 +2270,7 @@ void MSWordExportBase::OutputTextNode( const SwTxtNode& rNode )
             }
         }
 
-        bool bParaRTL = false;
-        const SvxFrameDirectionItem* pItem = (const SvxFrameDirectionItem*)
-            rNode.GetSwAttrSet().GetItem(RES_FRAMEDIR);
-        if ( aAttrIter.IsParaRTL())
-            bParaRTL = true;
+        bool bParaRTL = aAttrIter.IsParaRTL();
 
         int nNumberLevel = -1;
         if (rNode.IsNumbered())
@@ -2355,7 +2351,7 @@ void MSWordExportBase::OutputTextNode( const SwTxtNode& rNode )
         cannot export that, its its ltr then that's ok as thats word's
         default. Otherwise we must add a RTL attribute to our export list
         */
-        pItem = (const SvxFrameDirectionItem*)
+        const SvxFrameDirectionItem* pItem = (const SvxFrameDirectionItem*)
             rNode.GetSwAttrSet().GetItem(RES_FRAMEDIR);
         if (
             (!pItem || pItem->GetValue() == FRMDIR_ENVIRONMENT) &&
