@@ -3601,12 +3601,15 @@ void DocxAttributeOutput::WritePostponedFormControl(const SdrObject* pObject)
 
                 Date aOriginalDate(Date::EMPTY);
                 OUString sOriginalContent, sDateFormat;
+                OUString sLocale("en-US");
                 uno::Sequence<beans::PropertyValue> aGrabBag;
                 uno::Reference<beans::XPropertySet> xShapePropertySet(pFormObj->getUnoShape(), uno::UNO_QUERY);
                 if (xShapePropertySet->getPropertyValue(UNO_NAME_MISC_OBJ_INTEROPGRABBAG) >>= aGrabBag)
                     for (sal_Int32 i=0; i < aGrabBag.getLength(); ++i)
                         if (aGrabBag[i].Name == "DateFormat")
                             aGrabBag[i].Value >>= sDateFormat;
+                        else if (aGrabBag[i].Name == "Locale")
+                            aGrabBag[i].Value >>= sLocale;
                         else if (aGrabBag[i].Name == "OriginalContent")
                             aGrabBag[i].Value >>= sOriginalContent;
                         else if (aGrabBag[i].Name == "OriginalDate")
@@ -3661,7 +3664,8 @@ void DocxAttributeOutput::WritePostponedFormControl(const SdrObject* pObject)
                                                rtl::OUStringToOString( sDateFormat, RTL_TEXTENCODING_UTF8 ).getStr(),
                                                FSEND);
                 m_pSerializer->singleElementNS(XML_w, XML_lid,
-                                               FSNS(XML_w, XML_val), "en-US",      //TODO: hardwired
+                                               FSNS(XML_w, XML_val),
+                                               rtl::OUStringToOString( sLocale, RTL_TEXTENCODING_UTF8 ).getStr(),
                                                FSEND);
                 m_pSerializer->singleElementNS(XML_w, XML_storeMappedDataAs,
                                                FSNS(XML_w, XML_val), "dateTime",

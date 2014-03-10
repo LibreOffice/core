@@ -2964,6 +2964,7 @@ DECLARE_OOXMLEXPORT_TEST(testDateControl, "date-control.docx")
         return;
     assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:sdt/w:sdtPr/w:date", "fullDate", "2014-03-05T00:00:00Z");
     assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:sdt/w:sdtPr/w:date/w:dateFormat", "val", "dddd, dd' de 'MMMM' de 'yyyy");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:sdt/w:sdtPr/w:date/w:lid", "val", "es-ES");
     assertXPathContent(pXmlDoc, "/w:document/w:body/w:p/w:sdt/w:sdtContent/w:r/w:t", "miércoles, 05 de marzo de 2014");
 
     // check imported control

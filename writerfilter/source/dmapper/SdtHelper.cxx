@@ -122,13 +122,15 @@ void SdtHelper::createDateControl(OUString& rContentText)
         xPropertySet->setPropertyValue("HelpText", uno::makeAny(rContentText));
 
     // append date format to grab bag
-    uno::Sequence<beans::PropertyValue> aGrabBag(3);
+    uno::Sequence<beans::PropertyValue> aGrabBag(4);
     aGrabBag[0].Name = "OriginalDate";
     aGrabBag[0].Value = uno::makeAny(aDate);
     aGrabBag[1].Name = "OriginalContent";
     aGrabBag[1].Value = uno::makeAny(rContentText);
     aGrabBag[2].Name = "DateFormat";
     aGrabBag[2].Value = uno::makeAny(sDateFormat);
+    aGrabBag[3].Name = "Locale";
+    aGrabBag[3].Value = uno::makeAny(m_sLocale.makeStringAndClear());
 
     std::vector<OUString> aItems;
     createControlShape(lcl_getOptimalWidth(m_rDM_Impl.GetStyleSheetTable(), rContentText, aItems), xControlModel, aGrabBag);
@@ -174,6 +176,11 @@ OUStringBuffer& SdtHelper::getDate()
 OUStringBuffer& SdtHelper::getDateFormat()
 {
     return m_sDateFormat;
+}
+
+OUStringBuffer& SdtHelper::getLocale()
+{
+    return m_sLocale;
 }
 
 bool SdtHelper::hasElements()

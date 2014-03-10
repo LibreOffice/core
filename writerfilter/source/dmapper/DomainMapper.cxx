@@ -2223,6 +2223,11 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, PropertyMapPtr rContext )
         m_pImpl->m_pSdtHelper->getDateFormat().append(sStringValue);
     }
     break;
+    case NS_ooxml::LN_CT_SdtDate_lid:
+    {
+        m_pImpl->m_pSdtHelper->getLocale().append(sStringValue);
+    }
+    break;
     case NS_ooxml::LN_EG_SectPrContents_pgNumType:
     {
         writerfilter::Reference<Properties>::Pointer_t pProperties = rSprm.getProps();

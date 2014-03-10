@@ -55,6 +55,8 @@ class SdtHelper
     OUStringBuffer m_sDate;
     /// Date format string as it comes from the ooxml document.
     OUStringBuffer m_sDateFormat;
+    /// Locale string as it comes from the ooxml document.
+    OUStringBuffer m_sLocale;
 
     bool m_bHasElements;
 
@@ -70,6 +72,7 @@ public:
     OUStringBuffer& getSdtTexts();
     OUStringBuffer& getDate();
     OUStringBuffer& getDateFormat();
+    OUStringBuffer& getLocale();
     /// If createControlShape() was ever called.
     bool hasElements();
 
