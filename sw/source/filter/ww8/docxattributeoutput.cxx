@@ -3685,6 +3685,42 @@ void DocxAttributeOutput::WritePostponedFormControl(const SdrObject* pObject)
 
                 m_pSerializer->endElementNS(XML_w, XML_sdt);
             }
+            else if (xInfo->supportsService("com.sun.star.form.component.ComboBox"))
+            {
+                // gather component properties
+
+                uno::Reference<beans::XPropertySet> xPropertySet(xControlModel, uno::UNO_QUERY);
+                OUString sText = xPropertySet->getPropertyValue("Text").get<OUString>();
+                uno::Sequence<OUString> aItems = xPropertySet->getPropertyValue("StringItemList").get<uno::Sequence<OUString>>();
+
+                // output component
+
+                m_pSerializer->startElementNS(XML_w, XML_sdt, FSEND);
+                m_pSerializer->startElementNS(XML_w, XML_sdtPr, FSEND);
+
+                m_pSerializer->startElementNS(XML_w, XML_dropDownList, FSEND);
+
+                for (sal_Int32 i=0; i < aItems.getLength(); ++i)
+                {
+                    m_pSerializer->singleElementNS(XML_w, XML_listItem,
+                                                   FSNS(XML_w, XML_displayText),
+                                                   rtl::OUStringToOString( aItems[i], RTL_TEXTENCODING_UTF8 ).getStr(),
+                                                   FSNS(XML_w, XML_value),
+                                                   rtl::OUStringToOString( aItems[i], RTL_TEXTENCODING_UTF8 ).getStr(),
+                                                   FSEND);
+                }
+
+                m_pSerializer->endElementNS(XML_w, XML_dropDownList);
+                m_pSerializer->endElementNS(XML_w, XML_sdtPr);
+
+                m_pSerializer->startElementNS(XML_w, XML_sdtContent, FSEND);
+                m_pSerializer->startElementNS(XML_w, XML_r, FSEND);
+                RunText(sText);
+                m_pSerializer->endElementNS(XML_w, XML_r);
+                m_pSerializer->endElementNS(XML_w, XML_sdtContent);
+
+                m_pSerializer->endElementNS(XML_w, XML_sdt);
+            }
         }
     }
 }

@@ -2975,6 +2975,27 @@ DECLARE_OOXMLEXPORT_TEST(testDateControl, "date-control.docx")
     CPPUNIT_ASSERT_EQUAL(sal_Int32(2014), sal_Int32(aDate.Year));
 }
 
+DECLARE_OOXMLEXPORT_TEST(testComboBoxControl, "combobox-control.docx")
+{
+    // check XML
+    xmlDocPtr pXmlDoc = parseExport("word/document.xml");
+    if (!pXmlDoc)
+        return;
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:sdt/w:sdtPr/w:dropDownList/w:listItem[1]", "value", "manolo");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:sdt/w:sdtPr/w:dropDownList/w:listItem[2]", "value", "pepito");
+    assertXPathContent(pXmlDoc, "/w:document/w:body/w:p/w:sdt/w:sdtContent/w:r/w:t", "Manolo");
+
+    // check imported control
+    uno::Reference<drawing::XControlShape> xControl(getShape(1), uno::UNO_QUERY);
+
+    CPPUNIT_ASSERT_EQUAL(OUString("Manolo"), getProperty<OUString>(xControl->getControl(), "Text"));
+
+    uno::Sequence<OUString> aItems = getProperty<uno::Sequence<OUString>>(xControl->getControl(), "StringItemList");
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(2), sal_Int32(aItems.getLength()));
+    CPPUNIT_ASSERT_EQUAL(OUString("manolo"), aItems[0]);
+    CPPUNIT_ASSERT_EQUAL(OUString("pepito"), aItems[1]);
+}
+
 #endif
 
 CPPUNIT_PLUGIN_IMPLEMENT();
