@@ -63,17 +63,22 @@ struct Impl_DownLoadData
     }
 };
 
-
-
-
-SvFileObject::SvFileObject() :
-    pDownLoadData( NULL ), pOldParent( NULL ), nType( FILETYPE_TEXT )
+SvFileObject::SvFileObject()
+    : pDownLoadData(NULL)
+    , pOldParent(NULL)
+    , nType(FILETYPE_TEXT)
+    , bLoadAgain(true)
+    , bSynchron(false)
+    , bLoadError(false)
+    , bWaitForData(false)
+    , bInNewData(false)
+    , bDataReady(false)
+    , bNativFormat(false)
+    , bClearMedium(false)
+    , bStateChangeCalled(false)
+    , bInCallDownLoad(false)
 {
-    bLoadAgain = sal_True;
-    bSynchron = bLoadError = bWaitForData = bDataReady = bNativFormat =
-    bClearMedium = bStateChangeCalled = bInCallDownLoad = sal_False;
 }
-
 
 SvFileObject::~SvFileObject()
 {
