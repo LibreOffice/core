@@ -609,8 +609,6 @@ void StyleSheetTable::lcl_sprm(Sprm & rSprm)
                 case NS_ooxml::LN_CT_Style_locked:
                     aValue.Name = "locked";
                 break;
-                default:
-                break;
                 }
                 pEntry->AppendInteropGrabBag(aValue);
             }
