@@ -299,20 +299,7 @@ css::uno::Sequence< css::uno::Type > SAL_CALL BackingComp::getTypes()
 css::uno::Sequence< sal_Int8 > SAL_CALL BackingComp::getImplementationId()
     throw(css::uno::RuntimeException, std::exception)
 {
-    static ::cppu::OImplementationId* pID = NULL;
-    if (!pID)
-    {
-        /* GLOBAL SAFE { */
-        ::osl::MutexGuard aLock(::osl::Mutex::getGlobalMutex());
-        // Control these pointer again ... it can be, that another instance will be faster then this one!
-        if (!pID)
-        {
-            static ::cppu::OImplementationId aID(false);
-            pID = &aID;
-        }
-        /* } GLOBAL SAFE */
-    }
-    return pID->getImplementationId();
+    return css::uno::Sequence<sal_Int8>();
 }
 
 OUString SAL_CALL BackingComp::getImplementationName()

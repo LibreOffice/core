@@ -1435,7 +1435,7 @@ public class UndoManager
 
         public byte[] getImplementationId()
         {
-            return getClass().toString().getBytes();
+            return new byte[0];
         }
     }
 
