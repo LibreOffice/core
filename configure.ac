@@ -11126,7 +11126,7 @@ if test "$test_kde4" = "yes" -a "$ENABLE_KDE4" = "TRUE"; then
     fi
 
     qt_test_include="Qt/qobject.h"
-    qt_test_library="libQtCore.so"
+    qt_test_library="libQtNetwork.so"
     kde_test_include="kwindowsystem.h"
     kde_test_library="libsolid.so"
 
@@ -11213,8 +11213,9 @@ the root of your Qt installation by exporting QT4DIR before running "configure".
         AC_MSG_ERROR([KDE4 libraries not found.  Please specify the root of your KDE4 installation by exporting KDE4DIR before running "configure".])
     fi
 
-    KDE4_CFLAGS="`pkg-config --cflags QtCore` `pkg-config --cflags QtGui` -I$kde_incdir -DQT_CLEAN_NAMESPACE -DQT_THREAD_SUPPORT"
-    KDE4_LIBS="-L$kde_libdir -L$qt_lib_dir -lkio -lkfile -lkdeui -lkdecore -lQtCore -lQtGui"
+    PKG_CHECK_MODULES([QT4],[QtNetwork QtGui])
+    KDE4_CFLAGS="-I$kde_incdir $QT4_CFLAGS -DQT_CLEAN_NAMESPACE -DQT_THREAD_SUPPORT"
+    KDE4_LIBS="-L$kde_libdir -lkio -lkfile -lkdeui -lkdecore -L$qt_lib_dir $QT4_LIBS"
     KDE4_CFLAGS=$(printf '%s' "$KDE4_CFLAGS" | sed -e "s/-I/${ISYSTEM?}/g")
 
     AC_LANG_PUSH([C++])
@@ -11236,11 +11237,47 @@ int main(int argc, char **argv) {
     # Sets also KDE_GLIB_CFLAGS/KDE_GLIB_LIBS if successful.
     PKG_CHECK_MODULES(KDE_GLIB,[glib-2.0 >= 2.4],
         [
-        KDE_HAVE_GLIB=1
-        AC_DEFINE(KDE_HAVE_GLIB,1)
-        KDE_GLIB_CFLAGS=$(printf '%s' "$KDE_GLIB_CFLAGS" | sed -e "s/-I/${ISYSTEM?}/g")
+            KDE_HAVE_GLIB=1
+            AC_DEFINE(KDE_HAVE_GLIB,1)
+            KDE_GLIB_CFLAGS=$(printf '%s' "$KDE_GLIB_CFLAGS" | sed -e "s/-I/${ISYSTEM?}/g")
+
+            AC_LANG_PUSH([C++])
+            save_CXXFLAGS=$CXXFLAGS
+            CXXFLAGS="$CXXFLAGS $KDE4_CFLAGS"
+            save_LIBS=$LIBS
+            LIBS="$LIBS $KDE4_LIBS"
+            AC_MSG_CHECKING([whether Qt has fixed ExcludeSocketNotifiers])
+
+            # Prepare meta object data
+            TSTBASE="tst_exclude_socket_notifiers"
+            TSTMOC="${SRC_ROOT}/vcl/unx/kde4/${TSTBASE}"
+            ln -fs "${TSTMOC}.hxx"
+            $MOC4 "${TSTBASE}.hxx" -o "${TSTBASE}.moc"
+
+            AC_RUN_IFELSE([AC_LANG_SOURCE([[
+#include "tst_exclude_socket_notifiers.moc"
+
+int main(int argc, char *argv[])
+{
+    QCoreApplication app(argc, argv);
+    exit(tst_processEventsExcludeSocket());
+    return 0;
+}
+            ]])],[
+                AC_MSG_RESULT([yes])
+            ],[
+                AC_MSG_RESULT([no])
+                AC_MSG_WARN([native KDE4 file pickers will be disabled at runtime - fix your Qt4 library!])
+            ])
+
+            # Remove meta object data
+            rm -f "${TSTBASE}."*
+
+            LIBS=$save_LIBS
+            CXXFLAGS=$save_CXXFLAGS
+            AC_LANG_POP([C++])
         ],
-        AC_MSG_WARN([[No Glib found, KDE4 support will not integrate with Qt's Glib event loop support]]))
+        AC_MSG_WARN([[No Glib found, KDE4 support will not use native file pickers!]]))
 fi
 AC_SUBST(KDE4_CFLAGS)
 AC_SUBST(KDE4_LIBS)
