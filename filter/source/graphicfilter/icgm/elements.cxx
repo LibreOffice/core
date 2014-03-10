@@ -281,6 +281,9 @@ void CGMElements::Init()
     nBackGroundColor = nAuxiliaryColor = 0;
 
     bSegmentCount = sal_False;
+
+    nScalingFactor = 1.0;
+    nTextAlignmentVCont = nTextAlignmentHCont = 0.0;
 }
 
 
