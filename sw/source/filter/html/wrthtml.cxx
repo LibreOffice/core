@@ -1270,19 +1270,20 @@ sal_uInt16 SwHTMLWriter::GetHTMLFontSize( sal_uInt32 nHeight ) const
 
 // Struktur speichert die aktuellen Daten des Writers zwischen, um
 // einen anderen Dokument-Teil auszugeben, wie z.B. Header/Footer
-HTMLSaveData::HTMLSaveData( SwHTMLWriter& rWriter, sal_uLong nStt,
+HTMLSaveData::HTMLSaveData(SwHTMLWriter& rWriter, sal_uLong nStt,
                             sal_uLong nEnd, sal_Bool bSaveNum,
-                                const SwFrmFmt *pFrmFmt ) :
-    rWrt( rWriter ),
-    pOldPam( rWrt.pCurPam ),
-    pOldEnd( rWrt.GetEndPaM() ),
-    pOldNumRuleInfo( 0 ),
-    pOldNextNumRuleInfo( 0 ),
-    nOldDefListLvl( rWrt.nDefListLvl ),
-    nOldDirection( rWrt.nDirection ),
-    bOldOutHeader( rWrt.bOutHeader ),
-    bOldOutFooter( rWrt.bOutFooter ),
-    bOldOutFlyFrame( rWrt.bOutFlyFrame )
+                                const SwFrmFmt *pFrmFmt)
+    : rWrt(rWriter)
+    , pOldPam(rWrt.pCurPam)
+    , pOldEnd(rWrt.GetEndPaM())
+    , pOldNumRuleInfo(0)
+    , pOldNextNumRuleInfo(0)
+    , nOldDefListLvl(rWrt.nDefListLvl)
+    , nOldDirection(rWrt.nDirection)
+    , bOldOutHeader(rWrt.bOutHeader)
+    , bOldOutFooter(rWrt.bOutFooter)
+    , bOldOutFlyFrame(rWrt.bOutFlyFrame)
+    , pOldFlyFmt(NULL)
 {
     bOldWriteAll = rWrt.bWriteAll;
 
