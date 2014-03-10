@@ -30,6 +30,8 @@ interface XWizardController;
 
 
 /** provides a framework for implementing a wizard dialog.
+
+    @since OOo 3.3
  */
 service Wizard : XWizard
 {

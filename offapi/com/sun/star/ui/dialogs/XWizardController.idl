@@ -27,6 +27,8 @@ module com { module sun { module star { module ui { module dialogs {
 
 
 /** is the interface of a client-provided controller of a custom Wizard.
+
+    @since OOo 3.3
  */
 interface XWizardController
 {

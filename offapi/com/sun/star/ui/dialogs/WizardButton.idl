@@ -25,6 +25,8 @@ module com { module sun { module star { module ui { module dialogs {
 
 
 /** denotes the buttons found in a Wizard
+
+    @since OOo 3.3
  */
 constants WizardButton
 {

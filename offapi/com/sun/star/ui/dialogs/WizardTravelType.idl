@@ -25,6 +25,8 @@ module com { module sun { module star { module ui { module dialogs {
 
 
 /** denotes ways to leave a Wizard's page
+
+    @since OOo 3.3
  */
 constants WizardTravelType
 {
