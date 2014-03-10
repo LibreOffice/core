@@ -215,13 +215,159 @@
 		BE82C3A518C752E20050EB79 /* time.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; name = time.c; path = ../../../sal/osl/unx/time.c; sourceTree = "<group>"; };
 		BE82C3A618C752E20050EB79 /* uunxapi.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = uunxapi.cxx; path = ../../../sal/osl/unx/uunxapi.cxx; sourceTree = "<group>"; };
 		BE82C3A718C752E20050EB79 /* uunxapi.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; name = uunxapi.mm; path = ../../../sal/osl/unx/uunxapi.mm; sourceTree = "<group>"; };
+		BE82C42918CA18610050EB79 /* ActionDescriptionProvider.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = ActionDescriptionProvider.cxx; path = ../../../svx/source/svdraw/ActionDescriptionProvider.cxx; sourceTree = "<group>"; };
+		BE82C42A18CA18610050EB79 /* charthelper.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = charthelper.cxx; path = ../../../svx/source/svdraw/charthelper.cxx; sourceTree = "<group>"; };
+		BE82C42B18CA18610050EB79 /* clonelist.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = clonelist.cxx; path = ../../../svx/source/svdraw/clonelist.cxx; sourceTree = "<group>"; };
+		BE82C42C18CA18610050EB79 /* gradtrns.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = gradtrns.cxx; path = ../../../svx/source/svdraw/gradtrns.cxx; sourceTree = "<group>"; };
+		BE82C42D18CA18610050EB79 /* gradtrns.hxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = gradtrns.hxx; path = ../../../svx/source/svdraw/gradtrns.hxx; sourceTree = "<group>"; };
+		BE82C42E18CA18610050EB79 /* polypolygoneditor.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = polypolygoneditor.cxx; path = ../../../svx/source/svdraw/polypolygoneditor.cxx; sourceTree = "<group>"; };
+		BE82C42F18CA18610050EB79 /* sdrhittesthelper.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = sdrhittesthelper.cxx; path = ../../../svx/source/svdraw/sdrhittesthelper.cxx; sourceTree = "<group>"; };
+		BE82C43018CA18610050EB79 /* sdrmasterpagedescriptor.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = sdrmasterpagedescriptor.cxx; path = ../../../svx/source/svdraw/sdrmasterpagedescriptor.cxx; sourceTree = "<group>"; };
+		BE82C43118CA18610050EB79 /* sdrpagewindow.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = sdrpagewindow.cxx; path = ../../../svx/source/svdraw/sdrpagewindow.cxx; sourceTree = "<group>"; };
+		BE82C43218CA18610050EB79 /* sdrpaintwindow.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = sdrpaintwindow.cxx; path = ../../../svx/source/svdraw/sdrpaintwindow.cxx; sourceTree = "<group>"; };
+		BE82C43318CA18610050EB79 /* sdrundomanager.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = sdrundomanager.cxx; path = ../../../svx/source/svdraw/sdrundomanager.cxx; sourceTree = "<group>"; };
+		BE82C43418CA18610050EB79 /* selectioncontroller.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = selectioncontroller.cxx; path = ../../../svx/source/svdraw/selectioncontroller.cxx; sourceTree = "<group>"; };
+		BE82C43518CA18610050EB79 /* svdattr.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = svdattr.cxx; path = ../../../svx/source/svdraw/svdattr.cxx; sourceTree = "<group>"; };
+		BE82C43618CA18610050EB79 /* svdcrtv.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = svdcrtv.cxx; path = ../../../svx/source/svdraw/svdcrtv.cxx; sourceTree = "<group>"; };
+		BE82C43718CA18610050EB79 /* svddrag.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = svddrag.cxx; path = ../../../svx/source/svdraw/svddrag.cxx; sourceTree = "<group>"; };
+		BE82C43818CA18610050EB79 /* svddrgmt.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = svddrgmt.cxx; path = ../../../svx/source/svdraw/svddrgmt.cxx; sourceTree = "<group>"; };
+		BE82C43918CA18610050EB79 /* svddrgv.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = svddrgv.cxx; path = ../../../svx/source/svdraw/svddrgv.cxx; sourceTree = "<group>"; };
+		BE82C43A18CA18610050EB79 /* svdedtv.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = svdedtv.cxx; path = ../../../svx/source/svdraw/svdedtv.cxx; sourceTree = "<group>"; };
+		BE82C43B18CA18610050EB79 /* svdedtv1.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = svdedtv1.cxx; path = ../../../svx/source/svdraw/svdedtv1.cxx; sourceTree = "<group>"; };
+		BE82C43C18CA18610050EB79 /* svdedtv2.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = svdedtv2.cxx; path = ../../../svx/source/svdraw/svdedtv2.cxx; sourceTree = "<group>"; };
+		BE82C43D18CA18610050EB79 /* svdedxv.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = svdedxv.cxx; path = ../../../svx/source/svdraw/svdedxv.cxx; sourceTree = "<group>"; };
+		BE82C43E18CA18610050EB79 /* svdetc.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = svdetc.cxx; path = ../../../svx/source/svdraw/svdetc.cxx; sourceTree = "<group>"; };
+		BE82C43F18CA18610050EB79 /* svdfmtf.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = svdfmtf.cxx; path = ../../../svx/source/svdraw/svdfmtf.cxx; sourceTree = "<group>"; };
+		BE82C44018CA18610050EB79 /* svdglev.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = svdglev.cxx; path = ../../../svx/source/svdraw/svdglev.cxx; sourceTree = "<group>"; };
+		BE82C44118CA18610050EB79 /* svdglue.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = svdglue.cxx; path = ../../../svx/source/svdraw/svdglue.cxx; sourceTree = "<group>"; };
+		BE82C44218CA18610050EB79 /* svdhdl.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = svdhdl.cxx; path = ../../../svx/source/svdraw/svdhdl.cxx; sourceTree = "<group>"; };
+		BE82C44318CA18610050EB79 /* svdhlpln.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = svdhlpln.cxx; path = ../../../svx/source/svdraw/svdhlpln.cxx; sourceTree = "<group>"; };
+		BE82C44418CA18610050EB79 /* svdibrow.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = svdibrow.cxx; path = ../../../svx/source/svdraw/svdibrow.cxx; sourceTree = "<group>"; };
+		BE82C44518CA18610050EB79 /* svditer.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = svditer.cxx; path = ../../../svx/source/svdraw/svditer.cxx; sourceTree = "<group>"; };
+		BE82C44618CA18610050EB79 /* svdlayer.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = svdlayer.cxx; path = ../../../svx/source/svdraw/svdlayer.cxx; sourceTree = "<group>"; };
+		BE82C44718CA18610050EB79 /* svdmark.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = svdmark.cxx; path = ../../../svx/source/svdraw/svdmark.cxx; sourceTree = "<group>"; };
+		BE82C44818CA18610050EB79 /* svdmodel.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = svdmodel.cxx; path = ../../../svx/source/svdraw/svdmodel.cxx; sourceTree = "<group>"; };
+		BE82C44918CA18610050EB79 /* svdmrkv.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = svdmrkv.cxx; path = ../../../svx/source/svdraw/svdmrkv.cxx; sourceTree = "<group>"; };
+		BE82C44A18CA18610050EB79 /* svdmrkv1.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = svdmrkv1.cxx; path = ../../../svx/source/svdraw/svdmrkv1.cxx; sourceTree = "<group>"; };
+		BE82C44B18CA18610050EB79 /* svdoashp.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = svdoashp.cxx; path = ../../../svx/source/svdraw/svdoashp.cxx; sourceTree = "<group>"; };
+		BE82C44C18CA18610050EB79 /* svdoattr.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = svdoattr.cxx; path = ../../../svx/source/svdraw/svdoattr.cxx; sourceTree = "<group>"; };
+		BE82C44D18CA18610050EB79 /* svdobj.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = svdobj.cxx; path = ../../../svx/source/svdraw/svdobj.cxx; sourceTree = "<group>"; };
+		BE82C44E18CA18610050EB79 /* svdocapt.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = svdocapt.cxx; path = ../../../svx/source/svdraw/svdocapt.cxx; sourceTree = "<group>"; };
+		BE82C44F18CA18610050EB79 /* svdocirc.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = svdocirc.cxx; path = ../../../svx/source/svdraw/svdocirc.cxx; sourceTree = "<group>"; };
+		BE82C45018CA18610050EB79 /* svdoedge.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = svdoedge.cxx; path = ../../../svx/source/svdraw/svdoedge.cxx; sourceTree = "<group>"; };
+		BE82C45118CA18610050EB79 /* svdograf.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = svdograf.cxx; path = ../../../svx/source/svdraw/svdograf.cxx; sourceTree = "<group>"; };
+		BE82C45218CA18610050EB79 /* svdogrp.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = svdogrp.cxx; path = ../../../svx/source/svdraw/svdogrp.cxx; sourceTree = "<group>"; };
+		BE82C45318CA18610050EB79 /* svdomeas.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = svdomeas.cxx; path = ../../../svx/source/svdraw/svdomeas.cxx; sourceTree = "<group>"; };
+		BE82C45418CA18610050EB79 /* svdomedia.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = svdomedia.cxx; path = ../../../svx/source/svdraw/svdomedia.cxx; sourceTree = "<group>"; };
+		BE82C45518CA18610050EB79 /* svdoole2.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = svdoole2.cxx; path = ../../../svx/source/svdraw/svdoole2.cxx; sourceTree = "<group>"; };
+		BE82C45618CA18610050EB79 /* svdopage.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = svdopage.cxx; path = ../../../svx/source/svdraw/svdopage.cxx; sourceTree = "<group>"; };
+		BE82C45718CA18610050EB79 /* svdopath.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = svdopath.cxx; path = ../../../svx/source/svdraw/svdopath.cxx; sourceTree = "<group>"; };
+		BE82C45818CA18610050EB79 /* svdorect.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = svdorect.cxx; path = ../../../svx/source/svdraw/svdorect.cxx; sourceTree = "<group>"; };
+		BE82C45918CA18610050EB79 /* svdotext.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = svdotext.cxx; path = ../../../svx/source/svdraw/svdotext.cxx; sourceTree = "<group>"; };
+		BE82C45A18CA18610050EB79 /* svdotextdecomposition.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = svdotextdecomposition.cxx; path = ../../../svx/source/svdraw/svdotextdecomposition.cxx; sourceTree = "<group>"; };
+		BE82C45B18CA18610050EB79 /* svdotextpathdecomposition.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = svdotextpathdecomposition.cxx; path = ../../../svx/source/svdraw/svdotextpathdecomposition.cxx; sourceTree = "<group>"; };
+		BE82C45C18CA18610050EB79 /* svdotxat.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = svdotxat.cxx; path = ../../../svx/source/svdraw/svdotxat.cxx; sourceTree = "<group>"; };
+		BE82C45D18CA18610050EB79 /* svdotxdr.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = svdotxdr.cxx; path = ../../../svx/source/svdraw/svdotxdr.cxx; sourceTree = "<group>"; };
+		BE82C45E18CA18610050EB79 /* svdotxed.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = svdotxed.cxx; path = ../../../svx/source/svdraw/svdotxed.cxx; sourceTree = "<group>"; };
+		BE82C45F18CA18610050EB79 /* svdotxfl.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = svdotxfl.cxx; path = ../../../svx/source/svdraw/svdotxfl.cxx; sourceTree = "<group>"; };
+		BE82C46018CA18610050EB79 /* svdotxln.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = svdotxln.cxx; path = ../../../svx/source/svdraw/svdotxln.cxx; sourceTree = "<group>"; };
+		BE82C46118CA18610050EB79 /* svdotxtr.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = svdotxtr.cxx; path = ../../../svx/source/svdraw/svdotxtr.cxx; sourceTree = "<group>"; };
+		BE82C46218CA18610050EB79 /* svdouno.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = svdouno.cxx; path = ../../../svx/source/svdraw/svdouno.cxx; sourceTree = "<group>"; };
+		BE82C46318CA18610050EB79 /* svdoutl.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = svdoutl.cxx; path = ../../../svx/source/svdraw/svdoutl.cxx; sourceTree = "<group>"; };
+		BE82C46418CA18610050EB79 /* svdoutlinercache.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = svdoutlinercache.cxx; path = ../../../svx/source/svdraw/svdoutlinercache.cxx; sourceTree = "<group>"; };
+		BE82C46518CA18610050EB79 /* svdovirt.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = svdovirt.cxx; path = ../../../svx/source/svdraw/svdovirt.cxx; sourceTree = "<group>"; };
+		BE82C46618CA18610050EB79 /* svdpage.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = svdpage.cxx; path = ../../../svx/source/svdraw/svdpage.cxx; sourceTree = "<group>"; };
+		BE82C46718CA18610050EB79 /* svdpagv.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = svdpagv.cxx; path = ../../../svx/source/svdraw/svdpagv.cxx; sourceTree = "<group>"; };
+		BE82C46818CA18610050EB79 /* svdpntv.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = svdpntv.cxx; path = ../../../svx/source/svdraw/svdpntv.cxx; sourceTree = "<group>"; };
+		BE82C46918CA18610050EB79 /* svdpoev.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = svdpoev.cxx; path = ../../../svx/source/svdraw/svdpoev.cxx; sourceTree = "<group>"; };
+		BE82C46A18CA18610050EB79 /* svdsnpv.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = svdsnpv.cxx; path = ../../../svx/source/svdraw/svdsnpv.cxx; sourceTree = "<group>"; };
+		BE82C46B18CA18610050EB79 /* svdtext.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = svdtext.cxx; path = ../../../svx/source/svdraw/svdtext.cxx; sourceTree = "<group>"; };
+		BE82C46C18CA18610050EB79 /* svdtrans.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = svdtrans.cxx; path = ../../../svx/source/svdraw/svdtrans.cxx; sourceTree = "<group>"; };
+		BE82C46D18CA18610050EB79 /* svdundo.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = svdundo.cxx; path = ../../../svx/source/svdraw/svdundo.cxx; sourceTree = "<group>"; };
+		BE82C46E18CA18610050EB79 /* svdview.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = svdview.cxx; path = ../../../svx/source/svdraw/svdview.cxx; sourceTree = "<group>"; };
+		BE82C46F18CA18610050EB79 /* svdviter.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = svdviter.cxx; path = ../../../svx/source/svdraw/svdviter.cxx; sourceTree = "<group>"; };
+		BE82C47018CA18610050EB79 /* svdxcgv.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = svdxcgv.cxx; path = ../../../svx/source/svdraw/svdxcgv.cxx; sourceTree = "<group>"; };
+		BE82C47318CA192D0050EB79 /* baseprocessor2d.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = baseprocessor2d.cxx; path = ../../../drawinglayer/source/processor2d/baseprocessor2d.cxx; sourceTree = "<group>"; };
+		BE82C47418CA192D0050EB79 /* contourextractor2d.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = contourextractor2d.cxx; path = ../../../drawinglayer/source/processor2d/contourextractor2d.cxx; sourceTree = "<group>"; };
+		BE82C47518CA192D0050EB79 /* getdigitlanguage.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = getdigitlanguage.cxx; path = ../../../drawinglayer/source/processor2d/getdigitlanguage.cxx; sourceTree = "<group>"; };
+		BE82C47618CA192D0050EB79 /* helperwrongspellrenderer.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = helperwrongspellrenderer.cxx; path = ../../../drawinglayer/source/processor2d/helperwrongspellrenderer.cxx; sourceTree = "<group>"; };
+		BE82C47718CA192D0050EB79 /* hittestprocessor2d.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = hittestprocessor2d.cxx; path = ../../../drawinglayer/source/processor2d/hittestprocessor2d.cxx; sourceTree = "<group>"; };
+		BE82C47818CA192D0050EB79 /* linegeometryextractor2d.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = linegeometryextractor2d.cxx; path = ../../../drawinglayer/source/processor2d/linegeometryextractor2d.cxx; sourceTree = "<group>"; };
+		BE82C47918CA192D0050EB79 /* objectinfoextractor2d.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = objectinfoextractor2d.cxx; path = ../../../drawinglayer/source/processor2d/objectinfoextractor2d.cxx; sourceTree = "<group>"; };
+		BE82C47A18CA192D0050EB79 /* processor2dtools.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = processor2dtools.cxx; path = ../../../drawinglayer/source/processor2d/processor2dtools.cxx; sourceTree = "<group>"; };
+		BE82C47B18CA192D0050EB79 /* processorfromoutputdevice.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = processorfromoutputdevice.cxx; path = ../../../drawinglayer/source/processor2d/processorfromoutputdevice.cxx; sourceTree = "<group>"; };
+		BE82C47C18CA192D0050EB79 /* textaspolygonextractor2d.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = textaspolygonextractor2d.cxx; path = ../../../drawinglayer/source/processor2d/textaspolygonextractor2d.cxx; sourceTree = "<group>"; };
+		BE82C47D18CA192D0050EB79 /* vclhelperbufferdevice.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = vclhelperbufferdevice.cxx; path = ../../../drawinglayer/source/processor2d/vclhelperbufferdevice.cxx; sourceTree = "<group>"; };
+		BE82C47E18CA192D0050EB79 /* vclmetafileprocessor2d.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = vclmetafileprocessor2d.cxx; path = ../../../drawinglayer/source/processor2d/vclmetafileprocessor2d.cxx; sourceTree = "<group>"; };
+		BE82C47F18CA192D0050EB79 /* vclpixelprocessor2d.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = vclpixelprocessor2d.cxx; path = ../../../drawinglayer/source/processor2d/vclpixelprocessor2d.cxx; sourceTree = "<group>"; };
+		BE82C48018CA192D0050EB79 /* vclprocessor2d.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = vclprocessor2d.cxx; path = ../../../drawinglayer/source/processor2d/vclprocessor2d.cxx; sourceTree = "<group>"; };
+		BE82C48218CA19920050EB79 /* animatedprimitive2d.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = animatedprimitive2d.cxx; path = ../../../drawinglayer/source/primitive2d/animatedprimitive2d.cxx; sourceTree = "<group>"; };
+		BE82C48318CA19920050EB79 /* backgroundcolorprimitive2d.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = backgroundcolorprimitive2d.cxx; path = ../../../drawinglayer/source/primitive2d/backgroundcolorprimitive2d.cxx; sourceTree = "<group>"; };
+		BE82C48418CA19920050EB79 /* baseprimitive2d.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = baseprimitive2d.cxx; path = ../../../drawinglayer/source/primitive2d/baseprimitive2d.cxx; sourceTree = "<group>"; };
+		BE82C48518CA19920050EB79 /* bitmapprimitive2d.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = bitmapprimitive2d.cxx; path = ../../../drawinglayer/source/primitive2d/bitmapprimitive2d.cxx; sourceTree = "<group>"; };
+		BE82C48618CA19920050EB79 /* borderlineprimitive2d.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = borderlineprimitive2d.cxx; path = ../../../drawinglayer/source/primitive2d/borderlineprimitive2d.cxx; sourceTree = "<group>"; };
+		BE82C48718CA19920050EB79 /* clippedborderlineprimitive2d.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = clippedborderlineprimitive2d.cxx; path = ../../../drawinglayer/source/primitive2d/clippedborderlineprimitive2d.cxx; sourceTree = "<group>"; };
+		BE82C48818CA19920050EB79 /* controlprimitive2d.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = controlprimitive2d.cxx; path = ../../../drawinglayer/source/primitive2d/controlprimitive2d.cxx; sourceTree = "<group>"; };
+		BE82C48918CA19920050EB79 /* cropprimitive2d.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = cropprimitive2d.cxx; path = ../../../drawinglayer/source/primitive2d/cropprimitive2d.cxx; sourceTree = "<group>"; };
+		BE82C48A18CA19920050EB79 /* discretebitmapprimitive2d.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = discretebitmapprimitive2d.cxx; path = ../../../drawinglayer/source/primitive2d/discretebitmapprimitive2d.cxx; sourceTree = "<group>"; };
+		BE82C48B18CA19920050EB79 /* discreteshadowprimitive2d.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = discreteshadowprimitive2d.cxx; path = ../../../drawinglayer/source/primitive2d/discreteshadowprimitive2d.cxx; sourceTree = "<group>"; };
+		BE82C48C18CA19920050EB79 /* embedded3dprimitive2d.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = embedded3dprimitive2d.cxx; path = ../../../drawinglayer/source/primitive2d/embedded3dprimitive2d.cxx; sourceTree = "<group>"; };
+		BE82C48D18CA19920050EB79 /* epsprimitive2d.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = epsprimitive2d.cxx; path = ../../../drawinglayer/source/primitive2d/epsprimitive2d.cxx; sourceTree = "<group>"; };
+		BE82C48E18CA19920050EB79 /* fillgradientprimitive2d.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = fillgradientprimitive2d.cxx; path = ../../../drawinglayer/source/primitive2d/fillgradientprimitive2d.cxx; sourceTree = "<group>"; };
+		BE82C48F18CA19920050EB79 /* fillgraphicprimitive2d.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = fillgraphicprimitive2d.cxx; path = ../../../drawinglayer/source/primitive2d/fillgraphicprimitive2d.cxx; sourceTree = "<group>"; };
+		BE82C49018CA19920050EB79 /* fillhatchprimitive2d.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = fillhatchprimitive2d.cxx; path = ../../../drawinglayer/source/primitive2d/fillhatchprimitive2d.cxx; sourceTree = "<group>"; };
+		BE82C49118CA19920050EB79 /* graphicprimitive2d.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = graphicprimitive2d.cxx; path = ../../../drawinglayer/source/primitive2d/graphicprimitive2d.cxx; sourceTree = "<group>"; };
+		BE82C49218CA19920050EB79 /* graphicprimitivehelper2d.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = graphicprimitivehelper2d.cxx; path = ../../../drawinglayer/source/primitive2d/graphicprimitivehelper2d.cxx; sourceTree = "<group>"; };
+		BE82C49318CA19920050EB79 /* gridprimitive2d.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = gridprimitive2d.cxx; path = ../../../drawinglayer/source/primitive2d/gridprimitive2d.cxx; sourceTree = "<group>"; };
+		BE82C49418CA19920050EB79 /* groupprimitive2d.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = groupprimitive2d.cxx; path = ../../../drawinglayer/source/primitive2d/groupprimitive2d.cxx; sourceTree = "<group>"; };
+		BE82C49518CA19920050EB79 /* helplineprimitive2d.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = helplineprimitive2d.cxx; path = ../../../drawinglayer/source/primitive2d/helplineprimitive2d.cxx; sourceTree = "<group>"; };
+		BE82C49618CA19920050EB79 /* hiddengeometryprimitive2d.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = hiddengeometryprimitive2d.cxx; path = ../../../drawinglayer/source/primitive2d/hiddengeometryprimitive2d.cxx; sourceTree = "<group>"; };
+		BE82C49718CA19920050EB79 /* invertprimitive2d.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = invertprimitive2d.cxx; path = ../../../drawinglayer/source/primitive2d/invertprimitive2d.cxx; sourceTree = "<group>"; };
+		BE82C49818CA19920050EB79 /* markerarrayprimitive2d.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = markerarrayprimitive2d.cxx; path = ../../../drawinglayer/source/primitive2d/markerarrayprimitive2d.cxx; sourceTree = "<group>"; };
+		BE82C49918CA19920050EB79 /* maskprimitive2d.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = maskprimitive2d.cxx; path = ../../../drawinglayer/source/primitive2d/maskprimitive2d.cxx; sourceTree = "<group>"; };
+		BE82C49A18CA19920050EB79 /* mediaprimitive2d.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = mediaprimitive2d.cxx; path = ../../../drawinglayer/source/primitive2d/mediaprimitive2d.cxx; sourceTree = "<group>"; };
+		BE82C49B18CA19920050EB79 /* metafileprimitive2d.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = metafileprimitive2d.cxx; path = ../../../drawinglayer/source/primitive2d/metafileprimitive2d.cxx; sourceTree = "<group>"; };
+		BE82C49C18CA19920050EB79 /* modifiedcolorprimitive2d.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = modifiedcolorprimitive2d.cxx; path = ../../../drawinglayer/source/primitive2d/modifiedcolorprimitive2d.cxx; sourceTree = "<group>"; };
+		BE82C49D18CA19920050EB79 /* objectinfoprimitive2d.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = objectinfoprimitive2d.cxx; path = ../../../drawinglayer/source/primitive2d/objectinfoprimitive2d.cxx; sourceTree = "<group>"; };
+		BE82C49E18CA19920050EB79 /* pagepreviewprimitive2d.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = pagepreviewprimitive2d.cxx; path = ../../../drawinglayer/source/primitive2d/pagepreviewprimitive2d.cxx; sourceTree = "<group>"; };
+		BE82C49F18CA19920050EB79 /* patternfillprimitive2d.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = patternfillprimitive2d.cxx; path = ../../../drawinglayer/source/primitive2d/patternfillprimitive2d.cxx; sourceTree = "<group>"; };
+		BE82C4A018CA19920050EB79 /* pointarrayprimitive2d.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = pointarrayprimitive2d.cxx; path = ../../../drawinglayer/source/primitive2d/pointarrayprimitive2d.cxx; sourceTree = "<group>"; };
+		BE82C4A118CA19920050EB79 /* polygonprimitive2d.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = polygonprimitive2d.cxx; path = ../../../drawinglayer/source/primitive2d/polygonprimitive2d.cxx; sourceTree = "<group>"; };
+		BE82C4A218CA19920050EB79 /* polypolygonprimitive2d.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = polypolygonprimitive2d.cxx; path = ../../../drawinglayer/source/primitive2d/polypolygonprimitive2d.cxx; sourceTree = "<group>"; };
+		BE82C4A318CA19920050EB79 /* primitivetools2d.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = primitivetools2d.cxx; path = ../../../drawinglayer/source/primitive2d/primitivetools2d.cxx; sourceTree = "<group>"; };
+		BE82C4A418CA19920050EB79 /* sceneprimitive2d.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = sceneprimitive2d.cxx; path = ../../../drawinglayer/source/primitive2d/sceneprimitive2d.cxx; sourceTree = "<group>"; };
+		BE82C4A518CA19920050EB79 /* sdrdecompositiontools2d.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = sdrdecompositiontools2d.cxx; path = ../../../drawinglayer/source/primitive2d/sdrdecompositiontools2d.cxx; sourceTree = "<group>"; };
+		BE82C4A618CA19920050EB79 /* shadowprimitive2d.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = shadowprimitive2d.cxx; path = ../../../drawinglayer/source/primitive2d/shadowprimitive2d.cxx; sourceTree = "<group>"; };
+		BE82C4A718CA19920050EB79 /* structuretagprimitive2d.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = structuretagprimitive2d.cxx; path = ../../../drawinglayer/source/primitive2d/structuretagprimitive2d.cxx; sourceTree = "<group>"; };
+		BE82C4A818CA19920050EB79 /* svggradientprimitive2d.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = svggradientprimitive2d.cxx; path = ../../../drawinglayer/source/primitive2d/svggradientprimitive2d.cxx; sourceTree = "<group>"; };
+		BE82C4A918CA19920050EB79 /* textbreakuphelper.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = textbreakuphelper.cxx; path = ../../../drawinglayer/source/primitive2d/textbreakuphelper.cxx; sourceTree = "<group>"; };
+		BE82C4AA18CA19920050EB79 /* textdecoratedprimitive2d.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = textdecoratedprimitive2d.cxx; path = ../../../drawinglayer/source/primitive2d/textdecoratedprimitive2d.cxx; sourceTree = "<group>"; };
+		BE82C4AB18CA19920050EB79 /* texteffectprimitive2d.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = texteffectprimitive2d.cxx; path = ../../../drawinglayer/source/primitive2d/texteffectprimitive2d.cxx; sourceTree = "<group>"; };
+		BE82C4AC18CA19920050EB79 /* textenumsprimitive2d.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = textenumsprimitive2d.cxx; path = ../../../drawinglayer/source/primitive2d/textenumsprimitive2d.cxx; sourceTree = "<group>"; };
+		BE82C4AD18CA19920050EB79 /* texthierarchyprimitive2d.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = texthierarchyprimitive2d.cxx; path = ../../../drawinglayer/source/primitive2d/texthierarchyprimitive2d.cxx; sourceTree = "<group>"; };
+		BE82C4AE18CA19920050EB79 /* textlayoutdevice.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = textlayoutdevice.cxx; path = ../../../drawinglayer/source/primitive2d/textlayoutdevice.cxx; sourceTree = "<group>"; };
+		BE82C4AF18CA19920050EB79 /* textlineprimitive2d.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = textlineprimitive2d.cxx; path = ../../../drawinglayer/source/primitive2d/textlineprimitive2d.cxx; sourceTree = "<group>"; };
+		BE82C4B018CA19920050EB79 /* textprimitive2d.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = textprimitive2d.cxx; path = ../../../drawinglayer/source/primitive2d/textprimitive2d.cxx; sourceTree = "<group>"; };
+		BE82C4B118CA19920050EB79 /* textstrikeoutprimitive2d.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = textstrikeoutprimitive2d.cxx; path = ../../../drawinglayer/source/primitive2d/textstrikeoutprimitive2d.cxx; sourceTree = "<group>"; };
+		BE82C4B218CA19920050EB79 /* transformprimitive2d.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = transformprimitive2d.cxx; path = ../../../drawinglayer/source/primitive2d/transformprimitive2d.cxx; sourceTree = "<group>"; };
+		BE82C4B318CA19920050EB79 /* transparenceprimitive2d.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = transparenceprimitive2d.cxx; path = ../../../drawinglayer/source/primitive2d/transparenceprimitive2d.cxx; sourceTree = "<group>"; };
+		BE82C4B418CA19920050EB79 /* unifiedtransparenceprimitive2d.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = unifiedtransparenceprimitive2d.cxx; path = ../../../drawinglayer/source/primitive2d/unifiedtransparenceprimitive2d.cxx; sourceTree = "<group>"; };
+		BE82C4B518CA19920050EB79 /* wallpaperprimitive2d.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = wallpaperprimitive2d.cxx; path = ../../../drawinglayer/source/primitive2d/wallpaperprimitive2d.cxx; sourceTree = "<group>"; };
+		BE82C4B618CA19920050EB79 /* wrongspellprimitive2d.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = wrongspellprimitive2d.cxx; path = ../../../drawinglayer/source/primitive2d/wrongspellprimitive2d.cxx; sourceTree = "<group>"; };
+		BE82C4BB18CDBCC50050EB79 /* pagepreviewlayout.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = pagepreviewlayout.cxx; path = ../../../sw/source/core/view/pagepreviewlayout.cxx; sourceTree = "<group>"; };
+		BE82C4BC18CDBCC50050EB79 /* printdata.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = printdata.cxx; path = ../../../sw/source/core/view/printdata.cxx; sourceTree = "<group>"; };
+		BE82C4BD18CDBCC50050EB79 /* vdraw.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = vdraw.cxx; path = ../../../sw/source/core/view/vdraw.cxx; sourceTree = "<group>"; };
+		BE82C4BE18CDBCC50050EB79 /* viewimp.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = viewimp.cxx; path = ../../../sw/source/core/view/viewimp.cxx; sourceTree = "<group>"; };
+		BE82C4BF18CDBCC50050EB79 /* viewpg.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = viewpg.cxx; path = ../../../sw/source/core/view/viewpg.cxx; sourceTree = "<group>"; };
+		BE82C4C018CDBCC50050EB79 /* viewsh.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = viewsh.cxx; path = ../../../sw/source/core/view/viewsh.cxx; sourceTree = "<group>"; };
+		BE82C4C118CDBCC50050EB79 /* vnew.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = vnew.cxx; path = ../../../sw/source/core/view/vnew.cxx; sourceTree = "<group>"; };
+		BE82C4C218CDBCC50050EB79 /* vprint.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = vprint.cxx; path = ../../../sw/source/core/view/vprint.cxx; sourceTree = "<group>"; };
 		BE9F45F91868396500B8BE69 /* cpp2uno-arm.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = "cpp2uno-arm.cxx"; path = "../../../bridges/source/cpp_uno/gcc3_ios_arm/cpp2uno-arm.cxx"; sourceTree = "<group>"; };
 		BE9F45FA1868396500B8BE69 /* cpp2uno-arm64.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = "cpp2uno-arm64.cxx"; path = "../../../bridges/source/cpp_uno/gcc3_ios_arm/cpp2uno-arm64.cxx"; sourceTree = "<group>"; };
 		BE9F45FB1868396500B8BE69 /* cpp2uno-i386.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = "cpp2uno-i386.cxx"; path = "../../../bridges/source/cpp_uno/gcc3_ios_arm/cpp2uno-i386.cxx"; sourceTree = "<group>"; };
 		BE9F45FC1868396500B8BE69 /* cpp2uno.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = cpp2uno.cxx; path = ../../../bridges/source/cpp_uno/gcc3_ios_arm/cpp2uno.cxx; sourceTree = "<group>"; };
 		BE9F45FD1868396500B8BE69 /* except.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = except.cxx; path = ../../../bridges/source/cpp_uno/gcc3_ios_arm/except.cxx; sourceTree = "<group>"; };
 		BE9F45FE1868396500B8BE69 /* helper.s */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.asm; name = helper.s; path = ../../../bridges/source/cpp_uno/gcc3_ios_arm/helper.s; sourceTree = "<group>"; };
-		BE9F45FF1868396500B8BE69 /* temp.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = temp.cxx; path = ../../../bridges/source/cpp_uno/gcc3_ios_arm/temp.cxx; sourceTree = "<group>"; };
 		BE9F46001868396500B8BE69 /* uno2cpp-arm.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = "uno2cpp-arm.cxx"; path = "../../../bridges/source/cpp_uno/gcc3_ios_arm/uno2cpp-arm.cxx"; sourceTree = "<group>"; };
 		BE9F46011868396500B8BE69 /* uno2cpp-arm64.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = "uno2cpp-arm64.cxx"; path = "../../../bridges/source/cpp_uno/gcc3_ios_arm/uno2cpp-arm64.cxx"; sourceTree = "<group>"; };
 		BE9F46021868396500B8BE69 /* uno2cpp-i386.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = "uno2cpp-i386.cxx"; path = "../../../bridges/source/cpp_uno/gcc3_ios_arm/uno2cpp-i386.cxx"; sourceTree = "<group>"; };
@@ -270,8 +416,13 @@
 		BE0898E61860D3CD0021A679 /* LibreOffice source files */ = {
 			isa = PBXGroup;
 			children = (
+				BE82C47118CA18D70050EB79 /* drawinglayer */,
 				BE35B58A188FFA43001B7439 /* cppuhelper */,
 				BE9F45F81868393D00B8BE69 /* bridges */,
+				BE82C38818C752760050EB79 /* sal */,
+				BE35B5A6189051F7001B7439 /* sfx2 */,
+				BE82C42718CA17A60050EB79 /* svx */,
+				BE82C4B918CDBC5B0050EB79 /* sw */,
 				BE0898E71860D3DA0021A679 /* vcl */,
 			);
 			name = "LibreOffice source files";
@@ -474,8 +625,6 @@
 			isa = PBXGroup;
 			children = (
 				BE0898E61860D3CD0021A679 /* LibreOffice source files */,
-				BE82C38818C752760050EB79 /* sal */,
-				BE35B5A6189051F7001B7439 /* sfx2 */,
 				BE82BD7B18218E2E00A447B5 /* TiledLibreOffice */,
 				BEEEF9681860A21F00FBDE67 /* Resources */,
 				BE82BD7418218E2E00A447B5 /* Frameworks */,
@@ -572,6 +721,206 @@
 			name = sal;
 			sourceTree = "<group>";
 		};
+		BE82C42718CA17A60050EB79 /* svx */ = {
+			isa = PBXGroup;
+			children = (
+				BE82C42818CA184E0050EB79 /* svdraw */,
+			);
+			name = svx;
+			sourceTree = "<group>";
+		};
+		BE82C42818CA184E0050EB79 /* svdraw */ = {
+			isa = PBXGroup;
+			children = (
+				BE82C42918CA18610050EB79 /* ActionDescriptionProvider.cxx */,
+				BE82C42A18CA18610050EB79 /* charthelper.cxx */,
+				BE82C42B18CA18610050EB79 /* clonelist.cxx */,
+				BE82C42C18CA18610050EB79 /* gradtrns.cxx */,
+				BE82C42D18CA18610050EB79 /* gradtrns.hxx */,
+				BE82C42E18CA18610050EB79 /* polypolygoneditor.cxx */,
+				BE82C42F18CA18610050EB79 /* sdrhittesthelper.cxx */,
+				BE82C43018CA18610050EB79 /* sdrmasterpagedescriptor.cxx */,
+				BE82C43118CA18610050EB79 /* sdrpagewindow.cxx */,
+				BE82C43218CA18610050EB79 /* sdrpaintwindow.cxx */,
+				BE82C43318CA18610050EB79 /* sdrundomanager.cxx */,
+				BE82C43418CA18610050EB79 /* selectioncontroller.cxx */,
+				BE82C43518CA18610050EB79 /* svdattr.cxx */,
+				BE82C43618CA18610050EB79 /* svdcrtv.cxx */,
+				BE82C43718CA18610050EB79 /* svddrag.cxx */,
+				BE82C43818CA18610050EB79 /* svddrgmt.cxx */,
+				BE82C43918CA18610050EB79 /* svddrgv.cxx */,
+				BE82C43A18CA18610050EB79 /* svdedtv.cxx */,
+				BE82C43B18CA18610050EB79 /* svdedtv1.cxx */,
+				BE82C43C18CA18610050EB79 /* svdedtv2.cxx */,
+				BE82C43D18CA18610050EB79 /* svdedxv.cxx */,
+				BE82C43E18CA18610050EB79 /* svdetc.cxx */,
+				BE82C43F18CA18610050EB79 /* svdfmtf.cxx */,
+				BE82C44018CA18610050EB79 /* svdglev.cxx */,
+				BE82C44118CA18610050EB79 /* svdglue.cxx */,
+				BE82C44218CA18610050EB79 /* svdhdl.cxx */,
+				BE82C44318CA18610050EB79 /* svdhlpln.cxx */,
+				BE82C44418CA18610050EB79 /* svdibrow.cxx */,
+				BE82C44518CA18610050EB79 /* svditer.cxx */,
+				BE82C44618CA18610050EB79 /* svdlayer.cxx */,
+				BE82C44718CA18610050EB79 /* svdmark.cxx */,
+				BE82C44818CA18610050EB79 /* svdmodel.cxx */,
+				BE82C44918CA18610050EB79 /* svdmrkv.cxx */,
+				BE82C44A18CA18610050EB79 /* svdmrkv1.cxx */,
+				BE82C44B18CA18610050EB79 /* svdoashp.cxx */,
+				BE82C44C18CA18610050EB79 /* svdoattr.cxx */,
+				BE82C44D18CA18610050EB79 /* svdobj.cxx */,
+				BE82C44E18CA18610050EB79 /* svdocapt.cxx */,
+				BE82C44F18CA18610050EB79 /* svdocirc.cxx */,
+				BE82C45018CA18610050EB79 /* svdoedge.cxx */,
+				BE82C45118CA18610050EB79 /* svdograf.cxx */,
+				BE82C45218CA18610050EB79 /* svdogrp.cxx */,
+				BE82C45318CA18610050EB79 /* svdomeas.cxx */,
+				BE82C45418CA18610050EB79 /* svdomedia.cxx */,
+				BE82C45518CA18610050EB79 /* svdoole2.cxx */,
+				BE82C45618CA18610050EB79 /* svdopage.cxx */,
+				BE82C45718CA18610050EB79 /* svdopath.cxx */,
+				BE82C45818CA18610050EB79 /* svdorect.cxx */,
+				BE82C45918CA18610050EB79 /* svdotext.cxx */,
+				BE82C45A18CA18610050EB79 /* svdotextdecomposition.cxx */,
+				BE82C45B18CA18610050EB79 /* svdotextpathdecomposition.cxx */,
+				BE82C45C18CA18610050EB79 /* svdotxat.cxx */,
+				BE82C45D18CA18610050EB79 /* svdotxdr.cxx */,
+				BE82C45E18CA18610050EB79 /* svdotxed.cxx */,
+				BE82C45F18CA18610050EB79 /* svdotxfl.cxx */,
+				BE82C46018CA18610050EB79 /* svdotxln.cxx */,
+				BE82C46118CA18610050EB79 /* svdotxtr.cxx */,
+				BE82C46218CA18610050EB79 /* svdouno.cxx */,
+				BE82C46318CA18610050EB79 /* svdoutl.cxx */,
+				BE82C46418CA18610050EB79 /* svdoutlinercache.cxx */,
+				BE82C46518CA18610050EB79 /* svdovirt.cxx */,
+				BE82C46618CA18610050EB79 /* svdpage.cxx */,
+				BE82C46718CA18610050EB79 /* svdpagv.cxx */,
+				BE82C46818CA18610050EB79 /* svdpntv.cxx */,
+				BE82C46918CA18610050EB79 /* svdpoev.cxx */,
+				BE82C46A18CA18610050EB79 /* svdsnpv.cxx */,
+				BE82C46B18CA18610050EB79 /* svdtext.cxx */,
+				BE82C46C18CA18610050EB79 /* svdtrans.cxx */,
+				BE82C46D18CA18610050EB79 /* svdundo.cxx */,
+				BE82C46E18CA18610050EB79 /* svdview.cxx */,
+				BE82C46F18CA18610050EB79 /* svdviter.cxx */,
+				BE82C47018CA18610050EB79 /* svdxcgv.cxx */,
+			);
+			name = svdraw;
+			sourceTree = "<group>";
+		};
+		BE82C47118CA18D70050EB79 /* drawinglayer */ = {
+			isa = PBXGroup;
+			children = (
+				BE82C48118CA19660050EB79 /* primitive2d */,
+				BE82C47218CA18F60050EB79 /* processor2d */,
+			);
+			name = drawinglayer;
+			sourceTree = "<group>";
+		};
+		BE82C47218CA18F60050EB79 /* processor2d */ = {
+			isa = PBXGroup;
+			children = (
+				BE82C47318CA192D0050EB79 /* baseprocessor2d.cxx */,
+				BE82C47418CA192D0050EB79 /* contourextractor2d.cxx */,
+				BE82C47518CA192D0050EB79 /* getdigitlanguage.cxx */,
+				BE82C47618CA192D0050EB79 /* helperwrongspellrenderer.cxx */,
+				BE82C47718CA192D0050EB79 /* hittestprocessor2d.cxx */,
+				BE82C47818CA192D0050EB79 /* linegeometryextractor2d.cxx */,
+				BE82C47918CA192D0050EB79 /* objectinfoextractor2d.cxx */,
+				BE82C47A18CA192D0050EB79 /* processor2dtools.cxx */,
+				BE82C47B18CA192D0050EB79 /* processorfromoutputdevice.cxx */,
+				BE82C47C18CA192D0050EB79 /* textaspolygonextractor2d.cxx */,
+				BE82C47D18CA192D0050EB79 /* vclhelperbufferdevice.cxx */,
+				BE82C47E18CA192D0050EB79 /* vclmetafileprocessor2d.cxx */,
+				BE82C47F18CA192D0050EB79 /* vclpixelprocessor2d.cxx */,
+				BE82C48018CA192D0050EB79 /* vclprocessor2d.cxx */,
+			);
+			name = processor2d;
+			sourceTree = "<group>";
+		};
+		BE82C48118CA19660050EB79 /* primitive2d */ = {
+			isa = PBXGroup;
+			children = (
+				BE82C48218CA19920050EB79 /* animatedprimitive2d.cxx */,
+				BE82C48318CA19920050EB79 /* backgroundcolorprimitive2d.cxx */,
+				BE82C48418CA19920050EB79 /* baseprimitive2d.cxx */,
+				BE82C48518CA19920050EB79 /* bitmapprimitive2d.cxx */,
+				BE82C48618CA19920050EB79 /* borderlineprimitive2d.cxx */,
+				BE82C48718CA19920050EB79 /* clippedborderlineprimitive2d.cxx */,
+				BE82C48818CA19920050EB79 /* controlprimitive2d.cxx */,
+				BE82C48918CA19920050EB79 /* cropprimitive2d.cxx */,
+				BE82C48A18CA19920050EB79 /* discretebitmapprimitive2d.cxx */,
+				BE82C48B18CA19920050EB79 /* discreteshadowprimitive2d.cxx */,
+				BE82C48C18CA19920050EB79 /* embedded3dprimitive2d.cxx */,
+				BE82C48D18CA19920050EB79 /* epsprimitive2d.cxx */,
+				BE82C48E18CA19920050EB79 /* fillgradientprimitive2d.cxx */,
+				BE82C48F18CA19920050EB79 /* fillgraphicprimitive2d.cxx */,
+				BE82C49018CA19920050EB79 /* fillhatchprimitive2d.cxx */,
+				BE82C49118CA19920050EB79 /* graphicprimitive2d.cxx */,
+				BE82C49218CA19920050EB79 /* graphicprimitivehelper2d.cxx */,
+				BE82C49318CA19920050EB79 /* gridprimitive2d.cxx */,
+				BE82C49418CA19920050EB79 /* groupprimitive2d.cxx */,
+				BE82C49518CA19920050EB79 /* helplineprimitive2d.cxx */,
+				BE82C49618CA19920050EB79 /* hiddengeometryprimitive2d.cxx */,
+				BE82C49718CA19920050EB79 /* invertprimitive2d.cxx */,
+				BE82C49818CA19920050EB79 /* markerarrayprimitive2d.cxx */,
+				BE82C49918CA19920050EB79 /* maskprimitive2d.cxx */,
+				BE82C49A18CA19920050EB79 /* mediaprimitive2d.cxx */,
+				BE82C49B18CA19920050EB79 /* metafileprimitive2d.cxx */,
+				BE82C49C18CA19920050EB79 /* modifiedcolorprimitive2d.cxx */,
+				BE82C49D18CA19920050EB79 /* objectinfoprimitive2d.cxx */,
+				BE82C49E18CA19920050EB79 /* pagepreviewprimitive2d.cxx */,
+				BE82C49F18CA19920050EB79 /* patternfillprimitive2d.cxx */,
+				BE82C4A018CA19920050EB79 /* pointarrayprimitive2d.cxx */,
+				BE82C4A118CA19920050EB79 /* polygonprimitive2d.cxx */,
+				BE82C4A218CA19920050EB79 /* polypolygonprimitive2d.cxx */,
+				BE82C4A318CA19920050EB79 /* primitivetools2d.cxx */,
+				BE82C4A418CA19920050EB79 /* sceneprimitive2d.cxx */,
+				BE82C4A518CA19920050EB79 /* sdrdecompositiontools2d.cxx */,
+				BE82C4A618CA19920050EB79 /* shadowprimitive2d.cxx */,
+				BE82C4A718CA19920050EB79 /* structuretagprimitive2d.cxx */,
+				BE82C4A818CA19920050EB79 /* svggradientprimitive2d.cxx */,
+				BE82C4A918CA19920050EB79 /* textbreakuphelper.cxx */,
+				BE82C4AA18CA19920050EB79 /* textdecoratedprimitive2d.cxx */,
+				BE82C4AB18CA19920050EB79 /* texteffectprimitive2d.cxx */,
+				BE82C4AC18CA19920050EB79 /* textenumsprimitive2d.cxx */,
+				BE82C4AD18CA19920050EB79 /* texthierarchyprimitive2d.cxx */,
+				BE82C4AE18CA19920050EB79 /* textlayoutdevice.cxx */,
+				BE82C4AF18CA19920050EB79 /* textlineprimitive2d.cxx */,
+				BE82C4B018CA19920050EB79 /* textprimitive2d.cxx */,
+				BE82C4B118CA19920050EB79 /* textstrikeoutprimitive2d.cxx */,
+				BE82C4B218CA19920050EB79 /* transformprimitive2d.cxx */,
+				BE82C4B318CA19920050EB79 /* transparenceprimitive2d.cxx */,
+				BE82C4B418CA19920050EB79 /* unifiedtransparenceprimitive2d.cxx */,
+				BE82C4B518CA19920050EB79 /* wallpaperprimitive2d.cxx */,
+				BE82C4B618CA19920050EB79 /* wrongspellprimitive2d.cxx */,
+			);
+			name = primitive2d;
+			sourceTree = "<group>";
+		};
+		BE82C4B918CDBC5B0050EB79 /* sw */ = {
+			isa = PBXGroup;
+			children = (
+				BE82C4BA18CDBCB00050EB79 /* view */,
+			);
+			name = sw;
+			sourceTree = "<group>";
+		};
+		BE82C4BA18CDBCB00050EB79 /* view */ = {
+			isa = PBXGroup;
+			children = (
+				BE82C4BB18CDBCC50050EB79 /* pagepreviewlayout.cxx */,
+				BE82C4BC18CDBCC50050EB79 /* printdata.cxx */,
+				BE82C4BD18CDBCC50050EB79 /* vdraw.cxx */,
+				BE82C4BE18CDBCC50050EB79 /* viewimp.cxx */,
+				BE82C4BF18CDBCC50050EB79 /* viewpg.cxx */,
+				BE82C4C018CDBCC50050EB79 /* viewsh.cxx */,
+				BE82C4C118CDBCC50050EB79 /* vnew.cxx */,
+				BE82C4C218CDBCC50050EB79 /* vprint.cxx */,
+			);
+			name = view;
+			sourceTree = "<group>";
+		};
 		BE9F45F81868393D00B8BE69 /* bridges */ = {
 			isa = PBXGroup;
 			children = (
@@ -589,7 +938,6 @@
 				BE9F45FC1868396500B8BE69 /* cpp2uno.cxx */,
 				BE9F45FD1868396500B8BE69 /* except.cxx */,
 				BE9F45FE1868396500B8BE69 /* helper.s */,
-				BE9F45FF1868396500B8BE69 /* temp.cxx */,
 				BE9F46001868396500B8BE69 /* uno2cpp-arm.cxx */,
 				BE9F46011868396500B8BE69 /* uno2cpp-arm64.cxx */,
 				BE9F46021868396500B8BE69 /* uno2cpp-i386.cxx */,
