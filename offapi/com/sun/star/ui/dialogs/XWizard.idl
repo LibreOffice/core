@@ -34,7 +34,7 @@ module com { module sun { module star { module ui { module dialogs {
 
 //==================================================================================================================
 
-published interface XWizardPage;
+interface XWizardPage;
 
 /** is the main interface implemented by the <type>Wizard</type> services.
 
@@ -78,7 +78,7 @@ published interface XWizardPage;
 
     @since OpenOffice 3.3
  */
-published interface XWizard
+interface XWizard
 {
     interface   XExecutableDialog;
 

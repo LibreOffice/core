@@ -31,7 +31,7 @@
 
 module com { module sun { module star { module ui { module dialogs {
 
-published interface XWizardController;
+interface XWizardController;
 
 //==================================================================================================================
 
@@ -39,7 +39,7 @@ published interface XWizardController;
 
     @since OpenOffice 3.3
  */
-published service Wizard : XWizard
+service Wizard : XWizard
 {
     /** creates a wizard with a single execution path
         @param PageIds

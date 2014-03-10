@@ -36,7 +36,7 @@ module com { module sun { module star { module ui { module dialogs {
 
     @since OpenOffice 3.3
  */
-published interface XWizardController
+interface XWizardController
 {
     /** creates a page
 
