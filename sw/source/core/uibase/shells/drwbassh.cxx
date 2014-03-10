@@ -73,8 +73,10 @@ SFX_IMPL_INTERFACE(SwDrawBaseShell, SwBaseShell, SW_RES(0))
 
 TYPEINIT1(SwDrawBaseShell,SwBaseShell)
 
-SwDrawBaseShell::SwDrawBaseShell(SwView &_rView):
-    SwBaseShell( _rView )
+SwDrawBaseShell::SwDrawBaseShell(SwView &_rView)
+    : SwBaseShell(_rView)
+    , pDrawActual(0)
+    , eDrawMode(0)
 {
     GetShell().NoEdit(true);
 
