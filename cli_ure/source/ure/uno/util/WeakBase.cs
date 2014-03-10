@@ -109,41 +109,9 @@ public class WeakBase : XWeak, XTypeProvider
         return types;
     }
     
-    /** Provides an identifier that represents the set of UNO interfaces
-        implemented by this class.  All instances of this class which run
-        in the same CLR return the same array.
-        
-        @return identifier as array of bytes
-    */
     public byte [] getImplementationId()
     {
-        byte [] id;
-        Type type = GetType();
-        lock (s_impl_ids)
-        {
-            id = (byte []) s_impl_ids[ type ];
-            if (null == id)
-            {
-                Int32 hash = GetHashCode();
-                String name = type.FullName;
-                Int32 len= name.Length;
-                
-                id = new byte[ 4 + (2 * len) ];
-                id[ 0 ]= (byte) (hash & 0xff);
-                id[ 1 ]= (byte) ((hash >> 8) & 0xff);
-                id[ 2 ]= (byte) ((hash >> 16) & 0xff);
-                id[ 3 ]= (byte) ((hash >> 24) & 0xff);
-                
-                for ( Int32 pos = 0; pos < len; ++pos )
-                {
-                    UInt16 c = Convert.ToUInt16( name[ pos ] );
-                    id[ 4 + (2 * pos) ] = (byte) (c & 0xff);
-                    id[ 4 + (2 * pos) +1 ] = (byte) ((c >> 8) & 0xff);
-                }
-                s_impl_ids[ type ] = id;
-            }
-        }
-        return id;
+        return new byte[0];
     }
     
     // System.Object
@@ -151,9 +119,7 @@ public class WeakBase : XWeak, XTypeProvider
     {
         System.Text.StringBuilder buf =
             new System.Text.StringBuilder( base.ToString(), 256 );
-        buf.Append( "\nUNO Object Implementation:\n\tImplementationId: " );
-        buf.Append( getImplementationId() );
-        buf.Append( "\n\tInterfaces: " );
+        buf.Append( "\nUNO Object Implementation:\n\tInterfaces: " );
         Type [] types = getTypes();
         for ( Int32 pos = 0; pos < types.Length; ++pos )
         {
