@@ -207,6 +207,11 @@ public:
         const ::com::sun::star::awt::Size & rPageSize,
         sal_Bool bExportContent,
         sal_Bool bHasTwoYAxes );
+
+    void exportPropertyMapping(
+        const com::sun::star::uno::Reference< com::sun::star::chart2::data::XDataSource > & xSource,
+        Sequence< OUString >& rSupportedMappings );
+
     void exportCandleStickSeries(
         const ::com::sun::star::uno::Sequence<
             ::com::sun::star::uno::Reference<
@@ -2874,11 +2879,48 @@ void SchXMLExportHelper_Impl::exportSeries(
                         uno::Reference< beans::XPropertySet >( aSeriesSeq[nSeriesIdx], uno::UNO_QUERY ),
                         nSeriesLength, xNewDiagram, bExportContent );
 
+                    const SvtSaveOptions::ODFDefaultVersion nCurrentODFVersion( SvtSaveOptions().GetODFDefaultVersion() );
+                    if( bExportContent && nCurrentODFVersion > SvtSaveOptions::ODFVER_012 )//do not export to ODF 1.2 or older
+                    {
+                        Sequence< OUString > aSupportedMappings = aCTSeq[nCTIdx]->getSupportedPropertyRoles();
+                        exportPropertyMapping( xSource, aSupportedMappings );
+                    }
+
                     // close series element
                     delete pSeries;
                 }
             }
             aPropertyStates.clear();
+        }
+    }
+}
+
+void SchXMLExportHelper_Impl::exportPropertyMapping(
+    const Reference< chart2::data::XDataSource > & xSource, Sequence< OUString >& rSupportedMappings )
+{
+    Reference< chart2::XChartDocument > xNewDoc( mrExport.GetModel(), uno::UNO_QUERY );
+    Sequence< Reference< chart2::data::XLabeledDataSequence > > aSeqCnt(
+            xSource->getDataSequences());
+
+    for(sal_Int32 i = 0, n = rSupportedMappings.getLength(); i < n; ++i)
+    {
+        Reference< chart2::data::XLabeledDataSequence > xSequence( lcl_getDataSequenceByRole( aSeqCnt, rSupportedMappings[i] ) );
+        if(xSequence.is())
+        {
+            Reference< chart2::data::XDataSequence > xValues( xSequence->getValues() );
+            if( xValues.is())
+            {
+                mrExport.AddAttribute( XML_NAMESPACE_LO_EXT, XML_PROPERTY, rSupportedMappings[i]);
+                mrExport.AddAttribute( XML_NAMESPACE_LO_EXT, XML_CELL_RANGE_ADDRESS,
+                        lcl_ConvertRange(
+                            xValues->getSourceRangeRepresentation(),
+                            xNewDoc ));
+                SvXMLElementExport( mrExport, XML_NAMESPACE_LO_EXT, XML_PROPERTY_MAPPING, sal_True, sal_True );
+
+                // register range for data table export
+                m_aDataSequencesToExport.push_back( tLabelValuesDataPair(
+                            (uno::Reference< chart2::data::XDataSequence >)0, xValues ));
+            }
         }
     }
 }
