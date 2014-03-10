@@ -41,7 +41,7 @@ endif
 
 ifneq ($(ENABLE_JAVA),)
 $(eval $(call gb_Module_add_targets,odk,\
-	$(if $(filter YESGCC,$(BUILD_UNOWINREG)$(COM)),CustomTarget_unowinreg) \
+	$(if $(and $(BUILD_UNOWINREG),$(filter GCC,$(COM))),CustomTarget_unowinreg)\
 	CustomTarget_classes \
 	CustomTarget_javadoc \
 	GeneratedPackage_odk_javadoc \

@@ -7,14 +7,14 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
-ifeq ($(BUILD_UNOWINREG),YES)
+ifneq ($(BUILD_UNOWINREG),)
 ifeq ($(COM),MSC)
 odk_unowinreg_DIR := $(WORKDIR)/LinkTarget/Library
 else
 odk_unowinreg_DIR := $(call gb_CustomTarget_get_workdir,odk/unowinreg)
 endif
 odk_unowinreg_FILE := unowinreg.dll
-else # BUILD_UNOWINREG=NO
+else # !BUILD_UNOWINREG
 odk_unowinreg_DIR := $(TARFILE_LOCATION)
 odk_unowinreg_FILE := $(UNOWINREG_DLL)
 endif

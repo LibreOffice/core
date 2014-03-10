@@ -7416,12 +7416,12 @@ if test "$enable_odk" = "" -o "$enable_odk" != "no"; then
         fi
         if test "$enable_build_unowinreg" = "" -o "$enable_build_unowinreg" = "no"; then
             AC_MSG_RESULT([no])
-            BUILD_UNOWINREG=NO
+            BUILD_UNOWINREG=
         else
             AC_MSG_RESULT([yes])
-            BUILD_UNOWINREG=YES
+            BUILD_UNOWINREG=TRUE
         fi
-        if test "$_os" != "WINNT" -a "$BUILD_UNOWINREG" = "YES"; then
+        if test "$_os" != "WINNT" -a "$BUILD_UNOWINREG" = "TRUE"; then
             if test -z "$with_mingw_cross_compiler"; then
                 dnl Guess...
                 AC_CHECK_PROGS(MINGWCXX,i386-mingw32msvc-g++ i586-pc-mingw32-g++ i686-pc-mingw32-g++ i686-w64-mingw32-g++,false)
@@ -7450,7 +7450,7 @@ if test "$enable_odk" = "" -o "$enable_odk" != "no"; then
     BUILD_TYPE="$BUILD_TYPE ODK"
 else
     AC_MSG_RESULT([no])
-    BUILD_UNOWINREG=NO
+    BUILD_UNOWINREG=
 fi
 AC_SUBST(BUILD_UNOWINREG)
 AC_SUBST(MINGWCXX)
