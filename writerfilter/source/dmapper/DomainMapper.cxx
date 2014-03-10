@@ -2220,16 +2220,7 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, PropertyMapPtr rContext )
     break;
     case NS_ooxml::LN_CT_SdtDate_dateFormat:
     {
-        // See com/sun/star/awt/UnoControlDateFieldModel.idl, DateFormat; sadly there are no constants for this.
-        if (sStringValue == "M/d/yyyy" || sStringValue == "M.d.yyyy")
-            // Approximate with MM.dd.yyy
-            m_pImpl->m_pSdtHelper->getDateFormat().reset(8);
-        else
-        {
-            // Set default format, so at least the date picker is created.
-            m_pImpl->m_pSdtHelper->getDateFormat().reset(0);
-            SAL_WARN("writerfilter", "unhandled w:dateFormat value");
-        }
+        m_pImpl->m_pSdtHelper->getDateFormat().append(sStringValue);
     }
     break;
     case NS_ooxml::LN_EG_SectPrContents_pgNumType:
@@ -2608,7 +2599,7 @@ void DomainMapper::lcl_utext(const sal_uInt8 * data_, size_t len)
         m_pImpl->m_pSdtHelper->getSdtTexts().append(sText);
         return;
     }
-    else if (m_pImpl->m_pSdtHelper->getDateFormat())
+    else if (!m_pImpl->m_pSdtHelper->getDateFormat().isEmpty())
     {
         /*
          * Here we assume w:sdt only contains a single text token. We need to

@@ -53,8 +53,8 @@ class SdtHelper
     OUStringBuffer m_aSdtTexts;
     /// Date ISO string contained in the w:date element, used by the date control.
     OUStringBuffer m_sDate;
-    /// Date format, see com/sun/star/awt/UnoControlDateFieldModel.idl
-    boost::optional<sal_Int16> m_oDateFormat;
+    /// Date format string as it comes from the ooxml document.
+    OUStringBuffer m_sDateFormat;
 
     bool m_bHasElements;
 
@@ -67,7 +67,7 @@ public:
     std::vector<OUString>& getDropDownItems();
     OUStringBuffer& getSdtTexts();
     OUStringBuffer& getDate();
-    boost::optional<sal_Int16>& getDateFormat();
+    OUStringBuffer& getDateFormat();
     /// If createControlShape() was ever called.
     bool hasElements();
 

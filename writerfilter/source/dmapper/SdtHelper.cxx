@@ -97,8 +97,17 @@ void SdtHelper::createDateControl(OUString& rContentText)
     uno::Reference<beans::XPropertySet> xPropertySet(xControlModel, uno::UNO_QUERY);
 
     xPropertySet->setPropertyValue("Dropdown", uno::makeAny(sal_True));
-    xPropertySet->setPropertyValue("DateFormat", uno::makeAny(*m_oDateFormat));
-    m_oDateFormat.reset();
+
+    // See com/sun/star/awt/UnoControlDateFieldModel.idl, DateFormat; sadly there are no constants
+    sal_Int16 nDateFormat = 0;
+    OUString sDateFormat = m_sDateFormat.makeStringAndClear();
+    if (sDateFormat == "M/d/yyyy" || sDateFormat == "M.d.yyyy")
+        // Approximate with MM.dd.yyy
+        nDateFormat = 8;
+    else
+        // Set default format, so at least the date picker is created.
+        SAL_WARN("writerfilter", "unhandled w:dateFormat value");
+    xPropertySet->setPropertyValue("DateFormat", uno::makeAny(nDateFormat));
 
     util::Date aDate;
     util::DateTime aDateTime;
@@ -144,9 +153,9 @@ OUStringBuffer& SdtHelper::getDate()
     return m_sDate;
 }
 
-boost::optional<sal_Int16>& SdtHelper::getDateFormat()
+OUStringBuffer& SdtHelper::getDateFormat()
 {
-    return m_oDateFormat;
+    return m_sDateFormat;
 }
 
 bool SdtHelper::hasElements()
