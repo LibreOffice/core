@@ -145,6 +145,7 @@ namespace toolkit
 
 
     AccessibleDummyFactory::AccessibleDummyFactory()
+        : m_refCount(0)
     {
     }
 
