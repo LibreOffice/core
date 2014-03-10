@@ -100,15 +100,10 @@ uno::Sequence< uno::Type > SAL_CALL SvxAccessibleTextPropertySet::getTypes() thr
     return pTypeCollection->getTypes() ;
 }
 
-namespace
-{
-    class theSvxAccessibleTextPropertySetImplementationId : public rtl::Static< UnoTunnelIdInit, theSvxAccessibleTextPropertySetImplementationId > {};
-}
-
 uno::Sequence< sal_Int8 > SAL_CALL SvxAccessibleTextPropertySet::getImplementationId()
     throw (uno::RuntimeException, std::exception)
 {
-    return theSvxAccessibleTextPropertySetImplementationId::get().getSeq();
+    return css::uno::Sequence<sal_Int8>();
 }
 
 // XServiceInfo

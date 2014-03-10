@@ -548,15 +548,10 @@ uno::Sequence< uno::Type > SAL_CALL SvxUnoTextField::getTypes()
     return maTypeSequence;
 }
 
-namespace
-{
-    class theSvxUnoTextFieldImplementationId : public rtl::Static< UnoTunnelIdInit, theSvxUnoTextFieldImplementationId > {};
-}
-
 uno::Sequence< sal_Int8 > SAL_CALL SvxUnoTextField::getImplementationId()
     throw (uno::RuntimeException, std::exception)
 {
-    return theSvxUnoTextFieldImplementationId::get().getSeq();
+    return css::uno::Sequence<sal_Int8>();
 }
 
 uno::Any SAL_CALL SvxUnoTextField::queryInterface( const uno::Type & rType )

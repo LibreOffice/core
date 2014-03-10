@@ -508,16 +508,11 @@ uno::Sequence< ::com::sun::star::uno::Type>
     return BaseClass::getTypes();
 }
 
-namespace
-{
-    class theAccessibleContextBaseImplementationId : public rtl::Static< UnoTunnelIdInit, theAccessibleContextBaseImplementationId > {};
-}
-
 uno::Sequence<sal_Int8> SAL_CALL
     AccessibleContextBase::getImplementationId (void)
     throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
-    return theAccessibleContextBaseImplementationId::get().getSeq();
+    return css::uno::Sequence<sal_Int8>();
 }
 
 //=====  internal  ============================================================

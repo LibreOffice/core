@@ -202,15 +202,10 @@ uno::Sequence< uno::Type > SAL_CALL SvxUnoTextContent::getTypes()
     return theSvxUnoTextContentTypes::get();
 }
 
-namespace
-{
-    class theSvxUnoTextContentImplementationId : public rtl::Static< UnoTunnelIdInit, theSvxUnoTextContentImplementationId > {};
-}
-
 uno::Sequence< sal_Int8 > SAL_CALL SvxUnoTextContent::getImplementationId()
     throw (uno::RuntimeException, std::exception)
 {
-    return theSvxUnoTextContentImplementationId::get().getSeq();
+    return css::uno::Sequence<sal_Int8>();
 }
 
 // text::XTextRange
@@ -564,15 +559,10 @@ uno::Sequence< uno::Type > SAL_CALL SvxUnoTextCursor::getTypes()
     return theSvxUnoTextCursorTypes::get();
 }
 
-namespace
-{
-    class theSvxUnoTextCursorImplementationId : public rtl::Static< UnoTunnelIdInit, theSvxUnoTextCursorImplementationId > {};
-}
-
 uno::Sequence< sal_Int8 > SAL_CALL SvxUnoTextCursor::getImplementationId()
     throw (uno::RuntimeException, std::exception)
 {
-    return theSvxUnoTextCursorImplementationId::get().getSeq();
+    return css::uno::Sequence<sal_Int8>();
 }
 
 // text::XTextCursor
