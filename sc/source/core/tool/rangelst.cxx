@@ -611,10 +611,8 @@ ScRangePairList_QsortNameCompare( const void* p1, const void* p2 )
     {
         case COMPARE_LESS:
             return -1;
-        //break;
         case COMPARE_GREATER:
             return 1;
-        //break;
         default:
             // gleiche Tabs
             if ( rStartPos1.Col() < rStartPos2.Col() )
@@ -642,10 +640,8 @@ ScRangePairList_QsortNameCompare( const void* p1, const void* p2 )
                 {
                     case COMPARE_LESS:
                         return -1;
-                    //break;
                     case COMPARE_GREATER:
                         return 1;
-                    //break;
                     default:
                         // gleiche Tabs
                         if ( rEndPos1.Col() < rEndPos2.Col() )
@@ -660,9 +656,7 @@ ScRangePairList_QsortNameCompare( const void* p1, const void* p2 )
                         return 0;
                 }
             }
-            return 0;
     }
-    return 0; // just in case
 }
 
 
