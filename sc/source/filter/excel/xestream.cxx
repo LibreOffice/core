@@ -679,45 +679,27 @@ static const char* lcl_GetErrorString( sal_uInt16 nScErrCode )
 
 void XclXmlUtils::GetFormulaTypeAndValue( ScFormulaCell& rCell, const char*& rsType, OUString& rsValue )
 {
-    sal_uInt16 nScErrCode = rCell.GetErrCode();
-    if( nScErrCode )
-    {
-        rsType = "e";
-        rsValue = ToOUString( lcl_GetErrorString( nScErrCode ) );
+    sc::FormulaResultValue aResValue = rCell.GetResult();
 
-        return;
-    }
-
-    switch( rCell.GetFormatType() )
+    switch (aResValue.meType)
     {
-        case NUMBERFORMAT_NUMBER:
-        {
-            // either value or error code
-            rsType = "n";
-            rsValue = OUString::number( rCell.GetValue() );
-        }
+        case sc::FormulaResultValue::Error:
+            rsType = "e";
+            rsValue = ToOUString(lcl_GetErrorString(aResValue.mnError));
         break;
-
-        case NUMBERFORMAT_TEXT:
-        {
+        case sc::FormulaResultValue::Value:
+            rsType = "n";
+            rsValue = OUString::number(aResValue.mfValue);
+        break;
+        case sc::FormulaResultValue::String:
             rsType = "str";
             rsValue = rCell.GetString().getString();
-        }
         break;
-
-        case NUMBERFORMAT_LOGICAL:
-        {
-            rsType = "b";
-            rsValue = ToOUString( rCell.GetValue() == 0.0 ? "0" : "1" );
-        }
-        break;
-
+        case sc::FormulaResultValue::Invalid:
         default:
-        {
+            // TODO : double-check this to see if this is correct.
             rsType = "inlineStr";
             rsValue = rCell.GetString().getString();
-        }
-        break;
     }
 }
 
