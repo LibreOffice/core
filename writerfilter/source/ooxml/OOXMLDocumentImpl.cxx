@@ -656,7 +656,7 @@ void OOXMLDocumentImpl::resolveGlossaryStream(Stream & /*rStream*/)
 void OOXMLDocumentImpl::resolveEmbeddingsStream(Stream & /*rStream*/)
 {
     uno::Reference<embed::XRelationshipAccess> mxRelationshipAccess;
-    mxRelationshipAccess.set((*dynamic_cast<OOXMLStreamImpl *>(mpStream.get())).accessDocumentStream(), uno::UNO_QUERY_THROW);
+    mxRelationshipAccess.set((dynamic_cast<OOXMLStreamImpl&>(*mpStream.get())).accessDocumentStream(), uno::UNO_QUERY_THROW);
     if (mxRelationshipAccess.is())
     {
         OUString sChartType("http://schemas.openxmlformats.org/officeDocument/2006/relationships/chart");
