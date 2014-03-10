@@ -1922,8 +1922,12 @@ DECLARE_OOXMLIMPORT_TEST(testStrict, "strict.docx")
     uno::Reference<lang::XServiceInfo> xServiceInfo(getShape(1), uno::UNO_QUERY);
     CPPUNIT_ASSERT(xServiceInfo->supportsService("com.sun.star.text.TextGraphicObject"));
 
-    // Chart was missing.
+    // SmartArt was missing.
     xServiceInfo.set(getShape(2), uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xServiceInfo->supportsService("com.sun.star.drawing.GroupShape"));
+
+    // Chart was missing.
+    xServiceInfo.set(getShape(3), uno::UNO_QUERY);
     CPPUNIT_ASSERT(xServiceInfo->supportsService("com.sun.star.text.TextEmbeddedObject"));
 }
 

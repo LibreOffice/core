@@ -30,6 +30,7 @@
   <namespace-alias name="http://schemas.openxmlformats.org/drawingml/2006/picture" alias="picture" id="dmlPicture"/>
   <namespace-alias name="http://purl.oclc.org/ooxml/drawingml/picture" alias="picture" id="dmlPicture"/>
   <namespace-alias name="http://schemas.openxmlformats.org/drawingml/2006/diagram" alias="diagram" id="dmlDiagram"/>
+  <namespace-alias name="http://purl.oclc.org/ooxml/drawingml/diagram" alias="diagram" id="dmlDiagram"/>
   <namespace-alias name="http://schemas.openxmlformats.org/drawingml/2006/lockedCanvas" alias="lockedCanvas" id="dmlLockedCanvas"/>
   <namespace-alias name="http://schemas.microsoft.com/office/word/2010/wordprocessingShape" alias="wps" id="wps"/>
   <namespace-alias name="http://schemas.microsoft.com/office/word/2010/wordprocessingGroup" alias="wpg" id="wpg"/>
