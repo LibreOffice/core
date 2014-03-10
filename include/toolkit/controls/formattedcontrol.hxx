@@ -59,11 +59,13 @@ namespace toolkit
                 ) throw (::com::sun::star::uno::Exception, std::exception);
 
     public:
-                            UnoControlFormattedFieldModel( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxContext );
-                            UnoControlFormattedFieldModel( const UnoControlFormattedFieldModel& rModel )
-                                :UnoControlModel( rModel )
-                            {
-                            }
+        UnoControlFormattedFieldModel( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxContext );
+        UnoControlFormattedFieldModel( const UnoControlFormattedFieldModel& rModel )
+            : UnoControlModel(rModel)
+            , m_bRevokedAsClient(false)
+            , m_bSettingValueAndText(false)
+        {
+        }
 
         UnoControlModel*    Clone() const { return new UnoControlFormattedFieldModel( *this ); }
 
