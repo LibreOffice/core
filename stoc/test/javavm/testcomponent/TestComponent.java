@@ -56,7 +56,7 @@ public class TestComponent implements XServiceInfo, XTypeProvider
     // XTypeProvider
     public byte[] getImplementationId(  )
     {
-        return TestComponent.class.getName().getBytes();
+        return new byte[0];
     }
 
 

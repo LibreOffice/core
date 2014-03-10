@@ -68,17 +68,7 @@ Sequence< Type > ArrayIdlClassImpl::getTypes()
 Sequence< sal_Int8 > ArrayIdlClassImpl::getImplementationId()
     throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
-    static OImplementationId * s_pId = 0;
-    if (! s_pId)
-    {
-        MutexGuard aGuard( getMutexAccess() );
-        if (! s_pId)
-        {
-            static OImplementationId s_aId;
-            s_pId = &s_aId;
-        }
-    }
-    return s_pId->getImplementationId();
+    return css::uno::Sequence<sal_Int8>();
 }
 
 // XIdlArray

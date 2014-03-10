@@ -1050,17 +1050,7 @@ Sequence< Type > SAL_CALL Invocation_Impl::getTypes(void) throw( RuntimeExceptio
 
 Sequence< sal_Int8 > SAL_CALL Invocation_Impl::getImplementationId(  ) throw( RuntimeException, std::exception)
 {
-    static OImplementationId *pId = 0;
-    if( ! pId )
-    {
-        MutexGuard guard( Mutex::getGlobalMutex() );
-        if( ! pId )
-        {
-            static OImplementationId id( false );
-            pId = &id;
-        }
-    }
-    return pId->getImplementationId();
+    return css::uno::Sequence<sal_Int8>();
 }
 
 
