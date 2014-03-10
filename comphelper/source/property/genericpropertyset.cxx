@@ -31,9 +31,6 @@
 #include <comphelper/genericpropertyset.hxx>
 #include <comphelper/propertysetinfo.hxx>
 #include <comphelper/servicehelper.hxx>
-#include <rtl/uuid.h>
-
-
 
 using namespace ::rtl;
 using namespace ::osl;
@@ -242,15 +239,10 @@ uno::Sequence< uno::Type > SAL_CALL GenericPropertySet::getTypes()
     return aTypes;
 }
 
-namespace
-{
-    class theGenericPropertySetImplmentationId : public rtl::Static< UnoTunnelIdInit, theGenericPropertySetImplmentationId > {};
-}
-
 uno::Sequence< sal_Int8 > SAL_CALL GenericPropertySet::getImplementationId()
     throw (uno::RuntimeException, std::exception)
 {
-    return theGenericPropertySetImplmentationId::get().getSeq();
+    return css::uno::Sequence<sal_Int8>();
 }
 
 // XServiceInfo

@@ -21,8 +21,6 @@
 #include <com/sun/star/uno/genfunc.h>
 #include <cppuhelper/queryinterface.hxx>
 #include <comphelper/sequence.hxx>
-#include <rtl/instance.hxx>
-
 
 namespace comphelper
 {
@@ -203,13 +201,9 @@ namespace comphelper
         );
     }
 
-    namespace { struct lcl_ImplId : public rtl::Static< ::cppu::OImplementationId, lcl_ImplId > {}; }
-
-
     Sequence< sal_Int8 > SAL_CALL OStatefulPropertySet::getImplementationId() throw(RuntimeException, std::exception)
     {
-        ::cppu::OImplementationId &rID = lcl_ImplId::get();
-        return rID.getImplementationId();
+        return css::uno::Sequence<sal_Int8>();
     }
 
 

@@ -189,13 +189,9 @@ namespace comphelper
         virtual ::com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId(  ) throw (::com::sun::star::uno::RuntimeException, std::exception);
 
     #define IMPLEMENT_GET_IMPLEMENTATION_ID( classname ) \
-        namespace \
-        { \
-            class the##classname##ImplementationId : public rtl::Static< ::cppu::OImplementationId, the##classname##ImplementationId> {}; \
-        } \
         ::com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL classname::getImplementationId(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) \
         { \
-            return the##classname##ImplementationId::get().getImplementationId(); \
+            return css::uno::Sequence<sal_Int8>(); \
         }
 
     #define IMPLEMENT_FORWARD_XTYPEPROVIDER2( classname, baseclass1, baseclass2 ) \
