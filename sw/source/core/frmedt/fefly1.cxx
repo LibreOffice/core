@@ -794,7 +794,10 @@ void SwFEShell::Insert( const OUString& rGrfName, const OUString& rFltName,
     StartAllAction();
     SwShellCrsr *pStartCursor = dynamic_cast<SwShellCrsr*>(this->GetSwCrsr());
     SwShellCrsr *pCursor = pStartCursor;
-    do {
+    do
+    {
+        if (!pCursor)
+            break;
 
         // Has the anchor not been set or been set incompletely?
         if( pFlyAttrSet )
@@ -839,8 +842,8 @@ void SwFEShell::Insert( const OUString& rGrfName, const OUString& rFltName,
                                 pGrfAttrSet, pFrmFmt );
         OSL_ENSURE( pFmt, "Doc->Insert(notxt) failed." );
 
-    } while( (pCursor = dynamic_cast<SwShellCrsr*>(pCursor->GetNext()))
-             != pStartCursor );
+        pCursor = dynamic_cast<SwShellCrsr*>(pCursor->GetNext());
+    } while( pCursor != pStartCursor );
 
     EndAllAction();
 
