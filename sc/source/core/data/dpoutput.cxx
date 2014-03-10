@@ -1003,9 +1003,7 @@ void ScDPOutput::Output()
         else if (n > 1)
             aPageValue = ScResId(SCSTR_MULTIPLE).toString();
 
-        ScSetStringParam aParam;
-        aParam.setTextInput();
-        pDoc->SetString(nFldCol, nHdrRow, nTab, aPageValue, &aParam);
+        pDoc->SetString( nFldCol, nHdrRow, nTab, aPageValue );
 
         lcl_SetFrame( pDoc,nTab, nFldCol,nHdrRow, nFldCol,nHdrRow, 20 );
     }
