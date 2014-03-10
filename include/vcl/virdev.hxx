@@ -31,15 +31,16 @@ class VCL_DLLPUBLIC VirtualDevice : public OutputDevice
 {
     friend class Application;
     friend class OutputDevice;
+    friend class Printer;
 
 private:
     SalVirtualDevice*   mpVirDev;
     VirtualDevice*      mpPrev;
     VirtualDevice*      mpNext;
-    sal_uInt16              mnBitCount;
+    sal_uInt16          mnBitCount;
     bool                mbScreenComp;
     sal_Int8            mnAlphaDepth;
-    sal_uInt8               meRefDevMode;
+    sal_uInt8           meRefDevMode;
 
     SAL_DLLPRIVATE void ImplInitVirDev( const OutputDevice* pOutDev, long nDX, long nDY, sal_uInt16 nBitCount, const SystemGraphicsData *pData = NULL );
     SAL_DLLPRIVATE bool InnerImplSetOutputSizePixel( const Size& rNewSize, bool bErase, const basebmp::RawMemorySharedArray &pBuffer );
@@ -59,6 +60,9 @@ private:
     #define REFDEV_FORCE_ZERO_EXTLEAD 0x80
     SAL_DLLPRIVATE bool ForceZeroExtleadBug() const
         { return ((meRefDevMode & REFDEV_FORCE_ZERO_EXTLEAD) != 0); }
+public:
+    bool ImplInitGraphics() const;
+
 public:
     /** Create a virtual device of size 1x1
 

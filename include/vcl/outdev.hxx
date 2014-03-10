@@ -385,7 +385,7 @@ public:
 
      @returns true if was able to initialize the graphics device, false otherwise.
      */
-    SAL_DLLPRIVATE bool         ImplInitGraphics() const;
+    virtual bool                ImplInitGraphics() const = 0;
 
     /** Release the graphics device, and remove it from the graphics device
      list.

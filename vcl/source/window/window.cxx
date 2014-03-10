@@ -352,6 +352,74 @@ const char* ImplDbgCheckWindow( const void* pObj )
 }
 #endif
 
+bool Window::ImplInitGraphics() const
+{
+    DBG_TESTSOLARMUTEX();
+
+    if ( mpGraphics )
+        return mpGraphics;
+
+    mbInitLineColor     = true;
+    mbInitFillColor     = true;
+    mbInitFont          = true;
+    mbInitTextColor     = true;
+    mbInitClipRegion    = true;
+
+    ImplSVData* pSVData = ImplGetSVData();
+
+    Window* pWindow = (Window*)this;
+
+    mpGraphics = pWindow->mpWindowImpl->mpFrame->AcquireGraphics();
+    // try harder if no wingraphics was available directly
+    if ( !mpGraphics )
+    {
+        // find another output device in the same frame
+        OutputDevice* pReleaseOutDev = pSVData->maGDIData.mpLastWinGraphics;
+        while ( pReleaseOutDev )
+        {
+            if ( ((Window*)pReleaseOutDev)->mpWindowImpl->mpFrame == pWindow->mpWindowImpl->mpFrame )
+                break;
+            pReleaseOutDev = pReleaseOutDev->mpPrevGraphics;
+        }
+
+        if ( pReleaseOutDev )
+        {
+            // steal the wingraphics from the other outdev
+            mpGraphics = pReleaseOutDev->mpGraphics;
+            pReleaseOutDev->ImplReleaseGraphics( false );
+        }
+        else
+        {
+            // if needed retry after releasing least recently used wingraphics
+            while ( !mpGraphics )
+            {
+                if ( !pSVData->maGDIData.mpLastWinGraphics )
+                    break;
+                pSVData->maGDIData.mpLastWinGraphics->ImplReleaseGraphics();
+                mpGraphics = pWindow->mpWindowImpl->mpFrame->AcquireGraphics();
+            }
+        }
+    }
+
+    // update global LRU list of wingraphics
+    if ( mpGraphics )
+    {
+        mpNextGraphics = pSVData->maGDIData.mpFirstWinGraphics;
+        pSVData->maGDIData.mpFirstWinGraphics = const_cast<Window*>(this);
+        if ( mpNextGraphics )
+            mpNextGraphics->mpPrevGraphics = const_cast<Window*>(this);
+        if ( !pSVData->maGDIData.mpLastWinGraphics )
+            pSVData->maGDIData.mpLastWinGraphics = const_cast<Window*>(this);
+    }
+
+    if ( mpGraphics )
+    {
+        mpGraphics->SetXORMode( (ROP_INVERT == meRasterOp) || (ROP_XOR == meRasterOp), ROP_INVERT == meRasterOp );
+        mpGraphics->setAntiAliasB2DDraw(mnAntialiasing & ANTIALIASING_ENABLE_B2DDRAW);
+    }
+
+    return mpGraphics ? true : false;
+}
 
 
 bool Window::HasMirroredGraphics() const
