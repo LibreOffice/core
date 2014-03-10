@@ -61,9 +61,13 @@ KDEXLib::KDEXLib() :
     eventLoopType( LibreOfficeEventLoop ),
     m_bYieldFrozen( false ), m_frameWidth( -1 )
 {
-    // the timers created here means they belong to the main thread
-    connect( &timeoutTimer, SIGNAL( timeout()), this, SLOT( timeoutActivated()));
-    connect( &userEventTimer, SIGNAL( timeout()), this, SLOT( userEventActivated()));
+    // the timers created here means they belong to the main thread.
+    // As the timeoutTimer runs the LO event queue, which may block on a dialog,
+    // the timer has to use a Qt::QueuedConnection, otherwise the nested event
+    // loop will detect the blocking timer and drop it from the polling
+    // freezing LO X11 processing.
+    connect( &timeoutTimer, SIGNAL( timeout()), this, SLOT( timeoutActivated()), Qt::QueuedConnection );
+    connect( &userEventTimer, SIGNAL( timeout()), this, SLOT( userEventActivated()), Qt::QueuedConnection );
 
     // QTimer::start() can be called only in its (here main) thread, so this will
     // forward between threads if needed
