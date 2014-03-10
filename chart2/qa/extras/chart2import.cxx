@@ -34,6 +34,7 @@ public:
     void testPPTChartSeries();
     void testODPChartSeries();
     void testBnc864396();
+    void testSimpleStrictXLSX();
 
     CPPUNIT_TEST_SUITE(Chart2ImportTest);
     CPPUNIT_TEST(Fdo60083);
@@ -55,6 +56,7 @@ public:
     CPPUNIT_TEST(testPPTXChartSeries);
     CPPUNIT_TEST(testODPChartSeries);
     CPPUNIT_TEST(testBnc864396);
+    CPPUNIT_TEST(testSimpleStrictXLSX);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -296,6 +298,17 @@ void Chart2ImportTest::testBnc864396()
         OUString aExpected = OUString("cat") + OUString::number(i+1);
         CPPUNIT_ASSERT_EQUAL(aExpected, aRowLabels[i]);
     }
+}
+
+void Chart2ImportTest::testSimpleStrictXLSX()
+{
+    load("/chart2/qa/extras/data/xlsx/", "strict_chart.xlsx");
+    uno::Reference< chart2::XChartDocument > xChartDoc = getChartDocFromSheet( 0, mxComponent );
+    CPPUNIT_ASSERT(xChartDoc.is());
+
+    Reference< chart2::XDataSeries > xDataSeries = getDataSeriesFromDoc( xChartDoc, 0 );
+    CPPUNIT_ASSERT(xDataSeries.is());
+
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Chart2ImportTest);
