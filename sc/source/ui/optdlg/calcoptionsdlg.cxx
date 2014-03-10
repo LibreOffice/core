@@ -404,7 +404,11 @@ void ScCalcOptionsDialog::SelectedDeviceChanged()
         mpFtMemory->SetText(OUString());
     }
 
-    OUString aDevice = dynamic_cast<SvLBoxString*>(pEntry->GetItem(1))->GetText();
+    SvLBoxString* pBoxEntry = dynamic_cast<SvLBoxString*>(pEntry->GetItem(1));
+    if (!pBoxEntry)
+        return;
+
+    OUString aDevice = pBoxEntry->GetText();
     // use english string for configuration
     if(aDevice == maSoftware)
         aDevice = OPENCL_SOFTWARE_DEVICE_CONFIG_NAME;
