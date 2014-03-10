@@ -446,19 +446,7 @@ uno::Sequence< uno::Type > SAL_CALL OCommonEmbeddedObject::getTypes()
 uno::Sequence< sal_Int8 > SAL_CALL OCommonEmbeddedObject::getImplementationId()
         throw( uno::RuntimeException )
 {
-    static ::cppu::OImplementationId* pID = NULL ;
-
-    if ( !pID )
-    {
-        ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() ) ;
-        if ( !pID )
-        {
-            static ::cppu::OImplementationId aID( false ) ;
-            pID = &aID ;
-        }
-    }
-
-    return pID->getImplementationId() ;
+    return css::uno::Sequence<sal_Int8>();
 }
 
 
