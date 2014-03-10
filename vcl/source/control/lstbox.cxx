@@ -1499,12 +1499,6 @@ void ListBox::SetEdgeBlending(bool bNew)
     }
 }
 
-sal_Int32 ListBox::GetMRUCount() const
-{
-    return mpImplLB->GetEntryList()->GetMRUCount();
-}
-
-
 MultiListBox::MultiListBox( Window* pParent, WinBits nStyle ) :
     ListBox( WINDOW_MULTILISTBOX )
 {

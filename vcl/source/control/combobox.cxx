@@ -1273,11 +1273,6 @@ sal_Int32 ComboBox::GetMaxMRUCount() const
     return mpImplLB->GetMaxMRUCount();
 }
 
-sal_Int32 ComboBox::GetMRUCount() const
-{
-    return mpImplLB->GetEntryList()->GetMRUCount();
-}
-
 sal_uInt16 ComboBox::GetDisplayLineCount() const
 {
     return mpImplLB->GetDisplayLineCount();

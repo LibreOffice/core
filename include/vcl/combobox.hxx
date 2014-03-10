@@ -179,7 +179,6 @@ public:
     OUString        GetMRUEntries( sal_Unicode cSep = ';' ) const;
     void            SetMaxMRUCount( sal_Int32  n );
     sal_Int32       GetMaxMRUCount() const;
-    sal_Int32       GetMRUCount() const;
     void            SetEntryData( sal_Int32  nPos, void* pNewData );
     void*           GetEntryData( sal_Int32  nPos ) const;
 

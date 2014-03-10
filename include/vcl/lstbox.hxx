@@ -199,7 +199,6 @@ public:
     Size                CalcBlockSize( sal_uInt16 nColumns, sal_uInt16 nLines ) const;
     void                GetMaxVisColumnsAndLines( sal_uInt16& rnCols, sal_uInt16& rnLines ) const;
 
-    sal_Int32           GetMRUCount() const;
     sal_uInt16          GetDisplayLineCount() const;
 
     void                EnableMirroring();

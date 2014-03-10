@@ -98,10 +98,6 @@ public:
     void        SetIsSystemFont(sal_Bool bSet);
     void        SetHelpTipSeconds(sal_Int16 nSet);
     void        SetSelectionInReadonly(sal_Bool bSet);
-    void        SetEdgeBlending(sal_Int16 nSet);
-    void        SetListBoxMaximumLineCount(sal_Int16 nSet);
-    void        SetColorValueSetColumnCount(sal_Int16 nSet);
-    void        SetPreviewUsesCheckeredBackground(sal_Bool bSet);
 
     sal_Bool    IsModified() const { return bIsModified; };
 };
@@ -620,87 +616,6 @@ void SvtAccessibilityOptions_Impl::SetVCLSettings()
 
     Application::SetSettings(aAllSettings);
 }
-
-void SvtAccessibilityOptions_Impl::SetEdgeBlending(sal_Int16 nSet)
-{
-    css::uno::Reference< css::beans::XPropertySet > xNode(m_xCfg, css::uno::UNO_QUERY);
-
-    try
-    {
-        if(xNode.is() && xNode->getPropertyValue(s_sEdgeBlending)!=nSet)
-        {
-            xNode->setPropertyValue(s_sEdgeBlending, css::uno::makeAny(nSet));
-            ::comphelper::ConfigurationHelper::flush(m_xCfg);
-
-            bIsModified = sal_True;
-        }
-    }
-    catch(const css::uno::Exception& ex)
-    {
-        SAL_WARN("svtools", "Caught unexpected: " << ex.Message);
-    }
-}
-
-void SvtAccessibilityOptions_Impl::SetListBoxMaximumLineCount(sal_Int16 nSet)
-{
-    css::uno::Reference< css::beans::XPropertySet > xNode(m_xCfg, css::uno::UNO_QUERY);
-
-    try
-    {
-        if(xNode.is() && xNode->getPropertyValue(s_sListBoxMaximumLineCount)!=nSet)
-        {
-            xNode->setPropertyValue(s_sListBoxMaximumLineCount, css::uno::makeAny(nSet));
-            ::comphelper::ConfigurationHelper::flush(m_xCfg);
-
-            bIsModified = sal_True;
-        }
-    }
-    catch(const css::uno::Exception& ex)
-    {
-        SAL_WARN("svtools", "Caught unexpected: " << ex.Message);
-    }
-}
-
-void SvtAccessibilityOptions_Impl::SetColorValueSetColumnCount(sal_Int16 nSet)
-{
-    css::uno::Reference< css::beans::XPropertySet > xNode(m_xCfg, css::uno::UNO_QUERY);
-
-    try
-    {
-        if(xNode.is() && xNode->getPropertyValue(s_sColorValueSetColumnCount)!=nSet)
-        {
-            xNode->setPropertyValue(s_sColorValueSetColumnCount, css::uno::makeAny(nSet));
-            ::comphelper::ConfigurationHelper::flush(m_xCfg);
-
-            bIsModified = sal_True;
-        }
-    }
-    catch(const css::uno::Exception& ex)
-    {
-        SAL_WARN("svtools", "Caught unexpected: " << ex.Message);
-    }
-}
-
-void SvtAccessibilityOptions_Impl::SetPreviewUsesCheckeredBackground(sal_Bool bSet)
-{
-    css::uno::Reference< css::beans::XPropertySet > xNode(m_xCfg, css::uno::UNO_QUERY);
-
-    try
-    {
-        if(xNode.is() && xNode->getPropertyValue(s_sPreviewUsesCheckeredBackground)!=bSet)
-        {
-            xNode->setPropertyValue(s_sPreviewUsesCheckeredBackground, css::uno::makeAny(bSet));
-            ::comphelper::ConfigurationHelper::flush(m_xCfg);
-
-            bIsModified = sal_True;
-        }
-    }
-    catch(const css::uno::Exception& ex)
-    {
-        SAL_WARN("svtools", "Caught unexpected: " << ex.Message);
-    }
-}
-
 
 // class SvtAccessibilityOptions --------------------------------------------------
 
