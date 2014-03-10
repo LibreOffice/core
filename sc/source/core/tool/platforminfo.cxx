@@ -12,7 +12,13 @@
 
 namespace sc {
 
-OpenclDeviceInfo::OpenclDeviceInfo() {}
+OpenclDeviceInfo::OpenclDeviceInfo()
+    : device(0)
+    , mnMemory(0)
+    , mnComputeUnits(0)
+    , mnFrequency(0)
+{
+}
 
 OpenclPlatformInfo::OpenclPlatformInfo()
     : platform(NULL)
