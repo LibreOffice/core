@@ -1409,7 +1409,7 @@ void OutputDevice::DrawLine( const Point& rStartPt, const Point& rEndPt )
         mpAlphaVDev->DrawLine( rStartPt, rEndPt );
 }
 
-void OutputDevice::impPaintLineGeometryWithEvtlExpand(
+void OutputDevice::ImplPaintLineGeometryWithEvtlExpand(
     const LineInfo& rInfo,
     basegfx::B2DPolyPolygon aLinePolyPolygon)
 {
@@ -1585,7 +1585,7 @@ void OutputDevice::DrawLine( const Point& rStartPt, const Point& rEndPt,
         aLinePolygon.append(basegfx::B2DPoint(aStartPt.X(), aStartPt.Y()));
         aLinePolygon.append(basegfx::B2DPoint(aEndPt.X(), aEndPt.Y()));
 
-        impPaintLineGeometryWithEvtlExpand(aInfo, basegfx::B2DPolyPolygon(aLinePolygon));
+        ImplPaintLineGeometryWithEvtlExpand(aInfo, basegfx::B2DPolyPolygon(aLinePolygon));
     }
     else
     {
@@ -1663,7 +1663,7 @@ void OutputDevice::DrawPolyLine( const Polygon& rPoly )
         && IsLineColor());
 
     // use b2dpolygon drawing if possible
-    if(bTryAA && ImpTryDrawPolyLineDirect(rPoly.getB2DPolygon()))
+    if(bTryAA && ImplTryDrawPolyLineDirect(rPoly.getB2DPolygon()))
     {
         basegfx::B2DPolygon aB2DPolyLine(rPoly.getB2DPolygon());
         const ::basegfx::B2DHomMatrix aTransform = ImplGetDeviceTransformation();
@@ -1727,10 +1727,10 @@ void OutputDevice::DrawPolyLine( const Polygon& rPoly, const LineInfo& rLineInfo
     if ( mpMetaFile )
         mpMetaFile->AddAction( new MetaPolyLineAction( rPoly, rLineInfo ) );
 
-    ImpDrawPolyLineWithLineInfo(rPoly, rLineInfo);
+    ImplDrawPolyLineWithLineInfo(rPoly, rLineInfo);
 }
 
-void OutputDevice::ImpDrawPolyLineWithLineInfo(const Polygon& rPoly, const LineInfo& rLineInfo)
+void OutputDevice::ImplDrawPolyLineWithLineInfo(const Polygon& rPoly, const LineInfo& rLineInfo)
 {
     sal_uInt16 nPoints(rPoly.GetSize());
 
@@ -1773,7 +1773,7 @@ void OutputDevice::ImpDrawPolyLineWithLineInfo(const Polygon& rPoly, const LineI
 
     if(bDashUsed || bLineWidthUsed)
     {
-        impPaintLineGeometryWithEvtlExpand(aInfo, basegfx::B2DPolyPolygon(aPoly.getB2DPolygon()));
+        ImplPaintLineGeometryWithEvtlExpand(aInfo, basegfx::B2DPolyPolygon(aPoly.getB2DPolygon()));
     }
     else
     {
@@ -2002,10 +2002,10 @@ void OutputDevice::DrawPolyPolygon( const basegfx::B2DPolyPolygon& rB2DPolyPoly 
         mpMetaFile->AddAction( new MetaPolyPolygonAction( PolyPolygon( rB2DPolyPoly ) ) );
 
     // call helper
-    ImpDrawPolyPolygonWithB2DPolyPolygon(rB2DPolyPoly);
+    ImplDrawPolyPolygonWithB2DPolyPolygon(rB2DPolyPoly);
 }
 
-void OutputDevice::ImpDrawPolyPolygonWithB2DPolyPolygon(const basegfx::B2DPolyPolygon& rB2DPolyPoly)
+void OutputDevice::ImplDrawPolyPolygonWithB2DPolyPolygon(const basegfx::B2DPolyPolygon& rB2DPolyPoly)
 {
     // Do not paint empty PolyPolygons
     if(!rB2DPolyPoly.count() || !IsDeviceOutputNecessary())
@@ -2077,7 +2077,7 @@ void OutputDevice::ImpDrawPolyPolygonWithB2DPolyPolygon(const basegfx::B2DPolyPo
     ImplDrawPolyPolygon( aPixelPolyPolygon.Count(), aPixelPolyPolygon );
 }
 
-bool OutputDevice::ImpTryDrawPolyLineDirect(
+bool OutputDevice::ImplTryDrawPolyLineDirect(
     const basegfx::B2DPolygon& rB2DPolygon,
     double fLineWidth,
     double fTransparency,
@@ -2149,7 +2149,7 @@ bool OutputDevice::TryDrawPolyLineDirect(
 
     if(bTryAA)
     {
-        if(ImpTryDrawPolyLineDirect(rB2DPolygon, fLineWidth, fTransparency, eLineJoin, eLineCap))
+        if(ImplTryDrawPolyLineDirect(rB2DPolygon, fLineWidth, fTransparency, eLineJoin, eLineCap))
         {
             // worked, add metafile action (if recorded) and return true
             if( mpMetaFile )
@@ -2207,14 +2207,14 @@ void OutputDevice::DrawPolyLine(
         && IsLineColor());
 
     // use b2dpolygon drawing if possible
-    if(bTryAA && ImpTryDrawPolyLineDirect(rB2DPolygon, fLineWidth, 0.0, eLineJoin, eLineCap))
+    if(bTryAA && ImplTryDrawPolyLineDirect(rB2DPolygon, fLineWidth, 0.0, eLineJoin, eLineCap))
     {
         return;
     }
 
     // #i101491#
     // no output yet; fallback to geometry decomposition and use filled polygon paint
-    // when line is fat and not too complex. ImpDrawPolyPolygonWithB2DPolyPolygon
+    // when line is fat and not too complex. ImplDrawPolyPolygonWithB2DPolyPolygon
     // will do internal needed AA checks etc.
     if(fLineWidth >= 2.5
         && rB2DPolygon.count()
@@ -2238,7 +2238,7 @@ void OutputDevice::DrawPolyLine(
         // draw usig a loop; else the topology will paint a PolyPolygon
         for(sal_uInt32 a(0); a < aAreaPolyPolygon.count(); a++)
         {
-            ImpDrawPolyPolygonWithB2DPolyPolygon(
+            ImplDrawPolyPolygonWithB2DPolyPolygon(
                 basegfx::B2DPolyPolygon(aAreaPolyPolygon.getB2DPolygon(a)));
         }
 
@@ -2253,7 +2253,7 @@ void OutputDevice::DrawPolyLine(
             // to avoid optical gaps
             for(sal_uInt32 a(0); a < aAreaPolyPolygon.count(); a++)
             {
-                ImpTryDrawPolyLineDirect(aAreaPolyPolygon.getB2DPolygon(a));
+                ImplTryDrawPolyLineDirect(aAreaPolyPolygon.getB2DPolygon(a));
             }
         }
     }
@@ -2264,7 +2264,7 @@ void OutputDevice::DrawPolyLine(
         LineInfo aLineInfo;
         if( fLineWidth != 0.0 )
             aLineInfo.SetWidth( static_cast<long>(fLineWidth+0.5) );
-        ImpDrawPolyLineWithLineInfo( aToolsPolygon, aLineInfo );
+        ImplDrawPolyLineWithLineInfo( aToolsPolygon, aLineInfo );
     }
 }
 
