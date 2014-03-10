@@ -24,10 +24,11 @@
 //----------------------------------DXFLType-----------------------------------
 
 DXFLType::DXFLType()
+    : pSucc(NULL)
+    , nFlags(0)
+    , nDashCount(0)
+    , fPatternLength(0.0)
 {
-    pSucc=NULL;
-    nFlags=0;
-    nDashCount=0;
 }
 
 void DXFLType::Read(DXFGroupReader & rDGR)
