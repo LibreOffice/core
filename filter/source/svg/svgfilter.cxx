@@ -67,6 +67,8 @@ SVGFilter::SVGFilter( const Reference< XComponentContext >& rxCtx ) :
     mpSdrModel( NULL ),
     mbPresentation( sal_False ),
     mbExportAll( sal_False ),
+    mbSinglePage( sal_False ),
+    mnVisiblePage( -1 ),
     mpObjects( NULL )
 {
 }
