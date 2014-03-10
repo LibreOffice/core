@@ -710,7 +710,7 @@ void OOXMLDocumentImpl::resolveActiveXStream(Stream & rStream)
 {
     // Resolving all ActiveX[n].xml files from ActiveX folder.
     uno::Reference<embed::XRelationshipAccess> mxRelationshipAccess;
-    mxRelationshipAccess.set((*dynamic_cast<OOXMLStreamImpl *>(mpStream.get())).accessDocumentStream(), uno::UNO_QUERY_THROW);
+    mxRelationshipAccess.set((dynamic_cast<OOXMLStreamImpl&>(*mpStream.get())).accessDocumentStream(), uno::UNO_QUERY_THROW);
     if (mxRelationshipAccess.is())
     {
         static const OUString sCustomType("http://schemas.openxmlformats.org/officeDocument/2006/relationships/control");
