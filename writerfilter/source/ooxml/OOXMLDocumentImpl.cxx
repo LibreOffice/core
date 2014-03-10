@@ -567,7 +567,7 @@ void OOXMLDocumentImpl::resolveGlossaryStream(Stream & /*rStream*/)
         return;
     }
     uno::Reference<embed::XRelationshipAccess> mxRelationshipAccess;
-    mxRelationshipAccess.set((*dynamic_cast<OOXMLStreamImpl *>(pStream.get())).accessDocumentStream(), uno::UNO_QUERY_THROW);
+    mxRelationshipAccess.set((dynamic_cast<OOXMLStreamImpl&>(*pStream.get())).accessDocumentStream(), uno::UNO_QUERY_THROW);
     if (mxRelationshipAccess.is())
     {
 
