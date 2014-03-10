@@ -42,19 +42,19 @@ published interface XTypeProvider: com::sun::star::uno::XInterface
     sequence<type> getTypes();
 
 
-    /** returns
-        a sequence of bytes with length > 0 that is used as an Id to distinguish
-        unambiguously between two sets of types, for example to realise hashing
-        functionality when the object is introspected. Two objects that return
-        the same UUID also have to return the same set of types in getTypes().
+    /** Obsolete unique identifier.
 
-        If a unique implementation Id cannot be provided this method has to return
-        an empty sequence.
+        Originally returned a sequence of bytes which, when non-empty, was used
+        as an ID to distinguish unambiguously between two sets of types, for
+        example to realise hashing functionality when the object is
+        introspected. Two objects that returned the same non-empty ID had to
+        return the same set of types in getTypes().  (If a unique ID could not
+        be provided, this method was always allowed to return an empty sequence,
+        though).
 
-        @attention
-        If the object aggregates other objects the UUID has to be unique
-        for the whole combination of objects.
-     */
+        @deprecated This feature should no longer be used, and implementations
+        are encouraged to always return an empty sequence.
+    */
     sequence<byte> getImplementationId();
 };
 
