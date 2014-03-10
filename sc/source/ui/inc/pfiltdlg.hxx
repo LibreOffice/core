@@ -42,44 +42,30 @@ class ScTypedStrData;
 class ScPivotFilterDlg : public ModalDialog
 {
 public:
-                    ScPivotFilterDlg( Window* pParent,
-                                      const SfxItemSet& rArgSet, SCTAB nSourceTab );
-                    ~ScPivotFilterDlg();
+    ScPivotFilterDlg(Window* pParent, const SfxItemSet& rArgSet, SCTAB nSourceTab);
+    ~ScPivotFilterDlg();
 
     const ScQueryItem&  GetOutputItem();
 
 private:
-    FixedLine       aFlCriteria;
+    ListBox*        m_pLbField1;
+    ListBox*        m_pLbCond1;
+    ComboBox*       m_pEdVal1;
 
-    ListBox         aLbField1;
-    ListBox         aLbCond1;
-    ComboBox        aEdVal1;
+    ListBox*        m_pLbConnect1;
+    ListBox*        m_pLbField2;
+    ListBox*        m_pLbCond2;
+    ComboBox*       m_pEdVal2;
 
-    ListBox         aLbConnect1;
-    ListBox         aLbField2;
-    ListBox         aLbCond2;
-    ComboBox        aEdVal2;
+    ListBox*        m_pLbConnect2;
+    ListBox*        m_pLbField3;
+    ListBox*        m_pLbCond3;
+    ComboBox*       m_pEdVal3;
 
-    ListBox         aLbConnect2;
-    ListBox         aLbField3;
-    ListBox         aLbCond3;
-    ComboBox        aEdVal3;
-
-    FixedText       aFtConnect;
-    FixedText       aFtField;
-    FixedText       aFtCond;
-    FixedText       aFtVal;
-
-    FixedLine       aFlOptions;
-    CheckBox        aBtnCase;
-    CheckBox        aBtnRegExp;
-    CheckBox        aBtnUnique;
-    FixedText       aFtDbAreaLabel;
-    FixedInfo       aFtDbArea;
-    OKButton        aBtnOk;
-    CancelButton    aBtnCancel;
-    HelpButton      aBtnHelp;
-    MoreButton      aBtnMore;
+    CheckBox*       m_pBtnCase;
+    CheckBox*       m_pBtnRegExp;
+    CheckBox*       m_pBtnUnique;
+    FixedText*      m_pFtDbArea;
     const OUString aStrUndefined;
     const OUString aStrNone;
     const OUString aStrEmpty;

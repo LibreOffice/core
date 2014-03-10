@@ -212,9 +212,8 @@ void ScGridWindow::DoPushPivotButton( SCCOL nCol, SCROW nRow, const MouseEvent& 
             ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
             OSL_ENSURE(pFact, "ScAbstractFactory create fail!");
 
-            AbstractScPivotFilterDlg* pDlg = pFact->CreateScPivotFilterDlg( pViewData->GetViewShell()->GetDialogParent(),
-                                                                            aArgSet, nSrcTab,
-                                                                            RID_SCDLG_PIVOTFILTER);
+            AbstractScPivotFilterDlg* pDlg = pFact->CreateScPivotFilterDlg(
+                pViewData->GetViewShell()->GetDialogParent(), aArgSet, nSrcTab);
             OSL_ENSURE(pDlg, "Dialog create fail!");
             if ( pDlg->Execute() == RET_OK )
             {

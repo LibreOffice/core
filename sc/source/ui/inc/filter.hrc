@@ -17,9 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 #include "sc.hrc"
-                    // -> RID_SCDLG_SPEC_FILTER
-                    // -> RID_SCDLG_PIVOTFILTER
-
 // General
 
 #define BTN_OK              1

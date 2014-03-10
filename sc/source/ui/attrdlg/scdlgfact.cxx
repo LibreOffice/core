@@ -814,22 +814,11 @@ AbstractScNamePasteDlg * ScAbstractDialogFactory_Impl::CreateScNamePasteDlg ( Wi
     return new AbstractScNamePasteDlg_Impl( pDlg );
 }
 
-AbstractScPivotFilterDlg * ScAbstractDialogFactory_Impl::CreateScPivotFilterDlg ( Window* pParent,
-                                                                const SfxItemSet&   rArgSet, sal_uInt16 nSourceTab , int nId )
+AbstractScPivotFilterDlg * ScAbstractDialogFactory_Impl::CreateScPivotFilterDlg(Window* pParent,
+    const SfxItemSet& rArgSet, sal_uInt16 nSourceTab)
 {
-    ScPivotFilterDlg * pDlg=NULL;
-    switch ( nId )
-    {
-        case RID_SCDLG_PIVOTFILTER :
-            pDlg = new ScPivotFilterDlg( pParent, rArgSet, nSourceTab );
-            break;
-        default:
-            break;
-    }
-
-    if ( pDlg )
-        return new AbstractScPivotFilterDlg_Impl( pDlg );
-    return 0;
+    ScPivotFilterDlg *pDlg = new ScPivotFilterDlg(pParent, rArgSet, nSourceTab);
+    return new AbstractScPivotFilterDlg_Impl(pDlg);
 }
 
 AbstractScDPFunctionDlg * ScAbstractDialogFactory_Impl::CreateScDPFunctionDlg ( Window* pParent,

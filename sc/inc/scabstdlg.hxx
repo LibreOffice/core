@@ -410,8 +410,8 @@ public:
 
     virtual AbstractScNamePasteDlg * CreateScNamePasteDlg ( Window * pParent, ScDocShell* pShell, bool bInsList=true ) = 0;
 
-    virtual AbstractScPivotFilterDlg * CreateScPivotFilterDlg ( Window* pParent,
-                                                                const SfxItemSet&   rArgSet, sal_uInt16 nSourceTab , int nId ) = 0;
+    virtual AbstractScPivotFilterDlg * CreateScPivotFilterDlg(Window* pParent,
+        const SfxItemSet& rArgSet, sal_uInt16 nSourceTab) = 0;
 
     virtual AbstractScDPFunctionDlg * CreateScDPFunctionDlg( Window* pParent,
                                                                 const ScDPLabelDataVector& rLabelVec,
