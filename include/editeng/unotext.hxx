@@ -125,7 +125,9 @@ class SvxItemPropertySet;
     { OUString(UNO_NAME_EDIT_CHAR_POSTURE_COMPLEX),     EE_CHAR_ITALIC_CTL,     ::getCppuType((const ::com::sun::star::awt::FontSlant*)0),0, MID_POSTURE }, \
     { OUString(UNO_NAME_EDIT_CHAR_WEIGHT_COMPLEX),      EE_CHAR_WEIGHT_CTL,     ::getCppuType((const float*)0),            0, MID_WEIGHT }, \
     { OUString(UNO_NAME_EDIT_CHAR_LOCALE_COMPLEX),      EE_CHAR_LANGUAGE_CTL,   ::getCppuType((const ::com::sun::star::lang::Locale*)0),0, MID_LANG_LOCALE }, \
-    { OUString("CharRelief"),                           EE_CHAR_RELIEF,         ::getCppuType((const sal_Int16*)0),    0, MID_RELIEF }
+    { OUString("CharRelief"),                           EE_CHAR_RELIEF,         ::getCppuType((const sal_Int16*)0),    0, MID_RELIEF }, \
+    { OUString("CharInteropGrabBag"),                   EE_CHAR_GRABBAG,        ::getCppuType((css::uno::Sequence<css::beans::PropertyValue >*)0), 0, 0}
+
 
 #define SVX_UNOEDIT_FONT_PROPERTIES \
     {OUString(UNO_NAME_EDIT_FONT_DESCRIPTOR),   WID_FONTDESC,       ::getCppuType((const ::com::sun::star::awt::FontDescriptor*)0),    0, MID_FONT_FAMILY_NAME }

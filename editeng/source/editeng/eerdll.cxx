@@ -39,6 +39,7 @@
 #include <editeng/scriptspaceitem.hxx>
 #include <editeng/numdef.hxx>
 #include <svl/itempool.hxx>
+#include <svl/grabbagitem.hxx>
 #include <vcl/virdev.hxx>
 
 #include <editeng/autokernitem.hxx>
@@ -160,8 +161,9 @@ SfxPoolItem** GlobalEditData::GetDefItems()
         ppDefItems[50] = new SfxVoidItem( EE_FEATURE_LINEBR );
         ppDefItems[51] = new SvxCharSetColorItem( Color( COL_RED ), RTL_TEXTENCODING_DONTKNOW, EE_FEATURE_NOTCONV );
         ppDefItems[52] = new SvxFieldItem( SvxFieldData(), EE_FEATURE_FIELD );
+        ppDefItems[53] = new SfxGrabBagItem( EE_CHAR_GRABBAG );
 
-        DBG_ASSERT( EDITITEMCOUNT == 53, "ITEMCOUNT geaendert, DefItems nicht angepasst!" );
+        DBG_ASSERT( EDITITEMCOUNT == 54, "ITEMCOUNT geaendert, DefItems nicht angepasst!" );
 
         // Init DefFonts:
         GetDefaultFonts( *(SvxFontItem*)ppDefItems[EE_CHAR_FONTINFO - EE_ITEMS_START],
