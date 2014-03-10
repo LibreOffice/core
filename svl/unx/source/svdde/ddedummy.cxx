@@ -25,6 +25,7 @@ DdeData::DdeData()
 }
 
 DdeData::DdeData( const OUString& )
+    : pImp(NULL)
 {
 }
 
