@@ -194,8 +194,11 @@ const OUString DdeTopic::GetName() const
 }
 
 DdeService::DdeService( const OUString& )
+    : pSysTopic(NULL)
+    , pName(NULL)
+    , pConv(NULL)
+    , nStatus(0)
 {
-    nStatus = 0;
 }
 
 OUString DdeService::Topics()
