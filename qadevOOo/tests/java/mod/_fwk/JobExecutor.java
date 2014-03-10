@@ -236,7 +236,7 @@ class Job implements
         int callCount = 0;
 
         public byte[] getImplementationId() {
-            return toString().getBytes();
+            return new byte[0];
         }
 
         public Type[] getTypes() {

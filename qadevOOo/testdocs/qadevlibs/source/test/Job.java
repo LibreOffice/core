@@ -72,7 +72,7 @@ public class Job {
         }
 
     public byte[] getImplementationId() {
-        return toString().getBytes();
+        return new byte[0];
     }
 
     public Type[] getTypes() {
