@@ -464,7 +464,7 @@ void SwDocStyleSheet::SetGrabBagItem(const uno::Any& rVal)
 
     if (bChg)
     {
-        dynamic_cast<SwDocStyleSheetPool*>(pPool)->InvalidateIterator();
+        dynamic_cast<SwDocStyleSheetPool&>(*pPool).InvalidateIterator();
         pPool->Broadcast(SfxStyleSheetHint(SFX_STYLESHEET_MODIFIED, *this));
         SwEditShell* pSh = rDoc.GetEditShell();
         if (pSh)
