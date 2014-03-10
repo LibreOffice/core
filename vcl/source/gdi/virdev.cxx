@@ -34,7 +34,51 @@
 
 using namespace ::com::sun::star::uno;
 
+bool VirtualDevice::ImplInitGraphics() const
+{
+    DBG_TESTSOLARMUTEX();
 
+    mbInitLineColor     = true;
+    mbInitFillColor     = true;
+    mbInitFont          = true;
+    mbInitTextColor     = true;
+    mbInitClipRegion    = true;
+
+    ImplSVData* pSVData = ImplGetSVData();
+
+    const VirtualDevice* pVirDev = (const VirtualDevice*)this;
+
+    if ( pVirDev->mpVirDev )
+    {
+        mpGraphics = pVirDev->mpVirDev->AcquireGraphics();
+        // if needed retry after releasing least recently used virtual device graphics
+        while ( !mpGraphics )
+        {
+            if ( !pSVData->maGDIData.mpLastVirGraphics )
+                break;
+            pSVData->maGDIData.mpLastVirGraphics->ImplReleaseGraphics();
+            mpGraphics = pVirDev->mpVirDev->AcquireGraphics();
+        }
+        // update global LRU list of virtual device graphics
+        if ( mpGraphics )
+        {
+            mpNextGraphics = pSVData->maGDIData.mpFirstVirGraphics;
+            pSVData->maGDIData.mpFirstVirGraphics = const_cast<VirtualDevice*>(this);
+            if ( mpNextGraphics )
+                mpNextGraphics->mpPrevGraphics = const_cast<VirtualDevice*>(this);
+            if ( !pSVData->maGDIData.mpLastVirGraphics )
+                pSVData->maGDIData.mpLastVirGraphics = const_cast<VirtualDevice*>(this);
+        }
+    }
+
+    if ( mpGraphics )
+    {
+        mpGraphics->SetXORMode( (ROP_INVERT == meRasterOp) || (ROP_XOR == meRasterOp), ROP_INVERT == meRasterOp );
+        mpGraphics->setAntiAliasB2DDraw(mnAntialiasing & ANTIALIASING_ENABLE_B2DDRAW);
+    }
+
+    return mpGraphics ? true : false;
+}
 
 void VirtualDevice::ImplInitVirDev( const OutputDevice* pOutDev,
                                     long nDX, long nDY, sal_uInt16 nBitCount, const SystemGraphicsData *pData )

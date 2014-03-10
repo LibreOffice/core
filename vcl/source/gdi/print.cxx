@@ -35,6 +35,7 @@
 #include <vcl/print.hxx>
 
 #include <salinst.hxx>
+#include <salvd.hxx>
 #include <salgdi.hxx>
 #include <salptype.hxx>
 #include <salprn.hxx>
@@ -453,6 +454,76 @@ void Printer::ImplInitData()
     pSVData->maGDIData.mpFirstPrinter = this;
 }
 
+bool Printer::ImplInitGraphics() const
+{
+    DBG_TESTSOLARMUTEX();
+
+    mbInitLineColor     = true;
+    mbInitFillColor     = true;
+    mbInitFont          = true;
+    mbInitTextColor     = true;
+    mbInitClipRegion    = true;
+
+    ImplSVData* pSVData = ImplGetSVData();
+
+    const Printer* pPrinter = (const Printer*)this;
+
+    if ( pPrinter->mpJobGraphics )
+        mpGraphics = pPrinter->mpJobGraphics;
+    else if ( pPrinter->mpDisplayDev )
+    {
+        const VirtualDevice* pVirDev = pPrinter->mpDisplayDev;
+        mpGraphics = pVirDev->mpVirDev->AcquireGraphics();
+        // if needed retry after releasing least recently used virtual device graphics
+        while ( !mpGraphics )
+        {
+            if ( !pSVData->maGDIData.mpLastVirGraphics )
+                break;
+            pSVData->maGDIData.mpLastVirGraphics->ImplReleaseGraphics();
+            mpGraphics = pVirDev->mpVirDev->AcquireGraphics();
+        }
+        // update global LRU list of virtual device graphics
+        if ( mpGraphics )
+        {
+            mpNextGraphics = pSVData->maGDIData.mpFirstVirGraphics;
+            pSVData->maGDIData.mpFirstVirGraphics = const_cast<Printer*>(this);
+            if ( mpNextGraphics )
+                mpNextGraphics->mpPrevGraphics = const_cast<Printer*>(this);
+            if ( !pSVData->maGDIData.mpLastVirGraphics )
+                pSVData->maGDIData.mpLastVirGraphics = const_cast<Printer*>(this);
+        }
+    }
+    else
+    {
+        mpGraphics = pPrinter->mpInfoPrinter->AcquireGraphics();
+        // if needed retry after releasing least recently used printer graphics
+        while ( !mpGraphics )
+        {
+            if ( !pSVData->maGDIData.mpLastPrnGraphics )
+                break;
+            pSVData->maGDIData.mpLastPrnGraphics->ImplReleaseGraphics();
+            mpGraphics = pPrinter->mpInfoPrinter->AcquireGraphics();
+        }
+        // update global LRU list of printer graphics
+        if ( mpGraphics )
+        {
+            mpNextGraphics = pSVData->maGDIData.mpFirstPrnGraphics;
+            pSVData->maGDIData.mpFirstPrnGraphics = const_cast<Printer*>(this);
+            if ( mpNextGraphics )
+                mpNextGraphics->mpPrevGraphics = const_cast<Printer*>(this);
+            if ( !pSVData->maGDIData.mpLastPrnGraphics )
+                pSVData->maGDIData.mpLastPrnGraphics = const_cast<Printer*>(this);
+        }
+    }
+
+    if ( mpGraphics )
+    {
+        mpGraphics->SetXORMode( (ROP_INVERT == meRasterOp) || (ROP_XOR == meRasterOp), ROP_INVERT == meRasterOp );
+        mpGraphics->setAntiAliasB2DDraw(mnAntialiasing & ANTIALIASING_ENABLE_B2DDRAW);
+    }
+
+    return mpGraphics ? true : false;
+}
 
 void Printer::ImplInit( SalPrinterQueueInfo* pInfo )
 {

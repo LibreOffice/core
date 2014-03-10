@@ -374,6 +374,7 @@ private:
     friend Window* ImplFindWindow( const SalFrame* pFrame, Point& rSalFramePos );
 public:
     SAL_DLLPRIVATE void                ImplInit( Window* pParent, WinBits nStyle, SystemParentData* pSystemParentData );
+    bool                               ImplInitGraphics() const;
     SAL_DLLPRIVATE WinBits             ImplInitRes( const ResId& rResId );
     SAL_DLLPRIVATE WindowResHeader     ImplLoadResHeader( const ResId& rResId );
     SAL_DLLPRIVATE void                ImplLoadRes( const ResId& rResId );
