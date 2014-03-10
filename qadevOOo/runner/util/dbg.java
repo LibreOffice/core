@@ -309,27 +309,4 @@ public class dbg {
         if (notSupportedServices)
             System.out.println(str);
     }
-
-    /**
-     * Get the unique implementation id of a UNO object.
-     * @param xTarget An implementation of a UNO object.
-     * @return The implementation id.
-     */
-    public static String getImplID( XInterface xTarget ) {
-    String str = "";
-    XTypeProvider xTypeProvider = UnoRuntime.queryInterface( XTypeProvider.class, xTarget);
-            if( xTypeProvider != null ) {
-        byte[] id = xTypeProvider.getImplementationId();
-        str = "ImplementationID: ";
-        for (int i=0; i<id.length;i++) {
-            Byte b = new Byte(id[i]);
-            str += b.intValue();
-        }
-            } else {
-        str = "No Implementation ID available";
-    }
-    return str;
-    }
-
-
 }
