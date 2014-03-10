@@ -638,11 +638,11 @@ public:
     // #i101491#
     // Helper which holds the old line geometry creation and is extended to use AA when
     // switched on. Advantage is that line geometry is only temporarily used for paint
-    SAL_DLLPRIVATE void         ImpDrawPolyLineWithLineInfo(const Polygon& rPoly, const LineInfo& rLineInfo);
+    SAL_DLLPRIVATE void         ImplDrawPolyLineWithLineInfo(const Polygon& rPoly, const LineInfo& rLineInfo);
 
     // #i101491#
     // Helper who tries to use SalGDI's DrawPolyLine direct and returns it's bool. Contains no AA check.
-    SAL_DLLPRIVATE bool         ImpTryDrawPolyLineDirect(
+    SAL_DLLPRIVATE bool         ImplTryDrawPolyLineDirect(
                                     const basegfx::B2DPolygon& rB2DPolygon,
                                     double fLineWidth = 0.0,
                                     double fTransparency = 0.0,
@@ -650,7 +650,7 @@ public:
                                     css::drawing::LineCap eLineCap = css::drawing::LineCap_BUTT);
 
     // Helper for line geometry paint with support for graphic expansion (pattern and fat_to_area)
-    void                        impPaintLineGeometryWithEvtlExpand(const LineInfo& rInfo, basegfx::B2DPolyPolygon aLinePolyPolygon);
+    void                        ImplPaintLineGeometryWithEvtlExpand(const LineInfo& rInfo, basegfx::B2DPolyPolygon aLinePolyPolygon);
     ///@}
 
     /** @name Polygon functions
@@ -662,7 +662,7 @@ public:
     // #i101491#
     // Helper who implements the DrawPolyPolygon functionality for basegfx::B2DPolyPolygon
     // without MetaFile processing
-    SAL_DLLPRIVATE void         ImpDrawPolyPolygonWithB2DPolyPolygon(const basegfx::B2DPolyPolygon& rB2DPolyPoly);
+    SAL_DLLPRIVATE void         ImplDrawPolyPolygonWithB2DPolyPolygon(const basegfx::B2DPolyPolygon& rB2DPolyPoly);
 
 
     ///@}
