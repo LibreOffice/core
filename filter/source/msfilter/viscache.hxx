@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sfx2/objsh.hxx>
 #include <tools/stream.hxx>
 #include <vcl/gdimtf.hxx>
 #include <vcl/bitmap.hxx>
@@ -35,6 +36,7 @@ class Impl_OlePres
 public:
                     Impl_OlePres( sal_uLong nF )
                         : nFormat( nF )
+                        , nAspect( ASPECT_CONTENT )
                         , pBmp( NULL )
                         , pMtf( NULL )
                         , nAdvFlags( 0x2 )  // in Dokument gefunden
