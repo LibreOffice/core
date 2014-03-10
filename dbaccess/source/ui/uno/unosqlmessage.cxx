@@ -54,8 +54,7 @@ OSQLMessageDialog::OSQLMessageDialog(const Reference< XComponentContext >& _rxOR
 
 Sequence<sal_Int8> SAL_CALL OSQLMessageDialog::getImplementationId(  ) throw(RuntimeException, std::exception)
 {
-    static ::cppu::OImplementationId aId;
-    return aId.getImplementationId();
+    return css::uno::Sequence<sal_Int8>();
 }
 
 Reference< XInterface > SAL_CALL OSQLMessageDialog::Create(const Reference< XMultiServiceFactory >& _rxFactory)

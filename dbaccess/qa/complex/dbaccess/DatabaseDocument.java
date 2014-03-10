@@ -128,7 +128,7 @@ public class DatabaseDocument extends TestCase implements com.sun.star.document.
 
         public byte[] getImplementationId()
         {
-            return getClass().toString().getBytes();
+            return new byte[0];
         }
     };
 

@@ -258,6 +258,7 @@ namespace dbaccess
 
     // com::sun::star::lang::XUnoTunnel
         virtual sal_Int64 SAL_CALL getSomething( const ::com::sun::star::uno::Sequence< sal_Int8 >& aIdentifier ) throw(::com::sun::star::uno::RuntimeException, std::exception);
+        static ::com::sun::star::uno::Sequence< sal_Int8 > getUnoTunnelImplementationId();
 
     // com::sun::star::uno::XAggregation
         virtual ::com::sun::star::uno::Any SAL_CALL queryAggregation( const ::com::sun::star::uno::Type& aType ) throw(::com::sun::star::uno::RuntimeException, std::exception);
@@ -484,7 +485,7 @@ namespace dbaccess
         virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL getTypes() throw (::com::sun::star::uno::RuntimeException, std::exception);
         virtual ::com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId() throw (::com::sun::star::uno::RuntimeException, std::exception)
         {
-            return getUnoTunnelImplementationId();
+            return css::uno::Sequence<sal_Int8>();
         }
 
     // com::sun::star::uno::XInterface

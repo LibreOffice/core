@@ -43,8 +43,7 @@ OUserSettingsDialog::OUserSettingsDialog(const Reference< XComponentContext >& _
 
 Sequence<sal_Int8> SAL_CALL OUserSettingsDialog::getImplementationId(  ) throw(RuntimeException, std::exception)
 {
-    static ::cppu::OImplementationId aId;
-    return aId.getImplementationId();
+    return css::uno::Sequence<sal_Int8>();
 }
 
 Reference< XInterface > SAL_CALL OUserSettingsDialog::Create(const Reference< XMultiServiceFactory >& _rxFactory)

@@ -72,17 +72,7 @@ Sequence< Type > SAL_CALL SbaXFormAdapter::getTypes(  ) throw (RuntimeException,
 
 Sequence< sal_Int8 > SAL_CALL SbaXFormAdapter::getImplementationId(  ) throw (RuntimeException, std::exception)
 {
-    static ::cppu::OImplementationId * pId = 0;
-    if (! pId)
-    {
-        ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
-        if (! pId)
-        {
-            static ::cppu::OImplementationId aId;
-            pId = &aId;
-        }
-    }
-    return pId->getImplementationId();
+    return css::uno::Sequence<sal_Int8>();
 }
 
 Any SAL_CALL SbaXFormAdapter::queryInterface(const Type& _rType) throw (RuntimeException, std::exception)

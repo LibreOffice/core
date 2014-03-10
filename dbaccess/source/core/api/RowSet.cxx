@@ -424,17 +424,7 @@ Sequence< Type > SAL_CALL ORowSet::getTypes() throw (RuntimeException, std::exce
 
 Sequence< sal_Int8 > SAL_CALL ORowSet::getImplementationId() throw (RuntimeException, std::exception)
 {
-    static OImplementationId * pId = 0;
-    if (! pId)
-    {
-        MutexGuard aGuard( Mutex::getGlobalMutex() );
-        if (! pId)
-        {
-            static OImplementationId aId;
-            pId = &aId;
-        }
-    }
-    return pId->getImplementationId();
+    return css::uno::Sequence<sal_Int8>();
 }
 
 // com::sun::star::XInterface
@@ -456,10 +446,25 @@ void SAL_CALL ORowSet::release() throw()
 // com::sun::star::XUnoTunnel
 sal_Int64 SAL_CALL ORowSet::getSomething( const Sequence< sal_Int8 >& rId ) throw(RuntimeException, std::exception)
 {
-    if (rId.getLength() == 16 && 0 == memcmp(getImplementationId().getConstArray(),  rId.getConstArray(), 16 ) )
+    if (rId.getLength() == 16 && 0 == memcmp(getUnoTunnelImplementationId().getConstArray(),  rId.getConstArray(), 16 ) )
         return reinterpret_cast<sal_Int64>(this);
 
     return 0;
+}
+
+Sequence< sal_Int8 > ORowSet::getUnoTunnelImplementationId()
+{
+    static ::cppu::OImplementationId * pId = 0;
+    if (! pId)
+    {
+        ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
+        if (! pId)
+        {
+            static ::cppu::OImplementationId aId;
+            pId = &aId;
+        }
+    }
+    return pId->getImplementationId();
 }
 
 // com::sun::star::XAggregation

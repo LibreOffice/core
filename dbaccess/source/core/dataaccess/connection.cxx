@@ -444,8 +444,7 @@ Sequence< Type > OConnection::getTypes() throw (RuntimeException, std::exception
 
 Sequence< sal_Int8 > OConnection::getImplementationId() throw (RuntimeException, std::exception)
 {
-    SAL_INFO("dbaccess", "OConnection::getImplementationId" );
-    return getUnoTunnelImplementationId();
+    return css::uno::Sequence<sal_Int8>();
 }
 
 // com::sun::star::uno::XInterface

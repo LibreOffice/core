@@ -528,18 +528,7 @@ Sequence< Type > ODatabaseSource::getTypes() throw (RuntimeException, std::excep
 
 Sequence< sal_Int8 > ODatabaseSource::getImplementationId() throw (RuntimeException, std::exception)
 {
-    SAL_INFO("dbaccess", "ODatabaseSource::getImplementationId" );
-    static OImplementationId * pId = 0;
-    if (! pId)
-    {
-        MutexGuard aGuard( Mutex::getGlobalMutex() );
-        if (! pId)
-        {
-            static OImplementationId aId;
-            pId = &aId;
-        }
-    }
-    return pId->getImplementationId();
+    return css::uno::Sequence<sal_Int8>();
 }
 
 // com::sun::star::uno::XInterface

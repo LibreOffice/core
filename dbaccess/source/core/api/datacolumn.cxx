@@ -66,17 +66,7 @@ Sequence< Type > ODataColumn::getTypes() throw (RuntimeException, std::exception
 
 Sequence< sal_Int8 > ODataColumn::getImplementationId() throw (RuntimeException, std::exception)
 {
-    static OImplementationId * pId = 0;
-    if (! pId)
-    {
-        MutexGuard aGuard( Mutex::getGlobalMutex() );
-        if (! pId)
-        {
-            static OImplementationId aId;
-            pId = &aId;
-        }
-    }
-    return pId->getImplementationId();
+    return css::uno::Sequence<sal_Int8>();
 }
 
 Any SAL_CALL ODataColumn::queryInterface( const Type & _rType ) throw (RuntimeException, std::exception)

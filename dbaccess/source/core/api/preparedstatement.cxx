@@ -77,17 +77,7 @@ Sequence< Type > OPreparedStatement::getTypes() throw (RuntimeException, std::ex
 
 Sequence< sal_Int8 > OPreparedStatement::getImplementationId() throw (RuntimeException, std::exception)
 {
-        static OImplementationId * pId = 0;
-    if (! pId)
-    {
-        MutexGuard aGuard( Mutex::getGlobalMutex() );
-        if (! pId)
-        {
-            static OImplementationId aId;
-            pId = &aId;
-        }
-    }
-    return pId->getImplementationId();
+    return css::uno::Sequence<sal_Int8>();
 }
 
 // com::sun::star::uno::XInterface

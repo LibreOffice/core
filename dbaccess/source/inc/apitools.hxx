@@ -224,7 +224,7 @@ public:
 } \
 ::com::sun::star::uno::Sequence< sal_Int8 > classname::getImplementationId() throw (::com::sun::star::uno::RuntimeException, std::exception)    \
 {   \
-    return classname::getUnoTunnelImplementationId(); \
+    return css::uno::Sequence<sal_Int8>(); \
 }
 
 #define IMPLEMENT_GETTYPES2( classname, baseclass1, baseclass2 )    \

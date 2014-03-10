@@ -174,17 +174,7 @@ sal_Bool SAL_CALL ORowSetDataColumn::convertFastPropertyValue( Any & rConvertedV
 
 Sequence< sal_Int8 > ORowSetDataColumn::getImplementationId() throw (RuntimeException, std::exception)
 {
-    static OImplementationId * pId = 0;
-    if (! pId)
-    {
-        MutexGuard aGuard( Mutex::getGlobalMutex() );
-        if (! pId)
-        {
-            static OImplementationId aId;
-            pId = &aId;
-        }
-    }
-    return pId->getImplementationId();
+    return css::uno::Sequence<sal_Int8>();
 }
 
 void ORowSetDataColumn::fireValueChange(const ORowSetValue& _rOldValue)

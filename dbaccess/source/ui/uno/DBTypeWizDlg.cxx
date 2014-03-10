@@ -43,8 +43,7 @@ ODBTypeWizDialog::ODBTypeWizDialog(const Reference< XComponentContext >& _rxORB)
 
 Sequence<sal_Int8> SAL_CALL ODBTypeWizDialog::getImplementationId(  ) throw(RuntimeException, std::exception)
 {
-    static ::cppu::OImplementationId aId;
-    return aId.getImplementationId();
+    return css::uno::Sequence<sal_Int8>();
 }
 
 Reference< XInterface > SAL_CALL ODBTypeWizDialog::Create(const Reference< XMultiServiceFactory >& _rxFactory)

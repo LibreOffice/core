@@ -132,17 +132,7 @@ namespace dbmm
 
     Sequence< sal_Int8 > SAL_CALL MacroMigrationDialogService::getImplementationId() throw(RuntimeException, std::exception)
     {
-        static ::cppu::OImplementationId* pId = NULL;
-        if ( !pId )
-        {
-            ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
-            if ( !pId )
-            {
-                static ::cppu::OImplementationId aId;
-                pId = &aId;
-            }
-        }
-        return pId->getImplementationId();
+        return css::uno::Sequence<sal_Int8>();
     }
 
     OUString SAL_CALL MacroMigrationDialogService::getImplementationName_static() throw(RuntimeException)
