@@ -638,27 +638,17 @@ void ScInterpreter::ScCeil_MS()
         if ( nParamCount == 1 )
         {
             fVal = GetDouble();
-            fDec = ( fVal < 0 ? -1 : 1 );
+            fDec = 1.0;
         }
         else
         {
-            bool bArgumentMissing = IsMissing();
-            fDec = GetDouble();
+            fDec = fabs( GetDoubleWithDefault( 1.0 ));
             fVal = GetDouble();
-            if ( bArgumentMissing )
-                fDec = ( fVal < 0 ? -1 : 1 );
         }
         if ( fDec == 0.0 || fVal == 0.0 )
             PushInt( 0 );
         else
-        {
-            if ( fVal * fDec > 0.0 )
-                fDec *= -1.0;
-            if ( fVal < 0.0 )
-                PushDouble(::rtl::math::approxFloor( fVal / fDec ) * fDec );
-            else
-                PushDouble(::rtl::math::approxCeil( fVal / fDec ) * fDec );
-        }
+            PushDouble(::rtl::math::approxCeil( fVal / fDec ) * fDec );
     }
 }
 
@@ -693,27 +683,17 @@ void ScInterpreter::ScFloor_MS()
         if ( nParamCount == 1 )
         {
             fVal = GetDouble();
-            fDec = ( fVal < 0 ? -1 : 1 );
+            fDec = 1.0;
         }
         else
         {
-            bool bArgumentMissing = IsMissing();
-            fDec = GetDouble();
+            fDec = fabs( GetDoubleWithDefault( 1.0 ));
             fVal = GetDouble();
-            if ( bArgumentMissing )
-                fDec = ( fVal < 0 ? -1 : 1 );
         }
         if ( fDec == 0.0 || fVal == 0.0 )
             PushInt( 0 );
         else
-        {
-            if ( fVal * fDec > 0.0 )
-                fDec *= -1.0;
-            if ( fVal < 0.0 )
-                PushDouble(::rtl::math::approxCeil( fVal / fDec ) * fDec );
-            else
-                PushDouble(::rtl::math::approxFloor( fVal / fDec ) * fDec );
-        }
+            PushDouble(::rtl::math::approxFloor( fVal / fDec ) * fDec );
     }
 }
 
