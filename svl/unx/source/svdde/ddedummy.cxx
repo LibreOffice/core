@@ -88,7 +88,12 @@ const OUString DdeConnection::GetTopicName()
 }
 
 DdeTransaction::DdeTransaction( DdeConnection& rConnection, const OUString&, long )
-    : rDde( rConnection )
+    : rDde(rConnection)
+    , pName(NULL)
+    , nType(0)
+    , nId(0)
+    , nTime(0)
+    , bBusy(false)
 {
 }
 
