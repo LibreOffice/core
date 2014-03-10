@@ -1140,30 +1140,30 @@ void DrawDocShell::FillClass(SvGlobalName* pClassName,
     {
         if ( meDocType == DOCUMENT_TYPE_DRAW )
         {
-                *pClassName = SvGlobalName(SO3_SDRAW_CLASSID_60);
-                *pFormat = SOT_FORMATSTR_ID_STARDRAW_60;
-                *pFullTypeName = OUString(SdResId(STR_GRAPHIC_DOCUMENT_FULLTYPE_60));
+            *pClassName = SvGlobalName(SO3_SDRAW_CLASSID_60);
+            *pFormat = SOT_FORMATSTR_ID_STARDRAW_60;
+            *pFullTypeName = OUString(SdResId(STR_GRAPHIC_DOCUMENT_FULLTYPE_60));
         }
         else
         {
-                *pClassName = SvGlobalName(SO3_SIMPRESS_CLASSID_60);
-                *pFormat = SOT_FORMATSTR_ID_STARIMPRESS_60;
-                *pFullTypeName = OUString(SdResId(STR_IMPRESS_DOCUMENT_FULLTYPE_60));
+            *pClassName = SvGlobalName(SO3_SIMPRESS_CLASSID_60);
+            *pFormat = SOT_FORMATSTR_ID_STARIMPRESS_60;
+            *pFullTypeName = OUString(SdResId(STR_IMPRESS_DOCUMENT_FULLTYPE_60));
         }
     }
     else if (nFileFormat == SOFFICE_FILEFORMAT_8)
     {
         if ( meDocType == DOCUMENT_TYPE_DRAW )
         {
-                *pClassName = SvGlobalName(SO3_SDRAW_CLASSID_60);
-                *pFormat = bTemplate ? SOT_FORMATSTR_ID_STARDRAW_8_TEMPLATE : SOT_FORMATSTR_ID_STARDRAW_8;
-                *pFullTypeName = "Draw 8"; // HACK: method will be removed with new storage API
+            *pClassName = SvGlobalName(SO3_SDRAW_CLASSID_60);
+            *pFormat = bTemplate ? SOT_FORMATSTR_ID_STARDRAW_8_TEMPLATE : SOT_FORMATSTR_ID_STARDRAW_8;
+            *pFullTypeName = "Draw 8"; // HACK: method will be removed with new storage API
         }
         else
         {
-                *pClassName = SvGlobalName(SO3_SIMPRESS_CLASSID_60);
-                *pFormat = bTemplate ? SOT_FORMATSTR_ID_STARIMPRESS_8_TEMPLATE : SOT_FORMATSTR_ID_STARIMPRESS_8;
-                *pFullTypeName = "Impress 8"; // HACK: method will be removed with new storage API
+            *pClassName = SvGlobalName(SO3_SIMPRESS_CLASSID_60);
+            *pFormat = bTemplate ? SOT_FORMATSTR_ID_STARIMPRESS_8_TEMPLATE : SOT_FORMATSTR_ID_STARIMPRESS_8;
+            *pFullTypeName = "Impress 8"; // HACK: method will be removed with new storage API
         }
     }
 
