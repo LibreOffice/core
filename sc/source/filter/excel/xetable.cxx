@@ -962,8 +962,8 @@ void XclExpFormulaCell::SaveXml( XclExpXmlStream& rStrm )
             // OOXTODO: XML_si,     uint
             // OOXTODO: XML_bx      bool
             FSEND );
-    rWorksheet->writeEscaped( XclXmlUtils::ToOUString( *mrScFmlaCell.GetDocument(), mrScFmlaCell.aPos,
-                mrScFmlaCell.GetCode(), rStrm.GetRoot().GetOpCodeMap() ) );
+    rWorksheet->writeEscaped( XclXmlUtils::ToOUString(
+        *mrScFmlaCell.GetDocument(), mrScFmlaCell.aPos, mrScFmlaCell.GetCode()));
     rWorksheet->endElement( XML_f );
     if( strcmp( sType, "inlineStr" ) == 0 )
     {

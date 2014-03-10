@@ -145,8 +145,6 @@ public:
     XclExpPivotTableManager& GetPivotTableManager() const;
     /** Returns the differential formatting list */
     XclExpDxfs&          GetDxfs() const;
-    /** Returns the op-code mapping */
-    ScCompiler::OpCodeMapPtr  GetOpCodeMap() const;
 
     /** Is called when export filter starts to create the Excel document (all BIFF versions). */
     void                InitializeConvert();
