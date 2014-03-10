@@ -532,7 +532,7 @@ public:
      */
     void            SetupStorage(
                         const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& xStorage,
-                        sal_Int32 nVersion, sal_Bool bTemplate, bool bChart = false ) const;
+                        sal_Int32 nVersion, bool bTemplate, bool bChart = false ) const;
 
     ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage > GetStorage();
 
@@ -583,7 +583,7 @@ public:
                                OUString * pFullTypeName,
                                OUString * pShortTypeName,
                                sal_Int32 nVersion,
-                               sal_Bool bTemplate = sal_False) const = 0;
+                               bool bTemplate = false) const = 0;
 
     // change recording and respective passwword protection for Writer and Calc
     // slots available for Writer:  FN_REDLINE_ON, FN_REDLINE_ON

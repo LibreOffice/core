@@ -1134,7 +1134,7 @@ void DrawDocShell::FillClass(SvGlobalName* pClassName,
                                         OUString* pFullTypeName,
                                         OUString* pShortTypeName,
                                         sal_Int32 nFileFormat,
-                                        sal_Bool bTemplate /* = sal_False */) const
+                                        bool bTemplate /* = false */) const
 {
     if (nFileFormat == SOFFICE_FILEFORMAT_60)
     {

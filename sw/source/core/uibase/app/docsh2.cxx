@@ -1195,7 +1195,7 @@ void SwDocShell::FillClass( SvGlobalName * pClassName,
                                    OUString * pLongUserName,
                                    OUString * pUserName,
                                    sal_Int32 nVersion,
-                                   sal_Bool bTemplate /* = sal_False */) const
+                                   bool bTemplate /* = false */) const
 {
     if (nVersion == SOFFICE_FILEFORMAT_60)
     {

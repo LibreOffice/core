@@ -451,7 +451,7 @@ sal_Bool SwDocShell::SaveAs( SfxMedium& rMedium )
             SfxObjectShellLock xDocSh =
                 new SwGlobalDocShell( SFX_CREATE_MODE_INTERNAL );
             // the global document can not be a template
-            xDocSh->SetupStorage( xStor, SotStorage::GetVersion( xStor ), sal_False );
+            xDocSh->SetupStorage( xStor, SotStorage::GetVersion( xStor ), false );
             xDocSh->DoClose();
         }
 

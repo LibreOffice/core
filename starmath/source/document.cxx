@@ -1393,7 +1393,7 @@ void SmDocShell::FillClass(SvGlobalName* pClassName,
                            OUString* pFullTypeName,
                            OUString* pShortTypeName,
                            sal_Int32 nFileFormat,
-                           sal_Bool bTemplate /* = sal_False */) const
+                           bool bTemplate /* = false */) const
 {
     SAL_INFO( "starmath", "SmDocShell::FillClass" );
 

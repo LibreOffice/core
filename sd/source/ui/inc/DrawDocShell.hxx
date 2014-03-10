@@ -95,7 +95,7 @@ public:
     virtual void            OnDocumentPrinterChanged(Printer* pNewPrinter);
     virtual SfxStyleSheetBasePool* GetStyleSheetPool();
     virtual Size            GetFirstPageSize();
-    virtual void            FillClass(SvGlobalName* pClassName, sal_uInt32*  pFormat, OUString* pAppName, OUString* pFullTypeName, OUString* pShortTypeName, sal_Int32 nFileFormat, sal_Bool bTemplate = sal_False ) const;
+    virtual void            FillClass(SvGlobalName* pClassName, sal_uInt32*  pFormat, OUString* pAppName, OUString* pFullTypeName, OUString* pShortTypeName, sal_Int32 nFileFormat, bool bTemplate = false ) const;
     virtual void            SetModified( sal_Bool = sal_True );
     virtual SfxDocumentInfoDialog*  CreateDocumentInfoDialog( ::Window *pParent,
                                                               const SfxItemSet &rSet );

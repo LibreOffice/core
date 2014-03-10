@@ -338,7 +338,7 @@ sal_uInt32 GetChartVersion( sal_Int32 nVersion, bool bTemplate )
 
 
 void SfxObjectShell::SetupStorage( const uno::Reference< embed::XStorage >& xStorage,
-                                   sal_Int32 nVersion, sal_Bool bTemplate, bool bChart ) const
+                                   sal_Int32 nVersion, bool bTemplate, bool bChart ) const
 {
     uno::Reference< beans::XPropertySet > xProps( xStorage, uno::UNO_QUERY );
 
@@ -455,7 +455,7 @@ sal_Bool SfxObjectShell::GeneralInit_Impl( const uno::Reference< embed::XStorage
                     return sal_False;
                 }
 
-                SetupStorage( xStorage, SOFFICE_FILEFORMAT_CURRENT, sal_False, false );
+                SetupStorage( xStorage, SOFFICE_FILEFORMAT_CURRENT, false, false );
             }
         }
         catch ( uno::Exception& )
@@ -1917,7 +1917,7 @@ sal_Bool SfxObjectShell::DoSaveObjectAs( SfxMedium& rMedium, sal_Bool bCommit )
     if ( !(a>>=aMediaType) || aMediaType.isEmpty() )
     {
         SAL_WARN( "sfx.doc", "The mediatype must be set already!" );
-        SetupStorage( xNewStor, SOFFICE_FILEFORMAT_CURRENT, sal_False, false );
+        SetupStorage( xNewStor, SOFFICE_FILEFORMAT_CURRENT, false, false );
     }
 
     pImp->bIsSaving = sal_False;
@@ -3090,7 +3090,8 @@ sal_Bool SfxObjectShell::SaveAsOwnFormat( SfxMedium& rMedium )
         sal_Int32 nVersion = rMedium.GetFilter()->GetVersion();
 
         // OASIS templates have own mediatypes ( SO7 also actually, but it is to late to use them here )
-        sal_Bool bTemplate = ( rMedium.GetFilter()->IsOwnTemplateFormat() && nVersion > SOFFICE_FILEFORMAT_60 );
+        const bool bTemplate = rMedium.GetFilter()->IsOwnTemplateFormat()
+            && nVersion > SOFFICE_FILEFORMAT_60;
 
         const SfxFilter* pFilter = rMedium.GetFilter();
         bool bChart = false;
@@ -3123,7 +3124,7 @@ uno::Reference< embed::XStorage > SfxObjectShell::GetStorage()
             pImp->m_xDocStorage = ::comphelper::OStorageHelper::GetTemporaryStorage();
             OSL_ENSURE( pImp->m_xDocStorage.is(), "The method must either return storage or throw an exception!" );
 
-            SetupStorage( pImp->m_xDocStorage, SOFFICE_FILEFORMAT_CURRENT, sal_False, false );
+            SetupStorage( pImp->m_xDocStorage, SOFFICE_FILEFORMAT_CURRENT, false, false );
             pImp->m_bCreateTempStor = sal_False;
             SFX_APP()->NotifyEvent( SfxEventHint( SFX_EVENT_STORAGECHANGED, GlobalEventConfig::GetEventName(STR_EVENT_STORAGECHANGED), this ) );
         }

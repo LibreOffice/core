@@ -49,10 +49,10 @@ void SwGlobalDocShell::FillClass( SvGlobalName * pClassName,
                                    OUString * pLongUserName,
                                    OUString * pUserName,
                                    sal_Int32 nVersion,
-                                   sal_Bool bTemplate /* = sal_False */) const
+                                   bool bTemplate /* = false */) const
 {
     (void)bTemplate;
-    OSL_ENSURE( bTemplate == sal_False, "No template for Writer Global" );
+    OSL_ENSURE( !bTemplate, "No template for Writer Global" );
 
     if (nVersion == SOFFICE_FILEFORMAT_60)
     {

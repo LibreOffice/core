@@ -128,7 +128,7 @@ class SmDocShell : public SfxObjectShell, public SfxListener
                                   OUString* pFullTypeName,
                                   OUString* pShortTypeName,
                                   sal_Int32 nFileFormat,
-                                  sal_Bool bTemplate = sal_False ) const;
+                                  bool bTemplate = false ) const;
 
     virtual sal_Bool        SetData( const OUString& rData );
     virtual sal_uLong       GetMiscStatus() const;

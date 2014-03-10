@@ -199,7 +199,7 @@ public:
                                OUString * pFullTypeName,
                                OUString * pShortTypeName,
                                sal_Int32 nFileFormat,
-                               sal_Bool bTemplate = sal_False ) const;
+                               bool bTemplate = false ) const;
 
     virtual sal_Bool    InitNew( const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& );
     virtual sal_Bool    Load( SfxMedium& rMedium );

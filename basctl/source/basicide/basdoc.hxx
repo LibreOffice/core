@@ -45,7 +45,7 @@ protected:
                                OUString * pFullTypeName,
                                OUString * pShortTypeName,
                                sal_Int32 nVersion,
-                               sal_Bool bTemplate = false ) const;
+                               bool bTemplate = false ) const;
 
 public:
                         TYPEINFO();

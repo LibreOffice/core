@@ -610,7 +610,7 @@ sal_Bool SdTransferable::WriteObject( SotStorageStreamRef& rxOStm, void* pObject
                     ::comphelper::OStorageHelper::GetStorageFromURL( aTempFile.GetURL(), embed::ElementModes::READWRITE );
 
                 // write document storage
-                pEmbObj->SetupStorage( xWorkStore, SOFFICE_FILEFORMAT_CURRENT, sal_False );
+                pEmbObj->SetupStorage( xWorkStore, SOFFICE_FILEFORMAT_CURRENT, false );
                 // mba: no relative ULRs for clipboard!
                 SfxMedium aMedium( xWorkStore, OUString() );
                 bRet = pEmbObj->DoSaveObjectAs( aMedium, sal_False );

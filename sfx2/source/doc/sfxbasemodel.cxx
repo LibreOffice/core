@@ -3803,7 +3803,7 @@ void SAL_CALL SfxBaseModel::storeToStorage( const Reference< embed::XStorage >& 
     {
         // TODO/LATER: if the provided storage has some data inside the storing might fail, probably the storage must be truncated
         // TODO/LATER: is it possible to have a template here?
-        m_pData->m_pObjectShell->SetupStorage( xStorage, nVersion, sal_False, false );
+        m_pData->m_pObjectShell->SetupStorage( xStorage, nVersion, false, false );
 
         // BaseURL is part of the ItemSet
         SfxMedium aMedium( xStorage, OUString(), &aSet );
