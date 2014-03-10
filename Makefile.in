@@ -174,7 +174,7 @@ cmd:
 #
 # Fetch
 #
-ifneq ($(DO_FETCH_TARBALLS),NO)
+ifneq ($(DO_FETCH_TARBALLS),)
 include $(SRCDIR)/Makefile.fetch
 fetch: download
 fetch: get-submodules

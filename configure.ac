@@ -4785,11 +4785,11 @@ if test "$enable_fetch_external" != "no"; then
         DO_FETCH_TARBALLS="ALL"
     else
         AC_MSG_RESULT(["yes, if we use them"])
-        DO_FETCH_TARBALLS="YES"
+        DO_FETCH_TARBALLS="TRUE"
     fi
 else
     AC_MSG_RESULT([no])
-    DO_FETCH_TARBALLS="NO"
+    DO_FETCH_TARBALLS=
 fi
 AC_SUBST(DO_FETCH_TARBALLS)
 
