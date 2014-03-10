@@ -1668,6 +1668,31 @@ void Test::testPivotTableTextNumber()
         CPPUNIT_ASSERT_MESSAGE("Table output check failed", bSuccess);
     }
 
+    // Set the Name dimension to page dimension.
+    pDPObj->BuildAllDimensionMembers();
+    ScDPSaveData aSaveData(*pDPObj->GetSaveData());
+    ScDPSaveDimension* pDim = aSaveData.GetExistingDimensionByName("Name");
+    CPPUNIT_ASSERT(pDim);
+    pDim->SetOrientation(sheet::DataPilotFieldOrientation_PAGE);
+    OUString aVisiblePage("0004");
+    pDim->SetCurrentPage(&aVisiblePage);
+    pDPObj->SetSaveData(aSaveData);
+
+    aOutRange = refresh(pDPObj);
+
+    {
+        // Expected output table content.  0 = empty cell
+        const char* aOutputCheck[][2] = {
+            { "Name", "0004" },
+            {  0, 0 },
+            { "Sum - Value", 0 },
+            { "4", 0 }
+        };
+
+        bSuccess = checkDPTableOutput<2>(m_pDoc, aOutRange, aOutputCheck, "Text number field members");
+        CPPUNIT_ASSERT_MESSAGE("Table output check failed", bSuccess);
+    }
+
     pDPs->FreeTable(pDPObj);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("There should be no more tables.", pDPs->GetCount(), static_cast<size_t>(0));
     CPPUNIT_ASSERT_EQUAL_MESSAGE("There shouldn't be any more cache stored.",
