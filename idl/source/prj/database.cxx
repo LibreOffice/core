@@ -618,52 +618,51 @@ SvIdlWorkingBase::SvIdlWorkingBase(const SvCommand& rCmd) : SvIdlDataBase(rCmd)
 sal_Bool SvIdlWorkingBase::ReadSvIdl( SvTokenStream & rInStm, sal_Bool bImported, const OUString & rPath )
 {
     aPath = rPath; // only valid for this iteration
-    SvToken * pTok;
     sal_Bool bOk = sal_True;
-        pTok = rInStm.GetToken();
-        // only one import at the very beginning
-        if( pTok->Is( SvHash_import() ) )
+    SvToken * pTok = rInStm.GetToken();
+    // only one import at the very beginning
+    if( pTok->Is( SvHash_import() ) )
+    {
+        rInStm.GetToken_Next();
+        rInStm.Read( '(' ); // optional
+        pTok = rInStm.GetToken_Next();
+        if( pTok->IsString() )
         {
-            rInStm.GetToken_Next();
-            rInStm.Read( '(' ); // optional
-            pTok = rInStm.GetToken_Next();
-            if( pTok->IsString() )
+            OUString aFullName;
+            if( osl::FileBase::E_None == osl::File::searchFileURL(
+                OStringToOUString(pTok->GetString(), RTL_TEXTENCODING_ASCII_US),
+                rPath,
+                aFullName) )
             {
-                OUString aFullName;
-                if( osl::FileBase::E_None == osl::File::searchFileURL(
-                    OStringToOUString(pTok->GetString(), RTL_TEXTENCODING_ASCII_US),
-                    rPath,
-                    aFullName) )
+                osl::FileBase::getSystemPathFromFileURL( aFullName, aFullName );
+                this->AddDepFile(aFullName);
+                SvFileStream aStm( aFullName, STREAM_STD_READ | STREAM_NOCREATE );
+                Load( aStm );
+                if( aStm.GetError() != SVSTREAM_OK )
                 {
-                    osl::FileBase::getSystemPathFromFileURL( aFullName, aFullName );
-                    this->AddDepFile(aFullName);
-                    SvFileStream aStm( aFullName, STREAM_STD_READ | STREAM_NOCREATE );
-                    Load( aStm );
-                    if( aStm.GetError() != SVSTREAM_OK )
+                    if( aStm.GetError() == SVSTREAM_WRONGVERSION )
                     {
-                        if( aStm.GetError() == SVSTREAM_WRONGVERSION )
-                        {
-                            OStringBuffer aStr("wrong version, file ");
-                            aStr.append(OUStringToOString( aFullName, RTL_TEXTENCODING_UTF8));
-                            SetError(aStr.makeStringAndClear(), pTok);
-                            WriteError( rInStm );
-                            bOk = sal_False;
-                        }
-                        else
-                        {
-                            aStm.Seek( 0 );
-                            aStm.ResetError();
-                            SvTokenStream aTokStm( aStm, aFullName );
-                            bOk = ReadSvIdl( aTokStm, sal_True, rPath );
-                        }
+                        OStringBuffer aStr("wrong version, file ");
+                        aStr.append(OUStringToOString( aFullName, RTL_TEXTENCODING_UTF8));
+                        SetError(aStr.makeStringAndClear(), pTok);
+                        WriteError( rInStm );
+                        bOk = sal_False;
+                    }
+                    else
+                    {
+                        aStm.Seek( 0 );
+                        aStm.ResetError();
+                        SvTokenStream aTokStm( aStm, aFullName );
+                        bOk = ReadSvIdl( aTokStm, sal_True, rPath );
                     }
                 }
-                else
-                    bOk = sal_False;
             }
             else
                 bOk = sal_False;
         }
+        else
+            bOk = sal_False;
+    }
 
     sal_uInt32 nBeginPos = 0xFFFFFFFF; // can not happen with Tell
 
