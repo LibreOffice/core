@@ -64,15 +64,10 @@ Sequence< OUString > SAL_CALL SwAccessibleGraphic::getSupportedServiceNames()
     return aRet;
 }
 
-namespace
-{
-    class theSwAccessibleGraphicImplementationId : public rtl::Static< UnoTunnelIdInit, theSwAccessibleGraphicImplementationId > {};
-}
-
 Sequence< sal_Int8 > SAL_CALL SwAccessibleGraphic::getImplementationId()
         throw(RuntimeException, std::exception)
 {
-    return theSwAccessibleGraphicImplementationId::get().getSeq();
+    return css::uno::Sequence<sal_Int8>();
 }
 
 //  Return this object's role.

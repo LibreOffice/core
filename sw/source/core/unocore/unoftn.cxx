@@ -225,15 +225,10 @@ SwXFootnote::getTypes() throw (uno::RuntimeException, std::exception)
     return ::comphelper::concatSequences(aTypes, aTextTypes);
 }
 
-namespace
-{
-    class theSwXFootnoteImplementationId : public rtl::Static< UnoTunnelIdInit, theSwXFootnoteImplementationId > {};
-}
-
 uno::Sequence< sal_Int8 > SAL_CALL
 SwXFootnote::getImplementationId() throw (uno::RuntimeException, std::exception)
 {
-    return theSwXFootnoteImplementationId::get().getSeq();
+    return css::uno::Sequence<sal_Int8>();
 }
 
 uno::Any SAL_CALL

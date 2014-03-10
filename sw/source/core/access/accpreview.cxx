@@ -63,15 +63,10 @@ Sequence<OUString> SwAccessiblePreview::getSupportedServiceNames( )
     return aSeq;
 }
 
-namespace
-{
-    class theSwAccessiblePreviewImplementationId : public rtl::Static< UnoTunnelIdInit, theSwAccessiblePreviewImplementationId > {};
-}
-
 Sequence< sal_Int8 > SAL_CALL SwAccessiblePreview::getImplementationId()
         throw(RuntimeException, std::exception)
 {
-    return theSwAccessiblePreviewImplementationId::get().getSeq();
+    return css::uno::Sequence<sal_Int8>();
 }
 
 OUString SAL_CALL SwAccessiblePreview::getAccessibleDescription (void) throw (com::sun::star::uno::RuntimeException, std::exception)

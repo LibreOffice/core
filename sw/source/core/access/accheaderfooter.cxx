@@ -106,15 +106,10 @@ Sequence< OUString > SAL_CALL SwAccessibleHeaderFooter::getSupportedServiceNames
     return aRet;
 }
 
-namespace
-{
-    class theSwAccessibleHeaderFooterImplementationId : public rtl::Static< UnoTunnelIdInit, theSwAccessibleHeaderFooterImplementationId > {};
-}
-
 Sequence< sal_Int8 > SAL_CALL SwAccessibleHeaderFooter::getImplementationId()
         throw(RuntimeException, std::exception)
 {
-    return theSwAccessibleHeaderFooterImplementationId::get().getSeq();
+    return css::uno::Sequence<sal_Int8>();
 }
 
 sal_Int32 SAL_CALL SwAccessibleHeaderFooter::getBackground()

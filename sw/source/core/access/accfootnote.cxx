@@ -122,15 +122,10 @@ Sequence< OUString > SAL_CALL SwAccessibleFootnote::getSupportedServiceNames()
     return aRet;
 }
 
-namespace
-{
-    class theSwAccessibleFootnoteImplementationId : public rtl::Static< UnoTunnelIdInit, theSwAccessibleFootnoteImplementationId > {};
-}
-
 Sequence< sal_Int8 > SAL_CALL SwAccessibleFootnote::getImplementationId()
         throw(RuntimeException, std::exception)
 {
-    return theSwAccessibleFootnoteImplementationId::get().getSeq();
+    return css::uno::Sequence<sal_Int8>();
 }
 
 sal_Bool SwAccessibleFootnote::IsEndnote( const SwFtnFrm *pFtnFrm )

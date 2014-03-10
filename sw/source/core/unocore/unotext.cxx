@@ -2429,15 +2429,10 @@ SwXBodyText::getTypes() throw (uno::RuntimeException, std::exception)
     return ::comphelper::concatSequences(aTypes, aTextTypes);
 }
 
-namespace
-{
-    class theSwXBodyTextImplementationId : public rtl::Static< UnoTunnelIdInit, theSwXBodyTextImplementationId> {};
-}
-
 uno::Sequence< sal_Int8 > SAL_CALL
 SwXBodyText::getImplementationId() throw (uno::RuntimeException, std::exception)
 {
-    return theSwXBodyTextImplementationId::get().getSeq();
+    return css::uno::Sequence<sal_Int8>();
 }
 
 uno::Any SAL_CALL
@@ -2716,15 +2711,10 @@ SwXHeadFootText::getTypes() throw (uno::RuntimeException, std::exception)
     return ::comphelper::concatSequences(aTypes, aTextTypes);
 }
 
-namespace
-{
-    class theSwXHeadFootTextImplementationId : public rtl::Static< UnoTunnelIdInit, theSwXHeadFootTextImplementationId > {};
-}
-
 uno::Sequence< sal_Int8 > SAL_CALL
 SwXHeadFootText::getImplementationId() throw (uno::RuntimeException, std::exception)
 {
-    return theSwXHeadFootTextImplementationId::get().getSeq();
+    return css::uno::Sequence<sal_Int8>();
 }
 
 uno::Any SAL_CALL

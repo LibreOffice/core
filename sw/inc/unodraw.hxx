@@ -143,7 +143,6 @@ class SwXShape : public SwXShapeBaseClass,
 
     const SfxItemPropertySet*           m_pPropSet;
     const SfxItemPropertyMapEntry*      m_pPropertyMapEntries;
-    com::sun::star::uno::Sequence< sal_Int8 >* pImplementationId;
 
     SwShapeDescriptor_Impl*     pImpl;
 

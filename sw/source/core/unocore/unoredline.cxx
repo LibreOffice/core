@@ -92,15 +92,10 @@ uno::Sequence<uno::Type> SwXRedlineText::getTypes()
     return aTypes;
 }
 
-namespace
-{
-    class theSwXRedlineTextImplementationId : public rtl::Static< UnoTunnelIdInit, theSwXRedlineTextImplementationId> {};
-}
-
 uno::Sequence<sal_Int8> SwXRedlineText::getImplementationId()
     throw(uno::RuntimeException, std::exception)
 {
-    return theSwXRedlineTextImplementationId::get().getSeq();
+    return css::uno::Sequence<sal_Int8>();
 }
 
 uno::Reference<text::XTextCursor> SwXRedlineText::createTextCursor(void)
@@ -289,14 +284,9 @@ void SwXRedlinePortion::Validate() throw( uno::RuntimeException )
         throw uno::RuntimeException();
 }
 
-namespace
-{
-    class theSwXRedlinePortionImplementationId : public rtl::Static< UnoTunnelIdInit, theSwXRedlinePortionImplementationId > {};
-}
-
 uno::Sequence< sal_Int8 > SAL_CALL SwXRedlinePortion::getImplementationId(  ) throw(uno::RuntimeException, std::exception)
 {
-    return theSwXRedlinePortionImplementationId::get().getSeq();
+    return css::uno::Sequence<sal_Int8>();
 }
 
 uno::Any  SwXRedlinePortion::GetPropertyValue( const OUString& rPropertyName, const SwRangeRedline& rRedline ) throw()
@@ -656,15 +646,10 @@ uno::Sequence<uno::Type> SwXRedline::getTypes()
     return aTypes;
 }
 
-namespace
-{
-    class theSwXRedlineImplementationId : public rtl::Static< UnoTunnelIdInit, theSwXRedlineImplementationId > {};
-}
-
 uno::Sequence<sal_Int8> SwXRedline::getImplementationId()
     throw(uno::RuntimeException, std::exception)
 {
-    return theSwXRedlineImplementationId::get().getSeq();
+    return css::uno::Sequence<sal_Int8>();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

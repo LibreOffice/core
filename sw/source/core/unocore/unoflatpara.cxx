@@ -81,14 +81,9 @@ uno::Sequence< uno::Type > SwXFlatParagraph::getTypes(  ) throw(uno::RuntimeExce
     return aTypes;
 }
 
-namespace
-{
-    class theSwXFlatParagraphImplementationId : public rtl::Static< UnoTunnelIdInit, theSwXFlatParagraphImplementationId > {};
-}
-
 uno::Sequence< sal_Int8 > SwXFlatParagraph::getImplementationId(  ) throw(uno::RuntimeException, std::exception)
 {
-    return theSwXFlatParagraphImplementationId::get().getSeq();
+    return css::uno::Sequence<sal_Int8>();
 }
 
 uno::Any SAL_CALL SwXFlatParagraph::queryInterface( const uno::Type& rType ) throw(uno::RuntimeException, std::exception)

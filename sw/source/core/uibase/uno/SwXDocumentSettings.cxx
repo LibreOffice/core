@@ -283,15 +283,10 @@ uno::Sequence< uno::Type > SAL_CALL SwXDocumentSettings::getTypes(  )
     return aBaseTypes;
 }
 
-namespace
-{
-    class theSwXDocumentSettingsImplementationId : public rtl::Static< UnoTunnelIdInit, theSwXDocumentSettingsImplementationId > {};
-}
-
 uno::Sequence< sal_Int8 > SAL_CALL SwXDocumentSettings::getImplementationId(  )
     throw (RuntimeException, std::exception)
 {
-    return theSwXDocumentSettingsImplementationId::get().getSeq();
+    return css::uno::Sequence<sal_Int8>();
 }
 
 void SwXDocumentSettings::_preSetValues ()

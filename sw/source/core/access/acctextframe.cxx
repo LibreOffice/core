@@ -294,15 +294,10 @@ uno::Sequence< OUString > SAL_CALL SwAccessibleTextFrame::getSupportedServiceNam
     return aRet;
 }
 
-namespace
-{
-    class theSwAccessibleTextFrameImplementationId : public rtl::Static< UnoTunnelIdInit, theSwAccessibleTextFrameImplementationId > {};
-}
-
 uno::Sequence< sal_Int8 > SAL_CALL SwAccessibleTextFrame::getImplementationId()
         throw(uno::RuntimeException, std::exception)
 {
-    return theSwAccessibleTextFrameImplementationId::get().getSeq();
+    return css::uno::Sequence<sal_Int8>();
 }
 
 // XAccessibleRelationSet

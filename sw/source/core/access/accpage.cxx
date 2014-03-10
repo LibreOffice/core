@@ -158,15 +158,10 @@ Sequence<OUString> SwAccessiblePage::getSupportedServiceNames( )
     return aRet;
 }
 
-namespace
-{
-    class theSwAccessiblePageImplementationId : public rtl::Static< UnoTunnelIdInit, theSwAccessiblePageImplementationId > {};
-}
-
 Sequence< sal_Int8 > SAL_CALL SwAccessiblePage::getImplementationId()
         throw(RuntimeException, std::exception)
 {
-    return theSwAccessiblePageImplementationId::get().getSeq();
+    return css::uno::Sequence<sal_Int8>();
 }
 
 OUString SwAccessiblePage::getAccessibleDescription( )

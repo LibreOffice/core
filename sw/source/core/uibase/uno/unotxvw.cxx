@@ -150,14 +150,9 @@ Sequence< uno::Type > SAL_CALL SwXTextView::getTypes(  ) throw(uno::RuntimeExcep
     return aBaseTypes;
 }
 
-namespace
-{
-    class theSwXTextViewImplementationId : public rtl::Static< UnoTunnelIdInit, theSwXTextViewImplementationId > {};
-}
-
 Sequence< sal_Int8 > SAL_CALL SwXTextView::getImplementationId(  ) throw(uno::RuntimeException, std::exception)
 {
-    return theSwXTextViewImplementationId::get().getSeq();
+    return css::uno::Sequence<sal_Int8>();
 }
 
 void SAL_CALL SwXTextView::acquire(  )throw()

@@ -330,15 +330,10 @@ uno::Sequence< uno::Type > SAL_CALL SwAccessibleCell::getTypes()
     return aTypes;
 }
 
-namespace
-{
-    class theSwAccessibleCellImplementationId : public rtl::Static< UnoTunnelIdInit, theSwAccessibleCellImplementationId > {};
-}
-
 uno::Sequence< sal_Int8 > SAL_CALL SwAccessibleCell::getImplementationId()
         throw(uno::RuntimeException, std::exception)
 {
-    return theSwAccessibleCellImplementationId::get().getSeq();
+    return css::uno::Sequence<sal_Int8>();
 }
 
 // XAccessibleValue

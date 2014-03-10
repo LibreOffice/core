@@ -1334,15 +1334,10 @@ uno::Sequence< uno::Type > SAL_CALL SwAccessibleParagraph::getTypes() throw(uno:
     return aTypes;
 }
 
-namespace
-{
-    class theSwAccessibleParagraphImplementationId : public rtl::Static< UnoTunnelIdInit, theSwAccessibleParagraphImplementationId > {};
-}
-
 uno::Sequence< sal_Int8 > SAL_CALL SwAccessibleParagraph::getImplementationId()
         throw(uno::RuntimeException, std::exception)
 {
-    return theSwAccessibleParagraphImplementationId::get().getSeq();
+    return css::uno::Sequence<sal_Int8>();
 }
 
 // XAccesibleText

@@ -2583,14 +2583,9 @@ uno::Sequence< uno::Type > SAL_CALL SwXTextFrame::getTypes(  ) throw(uno::Runtim
     return aTextFrameTypes;
 }
 
-namespace
-{
-    class theSwXTextFrameImplementationId : public rtl::Static< UnoTunnelIdInit, theSwXTextFrameImplementationId > {};
-}
-
 uno::Sequence< sal_Int8 > SAL_CALL SwXTextFrame::getImplementationId(  ) throw(uno::RuntimeException, std::exception)
 {
-    return theSwXTextFrameImplementationId::get().getSeq();
+    return css::uno::Sequence<sal_Int8>();
 }
 
 uno::Reference< text::XText >  SwXTextFrame::getText(void) throw( uno::RuntimeException, std::exception )
@@ -2873,14 +2868,9 @@ uno::Sequence< uno::Type > SAL_CALL
     return aGraphicTypes;
 }
 
-namespace
-{
-    class theSwXTextGraphicObjectImplementationId : public rtl::Static< UnoTunnelIdInit, theSwXTextGraphicObjectImplementationId > {};
-}
-
 uno::Sequence< sal_Int8 > SAL_CALL SwXTextGraphicObject::getImplementationId(  ) throw(uno::RuntimeException, std::exception)
 {
-    return theSwXTextGraphicObjectImplementationId::get().getSeq();
+    return css::uno::Sequence<sal_Int8>();
 }
 
 void SwXTextGraphicObject::attach(const uno::Reference< text::XTextRange > & xTextRange) throw( lang::IllegalArgumentException, uno::RuntimeException, std::exception )
@@ -3003,14 +2993,9 @@ uno::Sequence< uno::Type > SAL_CALL SwXTextEmbeddedObject::getTypes(  ) throw(un
     return aTextEmbeddedTypes;
 }
 
-namespace
-{
-    class theSwXTextEmbeddedObjectImplementationId : public rtl::Static< UnoTunnelIdInit, theSwXTextEmbeddedObjectImplementationId > {};
-}
-
 uno::Sequence< sal_Int8 > SAL_CALL SwXTextEmbeddedObject::getImplementationId(  ) throw(uno::RuntimeException, std::exception)
 {
-    return theSwXTextEmbeddedObjectImplementationId::get().getSeq();
+    return css::uno::Sequence<sal_Int8>();
 }
 
 void SwXTextEmbeddedObject::attach(const uno::Reference< text::XTextRange > & xTextRange) throw( lang::IllegalArgumentException, uno::RuntimeException, std::exception )

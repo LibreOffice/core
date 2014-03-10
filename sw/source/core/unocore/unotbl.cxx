@@ -847,14 +847,9 @@ uno::Sequence< uno::Type > SAL_CALL SwXCell::getTypes(  ) throw(uno::RuntimeExce
     return aRetTypes;
 }
 
-namespace
-{
-    class theSwXCellImplementationId : public rtl::Static< UnoTunnelIdInit, theSwXCellImplementationId > {};
-}
-
 uno::Sequence< sal_Int8 > SAL_CALL SwXCell::getImplementationId(  ) throw(uno::RuntimeException, std::exception)
 {
-    return theSwXCellImplementationId::get().getSeq();
+    return css::uno::Sequence<sal_Int8>();
 }
 
 void SAL_CALL SwXCell::acquire(  ) throw()

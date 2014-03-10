@@ -890,15 +890,10 @@ uno::Sequence< uno::Type > SAL_CALL SwAccessibleTable::getTypes()
     return aTypes;
 }
 
-namespace
-{
-    class theSwAccessibleTableImplementationId : public rtl::Static< UnoTunnelIdInit, theSwAccessibleTableImplementationId > {};
-}
-
 uno::Sequence< sal_Int8 > SAL_CALL SwAccessibleTable::getImplementationId()
         throw(uno::RuntimeException, std::exception)
 {
-    return theSwAccessibleTableImplementationId::get().getSeq();
+    return css::uno::Sequence<sal_Int8>();
 }
 
 // #i77106#

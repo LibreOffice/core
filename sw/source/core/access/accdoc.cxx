@@ -505,15 +505,10 @@ uno::Sequence< uno::Type > SAL_CALL SwAccessibleDocument::getTypes()
     return aTypes;
 }
 
-namespace
-{
-    class theSwAccessibleDocumentImplementationId : public rtl::Static< UnoTunnelIdInit, theSwAccessibleDocumentImplementationId > {};
-}
-
 uno::Sequence< sal_Int8 > SAL_CALL SwAccessibleDocument::getImplementationId()
         throw(uno::RuntimeException, std::exception)
 {
-    return theSwAccessibleDocumentImplementationId::get().getSeq();
+    return css::uno::Sequence<sal_Int8>();
 }
 
 // XAccessibleSelection

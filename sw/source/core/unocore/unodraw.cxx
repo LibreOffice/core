@@ -19,8 +19,6 @@
 
 #include <sal/config.h>
 
-#include <map>
-
 #include <cmdid.h>
 
 #include <unodraw.hxx>
@@ -65,10 +63,6 @@
 #include <switerator.hxx>
 
 using namespace ::com::sun::star;
-
-typedef std::map<OUString, uno::Sequence< sal_Int8 > *> SwShapeImplementationIdMap;
-
-static SwShapeImplementationIdMap aImplementationIdMap;
 
 class SwShapeDescriptor_Impl
 {
@@ -903,7 +897,6 @@ namespace
 SwXShape::SwXShape(uno::Reference< uno::XInterface > & xShape) :
     m_pPropSet(aSwMapProvider.GetPropertySet(PROPERTY_MAP_TEXT_SHAPE)),
     m_pPropertyMapEntries(aSwMapProvider.GetPropertyMapEntries(PROPERTY_MAP_TEXT_SHAPE)),
-    pImplementationId(0),
     pImpl(new SwShapeDescriptor_Impl()),
     m_bDescriptor(sal_True)
 {
@@ -1034,44 +1027,7 @@ uno::Sequence< uno::Type > SwXShape::getTypes(  ) throw(uno::RuntimeException, s
 
 uno::Sequence< sal_Int8 > SwXShape::getImplementationId(  ) throw(uno::RuntimeException, std::exception)
 {
-    SolarMutexGuard aGuard;
-    // do we need to compute the implementation id for this instance?
-    if( !pImplementationId && xShapeAgg.is())
-    {
-        uno::Reference< XShape > xAggShape;
-        xShapeAgg->queryAggregation( ::getCppuType((uno::Reference< XShape >*)0) ) >>= xAggShape;
-
-        if( xAggShape.is() )
-        {
-            const OUString aShapeType( xAggShape->getShapeType() );
-            // did we already compute an implementation id for the aggregated shape type?
-            SwShapeImplementationIdMap::iterator aIter( aImplementationIdMap.find(aShapeType ) );
-            if( aIter == aImplementationIdMap.end() )
-            {
-                // we need to create a new implementation id for this
-                // note: this memory is not free'd until application exists
-                //       but since we have a fixed set of shapetypes and the
-                //       memory will be reused this is ok.
-                pImplementationId = new uno::Sequence< sal_Int8 >( 16 );
-                rtl_createUuid( (sal_uInt8 *) pImplementationId->getArray(), 0, sal_True );
-                aImplementationIdMap[ aShapeType ] = pImplementationId;
-            }
-            else
-            {
-                // use the already computed implementation id
-                pImplementationId = (*aIter).second;
-            }
-        }
-    }
-    if( NULL == pImplementationId )
-    {
-        OSL_FAIL( "Could not create an implementation id for a SwXShape!" );
-        return uno::Sequence< sal_Int8 > ();
-    }
-    else
-    {
-        return *pImplementationId;
-    }
+    return css::uno::Sequence<sal_Int8>();
 }
 
 uno::Reference< beans::XPropertySetInfo >  SwXShape::getPropertySetInfo(void) throw( uno::RuntimeException, std::exception )

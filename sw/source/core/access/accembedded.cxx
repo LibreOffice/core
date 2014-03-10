@@ -96,15 +96,10 @@ uno::Sequence< OUString > SAL_CALL SwAccessibleEmbeddedObject::getSupportedServi
     return aRet;
 }
 
-namespace
-{
-    class theSwAccessibleEmbeddedObjectImplementationId : public rtl::Static< UnoTunnelIdInit, theSwAccessibleEmbeddedObjectImplementationId > {};
-}
-
 uno::Sequence< sal_Int8 > SAL_CALL SwAccessibleEmbeddedObject::getImplementationId()
         throw(uno::RuntimeException, std::exception)
 {
-    return theSwAccessibleEmbeddedObjectImplementationId::get().getSeq();
+    return css::uno::Sequence<sal_Int8>();
 }
 
 // XAccessibleExtendedAttributes

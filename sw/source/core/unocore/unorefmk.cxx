@@ -627,7 +627,7 @@ throw (uno::RuntimeException)
 uno::Sequence<sal_Int8> SAL_CALL
 SwXMetaText::getImplementationId() throw (uno::RuntimeException, std::exception)
 {
-    return m_rMeta.getImplementationId();
+    return css::uno::Sequence<sal_Int8>();
 }
 
 // XText
