@@ -286,6 +286,10 @@ DdeServices& DdeService::GetServices()
 }
 
 DdeItem::DdeItem( const OUString& )
+    : pName(NULL)
+    , pMyTopic(NULL)
+    , pImpData(NULL)
+    , nType(0)
 {
 }
 
