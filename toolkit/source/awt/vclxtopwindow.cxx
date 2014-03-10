@@ -277,36 +277,7 @@ Window* VCLXTopWindow::GetWindowImpl()
 
 ::com::sun::star::uno::Sequence< sal_Int8 > VCLXTopWindow::getImplementationId() throw(::com::sun::star::uno::RuntimeException, std::exception)
 {
-    static ::cppu::OImplementationId* pId = NULL;
-    static ::cppu::OImplementationId* pIdWithHandle = NULL;
-    if ( isSystemDependentWindowPeer() )
-    {
-        if( !pIdWithHandle )
-        {
-            ::osl::Guard< ::osl::Mutex > aGuard( ::osl::Mutex::getGlobalMutex() );
-            if( !pIdWithHandle )
-            {
-                static ::cppu::OImplementationId idWithHandle( false );
-                pIdWithHandle = &idWithHandle;
-            }
-        }
-
-        return (*pIdWithHandle).getImplementationId();
-    }
-    else
-    {
-        if( !pId )
-        {
-            ::osl::Guard< ::osl::Mutex > aGuard( ::osl::Mutex::getGlobalMutex() );
-            if( !pId )
-            {
-                static ::cppu::OImplementationId id( false );
-                pId = &id;
-            }
-        }
-
-        return (*pId).getImplementationId();
-    }
+    return css::uno::Sequence<sal_Int8>();
 }
 
 ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > VCLXTopWindow::getTypes() throw(::com::sun::star::uno::RuntimeException, std::exception)

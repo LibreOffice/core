@@ -580,16 +580,9 @@
         return new OCommonGeometryControlModel( _rxAggregateInstance, m_sServiceSpecifier );
     }
 
-    namespace
-    {
-        class theOCommonGeometryControlModelImplementationId :
-            public rtl::Static< ::cppu::OImplementationId, theOCommonGeometryControlModelImplementationId > {};
-    }
-
-
     Sequence< sal_Int8 > SAL_CALL OCommonGeometryControlModel::getImplementationId(  ) throw (RuntimeException, std::exception)
     {
-        return theOCommonGeometryControlModelImplementationId::get().getImplementationId();
+        return css::uno::Sequence<sal_Int8>();
     }
 
 

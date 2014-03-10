@@ -342,8 +342,7 @@ private:
 
     Sequence< ::sal_Int8 > SAL_CALL SortableGridDataModel::getImplementationId(  ) throw (RuntimeException, std::exception)
     {
-        static ::cppu::OImplementationId aId;
-        return aId.getImplementationId();
+        return css::uno::Sequence<sal_Int8>();
     }
 
 

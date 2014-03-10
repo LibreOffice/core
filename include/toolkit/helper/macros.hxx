@@ -78,17 +78,7 @@ ClassName* ClassName::GetImplementation( const ::com::sun::star::uno::Reference<
 #define IMPL_IMPLEMENTATION_ID( ClassName ) \
 ::com::sun::star::uno::Sequence< sal_Int8 > ClassName::getImplementationId() throw(::com::sun::star::uno::RuntimeException, std::exception) \
 { \
-    static ::cppu::OImplementationId* pId = NULL; \
-    if( !pId ) \
-    { \
-        ::osl::Guard< ::osl::Mutex > aGuard( ::osl::Mutex::getGlobalMutex() ); \
-        if( ! pId ) \
-        { \
-            static ::cppu::OImplementationId id( false ); \
-            pId = &id; \
-        } \
-    } \
-    return (*pId).getImplementationId(); \
+    return css::uno::Sequence<sal_Int8>(); \
 }
 
 #define IMPL_XTYPEPROVIDER_START( ClassName )   \

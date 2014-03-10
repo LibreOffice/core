@@ -58,17 +58,7 @@ void OGeometryControlModel<CONTROLMODEL>::fillProperties(::com::sun::star::uno::
 template <class CONTROLMODEL>
 ::com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL OGeometryControlModel<CONTROLMODEL>::getImplementationId(  ) throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
-    static ::cppu::OImplementationId * pId = NULL;
-    if ( !pId )
-    {
-        ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
-        if ( !pId )
-        {
-            static ::cppu::OImplementationId s_aId;
-            pId = &s_aId;
-        }
-    }
-    return pId->getImplementationId();
+    return css::uno::Sequence<sal_Int8>();
 }
 
 

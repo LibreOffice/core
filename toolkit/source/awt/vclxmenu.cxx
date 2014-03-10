@@ -288,41 +288,7 @@ throw(css::uno::RuntimeException, std::exception)
 css::uno::Sequence< sal_Int8 > VCLXMenu::getImplementationId()
 throw(css::uno::RuntimeException, std::exception)
 {
-    ::osl::ResettableGuard < ::osl::Mutex > aGuard( GetMutex() );
-    const bool bIsPopupMenu = IsPopupMenu();
-    aGuard.clear();
-
-    static ::cppu::OImplementationId* pIdMenuBar = NULL;
-    static ::cppu::OImplementationId* pIdPopupMenu = NULL;
-
-    if ( bIsPopupMenu )
-    {
-        if( !pIdPopupMenu )
-        {
-            ::osl::Guard< ::osl::Mutex > aGlobalGuard( ::osl::Mutex::getGlobalMutex() );
-            if( !pIdPopupMenu )
-            {
-                static ::cppu::OImplementationId idPopupMenu( false );
-                pIdPopupMenu = &idPopupMenu;
-            }
-        }
-
-        return (*pIdPopupMenu).getImplementationId();
-    }
-    else
-    {
-        if( !pIdMenuBar )
-        {
-            ::osl::Guard< ::osl::Mutex > aGlobalGuard( ::osl::Mutex::getGlobalMutex() );
-            if( !pIdMenuBar )
-            {
-                static ::cppu::OImplementationId idMenuBar( false );
-                pIdMenuBar = &idMenuBar;
-            }
-        }
-
-        return (*pIdMenuBar).getImplementationId();
-    }
+    return css::uno::Sequence<sal_Int8>();
 }
 
 void VCLXMenu::addMenuListener(
