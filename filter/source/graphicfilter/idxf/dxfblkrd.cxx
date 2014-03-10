@@ -28,8 +28,9 @@
 
 
 DXFBlock::DXFBlock()
+    : pSucc(NULL)
+    , nFlags(0)
 {
-    pSucc=NULL;
 }
 
 
