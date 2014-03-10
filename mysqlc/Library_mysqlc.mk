@@ -40,8 +40,7 @@ $(eval $(call gb_Library_add_defs,mysqlc,\
 	-DMARIADBC_VERSION_MICRO=$(MARIADBC_MICRO) \
 	$(if $(SYSTEM_MYSQL_CPPCONN),,\
 	-DCPPCONN_LIB=\"$(call gb_Library_get_runtime_filename,mysqlcppconn)\") \
-	$(if $(filter YES,$(BUNDLE_MARIADB)),\
-	-DBUNDLE_MARIADB=\"$(LIBMARIADB)\") \
+	$(if $(BUNDLE_MARIADB),-DBUNDLE_MARIADB=\"$(LIBMARIADB)\") \
 ))
 
 $(eval $(call gb_Library_add_exception_objects,mysqlc,\

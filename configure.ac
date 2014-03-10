@@ -8105,7 +8105,7 @@ if test "$ENABLE_MARIADBC" = "TRUE"; then
         AC_MSG_CHECKING([whether to bundle the MySQL/MariaDB client library])
         if test "$enable_bundle_mariadb" = "yes"; then
             AC_MSG_RESULT([yes])
-            BUNDLE_MARIADB=YES
+            BUNDLE_MARIADB=TRUE
             LIBMARIADB=lib$(echo "${MARIADB_LIBS}" | sed -e 's/[[[:space:]]]\+-l/\n/g' | grep -E '(mysqlclient|mariadb)')
             if test "$_os" = "Darwin"; then
                 LIBMARIADB=${LIBMARIADB}.dylib
@@ -8125,7 +8125,7 @@ if test "$ENABLE_MARIADBC" = "TRUE"; then
             fi
         else
             AC_MSG_RESULT([no])
-            BUNDLE_MARIADB=NO
+            BUNDLE_MARIADB=
         fi
     else
         AC_MSG_RESULT([internal])

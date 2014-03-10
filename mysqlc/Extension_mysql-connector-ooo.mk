@@ -26,7 +26,7 @@ ifeq ($(SYSTEM_MYSQL_CPPCONN),)
 $(eval $(call gb_Extension_add_library,mysql-connector-ooo,mysqlcppconn))
 endif
 
-ifeq ($(BUNDLE_MARIADB),YES)
+ifneq ($(BUNDLE_MARIADB),)
 $(eval $(call gb_Extension_add_files,mysql-connector-ooo,,\
        $(LIBMARIADB_PATH)/$(LIBMARIADB) \
 ))
