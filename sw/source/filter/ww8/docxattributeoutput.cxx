@@ -3605,7 +3605,9 @@ void DocxAttributeOutput::WritePostponedFormControl(const SdrObject* pObject)
                 uno::Sequence<beans::PropertyValue> aGrabBag;
                 uno::Reference<beans::XPropertySet> xShapePropertySet(pFormObj->getUnoShape(), uno::UNO_QUERY);
                 if (xShapePropertySet->getPropertyValue(UNO_NAME_MISC_OBJ_INTEROPGRABBAG) >>= aGrabBag)
+                {
                     for (sal_Int32 i=0; i < aGrabBag.getLength(); ++i)
+                    {
                         if (aGrabBag[i].Name == "DateFormat")
                             aGrabBag[i].Value >>= sDateFormat;
                         else if (aGrabBag[i].Name == "Locale")
@@ -3620,7 +3622,8 @@ void DocxAttributeOutput::WritePostponedFormControl(const SdrObject* pObject)
                             aOriginalDate.SetMonth(aUNODate.Month);
                             aOriginalDate.SetYear(aUNODate.Year);
                         }
-
+                    }
+                }
                 uno::Reference<beans::XPropertySet> xPropertySet(xControlModel, uno::UNO_QUERY);
 
                 OString sDate;
