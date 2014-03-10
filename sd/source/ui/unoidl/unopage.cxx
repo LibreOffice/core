@@ -2115,14 +2115,9 @@ Sequence< uno::Type > SAL_CALL SdDrawPage::getTypes() throw(uno::RuntimeExceptio
     return maTypeSequence;
 }
 
-namespace
-{
-    class theSdDrawPageImplementationId : public rtl::Static< UnoTunnelIdInit, theSdDrawPageImplementationId > {};
-}
-
 Sequence< sal_Int8 > SAL_CALL SdDrawPage::getImplementationId() throw(uno::RuntimeException, std::exception)
 {
-    return theSdDrawPageImplementationId::get().getSeq();
+    return css::uno::Sequence<sal_Int8>();
 }
 
 OUString SdDrawPage::getPageApiName( SdPage* pPage )
@@ -2765,14 +2760,9 @@ Sequence< uno::Type > SAL_CALL SdMasterPage::getTypes() throw(uno::RuntimeExcept
     return maTypeSequence;
 }
 
-namespace
-{
-    class theSdMasterPageImplementationId : public rtl::Static< UnoTunnelIdInit, theSdMasterPageImplementationId > {};
-}
-
 Sequence< sal_Int8 > SAL_CALL SdMasterPage::getImplementationId() throw(uno::RuntimeException, std::exception)
 {
-    return theSdMasterPageImplementationId::get().getSeq();
+    return css::uno::Sequence<sal_Int8>();
 }
 
 // XServiceInfo

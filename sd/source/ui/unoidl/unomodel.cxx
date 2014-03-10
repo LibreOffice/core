@@ -379,14 +379,9 @@ uno::Sequence< uno::Type > SAL_CALL SdXImpressDocument::getTypes(  ) throw(uno::
     return maTypeSequence;
 }
 
-namespace
-{
-    class theSdXImpressDocumentImplementationId : public rtl::Static< UnoTunnelIdInit, theSdXImpressDocumentImplementationId > {};
-}
-
 uno::Sequence< sal_Int8 > SAL_CALL SdXImpressDocument::getImplementationId(  ) throw(uno::RuntimeException, std::exception)
 {
-    return theSdXImpressDocumentImplementationId::get().getSeq();
+    return css::uno::Sequence<sal_Int8>();
 }
 
 /***********************************************************************
