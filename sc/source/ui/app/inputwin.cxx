@@ -2484,43 +2484,55 @@ void ScPosWnd::DoEnter()
 
 bool ScPosWnd::Notify( NotifyEvent& rNEvt )
 {
-    bool nHandled = false;
+    bool bHandled = true;
 
-    if ( rNEvt.GetType() == EVENT_KEYINPUT )
+    switch (rNEvt.GetType())
     {
-        const KeyEvent* pKEvt = rNEvt.GetKeyEvent();
-
-        switch ( pKEvt->GetKeyCode().GetCode() )
+        case EVENT_KEYINPUT:
         {
-            case KEY_RETURN:
-                DoEnter();
-                nHandled = true;
-                break;
+            const KeyEvent* pKEvt = rNEvt.GetKeyEvent();
 
-            case KEY_ESCAPE:
-                if (nTipVisible)
-                {
-                    // escape when the tip help is shown: only hide the tip
-                    HideTip();
-                }
-                else
-                {
-                    if (!bFormulaMode)
-                        SetText( aPosStr );
-                    ReleaseFocus_Impl();
-                }
-                nHandled = true;
-                break;
+            switch ( pKEvt->GetKeyCode().GetCode() )
+            {
+                case KEY_RETURN:
+                    DoEnter();
+                    break;
+
+                case KEY_ESCAPE:
+                    if (nTipVisible)
+                    {
+                        // escape when the tip help is shown: only hide the tip
+                        HideTip();
+                    }
+                    else
+                    {
+                        if (!bFormulaMode)
+                            SetText( aPosStr );
+                        ReleaseFocus_Impl();
+                    }
+                    break;
+            }
         }
+        break;
+        case EVENT_GETFOCUS:
+        {
+            // Select the whole text upon focus.
+            OUString aStr = GetText();
+            SetSelection(Selection(0, aStr.getLength()));
+        }
+        break;
+        case EVENT_LOSEFOCUS:
+            HideTip();
+            bHandled = false;
+        break;
+        default:
+            bHandled = false;
     }
 
-    if ( !nHandled )
-        nHandled = ComboBox::Notify( rNEvt );
+    if (!bHandled)
+        bHandled = ComboBox::Notify(rNEvt);
 
-    if ( rNEvt.GetType() == EVENT_LOSEFOCUS )
-        HideTip();
-
-    return nHandled;
+    return bHandled;
 }
 
 void ScPosWnd::ReleaseFocus_Impl()
