@@ -1232,10 +1232,13 @@ void ScExportTest::testSharedFormulaExportXLSX()
     ScDocShellRef xDocSh = loadDoc("shared-formula/3d-reference.", XLSX);
     CPPUNIT_ASSERT_MESSAGE("Failed to load file.", xDocSh.Is());
     ScDocument* pDoc = xDocSh->GetDocument();
-    pDoc->CalcAll(); // Recalculate to flush all cached results.
 
     bool bRes = aTest.checkContent(pDoc);
     CPPUNIT_ASSERT_MESSAGE("Content check on the initial document failed.", bRes);
+
+    pDoc->CalcAll(); // Recalculate to flush all cached results.
+    bRes = aTest.checkContent(pDoc);
+    CPPUNIT_ASSERT_MESSAGE("Content check on the initial recalculated document failed.", bRes);
 
     // Save and reload, and check the content again.
     ScDocShellRef xDocSh2 = saveAndReload(xDocSh, XLSX);
