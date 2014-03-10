@@ -8236,7 +8236,7 @@ else
     javanumver=`$JAVAINTERPRETER -version 2>&1 | $AWK -v num=true -f $SRC_ROOT/solenv/bin/getcompver.awk`
     if expr "$javanumver" '>=' 000100060000 > /dev/null; then
         AC_MSG_RESULT([yes])
-        HSQLDB_USE_JDBC_4_1=YES
+        HSQLDB_USE_JDBC_4_1=TRUE
     else
         AC_MSG_RESULT([no])
     fi
