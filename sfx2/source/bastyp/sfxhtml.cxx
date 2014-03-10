@@ -63,9 +63,11 @@ static HTMLOptionEnum const aAreaShapeOptEnums[] =
 };
 
 SfxHTMLParser::SfxHTMLParser( SvStream& rStream, sal_Bool bIsNewDoc,
-                              SfxMedium *pMed ) :
-    HTMLParser( rStream, bIsNewDoc ),
-    pMedium( pMed ), pDLMedium( 0 )
+                              SfxMedium *pMed )
+    : HTMLParser(rStream, bIsNewDoc)
+    , pMedium(pMed)
+    , pDLMedium(0)
+    , eScriptType(STARBASIC)
 {
     DBG_ASSERT( RTL_TEXTENCODING_UTF8 == GetSrcEncoding( ),
                 "SfxHTMLParser::SfxHTMLParser: From where comes ZS?" );
