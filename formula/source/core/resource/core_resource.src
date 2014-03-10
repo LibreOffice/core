@@ -550,7 +550,7 @@ Resource RID_STRLIST_FUNCTION_NAMES_ENGLISH_OOXML
     String SC_OPCODE_ARC_TAN_2 { Text = "ATAN2" ; };
     String SC_OPCODE_CEIL { Text = "CEILING" ; };
     String SC_OPCODE_CEIL_MS { Text = "_xlfn.CEILING.PRECISE" ; };
-    String SC_OPCODE_CEIL_ISO { Text = "_xlfn.ISO.CEILING" ; };
+    String SC_OPCODE_CEIL_ISO { Text = "ISO.CEILING" ; };
     String SC_OPCODE_FLOOR_MS { Text = "_xlfn.FLOOR.PRECISE" ; };
     String SC_OPCODE_FLOOR { Text = "FLOOR" ; };
     String SC_OPCODE_ROUND { Text = "ROUND" ; };

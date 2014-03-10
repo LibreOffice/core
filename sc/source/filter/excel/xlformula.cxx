@@ -380,6 +380,11 @@ static const XclFunctionInfo saFuncTable_8[] =
     { ocEuroConvert,        255,    4,  6,  V, { RO_E, RO }, EXC_FUNCFLAG_EXPORTONLY, "EUROCONVERT" }
 };
 
+
+#define EXC_FUNCENTRY_V_VR( opcode, minparam, maxparam, flags, asciiname ) \
+    { opcode, NOID, minparam,     maxparam,     V, { VR },       EXC_FUNCFLAG_IMPORTONLY|(flags), EXC_FUNCNAME( asciiname ) }, \
+    { opcode,  255, (minparam)+1, (maxparam)+1, V, { RO_E, RO }, EXC_FUNCFLAG_EXPORTONLY|(flags), EXC_FUNCNAME( asciiname ) }
+
 /** Functions new in OOXML. */
 static const XclFunctionInfo saFuncTable_Oox[] =
 {
@@ -392,13 +397,11 @@ static const XclFunctionInfo saFuncTable_Oox[] =
     { ocAverageIfs,         NOID,   3,  MX, V, { RO, RO, VR }, EXC_FUNCFLAG_IMPORTONLY|EXC_FUNCFLAG_PARAMPAIRS, EXC_FUNCNAME( "AVERAGEIFS" ) },
     { ocAverageIfs,         255,    4,  MX, V, { RO_E, RO, RO, VR }, EXC_FUNCFLAG_EXPORTONLY|EXC_FUNCFLAG_PARAMPAIRS, EXC_FUNCNAME( "AVERAGEIFS" ) },
     { ocIfError,            NOID,   2,  2,  V, { VO, RO }, EXC_FUNCFLAG_IMPORTONLY, EXC_FUNCNAME( "IFERROR" ) },
-    { ocIfError,            255,    3,  3,  V, { RO_E, VO, RO }, EXC_FUNCFLAG_EXPORTONLY, EXC_FUNCNAME( "IFERROR" ) }
+    { ocIfError,            255,    3,  3,  V, { RO_E, VO, RO }, EXC_FUNCFLAG_EXPORTONLY, EXC_FUNCNAME( "IFERROR" ) },
+
+    EXC_FUNCENTRY_V_VR( ocCeil_ISO,         2,  2,  0,  "ISO.CEILING" ),
 };
 
-
-#define EXC_FUNCENTRY_V_VR( opcode, minparam, maxparam, flags, asciiname ) \
-    { opcode, NOID, minparam,     maxparam,     V, { VR },       EXC_FUNCFLAG_IMPORTONLY|(flags), EXC_FUNCNAME( asciiname ) }, \
-    { opcode,  255, (minparam)+1, (maxparam)+1, V, { RO_E, RO }, EXC_FUNCFLAG_EXPORTONLY|(flags), EXC_FUNCNAME( asciiname ) }
 
 #define EXC_FUNCENTRY_V_VR_IMPORT( opcode, minparam, maxparam, flags, asciiname ) \
     { opcode, NOID, minparam,     maxparam,     V, { VR },       EXC_FUNCFLAG_IMPORTONLY|(flags), EXC_FUNCNAME( asciiname ) }
@@ -483,7 +486,6 @@ static const XclFunctionInfo saFuncTable_2010[] =
     EXC_FUNCENTRY_V_VR( ocNegBinomDist_MS,  4,  4,  0,  "NEGBINOM.DIST" ),
     EXC_FUNCENTRY_V_VR( ocZTest_MS,         2,  3,  0,  "Z.TEST" ),
     EXC_FUNCENTRY_V_VR( ocCeil_MS,          2,  2,  0,  "CEILING.PRECISE" ),
-    EXC_FUNCENTRY_V_VR( ocCeil_ISO,         2,  2,  0,  "ISO.CEILING" ),
     EXC_FUNCENTRY_V_VR( ocFloor_MS,         2,  2,  0,  "FLOOR.PRECISE" )
 };
 

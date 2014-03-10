@@ -425,7 +425,7 @@ void ScFiltersTest::testFunctionsExcel2010()
         {  7, true  },
         {  8, true  },
         {  9, true  },
-        { 10, false }, //fdo71720 to be set to true once functions-Excel-2010.xlsx has been rectified
+        { 10, true  },
         { 11, true  },
         { 12, true  },
         { 13, true  },

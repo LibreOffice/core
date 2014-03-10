@@ -197,7 +197,7 @@ const size_t FUNCINFO_PARAMINFOCOUNT        = 5;        /// Number of parameter 
 const sal_uInt16 FUNCFLAG_VOLATILE          = 0x0001;   /// Result is volatile (e.g. NOW() function).
 const sal_uInt16 FUNCFLAG_IMPORTONLY        = 0x0002;   /// Only used in import filter.
 const sal_uInt16 FUNCFLAG_EXPORTONLY        = 0x0004;   /// Only used in export filter.
-const sal_uInt16 FUNCFLAG_MACROCALL         = 0x0008;   /// Function is stored as macro call in Excel (_xlfn. prefix). OOXML name MUST exist.
+const sal_uInt16 FUNCFLAG_MACROCALL         = 0x0008;   /// Function is stored as macro call in BIFF Excel (_xlfn. prefix). OOXML name MUST exist.
 const sal_uInt16 FUNCFLAG_MACROCALLODF      = 0x0010;   /// ODF-only function stored as macro call in BIFF Excel (_xlfnodf. prefix). ODF name MUST exist.
 const sal_uInt16 FUNCFLAG_EXTERNAL          = 0x0020;   /// Function is external in Calc.
 const sal_uInt16 FUNCFLAG_MACROFUNC         = 0x0040;   /// Function is a macro-sheet function.
@@ -725,7 +725,8 @@ static const FunctionData saFuncTableOox[] =
     { "COUNTIFS",               "COUNTIFS",             481,    NOID,   2,  MX, V, { RO, VR }, FUNCFLAG_MACROCALL | FUNCFLAG_PARAMPAIRS },
     { "SUMIFS",                 "SUMIFS",               482,    NOID,   3,  MX, V, { RO, RO, VR }, FUNCFLAG_MACROCALL | FUNCFLAG_PARAMPAIRS },
     { "AVERAGEIF",              "AVERAGEIF",            483,    NOID,   2,  3,  V, { RO, VR, RO }, FUNCFLAG_MACROCALL },
-    { "AVERAGEIFS",             "AVERAGEIFS",           484,    NOID,   3,  MX, V, { RO, RO, VR }, FUNCFLAG_MACROCALL | FUNCFLAG_PARAMPAIRS }
+    { "AVERAGEIFS",             "AVERAGEIFS",           484,    NOID,   3,  MX, V, { RO, RO, VR }, FUNCFLAG_MACROCALL | FUNCFLAG_PARAMPAIRS },
+    { "COM.MICROSOFT.ISO.CEILING",  "ISO.CEILING",     NOID,    NOID,   2,  2,  V, { VR }, FUNCFLAG_MACROCALL }
 };
 
 /** Functions new in Excel 2010.
@@ -801,7 +802,6 @@ static const FunctionData saFuncTable2010[] =
     { "COM.MICROSOFT.NEGBINOM.DIST",          "NEGBINOM.DIST",       NOID,   NOID,    4,  4,  V, { VR }, FUNCFLAG_MACROCALL_NEW },
     { "COM.MICROSOFT.Z.TEST",                 "Z.TEST",              NOID,   NOID,    2,  3,  V, { RX, VR }, FUNCFLAG_MACROCALL_NEW },
     { "COM.MICROSOFT.CEILING.PRECISE",        "CEILING.PRECISE",     NOID,   NOID,    2,  2,  V, { VR }, FUNCFLAG_MACROCALL_NEW },
-    { "COM.MICROSOFT.ISO.CEILING",            "ISO.CEILING",         NOID,   NOID,    2,  2,  V, { VR }, FUNCFLAG_MACROCALL_NEW },
     { "COM.MICROSOFT.FLOOR.PRECISE",          "FLOOR.PRECISE",       NOID,   NOID,    2,  2,  V, { VR }, FUNCFLAG_MACROCALL_NEW }
 };
 
