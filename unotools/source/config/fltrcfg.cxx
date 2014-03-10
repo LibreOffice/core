@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <config_features.h>
 
 #include <unotools/fltrcfg.hxx>
 #include <tools/debug.hxx>
@@ -601,10 +602,24 @@ void SvtFilterOptions::SetImpress2PowerPoint( bool bFlag )
     SetModified();
 }
 
-
+static bool lcl_DoTiledRendering()
+{
+#if !HAVE_FEATURE_DESKTOP
+    // We do tiled rendering only for iOS at the moment, actually, but
+    // let's see what happens if we assume it for Android, too.
+    return true;
+#else
+    // We need some way to know globally if this process will use
+    // tiled rendering or not. Or should this be a per-window setting?
+    // Or what?
+    return false;
+#endif
+}
 
 bool SvtFilterOptions::IsSmartArt2Shape() const
 {
+    if (lcl_DoTiledRendering())
+        return true;
     return pImp->IsFlag( FILTERCFG_SMARTART_SHAPE_LOAD );
 }
 

@@ -731,6 +731,20 @@ void Window::ImplInitWindowData( WindowType nType )
 
 
 
+static bool ImplDoTiledRendering()
+{
+#if !HAVE_FEATURE_DESKTOP
+    // We do tiled rendering only for iOS at the moment, actually, but
+    // let's see what happens if we assume it for Android, too.
+    return true;
+#else
+    // We need some way to know globally if this process will use
+    // tiled rendering or not. Or should this be a per-window setting?
+    // Or what?
+    return false;
+#endif
+}
+
 void Window::ImplInit( Window* pParent, WinBits nStyle, SystemParentData* pSystemParentData )
 {
     DBG_ASSERT( mpWindowImpl->mbFrame || pParent, "Window::Window(): pParent == NULL" );
@@ -906,10 +920,13 @@ void Window::ImplInit( Window* pParent, WinBits nStyle, SystemParentData* pSyste
         mpWindowImpl->mpFrameData->mbInSysObjFocusHdl = false;
         mpWindowImpl->mpFrameData->mbInSysObjToTopHdl = false;
         mpWindowImpl->mpFrameData->mbSysObjFocus      = false;
-        mpWindowImpl->mpFrameData->maPaintTimer.SetTimeout( 30 );
-        mpWindowImpl->mpFrameData->maPaintTimer.SetTimeoutHdl( LINK( this, Window, ImplHandlePaintHdl ) );
-        mpWindowImpl->mpFrameData->maResizeTimer.SetTimeout( 50 );
-        mpWindowImpl->mpFrameData->maResizeTimer.SetTimeoutHdl( LINK( this, Window, ImplHandleResizeTimerHdl ) );
+        if (!ImplDoTiledRendering())
+        {
+            mpWindowImpl->mpFrameData->maPaintTimer.SetTimeout( 30 );
+            mpWindowImpl->mpFrameData->maPaintTimer.SetTimeoutHdl( LINK( this, Window, ImplHandlePaintHdl ) );
+            mpWindowImpl->mpFrameData->maResizeTimer.SetTimeout( 50 );
+            mpWindowImpl->mpFrameData->maResizeTimer.SetTimeoutHdl( LINK( this, Window, ImplHandleResizeTimerHdl ) );
+        }
         mpWindowImpl->mpFrameData->mbInternalDragGestureRecognizer = false;
 
         if ( pRealParent && IsTopWindow() )
@@ -2580,7 +2597,7 @@ void Window::ImplCallOverlapPaint()
 
 void Window::ImplPostPaint()
 {
-    if ( !mpWindowImpl->mpFrameData->maPaintTimer.IsActive() )
+    if ( !ImplDoTiledRendering() && !mpWindowImpl->mpFrameData->maPaintTimer.IsActive() )
         mpWindowImpl->mpFrameData->maPaintTimer.Start();
 }
 
@@ -2589,14 +2606,15 @@ void Window::ImplPostPaint()
 IMPL_LINK_NOARG(Window, ImplHandlePaintHdl)
 {
     // save paint events until layout is done
-    if (IsDialog() && static_cast<const Dialog*>(this)->hasPendingLayout())
+    if (!ImplDoTiledRendering() && IsDialog() && static_cast<const Dialog*>(this)->hasPendingLayout())
     {
         mpWindowImpl->mpFrameData->maPaintTimer.Start();
         return 0;
     }
 
     // save paint events until resizing is done
-    if( mpWindowImpl->mbFrame && mpWindowImpl->mpFrameData->maResizeTimer.IsActive() )
+    if( !ImplDoTiledRendering() &&
+        mpWindowImpl->mbFrame && mpWindowImpl->mpFrameData->maResizeTimer.IsActive() )
         mpWindowImpl->mpFrameData->maPaintTimer.Start();
     else if ( mpWindowImpl->mbReallyVisible )
         ImplCallOverlapPaint();
