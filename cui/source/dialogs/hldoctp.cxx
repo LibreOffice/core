@@ -100,7 +100,7 @@ void SvxHyperlinkDocTp::FillDlgFields(const OUString& rStrURL)
     // set target in document at editfield
     OUString aStrMark;
     if ( nPos != -1 && nPos < rStrURL.getLength()-1 )
-        aStrMark = rStrURL.copy( nPos+1, rStrURL.getLength() - nPos - 1 );
+        aStrMark = rStrURL.copy( nPos+1 );
      maEdTarget.SetText ( aStrMark );
 
     ModifiedPathHdl_Impl ( NULL );
