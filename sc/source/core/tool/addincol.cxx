@@ -752,7 +752,6 @@ sal_Bool lcl_ValidReturnType( const uno::Reference<reflection::XIdlClass>& xClas
                     IsTypeName( sName, getCppuType((uno::Sequence< uno::Sequence<uno::Any> >*)0) ) );
             }
     }
-    return sal_False;
 }
 
 ScAddInArgumentType lcl_GetArgType( const uno::Reference<reflection::XIdlClass>& xClass )

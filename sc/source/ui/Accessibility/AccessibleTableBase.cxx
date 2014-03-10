@@ -77,8 +77,6 @@ void SAL_CALL ScAccessibleTableBase::disposing()
 uno::Any SAL_CALL ScAccessibleTableBase::queryInterface( uno::Type const & rType )
     throw (uno::RuntimeException)
 {
-    //uno::Any aAny (ScAccessibleTableBaseImpl::queryInterface(rType));
-    //return aAny.hasValue() ? aAny : ScAccessibleContextBase::queryInterface(rType);
     uno::Any aRet;
     if ( rType == ::getCppuType((uno::Reference<XAccessibleTableSelection> *)0) )
     {
@@ -91,7 +89,6 @@ uno::Any SAL_CALL ScAccessibleTableBase::queryInterface( uno::Type const & rType
         uno::Any aAny (ScAccessibleTableBaseImpl::queryInterface(rType));
         return aAny.hasValue() ? aAny : ScAccessibleContextBase::queryInterface(rType);
     }
-    return aRet;
 }
 
 void SAL_CALL ScAccessibleTableBase::acquire()

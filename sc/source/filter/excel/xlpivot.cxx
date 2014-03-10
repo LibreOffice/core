@@ -194,8 +194,6 @@ const String* XclPCItem::GetItemName() const
         else
             return this->GetText();
     }
-
-    return NULL;
 }
 
 

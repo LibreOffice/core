@@ -390,8 +390,6 @@ ScDBData* ScDocShell::GetDBData( const ScRange& rMarked, ScGetDBMode eMode, ScGe
 
         return pDBData;
     }
-
-    return NULL; // never reached
 }
 
 

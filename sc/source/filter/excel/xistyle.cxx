@@ -1247,7 +1247,7 @@ void XclImpXF::ApplyPattern(
     }
 }
 
-void XclImpXF::Notify(SfxBroadcaster& rBC, const SfxHint& rHint )
+void XclImpXF::Notify(SfxBroadcaster& /* rBC */, const SfxHint& /* rHint */ )
 {
     mpPooledPattern = 0;
 }
