@@ -361,15 +361,10 @@ uno::Sequence< uno::Type > SAL_CALL SvUnoImageMapObject::getTypes()
     return aTypes;
 }
 
-namespace
-{
-    class theSvUnoImageMapObjectImplementationId : public rtl::Static< UnoTunnelIdInit, theSvUnoImageMapObjectImplementationId > {};
-}
-
 uno::Sequence< sal_Int8 > SAL_CALL SvUnoImageMapObject::getImplementationId()
     throw (uno::RuntimeException, std::exception)
 {
-    return theSvUnoImageMapObjectImplementationId::get().getSeq();
+    return css::uno::Sequence<sal_Int8>();
 }
 
 // XServiceInfo

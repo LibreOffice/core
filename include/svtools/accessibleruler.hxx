@@ -179,8 +179,6 @@ public:
     virtual ::com::sun::star::uno::Sequence<sal_Int8> SAL_CALL
         getImplementationId( void ) throw( ::com::sun::star::uno::RuntimeException, std::exception );
 
-private:
-    static ::com::sun::star::uno::Sequence< sal_Int8 > getUniqueId( void );
 protected:
 
     /// @Return the object's current bounding box relative to the desktop.

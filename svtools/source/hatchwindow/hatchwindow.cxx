@@ -161,20 +161,7 @@ uno::Sequence< uno::Type > SAL_CALL VCLXHatchWindow::getTypes()
 uno::Sequence< sal_Int8 > SAL_CALL VCLXHatchWindow::getImplementationId()
     throw( uno::RuntimeException, std::exception )
 {
-    static ::cppu::OImplementationId* pID = NULL ;
-
-    if ( pID == NULL )
-    {
-        ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() ) ;
-
-        if ( pID == NULL )
-        {
-            static ::cppu::OImplementationId aID( false ) ;
-            pID = &aID ;
-        }
-    }
-
-    return pID->getImplementationId() ;
+    return css::uno::Sequence<sal_Int8>();
 }
 
 ::com::sun::star::awt::Size SAL_CALL VCLXHatchWindow::getHatchBorderSize() throw (::com::sun::star::uno::RuntimeException, std::exception)

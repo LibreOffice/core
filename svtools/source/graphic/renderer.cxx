@@ -146,15 +146,10 @@ uno::Sequence< uno::Type > SAL_CALL GraphicRendererVCL::getTypes()
     return aTypes;
 }
 
-namespace
-{
-    class theGraphicRendererVCLUnoTunnelId : public rtl::Static< UnoTunnelIdInit, theGraphicRendererVCLUnoTunnelId > {};
-}
-
 uno::Sequence< sal_Int8 > SAL_CALL GraphicRendererVCL::getImplementationId()
     throw( uno::RuntimeException, std::exception )
 {
-    return theGraphicRendererVCLUnoTunnelId::get().getSeq();
+    return css::uno::Sequence<sal_Int8>();
 }
 
 

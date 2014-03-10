@@ -99,21 +99,6 @@ void SAL_CALL Graphic::release() throw()
     ::unographic::GraphicDescriptor::release();
 }
 
-
-
-namespace
-{
-    class theGraphicUnoTunnelId : public rtl::Static< UnoTunnelIdInit, theGraphicUnoTunnelId > {};
-}
-
-uno::Sequence< sal_Int8 > SAL_CALL Graphic::getImplementationId_Static()
-    throw(uno::RuntimeException)
-{
-    return theGraphicUnoTunnelId::get().getSeq();
-}
-
-
-
 OUString Graphic::getImplementationName_Static()
     throw()
 {
@@ -177,7 +162,7 @@ uno::Sequence< uno::Type > SAL_CALL Graphic::getTypes()
 uno::Sequence< sal_Int8 > SAL_CALL Graphic::getImplementationId()
     throw(uno::RuntimeException, std::exception)
 {
-    return getImplementationId_Static();
+    return css::uno::Sequence<sal_Int8>();
 }
 
 

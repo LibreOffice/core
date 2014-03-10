@@ -91,15 +91,10 @@ uno::Sequence< uno::Type > SAL_CALL GraphicProvider::getTypes()
     return aTypes;
 }
 
-namespace
-{
-    class theGraphicProviderUnoTunnelId : public rtl::Static< UnoTunnelIdInit, theGraphicProviderUnoTunnelId > {};
-}
-
 uno::Sequence< sal_Int8 > SAL_CALL GraphicProvider::getImplementationId()
     throw(uno::RuntimeException, std::exception)
 {
-    return theGraphicProviderUnoTunnelId::get().getSeq();
+    return css::uno::Sequence<sal_Int8>();
 }
 
 

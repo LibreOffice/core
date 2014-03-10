@@ -379,7 +379,7 @@ Sequence< OUString > SAL_CALL SvtRulerAccessible::getSupportedServiceNames( void
 //=====  XTypeProvider  =======================================================
 Sequence< sal_Int8 > SAL_CALL SvtRulerAccessible::getImplementationId( void ) throw( RuntimeException, std::exception )
 {
-    return getUniqueId();
+    return css::uno::Sequence<sal_Int8>();
 }
 
 void SAL_CALL SvtRulerAccessible::disposing()
@@ -423,21 +423,6 @@ Rectangle SvtRulerAccessible::GetBoundingBox( void ) throw( RuntimeException )
     ThrowExceptionIfNotAlive();
 
     return Rectangle( mpRepr->GetPosPixel(), mpRepr->GetSizePixel() );
-}
-
-Sequence< sal_Int8 > SvtRulerAccessible::getUniqueId( void )
-{
-    static OImplementationId*   pId = 0;
-    if( !pId )
-    {
-        MutexGuard                      aGuard( Mutex::getGlobalMutex() );
-        if( !pId)
-        {
-            static OImplementationId    aId;
-            pId = &aId;
-        }
-    }
-    return pId->getImplementationId();
 }
 
 void SvtRulerAccessible::ThrowExceptionIfNotAlive( void ) throw( lang::DisposedException )

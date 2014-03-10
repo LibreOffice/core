@@ -278,15 +278,10 @@ uno::Sequence< uno::Type > SAL_CALL GraphicDescriptor::getTypes()
     return aTypes;
 }
 
-namespace
-{
-    class theGraphicDescriptorUnoTunnelId : public rtl::Static< UnoTunnelIdInit, theGraphicDescriptorUnoTunnelId > {};
-}
-
 uno::Sequence< sal_Int8 > SAL_CALL GraphicDescriptor::getImplementationId()
     throw( uno::RuntimeException, std::exception )
 {
-    return theGraphicDescriptorUnoTunnelId::get().getSeq();
+    return css::uno::Sequence<sal_Int8>();
 }
 
 
