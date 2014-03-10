@@ -3664,8 +3664,21 @@ void WW8RStyle::ImportGrupx(short nLen, bool bPara, bool bOdd)
 }
 
 WW8RStyle::WW8RStyle(WW8Fib& _rFib, SwWW8ImplReader* pI)
-    : WW8Style(*pI->pTableStream, _rFib), maSprmParser(_rFib.GetFIBVersion()),
-    pIo(pI), pStStrm(pI->pTableStream), pStyRule(0), nWwNumLevel(0)
+    : WW8Style(*pI->pTableStream, _rFib)
+    , maSprmParser(_rFib.GetFIBVersion())
+    , pIo(pI)
+    , pStStrm(pI->pTableStream)
+    , pStyRule(0)
+    , pParaSprms(0)
+    , nSprmsLen(0)
+    , nWwNumLevel(0)
+    , bTxtColChanged(false)
+    , bFontChanged(false)
+    , bCJKFontChanged(false)
+    , bCTLFontChanged(false)
+    , bFSizeChanged(false)
+    , bFCTLSizeChanged(false)
+    , bWidowsChanged(false)
 {
     pIo->vColl.resize(cstd);
 }
