@@ -325,15 +325,10 @@ OUString SAL_CALL AccessibleBrowseBoxHeaderBar::getImplementationName()
     return OUString( "com.sun.star.comp.svtools.AccessibleBrowseBoxHeaderBar" );
 }
 
-namespace
-{
-    class theAccessibleBrowseBoxHeaderBarImplementationId : public rtl::Static< UnoTunnelIdInit, theAccessibleBrowseBoxHeaderBarImplementationId > {};
-}
-
 Sequence< sal_Int8 > SAL_CALL AccessibleBrowseBoxHeaderBar::getImplementationId()
     throw ( uno::RuntimeException, std::exception )
 {
-    return theAccessibleBrowseBoxHeaderBarImplementationId::get().getSeq();
+    return css::uno::Sequence<sal_Int8>();
 }
 
 // internal virtual methods ---------------------------------------------------

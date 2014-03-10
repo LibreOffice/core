@@ -200,15 +200,10 @@ Sequence< uno::Type > SAL_CALL AccessibleGridControlTableBase::getTypes()
         AccessibleGridControlTableImplHelper::getTypes() );
 }
 
-namespace
-{
-    class theAccessibleGridControlTableBaseImplementationId : public rtl::Static< UnoTunnelIdInit, theAccessibleGridControlTableBaseImplementationId > {};
-}
-
 Sequence< sal_Int8 > SAL_CALL AccessibleGridControlTableBase::getImplementationId()
     throw ( uno::RuntimeException, std::exception )
 {
-    return theAccessibleGridControlTableBaseImplementationId::get().getSeq();
+    return css::uno::Sequence<sal_Int8>();
 }
 
 // internal helper methods ----------------------------------------------------

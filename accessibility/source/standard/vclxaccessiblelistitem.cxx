@@ -170,19 +170,7 @@ Sequence< Type > SAL_CALL VCLXAccessibleListItem::getTypes(  ) throw (RuntimeExc
 
 Sequence< sal_Int8 > VCLXAccessibleListItem::getImplementationId() throw (RuntimeException, std::exception)
 {
-    static ::cppu::OImplementationId* pId = NULL;
-
-    if ( !pId )
-    {
-        ::osl::Guard< ::osl::Mutex > aGuard( m_aMutex );
-
-        if ( !pId )
-        {
-            static ::cppu::OImplementationId aId;
-            pId = &aId;
-        }
-    }
-    return pId->getImplementationId();
+    return css::uno::Sequence<sal_Int8>();
 }
 
 // XComponent

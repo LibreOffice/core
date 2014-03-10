@@ -214,15 +214,10 @@ OUString SAL_CALL AccessibleGridControlHeader::getImplementationName()
     return OUString( "com.sun.star.accessibility.AccessibleGridControlHeader" );
 }
 
-namespace
-{
-    class theAccessibleGridControlHeaderImplementationId : public rtl::Static< UnoTunnelIdInit, theAccessibleGridControlHeaderImplementationId > {};
-}
-
 Sequence< sal_Int8 > SAL_CALL AccessibleGridControlHeader::getImplementationId()
     throw ( uno::RuntimeException, std::exception )
 {
-    return theAccessibleGridControlHeaderImplementationId::get().getSeq();
+    return css::uno::Sequence<sal_Int8>();
 }
 
 // internal virtual methods ---------------------------------------------------

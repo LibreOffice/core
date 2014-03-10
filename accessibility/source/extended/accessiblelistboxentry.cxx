@@ -217,19 +217,7 @@ namespace accessibility
 
     Sequence< sal_Int8 > AccessibleListBoxEntry::getImplementationId() throw (RuntimeException, std::exception)
     {
-        static ::cppu::OImplementationId* pId = NULL;
-
-        if ( !pId )
-        {
-            ::osl::Guard< ::osl::Mutex > aGuard( m_aMutex );
-
-            if ( !pId )
-            {
-                static ::cppu::OImplementationId aId;
-                pId = &aId;
-            }
-        }
-        return pId->getImplementationId();
+        return css::uno::Sequence<sal_Int8>();
     }
 
 

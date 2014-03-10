@@ -188,15 +188,10 @@ Sequence< uno::Type > SAL_CALL AccessibleBrowseBoxTableBase::getTypes()
         AccessibleBrowseBoxTableImplHelper::getTypes() );
 }
 
-namespace
-{
-    class theAccessibleBrowseBoxTableBaseImplementationId : public rtl::Static< UnoTunnelIdInit, theAccessibleBrowseBoxTableBaseImplementationId > {};
-}
-
 Sequence< sal_Int8 > SAL_CALL AccessibleBrowseBoxTableBase::getImplementationId()
     throw ( uno::RuntimeException, std::exception )
 {
-    return theAccessibleBrowseBoxTableBaseImplementationId::get().getSeq();
+    return css::uno::Sequence<sal_Int8>();
 }
 
 // internal virtual methods ---------------------------------------------------

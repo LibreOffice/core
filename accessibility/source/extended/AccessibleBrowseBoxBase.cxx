@@ -326,15 +326,10 @@ void SAL_CALL AccessibleBrowseBoxBase::removeAccessibleEventListener(
 
 // XTypeProvider --------------------------------------------------------------
 
-namespace
-{
-    class theAccessibleBrowseBoxBaseImplementationId : public rtl::Static< UnoTunnelIdInit, theAccessibleBrowseBoxBaseImplementationId > {};
-}
-
 Sequence< sal_Int8 > SAL_CALL AccessibleBrowseBoxBase::getImplementationId()
     throw ( uno::RuntimeException, std::exception )
 {
-    return theAccessibleBrowseBoxBaseImplementationId::get().getSeq();
+    return css::uno::Sequence<sal_Int8>();
 }
 
 // XServiceInfo ---------------------------------------------------------------

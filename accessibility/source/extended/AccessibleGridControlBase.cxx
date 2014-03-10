@@ -284,15 +284,10 @@ void SAL_CALL AccessibleGridControlBase::removeAccessibleEventListener(
 
 // XTypeProvider --------------------------------------------------------------
 
-namespace
-{
-    class theAccessibleGridControlBaseImplementationId : public rtl::Static< UnoTunnelIdInit, theAccessibleGridControlBaseImplementationId > {};
-}
-
 Sequence< sal_Int8 > SAL_CALL AccessibleGridControlBase::getImplementationId()
     throw ( uno::RuntimeException, std::exception )
 {
-    return theAccessibleGridControlBaseImplementationId::get().getSeq();
+    return css::uno::Sequence<sal_Int8>();
 }
 
 // XServiceInfo ---------------------------------------------------------------
