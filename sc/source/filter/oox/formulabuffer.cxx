@@ -28,6 +28,7 @@
 #include "externalrefmgr.hxx"
 #include "tokenstringcontext.hxx"
 #include "oox/token/tokens.hxx"
+#include <svl/sharedstringpool.hxx>
 
 using namespace com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -256,19 +257,39 @@ void applyArrayFormulas(
 }
 
 void applyCellFormulaValues(
-    ScDocumentImport& rDoc, const std::vector<FormulaBuffer::ValueAddressPair>& rVector )
+    ScDocumentImport& rDoc, const std::vector<FormulaBuffer::FormulaValue>& rVector )
 {
-    std::vector<FormulaBuffer::ValueAddressPair>::const_iterator it = rVector.begin(), itEnd = rVector.end();
+    svl::SharedStringPool& rStrPool = rDoc.getDoc().GetSharedStringPool();
+
+    std::vector<FormulaBuffer::FormulaValue>::const_iterator it = rVector.begin(), itEnd = rVector.end();
     for (; it != itEnd; ++it)
     {
         ScAddress aCellPos;
-        ScUnoConversion::FillScAddress(aCellPos, it->first);
+        ScUnoConversion::FillScAddress(aCellPos, it->maCellAddress);
         ScFormulaCell* pCell = rDoc.getDoc().GetFormulaCell(aCellPos);
-        if (pCell)
+        const OUString& rValueStr = it->maValueStr;
+        if (!pCell)
+            continue;
+
+        switch (it->mnCellType)
         {
-            pCell->SetHybridDouble(it->second);
-            pCell->ResetDirty();
-            pCell->SetChanged(false);
+            case XML_n:
+            {
+                pCell->SetResultDouble(rValueStr.toDouble());
+                pCell->ResetDirty();
+                pCell->SetChanged(false);
+            }
+            break;
+            case XML_str:
+            {
+                svl::SharedString aSS = rStrPool.intern(rValueStr);
+                pCell->SetResultToken(new formula::FormulaStringToken(aSS));
+                pCell->ResetDirty();
+                pCell->SetChanged(false);
+            }
+            break;
+            default:
+                ;
         }
     }
 }
@@ -470,10 +491,15 @@ void FormulaBuffer::setCellArrayFormula( const ::com::sun::star::table::CellRang
     maCellArrayFormulas[ rRangeAddress.Sheet ].push_back( TokenRangeAddressItem( tokenPair, rRangeAddress ) );
 }
 
-void FormulaBuffer::setCellFormulaValue( const ::com::sun::star::table::CellAddress& rAddress, double fValue )
+void FormulaBuffer::setCellFormulaValue(
+        const css::table::CellAddress& rAddress, const OUString& rValueStr, sal_Int32 nCellType )
 {
     assert( rAddress.Sheet >= 0 && (size_t)rAddress.Sheet < maCellFormulaValues.size() );
-    maCellFormulaValues[ rAddress.Sheet ].push_back( ValueAddressPair( rAddress, fValue ) );
+    FormulaValue aVal;
+    aVal.maCellAddress = rAddress;
+    aVal.maValueStr = rValueStr;
+    aVal.mnCellType = nCellType;
+    maCellFormulaValues[rAddress.Sheet].push_back(aVal);
 }
 
 }}
