@@ -17,7 +17,7 @@
 #   the License at http://www.apache.org/licenses/LICENSE-2.0 .
 #
 
-ifeq ($(HAVE_GNUMAKE_FILE_FUNC),YES)
+ifneq ($(HAVE_GNUMAKE_FILE_FUNC),)
 define var2file
 $(file >$(1),$(3))$(1)
 endef

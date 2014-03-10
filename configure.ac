@@ -4819,12 +4819,12 @@ dnl ===================================================================
 AC_MSG_CHECKING([whether to include MySpell dictionaries])
 if test "$with_myspell_dicts" = "yes"; then
     AC_MSG_RESULT([yes])
-    WITH_MYSPELL_DICTS=YES
+    WITH_MYSPELL_DICTS=TRUE
     BUILD_TYPE="$BUILD_TYPE DICTIONARIES"
     GIT_NEEDED_SUBMODULES="dictionaries $GIT_NEEDED_SUBMODULES"
 else
     AC_MSG_RESULT([no])
-    WITH_MYSPELL_DICTS=NO
+    WITH_MYSPELL_DICTS=
 fi
 AC_SUBST(WITH_MYSPELL_DICTS)
 
@@ -4993,7 +4993,7 @@ all:
 EOF
 $GNUMAKE -C $TESTGMAKEFILEFUNC 2>/dev/null 1>&2
 if test -f $TESTGMAKEFILEFUNC/test.txt; then
-    HAVE_GNUMAKE_FILE_FUNC="YES"
+    HAVE_GNUMAKE_FILE_FUNC=TRUE
     AC_MSG_RESULT([yes])
 else
     AC_MSG_RESULT([no])
