@@ -31,6 +31,8 @@ module com { module sun { module star { module ui { module dialogs {
 //==================================================================================================================
 
 /** denotes ways to leave a <type>Wizard</type>'s page
+
+    @since OpenOffice 3.3
  */
 constants WizardTravelType
 {

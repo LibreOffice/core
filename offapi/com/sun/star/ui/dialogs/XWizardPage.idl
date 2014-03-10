@@ -33,6 +33,8 @@ module com { module sun { module star { module ui { module dialogs {
 //==================================================================================================================
 
 /** is a single page of a <type>Wizard</type>
+
+    @since OpenOffice 3.3
  */
 published interface XWizardPage : ::com::sun::star::lang::XComponent
 {

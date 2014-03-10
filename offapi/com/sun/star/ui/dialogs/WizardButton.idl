@@ -31,6 +31,8 @@ module com { module sun { module star { module ui { module dialogs {
 //==================================================================================================================
 
 /** denotes the buttons found in a <type>Wizard</type>
+
+    @since OpenOffice 3.3
  */
 constants WizardButton
 {

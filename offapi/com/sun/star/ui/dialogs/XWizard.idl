@@ -75,6 +75,8 @@ published interface XWizardPage;
 
     @see XWizardController
     @see XWizardPage
+
+    @since OpenOffice 3.3
  */
 published interface XWizard
 {

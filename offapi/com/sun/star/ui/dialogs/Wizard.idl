@@ -36,6 +36,8 @@ published interface XWizardController;
 //==================================================================================================================
 
 /** provides a framework for implementing a wizard dialog.
+
+    @since OpenOffice 3.3
  */
 published service Wizard : XWizard
 {
