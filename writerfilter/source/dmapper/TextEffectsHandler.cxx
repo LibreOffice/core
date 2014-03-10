@@ -27,7 +27,7 @@ using namespace css::beans;
 namespace
 {
 
-OUString getNameForElementId(sal_uInt32 aId)
+OUString lclGetNameForElementId(sal_uInt32 aId)
 {
     static std::map<sal_uInt32, OUString> aIdMap;
     if(aIdMap.empty())
@@ -68,6 +68,8 @@ OUString getNameForElementId(sal_uInt32 aId)
     }
     return aIdMap[aId];
 }
+
+const char constAttributesSequenceName[] = "attributes";
 
 }
 
@@ -496,8 +498,8 @@ boost::optional<PropertyIds> TextEffectsHandler::getGrabBagPropertyId()
 
 void TextEffectsHandler::lcl_attribute(Id aName, Value& aValue)
 {
-    if (mpGrabBagStack->getCurrentName() != "attributes")
-        mpGrabBagStack->push("attributes");
+    if (mpGrabBagStack->getCurrentName() != constAttributesSequenceName)
+        mpGrabBagStack->push(constAttributesSequenceName);
 
     switch(aName)
     {
@@ -720,11 +722,11 @@ void TextEffectsHandler::lcl_attribute(Id aName, Value& aValue)
 
 void TextEffectsHandler::lcl_sprm(Sprm& rSprm)
 {
-    if (mpGrabBagStack->getCurrentName() == "attributes")
+    if (mpGrabBagStack->getCurrentName() == constAttributesSequenceName)
         mpGrabBagStack->pop();
 
     sal_uInt32 nSprmId = rSprm.getId();
-    OUString aElementName = getNameForElementId(nSprmId);
+    OUString aElementName = lclGetNameForElementId(nSprmId);
     if(aElementName.isEmpty())
     {
         // Element is unknown -> leave.
@@ -739,7 +741,7 @@ void TextEffectsHandler::lcl_sprm(Sprm& rSprm)
 
     pProperties.get()->resolve( *this );
 
-    if (mpGrabBagStack->getCurrentName() == "attributes")
+    if (mpGrabBagStack->getCurrentName() == constAttributesSequenceName)
         mpGrabBagStack->pop();
 
     mpGrabBagStack->pop();
