@@ -130,7 +130,9 @@ MultiSelection::MultiSelection( const MultiSelection& rOrig ) :
 MultiSelection::MultiSelection( const Range& rRange ):
     aTotRange(rRange),
     nCurSubSel(0),
+    nCurIndex(0),
     nSelCount(0),
+    bInverseCur(false),
     bCurValid(false),
     bSelectNew(false)
 {
