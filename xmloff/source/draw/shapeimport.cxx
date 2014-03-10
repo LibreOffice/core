@@ -466,13 +466,15 @@ SvXMLShapeContext* XMLShapeImportHelper::Create3DSceneChildContext(
 void XMLShapeImportHelper::SetStylesContext(SvXMLStylesContext* pNew)
 {
     mpStylesContext = pNew;
-    mpStylesContext->AddRef();
+    if (mpStylesContext)
+        mpStylesContext->AddRef();
 }
 
 void XMLShapeImportHelper::SetAutoStylesContext(SvXMLStylesContext* pNew)
 {
     mpAutoStylesContext = pNew;
-    mpAutoStylesContext->AddRef();
+    if (mpAutoStylesContext)
+        mpAutoStylesContext->AddRef();
 }
 
 SvXMLShapeContext* XMLShapeImportHelper::CreateGroupChildContext(
