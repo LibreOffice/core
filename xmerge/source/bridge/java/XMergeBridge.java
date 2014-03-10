@@ -554,11 +554,7 @@ public class XMergeBridge {
 
         // Implement methods from interface XTypeProvider
         public byte[] getImplementationId() {
-            byte[] byteReturn = {};
-
-            byteReturn = new String( "" + this.hashCode() ).getBytes();
-
-            return( byteReturn );
+            return new byte[0];
         }
 
         // Implement method from interface XServiceName
