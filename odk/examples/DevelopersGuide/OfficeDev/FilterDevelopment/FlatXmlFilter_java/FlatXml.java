@@ -71,7 +71,7 @@ public class FlatXml implements XImportFilter, XExportFilter, XServiceName,
 
     // --- XTypeProvider ---
     public byte[] getImplementationId() {
-        return Integer.toString(this.hashCode()).getBytes();
+        return new byte[0];
     }
 
     // --- XServiceName ---

@@ -209,16 +209,8 @@ public class DialogComponent {
             return retValue;
         }
         //XTypeProvider
-        synchronized public byte[] getImplementationId(  ) {
-            if (_implementationId == null) {
-                _implementationId= new byte[16];
-                int hash = hashCode();
-                _implementationId[0] = (byte)(hash & 0xff);
-                _implementationId[1] = (byte)((hash >>> 8) & 0xff);
-                _implementationId[2] = (byte)((hash >>> 16) & 0xff);
-                _implementationId[3] = (byte)((hash >>>24) & 0xff);
-            }
-            return _implementationId;
+        public byte[] getImplementationId(  ) {
+            return new byte[0];
         }
 
 

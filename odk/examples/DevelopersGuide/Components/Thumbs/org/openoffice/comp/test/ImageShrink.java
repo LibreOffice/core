@@ -52,12 +52,6 @@ public class ImageShrink extends WeakBase
 
     com.sun.star.uno.XComponentContext xComponentContext = null;
 
-
-    // maintain a static implementation id for all instances of ImageShrink
-    // initialized by the first call to getImplementationId()
-    static byte[] _implementationId;
-
-
     // hold the service name in a private static member variable of the class
     protected static final String __serviceName = "org.openoffice.test.ImageShrink";
 

@@ -35,8 +35,6 @@
 
 #include <osl/interlck.h>
 #include <osl/mutex.hxx>
-#include <rtl/uuid.h>
-#include <rtl/instance.hxx>
 #include <cppuhelper/factory.hxx>
 #include <cppuhelper/supportsservice.hxx>
 
@@ -173,34 +171,11 @@ Sequence< Type > MyService1Impl::getTypes()
     seq[ 2 ] = ::cppu::UnoType< Reference< ::my_module::XSomething > >::get();
     return seq;
 }
-namespace
-{
-    // class to create an unique id
-    class UniqueIdInit
-    {
-    private:
-        ::com::sun::star::uno::Sequence< sal_Int8 > m_aSeq;
-    public:
-        UniqueIdInit() : m_aSeq(16)
-        {
-            rtl_createUuid( (sal_uInt8*)m_aSeq.getArray(), 0, sal_True );
-        }
-        const ::com::sun::star::uno::Sequence< sal_Int8 >& getSeq() const { return m_aSeq; }
-    };
-    //A multi-thread safe UniqueIdInit singleton wrapper
-    class theService1ImplImplementationId
-        : public rtl::Static< UniqueIdInit,
-          theService1ImplImplementationId >
-    {
-    };
-}
+
 Sequence< sal_Int8 > MyService1Impl::getImplementationId()
     throw (RuntimeException)
 {
-    //create a singleton that generates a unique id on
-    //first initialization and returns the same one
-    //on subsequent calls.
-    return theService1ImplImplementationId::get().getSeq();
+    return css::uno::Sequence<sal_Int8>();
 }
 
 // XSomething implementation
