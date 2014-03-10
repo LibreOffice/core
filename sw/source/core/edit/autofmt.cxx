@@ -1760,7 +1760,7 @@ void SwAutoFormat::BuildHeadLine( sal_uInt16 nLvl )
         DelPrevPara();
 
         DeleteCurrentParagraph( true, false );
-        DeleteCurNxtPara( OUString() );
+        (void)DeleteCurNxtPara( OUString() );
 
         m_aDelPam.DeleteMark();
         m_aDelPam.GetPoint()->nNode = m_aNdIdx.GetIndex() + 1;
