@@ -236,9 +236,9 @@ public:
 #endif
 
     /** A PaM marks a selection if Point and Mark are distinct positions.
-        @return     true iff the PaM spans a selection
+        @return     true if the PaM spans a selection
      */
-    bool HasMark() const { return m_pPoint == m_pMark ? false : true; }
+    bool HasMark() const { return m_pPoint != m_pMark; }
 
     const SwPosition *GetPoint() const { return m_pPoint; }
           SwPosition *GetPoint()       { return m_pPoint; }
