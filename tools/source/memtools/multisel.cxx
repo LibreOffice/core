@@ -120,6 +120,13 @@ MultiSelection::MultiSelection( const MultiSelection& rOrig ) :
     {
         nCurSubSel = rOrig.nCurSubSel;
         nCurIndex = rOrig.nCurIndex;
+        bInverseCur = rOrig.bInverseCur;
+    }
+    else
+    {
+        nCurSubSel = 0;
+        nCurIndex = 0;
+        bInverseCur = false;
     }
 
     // copy the sub selections
