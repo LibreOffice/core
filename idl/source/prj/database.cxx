@@ -624,9 +624,9 @@ sal_Bool SvIdlWorkingBase::ReadSvIdl( SvTokenStream & rInStm, sal_Bool bImported
     if( pTok->Is( SvHash_import() ) )
     {
         rInStm.GetToken_Next();
-        rInStm.Read( '(' ); // optional
-        pTok = rInStm.GetToken_Next();
-        if( pTok->IsString() )
+        bOk = rInStm.Read( '(' ); // optional
+        pTok = bOk ? rInStm.GetToken_Next() : NULL;
+        if( pTok && pTok->IsString() )
         {
             OUString aFullName;
             if( osl::FileBase::E_None == osl::File::searchFileURL(
