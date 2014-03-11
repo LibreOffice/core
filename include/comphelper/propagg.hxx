@@ -149,7 +149,7 @@ public:
 
         @return sal_True, if _nHandle marks an aggregate property, otherwise sal_False
     */
-    virtual bool SAL_CALL fillAggregatePropertyInfoByHandle(OUString* _pPropName, sal_Int32* _pOriginalHandle,
+    bool fillAggregatePropertyInfoByHandle(OUString* _pPropName, sal_Int32* _pOriginalHandle,
                                                    sal_Int32 _nHandle) const;
 
     /** returns information about a property given by handle
