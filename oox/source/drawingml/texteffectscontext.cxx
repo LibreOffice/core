@@ -295,7 +295,6 @@ void TextEffectsContext::onStartElement(const oox::AttributeList& rAttribs)
 void TextEffectsContext::onEndElement()
 {
     mpGrabBagStack->pop();
-    OUString aCurrentElementName = mpGrabBagStack->getCurrentName();
 
     if (mpGrabBagStack->isStackEmpty())
     {
