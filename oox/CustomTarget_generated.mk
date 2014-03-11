@@ -16,7 +16,7 @@ oox_GENHEADERPATH := $(oox_INC)/oox/token
 
 $(oox_MISC)/vmlexport-shape-types.cxx : \
 		$(SRCDIR)/oox/source/export/preset-definitions-to-shape-types.pl \
-		$(SRCDIR)/oox/source/export/presetShapeDefinitions.xml \
+		$(SRCDIR)/oox/source/drawingml/customshapes/presetShapeDefinitions.xml \
 		$(SRCDIR)/oox/source/export/presetTextWarpDefinitions.xml
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),build,PRL,1)
 	mkdir -p $(dir $@)
