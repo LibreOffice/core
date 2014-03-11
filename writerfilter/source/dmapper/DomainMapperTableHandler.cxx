@@ -406,18 +406,6 @@ TableStyleSheetEntry * DomainMapperTableHandler::endTableGetTableStyle(TableInfo
         m_aTableProperties->getValue( TablePropertyMap::CELL_MAR_BOTTOM,
                                      rInfo.nBottomBorderDistance );
 
-        table::TableBorderDistances aDistances;
-        aDistances.IsTopDistanceValid =
-        aDistances.IsBottomDistanceValid =
-        aDistances.IsLeftDistanceValid =
-        aDistances.IsRightDistanceValid = sal_True;
-        aDistances.TopDistance = static_cast<sal_Int16>( rInfo.nTopBorderDistance );
-        aDistances.BottomDistance = static_cast<sal_Int16>( rInfo.nBottomBorderDistance );
-        aDistances.LeftDistance = static_cast<sal_Int16>( rInfo.nLeftBorderDistance );
-        aDistances.RightDistance = static_cast<sal_Int16>( rInfo.nRightBorderDistance );
-
-        m_aTableProperties->Insert( PROP_TABLE_BORDER_DISTANCES, uno::makeAny( aDistances ) );
-
         if (rFrameProperties.hasElements())
             lcl_DecrementHoriOrientPosition(rFrameProperties, rInfo.nLeftBorderDistance);
 
@@ -476,6 +464,18 @@ TableStyleSheetEntry * DomainMapperTableHandler::endTableGetTableStyle(TableInfo
 #ifdef DEBUG_DMAPPER_TABLE_HANDLER
         lcl_debug_TableBorder(aTableBorder);
 #endif
+
+        table::TableBorderDistances aDistances;
+        aDistances.IsTopDistanceValid =
+        aDistances.IsBottomDistanceValid =
+        aDistances.IsLeftDistanceValid =
+        aDistances.IsRightDistanceValid = sal_True;
+        aDistances.TopDistance = static_cast<sal_Int16>( rInfo.nTopBorderDistance );
+        aDistances.BottomDistance = static_cast<sal_Int16>( rInfo.nBottomBorderDistance );
+        aDistances.LeftDistance = static_cast<sal_Int16>( rInfo.nLeftBorderDistance );
+        aDistances.RightDistance = static_cast<sal_Int16>( rInfo.nRightBorderDistance );
+
+        m_aTableProperties->Insert( PROP_TABLE_BORDER_DISTANCES, uno::makeAny( aDistances ) );
 
         // Table position in Office is computed in 2 different ways :
         // - top level tables: the goal is to have in-cell text starting at table indent pos (tblInd),
