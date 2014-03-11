@@ -104,7 +104,7 @@ endif
 
 ifeq ($(OS),WNT)
 
-ifeq ($(WITH_MOZAB4WIN),YES)
+ifneq ($(WITH_MOZAB4WIN),)
 $(eval $(call gb_Module_add_targets,connectivity,\
 	Configuration_mozab \
 	Library_mozab \

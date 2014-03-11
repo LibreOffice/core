@@ -375,11 +375,11 @@ $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,ooo, \
 		$(if $(DISABLE_ATL),,oleautobridge) \
 		smplmail \
 		wininetbe1 \
-		$(if $(filter YES,$(WITH_MOZAB4WIN)), \
+		$(if $(WITH_MOZAB4WIN), \
 			mozab2 \
 			mozabdrv \
 		) \
-		$(if $(filter NO,$(WITH_MOZAB4WIN)),mozbootstrap) \
+		$(if $(WITH_MOZAB4WIN),,mozbootstrap) \
 	) \
 	$(if $(filter $(OS),WNT),, \
 		mork \

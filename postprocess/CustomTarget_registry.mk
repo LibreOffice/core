@@ -287,7 +287,7 @@ postprocess_FILES_main += \
 	$(call gb_XcuModuleTarget_get_target,connectivity/registry/odbc)/org/openoffice/Office/DataAccess/Drivers-odbc.xcu
 postprocess_DRIVERS += dbase flat mysql odbc
 ifeq (WNT,$(OS))
-ifeq ($(WITH_MOZAB4WIN),YES)
+ifneq ($(WITH_MOZAB4WIN),)
 postprocess_FILES_main += $(call gb_XcuModuleTarget_get_target,connectivity/registry/mozab)/org/openoffice/Office/DataAccess/Drivers-mozab.xcu
 postprocess_DRIVERS += mozab
 endif

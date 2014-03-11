@@ -283,7 +283,7 @@ $(eval $(call gb_Rdb_add_components,services,\
 
 ifeq ($(OS),WNT)
 
-ifeq ($(WITH_MOZAB4WIN),YES)
+ifneq ($(WITH_MOZAB4WIN),)
 $(eval $(call gb_Rdb_add_components,services,\
 	connectivity/source/drivers/mozab/mozab \
 ))

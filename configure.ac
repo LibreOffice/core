@@ -8679,7 +8679,7 @@ dnl ===================================================================
 if test "$_os" = "WINNT"; then
     AC_MSG_CHECKING([whether to enable build of Mozilla addressbook connectivity driver for Windows])
     if test "$enable_win_mozab_driver" = "yes" -a "$WITH_MINGW" != "YES" ; then
-        WITH_MOZAB4WIN=YES
+        WITH_MOZAB4WIN=TRUE
         AC_MSG_RESULT([yes, internal (old windows mozab driver)])
         BUILD_TYPE="$BUILD_TYPE MOZ"
         MSVC80_DLLS="msvcp80.dll msvcr80.dll Microsoft.VC80.CRT.manifest"
@@ -8691,7 +8691,7 @@ if test "$_os" = "WINNT"; then
         done
     else
         AC_MSG_RESULT([no])
-        WITH_MOZAB4WIN=NO
+        WITH_MOZAB4WIN=
     fi
 fi
 AC_SUBST(WITH_MOZAB4WIN)

@@ -9,7 +9,7 @@
 
 $(eval $(call gb_Module_Module,moz))
 
-ifeq ($(WITH_MOZAB4WIN),YES)
+ifneq ($(WITH_MOZAB4WIN),)
 
 $(eval $(call gb_Module_add_targets,moz,\
 	ExternalPackage_runtime \
