@@ -1704,68 +1704,64 @@ void SfxWorkWindow::ConfigChild_Impl(SfxChildIdentifier eChild,
     SfxChildWin_Impl *pCW = 0;
 
     if ( eChild == SFX_CHILDWIN_OBJECTBAR )
-    {
         return;
-    }
-    else
+
+    // configure direct childwindow
+    for (sal_uInt16 n=0; n<aChildWins.size(); n++)
     {
-        // configure direct childwindow
-        for (sal_uInt16 n=0; n<aChildWins.size(); n++)
+        pCW = aChildWins[n];
+        SfxChildWindow *pChild = pCW->pWin;
+        if ( pChild )
         {
-            pCW = aChildWins[n];
-            SfxChildWindow *pChild = pCW->pWin;
-            if ( pChild )
+            if ( pChild->GetType() == nId )
             {
-                if ( pChild->GetType() == nId )
-                {
-                    if ( pChild->GetWindow()->GetType() == RSC_DOCKINGWINDOW )
-                        // it's a DockingWindow
-                        pDockWin = (SfxDockingWindow*) pChild->GetWindow();
-                    else
-                        // FloatingWindow or ModelessDialog
-                        pWin = pChild->GetWindow();
-                    break;
-                }
+                if ( pChild->GetWindow()->GetType() == RSC_DOCKINGWINDOW )
+                    // it's a DockingWindow
+                    pDockWin = (SfxDockingWindow*) pChild->GetWindow();
+                else
+                    // FloatingWindow or ModelessDialog
+                    pWin = pChild->GetWindow();
+                break;
             }
         }
+    }
 
-        if ( pDockWin )
+    if ( pDockWin )
+    {
+        if ( eChild == SFX_CHILDWIN_DOCKINGWINDOW || pDockWin->GetAlignment() == SFX_ALIGN_NOALIGNMENT )
         {
-            if ( eChild == SFX_CHILDWIN_DOCKINGWINDOW || pDockWin->GetAlignment() == SFX_ALIGN_NOALIGNMENT )
+            if ( eChild == SFX_CHILDWIN_SPLITWINDOW && eConfig == SFX_TOGGLEFLOATMODE)
             {
-                if ( eChild == SFX_CHILDWIN_SPLITWINDOW && eConfig == SFX_TOGGLEFLOATMODE)
-                {
-                    // DockingWindow was dragged out of a SplitWindow
-                    pCW->pCli = RegisterChild_Impl(*pDockWin, pDockWin->GetAlignment(), pCW->pWin->CanGetFocus());
-                    pCW->pCli->nVisible = CHILD_VISIBLE;
-                }
-
-                pWin = pDockWin;
+                // DockingWindow was dragged out of a SplitWindow
+                pCW->pCli = RegisterChild_Impl(*pDockWin, pDockWin->GetAlignment(), pCW->pWin->CanGetFocus());
+                pCW->pCli->nVisible = CHILD_VISIBLE;
             }
-            else
-            {
-                SfxSplitWindow *pSplitWin = GetSplitWindow_Impl(pDockWin->GetAlignment());
 
-                // configure DockingWindow inside a SplitWindow
-                if ( eConfig == SFX_TOGGLEFLOATMODE)
-                {
-                    // DockingWindow was dragged into a SplitWindow
-                    pCW->pCli = 0;
-                    ReleaseChild_Impl(*pDockWin);
-                }
-
-                pWin = pSplitWin->GetSplitWindow();
-                if ( pSplitWin->GetWindowCount() == 1 )
-                    ((SplitWindow*)pWin)->Show( true, SHOW_NOFOCUSCHANGE | SHOW_NOACTIVATE );
-            }
+            pWin = pDockWin;
         }
-
-        DBG_ASSERT( pCW, "Unknown window!" );
-        if ( !pCW && pParent )
+        else
         {
-            pParent->ConfigChild_Impl( eChild, eConfig, nId );
-            return;
+            SfxSplitWindow *pSplitWin = GetSplitWindow_Impl(pDockWin->GetAlignment());
+
+            // configure DockingWindow inside a SplitWindow
+            if ( eConfig == SFX_TOGGLEFLOATMODE)
+            {
+                // DockingWindow was dragged into a SplitWindow
+                pCW->pCli = 0;
+                ReleaseChild_Impl(*pDockWin);
+            }
+
+            pWin = pSplitWin->GetSplitWindow();
+            if ( pSplitWin->GetWindowCount() == 1 )
+                ((SplitWindow*)pWin)->Show( true, SHOW_NOFOCUSCHANGE | SHOW_NOACTIVATE );
         }
+    }
+
+    DBG_ASSERT( pCW, "Unknown window!" );
+    if ( !pCW && pParent )
+    {
+        pParent->ConfigChild_Impl( eChild, eConfig, nId );
+        return;
     }
 
     if ( !bSorted )
