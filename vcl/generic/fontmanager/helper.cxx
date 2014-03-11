@@ -31,6 +31,7 @@
 #include <tools/urlobj.hxx>
 #include "vcl/helper.hxx"
 #include "vcl/ppdparser.hxx"
+#include <boost/scoped_array.hpp>
 
 using ::rtl::Bootstrap;
 
@@ -284,15 +285,15 @@ bool psp::convertPfbToPfa( ::osl::File& rInFile, ::osl::File& rOutFile )
         }
         else if( nType == 1 || nType == 2 )
         {
-            unsigned char* pBuffer = new unsigned char[ nBytesToRead+1 ];
+            boost::scoped_array<unsigned char> pBuffer(new unsigned char[ nBytesToRead+1 ]);
 
-            if( ! rInFile.read( pBuffer, nBytesToRead, nRead ) && nRead == nBytesToRead )
+            if( ! rInFile.read( pBuffer.get(), nBytesToRead, nRead ) && nRead == nBytesToRead )
             {
                 if( nType == 1 )
                 {
                     // ascii data, convert dos lineends( \r\n ) and
                     // m_ac lineends( \r ) to \n
-                    unsigned char * pWriteBuffer = new unsigned char[ nBytesToRead ];
+                    boost::scoped_array<unsigned char> pWriteBuffer(new unsigned char[ nBytesToRead ]);
                     unsigned int nBytesToWrite = 0;
                     for( unsigned int i = 0; i < nBytesToRead; i++ )
                     {
@@ -306,10 +307,8 @@ bool psp::convertPfbToPfa( ::osl::File& rInFile, ::osl::File& rOutFile )
                         else
                             pWriteBuffer[ nBytesToWrite++ ] = '\n';
                     }
-                    if( rOutFile.write( pWriteBuffer, nBytesToWrite, nRead ) || nRead != nBytesToWrite )
+                    if( rOutFile.write( pWriteBuffer.get(), nBytesToWrite, nRead ) || nRead != nBytesToWrite )
                         bSuccess = false;
-
-                    delete [] pWriteBuffer;
                 }
                 else
                 {
@@ -337,8 +336,6 @@ bool psp::convertPfbToPfa( ::osl::File& rInFile, ::osl::File& rOutFile )
             }
             else
                 bSuccess = false;
-
-            delete [] pBuffer;
         }
         else if( nType == 3 )
             bEof = true;

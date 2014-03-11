@@ -58,6 +58,7 @@
 
 #include <map>
 #include <algorithm>
+#include <boost/scoped_array.hpp>
 #include <boost/scoped_ptr.hpp>
 
 using namespace ::com::sun::star;
@@ -1090,8 +1091,8 @@ void DbgDialogTest( Window* pWindow )
     if ( !pGetChild )
         return;
 
-    Rectangle*  pRectAry = (Rectangle*)new long[(sizeof(Rectangle)*nChildCount)/sizeof(long)];
-    memset( pRectAry, 0, sizeof(Rectangle)*nChildCount );
+    boost::scoped_array<Rectangle> pRectAry((Rectangle*)new long[(sizeof(Rectangle)*nChildCount)/sizeof(long)]);
+    memset( pRectAry.get(), 0, sizeof(Rectangle)*nChildCount );
 
     if ( pWindow->IsDialog() )
     {
@@ -1433,8 +1434,6 @@ void DbgDialogTest( Window* pWindow )
         pGetChild = pGetChild->GetWindow( WINDOW_NEXT );
         i++;
     }
-
-    delete [] pRectAry;
 }
 
 #ifndef WNT

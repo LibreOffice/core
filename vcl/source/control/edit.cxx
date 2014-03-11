@@ -67,6 +67,7 @@
 #include <vcl/unohelp2.hxx>
 
 #include <officecfg/Office/Common.hxx>
+#include <boost/scoped_array.hpp>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -486,15 +487,15 @@ void Edit::ImplRepaint(bool bLayout)
     sal_Int32 nLen = aText.getLength();
 
     sal_Int32   nDXBuffer[256];
-    sal_Int32*  pDXBuffer = NULL;
+    boost::scoped_array<sal_Int32> pDXBuffer;
     sal_Int32*  pDX = nDXBuffer;
 
     if( !aText.isEmpty() )
     {
         if( (size_t) (2*aText.getLength()) > SAL_N_ELEMENTS(nDXBuffer) )
         {
-            pDXBuffer = new sal_Int32[2*(aText.getLength()+1)];
-            pDX = pDXBuffer;
+            pDXBuffer.reset(new sal_Int32[2*(aText.getLength()+1)]);
+            pDX = pDXBuffer.get();
         }
 
         GetCaretPositions( aText, pDX, 0, nLen );
@@ -512,7 +513,6 @@ void Edit::ImplRepaint(bool bLayout)
 
         DrawText( aPos, aText, 0, nLen, pVector, pDisplayText );
 
-        delete [] pDXBuffer;
         return;
     }
 
@@ -693,8 +693,6 @@ void Edit::ImplRepaint(bool bLayout)
 
     if ( bVisCursor && ( !mpIMEInfos || mpIMEInfos->bCursor ) )
         pCursor->Show();
-
-    delete [] pDXBuffer;
 }
 
 void Edit::ImplDelete( const Selection& rSelection, sal_uInt8 nDirection, sal_uInt8 nMode )
@@ -1089,15 +1087,15 @@ void Edit::ImplShowCursor( bool bOnlyIfVisible )
     long nTextPos = 0;
 
     sal_Int32   nDXBuffer[256];
-    sal_Int32*  pDXBuffer = NULL;
+    boost::scoped_array<sal_Int32> pDXBuffer;
     sal_Int32*  pDX = nDXBuffer;
 
     if( !aText.isEmpty() )
     {
         if( (size_t) (2*aText.getLength()) > SAL_N_ELEMENTS(nDXBuffer) )
         {
-            pDXBuffer = new sal_Int32[2*(aText.getLength()+1)];
-            pDX = pDXBuffer;
+            pDXBuffer.reset(new sal_Int32[2*(aText.getLength()+1)]);
+            pDX = pDXBuffer.get();
         }
 
         GetCaretPositions( aText, pDX, 0, aText.getLength() );
@@ -1153,9 +1151,6 @@ void Edit::ImplShowCursor( bool bOnlyIfVisible )
     pCursor->SetPos( Point( nCursorPosX, nCursorPosY ) );
     pCursor->SetSize( Size( nCursorWidth, nTextHeight ) );
     pCursor->Show();
-
-    if( pDXBuffer )
-        delete [] pDXBuffer;
 }
 
 void Edit::ImplAlign()
@@ -1208,12 +1203,12 @@ sal_Int32 Edit::ImplGetCharPos( const Point& rWindowPos ) const
     OUString aText = ImplGetText();
 
     sal_Int32   nDXBuffer[256];
-    sal_Int32*  pDXBuffer = NULL;
+    boost::scoped_array<sal_Int32> pDXBuffer;
     sal_Int32*  pDX = nDXBuffer;
     if( (size_t) (2*aText.getLength()) > SAL_N_ELEMENTS(nDXBuffer) )
     {
-        pDXBuffer = new sal_Int32[2*(aText.getLength()+1)];
-        pDX = pDXBuffer;
+        pDXBuffer.reset(new sal_Int32[2*(aText.getLength()+1)]);
+        pDX = pDXBuffer.get();
     }
 
     GetCaretPositions( aText, pDX, 0, aText.getLength() );
@@ -1254,9 +1249,6 @@ sal_Int32 Edit::ImplGetCharPos( const Point& rWindowPos ) const
         if( nIndex == aText.getLength()-1 && std::abs( pDX[2*nIndex+1] - nX ) < nDiff )
             nIndex = EDIT_NOLIMIT;
     }
-
-    if( pDXBuffer )
-        delete [] pDXBuffer;
 
     return nIndex;
 }
@@ -2177,15 +2169,15 @@ void Edit::Command( const CommandEvent& rCEvt )
         {
             OUString aText = ImplGetText();
             sal_Int32   nDXBuffer[256];
-            sal_Int32*  pDXBuffer = NULL;
+            boost::scoped_array<sal_Int32> pDXBuffer;
             sal_Int32*  pDX = nDXBuffer;
 
             if( !aText.isEmpty() )
             {
                 if( (size_t) (2*aText.getLength()) > SAL_N_ELEMENTS(nDXBuffer) )
                 {
-                    pDXBuffer = new sal_Int32[2*(aText.getLength()+1)];
-                    pDX = pDXBuffer;
+                    pDXBuffer.reset(new sal_Int32[2*(aText.getLength()+1)]);
+                    pDX = pDXBuffer.get();
                 }
 
                 GetCaretPositions( aText, pDX, 0, aText.getLength() );
@@ -2193,16 +2185,14 @@ void Edit::Command( const CommandEvent& rCEvt )
             long    nTH = GetTextHeight();
             Point   aPos( mnXOffset, ImplGetTextYPosition() );
 
-            Rectangle* aRects = new Rectangle[ mpIMEInfos->nLen ];
+            boost::scoped_array<Rectangle> aRects(new Rectangle[ mpIMEInfos->nLen ]);
             for ( int nIndex = 0; nIndex < mpIMEInfos->nLen; ++nIndex )
             {
                 Rectangle aRect( aPos, Size( 10, nTH ) );
                 aRect.Left() = pDX[2*(nIndex+mpIMEInfos->nPos)] + mnXOffset + ImplGetExtraOffset();
                 aRects[ nIndex ] = aRect;
             }
-            SetCompositionCharRect( aRects, mpIMEInfos->nLen );
-            delete[] aRects;
-            delete[] pDXBuffer;
+            SetCompositionCharRect( aRects.get(), mpIMEInfos->nLen );
         }
     }
     else
