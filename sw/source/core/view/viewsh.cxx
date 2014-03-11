@@ -1768,11 +1768,23 @@ void SwViewShell::PaintTile(VirtualDevice &rDevice, int contextWidth, int contex
     aMapMode.SetScaleY(scaleY);
     rDevice.SetMapMode(aMapMode);
 
+    // Update this device in DrawLayer
+    if (Imp()->GetDrawView())
+    {
+        Imp()->GetDrawView()->AddWindowToPaintView(&rDevice);
+    }
+
     // scroll the requested area into view if necessary
     MakeVisible(SwRect(Point(tilePosX, tilePosY), rDevice.PixelToLogic(Size(contextWidth, contextHeight))));
 
     // draw - works in logic coordinates
     Paint(Rectangle(Point(tilePosX, tilePosY), rDevice.PixelToLogic(Size(contextWidth, contextHeight))));
+
+    // Remove this device in DrawLayer
+    if (Imp()->GetDrawView())
+    {
+        Imp()->GetDrawView()->DeleteWindowFromPaintView(&rDevice);
+    }
 
     // SwViewShell's output device tear down
     mpOut = pSaveOut;
