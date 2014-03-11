@@ -15,6 +15,8 @@
 #include <rtl/ustring.hxx>
 #include <rtl/ref.hxx>
 
+#include <svl/svldllapi.h>
+
 #include <boost/unordered_map.hpp>
 #include <vector>
 
@@ -66,7 +68,8 @@ struct StyleSheetCallback {
  * Index-based access is required in several code portions. Hence we have to store the style sheets
  * in a vector as well as in a map.
  */
-class SAL_DLLPUBLIC IndexedStyleSheets SAL_FINAL {
+class SVL_DLLPUBLIC IndexedStyleSheets SAL_FINAL
+{
 public:
     IndexedStyleSheets();
 
