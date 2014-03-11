@@ -1655,6 +1655,8 @@ void ScAccessibleDocument::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
 
                     if (mpAccessibleSpreadsheet)
                         mpAccessibleSpreadsheet->BoundingBoxChanged();
+                    if (mpAccessibleSpreadsheet && mpViewShell->IsActive())
+                        mpAccessibleSpreadsheet->FireFirstCellFocus();
                 }
                 else if (mpAccessibleSpreadsheet)
                 {
@@ -2280,7 +2282,6 @@ uno::Reference < XAccessible >
         mpAccessibleSpreadsheet->acquire();
         mpAccessibleSpreadsheet->Init();
         mbCompleteSheetSelected = IsTableSelected();
-        mpAccessibleSpreadsheet->FireFirstCellFocus(); // i123622
     }
     return mpAccessibleSpreadsheet;
 }
