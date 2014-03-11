@@ -748,7 +748,7 @@ void SwCntntFrm::Paste( SwFrm* pParent, SwFrm* pSibling)
     if( pPage )
     {
         pPage->InvalidateSpelling();
-        pPage->InvalidateSmartTags();   // SMARTTAGS
+        pPage->InvalidateSmartTags();
         pPage->InvalidateAutoCompleteWords();
         pPage->InvalidateWordCount();
     }

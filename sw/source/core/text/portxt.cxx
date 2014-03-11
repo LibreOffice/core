@@ -577,7 +577,6 @@ void SwTxtPortion::Paint( const SwTxtPaintInfo &rInf ) const
 
         const SwWrongList *pWrongList = rInf.GetpWrongList();
         const SwWrongList *pGrammarCheckList = rInf.GetGrammarCheckList();
-        // SMARTTAGS
         const SwWrongList *pSmarttags = rInf.GetSmartTags();
 
         const bool bWrong = 0 != pWrongList;

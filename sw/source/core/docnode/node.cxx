@@ -1292,7 +1292,7 @@ void SwCntntNode::DelFrms( sal_Bool /*bNeedDel*/, sal_Bool bIsDisposeAccTable )
 
         ((SwTxtNode*)this)->SetGrammarCheck( NULL );
         ((SwTxtNode*)this)->SetGrammarCheckDirty( true );
-        // SMARTTAGS
+
         ((SwTxtNode*)this)->SetSmartTags( NULL );
         ((SwTxtNode*)this)->SetSmartTagDirty( true );
 

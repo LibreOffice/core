@@ -63,7 +63,7 @@ class SwPageFrm: public SwFtnBossFrm
     sal_Bool bEmptyPage         :1; //Dies ist eine explizite Leerseite
     sal_Bool bEndNotePage       :1; //'Fussnotenseite' fuer Endnoten
     sal_Bool bInvalidSpelling   :1; //Das Online-Spelling ist gefordert
-    sal_Bool bInvalidSmartTags :1;  //checking for smarttags is needed  // SMARTTAGS
+    sal_Bool bInvalidSmartTags :1;  //checking for smarttags is needed
     sal_Bool bInvalidAutoCmplWrds :1; //Auto-Complete Wordliste aktualisieren
     sal_Bool bInvalidWordCount  :1;
     sal_Bool bHasGrid           :1; // Grid for Asian layout
@@ -210,7 +210,7 @@ public:
     inline void ValidateLayout() const;
     inline void ValidateCntnt() const;
     inline void ValidateSpelling()  const;
-    inline void ValidateSmartTags() const;        // SMARTTAGS
+    inline void ValidateSmartTags() const;
     inline void ValidateAutoCompleteWords() const;
     inline void ValidateWordCount() const;
     inline sal_Bool IsInvalid() const;
@@ -223,7 +223,7 @@ public:
     sal_Bool IsInvalidLayout() const { return bInvalidLayout; }
     sal_Bool IsInvalidCntnt() const { return (bInvalidCntnt || bInvalidFlyInCnt); }
     sal_Bool IsInvalidSpelling() const { return bInvalidSpelling; }
-    sal_Bool IsInvalidSmartTags() const { return bInvalidSmartTags; }   // SMARTTAGS
+    sal_Bool IsInvalidSmartTags() const { return bInvalidSmartTags; }
     sal_Bool IsInvalidAutoCompleteWords() const { return bInvalidAutoCmplWrds; }
     sal_Bool IsInvalidWordCount() const { return bInvalidWordCount; }
 
@@ -370,8 +370,8 @@ inline void SwPageFrm::InvalidateSpelling() const
 {
     ((SwPageFrm*)this)->bInvalidSpelling = sal_True;
 }
-// SMARTTAGS
-inline void    SwPageFrm::InvalidateSmartTags() const
+
+inline void SwPageFrm::InvalidateSmartTags() const
 {
    ((SwPageFrm*)this)->bInvalidSmartTags = sal_True;
 }
@@ -407,8 +407,8 @@ inline void SwPageFrm::ValidateSpelling() const
 {
     ((SwPageFrm*)this)->bInvalidSpelling = sal_False;
 }
-// SMARTTAGS
-inline void    SwPageFrm::ValidateSmartTags() const
+
+inline void SwPageFrm::ValidateSmartTags() const
 {
    ((SwPageFrm*)this)->bInvalidSmartTags = sal_False;
 }

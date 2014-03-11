@@ -80,7 +80,6 @@ class SwFntObj : public SwCacheObj
     static MapMode *pPixMap;
     static OutputDevice *pPixOut;
 
-    // SMARTTAGS
     void calcLinePos(SwDrawTextInfo& rInf, Point& aStart, Point& aEnd, sal_Int32 nStart,
        sal_Int32 nWrLen, sal_Int32 nCnt, const sal_Bool bSwitchH2V, const sal_Bool bSwitchL2R,
        long nHalfSpace, long* pKernArray, const sal_Bool bBidiPor);

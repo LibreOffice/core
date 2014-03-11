@@ -546,7 +546,7 @@ void SwPageFrm::AppendFlyToPage( SwFlyFrm *pNew )
                 pNew->GetVirtDrawObj()->GetReferencedObj().GetOrdNumDirect() );
 
     InvalidateSpelling();
-    InvalidateSmartTags();  // SMARTTAGS
+    InvalidateSmartTags();
     InvalidateAutoCompleteWords();
     InvalidateWordCount();
 
@@ -694,7 +694,7 @@ void SwPageFrm::MoveFly( SwFlyFrm *pToMove, SwPageFrm *pDest )
     }
 
     pDest->InvalidateSpelling();
-    pDest->InvalidateSmartTags();   // SMARTTAGS
+    pDest->InvalidateSmartTags();
     pDest->InvalidateAutoCompleteWords();
     pDest->InvalidateWordCount();
 

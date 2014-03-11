@@ -1688,7 +1688,7 @@ sal_Int32 SwTxtCursor::GetCrsrOfst( SwPosition *pPos, const Point &rPoint,
                 }
 
                 if ( pPor->InFldGrp() && pCMS && pCMS->pSpecialPos )
-                    aDrawInf.SetLen( COMPLETE_STRING ); // SMARTTAGS
+                    aDrawInf.SetLen( COMPLETE_STRING );
 
                 aDrawInf.SetSpace( nSpaceAdd );
                 aDrawInf.SetFont( aSizeInf.GetFont() );
@@ -1707,7 +1707,7 @@ sal_Int32 SwTxtCursor::GetCrsrOfst( SwPosition *pPos, const Point &rPoint,
                 if ( pPor->InFldGrp() && pCMS && pCMS->pSpecialPos )
                 {
                     pCMS->pSpecialPos->nCharOfst = nLength;
-                    nLength = 0; // SMARTTAGS
+                    nLength = 0;
                 }
 
                 // set cursor bidi level

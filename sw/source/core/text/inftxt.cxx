@@ -453,7 +453,7 @@ void SwTxtPaintInfo::CtorInitTxtPaintInfo( SwTxtFrm *pFrame, const SwRect &rPain
     pSpaceAdd = NULL;
     pWrongList = NULL;
     pGrammarCheckList = NULL;
-    pSmartTags = NULL;  // SMARTTAGS
+    pSmartTags = NULL;
 
 #if OSL_DEBUG_LEVEL > 1
     pBrushItem = ((SvxBrushItem*)-1);
@@ -466,7 +466,7 @@ SwTxtPaintInfo::SwTxtPaintInfo( const SwTxtPaintInfo &rInf, const OUString* pTxt
     : SwTxtSizeInfo( rInf, pTxt ),
       pWrongList( rInf.GetpWrongList() ),
       pGrammarCheckList( rInf.GetGrammarCheckList() ),
-      pSmartTags( rInf.GetSmartTags() ),    // SMARTTAGS
+      pSmartTags( rInf.GetSmartTags() ),
       pSpaceAdd( rInf.GetpSpaceAdd() ),
       pBrushItem( rInf.GetBrushItem() ),
       aTxtFly( *rInf.GetTxtFly() ),
@@ -479,7 +479,7 @@ SwTxtPaintInfo::SwTxtPaintInfo( const SwTxtPaintInfo &rInf )
     : SwTxtSizeInfo( rInf ),
       pWrongList( rInf.GetpWrongList() ),
       pGrammarCheckList( rInf.GetGrammarCheckList() ),
-      pSmartTags( rInf.GetSmartTags() ),    // SMARTTAGS
+      pSmartTags( rInf.GetSmartTags() ),
       pSpaceAdd( rInf.GetpSpaceAdd() ),
       pBrushItem( rInf.GetBrushItem() ),
       aTxtFly( *rInf.GetTxtFly() ),
@@ -537,7 +537,7 @@ void SwTxtPaintInfo::_DrawText( const OUString &rText, const SwLinePortion &rPor
                                 const sal_Int32 nStart, const sal_Int32 nLength,
                                 const bool bKern, const bool bWrong,
                                 const bool bSmartTag,
-                                const bool bGrammarCheck )  // SMARTTAGS
+                                const bool bGrammarCheck )
 {
     if( !nLength )
         return;
@@ -591,7 +591,7 @@ void SwTxtPaintInfo::_DrawText( const OUString &rText, const SwLinePortion &rPor
     const bool bBullet = OnWin() && GetOpt().IsBlank() && IsNoSymbol();
     const bool bTmpWrong = bWrong && OnWin() && GetOpt().IsOnlineSpell();
     const bool bTmpGrammarCheck = bGrammarCheck && OnWin() && bCfgIsAutoGrammar && GetOpt().IsOnlineSpell();
-    const bool bTmpSmart = bSmartTag && OnWin() && !GetOpt().IsPagePreview() && SwSmartTagMgr::Get().IsSmartTagsEnabled(); // SMARTTAGS
+    const bool bTmpSmart = bSmartTag && OnWin() && !GetOpt().IsPagePreview() && SwSmartTagMgr::Get().IsSmartTagsEnabled();
 
     OSL_ENSURE( GetParaPortion(), "No paragraph!");
     SwDrawTextInfo aDrawInf( m_pFrm->getRootFrm()->GetCurrShell(), *m_pOut, pSI, rText, nStart, nLength,
@@ -674,7 +674,7 @@ void SwTxtPaintInfo::_DrawText( const OUString &rText, const SwLinePortion &rPor
         aDrawInf.SetKern( bKern ? rPor.Width() : 0 );
         aDrawInf.SetWrong( bTmpWrong ? pWrongList : NULL );
         aDrawInf.SetGrammarCheck( bTmpGrammarCheck ? pGrammarCheckList : NULL );
-        aDrawInf.SetSmartTags( bTmpSmart ? pSmartTags : NULL );     // SMARTTAGS
+        aDrawInf.SetSmartTags( bTmpSmart ? pSmartTags : NULL );
         GetTxtFly()->DrawTextOpaque( aDrawInf );
     }
     else
@@ -686,7 +686,7 @@ void SwTxtPaintInfo::_DrawText( const OUString &rText, const SwLinePortion &rPor
         {
             aDrawInf.SetWrong( bTmpWrong ? pWrongList : NULL );
             aDrawInf.SetGrammarCheck( bTmpGrammarCheck ? pGrammarCheckList : NULL );
-            aDrawInf.SetSmartTags( bTmpSmart ? pSmartTags : NULL );  // SMARTTAGS
+            aDrawInf.SetSmartTags( bTmpSmart ? pSmartTags : NULL );
             m_pFnt->_DrawText( aDrawInf );
         }
     }

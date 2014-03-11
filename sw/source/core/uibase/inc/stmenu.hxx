@@ -17,8 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-// SMARTTAGS
-
 #ifndef INCLUDED_SW_SOURCE_UI_INC_STMENU_HXX
 #define INCLUDED_SW_SOURCE_UI_INC_STMENU_HXX
 

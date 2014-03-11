@@ -1935,7 +1935,7 @@ sal_Bool SwFlowFrm::MoveFwd( sal_Bool bMakePage, sal_Bool bPageBreak, sal_Bool b
                         pSh->GetDoc()->SetNewFldLst(true);  // Will be done by CalcLayout() later on!
 
                     pNewPage->InvalidateSpelling();
-                    pNewPage->InvalidateSmartTags();    // SMARTTAGS
+                    pNewPage->InvalidateSmartTags();
                     pNewPage->InvalidateAutoCompleteWords();
                     pNewPage->InvalidateWordCount();
                 }
@@ -2467,7 +2467,7 @@ sal_Bool SwFlowFrm::MoveBwd( sal_Bool &rbReformat )
                 pSh->GetDoc()->SetNewFldLst(true);  // Will be done by CalcLayout() later on
 
             pNewPage->InvalidateSpelling();
-            pNewPage->InvalidateSmartTags();    // SMARTTAGS
+            pNewPage->InvalidateSmartTags();
             pNewPage->InvalidateAutoCompleteWords();
             pNewPage->InvalidateWordCount();
 

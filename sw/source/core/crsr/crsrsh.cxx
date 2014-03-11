@@ -3276,8 +3276,6 @@ OUString SwCrsrShell::GetCrsrDescr() const
     return aResult;
 }
 
-// SMARTTAGS
-
 static void lcl_FillRecognizerData( uno::Sequence< OUString >& rSmartTagTypes,
                              uno::Sequence< uno::Reference< container::XStringKeyMap > >& rStringKeyMaps,
                              const SwWrongList& rSmartTagList, sal_Int32 nCurrent )

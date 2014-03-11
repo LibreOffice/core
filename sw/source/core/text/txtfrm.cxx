@@ -804,7 +804,6 @@ static void lcl_SetWrong( SwTxtFrm& rFrm, sal_Int32 nPos, sal_Int32 nCnt, bool b
         }
         if ( !pTxtNode->GetSmartTags() && !pTxtNode->IsSmartTagDirty() )
         {
-            // SMARTTAGS
             pTxtNode->SetSmartTags( new SwWrongList( WRONGLIST_SMARTTAG ) );
             pTxtNode->GetSmartTags()->SetInvalid( nPos, nEnd );
         }
@@ -812,7 +811,6 @@ static void lcl_SetWrong( SwTxtFrm& rFrm, sal_Int32 nPos, sal_Int32 nCnt, bool b
         pTxtNode->SetGrammarCheckDirty( true );
         pTxtNode->SetWordCountDirty( true );
         pTxtNode->SetAutoCompleteWordDirty( true );
-        // SMARTTAGS
         pTxtNode->SetSmartTagDirty( true );
     }
 

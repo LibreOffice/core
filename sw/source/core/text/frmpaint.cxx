@@ -195,7 +195,7 @@ void SwExtraPainter::PaintExtra( SwTwips nY, long nAsc, long nMax, bool bRed )
     aDrawInf.SetSpace( 0 );
     aDrawInf.SetWrong( NULL );
     aDrawInf.SetGrammarCheck( NULL );
-    aDrawInf.SetSmartTags( NULL ); // SMARTTAGS
+    aDrawInf.SetSmartTags( NULL );
     aDrawInf.SetLeft( 0 );
     aDrawInf.SetRight( LONG_MAX );
     aDrawInf.SetFrm( pTxtFrm );
@@ -551,7 +551,7 @@ bool SwTxtFrm::PaintEmpty( const SwRect &rRect, bool bCheck ) const
                     aDrawInf.SetKanaComp( 0 );
                     aDrawInf.SetWrong( NULL );
                     aDrawInf.SetGrammarCheck( NULL );
-                    aDrawInf.SetSmartTags( NULL ); // SMARTTAGS
+                    aDrawInf.SetSmartTags( NULL );
                     aDrawInf.SetFrm( this );
                     aDrawInf.SetFont( pFnt );
                     aDrawInf.SetSnapToGrid( false );
@@ -654,7 +654,7 @@ void SwTxtFrm::Paint(SwRect const& rRect, SwPrintData const*const) const
         SwTxtPaintInfo aInf( (SwTxtFrm*)this, rRect );
         aInf.SetWrongList( ( (SwTxtNode*)GetTxtNode() )->GetWrong() );
         aInf.SetGrammarCheckList( ( (SwTxtNode*)GetTxtNode() )->GetGrammarCheck() );
-        aInf.SetSmartTags( ( (SwTxtNode*)GetTxtNode() )->GetSmartTags() );  // SMARTTAGS
+        aInf.SetSmartTags( ( (SwTxtNode*)GetTxtNode() )->GetSmartTags() );
         aInf.GetTxtFly()->SetTopRule();
 
         SwTxtPainter  aLine( (SwTxtFrm*)this, &aInf );

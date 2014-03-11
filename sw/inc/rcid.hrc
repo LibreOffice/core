@@ -65,7 +65,7 @@
 #define RC_ACCESS                   (RC_BASE + 3550)
 #define STR_POOLPARSTYLE            (RC_BASE + 3650)
 #define RC_UNDO                     (RC_BASE + 3750)
-#define RC_SMARTTAG                    (RC_BASE + 3950)  // SMARTTAGS
+#define RC_SMARTTAG                 (RC_BASE + 3950)
 #define RC_UNOCORE                  (RC_BASE + 4050)
 #define RC_PROPERTYPANEL            (RC_BASE + 4070)
 #define RC_ANNOTATION               (RC_BASE + 4150)

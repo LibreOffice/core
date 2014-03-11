@@ -182,19 +182,18 @@ public:
     bool IsWordCountDirty() const;
     bool IsWrongDirty() const;
     bool IsGrammarCheckDirty() const;
-    bool IsSmartTagDirty() const;   ///< SMARTTAGS
+    bool IsSmartTagDirty() const;
     bool IsAutoCompleteWordDirty() const;
     void SetWordCountDirty( bool bNew ) const;
     void SetWrongDirty( bool bNew ) const;
     void SetGrammarCheckDirty( bool bNew ) const;
-    void SetSmartTagDirty( bool bNew ) const;  ///< SMARTTAGS
+    void SetSmartTagDirty( bool bNew ) const;
     void SetAutoCompleteWordDirty( bool bNew ) const;
     void SetWrong( SwWrongList* pNew, bool bDelete = true );
     SwWrongList* GetWrong();
     const SwWrongList* GetWrong() const;
     void SetGrammarCheck( SwGrammarMarkUp* pNew, bool bDelete = true );
     SwGrammarMarkUp* GetGrammarCheck();
-    /// SMARTTAGS
     void SetSmartTags( SwWrongList* pNew, bool bDelete = true );
     SwWrongList* GetSmartTags();
     bool TryCharSetExpandToNum(const SfxItemSet& pCharSet);

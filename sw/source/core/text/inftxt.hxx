@@ -401,7 +401,7 @@ class SwTxtPaintInfo : public SwTxtSizeInfo
 {
     const SwWrongList *pWrongList;
     const SwWrongList *pGrammarCheckList;
-    const SwWrongList *pSmartTags;    // SMARTTAGS
+    const SwWrongList *pSmartTags;
     std::vector<long>* pSpaceAdd;
     const SvxBrushItem *pBrushItem; // For the background
     SwRect      aItemRect;          // Also for the background
@@ -414,7 +414,7 @@ class SwTxtPaintInfo : public SwTxtSizeInfo
                    const sal_Int32 nIdx, const sal_Int32 nLen,
                    const bool bKern, const bool bWrong = false,
                    const bool bSmartTag = false,
-                   const bool bGrammarCheck = false );  // SMARTTAGS
+                   const bool bGrammarCheck = false );
 
     SwTxtPaintInfo &operator=(const SwTxtPaintInfo&);
     void _NotifyURL( const SwLinePortion &rPor ) const;
@@ -531,7 +531,6 @@ public:
     inline void SetGrammarCheckList( const SwWrongList *pNew ){ pGrammarCheckList = pNew; }
     inline const SwWrongList* GetGrammarCheckList() const { return pGrammarCheckList; }
 
-    // SMARTTAGS
     inline void SetSmartTags( const SwWrongList *pNew ){ pSmartTags = pNew; }
     inline const SwWrongList* GetSmartTags() const { return pSmartTags; }
 };

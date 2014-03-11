@@ -248,7 +248,7 @@ sal_Int32 SwFont::GetCapitalBreak( SwViewShell* pSh, const OutputDevice* pOut,
     aInfo.SetSpace( 0 );
     aInfo.SetWrong( NULL );
     aInfo.SetGrammarCheck( NULL );
-    aInfo.SetSmartTags( NULL ); // SMARTTAGS
+    aInfo.SetSmartTags( NULL );
     aInfo.SetDrawSpace( sal_False );
     aInfo.SetKern( CheckKerning() );
     aInfo.SetKanaComp( pScript ? 0 : 100 );

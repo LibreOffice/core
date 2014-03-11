@@ -203,7 +203,7 @@ class SwLayIdle
     void ShowIdle( ColorData eName );
 #endif
 
-    enum IdleJobType{ ONLINE_SPELLING, AUTOCOMPLETE_WORDS, WORD_COUNT, SMART_TAGS };    // SMARTTAGS
+    enum IdleJobType{ ONLINE_SPELLING, AUTOCOMPLETE_WORDS, WORD_COUNT, SMART_TAGS };
     sal_Bool _DoIdleJob( const SwCntntFrm*, IdleJobType );
     sal_Bool DoIdleJob( IdleJobType, sal_Bool bVisAreaOnly );
 

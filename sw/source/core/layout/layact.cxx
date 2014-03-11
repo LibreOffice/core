@@ -1936,7 +1936,7 @@ sal_Bool SwLayIdle::_DoIdleJob( const SwCntntFrm *pCnt, IdleJobType eJob )
             bProcess = pTxtNode->IsAutoCompleteWordDirty(); break;
         case WORD_COUNT :
             bProcess = pTxtNode->IsWordCountDirty(); break;
-        case SMART_TAGS :   // SMARTTAGS
+        case SMART_TAGS :
             bProcess = pTxtNode->IsSmartTagDirty(); break;
     }
 
@@ -1985,7 +1985,7 @@ sal_Bool SwLayIdle::_DoIdleJob( const SwCntntFrm *pCnt, IdleJobType eJob )
                     return sal_True;
                 break;
             }
-            case SMART_TAGS : // SMARTTAGS
+            case SMART_TAGS :
             {
                 try {
                     const SwRect aRepaint( ((SwTxtFrm*)pCnt)->SmartTagScan( pCntntNode, nTxtPos ) );
@@ -2115,7 +2115,7 @@ sal_Bool SwLayIdle::DoIdleJob( IdleJobType eJob, sal_Bool bVisAreaOnly )
                 case ONLINE_SPELLING : pPage->ValidateSpelling(); break;
                 case AUTOCOMPLETE_WORDS : pPage->ValidateAutoCompleteWords(); break;
                 case WORD_COUNT : pPage->ValidateWordCount(); break;
-                case SMART_TAGS : pPage->ValidateSmartTags(); break; // SMARTTAGS
+                case SMART_TAGS : pPage->ValidateSmartTags(); break;
             }
         }
 
@@ -2169,7 +2169,7 @@ SwLayIdle::SwLayIdle( SwRootFrm *pRt, SwViewImp *pI ) :
     // to do there, we trigger the IdleFormat.
     if ( !DoIdleJob( SMART_TAGS, sal_True ) &&
          !DoIdleJob( ONLINE_SPELLING, sal_True ) &&
-         !DoIdleJob( AUTOCOMPLETE_WORDS, sal_True ) ) // SMARTTAGS
+         !DoIdleJob( AUTOCOMPLETE_WORDS, sal_True ) )
     {
         // Format, then register repaint rectangles with the SwViewShell if necessary.
         // This requires running artificial actions, so we don't get undesired
@@ -2288,7 +2288,7 @@ SwLayIdle::SwLayIdle( SwRootFrm *pRt, SwViewImp *pI ) :
             if ( !DoIdleJob( WORD_COUNT, sal_False ) )
                 if ( !DoIdleJob( SMART_TAGS, sal_False ) )
                     if ( !DoIdleJob( ONLINE_SPELLING, sal_False ) )
-                        DoIdleJob( AUTOCOMPLETE_WORDS, sal_False ); // SMARTTAGS
+                        DoIdleJob( AUTOCOMPLETE_WORDS, sal_False );
         }
 
         bool bInValid = false;
@@ -2300,7 +2300,7 @@ SwLayIdle::SwLayIdle( SwRootFrm *pRt, SwViewImp *pI ) :
         const sal_Bool bWordCount = pViewShell->getIDocumentStatistics()->GetDocStat().bModified;
         const bool bSmartTags = !pViewShell->GetDoc()->GetDocShell()->IsHelpDocument() &&
                                 !pViewShell->GetDoc()->isXForms() &&
-                                SwSmartTagMgr::Get().IsSmartTagsEnabled(); // SMARTTAGS
+                                SwSmartTagMgr::Get().IsSmartTagsEnabled();
 
         SwPageFrm *pPg = (SwPageFrm*)pRoot->Lower();
         do
@@ -2311,7 +2311,7 @@ SwLayIdle::SwLayIdle( SwRootFrm *pRt, SwViewImp *pI ) :
                        (bSpell && pPg->IsInvalidSpelling()) ||
                        (bACmplWrd && pPg->IsInvalidAutoCompleteWords()) ||
                        (bWordCount && pPg->IsInvalidWordCount()) ||
-                       (bSmartTags && pPg->IsInvalidSmartTags()); // SMARTTAGS
+                       (bSmartTags && pPg->IsInvalidSmartTags());
 
             pPg = (SwPageFrm*)pPg->GetNext();
 

@@ -455,8 +455,6 @@ public:
     void SpellError(LanguageType eLang);
     sal_Bool            ExecSpellPopup( const Point& rPt );
     void                ExecFieldPopup( const Point& rPt, sw::mark::IFieldmark *fieldBM );
-
-    // SMARTTAGS
     sal_Bool            ExecSmartTagPopup( const Point& rPt );
 
     DECL_LINK( OnlineSpellCallback, SpellCallbackInfo*);

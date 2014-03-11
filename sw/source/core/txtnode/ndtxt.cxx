@@ -418,7 +418,6 @@ SwCntntNode *SwTxtNode::SplitCntntNode( const SwPosition &rPos )
 
         SetWordCountDirty( true );
 
-        // SMARTTAGS
         if( GetSmartTags() )
         {
             pNode->SetSmartTags( GetSmartTags()->SplitList( nSplitPos ) );
@@ -520,7 +519,6 @@ SwCntntNode *SwTxtNode::SplitCntntNode( const SwPosition &rPos )
 
         SetWordCountDirty( true );
 
-        // SMARTTAGS
         SwWrongList *pList2 = GetSmartTags();
         SetSmartTags( 0, false );
         SetSmartTagDirty( true );
@@ -558,7 +556,6 @@ SwCntntNode *SwTxtNode::SplitCntntNode( const SwPosition &rPos )
             SetGrammarCheck( pList3, false );
         }
 
-        // SMARTTAGS
         if( pList2 )
         {
             pNode->SetSmartTags( pList2->SplitList( nSplitPos ) );
@@ -667,7 +664,6 @@ SwCntntNode *SwTxtNode::JoinNext()
             }
         }
 
-        // SMARTTAGS
         SwWrongList *pList2 = GetSmartTags();
         if( pList2 )
         {
@@ -701,7 +697,7 @@ SwCntntNode *SwTxtNode::JoinNext()
         rNds.Delete(aIdx);
         SetWrong( pList, false );
         SetGrammarCheck( pList3, false );
-        SetSmartTags( pList2, false ); // SMARTTAGS
+        SetSmartTags( pList2, false );
         InvalidateNumRule();
     }
     else {
@@ -761,7 +757,6 @@ SwCntntNode *SwTxtNode::JoinPrev()
             }
         }
 
-        // SMARTTAGS
         SwWrongList *pList2 = pTxtNode->GetSmartTags();
         if( pList2 )
         {

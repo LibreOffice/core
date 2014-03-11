@@ -17,8 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-// SMARTTAGS
-
 #include <stmenu.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <svl/eitem.hxx>
