@@ -673,7 +673,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
                     else
                     {
                         WaitObject aWait( (Window*)GetActiveWindow() );
-                        mpDrawView->ConvertMarkedToPolyObj(sal_False);
+                        mpDrawView->ConvertMarkedToPolyObj(false);
                     }
                 }
 

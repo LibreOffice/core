@@ -42,7 +42,7 @@
 #include <svx/svdogrp.hxx>
 #include <svx/e3dsceneupdater.hxx>
 
-void E3dView::ConvertMarkedToPolyObj(sal_Bool bLineToArea)
+void E3dView::ConvertMarkedToPolyObj(bool bLineToArea)
 {
     SdrObject* pNewObj = NULL;
 
@@ -96,7 +96,7 @@ void Imp_E3dView_InorderRun3DObjects(const SdrObject* pObj, sal_uInt32& rMask)
     }
 }
 
-SfxItemSet E3dView::Get3DAttributes(E3dScene* pInScene, sal_Bool /*bOnly3DAttr*/) const
+SfxItemSet E3dView::Get3DAttributes(E3dScene* pInScene, bool /*bOnly3DAttr*/) const
 {
     // Creating itemset with corresponding field
     SfxItemSet aSet(
@@ -151,7 +151,7 @@ SfxItemSet E3dView::Get3DAttributes(E3dScene* pInScene, sal_Bool /*bOnly3DAttr*/
     return(aSet);
 }
 
-void E3dView::Set3DAttributes( const SfxItemSet& rAttr, E3dScene* pInScene, sal_Bool bReplaceAll)
+void E3dView::Set3DAttributes( const SfxItemSet& rAttr, E3dScene* pInScene, bool bReplaceAll)
 {
     sal_uInt32 nSelectedItems(0L);
 

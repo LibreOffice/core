@@ -1534,8 +1534,8 @@ void E3dView::InitView ()
     nVDefaultSegments        = 12;
     aDefaultLightColor       = RGB_Color(COL_WHITE);
     aDefaultAmbientColor     = RGB_Color(COL_BLACK);
-    bDoubleSided             = sal_False;
-    mpMirrorOverlay = 0L;
+    bDoubleSided             = false;
+    mpMirrorOverlay          = 0L;
 }
 
 bool E3dView::IsBreak3DObjPossible() const

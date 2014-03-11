@@ -32,7 +32,7 @@ Viewport3D::Viewport3D() :
     eAspectMapping(AS_NO_MAPPING),
     aDeviceRect(Point(0,0), Size(-1,-1)),
     aViewPoint (0, 0, 5000),
-    bTfValid(0),
+    bTfValid(false),
     fWRatio (1.0),
     fHRatio (1.0)
 {
@@ -123,7 +123,7 @@ void Viewport3D::MakeTransform(void)
             aViewTf *= aTemp;
         }
 
-        bTfValid = sal_True;
+        bTfValid = true;
     }
 }
 
@@ -181,7 +181,7 @@ void Viewport3D::SetDeviceWindow(const Rectangle& rRect)
 void Viewport3D::SetVRP(const basegfx::B3DPoint& rNewVRP)
 {
     aVRP = rNewVRP;
-    bTfValid = sal_False;
+    bTfValid = false;
 }
 
 // Set View Plane Normal
@@ -190,7 +190,7 @@ void Viewport3D::SetVPN(const basegfx::B3DVector& rNewVPN)
 {
     aVPN = rNewVPN;
     aVPN.normalize();
-    bTfValid = sal_False;
+    bTfValid = false;
 }
 
 // Set View Up Vector
@@ -198,7 +198,7 @@ void Viewport3D::SetVPN(const basegfx::B3DVector& rNewVPN)
 void Viewport3D::SetVUV(const basegfx::B3DVector& rNewVUV)
 {
     aVUV = rNewVUV;
-    bTfValid = sal_False;
+    bTfValid = false;
 }
 
 // Set Center Of Projection
@@ -208,7 +208,7 @@ void Viewport3D::SetPRP(const basegfx::B3DPoint& rNewPRP)
     aPRP = rNewPRP;
     aPRP.setX(0.0);
     aPRP.setY(0.0);
-    bTfValid = sal_False;
+    bTfValid = false;
 }
 
 // Set View Plane Distance
@@ -216,7 +216,7 @@ void Viewport3D::SetPRP(const basegfx::B3DPoint& rNewPRP)
 void Viewport3D::SetVPD(double fNewVPD)
 {
     fVPD = fNewVPD;
-    bTfValid = sal_False;
+    bTfValid = false;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -63,7 +63,7 @@ protected:
     // Migrate selections
     Impl3DMirrorConstructOverlay*                   mpMirrorOverlay;
 
-    sal_Bool                        bDoubleSided;
+    bool                        bDoubleSided;
 
     void InitView();
 
@@ -108,7 +108,7 @@ public:
 
     // Means to create all Extrudes in a certain depth order.
     void DoDepthArrange(E3dScene* pScene, double fDepth);
-    void ConvertMarkedToPolyObj(sal_Bool bLineToArea);
+    void ConvertMarkedToPolyObj(bool bLineToArea);
     E3dScene* SetCurrent3DObj(E3dObject* p3DObj);
     void Start3DCreation();
 
@@ -242,18 +242,12 @@ public:
     bool IsBreak3DObjPossible() const;
     void Break3DObj();
 
-    sal_Bool DoubleSided () const
-    {
-        return bDoubleSided;
-    }
+    bool DoubleSided () const { return bDoubleSided; }
 
-    sal_Bool &DoubleSided ()
-    {
-        return bDoubleSided;
-    }
+    bool &DoubleSided ()      { return bDoubleSided; }
 
-    SfxItemSet Get3DAttributes(E3dScene* pInScene = NULL, sal_Bool bOnly3DAttr=sal_False) const;
-    void Set3DAttributes(const SfxItemSet& rAttr, E3dScene* pInScene = NULL, sal_Bool bOnly3DAttr=sal_False);
+    SfxItemSet Get3DAttributes(E3dScene* pInScene = NULL, bool bOnly3DAttr=false) const;
+    void Set3DAttributes(const SfxItemSet& rAttr, E3dScene* pInScene = NULL, bool bOnly3DAttr=false);
 };
 
 #endif // INCLUDED_SVX_VIEW3D_HXX
