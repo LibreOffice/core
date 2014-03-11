@@ -23,7 +23,7 @@
 
 #include "webdavresponseparser.hxx"
 #include <comphelper/seqstream.hxx>
-#include <rtl/ustrbuf.hxx>
+#include <rtl/strbuf.hxx>
 
 
 using namespace com::sun::star;
@@ -95,7 +95,7 @@ serf_bucket_t * SerfPropFindReqProcImpl::createSerfRequestBucket( serf_request_t
     {
         // TODO is it really needed a Unicode string buffer?
         // All properties and property names aren't supposed to be ASCII?
-        rtl::OUStringBuffer aBuffer;
+        OStringBuffer aBuffer;
         aBuffer.append( PROPFIND_HEADER );
 
         // create and fill body bucket with requested properties
@@ -135,7 +135,7 @@ serf_bucket_t * SerfPropFindReqProcImpl::createSerfRequestBucket( serf_request_t
         }
 
         aBuffer.append( PROPFIND_TRAILER );
-        aBodyText = rtl::OUStringToOString( aBuffer.makeStringAndClear(), RTL_TEXTENCODING_UTF8 );
+        aBodyText = aBuffer.makeStringAndClear();
         body_bkt = serf_bucket_simple_copy_create( aBodyText.getStr(),
                                                    aBodyText.getLength(),
                                                    pSerfBucketAlloc );
