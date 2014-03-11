@@ -122,7 +122,7 @@ namespace canvas
         }
 
         // XCanvas
-        virtual void SAL_CALL clear() throw (::com::sun::star::uno::RuntimeException)
+        virtual void SAL_CALL clear() throw (::com::sun::star::uno::RuntimeException) SAL_OVERRIDE
         {
             MutexType aGuard( BaseType::m_aMutex );
 
@@ -135,7 +135,7 @@ namespace canvas
         virtual void SAL_CALL drawPoint( const ::com::sun::star::geometry::RealPoint2D&     aPoint,
                                          const ::com::sun::star::rendering::ViewState&      viewState,
                                          const ::com::sun::star::rendering::RenderState&    renderState ) throw (::com::sun::star::lang::IllegalArgumentException,
-                                                                                                                 ::com::sun::star::uno::RuntimeException)
+                                                                                                                 ::com::sun::star::uno::RuntimeException) SAL_OVERRIDE
         {
             tools::verifyArgs(aPoint, viewState, renderState,
                               BOOST_CURRENT_FUNCTION,
@@ -153,7 +153,7 @@ namespace canvas
                                         const ::com::sun::star::geometry::RealPoint2D&  aEndPoint,
                                         const ::com::sun::star::rendering::ViewState&   viewState,
                                         const ::com::sun::star::rendering::RenderState& renderState ) throw (::com::sun::star::lang::IllegalArgumentException,
-                                                                                                             ::com::sun::star::uno::RuntimeException)
+                                                                                                             ::com::sun::star::uno::RuntimeException) SAL_OVERRIDE
         {
             tools::verifyArgs(aStartPoint, aEndPoint, viewState, renderState,
                               BOOST_CURRENT_FUNCTION,
@@ -171,7 +171,7 @@ namespace canvas
                                           const ::com::sun::star::geometry::RealPoint2D&            aEndPoint,
                                           const ::com::sun::star::rendering::ViewState&             viewState,
                                           const ::com::sun::star::rendering::RenderState&           renderState ) throw (::com::sun::star::lang::IllegalArgumentException,
-                                                                                                                         ::com::sun::star::uno::RuntimeException)
+                                                                                                                         ::com::sun::star::uno::RuntimeException) SAL_OVERRIDE
         {
             tools::verifyArgs(aBezierSegment, aEndPoint, viewState, renderState,
                               BOOST_CURRENT_FUNCTION,
@@ -189,7 +189,7 @@ namespace canvas
             drawPolyPolygon( const ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XPolyPolygon2D >& xPolyPolygon,
                              const ::com::sun::star::rendering::ViewState&                                          viewState,
                              const ::com::sun::star::rendering::RenderState&                                        renderState ) throw (::com::sun::star::lang::IllegalArgumentException,
-                                                                                                                                         ::com::sun::star::uno::RuntimeException)
+                                                                                                                                         ::com::sun::star::uno::RuntimeException) SAL_OVERRIDE
         {
             tools::verifyArgs(xPolyPolygon, viewState, renderState,
                               BOOST_CURRENT_FUNCTION,
@@ -208,7 +208,7 @@ namespace canvas
                                const ::com::sun::star::rendering::ViewState&                                            viewState,
                                const ::com::sun::star::rendering::RenderState&                                          renderState,
                                const ::com::sun::star::rendering::StrokeAttributes&                                     strokeAttributes ) throw (::com::sun::star::lang::IllegalArgumentException,
-                                                                                                                                                  ::com::sun::star::uno::RuntimeException)
+                                                                                                                                                  ::com::sun::star::uno::RuntimeException) SAL_OVERRIDE
         {
             tools::verifyArgs(xPolyPolygon, viewState, renderState, strokeAttributes,
                               BOOST_CURRENT_FUNCTION,
@@ -228,7 +228,7 @@ namespace canvas
                                        const ::com::sun::star::rendering::RenderState&                                          renderState,
                                        const ::com::sun::star::uno::Sequence< ::com::sun::star::rendering::Texture >&           textures,
                                        const ::com::sun::star::rendering::StrokeAttributes&                                     strokeAttributes ) throw (::com::sun::star::lang::IllegalArgumentException,
-                                                                                                                                                          ::com::sun::star::uno::RuntimeException)
+                                                                                                                                                          ::com::sun::star::uno::RuntimeException) SAL_OVERRIDE
         {
             tools::verifyArgs(xPolyPolygon, viewState, renderState, strokeAttributes,
                               BOOST_CURRENT_FUNCTION,
@@ -249,7 +249,7 @@ namespace canvas
                                             const ::com::sun::star::uno::Sequence< ::com::sun::star::rendering::Texture >&          textures,
                                             const ::com::sun::star::uno::Reference< ::com::sun::star::geometry::XMapping2D >&       xMapping,
                                             const ::com::sun::star::rendering::StrokeAttributes&                                    strokeAttributes ) throw (::com::sun::star::lang::IllegalArgumentException,
-                                                                                                                                                              ::com::sun::star::uno::RuntimeException)
+                                                                                                                                                              ::com::sun::star::uno::RuntimeException) SAL_OVERRIDE
         {
             tools::verifyArgs(xPolyPolygon, viewState, renderState, textures, xMapping, strokeAttributes,
                               BOOST_CURRENT_FUNCTION,
@@ -268,7 +268,7 @@ namespace canvas
                                const ::com::sun::star::rendering::ViewState&                                            viewState,
                                const ::com::sun::star::rendering::RenderState&                                          renderState,
                                const ::com::sun::star::rendering::StrokeAttributes&                                     strokeAttributes ) throw (::com::sun::star::lang::IllegalArgumentException,
-                                                                                                                                                  ::com::sun::star::uno::RuntimeException)
+                                                                                                                                                  ::com::sun::star::uno::RuntimeException) SAL_OVERRIDE
         {
             tools::verifyArgs(xPolyPolygon, viewState, renderState, strokeAttributes,
                               BOOST_CURRENT_FUNCTION,
@@ -286,7 +286,7 @@ namespace canvas
             fillPolyPolygon( const ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XPolyPolygon2D >& xPolyPolygon,
                              const ::com::sun::star::rendering::ViewState&                                          viewState,
                              const ::com::sun::star::rendering::RenderState&                                        renderState ) throw (::com::sun::star::lang::IllegalArgumentException,
-                                                                                                                                         ::com::sun::star::uno::RuntimeException)
+                                                                                                                                         ::com::sun::star::uno::RuntimeException) SAL_OVERRIDE
         {
             tools::verifyArgs(xPolyPolygon, viewState, renderState,
                               BOOST_CURRENT_FUNCTION,
@@ -305,7 +305,7 @@ namespace canvas
                                      const ::com::sun::star::rendering::ViewState&                                          viewState,
                                      const ::com::sun::star::rendering::RenderState&                                        renderState,
                                      const ::com::sun::star::uno::Sequence< ::com::sun::star::rendering::Texture >&         textures ) throw (::com::sun::star::lang::IllegalArgumentException,
-                                                                                                                                              ::com::sun::star::uno::RuntimeException)
+                                                                                                                                              ::com::sun::star::uno::RuntimeException) SAL_OVERRIDE
         {
             tools::verifyArgs(xPolyPolygon, viewState, renderState, textures,
                               BOOST_CURRENT_FUNCTION,
@@ -324,7 +324,7 @@ namespace canvas
                                           const ::com::sun::star::rendering::ViewState&                                             viewState,
                                           const ::com::sun::star::rendering::RenderState&                                           renderState,
                                           const ::com::sun::star::uno::Sequence< ::com::sun::star::rendering::Texture >&            textures,
-                                          const ::com::sun::star::uno::Reference< ::com::sun::star::geometry::XMapping2D >&         xMapping ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException)
+                                          const ::com::sun::star::uno::Reference< ::com::sun::star::geometry::XMapping2D >&         xMapping ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException) SAL_OVERRIDE
         {
             tools::verifyArgs(xPolyPolygon, viewState, renderState, textures, xMapping,
                               BOOST_CURRENT_FUNCTION,
@@ -343,7 +343,7 @@ namespace canvas
             createFont( const ::com::sun::star::rendering::FontRequest&                                     fontRequest,
                         const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >&    extraFontProperties,
                         const ::com::sun::star::geometry::Matrix2D&                                         fontMatrix ) throw (::com::sun::star::lang::IllegalArgumentException,
-                                                                                                                                ::com::sun::star::uno::RuntimeException)
+                                                                                                                                ::com::sun::star::uno::RuntimeException) SAL_OVERRIDE
         {
             tools::verifyArgs(fontRequest,
                               // dummy, to keep argPos in sync
@@ -361,7 +361,7 @@ namespace canvas
         virtual ::com::sun::star::uno::Sequence< ::com::sun::star::rendering::FontInfo > SAL_CALL
             queryAvailableFonts( const ::com::sun::star::rendering::FontInfo&                                       aFilter,
                                  const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >&   aFontProperties ) throw (::com::sun::star::lang::IllegalArgumentException,
-                                                                                                                                             ::com::sun::star::uno::RuntimeException)
+                                                                                                                                             ::com::sun::star::uno::RuntimeException) SAL_OVERRIDE
         {
             tools::verifyArgs(aFilter,
                               BOOST_CURRENT_FUNCTION,
@@ -379,7 +379,7 @@ namespace canvas
                       const ::com::sun::star::rendering::ViewState&                                         viewState,
                       const ::com::sun::star::rendering::RenderState&                                       renderState,
                       sal_Int8                                                                              textDirection ) throw (::com::sun::star::lang::IllegalArgumentException,
-                                                                                                                                   ::com::sun::star::uno::RuntimeException)
+                                                                                                                                   ::com::sun::star::uno::RuntimeException) SAL_OVERRIDE
         {
             tools::verifyArgs(xFont, viewState, renderState,
                               BOOST_CURRENT_FUNCTION,
@@ -400,7 +400,7 @@ namespace canvas
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XCachedPrimitive > SAL_CALL
             drawTextLayout( const ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XTextLayout >& laidOutText,
                             const ::com::sun::star::rendering::ViewState&                                       viewState,
-                            const ::com::sun::star::rendering::RenderState&                                     renderState ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException)
+                            const ::com::sun::star::rendering::RenderState&                                     renderState ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException) SAL_OVERRIDE
         {
             tools::verifyArgs(laidOutText, viewState, renderState,
                               BOOST_CURRENT_FUNCTION,
@@ -418,7 +418,7 @@ namespace canvas
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XCachedPrimitive > SAL_CALL
             drawBitmap( const ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XBitmap >& xBitmap,
                         const ::com::sun::star::rendering::ViewState&                                   viewState,
-                        const ::com::sun::star::rendering::RenderState&                                 renderState ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException)
+                        const ::com::sun::star::rendering::RenderState&                                 renderState ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException) SAL_OVERRIDE
         {
             tools::verifyArgs(xBitmap, viewState, renderState,
                               BOOST_CURRENT_FUNCTION,
@@ -435,7 +435,7 @@ namespace canvas
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XCachedPrimitive > SAL_CALL
             drawBitmapModulated( const ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XBitmap >&    xBitmap,
                                  const ::com::sun::star::rendering::ViewState&                                      viewState,
-                                 const ::com::sun::star::rendering::RenderState&                                    renderState ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException)
+                                 const ::com::sun::star::rendering::RenderState&                                    renderState ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException) SAL_OVERRIDE
         {
             tools::verifyArgs(xBitmap, viewState, renderState,
                               BOOST_CURRENT_FUNCTION,
@@ -450,7 +450,7 @@ namespace canvas
         }
 
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XGraphicDevice >   SAL_CALL
-            getDevice() throw (::com::sun::star::uno::RuntimeException)
+            getDevice() throw (::com::sun::star::uno::RuntimeException) SAL_OVERRIDE
         {
             MutexType aGuard( BaseType::m_aMutex );
 
