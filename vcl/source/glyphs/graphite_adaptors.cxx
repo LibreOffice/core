@@ -42,14 +42,10 @@
 // Platform
 #ifndef WNT
 #include <unx/saldisp.hxx>
-
 #include <salgdi.hxx>
-
-#include <freetype2/ftsynth.h>
 
 // Module
 #include "gcach_ftyp.hxx"
-
 #include <graphite_features.hxx>
 #include <graphite_adaptors.hxx>
 
