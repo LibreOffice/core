@@ -373,7 +373,7 @@ OString DocxExport::WriteOLEObject( SwOLEObj& rObject, OUString sMediaType, OUSt
     OUString sId;
     if( lcl_CopyStream( xInStream, xOutStream ) )
 
-        sId = m_pFilter->addRelation( m_pDocumentFS->getOutputStream(),
+        sId = m_pFilter->addRelation( GetFS()->getOutputStream(),
                 sRelationType, sFileName, false );
 
     return OUStringToOString( sId, RTL_TEXTENCODING_UTF8 );
@@ -706,6 +706,7 @@ void DocxExport::WriteHeaderFooter( const SwFmt& rFmt, bool bHeader, const char*
     m_pAttrOutput->SetSerializer( pFS );
     m_pVMLExport->SetFS( pFS );
     m_pSdrExport->setSerializer(pFS);
+    SetFS( pFS );
     m_pAttrOutput->switchHeaderFooter(true, m_nHeadersFootersInSection++);
     // do the work
     WriteHeaderFooterText( rFmt, bHeader );
@@ -714,6 +715,7 @@ void DocxExport::WriteHeaderFooter( const SwFmt& rFmt, bool bHeader, const char*
     m_pAttrOutput->SetSerializer( m_pDocumentFS );
     m_pVMLExport->SetFS( m_pDocumentFS );
     m_pSdrExport->setSerializer(m_pDocumentFS);
+    SetFS( m_pDocumentFS );
 
     // close the tag
     sal_Int32 nReference;
@@ -1385,6 +1387,11 @@ void DocxExport::WriteOutliner(const OutlinerParaObject& rParaObj, sal_uInt8 nTy
     }
 }
 
+void DocxExport::SetFS( ::sax_fastparser::FSHelperPtr pFS )
+{
+    mpFS = pFS;
+}
+
 DocxExport::DocxExport( DocxExportFilter *pFilter, SwDoc *pDocument, SwPaM *pCurrentPam, SwPaM *pOriginalPam )
     : MSWordExportBase( pDocument, pCurrentPam, pOriginalPam ),
       m_pFilter( pFilter ),
@@ -1407,6 +1414,8 @@ DocxExport::DocxExport( DocxExportFilter *pFilter, SwDoc *pDocument, SwPaM *pCur
     // the actual document
     m_pDocumentFS = m_pFilter->openFragmentStreamWithSerializer( "word/document.xml",
             "application/vnd.openxmlformats-officedocument.wordprocessingml.document.main+xml" );
+
+    SetFS(m_pDocumentFS);
 
     // the DrawingML access
     m_pDrawingML = new oox::drawingml::DrawingML( m_pDocumentFS, m_pFilter, oox::drawingml::DrawingML::DOCUMENT_DOCX );

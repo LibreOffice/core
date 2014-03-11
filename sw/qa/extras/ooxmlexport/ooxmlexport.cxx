@@ -2731,6 +2731,19 @@ DECLARE_OOXMLEXPORT_TEST(testComboBoxControl, "combobox-control.docx")
     CPPUNIT_ASSERT_EQUAL(OUString("pepito"), aItems[1]);
 }
 
+DECLARE_OOXMLEXPORT_TEST(testOLEObjectinHeader, "2129393649.docx")
+{
+    // fdo#76015 : Document contains oleobject in header xml.
+    // Problem was relationship entry for oleobject from header was
+    // exported into document.xml.rels file because of this rels file
+    // for headers were missing from document/word/rels.
+    xmlDocPtr pXmlDoc = parseExport("word/_rels/header3.xml.rels");
+    if(!pXmlDoc)
+        return;
+
+    assertXPath(pXmlDoc,"/rels:Relationships/rels:Relationship[1]","Id","rId1");
+}
+
 #endif
 
 CPPUNIT_PLUGIN_IMPLEMENT();
