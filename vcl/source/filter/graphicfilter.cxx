@@ -63,6 +63,7 @@
 #include <rtl/instance.hxx>
 #include <vcl/metaact.hxx>
 #include <vector>
+#include <boost/scoped_array.hpp>
 #include <boost/scoped_ptr.hpp>
 
 #include "FilterConfigCache.hxx"
@@ -621,22 +622,20 @@ static bool ImpPeekGraphicFormat( SvStream& rStream, OUString& rFormatExtension,
     if( !bTest )
     {
         sal_uLong nSize = ( nStreamLen > 2048 ) ? 2048 : nStreamLen;
-        sal_uInt8* pBuf = new sal_uInt8 [ nSize ];
+        boost::scoped_array<sal_uInt8> pBuf(new sal_uInt8 [ nSize ]);
 
         rStream.Seek( nStreamPos );
-        rStream.Read( pBuf, nSize );
-        sal_uInt8* pPtr = ImplSearchEntry( pBuf, (sal_uInt8*)"#define", nSize, 7 );
+        rStream.Read( pBuf.get(), nSize );
+        sal_uInt8* pPtr = ImplSearchEntry( pBuf.get(), (sal_uInt8*)"#define", nSize, 7 );
 
         if( pPtr )
         {
-            if( ImplSearchEntry( pPtr, (sal_uInt8*)"_width", pBuf + nSize - pPtr, 6 ) )
+            if( ImplSearchEntry( pPtr, (sal_uInt8*)"_width", pBuf.get() + nSize - pPtr, 6 ) )
             {
                 rFormatExtension = "XBM";
-                delete[] pBuf;
                 return true;
             }
         }
-        delete[] pBuf;
     }
     else if( rFormatExtension.startsWith( "XBM" ) )
     {

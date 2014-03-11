@@ -35,6 +35,7 @@ extern "C" {
 #include "jpeg.h"
 #include <JpegReader.hxx>
 #include <JpegWriter.hxx>
+#include <boost/scoped_array.hpp>
 
 struct ErrorManagerStruct
 {
@@ -67,7 +68,7 @@ void ReadJPEG( JPEGReader* pJPEGReader, void* pInputStream, long* pLines,
     long                            nHeight;
     long                            nAlignedWidth;
     JSAMPLE*                        aRangeLimit;
-    unsigned char *                 pScanLineBuffer = NULL;
+    boost::scoped_array<unsigned char> pScanLineBuffer;
     long                            nScanLineBufferComponents = 0;
 
     if ( setjmp( jerr.setjmp_buffer ) )
@@ -152,7 +153,7 @@ void ReadJPEG( JPEGReader* pJPEGReader, void* pInputStream, long* pLines,
     if ( cinfo.out_color_space == JCS_CMYK )
     {
         nScanLineBufferComponents = cinfo.output_width * 4;
-        pScanLineBuffer = new unsigned char[nScanLineBufferComponents];
+        pScanLineBuffer.reset(new unsigned char[nScanLineBufferComponents]);
     }
 
     if( pDIB )
@@ -169,11 +170,12 @@ void ReadJPEG( JPEGReader* pJPEGReader, void* pInputStream, long* pLines,
 
         for ( *pLines = 0; *pLines < nHeight; (*pLines)++ )
         {
-            if (pScanLineBuffer != NULL)
+            if (pScanLineBuffer)
             { // in other words cinfo.out_color_space == JCS_CMYK
                 int i;
                 int j;
-                jpeg_read_scanlines( &cinfo, (JSAMPARRAY) &pScanLineBuffer, 1 );
+                unsigned char *pSLB = pScanLineBuffer.get();
+                jpeg_read_scanlines( &cinfo, (JSAMPARRAY) &pSLB, 1 );
                 // convert CMYK to RGB
                 for( i=0, j=0; i < nScanLineBufferComponents; i+=4, j+=3 )
                 {
@@ -208,11 +210,7 @@ void ReadJPEG( JPEGReader* pJPEGReader, void* pInputStream, long* pLines,
         jpeg_abort_decompress( &cinfo );
     }
 
-    if (pScanLineBuffer != NULL)
-    {
-        delete[] pScanLineBuffer;
-        pScanLineBuffer = NULL;
-    }
+    pScanLineBuffer.reset();
 
     jpeg_destroy_decompress( &cinfo );
 }

@@ -18,6 +18,7 @@
  */
 
 #include "Exif.hxx"
+#include <boost/scoped_array.hpp>
 
 Exif::Exif() :
     maOrientation(TOP_LEFT),
@@ -214,10 +215,10 @@ bool Exif::processExif(SvStream& rStream, sal_uInt16 aSectionLength, bool bSetVa
 
     sal_uInt16 aLength = aSectionLength - 6; // Length = Section - Header
 
-    sal_uInt8* aExifData = new sal_uInt8[aLength];
+    boost::scoped_array<sal_uInt8> aExifData(new sal_uInt8[aLength]);
     sal_uInt32 aExifDataBeginPosition = rStream.Tell();
 
-    rStream.Read(aExifData, aLength);
+    rStream.Read(aExifData.get(), aLength);
 
     // Exif detected
     mbExifPresent = true;
@@ -229,7 +230,6 @@ bool Exif::processExif(SvStream& rStream, sal_uInt16 aSectionLength, bool bSetVa
 
     if (!bIntel && !bMotorola)
     {
-        delete[] aExifData;
         return false;
     }
 
@@ -251,7 +251,6 @@ bool Exif::processExif(SvStream& rStream, sal_uInt16 aSectionLength, bool bSetVa
 
     if (aTiffHeader->tagAlign != 0x002A) // TIFF tag
     {
-        delete[] aExifData;
         return false;
     }
 
@@ -263,15 +262,14 @@ bool Exif::processExif(SvStream& rStream, sal_uInt16 aSectionLength, bool bSetVa
         aNumberOfTags = ((aExifData[aOffset] << 8) | aExifData[aOffset+1]);
     }
 
-    processIFD(aExifData, aLength, aOffset+2, aNumberOfTags, bSetValue, bSwap);
+    processIFD(aExifData.get(), aLength, aOffset+2, aNumberOfTags, bSetValue, bSwap);
 
     if (bSetValue)
     {
         rStream.Seek(aExifDataBeginPosition);
-        rStream.Write(aExifData, aLength);
+        rStream.Write(aExifData.get(), aLength);
     }
 
-    delete[] aExifData;
     return true;
 }
 

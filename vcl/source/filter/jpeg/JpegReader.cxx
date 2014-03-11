@@ -28,6 +28,7 @@
 #include <vcl/bmpacc.hxx>
 #include <vcl/FilterConfigItem.hxx>
 #include <vcl/graphicfilter.hxx>
+#include <boost/scoped_array.hpp>
 
 #define JPEG_MIN_READ 512
 #define BUFFER_SIZE  4096
@@ -313,7 +314,7 @@ void JPEGReader::FillBitmap()
 
         if( mpAcc->GetBitCount() == 8 )
         {
-            BitmapColor* pCols = new BitmapColor[ 256 ];
+            boost::scoped_array<BitmapColor> pCols(new BitmapColor[ 256 ]);
 
             for( sal_uInt16 n = 0; n < 256; n++ )
             {
@@ -332,8 +333,6 @@ void JPEGReader::FillBitmap()
                     mpAcc->SetPixel( nY, nX, pCols[ *pTmp++ ] );
                 }
             }
-
-            delete[] pCols;
         }
         else
         {

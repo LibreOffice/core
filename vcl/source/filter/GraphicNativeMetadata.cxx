@@ -22,6 +22,7 @@
 #include <vcl/gfxlink.hxx>
 
 #include "jpeg/Exif.hxx"
+#include <boost/scoped_array.hpp>
 
 GraphicNativeMetadata::GraphicNativeMetadata() :
     mRotation(0)
@@ -41,16 +42,15 @@ bool GraphicNativeMetadata::read(Graphic& rGraphic)
     if ( aLink.GetType() != GFX_LINK_TYPE_NATIVE_JPG )
         return false;
     sal_uInt32 aDataSize = aLink.GetDataSize();
-    sal_uInt8* aBuffer = new sal_uInt8[aDataSize];
+    boost::scoped_array<sal_uInt8> aBuffer(new sal_uInt8[aDataSize]);
 
-    memcpy(aBuffer, aLink.GetData(), aDataSize);
-    SvMemoryStream aMemoryStream(aBuffer, aDataSize, STREAM_READ);
+    memcpy(aBuffer.get(), aLink.GetData(), aDataSize);
+    SvMemoryStream aMemoryStream(aBuffer.get(), aDataSize, STREAM_READ);
 
     Exif aExif;
     aExif.read(aMemoryStream);
     mRotation = aExif.getRotation();
 
-    delete[] aBuffer;
     return true;
 }
 

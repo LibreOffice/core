@@ -22,6 +22,7 @@
 
 #include "decode.hxx"
 #include "gifread.hxx"
+#include <boost/scoped_array.hpp>
 
 #define NO_PENDING( rStm ) ( ( rStm ).GetError() != ERRCODE_IO_PENDING )
 
@@ -172,12 +173,12 @@ bool GIFReader::ReadGlobalHeader()
 void GIFReader::ReadPaletteEntries( BitmapPalette* pPal, sal_uLong nCount )
 {
     const sal_uLong nLen = 3UL * nCount;
-    sal_uInt8*      pBuf = new sal_uInt8[ nLen ];
+    boost::scoped_array<sal_uInt8> pBuf(new sal_uInt8[ nLen ]);
 
-    rIStm.Read( pBuf, nLen );
+    rIStm.Read( pBuf.get(), nLen );
     if( NO_PENDING( rIStm ) )
     {
-        sal_uInt8* pTmp = pBuf;
+        sal_uInt8* pTmp = pBuf.get();
 
         for( sal_uLong i = 0UL; i < nCount; )
         {
@@ -197,8 +198,6 @@ void GIFReader::ReadPaletteEntries( BitmapPalette* pPal, sal_uLong nCount )
                 (*pPal)[ 254UL ] = Color( COL_BLACK );
         }
     }
-
-    delete[] pBuf;
 }
 
 bool GIFReader::ReadExtension()
@@ -315,10 +314,10 @@ bool GIFReader::ReadExtension()
             while( cSize && bStatus && !rIStm.IsEof() )
             {
                 sal_uInt16  nCount = (sal_uInt16) cSize + 1;
-                char*   pBuffer = new char[ nCount ];
+                boost::scoped_array<char> pBuffer(new char[ nCount ]);
 
                 bRet = false;
-                rIStm.Read( pBuffer, nCount );
+                rIStm.Read( pBuffer.get(), nCount );
                 if( NO_PENDING( rIStm ) )
                 {
                     cSize = (sal_uInt8) pBuffer[ cSize ];
@@ -326,8 +325,6 @@ bool GIFReader::ReadExtension()
                 }
                 else
                     cSize = 0;
-
-                delete[] pBuffer;
             }
         }
     }
