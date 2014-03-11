@@ -699,11 +699,6 @@ SfxStyleSheetBase* SfxStyleSheetBasePool::Find(const OUString& rName,
     return aIter.Find(rName);
 }
 
-const SfxStyles& SfxStyleSheetBasePool::GetStyles()
-{
-    return aStyles;
-}
-
 SfxStyleSheetBase* SfxStyleSheetBasePool::First()
 {
     return GetIterator_Impl().First();

@@ -250,7 +250,6 @@ public:
     SfxStyleSheetBasePool&      operator=( const SfxStyleSheetBasePool& );
     SfxStyleSheetBasePool&      operator+=( const SfxStyleSheetBasePool& );
 
-    const SfxStyles&            GetStyles();
     virtual SfxStyleSheetBase*  First();
     virtual SfxStyleSheetBase*  Next();
     virtual SfxStyleSheetBase*  Find( const OUString&, SfxStyleFamily eFam, sal_uInt16 n=SFXSTYLEBIT_ALL );
