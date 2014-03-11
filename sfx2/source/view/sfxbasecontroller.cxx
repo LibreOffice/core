@@ -358,7 +358,7 @@ void SAL_CALL IMPL_SfxBaseController_CloseListenerHelper::queryClosing( const la
 {
     SolarMutexGuard aGuard;
     SfxViewShell* pShell = m_pController->GetViewShell_Impl();
-    if  ( m_pController !=  NULL &&  pShell )
+    if  (pShell)
     {
         bool bCanClose = pShell->PrepareClose( sal_False );
         if ( !bCanClose )
