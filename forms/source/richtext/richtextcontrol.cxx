@@ -579,13 +579,6 @@ namespace frm
                 {
                     bNeedParametrizedDispatcher = true;
                 }
-                else if (  ( _nSlotId == SID_ATTR_PARA_HANGPUNCTUATION )
-                        || ( _nSlotId == SID_ATTR_PARA_FORBIDDEN_RULES )
-                        || ( _nSlotId == SID_ATTR_PARA_SCRIPTSPACE )
-                        )
-                {
-                    bNeedParametrizedDispatcher = false;
-                }
                 else
                 {
                     SfxSlotPool& rSlotPool = SfxSlotPool::GetSlotPool( NULL );
