@@ -123,7 +123,7 @@ public:
 
 protected:
     // base class overridables
-    ::com::sun::star::awt::Rectangle SAL_CALL implGetBounds(  ) throw (::com::sun::star::uno::RuntimeException);
+    ::com::sun::star::awt::Rectangle implGetBounds(  ) throw (::com::sun::star::uno::RuntimeException) SAL_OVERRIDE;
 
 private:
     /** we may be reparented (if external components use OAccessibleImplementationAccess base class),

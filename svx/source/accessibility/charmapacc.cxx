@@ -156,7 +156,7 @@ Reference< XAccessible > SAL_CALL SvxShowCharSetVirtualAcc::getAccessibleParent(
     return xRet;
 }
 
-::com::sun::star::awt::Rectangle SAL_CALL SvxShowCharSetVirtualAcc::implGetBounds(  ) throw (RuntimeException)
+::com::sun::star::awt::Rectangle SvxShowCharSetVirtualAcc::implGetBounds(  ) throw (RuntimeException)
 {
     ::com::sun::star::awt::Rectangle aBounds ( 0, 0, 0, 0 );
     Window* pWindow = mpParent;
@@ -335,7 +335,7 @@ void SvxShowCharSetAcc::implSelect( sal_Int32 nAccessibleChildIndex, sal_Bool bS
     }
 }
 
-::com::sun::star::awt::Rectangle SAL_CALL SvxShowCharSetAcc::implGetBounds(  ) throw (RuntimeException)
+::com::sun::star::awt::Rectangle SvxShowCharSetAcc::implGetBounds(  ) throw (RuntimeException)
 {
     const Point   aOutPos;//( m_pParent->getCharSetControl()->GetPosPixel() );
     Size          aOutSize( m_pParent->getCharSetControl()->GetOutputSizePixel());
@@ -795,7 +795,7 @@ uno::Any SAL_CALL SvxShowCharSetItemAcc::getAccessibleKeyBinding()
     return uno::Any();
 }
 
-awt::Rectangle SAL_CALL SvxShowCharSetItemAcc::implGetBounds(  ) throw (RuntimeException)
+awt::Rectangle SvxShowCharSetItemAcc::implGetBounds(  ) throw (RuntimeException)
 {
     awt::Rectangle      aRet;
 

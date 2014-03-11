@@ -70,7 +70,7 @@ namespace toolkit
         )   SAL_THROW( ( ::com::sun::star::uno::Exception ) );
 
         // OCommonAccessibleComponent overridables
-        virtual ::com::sun::star::awt::Rectangle SAL_CALL implGetBounds(  ) throw (::com::sun::star::uno::RuntimeException);
+        virtual ::com::sun::star::awt::Rectangle implGetBounds(  ) throw (::com::sun::star::uno::RuntimeException) SAL_OVERRIDE;
 
     public:
         /** creates an accessible context for an uno control

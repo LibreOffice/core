@@ -67,7 +67,7 @@ protected:
     virtual void SAL_CALL                   disposing();
 
     /// implements the calculation of the bounding rectangle
-    virtual ::com::sun::star::awt::Rectangle SAL_CALL   implGetBounds(  ) throw (::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::awt::Rectangle implGetBounds(  ) throw (::com::sun::star::uno::RuntimeException) SAL_OVERRIDE;
 
     // OCommonAccessibleText
     virtual OUString                                    implGetText();

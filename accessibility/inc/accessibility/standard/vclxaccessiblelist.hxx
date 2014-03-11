@@ -194,7 +194,7 @@ protected:
     virtual void HandleChangedItemList (bool bItemInserted, sal_Int32 nIndex);
 
     // VCLXAccessibleComponent
-    virtual ::com::sun::star::awt::Rectangle SAL_CALL implGetBounds(  ) throw (::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::awt::Rectangle implGetBounds(  ) throw (::com::sun::star::uno::RuntimeException) SAL_OVERRIDE;
 
 private:
     /** We need to save the accessible parent to return it in <type>getAccessibleParent()</type>,

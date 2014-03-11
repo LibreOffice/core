@@ -47,7 +47,7 @@ namespace comphelper
 
     protected:
         /// implements the calculation of the bounding rectangle - still waiting to be overwritten
-        virtual ::com::sun::star::awt::Rectangle SAL_CALL implGetBounds(  ) throw (::com::sun::star::uno::RuntimeException) = 0;
+        virtual ::com::sun::star::awt::Rectangle implGetBounds(  ) throw (::com::sun::star::uno::RuntimeException) = 0;
 
     protected:
         /** non-virtual versions of the methods which can be implemented using <method>implGetBounds</method>

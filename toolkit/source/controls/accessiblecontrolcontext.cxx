@@ -240,7 +240,7 @@ namespace toolkit
     }
 
 
-    awt::Rectangle SAL_CALL OAccessibleControlContext::implGetBounds(  ) throw (RuntimeException)
+    awt::Rectangle OAccessibleControlContext::implGetBounds(  ) throw (RuntimeException)
     {
         SolarMutexGuard aSolarGuard;
             // want to do some VCL stuff here ...

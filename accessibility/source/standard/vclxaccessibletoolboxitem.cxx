@@ -234,7 +234,7 @@ void VCLXAccessibleToolBoxItem::ToggleEnableState()
     NotifyAccessibleEvent( AccessibleEventId::STATE_CHANGED, aOldValue[1], aNewValue[1] );
 }
 
-awt::Rectangle SAL_CALL VCLXAccessibleToolBoxItem::implGetBounds(  ) throw (RuntimeException)
+awt::Rectangle VCLXAccessibleToolBoxItem::implGetBounds(  ) throw (RuntimeException)
 {
     awt::Rectangle aRect;
     if ( m_pToolBox )

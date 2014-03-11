@@ -368,7 +368,7 @@ namespace accessibility
         return m_pImpl->getPanelDisplayName();
     }
 
-    UnoRectangle SAL_CALL AccessibleToolPanelDeckTabBarItem::implGetBounds() throw (RuntimeException)
+    UnoRectangle AccessibleToolPanelDeckTabBarItem::implGetBounds() throw (RuntimeException)
     {
         ItemMethodGuard aGuard( *m_pImpl );
 
