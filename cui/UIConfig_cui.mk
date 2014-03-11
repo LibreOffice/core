@@ -61,6 +61,7 @@ $(eval $(call gb_UIConfig_add_uifiles,cui,\
 	cui/uiconfig/ui/gallerythemedialog \
 	cui/uiconfig/ui/gallerythemeiddialog \
 	cui/uiconfig/ui/gallerytitledialog \
+	cui/uiconfig/ui/galleryupdateprogress \
 	cui/uiconfig/ui/hangulhanjaadddialog \
 	cui/uiconfig/ui/hangulhanjaoptdialog \
 	cui/uiconfig/ui/hatchpage \

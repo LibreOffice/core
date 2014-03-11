@@ -24,7 +24,6 @@
 
 // Dialogs
 #define RID_SVXDLG_GALLERY_TAKE_PROGRESS        (RID_CUI_GALLERY_START + 7)
-#define RID_SVXDLG_GALLERY_ACTUALIZE_PROGRESS   (RID_CUI_GALLERY_START + 8)
 
 // Gallery-Strings
 #define RID_SVXSTR_GALLERY_NOFILES              (RID_CUI_GALLERY_START + 12)
@@ -55,8 +54,5 @@
 #define WND_BRSPRV 1
 #define BTN_MADDIN1 8
 #define BTN_MADDIN2 9
-
-#define FL_ACTUALIZE_PROGRESS 1
-#define FT_ACTUALIZE_FILE 1
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

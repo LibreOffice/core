@@ -145,34 +145,6 @@ ModalDialog RID_SVXDLG_GALLERY_TAKE_PROGRESS
 
 /******************************************************************************/
 
-ModalDialog RID_SVXDLG_GALLERY_ACTUALIZE_PROGRESS
-{
-    HelpId = HID_GALLERY_ACTUALIZE;
-    OutputSize = TRUE ;
-    Border = TRUE ;
-    SVLook = TRUE ;
-    Size = MAP_APPFONT ( 124 , 56 ) ;
-    Text [ en-US ] = "Update" ;
-    Moveable = TRUE ;
-    FixedLine FL_ACTUALIZE_PROGRESS
-    {
-        Pos = MAP_APPFONT ( 6 , 3 ) ;
-        Size = MAP_APPFONT ( 112 , 8 ) ;
-        Text [ en-US ] = "File" ;
-    };
-    FixedText FT_ACTUALIZE_FILE
-    {
-        Pos = MAP_APPFONT ( 12 , 14 ) ;
-        Size = MAP_APPFONT ( 100 , 10 ) ;
-    };
-    CancelButton BTN_CANCEL
-    {
-        Pos = MAP_APPFONT ( 37 , 36 ) ;
-        Size = MAP_APPFONT ( 50 , 14 ) ;
-        TabStop = TRUE ;
-    };
-};
-
 String RID_SVXSTR_GALLERY_NOFILES
 {
     Text [ en-US ] = "<No Files>" ;

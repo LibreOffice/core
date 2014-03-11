@@ -443,21 +443,16 @@ void TakeProgress::StartExecuteModal( const Link& rEndDialogHdl )
 
 
 // - ActualizeProgress -
-
-
-ActualizeProgress::ActualizeProgress( Window* pWindow, GalleryTheme* pThm ) :
-    ModalDialog             ( pWindow, CUI_RES( RID_SVXDLG_GALLERY_ACTUALIZE_PROGRESS ) ),
-    aFtActualizeFile        ( this, CUI_RES( FT_ACTUALIZE_FILE ) ),
-    aFLActualizeProgress   ( this, CUI_RES( FL_ACTUALIZE_PROGRESS ) ),
-    aBtnCancel              ( this, CUI_RES( BTN_CANCEL ) ),
-    pTimer(NULL),
-    pTheme                  ( pThm )
+ActualizeProgress::ActualizeProgress(Window* pWindow, GalleryTheme* pThm)
+    : ModalDialog(pWindow, "GalleryUpdateProgress",
+        "cui/ui/galleryupdateprogress.ui")
+    , pTimer(NULL)
+    , pTheme(pThm)
 {
-    FreeResource();
-    aBtnCancel.SetClickHdl( LINK( this, ActualizeProgress, ClickCancelBtn ) );
+    get(m_pFtActualizeFile, "file");
+    get(m_pBtnCancel, "cancel");
+    m_pBtnCancel->SetClickHdl( LINK( this, ActualizeProgress, ClickCancelBtn ) );
 }
-
-
 
 short ActualizeProgress::Execute()
 {
@@ -515,9 +510,9 @@ IMPL_LINK( ActualizeProgress, ActualizeHdl, INetURLObject*, pURL )
 
     if( pURL )
     {
-        aFtActualizeFile.SetText( GetReducedString( *pURL, 30 ) );
-        aFtActualizeFile.Flush();
-        aFtActualizeFile.Sync();
+        m_pFtActualizeFile->SetText( GetReducedString( *pURL, 30 ) );
+        m_pFtActualizeFile->Flush();
+        m_pFtActualizeFile->Sync();
     }
 
     return 0;

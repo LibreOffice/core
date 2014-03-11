@@ -151,10 +151,8 @@ public:
 class ActualizeProgress : public ModalDialog
 {
 private:
-
-    FixedText           aFtActualizeFile;
-    FixedLine           aFLActualizeProgress;
-    CancelButton        aBtnCancel;
+    FixedText*          m_pFtActualizeFile;
+    CancelButton*       m_pBtnCancel;
     Timer*              pTimer;
     GalleryTheme*       pTheme;
     GalleryProgress     aStatusProgress;
