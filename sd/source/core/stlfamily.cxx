@@ -343,10 +343,9 @@ sal_Bool SAL_CALL SdStyleFamily::hasElements() throw(RuntimeException, std::exce
     else
     {
         SfxStyleSheetIteratorPtr aSSSIterator = boost::make_shared<SfxStyleSheetIterator>(mxPool.get(), mnFamily);
-        for ( SfxStyleSheetBase* pStyle = aSSSIterator->First(); pStyle;
-                                 pStyle = aSSSIterator->Next() )
+        if (aSSSIterator->First())
         {
-                return sal_True;
+            return sal_True;
         }
     }
 
