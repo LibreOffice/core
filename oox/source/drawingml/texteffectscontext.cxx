@@ -56,21 +56,43 @@ OUString lclGetNameForElementId(sal_uInt32 aId)
         aIdMap[OOX_TOKEN(w14, contourClr)]   = "contourClr";
         aIdMap[OOX_TOKEN(w14, styleSet)]     = "styleSet";
 
-        aIdMap[OOX_TOKEN(w14, glow)]         = "CharGlowTextEffect";
-        aIdMap[OOX_TOKEN(w14, shadow)]       = "CharShadowTextEffect";
-        aIdMap[OOX_TOKEN(w14, reflection)]   = "CharReflectionTextEffect";
-        aIdMap[OOX_TOKEN(w14, textOutline)]  = "CharTextOutlineTextEffect";
-        aIdMap[OOX_TOKEN(w14, textFill)]     = "CharTextFillTextEffect";
-        aIdMap[OOX_TOKEN(w14, scene3d)]      = "CharScene3DTextEffect";
-        aIdMap[OOX_TOKEN(w14, props3d)]      = "CharProps3DTextEffect";
-        aIdMap[OOX_TOKEN(w14, ligatures)]    = "CharLigaturesTextEffect";
-        aIdMap[OOX_TOKEN(w14, numForm)]      = "CharNumFormTextEffect";
-        aIdMap[OOX_TOKEN(w14, numSpacing)]   = "CharNumSpacingTextEffect";
-        aIdMap[OOX_TOKEN(w14, stylisticSets)]= "CharStylisticSetsTextEffect";
-        aIdMap[OOX_TOKEN(w14, cntxtAlts)]    = "CharCntxtAltsTextEffect";
+        aIdMap[OOX_TOKEN(w14, glow)]         = "glow";
+        aIdMap[OOX_TOKEN(w14, shadow)]       = "shadow";
+        aIdMap[OOX_TOKEN(w14, reflection)]   = "reflection";
+        aIdMap[OOX_TOKEN(w14, textOutline)]  = "textOutline";
+        aIdMap[OOX_TOKEN(w14, textFill)]     = "textFill";
+        aIdMap[OOX_TOKEN(w14, scene3d)]      = "scene3d";
+        aIdMap[OOX_TOKEN(w14, props3d)]      = "props3d";
+        aIdMap[OOX_TOKEN(w14, ligatures)]    = "ligatures";
+        aIdMap[OOX_TOKEN(w14, numForm)]      = "numForm";
+        aIdMap[OOX_TOKEN(w14, numSpacing)]   = "numSpacing";
+        aIdMap[OOX_TOKEN(w14, stylisticSets)]= "stylisticSets";
+        aIdMap[OOX_TOKEN(w14, cntxtAlts)]    = "cntxtAlts";
     }
 
     return aIdMap[aId];
+}
+
+OUString lclGetGrabBagName(sal_uInt32 aId)
+{
+    static std::map<sal_uInt32, OUString> aGrabBagNameMap;
+    if(aGrabBagNameMap.empty())
+    {
+        aGrabBagNameMap[OOX_TOKEN(w14, glow)]         = "CharGlowTextEffect";
+        aGrabBagNameMap[OOX_TOKEN(w14, shadow)]       = "CharShadowTextEffect";
+        aGrabBagNameMap[OOX_TOKEN(w14, reflection)]   = "CharReflectionTextEffect";
+        aGrabBagNameMap[OOX_TOKEN(w14, textOutline)]  = "CharTextOutlineTextEffect";
+        aGrabBagNameMap[OOX_TOKEN(w14, textFill)]     = "CharTextFillTextEffect";
+        aGrabBagNameMap[OOX_TOKEN(w14, scene3d)]      = "CharScene3DTextEffect";
+        aGrabBagNameMap[OOX_TOKEN(w14, props3d)]      = "CharProps3DTextEffect";
+        aGrabBagNameMap[OOX_TOKEN(w14, ligatures)]    = "CharLigaturesTextEffect";
+        aGrabBagNameMap[OOX_TOKEN(w14, numForm)]      = "CharNumFormTextEffect";
+        aGrabBagNameMap[OOX_TOKEN(w14, numSpacing)]   = "CharNumSpacingTextEffect";
+        aGrabBagNameMap[OOX_TOKEN(w14, stylisticSets)]= "CharStylisticSetsTextEffect";
+        aGrabBagNameMap[OOX_TOKEN(w14, cntxtAlts)]    = "CharCntxtAltsTextEffect";
+    }
+
+    return aGrabBagNameMap[aId];
 }
 
 const char constAttributesSequenceName[] = "attributes";
@@ -257,9 +279,13 @@ void TextEffectsContext::processAttributes(const AttributeList& rAttribs)
 
 void TextEffectsContext::onStartElement(const oox::AttributeList& rAttribs)
 {
-    OUString aElementName = lclGetNameForElementId(mnCurrentElement);
     if(mpGrabBagStack.get() == NULL)
-        mpGrabBagStack.reset(new GrabBagStack(aElementName));
+    {
+        OUString aGrabBagName = lclGetGrabBagName(mnCurrentElement);
+        mpGrabBagStack.reset(new GrabBagStack(aGrabBagName));
+    }
+
+    OUString aElementName = lclGetNameForElementId(mnCurrentElement);
     mpGrabBagStack->push(aElementName);
     processAttributes(rAttribs);
 }
@@ -271,22 +297,12 @@ void TextEffectsContext::onEndElement()
 
     if (mpGrabBagStack->isStackEmpty())
     {
-        if (aCurrentElementName == "CharGlowTextEffect" ||
-            aCurrentElementName == "CharShadowTextEffect" ||
-            aCurrentElementName == "CharReflectionTextEffect" ||
-            aCurrentElementName == "CharTextOutlineTextEffect" ||
-            aCurrentElementName == "CharTextFillTextEffect" ||
-            aCurrentElementName == "CharScene3DTextEffect" ||
-            aCurrentElementName == "CharProps3DTextEffect" ||
-            aCurrentElementName == "CharLigaturesTextEffect" ||
-            aCurrentElementName == "CharNumFormTextEffect" ||
-            aCurrentElementName == "CharNumSpacingTextEffect" ||
-            aCurrentElementName == "CharStylisticSetsTextEffect" ||
-            aCurrentElementName == "CharCntxtAltsTextEffect")
-        {
-            PropertyValue aValue = mpGrabBagStack->getRootProperty();
-            mrTextEffectsProperties.push_back(aValue);
-        }
+        Sequence<PropertyValue> aSeq;
+        PropertyValue aPropertyValue = mpGrabBagStack->getRootProperty();
+        aPropertyValue.Value >>= aSeq;
+        aPropertyValue.Value = makeAny(aSeq[0]);
+
+        mrTextEffectsProperties.push_back(aPropertyValue);
     }
 
 }
