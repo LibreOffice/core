@@ -20,6 +20,7 @@
 #include "SchXMLSeries2Context.hxx"
 #include "SchXMLPlotAreaContext.hxx"
 #include "SchXMLRegressionCurveObjectContext.hxx"
+#include "SchXMLPropertyMappingContext.hxx"
 #include "SchXMLTools.hxx"
 #include "PropertyMap.hxx"
 
@@ -673,6 +674,11 @@ SvXMLImportContext* SchXMLSeries2Context::CreateChildContext(
         case XML_TOK_SERIES_DATA_POINT:
             pContext = new SchXMLDataPointContext( GetImport(), rLocalName,
                                                    mrStyleList, m_xSeries, mnDataPointIndex, mbSymbolSizeIsMissingInFile );
+            break;
+        case XML_TOK_SERIES_PROPERTY_MAPPING:
+            pContext = new SchXMLPropertyMappingContext( mrImportHelper,
+                    GetImport(), rLocalName,
+                    mrLSequencesPerIndex, m_xSeries );
             break;
 
         default:

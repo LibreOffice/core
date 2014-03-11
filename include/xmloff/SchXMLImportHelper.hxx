@@ -78,6 +78,7 @@ private:
     SvXMLTokenMap* mpAutoStyleAttrTokenMap;
     SvXMLTokenMap* mpCellAttrTokenMap;
     SvXMLTokenMap* mpSeriesAttrTokenMap;
+    SvXMLTokenMap* mpPropMappingAttrTokenMap;
     SvXMLTokenMap* mpRegEquationAttrTokenMap;
 
 public:
@@ -112,6 +113,7 @@ public:
     const SvXMLTokenMap& GetChartElemTokenMap();
     const SvXMLTokenMap& GetPlotAreaElemTokenMap();
     const SvXMLTokenMap& GetSeriesElemTokenMap();
+    const SvXMLTokenMap& GetPropMappingAttrTokenMap();
 
     const SvXMLTokenMap& GetChartAttrTokenMap();
     const SvXMLTokenMap& GetPlotAreaAttrTokenMap();

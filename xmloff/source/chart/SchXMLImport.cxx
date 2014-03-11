@@ -96,6 +96,7 @@ SchXMLImportHelper::SchXMLImportHelper() :
         mpAutoStyleAttrTokenMap( 0 ),
         mpCellAttrTokenMap( 0 ),
         mpSeriesAttrTokenMap( 0 ),
+        mpPropMappingAttrTokenMap( 0 ),
         mpRegEquationAttrTokenMap( 0 )
 {
 }
@@ -124,6 +125,7 @@ SchXMLImportHelper::~SchXMLImportHelper()
         delete mpCellAttrTokenMap;
     if( mpSeriesAttrTokenMap )
         delete mpSeriesAttrTokenMap;
+    delete mpPropMappingAttrTokenMap;
 }
 
 SvXMLImportContext* SchXMLImportHelper::CreateChartContext(
@@ -247,6 +249,7 @@ const SvXMLTokenMap& SchXMLImportHelper::GetSeriesElemTokenMap()
     { XML_NAMESPACE_CHART,  XML_MEAN_VALUE,       XML_TOK_SERIES_MEAN_VALUE_LINE  },
     { XML_NAMESPACE_CHART,  XML_REGRESSION_CURVE, XML_TOK_SERIES_REGRESSION_CURVE },
     { XML_NAMESPACE_CHART,  XML_ERROR_INDICATOR,  XML_TOK_SERIES_ERROR_INDICATOR  },
+    { XML_NAMESPACE_LO_EXT, XML_PROPERTY_MAPPING, XML_TOK_SERIES_PROPERTY_MAPPING },
     XML_TOKEN_MAP_END
 };
 
@@ -346,6 +349,23 @@ const SvXMLTokenMap& SchXMLImportHelper::GetSeriesAttrTokenMap()
     } // if( ! mpSeriesAttrTokenMap )
 
     return *mpSeriesAttrTokenMap;
+}
+
+const SvXMLTokenMap& SchXMLImportHelper::GetPropMappingAttrTokenMap()
+{
+    if( !mpPropMappingAttrTokenMap )
+    {
+        static const SvXMLTokenMapEntry aPropMappingAttrTokenMap[] =
+        {
+            { XML_NAMESPACE_LO_EXT, XML_PROPERTY, XML_TOK_PROPERTY_MAPPING_PROPERTY },
+            { XML_NAMESPACE_LO_EXT, XML_CELL_RANGE_ADDRESS, XML_TOK_PROPERTY_MAPPING_RANGE },
+            XML_TOKEN_MAP_END
+        };
+
+        mpPropMappingAttrTokenMap = new SvXMLTokenMap( aPropMappingAttrTokenMap );
+    }
+
+    return *mpPropMappingAttrTokenMap;
 }
 
 const SvXMLTokenMap& SchXMLImportHelper::GetRegEquationAttrTokenMap()
