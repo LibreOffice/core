@@ -1507,10 +1507,10 @@ void WW8AttributeOutput::CharRotate( const SvxCharRotateItem& rRotate )
     if ( m_rWW8Export.bWrtWW8 && !m_rWW8Export.IsInTable() )
     {
         // #i36867 In word the text in a table is rotated via the TC or NS_sprm::LN_TTextFlow
-        // This means you can only rotate all or none of the text adding NS_sprm::LN_CEastAsianLayout
+        // This means you can only rotate all or none of the text adding NS_sprm::LN_CFELayout
         // here corrupts the table, hence !m_rWW8Export.bIsInTable
 
-        m_rWW8Export.InsUInt16( NS_sprm::LN_CEastAsianLayout );
+        m_rWW8Export.InsUInt16( NS_sprm::LN_CFELayout );
         m_rWW8Export.pO->push_back( (sal_uInt8)0x06 ); //len 6
         m_rWW8Export.pO->push_back( (sal_uInt8)0x01 );
 
@@ -3351,7 +3351,7 @@ void WW8AttributeOutput::CharTwoLines( const SvxTwoLinesItem& rTwoLines )
         if( !m_rWW8Export.bWrtWW8 )
             return;
 
-        m_rWW8Export.InsUInt16( NS_sprm::LN_CEastAsianLayout );
+        m_rWW8Export.InsUInt16( NS_sprm::LN_CFELayout );
         m_rWW8Export.pO->push_back( (sal_uInt8)0x06 ); //len 6
         m_rWW8Export.pO->push_back( (sal_uInt8)0x02 );
 

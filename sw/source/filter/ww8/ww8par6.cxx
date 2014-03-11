@@ -6054,7 +6054,7 @@ const wwSprmDispatcher *GetWW8SprmDispatcher()
                                                      //tap.rgtc[].vertAlign;complex
                                                      //variable length always
                                                      //recorded as 3 byte;
-        {0xCA78, &SwWW8ImplReader::Read_DoubleLine_Rotate},
+        {NS_sprm::LN_CFELayout, &SwWW8ImplReader::Read_DoubleLine_Rotate},
         {0x6649, 0},                                 //undocumented
         {0xF614, 0},                                 //"sprmTTableWidth"
                                                      //recorded as 3 bytes;

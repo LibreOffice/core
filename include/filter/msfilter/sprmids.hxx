@@ -280,7 +280,7 @@ namespace NS_sprm {
     const sal_uInt16 LN_PBorderBetween = 0xc652;
     const sal_uInt16 LN_CBorder = 0xca72;
     const sal_uInt16 LN_TTPreferredWidth = 0xf614;
-    const sal_uInt16 LN_CEastAsianLayout = 0xca78;
+    const sal_uInt16 LN_CFELayout = 0xca78;
     const sal_uInt16 LN_TWidthBefore = 0xf617;
     const sal_uInt16 LN_TWidthAfter = 0xf618;
     const sal_uInt16 LN_PDxaLeft1 = 0x8460;

@@ -727,7 +727,7 @@ const wwSprmSearcher *wwSprmParser::GetWW8SprmSearcher()
         {0xD62A, 1, L_FIX}, // "sprmTDiagLine" ;;;
         {0xD62B, 0, L_VAR}, // "sprmTVertMerge" tap.rgtc[].vertMerge
         {0xD62C, 0, L_VAR}, // "sprmTVertAlign" tap.rgtc[].vertAlign
-        {0xCA78, 0, L_VAR}, // undocumented "sprmCDoubleLine ?"
+        {NS_sprm::LN_CFELayout, 0, L_VAR},
         {0x6649, 4, L_FIX}, // undocumented
         {0xF614, 3, L_FIX}, // undocumented
         {0xD612, 0, L_VAR}, // undocumented, new background colours.
