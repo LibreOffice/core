@@ -101,7 +101,7 @@ void SvxTbxCtlDraw::toggleToolbox()
 
 
 
-void SvxTbxCtlDraw::Select( sal_Bool )
+void SvxTbxCtlDraw::Select( bool )
 {
     toggleToolbox();
 }

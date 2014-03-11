@@ -44,7 +44,7 @@ public:
 
     SFX_DECL_TOOLBOX_CONTROL();
 
-    virtual void                Select( sal_Bool bMod1 = sal_False );
+    virtual void                Select( bool bMod1 = false );
     virtual void                StateChanged( sal_uInt16 nSID, SfxItemState eState,
                                               const SfxPoolItem* pState );
     virtual SfxPopupWindowType  GetPopupWindowType() const;

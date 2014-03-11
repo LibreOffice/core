@@ -128,7 +128,7 @@ SfxPopupWindow* SvxTbxCtlCustomShapes::CreatePopupWindow()
 
 
 
-void SvxTbxCtlCustomShapes::Select( sal_Bool /*bMod1*/ )
+void SvxTbxCtlCustomShapes::Select( bool /*bMod1*/ )
 {
      if ( !m_aCommand.isEmpty() )
     {

@@ -270,7 +270,7 @@ class SVX_DLLPUBLIC SvxColorExtToolBoxControl : public SfxToolBoxControl
 
     ::svx::ToolboxButtonColorUpdater*   pBtnUpdater;
     Color                               mLastColor;
-    sal_Bool                            bChoiceFromPalette;
+    bool                                bChoiceFromPalette;
 
 public:
     SFX_DECL_TOOLBOX_CONTROL();
@@ -281,7 +281,7 @@ public:
                                               const SfxPoolItem* pState );
     virtual SfxPopupWindowType  GetPopupWindowType() const;
     virtual SfxPopupWindow*     CreatePopupWindow();
-    virtual void                Select( sal_Bool bMod1 = sal_False );
+    virtual void                Select( bool bMod1 = false );
 };
 
 

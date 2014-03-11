@@ -2471,7 +2471,7 @@ SvxColorExtToolBoxControl::SvxColorExtToolBoxControl(
     mLastColor( COL_AUTO )
 {
     rTbx.SetItemBits( nId, TIB_DROPDOWN | rTbx.GetItemBits( nId ) );
-    bChoiceFromPalette = sal_False;
+    bChoiceFromPalette = false;
 
     // The following commands are available at the various modules
     switch( nSlotId )
@@ -2548,7 +2548,7 @@ SfxPopupWindow* SvxColorExtToolBoxControl::CreatePopupWindow()
         FLOATWIN_POPUPMODE_GRABFOCUS|FLOATWIN_POPUPMODE_ALLOWTEAROFF|FLOATWIN_POPUPMODE_NOAPPFOCUSCLOSE );
     pColorWin->StartSelection();
     SetPopupWindow( pColorWin );
-    bChoiceFromPalette = sal_True;
+    bChoiceFromPalette = true;
     return pColorWin;
 }
 
@@ -2568,7 +2568,7 @@ void SvxColorExtToolBoxControl::StateChanged(
 
         if (bChoiceFromPalette)
         {
-            bChoiceFromPalette = sal_False;
+            bChoiceFromPalette = false;
 
             const SvxColorItem* pItem = 0;
             if ( SFX_ITEM_DONTCARE != eState )
@@ -2585,7 +2585,7 @@ void SvxColorExtToolBoxControl::StateChanged(
 
 
 
-void SvxColorExtToolBoxControl::Select( sal_Bool )
+void SvxColorExtToolBoxControl::Select( bool )
 {
     OUString aCommand;
     OUString aParamName;

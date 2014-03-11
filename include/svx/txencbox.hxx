@@ -52,7 +52,7 @@ public:
             RTL_TEXTENCODING_GB_18030. Normally, this flag should be set to
             <TRUE/> whenever the box is used in import dialogs. */
     void                FillFromTextEncodingTable(
-                            sal_Bool bExcludeImportSubsets = sal_False,
+                            bool bExcludeImportSubsets = false,
                             sal_uInt32 nExcludeInfoFlags = 0,
                             sal_uInt32 nButIncludeInfoFlags = 0
                             );
@@ -73,7 +73,7 @@ public:
             RTL_TEXTENCODING_GB_18030. Normally, this flag should be set to
             <TRUE/> whenever the box is used in import dialogs. */
     void                FillFromDbTextEncodingMap(
-                            sal_Bool bExcludeImportSubsets = sal_False,
+                            bool bExcludeImportSubsets = false,
                             sal_uInt32 nExcludeInfoFlags = 0,
                             sal_uInt32 nButIncludeInfoFlags = 0
                             );
@@ -94,7 +94,7 @@ public:
                             sal_Int32  nPos = LISTBOX_APPEND );
 
     void                SelectTextEncoding( const rtl_TextEncoding nEnc,
-                            sal_Bool bSelect = sal_True );
+                            bool bSelect = true );
 
     rtl_TextEncoding    GetSelectTextEncoding() const;
 

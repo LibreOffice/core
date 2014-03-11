@@ -81,7 +81,7 @@ sal_Int32 SvxTextEncodingBox::EncodingToPos_Impl( rtl_TextEncoding nEnc ) const
 
 
 void SvxTextEncodingBox::FillFromTextEncodingTable(
-        sal_Bool bExcludeImportSubsets, sal_uInt32 nExcludeInfoFlags,
+        bool bExcludeImportSubsets, sal_uInt32 nExcludeInfoFlags,
         sal_uInt32 nButIncludeInfoFlags )
 {
     rtl_TextEncodingInfo aInfo;
@@ -131,7 +131,7 @@ void SvxTextEncodingBox::FillFromTextEncodingTable(
 
 
 void SvxTextEncodingBox::FillFromDbTextEncodingMap(
-        sal_Bool bExcludeImportSubsets, sal_uInt32 nExcludeInfoFlags,
+        bool bExcludeImportSubsets, sal_uInt32 nExcludeInfoFlags,
         sal_uInt32 nButIncludeInfoFlags )
 {
 #ifdef DISABLE_DBCONNECTIVITY
@@ -193,7 +193,7 @@ void SvxTextEncodingBox::FillFromDbTextEncodingMap(
 
 void SvxTextEncodingBox::FillWithMimeAndSelectBest()
 {
-    FillFromTextEncodingTable( sal_False, 0xffffffff, RTL_TEXTENCODING_INFO_MIME );
+    FillFromTextEncodingTable( false, 0xffffffff, RTL_TEXTENCODING_INFO_MIME );
     rtl_TextEncoding nEnc = SvtSysLocale::GetBestMimeEncoding();
     SelectTextEncoding( nEnc );
 }
@@ -232,7 +232,7 @@ rtl_TextEncoding SvxTextEncodingBox::GetSelectTextEncoding() const
 
 
 
-void SvxTextEncodingBox::SelectTextEncoding( const rtl_TextEncoding nEnc, sal_Bool bSelect )
+void SvxTextEncodingBox::SelectTextEncoding( const rtl_TextEncoding nEnc, bool bSelect )
 {
     sal_Int32 nAt = EncodingToPos_Impl( nEnc );
 
