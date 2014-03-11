@@ -171,7 +171,7 @@ SvxZoomSliderControl::SvxZoomSliderControl( sal_uInt16 _nSlotId,  sal_uInt16 _nI
     mpImpl->maIncreaseButton = Image( SVX_RES( RID_SVXBMP_SLIDERINCREASE ) );
     mpImpl->maDecreaseButton = Image( SVX_RES( RID_SVXBMP_SLIDERDECREASE ) );
 
-#ifndef MACOSX
+//#ifndef MACOSX
     if ( _rStb.GetDPIScaleFactor() > 1)
     {
         Image arr[3] = {mpImpl->maSliderButton, mpImpl->maIncreaseButton, mpImpl->maDecreaseButton};
@@ -187,7 +187,7 @@ SvxZoomSliderControl::SvxZoomSliderControl( sal_uInt16 _nSlotId,  sal_uInt16 _nI
         mpImpl->maIncreaseButton = arr[1];
         mpImpl->maDecreaseButton = arr[2];
     }
-#endif
+//#endif
 }
 
 

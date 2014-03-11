@@ -1563,7 +1563,6 @@ void SwContentTree::Display( bool bActive )
     {
         aEntryImages = ImageList(SW_RES(IMG_NAVI_ENTRYBMP));
 
-#ifndef MACSOX
         if ( GetDPIScaleFactor() > 1 )
         {
             for (short i = 0; i < aEntryImages.GetImageCount(); i++)
@@ -1575,7 +1574,6 @@ void SwContentTree::Display( bool bActive )
                 aEntryImages.ReplaceImage(rImageName, Image(b));
             }
         }
-#endif
         bIsImageListInitialized = true;
     }
     // First read the selected entry to select it later again if necessary

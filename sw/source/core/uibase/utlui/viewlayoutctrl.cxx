@@ -52,7 +52,6 @@ SwViewLayoutControl::SwViewLayoutControl( sal_uInt16 _nSlotId, sal_uInt16 _nId, 
     mpImpl->maImageBookMode             = Image( SW_RES(IMG_VIEWLAYOUT_BOOKMODE) );
     mpImpl->maImageBookMode_Active      = Image( SW_RES(IMG_VIEWLAYOUT_BOOKMODE_ACTIVE) );
 
-#ifndef MACOSX
     if ( rStb.GetDPIScaleFactor() > 1)
     {
         Image arr[6] = {mpImpl->maImageSingleColumn, mpImpl->maImageSingleColumn_Active,
@@ -76,7 +75,7 @@ SwViewLayoutControl::SwViewLayoutControl( sal_uInt16 _nSlotId, sal_uInt16 _nId, 
         mpImpl->maImageBookMode = arr[4];
         mpImpl->maImageBookMode_Active = arr[5];
     }
-#endif
+
 }
 
 SwViewLayoutControl::~SwViewLayoutControl()

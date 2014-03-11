@@ -1236,7 +1236,6 @@ void ToolBox::SetItemImage( sal_uInt16 nItemId, const Image& rImage )
     {
         Image aImage(rImage);
 
-#ifndef MACOSX
         if ( GetDPIScaleFactor() > 1)
         {
             BitmapEx aBitmap(aImage.GetBitmapEx());
@@ -1249,7 +1248,7 @@ void ToolBox::SetItemImage( sal_uInt16 nItemId, const Image& rImage )
                 aImage = Image(aBitmap);
             }
         }
-#endif
+
         ImplToolItem* pItem = &mpData->m_aItems[nPos];
         // only once all is calculated, do extra work
         if ( !mbCalc )
