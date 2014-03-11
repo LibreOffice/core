@@ -201,9 +201,9 @@ namespace comphelper
         // helper
         /** notifies all AccessibleEventListeners of a certain event
 
-        @precond    not too be called with our mutex locked
+        @precond    not to be called with our mutex locked
         @param  _nEventId
-            the id of the even. See AccessibleEventType
+            the id of the event. See AccessibleEventType
         @param  _rOldValue
             the old value to be notified
         @param  _rNewValue
