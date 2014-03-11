@@ -36,7 +36,6 @@
 #define STR_DELETE_TEMPLATE                 (RID_SFX_DOC_START+15)
 #define MSG_REGION_NOTEMPTY                 (RID_SFX_DOC_START+17)
 
-#define DLG_NEW_FILE                        (RID_SFX_DOC_START+1)
 #define DLG_DOC_TEMPLATE                    (RID_SFX_DOC_START+2)
 
 #define DLG_TEMPLATE_MANAGER                (RID_SFX_DOC_START+4)

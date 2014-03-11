@@ -31,23 +31,21 @@ class SfxPreviewBase_Impl : public Window
 protected:
     ::boost::shared_ptr<GDIMetaFile> pMetaFile;
 public:
-                    SfxPreviewBase_Impl( Window* pParent,
-                                         const ResId& rResId );
-                    ~SfxPreviewBase_Impl(  );
+    SfxPreviewBase_Impl(Window* pParent, WinBits nStyle);
     void            SetObjectShell( SfxObjectShell* pObj );
     virtual void    Resize();
+    virtual Size    GetOptimalSize() const;
 };
-
-
 
 class SfxPreviewWin_Impl: public SfxPreviewBase_Impl
 {
 protected:
     virtual void    Paint( const Rectangle& rRect );
 public:
-                    SfxPreviewWin_Impl( Window* pParent,
-                                    const ResId& rResId )
-                    : SfxPreviewBase_Impl( pParent, rResId ){};
+    SfxPreviewWin_Impl(Window* pParent, WinBits nStyle)
+        : SfxPreviewBase_Impl(pParent, nStyle)
+    {
+    }
     static void     ImpPaint(
         const Rectangle& rRect, GDIMetaFile* pFile, Window* pWindow );
 };

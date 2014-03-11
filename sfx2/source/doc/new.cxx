@@ -19,8 +19,9 @@
 
 #include <comphelper/string.hxx>
 #include <sfx2/new.hxx>
+#include <vcl/builder.hxx>
+#include <vcl/layout.hxx>
 #include <vcl/msgbox.hxx>
-#include <vcl/morebtn.hxx>
 #include <svtools/svmedit.hxx>
 #include <svl/itemset.hxx>
 #include <svl/eitem.hxx>
@@ -29,7 +30,6 @@
 #include <tools/urlobj.hxx>
 #include <unotools/localfilehelper.hxx>
 
-#include "new.hrc"
 #include "doc.hrc"
 #include <sfx2/app.hxx>
 #include <sfx2/objsh.hxx>
@@ -38,12 +38,6 @@
 #include "preview.hxx"
 #include <sfx2/printer.hxx>
 #include <vcl/waitobj.hxx>
-
-
-
-#define MORE_BTN(x) pMoreBt->x
-
-
 
 void SfxPreviewBase_Impl::SetObjectShell( SfxObjectShell* pObj )
 {
@@ -55,18 +49,20 @@ void SfxPreviewBase_Impl::SetObjectShell( SfxObjectShell* pObj )
 }
 
 SfxPreviewBase_Impl::SfxPreviewBase_Impl(
-    Window* pParent, const ResId& rResId )
-    : Window(pParent, rResId), pMetaFile()
-{
-}
-
-SfxPreviewBase_Impl::~SfxPreviewBase_Impl()
+    Window* pParent, WinBits nStyle)
+    : Window(pParent, nStyle)
+    , pMetaFile()
 {
 }
 
 void SfxPreviewBase_Impl::Resize()
 {
     Invalidate();
+}
+
+Size SfxPreviewBase_Impl::GetOptimalSize() const
+{
+    return LogicToPixel(Size(127, 129), MAP_APPFONT);
 }
 
 void SfxPreviewWin_Impl::ImpPaint(
@@ -119,37 +115,26 @@ void SfxPreviewWin_Impl::Paint( const Rectangle& rRect )
     ImpPaint( rRect, pMetaFile.get(), this );
 }
 
+extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeSfxPreviewWin(Window *pParent, VclBuilder::stringmap &)
+{
+    return new SfxPreviewWin_Impl(pParent, 0);
+}
+
 class SfxNewFileDialog_Impl
 {
-    FixedText aRegionFt;
-    ListBox aRegionLb;
-    FixedText aTemplateFt;
-    ListBox aTemplateLb;
+    ListBox*  m_pRegionLb;
+    ListBox*  m_pTemplateLb;
 
-    CheckBox aPreviewBtn;
-    SfxPreviewWin_Impl aPreviewWin;
+    SfxPreviewWin_Impl* m_pPreviewWin;
 
-    FixedText aTitleFt;
-    Edit aTitleEd;
-    FixedText aThemaFt;
-    Edit aThemaEd;
-    FixedText aKeywordsFt;
-    Edit aKeywordsEd;
-    FixedText aDescFt;
-    MultiLineEdit aDescEd;
-    FixedLine aDocinfoGb;
+    CheckBox* m_pTextStyleCB;
+    CheckBox* m_pFrameStyleCB;
+    CheckBox* m_pPageStyleCB;
+    CheckBox* m_pNumStyleCB;
+    CheckBox* m_pMergeStyleCB;
+    PushButton* m_pLoadFilePB;
 
-    CheckBox aTextStyleCB;
-    CheckBox aFrameStyleCB;
-    CheckBox aPageStyleCB;
-    CheckBox aNumStyleCB;
-    CheckBox aMergeStyleCB;
-    PushButton aLoadFilePB;
-
-    OKButton aOkBt;
-    CancelButton aCancelBt;
-    HelpButton aHelpBt;
-    MoreButton* pMoreBt;
+    VclExpander* m_pMoreBt;
     Timer aPrevTimer;
     OUString aNone;
     OUString sLoadTemplate;
@@ -167,7 +152,6 @@ class SfxNewFileDialog_Impl
     DECL_LINK( DoubleClick, ListBox * );
     void TogglePreview(CheckBox *);
     DECL_LINK( Expand, void * );
-    DECL_LINK( PreviewClick, CheckBox * );
     DECL_LINK(LoadFile, void *);
     sal_uInt16  GetSelectedTemplatePos() const;
 
@@ -186,19 +170,10 @@ public:
     void    SetTemplateFlags(sal_uInt16 nSet);
 };
 
-
-
-
 void SfxNewFileDialog_Impl::ClearInfo()
 {
     const OUString aNo;
-    aTitleEd.SetText(aNo);
-    aThemaEd.SetText(aNo);
-    aKeywordsEd.SetText(aNo);
-    aDescEd.SetText(aNo);
 }
-
-
 
 IMPL_LINK_NOARG(SfxNewFileDialog_Impl, Update)
 {
@@ -213,15 +188,15 @@ IMPL_LINK_NOARG(SfxNewFileDialog_Impl, Update)
     if(!nEntry)
     {
         ClearInfo();
-        aPreviewWin.Invalidate();
-        aPreviewWin.SetObjectShell( 0);
+        m_pPreviewWin->Invalidate();
+        m_pPreviewWin->SetObjectShell( 0);
         return 0;
     }
 
-    if ( aPreviewBtn.IsChecked() && (nFlags & SFXWB_PREVIEW) == SFXWB_PREVIEW)
+    if ( m_pMoreBt->get_expanded() && (nFlags & SFXWB_PREVIEW) == SFXWB_PREVIEW)
     {
 
-        OUString aFileName = aTemplates.GetPath( aRegionLb.GetSelectEntryPos(), nEntry-1);
+        OUString aFileName = aTemplates.GetPath( m_pRegionLb->GetSelectEntryPos(), nEntry-1);
         INetURLObject aTestObj( aFileName );
         if( aTestObj.GetProtocol() == INET_PROT_NOT_VALID )
         {
@@ -263,12 +238,12 @@ IMPL_LINK_NOARG(SfxNewFileDialog_Impl, Update)
             Application::SetDefDialogParent( pParent );
             if ( !xDocShell.Is() )
             {
-                aPreviewWin.SetObjectShell( 0 );
+                m_pPreviewWin->SetObjectShell( 0 );
                 return sal_False;
             }
         }
 
-        aPreviewWin.SetObjectShell( xDocShell );
+        m_pPreviewWin->SetObjectShell( xDocShell );
     }
     return sal_True;
 }
@@ -282,55 +257,30 @@ IMPL_LINK( SfxNewFileDialog_Impl, RegionSelect, ListBox *, pBox )
 
     const sal_uInt16 nRegion = pBox->GetSelectEntryPos();
     const sal_uInt16 nCount = aTemplates.GetRegionCount()? aTemplates.GetCount(nRegion): 0;
-    aTemplateLb.SetUpdateMode(false);
-    aTemplateLb.Clear();
-    OUString aSel = aRegionLb.GetSelectEntry();
+    m_pTemplateLb->SetUpdateMode(false);
+    m_pTemplateLb->Clear();
+    OUString aSel = m_pRegionLb->GetSelectEntry();
     sal_Int32 nc = aSel.indexOf('(');
     if (nc != -1 && nc != 0)
         aSel = aSel.replaceAt(nc-1, 1, "");
     if ( aSel.compareToIgnoreAsciiCase( SfxResId(STR_STANDARD).toString() ) == 0 )
-        aTemplateLb.InsertEntry(aNone);
+        m_pTemplateLb->InsertEntry(aNone);
     for (sal_uInt16 i = 0; i < nCount; ++i)
-        aTemplateLb.InsertEntry(aTemplates.GetName(nRegion, i));
-    aTemplateLb.SelectEntryPos(0);
-    aTemplateLb.SetUpdateMode(true);
-    aTemplateLb.Invalidate();
-    aTemplateLb.Update();
-    TemplateSelect(&aTemplateLb);
+        m_pTemplateLb->InsertEntry(aTemplates.GetName(nRegion, i));
+    m_pTemplateLb->SelectEntryPos(0);
+    m_pTemplateLb->SetUpdateMode(true);
+    m_pTemplateLb->Invalidate();
+    m_pTemplateLb->Update();
+    TemplateSelect(m_pTemplateLb);
     return 0;
 }
-
-
 
 IMPL_LINK_NOARG_INLINE_START(SfxNewFileDialog_Impl, Expand)
 {
-    TemplateSelect(&aTemplateLb);
+    TemplateSelect(m_pTemplateLb);
     return 0;
 }
 IMPL_LINK_NOARG_INLINE_END(SfxNewFileDialog_Impl, Expand)
-
-
-
-IMPL_LINK( SfxNewFileDialog_Impl, PreviewClick, CheckBox *, pBox )
-{
-    if ( xDocShell.Is() && xDocShell->GetProgress() )
-        return 0;
-
-    sal_uInt16 nEntry = GetSelectedTemplatePos();
-    if ( nEntry && pBox->IsChecked() )
-    {
-        if(!Update(0))
-            aPreviewWin.Invalidate();
-    }
-    else
-    {
-        if (xDocShell.Is())
-            xDocShell.Clear();
-        aPreviewWin.SetObjectShell( 0 );
-    }
-    return 0;
-}
-
 
 
 IMPL_LINK_NOARG(SfxNewFileDialog_Impl, TemplateSelect)
@@ -339,15 +289,13 @@ IMPL_LINK_NOARG(SfxNewFileDialog_Impl, TemplateSelect)
     if ( xDocShell && xDocShell->GetProgress() )
         return 0;
 
-    if ( !MORE_BTN(GetState()) )
+    if (!m_pMoreBt->get_expanded())
         // Dialog is not opened
         return 0;
 
     aPrevTimer.Start();
     return 0;
 }
-
-
 
 IMPL_LINK_INLINE_START( SfxNewFileDialog_Impl, DoubleClick, ListBox *, pListBox )
 {
@@ -371,14 +319,14 @@ IMPL_LINK_NOARG_INLINE_END(SfxNewFileDialog_Impl, LoadFile)
 
 sal_uInt16  SfxNewFileDialog_Impl::GetSelectedTemplatePos() const
 {
-    sal_uInt16 nEntry = aTemplateLb.GetSelectEntryPos();
-    OUString aSel = aRegionLb.GetSelectEntry();
+    sal_uInt16 nEntry = m_pTemplateLb->GetSelectEntryPos();
+    OUString aSel = m_pRegionLb->GetSelectEntry();
     sal_Int32 nc = aSel.indexOf('(');
     if (nc != -1 && nc != 0)
         aSel = aSel.replaceAt(nc-1, 1, "");
     if ( aSel.compareToIgnoreAsciiCase(SfxResId(STR_STANDARD).toString()) != 0 )
         nEntry++;
-    if (!aTemplateLb.GetSelectEntryCount())
+    if (!m_pTemplateLb->GetSelectEntryCount())
         nEntry = 0;
     return nEntry;
 }
@@ -391,147 +339,91 @@ sal_Bool SfxNewFileDialog_Impl::IsTemplate() const
 
 }
 
-
-
 OUString SfxNewFileDialog_Impl::GetTemplateFileName() const
 {
     if(!IsTemplate() || !aTemplates.GetRegionCount())
         return OUString();
-    return aTemplates.GetPath(aRegionLb.GetSelectEntryPos(),
+    return aTemplates.GetPath(m_pRegionLb->GetSelectEntryPos(),
                               GetSelectedTemplatePos()-1);
-}
-
-
-
-void AdjustPosSize_Impl(Window *pWin, short nMoveOffset, short nSizeOffset)
-{
-    Point aPos(pWin->GetPosPixel());
-    Size aSize(pWin->GetSizePixel());
-    aPos.X() -= nMoveOffset;
-    aSize.Width() += nSizeOffset;
-    pWin->SetPosSizePixel(aPos, aSize);
 }
 
 sal_uInt16  SfxNewFileDialog_Impl::GetTemplateFlags()const
 {
-    sal_uInt16 nRet = aTextStyleCB.IsChecked() ? SFX_LOAD_TEXT_STYLES : 0;
-    if(aFrameStyleCB.IsChecked())
+    sal_uInt16 nRet = m_pTextStyleCB->IsChecked() ? SFX_LOAD_TEXT_STYLES : 0;
+    if(m_pFrameStyleCB->IsChecked())
         nRet |= SFX_LOAD_FRAME_STYLES;
-    if(aPageStyleCB.IsChecked())
+    if(m_pPageStyleCB->IsChecked())
         nRet |= SFX_LOAD_PAGE_STYLES;
-    if(aNumStyleCB.IsChecked())
+    if(m_pNumStyleCB->IsChecked())
         nRet |= SFX_LOAD_NUM_STYLES;
-    if(aMergeStyleCB.IsChecked())
+    if(m_pMergeStyleCB->IsChecked())
         nRet |= SFX_MERGE_STYLES;
     return nRet;
 }
 
 void    SfxNewFileDialog_Impl::SetTemplateFlags(sal_uInt16 nSet)
 {
-    aTextStyleCB.Check(  0 != (nSet&SFX_LOAD_TEXT_STYLES ));
-    aFrameStyleCB.Check( 0 != (nSet&SFX_LOAD_FRAME_STYLES));
-    aPageStyleCB.Check(  0 != (nSet&SFX_LOAD_PAGE_STYLES ));
-    aNumStyleCB.Check(   0 != (nSet&SFX_LOAD_NUM_STYLES  ));
-    aMergeStyleCB.Check( 0 != (nSet&SFX_MERGE_STYLES     ));
+    m_pTextStyleCB->Check(  0 != (nSet&SFX_LOAD_TEXT_STYLES ));
+    m_pFrameStyleCB->Check( 0 != (nSet&SFX_LOAD_FRAME_STYLES));
+    m_pPageStyleCB->Check(  0 != (nSet&SFX_LOAD_PAGE_STYLES ));
+    m_pNumStyleCB->Check(   0 != (nSet&SFX_LOAD_NUM_STYLES  ));
+    m_pMergeStyleCB->Check( 0 != (nSet&SFX_MERGE_STYLES     ));
 }
 
 
 
 SfxNewFileDialog_Impl::SfxNewFileDialog_Impl(
     SfxNewFileDialog* pAntiImplP, sal_uInt16 nFl)
-    :   aRegionFt( pAntiImplP, SfxResId( FT_REGION ) ),
-        aRegionLb( pAntiImplP, SfxResId( LB_REGION ) ),
-        aTemplateFt( pAntiImplP, SfxResId( FT_TEMPLATE ) ),
-        aTemplateLb( pAntiImplP, SfxResId( LB_TEMPLATE ) ),
-        aPreviewBtn( pAntiImplP, SfxResId( BTN_PREVIEW ) ),
-        aPreviewWin( pAntiImplP, SfxResId( WIN_PREVIEW ) ),
-        aTitleFt( pAntiImplP, SfxResId( FT_TITLE ) ),
-        aTitleEd( pAntiImplP, SfxResId( ED_TITLE ) ),
-        aThemaFt( pAntiImplP, SfxResId( FT_THEMA ) ),
-        aThemaEd( pAntiImplP, SfxResId( ED_THEMA ) ),
-        aKeywordsFt( pAntiImplP, SfxResId( FT_KEYWORDS ) ),
-        aKeywordsEd( pAntiImplP, SfxResId( ED_KEYWORDS ) ),
-        aDescFt( pAntiImplP, SfxResId( FT_DESC ) ),
-        aDescEd( pAntiImplP, SfxResId( ED_DESC ) ),
-        aDocinfoGb( pAntiImplP, SfxResId( GB_DOCINFO ) ),
-        aTextStyleCB( pAntiImplP, SfxResId(  CB_TEXT_STYLE )),
-        aFrameStyleCB( pAntiImplP, SfxResId( CB_FRAME_STYLE )),
-        aPageStyleCB( pAntiImplP, SfxResId(  CB_PAGE_STYLE )),
-        aNumStyleCB( pAntiImplP, SfxResId(   CB_NUM_STYLE  )),
-        aMergeStyleCB( pAntiImplP, SfxResId( CB_MERGE_STYLE )),
-        aLoadFilePB( pAntiImplP, SfxResId(   PB_LOAD_FILE )),
-        aOkBt( pAntiImplP, SfxResId( BT_OK ) ),
-        aCancelBt( pAntiImplP, SfxResId( BT_CANCEL ) ),
-        aHelpBt( pAntiImplP, SfxResId( BT_HELP ) ),
-        pMoreBt( new MoreButton( pAntiImplP, SfxResId( BT_MORE ) ) ),
-        aNone(SfxResId(STR_NONE).toString()),
-        sLoadTemplate(SfxResId(STR_LOAD_TEMPLATE).toString()),
-        nFlags(nFl),
-        pAntiImpl( pAntiImplP )
+    : aNone(SfxResId(STR_NONE).toString())
+    , nFlags(nFl)
+    , pAntiImpl(pAntiImplP)
 {
-    short nMoveOffset = *(short *)pAntiImplP->GetClassRes();
-    pAntiImplP->IncrementRes(sizeof(short));
-    short nExpandSize= *(short *)pAntiImplP->GetClassRes();
-    pAntiImplP->IncrementRes(sizeof(short));
-    pAntiImplP->FreeResource();
+    pAntiImplP->get(m_pRegionLb, "categories");
+    pAntiImplP->get(m_pTemplateLb, "templates");
+
+    Size aSize(m_pRegionLb->LogicToPixel(Size(127, 72), MAP_APPFONT));
+    m_pRegionLb->set_width_request(aSize.Width());
+    m_pRegionLb->set_height_request(aSize.Height());
+    m_pTemplateLb->set_width_request(aSize.Width());
+    m_pTemplateLb->set_height_request(aSize.Height());
+
+    pAntiImplP->get(m_pTextStyleCB, "text");
+    pAntiImplP->get(m_pFrameStyleCB, "frame");
+    pAntiImplP->get(m_pPageStyleCB, "pages");
+    pAntiImplP->get(m_pNumStyleCB, "numbering");
+    pAntiImplP->get(m_pMergeStyleCB, "overwrite");
+    pAntiImplP->get(m_pMoreBt, "expander");
+    pAntiImplP->get(m_pPreviewWin, "image");
+    pAntiImplP->get(m_pLoadFilePB, "fromfile");
+    sLoadTemplate = pAntiImplP->get<FixedText>("alttitle")->GetText();
 
     if (!nFlags)
-        MORE_BTN(Hide());
+        m_pMoreBt->Hide();
     else if(SFXWB_LOAD_TEMPLATE == nFlags)
     {
-        aLoadFilePB.SetClickHdl(LINK(this, SfxNewFileDialog_Impl, LoadFile));
-        aLoadFilePB.Show();
-        aTextStyleCB.Show();
-        aFrameStyleCB.Show();
-        aPageStyleCB.Show();
-        aNumStyleCB.Show();
-        aMergeStyleCB.Show();
-        Size aSize(pAntiImplP->GetOutputSizePixel());
-        Size aTmp(pAntiImplP->LogicToPixel(Size(16, 16), MAP_APPFONT));
-        aSize.Height() += aTmp.Height();
-        pAntiImplP->SetOutputSizePixel(aSize);
-        pMoreBt->Hide();
-        aTextStyleCB.Check();
+        m_pLoadFilePB->SetClickHdl(LINK(this, SfxNewFileDialog_Impl, LoadFile));
+        m_pLoadFilePB->Show();
+        m_pTextStyleCB->Show();
+        m_pFrameStyleCB->Show();
+        m_pPageStyleCB->Show();
+        m_pNumStyleCB->Show();
+        m_pMergeStyleCB->Show();
+        m_pMoreBt->Hide();
+        m_pTextStyleCB->Check();
         pAntiImplP->SetText(sLoadTemplate);
     }
     else
     {
-        MORE_BTN(SetClickHdl(LINK(this, SfxNewFileDialog_Impl, Expand)));
-        if((nFlags & SFXWB_PREVIEW) == SFXWB_PREVIEW)
-        {
-            MORE_BTN(AddWindow(&aPreviewBtn));
-            MORE_BTN(AddWindow(&aPreviewWin));
-            aPreviewBtn.SetClickHdl(LINK(this, SfxNewFileDialog_Impl, PreviewClick));
-        }
-        else
-        {
-            aPreviewBtn.Hide();
-            aPreviewWin.Hide();
-            nMoveOffset = (short)pAntiImplP->LogicToPixel(
-                Size(nMoveOffset, nMoveOffset), MAP_APPFONT).Width();
-            nExpandSize = (short)pAntiImplP->LogicToPixel(
-                Size(nExpandSize, nExpandSize), MAP_APPFONT).Width();
-            AdjustPosSize_Impl(&aTitleFt, nMoveOffset, 0);
-            AdjustPosSize_Impl(&aTitleEd, nMoveOffset, nExpandSize);
-            AdjustPosSize_Impl(&aThemaFt, nMoveOffset, 0);
-            AdjustPosSize_Impl(&aThemaEd, nMoveOffset, nExpandSize);
-            AdjustPosSize_Impl(&aKeywordsFt, nMoveOffset, 0);
-            AdjustPosSize_Impl(&aKeywordsEd, nMoveOffset, nExpandSize);
-            AdjustPosSize_Impl(&aDescFt , nMoveOffset, 0);
-            AdjustPosSize_Impl(&aDescEd , nMoveOffset, nExpandSize);
-            AdjustPosSize_Impl(&aDocinfoGb, nMoveOffset, nExpandSize);
-        }
+        m_pMoreBt->SetExpandedHdl(LINK(this, SfxNewFileDialog_Impl, Expand));
+        m_pPreviewWin->Show();
     }
 
     OUString &rExtra = pAntiImplP->GetExtraData();
-    sal_Int32 nTokCount = comphelper::string::getTokenCount(rExtra, '|');
-    if( nTokCount > 0 && nFlags )
-        MORE_BTN(SetState(comphelper::string::equals(rExtra.getToken( 0, '|'), 'Y')));
-    if( nTokCount > 1 && nFlags )
-        aPreviewBtn.Check(comphelper::string::equals(rExtra.getToken( 1 ,'|'), 'Y'));
+    bool bExpand = !rExtra.isEmpty() && rExtra[0] == 'Y';
+    m_pMoreBt->set_expanded(bExpand && nFlags);
 
-    aTemplateLb.SetSelectHdl(LINK(this, SfxNewFileDialog_Impl, TemplateSelect));
-    aTemplateLb.SetDoubleClickHdl(LINK(this, SfxNewFileDialog_Impl, DoubleClick));
+    m_pTemplateLb->SetSelectHdl(LINK(this, SfxNewFileDialog_Impl, TemplateSelect));
+    m_pTemplateLb->SetDoubleClickHdl(LINK(this, SfxNewFileDialog_Impl, DoubleClick));
 
     // update the template configuration if necessary
     {
@@ -543,33 +435,28 @@ SfxNewFileDialog_Impl::SfxNewFileDialog_Impl(
     if (nCount)
     {
         for(sal_uInt16 i = 0; i < nCount; ++i)
-            aRegionLb.InsertEntry(aTemplates.GetFullRegionName(i));
-        aRegionLb.SetSelectHdl(LINK(this, SfxNewFileDialog_Impl, RegionSelect));
+            m_pRegionLb->InsertEntry(aTemplates.GetFullRegionName(i));
+        m_pRegionLb->SetSelectHdl(LINK(this, SfxNewFileDialog_Impl, RegionSelect));
     }
 
     aPrevTimer.SetTimeout( 500 );
     aPrevTimer.SetTimeoutHdl( LINK( this, SfxNewFileDialog_Impl, Update));
 
-    aRegionLb.SelectEntryPos(0);
-    RegionSelect(&aRegionLb);
+    m_pRegionLb->SelectEntryPos(0);
+    RegionSelect(m_pRegionLb);
 }
-
-
 
 SfxNewFileDialog_Impl::~SfxNewFileDialog_Impl()
 {
     OUString &rExtra = pAntiImpl->GetExtraData();
-    rExtra = MORE_BTN(GetState()) ? OUString("Y") : OUString("N");
-    rExtra += "|";
-    rExtra += aPreviewBtn.IsChecked() ? OUString("Y") : OUString("N");
-
-    delete pMoreBt;
+    rExtra = m_pMoreBt->get_expanded() ? OUString("Y") : OUString("N");
 }
 
 SfxNewFileDialog::SfxNewFileDialog(Window *pParent, sal_uInt16 nFlags)
-    : SfxModalDialog( pParent, SfxResId( DLG_NEW_FILE ) )
+    : SfxModalDialog(pParent, "LoadTemplateDialog",
+        "sfx/ui/loadtemplatedialog.ui")
 {
-    pImpl = new SfxNewFileDialog_Impl( this, nFlags );
+    pImpl = new SfxNewFileDialog_Impl(this, nFlags);
 }
 
 SfxNewFileDialog::~SfxNewFileDialog()
