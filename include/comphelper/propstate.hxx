@@ -75,8 +75,7 @@ namespace comphelper
 
         void firePropertyChange(sal_Int32 nHandle, const ::com::sun::star::uno::Any& aNewValue, const ::com::sun::star::uno::Any& aOldValue);
 
-    protected:
-        virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type> SAL_CALL getTypes() throw(::com::sun::star::uno::RuntimeException, std::exception);
+        css::uno::Sequence<css::uno::Type> getTypes();
     };
 
 

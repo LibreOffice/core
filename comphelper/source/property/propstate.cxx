@@ -53,7 +53,7 @@ namespace comphelper
     }
 
 
-    ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type> OPropertyStateHelper::getTypes() throw( ::com::sun::star::uno::RuntimeException, std::exception)
+    css::uno::Sequence<css::uno::Type> OPropertyStateHelper::getTypes()
     {
         ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type> aTypes(4);
         ::com::sun::star::uno::Type* pTypes = aTypes.getArray();
