@@ -329,12 +329,7 @@ sal_Int32  SAL_CALL BreakIteratorImpl::previousScript( const OUString& Text,
         if ((((numberOfChange % 2) == 0) != (ScriptType != getScriptClass(ch))))
             numberOfChange--;
         else if (nStartPos == 0) {
-            if (numberOfChange > 0)
-                numberOfChange--;
-            if (nStartPos > 0)
-                Text.iterateCodePoints(&nStartPos, -1);
-            else
-                return -1;
+            return -1;
         }
     }
     return numberOfChange == 0 ? iterateCodePoints(Text, nStartPos, 1, ch) : -1;
