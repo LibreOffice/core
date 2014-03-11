@@ -522,9 +522,9 @@ IMPL_LINK( SfxApplication, GlobalBasicErrorHdl_Impl, StarBASIC*, pStarBasic )
 #endif
 }
 
-sal_Bool SfxApplication::IsXScriptURL( const OUString& rScriptURL )
+bool SfxApplication::IsXScriptURL( const OUString& rScriptURL )
 {
-    sal_Bool result = sal_False;
+    bool result = false;
 
 #ifdef DISABLE_SCRIPTING
     (void) rScriptURL;
@@ -546,7 +546,7 @@ sal_Bool SfxApplication::IsXScriptURL( const OUString& rScriptURL )
 
         if ( xUrl.is() )
         {
-            result = sal_True;
+            result = true;
         }
     }
     catch (const ::com::sun::star::uno::RuntimeException&)

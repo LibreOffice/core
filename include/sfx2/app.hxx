@@ -152,7 +152,7 @@ public:
 #if defined( WNT )
     long                        DdeExecute( const OUString& rCmd );
 #endif
-    sal_Bool                    InitializeDde();
+    bool                        InitializeDde();
     const DdeService*           GetDdeService() const;
     DdeService*                 GetDdeService();
 #if defined( WNT )
@@ -164,7 +164,7 @@ public:
     /**
     * @param pArgs Takes ownership
     */
-    sal_uIntPtr                       LoadTemplate( SfxObjectShellLock& xDoc, const OUString& rFileName, sal_Bool bCopy=sal_True, SfxItemSet* pArgs = 0 );
+    sal_uIntPtr                       LoadTemplate( SfxObjectShellLock& xDoc, const OUString& rFileName, bool bCopy=true, SfxItemSet* pArgs = 0 );
     SfxTemplateDialog*          GetTemplateDialog();
     Window*                     GetTopWindow() const;
 
@@ -179,8 +179,8 @@ public:
     void                        ReleaseIndex(sal_uInt16 i);
 
     // Basic/Scripting
-    static sal_Bool             IsXScriptURL( const OUString& rScriptURL );
-    static OUString      ChooseScript();
+    static bool                 IsXScriptURL( const OUString& rScriptURL );
+    static OUString             ChooseScript();
     static void                 MacroOrganizer( sal_Int16 nTabId );
     static ErrCode              CallBasic( const OUString&, BasicManager*, SbxArray *pArgs, SbxValue *pRet );
     static ErrCode              CallAppBasic( const OUString& i_macroName, SbxArray* i_args = NULL, SbxValue* i_ret = NULL )
@@ -192,18 +192,18 @@ public:
     sal_uInt16                  SaveBasicAndDialogContainer() const;
 
     // misc.
-    sal_Bool                        GetOptions(SfxItemSet &);
+    bool                        GetOptions(SfxItemSet &);
     void                        SetOptions(const SfxItemSet &);
     virtual void                Invalidate(sal_uInt16 nId = 0);
     void                        NotifyEvent(const SfxEventHint& rEvent, bool bSynchron = true );
-    sal_Bool                        IsDowning() const;
+    bool                        IsDowning() const;
     void                        ResetLastDir();
 
     SAL_DLLPRIVATE static SfxApplication* Get() { return pApp;}
     SAL_DLLPRIVATE SfxDispatcher* GetAppDispatcher_Impl();
     SAL_DLLPRIVATE SfxDispatcher* GetDispatcher_Impl();
 
-    SAL_DLLPRIVATE sal_Bool         QueryExit_Impl();
+    SAL_DLLPRIVATE bool         QueryExit_Impl();
     SAL_DLLPRIVATE void         SetOptions_Impl(const SfxItemSet &);
     SAL_DLLPRIVATE bool         Initialize_Impl();
 

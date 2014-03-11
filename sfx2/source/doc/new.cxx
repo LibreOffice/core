@@ -225,7 +225,7 @@ IMPL_LINK_NOARG(SfxNewFileDialog_Impl, Update)
             SfxItemSet* pSet = new SfxAllItemSet( pSfxApp->GetPool() );
             pSet->Put( SfxBoolItem( SID_TEMPLATE, true ) );
             pSet->Put( SfxBoolItem( SID_PREVIEW, true ) );
-            lErr = pSfxApp->LoadTemplate( xDocShell, aFileName, sal_True, pSet );
+            lErr = pSfxApp->LoadTemplate( xDocShell, aFileName, true, pSet );
             if( lErr )
                 ErrorHandler::HandleError(lErr);
             Application::SetDefDialogParent( pParent );

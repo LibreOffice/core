@@ -150,9 +150,9 @@ IMPL_LINK(SfxEventAsyncer_Impl, TimerHdl, Timer*, pAsyncTimer)
 
 
 
-sal_Bool SfxApplication::GetOptions( SfxItemSet& rSet )
+bool SfxApplication::GetOptions( SfxItemSet& rSet )
 {
-    sal_Bool bRet = sal_False;
+    bool bRet = false;
     SfxItemPool &rPool = GetPool();
 
     const sal_uInt16 *pRanges = rSet.GetRanges();
@@ -170,92 +170,92 @@ sal_Bool SfxApplication::GetOptions( SfxItemSet& rSet )
                 case SID_ATTR_BUTTON_OUTSTYLE3D :
                     if(rSet.Put( SfxBoolItem( rPool.GetWhich( SID_ATTR_BUTTON_OUTSTYLE3D ),
                               aMiscOptions.GetToolboxStyle() != TOOLBOX_STYLE_FLAT)))
-                        bRet = sal_True;
+                        bRet = true;
                     break;
                 case SID_ATTR_BUTTON_BIGSIZE :
                 {
                     if( rSet.Put( SfxBoolItem( rPool.GetWhich( SID_ATTR_BUTTON_BIGSIZE ), aMiscOptions.AreCurrentSymbolsLarge() ) ) )
-                        bRet = sal_True;
+                        bRet = true;
                     break;
                 }
                 case SID_ATTR_BACKUP :
                     {
-                        bRet = sal_True;
+                        bRet = true;
                         if (!aSaveOptions.IsReadOnly(SvtSaveOptions::E_BACKUP))
                             if (!rSet.Put( SfxBoolItem( rPool.GetWhich( SID_ATTR_BACKUP ),aSaveOptions.IsBackup())))
-                                bRet = sal_False;
+                                bRet = false;
                     }
                     break;
                 case SID_ATTR_PRETTYPRINTING:
                     {
-                        bRet = sal_True;
+                        bRet = true;
                         if (!aSaveOptions.IsReadOnly(SvtSaveOptions::E_DOPRETTYPRINTING))
                             if (!rSet.Put( SfxBoolItem( rPool.GetWhich( SID_ATTR_PRETTYPRINTING ), aSaveOptions.IsPrettyPrinting())))
-                                bRet = sal_False;
+                                bRet = false;
                     }
                     break;
                 case SID_ATTR_WARNALIENFORMAT:
                     {
-                        bRet = sal_True;
+                        bRet = true;
                         if (!aSaveOptions.IsReadOnly(SvtSaveOptions::E_WARNALIENFORMAT))
                             if (!rSet.Put( SfxBoolItem( rPool.GetWhich( SID_ATTR_WARNALIENFORMAT ), aSaveOptions.IsWarnAlienFormat())))
-                                bRet = sal_False;
+                                bRet = false;
                     }
                     break;
                 case SID_ATTR_AUTOSAVE :
                     {
-                        bRet = sal_True;
+                        bRet = true;
                         if (!aSaveOptions.IsReadOnly(SvtSaveOptions::E_AUTOSAVE))
                             if (!rSet.Put( SfxBoolItem( rPool.GetWhich( SID_ATTR_AUTOSAVE ), aSaveOptions.IsAutoSave())))
-                                bRet = sal_False;
+                                bRet = false;
                     }
                     break;
                 case SID_ATTR_AUTOSAVEPROMPT :
                     {
-                        bRet = sal_True;
+                        bRet = true;
                         if (!aSaveOptions.IsReadOnly(SvtSaveOptions::E_AUTOSAVEPROMPT))
                             if (!rSet.Put( SfxBoolItem( rPool.GetWhich( SID_ATTR_AUTOSAVEPROMPT ), aSaveOptions.IsAutoSavePrompt())))
-                                bRet = sal_False;
+                                bRet = false;
                     }
                     break;
                 case SID_ATTR_AUTOSAVEMINUTE :
                     {
-                        bRet = sal_True;
+                        bRet = true;
                         if (!aSaveOptions.IsReadOnly(SvtSaveOptions::E_AUTOSAVETIME))
                             if (!rSet.Put( SfxUInt16Item( rPool.GetWhich( SID_ATTR_AUTOSAVEMINUTE ), (sal_uInt16)aSaveOptions.GetAutoSaveTime())))
-                                bRet = sal_False;
+                                bRet = false;
                     }
                     break;
                 case SID_ATTR_USERAUTOSAVE :
                     {
-                        bRet = sal_True;
+                        bRet = true;
                         if (!aSaveOptions.IsReadOnly(SvtSaveOptions::E_USERAUTOSAVE))
                             if (!rSet.Put( SfxBoolItem( rPool.GetWhich( SID_ATTR_USERAUTOSAVE ), aSaveOptions.IsUserAutoSave())))
-                                bRet = sal_False;
+                                bRet = false;
                     }
                     break;
                 case SID_ATTR_DOCINFO :
                     {
-                        bRet = sal_True;
+                        bRet = true;
                         if (!aSaveOptions.IsReadOnly(SvtSaveOptions::E_DOCINFSAVE))
                             if (!rSet.Put( SfxBoolItem( rPool.GetWhich( SID_ATTR_DOCINFO ), aSaveOptions.IsDocInfoSave())))
-                                bRet = sal_False;
+                                bRet = false;
                     }
                     break;
                 case SID_ATTR_WORKINGSET :
                     {
-                        bRet = sal_True;
+                        bRet = true;
                         if (!aSaveOptions.IsReadOnly(SvtSaveOptions::E_SAVEWORKINGSET))
                             if (!rSet.Put( SfxBoolItem( rPool.GetWhich( SID_ATTR_WORKINGSET ), aSaveOptions.IsSaveWorkingSet())))
-                                bRet = sal_False;
+                                bRet = false;
                     }
                     break;
                 case SID_ATTR_SAVEDOCVIEW :
                     {
-                        bRet = sal_True;
+                        bRet = true;
                         if (!aSaveOptions.IsReadOnly(SvtSaveOptions::E_SAVEDOCVIEW))
                             if (!rSet.Put( SfxBoolItem( rPool.GetWhich( SID_ATTR_SAVEDOCVIEW ), aSaveOptions.IsSaveDocView())))
-                                bRet = sal_False;
+                                bRet = false;
                     }
                     break;
                 case SID_ATTR_METRIC :
@@ -263,22 +263,22 @@ sal_Bool SfxApplication::GetOptions( SfxItemSet& rSet )
                 case SID_HELPBALLOONS :
                     if(rSet.Put( SfxBoolItem ( rPool.GetWhich( SID_HELPBALLOONS ),
                                aHelpOptions.IsExtendedHelp() ) ) )
-                        bRet = sal_True;
+                        bRet = true;
                     break;
                 case SID_HELPTIPS :
                     if(rSet.Put( SfxBoolItem ( rPool.GetWhich( SID_HELPTIPS ),
                                aHelpOptions.IsHelpTips() ) ) )
-                        bRet = sal_True;
+                        bRet = true;
                     break;
                 case SID_ATTR_WELCOMESCREEN :
                     if(rSet.Put( SfxBoolItem ( rPool.GetWhich( SID_ATTR_WELCOMESCREEN ),
                                aHelpOptions.IsWelcomeScreen() ) ) )
-                        bRet = sal_True;
+                        bRet = true;
                     break;
                 case SID_HELP_STYLESHEET :
                     if(rSet.Put( SfxStringItem ( rPool.GetWhich( SID_HELP_STYLESHEET ),
                                aHelpOptions.GetHelpStyleSheet() ) ) )
-                        bRet = sal_True;
+                        bRet = true;
                 break;
                 case SID_ATTR_UNDO_COUNT :
                     if (rSet.Put(
@@ -295,74 +295,74 @@ sal_Bool SfxApplication::GetOptions( SfxItemSet& rSet )
                     {
                         if ( rSet.Put( SfxBoolItem( rPool.GetWhich( SID_ATTR_QUICKLAUNCHER ),
                                                     ShutdownIcon::GetAutostart() ) ) )
-                            bRet = sal_True;
+                            bRet = true;
                     }
                     else
                     {
                         rSet.DisableItem( rPool.GetWhich( SID_ATTR_QUICKLAUNCHER ) );
-                        bRet = sal_True;
+                        bRet = true;
                     }
                     break;
                 }
                 case SID_SAVEREL_INET :
                     {
-                        bRet = sal_True;
+                        bRet = true;
                         if (!aSaveOptions.IsReadOnly(SvtSaveOptions::E_SAVERELINET))
                             if (!rSet.Put( SfxBoolItem ( rPool.GetWhich( SID_SAVEREL_INET ), aSaveOptions.IsSaveRelINet() )))
-                                bRet = sal_False;
+                                bRet = false;
                     }
                     break;
                 case SID_SAVEREL_FSYS :
                     {
-                        bRet = sal_True;
+                        bRet = true;
                         if (!aSaveOptions.IsReadOnly(SvtSaveOptions::E_SAVERELFSYS))
                             if (!rSet.Put( SfxBoolItem ( rPool.GetWhich( SID_SAVEREL_FSYS ), aSaveOptions.IsSaveRelFSys() )))
-                                bRet = sal_False;
+                                bRet = false;
                     }
                     break;
                 case SID_BASIC_ENABLED :
                     {
-                        bRet = sal_True;
+                        bRet = true;
                         if (!aSecurityOptions.IsReadOnly(SvtSecurityOptions::E_BASICMODE))
                         {
                             if ( !rSet.Put( SfxUInt16Item( rPool.GetWhich( SID_BASIC_ENABLED ), sal::static_int_cast< sal_uInt16 >(aSecurityOptions.GetBasicMode()))))
-                                bRet = sal_False;
+                                bRet = false;
                         }
                     }
                     break;
                 case SID_INET_EXE_PLUGIN  :
                     {
-                        bRet = sal_True;
+                        bRet = true;
                         if (!aSecurityOptions.IsReadOnly(SvtSecurityOptions::E_EXECUTEPLUGINS))
                         {
                             if ( !rSet.Put( SfxBoolItem( SID_INET_EXE_PLUGIN, aSecurityOptions.IsExecutePlugins() ) ) )
-                                bRet = sal_False;
+                                bRet = false;
                         }
                     }
                     break;
                 case SID_MACRO_WARNING :
                     {
-                        bRet = sal_True;
+                        bRet = true;
                         if (!aSecurityOptions.IsReadOnly(SvtSecurityOptions::E_WARNING))
                         {
                             if ( !rSet.Put( SfxBoolItem( SID_MACRO_WARNING, aSecurityOptions.IsWarningEnabled() ) ) )
-                                bRet = sal_False;
+                                bRet = false;
                         }
                     }
                     break;
                 case SID_MACRO_CONFIRMATION :
                     {
-                        bRet = sal_True;
+                        bRet = true;
                         if (!aSecurityOptions.IsReadOnly(SvtSecurityOptions::E_CONFIRMATION))
                         {
                             if ( !rSet.Put( SfxBoolItem( SID_MACRO_CONFIRMATION, aSecurityOptions.IsConfirmationEnabled() ) ) )
-                                bRet = sal_False;
+                                bRet = false;
                         }
                     }
                     break;
                 case SID_SECURE_URL :
                     {
-                        bRet = sal_True;
+                        bRet = true;
                         if (!aSecurityOptions.IsReadOnly(SvtSecurityOptions::E_SECUREURLS))
                         {
                             ::com::sun::star::uno::Sequence< OUString > seqURLs = aSecurityOptions.GetSecureURLs();
@@ -372,7 +372,7 @@ sal_Bool SfxApplication::GetOptions( SfxItemSet& rSet )
                                 aList.push_back(seqURLs[nURL]);
 
                             if( !rSet.Put( SfxStringListItem( rPool.GetWhich(SID_SECURE_URL), &aList ) ) )
-                                bRet = sal_False;
+                                bRet = false;
                         }
                     }
                     break;
@@ -476,7 +476,7 @@ sal_Bool SfxApplication::GetOptions( SfxItemSet& rSet )
                     }
 
                     if ( rSet.Put(aNames) || rSet.Put(aValues) )
-                        bRet = sal_True;
+                        bRet = true;
                 }
                 break;
 

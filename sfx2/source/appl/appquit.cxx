@@ -57,9 +57,9 @@
 using ::basic::BasicManagerRepository;
 
 
-sal_Bool SfxApplication::QueryExit_Impl()
+bool SfxApplication::QueryExit_Impl()
 {
-    sal_Bool bQuit = sal_True;
+    bool bQuit = true;
 
     // Does some instance, that can not be shut down, still require the app?
     if ( !bQuit )
@@ -68,10 +68,10 @@ sal_Bool SfxApplication::QueryExit_Impl()
         InfoBox aInfoBox( NULL, SfxResId(MSG_CANT_QUIT) );
         aInfoBox.Execute();
         OSL_TRACE( "QueryExit => sal_False (in use)" );
-        return sal_False;
+        return false;
     }
 
-    return sal_True;
+    return true;
 }
 
 

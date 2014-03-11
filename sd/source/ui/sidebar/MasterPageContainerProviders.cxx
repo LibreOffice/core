@@ -186,7 +186,7 @@ SdPage* TemplatePageObjectProvider::operator() (SdDrawDocument* pContainerDocume
     SfxItemSet* pSet = new SfxAllItemSet (pSfxApp->GetPool());
     pSet->Put (SfxBoolItem (SID_TEMPLATE, true));
     pSet->Put (SfxBoolItem (SID_PREVIEW, true));
-    if (pSfxApp->LoadTemplate (mxDocumentShell, sFileName, sal_True, pSet))
+    if (pSfxApp->LoadTemplate (mxDocumentShell, sFileName, true, pSet))
     {
         mxDocumentShell = NULL;
     }

@@ -482,7 +482,7 @@ bool SfxViewFrame::DdeSetData( const OUString&,                  // the Item to 
     return 0;
 }
 
-sal_Bool SfxApplication::InitializeDde()
+bool SfxApplication::InitializeDde()
 {
     int nError = 0;
 #if defined( WNT )

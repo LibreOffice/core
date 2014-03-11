@@ -1550,7 +1550,7 @@ void AssistentDlgImpl::UpdatePreview( sal_Bool bDocPreview )
             if(bDocPreview)
                 pSet->Put( SfxBoolItem( SID_PREVIEW, true ) );
             RestorePassword( pSet, aDocFile );
-            if( (lErr = pSfxApp->LoadTemplate( xDocShell, aDocFile, sal_True, pSet )) != 0 )
+            if( (lErr = pSfxApp->LoadTemplate( xDocShell, aDocFile, true, pSet )) != 0 )
                 ErrorHandler::HandleError(lErr);
             else
                 SavePassword( xDocShell, aDocFile );
@@ -1595,7 +1595,7 @@ void AssistentDlgImpl::UpdatePreview( sal_Bool bDocPreview )
             pSet->Put( SfxBoolItem( SID_PREVIEW, true ) );
 
             RestorePassword( pSet, aLayoutFile );
-            if( (lErr = pSfxApp->LoadTemplate( xLayoutDocShell, aLayoutFile, sal_True, pSet )) != 0 )
+            if( (lErr = pSfxApp->LoadTemplate( xLayoutDocShell, aLayoutFile, true, pSet )) != 0 )
                 ErrorHandler::HandleError(lErr);
             SavePassword( xLayoutDocShell, aLayoutFile );
         }

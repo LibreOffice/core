@@ -508,7 +508,7 @@ SfxFrame* SdModule::CreateFromTemplate( const OUString& rTemplatePath, const Ref
     SfxItemSet* pSet = new SfxAllItemSet( SFX_APP()->GetPool() );
     pSet->Put( SfxBoolItem( SID_TEMPLATE, true ) );
 
-    sal_uLong lErr = SFX_APP()->LoadTemplate( xDocShell, rTemplatePath, sal_True, pSet );
+    sal_uLong lErr = SFX_APP()->LoadTemplate( xDocShell, rTemplatePath, true, pSet );
 
     SfxObjectShell* pDocShell = xDocShell;
 
