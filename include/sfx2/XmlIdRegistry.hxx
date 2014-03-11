@@ -53,7 +53,7 @@ public:
     virtual ~IXmlIdRegistry() { }
 
     virtual ::com::sun::star::uno::Reference<
-            ::com::sun::star::rdf::XMetadatable > SAL_CALL
+            ::com::sun::star::rdf::XMetadatable >
         GetElementByMetadataReference(
             const ::com::sun::star::beans::StringPair & i_rXmlId) const = 0;
 

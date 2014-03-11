@@ -150,9 +150,10 @@ public:
 
     /** get the ODF element with the given metadata reference. */
     virtual ::com::sun::star::uno::Reference<
-            ::com::sun::star::rdf::XMetadatable > SAL_CALL
+            ::com::sun::star::rdf::XMetadatable >
         GetElementByMetadataReference(
-            const ::com::sun::star::beans::StringPair & i_rReference) const;
+            const ::com::sun::star::beans::StringPair & i_rReference) const
+        SAL_OVERRIDE;
 
     /** register an ODF element at a newly generated, unique metadata reference.
 
@@ -364,7 +365,7 @@ XmlIdRegistry::~XmlIdRegistry()
 {
 }
 
-::com::sun::star::uno::Reference< ::com::sun::star::rdf::XMetadatable > SAL_CALL
+::com::sun::star::uno::Reference< ::com::sun::star::rdf::XMetadatable >
 XmlIdRegistry::GetElementByMetadataReference(
     const beans::StringPair & i_rReference) const
 {
