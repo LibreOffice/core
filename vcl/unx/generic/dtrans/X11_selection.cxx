@@ -3490,7 +3490,11 @@ void SelectionManager::dragDoDispatch()
 
         // cleanup after drag
         if( m_bWaitingForPrimaryConversion )
-            getAdaptor( XA_PRIMARY )->clearTransferable();
+        {
+            SelectionAdaptor* pAdaptor = getAdaptor( XA_PRIMARY );
+            if (pAdaptor)
+                pAdaptor->clearTransferable();
+        }
 
         m_bDropSent                         = false;
         m_bDropSuccess                      = false;
