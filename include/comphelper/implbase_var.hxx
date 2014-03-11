@@ -154,14 +154,14 @@ protected:
 public:
     virtual ::com::sun::star::uno::Any
         SAL_CALL queryInterface( ::com::sun::star::uno::Type const& rType )
-        throw (::com::sun::star::uno::RuntimeException, std::exception)
+        throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE
         { return ::cppu::ImplHelper_query( rType, cd::get(), this ); }
     virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type >
-        SAL_CALL getTypes() throw (::com::sun::star::uno::RuntimeException, std::exception)
+        SAL_CALL getTypes() throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE
         { return ::cppu::ImplHelper_getTypes( cd::get() ); }
     virtual ::com::sun::star::uno::Sequence<sal_Int8>
         SAL_CALL getImplementationId()
-        throw (::com::sun::star::uno::RuntimeException, std::exception)
+        throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE
         { return ::cppu::ImplHelper_getImplementationId( cd::get() ); }
 };
 
@@ -198,21 +198,21 @@ class SAL_NO_VTABLE BOOST_PP_CAT(WeakImplHelper,
 public:
     virtual ::com::sun::star::uno::Any
         SAL_CALL queryInterface( ::com::sun::star::uno::Type const& rType )
-        throw (::com::sun::star::uno::RuntimeException, std::exception)
+        throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE
     {
         return ::cppu::WeakImplHelper_query(
             rType, cd::get(), this, static_cast<OWeakObject *>(this) );
     }
-    virtual void SAL_CALL acquire() throw ()
+    virtual void SAL_CALL acquire() throw () SAL_OVERRIDE
         { OWeakObject::acquire(); }
-    virtual void SAL_CALL release() throw ()
+    virtual void SAL_CALL release() throw () SAL_OVERRIDE
         { OWeakObject::release(); }
     virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type >
-        SAL_CALL getTypes() throw (::com::sun::star::uno::RuntimeException, std::exception)
+        SAL_CALL getTypes() throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE
         { return ::cppu::WeakImplHelper_getTypes( cd::get() ); }
     virtual ::com::sun::star::uno::Sequence<sal_Int8>
         SAL_CALL getImplementationId()
-        throw (::com::sun::star::uno::RuntimeException, std::exception)
+        throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE
         { return ::cppu::ImplHelper_getImplementationId( cd::get() ); }
 };
 
@@ -275,7 +275,7 @@ protected:
 public:
     virtual ::com::sun::star::uno::Any
         SAL_CALL queryInterface( ::com::sun::star::uno::Type const& rType )
-        throw (::com::sun::star::uno::RuntimeException)
+        throw (::com::sun::star::uno::RuntimeException) SAL_OVERRIDE
     {
         ::com::sun::star::uno::Any const aRet(
             ::cppu::ImplHelper_queryNoXInterface( rType, cd::get(), this ) );
@@ -283,19 +283,19 @@ public:
             return aRet;
         return BaseClass::queryInterface( rType );
     }
-    virtual void SAL_CALL acquire() throw ()
+    virtual void SAL_CALL acquire() throw () SAL_OVERRIDE
         { BaseClass::acquire(); }
-    virtual void SAL_CALL release() throw ()
+    virtual void SAL_CALL release() throw () SAL_OVERRIDE
         { BaseClass::release(); }
     virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type >
-        SAL_CALL getTypes() throw (::com::sun::star::uno::RuntimeException)
+        SAL_CALL getTypes() throw (::com::sun::star::uno::RuntimeException) SAL_OVERRIDE
     {
         return ::cppu::ImplInhHelper_getTypes(
             cd::get(), BaseClass::getTypes() );
     }
     virtual ::com::sun::star::uno::Sequence<sal_Int8>
         SAL_CALL getImplementationId()
-        throw (::com::sun::star::uno::RuntimeException)
+        throw (::com::sun::star::uno::RuntimeException) SAL_OVERRIDE
         { return ::cppu::ImplHelper_getImplementationId( cd::get() ); }
 };
 
@@ -346,35 +346,35 @@ public:
 
     virtual ::com::sun::star::uno::Any
         SAL_CALL queryInterface( ::com::sun::star::uno::Type const& rType )
-        throw (::com::sun::star::uno::RuntimeException, std::exception)
+        throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE
     {
         return ::cppu::WeakComponentImplHelper_query(
             rType, cd::get(), this,
             static_cast< ::cppu::WeakComponentImplHelperBase * >(this) );
     }
-    virtual void SAL_CALL acquire() throw ()
+    virtual void SAL_CALL acquire() throw () SAL_OVERRIDE
         { WeakComponentImplHelperBase::acquire(); }
-    virtual void SAL_CALL release() throw ()
+    virtual void SAL_CALL release() throw () SAL_OVERRIDE
         { WeakComponentImplHelperBase::release(); }
     virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type >
-        SAL_CALL getTypes() throw (::com::sun::star::uno::RuntimeException, std::exception)
+        SAL_CALL getTypes() throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE
         { return ::cppu::WeakComponentImplHelper_getTypes( cd::get() ); }
     virtual ::com::sun::star::uno::Sequence<sal_Int8>
         SAL_CALL getImplementationId()
-        throw (::com::sun::star::uno::RuntimeException, std::exception)
+        throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE
         { return ::cppu::ImplHelper_getImplementationId( cd::get() ); }
 
     // implement XComponent directly avoiding ambiguities:
     virtual void SAL_CALL dispose()
-        throw (::com::sun::star::uno::RuntimeException, std::exception)
+        throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE
         { WeakComponentImplHelperBase::dispose(); }
     virtual void SAL_CALL addEventListener(
         ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener>
-        const & xListener ) throw (::com::sun::star::uno::RuntimeException, std::exception)
+        const & xListener ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE
         { WeakComponentImplHelperBase::addEventListener( xListener ); }
     virtual void SAL_CALL removeEventListener(
         ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener>
-        const & xListener ) throw (::com::sun::star::uno::RuntimeException, std::exception)
+        const & xListener ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE
         { WeakComponentImplHelperBase::removeEventListener( xListener ); }
 };
 
@@ -404,22 +404,22 @@ public:
 
     virtual ::com::sun::star::uno::Any
         SAL_CALL queryInterface( ::com::sun::star::uno::Type const& rType )
-        throw (::com::sun::star::uno::RuntimeException, std::exception)
+        throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE
     {
         return ::cppu::WeakComponentImplHelper_query(
             rType, cd::get(), this,
             static_cast< ::cppu::WeakComponentImplHelperBase * >(this) );
     }
-    virtual void SAL_CALL acquire() throw ()
+    virtual void SAL_CALL acquire() throw () SAL_OVERRIDE
         { WeakComponentImplHelperBase::acquire(); }
-    virtual void SAL_CALL release() throw ()
+    virtual void SAL_CALL release() throw () SAL_OVERRIDE
         { WeakComponentImplHelperBase::release(); }
     virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type >
-        SAL_CALL getTypes() throw (::com::sun::star::uno::RuntimeException, std::exception)
+        SAL_CALL getTypes() throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE
         { return ::cppu::WeakComponentImplHelper_getTypes( cd::get() ); }
     virtual ::com::sun::star::uno::Sequence<sal_Int8>
         SAL_CALL getImplementationId()
-        throw (::com::sun::star::uno::RuntimeException, std::exception)
+        throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE
         { return ::cppu::ImplHelper_getImplementationId( cd::get() ); }
 };
 
