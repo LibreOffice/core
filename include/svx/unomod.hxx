@@ -51,7 +51,7 @@ public:
             true    if the SdrHint could be translated to an EventObject<br>
             false   if not
     */
-    static sal_Bool createEvent( const SdrModel* pDoc, const SdrHint* pSdrHint, ::com::sun::star::document::EventObject& aEvent );
+    static bool createEvent( const SdrModel* pDoc, const SdrHint* pSdrHint, ::com::sun::star::document::EventObject& aEvent );
 
 protected:
     ~SvxUnoDrawMSFactory() {}

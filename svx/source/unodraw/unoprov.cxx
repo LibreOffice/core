@@ -1002,7 +1002,7 @@ sal_Bool SvxMeasureUnitToMapUnit( const short eApi, int& eVcl ) throw()
 /** maps the vcl MapUnit enum to a API constant MeasureUnit.
     Returns false if conversion is not supported.
 */
-sal_Bool SvxMapUnitToMeasureUnit( const short eVcl, short& eApi ) throw()
+bool SvxMapUnitToMeasureUnit( const short eVcl, short& eApi ) throw()
 {
     switch( eVcl )
     {
@@ -1028,7 +1028,7 @@ sal_Bool SvxMapUnitToMeasureUnit( const short eVcl, short& eApi ) throw()
     Returns false if conversion is not supported.
 */
 
-sal_Bool SvxMeasureUnitToFieldUnit( const short eApi, short& eVcl ) throw()
+bool SvxMeasureUnitToFieldUnit( const short eApi, short& eVcl ) throw()
 {
     switch( eApi )
     {
@@ -1045,16 +1045,16 @@ sal_Bool SvxMeasureUnitToFieldUnit( const short eApi, short& eVcl ) throw()
     case util::MeasureUnit::PERCENT:    eVcl = FUNIT_PERCENT;   break;
     case util::MeasureUnit::MM_100TH:   eVcl = FUNIT_100TH_MM;  break;
     default:
-        return sal_False;
+        return false;
     }
 
-    return sal_True;
+    return true;
 }
 
 /** maps the vcl MapUnit enum to a API constant MeasureUnit.
     Returns false if conversion is not supported.
 */
-sal_Bool SvxFieldUnitToMeasureUnit( const short eVcl, short& eApi ) throw()
+bool SvxFieldUnitToMeasureUnit( const short eVcl, short& eApi ) throw()
 {
     switch( eVcl )
     {
@@ -1071,10 +1071,10 @@ sal_Bool SvxFieldUnitToMeasureUnit( const short eVcl, short& eApi ) throw()
     case FUNIT_PERCENT:     eApi = util::MeasureUnit::PERCENT;  break;
     case FUNIT_100TH_MM:    eApi = util::MeasureUnit::MM_100TH; break;
     default:
-        return sal_False;
+        return false;
     }
 
-    return sal_True;
+    return true;
 }
 
 bool SvxUnoGetResourceRanges( const short nWhich, int& nApiResIds, int& nIntResIds, int& nCount ) throw()

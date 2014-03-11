@@ -43,12 +43,12 @@
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 
-sal_Bool SvxDrawingLayerExport( SdrModel* pModel, const uno::Reference<io::XOutputStream>& xOut, const Reference< lang::XComponent >& xComponent )
+bool SvxDrawingLayerExport( SdrModel* pModel, const uno::Reference<io::XOutputStream>& xOut, const Reference< lang::XComponent >& xComponent )
 {
     return SvxDrawingLayerExport( pModel, xOut, xComponent, "com.sun.star.comp.DrawingLayer.XMLExporter" );
 }
 
-sal_Bool SvxDrawingLayerExport( SdrModel* pModel, const uno::Reference<io::XOutputStream>& xOut, const Reference< lang::XComponent >& xComponent, const char* pExportService )
+bool SvxDrawingLayerExport( SdrModel* pModel, const uno::Reference<io::XOutputStream>& xOut, const Reference< lang::XComponent >& xComponent, const char* pExportService )
 {
     sal_Bool bDocRet = xOut.is();
 
@@ -135,7 +135,7 @@ sal_Bool SvxDrawingLayerExport( SdrModel* pModel, const uno::Reference<io::XOutp
     return bDocRet;
 }
 
-sal_Bool SvxDrawingLayerExport( SdrModel* pModel, const uno::Reference<io::XOutputStream>& xOut )
+bool SvxDrawingLayerExport( SdrModel* pModel, const uno::Reference<io::XOutputStream>& xOut )
 {
     Reference< lang::XComponent > xComponent;
     return SvxDrawingLayerExport( pModel, xOut, xComponent );
@@ -143,12 +143,12 @@ sal_Bool SvxDrawingLayerExport( SdrModel* pModel, const uno::Reference<io::XOutp
 
 //-
 
-sal_Bool SvxDrawingLayerImport( SdrModel* pModel, const uno::Reference<io::XInputStream>& xInputStream, const Reference< lang::XComponent >& xComponent )
+bool SvxDrawingLayerImport( SdrModel* pModel, const uno::Reference<io::XInputStream>& xInputStream, const Reference< lang::XComponent >& xComponent )
 {
     return SvxDrawingLayerImport( pModel, xInputStream, xComponent, "com.sun.star.comp.Draw.XMLOasisImporter" );
 }
 
-sal_Bool SvxDrawingLayerImport( SdrModel* pModel, const uno::Reference<io::XInputStream>& xInputStream, const Reference< lang::XComponent >& xComponent, const char* pImportService  )
+bool SvxDrawingLayerImport( SdrModel* pModel, const uno::Reference<io::XInputStream>& xInputStream, const Reference< lang::XComponent >& xComponent, const char* pImportService  )
 {
     sal_uInt32  nRet = 0;
 
@@ -248,7 +248,7 @@ sal_Bool SvxDrawingLayerImport( SdrModel* pModel, const uno::Reference<io::XInpu
     return nRet == 0;
 }
 
-sal_Bool SvxDrawingLayerImport( SdrModel* pModel, const uno::Reference<io::XInputStream>& xInputStream )
+bool SvxDrawingLayerImport( SdrModel* pModel, const uno::Reference<io::XInputStream>& xInputStream )
 {
     Reference< lang::XComponent > xComponent;
     return SvxDrawingLayerImport( pModel, xInputStream, xComponent );

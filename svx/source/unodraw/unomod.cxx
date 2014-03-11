@@ -114,7 +114,7 @@ static const SvEventDescription* ImplGetSupportedMacroItems()
         true    if the SdrHint could be translated to an EventObject<br>
         false   if not
 */
-sal_Bool SvxUnoDrawMSFactory::createEvent( const SdrModel* pDoc, const SdrHint* pSdrHint, ::com::sun::star::document::EventObject& aEvent )
+bool SvxUnoDrawMSFactory::createEvent( const SdrModel* pDoc, const SdrHint* pSdrHint, ::com::sun::star::document::EventObject& aEvent )
 {
     const SdrObject* pObj = NULL;
     const SdrPage* pPage = NULL;
@@ -152,7 +152,7 @@ sal_Bool SvxUnoDrawMSFactory::createEvent( const SdrModel* pDoc, const SdrHint* 
 //                HINT_SWITCHTOPAGE,    // #94278# UNDO/REDO at an object evtl. on another page
 //                HINT_OBJLISTCLEAR     // Is called before an SdrObjList will be cleared
         default:
-            return sal_False;
+            return false;
     }
 
     if( pObj )
@@ -162,7 +162,7 @@ sal_Bool SvxUnoDrawMSFactory::createEvent( const SdrModel* pDoc, const SdrHint* 
     else
         aEvent.Source = (const_cast<SdrModel*>(pDoc))->getUnoModel();
 
-    return sal_True;
+    return true;
 }
 
 namespace {

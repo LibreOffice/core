@@ -674,7 +674,7 @@ void SvxShape::ObtainSettingsFromPropertySet(const SvxItemPropertySet& rPropSet)
 
 
 
-uno::Any SvxShape::GetBitmap( sal_Bool bMetaFile /* = sal_False */ ) const throw()
+uno::Any SvxShape::GetBitmap( bool bMetaFile /* = false */ ) const throw()
 {
     DBG_TESTSOLARMUTEX();
     uno::Any aAny;
@@ -1446,7 +1446,7 @@ void SAL_CALL SvxShape::removeVetoableChangeListener( const OUString& , const Re
 
 
 
-sal_Bool SAL_CALL SvxShape::SetFillAttribute( sal_Int32 nWID, const OUString& rName )
+bool SAL_CALL SvxShape::SetFillAttribute( sal_Int32 nWID, const OUString& rName )
 {
     SfxItemSet aSet( mpModel->GetItemPool(),    (sal_uInt16)nWID, (sal_uInt16)nWID );
 
@@ -1455,17 +1455,17 @@ sal_Bool SAL_CALL SvxShape::SetFillAttribute( sal_Int32 nWID, const OUString& rN
         //mpObj->SetItemSetAndBroadcast(aSet);
         mpObj->SetMergedItemSetAndBroadcast(aSet);
 
-        return sal_True;
+        return true;
     }
     else
     {
-        return sal_False;
+        return false;
     }
 }
 
 
 
-sal_Bool SAL_CALL SvxShape::SetFillAttribute( sal_Int32 nWID, const OUString& rName, SfxItemSet& rSet, SdrModel* pModel )
+bool SAL_CALL SvxShape::SetFillAttribute( sal_Int32 nWID, const OUString& rName, SfxItemSet& rSet, SdrModel* pModel )
 {
     // check if an item with the given name and which id is inside the models
     // pool or the stylesheet pool, if found its puttet in the itemse
@@ -1483,7 +1483,7 @@ sal_Bool SAL_CALL SvxShape::SetFillAttribute( sal_Int32 nWID, const OUString& rN
             XBitmapListRef pBitmapList = pModel->GetBitmapList();
 
             if( !pBitmapList.is() )
-                return sal_False;
+                return false;
 
             long nPos = pBitmapList->GetIndex(aStrName);
             if( nPos == -1 )
@@ -1502,7 +1502,7 @@ sal_Bool SAL_CALL SvxShape::SetFillAttribute( sal_Int32 nWID, const OUString& rN
             XGradientListRef pGradientList = pModel->GetGradientList();
 
             if( !pGradientList.is() )
-                return sal_False;
+                return false;
 
             long nPos = pGradientList->GetIndex(aStrName);
             if( nPos == -1 )
@@ -1521,7 +1521,7 @@ sal_Bool SAL_CALL SvxShape::SetFillAttribute( sal_Int32 nWID, const OUString& rN
             XHatchListRef pHatchList = pModel->GetHatchList();
 
             if( !pHatchList.is() )
-                return sal_False;
+                return false;
 
             long nPos = pHatchList->GetIndex(aStrName);
             if( nPos == -1 )
@@ -1541,7 +1541,7 @@ sal_Bool SAL_CALL SvxShape::SetFillAttribute( sal_Int32 nWID, const OUString& rN
             XLineEndListRef pLineEndList = pModel->GetLineEndList();
 
             if( !pLineEndList.is() )
-                return sal_False;
+                return false;
 
             long nPos = pLineEndList->GetIndex(aStrName);
             if( nPos == -1 )
@@ -1587,16 +1587,16 @@ sal_Bool SAL_CALL SvxShape::SetFillAttribute( sal_Int32 nWID, const OUString& rN
             break;
         }
         default:
-            return sal_False;
+            return false;
         }
     }
 
-    return sal_True;
+    return true;
 }
 
 
 
-sal_Bool SAL_CALL SvxShape::SetFillAttribute( sal_Int32 nWID, const OUString& rName, SfxItemSet& rSet )
+bool SAL_CALL SvxShape::SetFillAttribute( sal_Int32 nWID, const OUString& rName, SfxItemSet& rSet )
 {
     OUString aName = SvxUnogetInternalNameForItem((sal_Int16)nWID, rName);
 
@@ -1614,18 +1614,18 @@ sal_Bool SAL_CALL SvxShape::SetFillAttribute( sal_Int32 nWID, const OUString& rN
                 else
                     rSet.Put( XLineStartItem( aEmpty, aEmptyPoly ) );
 
-                return sal_True;
+                return true;
             }
         case XATTR_FILLFLOATTRANSPARENCE:
             {
                 // #85953# Set a disabled XFillFloatTransparenceItem
                 rSet.Put(XFillFloatTransparenceItem());
 
-                return sal_True;
+                return true;
             }
         }
 
-        return sal_False;
+        return false;
     }
 
     const SfxItemPool* pPool = rSet.GetPool();
@@ -1640,11 +1640,11 @@ sal_Bool SAL_CALL SvxShape::SetFillAttribute( sal_Int32 nWID, const OUString& rN
         if( pItem && ( pItem->GetName() == aSearchName ) )
         {
             rSet.Put( *pItem );
-            return sal_True;
+            return true;
         }
     }
 
-    return sal_False;
+    return false;
 }
 
 
@@ -2966,7 +2966,7 @@ bool SvxShape::getPropertyValueImpl( const OUString&, const SfxItemPropertySimpl
         }
         else
         {
-            rValue = GetBitmap( sal_True );
+            rValue = GetBitmap( true );
         }
         break;
     }

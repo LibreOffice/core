@@ -89,12 +89,12 @@ public:
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XAnyCompare > SAL_CALL createAnyCompareByName( const OUString& PropertyName ) throw(::com::sun::star::uno::RuntimeException, std::exception);
 };
 
-SVX_DLLPUBLIC extern sal_Bool SvxDrawingLayerExport( SdrModel* pModel, const com::sun::star::uno::Reference<com::sun::star::io::XOutputStream>& xOut );
-SVX_DLLPUBLIC extern sal_Bool SvxDrawingLayerExport( SdrModel* pModel, const com::sun::star::uno::Reference<com::sun::star::io::XOutputStream>& xOut, const com::sun::star::uno::Reference< com::sun::star::lang::XComponent >& xComponent );
-SVX_DLLPUBLIC extern sal_Bool SvxDrawingLayerExport( SdrModel* pModel, const com::sun::star::uno::Reference<com::sun::star::io::XOutputStream>& xOut, const com::sun::star::uno::Reference< com::sun::star::lang::XComponent >& xComponent, const char* pExportService  );
-SVX_DLLPUBLIC extern sal_Bool SvxDrawingLayerImport( SdrModel* pModel, const com::sun::star::uno::Reference<com::sun::star::io::XInputStream>& xInputStream );
-SVX_DLLPUBLIC extern sal_Bool SvxDrawingLayerImport( SdrModel* pModel, const com::sun::star::uno::Reference<com::sun::star::io::XInputStream>& xInputStream, const com::sun::star::uno::Reference< com::sun::star::lang::XComponent >& xComponent  );
-SVX_DLLPUBLIC extern sal_Bool SvxDrawingLayerImport( SdrModel* pModel, const com::sun::star::uno::Reference<com::sun::star::io::XInputStream>& xInputStream, const com::sun::star::uno::Reference< com::sun::star::lang::XComponent >& xComponent, const char* pImportService );
+SVX_DLLPUBLIC extern bool SvxDrawingLayerExport( SdrModel* pModel, const com::sun::star::uno::Reference<com::sun::star::io::XOutputStream>& xOut );
+SVX_DLLPUBLIC extern bool SvxDrawingLayerExport( SdrModel* pModel, const com::sun::star::uno::Reference<com::sun::star::io::XOutputStream>& xOut, const com::sun::star::uno::Reference< com::sun::star::lang::XComponent >& xComponent );
+SVX_DLLPUBLIC extern bool SvxDrawingLayerExport( SdrModel* pModel, const com::sun::star::uno::Reference<com::sun::star::io::XOutputStream>& xOut, const com::sun::star::uno::Reference< com::sun::star::lang::XComponent >& xComponent, const char* pExportService  );
+SVX_DLLPUBLIC extern bool SvxDrawingLayerImport( SdrModel* pModel, const com::sun::star::uno::Reference<com::sun::star::io::XInputStream>& xInputStream );
+SVX_DLLPUBLIC extern bool SvxDrawingLayerImport( SdrModel* pModel, const com::sun::star::uno::Reference<com::sun::star::io::XInputStream>& xInputStream, const com::sun::star::uno::Reference< com::sun::star::lang::XComponent >& xComponent  );
+SVX_DLLPUBLIC extern bool SvxDrawingLayerImport( SdrModel* pModel, const com::sun::star::uno::Reference<com::sun::star::io::XInputStream>& xInputStream, const com::sun::star::uno::Reference< com::sun::star::lang::XComponent >& xComponent, const char* pImportService );
 
 #endif
 

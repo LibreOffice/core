@@ -33,7 +33,7 @@
 class SvxShapeMaster
 {
 public:
-    virtual sal_Bool queryAggregation( const com::sun::star::uno::Type & rType, com::sun::star::uno::Any& aAny ) = 0;
+    virtual bool queryAggregation( const com::sun::star::uno::Type & rType, com::sun::star::uno::Any& aAny ) = 0;
 
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) throw(::com::sun::star::uno::RuntimeException) = 0;
     virtual void SAL_CALL setPropertyValue( const OUString& aPropertyName, const ::com::sun::star::uno::Any& aValue )

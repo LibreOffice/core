@@ -141,7 +141,7 @@ protected:
 
     ::com::sun::star::uno::Any GetAnyForItem( SfxItemSet& aSet, const SfxItemPropertySimpleEntry* pMap ) const;
 
-    sal_Bool SAL_CALL SetFillAttribute( sal_Int32 nWID, const OUString& rName );
+    bool SAL_CALL SetFillAttribute( sal_Int32 nWID, const OUString& rName );
 
     /** called from the XActionLockable interface methods on initial locking */
     virtual void lock();
@@ -186,7 +186,7 @@ public:
     const SvxItemPropertySet& GetPropertySet() { return *mpPropSet; }
     SdrObject* GetSdrObject() const {return mpObj.get();}
     void SetShapeType( const OUString& ShapeType ) { maShapeType = ShapeType; }
-    ::com::sun::star::uno::Any GetBitmap( sal_Bool bMetaFile = sal_False ) const throw ();
+    ::com::sun::star::uno::Any GetBitmap( bool bMetaFile = false ) const throw ();
 
     ::svx::PropertyChangeNotifier& getShapePropertyChangeNotifier();
 
@@ -194,8 +194,8 @@ public:
     sal_uInt32 getShapeKind() const;
 
     // styles need this
-    static sal_Bool SAL_CALL SetFillAttribute( sal_Int32 nWID, const OUString& rName, SfxItemSet& rSet, SdrModel* pModel );
-    static sal_Bool SAL_CALL SetFillAttribute( sal_Int32 nWID, const OUString& rName, SfxItemSet& rSet );
+    static bool SAL_CALL SetFillAttribute( sal_Int32 nWID, const OUString& rName, SfxItemSet& rSet, SdrModel* pModel );
+    static bool SAL_CALL SetFillAttribute( sal_Int32 nWID, const OUString& rName, SfxItemSet& rSet );
 
     /** same as SetFillAttribute but for property names instead of which ids,
         and the property found is returned instead of set at the object
@@ -575,9 +575,9 @@ public:
     SvxOle2Shape( SdrObject* pObject, const SfxItemPropertyMapEntry* pPropertyMap, const SvxItemPropertySet* pPropertySet ) throw ();
     virtual ~SvxOle2Shape() throw();
 
-    sal_Bool createObject( const SvGlobalName &aClassName );
+    bool createObject( const SvGlobalName &aClassName );
 
-    sal_Bool createLink( const OUString& aLinkURL );
+    bool createLink( const OUString& aLinkURL );
 
     // XInterface
     virtual ::com::sun::star::uno::Any SAL_CALL queryAggregation( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException, std::exception);

@@ -256,7 +256,7 @@ bool SvxOle2Shape::getPropertyValueImpl( const OUString& rName, const SfxItemPro
         }
         else
         {
-            rValue = GetBitmap( sal_True );
+            rValue = GetBitmap( true );
         }
         break;
     }
@@ -395,13 +395,13 @@ bool SvxOle2Shape::getPropertyValueImpl( const OUString& rName, const SfxItemPro
     return true;
 }
 
-sal_Bool SvxOle2Shape::createObject( const SvGlobalName &aClassName )
+bool SvxOle2Shape::createObject( const SvGlobalName &aClassName )
 {
     DBG_TESTSOLARMUTEX();
 
     SdrOle2Obj* pOle2Obj = dynamic_cast< SdrOle2Obj* >( mpObj.get() );
     if ( !pOle2Obj || !pOle2Obj->IsEmpty() )
-        return sal_False;
+        return false;
 
     // create storage and inplace object
     ::comphelper::IEmbeddedHelper*     pPersist = mpModel->GetPersist();
@@ -448,13 +448,13 @@ sal_Bool SvxOle2Shape::createObject( const SvGlobalName &aClassName )
     return xObj.is();
 }
 
-sal_Bool SvxOle2Shape::createLink( const OUString& aLinkURL )
+bool SvxOle2Shape::createLink( const OUString& aLinkURL )
 {
     DBG_TESTSOLARMUTEX();
 
     SdrOle2Obj* pOle2Obj = dynamic_cast< SdrOle2Obj* >( mpObj.get() );
     if ( !pOle2Obj || !pOle2Obj->IsEmpty() )
-        return sal_False;
+        return false;
 
     OUString aPersistName;
 

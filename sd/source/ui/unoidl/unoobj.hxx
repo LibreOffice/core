@@ -73,7 +73,7 @@ public:
     SdXShape(SvxShape* pShape, SdXImpressDocument* pModel) throw();
     virtual ~SdXShape() throw();
 
-    virtual sal_Bool queryAggregation( const com::sun::star::uno::Type & rType, com::sun::star::uno::Any& aAny );
+    virtual bool queryAggregation( const com::sun::star::uno::Type & rType, com::sun::star::uno::Any& aAny );
     virtual void dispose();
     virtual void modelChanged( SdrModel* pNewModel );
     virtual void pageChanged( SdrPage* pNewPage );

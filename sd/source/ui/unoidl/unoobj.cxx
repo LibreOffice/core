@@ -341,18 +341,18 @@ void SAL_CALL SdXShape::release() throw()
     mpShape->release();
 }
 
-sal_Bool SdXShape::queryAggregation( const com::sun::star::uno::Type & rType, com::sun::star::uno::Any& aAny )
+bool SdXShape::queryAggregation( const com::sun::star::uno::Type & rType, com::sun::star::uno::Any& aAny )
 {
     if( mpModel && mpModel ->IsImpressDocument() )
     {
         if( rType == ::getCppuType(( const uno::Reference< document::XEventsSupplier >*)0) )
         {
             aAny <<= uno::Reference< document::XEventsSupplier >(this);
-            return sal_True;
+            return true;
         }
     }
 
-    return sal_False;
+    return false;
 }
 
 uno::Sequence< uno::Type > SAL_CALL SdXShape::getTypes()
