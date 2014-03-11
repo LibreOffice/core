@@ -359,50 +359,48 @@ void GalleryTheme::UnlockBroadcaster( sal_uIntPtr nUpdatePos )
 
 bool GalleryTheme::InsertObject( const SgaObject& rObj, sal_uIntPtr nInsertPos )
 {
-    sal_Bool bRet = sal_False;
+    if (!rObj.IsValid())
+        return false;
 
-    if( rObj.IsValid() )
+    GalleryObject* pFoundEntry = NULL;
+    size_t iFoundPos = 0;
+    for (size_t n = aObjectList.size(); iFoundPos < n; ++iFoundPos)
     {
-        GalleryObject*  pFoundEntry = NULL;
-        size_t iFoundPos = 0;
-        for ( size_t n = aObjectList.size(); iFoundPos < n; ++iFoundPos )
+        if (aObjectList[ iFoundPos ]->aURL == rObj.GetURL())
         {
-            if ( aObjectList[ iFoundPos ]->aURL == rObj.GetURL() )
-            {
-                pFoundEntry = aObjectList[ iFoundPos ];
-                break;
-            }
+            pFoundEntry = aObjectList[ iFoundPos ];
+            break;
         }
-
-        if( pFoundEntry )
-        {
-            GalleryObject aNewEntry;
-
-            // update title of new object if necessary
-            if( rObj.GetTitle().isEmpty() )
-            {
-                SgaObject* pOldObj = ImplReadSgaObject( pFoundEntry );
-
-                if( pOldObj )
-                {
-                    ( (SgaObject&) rObj ).SetTitle( pOldObj->GetTitle() );
-                    delete pOldObj;
-                }
-            }
-            else if( rObj.GetTitle() == "__<empty>__" )
-                ( (SgaObject&) rObj ).SetTitle( "" );
-
-            ImplWriteSgaObject( rObj, nInsertPos, &aNewEntry );
-            pFoundEntry->nOffset = aNewEntry.nOffset;
-        }
-        else
-            ImplWriteSgaObject( rObj, nInsertPos, NULL );
-
-        ImplSetModified( (bRet = sal_True) );
-        ImplBroadcast( pFoundEntry ? iFoundPos : nInsertPos );
     }
 
-    return bRet;
+    if (pFoundEntry)
+    {
+        GalleryObject aNewEntry;
+
+        // update title of new object if necessary
+        if (rObj.GetTitle().isEmpty())
+        {
+            SgaObject* pOldObj = ImplReadSgaObject(pFoundEntry);
+
+            if (pOldObj)
+            {
+                ((SgaObject&) rObj).SetTitle( pOldObj->GetTitle() );
+                delete pOldObj;
+            }
+        }
+        else if (rObj.GetTitle() == "__<empty>__")
+            ((SgaObject&) rObj).SetTitle("");
+
+        ImplWriteSgaObject(rObj, nInsertPos, &aNewEntry);
+        pFoundEntry->nOffset = aNewEntry.nOffset;
+    }
+    else
+        ImplWriteSgaObject(rObj, nInsertPos, NULL);
+
+    ImplSetModified(true);
+    ImplBroadcast(pFoundEntry? iFoundPos: nInsertPos);
+
+    return true;
 }
 
 SgaObject* GalleryTheme::AcquireObject( size_t nPos )
@@ -481,29 +479,26 @@ bool GalleryTheme::RemoveObject( size_t nPos )
 
 bool GalleryTheme::ChangeObjectPos( size_t nOldPos, size_t nNewPos )
 {
-    sal_Bool bRet = sal_False;
+    if (nOldPos == nNewPos || nOldPos >= aObjectList.size())
+        return false;
 
-    if(  nOldPos != nNewPos
-      && nOldPos < aObjectList.size()
-      )
-    {
-        GalleryObject* pEntry = aObjectList[ nOldPos ];
+    GalleryObject* pEntry = aObjectList[nOldPos];
 
-        GalleryObjectList::iterator it = aObjectList.begin();
-        ::std::advance( it, nNewPos );
-        aObjectList.insert( it, pEntry );
+    GalleryObjectList::iterator it = aObjectList.begin();
+    ::std::advance(it, nNewPos);
+    aObjectList.insert(it, pEntry);
 
-        if( nNewPos < nOldPos ) nOldPos++;
+    if (nNewPos < nOldPos)
+        nOldPos++;
 
-        it = aObjectList.begin();
-        ::std::advance( it, nOldPos );
-        aObjectList.erase( it );
+    it = aObjectList.begin();
+    ::std::advance(it, nOldPos);
+    aObjectList.erase(it);
 
-        ImplSetModified( (bRet = sal_True) );
-        ImplBroadcast( ( nNewPos < nOldPos ) ? nNewPos : ( nNewPos - 1 ) );
-    }
+    ImplSetModified(true);
+    ImplBroadcast((nNewPos < nOldPos)? nNewPos: (nNewPos - 1));
 
-    return bRet;
+    return true;
 }
 
 void GalleryTheme::Actualize( const Link& rActualizeLink, GalleryProgress* pProgress )
@@ -1525,7 +1520,9 @@ SvStream& ReadGalleryTheme( SvStream& rIn, GalleryTheme& rTheme )
 }
 
 void GalleryTheme::ImplSetModified( bool bModified )
-{ pThm->SetModified( bModified ); }
+{
+    pThm->SetModified(bModified);
+}
 
 const OUString& GalleryTheme::GetRealName() const { return pThm->GetThemeName(); }
 const INetURLObject& GalleryTheme::GetThmURL() const { return pThm->GetThmURL(); }
