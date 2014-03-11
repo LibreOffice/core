@@ -49,6 +49,7 @@ public:
     void testShapeFollowedByChart();
     void testPieChartDataLabels();
     void testSeriesIdxOrder();
+    void testErrorBarDataRangeODS();
 
     CPPUNIT_TEST_SUITE(Chart2ExportTest);
     CPPUNIT_TEST(test);
@@ -70,6 +71,7 @@ public:
     CPPUNIT_TEST(testShapeFollowedByChart);
     CPPUNIT_TEST(testPieChartDataLabels);
     CPPUNIT_TEST(testSeriesIdxOrder);
+    CPPUNIT_TEST(testErrorBarDataRangeODS);
     CPPUNIT_TEST_SUITE_END();
 
 protected:
@@ -620,6 +622,37 @@ void Chart2ExportTest::testSeriesIdxOrder()
     assertXPath(pXmlDoc, "/c:chartSpace[1]/c:chart[1]/c:plotArea[1]/c:lineChart[1]/c:ser[1]/c:idx[1]", "val", "1");
     assertXPath(pXmlDoc, "/c:chartSpace[1]/c:chart[1]/c:plotArea[1]/c:lineChart[1]/c:ser[1]/c:order[1]", "val", "1");
 }
+
+void Chart2ExportTest::testErrorBarDataRangeODS()
+{
+    load("/chart2/qa/extras/data/ods/", "ErrorBarRange.ods");
+    reload("calc8");
+
+    uno::Reference< chart2::XChartDocument > xChartDoc = getChartDocFromSheet( 0, mxComponent );
+    CPPUNIT_ASSERT(xChartDoc.is());
+
+    Reference< chart2::XDataSeries > xDataSeries = getDataSeriesFromDoc( xChartDoc, 0 );
+    CPPUNIT_ASSERT( xDataSeries.is() );
+
+    Reference< beans::XPropertySet > xPropSet( xDataSeries, UNO_QUERY_THROW );
+    CPPUNIT_ASSERT( xPropSet.is() );
+
+    // test that y error bars are there
+    Reference< beans::XPropertySet > xErrorBarYProps;
+    xPropSet->getPropertyValue("ErrorBarY") >>= xErrorBarYProps;
+    uno::Any aAny = xErrorBarYProps->getPropertyValue("ErrorBarRangePositive");
+    CPPUNIT_ASSERT(aAny.hasValue());
+    OUString aPosRange;
+    aAny >>= aPosRange;
+    CPPUNIT_ASSERT_EQUAL(OUString("$Sheet1.$B$1:$B$3"), aPosRange);
+
+    aAny = xErrorBarYProps->getPropertyValue("ErrorBarRangeNegative");
+    CPPUNIT_ASSERT(aAny.hasValue());
+    OUString aNegRange;
+    aAny >>= aNegRange;
+    CPPUNIT_ASSERT_EQUAL(OUString("$Sheet1.$C$1:$C$3"), aNegRange);
+}
+
 CPPUNIT_TEST_SUITE_REGISTRATION(Chart2ExportTest);
 
 CPPUNIT_PLUGIN_IMPLEMENT();
