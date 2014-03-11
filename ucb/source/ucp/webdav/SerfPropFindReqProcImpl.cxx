@@ -23,6 +23,8 @@
 
 #include <webdavresponseparser.hxx>
 #include <comphelper/seqstream.hxx>
+#include <rtl/strbuf.hxx>
+
 
 using namespace com::sun::star;
 
@@ -89,8 +91,11 @@ serf_bucket_t * SerfPropFindReqProcImpl::createSerfRequestBucket( serf_request_t
 
     // body bucket - certain properties OR all properties OR only property names
     serf_bucket_t* body_bkt = 0;
-    OUString aBodyText;
+    OString aBodyText;
     {
+        OStringBuffer aBuffer;
+        aBuffer.append( PROPFIND_HEADER );
+
         // create and fill body bucket with requested properties
         const int nPropCount = ( !mbOnlyPropertyNames && mpPropNames )
                                ? mpPropNames->size()
@@ -119,23 +124,19 @@ serf_bucket_t * SerfPropFindReqProcImpl::createSerfRequestBucket( serf_request_t
         {
             if ( mbOnlyPropertyNames )
             {
-                aBodyText = OUString::createFromAscii( "<propname/>" );
+                aBuffer.append( "<propname/>" );
             }
             else
             {
-                aBodyText = OUString::createFromAscii( "<allprop/>" );
+                aBuffer.append( "<allprop/>" );
             }
         }
 
-        aBodyText = OUString::createFromAscii( PROPFIND_HEADER ) +
-                    aBodyText +
-                    OUString::createFromAscii( PROPFIND_TRAILER );
-        body_bkt = SERF_BUCKET_SIMPLE_STRING( OUStringToOString( aBodyText, RTL_TEXTENCODING_UTF8 ),
-                                              pSerfBucketAlloc );
-        if ( useChunkedEncoding() )
-        {
-            body_bkt = serf_bucket_chunk_create( body_bkt, pSerfBucketAlloc );
-        }
+        aBuffer.append( PROPFIND_TRAILER );
+        aBodyText = aBuffer.makeStringAndClear();
+        body_bkt = serf_bucket_simple_copy_create( aBodyText.getStr(),
+                                                   aBodyText.getLength(),
+                                                   pSerfBucketAlloc );
     }
 
     // create serf request
