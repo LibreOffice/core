@@ -398,7 +398,8 @@ bool GalleryTheme::InsertObject( const SgaObject& rObj, sal_uIntPtr nInsertPos )
         else
             ImplWriteSgaObject( rObj, nInsertPos, NULL );
 
-        ImplSetModified( bRet = sal_True );
+        bRet = sal_True;
+        ImplSetModified( sal_True );
         ImplBroadcast( pFoundEntry ? iFoundPos : nInsertPos );
     }
 
@@ -499,7 +500,8 @@ bool GalleryTheme::ChangeObjectPos( size_t nOldPos, size_t nNewPos )
         ::std::advance( it, nOldPos );
         aObjectList.erase( it );
 
-        ImplSetModified( bRet = sal_True );
+        bRet = sal_True;
+        ImplSetModified( sal_True );
         ImplBroadcast( ( nNewPos < nOldPos ) ? nNewPos : ( nNewPos - 1 ) );
     }
 
