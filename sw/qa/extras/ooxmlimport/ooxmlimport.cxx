@@ -47,6 +47,7 @@
 #include <com/sun/star/view/XFormLayerAccess.hpp>
 #include <com/sun/star/table/BorderLine2.hpp>
 #include <com/sun/star/table/TableBorder2.hpp>
+#include <com/sun/star/table/TableBorderDistances.hpp>
 #include <com/sun/star/text/SizeType.hpp>
 #include <com/sun/star/xml/dom/XDocument.hpp>
 #include <com/sun/star/text/XDocumentIndex.hpp>
@@ -208,6 +209,21 @@ DECLARE_OOXMLIMPORT_TEST(testRhbz988516, "rhbz988516.docx")
             getProperty<OUString>(getParagraph(2), "NumberingStyleName"));
     CPPUNIT_ASSERT_EQUAL(OUString(),
             getProperty<OUString>(getParagraph(3), "NumberingStyleName"));
+}
+
+DECLARE_OOXMLIMPORT_TEST(testRhbz1075124, "rhbz1075124.docx")
+{
+    // negative left margin on table wrapped around to 64k unsigned
+    uno::Reference<text::XTextTablesSupplier> xTablesSupplier(mxComponent,
+            uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xTables(
+            xTablesSupplier->getTextTables(), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(-243),
+            getProperty<sal_Int32>(xTables->getByIndex(0), "LeftMargin"));
+    table::TableBorderDistances dists(
+            getProperty<table::TableBorderDistances>(xTables->getByIndex(0),
+                "TableBorderDistances"));
+    CPPUNIT_ASSERT_EQUAL(sal_Int16(26), dists.LeftDistance);
 }
 
 DECLARE_OOXMLIMPORT_TEST(testFdo49940, "fdo49940.docx")

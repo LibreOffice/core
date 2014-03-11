@@ -366,8 +366,8 @@ namespace dmapper {
                    if (m_pCurrentInteropGrabBag)
                        m_pCurrentInteropGrabBag->push_back(pHandler->getInteropGrabBag());
                    TablePropertyMapPtr pTblIndMap(new TablePropertyMap);
-                   sal_uInt32 nTblInd = pHandler->getMeasureValue();
-                   pTblIndMap->setValue( TablePropertyMap::LEFT_MARGIN, nTblInd);
+                   sal_Int32 nTblInd = pHandler->getMeasureValue();
+                   pTblIndMap->setValue(TablePropertyMap::LEFT_MARGIN, nTblInd);
                    insertTableProps(pTblIndMap);
                }
            }
