@@ -70,6 +70,9 @@ class DocxExport : public MSWordExportBase
     /// Fast serializer for the document output.
     ::sax_fastparser::FSHelperPtr m_pDocumentFS;
 
+    /// Fast serializer to output the data.
+    ::sax_fastparser::FSHelperPtr mpFS;
+
     /// Access to the DrawingML writer.
     oox::drawingml::DrawingML *m_pDrawingML;
 
@@ -272,6 +275,10 @@ public:
 
     /// Set the document default tab stop.
     void setDefaultTabStop( int stop ) { m_aSettings.defaultTabStop = stop; }
+
+    ::sax_fastparser::FSHelperPtr GetFS() { return mpFS; }
+
+    void SetFS(::sax_fastparser::FSHelperPtr mpFS);
 
 private:
     /// No copying.

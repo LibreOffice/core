@@ -3816,6 +3816,7 @@ void DocxAttributeOutput::WriteOLE( SwOLENode& rNode, const Size& rSize, const S
 
     // write preview image
     const Graphic* pGraphic = rNode.GetGraphic();
+    m_rDrawingML.SetFS(m_pSerializer);
     OUString sImageId = m_rDrawingML.WriteImage( *pGraphic );
 
     m_pSerializer->startElementNS( XML_w, XML_object, FSEND );
