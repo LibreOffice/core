@@ -106,7 +106,13 @@ Reference< XCloneable > SAL_CALL OColumnControlModel::createClone( ) throw (Runt
     return new OColumnControlModel( this, getORB() );
 }
 
-IMPLEMENT_TYPEPROVIDER2(OColumnControlModel,OColumnControlModel_BASE,comphelper::OPropertyContainer)
+css::uno::Sequence<sal_Int8> OColumnControlModel::getImplementationId()
+    throw (css::uno::RuntimeException, std::exception)
+{
+    return css::uno::Sequence<sal_Int8>();
+}
+
+IMPLEMENT_GETTYPES2(OColumnControlModel,OColumnControlModel_BASE,comphelper::OPropertyContainer)
 IMPLEMENT_PROPERTYCONTAINER_DEFAULTS(OColumnControlModel)
 IMPLEMENT_SERVICE_INFO2_STATIC(OColumnControlModel,"com.sun.star.comp.dbu.OColumnControlModel","com.sun.star.awt.UnoControlModel","com.sun.star.sdb.ColumnDescriptorControlModel")
 IMPLEMENT_FORWARD_REFCOUNT( OColumnControlModel, OColumnControlModel_BASE )

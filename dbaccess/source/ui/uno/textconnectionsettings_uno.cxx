@@ -73,7 +73,9 @@ namespace dbaui
         virtual ~OTextConnectionSettingsDialog();
 
     public:
-        DECLARE_IMPLEMENTATION_ID( );
+        virtual css::uno::Sequence<sal_Int8> SAL_CALL getImplementationId()
+            throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+
         DECLARE_SERVICE_INFO_STATIC( );
         DECLARE_PROPERTYCONTAINER_DEFAULTS( );
 
@@ -118,7 +120,12 @@ namespace dbaui
     {
     }
 
-    IMPLEMENT_IMPLEMENTATION_ID( OTextConnectionSettingsDialog )
+    css::uno::Sequence<sal_Int8>
+    OTextConnectionSettingsDialog::getImplementationId()
+        throw (css::uno::RuntimeException, std::exception)
+    {
+        return css::uno::Sequence<sal_Int8>();
+    }
 
     IMPLEMENT_SERVICE_INFO_IMPLNAME_STATIC(OTextConnectionSettingsDialog, "com.sun.star.comp.dbaccess.OTextConnectionSettingsDialog")
     IMPLEMENT_SERVICE_INFO_SUPPORTS(OTextConnectionSettingsDialog)

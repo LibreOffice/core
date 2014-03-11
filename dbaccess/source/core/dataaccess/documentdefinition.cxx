@@ -490,7 +490,13 @@ void SAL_CALL ODocumentDefinition::disposing()
     }
 }
 
-IMPLEMENT_TYPEPROVIDER3(ODocumentDefinition,OContentHelper,OPropertyStateContainer,ODocumentDefinition_Base);
+css::uno::Sequence<sal_Int8> ODocumentDefinition::getImplementationId()
+    throw (css::uno::RuntimeException, std::exception)
+{
+    return css::uno::Sequence<sal_Int8>();
+}
+
+IMPLEMENT_GETTYPES3(ODocumentDefinition,OContentHelper,OPropertyStateContainer,ODocumentDefinition_Base);
 IMPLEMENT_FORWARD_XINTERFACE3( ODocumentDefinition,OContentHelper,OPropertyStateContainer,ODocumentDefinition_Base)
 IMPLEMENT_SERVICE_INFO1(ODocumentDefinition,"com.sun.star.comp.dba.ODocumentDefinition",SERVICE_SDB_DOCUMENTDEFINITION)
 

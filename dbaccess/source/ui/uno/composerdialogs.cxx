@@ -68,7 +68,11 @@ namespace dbaui
 
     }
 
-    IMPLEMENT_IMPLEMENTATION_ID( ComposerDialog )
+    css::uno::Sequence<sal_Int8> ComposerDialog::getImplementationId()
+        throw (css::uno::RuntimeException, std::exception)
+    {
+        return css::uno::Sequence<sal_Int8>();
+    }
 
     IMPLEMENT_PROPERTYCONTAINER_DEFAULTS( ComposerDialog )
 

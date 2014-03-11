@@ -49,7 +49,11 @@ public:
         );
 
     DECLARE_XINTERFACE( )
-    DECLARE_TYPEPROVIDER( );
+
+    virtual css::uno::Sequence<css::uno::Type> SAL_CALL getTypes()
+        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual css::uno::Sequence<sal_Int8> SAL_CALL getImplementationId()
+        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // XSingleServiceFactory
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL createInstance( ) throw (::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException, std::exception);

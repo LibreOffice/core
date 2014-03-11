@@ -150,7 +150,12 @@ OComponentDefinition::OComponentDefinition( const Reference< XInterface >& _rxCo
     OSL_ENSURE(!m_pImpl->m_aProps.aTitle.isEmpty(), "OComponentDefinition::OComponentDefinition : invalid name !");
 }
 
-IMPLEMENT_IMPLEMENTATION_ID(OComponentDefinition);
+css::uno::Sequence<sal_Int8> OComponentDefinition::getImplementationId()
+    throw (css::uno::RuntimeException, std::exception)
+{
+    return css::uno::Sequence<sal_Int8>();
+}
+
 IMPLEMENT_GETTYPES3(OComponentDefinition,ODataSettings,OContentHelper,OComponentDefinition_BASE);
 IMPLEMENT_FORWARD_XINTERFACE3( OComponentDefinition,OContentHelper,ODataSettings,OComponentDefinition_BASE)
 

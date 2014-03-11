@@ -144,7 +144,12 @@ OCommandDefinition::OCommandDefinition( const Reference< XInterface >& _rxContai
     registerProperties();
 }
 
-IMPLEMENT_IMPLEMENTATION_ID(OCommandDefinition);
+css::uno::Sequence<sal_Int8> OCommandDefinition::getImplementationId()
+    throw (css::uno::RuntimeException, std::exception)
+{
+    return css::uno::Sequence<sal_Int8>();
+}
+
 IMPLEMENT_GETTYPES2(OCommandDefinition,OCommandDefinition_Base,OComponentDefinition);
 IMPLEMENT_FORWARD_XINTERFACE2( OCommandDefinition,OComponentDefinition,OCommandDefinition_Base)
 IMPLEMENT_PROPERTYCONTAINER_DEFAULTS2(OCommandDefinition,OCommandDefinition_PROP)

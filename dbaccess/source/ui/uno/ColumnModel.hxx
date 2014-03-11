@@ -76,8 +76,10 @@ public:
 // ::com::sun::star::lang::XServiceInfo
     DECLARE_SERVICE_INFO_STATIC();
 
-// XTypeProvider
-    DECLARE_TYPEPROVIDER( );
+    virtual css::uno::Sequence<css::uno::Type> SAL_CALL getTypes()
+        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual css::uno::Sequence<sal_Int8> SAL_CALL getImplementationId()
+        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
 // com::sun::star::uno::XAggregation
     virtual ::com::sun::star::uno::Any SAL_CALL queryAggregation( const ::com::sun::star::uno::Type& aType ) throw(::com::sun::star::uno::RuntimeException, std::exception);

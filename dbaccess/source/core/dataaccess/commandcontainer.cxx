@@ -54,7 +54,13 @@ OCommandContainer::~OCommandContainer()
 }
 
 IMPLEMENT_FORWARD_XINTERFACE2( OCommandContainer,ODefinitionContainer,OCommandContainer_BASE)
-IMPLEMENT_TYPEPROVIDER2(OCommandContainer,ODefinitionContainer,OCommandContainer_BASE);
+IMPLEMENT_GETTYPES2(OCommandContainer,ODefinitionContainer,OCommandContainer_BASE);
+
+css::uno::Sequence<sal_Int8> OCommandContainer::getImplementationId()
+    throw (css::uno::RuntimeException, std::exception)
+{
+    return css::uno::Sequence<sal_Int8>();
+}
 
 Reference< XContent > OCommandContainer::createObject( const OUString& _rName)
 {

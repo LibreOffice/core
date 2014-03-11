@@ -297,7 +297,14 @@ void SAL_CALL OSingleSelectQueryComposer::disposing(void)
 
 IMPLEMENT_FORWARD_XINTERFACE3(OSingleSelectQueryComposer,OSubComponent,OSingleSelectQueryComposer_BASE,OPropertyContainer)
 IMPLEMENT_SERVICE_INFO1(OSingleSelectQueryComposer,"org.openoffice.comp.dba.OSingleSelectQueryComposer",SERVICE_NAME_SINGLESELECTQUERYCOMPOSER)
-IMPLEMENT_TYPEPROVIDER3(OSingleSelectQueryComposer,OSubComponent,OSingleSelectQueryComposer_BASE,OPropertyContainer)
+
+css::uno::Sequence<sal_Int8> OSingleSelectQueryComposer::getImplementationId()
+    throw (css::uno::RuntimeException, std::exception)
+{
+    return css::uno::Sequence<sal_Int8>();
+}
+
+IMPLEMENT_GETTYPES3(OSingleSelectQueryComposer,OSubComponent,OSingleSelectQueryComposer_BASE,OPropertyContainer)
 IMPLEMENT_PROPERTYCONTAINER_DEFAULTS(OSingleSelectQueryComposer)
 
 // XSingleSelectQueryAnalyzer

@@ -57,7 +57,11 @@ namespace dbaui
 
     }
 
-    IMPLEMENT_IMPLEMENTATION_ID( ODirectSQLDialog )
+    css::uno::Sequence<sal_Int8> ODirectSQLDialog::getImplementationId()
+        throw (css::uno::RuntimeException, std::exception)
+    {
+        return css::uno::Sequence<sal_Int8>();
+    }
 
     IMPLEMENT_SERVICE_INFO_IMPLNAME_STATIC(ODirectSQLDialog, "com.sun.star.comp.sdb.DirectSQLDialog")
     IMPLEMENT_SERVICE_INFO_SUPPORTS(ODirectSQLDialog)

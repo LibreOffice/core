@@ -148,7 +148,14 @@ ODefinitionContainer::~ODefinitionContainer()
 }
 
 IMPLEMENT_FORWARD_XINTERFACE2( ODefinitionContainer,OContentHelper,ODefinitionContainer_Base)
-IMPLEMENT_TYPEPROVIDER2(ODefinitionContainer,OContentHelper,ODefinitionContainer_Base);
+IMPLEMENT_GETTYPES2(ODefinitionContainer,OContentHelper,ODefinitionContainer_Base);
+
+css::uno::Sequence<sal_Int8> ODefinitionContainer::getImplementationId()
+    throw (css::uno::RuntimeException, std::exception)
+{
+    return css::uno::Sequence<sal_Int8>();
+}
+
 // XServiceInfo
 OUString SAL_CALL ODefinitionContainer::getImplementationName(  ) throw(RuntimeException, std::exception)
 {

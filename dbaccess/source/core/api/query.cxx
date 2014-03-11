@@ -108,7 +108,12 @@ OQuery::~OQuery()
 {
 }
 
-IMPLEMENT_IMPLEMENTATION_ID(OQuery);
+css::uno::Sequence<sal_Int8> OQuery::getImplementationId()
+    throw (css::uno::RuntimeException, std::exception)
+{
+    return css::uno::Sequence<sal_Int8>();
+}
+
 IMPLEMENT_GETTYPES3(OQuery,OQueryDescriptor_Base,ODataSettings,OContentHelper);
 IMPLEMENT_FORWARD_XINTERFACE3( OQuery,OContentHelper,OQueryDescriptor_Base,ODataSettings)
 

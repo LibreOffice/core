@@ -65,7 +65,13 @@ OQueryDescriptor::~OQueryDescriptor()
 {
 }
 
-IMPLEMENT_TYPEPROVIDER2(OQueryDescriptor,OQueryDescriptor_Base,ODataSettings);
+css::uno::Sequence<sal_Int8> OQueryDescriptor::getImplementationId()
+    throw (css::uno::RuntimeException, std::exception)
+{
+    return css::uno::Sequence<sal_Int8>();
+}
+
+IMPLEMENT_GETTYPES2(OQueryDescriptor,OQueryDescriptor_Base,ODataSettings);
 IMPLEMENT_FORWARD_XINTERFACE3( OQueryDescriptor,OWeakObject,OQueryDescriptor_Base,ODataSettings)
 
 void OQueryDescriptor::registerProperties()

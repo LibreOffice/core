@@ -48,7 +48,8 @@ namespace dbaui
         virtual ~ODirectSQLDialog();
 
     public:
-        DECLARE_IMPLEMENTATION_ID( );
+        virtual css::uno::Sequence<sal_Int8> SAL_CALL getImplementationId()
+            throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
         DECLARE_SERVICE_INFO_STATIC( );
 

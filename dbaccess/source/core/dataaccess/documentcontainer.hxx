@@ -59,8 +59,12 @@ public:
 
     // ::com::sun::star::uno::XInterface
     DECLARE_XINTERFACE( )
-    // com::sun::star::lang::XTypeProvider
-    DECLARE_TYPEPROVIDER( );
+
+    virtual css::uno::Sequence<css::uno::Type> SAL_CALL getTypes()
+        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual css::uno::Sequence<sal_Int8> SAL_CALL getImplementationId()
+        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+
     // ::com::sun::star::lang::XServiceInfo
     DECLARE_SERVICE_INFO();
 

@@ -114,7 +114,14 @@ ODocumentContainer::~ODocumentContainer()
 }
 
 IMPLEMENT_FORWARD_XINTERFACE3( ODocumentContainer,ODefinitionContainer,ODocumentContainer_Base,OPropertyStateContainer)
-IMPLEMENT_TYPEPROVIDER3(ODocumentContainer,ODefinitionContainer,OPropertyStateContainer,ODocumentContainer_Base);
+
+css::uno::Sequence<sal_Int8> ODocumentContainer::getImplementationId()
+    throw (css::uno::RuntimeException, std::exception)
+{
+    return css::uno::Sequence<sal_Int8>();
+}
+
+IMPLEMENT_GETTYPES3(ODocumentContainer,ODefinitionContainer,OPropertyStateContainer,ODocumentContainer_Base);
 IMPLEMENT_SERVICE_INFO_IMPLNAME(ODocumentContainer, "com.sun.star.comp.dba.ODocumentContainer");
 IMPLEMENT_SERVICE_INFO_SUPPORTS(ODocumentContainer);
 IMPLEMENT_PROPERTYCONTAINER_DEFAULTS(ODocumentContainer)
