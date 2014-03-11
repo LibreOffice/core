@@ -209,7 +209,7 @@ namespace comphelper
         @param  _rNewValue
             the new value to be notified
         */
-        virtual void SAL_CALL   NotifyAccessibleEvent(
+        void NotifyAccessibleEvent(
                     const sal_Int16 _nEventId,
                     const ::com::sun::star::uno::Any& _rOldValue,
                     const ::com::sun::star::uno::Any& _rNewValue
