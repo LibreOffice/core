@@ -384,7 +384,7 @@ bool SwTabPortion::PreFormat( SwTxtFormatInfo &rInf )
     // Break tab stop to next line if:
     // 1. Minmal width does not fit to line anymore.
     // 2. An underflow event was called for the tab portion.
-    bool bFull = ( bTabCompat && rInf.IsUnderFlow() ) ||
+    bool bFull = ( bTabCompat && rInf.IsUnderflow() ) ||
                      ( rInf.Width() <= rInf.X() + PrtWidth() && rInf.X() <= rInf.Width() ) ;
 
     // #95477# Rotated tab stops get the width of one blank

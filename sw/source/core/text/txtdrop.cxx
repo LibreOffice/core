@@ -376,7 +376,7 @@ bool SwDropPortion::FormatTxt( SwTxtFormatInfo &rInf )
         return false;
 
     // looks like shit, but what can we do?
-    rInf.SetUnderFlow( 0 );
+    rInf.SetUnderflow( 0 );
     Truncate();
     SetLen( nOldLen );
     rInf.SetLen( nOldInfLen );

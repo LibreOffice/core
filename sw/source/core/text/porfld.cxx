@@ -416,7 +416,7 @@ bool SwFldPortion::Format( SwTxtFormatInfo &rInf )
         }
     }
 
-    if( bEOL && rInf.GetLast() && !rInf.GetUnderFlow() )
+    if( bEOL && rInf.GetLast() && !rInf.GetUnderflow() )
         rInf.GetLast()->FormatEOL( rInf );
     return bFull;
 }

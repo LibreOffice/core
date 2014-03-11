@@ -282,7 +282,7 @@ void SwTxtPortion::BreakUnderflow( SwTxtFormatInfo &rInf )
     Width( 0 );
     SetLen( 0 );
     SetAscent( 0 );
-    rInf.SetUnderFlow( this );
+    rInf.SetUnderflow( this );
 }
 
  /*************************************************************************
@@ -299,7 +299,7 @@ bool SwTxtPortion::_Format( SwTxtFormatInfo &rInf )
 {
     // 5744: If only the hypen does not fit anymore, we still need to wrap
     // the word, or else return true!
-    if( rInf.IsUnderFlow() && rInf.GetSoftHyphPos() )
+    if( rInf.IsUnderflow() && rInf.GetSoftHyphPos() )
     {
         // soft hyphen portion has triggered an underflow event because
         // of an alternative spelling position
@@ -441,7 +441,7 @@ bool SwTxtPortion::_Format( SwTxtFormatInfo &rInf )
             ( !bFirstPor || rInf.GetFly() || rInf.GetLast()->IsFlyPortion() ||
               rInf.IsFirstMulti() ) &&
             ( !rInf.GetLast()->IsBlankPortion() ||  ((SwBlankPortion*)
-              rInf.GetLast())->MayUnderFlow( rInf, rInf.GetIdx()-1, true )))
+              rInf.GetLast())->MayUnderflow( rInf, rInf.GetIdx()-1, true )))
         {       // case C1 (former BreakUnderflow())
             BreakUnderflow( rInf );
         }

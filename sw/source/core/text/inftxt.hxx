@@ -181,7 +181,7 @@ protected:
     bool m_bOnWin     : 1;
     bool m_bNotEOL    : 1;
     bool m_bURLNotify : 1;
-    bool m_bStopUnderFlow : 1; // Underflow was stopped e.g. by a FlyPortion
+    bool m_bStopUnderflow : 1; // Underflow was stopped e.g. by a FlyPortion
     bool m_bFtnInside : 1;     // the current line contains a footnote
     bool m_bOtherThanFtnInside : 1; // the current line contains another portion than a footnote portion.
                                       // needed for checking keep together of footnote portion with previous portion
@@ -217,7 +217,7 @@ protected:
         , m_bOnWin    (false)
         , m_bNotEOL   (false)
         , m_bURLNotify(false)
-        , m_bStopUnderFlow(false)
+        , m_bStopUnderflow(false)
         , m_bFtnInside(false)
         , m_bOtherThanFtnInside(false)
         , m_bMulti(false)
@@ -254,8 +254,8 @@ public:
     inline void SetNotEOL( const bool bNew ) { m_bNotEOL = bNew; }
     inline bool URLNotify() const { return m_bURLNotify; }
     inline void SetURLNotify( const bool bNew ) { m_bURLNotify = bNew; }
-    inline bool StopUnderFlow() const { return m_bStopUnderFlow; }
-    inline void SetStopUnderFlow( const bool bNew ) { m_bStopUnderFlow = bNew; }
+    inline bool StopUnderflow() const { return m_bStopUnderflow; }
+    inline void SetStopUnderflow( const bool bNew ) { m_bStopUnderflow = bNew; }
     inline bool IsFtnInside() const { return m_bFtnInside; }
     inline void SetFtnInside( const bool bNew ) { m_bFtnInside = bNew; }
     inline bool IsOtherThanFtnInside() const { return m_bOtherThanFtnInside; }
@@ -548,7 +548,7 @@ class SwTxtFormatInfo : public SwTxtPaintInfo
     SwLinePortion   *pLast;       // The last Portion
     SwFlyPortion    *pFly;        // The following FlyPortion
     SwFldPortion    *pLastFld;    // Wrapped Field
-    SwLinePortion   *pUnderFlow;  // Underflow: Last Portion
+    SwLinePortion   *pUnderflow;  // Underflow: Last Portion
     SwLinePortion   *pRest;       // The Rest is the start of the next Line
 
     SwTabPortion    *pLastTab;     // The _last_ TabPortion
@@ -578,7 +578,7 @@ class SwTxtFormatInfo : public SwTxtPaintInfo
     bool bStop : 1;             // Cancel immediately, discarding the line
     bool bNewLine : 1;          // Format another line
     bool bShift : 1;            // Position change: Repaint until further notice
-    bool bUnderFlow : 1;        // Context: UnderFlow() ?
+    bool bUnderflow : 1;        // Context: Underflow() ?
     bool bInterHyph : 1;        // Interactive hyphenation?
     bool bAutoHyph : 1;         // Automatic hyphenation?
     bool bDropInit : 1;         // Set DropWidth
@@ -663,8 +663,8 @@ public:
     inline void SetShift( const bool bNew ) { bShift = bNew; }
     inline bool IsInterHyph() const { return bInterHyph; }
     inline bool IsAutoHyph() const { return bAutoHyph; }
-    inline bool IsUnderFlow() const { return bUnderFlow; }
-    inline void ClrUnderFlow() { bUnderFlow = false; }
+    inline bool IsUnderflow() const { return bUnderflow; }
+    inline void ClrUnderflow() { bUnderflow = false; }
     inline bool IsDropInit() const { return bDropInit; }
     inline void SetDropInit( const bool bNew ) { bDropInit = bNew; }
     inline bool IsQuick() const { return bQuick; }
@@ -679,10 +679,10 @@ public:
     inline KSHORT GetLineNettoHeight() const { return nLineNettoHeight; }
     inline void SetLineNettoHeight( const KSHORT nNew ) { nLineNettoHeight = nNew; }
 
-    inline const SwLinePortion *GetUnderFlow() const { return pUnderFlow; }
-    inline SwLinePortion *GetUnderFlow() { return pUnderFlow; }
-    inline void SetUnderFlow( SwLinePortion *pNew )
-           { pUnderFlow = pNew; bUnderFlow = true; }
+    inline const SwLinePortion *GetUnderflow() const { return pUnderflow; }
+    inline SwLinePortion *GetUnderflow() { return pUnderflow; }
+    inline void SetUnderflow( SwLinePortion *pNew )
+           { pUnderflow = pNew; bUnderflow = true; }
     inline sal_Int32 GetSoftHyphPos() const { return nSoftHyphPos; }
     inline void SetSoftHyphPos( const sal_Int32 nNew ) { nSoftHyphPos = nNew; }
 

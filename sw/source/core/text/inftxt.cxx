@@ -203,7 +203,7 @@ SwTxtSizeInfo::SwTxtSizeInfo( const SwTxtSizeInfo &rNew )
       m_bOnWin( rNew.OnWin() ),
       m_bNotEOL( rNew.NotEOL() ),
       m_bURLNotify( rNew.URLNotify() ),
-      m_bStopUnderFlow( rNew.StopUnderFlow() ),
+      m_bStopUnderflow( rNew.StopUnderflow() ),
       m_bFtnInside( rNew.IsFtnInside() ),
       m_bOtherThanFtnInside( rNew.IsOtherThanFtnInside() ),
       m_bMulti( rNew.IsMulti() ),
@@ -289,7 +289,7 @@ void SwTxtSizeInfo::CtorInitTxtSizeInfo( SwTxtFrm *pFrame, SwFont *pNewFnt,
     m_nIdx = nNewIdx;
     m_nLen = nNewLen;
     m_bNotEOL = false;
-    m_bStopUnderFlow = m_bFtnInside = m_bOtherThanFtnInside = false;
+    m_bStopUnderflow = m_bFtnInside = m_bOtherThanFtnInside = false;
     m_bMulti = m_bFirstMulti = m_bRuby = m_bHanging = m_bScriptSpace =
         m_bForbiddenChars = false;
 
@@ -314,7 +314,7 @@ SwTxtSizeInfo::SwTxtSizeInfo( const SwTxtSizeInfo &rNew, const OUString* pTxt,
       m_bOnWin( rNew.OnWin() ),
       m_bNotEOL( rNew.NotEOL() ),
       m_bURLNotify( rNew.URLNotify() ),
-      m_bStopUnderFlow( rNew.StopUnderFlow() ),
+      m_bStopUnderflow( rNew.StopUnderflow() ),
       m_bFtnInside( rNew.IsFtnInside() ),
       m_bOtherThanFtnInside( rNew.IsOtherThanFtnInside() ),
       m_bMulti( rNew.IsMulti() ),
@@ -1409,7 +1409,7 @@ void SwTxtFormatInfo::Init()
     // Not initialized: pRest, nLeft, nRight, nFirst, nRealWidth
     X(0);
     bArrowDone = bFull = bFtnDone = bErgoDone = bNumDone = bNoEndHyph =
-        bNoMidHyph = bStop = bNewLine = bUnderFlow = bTabOverflow = false;
+        bNoMidHyph = bStop = bNewLine = bUnderflow = bTabOverflow = false;
 
     // generally we do not allow number portions in follows, except...
     if ( GetTxtFrm()->IsFollow() )
@@ -1429,7 +1429,7 @@ void SwTxtFormatInfo::Init()
     pFly = 0;
     pLastFld = 0;
     pLastTab = 0;
-    pUnderFlow = 0;
+    pUnderflow = 0;
     cTabDecimal = 0;
     nWidth = nRealWidth;
     nForcedLeftMargin = 0;
@@ -1458,7 +1458,7 @@ SwTxtFormatInfo::SwTxtFormatInfo( const SwTxtFormatInfo& rInf,
     pLast = &rLay;
     pFly = NULL;
     pLastFld = NULL;
-    pUnderFlow = NULL;
+    pUnderflow = NULL;
     pRest = NULL;
     pLastTab = NULL;
 
@@ -1485,7 +1485,7 @@ SwTxtFormatInfo::SwTxtFormatInfo( const SwTxtFormatInfo& rInf,
     bStop = false;
     bNewLine = true;
     bShift = false;
-    bUnderFlow = false;
+    bUnderflow = false;
     bInterHyph = false;
     bAutoHyph = false;
     bDropInit = false;

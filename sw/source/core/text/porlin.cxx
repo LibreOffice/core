@@ -292,7 +292,7 @@ bool SwLinePortion::Format( SwTxtFormatInfo &rInf )
     if( rInf.X() > rInf.Width() )
     {
         Truncate();
-        rInf.SetUnderFlow( this );
+        rInf.SetUnderflow( this );
         return true;
     }
 

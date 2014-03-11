@@ -128,7 +128,7 @@ void SwExpandPortion::Paint( const SwTxtPaintInfo &rInf ) const
 SwLinePortion *SwBlankPortion::Compress() { return this; }
 
 /*************************************************************************
- *                 SwBlankPortion::MayUnderFlow()
+ *                 SwBlankPortion::MayUnderflow()
  *************************************************************************/
 
 // 5497: Es gibt schon Gemeinheiten auf der Welt...
@@ -136,10 +136,10 @@ SwLinePortion *SwBlankPortion::Compress() { return this; }
 // dann duerfen keine Underflows generiert werden!
 // Komplikationen bei Flys...
 
-MSHORT SwBlankPortion::MayUnderFlow( const SwTxtFormatInfo &rInf,
-    sal_Int32 nIdx, bool bUnderFlow ) const
+MSHORT SwBlankPortion::MayUnderflow( const SwTxtFormatInfo &rInf,
+    sal_Int32 nIdx, bool bUnderflow ) const
 {
-    if( rInf.StopUnderFlow() )
+    if( rInf.StopUnderflow() )
         return 0;
     const SwLinePortion *pPos = rInf.GetRoot();
     if( pPos->GetPortion() )
@@ -150,7 +150,7 @@ MSHORT SwBlankPortion::MayUnderFlow( const SwTxtFormatInfo &rInf,
         return 0; // Nur noch BlankPortions unterwegs
     // Wenn vor uns ein Blank ist, brauchen wir kein Underflow ausloesen,
     // wenn hinter uns ein Blank ist, brauchen wir kein Underflow weiterreichen
-    if (bUnderFlow && nIdx + 1 < rInf.GetTxt().getLength() && CH_BLANK == rInf.GetTxt()[nIdx + 1])
+    if (bUnderflow && nIdx + 1 < rInf.GetTxt().getLength() && CH_BLANK == rInf.GetTxt()[nIdx + 1])
         return 0;
     if( nIdx && !((SwTxtFormatInfo&)rInf).GetFly() )
     {
@@ -189,7 +189,7 @@ MSHORT SwBlankPortion::MayUnderFlow( const SwTxtFormatInfo &rInf,
 
 void SwBlankPortion::FormatEOL( SwTxtFormatInfo &rInf )
 {
-    MSHORT nMay = MayUnderFlow( rInf, rInf.GetIdx() - nLineLength, true );
+    MSHORT nMay = MayUnderflow( rInf, rInf.GetIdx() - nLineLength, true );
     if( nMay )
     {
         if( nMay > 1 )
@@ -200,9 +200,9 @@ void SwBlankPortion::FormatEOL( SwTxtFormatInfo &rInf )
             rInf.SetIdx( rInf.GetIdx() - GetLen() );
         }
         Truncate();
-        rInf.SetUnderFlow( this );
+        rInf.SetUnderflow( this );
         if( rInf.GetLast()->IsKernPortion() )
-            rInf.SetUnderFlow( rInf.GetLast() );
+            rInf.SetUnderflow( rInf.GetLast() );
     }
 }
 
@@ -210,16 +210,16 @@ void SwBlankPortion::FormatEOL( SwTxtFormatInfo &rInf )
  *                 virtual SwBlankPortion::Format()
  *************************************************************************/
 
-// 7771: UnderFlows weiterreichen und selbst ausloesen!
+// 7771: Underflows weiterreichen und selbst ausloesen!
 bool SwBlankPortion::Format( SwTxtFormatInfo &rInf )
 {
-    const bool bFull = rInf.IsUnderFlow() || SwExpandPortion::Format( rInf );
-    if( bFull && MayUnderFlow( rInf, rInf.GetIdx(), rInf.IsUnderFlow() ) )
+    const bool bFull = rInf.IsUnderflow() || SwExpandPortion::Format( rInf );
+    if( bFull && MayUnderflow( rInf, rInf.GetIdx(), rInf.IsUnderflow() ) )
     {
         Truncate();
-        rInf.SetUnderFlow( this );
+        rInf.SetUnderflow( this );
         if( rInf.GetLast()->IsKernPortion() )
-            rInf.SetUnderFlow( rInf.GetLast() );
+            rInf.SetUnderflow( rInf.GetLast() );
     }
     return bFull;
 }

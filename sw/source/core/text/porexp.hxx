@@ -63,8 +63,8 @@ public:
     virtual void FormatEOL( SwTxtFormatInfo &rInf );
     virtual bool Format( SwTxtFormatInfo &rInf );
     virtual void Paint( const SwTxtPaintInfo &rInf ) const;
-    MSHORT MayUnderFlow( const SwTxtFormatInfo &rInf, sal_Int32 nIdx,
-        bool bUnderFlow ) const;
+    MSHORT MayUnderflow( const SwTxtFormatInfo &rInf, sal_Int32 nIdx,
+        bool bUnderflow ) const;
 
     // Accessibility: pass information about this portion to the PortionHandler
     virtual void HandlePortion( SwPortionHandler& rPH ) const;

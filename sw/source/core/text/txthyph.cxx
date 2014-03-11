@@ -396,9 +396,9 @@ bool SwHyphPortion::Format( SwTxtFormatInfo &rInf )
 
     PrtWidth( rInf.GetTxtSize( aTxt ).Width() );
     const bool bFull = rInf.Width() <= rInf.X() + PrtWidth();
-    if( bFull && !rInf.IsUnderFlow() ) {
+    if( bFull && !rInf.IsUnderflow() ) {
         Truncate();
-        rInf.SetUnderFlow( this );
+        rInf.SetUnderflow( this );
     }
 
     return bFull;
@@ -494,7 +494,7 @@ bool SwSoftHyphPortion::Format( SwTxtFormatInfo &rInf )
     bool bFull = true;
 
     // special case for old german spelling
-    if( rInf.IsUnderFlow()  )
+    if( rInf.IsUnderflow()  )
     {
         if( rInf.GetSoftHyphPos() )
             return true;
@@ -526,7 +526,7 @@ bool SwSoftHyphPortion::Format( SwTxtFormatInfo &rInf )
         {
             rInf.SetSoftHyphPos( rInf.GetIdx() );
             Truncate();
-            rInf.SetUnderFlow( this );
+            rInf.SetUnderflow( this );
         }
         return true;
     }

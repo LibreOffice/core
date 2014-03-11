@@ -94,7 +94,7 @@ class SwTxtFormatter : public SwTxtPainter
     void FeedInf( SwTxtFormatInfo &rInf ) const;
 
     // Treats underflow situations
-    SwLinePortion *UnderFlow( SwTxtFormatInfo &rInf );
+    SwLinePortion *Underflow( SwTxtFormatInfo &rInf );
 
     // Calculates the ascent and the height from the fontmetric
     void CalcAscent( SwTxtFormatInfo &rInf, SwLinePortion *pPor );

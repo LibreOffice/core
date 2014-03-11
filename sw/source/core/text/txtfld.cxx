@@ -320,7 +320,7 @@ static SwFldPortion * lcl_NewMetaPortion(SwTxtAttr & rHint, const bool bPrefix)
     (where there is no CH_TXTATR). Because there may be multiple hint ends at a
     given index, m_nHintEndIndex is used to keep track of the already created
     portions. But the portions created here may actually be deleted again,
-    due to UnderFlow. In that case, m_nHintEndIndex must be decremented,
+    due to Underflow. In that case, m_nHintEndIndex must be decremented,
     so the portion will be created again on the next line.
  */
 SwExpandPortion *

@@ -167,14 +167,14 @@ KSHORT SwTxtFormatter::GetFrmRstHeight() const
 }
 
 /*************************************************************************
- *                  SwTxtFormatter::UnderFlow()
+ *                  SwTxtFormatter::Underflow()
  *************************************************************************/
 
-SwLinePortion *SwTxtFormatter::UnderFlow( SwTxtFormatInfo &rInf )
+SwLinePortion *SwTxtFormatter::Underflow( SwTxtFormatInfo &rInf )
 {
     // Save values and initialize rInf
-    SwLinePortion *pUnderFlow = rInf.GetUnderFlow();
-    if( !pUnderFlow )
+    SwLinePortion *pUnderflow = rInf.GetUnderflow();
+    if( !pUnderflow )
         return 0;
 
     // We format backwards, i.e. attribute changes can happen the next
@@ -191,23 +191,23 @@ SwLinePortion *SwTxtFormatter::UnderFlow( SwTxtFormatInfo &rInf )
 
     FeedInf( rInf );
     rInf.SetLast( pCurr );
-    // pUnderFlow does not need to be deleted, because it will drown in the following
+    // pUnderflow does not need to be deleted, because it will drown in the following
     // Truncate()
-    rInf.SetUnderFlow(0);
+    rInf.SetUnderflow(0);
     rInf.SetSoftHyphPos( nSoftHyphPos );
     rInf.SetUnderScorePos( nUnderScorePos );
     rInf.SetPaintOfst( GetLeftMargin() );
 
     // We look for the portion with the under-flow position
     SwLinePortion *pPor = pCurr->GetFirstPortion();
-    if( pPor != pUnderFlow )
+    if( pPor != pUnderflow )
     {
-        // pPrev will be the last portion before pUnderFlow,
+        // pPrev will be the last portion before pUnderflow,
         // which still has a real width.
         // Exception: SoftHyphPortions must not be forgotten, of course!
         // Although they don't have a width.
         SwLinePortion *pTmpPrev = pPor;
-        while( pPor && pPor != pUnderFlow )
+        while( pPor && pPor != pUnderflow )
         {
             if( !pPor->IsKernPortion() &&
                 ( pPor->Width() || pPor->IsSoftHyphPortion() ) )
@@ -217,25 +217,25 @@ SwLinePortion *SwTxtFormatter::UnderFlow( SwTxtFormatInfo &rInf )
                     pTmpPrev->Move( rInf );
                     rInf.SetLast( pTmpPrev );
                     pTmpPrev = pTmpPrev->GetPortion();
-                    OSL_ENSURE( pTmpPrev, "UnderFlow: Loosing control!" );
+                    OSL_ENSURE( pTmpPrev, "Underflow: Loosing control!" );
                 };
             }
             pPor = pPor->GetPortion();
         }
         pPor = pTmpPrev;
-        if( pPor && // Flies + Initialen werden nicht beim UnderFlow mitgenommen
+        if( pPor && // Flies + Initialen werden nicht beim Underflow mitgenommen
             ( pPor->IsFlyPortion() || pPor->IsDropPortion() ||
               pPor->IsFlyCntPortion() ) )
         {
             pPor->Move( rInf );
             rInf.SetLast( pPor );
-            rInf.SetStopUnderFlow( true );
-            pPor = pUnderFlow;
+            rInf.SetStopUnderflow( true );
+            pPor = pUnderflow;
         }
     }
 
     // What? The under-flow portion is not in the portion chain?
-    OSL_ENSURE( pPor, "SwTxtFormatter::UnderFlow: overflow but underflow" );
+    OSL_ENSURE( pPor, "SwTxtFormatter::Underflow: overflow but underflow" );
 
     // OD 2004-05-26 #i29529# - correction: no delete of footnotes
 //    if( rInf.IsFtnInside() && pPor && !rInf.IsQuick() )
@@ -617,10 +617,10 @@ void SwTxtFormatter::BuildPortions( SwTxtFormatInfo &rInf )
         if( pPor->IsFlyCntPortion() || ( pPor->IsMultiPortion() &&
             ((SwMultiPortion*)pPor)->HasFlyInCntnt() ) )
             SetFlyInCntBase();
-        // bUnderFlow needs to be reset or we wrap again at the next softhyphen
+        // bUnderflow needs to be reset or we wrap again at the next softhyphen
         if ( !bFull )
         {
-            rInf.ClrUnderFlow();
+            rInf.ClrUnderflow();
             if( ! bHasGrid && rInf.HasScriptSpace() && pPor->InTxtGrp() &&
                 pPor->GetLen() && !pPor->InFldGrp() )
             {
@@ -666,7 +666,7 @@ void SwTxtFormatter::BuildPortions( SwTxtFormatInfo &rInf )
             // be careful when handling an underflow event: the gridkernportion
             // could have been deleted
             if ( nRestWidth > 0 && SW_CJK != nCurrScript &&
-                ! rInf.IsUnderFlow() && ( bFull || SW_CJK == nNextScript ) )
+                ! rInf.IsUnderflow() && ( bFull || SW_CJK == nNextScript ) )
             {
                 OSL_ENSURE( pGridKernPortion, "No GridKernPortion available" );
 
@@ -1175,14 +1175,14 @@ static bool lcl_OldFieldRest( const SwLineLayout* pCurr )
 SwLinePortion *SwTxtFormatter::NewPortion( SwTxtFormatInfo &rInf )
 {
     // Underflow takes precedence
-    rInf.SetStopUnderFlow( false );
-    if( rInf.GetUnderFlow() )
+    rInf.SetStopUnderflow( false );
+    if( rInf.GetUnderflow() )
     {
         OSL_ENSURE( rInf.IsFull(), "SwTxtFormatter::NewPortion: underflow but not full" );
-        return UnderFlow( rInf );
+        return Underflow( rInf );
     }
 
-    // If the line is full, flys and UnderFlow portions could be waiting ...
+    // If the line is full, flys and Underflow portions could be waiting ...
     if( rInf.IsFull() )
     {
         // LineBreaks and Flys (bug05.sdw)
