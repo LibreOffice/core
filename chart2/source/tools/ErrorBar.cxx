@@ -256,7 +256,7 @@ uno::Any ErrorBar::getPropertyValue(const OUString& rPropName)
             uno::Sequence< uno::Reference< chart2::data::XLabeledDataSequence > > aSequences =
                 getDataSequences();
 
-            aRange = getSourceRangeStrFromLabeledSequences( aSequences, true );
+            aRange = getSourceRangeStrFromLabeledSequences( aSequences, false );
         }
 
         aRet <<= aRange;
