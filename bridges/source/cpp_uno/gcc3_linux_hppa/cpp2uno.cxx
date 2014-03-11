@@ -107,7 +107,7 @@ namespace
             (typelib_TypeDescription **)(pUnoArgs + (3 * nParams));
 
         sal_Int32 nTempIndices   = 0;
-        bool bOverFlowUsed = false;
+        bool bOverflowUsed = false;
         for ( sal_Int32 nPos = 0; nPos < nParams; ++nPos )
         {
             const typelib_MethodParameter & rParam = pParams[nPos];
@@ -138,9 +138,9 @@ namespace
                             if ((startovrflw-ovrflw) & 1)
                                 ovrflw--;
                             pCppArgs[nPos] = pUnoArgs[nPos] = ((char*)ovrflw - 4);
-                            bOverFlowUsed = true;
+                            bOverflowUsed = true;
                         }
-                        if (bOverFlowUsed) ovrflw-=2;
+                        if (bOverflowUsed) ovrflw-=2;
                         break;
                     case typelib_TypeClass_FLOAT:
                         if (nregs < hppa::MAX_WORDS_IN_REGS)
@@ -153,9 +153,9 @@ namespace
                         else
                         {
                             pCppArgs[nPos] = pUnoArgs[nPos] = ovrflw;
-                            bOverFlowUsed = true;
+                            bOverflowUsed = true;
                         }
-                        if (bOverFlowUsed) ovrflw--;
+                        if (bOverflowUsed) ovrflw--;
                         break;
                     case typelib_TypeClass_HYPER:
                     case typelib_TypeClass_UNSIGNED_HYPER:
@@ -177,9 +177,9 @@ namespace
                             if ((startovrflw-ovrflw) & 1)
                                 ovrflw--;
                             pCppArgs[nPos] = pUnoArgs[nPos] = ((char*)ovrflw - 4);
-                            bOverFlowUsed = true;
+                            bOverflowUsed = true;
                         }
-                        if (bOverFlowUsed) ovrflw-=2;
+                        if (bOverflowUsed) ovrflw-=2;
                         break;
                     case typelib_TypeClass_BYTE:
                     case typelib_TypeClass_BOOLEAN:
@@ -193,9 +193,9 @@ namespace
                         else
                         {
                             pCppArgs[nPos] = pUnoArgs[nPos] = ((char*)ovrflw+3);
-                            bOverFlowUsed = true;
+                            bOverflowUsed = true;
                         }
-                        if (bOverFlowUsed) ovrflw--;
+                        if (bOverflowUsed) ovrflw--;
                         break;
                     case typelib_TypeClass_CHAR:
                     case typelib_TypeClass_SHORT:
@@ -210,9 +210,9 @@ namespace
                         else
                         {
                             pCppArgs[nPos] = pUnoArgs[nPos] = ((char*)ovrflw+2);
-                            bOverFlowUsed = true;
+                            bOverflowUsed = true;
                         }
-                        if (bOverFlowUsed) ovrflw--;
+                        if (bOverflowUsed) ovrflw--;
                         break;
                     case typelib_TypeClass_ENUM:
                     case typelib_TypeClass_LONG:
@@ -228,9 +228,9 @@ namespace
                         else
                         {
                             pCppArgs[nPos] = pUnoArgs[nPos] = ovrflw;
-                            bOverFlowUsed = true;
+                            bOverflowUsed = true;
                         }
-                        if (bOverFlowUsed) ovrflw--;
+                        if (bOverflowUsed) ovrflw--;
                         break;
                 }
                 // no longer needed
@@ -250,9 +250,9 @@ namespace
                 else
                 {
                     pCppArgs[nPos] = pCppStack = *ovrflw;
-                    bOverFlowUsed = true;
+                    bOverflowUsed = true;
                 }
-                if (bOverFlowUsed) ovrflw--;
+                if (bOverflowUsed) ovrflw--;
 
                 if (! rParam.bIn) // is pure out
                 {

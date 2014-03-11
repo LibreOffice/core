@@ -188,7 +188,7 @@ void SwTblBoxFormula::Calc( SwTblCalcPara& rCalcPara, double& rValue )
             rValue = rCalcPara.rCalc.Calculate( sFml ).GetDouble();
         else
             rValue = DBL_MAX;
-        ChgValid( !rCalcPara.IsStackOverFlow() ); // value is now valid again
+        ChgValid( !rCalcPara.IsStackOverflow() ); // value is now valid again
     }
 }
 

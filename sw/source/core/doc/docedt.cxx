@@ -1224,7 +1224,7 @@ static std::vector<sal_uInt16> * lcl_RangesToVector(sal_uInt16 * pRanges)
     return pResult;
 }
 
-static bool lcl_StrLenOverFlow( const SwPaM& rPam )
+static bool lcl_StrLenOverflow( const SwPaM& rPam )
 {
     // If we try to merge two paragraphs we have to test if afterwards
     // the string doesn't exceed the allowed string length
@@ -1754,7 +1754,7 @@ bool SwDoc::DeleteRangeImplImpl(SwPaM & rPam)
 bool SwDoc::DeleteAndJoin( SwPaM & rPam,
                            const bool bForceJoinNext )
 {
-    if ( lcl_StrLenOverFlow( rPam ) )
+    if ( lcl_StrLenOverflow( rPam ) )
         return false;
 
     return lcl_DoWithBreaks( *this, rPam, (IsRedlineOn())

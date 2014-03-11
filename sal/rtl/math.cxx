@@ -812,7 +812,7 @@ inline double stringToDouble(CharT const * pBegin, CharT const * pEnd,
             }
             else
             {
-                bool bOverFlow = false;
+                bool bOverflow = false;
                 long nExp = 0;
                 for (; p != pEnd; ++p)
                 {
@@ -821,7 +821,7 @@ inline double stringToDouble(CharT const * pBegin, CharT const * pEnd,
                         break;
                     int i = c - CharT('0');
                     if ( long10Overflow( nExp, i ) )
-                        bOverFlow = true;
+                        bOverflow = true;
                     else
                         nExp = nExp * 10 + i;
                 }
@@ -829,14 +829,14 @@ inline double stringToDouble(CharT const * pBegin, CharT const * pEnd,
                 {
                     if ( bExpSign )
                         nExp = -nExp;
-                    long nAllExp = ( bOverFlow ? 0 : nExp + nValExp );
-                    if ( nAllExp > DBL_MAX_10_EXP || (bOverFlow && !bExpSign) )
+                    long nAllExp = ( bOverflow ? 0 : nExp + nValExp );
+                    if ( nAllExp > DBL_MAX_10_EXP || (bOverflow && !bExpSign) )
                     {   // overflow
                         fVal = HUGE_VAL;
                         eStatus = rtl_math_ConversionStatus_OutOfRange;
                     }
                     else if ((nAllExp < DBL_MIN_10_EXP) ||
-                             (bOverFlow && bExpSign) )
+                             (bOverflow && bExpSign) )
                     {   // underflow
                         fVal = 0.0;
                         eStatus = rtl_math_ConversionStatus_OutOfRange;

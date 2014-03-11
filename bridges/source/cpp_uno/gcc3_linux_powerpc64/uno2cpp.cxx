@@ -183,48 +183,48 @@ static void callVirtualMethod(void * pThis, sal_uInt32 nVtableIndex,
         if ( nr < ppc64::MAX_SSE_REGS ) \
                 pFPR[nr++] = *reinterpret_cast<float *>( pSV ); \
         else \
-            bOverFlow = true; \
-        if (bOverFlow) \
+            bOverflow = true; \
+        if (bOverflow) \
                 *pDS++ = *reinterpret_cast<sal_uInt64 *>( pSV ); // verbatim!
 
 #define INSERT_DOUBLE( pSV, nr, pFPR, pDS, bOverflow ) \
         if ( nr < ppc64::MAX_SSE_REGS ) \
                 pFPR[nr++] = *reinterpret_cast<double *>( pSV ); \
         else \
-            bOverFlow = true; \
-        if (bOverFlow) \
+            bOverflow = true; \
+        if (bOverflow) \
                 *pDS++ = *reinterpret_cast<sal_uInt64 *>( pSV ); // verbatim!
 
 #define INSERT_INT64( pSV, nr, pGPR, pDS, bOverflow ) \
         if ( nr < ppc64::MAX_GPR_REGS ) \
                 pGPR[nr++] = *reinterpret_cast<sal_uInt64 *>( pSV ); \
         else \
-        bOverFlow = true; \
-    if (bOverFlow) \
+        bOverflow = true; \
+    if (bOverflow) \
                 *pDS++ = *reinterpret_cast<sal_uInt64 *>( pSV );
 
 #define INSERT_INT32( pSV, nr, pGPR, pDS, bOverflow ) \
         if ( nr < ppc64::MAX_GPR_REGS ) \
                 pGPR[nr++] = *reinterpret_cast<sal_uInt32 *>( pSV ); \
         else \
-                bOverFlow = true; \
-        if (bOverFlow) \
+                bOverflow = true; \
+        if (bOverflow) \
                 *pDS++ = *reinterpret_cast<sal_uInt32 *>( pSV );
 
 #define INSERT_INT16( pSV, nr, pGPR, pDS, bOverflow ) \
         if ( nr < ppc64::MAX_GPR_REGS ) \
                 pGPR[nr++] = *reinterpret_cast<sal_uInt16 *>( pSV ); \
         else \
-                bOverFlow = true; \
-        if (bOverFlow) \
+                bOverflow = true; \
+        if (bOverflow) \
                 *pDS++ = *reinterpret_cast<sal_uInt16 *>( pSV );
 
 #define INSERT_INT8( pSV, nr, pGPR, pDS, bOverflow ) \
         if ( nr < ppc64::MAX_GPR_REGS ) \
                 pGPR[nr++] = *reinterpret_cast<sal_uInt8 *>( pSV ); \
         else \
-                bOverFlow = true; \
-        if (bOverFlow) \
+                bOverflow = true; \
+        if (bOverflow) \
                 *pDS++ = *reinterpret_cast<sal_uInt8 *>( pSV );
 
 static void cpp_call(
@@ -251,7 +251,7 @@ static void cpp_call(
 
     void * pCppReturn = 0; // if != 0 && != pUnoReturn, needs reconversion
 
-        bool bOverFlow = false;
+        bool bOverflow = false;
 
     if (pReturnTypeDescr)
     {
@@ -273,7 +273,7 @@ static void cpp_call(
 #if OSL_DEBUG_LEVEL > 2
             fprintf(stderr, "pCppReturn/pUnoReturn is %lx/%lx", pCppReturn, pUnoReturn);
 #endif
-            INSERT_INT64( &pCppReturn, nGPR, pGPR, pStack, bOverFlow );
+            INSERT_INT64( &pCppReturn, nGPR, pGPR, pStack, bOverflow );
         }
     }
     // push "this" pointer
@@ -281,7 +281,7 @@ static void cpp_call(
 #if OSL_DEBUG_LEVEL > 2
     fprintf(stderr, "this pointer is %p\n", pAdjustedThisPtr);
 #endif
-    INSERT_INT64( &pAdjustedThisPtr, nGPR, pGPR, pStack, bOverFlow );
+    INSERT_INT64( &pAdjustedThisPtr, nGPR, pGPR, pStack, bOverflow );
 
         // Args
         void ** pCppArgs = (void **)alloca( 3 * sizeof(void *) * nParams );
@@ -319,7 +319,7 @@ static void cpp_call(
 #if OSL_DEBUG_LEVEL > 2
                 fprintf(stderr, "hyper is %lx\n", pCppArgs[nPos]);
 #endif
-                                INSERT_INT64( pCppArgs[nPos], nGPR, pGPR, pStack, bOverFlow );
+                                INSERT_INT64( pCppArgs[nPos], nGPR, pGPR, pStack, bOverflow );
                                 break;
                         case typelib_TypeClass_LONG:
                         case typelib_TypeClass_UNSIGNED_LONG:
@@ -327,22 +327,22 @@ static void cpp_call(
 #if OSL_DEBUG_LEVEL > 2
                 fprintf(stderr, "long is %x\n", pCppArgs[nPos]);
 #endif
-                                INSERT_INT32( pCppArgs[nPos], nGPR, pGPR, pStack, bOverFlow );
+                                INSERT_INT32( pCppArgs[nPos], nGPR, pGPR, pStack, bOverflow );
                                 break;
                         case typelib_TypeClass_SHORT:
                         case typelib_TypeClass_CHAR:
                         case typelib_TypeClass_UNSIGNED_SHORT:
-                                INSERT_INT16( pCppArgs[nPos], nGPR, pGPR, pStack, bOverFlow );
+                                INSERT_INT16( pCppArgs[nPos], nGPR, pGPR, pStack, bOverflow );
                                 break;
                         case typelib_TypeClass_BOOLEAN:
                         case typelib_TypeClass_BYTE:
-                                INSERT_INT8( pCppArgs[nPos], nGPR, pGPR, pStack, bOverFlow );
+                                INSERT_INT8( pCppArgs[nPos], nGPR, pGPR, pStack, bOverflow );
                                 break;
                         case typelib_TypeClass_FLOAT:
-                                INSERT_FLOAT( pCppArgs[nPos], nFPR, pFPR, pStack, bOverFlow );
+                                INSERT_FLOAT( pCppArgs[nPos], nFPR, pFPR, pStack, bOverflow );
                 break;
                         case typelib_TypeClass_DOUBLE:
-                                INSERT_DOUBLE( pCppArgs[nPos], nFPR, pFPR, pStack, bOverFlow );
+                                INSERT_DOUBLE( pCppArgs[nPos], nFPR, pFPR, pStack, bOverflow );
                                 break;
                         }
 
@@ -391,7 +391,7 @@ static void cpp_call(
                                 // no longer needed
                                 TYPELIB_DANGER_RELEASE( pParamTypeDescr );
                         }
-                        INSERT_INT64( &(pCppArgs[nPos]), nGPR, pGPR, pStack, bOverFlow );
+                        INSERT_INT64( &(pCppArgs[nPos]), nGPR, pGPR, pStack, bOverflow );
         }
     }
 

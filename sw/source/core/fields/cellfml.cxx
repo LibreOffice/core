@@ -113,7 +113,7 @@ double SwTableBox::GetValue( SwTblCalcPara& rCalcPara ) const
                 rCalcPara.pTbl = &pBox->GetSttNd()->FindTableNode()->GetTable();
                 ((SwTblBoxFormula*)pItem)->Calc( rCalcPara, nRet );
 
-                if( !rCalcPara.IsStackOverFlow() )
+                if( !rCalcPara.IsStackOverflow() )
                 {
                     SwFrmFmt* pFmt = pBox->ClaimFrmFmt();
                     SfxItemSet aTmp( pDoc->GetAttrPool(),
@@ -225,7 +225,7 @@ double SwTableBox::GetValue( SwTblCalcPara& rCalcPara ) const
         // ?? otherwise it is an error
     } while( false );
 
-    if( !rCalcPara.IsStackOverFlow() )
+    if( !rCalcPara.IsStackOverflow() )
     {
         rCalcPara.pBoxStk->erase( pBox );      // remove from stack
         rCalcPara.DecStackCnt();
@@ -259,16 +259,16 @@ sal_Bool SwTblCalcPara::CalcWithStackOverflow()
 
     nMaxSize = cMAXSTACKSIZE - 5;
     sal_uInt16 nCnt = 0;
-    SwTableBoxes aStackOverFlows;
+    SwTableBoxes aStackOverflows;
     do {
         SwTableBox* pBox = (SwTableBox*)pLastTblBox;
         nStackCnt = 0;
         rCalc.SetCalcError( CALC_NOERR );
-        aStackOverFlows.insert( aStackOverFlows.begin() + nCnt++, pBox );
+        aStackOverflows.insert( aStackOverflows.begin() + nCnt++, pBox );
 
         pBoxStk->erase( pBox );
         pBox->GetValue( *this );
-    } while( IsStackOverFlow() );
+    } while( IsStackOverflow() );
 
     nMaxSize = cMAXSTACKSIZE - 3; // decrease at least one level
 
@@ -279,13 +279,13 @@ sal_Bool SwTblCalcPara::CalcWithStackOverflow()
 
     while( !rCalc.IsCalcError() && nCnt )
     {
-        aStackOverFlows[ --nCnt ]->GetValue( *this );
-        if( IsStackOverFlow() && !CalcWithStackOverflow() )
+        aStackOverflows[ --nCnt ]->GetValue( *this );
+        if( IsStackOverflow() && !CalcWithStackOverflow() )
             break;
     }
 
     nMaxSize = nSaveMaxSize;
-    aStackOverFlows.clear();
+    aStackOverflows.clear();
     return !rCalc.IsCalcError();
 }
 

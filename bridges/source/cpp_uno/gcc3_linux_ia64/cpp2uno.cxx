@@ -103,7 +103,7 @@ static typelib_TypeClass cpp2uno_call(
     typelib_TypeDescription ** ppTempParamTypeDescr = (typelib_TypeDescription **)(pUnoArgs + (3 * nParams));
 
     sal_Int32 nTempIndices = 0;
-    bool bOverFlowUsed = false;
+    bool bOverflowUsed = false;
     for ( sal_Int32 nPos = 0; nPos < nParams; ++nPos )
     {
         const typelib_MethodParameter & rParam = pParams[nPos];
@@ -136,9 +136,9 @@ static typelib_TypeClass cpp2uno_call(
                     else
                     {
                         pCppArgs[nPos] = pUnoArgs[nPos] = ovrflw;
-                        bOverFlowUsed = true;
+                        bOverflowUsed = true;
                     }
-                    if (bOverFlowUsed) ovrflw++;
+                    if (bOverflowUsed) ovrflw++;
                     break;
                 case typelib_TypeClass_DOUBLE:
                     if (nf < ia64::MAX_SSE_REGS && ng < ia64::MAX_GPR_REGS)
@@ -151,9 +151,9 @@ static typelib_TypeClass cpp2uno_call(
                     else
                     {
                         pCppArgs[nPos] = pUnoArgs[nPos] = ovrflw;
-                        bOverFlowUsed = true;
+                        bOverflowUsed = true;
                     }
-                    if (bOverFlowUsed) ovrflw++;
+                    if (bOverflowUsed) ovrflw++;
                     break;
                 case typelib_TypeClass_BYTE:
                 case typelib_TypeClass_BOOLEAN:
@@ -172,9 +172,9 @@ static typelib_TypeClass cpp2uno_call(
                     else
                     {
                         pCppArgs[nPos] = pUnoArgs[nPos] = ovrflw;
-                        bOverFlowUsed = true;
+                        bOverflowUsed = true;
                     }
-                    if (bOverFlowUsed) ovrflw++;
+                    if (bOverflowUsed) ovrflw++;
                     break;
                 }
 
@@ -196,9 +196,9 @@ static typelib_TypeClass cpp2uno_call(
             else
             {
                 pCppArgs[nPos] = pCppStack = *ovrflw;
-                bOverFlowUsed = true;
+                bOverflowUsed = true;
             }
-            if (bOverFlowUsed) ovrflw++;
+            if (bOverflowUsed) ovrflw++;
 
             if (! rParam.bIn) // is pure out
             {

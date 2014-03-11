@@ -48,7 +48,7 @@ void SwTblField::CalcField( SwTblCalcPara& rCalcPara )
     BoxNmToPtr( rCalcPara.pTbl );
     OUString sFml( MakeFormula( rCalcPara ));
     SetValue( rCalcPara.rCalc.Calculate( sFml ).GetDouble() );
-    ChgValid( !rCalcPara.IsStackOverFlow() ); // is the value again valid?
+    ChgValid( !rCalcPara.IsStackOverflow() ); // is the value again valid?
 }
 
 SwTblField::SwTblField( SwTblFieldType* pInitType, const OUString& rFormel,

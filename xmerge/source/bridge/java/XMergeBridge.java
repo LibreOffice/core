@@ -496,7 +496,7 @@ public class XMergeBridge {
              ConverterInfoMgr.removeByJar(jarName);
          }
          catch (StackOverflowError sOE){
-             System.out.println("\nERROR : Stack OverFlow. \n Increase of the JRE by adding the following line to the end of the javarc file \n \"-Xss1m\"\n");
+             System.out.println("\nERROR : Stack Overflow. \n Increase of the JRE by adding the following line to the end of the javarc file \n \"-Xss1m\"\n");
 
          }
          catch (Exception e) {
@@ -530,7 +530,7 @@ public class XMergeBridge {
              ConverterInfoMgr.removeByJar(jarName);
          }
          catch (StackOverflowError sOE){
-              System.out.println("\nERROR : Stack OverFlow. \n Increase of the JRE by adding the following line to the end of the javarc file \n \"-Xss1m\"\n");
+              System.out.println("\nERROR : Stack Overflow. \n Increase of the JRE by adding the following line to the end of the javarc file \n \"-Xss1m\"\n");
          }
          catch (Exception e) {
              System.out.println("Error:"+e);

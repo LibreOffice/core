@@ -42,14 +42,14 @@ void Comment::setDateTime (OUString datetime)
     aDateTime.Seconds = floor(seconds);
     seconds -= aDateTime.Seconds;
     aDateTime.NanoSeconds = ::rtl::math::round(seconds * 1000000000);
-    const int secondsOverFlow = (aDateTime.Seconds == 60) ? 61 : 60;
+    const int secondsOverflow = (aDateTime.Seconds == 60) ? 61 : 60;
     // normalise time part of aDateTime
     if (aDateTime.NanoSeconds == 1000000000)
     {
         aDateTime.NanoSeconds = 0;
         ++aDateTime.Seconds;
     }
-    if (aDateTime.Seconds == secondsOverFlow)
+    if (aDateTime.Seconds == secondsOverflow)
     {
         aDateTime.Seconds = 0;
         ++aDateTime.Minutes;

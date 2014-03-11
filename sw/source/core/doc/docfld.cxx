@@ -553,7 +553,7 @@ void SwDoc::UpdateTblFlds( SfxPoolItem* pHt )
 
                     SwTblCalcPara aPara( *pCalc, pTblNd->GetTable() );
                     pFld->CalcField( aPara );
-                    if( aPara.IsStackOverFlow() )
+                    if( aPara.IsStackOverflow() )
                     {
                         bool const bResult = aPara.CalcWithStackOverflow();
                         if (bResult)
@@ -620,7 +620,7 @@ void SwDoc::UpdateTblFlds( SfxPoolItem* pHt )
                     SwTblCalcPara aPara( *pCalc, pTblNd->GetTable() );
                     pFml->Calc( aPara, nValue );
 
-                    if( aPara.IsStackOverFlow() )
+                    if( aPara.IsStackOverflow() )
                     {
                         bool const bResult = aPara.CalcWithStackOverflow();
                         if (bResult)

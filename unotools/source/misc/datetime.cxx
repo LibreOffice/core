@@ -464,13 +464,13 @@ bool ISO8601parseTime(const OUString &aTimeStr, starutil::Time& rTime)
     if (bSuccess)
     {
         // normalise time
-        const int secondsOverFlow = (nSec == 60) ? 61 : 60;
+        const int secondsOverflow = (nSec == 60) ? 61 : 60;
         if (nNanoSec == 1000000000)
         {
             nNanoSec = 0;
             ++nSec;
         }
-        if(nSec == secondsOverFlow)
+        if(nSec == secondsOverflow)
         {
             nSec = 0;
             ++nMin;

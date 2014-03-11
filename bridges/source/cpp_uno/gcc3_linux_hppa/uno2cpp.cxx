@@ -41,17 +41,17 @@ void callVirtualMethod(void * pThis, sal_uInt32 nVtableIndex,
     void * pRegisterReturn, typelib_TypeDescription *pReturnTypeDescr, bool bRegisterReturn,
     sal_uInt32 *pStack, sal_uInt32 nStack, sal_uInt32 *pGPR, double *pFPR);
 
-#define INSERT_INT32( pSV, nr, pGPR, pDS, bOverFlow )\
+#define INSERT_INT32( pSV, nr, pGPR, pDS, bOverflow )\
         if (nr < hppa::MAX_WORDS_IN_REGS) \
         { \
             pGPR[nr++] = *reinterpret_cast<sal_uInt32 *>( pSV ); \
         } \
         else \
-            bOverFlow = true; \
-        if (bOverFlow) \
+            bOverflow = true; \
+        if (bOverflow) \
             *pDS++ = *reinterpret_cast<sal_uInt32 *>( pSV );
 
-#define INSERT_INT64( pSV, nr, pGPR, pDS, pStart, bOverFlow )\
+#define INSERT_INT64( pSV, nr, pGPR, pDS, pStart, bOverflow )\
     if ( (nr < hppa::MAX_WORDS_IN_REGS) && (nr % 2) ) \
     { \
         ++nr; \
@@ -62,8 +62,8 @@ void callVirtualMethod(void * pThis, sal_uInt32 nVtableIndex,
         pGPR[nr++] = *(reinterpret_cast<sal_uInt32 *>( pSV ) + 1); \
     } \
     else \
-        bOverFlow = true; \
-    if ( bOverFlow ) \
+        bOverflow = true; \
+    if ( bOverflow ) \
     { \
         if ( (pDS - pStart) % 2) \
             ++pDS; \
@@ -71,18 +71,18 @@ void callVirtualMethod(void * pThis, sal_uInt32 nVtableIndex,
         *pDS++ = reinterpret_cast<sal_uInt32 *>( pSV )[0]; \
     }
 
-#define INSERT_FLOAT( pSV, nr, pFPR, pDS, bOverFlow ) \
+#define INSERT_FLOAT( pSV, nr, pFPR, pDS, bOverflow ) \
     if (nr < hppa::MAX_WORDS_IN_REGS) \
     { \
         sal_uInt32 *pDouble = (sal_uInt32 *)&(pFPR[nr++]); \
         pDouble[0] = *reinterpret_cast<sal_uInt32 *>( pSV ); \
     } \
     else \
-        bOverFlow = true; \
-    if (bOverFlow) \
+        bOverflow = true; \
+    if (bOverflow) \
         *pDS++ = *reinterpret_cast<sal_uInt32 *>( pSV );
 
-#define INSERT_DOUBLE( pSV, nr, pFPR, pDS, pStart, bOverFlow ) \
+#define INSERT_DOUBLE( pSV, nr, pFPR, pDS, pStart, bOverflow ) \
     if ( (nr < hppa::MAX_WORDS_IN_REGS) && (nr % 2) ) \
     { \
         ++nr; \
@@ -95,8 +95,8 @@ void callVirtualMethod(void * pThis, sal_uInt32 nVtableIndex,
         nr+=2; \
     } \
     else \
-        bOverFlow = true; \
-    if ( bOverFlow ) \
+        bOverflow = true; \
+    if ( bOverflow ) \
     { \
         if ( (pDS - pStart) % 2) \
             ++pDS; \
@@ -104,20 +104,20 @@ void callVirtualMethod(void * pThis, sal_uInt32 nVtableIndex,
         *pDS++ = reinterpret_cast<sal_uInt32 *>( pSV )[0]; \
     }
 
-#define INSERT_INT16( pSV, nr, pGPR, pDS, bOverFlow ) \
+#define INSERT_INT16( pSV, nr, pGPR, pDS, bOverflow ) \
     if ( nr < hppa::MAX_WORDS_IN_REGS ) \
         pGPR[nr++] = *reinterpret_cast<sal_uInt16 *>( pSV ); \
     else \
-        bOverFlow = true; \
-    if (bOverFlow) \
+        bOverflow = true; \
+    if (bOverflow) \
         *pDS++ = *reinterpret_cast<sal_uInt16 *>( pSV );
 
-#define INSERT_INT8(  pSV, nr, pGPR, pDS, bOverFlow ) \
+#define INSERT_INT8(  pSV, nr, pGPR, pDS, bOverflow ) \
     if ( nr < hppa::MAX_WORDS_IN_REGS ) \
         pGPR[nr++] = *reinterpret_cast<sal_uInt8 *>( pSV ); \
     else \
-        bOverFlow = true; \
-    if (bOverFlow) \
+        bOverflow = true; \
+    if (bOverflow) \
         *pDS++ = *reinterpret_cast<sal_uInt8 *>( pSV );
 
 namespace hppa
@@ -191,7 +191,7 @@ static void cpp_call(
     OSL_ENSURE( pReturnTypeDescr, "### expected return type description!" );
 
     void * pCppReturn = 0; // if != 0 && != pUnoReturn, needs reconversion
-    bool bOverFlow = false;
+    bool bOverflow = false;
     bool bRegisterReturn = true;
 
     if (pReturnTypeDescr)
@@ -211,7 +211,7 @@ static void cpp_call(
     // push this
     void * pAdjustedThisPtr = reinterpret_cast< void ** >(pThis->getCppI())
         + aVtableSlot.offset;
-    INSERT_INT32( &pAdjustedThisPtr, nRegs, pGPR, pStack, bOverFlow );
+    INSERT_INT32( &pAdjustedThisPtr, nRegs, pGPR, pStack, bOverflow );
 
     // stack space
     OSL_ENSURE( sizeof(void *) == sizeof(sal_Int32), "### unexpected size!" );
@@ -242,7 +242,7 @@ static void cpp_call(
 #if OSL_DEBUG_LEVEL > 2
                     fprintf(stderr, "hyper is %llx\n", *((long long*)pCppArgs[nPos]));
 #endif
-                    INSERT_INT64( pCppArgs[nPos], nRegs, pGPR, pStack, pStackStart, bOverFlow );
+                    INSERT_INT64( pCppArgs[nPos], nRegs, pGPR, pStack, pStackStart, bOverflow );
                 break;
                 case typelib_TypeClass_LONG:
                 case typelib_TypeClass_UNSIGNED_LONG:
@@ -250,22 +250,22 @@ static void cpp_call(
 #if OSL_DEBUG_LEVEL > 2
                     fprintf(stderr, "long is %x\n", pCppArgs[nPos]);
 #endif
-                    INSERT_INT32( pCppArgs[nPos], nRegs, pGPR, pStack, bOverFlow );
+                    INSERT_INT32( pCppArgs[nPos], nRegs, pGPR, pStack, bOverflow );
                 break;
                 case typelib_TypeClass_SHORT:
                 case typelib_TypeClass_CHAR:
                 case typelib_TypeClass_UNSIGNED_SHORT:
-                    INSERT_INT16( pCppArgs[nPos], nRegs, pGPR, pStack, bOverFlow );
+                    INSERT_INT16( pCppArgs[nPos], nRegs, pGPR, pStack, bOverflow );
                 break;
                 case typelib_TypeClass_BOOLEAN:
                 case typelib_TypeClass_BYTE:
-                    INSERT_INT8( pCppArgs[nPos], nRegs, pGPR, pStack, bOverFlow );
+                    INSERT_INT8( pCppArgs[nPos], nRegs, pGPR, pStack, bOverflow );
                 break;
                 case typelib_TypeClass_FLOAT:
-                    INSERT_FLOAT( pCppArgs[nPos], nRegs, pFPR, pStack, bOverFlow );
+                    INSERT_FLOAT( pCppArgs[nPos], nRegs, pFPR, pStack, bOverflow );
                 break;
                 case typelib_TypeClass_DOUBLE:
-                    INSERT_DOUBLE( pCppArgs[nPos], nRegs, pFPR, pStack, pStackStart, bOverFlow );
+                    INSERT_DOUBLE( pCppArgs[nPos], nRegs, pFPR, pStack, pStackStart, bOverflow );
                 break;
                 default:
                 break;
@@ -302,7 +302,7 @@ static void cpp_call(
                 // no longer needed
                 TYPELIB_DANGER_RELEASE( pParamTypeDescr );
             }
-            INSERT_INT32( &(pCppArgs[nPos]), nRegs, pGPR, pStack, bOverFlow );
+            INSERT_INT32( &(pCppArgs[nPos]), nRegs, pGPR, pStack, bOverflow );
         }
     }
 

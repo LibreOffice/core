@@ -189,9 +189,9 @@ ScDPObject* createDPFromRange(
 
 ScRange refresh(ScDPObject* pDPObj)
 {
-    bool bOverFlow = false;
-    ScRange aOutRange = pDPObj->GetNewOutputRange(bOverFlow);
-    CPPUNIT_ASSERT_MESSAGE("Table overflow!?", !bOverFlow);
+    bool bOverflow = false;
+    ScRange aOutRange = pDPObj->GetNewOutputRange(bOverflow);
+    CPPUNIT_ASSERT_MESSAGE("Table overflow!?", !bOverflow);
 
     pDPObj->Output(aOutRange.aStart);
     aOutRange = pDPObj->GetOutRange();
@@ -252,9 +252,9 @@ void Test::testPivotTable()
                            pDPs->GetCount() == 1);
     pDPObj->SetName(pDPs->CreateNewName());
 
-    bool bOverFlow = false;
-    ScRange aOutRange = pDPObj->GetNewOutputRange(bOverFlow);
-    CPPUNIT_ASSERT_MESSAGE("Table overflow!?", !bOverFlow);
+    bool bOverflow = false;
+    ScRange aOutRange = pDPObj->GetNewOutputRange(bOverflow);
+    CPPUNIT_ASSERT_MESSAGE("Table overflow!?", !bOverflow);
 
     pDPObj->Output(aOutRange.aStart);
     aOutRange = pDPObj->GetOutRange();
