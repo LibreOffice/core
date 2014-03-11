@@ -3319,9 +3319,6 @@ void DocxAttributeOutput::FlyFrameGraphic( const SwGrfNode* pGrfNode, const Size
         nImageType = XML_embed;
     }
 
-    if ( aRelId.isEmpty() )
-        return;
-
     m_rExport.SdrExporter().startDMLAnchorInline(pFrmFmt, rSize);
 
     // picture description (used for pic:cNvPr later too)
@@ -3383,7 +3380,18 @@ void DocxAttributeOutput::FlyFrameGraphic( const SwGrfNode* pGrfNode, const Size
     // the actual picture
     m_pSerializer->startElementNS( XML_pic, XML_blipFill,
             FSEND );
-    m_pSerializer->singleElementNS( XML_a, XML_blip,
+
+/* At this point we are certain that, WriteImage returns empty RelId
+   for unhandled graphic type. Therefore we write the picture description
+   and not the relation( coz there ain't any), so that the user knows
+   there is a image/graphic in the doc but it is broken instead of
+   completely discarding it.
+*/
+    if ( aRelId.isEmpty() )
+        m_pSerializer->singleElementNS( XML_a, XML_blip,
+            FSEND );
+    else
+        m_pSerializer->singleElementNS( XML_a, XML_blip,
             FSNS( XML_r, nImageType ), aRelId.getStr(),
             FSEND );
 

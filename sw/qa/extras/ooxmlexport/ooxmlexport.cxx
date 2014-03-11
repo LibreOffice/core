@@ -2791,6 +2791,19 @@ DECLARE_OOXMLEXPORT_TEST(testFdo76016, "fdo76016.docx")
     assertXPath(pXmlDoc, "//a:graphic/a:graphicData/wps:wsp/wps:spPr/a:prstGeom/a:avLst/a:gd[2]", "name", "adj2");
 }
 
+DECLARE_OOXMLEXPORT_TEST(testFileWithInvalidImageLink, "FileWithInvalidImageLink.docx")
+{
+    /* In case if the original file has an image whose link is
+       invalid, then the RT file used to result in corruption
+       since the exported image would be an empty image.
+     */
+    xmlDocPtr pXmlDoc = parseExport("word/document.xml");
+    if (!pXmlDoc)
+      return;
+
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[2]/w:r[2]/w:drawing[1]/wp:inline[1]/a:graphic[1]/a:graphicData[1]/pic:pic[1]/pic:blipFill[1]/a:blip[1]", "embed", "");
+}
+
 #endif
 
 CPPUNIT_PLUGIN_IMPLEMENT();
