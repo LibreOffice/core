@@ -1792,7 +1792,6 @@ void SfxWorkWindow::ConfigChild_Impl(SfxChildIdentifier eChild,
             Rectangle aOuterRect( GetTopRect_Impl() );
             aOuterRect.SetPos( pWorkWin->OutputToScreenPixel( aOuterRect.TopLeft() ));
             Rectangle aInnerRect( aOuterRect );
-            sal_Bool bTbx = (eChild == SFX_CHILDWIN_OBJECTBAR);
 
             // The current affected window is included in the calculation of
             // the inner rectangle!
@@ -1807,12 +1806,6 @@ void SfxWorkWindow::ConfigChild_Impl(SfxChildIdentifier eChild,
                     {
                         case SFX_ALIGN_TOP:
                             // Objekt-Toolboxes come always last
-                                aInnerRect.Top() += pCli->aSize.Height();
-                            break;
-
-                        case SFX_ALIGN_TOOLBOXTOP:
-                            // Toolbox has priority, if no higher Position
-                            if ( bTbx && i <= nPos)
                                 aInnerRect.Top() += pCli->aSize.Height();
                             break;
 
@@ -1832,12 +1825,6 @@ void SfxWorkWindow::ConfigChild_Impl(SfxChildIdentifier eChild,
                                 aInnerRect.Bottom() -= pCli->aSize.Height();
                             break;
 
-                        case SFX_ALIGN_TOOLBOXBOTTOM:
-                            // Toolbox has priority, if no higher Position
-                            if ( bTbx && i <= nPos)
-                                aInnerRect.Bottom() -= pCli->aSize.Height();
-                            break;
-
                         case SFX_ALIGN_LOWESTBOTTOM:
                             // Always performed first
                             aInnerRect.Bottom() -= pCli->aSize.Height();
@@ -1854,12 +1841,6 @@ void SfxWorkWindow::ConfigChild_Impl(SfxChildIdentifier eChild,
                                 aInnerRect.Left() += pCli->aSize.Width();
                             break;
 
-                        case SFX_ALIGN_TOOLBOXLEFT:
-                            // Toolboxes come always last
-                            if (bTbx && i <= nPos)
-                                aInnerRect.Left() += pCli->aSize.Width();
-                            break;
-
                         case SFX_ALIGN_FIRSTLEFT:
                             // Always performed first
                             aInnerRect.Left() += pCli->aSize.Width();
@@ -1872,12 +1853,6 @@ void SfxWorkWindow::ConfigChild_Impl(SfxChildIdentifier eChild,
 
                         case SFX_ALIGN_RIGHT:
                             // Toolboxes come always last
-                                aInnerRect.Right() -= pCli->aSize.Width();
-                            break;
-
-                        case SFX_ALIGN_TOOLBOXRIGHT:
-                            // Toolboxes come always last
-                            if (bTbx && i <= nPos)
                                 aInnerRect.Right() -= pCli->aSize.Width();
                             break;
 
