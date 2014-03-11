@@ -1941,6 +1941,12 @@ DECLARE_OOXMLIMPORT_TEST(testStrictLockedcanvas, "strict-lockedcanvas.docx")
     getShape(1);
 }
 
+DECLARE_OOXMLIMPORT_TEST(testI124106, "i124106.docx")
+{
+    // This was 2.
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
+}
+
 #endif
 
 CPPUNIT_PLUGIN_IMPLEMENT();
