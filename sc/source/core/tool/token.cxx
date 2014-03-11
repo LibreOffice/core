@@ -2751,6 +2751,25 @@ sc::RefUpdateResult ScTokenArray::AdjustReferenceOnShift( const sc::RefUpdateCon
                 rRef.SetRange(aAbs, aNewPos);
             }
             break;
+            case svExternalSingleRef:
+            {
+                // For external reference, just reset the reference with
+                // respect to the new cell position.
+                ScToken* pToken = static_cast<ScToken*>(*p);
+                ScSingleRefData& rRef = pToken->GetSingleRef();
+                ScAddress aAbs = rRef.toAbs(rOldPos);
+                rRef.SetAddress(aAbs, aNewPos);
+            }
+            break;
+            case svExternalDoubleRef:
+            {
+                // Same as above.
+                ScToken* pToken = static_cast<ScToken*>(*p);
+                ScComplexRefData& rRef = pToken->GetDoubleRef();
+                ScRange aAbs = rRef.toAbs(rOldPos);
+                rRef.SetRange(aAbs, aNewPos);
+            }
+            break;
             case svIndex:
             {
                 const formula::FormulaToken* pToken = *p;
