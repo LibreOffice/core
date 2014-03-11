@@ -112,7 +112,7 @@ void SdtHelper::createDateControl(OUString& rContentText)
 
     util::Date aDate;
     util::DateTime aDateTime;
-    if(utl::ISO8601parseDateTime(m_sDate.makeStringAndClear(), aDateTime))
+    if (utl::ISO8601parseDateTime(m_sDate.makeStringAndClear(), aDateTime))
     {
         utl::extractDate(aDateTime, aDate);
         xPropertySet->setPropertyValue("Date", uno::makeAny(aDate));
@@ -150,7 +150,7 @@ void SdtHelper::createControlShape(awt::Size aSize, uno::Reference<awt::XControl
     uno::Reference<beans::XPropertySet> xPropertySet(xControlShape, uno::UNO_QUERY);
     xPropertySet->setPropertyValue("VertOrient", uno::makeAny(text::VertOrientation::CENTER));
 
-    if(rGrabBag.hasElements())
+    if (rGrabBag.hasElements())
         xPropertySet->setPropertyValue(UNO_NAME_MISC_OBJ_INTEROPGRABBAG, uno::makeAny(rGrabBag));
 
     uno::Reference<text::XTextContent> xTextContent(xControlShape, uno::UNO_QUERY);
