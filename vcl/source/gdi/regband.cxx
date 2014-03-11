@@ -340,7 +340,7 @@ void ImplRegionBand::ScaleX( double fHorzScale )
 
 
 
-// combine overlapping sparations
+// combine overlapping separations
 
 bool ImplRegionBand::OptimizeBand()
 {
