@@ -924,9 +924,9 @@ void Window::ImplInit( Window* pParent, WinBits nStyle, SystemParentData* pSyste
         {
             mpWindowImpl->mpFrameData->maPaintTimer.SetTimeout( 30 );
             mpWindowImpl->mpFrameData->maPaintTimer.SetTimeoutHdl( LINK( this, Window, ImplHandlePaintHdl ) );
-            mpWindowImpl->mpFrameData->maResizeTimer.SetTimeout( 50 );
-            mpWindowImpl->mpFrameData->maResizeTimer.SetTimeoutHdl( LINK( this, Window, ImplHandleResizeTimerHdl ) );
         }
+        mpWindowImpl->mpFrameData->maResizeTimer.SetTimeout( 50 );
+        mpWindowImpl->mpFrameData->maResizeTimer.SetTimeoutHdl( LINK( this, Window, ImplHandleResizeTimerHdl ) );
         mpWindowImpl->mpFrameData->mbInternalDragGestureRecognizer = false;
 
         if ( pRealParent && IsTopWindow() )
@@ -2628,7 +2628,11 @@ IMPL_LINK_NOARG(Window, ImplHandleResizeTimerHdl)
     if( mpWindowImpl->mbReallyVisible )
     {
         ImplCallResize();
-        if( mpWindowImpl->mpFrameData->maPaintTimer.IsActive() )
+        if( ImplDoTiledRendering() )
+        {
+            ImplHandlePaintHdl(NULL);
+        }
+        else if( mpWindowImpl->mpFrameData->maPaintTimer.IsActive() )
         {
             mpWindowImpl->mpFrameData->maPaintTimer.Stop();
             mpWindowImpl->mpFrameData->maPaintTimer.GetTimeoutHdl().Call( NULL );
