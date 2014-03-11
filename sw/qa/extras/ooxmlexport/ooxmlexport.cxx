@@ -2990,7 +2990,7 @@ DECLARE_OOXMLEXPORT_TEST(testComboBoxControl, "combobox-control.docx")
 
     CPPUNIT_ASSERT_EQUAL(OUString("Manolo"), getProperty<OUString>(xControl->getControl(), "Text"));
 
-    uno::Sequence<OUString> aItems = getProperty<uno::Sequence<OUString>>(xControl->getControl(), "StringItemList");
+    uno::Sequence<OUString> aItems = getProperty< uno::Sequence<OUString> >(xControl->getControl(), "StringItemList");
     CPPUNIT_ASSERT_EQUAL(sal_Int32(2), sal_Int32(aItems.getLength()));
     CPPUNIT_ASSERT_EQUAL(OUString("manolo"), aItems[0]);
     CPPUNIT_ASSERT_EQUAL(OUString("pepito"), aItems[1]);
