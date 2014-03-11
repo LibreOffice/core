@@ -2578,12 +2578,6 @@ void SwTabFrmPainter::PaintLines(OutputDevice& rDev, const SwRect& rRect) const
             aPaintStart.Y() -= nTwipYCorr;
             aPaintEnd.Y()   -= nTwipYCorr;
 
-            if (::rtl::math::approxEqual(aStyles[0].Prim(), 0.0) &&
-                ::rtl::math::approxEqual(aStyles[0].Secn(), 0.0))
-            {
-                continue; // fdo#75118 do not paint zero-width lines
-            }
-
             // Here comes the painting stuff: Thank you, DR, great job!!!
             if (bHori)
             {
@@ -4216,7 +4210,8 @@ void SwFlyFrm::Paint(SwRect const& rRect, SwPrintData const*const) const
 
 void SwTabFrm::Paint(SwRect const& rRect, SwPrintData const*const) const
 {
-    if ( pGlobalShell->GetViewOptions()->IsTable() )
+    const SwViewOption* pViewOption = pGlobalShell->GetViewOptions();
+    if (pViewOption->IsTable())
     {
         // #i29550#
         if ( IsCollapsingBorders() )
@@ -4232,9 +4227,12 @@ void SwTabFrm::Paint(SwRect const& rRect, SwPrintData const*const) const
                 PaintShadow( rRect, aRect, rAttrs );
             }
 
-            // paint lines
-            SwTabFrmPainter aHelper( *this );
-            aHelper.PaintLines( *pGlobalShell->GetOut(), rRect );
+            if (pViewOption->IsTableBoundaries())
+            {
+                // fdo#75118 Paint border lines only when it's enabled.
+                SwTabFrmPainter aHelper(*this);
+                aHelper.PaintLines(*pGlobalShell->GetOut(), rRect);
+            }
         }
         // <-- collapsing
 
@@ -4248,8 +4246,7 @@ void SwTabFrm::Paint(SwRect const& rRect, SwPrintData const*const) const
         aTabRect.Pos() += Frm().Pos();
         SwRect aTabOutRect( rRect );
         aTabOutRect.Intersection( aTabRect );
-        pGlobalShell->GetViewOptions()->
-                DrawRect( pGlobalShell->GetOut(), aTabOutRect, COL_LIGHTGRAY );
+        pViewOption->DrawRect( pGlobalShell->GetOut(), aTabOutRect, COL_LIGHTGRAY );
     }
     ((SwTabFrm*)this)->ResetComplete();
 }
