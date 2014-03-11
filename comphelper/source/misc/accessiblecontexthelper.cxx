@@ -176,7 +176,7 @@ namespace comphelper
     }
 
 
-    void SAL_CALL OAccessibleContextHelper::NotifyAccessibleEvent( const sal_Int16 _nEventId,
+    void OAccessibleContextHelper::NotifyAccessibleEvent( const sal_Int16 _nEventId,
         const Any& _rOldValue, const Any& _rNewValue )
     {
         if ( !m_pImpl->getClientId( ) )
