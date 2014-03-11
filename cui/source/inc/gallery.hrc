@@ -59,18 +59,4 @@
 #define FL_ACTUALIZE_PROGRESS 1
 #define FT_ACTUALIZE_FILE 1
 
-// Gallery-TabDialog
-#define FI_MS_IMAGE 1
-#define EDT_MS_NAME 1
-#define FL_MS_GENERAL_FIRST 1
-#define FT_MS_TYPE 2
-#define FT_MS_SHOW_TYPE 3
-#define FT_MS_PATH 4
-#define FT_MS_SHOW_PATH 5
-#define FT_MS_CONTENT 6
-#define FT_MS_SHOW_CONTENT 7
-#define FL_MS_GENERAL_SECOND 2
-#define FT_MS_CHANGEDATE 10
-#define FT_MS_SHOW_CHANGEDATE 11
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

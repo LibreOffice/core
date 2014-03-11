@@ -210,18 +210,12 @@ class TPGalleryThemeGeneral : public SfxTabPage
 {
 private:
 
-    FixedImage          aFiMSImage;
-    Edit                aEdtMSName;
-    FixedLine           aFlMSGeneralFirst;
-    FixedText           aFtMSType;
-    FixedText           aFtMSShowType;
-    FixedText           aFtMSPath;
-    FixedText           aFtMSShowPath;
-    FixedText           aFtMSContent;
-    FixedText           aFtMSShowContent;
-    FixedLine           aFlMSGeneralSecond;
-    FixedText           aFtMSChangeDate;
-    FixedText           aFtMSShowChangeDate;
+    FixedImage*         m_pFiMSImage;
+    Edit*               m_pEdtMSName;
+    FixedText*          m_pFtMSShowType;
+    FixedText*          m_pFtMSShowPath;
+    FixedText*          m_pFtMSShowContent;
+    FixedText*          m_pFtMSShowChangeDate;
     ExchangeData*       pData;
 
     virtual void        Reset( const SfxItemSet& ) {}

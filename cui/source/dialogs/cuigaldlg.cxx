@@ -614,8 +614,6 @@ GalleryThemeProperties::GalleryThemeProperties(Window* pParent,
     SetText( aText );
 }
 
-
-
 void GalleryThemeProperties::PageCreated( sal_uInt16 nId, SfxTabPage &rPage )
 {
     if (nId == m_nGeneralPageId)
@@ -624,35 +622,19 @@ void GalleryThemeProperties::PageCreated( sal_uInt16 nId, SfxTabPage &rPage )
         ( (TPGalleryThemeProperties&) rPage ).SetXChgData( pData );
 }
 
-
 // - TPGalleryThemeGeneral -
-
-
-TPGalleryThemeGeneral::TPGalleryThemeGeneral( Window* pParent, const SfxItemSet& rSet ) :
-            SfxTabPage              ( pParent, CUI_RES( RID_SVXTABPAGE_GALLERY_GENERAL ), rSet ),
-            aFiMSImage              ( this, CUI_RES( FI_MS_IMAGE ) ),
-            aEdtMSName              ( this, CUI_RES( EDT_MS_NAME ) ),
-            aFlMSGeneralFirst       ( this, CUI_RES( FL_MS_GENERAL_FIRST ) ),
-            aFtMSType               ( this, CUI_RES( FT_MS_TYPE ) ),
-            aFtMSShowType           ( this, CUI_RES( FT_MS_SHOW_TYPE ) ),
-            aFtMSPath               ( this, CUI_RES( FT_MS_PATH ) ),
-            aFtMSShowPath           ( this, CUI_RES( FT_MS_SHOW_PATH ) ),
-            aFtMSContent            ( this, CUI_RES( FT_MS_CONTENT ) ),
-            aFtMSShowContent        ( this, CUI_RES( FT_MS_SHOW_CONTENT ) ),
-            aFlMSGeneralSecond      ( this, CUI_RES( FL_MS_GENERAL_SECOND ) ),
-            aFtMSChangeDate         ( this, CUI_RES( FT_MS_CHANGEDATE ) ),
-            aFtMSShowChangeDate     ( this, CUI_RES( FT_MS_SHOW_CHANGEDATE ) ),
-            pData(NULL)
+TPGalleryThemeGeneral::TPGalleryThemeGeneral(Window* pParent, const SfxItemSet& rSet)
+    : SfxTabPage(pParent, "GalleryGeneralPage",
+        "cui/ui/gallerygeneralpage.ui", rSet)
+    , pData(NULL)
 {
-    FreeResource();
-
-    OUString aAccName(SVX_RES(RID_SVXSTR_GALLERY_THEMENAME));
-    aEdtMSName.SetAccessibleName(aAccName);
-    aFiMSImage.SetAccessibleName(aAccName);
-    aEdtMSName.SetAccessibleRelationLabeledBy( &aFiMSImage );
+    get(m_pFiMSImage, "image");
+    get(m_pEdtMSName, "name");
+    get(m_pFtMSShowType, "type");
+    get(m_pFtMSShowPath, "location");
+    get(m_pFtMSShowContent, "contents");
+    get(m_pFtMSShowChangeDate, "modified");
 }
-
-
 
 void TPGalleryThemeGeneral::SetXChgData( ExchangeData* _pData )
 {
@@ -665,20 +647,19 @@ void TPGalleryThemeGeneral::SetXChgData( ExchangeData* _pData )
     OUString            aType( SVX_RES( RID_SVXSTR_GALLERYPROPS_GALTHEME ) );
     sal_Bool            bReadOnly = pThm->IsReadOnly();
 
-    aEdtMSName.SetHelpId( HID_GALLERY_EDIT_MSNAME );
-    aEdtMSName.SetText( pThm->GetName() );
-    aEdtMSName.SetReadOnly( bReadOnly );
+    m_pEdtMSName->SetText( pThm->GetName() );
+    m_pEdtMSName->SetReadOnly( bReadOnly );
 
     if( bReadOnly )
-        aEdtMSName.Disable();
+        m_pEdtMSName->Disable();
     else
-        aEdtMSName.Enable();
+        m_pEdtMSName->Enable();
 
     if( pThm->IsReadOnly() )
         aType += CUI_RES( RID_SVXSTR_GALLERY_READONLY );
 
-    aFtMSShowType.SetText( aType );
-    aFtMSShowPath.SetText( pThm->GetSdgURL().GetMainURL( INetURLObject::DECODE_UNAMBIGUOUS ) );
+    m_pFtMSShowType->SetText( aType );
+    m_pFtMSShowPath->SetText( pThm->GetSdgURL().GetMainURL( INetURLObject::DECODE_UNAMBIGUOUS ) );
 
     // singular or plural?
     if ( 1 == pThm->GetObjectCount() )
@@ -688,7 +669,7 @@ void TPGalleryThemeGeneral::SetXChgData( ExchangeData* _pData )
 
     aOutStr += " " + aObjStr;
 
-    aFtMSShowContent.SetText( aOutStr );
+    m_pFtMSShowContent->SetText( aOutStr );
 
     // get locale wrapper (singleton)
     const SvtSysLocale aSysLocale;
@@ -696,7 +677,7 @@ void TPGalleryThemeGeneral::SetXChgData( ExchangeData* _pData )
 
     // ChangeDate/Time
     aAccess = aLocaleData.getDate( pData->aThemeChangeDate ) + ", " + aLocaleData.getTime( pData->aThemeChangeTime );
-    aFtMSShowChangeDate.SetText( aAccess );
+    m_pFtMSShowChangeDate->SetText( aAccess );
 
     // set image
     sal_uInt16 nId;
@@ -708,14 +689,14 @@ void TPGalleryThemeGeneral::SetXChgData( ExchangeData* _pData )
     else
         nId = RID_SVXBMP_THEME_NORMAL_BIG;
 
-    aFiMSImage.SetImage( Image( Bitmap( CUI_RES( nId ) ), COL_LIGHTMAGENTA ) );
+    m_pFiMSImage->SetImage( Image( Bitmap( CUI_RES( nId ) ), COL_LIGHTMAGENTA ) );
 }
 
 
 
 sal_Bool TPGalleryThemeGeneral::FillItemSet( SfxItemSet& /*rSet*/ )
 {
-    pData->aEditedTitle = aEdtMSName.GetText();
+    pData->aEditedTitle = m_pEdtMSName->GetText();
     return sal_True;
 }
 
