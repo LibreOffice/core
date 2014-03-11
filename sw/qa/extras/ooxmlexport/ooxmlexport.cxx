@@ -2744,6 +2744,19 @@ DECLARE_OOXMLEXPORT_TEST(testOLEObjectinHeader, "2129393649.docx")
     assertXPath(pXmlDoc,"/rels:Relationships/rels:Relationship[1]","Id","rId1");
 }
 
+DECLARE_OOXMLEXPORT_TEST(testFileWithInvalidImageLink, "FileWithInvalidImageLink.docx")
+{
+    /* In case if the original file has an image whose link is
+       invalid, then the RT file used to result in corruption
+       since the exported image would be an empty image.
+     */
+    xmlDocPtr pXmlDoc = parseExport("word/document.xml");
+    if (!pXmlDoc)
+      return;
+
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[2]/w:r[2]/w:drawing[1]/wp:inline[1]/a:graphic[1]/a:graphicData[1]/pic:pic[1]/pic:blipFill[1]/a:blip[1]", "embed", "");
+}
+
 #endif
 
 CPPUNIT_PLUGIN_IMPLEMENT();

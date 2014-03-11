@@ -3312,8 +3312,17 @@ void DocxAttributeOutput::FlyFrameGraphic( const SwGrfNode* pGrfNode, const Size
         nImageType = XML_embed;
     }
 
+/* Earlier, the function WriteImage, would never have returned RelId as empty.
+   unless there was no relationship access. This was more like a dead code.
+   Now that WriteImage returns empty RelId ( for unhandled graphic type)
+   Keeping the below code would no longer give a clue to the user that there was
+   a graphic pic in the document, since it would never bother to write picture description.
+   (eg: Image whose link is invalid/broken)
+*/
+#if 0
     if ( aRelId.isEmpty() )
-        return;
+       return;
+#endif
 
     m_rExport.SdrExporter().startDMLAnchorInline(pFrmFmt, rSize);
 
@@ -3376,7 +3385,18 @@ void DocxAttributeOutput::FlyFrameGraphic( const SwGrfNode* pGrfNode, const Size
     // the actual picture
     m_pSerializer->startElementNS( XML_pic, XML_blipFill,
             FSEND );
-    m_pSerializer->singleElementNS( XML_a, XML_blip,
+
+/* At this point we are certain that, WriteImage returns empty RelId
+   for unhandled graphic type. Therefore we write the picture description
+   and not the relation( coz there ain't any), so that the user knows
+   there is a image/graphic in the doc but it is broken instead of
+   completely discarding it.
+*/
+    if ( aRelId.isEmpty() )
+        m_pSerializer->singleElementNS( XML_a, XML_blip,
+            FSEND );
+    else
+        m_pSerializer->singleElementNS( XML_a, XML_blip,
             FSNS( XML_r, nImageType ), aRelId.getStr(),
             FSEND );
 
