@@ -686,7 +686,7 @@ SetPrevCrsr:
 }
 
 /// Return <true> if cursor can be set to this position
-sal_Bool SwCursor::IsAtValidPos( sal_Bool bPoint ) const
+bool SwCursor::IsAtValidPos( bool bPoint ) const
 {
     const SwDoc* pDoc = GetDoc();
     const SwPosition* pPos = bPoint ? GetPoint() : GetMark();
@@ -695,23 +695,23 @@ sal_Bool SwCursor::IsAtValidPos( sal_Bool bPoint ) const
     if( pNd->IsCntntNode() && !((SwCntntNode*)pNd)->getLayoutFrm( pDoc->GetCurrentLayout() ) &&
         !dynamic_cast<const SwUnoCrsr*>(this) )
     {
-        return sal_False;
+        return false;
     }
 
     // #i45129# - in UI-ReadOnly everything is allowed
     if( !pDoc->GetDocShell() || !pDoc->GetDocShell()->IsReadOnlyUI() )
-        return sal_True;
+        return true;
 
-    sal_Bool bCrsrInReadOnly = IsReadOnlyAvailable();
+    const bool bCrsrInReadOnly = IsReadOnlyAvailable();
     if( !bCrsrInReadOnly && pNd->IsProtect() )
-        return sal_False;
+        return false;
 
     const SwSectionNode* pSectNd = pNd->FindSectionNode();
     if( pSectNd && (pSectNd->GetSection().IsHiddenFlag() ||
                     ( !bCrsrInReadOnly && pSectNd->GetSection().IsProtectFlag() )))
-        return sal_False;
+        return false;
 
-    return sal_True;
+    return true;
 }
 
 void SwCursor::SaveTblBoxCntnt( const SwPosition* ) {}

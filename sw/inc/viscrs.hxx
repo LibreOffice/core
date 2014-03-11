@@ -151,8 +151,8 @@ public:
 
     bool UpDown( bool bUp, sal_uInt16 nCnt = 1 );
 
-    // sal_True: Cursor can be set to this position.
-    virtual sal_Bool IsAtValidPos( sal_Bool bPoint = sal_True ) const;
+    // true: Cursor can be set to this position.
+    virtual bool IsAtValidPos( bool bPoint = true ) const;
 
     virtual bool IsReadOnlyAvailable() const;
 
@@ -175,7 +175,7 @@ public:
     virtual void FillRects();   // For table and normal cursor.
 
     // Check if SPoint is within table SSelection.
-    sal_Bool IsInside( const Point& rPt ) const;
+    bool IsInside( const Point& rPt ) const;
 
     virtual void SetMark();
     virtual SwCursor* Create( SwPaM* pRing = 0 ) const;
@@ -183,8 +183,8 @@ public:
     virtual short MaxReplaceArived(); //returns RET_YES/RET_CANCEL/RET_NO
     virtual void SaveTblBoxCntnt( const SwPosition* pPos = 0 );
 
-    // sal_True: Cursor can be set to this position.
-    virtual sal_Bool IsAtValidPos( sal_Bool bPoint = sal_True ) const;
+    // true: Cursor can be set to this position.
+    virtual bool IsAtValidPos( bool bPoint = true ) const;
 
 };
 

@@ -196,8 +196,8 @@ public:
     /** Restore cursor state to the one saved by SwCrsrSaveState **/
     void RestoreSavePos();
 
-    // sal_True: cursor can be set at this position.
-    virtual sal_Bool IsAtValidPos( sal_Bool bPoint = sal_True ) const;
+    // true: cursor can be set at this position.
+    virtual bool IsAtValidPos( bool bPoint = true ) const;
 
     // Is cursor allowed in ready only ranges?
     virtual bool IsReadOnlyAvailable() const;

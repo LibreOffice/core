@@ -137,7 +137,7 @@ void SwVisCrsr::_SetPosAndShow()
         if( rNode.IsTxtNode() )
         {
             const SwTxtNode& rTNd = *rNode.GetTxtNode();
-            const SwFrm* pFrm = rTNd.getLayoutFrm( m_pCrsrShell->GetLayout(), 0, 0, sal_False );
+            const SwFrm* pFrm = rTNd.getLayoutFrm( m_pCrsrShell->GetLayout(), 0, 0, false );
             if ( pFrm )
             {
                 const SwScriptInfo* pSI = ((SwTxtFrm*)pFrm)->GetScriptInfo();
@@ -630,13 +630,13 @@ bool SwShellCrsr::UpDown( bool bUp, sal_uInt16 nCnt )
 }
 
 // if <true> than the cursor can be set to the position.
-sal_Bool SwShellCrsr::IsAtValidPos( sal_Bool bPoint ) const
+bool SwShellCrsr::IsAtValidPos( bool bPoint ) const
 {
     if( GetShell() && ( GetShell()->IsAllProtect() ||
         GetShell()->GetViewOptions()->IsReadonly() ||
         ( GetShell()->Imp()->GetDrawView() &&
           GetShell()->Imp()->GetDrawView()->GetMarkedObjectList().GetMarkCount() )))
-        return sal_True;
+        return true;
 
     return SwCursor::IsAtValidPos( bPoint );
 }
@@ -726,11 +726,11 @@ void SwShellTableCrsr::FillRects()
 }
 
 // Check if the SPoint is within the Table-SSelection.
-sal_Bool SwShellTableCrsr::IsInside( const Point& rPt ) const
+bool SwShellTableCrsr::IsInside( const Point& rPt ) const
 {
     // Calculate the new rectangles. If the cursor is still "parked" do nothing
     if (m_SelectedBoxes.empty() || bParked || !GetPoint()->nNode.GetIndex())
-        return sal_False;
+        return false;
 
     SwNodes& rNds = GetDoc()->GetNodes();
     for (size_t n = 0; n < m_SelectedBoxes.size(); ++n)
@@ -745,12 +745,12 @@ sal_Bool SwShellTableCrsr::IsInside( const Point& rPt ) const
             pFrm = pFrm->GetUpper();
         OSL_ENSURE( pFrm, "Node not in a table" );
         if( pFrm && pFrm->Frm().IsInside( rPt ) )
-            return sal_True;
+            return true;
     }
-    return sal_False;
+    return false;
 }
 
-sal_Bool SwShellTableCrsr::IsAtValidPos( sal_Bool bPoint ) const
+bool SwShellTableCrsr::IsAtValidPos( bool bPoint ) const
 {
     return SwShellCrsr::IsAtValidPos( bPoint );
 }
