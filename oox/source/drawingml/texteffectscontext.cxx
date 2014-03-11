@@ -162,6 +162,7 @@ void TextEffectsContext::processAttributes(const AttributeList& rAttribs)
             pushAttributeToGrabBag(OOX_TOKEN(w14, ky),       "ky",  rAttribs);
             pushAttributeToGrabBag(OOX_TOKEN(w14, algn),     "algn",  rAttribs);
         }
+        break;
         case OOX_TOKEN(w14, reflection):
         {
             pushAttributeToGrabBag(OOX_TOKEN(w14, blurRad),  "blurRad",  rAttribs);
@@ -178,6 +179,7 @@ void TextEffectsContext::processAttributes(const AttributeList& rAttribs)
             pushAttributeToGrabBag(OOX_TOKEN(w14, ky),       "ky",  rAttribs);
             pushAttributeToGrabBag(OOX_TOKEN(w14, algn),     "algn",  rAttribs);
         }
+        break;
         case OOX_TOKEN(w14, textOutline):
         {
             pushAttributeToGrabBag(OOX_TOKEN(w14, w),     "w",   rAttribs);
