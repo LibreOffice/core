@@ -983,7 +983,11 @@ void Window::ImplInit( Window* pParent, WinBits nStyle, SystemParentData* pSyste
     }
 
     // setup the scale factor for Hi-DPI displays
+#ifdef MACOSX
+    mnDPIScaleFactor = 1;
+#else
     mnDPIScaleFactor = std::max((sal_Int32)1, (mpWindowImpl->mpFrameData->mnDPIY + 48) / 96);
+#endif
 
     const StyleSettings& rStyleSettings = maSettings.GetStyleSettings();
     sal_uInt16 nScreenZoom = rStyleSettings.GetScreenZoom();
@@ -1723,7 +1727,11 @@ void Window::ImplInitResolutionSettings()
         mnDPIY = (mpWindowImpl->mpFrameData->mnDPIY*nScreenZoom)/100;
 
         // setup the scale factor for Hi-DPI displays
-        mnDPIScaleFactor = std::max(1, (mpWindowImpl->mpFrameData->mnDPIY + 48) / 96);
+#ifdef MACOSX
+        mnDPIScaleFactor = 1;
+#else
+        mnDPIScaleFactor = std::max((sal_Int32)1, (mpWindowImpl->mpFrameData->mnDPIY + 48) / 96);
+#endif
 
         SetPointFont( rStyleSettings.GetAppFont() );
     }
