@@ -17,9 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <config_features.h>
 
 
-// include files of own module
 #include <helper/statusindicator.hxx>
 #include <threadhelp/readguard.hxx>
 #include <threadhelp/writeguard.hxx>
@@ -45,6 +45,10 @@ void SAL_CALL StatusIndicator::start(const OUString& sText ,
                                            sal_Int32        nRange)
     throw(css::uno::RuntimeException, std::exception)
 {
+#if !HAVE_FEATURE_DESKTOP
+    (void) sText;
+    (void) nRange;
+#else
     // SAFE ->
     ReadGuard aReadLock(m_aLock);
     css::uno::Reference< css::task::XStatusIndicatorFactory > xFactory(m_xFactory.get(), css::uno::UNO_QUERY);
@@ -55,12 +59,14 @@ void SAL_CALL StatusIndicator::start(const OUString& sText ,
         StatusIndicatorFactory* pFactory = (StatusIndicatorFactory*)xFactory.get();
         pFactory->start(this, sText, nRange);
     }
+#endif
 }
 
 
 void SAL_CALL StatusIndicator::end()
     throw(css::uno::RuntimeException, std::exception)
 {
+#if HAVE_FEATURE_DESKTOP
     // SAFE ->
     ReadGuard aReadLock(m_aLock);
     css::uno::Reference< css::task::XStatusIndicatorFactory > xFactory(m_xFactory.get(), css::uno::UNO_QUERY);
@@ -71,12 +77,14 @@ void SAL_CALL StatusIndicator::end()
         StatusIndicatorFactory* pFactory = (StatusIndicatorFactory*)xFactory.get();
         pFactory->end(this);
     }
+#endif
 }
 
 
 void SAL_CALL StatusIndicator::reset()
     throw(css::uno::RuntimeException, std::exception)
 {
+#if HAVE_FEATURE_DESKTOP
     // SAFE ->
     ReadGuard aReadLock(m_aLock);
     css::uno::Reference< css::task::XStatusIndicatorFactory > xFactory(m_xFactory.get(), css::uno::UNO_QUERY);
@@ -87,12 +95,16 @@ void SAL_CALL StatusIndicator::reset()
         StatusIndicatorFactory* pFactory = (StatusIndicatorFactory*)xFactory.get();
         pFactory->reset(this);
     }
+#endif
 }
 
 
 void SAL_CALL StatusIndicator::setText(const OUString& sText)
     throw(css::uno::RuntimeException, std::exception)
 {
+#if !HAVE_FEATURE_DESKTOP
+    (void) sText;
+#else
     // SAFE ->
     ReadGuard aReadLock(m_aLock);
     css::uno::Reference< css::task::XStatusIndicatorFactory > xFactory(m_xFactory.get(), css::uno::UNO_QUERY);
@@ -103,12 +115,16 @@ void SAL_CALL StatusIndicator::setText(const OUString& sText)
         StatusIndicatorFactory* pFactory = (StatusIndicatorFactory*)xFactory.get();
         pFactory->setText(this, sText);
     }
+#endif
 }
 
 
 void SAL_CALL StatusIndicator::setValue(sal_Int32 nValue)
     throw(css::uno::RuntimeException, std::exception)
 {
+#if !HAVE_FEATURE_DESKTOP
+    (void) nValue;
+#else
     // SAFE ->
     ReadGuard aReadLock(m_aLock);
     css::uno::Reference< css::task::XStatusIndicatorFactory > xFactory(m_xFactory.get(), css::uno::UNO_QUERY);
@@ -119,6 +135,7 @@ void SAL_CALL StatusIndicator::setValue(sal_Int32 nValue)
         StatusIndicatorFactory* pFactory = (StatusIndicatorFactory*)xFactory.get();
         pFactory->setValue(this, nValue);
     }
+#endif
 }
 
 } // namespace framework
