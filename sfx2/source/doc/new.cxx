@@ -144,7 +144,6 @@ class SfxNewFileDialog_Impl
     SfxObjectShellLock xDocShell;
     SfxNewFileDialog* pAntiImpl;
 
-    void ClearInfo();
     DECL_LINK( Update, void * );
 
     DECL_LINK( RegionSelect, ListBox * );
@@ -170,11 +169,6 @@ public:
     void    SetTemplateFlags(sal_uInt16 nSet);
 };
 
-void SfxNewFileDialog_Impl::ClearInfo()
-{
-    const OUString aNo;
-}
-
 IMPL_LINK_NOARG(SfxNewFileDialog_Impl, Update)
 {
     if ( xDocShell.Is() )
@@ -187,7 +181,6 @@ IMPL_LINK_NOARG(SfxNewFileDialog_Impl, Update)
     const sal_uInt16 nEntry = GetSelectedTemplatePos();
     if(!nEntry)
     {
-        ClearInfo();
         m_pPreviewWin->Invalidate();
         m_pPreviewWin->SetObjectShell( 0);
         return 0;
