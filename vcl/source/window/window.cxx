@@ -235,8 +235,8 @@ WindowImpl::WindowImpl( WindowType nType )
     mbNoParentUpdate    = false;        // true: SetParentUpdateMode( sal_False ) called
     mbActive            = false;        // true: Window Active
     mbParentActive      = false;        // true: OverlapActive from Parent
-    mbReallyVisible     = false;        // true: this and all parents to an overlaped window are visible
-    mbReallyShown       = false;        // true: this and all parents to an overlaped window are shown
+    mbReallyVisible     = false;        // true: this and all parents to an overlapped window are visible
+    mbReallyShown       = false;        // true: this and all parents to an overlapped window are shown
     mbInInitShow        = false;        // true: we are in InitShow
     mbChildNotify       = false;        // true: ChildNotify
     mbChildPtrOverwrite = false;        // true: PointerStyle overwrites Child-Pointer

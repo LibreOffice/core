@@ -340,7 +340,7 @@ void ImplRegionBand::ScaleX( double fHorzScale )
 
 
 
-// combine overlaping sparations
+// combine overlapping sparations
 
 bool ImplRegionBand::OptimizeBand()
 {
@@ -361,7 +361,7 @@ bool ImplRegionBand::OptimizeBand()
             continue;
         }
 
-        // overlaping separations? -> combine!
+        // overlapping separations? -> combine!
         if ( pSep->mpNextSep )
         {
             if ( (pSep->mnXRight+1) >= pSep->mpNextSep->mnXLeft )
@@ -426,11 +426,11 @@ void ImplRegionBand::Union( long nXLeft, long nXRight )
             break;
         }
 
-        // new separation overlaping from left? -> extend boundary
+        // new separation overlapping from left? -> extend boundary
         if ( (nXRight >= pSep->mnXLeft) && (nXLeft <= pSep->mnXLeft) )
             pSep->mnXLeft = nXLeft;
 
-        // new separation overlaping from right? -> extend boundary
+        // new separation overlapping from right? -> extend boundary
         if ( (nXLeft <= pSep->mnXRight) && (nXRight > pSep->mnXRight) )
         {
             pSep->mnXRight = nXRight;
@@ -479,13 +479,13 @@ void ImplRegionBand::Intersect( long nXLeft, long nXRight )
             // will be removed from the optimizer
             pSep->mbRemoved = true;
 
-        // new separation overlaping from left? -> reduce right boundary
+        // new separation overlapping from left? -> reduce right boundary
         if ( (nXLeft <= pSep->mnXLeft) &&
              (nXRight <= pSep->mnXRight) &&
              (nXRight >= pSep->mnXLeft) )
             pSep->mnXRight = nXRight;
 
-        // new separation overlaping from right? -> reduce right boundary
+        // new separation overlapping from right? -> reduce right boundary
         if ( (nXLeft >= pSep->mnXLeft) &&
              (nXLeft <= pSep->mnXRight) &&
              (nXRight >= pSep->mnXRight) )
@@ -533,7 +533,7 @@ void ImplRegionBand::Exclude( long nXLeft, long nXRight )
             bSepProcessed = true;
         }
 
-        // new separation overlaping from left? -> reduce boundary
+        // new separation overlapping from left? -> reduce boundary
         if ( !bSepProcessed )
         {
             if ( (nXRight >= pSep->mnXLeft) && (nXLeft <= pSep->mnXLeft) )
@@ -543,7 +543,7 @@ void ImplRegionBand::Exclude( long nXLeft, long nXRight )
             }
         }
 
-        // new separation overlaping from right? -> reduce boundary
+        // new separation overlapping from right? -> reduce boundary
         if ( !bSepProcessed )
         {
             if ( (nXLeft <= pSep->mnXRight) && (nXRight > pSep->mnXRight) )
