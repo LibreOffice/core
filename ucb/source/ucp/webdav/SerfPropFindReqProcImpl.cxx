@@ -93,8 +93,6 @@ serf_bucket_t * SerfPropFindReqProcImpl::createSerfRequestBucket( serf_request_t
     serf_bucket_t* body_bkt = 0;
     OString aBodyText;
     {
-        // TODO is it really needed a Unicode string buffer?
-        // All properties and property names aren't supposed to be ASCII?
         OStringBuffer aBuffer;
         aBuffer.append( PROPFIND_HEADER );
 
