@@ -219,13 +219,13 @@ void SvXMLEmbeddedObjectHelper::splitObjectURL(const OUString& _aURLNoPar,
     }
 }
 
-sal_Bool SvXMLEmbeddedObjectHelper::ImplGetStorageNames(
+bool SvXMLEmbeddedObjectHelper::ImplGetStorageNames(
         const OUString& rURLStr,
         OUString& rContainerStorageName,
         OUString& rObjectStorageName,
-        sal_Bool bInternalToExternal,
-        sal_Bool *pGraphicRepl,
-        sal_Bool *pOasisFormat ) const
+        bool bInternalToExternal,
+        bool *pGraphicRepl,
+        bool *pOasisFormat ) const
 {
     // internal URL: vnd.sun.star.EmbeddedObject:<object-name>
     //           or: vnd.sun.star.EmbeddedObject:<path>/<object-name>
@@ -239,13 +239,13 @@ sal_Bool SvXMLEmbeddedObjectHelper::ImplGetStorageNames(
     // it is also possible to have additional arguments at the end of URL: <main URL>[?<name>=<value>[,<name>=<value>]*]
 
     if( pGraphicRepl )
-        *pGraphicRepl = sal_False;
+        *pGraphicRepl = false;
 
     if( pOasisFormat )
-        *pOasisFormat = sal_True; // the default value
+        *pOasisFormat = true; // the default value
 
     if( rURLStr.isEmpty() )
-        return sal_False;
+        return false;
 
     // get rid of arguments
     sal_Int32 nPos = rURLStr.indexOf( '?' );
@@ -264,7 +264,7 @@ sal_Bool SvXMLEmbeddedObjectHelper::ImplGetStorageNames(
             if ( aToken.equalsIgnoreAsciiCase( "oasis=false" ) )
             {
                 if ( pOasisFormat )
-                    *pOasisFormat = sal_False;
+                    *pOasisFormat = false;
                 break;
             }
             else
@@ -278,12 +278,12 @@ sal_Bool SvXMLEmbeddedObjectHelper::ImplGetStorageNames(
     {
         nPos = aURLNoPar.indexOf( ':' );
         if( -1 == nPos )
-            return sal_False;
+            return false;
         sal_Bool bObjUrl = aURLNoPar.startsWith( XML_EMBEDDEDOBJECT_URL_BASE );
         bool bGrUrl = !bObjUrl &&
               aURLNoPar.startsWith( XML_EMBEDDEDOBJECTGRAPHIC_URL_BASE );
         if( !(bObjUrl || bGrUrl) )
-            return sal_False;
+            return false;
 
         sal_Int32 nPathStart = nPos + 1;
         nPos = aURLNoPar.lastIndexOf( '/' );
@@ -298,7 +298,7 @@ sal_Bool SvXMLEmbeddedObjectHelper::ImplGetStorageNames(
             rObjectStorageName = aURLNoPar.copy( nPos+1 );
         }
         else
-            return sal_False;
+            return false;
 
         if( bGrUrl )
         {
@@ -309,7 +309,7 @@ sal_Bool SvXMLEmbeddedObjectHelper::ImplGetStorageNames(
                     : maReplacementGraphicsContainerStorageName60;
 
             if( pGraphicRepl )
-                *pGraphicRepl = sal_True;
+                *pGraphicRepl = true;
         }
 
 
@@ -322,10 +322,10 @@ sal_Bool SvXMLEmbeddedObjectHelper::ImplGetStorageNames(
     if( -1 != rContainerStorageName.indexOf( '/' ) )
     {
         OSL_FAIL( "SvXMLEmbeddedObjectHelper: invalid path name" );
-        return sal_False;
+        return false;
     }
 
-    return sal_True;
+    return true;
 }
 
 uno::Reference < embed::XStorage > SvXMLEmbeddedObjectHelper::ImplGetContainerStorage(
@@ -364,7 +364,7 @@ uno::Reference < embed::XStorage > SvXMLEmbeddedObjectHelper::ImplGetContainerSt
     return mxContainerStorage;
 }
 
-sal_Bool SvXMLEmbeddedObjectHelper::ImplReadObject(
+bool SvXMLEmbeddedObjectHelper::ImplReadObject(
         const OUString& rContainerStorageName,
         OUString& rObjName,
         const SvGlobalName *pClassId,
@@ -376,7 +376,7 @@ sal_Bool SvXMLEmbeddedObjectHelper::ImplReadObject(
     uno::Reference < embed::XStorage > xCntnrStor( ImplGetContainerStorage( rContainerStorageName ) );
 
     if( !xCntnrStor.is() && !pTemp )
-        return sal_False;
+        return false;
 
     OUString aSrcObjName( rObjName );
     comphelper::EmbeddedObjectContainer& rContainer = mpDocPersist->getEmbeddedObjectContainer();
@@ -417,7 +417,7 @@ sal_Bool SvXMLEmbeddedObjectHelper::ImplReadObject(
             }
             catch ( uno::Exception& )
             {
-                return sal_False;
+                return false;
             }
         }
         else
@@ -428,7 +428,7 @@ sal_Bool SvXMLEmbeddedObjectHelper::ImplReadObject(
             }
             catch ( uno::Exception& )
             {
-                return sal_False;
+                return false;
             }
         }
     }
@@ -444,7 +444,7 @@ sal_Bool SvXMLEmbeddedObjectHelper::ImplReadObject(
     //             area.
     rContainer.GetEmbeddedObject( aName );
 
-    return sal_True;
+    return true;
 }
 
 OUString SvXMLEmbeddedObjectHelper::ImplInsertEmbeddedObjectURL(
@@ -561,7 +561,7 @@ SvXMLEmbeddedObjectHelper* SvXMLEmbeddedObjectHelper::Create(
         const uno::Reference < embed::XStorage >& rRootStorage,
         ::comphelper::IEmbeddedHelper& rDocPersist,
         SvXMLEmbeddedObjectHelperMode eCreateMode,
-        sal_Bool bDirect )
+        bool bDirect )
 {
     (void)bDirect;
 
@@ -644,14 +644,14 @@ Any SAL_CALL SvXMLEmbeddedObjectHelper::getByName(
     }
     else
     {
-        sal_Bool bGraphicRepl = sal_False;
-        sal_Bool bOasisFormat = sal_True;
+        bool bGraphicRepl = false;
+        bool bOasisFormat = true;
         Reference < XInputStream > xStrm;
         OUString aContainerStorageName, aObjectStorageName;
         if( ImplGetStorageNames( rURLStr, aContainerStorageName,
                                  aObjectStorageName,
-                                 sal_True,
-                                    &bGraphicRepl,
+                                 true,
+                                 &bGraphicRepl,
                                  &bOasisFormat ) )
         {
             try
@@ -733,7 +733,7 @@ sal_Bool SAL_CALL SvXMLEmbeddedObjectHelper::hasByName( const OUString& rURLStr 
         OUString aContainerStorageName, aObjectStorageName;
         if( !ImplGetStorageNames( rURLStr, aContainerStorageName,
                                   aObjectStorageName,
-                                  sal_True ) )
+                                  true ) )
             return sal_False;
 
         comphelper::EmbeddedObjectContainer& rContainer = mpDocPersist->getEmbeddedObjectContainer();

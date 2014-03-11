@@ -390,7 +390,7 @@ MotionPathTag::MotionPathTag( CustomAnimationPane& rPane, ::sd::View& rView, con
     aStartArrow.setClosed(true);
     mpPathObj->SetMergedItem(XLineStartItem(aEmpty,::basegfx::B2DPolyPolygon(aStartArrow)));
     mpPathObj->SetMergedItem(XLineStartWidthItem(400));
-    mpPathObj->SetMergedItem(XLineStartCenterItem(sal_True));
+    mpPathObj->SetMergedItem(XLineStartCenterItem(true));
 
     updatePathAttributes();
 
@@ -438,7 +438,7 @@ void MotionPathTag::updatePathAttributes()
         aEndArrow.setClosed(true);
         mpPathObj->SetMergedItem(XLineEndItem(aEmpty,::basegfx::B2DPolyPolygon(aEndArrow)));
         mpPathObj->SetMergedItem(XLineEndWidthItem(400));
-        mpPathObj->SetMergedItem(XLineEndCenterItem(sal_True));
+        mpPathObj->SetMergedItem(XLineEndCenterItem(true));
     }
     else
     {

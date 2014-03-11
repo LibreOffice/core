@@ -62,9 +62,9 @@ private:
     GraphicOutputStreamVector   maGrfStms;
     URLSet                      maURLSet;
     SvXMLGraphicHelperMode      meCreateMode;
-    sal_Bool                    mbDirect;
+    bool                        mbDirect;
 
-    SVX_DLLPRIVATE sal_Bool                 ImplGetStreamNames( const OUString& rURLStr,
+    SVX_DLLPRIVATE bool                 ImplGetStreamNames( const OUString& rURLStr,
                                                     OUString& rPictureStorageName,
                                                     OUString& rPictureStreamName );
     SVX_DLLPRIVATE css::uno::Reference < css::embed::XStorage >
@@ -72,11 +72,11 @@ private:
     SVX_DLLPRIVATE SvxGraphicHelperStream_Impl
                                             ImplGetGraphicStream( const OUString& rPictureStorageName,
                                                       const OUString& rPictureStreamName,
-                                                      sal_Bool bTruncate );
+                                                      bool bTruncate );
     SVX_DLLPRIVATE OUString                 ImplGetGraphicMimeType( const OUString& rFileName ) const;
     SVX_DLLPRIVATE Graphic                  ImplReadGraphic( const OUString& rPictureStorageName,
                                                  const OUString& rPictureStreamName );
-    SVX_DLLPRIVATE sal_Bool                 ImplWriteGraphic( const OUString& rPictureStorageName,
+    SVX_DLLPRIVATE bool                 ImplWriteGraphic( const OUString& rPictureStorageName,
                                                   const OUString& rPictureStreamName,
                                                   const OUString& rGraphicId,
                                                   bool bUseGfxLink );
@@ -87,7 +87,7 @@ protected:
                                 ~SvXMLGraphicHelper();
     void                        Init( const ::com::sun::star::uno::Reference < ::com::sun::star::embed::XStorage >& xXMLStorage,
                                       SvXMLGraphicHelperMode eCreateMode,
-                                      sal_Bool bDirect );
+                                      bool bDirect );
 
     virtual void SAL_CALL       disposing();
 
@@ -96,7 +96,7 @@ public:
 
     static SvXMLGraphicHelper*  Create( const ::com::sun::star::uno::Reference < ::com::sun::star::embed::XStorage >& rXMLStorage,
                                         SvXMLGraphicHelperMode eCreateMode,
-                                        sal_Bool bDirect = sal_True );
+                                        bool bDirect = true );
     static SvXMLGraphicHelper*  Create( SvXMLGraphicHelperMode eCreateMode );
 
     static void                 Destroy( SvXMLGraphicHelper* pSvXMLGraphicHelper );

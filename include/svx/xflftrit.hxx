@@ -31,14 +31,14 @@ class SVX_DLLPUBLIC XFillFloatTransparenceItem : public XFillGradientItem
 {
 private:
 
-    sal_Bool                    bEnabled;
+    bool                    bEnabled;
 
 public:
                             TYPEINFO();
 
                             XFillFloatTransparenceItem();
-                            XFillFloatTransparenceItem(const OUString& rName, const XGradient& rGradient, sal_Bool bEnable = sal_True );
-                            XFillFloatTransparenceItem(SfxItemPool* pPool, const XGradient& rTheGradient, sal_Bool bEnable = sal_True );
+                            XFillFloatTransparenceItem(const OUString& rName, const XGradient& rGradient, bool bEnable = true );
+                            XFillFloatTransparenceItem(SfxItemPool* pPool, const XGradient& rTheGradient, bool bEnable = true );
                             XFillFloatTransparenceItem( const XFillFloatTransparenceItem& rItem );
 
     virtual bool            operator==( const SfxPoolItem& rItem ) const;
@@ -50,10 +50,10 @@ public:
     virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres, SfxMapUnit eCoreMetric,
                                     SfxMapUnit ePresMetric, OUString &rText, const IntlWrapper * pIntlWrapper = 0 ) const;
 
-    sal_Bool                    IsEnabled() const { return bEnabled; }
-    void                    SetEnabled( sal_Bool bEnable ) { bEnabled = bEnable; }
+    bool                    IsEnabled() const { return bEnabled; }
+    void                    SetEnabled( bool bEnable ) { bEnabled = bEnable; }
 
-    static sal_Bool CompareValueFunc( const NameOrIndex* p1, const NameOrIndex* p2 );
+    static bool CompareValueFunc( const NameOrIndex* p1, const NameOrIndex* p2 );
     XFillFloatTransparenceItem* checkForUniqueItem( SdrModel* pModel ) const;
 };
 

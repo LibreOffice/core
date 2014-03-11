@@ -46,7 +46,7 @@ XOBitmap::XOBitmap( const Bitmap& rBmp ) :
     eType           ( XBITMAP_IMPORT ),
     aGraphicObject  ( rBmp ),
     pPixelArray     ( NULL ),
-    bGraphicDirty   ( sal_False )
+    bGraphicDirty   ( false )
 {
 }
 
@@ -194,7 +194,7 @@ void XOBitmap::Array2Bitmap()
     }
 
     aGraphicObject = GraphicObject( aVD.GetBitmap( Point(), Size( nLines, nLines ) ) );
-    bGraphicDirty = sal_False;
+    bGraphicDirty = false;
 }
 
 // class XFillBitmapItem
@@ -538,7 +538,7 @@ bool XFillBitmapItem::PutValue( const ::com::sun::star::uno::Any& rVal, sal_uInt
     return (bSetName || bSetURL || bSetBitmap);
 }
 
-sal_Bool XFillBitmapItem::CompareValueFunc( const NameOrIndex* p1, const NameOrIndex* p2 )
+bool XFillBitmapItem::CompareValueFunc( const NameOrIndex* p1, const NameOrIndex* p2 )
 {
     const GraphicObject& aGraphicObjectA(((XFillBitmapItem*)p1)->GetGraphicObject());
     const GraphicObject& aGraphicObjectB(((XFillBitmapItem*)p2)->GetGraphicObject());

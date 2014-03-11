@@ -39,7 +39,7 @@
 
 GraphicFilter* XOutBitmap::pGrfFilter = NULL;
 
-Animation XOutBitmap::MirrorAnimation( const Animation& rAnimation, sal_Bool bHMirr, sal_Bool bVMirr )
+Animation XOutBitmap::MirrorAnimation( const Animation& rAnimation, bool bHMirr, bool bVMirr )
 {
     Animation aNewAnim( rAnimation );
 
@@ -607,14 +607,14 @@ Polygon XOutBitmap::GetCountour( const Bitmap& rBmp, const sal_uIntPtr nFlags,
     return aRetPoly;
 };
 
-sal_Bool DitherBitmap( Bitmap& rBitmap )
+bool DitherBitmap( Bitmap& rBitmap )
 {
-    sal_Bool bRet = sal_False;
+    bool bRet = false;
 
     if( ( rBitmap.GetBitCount() >= 8 ) && ( Application::GetDefaultDevice()->GetColorCount() < 257 ) )
         bRet = rBitmap.Dither( BMP_DITHER_FLOYD );
     else
-        bRet = sal_False;
+        bRet = false;
 
     return bRet;
 }

@@ -554,12 +554,12 @@ sal_Bool SdXMLFilter::Import( ErrCode& nError )
     {
         pGraphicHelper = SvXMLGraphicHelper::Create( xStorage,
                                                      GRAPHICHELPER_MODE_READ,
-                                                     sal_False );
+                                                     false );
         xGraphicResolver = pGraphicHelper;
         pObjectHelper = SvXMLEmbeddedObjectHelper::Create(
                                     xStorage, *pDoc->GetPersist(),
                                     EMBEDDEDOBJECTHELPER_MODE_READ,
-                                    sal_False );
+                                    false );
         xObjectResolver = pObjectHelper;
     }
 
@@ -895,10 +895,10 @@ sal_Bool SdXMLFilter::Export()
             // create helper for graphic and ole export if we have a storage
             if( xStorage.is() )
             {
-                pObjectHelper = SvXMLEmbeddedObjectHelper::Create( xStorage, *mrDocShell.GetDoc()->GetPersist(), EMBEDDEDOBJECTHELPER_MODE_WRITE, sal_False );
+                pObjectHelper = SvXMLEmbeddedObjectHelper::Create( xStorage, *mrDocShell.GetDoc()->GetPersist(), EMBEDDEDOBJECTHELPER_MODE_WRITE, false );
                 xObjectResolver = pObjectHelper;
 
-                pGraphicHelper = SvXMLGraphicHelper::Create( xStorage, GRAPHICHELPER_MODE_WRITE, sal_False );
+                pGraphicHelper = SvXMLGraphicHelper::Create( xStorage, GRAPHICHELPER_MODE_WRITE, false );
                 xGrfResolver = pGraphicHelper;
             }
 

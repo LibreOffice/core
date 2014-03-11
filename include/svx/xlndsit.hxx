@@ -60,7 +60,7 @@ public:
     const XDash&            GetDashValue() const;
     void                    SetDashValue(const XDash& rNew)   { aDash = rNew; Detach(); } // SetValue -> SetDashValue
 
-    static sal_Bool CompareValueFunc( const NameOrIndex* p1, const NameOrIndex* p2 );
+    static bool CompareValueFunc( const NameOrIndex* p1, const NameOrIndex* p2 );
     XLineDashItem* checkForUniqueItem( SdrModel* pModel ) const;
 };
 

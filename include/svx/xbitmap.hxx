@@ -35,7 +35,7 @@ private:
     Size            aArraySize;
     Color           aPixelColor;
     Color           aBckgrColor;
-    sal_Bool        bGraphicDirty;
+    bool            bGraphicDirty;
 
     const GraphicObject& GetGraphicObject() const;
 
@@ -51,9 +51,9 @@ public:
     void Array2Bitmap();
 
     void SetBitmapType( XBitmapType eNewType )          { eType = eNewType; }
-    void SetPixelColor( const Color& rColor )           { aPixelColor = rColor; bGraphicDirty = sal_True; }
-    void SetPixelSize( const Size& rSize )              { aArraySize  = rSize;  bGraphicDirty = sal_True; }
-    void SetBackgroundColor( const Color& rColor )      { aBckgrColor = rColor; bGraphicDirty = sal_True; }
+    void SetPixelColor( const Color& rColor )           { aPixelColor = rColor; bGraphicDirty = true; }
+    void SetPixelSize( const Size& rSize )              { aArraySize  = rSize;  bGraphicDirty = true; }
+    void SetBackgroundColor( const Color& rColor )      { aBckgrColor = rColor; bGraphicDirty = true; }
 
     XBitmapType             GetBitmapType() const       { return eType; }
     Bitmap                  GetBitmap() const;

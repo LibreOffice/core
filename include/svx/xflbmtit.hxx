@@ -27,7 +27,7 @@ class SVX_DLLPUBLIC XFillBmpTileItem : public SfxBoolItem
 {
 public:
                             TYPEINFO();
-                            XFillBmpTileItem( sal_Bool bTile = sal_True );
+                            XFillBmpTileItem( bool bTile = true );
                             XFillBmpTileItem( SvStream& rIn );
 
     virtual SfxPoolItem*    Clone( SfxItemPool* pPool = NULL ) const;

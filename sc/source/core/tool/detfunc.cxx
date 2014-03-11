@@ -165,21 +165,21 @@ ScDetectiveData::ScDetectiveData( SdrModel* pModel ) :
 
     aArrowSet.Put( XLineStartItem( aName, basegfx::B2DPolyPolygon(aCircle) ) );
     aArrowSet.Put( XLineStartWidthItem( 200 ) );
-    aArrowSet.Put( XLineStartCenterItem( sal_True ) );
+    aArrowSet.Put( XLineStartCenterItem( true ) );
     aArrowSet.Put( XLineEndItem( aName, basegfx::B2DPolyPolygon(aTriangle) ) );
     aArrowSet.Put( XLineEndWidthItem( 200 ) );
     aArrowSet.Put( XLineEndCenterItem( false ) );
 
     aToTabSet.Put( XLineStartItem( aName, basegfx::B2DPolyPolygon(aCircle) ) );
     aToTabSet.Put( XLineStartWidthItem( 200 ) );
-    aToTabSet.Put( XLineStartCenterItem( sal_True ) );
+    aToTabSet.Put( XLineStartCenterItem( true ) );
     aToTabSet.Put( XLineEndItem( aName, basegfx::B2DPolyPolygon(aSquare) ) );
     aToTabSet.Put( XLineEndWidthItem( 300 ) );
     aToTabSet.Put( XLineEndCenterItem( false ) );
 
     aFromTabSet.Put( XLineStartItem( aName, basegfx::B2DPolyPolygon(aSquare) ) );
     aFromTabSet.Put( XLineStartWidthItem( 300 ) );
-    aFromTabSet.Put( XLineStartCenterItem( sal_True ) );
+    aFromTabSet.Put( XLineStartCenterItem( true ) );
     aFromTabSet.Put( XLineEndItem( aName, basegfx::B2DPolyPolygon(aTriangle) ) );
     aFromTabSet.Put( XLineEndWidthItem( 200 ) );
     aFromTabSet.Put( XLineEndCenterItem( false ) );

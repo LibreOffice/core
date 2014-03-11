@@ -299,8 +299,8 @@ const SfxItemSet* FuPage::ExecuteDialog( Window* pParent )
                 aMigrateSet.Put(XFillBitmapItem(OUString("background"), aGraphic));
                 mpDoc->MigrateItemSet( &aMigrateSet, pTempSet.get(), NULL );
 
-                pTempSet->Put( XFillBmpStretchItem( sal_True ));
-                pTempSet->Put( XFillBmpTileItem( sal_False ));
+                pTempSet->Put( XFillBmpStretchItem( true ));
+                pTempSet->Put( XFillBmpTileItem( false ));
             }
         }
     }

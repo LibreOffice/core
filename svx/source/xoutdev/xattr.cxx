@@ -1017,7 +1017,7 @@ bool XLineDashItem::PutValue( const ::com::sun::star::uno::Any& rVal, sal_uInt8 
     return true;
 }
 
-sal_Bool XLineDashItem::CompareValueFunc( const NameOrIndex* p1, const NameOrIndex* p2 )
+bool XLineDashItem::CompareValueFunc( const NameOrIndex* p1, const NameOrIndex* p2 )
 {
     return ((XLineDashItem*)p1)->GetDashValue() == ((XLineDashItem*)p2)->GetDashValue();
 }
@@ -2115,7 +2115,7 @@ bool XLineEndWidthItem::PutValue( const ::com::sun::star::uno::Any& rVal, sal_uI
 
 TYPEINIT1_AUTOFACTORY(XLineStartCenterItem, SfxBoolItem);
 
-XLineStartCenterItem::XLineStartCenterItem(sal_Bool bStartCenter) :
+XLineStartCenterItem::XLineStartCenterItem(bool bStartCenter) :
     SfxBoolItem(XATTR_LINESTARTCENTER, bStartCenter)
 {
 }
@@ -2178,7 +2178,7 @@ bool XLineStartCenterItem::PutValue( const ::com::sun::star::uno::Any& rVal, sal
 
 TYPEINIT1_AUTOFACTORY(XLineEndCenterItem, SfxBoolItem);
 
-XLineEndCenterItem::XLineEndCenterItem(sal_Bool bEndCenter) :
+XLineEndCenterItem::XLineEndCenterItem(bool bEndCenter) :
     SfxBoolItem(XATTR_LINEENDCENTER, bEndCenter)
 {
 }
@@ -2907,7 +2907,7 @@ bool XFillGradientItem::PutValue( const ::com::sun::star::uno::Any& rVal, sal_uI
     return true;
 }
 
-sal_Bool XFillGradientItem::CompareValueFunc( const NameOrIndex* p1, const NameOrIndex* p2 )
+bool XFillGradientItem::CompareValueFunc( const NameOrIndex* p1, const NameOrIndex* p2 )
 {
     return ((XFillGradientItem*)p1)->GetGradientValue() == ((XFillGradientItem*)p2)->GetGradientValue();
 }
@@ -2935,12 +2935,12 @@ XFillGradientItem* XFillGradientItem::checkForUniqueItem( SdrModel* pModel ) con
 TYPEINIT1_AUTOFACTORY( XFillFloatTransparenceItem, XFillGradientItem );
 
 XFillFloatTransparenceItem::XFillFloatTransparenceItem() :
-    bEnabled( sal_False )
+    bEnabled( false )
 {
     SetWhich( XATTR_FILLFLOATTRANSPARENCE );
 }
 
-XFillFloatTransparenceItem::XFillFloatTransparenceItem(const OUString& rName, const XGradient& rGradient, sal_Bool bEnable ) :
+XFillFloatTransparenceItem::XFillFloatTransparenceItem(const OUString& rName, const XGradient& rGradient, bool bEnable ) :
     XFillGradientItem   ( rName, rGradient ),
     bEnabled            ( bEnable )
 {
@@ -2954,7 +2954,7 @@ XFillFloatTransparenceItem::XFillFloatTransparenceItem( const XFillFloatTranspar
     SetWhich( XATTR_FILLFLOATTRANSPARENCE );
 }
 
-XFillFloatTransparenceItem::XFillFloatTransparenceItem(SfxItemPool* /*pPool*/, const XGradient& rTheGradient, sal_Bool bEnable )
+XFillFloatTransparenceItem::XFillFloatTransparenceItem(SfxItemPool* /*pPool*/, const XGradient& rTheGradient, bool bEnable )
 :   XFillGradientItem   ( -1, rTheGradient ),
     bEnabled            ( bEnable )
 {
@@ -2998,7 +2998,7 @@ SfxItemPresentation XFillFloatTransparenceItem::GetPresentation(    SfxItemPrese
     return XFillGradientItem::GetPresentation( ePres, eCoreUnit, ePresUnit, rText, pIntlWrapper );
 }
 
-sal_Bool XFillFloatTransparenceItem::CompareValueFunc( const NameOrIndex* p1, const NameOrIndex* p2 )
+bool XFillFloatTransparenceItem::CompareValueFunc( const NameOrIndex* p1, const NameOrIndex* p2 )
 {
     return  ((XFillFloatTransparenceItem*)p1)->IsEnabled() == ((XFillFloatTransparenceItem*)p2)->IsEnabled() &&
             ((XFillFloatTransparenceItem*)p1)->GetGradientValue()  == ((XFillFloatTransparenceItem*)p2)->GetGradientValue();
@@ -3022,7 +3022,7 @@ XFillFloatTransparenceItem* XFillFloatTransparenceItem::checkForUniqueItem( SdrM
             // if the given name is not valid, replace it!
             if( aUniqueName != GetName() )
             {
-                return new XFillFloatTransparenceItem( aUniqueName, GetGradientValue(), sal_True );
+                return new XFillFloatTransparenceItem( aUniqueName, GetGradientValue(), true );
             }
         }
     }
@@ -3031,7 +3031,7 @@ XFillFloatTransparenceItem* XFillFloatTransparenceItem::checkForUniqueItem( SdrM
         // #85953# if disabled, force name to empty string
         if( !GetName().isEmpty() )
         {
-            return new XFillFloatTransparenceItem(OUString(), GetGradientValue(), sal_False);
+            return new XFillFloatTransparenceItem(OUString(), GetGradientValue(), false);
         }
     }
 
@@ -3334,7 +3334,7 @@ bool XFillHatchItem::PutValue( const ::com::sun::star::uno::Any& rVal, sal_uInt8
     return true;
 }
 
-sal_Bool XFillHatchItem::CompareValueFunc( const NameOrIndex* p1, const NameOrIndex* p2 )
+bool XFillHatchItem::CompareValueFunc( const NameOrIndex* p1, const NameOrIndex* p2 )
 {
     return ((XFillHatchItem*)p1)->GetHatchValue() == ((XFillHatchItem*)p2)->GetHatchValue();
 }
@@ -3499,7 +3499,7 @@ SfxPoolItem* XFormTextStartItem::Create(SvStream& rIn, sal_uInt16 /*nVer*/) cons
 
 TYPEINIT1_AUTOFACTORY(XFormTextMirrorItem, SfxBoolItem);
 
-XFormTextMirrorItem::XFormTextMirrorItem(sal_Bool bMirror) :
+XFormTextMirrorItem::XFormTextMirrorItem(bool bMirror) :
     SfxBoolItem(XATTR_FORMTXTMIRROR, bMirror)
 {
 }
@@ -3523,7 +3523,7 @@ SfxPoolItem* XFormTextMirrorItem::Create(SvStream& rIn, sal_uInt16 /*nVer*/) con
 
 TYPEINIT1_AUTOFACTORY(XFormTextOutlineItem, SfxBoolItem);
 
-XFormTextOutlineItem::XFormTextOutlineItem(sal_Bool bOutline) :
+XFormTextOutlineItem::XFormTextOutlineItem(bool bOutline) :
     SfxBoolItem(XATTR_FORMTXTOUTLINE, bOutline)
 {
 }
@@ -3665,7 +3665,7 @@ SfxPoolItem* XFormTextShadowYValItem::Create(SvStream& rIn, sal_uInt16 /*nVer*/)
 
 TYPEINIT1_AUTOFACTORY(XFormTextHideFormItem, SfxBoolItem);
 
-XFormTextHideFormItem::XFormTextHideFormItem(sal_Bool bHide) :
+XFormTextHideFormItem::XFormTextHideFormItem(bool bHide) :
     SfxBoolItem(XATTR_FORMTXTHIDEFORM, bHide)
 {
 }

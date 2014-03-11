@@ -1063,14 +1063,14 @@ sal_Bool SvxLineTabPage::FillXLSet_Impl()
 
     // Centered line end
     if( m_pTsbCenterStart->GetState() == TRISTATE_TRUE )
-        rXLSet.Put( XLineStartCenterItem( sal_True ) );
+        rXLSet.Put( XLineStartCenterItem( true ) );
     else if( m_pTsbCenterStart->GetState() == TRISTATE_FALSE )
-        rXLSet.Put( XLineStartCenterItem( sal_False ) );
+        rXLSet.Put( XLineStartCenterItem( false ) );
 
     if( m_pTsbCenterEnd->GetState() == TRISTATE_TRUE )
-        rXLSet.Put( XLineEndCenterItem( sal_True ) );
+        rXLSet.Put( XLineEndCenterItem( true ) );
     else if( m_pTsbCenterEnd->GetState() == TRISTATE_FALSE )
-        rXLSet.Put( XLineEndCenterItem( sal_False ) );
+        rXLSet.Put( XLineEndCenterItem( false ) );
 
     // Transparency
     sal_uInt16 nVal = (sal_uInt16)m_pMtrTransparent->GetValue();

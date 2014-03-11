@@ -378,7 +378,7 @@ sal_Bool SvxTransparenceTabPage::FillItemSet(SfxItemSet& rAttrs)
         aGrad.SetStartIntens(100);
         aGrad.SetEndIntens(100);
         XFillFloatTransparenceItem aItem( rXFSet.GetPool()/*aString*/, aGrad);
-        aItem.SetEnabled(sal_False);
+        aItem.SetEnabled(false);
         rAttrs.Put(aItem);
         bModified = sal_True;
     }
@@ -1212,7 +1212,7 @@ sal_Bool SvxAreaTabPage::FillItemSet( SfxItemSet& rAttrs )
             if( m_pTsbScale->IsEnabled() )
                 pItem = new XFillBmpSizeLogItem( eState == TRISTATE_FALSE );
             else if( m_pTsbOriginal->IsEnabled() && m_pTsbOriginal->GetState() == TRISTATE_TRUE )
-                pItem = new XFillBmpSizeLogItem( sal_True );
+                pItem = new XFillBmpSizeLogItem( true );
 
             if( pItem )
             {
@@ -2224,7 +2224,7 @@ IMPL_LINK_NOARG(SvxAreaTabPage, ModifyTileHdl_Impl)
     {
         // original size -> size == 0
         rXFSet.Put( XFillBmpSizeXItem( 0 ) );
-        rXFSet.Put( XFillBmpSizeLogItem( sal_True ) );
+        rXFSet.Put( XFillBmpSizeLogItem( true ) );
     }
 
     if( m_pMtrFldYSize->IsEnabled() )
@@ -2245,7 +2245,7 @@ IMPL_LINK_NOARG(SvxAreaTabPage, ModifyTileHdl_Impl)
     {
         // original size -> size == 0
         rXFSet.Put( XFillBmpSizeYItem( 0 ) );
-        rXFSet.Put( XFillBmpSizeLogItem( sal_True ) );
+        rXFSet.Put( XFillBmpSizeLogItem( true ) );
     }
 
     if( m_pMtrFldOffset->IsEnabled() )

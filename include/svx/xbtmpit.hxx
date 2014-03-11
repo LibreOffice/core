@@ -66,7 +66,7 @@ public:
     const GraphicObject& GetGraphicObject() const;
     void SetGraphicObject(const GraphicObject& rGraphicObject);
 
-    static sal_Bool CompareValueFunc( const NameOrIndex* p1, const NameOrIndex* p2 );
+    static bool CompareValueFunc( const NameOrIndex* p1, const NameOrIndex* p2 );
     XFillBitmapItem* checkForUniqueItem( SdrModel* pModel ) const;
 };
 

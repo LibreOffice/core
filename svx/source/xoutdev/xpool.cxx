@@ -28,7 +28,7 @@ XOutdevItemPool::XOutdevItemPool(
     SfxItemPool* _pMaster,
     sal_uInt16 nAttrStart,
     sal_uInt16 nAttrEnd,
-    sal_Bool bLoadRefCounts)
+    bool bLoadRefCounts)
 :   SfxItemPool("XOutdevItemPool", nAttrStart, nAttrEnd, 0L, 0L, bLoadRefCounts)
 {
     // prepare some defaults
@@ -92,7 +92,7 @@ XOutdevItemPool::XOutdevItemPool(
     mppLocalPoolDefaults[XATTR_FILLBMP_STRETCH      -XATTR_START] = new XFillBmpStretchItem;
     mppLocalPoolDefaults[XATTR_FILLBMP_POSOFFSETX       -XATTR_START] = new XFillBmpPosOffsetXItem;
     mppLocalPoolDefaults[XATTR_FILLBMP_POSOFFSETY       -XATTR_START] = new XFillBmpPosOffsetYItem;
-    mppLocalPoolDefaults[XATTR_FILLFLOATTRANSPARENCE    -XATTR_START] = new XFillFloatTransparenceItem( this, aNullGrad, sal_False );
+    mppLocalPoolDefaults[XATTR_FILLFLOATTRANSPARENCE    -XATTR_START] = new XFillFloatTransparenceItem( this, aNullGrad, false );
     mppLocalPoolDefaults[XATTR_SECONDARYFILLCOLOR       -XATTR_START] = new XSecondaryFillColorItem(aNullStr, aNullFillCol);
     mppLocalPoolDefaults[XATTR_FILLBACKGROUND           -XATTR_START] = new XFillBackgroundItem;
     mppLocalPoolDefaults[XATTR_FORMTXTSTYLE       -XATTR_START] = new XFormTextStyleItem;

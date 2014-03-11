@@ -74,18 +74,18 @@ private:
     SvXMLEmbeddedObjectHelperMode       meCreateMode;
     SvXMLEmbeddedObjectHelper_Impl      *mpStreamMap;
 
-    SVX_DLLPRIVATE sal_Bool                 ImplGetStorageNames(
-                                    const OUString& rURLStr,
-                                    OUString& rContainerStorageName,
-                                    OUString& rObjectStorageName,
-                                    sal_Bool bInternalToExternal,
-                                       sal_Bool *pGraphicRepl=0,
-                                    sal_Bool *pOasisFormat=0 ) const;
+    SVX_DLLPRIVATE bool                 ImplGetStorageNames(
+                                       const OUString& rURLStr,
+                                       OUString& rContainerStorageName,
+                                       OUString& rObjectStorageName,
+                                       bool bInternalToExternal,
+                                       bool *pGraphicRepl=0,
+                                       bool *pOasisFormat=0 ) const;
 
     SVX_DLLPRIVATE com::sun::star::uno::Reference < com::sun::star::embed::XStorage > ImplGetContainerStorage(
                                     const OUString& rStorageName );
 
-    SVX_DLLPRIVATE sal_Bool                 ImplReadObject(
+    SVX_DLLPRIVATE bool                 ImplReadObject(
                                     const OUString& rContainerStorageName,
                                     OUString& rObjName,
                                     const SvGlobalName *pClassId,
@@ -116,7 +116,7 @@ public:
                                     const com::sun::star::uno::Reference < com::sun::star::embed::XStorage >&,
                                     ::comphelper::IEmbeddedHelper& rDocPersist,
                                     SvXMLEmbeddedObjectHelperMode eCreateMode,
-                                    sal_Bool bDirect = sal_True );
+                                    bool bDirect = true );
     static SvXMLEmbeddedObjectHelper*   Create(
                                     ::comphelper::IEmbeddedHelper& rDocPersist,
                                     SvXMLEmbeddedObjectHelperMode eCreateMode );

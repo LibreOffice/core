@@ -273,7 +273,7 @@ void SdDrawDocument::CreateLayoutTemplates()
 
     pISet->Put(XLineStartWidthItem(700));
     pISet->Put(XLineEndWidthItem(300));
-    pISet->Put(XLineStartCenterItem(sal_True));
+    pISet->Put(XLineStartCenterItem(true));
 
     // Object with Shadow
     aName = SD_RESSTR(STR_POOLSHEET_OBJWITHSHADOW);

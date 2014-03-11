@@ -30,7 +30,7 @@
 class SfxItemPool;
 class NameOrIndex;
 
-typedef sal_Bool (*SvxCompareValueFunc)( const NameOrIndex* p1, const NameOrIndex* p2 );
+typedef bool (*SvxCompareValueFunc)( const NameOrIndex* p1, const NameOrIndex* p2 );
 
 
 // class NameOrIndex
@@ -61,7 +61,7 @@ public:
             void         SetName(const OUString& rName) { SetValue(rName);     }
             sal_Int32    GetIndex() const             { return nPalIndex;    }
             void         SetIndex(sal_Int32 nIndex)        { nPalIndex = nIndex;  }
-            sal_Bool     IsIndex() const          { return (nPalIndex >= 0); }
+            bool         IsIndex() const          { return (nPalIndex >= 0); }
 
     /** this static checks if the given NameOrIndex item has a unique name for its value.
         The returned String is a unique name for an item with this value in both given pools.

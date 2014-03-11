@@ -354,7 +354,7 @@ SvXMLGraphicHelper::SvXMLGraphicHelper( SvXMLGraphicHelperMode eCreateMode ) :
     ::cppu::WeakComponentImplHelper2< ::com::sun::star::document::XGraphicObjectResolver,
                                       ::com::sun::star::document::XBinaryStreamResolver >( maMutex )
 {
-    Init( NULL, eCreateMode, sal_False );
+    Init( NULL, eCreateMode, false );
 }
 
 SvXMLGraphicHelper::SvXMLGraphicHelper() :
@@ -371,7 +371,7 @@ void SAL_CALL SvXMLGraphicHelper::disposing()
 {
 }
 
-sal_Bool SvXMLGraphicHelper::ImplGetStreamNames( const OUString& rURLStr,
+bool SvXMLGraphicHelper::ImplGetStreamNames( const OUString& rURLStr,
                                                  OUString& rPictureStorageName,
                                                  OUString& rPictureStreamName )
 {
@@ -433,7 +433,7 @@ uno::Reference < embed::XStorage > SvXMLGraphicHelper::ImplGetGraphicStorage( co
 
 SvxGraphicHelperStream_Impl SvXMLGraphicHelper::ImplGetGraphicStream( const OUString& rPictureStorageName,
                                                               const OUString& rPictureStreamName,
-                                                              sal_Bool bTruncate )
+                                                              bool bTruncate )
 {
     SvxGraphicHelperStream_Impl aRet;
     aRet.xStorage = ImplGetGraphicStorage( rPictureStorageName );
@@ -496,7 +496,7 @@ Graphic SvXMLGraphicHelper::ImplReadGraphic( const OUString& rPictureStorageName
                                              const OUString& rPictureStreamName )
 {
     Graphic             aGraphic;
-    SvxGraphicHelperStream_Impl aStream( ImplGetGraphicStream( rPictureStorageName, rPictureStreamName, sal_False ) );
+    SvxGraphicHelperStream_Impl aStream( ImplGetGraphicStream( rPictureStorageName, rPictureStreamName, false ) );
     if( aStream.xStream.is() )
     {
         SvStream* pStream = utl::UcbStreamHelper::CreateStream( aStream.xStream );
@@ -507,7 +507,7 @@ Graphic SvXMLGraphicHelper::ImplReadGraphic( const OUString& rPictureStorageName
     return aGraphic;
 }
 
-sal_Bool SvXMLGraphicHelper::ImplWriteGraphic( const OUString& rPictureStorageName,
+bool SvXMLGraphicHelper::ImplWriteGraphic( const OUString& rPictureStorageName,
                                                const OUString& rPictureStreamName,
                                                const OUString& rGraphicId,
                                                bool bUseGfxLink )
@@ -517,7 +517,7 @@ sal_Bool SvXMLGraphicHelper::ImplWriteGraphic( const OUString& rPictureStorageNa
 
     if( aGrfObject.GetType() != GRAPHIC_NONE )
     {
-        SvxGraphicHelperStream_Impl aStream( ImplGetGraphicStream( rPictureStorageName, rPictureStreamName, sal_False ) );
+        SvxGraphicHelperStream_Impl aStream( ImplGetGraphicStream( rPictureStorageName, rPictureStreamName, false ) );
         if( aStream.xStream.is() )
         {
             Graphic         aGraphic( (Graphic&) aGrfObject.GetGraphic() );
@@ -739,7 +739,7 @@ void SvXMLGraphicHelper::ImplInsertGraphicURL( const OUString& rURLStr, sal_uInt
 
 void SvXMLGraphicHelper::Init( const uno::Reference < embed::XStorage >& rXMLStorage,
                                SvXMLGraphicHelperMode eCreateMode,
-                               sal_Bool bDirect )
+                               bool bDirect )
 {
     mxRootStorage = rXMLStorage;
     meCreateMode = eCreateMode;
@@ -748,7 +748,7 @@ void SvXMLGraphicHelper::Init( const uno::Reference < embed::XStorage >& rXMLSto
 
 SvXMLGraphicHelper* SvXMLGraphicHelper::Create( const uno::Reference < embed::XStorage >& rXMLStorage,
                                                 SvXMLGraphicHelperMode eCreateMode,
-                                                sal_Bool bDirect )
+                                                bool bDirect )
 {
     SvXMLGraphicHelper* pThis = new SvXMLGraphicHelper;
 
@@ -763,7 +763,7 @@ SvXMLGraphicHelper* SvXMLGraphicHelper::Create( SvXMLGraphicHelperMode eCreateMo
     SvXMLGraphicHelper* pThis = new SvXMLGraphicHelper;
 
     pThis->acquire();
-    pThis->Init( NULL, eCreateMode, sal_False );
+    pThis->Init( NULL, eCreateMode, false );
 
     return pThis;
 }

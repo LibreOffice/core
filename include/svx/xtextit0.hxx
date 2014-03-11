@@ -55,7 +55,7 @@ class SVX_DLLPUBLIC XFormTextHideFormItem : public SfxBoolItem
 {
 public:
                             TYPEINFO();
-                            XFormTextHideFormItem(sal_Bool bHide = sal_False);
+                            XFormTextHideFormItem(bool bHide = false);
                             XFormTextHideFormItem(SvStream& rIn);
     virtual SfxPoolItem*    Clone(SfxItemPool* pPool = 0) const;
     virtual SfxPoolItem*    Create(SvStream& rIn, sal_uInt16 nVer) const;

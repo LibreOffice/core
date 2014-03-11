@@ -109,7 +109,7 @@ E3dCompoundObject* FuConstruct3dObject::ImpCreateBasic3DShape()
 
         case SID_3D_SHELL:
         {
-            XPolygon aXPoly(Point (0, 1250), 2500, 2500, 0, 900, sal_False);
+            XPolygon aXPoly(Point (0, 1250), 2500, 2500, 0, 900, false);
             aXPoly.Scale(5.0, 5.0);
 
             ::basegfx::B2DPolygon aB2DPolygon(aXPoly.getB2DPolygon());
@@ -127,7 +127,7 @@ E3dCompoundObject* FuConstruct3dObject::ImpCreateBasic3DShape()
 
         case SID_3D_HALF_SPHERE:
         {
-            XPolygon aXPoly(Point (0, 1250), 2500, 2500, 0, 900, sal_False);
+            XPolygon aXPoly(Point (0, 1250), 2500, 2500, 0, 900, false);
             aXPoly.Scale(5.0, 5.0);
 
             aXPoly.Insert(0, Point (2400*5, 1250*5), XPOLY_NORMAL);

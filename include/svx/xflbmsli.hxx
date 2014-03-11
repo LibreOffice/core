@@ -27,7 +27,7 @@ class SVX_DLLPUBLIC XFillBmpSizeLogItem : public SfxBoolItem
 {
 public:
                             TYPEINFO();
-                            XFillBmpSizeLogItem( sal_Bool bLog = sal_True );
+                            XFillBmpSizeLogItem( bool bLog = true );
                             SVX_DLLPRIVATE XFillBmpSizeLogItem( SvStream& rIn );
 
     SVX_DLLPRIVATE virtual SfxPoolItem*    Clone( SfxItemPool* pPool = 0 ) const;

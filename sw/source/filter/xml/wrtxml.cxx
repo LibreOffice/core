@@ -82,9 +82,9 @@ sal_uInt32 SwXMLWriter::_Write( const uno::Reference < task::XStatusIndicator >&
     SvXMLEmbeddedObjectHelper *pObjectHelper = 0;
 
     OSL_ENSURE( xStg.is(), "Where is my storage?" );
-pGraphicHelper = SvXMLGraphicHelper::Create( xStg,
+    pGraphicHelper = SvXMLGraphicHelper::Create( xStg,
                                                  GRAPHICHELPER_MODE_WRITE,
-                                                 sal_False );
+                                                 false );
     xGraphicResolver = pGraphicHelper;
 
     SfxObjectShell *pPersist = pDoc->GetPersist();
@@ -93,7 +93,7 @@ pGraphicHelper = SvXMLGraphicHelper::Create( xStg,
         pObjectHelper = SvXMLEmbeddedObjectHelper::Create(
                                          xStg, *pPersist,
                                          EMBEDDEDOBJECTHELPER_MODE_WRITE,
-                                         sal_False );
+                                         false );
         xObjectResolver = pObjectHelper;
     }
 

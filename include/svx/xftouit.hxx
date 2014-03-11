@@ -33,7 +33,7 @@ class SVX_DLLPUBLIC XFormTextOutlineItem : public SfxBoolItem
 {
 public:
                             TYPEINFO();
-                            XFormTextOutlineItem(sal_Bool bOutline = sal_False);
+                            XFormTextOutlineItem(bool bOutline = false);
                             XFormTextOutlineItem(SvStream& rIn);
     virtual SfxPoolItem*    Clone(SfxItemPool* pPool = 0) const;
     virtual SfxPoolItem*    Create(SvStream& rIn, sal_uInt16 nVer) const;

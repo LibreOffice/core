@@ -1298,7 +1298,7 @@ IMPL_LINK(AreaPropertyPanel, ChangeTrgrTypeHdl_Impl, void *, EMPTYARG)
     }
 
     SfxItemPool* pPool = 0;
-    const XFillFloatTransparenceItem aGradientItem(pPool, aTmpGradient, sal_Bool(bGradient));
+    const XFillFloatTransparenceItem aGradientItem(pPool, aTmpGradient, bGradient);
     GetBindings()->GetDispatcher()->Execute( SID_ATTR_FILL_FLOATTRANSPARENCE, SFX_CALLMODE_RECORD, &aGradientItem, 0L );
 
     return( 0L );

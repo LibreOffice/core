@@ -4474,7 +4474,7 @@ SdrObject* SvxMSDffManager::ImportShape( const DffRecordHeader& rHd, SvStream& r
                         if ( nStartAngle != nEndAngle )
                         {
                             XPolygon aXPoly( aPolyBoundRect.Center(), aPolyBoundRect.GetWidth() / 2, aPolyBoundRect.GetHeight() / 2,
-                                (sal_uInt16)nStartAngle / 10, (sal_uInt16)nEndAngle / 10, sal_True );
+                                (sal_uInt16)nStartAngle / 10, (sal_uInt16)nEndAngle / 10, true );
                             Rectangle aPolyPieRect( aXPoly.GetBoundRect() );
 
                             double  fYScale = 0.0, fXScale = 0.0;

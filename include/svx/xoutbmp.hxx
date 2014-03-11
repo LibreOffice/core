@@ -50,7 +50,7 @@ public:
     static GraphicFilter* pGrfFilter;
 
     static Graphic      MirrorGraphic( const Graphic& rGraphic, const sal_uIntPtr nMirrorFlags );
-    static Animation    MirrorAnimation( const Animation& rAnimation, sal_Bool bHMirr, sal_Bool bVMirr );
+    static Animation    MirrorAnimation( const Animation& rAnimation, bool bHMirr, bool bVMirr );
     static sal_uInt16   WriteGraphic( const Graphic& rGraphic, OUString& rFileName,
                                       const OUString& rFilterName, const sal_uIntPtr nFlags = 0L,
                                       const Size* pMtfSize_100TH_MM = NULL );
@@ -67,7 +67,7 @@ public:
                                      const Rectangle* pWorkRect = NULL );
 };
 
-SVX_DLLPUBLIC sal_Bool DitherBitmap( Bitmap& rBitmap );
+SVX_DLLPUBLIC bool DitherBitmap( Bitmap& rBitmap );
 
 #endif // INCLUDED_SVX_XOUTBMP_HXX
 

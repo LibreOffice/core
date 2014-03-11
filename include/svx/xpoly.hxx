@@ -56,11 +56,11 @@ protected:
     void    CheckReference();
 
     // Hilfsfunktionen fuer Bezierkonvertierung
-    void    SubdivideBezier(sal_uInt16 nPos, sal_Bool bCalcFirst, double fT);
+    void    SubdivideBezier(sal_uInt16 nPos, bool bCalcFirst, double fT);
     void    GenBezArc(const Point& rCenter, long nRx, long nRy,
                       long nXHdl, long nYHdl, sal_uInt16 nStart, sal_uInt16 nEnd,
                       sal_uInt16 nQuad, sal_uInt16 nFirst);
-    sal_Bool    CheckAngles(sal_uInt16& nStart, sal_uInt16 nEnd, sal_uInt16& nA1, sal_uInt16& nA2);
+    bool    CheckAngles(sal_uInt16& nStart, sal_uInt16 nEnd, sal_uInt16& nA1, sal_uInt16& nA2);
 
 public:
     XPolygon( sal_uInt16 nSize=16, sal_uInt16 nResize=16 );
@@ -69,7 +69,7 @@ public:
     XPolygon( const Rectangle& rRect, long nRx = 0, long nRy = 0 );
     XPolygon( const Point& rCenter, long nRx, long nRy,
               sal_uInt16 nStartAngle = 0, sal_uInt16 nEndAngle = 3600,
-              sal_Bool bClose = sal_True );
+              bool bClose = true );
 
     ~XPolygon();
 
@@ -87,13 +87,13 @@ public:
     const Point&    operator[]( sal_uInt16 nPos ) const;
           Point&    operator[]( sal_uInt16 nPos );
     XPolygon&       operator=( const XPolygon& rXPoly );
-    sal_Bool            operator==( const XPolygon& rXPoly ) const;
-    sal_Bool            operator!=( const XPolygon& rXPoly ) const;
+    bool            operator==( const XPolygon& rXPoly ) const;
+    bool            operator!=( const XPolygon& rXPoly ) const;
 
     XPolyFlags  GetFlags( sal_uInt16 nPos ) const;
     void        SetFlags( sal_uInt16 nPos, XPolyFlags eFlags );
-    sal_Bool        IsControl(sal_uInt16 nPos) const;
-    sal_Bool        IsSmooth(sal_uInt16 nPos) const;
+    bool        IsControl(sal_uInt16 nPos) const;
+    bool        IsSmooth(sal_uInt16 nPos) const;
 
     // Abstand zwischen zwei Punkten
     double  CalcDistance(sal_uInt16 nP1, sal_uInt16 nP2);
@@ -152,8 +152,8 @@ public:
     XPolygon&       operator[]( sal_uInt16 nPos );
 
     XPolyPolygon&   operator=( const XPolyPolygon& rXPolyPoly );
-    sal_Bool            operator==( const XPolyPolygon& rXPolyPoly ) const;
-    sal_Bool            operator!=( const XPolyPolygon& rXPolyPoly ) const;
+    bool            operator==( const XPolyPolygon& rXPolyPoly ) const;
+    bool            operator!=( const XPolyPolygon& rXPolyPoly ) const;
 
     // Transformationen
     void Distort(const Rectangle& rRefRect, const XPolygon& rDistortedRect);

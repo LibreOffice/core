@@ -368,13 +368,13 @@ XPolygon ImpPathCreateUser::GetCirclePoly() const
 {
     if (nCircRelWink>=0) {
         XPolygon aXP(aCircCenter,nCircRadius,nCircRadius,
-                     sal_uInt16((nCircStWink+5)/10),sal_uInt16((nCircStWink+nCircRelWink+5)/10),sal_False);
+                     sal_uInt16((nCircStWink+5)/10),sal_uInt16((nCircStWink+nCircRelWink+5)/10),false);
         aXP[0]=aCircStart; aXP.SetFlags(0,XPOLY_SMOOTH);
         if (!bAngleSnap) aXP[aXP.GetPointCount()-1]=aCircEnd;
         return aXP;
     } else {
         XPolygon aXP(aCircCenter,nCircRadius,nCircRadius,
-                     sal_uInt16(NormAngle360(nCircStWink+nCircRelWink+5)/10),sal_uInt16((nCircStWink+5)/10),sal_False);
+                     sal_uInt16(NormAngle360(nCircStWink+nCircRelWink+5)/10),sal_uInt16((nCircStWink+5)/10),false);
         sal_uInt16 nAnz=aXP.GetPointCount();
         for (sal_uInt16 nNum=nAnz/2; nNum>0;) {
             nNum--; // reverse XPoly's order of points

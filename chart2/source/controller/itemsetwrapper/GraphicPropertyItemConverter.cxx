@@ -281,7 +281,7 @@ void GraphicPropertyItemConverter::FillSpecialItem(
                         if( (aValue >>= aName) &&
                             !aName.isEmpty())
                         {
-                            aItem.SetEnabled( sal_True );
+                            aItem.SetEnabled( true );
                             rOutItemSet.Put( aItem );
                         }
                     }

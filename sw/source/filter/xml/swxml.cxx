@@ -507,7 +507,7 @@ sal_uLong XMLReader::Read( SwDoc &rDoc, const OUString& rBaseURL, SwPaM &rPaM, c
 
     pGraphicHelper = SvXMLGraphicHelper::Create( xStorage,
                                                  GRAPHICHELPER_MODE_READ,
-                                                 sal_False );
+                                                 false );
     xGraphicResolver = pGraphicHelper;
     SfxObjectShell *pPersist = rDoc.GetPersist();
     if( pPersist )
@@ -515,7 +515,7 @@ sal_uLong XMLReader::Read( SwDoc &rDoc, const OUString& rBaseURL, SwPaM &rPaM, c
         pObjectHelper = SvXMLEmbeddedObjectHelper::Create(
                                         xStorage, *pPersist,
                                         EMBEDDEDOBJECTHELPER_MODE_READ,
-                                        sal_False );
+                                        false );
         xObjectResolver = pObjectHelper;
     }
 

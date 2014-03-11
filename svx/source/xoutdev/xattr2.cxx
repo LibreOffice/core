@@ -547,7 +547,7 @@ SfxItemPresentation XGradientStepCountItem::GetPresentation
 
 TYPEINIT1_AUTOFACTORY( XFillBmpTileItem, SfxBoolItem );
 
-XFillBmpTileItem::XFillBmpTileItem( sal_Bool bTile ) :
+XFillBmpTileItem::XFillBmpTileItem( bool bTile ) :
             SfxBoolItem( XATTR_FILLBMP_TILE, bTile )
 {
 }
@@ -746,7 +746,7 @@ bool XFillBmpSizeYItem::HasMetrics() const
 
 TYPEINIT1_AUTOFACTORY( XFillBmpSizeLogItem, SfxBoolItem );
 
-XFillBmpSizeLogItem::XFillBmpSizeLogItem( sal_Bool bLog ) :
+XFillBmpSizeLogItem::XFillBmpSizeLogItem( bool bLog ) :
             SfxBoolItem( XATTR_FILLBMP_SIZELOG, bLog )
 {
 }
@@ -884,7 +884,7 @@ SfxItemPresentation XFillBmpTileOffsetYItem::GetPresentation
 
 TYPEINIT1_AUTOFACTORY( XFillBmpStretchItem, SfxBoolItem );
 
-XFillBmpStretchItem::XFillBmpStretchItem( sal_Bool bStretch ) :
+XFillBmpStretchItem::XFillBmpStretchItem( bool bStretch ) :
             SfxBoolItem( XATTR_FILLBMP_STRETCH, bStretch )
 {
 }
@@ -1022,7 +1022,7 @@ SfxItemPresentation XFillBmpPosOffsetYItem::GetPresentation
 
 TYPEINIT1_AUTOFACTORY(XFillBackgroundItem, SfxBoolItem);
 
-XFillBackgroundItem::XFillBackgroundItem( sal_Bool bFill ) :
+XFillBackgroundItem::XFillBackgroundItem( bool bFill ) :
     SfxBoolItem( XATTR_FILLBACKGROUND, bFill )
 {
 }

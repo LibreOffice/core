@@ -58,7 +58,7 @@ public:
     const XHatch&           GetHatchValue() const; // GetValue -> GetHatchValue
     void                    SetHatchValue(const XHatch& rNew)  { aHatch = rNew; Detach(); } // SetValue -> SetHatchValue
 
-    static sal_Bool CompareValueFunc( const NameOrIndex* p1, const NameOrIndex* p2 );
+    static bool CompareValueFunc( const NameOrIndex* p1, const NameOrIndex* p2 );
     XFillHatchItem* checkForUniqueItem( SdrModel* pModel ) const;
 };
 

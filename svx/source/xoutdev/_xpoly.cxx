@@ -274,7 +274,7 @@ XPolygon::XPolygon(const Rectangle& rRect, long nRx, long nRy)
 
 /// create a ellipse (curve) as Bézier polygon
 XPolygon::XPolygon(const Point& rCenter, long nRx, long nRy,
-                   sal_uInt16 nStartAngle, sal_uInt16 nEndAngle, sal_Bool bClose)
+                   sal_uInt16 nStartAngle, sal_uInt16 nEndAngle, bool bClose)
 {
     pImpXPolygon = new ImpXPolygon(17);
 
@@ -470,17 +470,17 @@ XPolygon& XPolygon::operator=( const XPolygon& rXPoly )
     return *this;
 }
 
-sal_Bool XPolygon::operator==( const XPolygon& rXPoly ) const
+bool XPolygon::operator==( const XPolygon& rXPoly ) const
 {
     pImpXPolygon->CheckPointDelete();
-    if (rXPoly.pImpXPolygon==pImpXPolygon) return sal_True;
+    if (rXPoly.pImpXPolygon==pImpXPolygon) return true;
     return *rXPoly.pImpXPolygon == *pImpXPolygon;
 }
 
-sal_Bool XPolygon::operator!=( const XPolygon& rXPoly ) const
+bool XPolygon::operator!=( const XPolygon& rXPoly ) const
 {
     pImpXPolygon->CheckPointDelete();
-    if (rXPoly.pImpXPolygon==pImpXPolygon) return sal_False;
+    if (rXPoly.pImpXPolygon==pImpXPolygon) return false;
     return *rXPoly.pImpXPolygon != *pImpXPolygon;
 }
 
@@ -500,13 +500,13 @@ void XPolygon::SetFlags( sal_uInt16 nPos, XPolyFlags eFlags )
 }
 
 /// short path to read the CONTROL flag directly (TODO: better explain what the sense behind this flag is!)
-sal_Bool XPolygon::IsControl(sal_uInt16 nPos) const
+bool XPolygon::IsControl(sal_uInt16 nPos) const
 {
     return ( (XPolyFlags) pImpXPolygon->pFlagAry[nPos] == XPOLY_CONTROL );
 }
 
 /// short path to read the SMOOTH and SYMMTR flag directly (TODO: better explain what the sense behind these flags is!)
-sal_Bool XPolygon::IsSmooth(sal_uInt16 nPos) const
+bool XPolygon::IsSmooth(sal_uInt16 nPos) const
 {
     XPolyFlags eFlag = (XPolyFlags) pImpXPolygon->pFlagAry[nPos];
     return ( eFlag == XPOLY_SMOOTH || eFlag == XPOLY_SYMMTR );
@@ -526,7 +526,7 @@ double XPolygon::CalcDistance(sal_uInt16 nP1, sal_uInt16 nP2)
     return sqrt(fDx * fDx + fDy * fDy);
 }
 
-void XPolygon::SubdivideBezier(sal_uInt16 nPos, sal_Bool bCalcFirst, double fT)
+void XPolygon::SubdivideBezier(sal_uInt16 nPos, bool bCalcFirst, double fT)
 {
     Point*  pPoints = pImpXPolygon->pPointAry;
     double  fT2 = fT * fT;
@@ -610,14 +610,14 @@ void XPolygon::GenBezArc(const Point& rCenter, long nRx, long nRy,
         pPoints[nFirst+1].X() += nXHdl; pPoints[nFirst+2].Y() += nYHdl;
     }
     if ( nStart > 0 )
-        SubdivideBezier(nFirst, sal_False, (double)nStart / 900);
+        SubdivideBezier(nFirst, false, (double)nStart / 900);
     if ( nEnd < 900 )
-        SubdivideBezier(nFirst, sal_True, (double)(nEnd-nStart) / (900-nStart));
+        SubdivideBezier(nFirst, true, (double)(nEnd-nStart) / (900-nStart));
     SetFlags(nFirst+1, XPOLY_CONTROL);
     SetFlags(nFirst+2, XPOLY_CONTROL);
 }
 
-sal_Bool XPolygon::CheckAngles(sal_uInt16& nStart, sal_uInt16 nEnd, sal_uInt16& nA1, sal_uInt16& nA2)
+bool XPolygon::CheckAngles(sal_uInt16& nStart, sal_uInt16 nEnd, sal_uInt16& nA1, sal_uInt16& nA2)
 {
     if ( nStart == 3600 ) nStart = 0;
     if ( nEnd == 0 ) nEnd = 3600;
@@ -1049,15 +1049,15 @@ XPolyPolygon& XPolyPolygon::operator=( const XPolyPolygon& rXPolyPoly )
     return *this;
 }
 
-sal_Bool XPolyPolygon::operator==( const XPolyPolygon& rXPolyPoly ) const
+bool XPolyPolygon::operator==( const XPolyPolygon& rXPolyPoly ) const
 {
-    if (pImpXPolyPolygon==rXPolyPoly.pImpXPolyPolygon) return sal_True;
+    if (pImpXPolyPolygon==rXPolyPoly.pImpXPolyPolygon) return true;
     return *pImpXPolyPolygon == *rXPolyPoly.pImpXPolyPolygon;
 }
 
-sal_Bool XPolyPolygon::operator!=( const XPolyPolygon& rXPolyPoly ) const
+bool XPolyPolygon::operator!=( const XPolyPolygon& rXPolyPoly ) const
 {
-    if (pImpXPolyPolygon==rXPolyPoly.pImpXPolyPolygon) return sal_False;
+    if (pImpXPolyPolygon==rXPolyPoly.pImpXPolyPolygon) return false;
     return *pImpXPolyPolygon != *rXPolyPoly.pImpXPolyPolygon;
 }
 

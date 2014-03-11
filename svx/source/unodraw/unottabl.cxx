@@ -74,7 +74,7 @@ uno::Sequence< OUString > SAL_CALL SvxUnoTransGradientTable::getSupportedService
 NameOrIndex* SvxUnoTransGradientTable::createItem() const throw()
 {
     XFillFloatTransparenceItem* pNewItem = new XFillFloatTransparenceItem();
-    pNewItem->SetEnabled( sal_True );
+    pNewItem->SetEnabled( true );
     return pNewItem;
 }
 

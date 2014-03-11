@@ -41,7 +41,7 @@ public:
         SfxItemPool* pMaster = 0L,
         sal_uInt16 nAttrStart = XATTR_START,
         sal_uInt16 nAttrEnd = XATTR_END,
-        sal_Bool bLoadRefCounts = sal_True);
+        bool bLoadRefCounts = true);
     XOutdevItemPool(const XOutdevItemPool& rPool);
 
     virtual SfxItemPool* Clone() const;

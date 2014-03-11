@@ -58,7 +58,7 @@ public:
     const XGradient&        GetGradientValue() const; // GetValue -> GetGradientValue
     void                    SetGradientValue(const XGradient& rNew) { aGradient = rNew; Detach(); } // SetValue -> SetGradientValue
 
-    static sal_Bool CompareValueFunc( const NameOrIndex* p1, const NameOrIndex* p2 );
+    static bool CompareValueFunc( const NameOrIndex* p1, const NameOrIndex* p2 );
     XFillGradientItem* checkForUniqueItem( SdrModel* pModel ) const;
 };
 
