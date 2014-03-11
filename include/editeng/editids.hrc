@@ -118,6 +118,7 @@
 #define SID_ATTR_CHAR_LATIN_LANGUAGE                    ( SID_SVX_START + 996 )
 #define SID_ATTR_CHAR_LATIN_POSTURE                     ( SID_SVX_START + 997 )
 #define SID_ATTR_CHAR_LATIN_WEIGHT                      ( SID_SVX_START + 998 )
+#define SID_ATTR_CHAR_GRABBAG                           ( SID_SVX_START + 1142 )
 
 // these ID didn't exist prior to the svx split, add new ids here
 #define SID_ATTR_CHAR_OVERLINE                          ( SID_EDIT_START + 68 )

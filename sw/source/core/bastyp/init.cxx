@@ -293,7 +293,7 @@ SfxItemInfo aSlotTab[] =
     { 0, SFX_ITEM_POOLABLE },                           // RES_CHRATR_BOX
     { 0, SFX_ITEM_POOLABLE },                           // RES_CHRATR_SHADOW
     { 0, SFX_ITEM_POOLABLE },                           // RES_CHRATR_HIGHLIGHT
-    { 0, SFX_ITEM_POOLABLE },                           // RES_CHRATR_GRABBAG
+    { SID_ATTR_CHAR_GRABBAG, SFX_ITEM_POOLABLE },       // RES_CHRATR_GRABBAG
     { 0, SFX_ITEM_POOLABLE },                           // RES_CHRATR_BIDIRTL
     { 0, SFX_ITEM_POOLABLE },                           // RES_CHRATR_IDCTHINT
 
