@@ -40,8 +40,6 @@ const sal_Int16  API_LINE_SOLID    = 0;
 const sal_Int16  API_LINE_DOTTED   = 1;
 const sal_Int16  API_LINE_DASHED   = 2;
 
-#define TWIP_TO_MM100(TWIP)     ((TWIP) >= 0 ? (((TWIP)*127L+36L)/72L) : (((TWIP)*127L-36L)/72L))
-
 sal_Int32 MakeBorderLine( sal_Int32 nSprmValue, table::BorderLine2& rToFill )
 {
     //TODO: Lines are always solid
@@ -235,6 +233,11 @@ OUString ConvertMSFormatStringToSO(
 
 sal_Int32 convertTwipToMM100(sal_Int32 _t)
 {
+    // It appears that MSO handles large twip values specially, probably legacy 16bit handling,
+    // anything that's bigger than 32767 appears to be simply ignored.
+    if( _t >= 0x8000 )
+        return 0;
+#define TWIP_TO_MM100(TWIP)     ((TWIP) >= 0 ? (((TWIP)*127L+36L)/72L) : (((TWIP)*127L-36L)/72L))
     return TWIP_TO_MM100( _t );
 }
 
