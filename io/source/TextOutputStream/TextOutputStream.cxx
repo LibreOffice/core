@@ -97,8 +97,10 @@ public:
 };
 
 OTextOutputStream::OTextOutputStream()
+    : mbEncodingInitialized(false)
+    , mConvUnicode2Text(NULL)
+    , mContextUnicode2Text(NULL)
 {
-    mbEncodingInitialized = false;
 }
 
 OTextOutputStream::~OTextOutputStream()
