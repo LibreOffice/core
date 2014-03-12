@@ -116,6 +116,7 @@
 #include <flddropdown.hxx>
 #include <chpfld.hxx>
 #include <fmthdft.hxx>
+#include <authfld.hxx>
 
 #include <filter/msfilter/sprmids.hxx>
 
@@ -2862,6 +2863,13 @@ void AttributeOutputBase::TextField( const SwFmtFld& rField )
                 bWriteExpand = true;
         }
         break;
+    case RES_AUTHORITY:
+    {
+        const OUString sStr = " CITATION "
+                + lcl_GetExpandedField(*pFld);
+        GetExport().OutputField( pFld, ww::eCITATION, sStr );
+    }
+    break;
     case RES_POSTITFLD:
         //Sadly only possible for word in main document text
         if (GetExport().nTxtTyp == TXT_MAINTEXT)

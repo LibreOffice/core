@@ -26,7 +26,7 @@
 #include <com/sun/star/uno/Any.hxx>
 #include <cppuhelper/weakref.hxx>
 #include <vector>
-
+#include <toxe.hxx>
 class SwDoc;
 class SvNumberFormatter;
 
@@ -317,7 +317,7 @@ public:
                     SwTxtFormatter::NewFldPortion() sets things up properly.
         @return     the generated text (suitable for display)
       */
-    OUString            ExpandField(bool const bCached) const;
+    OUString            ExpandField(bool const bCached, ToxAuthorityField eField = AUTH_FIELD_IDENTIFIER) const;
 
     /// @return name or content.
     virtual OUString    GetFieldName() const;

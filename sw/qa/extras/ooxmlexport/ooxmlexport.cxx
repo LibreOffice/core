@@ -2768,7 +2768,17 @@ DECLARE_OOXMLEXPORT_TEST(testlvlPicBulletId, "lvlPicBulletId.docx")
     if (!pXmlDoc)
        return;
     assertXPath(pXmlDoc, "/w:numbering[1]/w:abstractNum[1]/w:lvl[1]/w:lvlPicBulletId[1]", 0);
+}
 
+DECLARE_OOXMLEXPORT_TEST(testCitation,"FDO74775.docx")
+{
+    xmlDocPtr pXmlDoc = parseExport();
+    if (!pXmlDoc)
+        return;
+    xmlNodeSetPtr pXmlNodes = getXPathNode(pXmlDoc,"/w:document/w:body/w:p[1]/w:r[3]/w:instrText");
+    xmlNodePtr pXmlNode = pXmlNodes->nodeTab[0];
+    OUString contents = OUString::createFromAscii((const char*)((pXmlNode->children[0]).content));
+    CPPUNIT_ASSERT(contents.match(" CITATION [Kra06]"));
 }
 
 #endif

@@ -40,6 +40,7 @@
 #include <calc.hxx>
 #include <comcore.hrc>
 #include <docary.hxx>
+#include <authfld.hxx>
 
 #include <math.h>
 
@@ -384,13 +385,19 @@ sal_Bool SwField::IsFixed() const
     return bRet;
 }
 
-OUString SwField::ExpandField(bool const bCached) const
+OUString SwField::ExpandField(bool const bCached, ToxAuthorityField eField) const
 {
     if ( m_bUseFieldValueCache )
     {
         if (!bCached) // #i85766# do not expand fields in clipboard documents
         {
-            m_Cache = Expand();
+            if (GetTypeId() == TYP_AUTHORITY)
+            {
+                const SwAuthorityField* pAuthorityField = static_cast<const SwAuthorityField*>(this);
+                m_Cache = pAuthorityField->ConditionalExpand(eField);
+            }
+            else
+                m_Cache = Expand();
         }
         return m_Cache;
     }

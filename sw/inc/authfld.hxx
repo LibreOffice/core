@@ -150,6 +150,9 @@ class SwAuthorityField : public SwField
     virtual SwField*    Copy() const;
 
 public:
+    /// For internal use only, in general continue using ExpandField() instead.
+    OUString ConditionalExpand(ToxAuthorityField eField) const;
+
     SwAuthorityField(SwAuthorityFieldType* pType, const OUString& rFieldContents);
     SwAuthorityField(SwAuthorityFieldType* pType, sal_IntPtr nHandle);
     ~SwAuthorityField();
