@@ -619,6 +619,8 @@ IMPL_LINK( OFieldDescControl, FormatClickHdl, Button *, /*pButton*/ )
     SvxCellHorJustify rOldJustify = pActFieldDescr->GetHorJustify();
     Reference< XNumberFormatsSupplier >  xSupplier = GetFormatter()->getNumberFormatsSupplier();
     SvNumberFormatsSupplierObj* pSupplierImpl = SvNumberFormatsSupplierObj::getImplementation( xSupplier );
+    if (!pSupplierImpl)
+        return 0;
 
     SvNumberFormatter* pFormatter = pSupplierImpl->GetNumberFormatter();
     if(::dbaui::callColumnFormatDialog(this,pFormatter,pActFieldDescr->GetType(),nOldFormatKey,rOldJustify,sal_True))
