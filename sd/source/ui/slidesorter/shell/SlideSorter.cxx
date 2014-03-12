@@ -534,9 +534,9 @@ bool SlideSorter::RelocateToWindow (::Window* pParentWindow)
     {
         mpViewShell->ViewShell::RelocateToParentWindow(pParentWindow);
         pNewWindow = mpViewShell->GetParentWindow();
+    }
     else
         pNewWindow = NULL;
-    }
 
     SetupControls(pNewWindow);
     SetupListeners();
