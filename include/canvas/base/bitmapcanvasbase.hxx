@@ -67,6 +67,41 @@ namespace canvas
     public:
         typedef CanvasBase< Base, CanvasHelper, Mutex, UnambiguousBase >    BaseType;
 
+        // XBitmap
+        virtual ::com::sun::star::geometry::IntegerSize2D SAL_CALL getSize(  ) throw (::com::sun::star::uno::RuntimeException) SAL_OVERRIDE
+        {
+            typename BaseType::MutexType aGuard( BaseType::m_aMutex );
+
+            return BaseType::maCanvasHelper.getSize();
+        }
+
+        virtual ::sal_Bool SAL_CALL hasAlpha(  ) throw (::com::sun::star::uno::RuntimeException) SAL_OVERRIDE
+        {
+            typename BaseType::MutexType aGuard( BaseType::m_aMutex );
+
+            return BaseType::maCanvasHelper.hasAlpha();
+        }
+
+        virtual ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XBitmap > SAL_CALL getScaledBitmap( const ::com::sun::star::geometry::RealSize2D& newSize,
+                                                                                                                   sal_Bool                                      beFast ) throw (::com::sun::star::uno::RuntimeException) SAL_OVERRIDE
+        {
+            typename BaseType::MutexType aGuard( BaseType::m_aMutex );
+
+            return BaseType::maCanvasHelper.getScaledBitmap( newSize, beFast );
+        }
+
+    };
+
+    template< class Base,
+              class CanvasHelper,
+              class Mutex=::osl::MutexGuard,
+              class UnambiguousBase=::com::sun::star::uno::XInterface > class BitmapCanvasBase2 :
+        public BitmapCanvasBase< Base, CanvasHelper, Mutex, UnambiguousBase >
+    {
+        typedef BitmapCanvasBase< Base, CanvasHelper, Mutex, UnambiguousBase >
+            BaseType;
+
+    public:
         // XBitmapCanvas
         virtual void SAL_CALL copyRect( const ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XBitmapCanvas >&   sourceCanvas,
                                         const ::com::sun::star::geometry::RealRectangle2D&                                      sourceRect,
@@ -75,19 +110,19 @@ namespace canvas
                                         const ::com::sun::star::geometry::RealRectangle2D&                                      destRect,
                                         const ::com::sun::star::rendering::ViewState&                                           destViewState,
                                         const ::com::sun::star::rendering::RenderState&                                         destRenderState ) throw (::com::sun::star::lang::IllegalArgumentException,
-                                                                                                                                                         ::com::sun::star::uno::RuntimeException)
+                                                                                                                                                         ::com::sun::star::uno::RuntimeException) SAL_OVERRIDE
         {
             tools::verifyArgs(sourceCanvas, sourceRect, sourceViewState, sourceRenderState,
                               destRect, destViewState, destRenderState,
                               BOOST_CURRENT_FUNCTION,
                               static_cast< typename BaseType::UnambiguousBaseType* >(this));
 
-            typename BaseType::MutexType aGuard( BaseType::m_aMutex );
+            typename BaseType::BaseType::MutexType aGuard( BaseType::m_aMutex );
 
-            BaseType::mbSurfaceDirty = true;
-            BaseType::maCanvasHelper.modifying();
+            BaseType::BaseType::mbSurfaceDirty = true;
+            BaseType::BaseType::maCanvasHelper.modifying();
 
-            BaseType::maCanvasHelper.copyRect( this,
+            BaseType::BaseType::maCanvasHelper.copyRect( this,
                                                sourceCanvas,
                                                sourceRect,
                                                sourceViewState,
@@ -96,30 +131,6 @@ namespace canvas
                                                destViewState,
                                                destRenderState );
         }
-
-        // XBitmap
-        virtual ::com::sun::star::geometry::IntegerSize2D SAL_CALL getSize(  ) throw (::com::sun::star::uno::RuntimeException)
-        {
-            typename BaseType::MutexType aGuard( BaseType::m_aMutex );
-
-            return BaseType::maCanvasHelper.getSize();
-        }
-
-        virtual ::sal_Bool SAL_CALL hasAlpha(  ) throw (::com::sun::star::uno::RuntimeException)
-        {
-            typename BaseType::MutexType aGuard( BaseType::m_aMutex );
-
-            return BaseType::maCanvasHelper.hasAlpha();
-        }
-
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XBitmap > SAL_CALL getScaledBitmap( const ::com::sun::star::geometry::RealSize2D& newSize,
-                                                                                                                   sal_Bool                                      beFast ) throw (::com::sun::star::uno::RuntimeException)
-        {
-            typename BaseType::MutexType aGuard( BaseType::m_aMutex );
-
-            return BaseType::maCanvasHelper.getScaledBitmap( newSize, beFast );
-        }
-
     };
 }
 

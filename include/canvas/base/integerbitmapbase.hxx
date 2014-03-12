@@ -33,53 +33,25 @@ namespace canvas
         implementation.
 
         @tpl Base
-        Base class to use, most probably one of the
-        WeakComponentImplHelperN templates with the appropriate
-        interfaces. At least XIntegerBitmap should be among them (why
-        else would you use this template, then?). Base class must have
-        an Base( const Mutex& ) constructor (like the
-        WeakComponentImplHelperN templates have).
-
-        @tpl CanvasHelper
-        Canvas helper implementation for the backend in question
-
-        @tpl Mutex
-        Lock strategy to use. Defaults to using the
-        OBaseMutex-provided lock.  Everytime one of the methods is
-        entered, an object of type Mutex is created with m_aMutex as
-        the sole parameter, and destroyed again when the method scope
-        is left.
-
-        @tpl UnambiguousBase
-        Optional unambiguous base class for XInterface of Base. It's
-        sometimes necessary to specify this parameter, e.g. if Base
-        derives from multiple UNO interface (were each provides its
-        own version of XInterface, making the conversion ambiguous)
-
-        @see CanvasBase for further contractual requirements towards
-        the CanvasHelper type, and some examples.
+        Either BitmapCanvasBase (just XBitmap) or BitmapCanvasBase2 (XBitmap and
+        XBitmapCanvas).
      */
-    template< class Base,
-              class CanvasHelper,
-              class Mutex=::osl::MutexGuard,
-              class UnambiguousBase=::com::sun::star::uno::XInterface > class IntegerBitmapBase :
-        public BitmapCanvasBase< Base, CanvasHelper, Mutex, UnambiguousBase >
+    template< class Base > class IntegerBitmapBase :
+        public Base
     {
     public:
-        typedef BitmapCanvasBase< Base, CanvasHelper, Mutex, UnambiguousBase >  BaseType;
-
         // XIntegerBitmap
         virtual ::com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL getData( ::com::sun::star::rendering::IntegerBitmapLayout&     bitmapLayout,
                                                                               const ::com::sun::star::geometry::IntegerRectangle2D& rect ) throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::rendering::VolatileContentDestroyedException, ::com::sun::star::uno::RuntimeException)
         {
             tools::verifyArgs(rect,
                               BOOST_CURRENT_FUNCTION,
-                              static_cast< typename BaseType::UnambiguousBaseType* >(this));
-            tools::verifyIndexRange(rect, BaseType::getSize() );
+                              static_cast< typename Base::UnambiguousBaseType* >(this));
+            tools::verifyIndexRange(rect, Base::getSize() );
 
-            typename BaseType::MutexType aGuard( BaseType::m_aMutex );
+            typename Base::MutexType aGuard( Base::m_aMutex );
 
-            return BaseType::maCanvasHelper.getData( bitmapLayout,
+            return Base::maCanvasHelper.getData( bitmapLayout,
                                                      rect );
         }
 
@@ -89,15 +61,15 @@ namespace canvas
         {
             tools::verifyArgs(bitmapLayout, rect,
                               BOOST_CURRENT_FUNCTION,
-                              static_cast< typename BaseType::UnambiguousBaseType* >(this));
-            tools::verifyIndexRange(rect, BaseType::getSize() );
+                              static_cast< typename Base::UnambiguousBaseType* >(this));
+            tools::verifyIndexRange(rect, Base::getSize() );
 
-            typename BaseType::MutexType aGuard( BaseType::m_aMutex );
+            typename Base::MutexType aGuard( Base::m_aMutex );
 
-            BaseType::mbSurfaceDirty = true;
-            BaseType::maCanvasHelper.modifying();
+            Base::mbSurfaceDirty = true;
+            Base::maCanvasHelper.modifying();
 
-            BaseType::maCanvasHelper.setData( data, bitmapLayout, rect );
+            Base::maCanvasHelper.setData( data, bitmapLayout, rect );
         }
 
         virtual void SAL_CALL setPixel( const ::com::sun::star::uno::Sequence< sal_Int8 >&      color,
@@ -106,15 +78,15 @@ namespace canvas
         {
             tools::verifyArgs(bitmapLayout, pos,
                               BOOST_CURRENT_FUNCTION,
-                              static_cast< typename BaseType::UnambiguousBaseType* >(this));
-            tools::verifyIndexRange(pos, BaseType::getSize() );
+                              static_cast< typename Base::UnambiguousBaseType* >(this));
+            tools::verifyIndexRange(pos, Base::getSize() );
 
-            typename BaseType::MutexType aGuard( BaseType::m_aMutex );
+            typename Base::MutexType aGuard( Base::m_aMutex );
 
-            BaseType::mbSurfaceDirty = true;
-            BaseType::maCanvasHelper.modifying();
+            Base::mbSurfaceDirty = true;
+            Base::maCanvasHelper.modifying();
 
-            BaseType::maCanvasHelper.setPixel( color, bitmapLayout, pos );
+            Base::maCanvasHelper.setPixel( color, bitmapLayout, pos );
         }
 
         virtual ::com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL getPixel( ::com::sun::star::rendering::IntegerBitmapLayout& bitmapLayout,
@@ -122,20 +94,20 @@ namespace canvas
         {
             tools::verifyArgs(pos,
                               BOOST_CURRENT_FUNCTION,
-                              static_cast< typename BaseType::UnambiguousBaseType* >(this));
-            tools::verifyIndexRange(pos, BaseType::getSize() );
+                              static_cast< typename Base::UnambiguousBaseType* >(this));
+            tools::verifyIndexRange(pos, Base::getSize() );
 
-            typename BaseType::MutexType aGuard( BaseType::m_aMutex );
+            typename Base::MutexType aGuard( Base::m_aMutex );
 
-            return BaseType::maCanvasHelper.getPixel( bitmapLayout,
+            return Base::maCanvasHelper.getPixel( bitmapLayout,
                                                       pos );
         }
 
         virtual ::com::sun::star::rendering::IntegerBitmapLayout SAL_CALL getMemoryLayout(  ) throw (::com::sun::star::uno::RuntimeException)
         {
-            typename BaseType::MutexType aGuard( BaseType::m_aMutex );
+            typename Base::MutexType aGuard( Base::m_aMutex );
 
-            return BaseType::maCanvasHelper.getMemoryLayout();
+            return Base::maCanvasHelper.getMemoryLayout();
         }
     };
 }

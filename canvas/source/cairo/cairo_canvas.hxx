@@ -85,10 +85,12 @@ namespace cairocanvas
     {
     };
 
-    typedef ::canvas::IntegerBitmapBase< CanvasBaseSurfaceProvider_Base,
-                                         CanvasHelper,
-                                         ::osl::MutexGuard,
-                                         ::cppu::OWeakObject >          CanvasBaseT;
+    typedef ::canvas::IntegerBitmapBase<
+        canvas::BitmapCanvasBase2<
+            CanvasBaseSurfaceProvider_Base,
+            CanvasHelper,
+            ::osl::MutexGuard,
+            ::cppu::OWeakObject> > CanvasBaseT;
 
     /** Product of this component's factory.
 

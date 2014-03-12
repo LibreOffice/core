@@ -66,10 +66,10 @@ namespace canvas
               class CanvasHelper,
               class Mutex=::osl::MutexGuard,
               class UnambiguousBase=::com::sun::star::uno::XInterface > class SpriteCanvasBase :
-        public IntegerBitmapBase< Base, CanvasHelper, Mutex, UnambiguousBase >
+        public IntegerBitmapBase< BitmapCanvasBase<Base, CanvasHelper, Mutex, UnambiguousBase> >
     {
     public:
-        typedef IntegerBitmapBase< Base, CanvasHelper, Mutex, UnambiguousBase > BaseType;
+        typedef IntegerBitmapBase< BitmapCanvasBase<Base, CanvasHelper, Mutex, UnambiguousBase> > BaseType;
         typedef ::rtl::Reference< SpriteCanvasBase >                            Reference;
 
         SpriteCanvasBase() :

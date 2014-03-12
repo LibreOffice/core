@@ -59,10 +59,12 @@ namespace vclcanvas
                                            DeviceHelper,
                                            tools::LocalGuard,
                                            ::cppu::OWeakObject >    CanvasBase_Base;
-    typedef ::canvas::IntegerBitmapBase< CanvasBase_Base,
-                                         CanvasHelper,
-                                         tools::LocalGuard,
-                                         ::cppu::OWeakObject >      CanvasBaseT;
+    typedef ::canvas::IntegerBitmapBase<
+        canvas::BitmapCanvasBase2<
+            CanvasBase_Base,
+            CanvasHelper,
+            tools::LocalGuard,
+            ::cppu::OWeakObject> > CanvasBaseT;
 
     /** Product of this component's factory.
 

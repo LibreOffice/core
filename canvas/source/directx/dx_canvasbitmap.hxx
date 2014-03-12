@@ -51,10 +51,12 @@ namespace dxcanvas
                                               ::com::sun::star::rendering::XIntegerBitmap,
                                                ::com::sun::star::lang::XServiceInfo,
                                                ::com::sun::star::beans::XFastPropertySet >      CanvasBitmapBase_Base;
-    typedef ::canvas::IntegerBitmapBase< ::canvas::DisambiguationHelper< CanvasBitmapBase_Base >,
-                                         BitmapCanvasHelper,
-                                         ::osl::MutexGuard,
-                                         ::cppu::OWeakObject >                          CanvasBitmap_Base;
+    typedef ::canvas::IntegerBitmapBase<
+        canvas::BitmapCanvasBase2<
+            ::canvas::DisambiguationHelper< CanvasBitmapBase_Base >,
+            BitmapCanvasHelper,
+            ::osl::MutexGuard,
+            ::cppu::OWeakObject> > CanvasBitmap_Base;
 
     class CanvasBitmap : public CanvasBitmap_Base, public BitmapProvider
     {
