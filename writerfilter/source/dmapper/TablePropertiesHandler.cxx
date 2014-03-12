@@ -96,12 +96,16 @@ namespace dmapper {
                     pProperties->resolve(*pMeasureHandler);
                     TablePropertyMapPtr pPropMap( new TablePropertyMap );
 
-                    // In case a cell already wanted fixed size, we should not overwrite it here.
                     DomainMapperTableManager* pManager = dynamic_cast<DomainMapperTableManager*>(m_pTableManager);
-                    if (!pManager || !pManager->IsRowSizeTypeInserted())
-                        pPropMap->Insert( PROP_SIZE_TYPE, uno::makeAny( pMeasureHandler->GetRowHeightSizeType() ), false);
+                    // In case any of the cells has the btLr cell direction, then an explicit minimal size will just hide the whole row, don't do that.
+                    if (pMeasureHandler->GetRowHeightSizeType() != text::SizeType::MIN || !pManager->HasBtlrCell())
+                    {
+                        // In case a cell already wanted fixed size, we should not overwrite it here.
+                        if (!pManager || !pManager->IsRowSizeTypeInserted())
+                            pPropMap->Insert( PROP_SIZE_TYPE, uno::makeAny( pMeasureHandler->GetRowHeightSizeType() ), false);
 
-                    pPropMap->Insert( PROP_HEIGHT, uno::makeAny(pMeasureHandler->getMeasureValue() ));
+                        pPropMap->Insert( PROP_HEIGHT, uno::makeAny(pMeasureHandler->getMeasureValue() ));
+                    }
                     insertRowProps(pPropMap);
                 }
             }

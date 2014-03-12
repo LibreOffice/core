@@ -1106,8 +1106,10 @@ DECLARE_OOXMLIMPORT_TEST(testBnc865381, "bnc865381.docx")
     uno::Reference<container::XIndexAccess> xTables(xTablesSupplier->getTextTables(), uno::UNO_QUERY);
     uno::Reference<text::XTextTable> xTextTable(xTables->getByIndex(0), uno::UNO_QUERY);
     uno::Reference<table::XTableRows> xTableRows(xTextTable->getRows(), uno::UNO_QUERY);
-    // Second row has a vertically merged cell, make sure size type is MIN in that case (otherwise B2 is not readable).
-    CPPUNIT_ASSERT_EQUAL(text::SizeType::MIN, getProperty<sal_Int16>(xTableRows->getByIndex(1), "SizeType"));
+    // Second row has a vertically merged cell, make sure size type is not FIX in that case (otherwise B2 is not readable).
+    CPPUNIT_ASSERT(text::SizeType::FIX != getProperty<sal_Int16>(xTableRows->getByIndex(1), "SizeType"));
+    // Explicit size of 41 mm100 was set, so the vertical text in A2 was not readable.
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty<sal_Int32>(xTableRows->getByIndex(1), "Height"));
 }
 
 DECLARE_OOXMLIMPORT_TEST(testFdo53985, "fdo53985.docx")

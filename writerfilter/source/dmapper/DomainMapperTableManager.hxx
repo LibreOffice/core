@@ -58,6 +58,8 @@ class DomainMapperTableManager : public DomainMapperTableManager_Base_t
     ::std::vector< IntVectorPtr >  m_aCellWidths;
     /// Remember if a cell already set this, then it should not be set at a row level.
     bool m_bRowSizeTypeInserted;
+    /// At least one cell in the current row has the btLr text direction.
+    bool m_bHasBtlrCell;
     /// Remember if table width was already set, when we lack a w:tblW, it should be set manually at the end.
     bool m_bTableSizeTypeInserted;
     /// Table layout algorithm, IOW if we should consider fixed column width or not.
@@ -128,6 +130,11 @@ public:
     bool IsRowSizeTypeInserted() const
     {
         return m_bRowSizeTypeInserted;
+    }
+
+    bool HasBtlrCell() const
+    {
+        return m_bHasBtlrCell;
     }
 
     bool IsTableSizeTypeInserted() const

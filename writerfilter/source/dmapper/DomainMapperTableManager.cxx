@@ -54,6 +54,7 @@ DomainMapperTableManager::DomainMapperTableManager(bool bOOXML) :
     m_aTmpTableProperties(),
     m_bPushCurrentWidth(false),
     m_bRowSizeTypeInserted(false),
+    m_bHasBtlrCell(false),
     m_bTableSizeTypeInserted(false),
     m_nLayoutType(0),
     m_nMaxFixedWidth(0),
@@ -354,6 +355,7 @@ bool DomainMapperTableManager::sprm(Sprm & rSprm)
                             m_bRowSizeTypeInserted = true;
                             insertRowProps(pRowPropMap);
                         }
+                        m_bHasBtlrCell = true;
                         }
                         break;
                     case 4: // lrTbV
@@ -758,6 +760,7 @@ void DomainMapperTableManager::endOfRowAction()
 
     m_nGridBefore = m_nGridAfter = 0;
     m_bRowSizeTypeInserted = false;
+    m_bHasBtlrCell = false;
     m_bTableSizeTypeInserted = false;
 
 #ifdef DEBUG_DOMAINMAPPER
