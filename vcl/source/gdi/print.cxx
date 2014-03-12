@@ -525,6 +525,59 @@ bool Printer::ImplInitGraphics() const
     return mpGraphics ? true : false;
 }
 
+void Printer::ImplReleaseGraphics( bool bRelease )
+{
+    DBG_TESTSOLARMUTEX();
+
+    if ( !mpGraphics )
+        return;
+
+    // release the fonts of the physically released graphics device
+    if( bRelease )
+        ImplReleaseFonts();
+
+    ImplSVData* pSVData = ImplGetSVData();
+
+    Printer* pPrinter = (Printer*)this;
+
+    if ( !pPrinter->mpJobGraphics )
+    {
+        if ( pPrinter->mpDisplayDev )
+        {
+            VirtualDevice* pVirDev = pPrinter->mpDisplayDev;
+            if ( bRelease )
+                pVirDev->mpVirDev->ReleaseGraphics( mpGraphics );
+            // remove from global LRU list of virtual device graphics
+            if ( mpPrevGraphics )
+                mpPrevGraphics->mpNextGraphics = mpNextGraphics;
+            else
+                pSVData->maGDIData.mpFirstVirGraphics = mpNextGraphics;
+            if ( mpNextGraphics )
+                mpNextGraphics->mpPrevGraphics = mpPrevGraphics;
+            else
+                pSVData->maGDIData.mpLastVirGraphics = mpPrevGraphics;
+        }
+        else
+        {
+            if ( bRelease )
+                pPrinter->mpInfoPrinter->ReleaseGraphics( mpGraphics );
+            // remove from global LRU list of printer graphics
+            if ( mpPrevGraphics )
+                mpPrevGraphics->mpNextGraphics = mpNextGraphics;
+            else
+                pSVData->maGDIData.mpFirstPrnGraphics = mpNextGraphics;
+            if ( mpNextGraphics )
+                mpNextGraphics->mpPrevGraphics = mpPrevGraphics;
+            else
+                pSVData->maGDIData.mpLastPrnGraphics = mpPrevGraphics;
+        }
+    }
+
+    mpGraphics      = NULL;
+    mpPrevGraphics  = NULL;
+    mpNextGraphics  = NULL;
+}
+
 void Printer::ImplInit( SalPrinterQueueInfo* pInfo )
 {
     ImplSVData* pSVData = ImplGetSVData();
