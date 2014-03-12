@@ -771,6 +771,8 @@ public:
     bool isInIndexContext() { return m_bStartIndex;}
     bool isInBibliographyContext() { return m_bStartBibliography;}
 
+    void substream(Id rName, ::writerfilter::Reference<Stream>::Pointer_t const& ref);
+
 private:
     void PushPageHeaderFooter(bool bHeader, SectionPropertyMap::PageType eType);
 };

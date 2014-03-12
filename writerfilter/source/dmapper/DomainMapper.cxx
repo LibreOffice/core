@@ -2763,11 +2763,25 @@ void DomainMapper::lcl_table(Id name, writerfilter::Reference<Table>::Pointer_t 
 
 void DomainMapper::lcl_substream(Id rName, ::writerfilter::Reference<Stream>::Pointer_t ref)
 {
-    m_pImpl->appendTableManager( );
+    m_pImpl->substream(rName, ref);
+}
+
+void DomainMapper_Impl::substream(Id rName,
+        ::writerfilter::Reference<Stream>::Pointer_t const& ref)
+{
+#ifndef NDEBUG
+    size_t contextSize(m_aContextStack.size());
+    size_t propSize[NUMBER_OF_CONTEXTS];
+    for (int i = 0; i < NUMBER_OF_CONTEXTS; ++i) {
+        propSize[i] = m_aPropertyStacks[i].size();
+    }
+#endif
+
+    appendTableManager();
     // Appending a TableManager resets its TableHandler, so we need to append
     // that as well, or tables won't be imported properly in headers/footers.
-    m_pImpl->appendTableHandler( );
-    m_pImpl->getTableManager().startLevel();
+    appendTableHandler();
+    getTableManager().startLevel();
 
     //import of page header/footer
 
@@ -2775,37 +2789,37 @@ void DomainMapper::lcl_substream(Id rName, ::writerfilter::Reference<Stream>::Po
     {
     case NS_ooxml::LN_headerl:
 
-        m_pImpl->PushPageHeader(SectionPropertyMap::PAGE_LEFT);
+        PushPageHeader(SectionPropertyMap::PAGE_LEFT);
         break;
     case NS_ooxml::LN_headerr:
 
-        m_pImpl->PushPageHeader(SectionPropertyMap::PAGE_RIGHT);
+        PushPageHeader(SectionPropertyMap::PAGE_RIGHT);
         break;
     case NS_ooxml::LN_headerf:
 
-        m_pImpl->PushPageHeader(SectionPropertyMap::PAGE_FIRST);
+        PushPageHeader(SectionPropertyMap::PAGE_FIRST);
         break;
     case NS_ooxml::LN_footerl:
 
-        m_pImpl->PushPageFooter(SectionPropertyMap::PAGE_LEFT);
+        PushPageFooter(SectionPropertyMap::PAGE_LEFT);
         break;
     case NS_ooxml::LN_footerr:
 
-        m_pImpl->PushPageFooter(SectionPropertyMap::PAGE_RIGHT);
+        PushPageFooter(SectionPropertyMap::PAGE_RIGHT);
         break;
     case NS_ooxml::LN_footerf:
 
-        m_pImpl->PushPageFooter(SectionPropertyMap::PAGE_FIRST);
+        PushPageFooter(SectionPropertyMap::PAGE_FIRST);
         break;
     case NS_ooxml::LN_footnote:
     case NS_ooxml::LN_endnote:
-        m_pImpl->PushFootOrEndnote( NS_ooxml::LN_footnote == rName );
+        PushFootOrEndnote( NS_ooxml::LN_footnote == rName );
     break;
     case NS_ooxml::LN_annotation :
-        m_pImpl->PushAnnotation();
+        PushAnnotation();
     break;
     }
-    ref->resolve(*this);
+    ref->resolve(m_rDMapper);
     switch( rName )
     {
     case NS_ooxml::LN_headerl:
@@ -2814,19 +2828,25 @@ void DomainMapper::lcl_substream(Id rName, ::writerfilter::Reference<Stream>::Po
     case NS_ooxml::LN_footerl:
     case NS_ooxml::LN_footerr:
     case NS_ooxml::LN_footerf:
-        m_pImpl->PopPageHeaderFooter();
+        PopPageHeaderFooter();
     break;
     case NS_ooxml::LN_footnote:
     case NS_ooxml::LN_endnote:
-        m_pImpl->PopFootOrEndnote();
+        PopFootOrEndnote();
     break;
     case NS_ooxml::LN_annotation :
-        m_pImpl->PopAnnotation();
+        PopAnnotation();
     break;
     }
 
-    m_pImpl->getTableManager().endLevel();
-    m_pImpl->popTableManager( );
+    getTableManager().endLevel();
+    popTableManager();
+
+    // check that stacks are the same as before substream
+    assert(m_aContextStack.size() == contextSize);
+    for (int i = 0; i < NUMBER_OF_CONTEXTS; ++i) {
+        assert(m_aPropertyStacks[i].size() == propSize[i]);
+    }
 }
 
 void DomainMapper::lcl_info(const string & /*info_*/)
