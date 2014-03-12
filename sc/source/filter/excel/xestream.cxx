@@ -988,7 +988,7 @@ sax_fastparser::FSHelperPtr& XclExpXmlStream::WriteAttributesInternal( sal_Int32
             rStream->write( " " )
                 ->writeId( nAttribute )
                 ->write( "=\"" )
-                ->writeEscaped( OUString(pValue, std::strlen(pValue), RTL_TEXTENCODING_UTF8) )
+                ->writeEscaped( OUString(pValue, strlen(pValue), RTL_TEXTENCODING_UTF8) )
                 ->write( "\"" );
         }
 
