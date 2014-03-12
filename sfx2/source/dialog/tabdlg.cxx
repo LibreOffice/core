@@ -1295,6 +1295,8 @@ IMPL_LINK( SfxTabDialog, DeactivatePageHdl, TabControl *, pTabCtrl )
     SFX_APP();
     SfxTabPage *pPage = dynamic_cast<SfxTabPage*> (pTabCtrl->GetTabPage( nId ));
     DBG_ASSERT( pPage, "no active Page" );
+    if (!pPage)
+        return sal_False;
 #ifdef DBG_UTIL
     Data_Impl* pDataObject = Find( pImpl->aData, pTabCtrl->GetCurPageId() );
     DBG_ASSERT( pDataObject, "no Data structur for current page" );
