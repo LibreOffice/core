@@ -484,7 +484,7 @@ OUString SbiImage::GetString( short nId ) const
     return OUString();
 }
 
-const SbxObject* SbiImage::FindType (OUString aTypeName) const
+const SbxObject* SbiImage::FindType (const OUString& aTypeName) const
 {
     return rTypes.Is() ? (SbxObject*)rTypes->Find(aTypeName,SbxCLASS_OBJECT) : NULL;
 }

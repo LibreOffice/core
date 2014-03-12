@@ -524,7 +524,7 @@ sal_Bool SbModule::IsCompiled() const
     return sal_Bool( pImage != 0 );
 }
 
-const SbxObject* SbModule::FindType( OUString aTypeName ) const
+const SbxObject* SbModule::FindType( const OUString& aTypeName ) const
 {
     return pImage ? pImage->FindType( aTypeName ) : NULL;
 }

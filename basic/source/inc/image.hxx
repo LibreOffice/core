@@ -75,7 +75,7 @@ public:
     OUString&   GetSource32()  { return aOUSource; }
     sal_uInt16  GetBase() const     { return nDimBase;  }
     OUString    GetString( short nId ) const;
-    const SbxObject* FindType (OUString aTypeName) const;
+    const SbxObject* FindType (const OUString& aTypeName) const;
 
     SbxArrayRef GetEnums()          { return rEnums; }
 

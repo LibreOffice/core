@@ -2800,7 +2800,7 @@ inline sal_Bool implCheckWildcard( const OUString& rName, SbiRTLData* pRTLData )
 }
 
 
-bool isRootDir( OUString aDirURLStr )
+bool isRootDir( const OUString& aDirURLStr )
 {
     INetURLObject aDirURLObj( aDirURLStr );
     bool bRoot = false;

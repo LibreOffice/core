@@ -146,14 +146,14 @@ class BasMgrContainerListenerImpl: public ContainerListenerHelper
     OUString maLibName;      // empty -> no lib, but lib container
 
 public:
-    BasMgrContainerListenerImpl( BasicManager* pMgr, OUString aLibName )
+    BasMgrContainerListenerImpl( BasicManager* pMgr, const OUString& aLibName )
         : mpMgr( pMgr )
         , maLibName( aLibName ) {}
 
     static void insertLibraryImpl( const uno::Reference< script::XLibraryContainer >& xScriptCont, BasicManager* pMgr,
-                                   uno::Any aLibAny, OUString aLibName );
+                                   uno::Any aLibAny, const OUString& aLibName );
     static void addLibraryModulesImpl( BasicManager* pMgr, uno::Reference< container::XNameAccess > xLibNameAccess,
-                                       OUString aLibName );
+                                       const OUString& aLibName );
 
 
     // XEventListener
@@ -175,7 +175,7 @@ public:
 
 
 void BasMgrContainerListenerImpl::insertLibraryImpl( const uno::Reference< script::XLibraryContainer >& xScriptCont,
-    BasicManager* pMgr, uno::Any aLibAny, OUString aLibName )
+    BasicManager* pMgr, uno::Any aLibAny, const OUString& aLibName )
 {
     Reference< container::XNameAccess > xLibNameAccess;
     aLibAny >>= xLibNameAccess;
@@ -208,7 +208,7 @@ void BasMgrContainerListenerImpl::insertLibraryImpl( const uno::Reference< scrip
 
 
 void BasMgrContainerListenerImpl::addLibraryModulesImpl( BasicManager* pMgr,
-    uno::Reference< container::XNameAccess > xLibNameAccess, OUString aLibName )
+    uno::Reference< container::XNameAccess > xLibNameAccess, const OUString& aLibName )
 {
     uno::Sequence< OUString > aModuleNames = xLibNameAccess->getElementNames();
     sal_Int32 nModuleCount = aModuleNames.getLength();
