@@ -125,25 +125,22 @@ public:
 class TakeProgress : public ModalDialog
 {
 private:
-
-    FixedText           aFtTakeFile;
-    FixedLine           aFLTakeProgress;
-    CancelButton        aBtnCancel;
+    FixedText*          m_pFtTakeFile;
+    CancelButton*       m_pBtnCancel;
     Window * window_;
     rtl::Reference< TakeThread > maTakeThread;
     TokenList_impl      maTakenList;
 
-                        DECL_LINK( ClickCancelBtn, void* );
+    DECL_LINK( ClickCancelBtn, void* );
     void                Terminate();
 
 public:
 
-                        TakeProgress( Window* pWindow );
-                        ~TakeProgress() {};
+    TakeProgress( Window* pWindow );
 
-                        DECL_LINK( CleanUpHdl, void* );
+    DECL_LINK( CleanUpHdl, void* );
 
-    void                SetFile( const INetURLObject& rURL ) { aFtTakeFile.SetText( GetReducedString( rURL, 30 ) ); }
+    void                SetFile( const INetURLObject& rURL ) { m_pFtTakeFile->SetText( GetReducedString( rURL, 30 ) ); }
     virtual short       Execute();
     virtual void        StartExecuteModal( const Link& rEndDialogHdl );
 };

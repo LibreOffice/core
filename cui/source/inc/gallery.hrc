@@ -18,9 +18,6 @@
  */
 #include <cuires.hrc>
 
-// Dialogs
-#define RID_SVXDLG_GALLERY_TAKE_PROGRESS        (RID_CUI_GALLERY_START + 7)
-
 // Gallery-Strings
 #define RID_SVXSTR_GALLERY_NOFILES              (RID_CUI_GALLERY_START + 12)
 #define RID_SVXSTR_GALLERYPROPS_OBJECT          (RID_CUI_GALLERY_START + 39)
@@ -32,23 +29,5 @@
 #define RID_SVXBMP_THEME_NORMAL_BIG             (RID_CUI_GALLERY_START + 49)
 #define RID_SVXBMP_THEME_READONLY_BIG           (RID_CUI_GALLERY_START + 53)
 #define RID_SVXBMP_THEME_DEFAULT_BIG            (RID_CUI_GALLERY_START + 55)
-
-// local Defines
-#define BTN_OK 1
-#define BTN_CANCEL 1
-#define BTN_HELP 1
-
-#define LBX_FOUND 1
-#define BTN_TAKE 5
-#define BTN_SEARCH 4
-#define CBX_PREVIEW 3
-#define FT_FILETYPE 2
-#define CBB_FILETYPE 1
-#define FL_TAKE_PROGRESS 1
-#define FT_TAKE_FILE 1
-#define BTN_TAKEALL 1
-#define WND_BRSPRV 1
-#define BTN_MADDIN1 8
-#define BTN_MADDIN2 9
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

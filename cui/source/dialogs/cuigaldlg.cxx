@@ -334,23 +334,17 @@ void TakeThread::execute()
     Application::PostUserEvent( LINK( mpProgress, TakeProgress, CleanUpHdl ) );
 }
 
-
 // - TakeProgress -
-
-
-TakeProgress::TakeProgress( Window* pWindow ) :
-    ModalDialog     ( pWindow, CUI_RES( RID_SVXDLG_GALLERY_TAKE_PROGRESS ) ),
-    aFtTakeFile     ( this, CUI_RES( FT_TAKE_FILE ) ),
-    aFLTakeProgress( this, CUI_RES( FL_TAKE_PROGRESS ) ),
-    aBtnCancel      ( this, CUI_RES( BTN_CANCEL ) ),
-    window_(pWindow)
+TakeProgress::TakeProgress(Window* pWindow)
+    : ModalDialog(pWindow, "GalleryApplyProgress",
+        "cui/ui/galleryapplyprogress.ui")
+    , window_(pWindow)
 {
-    FreeResource();
-    aBtnCancel.SetClickHdl( LINK( this, TakeProgress, ClickCancelBtn ) );
+    get(m_pFtTakeFile, "file");
+    get(m_pBtnCancel, "cancel");
+
+    m_pBtnCancel->SetClickHdl( LINK( this, TakeProgress, ClickCancelBtn ) );
 }
-
-
-
 
 void TakeProgress::Terminate()
 {
@@ -358,15 +352,11 @@ void TakeProgress::Terminate()
         maTakeThread->terminate();
 }
 
-
-
 IMPL_LINK_NOARG(TakeProgress, ClickCancelBtn)
 {
     Terminate();
     return 0L;
 }
-
-
 
 IMPL_LINK_NOARG(TakeProgress, CleanUpHdl)
 {

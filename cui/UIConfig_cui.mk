@@ -56,6 +56,7 @@ $(eval $(call gb_UIConfig_add_uifiles,cui,\
 	cui/uiconfig/ui/effectspage \
 	cui/uiconfig/ui/eventsconfigpage \
 	cui/uiconfig/ui/formatcellsdialog \
+	cui/uiconfig/ui/galleryapplyprogress \
 	cui/uiconfig/ui/galleryfilespage \
 	cui/uiconfig/ui/gallerygeneralpage \
 	cui/uiconfig/ui/gallerysearchprogress \
