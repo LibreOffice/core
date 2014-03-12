@@ -190,14 +190,14 @@ int SVMain()
         return ImplSVMain();
 }
 
-// This variable is set, when no Application object is instantiated
-// before SVInit is called
+// This variable is set when no Application object has been instantiated
+// before InitVCL is called
 static Application *        pOwnSvApp = NULL;
 
 // Exception handler. pExceptionHandler != NULL => VCL already inited
 oslSignalHandler   pExceptionHandler = NULL;
 
-class Application_Impl : public Application
+class DummyApplication : public Application
 {
 public:
     int                Main() { return EXIT_SUCCESS; };
@@ -245,7 +245,7 @@ bool InitVCL()
 
     if( !ImplGetSVData()->mpApp )
     {
-        pOwnSvApp = new Application_Impl();
+        pOwnSvApp = new DummyApplication();
     }
     InitSalMain();
 
