@@ -2804,6 +2804,15 @@ DECLARE_OOXMLEXPORT_TEST(testFileWithInvalidImageLink, "FileWithInvalidImageLink
     assertXPath(pXmlDoc, "/w:document/w:body/w:p[2]/w:r[2]/w:drawing[1]/wp:inline[1]/a:graphic[1]/a:graphicData[1]/pic:pic[1]/pic:blipFill[1]/a:blip[1]", "embed", "");
 }
 
+DECLARE_OOXMLEXPORT_TEST(testNestedAlternateContent, "nestedAlternateContent.docx")
+{
+     xmlDocPtr pXmlDoc = parseExport("word/document.xml");
+     if (!pXmlDoc)
+        return;
+    // We check alternateContent  could not contains alternateContent (i.e. nested alternateContent)
+    assertXPath(pXmlDoc,"/w:document[1]/w:body[1]/w:p[1]/w:r[1]/mc:AlternateContent[1]/mc:Choice[1]/w:drawing[1]/wp:anchor[1]/a:graphic[1]/a:graphicData[1]/wpg:wgp[1]/wps:wsp[2]/wps:txbx[1]/w:txbxContent[1]/w:p[1]/w:r[2]/mc:AlternateContent[1]",0);
+}
+
 #endif
 
 CPPUNIT_PLUGIN_IMPLEMENT();

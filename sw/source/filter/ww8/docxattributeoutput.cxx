@@ -4069,7 +4069,10 @@ void DocxAttributeOutput::WriteOutliner(const OutlinerParaObject& rParaObj)
             aAttrIter.NextPos();
         }
         while( nAktPos < nEnd );
+        // Word can't handle nested text boxes, so write them on the same level.
+        ++m_nTextFrameLevel;
         EndParagraph(ww8::WW8TableNodeInfoInner::Pointer_t());
+        --m_nTextFrameLevel;
     }
     m_pSerializer->endElementNS( XML_w, XML_txbxContent );
 }
