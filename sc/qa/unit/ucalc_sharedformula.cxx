@@ -819,6 +819,65 @@ void Test::testSharedFormulasRefUpdateCopySheets()
     m_pDoc->DeleteTab(0);
 }
 
+void Test::testSharedFormulasRefUpdateDeleteSheets()
+{
+    sc::AutoCalcSwitch aACSwitch(*m_pDoc, true); // make sure auto calc is on.
+
+    m_pDoc->InsertTab(0, "Sheet1");
+    m_pDoc->InsertTab(1, "Sheet2");
+
+    // Set values to B2:B4 on Sheet2.
+    m_pDoc->SetValue(ScAddress(1,1,1), 1.0);
+    m_pDoc->SetValue(ScAddress(1,2,1), 2.0);
+    m_pDoc->SetValue(ScAddress(1,3,1), 3.0);
+
+    // Set formulas in A1:A3 on Sheet1 that reference B2:B4 on Sheet2.
+    m_pDoc->SetString(ScAddress(0,0,0), "=Sheet2.B2");
+    m_pDoc->SetString(ScAddress(0,1,0), "=Sheet2.B3");
+    m_pDoc->SetString(ScAddress(0,2,0), "=Sheet2.B4");
+
+    // Check the formula results.
+    CPPUNIT_ASSERT_EQUAL(1.0, m_pDoc->GetValue(ScAddress(0,0,0)));
+    CPPUNIT_ASSERT_EQUAL(2.0, m_pDoc->GetValue(ScAddress(0,1,0)));
+    CPPUNIT_ASSERT_EQUAL(3.0, m_pDoc->GetValue(ScAddress(0,2,0)));
+
+    if (!checkFormula(*m_pDoc, ScAddress(0,0,0), "Sheet2.B2"))
+        CPPUNIT_FAIL("Wrong formula");
+    if (!checkFormula(*m_pDoc, ScAddress(0,1,0), "Sheet2.B3"))
+        CPPUNIT_FAIL("Wrong formula");
+    if (!checkFormula(*m_pDoc, ScAddress(0,2,0), "Sheet2.B4"))
+        CPPUNIT_FAIL("Wrong formula");
+
+    // Delete Sheet2.
+    ScDocFunc& rFunc = getDocShell().GetDocFunc();
+    rFunc.DeleteTable(1, true, true);
+
+    if (!checkFormula(*m_pDoc, ScAddress(0,0,0), "#REF!.B2"))
+        CPPUNIT_FAIL("Wrong formula");
+    if (!checkFormula(*m_pDoc, ScAddress(0,1,0), "#REF!.B3"))
+        CPPUNIT_FAIL("Wrong formula");
+    if (!checkFormula(*m_pDoc, ScAddress(0,2,0), "#REF!.B4"))
+        CPPUNIT_FAIL("Wrong formula");
+
+    // Undo the deletion and make sure the formulas are back to the way they were.
+    SfxUndoManager* pUndoMgr = m_pDoc->GetUndoManager();
+    CPPUNIT_ASSERT(pUndoMgr);
+    pUndoMgr->Undo();
+
+    if (!checkFormula(*m_pDoc, ScAddress(0,0,0), "Sheet2.B2"))
+        CPPUNIT_FAIL("Wrong formula");
+    if (!checkFormula(*m_pDoc, ScAddress(0,1,0), "Sheet2.B3"))
+        CPPUNIT_FAIL("Wrong formula");
+    if (!checkFormula(*m_pDoc, ScAddress(0,2,0), "Sheet2.B4"))
+        CPPUNIT_FAIL("Wrong formula");
+
+    // TODO: We can't test redo yet as ScUndoDeleteTab::Redo() relies on
+    // view shell to do its thing.
+
+    m_pDoc->DeleteTab(1);
+    m_pDoc->DeleteTab(0);
+}
+
 void Test::testSharedFormulasCopyPaste()
 {
     m_pDoc->InsertTab(0, "Test");
