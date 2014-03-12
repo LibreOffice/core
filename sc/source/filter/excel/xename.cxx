@@ -610,7 +610,10 @@ void XclExpNameManagerImpl::CreateBuiltInNames()
                 ScRangeList aRangeList;
                 for( sal_uInt16 nIdx = 0, nCount = rDoc.GetPrintRangeCount( nScTab ); nIdx < nCount; ++nIdx )
                 {
-                    ScRange aRange( *rDoc.GetPrintRange( nScTab, nIdx ) );
+                    const ScRange* pPrintRange = rDoc.GetPrintRange( nScTab, nIdx );
+                    if (!pPrintRange)
+                        continue;
+                    ScRange aRange( *pPrintRange );
                     // Calc document does not care about sheet index in print ranges
                     aRange.aStart.SetTab( nScTab );
                     aRange.aEnd.SetTab( nScTab );
