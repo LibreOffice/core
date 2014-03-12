@@ -42,7 +42,7 @@ public:
                                     bool bAktSelection );
     ~SwCallLink();
 
-    static long getLayoutFrm( const SwRootFrm*, SwTxtNode& rNd, sal_Int32 nCntPos, sal_Bool bCalcFrm );
+    static long getLayoutFrm( const SwRootFrm*, SwTxtNode& rNd, sal_Int32 nCntPos, bool bCalcFrm );
 };
 
 #endif // INCLUDED_SW_SOURCE_CORE_CRSR_CALLNK_HXX

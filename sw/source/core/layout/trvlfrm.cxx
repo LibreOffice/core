@@ -1872,8 +1872,8 @@ bool SwRootFrm::MakeTblCrsrs( SwTableCursor& rTblCrsr )
     const SwCntntNode* pTmpStartNode = rTblCrsr.GetCntntNode();
     const SwCntntNode* pTmpEndNode   = rTblCrsr.GetCntntNode(false);
 
-    const SwFrm* pTmpStartFrm = pTmpStartNode ? pTmpStartNode->getLayoutFrm( this, &aPtPt, 0, sal_False ) : 0;
-    const SwFrm* pTmpEndFrm   = pTmpEndNode   ?   pTmpEndNode->getLayoutFrm( this, &aMkPt, 0, sal_False ) : 0;
+    const SwFrm* pTmpStartFrm = pTmpStartNode ? pTmpStartNode->getLayoutFrm( this, &aPtPt, 0, false ) : 0;
+    const SwFrm* pTmpEndFrm   = pTmpEndNode   ?   pTmpEndNode->getLayoutFrm( this, &aMkPt, 0, false ) : 0;
 
     const SwLayoutFrm* pStart = pTmpStartFrm ? pTmpStartFrm->GetUpper() : 0;
     const SwLayoutFrm* pEnd   = pTmpEndFrm   ? pTmpEndFrm->GetUpper() : 0;

@@ -2475,7 +2475,7 @@ void SwDoc::GetTabCols( SwTabCols &rFill, const SwCursor* pCrsr,
         if( pShCrsr )
             aPt = pShCrsr->GetPtPos();
 
-        const SwFrm* pTmpFrm = pCNd->getLayoutFrm( pCNd->GetDoc()->GetCurrentLayout(), &aPt, 0, sal_False );
+        const SwFrm* pTmpFrm = pCNd->getLayoutFrm( pCNd->GetDoc()->GetCurrentLayout(), &aPt, 0, false );
         do {
             pTmpFrm = pTmpFrm->GetUpper();
         } while ( !pTmpFrm->IsCellFrm() );
@@ -2689,7 +2689,7 @@ void SwDoc::SetTabCols( const SwTabCols &rNew, sal_Bool bCurRowOnly,
         if( pShCrsr )
             aPt = pShCrsr->GetPtPos();
 
-        const SwFrm* pTmpFrm = pCNd->getLayoutFrm( pCNd->GetDoc()->GetCurrentLayout(), &aPt, 0, sal_False );
+        const SwFrm* pTmpFrm = pCNd->getLayoutFrm( pCNd->GetDoc()->GetCurrentLayout(), &aPt, 0, false );
         do {
             pTmpFrm = pTmpFrm->GetUpper();
         } while ( !pTmpFrm->IsCellFrm() );

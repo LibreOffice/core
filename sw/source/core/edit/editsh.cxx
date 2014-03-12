@@ -137,7 +137,7 @@ void SwEditShell::Insert2(const OUString &rStr, const bool bForceExpandHints )
                 Point aPt;
                 SwCntntFrm* pFrm =
                         ((SwTxtNode&)rNode).getLayoutFrm( GetLayout(), &aPt, pTmpCrsr->GetPoint(),
-                                                    sal_False );
+                                                    false );
 
                 SwScriptInfo aScriptInfo;
                 aScriptInfo.InitScriptInfo( (SwTxtNode&)rNode, pFrm->IsRightToLeft() );

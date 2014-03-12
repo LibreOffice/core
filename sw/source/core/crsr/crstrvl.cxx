@@ -232,7 +232,7 @@ sal_Bool SwCrsrShell::SetCrsrInHdFt( sal_uInt16 nDescNo, sal_Bool bInHeader )
 
             Point aPt( m_pCurCrsr->GetPtPos() );
 
-            if( pCNd && 0 != pCNd->getLayoutFrm( GetLayout(), &aPt, 0, sal_False ) )
+            if( pCNd && 0 != pCNd->getLayoutFrm( GetLayout(), &aPt, 0, false ) )
             {
                 // then we can set the cursor in here
                 SwCallLink aLk( *this ); // watch Crsr-Moves
@@ -435,7 +435,7 @@ sal_Bool SwCrsrShell::GotoNxtPrvTblFormula( sal_Bool bNext, sal_Bool bOnlyErrors
     if( rPos.nNode < GetDoc()->GetNodes().GetEndOfExtras() )
         // also at collection use only the first frame
         aCurGEF.SetBodyPos( *rPos.nNode.GetNode().GetCntntNode()->getLayoutFrm( GetLayout(),
-                                &aPt, &rPos, sal_False ) );
+                                &aPt, &rPos, false ) );
     {
         const SfxPoolItem* pItem;
         const SwTableBox* pTBox;
@@ -453,7 +453,7 @@ sal_Bool SwCrsrShell::GotoNxtPrvTblFormula( sal_Bool bNext, sal_Bool bOnlyErrors
                 const SwCntntFrm* pCFrm;
                 SwNodeIndex aIdx( *pTBox->GetSttNd() );
                 const SwCntntNode* pCNd = GetDoc()->GetNodes().GoNext( &aIdx );
-                if( pCNd && 0 != ( pCFrm = pCNd->getLayoutFrm( GetLayout(), &aPt, 0, sal_False ) ) &&
+                if( pCNd && 0 != ( pCFrm = pCNd->getLayoutFrm( GetLayout(), &aPt, 0, false ) ) &&
                     (IsReadOnlyAvailable() || !pCFrm->IsProtected() ))
                 {
                     _SetGetExpFld aCmp( *pTBox );
@@ -504,7 +504,7 @@ sal_Bool SwCrsrShell::GotoNxtPrvTOXMark( sal_Bool bNext )
     if( rPos.nNode.GetIndex() < GetDoc()->GetNodes().GetEndOfExtras().GetIndex() )
         // also at collection use only the first frame
         aCurGEF.SetBodyPos( *rPos.nNode.GetNode().
-                        GetCntntNode()->getLayoutFrm( GetLayout(), &aPt, &rPos, sal_False ) );
+                        GetCntntNode()->getLayoutFrm( GetLayout(), &aPt, &rPos, false ) );
 
     {
         const SfxPoolItem* pItem;
@@ -518,7 +518,7 @@ sal_Bool SwCrsrShell::GotoNxtPrvTOXMark( sal_Bool bNext )
                                         RES_TXTATR_TOXMARK, n ) ) &&
                 0 != (pTxtTOX = ((SwTOXMark*)pItem)->GetTxtTOXMark() ) &&
                 ( pTxtNd = &pTxtTOX->GetTxtNode())->GetNodes().IsDocNodes() &&
-                0 != ( pCFrm = pTxtNd->getLayoutFrm( GetLayout(), &aPt, 0, sal_False )) &&
+                0 != ( pCFrm = pTxtNd->getLayoutFrm( GetLayout(), &aPt, 0, false )) &&
                 ( IsReadOnlyAvailable() || !pCFrm->IsProtected() ))
             {
                 SwNodeIndex aNdIndex( *pTxtNd ); // UNIX needs this object
@@ -593,7 +593,7 @@ void lcl_MakeFldLst(
         {
             const SwTxtNode& rTxtNode = pTxtFld->GetTxtNode();
             const SwCntntFrm* pCFrm =
-                rTxtNode.getLayoutFrm( rTxtNode.GetDoc()->GetCurrentLayout(), &aPt, 0, sal_False );
+                rTxtNode.getLayoutFrm( rTxtNode.GetDoc()->GetCurrentLayout(), &aPt, 0, false );
             if ( pCFrm != NULL
                  && ( bInReadOnly || !pCFrm->IsProtected() ) )
             {
@@ -686,7 +686,7 @@ sal_Bool SwCrsrShell::MoveFldType(
         {
             // also at collection use only the first frame
             Point aPt;
-            aSrch.SetBodyPos( *pTNd->getLayoutFrm( GetLayout(), &aPt, &rPos, sal_False ) );
+            aSrch.SetBodyPos( *pTNd->getLayoutFrm( GetLayout(), &aPt, &rPos, false ) );
         }
 
         it = aSrtLst.lower_bound( &aSrch );
@@ -1652,7 +1652,7 @@ bool SwContentAtPos::IsInProtectSect() const
 
     const SwCntntFrm* pFrm;
     return pNd && ( pNd->IsInProtectSect() ||
-                    ( 0 != ( pFrm = pNd->getLayoutFrm( pNd->GetDoc()->GetCurrentLayout(), 0,0,sal_False)) &&
+                    ( 0 != ( pFrm = pNd->getLayoutFrm( pNd->GetDoc()->GetCurrentLayout(), 0, 0, false)) &&
                         pFrm->IsProtected() ));
 }
 

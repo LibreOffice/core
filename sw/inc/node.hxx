@@ -402,7 +402,7 @@ public:
     SwCntntFrm *getLayoutFrm( const SwRootFrm*,
                         const Point* pDocPos = 0,
                         const SwPosition *pPos = 0,
-                        const sal_Bool bCalcFrm = sal_True ) const;
+                        const bool bCalcFrm = true ) const;
     /** @return the real size of the frame or an empty rectangle if
        no layout exists. Needed for export filters. */
     SwRect FindLayoutRect( const sal_Bool bPrtArea = sal_False,

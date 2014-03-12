@@ -95,7 +95,7 @@ static bool lcl_SetNewFlyPos( const SwNode& rNode, SwFmtAnchor& rAnchor,
     else
     {
         const SwCntntNode *pCntNd = rNode.GetCntntNode();
-        const SwCntntFrm* pCFrm = pCntNd ? pCntNd->getLayoutFrm( pCntNd->GetDoc()->GetCurrentLayout(), &rPt, 0, sal_False ) : 0;
+        const SwCntntFrm* pCFrm = pCntNd ? pCntNd->getLayoutFrm( pCntNd->GetDoc()->GetCurrentLayout(), &rPt, 0, false ) : 0;
         const SwPageFrm *pPg = pCFrm ? pCFrm->FindPageFrm() : 0;
 
         rAnchor.SetPageNum( pPg ? pPg->GetPhyPageNum() : 1 );
@@ -171,7 +171,7 @@ static sal_Bool lcl_FindAnchorPos(
             aTmpPnt.setX(aTmpPnt.getX() - 1);                   // do not land in the fly!
             rDoc.GetCurrentLayout()->GetCrsrOfst( &aPos, aTmpPnt, &aState );
             pNewAnch = ::FindAnchor(
-                aPos.nNode.GetNode().GetCntntNode()->getLayoutFrm( rFrm.getRootFrm(), 0, 0, sal_False ),
+                aPos.nNode.GetNode().GetCntntNode()->getLayoutFrm( rFrm.getRootFrm(), 0, 0, false ),
                 aTmpPnt )->FindFlyFrm();
 
             if( pNewAnch && &rFrm != pNewAnch && !pNewAnch->IsProtected() )
@@ -340,7 +340,7 @@ const SwFrmFmt* SwFEShell::IsFlyInFly()
         aPoint.setX(aPoint.getX() - 1);                    //do not land in the fly!!
         GetLayout()->GetCrsrOfst( &aPos, aPoint, &aState );
         // determine text frame by left-top-corner of object
-        pTxtFrm = aPos.nNode.GetNode().GetCntntNode()->getLayoutFrm( GetLayout(), &aTmpPos, 0, sal_False );
+        pTxtFrm = aPos.nNode.GetNode().GetCntntNode()->getLayoutFrm( GetLayout(), &aTmpPos, 0, false );
     }
     const SwFrm *pTmp = ::FindAnchor( pTxtFrm, aTmpPos );
     const SwFlyFrm *pFly = pTmp->FindFlyFrm();
@@ -463,7 +463,7 @@ Point SwFEShell::FindAnchorPos( const Point& rAbsPos, sal_Bool bMoveIt )
         if ( nAnchorId != FLY_AT_CHAR
              || !PosInsideInputFld( aPos ) )
         {
-            pTxtFrm = aPos.nNode.GetNode().GetCntntNode()->getLayoutFrm( GetLayout(),0,&aPos,sal_False );
+            pTxtFrm = aPos.nNode.GetNode().GetCntntNode()->getLayoutFrm( GetLayout(), 0, &aPos, false );
         }
     }
     const SwFrm *pNewAnch = NULL;
@@ -914,7 +914,7 @@ void SwFEShell::InsertDrawObj( SdrObject& rDrawObj,
         SwCrsrMoveState aState( MV_SETONLYTEXT );
         Point aTmpPt( rInsertPosition );
         GetLayout()->GetCrsrOfst( aPam.GetPoint(), aTmpPt, &aState );
-        const SwFrm* pFrm = aPam.GetCntntNode()->getLayoutFrm( GetLayout(), 0, 0, sal_False );
+        const SwFrm* pFrm = aPam.GetCntntNode()->getLayoutFrm( GetLayout(), 0, 0, false );
         const Point aRelPos( rInsertPosition.X() - pFrm->Frm().Left(),
                              rInsertPosition.Y() - pFrm->Frm().Top() );
         rDrawObj.SetRelativePos( aRelPos );
@@ -1710,7 +1710,7 @@ const SwFrmFmt* SwFEShell::GetFmtFromAnyObj( const Point& rPt ) const
         Point aPt( rPt );
         GetLayout()->GetCrsrOfst( &aPos, aPt );
         SwCntntNode *pNd = aPos.nNode.GetNode().GetCntntNode();
-        SwFrm* pFrm = pNd->getLayoutFrm( GetLayout(), &rPt, 0, sal_False )->FindFlyFrm();
+        SwFrm* pFrm = pNd->getLayoutFrm( GetLayout(), &rPt, 0, false )->FindFlyFrm();
         pRet = pFrm ? ((SwLayoutFrm*)pFrm)->GetFmt() : 0;
     }
     return pRet;

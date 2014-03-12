@@ -537,7 +537,7 @@ sal_uInt16 SwPaM::GetPageNum( bool bAtPoint, const Point* pLayPos )
     const SwPosition* pPos = bAtPoint ? m_pPoint : m_pMark;
 
     if( 0 != ( pNd = pPos->nNode.GetNode().GetCntntNode() ) &&
-        0 != ( pCFrm = pNd->getLayoutFrm( pNd->GetDoc()->GetCurrentLayout(), pLayPos, pPos, sal_False )) &&
+        0 != ( pCFrm = pNd->getLayoutFrm( pNd->GetDoc()->GetCurrentLayout(), pLayPos, pPos, false )) &&
         0 != ( pPg = pCFrm->FindPageFrm() ))
         return pPg->GetPhyPageNum();
     return 0;

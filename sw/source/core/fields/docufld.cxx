@@ -2146,7 +2146,7 @@ sal_uInt16 SwRefPageGetFieldType::MakeSetList( _SetGetExpFlds& rTmpLst )
 
                 // Always the first! (in Tab-Headline, header/footer )
                 Point aPt;
-                const SwCntntFrm* pFrm = rTxtNd.getLayoutFrm( rTxtNd.GetDoc()->GetCurrentLayout(), &aPt, 0, sal_False );
+                const SwCntntFrm* pFrm = rTxtNd.getLayoutFrm( rTxtNd.GetDoc()->GetCurrentLayout(), &aPt, 0, false );
 
                 _SetGetExpFld* pNew;
 
@@ -2205,8 +2205,8 @@ void SwRefPageGetFieldType::UpdateField( SwTxtFld* pTxtFld,
             {
                 // determine the correct offset
                 Point aPt;
-                const SwCntntFrm* pFrm = pTxtNode->getLayoutFrm( pTxtNode->GetDoc()->GetCurrentLayout(), &aPt, 0, sal_False );
-                const SwCntntFrm* pRefFrm = pRefTxtFld->GetTxtNode().getLayoutFrm( pRefTxtFld->GetTxtNode().GetDoc()->GetCurrentLayout(), &aPt, 0, sal_False );
+                const SwCntntFrm* pFrm = pTxtNode->getLayoutFrm( pTxtNode->GetDoc()->GetCurrentLayout(), &aPt, 0, false );
+                const SwCntntFrm* pRefFrm = pRefTxtFld->GetTxtNode().getLayoutFrm( pRefTxtFld->GetTxtNode().GetDoc()->GetCurrentLayout(), &aPt, 0, false );
                 const SwPageFrm* pPgFrm = 0;
                 sal_uInt16 nDiff = ( pFrm && pRefFrm )
                         ?   (pPgFrm = pFrm->FindPageFrm())->GetPhyPageNum() -
@@ -2288,7 +2288,7 @@ void SwRefPageGetField::ChangeExpansion( const SwFrm* pFrm,
     const SwRefPageSetField* pSetFld =
                         (SwRefPageSetField*)pRefTxtFld->GetFmtFld().GetField();
     Point aPt;
-    const SwCntntFrm* pRefFrm = pRefTxtFld->GetTxtNode().getLayoutFrm( pFrm->getRootFrm(), &aPt, 0, sal_False );
+    const SwCntntFrm* pRefFrm = pRefTxtFld->GetTxtNode().getLayoutFrm( pFrm->getRootFrm(), &aPt, 0, false );
     if( pSetFld->IsOn() && pRefFrm )
     {
         // determine the correct offset

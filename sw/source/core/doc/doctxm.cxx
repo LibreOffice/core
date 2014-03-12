@@ -248,7 +248,7 @@ const SwTOXMark& SwDoc::GotoTOXMark( const SwTOXMark& rCurTOXMark,
             continue;
 
         Point aPt;
-        const SwCntntFrm* pCFrm = pTOXSrc->getLayoutFrm( GetCurrentLayout(), &aPt, 0, sal_False );
+        const SwCntntFrm* pCFrm = pTOXSrc->getLayoutFrm( GetCurrentLayout(), &aPt, 0, false );
         if (!pCFrm)
             continue;
 
@@ -1667,7 +1667,7 @@ void SwTOXBaseSection::GenerateText( sal_uInt16 nArrayIdx,
                     long nRightMargin;
                     if( pPageDesc )
                     {
-                        const SwFrm* pFrm = pTOXNd->getLayoutFrm( pDoc->GetCurrentLayout(), 0, 0, sal_True );
+                        const SwFrm* pFrm = pTOXNd->getLayoutFrm( pDoc->GetCurrentLayout(), 0, 0, true );
                         if( !pFrm || 0 == ( pFrm = pFrm->FindPageFrm() ) ||
                             pPageDesc != ((SwPageFrm*)pFrm)->GetPageDesc() )
                             // we have to go via the PageDesc here

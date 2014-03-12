@@ -139,7 +139,7 @@ void SwFlyAtCntFrm::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew )
         if ( !pCntnt )
         {
             SwCntntNode *pNode = aNewIdx.GetNode().GetCntntNode();
-            pCntnt = pNode->getLayoutFrm( getRootFrm(), &pOldAnchor->Frm().Pos(), 0, sal_False );
+            pCntnt = pNode->getLayoutFrm( getRootFrm(), &pOldAnchor->Frm().Pos(), 0, false );
             OSL_ENSURE( pCntnt, "Neuen Anker nicht gefunden" );
         }
         //Flys are never attached to a follow, but always on the master which

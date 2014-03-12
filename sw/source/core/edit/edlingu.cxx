@@ -908,7 +908,7 @@ uno::Reference< XSpellAlternatives >
                 SwCrsrMoveState aState;
                 aState.bRealWidth = sal_True;
                 SwCntntNode* pCntntNode = pCrsr->GetCntntNode();
-                SwCntntFrm *pCntntFrame = pCntntNode->getLayoutFrm( GetLayout(), pPt, pCrsr->GetPoint(), sal_False);
+                SwCntntFrm *pCntntFrame = pCntntNode->getLayoutFrm( GetLayout(), pPt, pCrsr->GetPoint(), false);
 
                 pCntntFrame->GetCharRect( aStartRect, *pCrsr->GetPoint(), &aState );
                 rContent = nWordEnd - 1;
@@ -1032,7 +1032,7 @@ bool SwEditShell::GetGrammarCorrection(
                 SwCrsrMoveState aState;
                 aState.bRealWidth = sal_True;
                 SwCntntNode* pCntntNode = pCrsr->GetCntntNode();
-                SwCntntFrm *pCntntFrame = pCntntNode->getLayoutFrm( GetLayout(), pPt, pCrsr->GetPoint(), sal_False);
+                SwCntntFrm *pCntntFrame = pCntntNode->getLayoutFrm( GetLayout(), pPt, pCrsr->GetPoint(), false);
 
                 pCntntFrame->GetCharRect( aStartRect, *pCrsr->GetPoint(), &aState );
                 rContent = nWordEnd - 1;

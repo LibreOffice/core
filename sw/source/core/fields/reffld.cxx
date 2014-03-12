@@ -93,8 +93,8 @@ static void lcl_GetLayTree( const SwFrm* pFrm, std::vector<const SwFrm*>& rArr )
 bool IsFrameBehind( const SwTxtNode& rMyNd, sal_Int32 nMySttPos,
                     const SwTxtNode& rBehindNd, sal_Int32 nSttPos )
 {
-    const SwTxtFrm *pMyFrm = (SwTxtFrm*)rMyNd.getLayoutFrm( rMyNd.GetDoc()->GetCurrentLayout(), 0,0,sal_False),
-                   *pFrm = (SwTxtFrm*)rBehindNd.getLayoutFrm( rBehindNd.GetDoc()->GetCurrentLayout(), 0,0,sal_False);
+    const SwTxtFrm *pMyFrm = (SwTxtFrm*)rMyNd.getLayoutFrm( rMyNd.GetDoc()->GetCurrentLayout(), 0, 0, false),
+                   *pFrm = (SwTxtFrm*)rBehindNd.getLayoutFrm( rBehindNd.GetDoc()->GetCurrentLayout(), 0, 0, false);
 
     while( pFrm && !pFrm->IsInside( nSttPos ) )
         pFrm = (SwTxtFrm*)pFrm->GetFollow();
@@ -417,7 +417,7 @@ void SwGetRefField::UpdateField( const SwTxtFld* pFldTxtAttr )
     case REF_PAGE:
     case REF_PAGE_PGDESC:
         {
-            const SwTxtFrm* pFrm = (SwTxtFrm*)pTxtNd->getLayoutFrm( pDoc->GetCurrentLayout(), 0,0,sal_False),
+            const SwTxtFrm* pFrm = (SwTxtFrm*)pTxtNd->getLayoutFrm( pDoc->GetCurrentLayout(), 0, 0, false),
                         *pSave = pFrm;
             while( pFrm && !pFrm->IsInside( nNumStart ) )
                 pFrm = (SwTxtFrm*)pFrm->GetFollow();

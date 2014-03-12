@@ -388,7 +388,7 @@ sal_Bool SwNode::IsInVisibleArea( SwViewShell* pSh ) const
     if( pSh )
     {
         const SwFrm* pFrm;
-        if( pNd && 0 != ( pFrm = pNd->getLayoutFrm( pSh->GetLayout(), 0, 0, sal_False ) ) )
+        if( pNd && 0 != ( pFrm = pNd->getLayoutFrm( pSh->GetLayout(), 0, 0, false ) ) )
         {
 
             if ( pFrm->IsInTab() )
@@ -781,8 +781,8 @@ const SwTxtNode* SwNode::FindOutlineNodeOfLevel( sal_uInt8 nLvl ) const
             const SwCntntNode* pCNd = GetCntntNode();
 
             Point aPt( 0, 0 );
-            const SwFrm* pFrm = pRet->getLayoutFrm( pRet->GetDoc()->GetCurrentLayout(), &aPt, 0, sal_False ),
-                       * pMyFrm = pCNd ? pCNd->getLayoutFrm( pCNd->GetDoc()->GetCurrentLayout(), &aPt, 0, sal_False ) : 0;
+            const SwFrm* pFrm = pRet->getLayoutFrm( pRet->GetDoc()->GetCurrentLayout(), &aPt, 0, false ),
+                       * pMyFrm = pCNd ? pCNd->getLayoutFrm( pCNd->GetDoc()->GetCurrentLayout(), &aPt, 0, false ) : 0;
             const SwPageFrm* pPgFrm = pFrm ? pFrm->FindPageFrm() : 0;
             if( pPgFrm && pMyFrm &&
                 pPgFrm->Frm().Top() > pMyFrm->Frm().Top() )
@@ -1016,7 +1016,7 @@ sal_Bool SwCntntNode::InvalidateNumRule()
 }
 
 SwCntntFrm *SwCntntNode::getLayoutFrm( const SwRootFrm* _pRoot,
-    const Point* pPoint, const SwPosition *pPos, const sal_Bool bCalcFrm ) const
+    const Point* pPoint, const SwPosition *pPos, const bool bCalcFrm ) const
 {
     return (SwCntntFrm*) ::GetFrmOfModify( _pRoot, *(SwModify*)this, FRM_CNTNT,
                                             pPoint, pPos, bCalcFrm );
@@ -1869,7 +1869,7 @@ short SwCntntNode::GetTextDirection( const SwPosition& rPos,
         aPt = *pPt;
 
     // #i72024# - No format of the frame, because this can cause recursive layout actions
-    SwFrm* pFrm = getLayoutFrm( GetDoc()->GetCurrentLayout(), &aPt, &rPos, sal_False );
+    SwFrm* pFrm = getLayoutFrm( GetDoc()->GetCurrentLayout(), &aPt, &rPos, false );
 
     if ( pFrm )
     {

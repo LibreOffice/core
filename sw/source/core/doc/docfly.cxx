@@ -165,7 +165,7 @@ static Point lcl_FindAnchorLayPos( SwDoc& rDoc, const SwFmtAnchor& rAnch,
             {
                 const SwPosition *pPos = rAnch.GetCntntAnchor();
                 const SwCntntNode* pNd = pPos->nNode.GetNode().GetCntntNode();
-                const SwFrm* pOld = pNd ? pNd->getLayoutFrm( rDoc.GetCurrentLayout(), &aRet, 0, sal_False ) : 0;
+                const SwFrm* pOld = pNd ? pNd->getLayoutFrm( rDoc.GetCurrentLayout(), &aRet, 0, false ) : 0;
                 if( pOld )
                     aRet = pOld->Frm().Pos();
             }
@@ -695,7 +695,7 @@ bool SwDoc::ChgAnchor( const SdrMarkList& _rMrkList,
                         // consider that drawing objects can be in
                         // header/footer. Thus, <GetFrm()> by left-top-corner
                         pTxtFrm = aPos.nNode.GetNode().
-                                        GetCntntNode()->getLayoutFrm( GetCurrentLayout(), &aPt, 0, sal_False );
+                                        GetCntntNode()->getLayoutFrm( GetCurrentLayout(), &aPt, 0, false );
                     }
                     const SwFrm *pTmp = ::FindAnchor( pTxtFrm, aPt );
                     pNewAnchorFrm = pTmp->FindFlyFrm();

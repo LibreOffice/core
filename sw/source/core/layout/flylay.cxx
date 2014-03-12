@@ -519,7 +519,7 @@ void SwFlyLayFrm::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew )
         {
             SwNodeIndex aIdx( pAnch->GetCntntAnchor()->nNode );
             SwCntntFrm *pCntnt = GetFmt()->GetDoc()->GetNodes().GoNext( &aIdx )->
-                         GetCntntNode()->getLayoutFrm( getRootFrm(), 0, 0, sal_False );
+                         GetCntntNode()->getLayoutFrm( getRootFrm(), 0, 0, false );
             if( pCntnt )
             {
                 SwFlyFrm *pTmp = pCntnt->FindFlyFrm();

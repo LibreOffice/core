@@ -188,7 +188,7 @@ void _RestFlyInRange( _SaveFlyArr & rArr, const SwNodeIndex& rSttIdx,
         pFmt->GetDoc()->GetSpzFrmFmts()->push_back( pFmt );
         pFmt->SetFmtAttr( aAnchor );
         SwCntntNode* pCNd = aPos.nNode.GetNode().GetCntntNode();
-        if( pCNd && pCNd->getLayoutFrm( pFmt->GetDoc()->GetCurrentLayout(), 0, 0, sal_False ) )
+        if( pCNd && pCNd->getLayoutFrm( pFmt->GetDoc()->GetCurrentLayout(), 0, 0, false ) )
             pFmt->MakeFrms();
     }
 }

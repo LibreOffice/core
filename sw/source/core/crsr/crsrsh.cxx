@@ -221,7 +221,7 @@ void SwCrsrShell::StartAction()
         m_nAktNdTyp = rNd.GetNodeType();
         m_bAktSelection = *m_pCurCrsr->GetPoint() != *m_pCurCrsr->GetMark();
         if( rNd.IsTxtNode() )
-            m_nLeftFrmPos = SwCallLink::getLayoutFrm( GetLayout(), (SwTxtNode&)rNd, m_nAktCntnt, sal_True );
+            m_nLeftFrmPos = SwCallLink::getLayoutFrm( GetLayout(), (SwTxtNode&)rNd, m_nAktCntnt, true );
         else
             m_nLeftFrmPos = 0;
     }
@@ -641,7 +641,7 @@ sal_Bool SwCrsrShell::MovePage( SwWhichPage fnWhichPage, SwPosPage fnPosPage )
         SwCrsrSaveState aSaveState( *m_pCurCrsr );
         Point& rPt = m_pCurCrsr->GetPtPos();
         SwCntntFrm * pFrm = m_pCurCrsr->GetCntntNode()->
-                            getLayoutFrm( GetLayout(), &rPt, m_pCurCrsr->GetPoint(), sal_False );
+                            getLayoutFrm( GetLayout(), &rPt, m_pCurCrsr->GetPoint(), false );
         if( pFrm && sal_True == ( bRet = GetFrmInPage( pFrm, fnWhichPage,
                                                 fnPosPage, m_pCurCrsr )  ) &&
             !m_pCurCrsr->IsSelOvr( nsSwCursorSelOverFlags::SELOVER_TOGGLE |
@@ -657,7 +657,7 @@ bool SwCrsrShell::isInHiddenTxtFrm(SwShellCrsr* pShellCrsr)
 {
     SwCntntNode *pCNode = pShellCrsr->GetCntntNode();
     SwCntntFrm  *pFrm = pCNode ?
-        pCNode->getLayoutFrm( GetLayout(), &pShellCrsr->GetPtPos(), pShellCrsr->GetPoint(), sal_False ) : 0;
+        pCNode->getLayoutFrm( GetLayout(), &pShellCrsr->GetPtPos(), pShellCrsr->GetPoint(), false ) : 0;
     return !pFrm || (pFrm->IsTxtFrm() && ((SwTxtFrm*)pFrm)->IsHiddenNow());
 }
 
@@ -704,7 +704,7 @@ static SwFrm* lcl_IsInHeaderFooter( const SwNodeIndex& rIdx, Point& rPt )
     SwCntntNode* pCNd = rIdx.GetNode().GetCntntNode();
     if( pCNd )
     {
-        SwCntntFrm *pCntFrm = pCNd->getLayoutFrm( pCNd->GetDoc()->GetCurrentLayout(), &rPt, 0, sal_False );
+        SwCntntFrm *pCntFrm = pCNd->getLayoutFrm( pCNd->GetDoc()->GetCurrentLayout(), &rPt, 0, false );
         pFrm = pCntFrm ? pCntFrm->GetUpper() : NULL;
         while( pFrm && !pFrm->IsHeaderFrm() && !pFrm->IsFooterFrm() )
             pFrm = pFrm->IsFlyFrm() ? ((SwFlyFrm*)pFrm)->AnchorFrm()
@@ -789,9 +789,9 @@ int SwCrsrShell::SetCrsr( const Point &rLPt, sal_Bool bOnlyText, bool bBlock )
             {
                 // in the same frame?
                 SwFrm* pOld = ((SwCntntNode&)aPos.nNode.GetNode()).getLayoutFrm(
-                                GetLayout(), &m_aCharRect.Pos(), 0, sal_False );
+                                GetLayout(), &m_aCharRect.Pos(), 0, false );
                 SwFrm* pNew = ((SwCntntNode&)aPos.nNode.GetNode()).getLayoutFrm(
-                                GetLayout(), &aPt, 0, sal_False );
+                                GetLayout(), &aPt, 0, false );
                 if( pNew == pOld )
                     return bRet;
             }
@@ -1425,7 +1425,7 @@ void SwCrsrShell::UpdateCrsr( sal_uInt16 eFlags, sal_Bool bIdleEnd )
         }
 
         SwCntntFrm *pTblFrm = pPos->nNode.GetNode().GetCntntNode()->
-                              getLayoutFrm( GetLayout(), &aTmpPt, pPos, sal_False );
+                              getLayoutFrm( GetLayout(), &aTmpPt, pPos, false );
 
         OSL_ENSURE( pTblFrm, "Tabelle Crsr nicht im Content ??" );
 
@@ -1442,7 +1442,7 @@ void SwCrsrShell::UpdateCrsr( sal_uInt16 eFlags, sal_Bool bIdleEnd )
             if ( !bInRepeatedHeadline )
             {
                 SwCntntFrm* pMarkTblFrm = pITmpCrsr->GetCntntNode( false )->
-                    getLayoutFrm( GetLayout(), &aTmpMk, pITmpCrsr->GetMark(), sal_False );
+                    getLayoutFrm( GetLayout(), &aTmpMk, pITmpCrsr->GetMark(), false );
                 OSL_ENSURE( pMarkTblFrm, "Tabelle Crsr nicht im Content ??" );
 
                 if ( pMarkTblFrm )
@@ -1658,7 +1658,7 @@ void SwCrsrShell::UpdateCrsr( sal_uInt16 eFlags, sal_Bool bIdleEnd )
         do {
             bAgainst = false;
             pFrm = pShellCrsr->GetCntntNode()->getLayoutFrm( GetLayout(),
-                        &pShellCrsr->GetPtPos(), pShellCrsr->GetPoint(), sal_False );
+                        &pShellCrsr->GetPtPos(), pShellCrsr->GetPoint(), false );
             // if the Frm doesn't exist anymore, the complete Layout has to be
             // created, because there used to be a Frm here!
             if ( !pFrm )
@@ -1667,7 +1667,7 @@ void SwCrsrShell::UpdateCrsr( sal_uInt16 eFlags, sal_Bool bIdleEnd )
                 {
                     CalcLayout();
                     pFrm = pShellCrsr->GetCntntNode()->getLayoutFrm( GetLayout(),
-                                &pShellCrsr->GetPtPos(), pShellCrsr->GetPoint(), sal_False );
+                                &pShellCrsr->GetPtPos(), pShellCrsr->GetPoint(), false );
                 }  while( !pFrm );
             }
             else if ( Imp()->IsIdleAction() )
@@ -1852,7 +1852,7 @@ void SwCrsrShell::RefreshBlockCursor()
     OSL_ENSURE( m_pBlockCrsr, "Don't call me without a block cursor" );
     SwShellCrsr &rBlock = m_pBlockCrsr->getShellCrsr();
     Point aPt = rBlock.GetPtPos();
-    SwCntntFrm* pFrm = rBlock.GetCntntNode()->getLayoutFrm( GetLayout(), &aPt, rBlock.GetPoint(), sal_False );
+    SwCntntFrm* pFrm = rBlock.GetCntntNode()->getLayoutFrm( GetLayout(), &aPt, rBlock.GetPoint(), false );
     Point aMk;
     if( m_pBlockCrsr->getEndPoint() && m_pBlockCrsr->getStartPoint() )
     {
@@ -2169,7 +2169,7 @@ SwCntntFrm *SwCrsrShell::GetCurrFrm( const sal_Bool bCalcFrm ) const
                 ((SwCrsrShell*)this)->SizeChgNotify();
         }
         else
-            pRet = pNd->getLayoutFrm( GetLayout(), &m_pCurCrsr->GetPtPos(), m_pCurCrsr->GetPoint(), sal_False);
+            pRet = pNd->getLayoutFrm( GetLayout(), &m_pCurCrsr->GetPtPos(), m_pCurCrsr->GetPoint(), false);
     }
     return pRet;
 }
@@ -2770,7 +2770,7 @@ sal_Bool SwCrsrShell::FindValidCntntNode( sal_Bool bOnlyText )
     SwCntntNode* pCNd = rNdIdx.GetNode().GetCntntNode();
     const SwCntntFrm * pFrm;
 
-    if( pCNd && 0 != (pFrm = pCNd->getLayoutFrm( GetLayout(),0,m_pCurCrsr->GetPoint(),sal_False)) &&
+    if( pCNd && 0 != (pFrm = pCNd->getLayoutFrm( GetLayout(), 0, m_pCurCrsr->GetPoint(), false)) &&
         !IsReadOnlyAvailable() && pFrm->IsProtected() &&
         nNdIdx < rNds.GetEndOfExtras().GetIndex() )
     {
@@ -2885,7 +2885,7 @@ sal_Bool SwCrsrShell::FindValidCntntNode( sal_Bool bOnlyText )
                 if( bOk && rNdIdx.GetIndex() < rNds.GetEndOfExtras().GetIndex() )
                 {
                     // also check for Fly - might be protected as well
-                    if( 0 == (pFrm = pCNd->getLayoutFrm( GetLayout(),0,0,sal_False)) ||
+                    if( 0 == (pFrm = pCNd->getLayoutFrm( GetLayout(), 0, 0, false)) ||
                         ( !IsReadOnlyAvailable() && pFrm->IsProtected() ) ||
                         ( bOnlyText && pCNd->IsNoTxtNode() ) )
                     {
@@ -2914,7 +2914,7 @@ sal_Bool SwCrsrShell::FindValidCntntNode( sal_Bool bOnlyText )
     {
         pCNd = rNdIdx.GetNode().GetCntntNode();
         // if cursor in hidden frame, always move it
-        if( !pCNd || !pCNd->getLayoutFrm( GetLayout(),0,0,sal_False) )
+        if( !pCNd || !pCNd->getLayoutFrm( GetLayout(), 0, 0, false) )
         {
             SwCrsrMoveState aTmpState( MV_NONE );
             aTmpState.bSetInReadOnly = IsReadOnlyAvailable();
@@ -3452,7 +3452,7 @@ void SwCrsrShell::GetSmartTagTerm( const Point& rPt, SwRect& rSelectRect,
             SwCrsrMoveState aState;
             aState.bRealWidth = sal_True;
             SwCntntNode* pCntntNode = pCrsr->GetCntntNode();
-            SwCntntFrm *pCntntFrame = pCntntNode->getLayoutFrm( GetLayout(), &rPt, pCrsr->GetPoint(), sal_False);
+            SwCntntFrm *pCntntFrame = pCntntNode->getLayoutFrm( GetLayout(), &rPt, pCrsr->GetPoint(), false);
 
             pCntntFrame->GetCharRect( aStartRect, *pCrsr->GetPoint(), &aState );
             rContent = nWordEnd - 1;

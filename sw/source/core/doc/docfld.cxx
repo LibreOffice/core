@@ -2377,7 +2377,7 @@ void SwDocUpdtFld::GetBodyNode( const SwTxtFld& rTFld, sal_uInt16 nFldWhich )
 
     // always the first! (in tab headline, header-/footer)
     Point aPt;
-    const SwCntntFrm* pFrm = rTxtNd.getLayoutFrm( rDoc.GetCurrentLayout(), &aPt, 0, sal_False );
+    const SwCntntFrm* pFrm = rTxtNd.getLayoutFrm( rDoc.GetCurrentLayout(), &aPt, 0, false );
 
     _SetGetExpFld* pNew = NULL;
     sal_Bool bIsInBody = sal_False;
@@ -2441,7 +2441,7 @@ void SwDocUpdtFld::GetBodyNode( const SwSectionNode& rSectNd )
 
             // always the first! (in tab headline, header-/footer)
             Point aPt;
-            const SwCntntFrm* pFrm = pCNd->getLayoutFrm( rDoc.GetCurrentLayout(), &aPt, 0, sal_False );
+            const SwCntntFrm* pFrm = pCNd->getLayoutFrm( rDoc.GetCurrentLayout(), &aPt, 0, false );
             if( !pFrm )
                 break;
 

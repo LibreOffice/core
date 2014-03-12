@@ -1699,7 +1699,7 @@ sal_Bool SwFEShell::ImpEndCreate()
             // search the next not-readonly position?
             bAtPage = true;
 
-        pAnch = aPos.nNode.GetNode().GetCntntNode()->getLayoutFrm( GetLayout(), &aPoint, 0, sal_False );
+        pAnch = aPos.nNode.GetNode().GetCntntNode()->getLayoutFrm( GetLayout(), &aPoint, 0, false );
 
         if( !bAtPage )
         {
