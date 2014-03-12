@@ -90,7 +90,7 @@ class SW_DLLPUBLIC SwGetExpField : public SwFormulaField
 
     bool            bLateInitialization; // #i82544#
 
-    virtual OUString            Expand() const;
+    virtual OUString            Expand(ToxAuthorityField eField = AUTH_FIELD_IDENTIFIER) const;
     virtual SwField*            Copy() const;
 
 public:
@@ -217,7 +217,7 @@ class SW_DLLPUBLIC SwSetExpField : public SwFormulaField
     sal_uInt16          nSeqNo;
     sal_uInt16          nSubType;
 
-    virtual OUString            Expand() const;
+    virtual OUString            Expand(ToxAuthorityField eField = AUTH_FIELD_IDENTIFIER) const;
     virtual SwField*            Copy() const;
 
 public:
@@ -299,7 +299,7 @@ class SW_DLLPUBLIC SwInputField : public SwField
 
     SwFmtFld* mpFmtFld; // attribute to which the <SwInputField> belongs to
 
-    virtual OUString        Expand() const;
+    virtual OUString        Expand(ToxAuthorityField eField = AUTH_FIELD_IDENTIFIER) const;
     virtual SwField*        Copy() const;
 
     // Accessing Input Field's content
@@ -391,7 +391,7 @@ class SwTblField : public SwValueField, public SwTableFormula
     OUString      sExpand;
     sal_uInt16      nSubType;
 
-    virtual OUString    Expand() const;
+    virtual OUString    Expand(ToxAuthorityField eField = AUTH_FIELD_IDENTIFIER) const;
     virtual SwField*    Copy() const;
 
     /// Search TextNode containing the field.

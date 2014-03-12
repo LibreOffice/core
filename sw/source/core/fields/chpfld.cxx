@@ -69,7 +69,7 @@ SwChapterField::SwChapterField(SwChapterFieldType* pTyp, sal_uInt32 nFmt)
     : SwField(pTyp, nFmt), nLevel( 0 )
 {}
 
-OUString SwChapterField::Expand() const
+OUString SwChapterField::Expand(ToxAuthorityField /**eField*/) const
 {
     switch( GetFormat() )
     {

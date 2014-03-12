@@ -70,7 +70,7 @@ class SW_DLLPUBLIC SwDBField : public SwValueField
     bool    bValidValue     : 1;
     bool    bInitialized    : 1;
 
-    virtual OUString    Expand() const;
+    virtual OUString    Expand(ToxAuthorityField eField = AUTH_FIELD_IDENTIFIER) const;
     virtual SwField*    Copy() const;
 
 public:
@@ -179,7 +179,7 @@ public:
     SwDBNextSetField( SwDBNextSetFieldType*,
                       const OUString& rCond, const OUString& rDummy, const SwDBData& rDBData);
 
-    virtual OUString        Expand() const;
+    virtual OUString        Expand(ToxAuthorityField eField = AUTH_FIELD_IDENTIFIER) const;
     virtual SwField*        Copy() const;
 
     void                    Evaluate(SwDoc*);
@@ -225,7 +225,7 @@ class SwDBNumSetField : public SwDBNameInfField
 public:
     SwDBNumSetField(SwDBNumSetFieldType*, const OUString& rCond, const OUString& rDBNum, const SwDBData& rDBData);
 
-    virtual OUString        Expand() const;
+    virtual OUString        Expand(ToxAuthorityField eField = AUTH_FIELD_IDENTIFIER) const;
     virtual SwField*        Copy() const;
 
     inline bool             IsCondValid() const;
@@ -274,7 +274,7 @@ class SW_DLLPUBLIC SwDBNameField : public SwDBNameInfField
 public:
     SwDBNameField(SwDBNameFieldType*, const SwDBData& rDBData, sal_uLong nFmt = 0);
 
-    virtual OUString Expand() const;
+    virtual OUString Expand(ToxAuthorityField eField = AUTH_FIELD_IDENTIFIER) const;
     virtual SwField* Copy() const;
     virtual bool        QueryValue( com::sun::star::uno::Any& rVal, sal_uInt16 nWhich ) const;
     virtual bool        PutValue( const com::sun::star::uno::Any& rVal, sal_uInt16 nWhich );
@@ -303,7 +303,7 @@ class SW_DLLPUBLIC SwDBSetNumberField : public SwDBNameInfField
 public:
     SwDBSetNumberField(SwDBSetNumberFieldType*, const SwDBData& rDBData, sal_uLong nFmt = 0);
 
-    virtual OUString Expand() const;
+    virtual OUString Expand(ToxAuthorityField eField = AUTH_FIELD_IDENTIFIER) const;
     virtual         SwField* Copy() const;
     void            Evaluate(SwDoc*);
 

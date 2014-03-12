@@ -93,7 +93,7 @@ class SW_DLLPUBLIC SwDateTimeField : public SwValueField
         sal_uInt16              nSubType;
         long                nOffset;    // Offset in minutes.
 
-        virtual OUString    Expand() const;
+        virtual OUString    Expand(ToxAuthorityField eField = AUTH_FIELD_IDENTIFIER) const;
         virtual SwField*    Copy() const;
 
 public:

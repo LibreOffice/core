@@ -47,7 +47,7 @@ SwMacroField::SwMacroField(SwMacroFieldType* pInitType,
     bIsScriptURL = isScriptURL(aMacro);
 }
 
-OUString SwMacroField::Expand() const
+OUString SwMacroField::Expand(ToxAuthorityField /**eField*/) const
 {
     return aText ;
 }

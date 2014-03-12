@@ -383,7 +383,7 @@ SwDDEField::~SwDDEField()
         ((SwDDEFieldType*)GetTyp())->Disconnect();
 }
 
-OUString SwDDEField::Expand() const
+OUString SwDDEField::Expand(ToxAuthorityField /**eField*/) const
 {
     OUString aStr = ((SwDDEFieldType*)GetTyp())->GetExpansion();
     aStr = aStr.replaceAll("\r", OUString());

@@ -90,7 +90,7 @@ class SW_DLLPUBLIC SwDropDownField : public SwField
 
        @return the expanded value of the field
     */
-    virtual OUString Expand() const;
+    virtual OUString Expand(ToxAuthorityField eField = AUTH_FIELD_IDENTIFIER) const;
 
     /**
        Creates a copy of this field.

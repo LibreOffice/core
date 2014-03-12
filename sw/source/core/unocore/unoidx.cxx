@@ -1519,6 +1519,7 @@ lcl_TypeToPropertyMap_Mark(const TOXTypes eType)
     {
         case TOX_INDEX:         return PROPERTY_MAP_INDEX_MARK;
         case TOX_CONTENT:       return PROPERTY_MAP_CNTIDX_MARK;
+        case TOX_CITATION   :   return PROPERTY_MAP_FLDTYP_BIBLIOGRAPHY;
         //case TOX_USER:
         default:
             return PROPERTY_MAP_USER_MARK;
@@ -1553,6 +1554,7 @@ public:
     OUString                    m_sPrimaryKeyReading;
     OUString                    m_sSecondaryKeyReading;
     OUString                    m_sUserIndexName;
+    OUString                    m_sCitaitonText;
 
     Impl(   SwXDocumentIndexMark & rThis,
             SwDoc *const pDoc,
@@ -1826,6 +1828,7 @@ throw (lang::IllegalArgumentException, uno::RuntimeException, std::exception)
     {
         case TOX_INDEX:
         case TOX_CONTENT:
+        case TOX_CITATION:
             pTOXType = pDoc->GetTOXType( m_pImpl->m_eTOXType, 0 );
         break;
         case TOX_USER:
@@ -1898,6 +1901,13 @@ throw (lang::IllegalArgumentException, uno::RuntimeException, std::exception)
                 aMark.SetSecondaryKeyReading(m_pImpl->m_sSecondaryKeyReading);
             }
             aMark.SetMainEntry(m_pImpl->m_bMainEntry);
+        break;
+        case TOX_CITATION:
+        if (!m_pImpl->m_sCitaitonText.isEmpty())
+        {
+            aMark.SetCitationKeyReading(m_pImpl->m_sCitaitonText);
+        }
+        aMark.SetMainEntry(m_pImpl->m_bMainEntry);
         break;
         case TOX_USER:
         case TOX_CONTENT:
@@ -2224,6 +2234,15 @@ throw (beans::UnknownPropertyException, beans::PropertyVetoException,
             break;
             case WID_MAIN_ENTRY:
                 m_pImpl->m_bMainEntry = lcl_AnyToBool(rValue);
+            break;
+            case PROPERTY_MAP_INDEX_OBJECTS:
+            {
+                uno::Sequence<com::sun::star::beans::PropertyValue> aValues(1);
+                com::sun::star::beans::PropertyValue propertyVal;
+                rValue >>= aValues;
+                propertyVal = aValues[0];
+                m_pImpl->m_sCitaitonText = lcl_AnyToString(propertyVal.Value);
+            }
             break;
         }
     }

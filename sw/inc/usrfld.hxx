@@ -91,7 +91,7 @@ class SW_DLLPUBLIC SwUserField : public SwValueField
 {
     sal_uInt16  nSubType;
 
-    virtual OUString        Expand() const;
+    virtual OUString        Expand(ToxAuthorityField eField = AUTH_FIELD_IDENTIFIER) const;
     virtual SwField*        Copy() const;
 
 public:

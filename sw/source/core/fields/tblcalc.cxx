@@ -104,7 +104,7 @@ OUString SwTblField::GetCommand()
         : OUString();
 }
 
-OUString SwTblField::Expand() const
+OUString SwTblField::Expand(ToxAuthorityField /**eField*/) const
 {
     if (nSubType & nsSwExtendedSubType::SUB_CMD)
     {

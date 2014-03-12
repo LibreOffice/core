@@ -206,7 +206,7 @@ void SwDBField::InitContent(const OUString& rExpansion)
     SetExpansion( rExpansion );
 }
 
-OUString SwDBField::Expand() const
+OUString SwDBField::Expand(ToxAuthorityField /**eField*/) const
 {
     if(0 ==(GetSubType() & nsSwExtendedSubType::SUB_INVISIBLE))
         return lcl_DBTrennConv(aContent);
@@ -555,7 +555,7 @@ SwDBNextSetField::SwDBNextSetField(SwDBNextSetFieldType* pTyp,
     SwDBNameInfField(pTyp, rDBData), aCond(rCond), bCondValid(true)
 {}
 
-OUString SwDBNextSetField::Expand() const
+OUString SwDBNextSetField::Expand(ToxAuthorityField /**eField*/) const
 {
     return OUString();
 }
@@ -644,7 +644,7 @@ SwDBNumSetField::SwDBNumSetField(SwDBNumSetFieldType* pTyp,
     bCondValid(true)
 {}
 
-OUString SwDBNumSetField::Expand() const
+OUString SwDBNumSetField::Expand(ToxAuthorityField /**eField*/) const
 {
     return OUString();
 }
@@ -758,7 +758,7 @@ SwDBNameField::SwDBNameField(SwDBNameFieldType* pTyp, const SwDBData& rDBData, s
     : SwDBNameInfField(pTyp, rDBData, nFmt)
 {}
 
-OUString SwDBNameField::Expand() const
+OUString SwDBNameField::Expand(ToxAuthorityField /**eField*/) const
 {
     if(0 ==(GetSubType() & nsSwExtendedSubType::SUB_INVISIBLE))
         return ((SwDBNameFieldType*)GetTyp())->Expand(GetFormat());
@@ -805,7 +805,7 @@ SwDBSetNumberField::SwDBSetNumberField(SwDBSetNumberFieldType* pTyp,
     : SwDBNameInfField(pTyp, rDBData, nFmt), nNumber(0)
 {}
 
-OUString SwDBSetNumberField::Expand() const
+OUString SwDBSetNumberField::Expand(ToxAuthorityField /**eField*/) const
 {
     if(0 !=(GetSubType() & nsSwExtendedSubType::SUB_INVISIBLE) || nNumber == 0)
         return OUString();

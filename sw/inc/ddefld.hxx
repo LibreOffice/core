@@ -90,7 +90,7 @@ public:
 class SwDDEField : public SwField
 {
 private:
-    virtual OUString Expand() const;
+    virtual OUString Expand(ToxAuthorityField eField = AUTH_FIELD_IDENTIFIER) const;
     virtual SwField* Copy() const;
 
 public:

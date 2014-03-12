@@ -143,6 +143,7 @@ DomainMapper_Impl::DomainMapper_Impl(
         m_xTextFactory( xModel, uno::UNO_QUERY ),
         m_xComponentContext( xContext ),
         m_bSetUserFieldContent( false ),
+        m_bSetCitation( false ),
         m_bIsFirstSection( true ),
         m_bIsColumnBreakDeferred( false ),
         m_bIsPageBreakDeferred( false ),
@@ -2395,6 +2396,7 @@ if(!bFilled)
             {OUString("INDEX"), "com.sun.star.text.DocumentIndex", "", FIELD_INDEX},
             {OUString("XE"), "com.sun.star.text.DocumentIndexMark", "", FIELD_XE},
             {OUString("BIBLIOGRAPHY"), "com.sun.star.text.Bibliography", "", FILED_BIBLIOGRAPHY},
+            {OUString("CITATION"), "com.sun.star.text.TextField.Bibliography", "", FIELD_CITATION},
 
 //            {OUString(""), "", "", FIELD_},
 
@@ -3003,6 +3005,7 @@ void DomainMapper_Impl::CloseFieldCommand()
     if( pContext.get() )
     {
         m_bSetUserFieldContent = false;
+        m_bSetCitation = false;
         FieldConversionMap_t aFieldConversionMap = lcl_GetFieldConversion();
 
         try
@@ -3029,6 +3032,7 @@ void DomainMapper_Impl::CloseFieldCommand()
                 case FIELD_INDEX:
                 case FIELD_XE:
                 case FILED_BIBLIOGRAPHY:
+                case FIELD_CITATION:
                 case FIELD_TC:
                 case FIELD_EQ:
                         bCreateField = false;
@@ -3548,6 +3552,38 @@ void DomainMapper_Impl::CloseFieldCommand()
                         }
                     }
                         break;
+                    case FIELD_CITATION:
+                    {
+                        xFieldInterface = m_xTextFactory->createInstance(
+                                  OUString::createFromAscii(aIt->second.cFieldServiceName));
+                                  uno::Reference< beans::XPropertySet > xTC(xFieldInterface,
+                                  uno::UNO_QUERY_THROW);
+
+                        if( !sFirstParam.isEmpty()){
+                            uno::Sequence<com::sun::star::beans::PropertyValue> aValues(1);
+                            com::sun::star::beans::PropertyValue propertyVal;
+                            propertyVal.Name = "Identifier";
+                            propertyVal.Value = uno::makeAny(sFirstParam);
+                            aValues[0] = propertyVal;
+                                    xTC->setPropertyValue("Fields",
+                                            uno::makeAny(aValues));
+                        }
+                        uno::Reference< text::XTextContent > xToInsert( xTC, uno::UNO_QUERY );
+                        uno::Reference< text::XTextAppend >  xTextAppend = m_aTextAppendStack.top().xTextAppend;
+                        if (xTextAppend.is())
+                        {
+                            uno::Reference< text::XTextCursor > xCrsr = xTextAppend->getText()->createTextCursor();
+                            uno::Reference< text::XText > xText = xTextAppend->getText();
+                            if(xCrsr.is() && xText.is())
+                            {
+                                xCrsr->gotoEnd(false);
+                                xText->insertTextContent(uno::Reference< text::XTextRange >( xCrsr, uno::UNO_QUERY_THROW ), xToInsert, sal_False);
+                            }
+                        }
+                        m_bSetCitation = true;
+                    }
+                    break;
+
                     case FIELD_TC :
                     {
                         uno::Reference< beans::XPropertySet > xTC(
@@ -3678,6 +3714,50 @@ void DomainMapper_Impl::SetFieldResult(OUString const& rResult)
                         xDependentField->getTextFieldMaster()->setPropertyValue(
                                 rPropNameSupplier.GetName(PROP_CONTENT),
                              uno::makeAny( rResult ));
+                    }
+                    else if ( m_bSetCitation )
+                    {
+
+                        uno::Reference< beans::XPropertySet > xFieldProperties( xTextField, uno::UNO_QUERY_THROW);
+                        // In case of SetExpression, the field result contains the content of the variable.
+                        uno::Reference<lang::XServiceInfo> xServiceInfo(xTextField, uno::UNO_QUERY);
+
+                        bool bIsSetbiblio = xServiceInfo->supportsService("com.sun.star.text.TextField.Bibliography");
+                        if( bIsSetbiblio )
+                        {
+                            com::sun::star::uno::Any aProperty  = xFieldProperties->getPropertyValue("Fields");
+                            uno::Sequence<com::sun::star::beans::PropertyValue> aValues ;
+                            aProperty >>= aValues;
+                            com::sun::star::beans::PropertyValue propertyVal;
+                            bool bTitleFound = false;
+                            int i=0;
+                            for (; i < aValues.getLength(); i++)
+                            {
+                                propertyVal = aValues[i];
+                                if(propertyVal.Name == "Title")
+                                {
+                                    bTitleFound = true;
+                                    break;
+                                }
+                            }
+                            if(bTitleFound)
+                            {
+                                OUString titleStr;
+                                uno::Any aValue(propertyVal.Value);
+                                aValue >>= titleStr;
+                                titleStr = titleStr + rResult;
+                                propertyVal.Value = uno::makeAny(titleStr);
+                                aValues[i] = propertyVal;
+                            }
+                            else
+                            {
+                                propertyVal.Name = "Title";
+                                propertyVal.Value = uno::makeAny(rResult);
+                                aValues[i] = propertyVal;
+                            }
+                            xFieldProperties->setPropertyValue("Fields",
+                                    uno::makeAny(aValues));
+                        }
                     }
                     else
                     {

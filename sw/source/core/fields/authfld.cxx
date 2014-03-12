@@ -538,11 +538,11 @@ SwAuthorityField::~SwAuthorityField()
     ((SwAuthorityFieldType* )GetTyp())->RemoveField(m_nHandle);
 }
 
-OUString SwAuthorityField::Expand() const
+OUString SwAuthorityField::Expand(ToxAuthorityField eField) const
 {
     SwAuthorityFieldType* pAuthType = (SwAuthorityFieldType*)GetTyp();
     OUString sRet;
-    if(pAuthType->GetPrefix())
+    if(pAuthType->GetPrefix() && eField != AUTH_FIELD_TITLE)
         sRet = OUString(pAuthType->GetPrefix());
 
     if( pAuthType->IsSequence() )

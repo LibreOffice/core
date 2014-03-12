@@ -384,13 +384,13 @@ sal_Bool SwField::IsFixed() const
     return bRet;
 }
 
-OUString SwField::ExpandField(bool const bCached) const
+OUString SwField::ExpandField(bool const bCached, ToxAuthorityField eField) const
 {
     if ( m_bUseFieldValueCache )
     {
         if (!bCached) // #i85766# do not expand fields in clipboard documents
         {
-            m_Cache = Expand();
+            m_Cache = Expand(eField);
         }
         return m_Cache;
     }

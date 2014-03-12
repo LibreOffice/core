@@ -173,7 +173,7 @@ public:
     void ChangeExpansion(sal_uInt16 const nPageNumber,
             sal_uInt16 const nMaxPage);
 
-    virtual OUString    Expand() const;
+    virtual OUString    Expand(ToxAuthorityField eField = AUTH_FIELD_IDENTIFIER) const;
     virtual SwField*    Copy() const;
 
     virtual OUString GetPar2() const;
@@ -211,7 +211,7 @@ class SwAuthorField : public SwField
 public:
     SwAuthorField(SwAuthorFieldType*, sal_uInt32 nFmt = 0);
 
-    virtual OUString    Expand() const;
+    virtual OUString    Expand(ToxAuthorityField eField = AUTH_FIELD_IDENTIFIER) const;
     virtual SwField*    Copy() const;
 
     inline void         SetExpansion(const OUString& rStr) { aContent = rStr; }
@@ -246,7 +246,7 @@ class SW_DLLPUBLIC SwFileNameField : public SwField
 public:
     SwFileNameField(SwFileNameFieldType*, sal_uInt32 nFmt = 0);
 
-    virtual OUString    Expand() const;
+    virtual OUString    Expand(ToxAuthorityField eField = AUTH_FIELD_IDENTIFIER) const;
     virtual SwField*    Copy() const;
 
     inline void         SetExpansion(const OUString& rStr) { aContent = rStr; }
@@ -279,7 +279,7 @@ class SW_DLLPUBLIC SwTemplNameField : public SwField
 public:
     SwTemplNameField(SwTemplNameFieldType*, sal_uInt32 nFmt = 0);
 
-    virtual OUString    Expand() const;
+    virtual OUString    Expand(ToxAuthorityField eField = AUTH_FIELD_IDENTIFIER) const;
     virtual SwField*    Copy() const;
     virtual bool        QueryValue( com::sun::star::uno::Any& rVal, sal_uInt16 nWhich ) const;
     virtual bool        PutValue( const com::sun::star::uno::Any& rVal, sal_uInt16 nWhich );
@@ -316,7 +316,7 @@ public:
 
     void ChangeExpansion( const SwFrm* pFrm );
 
-    virtual OUString    Expand() const;
+    virtual OUString    Expand(ToxAuthorityField eField = AUTH_FIELD_IDENTIFIER) const;
     virtual SwField*    Copy() const;
 
     virtual sal_uInt16      GetSubType() const;
@@ -358,7 +358,7 @@ class SwHiddenTxtField : public SwField
     sal_Bool    bIsHidden  : 1;     ///< Is it not visible?
     sal_Bool    bValid     : 1;     ///< Is DB-field evaluated?
 
-    virtual OUString    Expand() const;
+    virtual OUString    Expand(ToxAuthorityField eField = AUTH_FIELD_IDENTIFIER) const;
     virtual SwField*    Copy() const;
 
 public:
@@ -421,7 +421,7 @@ public:
     /// Direct input, delete old value.
     SwHiddenParaField(SwHiddenParaFieldType*, const OUString& rCond);
 
-    virtual OUString    Expand() const;
+    virtual OUString    Expand(ToxAuthorityField eField = AUTH_FIELD_IDENTIFIER) const;
     virtual SwField*    Copy() const;
 
     void                SetHidden(sal_Bool bHidden)     { bIsHidden = bHidden; }
@@ -458,7 +458,7 @@ class SW_DLLPUBLIC SwMacroField : public SwField
     OUString aText;
     sal_Bool      bIsScriptURL;
 
-    virtual OUString Expand() const;
+    virtual OUString Expand(ToxAuthorityField eField = AUTH_FIELD_IDENTIFIER) const;
     virtual SwField* Copy() const;
 
 public:
@@ -532,7 +532,7 @@ public:
                    const DateTime& rDate);
     ~SwPostItField();
 
-    virtual OUString        Expand() const;
+    virtual OUString        Expand(ToxAuthorityField eField = AUTH_FIELD_IDENTIFIER) const;
     virtual SwField*        Copy() const;
 
     inline const DateTime   GetDateTime() const             { return aDateTime; }
@@ -580,7 +580,7 @@ class SW_DLLPUBLIC SwDocInfoField : public SwValueField
     OUString  aContent;
     OUString  aName;
 
-    virtual OUString        Expand() const;
+    virtual OUString        Expand(ToxAuthorityField eField = AUTH_FIELD_IDENTIFIER) const;
     virtual SwField*        Copy() const;
 
 public:
@@ -622,7 +622,7 @@ class SwExtUserField : public SwField
 public:
     SwExtUserField(SwExtUserFieldType*, sal_uInt16 nSub, sal_uInt32 nFmt=0);
 
-    virtual OUString    Expand() const;
+    virtual OUString    Expand(ToxAuthorityField eField = AUTH_FIELD_IDENTIFIER) const;
     virtual SwField*    Copy() const;
 
     virtual sal_uInt16      GetSubType() const;
@@ -663,7 +663,7 @@ public:
     SwRefPageSetField( SwRefPageSetFieldType*, short nOff = 0,
                         sal_Bool bOn = sal_True );
 
-    virtual OUString    Expand() const;
+    virtual OUString    Expand(ToxAuthorityField eField = AUTH_FIELD_IDENTIFIER) const;
     virtual SwField*    Copy() const;
 
     virtual OUString  GetPar2() const;
@@ -707,7 +707,7 @@ class SwRefPageGetField : public SwField
 public:
     SwRefPageGetField( SwRefPageGetFieldType*, sal_uInt32 nFmt );
 
-    virtual OUString    Expand() const;
+    virtual OUString    Expand(ToxAuthorityField eField = AUTH_FIELD_IDENTIFIER) const;
     virtual SwField*    Copy() const;
 
     void SetText( const OUString& rTxt )      { sTxt = rTxt; }
@@ -740,7 +740,7 @@ public:
     SwJumpEditField( SwJumpEditFieldType*, sal_uInt32 nFormat,
                      const OUString& sText, const OUString& sHelp );
 
-    virtual OUString    Expand() const;
+    virtual OUString    Expand(ToxAuthorityField eField = AUTH_FIELD_IDENTIFIER) const;
     virtual SwField*    Copy() const;
 
     /// Placeholder-Text
@@ -788,7 +788,7 @@ public:
 
     virtual OUString        GetDescription() const;
 
-    virtual OUString        Expand() const;
+    virtual OUString        Expand(ToxAuthorityField eField = AUTH_FIELD_IDENTIFIER) const;
     virtual SwField*        Copy() const;
 
     /// Type
@@ -829,7 +829,7 @@ class SW_DLLPUBLIC SwCombinedCharField : public SwField
 public:
     SwCombinedCharField( SwCombinedCharFieldType*, const OUString& rChars );
 
-    virtual OUString        Expand() const;
+    virtual OUString        Expand(ToxAuthorityField eField = AUTH_FIELD_IDENTIFIER) const;
     virtual SwField*        Copy() const;
 
     /// Characters
