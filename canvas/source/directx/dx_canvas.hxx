@@ -36,7 +36,7 @@
 #include <comphelper/uno3.hxx>
 
 #include <canvas/base/integerbitmapbase.hxx>
-#include <canvas/base/disambiguationhelper.hxx>
+#include <canvas/base/basemutexhelper.hxx>
 #include <canvas/base/graphicdevicebase.hxx>
 
 #include "dx_bitmapprovider.hxx"
@@ -54,7 +54,7 @@ namespace dxcanvas
                                               ::com::sun::star::util::XUpdatable,
                                               ::com::sun::star::beans::XPropertySet,
                                               ::com::sun::star::lang::XServiceName >    GraphicDeviceBase1_Base;
-    typedef ::canvas::GraphicDeviceBase< ::canvas::DisambiguationHelper< GraphicDeviceBase1_Base >,
+    typedef ::canvas::GraphicDeviceBase< ::canvas::BaseMutexHelper< GraphicDeviceBase1_Base >,
                                            DeviceHelper,
                                            ::osl::MutexGuard,
                                            ::cppu::OWeakObject >    CanvasBase1_Base;
@@ -83,7 +83,7 @@ namespace dxcanvas
         void initialize();
 
         /// Dispose all internal references
-        virtual void disposeThis();
+        virtual void disposeThis() SAL_OVERRIDE;
 
         // Forwarding the XComponent implementation to the
         // cppu::ImplHelper templated base
@@ -111,7 +111,7 @@ namespace dxcanvas
                                               ::com::sun::star::util::XUpdatable,
                                               ::com::sun::star::beans::XPropertySet,
                                               ::com::sun::star::lang::XServiceName >    GraphicDeviceBase2_Base;
-    typedef ::canvas::GraphicDeviceBase< ::canvas::DisambiguationHelper< GraphicDeviceBase2_Base >,
+    typedef ::canvas::GraphicDeviceBase< ::canvas::BaseMutexHelper< GraphicDeviceBase2_Base >,
                                            DeviceHelper,
                                            ::osl::MutexGuard,
                                            ::cppu::OWeakObject >    CanvasBase2_Base;
@@ -142,7 +142,7 @@ namespace dxcanvas
         void initialize();
 
         /// Dispose all internal references
-        virtual void disposeThis();
+        virtual void disposeThis() SAL_OVERRIDE;
 
         // Forwarding the XComponent implementation to the
         // cppu::ImplHelper templated base

@@ -21,7 +21,7 @@
 #include <basegfx/vector/b2isize.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 
-#include <canvas/base/disambiguationhelper.hxx>
+#include <canvas/base/basemutexhelper.hxx>
 
 #include "ogl_spritecanvas.hxx"
 #include "ogl_canvashelper.hxx"
@@ -32,7 +32,7 @@ namespace oglcanvas
     typedef ::cppu::WeakComponentImplHelper2< ::com::sun::star::rendering::XCustomSprite,
                                               ::com::sun::star::rendering::XCanvas > CanvasCustomSpriteBase_Base;
     typedef ::canvas::CanvasBase<
-         ::canvas::DisambiguationHelper< CanvasCustomSpriteBase_Base >,
+         ::canvas::BaseMutexHelper< CanvasCustomSpriteBase_Base >,
          CanvasHelper,
          ::osl::MutexGuard,
          ::cppu::OWeakObject >                          CanvasCustomSpriteBaseT;
@@ -60,7 +60,7 @@ namespace oglcanvas
                             const SpriteCanvasRef&                          rRefDevice,
                             SpriteDeviceHelper&                             rDeviceHelper );
 
-        virtual void disposeThis();
+        virtual void disposeThis() SAL_OVERRIDE;
 
         // XSprite
         virtual void SAL_CALL setAlpha( double alpha ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException, std::exception);

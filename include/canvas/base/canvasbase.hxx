@@ -111,7 +111,7 @@ namespace canvas
         {
         }
 
-        virtual void disposeThis()
+        virtual void disposeThis() SAL_OVERRIDE
         {
             MutexType aGuard( BaseType::m_aMutex );
 

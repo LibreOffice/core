@@ -33,7 +33,7 @@
 
 #include <cppuhelper/compbase3.hxx>
 #include <comphelper/uno3.hxx>
-#include <canvas/base/disambiguationhelper.hxx>
+#include <canvas/base/basemutexhelper.hxx>
 #include <canvas/base/integerbitmapbase.hxx>
 
 #include "dx_bitmapprovider.hxx"
@@ -53,7 +53,7 @@ namespace dxcanvas
                                                ::com::sun::star::beans::XFastPropertySet >      CanvasBitmapBase_Base;
     typedef ::canvas::IntegerBitmapBase<
         canvas::BitmapCanvasBase2<
-            ::canvas::DisambiguationHelper< CanvasBitmapBase_Base >,
+            ::canvas::BaseMutexHelper< CanvasBitmapBase_Base >,
             BitmapCanvasHelper,
             ::osl::MutexGuard,
             ::cppu::OWeakObject> > CanvasBitmap_Base;
@@ -73,7 +73,7 @@ namespace dxcanvas
                       const DeviceRef&        rDevice );
 
         /// Dispose all internal references
-        virtual void disposeThis();
+        virtual void disposeThis() SAL_OVERRIDE;
 
         // XServiceInfo
         virtual OUString SAL_CALL getImplementationName(  ) throw (::com::sun::star::uno::RuntimeException);

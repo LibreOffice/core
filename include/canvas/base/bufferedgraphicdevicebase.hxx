@@ -176,7 +176,7 @@ namespace canvas
             return ::com::sun::star::uno::makeAny(mxWindow);
         }
 
-        virtual void disposeThis()
+        virtual void disposeThis() SAL_OVERRIDE
         {
             typename BaseType::MutexType aGuard( BaseType::m_aMutex );
 
@@ -224,7 +224,7 @@ namespace canvas
         }
 
         // XWindowListener
-        virtual void disposeEventSource( const ::com::sun::star::lang::EventObject& Source ) throw (::com::sun::star::uno::RuntimeException)
+        virtual void disposeEventSource( const ::com::sun::star::lang::EventObject& Source ) throw (::com::sun::star::uno::RuntimeException) SAL_OVERRIDE
         {
             typename BaseType::MutexType aGuard( BaseType::m_aMutex );
 

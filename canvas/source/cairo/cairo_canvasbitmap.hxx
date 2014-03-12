@@ -32,6 +32,7 @@
 
 #include <boost/shared_ptr.hpp>
 
+#include <canvas/base/basemutexhelper.hxx>
 #include <canvas/base/integerbitmapbase.hxx>
 
 #include "cairo_cairo.hxx"
@@ -49,7 +50,7 @@ namespace cairocanvas
                                               ::com::sun::star::lang::XServiceInfo,
                                               ::com::sun::star::beans::XFastPropertySet >   CanvasBitmapBase_Base;
     class CanvasBitmapSpriteSurface_Base :
-        public ::canvas::DisambiguationHelper<CanvasBitmapBase_Base>,
+        public ::canvas::BaseMutexHelper<CanvasBitmapBase_Base>,
         public SurfaceProvider
     {
     };
@@ -79,7 +80,7 @@ namespace cairocanvas
                       bool                      bHasAlpha );
 
         /// Dispose all internal references
-        virtual void disposeThis();
+        virtual void disposeThis() SAL_OVERRIDE;
 
         // Forwarding the XComponent implementation to the
         // cppu::ImplHelper templated base

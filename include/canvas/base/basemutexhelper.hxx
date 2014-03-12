@@ -17,13 +17,14 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_CANVAS_BASE_DISAMBIGUATIONHELPER_HXX
-#define INCLUDED_CANVAS_BASE_DISAMBIGUATIONHELPER_HXX
+#ifndef INCLUDED_CANVAS_BASE_BASEMUTEXHELPER_HXX
+#define INCLUDED_CANVAS_BASE_BASEMUTEXHELPER_HXX
+
+#include <sal/config.h>
 
 #include <osl/mutex.hxx>
 
-
-/* Definition of the DisambiguationHelper class */
+/* Definition of the BaseMutexHelper class */
 
 namespace canvas
 {
@@ -33,19 +34,11 @@ namespace canvas
         etc. classes freely combinable - letting them perform this
         initialization would prohibit deriving e.g. CanvasBase from
         GraphicDeviceBase.
-
-        On top of that, disambiguates XEventListener::disposing and
-        WeakComponentImplHelper::disposing.
-
-        Having two virtual methods with the same name, and not
-        overriding them in every derived class, will hide one of
-        them. Later trying to override the same method, will generate
-        a new vtable slot, and lead to very hard to spot errors.
      */
-    template< class Base > class DisambiguationHelper : public Base
+    template< class Base > class BaseMutexHelper : public Base
     {
     protected:
-        /** Construct DisambiguationHelper
+        /** Construct BaseMutexHelper
 
             This method is the whole purpose of this template:
             initializing a base class with the provided m_aMutex
@@ -53,28 +46,21 @@ namespace canvas
             as they require the lifetime of the mutex to extend
             theirs).
          */
-        DisambiguationHelper() :
+        BaseMutexHelper() :
             Base( m_aMutex )
         {
         }
 
-        virtual void disposeThis()
-        {}
-        virtual void disposeEventSource( const ::com::sun::star::lang::EventObject& ) throw (::com::sun::star::uno::RuntimeException)
-        {}
+        virtual void disposeThis() {}
 
-        mutable ::osl::Mutex m_aMutex;
+        mutable osl::Mutex m_aMutex;
 
     private:
         virtual void SAL_CALL disposing() SAL_OVERRIDE
         { disposeThis(); }
-
-        virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& Source ) throw (::com::sun::star::uno::RuntimeException) SAL_OVERRIDE
-        { disposeEventSource(Source); }
-
     };
 }
 
-#endif // INCLUDED_CANVAS_BASE_DISAMBIGUATIONHELPER_HXX
+#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

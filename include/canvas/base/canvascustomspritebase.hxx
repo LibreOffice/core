@@ -94,7 +94,7 @@ namespace canvas
             @derive when overriding this method in derived classes,
             <em>always</em> call the base class' method!
          */
-        virtual void disposeThis()
+        virtual void disposeThis() SAL_OVERRIDE
         {
             typename BaseType::MutexType aGuard( BaseType::m_aMutex );
 

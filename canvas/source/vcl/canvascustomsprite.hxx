@@ -32,7 +32,7 @@
 #include <vcl/virdev.hxx>
 
 #include <canvas/vclwrapper.hxx>
-#include <canvas/base/disambiguationhelper.hxx>
+#include <canvas/base/basemutexhelper.hxx>
 #include <canvas/base/spritesurface.hxx>
 #include <canvas/base/canvascustomspritebase.hxx>
 
@@ -68,7 +68,7 @@ namespace vclcanvas
         remain a base class that provides implementation, not to
         enforce any specific interface on its derivees.
      */
-    class CanvasCustomSpriteSpriteBase_Base : public ::canvas::DisambiguationHelper< CanvasCustomSpriteBase_Base >,
+    class CanvasCustomSpriteSpriteBase_Base : public ::canvas::BaseMutexHelper< CanvasCustomSpriteBase_Base >,
                                                  public Sprite
     {
     };

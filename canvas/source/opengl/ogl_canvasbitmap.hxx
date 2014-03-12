@@ -16,7 +16,7 @@
 #include <com/sun/star/rendering/XIntegerBitmap.hpp>
 
 #include <canvas/base/integerbitmapbase.hxx>
-#include <canvas/base/disambiguationhelper.hxx>
+#include <canvas/base/basemutexhelper.hxx>
 #include <basegfx/vector/b2isize.hxx>
 
 #include <boost/shared_ptr.hpp>
@@ -33,7 +33,7 @@ namespace oglcanvas
                                               ::com::sun::star::rendering::XIntegerBitmap > CanvasBitmapBase_Base;
     typedef ::canvas::IntegerBitmapBase<
         canvas::BitmapCanvasBase2<
-            ::canvas::DisambiguationHelper< CanvasBitmapBase_Base >,
+            ::canvas::BaseMutexHelper< CanvasBitmapBase_Base >,
             BitmapCanvasHelper,
             ::osl::MutexGuard,
             ::cppu::OWeakObject> > CanvasBitmapBaseT;
@@ -59,7 +59,7 @@ namespace oglcanvas
         CanvasBitmap( const CanvasBitmap& rSrc );
 
         /// Dispose all internal references
-        virtual void disposeThis();
+        virtual void disposeThis() SAL_OVERRIDE;
 
         /** Write out recorded actions
          */

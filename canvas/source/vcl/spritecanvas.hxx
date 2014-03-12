@@ -115,7 +115,7 @@ namespace vclcanvas
         ~SpriteCanvas();
 
         /// Dispose all internal references
-        virtual void disposeThis();
+        virtual void disposeThis() SAL_OVERRIDE;
 
         // Forwarding the XComponent implementation to the
         // cppu::ImplHelper templated base

@@ -32,6 +32,7 @@
 
 #include <canvas/vclwrapper.hxx>
 
+#include <canvas/base/basemutexhelper.hxx>
 #include <canvas/base/integerbitmapbase.hxx>
 #include <canvasbitmaphelper.hxx>
 
@@ -50,7 +51,7 @@ namespace vclcanvas
                                              ::com::sun::star::beans::XFastPropertySet >    CanvasBitmapBase_Base;
     typedef ::canvas::IntegerBitmapBase<
         canvas::BitmapCanvasBase2<
-            ::canvas::DisambiguationHelper< CanvasBitmapBase_Base >,
+            ::canvas::BaseMutexHelper< CanvasBitmapBase_Base >,
             CanvasBitmapHelper,
             tools::LocalGuard,
             ::cppu::OWeakObject> > CanvasBitmap_Base;
