@@ -1423,7 +1423,9 @@ int MSWordExportBase::CollectGrfsOfBullets()
                     }
                     if (!bHas)
                     {
-                        m_vecBulletPic.push_back(pGraf);
+                        Size aSize(pGraf->GetPrefSize());
+                        if (0 != aSize.Height() && 0 != aSize.Width())
+                           m_vecBulletPic.push_back(pGraf);
                     }
                 }
             }
