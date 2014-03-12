@@ -716,20 +716,9 @@ bool SdrObjEditView::SdrBeginTextEdit(
 #endif
             pTextEditOutliner->ClearModifyFlag();
 
-            if(pWin)
+            if(pWin && pTextObj->IsFitToSize())
             {
-                bool bExtraInvalidate(false);
-
-                if(!bExtraInvalidate)
-                {
-                    if(pTextObj->IsFitToSize())
-                        bExtraInvalidate = true;
-                }
-
-                if(bExtraInvalidate)
-                {
-                    pWin->Invalidate(aTextEditArea);
-                }
+                pWin->Invalidate(aTextEditArea);
             }
 
             if( GetModel() )
@@ -774,11 +763,9 @@ bool SdrObjEditView::SdrBeginTextEdit(
         }
         else
         {
-            bBrk = true;
             pTextEditOutliner->SetCalcFieldValueHdl(aOldCalcFieldValueLink);
             pTextEditOutliner->SetBeginPasteOrDropHdl(Link());
             pTextEditOutliner->SetEndPasteOrDropHdl(Link());
-
         }
     }
     if (pTextEditOutliner != NULL)
@@ -1135,29 +1122,27 @@ bool SdrObjEditView::IsTextEditHit(const Point& rHit, short nTol) const
         // only a third of the tolerance here, so handles can be hit well
         nTol=nTol/3;
         nTol=0; // no hit tolerance here any more
-        if (!bOk)
-        {
-            Rectangle aEditArea;
-            OutlinerView* pOLV=pTextEditOutliner->GetView(0);
-            if (pOLV!=NULL)
-            {
-                aEditArea.Union(pOLV->GetOutputArea());
-            }
-            aEditArea.Left()-=nTol;
-            aEditArea.Top()-=nTol;
-            aEditArea.Right()+=nTol;
-            aEditArea.Bottom()+=nTol;
-            bOk=aEditArea.IsInside(rHit);
-            if (bOk)
-            { // check if any characters were actually hit
-                Point aPnt(rHit); aPnt-=aEditArea.TopLeft();
-                long nHitTol = 2000;
-                OutputDevice* pRef = pTextEditOutliner->GetRefDevice();
-                if( pRef )
-                    nHitTol = pRef->LogicToLogic( nHitTol, MAP_100TH_MM, pRef->GetMapMode().GetMapUnit() );
 
-                bOk = pTextEditOutliner->IsTextPos( aPnt, (sal_uInt16)nHitTol );
-            }
+        Rectangle aEditArea;
+        OutlinerView* pOLV=pTextEditOutliner->GetView(0);
+        if (pOLV!=NULL)
+        {
+            aEditArea.Union(pOLV->GetOutputArea());
+        }
+        aEditArea.Left()-=nTol;
+        aEditArea.Top()-=nTol;
+        aEditArea.Right()+=nTol;
+        aEditArea.Bottom()+=nTol;
+        bOk=aEditArea.IsInside(rHit);
+        if (bOk)
+        { // check if any characters were actually hit
+            Point aPnt(rHit); aPnt-=aEditArea.TopLeft();
+            long nHitTol = 2000;
+            OutputDevice* pRef = pTextEditOutliner->GetRefDevice();
+            if( pRef )
+                nHitTol = pRef->LogicToLogic( nHitTol, MAP_100TH_MM, pRef->GetMapMode().GetMapUnit() );
+
+            bOk = pTextEditOutliner->IsTextPos( aPnt, (sal_uInt16)nHitTol );
         }
     }
     return bOk;
@@ -1708,7 +1693,6 @@ bool SdrObjEditView::IsTextEditInSelectionMode() const
 
 bool SdrObjEditView::BegMacroObj(const Point& rPnt, short nTol, SdrObject* pObj, SdrPageView* pPV, Window* pWin)
 {
-    bool bRet=false;
     BrkMacroObj();
     if (pObj!=NULL && pPV!=NULL && pWin!=NULL && pObj->HasMacro()) {
         nTol=ImpGetHitTolLogic(nTol,NULL);
@@ -1720,7 +1704,7 @@ bool SdrObjEditView::BegMacroObj(const Point& rPnt, short nTol, SdrObject* pObj,
         aMacroDownPos=rPnt;
         MovMacroObj(rPnt);
     }
-    return bRet;
+    return false;
 }
 
 void SdrObjEditView::ImpMacroUp(const Point& rUpPos)
