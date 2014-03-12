@@ -533,7 +533,7 @@ sal_Bool SvXMLGraphicHelper::ImplWriteGraphic( const OUString& rPictureStorageNa
                 xProps->setPropertyValue( "MediaType", aAny );
             }
 
-            const sal_Bool bCompressed = aMimeType.isEmpty() || aMimeType == "image/tiff";
+            const sal_Bool bCompressed = aMimeType.isEmpty() || aMimeType == "image/tiff" || aMimeType == "image/svg+xml";
             aAny <<= bCompressed;
             xProps->setPropertyValue( "Compressed", aAny );
 
