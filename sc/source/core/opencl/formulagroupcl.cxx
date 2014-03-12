@@ -3423,7 +3423,8 @@ bool FormulaGroupInterpreterOpenCL::interpret( ScDocument& rDoc,
     const ScAddress& rTopPos, ScFormulaCellGroupRef& xGroup,
     ScTokenArray& rCode )
 {
-    DynamicKernel *pKernel;
+    DynamicKernel *pKernel = NULL;
+    boost::scoped_ptr<DynamicKernel> pLocalKernel;
 
     if (xGroup->meKernelState == sc::OpenCLKernelCompilationScheduled ||
         xGroup->meKernelState == sc::OpenCLKernelBinaryCreated)
@@ -3440,6 +3441,7 @@ bool FormulaGroupInterpreterOpenCL::interpret( ScDocument& rDoc,
     {
         assert(xGroup->meCalcState == sc::GroupCalcRunning);
         pKernel = static_cast<DynamicKernel*>(createCompiledFormula(rDoc, rTopPos, *xGroup, rCode));
+        pLocalKernel.reset(pKernel); // to be deleted when done.
     }
 
     if (!pKernel)
@@ -3465,8 +3467,6 @@ bool FormulaGroupInterpreterOpenCL::interpret( ScDocument& rDoc,
         err = clEnqueueUnmapMemObject(kEnv.mpkCmdQueue, res, resbuf, 0, NULL, NULL);
         if (err != CL_SUCCESS)
             throw OpenCLError(err);
-        if (xGroup->meCalcState == sc::GroupCalcRunning)
-            delete pKernel;
     }
     catch (const UnhandledToken &ut) {
         std::cerr << "\nDynamic formual compiler: unhandled token: ";
