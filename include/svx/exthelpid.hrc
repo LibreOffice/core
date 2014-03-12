@@ -26,6 +26,7 @@
 // are moved to this exported (delivered) hrc file
 
 // Help-Ids --------------------------------------------------------------
+#define HID_GALLERY_ACTUALIZE                     "SVX_HID_GALLERY_ACTUALIZE"
 #define HID_GALLERY_TITLE                         "SVX_HID_GALLERY_TITLE"
 
 #endif
