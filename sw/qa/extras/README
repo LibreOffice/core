@@ -15,6 +15,17 @@ document model: use the UNO API to retrieve properties, then use
 
 See below for more details on writing the UNO code see below.
 
+=== Direct XPath assertions on the layout dump
+
+In most cases you want to assert the document model, but sometimes asserting
+the layout is easier. If you want to do so, the `parseDump()` method can be
+used to.. parse the layout dump of the currently loaded document. If you want
+to have a look at the XML document that can be asserted, start soffice with the
+`SW_DEBUG=1` environment variable, load a document, press F12, and have a look
+at the `layout.xml` file in the current directory. Once you find the needed
+information in that file, you can write your XPath expression to turn that into
+a testcase.
+
 == Export tests
 
 Export tests are similar. Given that test documents are easier to provide in
