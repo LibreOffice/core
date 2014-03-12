@@ -38,23 +38,20 @@ SdTransferable* TransferableData::CreateTransferable (
     return pTransferable;
 }
 
-
-
-
 ::boost::shared_ptr<TransferableData> TransferableData::GetFromTransferable (const SdTransferable* pTransferable)
 {
-    ::boost::shared_ptr<TransferableData> pData;
-    for (sal_Int32 nIndex=0,nCount=pTransferable->GetUserDataCount(); nIndex<nCount; ++nIndex)
+    if (pTransferable)
     {
-        pData = ::boost::dynamic_pointer_cast<TransferableData>(pTransferable->GetUserData(nIndex));
-        if (pData)
-            return pData;
+        for (sal_Int32 nIndex=0,nCount=pTransferable->GetUserDataCount(); nIndex<nCount; ++nIndex)
+        {
+            ::boost::shared_ptr<TransferableData> xData =
+                ::boost::dynamic_pointer_cast<TransferableData>(pTransferable->GetUserData(nIndex));
+            if (xData)
+                return xData;
+        }
     }
     return ::boost::shared_ptr<TransferableData>();
 }
-
-
-
 
 TransferableData::TransferableData (
     SlideSorterViewShell* pViewShell,
