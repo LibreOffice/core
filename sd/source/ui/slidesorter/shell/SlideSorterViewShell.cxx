@@ -603,6 +603,8 @@ void SlideSorterViewShell::Activate (sal_Bool bIsMDIActivate)
 
 void SlideSorterViewShell::Deactivate (sal_Bool /*bIsMDIActivate*/)
 {
+    // Save Settings - Specifically SlidesPerRow to retrieve it later
+    WriteFrameViewData();
 }
 
 
