@@ -167,7 +167,10 @@ bool ScDBDocFunc::RenameDBRange( const OUString& rOld, const OUString& rNew )
         rDBs.erase(*pOld);
         bool bInserted = rDBs.insert(pNewData);
         if (!bInserted)                             // Fehler -> alten Zustand wiederherstellen
+        {
+            delete pNewData;
             pDoc->SetDBCollection(pUndoColl);       // gehoert dann dem Dokument
+        }
 
         pDoc->CompileDBFormula( false );            // CompileFormulaString
 

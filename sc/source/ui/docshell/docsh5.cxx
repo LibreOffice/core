@@ -17,6 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <cassert>
+
 #include "scitems.hxx"
 #include <vcl/msgbox.hxx>
 #include <vcl/waitobj.hxx>
@@ -274,7 +278,8 @@ ScDBData* ScDocShell::GetDBData( const ScRange& rMarked, ScGetDBMode eMode, ScGe
                 pNoNameData = new ScDBData( aNewName, nTab,
                                 nStartCol,nStartRow, nEndCol,nEndRow,
                                 true, bHasHeader );
-                rDBs.insert(pNoNameData);
+                bool ins = rDBs.insert(pNoNameData);
+                assert(ins); (void)ins;
             }
             else
             {

@@ -40,6 +40,7 @@
 #include <editeng/justifyitem.hxx>
 #include <svl/zforlist.hxx>
 #include <svl/PasswordHelper.hxx>
+#include <cassert>
 #include <stdio.h>
 #include <math.h>
 #include <string.h>
@@ -1394,7 +1395,9 @@ void Sc10Import::LoadDataBaseCollection()
                                     ( SCROW ) pOldData->DataBaseRec.Block.y2,
                                     true,
                                     ( sal_Bool) pOldData->DataBaseRec.RowHeader );
-        pDoc->GetDBCollection()->getNamedDBs().insert(pNewData);
+        bool ins = pDoc->GetDBCollection()->getNamedDBs().insert(pNewData);
+        assert(ins); (void)ins;
+            //TODO: or can this fail (and need delete pNewData)?
     }
 }
 

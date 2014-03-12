@@ -491,7 +491,10 @@ void ScXMLDatabaseRangeContext::EndElement()
         if (pData.get())
         {
             setAutoFilterFlags(*pDoc, *pData);
-            pDoc->GetDBCollection()->getNamedDBs().insert(pData.release());
+            if (pDoc->GetDBCollection()->getNamedDBs().insert(pData.get()))
+            {
+                pData.release();
+            }
         }
     }
 }

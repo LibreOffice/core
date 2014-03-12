@@ -177,7 +177,8 @@ public:
         const_iterator end() const;
         ScDBData* findByIndex(sal_uInt16 nIndex);
         ScDBData* findByUpperName(const OUString& rName);
-        bool insert(ScDBData* p);
+        // Takes ownership of p iff it returns true:
+        SAL_WARN_UNUSED_RESULT bool insert(ScDBData* p);
         void erase(iterator itr);
         void erase(const ScDBData& r);
         bool empty() const;

@@ -17,6 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <cassert>
+
 #include <comphelper/string.hxx>
 #include <vcl/msgbox.hxx>
 
@@ -469,7 +473,8 @@ IMPL_LINK_NOARG(ScDbNameDlg, AddBtnHdl)
                     pNewEntry->SetKeepFmt( m_pBtnKeepFmt->IsChecked() );
                     pNewEntry->SetStripData( m_pBtnStripData->IsChecked() );
 
-                    aLocalDbCol.getNamedDBs().insert(pNewEntry);
+                    bool ins = aLocalDbCol.getNamedDBs().insert(pNewEntry);
+                    assert(ins); (void)ins;
                 }
 
                 UpdateNames();

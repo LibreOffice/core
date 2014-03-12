@@ -17,6 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <cassert>
+
 #include "formulacell.hxx"
 #include "grouptokenconverter.hxx"
 
@@ -379,7 +383,8 @@ void adjustDBRange(ScToken* pToken, ScDocument& rNewDoc, const ScDocument* pOldD
     if (!pNewDBData)
     {
         pNewDBData = new ScDBData(*pDBData);
-        aNewNamedDBs.insert(pNewDBData);
+        bool ins = aNewNamedDBs.insert(pNewDBData);
+        assert(ins); (void)ins;
     }
     pToken->SetIndex(pNewDBData->GetIndex());
 }
