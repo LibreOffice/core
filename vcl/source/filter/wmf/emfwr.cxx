@@ -28,6 +28,7 @@
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 #include <vcl/lineinfo.hxx>
 #include <vcl/dibtools.hxx>
+#include <boost/scoped_array.hpp>
 
 #define WIN_EMR_POLYGON                     3
 #define WIN_EMR_POLYLINE                    4
@@ -878,21 +879,20 @@ void EMFWriter::ImplWriteTextRecord( const Point& rPos, const OUString rText, co
     if( nLen )
     {
         sal_uInt32  nNormWidth;
-        sal_Int32*  pOwnArray;
+        boost::scoped_array<sal_Int32> pOwnArray;
         sal_Int32*  pDX;
 
         // get text sizes
         if( pDXArray )
         {
-            pOwnArray = NULL;
             nNormWidth = maVDev.GetTextWidth( rText );
             pDX = (sal_Int32*) pDXArray;
         }
         else
         {
-            pOwnArray = new sal_Int32[ nLen ];
-            nNormWidth = maVDev.GetTextArray( rText, pOwnArray );
-            pDX = pOwnArray;
+            pOwnArray.reset(new sal_Int32[ nLen ]);
+            nNormWidth = maVDev.GetTextArray( rText, pOwnArray.get() );
+            pDX = pOwnArray.get();
         }
 
         if( nLen > 1 )
@@ -939,7 +939,6 @@ void EMFWriter::ImplWriteTextRecord( const Point& rPos, const OUString rText, co
         }
 
         ImplEndRecord();
-        delete[] pOwnArray;
     }
 }
 

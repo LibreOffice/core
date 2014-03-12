@@ -27,6 +27,7 @@
 #include <osl/endian.h>
 #include <vcl/svapp.hxx>
 #include <vcl/dibtools.hxx>
+#include <boost/scoped_array.hpp>
 
 // MS Windows defines
 
@@ -442,10 +443,10 @@ void WMFReader::ReadRecordParams( sal_uInt16 nFunc )
             pWMF->ReadUInt16( nLength );
             if ( nLength )
             {
-                char*   pChar = new char[ ( nLength + 1 ) &~ 1 ];
-                pWMF->Read( pChar, ( nLength + 1 ) &~ 1 );
-                OUString aText( pChar, nLength, pOut->GetCharSet() );
-                delete[] pChar;
+                boost::scoped_array<char> pChar(new char[ ( nLength + 1 ) &~ 1 ]);
+                pWMF->Read( pChar.get(), ( nLength + 1 ) &~ 1 );
+                OUString aText( pChar.get(), nLength, pOut->GetCharSet() );
+                pChar.reset();
                 Point aPosition( ReadYX() );
                 pOut->DrawText( aPosition, aText );
             }
@@ -458,7 +459,7 @@ void WMFReader::ReadRecordParams( sal_uInt16 nFunc )
             sal_Int32   nRecordPos, nRecordSize = 0, nOriginalTextLen, nNewTextLen;
             Point       aPosition;
             Rectangle   aRect;
-            sal_Int32*  pDXAry = NULL;
+            boost::scoped_array<sal_Int32> pDXAry;
 
             pWMF->SeekRel(-6);
             nRecordPos = pWMF->Tell();
@@ -483,11 +484,11 @@ void WMFReader::ReadRecordParams( sal_uInt16 nFunc )
                     const Point aPt2( ReadPoint() );
                     aRect = Rectangle( aPt1, aPt2 );
                 }
-                char* pChar = new char[ ( nOriginalTextLen + 1 ) &~ 1 ];
-                pWMF->Read( pChar, ( nOriginalTextLen + 1 ) &~ 1 );
-                OUString aText( pChar, (sal_uInt16)nOriginalTextLen, pOut->GetCharSet() );// after this conversion the text may contain
+                boost::scoped_array<char> pChar(new char[ ( nOriginalTextLen + 1 ) &~ 1 ]);
+                pWMF->Read( pChar.get(), ( nOriginalTextLen + 1 ) &~ 1 );
+                OUString aText( pChar.get(), (sal_uInt16)nOriginalTextLen, pOut->GetCharSet() );// after this conversion the text may contain
                 nNewTextLen = aText.getLength();                                          // less character (japanese version), so the
-                delete[] pChar;                                                         // dxAry will not fit
+                pChar.reset();                                                         // dxAry will not fit
 
                 if ( nNewTextLen )
                 {
@@ -500,7 +501,7 @@ void WMFReader::ReadRecordParams( sal_uInt16 nFunc )
                     {
                         sal_Int16 nDx = 0, nDxTmp = 0;
                         sal_uInt16 i; //needed just outside the for
-                        pDXAry = new sal_Int32[ nNewTextLen ];
+                        pDXAry.reset(new sal_Int32[ nNewTextLen ]);
                         for (i = 0; i < nNewTextLen; i++ )
                         {
                             if ( pWMF->Tell() >= nMaxStreamPos )
@@ -528,13 +529,11 @@ void WMFReader::ReadRecordParams( sal_uInt16 nFunc )
                             bUseDXAry = true;
                     }
                     if ( pDXAry && bUseDXAry )
-                        pOut->DrawText( aPosition, aText, pDXAry );
+                        pOut->DrawText( aPosition, aText, pDXAry.get() );
                     else
                         pOut->DrawText( aPosition, aText );
                 }
             }
-            delete[] pDXAry;
-
         }
         break;
 
@@ -939,7 +938,7 @@ void WMFReader::ReadRecordParams( sal_uInt16 nFunc )
 #else
                                 sal_uInt32 nCheckSum = rtl_crc32( 0, &nEsc, 4 );
 #endif
-                                sal_Int8* pData = NULL;
+                                boost::scoped_array<sal_Int8> pData;
 
                                 if ( ( static_cast< sal_uInt64 >( nEscLen ) + pWMF->Tell() ) > nMetaRecEndPos )
                                 {
@@ -948,9 +947,9 @@ void WMFReader::ReadRecordParams( sal_uInt16 nFunc )
                                 }
                                 if ( nEscLen > 0 )
                                 {
-                                    pData = new sal_Int8[ nEscLen ];
-                                    pWMF->Read( pData, nEscLen );
-                                    nCheckSum = rtl_crc32( nCheckSum, pData, nEscLen );
+                                    pData.reset(new sal_Int8[ nEscLen ]);
+                                    pWMF->Read( pData.get(), nEscLen );
+                                    nCheckSum = rtl_crc32( nCheckSum, pData.get(), nEscLen );
                                 }
                                 if ( nCheck == nCheckSum )
                                 {
@@ -964,9 +963,9 @@ void WMFReader::ReadRecordParams( sal_uInt16 nFunc )
                                                 Point  aPt;
                                                 OUString aString;
                                                 sal_uInt32  nStringLen, nDXCount;
-                                                sal_Int32* pDXAry = NULL;
+                                                boost::scoped_array<sal_Int32> pDXAry;
                                                 SvMemoryStream aMemoryStream( nEscLen );
-                                                aMemoryStream.Write( pData, nEscLen );
+                                                aMemoryStream.Write( pData.get(), nEscLen );
                                                 aMemoryStream.Seek( STREAM_SEEK_TO_BEGIN );
                                                 //#fdo39428 SvStream no longer supports operator>>(long&)
                                                 sal_Int32 nTmpX(0), nTmpY(0);
@@ -984,19 +983,17 @@ void WMFReader::ReadRecordParams( sal_uInt16 nFunc )
                                                     if ( ( static_cast< sal_uInt64 >( nDXCount ) * sizeof( sal_Int32 ) ) >= ( nEscLen - aMemoryStream.Tell() ) )
                                                         nDXCount = 0;
                                                     if ( nDXCount )
-                                                        pDXAry = new sal_Int32[ nDXCount ];
+                                                        pDXAry.reset(new sal_Int32[ nDXCount ]);
                                                     for  (sal_uInt32 i = 0; i < nDXCount; i++ )
                                                         aMemoryStream.ReadInt32( pDXAry[ i ] );
                                                     aMemoryStream.ReadUInt32( nSkipActions );
-                                                    pOut->DrawText( aPt, aString, pDXAry );
-                                                    delete[] pDXAry;
+                                                    pOut->DrawText( aPt, aString, pDXAry.get() );
                                                 }
                                             }
                                         }
                                         break;
                                     }
                                 }
-                                delete[] pData;
                             }
                         }
                     }
@@ -1037,11 +1034,10 @@ void WMFReader::ReadRecordParams( sal_uInt16 nFunc )
 
                             if( pEMFStream )
                             {
-                                sal_Int8* pBuf = new sal_Int8[ nCurRecSize ];
-                                sal_uInt32 nCount = pWMF->Read( pBuf, nCurRecSize );
+                                boost::scoped_array<sal_Int8> pBuf(new sal_Int8[ nCurRecSize ]);
+                                sal_uInt32 nCount = pWMF->Read( pBuf.get(), nCurRecSize );
                                 if( nCount == nCurRecSize )
-                                    pEMFStream->Write( pBuf, nCount );
-                                delete[] pBuf;
+                                    pEMFStream->Write( pBuf.get(), nCount );
                             }
                         }
                     }

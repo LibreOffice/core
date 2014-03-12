@@ -23,6 +23,7 @@
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <boost/bind.hpp>
 #include <vcl/dibtools.hxx>
+#include <boost/scoped_array.hpp>
 
 using namespace std;
 
@@ -373,7 +374,7 @@ void EnhWMFReader::ReadAndDrawPolyLine()
          ( static_cast< sal_uInt32 >( nPoly ) * sizeof(sal_uInt16) ) <= ( nEndPos - pWMF->Tell() )
        )
     {
-        sal_uInt16* pnPoints = new sal_uInt16[ nPoly ];
+        boost::scoped_array<sal_uInt16> pnPoints(new sal_uInt16[ nPoly ]);
         for ( i = 0; i < nPoly && pWMF->good(); i++ )
         {
             pWMF->ReadUInt32( nPoints );
@@ -385,7 +386,6 @@ void EnhWMFReader::ReadAndDrawPolyLine()
             Polygon aPolygon = ReadPolygon<T>(0, pnPoints[i]);
             pOut->DrawPolyLine( aPolygon, false, bRecordPath );
         }
-        delete[] pnPoints;
     }
 }
 
@@ -418,7 +418,7 @@ void EnhWMFReader::ReadAndDrawPolyPolygon()
         ( (  nPoly * sizeof( sal_uInt16 ) ) <= ( nEndPos - pWMF->Tell() ) ))
     {
         // Get number of points in each polygon
-        sal_uInt16 * pnPoints = new sal_uInt16[ nPoly ];
+        boost::scoped_array<sal_uInt16> pnPoints(new sal_uInt16[ nPoly ]);
         for (sal_uInt32 i = 0; i < nPoly && pWMF->good(); ++i)
         {
             sal_uInt32 nPoints(0);
@@ -432,7 +432,7 @@ void EnhWMFReader::ReadAndDrawPolyPolygon()
             for (sal_uInt32 i = 0; i < nPoly && pWMF->good(); ++i)
             {
                 const sal_uInt16 nPointCount(pnPoints[i]);
-                Point* pPtAry = new Point[nPointCount];
+                boost::scoped_array<Point> pPtAry(new Point[nPointCount]);
                 for (sal_uInt16 j = 0; j < nPointCount && pWMF->good(); ++j)
                 {
                     T nX(0), nY(0);
@@ -441,13 +441,11 @@ void EnhWMFReader::ReadAndDrawPolyPolygon()
                     ++nReadPoints;
                 }
 
-                aPolyPoly.Insert(Polygon(nPointCount, pPtAry));
-                delete[] pPtAry;
+                aPolyPoly.Insert(Polygon(nPointCount, pPtAry.get()));
             }
 
             pOut->DrawPolyPolygon( aPolyPoly, bRecordPath );
         }
-        delete[] pnPoints;
 
         OSL_ENSURE(nReadPoints == nGesPoints, "The number Points processed from EMR_POLYPOLYGON is unequal imported number (!)");
 
@@ -1284,10 +1282,10 @@ bool EnhWMFReader::ReadEnhWMF()
                         {
                             if ( nLen <= static_cast<sal_Int32>( nEndPos - pWMF->Tell() ) )
                             {
-                                sal_Char* pBuf = new sal_Char[ nLen ];
-                                pWMF->Read( pBuf, nLen );
-                                aText = OUString( pBuf, (sal_uInt16)nLen, pOut->GetCharSet() );
-                                delete[] pBuf;
+                                boost::scoped_array<sal_Char> pBuf(new sal_Char[ nLen ]);
+                                pWMF->Read( pBuf.get(), nLen );
+                                aText = OUString( pBuf.get(), (sal_uInt16)nLen, pOut->GetCharSet() );
+                                pBuf.reset();
 
                                 if ( aText.getLength() != nLen )
                                 {
@@ -1310,19 +1308,18 @@ bool EnhWMFReader::ReadEnhWMF()
                         {
                             if ( ( nLen * sizeof(sal_Unicode) ) <= ( nEndPos - pWMF->Tell() ) )
                             {
-                                sal_Unicode* pBuf = new sal_Unicode[ nLen ];
-                                pWMF->Read( pBuf, nLen << 1 );
+                                boost::scoped_array<sal_Unicode> pBuf(new sal_Unicode[ nLen ]);
+                                pWMF->Read( pBuf.get(), nLen << 1 );
 #ifdef OSL_BIGENDIAN
-                                sal_Char nTmp, *pTmp = (sal_Char*)( pBuf + nLen );
-                                while ( pTmp-- != (sal_Char*)pBuf )
+                                sal_Char nTmp, *pTmp = (sal_Char*)( pBuf.get() + nLen );
+                                while ( pTmp-- != (sal_Char*)pBuf.get() )
                                 {
                                     nTmp = *pTmp--;
                                     pTmp[ 1 ] = *pTmp;
                                     *pTmp = nTmp;
                                 }
 #endif
-                                aText = OUString(pBuf, nLen);
-                                delete[] pBuf;
+                                aText = OUString(pBuf.get(), nLen);
                             }
                         }
                         pOut->DrawText( aPos, aText, pDX, bRecordPath, nGfxMode );

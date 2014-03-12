@@ -34,6 +34,7 @@
 #include <vcl/metric.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <basegfx/polygon/b2dpolypolygon.hxx>
+#include <boost/scoped_array.hpp>
 
 // MS Windows defines
 
@@ -545,7 +546,7 @@ void WMFWriter::TrueExtTextOut( const Point & rPoint, const OUString & rString,
         pWMF->WriteUChar( (sal_uInt8)0 );
 
     sal_Int32 nOriginalTextLen = rString.getLength();
-    sal_Int16* pConvertedDXAry = new sal_Int16[ nOriginalTextLen ];
+    boost::scoped_array<sal_Int16> pConvertedDXAry(new sal_Int16[ nOriginalTextLen ]);
     sal_Int32 j = 0;
     pConvertedDXAry[ j++ ] = (sal_Int16)ScaleWidth( pDXAry[ 0 ] );
     for (sal_uInt16 i = 1; i < ( nOriginalTextLen - 1 ); ++i)
@@ -565,7 +566,7 @@ void WMFWriter::TrueExtTextOut( const Point & rPoint, const OUString & rString,
                 pWMF->WriteUInt16( (sal_uInt16)0 );
         }
     }
-    delete[] pConvertedDXAry;
+    pConvertedDXAry.reset();
     UpdateRecordHeader();
 }
 
@@ -1198,17 +1199,16 @@ void WMFWriter::WriteRecords( const GDIMetaFile & rMTF )
 
                     pVirDev->SetFont( aSrcFont );
                     nLen = aTemp.getLength();
-                    sal_Int32* pDXAry = nLen ? new sal_Int32[ nLen ] : NULL;
-                    nNormSize = pVirDev->GetTextArray( aTemp, pDXAry );
+                    boost::scoped_array<sal_Int32> pDXAry(nLen ? new sal_Int32[ nLen ] : NULL);
+                    nNormSize = pVirDev->GetTextArray( aTemp, pDXAry.get() );
                     for ( i = 0; i < ( nLen - 1 ); i++ )
                         pDXAry[ i ] = pDXAry[ i ] * (sal_Int32)pA->GetWidth() / nNormSize;
                     if ( ( nLen <= 1 ) || ( (sal_Int32)pA->GetWidth() == nNormSize ) )
-                        delete[] pDXAry, pDXAry = NULL;
+                        pDXAry.reset();
                     aSrcLineInfo = LineInfo();
                     SetAllAttr();
-                    if ( !WMFRecord_Escape_Unicode( pA->GetPoint(), aTemp, pDXAry ) )
-                        WMFRecord_ExtTextOut( pA->GetPoint(), aTemp, pDXAry );
-                    delete[] pDXAry;
+                    if ( !WMFRecord_Escape_Unicode( pA->GetPoint(), aTemp, pDXAry.get() ) )
+                        WMFRecord_ExtTextOut( pA->GetPoint(), aTemp, pDXAry.get() );
                 }
                 break;
 

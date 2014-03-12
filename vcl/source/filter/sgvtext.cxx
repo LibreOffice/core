@@ -28,6 +28,7 @@
 #include "sgffilt.hxx"
 #include "sgfbram.hxx"
 #include "sgvmain.hxx"
+#include <boost/scoped_array.hpp>
 
 extern SgfFontLst* pSgfFonts;
 
@@ -906,8 +907,8 @@ void TextType::Draw(OutputDevice& rOut)
     bool   Ende = false;
     sal_uInt16 lc;
     bool   TextFit;
-    short* xLine;
-    UCHAR* cLine;   // Buffer for FormatLine
+    boost::scoped_array<short> xLine;
+    boost::scoped_array<UCHAR> cLine;   // Buffer for FormatLine
     sal_uInt16 FitXMul;
     sal_uInt16 FitXDiv;
     sal_uInt16 FitYMul;
@@ -916,8 +917,8 @@ void TextType::Draw(OutputDevice& rOut)
     UCHAR* Buf=Buffer; // pointer to the letters
 
     pSgfFonts->ReadList();
-    xLine=new short[ChrXPosArrSize];
-    cLine=new UCHAR[CharLineSize];
+    xLine.reset(new short[ChrXPosArrSize]);
+    cLine.reset(new UCHAR[CharLineSize]);
 
     TextFit=(Flags & TextFitBits)!=0;
     bool LineFit=((Flags & TextFitZBit)!=0);  // FitSize.x=0? or flags -> strech each line
@@ -951,7 +952,7 @@ void TextType::Draw(OutputDevice& rOut)
 
     do {
         T2=T1; Index2=Index1;
-        FormatLine(Buf,Index2,T,T2,xSize,xSAdj,xLine,l,sn,cs,cLine,LineFit);
+        FormatLine(Buf,Index2,T,T2,xSize,xSAdj,xLine.get(),l,sn,cs,cLine.get(),LineFit);
         Fehler=(Index2==Index1);
         if (!Fehler) {
             lc=GetLineFeed(Buf,Index1,T,T1,l,LF,MaxGrad);
@@ -996,8 +997,6 @@ void TextType::Draw(OutputDevice& rOut)
             } // if ObjMin.y+yPos<=Obj_Max.y
         } // if !Fehler
     } while (c!=TextEnd && !Ende && !Fehler);
-    delete[] cLine;
-    delete[] xLine;
 }
 
 // End of DrawText.Pas

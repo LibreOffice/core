@@ -22,6 +22,7 @@
 
 
 #include <tools/poly.hxx>
+#include <boost/scoped_array.hpp>
 
 extern "C" {
 
@@ -418,17 +419,17 @@ sal_uInt16 NaturalSpline(sal_uInt16 n, double* x, double* y,
                      double* b, double* c, double* d)
 {
     sal_uInt16  i;
-    double* a;
-    double* h;
+    boost::scoped_array<double> a;
+    boost::scoped_array<double> h;
     sal_uInt16  error;
 
     if (n<2) return 1;
     if ( (MargCond & ~3) ) return 2;
-    a=new double[n+1];
-    h=new double[n+1];
+    a.reset(new double[n+1]);
+    h.reset(new double[n+1]);
     for (i=0;i<n;i++) {
         h[i]=x[i+1]-x[i];
-        if (h[i]<=0.0) { delete[] a; delete[] h; return 1; }
+        if (h[i]<=0.0) return 1;
     }
     for (i=0;i<n-1;i++) {
         a[i]=3.0*((y[i+2]-y[i+1])/h[i+1]-(y[i+1]-y[i])/h[i]);
@@ -470,8 +471,8 @@ sal_uInt16 NaturalSpline(sal_uInt16 n, double* x, double* y,
     if (n==2) {
         c[1]=a[0]/d[0];
     } else {
-        error=TriDiagGS(false,n-1,b,d,c,a);
-        if (error!=0) { delete[] a; delete[] h; return error+2; }
+        error=TriDiagGS(false,n-1,b,d,c,a.get());
+        if (error!=0) return error+2;
         for (i=0;i<n-1;i++) c[i+1]=a[i];
     }
     switch (MargCond) {
@@ -503,8 +504,6 @@ sal_uInt16 NaturalSpline(sal_uInt16 n, double* x, double* y,
         b[i]=(y[i+1]-y[i])/h[i]-h[i]*(c[i+1]+2.0*c[i])/3.0;
         d[i]=(c[i+1]-c[i])/(3.0*h[i]);
     }
-    delete[] a;
-    delete[] h;
     return 0;
 }
 
@@ -525,18 +524,18 @@ sal_uInt16 PeriodicSpline(sal_uInt16 n, double* x, double* y,
     sal_uInt16  Error;
     sal_uInt16  i,im1,nm1; //integer
     double  hr,hl;
-    double* a;
-    double* lowrow;
-    double* ricol;
+    boost::scoped_array<double> a;
+    boost::scoped_array<double> lowrow;
+    boost::scoped_array<double> ricol;
 
     if (n<2) return 4;
     nm1=n-1;
     for (i=0;i<=nm1;i++) if (x[i+1]<=x[i]) return 2; // should be strictly monotonically decreasing!
     if (y[n]!=y[0]) return 3; // begin and end should be equal!
 
-    a     =new double[n+1];
-    lowrow=new double[n+1];
-    ricol =new double[n+1];
+    a.reset(new double[n+1]);
+    lowrow.reset(new double[n+1]);
+    ricol.reset(new double[n+1]);
 
     if (n==2) {
         c[1]=3.0*((y[2]-y[1])/(x[2]-x[1]));
@@ -560,12 +559,9 @@ sal_uInt16 PeriodicSpline(sal_uInt16 n, double* x, double* y,
         lowrow[0]=hr;
         ricol[0]=hr;
         a[nm1]=3.0*((y[1]-y[0])/hr-(y[n]-y[nm1])/hl);
-        Error=ZyklTriDiagGS(false,n,b,d,c,lowrow,ricol,a);
+        Error=ZyklTriDiagGS(false,n,b,d,c,lowrow.get(),ricol.get(),a.get());
         if ( Error != 0 )
         {
-            delete[] a;
-            delete[] lowrow;
-            delete[] ricol;
             return(Error+4);
         }
         for (i=0;i<=nm1;i++) c[i+1]=a[i];
@@ -577,9 +573,6 @@ sal_uInt16 PeriodicSpline(sal_uInt16 n, double* x, double* y,
         b[i]=b[i]-hl*(c[i+1]+2.0*c[i])/3.0;
         d[i]=(c[i+1]-c[i])/hl/3.0;
     }
-    delete[] a;
-    delete[] lowrow;
-    delete[] ricol;
     return 0;
 }
 

@@ -26,6 +26,7 @@
 #include <vcl/virdev.hxx>
 #include "sgffilt.hxx"
 #include "sgfbram.hxx"
+#include <boost/scoped_array.hpp>
 
 SgfHeader::SgfHeader()
 {
@@ -209,7 +210,7 @@ bool SgfFilterBMap(SvStream& rInp, SvStream& rOut, SgfHeader& rHead, SgfEntry&)
     sal_uInt16         i,j,k;              // column/row/plane counter
     sal_uInt16         a,b;                // helper variables
     sal_uInt8           pl1 = 0;            // masks for the planes
-    sal_uInt8*          pBuf=NULL;          // buffer for a pixel row
+    boost::scoped_array<sal_uInt8> pBuf;   // buffer for a pixel row
     PcxExpand      aPcx;
     sal_uLong          nOfs;
     sal_uInt8           cRGB[4];
@@ -233,11 +234,11 @@ bool SgfFilterBMap(SvStream& rInp, SvStream& rOut, SgfHeader& rHead, SgfEntry&)
     aBmpInfo.yDpmm=0;
     aBmpInfo.ColUsed=0;
     aBmpInfo.ColMust=0;
-    pBuf=new sal_uInt8[nWdtOut];
+    pBuf.reset(new sal_uInt8[nWdtOut]);
     if (!pBuf) return false;       // error: no more memory available
     WriteBmpFileHeader( rOut, aBmpHead );
     WriteBmpInfoHeader( rOut, aBmpInfo );
-    memset(pBuf,0,nWdtOut);        // fill buffer with zeroes
+    memset(pBuf.get(),0,nWdtOut);        // fill buffer with zeroes
 
     if (nColors==2)
     {
@@ -246,14 +247,14 @@ bool SgfFilterBMap(SvStream& rInp, SvStream& rOut, SgfHeader& rHead, SgfEntry&)
         WriteRGBQuad( rOut, RGBQuad(0xFF,0xFF,0xFF) ); // white
         nOfs=rOut.Tell();
         for (j=0;j<rHead.Ysize;j++)
-            rOut.Write((char*)pBuf,nWdtOut);  // fill file with zeroes
+            rOut.Write((char*)pBuf.get(),nWdtOut);  // fill file with zeroes
         for (j=0;j<rHead.Ysize;j++) {
             for(i=0;i<nWdtInp;i++) {
                 pBuf[i]=aPcx.GetByte(rInp);
             }
             for(i=nWdtInp;i<nWdtOut;i++) pBuf[i]=0;     // up to 3 bytes
             rOut.Seek(nOfs+((sal_uLong)rHead.Ysize-j-1L)*(sal_uLong)nWdtOut); // write backwards
-            rOut.Write((char*)pBuf,nWdtOut);
+            rOut.Write((char*)pBuf.get(),nWdtOut);
         }
     } else if (nColors==16) {
         sal_uInt8 pl2= 0;     // planes' masks
@@ -277,9 +278,9 @@ bool SgfFilterBMap(SvStream& rInp, SvStream& rOut, SgfHeader& rHead, SgfEntry&)
 
         nOfs=rOut.Tell();
         for (j=0;j<rHead.Ysize;j++)
-            rOut.Write((char*)pBuf,nWdtOut);  // fill file with zeroes
+            rOut.Write((char*)pBuf.get(),nWdtOut);  // fill file with zeroes
         for (j=0;j<rHead.Ysize;j++) {
-            memset(pBuf,0,nWdtOut);
+            memset(pBuf.get(),0,nWdtOut);
             for(k=0;k<4;k++) {
                 if (k==0) {
                     pl1=0x10; pl2=0x01;
@@ -301,7 +302,7 @@ bool SgfFilterBMap(SvStream& rInp, SvStream& rOut, SgfHeader& rHead, SgfEntry&)
             }
             for(i=nWdtInp*4;i<nWdtOut;i++) pBuf[i]=0;            // up to 3 bytes
             rOut.Seek(nOfs+((sal_uLong)rHead.Ysize-j-1L)*(sal_uLong)nWdtOut); // write backwards
-            rOut.Write((char*)pBuf,nWdtOut);
+            rOut.Write((char*)pBuf.get(),nWdtOut);
         }
     } else if (nColors==256) {
         cRGB[3]=0;                      // fourth palette entry for BMP
@@ -315,16 +316,15 @@ bool SgfFilterBMap(SvStream& rInp, SvStream& rOut, SgfHeader& rHead, SgfEntry&)
 
         nOfs=rOut.Tell();
         for (j=0;j<rHead.Ysize;j++)
-            rOut.Write((char*)pBuf,nWdtOut);  // fill file with zeroes
+            rOut.Write((char*)pBuf.get(),nWdtOut);  // fill file with zeroes
         for (j=0;j<rHead.Ysize;j++) {
             for(i=0;i<rHead.Xsize;i++)
                 pBuf[i]=aPcx.GetByte(rInp);
             for(i=rHead.Xsize;i<nWdtOut;i++) pBuf[i]=0;          // up to 3 bytes
             rOut.Seek(nOfs+((sal_uLong)rHead.Ysize-j-1L)*(sal_uLong)nWdtOut); // write backwards
-            rOut.Write((char*)pBuf,nWdtOut);
+            rOut.Write((char*)pBuf.get(),nWdtOut);
         }
     }
-    delete[] pBuf;
     return true;
 }
 
