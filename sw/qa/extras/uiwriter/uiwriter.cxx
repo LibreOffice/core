@@ -23,11 +23,13 @@ public:
     //EDITING: undo search&replace corrupt text when searching backward
     void testReplaceBackward();
     void testFdo69893();
+    void testFdo75110();
 
     CPPUNIT_TEST_SUITE(SwUiWriterTest);
     CPPUNIT_TEST(testReplaceForward);
     CPPUNIT_TEST(testReplaceBackward);
     CPPUNIT_TEST(testFdo69893);
+    CPPUNIT_TEST(testFdo75110);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -76,6 +78,19 @@ void SwUiWriterTest::testReplaceForward()
     rUndoManager.Undo();
 
     CPPUNIT_ASSERT_EQUAL(ORIGINAL_REPLACE_CONTENT, pTxtNode->GetTxt());
+}
+
+void SwUiWriterTest::testFdo75110()
+{
+    SwDoc* pDoc = createDoc("fdo75110.odt");
+    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+
+    pWrtShell->SelAll();
+    // The problem was that SwEditShell::DeleteSel() what this Delete() invokes took the wrong selection...
+    pWrtShell->Delete();
+    sw::UndoManager& rUndoManager = pDoc->GetUndoManager();
+    // ... so this Undo() call resulted in a crash.
+    rUndoManager.Undo();
 }
 
 void SwUiWriterTest::testReplaceBackward()
