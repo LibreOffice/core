@@ -1963,6 +1963,14 @@ DECLARE_OOXMLIMPORT_TEST(testI124106, "i124106.docx")
     CPPUNIT_ASSERT_EQUAL(1, getPages());
 }
 
+DECLARE_OOXMLIMPORT_TEST(testLargeTwips, "large-twips.docx" )
+{
+    // cp#1000043: MSO seems to ignore large twips values, we didn't, which resulted in different
+    // layout of broken documents (text not visible in this specific document).
+    OUString width = parseDump( "/root/page/body/tab/row[1]/cell[1]/txt/infos/bounds", "width" );
+    CPPUNIT_ASSERT( width.toInt32() > 0 );
+}
+
 #endif
 
 CPPUNIT_PLUGIN_IMPLEMENT();
