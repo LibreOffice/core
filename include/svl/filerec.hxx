@@ -328,8 +328,13 @@ protected:
     sal_uInt8               _nRecordVer;    // Version des Gesamt-Inhalts
     sal_uInt8               _nRecordType;   // Record Type aus dem Header
 
-                        // Drei-Phasen-Ctor f"ur Subklassen
-                        SfxSingleRecordReader() {}
+    // Drei-Phasen-Ctor f"ur Subklassen
+    SfxSingleRecordReader()
+        : _nRecordTag(0)
+        , _nRecordVer(0)
+        , _nRecordType(0)
+    {
+    }
     void                Construct_Impl( SvStream *pStream )
                         {
                             SfxMiniRecordReader::Construct_Impl(
