@@ -529,18 +529,16 @@ bool SlideSorter::RelocateToWindow (::Window* pParentWindow)
 
     ReleaseListeners();
 
-    Window *pParentWindow;
+    ::Window *pNewWindow = NULL;
     if (mpViewShell)
     {
         mpViewShell->ViewShell::RelocateToParentWindow(pParentWindow);
-        pParentWindow = mpViewShell->GetParentWindow();
-    }
+        pNewWindow = mpViewShell->GetParentWindow();
     else
-    {
-        pParentWindow = NULL;
+        pNewWindow = NULL;
     }
 
-    SetupControls(pParentWindow);
+    SetupControls(pNewWindow);
     SetupListeners();
 
     // For accessibility we have to shortly hide the content window.  This
