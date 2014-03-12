@@ -2710,6 +2710,15 @@ DECLARE_OOXMLEXPORT_TEST(testDateControl, "date-control.docx")
     CPPUNIT_ASSERT_EQUAL(sal_Int32(2014), sal_Int32(aDate.Year));
 }
 
+DECLARE_OOXMLEXPORT_TEST(test_OpeningBrace, "2120112713_OpenBrace.docx")
+{
+    xmlDocPtr pXmlDoc = parseExport("word/document.xml");
+    if (!pXmlDoc)
+        return;
+    // Checking for OpeningBrace tag
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/m:oMath[1]/m:d[1]/m:dPr[1]/m:begChr[1]","val","");
+}
+
 DECLARE_OOXMLEXPORT_TEST(testComboBoxControl, "combobox-control.docx")
 {
     // check XML
@@ -2742,6 +2751,15 @@ DECLARE_OOXMLEXPORT_TEST(testOLEObjectinHeader, "2129393649.docx")
         return;
 
     assertXPath(pXmlDoc,"/rels:Relationships/rels:Relationship[1]","Id","rId1");
+}
+
+DECLARE_OOXMLEXPORT_TEST(test_ClosingBrace, "2120112713.docx")
+{
+    xmlDocPtr pXmlDoc = parseExport("word/document.xml");
+    if (!pXmlDoc)
+        return;
+    // Checking for ClosingBrace tag
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/m:oMath[1]/m:d[2]/m:dPr[1]/m:endChr[1]","val","");
 }
 
 DECLARE_OOXMLEXPORT_TEST(testlvlPicBulletId, "lvlPicBulletId.docx")

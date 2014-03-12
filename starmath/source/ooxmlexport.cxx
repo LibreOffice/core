@@ -453,8 +453,15 @@ void SmOoxmlExport::HandleBrace( const SmBraceNode* pNode, int nLevel )
 {
     m_pSerializer->startElementNS( XML_m, XML_d, FSEND );
     m_pSerializer->startElementNS( XML_m, XML_dPr, FSEND );
-    m_pSerializer->singleElementNS( XML_m, XML_begChr,
-        FSNS( XML_m, XML_val ), mathSymbolToString( pNode->OpeningBrace()).getStr(), FSEND );
+
+    //check if the node has an opening brace
+    if( TNONE == pNode->GetSubNode(0)->GetToken().eType )
+        m_pSerializer->singleElementNS( XML_m, XML_begChr,
+            FSNS( XML_m, XML_val ), "", FSEND );
+    else
+        m_pSerializer->singleElementNS( XML_m, XML_begChr,
+            FSNS( XML_m, XML_val ), mathSymbolToString( pNode->OpeningBrace()).getStr(), FSEND );
+
     std::vector< const SmNode* > subnodes;
     if( pNode->Body()->GetType() == NBRACEBODY )
     {
@@ -479,8 +486,14 @@ void SmOoxmlExport::HandleBrace( const SmBraceNode* pNode, int nLevel )
     }
     else
         subnodes.push_back( pNode->Body());
-    m_pSerializer->singleElementNS( XML_m, XML_endChr,
-        FSNS( XML_m, XML_val ), mathSymbolToString( pNode->ClosingBrace()).getStr(), FSEND );
+
+    if( TNONE == pNode->GetSubNode(2)->GetToken().eType )
+        m_pSerializer->singleElementNS( XML_m, XML_endChr,
+            FSNS( XML_m, XML_val ), "", FSEND );
+    else
+        m_pSerializer->singleElementNS( XML_m, XML_endChr,
+            FSNS( XML_m, XML_val ), mathSymbolToString( pNode->ClosingBrace()).getStr(), FSEND );
+
     m_pSerializer->endElementNS( XML_m, XML_dPr );
     for( unsigned int i = 0; i < subnodes.size(); ++i )
     {
