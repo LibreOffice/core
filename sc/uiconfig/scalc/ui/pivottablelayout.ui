@@ -538,7 +538,7 @@
               <object class="GtkLabel" id="page_text">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">Page Fields</property>
+                <property name="label" translatable="yes">_Page Fields</property>
                 <property name="use_underline">True</property>
                 <property name="mnemonic_widget">pagefield</property>
               </object>
@@ -552,7 +552,7 @@
               <object class="GtkLabel" id="column_text">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">Column Fields</property>
+                <property name="label" translatable="yes">_Column Fields</property>
                 <property name="use_underline">True</property>
                 <property name="mnemonic_widget">columnfield</property>
               </object>
@@ -566,7 +566,7 @@
               <object class="GtkLabel" id="row_text">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">Row Fields</property>
+                <property name="label" translatable="yes">_Row Fields</property>
                 <property name="use_underline">True</property>
                 <property name="mnemonic_widget">rowfield</property>
               </object>
@@ -580,7 +580,7 @@
               <object class="GtkLabel" id="data_text">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">Data Fields</property>
+                <property name="label" translatable="yes">_Data Fields</property>
                 <property name="use_underline">True</property>
                 <property name="mnemonic_widget">datafield</property>
               </object>
