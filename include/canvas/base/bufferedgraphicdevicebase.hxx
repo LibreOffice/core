@@ -94,14 +94,14 @@ namespace canvas
         }
 
         // XGraphicDevice
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XBufferController > SAL_CALL getBufferController(  ) throw (::com::sun::star::uno::RuntimeException)
+        virtual ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XBufferController > SAL_CALL getBufferController(  ) throw (::com::sun::star::uno::RuntimeException) SAL_OVERRIDE
         {
             return this;
         }
 
         // XBufferController
         virtual ::sal_Int32 SAL_CALL createBuffers( ::sal_Int32 nBuffers ) throw (::com::sun::star::lang::IllegalArgumentException,
-                                                                                  ::com::sun::star::uno::RuntimeException)
+                                                                                  ::com::sun::star::uno::RuntimeException) SAL_OVERRIDE
         {
             tools::verifyRange( nBuffers, (sal_Int32)1 );
 
@@ -110,7 +110,7 @@ namespace canvas
             return BaseType::maDeviceHelper.createBuffers( nBuffers );
         }
 
-        virtual void SAL_CALL destroyBuffers(  ) throw (::com::sun::star::uno::RuntimeException)
+        virtual void SAL_CALL destroyBuffers(  ) throw (::com::sun::star::uno::RuntimeException) SAL_OVERRIDE
         {
             MutexType aGuard( BaseType::m_aMutex );
 
@@ -119,14 +119,14 @@ namespace canvas
 
         virtual ::sal_Bool SAL_CALL showBuffer( ::sal_Bool bUpdateAll )
             throw (::com::sun::star::uno::RuntimeException,
-                   std::exception)
+                   std::exception) SAL_OVERRIDE
         {
             MutexType aGuard( BaseType::m_aMutex );
 
             return BaseType::maDeviceHelper.showBuffer( mbIsVisible, bUpdateAll );
         }
 
-        virtual ::sal_Bool SAL_CALL switchBuffer( ::sal_Bool bUpdateAll ) throw (::com::sun::star::uno::RuntimeException)
+        virtual ::sal_Bool SAL_CALL switchBuffer( ::sal_Bool bUpdateAll ) throw (::com::sun::star::uno::RuntimeException) SAL_OVERRIDE
         {
             MutexType aGuard( BaseType::m_aMutex );
 
@@ -234,24 +234,24 @@ namespace canvas
             BaseType::disposeEventSource(Source);
         }
 
-        virtual void SAL_CALL windowResized( const ::com::sun::star::awt::WindowEvent& e ) throw (::com::sun::star::uno::RuntimeException)
+        virtual void SAL_CALL windowResized( const ::com::sun::star::awt::WindowEvent& e ) throw (::com::sun::star::uno::RuntimeException) SAL_OVERRIDE
         {
             boundsChanged( e );
         }
 
-        virtual void SAL_CALL windowMoved( const ::com::sun::star::awt::WindowEvent& e ) throw (::com::sun::star::uno::RuntimeException)
+        virtual void SAL_CALL windowMoved( const ::com::sun::star::awt::WindowEvent& e ) throw (::com::sun::star::uno::RuntimeException) SAL_OVERRIDE
         {
             boundsChanged( e );
         }
 
-        virtual void SAL_CALL windowShown( const ::com::sun::star::lang::EventObject& ) throw (::com::sun::star::uno::RuntimeException)
+        virtual void SAL_CALL windowShown( const ::com::sun::star::lang::EventObject& ) throw (::com::sun::star::uno::RuntimeException) SAL_OVERRIDE
         {
             typename BaseType::MutexType aGuard( BaseType::m_aMutex );
 
             mbIsVisible = true;
         }
 
-        virtual void SAL_CALL windowHidden( const ::com::sun::star::lang::EventObject& ) throw (::com::sun::star::uno::RuntimeException)
+        virtual void SAL_CALL windowHidden( const ::com::sun::star::lang::EventObject& ) throw (::com::sun::star::uno::RuntimeException) SAL_OVERRIDE
         {
             typename BaseType::MutexType aGuard( BaseType::m_aMutex );
 
