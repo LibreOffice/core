@@ -34,6 +34,24 @@
       "revId": "1d014e94e083b1efc57f86f38d23dab9ef38a0b8",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a930d6b_943e6a28",
+        "filename": "sw/inc/fldbas.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 290,
+      "author": {
+        "id": 1000531
+      },
+      "writtenOn": "2014-03-12T16:13:22Z",
+      "side": 1,
+      "message": "I want to use same function while export for CITATION field.\n \n1. For Citation field text.\n2. Text for which CITATION is applied.\n\nCheck https://gerrit.libreoffice.org/#/c/8473/2/sw/source/core/fields/authfld.cxx,cm\nFunction : OUString SwAuthorityField::Expand() const\nIn which I am using AUTH_FIELD_IDENTIFIER for Citation field text and AUTH_FIELD_TITLE for Text for which CITATION is applied.\n\nSo we are not able to set at the time of import.\nCan I pass enum ToxAuthorityField as argument to expand function with default value as a AUTH_FIELD_IDENTIFIER?",
+      "parentUuid": "1a930d6b_54fec26c",
+      "revId": "1d014e94e083b1efc57f86f38d23dab9ef38a0b8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
