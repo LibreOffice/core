@@ -106,7 +106,7 @@ public:
 
     /** Create a virtual device using an existing system dependent device or graphics context
         Any rendering will happen directly on the context and not on any intermediate bitmap.
-        Note: This might not be suported on all platforms !
+        Note: This might not be supported on all platforms !
     */
     explicit            VirtualDevice( const SystemGraphicsData *pData, sal_uInt16 nBitCount );
 

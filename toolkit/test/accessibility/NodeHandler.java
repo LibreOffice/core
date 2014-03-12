@@ -139,7 +139,7 @@ abstract class NodeHandler
     //    public void setChild(Object aObject, int nIndex) { }
 
 
-    /** get names of suported actions */
+    /** get names of supported actions */
     public String[] getActions (AccessibleTreeNode aNode)
     {
         return new String[] {};

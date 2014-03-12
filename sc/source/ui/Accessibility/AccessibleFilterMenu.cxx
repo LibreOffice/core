@@ -209,7 +209,7 @@ void ScAccessibleFilterMenu::clearAccessibleSelection() throw (RuntimeException,
 
 void ScAccessibleFilterMenu::selectAllAccessibleChildren() throw (RuntimeException, std::exception)
 {
-    // not suported - this is a menu, you can't select all menu items.
+    // not supported - this is a menu, you can't select all menu items.
 }
 
 sal_Int32 ScAccessibleFilterMenu::getSelectedAccessibleChildCount() throw (RuntimeException, std::exception)

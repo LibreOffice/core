@@ -36,7 +36,7 @@ module com {  module sun {  module star {  module lang {
 
     <p>The com::sun::star::container::XContentEnumerationAccess
     interface can be supported optionally.
-    If it is suported, it is possible to  enumerate all implementations that
+    If it is supported, it is possible to  enumerate all implementations that
     support the service specified with the argument of
     com::sun::star::container::XContentEnumerationAccess::createContentEnumeration().
     The enumerator returns interfaces. The type of the interface is not specified.

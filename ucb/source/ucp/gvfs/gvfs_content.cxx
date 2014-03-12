@@ -406,7 +406,7 @@ uno::Any SAL_CALL Content::execute(
 
         transfer( transferArgs, xEnv );
 
-    } else { // Unsuported
+    } else { // Unsupported
 #ifdef DEBUG
         g_warning( "Unsupported command: '%s'",
                OUStringToGnome( aCommand.Name ) );

@@ -197,7 +197,7 @@ public class JavaLoader implements XImplementationLoader,
     /**
      * Verifies if a given service is supported by the component.
      * <p>
-     * @return      true,if service is suported - otherwise false
+     * @return      true,if service is supported - otherwise false
      * @param       serviceName     the name of the service that should be checked
      * @see         com.sun.star.lang.XServiceInfo
      */

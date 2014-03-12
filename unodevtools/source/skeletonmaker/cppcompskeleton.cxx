@@ -1115,7 +1115,7 @@ void generateCalcAddin(ProgramOptions const & options,
     }
 
     // if backwardcompatible==true the AddIn service needs to be added to the
-    // suported service list, the necessary intefaces are mapped to the add-in
+    // supported service list, the necessary intefaces are mapped to the add-in
     // configuration. Since OO.org 2.0.4 this is obsolete and the add-in is
     // take form the configuration from Calc directly, this simplifies the
     // add-in code

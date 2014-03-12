@@ -272,7 +272,7 @@ css::uno::Reference< css::uno::XInterface > ServiceHandler::implts_dispatch( con
 void SAL_CALL ServiceHandler::addStatusListener( const css::uno::Reference< css::frame::XStatusListener >& /*xListener*/ ,
                                                  const css::util::URL&                                     /*aURL*/      ) throw( css::uno::RuntimeException, std::exception )
 {
-    // not suported yet
+    // not supported yet
 }
 
 
@@ -280,7 +280,7 @@ void SAL_CALL ServiceHandler::addStatusListener( const css::uno::Reference< css:
 void SAL_CALL ServiceHandler::removeStatusListener( const css::uno::Reference< css::frame::XStatusListener >& /*xListener*/ ,
                                                     const css::util::URL&                                     /*aURL*/      ) throw( css::uno::RuntimeException, std::exception )
 {
-    // not suported yet
+    // not supported yet
 }
 
 }       //  namespace framework

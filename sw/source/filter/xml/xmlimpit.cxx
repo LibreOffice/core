@@ -198,7 +198,7 @@ SvXMLImportItemMapper::handleSpecialItem(  const SvXMLItemMapEntry& /*rEntry*/,
                                             const SvXMLUnitConverter& /*rUnitConverter*/,
                                             const SvXMLNamespaceMap& /*rNamespaceMap*/ )
 {
-    OSL_FAIL( "unsuported special item in xml import" );
+    OSL_FAIL( "unsupported special item in xml import" );
     return false;
 }
 
@@ -210,7 +210,7 @@ bool SvXMLImportItemMapper::handleNoItem( const SvXMLItemMapEntry& /*rEntry*/,
                                            const SvXMLUnitConverter& /*rUnitConverter*/,
                                            const SvXMLNamespaceMap& /*rNamespaceMap*/ )
 {
-    OSL_FAIL( "unsuported no item in xml import" );
+    OSL_FAIL( "unsupported no item in xml import" );
     return false;
 }
 
