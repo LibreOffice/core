@@ -42,6 +42,7 @@ public:
         sal_uInt16 nId,
         SfxBindings* pBindings,
         SfxChildWinInfo* pInfo);
+    virtual ~SidebarChildWindow (void);
 
     SFX_DECL_CHILDWINDOW(SidebarChildWindow);
 

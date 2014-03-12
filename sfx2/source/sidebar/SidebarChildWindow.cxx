@@ -64,6 +64,13 @@ SidebarChildWindow::SidebarChildWindow (
 
 
 
+SidebarChildWindow::~SidebarChildWindow (void)
+{
+}
+
+
+
+
 sal_Int32 SidebarChildWindow::GetDefaultWidth (Window* pWindow)
 {
     if (pWindow != NULL)

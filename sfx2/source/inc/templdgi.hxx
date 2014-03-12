@@ -243,7 +243,7 @@ public:
 
     SfxCommonTemplateDialog_Impl( SfxBindings* pB, Window*, bool );
     SfxCommonTemplateDialog_Impl( SfxBindings* pB, Window* );
-    ~SfxCommonTemplateDialog_Impl();
+    virtual ~SfxCommonTemplateDialog_Impl();
 
     DECL_LINK( MenuSelectHdl, Menu * );
 

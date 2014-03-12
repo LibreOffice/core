@@ -1849,16 +1849,36 @@ sal_Bool SfxCommonTemplateDialog_Impl::Execute_Impl(
 
     pItems[ nCount++ ] = 0;
 
+    // This unbelievably crude technique is used to detect and handle
+    // destruction of this during the synchronous slot call: store a
+    // pointer to a local bool, initialize it to false and set that it
+    // to true in the destructor.
     Deleted aDeleted;
     pbDeleted = &aDeleted;
+
     sal_uInt16 nModi = pModifier ? *pModifier : 0;
     const SfxPoolItem* pItem = rDispatcher.Execute(
         nId, SFX_CALLMODE_SYNCHRON | SFX_CALLMODE_RECORD | SFX_CALLMODE_MODAL,
         pItems, nModi );
 
     // FIXME: Dialog can be destroyed while in Execute() check stack variable for dtor flag!
-    if ( !pItem || aDeleted() )
+    if (aDeleted())
+    {
+        // this has been deleted in the previous synchronous slot
+        // call.  Exit without touching anything.
         return sal_False;
+    }
+    else
+    {
+        // this has not been deleted.  Reset pbDeleted to prevent the
+        // destructor to access the local bool at a later and rather
+        // inconvenient time.  See bugs 124392 and 100110 for more information.
+        pbDeleted = NULL;
+    }
+    if (pItem == NULL)
+    {
+        return sal_False;
+    }
 
     if ( nId == SID_STYLE_NEW || SID_STYLE_EDIT == nId )
     {
@@ -1880,10 +1900,6 @@ sal_Bool SfxCommonTemplateDialog_Impl::Execute_Impl(
         }
     }
 
-    // Reset destroyed flag otherwise we use the pointer in the dtor
-    // where the local stack object is already destroyed. This would
-    // overwrite objects on the stack!! See #i100110
-    pbDeleted = NULL;
     return sal_True;
 }
 
