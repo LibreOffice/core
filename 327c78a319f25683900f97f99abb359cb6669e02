@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "1a930d6b_d49e3263",
+        "filename": "sw/inc/fldbas.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 290,
+      "author": {
+        "id": 1000531
+      },
+      "writtenOn": "2014-03-12T09:32:17Z",
+      "side": 1,
+      "message": "While writing, In \"https://gerrit.libreoffice.org/#/c/8473/1/sw/source/filter/ww8/docxattributeoutput.cxx\", I want to change value of this variable. But \"rInfos.pField\" variable is constant pointer. Can you please suggest me way to handle this situation?",
+      "parentUuid": "1a930d6b_9112fc56",
+      "revId": "327c78a319f25683900f97f99abb359cb6669e02",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1a930d6b_b10ff82d",
         "filename": "sw/inc/fldbas.hxx",
         "patchSetId": 1
@@ -30,6 +48,24 @@
       "writtenOn": "2014-03-06T08:28:17Z",
       "side": 1,
       "message": "Same here, sal_Bool -\u003e bool.",
+      "revId": "327c78a319f25683900f97f99abb359cb6669e02",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a930d6b_54ab2289",
+        "filename": "sw/inc/fldbas.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 363,
+      "author": {
+        "id": 1000531
+      },
+      "writtenOn": "2014-03-12T09:32:17Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1a930d6b_b10ff82d",
       "revId": "327c78a319f25683900f97f99abb359cb6669e02",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
@@ -53,6 +89,24 @@
     },
     {
       "key": {
+        "uuid": "1a930d6b_d133a4f4",
+        "filename": "sw/inc/tox.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 654,
+      "author": {
+        "id": 1000531
+      },
+      "writtenOn": "2014-03-12T09:32:17Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1a930d6b_d11c846d",
+      "revId": "327c78a319f25683900f97f99abb359cb6669e02",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1a930d6b_f119807a",
         "filename": "sw/source/core/fields/fldbas.cxx",
         "patchSetId": 1
@@ -64,6 +118,24 @@
       "writtenOn": "2014-03-06T08:28:17Z",
       "side": 1,
       "message": "Please use false, not sal_False in new code.",
+      "revId": "327c78a319f25683900f97f99abb359cb6669e02",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a930d6b_14a19aa9",
+        "filename": "sw/source/core/fields/fldbas.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 164,
+      "author": {
+        "id": 1000531
+      },
+      "writtenOn": "2014-03-12T09:32:17Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1a930d6b_f119807a",
       "revId": "327c78a319f25683900f97f99abb359cb6669e02",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
@@ -87,6 +159,24 @@
     },
     {
       "key": {
+        "uuid": "1a930d6b_34a696c2",
+        "filename": "sw/source/core/unocore/unoidx.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1000531
+      },
+      "writtenOn": "2014-03-12T09:32:17Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1a930d6b_11260cbb",
+      "revId": "327c78a319f25683900f97f99abb359cb6669e02",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1a930d6b_5120949b",
         "filename": "sw/source/filter/ww8/ww8atr.cxx",
         "patchSetId": 1
@@ -104,6 +194,24 @@
     },
     {
       "key": {
+        "uuid": "1a930d6b_9494aa45",
+        "filename": "sw/source/filter/ww8/ww8atr.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1773,
+      "author": {
+        "id": 1000531
+      },
+      "writtenOn": "2014-03-12T09:32:17Z",
+      "side": 1,
+      "message": "Done.\nReverted.",
+      "parentUuid": "1a930d6b_5120949b",
+      "revId": "327c78a319f25683900f97f99abb359cb6669e02",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1a930d6b_91391cdb",
         "filename": "writerfilter/source/dmapper/DomainMapper_Impl.cxx",
         "patchSetId": 1
@@ -115,6 +223,24 @@
       "writtenOn": "2014-03-06T08:28:17Z",
       "side": 1,
       "message": "Don\u0027t mix whitespace and functional changes, no need to reindent \"break;\" here just makes it harder to understand what did you change.",
+      "revId": "327c78a319f25683900f97f99abb359cb6669e02",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a930d6b_b491a654",
+        "filename": "writerfilter/source/dmapper/DomainMapper_Impl.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 3551,
+      "author": {
+        "id": 1000531
+      },
+      "writtenOn": "2014-03-12T09:32:17Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1a930d6b_91391cdb",
       "revId": "327c78a319f25683900f97f99abb359cb6669e02",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
