@@ -2744,6 +2744,15 @@ DECLARE_OOXMLEXPORT_TEST(testOLEObjectinHeader, "2129393649.docx")
     assertXPath(pXmlDoc,"/rels:Relationships/rels:Relationship[1]","Id","rId1");
 }
 
+DECLARE_OOXMLEXPORT_TEST(test_ClosingBrace, "2120112713.docx")
+{
+    xmlDocPtr pXmlDoc = parseExport("word/document.xml");
+    if (!pXmlDoc)
+        return;
+    // Checking for ClosingBrace tag
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/m:oMath[1]/m:d[2]/m:dPr[1]/m:endChr[1]","val","");
+}
+
 #endif
 
 CPPUNIT_PLUGIN_IMPLEMENT();
