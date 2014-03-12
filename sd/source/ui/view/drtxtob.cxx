@@ -443,7 +443,7 @@ void TextObjectBar::GetAttrState( SfxItemSet& rSet )
     else
     {
         // paragraph spacing
-        OutlinerView* pOLV = mpView->GetTextEditOutlinerView();
+        OutlinerView* pOLV = mpView ? mpView->GetTextEditOutlinerView() : NULL;
         if( pOLV )
         {
             ESelection aSel = pOLV->GetSelection();
