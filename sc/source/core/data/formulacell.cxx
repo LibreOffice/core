@@ -450,6 +450,7 @@ ScFormulaCellGroup::~ScFormulaCellGroup()
             }
     }
     delete mpCode;
+    delete mpCompiledFormula;
 }
 
 void ScFormulaCellGroup::scheduleCompilation()
