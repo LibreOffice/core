@@ -248,6 +248,7 @@ private:
     Link                        maErrorHdl;
 
     bool                        ImplInitGraphics() const;
+    void                        ImplReleaseGraphics( bool bRelease = true );
     SAL_DLLPRIVATE void         ImplInitData();
     SAL_DLLPRIVATE void         ImplInit( SalPrinterQueueInfo* pInfo );
     SAL_DLLPRIVATE void         ImplInitDisplay( const Window* pWindow );
