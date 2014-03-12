@@ -89,9 +89,14 @@ void SwEditShell::DeleteSel( SwPaM& rPam, sal_Bool* pUndo )
     }
     else
     {
+        SwPaM aPam(rPam);
+        if (bSelectAll)
+            // Selection starts at the first para of the first cell, but we
+            // want to delete the table node before the first cell as well.
+            aPam.Start()->nNode = aPam.Start()->nNode.GetNode().FindTableNode()->GetIndex();
         // delete everything
-        GetDoc()->DeleteAndJoin( rPam );
-        SaveTblBoxCntnt( rPam.GetPoint() );
+        GetDoc()->DeleteAndJoin( aPam );
+        SaveTblBoxCntnt( aPam.GetPoint() );
     }
 
     // Selection is not needed anymore
