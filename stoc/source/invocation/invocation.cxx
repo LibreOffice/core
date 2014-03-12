@@ -118,9 +118,6 @@ public:
     // Methoden von XMaterialHolder
     virtual Any         SAL_CALL getMaterial(void) throw(RuntimeException, std::exception);
 
-    // ? XTool
-    virtual void        SAL_CALL setMaterial( const Any& rMaterial );
-
     // XInvocation
     virtual Reference<XIntrospectionAccess> SAL_CALL getIntrospection(void) throw( RuntimeException, std::exception );
     virtual Any SAL_CALL invoke(const OUString& FunctionName, const Sequence< Any >& Params, Sequence< sal_Int16 >& OutParamIndex, Sequence< Any >& OutParam)
@@ -203,6 +200,8 @@ public:
 
 
 private:
+    void setMaterial( const Any& rMaterial );
+
     void getInfoSequenceImpl( Sequence< OUString >* pStringSeq, Sequence< InvocationInfo >* pInfoSeq );
     void fillInfoForNameAccess( InvocationInfo& rInfo, const OUString& aName );
     void fillInfoForProperty( InvocationInfo& rInfo, const Property& rProp );
