@@ -756,25 +756,4 @@ void SpinListenerFormattedField0Pg1::disposing( const ::com::sun::star::lang::Ev
 {
 }
 
-
-
-void HelpCloseListener::addCloseListener( const Reference < XCloseListener >& ) throw( RuntimeException )
-{
-}
-void HelpCloseListener::removeCloseListener( const Reference < XCloseListener >& ) throw( RuntimeException )
-{
-}
-void HelpCloseListener::queryClosing( const EventObject&, sal_Bool /* bDeliverOwnership */ )
-        throw ( RuntimeException, CloseVetoException, std::exception )
-{
-}
-void HelpCloseListener::notifyClosing( const EventObject& )
-        throw ( RuntimeException, std::exception )
-{
-}
-void HelpCloseListener::disposing( const EventObject& ) throw ( RuntimeException, std::exception )
-{
-    mrXFrame = NULL;
-}
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

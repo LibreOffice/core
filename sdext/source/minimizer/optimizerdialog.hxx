@@ -37,7 +37,6 @@
 #include <com/sun/star/view/XSelectionSupplier.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/awt/XItemEventBroadcaster.hpp>
-#include <com/sun/star/util/XCloseListener.hpp>
 #include <com/sun/star/frame/XStorable.hpp>
 #include <com/sun/star/frame/XDispatch.hpp>
 #include <com/sun/star/frame/XDesktop.hpp>
@@ -213,25 +212,6 @@ private:
 
     OptimizerDialog& mrOptimizerDialog;
 };
-
-
-
-class HelpCloseListener : public ::cppu::WeakImplHelper1< com::sun::star::util::XCloseListener >
-{
-public:
-    HelpCloseListener( com::sun::star::uno::Reference< com::sun::star::frame::XFrame >& rXFrame ) : mrXFrame( rXFrame ){};
-
-    virtual void SAL_CALL addCloseListener(const com::sun::star::uno::Reference < com::sun::star::util::XCloseListener >& ) throw( com::sun::star::uno::RuntimeException );
-    virtual void SAL_CALL removeCloseListener( const com::sun::star::uno::Reference < com::sun::star::util::XCloseListener >& xListener ) throw( com::sun::star::uno::RuntimeException );
-    virtual void SAL_CALL notifyClosing( const com::sun::star::lang::EventObject& aEvent ) throw (com::sun::star::uno::RuntimeException, std::exception) ;
-    virtual void SAL_CALL queryClosing( const com::sun::star::lang::EventObject& aEvent, sal_Bool bDeliverOwnership ) throw (com::sun::star::uno::RuntimeException, com::sun::star::util::CloseVetoException, std::exception) ;
-    virtual void SAL_CALL disposing( const com::sun::star::lang::EventObject& aEvent ) throw (com::sun::star::uno::RuntimeException, std::exception) ;
-
-private:
-
-    com::sun::star::uno::Reference< com::sun::star::frame::XFrame >& mrXFrame;
-};
-
 
 #endif // INCLUDED_SDEXT_SOURCE_MINIMIZER_OPTIMIZERDIALOG_HXX
 
