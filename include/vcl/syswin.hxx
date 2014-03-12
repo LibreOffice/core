@@ -143,7 +143,7 @@ private:
     Size            maOrgSize;
     Size            maRollUpOutSize;
     Size            maMinOutSize;
-    bool            mbPined;
+    bool            mbPinned;
     bool            mbRollUp;
     bool            mbRollFunc;
     bool            mbDockBtn;
@@ -197,7 +197,7 @@ public:
     bool            IsTitleButtonVisible( sal_uInt16 nButton ) const;
 
     void            SetPin( bool bPin );
-    bool            IsPined() const { return mbPined; }
+    bool            IsPinned() const { return mbPinned; }
 
     void            RollUp();
     void            RollDown();

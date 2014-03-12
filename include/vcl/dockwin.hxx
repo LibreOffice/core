@@ -110,7 +110,7 @@ private:
                     mbLastFloatMode:1,
                     mbStartFloat:1,
                     mbTrackDock:1,
-                    mbPined:1,
+                    mbPinned:1,
                     mbRollUp:1,
                     mbDockBtn:1,
                     mbHideBtn:1,
@@ -255,7 +255,7 @@ private:
                     mbLastFloatMode:1,
                     mbStartFloat:1,
                     mbTrackDock:1,
-                    mbPined:1,
+                    mbPinned:1,
                     mbRollUp:1,
                     mbDockBtn:1,
                     mbHideBtn:1;
@@ -301,7 +301,7 @@ public:
     virtual void    DataChanged( const DataChangedEvent& rDCEvt );
 
     void            SetPin( bool bPin );
-    bool            IsPined() const;
+    bool            IsPinned() const;
 
     void            RollUp();
     void            RollDown();
@@ -347,14 +347,14 @@ inline void DockingWindow::SetPin( bool bPin )
 {
     if ( mpFloatWin )
         mpFloatWin->SetPin( bPin );
-    mbPined = bPin;
+    mbPinned = bPin;
 }
 
-inline bool DockingWindow::IsPined() const
+inline bool DockingWindow::IsPinned() const
 {
     if ( mpFloatWin )
-        return mpFloatWin->IsPined();
-    return mbPined;
+        return mpFloatWin->IsPinned();
+    return mbPinned;
 }
 
 inline void DockingWindow::RollUp()

@@ -896,7 +896,7 @@ void ImplDockingWindowWrapper::ImplInitData()
     mbDockCanceled      = false;
     mbFloatPrevented    = false;
     mbDocking           = false;
-    mbPined             = false;
+    mbPinned             = false;
     mbRollUp            = false;
     mbDockBtn           = false;
     mbHideBtn           = false;
@@ -1283,7 +1283,7 @@ void ImplDockingWindowWrapper::SetFloatingMode( bool bFloatMode )
                 // pass on DockingData to FloatingWindow
                 pWin->ShowTitleButton( TITLE_BUTTON_DOCKING, mbDockBtn );
                 pWin->ShowTitleButton( TITLE_BUTTON_HIDE, mbHideBtn );
-                pWin->SetPin( mbPined );
+                pWin->SetPin( mbPinned );
                 if ( mbRollUp )
                     pWin->RollUp();
                 else
@@ -1307,7 +1307,7 @@ void ImplDockingWindowWrapper::SetFloatingMode( bool bFloatMode )
                 maFloatPos      = mpFloatWin->GetPosPixel();
                 mbDockBtn       = mpFloatWin->IsTitleButtonVisible( TITLE_BUTTON_DOCKING );
                 mbHideBtn       = mpFloatWin->IsTitleButtonVisible( TITLE_BUTTON_HIDE );
-                mbPined         = mpFloatWin->IsPined();
+                mbPinned         = mpFloatWin->IsPinned();
                 mbRollUp        = mpFloatWin->IsRollUp();
                 maRollUpOutSize = mpFloatWin->GetRollUpOutputSizePixel();
                 maMinOutSize    = mpFloatWin->GetMinOutputSizePixel();

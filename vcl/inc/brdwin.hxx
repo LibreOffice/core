@@ -95,7 +95,7 @@ private:
     bool                    mbFloatWindow;
     bool                    mbSmallOutBorder;
     bool                    mbFrameBorder;
-    bool                    mbPined;
+    bool                    mbPinned;
     bool                    mbRollUp;
     bool                    mbMenuHide;
     bool                    mbDockBtn;

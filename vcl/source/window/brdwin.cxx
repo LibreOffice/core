@@ -598,7 +598,7 @@ bool ImplBorderWindowView::ImplTracking( ImplBorderFrameData* pData, const Track
                     if ( pBorderWindow->ImplGetClientWindow()->IsSystemWindow() )
                     {
                         SystemWindow* pClientWindow = (SystemWindow*)(pBorderWindow->ImplGetClientWindow());
-                        pClientWindow->SetPin( !pClientWindow->IsPined() );
+                        pClientWindow->SetPin( !pClientWindow->IsPinned() );
                         pClientWindow->Pin();
                     }
                 }
@@ -1828,7 +1828,7 @@ void ImplStdBorderWindowView::DrawWindow( sal_uInt16 nDrawFlags, OutputDevice* p
          !pData->maPinRect.IsEmpty() )
     {
         Image aImage;
-        ImplGetPinImage( pData->mnPinState, pBorderWindow->mbPined, aImage );
+        ImplGetPinImage( pData->mnPinState, pBorderWindow->mbPinned, aImage );
         Size  aImageSize = aImage.GetSizePixel();
         long  nRectHeight = pData->maPinRect.GetHeight();
         Point aPos( pData->maPinRect.TopLeft() );
@@ -1917,7 +1917,7 @@ void ImplBorderWindow::ImplInit( Window* pParent,
     mnMaxHeight     = SHRT_MAX;
     mnRollHeight    = 0;
     mnOrgMenuHeight = 0;
-    mbPined         = false;
+    mbPinned        = false;
     mbRollUp        = false;
     mbMenuHide      = false;
     mbDockBtn       = false;
@@ -2259,7 +2259,7 @@ void ImplBorderWindow::SetBorderStyle( sal_uInt16 nStyle )
 
 void ImplBorderWindow::SetPin( bool bPin )
 {
-    mbPined = bPin;
+    mbPinned = bPin;
     InvalidateBorder();
 }
 

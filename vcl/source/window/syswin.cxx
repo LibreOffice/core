@@ -75,7 +75,7 @@ SystemWindow::SystemWindow( WindowType nType ) :
     mpWindowImpl->mnActivateMode      = ACTIVATE_MODE_GRABFOCUS;
 
     mpMenuBar           = NULL;
-    mbPined             = false;
+    mbPinned            = false;
     mbRollUp            = false;
     mbRollFunc          = false;
     mbDockBtn           = false;
@@ -344,9 +344,9 @@ bool SystemWindow::IsTitleButtonVisible( sal_uInt16 nButton ) const
 
 void SystemWindow::SetPin( bool bPin )
 {
-    if ( bPin != mbPined )
+    if ( bPin != mbPinned )
     {
-        mbPined = bPin;
+        mbPinned = bPin;
         if ( mpWindowImpl->mpBorderWindow )
             ((ImplBorderWindow*)mpWindowImpl->mpBorderWindow)->SetPin( bPin );
     }
