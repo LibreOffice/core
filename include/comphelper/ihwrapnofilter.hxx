@@ -23,9 +23,7 @@
 #include <com/sun/star/task/XInteractionHandler2.hpp>
 #include <com/sun/star/task/XInteractionHandler.hpp>
 #include <com/sun/star/task/XInteractionRequest.hpp>
-#include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/frame/DoubleInitializationException.hpp>
 
 #include <cppuhelper/implbase2.hxx>
 #include <comphelper/comphelperdllapi.h>
@@ -59,15 +57,6 @@ namespace comphelper {
 
         virtual sal_Bool SAL_CALL handleInteractionRequest( const com::sun::star::uno::Reference< com::sun::star::task::XInteractionRequest >& xRequest)
             throw( com::sun::star::uno::RuntimeException, std::exception );
-
-
-        // XInitialization
-
-
-        virtual void SAL_CALL initialize( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& aArguments )
-            throw ( ::com::sun::star::uno::Exception,
-            ::com::sun::star::uno::RuntimeException,
-            ::com::sun::star::frame::DoubleInitializationException ) ;
 
 
         // XServiceInfo

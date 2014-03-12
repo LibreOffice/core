@@ -89,16 +89,6 @@ namespace comphelper
         }
     }
 
-
-    // XInitialization
-
-    void SAL_CALL OIHWrapNoFilterDialog::initialize( const uno::Sequence< uno::Any >& )
-        throw ( uno::Exception,
-        uno::RuntimeException,
-        frame::DoubleInitializationException )
-    {
-    }
-
     // XServiceInfo
     OUString SAL_CALL OIHWrapNoFilterDialog::getImplementationName()
         throw ( uno::RuntimeException, std::exception )
