@@ -41,7 +41,7 @@ SwUserField::SwUserField(SwUserFieldType* pTyp, sal_uInt16 nSub, sal_uInt32 nFmt
 {
 }
 
-OUString SwUserField::Expand() const
+OUString SwUserField::Expand(ToxAuthorityField /**eField*/) const
 {
     if(!(nSubType & nsSwExtendedSubType::SUB_INVISIBLE))
         return ((SwUserFieldType*)GetTyp())->Expand(GetFormat(), nSubType, GetLanguage());

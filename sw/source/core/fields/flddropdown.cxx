@@ -59,7 +59,7 @@ SwDropDownField::~SwDropDownField()
 {
 }
 
-OUString SwDropDownField::Expand() const
+OUString SwDropDownField::Expand(ToxAuthorityField /**eField*/) const
 {
     OUString sSelect = GetSelectedItem();
     if (sSelect.isEmpty())

@@ -1043,8 +1043,15 @@ void DocxAttributeOutput::EndField_Impl( FieldInfos& rInfos )
     {
         // Write the Field latest value
         m_pSerializer->startElementNS( XML_w, XML_r, FSEND );
-
-        OUString sExpand( rInfos.pField->ExpandField( true ) );
+        OUString sExpand;
+        if(rInfos.eType == ww::eCITATION)
+        {
+            sExpand = rInfos.pField->ExpandField( false , AUTH_FIELD_TITLE);
+        }
+        else
+        {
+            sExpand = rInfos.pField->ExpandField( true );
+        }
         // newlines embedded in fields are 0x0B in MSO and 0x0A for us
         RunText(sExpand.replace(0x0A, 0x0B));
 

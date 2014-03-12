@@ -57,7 +57,7 @@ SwDateTimeField::SwDateTimeField(SwDateTimeFieldType* pInitType, sal_uInt16 nSub
     }
 }
 
-OUString SwDateTimeField::Expand() const
+OUString SwDateTimeField::Expand(ToxAuthorityField /**eField*/) const
 {
     double fVal;
 

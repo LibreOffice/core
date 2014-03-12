@@ -282,7 +282,7 @@ SwGetExpField::SwGetExpField(SwGetExpFieldType* pTyp, const OUString& rFormel,
     SetFormula( rFormel );
 }
 
-OUString SwGetExpField::Expand() const
+OUString SwGetExpField::Expand(ToxAuthorityField /**eField*/) const
 {
     if(nSubType & nsSwExtendedSubType::SUB_CMD)
         return GetFormula();
@@ -776,7 +776,7 @@ SwSetExpField::SwSetExpField(SwSetExpFieldType* pTyp, const OUString& rFormel,
     }
 }
 
-OUString SwSetExpField::Expand() const
+OUString SwSetExpField::Expand(ToxAuthorityField /**eField*/) const
 {
     if (nSubType & nsSwExtendedSubType::SUB_CMD)
     {   // we need the CommandString
@@ -1220,7 +1220,7 @@ SwField* SwInputField::Copy() const
     return pFld;
 }
 
-OUString SwInputField::Expand() const
+OUString SwInputField::Expand(ToxAuthorityField /**eField*/) const
 {
     if((nSubType & 0x00ff) == INP_TXT)
     {

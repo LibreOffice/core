@@ -252,7 +252,7 @@ OUString SwGetRefField::GetExpandedTxtOfReferencedTxtNode() const
            : OUString();
 }
 
-OUString SwGetRefField::Expand() const
+OUString SwGetRefField::Expand(ToxAuthorityField /**eField*/) const
 {
     return sTxt;
 }

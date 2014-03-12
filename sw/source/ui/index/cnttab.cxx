@@ -958,6 +958,7 @@ static long lcl_TOXTypesToUserData(CurTOXType eType)
         case TOX_TABLES      : nRet = TO_TABLE;     break;
         case TOX_AUTHORITIES : nRet = TO_AUTHORITIES; break;
         case TOX_BIBLIOGRAPHY : nRet = TO_BIBLIOGRAPHY; break;
+        case TOX_CITATION :break;
     }
     return nRet;
 }
@@ -1194,6 +1195,8 @@ void SwTOXSelectTabPage::FillTOXDescription()
                 rDesc.SetAuthBrackets(aEmptyOUStr);
             rDesc.SetAuthSequence(m_pSequenceCB->IsChecked());
         }
+        break;
+        case TOX_CITATION :
         break;
     }
 

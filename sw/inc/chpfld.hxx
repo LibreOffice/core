@@ -54,7 +54,7 @@ class SW_DLLPUBLIC SwChapterField : public SwField
     OUString sPre;
     OUString sPost;
 
-    virtual OUString Expand() const;
+    virtual OUString Expand(ToxAuthorityField eField = AUTH_FIELD_IDENTIFIER) const;
     virtual SwField* Copy() const;
 
 public:

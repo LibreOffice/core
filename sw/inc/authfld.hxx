@@ -146,7 +146,7 @@ class SwAuthorityField : public SwField
     sal_IntPtr          m_nHandle;
     mutable sal_IntPtr  m_nTempSequencePos;
 
-    virtual OUString    Expand() const;
+    virtual OUString    Expand(ToxAuthorityField eField = AUTH_FIELD_IDENTIFIER) const;
     virtual SwField*    Copy() const;
 
 public:

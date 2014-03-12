@@ -45,7 +45,7 @@ OUString SwScriptField::GetDescription() const
     return SW_RES(STR_SCRIPT);
 }
 
-OUString SwScriptField::Expand() const
+OUString SwScriptField::Expand(ToxAuthorityField /**eField*/) const
 {
     return OUString();
 }

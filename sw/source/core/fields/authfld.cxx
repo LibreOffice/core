@@ -538,11 +538,11 @@ SwAuthorityField::~SwAuthorityField()
     ((SwAuthorityFieldType* )GetTyp())->RemoveField(m_nHandle);
 }
 
-OUString SwAuthorityField::Expand() const
+OUString SwAuthorityField::Expand(ToxAuthorityField eField) const
 {
     SwAuthorityFieldType* pAuthType = (SwAuthorityFieldType*)GetTyp();
     OUString sRet;
-    if(pAuthType->GetPrefix())
+    if(pAuthType->GetPrefix() && eField != AUTH_FIELD_TITLE)
         sRet = OUString(pAuthType->GetPrefix());
 
     if( pAuthType->IsSequence() )
@@ -557,9 +557,12 @@ OUString SwAuthorityField::Expand() const
         const SwAuthEntry* pEntry = pAuthType->GetEntryByHandle(m_nHandle);
         //TODO: Expand to: identifier, number sequence, ...
         if(pEntry)
-            sRet += pEntry->GetAuthorField(AUTH_FIELD_IDENTIFIER);
+        {
+            sRet += pEntry->GetAuthorField(eField);
+        }
+
     }
-    if(pAuthType->GetSuffix())
+    if(pAuthType->GetSuffix() && eField != AUTH_FIELD_TITLE)
         sRet += OUString(pAuthType->GetSuffix());
     return sRet;
 }

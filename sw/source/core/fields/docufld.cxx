@@ -186,7 +186,7 @@ void SwPageNumberField::ChangeExpansion(sal_uInt16 const nPageNumber,
     m_nMaxPage = nMaxPage;
 }
 
-OUString SwPageNumberField::Expand() const
+OUString SwPageNumberField::Expand(ToxAuthorityField /**eField*/) const
 {
     OUString sRet;
     SwPageNumberFieldType* pFldType = (SwPageNumberFieldType*)GetTyp();
@@ -341,7 +341,7 @@ SwAuthorField::SwAuthorField(SwAuthorFieldType* pTyp, sal_uInt32 nFmt)
     aContent = ((SwAuthorFieldType*)GetTyp())->Expand(GetFormat());
 }
 
-OUString SwAuthorField::Expand() const
+OUString SwAuthorField::Expand(ToxAuthorityField /**eField*/) const
 {
     if (!IsFixed())
         ((SwAuthorField*)this)->aContent =
@@ -482,7 +482,7 @@ SwFileNameField::SwFileNameField(SwFileNameFieldType* pTyp, sal_uInt32 nFmt)
     aContent = ((SwFileNameFieldType*)GetTyp())->Expand(GetFormat());
 }
 
-OUString SwFileNameField::Expand() const
+OUString SwFileNameField::Expand(ToxAuthorityField /**eField*/) const
 {
     if (!IsFixed())
         ((SwFileNameField*)this)->aContent = ((SwFileNameFieldType*)GetTyp())->Expand(GetFormat());
@@ -657,7 +657,7 @@ SwTemplNameField::SwTemplNameField(SwTemplNameFieldType* pTyp, sal_uInt32 nFmt)
     : SwField(pTyp, nFmt)
 {}
 
-OUString SwTemplNameField::Expand() const
+OUString SwTemplNameField::Expand(ToxAuthorityField /**eField*/) const
 {
     return((SwTemplNameFieldType*)GetTyp())->Expand(GetFormat());
 }
@@ -786,7 +786,7 @@ SwDocStatField::SwDocStatField(SwDocStatFieldType* pTyp, sal_uInt16 nSub, sal_uI
     nSubType(nSub)
 {}
 
-OUString SwDocStatField::Expand() const
+OUString SwDocStatField::Expand(ToxAuthorityField /**eField*/) const
 {
     return((SwDocStatFieldType*)GetTyp())->Expand(nSubType, GetFormat());
 }
@@ -1055,7 +1055,7 @@ static double lcl_DateToDouble( const D& rDate, const Date& rNullDate )
     return double( nDate - nNullDate );
 }
 
-OUString SwDocInfoField::Expand() const
+OUString SwDocInfoField::Expand(ToxAuthorityField /**eField*/) const
 {
     if ( ( nSubType & 0xFF ) == DI_CUSTOM )
     {
@@ -1339,7 +1339,7 @@ SwHiddenTxtField::SwHiddenTxtField( SwHiddenTxtFieldType* pFldType,
     bCanToggle = !aCond.isEmpty();
 }
 
-OUString SwHiddenTxtField::Expand() const
+OUString SwHiddenTxtField::Expand(ToxAuthorityField /**eField*/) const
 {
     // Type: !Hidden  -> show always
     //        Hide    -> evaluate condition
@@ -1590,7 +1590,7 @@ SwHiddenParaField::SwHiddenParaField(SwHiddenParaFieldType* pTyp, const OUString
     bIsHidden = sal_False;
 }
 
-OUString SwHiddenParaField::Expand() const
+OUString SwHiddenParaField::Expand(ToxAuthorityField /**eField*/) const
 {
     return OUString();
 }
@@ -1693,7 +1693,7 @@ SwPostItField::~SwPostItField()
     delete mpText;
 }
 
-OUString SwPostItField::Expand() const
+OUString SwPostItField::Expand(ToxAuthorityField /**eField*/) const
 {
     return OUString();
 }
@@ -1942,7 +1942,7 @@ SwExtUserField::SwExtUserField(SwExtUserFieldType* pTyp, sal_uInt16 nSubTyp, sal
     aContent = ((SwExtUserFieldType*)GetTyp())->Expand(nType, GetFormat());
 }
 
-OUString SwExtUserField::Expand() const
+OUString SwExtUserField::Expand(ToxAuthorityField /**eField*/) const
 {
     if (!IsFixed())
         ((SwExtUserField*)this)->aContent = ((SwExtUserFieldType*)GetTyp())->Expand(nType, GetFormat());
@@ -2046,7 +2046,7 @@ SwRefPageSetField::SwRefPageSetField( SwRefPageSetFieldType* pTyp,
 {
 }
 
-OUString SwRefPageSetField::Expand() const
+OUString SwRefPageSetField::Expand(ToxAuthorityField /**eField*/) const
 {
     return OUString();
 }
@@ -2235,7 +2235,7 @@ SwRefPageGetField::SwRefPageGetField( SwRefPageGetFieldType* pTyp,
 {
 }
 
-OUString SwRefPageGetField::Expand() const
+OUString SwRefPageGetField::Expand(ToxAuthorityField /**eField*/) const
 {
     return sTxt;
 }
@@ -2373,7 +2373,7 @@ SwJumpEditField::SwJumpEditField( SwJumpEditFieldType* pTyp, sal_uInt32 nForm,
 {
 }
 
-OUString SwJumpEditField::Expand() const
+OUString SwJumpEditField::Expand(ToxAuthorityField /**eField*/) const
 {
     return "<" + sTxt + ">";
 }
@@ -2493,7 +2493,7 @@ SwCombinedCharField::SwCombinedCharField( SwCombinedCharFieldType* pFTyp,
 {
 }
 
-OUString SwCombinedCharField::Expand() const
+OUString SwCombinedCharField::Expand(ToxAuthorityField /**eField*/) const
 {
     return sCharacters;
 }

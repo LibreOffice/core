@@ -84,7 +84,7 @@ private:
     sal_uInt16 nSubType;
     sal_uInt16 nSeqNo;
 
-    virtual OUString    Expand() const;
+    virtual OUString    Expand(ToxAuthorityField eField = AUTH_FIELD_IDENTIFIER) const;
     virtual SwField*    Copy() const;
 
     // #i81002#
