@@ -381,6 +381,8 @@ sal_Bool SvxStdParagraphTabPage::FillItemSet( SfxItemSet& rOutSet )
     {
         const SfxBoolItem* pBoolItem = (SfxBoolItem*)GetOldItem(
                             rOutSet, SID_ATTR_PARA_REGISTER);
+        if (!pBoolItem)
+            return bModified;
         SfxBoolItem* pRegItem = (SfxBoolItem*)pBoolItem->Clone();
         sal_uInt16 _nWhich = GetWhich( SID_ATTR_PARA_REGISTER );
         bool bSet = pRegItem->GetValue();
