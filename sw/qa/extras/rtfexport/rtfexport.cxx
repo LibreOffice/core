@@ -8,7 +8,7 @@
 
 #include <swmodeltestbase.hxx>
 
-#if !defined(MACOSX) && !defined(WNT)
+#if !defined(WNT)
 
 #include <com/sun/star/awt/Gradient.hpp>
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
