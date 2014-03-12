@@ -47,6 +47,7 @@ define sw_ooxmlexport_components
 	sfx2/util/sfx \
 	starmath/util/sm \
 	svl/source/fsstor/fsstorage \
+	svl/util/svl \
 	svtools/util/svt \
 	svx/util/svx \
 	svx/util/svxcore \
