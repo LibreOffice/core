@@ -117,10 +117,15 @@ public:
 };
 
 OTextInputStream::OTextInputStream()
-    : mSeqSource( READ_BYTE_COUNT ), mpBuffer( NULL ), mnBufferSize( 0 )
-    , mnCharsInBuffer( 0 ), mbReachedEOF( sal_False )
+    : mbEncodingInitialized(false)
+    , mConvText2Unicode(NULL)
+    , mContextText2Unicode(NULL)
+    , mSeqSource(READ_BYTE_COUNT)
+    , mpBuffer(NULL)
+    , mnBufferSize(0)
+    , mnCharsInBuffer(0)
+    , mbReachedEOF(sal_False)
 {
-    mbEncodingInitialized = false;
 }
 
 OTextInputStream::~OTextInputStream()
