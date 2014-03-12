@@ -16,6 +16,24 @@
       "revId": "1d014e94e083b1efc57f86f38d23dab9ef38a0b8",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a930d6b_54fec26c",
+        "filename": "sw/inc/fldbas.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 290,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2014-03-12T14:10:42Z",
+      "side": 1,
+      "message": "Right, changing an SwField, which is part of the document model during export is bad. An export operation should just read the document model and serialize it in some format. Can\u0027t you set m_bCitation depending on what the field type is? Just put a breakpoint on the SwField constructor, get a backtrace and see where it\u0027s created -- hopefully the caller knows the field type.",
+      "parentUuid": "1a930d6b_74873e10",
+      "revId": "1d014e94e083b1efc57f86f38d23dab9ef38a0b8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
