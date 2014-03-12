@@ -287,7 +287,7 @@ sal_Int16 SAL_CALL SortedDynamicResultSet::getCapabilities()
  update call at once is, while he disposes his broadcaster or while he is
  removing himsef as listener (otherwise you deadlock)!!!
 */
-void SAL_CALL SortedDynamicResultSet::impl_notify( const ListEvent& Changes )
+void SortedDynamicResultSet::impl_notify( const ListEvent& Changes )
     throw( RuntimeException )
 {
     osl::Guard< osl::Mutex > aGuard( maMutex );
@@ -417,7 +417,7 @@ void SAL_CALL SortedDynamicResultSet::impl_notify( const ListEvent& Changes )
 
 // XEventListener
 
-void SAL_CALL SortedDynamicResultSet::impl_disposing( const EventObject& )
+void SortedDynamicResultSet::impl_disposing( const EventObject& )
     throw( RuntimeException )
 {
     mxListener.clear();

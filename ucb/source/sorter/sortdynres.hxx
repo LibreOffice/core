@@ -126,10 +126,10 @@ public:
 
     // own methods:
 
-    virtual void SAL_CALL impl_disposing( const css::lang::EventObject& Source )
+    void impl_disposing( const css::lang::EventObject& Source )
         throw( css::uno::RuntimeException );
 
-    virtual void SAL_CALL impl_notify( const css::ucb::ListEvent& Changes )
+    void impl_notify( const css::ucb::ListEvent& Changes )
         throw( css::uno::RuntimeException );
 };
 
