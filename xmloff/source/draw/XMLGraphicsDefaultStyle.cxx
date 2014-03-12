@@ -17,7 +17,12 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <xmloff/XMLGraphicsDefaultStyle.hxx>
+
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
+
+#include <tools/color.hxx>
+
 #include <xmloff/xmlimp.hxx>
 #include <xmloff/nmspmap.hxx>
 #include <xmloff/xmlnmspe.hxx>
@@ -25,7 +30,6 @@
 
 #include <xmloff/families.hxx>
 #include "XMLShapePropertySetContext.hxx"
-#include <xmloff/XMLGraphicsDefaultStyle.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -76,6 +80,14 @@ SvXMLImportContext *XMLGraphicsDefaultStyle::CreateChildContext( sal_uInt16 nPre
     return pContext;
 }
 
+struct XMLPropertyByIndex {
+    sal_Int32 const m_nIndex;
+    XMLPropertyByIndex(sal_Int32 const nIndex) : m_nIndex(nIndex) {}
+    bool operator()(XMLPropertyState const& rProp) {
+        return m_nIndex == rProp.mnIndex;
+    }
+};
+
 // This method is called for every default style
 void XMLGraphicsDefaultStyle::SetDefaults()
 {
@@ -111,6 +123,51 @@ void XMLGraphicsDefaultStyle::SetDefaults()
         // OOo 1.x only supported "true" so that is the more appropriate
         // default for OOoXML format documents.
         xDefaults->setPropertyValue("IsFollowingTextFlow", uno::makeAny(true));
+    }
+
+    bool const bIsAOO4(
+           GetImport().getGeneratorVersion() >= SvXMLImport::AOO_40x
+        && GetImport().getGeneratorVersion() <= SvXMLImport::AOO_4x);
+
+    // fdo#75872: backward compatibility for pool defaults change
+    if (GetImport().isGeneratorVersionOlderThan(
+                SvXMLImport::AOO_40x, SvXMLImport::LO_42x)
+        // argh... it turns out that LO has also changed defaults for these
+        // since LO 4.0, and so even the _new_ AOO 4.0+ default needs
+        // special handling since AOO still does _not_ write it into the file
+        || bIsAOO4)
+    {
+        UniReference<XMLPropertySetMapper> const pImpPrMap(
+            GetStyles()->GetImportPropertyMapper(GetFamily())
+                ->getPropertySetMapper());
+        sal_Int32 const nStrokeIndex(
+            pImpPrMap->GetEntryIndex(XML_NAMESPACE_SVG, "stroke-color", 0));
+        if (std::find_if(GetProperties().begin(), GetProperties().end(),
+                    XMLPropertyByIndex(nStrokeIndex)) == GetProperties().end())
+        {
+            sal_Int32 const nStroke(
+                    (bIsAOO4) ? RGB_COLORDATA(128, 128, 128) : COL_BLACK);
+            xDefaults->setPropertyValue("LineColor", makeAny(nStroke));
+        }
+        sal_Int32 const nFillColor( (bIsAOO4)
+            ? RGB_COLORDATA(0xCF, 0xE7, 0xF5) : RGB_COLORDATA(153, 204, 255));
+        sal_Int32 const nFillIndex(
+            pImpPrMap->GetEntryIndex(XML_NAMESPACE_DRAW, "fill-color", 0));
+        if (std::find_if(GetProperties().begin(), GetProperties().end(),
+                    XMLPropertyByIndex(nFillIndex)) == GetProperties().end())
+        {
+            xDefaults->setPropertyValue("FillColor", makeAny(nFillColor));
+        }
+        if (xInfo->hasPropertyByName("FillColor2"))
+        {
+            sal_Int32 const nFill2Index(pImpPrMap->GetEntryIndex(
+                        XML_NAMESPACE_DRAW, "secondary-fill-color", 0));
+            if (std::find_if(GetProperties().begin(), GetProperties().end(),
+                    XMLPropertyByIndex(nFill2Index)) == GetProperties().end())
+            {
+                xDefaults->setPropertyValue("FillColor2", makeAny(nFillColor));
+            }
+        }
     }
 
     FillPropertySet( xDefaults );
