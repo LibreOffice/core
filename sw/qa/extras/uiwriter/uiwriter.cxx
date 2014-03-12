@@ -28,6 +28,7 @@ public:
     void testFdo70807();
     void testImportRTF();
     void testExportRTF();
+    void testFdo75110();
 
     CPPUNIT_TEST_SUITE(SwUiWriterTest);
     CPPUNIT_TEST(testReplaceForward);
@@ -36,6 +37,7 @@ public:
     CPPUNIT_TEST(testFdo70807);
     CPPUNIT_TEST(testImportRTF);
     CPPUNIT_TEST(testExportRTF);
+    CPPUNIT_TEST(testFdo75110);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -85,6 +87,19 @@ void SwUiWriterTest::testReplaceForward()
     rUndoManager.Undo();
 
     CPPUNIT_ASSERT_EQUAL(ORIGINAL_REPLACE_CONTENT, pTxtNode->GetTxt());
+}
+
+void SwUiWriterTest::testFdo75110()
+{
+    SwDoc* pDoc = createDoc("fdo75110.odt");
+    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+
+    pWrtShell->SelAll();
+    // The problem was that SwEditShell::DeleteSel() what this Delete() invokes took the wrong selection...
+    pWrtShell->Delete();
+    sw::UndoManager& rUndoManager = pDoc->GetUndoManager();
+    // ... so this Undo() call resulted in a crash.
+    rUndoManager.Undo();
 }
 
 void SwUiWriterTest::testReplaceBackward()
