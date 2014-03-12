@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a930d6b_74873e10",
+        "filename": "sw/inc/fldbas.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 290,
+      "author": {
+        "id": 1000531
+      },
+      "writtenOn": "2014-03-12T09:39:55Z",
+      "side": 1,
+      "message": "While writing, In \"https://gerrit.libreoffice.org/#/c/8473/1/sw/source/filter/ww8/docxattributeoutput.cxx\", I want to change value of this variable. But \"rInfos.pField\" variable is constant pointer. Can you please suggest me way to handle this situation?",
+      "revId": "1d014e94e083b1efc57f86f38d23dab9ef38a0b8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
