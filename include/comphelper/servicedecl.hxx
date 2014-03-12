@@ -166,15 +166,15 @@ public:
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName()
-        throw (css::uno::RuntimeException) {
+        throw (css::uno::RuntimeException) SAL_OVERRIDE {
         return m_rServiceDecl.getImplementationName();
     }
     virtual sal_Bool SAL_CALL supportsService( OUString const& name )
-        throw (css::uno::RuntimeException) {
+        throw (css::uno::RuntimeException) SAL_OVERRIDE {
         return m_rServiceDecl.supportsService(name);
     }
     virtual css::uno::Sequence< OUString>
-    SAL_CALL getSupportedServiceNames() throw (css::uno::RuntimeException) {
+    SAL_CALL getSupportedServiceNames() throw (css::uno::RuntimeException) SAL_OVERRIDE {
         return m_rServiceDecl.getSupportedServiceNames();
     }
 
