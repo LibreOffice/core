@@ -428,9 +428,14 @@ public:
     static const sal_uInt16 OOo_32x = 32;
     static const sal_uInt16 OOo_33x = 33;
     static const sal_uInt16 OOo_34x = 34;
+    // for AOO, no release overlaps with OOo, so continue OOo version numbers
+    static const sal_uInt16 AOO_40x = 40;
+    static const sal_uInt16 AOO_4x = 41;
     static const sal_uInt16 LO_flag = 0x100;
     static const sal_uInt16 LO_3x = 30 | LO_flag;
-    static const sal_uInt16 LO_4x = 40 | LO_flag;
+    static const sal_uInt16 LO_41x = 41 | LO_flag;
+    static const sal_uInt16 LO_42x = 42 | LO_flag;
+    static const sal_uInt16 LO_4x = 43 | LO_flag;
     static const sal_uInt16 ProductVersionUnknown = SAL_MAX_UINT16;
 
     /** depending on whether the generator version indicates LO, compare

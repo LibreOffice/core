@@ -194,7 +194,20 @@ getBuildIdsProperty(uno::Reference<beans::XPropertySet> const& xImportInfo)
                             else
                             {
                                 SAL_INFO_IF('4' != loVersion[0], "xmloff.core", "unknown LO version: " << loVersion);
-                                mnGeneratorVersion = SvXMLImport::LO_4x;
+                                if ('4' == loVersion[0] && loVersion.getLength() > 1
+                                    && (loVersion[1] == '0' || loVersion[1] == '1'))
+                                {
+                                    mnGeneratorVersion = SvXMLImport::LO_41x; // 4.0/4.1
+                                }
+                                else if ('4' == loVersion[0]
+                                    && loVersion.getLength() > 1 && loVersion[1] == '2')
+                                {
+                                    mnGeneratorVersion = SvXMLImport::LO_42x; // 4.2
+                                }
+                                else
+                                {
+                                    mnGeneratorVersion = SvXMLImport::LO_4x;
+                                }
                             }
                             return; // ignore buildIds
                         }
@@ -230,6 +243,16 @@ getBuildIdsProperty(uno::Reference<beans::XPropertySet> const& xImportInfo)
                     else if ( nUPD == 340 )
                     {
                         mnGeneratorVersion = SvXMLImport::OOo_34x;
+                    }
+                    else if (nUPD == 400)
+                    {
+                        mnGeneratorVersion = SvXMLImport::AOO_40x;
+                    }
+                    else if (nUPD >= 410)
+                    {
+                        // effectively this means "latest", see use
+                        // in XMLGraphicsDefaultStyle::SetDefaults()!
+                        mnGeneratorVersion = SvXMLImport::AOO_4x;
                     }
                 }
             }
