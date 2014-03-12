@@ -1016,8 +1016,10 @@ sal_Bool SvxBackgroundTabPage::FillItemSetWithWallpaperItem( SfxItemSet& rCoreSe
 {
     sal_uInt16 nWhich = GetWhich( nSlot );
     const SfxPoolItem* pOld = GetOldItem( rCoreSet, nSlot );
-    const SfxItemSet& rOldSet = GetItemSet();
     DBG_ASSERT(pOld,"FillItemSetWithWallpaperItem: Item not found");
+    if (!pOld)
+        return sal_False;
+    const SfxItemSet& rOldSet = GetItemSet();
 
     SvxBrushItem        rOldItem( (const CntWallpaperItem&)*pOld, nWhich );
     SvxGraphicPosition  eOldPos     = rOldItem.GetGraphicPos();
