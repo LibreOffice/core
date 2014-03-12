@@ -62,6 +62,7 @@ private:
         { return ((meRefDevMode & REFDEV_FORCE_ZERO_EXTLEAD) != 0); }
 public:
     bool ImplInitGraphics() const;
+    void ImplReleaseGraphics( bool bRelease = true );
 
 public:
     /** Create a virtual device of size 1x1
