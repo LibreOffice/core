@@ -420,6 +420,37 @@ bool Window::ImplInitGraphics() const
     return mpGraphics ? true : false;
 }
 
+void Window::ImplReleaseGraphics( bool bRelease )
+{
+    DBG_TESTSOLARMUTEX();
+
+    if ( !mpGraphics )
+        return;
+
+    // release the fonts of the physically released graphics device
+    if( bRelease )
+        ImplReleaseFonts();
+
+    ImplSVData* pSVData = ImplGetSVData();
+
+    Window* pWindow = (Window*)this;
+
+    if ( bRelease )
+        pWindow->mpWindowImpl->mpFrame->ReleaseGraphics( mpGraphics );
+    // remove from global LRU list of window graphics
+    if ( mpPrevGraphics )
+        mpPrevGraphics->mpNextGraphics = mpNextGraphics;
+    else
+        pSVData->maGDIData.mpFirstWinGraphics = mpNextGraphics;
+    if ( mpNextGraphics )
+        mpNextGraphics->mpPrevGraphics = mpPrevGraphics;
+    else
+        pSVData->maGDIData.mpLastWinGraphics = mpPrevGraphics;
+
+    mpGraphics      = NULL;
+    mpPrevGraphics  = NULL;
+    mpNextGraphics  = NULL;
+}
 
 bool Window::HasMirroredGraphics() const
 {

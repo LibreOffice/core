@@ -82,6 +82,38 @@ bool VirtualDevice::ImplInitGraphics() const
     return mpGraphics ? true : false;
 }
 
+void VirtualDevice::ImplReleaseGraphics( bool bRelease )
+{
+    DBG_TESTSOLARMUTEX();
+
+    if ( !mpGraphics )
+        return;
+
+    // release the fonts of the physically released graphics device
+    if ( bRelease )
+        ImplReleaseFonts();
+
+    ImplSVData* pSVData = ImplGetSVData();
+
+    VirtualDevice* pVirDev = (VirtualDevice*)this;
+
+    if ( bRelease )
+        pVirDev->mpVirDev->ReleaseGraphics( mpGraphics );
+    // remove from global LRU list of virtual device graphics
+    if ( mpPrevGraphics )
+        mpPrevGraphics->mpNextGraphics = mpNextGraphics;
+    else
+        pSVData->maGDIData.mpFirstVirGraphics = mpNextGraphics;
+    if ( mpNextGraphics )
+        mpNextGraphics->mpPrevGraphics = mpPrevGraphics;
+    else
+        pSVData->maGDIData.mpLastVirGraphics = mpPrevGraphics;
+
+    mpGraphics      = NULL;
+    mpPrevGraphics  = NULL;
+    mpNextGraphics  = NULL;
+}
+
 void VirtualDevice::ImplInitVirDev( const OutputDevice* pOutDev,
                                     long nDX, long nDY, sal_uInt16 nBitCount, const SystemGraphicsData *pData )
 {

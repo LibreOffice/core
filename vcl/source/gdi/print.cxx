@@ -527,6 +527,90 @@ bool Printer::ImplInitGraphics() const
     return mpGraphics ? true : false;
 }
 
+void Printer::ImplReleaseFonts()
+{
+#ifndef UNX
+    // HACK to fix an urgent P1 printing issue fast
+    // WinSalPrinter does not respect GetGraphics/ReleaseGraphics conventions
+    // so Printer::mpGraphics often points to a dead WinSalGraphics
+    // TODO: fix WinSalPrinter's GetGraphics/ReleaseGraphics handling
+    mpGraphics->ReleaseFonts();
+#endif
+    mbNewFont = true;
+    mbInitFont = true;
+
+    if ( mpFontEntry )
+    {
+        mpFontCache->Release( mpFontEntry );
+        mpFontEntry = NULL;
+    }
+
+    if ( mpGetDevFontList )
+    {
+        delete mpGetDevFontList;
+        mpGetDevFontList = NULL;
+    }
+
+    if ( mpGetDevSizeList )
+    {
+        delete mpGetDevSizeList;
+        mpGetDevSizeList = NULL;
+    }
+}
+
+void Printer::ImplReleaseGraphics( bool bRelease )
+{
+    DBG_TESTSOLARMUTEX();
+
+    if ( !mpGraphics )
+        return;
+
+    // release the fonts of the physically released graphics device
+    if( bRelease )
+        ImplReleaseFonts();
+
+    ImplSVData* pSVData = ImplGetSVData();
+
+    Printer* pPrinter = (Printer*)this;
+
+    if ( !pPrinter->mpJobGraphics )
+    {
+        if ( pPrinter->mpDisplayDev )
+        {
+            VirtualDevice* pVirDev = pPrinter->mpDisplayDev;
+            if ( bRelease )
+                pVirDev->mpVirDev->ReleaseGraphics( mpGraphics );
+            // remove from global LRU list of virtual device graphics
+            if ( mpPrevGraphics )
+                mpPrevGraphics->mpNextGraphics = mpNextGraphics;
+            else
+                pSVData->maGDIData.mpFirstVirGraphics = mpNextGraphics;
+            if ( mpNextGraphics )
+                mpNextGraphics->mpPrevGraphics = mpPrevGraphics;
+            else
+                pSVData->maGDIData.mpLastVirGraphics = mpPrevGraphics;
+        }
+        else
+        {
+            if ( bRelease )
+                pPrinter->mpInfoPrinter->ReleaseGraphics( mpGraphics );
+            // remove from global LRU list of printer graphics
+            if ( mpPrevGraphics )
+                mpPrevGraphics->mpNextGraphics = mpNextGraphics;
+            else
+                pSVData->maGDIData.mpFirstPrnGraphics = mpNextGraphics;
+            if ( mpNextGraphics )
+                mpNextGraphics->mpPrevGraphics = mpPrevGraphics;
+            else
+                pSVData->maGDIData.mpLastPrnGraphics = mpPrevGraphics;
+        }
+    }
+
+    mpGraphics      = NULL;
+    mpPrevGraphics  = NULL;
+    mpNextGraphics  = NULL;
+}
+
 void Printer::ImplInit( SalPrinterQueueInfo* pInfo )
 {
     ImplSVData* pSVData = ImplGetSVData();

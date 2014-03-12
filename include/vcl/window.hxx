@@ -375,6 +375,7 @@ private:
 public:
     SAL_DLLPRIVATE void                ImplInit( Window* pParent, WinBits nStyle, SystemParentData* pSystemParentData );
     bool                               ImplInitGraphics() const;
+    void                               ImplReleaseGraphics( bool bRelease = true );
     SAL_DLLPRIVATE WinBits             ImplInitRes( const ResId& rResId );
     SAL_DLLPRIVATE WindowResHeader     ImplLoadResHeader( const ResId& rResId );
     SAL_DLLPRIVATE void                ImplLoadRes( const ResId& rResId );
