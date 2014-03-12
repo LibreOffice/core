@@ -421,7 +421,9 @@ void FillProperties::pushToPropMap( ShapePropertyMap& rPropMap,
 
                     OUString aGraphicUrl = rGraphicHelper.createGraphicObject( xGraphic );
                     // push bitmap or named bitmap to property map
-                    if( !aGraphicUrl.isEmpty() && rPropMap.setProperty( SHAPEPROP_FillBitmapUrl, aGraphicUrl ) )
+                    if( !aGraphicUrl.isEmpty() && rPropMap.supportsProperty( SHAPEPROP_FillBitmapNameFromUrl ) && rPropMap.setProperty( SHAPEPROP_FillBitmapNameFromUrl, aGraphicUrl ) )
+                        eFillStyle = FillStyle_BITMAP;
+                    else if( !aGraphicUrl.isEmpty() && rPropMap.setProperty( SHAPEPROP_FillBitmapUrl, aGraphicUrl ) )
                         eFillStyle = FillStyle_BITMAP;
 
                     // set other bitmap properties, if bitmap has been inserted into the map
