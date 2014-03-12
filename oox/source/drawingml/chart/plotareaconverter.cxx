@@ -355,7 +355,7 @@ void PlotAreaConverter::convertFromModel( View3DModel& rView3DModel )
         PlotAreaModel::AxisVector::value_type xAxis = *aAIt;
         OSL_ENSURE( xAxis->mnAxisId >= 0, "PlotAreaConverter::convertFromModel - invalid axis identifier" );
         OSL_ENSURE( !aAxisMap.has( xAxis->mnAxisId ), "PlotAreaConverter::convertFromModel - axis identifiers not unique" );
-        if( xAxis->mnAxisId >= 0 )
+        if( xAxis->mnAxisId != -1 )
             aAxisMap[ xAxis->mnAxisId ] = xAxis;
     }
 
