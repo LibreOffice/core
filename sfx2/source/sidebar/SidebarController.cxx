@@ -496,9 +496,15 @@ void SidebarController::UpdateConfigurations (void)
         // with the deck.
         mpTabBar->HighlightDeck(sNewDeckId);
 
-        SwitchToDeck(
-            *ResourceManager::Instance().GetDeckDescriptor(sNewDeckId),
-            maCurrentContext);
+        const DeckDescriptor* pDescriptor =
+            ResourceManager::Instance().GetDeckDescriptor(sNewDeckId);
+
+        if (pDescriptor)
+        {
+            SwitchToDeck(
+                *pDescriptor,
+                maCurrentContext);
+        }
     }
 }
 
