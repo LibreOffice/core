@@ -26,8 +26,6 @@ namespace oox {
 namespace drawingml {
 namespace chart {
 
-
-
 struct UpDownBarsModel
 {
     typedef ModelRef< Shape > ShapeRef;
@@ -39,8 +37,6 @@ struct UpDownBarsModel
     explicit            UpDownBarsModel();
                         ~UpDownBarsModel();
 };
-
-
 
 struct TypeGroupModel
 {
@@ -84,8 +80,6 @@ struct TypeGroupModel
     explicit            TypeGroupModel( sal_Int32 nTypeId );
                         ~TypeGroupModel();
 };
-
-
 
 } // namespace chart
 } // namespace drawingml
