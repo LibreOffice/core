@@ -287,7 +287,7 @@ private:
     sal_uInt16              nLang;   ///< Always change via SetLanguage!
     sal_Bool                bIsAutomaticLanguage;
     sal_uInt32          nFormat;
-
+    mutable bool m_bCitation;
     SwFieldType*        pType;
 
     virtual OUString    Expand() const = 0;
@@ -358,6 +358,9 @@ public:
     /// Does the field possess an action on its ClickHandler? (e.g. INetFields, ...).
     sal_Bool            HasClickHdl() const;
     sal_Bool            IsFixed() const;
+
+    bool                IsCitation() const { return m_bCitation;}
+    void                SetCitation(const bool bSet) const {m_bCitation = bSet;}
 
     sal_Bool                IsAutomaticLanguage() const { return bIsAutomaticLanguage;}
     void                SetAutomaticLanguage(sal_Bool bSet){bIsAutomaticLanguage = bSet;}

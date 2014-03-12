@@ -542,7 +542,7 @@ OUString SwAuthorityField::Expand() const
 {
     SwAuthorityFieldType* pAuthType = (SwAuthorityFieldType*)GetTyp();
     OUString sRet;
-    if(pAuthType->GetPrefix())
+    if(pAuthType->GetPrefix() && !IsCitation())
         sRet = OUString(pAuthType->GetPrefix());
 
     if( pAuthType->IsSequence() )
@@ -557,9 +557,15 @@ OUString SwAuthorityField::Expand() const
         const SwAuthEntry* pEntry = pAuthType->GetEntryByHandle(m_nHandle);
         //TODO: Expand to: identifier, number sequence, ...
         if(pEntry)
-            sRet += pEntry->GetAuthorField(AUTH_FIELD_IDENTIFIER);
+        {
+            if(!IsCitation())
+                sRet += pEntry->GetAuthorField(AUTH_FIELD_IDENTIFIER);
+            else
+                sRet += pEntry->GetAuthorField(AUTH_FIELD_TITLE);
+        }
+
     }
-    if(pAuthType->GetSuffix())
+    if(pAuthType->GetSuffix() && !IsCitation())
         sRet += OUString(pAuthType->GetSuffix());
     return sRet;
 }

@@ -583,6 +583,10 @@ String STR_POOLCOLL_TOX_USER10
 {
     Text [ en-US ] = "User Index 10" ;
 };
+String STR_POOLCOLL_TOX_CITATION
+{
+    Text [ en-US ] = "Citation" ;
+};
 String STR_POOLCOLL_TOX_ILLUSH
 {
     Text [ en-US ] = "Illustration Index Heading";

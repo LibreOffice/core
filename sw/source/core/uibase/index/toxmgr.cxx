@@ -363,6 +363,7 @@ sal_Bool SwTOXMgr::UpdateOrInsertTOX(const SwTOXDescription& rDesc,
             pNewTOX->SetLevelFromChapter(rDesc.IsLevelFromChapter());
         }
         break;
+        case TOX_CITATION: /** TODO */break;
         case TOX_OBJECTS:
         case TOX_TABLES:
         case TOX_AUTHORITIES:
