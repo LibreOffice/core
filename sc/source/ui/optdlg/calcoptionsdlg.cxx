@@ -83,7 +83,7 @@ void OptionString::Paint(const Point& rPos, SvTreeListBox& rDev, const SvViewDat
     rDev.Control::SetFont(aOldFont);
 }
 
-formula::FormulaGrammar::AddressConvention toAddressConvention(sal_uInt16 nPos)
+formula::FormulaGrammar::AddressConvention toAddressConvention(sal_Int32 nPos)
 {
     switch (nPos)
     {
@@ -269,7 +269,7 @@ void ScCalcOptionsDialog::FillOptionsList()
 
 void ScCalcOptionsDialog::SelectionChanged()
 {
-    sal_uInt16 nSelectedPos = mpLbSettings->GetSelectEntryPos();
+    sal_uLong nSelectedPos = mpLbSettings->GetSelectEntryPos();
     switch ((CalcOptionOrder)nSelectedPos)
     {
         case CALC_OPTION_REF_SYNTAX:
@@ -353,13 +353,13 @@ void ScCalcOptionsDialog::SelectionChanged()
 
 void ScCalcOptionsDialog::ListOptionValueChanged()
 {
-    sal_uInt16 nSelected = mpLbSettings->GetSelectEntryPos();
+    sal_uLong nSelected = mpLbSettings->GetSelectEntryPos();
     switch ((CalcOptionOrder) nSelected)
     {
         case CALC_OPTION_REF_SYNTAX:
         {
             // Formula syntax for INDIRECT function.
-            sal_uInt16 nPos = mpLbOptionEdit->GetSelectEntryPos();
+            sal_Int32 nPos = mpLbOptionEdit->GetSelectEntryPos();
             maConfig.meStringRefAddressSyntax = toAddressConvention(nPos);
 
             setValueAt(nSelected, toString(maConfig.meStringRefAddressSyntax));
@@ -419,7 +419,7 @@ void ScCalcOptionsDialog::SelectedDeviceChanged()
 
 void ScCalcOptionsDialog::RadioValueChanged()
 {
-    sal_uInt16 nSelected = mpLbSettings->GetSelectEntryPos();
+    sal_uLong nSelected = mpLbSettings->GetSelectEntryPos();
     bool bValue = mpBtnTrue->IsChecked();
     switch (nSelected)
     {
