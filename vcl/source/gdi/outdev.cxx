@@ -551,123 +551,6 @@ SalGraphics const *OutputDevice::ImplGetGraphics() const
     return mpGraphics;
 }
 
-void OutputDevice::ImplReleaseGraphics( bool bRelease )
-{
-    DBG_TESTSOLARMUTEX();
-
-    if ( !mpGraphics )
-        return;
-
-    // release the fonts of the physically released graphics device
-    if( bRelease )
-    {
-#ifndef UNX
-        // HACK to fix an urgent P1 printing issue fast
-        // WinSalPrinter does not respect GetGraphics/ReleaseGraphics conventions
-        // so Printer::mpGraphics often points to a dead WinSalGraphics
-        // TODO: fix WinSalPrinter's GetGraphics/ReleaseGraphics handling
-        if( meOutDevType != OUTDEV_PRINTER )
-#endif
-        mpGraphics->ReleaseFonts();
-
-        mbNewFont = true;
-        mbInitFont = true;
-
-        if ( mpFontEntry )
-        {
-            mpFontCache->Release( mpFontEntry );
-            mpFontEntry = NULL;
-        }
-
-        if ( mpGetDevFontList )
-        {
-            delete mpGetDevFontList;
-            mpGetDevFontList = NULL;
-        }
-
-        if ( mpGetDevSizeList )
-        {
-            delete mpGetDevSizeList;
-            mpGetDevSizeList = NULL;
-        }
-    }
-
-    ImplSVData* pSVData = ImplGetSVData();
-    if ( meOutDevType == OUTDEV_WINDOW )
-    {
-        Window* pWindow = (Window*)this;
-
-        if ( bRelease )
-            pWindow->mpWindowImpl->mpFrame->ReleaseGraphics( mpGraphics );
-        // remove from global LRU list of window graphics
-        if ( mpPrevGraphics )
-            mpPrevGraphics->mpNextGraphics = mpNextGraphics;
-        else
-            pSVData->maGDIData.mpFirstWinGraphics = mpNextGraphics;
-        if ( mpNextGraphics )
-            mpNextGraphics->mpPrevGraphics = mpPrevGraphics;
-        else
-            pSVData->maGDIData.mpLastWinGraphics = mpPrevGraphics;
-    }
-    else if ( meOutDevType == OUTDEV_VIRDEV )
-    {
-        VirtualDevice* pVirDev = (VirtualDevice*)this;
-
-        if ( bRelease )
-            pVirDev->mpVirDev->ReleaseGraphics( mpGraphics );
-        // remove from global LRU list of virtual device graphics
-        if ( mpPrevGraphics )
-            mpPrevGraphics->mpNextGraphics = mpNextGraphics;
-        else
-            pSVData->maGDIData.mpFirstVirGraphics = mpNextGraphics;
-        if ( mpNextGraphics )
-            mpNextGraphics->mpPrevGraphics = mpPrevGraphics;
-        else
-            pSVData->maGDIData.mpLastVirGraphics = mpPrevGraphics;
-    }
-    else if ( meOutDevType == OUTDEV_PRINTER )
-    {
-        Printer* pPrinter = (Printer*)this;
-
-        if ( !pPrinter->mpJobGraphics )
-        {
-            if ( pPrinter->mpDisplayDev )
-            {
-                VirtualDevice* pVirDev = pPrinter->mpDisplayDev;
-                if ( bRelease )
-                    pVirDev->mpVirDev->ReleaseGraphics( mpGraphics );
-                // remove from global LRU list of virtual device graphics
-                if ( mpPrevGraphics )
-                    mpPrevGraphics->mpNextGraphics = mpNextGraphics;
-                else
-                    pSVData->maGDIData.mpFirstVirGraphics = mpNextGraphics;
-                if ( mpNextGraphics )
-                    mpNextGraphics->mpPrevGraphics = mpPrevGraphics;
-                else
-                    pSVData->maGDIData.mpLastVirGraphics = mpPrevGraphics;
-            }
-            else
-            {
-                if ( bRelease )
-                    pPrinter->mpInfoPrinter->ReleaseGraphics( mpGraphics );
-                // remove from global LRU list of printer graphics
-                if ( mpPrevGraphics )
-                    mpPrevGraphics->mpNextGraphics = mpNextGraphics;
-                else
-                    pSVData->maGDIData.mpFirstPrnGraphics = mpNextGraphics;
-                if ( mpNextGraphics )
-                    mpNextGraphics->mpPrevGraphics = mpPrevGraphics;
-                else
-                    pSVData->maGDIData.mpLastPrnGraphics = mpPrevGraphics;
-           }
-        }
-    }
-
-    mpGraphics      = NULL;
-    mpPrevGraphics  = NULL;
-    mpNextGraphics  = NULL;
-}
-
 void OutputDevice::ImplInitOutDevData()
 {
     if ( !mpOutDevData )
@@ -679,6 +562,31 @@ void OutputDevice::ImplInitOutDevData()
         // #i75163#
         mpOutDevData->mpViewTransform = NULL;
         mpOutDevData->mpInverseViewTransform = NULL;
+    }
+}
+
+void OutputDevice::ImplReleaseFonts()
+{
+    mpGraphics->ReleaseFonts();
+    mbNewFont = true;
+    mbInitFont = true;
+
+    if ( mpFontEntry )
+    {
+        mpFontCache->Release( mpFontEntry );
+        mpFontEntry = NULL;
+    }
+
+    if ( mpGetDevFontList )
+    {
+        delete mpGetDevFontList;
+        mpGetDevFontList = NULL;
+    }
+
+    if ( mpGetDevSizeList )
+    {
+        delete mpGetDevSizeList;
+        mpGetDevSizeList = NULL;
     }
 }
 

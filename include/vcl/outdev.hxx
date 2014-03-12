@@ -352,6 +352,10 @@ private:
     mutable bool                mbRefPoint : 1;
     mutable bool                mbEnableRTL : 1;
 
+
+protected:
+     virtual void               ImplReleaseFonts();
+
 public:
     /** @name Initialization and accessor functions
      */
@@ -393,7 +397,7 @@ public:
      @param         bRelease    Determines whether to release the fonts of the
                                 physically released graphics device.
      */
-    SAL_DLLPRIVATE void         ImplReleaseGraphics( bool bRelease = true );
+    virtual void                ImplReleaseGraphics( bool bRelease = true ) = 0;
 
     /** Initialize the graphics device's data structures.
      */
