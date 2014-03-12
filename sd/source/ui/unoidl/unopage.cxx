@@ -1347,7 +1347,10 @@ Reference< drawing::XShape >  SdGenericDrawPage::_CreateShape( SdrObject *pObj )
     DBG_ASSERT( GetPage(), "SdGenericDrawPage::_CreateShape(), can't create shape for disposed page!" );
     DBG_ASSERT( pObj, "SdGenericDrawPage::_CreateShape(), invalid call with pObj == 0!" );
 
-    if( GetPage() && pObj )
+    if (!pObj)
+        return Reference< drawing::XShape >();
+
+    if (GetPage())
     {
         PresObjKind eKind = GetPage()->GetPresObjKind(pObj);
 
