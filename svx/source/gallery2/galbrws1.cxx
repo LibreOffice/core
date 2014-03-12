@@ -90,7 +90,7 @@ void GalleryThemeListBox::DataChanged( const DataChangedEvent& rDCEvt )
 
 bool GalleryThemeListBox::PreNotify( NotifyEvent& rNEvt )
 {
-    bool nDone = true;
+    bool bDone = false;
 
     if( rNEvt.GetType() == EVENT_COMMAND )
     {
@@ -104,10 +104,10 @@ bool GalleryThemeListBox::PreNotify( NotifyEvent& rNEvt )
         const KeyEvent* pKEvt = rNEvt.GetKeyEvent();
 
         if( pKEvt )
-            nDone = static_cast< GalleryBrowser1* >( GetParent() )->KeyInput( *pKEvt, this );
+            bDone = static_cast< GalleryBrowser1* >( GetParent() )->KeyInput( *pKEvt, this );
     }
 
-    return( nDone || ListBox::PreNotify( rNEvt ) );
+    return( bDone || ListBox::PreNotify( rNEvt ) );
 }
 
 // - GalleryBrowser1 -
