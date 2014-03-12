@@ -182,23 +182,15 @@ sal_Bool SwCntntFrm::ShouldBwdMoved( SwLayoutFrm *pNewUpper, sal_Bool, sal_Bool 
                 }
                 // It's impossible for _WouldFit to return a usable result if
                 // we have a fresh multi-column section - so we really have to
-                // float back
-                else if( pNewUpper->IsInSct() && pNewUpper->IsColBodyFrm() &&
-                    !(pNewUpper->Prt().*fnRectX->fnGetWidth)() &&
-                    ( pNewUpper->GetUpper()->GetPrev() ||
-                      pNewUpper->GetUpper()->GetNext() ) )
-                    return sal_True;
-                else
-                    return sal_False; // No space. No sense in floating back
+                // float back unless there is no space.
+                return pNewUpper->IsInSct() && pNewUpper->IsColBodyFrm() &&
+                       !(pNewUpper->Prt().*fnRectX->fnGetWidth)() &&
+                       ( pNewUpper->GetUpper()->GetPrev() ||
+                         pNewUpper->GetUpper()->GetNext() );
             }
-            else
-            {
-                // OD 2004-05-26 #i25904# - check for space left in new upper
-                if ( nSpace )
-                    return sal_True;
-                else
-                    return sal_False;
-            }
+
+            // OD 2004-05-26 #i25904# - check for space left in new upper
+            return nSpace != 0;
         }
     }
     return  sal_False;
@@ -879,28 +871,20 @@ bool SwTxtNode::IsCollapse() const
         SwSortedObjs* pObjs = this->getLayoutFrm( GetDoc()->GetCurrentLayout() )->GetDrawObjs( );
         sal_uInt32 nObjs = ( pObjs != NULL ) ? pObjs->Count( ) : 0;
 
-        if ( pNdBefore!=NULL && pNdAfter!=NULL && nObjs == 0 && bInTable ) {
-            return true;
-        } else {
-            return false;
-        }
-    } else
-        return false;
+        return pNdBefore!=NULL && pNdAfter!=NULL && nObjs == 0 && bInTable;
+    }
+
+    return false;
 }
 
 bool SwFrm::IsCollapse() const
 {
-    if (IsTxtFrm()) {
-        const SwTxtFrm *pTxtFrm=(SwTxtFrm*)this;
-        const SwTxtNode *pTxtNode=pTxtFrm->GetTxtNode();
-        if (pTxtNode && pTxtNode->IsCollapse()) {
-            return true;
-        } else {
-            return false;
-        }
-    } else {
+    if (!IsTxtFrm())
         return false;
-    }
+
+    const SwTxtFrm *pTxtFrm=(SwTxtFrm*)this;
+    const SwTxtNode *pTxtNode=pTxtFrm->GetTxtNode();
+    return pTxtNode && pTxtNode->IsCollapse();
 }
 
 sal_Bool SwCntntFrm::MakePrtArea( const SwBorderAttrs &rAttrs )
@@ -1762,7 +1746,7 @@ static bool lcl_IsNextFtnBoss( const SwFrm *pFrm, const SwFrm* pNxt )
     while( pNxt && pNxt->IsColumnFrm() && !pNxt->GetPrev() )
         pNxt = pNxt->GetUpper()->FindFtnBossFrm();
     // So.. now pFrm and pNxt are either two adjacent pages or columns.
-    return ( pFrm && pNxt && pFrm->GetNext() == pNxt );
+    return pFrm && pNxt && pFrm->GetNext() == pNxt;
 }
 
 sal_Bool SwCntntFrm::_WouldFit( SwTwips nSpace,
