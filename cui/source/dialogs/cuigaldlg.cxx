@@ -89,18 +89,18 @@ SearchThread::~SearchThread()
 
 void SearchThread::execute()
 {
-    const OUString aFileType( mpBrowser->aCbbFileType.GetText() );
+    const OUString aFileType( mpBrowser->m_pCbbFileType->GetText() );
 
     if( !aFileType.isEmpty() )
     {
-        const sal_uInt16        nFileNumber = mpBrowser->aCbbFileType.GetEntryPos( aFileType );
+        const sal_uInt16        nFileNumber = mpBrowser->m_pCbbFileType->GetEntryPos( aFileType );
         sal_uInt16              nBeginFormat, nEndFormat;
         ::std::vector< OUString > aFormats;
 
-        if( !nFileNumber || ( nFileNumber >= mpBrowser->aCbbFileType.GetEntryCount() ) )
+        if( !nFileNumber || ( nFileNumber >= mpBrowser->m_pCbbFileType->GetEntryCount() ) )
         {
             nBeginFormat = 1;
-            nEndFormat = mpBrowser->aCbbFileType.GetEntryCount() - 1;
+            nEndFormat = mpBrowser->m_pCbbFileType->GetEntryCount() - 1;
         }
         else
             nBeginFormat = nEndFormat = nFileNumber;
@@ -180,7 +180,7 @@ void SearchThread::ImplSearch( const INetURLObject& rStartURL,
                             mpBrowser->aFoundList.push_back(
                                 aFoundURL.GetMainURL( INetURLObject::NO_DECODE )
                             );
-                            mpBrowser->aLbxFound.InsertEntry(
+                            mpBrowser->m_pLbxFound->InsertEntry(
                                 GetReducedString( aFoundURL, 50 ),
                                 (sal_uInt16) mpBrowser->aFoundList.size() - 1 );
                         }
@@ -301,7 +301,7 @@ void TakeThread::execute()
     {
         SolarMutexGuard aGuard;
         pStatusProgress = new GalleryProgress;
-        nEntries = mpBrowser->bTakeAll ? mpBrowser->aLbxFound.GetEntryCount() : mpBrowser->aLbxFound.GetSelectEntryCount();
+        nEntries = mpBrowser->bTakeAll ? mpBrowser->m_pLbxFound->GetEntryCount() : mpBrowser->m_pLbxFound->GetSelectEntryCount();
         pThm->LockBroadcaster();
     }
 
@@ -310,7 +310,7 @@ void TakeThread::execute()
         if( mpBrowser->bTakeAll )
             aURL = INetURLObject( mpBrowser->aFoundList[ nPos = i ] );
         else
-            aURL = INetURLObject( mpBrowser->aFoundList[ nPos = mpBrowser->aLbxFound.GetSelectEntryPos( i ) ]);
+            aURL = INetURLObject( mpBrowser->aFoundList[ nPos = mpBrowser->m_pLbxFound->GetSelectEntryPos( i ) ]);
 
         mrTakenList.push_back( (sal_uLong)nPos );
 
@@ -379,8 +379,8 @@ IMPL_LINK_NOARG(TakeProgress, CleanUpHdl)
     sal_uInt32                  i, nCount;
 
     GetParent()->EnterWait();
-    mpBrowser->aLbxFound.SetUpdateMode( false );
-    mpBrowser->aLbxFound.SetNoSelection();
+    mpBrowser->m_pLbxFound->SetUpdateMode( false );
+    mpBrowser->m_pLbxFound->SetNoSelection();
 
     // mark all taken positions in aRemoveEntries
     for( i = 0, nCount = maTakenList.size(); i < nCount; ++i )
@@ -402,16 +402,16 @@ IMPL_LINK_NOARG(TakeProgress, CleanUpHdl)
     // refill list box
     for( i = 0, nCount = aRemoveEntries.size(); i < nCount; ++i )
         if( !aRemoveEntries[ i ] )
-            aRemainingVector.push_back( mpBrowser->aLbxFound.GetEntry( (sal_uInt16) i ) );
+            aRemainingVector.push_back( mpBrowser->m_pLbxFound->GetEntry( (sal_uInt16) i ) );
 
-    mpBrowser->aLbxFound.Clear();
+    mpBrowser->m_pLbxFound->Clear();
 
     for( i = 0, nCount = aRemainingVector.size(); i < nCount; ++i )
-        mpBrowser->aLbxFound.InsertEntry( aRemainingVector[ i ] );
+        mpBrowser->m_pLbxFound->InsertEntry( aRemainingVector[ i ] );
 
     aRemainingVector.clear();
 
-    mpBrowser->aLbxFound.SetUpdateMode( true );
+    mpBrowser->m_pLbxFound->SetUpdateMode( true );
     mpBrowser->SelectFoundHdl( NULL );
     GetParent()->LeaveWait();
 
@@ -702,36 +702,30 @@ SfxTabPage* TPGalleryThemeGeneral::Create( Window* pParent, const SfxItemSet& rS
     return new TPGalleryThemeGeneral( pParent, rSet );
 }
 
-
 // - TPGalleryThemeProperties -
-
-
-TPGalleryThemeProperties::TPGalleryThemeProperties( Window* pWindow, const SfxItemSet& rSet ) :
-        SfxTabPage          ( pWindow, CUI_RES( RID_SVXTABPAGE_GALLERYTHEME_FILES ), rSet ),
-        aFtFileType         ( this, CUI_RES(FT_FILETYPE ) ),
-        aCbbFileType        ( this, CUI_RES(CBB_FILETYPE ) ),
-        aLbxFound           ( this, CUI_RES(LBX_FOUND ) ),
-        aBtnSearch          ( this, CUI_RES(BTN_SEARCH ) ),
-        aBtnTake            ( this, CUI_RES(BTN_TAKE ) ),
-        aBtnTakeAll         ( this, CUI_RES(BTN_TAKEALL ) ),
-        aCbxPreview         ( this, CUI_RES(CBX_PREVIEW ) ),
-        aWndPreview         ( this, CUI_RES( WND_BRSPRV ) ),
-        nCurFilterPos       (0),
-        nFirstExtFilterPos  (0),
-        bEntriesFound       (sal_False),
-        bInputAllowed       (sal_True),
-        bSearchRecursive    (sal_False),
-        xDialogListener     ( new ::svt::DialogClosedListener() )
+TPGalleryThemeProperties::TPGalleryThemeProperties( Window* pWindow, const SfxItemSet& rSet )
+    : SfxTabPage(pWindow, "GalleryFilesPage", "cui/ui/galleryfilespage.ui", rSet)
+    , nCurFilterPos(0)
+    , nFirstExtFilterPos(0)
+    , bEntriesFound(false)
+    , bInputAllowed(true)
+    , bSearchRecursive(false)
+    , xDialogListener(new ::svt::DialogClosedListener())
 {
-    FreeResource();
+    get(m_pCbbFileType, "filetype");
+    get(m_pLbxFound, "files");
+    Size aSize(LogicToPixel(Size(172, 156), MAP_APPFONT));
+    m_pLbxFound->set_width_request(aSize.Width());
+    m_pLbxFound->set_height_request(aSize.Height());
+    m_pLbxFound->EnableMultiSelection(true);
+    get(m_pBtnSearch, "findfiles");
+    get(m_pBtnTake, "add");
+    get(m_pBtnTakeAll, "addall");
+    get(m_pCbxPreview, "preview");
+    get(m_pWndPreview, "image");
 
     xDialogListener->SetDialogClosedLink( LINK( this, TPGalleryThemeProperties, DialogClosedHdl ) );
-    aLbxFound.SetAccessibleName(OUString(SVX_RES(RID_SVXSTR_GALLERY_FILESFOUND)));
-    aWndPreview.SetAccessibleName(aCbxPreview.GetText());
-    aLbxFound.SetAccessibleRelationLabeledBy(&aLbxFound);
 }
-
-
 
 void TPGalleryThemeProperties::SetXChgData( ExchangeData* _pData )
 {
@@ -739,22 +733,22 @@ void TPGalleryThemeProperties::SetXChgData( ExchangeData* _pData )
 
     aPreviewTimer.SetTimeoutHdl( LINK( this, TPGalleryThemeProperties, PreviewTimerHdl ) );
     aPreviewTimer.SetTimeout( 500 );
-    aBtnSearch.SetClickHdl(LINK(this, TPGalleryThemeProperties, ClickSearchHdl));
-    aBtnTake.SetClickHdl(LINK(this, TPGalleryThemeProperties, ClickTakeHdl));
-    aBtnTakeAll.SetClickHdl(LINK(this, TPGalleryThemeProperties, ClickTakeAllHdl));
-    aCbxPreview.SetClickHdl(LINK(this, TPGalleryThemeProperties, ClickPreviewHdl));
-    aCbbFileType.SetSelectHdl(LINK(this, TPGalleryThemeProperties, SelectFileTypeHdl));
-    aCbbFileType.EnableDDAutoWidth( false );
-    aLbxFound.SetDoubleClickHdl(LINK(this, TPGalleryThemeProperties, DClickFoundHdl));
-    aLbxFound.SetSelectHdl(LINK(this, TPGalleryThemeProperties, SelectFoundHdl));
-    aLbxFound.InsertEntry(OUString(CUI_RES(RID_SVXSTR_GALLERY_NOFILES)));
-    aLbxFound.Show();
+    m_pBtnSearch->SetClickHdl(LINK(this, TPGalleryThemeProperties, ClickSearchHdl));
+    m_pBtnTake->SetClickHdl(LINK(this, TPGalleryThemeProperties, ClickTakeHdl));
+    m_pBtnTakeAll->SetClickHdl(LINK(this, TPGalleryThemeProperties, ClickTakeAllHdl));
+    m_pCbxPreview->SetClickHdl(LINK(this, TPGalleryThemeProperties, ClickPreviewHdl));
+    m_pCbbFileType->SetSelectHdl(LINK(this, TPGalleryThemeProperties, SelectFileTypeHdl));
+    m_pCbbFileType->EnableDDAutoWidth( false );
+    m_pLbxFound->SetDoubleClickHdl(LINK(this, TPGalleryThemeProperties, DClickFoundHdl));
+    m_pLbxFound->SetSelectHdl(LINK(this, TPGalleryThemeProperties, SelectFoundHdl));
+    m_pLbxFound->InsertEntry(OUString(CUI_RES(RID_SVXSTR_GALLERY_NOFILES)));
+    m_pLbxFound->Show();
 
     FillFilterList();
 
-    aBtnTake.Enable();
-    aBtnTakeAll.Disable();
-    aCbxPreview.Disable();
+    m_pBtnTake->Enable();
+    m_pBtnTakeAll->Disable();
+    m_pCbxPreview->Disable();
 }
 
 
@@ -768,7 +762,7 @@ void TPGalleryThemeProperties::StartSearchFiles( const OUString& _rFolderURL, sh
         SearchFiles();
     }
 
-    nCurFilterPos = aCbbFileType.GetEntryPos( aCbbFileType.GetText() );
+    nCurFilterPos = m_pCbbFileType->GetEntryPos( m_pCbbFileType->GetText() );
 }
 
 
@@ -861,7 +855,7 @@ void TPGalleryThemeProperties::FillFilterList()
         {
             pFilterEntry = new FilterEntry;
             pFilterEntry->aFilterName = aExt;
-            size_t pos = aCbbFileType.InsertEntry( aName );
+            size_t pos = m_pCbbFileType->InsertEntry( aName );
             if ( pos < aFilterEntryList.size() ) {
                 aFilterEntryList.insert( aFilterEntryList.begin() + pos, pFilterEntry );
             } else {
@@ -883,7 +877,7 @@ void TPGalleryThemeProperties::FillFilterList()
 
             pFilterEntry = new FilterEntry;
             pFilterEntry->aFilterName = aFilters[ l ].second.getToken( 0, ';', nIndex );
-            nFirstExtFilterPos = aCbbFileType.InsertEntry(
+            nFirstExtFilterPos = m_pCbbFileType->InsertEntry(
                 addExtension(
                     aFilters[ l ].first,
                     aFilterWildcard += pFilterEntry->aFilterName
@@ -942,20 +936,20 @@ void TPGalleryThemeProperties::FillFilterList()
     pFilterEntry = new FilterEntry;
     pFilterEntry->aFilterName = CUI_RESSTR(RID_SVXSTR_GALLERY_ALLFILES);
     pFilterEntry->aFilterName = addExtension( pFilterEntry->aFilterName, aExtensions );
-    size_t pos = aCbbFileType.InsertEntry( pFilterEntry->aFilterName, 0 );
+    size_t pos = m_pCbbFileType->InsertEntry( pFilterEntry->aFilterName, 0 );
     if ( pos < aFilterEntryList.size() ) {
         aFilterEntryList.insert( aFilterEntryList.begin() + pos, pFilterEntry );
     } else {
         aFilterEntryList.push_back( pFilterEntry );
     }
-    aCbbFileType.SetText( pFilterEntry->aFilterName );
+    m_pCbbFileType->SetText( pFilterEntry->aFilterName );
 }
 
 
 
 IMPL_LINK_NOARG(TPGalleryThemeProperties, SelectFileTypeHdl)
 {
-    OUString aText( aCbbFileType.GetText() );
+    OUString aText( m_pCbbFileType->GetText() );
 
     if( bInputAllowed && ( aLastFilterName != aText ) )
     {
@@ -975,9 +969,9 @@ void TPGalleryThemeProperties::SearchFiles()
     SearchProgress* pProgress = new SearchProgress( this, aURL );
 
     aFoundList.clear();
-    aLbxFound.Clear();
+    m_pLbxFound->Clear();
 
-    pProgress->SetFileType( aCbbFileType.GetText() );
+    pProgress->SetFileType( m_pCbbFileType->GetText() );
     pProgress->SetDirectory( INetURLObject() );
     pProgress->Update();
 
@@ -1013,7 +1007,7 @@ IMPL_LINK_NOARG(TPGalleryThemeProperties, ClickSearchHdl)
                     SearchFiles();
                 }
 
-                nCurFilterPos = aCbbFileType.GetEntryPos( aCbbFileType.GetText() );
+                nCurFilterPos = m_pCbbFileType->GetEntryPos( m_pCbbFileType->GetText() );
             }
         }
         catch (const IllegalArgumentException&)
@@ -1029,7 +1023,7 @@ IMPL_LINK_NOARG(TPGalleryThemeProperties, ClickSearchHdl)
 
 void TPGalleryThemeProperties::TakeFiles()
 {
-    if( aLbxFound.GetSelectEntryCount() || ( bTakeAll && bEntriesFound ) )
+    if( m_pLbxFound->GetSelectEntryCount() || ( bTakeAll && bEntriesFound ) )
     {
         TakeProgress* pTakeProgress = new TakeProgress( this );
         pTakeProgress->Update();
@@ -1049,11 +1043,11 @@ IMPL_LINK_NOARG(TPGalleryThemeProperties, ClickPreviewHdl)
         aPreviewTimer.Stop();
         aPreviewString = "";
 
-        if( !aCbxPreview.IsChecked() )
+        if( !m_pCbxPreview->IsChecked() )
         {
             xMediaPlayer.clear();
-            aWndPreview.SetGraphic( Graphic() );
-            aWndPreview.Invalidate();
+            m_pWndPreview->SetGraphic( Graphic() );
+            m_pWndPreview->Invalidate();
         }
         else
             DoPreview();
@@ -1066,14 +1060,14 @@ IMPL_LINK_NOARG(TPGalleryThemeProperties, ClickPreviewHdl)
 
 void TPGalleryThemeProperties::DoPreview()
 {
-    OUString aString( aLbxFound.GetSelectEntry() );
+    OUString aString( m_pLbxFound->GetSelectEntry() );
 
     if( aString != aPreviewString )
     {
-        INetURLObject   _aURL( aFoundList[ aLbxFound.GetEntryPos( aString ) ] );
+        INetURLObject   _aURL( aFoundList[ m_pLbxFound->GetEntryPos( aString ) ] );
         bInputAllowed = sal_False;
 
-        if ( !aWndPreview.SetGraphic( _aURL ) )
+        if ( !m_pWndPreview->SetGraphic( _aURL ) )
         {
             GetParent()->LeaveWait();
             ErrorHandler::HandleError( ERRCODE_IO_NOTEXISTSPATH );
@@ -1099,7 +1093,7 @@ IMPL_LINK_NOARG(TPGalleryThemeProperties, ClickTakeHdl)
     {
         aPreviewTimer.Stop();
 
-        if( !aLbxFound.GetSelectEntryCount() || !bEntriesFound )
+        if( !m_pLbxFound->GetSelectEntryCount() || !bEntriesFound )
         {
             SvxOpenGraphicDialog aDlg("Gallery");
             aDlg.EnableLink(sal_False);
@@ -1144,21 +1138,21 @@ IMPL_LINK_NOARG(TPGalleryThemeProperties, SelectFoundHdl)
 
         if( bEntriesFound )
         {
-            if( aLbxFound.GetSelectEntryCount() == 1 )
+            if( m_pLbxFound->GetSelectEntryCount() == 1 )
             {
-                aCbxPreview.Enable();
+                m_pCbxPreview->Enable();
                 bPreviewPossible = sal_True;
             }
             else
-                aCbxPreview.Disable();
+                m_pCbxPreview->Disable();
 
             if( !aFoundList.empty() )
-                aBtnTakeAll.Enable();
+                m_pBtnTakeAll->Enable();
             else
-                aBtnTakeAll.Disable();
+                m_pBtnTakeAll->Disable();
         }
 
-        if( bPreviewPossible && aCbxPreview.IsChecked() )
+        if( bPreviewPossible && m_pCbxPreview->IsChecked() )
             aPreviewTimer.Start();
     }
 
@@ -1173,7 +1167,7 @@ IMPL_LINK_NOARG(TPGalleryThemeProperties, DClickFoundHdl)
     {
         aPreviewTimer.Stop();
 
-        return (aLbxFound.GetSelectEntryCount() == 1 && bEntriesFound) ?
+        return (m_pLbxFound->GetSelectEntryCount() == 1 && bEntriesFound) ?
             ClickTakeHdl(NULL) : 0;
     }
     else
@@ -1195,16 +1189,16 @@ IMPL_LINK_NOARG(TPGalleryThemeProperties, EndSearchProgressHdl)
 {
   if( !aFoundList.empty() )
   {
-      aLbxFound.SelectEntryPos( 0 );
-      aBtnTakeAll.Enable();
-      aCbxPreview.Enable();
+      m_pLbxFound->SelectEntryPos( 0 );
+      m_pBtnTakeAll->Enable();
+      m_pCbxPreview->Enable();
       bEntriesFound = sal_True;
   }
   else
   {
-      aLbxFound.InsertEntry( OUString( CUI_RES( RID_SVXSTR_GALLERY_NOFILES ) ) );
-      aBtnTakeAll.Disable();
-      aCbxPreview.Disable();
+      m_pLbxFound->InsertEntry( OUString( CUI_RES( RID_SVXSTR_GALLERY_NOFILES ) ) );
+      m_pBtnTakeAll->Disable();
+      m_pCbxPreview->Disable();
       bEntriesFound = sal_False;
   }
   return 0L;

@@ -1664,8 +1664,6 @@ CreateTabPage AbstractDialogFactory_Impl::GetTabPageCreatorFunc( sal_uInt16 nId 
     {
         case RID_SVXPAGE_TEXTANIMATION :
             return SvxTextAnimationPage::Create;
-        case RID_SVXTABPAGE_GALLERY_GENERAL :
-            return TPGalleryThemeGeneral::Create;
         case RID_SVXPAGE_TRANSPARENCE :
             return SvxTransparenceTabPage::Create;
         case RID_SVXPAGE_AREA :

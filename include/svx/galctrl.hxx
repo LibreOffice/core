@@ -52,11 +52,12 @@ private:
     SVX_DLLPRIVATE void             InitSettings();
 
     // Window
-    SVX_DLLPRIVATE virtual void         Paint(const Rectangle& rRect);
-    SVX_DLLPRIVATE virtual void         MouseButtonDown(const MouseEvent& rMEvt);
+    SVX_DLLPRIVATE virtual void     Paint(const Rectangle& rRect);
+    SVX_DLLPRIVATE virtual Size     GetOptimalSize() const;
+    SVX_DLLPRIVATE virtual void     MouseButtonDown(const MouseEvent& rMEvt);
     SVX_DLLPRIVATE virtual void     Command(const CommandEvent& rCEvt);
     SVX_DLLPRIVATE virtual void     KeyInput( const KeyEvent& rKEvt );
-    SVX_DLLPRIVATE virtual void        DataChanged( const DataChangedEvent& rDCEvt );
+    SVX_DLLPRIVATE virtual void     DataChanged( const DataChangedEvent& rDCEvt );
 
 
     // DropTargetHelper
@@ -70,9 +71,9 @@ private:
 
 public:
 
-                        GalleryPreview( GalleryBrowser2* pParent, GalleryTheme* pTheme );
-                        GalleryPreview( Window* pParent, const ResId& rResId  );
-                        ~GalleryPreview();
+    GalleryPreview(Window* pParent,
+        WinBits nStyle = WB_TABSTOP | WB_BORDER,
+        GalleryTheme* pTheme = NULL);
 
     void                SetGraphic( const Graphic& rGraphic ) { aGraphicObj.SetGraphic( rGraphic ); }
     bool                SetGraphic( const INetURLObject& );

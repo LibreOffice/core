@@ -254,6 +254,9 @@
     <glade-widget-class title="Show Math Symbol" name="smlo-SmShowSymbol"
                         generic-name="Show Math Symbol" parent="GtkDrawingArea"
                         icon-name="widget-gtk-drawingarea"/>
+    <glade-widget-class title="Gallery Preview" name="svxlo-GalleryPreview"
+                        generic-name="Gallery Preview" parent="GtkDrawingArea"
+                        icon-name="widget-gtk-drawingarea"/>
     <glade-widget-class title="Show Math Font" name="smlo-SmShowFont"
                         generic-name="Show Math Font" parent="GtkDrawingArea"
                         icon-name="widget-gtk-drawingarea"/>

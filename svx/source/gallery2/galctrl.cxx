@@ -38,33 +38,30 @@
 #define GALLERY_BRWBOX_TITLE    1
 #define GALLERY_BRWBOX_PATH     2
 
-
-GalleryPreview::GalleryPreview( GalleryBrowser2* pParent, GalleryTheme* pTheme ) :
-    Window( pParent, WB_TABSTOP | WB_BORDER ),
-    DropTargetHelper( this ),
-    DragSourceHelper( this ),
-    mpTheme( pTheme )
+GalleryPreview::GalleryPreview(Window* pParent, WinBits nStyle, GalleryTheme* pTheme)
+    : Window(pParent, nStyle)
+    , DropTargetHelper(this)
+    , DragSourceHelper(this)
+    , mpTheme(pTheme)
 {
-
     SetHelpId( HID_GALLERY_WINDOW );
     InitSettings();
 }
 
-GalleryPreview::GalleryPreview( Window* pParent, const ResId & rResId  ) :
-    Window( pParent, rResId ),
-    DropTargetHelper( this ),
-    DragSourceHelper( this ),
-    mpTheme( NULL )
+extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeGalleryPreview(Window *pParent,
+    VclBuilder::stringmap &rMap)
 {
-
-    SetHelpId( HID_GALLERY_PREVIEW );
-    InitSettings();
+    WinBits nWinBits = WB_TABSTOP;
+    OString sBorder = VclBuilder::extractCustomProperty(rMap);
+    if (!sBorder.isEmpty())
+        nWinBits |= WB_BORDER;
+    return new GalleryPreview(pParent, nWinBits);
 }
 
-GalleryPreview::~GalleryPreview()
+Size GalleryPreview::GetOptimalSize() const
 {
+    return LogicToPixel(Size(70, 88), MAP_APPFONT);
 }
-
 
 bool GalleryPreview::SetGraphic( const INetURLObject& _aURL )
 {

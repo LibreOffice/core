@@ -419,7 +419,7 @@ GalleryBrowser2::GalleryBrowser2( Window* pParent, const ResId& rResId, Gallery*
     mpCurTheme          ( NULL ),
     mpIconView          ( new GalleryIconView( this, NULL ) ),
     mpListView          ( new GalleryListView( this, NULL ) ),
-    mpPreview           ( new GalleryPreview( this, NULL ) ),
+    mpPreview           ( new GalleryPreview(this) ),
     maViewBox           ( this ),
     maSeparator         ( this, WB_VERT ),
     maInfoBar           ( this, WB_LEFT | WB_VCENTER ),
@@ -752,7 +752,7 @@ void GalleryBrowser2::SelectTheme( const OUString& rThemeName )
 
     mpIconView = new GalleryIconView( this, mpCurTheme );
     mpListView = new GalleryListView( this, mpCurTheme );
-    mpPreview = new GalleryPreview( this, mpCurTheme );
+    mpPreview = new GalleryPreview( this, WB_TABSTOP | WB_BORDER, mpCurTheme );
 
     mpIconView->SetAccessibleName(SVX_RESSTR(RID_SVXSTR_GALLERY_THEMEITEMS));
     mpListView->SetAccessibleName(SVX_RESSTR(RID_SVXSTR_GALLERY_THEMEITEMS));
