@@ -188,6 +188,13 @@ function patch_tmp_path {
 	fi
 }
 
+function patch_template_path {
+        if [ -f "package-data/${LO_MAIN_XCD}" ]; then
+                echo "patching Template path ..."
+                sed -i -e 's|<node oor:name="Template" oor:op="fuse" oor:mandatory="true"><node oor:name="InternalPaths"><node oor:name="$(insturl)/share/template/$(vlang)" oor:op="fuse"/></node><prop oor:name="WritePath"><value>$(home)</value></prop></node>|<node oor:name="Template" oor:op="fuse" oor:mandatory="true"><node oor:name="InternalPaths"><node oor:name="$(insturl)/share/template/$(vlang)" oor:op="fuse"/></node><prop oor:name="WritePath"><value>$(insturl)/share/template/common</value></prop></node>|' package-data/${LO_MAIN_XCD}
+        fi
+}
+
 function patch_paths_xcu {
 	if [ -f "package-data/${LO_PATHS_XCU}" ]; then
 		echo "Exchanging Paths.xcu"
@@ -452,6 +459,7 @@ function patch_deb {
 		patch_sdk_exec
 		patch_paths_xcu
 		patch_tmp_path
+                patch_template_path
 		#patch_opensymbol_lhm
 
 		echo "Packaging ${NEW_BASE} ..."
