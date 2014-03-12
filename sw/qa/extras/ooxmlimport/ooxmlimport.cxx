@@ -1100,6 +1100,16 @@ DECLARE_OOXMLIMPORT_TEST(testTbLrHeight, "tblr-height.docx")
     CPPUNIT_ASSERT_EQUAL(text::SizeType::FIX, getProperty<sal_Int16>(xTableRows->getByIndex(0), "SizeType"));
 }
 
+DECLARE_OOXMLIMPORT_TEST(testBnc865381, "bnc865381.docx")
+{
+    uno::Reference<text::XTextTablesSupplier> xTablesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xTables(xTablesSupplier->getTextTables(), uno::UNO_QUERY);
+    uno::Reference<text::XTextTable> xTextTable(xTables->getByIndex(0), uno::UNO_QUERY);
+    uno::Reference<table::XTableRows> xTableRows(xTextTable->getRows(), uno::UNO_QUERY);
+    // Second row has a vertically merged cell, make sure size type is MIN in that case (otherwise B2 is not readable).
+    CPPUNIT_ASSERT_EQUAL(text::SizeType::MIN, getProperty<sal_Int16>(xTableRows->getByIndex(1), "SizeType"));
+}
+
 DECLARE_OOXMLIMPORT_TEST(testFdo53985, "fdo53985.docx")
 {
     // Unhandled excetion prevented import of the rest of the document.
