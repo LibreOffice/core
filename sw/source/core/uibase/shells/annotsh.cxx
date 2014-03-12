@@ -594,7 +594,7 @@ void SwAnnotationShell::Exec( SfxRequest &rReq )
     if (aNullRect != aOutRect)
         pOLV->SetAttribs(aNewAttr);
 
-    rView.GetViewFrame()->GetBindings().InvalidateAll(sal_False);
+    rView.GetViewFrame()->GetBindings().InvalidateAll(false);
     if ( pOLV->GetOutliner()->IsModified() )
         rView.GetWrtShell().SetModified();
 
@@ -1346,11 +1346,11 @@ void SwAnnotationShell::GetLinguState(SfxItemSet &rSet)
             {
                 if (!SvtCJKOptions().IsAnyEnabled())
                 {
-                    rView.GetViewFrame()->GetBindings().SetVisibleState( nWhich, sal_False );
+                    rView.GetViewFrame()->GetBindings().SetVisibleState( nWhich, false );
                     rSet.DisableItem(nWhich);
                 }
                 else
-                    rView.GetViewFrame()->GetBindings().SetVisibleState( nWhich, sal_True );
+                    rView.GetViewFrame()->GetBindings().SetVisibleState( nWhich, true );
             }
             break;
         }
@@ -1498,7 +1498,7 @@ void SwAnnotationShell::ExecUndo(SfxRequest &rReq)
         }
     }
 
-    rView.GetViewFrame()->GetBindings().InvalidateAll(sal_False);
+    rView.GetViewFrame()->GetBindings().InvalidateAll(false);
 
     if (rView.GetPostItMgr()->HasActiveSidebarWin())
         rView.GetPostItMgr()->GetActiveSidebarWin()->ResizeIfNecessary(aOldHeight,rView.GetPostItMgr()->GetActiveSidebarWin()->GetPostItTextHeight());

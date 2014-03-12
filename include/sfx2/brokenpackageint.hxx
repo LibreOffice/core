@@ -30,7 +30,7 @@ class SFX2_DLLPUBLIC RequestPackageReparation
 public:
     RequestPackageReparation( const OUString& aName );
     ~RequestPackageReparation();
-    sal_Bool    isApproved();
+    bool    isApproved();
     com::sun::star::uno::Reference < ::com::sun::star::task::XInteractionRequest > GetRequest();
 };
 
@@ -41,7 +41,7 @@ class SFX2_DLLPUBLIC NotifyBrokenPackage
 public:
     NotifyBrokenPackage( const OUString& aName );
     ~NotifyBrokenPackage();
-    sal_Bool    isAborted();
+    bool    isAborted();
     com::sun::star::uno::Reference < ::com::sun::star::task::XInteractionRequest > GetRequest();
 };
 

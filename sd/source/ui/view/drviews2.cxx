@@ -2080,7 +2080,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
             }
 
             SfxBindings& rBindings = GetViewFrame()->GetBindings();
-            rBindings.Invalidate( SID_NAVIGATOR_STATE, sal_True, sal_False );
+            rBindings.Invalidate( SID_NAVIGATOR_STATE, true, false );
             rBindings.Invalidate( SID_CONTEXT );
 
             Cancel();
@@ -2115,7 +2115,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
             }
 
             SfxBindings& rBindings = GetViewFrame()->GetBindings();
-            rBindings.Invalidate( SID_NAVIGATOR_STATE, sal_True, sal_False );
+            rBindings.Invalidate( SID_NAVIGATOR_STATE, true, false );
             rBindings.Invalidate( SID_CONTEXT );
 
             Cancel();

@@ -108,7 +108,7 @@ void SwWebView::SelectShell()
     int _nSelectionType = GetSelectionType();
     if ( nNewSelectionType == _nSelectionType )
     {
-        GetViewFrame()->GetBindings().InvalidateAll( sal_False );
+        GetViewFrame()->GetBindings().InvalidateAll( false );
         if ( _nSelectionType & nsSelectionType::SEL_OLE ||
              _nSelectionType & nsSelectionType::SEL_GRF )
             //The verb may of course change for graphics and OLE!

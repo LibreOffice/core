@@ -400,7 +400,7 @@ void DrawDocShell::ApplySlotFilter() const
                 pDispatcher->SetSlotFilter();
 
             if( pDispatcher->GetBindings() )
-                pDispatcher->GetBindings()->InvalidateAll( sal_True );
+                pDispatcher->GetBindings()->InvalidateAll( true );
         }
 
         pTestViewShell = SfxViewShell::GetNext( *pTestViewShell );

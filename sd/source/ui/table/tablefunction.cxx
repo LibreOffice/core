@@ -195,7 +195,7 @@ void DrawViewShell::FuTable(SfxRequest& rReq)
         SfxViewShell* pViewShell = GetViewShell();
         OSL_ASSERT (pViewShell!=NULL);
         SfxBindings& rBindings = pViewShell->GetViewFrame()->GetBindings();
-        rBindings.Invalidate( SID_INSERT_TABLE, sal_True, sal_False );
+        rBindings.Invalidate( SID_INSERT_TABLE, true, false );
         break;
     }
     case SID_TABLEDESIGN:

@@ -488,7 +488,7 @@ void SwBaseShell::ExecUndo(SfxRequest &rReq)
             OSL_FAIL("wrong Dispatcher");
     }
 
-    if (pViewFrame) { pViewFrame->GetBindings().InvalidateAll(sal_False); }
+    if (pViewFrame) { pViewFrame->GetBindings().InvalidateAll(false); }
 }
 
 // State of undo

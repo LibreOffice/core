@@ -511,7 +511,7 @@ void SfxShell::Invalidate_Impl( SfxBindings& rBindings, sal_uInt16 nId )
 {
     if ( nId == 0 )
     {
-        rBindings.InvalidateShell( *this, sal_False );
+        rBindings.InvalidateShell( *this, false );
     }
     else
     {
@@ -979,7 +979,7 @@ void SfxShell::SetVerbs(const com::sun::star::uno::Sequence < com::sun::star::em
         for (sal_uInt16 n1=0; n1<nCount ; n1++)
         {
             sal_uInt16 nId = SID_VERB_START + n1;
-            pBindings->Invalidate(nId, sal_False, sal_True);
+            pBindings->Invalidate(nId, false, true);
         }
     }
 
@@ -1029,7 +1029,7 @@ void SfxShell::SetVerbs(const com::sun::star::uno::Sequence < com::sun::star::em
         // the Shell, it is thus enough to encourage a new status update
         SfxBindings *pBindings = pViewSh->GetViewFrame()->GetDispatcher()->
                 GetBindings();
-        pBindings->Invalidate( SID_OBJECT, sal_True, sal_True );
+        pBindings->Invalidate( SID_OBJECT, true, true );
     }
 }
 
@@ -1126,7 +1126,7 @@ sal_Bool SfxShell::HasUIFeature( sal_uInt32 )
 long DispatcherUpdate_Impl( void*, void* pArg )
 {
     ((SfxDispatcher*) pArg)->Update_Impl( sal_True );
-    ((SfxDispatcher*) pArg)->GetBindings()->InvalidateAll(sal_False);
+    ((SfxDispatcher*) pArg)->GetBindings()->InvalidateAll(false);
     return 0;
 }
 

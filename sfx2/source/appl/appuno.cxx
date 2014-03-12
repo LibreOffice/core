@@ -1771,7 +1771,7 @@ RequestPackageReparation::~RequestPackageReparation()
     pImp->release();
 }
 
-sal_Bool RequestPackageReparation::isApproved()
+bool RequestPackageReparation::isApproved()
 {
     return pImp->isApproved();
 }

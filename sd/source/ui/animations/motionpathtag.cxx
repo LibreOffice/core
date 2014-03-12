@@ -1104,7 +1104,7 @@ void MotionPathTag::selectionChanged()
     if( mrView.GetViewShell() && mrView.GetViewShell()->GetViewFrame() )
     {
         SfxBindings& rBindings = mrView.GetViewShell()->GetViewFrame()->GetBindings();
-        rBindings.InvalidateAll(sal_True);
+        rBindings.InvalidateAll(true);
     }
 }
 

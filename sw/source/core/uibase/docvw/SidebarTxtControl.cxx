@@ -218,7 +218,7 @@ void SidebarTxtControl::KeyInput( const KeyEvent& rKeyEvt )
         }
     }
 
-    mrDocView.GetViewFrame()->GetBindings().InvalidateAll(sal_False);
+    mrDocView.GetViewFrame()->GetBindings().InvalidateAll(false);
 }
 
 void SidebarTxtControl::MouseMove( const MouseEvent& rMEvt )
@@ -284,7 +284,7 @@ void SidebarTxtControl::MouseButtonDown( const MouseEvent& rMEvt )
     {
         GetTextView()->MouseButtonDown( rMEvt );
     }
-    mrDocView.GetViewFrame()->GetBindings().InvalidateAll(sal_False);
+    mrDocView.GetViewFrame()->GetBindings().InvalidateAll(false);
 }
 
 void SidebarTxtControl::MouseButtonUp( const MouseEvent& rMEvt )

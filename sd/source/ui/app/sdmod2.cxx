@@ -711,7 +711,7 @@ void SdModule::ApplyItemSet( sal_uInt16 nSlot, const SfxItemSet& rSet )
     }
 
     if( pViewShell && pViewShell->GetViewFrame() )
-        pViewShell->GetViewFrame()->GetBindings().InvalidateAll( sal_True );
+        pViewShell->GetViewFrame()->GetBindings().InvalidateAll( true );
 }
 
 SfxTabPage* SdModule::CreateTabPage( sal_uInt16 nId, Window* pParent, const SfxItemSet& rSet )

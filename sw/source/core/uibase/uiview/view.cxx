@@ -246,7 +246,7 @@ void SwView::SelectShell()
 
     if ( nNewSelectionType == m_nSelectionType )
     {
-        GetViewFrame()->GetBindings().InvalidateAll( sal_False );
+        GetViewFrame()->GetBindings().InvalidateAll( false );
         if ( m_nSelectionType & nsSelectionType::SEL_OLE ||
              m_nSelectionType & nsSelectionType::SEL_GRF )
             // For graphs and OLE the verb can be modified of course!
@@ -631,7 +631,7 @@ void SwView::_CheckReadonlyState()
         rDis.SetSlotFilter();
     }
     if ( bChgd )
-        GetViewFrame()->GetBindings().InvalidateAll(sal_True);
+        GetViewFrame()->GetBindings().InvalidateAll(true);
 }
 
 void SwView::_CheckReadonlySelection()
@@ -685,7 +685,7 @@ void SwView::_CheckReadonlySelection()
     if( nDisableFlags != rDis.GetDisableFlags() )
     {
         rDis.SetDisableFlags( nDisableFlags );
-        GetViewFrame()->GetBindings().InvalidateAll( sal_True );
+        GetViewFrame()->GetBindings().InvalidateAll( true );
     }
 }
 

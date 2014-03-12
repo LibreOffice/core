@@ -883,7 +883,7 @@ sal_Bool ViewShell::ActivateObject(SdrOle2Obj* pObj, long nVerb)
 
         pSdClient->DoVerb(nVerb);   // if necessary, ErrCode is outputted by Sfx
         pViewShell->GetViewFrame()->GetBindings().Invalidate(
-            SID_NAVIGATOR_STATE, sal_True, sal_False);
+            SID_NAVIGATOR_STATE, true, false);
     }
 
     GetDocSh()->SetWaitCursor( sal_False );

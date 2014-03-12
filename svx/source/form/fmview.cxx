@@ -341,7 +341,7 @@ SdrPageView* FmFormView::ShowSdrPage(SdrPage* pPage)
             pFormShellImpl->UpdateForms( sal_True );
 
             // damit der Formular-Navigator auf den Seitenwechsel reagieren kann
-            pFormShell->GetViewShell()->GetViewFrame()->GetBindings().Invalidate(SID_FM_FMEXPLORER_CONTROL , sal_True, sal_False);
+            pFormShell->GetViewShell()->GetViewFrame()->GetBindings().Invalidate(SID_FM_FMEXPLORER_CONTROL, true, false);
 
             pFormShellImpl->SetSelection(GetMarkedObjectList());
         }

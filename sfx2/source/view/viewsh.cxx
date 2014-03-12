@@ -912,7 +912,7 @@ void SfxViewShell::UIDeactivated( SfxInPlaceClient* /*pClient*/ )
         pFrame->GetDispatcher()->Update_Impl( sal_True );
     pFrame->GetBindings().HidePopups(false);
 
-    pFrame->GetBindings().InvalidateAll(sal_True);
+    pFrame->GetBindings().InvalidateAll(true);
 }
 
 

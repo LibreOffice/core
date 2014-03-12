@@ -758,7 +758,7 @@ void SAL_CALL SlideShow::end()
                         framework::FrameworkHelper::GetViewURL(ePreviousType),
                         framework::FrameworkHelper::msCenterPaneURL);
 
-                    pViewShell->GetViewFrame()->GetBindings().InvalidateAll( sal_True );
+                    pViewShell->GetViewFrame()->GetBindings().InvalidateAll( true );
                 }
             }
         }

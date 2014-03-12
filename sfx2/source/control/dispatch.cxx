@@ -566,7 +566,7 @@ IMPL_LINK_INLINE_START( SfxDispatcher, EventHdl_Impl, void *, pvoid )
     Update_Impl();
     SfxBindings* pBindings = GetBindings();
     if ( pBindings )
-        pBindings->StartUpdate_Impl(sal_False);
+        pBindings->StartUpdate_Impl(false);
     return 0;
 }
 IMPL_LINK_INLINE_END( SfxDispatcher, EventHdl_Impl, void *, pvoid )
@@ -1800,7 +1800,7 @@ void SfxDispatcher::SetSlotFilter
     pImp->nFilterCount = nCount;
     pImp->pFilterSIDs = pSIDs;
 
-    GetBindings()->InvalidateAll(sal_True);
+    GetBindings()->InvalidateAll(true);
 }
 
 
@@ -2204,11 +2204,11 @@ void SfxDispatcher::Lock( sal_Bool bLock )
     if ( !bLock && pImp->bLocked && pImp->bInvalidateOnUnlock )
     {
         if ( pBindings )
-            pBindings->InvalidateAll(sal_True);
+            pBindings->InvalidateAll(true);
         pImp->bInvalidateOnUnlock = sal_False;
     }
     else if ( pBindings )
-        pBindings->InvalidateAll(sal_False);
+        pBindings->InvalidateAll(false);
     pImp->bLocked = bLock;
     if ( !bLock )
     {
@@ -2276,7 +2276,7 @@ void SfxDispatcher::SetQuietMode_Impl( sal_Bool bOn )
     pImp->bQuiet = bOn;
     SfxBindings* pBindings = GetBindings();
     if ( pBindings )
-        pBindings->InvalidateAll(sal_True);
+        pBindings->InvalidateAll(true);
 }
 
 SfxItemState SfxDispatcher::QueryState( sal_uInt16 nSlot, const SfxPoolItem* &rpState )

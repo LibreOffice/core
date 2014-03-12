@@ -331,7 +331,7 @@ void ViewShell::Activate(sal_Bool bIsMDIActivate)
         SfxViewShell* pViewShell = GetViewShell();
         OSL_ASSERT (pViewShell!=NULL);
         SfxBindings& rBindings = pViewShell->GetViewFrame()->GetBindings();
-        rBindings.Invalidate( SID_3D_STATE, sal_True, sal_False );
+        rBindings.Invalidate( SID_3D_STATE, true, false );
 
         rtl::Reference< SlideShow > xSlideShow( SlideShow::GetSlideShow( GetViewShellBase() ) );
         if(xSlideShow.is() && xSlideShow->isRunning() )
@@ -1196,7 +1196,7 @@ void ViewShell::ImpSidUndo(sal_Bool, SfxRequest& rReq)
 
     // This one is corresponding to the default handling
     // of SID_UNDO in sfx2
-    GetViewFrame()->GetBindings().InvalidateAll(sal_False);
+    GetViewFrame()->GetBindings().InvalidateAll(false);
 
     rReq.Done();
 }
@@ -1245,7 +1245,7 @@ void ViewShell::ImpSidRedo(sal_Bool, SfxRequest& rReq)
 
     // This one is corresponding to the default handling
     // of SID_UNDO in sfx2
-    GetViewFrame()->GetBindings().InvalidateAll(sal_False);
+    GetViewFrame()->GetBindings().InvalidateAll(false);
 
     rReq.Done();
 }

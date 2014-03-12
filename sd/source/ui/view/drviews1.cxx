@@ -1091,12 +1091,12 @@ sal_Bool DrawViewShell::SwitchPage(sal_uInt16 nSelectedPage)
 
         // so navigator (and effect window) notice that
         SfxBindings& rBindings = GetViewFrame()->GetBindings();
-        rBindings.Invalidate(SID_NAVIGATOR_PAGENAME, sal_True, sal_False);
-        rBindings.Invalidate(SID_STATUS_PAGE, sal_True, sal_False);
-        rBindings.Invalidate(SID_DELETE_MASTER_PAGE, sal_True, sal_False);
-        rBindings.Invalidate(SID_DELETE_PAGE, sal_True, sal_False);
-        rBindings.Invalidate(SID_ASSIGN_LAYOUT,sal_True,sal_False);
-        rBindings.Invalidate(SID_INSERTPAGE,sal_True,sal_False);
+        rBindings.Invalidate(SID_NAVIGATOR_PAGENAME, true, false);
+        rBindings.Invalidate(SID_STATUS_PAGE, true, false);
+        rBindings.Invalidate(SID_DELETE_MASTER_PAGE, true, false);
+        rBindings.Invalidate(SID_DELETE_PAGE, true, false);
+        rBindings.Invalidate(SID_ASSIGN_LAYOUT, true, false);
+        rBindings.Invalidate(SID_INSERTPAGE, true, false);
         UpdatePreview( mpActualPage );
 
         mpDrawView->AdjustMarkHdl();

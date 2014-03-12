@@ -805,13 +805,13 @@ Reference< frame::XDispatch > SAL_CALL SfxBaseController::queryDispatch(   const
                 {
                     const SfxSlot* pSlot = m_pData->m_pViewShell->GetVerbSlot_Impl(nId);
                     if ( pSlot )
-                        return pAct->GetBindings().GetDispatch( pSlot, aURL, sal_False );
+                        return pAct->GetBindings().GetDispatch( pSlot, aURL, false );
                 }
 
                 SfxSlotPool& rSlotPool = SfxSlotPool::GetSlotPool( pAct );
                 const SfxSlot* pSlot = rSlotPool.GetSlot( nId );
                 if ( pSlot && ( !pAct->GetFrame().IsInPlace() || !pSlot->IsMode( SFX_SLOT_CONTAINER ) ) )
-                    return pAct->GetBindings().GetDispatch( pSlot, aURL, sal_False );
+                    return pAct->GetBindings().GetDispatch( pSlot, aURL, false );
                 else
                 {
                     // try to find parent SfxViewFrame
@@ -843,7 +843,7 @@ Reference< frame::XDispatch > SAL_CALL SfxBaseController::queryDispatch(   const
                             SfxSlotPool& rSlotPool2 = SfxSlotPool::GetSlotPool( pParentFrame );
                             const SfxSlot* pSlot2 = rSlotPool2.GetUnoSlot( aURL.Path );
                             if ( pSlot2 )
-                                return pParentFrame->GetBindings().GetDispatch( pSlot2, aURL, sal_False );
+                                return pParentFrame->GetBindings().GetDispatch( pSlot2, aURL, false );
                         }
                     }
                 }

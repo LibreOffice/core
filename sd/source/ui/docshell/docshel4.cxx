@@ -653,7 +653,7 @@ sal_Bool DrawDocShell::SaveCompleted( const ::com::sun::star::uno::Reference< ::
                                SfxViewFrame::Current();
 
         if( pFrame )
-            pFrame->GetBindings().Invalidate( SID_NAVIGATOR_STATE, sal_True, sal_False );
+            pFrame->GetBindings().Invalidate( SID_NAVIGATOR_STATE, true, false );
     }
     return bRet;
 }
@@ -838,7 +838,7 @@ sal_Bool DrawDocShell::GotoBookmark(const OUString& rBookmark)
             ? pDrawViewShell->GetViewFrame()
             : SfxViewFrame::Current() )->GetBindings();
 
-        rBindings.Invalidate(SID_NAVIGATOR_STATE, sal_True, sal_False);
+        rBindings.Invalidate(SID_NAVIGATOR_STATE, true, false);
         rBindings.Invalidate(SID_NAVIGATOR_PAGENAME);
     }
 
@@ -1070,7 +1070,7 @@ sal_Bool DrawDocShell::GotoTreeBookmark(const OUString& rBookmark)
         SfxBindings& rBindings = ( ( mpViewShell && mpViewShell->GetViewFrame() ) ?
                                  mpViewShell->GetViewFrame() : SfxViewFrame::Current() )->GetBindings();
 
-        rBindings.Invalidate(SID_NAVIGATOR_STATE, sal_True, sal_False);
+        rBindings.Invalidate(SID_NAVIGATOR_STATE, true, false);
         rBindings.Invalidate(SID_NAVIGATOR_PAGENAME);
     }
 

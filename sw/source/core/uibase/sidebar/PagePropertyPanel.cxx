@@ -513,7 +513,7 @@ void PagePropertyPanel::NotifyItemUpdate(
     case SID_ATTR_PAGE_SIZE:
         if ( mbInvalidateSIDAttrPageOnSIDAttrPageSizeNotify )
         {
-            mpBindings->Invalidate( SID_ATTR_PAGE, sal_True, sal_False );
+            mpBindings->Invalidate( SID_ATTR_PAGE, true, false );
         }
         if ( eState >= SFX_ITEM_AVAILABLE &&
              pState && pState->ISA(SvxSizeItem) )

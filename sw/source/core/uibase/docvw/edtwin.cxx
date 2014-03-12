@@ -1355,7 +1355,7 @@ void SwEditWin::KeyInput(const KeyEvent &rKEvt)
     // OS:the DrawView also needs a readonly-Flag as well
     if ( !bIsDocReadOnly && rSh.GetDrawView() && rSh.GetDrawView()->KeyInput( rKEvt, this ) )
     {
-        rSh.GetView().GetViewFrame()->GetBindings().InvalidateAll( sal_False );
+        rSh.GetView().GetViewFrame()->GetBindings().InvalidateAll( false );
         rSh.SetModified();
         return; // Event evaluated by SdrView
     }
@@ -2930,7 +2930,7 @@ void SwEditWin::MouseButtonDown(const MouseEvent& _rMEvt)
     {
         if (pSdrView->MouseButtonDown( rMEvt, this ) )
         {
-            rSh.GetView().GetViewFrame()->GetBindings().InvalidateAll(sal_False);
+            rSh.GetView().GetViewFrame()->GetBindings().InvalidateAll(false);
             return; // SdrView's event evaluated
         }
     }
@@ -4222,7 +4222,7 @@ void SwEditWin::MouseButtonUp(const MouseEvent& rMEvt)
 
         if ( pSdrView->MouseButtonUp( rMEvt,this ) )
         {
-            rSh.GetView().GetViewFrame()->GetBindings().InvalidateAll(sal_False);
+            rSh.GetView().GetViewFrame()->GetBindings().InvalidateAll(false);
             return; // SdrView's event evaluated
         }
     }
@@ -5509,7 +5509,7 @@ sal_Bool SwEditWin::SelectMenuPosition(SwWrtShell& rSh, const Point& rMousePos )
         if (pSdrView->MouseButtonDown( aMEvt, this ) )
         {
             pSdrView->MouseButtonUp( aMEvt, this );
-            rSh.GetView().GetViewFrame()->GetBindings().InvalidateAll(sal_False);
+            rSh.GetView().GetViewFrame()->GetBindings().InvalidateAll(false);
             return sal_True;
         }
     }

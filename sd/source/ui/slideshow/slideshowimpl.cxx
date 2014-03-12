@@ -2748,7 +2748,7 @@ void SAL_CALL SlideshowImpl::activate() throw (RuntimeException, std::exception)
                 }
 
                 if( getBindings() )
-                    getBindings()->InvalidateAll(sal_True);
+                    getBindings()->InvalidateAll(true);
 
                 mpShowWindow->GrabFocus();
             }

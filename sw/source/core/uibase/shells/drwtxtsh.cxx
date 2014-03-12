@@ -501,7 +501,7 @@ void SwDrawTextShell::ExecDraw(SfxRequest &rReq)
             return;
     }
 
-    GetView().GetViewFrame()->GetBindings().InvalidateAll(sal_False);
+    GetView().GetViewFrame()->GetBindings().InvalidateAll(false);
 
     if (IsTextEdit() && pOLV->GetOutliner()->IsModified())
         rSh.SetModified();
@@ -538,7 +538,7 @@ void SwDrawTextShell::ExecUndo(SfxRequest &rReq)
                                 pUndoManager->Redo();
                     }
                     bCallBase = false;
-                    GetView().GetViewFrame()->GetBindings().InvalidateAll(sal_False);
+                    GetView().GetViewFrame()->GetBindings().InvalidateAll(false);
                 }
                 break;
             }

@@ -746,7 +746,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
                 if( pVFrame->HasChildWindow( nId ) )
                 {
                     pVFrame->ToggleChildWindow( nId );
-                    pVFrame->GetBindings().InvalidateAll( sal_True );
+                    pVFrame->GetBindings().InvalidateAll( true );
                 }
 
                 OUString sFormula(((const SfxStringItem*)pItem)->GetValue());
@@ -793,7 +793,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
                 rWrtSh.EndAllTblBoxEdit();
                 pVFrame->ToggleChildWindow( nId );
                 if( !pVFrame->HasChildWindow( nId ) )
-                    pVFrame->GetBindings().InvalidateAll( sal_True );
+                    pVFrame->GetBindings().InvalidateAll( true );
                 rReq.Ignore();
             }
         }
@@ -1604,11 +1604,11 @@ void SwTextShell::GetState( SfxItemSet &rSet )
                     if( !aCJKOptions.IsRubyEnabled()
                         || rSh.CrsrInsideInputFld() )
                     {
-                        GetView().GetViewFrame()->GetBindings().SetVisibleState( nWhich, sal_False );
+                        GetView().GetViewFrame()->GetBindings().SetVisibleState( nWhich, false );
                         rSet.DisableItem(nWhich);
                     }
                     else
-                        GetView().GetViewFrame()->GetBindings().SetVisibleState( nWhich, sal_True );
+                        GetView().GetViewFrame()->GetBindings().SetVisibleState( nWhich, true );
                 }
                 break;
 
@@ -1661,11 +1661,11 @@ void SwTextShell::GetState( SfxItemSet &rSet )
                 SvtCJKOptions aCJKOptions;
                 if(!aCJKOptions.IsChangeCaseMapEnabled())
                 {
-                    GetView().GetViewFrame()->GetBindings().SetVisibleState( nWhich, sal_False );
+                    GetView().GetViewFrame()->GetBindings().SetVisibleState( nWhich, false );
                     rSet.DisableItem(nWhich);
                 }
                 else
-                    GetView().GetViewFrame()->GetBindings().SetVisibleState( nWhich, sal_True );
+                    GetView().GetViewFrame()->GetBindings().SetVisibleState( nWhich, true );
             }
             break;
             case FN_READONLY_SELECTION_MODE :

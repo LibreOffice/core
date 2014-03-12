@@ -1166,7 +1166,7 @@ static void lcl_UpdateAndDelete(SfxVoidItem* pInvalidItems[], SfxBoolItem* pBool
         for(sal_Int16 i = 0; i < nCount; i++)
         {
             if(pCurrentFrm == pViewFrm)
-                rBind.InvalidateAll(sal_False);
+                rBind.InvalidateAll(false);
             rBind.SetState( *pInvalidItems[i] );
             rBind.SetState( *pBoolItems[i] );
         }

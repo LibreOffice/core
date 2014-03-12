@@ -2369,7 +2369,7 @@ PopupMenu* SfxCommonTemplateDialog_Impl::CreateContextMenu( void )
 {
     if ( bBindingUpdate )
     {
-        pBindings->Invalidate( SID_STYLE_NEW, sal_True, sal_False );
+        pBindings->Invalidate( SID_STYLE_NEW, true, false );
         pBindings->Update( SID_STYLE_NEW );
         bBindingUpdate = sal_False;
     }
@@ -2501,15 +2501,15 @@ void SfxTemplateDialog_Impl::ClearFamilyList()
 
 void SfxCommonTemplateDialog_Impl::InvalidateBindings()
 {
-    pBindings->Invalidate(SID_STYLE_NEW_BY_EXAMPLE, sal_True, sal_False);
+    pBindings->Invalidate(SID_STYLE_NEW_BY_EXAMPLE, true, false);
     pBindings->Update( SID_STYLE_NEW_BY_EXAMPLE );
-    pBindings->Invalidate(SID_STYLE_UPDATE_BY_EXAMPLE, sal_True, sal_False);
+    pBindings->Invalidate(SID_STYLE_UPDATE_BY_EXAMPLE, true, false);
     pBindings->Update( SID_STYLE_UPDATE_BY_EXAMPLE );
-    pBindings->Invalidate( SID_STYLE_WATERCAN, sal_True, sal_False);
+    pBindings->Invalidate( SID_STYLE_WATERCAN, true, false);
     pBindings->Update( SID_STYLE_WATERCAN );
-    pBindings->Invalidate( SID_STYLE_NEW, sal_True, sal_False );
+    pBindings->Invalidate( SID_STYLE_NEW, true, false );
     pBindings->Update( SID_STYLE_NEW );
-    pBindings->Invalidate( SID_STYLE_DRAGHIERARCHIE, sal_True, sal_False );
+    pBindings->Invalidate( SID_STYLE_DRAGHIERARCHIE, true, false );
     pBindings->Update( SID_STYLE_DRAGHIERARCHIE );
 }
 

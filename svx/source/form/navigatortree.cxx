@@ -1373,7 +1373,7 @@ namespace svxform
             aSelection.insert( xNewForm );
             pFormShell->GetImpl()->setCurrentSelection( aSelection );
 
-            pFormShell->GetViewShell()->GetViewFrame()->GetBindings().Invalidate(SID_FM_PROPERTIES,sal_True,sal_True);
+            pFormShell->GetViewShell()->GetViewFrame()->GetBindings().Invalidate(SID_FM_PROPERTIES, true, true);
         }
         GetNavModel()->SetModified();
 

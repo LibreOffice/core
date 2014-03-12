@@ -227,7 +227,7 @@ void SdNavigatorWin::InitTreeLB( const SdDrawDocument* pDoc )
 
     SfxViewFrame* pViewFrame = ( ( pViewShell && pViewShell->GetViewFrame() ) ? pViewShell->GetViewFrame() : SfxViewFrame::Current() );
     if( pViewFrame )
-        pViewFrame->GetBindings().Invalidate(SID_NAVIGATOR_PAGENAME, sal_True, sal_True);
+        pViewFrame->GetBindings().Invalidate(SID_NAVIGATOR_PAGENAME, true, true);
 }
 
 /**

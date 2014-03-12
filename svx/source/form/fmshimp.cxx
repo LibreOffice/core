@@ -825,7 +825,7 @@ void SAL_CALL FmXFormShell::propertyChange(const PropertyChangeEvent& evt) throw
         comphelper::SolarMutex& rSolarSafety = Application::GetSolarMutex();
         if (rSolarSafety.tryToAcquire())
         {
-            m_pShell->GetViewShell()->GetViewFrame()->GetBindings().Invalidate(SID_FM_RECORD_TOTAL , sal_True, sal_False);
+            m_pShell->GetViewShell()->GetViewFrame()->GetBindings().Invalidate(SID_FM_RECORD_TOTAL, true, false);
             m_pShell->GetViewShell()->GetViewFrame()->GetBindings().Update(SID_FM_RECORD_TOTAL);
             rSolarSafety.release();
         }
@@ -986,7 +986,7 @@ void FmXFormShell::UpdateSlot( sal_Int16 _nId )
     else
     {
         OSL_ENSURE( _nId, "FmXFormShell::UpdateSlot: can't update the complete shell!" );
-        m_pShell->GetViewShell()->GetViewFrame()->GetBindings().Invalidate( _nId, sal_True, sal_True );
+        m_pShell->GetViewShell()->GetViewFrame()->GetBindings().Invalidate( _nId, true, true );
         m_pShell->GetViewShell()->GetViewFrame()->GetBindings().Update( _nId );
     }
 }
@@ -1005,7 +1005,7 @@ void FmXFormShell::InvalidateSlot( sal_Int16 nId, sal_Bool bWithId )
     }
     else
         if (nId)
-            m_pShell->GetViewShell()->GetViewFrame()->GetBindings().Invalidate(nId, sal_True, bWithId);
+            m_pShell->GetViewShell()->GetViewFrame()->GetBindings().Invalidate(nId, true, bWithId);
         else
             m_pShell->GetViewShell()->GetViewFrame()->GetBindings().InvalidateShell(*m_pShell);
 }
@@ -1041,7 +1041,7 @@ IMPL_LINK_NOARG(FmXFormShell, OnInvalidateSlots)
     for (std::vector<InvalidSlotInfo>::const_iterator i = m_arrInvalidSlots.begin(); i < m_arrInvalidSlots.end(); ++i)
     {
         if (i->id)
-            m_pShell->GetViewShell()->GetViewFrame()->GetBindings().Invalidate(i->id, sal_True, (i->flags & 0x01));
+            m_pShell->GetViewShell()->GetViewFrame()->GetBindings().Invalidate(i->id, true, (i->flags & 0x01));
         else
             m_pShell->GetViewShell()->GetViewFrame()->GetBindings().InvalidateShell(*m_pShell);
     }

@@ -387,11 +387,11 @@ void SwSrcView::Execute(SfxRequest& rReq)
         break;
         case SID_UNDO:
             pTextView->Undo();
-            GetViewFrame()->GetBindings().InvalidateAll(sal_False);
+            GetViewFrame()->GetBindings().InvalidateAll(false);
         break;
         case SID_REDO:
             pTextView->Redo();
-            GetViewFrame()->GetBindings().InvalidateAll(sal_False);
+            GetViewFrame()->GetBindings().InvalidateAll(false);
         break;
         case SID_REPEAT:
         break;

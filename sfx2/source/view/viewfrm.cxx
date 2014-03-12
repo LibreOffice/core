@@ -948,13 +948,13 @@ void SfxViewFrame::ExecHistory_Impl( SfxRequest &rReq )
 
             case SID_UNDO:
                 pShUndoMgr->Undo();
-                GetBindings().InvalidateAll(sal_False);
+                GetBindings().InvalidateAll(false);
                 bOK = sal_True;
                 break;
 
             case SID_REDO:
                 pShUndoMgr->Redo();
-                GetBindings().InvalidateAll(sal_False);
+                GetBindings().InvalidateAll(false);
                 bOK = sal_True;
                 break;
 
@@ -1295,7 +1295,7 @@ void SfxViewFrame::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
                     rBind.Invalidate( SID_DOCINFO_TITLE );
                     rBind.Invalidate( SID_EDITDOC );
 
-                    pDispat->GetBindings()->InvalidateAll(sal_True);
+                    pDispat->GetBindings()->InvalidateAll(true);
                     pDispat->SetReadOnly_Impl( bIsReadOnly );
 
                     // Only force and Dispatcher-Update, if it is done next

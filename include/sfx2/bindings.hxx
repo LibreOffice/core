@@ -106,7 +106,7 @@ friend class SfxBindings_Impl;
 
 private:
     SAL_DLLPRIVATE const SfxPoolItem*  Execute_Impl( sal_uInt16 nSlot, const SfxPoolItem **pArgs, sal_uInt16 nModi,
-                                    SfxCallMode nCall, const SfxPoolItem **pInternalArgs, sal_Bool bGlobalOnly=sal_False);
+                                    SfxCallMode nCall, const SfxPoolItem **pInternalArgs, bool bGlobalOnly=false);
     SAL_DLLPRIVATE void SetSubBindings_Impl( SfxBindings* );
     SAL_DLLPRIVATE void UpdateSlotServer_Impl(); // Update SlotServer
     SAL_DLLPRIVATE SfxItemSet* CreateSet_Impl( SfxStateCache* &pCache,
@@ -134,19 +134,19 @@ public:
 
     void             Update( sal_uInt16 nId ); // For example, from  Menu::Activate
     void             Update();
-    SAL_DLLPRIVATE void StartUpdate_Impl(sal_Bool bComplete=sal_False);
+    SAL_DLLPRIVATE void StartUpdate_Impl(bool bComplete=false);
     void             Invalidate( sal_uInt16 nId );
     void             Invalidate( const sal_uInt16* pIds );
-    void             InvalidateShell( const SfxShell &rSh, sal_Bool bDeep = sal_False );
-    void             InvalidateAll( sal_Bool bWithMsg );
+    void             InvalidateShell( const SfxShell &rSh, bool bDeep = false );
+    void             InvalidateAll( bool bWithMsg );
     void             SetState( const SfxItemSet &rSet );
     void             SetState( const SfxPoolItem &rItem );
-    void             Invalidate( sal_uInt16 nId, sal_Bool bWithItem, sal_Bool bWithMsg=sal_False);
-    void             Invalidate( sal_uInt16 nId, sal_Bool bWithMsg);
-    sal_Bool         IsInUpdate() const;
-    void             SetVisibleState( sal_uInt16 nId, sal_Bool bShow );
+    void             Invalidate( sal_uInt16 nId, bool bWithItem, bool bWithMsg=false);
+    void             Invalidate( sal_uInt16 nId, bool bWithMsg);
+    bool             IsInUpdate() const;
+    void             SetVisibleState( sal_uInt16 nId, bool bShow );
 
-    sal_Bool         IsBound( sal_uInt16 nMsgId, sal_uInt16 nStartSearchAt = 0 );
+    bool             IsBound( sal_uInt16 nMsgId, sal_uInt16 nStartSearchAt = 0 );
 
     SfxStateCache*   GetStateCache( sal_uInt16 nId);
     SAL_DLLPRIVATE SfxStateCache* GetAnyStateCache_Impl( sal_uInt16 nId );
@@ -159,7 +159,7 @@ public:
                                  const SfxPoolItem **pArgs = 0,
                                  sal_uInt16 nModi = 0,
                                  const SfxPoolItem **pInternalArgs = 0);
-    sal_Bool         Execute( sal_uInt16 nSlot,
+    bool             Execute( sal_uInt16 nSlot,
                                  const SfxPoolItem **pArgs = 0,
                                  sal_uInt16 nModi = 0,
                                  SfxCallMode nCall = SFX_CALLMODE_SLOT,
@@ -178,22 +178,22 @@ public:
                      { return pDispatcher; }
     com::sun::star::uno::Reference< com::sun::star::frame::XDispatchRecorder > GetRecorder() const;
     com::sun::star::uno::Reference < com::sun::star::frame::XDispatch >
-                    GetDispatch( const SfxSlot*, const com::sun::star::util::URL& aURL, sal_Bool bMasterCommand );
+                    GetDispatch( const SfxSlot*, const com::sun::star::util::URL& aURL, bool bMasterCommand );
     SAL_DLLPRIVATE void ContextChanged_Impl();
     SAL_DLLPRIVATE void Execute_Impl( SfxRequest& rReq, const SfxSlot* pSlot, SfxShell* pShell );
     SAL_DLLPRIVATE void DeleteControllers_Impl();
     SAL_DLLPRIVATE SfxDispatcher* GetDispatcher_Impl()  { return pDispatcher; }
     SAL_DLLPRIVATE void ClearCache_Impl( sal_uInt16 nSlotId );
-    SAL_DLLPRIVATE sal_Bool IsInUpdate_Impl() const{ return IsInUpdate(); }
+    SAL_DLLPRIVATE bool IsInUpdate_Impl() const{ return IsInUpdate(); }
     SAL_DLLPRIVATE void RegisterInternal_Impl( SfxControllerItem& rBinding );
-    SAL_DLLPRIVATE void Register_Impl( SfxControllerItem& rBinding, sal_Bool );
+    SAL_DLLPRIVATE void Register_Impl( SfxControllerItem& rBinding, bool );
     SAL_DLLPRIVATE SfxWorkWindow* GetWorkWindow_Impl() const;
     SAL_DLLPRIVATE void SetWorkWindow_Impl( SfxWorkWindow* );
-    SAL_DLLPRIVATE SfxBindings* GetSubBindings_Impl( sal_Bool bTop = sal_False ) const;
+    SAL_DLLPRIVATE SfxBindings* GetSubBindings_Impl( bool bTop = false ) const;
     SAL_DLLPRIVATE void InvalidateUnoControllers_Impl();
     SAL_DLLPRIVATE void RegisterUnoController_Impl( SfxUnoControllerItem* );
     SAL_DLLPRIVATE void ReleaseUnoController_Impl( SfxUnoControllerItem* );
-    SAL_DLLPRIVATE sal_Bool ExecuteCommand_Impl( const OUString& rCommand );
+    SAL_DLLPRIVATE bool ExecuteCommand_Impl( const OUString& rCommand );
     SAL_DLLPRIVATE void SetRecorder_Impl( com::sun::star::uno::Reference< com::sun::star::frame::XDispatchRecorder >& );
     SAL_DLLPRIVATE void InvalidateSlotsInMap_Impl();
     SAL_DLLPRIVATE void AddSlotToInvalidateSlotsMap_Impl( sal_uInt16 nId );

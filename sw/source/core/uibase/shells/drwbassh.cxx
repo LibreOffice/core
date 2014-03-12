@@ -348,7 +348,7 @@ void SwDrawBaseShell::Execute(SfxRequest &rReq)
                             if(aFrmAttrSet.Count())
                                 pSh->SetDrawingAttr(aFrmAttrSet);
 
-                            rBind.InvalidateAll(sal_False);
+                            rBind.InvalidateAll(false);
 
                             // #i30451#
                             pSh->EndUndo( UNDO_INSFMTATTR );
@@ -424,7 +424,7 @@ void SwDrawBaseShell::Execute(SfxRequest &rReq)
             if (pSh->IsGroupSelected())
             {
                 pSdrView->EnterMarkedGroup();
-                rBind.InvalidateAll(sal_False);
+                rBind.InvalidateAll(false);
             }
             break;
 

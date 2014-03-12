@@ -223,7 +223,7 @@ void TextObjectBar::Execute( SfxRequest &rReq )
 
             Invalidate();
             // to refresh preview (in outline mode), slot has to be invalidated:
-            mpViewShell->GetViewFrame()->GetBindings().Invalidate( SID_PREVIEW_STATE, sal_True, sal_False );
+            mpViewShell->GetViewFrame()->GetBindings().Invalidate( SID_PREVIEW_STATE, true, false );
         }
         break;
 
@@ -236,7 +236,7 @@ void TextObjectBar::Execute( SfxRequest &rReq )
                 // Ensure bold/italic etc. icon state updates
                 Invalidate();
                 // trigger preview refresh
-                mpViewShell->GetViewFrame()->GetBindings().Invalidate( SID_PREVIEW_STATE, sal_True, sal_False );
+                mpViewShell->GetViewFrame()->GetBindings().Invalidate( SID_PREVIEW_STATE, true, false );
             }
             rReq.Done();
         }
@@ -251,7 +251,7 @@ void TextObjectBar::Execute( SfxRequest &rReq )
                 // Ensure bold/italic etc. icon state updates
                 Invalidate();
                 // trigger preview refresh
-                mpViewShell->GetViewFrame()->GetBindings().Invalidate( SID_PREVIEW_STATE, sal_True, sal_False );
+                mpViewShell->GetViewFrame()->GetBindings().Invalidate( SID_PREVIEW_STATE, true, false );
             }
             rReq.Done();
         }
@@ -280,7 +280,7 @@ void TextObjectBar::Execute( SfxRequest &rReq )
                 pOLV->AdjustHeight( -1 );
 
                 // trigger preview refresh
-                mpViewShell->GetViewFrame()->GetBindings().Invalidate( SID_PREVIEW_STATE, sal_True, sal_False );
+                mpViewShell->GetViewFrame()->GetBindings().Invalidate( SID_PREVIEW_STATE, true, false );
             }
             rReq.Done();
         }
@@ -293,7 +293,7 @@ void TextObjectBar::Execute( SfxRequest &rReq )
                 pOLV->AdjustHeight( 1 );
 
                 // trigger preview refresh
-                mpViewShell->GetViewFrame()->GetBindings().Invalidate( SID_PREVIEW_STATE, sal_True, sal_False );
+                mpViewShell->GetViewFrame()->GetBindings().Invalidate( SID_PREVIEW_STATE, true, false );
             }
             rReq.Done();
         }
@@ -311,7 +311,7 @@ void TextObjectBar::Execute( SfxRequest &rReq )
             rReq.Done( aAttr );
             mpView->SetAttributes( aAttr );
             Invalidate();
-            mpViewShell->GetViewFrame()->GetBindings().Invalidate( SID_PREVIEW_STATE, sal_True, sal_False );
+            mpViewShell->GetViewFrame()->GetBindings().Invalidate( SID_PREVIEW_STATE, true, false );
         }
         break;
 
@@ -341,7 +341,7 @@ void TextObjectBar::Execute( SfxRequest &rReq )
                 }
                 Invalidate();
                 // to refresh preview (in outline mode), slot has to be invalidated:
-                mpViewShell->GetViewFrame()->GetBindings().Invalidate( SID_PREVIEW_STATE, sal_True, sal_False );
+                mpViewShell->GetViewFrame()->GetBindings().Invalidate( SID_PREVIEW_STATE, true, false );
             }
             rReq.Done();
         }
@@ -655,7 +655,7 @@ void TextObjectBar::Execute( SfxRequest &rReq )
             Invalidate();
 
             // to refresh preview (in outline mode), slot has to be invalidated:
-            mpViewShell->GetViewFrame()->GetBindings().Invalidate( SID_PREVIEW_STATE, sal_True, sal_False );
+            mpViewShell->GetViewFrame()->GetBindings().Invalidate( SID_PREVIEW_STATE, true, false );
         }
         break;
     }

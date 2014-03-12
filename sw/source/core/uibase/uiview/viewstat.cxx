@@ -330,11 +330,11 @@ void SwView::GetState(SfxItemSet &rSet)
             {
                 if (!SvtCJKOptions().IsAnyEnabled())
                 {
-                    GetViewFrame()->GetBindings().SetVisibleState( nWhich, sal_False );
+                    GetViewFrame()->GetBindings().SetVisibleState( nWhich, false );
                     rSet.DisableItem(nWhich);
                 }
                 else
-                    GetViewFrame()->GetBindings().SetVisibleState( nWhich, sal_True );
+                    GetViewFrame()->GetBindings().SetVisibleState( nWhich, true );
             }
             break;
             case SID_MAIL_SCROLLBODY_PAGEDOWN:

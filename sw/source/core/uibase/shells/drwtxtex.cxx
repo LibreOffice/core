@@ -590,7 +590,7 @@ void SwDrawTextShell::Execute( SfxRequest &rReq )
 
     SetAttrToMarked(aNewAttr);
 
-    GetView().GetViewFrame()->GetBindings().InvalidateAll(sal_False);
+    GetView().GetViewFrame()->GetBindings().InvalidateAll(false);
 
     if (IsTextEdit() && pOLV->GetOutliner()->IsModified())
         rSh.SetModified();
@@ -757,11 +757,11 @@ ASK_ESCAPE:
         {
             if (!SvtCJKOptions().IsAnyEnabled())
             {
-                GetView().GetViewFrame()->GetBindings().SetVisibleState( nWhich, sal_False );
+                GetView().GetViewFrame()->GetBindings().SetVisibleState( nWhich, false );
                 rSet.DisableItem(nWhich);
             }
             else
-                GetView().GetViewFrame()->GetBindings().SetVisibleState( nWhich, sal_True );
+                GetView().GetViewFrame()->GetBindings().SetVisibleState( nWhich, true );
         }
         break;
 
@@ -835,10 +835,10 @@ ASK_ESCAPE:
             if(!aCJKOptions.IsChangeCaseMapEnabled())
             {
                 rSet.DisableItem(nWhich);
-                GetView().GetViewFrame()->GetBindings().SetVisibleState( nWhich, sal_False );
+                GetView().GetViewFrame()->GetBindings().SetVisibleState( nWhich, false );
             }
             else
-                GetView().GetViewFrame()->GetBindings().SetVisibleState( nWhich, sal_True );
+                GetView().GetViewFrame()->GetBindings().SetVisibleState( nWhich, true );
         }
         break;
         case SID_INSERT_RLM :
