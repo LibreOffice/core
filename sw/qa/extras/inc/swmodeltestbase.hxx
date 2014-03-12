@@ -551,6 +551,7 @@ protected:
         xmlXPathRegisterNs(pXmlXpathCtx, BAD_CAST("pic"), BAD_CAST("http://schemas.openxmlformats.org/drawingml/2006/picture"));
         xmlXPathRegisterNs(pXmlXpathCtx, BAD_CAST("rels"), BAD_CAST("http://schemas.openxmlformats.org/package/2006/relationships"));
         xmlXPathRegisterNs(pXmlXpathCtx, BAD_CAST("w14"), BAD_CAST("http://schemas.microsoft.com/office/word/2010/wordml"));
+        xmlXPathRegisterNs(pXmlXpathCtx, BAD_CAST("m"), BAD_CAST("http://schemas.openxmlformats.org/officeDocument/2006/math"));
         xmlXPathObjectPtr pXmlXpathObj = xmlXPathEvalExpression(BAD_CAST(rXPath.getStr()), pXmlXpathCtx);
         return pXmlXpathObj->nodesetval;
     }
