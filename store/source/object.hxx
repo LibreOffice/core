@@ -39,7 +39,7 @@ class IStoreHandle : public rtl::IReference
 public:
     /** Replaces dynamic_cast type checking.
      */
-    virtual bool SAL_CALL isKindOf (sal_uInt32 nTypeId) = 0;
+    virtual bool isKindOf (sal_uInt32 nTypeId) = 0;
 
 protected:
     ~IStoreHandle() {}
@@ -75,7 +75,7 @@ public:
 
     /** IStoreHandle.
      */
-    virtual bool SAL_CALL isKindOf (sal_uInt32 nTypeId);
+    virtual bool isKindOf (sal_uInt32 nTypeId) SAL_OVERRIDE;
 
     /** IReference.
      */

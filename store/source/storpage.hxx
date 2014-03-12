@@ -130,7 +130,7 @@ public:
 
     /** IStoreHandle.
      */
-    virtual bool SAL_CALL isKindOf (sal_uInt32 nTypeId);
+    virtual bool isKindOf (sal_uInt32 nTypeId) SAL_OVERRIDE;
 
 protected:
     /** Destruction.

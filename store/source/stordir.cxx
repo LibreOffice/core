@@ -91,7 +91,7 @@ OStoreDirectory_Impl::~OStoreDirectory_Impl (void)
 /*
  * isKindOf.
  */
-bool SAL_CALL OStoreDirectory_Impl::isKindOf (sal_uInt32 nTypeId)
+bool OStoreDirectory_Impl::isKindOf (sal_uInt32 nTypeId)
 {
     return (nTypeId == m_nTypeId);
 }

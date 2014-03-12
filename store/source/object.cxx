@@ -70,7 +70,7 @@ void OStoreObject::operator delete (void *p)
 /*
  * isKindOf.
  */
-bool SAL_CALL OStoreObject::isKindOf (sal_uInt32 nTypeId)
+bool OStoreObject::isKindOf (sal_uInt32 nTypeId)
 {
     return (nTypeId == m_nTypeId);
 }
