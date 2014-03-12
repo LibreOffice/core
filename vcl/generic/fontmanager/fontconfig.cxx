@@ -494,6 +494,7 @@ void PrintFontManager::countFontconfigFonts( boost::unordered_map<OString, int, 
             FcChar8* format = NULL;
             int slant = 0;
             int weight = 0;
+            int width = 0;
             int spacing = 0;
             int nCollectionEntry = -1;
             FcBool outline = false;
@@ -503,6 +504,7 @@ void PrintFontManager::countFontconfigFonts( boost::unordered_map<OString, int, 
             FcResult eStyleRes        = rWrapper.LocalizedElementFromPattern( pFSet->fonts[i], &style, FC_STYLE, FC_STYLELANG );
             FcResult eSlantRes        = FcPatternGetInteger(pFSet->fonts[i], FC_SLANT, 0, &slant);
             FcResult eWeightRes       = FcPatternGetInteger(pFSet->fonts[i], FC_WEIGHT, 0, &weight);
+            FcResult eWidthRes        = FcPatternGetInteger(pFSet->fonts[i], FC_WIDTH, 0, &width);
             FcResult eSpacRes         = FcPatternGetInteger(pFSet->fonts[i], FC_SPACING, 0, &spacing);
             FcResult eOutRes          = FcPatternGetBool(pFSet->fonts[i], FC_OUTLINE, 0, &outline);
             FcResult eIndexRes        = FcPatternGetInteger(pFSet->fonts[i], FC_INDEX, 0, &nCollectionEntry);
@@ -514,11 +516,12 @@ void PrintFontManager::countFontconfigFonts( boost::unordered_map<OString, int, 
 #if (OSL_DEBUG_LEVEL > 2)
             fprintf( stderr, "found font \"%s\" in file %s\n"
                      "   weight = %d, slant = %d, style = \"%s\"\n"
-                     "   spacing = %d, outline = %d, format %s\n"
+                     "   width = %d, spacing = %d, outline = %d, format %s\n"
                      , family, file
                      , eWeightRes == FcResultMatch ? weight : -1
                      , eSpacRes == FcResultMatch ? slant : -1
                      , eStyleRes == FcResultMatch ? (const char*) style : "<nil>"
+                     , eWeightRes == FcResultMatch ? width : -1
                      , eSpacRes == FcResultMatch ? spacing : -1
                      , eOutRes == FcResultMatch ? outline : -1
                      , eFormatRes == FcResultMatch ? (const char*)format : "<unknown>"
@@ -620,6 +623,8 @@ void PrintFontManager::countFontconfigFonts( boost::unordered_map<OString, int, 
                 }
                 if( eWeightRes == FcResultMatch )
                     pUpdate->m_eWeight = convertWeight(weight);
+                if( eWidthRes == FcResultMatch )
+                    pUpdate->m_eWidth = convertWidth(width);
                 if( eSpacRes == FcResultMatch )
                     pUpdate->m_ePitch = convertSpacing(spacing);
                 if( eSlantRes == FcResultMatch )
