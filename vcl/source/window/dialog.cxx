@@ -87,6 +87,11 @@ static bool ImplIsMnemonicCtrl( Window* pWindow )
 
     if ( pWindow->GetType() == WINDOW_FIXEDTEXT )
     {
+        FixedText *pText = static_cast<FixedText*>(pWindow);
+        if (pText->get_mnemonic_widget())
+            return true;
+        //This is the legacy pre-layout logic which we retain
+        //until we can be sure we can remove it
         if ( pWindow->GetStyle() & (WB_INFO | WB_NOLABEL) )
             return false;
         Window* pNextWindow = pWindow->GetWindow( WINDOW_NEXT );
