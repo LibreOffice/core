@@ -437,6 +437,7 @@ SfxStyleSheetBase* SfxStyleSheetIterator::operator[](sal_uInt16 nIdx)
     if( IsTrivialSearch())
     {
         retval = pBasePool->mIndexedStyleSheets->GetStyleSheetByPosition(nIdx).get();
+        nAktPosition = nIdx;
     }
     else
     {
