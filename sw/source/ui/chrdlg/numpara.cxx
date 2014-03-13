@@ -123,10 +123,13 @@ sal_Bool    SwParagraphNumTabPage::FillItemSet( SfxItemSet& rSet )
             aStyle = m_pNumberStyleLB->GetSelectEntry();
         const SfxStringItem* pOldRule = (const SfxStringItem*)GetOldItem( rSet, SID_ATTR_PARA_NUMRULE);
         SfxStringItem* pRule = (SfxStringItem*)pOldRule->Clone();
-        pRule->SetValue(aStyle);
-        rSet.Put(*pRule);
-        delete pRule;
-        bModified = sal_True;
+        if (pRule)
+        {
+            pRule->SetValue(aStyle);
+            rSet.Put(*pRule);
+            delete pRule;
+            bModified = sal_True;
+        }
     }
     if(m_pNewStartCB->GetState() != m_pNewStartCB->GetSavedValue() ||
         m_pNewStartNumberCB->GetState() != m_pNewStartNumberCB->GetSavedValue()||
