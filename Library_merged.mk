@@ -52,7 +52,6 @@ $(eval $(call gb_Library_use_externals,merged,\
 	liblangtag \
 	libxml2 \
 	libxslt \
-	$(if $(filter-out IOS,$(OS)),lpsolve) \
 	mythes \
 	nss3 \
 	telepathy \
