@@ -18,11 +18,8 @@
  */
 
 #include "newdatatype.hxx"
-#include "newdatatype.hrc"
-
 #include "modulepcr.hxx"
 #include "formresid.hrc"
-
 
 namespace pcr
 {
@@ -33,16 +30,14 @@ namespace pcr
 
 
     NewDataTypeDialog::NewDataTypeDialog( Window* _pParent, const OUString& _rNameBase, const ::std::vector< OUString >& _rProhibitedNames )
-        :ModalDialog( _pParent, PcrRes( RID_DLG_NEW_DATA_TYPE ) )
-        ,m_aLabel   ( this, PcrRes( FT_LABEL  ) )
-        ,m_aName    ( this, PcrRes( ED_NAME   ) )
-        ,m_aOK      ( this, PcrRes( PB_OK     ) )
-        ,m_aCancel  ( this, PcrRes( PB_CANCEL ) )
-        ,m_aProhibitedNames( _rProhibitedNames.begin(), _rProhibitedNames.end() )
+        : ModalDialog( _pParent, "DataTypeDialog",
+        "modules/spropctrlr/ui/datatypedialog.ui" )
+        , m_aProhibitedNames( _rProhibitedNames.begin(), _rProhibitedNames.end() )
     {
-        FreeResource();
+        get(m_pName, "entry");
+        get(m_pOK, "ok");
 
-        m_aName.SetModifyHdl( LINK( this, NewDataTypeDialog, OnNameModified ) );
+        m_pName->SetModifyHdl( LINK( this, NewDataTypeDialog, OnNameModified ) );
 
         // find an initial name
         // for this, first remove trailing digits
@@ -68,7 +63,7 @@ namespace pcr
         }
         while ( m_aProhibitedNames.find( sInitialName ) != m_aProhibitedNames.end() );
 
-        m_aName.SetText( sInitialName );
+        m_pName->SetText( sInitialName );
         OnNameModified( NULL );
     }
 
@@ -79,7 +74,7 @@ namespace pcr
         bool bNameIsOK = ( !sCurrentName.isEmpty() )
                       && ( m_aProhibitedNames.find( sCurrentName ) == m_aProhibitedNames.end() );
 
-        m_aOK.Enable( bNameIsOK );
+        m_pOK->Enable( bNameIsOK );
 
         return 0L;
     }

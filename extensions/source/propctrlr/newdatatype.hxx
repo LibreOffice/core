@@ -31,26 +31,20 @@
 
 namespace pcr
 {
-
-
-
     //= NewDataTypeDialog
-
     class NewDataTypeDialog : public ModalDialog
     {
     private:
-        FixedText       m_aLabel;
-        Edit            m_aName;
-        OKButton        m_aOK;
-        CancelButton    m_aCancel;
+        Edit*           m_pName;
+        OKButton*       m_pOK;
 
-        ::std::set< OUString >
-                        m_aProhibitedNames;
+        ::std::set< OUString > m_aProhibitedNames;
 
     public:
-        NewDataTypeDialog( Window* _pParent, const OUString& _rNameBase, const ::std::vector< OUString >& _rProhibitedNames );
+        NewDataTypeDialog(Window* _pParent, const OUString& _rNameBase,
+            const ::std::vector< OUString >& _rProhibitedNames );
 
-        inline OUString GetName() const { return m_aName.GetText(); }
+        OUString GetName() const { return m_pName->GetText(); }
 
     private:
         DECL_LINK( OnNameModified, void* );

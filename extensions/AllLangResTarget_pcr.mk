@@ -30,7 +30,6 @@ $(eval $(call gb_SrsTarget_add_files,pcr/res,\
 	extensions/source/propctrlr/pcrmiscres.src \
 	extensions/source/propctrlr/selectlabeldialog.src \
 	extensions/source/propctrlr/formlinkdialog.src \
-	extensions/source/propctrlr/newdatatype.src \
 ))
 
 $(eval $(call gb_SrsTarget_add_nonlocalizable_files,pcr/res,\
