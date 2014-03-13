@@ -302,6 +302,12 @@ void DocxAttributeOutput::EndParagraph( ww8::WW8TableNodeInfoInner::Pointer_t pT
             m_pSerializer->startElementNS(XML_mc, XML_Choice,
                     XML_Requires, "wps",
                     FSEND);
+            /**
+               This is to avoid AltenateContent within another AlternateContent.
+               So when Choice is Open, only write the DML Drawing instead of both DML
+               and VML Drawing in another AlternateContent.
+            **/
+            SetAlternateContentChoiceOpen( true );
             /** FDO#71834 :
                We should probably be renaming the function
                switchHeaderFooter to something like SaveRetrieveTableReference.
@@ -321,6 +327,7 @@ void DocxAttributeOutput::EndParagraph( ww8::WW8TableNodeInfoInner::Pointer_t pT
 
             m_rExport.SdrExporter().writeDMLTextFrame(&aFrame, m_anchorId++);
             m_pSerializer->endElementNS(XML_mc, XML_Choice);
+            SetAlternateContentChoiceOpen( false );
 
             // Reset table infos, otherwise the depth of the cells will be incorrect,
             // in case the text frame had table(s) and we try to export the
@@ -3897,7 +3904,10 @@ void DocxAttributeOutput::WritePostponedDMLDrawing()
          it != m_postponedDMLDrawing->end();
          ++it )
     {
-        m_rExport.SdrExporter().writeDMLAndVMLDrawing(it->object, *(it->frame), *(it->point), m_anchorId++);
+        if ( IsAlternateContentChoiceOpen() )
+            m_rExport.SdrExporter().writeDMLDrawing(it->object, (it->frame), m_anchorId++);
+        else
+            m_rExport.SdrExporter().writeDMLAndVMLDrawing(it->object, *(it->frame), *(it->point), m_anchorId++);
     }
     delete m_postponedDMLDrawing;
     m_postponedDMLDrawing = NULL;
@@ -3942,7 +3952,12 @@ void DocxAttributeOutput::OutputFlyFrame_Impl( const sw::Frame &rFrame, const Po
                     else
                     {
                         if ( m_postponedDMLDrawing == NULL )
-                            m_rExport.SdrExporter().writeDMLAndVMLDrawing( pSdrObj, rFrame.GetFrmFmt(), rNdTopLeft, m_anchorId++);
+                        {
+                            if ( IsAlternateContentChoiceOpen() )
+                                m_rExport.SdrExporter().writeDMLDrawing( pSdrObj, &rFrame.GetFrmFmt(), m_anchorId++);
+                            else
+                                m_rExport.SdrExporter().writeDMLAndVMLDrawing( pSdrObj, rFrame.GetFrmFmt(), rNdTopLeft, m_anchorId++);
+                        }
                         else
                             // we are writing out attributes, but w:drawing should not be inside w:rPr, so write it out later
                             m_postponedDMLDrawing->push_back(PostponedDrawing(pSdrObj, &(rFrame.GetFrmFmt()), &rNdTopLeft));
@@ -6945,6 +6960,7 @@ DocxAttributeOutput::DocxAttributeOutput( DocxExport &rExport, FSHelperPtr pSeri
       m_pTableWrt( NULL ),
       m_bParagraphOpened( false ),
       m_bIsFirstParagraph( true ),
+      m_bAlternateContentChoiceOpen( false ),
       m_nColBreakStatus( COLBRK_NONE ),
       m_nTextFrameLevel( 0 ),
       m_closeHyperlinkInThisRun( false ),
