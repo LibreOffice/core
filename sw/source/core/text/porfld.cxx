@@ -941,7 +941,9 @@ void SwGrfNumPortion::Paint( const SwTxtPaintInfo &rInf ) const
             if( OUTDEV_VIRDEV == rInf.GetOut()->GetOutDevType() &&
                 pViewShell && pViewShell->GetWin()  )
             {
-                ( (Graphic*) pBrush->GetGraphic() )->StopAnimation(0,nId);
+                Graphic* pGraph = (Graphic*)pBrush->GetGraphic();
+                if (pGraph)
+                    pGraph->StopAnimation(0,nId);
                 rInf.GetTxtFrm()->getRootFrm()->GetCurrShell()->InvalidateWindows( aTmp );
             }
 
@@ -951,8 +953,12 @@ void SwGrfNumPortion::Paint( const SwTxtPaintInfo &rInf ) const
                       // #i9684# Stop animation during printing/pdf export.
                       pViewShell->GetWin() )
             {
-                ( (Graphic*) pBrush->GetGraphic() )->StartAnimation(
-                    (OutputDevice*)rInf.GetOut(), aPos, aSize, nId );
+                Graphic* pGraph = (Graphic*)pBrush->GetGraphic();
+                if (pGraph)
+                {
+                    pGraph->StartAnimation(
+                        (OutputDevice*)rInf.GetOut(), aPos, aSize, nId );
+                }
             }
 
             // pdf export, printing, preview, stop animations...
@@ -960,7 +966,12 @@ void SwGrfNumPortion::Paint( const SwTxtPaintInfo &rInf ) const
                 bDraw = true;
         }
         if( bDraw )
-            ( (Graphic*) pBrush->GetGraphic() )->StopAnimation( 0, nId );
+        {
+
+            Graphic* pGraph = (Graphic*)pBrush->GetGraphic();
+            if (pGraph)
+                pGraph->StopAnimation( 0, nId );
+        }
     }
 
     SwRect aRepaint( rInf.GetPaintRect() );
