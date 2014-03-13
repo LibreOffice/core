@@ -98,6 +98,7 @@ IMPL_LINK( LookUpComboBox, ModifyTimer_Hdl, Timer *, EMPTYARG /*pTimer*/ )
 
 ReplaceEdit::ReplaceEdit(Window *pParent)
     : Edit(pParent, WB_BORDER | WB_TABSTOP)
+    , m_pBtn(NULL)
 {
 }
 
