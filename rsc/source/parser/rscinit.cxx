@@ -59,7 +59,6 @@ void RscTypCont::Init()
     RscTupel *  pStringLongTupel;
     RscCont  *  pStringTupelList;
     RscCont  *  pStringLongTupelList;
-    RscArray *  pLangStringTupelList;
     RscArray *  pLangStringLongTupelList;
 
     RscTop   *  pClassMgr;
@@ -320,7 +319,7 @@ void RscTypCont::Init()
     aBaseLst.push_back( pLangStringList  = InitLangStringList( pStringList ) );
     aBaseLst.push_back( pStringTupel     = InitStringTupel() );
     aBaseLst.push_back( pStringTupelList = InitStringTupelList( pStringTupel ) );
-    aBaseLst.push_back( pLangStringTupelList = InitLangStringTupelList( pStringTupelList ) );
+    aBaseLst.push_back( InitLangStringTupelList( pStringTupelList ) );
     aBaseLst.push_back( pStringLongTupel = InitStringLongTupel() );
     aBaseLst.push_back( pStringLongTupelList = InitStringLongTupelList( pStringLongTupel ) );
     aBaseLst.push_back( pLangStringLongTupelList = InitLangStringLongTupelList( pStringLongTupelList ) );
