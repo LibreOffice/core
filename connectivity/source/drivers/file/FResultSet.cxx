@@ -895,6 +895,9 @@ sal_Bool OResultSet::ExecuteRow(IResultSetHelper::Movement eFirstCursorPosition,
     IResultSetHelper::Movement eCursorPosition = eFirstCursorPosition;
     sal_Int32  nOffset = nFirstOffset;
 
+    if (!m_pTable)
+        return sal_False;
+
     const OSQLColumns & rTableCols = *(m_pTable->getTableColumns());
     sal_Bool bHasRestriction = m_pSQLAnalyzer->hasRestriction();
 again:
