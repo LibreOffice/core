@@ -204,6 +204,14 @@ bool SwFEShell::InsertRow( sal_uInt16 nCnt, bool bBehind )
 
     // search boxes via the layout
     SwSelBoxes aBoxes;
+    bool bSelectAll = StartsWithTable() && ExtendedSelectedAll(/*bFootnotes=*/false);
+    if (bSelectAll)
+    {
+        SwPaM* pPaM = getShellCrsr(false);
+        SwNode* pNode = pPaM->Start()->nNode.GetNode().FindTableNode()->EndOfSectionNode();
+        pPaM->End()->nNode = pNode->GetIndex() - 2;
+        pPaM->End()->nContent.Assign(pPaM->End()->nNode.GetNode().GetCntntNode(), 0);
+    }
     GetTblSel( *this, aBoxes, nsSwTblSearchType::TBLSEARCH_ROW );
 
     TblWait( nCnt, pFrm, *GetDoc()->GetDocShell(), aBoxes.size() );

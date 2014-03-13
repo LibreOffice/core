@@ -29,6 +29,7 @@ public:
     void testImportRTF();
     void testExportRTF();
     void testFdo75110();
+    void testFdo75898();
 
     CPPUNIT_TEST_SUITE(SwUiWriterTest);
     CPPUNIT_TEST(testReplaceForward);
@@ -38,6 +39,7 @@ public:
     CPPUNIT_TEST(testImportRTF);
     CPPUNIT_TEST(testExportRTF);
     CPPUNIT_TEST(testFdo75110);
+    CPPUNIT_TEST(testFdo75898);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -100,6 +102,21 @@ void SwUiWriterTest::testFdo75110()
     sw::UndoManager& rUndoManager = pDoc->GetUndoManager();
     // ... so this Undo() call resulted in a crash.
     rUndoManager.Undo();
+}
+
+void SwUiWriterTest::testFdo75898()
+{
+    SwDoc* pDoc = createDoc("fdo75898.odt");
+    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    pWrtShell->SelAll();
+    pWrtShell->InsertRow(1, true);
+    pWrtShell->InsertRow(1, true);
+
+    // Now check if the table has 3 lines.
+    SwShellCrsr* pShellCrsr = pWrtShell->getShellCrsr(false);
+    SwTableNode* pTableNode = pShellCrsr->Start()->nNode.GetNode().FindTableNode();
+    // This was 1, when doing the same using the UI, Writer even crashed.
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(3), pTableNode->GetTable().GetTabLines().size());
 }
 
 void SwUiWriterTest::testReplaceBackward()
