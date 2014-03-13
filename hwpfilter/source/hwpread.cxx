@@ -793,12 +793,15 @@ bool IndexMark::Read(HWPFile & hwpf)
     return !hwpf.State();
 }
 
-
 // outline(28)
-Outline::Outline():HBox(CH_OUTLINE)
+Outline::Outline()
+    : HBox(CH_OUTLINE)
+    , kind(0)
+    , shape(0)
+    , level(0)
+    , dummy(0)
 {
 }
-
 
 bool Outline::Read(HWPFile & hwpf)
 {
