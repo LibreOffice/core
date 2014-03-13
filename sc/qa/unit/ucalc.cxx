@@ -5575,6 +5575,12 @@ void Test::clearRange(ScDocument* pDoc, const ScRange& rRange)
         rRange.aEnd.Col(), rRange.aEnd.Row(), aMarkData, IDF_CONTENTS);
 }
 
+void Test::clearSheet(ScDocument* pDoc, SCTAB nTab)
+{
+    ScRange aRange(0,0,nTab,MAXCOL,MAXROW,nTab);
+    clearRange(pDoc, aRange);
+}
+
 void Test::copyToClip(ScDocument* pSrcDoc, const ScRange& rRange, ScDocument* pClipDoc)
 {
     ScClipParam aClipParam(rRange, false);

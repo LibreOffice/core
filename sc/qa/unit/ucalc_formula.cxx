@@ -2458,7 +2458,7 @@ void Test::testFuncVLOOKUP()
     }
 
     // Clear the sheet and start over.
-    clearRange(m_pDoc, ScRange(0,0,0,MAXCOL,MAXROW,0));
+    clearSheet(m_pDoc, 0);
 
     // Lookup on sorted data intersparsed with empty cells.
 
@@ -2491,6 +2491,22 @@ void Test::testFuncVLOOKUP()
     CPPUNIT_ASSERT_EQUAL(OUString("Two"), m_pDoc->GetString(ScAddress(4,2,0)));
     CPPUNIT_ASSERT_EQUAL(OUString("Four"), m_pDoc->GetString(ScAddress(4,3,0)));
     CPPUNIT_ASSERT_EQUAL(OUString("Four"), m_pDoc->GetString(ScAddress(4,4,0)));
+
+    // Start over again.
+    clearSheet(m_pDoc, 0);
+
+    // Set A,B,....,G to A1:A7.
+    m_pDoc->SetString(ScAddress(0,0,0), "A");
+    m_pDoc->SetString(ScAddress(0,1,0), "B");
+    m_pDoc->SetString(ScAddress(0,2,0), "C");
+    m_pDoc->SetString(ScAddress(0,3,0), "D");
+    m_pDoc->SetString(ScAddress(0,4,0), "E");
+    m_pDoc->SetString(ScAddress(0,5,0), "F");
+    m_pDoc->SetString(ScAddress(0,6,0), "G");
+
+    // Set the formula in C1.
+    m_pDoc->SetString(ScAddress(2,0,0), "=VLOOKUP(\"C\";A1:A16;1)");
+    CPPUNIT_ASSERT_EQUAL(OUString("C"), m_pDoc->GetString(ScAddress(2,0,0)));
 
     m_pDoc->DeleteTab(0);
 }
