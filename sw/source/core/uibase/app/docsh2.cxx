@@ -160,7 +160,8 @@ void SwDocShell::ToggleBrowserMode(sal_Bool bSet, SwView* _pView )
             pTempView->SetPrinter( GetDoc()->getPrinter( false ), SFX_PRINTER_PRINTER | SFX_PRINTER_JOBSETUP );
         GetDoc()->CheckDefaultPageFmt();
         SfxViewFrame *pTmpFrm = SfxViewFrame::GetFirst(this, sal_False);
-        do {
+        while (pTmpFrm)
+        {
             if( pTmpFrm != pTempView->GetViewFrame() )
             {
                 pTmpFrm->DoClose();
@@ -168,8 +169,7 @@ void SwDocShell::ToggleBrowserMode(sal_Bool bSet, SwView* _pView )
             }
             else
                 pTmpFrm = pTmpFrm->GetNext(*pTmpFrm, this, sal_False);
-
-        } while ( pTmpFrm );
+        }
         const SwViewOption& rViewOptions = *pTempView->GetWrtShell().GetViewOptions();
         pTempView->GetWrtShell().CheckBrowseView( sal_True );
         pTempView->CheckVisArea();
