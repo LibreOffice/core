@@ -58,6 +58,7 @@ using namespace ::com::sun::star;
 
 LookUpComboBox::LookUpComboBox(Window *pParent)
     : ComboBox(pParent, WB_LEFT|WB_DROPDOWN|WB_VCENTER|WB_3DLOOK|WB_TABSTOP)
+    , m_pDialog(NULL)
 {
     EnableAutoSize(true);
 
