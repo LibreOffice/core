@@ -132,7 +132,7 @@ ReferencePathInfo MenuBarMerger::FindReferencePath(
         }
         i++;
     }
-    while (( pCurrMenu != 0 ) && ( i < nCount ) && ( eResult == RP_OK ));
+    while ((i < nCount) && (eResult == RP_OK));
 
     aResult.pPopupMenu = pCurrMenu;
     aResult.nPos       = nPos;
