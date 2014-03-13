@@ -3302,6 +3302,8 @@ bool RtfAttributeOutput::PlaceholderField( const SwField* pField)
 
 RtfAttributeOutput::RtfAttributeOutput( RtfExport &rExport )
     : m_rExport( rExport ),
+    m_nStyleId( 0 ),
+    m_nListId( 0 ),
     m_bStrikeDouble( false ),
     m_nNextAnnotationMarkId(0),
     m_nCurrentAnnotationMarkId(-1),
