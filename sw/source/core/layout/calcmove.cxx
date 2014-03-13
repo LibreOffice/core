@@ -46,7 +46,7 @@
 // Move methods
 
 /// Return value tells whether the Frm should be moved.
-sal_Bool SwCntntFrm::ShouldBwdMoved( SwLayoutFrm *pNewUpper, sal_Bool, sal_Bool & )
+bool SwCntntFrm::ShouldBwdMoved( SwLayoutFrm *pNewUpper, bool, bool & )
 {
     if ( (SwFlowFrm::IsMoveBwdJump() || !IsPrevObjMove()))
     {
@@ -73,7 +73,7 @@ sal_Bool SwCntntFrm::ShouldBwdMoved( SwLayoutFrm *pNewUpper, sal_Bool, sal_Bool 
         SwPageFrm *pOldPage = FindPageFrm();
 
         if ( SwFlowFrm::IsMoveBwdJump() )
-            return sal_True;
+            return true;
 
         if( IsInFtn() && IsInSct() )
         {
@@ -193,7 +193,7 @@ sal_Bool SwCntntFrm::ShouldBwdMoved( SwLayoutFrm *pNewUpper, sal_Bool, sal_Bool 
             return nSpace != 0;
         }
     }
-    return  sal_False;
+    return false;
 }
 
 // Calc methods
@@ -1345,7 +1345,7 @@ void SwCntntFrm::MakeAll()
         // backwards (if this is movable at all).
         // To prevent oscillations/loops, check that this has not just
         // flowed forwards.
-        sal_Bool bDummy;
+        bool bDummy;
         if ( !lcl_Prev( this ) &&
              !bMovedFwd &&
              ( bMoveable || ( bFly && !bTab ) ) &&

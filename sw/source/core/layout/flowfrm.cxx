@@ -1964,13 +1964,13 @@ sal_Bool SwFlowFrm::MoveFwd( sal_Bool bMakePage, sal_Bool bPageBreak, sal_Bool b
  * @note This should be called by derived classes.
  * @note The actual moving must be implemented in the subclasses.
  */
-sal_Bool SwFlowFrm::MoveBwd( sal_Bool &rbReformat )
+bool SwFlowFrm::MoveBwd( bool &rbReformat )
 {
     SwFlowFrm::SetMoveBwdJump( sal_False );
 
     SwFtnFrm* pFtn = m_rThis.FindFtnFrm();
     if ( pFtn && pFtn->IsBackMoveLocked() )
-        return sal_False;
+        return false;
 
     // #115759# - text frames, which are directly inside
     // tables aren't allowed to move backward.
@@ -1981,9 +1981,9 @@ sal_Bool SwFlowFrm::MoveBwd( sal_Bool &rbReformat )
         {
             if ( pUpperFrm->IsTabFrm() )
             {
-                return sal_False;
+                return false;
             }
-            else if ( pUpperFrm->IsColumnFrm() && pUpperFrm->IsInSct() )
+            if ( pUpperFrm->IsColumnFrm() && pUpperFrm->IsInSct() )
             {
                 break;
             }
@@ -2290,7 +2290,7 @@ sal_Bool SwFlowFrm::MoveBwd( sal_Bool &rbReformat )
                 pNewUpper = 0;
         }
     }
-    if ( pNewUpper && !ShouldBwdMoved( pNewUpper, sal_True, rbReformat ) )
+    if ( pNewUpper && !ShouldBwdMoved( pNewUpper, true, rbReformat ) )
     {
         if( !pNewUpper->Lower() )
         {

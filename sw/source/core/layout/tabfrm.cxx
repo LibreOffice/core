@@ -1947,13 +1947,13 @@ void SwTabFrm::MakeAll()
                 if( pFrm && n1StLineHeight >(pFrm->Frm().*fnRect->fnGetHeight )() )
                 {
                     SwTabFrm *pMaster = (SwTabFrm*)FindMaster();
-                    sal_Bool bDummy;
-                    if ( ShouldBwdMoved( pMaster->GetUpper(), sal_False, bDummy ) )
+                    bool bDummy;
+                    if ( ShouldBwdMoved( pMaster->GetUpper(), false, bDummy ) )
                         pMaster->InvalidatePos();
                 }
             }
             SwFtnBossFrm *pOldBoss = bFtnsInDoc ? FindFtnBossFrm( sal_True ) : 0;
-            sal_Bool bReformat;
+            bool bReformat;
             if ( MoveBwd( bReformat ) )
             {
                 SWREFRESHFN( this )
@@ -2038,8 +2038,8 @@ void SwTabFrm::MakeAll()
             // at least one further row of an existing follow.
             if ( !bSplit && GetFollow() )
             {
-                sal_Bool bDummy;
-                if ( GetFollow()->ShouldBwdMoved( GetUpper(), sal_False, bDummy ) )
+                bool bDummy;
+                if ( GetFollow()->ShouldBwdMoved( GetUpper(), false, bDummy ) )
                 {
                     SwFrm *pTmp = GetUpper();
                     SwTwips nDeadLine = (pTmp->*fnRect->fnGetPrtBottom)();
@@ -3251,9 +3251,9 @@ SwCntntFrm *SwTabFrm::FindLastCntnt()
 }
 
 /// Return value defines if the frm needs to be relocated
-sal_Bool SwTabFrm::ShouldBwdMoved( SwLayoutFrm *pNewUpper, sal_Bool, sal_Bool &rReformat )
+bool SwTabFrm::ShouldBwdMoved( SwLayoutFrm *pNewUpper, bool, bool &rReformat )
 {
-    rReformat = sal_False;
+    rReformat = false;
     if ( (SwFlowFrm::IsMoveBwdJump() || !IsPrevObjMove()) )
     {
         //Floating back Frm's is quite time consuming unfortunately.
@@ -3320,8 +3320,11 @@ sal_Bool SwTabFrm::ShouldBwdMoved( SwLayoutFrm *pNewUpper, sal_Bool, sal_Bool &r
             bMoveAnyway = true;
 
         if ( bMoveAnyway )
-            return rReformat = sal_True;
-        else if ( !bLockBackMove && nSpace > 0 )
+        {
+            rReformat = true;
+            return true;
+        }
+        if ( !bLockBackMove && nSpace > 0 )
         {
             // #i26945# - check, if follow flow line
             // contains frame, which are moved forward due to its object
@@ -3332,7 +3335,7 @@ sal_Bool SwTabFrm::ShouldBwdMoved( SwLayoutFrm *pNewUpper, sal_Bool, sal_Bool &r
                                             *(pFirstRow->GetFmt()->GetDoc()),
                                             *(pFirstRow) ) )
             {
-                return sal_False;
+                return false;
             }
             SwTwips nTmpHeight = CalcHeightOfFirstContentLine();
 
@@ -3344,7 +3347,7 @@ sal_Bool SwTabFrm::ShouldBwdMoved( SwLayoutFrm *pNewUpper, sal_Bool, sal_Bool &r
             return nTmpHeight <= nSpace;
         }
     }
-    return sal_False;
+    return false;
 }
 
 void SwTabFrm::Cut()

@@ -98,7 +98,7 @@ class SwTabFrm: public SwLayoutFrm, public SwFlowFrm
         SwAttrSetChg *pa = 0,
         SwAttrSetChg *pb = 0 );
 
-    virtual sal_Bool ShouldBwdMoved( SwLayoutFrm *pNewUpper, sal_Bool bHead, sal_Bool &rReformat );
+    virtual bool ShouldBwdMoved( SwLayoutFrm *pNewUpper, bool bHead, bool &rReformat );
 
 protected:
     virtual void MakeAll();

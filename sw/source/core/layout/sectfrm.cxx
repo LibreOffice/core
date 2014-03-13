@@ -751,10 +751,10 @@ void SwSectionFrm::MakeAll()
         DelEmpty( sal_False );
 }
 
-sal_Bool SwSectionFrm::ShouldBwdMoved( SwLayoutFrm *, sal_Bool , sal_Bool & )
+bool SwSectionFrm::ShouldBwdMoved( SwLayoutFrm *, bool , bool & )
 {
     OSL_FAIL( "Hups, wo ist meine Tarnkappe?" );
-    return sal_False;
+    return false;
 }
 
 const SwSectionFmt* SwSectionFrm::_GetEndSectFmt() const

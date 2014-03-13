@@ -138,8 +138,8 @@ protected:
 
     sal_Bool CheckMoveFwd( bool& rbMakePage, sal_Bool bKeep, sal_Bool bMovedBwd );
     sal_Bool MoveFwd( sal_Bool bMakePage, sal_Bool bPageBreak, sal_Bool bMoveAlways = sal_False );
-    sal_Bool MoveBwd( sal_Bool &rbReformat );
-    virtual sal_Bool ShouldBwdMoved( SwLayoutFrm *pNewUpper, sal_Bool bHead, sal_Bool &rReformat )=0;
+    bool MoveBwd( bool &rbReformat );
+    virtual bool ShouldBwdMoved( SwLayoutFrm *pNewUpper, bool bHead, bool &rReformat )=0;
 
 public:
     SwFlowFrm( SwFrm &rFrm );

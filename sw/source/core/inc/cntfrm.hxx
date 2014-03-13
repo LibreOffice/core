@@ -50,7 +50,7 @@ class SwCntntFrm: public SwFrm, public SwFlowFrm
     void _UpdateAttr( const SfxPoolItem*, const SfxPoolItem*, sal_uInt8 &,
                       SwAttrSetChg *pa = 0, SwAttrSetChg *pb = 0 );
 
-    virtual sal_Bool ShouldBwdMoved( SwLayoutFrm *pNewUpper, sal_Bool, sal_Bool& );
+    virtual bool ShouldBwdMoved( SwLayoutFrm *pNewUpper, bool, bool& );
 
     const SwCntntFrm* ImplGetNextCntntFrm( bool bFwd ) const;
 

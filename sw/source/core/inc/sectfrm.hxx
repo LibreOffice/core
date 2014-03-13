@@ -55,7 +55,7 @@ class SwSectionFrm: public SwLayoutFrm, public SwFlowFrm
     bool IsEndnoteAtMyEnd() const;
 protected:
     virtual void MakeAll();
-    virtual sal_Bool ShouldBwdMoved( SwLayoutFrm *pNewUpper, sal_Bool bHead, sal_Bool &rReformat );
+    virtual bool ShouldBwdMoved( SwLayoutFrm *pNewUpper, bool bHead, bool &rReformat );
     virtual void Format( const SwBorderAttrs *pAttrs = 0 );
     virtual void Modify( const SfxPoolItem*, const SfxPoolItem* );
     virtual void SwClientNotify( const SwModify&, const SfxHint& );
