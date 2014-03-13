@@ -78,18 +78,6 @@ MoreButton::MoreButton( Window* pParent, WinBits nStyle ) :
     ImplInit( pParent, nStyle );
 }
 
-MoreButton::MoreButton( Window* pParent, const ResId& rResId ) :
-    PushButton( WINDOW_MOREBUTTON )
-{
-    rResId.SetRT( RSC_MOREBUTTON );
-    WinBits nStyle = ImplInitRes( rResId );
-    ImplInit( pParent, nStyle );
-    ImplLoadRes( rResId );
-
-    if ( !(nStyle & WB_HIDE) )
-        Show();
-}
-
 void MoreButton::ImplLoadRes( const ResId& rResId )
 {
     PushButton::ImplLoadRes( rResId );
@@ -112,8 +100,7 @@ void MoreButton::ImplLoadRes( const ResId& rResId )
 
 MoreButton::~MoreButton()
 {
-    if ( mpMBData->mpItemList )
-        delete mpMBData->mpItemList;
+    delete mpMBData->mpItemList;
     delete mpMBData;
 }
 
@@ -169,19 +156,6 @@ void MoreButton::Click()
     }
     // Call Click handler here, so that we can initialize the Controls
     PushButton::Click();
-}
-
-void MoreButton::AddWindow( Window* pWindow )
-{
-    if ( !mpMBData->mpItemList )
-        mpMBData->mpItemList = new ImplMoreWindowList();
-
-    mpMBData->mpItemList->push_back( pWindow );
-
-    if ( mbState )
-        pWindow->Show();
-    else
-        pWindow->Hide();
 }
 
 void MoreButton::SetText( const OUString& rText )

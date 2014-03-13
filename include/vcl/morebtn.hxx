@@ -51,15 +51,12 @@ protected:
 
 public:
     explicit            MoreButton( Window* pParent, WinBits nStyle = 0 );
-    explicit            MoreButton( Window* pParent, const ResId& );
     virtual             ~MoreButton();
 
     void                Click();
 
-    void                AddWindow( Window* pWindow );
-
     void                SetDelta( sal_uLong nNewDelta ) { mnDelta = nNewDelta; }
-    sal_uLong               GetDelta() const { return mnDelta; }
+    sal_uLong           GetDelta() const { return mnDelta; }
 
     void                SetMapUnit( MapUnit eNewUnit = MAP_PIXEL ) { meUnit = eNewUnit; }
     MapUnit             GetMapUnit() const { return meUnit; }
