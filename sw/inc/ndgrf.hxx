@@ -47,7 +47,6 @@ class SW_DLLPUBLIC SwGrfNode: public SwNoTxtNode
     sal_Bool bGraphicArrived        :1;
     sal_Bool bChgTwipSize           :1;
     sal_Bool bChgTwipSizeFromPixel  :1;
-    sal_Bool bLoadLowResGrf         :1;
     sal_Bool bFrameInPaint          :1; ///< To avoid Start-/EndActions in Paint via SwapIn.
     sal_Bool bScaleImageMap         :1; ///< Scale image map in SetTwipSize.
 
