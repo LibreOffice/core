@@ -2813,6 +2813,18 @@ DECLARE_OOXMLEXPORT_TEST(testNestedAlternateContent, "nestedAlternateContent.doc
     assertXPath(pXmlDoc,"/w:document[1]/w:body[1]/w:p[1]/w:r[1]/mc:AlternateContent[1]/mc:Choice[1]/w:drawing[1]/wp:anchor[1]/a:graphic[1]/a:graphicData[1]/wpg:wgp[1]/wps:wsp[2]/wps:txbx[1]/w:txbxContent[1]/w:p[1]/w:r[2]/mc:AlternateContent[1]",0);
 }
 
+DECLARE_OOXMLEXPORT_TEST(testContentTypeXLSM, "fdo76098.docx")
+{
+    xmlDocPtr pXmlDoc = parseExport("[Content_Types].xml");
+
+    if (!pXmlDoc)
+       return;
+
+    assertXPath(pXmlDoc, "/ContentType:Types/ContentType:Override[2]", "ContentType", "application/vnd.ms-excel.sheet.macroEnabled.12");
+
+}
+
+
 #endif
 
 CPPUNIT_PLUGIN_IMPLEMENT();

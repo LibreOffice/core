@@ -1213,10 +1213,15 @@ void DocxExport::WriteEmbeddings()
         OUString embeddingPath = embeddingsList[j].Name;
         uno::Reference<io::XInputStream> embeddingsStream;
         embeddingsList[j].Value >>= embeddingsStream;
+
+        OUString contentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
+        if (embeddingPath.endsWith(OUString(".xlsm")))
+            contentType = "application/vnd.ms-excel.sheet.macroEnabled.12";
+
         if ( embeddingsStream.is() )
         {
             uno::Reference< io::XOutputStream > xOutStream = GetFilter().openFragmentStream(embeddingPath,
-                                    "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+                                    contentType);
             try
             {
                 sal_Int32 nBufferSize = 512;
