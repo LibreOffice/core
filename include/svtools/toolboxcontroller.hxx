@@ -71,7 +71,7 @@ class SVT_DLLPUBLIC ToolboxController :
         const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& getContext() const;
         ::com::sun::star::uno::Reference< ::com::sun::star::frame::XLayoutManager > getLayoutManager() const;
 
-        void updateStatus( const OUString aCommandURL );
+        void updateStatus( const OUString& aCommandURL );
         void updateStatus();
 
         // XInterface

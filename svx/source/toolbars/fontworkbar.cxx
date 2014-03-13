@@ -337,7 +337,7 @@ static void impl_execute( SdrView*, SfxRequest& rReq, SdrCustomShapeGeometryItem
 #include <svx/fmpage.hxx>
 #include <svl/itempool.hxx>
 
-void GetGeometryForCustomShape( SdrCustomShapeGeometryItem& rGeometryItem, const OUString rCustomShape )
+void GetGeometryForCustomShape( SdrCustomShapeGeometryItem& rGeometryItem, const OUString& rCustomShape )
 {
     const OUString sType( "Type" );
 

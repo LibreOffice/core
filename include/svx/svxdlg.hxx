@@ -132,10 +132,10 @@ public:
 class AbstractSvxHlinkDlgMarkWnd :public VclAbstractDialog
 {
 public:
-    virtual bool    MoveTo ( Point aNewPos )const = 0;
-    virtual bool    ConnectToDialog( bool bDoit = true )const = 0;
-    virtual void    RefreshTree ( OUString aStrURL ) = 0;
-    virtual void    SelectEntry ( OUString aStrMark ) = 0;
+    virtual bool    MoveTo ( Point aNewPos ) const = 0;
+    virtual bool    ConnectToDialog( bool bDoit = true ) const = 0;
+    virtual void    RefreshTree ( const OUString& aStrURL ) = 0;
+    virtual void    SelectEntry ( const OUString& aStrMark ) = 0;
     virtual sal_uInt16  SetError( sal_uInt16 nError) = 0;
     // in class Window
     virtual void    SetSizePixel( const Size& rNewSize ) = 0;

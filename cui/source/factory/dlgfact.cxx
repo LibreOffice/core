@@ -578,12 +578,12 @@ bool AbstractSvxHlinkDlgMarkWnd_Impl::ConnectToDialog( bool bDoit  )const
     return pDlg->ConnectToDialog(bDoit);
 }
 
-void AbstractSvxHlinkDlgMarkWnd_Impl::RefreshTree ( OUString aStrURL )
+void AbstractSvxHlinkDlgMarkWnd_Impl::RefreshTree ( const OUString& aStrURL )
 {
     pDlg->RefreshTree(aStrURL);
 }
 
-void AbstractSvxHlinkDlgMarkWnd_Impl::SelectEntry ( OUString aStrMark )
+void AbstractSvxHlinkDlgMarkWnd_Impl::SelectEntry ( const OUString& aStrMark )
 {
     pDlg->SelectEntry(aStrMark);
 }

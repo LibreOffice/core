@@ -173,7 +173,7 @@ OUString NBOTypeMgrBase::GetBulCharFmtName()
 {
     return aNumCharFmtName;
 }
-void NBOTypeMgrBase::ImplLoad(OUString filename)
+void NBOTypeMgrBase::ImplLoad(const OUString& filename)
 {
     bIsLoading = true;
     SfxMapUnit      eOldCoreUnit=eCoreUnit;
@@ -213,7 +213,7 @@ void NBOTypeMgrBase::ImplLoad(OUString filename)
     eCoreUnit = eOldCoreUnit;
     bIsLoading = false;
 }
-void NBOTypeMgrBase::ImplStore(OUString filename)
+void NBOTypeMgrBase::ImplStore(const OUString& filename)
 {
     if (bIsLoading) return;
     SfxMapUnit      eOldCoreUnit=eCoreUnit;

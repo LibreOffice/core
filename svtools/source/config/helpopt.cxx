@@ -135,7 +135,7 @@ SvtHelpOptions_Impl::SvtHelpOptions_Impl()
 }
 
 
-static int lcl_MapPropertyName( const OUString rCompare,
+static int lcl_MapPropertyName( const OUString& rCompare,
                 const uno::Sequence< OUString>& aInternalPropertyNames)
 {
     for(int nProp = 0; nProp < aInternalPropertyNames.getLength(); ++nProp)

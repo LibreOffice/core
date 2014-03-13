@@ -88,7 +88,7 @@ void DescriptionGenerator::Initialize (sal_Int32 nResourceId)
 
 
 
-void DescriptionGenerator::Initialize (OUString sPrefix)
+void DescriptionGenerator::Initialize (const OUString& sPrefix)
 {
     msDescription = sPrefix;
     if (mxSet.is())

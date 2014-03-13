@@ -69,8 +69,8 @@ void disposeGallery( Gallery* pGallery )
     delete pGallery;
 }
 
-static void createTheme( OUString aThemeName, OUString aGalleryURL,
-                         OUString aDestDir, std::vector<INetURLObject> &rFiles,
+static void createTheme( const OUString& aThemeName, const OUString& aGalleryURL,
+                         const OUString& aDestDir, std::vector<INetURLObject> &rFiles,
                          bool bRelativeURLs )
 {
     Gallery* pGallery;

@@ -22,7 +22,7 @@ private:
 
 public:
 
-    Place( OUString sName, OUString sUrl, bool bEditable = false ) :
+    Place( const OUString& sName, const OUString& sUrl, bool bEditable = false ) :
         msName( sName ),
         maUrl( sUrl ),
         mbEditable( bEditable ) {};

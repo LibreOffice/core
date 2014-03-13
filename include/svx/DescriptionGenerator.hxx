@@ -64,7 +64,7 @@ public:
             An introductory description of the shape that is made more
             specific by later calls to <member>addProperty</member>.
     */
-    void Initialize (OUString sPrefix);
+    void Initialize (const OUString& sPrefix);
 
     /** Initialize the description with the specified string from the
         resource followed by the shape's style in parantheses and a colon.
