@@ -608,12 +608,14 @@ bool Footnote::Read(HWPFile & hwpf)
     return !hwpf.State();
 }
 
-
 // auto number(18)
-AutoNum::AutoNum():HBox(CH_AUTO_NUM)
+AutoNum::AutoNum()
+    : HBox(CH_AUTO_NUM)
+    , type(0)
+    , number(0)
+    , dummy(0)
 {
 }
-
 
 bool AutoNum::Read(HWPFile & hwpf)
 {
