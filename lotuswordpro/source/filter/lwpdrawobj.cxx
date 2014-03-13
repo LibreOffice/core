@@ -566,7 +566,7 @@ XFFrame* LwpDrawPolyLine::CreateStandardDrawObj(const  OUString& rStyleName)
  */
 LwpDrawPolygon::LwpDrawPolygon(SvStream * pStream, DrawingOffsetAndScale* pTransData)
     : LwpDrawObj(pStream, pTransData)
-    , m_nNumPoints(NULL)
+    , m_nNumPoints(0)
     , m_pVector(NULL)
 {
 }
