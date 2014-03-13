@@ -23,6 +23,7 @@
 #include <svtools/editbrowsebox.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <tools/diagnose_ex.h>
+#include <vcl/builder.hxx>
 #include "TableConnectionData.hxx"
 #include "TableConnection.hxx"
 #include "TableWindow.hxx"
@@ -78,7 +79,11 @@ namespace dbaui
         */
         sal_uInt16 getColumnIdent( sal_uInt16 _nColId ) const;
     public:
-        ORelationControl( OTableListBoxControl* pParent );
+        ORelationControl(Window *pParent);
+        void SetController(OTableListBoxControl* pController)
+        {
+            m_pBoxControl = pController;
+        }
         virtual ~ORelationControl();
 
         /** searches for a connection between these two tables
@@ -99,7 +104,7 @@ namespace dbaui
 
     protected:
         virtual void Resize();
-
+        virtual Size GetOptimalSize() const;
         virtual bool PreNotify(NotifyEvent& rNEvt );
 
         virtual sal_Bool IsTabAllowed(sal_Bool bForward) const;
@@ -123,13 +128,20 @@ namespace dbaui
     };
 
     // class ORelationControl
-    ORelationControl::ORelationControl( OTableListBoxControl* pParent )
-        : EditBrowseBox(pParent, EBBF_SMART_TAB_TRAVEL | EBBF_NOROWPICTURE, WB_TABSTOP | WB_BORDER | BROWSER_AUTOSIZE_LASTCOL)
-        , m_pBoxControl(pParent)
+    ORelationControl::ORelationControl(Window *pParent)
+        : EditBrowseBox(pParent,
+            EBBF_SMART_TAB_TRAVEL | EBBF_NOROWPICTURE,
+            WB_TABSTOP | WB_BORDER | BROWSER_AUTOSIZE_LASTCOL)
+        , m_pBoxControl(NULL)
         , m_nDataPos(0)
         , m_xSourceDef(NULL)
         , m_xDestDef(NULL)
     {
+    }
+
+    extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeORelationControl(Window *pParent, VclBuilder::stringmap &)
+    {
+        return new ORelationControl(pParent);
     }
 
     ORelationControl::~ORelationControl()
@@ -144,6 +156,7 @@ namespace dbaui
 
         m_pConnData->normalizeLines();
     }
+
     void ORelationControl::lateInit()
     {
         if ( !m_pConnData.get() )
@@ -174,10 +187,11 @@ namespace dbaui
 
         RowInserted(0, m_pConnData->GetConnLineDataList()->size() + 1, sal_True); // add one extra row
     }
+
     void ORelationControl::Resize()
     {
         EditBrowseBox::Resize();
-        long nOutputWidth = GetOutputSizePixel().Width();
+        long nOutputWidth = GetOutputSizePixel().Width() - 1;
         SetColumnWidth(1, (nOutputWidth / 2));
         SetColumnWidth(2, (nOutputWidth / 2));
     }
@@ -418,51 +432,45 @@ namespace dbaui
             ActivateCell();
         }
     }
+
     void ORelationControl::CellModified()
     {
         EditBrowseBox::CellModified();
         SaveModified();
-#if OSL_DEBUG_LEVEL > 0
-        OTableListBoxControl *parent = dynamic_cast<OTableListBoxControl*>(GetParent());
-#else
-        OTableListBoxControl *parent = static_cast<OTableListBoxControl*>(GetParent());
-#endif
-        assert(parent);
-        parent->NotifyCellChange();
+        assert(m_pBoxControl);
+        m_pBoxControl->NotifyCellChange();
     }
-    // class OTableListBoxControl
 
-OTableListBoxControl::OTableListBoxControl(  Window* _pParent
-                                            ,const ResId& _rResId
-                                            ,const OJoinTableView::OTableWindowMap* _pTableMap
-                                            ,IRelationControlInterface* _pParentDialog)
-     : Window(_pParent,_rResId)
-     , m_aFL_InvolvedTables(    this, ResId(FL_INVOLVED_TABLES,*_rResId.GetResMgr()))
-     , m_lmbLeftTable(          this, ResId(LB_LEFT_TABLE,*_rResId.GetResMgr()))
-     , m_lmbRightTable(         this, ResId(LB_RIGHT_TABLE,*_rResId.GetResMgr()))
-     , m_aFL_InvolvedFields(    this, ResId(FL_INVOLVED_FIELDS,*_rResId.GetResMgr()))
-     , m_pTableMap(_pTableMap)
-     , m_pParentDialog(_pParentDialog)
+    Size ORelationControl::GetOptimalSize() const
     {
-        m_pRC_Tables = new ORelationControl( this );
-        m_pRC_Tables->SetHelpId(HID_RELDLG_KEYFIELDS);
-        m_pRC_Tables->Init( );
-        m_pRC_Tables->SetZOrder(&m_lmbRightTable, WINDOW_ZORDER_BEHIND);
+        return LogicToPixel(Size(140, 80), MAP_APPFONT);
+    }
+
+    // class OTableListBoxControl
+    OTableListBoxControl::OTableListBoxControl(VclBuilderContainer* _pParent,
+        const OJoinTableView::OTableWindowMap* _pTableMap,
+        IRelationControlInterface* _pParentDialog)
+        : m_pTableMap(_pTableMap)
+        , m_pParentDialog(_pParentDialog)
+    {
+        _pParent->get(m_pLeftTable, "table1");
+        _pParent->get(m_pRightTable, "table2");
+
+        _pParent->get(m_pRC_Tables, "relations");
+        m_pRC_Tables->SetController(this);
+        m_pRC_Tables->Init();
 
         lateUIInit();
 
         Link aLink(LINK(this, OTableListBoxControl, OnTableChanged));
-        m_lmbLeftTable.SetSelectHdl(aLink);
-        m_lmbRightTable.SetSelectHdl(aLink);
-
-        FreeResource();
+        m_pLeftTable->SetSelectHdl(aLink);
+        m_pRightTable->SetSelectHdl(aLink);
     }
+
     OTableListBoxControl::~OTableListBoxControl()
     {
-        ORelationControl* pTemp = m_pRC_Tables;
-        m_pRC_Tables = NULL;
-        delete pTemp;
     }
+
     void OTableListBoxControl::fillListBoxes()
     {
         OSL_ENSURE( !m_pTableMap->empty(), "OTableListBoxControl::fillListBoxes: no table window!");
@@ -474,8 +482,8 @@ OTableListBoxControl::OTableListBoxControl(  Window* _pParent
         OJoinTableView::OTableWindowMap::const_iterator aEnd = m_pTableMap->end();
         for(;aIter != aEnd;++aIter)
         {
-            m_lmbLeftTable.InsertEntry(aIter->first);
-            m_lmbRightTable.InsertEntry(aIter->first);
+            m_pLeftTable->InsertEntry(aIter->first);
+            m_pRightTable->InsertEntry(aIter->first);
 
             if (!pInitialLeft)
             {
@@ -502,17 +510,18 @@ OTableListBoxControl::OTableListBoxControl(  Window* _pParent
 
         if ( m_pTableMap->size() > 2 )
         {
-            m_lmbLeftTable.RemoveEntry(m_strCurrentRight);
-            m_lmbRightTable.RemoveEntry(m_strCurrentLeft);
+            m_pLeftTable->RemoveEntry(m_strCurrentRight);
+            m_pRightTable->RemoveEntry(m_strCurrentLeft);
         }
 
         // Select the first one on the left side and on the right side,
         // select the second one
-        m_lmbLeftTable.SelectEntry(m_strCurrentLeft);
-        m_lmbRightTable.SelectEntry(m_strCurrentRight);
+        m_pLeftTable->SelectEntry(m_strCurrentLeft);
+        m_pRightTable->SelectEntry(m_strCurrentRight);
 
-        m_lmbLeftTable.GrabFocus();
+        m_pLeftTable->GrabFocus();
     }
+
     IMPL_LINK( OTableListBoxControl, OnTableChanged, ListBox*, pListBox )
     {
         OUString strSelected(pListBox->GetSelectEntry());
@@ -523,10 +532,10 @@ OTableListBoxControl::OTableListBoxControl(  Window* _pParent
         if ( m_pTableMap->size() == 2 )
         {
             ListBox* pOther;
-            if ( pListBox == &m_lmbLeftTable )
-                pOther = &m_lmbRightTable;
+            if (pListBox == m_pLeftTable)
+                pOther = m_pRightTable;
             else
-                pOther = &m_lmbLeftTable;
+                pOther = m_pLeftTable;
             pOther->SelectEntryPos(1 - pOther->GetSelectEntryPos());
 
             OJoinTableView::OTableWindowMap::const_iterator aIter = m_pTableMap->begin();
@@ -534,7 +543,7 @@ OTableListBoxControl::OTableListBoxControl(  Window* _pParent
             ++aIter;
             OTableWindow* pSecond = aIter->second;
 
-            if ( m_lmbLeftTable.GetSelectEntry() == pFirst->GetName() )
+            if ( m_pLeftTable->GetSelectEntry() == pFirst->GetName() )
             {
                 pLeft   = pFirst;
                 pRight  = pSecond;
@@ -554,33 +563,33 @@ OTableListBoxControl::OTableListBoxControl(  Window* _pParent
                 pLoop = aFind->second;
             OSL_ENSURE(pLoop != NULL, "ORelationDialog::OnTableChanged: invalid ListBox entry!");
                 // We need to find strSelect, because we filled the ListBoxes with the table names with which we compare now
-            if (pListBox == &m_lmbLeftTable)
+            if (pListBox == m_pLeftTable)
             {
                 // Insert the previously selected Entry on the left side on the right side
-                m_lmbRightTable.InsertEntry(m_strCurrentLeft);
+                m_pRightTable->InsertEntry(m_strCurrentLeft);
                 // Remove the currently selected Entry
-                m_lmbRightTable.RemoveEntry(strSelected);
+                m_pRightTable->RemoveEntry(strSelected);
                 m_strCurrentLeft    = strSelected;
 
                 pLeft = pLoop;
 
-                OJoinTableView::OTableWindowMap::const_iterator aIter = m_pTableMap->find(m_lmbRightTable.GetSelectEntry());
+                OJoinTableView::OTableWindowMap::const_iterator aIter = m_pTableMap->find(m_pRightTable->GetSelectEntry());
                 OSL_ENSURE( aIter != m_pTableMap->end(), "Invalid name");
                 if ( aIter != m_pTableMap->end() )
                     pRight = aIter->second;
 
-                m_lmbLeftTable.GrabFocus();
+                m_pLeftTable->GrabFocus();
             }
             else
             {
                 // Insert the previously selected Entry on the right side on the left side
-                m_lmbLeftTable.InsertEntry(m_strCurrentRight);
+                m_pLeftTable->InsertEntry(m_strCurrentRight);
                 // Remove the currently selected Entry
-                m_lmbLeftTable.RemoveEntry(strSelected);
+                m_pLeftTable->RemoveEntry(strSelected);
                 m_strCurrentRight = strSelected;
 
                 pRight = pLoop;
-                OJoinTableView::OTableWindowMap::const_iterator aIter = m_pTableMap->find(m_lmbLeftTable.GetSelectEntry());
+                OJoinTableView::OTableWindowMap::const_iterator aIter = m_pTableMap->find(m_pLeftTable->GetSelectEntry());
                 OSL_ENSURE( aIter != m_pTableMap->end(), "Invalid name");
                 if ( aIter != m_pTableMap->end() )
                     pLeft = aIter->second;
@@ -594,6 +603,7 @@ OTableListBoxControl::OTableListBoxControl(  Window* _pParent
         NotifyCellChange();
         return 0;
     }
+
     void OTableListBoxControl::NotifyCellChange()
     {
         // Enable/disable the OK button, depending on having a valid situation
@@ -633,62 +643,64 @@ OTableListBoxControl::OTableListBoxControl(  Window* _pParent
         m_pRC_Tables->ActivateCell();
         m_pRC_Tables->m_ops.clear();
     }
+
     void fillEntryAndDisable(ListBox& _rListBox,const OUString& _sEntry)
     {
         _rListBox.InsertEntry(_sEntry);
         _rListBox.SelectEntryPos(0);
         _rListBox.Disable();
     }
+
     void OTableListBoxControl::fillAndDisable(const TTableConnectionData::value_type& _pConnectionData)
     {
-        fillEntryAndDisable(m_lmbLeftTable,_pConnectionData->getReferencingTable()->GetWinName());
-        fillEntryAndDisable(m_lmbRightTable,_pConnectionData->getReferencedTable()->GetWinName());
+        fillEntryAndDisable(*m_pLeftTable, _pConnectionData->getReferencingTable()->GetWinName());
+        fillEntryAndDisable(*m_pRightTable, _pConnectionData->getReferencedTable()->GetWinName());
     }
+
     void OTableListBoxControl::Init(const TTableConnectionData::value_type& _pConnData)
     {
         m_pRC_Tables->Init(_pConnData);
     }
-    void OTableListBoxControl::lateUIInit(Window* _pTableSeparator)
+
+    void OTableListBoxControl::lateUIInit()
     {
-        const sal_Int32 nDiff = LogicToPixel( Point(0,6), MAP_APPFONT ).Y();
-        Point aDlgPoint = LogicToPixel( Point(12,43), MAP_APPFONT );
-        if ( _pTableSeparator )
-        {
-            _pTableSeparator->SetZOrder(&m_lmbRightTable, WINDOW_ZORDER_BEHIND);
-            m_pRC_Tables->SetZOrder(_pTableSeparator, WINDOW_ZORDER_BEHIND);
-            _pTableSeparator->SetPosPixel(Point(0,m_aFL_InvolvedFields.GetPosPixel().Y()));
-            const Size aSize = _pTableSeparator->GetSizePixel();
-            aDlgPoint.Y() = _pTableSeparator->GetPosPixel().Y() + aSize.Height();
-            m_aFL_InvolvedFields.SetPosPixel(Point(m_aFL_InvolvedFields.GetPosPixel().X(),aDlgPoint.Y()));
-            aDlgPoint.Y() += nDiff + m_aFL_InvolvedFields.GetSizePixel().Height();
-        }
-        // positing BrowseBox control
-        const Size aCurrentSize = GetSizePixel();
-        Size aDlgSize = LogicToPixel( Size(24,0), MAP_APPFONT );
-        aDlgSize.Width() = aCurrentSize.Width() - aDlgSize.Width();
-        aDlgSize.Height() = aCurrentSize.Height() - aDlgPoint.Y() - nDiff;
-
-        m_pRC_Tables->SetPosSizePixel( aDlgPoint, aDlgSize );
         m_pRC_Tables->Show();
-
         lateInit();
     }
+
     void OTableListBoxControl::lateInit()
     {
         m_pRC_Tables->lateInit();
     }
+
+    void OTableListBoxControl::Disable()
+    {
+        m_pLeftTable->Disable();
+        m_pRightTable->Disable();
+        m_pRC_Tables->Disable();
+    }
+
+    void OTableListBoxControl::Invalidate()
+    {
+        m_pLeftTable->Invalidate();
+        m_pRightTable->Invalidate();
+        m_pRC_Tables->Invalidate();
+    }
+
     sal_Bool OTableListBoxControl::SaveModified()
     {
         return m_pRC_Tables->SaveModified();
     }
+
     TTableWindowData::value_type OTableListBoxControl::getReferencingTable()    const
     {
         return m_pRC_Tables->getData()->getReferencingTable();
     }
+
     void OTableListBoxControl::enableRelation(bool _bEnable)
     {
         if ( !_bEnable )
-            PostUserEvent(LINK(m_pRC_Tables, ORelationControl, AsynchDeactivate));
+            m_pRC_Tables->PostUserEvent(LINK(m_pRC_Tables, ORelationControl, AsynchDeactivate));
         m_pRC_Tables->Enable(_bEnable);
 
     }

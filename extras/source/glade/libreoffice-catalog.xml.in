@@ -620,6 +620,10 @@
                         generic-name="Open Document Button" parent="GtkButton"
                         icon-name="widget-gtk-button"/>
 
+    <glade-widget-class title="Relation Control" name="dbulo-ORelationControl"
+                        generic-name="Relation Control" parent="GtkTreeView"
+                        icon-name="widget-gtk-treeview"/>
+
     <glade-widget-class title="Sidebar ToolBox" name="sfxlo-SidebarToolBox"
                         generic-name="Sidebar ToolBox" parent="GtkToolbar"
                         icon-name="widget-gtk-toolbar"/>

@@ -80,7 +80,7 @@ ORelationDialog::ORelationDialog( OJoinTableView* pParent,
     m_pConnData->CopyFrom( *pConnectionData );
 
     Init(m_pConnData);
-    m_pTableControl.reset( new OTableListBoxControl(this,ModuleRes(WND_CONTROL),m_pTableMap,this) );
+    m_pTableControl.reset( new OTableListBoxControl(this, m_pTableMap, this) );
 
     aPB_OK.SetClickHdl( LINK(this, ORelationDialog, OKClickHdl) );
 

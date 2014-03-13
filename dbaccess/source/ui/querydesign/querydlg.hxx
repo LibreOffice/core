@@ -35,17 +35,15 @@ namespace dbaui
 {
     class OTableListBoxControl;
     class OQueryTableView;
-    class OJoinControl;
     class DlgQryJoin :  public ModalDialog
                         ,public IRelationControlInterface
     {
     protected:
-        FixedText               aML_HelpText;
-        OKButton                aPB_OK;
-        CancelButton            aPB_CANCEL;
-        HelpButton              aPB_HELP;
+        FixedText*              m_pML_HelpText;
+        OKButton*               m_pPB_OK;
+        ListBox*                m_pLB_JoinType;
+        CheckBox*               m_pCBNatural;
 
-        OJoinControl*                       m_pJoinControl;
         OTableListBoxControl*               m_pTableControl;
         OJoinTableView::OTableWindowMap*    m_pTableMap;
         OQueryTableView*                    m_pTableView;

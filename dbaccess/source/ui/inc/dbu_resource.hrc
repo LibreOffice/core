@@ -80,7 +80,7 @@
 #define DLG_PARAMETERS                  RID_DIALOG_START +  5
 
 #define DLG_JOIN_TABADD                 RID_DIALOG_START + 14
-#define DLG_QRY_JOIN                    RID_DIALOG_START + 15
+    // FREE
 #define WIZ_RTFCOPYTABLE                RID_DIALOG_START + 16
 #define DLG_REL_PROPERTIES              RID_DIALOG_START + 17
     // FREE

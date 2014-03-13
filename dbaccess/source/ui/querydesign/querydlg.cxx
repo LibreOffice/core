@@ -36,62 +36,32 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::sdbc;
 
-namespace dbaui
-{
-class OJoinControl  : public Window
-{
-public:
-    FixedLine               aFL_Join;
-    FixedText               aFT_Title;
-    ListBox                 aLB_JoinType;
-    CheckBox                m_aCBNatural;
-
-    OJoinControl(Window* _pParent,const ResId& _rResId);
-};
-
-OJoinControl::OJoinControl(Window* _pParent,const ResId& _rResId)
-    : Window(_pParent,_rResId)
-    ,aFL_Join( this, ResId( FL_JOIN,*_rResId.GetResMgr() ) )
-    ,aFT_Title( this, ResId(FT_LISTBOXTITLE,*_rResId.GetResMgr()) )
-    ,aLB_JoinType( this, ResId(LB_JOINTYPE,*_rResId.GetResMgr()) )
-    ,m_aCBNatural( this, ResId(CB_NATURAL,*_rResId.GetResMgr()) )
-{
-    FreeResource();
-}
-
-} // dbaui
-
 DlgQryJoin::DlgQryJoin( OQueryTableView * pParent,
                        const TTableConnectionData::value_type& _pData,
                        OJoinTableView::OTableWindowMap* _pTableMap,
                        const Reference< XConnection >& _xConnection,
                        sal_Bool _bAllowTableSelect)
-    :ModalDialog( pParent, ModuleRes(DLG_QRY_JOIN) )
-    ,aML_HelpText( this, ModuleRes(ML_HELPTEXT) )
-    ,aPB_OK( this, ModuleRes( PB_OK ) )
-    ,aPB_CANCEL( this, ModuleRes( PB_CANCEL ) )
-    ,aPB_HELP( this, ModuleRes( PB_HELP ) )
-    ,m_pJoinControl( NULL )
-    ,m_pTableControl( NULL )
-    ,m_pTableMap(_pTableMap)
-    ,m_pTableView(pParent)
-    ,eJoinType(static_cast<OQueryTableConnectionData*>(_pData.get())->GetJoinType())
-    ,m_pOrigConnData(_pData)
-    ,m_xConnection(_xConnection)
+    : ModalDialog( pParent, "JoinDialog", "dbaccess/ui/joindialog.ui" )
+    , m_pTableControl( NULL )
+    , m_pTableMap(_pTableMap)
+    , m_pTableView(pParent)
+    , eJoinType(static_cast<OQueryTableConnectionData*>(_pData.get())->GetJoinType())
+    , m_pOrigConnData(_pData)
+    , m_xConnection(_xConnection)
 {
+    get(m_pML_HelpText, "helptext");
+    get(m_pLB_JoinType, "type");
+    get(m_pCBNatural, "natural");
+    get(m_pPB_OK, "ok");
 
-    aML_HelpText.SetControlBackground( GetSettings().GetStyleSettings().GetFaceColor() );
+    m_pML_HelpText->SetControlBackground( GetSettings().GetStyleSettings().GetFaceColor() );
     // Connection kopieren
     m_pConnData.reset(_pData->NewInstance());
     m_pConnData->CopyFrom(*_pData);
 
-    m_pTableControl = new OTableListBoxControl(this,ModuleRes(WND_CONTROL),m_pTableMap,this);
+    m_pTableControl = new OTableListBoxControl(this, m_pTableMap, this);
 
-    m_pJoinControl = new OJoinControl(m_pTableControl,ModuleRes(WND_JOIN_CONTROL));
-
-    m_pJoinControl->Show();
-    m_pJoinControl->m_aCBNatural.Check(static_cast<OQueryTableConnectionData*>(m_pConnData.get())->isNatural());
-    m_pTableControl->Show();
+    m_pCBNatural->Check(static_cast<OQueryTableConnectionData*>(m_pConnData.get())->isNatural());
 
     if( _bAllowTableSelect )
     {
@@ -104,7 +74,7 @@ DlgQryJoin::DlgQryJoin( OQueryTableView * pParent,
         m_pTableControl->Init( m_pConnData );
     }
 
-    m_pTableControl->lateUIInit(m_pJoinControl);
+    m_pTableControl->lateUIInit();
 
     sal_Bool bSupportFullJoin = sal_False;
     Reference<XDatabaseMetaData> xMeta;
@@ -129,49 +99,46 @@ DlgQryJoin::DlgQryJoin( OQueryTableView * pParent,
 
     setJoinType(eJoinType);
 
-    aPB_OK.SetClickHdl( LINK(this, DlgQryJoin, OKClickHdl) );
+    m_pPB_OK->SetClickHdl( LINK(this, DlgQryJoin, OKClickHdl) );
 
-    m_pJoinControl->aLB_JoinType.SetSelectHdl(LINK(this,DlgQryJoin,LBChangeHdl));
-    m_pJoinControl->m_aCBNatural.SetToggleHdl(LINK(this,DlgQryJoin,NaturalToggleHdl));
+    m_pLB_JoinType->SetSelectHdl(LINK(this,DlgQryJoin,LBChangeHdl));
+    m_pCBNatural->SetToggleHdl(LINK(this,DlgQryJoin,NaturalToggleHdl));
 
     if ( static_cast<OQueryTableView*>(pParent)->getDesignView()->getController().isReadOnly() )
     {
-        m_pJoinControl->aLB_JoinType.Disable();
-        m_pJoinControl->m_aCBNatural.Disable();
+        m_pLB_JoinType->Disable();
+        m_pCBNatural->Disable();
         m_pTableControl->Disable();
     }
     else
     {
-        const sal_uInt16 nCount = m_pJoinControl->aLB_JoinType.GetEntryCount();
+        const sal_uInt16 nCount = m_pLB_JoinType->GetEntryCount();
         for (sal_uInt16 i = 0; i < nCount; ++i)
         {
-            const sal_IntPtr nJoinTyp = reinterpret_cast<sal_IntPtr>(m_pJoinControl->aLB_JoinType.GetEntryData(i));
+            const sal_IntPtr nJoinTyp = reinterpret_cast<sal_IntPtr>(m_pLB_JoinType->GetEntryData(i));
             if ( !bSupportFullJoin && nJoinTyp == ID_FULL_JOIN )
-                m_pJoinControl->aLB_JoinType.RemoveEntry(i);
+                m_pLB_JoinType->RemoveEntry(i);
             else if ( !bSupportOuterJoin && (nJoinTyp == ID_LEFT_JOIN || nJoinTyp == ID_RIGHT_JOIN) )
-                m_pJoinControl->aLB_JoinType.RemoveEntry(i);
+                m_pLB_JoinType->RemoveEntry(i);
         }
 
         m_pTableControl->NotifyCellChange();
         m_pTableControl->enableRelation(!static_cast<OQueryTableConnectionData*>(m_pConnData.get())->isNatural() && eJoinType != CROSS_JOIN );
     }
-
-    FreeResource();
 }
 
 DlgQryJoin::~DlgQryJoin()
 {
-    delete m_pJoinControl;
     delete m_pTableControl;
 }
 
 IMPL_LINK( DlgQryJoin, LBChangeHdl, ListBox*, /*pListBox*/ )
 {
-    if (m_pJoinControl->aLB_JoinType.GetSelectEntryPos() == m_pJoinControl->aLB_JoinType.GetSavedValue() )
+    if (m_pLB_JoinType->GetSelectEntryPos() == m_pLB_JoinType->GetSavedValue() )
         return 1;
 
-    m_pJoinControl->aLB_JoinType.SaveValue();
-    aML_HelpText.SetText(OUString());
+    m_pLB_JoinType->SaveValue();
+    m_pML_HelpText->SetText(OUString());
 
     m_pTableControl->enableRelation(true);
 
@@ -179,8 +146,8 @@ IMPL_LINK( DlgQryJoin, LBChangeHdl, ListBox*, /*pListBox*/ )
     OUString sSecondWinName   = m_pConnData->getReferencedTable()->GetWinName();
     const EJoinType eOldJoinType = eJoinType;
     sal_uInt16 nResId = 0;
-    const sal_uInt16 nPos = m_pJoinControl->aLB_JoinType.GetSelectEntryPos();
-    const sal_IntPtr nJoinType = reinterpret_cast<sal_IntPtr>(m_pJoinControl->aLB_JoinType.GetEntryData(nPos));
+    const sal_uInt16 nPos = m_pLB_JoinType->GetSelectEntryPos();
+    const sal_IntPtr nJoinType = reinterpret_cast<sal_IntPtr>(m_pLB_JoinType->GetEntryData(nPos));
     sal_Bool bAddHint = sal_True;
     switch ( nJoinType )
     {
@@ -214,16 +181,16 @@ IMPL_LINK( DlgQryJoin, LBChangeHdl, ListBox*, /*pListBox*/ )
 
                 m_pConnData->ResetConnLines();
                 m_pTableControl->lateInit();
-                m_pJoinControl->m_aCBNatural.Check(false);
+                m_pCBNatural->Check(false);
                 m_pTableControl->enableRelation(false);
                 OUString sEmpty;
                 m_pConnData->AppendConnLine(sEmpty,sEmpty);
-                aPB_OK.Enable(true);
+                m_pPB_OK->Enable(true);
             }
             break;
     }
 
-    m_pJoinControl->m_aCBNatural.Enable(eJoinType != CROSS_JOIN);
+    m_pCBNatural->Enable(eJoinType != CROSS_JOIN);
 
     if ( eJoinType != eOldJoinType && eOldJoinType == CROSS_JOIN )
     {
@@ -232,7 +199,7 @@ IMPL_LINK( DlgQryJoin, LBChangeHdl, ListBox*, /*pListBox*/ )
     if ( eJoinType != CROSS_JOIN )
     {
         m_pTableControl->NotifyCellChange();
-        NaturalToggleHdl(&m_pJoinControl->m_aCBNatural);
+        NaturalToggleHdl(m_pCBNatural);
     }
 
     m_pTableControl->Invalidate();
@@ -249,7 +216,7 @@ IMPL_LINK( DlgQryJoin, LBChangeHdl, ListBox*, /*pListBox*/ )
         sHelpText += ModuleRes( STR_JOIN_TYPE_HINT );
     }
 
-    aML_HelpText.SetText( sHelpText );
+    m_pML_HelpText->SetText( sHelpText );
     return 1;
 }
 
@@ -265,7 +232,7 @@ IMPL_LINK( DlgQryJoin, OKClickHdl, Button*, /*pButton*/ )
 
 IMPL_LINK( DlgQryJoin, NaturalToggleHdl, CheckBox*, /*pButton*/ )
 {
-    sal_Bool bChecked = m_pJoinControl->m_aCBNatural.IsChecked();
+    sal_Bool bChecked = m_pCBNatural->IsChecked();
     static_cast<OQueryTableConnectionData*>(m_pConnData.get())->setNatural(bChecked);
     m_pTableControl->enableRelation(!bChecked);
     if ( bChecked )
@@ -301,20 +268,20 @@ TTableConnectionData::value_type DlgQryJoin::getConnectionData() const
 
 void DlgQryJoin::setValid(sal_Bool _bValid)
 {
-    aPB_OK.Enable(_bValid || eJoinType == CROSS_JOIN );
+    m_pPB_OK->Enable(_bValid || eJoinType == CROSS_JOIN );
 }
 
 void DlgQryJoin::notifyConnectionChange( )
 {
     setJoinType( static_cast<OQueryTableConnectionData*>(m_pConnData.get())->GetJoinType() );
-    m_pJoinControl->m_aCBNatural.Check(static_cast<OQueryTableConnectionData*>(m_pConnData.get())->isNatural());
-    NaturalToggleHdl(&m_pJoinControl->m_aCBNatural);
+    m_pCBNatural->Check(static_cast<OQueryTableConnectionData*>(m_pConnData.get())->isNatural());
+    NaturalToggleHdl(m_pCBNatural);
 }
 
 void DlgQryJoin::setJoinType(EJoinType _eNewJoinType)
 {
     eJoinType = _eNewJoinType;
-    m_pJoinControl->m_aCBNatural.Enable(eJoinType != CROSS_JOIN);
+    m_pCBNatural->Enable(eJoinType != CROSS_JOIN);
 
     sal_IntPtr nJoinType = 0;
     switch ( eJoinType )
@@ -337,17 +304,17 @@ void DlgQryJoin::setJoinType(EJoinType _eNewJoinType)
             break;
     }
 
-    const sal_uInt16 nCount = m_pJoinControl->aLB_JoinType.GetEntryCount();
+    const sal_uInt16 nCount = m_pLB_JoinType->GetEntryCount();
     for (sal_uInt16 i = 0; i < nCount; ++i)
     {
-        if ( nJoinType == reinterpret_cast<sal_IntPtr>(m_pJoinControl->aLB_JoinType.GetEntryData(i)) )
+        if ( nJoinType == reinterpret_cast<sal_IntPtr>(m_pLB_JoinType->GetEntryData(i)) )
         {
-            m_pJoinControl->aLB_JoinType.SelectEntryPos(i);
+            m_pLB_JoinType->SelectEntryPos(i);
             break;
         }
     }
 
-    LBChangeHdl(&m_pJoinControl->aLB_JoinType);
+    LBChangeHdl(m_pLB_JoinType);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

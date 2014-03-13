@@ -20,6 +20,7 @@
 #define INCLUDED_DBACCESS_SOURCE_UI_INC_RELATIONCONTROL_HXX
 
 #include <vcl/fixed.hxx>
+#include <vcl/builder.hxx>
 #include <vcl/lstbox.hxx>
 #include "JoinTableView.hxx"
 
@@ -29,12 +30,10 @@ namespace dbaui
     class IRelationControlInterface;
     class ORelationControl;
 
-    class OTableListBoxControl  : public Window
+    class OTableListBoxControl
     {
-        FixedLine                               m_aFL_InvolvedTables;
-        ListBox                                 m_lmbLeftTable,
-                                                m_lmbRightTable;
-        FixedLine                               m_aFL_InvolvedFields;
+        ListBox*                                m_pLeftTable;
+        ListBox*                                m_pRightTable;
 
         ORelationControl*                       m_pRC_Tables;
         const OJoinTableView::OTableWindowMap*  m_pTableMap;
@@ -44,8 +43,7 @@ namespace dbaui
     private:
         DECL_LINK( OnTableChanged, ListBox* );
     public:
-        OTableListBoxControl(Window* _pParent,
-                             const ResId& _rResId,
+        OTableListBoxControl(VclBuilderContainer* _pParent,
                              const OJoinTableView::OTableWindowMap* _pTableMap,
                              IRelationControlInterface* _pParentDialog);
         virtual ~OTableListBoxControl();
@@ -75,8 +73,11 @@ namespace dbaui
                     the connection data which is used to init the control
         */
         void Init(const TTableConnectionData::value_type& _pConnData);
-        void lateUIInit(Window* _pTableSeparator = NULL);
+        void lateUIInit();
         void lateInit();
+
+        void Disable();
+        void Invalidate();
 
         sal_Bool SaveModified();
 
