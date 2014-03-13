@@ -317,11 +317,8 @@ PropertyState   SfxItemPropertySet::getPropertyState(const OUString& rName, cons
     }
     sal_uInt16 nWhich = pEntry->nWID;
 
-    // item holen
-    const SfxPoolItem* pItem = 0;
-    SfxItemState eState = rSet.GetItemState( nWhich, false, &pItem );
-    if(!pItem && nWhich != rSet.GetPool()->GetSlotId(nWhich))
-        pItem = &rSet.GetPool()->GetDefaultItem(nWhich);
+    // get item state
+    SfxItemState eState = rSet.GetItemState(nWhich, false);
     // item-Wert als UnoAny zurueckgeben
     if(eState == SFX_ITEM_DEFAULT)
         eRet = PropertyState_DEFAULT_VALUE;
