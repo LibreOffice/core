@@ -809,7 +809,9 @@ bool Outline::Read(HWPFile & hwpf)
 
 
 /* ¹­À½ ºóÄ­(30) */
-KeepSpace::KeepSpace():HBox(CH_KEEP_SPACE)
+KeepSpace::KeepSpace()
+    : HBox(CH_KEEP_SPACE)
+    , dummy(0)
 {
 }
 
