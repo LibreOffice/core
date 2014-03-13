@@ -66,7 +66,10 @@
 #include <tools/stream.hxx>
 
 Lwp9Reader::Lwp9Reader (LwpSvStream* pInputStream, IXFStream* pStream)
-    : m_pDocStream(pInputStream), m_pStream(pStream), m_LwpFileHdr()
+    : m_pDocStream(pInputStream)
+    , m_pStream(pStream)
+    , m_pObjMgr(NULL)
+    , m_LwpFileHdr()
 {}
 
 /**
