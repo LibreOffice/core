@@ -705,6 +705,10 @@ $(eval $(call gb_Helper_register_packages_for_install,ure,\
 	) \
 ))
 
+$(eval $(call gb_Helper_register_packages_for_install,ooo,\
+	xmlsec \
+))
+
 # External executables
 $(eval $(call gb_ExternalExecutable_register_executables,\
 	genbrk \

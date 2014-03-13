@@ -201,37 +201,6 @@ End
 
 #endif
 
-#ifdef WNT
-File gid_File_Lib_LibXMLSec_xmlseccore
-    PACKED_LIB_FILE_BODY;
-    #ifdef _gcc3
-      Name = "libxmlsec1.dll";
-    #else
-      Name = "libxmlsec.dll";
-    #endif
-End
-
-#ifdef CROSS_COMPILING
-File gid_File_Lib_LibXMLSec_xmlsecnss
-    PACKED_LIB_FILE_BODY;
-  #ifdef _gcc3
-    Name = "libxmlsec1-nss.dll";
-  #else
-    Name = "libxmlsec-nss.dll";
-  #endif
-End
-#else
-File gid_File_Lib_LibXMLSec_xmlsecmscrypto
-    PACKED_LIB_FILE_BODY;
-  #ifdef _gcc3
-    Name = "libxmlsec1-mscrypto.dll";
-  #else
-    Name = "libxmlsec-mscrypto.dll";
-  #endif
-End
-#endif
-#endif
-
 #if defined WNT && !defined _gcc3 && defined WITH_MOZAB4WIN
         // see common_brand.scp gid_Brand_File_Lib_Msvcp80 and
         // gid_Brand_File_Lib_Msvcr80
