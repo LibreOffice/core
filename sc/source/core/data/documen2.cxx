@@ -916,8 +916,8 @@ bool ScDocument::CopyTab( SCTAB nOldPos, SCTAB nNewPos, const ScMarkData* pOnlyM
         pNewList->UpdateReference(aRefCxt);
         maTabs[nNewPos]->SetCondFormList( pNewList );
 
-        sc::SetFormulaDirtyContext aCxt;
-        SetAllFormulasDirty(aCxt);
+        sc::SetFormulaDirtyContext aFormulaDirtyCxt;
+        SetAllFormulasDirty(aFormulaDirtyCxt);
 
         if (pDrawLayer)
             DrawCopyPage( static_cast<sal_uInt16>(nOldPos), static_cast<sal_uInt16>(nNewPos) );
