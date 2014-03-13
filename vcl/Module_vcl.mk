@@ -25,6 +25,10 @@ $(eval $(call gb_Module_add_targets,vcl,\
     $(if $(filter DESKTOP,$(BUILD_TYPE)), \
 		StaticLibrary_vclmain \
 		Executable_ui-previewer) \
+	$(if $(filter FREEBSD LINUX MACOSX WNT,$(OS)), \
+		Library_vclopengl \
+		Package_opengl \
+	) \
 ))
 
 $(eval $(call gb_Module_add_l10n_targets,vcl,\

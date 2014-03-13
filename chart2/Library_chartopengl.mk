@@ -47,13 +47,13 @@ $(eval $(call gb_Library_use_libraries,chartopengl,\
     ucbhelper \
     utl \
     vcl \
+    vclopengl \
     $(gb_UWINAPI) \
 ))
 
 $(eval $(call gb_Library_add_exception_objects,chartopengl,\
     chart2/source/view/main/OpenglShapeFactory \
     chart2/source/view/main/DummyXShape \
-    chart2/source/view/main/OpenGLRender \
 ))
 
 ifeq ($(strip $(OS)),WNT)

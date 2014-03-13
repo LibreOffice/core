@@ -362,6 +362,7 @@ certain functionality.
 @li @c vcl.kde - KDE
 @li @c vcl.kde4 - KDE4
 @li @c vcl.layout - Widget layout
+@li @c vcl.opengl - OpenGL rendering
 @li @c vcl.plugadapt - the Unix/X11 backend plugin mechanism
 @li @c vcl.osx
 @li @c vcl.osx.print

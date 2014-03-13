@@ -356,6 +356,7 @@ $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,ooo, \
 	$(if $(DISABLE_SCRIPTING),,vbahelper) \
 	vcl \
 	vclcanvas \
+	$(if $(filter FREEBSD LINUX MACOSX WNT,$(OS)),vclopengl) \
 	$(if $(and $(filter unx,$(GUIBASE)),$(filter-out MACOSX,$(OS))), \
 		vclplug_gen \
 		$(if $(ENABLE_TDE),vclplug_tde) \

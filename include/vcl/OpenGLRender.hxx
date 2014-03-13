@@ -7,6 +7,9 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+#ifndef VCL_OPENGL_RENDER_HXX
+#define VCL_OPENGL_RENDER_HXX
+
 #if defined( MACOSX )
 #elif defined( UNX )
 #  include <prex.h>
@@ -90,7 +93,7 @@ typedef std::vector<GLfloat> PieSegment2DPointList;
 typedef std::vector<GLfloat> PointList;
 
 /// Holds the information of our new child window
-struct GLWindow
+struct VCL_DLLPUBLIC GLWindow
 {
 #if defined( _WIN32 )
     HWND                    hWnd;
@@ -140,7 +143,7 @@ struct GLWindow
     }
 };
 
-class OpenGLRender
+class VCL_DLLPUBLIC OpenGLRender
 {
 public:
     OpenGLRender(com::sun::star::uno::Reference<
@@ -192,16 +195,16 @@ public:
 
     void SetBackGroundColor(sal_uInt32 color1, sal_uInt32 color2, sal_uInt8 nAlpha);
 private:
-    GLint LoadShaders(const OUString& rVertexShaderName, const OUString& rFragmentShaderName);
-    int CreateTextureObj(int width, int height);
-    int CreateRenderObj(int width, int height);
-    int CreateFrameBufferObj();
+    SAL_DLLPRIVATE GLint LoadShaders(const OUString& rVertexShaderName, const OUString& rFragmentShaderName);
+    SAL_DLLPRIVATE int CreateTextureObj(int width, int height);
+    SAL_DLLPRIVATE int CreateRenderObj(int width, int height);
+    SAL_DLLPRIVATE int CreateFrameBufferObj();
 #if defined( _WIN32 )
-    int InitTempWindow(HWND *hwnd, int width, int height, PIXELFORMATDESCRIPTOR inPfd);
-    bool WGLisExtensionSupported(const char *extension);
+    SAL_DLLPRIVATE int InitTempWindow(HWND *hwnd, int width, int height, PIXELFORMATDESCRIPTOR inPfd);
+    SAL_DLLPRIVATE bool WGLisExtensionSupported(const char *extension);
 #endif
-    int CreateMultiSampleFrameBufObj();
-    int Create2DCircle(int detail);
+    SAL_DLLPRIVATE int CreateMultiSampleFrameBufObj();
+    SAL_DLLPRIVATE int Create2DCircle(int detail);
 
 private:
     // Projection matrix : default 45 degree Field of View, 4:3 ratio, display range : 0.1 unit <-> 100 units
@@ -294,5 +297,7 @@ private:
     GLuint m_DebugColorID;
 #endif
 };
+
+#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
