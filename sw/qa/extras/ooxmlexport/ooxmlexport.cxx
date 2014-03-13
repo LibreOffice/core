@@ -2751,6 +2751,25 @@ DECLARE_OOXMLEXPORT_TEST(testComboBoxControl, "combobox-control.docx")
     CPPUNIT_ASSERT_EQUAL(OUString("pepito"), aItems[1]);
 }
 
+DECLARE_OOXMLEXPORT_TEST(testParagraphWithComments, "paragraphWithComments.docx")
+{
+    /* Comment id's were getting overwritten for annotation mark(s),
+       which was causing a mismatch in the relationship for comment id's
+       in document.xml and comment.xml
+    */
+    xmlDocPtr pXmlDoc  = parseExport("word/document.xml");
+    xmlDocPtr pXmlComm = parseExport("word/comments.xml");
+    if(!pXmlDoc)
+        return;
+
+    sal_Int32 idInDocXml     = 0;
+    sal_Int32 idInCommentXml = -1; //intentionally assigning -1 so that it differs from idInDocXml
+    //and also because getXpath does not assert.
+    idInDocXml     = getXPath(pXmlDoc,"/w:document/w:body/w:p[3]/w:commentRangeEnd[1]","id").toInt32();
+    idInCommentXml = getXPath(pXmlComm,"/w:comments/w:comment[1]","id").toInt32();
+    CPPUNIT_ASSERT_EQUAL( idInDocXml, idInCommentXml );
+}
+
 DECLARE_OOXMLEXPORT_TEST(testOLEObjectinHeader, "2129393649.docx")
 {
     // fdo#76015 : Document contains oleobject in header xml.

@@ -884,12 +884,20 @@ void DocxAttributeOutput::DoWriteAnnotationMarks()
         const OString& rName = *it;
 
         // Output the annotation mark
-        sal_uInt16 nId = m_nNextAnnotationMarkId++;
-        m_rOpenedAnnotationMarksIds[rName] = nId;
-        m_pSerializer->singleElementNS( XML_w, XML_commentRangeStart,
-            FSNS( XML_w, XML_id ), OString::number( nId ).getStr(  ),
-            FSEND );
-        m_sLastOpenedAnnotationMark = rName;
+        /* Ensure that the existing Annotation Marks are not overwritten
+           as it causes discrepancy when DocxAttributeOutput::PostitField
+           refers to this map & while mapping comment id's in document.xml &
+           comment.xml.
+        */
+        if ( m_rOpenedAnnotationMarksIds.end() == m_rOpenedAnnotationMarksIds.find( rName ) )
+        {
+            sal_uInt16 nId = m_nNextAnnotationMarkId++;
+            m_rOpenedAnnotationMarksIds[rName] = nId;
+            m_pSerializer->singleElementNS( XML_w, XML_commentRangeStart,
+                FSNS( XML_w, XML_id ), OString::number( nId ).getStr(  ),
+                FSEND );
+            m_sLastOpenedAnnotationMark = rName;
+        }
     }
     m_rAnnotationMarksStart.clear();
 
