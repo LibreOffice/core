@@ -45,9 +45,7 @@
 
 #include "basegfx/polygon/b2dpolygon.hxx"
 
-
 // The only common SalFrame method
-
 
 SalFrameGeometry SalFrame::GetGeometry()
 {
@@ -64,8 +62,6 @@ SalFrameGeometry SalFrame::GetGeometry()
         return maGeometry;
 }
 
-
-
 SalGraphics::SalGraphics()
 :   m_nLayout( 0 ),
     m_bAntiAliasB2DDraw(false)
@@ -79,8 +75,6 @@ SalGraphics::~SalGraphics()
 {
 }
 
-
-
 bool SalGraphics::drawTransformedBitmap(
     const basegfx::B2DPoint& /* rNull */,
     const basegfx::B2DPoint& /* rX */,
@@ -91,8 +85,6 @@ bool SalGraphics::drawTransformedBitmap(
     // here direct support for transformed bitmaps can be impemented
     return false;
 }
-
-
 
 void SalGraphics::mirror( long& x, const OutputDevice *pOutDev, bool bBack ) const
 {
@@ -376,8 +368,6 @@ basegfx::B2DPolyPolygon SalGraphics::mirror( const basegfx::B2DPolyPolygon& i_rP
     return aRet;
 }
 
-
-
 bool SalGraphics::SetClipRegion( const Region& i_rClip, const OutputDevice *pOutDev )
 {
     if( (m_nLayout & SAL_LAYOUT_BIDI_RTL) || (pOutDev && pOutDev->IsRTLEnabled()) )
@@ -389,19 +379,21 @@ bool SalGraphics::SetClipRegion( const Region& i_rClip, const OutputDevice *pOut
     return setClipRegion( i_rClip );
 }
 
-void    SalGraphics::DrawPixel( long nX, long nY, const OutputDevice *pOutDev )
+void SalGraphics::DrawPixel( long nX, long nY, const OutputDevice *pOutDev )
 {
     if( (m_nLayout & SAL_LAYOUT_BIDI_RTL) || (pOutDev && pOutDev->IsRTLEnabled()) )
         mirror( nX, pOutDev );
     drawPixel( nX, nY );
 }
-void    SalGraphics::DrawPixel( long nX, long nY, SalColor nSalColor, const OutputDevice *pOutDev )
+
+void SalGraphics::DrawPixel( long nX, long nY, SalColor nSalColor, const OutputDevice *pOutDev )
 {
     if( (m_nLayout & SAL_LAYOUT_BIDI_RTL) || (pOutDev && pOutDev->IsRTLEnabled()) )
         mirror( nX, pOutDev );
     drawPixel( nX, nY, nSalColor );
 }
-void    SalGraphics::DrawLine( long nX1, long nY1, long nX2, long nY2, const OutputDevice *pOutDev )
+
+void SalGraphics::DrawLine( long nX1, long nY1, long nX2, long nY2, const OutputDevice *pOutDev )
 {
     if( (m_nLayout & SAL_LAYOUT_BIDI_RTL) || (pOutDev && pOutDev->IsRTLEnabled()) )
     {
@@ -410,7 +402,8 @@ void    SalGraphics::DrawLine( long nX1, long nY1, long nX2, long nY2, const Out
     }
     drawLine( nX1, nY1, nX2, nY2 );
 }
-void    SalGraphics::DrawRect( long nX, long nY, long nWidth, long nHeight, const OutputDevice *pOutDev )
+
+void SalGraphics::DrawRect( long nX, long nY, long nWidth, long nHeight, const OutputDevice *pOutDev )
 {
     if( (m_nLayout & SAL_LAYOUT_BIDI_RTL) || (pOutDev && pOutDev->IsRTLEnabled()) )
         mirror( nX, nWidth, pOutDev );
@@ -511,7 +504,7 @@ bool SalGraphics::DrawPolygonBezier( sal_uInt32 nPoints, const SalPoint* pPtAry,
 }
 
 bool SalGraphics::DrawPolyPolygonBezier( sal_uInt32 i_nPoly, const sal_uInt32* i_pPoints,
-                                                   const SalPoint* const* i_pPtAry, const sal_uInt8* const* i_pFlgAry, const OutputDevice* i_pOutDev )
+                                         const SalPoint* const* i_pPtAry, const sal_uInt8* const* i_pFlgAry, const OutputDevice* i_pOutDev )
 {
     bool bRet = false;
     if( (m_nLayout & SAL_LAYOUT_BIDI_RTL) || (i_pOutDev && i_pOutDev->IsRTLEnabled()) )
@@ -537,13 +530,12 @@ bool SalGraphics::DrawPolyPolygonBezier( sal_uInt32 i_nPoly, const sal_uInt32* i
     return bRet;
 }
 
-bool SalGraphics::DrawPolyLine(
-    const basegfx::B2DPolygon& i_rPolygon,
-    double i_fTransparency,
-    const basegfx::B2DVector& i_rLineWidth,
-    basegfx::B2DLineJoin i_eLineJoin,
-    com::sun::star::drawing::LineCap i_eLineCap,
-    const OutputDevice* i_pOutDev )
+bool SalGraphics::DrawPolyLine( const basegfx::B2DPolygon& i_rPolygon,
+                                double i_fTransparency,
+                                const basegfx::B2DVector& i_rLineWidth,
+                                basegfx::B2DLineJoin i_eLineJoin,
+                                com::sun::star::drawing::LineCap i_eLineCap,
+                                const OutputDevice* i_pOutDev )
 {
     bool bRet = false;
     if( (m_nLayout & SAL_LAYOUT_BIDI_RTL) || (i_pOutDev && i_pOutDev->IsRTLEnabled()) )
@@ -556,10 +548,10 @@ bool SalGraphics::DrawPolyLine(
     return bRet;
 }
 
-void    SalGraphics::CopyArea( long nDestX, long nDestY,
-                               long nSrcX, long nSrcY,
-                               long nSrcWidth, long nSrcHeight,
-                               sal_uInt16 nFlags, const OutputDevice *pOutDev )
+void SalGraphics::CopyArea( long nDestX, long nDestY,
+                            long nSrcX, long nSrcY,
+                            long nSrcWidth, long nSrcHeight,
+                            sal_uInt16 nFlags, const OutputDevice *pOutDev )
 {
     if( (m_nLayout & SAL_LAYOUT_BIDI_RTL) || (pOutDev && pOutDev->IsRTLEnabled()) )
     {
@@ -568,8 +560,9 @@ void    SalGraphics::CopyArea( long nDestX, long nDestY,
     }
     copyArea( nDestX, nDestY, nSrcX, nSrcY, nSrcWidth, nSrcHeight, nFlags );
 }
-void    SalGraphics::CopyBits( const SalTwoRect& rPosAry,
-                               SalGraphics* pSrcGraphics, const OutputDevice *pOutDev, const OutputDevice *pSrcOutDev )
+
+void SalGraphics::CopyBits( const SalTwoRect& rPosAry,
+                            SalGraphics* pSrcGraphics, const OutputDevice *pOutDev, const OutputDevice *pSrcOutDev )
 {
     if( ( (m_nLayout & SAL_LAYOUT_BIDI_RTL) || (pOutDev && pOutDev->IsRTLEnabled()) ) ||
         (pSrcGraphics && ( (pSrcGraphics->GetLayout() & SAL_LAYOUT_BIDI_RTL)  || (pSrcOutDev && pSrcOutDev->IsRTLEnabled()) ) ) )
@@ -584,8 +577,9 @@ void    SalGraphics::CopyBits( const SalTwoRect& rPosAry,
     else
         copyBits( rPosAry, pSrcGraphics );
 }
-void    SalGraphics::DrawBitmap( const SalTwoRect& rPosAry,
-                                    const SalBitmap& rSalBitmap, const OutputDevice *pOutDev )
+
+void SalGraphics::DrawBitmap( const SalTwoRect& rPosAry,
+                              const SalBitmap& rSalBitmap, const OutputDevice *pOutDev )
 {
     if( (m_nLayout & SAL_LAYOUT_BIDI_RTL) || (pOutDev && pOutDev->IsRTLEnabled()) )
     {
@@ -596,6 +590,7 @@ void    SalGraphics::DrawBitmap( const SalTwoRect& rPosAry,
     else
         drawBitmap( rPosAry, rSalBitmap );
 }
+
 void SalGraphics::DrawBitmap( const SalTwoRect& rPosAry,
                               const SalBitmap& rSalBitmap,
                               const SalBitmap& rTransparentBitmap, const OutputDevice *pOutDev )
@@ -609,9 +604,10 @@ void SalGraphics::DrawBitmap( const SalTwoRect& rPosAry,
     else
         drawBitmap( rPosAry, rSalBitmap, rTransparentBitmap );
 }
-void    SalGraphics::DrawMask( const SalTwoRect& rPosAry,
-                                  const SalBitmap& rSalBitmap,
-                                  SalColor nMaskColor, const OutputDevice *pOutDev )
+
+void SalGraphics::DrawMask( const SalTwoRect& rPosAry,
+                            const SalBitmap& rSalBitmap,
+                            SalColor nMaskColor, const OutputDevice *pOutDev )
 {
     if( (m_nLayout & SAL_LAYOUT_BIDI_RTL) || (pOutDev && pOutDev->IsRTLEnabled()) )
     {
@@ -622,25 +618,29 @@ void    SalGraphics::DrawMask( const SalTwoRect& rPosAry,
     else
         drawMask( rPosAry, rSalBitmap, nMaskColor );
 }
-SalBitmap*  SalGraphics::GetBitmap( long nX, long nY, long nWidth, long nHeight, const OutputDevice *pOutDev )
+
+SalBitmap* SalGraphics::GetBitmap( long nX, long nY, long nWidth, long nHeight, const OutputDevice *pOutDev )
 {
     if( (m_nLayout & SAL_LAYOUT_BIDI_RTL) || (pOutDev && pOutDev->IsRTLEnabled()) )
         mirror( nX, nWidth, pOutDev );
     return getBitmap( nX, nY, nWidth, nHeight );
 }
-SalColor    SalGraphics::GetPixel( long nX, long nY, const OutputDevice *pOutDev )
+
+SalColor SalGraphics::GetPixel( long nX, long nY, const OutputDevice *pOutDev )
 {
     if( (m_nLayout & SAL_LAYOUT_BIDI_RTL) || (pOutDev && pOutDev->IsRTLEnabled()) )
         mirror( nX, pOutDev );
     return getPixel( nX, nY );
 }
-void    SalGraphics::Invert( long nX, long nY, long nWidth, long nHeight, SalInvert nFlags, const OutputDevice *pOutDev )
+
+void SalGraphics::Invert( long nX, long nY, long nWidth, long nHeight, SalInvert nFlags, const OutputDevice *pOutDev )
 {
     if( (m_nLayout & SAL_LAYOUT_BIDI_RTL) || (pOutDev && pOutDev->IsRTLEnabled()) )
         mirror( nX, nWidth, pOutDev );
     invert( nX, nY, nWidth, nHeight, nFlags );
 }
-void    SalGraphics::Invert( sal_uInt32 nPoints, const SalPoint* pPtAry, SalInvert nFlags, const OutputDevice *pOutDev )
+
+void SalGraphics::Invert( sal_uInt32 nPoints, const SalPoint* pPtAry, SalInvert nFlags, const OutputDevice *pOutDev )
 {
     if( (m_nLayout & SAL_LAYOUT_BIDI_RTL) || (pOutDev && pOutDev->IsRTLEnabled()) )
     {
@@ -653,7 +653,7 @@ void    SalGraphics::Invert( sal_uInt32 nPoints, const SalPoint* pPtAry, SalInve
         invert( nPoints, pPtAry, nFlags );
 }
 
-bool    SalGraphics::DrawEPS( long nX, long nY, long nWidth, long nHeight, void* pPtr, sal_uLong nSize, const OutputDevice *pOutDev )
+bool SalGraphics::DrawEPS( long nX, long nY, long nWidth, long nHeight, void* pPtr, sal_uLong nSize, const OutputDevice *pOutDev )
 {
     if( (m_nLayout & SAL_LAYOUT_BIDI_RTL) || (pOutDev && pOutDev->IsRTLEnabled()) )
         mirror( nX, nWidth, pOutDev );
