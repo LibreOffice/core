@@ -734,12 +734,13 @@ bool Compose::Read(HWPFile & hwpf)
     return !hwpf.State();
 }
 
-
 // hyphen(24)
-Hyphen::Hyphen():HBox(CH_HYPHEN)
+Hyphen::Hyphen()
+    : HBox(CH_HYPHEN)
+    , width(0)
+    , dummy(0)
 {
 }
-
 
 bool Hyphen::Read(HWPFile & hwpf)
 {
