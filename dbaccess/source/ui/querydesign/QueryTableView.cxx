@@ -969,11 +969,11 @@ sal_Bool OQueryTableView::ExistsAVisitedConn(const OQueryTableWindow* pFrom) con
             OQueryTableConnection* pTemp = static_cast<OQueryTableConnection*>(*aIter);
             if (pTemp->IsVisited() &&
                 (pFrom == static_cast< OQueryTableWindow*>(pTemp->GetSourceWin()) || pFrom == static_cast< OQueryTableWindow*>(pTemp->GetDestWin())))
-                return pTemp != NULL;
+                return true;
         }
     }
 
-    return sal_False;
+    return false;
 }
 
 void OQueryTableView::onNoColumns_throw()
