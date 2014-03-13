@@ -60,6 +60,7 @@
 #include <toolkit/helper/unopropertyarrayhelper.hxx>
 
 #include <boost/bind.hpp>
+#include <boost/noncopyable.hpp>
 
 using namespace ::com::sun::star;
 
@@ -84,7 +85,7 @@ namespace MouseWheelBehavior = ::com::sun::star::awt::MouseWheelBehavior;
 
 //= VCLXWindowImpl
 
-class VCLXWindowImpl
+class VCLXWindowImpl: private boost::noncopyable
 {
 private:
     typedef ::std::vector< VCLXWindow::Callback >                       CallbackArray;
@@ -183,19 +184,10 @@ public:
     inline VclContainerListenerMultiplexer&     getContainerListeners()     { return maContainerListeners; }
     inline TopWindowListenerMultiplexer&        getTopWindowListeners()     { return maTopWindowListeners; }
 
-    virtual ~VCLXWindowImpl();
-
-protected:
-    virtual void SAL_CALL acquire();
-    virtual void SAL_CALL release();
+    ~VCLXWindowImpl();
 
 private:
     DECL_LINK( OnProcessCallbacks, void* );
-
-private:
-    VCLXWindowImpl();                                   // never implemented
-    VCLXWindowImpl( const VCLXWindowImpl& );            // never implemented
-    VCLXWindowImpl& operator=( const VCLXWindowImpl& ); // never implemented
 };
 
 
@@ -312,19 +304,6 @@ IMPL_LINK_NOARG(VCLXWindowImpl, OnProcessCallbacks)
 
     return 0L;
 }
-
-
-void SAL_CALL VCLXWindowImpl::acquire()
-{
-    mrAntiImpl.acquire();
-}
-
-
-void SAL_CALL VCLXWindowImpl::release()
-{
-    mrAntiImpl.release();
-}
-
 
 Reference< XStyleSettings > VCLXWindowImpl::getStyleSettings()
 {
