@@ -95,17 +95,17 @@ public:
 
     // ::com::sun::star::awt::XGraphics Attributes
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::awt::XDevice > SAL_CALL getDevice() throw (::com::sun::star::uno::RuntimeException, std::exception);
-    virtual ::sal_Int32 getTextColor() throw (::com::sun::star::uno::RuntimeException) SAL_FINAL;
+    ::sal_Int32 getTextColor() throw (::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL setTextColor( ::sal_Int32 _textcolor ) throw (::com::sun::star::uno::RuntimeException, std::exception);
-    virtual ::sal_Int32 getTextFillColor() throw (::com::sun::star::uno::RuntimeException) SAL_FINAL;
+    ::sal_Int32 getTextFillColor() throw (::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL setTextFillColor( ::sal_Int32 _textfillcolor ) throw (::com::sun::star::uno::RuntimeException, std::exception);
-    virtual ::sal_Int32 getLineColor() throw (::com::sun::star::uno::RuntimeException) SAL_FINAL;
+    ::sal_Int32 getLineColor() throw (::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL setLineColor( ::sal_Int32 _linecolor ) throw (::com::sun::star::uno::RuntimeException, std::exception);
-    virtual ::sal_Int32 getFillColor() throw (::com::sun::star::uno::RuntimeException) SAL_FINAL;
+    ::sal_Int32 getFillColor() throw (::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL setFillColor( ::sal_Int32 _fillcolor ) throw (::com::sun::star::uno::RuntimeException, std::exception);
-    virtual ::com::sun::star::awt::RasterOperation getRasterOp() throw (::com::sun::star::uno::RuntimeException) SAL_FINAL;
+    ::com::sun::star::awt::RasterOperation getRasterOp() throw (::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL setRasterOp( ::com::sun::star::awt::RasterOperation _rasterop ) throw (::com::sun::star::uno::RuntimeException, std::exception);
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::awt::XFont > getFont() throw (::com::sun::star::uno::RuntimeException) SAL_FINAL;
+    ::com::sun::star::uno::Reference< ::com::sun::star::awt::XFont > getFont() throw (::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL setFont( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XFont >& _font ) throw (::com::sun::star::uno::RuntimeException, std::exception);
     virtual ::com::sun::star::awt::SimpleFontMetric SAL_CALL getFontMetric() throw (::com::sun::star::uno::RuntimeException, std::exception);
 
