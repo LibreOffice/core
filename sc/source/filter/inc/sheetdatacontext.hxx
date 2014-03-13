@@ -129,8 +129,8 @@ private:
     bool                mbHasFormula;       /// True = current cell has formula data (OOXML only).
     bool                mbValidRange;       /// True = maFmlaData.maFormulaRef is valid (OOXML only).
 
-    sal_Int32 mnRow;
-    sal_Int32 mnCol;
+    sal_Int32 mnRow; /// row index (0-based)
+    sal_Int32 mnCol; /// column index (0-based)
 };
 
 

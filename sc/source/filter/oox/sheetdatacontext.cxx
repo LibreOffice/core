@@ -279,11 +279,11 @@ ContextHandlerRef SheetDataContext::onCreateRecordContext( sal_Int32 nRecId, Seq
 void SheetDataContext::importRow( const AttributeList& rAttribs )
 {
     RowModel aModel;
-    sal_Int32 nRow = rAttribs.getInteger( XML_r, -1 );
+    sal_Int32 nRow = rAttribs.getInteger( XML_r, -1 ); // 1-based row index
     if(nRow != -1)
     {
         aModel.mnRow = nRow;
-        mnRow = nRow;
+        mnRow = nRow-1; // to 0-based row index.
     }
     else
         aModel.mnRow = ++mnRow;
