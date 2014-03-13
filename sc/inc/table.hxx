@@ -69,6 +69,7 @@ struct RefUpdateMoveTabContext;
 struct NoteEntry;
 class DocumentStreamAccess;
 class CompileFormulaContext;
+struct SetFormulaDirtyContext;
 
 }
 
@@ -509,7 +510,7 @@ public:
 
     void        ResetChanged( const ScRange& rRange );
 
-    void        SetDirty();
+    void SetAllFormulasDirty( const sc::SetFormulaDirtyContext& rCxt );
     void        SetDirty( const ScRange& );
     void        SetDirtyAfterLoad();
     void        SetDirtyVar();

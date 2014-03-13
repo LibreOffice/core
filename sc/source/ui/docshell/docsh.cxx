@@ -121,6 +121,7 @@
 #include "orcusfilters.hxx"
 #include <datastream.hxx>
 #include <documentlinkmgr.hxx>
+#include <refupdatecontext.hxx>
 
 #include <config_telepathy.h>
 
@@ -1207,7 +1208,8 @@ sal_Bool ScDocShell::ConvertFrom( SfxMedium& rMedium )
                     bRet = aImpEx.ImportStream( *pInStream, rMedium.GetBaseURL() );
                     eError = bRet ? eERR_OK : SCERR_IMPORT_CONNECT;
                     aDocument.StartAllListeners();
-                    aDocument.SetDirty();
+                    sc::SetFormulaDirtyContext aCxt;
+                    aDocument.SetAllFormulasDirty(aCxt);
                     bOverflowRow = aImpEx.IsOverflowRow();
                     bOverflowCol = aImpEx.IsOverflowCol();
                     bOverflowCell = aImpEx.IsOverflowCell();
@@ -1325,7 +1327,8 @@ sal_Bool ScDocShell::ConvertFrom( SfxMedium& rMedium )
                     bRet = aImpEx.ImportStream( *pInStream, rMedium.GetBaseURL(), SOT_FORMATSTR_ID_SYLK );
                     eError = bRet ? eERR_OK : SCERR_IMPORT_UNKNOWN;
                     aDocument.StartAllListeners();
-                    aDocument.SetDirty();
+                    sc::SetFormulaDirtyContext aCxt;
+                    aDocument.SetAllFormulasDirty(aCxt);
                 }
                 else
                 {
@@ -1379,7 +1382,8 @@ sal_Bool ScDocShell::ConvertFrom( SfxMedium& rMedium )
                     else
                         bRet = sal_True;
                     aDocument.StartAllListeners();
-                    aDocument.SetDirty();
+                    sc::SetFormulaDirtyContext aCxt;
+                    aDocument.SetAllFormulasDirty(aCxt);
                     bSetColWidths = sal_True;
                     bSetRowHeights = sal_True;
                 }
@@ -1430,7 +1434,9 @@ sal_Bool ScDocShell::ConvertFrom( SfxMedium& rMedium )
                     else
                         bRet = sal_True;
                     aDocument.StartAllListeners();
-                    aDocument.SetDirty();
+
+                    sc::SetFormulaDirtyContext aCxt;
+                    aDocument.SetAllFormulasDirty(aCxt);
                 }
                 else
                 {
