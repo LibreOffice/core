@@ -1481,8 +1481,6 @@ sal_Bool SvxExtParagraphTabPage::FillItemSet( SfxItemSet& rOutSet )
 
     if ( eState != m_pKeepParaBox->GetSavedValue() )
     {
-        pOld = GetOldItem( rOutSet, SID_ATTR_PARA_KEEP );
-
         // if the status has changed, putting is necessary
         rOutSet.Put( SvxFmtKeepItem( eState == TRISTATE_TRUE, _nWhich ) );
         bModified = sal_True;
