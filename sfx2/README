@@ -11,6 +11,9 @@ The SFX framework is based on dispatching slots identified by integers
 involved that generates C++ slot headers from SDI files in modules' sdi/
 subdirectory.
 
+Documentation about SFX dispatch, SDI etc.:
+https://wiki.openoffice.org/wiki/Framework/Article/Implementation_of_the_Dispatch_API_In_SFX2
+
 Document load/save code is maintained in [git:sfx2/source/doc/docfile.cxx]
 SfxMedium class, which handles all the twisty load and save corner cases.
 
