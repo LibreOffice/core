@@ -2280,7 +2280,8 @@ void SwXFrame::attachToRange(const uno::Reference< text::XTextRange > & xTextRan
             {
                 SwGrfNode *pGrfNd = pDoc->GetNodes()[ pFmt->GetCntnt().GetCntntIdx()
                                             ->GetIndex()+1 ]->GetGrfNode();
-                pGrfNd->SetChgTwipSize( !bSizeFound );
+                if (pGrfNd)
+                    pGrfNd->SetChgTwipSize( !bSizeFound );
                 pFmt->Add(this);
                 if(!m_sName.isEmpty())
                     pDoc->SetFlyName((SwFlyFrmFmt&)*pFmt, m_sName);
