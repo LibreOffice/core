@@ -385,7 +385,7 @@ bool SwDoc::OutlineUpDown( const SwPaM& rPam, short nOffset )
                 pColl = aCollArr[ aMoveArr[nLevel] ];
 
                 if (pColl != NULL)
-                    pColl = (SwTxtFmtColl*)pTxtNd->ChgFmtColl( pColl );
+                    (SwTxtFmtColl*)pTxtNd->ChgFmtColl( pColl );
             }
 
         }
