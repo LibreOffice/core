@@ -201,7 +201,7 @@ void SwXMLTextParagraphExport::setTextEmbeddedGraphicURL(
         return;
 
     SwGrfNode *pGrfNd = GetNoTxtNode( rPropSet )->GetGrfNode();
-    if( !pGrfNd->IsGrfLink() )
+    if (pGrfNd && !pGrfNd->IsGrfLink())
     {
         // #i15411# save-as will swap all graphics in; we need to swap
         // them out again, to prevent excessive memory use
