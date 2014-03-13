@@ -52,7 +52,7 @@ public:
     SFX_DECL_CHILDWINDOW(SfxPartChildWnd_Impl);
                             ~SfxPartChildWnd_Impl();
 
-    virtual sal_Bool        QueryClose();
+    virtual sal_Bool            QueryClose();
 };
 
 // class SfxExplorerDockWnd_Impl -----------------------------------------

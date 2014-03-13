@@ -39,7 +39,7 @@ SfxNavigatorWrapper::SfxNavigatorWrapper( Window* pParentWnd ,
     pWindow->SetOutputSizePixel( Size( 270, 240 ) );
 
     ( ( SfxDockingWindow* ) pWindow )->Initialize( pInfo );
-    SetHideNotDelete( sal_True );
+    SetHideNotDelete( true );
 }
 
 SfxNavigator::SfxNavigator( SfxBindings* pBind ,

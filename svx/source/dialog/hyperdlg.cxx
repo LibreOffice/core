@@ -79,7 +79,7 @@ SvxHlinkDlgWrapper::SvxHlinkDlgWrapper( Window* _pParent, sal_uInt16 nId,
 
     eChildAlignment = SFX_ALIGN_NOALIGNMENT;
 
-    SetHideNotDelete( sal_True );
+    SetHideNotDelete( true );
 }
 
 SfxChildWinInfo SvxHlinkDlgWrapper::GetInfo() const
@@ -89,7 +89,7 @@ SfxChildWinInfo SvxHlinkDlgWrapper::GetInfo() const
 
 sal_Bool SvxHlinkDlgWrapper::QueryClose()
 {
-    return mpDlg ? mpDlg->QueryClose() : sal_True;
+    return !mpDlg || mpDlg->QueryClose();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

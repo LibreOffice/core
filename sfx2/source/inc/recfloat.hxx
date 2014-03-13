@@ -34,7 +34,7 @@ public:
                         ~SfxRecordingFloatWrapper_Impl();
 
                         SFX_DECL_CHILDWINDOW(SfxRecordingFloatWrapper_Impl);
-    virtual sal_Bool    QueryClose();
+    virtual sal_Bool        QueryClose();
 };
 
 class SfxRecordingFloat_Impl : public SfxFloatingWindow

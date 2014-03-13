@@ -40,7 +40,7 @@ SpellDialogChildWindow::SpellDialogChildWindow (
                                             this );
     pWindow = m_pAbstractSpellDialog->GetWindow();
     eChildAlignment = SFX_ALIGN_NOALIGNMENT;
-    SetHideNotDelete (sal_True);
+    SetHideNotDelete(true);
 }
 
 SpellDialogChildWindow::~SpellDialogChildWindow (void)

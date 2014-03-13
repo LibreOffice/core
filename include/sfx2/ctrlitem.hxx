@@ -57,7 +57,7 @@ public:
     void                Bind( sal_uInt16 nNewId, SfxBindings * = 0);    // Register in SfxBindings
     void                UnBind();
     void                ReBind();
-    sal_Bool                IsBound() const;
+    bool                IsBound() const;
     void                ClearCache();
     void                SetBindings(SfxBindings &rBindings) { pBindings = &rBindings; }
 
@@ -75,7 +75,7 @@ public:
 
     static SfxItemState GetItemState( const SfxPoolItem* pState );
 
-    SAL_DLLPRIVATE sal_Bool IsBindable_Impl() const
+    SAL_DLLPRIVATE bool IsBindable_Impl() const
                         { return pBindings != NULL; }
     SAL_DLLPRIVATE void BindInternal_Impl( sal_uInt16 nNewId, SfxBindings* );
 };

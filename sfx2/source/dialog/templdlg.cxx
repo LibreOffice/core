@@ -1421,7 +1421,7 @@ void SfxCommonTemplateDialog_Impl::SetWaterCanState(const SfxBoolItem *pItem)
     for(size_t n = 0; n < nCount; n++)
     {
         SfxControllerItem *pCItem=pBoundItems[n];
-        sal_Bool bChecked = pItem && pItem->GetValue();
+        bool bChecked = pItem && pItem->GetValue();
         if( pCItem->IsBound() == bChecked )
         {
             if( !bChecked )

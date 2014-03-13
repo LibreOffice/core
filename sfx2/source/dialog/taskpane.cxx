@@ -246,7 +246,7 @@ namespace sfx2
         pWindow->SetOutputSizePixel( Size( 300, 450 ) );
 
         dynamic_cast< SfxDockingWindow* >( pWindow )->Initialize( i_pInfo );
-        SetHideNotDelete( sal_True );
+        SetHideNotDelete( true );
 
         pWindow->Show();
     }

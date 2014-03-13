@@ -63,7 +63,7 @@ SfxControllerItem* SfxControllerItem::GetItemLink()
 
 // returns sal_True if this binding is really bound to a function
 
-sal_Bool SfxControllerItem::IsBound() const
+bool SfxControllerItem::IsBound() const
 {
     return pNext != this;
 }

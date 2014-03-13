@@ -123,12 +123,12 @@ void CheckBoxWrapper::SetControlDontKnow( bool bSet )
     GetControl().SetState( bSet ? TRISTATE_INDET : TRISTATE_FALSE );
 }
 
-sal_Bool CheckBoxWrapper::GetControlValue() const
+bool CheckBoxWrapper::GetControlValue() const
 {
     return GetControl().IsChecked();
 }
 
-void CheckBoxWrapper::SetControlValue( sal_Bool bValue )
+void CheckBoxWrapper::SetControlValue( bool bValue )
 {
     GetControl().Check( bValue );
 }

@@ -237,7 +237,7 @@ public:
 
 /** A wrapper for the VCL CheckBox. */
 class SFX2_DLLPUBLIC CheckBoxWrapper:
-    public SingleControlWrapper< CheckBox, sal_Bool >
+    public SingleControlWrapper< CheckBox, bool >
 {
 public:
     explicit            CheckBoxWrapper( CheckBox& rCheckBox );
@@ -245,8 +245,8 @@ public:
     virtual bool        IsControlDontKnow() const;
     virtual void        SetControlDontKnow( bool bSet );
 
-    virtual sal_Bool        GetControlValue() const;
-    virtual void        SetControlValue( sal_Bool bValue );
+    virtual bool        GetControlValue() const;
+    virtual void        SetControlValue( bool bValue );
 };
 
 

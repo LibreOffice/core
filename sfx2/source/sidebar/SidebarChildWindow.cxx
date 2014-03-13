@@ -52,7 +52,7 @@ SidebarChildWindow::SidebarChildWindow (
     SfxDockingWindow* pDockingParent = dynamic_cast<SfxDockingWindow*>(this->pWindow);
     if (pDockingParent != NULL)
         pDockingParent->Initialize(pInfo);
-    SetHideNotDelete(sal_True);
+    SetHideNotDelete(true);
 
     this->pWindow->Show();
 }
