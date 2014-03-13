@@ -207,8 +207,10 @@ bool SwFEShell::InsertRow( sal_uInt16 nCnt, bool bBehind )
     bool bSelectAll = StartsWithTable() && ExtendedSelectedAll(/*bFootnotes=*/false);
     if (bSelectAll)
     {
+        // Set the end of the selection to the last paragraph of the last cell of the table.
         SwPaM* pPaM = getShellCrsr(false);
         SwNode* pNode = pPaM->Start()->nNode.GetNode().FindTableNode()->EndOfSectionNode();
+        // pNode is the end node of the table, we want the last node before the end node of the last cell.
         pPaM->End()->nNode = pNode->GetIndex() - 2;
         pPaM->End()->nContent.Assign(pPaM->End()->nNode.GetNode().GetCntntNode(), 0);
     }
