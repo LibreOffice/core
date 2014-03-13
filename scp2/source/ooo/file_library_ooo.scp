@@ -232,25 +232,6 @@ End
 #endif
 #endif
 
-#ifndef SYSTEM_OPENSSL
-File gid_File_Lib_Openssl
-    PACKED_LIB_FILE_BODY;
-  #ifdef WNT
-    Name = "ssleay32.dll";
-  #endif
-End
-#endif
-
-#ifndef SYSTEM_OPENSSL
-File gid_File_Lib_Crypto
-    PACKED_LIB_FILE_BODY;
-
-	#ifdef WNT
-	  Name = "libeay32.dll";
-	#endif
-End
-#endif
-
 #if defined WNT && !defined _gcc3 && defined WITH_MOZAB4WIN
         // see common_brand.scp gid_Brand_File_Lib_Msvcp80 and
         // gid_Brand_File_Lib_Msvcr80

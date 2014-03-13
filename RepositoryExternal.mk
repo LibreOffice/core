@@ -1462,6 +1462,10 @@ endef
 
 else # !SYSTEM_OPENSSL
 
+$(eval $(call gb_Helper_register_packages_for_install,ooo, \
+	openssl \
+))
+
 define gb_ExternalProject__use_openssl
 $(call gb_ExternalProject_use_package,$(1),openssl)
 

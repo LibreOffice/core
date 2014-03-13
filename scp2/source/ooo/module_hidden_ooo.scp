@@ -155,12 +155,10 @@ Module gid_Module_Root_Files_5
 	Sortkey = "1500";
 	Default = YES;
 	Styles = (HIDDEN_ROOT);
-	Files = (gid_File_Lib_Crypto,
-	gid_Unixlink_File_Lib_Curl,
+	Files = (gid_Unixlink_File_Lib_Curl,
 	gid_File_Lib_Icudata,
 	gid_File_Lib_Icui18n,
 	gid_File_Lib_Icuuc,
-	gid_File_Lib_Openssl,
 	gid_File_Lib_Recentfile,
 	gid_File_Lib_Tab,
 	gid_File_Lib_Tab2,
