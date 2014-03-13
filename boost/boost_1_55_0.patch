@@ -184,8 +184,8 @@
    return impl::call(c).head;
  }
  
---- misc/boost_1_55_0/boost/concept/detail/general.hpp	2010-06-08 21:31:13.000000000 +0200
-+++ misc/build/boost_1_55_0/boost/concept/detail/general.hpp	2014-03-13 17:20:13.450234546 +0100
+--- misc/boost_1_55_0/boost/concept/detail/general.hpp	2010-06-08 21:31:13 +0200
++++ misc/build/boost_1_55_0/boost/concept/detail/general.hpp	2014-03-13 17:20:13 +0100
 @@ -65,10 +65,10 @@
    
  # endif
@@ -200,4 +200,14 @@
 +      BOOST_PP_CAT(boost_concept_check,__LINE__)()
  
  }}
+ 
+--- misc/boost_1_55_0/boost/spirit/home/classic/core/primitives/primitives.hpp	2014-03-12 14:02:51 +0100
++++ misc/build/boost_1_55_0/boost/spirit/home/classic/core/primitives/primitives.hpp	2008-06-22 17:05:38 +0200
+@@ -47,7 +47,6 @@
+         typename parser_result<self_t, ScannerT>::type
+         parse(ScannerT const& scan) const
+         {
+-            typedef typename parser_result<self_t, ScannerT>::type result_t;
+             typedef typename ScannerT::value_t value_t;
+             typedef typename ScannerT::iterator_t iterator_t;
  
