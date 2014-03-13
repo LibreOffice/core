@@ -3003,6 +3003,10 @@ endef
 
 else # !SYSTEM_NSS
 
+$(eval $(call gb_Helper_register_packages_for_install,ooo, \
+	nss \
+))
+
 define gb_LinkTarget__use_nss3
 $(call gb_LinkTarget_use_package,$(1),nss)
 $(call gb_LinkTarget_set_include,$(1),\

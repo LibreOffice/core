@@ -166,29 +166,6 @@ STD_LIB_FILE( gid_File_Lib_BaseBmp, basebmp )
 
 #if !defined(ANDROID) && !defined(IOS) //FIXME: get nss&xmlsec building
 //we need the nss libs for libxmlsec (or if the internal mozilla is enabled)
-#ifndef SYSTEM_NSS
-SPECIAL_LIB_FILE(gid_File_Lib_Freebl3,freebl3)
-SPECIAL_LIB_FILE(gid_File_Lib_Nss3,nss3)
-SPECIAL_LIB_FILE(gid_File_Lib_Nspr,nspr4)
-SPECIAL_LIB_FILE(gid_File_Lib_Nssdbm3,nssdbm3)
-SPECIAL_LIB_FILE(gid_File_Lib_Nssutil3,nssutil3)
-SPECIAL_LIB_FILE(gid_File_Lib_Nssckbi,nssckbi)
-SPECIAL_LIB_FILE(gid_File_Lib_Plc4,plc4)
-SPECIAL_LIB_FILE(gid_File_Lib_Plds4,plds4)
-SPECIAL_LIB_FILE(gid_File_Lib_Softokn3,softokn3)
-SPECIAL_LIB_FILE(gid_File_Lib_Smime3,smime3)
-#ifdef WNT
-SPECIAL_LIB_FILE(gid_File_Lib_Sqlite3,sqlite3)
-#else
-#if !defined(MACOSX)
-File gid_File_Lib_Sqlite3
-    Name = SPECIAL_NAME(sqlite3);
-    PACKED_LIB_FILE_BODY;
-End
-#endif //!defined(MACOSX)
-#endif //WNT
-SPECIAL_LIB_FILE(gid_File_Lib_Ssl3,ssl3)
-#endif //SYSTEM_NSS
 
 File gid_File_Lib_XSec_XmlSec
     PACKED_LIB_FILE_BODY;
