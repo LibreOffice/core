@@ -127,6 +127,12 @@ public:
     //change this test file only in excel and not in calc
     void testCellValueXLSX();
 
+    /**
+     * Test importing of xlsx document that previously had its row index off
+     * by one. (fdo#76032)
+     */
+    void testRowIndex1BasedXLSX();
+
     //misc tests unrelated to the import filters
     void testPasswordNew();
     void testPasswordOld();
@@ -195,6 +201,7 @@ public:
     CPPUNIT_TEST(testDataTableMultiTableXLSX);
     CPPUNIT_TEST(testBrokenQuotesCSV);
     CPPUNIT_TEST(testCellValueXLSX);
+    CPPUNIT_TEST(testRowIndex1BasedXLSX);
     CPPUNIT_TEST(testControlImport);
     CPPUNIT_TEST(testChartImportODS);
 
@@ -1413,6 +1420,38 @@ void ScFiltersTest::testCellValueXLSX()
     OUString aCSVPath;
     createCSVPath( aFileNameBase, aCSVPath );
     testFile( aCSVPath, pDoc, 0 );
+
+    xDocSh->DoClose();
+}
+
+void ScFiltersTest::testRowIndex1BasedXLSX()
+{
+    ScDocShellRef xDocSh = loadDoc("row-index-1-based.", XLSX);
+    CPPUNIT_ASSERT(xDocSh.Is());
+    ScDocument* pDoc = xDocSh->GetDocument();
+
+    // A1
+    OUString aStr = pDoc->GetString(ScAddress(0,0,0));
+    CPPUNIT_ASSERT_EQUAL(OUString("Action Plan.Name"), aStr);
+
+    // B1
+    aStr = pDoc->GetString(ScAddress(1,0,0));
+    CPPUNIT_ASSERT_EQUAL(OUString("Action Plan.Description"), aStr);
+
+    // A2
+    aStr = pDoc->GetString(ScAddress(0,1,0));
+    CPPUNIT_ASSERT_EQUAL(OUString("Jerry"), aStr);
+
+    // B2 - multi-line text.
+    const EditTextObject* pText = pDoc->GetEditText(ScAddress(1,1,0));
+    CPPUNIT_ASSERT(pText);
+    CPPUNIT_ASSERT(pText->GetParagraphCount() == 3);
+    aStr = pText->GetText(0);
+    CPPUNIT_ASSERT_EQUAL(OUString("This is a longer Text."), aStr);
+    aStr = pText->GetText(1);
+    CPPUNIT_ASSERT_EQUAL(OUString("Second line."), aStr);
+    aStr = pText->GetText(2);
+    CPPUNIT_ASSERT_EQUAL(OUString("Third line."), aStr);
 
     xDocSh->DoClose();
 }
