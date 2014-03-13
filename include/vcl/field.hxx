@@ -777,7 +777,6 @@ class VCL_DLLPUBLIC CurrencyBox : public ComboBox, public CurrencyFormatter
 {
 public:
     explicit                CurrencyBox( Window* pParent, WinBits nWinStyle );
-    explicit                CurrencyBox( Window* pParent, const ResId& );
     virtual                 ~CurrencyBox();
 
     virtual bool            PreNotify( NotifyEvent& rNEvt );

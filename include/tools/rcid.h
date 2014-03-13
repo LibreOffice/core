@@ -98,11 +98,11 @@
 #define RSC_PATTERNBOX          (RSC_NOTYPE + 0x68)
 #define RSC_NUMERICBOX          (RSC_NOTYPE + 0x69)
 #define RSC_METRICBOX           (RSC_NOTYPE + 0x6a)
-#define RSC_CURRENCYBOX         (RSC_NOTYPE + 0x6b)
+
 
 
 #define RSC_LONGCURRENCYFIELD   (RSC_NOTYPE + 0x6e)
-#define RSC_LONGCURRENCYBOX     (RSC_NOTYPE + 0x6f)
+
 #define RSC_TOOLBOXITEM         (RSC_NOTYPE + 0x70)
 #define RSC_TOOLBOX             (RSC_NOTYPE + 0x71)
 #define RSC_DOCKINGWINDOW       (RSC_NOTYPE + 0x72)

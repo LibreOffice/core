@@ -1499,7 +1499,6 @@ OString ResMgr::GetAutoHelpId()
                     case RSC_TIMEFIELD:         aHID.append( "TimeField" );        break;
                     case RSC_NUMERICBOX:        aHID.append( "NumericBox" );       break;
                     case RSC_METRICBOX:         aHID.append( "MetricBox" );        break;
-                    case RSC_CURRENCYBOX:       aHID.append( "CurrencyBox" );      break;
                     case RSC_IMAGEBUTTON:       aHID.append( "ImageButton" );      break;
                     case RSC_MENUBUTTON:        aHID.append( "MenuButton" );       break;
                     default:

@@ -1577,28 +1577,6 @@ RscTop * RscTypCont::InitClassMetricBox( RscTop * pSuper )
     return pClassMetricBox;
 }
 
-RscTop * RscTypCont::InitClassCurrencyBox
-(
-    const char * pClassName,
-    sal_uInt32 nRT,
-    RscTop * pSuper
-)
-{
-    Atom        nId;
-    RscTop *    pClassCurrencyBox;
-
-    // Klasse anlegen
-    nId = pHS->getID( pClassName );
-    pClassCurrencyBox = new RscClass( nId, nRT, pSuper );
-    pClassCurrencyBox->SetCallPar( *pWinPar1, *pWinPar2, *pWinParType );
-
-    aNmTb.Put( nId, CLASSNAME, pClassCurrencyBox );
-
-    // Variablen anlegen
-
-    return pClassCurrencyBox;
-}
-
 RscTop * RscTypCont::InitClassDockingWindow( RscTop * pSuper,
                                              RscEnum * pMapUnit )
 {
