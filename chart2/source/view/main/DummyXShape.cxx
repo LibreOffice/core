@@ -547,7 +547,7 @@ void DummyCircle::render()
     if(itr != maProperties.end())
     {
         sal_Int32 nTrans = itr->second.get<sal_Int32>();
-        nAlpha = static_cast<sal_uInt8>(nTrans & 0xFF);
+        nAlpha = 255 - static_cast<sal_uInt8>(nTrans & 0xFF);
     }
 
     itr = maProperties.find("FillColor");
