@@ -1092,10 +1092,13 @@ SwNumRule* WW8ListManager::GetNumRule(size_t i)
 // oeffentliche Methoden
 
 WW8ListManager::WW8ListManager(SvStream& rSt_, SwWW8ImplReader& rReader_)
-    : maSprmParser(rReader_.GetFib().GetFIBVersion()), rReader(rReader_),
-    rDoc(rReader.GetDoc()), rFib(rReader.GetFib()), rSt(rSt_),
-    nUniqueList(1)
+    : maSprmParser(rReader_.GetFib().GetFIBVersion()), rReader(rReader_)
+    , rDoc(rReader.GetDoc())
+    , rFib(rReader.GetFib()), rSt(rSt_)
+    , nUniqueList(1)
+    , nLastLFOPosition(USHRT_MAX)
 {
+
     // LST und LFO gibts erst ab WW8
     if(    ( 8 > rFib.nVersion )
             || ( rFib.fcPlcfLst == rFib.fcPlfLfo )
@@ -1105,7 +1108,6 @@ WW8ListManager::WW8ListManager(SvStream& rSt_, SwWW8ImplReader& rReader_)
     // Arrays anlegen
     bool bLVLOk = true;
 
-    nLastLFOPosition = USHRT_MAX;
     long nOriginalPos = rSt.Tell();
 
     // 1. PLCF LST auslesen und die Listen Vorlagen im Writer anlegen
