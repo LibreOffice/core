@@ -305,8 +305,8 @@ SvLBoxButton::SvLBoxButton( SvTreeListEntry* pEntry, SvLBoxButtonKind eTheKind,
     , isVis(true)
     , pData(pBData)
     , eKind(eTheKind)
-    , nBaseOffs(0)
     , nItemFlags(0)
+    , nBaseOffs(0)
 {
     SetStateUnchecked();
 }
