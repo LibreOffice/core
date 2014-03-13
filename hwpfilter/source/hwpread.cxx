@@ -752,7 +752,10 @@ bool Hyphen::Read(HWPFile & hwpf)
 
 
 // toc mark(25)
-TocMark::TocMark():HBox(CH_TOC_MARK)
+TocMark::TocMark()
+    : HBox(CH_TOC_MARK)
+    , kind(0)
+    , dummy(0)
 {
 }
 
