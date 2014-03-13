@@ -2771,6 +2771,15 @@ DECLARE_OOXMLEXPORT_TEST(testlvlPicBulletId, "lvlPicBulletId.docx")
 
 }
 
+DECLARE_OOXMLEXPORT_TEST(testLOCrashWhileSave, "FDO76074.docx")
+{
+    uno::Reference<frame::XModel> xModel(mxComponent, uno::UNO_QUERY);
+    uno::Reference<text::XTextViewCursorSupplier> xTextViewCursorSupplier(xModel->getCurrentController(), uno::UNO_QUERY);
+    uno::Reference<text::XPageCursor> xCursor(xTextViewCursorSupplier->getViewCursor(), uno::UNO_QUERY);
+    xCursor->jumpToLastPage();
+    CPPUNIT_ASSERT_EQUAL(sal_Int16(7), xCursor->getPage());
+}
+
 #endif
 
 CPPUNIT_PLUGIN_IMPLEMENT();

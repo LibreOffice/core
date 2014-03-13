@@ -2324,7 +2324,6 @@ void DocxAttributeOutput::TableCellProperties( ww8::WW8TableNodeInfoInner::Point
     }
 
     const SvxBoxItem& rBox = pTblBox->GetFrmFmt( )->GetBox( );
-    const SvxBoxItem& rDefaultBox = (*tableFirstCells.rbegin())->getTableBox( )->GetFrmFmt( )->GetBox( );
     {
         // The cell borders
         impl_borders( m_pSerializer, rBox, lcl_getTableCellBorderOptions(bEcma), NULL );
@@ -2332,7 +2331,9 @@ void DocxAttributeOutput::TableCellProperties( ww8::WW8TableNodeInfoInner::Point
 
     TableBackgrounds( pTableTextNodeInfoInner );
 
+    if (!tableFirstCells.empty())
     {
+        const SvxBoxItem& rDefaultBox = (*tableFirstCells.rbegin())->getTableBox( )->GetFrmFmt( )->GetBox( );
         // Cell margins
         impl_cellMargins( m_pSerializer, rBox, XML_tcMar, !bEcma, &rDefaultBox );
     }
@@ -2407,8 +2408,8 @@ void DocxAttributeOutput::EndTable()
 
     if ( m_tableReference->m_nTableDepth > 0 )
         --m_tableReference->m_nTableDepth;
-
-    tableFirstCells.pop_back();
+    if (!tableFirstCells.empty())
+        tableFirstCells.pop_back();
 
     // We closed the table; if it is a nested table, the cell that contains it
     // still continues
