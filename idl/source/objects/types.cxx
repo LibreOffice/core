@@ -1398,7 +1398,7 @@ sal_uLong SvMetaType::MakeSfx( OStringBuffer& rAttrArray )
 }
 
 void SvMetaType::WriteSfxItem(
-    const OString& rItemName, SvIdlDataBase &, SvStream & rOutStm )
+    const OString& rItemName, SvIdlDataBase& rBase, SvStream& rOutStm )
 {
     WriteStars( rOutStm );
     OStringBuffer aVarName(" a");
@@ -1411,14 +1411,35 @@ void SvMetaType::WriteSfxItem(
         OString::number(nAttrCount));
     aTypeName.append(aAttrCount);
 
-    rOutStm.WriteCharPtr( "extern " ).WriteCharPtr( aTypeName.getStr() )
+    bool bExport = false, bReturn = false;
+    // these are exported from sfx library
+    if (rItemName == "SfxBoolItem" ||
+        rItemName == "SfxStringItem" ||
+        rItemName == "SfxUInt16Item" ||
+        rItemName == "SfxUInt32Item" ||
+        rItemName == "SfxVoidItem")
+    {
+        if (rBase.sSlotMapFile.endsWith("sfxslots.hxx"))
+            bExport = true;
+        else
+            bReturn = true;
+    }
+
+    rOutStm.WriteCharPtr( "extern " );
+    if (bExport)
+        rOutStm.WriteCharPtr( "SFX2_DLLPUBLIC " );
+    rOutStm.WriteCharPtr( aTypeName.getStr() )
            .WriteCharPtr( aVarName.getStr() ).WriteChar( ';' ) << endl;
+    if (bReturn)
+        return;
 
     // write the implementation part
     rOutStm.WriteCharPtr( "#ifdef SFX_TYPEMAP" ) << endl;
     rOutStm.WriteCharPtr( "#if !defined(_WIN32) && ((defined(DISABLE_DYNLOADING) && (defined(ANDROID) || defined(IOS))) || STATIC_LINKING)" ) << endl;
     rOutStm.WriteCharPtr( "__attribute__((__weak__))" ) << endl;
     rOutStm.WriteCharPtr( "#endif" ) << endl;
+    if (bExport)
+        rOutStm.WriteCharPtr( "SFX2_DLLPUBLIC " );
     rOutStm.WriteCharPtr( aTypeName.getStr() ).WriteCharPtr( aVarName.getStr() )
            .WriteCharPtr( " = " ) << endl;
     rOutStm.WriteChar( '{' ) << endl;
