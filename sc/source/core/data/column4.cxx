@@ -334,24 +334,39 @@ void ScColumn::CloneFormulaCell( const ScFormulaCell& rSrc, const std::vector<sc
     {
         SCROW nRow1 = itSpan->mnRow1, nRow2 = itSpan->mnRow2;
         size_t nLen = nRow2 - nRow1 + 1;
+        assert(nLen > 0);
         aFormulas.clear();
         aFormulas.reserve(nLen);
 
         ScAddress aPos(nCol, nRow1, nTab);
-        ScFormulaCellGroupRef xGroup(new ScFormulaCellGroup);
-        xGroup->setCode(*rSrc.GetCode());
-        xGroup->compileCode(*pDocument, aPos, pDocument->GetGrammar());
-        for (size_t i = 0; i < nLen; ++i, aPos.IncRow())
+
+        if (nLen == 1)
         {
-            ScFormulaCell* pCell = new ScFormulaCell(pDocument, aPos, xGroup);
-            if (i == 0)
-            {
-                xGroup->mpTopCell = pCell;
-                xGroup->mnLength = nLen;
-            }
+            // Single, ungrouped formula cell.
+            ScFormulaCell* pCell =
+                new ScFormulaCell(rSrc, *pDocument, aPos, pDocument->GetGrammar());
             pCell->StartListeningTo(aCxt);
             pCell->SetDirty();
             aFormulas.push_back(pCell);
+        }
+        else
+        {
+            // Create a group of formula cells.
+            ScFormulaCellGroupRef xGroup(new ScFormulaCellGroup);
+            xGroup->setCode(*rSrc.GetCode());
+            xGroup->compileCode(*pDocument, aPos, pDocument->GetGrammar());
+            for (size_t i = 0; i < nLen; ++i, aPos.IncRow())
+            {
+                ScFormulaCell* pCell = new ScFormulaCell(pDocument, aPos, xGroup);
+                if (i == 0)
+                {
+                    xGroup->mpTopCell = pCell;
+                    xGroup->mnLength = nLen;
+                }
+                pCell->StartListeningTo(aCxt);
+                pCell->SetDirty();
+                aFormulas.push_back(pCell);
+            }
         }
 
         itPos = maCells.set(itPos, nRow1, aFormulas.begin(), aFormulas.end());
