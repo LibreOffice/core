@@ -1560,23 +1560,6 @@ RscTop * RscTypCont::InitClassNumericBox( RscTop * pSuper )
     return pClassNumericBox;
 }
 
-RscTop * RscTypCont::InitClassMetricBox( RscTop * pSuper )
-{
-    Atom        nId;
-    RscTop *    pClassMetricBox;
-
-    // Klasse anlegen
-    nId = pHS->getID( "MetricBox" );
-    pClassMetricBox = new RscClass( nId, RSC_METRICBOX, pSuper );
-    pClassMetricBox->SetCallPar( *pWinPar1, *pWinPar2, *pWinParType );
-
-    aNmTb.Put( nId, CLASSNAME, pClassMetricBox );
-
-    // Variablen anlegen
-
-    return pClassMetricBox;
-}
-
 RscTop * RscTypCont::InitClassDockingWindow( RscTop * pSuper,
                                              RscEnum * pMapUnit )
 {

@@ -224,7 +224,6 @@ class RscTypCont
     RscTop *    InitClassTimeField( RscTop * pSuper, RscTop * pClassTime );
     RscTop *    InitClassPatternBox( RscTop * pSuper );
     RscTop *    InitClassNumericBox( RscTop * pSuper );
-    RscTop *    InitClassMetricBox( RscTop * pSuper );
 
     RscTop *    InitClassDockingWindow( RscTop * pSuper,
                                         RscEnum * pMapUnit );

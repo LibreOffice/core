@@ -97,7 +97,7 @@
 #define RSC_TIMEFIELD           (RSC_NOTYPE + 0x67)
 #define RSC_PATTERNBOX          (RSC_NOTYPE + 0x68)
 #define RSC_NUMERICBOX          (RSC_NOTYPE + 0x69)
-#define RSC_METRICBOX           (RSC_NOTYPE + 0x6a)
+
 
 
 
