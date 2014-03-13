@@ -8,6 +8,10 @@
  *
  */
 
+#include <sal/config.h>
+
+#include <map>
+
 #include <TextEffectsHandler.hxx>
 
 #include <rtl/ustrbuf.hxx>
