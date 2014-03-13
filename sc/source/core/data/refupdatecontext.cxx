@@ -94,6 +94,9 @@ SCTAB RefUpdateMoveTabContext::getNewTab(SCTAB nOldTab) const
     return nOldTab + 1;
 }
 
+SetFormulaDirtyContext::SetFormulaDirtyContext() :
+    mnTabDeletedStart(-1), mnTabDeletedEnd(-1), mbClearTabDeletedFlag(false) {}
+
 }
 
 

@@ -315,7 +315,7 @@ void ScUndoDeleteTab::Undo()
     unsigned int i=0;
     ScDocument* pDoc = pDocShell->GetDocument();
 
-    sal_Bool bLink = false;
+    bool bLink = false;
     OUString aName;
 
     for(i=0; i<theTabs.size(); ++i)
@@ -323,8 +323,8 @@ void ScUndoDeleteTab::Undo()
         SCTAB nTab = theTabs[i];
         pRefUndoDoc->GetName( nTab, aName );
 
-        bDrawIsInUndo = sal_True;
-        sal_Bool bOk = pDoc->InsertTab( nTab, aName );
+        bDrawIsInUndo = true;
+        bool bOk = pDoc->InsertTab(nTab, aName, false, true);
         bDrawIsInUndo = false;
         if (bOk)
         {
@@ -338,7 +338,7 @@ void ScUndoDeleteTab::Undo()
                 pDoc->SetLink( nTab, pRefUndoDoc->GetLinkMode(nTab), pRefUndoDoc->GetLinkDoc(nTab),
                                      pRefUndoDoc->GetLinkFlt(nTab), pRefUndoDoc->GetLinkOpt(nTab),
                                      pRefUndoDoc->GetLinkTab(nTab), pRefUndoDoc->GetLinkRefreshDelay(nTab) );
-                bLink = sal_True;
+                bLink = true;
             }
 
             if ( pRefUndoDoc->IsScenario(nTab) )
