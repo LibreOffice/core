@@ -813,7 +813,14 @@ private:
     {
         bool bHasHeader, bHasFooter;
         sal_uInt32 nSwHLo, nSwFUp, nSwUp,  nSwLo;
-        wwULSpaceData() : bHasHeader(false), bHasFooter(false) {}
+        wwULSpaceData()
+            : bHasHeader(false)
+            , bHasFooter(false)
+            , nSwHLo(0)
+            , nSwFUp(0)
+            , nSwUp(0)
+            , nSwLo(0)
+        {}
     };
 
     void SetSegmentToPageDesc(const wwSection &rSection, bool bIgnoreCols);
