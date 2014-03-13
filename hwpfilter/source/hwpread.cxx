@@ -582,10 +582,14 @@ bool HeaderFooter::Read(HWPFile & hwpf)
 
 
 // footnote(17)
-Footnote::Footnote():HBox(CH_FOOTNOTE)
+Footnote::Footnote()
+    : HBox(CH_FOOTNOTE)
+    , dummy(0)
+    , number(0)
+    , type(0)
+    , width(0)
 {
 }
-
 
 bool Footnote::Read(HWPFile & hwpf)
 {
