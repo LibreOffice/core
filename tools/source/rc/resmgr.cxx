@@ -1494,7 +1494,6 @@ OString ResMgr::GetAutoHelpId()
                     case RSC_PATTERNFIELD:      aHID.append( "PatternField" );     break;
                     case RSC_NUMERICFIELD:      aHID.append( "NumericField" );     break;
                     case RSC_METRICFIELD:       aHID.append( "MetricField" );      break;
-                    case RSC_CURRENCYFIELD:     aHID.append( "CurrencyField" );    break;
                     case RSC_DATEFIELD:         aHID.append( "DateField" );        break;
                     case RSC_TIMEFIELD:         aHID.append( "TimeField" );        break;
                     case RSC_NUMERICBOX:        aHID.append( "NumericBox" );       break;

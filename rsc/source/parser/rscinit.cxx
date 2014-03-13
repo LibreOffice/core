@@ -116,8 +116,6 @@ void RscTypCont::Init()
     RscTop   *  pClassPatternField;
     RscTop   *  pClassNumericField;
     RscTop   *  pClassMetricField;
-    RscTop   *  pClassCurrencyField;
-    RscTop   *  pClassLongCurrencyField;
     RscTop   *  pClassDateField;
     RscTop   *  pClassTimeField;
     RscTop   *  pClassPatternBox;
@@ -610,19 +608,6 @@ void RscTypCont::Init()
 
     pClassMetricField = InitClassMetricField( pClassTmp );
     pRoot->Insert( pClassMetricField );
-    }
-    { // Mehrfachvererbung von Hand
-    RscTop * pClassTmp = InitClassNumericFormatter( pClassSpinField );
-    aBaseLst.push_back( pClassTmp );
-    pClassTmp = InitClassCurrencyFormatter( pClassTmp );
-    aBaseLst.push_back( pClassTmp );
-
-    pClassCurrencyField = InitClassCurrencyField( "CurrencyField", RSC_CURRENCYFIELD, pClassTmp );
-    pRoot->Insert( pClassCurrencyField );
-
-    pClassLongCurrencyField = InitClassCurrencyField( "LongCurrencyField", RSC_LONGCURRENCYFIELD, pClassTmp );
-    pRoot->Insert( pClassLongCurrencyField );
-
     }
     { // Mehrfachvererbung von Hand
     RscTop * pClassTmp = InitClassDateFormatter( pClassSpinField, pClassDate );

@@ -1455,37 +1455,6 @@ RscTop * RscTypCont::InitClassMetricField( RscTop * pSuper )
     return pClassMetricField;
 }
 
-RscTop * RscTypCont::InitClassCurrencyField
-(
-    const char * pClassName,
-    sal_uInt32 nRT,
-    RscTop * pSuper
-)
-{
-    Atom        nId;
-    RscTop *    pClassCurrencyField;
-
-    // Klasse anlegen
-    nId = pHS->getID( pClassName );
-    pClassCurrencyField = new RscClass( nId, nRT, pSuper );
-    pClassCurrencyField->SetCallPar( *pWinPar1, *pWinPar2, *pWinParType );
-
-    aNmTb.Put( nId, CLASSNAME, pClassCurrencyField );
-
-    // Variablen anlegen
-    nId = aNmTb.Put( "First", VARNAME );
-    pClassCurrencyField->SetVariable( nId, &aIdLong, NULL,
-                                      0, CURRENCYFIELD_FIRST );
-    nId = aNmTb.Put( "Last", VARNAME );
-    pClassCurrencyField->SetVariable( nId, &aIdLong, NULL,
-                                      0, CURRENCYFIELD_LAST );
-    nId = aNmTb.Put( "SpinSize", VARNAME );
-    pClassCurrencyField->SetVariable( nId, &aIdLong, NULL,
-                                      0, CURRENCYFIELD_SPINSIZE  );
-
-    return pClassCurrencyField;
-}
-
 RscTop * RscTypCont::InitClassDateField( RscTop * pSuper, RscTop * pClassDate )
 {
     Atom        nId;

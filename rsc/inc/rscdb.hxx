@@ -218,8 +218,6 @@ class RscTypCont
     RscTop *    InitClassPatternField( RscTop * pSuper );
     RscTop *    InitClassNumericField( RscTop * pSuper );
     RscTop *    InitClassMetricField( RscTop * pSuper );
-    RscTop *    InitClassCurrencyField( const char * pClassName, sal_uInt32 nRT,
-                                        RscTop * pSuper );
     RscTop *    InitClassDateField( RscTop * pSuper, RscTop * pClassDate );
     RscTop *    InitClassTimeField( RscTop * pSuper, RscTop * pClassTime );
     RscTop *    InitClassPatternBox( RscTop * pSuper );

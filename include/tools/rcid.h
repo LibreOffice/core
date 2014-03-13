@@ -92,7 +92,7 @@
 #define RSC_PATTERNFIELD        (RSC_NOTYPE + 0x62)
 #define RSC_NUMERICFIELD        (RSC_NOTYPE + 0x63)
 #define RSC_METRICFIELD         (RSC_NOTYPE + 0x64)
-#define RSC_CURRENCYFIELD       (RSC_NOTYPE + 0x65)
+
 #define RSC_DATEFIELD           (RSC_NOTYPE + 0x66)
 #define RSC_TIMEFIELD           (RSC_NOTYPE + 0x67)
 #define RSC_PATTERNBOX          (RSC_NOTYPE + 0x68)
@@ -101,7 +101,7 @@
 
 
 
-#define RSC_LONGCURRENCYFIELD   (RSC_NOTYPE + 0x6e)
+
 
 #define RSC_TOOLBOXITEM         (RSC_NOTYPE + 0x70)
 #define RSC_TOOLBOX             (RSC_NOTYPE + 0x71)

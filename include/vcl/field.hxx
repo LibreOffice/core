@@ -600,9 +600,8 @@ public:
 class VCL_DLLPUBLIC CurrencyField : public SpinField, public CurrencyFormatter
 {
 public:
-                            CurrencyField( Window* pParent, WinBits nWinStyle );
-
-                            ~CurrencyField();
+    CurrencyField( Window* pParent, WinBits nWinStyle );
+    ~CurrencyField();
 
     virtual bool            PreNotify( NotifyEvent& rNEvt );
     virtual bool            Notify( NotifyEvent& rNEvt );
