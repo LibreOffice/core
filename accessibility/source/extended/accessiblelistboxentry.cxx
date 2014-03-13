@@ -531,24 +531,25 @@ namespace accessibility
             switch(getAccessibleRole())
             {
                 case AccessibleRole::LABEL:
-                       pStateSetHelper->AddState( AccessibleStateType::TRANSIENT );
-                       pStateSetHelper->AddState( AccessibleStateType::SELECTABLE );
-                       pStateSetHelper->AddState( AccessibleStateType::ENABLED );
-                    if ( getListBox()->IsInplaceEditingEnabled() )
-                           pStateSetHelper->AddState( AccessibleStateType::EDITABLE );
-                    if ( IsShowing_Impl() )
-                            pStateSetHelper->AddState( AccessibleStateType::SHOWING );
+                    pStateSetHelper->AddState( AccessibleStateType::TRANSIENT );
+                    pStateSetHelper->AddState( AccessibleStateType::SELECTABLE );
+                    pStateSetHelper->AddState( AccessibleStateType::ENABLED );
+                    if (getListBox()->IsInplaceEditingEnabled())
+                        pStateSetHelper->AddState( AccessibleStateType::EDITABLE );
+                    if (IsShowing_Impl())
+                        pStateSetHelper->AddState( AccessibleStateType::SHOWING );
                     break;
                 case AccessibleRole::CHECK_BOX:
-                       pStateSetHelper->AddState( AccessibleStateType::TRANSIENT );
-                       pStateSetHelper->AddState( AccessibleStateType::SELECTABLE );
-                       pStateSetHelper->AddState( AccessibleStateType::ENABLED );
-                    if ( IsShowing_Impl() )
-                            pStateSetHelper->AddState( AccessibleStateType::SHOWING );
+                    pStateSetHelper->AddState( AccessibleStateType::TRANSIENT );
+                    pStateSetHelper->AddState( AccessibleStateType::SELECTABLE );
+                    pStateSetHelper->AddState( AccessibleStateType::ENABLED );
+                    if (IsShowing_Impl())
+                        pStateSetHelper->AddState( AccessibleStateType::SHOWING );
                     break;
             }
-            getListBox()->FillAccessibleEntryStateSet(
-                getListBox()->GetEntryFromPath( m_aEntryPath ), *pStateSetHelper );
+            SvTreeListEntry *pEntry = getListBox()->GetEntryFromPath(m_aEntryPath);
+            if (pEntry)
+                getListBox()->FillAccessibleEntryStateSet(pEntry, *pStateSetHelper);
         }
         else
             pStateSetHelper->AddState( AccessibleStateType::DEFUNC );
