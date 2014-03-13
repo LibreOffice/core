@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a930d6b_b45a864e",
+        "filename": "sc/uiconfig/scalc/statusbar/statusbar.xml",
+        "patchSetId": 7
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2014-03-13T11:28:47Z",
+      "side": 1,
+      "message": "1/ no tab please\n2/ we do not document change history in the source..\nthat is why we have git... and commit message",
+      "revId": "c70e1b47246497a0fbafb2670eecfbc2f0111eaf",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
