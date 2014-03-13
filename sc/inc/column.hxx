@@ -57,6 +57,7 @@ class EditTextIterator;
 struct NoteEntry;
 class DocumentStreamAccess;
 class CompileFormulaContext;
+struct SetFormulaDirtyContext;
 
 }
 
@@ -321,7 +322,7 @@ public:
 
     bool IsFormulaDirty( SCROW nRow ) const;
 
-    void        SetDirty();
+    void SetAllFormulasDirty( const sc::SetFormulaDirtyContext& rCxt );
     void        SetDirty( SCROW nRow1, SCROW nRow2 );
     void        SetDirtyVar();
     void        SetDirtyAfterLoad();

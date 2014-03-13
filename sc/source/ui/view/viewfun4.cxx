@@ -65,6 +65,7 @@
 #include "reffind.hxx"
 #include "compiler.hxx"
 #include "tokenarray.hxx"
+#include <refupdatecontext.hxx>
 
 #include <boost/scoped_ptr.hpp>
 
@@ -559,7 +560,10 @@ void ScViewFunc::DoSheetConversion( const ScConversionParam& rConvParam, sal_Boo
                         nCol, nRow, nTab, pUndoDoc,
                         nNewCol, nNewRow, nTab, pRedoDoc, rConvParam ) );
         }
-        pDoc->SetDirty();
+
+        sc::SetFormulaDirtyContext aCxt;
+        pDoc->SetAllFormulasDirty(aCxt);
+
         pDocSh->SetDocumentModified();
     }
     else
