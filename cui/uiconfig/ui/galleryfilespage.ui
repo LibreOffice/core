@@ -127,7 +127,7 @@
               </packing>
             </child>
             <child>
-              <object class="svxlo-GalleryPreview" id="image:border">
+              <object class="svxcorelo-GalleryPreview" id="image:border">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="hexpand">True</property>
