@@ -490,7 +490,7 @@ handleError( ucb::InteractiveAugmentedIOException const & i_rException,
     e.g. ODB files seem to only have content.xml */
 static void
 collectFilesFromStorage(uno::Reference<embed::XStorage> const& i_xStorage,
-    OUString i_Path,
+    const OUString& i_Path,
     std::set< OUString > & o_rFiles)
 {
     static OUString content(s_content);
@@ -587,7 +587,7 @@ importFile(struct DocumentMetadataAccess_Impl & i_rImpl,
     uno::Reference<embed::XStorage> const & i_xStorage,
     OUString const & i_rBaseURI,
     uno::Reference<task::XInteractionHandler> const & i_xHandler,
-    OUString i_rPath)
+    const OUString& i_rPath)
 {
 retry:
     try {

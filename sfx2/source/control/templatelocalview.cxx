@@ -824,7 +824,7 @@ bool TemplateLocalView::isTemplateNameUnique(const sal_uInt16 nRegionItemId, con
     return true;
 }
 
-bool TemplateLocalView::renameItem(ThumbnailViewItem* pItem, OUString sNewTitle)
+bool TemplateLocalView::renameItem(ThumbnailViewItem* pItem, const OUString& sNewTitle)
 {
     sal_uInt16 nRegionId = 0;
     sal_uInt16 nDocId = USHRT_MAX;

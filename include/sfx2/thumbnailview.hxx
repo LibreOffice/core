@@ -241,7 +241,7 @@ public:
 
     virtual void Resize();
 
-    virtual bool renameItem(ThumbnailViewItem* pItem, OUString sNewTitle);
+    virtual bool renameItem(ThumbnailViewItem* pItem, const OUString& sNewTitle);
 
     static BitmapEx readThumbnail(const OUString &msURL);
 

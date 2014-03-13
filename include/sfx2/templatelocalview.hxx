@@ -91,7 +91,7 @@ public:
 
     bool isTemplateNameUnique (const sal_uInt16 nRegionItemId, const OUString &rName) const;
 
-    virtual bool renameItem(ThumbnailViewItem* pItem, OUString sNewTitle);
+    virtual bool renameItem(ThumbnailViewItem* pItem, const OUString& sNewTitle);
 
 private:
 

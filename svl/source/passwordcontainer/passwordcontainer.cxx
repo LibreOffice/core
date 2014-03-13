@@ -78,7 +78,7 @@ static OUString createIndex( vector< OUString > lines )
 }
 
 
-static vector< OUString > getInfoFromInd( OUString aInd )
+static vector< OUString > getInfoFromInd( const OUString& aInd )
 {
     vector< OUString > aResult;
     bool aStart = true;
@@ -162,7 +162,7 @@ static OUString getAsciiLine( const ::rtl::ByteSequence& buf )
 }
 
 
-static ::rtl::ByteSequence getBufFromAsciiLine( OUString line )
+static ::rtl::ByteSequence getBufFromAsciiLine( const OUString& line )
 {
     OSL_ENSURE( line.getLength() % 2 == 0, "Wrong syntax!\n" );
     OString tmpLine = OUStringToOString( line, RTL_TEXTENCODING_ASCII_US );

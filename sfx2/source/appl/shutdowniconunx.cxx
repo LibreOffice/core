@@ -224,7 +224,7 @@ static void add_ugly_db_item( GtkMenuShell *pMenuShell, const char *pAsciiURL,
 static GtkWidget *
 add_image_menu_item( GtkMenuShell *pMenuShell,
                      const gchar *stock_id,
-                     OUString aLabel,
+                     const OUString& aLabel,
                      GCallback     activate_cb )
 {
     OString aUtfLabel = OUStringToOString (aLabel, RTL_TEXTENCODING_UTF8 );

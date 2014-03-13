@@ -110,13 +110,13 @@ public:
     sal_Int32   getAutoloadDelay() const { return m_AutoloadDelay; }
     void        setAutoloadDelay(sal_Int32 i_val) { m_AutoloadDelay = i_val; }
     OUString getAutoloadURL() const { return m_AutoloadURL; }
-    void        setAutoloadURL(OUString i_val) { m_AutoloadURL = i_val; }
+    void        setAutoloadURL(const OUString& i_val) { m_AutoloadURL = i_val; }
     OUString getDefaultTarget() const { return m_DefaultTarget; }
-    void        setDefaultTarget(OUString i_val) { m_DefaultTarget = i_val; }
+    void        setDefaultTarget(const OUString& i_val) { m_DefaultTarget = i_val; }
     OUString getTemplateName() const { return m_TemplateName; }
-    void        setTemplateName(OUString i_val) { m_TemplateName = i_val; }
+    void        setTemplateName(const OUString& i_val) { m_TemplateName = i_val; }
     OUString getAuthor() const { return m_Author; }
-    void        setAuthor(OUString i_val) { m_Author = i_val; }
+    void        setAuthor(const OUString& i_val) { m_Author = i_val; }
 
     ::com::sun::star::util::DateTime
                 getCreationDate() const { return m_CreationDate; }
@@ -124,7 +124,7 @@ public:
                     m_CreationDate = i_val;
                 }
     OUString getModifiedBy() const { return m_ModifiedBy; }
-    void        setModifiedBy(OUString i_val) { m_ModifiedBy = i_val; }
+    void        setModifiedBy(const OUString& i_val) { m_ModifiedBy = i_val; }
 
     ::com::sun::star::util::DateTime
                 getModificationDate() const { return m_ModificationDate; }
@@ -132,7 +132,7 @@ public:
                     m_ModificationDate = i_val;
                 }
     OUString getPrintedBy() const { return m_PrintedBy; }
-    void        setPrintedBy(OUString i_val) { m_PrintedBy = i_val; }
+    void        setPrintedBy(const OUString& i_val) { m_PrintedBy = i_val; }
     ::com::sun::star::util::DateTime
                 getPrintDate() const { return m_PrintDate; }
     void        setPrintDate(::com::sun::star::util::DateTime i_val) {
@@ -143,13 +143,13 @@ public:
     sal_Int32   getEditingDuration() const { return m_EditingDuration; }
     void        setEditingDuration(sal_Int32 i_val) { m_EditingDuration = i_val; }
     OUString getDescription() const { return m_Description; }
-    void        setDescription(OUString i_val) { m_Description = i_val; }
+    void        setDescription(const OUString& i_val) { m_Description = i_val; }
     OUString getKeywords() const { return m_Keywords; }
-    void        setKeywords(OUString i_val) { m_Keywords = i_val; }
+    void        setKeywords(const OUString& i_val) { m_Keywords = i_val; }
     OUString getSubject() const { return m_Subject; }
-    void        setSubject(OUString i_val) { m_Subject = i_val; }
+    void        setSubject(const OUString& i_val) { m_Subject = i_val; }
     OUString getTitle() const { return m_Title; }
-    void        setTitle(OUString i_val) { m_Title = i_val; }
+    void        setTitle(const OUString& i_val) { m_Title = i_val; }
 
     /// reset user-specific data (author, modified-by, ...)
     void        resetUserData(const OUString & i_rAuthor);

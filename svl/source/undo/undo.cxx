@@ -1241,7 +1241,7 @@ OUString SfxListUndoAction::GetRepeatComment(SfxRepeatTarget &) const
 SfxListUndoAction::SfxListUndoAction
 (
     const OUString &rComment,
-    const OUString rRepeatComment,
+    const OUString &rRepeatComment,
     sal_uInt16 Id,
     SfxUndoArray *pFather
 )

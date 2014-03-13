@@ -97,7 +97,7 @@ public:
 
     NamePassRecord( const OUString& aName,
                     bool bHasMemoryList, const ::std::vector< OUString >& aMemoryList,
-                    bool bHasPersistentList, const OUString aPersistentList )
+                    bool bHasPersistentList, const OUString & aPersistentList )
         : m_aName( aName )
         , m_bHasMemPass( bHasMemoryList )
         , m_bHasPersPass( bHasPersistentList )

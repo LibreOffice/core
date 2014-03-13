@@ -1352,9 +1352,10 @@ sal_Bool SfxStoringHelper::GUIStoreModel( uno::Reference< frame::XModel > xModel
                                             const OUString& aSlotName,
                                             uno::Sequence< beans::PropertyValue >& aArgsSequence,
                                             sal_Bool bPreselectPassword,
-                                            OUString aSuggestedName,
+                                            const OUString& _aSuggestedName,
                                             sal_uInt16 nDocumentSignatureState )
 {
+    OUString aSuggestedName = _aSuggestedName;
     ModelData_Impl aModelData( *this, xModel, aArgsSequence );
 
     sal_Bool bDialogUsed = sal_False;
@@ -1839,8 +1840,8 @@ void SfxStoringHelper::SetDocInfoState(
 
 // static
 sal_Bool SfxStoringHelper::WarnUnacceptableFormat( const uno::Reference< frame::XModel >& xModel,
-                                                    OUString aOldUIName,
-                                                    OUString /*aDefUIName*/,
+                                                    const OUString& aOldUIName,
+                                                    const OUString& /*aDefUIName*/,
                                                     sal_Bool /*bCanProceedFurther*/ )
 {
     if ( !SvtSaveOptions().IsWarnAlienFormat() )

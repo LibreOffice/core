@@ -118,7 +118,7 @@ namespace sfx2
 
 namespace
 {
-    bool lclSupportsOOXMLEncryption(OUString aFilterName)
+    bool lclSupportsOOXMLEncryption(const OUString& aFilterName)
     {
         return  aFilterName == "Calc MS Excel 2007 XML"
                 ||  aFilterName == "MS Word 2007 XML"

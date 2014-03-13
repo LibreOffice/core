@@ -520,7 +520,7 @@ OUString SAL_CALL getNameSpace(const char* i_qname) throw ()
 bool SAL_CALL
 textToDateOrDateTime(css::util::Date & io_rd, css::util::DateTime & io_rdt,
         bool & o_rIsDateTime, boost::optional<sal_Int16> & o_rTimeZone,
-        OUString i_text) throw ()
+        const OUString& i_text) throw ()
 {
     if (::sax::Converter::parseDateOrDateTime(
                 &io_rd, io_rdt, o_rIsDateTime, &o_rTimeZone, i_text)) {
@@ -534,7 +534,7 @@ textToDateOrDateTime(css::util::Date & io_rd, css::util::DateTime & io_rdt,
 
 // convert string to date/time
 bool SAL_CALL
-textToDateTime(css::util::DateTime & io_rdt, OUString i_text) throw ()
+textToDateTime(css::util::DateTime & io_rdt, const OUString& i_text) throw ()
 {
     if (::sax::Converter::parseDateTime(io_rdt, 0, i_text)) {
         return true;
@@ -547,7 +547,7 @@ textToDateTime(css::util::DateTime & io_rdt, OUString i_text) throw ()
 
 // convert string to date/time with default return value
 css::util::DateTime SAL_CALL
-textToDateTimeDefault(OUString i_text) throw ()
+textToDateTimeDefault(const OUString& i_text) throw ()
 {
     css::util::DateTime dt;
     static_cast<void> (textToDateTime(dt, i_text));

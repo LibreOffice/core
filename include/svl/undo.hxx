@@ -166,7 +166,7 @@ class SVL_DLLPUBLIC SfxListUndoAction : public SfxUndoAction, public SfxUndoArra
                             TYPEINFO();
 
                             SfxListUndoAction( const OUString &rComment,
-                                const OUString rRepeatComment, sal_uInt16 Id, SfxUndoArray *pFather);
+                                const OUString& rRepeatComment, sal_uInt16 Id, SfxUndoArray *pFather);
     virtual void            Undo();
     virtual void            UndoWithContext( SfxUndoContext& i_context );
     virtual void            Redo();

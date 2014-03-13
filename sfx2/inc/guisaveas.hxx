@@ -62,7 +62,7 @@ public:
                     const OUString& aSlotName,
                     ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& aArgsSequence,
                     sal_Bool bPreselectPassword,
-                    OUString aUserSelectedName,
+                    const OUString& aUserSelectedName,
                     sal_uInt16 nDocumentSignatureState = SIGNATURESTATE_NOSIGNATURES );
 
     static sal_Bool CheckFilterOptionsAppearence(
@@ -78,8 +78,8 @@ public:
 
     static sal_Bool WarnUnacceptableFormat(
                                     const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >& xModel,
-                                    OUString aOldUIName,
-                                    OUString aDefUIName,
+                                    const OUString& aOldUIName,
+                                    const OUString& aDefUIName,
                                     sal_Bool bCanProceedFurther );
 
     static Window* GetModelWindow( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >& xModel );

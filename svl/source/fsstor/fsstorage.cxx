@@ -64,7 +64,7 @@ using namespace ::com::sun::star;
 
 
 // TODO: move to a standard helper
-bool isLocalFile_Impl( OUString aURL )
+bool isLocalFile_Impl( const OUString& aURL )
 {
     OUString aSystemPath;
 
