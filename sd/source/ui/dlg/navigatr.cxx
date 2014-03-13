@@ -629,7 +629,7 @@ bool SdNavigatorWin::InsertFile(const OUString& rFileName)
         {
             SfxMedium aMed(aFileName, (STREAM_READ | STREAM_SHARE_DENYNONE));
             SfxFilterMatcher aMatch( OUString("simpress") );
-            aMed.UseInteractionHandler( sal_True );
+            aMed.UseInteractionHandler( true );
             nErr = aMatch.GuessFilter(aMed, &pFilter);
         }
 

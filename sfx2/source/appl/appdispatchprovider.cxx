@@ -141,7 +141,7 @@ Reference < XDispatch > SAL_CALL SfxAppDispatchProvider::queryDispatch(
     {
         nId = (sal_uInt16) aURL.Path.toInt32();
         SfxShell* pShell;
-        pAppDisp->GetShellAndSlot_Impl( nId, &pShell, &pSlot, sal_True, sal_True );
+        pAppDisp->GetShellAndSlot_Impl( nId, &pShell, &pSlot, true, true );
     }
     else if ( aURL.Protocol == ".uno:" )
     {

@@ -512,7 +512,7 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
                     IsUseUserData() );
                 if ( !GetSlotState( SID_DOCTEMPLATE ) )
                     // templates not supported
-                    aDocInfoItem.SetTemplate(sal_False);
+                    aDocInfoItem.SetTemplate(false);
 
                 SfxItemSet aSet(GetPool(), SID_DOCINFO, SID_DOCINFO, SID_DOC_READONLY, SID_DOC_READONLY,
                                 SID_EXPLORER_PROPS_START, SID_EXPLORER_PROPS_START, SID_BASEURL, SID_BASEURL,
@@ -706,7 +706,7 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
 
                 // the StoreAsURL/StoreToURL method have called this method with false
                 // so it has to be restored to true here since it is a call from GUI
-                GetMedium()->SetUpdatePickList( sal_True );
+                GetMedium()->SetUpdatePickList( true );
 
                 // TODO: in future it must be done in followind way
                 // if document is opened from GUI it is immediatelly appears in the picklist
@@ -912,7 +912,7 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
 
     // Prevent entry in the Pick-lists
     if ( rReq.IsAPI() )
-        GetMedium()->SetUpdatePickList( sal_False );
+        GetMedium()->SetUpdatePickList( false );
     else if ( rReq.GetArgs() )
     {
         SFX_ITEMSET_GET( *rReq.GetArgs(), pPicklistItem, SfxBoolItem, SID_PICKLIST, false );

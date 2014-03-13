@@ -199,7 +199,7 @@ SfxDocumentInfoItem::SfxDocumentInfoItem()
     : SfxStringItem()
     , m_AutoloadDelay(0)
     , m_AutoloadURL()
-    , m_isAutoloadEnabled(sal_False)
+    , m_isAutoloadEnabled(false)
     , m_DefaultTarget()
     , m_TemplateName()
     , m_Author()
@@ -214,9 +214,9 @@ SfxDocumentInfoItem::SfxDocumentInfoItem()
     , m_Keywords()
     , m_Subject()
     , m_Title()
-    , m_bHasTemplate( sal_True )
-    , m_bDeleteUserData( sal_False )
-    , m_bUseUserData( sal_True )
+    , m_bHasTemplate( true )
+    , m_bDeleteUserData( false )
+    , m_bUseUserData( true )
 {
 }
 
@@ -225,7 +225,7 @@ SfxDocumentInfoItem::SfxDocumentInfoItem()
 SfxDocumentInfoItem::SfxDocumentInfoItem( const OUString& rFile,
         const uno::Reference<document::XDocumentProperties>& i_xDocProps,
         const uno::Sequence<document::CmisProperty>& i_cmisProps,
-        sal_Bool bIs )
+        bool bIs )
     : SfxStringItem( SID_DOCINFO, rFile )
     , m_AutoloadDelay( i_xDocProps->getAutoloadSecs() )
     , m_AutoloadURL( i_xDocProps->getAutoloadURL() )
@@ -245,8 +245,8 @@ SfxDocumentInfoItem::SfxDocumentInfoItem( const OUString& rFile,
                     i_xDocProps->getKeywords()) )
     , m_Subject( i_xDocProps->getSubject() )
     , m_Title( i_xDocProps->getTitle() )
-    , m_bHasTemplate( sal_True )
-    , m_bDeleteUserData( sal_False )
+    , m_bHasTemplate( true )
+    , m_bDeleteUserData( false )
     , m_bUseUserData( bIs )
 {
     try
@@ -446,22 +446,22 @@ void SfxDocumentInfoItem::UpdateDocumentInfo(
 }
 
 
-sal_Bool SfxDocumentInfoItem::IsDeleteUserData() const
+bool SfxDocumentInfoItem::IsDeleteUserData() const
 {
     return m_bDeleteUserData;
 }
 
-void SfxDocumentInfoItem::SetDeleteUserData( sal_Bool bSet )
+void SfxDocumentInfoItem::SetDeleteUserData( bool bSet )
 {
     m_bDeleteUserData = bSet;
 }
 
-sal_Bool SfxDocumentInfoItem::IsUseUserData() const
+bool SfxDocumentInfoItem::IsUseUserData() const
 {
     return m_bUseUserData;
 }
 
-void SfxDocumentInfoItem::SetUseUserData( sal_Bool bSet )
+void SfxDocumentInfoItem::SetUseUserData( bool bSet )
 {
     m_bUseUserData = bSet;
 }
@@ -764,8 +764,8 @@ namespace
 
 SfxDocumentPage::SfxDocumentPage(Window* pParent, const SfxItemSet& rItemSet)
     : SfxTabPage(pParent, "DocumentInfoPage", "sfx/ui/documentinfopage.ui", rItemSet)
-    , bEnableUseUserData( sal_False )
-    , bHandleDelete( sal_False )
+    , bEnableUseUserData( false )
+    , bHandleDelete( false )
 {
     get(m_pBmp, "icon");
     get(m_pNameED, "nameed");
@@ -828,7 +828,7 @@ IMPL_LINK_NOARG(SfxDocumentPage, DeleteHdl)
     const Time aTime( 0 );
     m_pTimeLogValFt->SetText( rLocaleWrapper.getDuration( aTime ) );
     m_pDocNoValFt->SetText(OUString('1'));
-    bHandleDelete = sal_True;
+    bHandleDelete = true;
     return 0;
 }
 
@@ -934,7 +934,7 @@ SfxTabPage* SfxDocumentPage::Create( Window* pParent, const SfxItemSet& rItemSet
 
 void SfxDocumentPage::EnableUseUserData()
 {
-    bEnableUseUserData = sal_True;
+    bEnableUseUserData = true;
     m_pUseUserDataCB->Show();
     m_pDeleteBtn->Show();
 }
@@ -977,7 +977,7 @@ sal_Bool SfxDocumentPage::FillItemSet( SfxItemSet& rSet )
             m_pInfoItem->SetUseUserData( TRISTATE_TRUE == m_pUseUserDataCB->GetState() );
             newItem.SetUseUserData( TRISTATE_TRUE == m_pUseUserDataCB->GetState() );
 
-            newItem.SetDeleteUserData( sal_True );
+            newItem.SetDeleteUserData( true );
             rSet.Put( newItem );
             bRet = sal_True;
         }
@@ -1123,7 +1123,7 @@ void SfxDocumentPage::Reset( const SfxItemSet& rSet )
     m_pUseUserDataCB->SetState( eState );
     m_pUseUserDataCB->SaveValue();
     m_pUseUserDataCB->Enable( bEnableUseUserData );
-    bHandleDelete = sal_False;
+    bHandleDelete = false;
     m_pDeleteBtn->Enable( bEnableUseUserData );
 }
 

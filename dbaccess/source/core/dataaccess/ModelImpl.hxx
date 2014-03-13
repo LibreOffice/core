@@ -476,13 +476,13 @@ public:
 public:
     // IMacroDocumentAccess overridables
     virtual sal_Int16 getCurrentMacroExecMode() const;
-    virtual sal_Bool setCurrentMacroExecMode( sal_uInt16 );
+    virtual bool setCurrentMacroExecMode( sal_uInt16 );
     virtual OUString getDocumentLocation() const;
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage > getZipStorageToSign();
-    virtual sal_Bool documentStorageHasMacros() const;
+    virtual bool documentStorageHasMacros() const;
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::document::XEmbeddedScripts > getEmbeddedDocumentScripts() const;
     virtual sal_Int16 getScriptingSignatureState();
-    virtual sal_Bool hasTrustedScriptingSignature( sal_Bool bAllowUIToAddAuthor );
+    virtual bool hasTrustedScriptingSignature( bool bAllowUIToAddAuthor );
     virtual void showBrokenSignatureWarning( const ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionHandler >& _rxInteraction ) const;
 
     // IModifiableDocument

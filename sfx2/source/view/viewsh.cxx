@@ -901,7 +901,7 @@ void SfxViewShell::UIActivating( SfxInPlaceClient* /*pClient*/ )
         xParentFrame->setActiveFrame( xOwnFrame );
 
     pFrame->GetBindings().HidePopups(true);
-    pFrame->GetDispatcher()->Update_Impl( sal_True );
+    pFrame->GetDispatcher()->Update_Impl( true );
 }
 
 
@@ -909,7 +909,7 @@ void SfxViewShell::UIActivating( SfxInPlaceClient* /*pClient*/ )
 void SfxViewShell::UIDeactivated( SfxInPlaceClient* /*pClient*/ )
 {
     if ( !pFrame->GetFrame().IsClosing_Impl() || SfxViewFrame::Current() != pFrame )
-        pFrame->GetDispatcher()->Update_Impl( sal_True );
+        pFrame->GetDispatcher()->Update_Impl( true );
     pFrame->GetBindings().HidePopups(false);
 
     pFrame->GetBindings().InvalidateAll(true);

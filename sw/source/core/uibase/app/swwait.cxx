@@ -51,7 +51,7 @@ void SwWait::EnterWaitAndLockDispatcher()
             SfxDispatcher* pDispatcher = pFrame->GetDispatcher();
             if ( !pDispatcher->IsLocked() )
             {
-                pDispatcher->Lock( sal_True );
+                pDispatcher->Lock( true );
                 mpLockedDispatchers.insert( pDispatcher );
             }
         }
@@ -73,7 +73,7 @@ void SwWait::LeaveWaitAndUnlockDispatcher()
             if ( mpLockedDispatchers.find( pDispatcher ) != mpLockedDispatchers.end() )
             {
                 mpLockedDispatchers.erase( pDispatcher );
-                pDispatcher->Lock( sal_False );
+                pDispatcher->Lock( false );
             }
         }
 

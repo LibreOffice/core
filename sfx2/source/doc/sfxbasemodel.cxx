@@ -3100,7 +3100,7 @@ void SfxBaseModel::impl_store(  const   OUString&                   sURL        
 
                     task::ErrorCodeRequest aErrorCode;
                     aErrorCode.ErrCode = nErrCode;
-                    SfxMedium::CallApproveHandler( xHandler, makeAny( aErrorCode ), sal_False );
+                    SfxMedium::CallApproveHandler( xHandler, makeAny( aErrorCode ), false );
                 }
             }
 
@@ -3747,7 +3747,7 @@ void SAL_CALL SfxBaseModel::loadFromStorage( const Reference< embed::XStorage >&
     pMedium->GetItemSet()->Put( aSet );
 
     // allow to use an interactionhandler (if there is one)
-    pMedium->UseInteractionHandler( sal_True );
+    pMedium->UseInteractionHandler( true );
 
     SFX_ITEMSET_ARG( &aSet, pTemplateItem, SfxBoolItem, SID_TEMPLATE, false);
     sal_Bool bTemplate = pTemplateItem && pTemplateItem->GetValue();
@@ -3807,7 +3807,7 @@ void SAL_CALL SfxBaseModel::storeToStorage( const Reference< embed::XStorage >& 
 
         // BaseURL is part of the ItemSet
         SfxMedium aMedium( xStorage, OUString(), &aSet );
-        aMedium.CanDisposeStorage_Impl( sal_False );
+        aMedium.CanDisposeStorage_Impl( false );
         if ( aMedium.GetFilter() )
         {
             // storing without a valid filter will often crash

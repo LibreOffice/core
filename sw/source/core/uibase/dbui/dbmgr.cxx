@@ -950,7 +950,7 @@ sal_Bool SwNewDBMgr::MergeMailFiles(SwWrtShell* pSourceShell,
             SfxViewFrame* pViewFrm = SfxViewFrame::GetFirst(pSourceDocSh);
             while (pViewFrm)
             {
-                pViewFrm->GetDispatcher()->Lock(sal_True);
+                pViewFrm->GetDispatcher()->Lock(true);
                 pViewFrm = SfxViewFrame::GetNext(*pViewFrm, pSourceDocSh);
             }
             sal_uLong nDocNo = 1;
@@ -1337,7 +1337,7 @@ sal_Bool SwNewDBMgr::MergeMailFiles(SwWrtShell* pSourceShell,
             pViewFrm = SfxViewFrame::GetFirst(pSourceDocSh);
             while (pViewFrm)
             {
-                pViewFrm->GetDispatcher()->Lock(sal_False);
+                pViewFrm->GetDispatcher()->Lock(false);
                 pViewFrm = SfxViewFrame::GetNext(*pViewFrm, pSourceDocSh);
             }
 

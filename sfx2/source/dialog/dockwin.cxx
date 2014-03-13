@@ -1840,20 +1840,20 @@ void SfxDockingWindow::Reappear_Impl()
     }
 }
 
-sal_Bool SfxDockingWindow::IsAutoHide_Impl() const
+bool SfxDockingWindow::IsAutoHide_Impl() const
 {
     if ( pImp->pSplitWin )
         return !pImp->pSplitWin->IsFadeIn();
     else
-        return sal_False;
+        return false;
 }
 
-void SfxDockingWindow::AutoShow( sal_Bool bShow )
+void SfxDockingWindow::AutoShow( bool bShow )
 {
     AutoShow_Impl(bShow);
 }
 
-void SfxDockingWindow::AutoShow_Impl( sal_Bool bShow )
+void SfxDockingWindow::AutoShow_Impl( bool bShow )
 {
     if ( pImp->pSplitWin )
     {
@@ -1864,7 +1864,7 @@ void SfxDockingWindow::AutoShow_Impl( sal_Bool bShow )
     }
 }
 
-void SfxDockingWindow::FadeIn( sal_Bool /*bFadeIn*/ )
+void SfxDockingWindow::FadeIn( bool /*bFadeIn*/ )
 {
 }
 

@@ -502,7 +502,7 @@ void StyleSelect( ListBox& rLbStyle, ScDocument* pDoc, SvxFontPrevWindow& rWdPre
                 0L );
 
         if (bLocked)
-            pDisp->Lock(sal_True);
+            pDisp->Lock(true);
 
         // Find the new style and add it into the style list boxes
         SfxStyleSheetIterator aStyleIter( pDoc->GetStyleSheetPool(), SFX_STYLE_FAMILY_PARA );

@@ -173,7 +173,7 @@ void SfxViewFrame::Exec_Impl(SfxRequest &rReq )
             {
                 // First, make the floats viewable
                 pWorkWin->MakeChildrenVisible_Impl( bShow );
-                GetDispatcher()->Update_Impl( sal_True );
+                GetDispatcher()->Update_Impl( true );
 
                 // Then view it
                 GetBindings().HidePopups( !bShow );

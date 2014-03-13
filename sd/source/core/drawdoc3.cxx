@@ -200,7 +200,7 @@ SdDrawDocument* SdDrawDocument::OpenBookmarkDoc(SfxMedium& rMedium)
     const SfxFilter* pFilter = rMedium.GetFilter();
     if ( !pFilter )
     {
-        rMedium.UseInteractionHandler( sal_True );
+        rMedium.UseInteractionHandler( true );
         SFX_APP()->GetFilterMatcher().GuessFilter( rMedium, &pFilter );
     }
 

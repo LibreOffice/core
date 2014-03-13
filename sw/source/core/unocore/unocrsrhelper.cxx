@@ -1011,7 +1011,7 @@ void InsertFile(SwUnoCrsr* pUnoCrsr, const OUString& rURL,
         if( xInputStream.is() && !xReadStorage.is())
         {
             pMed = new SfxMedium;
-            pMed->setStreamToLoadFrom(xInputStream, sal_True );
+            pMed->setStreamToLoadFrom(xInputStream, true );
         }
         else
             pMed = xReadStorage.is() ?
@@ -1034,7 +1034,7 @@ void InsertFile(SwUnoCrsr* pUnoCrsr, const OUString& rURL,
             if( xInputStream.is() && !xReadStorage.is())
             {
                 pMed = new SfxMedium;
-                pMed->setStreamToLoadFrom(xInputStream, sal_True );
+                pMed->setStreamToLoadFrom(xInputStream, true );
                 pMed->SetFilter( pFilter );
             }
             else

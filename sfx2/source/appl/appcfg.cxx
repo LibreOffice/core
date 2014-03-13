@@ -527,7 +527,7 @@ void SfxApplication::SetOptions_Impl( const SfxItemSet& rSet )
         {
             // update all "final" dispatchers
             if ( !pCurrViewFrame->GetActiveChildFrame_Impl() )
-                pCurrViewFrame->GetDispatcher()->Update_Impl(sal_True);
+                pCurrViewFrame->GetDispatcher()->Update_Impl(true);
             pCurrViewFrame = SfxViewFrame::GetNext(*pCurrViewFrame);
         }
     }

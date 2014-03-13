@@ -699,8 +699,8 @@ void SAL_CALL SfxDispatchController_Impl::dispatch( const ::com::sun::star::util
                 if ( !pDispatcher->IsLocked( GetId() ) )
                 {
                     const SfxSlot *pSlot = 0;
-                    if ( pDispatcher->GetShellAndSlot_Impl( GetId(), &pShell, &pSlot, sal_False,
-                                                            SFX_CALLMODE_MODAL==(nCall&SFX_CALLMODE_MODAL), sal_False ) )
+                    if ( pDispatcher->GetShellAndSlot_Impl( GetId(), &pShell, &pSlot, false,
+                                                            SFX_CALLMODE_MODAL==(nCall&SFX_CALLMODE_MODAL), false ) )
                     {
                         if ( bMasterSlave )
                         {

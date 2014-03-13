@@ -396,7 +396,7 @@ bool SvxXMLXTableImport::load( const OUString &rPath, const OUString &rReferer,
 
             if( aMedium.IsStorage() )
             {
-                uno::Reference < embed::XStorage > xMediumStorage( aMedium.GetStorage( sal_False ), uno::UNO_QUERY_THROW );
+                uno::Reference < embed::XStorage > xMediumStorage( aMedium.GetStorage( false ), uno::UNO_QUERY_THROW );
                 openStorageStream( &aParserInput, &pGraphicHelper, xMediumStorage );
             }
             else

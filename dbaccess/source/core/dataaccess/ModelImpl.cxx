@@ -1292,10 +1292,10 @@ sal_Int16 ODatabaseModelImpl::getCurrentMacroExecMode() const
     return nCurrentMode;
 }
 
-sal_Bool ODatabaseModelImpl::setCurrentMacroExecMode( sal_uInt16 nMacroMode )
+bool ODatabaseModelImpl::setCurrentMacroExecMode( sal_uInt16 nMacroMode )
 {
     m_aMediaDescriptor.put( "MacroExecutionMode", nMacroMode );
-    return sal_True;
+    return true;
 }
 
 OUString ODatabaseModelImpl::getDocumentLocation() const
@@ -1338,7 +1338,7 @@ ODatabaseModelImpl::EmbeddedMacros ODatabaseModelImpl::determineEmbeddedMacros()
     return *m_aEmbeddedMacros;
 }
 
-sal_Bool ODatabaseModelImpl::documentStorageHasMacros() const
+bool ODatabaseModelImpl::documentStorageHasMacros() const
 {
     const_cast< ODatabaseModelImpl* >( this )->determineEmbeddedMacros();
     return ( *m_aEmbeddedMacros != eNoMacros );
@@ -1355,10 +1355,10 @@ sal_Int16 ODatabaseModelImpl::getScriptingSignatureState()
     return SIGNATURESTATE_NOSIGNATURES;
 }
 
-sal_Bool ODatabaseModelImpl::hasTrustedScriptingSignature( sal_Bool /*bAllowUIToAddAuthor*/ )
+bool ODatabaseModelImpl::hasTrustedScriptingSignature( bool /*bAllowUIToAddAuthor*/ )
 {
     // no support for signatures at the moment
-    return sal_False;
+    return false;
 }
 
 void ODatabaseModelImpl::showBrokenSignatureWarning( const Reference< XInteractionHandler >& /*_rxInteraction*/ ) const

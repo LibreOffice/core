@@ -2744,7 +2744,7 @@ void SAL_CALL SlideshowImpl::activate() throw (RuntimeException, std::exception)
                 if( pDispatcher )
                 {
                     // filter all forbiden slots
-                    pDispatcher->SetSlotFilter( sal_True, sizeof(pAllowed) / sizeof(sal_uInt16), pAllowed );
+                    pDispatcher->SetSlotFilter( true, sizeof(pAllowed) / sizeof(sal_uInt16), pAllowed );
                 }
 
                 if( getBindings() )

@@ -1281,7 +1281,7 @@ void SfxBaseController::ConnectSfxFrame_Impl( const ConnectSfxFrame i_eConnect )
             pEditWin->Show();
 
         if ( SfxViewFrame::Current() == pViewFrame )
-            pViewFrame->GetDispatcher()->Update_Impl( sal_True );
+            pViewFrame->GetDispatcher()->Update_Impl( true );
 
         Window* pFrameWin = &pViewFrame->GetWindow();
         if ( pFrameWin != &pViewFrame->GetFrame().GetWindow() )
@@ -1299,9 +1299,9 @@ void SfxBaseController::ConnectSfxFrame_Impl( const ConnectSfxFrame i_eConnect )
             if ( !rFrame.IsMarkedHidden_Impl() )
             {
                 if ( rDoc.IsHelpDocument() || ( nPluginMode == 2 ) )
-                    pViewFrame->GetDispatcher()->HideUI( sal_True );
+                    pViewFrame->GetDispatcher()->HideUI( true );
                 else
-                    pViewFrame->GetDispatcher()->HideUI( sal_False );
+                    pViewFrame->GetDispatcher()->HideUI( false );
 
                 if ( rFrame.IsInPlace() )
                     pViewFrame->LockAdjustPosSizePixel();

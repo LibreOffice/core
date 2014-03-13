@@ -285,7 +285,7 @@ void SwInputWindow::ShowWin()
         // For input cut the UserInterface
 
         pView->GetEditWin().LockKeyInput(sal_True);
-        pView->GetViewFrame()->GetDispatcher()->Lock(sal_True);
+        pView->GetViewFrame()->GetDispatcher()->Lock(true);
         pWrtShell->Push();
     }
     ToolBox::Show();
@@ -370,7 +370,7 @@ void SwInputWindow::Click( )
 
 void  SwInputWindow::ApplyFormula()
 {
-    pView->GetViewFrame()->GetDispatcher()->Lock(sal_False);
+    pView->GetViewFrame()->GetDispatcher()->Lock(false);
     pView->GetEditWin().LockKeyInput(sal_False);
     CleanupUglyHackWithUndo();
     pWrtShell->Pop( sal_False );
@@ -393,7 +393,7 @@ void  SwInputWindow::CancelFormula()
 {
     if(pView)
     {
-        pView->GetViewFrame()->GetDispatcher()->Lock( sal_False );
+        pView->GetViewFrame()->GetDispatcher()->Lock( false );
         pView->GetEditWin().LockKeyInput(sal_False);
         CleanupUglyHackWithUndo();
         pWrtShell->Pop( sal_False );
@@ -624,7 +624,7 @@ SwInputChild::SwInputChild(Window* _pParent,
 SwInputChild::~SwInputChild()
 {
     if(pDispatch)
-        pDispatch->Lock(sal_False);
+        pDispatch->Lock(false);
 }
 
 SfxChildWinInfo SwInputChild::GetInfo() const

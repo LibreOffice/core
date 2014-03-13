@@ -194,7 +194,7 @@ SfxRequest::SfxRequest
     pImp->nCallMode = SFX_CALLMODE_SYNCHRON;
     pImp->bUseTarget = sal_False;
     pImp->pViewFrame = pViewFrame;
-    if( pImp->pViewFrame->GetDispatcher()->GetShellAndSlot_Impl( nSlotId, &pImp->pShell, &pImp->pSlot, sal_True, sal_True ) )
+    if( pImp->pViewFrame->GetDispatcher()->GetShellAndSlot_Impl( nSlotId, &pImp->pShell, &pImp->pSlot, true, true ) )
     {
         pImp->SetPool( &pImp->pShell->GetPool() );
         pImp->xRecorder = SfxRequest::GetMacroRecorder( pViewFrame );

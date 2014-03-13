@@ -48,14 +48,14 @@ class SFX2_DLLPUBLIC SfxDocumentTemplates
 private:
     SfxDocTemplate_ImplRef  pImp;
 
-    SAL_DLLPRIVATE sal_Bool CopyOrMove( sal_uInt16 nTargetRegion, sal_uInt16 nTargetIdx,
-                                    sal_uInt16 nSourceRegion, sal_uInt16 nSourceIdx, sal_Bool bMove );
+    SAL_DLLPRIVATE bool CopyOrMove( sal_uInt16 nTargetRegion, sal_uInt16 nTargetIdx,
+                                    sal_uInt16 nSourceRegion, sal_uInt16 nSourceIdx, bool bMove );
 public:
                         SfxDocumentTemplates();
                         SfxDocumentTemplates(const SfxDocumentTemplates &);
                         ~SfxDocumentTemplates();
 
-    sal_Bool                IsConstructed() { return pImp != NULL; }
+    bool                IsConstructed() { return pImp != NULL; }
     void                Construct();
 
     const SfxDocumentTemplates &operator=(const SfxDocumentTemplates &);
@@ -81,18 +81,18 @@ public:
                             int nCount,
                             const OUString& rString);
 
-    sal_Bool            Copy(sal_uInt16 nTargetRegion,
+    bool            Copy(sal_uInt16 nTargetRegion,
                          sal_uInt16 nTargetIdx,
                          sal_uInt16 nSourceRegion,
                          sal_uInt16 nSourceIdx);
-    sal_Bool            Move(sal_uInt16 nTargetRegion,
+    bool            Move(sal_uInt16 nTargetRegion,
                          sal_uInt16 nTargetIdx,
                          sal_uInt16 nSourceRegion,
                          sal_uInt16 nSourceIdx);
-    sal_Bool            Delete(sal_uInt16 nRegion, sal_uInt16 nIdx);
-    sal_Bool            InsertDir(const OUString &rText, sal_uInt16 nRegion);
+    bool            Delete(sal_uInt16 nRegion, sal_uInt16 nIdx);
+    bool            InsertDir(const OUString &rText, sal_uInt16 nRegion);
 
-    sal_Bool InsertTemplate (sal_uInt16 nSourceRegion, sal_uInt16 nIdx, const OUString &rName, const OUString &rPath);
+    bool InsertTemplate (sal_uInt16 nSourceRegion, sal_uInt16 nIdx, const OUString &rName, const OUString &rPath);
 
     /** Change the name of an entry or a directory
 
@@ -107,13 +107,13 @@ public:
             sal_True if the action could be performed, sal_False otherwise
 
     */
-    sal_Bool            SetName(const OUString &rName, sal_uInt16 nRegion, sal_uInt16 nIdx);
+    bool            SetName(const OUString &rName, sal_uInt16 nRegion, sal_uInt16 nIdx);
 
-    sal_Bool            CopyTo(sal_uInt16 nRegion, sal_uInt16 nIdx, const OUString &rName) const;
-    sal_Bool            CopyFrom(sal_uInt16 nRegion, sal_uInt16 nIdx, OUString &rName);
+    bool            CopyTo(sal_uInt16 nRegion, sal_uInt16 nIdx, const OUString &rName) const;
+    bool            CopyFrom(sal_uInt16 nRegion, sal_uInt16 nIdx, OUString &rName);
 
-    sal_Bool            GetFull( const OUString& rRegion, const OUString& rName, OUString& rPath );
-    sal_Bool            GetLogicNames( const OUString& rPath, OUString& rRegion, OUString& rName ) const;
+    bool            GetFull( const OUString& rRegion, const OUString& rName, OUString& rPath );
+    bool            GetLogicNames( const OUString& rPath, OUString& rRegion, OUString& rName ) const;
 
     /** updates the configuration where the document templates structure is stored.
 
@@ -130,7 +130,7 @@ public:
         <br/>
         So set <arg>_bSmart</arg> to <TRUE/> to do a check for necessity first.
     */
-    void            Update( sal_Bool _bSmart = sal_True );
+    void            Update( bool _bSmart = true );
 };
 
 #endif // #ifndef _SFXDOCTEMPL_HXX

@@ -193,7 +193,7 @@ OUString SAL_CALL SmFilterDetect::detect( Sequence< PropertyValue >& lDescriptor
             if ( bIsStorage )
             {
                 //TODO/LATER: factor this out!
-                Reference < embed::XStorage > xStorage = aMedium.GetStorage( sal_False );
+                Reference < embed::XStorage > xStorage = aMedium.GetStorage( false );
                 if ( aMedium.GetLastStorageCreationState() != ERRCODE_NONE )
                 {
                     // error during storage creation means _here_ that the medium

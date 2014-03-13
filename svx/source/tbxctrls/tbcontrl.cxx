@@ -404,7 +404,7 @@ void SvxStyleBox_Impl::Select()
                 if ( pChildWin && pChildWin->GetWindow() )
                 {
                     static_cast< SfxTemplateDialogWrapper* >( pChildWin )->SetParagraphFamily();
-                    static_cast< SfxDockingWindow* >( pChildWin->GetWindow() )->AutoShow( sal_True );
+                    static_cast< SfxDockingWindow* >( pChildWin->GetWindow() )->AutoShow( true );
                     Application::PostUserEvent(
                         STATIC_LINK( 0, SvxStyleBox_Impl, FocusHdl_Impl ), pChildWin->GetWindow() );
                 }

@@ -436,7 +436,7 @@ sal_Bool ODBFilter::implImport( const Sequence< PropertyValue >& rDescriptor )
         uno::Reference< embed::XStorage > xStorage;
         try
         {
-            xStorage.set( pMedium->GetStorage( sal_False ), UNO_QUERY_THROW );
+            xStorage.set( pMedium->GetStorage( false ), UNO_QUERY_THROW );
         }
         catch (const Exception&)
         {

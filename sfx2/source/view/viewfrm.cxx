@@ -481,7 +481,7 @@ void SfxViewFrame::ExecReload_Impl( SfxRequest& rReq )
 
                     pMed->CompleteReOpen();
                     if ( nOpenMode & STREAM_WRITE )
-                        pMed->LockOrigFileOnDemand( sal_False, sal_True );
+                        pMed->LockOrigFileOnDemand( false, true );
 
                     // LockOrigFileOnDemand might set the readonly flag itself, it should be set back
                     pMed->GetItemSet()->Put( SfxBoolItem( SID_DOC_READONLY, !( nOpenMode & STREAM_WRITE ) ) );
@@ -762,7 +762,7 @@ void SfxViewFrame::ExecReload_Impl( SfxRequest& rReq )
                     {
                         // back to old medium
                         pMedium->ReOpen();
-                        pMedium->LockOrigFileOnDemand( sal_False, sal_True );
+                        pMedium->LockOrigFileOnDemand( false, true );
 
                         xOldObj->DoSaveCompleted( pMedium );
                     }
@@ -1143,7 +1143,7 @@ sal_Bool SfxViewFrame::Close()
 
     // Since the Dispatcher is emptied, it can not be used in any reasnable
     // manner, thus it is better to let the dispatcher be.
-    GetDispatcher()->Lock(sal_True);
+    GetDispatcher()->Lock(true);
     delete this;
 
     return sal_True;
@@ -1305,7 +1305,7 @@ void SfxViewFrame::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
                     // result!
 
                     if ( pDispat->IsUpdated_Impl() )
-                        pDispat->Update_Impl(sal_True);
+                        pDispat->Update_Impl(true);
                 }
 
                 Enable( !xObjSh->IsInModalMode() );
@@ -1382,7 +1382,7 @@ void SfxViewFrame::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
             case SFX_EVENT_TOGGLEFULLSCREENMODE:
             {
                 if ( GetFrame().OwnsBindings_Impl() )
-                    GetBindings().GetDispatcher_Impl()->Update_Impl( sal_True );
+                    GetBindings().GetDispatcher_Impl()->Update_Impl( true );
                 break;
             }
         }
@@ -1816,7 +1816,7 @@ void SfxViewFrame::MakeActive_Impl( sal_Bool bGrabFocus )
                 {
                     GetBindings().SetDispatcher( GetDispatcher() );
                     GetBindings().SetActiveFrame( ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame > () );
-                    GetDispatcher()->Update_Impl( sal_False );
+                    GetDispatcher()->Update_Impl( false );
                 }
             }
         }
@@ -2935,7 +2935,7 @@ void SfxViewFrame::MiscExec_Impl( SfxRequest& rReq )
             else
                 rReq.Ignore();
 
-            GetDispatcher()->Update_Impl( sal_True );
+            GetDispatcher()->Update_Impl( true );
             break;
         }
     }
@@ -3127,7 +3127,7 @@ void SfxViewFrame::ChildWindowExecute( SfxRequest &rReq )
 
     sal_Bool bHasChild = HasChildWindow(nSID);
     sal_Bool bShow = pShowItem ? pShowItem->GetValue() : !bHasChild;
-    GetDispatcher()->Update_Impl( sal_True );
+    GetDispatcher()->Update_Impl( true );
 
     // Perform action.
     if ( !pShowItem || bShow != bHasChild )
@@ -3272,7 +3272,7 @@ void SfxViewFrame::ShowChildWindow( sal_uInt16 nId, sal_Bool bVisible )
     SfxWorkWindow* pWork = GetWorkWindow_Impl( nId );
     if ( pWork )
     {
-        GetDispatcher()->Update_Impl(sal_True);
+        GetDispatcher()->Update_Impl(true);
         pWork->ShowChildWindow_Impl(nId, bVisible, sal_True );
     }
 }

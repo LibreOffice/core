@@ -231,7 +231,7 @@ IMPL_LINK( ScLinkedAreaDlg, DialogClosedHdl, sfx2::FileDialogHelper*, _pFileDlg 
         if (pSourceShell)
             pSourceShell->DoClose();        // deleted when assigning aSourceRef
 
-        pMed->UseInteractionHandler( sal_True );    // to enable the filter options dialog
+        pMed->UseInteractionHandler( true );    // to enable the filter options dialog
 
         pSourceShell = new ScDocShell;
         aSourceRef = pSourceShell;

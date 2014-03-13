@@ -71,7 +71,7 @@ public:
     OUString        GetFactoryURL() const;  // shortcut for "private:factory/GetShortName()"
     OUString        GetFactoryName() const { return OUString::createFromAscii(pShortName); }
     OUString        GetModuleName() const;
-    SfxFilterContainer *GetFilterContainer( sal_Bool bForceLoad = sal_True) const;
+    SfxFilterContainer *GetFilterContainer( bool bForceLoad = true) const;
 
     // Views
     void            RegisterViewFactory(SfxViewFactory &rFactory);

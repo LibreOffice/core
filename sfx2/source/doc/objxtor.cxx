@@ -373,8 +373,8 @@ SfxObjectShell::~SfxObjectShell()
     pImp->pBaseModel.set( NULL );
 
     // don't call GetStorage() here, in case of Load Failure it's possible that a storage was never assigned!
-    if ( pMedium && pMedium->HasStorage_Impl() && pMedium->GetStorage( sal_False ) == pImp->m_xDocStorage )
-        pMedium->CanDisposeStorage_Impl( sal_False );
+    if ( pMedium && pMedium->HasStorage_Impl() && pMedium->GetStorage( false ) == pImp->m_xDocStorage )
+        pMedium->CanDisposeStorage_Impl( false );
 
     if ( pImp->mpObjectContainer )
     {

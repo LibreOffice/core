@@ -103,7 +103,7 @@ void SfxApplication::Deinitialize()
     pAppData_Impl->pAppDispat->Pop( *this, SFX_SHELL_POP_UNTIL );
     pAppData_Impl->pAppDispat->Flush();
     pAppData_Impl->bDowning = sal_True;
-    pAppData_Impl->pAppDispat->DoDeactivate_Impl( sal_True, NULL );
+    pAppData_Impl->pAppDispat->DoDeactivate_Impl( true, NULL );
 
     // call derived application-exit
     Exit();

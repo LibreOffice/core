@@ -363,7 +363,7 @@ void SfxApplication::SetViewFrame_Impl( SfxViewFrame *pFrame )
             {
                 SfxDispatcher* pDisp = pAppData_Impl->pViewFrame->GetDispatcher();
                 pDisp->Flush();
-                pDisp->Update_Impl(sal_True);
+                pDisp->Update_Impl(true);
             }
         }
     }

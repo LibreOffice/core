@@ -337,7 +337,7 @@ void SfxFrame::SetPresentationMode( sal_Bool bSet )
     if ( GetWorkWindow_Impl() )
         GetWorkWindow_Impl()->SetDockingAllowed( !bSet );
     if ( GetCurrentViewFrame() )
-        GetCurrentViewFrame()->GetDispatcher()->Update_Impl( sal_True );
+        GetCurrentViewFrame()->GetDispatcher()->Update_Impl( true );
 }
 
 SystemWindow* SfxFrame::GetSystemWindow() const

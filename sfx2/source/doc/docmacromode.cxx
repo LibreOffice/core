@@ -98,7 +98,7 @@ namespace sfx2
             ErrorCodeRequest aErrorCodeRequest;
             aErrorCodeRequest.ErrCode = nSfxErrorCode;
 
-            SfxMedium::CallApproveHandler( rxHandler, makeAny( aErrorCodeRequest ), sal_False );
+            SfxMedium::CallApproveHandler( rxHandler, makeAny( aErrorCodeRequest ), false );
             rbAlreadyShown = sal_True;
         }
 
@@ -124,7 +124,7 @@ namespace sfx2
         {
             DocumentMacroConfirmationRequest aRequest;
             aRequest.DocumentURL = rDocumentLocation;
-            return SfxMedium::CallApproveHandler( rxHandler, makeAny( aRequest ), sal_True );
+            return SfxMedium::CallApproveHandler( rxHandler, makeAny( aRequest ), true );
         }
     }
 
@@ -143,21 +143,21 @@ namespace sfx2
     }
 
 
-    sal_Bool DocumentMacroMode::allowMacroExecution()
+    bool DocumentMacroMode::allowMacroExecution()
     {
         m_pData->m_rDocumentAccess.setCurrentMacroExecMode( MacroExecMode::ALWAYS_EXECUTE_NO_WARN );
-        return sal_True;
+        return true;
     }
 
 
-    sal_Bool DocumentMacroMode::disallowMacroExecution()
+    bool DocumentMacroMode::disallowMacroExecution()
     {
         m_pData->m_rDocumentAccess.setCurrentMacroExecMode( MacroExecMode::NEVER_EXECUTE );
-        return sal_False;
+        return false;
     }
 
 
-    sal_Bool DocumentMacroMode::adjustMacroMode( const Reference< XInteractionHandler >& rxInteraction )
+    bool DocumentMacroMode::adjustMacroMode( const Reference< XInteractionHandler >& rxInteraction )
     {
         sal_uInt16 nMacroExecutionMode = m_pData->m_rDocumentAccess.getCurrentMacroExecMode();
 
@@ -209,10 +209,10 @@ namespace sfx2
         }
 
         if ( nMacroExecutionMode == MacroExecMode::NEVER_EXECUTE )
-            return sal_False;
+            return false;
 
         if ( nMacroExecutionMode == MacroExecMode::ALWAYS_EXECUTE_NO_WARN )
-            return sal_True;
+            return true;
 
         try
         {
@@ -309,15 +309,15 @@ namespace sfx2
     }
 
 
-    sal_Bool DocumentMacroMode::isMacroExecutionDisallowed() const
+    bool DocumentMacroMode::isMacroExecutionDisallowed() const
     {
         return m_pData->m_rDocumentAccess.getCurrentMacroExecMode() == MacroExecMode::NEVER_EXECUTE;
     }
 
 
-    sal_Bool DocumentMacroMode::containerHasBasicMacros( const Reference< XLibraryContainer >& xContainer )
+    bool DocumentMacroMode::containerHasBasicMacros( const Reference< XLibraryContainer >& xContainer )
     {
-        sal_Bool bHasMacroLib = sal_False;
+        bool bHasMacroLib = false;
         try
         {
             if ( xContainer.is() )
@@ -327,7 +327,7 @@ namespace sfx2
                 // if there are libraries except the "Standard" library
                 // we assume that they are not empty (because they have been created by the user)
                 if ( !xContainer->hasElements() )
-                    bHasMacroLib = sal_False;
+                    bHasMacroLib = false;
                 else
                 {
                     OUString aStdLibName( "Standard" );
@@ -345,10 +345,10 @@ namespace sfx2
                                 Any aAny = xContainer->getByName( aStdLibName );
                                 aAny >>= xLib;
                                 if ( xLib.is() && xLib->hasElements() )
-                                    return sal_True;
+                                    return true;
                             }
                             else
-                                return sal_True;
+                                return true;
                         }
                     }
                 }
@@ -362,9 +362,9 @@ namespace sfx2
     }
 
 
-    sal_Bool DocumentMacroMode::hasMacroLibrary() const
+    bool DocumentMacroMode::hasMacroLibrary() const
     {
-        sal_Bool bHasMacroLib = sal_False;
+        bool bHasMacroLib = false;
 #ifndef DISABLE_SCRIPTING
         try
         {
@@ -384,9 +384,9 @@ namespace sfx2
     }
 
 
-    sal_Bool DocumentMacroMode::storageHasMacros( const Reference< XStorage >& rxStorage )
+    bool DocumentMacroMode::storageHasMacros( const Reference< XStorage >& rxStorage )
     {
-        sal_Bool bHasMacros = sal_False;
+        bool bHasMacros = false;
         if ( rxStorage.is() )
         {
             try
@@ -411,9 +411,9 @@ namespace sfx2
     }
 
 
-    sal_Bool DocumentMacroMode::checkMacrosOnLoading( const Reference< XInteractionHandler >& rxInteraction )
+    bool DocumentMacroMode::checkMacrosOnLoading( const Reference< XInteractionHandler >& rxInteraction )
     {
-        sal_Bool bAllow = sal_False;
+        bool bAllow = false;
         if ( SvtSecurityOptions().IsMacroDisabled() )
         {
             // no macro should be executed at all

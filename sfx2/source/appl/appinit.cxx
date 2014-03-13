@@ -273,7 +273,7 @@ bool SfxApplication::Initialize_Impl()
     // App-Dispatcher aufbauen
     pAppData_Impl->pAppDispat->Push(*this);
     pAppData_Impl->pAppDispat->Flush();
-    pAppData_Impl->pAppDispat->DoActivate_Impl( sal_True, NULL );
+    pAppData_Impl->pAppDispat->DoActivate_Impl( true, NULL );
 
     {
         SolarMutexGuard aGuard;

@@ -213,7 +213,7 @@ OUString SAL_CALL SdFilterDetect::detect( Sequence< beans::PropertyValue >& lDes
     {
         // ctor of SfxMedium uses owner transition of ItemSet
         SfxMedium aMedium( aURL, bWasReadOnly ? STREAM_STD_READ : STREAM_STD_READWRITE, NULL, pSet );
-        aMedium.UseInteractionHandler( sal_True );
+        aMedium.UseInteractionHandler( true );
         if ( !aPreselectedFilterName.isEmpty() )
             pFilter = SfxFilter::GetFilterByName( aPreselectedFilterName );
         else if (!aTypeName.isEmpty())
@@ -237,7 +237,7 @@ OUString SAL_CALL SdFilterDetect::detect( Sequence< beans::PropertyValue >& lDes
                 {
                     // PowerPoint needs to be detected via StreamName, all other storage based formats are our own and can
                     // be detected by the ClipboardId, so except for the PPT filter all filters must have a ClipboardId set
-                    Reference < embed::XStorage > xStorage = aMedium.GetStorage( sal_False );
+                    Reference < embed::XStorage > xStorage = aMedium.GetStorage( false );
 
                     //TODO/LATER: move error handling to central place! (maybe even complete own filters)
                     if ( aMedium.GetLastStorageCreationState() != ERRCODE_NONE )

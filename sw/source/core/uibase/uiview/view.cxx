@@ -1731,7 +1731,7 @@ bool SwView::PrepareClose( sal_Bool bUI )
     SfxViewFrame* pVFrame = GetViewFrame();
     pVFrame->SetChildWindow( SwInputChild::GetChildWindowId(), sal_False );
     if( pVFrame->GetDispatcher()->IsLocked() )
-        pVFrame->GetDispatcher()->Lock(sal_False);
+        pVFrame->GetDispatcher()->Lock(false);
 
     if ( m_pFormShell && !m_pFormShell->PrepareClose( bUI ) )
     {

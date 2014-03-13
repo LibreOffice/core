@@ -516,7 +516,7 @@ sal_Bool SfxObjectShell::DoInitNew( SfxMedium* pMed )
         pMedium = new SfxMedium;
     }
 
-    pMedium->CanDisposeStorage_Impl( sal_True );
+    pMedium->CanDisposeStorage_Impl( true );
 
     if ( InitNew( pMed ? pMed->GetStorage() : uno::Reference < embed::XStorage >() ) )
     {
@@ -576,7 +576,7 @@ sal_Bool SfxObjectShell::ImportFromGeneratedStream_Impl(
         SfxAllItemSet aSet( SFX_APP()->GetPool() );
         TransformParameters( SID_OPENDOC, rMediaDescr, aSet );
         pMedium->GetItemSet()->Put( aSet );
-        pMedium->CanDisposeStorage_Impl( sal_False );
+        pMedium->CanDisposeStorage_Impl( false );
         uno::Reference<text::XTextRange> xInsertTextRange;
         for (sal_Int32 i = 0; i < rMediaDescr.getLength(); ++i)
         {
@@ -626,7 +626,7 @@ sal_Bool SfxObjectShell::DoLoad( SfxMedium *pMed )
     ModifyBlocker_Impl aBlock( this );
 
     pMedium = pMed;
-    pMedium->CanDisposeStorage_Impl( sal_True );
+    pMedium->CanDisposeStorage_Impl( true );
 
     sal_Bool bOk = sal_False;
     const SfxFilter* pFilter = pMed->GetFilter();
@@ -678,7 +678,7 @@ sal_Bool SfxObjectShell::DoLoad( SfxMedium *pMed )
 
     EnableSetModified( sal_False );
 
-    pMedium->LockOrigFileOnDemand( sal_True, sal_False );
+    pMedium->LockOrigFileOnDemand( true, false );
     if ( GetError() == ERRCODE_NONE && bOwnStorageFormat && ( !pFilter || !( pFilter->GetFilterFlags() & SFX_FILTER_STARONEFILTER ) ) )
     {
         uno::Reference< embed::XStorage > xStorage;
@@ -1211,7 +1211,7 @@ sal_Bool SfxObjectShell::SaveTo_Impl
         AddLog( OUString( OSL_LOG_PREFIX "Save"  ) );
 
         if ( pMedium->DocNeedsFileDateCheck() )
-            rMedium.CheckFileDate( pMedium->GetInitFileDate( sal_False ) );
+            rMedium.CheckFileDate( pMedium->GetInitFileDate( false ) );
 
         if ( bCopyTo && GetCreateMode() != SFX_CREATE_MODE_EMBEDDED )
         {
@@ -1338,7 +1338,7 @@ sal_Bool SfxObjectShell::SaveTo_Impl
 
     AddLog( OUString( OSL_LOG_PREFIX "Locking"  ) );
 
-    rMedium.LockOrigFileOnDemand( sal_False, sal_False );
+    rMedium.LockOrigFileOnDemand( false, false );
 
     if ( bStorageBasedTarget )
     {
@@ -1538,13 +1538,13 @@ sal_Bool SfxObjectShell::SaveTo_Impl
                     // add new version information into the versionlist and save the versionlist
                     // the version list must have been transferred from the "old" medium before
                     rMedium.AddVersion_Impl( aInfo );
-                    rMedium.SaveVersionList_Impl( sal_True );
+                    rMedium.SaveVersionList_Impl( true );
                     bOk = PutURLContentsToVersionStream_Impl( aTmpVersionURL, xMedStorage, aInfo.Identifier );
                 }
             }
             else if ( bOk && ( pImp->bIsSaving || pImp->bPreserveVersions ) )
             {
-                rMedium.SaveVersionList_Impl( sal_True );
+                rMedium.SaveVersionList_Impl( true );
             }
         }
 
@@ -1620,7 +1620,7 @@ sal_Bool SfxObjectShell::SaveTo_Impl
                                 OUString( "META-INF"  ),
                                 embed::ElementModes::READ );
 
-                    uno::Reference< embed::XStorage > xTarget = rMedium.GetZipStorageToSign_Impl( sal_False );
+                    uno::Reference< embed::XStorage > xTarget = rMedium.GetZipStorageToSign_Impl( false );
                     if ( !xTarget.is() )
                         throw uno::RuntimeException();
                     uno::Reference< embed::XStorage > xTargetMetaInf = xTarget->openStorageElement(
@@ -1787,7 +1787,7 @@ sal_Bool SfxObjectShell::DisconnectStorage_Impl( SfxMedium& rSrcMedium, SfxMediu
                 // in this case the optimization is not possible, connect storage to a temporary file
                 rTargetMedium.ResetError();
                 xOptStorage->writeAndAttachToStream( uno::Reference< io::XStream >() );
-                rSrcMedium.CanDisposeStorage_Impl( sal_False );
+                rSrcMedium.CanDisposeStorage_Impl( false );
                 rSrcMedium.Close();
 
                 // now try to create the backup
@@ -1801,7 +1801,7 @@ sal_Bool SfxObjectShell::DisconnectStorage_Impl( SfxMedium& rSrcMedium, SfxMediu
                 xOptStorage->attachToURL( aBackupURL, sal_True );
 
                 // the storage is successfully attached to backup, thus it it owned by the document not by the medium
-                rSrcMedium.CanDisposeStorage_Impl( sal_False );
+                rSrcMedium.CanDisposeStorage_Impl( false );
                 bResult = sal_True;
             }
         }
@@ -1840,7 +1840,7 @@ sal_Bool SfxObjectShell::ConnectTmpStorage_Impl(
 
             // the storage is successfully disconnected from the original sources, thus the medium must not dispose it
             if ( pMediumArg )
-                pMediumArg->CanDisposeStorage_Impl( sal_False );
+                pMediumArg->CanDisposeStorage_Impl( false );
 
             bResult = sal_True;
         }
@@ -1974,7 +1974,7 @@ sal_Bool SfxObjectShell::DoSaveCompleted( SfxMedium* pNewMed )
     if ( bMedChanged )
     {
         pMedium = pNewMed;
-        pMedium->CanDisposeStorage_Impl( sal_True );
+        pMedium->CanDisposeStorage_Impl( true );
     }
 
     const SfxFilter *pFilter = pMedium ? pMedium->GetFilter() : 0;
@@ -2097,12 +2097,12 @@ sal_Bool SfxObjectShell::DoSaveCompleted( SfxMedium* pNewMed )
             // between medium commit and this step (attributes change and so on)
             // so get the file date again
             if ( pNewMed->DocNeedsFileDateCheck() )
-                pNewMed->GetInitFileDate( sal_True );
+                pNewMed->GetInitFileDate( true );
         }
     }
 
     pMedium->ClearBackup_Impl();
-    pMedium->LockOrigFileOnDemand( sal_True, sal_False );
+    pMedium->LockOrigFileOnDemand( true, false );
 
     AddToRecentlyUsedList();
 

@@ -62,9 +62,9 @@ struct CustomProperty;
 class SFX2_DLLPUBLIC SfxDocumentInfoItem : public SfxStringItem
 {
 private:
-    sal_Int32                           m_AutoloadDelay;
+    sal_Int32                    m_AutoloadDelay;
     OUString                     m_AutoloadURL;
-    sal_Bool                            m_isAutoloadEnabled;
+    bool                         m_isAutoloadEnabled;
     OUString                     m_DefaultTarget;
     OUString                     m_TemplateName;
     OUString                     m_Author;
@@ -73,15 +73,15 @@ private:
     ::com::sun::star::util::DateTime    m_ModificationDate;
     OUString                     m_PrintedBy;
     ::com::sun::star::util::DateTime    m_PrintDate;
-    sal_Int16                           m_EditingCycles;
-    sal_Int32                           m_EditingDuration;
+    sal_Int16                    m_EditingCycles;
+    sal_Int32                    m_EditingDuration;
     OUString                     m_Description;
     OUString                     m_Keywords;
     OUString                     m_Subject;
     OUString                     m_Title;
-    sal_Bool                            m_bHasTemplate;
-    sal_Bool                            m_bDeleteUserData;
-    sal_Bool                            m_bUseUserData;
+    bool                         m_bHasTemplate;
+    bool                         m_bDeleteUserData;
+    bool                         m_bUseUserData;
     std::vector< CustomProperty* >    m_aCustomProperties;
     ::com::sun::star::uno::Sequence< ::com::sun::star::document::CmisProperty > m_aCmisProperties;
 
@@ -93,7 +93,7 @@ public:
             ::com::sun::star::document::XDocumentProperties> & i_xDocProps,
         const ::com::sun::star::uno::Sequence<
             ::com::sun::star::document::CmisProperty> & i_cmisProps,
-        sal_Bool bUseUserData );
+        bool bUseUserData );
     SfxDocumentInfoItem( const SfxDocumentInfoItem& );
     virtual ~SfxDocumentInfoItem();
 
@@ -103,10 +103,10 @@ public:
             ::com::sun::star::document::XDocumentProperties> & i_xDocProps,
         bool i_bDoNotUpdateUserDefined = false)
         const;
-    sal_Bool    isCmisDocument() const { return m_aCmisProperties.getLength() > 0;}
+    bool        isCmisDocument() const { return m_aCmisProperties.getLength() > 0;}
 
-    sal_Bool    isAutoloadEnabled() const { return m_isAutoloadEnabled; }
-    void        setAutoloadEnabled(sal_Bool i_val) { m_isAutoloadEnabled = i_val; }
+    bool        isAutoloadEnabled() const { return m_isAutoloadEnabled; }
+    void        setAutoloadEnabled(bool i_val) { m_isAutoloadEnabled = i_val; }
     sal_Int32   getAutoloadDelay() const { return m_AutoloadDelay; }
     void        setAutoloadDelay(sal_Int32 i_val) { m_AutoloadDelay = i_val; }
     OUString getAutoloadURL() const { return m_AutoloadURL; }
@@ -154,12 +154,12 @@ public:
     /// reset user-specific data (author, modified-by, ...)
     void        resetUserData(const OUString & i_rAuthor);
 
-    void        SetTemplate( sal_Bool b ) { m_bHasTemplate = b; }
-    sal_Bool    HasTemplate() const { return m_bHasTemplate; }
-    void        SetDeleteUserData( sal_Bool bSet );
-    void        SetUseUserData( sal_Bool bSet );
-    sal_Bool    IsDeleteUserData() const;
-    sal_Bool    IsUseUserData() const;
+    void        SetTemplate( bool b ) { m_bHasTemplate = b; }
+    bool        HasTemplate() const { return m_bHasTemplate; }
+    void        SetDeleteUserData( bool bSet );
+    void        SetUseUserData( bool bSet );
+    bool        IsDeleteUserData() const;
+    bool        IsUseUserData() const;
 
     std::vector< CustomProperty* >  GetCustomProperties() const;
     void        ClearCustomProperties();
@@ -207,7 +207,7 @@ private:
     OUString                    m_aUnknownSize;
     OUString                    m_aMultiSignedStr;
 
-    sal_Bool                        bEnableUseUserData  : 1,
+    bool                        bEnableUseUserData  : 1,
                                 bHandleDelete       : 1;
 
     DECL_LINK(DeleteHdl, void *);

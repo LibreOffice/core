@@ -1125,7 +1125,7 @@ sal_Bool SfxShell::HasUIFeature( sal_uInt32 )
 
 long DispatcherUpdate_Impl( void*, void* pArg )
 {
-    ((SfxDispatcher*) pArg)->Update_Impl( sal_True );
+    ((SfxDispatcher*) pArg)->Update_Impl( true );
     ((SfxDispatcher*) pArg)->GetBindings()->InvalidateAll(false);
     return 0;
 }

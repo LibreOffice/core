@@ -82,7 +82,7 @@ namespace sfx2
 
             see getCurrentMacroExecMode
         */
-        virtual sal_Bool
+        virtual bool
                     setCurrentMacroExecMode( sal_uInt16 ) = 0;
 
         /** returns the origin of the document
@@ -123,7 +123,7 @@ namespace sfx2
             isn't sufficient (e.g. database documents which contain sub documents which can also
             contain macro/script storages).
         */
-        virtual sal_Bool
+        virtual bool
                     documentStorageHasMacros() const = 0;
 
         /** provides access to the XEmbeddedScripts interface of the document
@@ -161,8 +161,8 @@ namespace sfx2
 
             @seealso <sfx2/signaturestate.hxx>
         */
-        virtual sal_Bool
-                    hasTrustedScriptingSignature( sal_Bool bAllowUIToAddAuthor ) = 0;
+        virtual bool
+                    hasTrustedScriptingSignature( bool bAllowUIToAddAuthor ) = 0;
 
         /** shows a warning that the document's signature is broken
 
@@ -214,7 +214,7 @@ namespace sfx2
             @return
                 <TRUE/>, always
         */
-        sal_Bool    allowMacroExecution();
+        bool    allowMacroExecution();
 
         /** disallows macro execution in the document
 
@@ -223,7 +223,7 @@ namespace sfx2
             @return
                 <TRUE/>, always
         */
-        sal_Bool    disallowMacroExecution();
+        bool    disallowMacroExecution();
 
         /** checks whether the document allows executing contained macros.
 
@@ -245,7 +245,7 @@ namespace sfx2
             @return
                 <TRUE/> if and only if macro execution in this document is allowed.
         */
-        sal_Bool    adjustMacroMode(
+        bool    adjustMacroMode(
                     const ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionHandler >& _rxInteraction
                 );
 
@@ -267,7 +267,7 @@ namespace sfx2
             denying macro execution, in which ->adjustMacroMode will return <FALSE/>,
             and the next call to isMacroExecutionDisallowed will return <TRUE/>.
         */
-        sal_Bool    isMacroExecutionDisallowed() const;
+        bool    isMacroExecutionDisallowed() const;
 
         /** determines whether the document actually has a macros library
 
@@ -275,7 +275,7 @@ namespace sfx2
             IMacroDocumentAccess::getEmbeddedDocumentScripts().getBasicLibraries) for
             content.
         */
-        sal_Bool    hasMacroLibrary() const;
+        bool    hasMacroLibrary() const;
 
         /** determines whether the given document storage has sub storages containing scripts
             or macros.
@@ -284,10 +284,10 @@ namespace sfx2
             BeanShell-/JavaScript-/Python-Scripts are stored, and a sub storage named "Basic" (where
             Basic scripts are stored).
         */
-        static sal_Bool
+        static bool
                 storageHasMacros( const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& _rxStorage );
 
-        static sal_Bool containerHasBasicMacros( const ::com::sun::star::uno::Reference< ::com::sun::star::script::XLibraryContainer >& xContainter );
+        static bool containerHasBasicMacros( const ::com::sun::star::uno::Reference< ::com::sun::star::script::XLibraryContainer >& xContainter );
         /** checks the macro execution mode while loading the document.
 
             This must be called when the loading is effectively finished, but before any macro action
@@ -310,7 +310,7 @@ namespace sfx2
             @see hasMacroLibrary
             @see IMacroDocumentAccess::checkForBrokenScriptingSignatures
         */
-        sal_Bool
+        bool
                 checkMacrosOnLoading(
                     const ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionHandler >& _rxInteraction
                 );

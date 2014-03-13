@@ -99,8 +99,8 @@ public:
     void                SetMinOutputSizePixel( const Size& rSize );
     Size                GetMinOutputSizePixel() const;
     virtual bool        Notify( NotifyEvent& rNEvt );
-    virtual void        FadeIn( sal_Bool );
-    void                AutoShow( sal_Bool bShow = sal_True );
+    virtual void        FadeIn( bool );
+    void                AutoShow( bool bShow = true );
     DECL_LINK(TimerHdl, void *);
 
     SAL_DLLPRIVATE void Initialize_Impl();
@@ -108,9 +108,9 @@ public:
     SAL_DLLPRIVATE void SetItemSize_Impl( const Size& rSize );
     SAL_DLLPRIVATE void Disappear_Impl();
     SAL_DLLPRIVATE void Reappear_Impl();
-    SAL_DLLPRIVATE sal_Bool IsAutoHide_Impl() const;
-    SAL_DLLPRIVATE void AutoShow_Impl( sal_Bool bShow = sal_True );
-    SAL_DLLPRIVATE void Pin_Impl( sal_Bool bPinned );
+    SAL_DLLPRIVATE bool IsAutoHide_Impl() const;
+    SAL_DLLPRIVATE void AutoShow_Impl( bool bShow = true );
+    SAL_DLLPRIVATE void Pin_Impl( bool bPinned );
     SAL_DLLPRIVATE void ReleaseChildWindow_Impl();
 };
 

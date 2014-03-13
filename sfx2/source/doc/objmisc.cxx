@@ -430,14 +430,14 @@ void SfxObjectShell::SetReadOnly()
     {
         sal_Bool bWasROUI = IsReadOnly();
 
-        pMedium->UnlockFile( sal_False );
+        pMedium->UnlockFile( false );
 
         // the storage-based mediums are already based on the temporary file
         // so UnlockFile has already closed the locking stream
         if ( !pMedium->HasStorage_Impl() && IsLoadingFinished() )
             pMedium->CloseInStream();
 
-        pMedium->SetOpenMode( SFX_STREAM_READONLY, sal_True );
+        pMedium->SetOpenMode( SFX_STREAM_READONLY, true );
         pMedium->GetItemSet()->Put( SfxBoolItem( SID_DOC_READONLY, true ) );
 
         if ( !bWasROUI )
@@ -1105,7 +1105,7 @@ void SfxObjectShell::CheckEncryption_Impl( const uno::Reference< task::XInteract
                 ::com::sun::star::task::ErrorCodeRequest aErrorCode;
                 aErrorCode.ErrCode = ERRCODE_SFX_INCOMPLETE_ENCRYPTION;
 
-                SfxMedium::CallApproveHandler( xHandler, uno::makeAny( aErrorCode ), sal_False );
+                SfxMedium::CallApproveHandler( xHandler, uno::makeAny( aErrorCode ), false );
                 pImp->m_bIncomplEncrWarnShown = sal_True;
             }
 
@@ -1308,7 +1308,7 @@ void SfxObjectShell::TemplateDisconnectionAfterLoad()
         }
 
         // set medium to noname
-        pTmpMedium->SetName( OUString(), sal_True );
+        pTmpMedium->SetName( OUString(), true );
         pTmpMedium->Init_Impl();
 
         // drop resource
@@ -1325,7 +1325,7 @@ void SfxObjectShell::TemplateDisconnectionAfterLoad()
             // the medium should disconnect from the original location
             // the storage should not be disposed since the document is still
             // based on it, but in DoSaveCompleted it will be disposed
-            pTmpMedium->CanDisposeStorage_Impl( sal_False );
+            pTmpMedium->CanDisposeStorage_Impl( false );
             pTmpMedium->Close();
 
             // setting the new storage the medium will be based on
@@ -1346,7 +1346,7 @@ void SfxObjectShell::TemplateDisconnectionAfterLoad()
                 }
 
                 // the medium should not dispose the storage, DoSaveCompleted() has let it to do so
-                pTmpMedium->CanDisposeStorage_Impl( sal_False );
+                pTmpMedium->CanDisposeStorage_Impl( false );
             }
             else
             {
@@ -1357,12 +1357,12 @@ void SfxObjectShell::TemplateDisconnectionAfterLoad()
         {
             // some further initializations for templates
             SetTemplate_Impl( aName, aTemplateName, this );
-            pTmpMedium->CreateTempFile( sal_True );
+            pTmpMedium->CreateTempFile( true );
         }
 
         // templates are never readonly
         pTmpMedium->GetItemSet()->ClearItem( SID_DOC_READONLY );
-        pTmpMedium->SetOpenMode( SFX_STREAM_READWRITE, sal_True );
+        pTmpMedium->SetOpenMode( SFX_STREAM_READWRITE, true );
 
         // notifications about possible changes in readonly state and document info
         Broadcast( SfxSimpleHint(SFX_HINT_MODECHANGED) );
@@ -1872,17 +1872,17 @@ sal_Int16 SfxObjectShell_Impl::getCurrentMacroExecMode() const
     return nImposedExecMode;
 }
 
-sal_Bool SfxObjectShell_Impl::setCurrentMacroExecMode( sal_uInt16 nMacroMode )
+bool SfxObjectShell_Impl::setCurrentMacroExecMode( sal_uInt16 nMacroMode )
 {
     const SfxMedium* pMedium( rDocShell.GetMedium() );
     OSL_PRECOND( pMedium, "SfxObjectShell_Impl::getCurrentMacroExecMode: no medium!" );
     if ( pMedium )
     {
         pMedium->GetItemSet()->Put( SfxUInt16Item( SID_MACROEXECMODE, nMacroMode ) );
-        return sal_True;
+        return true;
     }
 
-    return sal_False;
+    return false;
 }
 
 OUString SfxObjectShell_Impl::getDocumentLocation() const
@@ -1915,7 +1915,7 @@ uno::Reference< embed::XStorage > SfxObjectShell_Impl::getZipStorageToSign()
     return xStore;
 }
 
-sal_Bool SfxObjectShell_Impl::documentStorageHasMacros() const
+bool SfxObjectShell_Impl::documentStorageHasMacros() const
 {
     return ::sfx2::DocumentMacroMode::storageHasMacros( m_xDocStorage );
 }
@@ -1938,9 +1938,9 @@ sal_Int16 SfxObjectShell_Impl::getScriptingSignatureState()
     return nSignatureState;
 }
 
-sal_Bool SfxObjectShell_Impl::hasTrustedScriptingSignature( sal_Bool bAllowUIToAddAuthor )
+bool SfxObjectShell_Impl::hasTrustedScriptingSignature( bool bAllowUIToAddAuthor )
 {
-    sal_Bool bResult = sal_False;
+    bool bResult = false;
 
     try
     {
@@ -1989,7 +1989,7 @@ sal_Bool SfxObjectShell_Impl::hasTrustedScriptingSignature( sal_Bool bAllowUIToA
                             aRequest.DocumentSignatureInformation = aInfo;
                             aRequest.DocumentVersion = aVersion;
                             aRequest.Classification = task::InteractionClassification_QUERY;
-                            bResult = SfxMedium::CallApproveHandler( xInteraction, uno::makeAny( aRequest ), sal_True );
+                            bResult = SfxMedium::CallApproveHandler( xInteraction, uno::makeAny( aRequest ), true );
                         }
                     }
                 }

@@ -595,7 +595,7 @@ bool ScViewFunc::PasteFile( const Point& rPos, const OUString& rFile, bool bLink
         SfxMedium aSfxMedium( aStrURL, (STREAM_READ | STREAM_SHARE_DENYNONE) );
         // #i73992# GuessFilter no longer calls UseInteractionHandler.
         // This is UI, so it can be called here.
-        aSfxMedium.UseInteractionHandler(sal_True);
+        aSfxMedium.UseInteractionHandler(true);
         ErrCode nErr = aMatcher.GuessFilter( aSfxMedium, &pFlt );
 
         if ( pFlt && !nErr )

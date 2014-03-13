@@ -353,7 +353,7 @@ IMPL_LINK( ScInsertTableDlg, DialogClosedHdl, sfx2::FileDialogHelper*, _pFileDlg
             if ( pDocShTables )
                 pDocShTables->DoClose();        // delete passiert beim Zuweisen auf die Ref
 
-            pMed->UseInteractionHandler( sal_True );    // to enable the filter options dialog
+            pMed->UseInteractionHandler( true );    // to enable the filter options dialog
 
             pDocShTables = new ScDocShell;
             aDocShTablesRef = pDocShTables;

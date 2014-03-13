@@ -179,7 +179,7 @@ OUString SAL_CALL SwFilterDetect::detect( Sequence< PropertyValue >& lDescriptor
         {
             // ctor of SfxMedium uses owner transition of ItemSet
             SfxMedium aMedium( aURL, bWasReadOnly ? STREAM_STD_READ : STREAM_STD_READWRITE, NULL, pSet );
-            aMedium.UseInteractionHandler( sal_True );
+            aMedium.UseInteractionHandler( true );
             if ( aMedium.GetErrorCode() == ERRCODE_NONE )
             {
                 // remember input stream and content and put them into the descriptor later
@@ -191,7 +191,7 @@ OUString SAL_CALL SwFilterDetect::detect( Sequence< PropertyValue >& lDescriptor
                 sal_Bool bIsStorage = aMedium.IsStorage();
                 if ( bIsStorage )
                 {
-                    Reference< embed::XStorage > xStorage = aMedium.GetStorage( sal_False );
+                    Reference< embed::XStorage > xStorage = aMedium.GetStorage( false );
                     if ( aMedium.GetLastStorageCreationState() != ERRCODE_NONE )
                     {
                         // error during storage creation means _here_ that the medium

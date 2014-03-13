@@ -752,7 +752,7 @@ void SfxFrame::AppearWithUpdate()
 {
     Appear();
     if ( GetCurrentViewFrame() )
-        GetCurrentViewFrame()->GetDispatcher()->Update_Impl( sal_True );
+        GetCurrentViewFrame()->GetDispatcher()->Update_Impl( true );
 }
 
 void SfxFrame::SetOwnsBindings_Impl( sal_Bool bSet )

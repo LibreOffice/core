@@ -90,7 +90,7 @@ SfxMedium* DocumentInserter::CreateMedium()
         pMedium = new SfxMedium(
                 sURL, SFX_STREAM_READONLY,
                 SFX_APP()->GetFilterMatcher().GetFilter4FilterName( m_sFilter ), m_pItemSet );
-        pMedium->UseInteractionHandler( sal_True );
+        pMedium->UseInteractionHandler( true );
         SfxFilterMatcher* pMatcher = NULL;
         if ( !m_sDocFactory.isEmpty() )
             pMatcher = new SfxFilterMatcher( m_sDocFactory );
@@ -124,7 +124,7 @@ SfxMediumList* DocumentInserter::CreateMediumList()
                     *i, SFX_STREAM_READONLY,
                     SFX_APP()->GetFilterMatcher().GetFilter4FilterName( m_sFilter ), m_pItemSet );
 
-            pMedium->UseInteractionHandler( sal_True );
+            pMedium->UseInteractionHandler( true );
 
             SfxFilterMatcher aMatcher( m_sDocFactory );
             const SfxFilter* pFilter = NULL;

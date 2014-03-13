@@ -68,7 +68,7 @@ class SFX2_DLLPUBLIC SfxDispatcher
 
 private:
     // Search for temporary evaluated Todos
-    SAL_DLLPRIVATE sal_Bool CheckVirtualStack( const SfxShell& rShell, sal_Bool bDeep );
+    SAL_DLLPRIVATE bool CheckVirtualStack( const SfxShell& rShell, bool bDeep );
 
 #ifndef _SFX_HXX
 
@@ -78,8 +78,8 @@ friend class SfxViewFrame;
     DECL_DLLPRIVATE_LINK( EventHdl_Impl, void * );
     DECL_DLLPRIVATE_LINK( PostMsgHandler, SfxRequest * );
 
-    SAL_DLLPRIVATE int Call_Impl( SfxShell& rShell, const SfxSlot &rSlot, SfxRequest &rReq, sal_Bool bRecord );
-    SAL_DLLPRIVATE void _Update_Impl( sal_Bool,sal_Bool,sal_Bool,SfxWorkWindow*);
+    SAL_DLLPRIVATE int Call_Impl( SfxShell& rShell, const SfxSlot &rSlot, SfxRequest &rReq, bool bRecord );
+    SAL_DLLPRIVATE void _Update_Impl( bool,bool,bool,SfxWorkWindow*);
     SAL_DLLPRIVATE void CollectTools_Impl(SfxWorkWindow*);
 
 protected:
@@ -89,9 +89,9 @@ friend class SfxPopupMenuManager;
 friend class SfxHelp;
                         // For bindings: Finding the Message;
                         // level for re-access
-    SAL_DLLPRIVATE sal_Bool _TryIntercept_Impl( sal_uInt16 nId, SfxSlotServer &rServer, sal_Bool bModal );
-    sal_Bool                _FindServer( sal_uInt16 nId, SfxSlotServer &rServer, sal_Bool bModal );
-    sal_Bool                _FillState( const SfxSlotServer &rServer,
+    SAL_DLLPRIVATE bool _TryIntercept_Impl( sal_uInt16 nId, SfxSlotServer &rServer, bool bModal );
+    bool                _FindServer( sal_uInt16 nId, SfxSlotServer &rServer, bool bModal );
+    bool                _FillState( const SfxSlotServer &rServer,
                                     SfxItemSet &rState, const SfxSlot *pRealSlot );
     void                _Execute( SfxShell &rShell, const SfxSlot &rSlot,
                                   SfxRequest &rReq,
@@ -135,7 +135,7 @@ public:
 
     const SfxSlot*      GetSlot( const OUString& rCommand );
 
-    sal_Bool                IsActive( const SfxShell& rShell );
+    bool                IsActive( const SfxShell& rShell );
     sal_uInt16          GetShellLevel( const SfxShell &rShell );
     SfxBindings*        GetBindings() const;
 
@@ -153,15 +153,15 @@ public:
     static void         ExecutePopup( sal_uInt16 nConfigId = 0,
                               Window *pWin = 0, const Point *pPosPixel = 0 );
 
-    sal_Bool            IsAppDispatcher() const;
+    bool                IsAppDispatcher() const;
     bool                IsFlushed() const;
     void                Flush();
-    void                Lock( sal_Bool bLock );
-    sal_Bool                IsLocked( sal_uInt16 nSID = 0 ) const;
+    void                Lock( bool bLock );
+    bool                IsLocked( sal_uInt16 nSID = 0 ) const;
     void                SetSlotFilter( sal_Bool bEnable = sal_False,
                                        sal_uInt16 nCount = 0, const sal_uInt16 *pSIDs = 0 );
 
-    void                HideUI( sal_Bool bHide = sal_True );
+    void                HideUI( bool bHide = true );
     void                ShowObjectBar(sal_uInt16 nId, SfxShell *pShell=0) const;
     sal_uInt32          GetObjectBarId( sal_uInt16 nPos ) const;
 
@@ -173,21 +173,21 @@ public:
     sal_uInt32              GetDisableFlags() const;
 
     SAL_DLLPRIVATE void SetMenu_Impl();
-    SAL_DLLPRIVATE void Update_Impl( sal_Bool bForce = sal_False ); // ObjectBars etc.
-    SAL_DLLPRIVATE sal_Bool IsUpdated_Impl() const;
+    SAL_DLLPRIVATE void Update_Impl( bool bForce = false ); // ObjectBars etc.
+    SAL_DLLPRIVATE bool IsUpdated_Impl() const;
     SAL_DLLPRIVATE int GetShellAndSlot_Impl( sal_uInt16 nSlot, SfxShell **ppShell, const SfxSlot **ppSlot,
-                                              sal_Bool bOwnShellsOnly, sal_Bool bModal, sal_Bool bRealSlot=sal_True );
-    SAL_DLLPRIVATE void SetReadOnly_Impl( sal_Bool  bOn );
-    SAL_DLLPRIVATE sal_Bool GetReadOnly_Impl() const;
+                                              bool bOwnShellsOnly, bool bModal, bool bRealSlot=true );
+    SAL_DLLPRIVATE void SetReadOnly_Impl( bool  bOn );
+    SAL_DLLPRIVATE bool GetReadOnly_Impl() const;
     SAL_DLLPRIVATE sal_Bool IsSlotEnabledByFilter_Impl( sal_uInt16 nSID ) const;
-    SAL_DLLPRIVATE void SetQuietMode_Impl( sal_Bool bOn );
-    SAL_DLLPRIVATE sal_Bool IsReadOnlyShell_Impl( sal_uInt16 nShell ) const;
+    SAL_DLLPRIVATE void SetQuietMode_Impl( bool bOn );
+    SAL_DLLPRIVATE bool IsReadOnlyShell_Impl( sal_uInt16 nShell ) const;
     SAL_DLLPRIVATE void RemoveShell_Impl( SfxShell& rShell );
     SAL_DLLPRIVATE void DoParentActivate_Impl();
     SAL_DLLPRIVATE void DoParentDeactivate_Impl();
-    SAL_DLLPRIVATE void DoActivate_Impl( sal_Bool bMDI, SfxViewFrame* pOld );
-    SAL_DLLPRIVATE void DoDeactivate_Impl( sal_Bool bMDI, SfxViewFrame* pNew );
-    SAL_DLLPRIVATE void InvalidateBindings_Impl(sal_Bool);
+    SAL_DLLPRIVATE void DoActivate_Impl( bool bMDI, SfxViewFrame* pOld );
+    SAL_DLLPRIVATE void DoDeactivate_Impl( bool bMDI, SfxViewFrame* pNew );
+    SAL_DLLPRIVATE void InvalidateBindings_Impl(bool);
     SAL_DLLPRIVATE sal_uInt16 GetNextToolBox_Impl( sal_uInt16 nPos, sal_uInt16 nType, OUString *pStr );
 };
 
