@@ -714,12 +714,12 @@ bool MailMerge::Read(HWPFile & hwpf)
     return !hwpf.State();
 }
 
-
 // char compositon(23)
-Compose::Compose():HBox(CH_COMPOSE)
+Compose::Compose()
+    : HBox(CH_COMPOSE)
+    , dummy(0)
 {
 }
-
 
 bool Compose::Read(HWPFile & hwpf)
 {
