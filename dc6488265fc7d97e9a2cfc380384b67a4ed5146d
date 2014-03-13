@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a930d6b_b48526af",
+        "filename": "sw/qa/extras/ooxmlexport/ooxmlexport.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2993,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2014-03-13T08:56:19Z",
+      "side": 1,
+      "message": "This fix is no longer needed, already fixed on master.",
+      "revId": "dc6488265fc7d97e9a2cfc380384b67a4ed5146d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
