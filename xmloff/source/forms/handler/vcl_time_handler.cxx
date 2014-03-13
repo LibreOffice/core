@@ -64,7 +64,7 @@ namespace xmloff
         return aBuffer.makeStringAndClear();
     }
 
-    bool VCLTimeHandler::getPropertyValues( const OUString i_attributeValue, PropertyValues& o_propertyValues ) const
+    bool VCLTimeHandler::getPropertyValues( const OUString& i_attributeValue, PropertyValues& o_propertyValues ) const
     {
         Duration aDuration;
         Time aTime;

@@ -69,7 +69,7 @@ public:
     // methods that are not contained in any interface
     void AddAttribute( const OUString &sName , const OUString &sValue );
     void Clear();
-    void RemoveAttribute( const OUString sName );
+    void RemoveAttribute( const OUString& sName );
     void AppendAttributeList( const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList > & );
     void SetValueByIndex( sal_Int16 i, const OUString& rValue );
     void RemoveAttributeByIndex( sal_Int16 i );

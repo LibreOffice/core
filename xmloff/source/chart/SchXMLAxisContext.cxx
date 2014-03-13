@@ -173,7 +173,7 @@ Reference< drawing::XShape > SchXMLAxisContext::getTitleShape()
     return xResult;
 }
 
-void SchXMLAxisContext::CreateGrid( OUString sAutoStyleName, bool bIsMajor )
+void SchXMLAxisContext::CreateGrid( const OUString& sAutoStyleName, bool bIsMajor )
 {
     Reference< beans::XPropertySet > xDiaProp( m_rImportHelper.GetChartDocument()->getDiagram(), uno::UNO_QUERY );
     Reference< chart::XAxis > xAxis( lcl_getChartAxis( m_aCurrentAxis, m_xDiagram ) );

@@ -36,7 +36,7 @@ ScVbaLineFormat::ScVbaLineFormat( const uno::Reference< ov::XHelperInterface >& 
 }
 
 sal_Int32
-ScVbaLineFormat::convertLineStartEndNameToArrowheadStyle( OUString sLineName )
+ScVbaLineFormat::convertLineStartEndNameToArrowheadStyle( const OUString& sLineName )
 {
     sal_Int32 nLineType = office::MsoArrowheadStyle::msoArrowheadNone;
     if ( sLineName == "Small Arrow" || sLineName == "Arrow" || sLineName == "msArrowEnd" || sLineName == "Double Arrow")

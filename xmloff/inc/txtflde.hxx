@@ -206,7 +206,7 @@ public:
     static enum ::xmloff::token::XMLTokenEnum MapReferenceSource(sal_Int16 nType);
     static enum ::xmloff::token::XMLTokenEnum MapReferenceType(sal_Int16 nType);
     static enum ::xmloff::token::XMLTokenEnum MapCountFieldName(FieldIdEnum nToken);
-    static enum ::xmloff::token::XMLTokenEnum MapBibliographyFieldName(OUString sName);
+    static enum ::xmloff::token::XMLTokenEnum MapBibliographyFieldName(const OUString& sName);
     static enum ::xmloff::token::XMLTokenEnum MapMeasureKind(sal_Int16 nKind);
     enum ::xmloff::token::XMLTokenEnum MapPageNumberName(const ::com::sun::star::uno::Reference<
                       ::com::sun::star::beans::XPropertySet> & xPropSet,
@@ -383,7 +383,7 @@ protected:
 
     void ProcessStringSequence(
         const ::com::sun::star::uno::Sequence<OUString>& rSequence,
-        const OUString sSelected );
+        const OUString& sSelected );
 
     void ProcessStringSequence(
         const ::com::sun::star::uno::Sequence<OUString>& rSequence,

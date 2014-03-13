@@ -230,7 +230,7 @@ class VBAHELPER_DLLPUBLIC ContainerUtilities
 
 public:
     static OUString getUniqueName( const css::uno::Sequence< OUString >&  _slist, const OUString& _sElementName, const OUString& _sSuffixSeparator);
-    static OUString getUniqueName( const css::uno::Sequence< OUString >& _slist, const OUString _sElementName, const OUString& _sSuffixSeparator, sal_Int32 _nStartSuffix );
+    static OUString getUniqueName( const css::uno::Sequence< OUString >& _slist, const OUString& _sElementName, const OUString& _sSuffixSeparator, sal_Int32 _nStartSuffix );
 
     static sal_Int32 FieldInList( const css::uno::Sequence< OUString >& SearchList, const OUString& SearchString );
 };

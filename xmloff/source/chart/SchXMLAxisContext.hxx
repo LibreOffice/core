@@ -65,7 +65,7 @@ private:
     bool& m_rbAxisPositionAttributeImported;
 
     ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > getTitleShape();
-    void CreateGrid( OUString sAutoStyleName, bool bIsMajor );
+    void CreateGrid( const OUString& sAutoStyleName, bool bIsMajor );
     void CreateAxis();
     void SetAxisTitle();
 };

@@ -60,7 +60,7 @@ using com::sun::star::xml::dom::NodeType_ELEMENT_NODE;
 static Reference<XNode> lcl_createDomInstance();
 static Reference<XNode> lcl_createElement( SvXMLImport& rImport,
                                     sal_uInt16 nPrefix,
-                                    const OUString rLocalName,
+                                    const OUString& rLocalName,
                                     Reference<XNode> xParent);
 
 
@@ -195,7 +195,7 @@ static Reference<XNode> lcl_createDomInstance()
 
 static Reference<XNode> lcl_createElement( SvXMLImport& rImport,
                                     sal_uInt16 nPrefix,
-                                    const OUString rLocalName,
+                                    const OUString& rLocalName,
                                     Reference<XNode> xParent)
 {
     DBG_ASSERT( xParent.is(), "need parent node" );

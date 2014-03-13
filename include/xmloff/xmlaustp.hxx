@@ -77,7 +77,7 @@ public:
         if bAsFamily is sal_False, the family name is used as element name
      */
     // TODO: Remove this ugly method as soon as possible
-    void AddFamily( sal_Int32 nFamily, const OUString& rStrName, SvXMLExportPropertyMapper* pMapper, OUString aStrPrefix, sal_Bool bAsFamily = sal_True );
+    void AddFamily( sal_Int32 nFamily, const OUString& rStrName, SvXMLExportPropertyMapper* pMapper, const OUString& aStrPrefix, sal_Bool bAsFamily = sal_True );
     void AddFamily( sal_Int32 nFamily, const OUString& rStrName,
                     const UniReference< SvXMLExportPropertyMapper >& rMapper,
                     const OUString& rStrPrefix, sal_Bool bAsFamily = sal_True );

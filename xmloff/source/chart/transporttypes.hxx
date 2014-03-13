@@ -156,7 +156,7 @@ struct RegressionStyle
 
     RegressionStyle(const com::sun::star::uno::Reference<
                           com::sun::star::chart2::XDataSeries >& xSeries,
-                    OUString sStyleName) :
+                    const OUString& sStyleName) :
             m_xSeries    ( xSeries ),
             msStyleName  ( sStyleName )
     {}
@@ -197,7 +197,7 @@ struct DataRowPointStyle
                           com::sun::star::chart2::XDataSeries >& xSeries
                         , sal_Int32 nPointIndex
                         , sal_Int32 nPointRepeat
-                        , OUString sStyleName
+                        , const OUString& sStyleName
                         , sal_Int32 nAttachedAxis = 0 ) :
             meType( eType ),
             m_xSeries( xSeries ),

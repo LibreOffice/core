@@ -1285,7 +1285,7 @@ OUString XMLTextImportHelper::ConvertStarFonts( const OUString& rChars,
 /* Apply special case, that found list style equals the chapter numbering, also
    to the found list styles of the parent styles. (#i73973#)
 */
-static bool lcl_HasListStyle( OUString sStyleName,
+static bool lcl_HasListStyle( const OUString& sStyleName,
                                   const Reference < XNameContainer >& xParaStyles,
                                   SvXMLImport& rImport,
                                   const OUString& sNumberingStyleName,
@@ -2548,7 +2548,7 @@ OUString XMLTextImportHelper::FindActiveBookmarkName()
     }
 }
 
-void XMLTextImportHelper::pushFieldCtx( OUString name, OUString type )
+void XMLTextImportHelper::pushFieldCtx( const OUString& name, const OUString& type )
 {
     m_pImpl->m_FieldStack.push(Impl::field_stack_item_t(
         Impl::field_name_type_t(name, type), Impl::field_params_t()));
@@ -2560,7 +2560,7 @@ void XMLTextImportHelper::popFieldCtx()
         m_pImpl->m_FieldStack.pop();
 }
 
-void XMLTextImportHelper::addFieldParam( OUString name, OUString value )
+void XMLTextImportHelper::addFieldParam( const OUString& name, const OUString& value )
 {
     DBG_ASSERT(!m_pImpl->m_FieldStack.empty(),
         "stack is empty: not good! Do a pushFieldCtx before...");

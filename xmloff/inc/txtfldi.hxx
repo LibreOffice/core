@@ -161,7 +161,7 @@ protected:
     inline XMLTextImportHelper& GetImportHelper() { return rTextImportHelper; }
 
     inline OUString GetServiceName() { return sServiceName; }
-    inline void SetServiceName(OUString sStr) { sServiceName = sStr; }
+    inline void SetServiceName(const OUString& sStr) { sServiceName = sStr; }
 
     OUString GetContent();
 
@@ -1197,7 +1197,7 @@ protected:
         const ::com::sun::star::uno::Reference<
         ::com::sun::star::beans::XPropertySet> & xPropertySet);
 
-    static const sal_Char* MapBibliographyFieldName(OUString sName);
+    static const sal_Char* MapBibliographyFieldName(const OUString& sName);
 };
 
 /** Import an annotation field (<text:annotation>) */

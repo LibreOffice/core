@@ -63,7 +63,7 @@ namespace xmloff
         return aBuffer.makeStringAndClear();
     }
 
-    bool VCLDateHandler::getPropertyValues( const OUString i_attributeValue, PropertyValues& o_propertyValues ) const
+    bool VCLDateHandler::getPropertyValues( const OUString& i_attributeValue, PropertyValues& o_propertyValues ) const
     {
         DateTime aDateTime;
         Date aDate;

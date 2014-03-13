@@ -171,7 +171,7 @@ public:
 
     XMLIndexMarkHint_Impl( const css::uno::Reference < css::beans::XPropertySet > & rPropSet,
                            const css::uno::Reference < css::text::XTextRange > & rPos,
-                           OUString sIDString) :
+                           const OUString& sIDString) :
         XMLHint_Impl( XML_HINT_INDEX_MARK, rPos, rPos ),
         xIndexMarkPropSet( rPropSet ),
         sID(sIDString)

@@ -165,7 +165,7 @@ void SvXMLAttributeList::Clear()
     OSL_ASSERT( ! getLength() );
 }
 
-void SvXMLAttributeList::RemoveAttribute( const OUString sName )
+void SvXMLAttributeList::RemoveAttribute( const OUString& sName )
 {
     ::std::vector<struct SvXMLTagAttribute_Impl>::iterator ii = m_pImpl->vecAttribute.begin();
 
