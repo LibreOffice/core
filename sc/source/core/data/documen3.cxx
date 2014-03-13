@@ -804,11 +804,11 @@ void ScDocument::CopyScenario( SCTAB nSrcTab, SCTAB nDestTab, bool bNewScenario 
         maTabs[nSrcTab]->SetActiveScenario(true);       // da kommt's her...
         if (!bNewScenario)                          // Daten aus dem ausgewaehlten Szenario kopieren
         {
-            bool bOldAutoCalc = GetAutoCalc();
-            SetAutoCalc( false );   // Mehrfachberechnungen vermeiden
+            sc::AutoCalcSwitch aACSwitch(*this, false);
             maTabs[nSrcTab]->CopyScenarioTo( maTabs[nDestTab] );
-            SetDirty();
-            SetAutoCalc( bOldAutoCalc );
+
+            sc::SetFormulaDirtyContext aCxt;
+            SetAllFormulasDirty(aCxt);
         }
     }
 }

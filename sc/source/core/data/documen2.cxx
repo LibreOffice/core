@@ -774,7 +774,9 @@ bool ScDocument::MoveTab( SCTAB nOldPos, SCTAB nNewPos, ScProgress* pProgress )
                     (*it)->StartAllListeners();
             // sheet names of references may not be valid until sheet is moved
             pChartListenerCollection->UpdateScheduledSeriesRanges();
-            SetDirty();
+
+            sc::SetFormulaDirtyContext aFormulaDirtyCxt;
+            SetAllFormulasDirty(aFormulaDirtyCxt);
 
             if (pDrawLayer)
                 DrawMovePage( static_cast<sal_uInt16>(nOldPos), static_cast<sal_uInt16>(nNewPos) );
@@ -898,7 +900,8 @@ bool ScDocument::CopyTab( SCTAB nOldPos, SCTAB nNewPos, const ScMarkData* pOnlyM
         pNewList->UpdateReference(aRefCxt);
         maTabs[nNewPos]->SetCondFormList( pNewList );
 
-        SetDirty();
+        sc::SetFormulaDirtyContext aCxt;
+        SetAllFormulasDirty(aCxt);
 
         if (pDrawLayer)
             DrawCopyPage( static_cast<sal_uInt16>(nOldPos), static_cast<sal_uInt16>(nNewPos) );

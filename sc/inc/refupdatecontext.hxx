@@ -130,6 +130,20 @@ struct RefUpdateMoveTabContext
     SCTAB getNewTab(SCTAB nOldTab) const;
 };
 
+struct SetFormulaDirtyContext
+{
+    SCTAB mnTabDeletedStart;
+    SCTAB mnTabDeletedEnd;
+
+    /**
+     * When true, go through all reference tokens and clears "sheet deleted"
+     * flag if its corresponding index falls within specified sheet range.
+     */
+    bool mbClearTabDeletedFlag;
+
+    SetFormulaDirtyContext();
+};
+
 }
 
 #endif

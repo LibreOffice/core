@@ -31,6 +31,8 @@
 #include "dpobject.hxx"
 #include "areasave.hxx"
 #include "unoreflist.hxx"
+#include <scopetools.hxx>
+#include <refupdatecontext.hxx>
 
 ScRefUndoData::ScRefUndoData( const ScDocument* pDoc ) :
     pUnoRefs( NULL )
@@ -162,11 +164,11 @@ void ScRefUndoData::DoUndo( ScDocument* pDoc, bool bUndoRefFirst )
 
     if (pDBCollection || pRangeName)
     {
-        sal_Bool bOldAutoCalc = pDoc->GetAutoCalc();
-        pDoc->SetAutoCalc( false ); // Avoid multiple calculations
+        sc::AutoCalcSwitch aACSwitch(*pDoc, false);
         pDoc->CompileAll();
-        pDoc->SetDirty();
-        pDoc->SetAutoCalc( bOldAutoCalc );
+
+        sc::SetFormulaDirtyContext aCxt;
+        pDoc->SetAllFormulasDirty(aCxt);
     }
 
     if (pAreaLinks)

@@ -3198,6 +3198,52 @@ sc::RefUpdateResult ScTokenArray::AdjustReferenceOnMovedTab( sc::RefUpdateMoveTa
 
 namespace {
 
+void clearTabDeletedFlag( ScSingleRefData& rRef, const ScAddress& rPos, SCTAB nStartTab, SCTAB nEndTab )
+{
+    if (!rRef.IsTabDeleted())
+        return;
+
+    ScAddress aAbs = rRef.toAbs(rPos);
+    if (nStartTab <=  aAbs.Tab() && aAbs.Tab() <= nEndTab)
+        rRef.SetTabDeleted(false);
+}
+
+}
+
+void ScTokenArray::ClearTabDeleted( const ScAddress& rPos, SCTAB nStartTab, SCTAB nEndTab )
+{
+    if (nEndTab < nStartTab)
+        return;
+
+    FormulaToken** p = pCode;
+    FormulaToken** pEnd = p + static_cast<size_t>(nLen);
+    for (; p != pEnd; ++p)
+    {
+        switch ((*p)->GetType())
+        {
+            case svSingleRef:
+            {
+                ScToken* pToken = static_cast<ScToken*>(*p);
+                ScSingleRefData& rRef = pToken->GetSingleRef();
+                clearTabDeletedFlag(rRef, rPos, nStartTab, nEndTab);
+            }
+            break;
+            case svDoubleRef:
+            {
+                ScToken* pToken = static_cast<ScToken*>(*p);
+                ScComplexRefData& rRef = pToken->GetDoubleRef();
+                clearTabDeletedFlag(rRef.Ref1, rPos, nStartTab, nEndTab);
+                clearTabDeletedFlag(rRef.Ref2, rPos, nStartTab, nEndTab);
+            }
+            break;
+            default:
+                ;
+        }
+    }
+}
+
+namespace {
+
 void checkBounds(
     const sc::RefUpdateContext& rCxt, const ScAddress& rPos, SCROW nGroupLen,
     const ScSingleRefData& rRef, std::vector<SCROW>& rBounds)

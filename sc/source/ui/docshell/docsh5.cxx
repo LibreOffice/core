@@ -52,6 +52,7 @@
 #include "sizedev.hxx"
 #include "clipparam.hxx"
 #include <rowheightcontext.hxx>
+#include <refupdatecontext.hxx>
 
 // defined in docfunc.cxx
 void VBA_InsertModule( ScDocument& rDoc, SCTAB nTab, const OUString& sModuleName, const OUString& sModuleSource );
@@ -694,7 +695,9 @@ void ScDocShell::UseScenario( SCTAB nTab, const OUString& rName, bool bRecord )
                 }
 
                 aDocument.CopyScenario( nSrcTab, nTab );
-                aDocument.SetDirty();
+
+                sc::SetFormulaDirtyContext aCxt;
+                aDocument.SetAllFormulasDirty(aCxt);
 
                 //  alles painten, weil in anderen Bereichen das aktive Szenario
                 //  geaendert sein kann

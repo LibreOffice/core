@@ -75,6 +75,7 @@ class DocumentStreamAccess;
 class DocumentLinkManager;
 class CellValues;
 class RowHeightContext;
+struct SetFormulaDirtyContext;
 
 }
 
@@ -618,8 +619,9 @@ public:
     void SetTabNameOnLoad(SCTAB nTab, const OUString& rName);
     void InvalidateStreamOnSave();
 
-    SC_DLLPUBLIC bool           InsertTab( SCTAB nPos, const OUString& rName,
-                                        bool bExternalDocument = false );
+    SC_DLLPUBLIC bool InsertTab(
+        SCTAB nPos, const OUString& rName, bool bExternalDocument = false, bool bUndoDeleteTab = false );
+
     SC_DLLPUBLIC bool           InsertTabs( SCTAB nPos, const std::vector<OUString>& rNames,
                                 bool bExternalDocument = false, bool bNamesValid = false );
     SC_DLLPUBLIC bool DeleteTabs( SCTAB nTab, SCTAB nSheets );
@@ -977,7 +979,7 @@ public:
 
     void            ResetChanged( const ScRange& rRange );
 
-    void            SetDirty();
+    void SetAllFormulasDirty( const sc::SetFormulaDirtyContext& rCxt );
     void            SetDirty( const ScRange& );
     void            SetTableOpDirty( const ScRange& );  // for Interpreter TableOp
     void            InterpretDirtyCells( const ScRangeList& rRanges );

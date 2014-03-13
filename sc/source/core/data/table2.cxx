@@ -1659,13 +1659,12 @@ void ScTable::SetDirtyVar()
 }
 
 
-void ScTable::SetDirty()
+void ScTable::SetAllFormulasDirty( const sc::SetFormulaDirtyContext& rCxt )
 {
-    bool bOldAutoCalc = pDocument->GetAutoCalc();
-    pDocument->SetAutoCalc( false );    // Mehrfachberechnungen vermeiden
+    sc::AutoCalcSwitch aACSwitch(*pDocument, false);
+
     for (SCCOL i=0; i<=MAXCOL; i++)
-        aCol[i].SetDirty();
-    pDocument->SetAutoCalc( bOldAutoCalc );
+        aCol[i].SetAllFormulasDirty(rCxt);
 }
 
 

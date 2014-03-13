@@ -168,6 +168,18 @@ public:
 
     sc::RefUpdateResult AdjustReferenceOnMovedTab( sc::RefUpdateMoveTabContext& rCxt, const ScAddress& rOldPos );
 
+    /**
+     * Clear sheet deleted flag from internal reference tokens if the sheet
+     * index falls within specified range.  Note that when a reference is on a
+     * sheet that's been deleted, its referenced sheet index retains the
+     * original index of the deleted sheet.
+     *
+     * @param rPos position of formula cell
+     * @param nStartTab index of first sheet, inclusive.
+     * @param nEndTab index of last sheet, inclusive.
+     */
+    void ClearTabDeleted( const ScAddress& rPos, SCTAB nStartTab, SCTAB nEndTab );
+
     void CheckRelativeReferenceBounds(
         const sc::RefUpdateContext& rCxt, const ScAddress& rPos, SCROW nGroupLen, std::vector<SCROW>& rBounds ) const;
 

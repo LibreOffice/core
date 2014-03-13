@@ -460,8 +460,8 @@ void ScDocument::InvalidateStreamOnSave()
     }
 }
 
-bool ScDocument::InsertTab( SCTAB nPos, const OUString& rName,
-            bool bExternalDocument )
+bool ScDocument::InsertTab(
+    SCTAB nPos, const OUString& rName, bool bExternalDocument, bool bUndoDeleteTab )
 {
     SCTAB   nTabCount = static_cast<SCTAB>(maTabs.size());
     bool    bValid = ValidTab(nTabCount);
@@ -471,6 +471,7 @@ bool ScDocument::InsertTab( SCTAB nPos, const OUString& rName,
     {
         if (nPos == SC_TAB_APPEND || nPos >= nTabCount)
         {
+            nPos = maTabs.size();
             maTabs.push_back( new ScTable(this, nTabCount, rName) );
             if ( bExternalDocument )
                 maTabs[nTabCount]->SetVisible( false );
@@ -538,7 +539,13 @@ bool ScDocument::InsertTab( SCTAB nPos, const OUString& rName,
     }
 
     if (bValid)
-        SetDirty();
+    {
+        sc::SetFormulaDirtyContext aCxt;
+        aCxt.mbClearTabDeletedFlag = bUndoDeleteTab;
+        aCxt.mnTabDeletedStart = nPos;
+        aCxt.mnTabDeletedEnd = nPos;
+        SetAllFormulasDirty(aCxt);
+    }
 
     return bValid;
 }
@@ -625,7 +632,10 @@ bool ScDocument::InsertTabs( SCTAB nPos, const std::vector<OUString>& rNames,
     }
 
     if (bValid)
-        SetDirty();
+    {
+        sc::SetFormulaDirtyContext aCxt;
+        SetAllFormulasDirty(aCxt);
+    }
 
     return bValid;
 }
@@ -702,7 +712,9 @@ bool ScDocument::DeleteTab( SCTAB nTab )
                     for (; it != maTabs.end(); ++it)
                         if ( *it )
                             (*it)->StartAllListeners();
-                    SetDirty();
+
+                    sc::SetFormulaDirtyContext aFormulaDirtyCxt;
+                    SetAllFormulasDirty(aFormulaDirtyCxt);
                 }
                 // sheet names of references are not valid until sheet is deleted
                 pChartListenerCollection->UpdateScheduledSeriesRanges();
@@ -791,7 +803,9 @@ bool ScDocument::DeleteTabs( SCTAB nTab, SCTAB nSheets )
                     for (; it != maTabs.end(); ++it)
                         if ( *it )
                             (*it)->StartAllListeners();
-                    SetDirty();
+
+                    sc::SetFormulaDirtyContext aFormulaDirtyCxt;
+                    SetAllFormulasDirty(aFormulaDirtyCxt);
                 }
                 // sheet names of references are not valid until sheet is deleted
                 pChartListenerCollection->UpdateScheduledSeriesRanges();
@@ -3590,7 +3604,7 @@ bool ScDocument::HasSelectionData( SCCOL nCol, SCROW nRow, SCTAB nTab ) const
 }
 
 
-void ScDocument::SetDirty()
+void ScDocument::SetAllFormulasDirty( const sc::SetFormulaDirtyContext& rCxt )
 {
     bool bOldAutoCalc = GetAutoCalc();
     bAutoCalc = false;      // keine Mehrfachberechnung
@@ -3599,7 +3613,7 @@ void ScDocument::SetDirty()
         TableContainer::iterator it = maTabs.begin();
         for (;it != maTabs.end(); ++it)
             if (*it)
-                (*it)->SetDirty();
+                (*it)->SetAllFormulasDirty(rCxt);
     }
 
     //  Charts werden zwar auch ohne AutoCalc im Tracking auf Dirty gesetzt,
@@ -3705,7 +3719,9 @@ void ScDocument::CompileAll()
     for (; it != maTabs.end(); ++it)
         if (*it)
             (*it)->CompileAll(aCxt);
-    SetDirty();
+
+    sc::SetFormulaDirtyContext aFormulaDirtyCxt;
+    SetAllFormulasDirty(aFormulaDirtyCxt);
 }
 
 

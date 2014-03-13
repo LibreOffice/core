@@ -53,6 +53,7 @@
 #include "hints.hxx"
 #include "miscuno.hxx"
 #include "chgtrack.hxx"
+#include <refupdatecontext.hxx>
 
 using namespace com::sun::star;
 
@@ -626,7 +627,8 @@ bool ScDBDocFunc::DoImport( SCTAB nTab, const ScImportParam& rParam,
                                         pUndoDoc, pRedoDoc, pUndoDBData, pRedoDBData ) );
         }
 
-        pDoc->SetDirty();
+        sc::SetFormulaDirtyContext aCxt;
+        pDoc->SetAllFormulasDirty(aCxt);
         rDocShell.PostPaint(ScRange(0, 0, nTab, MAXCOL, MAXROW, nTab), PAINT_GRID);
         aModificator.SetDocumentModified();
 

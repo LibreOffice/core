@@ -2959,11 +2959,23 @@ struct SetDirtyVarHandler
 class SetDirtyHandler
 {
     ScDocument& mrDoc;
+    const sc::SetFormulaDirtyContext& mrCxt;
 public:
-    SetDirtyHandler(ScDocument& rDoc) : mrDoc(rDoc) {}
+    SetDirtyHandler( ScDocument& rDoc, const sc::SetFormulaDirtyContext& rCxt ) :
+        mrDoc(rDoc), mrCxt(rCxt) {}
 
     void operator() (size_t /*nRow*/, ScFormulaCell* p)
     {
+        if (mrCxt.mbClearTabDeletedFlag)
+        {
+            if (!p->IsShared() || p->IsSharedTop())
+            {
+                ScTokenArray* pCode = p->GetCode();
+                pCode->ClearTabDeleted(
+                    p->aPos, mrCxt.mnTabDeletedStart, mrCxt.mnTabDeletedEnd);
+            }
+        }
+
         p->SetDirtyVar();
         if (!mrDoc.IsInFormulaTree(p))
             mrDoc.PutInFormulaTree(p);
@@ -3357,11 +3369,11 @@ bool ScColumn::IsFormulaDirty( SCROW nRow ) const
     return p->GetDirty();
 }
 
-void ScColumn::SetDirty()
+void ScColumn::SetAllFormulasDirty( const sc::SetFormulaDirtyContext& rCxt )
 {
     // is only done documentwide, no FormulaTracking
     sc::AutoCalcSwitch aSwitch(*pDocument, false);
-    SetDirtyHandler aFunc(*pDocument);
+    SetDirtyHandler aFunc(*pDocument, rCxt);
     sc::ProcessFormula(maCells, aFunc);
 }
 

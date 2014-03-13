@@ -34,8 +34,7 @@
 #include "scmod.hxx"
 #include "editable.hxx"
 #include "undoblk.hxx"
-
-
+#include <refupdatecontext.hxx>
 
 SFX_IMPL_CHILDWINDOW_WITHID( ScSpellDialogChildWindow, SID_SPELL_DIALOG )
 
@@ -133,7 +132,10 @@ void ScSpellDialogChildWindow::Reset()
                 nOldCol, nOldRow, nTab, mxUndoDoc.release(),
                 nNewCol, nNewRow, nTab, mxRedoDoc.release(),
                 ScConversionParam( SC_CONVERSION_SPELLCHECK ) ) );
-            mpDoc->SetDirty();
+
+            sc::SetFormulaDirtyContext aCxt;
+            mpDoc->SetAllFormulasDirty(aCxt);
+
             mpDocShell->SetDocumentModified();
         }
 
