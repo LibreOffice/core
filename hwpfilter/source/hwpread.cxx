@@ -766,7 +766,9 @@ bool TocMark::Read(HWPFile & hwpf)
 
 
 // index mark(26)
-IndexMark::IndexMark():HBox(CH_INDEX_MARK)
+IndexMark::IndexMark()
+    : HBox(CH_INDEX_MARK)
+    , dummy(0)
 {
 }
 
