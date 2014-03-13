@@ -781,11 +781,6 @@ AC_ARG_ENABLE(ext-wiki-publisher,
         [Enable the Wiki Publisher extension.])
 )
 
-AC_ARG_ENABLE(lpsolve,
-    AS_HELP_STRING([--disable-lpsolve],
-        [Disable compilation of the lp solve solver ])
-)
-
 AC_ARG_ENABLE(pdfimport,
     AS_HELP_STRING([--disable-pdfimport],
         [Disable building the PDF import feature.])
@@ -9413,7 +9408,7 @@ AC_SUBST(MYTHES_LIBS)
 dnl ===================================================================
 dnl How should we build the linear programming solver ?
 dnl ===================================================================
-if test "$enable_lpsolve" = "no" -o "$enable_mpl_subset" = "yes"; then
+if test "$enable_mpl_subset" = "yes"; then
     WITH_LPSOLVER="coinmp"
 fi
 if test $_os = iOS -o $_os = Android; then
