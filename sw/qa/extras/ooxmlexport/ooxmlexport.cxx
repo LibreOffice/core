@@ -2753,6 +2753,18 @@ DECLARE_OOXMLEXPORT_TEST(testlvlPicBulletId, "lvlPicBulletId.docx")
 
 }
 
+DECLARE_OOXMLEXPORT_TEST(testContentTypeXLSM, "fdo76098.docx")
+{
+    xmlDocPtr pXmlDoc = parseExport("[Content_Types].xml");
+
+    if (!pXmlDoc)
+       return;
+
+    assertXPath(pXmlDoc, "/ContentType:Types/ContentType:Override[2]", "ContentType", "application/vnd.ms-excel.sheet.macroEnabled.12");
+
+}
+
+
 #endif
 
 CPPUNIT_PLUGIN_IMPLEMENT();
