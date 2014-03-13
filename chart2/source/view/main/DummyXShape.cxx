@@ -182,6 +182,11 @@ awt::Point SAL_CALL DummyXShape::getPosition()
     return maPosition;
 }
 
+const awt::Point& DummyXShape::getPos()
+{
+    return maPosition;
+}
+
 void SAL_CALL DummyXShape::setPosition( const awt::Point& rPoint )
     throw(uno::RuntimeException, std::exception)
 {
@@ -1004,8 +1009,8 @@ void SAL_CALL DummyGroup2D::setPosition( const awt::Point& rPos )
     for(std::vector<DummyXShape*>::const_iterator itr = maShapes.begin(),
             itrEnd = maShapes.end(); itr != itrEnd; ++itr)
     {
-        awt::Point aPos = (*itr)->getPosition();
-        awt::Point aNewPos( rPos.X + aPos.X, rPos.Y + aPos.Y);
+        const awt::Point& rOldPos = (*itr)->getPos();
+        awt::Point aNewPos( rPos.X + rOldPos.X, rPos.Y + rOldPos.Y);
         (*itr)->setPosition(aNewPos);
     }
 }

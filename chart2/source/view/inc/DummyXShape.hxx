@@ -199,6 +199,8 @@ public:
      */
     virtual void render();
 
+    const com::sun::star::awt::Point& getPos(); // internal API
+
 protected:
 
     std::map<OUString, uno::Any> maProperties;
