@@ -756,6 +756,7 @@ private:
 
     bool m_bParagraphOpened;
     bool m_bIsFirstParagraph;
+    bool m_bAlternateContentChoiceOpen;
 
     // Remember that a column break has to be opened at the
     // beginning of the next paragraph
@@ -892,6 +893,8 @@ public:
 
     void SetWritingHeaderFooter( bool bWritingHeaderFooter )    {   m_bWritingHeaderFooter = bWritingHeaderFooter;   }
     bool GetWritingHeaderFooter( )  {   return m_bWritingHeaderFooter;  }
+    void SetAlternateContentChoiceOpen( bool bAltContentChoiceOpen ) { m_bAlternateContentChoiceOpen = bAltContentChoiceOpen; }
+    bool IsAlternateContentChoiceOpen( ) { return m_bAlternateContentChoiceOpen; }
 };
 
 #endif // INCLUDED_SW_SOURCE_FILTER_WW8_DOCXATTRIBUTEOUTPUT_HXX

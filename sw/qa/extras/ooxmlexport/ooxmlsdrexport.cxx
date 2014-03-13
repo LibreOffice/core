@@ -937,6 +937,16 @@ DECLARE_OOXMLEXPORT_TEST(testPictureWatermark, "pictureWatermark.docx")
     assertXPath(pXmlHeader1, "/w:hdr[1]/w:p[1]/w:r[1]/mc:AlternateContent[1]/mc:Fallback[1]/w:pict[1]/v:rect[1]","id","WordPictureWatermark11962361");
 }
 
+DECLARE_OOXMLEXPORT_TEST(testfdo76122, "fdo76122.docx")
+{
+
+    xmlDocPtr pXmlDoc = parseExport("word/document.xml");
+    if (!pXmlDoc)
+        return;
+    // We check alternateContent  could not contains alternateContent (i.e. nested alternateContent)
+    assertXPath(pXmlDoc, "//mc:AlternateContent/mc:Choice//mc:AlternateContent/mc:Choice", 0);
+
+}
 #endif
 
 CPPUNIT_PLUGIN_IMPLEMENT();
