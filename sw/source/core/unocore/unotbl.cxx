@@ -3335,11 +3335,12 @@ uno::Any SwXTextTable::getPropertyValue(const OUString& rPropertyName)
     SwFrmFmt* pFmt = GetFrmFmt();
     const SfxItemPropertySimpleEntry* pEntry =
                                 m_pPropSet->getPropertyMap().getByName(rPropertyName);
+
+    if (!pEntry)
+        throw beans::UnknownPropertyException(OUString( "Unknown property: " ) + rPropertyName, static_cast < cppu::OWeakObject * > ( this ) );
+
     if(pFmt)
     {
-        if (!pEntry)
-            throw beans::UnknownPropertyException(OUString( "Unknown property: " ) + rPropertyName, static_cast < cppu::OWeakObject * > ( this ) );
-
         if(0xFF == pEntry->nMemberId)
         {
             aRet = lcl_GetSpecialProperty(pFmt, pEntry );
