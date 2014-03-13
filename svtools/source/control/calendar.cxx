@@ -2389,20 +2389,18 @@ bool ImplCFieldFloatWin::Notify( NotifyEvent& rNEvt )
     return FloatingWindow::Notify( rNEvt );
 }
 
-
-
-CalendarField::CalendarField( Window* pParent, WinBits nWinStyle ) :
-    DateField( pParent, nWinStyle ),
-    maDefaultDate( 0, 0, 0 )
+CalendarField::CalendarField(Window* pParent, WinBits nWinStyle)
+    : DateField(pParent, nWinStyle)
+    , mpFloatWin(NULL)
+    , mpCalendar(NULL)
+    , mnCalendarStyle(0)
+    , mpTodayBtn(NULL)
+    , mpNoneBtn(NULL)
+    , maDefaultDate( 0, 0, 0 )
+    , mbToday(false)
+    , mbNone(false)
 {
-    mpFloatWin      = NULL;
-    mpCalendar      = NULL;
-    mnCalendarStyle = 0;
-    mbToday         = sal_False;
-    mbNone          = sal_False;
 }
-
-
 
 CalendarField::~CalendarField()
 {
