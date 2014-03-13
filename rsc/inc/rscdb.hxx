@@ -228,7 +228,6 @@ class RscTypCont
     RscTop *    InitClassCurrencyBox( const char * pClassName, sal_uInt32 nRT,
                                         RscTop * pSuper );
     RscTop *    InitClassDateBox( RscTop * pSuper );
-    RscTop *    InitClassTimeBox( RscTop * pSuper );
 
     RscTop *    InitClassDockingWindow( RscTop * pSuper,
                                         RscEnum * pMapUnit );

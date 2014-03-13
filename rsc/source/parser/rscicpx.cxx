@@ -1616,23 +1616,6 @@ RscTop * RscTypCont::InitClassDateBox( RscTop * pSuper )
     return pClassDateBox;
 }
 
-RscTop * RscTypCont::InitClassTimeBox( RscTop * pSuper )
-{
-    Atom        nId;
-    RscTop *    pClassTimeBox;
-
-    // Klasse anlegen
-    nId = pHS->getID( "TimeBox" );
-    pClassTimeBox = new RscClass( nId, RSC_TIMEBOX, pSuper );
-    pClassTimeBox->SetCallPar( *pWinPar1, *pWinPar2, *pWinParType );
-
-    aNmTb.Put( nId, CLASSNAME, pClassTimeBox );
-
-    // Variablen anlegen
-
-    return pClassTimeBox;
-}
-
 RscTop * RscTypCont::InitClassDockingWindow( RscTop * pSuper,
                                              RscEnum * pMapUnit )
 {

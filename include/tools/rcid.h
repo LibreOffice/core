@@ -100,7 +100,7 @@
 #define RSC_METRICBOX           (RSC_NOTYPE + 0x6a)
 #define RSC_CURRENCYBOX         (RSC_NOTYPE + 0x6b)
 #define RSC_DATEBOX             (RSC_NOTYPE + 0x6c)
-#define RSC_TIMEBOX             (RSC_NOTYPE + 0x6d)
+
 #define RSC_LONGCURRENCYFIELD   (RSC_NOTYPE + 0x6e)
 #define RSC_LONGCURRENCYBOX     (RSC_NOTYPE + 0x6f)
 #define RSC_TOOLBOXITEM         (RSC_NOTYPE + 0x70)
