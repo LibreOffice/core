@@ -3052,20 +3052,17 @@ void ScGridWindow::Command( const CommandEvent& rCEvt )
             aMenuPos.X() += bLayoutIsRTL ? -nSizeXPix : nSizeXPix;
             aMenuPos.Y() += nSizeYPix;
 
-            if (pViewData)
+            ScTabViewShell* pViewSh = pViewData->GetViewShell();
+            if (pViewSh)
             {
-                ScTabViewShell* pViewSh = pViewData->GetViewShell();
-                if (pViewSh)
-                {
-                    //  Is a draw object selected?
+                //  Is a draw object selected?
 
-                    SdrView* pDrawView = pViewSh->GetSdrView();
-                    if (pDrawView && pDrawView->AreObjectsMarked())
-                    {
-                        // #100442#; the conext menu should open in the middle of the selected objects
-                        Rectangle aSelectRect(LogicToPixel(pDrawView->GetAllMarkedBoundRect()));
-                        aMenuPos = aSelectRect.Center();
-                    }
+                SdrView* pDrawView = pViewSh->GetSdrView();
+                if (pDrawView && pDrawView->AreObjectsMarked())
+                {
+                    // #100442#; the conext menu should open in the middle of the selected objects
+                    Rectangle aSelectRect(LogicToPixel(pDrawView->GetAllMarkedBoundRect()));
+                    aMenuPos = aSelectRect.Center();
                 }
             }
         }
