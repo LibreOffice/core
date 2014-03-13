@@ -5894,9 +5894,9 @@ rtl_TextEncoding WW8Fib::GetFIBCharset(sal_uInt16 chs)
 }
 
 WW8Style::WW8Style(SvStream& rStream, WW8Fib& rFibPara)
-    : rFib(rFibPara), rSt(rStream), cstd(0), cbSTDBaseInFile(0),
-    stiMaxWhenSaved(0), istdMaxFixedWhenSaved(0), nVerBuiltInNamesWhenSaved(0),
-    ftcAsci(0), ftcFE(0), ftcOther(0), ftcBi(0)
+    : rFib(rFibPara), rSt(rStream), cstd(0), cbSTDBaseInFile(0), fStdStylenamesWritten(0)
+    , stiMaxWhenSaved(0), istdMaxFixedWhenSaved(0), nVerBuiltInNamesWhenSaved(0)
+    , ftcAsci(0), ftcFE(0), ftcOther(0), ftcBi(0)
 {
     if (!checkSeek(rSt, rFib.fcStshf))
         return;
