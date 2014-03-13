@@ -624,7 +624,7 @@ public:
  *
  * Node for drawing dynamicall sized integral symbols.
  *
- * XXX: It might be created a parent class SmDynamicSizedNode
+ * TODO: It might be created a parent class SmDynamicSizedNode
         (for both dynamic integrals, roots and other dynamic symbols)
 
  */
@@ -834,13 +834,11 @@ public:
 
 /** Dynamic Integral node
  *
- * Used for create Dynamically sized integrals
+ * Used to create Dynamically sized integrals
  *
  * Children:<BR>
- * 0: Argument (optional)<BR>
- * 1: Symbol (instance of DynIntegralSymbolNode)<BR>
- * 2: Body<BR>
- * Where argument is optional and may be NULL.
+ * 0: Symbol (instance of DynIntegralSymbolNode)<BR>
+ * 1: Body<BR>
  */
 class SmDynIntegralNode : public SmStructureNode
 {

@@ -1634,7 +1634,6 @@ void SmParser::Oper()
         case TPROD :
         case TCOPROD :
         case TINT :
-        //case TINTD:
         case TIINT :
         case TIIINT :
         case TLINT :
@@ -1700,6 +1699,9 @@ void SmParser::UnOper()
     {
         case TABS :
         case TSQRT :
+           /* Dynamic integrals are handled as unary operators so we can wrap
+             the symbol together with the body in a upper level node and make
+             proper graphic arrangements */
         case TINTD:
             NextToken();
             break;

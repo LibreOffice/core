@@ -1120,19 +1120,6 @@ void SmRootNode::CreateTextFromNode(OUString &rText)
 /**************************************************************************/
 
 
-void SmDynIntegralNode::GetHeightVerOffset(const SmRect &rRect,
-                                    long &rHeight, long &rVerOffset) const
-    // calculate height and vertical offset of root sign suitable for 'rRect'
-    //! Code copied from SmRootNode
-{
-    rVerOffset = (rRect.GetBottom() - rRect.GetAlignB()) / 2;
-    rHeight    = rRect.GetHeight() - rVerOffset;
-
-    OSL_ENSURE(rHeight    >= 0, "Sm : Ooops...");
-    OSL_ENSURE(rVerOffset >= 0, "Sm : Ooops...");
-}
-
-
 void SmDynIntegralNode::Arrange(const OutputDevice &rDev, const SmFormat &rFormat)
 {
     SmNode  *pDynIntegralSym = Symbol(),
@@ -1142,14 +1129,7 @@ void SmDynIntegralNode::Arrange(const OutputDevice &rDev, const SmFormat &rForma
 
     pBody->Arrange(rDev, rFormat);
 
-    long  nHeight,
-          nVerOffset;
-    // XXX This is root-specific too
-    GetHeightVerOffset(*pBody, nHeight, nVerOffset);
-    //XXX I suppose I don't need the lines below which seem root-specific
-    //nHeight += rFormat.GetDistance(DIS_ROOT) // XXX
-               //* GetFont().GetSize().Height() / 100L;
-
+    long  nHeight = pBody->GetHeight();
     pDynIntegralSym->AdaptToY(rDev, nHeight);
 
     pDynIntegralSym->Arrange(rDev, rFormat);
@@ -1157,7 +1137,6 @@ void SmDynIntegralNode::Arrange(const OutputDevice &rDev, const SmFormat &rForma
     Point  aPos = pDynIntegralSym->AlignTo(*pBody, RP_LEFT, RHA_CENTER, RVA_BASELINE);
     //! override calculated vertical position
     aPos.Y()  = pDynIntegralSym->GetTop() + pBody->GetBottom() - pDynIntegralSym->GetBottom();
-    //aPos.Y() -= nVerOffset;
     pDynIntegralSym->MoveTo(aPos);
 
 
@@ -2371,10 +2350,10 @@ void SmDynIntegralSymbolNode::AdaptToY(const OutputDevice &rDev, sal_uLong nHeig
 {
     long nFactor = 12L;
 
-    // XXX: testing with a slightly higher height
+    // The new height equals (1 + nFactor) * oldHeight
+    // nFactor was chosen for keeping the integral sign from becoming too "fat".
     SmMathSymbolNode::AdaptToY(rDev, nHeight + nHeight / nFactor);
 
-    //XXX Assuming we can only increase the size?
     // keep the ratio
     long nCurWidth = GetSize().Width();
     SmMathSymbolNode::AdaptToX(rDev, nCurWidth + nCurWidth / nFactor);
