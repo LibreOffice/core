@@ -160,6 +160,7 @@ void AlternativesString::Paint(
 
 ThesaurusAlternativesCtrl::ThesaurusAlternativesCtrl(Window* pParent)
     : SvxCheckListBox(pParent)
+    , m_pDialog(NULL)
 {
     SetStyle( GetStyle() | WB_CLIPCHILDREN | WB_HSCROLL | WB_FORCE_MAKEVISIBLE );
     SetHighlightRange();
