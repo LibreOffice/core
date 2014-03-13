@@ -444,7 +444,8 @@ void SwDocShell::Execute(SfxRequest& rReq)
                     else
                         pTmpFrm = SfxViewFrame::GetFirst( this );
 
-                    pTmpFrm->GetDispatcher()->Execute( nSlotId, 0, 0, SFX_CALLMODE_ASYNCHRON );
+                    if (pTmpFrm)
+                        pTmpFrm->GetDispatcher()->Execute( nSlotId, 0, 0, SFX_CALLMODE_ASYNCHRON );
                 }
 
                 rReq.SetReturnValue(SfxBoolItem(SID_PRINTPREVIEW, bSet ));
