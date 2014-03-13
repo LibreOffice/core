@@ -22,9 +22,10 @@
 namespace {
 
 typedef enum {
-    CALC_OPTION_REF_SYNTAX    = 0,
-    CALC_OPTION_EMPTY_AS_ZERO = 1,
-    CALC_OPTION_ENABLE_OPENCL = 2
+    CALC_OPTION_STRING_CONVERSION = 0,
+    CALC_OPTION_EMPTY_AS_ZERO     = 1,
+    CALC_OPTION_REF_SYNTAX        = 2,
+    CALC_OPTION_ENABLE_OPENCL     = 3
 } CalcOptionOrder;
 
 class OptionString : public SvLBoxString
@@ -101,6 +102,23 @@ formula::FormulaGrammar::AddressConvention toAddressConvention(sal_Int32 nPos)
     return formula::FormulaGrammar::CONV_UNSPECIFIED;
 }
 
+ScCalcConfig::StringConversion toStringConversion(sal_Int32 nPos)
+{
+    switch (nPos)
+    {
+        case 0:
+            return ScCalcConfig::STRING_CONVERSION_AS_ERROR;
+        case 1:
+            return ScCalcConfig::STRING_CONVERSION_AS_ZERO;
+        case 2:
+            return ScCalcConfig::STRING_CONVERSION_UNAMBIGUOUS;
+        case 3:
+            return ScCalcConfig::STRING_CONVERSION_LOCALE_DEPENDENT;
+    }
+
+    return ScCalcConfig::STRING_CONVERSION_AS_ERROR;
+}
+
 }
 
 ScCalcOptionsDialog::ScCalcOptionsDialog(Window* pParent, const ScCalcConfig& rConfig)
@@ -110,6 +128,7 @@ ScCalcOptionsDialog::ScCalcOptionsDialog(Window* pParent, const ScCalcConfig& rC
     , maExcelA1(ScResId(SCSTR_FORMULA_SYNTAX_XL_A1).toString())
     , maExcelR1C1(ScResId(SCSTR_FORMULA_SYNTAX_XL_R1C1).toString())
     , maConfig(rConfig)
+    , mbSelectedEmptyStringAsZero(rConfig.mbEmptyStringAsZero)
 {
     get(mpLbSettings, "settings");
     get(mpLbOptionEdit, "edit");
@@ -134,8 +153,17 @@ ScCalcOptionsDialog::ScCalcOptionsDialog(Window* pParent, const ScCalcConfig& rC
     maCaptionStringRefSyntax = get<Window>("ref_syntax_caption")->GetText();
     maDescStringRefSyntax = get<Window>("ref_syntax_desc")->GetText();
     maUseFormulaSyntax = get<Window>("use_formula_syntax")->GetText();
+
+    maCaptionStringConversion = get<Window>("string_conversion_caption")->GetText();
+    maDescStringConversion = get<Window>("string_conversion_desc")->GetText();
+    maStringConversionAsError = get<Window>("string_conversion_as_error")->GetText();
+    maStringConversionAsZero = get<Window>("string_conversion_as_zero")->GetText();
+    maStringConversionUnambiguous = get<Window>("string_conversion_unambiguous")->GetText();
+    maStringConversionLocaleDependent = get<Window>("string_conversion_locale_dependent")->GetText();
+
     maCaptionEmptyStringAsZero = get<Window>("empty_str_as_zero_caption")->GetText();
     maDescEmptyStringAsZero = get<Window>("empty_str_as_zero_desc")->GetText();
+
     maCaptionOpenCLEnabled = get<Window>("opencl_enabled")->GetText();
     maDescOpenCLEnabled = get<Window>("opencl_enabled_desc")->GetText();
     maSoftware = get<Window>("software")->GetText();
@@ -237,6 +265,18 @@ void ScCalcOptionsDialog::fillOpenclList()
 
 #endif
 
+
+namespace {
+void addOption( SvTreeList* pModel, OptionString* pItem )
+{
+    SvTreeListEntry* pEntry = new SvTreeListEntry;
+    pEntry->AddItem(new SvLBoxString(pEntry, 0, OUString()));
+    pEntry->AddItem(new SvLBoxContextBmp(pEntry, 0, Image(), Image(), false));
+    pEntry->AddItem(pItem);
+    pModel->Insert(pEntry);
+}
+}
+
 void ScCalcOptionsDialog::FillOptionsList()
 {
     mpLbSettings->SetUpdateMode(false);
@@ -245,17 +285,21 @@ void ScCalcOptionsDialog::FillOptionsList()
     SvTreeList* pModel = mpLbSettings->GetModel();
 
     {
-        // Syntax for INDIRECT function.
-        SvTreeListEntry* pEntry = new SvTreeListEntry;
-        pEntry->AddItem(new SvLBoxString(pEntry, 0, OUString()));
-        pEntry->AddItem(new SvLBoxContextBmp(pEntry, 0, Image(), Image(), false));
+        // String conversion for arithmetic operations.
         OptionString* pItem = new OptionString(
-            maCaptionStringRefSyntax, toString(maConfig.meStringRefAddressSyntax));
-        pEntry->AddItem(pItem);
-        pModel->Insert(pEntry);
+            maCaptionStringConversion, toString(maConfig.meStringConversion));
+        addOption( pModel, pItem);
     }
 
     pModel->Insert(createBoolItem(maCaptionEmptyStringAsZero,maConfig.mbEmptyStringAsZero));
+
+    {
+        // Syntax for INDIRECT function.
+        OptionString* pItem = new OptionString(
+            maCaptionStringRefSyntax, toString(maConfig.meStringRefAddressSyntax));
+        addOption( pModel, pItem);
+    }
+
 #if HAVE_FEATURE_OPENCL
     pModel->Insert(createBoolItem(maCaptionOpenCLEnabled,maConfig.mbOpenCLEnabled));
     fillOpenclList();
@@ -304,6 +348,38 @@ void ScCalcOptionsDialog::SelectionChanged()
         }
         break;
 
+        case CALC_OPTION_STRING_CONVERSION:
+        {
+            // String conversion for arithmetic operations.
+            mpBtnTrue->Hide();
+            mpBtnFalse->Hide();
+            mpLbOptionEdit->Show();
+            mpOpenclInfoList->GetParent()->Hide();
+
+            mpLbOptionEdit->Clear();
+            mpLbOptionEdit->InsertEntry(maStringConversionAsError);
+            mpLbOptionEdit->InsertEntry(maStringConversionAsZero);
+            mpLbOptionEdit->InsertEntry(maStringConversionUnambiguous);
+            mpLbOptionEdit->InsertEntry(maStringConversionLocaleDependent);
+            switch (maConfig.meStringConversion)
+            {
+                case ScCalcConfig::STRING_CONVERSION_AS_ERROR:
+                    mpLbOptionEdit->SelectEntryPos(0);
+                break;
+                case ScCalcConfig::STRING_CONVERSION_AS_ZERO:
+                    mpLbOptionEdit->SelectEntryPos(1);
+                break;
+                case ScCalcConfig::STRING_CONVERSION_UNAMBIGUOUS:
+                    mpLbOptionEdit->SelectEntryPos(2);
+                break;
+                case ScCalcConfig::STRING_CONVERSION_LOCALE_DEPENDENT:
+                    mpLbOptionEdit->SelectEntryPos(3);
+                break;
+            }
+            mpFtAnnotation->SetText(maDescStringConversion);
+        }
+        break;
+
         // booleans
         case CALC_OPTION_EMPTY_AS_ZERO:
         case CALC_OPTION_ENABLE_OPENCL:
@@ -314,11 +390,22 @@ void ScCalcOptionsDialog::SelectionChanged()
             mpBtnFalse->Show();
 
             bool bValue = false;
+            bool bEnable = true;
             if ( nSelectedPos == CALC_OPTION_EMPTY_AS_ZERO )
             {
                 bValue = maConfig.mbEmptyStringAsZero;
                 mpFtAnnotation->SetText(maDescEmptyStringAsZero);
                 mpOpenclInfoList->GetParent()->Hide();
+                switch (maConfig.meStringConversion)
+                {
+                    case ScCalcConfig::STRING_CONVERSION_AS_ERROR:
+                    case ScCalcConfig::STRING_CONVERSION_AS_ZERO:
+                        bEnable = false;
+                        break;
+                    case ScCalcConfig::STRING_CONVERSION_UNAMBIGUOUS:
+                    case ScCalcConfig::STRING_CONVERSION_LOCALE_DEPENDENT:
+                        break;  // nothing
+                }
             }
             else
             {
@@ -344,6 +431,16 @@ void ScCalcOptionsDialog::SelectionChanged()
                 mpBtnTrue->Check(false);
                 mpBtnFalse->Check(true);
             }
+            if (bEnable)
+            {
+                mpBtnTrue->Enable();
+                mpBtnFalse->Enable();
+            }
+            else
+            {
+                mpBtnTrue->Disable();
+                mpBtnFalse->Disable();
+            }
         }
         break;
         default:
@@ -363,6 +460,36 @@ void ScCalcOptionsDialog::ListOptionValueChanged()
             maConfig.meStringRefAddressSyntax = toAddressConvention(nPos);
 
             setValueAt(nSelected, toString(maConfig.meStringRefAddressSyntax));
+        }
+        break;
+
+        case CALC_OPTION_STRING_CONVERSION:
+        {
+            // String conversion for arithmetic operations.
+            sal_Int32 nPos = mpLbOptionEdit->GetSelectEntryPos();
+            maConfig.meStringConversion = toStringConversion(nPos);
+
+            setValueAt(nSelected, toString(maConfig.meStringConversion));
+
+            switch (maConfig.meStringConversion)
+            {
+                case ScCalcConfig::STRING_CONVERSION_AS_ERROR:
+                    maConfig.mbEmptyStringAsZero = false;
+                    setValueAt(CALC_OPTION_EMPTY_AS_ZERO, toString(maConfig.mbEmptyStringAsZero));
+                    mpLbOptionEdit->SelectEntryPos(0);
+                break;
+                case ScCalcConfig::STRING_CONVERSION_AS_ZERO:
+                    maConfig.mbEmptyStringAsZero = true;
+                    setValueAt(CALC_OPTION_EMPTY_AS_ZERO, toString(maConfig.mbEmptyStringAsZero));
+                    mpLbOptionEdit->SelectEntryPos(1);
+                break;
+                case ScCalcConfig::STRING_CONVERSION_UNAMBIGUOUS:
+                case ScCalcConfig::STRING_CONVERSION_LOCALE_DEPENDENT:
+                    // Reset to the value the user selected before.
+                    maConfig.mbEmptyStringAsZero = mbSelectedEmptyStringAsZero;
+                    setValueAt(CALC_OPTION_EMPTY_AS_ZERO, toString(maConfig.mbEmptyStringAsZero));
+                break;
+            }
         }
         break;
 
@@ -424,9 +551,10 @@ void ScCalcOptionsDialog::RadioValueChanged()
     switch (nSelected)
     {
         case CALC_OPTION_REF_SYNTAX:
+        case CALC_OPTION_STRING_CONVERSION:
             return;
         case CALC_OPTION_EMPTY_AS_ZERO:
-            maConfig.mbEmptyStringAsZero = bValue;
+            maConfig.mbEmptyStringAsZero = mbSelectedEmptyStringAsZero = bValue;
             break;
         case CALC_OPTION_ENABLE_OPENCL:
             maConfig.mbOpenCLEnabled = bValue;
@@ -456,6 +584,22 @@ OUString ScCalcOptionsDialog::toString(formula::FormulaGrammar::AddressConventio
             ;
     }
     return maUseFormulaSyntax;
+}
+
+OUString ScCalcOptionsDialog::toString(ScCalcConfig::StringConversion eConv) const
+{
+    switch (eConv)
+    {
+        case ScCalcConfig::STRING_CONVERSION_AS_ERROR:
+            return maStringConversionAsError;
+        case ScCalcConfig::STRING_CONVERSION_AS_ZERO:
+            return maStringConversionAsZero;
+        case ScCalcConfig::STRING_CONVERSION_UNAMBIGUOUS:
+            return maStringConversionUnambiguous;
+        case ScCalcConfig::STRING_CONVERSION_LOCALE_DEPENDENT:
+            return maStringConversionLocaleDependent;
+    }
+    return maStringConversionAsError;
 }
 
 OUString ScCalcOptionsDialog::toString(bool bVal) const

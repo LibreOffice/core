@@ -193,13 +193,14 @@ SfxPoolItem* ScTpFormulaItem::Clone( SfxItemPool * ) const
 #define SCFORMULAOPT_SEP_ARRAY_ROW        3
 #define SCFORMULAOPT_SEP_ARRAY_COL        4
 #define SCFORMULAOPT_STRING_REF_SYNTAX    5
-#define SCFORMULAOPT_EMPTY_OUSTRING_AS_ZERO 6
-#define SCFORMULAOPT_OOXML_RECALC         7
-#define SCFORMULAOPT_ODF_RECALC           8
-#define SCFORMULAOPT_OPENCL_ENABLED       9
-#define SCFORMULAOPT_OPENCL_AUTOSELECT   10
-#define SCFORMULAOPT_OPENCL_DEVICE       11
-#define SCFORMULAOPT_COUNT               12
+#define SCFORMULAOPT_STRING_CONVERSION    6
+#define SCFORMULAOPT_EMPTY_OUSTRING_AS_ZERO 7
+#define SCFORMULAOPT_OOXML_RECALC         8
+#define SCFORMULAOPT_ODF_RECALC           9
+#define SCFORMULAOPT_OPENCL_ENABLED      10
+#define SCFORMULAOPT_OPENCL_AUTOSELECT   11
+#define SCFORMULAOPT_OPENCL_DEVICE       12
+#define SCFORMULAOPT_COUNT               13
 
 Sequence<OUString> ScFormulaCfg::GetPropertyNames()
 {
@@ -211,6 +212,7 @@ Sequence<OUString> ScFormulaCfg::GetPropertyNames()
         "Syntax/SeparatorArrayRow",      // SCFORMULAOPT_SEP_ARRAY_ROW
         "Syntax/SeparatorArrayCol",      // SCFORMULAOPT_SEP_ARRAY_COL
         "Syntax/StringRefAddressSyntax", // SCFORMULAOPT_STRING_REF_SYNTAX
+        "Syntax/StringConversion",       // SCFORMULAOPT_STRING_CONVERSION
         "Syntax/EmptyStringAsZero",      // SCFORMULAOPT_EMPTY_OUSTRING_AS_ZERO
         "Load/OOXMLRecalcMode",          // SCFORMULAOPT_OOXML_RECALC
         "Load/ODFRecalcMode",            // SCFORMULAOPT_ODF_RECALC
@@ -229,7 +231,7 @@ Sequence<OUString> ScFormulaCfg::GetPropertyNames()
 ScFormulaCfg::PropsToIds ScFormulaCfg::GetPropNamesToId()
 {
     Sequence<OUString> aPropNames = GetPropertyNames();
-    static sal_uInt16 aVals[] = { SCFORMULAOPT_GRAMMAR, SCFORMULAOPT_ENGLISH_FUNCNAME, SCFORMULAOPT_SEP_ARG, SCFORMULAOPT_SEP_ARRAY_ROW, SCFORMULAOPT_SEP_ARRAY_COL, SCFORMULAOPT_STRING_REF_SYNTAX, SCFORMULAOPT_EMPTY_OUSTRING_AS_ZERO, SCFORMULAOPT_OOXML_RECALC, SCFORMULAOPT_ODF_RECALC, SCFORMULAOPT_OPENCL_ENABLED, SCFORMULAOPT_OPENCL_AUTOSELECT, SCFORMULAOPT_OPENCL_DEVICE };
+    static sal_uInt16 aVals[] = { SCFORMULAOPT_GRAMMAR, SCFORMULAOPT_ENGLISH_FUNCNAME, SCFORMULAOPT_SEP_ARG, SCFORMULAOPT_SEP_ARRAY_ROW, SCFORMULAOPT_SEP_ARRAY_COL, SCFORMULAOPT_STRING_REF_SYNTAX, SCFORMULAOPT_STRING_CONVERSION, SCFORMULAOPT_EMPTY_OUSTRING_AS_ZERO, SCFORMULAOPT_OOXML_RECALC, SCFORMULAOPT_ODF_RECALC, SCFORMULAOPT_OPENCL_ENABLED, SCFORMULAOPT_OPENCL_AUTOSELECT, SCFORMULAOPT_OPENCL_DEVICE };
     OSL_ENSURE( SAL_N_ELEMENTS(aVals) == aPropNames.getLength(), "Properties and ids are out of Sync");
     PropsToIds aPropIdMap;
     for ( sal_uInt16 i=0; i<aPropNames.getLength(); ++i )
@@ -328,7 +330,7 @@ void ScFormulaCfg::UpdateFromProperties( const Sequence<OUString>& aNames )
                     do
                     {
                         if (!(pValues[nProp] >>= nIntVal))
-                            // extractino failed.
+                            // extraction failed.
                             break;
 
                         switch (nIntVal)
@@ -351,6 +353,39 @@ void ScFormulaCfg::UpdateFromProperties( const Sequence<OUString>& aNames )
                     }
                     while (false);
                     GetCalcConfig().meStringRefAddressSyntax = eConv;
+                }
+                break;
+                case SCFORMULAOPT_STRING_CONVERSION:
+                {
+                    // Get default value in case this option is not set.
+                    ScCalcConfig::StringConversion eConv = GetCalcConfig().meStringConversion;
+
+                    do
+                    {
+                        if (!(pValues[nProp] >>= nIntVal))
+                            // extraction failed.
+                            break;
+
+                        switch (nIntVal)
+                        {
+                            case 0:
+                                eConv = ScCalcConfig::STRING_CONVERSION_AS_ERROR;
+                            break;
+                            case 1:
+                                eConv = ScCalcConfig::STRING_CONVERSION_AS_ZERO;
+                            break;
+                            case 2:
+                                eConv = ScCalcConfig::STRING_CONVERSION_UNAMBIGUOUS;
+                            break;
+                            case 3:
+                                eConv = ScCalcConfig::STRING_CONVERSION_LOCALE_DEPENDENT;
+                            break;
+                            default:
+                                SAL_WARN("sc", "unknown string conversion option!");
+                        }
+                    }
+                    while (false);
+                    GetCalcConfig().meStringConversion = eConv;
                 }
                 break;
                 case SCFORMULAOPT_EMPTY_OUSTRING_AS_ZERO:
@@ -488,6 +523,19 @@ void ScFormulaCfg::Commit()
                     case ::formula::FormulaGrammar::CONV_XL_A1:   nVal = 1; break;
                     case ::formula::FormulaGrammar::CONV_XL_R1C1: nVal = 2; break;
                     default: break;
+                }
+                pValues[nProp] <<= nVal;
+            }
+            break;
+            case SCFORMULAOPT_STRING_CONVERSION:
+            {
+                sal_Int32 nVal = 3;
+                switch (GetCalcConfig().meStringConversion)
+                {
+                    case ScCalcConfig::STRING_CONVERSION_AS_ERROR:          nVal = 0; break;
+                    case ScCalcConfig::STRING_CONVERSION_AS_ZERO:           nVal = 1; break;
+                    case ScCalcConfig::STRING_CONVERSION_UNAMBIGUOUS:       nVal = 2; break;
+                    case ScCalcConfig::STRING_CONVERSION_LOCALE_DEPENDENT:  nVal = 3; break;
                 }
                 pValues[nProp] <<= nVal;
             }

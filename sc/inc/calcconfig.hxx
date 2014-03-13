@@ -28,7 +28,17 @@ enum ScRecalcOptions
  */
 struct SC_DLLPUBLIC ScCalcConfig
 {
+    // from most stringent to most relaxed
+    enum StringConversion
+    {
+        STRING_CONVERSION_AS_ERROR = 0,     ///<  =1+"1" or =1+"x" give #VALUE!
+        STRING_CONVERSION_AS_ZERO,          ///<  =1+"1" or =1+"x" give 1
+        STRING_CONVERSION_UNAMBIGUOUS,      ///<  =1+"1" gives 2, but =1+"1.000" or =1+"x" give #VALUE!
+        STRING_CONVERSION_LOCALE_DEPENDENT  ///<  =1+"1.000" may be 2 or 1001 ... =1+"x" gives #VALUE!
+    };
+
     formula::FormulaGrammar::AddressConvention meStringRefAddressSyntax;
+    StringConversion meStringConversion;
     bool mbEmptyStringAsZero:1;
     bool mbOpenCLEnabled:1;
     bool mbOpenCLAutoSelect:1;

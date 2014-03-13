@@ -11,6 +11,7 @@
 
 ScCalcConfig::ScCalcConfig() :
     meStringRefAddressSyntax(formula::FormulaGrammar::CONV_UNSPECIFIED),
+    meStringConversion(STRING_CONVERSION_LOCALE_DEPENDENT),     // old LibreOffice behavior
     mbEmptyStringAsZero(false),
     mbOpenCLEnabled(false),
     mbOpenCLAutoSelect(true)
@@ -25,6 +26,7 @@ void ScCalcConfig::reset()
 bool ScCalcConfig::operator== (const ScCalcConfig& r) const
 {
     return meStringRefAddressSyntax == r.meStringRefAddressSyntax &&
+           meStringConversion == r.meStringConversion &&
            mbEmptyStringAsZero == r.mbEmptyStringAsZero &&
            mbOpenCLEnabled == r.mbOpenCLEnabled &&
            mbOpenCLAutoSelect == r.mbOpenCLAutoSelect &&

@@ -50,6 +50,7 @@ private:
 #endif
 
     OUString toString(formula::FormulaGrammar::AddressConvention eConv) const;
+    OUString toString(ScCalcConfig::StringConversion eConv) const;
     OUString toString(bool bVal) const;
     SvTreeListEntry *createBoolItem(const OUString &rCaption, bool bValue) const;
     void     setValueAt(size_t nPos, const OUString &rString);
@@ -81,6 +82,14 @@ private:
     OUString maDescStringRefSyntax;
     OUString maUseFormulaSyntax;
 
+    OUString maStringConversionAsError;
+    OUString maStringConversionAsZero;
+    OUString maStringConversionUnambiguous;
+    OUString maStringConversionLocaleDependent;
+
+    OUString maCaptionStringConversion;
+    OUString maDescStringConversion;
+
     OUString maCaptionEmptyStringAsZero;
     OUString maDescEmptyStringAsZero;
 
@@ -93,6 +102,8 @@ private:
 #if HAVE_FEATURE_OPENCL
     std::vector<sc::OpenclPlatformInfo> maPlatformInfo;
 #endif
+
+    bool mbSelectedEmptyStringAsZero;
 };
 
 #endif

@@ -189,6 +189,25 @@ sal_uInt16 ScInterpreter::GetCellErrCode( const ScRefCellValue& rCell )
     return rCell.meType == CELLTYPE_FORMULA ? rCell.mpFormula->GetErrCode() : 0;
 }
 
+namespace
+{
+bool isEmptyString( const OUString& rStr )
+{
+    if (rStr.isEmpty())
+        return true;
+    else if (rStr[0] == ' ')
+    {
+        const sal_Unicode* p = rStr.getStr() + 1;
+        const sal_Unicode* const pStop = p - 1 + rStr.getLength();
+        while (p < pStop && *p == ' ')
+            ++p;
+        if (p == pStop)
+            return true;
+    }
+    return false;
+}
+}
+
 /** Convert string content to numeric value.
 
     Converted are only integer numbers including exponent, and ISO 8601 dates
@@ -221,9 +240,9 @@ sal_uInt16 ScInterpreter::GetCellErrCode( const ScRefCellValue& rCell )
 
 double ScInterpreter::ConvertStringToValue( const OUString& rStr )
 {
-#if 1
-    // We keep this code until we provide a friendly way to convert string
-    // numbers into numbers in the UI.
+    // We keep ScCalcConfig::STRING_CONVERSION_LOCALE_DEPENDENT default until
+    // we provide a friendly way to convert string numbers into numbers in the UI.
+
     double fValue = 0.0;
     if (mnStringNoValueError == errCellNoValue)
     {
@@ -232,40 +251,51 @@ double ScInterpreter::ConvertStringToValue( const OUString& rStr )
         return fValue;
     }
 
-    if (GetGlobalConfig().mbEmptyStringAsZero)
+    switch (GetGlobalConfig().meStringConversion)
     {
-        // The number scanner does not accept empty strings or strings
-        // containing only spaces, be on par in these cases with what was
-        // accepted in OOo and is in AOO (see also the else branch below) and
-        // convert to 0 to prevent interoperability nightmares.
-        if (rStr.isEmpty())
+        case ScCalcConfig::STRING_CONVERSION_AS_ERROR:
+            SetError( mnStringNoValueError);
             return fValue;
-        else if (rStr[0] == ' ')
-        {
-            const sal_Unicode* p = rStr.getStr() + 1;
-            const sal_Unicode* const pStop = p - 1 + rStr.getLength();
-            while (p < pStop && *p == ' ')
-                ++p;
-            if (p == pStop)
+        case ScCalcConfig::STRING_CONVERSION_AS_ZERO:
+            return fValue;
+        case ScCalcConfig::STRING_CONVERSION_LOCALE_DEPENDENT:
+            {
+                if (GetGlobalConfig().mbEmptyStringAsZero)
+                {
+                    // The number scanner does not accept empty strings or strings
+                    // containing only spaces, be on par in these cases with what was
+                    // accepted in OOo and is in AOO (see also the
+                    // STRING_CONVERSION_UNAMBIGUOUS branch) and convert to 0 to prevent
+                    // interoperability nightmares.
+
+                    if (isEmptyString( rStr))
+                        return fValue;
+                }
+
+                sal_uInt32 nFIndex = 0;
+                if (!pFormatter->IsNumberFormat(rStr, nFIndex, fValue))
+                {
+                    SetError( mnStringNoValueError);
+                    fValue = 0.0;
+                }
                 return fValue;
-        }
+            }
+            break;
+        case ScCalcConfig::STRING_CONVERSION_UNAMBIGUOUS:
+            {
+                if (!GetGlobalConfig().mbEmptyStringAsZero)
+                {
+                    if (isEmptyString( rStr))
+                    {
+                        SetError( mnStringNoValueError);
+                        return fValue;
+                    }
+                }
+            }
+            // continue below, pulled from switch case for better readability
+            break;
     }
 
-    sal_uInt32 nFIndex = 0;
-    if (!pFormatter->IsNumberFormat(rStr, nFIndex, fValue))
-    {
-        SetError( mnStringNoValueError);
-        fValue = 0.0;
-    }
-    return fValue;
-#else
-    double fValue = 0.0;
-    if (mnStringNoValueError == errCellNoValue)
-    {
-        // Requested that all strings result in 0, error handled by caller.
-        SetError( mnStringNoValueError);
-        return fValue;
-    }
     OUString aStr( rStr);
     rtl_math_ConversionStatus eStatus;
     sal_Int32 nParseEnd;
@@ -305,14 +335,14 @@ double ScInterpreter::ConvertStringToValue( const OUString& rStr )
                     p = pStart;
                     while (p < pStop && *p == ' ')
                         ++p;
-                    if (p < pStop && !CharClass::isAsciiDigit(*p))
+                    if (p < pStop && !rtl::isAsciiDigit(*p))
                         SetError( mnStringNoValueError);
                     p = pLastStart;
                     while (p < pStop && !nGlobalError && eState < blank)
                     {
                         if (eState == minute)
                             nCurFmtType |= NUMBERFORMAT_TIME;
-                        if (CharClass::isAsciiDigit(*p))
+                        if (rtl::isAsciiDigit(*p))
                         {
                             // Maximum 2 digits per unit, except fractions.
                             if (p - pLastStart >= 2 && eState != fraction)
@@ -427,7 +457,6 @@ double ScInterpreter::ConvertStringToValue( const OUString& rStr )
             fValue = 0.0;
     }
     return fValue;
-#endif
 }
 
 double ScInterpreter::GetCellValue( const ScAddress& rPos, ScRefCellValue& rCell )

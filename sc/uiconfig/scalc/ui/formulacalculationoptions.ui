@@ -188,6 +188,114 @@
               </packing>
             </child>
             <child>
+              <object class="GtkLabel" id="string_conversion_caption">
+                <property name="can_focus">False</property>
+                <property name="no_show_all">True</property>
+                <property name="label" translatable="yes">Conversion from text to number</property>
+              </object>
+              <packing>
+                <property name="left_attach">0</property>
+                <property name="top_attach">4</property>
+                <property name="width">1</property>
+                <property name="height">1</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkLabel" id="string_conversion_desc">
+                <property name="can_focus">False</property>
+                <property name="no_show_all">True</property>
+                <property name="label" translatable="yes">How to treat text when encountered as operand in an arithmetic operation or as argument to a function that expects a number instead. Unambiguous conversion is possible for integer numbers including exponents and ISO 8601 dates and times in their extended formats with separators. Fractional numeric values with decimal separators or dates other than ISO 8601 are locale dependent. Note that in locale dependent conversions the resulting numeric value may differ between locales!</property>
+                <property name="wrap">True</property>
+                <property name="max_width_chars">56</property>
+              </object>
+              <packing>
+                <property name="left_attach">0</property>
+                <property name="top_attach">5</property>
+                <property name="width">1</property>
+                <property name="height">1</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkLabel" id="string_conversion_as_error">
+                <property name="can_focus">False</property>
+                <property name="no_show_all">True</property>
+                <property name="label" translatable="yes">Generate #VALUE! error</property>
+              </object>
+              <packing>
+                <property name="left_attach">0</property>
+                <property name="top_attach">6</property>
+                <property name="width">1</property>
+                <property name="height">1</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkLabel" id="string_conversion_as_zero">
+                <property name="can_focus">False</property>
+                <property name="no_show_all">True</property>
+                <property name="label" translatable="yes">Treat as zero</property>
+              </object>
+              <packing>
+                <property name="left_attach">0</property>
+                <property name="top_attach">7</property>
+                <property name="width">1</property>
+                <property name="height">1</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkLabel" id="string_conversion_unambiguous">
+                <property name="can_focus">False</property>
+                <property name="no_show_all">True</property>
+                <property name="label" translatable="yes">Convert only unambiguous</property>
+              </object>
+              <packing>
+                <property name="left_attach">0</property>
+                <property name="top_attach">8</property>
+                <property name="width">1</property>
+                <property name="height">1</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkLabel" id="string_conversion_locale_dependent">
+                <property name="can_focus">False</property>
+                <property name="no_show_all">True</property>
+                <property name="label" translatable="yes">Convert also locale dependent</property>
+              </object>
+              <packing>
+                <property name="left_attach">0</property>
+                <property name="top_attach">9</property>
+                <property name="width">1</property>
+                <property name="height">1</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkLabel" id="empty_str_as_zero_caption">
+                <property name="can_focus">False</property>
+                <property name="no_show_all">True</property>
+                <property name="label" translatable="yes">Treat empty string as zero</property>
+              </object>
+              <packing>
+                <property name="left_attach">0</property>
+                <property name="top_attach">10</property>
+                <property name="width">1</property>
+                <property name="height">1</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkLabel" id="empty_str_as_zero_desc">
+                <property name="can_focus">False</property>
+                <property name="no_show_all">True</property>
+                <property name="label" translatable="yes">This option determines whether an empty string is to be treated as having a value of zero when used in arithmetic or generates an error. It is disabled if conversion from text to number is set to always generate an error or always treat text as zero and then follows that value.</property>
+                <property name="wrap">True</property>
+                <property name="max_width_chars">56</property>
+              </object>
+              <packing>
+                <property name="left_attach">0</property>
+                <property name="top_attach">11</property>
+                <property name="width">1</property>
+                <property name="height">1</property>
+              </packing>
+            </child>
+            <child>
               <object class="GtkLabel" id="ref_syntax_caption">
                 <property name="can_focus">False</property>
                 <property name="no_show_all">True</property>
@@ -195,7 +303,7 @@
               </object>
               <packing>
                 <property name="left_attach">0</property>
-                <property name="top_attach">4</property>
+                <property name="top_attach">12</property>
                 <property name="width">1</property>
                 <property name="height">1</property>
               </packing>
@@ -210,7 +318,7 @@
               </object>
               <packing>
                 <property name="left_attach">0</property>
-                <property name="top_attach">5</property>
+                <property name="top_attach">13</property>
                 <property name="width">1</property>
                 <property name="height">1</property>
               </packing>
@@ -223,35 +331,7 @@
               </object>
               <packing>
                 <property name="left_attach">0</property>
-                <property name="top_attach">6</property>
-                <property name="width">1</property>
-                <property name="height">1</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkLabel" id="empty_str_as_zero_caption">
-                <property name="can_focus">False</property>
-                <property name="no_show_all">True</property>
-                <property name="label" translatable="yes">Treat empty string as zero</property>
-              </object>
-              <packing>
-                <property name="left_attach">0</property>
-                <property name="top_attach">7</property>
-                <property name="width">1</property>
-                <property name="height">1</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkLabel" id="empty_str_as_zero_desc">
-                <property name="can_focus">False</property>
-                <property name="no_show_all">True</property>
-                <property name="label" translatable="yes">This option determines whether or not an empty string is to be treated as having a value of zero when used in arithmetic.</property>
-                <property name="wrap">True</property>
-                <property name="max_width_chars">56</property>
-              </object>
-              <packing>
-                <property name="left_attach">0</property>
-                <property name="top_attach">8</property>
+                <property name="top_attach">14</property>
                 <property name="width">1</property>
                 <property name="height">1</property>
               </packing>
@@ -264,7 +344,7 @@
               </object>
               <packing>
                 <property name="left_attach">0</property>
-                <property name="top_attach">9</property>
+                <property name="top_attach">15</property>
                 <property name="width">1</property>
                 <property name="height">1</property>
               </packing>
@@ -279,7 +359,7 @@
               </object>
               <packing>
                 <property name="left_attach">0</property>
-                <property name="top_attach">10</property>
+                <property name="top_attach">16</property>
                 <property name="width">1</property>
                 <property name="height">1</property>
               </packing>
@@ -470,7 +550,7 @@
               </object>
               <packing>
                 <property name="left_attach">0</property>
-                <property name="top_attach">11</property>
+                <property name="top_attach">17</property>
                 <property name="width">1</property>
                 <property name="height">1</property>
               </packing>
