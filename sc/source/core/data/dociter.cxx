@@ -1538,7 +1538,9 @@ public:
             // Move to the last position of the previous block.
             decBlock(aHiPos);
 
-            if (aHiPos.first == mrCells.begin())
+            // Check the row postion of the end of the previous block, and make sure it's valid.
+            SCROW nBlockEndRow = aHiPos.first->position + aHiPos.first->size - 1;
+            if (nBlockEndRow < nStartRow)
             {
                 mbValid = false;
                 return;
