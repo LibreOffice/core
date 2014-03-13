@@ -48,6 +48,22 @@ namespace chart {
 
 namespace dummy {
 
+#if 0
+
+std::ostream& operator<<(std::ostream& rStrm, const awt::Point& rPoint)
+{
+    rStrm << rPoint.X << "," << rPoint.Y;
+    return rStrm;
+}
+
+std::ostream& operator<<(std::ostream& rStrm, const awt::Size& rSize)
+{
+    rStrm << rSize.Width << "," << rSize.Height;
+    return rStrm;
+}
+
+#endif
+
 bool TextCache::hasEntry(const TextCacheKey& rKey)
 {
     return maCache.find(rKey) != maCache.end();
