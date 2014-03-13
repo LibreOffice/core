@@ -24,6 +24,7 @@ $(eval $(call gb_UIConfig_add_uifiles,dbaccess, \
     dbaccess/uiconfig/ui/joindialog \
     dbaccess/uiconfig/ui/queryfilterdialog \
     dbaccess/uiconfig/ui/querypropertiesdialog  \
+    dbaccess/uiconfig/ui/relationdialog \
     dbaccess/uiconfig/ui/rowheightdialog \
     dbaccess/uiconfig/ui/savedialog \
     dbaccess/uiconfig/ui/specialsettingspage \

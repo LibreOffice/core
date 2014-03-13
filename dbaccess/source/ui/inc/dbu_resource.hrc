@@ -82,7 +82,7 @@
 #define DLG_JOIN_TABADD                 RID_DIALOG_START + 14
     // FREE
 #define WIZ_RTFCOPYTABLE                RID_DIALOG_START + 16
-#define DLG_REL_PROPERTIES              RID_DIALOG_START + 17
+    // FREE
     // FREE
 #define DLG_INDEXDESIGN                 RID_DIALOG_START + 19
     // FREE
@@ -280,10 +280,6 @@
 // various
 
 #define PB_FORMAT                       RID_MISC_START +  0
-#define LB_LEFT_TABLE                   RID_MISC_START +  2
-#define LB_RIGHT_TABLE                  RID_MISC_START +  3
-#define FL_INVOLVED_TABLES              RID_MISC_START +  5
-#define FL_INVOLVED_FIELDS              RID_MISC_START +  6
 
 #endif // _DBU_RESOURCE_HRC_
 

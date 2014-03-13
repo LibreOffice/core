@@ -51,27 +51,21 @@ using namespace ::dbtools;
 ORelationDialog::ORelationDialog( OJoinTableView* pParent,
                                  const TTableConnectionData::value_type& pConnectionData,
                                  sal_Bool bAllowTableSelect )
-    :ModalDialog( pParent, ModuleRes(DLG_REL_PROPERTIES) )
-    ,m_pTableMap(pParent->GetTabWinMap())
-
-    ,aFL_CascUpd(           this, ModuleRes(FL_CASC_UPD) )
-    ,aRB_NoCascUpd(         this, ModuleRes(RB_NO_CASC_UPD) )
-    ,aRB_CascUpd(           this, ModuleRes(RB_CASC_UPD) )
-    ,aRB_CascUpdNull(       this, ModuleRes(RB_CASC_UPD_NULL) )
-    ,aRB_CascUpdDefault(    this, ModuleRes(RB_CASC_UPD_DEFAULT) )
-    ,aFL_CascDel(           this, ModuleRes(FL_CASC_DEL) )
-    ,aRB_NoCascDel(         this, ModuleRes(RB_NO_CASC_DEL) )
-    ,aRB_CascDel(           this, ModuleRes(RB_CASC_DEL) )
-    ,aRB_CascDelNull(       this, ModuleRes(RB_CASC_DEL_NULL) )
-    ,aRB_CascDelDefault(    this, ModuleRes(RB_CASC_DEL_DEFAULT) )
-
-    ,aPB_OK( this, ModuleRes( PB_OK ) )
-    ,aPB_CANCEL( this, ModuleRes( PB_CANCEL ) )
-    ,aPB_HELP( this, ModuleRes( PB_HELP ) )
-
-    ,m_pOrigConnData( pConnectionData )
-    ,m_bTriedOneUpdate(sal_False)
+    : ModalDialog(pParent, "RelationDialog",
+        "dbaccess/ui/relationdialog.ui")
+    , m_pTableMap(pParent->GetTabWinMap())
+    , m_pOrigConnData(pConnectionData)
+    , m_bTriedOneUpdate(false)
 {
+    get(m_pRB_NoCascUpd, "addaction");
+    get(m_pRB_CascUpd, "addcascade");
+    get(m_pRB_CascUpdNull, "addnull");
+    get(m_pRB_CascUpdDefault, "adddefault");
+    get(m_pRB_NoCascDel, "delaction");
+    get(m_pRB_CascDel, "delcascade");
+    get(m_pRB_CascDelNull, "delnull");
+    get(m_pRB_CascDelDefault, "deldefault");
+    get(m_pPB_OK, "ok");
 
     m_xConnection = pParent->getDesignView()->getController().getConnection();
 
@@ -80,21 +74,19 @@ ORelationDialog::ORelationDialog( OJoinTableView* pParent,
     m_pConnData->CopyFrom( *pConnectionData );
 
     Init(m_pConnData);
-    m_pTableControl.reset( new OTableListBoxControl(this, m_pTableMap, this) );
+    m_xTableControl.reset( new OTableListBoxControl(this, m_pTableMap, this) );
 
-    aPB_OK.SetClickHdl( LINK(this, ORelationDialog, OKClickHdl) );
+    m_pPB_OK->SetClickHdl( LINK(this, ORelationDialog, OKClickHdl) );
 
-    m_pTableControl->Init( m_pConnData );
+    m_xTableControl->Init( m_pConnData );
     if ( bAllowTableSelect )
-        m_pTableControl->fillListBoxes();
+        m_xTableControl->fillListBoxes();
     else
-        m_pTableControl->fillAndDisable(pConnectionData);
+        m_xTableControl->fillAndDisable(pConnectionData);
 
-    m_pTableControl->lateInit();
+    m_xTableControl->lateInit();
 
-    m_pTableControl->NotifyCellChange();
-
-    FreeResource();
+    m_xTableControl->NotifyCellChange();
 }
 
 void ORelationDialog::Init(const TTableConnectionData::value_type& _pConnectionData)
@@ -105,18 +97,18 @@ void ORelationDialog::Init(const TTableConnectionData::value_type& _pConnectionD
     {
     case KeyRule::NO_ACTION:
     case KeyRule::RESTRICT:
-        aRB_NoCascUpd.Check( true );
+        m_pRB_NoCascUpd->Check( true );
         break;
 
     case KeyRule::CASCADE:
-        aRB_CascUpd.Check( true );
+        m_pRB_CascUpd->Check( true );
         break;
 
     case KeyRule::SET_NULL:
-        aRB_CascUpdNull.Check( true );
+        m_pRB_CascUpdNull->Check( true );
         break;
     case KeyRule::SET_DEFAULT:
-        aRB_CascUpdDefault.Check( true );
+        m_pRB_CascUpdDefault->Check( true );
         break;
     }
 
@@ -125,18 +117,18 @@ void ORelationDialog::Init(const TTableConnectionData::value_type& _pConnectionD
     {
     case KeyRule::NO_ACTION:
     case KeyRule::RESTRICT:
-        aRB_NoCascDel.Check( true );
+        m_pRB_NoCascDel->Check( true );
         break;
 
     case KeyRule::CASCADE:
-        aRB_CascDel.Check( true );
+        m_pRB_CascDel->Check( true );
         break;
 
     case KeyRule::SET_NULL:
-        aRB_CascDelNull.Check( true );
+        m_pRB_CascDelNull->Check( true );
         break;
     case KeyRule::SET_DEFAULT:
-        aRB_CascDelDefault.Check( true );
+        m_pRB_CascDelDefault->Check( true );
         break;
     }
 }
@@ -151,13 +143,13 @@ IMPL_LINK( ORelationDialog, OKClickHdl, Button*, /*pButton*/ )
     sal_uInt16 nAttrib = 0;
 
     // Delete Rules
-    if( aRB_NoCascDel.IsChecked() )
+    if( m_pRB_NoCascDel->IsChecked() )
         nAttrib |= KeyRule::NO_ACTION;
-    if( aRB_CascDel.IsChecked() )
+    if( m_pRB_CascDel->IsChecked() )
         nAttrib |= KeyRule::CASCADE;
-    if( aRB_CascDelNull.IsChecked() )
+    if( m_pRB_CascDelNull->IsChecked() )
         nAttrib |= KeyRule::SET_NULL;
-    if( aRB_CascDelDefault.IsChecked() )
+    if( m_pRB_CascDelDefault->IsChecked() )
         nAttrib |= KeyRule::SET_DEFAULT;
 
     ORelationTableConnectionData* pConnData = static_cast<ORelationTableConnectionData*>(m_pConnData.get());
@@ -165,22 +157,22 @@ IMPL_LINK( ORelationDialog, OKClickHdl, Button*, /*pButton*/ )
 
     // Update Rules
     nAttrib = 0;
-    if( aRB_NoCascUpd.IsChecked() )
+    if( m_pRB_NoCascUpd->IsChecked() )
         nAttrib |= KeyRule::NO_ACTION;
-    if( aRB_CascUpd.IsChecked() )
+    if( m_pRB_CascUpd->IsChecked() )
         nAttrib |= KeyRule::CASCADE;
-    if( aRB_CascUpdNull.IsChecked() )
+    if( m_pRB_CascUpdNull->IsChecked() )
         nAttrib |= KeyRule::SET_NULL;
-    if( aRB_CascUpdDefault.IsChecked() )
+    if( m_pRB_CascUpdDefault->IsChecked() )
         nAttrib |= KeyRule::SET_DEFAULT;
     pConnData->SetUpdateRules( nAttrib );
 
-    m_pTableControl->SaveModified();
+    m_xTableControl->SaveModified();
 
     //// wenn die ComboBoxen fuer die Tabellenauswahl enabled sind (Constructor mit bAllowTableSelect==sal_True), dann muss ich in die
     //// Connection auch die Tabellennamen stecken
-    //m_pConnData->SetSourceWinName(m_pTableControl->getSourceWinName());
-    //m_pConnData->SetDestWinName(m_pTableControl->getDestWinName());
+    //m_pConnData->SetSourceWinName(m_xTableControl->getSourceWinName());
+    //m_pConnData->SetDestWinName(m_xTableControl->getDestWinName());
 
     // try to create the relation
     try
@@ -210,8 +202,8 @@ IMPL_LINK( ORelationDialog, OKClickHdl, Button*, /*pButton*/ )
 
     // try again
     Init(m_pConnData);
-    m_pTableControl->Init( m_pConnData );
-    m_pTableControl->lateInit();
+    m_xTableControl->Init( m_pConnData );
+    m_xTableControl->lateInit();
 
     return 0;
 }
@@ -232,7 +224,7 @@ TTableConnectionData::value_type ORelationDialog::getConnectionData() const
 
 void ORelationDialog::setValid(sal_Bool _bValid)
 {
-    aPB_OK.Enable(_bValid);
+    m_pPB_OK->Enable(_bValid);
 }
 
 void ORelationDialog::notifyConnectionChange()

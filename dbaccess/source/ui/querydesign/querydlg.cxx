@@ -19,7 +19,6 @@
 
 #include "querydlg.hxx"
 #include "dbu_qry.hrc"
-#include "querydlg.hrc"
 #include <tools/debug.hxx>
 #include <tools/diagnose_ex.h>
 #include "QTableConnectionData.hxx"
@@ -30,6 +29,12 @@
 #include "RelationControl.hxx"
 #include <vcl/msgbox.hxx>
 #include <vcl/settings.hxx>
+
+#define ID_INNER_JOIN       1
+#define ID_LEFT_JOIN        2
+#define ID_RIGHT_JOIN       3
+#define ID_FULL_JOIN        4
+#define ID_CROSS_JOIN       5
 
 using namespace dbaui;
 using namespace ::com::sun::star::uno;

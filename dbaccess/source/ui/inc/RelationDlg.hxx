@@ -19,9 +19,9 @@
 #ifndef INCLUDED_DBACCESS_SOURCE_UI_INC_RELATIONDLG_HXX
 #define INCLUDED_DBACCESS_SOURCE_UI_INC_RELATIONDLG_HXX
 
-#include <vcl/dialog.hxx>
-
+#include <boost/scoped_ptr.hpp>
 #include <vcl/button.hxx>
+#include <vcl/dialog.hxx>
 #include <vcl/fixed.hxx>
 #include <vcl/msgbox.hxx>
 #include "JoinTableView.hxx"
@@ -36,23 +36,19 @@ namespace dbaui
                             ,public IRelationControlInterface
     {
         OModuleClient                           m_aModuleClient;
-        ::std::auto_ptr<OTableListBoxControl>   m_pTableControl;
+        boost::scoped_ptr<OTableListBoxControl> m_xTableControl;
         OJoinTableView::OTableWindowMap*        m_pTableMap;
 
-        FixedLine   aFL_CascUpd;
-        RadioButton aRB_NoCascUpd,
-                    aRB_CascUpd,
-                    aRB_CascUpdNull,
-                    aRB_CascUpdDefault;
-        FixedLine   aFL_CascDel;
-        RadioButton aRB_NoCascDel,
-                    aRB_CascDel,
-                    aRB_CascDelNull,
-                    aRB_CascDelDefault;
+        RadioButton* m_pRB_NoCascUpd;
+        RadioButton* m_pRB_CascUpd;
+        RadioButton* m_pRB_CascUpdNull;
+        RadioButton* m_pRB_CascUpdDefault;
+        RadioButton* m_pRB_NoCascDel;
+        RadioButton* m_pRB_CascDel;
+        RadioButton* m_pRB_CascDelNull;
+        RadioButton* m_pRB_CascDelDefault;
 
-        OKButton    aPB_OK;
-        CancelButton aPB_CANCEL;
-        HelpButton  aPB_HELP;
+        OKButton*   m_pPB_OK;
 
         TTableConnectionData::value_type                                        m_pConnData;
         TTableConnectionData::value_type                                        m_pOrigConnData;
