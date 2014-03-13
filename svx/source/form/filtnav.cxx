@@ -108,9 +108,9 @@ namespace svxform
 
 
 OFilterItemExchange::OFilterItemExchange()
+    : m_pFormItem(NULL)
 {
 }
-
 
 void OFilterItemExchange::AddSupportedFormats()
 {
