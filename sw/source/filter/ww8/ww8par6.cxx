@@ -752,7 +752,7 @@ void SwWW8ImplReader::HandleLineNumbering(const wwSection &rSection)
 }
 
 wwSection::wwSection(const SwPosition &rPos) : maStart(rPos.nNode),
-    mpSection(0), mpPage(0), meDir(FRMDIR_HORI_LEFT_TOP),
+    mpSection(0), mpPage(0), meDir(FRMDIR_HORI_LEFT_TOP), mLinkId(0),
     nPgWidth(SvxPaperInfo::GetPaperSize(PAPER_A4).Width()),
     nPgLeft(MM_250), nPgRight(MM_250), mnBorders(0), mbHasFootnote(false)
 {
