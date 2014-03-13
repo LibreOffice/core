@@ -125,7 +125,6 @@ void RscTypCont::Init()
     RscTop   *  pClassMetricBox;
     RscTop   *  pClassCurrencyBox;
     RscTop   *  pClassLongCurrencyBox;
-    RscTop   *  pClassDateBox;
     RscTop   *  pClassDockingWindow;
     RscTop   *  pClassToolBoxItem;
     RscTop   *  pClassToolBox;
@@ -679,13 +678,6 @@ void RscTypCont::Init()
 
     pClassLongCurrencyBox = InitClassCurrencyBox( "LongCurrencyBox", RSC_LONGCURRENCYBOX, pClassTmp );
     pRoot->Insert( pClassLongCurrencyBox );
-    }
-    { // Mehrfachvererbung von Hand
-    RscTop * pClassTmp = InitClassDateFormatter( pClassComboBox, pClassDate );
-    aBaseLst.push_back( pClassTmp );
-
-    pClassDateBox = InitClassDateBox( pClassTmp );
-    pRoot->Insert( pClassDateBox );
     }
     pClassDockingWindow = InitClassDockingWindow( pClassWindow, pMapUnit );
     pRoot->Insert( pClassDockingWindow );
