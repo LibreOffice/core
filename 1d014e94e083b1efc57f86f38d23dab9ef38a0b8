@@ -52,6 +52,24 @@
       "revId": "1d014e94e083b1efc57f86f38d23dab9ef38a0b8",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a930d6b_34c136e5",
+        "filename": "sw/inc/fldbas.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 290,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2014-03-13T09:17:01Z",
+      "side": 1,
+      "message": "Aha! Yes, I think a new optional parameter would be also OK, as that would also avoid altering the document model on export, which was my primary problem. :-)",
+      "parentUuid": "1a930d6b_943e6a28",
+      "revId": "1d014e94e083b1efc57f86f38d23dab9ef38a0b8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
