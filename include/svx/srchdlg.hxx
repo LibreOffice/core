@@ -36,7 +36,6 @@
 #include <vector>
 
 class SvxSearchItem;
-class MoreButton;
 class SfxStyleSheetBasePool;
 class SvxJSearchOptionsPage;
 class SvxSearchController;

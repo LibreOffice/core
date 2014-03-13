@@ -47,7 +47,6 @@ private:
 protected:
     using Window::ImplInit;
     SAL_DLLPRIVATE void ImplInit( Window* pParent, WinBits nStyle );
-    SAL_DLLPRIVATE void ImplLoadRes( const ResId& rResId );
 
 public:
     explicit            MoreButton( Window* pParent, WinBits nStyle = 0 );

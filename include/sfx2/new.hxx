@@ -32,7 +32,6 @@
 
 class SfxObjectShellLock;
 class SfxObjectShell;
-class MoreButton;
 
 
 

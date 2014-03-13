@@ -131,7 +131,6 @@ void RscTypCont::Init()
     RscTop   *  pClassToolBoxItem;
     RscTop   *  pClassToolBox;
     RscTop   *  pClassStatusBar;
-    RscTop   *  pClassMoreButton;
     RscTop   *  pClassFloatingWindow;
     RscTop   *  pClassTabPage;
     RscTop   *  pClassTabDialog;
@@ -710,9 +709,6 @@ void RscTypCont::Init()
 
     pClassStatusBar = InitClassStatusBar( pClassWindow );
     pRoot->Insert( pClassStatusBar );
-
-    pClassMoreButton = InitClassMoreButton( pClassPushButton, pMapUnit );
-    pRoot->Insert( pClassMoreButton );
 
     pClassFloatingWindow = InitClassFloatingWindow( pClassSystemWindow,
                                                     pMapUnit );

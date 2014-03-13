@@ -156,11 +156,6 @@ typedef short RSWND_STYLE;
 #define RSC_TOOLBOX_ITEMIMAGELIST       0x40
 #define RSC_TOOLBOX_ITEMLIST            0x80
 
-// For "MoreButton" resources:
-#define RSC_MOREBUTTON_STATE            0x01
-#define RSC_MOREBUTTON_MAPUNIT          0x02
-#define RSC_MOREBUTTON_DELTA            0x04
-
 // For "FloatingWindow" resources:
 #define RSC_FLOATINGWINDOW_WHMAPMODE    0x01
 #define RSC_FLOATINGWINDOW_WIDTH        0x02

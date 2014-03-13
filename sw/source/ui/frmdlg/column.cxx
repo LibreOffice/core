@@ -478,7 +478,6 @@ SwColumnPage::SwColumnPage(Window *pParent, const SfxItemSet &rSet)
 
     m_pDefaultVS->SetSelectHdl(LINK(this, SwColumnPage, SetDefaultsHdl));
 
-    // announce Controls for additional region at the MoreButton
     Link aCLNrLk = LINK(this, SwColumnPage, ColModify);
     m_pCLNrEdt->SetModifyHdl(aCLNrLk);
     Link aLk = LINK(this, SwColumnPage, GapModify);

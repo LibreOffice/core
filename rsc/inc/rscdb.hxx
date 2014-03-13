@@ -238,7 +238,6 @@ class RscTypCont
     RscTop *    InitClassToolBox( RscTop * pSuper, RscTop * pClassToolBoxItem,
                                   RscTop * pClassImageList );
     RscTop *    InitClassStatusBar( RscTop * pSuper );
-    RscTop *    InitClassMoreButton( RscTop * pSuper, RscEnum * pMapUnit );
     RscTop *    InitClassFloatingWindow( RscTop * pSuper,
                                          RscEnum * pMapUnit );
     RscTop *    InitClassTabControlItem( RscTop * pSuper );

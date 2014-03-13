@@ -240,8 +240,6 @@ private:
     CancelButton*            mpBtnCancel;
     PushButton*              mpBtnRemove;
     PushButton*              mpBtnOptions;
-    //FIXME: replace with expander
-    //MoreButton*              mpBtnMore;
     VclExpander*             mpExpander;
     std::vector<OUString> maFuncNames;     /// Localized function names from resource.
     boost::ptr_vector<OUString> maRefStrs; /// Reference strings stored with the output list box.

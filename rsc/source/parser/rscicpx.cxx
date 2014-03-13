@@ -1899,31 +1899,6 @@ RscTop * RscTypCont::InitClassStatusBar( RscTop * pSuper )
     return pClassStatusBar;
 }
 
-RscTop * RscTypCont::InitClassMoreButton( RscTop * pSuper, RscEnum * pMapUnit )
-{
-    Atom        nId;
-    RscTop *    pClassMoreButton;
-
-    // Klasse anlegen
-    nId = pHS->getID( "MoreButton" );
-    pClassMoreButton = new RscClass( nId, RSC_MOREBUTTON, pSuper );
-    pClassMoreButton->SetCallPar( *pWinPar1, *pWinPar2, *pWinParType );
-    aNmTb.Put( nId, CLASSNAME, pClassMoreButton );
-
-    // Variablen anlegen
-    nId = aNmTb.Put( "State", VARNAME );
-    pClassMoreButton->SetVariable( nId, &aBool, NULL, 0,
-                                   RSC_MOREBUTTON_STATE );
-    nId = aNmTb.Put( "MapUnit", VARNAME );
-    pClassMoreButton->SetVariable( nId, pMapUnit, NULL, 0,
-                                   RSC_MOREBUTTON_MAPUNIT );
-    nId = aNmTb.Put( "Delta", VARNAME );
-    pClassMoreButton->SetVariable( nId, &aUShort, NULL, 0,
-                                   RSC_MOREBUTTON_DELTA );
-
-    return pClassMoreButton;
-}
-
 RscTop * RscTypCont::InitClassFloatingWindow( RscTop * pSuper,
                                               RscEnum * pMapUnit )
 {

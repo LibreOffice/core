@@ -1504,7 +1504,6 @@ OString ResMgr::GetAutoHelpId()
                     case RSC_TIMEBOX:           aHID.append( "TimeBox" );          break;
                     case RSC_IMAGEBUTTON:       aHID.append( "ImageButton" );      break;
                     case RSC_MENUBUTTON:        aHID.append( "MenuButton" );       break;
-                    case RSC_MOREBUTTON:        aHID.append( "MoreButton" );       break;
                     default:
                         // no type, no auto HID
                         return OString();

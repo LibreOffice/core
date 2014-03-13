@@ -78,26 +78,6 @@ MoreButton::MoreButton( Window* pParent, WinBits nStyle ) :
     ImplInit( pParent, nStyle );
 }
 
-void MoreButton::ImplLoadRes( const ResId& rResId )
-{
-    PushButton::ImplLoadRes( rResId );
-
-    sal_uLong nObjMask = ReadLongRes();
-
-    if ( nObjMask & RSC_MOREBUTTON_STATE )
-    {
-        // Don't call method as Dialog should not be switched over
-        mbState = ReadShortRes() != 0;
-        // SetText( GetText() );
-        ShowState();
-    }
-    if ( nObjMask & RSC_MOREBUTTON_MAPUNIT )
-        meUnit = (MapUnit)ReadLongRes();
-    if ( nObjMask & RSC_MOREBUTTON_DELTA )
-        // Size for resizing the Dialog
-        mnDelta = ReadShortRes();
-}
-
 MoreButton::~MoreButton()
 {
     delete mpMBData->mpItemList;
