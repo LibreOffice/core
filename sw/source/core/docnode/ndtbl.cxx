@@ -2746,13 +2746,11 @@ void SwDoc::SetTabCols( const SwTabCols &rNew, sal_Bool bCurRowOnly,
 void SwDoc::SetTabRows( const SwTabCols &rNew, sal_Bool bCurColOnly, const SwCursor*,
                         const SwCellFrm* pBoxFrm )
 {
-    const SwTableBox* pBox;
     SwTabFrm *pTab;
 
     OSL_ENSURE( pBoxFrm, "SetTabRows called without pBoxFrm" );
 
     pTab = ((SwFrm*)pBoxFrm)->ImplFindTabFrm();
-    pBox = pBoxFrm->GetTabBox();
 
     // If the Table is still using relative values (USHRT_MAX)
     // we need to switch to absolute ones.
@@ -2828,7 +2826,7 @@ void SwDoc::SetTabRows( const SwTabCols &rNew, sal_Bool bCurColOnly, const SwCur
 
                             if ( pCntnt && pCntnt->IsTxtFrm() )
                             {
-                                pBox = ((SwCellFrm*)pFrm)->GetTabBox();
+                                const SwTableBox* pBox = ((SwCellFrm*)pFrm)->GetTabBox();
                                 const long nRowSpan = pBox->getRowSpan();
                                 if( nRowSpan > 0 ) // Not overlapped
                                     pTxtFrm = (SwTxtFrm*)pCntnt;
