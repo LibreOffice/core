@@ -872,7 +872,7 @@ void EMFWriter::ImplWriteBmpRecord( const Bitmap& rBmp, const Point& rPt,
     }
 }
 
-void EMFWriter::ImplWriteTextRecord( const Point& rPos, const OUString rText, const sal_Int32* pDXArray, sal_uInt32 nWidth )
+void EMFWriter::ImplWriteTextRecord( const Point& rPos, const OUString& rText, const sal_Int32* pDXArray, sal_uInt32 nWidth )
 {
     sal_Int32 nLen = rText.getLength(), i;
 

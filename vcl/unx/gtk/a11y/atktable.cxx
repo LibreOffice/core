@@ -45,7 +45,7 @@ atk_object_wrapper_conditional_ref( const uno::Reference< accessibility::XAccess
 
 // FIXME
 static G_CONST_RETURN gchar *
-getAsConst( OUString rString )
+getAsConst( const OUString& rString )
 {
     static const int nMax = 10;
     static OString aUgly[nMax];

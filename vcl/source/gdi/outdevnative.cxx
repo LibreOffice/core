@@ -268,7 +268,7 @@ bool OutputDevice::DrawNativeControl( ControlType nType,
                             const Rectangle& rControlRegion,
                             ControlState nState,
                             const ImplControlValue& aValue,
-                            OUString aCaption )
+                            const OUString& aCaption )
 {
     if( !lcl_enableNativeWidget( *this ) )
         return false;
@@ -310,7 +310,7 @@ bool OutputDevice::GetNativeControlRegion(  ControlType nType,
                                 const Rectangle& rControlRegion,
                                 ControlState nState,
                                 const ImplControlValue& aValue,
-                                OUString aCaption,
+                                const OUString& aCaption,
                                 Rectangle &rNativeBoundingRegion,
                                 Rectangle &rNativeContentRegion ) const
 {

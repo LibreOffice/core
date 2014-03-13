@@ -104,7 +104,7 @@ bool GraphicNativeTransform::rotateBitmapOnly(sal_uInt16 aRotation)
     return true;
 }
 
-bool GraphicNativeTransform::rotateGeneric(sal_uInt16 aRotation, OUString aType)
+bool GraphicNativeTransform::rotateGeneric(sal_uInt16 aRotation, const OUString& aType)
 {
     // Can't rotate animations yet
     if (mrGraphic.IsAnimated())

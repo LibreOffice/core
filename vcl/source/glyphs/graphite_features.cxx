@@ -38,14 +38,14 @@ const char GrFeatureParser::FEAT_PREFIX = ':';
 const char GrFeatureParser::FEAT_SEPARATOR = '&';
 const char GrFeatureParser::FEAT_ID_VALUE_SEPARATOR = '=';
 
-GrFeatureParser::GrFeatureParser(const gr_face * pFace, const OString lang)
+GrFeatureParser::GrFeatureParser(const gr_face * pFace, const OString& lang)
     : mnNumSettings(0), mbErrors(false), mpSettings(NULL)
 {
     maLang.label[0] = maLang.label[1] = maLang.label[2] = maLang.label[3] = '\0';
     setLang(pFace, lang);
 }
 
-GrFeatureParser::GrFeatureParser(const gr_face * pFace, const OString features, const OString lang)
+GrFeatureParser::GrFeatureParser(const gr_face * pFace, const OString& features, const OString& lang)
     : mnNumSettings(0), mbErrors(false), mpSettings(NULL)
 {
     sal_Int32 nEquals = 0;

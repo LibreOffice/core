@@ -2341,7 +2341,7 @@ ImplFontEntry* ImplFontCache::GetFontEntry( ImplDevFontList* pFontList,
 
 namespace
 {
-    OUString stripCharSetFromName(OUString aName)
+    OUString stripCharSetFromName(const OUString& _aName)
     {
         // I worry that someone will have a font which *does* have
         // e.g. "Greek" legitimately at the end of its name :-(
@@ -2358,6 +2358,7 @@ namespace
             " (vietnamese)"
         };
 
+        OUString aName = _aName;
         // These can be crazily piled up, e.g. Times New Roman CYR Greek
         bool bFinished = false;
         while (!bFinished)

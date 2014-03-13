@@ -28,7 +28,7 @@ using namespace ::com::sun::star;
 
 // FIXME
 static G_CONST_RETURN gchar *
-getAsConst( OUString rString )
+getAsConst( const OUString& rString )
 {
     static const int nMax = 10;
     static OString aUgly[nMax];

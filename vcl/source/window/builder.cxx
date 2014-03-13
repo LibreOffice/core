@@ -45,7 +45,7 @@ using namespace com::sun::star;
 
 namespace
 {
-    sal_uInt16 mapStockToImageResource(OString sType)
+    sal_uInt16 mapStockToImageResource(const OString& sType)
     {
         sal_uInt16 nRet = 0;
         if (sType == "gtk-index")
@@ -55,7 +55,7 @@ namespace
         return nRet;
     }
 
-    SymbolType mapStockToSymbol(OString sType)
+    SymbolType mapStockToSymbol(const OString& sType)
     {
         SymbolType eRet = SYMBOL_NOSYMBOL;
         if (sType == "gtk-media-next")
@@ -167,7 +167,7 @@ namespace
 }
 #endif
 
-VclBuilder::VclBuilder(Window *pParent, OUString sUIDir, OUString sUIFile, OString sID, const uno::Reference<frame::XFrame>& rFrame)
+VclBuilder::VclBuilder(Window *pParent, const OUString& sUIDir, const OUString& sUIFile, const OString& sID, const uno::Reference<frame::XFrame>& rFrame)
     : m_sID(sID)
     , m_sHelpRoot(OUStringToOString(sUIFile, RTL_TEXTENCODING_UTF8))
     , m_pStringReplace(ResMgr::GetReadStringHook())
@@ -851,7 +851,7 @@ namespace
         return nDigits;
     }
 
-    FieldUnit detectMetricUnit(OString sUnit)
+    FieldUnit detectMetricUnit(const OString& sUnit)
     {
         FieldUnit eUnit = FUNIT_NONE;
 
@@ -2906,7 +2906,7 @@ Window *VclBuilder::get_widget_root()
     return m_aChildren.empty() ? NULL : m_aChildren[0].m_pWindow;
 }
 
-Window *VclBuilder::get_by_name(OString sID)
+Window *VclBuilder::get_by_name(const OString& sID)
 {
     for (std::vector<WinAndId>::iterator aI = m_aChildren.begin(),
          aEnd = m_aChildren.end(); aI != aEnd; ++aI)
@@ -2918,7 +2918,7 @@ Window *VclBuilder::get_by_name(OString sID)
     return NULL;
 }
 
-PopupMenu *VclBuilder::get_menu(OString sID)
+PopupMenu *VclBuilder::get_menu(const OString& sID)
 {
     for (std::vector<MenuAndId>::iterator aI = m_aMenus.begin(),
          aEnd = m_aMenus.end(); aI != aEnd; ++aI)
@@ -2946,7 +2946,7 @@ short VclBuilder::get_response(const Window *pWindow) const
     return RET_CANCEL;
 }
 
-void VclBuilder::set_response(OString sID, short nResponse)
+void VclBuilder::set_response(const OString& sID, short nResponse)
 {
     for (std::vector<WinAndId>::iterator aI = m_aChildren.begin(),
          aEnd = m_aChildren.end(); aI != aEnd; ++aI)
@@ -2962,7 +2962,7 @@ void VclBuilder::set_response(OString sID, short nResponse)
     assert(false);
 }
 
-void VclBuilder::delete_by_name(OString sID)
+void VclBuilder::delete_by_name(const OString& sID)
 {
     for (std::vector<WinAndId>::iterator aI = m_aChildren.begin(),
          aEnd = m_aChildren.end(); aI != aEnd; ++aI)
@@ -3031,7 +3031,7 @@ void VclBuilder::set_window_packing_position(const Window *pWindow, sal_Int32 nP
     }
 }
 
-const VclBuilder::ListStore *VclBuilder::get_model_by_name(OString sID) const
+const VclBuilder::ListStore *VclBuilder::get_model_by_name(const OString& sID) const
 {
     std::map<OString, ListStore>::const_iterator aI = m_pParserState->m_aModels.find(sID);
     if (aI != m_pParserState->m_aModels.end())
@@ -3039,7 +3039,7 @@ const VclBuilder::ListStore *VclBuilder::get_model_by_name(OString sID) const
     return NULL;
 }
 
-const VclBuilder::TextBuffer *VclBuilder::get_buffer_by_name(OString sID) const
+const VclBuilder::TextBuffer *VclBuilder::get_buffer_by_name(const OString& sID) const
 {
     std::map<OString, TextBuffer>::const_iterator aI = m_pParserState->m_aTextBuffers.find(sID);
     if (aI != m_pParserState->m_aTextBuffers.end())
@@ -3047,7 +3047,7 @@ const VclBuilder::TextBuffer *VclBuilder::get_buffer_by_name(OString sID) const
     return NULL;
 }
 
-const VclBuilder::Adjustment *VclBuilder::get_adjustment_by_name(OString sID) const
+const VclBuilder::Adjustment *VclBuilder::get_adjustment_by_name(const OString& sID) const
 {
     std::map<OString, Adjustment>::const_iterator aI = m_pParserState->m_aAdjustments.find(sID);
     if (aI != m_pParserState->m_aAdjustments.end())
