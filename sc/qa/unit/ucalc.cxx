@@ -3765,6 +3765,37 @@ void Test::testCopyPasteRelativeFormula()
     // B2 references A2, so the value should be 1.
     CPPUNIT_ASSERT_EQUAL(1.0, m_pDoc->GetValue(ScAddress(1,1,0)));
 
+    // Clear content and start over.
+    clearSheet(m_pDoc, 0);
+    clearSheet(&aClipDoc, 0);
+
+    // Insert a single formula cell in A1.
+    m_pDoc->SetString(ScAddress(0,0,0), "=ROW()");
+    const ScFormulaCell* pFC = m_pDoc->GetFormulaCell(ScAddress(0,0,0));
+    CPPUNIT_ASSERT(pFC);
+    CPPUNIT_ASSERT(!pFC->IsShared()); // single formula cell is never shared.
+
+    // Copy A1 to clipboard.
+    aClipParam = ScClipParam(ScAddress(0,0,0), false);
+    m_pDoc->CopyToClip(aClipParam, &aClipDoc, &aMark);
+
+    pFC = aClipDoc.GetFormulaCell(ScAddress(0,0,0));
+    CPPUNIT_ASSERT(pFC);
+    CPPUNIT_ASSERT(!pFC->IsShared());
+
+    // Paste to A3.
+    aDestRange = ScRange(0,2,0,0,2,0);
+    aMark.SetMarkArea(aDestRange);
+    m_pDoc->CopyFromClip(aDestRange, aMark, nFlags, NULL, &aClipDoc);
+
+    pFC = m_pDoc->GetFormulaCell(ScAddress(0,2,0));
+    CPPUNIT_ASSERT(pFC);
+    CPPUNIT_ASSERT(!pFC->IsShared());
+
+    // Delete A3 and make sure it doesn't crash (see fdo#76132).
+    clearRange(m_pDoc, ScAddress(0,2,0));
+    CPPUNIT_ASSERT(m_pDoc->GetCellType(ScAddress(0,2,0)) == CELLTYPE_NONE);
+
     m_pDoc->DeleteTab(0);
 }
 
