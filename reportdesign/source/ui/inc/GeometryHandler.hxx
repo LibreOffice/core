@@ -177,10 +177,10 @@ namespace rptui
 
         /** get the functions supplier for the set scope, default is the surrounding group.
         *
-        * \param _rsNamePostFix the name post fix which canbe used when the scope as name part is needed
+        * \param _rsNamePostfix the name postfix which can be used when the scope as name part is needed
         * \return the function supplier
         */
-        ::com::sun::star::uno::Reference< ::com::sun::star::report::XFunctionsSupplier> fillScope_throw(OUString& _rsNamePostFix);
+        ::com::sun::star::uno::Reference< ::com::sun::star::report::XFunctionsSupplier> fillScope_throw(OUString& _rsNamePostfix);
 
         /** checks if the given function is a default function we know.
         *

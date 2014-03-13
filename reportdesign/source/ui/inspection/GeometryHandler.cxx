@@ -555,8 +555,8 @@ void SAL_CALL GeometryHandler::setPropertyValue(const OUString & PropertyName, c
                             impl_isCounterFunction_throw(sFunction,m_sScope);
                         else
                         {
-                            OUString sNamePostFix;
-                            const uno::Reference< report::XFunctionsSupplier> xFunctionsSupplier = fillScope_throw(sNamePostFix);
+                            OUString sNamePostfix;
+                            const uno::Reference< report::XFunctionsSupplier> xFunctionsSupplier = fillScope_throw(sNamePostfix);
                             isDefaultFunction(sFunction,sDataField,xFunctionsSupplier,true);
                         }
                         const sal_uInt32 nOldDataFieldType = m_nDataFieldType;
@@ -598,8 +598,8 @@ void SAL_CALL GeometryHandler::setPropertyValue(const OUString & PropertyName, c
                 {
                     OSL_ENSURE(m_xFunction.is(),"Where is my function gone!");
 
-                    OUString sNamePostFix;
-                    const uno::Reference< report::XFunctionsSupplier> xFunctionsSupplier = fillScope_throw(sNamePostFix);
+                    OUString sNamePostfix;
+                    const uno::Reference< report::XFunctionsSupplier> xFunctionsSupplier = fillScope_throw(sNamePostfix);
 
                     OUString sQuotedFunctionName(lcl_getQuotedFunctionName(m_xFunction));
                     if ( isDefaultFunction(sQuotedFunctionName,sQuotedFunctionName,xFunctionsSupplier,true) )
@@ -1724,7 +1724,7 @@ void GeometryHandler::impl_fillScopeList_nothrow(::std::vector< OUString >& _out
     }
 }
 
-uno::Reference< report::XFunctionsSupplier> GeometryHandler::fillScope_throw(OUString& _rsNamePostFix)
+uno::Reference< report::XFunctionsSupplier> GeometryHandler::fillScope_throw(OUString& _rsNamePostfix)
 {
     uno::Reference< report::XFunctionsSupplier> xReturn;
 
@@ -1737,8 +1737,8 @@ uno::Reference< report::XFunctionsSupplier> GeometryHandler::fillScope_throw(OUS
         if ( xGroup.is() )
         {
             OUString sGroupName = ModuleRes(RID_STR_SCOPE_GROUP).toString();
-            _rsNamePostFix = xGroup->getExpression();
-            m_sScope = sGroupName.replaceFirst("%1",_rsNamePostFix);
+            _rsNamePostfix = xGroup->getExpression();
+            m_sScope = sGroupName.replaceFirst("%1",_rsNamePostfix);
             xReturn = xGroup.get();
         }
         else if ( xSection == xReportDefinition->getDetail() )
@@ -1749,21 +1749,21 @@ uno::Reference< report::XFunctionsSupplier> GeometryHandler::fillScope_throw(OUS
             {
                 const uno::Reference< report::XGroup> xGroup2(xGroups->getByIndex(nCount - 1),uno::UNO_QUERY_THROW);
                 OUString sGroupName = ModuleRes(RID_STR_SCOPE_GROUP);
-                _rsNamePostFix = xGroup2->getExpression();
-                m_sScope = sGroupName.replaceFirst("%1",_rsNamePostFix);
+                _rsNamePostfix = xGroup2->getExpression();
+                m_sScope = sGroupName.replaceFirst("%1",_rsNamePostfix);
                 xReturn = xGroup2.get();
             }
         }
         if ( m_sScope.isEmpty() )
         {
             xReturn = xReportDefinition.get();
-            _rsNamePostFix = m_sScope = xReportDefinition->getName();
+            _rsNamePostfix = m_sScope = xReportDefinition->getName();
         }
     }
     else if ( m_sScope == xReportDefinition->getName() )
     {
         xReturn = xReportDefinition.get();
-        _rsNamePostFix = m_sScope;
+        _rsNamePostfix = m_sScope;
     }
     else
     {
@@ -1776,7 +1776,7 @@ uno::Reference< report::XFunctionsSupplier> GeometryHandler::fillScope_throw(OUS
             OUString sGroupName = ModuleRes(RID_STR_SCOPE_GROUP);
             if ( m_sScope == sGroupName.replaceFirst("%1",xGroup->getExpression()) )
             {
-                _rsNamePostFix = xGroup->getExpression();
+                _rsNamePostfix = xGroup->getExpression();
                 xReturn = xGroup.get();
                 break;
             }
@@ -1923,8 +1923,8 @@ void GeometryHandler::createDefaultFunction(::osl::ResettableMutexGuard& _aGuard
 {
     try
     {
-        OUString sNamePostFix;
-        const uno::Reference< report::XFunctionsSupplier> xFunctionsSupplier = fillScope_throw(sNamePostFix);
+        OUString sNamePostfix;
+        const uno::Reference< report::XFunctionsSupplier> xFunctionsSupplier = fillScope_throw(sNamePostfix);
 
         ::std::vector< DefaultFunction >::const_iterator aIter = m_aDefaultFunctions.begin();
         ::std::vector< DefaultFunction >::const_iterator aDeEnd = m_aDefaultFunctions.end();
@@ -1932,7 +1932,7 @@ void GeometryHandler::createDefaultFunction(::osl::ResettableMutexGuard& _aGuard
         {
             if ( aIter->m_sName == _sFunction )
             {
-                const OUString sFunctionName( _sFunction + _sDataField + sNamePostFix);
+                const OUString sFunctionName( _sFunction + _sDataField + sNamePostfix);
                 const OUString sQuotedFunctionName(lcl_getQuotedFunctionName(sFunctionName));
 
                 beans::PropertyChangeEvent aEvent;
@@ -2120,8 +2120,8 @@ void GeometryHandler::impl_createFunction(const OUString& _sFunctionName,const O
         aInitialFormula.Value = sInitialFormula;
         m_xFunction->setInitialFormula( aInitialFormula );
     }
-    OUString sNamePostFix;
-    const uno::Reference< report::XFunctionsSupplier> xFunctionsSupplier = fillScope_throw(sNamePostFix);
+    OUString sNamePostfix;
+    const uno::Reference< report::XFunctionsSupplier> xFunctionsSupplier = fillScope_throw(sNamePostfix);
     const uno::Reference< container::XIndexContainer> xFunctions(xFunctionsSupplier->getFunctions(),uno::UNO_QUERY_THROW);
     xFunctions->insertByIndex(xFunctions->getCount(),uno::makeAny(m_xFunction));
     m_aFunctionNames.insert(TFunctions::value_type(sQuotedFunctionName,TFunctionPair(m_xFunction,xFunctionsSupplier)));
@@ -2130,10 +2130,10 @@ void GeometryHandler::impl_createFunction(const OUString& _sFunctionName,const O
 
 void GeometryHandler::impl_setCounterFunction_throw()
 {
-    OUString sNamePostFix;
-    fillScope_throw(sNamePostFix);
+    OUString sNamePostfix;
+    fillScope_throw(sNamePostfix);
     OUString sFunctionName = m_aCounterFunction.m_sName;
-    sFunctionName += sNamePostFix;
+    sFunctionName += sNamePostfix;
     const OUString sQuotedFunctionName = lcl_getQuotedFunctionName(sFunctionName);
     OUString sScope;
     if ( !(!sFunctionName.isEmpty() && m_aFunctionNames.find(sQuotedFunctionName) != m_aFunctionNames.end() && impl_isCounterFunction_throw(sQuotedFunctionName,sScope)) )

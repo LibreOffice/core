@@ -102,30 +102,23 @@ static const sal_Unicode aDefaultRTLBulletTypes[] =
     0x2714
 };
 
-static const sal_Char sNumberingType[] = "NumberingType";
-static const sal_Char sParentNumbering[] = "ParentNumbering";
-static const sal_Char sPrefix[] = "Prefix";
-static const sal_Char sSuffix[] = "Suffix";
-static const sal_Char sBulletChar[] = "BulletChar";
-static const sal_Char sBulletFontName[] = "BulletFontName";
-
 NumSettings_ImplPtr lcl_CreateNumberingSettingsPtr(const Sequence<PropertyValue>& rLevelProps)
 {
     const PropertyValue* pValues = rLevelProps.getConstArray();
     NumSettings_ImplPtr pNew = new NumSettings_Impl;
     for(sal_Int32 j = 0; j < rLevelProps.getLength(); j++)
     {
-        if(pValues[j].Name == sNumberingType)
+        if(pValues[j].Name == "NumberingType")
             pValues[j].Value >>= pNew->nNumberType;
-        else if(pValues[j].Name == sPrefix)
+        else if(pValues[j].Name == "Prefix")
             pValues[j].Value >>= pNew->sPrefix;
-        else if(pValues[j].Name == sSuffix)
+        else if(pValues[j].Name == "Suffix")
             pValues[j].Value >>= pNew->sSuffix;
-        else if(pValues[j].Name == sParentNumbering)
+        else if(pValues[j].Name == "ParentNumbering")
             pValues[j].Value >>= pNew->nParentNumbering;
-        else if(pValues[j].Name == sBulletChar)
+        else if(pValues[j].Name == "BulletChar")
             pValues[j].Value >>= pNew->sBulletChar;
-        else if(pValues[j].Name == sBulletFontName)
+        else if(pValues[j].Name == "BulletFontName")
             pValues[j].Value >>= pNew->sBulletFont;
     }
     const sal_Unicode cLocalPrefix = pNew->sPrefix.getLength() ? pNew->sPrefix[0] : 0;
@@ -1414,7 +1407,7 @@ sal_uInt16 NumberingTypeMgr::GetNBOIndexForNumRule(SvxNumRule& aNum,sal_uInt16 m
     SvxNumberFormat aFmt(aNum.GetLevel(nActLv));
     //sal_Unicode cPrefix = rtl::OUString(aFmt.GetPrefix())[0];
     //sal_Unicode cSuffix = rtl::OUString(aFmt.GetSuffix())[0];
-    OUString sPreFix = aFmt.GetPrefix();
+    OUString sPrefix = aFmt.GetPrefix();
     OUString sLclSuffix = aFmt.GetSuffix();
     sal_Int16 eNumType = aFmt.GetNumberingType();
 
@@ -1423,9 +1416,9 @@ sal_uInt16 NumberingTypeMgr::GetNBOIndexForNumRule(SvxNumRule& aNum,sal_uInt16 m
     {
         NumberSettings_ImplPtr _pSet = (*pNumberSettingsArr)[i].get();
         sal_Int16 eNType = _pSet->pNumSetting->nNumberType;
-        OUString sLocalPreFix = _pSet->pNumSetting->sPrefix;
+        OUString sLocalPrefix = _pSet->pNumSetting->sPrefix;
         OUString sLocalSuffix = _pSet->pNumSetting->sSuffix;
-        if (sPreFix == sLocalPreFix &&
+        if (sPrefix == sLocalPrefix &&
             sLclSuffix == sLocalSuffix &&
             eNumType == eNType )
         {
@@ -1641,7 +1634,7 @@ sal_uInt16 OutlineTypeMgr::GetNBOIndexForNumRule(SvxNumRule& aNum,sal_uInt16 /*m
             sal_Int16 eNType = _pSet->nNumberType;
 
             SvxNumberFormat aFmt(aNum.GetLevel(iLevel));
-            OUString sPreFix = aFmt.GetPrefix();
+            OUString sPrefix = aFmt.GetPrefix();
             OUString sLclSuffix = aFmt.GetSuffix();
                 sal_Int16 eNumType = aFmt.GetNumberingType();
                 if( eNumType == SVX_NUM_CHAR_SPECIAL)
@@ -1681,7 +1674,7 @@ sal_uInt16 OutlineTypeMgr::GetNBOIndexForNumRule(SvxNumRule& aNum,sal_uInt16 /*m
                         }
                 } else
                 {
-                if (!(sPreFix == _pSet->sPrefix &&
+                if (!(sPrefix == _pSet->sPrefix &&
                       sLclSuffix == _pSet->sSuffix &&
                       eNumType == eNType &&
                       _pSet->eLabelFollowedBy == aFmt.GetLabelFollowedBy() &&

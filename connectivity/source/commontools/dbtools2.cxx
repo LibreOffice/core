@@ -88,7 +88,7 @@ OUString createStandardTypePart(const Reference< XPropertySet >& xColProp,const 
         xColProp->getPropertyValue(rPropMap.getNameByIndex(PROPERTY_ID_AUTOINCREMENTCREATION)) >>= sAutoIncrementValue;
     // look if we have to use precisions
     sal_Bool bUseLiteral = sal_False;
-    OUString sPreFix,sPostFix,sCreateParams;
+    OUString sPrefix,sPostfix,sCreateParams;
     {
         Reference<XResultSet> xRes = xMetaData->getTypeInfo();
         if(xRes.is())
@@ -98,8 +98,8 @@ OUString createStandardTypePart(const Reference< XPropertySet >& xColProp,const 
             {
                 OUString sTypeName2Cmp = xRow->getString(1);
                 sal_Int32 nType = xRow->getShort(2);
-                sPreFix = xRow->getString (4);
-                sPostFix = xRow->getString (5);
+                sPrefix = xRow->getString (4);
+                sPostfix = xRow->getString (5);
                 sCreateParams = xRow->getString(6);
                 // first identical type will be used if typename is empty
                 if ( sTypeName.isEmpty() && nType == nDataType )
@@ -157,9 +157,9 @@ OUString createStandardTypePart(const Reference< XPropertySet >& xColProp,const 
     if ( !aDefault.isEmpty() )
     {
         aSql.append(" DEFAULT ");
-        aSql.append(sPreFix);
+        aSql.append(sPrefix);
         aSql.append(aDefault);
-        aSql.append(sPostFix);
+        aSql.append(sPostfix);
     } // if ( aDefault.getLength() )
 
     return aSql.makeStringAndClear();

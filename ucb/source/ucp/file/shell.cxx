@@ -1194,9 +1194,9 @@ shell::move( sal_Int32 CommandId,
                 {
                     newDstUnqPath = dstUnqPath;
 
-                    OUString aPostFix =  "_" + OUString::number( ++nTry );
+                    OUString aPostfix =  "_" + OUString::number( ++nTry );
 
-                    newDstUnqPath = newDstUnqPath.replaceAt( nPos, 0, aPostFix );
+                    newDstUnqPath = newDstUnqPath.replaceAt( nPos, 0, aPostfix );
 
                     nError = osl_File_move( srcUnqPath,newDstUnqPath,true );
                 }
@@ -1420,9 +1420,9 @@ shell::copy(
                 {
                     newDstUnqPath = dstUnqPath;
 
-                    OUString aPostFix =  "_" + OUString::number( ++nTry );
+                    OUString aPostfix =  "_" + OUString::number( ++nTry );
 
-                    newDstUnqPath = newDstUnqPath.replaceAt( nPos, 0, aPostFix );
+                    newDstUnqPath = newDstUnqPath.replaceAt( nPos, 0, aPostfix );
 
                     nError = copy_recursive( rslvdSrcUnqPath,newDstUnqPath,IsWhat,true );
                 }

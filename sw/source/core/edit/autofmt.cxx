@@ -174,7 +174,7 @@ class SwAutoFormat
 
     bool IsFirstCharCapital( const SwTxtNode& rNd ) const;
     sal_uInt16 GetDigitLevel( const SwTxtNode& rTxtNd, sal_Int32& rPos,
-                            OUString* pPreFix = 0, OUString* pPostFix = 0,
+                            OUString* pPrefix = 0, OUString* pPostfix = 0,
                             OUString* pNumTypes = 0 ) const;
     /// get the FORMATED TextFrame
     SwTxtFrm* GetFrm( const SwTxtNode& rTxtNd ) const;
@@ -721,7 +721,7 @@ bool SwAutoFormat::IsFirstCharCapital( const SwTxtNode& rNd ) const
 }
 
 sal_uInt16 SwAutoFormat::GetDigitLevel( const SwTxtNode& rNd, sal_Int32& rPos,
-        OUString* pPreFix, OUString* pPostFix, OUString* pNumTypes ) const
+        OUString* pPrefix, OUString* pPostfix, OUString* pNumTypes ) const
 {
     // check for 1.) / 1. / 1.1.1 / (1). / (1) / ....
     const OUString& rTxt = rNd.GetTxt();
@@ -747,8 +747,8 @@ sal_uInt16 SwAutoFormat::GetDigitLevel( const SwTxtNode& rNd, sal_Int32& rPos,
                 if( eScan & CHG )   // not if it starts with a number
                 {
                     ++nDigitLvl;
-                    if( pPostFix )
-                        *pPostFix += OUString((sal_Unicode)1);
+                    if( pPostfix )
+                        *pPostfix += OUString((sal_Unicode)1);
                 }
 
                 if( pNumTypes )
@@ -823,8 +823,8 @@ sal_uInt16 SwAutoFormat::GetDigitLevel( const SwTxtNode& rNd, sal_Int32& rPos,
                 if( eScan & CHG )   // not if it starts with a number
                 {
                     ++nDigitLvl;
-                    if( pPostFix )
-                        *pPostFix += OUString((sal_Unicode)1);
+                    if( pPostfix )
+                        *pPostfix += OUString((sal_Unicode)1);
                 }
 
                 if( pNumTypes )
@@ -925,16 +925,16 @@ CHECK_ROMAN_5:
             else if(cCurrentChar == ')'|| cCurrentChar == 0xFF08)
                 nClosingParentheses++;
             // only if no numbers were read until here
-            if( pPreFix && !( eScan & ( NO_DELIM | CHG )) )
-                *pPreFix += OUString(rTxt[nPos]);
-            else if( pPostFix )
-                *pPostFix += OUString(rTxt[nPos]);
+            if( pPrefix && !( eScan & ( NO_DELIM | CHG )) )
+                *pPrefix += OUString(rTxt[nPos]);
+            else if( pPostfix )
+                *pPostfix += OUString(rTxt[nPos]);
 
             if( NO_DELIM & eScan )
             {
                 eScan |= CHG;
-                if( pPreFix )
-                    *pPreFix += OUString((sal_Unicode)1)
+                if( pPrefix )
+                    *pPrefix += OUString((sal_Unicode)1)
                               + OUString::number( nStart );
             }
             eScan &= ~NO_DELIM;     // remove Delim
@@ -951,8 +951,8 @@ CHECK_ROMAN_5:
         (nOpeningParentheses > nClosingParentheses))
         return USHRT_MAX;
 
-    if( (NO_DELIM & eScan) && pPreFix )     // do not forget the last one
-        *pPreFix += OUString((sal_Unicode)1) + OUString::number( nStart );
+    if( (NO_DELIM & eScan) && pPrefix )     // do not forget the last one
+        *pPrefix += OUString((sal_Unicode)1) + OUString::number( nStart );
 
     rPos = nPos;
     return nDigitLvl;       // 0 .. 9 (MAXLEVEL - 1)
@@ -1471,9 +1471,9 @@ void SwAutoFormat::BuildEnum( sal_uInt16 nLvl, sal_uInt16 nDigitLevel )
         //JP 21.11.97: The NumLevel is either the DigitLevel or, if the latter is not existent or 0,
         //             it is determined by the indentation level.
 
-        OUString aPostFix, aPreFix, aNumTypes;
+        OUString aPostfix, aPrefix, aNumTypes;
         if( USHRT_MAX != ( nDigitLevel = GetDigitLevel( *m_pCurTxtNd, nTxtStt,
-                                        &aPreFix, &aPostFix, &aNumTypes )) )
+                                        &aPrefix, &aPostfix, &aNumTypes )) )
         {
             bChgEnum = true;
 
@@ -1494,10 +1494,10 @@ void SwAutoFormat::BuildEnum( sal_uInt16 nLvl, sal_uInt16 nDigitLevel )
                 if( !nDigitLevel )
                 {
                     SwNumFmt aFmt( aRule.Get( nLvl ) );
-                    aFmt.SetStart( static_cast<sal_uInt16>(aPreFix.getToken( 1,
+                    aFmt.SetStart( static_cast<sal_uInt16>(aPrefix.getToken( 1,
                                             (sal_Unicode)1 ).toInt32()));
-                    aFmt.SetPrefix( aPreFix.getToken( 0, (sal_Unicode)1 ));
-                    aFmt.SetSuffix( aPostFix.getToken( 0, (sal_Unicode)1 ));
+                    aFmt.SetPrefix( aPrefix.getToken( 0, (sal_Unicode)1 ));
+                    aFmt.SetSuffix( aPostfix.getToken( 0, (sal_Unicode)1 ));
                     aFmt.SetIncludeUpperLevels( 0 );
 
                     if( !aFmt.GetCharFmt() )
@@ -1518,11 +1518,11 @@ void SwAutoFormat::BuildEnum( sal_uInt16 nLvl, sal_uInt16 nDigitLevel )
                     {
                         SwNumFmt aFmt( aRule.Get( n ) );
 
-                        aFmt.SetStart( static_cast<sal_uInt16>(aPreFix.getToken( n+1,
+                        aFmt.SetStart( static_cast<sal_uInt16>(aPrefix.getToken( n+1,
                                                     (sal_Unicode)1 ).toInt32() ));
                         if( !n )
-                            aFmt.SetPrefix( aPreFix.getToken( n, (sal_Unicode)1 ));
-                        aFmt.SetSuffix( aPostFix.getToken( n, (sal_Unicode)1 ));
+                            aFmt.SetPrefix( aPrefix.getToken( n, (sal_Unicode)1 ));
+                        aFmt.SetSuffix( aPostfix.getToken( n, (sal_Unicode)1 ));
                         aFmt.SetIncludeUpperLevels( MAXLEVEL );
                         if( n < aNumTypes.getLength() )
                             aFmt.SetNumberingType((aNumTypes[ n ] - '0'));
