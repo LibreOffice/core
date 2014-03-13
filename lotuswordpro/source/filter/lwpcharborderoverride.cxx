@@ -69,8 +69,11 @@
 #include "lwpborderstuff.hxx"
 #include "lwpmargins.hxx"
 
-LwpCharacterBorderOverride::LwpCharacterBorderOverride() :
-m_pBorderStuff(new LwpBorderStuff), m_pMargins(new LwpMargins)
+LwpCharacterBorderOverride::LwpCharacterBorderOverride()
+    : m_pBorderStuff(new LwpBorderStuff)
+    , m_pMargins(new LwpMargins)
+    , m_nAboveWidth(0)
+    , m_nBelowWidth(0)
 {
 }
 
