@@ -728,16 +728,19 @@ IMAGE_SETEVENT:
         }
     }
 
-    if( !sAltNm.isEmpty() )
-        pGrfNd->SetTitle( sAltNm );
+    if (pGrfNd)
+    {
+        if( !sAltNm.isEmpty() )
+            pGrfNd->SetTitle( sAltNm );
 
-    if( bSetTwipSize )
-        pGrfNd->SetTwipSize( aGrfSz );
+        if( bSetTwipSize )
+            pGrfNd->SetTwipSize( aGrfSz );
 
-    pGrfNd->SetChgTwipSize( bChangeFrmSize, bChangeFrmSize );
+        pGrfNd->SetChgTwipSize( bChangeFrmSize, bChangeFrmSize );
 
-    if( bSetScaleImageMap )
-        pGrfNd->SetScaleImageMap( sal_True );
+        if( bSetScaleImageMap )
+            pGrfNd->SetScaleImageMap( sal_True );
+    }
 
     if( aAttrTab.pINetFmt )
     {
@@ -793,7 +796,7 @@ IMAGE_SETEVENT:
     // Wenn die Grafik gleich angeforder wird, muss dies geschehen,
     // nachdem das Format vollstaendig aufgebaut ist, weil es evtl.
     // gleich (synchron) angepasst wird (war bug #40983#)
-    if( bRequestGrfNow )
+    if (bRequestGrfNow && pGrfNd)
     {
         pGrfNd->SwapIn();
     }
