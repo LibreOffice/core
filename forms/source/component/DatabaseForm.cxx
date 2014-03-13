@@ -1800,7 +1800,7 @@ void ODatabaseForm::setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, const A
 }
 
 
-void SAL_CALL ODatabaseForm::forwardingPropertyValue( sal_Int32 _nHandle )
+void ODatabaseForm::forwardingPropertyValue( sal_Int32 _nHandle )
 {
     OSL_ENSURE( _nHandle == PROPERTY_ID_ACTIVE_CONNECTION, "ODatabaseForm::forwardingPropertyValue: unexpected property!" );
     if ( _nHandle == PROPERTY_ID_ACTIVE_CONNECTION )
@@ -1812,7 +1812,7 @@ void SAL_CALL ODatabaseForm::forwardingPropertyValue( sal_Int32 _nHandle )
 }
 
 
-void SAL_CALL ODatabaseForm::forwardedPropertyValue( sal_Int32 _nHandle, bool /*_bSuccess*/ )
+void ODatabaseForm::forwardedPropertyValue( sal_Int32 _nHandle )
 {
     OSL_ENSURE( _nHandle == PROPERTY_ID_ACTIVE_CONNECTION, "ODatabaseForm::forwardedPropertyValue: unexpected property!" );
     if ( _nHandle == PROPERTY_ID_ACTIVE_CONNECTION )

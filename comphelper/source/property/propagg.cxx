@@ -424,13 +424,13 @@ namespace internal
             }
             catch( const Exception& )
             {
-                m_rAggregationHelper.forwardedPropertyValue( _nHandle, false );
+                m_rAggregationHelper.forwardedPropertyValue( _nHandle );
                 throw;
             }
 
             m_nCurrentlyForwarding = -1;
 
-            m_rAggregationHelper.forwardedPropertyValue( _nHandle, true );
+            m_rAggregationHelper.forwardedPropertyValue( _nHandle );
         }
     }
 }
@@ -1013,13 +1013,13 @@ void OPropertySetAggregationHelper::declareForwardedProperty( sal_Int32 _nHandle
 }
 
 
-void SAL_CALL OPropertySetAggregationHelper::forwardingPropertyValue( sal_Int32 )
+void OPropertySetAggregationHelper::forwardingPropertyValue( sal_Int32 )
 {
     // not interested in
 }
 
 
-void SAL_CALL OPropertySetAggregationHelper::forwardedPropertyValue( sal_Int32, bool )
+void OPropertySetAggregationHelper::forwardedPropertyValue( sal_Int32 )
 {
     // not interested in
 }

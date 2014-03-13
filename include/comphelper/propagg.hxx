@@ -301,7 +301,7 @@ protected:
         @see declareForwardedProperty
         @see forwardedPropertyValue
     */
-    virtual void SAL_CALL forwardingPropertyValue( sal_Int32 _nHandle );
+    virtual void forwardingPropertyValue( sal_Int32 _nHandle );
 
     /** called immediately after a property value which is overwritten in this instance
         has been forwarded to the aggregate
@@ -309,7 +309,7 @@ protected:
         @see declareForwardedProperty
         @see forwardingPropertyValue
     */
-    virtual void SAL_CALL forwardedPropertyValue( sal_Int32 _nHandle, bool _bSuccess );
+    virtual void forwardedPropertyValue( sal_Int32 _nHandle );
 
     /// must be called before aggregation, if aggregation is used
     void setAggregation(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >&) throw( ::com::sun::star::lang::IllegalArgumentException );

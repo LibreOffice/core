@@ -443,8 +443,8 @@ public:
 
 protected:
     // OPropertySetAggregationHelper overridables
-    virtual void SAL_CALL forwardingPropertyValue( sal_Int32 _nHandle );
-    virtual void SAL_CALL forwardedPropertyValue( sal_Int32 _nHandle, bool _bSuccess );
+    virtual void forwardingPropertyValue( sal_Int32 _nHandle ) SAL_OVERRIDE;
+    virtual void forwardedPropertyValue( sal_Int32 _nHandle ) SAL_OVERRIDE;
 
     // OInterfaceContainer overridables
     virtual void implInserted( const ElementDescription* _pElement );
