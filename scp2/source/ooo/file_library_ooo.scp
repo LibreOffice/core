@@ -274,28 +274,3 @@ File gid_File_Moz_Msvc80crt_Manifest
 End
 #endif
 
-#ifndef SYSTEM_REDLAND
-#ifndef WNT
-File gid_File_Lib_Raptor
-    LIB_FILE_BODY;
-    Styles = (FILELIST);
-    Dir = FILELIST_DIR;
-    Name = "raptor.filelist";
-End
-
-File gid_File_Lib_Rasqal
-    LIB_FILE_BODY;
-    Styles = (FILELIST);
-    Dir = FILELIST_DIR;
-    Name = "rasqal.filelist";
-End
-
-File gid_File_Lib_Rdf
-    LIB_FILE_BODY;
-    Styles = (FILELIST);
-    Dir = FILELIST_DIR;
-    Name = "redland.filelist";
-End
-#endif // WNT
-#endif // SYSTEM_REDLAND
-

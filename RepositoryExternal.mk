@@ -1144,6 +1144,12 @@ $(eval $(call gb_Helper_register_libraries_for_install,PLAINLIBS_OOO,ooo, \
 	rasqal \
 	rdf \
 ))
+else
+$(eval $(call gb_Helper_register_packages_for_install,ooo, \
+	raptor \
+	rasqal \
+	redland \
+))
 endif
 
 define gb_LinkTarget__use_librdf
