@@ -74,10 +74,15 @@
 #include "xfilter/xflist.hxx"
 #include "lwpglobalmgr.hxx"
 
-LwpBulletStyleMgr::LwpBulletStyleMgr() :
-m_pBulletList(NULL), m_bContinue(sal_True), m_bIsBulletSkipped(sal_False), m_nCurrentPos(0xFF)
+LwpBulletStyleMgr::LwpBulletStyleMgr()
+    : m_pFoundry(NULL)
+    , m_pBulletList(NULL)
+    , m_bContinue(sal_True)
+    , m_bIsBulletSkipped(sal_False)
+    , m_nCurrentPos(0xFF)
 {
 }
+
 LwpBulletStyleMgr::~LwpBulletStyleMgr()
 {
     if (m_pBulletList)
