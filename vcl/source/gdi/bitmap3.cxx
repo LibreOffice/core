@@ -680,9 +680,9 @@ bool Bitmap::ImplConvertDown( sal_uInt16 nBitCount, Color* pExtColor )
             InverseColorMap aColorMap( aPal = aOctree.GetPalette() );
             BitmapColor aColor;
             ImpErrorQuad aErrQuad;
-            ImpErrorQuad* pErrQuad1 = new ImpErrorQuad[ nWidth ];
-            ImpErrorQuad* pErrQuad2 = new ImpErrorQuad[ nWidth ];
-            ImpErrorQuad* pQLine1 = pErrQuad1;
+            boost::scoped_array<ImpErrorQuad> pErrQuad1(new ImpErrorQuad[ nWidth ]);
+            boost::scoped_array<ImpErrorQuad> pErrQuad2(new ImpErrorQuad[ nWidth ]);
+            ImpErrorQuad* pQLine1 = pErrQuad1.get();
             ImpErrorQuad* pQLine2 = 0;
             long nX, nY;
             long nYTmp = 0L;
@@ -707,7 +707,7 @@ bool Bitmap::ImplConvertDown( sal_uInt16 nBitCount, Color* pExtColor )
 
             for( nY = 0L; nY < std::min( nHeight, 2L ); nY++, nYTmp++ )
             {
-                for( nX = 0L, pQLine2 = !nY ? pErrQuad1 : pErrQuad2; nX < nWidth; nX++ )
+                for( nX = 0L, pQLine2 = !nY ? pErrQuad1.get() : pErrQuad2.get(); nX < nWidth; nX++ )
                 {
                     if( pReadAcc->HasPalette() )
                         pQLine2[ nX ] = pReadAcc->GetPaletteColor( pReadAcc->GetPixelIndex( nYTmp, nX ) );
@@ -742,7 +742,7 @@ bool Bitmap::ImplConvertDown( sal_uInt16 nBitCount, Color* pExtColor )
 
                 // Refill/copy row buffer
                 pQLine1 = pQLine2;
-                pQLine2 = ( bQ1 = !bQ1 ) ? pErrQuad2 : pErrQuad1;
+                pQLine2 = ( bQ1 = !bQ1 ) ? pErrQuad2.get() : pErrQuad1.get();
 
                 if( nYTmp < nHeight )
                 {
@@ -755,10 +755,6 @@ bool Bitmap::ImplConvertDown( sal_uInt16 nBitCount, Color* pExtColor )
                     }
                 }
             }
-
-            // Delete row buffer
-            delete[] pErrQuad1;
-            delete[] pErrQuad2;
 
             aNewBmp.ReleaseAccess( pWriteAcc );
             bRet = true;
@@ -1047,8 +1043,8 @@ bool Bitmap::ImplScaleFast( const double& rScaleX, const double& rScaleY )
                 const long nNewHeight1 = nNewHeight - 1L;
                 const long nWidth = pReadAcc->Width();
                 const long nHeight = pReadAcc->Height();
-                long* pLutX = new long[ nNewWidth ];
-                long* pLutY = new long[ nNewHeight ];
+                boost::scoped_array<long> pLutX(new long[ nNewWidth ]);
+                boost::scoped_array<long> pLutY(new long[ nNewHeight ]);
 
                 if( nNewWidth1 && nNewHeight1 )
                 {
@@ -1078,9 +1074,6 @@ bool Bitmap::ImplScaleFast( const double& rScaleX, const double& rScaleY )
                     bRet = true;
                     aNewBmp.ReleaseAccess( pWriteAcc );
                 }
-
-                delete[] pLutX;
-                delete[] pLutY;
             }
             ReleaseAccess( pReadAcc );
 
@@ -1106,8 +1099,6 @@ bool Bitmap::ImplScaleInterpolate( const double& rScaleX, const double& rScaleY 
         long nHeight = pReadAcc->Height();
         Bitmap aNewBmp( Size( nNewWidth, nHeight ), 24 );
         BitmapWriteAccess* pWriteAcc = aNewBmp.AcquireWriteAccess();
-        long* pLutInt;
-        long* pLutFrac;
         long nX, nY;
         long lXB0, lXB1, lXG0, lXG1, lXR0, lXR1;
         double fTemp;
@@ -1119,8 +1110,8 @@ bool Bitmap::ImplScaleInterpolate( const double& rScaleX, const double& rScaleY 
             const long nWidth1 = pReadAcc->Width() - 1L;
             const double fRevScaleX = (double) nWidth1 / nNewWidth1;
 
-            pLutInt = new long[ nNewWidth ];
-            pLutFrac = new long[ nNewWidth ];
+            boost::scoped_array<long> pLutInt(new long[ nNewWidth ]);
+            boost::scoped_array<long> pLutFrac(new long[ nNewWidth ]);
 
             for( nX = 0L, nTemp = nWidth - 2L; nX < nNewWidth; nX++ )
             {
@@ -1182,8 +1173,6 @@ bool Bitmap::ImplScaleInterpolate( const double& rScaleX, const double& rScaleY 
                 }
             }
 
-            delete[] pLutInt;
-            delete[] pLutFrac;
             bRet = true;
         }
 
@@ -1205,8 +1194,8 @@ bool Bitmap::ImplScaleInterpolate( const double& rScaleX, const double& rScaleY 
                 const long nHeight1 = pReadAcc->Height() - 1L;
                 const double fRevScaleY = (double) nHeight1 / nNewHeight1;
 
-                pLutInt = new long[ nNewHeight ];
-                pLutFrac = new long[ nNewHeight ];
+                boost::scoped_array<long> pLutInt(new long[ nNewHeight ]);
+                boost::scoped_array<long> pLutFrac(new long[ nNewHeight ]);
 
                 for( nY = 0L, nTemp = nHeight - 2L; nY < nNewHeight; nY++ )
                 {
@@ -1254,8 +1243,6 @@ bool Bitmap::ImplScaleInterpolate( const double& rScaleX, const double& rScaleY 
                     }
                 }
 
-                delete[] pLutInt;
-                delete[] pLutFrac;
                 bRet = true;
             }
 
@@ -2551,10 +2538,10 @@ bool Bitmap::ImplDitherFloyd()
             long nW2 = nW - 3L;
             long nRErr, nGErr, nBErr;
             long nRC, nGC, nBC;
-            long* p1 = new long[ nW ];
-            long* p2 = new long[ nW ];
-            long* p1T = p1;
-            long* p2T = p2;
+            boost::scoped_array<long> p1(new long[ nW ]);
+            boost::scoped_array<long> p2(new long[ nW ]);
+            long* p1T = p1.get();
+            long* p2T = p2.get();
             long* pTmp;
             bool bPal = pReadAcc->HasPalette();
 
@@ -2644,8 +2631,6 @@ bool Bitmap::ImplDitherFloyd()
                 pWriteAcc->SetPixelIndex( nYAcc, nWidth1, static_cast<sal_uInt8>(nVCLBLut[ nBC ] + nVCLGLut[nGC ] + nVCLRLut[nRC ]) );
             }
 
-            delete[] p1;
-            delete[] p2;
             bRet = true;
         }
 
@@ -2682,16 +2667,16 @@ bool Bitmap::ImplDitherFloyd16()
         BitmapColor aColor;
         BitmapColor aBestCol;
         ImpErrorQuad aErrQuad;
-        ImpErrorQuad* pErrQuad1 = new ImpErrorQuad[ nWidth ];
-        ImpErrorQuad* pErrQuad2 = new ImpErrorQuad[ nWidth ];
-        ImpErrorQuad* pQLine1 = pErrQuad1;
+        boost::scoped_array<ImpErrorQuad> pErrQuad1(new ImpErrorQuad[ nWidth ]);
+        boost::scoped_array<ImpErrorQuad> pErrQuad2(new ImpErrorQuad[ nWidth ]);
+        ImpErrorQuad* pQLine1 = pErrQuad1.get();
         ImpErrorQuad* pQLine2 = 0;
         long nX, nY;
         long nYTmp = 0L;
         bool bQ1 = true;
 
         for( nY = 0L; nY < std::min( nHeight, 2L ); nY++, nYTmp++ )
-            for( nX = 0L, pQLine2 = !nY ? pErrQuad1 : pErrQuad2; nX < nWidth; nX++ )
+            for( nX = 0L, pQLine2 = !nY ? pErrQuad1.get() : pErrQuad2.get(); nX < nWidth; nX++ )
                 pQLine2[ nX ] = pReadAcc->GetPixel( nYTmp, nX );
 
         for( nY = 0L; nY < nHeight; nY++, nYTmp++ )
@@ -2726,16 +2711,13 @@ bool Bitmap::ImplDitherFloyd16()
 
             // Refill/copy row buffer
             pQLine1 = pQLine2;
-            pQLine2 = ( bQ1 = !bQ1 ) ? pErrQuad2 : pErrQuad1;
+            pQLine2 = ( bQ1 = !bQ1 ) ? pErrQuad2.get() : pErrQuad1.get();
 
             if( nYTmp < nHeight )
                 for( nX = 0L; nX < nWidth; nX++ )
                     pQLine2[ nX ] = pReadAcc->GetPixel( nYTmp, nX );
         }
 
-        // Destroy row buffer
-        delete[] pErrQuad1;
-        delete[] pErrQuad2;
         bRet = true;
     }
 
@@ -2884,10 +2866,10 @@ bool Bitmap::ImplReducePopular( sal_uInt16 nColCount )
         const sal_uInt32 nTotalColors = nColorsPerComponent * nColorsPerComponent * nColorsPerComponent;
         const long nWidth = pRAcc->Width();
         const long nHeight = pRAcc->Height();
-        PopularColorCount* pCountTable = new PopularColorCount[ nTotalColors ];
+        boost::scoped_array<PopularColorCount> pCountTable(new PopularColorCount[ nTotalColors ]);
         long nX, nY, nR, nG, nB, nIndex;
 
-        memset( pCountTable, 0, nTotalColors * sizeof( PopularColorCount ) );
+        memset( pCountTable.get(), 0, nTotalColors * sizeof( PopularColorCount ) );
 
         for( nR = 0, nIndex = 0; nR < 256; nR += nColorOffset )
         {
@@ -2930,7 +2912,7 @@ bool Bitmap::ImplReducePopular( sal_uInt16 nColCount )
 
         BitmapPalette aNewPal( nColCount );
 
-        qsort( pCountTable, nTotalColors, sizeof( PopularColorCount ), ImplPopularCmpFnc );
+        qsort( pCountTable.get(), nTotalColors, sizeof( PopularColorCount ), ImplPopularCmpFnc );
 
         for( sal_uInt16 n = 0; n < nColCount; n++ )
         {
@@ -2946,7 +2928,7 @@ bool Bitmap::ImplReducePopular( sal_uInt16 nColCount )
         if( pWAcc )
         {
             BitmapColor aDstCol( (sal_uInt8) 0 );
-            sal_uInt8* pIndexMap = new sal_uInt8[ nTotalColors ];
+            boost::scoped_array<sal_uInt8> pIndexMap(new sal_uInt8[ nTotalColors ]);
 
             for( nR = 0, nIndex = 0; nR < 256; nR += nColorOffset )
                 for( nG = 0; nG < 256; nG += nColorOffset )
@@ -2982,12 +2964,11 @@ bool Bitmap::ImplReducePopular( sal_uInt16 nColCount )
                 }
             }
 
-            delete[] pIndexMap;
             aNewBmp.ReleaseAccess( pWAcc );
             bRet = true;
         }
 
-        delete[] pCountTable;
+        pCountTable.reset();
         ReleaseAccess( pRAcc );
 
         if( bRet )
@@ -3256,9 +3237,9 @@ bool Bitmap::Adjust( short nLuminancePercent, short nContrastPercent,
             BitmapColor aCol;
             const long nW = pAcc->Width();
             const long nH = pAcc->Height();
-            sal_uInt8* cMapR = new sal_uInt8[ 256 ];
-            sal_uInt8* cMapG = new sal_uInt8[ 256 ];
-            sal_uInt8* cMapB = new sal_uInt8[ 256 ];
+            boost::scoped_array<sal_uInt8> cMapR(new sal_uInt8[ 256 ]);
+            boost::scoped_array<sal_uInt8> cMapG(new sal_uInt8[ 256 ]);
+            boost::scoped_array<sal_uInt8> cMapB(new sal_uInt8[ 256 ]);
             long nX, nY;
             double fM, fROff, fGOff, fBOff, fOff;
 
@@ -3359,9 +3340,6 @@ bool Bitmap::Adjust( short nLuminancePercent, short nContrastPercent,
                 }
             }
 
-            delete[] cMapR;
-            delete[] cMapG;
-            delete[] cMapB;
             ReleaseAccess( pAcc );
             bRet = true;
         }

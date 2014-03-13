@@ -32,6 +32,7 @@
 
 #include <impbmp.hxx>
 #include <salbmp.hxx>
+#include <boost/scoped_array.hpp>
 
 Bitmap::Bitmap() :
     mpImpBmp( NULL )
@@ -584,19 +585,18 @@ bool Bitmap::Mirror( sal_uLong nMirrorFlags )
         if( pAcc )
         {
             const long  nScanSize = pAcc->GetScanlineSize();
-            sal_uInt8*      pBuffer = new sal_uInt8[ nScanSize ];
+            boost::scoped_array<sal_uInt8> pBuffer(new sal_uInt8[ nScanSize ]);
             const long  nHeight = pAcc->Height();
             const long  nHeight1 = nHeight - 1L;
             const long  nHeight_2 = nHeight >> 1L;
 
             for( long nY = 0L, nOther = nHeight1; nY < nHeight_2; nY++, nOther-- )
             {
-                memcpy( pBuffer, pAcc->GetScanline( nY ), nScanSize );
+                memcpy( pBuffer.get(), pAcc->GetScanline( nY ), nScanSize );
                 memcpy( pAcc->GetScanline( nY ), pAcc->GetScanline( nOther ), nScanSize );
-                memcpy( pAcc->GetScanline( nOther ), pBuffer, nScanSize );
+                memcpy( pAcc->GetScanline( nOther ), pBuffer.get(), nScanSize );
             }
 
-            delete[] pBuffer;
             ReleaseAccess( pAcc );
             bRet = true;
         }
@@ -726,10 +726,10 @@ bool Bitmap::Rotate( long nAngle10, const Color& rFillColor )
                     long                nRotY;
                     long                nSinY;
                     long                nCosY;
-                    long*               pCosX = new long[ nNewWidth ];
-                    long*               pSinX = new long[ nNewWidth ];
-                    long*               pCosY = new long[ nNewHeight ];
-                    long*               pSinY = new long[ nNewHeight ];
+                    boost::scoped_array<long> pCosX(new long[ nNewWidth ]);
+                    boost::scoped_array<long> pSinX(new long[ nNewWidth ]);
+                    boost::scoped_array<long> pCosY(new long[ nNewHeight ]);
+                    boost::scoped_array<long> pSinY(new long[ nNewHeight ]);
 
                     for ( nX = 0; nX < nNewWidth; nX++ )
                     {
@@ -763,11 +763,6 @@ bool Bitmap::Rotate( long nAngle10, const Color& rFillColor )
                                 pWriteAcc->SetPixel( nY, nX, aFillColor );
                         }
                     }
-
-                    delete[] pSinX;
-                    delete[] pCosX;
-                    delete[] pSinY;
-                    delete[] pCosY;
 
                     aNewBmp.ReleaseAccess( pWriteAcc );
                 }
@@ -925,7 +920,7 @@ bool Bitmap::CopyPixel( const Rectangle& rRectDst,
                         if( pReadAcc->HasPalette() && pWriteAcc->HasPalette() )
                         {
                             const sal_uInt16    nCount = pReadAcc->GetPaletteEntryCount();
-                            sal_uInt8*          pMap = new sal_uInt8[ nCount ];
+                            boost::scoped_array<sal_uInt8> pMap(new sal_uInt8[ nCount ]);
 
                             // Create index map for the color table, as the bitmap should be copied
                             // retaining it's color information relatively well
@@ -935,8 +930,6 @@ bool Bitmap::CopyPixel( const Rectangle& rRectDst,
                             for( long nSrcY = aRectSrc.Top(); nSrcY < nSrcEndY; nSrcY++, nDstY++ )
                                 for( long nSrcX = aRectSrc.Left(), nDstX = aRectDst.Left(); nSrcX < nSrcEndX; nSrcX++, nDstX++ )
                                     pWriteAcc->SetPixelIndex( nDstY, nDstX, pMap[ pReadAcc->GetPixelIndex( nSrcY, nSrcX ) ] );
-
-                            delete[] pMap;
                         }
                         else if( pReadAcc->HasPalette() )
                         {
@@ -1403,10 +1396,10 @@ bool Bitmap::Replace( const Bitmap& rMask, const Color& rReplaceColor )
                 }
                 else
                 {
-                    bool* pFlags = new bool[ nMaxColors ];
+                    boost::scoped_array<bool> pFlags(new bool[ nMaxColors ]);
 
                     // Set all entries to false
-                    std::fill( pFlags, pFlags+nMaxColors, false );
+                    std::fill( pFlags.get(), pFlags.get()+nMaxColors, false );
 
                     for( long nY = 0L; nY < nHeight; nY++ )
                         for( long nX = 0L; nX < nWidth; nX++ )
@@ -1421,8 +1414,6 @@ bool Bitmap::Replace( const Bitmap& rMask, const Color& rReplaceColor )
                             aReplace = BitmapColor( (sal_uInt8) i );
                         }
                     }
-
-                    delete[] pFlags;
                 }
             }
         }
@@ -1561,12 +1552,12 @@ bool Bitmap::Replace( const Color* pSearchColors, const Color* pReplaceColors,
 
     if( pAcc )
     {
-        long*   pMinR = new long[ nColorCount ];
-        long*   pMaxR = new long[ nColorCount ];
-        long*   pMinG = new long[ nColorCount ];
-        long*   pMaxG = new long[ nColorCount ];
-        long*   pMinB = new long[ nColorCount ];
-        long*   pMaxB = new long[ nColorCount ];
+        boost::scoped_array<long> pMinR(new long[ nColorCount ]);
+        boost::scoped_array<long> pMaxR(new long[ nColorCount ]);
+        boost::scoped_array<long> pMinG(new long[ nColorCount ]);
+        boost::scoped_array<long> pMaxG(new long[ nColorCount ]);
+        boost::scoped_array<long> pMinB(new long[ nColorCount ]);
+        boost::scoped_array<long> pMaxB(new long[ nColorCount ]);
         long*   pTols;
         sal_uLong   i;
 
@@ -1612,7 +1603,7 @@ bool Bitmap::Replace( const Color* pSearchColors, const Color* pReplaceColors,
         else
         {
             BitmapColor     aCol;
-            BitmapColor*    pReplaces = new BitmapColor[ nColorCount ];
+            boost::scoped_array<BitmapColor> pReplaces(new BitmapColor[ nColorCount ]);
 
             for( i = 0UL; i < nColorCount; i++ )
                 pReplaces[ i ] = pAcc->GetBestMatchingColor( pReplaceColors[ i ] );
@@ -1635,19 +1626,11 @@ bool Bitmap::Replace( const Color* pSearchColors, const Color* pReplaceColors,
                     }
                 }
             }
-
-            delete[] pReplaces;
         }
 
         if( !_pTols )
             delete[] pTols;
 
-        delete[] pMinR;
-        delete[] pMaxR;
-        delete[] pMinG;
-        delete[] pMaxG;
-        delete[] pMinB;
-        delete[] pMaxB;
         ReleaseAccess( pAcc );
         bRet = true;
     }
