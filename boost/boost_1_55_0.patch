@@ -184,3 +184,20 @@
    return impl::call(c).head;
  }
  
+--- misc/boost_1_55_0/boost/concept/detail/general.hpp	2010-06-08 21:31:13.000000000 +0200
++++ misc/build/boost_1_55_0/boost/concept/detail/general.hpp	2014-03-13 17:20:13.450234546 +0100
+@@ -65,10 +65,10 @@
+   
+ # endif
+ 
+-#  define BOOST_CONCEPT_ASSERT_FN( ModelFnPtr )             \
+-    typedef ::boost::concepts::detail::instantiate<          \
+-    &::boost::concepts::requirement_<ModelFnPtr>::failed>    \
+-      BOOST_PP_CAT(boost_concept_check,__LINE__)
++#define BOOST_CONCEPT_ASSERT_FN( ModelFnPtr )             \
++    ::boost::concepts::detail::instantiate<               \
++    &::boost::concepts::requirement_<ModelFnPtr>::failed> \
++      BOOST_PP_CAT(boost_concept_check,__LINE__)()
+ 
+ }}
+ 
