@@ -601,7 +601,7 @@ uno::Any SAL_CALL SwXMailMerge::execute(
     }
 
     SfxViewFrame*   pFrame = SfxViewFrame::GetFirst( xCurDocSh, sal_False);
-    SwView *pView = PTR_CAST( SwView, pFrame->GetViewShell() );
+    SwView *pView = pFrame ? PTR_CAST( SwView, pFrame->GetViewShell() ) : NULL;
     if (!pView)
         throw RuntimeException();
     SwWrtShell &rSh = *pView->GetWrtShellPtr();
