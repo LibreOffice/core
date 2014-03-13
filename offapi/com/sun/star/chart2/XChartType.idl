@@ -74,7 +74,7 @@ interface XChartType : com::sun::star::uno::XInterface
 
     /** Returns a sequence with supported property mapping roles.
 
-        <p>An example for a property mappong role is FillColor.</p>
+        <p>An example for a property mapping role is FillColor.</p>
     */
     sequence< string >  getSupportedPropertyRoles();
 
