@@ -77,6 +77,8 @@ public:
     void endDMLAnchorInline(const SwFrmFmt* pFrmFmt);
     /// Writes a drawing as VML data.
     void writeVMLDrawing(const SdrObject* sdrObj, const SwFrmFmt& rFrmFmt,const Point& rNdTopLeft);
+    /// Writes a drawing as DML.
+    void writeDMLDrawing(const SdrObject* pSdrObj, const SwFrmFmt* pFrmFmt, int nAnchorId);
     /// Writes shape in both DML and VML format.
     void writeDMLAndVMLDrawing(const SdrObject* sdrObj, const SwFrmFmt& rFrmFmt,const Point& rNdTopLeft, int nAnchorId);
     /// Write <a:effectLst>, the effect list.

@@ -138,7 +138,7 @@ struct DocxSdrExport::Impl
     }
 
     /// Writes wp wrapper code around an SdrObject, which itself is written using drawingML syntax.
-    void writeDMLDrawing(const SdrObject* pSdrObj, const SwFrmFmt* pFrmFmt, int nAnchorId);
+
     void textFrameShadow(const SwFrmFmt& rFrmFmt);
     bool isSupportedDMLShape(com::sun::star::uno::Reference<com::sun::star::drawing::XShape> xShape);
 };
@@ -532,11 +532,11 @@ void DocxSdrExport::writeVMLDrawing(const SdrObject* sdrObj, const SwFrmFmt& rFr
         const_cast< SdrObject* >(sdrObj)->SetPage(0);
 }
 
-void DocxSdrExport::Impl::writeDMLDrawing(const SdrObject* pSdrObject, const SwFrmFmt* pFrmFmt, int nAnchorId)
+void DocxSdrExport::writeDMLDrawing(const SdrObject* pSdrObject, const SwFrmFmt* pFrmFmt, int nAnchorId)
 {
-    sax_fastparser::FSHelperPtr pFS = m_pSerializer;
+    sax_fastparser::FSHelperPtr pFS = m_pImpl->m_pSerializer;
     Size aSize(pSdrObject->GetLogicRect().GetWidth(), pSdrObject->GetLogicRect().GetHeight());
-    m_rSdrExport.startDMLAnchorInline(pFrmFmt, aSize);
+    m_pImpl->m_rSdrExport.startDMLAnchorInline(pFrmFmt, aSize);
 
     sax_fastparser::FastAttributeList* pDocPrAttrList = pFS->createAttrList();
     pDocPrAttrList->add(XML_id, OString::number(nAnchorId).getStr());
@@ -562,7 +562,7 @@ void DocxSdrExport::Impl::writeDMLDrawing(const SdrObject* pSdrObject, const SwF
                         XML_uri, pNamespace,
                         FSEND);
 
-    m_rExport.OutputDML(xShape);
+    m_pImpl->m_rExport.OutputDML(xShape);
 
     pFS->endElementNS(XML_a, XML_graphicData);
     pFS->endElementNS(XML_a, XML_graphic);
@@ -590,7 +590,7 @@ void DocxSdrExport::Impl::writeDMLDrawing(const SdrObject* pSdrObject, const SwF
         pFS->endElementNS(XML_wp14, XML_sizeRelV);
     }
 
-    m_rSdrExport.endDMLAnchorInline(pFrmFmt);
+    m_pImpl->m_rSdrExport.endDMLAnchorInline(pFrmFmt);
 }
 
 void DocxSdrExport::Impl::textFrameShadow(const SwFrmFmt& rFrmFmt)
@@ -657,7 +657,7 @@ void DocxSdrExport::writeDMLAndVMLDrawing(const SdrObject* sdrObj, const SwFrmFm
         m_pImpl->m_pSerializer->startElementNS(XML_mc, XML_Choice,
                                                XML_Requires, (pObjGroup ? "wpg" : "wps"),
                                                FSEND);
-        m_pImpl->writeDMLDrawing(sdrObj, &rFrmFmt, nAnchorId);
+        writeDMLDrawing(sdrObj, &rFrmFmt, nAnchorId);
         m_pImpl->m_pSerializer->endElementNS(XML_mc, XML_Choice);
 
         m_pImpl->m_pSerializer->startElementNS(XML_mc, XML_Fallback, FSEND);
