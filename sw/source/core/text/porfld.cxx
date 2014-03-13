@@ -794,14 +794,22 @@ SwGrfNumPortion::SwGrfNumPortion(
 SwGrfNumPortion::~SwGrfNumPortion()
 {
     if ( IsAnimated() )
-        ( (Graphic*) pBrush->GetGraphic() )->StopAnimation( 0, nId );
+    {
+        Graphic* pGraph = ( (Graphic*) pBrush->GetGraphic() );
+        if (pGraph)
+            pGraph->StopAnimation( 0, nId );
+    }
     delete pBrush;
 }
 
 void SwGrfNumPortion::StopAnimation( OutputDevice* pOut )
 {
     if ( IsAnimated() )
-        ( (Graphic*) pBrush->GetGraphic() )->StopAnimation( pOut, nId );
+    {
+        Graphic* pGraph = ( (Graphic*) pBrush->GetGraphic() );
+        if (pGraph)
+            pGraph->StopAnimation( pOut, nId );
+    }
 }
 
 bool SwGrfNumPortion::Format( SwTxtFormatInfo &rInf )
