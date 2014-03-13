@@ -89,6 +89,7 @@ namespace svt
         ,m_rContentMutex         ( _rContentMutex  )
         ,m_xCommandEnv           ( _rxCommandEnv   )
         ,m_pTranslator           ( _pTranslator    )
+        ,m_pResultHandler        ( NULL            )
         ,m_bCancelled            ( false           )
         ,m_rBlackList            ( ::com::sun::star::uno::Sequence< OUString >() )
     {
