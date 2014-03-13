@@ -302,19 +302,23 @@ void SvLBoxBmp::Clone( SvLBoxItem* pSource )
 SvLBoxButton::SvLBoxButton( SvTreeListEntry* pEntry, SvLBoxButtonKind eTheKind,
                             sal_uInt16 nFlags, SvLBoxButtonData* pBData )
     : SvLBoxItem( pEntry, nFlags )
+    , isVis(true)
+    , pData(pBData)
+    , eKind(eTheKind)
+    , nBaseOffs(0)
+    , nItemFlags(0)
 {
-    eKind = eTheKind;
-    nBaseOffs = 0;
-    nItemFlags = 0;
     SetStateUnchecked();
-    pData = pBData;
-    isVis = true;
 }
 
-SvLBoxButton::SvLBoxButton() : SvLBoxItem()
+SvLBoxButton::SvLBoxButton()
+    : SvLBoxItem()
+    , isVis(false)
+    , pData(0)
+    , eKind(SvLBoxButtonKind_enabledCheckbox)
+    , nItemFlags(0)
+    , nBaseOffs(0)
 {
-    eKind = SvLBoxButtonKind_enabledCheckbox;
-    nItemFlags = 0;
     SetStateUnchecked();
 }
 
