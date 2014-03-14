@@ -94,7 +94,7 @@ typedef std::vector<GLfloat> PieSegment2DPointList;
 typedef std::vector<GLfloat> PointList;
 
 /// Holds the information of our new child window
-struct VCLOPENGL_DLLPUBLIC GLWindow
+struct GLWindow
 {
 #if defined( _WIN32 )
     HWND                    hWnd;
