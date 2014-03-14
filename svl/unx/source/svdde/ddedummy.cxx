@@ -21,6 +21,7 @@
 #include <rtl/instance.hxx>
 
 DdeData::DdeData()
+    : pImp(NULL)
 {
 }
 
@@ -30,10 +31,12 @@ DdeData::DdeData( const OUString& )
 }
 
 DdeData::DdeData( const DdeData& )
+    : pImp(NULL)
 {
 }
 
 DdeData::DdeData( const void*, long, sal_uLong)
+    : pImp(NULL)
 {
 }
 
