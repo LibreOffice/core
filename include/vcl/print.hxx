@@ -282,6 +282,9 @@ protected:
 
     void                        SetSelfAsQueuePrinter( bool bQueuePrinter ) { mbIsQueuePrinter = bQueuePrinter; }
     bool                        IsQueuePrinter() const { return mbIsQueuePrinter; }
+    virtual void                ImplPrintMask ( const Bitmap& rMask, const Color& rMaskColor,
+                                                const Point& rDestPt, const Size& rDestSize,
+                                                const Point& rSrcPtPixel, const Size& rSrcSizePixel );
 
 public:
                                 Printer();

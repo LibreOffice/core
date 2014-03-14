@@ -762,9 +762,6 @@ public:
     SAL_DLLPRIVATE void         ImplPrintTransparent ( const Bitmap& rBmp, const Bitmap& rMask,
                                                        const Point& rDestPt, const Size& rDestSize,
                                                        const Point& rSrcPtPixel, const Size& rSrcSizePixel );
-    SAL_DLLPRIVATE void         ImplPrintMask        ( const Bitmap& rMask, const Color& rMaskColor,
-                                                       const Point& rDestPt, const Size& rDestSize,
-                                                       const Point& rSrcPtPixel, const Size& rSrcSizePixel );
     SAL_DLLPRIVATE Color        ImplDrawModeToColor  ( const Color& rColor ) const;
     ///@}
 
@@ -801,6 +798,10 @@ public:
 
 protected:
                                 OutputDevice();
+
+    virtual void                ImplPrintMask ( const Bitmap& rMask, const Color& rMaskColor,
+                                                const Point& rDestPt, const Size& rDestSize,
+                                                const Point& rSrcPtPixel, const Size& rSrcSizePixel );
 
     virtual long                ImplGetGradientStepCount( long nMinRect );
 

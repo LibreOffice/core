@@ -24,6 +24,7 @@
 #include <tools/resary.hxx>
 #include <tools/stream.hxx>
 #include <tools/vcompat.hxx>
+#include <tools/helpers.hxx>
 
 #include <vcl/unohelp.hxx>
 #include <vcl/svapp.hxx>
@@ -683,6 +684,94 @@ void Printer::ImplInitDisplay( const Window* pWindow )
     mnDPIY              = mpDisplayDev->mnDPIY;
 }
 
+void Printer::ImplPrintMask( const Bitmap& rMask, const Color& rMaskColor,
+                             const Point& rDestPt, const Size& rDestSize,
+                             const Point& rSrcPtPixel, const Size& rSrcSizePixel )
+{
+    Point       aPt;
+    Point       aDestPt( LogicToPixel( rDestPt ) );
+    Size        aDestSz( LogicToPixel( rDestSize ) );
+    Rectangle   aSrcRect( rSrcPtPixel, rSrcSizePixel );
+
+    aSrcRect.Justify();
+
+    if( !rMask.IsEmpty() && aSrcRect.GetWidth() && aSrcRect.GetHeight() && aDestSz.Width() && aDestSz.Height() )
+    {
+        Bitmap  aMask( rMask );
+        sal_uLong   nMirrFlags = 0UL;
+
+        if( aMask.GetBitCount() > 1 )
+            aMask.Convert( BMP_CONVERSION_1BIT_THRESHOLD );
+
+        // mirrored horizontically
+        if( aDestSz.Width() < 0L )
+        {
+            aDestSz.Width() = -aDestSz.Width();
+            aDestPt.X() -= ( aDestSz.Width() - 1L );
+            nMirrFlags |= BMP_MIRROR_HORZ;
+        }
+
+        // mirrored vertically
+        if( aDestSz.Height() < 0L )
+        {
+            aDestSz.Height() = -aDestSz.Height();
+            aDestPt.Y() -= ( aDestSz.Height() - 1L );
+            nMirrFlags |= BMP_MIRROR_VERT;
+        }
+
+        // source cropped?
+        if( aSrcRect != Rectangle( aPt, aMask.GetSizePixel() ) )
+            aMask.Crop( aSrcRect );
+
+        // destination mirrored
+        if( nMirrFlags )
+            aMask.Mirror( nMirrFlags );
+
+        // do painting
+        const long      nSrcWidth = aSrcRect.GetWidth(), nSrcHeight = aSrcRect.GetHeight();
+        long            nX, nY; //, nWorkX, nWorkY, nWorkWidth, nWorkHeight;
+        long*           pMapX = new long[ nSrcWidth + 1 ];
+        long*           pMapY = new long[ nSrcHeight + 1 ];
+        GDIMetaFile*    pOldMetaFile = mpMetaFile;
+        const bool      bOldMap = mbMap;
+
+        mpMetaFile = NULL;
+        mbMap = false;
+        Push( PUSH_FILLCOLOR | PUSH_LINECOLOR );
+        SetLineColor( rMaskColor );
+        SetFillColor( rMaskColor );
+        ImplInitLineColor();
+        ImplInitFillColor();
+
+        // create forward mapping tables
+        for( nX = 0L; nX <= nSrcWidth; nX++ )
+            pMapX[ nX ] = aDestPt.X() + FRound( (double) aDestSz.Width() * nX / nSrcWidth );
+
+        for( nY = 0L; nY <= nSrcHeight; nY++ )
+            pMapY[ nY ] = aDestPt.Y() + FRound( (double) aDestSz.Height() * nY / nSrcHeight );
+
+        // walk through all rectangles of mask
+        const Region aWorkRgn(aMask.CreateRegion(COL_BLACK, Rectangle(Point(), aMask.GetSizePixel())));
+        RectangleVector aRectangles;
+        aWorkRgn.GetRegionRectangles(aRectangles);
+
+        for(RectangleVector::const_iterator aRectIter(aRectangles.begin()); aRectIter != aRectangles.end(); ++aRectIter)
+        {
+            const Point aMapPt(pMapX[aRectIter->Left()], pMapY[aRectIter->Top()]);
+            const Size aMapSz(
+                pMapX[aRectIter->Right() + 1] - aMapPt.X(),      // pMapX[L + W] -> L + ((R - L) + 1) -> R + 1
+                pMapY[aRectIter->Bottom() + 1] - aMapPt.Y());    // same for Y
+
+            DrawRect(Rectangle(aMapPt, aMapSz));
+        }
+
+        Pop();
+        delete[] pMapX;
+        delete[] pMapY;
+        mbMap = bOldMap;
+        mpMetaFile = pOldMetaFile;
+    }
+}
 
 SalPrinterQueueInfo* Printer::ImplGetQueueInfo( const OUString& rPrinterName,
                                                 const OUString* pDriver )
