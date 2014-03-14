@@ -23,7 +23,7 @@
 {
     self = [super initWithFrame:frame];
     if (self) {
-        const int MAXZOOM = 4;
+        const int MAXZOOM = 8;
 
         [self setMaximumZoomScale:MAXZOOM];
         [self setDelegate:self];
