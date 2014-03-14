@@ -1292,19 +1292,6 @@ RscTop * RscTypCont::InitClassMetricFormatter( RscTop * pSuper,
     return pClassMetric;
 }
 
-RscTop * RscTypCont::InitClassCurrencyFormatter(RscTop * pSuper)
-{
-    Atom        nId;
-    RscTop *    pClassCurrency;
-
-    // Klasse anlegen
-    nId = pHS->getID( "CurrencyFormatter" );
-    pClassCurrency = new RscClass( nId, RSC_NOTYPE, pSuper );
-    pClassCurrency->SetCallPar( *pStdPar1, *pStdPar2, *pStdParType );
-
-    return pClassCurrency;
-}
-
 RscTop * RscTypCont::InitClassDateFormatter( RscTop * pSuper,
                         RscTop * pClassDate )
 {

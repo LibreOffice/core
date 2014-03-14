@@ -209,7 +209,6 @@ class RscTypCont
     RscTop *    InitClassNumericFormatter( RscTop * pSuper );
     RscTop *    InitClassMetricFormatter( RscTop * pSuper,
                                           RscEnum * pFieldUnits );
-    RscTop *    InitClassCurrencyFormatter( RscTop * pSuper );
     RscTop *    InitClassDateFormatter( RscTop * pSuper, RscTop * pClassDate );
     RscTop *    InitClassTimeFormatter( RscTop * pSuper, RscTop * pClassTime,
                                         RscEnum * pTimeFieldFormat );
