@@ -19,6 +19,7 @@ $(eval $(call gb_UIConfig_add_uifiles,filter,\
     filter/uiconfig/ui/pdfuserinterfacepage \
     filter/uiconfig/ui/pdfviewpage \
 	filter/uiconfig/ui/testxmlfilter \
+	filter/uiconfig/ui/warnpdfdialog \
 	filter/uiconfig/ui/xmlfiltersettings \
 	filter/uiconfig/ui/xmlfiltertabpagegeneral \
 	filter/uiconfig/ui/xmlfiltertabpagetransformation \

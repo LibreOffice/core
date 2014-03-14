@@ -19,32 +19,25 @@
 
 #include <filter.hrc>
 
-#define RID_PDF_WARNPDFAPASSWORD    (RID_PDF_DIALOG_START +   6)
+#define RID_PDF_WARNPDFAPASSWORD        (RID_PDF_DIALOG_START + 6)
 
 //strings for PDF security, user password management
-#define STR_PDF_EXPORT_UDPWD         (RID_PDF_DIALOG_START +  7)
+#define STR_PDF_EXPORT_UDPWD            (RID_PDF_DIALOG_START + 7)
 
 //strings for PDF security, owner password management
-#define STR_PDF_EXPORT_ODPWD         (RID_PDF_DIALOG_START + 10)
+#define STR_PDF_EXPORT_ODPWD            (RID_PDF_DIALOG_START + 8)
 
-#define RID_PDF_ERROR_DLG            (RID_PDF_DIALOG_START + 11)
-#define FT_PROCESS                        1
-#define IMG_WARN                          2
-#define IMG_ERR                           3
-#define STR_WARN_TRANSP_PDFA              4
-#define STR_WARN_TRANSP_PDFA_SHORT        5
-#define STR_WARN_TRANSP_VERSION           6
-#define STR_WARN_TRANSP_VERSION_SHORT     7
-#define STR_WARN_FORMACTION_PDFA          8
-#define STR_WARN_FORMACTION_PDFA_SHORT    9
-#define STR_WARN_TRANSP_CONVERTED        10
-#define STR_WARN_TRANSP_CONVERTED_SHORT  11
+#define STR_WARN_TRANSP_PDFA            (RID_PDF_DIALOG_START + 9)
+#define STR_WARN_TRANSP_PDFA_SHORT      (RID_PDF_DIALOG_START + 10)
+#define STR_WARN_TRANSP_VERSION         (RID_PDF_DIALOG_START + 11)
+#define STR_WARN_TRANSP_VERSION_SHORT   (RID_PDF_DIALOG_START + 12)
+#define STR_WARN_FORMACTION_PDFA        (RID_PDF_DIALOG_START + 13)
+#define STR_WARN_FORMACTION_PDFA_SHORT  (RID_PDF_DIALOG_START + 14)
+#define STR_WARN_TRANSP_CONVERTED       (RID_PDF_DIALOG_START + 15)
+#define STR_WARN_TRANSP_CONVERTED_SHORT (RID_PDF_DIALOG_START + 16)
+#define IMG_WARN                        (RID_PDF_DIALOG_START + 17)
+#define IMG_ERR                         (RID_PDF_DIALOG_START + 18)
 
-//ATTENTION: maximum allowed value is( RID_PDF_DIALOG_START +   19)
-
-#define FL_GENERAL_VERTICAL  157
-#define FL_INITVIEW_VERTICAL 158
-#define FL_VPREFER_VERTICAL  158
-#define FL_SECURITY_VERTICAL 160
+//ATTENTION: maximum allowed value is   (RID_PDF_DIALOG_START + 19)
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

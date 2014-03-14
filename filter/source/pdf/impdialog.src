@@ -39,64 +39,54 @@ WarningBox RID_PDF_WARNPDFAPASSWORD
     Message[ en-US ] = "PDF/A does not allow encryption. The exported PDF file will not be password protected.";
 };
 
-ModalDialog RID_PDF_ERROR_DLG
+String STR_WARN_TRANSP_PDFA_SHORT
 {
-    HelpID = "filter:ModalDialog:RID_PDF_ERROR_DLG";
-    OutputSize = TRUE;
-    SVLook = TRUE;
-    Moveable = TRUE;
-    Text [en-US] = "Problems during PDF export";
-    Size = MAP_APPFONT( 200, 150 );
+    Text [en-US] = "PDF/A transparency";
+};
 
-    FixedText FT_PROCESS
-    {
-        WordBreak = TRUE;
-        Pos = MAP_APPFONT( 5, 5 );
-        Size = MAP_APPFONT( 210, 24 );
-        Text [en-US] = "During PDF export the following problems occurred:";
-    };
+String STR_WARN_TRANSP_PDFA
+{
+    Text [en-US] = "PDF/A forbids transparency. A transparent object was painted opaque instead.";
+};
 
-    Bitmap IMG_WARN
-    {
-        File = "ballgreen_7.png";
-    };
-    Bitmap IMG_ERR
-    {
-        File = "ballred_7.png";
-    };
+String STR_WARN_TRANSP_VERSION_SHORT
+{
+    Text [en-US] = "PDF version conflict";
+};
 
-    String STR_WARN_TRANSP_PDFA_SHORT
-    {
-        Text [en-US] = "PDF/A transparency";
-    };
-    String STR_WARN_TRANSP_PDFA
-    {
-        Text [en-US] = "PDF/A forbids transparency. A transparent object was painted opaque instead.";
-    };
-    String STR_WARN_TRANSP_VERSION_SHORT
-    {
-        Text [en-US] = "PDF version conflict";
-    };
-    String STR_WARN_TRANSP_VERSION
-    {
-        Text [en-US] = "Transparency is not supported in PDF versions earlier than PDF 1.4. A transparent object was painted opaque instead";
-    };
-    String STR_WARN_FORMACTION_PDFA_SHORT
-    {
-        Text [en-US] = "PDF/A form action";
-    };
-    String STR_WARN_FORMACTION_PDFA
-    {
-        Text [en-US] = "A form control contained an action not supported by the PDF/A standard. The action was skipped";
-    };
-    String STR_WARN_TRANSP_CONVERTED
-    {
-        Text [en-US] = "Some objects were converted to an image in order to remove transparencies, because the target PDF format does not support transparencies. Possibly better results can be achieved if you remove the transparent objects before exporting.";
-    };
-    String STR_WARN_TRANSP_CONVERTED_SHORT
-    {
-        Text [en-US] = "Transparencies removed";
-    };
+String STR_WARN_TRANSP_VERSION
+{
+    Text [en-US] = "Transparency is not supported in PDF versions earlier than PDF 1.4. A transparent object was painted opaque instead";
+};
+
+String STR_WARN_FORMACTION_PDFA_SHORT
+{
+    Text [en-US] = "PDF/A form action";
+};
+
+String STR_WARN_FORMACTION_PDFA
+{
+    Text [en-US] = "A form control contained an action not supported by the PDF/A standard. The action was skipped";
+};
+
+String STR_WARN_TRANSP_CONVERTED
+{
+    Text [en-US] = "Some objects were converted to an image in order to remove transparencies, because the target PDF format does not support transparencies. Possibly better results can be achieved if you remove the transparent objects before exporting.";
+};
+
+String STR_WARN_TRANSP_CONVERTED_SHORT
+{
+    Text [en-US] = "Transparencies removed";
+};
+
+Bitmap IMG_WARN
+{
+    File = "ballgreen_7.png";
+};
+
+Bitmap IMG_ERR
+{
+    File = "ballred_7.png";
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

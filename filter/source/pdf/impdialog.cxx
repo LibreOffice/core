@@ -1450,15 +1450,18 @@ IMPL_LINK_NOARG(ImpPDFTabLinksPage, ClickRbOpnLnksBrowserHdl)
     return 0;
 }
 
-ImplErrorDialog::ImplErrorDialog( const std::set< vcl::PDFWriter::ErrorCode >& rErrors ) :
-    ModalDialog( NULL, PDFFilterResId( RID_PDF_ERROR_DLG ) ),
-    maFI( this, 0 ),
-    maProcessText( this, PDFFilterResId( FT_PROCESS ) ),
-    maErrors( this, WB_BORDER | WB_AUTOVSCROLL ),
-    maExplanation( this, WB_WORDBREAK ),
-    maButton( this, WB_DEFBUTTON )
-
+ImplErrorDialog::ImplErrorDialog(const std::set< vcl::PDFWriter::ErrorCode >& rErrors)
+    : MessageDialog(NULL, "WarnPDFDialog", "filter/ui/warnpdfdialog.ui")
 {
+    get(m_pErrors, "errors");
+    get(m_pExplanation, "message");
+
+    Size aSize(LogicToPixel(Size(100, 75), MapMode(MAP_APPFONT)));
+    m_pErrors->set_width_request(aSize.Width());
+    m_pErrors->set_height_request(aSize.Height());
+    m_pExplanation->set_width_request(aSize.Width());
+    m_pExplanation->set_height_request(aSize.Height());
+
     // load images
     Image aWarnImg( BitmapEx( PDFFilterResId( IMG_WARN ) ) );
     Image aErrImg( BitmapEx( PDFFilterResId( IMG_ERR ) ) );
@@ -1470,30 +1473,30 @@ ImplErrorDialog::ImplErrorDialog( const std::set< vcl::PDFWriter::ErrorCode >& r
         {
         case vcl::PDFWriter::Warning_Transparency_Omitted_PDFA:
         {
-            sal_uInt16 nPos = maErrors.InsertEntry( OUString( PDFFilterResId( STR_WARN_TRANSP_PDFA_SHORT ) ),
+            sal_uInt16 nPos = m_pErrors->InsertEntry( OUString( PDFFilterResId( STR_WARN_TRANSP_PDFA_SHORT ) ),
                                                 aWarnImg );
-            maErrors.SetEntryData( nPos, new OUString( PDFFilterResId( STR_WARN_TRANSP_PDFA ) ) );
+            m_pErrors->SetEntryData( nPos, new OUString( PDFFilterResId( STR_WARN_TRANSP_PDFA ) ) );
         }
         break;
         case vcl::PDFWriter::Warning_Transparency_Omitted_PDF13:
         {
-            sal_uInt16 nPos = maErrors.InsertEntry( OUString( PDFFilterResId( STR_WARN_TRANSP_VERSION_SHORT ) ),
+            sal_uInt16 nPos = m_pErrors->InsertEntry( OUString( PDFFilterResId( STR_WARN_TRANSP_VERSION_SHORT ) ),
                                                 aWarnImg );
-            maErrors.SetEntryData( nPos, new OUString( PDFFilterResId( STR_WARN_TRANSP_VERSION ) ) );
+            m_pErrors->SetEntryData( nPos, new OUString( PDFFilterResId( STR_WARN_TRANSP_VERSION ) ) );
         }
         break;
         case vcl::PDFWriter::Warning_FormAction_Omitted_PDFA:
         {
-            sal_uInt16 nPos = maErrors.InsertEntry( OUString( PDFFilterResId( STR_WARN_FORMACTION_PDFA_SHORT ) ),
+            sal_uInt16 nPos = m_pErrors->InsertEntry( OUString( PDFFilterResId( STR_WARN_FORMACTION_PDFA_SHORT ) ),
                                                 aWarnImg );
-            maErrors.SetEntryData( nPos, new OUString( PDFFilterResId( STR_WARN_FORMACTION_PDFA ) ) );
+            m_pErrors->SetEntryData( nPos, new OUString( PDFFilterResId( STR_WARN_FORMACTION_PDFA ) ) );
         }
         break;
         case vcl::PDFWriter::Warning_Transparency_Converted:
         {
-            sal_uInt16 nPos = maErrors.InsertEntry( OUString( PDFFilterResId( STR_WARN_TRANSP_CONVERTED_SHORT ) ),
+            sal_uInt16 nPos = m_pErrors->InsertEntry( OUString( PDFFilterResId( STR_WARN_TRANSP_CONVERTED_SHORT ) ),
                                                 aWarnImg );
-            maErrors.SetEntryData( nPos, new OUString( PDFFilterResId( STR_WARN_TRANSP_CONVERTED ) ) );
+            m_pErrors->SetEntryData( nPos, new OUString( PDFFilterResId( STR_WARN_TRANSP_CONVERTED ) ) );
         }
         break;
         default:
@@ -1501,55 +1504,27 @@ ImplErrorDialog::ImplErrorDialog( const std::set< vcl::PDFWriter::ErrorCode >& r
         }
     }
 
-    FreeResource();
-
-    if( maErrors.GetEntryCount() > 0 )
+    if( m_pErrors->GetEntryCount() > 0 )
     {
-        maErrors.SelectEntryPos( 0 );
-        OUString* pStr = reinterpret_cast<OUString*>(maErrors.GetEntryData( 0 ));
-        maExplanation.SetText( pStr ? *pStr : OUString() );
+        m_pErrors->SelectEntryPos( 0 );
+        OUString* pStr = reinterpret_cast<OUString*>(m_pErrors->GetEntryData( 0 ));
+        m_pExplanation->SetText( pStr ? *pStr : OUString() );
     }
 
-    // adjust layout
-    Image aWarnImage( WarningBox::GetStandardImage() );
-    Size aImageSize( aWarnImage.GetSizePixel() );
-    Size aDlgSize( GetSizePixel() );
-    aImageSize.Width() += 6;
-    aImageSize.Height() += 6;
-    maFI.SetImage( aWarnImage );
-    maFI.SetPosSizePixel( Point( 5, 5 ), aImageSize );
-    maFI.Show();
-
-    maProcessText.SetStyle( maProcessText.GetStyle() | WB_VCENTER );
-    maProcessText.SetPosSizePixel( Point( aImageSize.Width() + 10, 5 ),
-                                   Size(  aDlgSize.Width() - aImageSize.Width() - 15, aImageSize.Height() ) );
-
-    Point aErrorLBPos( 5, aImageSize.Height() + 10 );
-    Size aErrorLBSize( aDlgSize.Width()/2 - 10, aDlgSize.Height() - aErrorLBPos.Y() - 35 );
-    maErrors.SetPosSizePixel( aErrorLBPos, aErrorLBSize );
-    maErrors.SetSelectHdl( LINK( this, ImplErrorDialog, SelectHdl ) );
-    maErrors.Show();
-
-    maExplanation.SetPosSizePixel( Point( aErrorLBPos.X() + aErrorLBSize.Width() + 5, aErrorLBPos.Y() ),
-                                   Size( aDlgSize.Width() - aErrorLBPos.X() - aErrorLBSize.Width() - 10, aErrorLBSize.Height() ) );
-    maExplanation.Show();
-
-    maButton.SetPosSizePixel( Point( (aDlgSize.Width() - 50)/2, aDlgSize.Height() - 30 ),
-                              Size( 50, 25 ) );
-    maButton.Show();
+    m_pErrors->SetSelectHdl( LINK( this, ImplErrorDialog, SelectHdl ) );
 }
 
 ImplErrorDialog::~ImplErrorDialog()
 {
     // free strings again
-    for( sal_uInt16 n = 0; n < maErrors.GetEntryCount(); n++ )
-        delete (OUString*)maErrors.GetEntryData( n );
+    for( sal_uInt16 n = 0; n < m_pErrors->GetEntryCount(); n++ )
+        delete (OUString*)m_pErrors->GetEntryData( n );
 }
 
 IMPL_LINK_NOARG(ImplErrorDialog, SelectHdl)
 {
-    OUString* pStr = reinterpret_cast<OUString*>(maErrors.GetEntryData( maErrors.GetSelectEntryPos() ));
-    maExplanation.SetText( pStr ? *pStr : OUString() );
+    OUString* pStr = reinterpret_cast<OUString*>(m_pErrors->GetEntryData( m_pErrors->GetSelectEntryPos() ));
+    m_pExplanation->SetText( pStr ? *pStr : OUString() );
     return 0;
 }
 

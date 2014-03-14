@@ -54,14 +54,10 @@ public:
     PDFFilterResId( sal_uInt32 nId );
 };
 
-class ImplErrorDialog : public ModalDialog
+class ImplErrorDialog : public MessageDialog
 {
-    FixedImage      maFI;
-    FixedText       maProcessText;
-    ListBox         maErrors;
-    FixedText       maExplanation;
-
-    OKButton        maButton;
+    ListBox*        m_pErrors;
+    FixedText*      m_pExplanation;
 
     DECL_LINK(SelectHdl, void *);
     public:
