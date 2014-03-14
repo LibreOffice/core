@@ -1661,12 +1661,14 @@ void Test::testFuncParam()
     m_pDoc->SetString(0, 0, 0, OUString("=\"\"+3"));    // empty string
     m_pDoc->SetString(0, 1, 0, OUString("=\" \"+3"));   // only blank
     m_pDoc->SetString(0, 2, 0, OUString("=\" 4 \"+3")); // number in blanks
-    m_pDoc->SetString(0, 3, 0, OUString("=\" x \"+3")); // non-numeric => #VALUE! error
+    m_pDoc->SetString(0, 3, 0, OUString("=\" x \"+3")); // non-numeric
+    m_pDoc->SetString(0, 4, 0, OUString("=\"4.4\"+3")); // locale dependent
 
     OUString aVal;
     ScCalcConfig aConfig;
 
-    // With "Empty string as zero" option.
+    // With "Convert also locale dependent" and "Empty string as zero"=True option.
+    aConfig.meStringConversion = ScCalcConfig::STRING_CONVERSION_LOCALE_DEPENDENT;
     aConfig.mbEmptyStringAsZero = true;
     ScInterpreter::SetGlobalConfig(aConfig);
     m_pDoc->CalcAll();
@@ -1678,8 +1680,11 @@ void Test::testFuncParam()
     CPPUNIT_ASSERT_MESSAGE("incorrect result", val == 7);
     aVal = m_pDoc->GetString( 0, 3, 0);
     CPPUNIT_ASSERT_MESSAGE("incorrect result", aVal == "#VALUE!");
+    m_pDoc->GetValue(0, 4, 0, val);
+    CPPUNIT_ASSERT_MESSAGE("incorrect result", val == 7.4);
 
-    // Without "Empty string as zero" option.
+    // With "Convert also locale dependent" and "Empty string as zero"=False option.
+    aConfig.meStringConversion = ScCalcConfig::STRING_CONVERSION_LOCALE_DEPENDENT;
     aConfig.mbEmptyStringAsZero = false;
     ScInterpreter::SetGlobalConfig(aConfig);
     m_pDoc->CalcAll();
@@ -1690,6 +1695,72 @@ void Test::testFuncParam()
     m_pDoc->GetValue(0, 2, 0, val);
     CPPUNIT_ASSERT_MESSAGE("incorrect result", val == 7);
     aVal = m_pDoc->GetString( 0, 3, 0);
+    CPPUNIT_ASSERT_MESSAGE("incorrect result", aVal == "#VALUE!");
+    m_pDoc->GetValue(0, 4, 0, val);
+    CPPUNIT_ASSERT_MESSAGE("incorrect result", val == 7.4);
+
+    // With "Convert only unambiguous" and "Empty string as zero"=True option.
+    aConfig.meStringConversion = ScCalcConfig::STRING_CONVERSION_UNAMBIGUOUS;
+    aConfig.mbEmptyStringAsZero = true;
+    ScInterpreter::SetGlobalConfig(aConfig);
+    m_pDoc->CalcAll();
+    m_pDoc->GetValue(0, 0, 0, val);
+    CPPUNIT_ASSERT_MESSAGE("incorrect result", val == 3);
+    m_pDoc->GetValue(0, 1, 0, val);
+    CPPUNIT_ASSERT_MESSAGE("incorrect result", val == 3);
+    m_pDoc->GetValue(0, 2, 0, val);
+    CPPUNIT_ASSERT_MESSAGE("incorrect result", val == 7);
+    aVal = m_pDoc->GetString( 0, 3, 0);
+    CPPUNIT_ASSERT_MESSAGE("incorrect result", aVal == "#VALUE!");
+    aVal = m_pDoc->GetString( 0, 4, 0);
+    CPPUNIT_ASSERT_MESSAGE("incorrect result", aVal == "#VALUE!");
+
+    // With "Convert only unambiguous" and "Empty string as zero"=False option.
+    aConfig.meStringConversion = ScCalcConfig::STRING_CONVERSION_UNAMBIGUOUS;
+    aConfig.mbEmptyStringAsZero = false;
+    ScInterpreter::SetGlobalConfig(aConfig);
+    m_pDoc->CalcAll();
+    aVal = m_pDoc->GetString( 0, 0, 0);
+    CPPUNIT_ASSERT_MESSAGE("incorrect result", aVal == "#VALUE!");
+    aVal = m_pDoc->GetString( 0, 1, 0);
+    CPPUNIT_ASSERT_MESSAGE("incorrect result", aVal == "#VALUE!");
+    m_pDoc->GetValue(0, 2, 0, val);
+    CPPUNIT_ASSERT_MESSAGE("incorrect result", val == 7);
+    aVal = m_pDoc->GetString( 0, 3, 0);
+    CPPUNIT_ASSERT_MESSAGE("incorrect result", aVal == "#VALUE!");
+    aVal = m_pDoc->GetString( 0, 4, 0);
+    CPPUNIT_ASSERT_MESSAGE("incorrect result", aVal == "#VALUE!");
+
+    // With "Treat as zero" ("Empty string as zero" is ignored).
+    aConfig.meStringConversion = ScCalcConfig::STRING_CONVERSION_AS_ZERO;
+    aConfig.mbEmptyStringAsZero = true;
+    ScInterpreter::SetGlobalConfig(aConfig);
+    m_pDoc->CalcAll();
+    m_pDoc->GetValue(0, 0, 0, val);
+    CPPUNIT_ASSERT_MESSAGE("incorrect result", val == 3);
+    m_pDoc->GetValue(0, 1, 0, val);
+    CPPUNIT_ASSERT_MESSAGE("incorrect result", val == 3);
+    m_pDoc->GetValue(0, 2, 0, val);
+    CPPUNIT_ASSERT_MESSAGE("incorrect result", val == 3);
+    m_pDoc->GetValue(0, 3, 0, val);
+    CPPUNIT_ASSERT_MESSAGE("incorrect result", val == 3);
+    m_pDoc->GetValue(0, 4, 0, val);
+    CPPUNIT_ASSERT_MESSAGE("incorrect result", val == 3);
+
+    // With "Generate #VALUE! error" ("Empty string as zero" is ignored).
+    aConfig.meStringConversion = ScCalcConfig::STRING_CONVERSION_AS_ERROR;
+    aConfig.mbEmptyStringAsZero = false;
+    ScInterpreter::SetGlobalConfig(aConfig);
+    m_pDoc->CalcAll();
+    aVal = m_pDoc->GetString( 0, 0, 0);
+    CPPUNIT_ASSERT_MESSAGE("incorrect result", aVal == "#VALUE!");
+    aVal = m_pDoc->GetString( 0, 1, 0);
+    CPPUNIT_ASSERT_MESSAGE("incorrect result", aVal == "#VALUE!");
+    aVal = m_pDoc->GetString( 0, 2, 0);
+    CPPUNIT_ASSERT_MESSAGE("incorrect result", aVal == "#VALUE!");
+    aVal = m_pDoc->GetString( 0, 3, 0);
+    CPPUNIT_ASSERT_MESSAGE("incorrect result", aVal == "#VALUE!");
+    aVal = m_pDoc->GetString( 0, 4, 0);
     CPPUNIT_ASSERT_MESSAGE("incorrect result", aVal == "#VALUE!");
 
     m_pDoc->DeleteTab(0);
