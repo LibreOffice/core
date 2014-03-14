@@ -24,7 +24,7 @@ namespace writerfilter {
                 void resolve(RTFShape& rShape, bool bClose);
                 void close();
                 void append(OUString aKey, OUString aValue);
-                void resolveDhgt(uno::Reference<beans::XPropertySet> xPropertySet, sal_Int32 nZOrder);
+                void resolveDhgt(uno::Reference<beans::XPropertySet> xPropertySet, sal_Int32 nZOrder, bool bOldStyle);
                 void resolveFLine(uno::Reference<beans::XPropertySet> xPropertySet, sal_Int32 nFLine);
                 /**
                  * These are the default in Word, but not in Writer.
