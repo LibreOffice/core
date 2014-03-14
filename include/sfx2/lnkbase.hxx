@@ -73,11 +73,11 @@ private:
     SvLinkSourceRef         xObj;
     OUString                aLinkName;
     BaseLink_Impl*          pImpl;
-    sal_uInt16                  nObjType;
-    sal_Bool                    bVisible : 1;
-    sal_Bool                    bSynchron : 1;
-    sal_Bool                    bUseCache : 1;  // for Graphics Links!
-    sal_Bool                    bWasLastEditOK : 1;
+    sal_uInt16              nObjType;
+    bool                    bVisible : 1;
+    bool                    bSynchron : 1;
+    bool                    bUseCache : 1;  // for Graphics Links!
+    bool                    bWasLastEditOK : 1;
 
     DECL_LINK( EndEditHdl, OUString* );
 
@@ -91,7 +91,7 @@ protected:
 
     ImplBaseLinkData* pImplData;
 
-    sal_Bool            m_bIsReadOnly;
+    bool            m_bIsReadOnly;
     com::sun::star::uno::Reference<com::sun::star::io::XInputStream>
                         m_xInputStreamToLoadFrom;
 
@@ -99,7 +99,7 @@ protected:
                     SvBaseLink( sal_uInt16 nLinkType, sal_uIntPtr nContentType = FORMAT_STRING );
     virtual         ~SvBaseLink();
 
-    void            _GetRealObject( sal_Bool bConnect = sal_True );
+    void            _GetRealObject( bool bConnect = true );
 
     SvLinkSource*   GetRealObject()
                     {
@@ -134,37 +134,37 @@ public:
     void            SetUpdateMode( sal_uInt16 );
     sal_uInt16          GetUpdateMode() const;
     sal_uIntPtr             GetContentType() const;
-    sal_Bool            SetContentType( sal_uIntPtr nType );
+    bool            SetContentType( sal_uIntPtr nType );
 
     LinkManager*          GetLinkManager();
     const LinkManager*    GetLinkManager() const;
     void                    SetLinkManager( LinkManager* _pMgr );
 
-    sal_Bool            Update();
+    bool            Update();
     void            Disconnect();
 
     // Link impl: DECL_LINK( MyEndDialogHdl, SvBaseLink* ); <= param is this
     virtual void    Edit( Window*, const Link& rEndEditHdl );
 
     // should the link appear in the dialog? (to the left in the link in the...)
-    sal_Bool            IsVisible() const           { return bVisible; }
-    void            SetVisible( sal_Bool bFlag )    { bVisible = bFlag; }
+    bool            IsVisible() const           { return bVisible; }
+    void            SetVisible( bool bFlag )    { bVisible = bFlag; }
     // should the Link be loaded synchronous or asynchronous?
-    sal_Bool            IsSynchron() const          { return bSynchron; }
-    void            SetSynchron( sal_Bool bFlag )   { bSynchron = bFlag; }
+    bool            IsSynchron() const          { return bSynchron; }
+    void            SetSynchron( bool bFlag )   { bSynchron = bFlag; }
 
-    sal_Bool            IsUseCache() const          { return bUseCache; }
-    void            SetUseCache( sal_Bool bFlag )   { bUseCache = bFlag; }
+    bool            IsUseCache() const          { return bUseCache; }
+    void            SetUseCache( bool bFlag )   { bUseCache = bFlag; }
 
     void            setStreamToLoadFrom(
                         const com::sun::star::uno::Reference<com::sun::star::io::XInputStream>& xInputStream,
-                        sal_Bool bIsReadOnly )
+                        bool bIsReadOnly )
                             { m_xInputStreamToLoadFrom = xInputStream;
                               m_bIsReadOnly = bIsReadOnly; }
     // #i88291#
     void            clearStreamToLoadFrom();
 
-    inline sal_Bool         WasLastEditOK() const       { return bWasLastEditOK; }
+    inline bool     WasLastEditOK() const       { return bWasLastEditOK; }
     FileDialogHelper & GetInsertFileDialog(const OUString& rFactory) const;
 };
 

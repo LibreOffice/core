@@ -61,7 +61,7 @@ class SFX2_DLLPUBLIC LinkManager
 
     SfxObjectShell *pPersist; // LinkMgr must be release before SfxObjectShell
 protected:
-    sal_Bool        InsertLink( SvBaseLink* pLink, sal_uInt16 nObjType, sal_uInt16 nUpdateType,
+    bool        InsertLink( SvBaseLink* pLink, sal_uInt16 nObjType, sal_uInt16 nUpdateType,
                             const OUString* pName = 0 );
 public:
 
@@ -90,16 +90,16 @@ public:
 
     void        Remove( SvBaseLink *pLink );
     void        Remove( size_t nPos, size_t nCnt = 1 );
-    sal_Bool        Insert( SvBaseLink* pLink );
+    bool        Insert( SvBaseLink* pLink );
 
     // the links connect to a SvLinkSource and adds to the list
-    sal_Bool        InsertDDELink( SvBaseLink*,
+    bool        InsertDDELink( SvBaseLink*,
                         const OUString& rServer,
                         const OUString& rTopic,
                         const OUString& rItem );
 
     // if everything is already set at the link!
-    sal_Bool        InsertDDELink( SvBaseLink* );
+    bool        InsertDDELink( SvBaseLink* );
 
     // Connect the links to a pseudo-object and add to the list
     bool InsertFileLink( sfx2::SvBaseLink&,
@@ -141,7 +141,7 @@ public:
     // Call with list of links to server
     const SvLinkSources& GetServers() const { return aServerTbl; }
     // Link register/delete
-    sal_Bool        InsertServer( SvLinkSource* rObj );
+    bool            InsertServer( SvLinkSource* rObj );
     void            RemoveServer( SvLinkSource* rObj );
 
     // A transfer is aborted, so cancel all download media
@@ -157,7 +157,7 @@ public:
 
     // if the mimetype says graphic/bitmap/gdimetafile then get the
     // graphic from the Any. Return says no errors
-    static sal_Bool GetGraphicFromAny( const OUString& rMimeType,
+    static bool GetGraphicFromAny( const OUString& rMimeType,
                                 const ::com::sun::star::uno::Any & rValue,
                                 Graphic& rGrf );
 

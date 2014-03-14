@@ -129,8 +129,8 @@ SvBaseLink::SvBaseLink()
     pImpl = new BaseLink_Impl();
     nObjType = OBJECT_CLIENT_SO;
     pImplData = new ImplBaseLinkData;
-    bVisible = bSynchron = bUseCache = sal_True;
-    bWasLastEditOK = sal_False;
+    bVisible = bSynchron = bUseCache = true;
+    bWasLastEditOK = false;
 }
 
 
@@ -141,8 +141,8 @@ SvBaseLink::SvBaseLink( sal_uInt16 nUpdateMode, sal_uIntPtr nContentType )
     pImpl = new BaseLink_Impl();
     nObjType = OBJECT_CLIENT_SO;
     pImplData = new ImplBaseLinkData;
-    bVisible = bSynchron = bUseCache = sal_True;
-    bWasLastEditOK = sal_False;
+    bVisible = bSynchron = bUseCache = true;
+    bWasLastEditOK = false;
 
     // It it going to be a Ole-Link,
     pImplData->ClientType.nUpdateMode = nUpdateMode;
@@ -156,8 +156,8 @@ SvBaseLink::SvBaseLink( const OUString& rLinkName, sal_uInt16 nObjectType, SvLin
     : pImpl(0)
     , m_bIsReadOnly(false)
 {
-    bVisible = bSynchron = bUseCache = sal_True;
-    bWasLastEditOK = sal_False;
+    bVisible = bSynchron = bUseCache = true;
+    bWasLastEditOK = false;
     aLinkName = rLinkName;
     pImplData = new ImplBaseLinkData;
     nObjType = nObjectType;
@@ -299,7 +299,7 @@ void SvBaseLink::clearStreamToLoadFrom()
     }
 }
 
-sal_Bool SvBaseLink::Update()
+bool SvBaseLink::Update()
 {
     if( OBJECT_CLIENT_SO & nObjType )
     {
@@ -329,7 +329,7 @@ sal_Bool SvBaseLink::Update()
             {
                 // should be asynschron?
                 if( xObj->IsPending() )
-                    return sal_True;
+                    return true;
 
                 // we do not need the object anymore
                 AddNextRef();
@@ -338,7 +338,7 @@ sal_Bool SvBaseLink::Update()
             }
         }
     }
-    return sal_False;
+    return false;
 }
 
 
@@ -350,7 +350,7 @@ sal_uInt16 SvBaseLink::GetUpdateMode() const
 }
 
 
-void SvBaseLink::_GetRealObject( sal_Bool bConnect)
+void SvBaseLink::_GetRealObject( bool bConnect)
 {
     if( !pImpl->m_pLinkMgr )
         return;
@@ -392,14 +392,14 @@ sal_uIntPtr SvBaseLink::GetContentType() const
 }
 
 
-sal_Bool SvBaseLink::SetContentType( sal_uIntPtr nType )
+bool SvBaseLink::SetContentType( sal_uIntPtr nType )
 {
     if( OBJECT_CLIENT_SO & nObjType )
     {
         pImplData->ClientType.nCntntType = nType;
-        return sal_True;
+        return true;
     }
-    return sal_False;
+    return false;
 }
 
 LinkManager* SvBaseLink::GetLinkManager()
@@ -471,7 +471,7 @@ void SvBaseLink::Edit( Window* pParent, const Link& rEndEditHdl )
     if ( !bAsync )
     {
         ExecuteEdit( OUString() );
-        bWasLastEditOK = sal_False;
+        bWasLastEditOK = false;
         if ( pImpl->m_aEndEditLink.IsSet() )
             pImpl->m_aEndEditLink.Call( this );
     }

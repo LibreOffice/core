@@ -296,9 +296,9 @@ IMPL_LINK_NOARG(SvBaseLinksDlg, UpdateNowClickHdl)
             for( size_t i = 0; i < pLinkMgr->GetLinks().size(); ++i )
                 if( &xLink == *pLinkMgr->GetLinks()[ i ] )
                 {
-                    xLink->SetUseCache( sal_False );
+                    xLink->SetUseCache( false );
                     SetType( *xLink, aPosArr[ n ], xLink->GetUpdateMode() );
-                    xLink->SetUseCache( sal_True );
+                    xLink->SetUseCache( true );
                     break;
                 }
         }

@@ -156,7 +156,7 @@ void LinkManager::Remove( size_t nPos, size_t nCnt )
 }
 
 
-sal_Bool LinkManager::Insert( SvBaseLink* pLink )
+bool LinkManager::Insert( SvBaseLink* pLink )
 {
     for( size_t n = 0; n < aLinkTbl.size(); ++n )
     {
@@ -167,17 +167,17 @@ sal_Bool LinkManager::Insert( SvBaseLink* pLink )
             aLinkTbl.erase( aLinkTbl.begin() + n-- );
         }
         else if( pLink == *pTmp )
-            return sal_False; // No duplicate links inserted
+            return false; // No duplicate links inserted
     }
 
     SvBaseLinkRef* pTmp = new SvBaseLinkRef( pLink );
     pLink->SetLinkManager( this );
     aLinkTbl.push_back( pTmp );
-    return sal_True;
+    return true;
 }
 
 
-sal_Bool LinkManager::InsertLink( SvBaseLink * pLink,
+bool LinkManager::InsertLink( SvBaseLink * pLink,
                                 sal_uInt16 nObjType,
                                 sal_uInt16 nUpdateMode,
                                 const OUString* pName )
@@ -191,13 +191,13 @@ sal_Bool LinkManager::InsertLink( SvBaseLink * pLink,
 }
 
 
-sal_Bool LinkManager::InsertDDELink( SvBaseLink * pLink,
+bool LinkManager::InsertDDELink( SvBaseLink * pLink,
                                     const OUString& rServer,
                                     const OUString& rTopic,
                                     const OUString& rItem )
 {
     if( !( OBJECT_CLIENT_SO & pLink->GetObjType() ) )
-        return sal_False;
+        return false;
 
     OUString sCmd;
     ::sfx2::MakeLnkName( sCmd, &rServer, rTopic, rItem );
@@ -208,11 +208,11 @@ sal_Bool LinkManager::InsertDDELink( SvBaseLink * pLink,
 }
 
 
-sal_Bool LinkManager::InsertDDELink( SvBaseLink * pLink )
+bool LinkManager::InsertDDELink( SvBaseLink * pLink )
 {
     DBG_ASSERT( OBJECT_CLIENT_SO & pLink->GetObjType(), "no OBJECT_CLIENT_SO" );
     if( !( OBJECT_CLIENT_SO & pLink->GetObjType() ) )
-        return sal_False;
+        return false;
 
     if( pLink->GetObjType() == OBJECT_CLIENT_SO )
         pLink->SetObjType( OBJECT_CLIENT_DDE );
@@ -357,11 +357,11 @@ SvLinkSourceRef LinkManager::CreateObj( SvBaseLink * pLink )
        }
 }
 
-sal_Bool LinkManager::InsertServer( SvLinkSource* pObj )
+bool LinkManager::InsertServer( SvLinkSource* pObj )
 {
     // no duplicate inserts
     if( !pObj )
-        return sal_False;
+        return false;
 
     return aServerTbl.insert( pObj ).second;
 }
@@ -505,11 +505,11 @@ sal_uIntPtr LinkManager::RegisterStatusInfoId()
 
 
 
-sal_Bool LinkManager::GetGraphicFromAny( const OUString& rMimeType,
+bool LinkManager::GetGraphicFromAny( const OUString& rMimeType,
                                 const ::com::sun::star::uno::Any & rValue,
                                 Graphic& rGrf )
 {
-    sal_Bool bRet = sal_False;
+    bool bRet = false;
     ::com::sun::star::uno::Sequence< sal_Int8 > aSeq;
     if( rValue.hasValue() && ( rValue >>= aSeq ) )
     {
@@ -522,7 +522,7 @@ sal_Bool LinkManager::GetGraphicFromAny( const OUString& rMimeType,
         case SOT_FORMATSTR_ID_SVXB:
             {
                 ReadGraphic( aMemStm, rGrf );
-                bRet = sal_True;
+                bRet = true;
             }
             break;
         case FORMAT_GDIMETAFILE:
@@ -530,7 +530,7 @@ sal_Bool LinkManager::GetGraphicFromAny( const OUString& rMimeType,
                 GDIMetaFile aMtf;
                 aMtf.Read( aMemStm );
                 rGrf = aMtf;
-                bRet = sal_True;
+                bRet = true;
             }
             break;
         case FORMAT_BITMAP:
@@ -538,7 +538,7 @@ sal_Bool LinkManager::GetGraphicFromAny( const OUString& rMimeType,
                 Bitmap aBmp;
                 ReadDIB(aBmp, aMemStm, true);
                 rGrf = aBmp;
-                bRet = sal_True;
+                bRet = true;
             }
             break;
         }

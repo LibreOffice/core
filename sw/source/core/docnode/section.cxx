@@ -620,7 +620,7 @@ void SwSection::MakeChildLinksVisible( const SwSectionNode& rSectNd )
 
             // It's within a normal Section, so show again
             if( !pParent )
-                pBLnk->SetVisible( sal_True );
+                pBLnk->SetVisible( true );
         }
     }
 }

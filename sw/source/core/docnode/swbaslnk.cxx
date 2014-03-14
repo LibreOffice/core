@@ -416,9 +416,9 @@ bool SwBaseLink::SwapIn( bool bWaitForData, bool bNativFormat )
     }
     else if( !IsSynchron() && bWaitForData )
     {
-        SetSynchron( sal_True );
+        SetSynchron( true );
         bRes = Update();
-        SetSynchron( sal_False );
+        SetSynchron( false );
     }
     else
         bRes = Update();

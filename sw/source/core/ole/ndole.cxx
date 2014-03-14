@@ -169,7 +169,7 @@ SwEmbedObjectLink::SwEmbedObjectLink(SwOLENode* pNode):
     ::sfx2::SvBaseLink( ::sfx2::LINKUPDATE_ONCALL, SOT_FORMATSTR_ID_SVXB ),
     pOleNode(pNode)
 {
-    SetSynchron( sal_False );
+    SetSynchron( false );
 }
 
 SwEmbedObjectLink::~SwEmbedObjectLink()
