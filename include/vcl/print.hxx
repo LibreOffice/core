@@ -155,10 +155,10 @@ private:
     PrinterTransparencyMode     meReducedTransparencyMode;
     bool                        mbReduceGradients;
     PrinterGradientMode         meReducedGradientsMode;
-    sal_uInt16                      mnReducedGradientStepCount;
+    sal_uInt16                  mnReducedGradientStepCount;
     bool                        mbReduceBitmaps;
     PrinterBitmapMode           meReducedBitmapMode;
-    sal_uInt16                      mnReducedBitmapResolution;
+    sal_uInt16                  mnReducedBitmapResolution;
     bool                        mbReducedBitmapsIncludeTransparency;
     bool                        mbConvertToGreyscales;
     bool                        mbPDFAsStandardPrintJobFormat;
@@ -180,7 +180,7 @@ public:
     PrinterGradientMode         GetReducedGradientMode() const { return meReducedGradientsMode; }
     void                        SetReducedGradientMode( PrinterGradientMode eMode ) { meReducedGradientsMode = eMode; }
 
-    sal_uInt16                      GetReducedGradientStepCount() const { return mnReducedGradientStepCount; }
+    sal_uInt16                  GetReducedGradientStepCount() const { return mnReducedGradientStepCount; }
     void                        SetReducedGradientStepCount( sal_uInt16 nStepCount ) { mnReducedGradientStepCount = nStepCount; }
 
     bool                        IsReduceBitmaps() const { return mbReduceBitmaps; }
@@ -189,7 +189,7 @@ public:
     PrinterBitmapMode           GetReducedBitmapMode() const { return meReducedBitmapMode; }
     void                        SetReducedBitmapMode( PrinterBitmapMode eMode ) { meReducedBitmapMode = eMode; }
 
-    sal_uInt16                      GetReducedBitmapResolution() const { return mnReducedBitmapResolution; }
+    sal_uInt16                  GetReducedBitmapResolution() const { return mnReducedBitmapResolution; }
     void                        SetReducedBitmapResolution( sal_uInt16 nResolution ) { mnReducedBitmapResolution = nResolution; }
 
     bool                        IsReducedBitmapIncludesTransparency() const { return mbReducedBitmapsIncludeTransparency; }
@@ -223,18 +223,18 @@ private:
     Printer*                    mpNext;
     VirtualDevice*              mpDisplayDev;
     PrinterOptions*             mpPrinterOptions;
-    OUString                   maPrinterName;
-    OUString                   maDriver;
-    OUString                   maPrintFile;
-    OUString                   maJobName;
+    OUString                    maPrinterName;
+    OUString                    maDriver;
+    OUString                    maPrintFile;
+    OUString                    maJobName;
     JobSetup                    maJobSetup;
     Point                       maPageOffset;
     Size                        maPaperSize;
-    sal_uLong                       mnError;
-    sal_uInt16                      mnCurPage;
-    sal_uInt16                      mnCurPrintPage;
-    sal_uInt16                      mnPageQueueSize;
-    sal_uInt16                      mnCopyCount;
+    sal_uLong                   mnError;
+    sal_uInt16                  mnCurPage;
+    sal_uInt16                  mnCurPrintPage;
+    sal_uInt16                  mnPageQueueSize;
+    sal_uInt16                  mnCopyCount;
     bool                        mbDefPrinter;
     bool                        mbPrinting;
     bool                        mbJobActive;
@@ -276,6 +276,16 @@ protected:
     void                        SetSelfAsQueuePrinter( bool bQueuePrinter ) { mbIsQueuePrinter = bQueuePrinter; }
     bool                        IsQueuePrinter() const { return mbIsQueuePrinter; }
 
+    bool                        DrawTransformBitmapExDirect(
+                                    const basegfx::B2DHomMatrix& aFullTransform,
+                                    const BitmapEx& rBitmapEx);
+
+    bool                        TransformReduceBitmapExTargetRange(
+                                    const basegfx::B2DHomMatrix& aFullTransform,
+                                    basegfx::B2DRange &aVisibleRange,
+                                    double &fMaximumArea);
+
+
 public:
                                 Printer();
                                 Printer( const JobSetup& rJobSetup );
@@ -285,17 +295,17 @@ public:
 
     static const std::vector< OUString >& GetPrinterQueues();
     static const QueueInfo*     GetQueueInfo( const OUString& rPrinterName, bool bStatusUpdate );
-    static OUString            GetDefaultPrinterName();
+    static OUString             GetDefaultPrinterName();
 
     virtual void                Error();
 
-    const OUString&            GetName() const             { return maPrinterName; }
-    const OUString&            GetDriverName() const       { return maDriver; }
+    const OUString&             GetName() const             { return maPrinterName; }
+    const OUString&             GetDriverName() const       { return maDriver; }
     bool                        IsDefPrinter() const        { return mbDefPrinter; }
     bool                        IsDisplayPrinter() const    { return mpDisplayDev != NULL; }
     bool                        IsValid() const             { return !IsDisplayPrinter(); }
 
-    sal_uLong                       GetCapabilities( sal_uInt16 nType ) const;
+    sal_uLong                   GetCapabilities( sal_uInt16 nType ) const;
     bool                        HasSupport( PrinterSupport eFeature ) const;
 
     bool                        SetJobSetup( const JobSetup& rSetup );
@@ -321,21 +331,21 @@ public:
     // the current paper
     int                         GetLandscapeAngle() const;
     bool                        SetPaperBin( sal_uInt16 nPaperBin );
-    sal_uInt16                      GetPaperBin() const;
+    sal_uInt16                  GetPaperBin() const;
     bool                        SetPaper( Paper ePaper );
     bool                        SetPaperSizeUser( const Size& rSize );
     bool                        SetPaperSizeUser( const Size& rSize, bool bMatchNearest );
-    Paper                   GetPaper() const;
-    static OUString        GetPaperName( Paper ePaper );
+    Paper                       GetPaper() const;
+    static OUString             GetPaperName( Paper ePaper );
     // return a UI string for the current paper; i_bPaperUser == false means an empty string for PAPER_USER
-    OUString               GetPaperName( bool i_bPaperUser = true ) const;
+    OUString                    GetPaperName( bool i_bPaperUser = true ) const;
 
     // returns number of available paper formats
     int                         GetPaperInfoCount() const;
     // returns info about paper format nPaper
     const PaperInfo&            GetPaperInfo( int nPaper ) const;
-    sal_uInt16                      GetPaperBinCount() const;
-    OUString                   GetPaperBinName( sal_uInt16 nPaperBin ) const;
+    sal_uInt16                  GetPaperBinCount() const;
+    OUString                    GetPaperBinName( sal_uInt16 nPaperBin ) const;
 
     const Size&                 GetPaperSizePixel() const { return maPaperSize; }
     Size                        GetPaperSize() const { return PixelToLogic( maPaperSize ); }
@@ -343,17 +353,17 @@ public:
     Point                       GetPageOffset() const { return PixelToLogic( maPageOffset ); }
 
     bool                        SetCopyCount( sal_uInt16 nCopy, bool bCollate = false );
-    sal_uInt16                      GetCopyCount() const { return mnCopyCount; }
+    sal_uInt16                  GetCopyCount() const { return mnCopyCount; }
     bool                        IsCollateCopy() const { return mbCollateCopy; }
 
     bool                        IsPrinting() const { return mbPrinting; }
 
-    const OUString&            GetCurJobName() const { return maJobName; }
-    sal_uInt16                      GetCurPage() const { return mnCurPage; }
+    const OUString&             GetCurJobName() const { return maJobName; }
+    sal_uInt16                  GetCurPage() const { return mnCurPage; }
     bool                        IsJobActive() const { return mbJobActive; }
 
-    sal_uLong                       GetError() const { return ERRCODE_TOERROR(mnError); }
-    sal_uLong                       GetErrorCode() const { return mnError; }
+    sal_uLong                   GetError() const { return ERRCODE_TOERROR(mnError); }
+    sal_uLong                   GetErrorCode() const { return mnError; }
 
     void                        SetErrorHdl( const Link& rLink ) { maErrorHdl = rLink; }
     const Link&                 GetErrorHdl() const { return maErrorHdl; }
@@ -363,24 +373,22 @@ public:
     *   sends a DataChanged event of type DATACHANGED_PRINTER
     *   if the printer list changed
     */
-    static void updatePrinters();
+    static void                 updatePrinters();
 
     /** execute a print job
 
         starts a print job asynchronously (that is will return
 
     */
-    static void PrintJob( const boost::shared_ptr<vcl::PrinterController>& i_pController,
-                          const JobSetup& i_rInitSetup
-                          );
+    static void                 PrintJob( const boost::shared_ptr<vcl::PrinterController>& i_pController,
+                                          const JobSetup& i_rInitSetup );
 
-    virtual bool HasMirroredGraphics() const;
+    virtual bool                HasMirroredGraphics() const;
 
     // implementation detail of PrintJob being asynchronous
     // not exported, not usable outside vcl
-    static void SAL_DLLPRIVATE ImplPrintJob( const boost::shared_ptr<vcl::PrinterController>& i_pController,
-                                             const JobSetup& i_rInitSetup
-                                             );
+    static void SAL_DLLPRIVATE  ImplPrintJob( const boost::shared_ptr<vcl::PrinterController>& i_pController,
+                                              const JobSetup& i_rInitSetup );
 };
 
 namespace vcl

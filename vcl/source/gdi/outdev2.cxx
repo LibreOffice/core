@@ -660,7 +660,124 @@ void OutputDevice::DrawBitmapEx( const Point& rDestPt, const Size& rDestSize,
     }
 }
 
+bool OutputDevice::DrawTransformBitmapExDirect(
+    const basegfx::B2DHomMatrix& aFullTransform,
+    const BitmapEx& rBitmapEx)
+{
+    bool bDone = false;
 
+    // try to paint directly
+    const basegfx::B2DPoint aNull(aFullTransform * basegfx::B2DPoint(0.0, 0.0));
+    const basegfx::B2DPoint aTopX(aFullTransform * basegfx::B2DPoint(1.0, 0.0));
+    const basegfx::B2DPoint aTopY(aFullTransform * basegfx::B2DPoint(0.0, 1.0));
+    SalBitmap* pSalSrcBmp = rBitmapEx.GetBitmap().ImplGetImpBitmap()->ImplGetSalBitmap();
+    SalBitmap* pSalAlphaBmp = 0;
+
+    if(rBitmapEx.IsTransparent())
+    {
+        if(rBitmapEx.IsAlpha())
+        {
+            pSalAlphaBmp = rBitmapEx.GetAlpha().ImplGetImpBitmap()->ImplGetSalBitmap();
+        }
+        else
+        {
+            pSalAlphaBmp = rBitmapEx.GetMask().ImplGetImpBitmap()->ImplGetSalBitmap();
+        }
+    }
+
+    bDone = mpGraphics->DrawTransformedBitmap(
+        aNull,
+        aTopX,
+        aTopY,
+        *pSalSrcBmp,
+        pSalAlphaBmp,
+        this);
+
+    return bDone;
+};
+
+bool OutputDevice::TransformReduceBitmapExTargetRange(
+    const basegfx::B2DHomMatrix& aFullTransform,
+    basegfx::B2DRange &aVisibleRange,
+    double &fMaximumArea)
+{
+    // limit TargetRange to existing pixels (if pixel device)
+    // first get discrete range of object
+    basegfx::B2DRange aFullPixelRange(aVisibleRange);
+
+    aFullPixelRange.transform(aFullTransform);
+
+    if(basegfx::fTools::equalZero(aFullPixelRange.getWidth()) || basegfx::fTools::equalZero(aFullPixelRange.getHeight()))
+    {
+        // object is outside of visible area
+        return false;
+    }
+
+    // now get discrete target pixels; start with OutDev pixel size and evtl.
+    // intersect with active clipping area
+    basegfx::B2DRange aOutPixel(
+        0.0,
+        0.0,
+        GetOutputSizePixel().Width(),
+        GetOutputSizePixel().Height());
+
+    if(IsClipRegion())
+    {
+        const Rectangle aRegionRectangle(GetActiveClipRegion().GetBoundRect());
+
+        aOutPixel.intersect( // caution! Range from rectangle, one too much (!)
+            basegfx::B2DRange(
+                aRegionRectangle.Left(),
+                aRegionRectangle.Top(),
+                aRegionRectangle.Right() + 1,
+                aRegionRectangle.Bottom() + 1));
+    }
+
+    if(aOutPixel.isEmpty())
+    {
+        // no active output area
+        return false;
+    }
+
+    // if aFullPixelRange is not completely inside of aOutPixel,
+    // reduction of target pixels is possible
+    basegfx::B2DRange aVisiblePixelRange(aFullPixelRange);
+
+    if(!aOutPixel.isInside(aFullPixelRange))
+    {
+        aVisiblePixelRange.intersect(aOutPixel);
+
+        if(aVisiblePixelRange.isEmpty())
+        {
+            // nothing in visible part, reduces to nothing
+            return false;
+        }
+
+        // aVisiblePixelRange contains the reduced output area in
+        // discrete coordinates. To make it useful everywhere, make it relative to
+        // the object range
+        basegfx::B2DHomMatrix aMakeVisibleRangeRelative;
+
+        aVisibleRange = aVisiblePixelRange;
+        aMakeVisibleRangeRelative.translate(
+            -aFullPixelRange.getMinX(),
+            -aFullPixelRange.getMinY());
+        aMakeVisibleRangeRelative.scale(
+            1.0 / aFullPixelRange.getWidth(),
+            1.0 / aFullPixelRange.getHeight());
+        aVisibleRange.transform(aMakeVisibleRangeRelative);
+    }
+
+    // for pixel devices, do *not* limit size, else OutputDevice::ImplDrawAlpha
+    // will create another, badly scaled bitmap to do the job. Nonetheless, do a
+    // maximum clipping of something big (1600x1280x2). Add 1.0 to avoid rounding
+    // errors in rough estimations
+    const double fNewMaxArea(aVisiblePixelRange.getWidth() * aVisiblePixelRange.getHeight());
+
+    fMaximumArea = std::min(4096000.0, fNewMaxArea + 1.0);
+
+    return true;
+}
 
 void OutputDevice::DrawTransformedBitmapEx(
     const basegfx::B2DHomMatrix& rTransformation,
@@ -704,36 +821,11 @@ void OutputDevice::DrawTransformedBitmapEx(
     const bool bPrinter(OUTDEV_PRINTER == meOutDevType);
     bool bDone(false);
     const basegfx::B2DHomMatrix aFullTransform(GetViewTransformation() * rTransformation);
-    const bool bTryDirectPaint(!bInvert && !bBitmapChangedColor && !bMetafile && !bPrinter);
+    const bool bTryDirectPaint(!bInvert && !bBitmapChangedColor && !bMetafile );
 
     if(!bForceToOwnTransformer && bTryDirectPaint)
     {
-        // try to paint directly
-        const basegfx::B2DPoint aNull(aFullTransform * basegfx::B2DPoint(0.0, 0.0));
-        const basegfx::B2DPoint aTopX(aFullTransform * basegfx::B2DPoint(1.0, 0.0));
-        const basegfx::B2DPoint aTopY(aFullTransform * basegfx::B2DPoint(0.0, 1.0));
-        SalBitmap* pSalSrcBmp = rBitmapEx.GetBitmap().ImplGetImpBitmap()->ImplGetSalBitmap();
-        SalBitmap* pSalAlphaBmp = 0;
-
-        if(rBitmapEx.IsTransparent())
-        {
-            if(rBitmapEx.IsAlpha())
-            {
-                pSalAlphaBmp = rBitmapEx.GetAlpha().ImplGetImpBitmap()->ImplGetSalBitmap();
-            }
-            else
-            {
-                pSalAlphaBmp = rBitmapEx.GetMask().ImplGetImpBitmap()->ImplGetSalBitmap();
-            }
-        }
-
-        bDone = mpGraphics->DrawTransformedBitmap(
-            aNull,
-            aTopX,
-            aTopY,
-            *pSalSrcBmp,
-            pSalAlphaBmp,
-            this);
+        bDone = DrawTransformBitmapExDirect(aFullTransform, rBitmapEx);
     }
 
     if(!bDone)
@@ -765,80 +857,8 @@ void OutputDevice::DrawTransformedBitmapEx(
 
         if(!bMetafile && !bPrinter)
         {
-            // limit TargetRange to existing pixels (if pixel device)
-            // first get discrete range of object
-            basegfx::B2DRange aFullPixelRange(aVisibleRange);
-
-            aFullPixelRange.transform(aFullTransform);
-
-            if(basegfx::fTools::equalZero(aFullPixelRange.getWidth()) || basegfx::fTools::equalZero(aFullPixelRange.getHeight()))
-            {
-                // object is outside of visible area
+            if ( !TransformReduceBitmapExTargetRange( aFullTransform, aVisibleRange, fMaximumArea ) )
                 return;
-            }
-
-            // now get discrete target pixels; start with OutDev pixel size and evtl.
-            // intersect with active clipping area
-            basegfx::B2DRange aOutPixel(
-                0.0,
-                0.0,
-                GetOutputSizePixel().Width(),
-                GetOutputSizePixel().Height());
-
-            if(IsClipRegion())
-            {
-                const Rectangle aRegionRectangle(GetActiveClipRegion().GetBoundRect());
-
-                aOutPixel.intersect( // caution! Range from rectangle, one too much (!)
-                    basegfx::B2DRange(
-                        aRegionRectangle.Left(),
-                        aRegionRectangle.Top(),
-                        aRegionRectangle.Right() + 1,
-                        aRegionRectangle.Bottom() + 1));
-            }
-
-            if(aOutPixel.isEmpty())
-            {
-                // no active output area
-                return;
-            }
-
-            // if aFullPixelRange is not completely inside of aOutPixel,
-            // reduction of target pixels is possible
-            basegfx::B2DRange aVisiblePixelRange(aFullPixelRange);
-
-            if(!aOutPixel.isInside(aFullPixelRange))
-            {
-                aVisiblePixelRange.intersect(aOutPixel);
-
-                if(aVisiblePixelRange.isEmpty())
-                {
-                    // nothing in visible part, reduces to nothing
-                    return;
-                }
-
-                // aVisiblePixelRange contains the reduced output area in
-                // discrete coordinates. To make it useful everywhere, make it relative to
-                // the object range
-                basegfx::B2DHomMatrix aMakeVisibleRangeRelative;
-
-                aVisibleRange = aVisiblePixelRange;
-                aMakeVisibleRangeRelative.translate(
-                    -aFullPixelRange.getMinX(),
-                    -aFullPixelRange.getMinY());
-                aMakeVisibleRangeRelative.scale(
-                    1.0 / aFullPixelRange.getWidth(),
-                    1.0 / aFullPixelRange.getHeight());
-                aVisibleRange.transform(aMakeVisibleRangeRelative);
-            }
-
-            // for pixel devices, do *not* limit size, else OutputDevice::ImplDrawAlpha
-            // will create another, badly scaled bitmap to do the job. Nonetheless, do a
-            // maximum clipping of something big (1600x1280x2). Add 1.0 to avoid rounding
-            // errors in rough estimations
-            const double fNewMaxArea(aVisiblePixelRange.getWidth() * aVisiblePixelRange.getHeight());
-
-            fMaximumArea = std::min(4096000.0, fNewMaxArea + 1.0);
         }
 
         if(!aVisibleRange.isEmpty())
