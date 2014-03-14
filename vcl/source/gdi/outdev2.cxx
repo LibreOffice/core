@@ -224,12 +224,7 @@ void OutputDevice::ImplDrawOutDevDirect( const OutputDevice* pSrcDev, SalTwoRect
 void OutputDevice::DrawOutDev( const Point& rDestPt, const Size& rDestSize,
                                const Point& rSrcPt,  const Size& rSrcSize )
 {
-    DBG_ASSERT( meOutDevType != OUTDEV_PRINTER, "Don't use OutputDevice::DrawOutDev(...) with printer devices!" );
-
     if( ImplIsRecordLayout() )
-        return;
-
-    if ( meOutDevType == OUTDEV_PRINTER )
         return;
 
     if ( ROP_INVERT == meRasterOp )
@@ -276,10 +271,9 @@ void OutputDevice::DrawOutDev( const Point& rDestPt, const Size& rDestSize,
                                const Point& rSrcPt,  const Size& rSrcSize,
                                const OutputDevice& rOutDev )
 {
-    DBG_ASSERT( meOutDevType != OUTDEV_PRINTER, "Don't use OutputDevice::DrawOutDev(...) with printer devices!" );
     DBG_ASSERT( rOutDev.meOutDevType != OUTDEV_PRINTER, "Don't use OutputDevice::DrawOutDev(...) with printer devices!" );
 
-    if ( (meOutDevType == OUTDEV_PRINTER) || (rOutDev.meOutDevType == OUTDEV_PRINTER) || ImplIsRecordLayout() )
+    if ( ImplIsRecordLayout() )
         return;
 
     if ( ROP_INVERT == meRasterOp )
@@ -344,9 +338,7 @@ void OutputDevice::CopyArea( const Point& rDestPt,
                              const Point& rSrcPt,  const Size& rSrcSize,
                              sal_uInt16 nFlags )
 {
-    DBG_ASSERT( meOutDevType != OUTDEV_PRINTER, "Don't use OutputDevice::CopyArea(...) with printer devices!" );
-
-    if ( meOutDevType == OUTDEV_PRINTER || ImplIsRecordLayout() )
+    if ( ImplIsRecordLayout() )
         return;
 
     RasterOp eOldRop = GetRasterOp();

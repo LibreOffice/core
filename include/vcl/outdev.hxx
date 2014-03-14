@@ -994,12 +994,12 @@ public:
     void                        DrawChord( const Rectangle& rRect,
                                            const Point& rStartPt, const Point& rEndPt );
 
-    void                        DrawOutDev( const Point& rDestPt, const Size& rDestSize,
+    virtual void                DrawOutDev( const Point& rDestPt, const Size& rDestSize,
                                             const Point& rSrcPt,  const Size& rSrcSize );
-    void                        DrawOutDev( const Point& rDestPt, const Size& rDestSize,
+    virtual void                DrawOutDev( const Point& rDestPt, const Size& rDestSize,
                                             const Point& rSrcPt,  const Size& rSrcSize,
                                             const OutputDevice& rOutDev );
-    void                        CopyArea( const Point& rDestPt,
+    virtual void                CopyArea( const Point& rDestPt,
                                           const Point& rSrcPt,  const Size& rSrcSize,
                                           sal_uInt16 nFlags = 0 );
 
