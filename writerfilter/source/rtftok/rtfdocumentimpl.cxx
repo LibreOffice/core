@@ -2237,6 +2237,17 @@ int RTFDocumentImpl::dispatchSymbol(RTFKeyword nKeyword)
     return 0;
 }
 
+// Checks if rName is contained at least once in rProperties as a key.
+bool lcl_findPropertyName(const std::vector<beans::PropertyValue>& rProperties, const OUString& rName)
+{
+    for (std::vector<beans::PropertyValue>::const_iterator it = rProperties.begin(); it != rProperties.end(); ++it)
+    {
+        if (it->Name == rName)
+            return true;
+    }
+    return false;
+}
+
 int RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
 {
     setNeedSect();
@@ -2848,7 +2859,10 @@ int RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
                                 m_aStates.top().aDrawingObject.xShape.set(getModelFactory()->createInstance("com.sun.star.text.TextFrame"), uno::UNO_QUERY);
                                 std::vector<beans::PropertyValue> aDefaults = m_pSdrImport->getTextFrameDefaults(false);
                                 for (size_t i = 0; i < aDefaults.size(); ++i)
-                                    m_aStates.top().aDrawingObject.aPendingProperties.push_back(aDefaults[i]);
+                                {
+                                    if (!lcl_findPropertyName(m_aStates.top().aDrawingObject.aPendingProperties, aDefaults[i].Name))
+                                        m_aStates.top().aDrawingObject.aPendingProperties.push_back(aDefaults[i]);
+                                }
                                 checkFirstRun();
                                 Mapper().startShape(m_aStates.top().aDrawingObject.xShape);
                                 m_aStates.top().aDrawingObject.bHadShapeText = true;
