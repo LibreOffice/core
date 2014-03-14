@@ -37,6 +37,7 @@
 #include "typedstrdata.hxx"
 #include "compressedarray.hxx"
 #include "calcmacros.hxx"
+#include "calcconfig.hxx"
 #include <tools/fract.hxx>
 #include <tools/gen.hxx>
 
@@ -266,6 +267,8 @@ private:
     boost::shared_ptr<svl::SharedStringPool> mpCellStringPool;
     boost::scoped_ptr<sc::FormulaGroupContext> mpFormulaGroupCxt;
     mutable boost::scoped_ptr<sc::DocumentLinkManager> mpDocLinkMgr;
+
+    ScCalcConfig        maCalcConfig;
 
     SfxUndoManager*     mpUndoManager;
     ScFieldEditEngine*  pEditEngine;                    // uses pEditPool from xPoolHelper
@@ -2061,6 +2064,9 @@ public:
 #if DEBUG_COLUMN_STORAGE
     SC_DLLPUBLIC void DumpFormulaGroups( SCTAB nTab, SCCOL nCol ) const;
 #endif
+
+    void SetCalcConfig( const ScCalcConfig& rConfig );
+    const ScCalcConfig& GetCalcConfig() const;
 
 private: // CLOOK-Impl-methods
 

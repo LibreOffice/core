@@ -1670,7 +1670,7 @@ void Test::testFuncParam()
     // With "Convert also locale dependent" and "Empty string as zero"=True option.
     aConfig.meStringConversion = ScCalcConfig::STRING_CONVERSION_LOCALE_DEPENDENT;
     aConfig.mbEmptyStringAsZero = true;
-    ScInterpreter::SetGlobalConfig(aConfig);
+    m_pDoc->SetCalcConfig(aConfig);
     m_pDoc->CalcAll();
     m_pDoc->GetValue(0, 0, 0, val);
     CPPUNIT_ASSERT_MESSAGE("incorrect result", val == 3);
@@ -1686,7 +1686,7 @@ void Test::testFuncParam()
     // With "Convert also locale dependent" and "Empty string as zero"=False option.
     aConfig.meStringConversion = ScCalcConfig::STRING_CONVERSION_LOCALE_DEPENDENT;
     aConfig.mbEmptyStringAsZero = false;
-    ScInterpreter::SetGlobalConfig(aConfig);
+    m_pDoc->SetCalcConfig(aConfig);
     m_pDoc->CalcAll();
     aVal = m_pDoc->GetString( 0, 0, 0);
     CPPUNIT_ASSERT_MESSAGE("incorrect result", aVal == "#VALUE!");
@@ -1702,7 +1702,7 @@ void Test::testFuncParam()
     // With "Convert only unambiguous" and "Empty string as zero"=True option.
     aConfig.meStringConversion = ScCalcConfig::STRING_CONVERSION_UNAMBIGUOUS;
     aConfig.mbEmptyStringAsZero = true;
-    ScInterpreter::SetGlobalConfig(aConfig);
+    m_pDoc->SetCalcConfig(aConfig);
     m_pDoc->CalcAll();
     m_pDoc->GetValue(0, 0, 0, val);
     CPPUNIT_ASSERT_MESSAGE("incorrect result", val == 3);
@@ -1718,7 +1718,7 @@ void Test::testFuncParam()
     // With "Convert only unambiguous" and "Empty string as zero"=False option.
     aConfig.meStringConversion = ScCalcConfig::STRING_CONVERSION_UNAMBIGUOUS;
     aConfig.mbEmptyStringAsZero = false;
-    ScInterpreter::SetGlobalConfig(aConfig);
+    m_pDoc->SetCalcConfig(aConfig);
     m_pDoc->CalcAll();
     aVal = m_pDoc->GetString( 0, 0, 0);
     CPPUNIT_ASSERT_MESSAGE("incorrect result", aVal == "#VALUE!");
@@ -1734,7 +1734,7 @@ void Test::testFuncParam()
     // With "Treat as zero" ("Empty string as zero" is ignored).
     aConfig.meStringConversion = ScCalcConfig::STRING_CONVERSION_AS_ZERO;
     aConfig.mbEmptyStringAsZero = true;
-    ScInterpreter::SetGlobalConfig(aConfig);
+    m_pDoc->SetCalcConfig(aConfig);
     m_pDoc->CalcAll();
     m_pDoc->GetValue(0, 0, 0, val);
     CPPUNIT_ASSERT_MESSAGE("incorrect result", val == 3);
@@ -1750,7 +1750,7 @@ void Test::testFuncParam()
     // With "Generate #VALUE! error" ("Empty string as zero" is ignored).
     aConfig.meStringConversion = ScCalcConfig::STRING_CONVERSION_AS_ERROR;
     aConfig.mbEmptyStringAsZero = false;
-    ScInterpreter::SetGlobalConfig(aConfig);
+    m_pDoc->SetCalcConfig(aConfig);
     m_pDoc->CalcAll();
     aVal = m_pDoc->GetString( 0, 0, 0);
     CPPUNIT_ASSERT_MESSAGE("incorrect result", aVal == "#VALUE!");

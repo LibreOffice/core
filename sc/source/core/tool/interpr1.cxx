@@ -3177,7 +3177,7 @@ void ScInterpreter::ScNumberValue()
     }
     if ( aInputString.isEmpty() )
     {
-        if ( GetGlobalConfig().mbEmptyStringAsZero )
+        if ( maCalcConfig.mbEmptyStringAsZero )
             PushDouble( 0.0 );
         else
             PushNoValue();
@@ -7038,7 +7038,7 @@ void ScInterpreter::ScIndirect()
     if ( MustHaveParamCount( nParamCount, 1, 2 )  )
     {
         // Reference address syntax for INDIRECT is configurable.
-        FormulaGrammar::AddressConvention eConv = GetGlobalConfig().meStringRefAddressSyntax;
+        FormulaGrammar::AddressConvention eConv = maCalcConfig.meStringRefAddressSyntax;
         if (eConv == FormulaGrammar::CONV_UNSPECIFIED)
             // Use the current address syntax if unspecified.
             eConv = pDok->GetAddressConvention();

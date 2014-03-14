@@ -227,4 +227,14 @@ void ScDocument::CopyCellValuesFrom( const ScAddress& rTopPos, const sc::CellVal
     pTab->CopyCellValuesFrom(rTopPos.Col(), rTopPos.Row(), rSrc);
 }
 
+void ScDocument::SetCalcConfig( const ScCalcConfig& rConfig )
+{
+    maCalcConfig = rConfig;
+}
+
+const ScCalcConfig& ScDocument::GetCalcConfig() const
+{
+    return maCalcConfig;
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

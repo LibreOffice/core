@@ -96,6 +96,7 @@
 #include "scopetools.hxx"
 #include "formulagroup.hxx"
 #include "documentlinkmgr.hxx"
+#include "interpre.hxx"
 #include <tokenstringcontext.hxx>
 
 using namespace com::sun::star;
@@ -129,6 +130,7 @@ private:
 ScDocument::ScDocument( ScDocumentMode eMode, SfxObjectShell* pDocShell ) :
         mpCellStringPool(new svl::SharedStringPool(ScGlobal::pCharClass)),
         mpFormulaGroupCxt(NULL),
+        maCalcConfig( ScInterpreter::GetGlobalConfig()),
         mpUndoManager( NULL ),
         pEditEngine( NULL ),
         pNoteEngine( NULL ),

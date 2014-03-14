@@ -251,7 +251,7 @@ double ScInterpreter::ConvertStringToValue( const OUString& rStr )
         return fValue;
     }
 
-    switch (GetGlobalConfig().meStringConversion)
+    switch (maCalcConfig.meStringConversion)
     {
         case ScCalcConfig::STRING_CONVERSION_AS_ERROR:
             SetError( mnStringNoValueError);
@@ -260,7 +260,7 @@ double ScInterpreter::ConvertStringToValue( const OUString& rStr )
             return fValue;
         case ScCalcConfig::STRING_CONVERSION_LOCALE_DEPENDENT:
             {
-                if (GetGlobalConfig().mbEmptyStringAsZero)
+                if (maCalcConfig.mbEmptyStringAsZero)
                 {
                     // The number scanner does not accept empty strings or strings
                     // containing only spaces, be on par in these cases with what was
@@ -283,7 +283,7 @@ double ScInterpreter::ConvertStringToValue( const OUString& rStr )
             break;
         case ScCalcConfig::STRING_CONVERSION_UNAMBIGUOUS:
             {
-                if (!GetGlobalConfig().mbEmptyStringAsZero)
+                if (!maCalcConfig.mbEmptyStringAsZero)
                 {
                     if (isEmptyString( rStr))
                     {
@@ -3746,6 +3746,7 @@ ScInterpreter::ScInterpreter( ScFormulaCell* pCell, ScDocument* pDoc,
     bCalcAsShown( pDoc->GetDocOptions().IsCalcAsShown() ),
     meVolatileType(r.IsRecalcModeAlways() ? VOLATILE : NOT_VOLATILE)
 {
+    MergeCalcConfig();
 
     if(pMyFormulaCell)
     {
@@ -3789,6 +3790,13 @@ void ScInterpreter::SetGlobalConfig(const ScCalcConfig& rConfig)
 const ScCalcConfig& ScInterpreter::GetGlobalConfig()
 {
     return maGlobalConfig;
+}
+
+void ScInterpreter::MergeCalcConfig()
+{
+    maCalcConfig = maGlobalConfig;
+    if (pDok)
+        maCalcConfig.MergeDocumentSpecific( pDok->GetCalcConfig());
 }
 
 void ScInterpreter::GlobalExit()

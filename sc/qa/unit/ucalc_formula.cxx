@@ -2842,7 +2842,7 @@ void Test::testFuncINDIRECT()
 
     ScCalcConfig aConfig;
     aConfig.meStringRefAddressSyntax = formula::FormulaGrammar::CONV_OOO;
-    ScInterpreter::SetGlobalConfig(aConfig);
+    m_pDoc->SetCalcConfig(aConfig);
     m_pDoc->CalcAll();
     {
         // Explicit Calc A1 syntax
@@ -2858,7 +2858,7 @@ void Test::testFuncINDIRECT()
     }
 
     aConfig.meStringRefAddressSyntax = formula::FormulaGrammar::CONV_XL_A1;
-    ScInterpreter::SetGlobalConfig(aConfig);
+    m_pDoc->SetCalcConfig(aConfig);
     m_pDoc->CalcAll();
     {
         // Excel A1 syntax
@@ -2874,7 +2874,7 @@ void Test::testFuncINDIRECT()
     }
 
     aConfig.meStringRefAddressSyntax = formula::FormulaGrammar::CONV_XL_R1C1;
-    ScInterpreter::SetGlobalConfig(aConfig);
+    m_pDoc->SetCalcConfig(aConfig);
     m_pDoc->CalcAll();
     {
         // Excel R1C1 syntax

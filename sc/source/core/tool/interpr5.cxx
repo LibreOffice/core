@@ -913,7 +913,7 @@ void ScInterpreter::ScMatInv()
         SCSIZE nC, nR;
         pMat->GetDimensions(nC, nR);
 
-        if (ScInterpreter::GetGlobalConfig().mbOpenCLEnabled)
+        if (maCalcConfig.mbOpenCLEnabled)
         {
             ScMatrixRef xResMat = sc::FormulaGroupInterpreter::getStatic()->inverseMatrix(*pMat);
             if (xResMat)

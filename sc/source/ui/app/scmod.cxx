@@ -2162,7 +2162,14 @@ SfxItemSet*  ScModule::CreateItemSet( sal_uInt16 nId )
         pRet->Put( ScTpDefaultsItem( SID_SCDEFAULTSOPTIONS, GetDefaultsOptions() ) );
 
         // TP_FORMULA
-        pRet->Put( ScTpFormulaItem( SID_SCFORMULAOPTIONS, GetFormulaOptions() ) );
+        ScFormulaOptions aOptions = GetFormulaOptions();
+        if (pDocSh)
+        {
+            ScCalcConfig aConfig( aOptions.GetCalcConfig());
+            aConfig.MergeDocumentSpecific( pDocSh->GetDocument()->GetCalcConfig());
+            aOptions.SetCalcConfig( aConfig);
+        }
+        pRet->Put( ScTpFormulaItem( SID_SCFORMULAOPTIONS, aOptions ) );
     }
     return pRet;
 }

@@ -47,6 +47,7 @@ struct SC_DLLPUBLIC ScCalcConfig
     ScCalcConfig();
 
     void reset();
+    void MergeDocumentSpecific( const ScCalcConfig& r );
 
     bool operator== (const ScCalcConfig& r) const;
     bool operator!= (const ScCalcConfig& r) const;

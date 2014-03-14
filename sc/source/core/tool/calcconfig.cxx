@@ -23,6 +23,15 @@ void ScCalcConfig::reset()
     *this = ScCalcConfig();
 }
 
+void ScCalcConfig::MergeDocumentSpecific( const ScCalcConfig& r )
+{
+    // String conversion options are per document.
+    meStringConversion       = r.meStringConversion;
+    mbEmptyStringAsZero      = r.mbEmptyStringAsZero;
+    // INDIRECT ref syntax is per document.
+    meStringRefAddressSyntax = r.meStringRefAddressSyntax;
+}
+
 bool ScCalcConfig::operator== (const ScCalcConfig& r) const
 {
     return meStringRefAddressSyntax == r.meStringRefAddressSyntax &&

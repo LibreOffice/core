@@ -480,6 +480,14 @@ void ScDocShell::SetFormulaOptions(const ScFormulaOptions& rOpt )
 
     // Global interpreter settings.
     ScInterpreter::SetGlobalConfig(rOpt.GetCalcConfig());
+
+    // Per document interpreter settings.
+    SetCalcConfig( rOpt.GetCalcConfig());
+}
+
+void ScDocShell::SetCalcConfig( const ScCalcConfig& rConfig )
+{
+    aDocument.SetCalcConfig( rConfig);
 }
 
 void ScDocShell::CheckConfigOptions()
