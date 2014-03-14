@@ -1484,6 +1484,68 @@ DECLARE_RTFIMPORT_TEST(testFdo65090, "fdo65090.rtf")
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), getProperty< uno::Sequence<text::TableColumnSeparator> >(xTableRows->getByIndex(0), "TableColumnSeparators").getLength());
 }
 
+DECLARE_RTFIMPORT_TEST(testTableBorderDefaults, "fdo68779.rtf")
+{
+    // table borders without \brdrw were not imported
+    uno::Reference<text::XTextTablesSupplier> xTextTablesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xTables(xTextTablesSupplier->getTextTables(), uno::UNO_QUERY);
+    uno::Reference<text::XTextTable> xTable(xTables->getByIndex(0), uno::UNO_QUERY);
+    uno::Reference<text::XTextRange> xCell(xTable->getCellByName("A1"), uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xCell.is());
+    table::BorderLine2 solid(
+            1, 0, 26, 0, table::BorderLineStyle::SOLID, 26);
+    CPPUNIT_ASSERT_BORDER_EQUAL(solid,
+        getProperty<table::BorderLine2>(xCell, "LeftBorder"));
+    CPPUNIT_ASSERT_BORDER_EQUAL(solid,
+        getProperty<table::BorderLine2>(xCell, "RightBorder"));
+    CPPUNIT_ASSERT_BORDER_EQUAL(solid,
+        getProperty<table::BorderLine2>(xCell, "TopBorder"));
+    CPPUNIT_ASSERT_BORDER_EQUAL(solid,
+        getProperty<table::BorderLine2>(xCell, "BottomBorder"));
+
+    xTable.set(xTables->getByIndex(1), uno::UNO_QUERY);
+    xCell.set(xTable->getCellByName("A1"), uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xCell.is());
+    table::BorderLine2 dotted(
+            1, 0, 26, 0, table::BorderLineStyle::DOTTED, 26);
+    CPPUNIT_ASSERT_BORDER_EQUAL(dotted,
+        getProperty<table::BorderLine2>(xCell, "LeftBorder"));
+    CPPUNIT_ASSERT_BORDER_EQUAL(dotted,
+        getProperty<table::BorderLine2>(xCell, "RightBorder"));
+    CPPUNIT_ASSERT_BORDER_EQUAL(dotted,
+        getProperty<table::BorderLine2>(xCell, "TopBorder"));
+    CPPUNIT_ASSERT_BORDER_EQUAL(dotted,
+        getProperty<table::BorderLine2>(xCell, "BottomBorder"));
+
+    xTable.set(xTables->getByIndex(2), uno::UNO_QUERY);
+    xCell.set(xTable->getCellByName("A1"), uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xCell.is());
+    table::BorderLine2 doubled(
+            1, 26, 26, 26, table::BorderLineStyle::DOUBLE, 79);
+    CPPUNIT_ASSERT_BORDER_EQUAL(doubled,
+        getProperty<table::BorderLine2>(xCell, "LeftBorder"));
+    CPPUNIT_ASSERT_BORDER_EQUAL(doubled,
+        getProperty<table::BorderLine2>(xCell, "RightBorder"));
+    CPPUNIT_ASSERT_BORDER_EQUAL(doubled,
+        getProperty<table::BorderLine2>(xCell, "TopBorder"));
+    CPPUNIT_ASSERT_BORDER_EQUAL(doubled,
+        getProperty<table::BorderLine2>(xCell, "BottomBorder"));
+
+    xTable.set(xTables->getByIndex(3), uno::UNO_QUERY);
+    xCell.set(xTable->getCellByName("A1"), uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xCell.is());
+    table::BorderLine2 thinThickMG(
+            1, 14, 26, 14, table::BorderLineStyle::THINTHICK_MEDIUMGAP, 53);
+    CPPUNIT_ASSERT_BORDER_EQUAL(thinThickMG,
+        getProperty<table::BorderLine2>(xCell, "LeftBorder"));
+    CPPUNIT_ASSERT_BORDER_EQUAL(thinThickMG,
+        getProperty<table::BorderLine2>(xCell, "RightBorder"));
+    CPPUNIT_ASSERT_BORDER_EQUAL(thinThickMG,
+        getProperty<table::BorderLine2>(xCell, "TopBorder"));
+    CPPUNIT_ASSERT_BORDER_EQUAL(thinThickMG,
+        getProperty<table::BorderLine2>(xCell, "BottomBorder"));
+}
+
 DECLARE_RTFIMPORT_TEST(testShpzDhgt, "shpz-dhgt.rtf")
 {
     // Test that shpz has priority over dhght and not the other way around.
