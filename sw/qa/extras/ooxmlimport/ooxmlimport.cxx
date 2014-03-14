@@ -1983,6 +1983,21 @@ DECLARE_OOXMLIMPORT_TEST(testLargeTwips, "large-twips.docx" )
     CPPUNIT_ASSERT( width.toInt32() > 0 );
 }
 
+DECLARE_OOXMLIMPORT_TEST(testLibreOfficeHang, "lo_hang.docx")
+{
+    // fdo#72775
+    // There was a problem for some documents that when opened in LO increasing number of pages continuously
+    // which was a reason for LO hang.
+    // This test case is to verify that doc is opening properly and has only 54 pages.
+
+    uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);
+    if (xDrawPageSupplier.is())
+    {
+    uno::Reference<container::XIndexAccess> xDrawPage(xDrawPageSupplier->getDrawPage(), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(54), xDrawPage->getCount());
+    }
+}
+
 #endif
 
 CPPUNIT_PLUGIN_IMPLEMENT();

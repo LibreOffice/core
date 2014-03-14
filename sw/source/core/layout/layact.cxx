@@ -1422,7 +1422,7 @@ sal_Bool SwLayAction::FormatLayout( SwLayoutFrm *pLay, sal_Bool bAddRect )
 
     SwFrm *pLow = pLay->Lower();
     sal_Bool bTabChanged = sal_False;
-    while ( pLow && pLow->GetUpper() == pLay )
+    while ( pLow && pLow->GetNext() == pLay )
     {
         if ( pLow->IsLayoutFrm() )
         {
