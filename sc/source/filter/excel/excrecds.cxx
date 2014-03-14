@@ -442,16 +442,17 @@ void XclExpCountry::WriteBody( XclExpStream& rStrm )
 
 // XclExpWsbool ===============================================================
 
-XclExpWsbool::XclExpWsbool( bool bFitToPages, SCTAB nScTab, XclExpFilterManager* pManager )
+XclExpWsbool::XclExpWsbool( bool bFitToPages )
     : XclExpUInt16Record( EXC_ID_WSBOOL, EXC_WSBOOL_DEFAULTFLAGS )
-    , mnScTab( nScTab )
-    , mpManager( pManager )
 {
     if( bFitToPages )
         SetValue( GetValue() | EXC_WSBOOL_FITTOPAGE );
 }
 
-void XclExpWsbool::SaveXml( XclExpXmlStream& rStrm )
+XclExpXmlSheetPr::XclExpXmlSheetPr( bool bFitToPages, SCTAB nScTab, const Color& rTabColor, XclExpFilterManager* pManager ) :
+    mnScTab(nScTab), mpManager(pManager), mbFitToPage(bFitToPages), maTabColor(rTabColor) {}
+
+void XclExpXmlSheetPr::SaveXml( XclExpXmlStream& rStrm )
 {
     sax_fastparser::FSHelperPtr& rWorksheet = rStrm.GetCurrentStream();
     rWorksheet->startElement( XML_sheetPr,
@@ -465,11 +466,18 @@ void XclExpWsbool::SaveXml( XclExpXmlStream& rStrm )
             XML_filterMode, mpManager ? XclXmlUtils::ToPsz( mpManager->HasFilterMode( mnScTab ) ) : NULL,
             // OOXTODO: XML_enableFormatConditionsCalculation,
             FSEND );
-    // OOXTODO: elements XML_tabColor, XML_outlinePr
-    rWorksheet->singleElement( XML_pageSetUpPr,
+
+    // Note : the order of child elements is significant. Don't change the order.
+
+    // OOXTODO: XML_outlinePr
+
+    rWorksheet->singleElement(
+        XML_tabColor, XML_rgb, XclXmlUtils::ToOString(maTabColor).getStr(), FSEND);
+
+    rWorksheet->singleElement(XML_pageSetUpPr,
             // OOXTODO: XML_autoPageBreaks,
-            XML_fitToPage,  XclXmlUtils::ToPsz( (GetValue() & EXC_WSBOOL_FITTOPAGE) != 0 ),
-            FSEND );
+        XML_fitToPage,  XclXmlUtils::ToPsz(mbFitToPage), FSEND);
+
     rWorksheet->endElement( XML_sheetPr );
 }
 

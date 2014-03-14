@@ -24,6 +24,7 @@
 #include <rtl/ustring.hxx>
 #include <svl/zforlist.hxx>
 #include <tools/solar.h>
+#include <tools/color.hxx>
 #include <vcl/vclenum.hxx>
 
 
@@ -325,15 +326,26 @@ private:
 class XclExpWsbool : public XclExpUInt16Record
 {
 public:
-    explicit                    XclExpWsbool( bool bFitToPages, SCTAB nScTab = -1, XclExpFilterManager* pManager = NULL );
-
-    virtual void                SaveXml( XclExpXmlStream& rStrm );
-private:
-    SCTAB                       mnScTab;
-    XclExpFilterManager*        mpManager;
+    explicit XclExpWsbool( bool bFitToPages );
 };
 
+/**
+ * Save sheetPr element and its children for xlsx export.
+ */
+class XclExpXmlSheetPr : public XclExpRecordBase
+{
+public:
+    explicit XclExpXmlSheetPr(
+        bool bFitToPages, SCTAB nScTab, const Color& rTabColor, XclExpFilterManager* pManager );
 
+    virtual void SaveXml( XclExpXmlStream& rStrm );
+
+private:
+    SCTAB mnScTab;
+    XclExpFilterManager* mpManager;
+    bool mbFitToPage;
+    Color maTabColor;
+};
 
 
 class XclExpFiltermode : public XclExpEmptyRecord
