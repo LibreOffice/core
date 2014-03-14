@@ -1081,6 +1081,10 @@ void ScModule::ModifyOptions( const SfxItemSet& rOptSet )
             bCompileErrorCells = true;
         }
 
+        // Recalc for interpreter options changes.
+        if (pFormulaCfg && pFormulaCfg->GetCalcConfig() != rOpt.GetCalcConfig())
+            bCalcAll = true;
+
         SetFormulaOptions( rOpt );
 
         if ( pDocSh )
