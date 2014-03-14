@@ -399,6 +399,8 @@ struct DoesStyleMatchStyleSheetPredicate SAL_FINAL : public svl::StyleSheetPredi
 
 SfxStyleSheetIterator::SfxStyleSheetIterator(SfxStyleSheetBasePool *pBase,
                                              SfxStyleFamily eFam, sal_uInt16 n)
+    : pAktStyle(NULL)
+    , nAktPosition(0)
 {
     pBasePool=pBase;
     nSearchFamily=eFam;
