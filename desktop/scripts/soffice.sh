@@ -101,7 +101,7 @@ for arg in $@ $VALGRINDOPT ; do
                 valgrind_ver_min=`echo $valgrind_ver | awk -F. '{ print \$2 }'`
                 valgrind_skip=
                 if [ "$valgrind_ver_maj" -gt 3 -o \( "$valgrind_ver_maj" -eq 3 -a "$valgrind_ver_min" -ge 6 \) ] ; then
-                    valgrind_skip='--trace-children-skip=*/java'
+                    valgrind_skip='--trace-children-skip=*/java,*/gij'
                 fi
                 # finally set the valgrind check
                 VALGRINDCHECK="valgrind --tool=$VALGRIND --trace-children=yes $valgrind_skip --num-callers=50 --error-limit=no"
