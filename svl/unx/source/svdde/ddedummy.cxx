@@ -106,6 +106,11 @@ DdeTransaction::DdeTransaction( DdeConnection& rConnection, const OUString&, lon
 
 DdeTransaction::DdeTransaction( const DdeTransaction& rTransaction )
     : rDde( rTransaction.rDde )
+    , pName(NULL)
+    , nType(0)
+    , nId(0)
+    , nTime(0)
+    , bBusy(false)
 {
 }
 
