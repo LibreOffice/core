@@ -33,8 +33,8 @@ public:
     virtual void    DrawText( SalGraphics& ) const SAL_OVERRIDE;
 
     virtual int     GetNextGlyphs( int nLen, sal_GlyphId* pOutGlyphIds, Point& rPos, int&,
-                        sal_Int32* pGlyphAdvances, int* pCharIndexes,
-                        const PhysicalFontFace** pFallbackFonts ) const SAL_OVERRIDE;
+                                   sal_Int32* pGlyphAdvances, int* pCharIndexes,
+                                   const PhysicalFontFace** pFallbackFonts ) const SAL_OVERRIDE;
 
     virtual long    GetTextWidth() const SAL_OVERRIDE;
     virtual long    FillDXArray( sal_Int32* pDXArray ) const SAL_OVERRIDE;
@@ -58,6 +58,8 @@ private:
     CTLineRef mpCTLine;
 
     int mnCharCount;        // ==mnEndCharPos-mnMinCharPos
+    int mnTrailingSpaceCount;
+    double mfTrailingSpaceWidth;
 
     // cached details about the resulting layout
     // mutable members since these details are all lazy initialized
@@ -69,12 +71,14 @@ private:
 };
 
 CTLayout::CTLayout( const CoreTextStyle* pTextStyle )
-:   mpTextStyle( pTextStyle )
-,   mpAttrString( NULL )
-,   mpCTLine( NULL )
-,   mnCharCount( 0 )
-,   mfCachedWidth( -1 )
-,   mfBaseAdv( 0 )
+    : mpTextStyle( pTextStyle )
+    , mpAttrString( NULL )
+    , mpCTLine( NULL )
+    , mnCharCount( 0 )
+    , mnTrailingSpaceCount( 0 )
+    , mfTrailingSpaceWidth( 0.0 )
+    , mfCachedWidth( -1 )
+    , mfBaseAdv( 0 )
 {
 }
 
@@ -103,12 +107,32 @@ bool CTLayout::LayoutText( ImplLayoutArgs& rArgs )
         return false;
 
     // create the CoreText line layout
-    CFStringRef aCFText = CFStringCreateWithCharactersNoCopy( NULL, rArgs.mpStr + mnMinCharPos, mnCharCount, kCFAllocatorNull );
+    CFStringRef aCFText = CFStringCreateWithCharactersNoCopy( NULL,
+                                                              rArgs.mpStr + mnMinCharPos,
+                                                              mnCharCount,
+                                                              kCFAllocatorNull );
     // CFAttributedStringCreate copies the attribues parameter
     mpAttrString = CFAttributedStringCreate( NULL, aCFText, mpTextStyle->GetStyleDict() );
     mpCTLine = CTLineCreateWithAttributedString( mpAttrString );
     CFRelease( aCFText);
 
+    mnTrailingSpaceCount = 0;
+    // reverse search for first 'non-space'...
+    for( int i = mnEndCharPos - 1; i >= mnMinCharPos; i--)
+    {
+        sal_Unicode nChar = rArgs.mpStr[i];
+        if ((nChar <= 0x0020) ||                  // blank
+            (nChar == 0x00A0) ||                  // non breaking space
+            (nChar >= 0x2000 && nChar <= 0x200F) || // whitespace
+            (nChar == 0x3000))                   // ideographic space
+        {
+            mnTrailingSpaceCount += 1;
+        }
+        else
+        {
+            break;
+        }
+    }
     return true;
 }
 
@@ -117,37 +141,66 @@ void CTLayout::AdjustLayout( ImplLayoutArgs& rArgs )
     if( !mpCTLine)
         return;
 
-    int nOrigWidth = GetTextWidth();
-    int nPixelWidth = rArgs.mnLayoutWidth;
-    if( nPixelWidth )
-    {
-        if( nPixelWidth <= 0)
-            return;
-    }
-    else if( rArgs.mpDXArray )
-    {
-        // for now we are only interested in the layout width
-        // TODO: use all mpDXArray elements for layouting
-        nPixelWidth = rArgs.mpDXArray[ mnCharCount - 1 ];
-    }
-
-    float fTrailingSpace = CTLineGetTrailingWhitespaceWidth( mpCTLine );
-    // in RTL-layouts trailing spaces are leftmost
-    // TODO: use BiDi-algorithm to thoroughly check this assumption
-    if( rArgs.mnFlags & SAL_LAYOUT_BIDI_RTL)
-        mfBaseAdv = fTrailingSpace;
-
-    // return early if there is nothing to do
-    if( nPixelWidth <= 0 )
+    int nPixelWidth = rArgs.mpDXArray ? rArgs.mpDXArray[ mnCharCount - 1 ] : rArgs.mnLayoutWidth;
+    if( nPixelWidth <= 0)
         return;
 
     // HACK: justification requests which change the width by just one pixel are probably
     // #i86038# introduced by lossy conversions between integer based coordinate system
-    if( (nOrigWidth >= nPixelWidth-1) && (nOrigWidth <= nPixelWidth+1) )
+    int fuzz =  (nPixelWidth - GetTextWidth()) / 2;
+    if (!fuzz)
+    {
         return;
+    }
 
-    CTLineRef pNewCTLine = CTLineCreateJustifiedLine( mpCTLine, 1.0, nPixelWidth - fTrailingSpace );
-    if( !pNewCTLine ) { // CTLineCreateJustifiedLine can and does fail
+    // if the text to be justified has whitespace in it then
+    // - Writer goes crazy with its HalfSpace magic
+    // - CoreText handles spaces specially (in particular at the text end)
+    if( mnTrailingSpaceCount )
+    {
+        if(rArgs.mpDXArray)
+        {
+            int nFullPixelWidth = nPixelWidth;
+            nPixelWidth = rArgs.mpDXArray[ mnCharCount - mnTrailingSpaceCount - 1];
+            mfTrailingSpaceWidth = nFullPixelWidth - nPixelWidth;
+        }
+        else
+        {
+            if(mfTrailingSpaceWidth <= 0.0)
+            {
+                mfTrailingSpaceWidth = CTLineGetTrailingWhitespaceWidth( mpCTLine );
+                nPixelWidth -= rint(mfTrailingSpaceWidth);
+            }
+        }
+        if(nPixelWidth <= 0)
+        {
+            return;
+        }
+        // recreate the CoreText line layout without trailing spaces
+        CFRelease( mpCTLine );
+        CFStringRef aCFText = CFStringCreateWithCharactersNoCopy( NULL,
+                                                                  rArgs.mpStr + mnMinCharPos,
+                                                                  mnCharCount - mnTrailingSpaceCount,
+                                                                  kCFAllocatorNull );
+        CFAttributedStringRef pAttrStr = CFAttributedStringCreate( NULL,
+                                                                   aCFText,
+                                                                   mpTextStyle->GetStyleDict() );
+        mpCTLine = CTLineCreateWithAttributedString( pAttrStr );
+        CFRelease( aCFText);
+        CFRelease( pAttrStr );
+
+        // in RTL-layouts trailing spaces are leftmost
+        // TODO: use BiDi-algorithm to thoroughly check this assumption
+        if( rArgs.mnFlags & SAL_LAYOUT_BIDI_RTL)
+        {
+            mfBaseAdv = mfTrailingSpaceWidth;
+        }
+    }
+
+    CTLineRef pNewCTLine = CTLineCreateJustifiedLine( mpCTLine, 1.0, nPixelWidth);
+    if( !pNewCTLine )
+    {
+        // CTLineCreateJustifiedLine can and does fail
         // handle failure by keeping the unjustified layout
         // TODO: a better solution such as
         // - forcing glyph overlap
@@ -157,7 +210,7 @@ void CTLayout::AdjustLayout( ImplLayoutArgs& rArgs )
     }
     CFRelease( mpCTLine );
     mpCTLine = pNewCTLine;
-    mfCachedWidth = nPixelWidth;
+    mfCachedWidth = nPixelWidth + mfTrailingSpaceWidth;
 }
 
 // When drawing right aligned text, rounding errors in the position returned by
@@ -196,8 +249,7 @@ void CTLayout::DrawText( SalGraphics& rGraphics ) const
     AquaSalGraphics& rAquaGraphics = static_cast<AquaSalGraphics&>(rGraphics);
 
     // short circuit if there is nothing to do
-    if( (mnCharCount <= 0)
-    ||  !rAquaGraphics.CheckContext() )
+    if( (mnCharCount <= 0) || !rAquaGraphics.CheckContext() )
         return;
 
     // the view is vertically flipped => flipped glyphs
@@ -235,8 +287,8 @@ void CTLayout::DrawText( SalGraphics& rGraphics ) const
 }
 
 int CTLayout::GetNextGlyphs( int nLen, sal_GlyphId* pOutGlyphIds, Point& rPos, int& nStart,
-    sal_Int32* pGlyphAdvances, int* pCharIndexes,
-    const PhysicalFontFace** pFallbackFonts ) const
+                             sal_Int32* pGlyphAdvances, int* pCharIndexes,
+                             const PhysicalFontFace** pFallbackFonts ) const
 {
     if( !mpCTLine )
         return 0;
@@ -261,11 +313,14 @@ int CTLayout::GetNextGlyphs( int nLen, sal_GlyphId* pOutGlyphIds, Point& rPos, i
     // TODO: iterate over cached layout
     CFArrayRef aGlyphRuns = CTLineGetGlyphRuns( mpCTLine );
     const int nRunCount = CFArrayGetCount( aGlyphRuns );
-    for( int nRunIndex = 0; nRunIndex < nRunCount; ++nRunIndex ) {
+
+    for( int nRunIndex = 0; nRunIndex < nRunCount; ++nRunIndex )
+    {
         CTRunRef pGlyphRun = (CTRunRef)CFArrayGetValueAtIndex( aGlyphRuns, nRunIndex );
         const CFIndex nGlyphsInRun = CTRunGetGlyphCount( pGlyphRun );
         // skip to the first glyph run of interest
-        if( nSubIndex >= nGlyphsInRun ) {
+        if( nSubIndex >= nGlyphsInRun )
+        {
             nSubIndex -= nGlyphsInRun;
             continue;
         }
@@ -273,22 +328,26 @@ int CTLayout::GetNextGlyphs( int nLen, sal_GlyphId* pOutGlyphIds, Point& rPos, i
 
         // get glyph run details
         const CGGlyph* pCGGlyphIdx = CTRunGetGlyphsPtr( pGlyphRun );
-        if( !pCGGlyphIdx ) {
+        if( !pCGGlyphIdx )
+        {
             aCGGlyphVec.reserve( nGlyphsInRun );
             CTRunGetGlyphs( pGlyphRun, aFullRange, &aCGGlyphVec[0] );
             pCGGlyphIdx = &aCGGlyphVec[0];
         }
         const CGPoint* pCGGlyphPos = CTRunGetPositionsPtr( pGlyphRun );
-        if( !pCGGlyphPos ) {
+        if( !pCGGlyphPos )
+        {
             aCGPointVec.reserve( nGlyphsInRun );
             CTRunGetPositions( pGlyphRun, aFullRange, &aCGPointVec[0] );
             pCGGlyphPos = &aCGPointVec[0];
         }
 
         const CGSize* pCGGlyphAdvs = NULL;
-        if( pGlyphAdvances) {
+        if( pGlyphAdvances)
+        {
             pCGGlyphAdvs = CTRunGetAdvancesPtr( pGlyphRun );
-            if( !pCGGlyphAdvs) {
+            if( !pCGGlyphAdvs)
+            {
                 aCGSizeVec.reserve( nGlyphsInRun );
                 CTRunGetAdvances( pGlyphRun, aFullRange, &aCGSizeVec[0] );
                 pCGGlyphAdvs = &aCGSizeVec[0];
@@ -296,9 +355,11 @@ int CTLayout::GetNextGlyphs( int nLen, sal_GlyphId* pOutGlyphIds, Point& rPos, i
         }
 
         const CFIndex* pCGGlyphStrIdx = NULL;
-        if( pCharIndexes) {
+        if( pCharIndexes)
+        {
             pCGGlyphStrIdx = CTRunGetStringIndicesPtr( pGlyphRun );
-            if( !pCGGlyphStrIdx) {
+            if( !pCGGlyphStrIdx)
+            {
                 aCFIndexVec.reserve( nGlyphsInRun );
                 CTRunGetStringIndices( pGlyphRun, aFullRange, &aCFIndexVec[0] );
                 pCGGlyphStrIdx = &aCFIndexVec[0];
@@ -306,13 +367,15 @@ int CTLayout::GetNextGlyphs( int nLen, sal_GlyphId* pOutGlyphIds, Point& rPos, i
         }
 
         const PhysicalFontFace* pFallbackFont = NULL;
-        if( pFallbackFonts ) {
+        if( pFallbackFonts )
+        {
             CFDictionaryRef pRunAttributes = CTRunGetAttributes( pGlyphRun );
             CTFontRef pRunFont = (CTFontRef)CFDictionaryGetValue( pRunAttributes, kCTFontAttributeName );
 
             CFDictionaryRef pAttributes = mpTextStyle->GetStyleDict();
             CTFontRef pFont = (CTFontRef)CFDictionaryGetValue( pAttributes, kCTFontAttributeName );
-            if ( !CFEqual( pRunFont,  pFont ) ) {
+            if ( !CFEqual( pRunFont,  pFont ) )
+            {
                 CTFontDescriptorRef pFontDesc = CTFontCopyFontDescriptor( pRunFont );
                 ImplDevFontAttributes rDevFontAttr = DevFontFromCTFontDescriptor( pFontDesc, NULL );
                 pFallbackFont = new CoreTextFontData( rDevFontAttr, (sal_IntPtr)pFontDesc );
@@ -331,7 +394,8 @@ int CTLayout::GetNextGlyphs( int nLen, sal_GlyphId* pOutGlyphIds, Point& rPos, i
                 *(pCharIndexes++) = pCGGlyphStrIdx[ nSubIndex] + mnMinCharPos;
             if( pFallbackFonts )
                 *(pFallbackFonts++) = pFallbackFont;
-            if( !nCount++ ) {
+            if( !nCount++ )
+            {
                 const CGPoint& rCurPos = pCGGlyphPos[ nSubIndex ];
                 rPos = GetDrawPosition( Point( rCurPos.x, rCurPos.y) );
             }
@@ -348,7 +412,8 @@ double CTLayout::GetWidth() const
     if( (mnCharCount <= 0) || !mpCTLine )
         return 0;
 
-    if( mfCachedWidth < 0.0 ) {
+    if( mfCachedWidth < 0.0 )
+    {
         mfCachedWidth = CTLineGetTypographicBounds( mpCTLine, NULL, NULL, NULL);
     }
 
@@ -367,9 +432,18 @@ long CTLayout::FillDXArray( sal_Int32* pDXArray ) const
         return GetTextWidth();
 
     long nPixWidth = GetTextWidth();
-    if( pDXArray ) {
+    if( pDXArray )
+    {
         // prepare the sub-pixel accurate logical-width array
         ::std::vector<float> aWidthVector( mnCharCount );
+        if( mnTrailingSpaceCount && (mfTrailingSpaceWidth > 0.0) )
+        {
+            const double fOneWidth = mfTrailingSpaceWidth / mnTrailingSpaceCount;
+            ::std::fill_n(aWidthVector.begin() + (mnCharCount - mnTrailingSpaceCount),
+                          mnTrailingSpaceCount,
+                          fOneWidth);
+        }
+
         // handle each glyph run
         CFArrayRef aGlyphRuns = CTLineGetGlyphRuns( mpCTLine );
         const int nRunCount = CFArrayGetCount( aGlyphRuns );
@@ -377,15 +451,20 @@ long CTLayout::FillDXArray( sal_Int32* pDXArray ) const
         CGSizeVector aSizeVec;
         typedef std::vector<CFIndex> CFIndexVector;
         CFIndexVector aIndexVec;
-        for( int nRunIndex = 0; nRunIndex < nRunCount; ++nRunIndex ) {
+
+        for( int nRunIndex = 0; nRunIndex < nRunCount; ++nRunIndex )
+        {
             CTRunRef pGlyphRun = (CTRunRef)CFArrayGetValueAtIndex( aGlyphRuns, nRunIndex );
             const CFIndex nGlyphCount = CTRunGetGlyphCount( pGlyphRun );
             const CFRange aFullRange = CFRangeMake( 0, nGlyphCount );
-            aSizeVec.reserve( nGlyphCount );
-            aIndexVec.reserve( nGlyphCount );
+
+            aSizeVec.resize( nGlyphCount );
+            aIndexVec.resize( nGlyphCount );
             CTRunGetAdvances( pGlyphRun, aFullRange, &aSizeVec[0] );
             CTRunGetStringIndices( pGlyphRun, aFullRange, &aIndexVec[0] );
-            for( int i = 0; i != nGlyphCount; ++i ) {
+
+            for( int i = 0; i != nGlyphCount; ++i )
+            {
                 const int nRelIdx = aIndexVec[i];
                 aWidthVector[nRelIdx] += aSizeVec[i].width;
             }
@@ -394,7 +473,8 @@ long CTLayout::FillDXArray( sal_Int32* pDXArray ) const
         // convert the sub-pixel accurate array into classic pDXArray integers
         float fWidthSum = 0.0;
         sal_Int32 nOldDX = 0;
-        for( int i = 0; i < mnCharCount; ++i) {
+        for( int i = 0; i < mnCharCount; ++i)
+        {
             const sal_Int32 nNewDX = rint( fWidthSum += aWidthVector[i]);
             pDXArray[i] = nNewDX - nOldDX;
             nOldDX = nNewDX;
@@ -412,6 +492,7 @@ sal_Int32 CTLayout::GetTextBreak( long nMaxWidth, long /*nCharExtra*/, int nFact
     CTTypesetterRef aCTTypeSetter = CTTypesetterCreateWithAttributedString( mpAttrString );
     const double fCTMaxWidth = (double)nMaxWidth / nFactor;
     CFIndex nIndex = CTTypesetterSuggestClusterBreak( aCTTypeSetter, 0, fCTMaxWidth );
+
     if( nIndex >= mnCharCount )
         return -1;
 
@@ -426,17 +507,20 @@ void CTLayout::GetCaretPositions( int nMaxIndex, sal_Int32* pCaretXArray ) const
 
     // initialize the caret positions
     for( int i = 0; i < nMaxIndex; ++i )
+    {
         pCaretXArray[ i ] = -1;
-
+    }
     for( int n = 0; n <= mnCharCount; ++n )
     {
         // measure the characters cursor position
         CGFloat fPos2 = -1;
         const CGFloat fPos1 = CTLineGetOffsetForStringIndex( mpCTLine, n, &fPos2 );
         (void)fPos2; // TODO: split cursor at line direction change
+
         // update previous trailing position
         if( n > 0 )
             pCaretXArray[ 2*n-1 ] = lrint( fPos1 );
+
         // update current leading position
         if( 2*n >= nMaxIndex )
             break;
