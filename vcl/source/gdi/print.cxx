@@ -662,6 +662,16 @@ void Printer::ImplUpdateFontList()
     ImplUpdateFontData( true );
 }
 
+long Printer::ImplGetStepCount( long nMinRect, bool bMtf )
+{
+    long nInc = 1;
+    (void) bMtf;
+
+    // use display-equivalent step size calculation
+    nInc = (nMinRect < 800) ? 10 : 20;
+
+    return nInc;
+}
 
 Printer::Printer()
 {
