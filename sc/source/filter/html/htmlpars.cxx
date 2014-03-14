@@ -266,10 +266,8 @@ ScHTMLLayoutParser::~ScHTMLLayoutParser()
             delete pS->pLocalColOffset;
         delete pS;
     }
-    if ( pLocalColOffset )
-        delete pLocalColOffset;
-    if ( pColOffset )
-        delete pColOffset;
+    delete pLocalColOffset;
+    delete pColOffset;
     if ( pTables )
     {
         for( OuterMap::const_iterator it = pTables->begin(); it != pTables->end(); ++it)
@@ -1349,8 +1347,7 @@ void ScHTMLLayoutParser::TableOff( ImportInfo* pInfo )
             nColOffsetStart = pS->nColOffsetStart;
             bFirstRow = pS->bFirstRow;
             xLockedList = pS->xLockedList;
-            if ( pLocalColOffset )
-                delete pLocalColOffset;
+            delete pLocalColOffset;
             pLocalColOffset = pS->pLocalColOffset;
             delete pActEntry;
             // pActEntry is kept around if a table is started in the same row
@@ -1370,8 +1367,7 @@ void ScHTMLLayoutParser::TableOff( ImportInfo* pInfo )
         {
             ScHTMLTableStackEntry* pS = aTableStack.top();
             aTableStack.pop();
-            if ( pLocalColOffset )
-                delete pLocalColOffset;
+            delete pLocalColOffset;
             pLocalColOffset = pS->pLocalColOffset;
             delete pS;
         }
