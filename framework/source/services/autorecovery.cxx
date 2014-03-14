@@ -3233,9 +3233,11 @@ void AutoRecovery::implts_saveOneDoc(const OUString&                            
     // if the document was loaded with a password, it should be
     // stored with password
     utl::MediaDescriptor lNewArgs;
-    OUString sPassword = lOldArgs.getUnpackedValueOrDefault(utl::MediaDescriptor::PROP_PASSWORD(), OUString());
-    if (!sPassword.isEmpty())
-        lNewArgs[utl::MediaDescriptor::PROP_PASSWORD()] <<= sPassword;
+    css::uno::Sequence< css::beans::NamedValue > aEncryptionData =
+        lOldArgs.getUnpackedValueOrDefault(utl::MediaDescriptor::PROP_ENCRYPTIONDATA(),
+                css::uno::Sequence< css::beans::NamedValue >());
+    if (aEncryptionData.getLength() > 0)
+        lNewArgs[utl::MediaDescriptor::PROP_ENCRYPTIONDATA()] <<= aEncryptionData;
 
     // Further it must be saved using the default file format of that application.
     // Otherwhise we will some data lost.
