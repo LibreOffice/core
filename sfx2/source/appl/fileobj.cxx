@@ -91,9 +91,9 @@ SvFileObject::~SvFileObject()
 }
 
 
-sal_Bool SvFileObject::GetData( ::com::sun::star::uno::Any & rData,
+bool SvFileObject::GetData( ::com::sun::star::uno::Any & rData,
                                 const OUString & rMimeType,
-                                sal_Bool bGetSynchron )
+                                bool bGetSynchron )
 {
     sal_uIntPtr nFmt = SotExchange::GetFormatStringId( rMimeType );
     switch( nType )
@@ -212,13 +212,13 @@ sal_Bool SvFileObject::GetData( ::com::sun::star::uno::Any & rData,
         rData <<= OUString( sFileNm );
         break;
     }
-    return sal_True/*0 != aTypeList.Count()*/;
+    return true/*0 != aTypeList.Count()*/;
 }
 
-sal_Bool SvFileObject::Connect( sfx2::SvBaseLink* pLink )
+bool SvFileObject::Connect( sfx2::SvBaseLink* pLink )
 {
     if( !pLink || !pLink->GetLinkManager() )
-        return sal_False;
+        return false;
 
     // Test if not another link of the same connection already exists
     pLink->GetLinkManager()->GetDisplayNames( pLink, 0, &sFileNm, 0, &sFilter );
@@ -229,7 +229,7 @@ sal_Bool SvFileObject::Connect( sfx2::SvBaseLink* pLink )
         if( pShell.Is() )
         {
             if( pShell->IsAbortingImport() )
-                return sal_False;
+                return false;
 
             if( pShell->GetMedium() )
                 sReferer = pShell->GetMedium()->GetName();
@@ -253,14 +253,14 @@ sal_Bool SvFileObject::Connect( sfx2::SvBaseLink* pLink )
         break;
 
     default:
-        return sal_False;
+        return false;
     }
 
     SetUpdateTimeout( 0 );
 
     // and now register by this or other found Pseudo-Object
     AddDataAdvise( pLink, SotExchange::GetFormatMimeType( pLink->GetContentType()), 0 );
-    return sal_True;
+    return true;
 }
 
 sal_Bool SvFileObject::LoadFile_Impl()
@@ -588,28 +588,29 @@ IMPL_LINK( SvFileObject, DialogClosedHdl, sfx2::FileDialogHelper*, _pFileDlg )
         ERRCODE_SO_PENDING              if it has not been completely read
         ERRCODE_SO_FALSE                otherwise
 */
-sal_Bool SvFileObject::IsPending() const
+bool SvFileObject::IsPending() const
 {
     return FILETYPE_GRF == nType && !bLoadError &&
             ( pDownLoadData || bWaitForData );
 }
-sal_Bool SvFileObject::IsDataComplete() const
+
+bool SvFileObject::IsDataComplete() const
 {
-    sal_Bool bRet = sal_False;
+    bool bRet = false;
     if( FILETYPE_GRF != nType )
-        bRet = sal_True;
+        bRet = true;
     else if( !bLoadError && ( !bWaitForData && !pDownLoadData ))
     {
         SvFileObject* pThis = (SvFileObject*)this;
         if( bDataReady ||
             ( bSynchron && pThis->LoadFile_Impl() && xMed.Is() ) )
-            bRet = sal_True;
+            bRet = true;
         else
         {
             INetURLObject aUrl( sFileNm );
             if( aUrl.HasError() ||
                 INET_PROT_NOT_VALID == aUrl.GetProtocol() )
-                bRet = sal_True;
+                bRet = true;
         }
     }
     return bRet;

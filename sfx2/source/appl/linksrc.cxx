@@ -212,7 +212,7 @@ SvLinkSource::StreamToLoadFrom SvLinkSource::getStreamToLoadFrom()
         pImpl->m_bIsReadOnly);
 }
 
-void SvLinkSource::setStreamToLoadFrom(const com::sun::star::uno::Reference<com::sun::star::io::XInputStream>& xInputStream,sal_Bool bIsReadOnly )
+void SvLinkSource::setStreamToLoadFrom(const com::sun::star::uno::Reference<com::sun::star::io::XInputStream>& xInputStream, bool bIsReadOnly )
 {
     pImpl->m_xInputStreamToLoadFrom = xInputStream;
     pImpl->m_bIsReadOnly = bIsReadOnly;
@@ -257,7 +257,7 @@ void SvLinkSource::SendDataChanged()
 
             Any aVal;
             if( ( p->nAdviseModes & ADVISEMODE_NODATA ) ||
-                GetData( aVal, sDataMimeType, sal_True ) )
+                GetData( aVal, sDataMimeType, true ) )
             {
                 p->xSink->DataChanged( sDataMimeType, aVal );
 
@@ -292,7 +292,7 @@ void SvLinkSource::NotifyDataChanged()
             {
                 Any aVal;
                 if( ( p->nAdviseModes & ADVISEMODE_NODATA ) ||
-                    GetData( aVal, p->aDataMimeType, sal_True ) )
+                    GetData( aVal, p->aDataMimeType, true ) )
                 {
                     p->xSink->DataChanged( p->aDataMimeType, aVal );
 
@@ -389,40 +389,40 @@ void SvLinkSource::RemoveConnectAdvise( SvBaseLink * pLink )
         }
 }
 
-sal_Bool SvLinkSource::HasDataLinks( const SvBaseLink* pLink ) const
+bool SvLinkSource::HasDataLinks( const SvBaseLink* pLink ) const
 {
-    sal_Bool bRet = sal_False;
+    bool bRet = false;
     const SvLinkSource_Entry_Impl* p;
     for( sal_uInt16 n = 0, nEnd = pImpl->aArr.size(); n < nEnd; ++n )
         if( ( p = pImpl->aArr[ n ] )->bIsDataSink &&
             ( !pLink || &p->xSink == pLink ) )
         {
-            bRet = sal_True;
+            bRet = true;
             break;
         }
     return bRet;
 }
 
 // sal_True => waitinmg for data
-sal_Bool SvLinkSource::IsPending() const
+bool SvLinkSource::IsPending() const
 {
-    return sal_False;
+    return false;
 }
 
 // sal_True => data complete loaded
-sal_Bool SvLinkSource::IsDataComplete() const
+bool SvLinkSource::IsDataComplete() const
 {
-    return sal_True;
+    return true;
 }
 
-sal_Bool SvLinkSource::Connect( SvBaseLink* )
+bool SvLinkSource::Connect( SvBaseLink* )
 {
-    return sal_True;
+    return true;
 }
 
-sal_Bool SvLinkSource::GetData( ::com::sun::star::uno::Any &, const OUString &, sal_Bool )
+bool SvLinkSource::GetData( ::com::sun::star::uno::Any &, const OUString &, bool )
 {
-    return sal_False;
+    return false;
 }
 
 void SvLinkSource::Edit( Window *, SvBaseLink *, const Link& )

@@ -60,9 +60,9 @@ public:
     }
     virtual ~SwServerObject();
 
-    virtual sal_Bool GetData( ::com::sun::star::uno::Any & rData,
+    virtual bool GetData( ::com::sun::star::uno::Any & rData,
                             const OUString & rMimeType,
-                            sal_Bool bSynchron = sal_False );
+                            bool bSynchron = false );
 
     sal_Bool SetData( const OUString & rMimeType,
                     const ::com::sun::star::uno::Any& rData );

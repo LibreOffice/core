@@ -133,9 +133,9 @@ void ScServerObject::EndListeningAll()
     SfxListener::EndListeningAll();
 }
 
-sal_Bool ScServerObject::GetData(
+bool ScServerObject::GetData(
         ::com::sun::star::uno::Any & rData /*out param*/,
-        const OUString & rMimeType, sal_Bool /* bSynchron */ )
+        const OUString & rMimeType, bool /* bSynchron */ )
 {
     if (!pDocSh)
         return false;
@@ -179,22 +179,22 @@ sal_Bool ScServerObject::GetData(
                 rData <<= ::com::sun::star::uno::Sequence< sal_Int8 >(
                                         (const sal_Int8*)aByteData.getStr(),
                                         aByteData.getLength() + 1 );
-                return 1;
+                return true;
             }
-            return 0;
+            return false;
         }
         if( aDdeTextFmt.equalsAscii( "CSV" ) ||
             aDdeTextFmt.equalsAscii( "FCSV" ) )
             aObj.SetSeparator( ',' );
         aObj.SetExportTextOptions( ScExportTextOptions( ScExportTextOptions::ToSpace, ' ', false ) );
-        return aObj.ExportData( rMimeType, rData ) ? 1 : 0;
+        return aObj.ExportData( rMimeType, rData );
     }
 
     ScImportExport aObj( pDoc, aRange );
     aObj.SetExportTextOptions( ScExportTextOptions( ScExportTextOptions::ToSpace, ' ', false ) );
     if( aObj.IsRef() )
-        return aObj.ExportData( rMimeType, rData ) ? 1 : 0;
-    return 0;
+        return aObj.ExportData( rMimeType, rData );
+    return false;
 }
 
 void ScServerObject::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )

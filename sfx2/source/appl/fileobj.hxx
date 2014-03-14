@@ -64,16 +64,16 @@ protected:
 public:
     SvFileObject();
 
-    virtual sal_Bool GetData( ::com::sun::star::uno::Any & rData /*out param*/,
+    virtual bool GetData( ::com::sun::star::uno::Any & rData /*out param*/,
                             const OUString & rMimeType,
-                            sal_Bool bSynchron = sal_False );
+                            bool bSynchron = false );
 
-    virtual sal_Bool    Connect( sfx2::SvBaseLink* );
-    virtual void    Edit( Window *, sfx2::SvBaseLink *, const Link& rEndEditHdl );
+    virtual bool Connect( sfx2::SvBaseLink* );
+    virtual void Edit( Window *, sfx2::SvBaseLink *, const Link& rEndEditHdl );
 
     // Ask whether you can access data directly or whether it has to be triggered
-    virtual sal_Bool IsPending() const;
-    virtual sal_Bool IsDataComplete() const;
+    virtual bool IsPending() const;
+    virtual bool IsDataComplete() const;
 
     void CancelTransfers();
 };

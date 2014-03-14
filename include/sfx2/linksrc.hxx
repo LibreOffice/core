@@ -61,7 +61,7 @@ public:
                         SvLinkSource();
     virtual             ~SvLinkSource();
 
-    sal_Bool                HasDataLinks( const SvBaseLink* = 0 ) const;
+    bool                HasDataLinks( const SvBaseLink* = 0 ) const;
 
     void                Closed();
 
@@ -74,15 +74,15 @@ public:
     void                SendDataChanged();
     void                NotifyDataChanged();
 
-    virtual sal_Bool        Connect( SvBaseLink* );
-    virtual sal_Bool        GetData( ::com::sun::star::uno::Any & rData /*out param*/,
+    virtual bool        Connect( SvBaseLink* );
+    virtual bool        GetData( ::com::sun::star::uno::Any & rData /*out param*/,
                                 const rtl::OUString & rMimeType,
-                                sal_Bool bSynchron = sal_False );
+                                bool bSynchron = false );
 
                         // sal_True => waitinmg for data
-    virtual sal_Bool        IsPending() const;
+    virtual bool        IsPending() const;
                         // sal_True => data complete loaded
-    virtual sal_Bool        IsDataComplete() const;
+    virtual bool        IsDataComplete() const;
 
     // Link impl: DECL_LINK( MyEndEditHdl, sfx2::FileDialogHelper* ); <= param is the dialog
     virtual void        Edit( Window *, SvBaseLink *, const Link& rEndEditHdl );
@@ -97,19 +97,19 @@ public:
 
     struct StreamToLoadFrom{
         StreamToLoadFrom(
-            const com::sun::star::uno::Reference<com::sun::star::io::XInputStream>& xInputStream,sal_Bool bIsReadOnly )
+            const com::sun::star::uno::Reference<com::sun::star::io::XInputStream>& xInputStream, bool bIsReadOnly )
             :m_xInputStreamToLoadFrom(xInputStream),
              m_bIsReadOnly(bIsReadOnly)
         {
         }
 
         com::sun::star::uno::Reference<com::sun::star::io::XInputStream>
-        m_xInputStreamToLoadFrom;
-        sal_Bool m_bIsReadOnly;
+             m_xInputStreamToLoadFrom;
+        bool m_bIsReadOnly;
     };
 
     StreamToLoadFrom getStreamToLoadFrom();
-    void setStreamToLoadFrom(const com::sun::star::uno::Reference<com::sun::star::io::XInputStream>& xInputStream,sal_Bool bIsReadOnly );
+    void setStreamToLoadFrom(const com::sun::star::uno::Reference<com::sun::star::io::XInputStream>& xInputStream, bool bIsReadOnly );
     void clearStreamToLoadFrom();
 };
 

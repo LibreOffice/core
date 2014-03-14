@@ -60,7 +60,7 @@ class SvxInternalLink : public sfx2::SvLinkSource
 public:
     SvxInternalLink() {}
 
-    virtual sal_Bool Connect( sfx2::SvBaseLink* );
+    virtual bool Connect( sfx2::SvBaseLink* );
 };
 
 
@@ -559,7 +559,7 @@ OUString lcl_DDE_RelToAbs( const OUString& rTopic, const OUString& rBaseURL )
     return sRet;
 }
 
-sal_Bool SvxInternalLink::Connect( sfx2::SvBaseLink* pLink )
+bool SvxInternalLink::Connect( sfx2::SvBaseLink* pLink )
 {
     SfxObjectShell* pFndShell = 0;
     sal_uInt16 nUpdateMode = com::sun::star::document::UpdateDocMode::NO_UPDATE;
@@ -622,7 +622,7 @@ sal_Bool SvxInternalLink::Connect( sfx2::SvBaseLink* pLink )
 
     // empty topics are not allowed - which document is it
     if( sTopic.isEmpty() )
-        return sal_False;
+        return false;
 
     if (pFndShell)
     {

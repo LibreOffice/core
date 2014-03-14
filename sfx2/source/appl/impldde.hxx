@@ -54,15 +54,15 @@ protected:
 public:
     SvDDEObject();
 
-    virtual sal_Bool    GetData( ::com::sun::star::uno::Any & rData /*out param*/,
+    virtual bool    GetData( ::com::sun::star::uno::Any & rData /*out param*/,
                                 const OUString & aMimeType,
-                                sal_Bool bSynchron = sal_False );
+                                bool bSynchron = false );
 
-    virtual sal_Bool    Connect( SvBaseLink * );
+    virtual bool    Connect( SvBaseLink * );
     virtual void    Edit( Window* pParent, sfx2::SvBaseLink* pBaseLink, const Link& rEndEditHdl );
 
-    virtual sal_Bool    IsPending() const;
-    virtual sal_Bool    IsDataComplete() const;
+    virtual bool    IsPending() const;
+    virtual bool    IsDataComplete() const;
 };
 
 }

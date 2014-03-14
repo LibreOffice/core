@@ -39,10 +39,10 @@ SwServerObject::~SwServerObject()
 {
 }
 
-sal_Bool SwServerObject::GetData( uno::Any & rData,
-                                const OUString & rMimeType, sal_Bool )
+bool SwServerObject::GetData( uno::Any & rData,
+                                const OUString & rMimeType, bool )
 {
-    sal_Bool bRet = sal_False;
+    bool bRet = false;
     WriterRef xWrt;
     switch( SotExchange::GetFormatIdFromMimeType( rMimeType ) )
     {
@@ -96,7 +96,7 @@ sal_Bool SwServerObject::GetData( uno::Any & rData,
                 rData <<= uno::Sequence< sal_Int8 >(
                                         (sal_Int8*)aMemStm.GetData(),
                                         aMemStm.Seek( STREAM_SEEK_TO_END ) );
-                bRet = sal_True;
+                bRet = true;
             }
             delete pPam;
         }

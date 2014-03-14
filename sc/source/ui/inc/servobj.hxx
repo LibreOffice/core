@@ -54,9 +54,9 @@ public:
             ScServerObject( ScDocShell* pShell, const OUString& rItem );
     virtual ~ScServerObject();
 
-    virtual sal_Bool GetData( ::com::sun::star::uno::Any & rData /*out param*/,
+    virtual bool GetData( ::com::sun::star::uno::Any & rData /*out param*/,
                              const OUString & rMimeType,
-                             sal_Bool bSynchron = false );
+                             bool bSynchron = false );
 
     virtual void Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
             void    EndListeningAll();
