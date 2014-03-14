@@ -36,15 +36,6 @@ ScClipParam::ScClipParam(const ScRange& rRange, bool bCutMode) :
     maRanges.Append(rRange);
 }
 
-ScClipParam::ScClipParam(const ScClipParam& r) :
-    maRanges(r.maRanges),
-    meDirection(r.meDirection),
-    mbCutMode(r.mbCutMode),
-    mnSourceDocID(r.mnSourceDocID),
-    maProtectedChartRangesVector(r.maProtectedChartRangesVector)
-{
-}
-
 bool ScClipParam::isMultiRange() const
 {
     return maRanges.size() > 1;

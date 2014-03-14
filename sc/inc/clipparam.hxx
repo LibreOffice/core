@@ -42,7 +42,6 @@ struct ScClipParam
 
     ScClipParam();
     ScClipParam(const ScRange& rRange, bool bCutMode);
-    explicit ScClipParam(const ScClipParam& r);
 
     bool isMultiRange() const;
 
