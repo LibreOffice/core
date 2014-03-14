@@ -71,9 +71,6 @@ namespace dummy {
 
 class DummyChart;
 
-struct OpenglContext;
-
-
 class TextCache
 {
 public:
