@@ -53,7 +53,7 @@ TextCharacterPropertiesContext::TextCharacterPropertiesContext(
         mrTextCharacterProperties.moUnderline = rAttribs.getToken( XML_u );
     if ( rAttribs.hasAttribute( XML_strike ) )
         mrTextCharacterProperties.moStrikeout = rAttribs.getToken( XML_strike );
-    if ( rAttribs.hasAttribute( XML_baseline ) )
+    if ( rAttribs.hasAttribute( XML_baseline ) && rAttribs.getInteger( XML_baseline ).get() != 0 )
         mrTextCharacterProperties.moBaseline = rAttribs.getInteger( XML_baseline );
 
     if ( rAttribs.hasAttribute( XML_b ) )
