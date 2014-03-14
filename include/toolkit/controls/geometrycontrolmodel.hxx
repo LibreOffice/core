@@ -195,17 +195,17 @@ namespace com { namespace sun { namespace star {
         virtual void fillProperties(
             ::com::sun::star::uno::Sequence< ::com::sun::star::beans::Property >& _rProps,
             ::com::sun::star::uno::Sequence< ::com::sun::star::beans::Property >& _rAggregateProps
-            ) const;
+            ) const SAL_OVERRIDE;
 
         // OPropertySetAggregationHelper overridables
-        virtual ::cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper();
+        virtual ::cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper() SAL_OVERRIDE;
 
         // OGeometryControlModel_Base
         virtual OGeometryControlModel_Base* createClone_Impl(
-            ::com::sun::star::uno::Reference< ::com::sun::star::util::XCloneable >& _rxAggregateInstance);
+            ::com::sun::star::uno::Reference< ::com::sun::star::util::XCloneable >& _rxAggregateInstance) SAL_OVERRIDE;
 
         // XTypeProvider
-        virtual ::com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId(  ) throw (::com::sun::star::uno::RuntimeException, std::exception);
+        virtual ::com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     };
 
 
