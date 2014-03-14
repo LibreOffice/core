@@ -36,6 +36,7 @@
 #include <com/sun/star/chart2/XChartDocument.hpp>
 #include "typedstrdata.hxx"
 #include "compressedarray.hxx"
+#include "calcconfig.hxx"
 #include <tools/fract.hxx>
 #include <tools/gen.hxx>
 
@@ -235,6 +236,8 @@ private:
     ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > xServiceManager;
 
     rtl::Reference<ScPoolHelper> xPoolHelper;
+
+    ScCalcConfig        maCalcConfig;
 
     SfxUndoManager*     mpUndoManager;
     ScFieldEditEngine*  pEditEngine;                    // uses pEditPool from xPoolHelper
@@ -1970,6 +1973,10 @@ public:
      * See if specified column has any broadcaster at all.
      */
     bool HasBroadcaster( SCTAB nTab, SCCOL nCol ) const;
+
+
+    void SetCalcConfig( const ScCalcConfig& rConfig );
+    const ScCalcConfig& GetCalcConfig() const;
 
 private: // CLOOK-Impl-methods
 

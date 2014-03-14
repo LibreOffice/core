@@ -137,6 +137,7 @@ private:
     static ScTokenStack*    pGlobalStack;
     static bool             bGlobalStackInUse;
 
+    ScCalcConfig maCalcConfig;
     formula::FormulaTokenIterator aCode;
     ScAddress   aPos;
     ScTokenArray& rArr;
@@ -168,6 +169,10 @@ private:
     bool        bMatrixFormula;         // formula cell is a matrix formula
 
     VolatileType meVolatileType;
+
+
+    /// Merge global and document specific settings.
+    void MergeCalcConfig();
 
 // nMust <= nAct <= nMax ? ok : PushError
 inline bool MustHaveParamCount( short nAct, short nMust );

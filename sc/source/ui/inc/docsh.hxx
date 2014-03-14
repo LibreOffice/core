@@ -322,6 +322,7 @@ public:
     sal_Bool            ReloadTabLinks();
 
     void            SetFormulaOptions(const ScFormulaOptions& rOpt );
+    void            SetCalcConfig( const ScCalcConfig& rConfig );
     virtual void    CheckConfigOptions();
 
     void            PostEditView( ScEditEngineDefaulter* pEditEngine, const ScAddress& rCursorPos );
