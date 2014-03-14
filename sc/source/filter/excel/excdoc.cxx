@@ -550,7 +550,8 @@ void ExcTable::FillAsXmlTable( SCTAB nCodeNameIdx )
 
     Add( new ExcBof8 );
 
-    Add( new XclExpWsbool( bFitToPages, mnScTab, &GetFilterManager() ) );
+    Color aTabColor = GetRoot().GetDoc().GetTabBgColor(mnScTab);
+    Add(new XclExpXmlSheetPr(bFitToPages, mnScTab, aTabColor, &GetFilterManager()));
 
     // GUTS (count & size of outline icons)
     aRecList.AppendRecord( mxCellTable->CreateRecord( EXC_ID_GUTS ) );
