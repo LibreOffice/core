@@ -295,6 +295,10 @@ DdeItem::DdeItem( const OUString& )
 }
 
 DdeItem::DdeItem( const DdeItem& )
+    : pName(NULL)
+    , pMyTopic(NULL)
+    , pImpData(NULL)
+    , nType(0)
 {
 }
 
