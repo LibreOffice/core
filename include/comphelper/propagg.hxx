@@ -259,7 +259,7 @@ protected:
     ~OPropertySetAggregationHelper();
 
     virtual void SAL_CALL getFastPropertyValue(::com::sun::star::uno::Any& rValue, sal_Int32 nHandle) const;
-    virtual void SAL_CALL disposing();
+    void disposing();
 
     sal_Int32       getOriginalHandle( sal_Int32 _nHandle ) const;
     OUString getPropertyName( sal_Int32 _nHandle ) const;
