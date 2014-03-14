@@ -3416,6 +3416,9 @@ int RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
                                     ? m_nNestedCurrentCellX
                                     : m_nTopLevelCurrentCellX);
                 int nCellX = nParam - rCurrentCellX;
+                const int COL_DFLT_WIDTH = 41; // sw/source/filter/inc/wrtswtbl.hxx, minimal possible width of cells.
+                if (!nCellX)
+                    nCellX = COL_DFLT_WIDTH;
 
                 // If there is a negative left margin, then the first cellx is relateve to that.
                 RTFValue::Pointer_t pTblInd = m_aStates.top().aTableRowSprms.find(NS_ooxml::LN_CT_TblPrBase_tblInd);
