@@ -211,6 +211,29 @@ bool PrinterOptions::ReadFromConfig( bool i_bFile )
     return bSuccess;
 }
 
+bool Printer::DrawTransformBitmapExDirect(
+    const basegfx::B2DHomMatrix& aFullTransform,
+    const BitmapEx& rBitmapEx)
+{
+    // printers can't draw bitmaps directly
+    (void) aFullTransform;
+    (void) rBitmapEx;
+    return false;
+}
+
+bool Printer::TransformReduceBitmapExTargetRange(
+    const basegfx::B2DHomMatrix& aFullTransform,
+    basegfx::B2DRange &aVisibleRange,
+    double &fMaximumArea)
+{
+    // deliberately do nothing - you can't reduce the
+    // target range for a printer at all
+    (void) aFullTransform;
+    (void) aVisibleRange;
+    (void) fMaximumArea;
+    return true;
+}
+
 void Printer::SetPrinterOptions( const PrinterOptions& i_rOptions )
 {
     *mpPrinterOptions = i_rOptions;

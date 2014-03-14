@@ -804,6 +804,32 @@ protected:
                                                 const Point& rSrcPtPixel, const Size& rSrcSizePixel );
 
     virtual long                ImplGetGradientStepCount( long nMinRect );
+    /** Transform and draw a bitmap directly
+
+     @param     aFullTransform      The B2DHomMatrix used for the transformation
+     @param     rBitmapEx           Reference to the bitmap to be transformed and drawn
+
+     @return true if it was able to draw the bitmap, false if not
+     */
+    virtual bool                DrawTransformBitmapExDirect(
+                                    const basegfx::B2DHomMatrix& aFullTransform,
+                                    const BitmapEx& rBitmapEx);
+
+    /** Reduce the area that needs to be drawn of the bitmap and return the new
+        visible range and the maximum area.
+
+
+      @param     aFullTransform      B2DHomMatrix used for transformation
+      @param     aVisibleRange       The new visible area of the bitmap
+      @param     fMaximumArea        The maximum area of the bitmap
+
+      @returns true if there is an area to be drawn, otherwise nothing is left to be drawn
+        so return false
+      */
+    virtual bool                TransformReduceBitmapExTargetRange(
+                                    const basegfx::B2DHomMatrix& aFullTransform,
+                                    basegfx::B2DRange &aVisibleRange,
+                                    double &fMaximumArea);
 
 private:
     typedef void ( OutputDevice::* FontUpdateHandler_t )( bool );
