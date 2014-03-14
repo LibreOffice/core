@@ -142,6 +142,36 @@ inline sal_uInt8 ImplGetGradientColorValue( long nValue )
         return (sal_uInt8)nValue;
 }
 
+long OutputDevice::ImplGetGradientStepCount( long nMinRect )
+{
+    long nInc = 1;
+
+    nInc = (nMinRect < 50) ? 2 : 4;
+
+    return nInc;
+}
+
+long OutputDevice::ImplGetGradientSteps( const Gradient& rGradient, const Rectangle& rRect, bool bMtf )
+{
+    // calculate step count
+    long    nStepCount  = rGradient.GetSteps();
+
+    // generate nStepCount, if not passed
+    long nMinRect = rRect.GetHeight();
+
+    if ( !nStepCount )
+    {
+        long nInc;
+
+        nInc = ImplGetGradientStepCount (nMinRect);
+        if ( !nInc || bMtf )
+            nInc = 1;
+        nStepCount = nMinRect / nInc;
+    }
+
+    return nStepCount;
+}
+
 void OutputDevice::ImplDrawLinearGradient( const Rectangle& rRect,
                                            const Gradient& rGradient,
                                            bool bMtf, const PolyPolygon* pClipPolyPoly )
@@ -245,23 +275,7 @@ void OutputDevice::ImplDrawLinearGradient( const Rectangle& rRect,
     }
 
     // calculate step count
-    long    nStepCount  = rGradient.GetSteps();
-    // generate nStepCount, if not passed
-    long nMinRect = aRect.GetHeight();
-    if ( !nStepCount )
-    {
-        long nInc = 1;
-        if ( meOutDevType != OUTDEV_PRINTER && !bMtf )
-        {
-            nInc = (nMinRect < 50) ? 2 : 4;
-        }
-        else
-        {
-            // Use display-equivalent step size calculation
-            nInc = (nMinRect < 800) ? 10 : 20;
-        }
-        nStepCount = nMinRect / nInc;
-    }
+    long    nStepCount  = ImplGetGradientSteps( rGradient, aRect, bMtf );
 
     // minimal three steps and maximal as max color steps
     long   nAbsRedSteps   = std::abs( nEndRed   - nStartRed );
