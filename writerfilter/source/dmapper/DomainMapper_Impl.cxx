@@ -3869,6 +3869,7 @@ void DomainMapper_Impl::PopFieldContext()
                     {
                         m_bStartedTOC = false;
                         m_aTextAppendStack.pop();
+                        m_bTextInserted = false;
                     }
                     m_bStartTOC = false;
                     m_bStartIndex = false;
