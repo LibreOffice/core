@@ -12,6 +12,7 @@
 
 #include <vcl/vclopengl_dllapi.hxx>
 #include <vcl/OpenGLRender.hxx>
+#include <boost/scoped_ptr.hpp>
 
 class VCLOPENGL_DLLPUBLIC OpenGLContext
 {
