@@ -46,13 +46,6 @@
 #define RID_PA_FL_CUPSUSAGE                 23
 #define RID_PA_CB_CUPSUSAGE                 23
 
-#define RID_STRINGQUERYDLG         1003
-#define RID_STRQRY_TXT_RENAME         1
-#define RID_STRQRY_EDT_NEWNAME        2
-#define RID_STRQRY_BTN_OK             3
-#define RID_STRQRY_BTN_CANCEL         4
-#define RID_STRQRY_BOX_NEWNAME         5
-
 #define RID_PPDIMPORT_DLG          1004
 #define RID_PPDIMP_BTN_OK             1
 #define RID_PPDIMP_BTN_CANCEL         2

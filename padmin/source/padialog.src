@@ -168,49 +168,6 @@ ModalDialog RID_PADIALOG
     Text [ en-US ] = "Printer Administration";
 };
 
-ModalDialog RID_STRINGQUERYDLG
-{
-    HelpID = "padmin:ModalDialog:RID_STRINGQUERYDLG";
-    OutputSize = TRUE ;
-    SVLook = TRUE ;
-    Pos = MAP_APPFONT ( 10 , 10 ) ;
-    Size = MAP_APPFONT ( 200 , 42 ) ;
-    Moveable = TRUE ;
-    Closeable = TRUE ;
-    FixedText RID_STRQRY_TXT_RENAME
-    {
-        Pos = MAP_APPFONT ( 6 , 6 ) ;
-        Size = MAP_APPFONT ( 130 , 16 ) ;
-        Wordbreak=TRUE;
-    };
-    Edit RID_STRQRY_EDT_NEWNAME
-    {
-        HelpID = "padmin:Edit:RID_STRINGQUERYDLG:RID_STRQRY_EDT_NEWNAME";
-        Border = TRUE ;
-        Pos = MAP_APPFONT ( 6 , 23 ) ;
-        Size = MAP_APPFONT ( 130 , 12 ) ;
-    };
-    ComboBox RID_STRQRY_BOX_NEWNAME
-    {
-        HelpID = "padmin:ComboBox:RID_STRINGQUERYDLG:RID_STRQRY_BOX_NEWNAME";
-        Border = TRUE ;
-        DropDown = TRUE;
-        Pos = MAP_APPFONT ( 6 , 23 ) ;
-        Size = MAP_APPFONT ( 130 , 200 ) ;
-    };
-    OKButton RID_STRQRY_BTN_OK
-    {
-        DefButton = TRUE ;
-        Pos = MAP_APPFONT ( 145 , 6 ) ;
-        Size = MAP_APPFONT ( 50 , 12 ) ;
-    };
-    CancelButton RID_STRQRY_BTN_CANCEL
-    {
-        Pos = MAP_APPFONT ( 145 , 23 ) ;
-        Size = MAP_APPFONT ( 50 , 12 ) ;
-    };
-};
-
 String RID_ERR_NOPRINTER
 {
     Text [ en-US ] = "Could not open printer %s.";

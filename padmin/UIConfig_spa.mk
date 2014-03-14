@@ -13,6 +13,7 @@ $(eval $(call gb_UIConfig_add_uifiles,spa,\
 	padmin/uiconfig/ui/printerdevicepage \
 	padmin/uiconfig/ui/printerpaperpage \
 	padmin/uiconfig/ui/printerpropertiesdialog \
+	padmin/uiconfig/ui/querydialog \
 ))
 
 # vim: set noet sw=4 ts=4:

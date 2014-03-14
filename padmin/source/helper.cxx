@@ -181,33 +181,18 @@ bool DelListBox::Notify( NotifyEvent& rEvent )
  *  QueryString
  */
 
-QueryString::QueryString( Window* pParent, OUString& rQuery, OUString& rRet, const ::std::list< OUString >& rChoices ) :
-        ModalDialog( pParent, PaResId( RID_STRINGQUERYDLG ) ),
-        m_aOKButton( this, PaResId( RID_STRQRY_BTN_OK ) ),
-        m_aCancelButton( this, PaResId( RID_STRQRY_BTN_CANCEL ) ),
-        m_aFixedText( this, PaResId( RID_STRQRY_TXT_RENAME ) ),
-        m_aEdit( this, PaResId( RID_STRQRY_EDT_NEWNAME ) ),
-        m_aComboBox( this, PaResId( RID_STRQRY_BOX_NEWNAME ) ),
-        m_rReturnValue( rRet )
+QueryString::QueryString(Window* pParent, OUString& rQuery, OUString& rRet)
+    : ModalDialog(pParent, "QueryDialog",
+        "spa/ui/querydialog.ui" )
+    , m_rReturnValue( rRet )
 {
-    FreeResource();
-    m_aOKButton.SetClickHdl( LINK( this, QueryString, ClickBtnHdl ) );
-    m_aFixedText.SetText( rQuery );
-    if( rChoices.begin() != rChoices.end() )
-    {
-        m_aComboBox.SetText( m_rReturnValue );
-        m_aComboBox.InsertEntry( m_rReturnValue );
-        for( ::std::list<OUString>::const_iterator it = rChoices.begin(); it != rChoices.end(); ++it )
-            m_aComboBox.InsertEntry( *it );
-        m_aEdit.Show( false );
-        m_bUseEdit = false;
-    }
-    else
-    {
-        m_aEdit.SetText( m_rReturnValue );
-        m_aComboBox.Show( false );
-        m_bUseEdit = true;
-    }
+    get(m_pOKButton, "ok");
+    get(m_pFixedText, "label");
+    get(m_pEdit, "entry");
+
+    m_pOKButton->SetClickHdl( LINK( this, QueryString, ClickBtnHdl ) );
+    m_pFixedText->SetText( rQuery );
+    m_pEdit->SetText( m_rReturnValue );
     SetText( Application::GetDisplayName() );
 }
 
@@ -217,9 +202,9 @@ QueryString::~QueryString()
 
 IMPL_LINK( QueryString, ClickBtnHdl, Button*, pButton )
 {
-    if( pButton == &m_aOKButton )
+    if (pButton == m_pOKButton)
     {
-        m_rReturnValue = m_bUseEdit ? m_aEdit.GetText() : m_aComboBox.GetText();
+        m_rReturnValue = m_pEdit->GetText();
         EndDialog( 1 );
     }
     else

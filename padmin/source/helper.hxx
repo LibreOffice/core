@@ -82,19 +82,15 @@ public:
 class QueryString : public ModalDialog
 {
 private:
-    OKButton     m_aOKButton;
-    CancelButton m_aCancelButton;
-    FixedText    m_aFixedText;
-    Edit         m_aEdit;
-    ComboBox     m_aComboBox;
-
+    OKButton*    m_pOKButton;
+    FixedText*   m_pFixedText;
+    Edit*        m_pEdit;
     OUString&    m_rReturnValue;
-    bool         m_bUseEdit;
 
     DECL_LINK( ClickBtnHdl, Button* );
 
 public:
-    QueryString( Window*, OUString &, OUString &, const ::std::list< OUString >& rChoices = ::std::list<OUString>() );
+    QueryString(Window*, OUString &, OUString &);
     // parent window, Query text, initial value
     ~QueryString();
 };
