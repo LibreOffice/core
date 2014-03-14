@@ -27,7 +27,7 @@ gb_CppunitTest__interactive := $(true)
 endif
 
 ifneq ($(strip $(VALGRIND)),)
-gb_CppunitTest_VALGRINDTOOL := valgrind --tool=$(VALGRIND) --num-callers=50 --error-exitcode=1 --trace-children=yes --leak-check=no
+gb_CppunitTest_VALGRINDTOOL := valgrind --tool=$(VALGRIND) --num-callers=50 --error-exitcode=1 --trace-children=yes --trace-children-skip='*/java,*/gij' --leak-check=no
 ifeq ($(strip $(VALGRIND)),memcheck)
 G_SLICE := always-malloc
 GLIBCXX_FORCE_NEW := 1
