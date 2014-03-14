@@ -67,7 +67,7 @@ SFX_IMPL_INTERFACE(SdModule, SfxModule, SdResId(STR_APPLICATIONOBJECTBAR))
 
 // Ctor
 SdModule::SdModule(SfxObjectFactory* pFact1, SfxObjectFactory* pFact2 )
-:   SfxModule( SfxApplication::CreateResManager("sd"), sal_False,
+:   SfxModule( SfxApplication::CreateResManager("sd"), false,
                   pFact1, pFact2, NULL ),
     pTransferClip(NULL),
     pTransferDrag(NULL),

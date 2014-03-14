@@ -46,13 +46,13 @@ class SfxMenuManager
 {
 friend class SfxPopupMenuManager;
 
-    SfxVirtualMenu*  pMenu;     // the actual Menu
+    SfxVirtualMenu*         pMenu;     // the actual Menu
     SfxVirtualMenu*         pOldMenu;       // only while reconfiguring
-    sal_Bool         bMenuBar;  // Popup or MenuBar
+    bool                    bMenuBar;  // Popup or MenuBar
     SfxBindings*            pBindings;
     ResMgr*                 pResMgr;
     sal_uInt32              nType;
-    sal_Bool                    bAddClipboardFuncs : 1;
+    bool                    bAddClipboardFuncs : 1;
 
     void                    Construct( SfxVirtualMenu& rMenu );
 

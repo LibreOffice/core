@@ -114,7 +114,7 @@ ResMgr* SfxModule::GetResMgr()
 
 
 
-SfxModule::SfxModule( ResMgr* pMgrP, sal_Bool bDummyP,
+SfxModule::SfxModule( ResMgr* pMgrP, bool bDummyP,
                       SfxObjectFactory* pFactoryP, ... )
     : pResMgr( pMgrP ), bDummy( bDummyP ), pImpl(0L)
 {
@@ -299,7 +299,7 @@ SfxChildWinFactArr_Impl* SfxModule::GetChildWinFactories_Impl() const
     return pImpl->pFactArr;
 }
 
-ImageList* SfxModule::GetImageList_Impl( sal_Bool bBig )
+ImageList* SfxModule::GetImageList_Impl( bool bBig )
 {
     return pImpl->GetImageList( pResMgr, bBig );
 }

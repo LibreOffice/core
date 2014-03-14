@@ -265,7 +265,7 @@ public:
     sal_uInt16          GetSlotId() const;
     sal_uIntPtr         GetHelpId() const;
     sal_uIntPtr         GetMode() const;
-    sal_Bool            IsMode( sal_uIntPtr nMode ) const;
+    bool                IsMode( sal_uIntPtr nMode ) const;
     sal_uInt16          GetGroupId() const;
     sal_uInt16          GetMasterSlotId() const { return nMasterSlotId; }
     sal_uInt16          GetWhich( const SfxItemPool &rPool ) const;
@@ -314,7 +314,7 @@ inline sal_uIntPtr SfxSlot::GetMode() const
 
 // determines if the specified mode is assigned
 
-inline sal_Bool SfxSlot::IsMode( sal_uIntPtr nMode ) const
+inline bool SfxSlot::IsMode( sal_uIntPtr nMode ) const
 {
     return (nFlags & nMode) != 0;
 }

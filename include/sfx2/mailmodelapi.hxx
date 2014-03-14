@@ -77,7 +77,7 @@ private:
     OUString            maSubject;
     MailPriority        mePriority;
 
-    sal_Bool            mbLoadDone;
+    bool                mbLoadDone;
 
     SaveResult          ShowFilterOptionsDialog( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > xSMGR,
                                                  const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel > xModel,
@@ -124,10 +124,10 @@ public:
                                      const OUString& rType );
     SendMailResult      Send( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& xFrame );
 
-    sal_Bool            IsEmpty() const;
+    bool                IsEmpty() const;
 };
 
-sal_Bool CreateFromAddress_Impl( OUString& rFrom );
+bool CreateFromAddress_Impl( OUString& rFrom );
 
 #endif // INCLUDED_SFX2_MAILMODELAPI_HXX
 

@@ -162,7 +162,7 @@ public:
         // Returns sal_False if '- No -' is set as a template
         // Template name can only be obtained if IsTemplate() is TRUE
         // erfragt werden
-    sal_Bool IsTemplate() const;
+    bool IsTemplate() const;
     OUString GetTemplateFileName() const;
 
     sal_uInt16  GetTemplateFlags()const;
@@ -326,7 +326,7 @@ sal_uInt16  SfxNewFileDialog_Impl::GetSelectedTemplatePos() const
 
 
 
-sal_Bool SfxNewFileDialog_Impl::IsTemplate() const
+bool SfxNewFileDialog_Impl::IsTemplate() const
 {
     return GetSelectedTemplatePos()!=0;
 
@@ -457,7 +457,7 @@ SfxNewFileDialog::~SfxNewFileDialog()
     delete pImpl;
 }
 
-sal_Bool SfxNewFileDialog::IsTemplate() const
+bool SfxNewFileDialog::IsTemplate() const
 {
     return pImpl->IsTemplate();
 }

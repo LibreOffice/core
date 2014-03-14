@@ -40,11 +40,11 @@ class SFX2_DLLPUBLIC SfxMenuControl: public SfxControllerItem
     OUString                aTitle;
     SfxVirtualMenu*         pOwnMenu;
     SfxVirtualMenu*         pSubMenu;
-    sal_Bool                    b_ShowStrings;
+    bool                    b_ShowStrings;
 
 public:
                             SfxMenuControl();
-                            SfxMenuControl( sal_Bool bShowStrings );
+                            SfxMenuControl( bool bShowStrings );
                             SfxMenuControl( sal_uInt16, SfxBindings&);
 
     static SfxMenuControl*  CreateImpl( sal_uInt16 nId, Menu &rMenu, SfxBindings &rBindings );
@@ -123,7 +123,7 @@ class SfxAppMenuControl_Impl : public SfxMenuControl
 {
     PopupMenu*  pMenu;
     OUString    m_sIconTheme;
-    sal_Bool    m_bShowMenuImages;
+    bool        m_bShowMenuImages;
 
 protected:
     DECL_LINK( Activate, Menu * ); // Needed to support high contrast images

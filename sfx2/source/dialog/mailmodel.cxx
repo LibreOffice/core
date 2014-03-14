@@ -276,7 +276,7 @@ SfxMailModel::SaveResult SfxMailModel::ShowFilterOptionsDialog(
     return eRet;
 }
 
-sal_Bool SfxMailModel::IsEmpty() const
+bool SfxMailModel::IsEmpty() const
 {
     return maAttachedDocuments.empty();
 }
@@ -684,7 +684,7 @@ SfxMailModel::SfxMailModel() :
     mpCcList    ( NULL ),
     mpBccList   ( NULL ),
     mePriority  ( PRIO_NORMAL ),
-    mbLoadDone  ( sal_True )
+    mbLoadDone  ( true )
 {
 }
 
@@ -920,7 +920,7 @@ SfxMailModel::SendMailResult SfxMailModel::SaveAndSend( const css::uno::Referenc
 
 // functions -------------------------------------------------------------
 
-sal_Bool CreateFromAddress_Impl( OUString& rFrom )
+bool CreateFromAddress_Impl( OUString& rFrom )
 
 /* [Description]
 

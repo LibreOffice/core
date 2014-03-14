@@ -165,7 +165,7 @@ SFX_IMPL_INTERFACE(SmModule, SfxModule, SmResId(RID_APPLICATION))
 
 
 SmModule::SmModule(SfxObjectFactory* pObjFact) :
-    SfxModule(SfxApplication::CreateResManager("sm"), sal_False, pObjFact, NULL),
+    SfxModule(SfxApplication::CreateResManager("sm"), false, pObjFact, NULL),
     pColorConfig( 0 ),
     pConfig( 0 ),
     pLocSymbolData( 0 ),

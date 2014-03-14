@@ -59,9 +59,9 @@ public:
     SfxNewFileDialog(Window *pParent, sal_uInt16 nFlags = 0);
     ~SfxNewFileDialog();
 
-    // Returns sal_False, when '- No -' is set as Template
-    // Template names can only be obtained when IsTemplate() returns sal_True.
-    sal_Bool IsTemplate() const;
+    // Returns false, when '- No -' is set as Template
+    // Template names can only be obtained when IsTemplate() returns true.
+    bool IsTemplate() const;
     OUString GetTemplateFileName() const;
 
     // load template methods

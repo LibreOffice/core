@@ -382,7 +382,7 @@ sal_Bool SfxManageStyleSheetPage::FillItemSet( SfxItemSet& rSet )
          nFilterIdx != m_pFilterLb->GetSavedValue()    &&
          m_pFilterLb->IsEnabled() )
     {
-        bModified = sal_True;
+        bModified = true;
         OSL_ENSURE( pItem, "No Item" );
         // is only possibly for user templates
         sal_uInt16 nMask = pItem->GetFilterList()[ (size_t)m_pFilterLb->GetEntryData( nFilterIdx ) ]->nFlags | SFXSTYLEBIT_USERDEF;
@@ -415,7 +415,7 @@ void SfxManageStyleSheetPage::Reset( const SfxItemSet& /*rAttrSet*/ )
 */
 
 {
-    bModified = sal_False;
+    bModified = false;
     OUString sCmp( pStyle->GetName() );
 
     if ( sCmp != aName )
@@ -550,7 +550,7 @@ int SfxManageStyleSheetPage::DeactivatePage( SfxItemSet* pItemSet )
             m_pNameRw->SetSelection( Selection( SELECTION_MIN, SELECTION_MAX ) );
             return SfxTabPage::KEEP_PAGE;
         }
-        bModified = sal_True;
+        bModified = true;
     }
 
     if ( pStyle->HasFollowSupport() && m_pFollowLb->IsEnabled() )
@@ -566,7 +566,7 @@ int SfxManageStyleSheetPage::DeactivatePage( SfxItemSet* pItemSet )
                 m_pFollowLb->GrabFocus();
                 return SfxTabPage::KEEP_PAGE;
             }
-            bModified = sal_True;
+            bModified = true;
         }
     }
 
@@ -586,7 +586,7 @@ int SfxManageStyleSheetPage::DeactivatePage( SfxItemSet* pItemSet )
                 m_pBaseLb->GrabFocus();
                 return SfxTabPage::KEEP_PAGE;
             }
-            bModified = sal_True;
+            bModified = true;
             nRet |= (int)SfxTabPage::REFRESH_SET;
         }
     }

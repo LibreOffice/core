@@ -56,7 +56,7 @@ class SfxManageStyleSheetPage : public SfxTabPage
     SfxStyleFamilies *pFamilies;
     const SfxStyleFamilyItem *pItem;
     OUString aBuf;
-    sal_Bool bModified;
+    bool bModified;
 
     // initial data for the style
     OUString aName;

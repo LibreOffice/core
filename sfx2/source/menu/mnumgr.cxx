@@ -263,7 +263,7 @@ SfxMenuManager::SfxMenuManager( Menu* pMenuArg, SfxBindings &rBindings )
     pResMgr(NULL),
     nType(0)
 {
-    bAddClipboardFuncs = sal_False;
+    bAddClipboardFuncs = false;
     SfxVirtualMenu* pVMenu = new SfxVirtualMenu( pMenuArg, sal_False, rBindings, sal_True, sal_True );
     Construct(*pVMenu);
 }

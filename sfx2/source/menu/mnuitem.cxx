@@ -110,7 +110,7 @@ void SfxMenuControl::Bind(
 
 // Constructor for explicit registration
 
-SfxMenuControl::SfxMenuControl( sal_Bool bShowStrings )
+SfxMenuControl::SfxMenuControl( bool bShowStrings )
 :   pOwnMenu(0),
     pSubMenu(0),
     b_ShowStrings(bShowStrings)
@@ -123,7 +123,7 @@ SfxMenuControl::SfxMenuControl( sal_Bool bShowStrings )
 SfxMenuControl::SfxMenuControl():
     pOwnMenu(0),
     pSubMenu(0),
-    b_ShowStrings(sal_False)
+    b_ShowStrings(false)
 {
 }
 
@@ -133,7 +133,7 @@ SfxMenuControl::SfxMenuControl(sal_uInt16 nSlotId, SfxBindings& rBindings):
     SfxControllerItem(nSlotId, rBindings),
     pOwnMenu(0),
     pSubMenu(0),
-    b_ShowStrings(sal_False)
+    b_ShowStrings(false)
 {
     // This constructor should make it possible already during the design
     // to fall back to the bindings, but can as always be bound later.
@@ -240,7 +240,7 @@ void SfxMenuControl::StateChanged
 
 SfxMenuControl* SfxMenuControl::CreateImpl( sal_uInt16 /*nId*/, Menu& /*rMenu*/, SfxBindings& /*rBindings*/ )
 {
-    return new SfxMenuControl( sal_True );
+    return new SfxMenuControl( true );
 }
 
 void SfxMenuControl::RegisterControl( sal_uInt16 nSlotId, SfxModule *pMod )
@@ -333,7 +333,7 @@ IMPL_LINK( SfxAppMenuControl_Impl, Activate, Menu *, pActMenu )
     {
         const StyleSettings& rSettings = Application::GetSettings().GetStyleSettings();
         OUString sIconTheme = rSettings.DetermineIconTheme();
-        sal_Bool bShowMenuImages = rSettings.GetUseImagesInMenus();
+        bool bShowMenuImages = rSettings.GetUseImagesInMenus();
 
         if (( sIconTheme != m_sIconTheme ) ||
             ( bShowMenuImages != m_bShowMenuImages ))
@@ -349,7 +349,7 @@ IMPL_LINK( SfxAppMenuControl_Impl, Activate, Menu *, pActMenu )
                 {
                     if ( bShowMenuImages )
                     {
-                        sal_Bool        bImageSet = sal_False;
+                        bool        bImageSet = false;
                         OUString aImageId;
                         ::framework::MenuConfiguration::Attributes* pMenuAttributes =
                             (::framework::MenuConfiguration::Attributes*)pMenu->GetUserValue( nItemId );
@@ -363,7 +363,7 @@ IMPL_LINK( SfxAppMenuControl_Impl, Activate, Menu *, pActMenu )
                             Image aImage = GetImage( xFrame, aImageId, false );
                             if ( !!aImage )
                             {
-                                bImageSet = sal_True;
+                                bImageSet = true;
                                 pActMenu->SetItemImage( nItemId, aImage );
                             }
                         }

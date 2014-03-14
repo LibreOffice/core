@@ -39,8 +39,8 @@ public:
     ~MSE40HTMLClipFormatObj();
 
 //JP 31.01.2001: old interfaces
-    SAL_DLLPRIVATE sal_Bool GetData( SotDataObject& );
-    SAL_DLLPRIVATE sal_Bool GetData( SvData& );
+    SAL_DLLPRIVATE bool GetData( SotDataObject& );
+    SAL_DLLPRIVATE bool GetData( SvData& );
 //JP 31.01.2001: the new one
     SvStream* IsValid( SvStream& );
 

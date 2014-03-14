@@ -60,7 +60,7 @@ class SFX2_DLLPUBLIC SfxModule : public SfxShell
 {
 private:
     ResMgr*                     pResMgr;
-    sal_Bool                    bDummy : 1;
+    bool                        bDummy : 1;
     SfxModule_Impl*             pImpl;
 
     SAL_DLLPRIVATE void Construct_Impl();
@@ -69,7 +69,7 @@ public:
                                 TYPEINFO();
                                 SFX_DECL_INTERFACE(SFX_INTERFACE_SFXMODULE)
 
-                                SfxModule( ResMgr* pMgrP, sal_Bool bDummy,
+                                SfxModule( ResMgr* pMgrP, bool bDummy,
                                     SfxObjectFactory* pFactoryP, ... );
                                 ~SfxModule();
 
@@ -107,7 +107,7 @@ public:
     SAL_DLLPRIVATE SfxStbCtrlFactArr_Impl* GetStbCtrlFactories_Impl() const;
     SAL_DLLPRIVATE SfxMenuCtrlFactArr_Impl* GetMenuCtrlFactories_Impl() const;
     SAL_DLLPRIVATE SfxChildWinFactArr_Impl* GetChildWinFactories_Impl() const;
-    SAL_DLLPRIVATE ImageList* GetImageList_Impl( sal_Bool bBig );
+    SAL_DLLPRIVATE ImageList* GetImageList_Impl( bool bBig );
 };
 
 #endif
