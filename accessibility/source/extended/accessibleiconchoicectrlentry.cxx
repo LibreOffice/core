@@ -54,7 +54,7 @@ namespace
 namespace accessibility
 {
 
-    // class AccessibleIconChoiceCtrlEntry -----------------------------------------------------
+    // class AccessibleIconChoiceCtrlEntry
 
     using namespace ::com::sun::star::accessibility;
     using namespace ::com::sun::star::uno;
@@ -65,7 +65,7 @@ namespace accessibility
     // Ctor() and Dtor()
 
     AccessibleIconChoiceCtrlEntry::AccessibleIconChoiceCtrlEntry( SvtIconChoiceCtrl& _rIconCtrl,
-                                                                  sal_uLong _nPos,
+                                                                  sal_Int32 _nPos,
                                                                   const Reference< XAccessible >& _xParent ) :
 
         AccessibleIconChoiceCtrlEntry_BASE  ( m_aMutex ),

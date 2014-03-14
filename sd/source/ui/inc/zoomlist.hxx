@@ -42,7 +42,7 @@ public:
 
 private:
     ViewShell*  mpViewShell;
-    sal_uLong   mnCurPos;
+    sal_uInt32  mnCurPos;
 
     std::vector<Rectangle> maRectangles;
 };
