@@ -731,7 +731,7 @@ void SfxInPlaceClient::SetObject( const uno::Reference < embed::XEmbeddedObject 
 }
 
 
-sal_Bool SfxInPlaceClient::SetObjArea( const Rectangle& rArea )
+bool SfxInPlaceClient::SetObjArea( const Rectangle& rArea )
 {
     if( rArea != m_pImp->m_aObjArea )
     {
@@ -739,10 +739,10 @@ sal_Bool SfxInPlaceClient::SetObjArea( const Rectangle& rArea )
         m_pImp->SizeHasChanged();
 
         Invalidate();
-        return sal_True;
+        return true;
     }
 
-    return sal_False;
+    return false;
 }
 
 
@@ -776,7 +776,7 @@ void SfxInPlaceClient::SetSizeScale( const Fraction & rScaleWidth, const Fractio
 }
 
 
-sal_Bool SfxInPlaceClient::SetObjAreaAndScale( const Rectangle& rArea, const Fraction& rScaleWidth, const Fraction& rScaleHeight )
+bool SfxInPlaceClient::SetObjAreaAndScale( const Rectangle& rArea, const Fraction& rScaleWidth, const Fraction& rScaleHeight )
 {
     if( rArea != m_pImp->m_aObjArea || m_pImp->m_aScaleWidth != rScaleWidth || m_pImp->m_aScaleHeight != rScaleHeight )
     {
@@ -787,10 +787,10 @@ sal_Bool SfxInPlaceClient::SetObjAreaAndScale( const Rectangle& rArea, const Fra
         m_pImp->SizeHasChanged();
 
         Invalidate();
-        return sal_True;
+        return true;
     }
 
-    return sal_False;
+    return false;
 }
 
 
@@ -820,7 +820,7 @@ void SfxInPlaceClient::Invalidate()
 }
 
 
-sal_Bool SfxInPlaceClient::IsObjectUIActive() const
+bool SfxInPlaceClient::IsObjectUIActive() const
 {
     try {
         return ( m_pImp->m_xObject.is() && ( m_pImp->m_xObject->getCurrentState() == embed::EmbedStates::UI_ACTIVE ) );
@@ -828,11 +828,11 @@ sal_Bool SfxInPlaceClient::IsObjectUIActive() const
     catch( uno::Exception& )
     {}
 
-    return sal_False;
+    return false;
 }
 
 
-sal_Bool SfxInPlaceClient::IsObjectInPlaceActive() const
+bool SfxInPlaceClient::IsObjectInPlaceActive() const
 {
     try {
         return(
@@ -849,7 +849,7 @@ sal_Bool SfxInPlaceClient::IsObjectInPlaceActive() const
     catch( uno::Exception& )
     {}
 
-    return sal_False;
+    return false;
 }
 
 
@@ -1106,7 +1106,7 @@ void SfxInPlaceClient::ResetObject()
     }
 }
 
-sal_Bool SfxInPlaceClient::IsUIActive()
+bool SfxInPlaceClient::IsUIActive()
 {
     return m_pImp->m_bUIActive;
 }

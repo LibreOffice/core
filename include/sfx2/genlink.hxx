@@ -38,8 +38,8 @@ public:
     GenLink& operator = ( const GenLink& rOrig )
         { pFunc = rOrig.pFunc; aLink = rOrig.aLink; return *this; }
 
-    sal_Bool operator!() const { return !aLink && !pFunc; }
-    sal_Bool IsSet() const { return aLink.IsSet() || pFunc; }
+    bool operator!() const { return !aLink && !pFunc; }
+    bool IsSet() const { return aLink.IsSet() || pFunc; }
 
     long Call( void* pCaller )
          { return pFunc ? (*pFunc)(pCaller) : aLink.Call(pCaller); }

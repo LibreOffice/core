@@ -68,14 +68,14 @@ public:
     void                SetObject( const com::sun::star::uno::Reference < com::sun::star::embed::XEmbeddedObject >& rObject );
     void                SetObjectState( sal_Int32 );
     Size                GetObjectVisAreaSize() const;
-    sal_Bool            IsObjectUIActive() const;
-    sal_Bool            IsObjectInPlaceActive() const;
+    bool                IsObjectUIActive() const;
+    bool                IsObjectInPlaceActive() const;
     void                DeactivateObject();
-    sal_Bool                SetObjArea( const Rectangle & );
+    bool                SetObjArea( const Rectangle & );
     Rectangle           GetObjArea() const;
     Rectangle           GetScaledObjArea() const;
     void                SetSizeScale( const Fraction & rScaleWidth, const Fraction & rScaleHeight );
-    sal_Bool            SetObjAreaAndScale( const Rectangle&, const Fraction&, const Fraction& );
+    bool                SetObjAreaAndScale( const Rectangle&, const Fraction&, const Fraction& );
     const Fraction&     GetScaleWidth() const;
     const Fraction&     GetScaleHeight() const;
     void                Invalidate();
@@ -85,7 +85,7 @@ public:
     ErrCode             DoVerb( long nVerb );
     void                VisAreaChanged();
     void                ResetObject();
-    sal_Bool                IsUIActive();
+    bool                IsUIActive();
 
     virtual void        FormatChanged(); // object format was changed (used for StarMath formulas aligning)
 };
