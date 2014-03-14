@@ -38,6 +38,9 @@ bool VirtualDevice::ImplInitGraphics() const
 {
     DBG_TESTSOLARMUTEX();
 
+    if ( mpGraphics )
+        return true;
+
     mbInitLineColor     = true;
     mbInitFillColor     = true;
     mbInitFont          = true;
@@ -46,18 +49,16 @@ bool VirtualDevice::ImplInitGraphics() const
 
     ImplSVData* pSVData = ImplGetSVData();
 
-    const VirtualDevice* pVirDev = (const VirtualDevice*)this;
-
-    if ( pVirDev->mpVirDev )
+    if ( mpVirDev )
     {
-        mpGraphics = pVirDev->mpVirDev->AcquireGraphics();
+        mpGraphics = mpVirDev->AcquireGraphics();
         // if needed retry after releasing least recently used virtual device graphics
         while ( !mpGraphics )
         {
             if ( !pSVData->maGDIData.mpLastVirGraphics )
                 break;
             pSVData->maGDIData.mpLastVirGraphics->ImplReleaseGraphics();
-            mpGraphics = pVirDev->mpVirDev->AcquireGraphics();
+            mpGraphics = mpVirDev->AcquireGraphics();
         }
         // update global LRU list of virtual device graphics
         if ( mpGraphics )

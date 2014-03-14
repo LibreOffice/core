@@ -357,7 +357,7 @@ bool Window::ImplInitGraphics() const
     DBG_TESTSOLARMUTEX();
 
     if ( mpGraphics )
-        return mpGraphics;
+        return true;
 
     mbInitLineColor     = true;
     mbInitFillColor     = true;
@@ -367,9 +367,7 @@ bool Window::ImplInitGraphics() const
 
     ImplSVData* pSVData = ImplGetSVData();
 
-    Window* pWindow = (Window*)this;
-
-    mpGraphics = pWindow->mpWindowImpl->mpFrame->AcquireGraphics();
+    mpGraphics = mpWindowImpl->mpFrame->AcquireGraphics();
     // try harder if no wingraphics was available directly
     if ( !mpGraphics )
     {
@@ -377,7 +375,7 @@ bool Window::ImplInitGraphics() const
         OutputDevice* pReleaseOutDev = pSVData->maGDIData.mpLastWinGraphics;
         while ( pReleaseOutDev )
         {
-            if ( ((Window*)pReleaseOutDev)->mpWindowImpl->mpFrame == pWindow->mpWindowImpl->mpFrame )
+            if ( ((Window*)pReleaseOutDev)->mpWindowImpl->mpFrame == mpWindowImpl->mpFrame )
                 break;
             pReleaseOutDev = pReleaseOutDev->mpPrevGraphics;
         }
@@ -396,7 +394,7 @@ bool Window::ImplInitGraphics() const
                 if ( !pSVData->maGDIData.mpLastWinGraphics )
                     break;
                 pSVData->maGDIData.mpLastWinGraphics->ImplReleaseGraphics();
-                mpGraphics = pWindow->mpWindowImpl->mpFrame->AcquireGraphics();
+                mpGraphics = mpWindowImpl->mpFrame->AcquireGraphics();
             }
         }
     }
