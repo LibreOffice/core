@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da86d52c_6925a5aa",
+        "filename": "vcl/source/gdi/print.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 217,
+      "author": {
+        "id": 1000381
+      },
+      "writtenOn": "2014-03-14T21:28:57Z",
+      "side": 1,
+      "message": "Nitpick: instead of this you can just drop (or comment out) the parameter, const basegfx::B2DHomMatrix\u0026 /*aFullTransform*/ etc.",
+      "revId": "3c7cbe603107e96cc2fe42984e2dba53ca0a3d91",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
