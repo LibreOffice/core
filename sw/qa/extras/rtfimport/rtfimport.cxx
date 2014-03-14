@@ -1578,6 +1578,12 @@ DECLARE_RTFIMPORT_TEST(testCharColor, "char-color.rtf")
 
 #endif
 
+DECLARE_RTFIMPORT_TEST(testDptxbxRelation, "dptxbx-relation.rtf")
+{
+    // This was FRAME, not PAGE_FRAME, even if dobxpage is in the document.
+    CPPUNIT_ASSERT_EQUAL(text::RelOrientation::PAGE_FRAME, getProperty<sal_Int16>(getShape(1), "HoriOrientRelation"));
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
