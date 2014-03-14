@@ -98,9 +98,11 @@ debug_callback(GLenum source, GLenum type, GLuint id,
 
 #endif
 
-namespace {
 
 #if defined( UNX )
+
+namespace {
+
 static bool errorTriggered;
 int oglErrorHandler( Display* /*dpy*/, XErrorEvent* /*evnt*/ )
 {
