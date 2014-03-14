@@ -455,9 +455,8 @@ void PPDParser::scanPPDDir( const OUString& rDir )
     }
 }
 
-void PPDParser::initPPDFiles()
+void PPDParser::initPPDFiles(PPDCache &rPPDCache)
 {
-    PPDCache &rPPDCache = thePPDCache::get();
     if( rPPDCache.pAllPPDFiles )
         return;
 
@@ -499,7 +498,7 @@ void PPDParser::getKnownPPDDrivers( std::list< OUString >& o_rDrivers, bool bRef
         rPPDCache.pAllPPDFiles = NULL;
     }
 
-    initPPDFiles();
+    initPPDFiles(rPPDCache);
     o_rDrivers.clear();
 
     boost::unordered_map< OUString, OUString, OUStringHash >::const_iterator it;
@@ -520,7 +519,7 @@ OUString PPDParser::getPPDFile( const OUString& rFile )
         bool bRetry = true;
         do
         {
-            initPPDFiles();
+            initPPDFiles(rPPDCache);
             // some PPD files contain dots beside the extension, so try name first
             // and cut of points after that
             OUString aBase( rFile );

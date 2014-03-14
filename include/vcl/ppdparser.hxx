@@ -34,6 +34,7 @@
 
 namespace psp {
 
+class PPDCache;
 class PPDParser;
 class PPDTranslator;
 
@@ -185,7 +186,7 @@ private:
     OUString handleTranslation(const OString& i_rString, bool i_bIsGlobalized);
 
     static void scanPPDDir( const OUString& rDir );
-    static void initPPDFiles();
+    static void initPPDFiles(PPDCache &rPPDCache);
     static OUString getPPDFile( const OUString& rFile );
 public:
     static const PPDParser* getParser( const OUString& rFile );
