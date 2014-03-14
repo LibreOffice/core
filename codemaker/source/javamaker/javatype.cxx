@@ -691,7 +691,7 @@ void addTypeInfo(
 }
 
 void handleEnumType(
-    OUString name, rtl::Reference< unoidl::EnumTypeEntity > const & entity,
+    const OUString& name, rtl::Reference< unoidl::EnumTypeEntity > const & entity,
     JavaOptions const & options)
 {
     assert(entity.is());
@@ -1406,7 +1406,7 @@ void addPlainStructBaseArguments(
 }
 
 void handlePlainStructType(
-    OUString name,
+    const OUString& name,
     rtl::Reference< unoidl::PlainStructTypeEntity > const & entity,
     rtl::Reference< TypeManager > const & manager, JavaOptions const & options,
     Dependencies * dependencies)
@@ -1491,7 +1491,7 @@ void handlePlainStructType(
 }
 
 void handlePolyStructType(
-    OUString name,
+    const OUString& name,
     rtl::Reference< unoidl::PolymorphicStructTypeTemplateEntity > const &
         entity,
     rtl::Reference< TypeManager > const & manager, JavaOptions const & options,
@@ -1626,7 +1626,7 @@ void addExceptionBaseArguments(
 }
 
 void handleExceptionType(
-    OUString name, rtl::Reference< unoidl::ExceptionTypeEntity > const & entity,
+    const OUString& name, rtl::Reference< unoidl::ExceptionTypeEntity > const & entity,
     rtl::Reference< TypeManager > const & manager, JavaOptions const & options,
     Dependencies * dependencies)
 {
@@ -1797,7 +1797,7 @@ void createExceptionsAttribute(
 }
 
 void handleInterfaceType(
-    OUString name, rtl::Reference< unoidl::InterfaceTypeEntity > const & entity,
+    const OUString& name, rtl::Reference< unoidl::InterfaceTypeEntity > const & entity,
     rtl::Reference< TypeManager > const & manager, JavaOptions const & options,
     Dependencies * dependencies)
 {
@@ -1956,7 +1956,7 @@ void handleTypedef(
 }
 
 void handleConstantGroup(
-    OUString name, rtl::Reference< unoidl::ConstantGroupEntity > const & entity,
+    const OUString& name, rtl::Reference< unoidl::ConstantGroupEntity > const & entity,
     rtl::Reference< TypeManager > const & manager, JavaOptions const & options,
     Dependencies * dependencies)
 {
@@ -2208,7 +2208,7 @@ void addConstructor(
 }
 
 void handleService(
-    OUString name,
+    const OUString& name,
     rtl::Reference< unoidl::SingleInterfaceBasedServiceEntity > const & entity,
     rtl::Reference< TypeManager > const & manager, JavaOptions const & options,
     Dependencies * dependencies)
@@ -2307,7 +2307,7 @@ void handleService(
 }
 
 void handleSingleton(
-    OUString name,
+    const OUString& name,
     rtl::Reference< unoidl::InterfaceBasedSingletonEntity > const & entity,
     rtl::Reference< TypeManager > const & manager, JavaOptions const & options,
     Dependencies * dependencies)

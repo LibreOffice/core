@@ -63,10 +63,10 @@ OString getTempDir(const OString& sFileName)
 }
 
 OString createFileNameFromType( const OString& destination,
-                                const OString typeName,
-                                const OString postfix,
+                                const OString& typeName,
+                                const OString& postfix,
                                 bool bLowerCase,
-                                const OString prefix )
+                                const OString& prefix )
 {
     OString type(typeName.replace('.', '/'));
 
