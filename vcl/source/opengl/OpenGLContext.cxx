@@ -12,8 +12,6 @@
 
 using namespace com::sun::star;
 
-namespace {
-
 #ifdef DBG_UTIL
 
 namespace {
@@ -99,6 +97,8 @@ debug_callback(GLenum source, GLenum type, GLuint id,
 }
 
 #endif
+
+namespace {
 
 #if defined( UNX )
 static bool errorTriggered;
