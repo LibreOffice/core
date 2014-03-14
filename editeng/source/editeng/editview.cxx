@@ -72,8 +72,6 @@ using namespace com::sun::star::uno;
 using namespace com::sun::star::beans;
 
 
-
-
 // static
 LanguageType EditView::CheckLanguage(
         const OUString &rText,
@@ -152,8 +150,6 @@ LanguageType EditView::CheckLanguage(
 
     return nLang;
 }
-
-
 
 // class EditView
 
@@ -475,7 +471,7 @@ void EditView::Redo()
     PIMPE->Redo( this );
 }
 
-sal_uLong EditView::Read( SvStream& rInput, const OUString& rBaseURL, EETextFormat eFormat, bool bSelect, SvKeyValueIterator* pHTTPHeaderAttrs )
+sal_uInt32 EditView::Read( SvStream& rInput, const OUString& rBaseURL, EETextFormat eFormat, bool bSelect, SvKeyValueIterator* pHTTPHeaderAttrs )
 {
     EditSelection aOldSel( pImpEditView->GetEditSelection() );
     pImpEditView->DrawSelection();
@@ -707,7 +703,6 @@ EESpellState EditView::StartThesaurus()
 
     return PIMPEE->StartThesaurus( this );
 }
-
 
 void EditView::StartTextConversion(
         LanguageType nSrcLang, LanguageType nDestLang, const Font *pDestFont,

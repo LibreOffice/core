@@ -39,7 +39,7 @@ ZoomList::ZoomList(ViewShell* pViewShell)
 
 void ZoomList::InsertZoomRect(const Rectangle& rRect)
 {
-    sal_uLong nRectCount = maRectangles.size();
+    size_t nRectCount = maRectangles.size();
 
     if (nRectCount >= MAX_ENTRYS)
         maRectangles.erase(maRectangles.begin());
@@ -58,7 +58,7 @@ void ZoomList::InsertZoomRect(const Rectangle& rRect)
 Rectangle ZoomList::GetNextZoomRect()
 {
     mnCurPos++;
-    sal_uLong nRectCount = maRectangles.size();
+    size_t nRectCount = maRectangles.size();
 
     if (nRectCount > 0 && mnCurPos > nRectCount - 1)
         mnCurPos = nRectCount - 1;
@@ -84,7 +84,7 @@ Rectangle ZoomList::GetPreviousZoomRect()
 
 sal_Bool ZoomList::IsNextPossible() const
 {
-    sal_uLong nRectCount = maRectangles.size();
+    size_t nRectCount = maRectangles.size();
 
     return nRectCount > 0 && mnCurPos < nRectCount - 1;
 }
