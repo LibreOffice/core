@@ -2208,7 +2208,6 @@ bool MessageDialog::set_property(const OString &rKey, const OString &rValue)
     }
     else if (rKey == "buttons")
     {
-        SAL_INFO("vcl.layout", "buttons type mode " << rValue);
         VclButtonsType eMode = VCL_BUTTONS_NONE;
         if (rValue.equals("none"))
             eMode = VCL_BUTTONS_NONE;
