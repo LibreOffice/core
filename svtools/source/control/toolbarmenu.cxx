@@ -1568,8 +1568,7 @@ void ToolbarMenu::AddStatusListener( const OUString& rCommandURL )
 
 
 
-// XStatusListener (subclasses must override this one to get the status updates
-void SAL_CALL ToolbarMenu::statusChanged( const ::com::sun::star::frame::FeatureStateEvent& /*Event*/ ) throw ( ::com::sun::star::uno::RuntimeException )
+void ToolbarMenu::statusChanged( const ::com::sun::star::frame::FeatureStateEvent& /*Event*/ ) throw ( ::com::sun::star::uno::RuntimeException )
 {
 }
 

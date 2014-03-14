@@ -309,7 +309,7 @@ class FontworkAlignmentWindow : public ToolbarMenu
 public:
     FontworkAlignmentWindow( svt::ToolboxController& rController, const Reference< XFrame >& rFrame, Window* pParentWindow );
 
-    virtual void SAL_CALL statusChanged( const frame::FeatureStateEvent& Event ) throw ( RuntimeException );
+    virtual void statusChanged( const frame::FeatureStateEvent& Event ) throw ( RuntimeException );
     virtual void DataChanged( const DataChangedEvent& rDCEvt );
 
 private:
@@ -368,7 +368,7 @@ void FontworkAlignmentWindow::implSetAlignment( int nSurface, bool bEnabled )
 
 
 
-void SAL_CALL FontworkAlignmentWindow::statusChanged( const frame::FeatureStateEvent& Event ) throw ( RuntimeException )
+void FontworkAlignmentWindow::statusChanged( const frame::FeatureStateEvent& Event ) throw ( RuntimeException )
 {
     if( Event.FeatureURL.Main.equals( msFontworkAlignment ) )
     {
@@ -503,7 +503,7 @@ class FontworkCharacterSpacingWindow : public ToolbarMenu
 public:
     FontworkCharacterSpacingWindow( svt::ToolboxController& rController, const Reference< XFrame >& rFrame, Window* pParentWindow );
 
-    virtual void SAL_CALL statusChanged( const ::com::sun::star::frame::FeatureStateEvent& Event ) throw ( ::com::sun::star::uno::RuntimeException );
+    virtual void statusChanged( const ::com::sun::star::frame::FeatureStateEvent& Event ) throw ( ::com::sun::star::uno::RuntimeException );
 private:
     svt::ToolboxController& mrController;
 
@@ -581,7 +581,7 @@ void FontworkCharacterSpacingWindow::implSetKernCharacterPairs( sal_Bool, bool b
 
 
 
-void SAL_CALL FontworkCharacterSpacingWindow::statusChanged( const ::com::sun::star::frame::FeatureStateEvent& Event ) throw ( ::com::sun::star::uno::RuntimeException )
+void FontworkCharacterSpacingWindow::statusChanged( const ::com::sun::star::frame::FeatureStateEvent& Event ) throw ( ::com::sun::star::uno::RuntimeException )
 {
     if( Event.FeatureURL.Main.equals( msFontworkCharacterSpacing ) )
     {

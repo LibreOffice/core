@@ -168,7 +168,7 @@ void ExtrusionDirectionWindow::implSetProjection( sal_Int32 nProjection, bool bE
 
 
 
-void SAL_CALL ExtrusionDirectionWindow::statusChanged(
+void ExtrusionDirectionWindow::statusChanged(
     const ::com::sun::star::frame::FeatureStateEvent& Event
 )   throw ( ::com::sun::star::uno::RuntimeException )
 {
@@ -387,7 +387,7 @@ void ExtrusionDepthWindow::implFillStrings( FieldUnit eUnit )
 
 
 
-void SAL_CALL ExtrusionDepthWindow::statusChanged(
+void ExtrusionDepthWindow::statusChanged(
     const ::com::sun::star::frame::FeatureStateEvent& Event
 )   throw ( ::com::sun::star::uno::RuntimeException )
 {
@@ -658,7 +658,7 @@ void ExtrusionLightingWindow::implSetDirection( int nDirection, bool bEnabled )
 
 
 
-void SAL_CALL ExtrusionLightingWindow::statusChanged(
+void ExtrusionLightingWindow::statusChanged(
     const ::com::sun::star::frame::FeatureStateEvent& Event
 )   throw ( ::com::sun::star::uno::RuntimeException )
 {
@@ -853,7 +853,7 @@ void ExtrusionSurfaceWindow::implSetSurface( int nSurface, bool bEnabled )
 
 
 
-void SAL_CALL ExtrusionSurfaceWindow::statusChanged(
+void ExtrusionSurfaceWindow::statusChanged(
     const ::com::sun::star::frame::FeatureStateEvent& Event
 )   throw ( ::com::sun::star::uno::RuntimeException )
 {

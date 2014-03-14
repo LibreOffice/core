@@ -100,8 +100,9 @@ protected:
     bool IsInPopupMode();
     void EndPopupMode();
 
-    // XStatusListener (subclasses must override this one to get the status updates
-    virtual void SAL_CALL statusChanged( const ::com::sun::star::frame::FeatureStateEvent& Event ) throw ( ::com::sun::star::uno::RuntimeException );
+    // Forwared from XStatusListener (subclasses must override this one to get
+    // the status updates):
+    virtual void statusChanged( const ::com::sun::star::frame::FeatureStateEvent& Event ) throw ( ::com::sun::star::uno::RuntimeException );
 
     void            StateChanged( StateChangedType nType );
     void            DataChanged( const DataChangedEvent& rDCEvt );
