@@ -916,65 +916,6 @@ sal_Bool SwAccessibleParagraph::GetTextBoundary(
 
         case AccessibleTextType::ATTRIBUTE_RUN:
             bRet = GetAttributeBoundary( rBound, rText, nPos );
-            if(bRet)
-            {
-                SwCrsrShell* pCrsrShell = GetCrsrShell();
-                if( pCrsrShell != NULL && pCrsrShell->GetViewOptions() && pCrsrShell->GetViewOptions()->IsOnlineSpell())
-                {
-                    SwTxtNode* pTxtNode = const_cast<SwTxtNode*>( GetTxtNode() );
-                    if(pTxtNode)
-                    {
-                        const SwWrongList* pWrongList = pTxtNode->GetWrong();
-                        if( NULL != pWrongList )
-                        {
-                            sal_Int32 nBegin = nPos;
-                            sal_Int32 nLen = 1;
-                            const sal_Int32 nNext = pWrongList->NextWrong(nBegin);
-                            sal_Int32 nLast = 0;
-                            sal_uInt16 nWrongPos = pWrongList->GetWrongPos( nBegin );
-                            if ( nWrongPos >= pWrongList->Count() ||
-                                 ( nLast = pWrongList->Pos( nWrongPos ) ) >= nBegin )
-                            {
-                                nLast = nWrongPos
-                                        ? pWrongList->Pos( --nWrongPos )
-                                        : COMPLETE_STRING;
-                            }
-                            if ( nBegin > pWrongList->GetBeginInv() &&
-                                 ( nLast == COMPLETE_STRING || nLast < pWrongList->GetEndInv() ) )
-                            {
-                                nLast = min(nBegin, pWrongList->GetEndInv());
-                            }
-                            else if ( nLast < COMPLETE_STRING )
-                            {
-                                nLast += pWrongList->Len( nWrongPos );
-                            }
-
-                            const bool bIn = pWrongList->InWrongWord(nBegin, nLen); // && !pTxtNode->IsSymbol(nBegin) )
-                            if(bIn)
-                            {
-                                rBound.startPos = max(nNext, rBound.startPos);
-                                rBound.endPos = min(nNext+nLen, rBound.endPos);
-                            }
-                            else
-                            {
-                                if (COMPLETE_STRING == nLast)//first
-                                {
-                                    rBound.endPos = min(nNext, rBound.endPos);
-                                }
-                                else if(COMPLETE_STRING == nNext)
-                                {
-                                    rBound.startPos = max(nLast, rBound.startPos);
-                                }
-                                else
-                                {
-                                    rBound.startPos = max(nLast, rBound.startPos);
-                                    rBound.endPos = min(nNext, rBound.endPos);
-                                }
-                            }
-                        }
-                    }
-                }
-            }
             break;
 
         case AccessibleTextType::GLYPH:
