@@ -19,6 +19,7 @@
 #include <com/sun/star/text/VertOrientation.hpp>
 #include <com/sun/star/text/RelOrientation.hpp>
 #include <com/sun/star/text/WrapTextMode.hpp>
+#include <com/sun/star/text/TextContentAnchorType.hpp>
 #include <rtl/tencinfo.h>
 #include <svl/lngmisc.hxx>
 #include <unotools/ucbstreamhelper.hxx>
@@ -4610,6 +4611,9 @@ int RTFDocumentImpl::popState()
 
                 uno::Reference<lang::XServiceInfo> xServiceInfo(xShape, uno::UNO_QUERY);
                 bool bTextFrame = xServiceInfo->supportsService("com.sun.star.text.TextFrame");
+
+                // The default is certainly not inline, but then what Word supports is just at-character.
+                xPropertySet->setPropertyValue("AnchorType", uno::makeAny(text::TextContentAnchorType_AT_CHARACTER));
 
                 if (bTextFrame)
                 {

@@ -1534,6 +1534,12 @@ DECLARE_RTFIMPORT_TEST(testDptxbxRelation, "dptxbx-relation.rtf")
     CPPUNIT_ASSERT_EQUAL(text::RelOrientation::PAGE_FRAME, getProperty<sal_Int16>(getShape(1), "HoriOrientRelation"));
 }
 
+DECLARE_RTFIMPORT_TEST(testDprectAnchor, "dprect-anchor.rtf")
+{
+    // This was at-page, which is not something Word supports, so clearly an import error.
+    CPPUNIT_ASSERT_EQUAL(text::TextContentAnchorType_AT_CHARACTER, getProperty<text::TextContentAnchorType>(getShape(1), "AnchorType"));
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
