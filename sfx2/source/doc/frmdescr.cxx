@@ -32,9 +32,9 @@ struct SfxFrameDescriptor_Impl
 {
     Wallpaper*  pWallpaper;
     SfxItemSet* pArgs;
-    sal_Bool        bEditable;
+    bool        bEditable;
 
-    SfxFrameDescriptor_Impl() : pWallpaper( NULL ), pArgs( NULL ), bEditable( sal_True ) {}
+    SfxFrameDescriptor_Impl() : pWallpaper( NULL ), pArgs( NULL ), bEditable( true ) {}
     ~SfxFrameDescriptor_Impl()
     {
         delete pWallpaper;
@@ -49,10 +49,10 @@ SfxFrameDescriptor::SfxFrameDescriptor() :
     eSizeSelector( SIZE_ABS ),
     nHasBorder( BORDER_YES ),
     nItemId( 0 ),
-    bResizeHorizontal( sal_True ),
-    bResizeVertical( sal_True ),
-    bHasUI( sal_True ),
-    bReadOnly( sal_False )
+    bResizeHorizontal( true ),
+    bResizeVertical( true ),
+    bHasUI( true ),
+    bReadOnly( false )
 {
 
     pImp = new SfxFrameDescriptor_Impl;
@@ -88,17 +88,17 @@ void SfxFrameDescriptor::SetActualURL( const INetURLObject& rURL )
     SetActualURL(rURL.GetMainURL( INetURLObject::DECODE_TO_IURI ));
 }
 
-void SfxFrameDescriptor::SetEditable( sal_Bool bSet )
+void SfxFrameDescriptor::SetEditable( bool bSet )
 {
     pImp->bEditable = bSet;
 }
 
-sal_Bool SfxFrameDescriptor::IsEditable() const
+bool SfxFrameDescriptor::IsEditable() const
 {
     return pImp->bEditable;
 }
 
-SfxFrameDescriptor* SfxFrameDescriptor::Clone( sal_Bool bWithIds ) const
+SfxFrameDescriptor* SfxFrameDescriptor::Clone( bool bWithIds ) const
 {
     SfxFrameDescriptor *pFrame = new SfxFrameDescriptor;
 
@@ -132,7 +132,7 @@ SfxFrameDescriptor* SfxFrameDescriptor::Clone( sal_Bool bWithIds ) const
     return pFrame;
 }
 
-sal_Bool SfxFrameDescriptor::HasFrameBorder() const
+bool SfxFrameDescriptor::HasFrameBorder() const
 {
     return (nHasBorder & BORDER_YES) != 0;
 }

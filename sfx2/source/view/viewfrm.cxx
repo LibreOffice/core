@@ -306,7 +306,7 @@ void SfxViewFrame::ExecReload_Impl( SfxRequest& rReq )
         if ( pParent == &rFrame && rFrame.GetChildFrameCount() )
         {
             sal_Bool bReloadAvailable = sal_False;
-            SfxFrameIterator aIter( rFrame, sal_False );
+            SfxFrameIterator aIter( rFrame, false );
             SfxFrame *pChild = aIter.FirstFrame();
             while ( pChild )
             {
@@ -905,7 +905,7 @@ void SfxViewFrame::StateReload_Impl( SfxItemSet& rSet )
                     // If any ChildFrame is reloadable, the slot is enabled,
                     // so you can perfom CTRL-Reload
                     sal_Bool bReloadAvailable = sal_False;
-                    SfxFrameIterator aFrameIter( *pFrame, sal_True );
+                    SfxFrameIterator aFrameIter( *pFrame, true );
                     for( SfxFrame* pNextFrame = aFrameIter.FirstFrame();
                             pFrame;
                             pNextFrame = pNextFrame ?
@@ -1077,7 +1077,7 @@ void SfxViewFrame::ReleaseObjectShell_Impl()
 {
     DBG_ASSERT( xObjSh.Is(), "no SfxObjectShell to release!" );
 
-    GetFrame().ReleasingComponent_Impl( sal_True );
+    GetFrame().ReleasingComponent_Impl( true );
     if ( GetWindow().HasChildPathFocus( true ) )
     {
         DBG_ASSERT( !GetActiveChildFrame_Impl(), "Wrong active child frame!" );
@@ -1466,7 +1466,7 @@ SfxViewFrame::SfxViewFrame
 
     pImp->pWindow = new SfxFrameViewWindow_Impl( this, rFrame.GetWindow() );
     pImp->pWindow->SetSizePixel( rFrame.GetWindow().GetOutputSizePixel() );
-    rFrame.SetOwnsBindings_Impl( sal_True );
+    rFrame.SetOwnsBindings_Impl( true );
     rFrame.CreateWorkWindow_Impl();
 }
 

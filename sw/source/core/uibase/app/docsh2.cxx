@@ -1396,12 +1396,12 @@ sal_uLong SwDocShell::LoadStylesFromFile( const OUString& rURL,
     // search for filter in WebDocShell, too
     SfxMedium aMed( rURL, STREAM_STD_READ );
     const SfxFilter* pFlt = 0;
-    aMatcher.DetectFilter( aMed, &pFlt, sal_False, sal_False );
+    aMatcher.DetectFilter( aMed, &pFlt, false, false );
     if(!pFlt)
     {
         OUString sWebFactory(OUString::createFromAscii(SwWebDocShell::Factory().GetShortName()));
         SfxFilterMatcher aWebMatcher( sWebFactory );
-        aWebMatcher.DetectFilter( aMed, &pFlt, sal_False, sal_False );
+        aWebMatcher.DetectFilter( aMed, &pFlt, false, false );
     }
     // --> OD #i117339# - trigger import only for own formats
     bool bImport( false );
@@ -1562,7 +1562,7 @@ int SwFindDocShell( SfxObjectShellRef& xDocSh,
             pMed->GetItemSet()->Put( SfxStringItem( SID_PASSWORD, rPasswd ));
 
         if( !pSfxFlt )
-            aMatcher.DetectFilter( *pMed, &pSfxFlt, sal_False, sal_False );
+            aMatcher.DetectFilter( *pMed, &pSfxFlt, false, false );
 
         if( pSfxFlt )
         {

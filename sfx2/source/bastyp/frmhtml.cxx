@@ -109,7 +109,7 @@ void SfxFrameHTMLParser::ParseFrameOptions(
             break;
         }
         case HTML_O_NORESIZE:
-            pFrame->SetResizable( sal_False );
+            pFrame->SetResizable( false );
             break;
         default:
             if (aOption.GetTokenString().equalsIgnoreAsciiCase(HTML_O_READONLY))

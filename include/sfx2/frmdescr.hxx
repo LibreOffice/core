@@ -75,12 +75,12 @@ class SFX2_DLLPUBLIC SfxFrameDescriptor
     long                    nWidth;
     ScrollingMode           eScroll;
     SizeSelector            eSizeSelector;
-    sal_uInt16                  nHasBorder;
-    sal_uInt16                  nItemId;
-    sal_Bool                    bResizeHorizontal;
-    sal_Bool                    bResizeVertical;
-    sal_Bool                    bHasUI;
-    sal_Bool                    bReadOnly;
+    sal_uInt16              nHasBorder;
+    sal_uInt16              nItemId;
+    bool                    bResizeHorizontal;
+    bool                    bResizeVertical;
+    bool                    bHasUI;
+    bool                    bReadOnly;
     SfxFrameDescriptor_Impl* pImp;
 
 public:
@@ -96,10 +96,10 @@ public:
                             { return aActualURL; }
     void                    SetActualURL( const INetURLObject& rURL );
     void                    SetActualURL( const OUString& rURL );
-    void                    SetReadOnly( sal_Bool bSet ) { bReadOnly = bSet;}
-    sal_Bool                    IsReadOnly(  ) const { return bReadOnly;}
-    void                    SetEditable( sal_Bool bSet );
-    sal_Bool                    IsEditable() const;
+    void                    SetReadOnly( bool bSet ) { bReadOnly = bSet;}
+    bool                    IsReadOnly(  ) const { return bReadOnly;}
+    void                    SetEditable( bool bSet );
+    bool                    IsEditable() const;
 
                             // Size
     void                    SetWidth( long n )
@@ -114,9 +114,9 @@ public:
                             { return nWidth; }
     SizeSelector            GetSizeSelector() const
                             { return eSizeSelector; }
-    sal_Bool                    IsResizable() const
+    bool                    IsResizable() const
                             { return bResizeHorizontal && bResizeVertical; }
-    void                    SetResizable( sal_Bool bRes )
+    void                    SetResizable( bool bRes )
                             { bResizeHorizontal = bResizeVertical = bRes; }
 
                             // FrameName
@@ -137,25 +137,25 @@ public:
 
                             // FrameBorder
     void                    SetWallpaper( const Wallpaper& rWallpaper );
-    sal_Bool                    HasFrameBorder() const;
+    bool                    HasFrameBorder() const;
 
-    sal_Bool                    IsFrameBorderOn() const
+    bool                    IsFrameBorderOn() const
                             { return ( nHasBorder & BORDER_YES ) != 0; }
 
-    void                    SetFrameBorder( sal_Bool bBorder )
+    void                    SetFrameBorder( bool bBorder )
                             {
                                 nHasBorder = bBorder ?
                                             BORDER_YES | BORDER_SET :
                                             BORDER_NO | BORDER_SET;
                             }
-    sal_Bool                    IsFrameBorderSet() const
+    bool                    IsFrameBorderSet() const
                             { return (nHasBorder & BORDER_SET) != 0; }
     void                    ResetBorder()
                             { nHasBorder = 0; }
 
-    sal_Bool                    HasUI() const
+    bool                    HasUI() const
                             { return bHasUI; }
-    void                    SetHasUI( sal_Bool bOn )
+    void                    SetHasUI( bool bOn )
                             { bHasUI = bOn; }
 
                             // Attribute for Splitwindow
@@ -165,7 +165,7 @@ public:
                             { nItemId = nId; }
 
                             // Copy for example for Views
-    SfxFrameDescriptor*     Clone( sal_Bool bWithIds = sal_True ) const;
+    SfxFrameDescriptor*     Clone( bool bWithIds = true ) const;
 };
 
 // No block to implement a =operator
@@ -182,13 +182,13 @@ struct SfxFrameProperties
     ScrollingMode                       eScroll;
     SizeSelector                        eSizeSelector;
     SizeSelector                        eSetSizeSelector;
-    sal_Bool                                bHasBorder;
-    sal_Bool                                bBorderSet;
-    sal_Bool                                bResizable;
-    sal_Bool                                bSetResizable;
-    sal_Bool                                bIsRootSet;
-    sal_Bool                                bIsInColSet;
-    sal_Bool                                bHasBorderInherited;
+    bool                                bHasBorder;
+    bool                                bBorderSet;
+    bool                                bResizable;
+    bool                                bSetResizable;
+    bool                                bIsRootSet;
+    bool                                bIsInColSet;
+    bool                                bHasBorderInherited;
     SfxFrameDescriptor*                 pFrame;
 
 private:
@@ -204,13 +204,13 @@ public:
                                               eScroll( ScrollingAuto ),
                                               eSizeSelector( SIZE_REL ),
                                               eSetSizeSelector( SIZE_REL ),
-                                              bHasBorder( sal_True ),
-                                              bBorderSet( sal_True ),
-                                              bResizable( sal_True ),
-                                              bSetResizable( sal_True ),
-                                              bIsRootSet( sal_False ),
-                                              bIsInColSet( sal_False ),
-                                              bHasBorderInherited( sal_True ),
+                                              bHasBorder( true ),
+                                              bBorderSet( true ),
+                                              bResizable( true ),
+                                              bSetResizable( true ),
+                                              bIsRootSet( false ),
+                                              bIsInColSet( false ),
+                                              bHasBorderInherited( true ),
                                               pFrame( 0 ) {}
 
                                         ~SfxFrameProperties() { delete pFrame; }

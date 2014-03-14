@@ -1263,7 +1263,7 @@ void SlideShow::StartFullscreenPresentation( )
         // new view shell--a prerequisite to process slot calls and initialize
         // its panes--a GrabFocus() has to be called later on.
         SfxFrame* pNewFrame = SfxFrame::Create( *mpDoc->GetDocSh(), *pWorkWindow, PRESENTATION_FACTORY_ID, true );
-        pNewFrame->SetPresentationMode(sal_True);
+        pNewFrame->SetPresentationMode(true);
 
         mpFullScreenViewShellBase = static_cast<ViewShellBase*>(pNewFrame->GetCurrentViewFrame()->GetViewShell());
         if(mpFullScreenViewShellBase != NULL)

@@ -135,7 +135,7 @@ public:
     void                    StartExecuteModal( const Link& rEndDialogHdl );
     inline ErrCode          GetError() const { return m_nError; }
     sal_Int16               GetDialogType() const;
-    sal_Bool                IsPasswordEnabled() const;
+    bool                    IsPasswordEnabled() const;
     OUString                  GetRealFilter() const;
 
     void                    SetTitle( const OUString&  rNewTitle );

@@ -2390,9 +2390,9 @@ short FileDialogHelper::GetDialogType() const
     return mpImp ? mpImp->m_nDialogType : 0;
 }
 
-sal_Bool FileDialogHelper::IsPasswordEnabled() const
+bool FileDialogHelper::IsPasswordEnabled() const
 {
-    return mpImp ? mpImp->isPasswordEnabled() : sal_False;
+    return mpImp && mpImp->isPasswordEnabled();
 }
 
 OUString FileDialogHelper::GetRealFilter() const

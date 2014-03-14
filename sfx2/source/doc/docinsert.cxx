@@ -98,7 +98,7 @@ SfxMedium* DocumentInserter::CreateMedium()
             pMatcher = new SfxFilterMatcher();
 
         const SfxFilter* pFilter = NULL;
-        sal_uInt32 nError = pMatcher->DetectFilter( *pMedium, &pFilter, sal_False );
+        sal_uInt32 nError = pMatcher->DetectFilter( *pMedium, &pFilter, false );
         if ( nError == ERRCODE_NONE && pFilter )
             pMedium->SetFilter( pFilter );
         else
@@ -128,7 +128,7 @@ SfxMediumList* DocumentInserter::CreateMediumList()
 
             SfxFilterMatcher aMatcher( m_sDocFactory );
             const SfxFilter* pFilter = NULL;
-            sal_uInt32 nError = aMatcher.DetectFilter( *pMedium, &pFilter, sal_False );
+            sal_uInt32 nError = aMatcher.DetectFilter( *pMedium, &pFilter, false );
             if ( nError == ERRCODE_NONE && pFilter )
                 pMedium->SetFilter( pFilter );
             else

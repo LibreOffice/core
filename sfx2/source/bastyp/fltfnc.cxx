@@ -410,12 +410,12 @@ sal_uInt32  SfxFilterMatcher::GuessFilterIgnoringContent(
 
 sal_uInt32  SfxFilterMatcher::GuessFilter( SfxMedium& rMedium, const SfxFilter**ppFilter, SfxFilterFlags nMust, SfxFilterFlags nDont ) const
 {
-    return GuessFilterControlDefaultUI( rMedium, ppFilter, nMust, nDont, sal_True );
+    return GuessFilterControlDefaultUI( rMedium, ppFilter, nMust, nDont, true );
 }
 
 
 
-sal_uInt32  SfxFilterMatcher::GuessFilterControlDefaultUI( SfxMedium& rMedium, const SfxFilter** ppFilter, SfxFilterFlags nMust, SfxFilterFlags nDont, sal_Bool /*bDefUI*/ ) const
+sal_uInt32  SfxFilterMatcher::GuessFilterControlDefaultUI( SfxMedium& rMedium, const SfxFilter** ppFilter, SfxFilterFlags nMust, SfxFilterFlags nDont, bool /*bDefUI*/ ) const
 {
     const SfxFilter* pOldFilter = *ppFilter;
 
@@ -509,7 +509,7 @@ sal_uInt32  SfxFilterMatcher::GuessFilterControlDefaultUI( SfxMedium& rMedium, c
 }
 
 
-sal_Bool SfxFilterMatcher::IsFilterInstalled_Impl( const SfxFilter* pFilter )
+bool SfxFilterMatcher::IsFilterInstalled_Impl( const SfxFilter* pFilter )
 {
     if ( pFilter->GetFilterFlags() & SFX_FILTER_MUSTINSTALL )
     {
@@ -535,14 +535,14 @@ sal_Bool SfxFilterMatcher::IsFilterInstalled_Impl( const SfxFilter* pFilter )
         OUString aText( SfxResId(STR_FILTER_CONSULT_SERVICE).toString() );
         aText = aText.replaceFirst( "$(FILTER)", pFilter->GetUIName() );
         InfoBox ( NULL, aText ).Execute();
-        return sal_False;
+        return false;
     }
     else
-        return sal_True;
+        return true;
 }
 
 
-sal_uInt32 SfxFilterMatcher::DetectFilter( SfxMedium& rMedium, const SfxFilter**ppFilter, sal_Bool /*bPlugIn*/, sal_Bool bAPI ) const
+sal_uInt32 SfxFilterMatcher::DetectFilter( SfxMedium& rMedium, const SfxFilter**ppFilter, bool /*bPlugIn*/, bool bAPI ) const
 /*  [Description]
 
     Here the Filter selection box is pulled up. Otherwise GuessFilter
@@ -825,7 +825,7 @@ const SfxFilter* SfxFilterMatcher::GetFilter4FilterName( const OUString& rName, 
                 }
             }
 
-            SfxFilterContainer::ReadSingleFilter_Impl( rName, xTypeCFG, xFilterCFG, sal_False );
+            SfxFilterContainer::ReadSingleFilter_Impl( rName, xTypeCFG, xFilterCFG, false );
         }
     }
 
@@ -931,7 +931,7 @@ void SfxFilterContainer::ReadSingleFilter_Impl(
     const OUString& rName,
     const uno::Reference< container::XNameAccess >& xTypeCFG,
     const uno::Reference< container::XNameAccess >& xFilterCFG,
-    sal_Bool bUpdate
+    bool bUpdate
     )
 {
     OUString sFilterName( rName );
@@ -1124,7 +1124,7 @@ void SfxFilterContainer::ReadSingleFilter_Impl(
     }
 }
 
-void SfxFilterContainer::ReadFilters_Impl( sal_Bool bUpdate )
+void SfxFilterContainer::ReadFilters_Impl( bool bUpdate )
 {
     SAL_INFO( "sfx.bastyp", "SfxFilterContainer::ReadFilters" );
     if ( !pFilterArr )
@@ -1157,7 +1157,7 @@ void SfxFilterContainer::ReadFilters_Impl( sal_Bool bUpdate )
                 // and change it back for all valid filters afterwards.
                 if( !rList.empty() )
                 {
-                    bUpdate = sal_True;
+                    bUpdate = true;
                     SfxFilter* pFilter;
                     for ( size_t i = 0, n = rList.size(); i < n; ++i )
                     {

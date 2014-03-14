@@ -4315,7 +4315,7 @@ Reference< frame::XController2 > SAL_CALL SfxBaseModel::createViewController(
     // some initial view settings, coming from our most recent attachResource call
     ::comphelper::NamedValueCollection aDocumentLoadArgs( getArgs() );
     if ( aDocumentLoadArgs.getOrDefault( "ViewOnly", false ) )
-        pViewFrame->GetFrame().SetMenuBarOn_Impl( sal_False );
+        pViewFrame->GetFrame().SetMenuBarOn_Impl( false );
 
     const sal_Int16 nPluginMode = aDocumentLoadArgs.getOrDefault( "PluginMode", sal_Int16( 0 ) );
     if ( nPluginMode == 1 )

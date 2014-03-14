@@ -316,7 +316,7 @@ SfxFrame::SfxFrame( Window& i_rContainerWindow, bool i_bHidden )
     pWindow->Show();
 }
 
-void SfxFrame::SetPresentationMode( sal_Bool bSet )
+void SfxFrame::SetPresentationMode( bool bSet )
 {
     if ( GetCurrentViewFrame() )
         GetCurrentViewFrame()->GetWindow().SetBorderStyle( bSet ? WINDOW_BORDER_NOBORDER : WINDOW_BORDER_NORMAL );
@@ -358,18 +358,18 @@ Window& SfxFrame::GetWindow() const
     return *pWindow;
 }
 
-sal_Bool SfxFrame::Close()
+bool SfxFrame::Close()
 {
     delete this;
-    return sal_True;
+    return true;
 }
 
-void SfxFrame::LockResize_Impl( sal_Bool bLock )
+void SfxFrame::LockResize_Impl( bool bLock )
 {
     pImp->bLockResize = bLock;
 }
 
-void SfxFrame::SetMenuBarOn_Impl( sal_Bool bOn )
+void SfxFrame::SetMenuBarOn_Impl( bool bOn )
 {
     pImp->bMenuBarOn = bOn;
 
@@ -393,7 +393,7 @@ void SfxFrame::SetMenuBarOn_Impl( sal_Bool bOn )
     }
 }
 
-sal_Bool SfxFrame::IsMenuBarOn_Impl() const
+bool SfxFrame::IsMenuBarOn_Impl() const
 {
     return pImp->bMenuBarOn;
 }
@@ -412,7 +412,7 @@ void SfxFrame::PrepareForDoc_Impl( SfxObjectShell& i_rDoc )
     // plugin mode
     sal_Int16 nPluginMode = aDocumentArgs.getOrDefault( "PluginMode", sal_Int16( 0 ) );
     if ( nPluginMode && ( nPluginMode != 2 ) )
-        SetInPlace_Impl( sal_True );
+        SetInPlace_Impl( true );
 }
 
 bool SfxFrame::IsMarkedHidden_Impl() const

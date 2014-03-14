@@ -121,17 +121,17 @@ SfxFrame::~SfxFrame()
     delete pImp;
 }
 
-sal_Bool SfxFrame::DoClose()
+bool SfxFrame::DoClose()
 {
     // Actually, one more PrepareClose is still needed!
-    sal_Bool bRet = sal_False;
+    bool bRet = false;
     if ( !pImp->bClosing )
     {
         pImp->bClosing = sal_True;
         CancelTransfers();
 
         // now close frame; it will be deleted if this call is successful, so don't use any members after that!
-        bRet = sal_True;
+        bRet = true;
         try
         {
             Reference< XCloseable > xCloseable  ( pImp->xFrame, UNO_QUERY );
@@ -149,7 +149,7 @@ sal_Bool SfxFrame::DoClose()
         catch( ::com::sun::star::util::CloseVetoException& )
         {
             pImp->bClosing = sal_False;
-            bRet = sal_False;
+            bRet = false;
         }
         catch( ::com::sun::star::lang::DisposedException& )
         {
@@ -159,9 +159,9 @@ sal_Bool SfxFrame::DoClose()
     return bRet;
 }
 
-sal_Bool SfxFrame::DoClose_Impl()
+bool SfxFrame::DoClose_Impl()
 {
-    sal_Bool bRet = sal_True;
+    bool bRet = true;
     SfxBindings* pBindings = NULL;
     if ( pImp->pCurrentViewFrame )
         pBindings = &pImp->pCurrentViewFrame->GetBindings();
@@ -181,18 +181,18 @@ sal_Bool SfxFrame::DoClose_Impl()
     return bRet;
 }
 
-sal_Bool SfxFrame::DocIsModified_Impl()
+bool SfxFrame::DocIsModified_Impl()
 {
     if ( pImp->pCurrentViewFrame && pImp->pCurrentViewFrame->GetObjectShell() &&
             pImp->pCurrentViewFrame->GetObjectShell()->IsModified() )
-        return sal_True;
+        return true;
     for( sal_uInt16 nPos = GetChildFrameCount(); nPos--; )
         if( (*pChildArr)[ nPos ]->DocIsModified_Impl() )
-            return sal_True;
-    return sal_False;
+            return true;
+    return false;
 }
 
-bool SfxFrame::PrepareClose_Impl( sal_Bool bUI )
+bool SfxFrame::PrepareClose_Impl( bool bUI )
 {
     bool nRet = true;
 
@@ -269,7 +269,7 @@ SfxFrame& SfxFrame::GetTopFrame() const
     return *const_cast< SfxFrame* >( pParent );
 }
 
-sal_Bool SfxFrame::IsClosing_Impl() const
+bool SfxFrame::IsClosing_Impl() const
 {
     return pImp->bClosing;
 }
@@ -284,7 +284,7 @@ sal_uInt16 SfxFrame::GetChildFrameCount() const
     return pChildArr ? pChildArr->size() : 0;
 }
 
-void SfxFrame::CancelTransfers( sal_Bool /*bCancelLoadEnv*/ )
+void SfxFrame::CancelTransfers( bool /*bCancelLoadEnv*/ )
 {
     if( !pImp->bInCancelTransfers )
     {
@@ -328,20 +328,20 @@ SfxDispatcher* SfxFrame::GetDispatcher_Impl() const
     return GetParentFrame()->GetDispatcher_Impl();
 }
 
-sal_Bool SfxFrame::IsAutoLoadLocked_Impl() const
+bool SfxFrame::IsAutoLoadLocked_Impl() const
 {
     // Its own Docucument is locked?
     const SfxObjectShell* pObjSh = GetCurrentDocument();
     if ( !pObjSh || !pObjSh->IsAutoLoadLocked() )
-        return sal_False;
+        return false;
 
     // Its children are locked?
     for ( sal_uInt16 n = GetChildFrameCount(); n--; )
         if ( !GetChildFrame(n)->IsAutoLoadLocked_Impl() )
-            return sal_False;
+            return false;
 
     // otherwise allow AutoLoad
-    return sal_True;
+    return true;
 }
 
 SfxObjectShell* SfxFrame::GetCurrentDocument() const
@@ -376,16 +376,16 @@ void SfxFrame::GetViewData_Impl()
     if( pViewFrame && pViewFrame->GetViewShell() )
     {
         const SfxMedium *pMed = GetCurrentDocument()->GetMedium();
-        sal_Bool bReadOnly = pMed->GetOpenMode() == SFX_STREAM_READONLY;
+        bool bReadOnly = pMed->GetOpenMode() == SFX_STREAM_READONLY;
         GetDescriptor()->SetReadOnly( bReadOnly );
 
         SfxItemSet *pSet = GetDescriptor()->GetArgs();
-        sal_Bool bGetViewData = sal_False;
+        bool bGetViewData = false;
         if ( GetController().is() && pSet->GetItemState( SID_VIEW_DATA ) != SFX_ITEM_SET )
         {
             ::com::sun::star::uno::Any aData = GetController()->getViewData();
             pSet->Put( SfxUsrAnyItem( SID_VIEW_DATA, aData ) );
-            bGetViewData = sal_True;
+            bGetViewData = true;
         }
 
         if ( pViewFrame->GetCurViewId() )
@@ -423,7 +423,7 @@ void SfxFrame::UpdateDescriptor( SfxObjectShell *pDoc )
     GetDescriptor()->SetActualURL( pMed->GetOrigURL() );
 
     SFX_ITEMSET_ARG( pMed->GetItemSet(), pItem, SfxBoolItem, SID_EDITDOC, false );
-    sal_Bool bEditable = ( !pItem || pItem->GetValue() );
+    bool bEditable = ( !pItem || pItem->GetValue() );
 
     GetDescriptor()->SetEditable( bEditable );
 
@@ -503,17 +503,17 @@ void SfxFrame::GetTargetList( TargetList& rList ) const
 
 
 
-sal_Bool SfxFrame::IsParent( SfxFrame *pFrame ) const
+bool SfxFrame::IsParent( SfxFrame *pFrame ) const
 {
     SfxFrame *pParent = pParentFrame;
     while ( pParent )
     {
         if ( pParent == pFrame )
-            return sal_True;
+            return true;
         pParent = pParent->pParentFrame;
     }
 
-    return sal_False;
+    return false;
 }
 
 void SfxFrame::InsertTopFrame_Impl( SfxFrame* pFrame )
@@ -663,7 +663,7 @@ bool SfxUnoFrameItem::PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 
     return ( rVal >>= m_xFrame );
 }
 
-SfxFrameIterator::SfxFrameIterator( const SfxFrame& rFrame, sal_Bool bRecur )
+SfxFrameIterator::SfxFrameIterator( const SfxFrame& rFrame, bool bRecur )
     : pFrame( &rFrame )
     , bRecursive( bRecur )
 {}
@@ -707,9 +707,9 @@ SfxFrame* SfxFrameIterator::NextSibling_Impl( SfxFrame& rPrev )
     return pRet;
 }
 
-sal_Bool SfxFrame::HasComponent() const
+bool SfxFrame::HasComponent() const
 {
-    return sal_False;
+    return false;
 }
 
 ::com::sun::star::uno::Reference< ::com::sun::star::frame::XController > SfxFrame::GetController() const
@@ -755,12 +755,12 @@ void SfxFrame::AppearWithUpdate()
         GetCurrentViewFrame()->GetDispatcher()->Update_Impl( true );
 }
 
-void SfxFrame::SetOwnsBindings_Impl( sal_Bool bSet )
+void SfxFrame::SetOwnsBindings_Impl( bool bSet )
 {
     pImp->bOwnsBindings = bSet;
 }
 
-sal_Bool SfxFrame::OwnsBindings_Impl() const
+bool SfxFrame::OwnsBindings_Impl() const
 {
     return pImp->bOwnsBindings;
 }
@@ -787,7 +787,7 @@ void SfxFrame::SetToolSpaceBorderPixel_Impl( const SvBorder& rBorder )
 
         if ( GetParentFrame() )
         {
-            sal_Bool bHasTools = rBorder.Left() != rBorder.Right() || rBorder.Top() != rBorder.Bottom();
+            bool bHasTools = rBorder.Left() != rBorder.Right() || rBorder.Top() != rBorder.Bottom();
             pF->GetWindow().SetBorderStyle( bHasTools ? WINDOW_BORDER_NORMAL : WINDOW_BORDER_NOBORDER );
         }
 
@@ -871,17 +871,17 @@ void SfxFrame::GrabFocusOnComponent_Impl()
         pFocusWindow->GrabFocus();
 }
 
-void SfxFrame::ReleasingComponent_Impl( sal_Bool bSet )
+void SfxFrame::ReleasingComponent_Impl( bool bSet )
 {
     pImp->bReleasingComponent = bSet;
 }
 
-sal_Bool SfxFrame::IsInPlace() const
+bool SfxFrame::IsInPlace() const
 {
     return pImp->bInPlace;
 }
 
-void SfxFrame::SetInPlace_Impl( sal_Bool bSet )
+void SfxFrame::SetInPlace_Impl( bool bSet )
 {
     pImp->bInPlace = bSet;
 }
