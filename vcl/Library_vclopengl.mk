@@ -27,7 +27,6 @@ $(eval $(call gb_Library_use_libraries,vclopengl,\
     comphelper \
     cppu \
     cppuhelper \
-    editeng \
     sal \
     vcl \
     $(gb_UWINAPI) \

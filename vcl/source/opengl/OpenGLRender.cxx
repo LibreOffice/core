@@ -32,7 +32,6 @@
 #include <com/sun/star/drawing/TextureProjectionMode.hpp>
 #include <com/sun/star/text/XText.hpp>
 #include <com/sun/star/uno/Any.hxx>
-#include <editeng/unoprnms.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/dibtools.hxx>
 
