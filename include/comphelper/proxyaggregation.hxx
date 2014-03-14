@@ -168,7 +168,7 @@ namespace comphelper
         virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& Source ) throw (::com::sun::star::uno::RuntimeException, std::exception);
 
         // XComponent
-        virtual void SAL_CALL dispose() throw( ::com::sun::star::uno::RuntimeException, std::exception );
+        virtual void SAL_CALL dispose() throw( ::com::sun::star::uno::RuntimeException, std::exception ) = 0;
 
     private:
         COMPHELPER_DLLPRIVATE OComponentProxyAggregationHelper( );                                                  // never implemented
