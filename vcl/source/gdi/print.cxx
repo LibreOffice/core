@@ -234,6 +234,42 @@ bool Printer::TransformReduceBitmapExTargetRange(
     return true;
 }
 
+void Printer::DrawOutDev( const Point& rDestPt, const Size& rDestSize,
+                               const Point& rSrcPt,  const Size& rSrcSize )
+{
+    (void) rDestPt;
+    (void) rDestSize;
+    (void) rSrcPt;
+    (void) rSrcSize;
+
+    DBG_ASSERT( false, "Don't use OutputDevice::DrawOutDev(...) with printer devices!" );
+}
+
+void Printer::DrawOutDev( const Point& rDestPt, const Size& rDestSize,
+                               const Point& rSrcPt,  const Size& rSrcSize,
+                               const OutputDevice& rOutDev )
+{
+    (void) rDestPt;
+    (void) rDestSize;
+    (void) rSrcPt;
+    (void) rSrcSize;
+    (void) rOutDev;
+
+    DBG_ASSERT( false, "Don't use OutputDevice::DrawOutDev(...) with printer devices!" );
+}
+
+void Printer::CopyArea( const Point& rDestPt,
+                        const Point& rSrcPt,  const Size& rSrcSize,
+                        sal_uInt16 nFlags )
+{
+    (void) rDestPt;
+    (void) rSrcPt;
+    (void) rSrcSize;
+    (void) nFlags;
+
+    DBG_ASSERT( false, "Don't use OutputDevice::CopyArea(...) with printer devices!" );
+}
+
 void Printer::SetPrinterOptions( const PrinterOptions& i_rOptions )
 {
     *mpPrinterOptions = i_rOptions;

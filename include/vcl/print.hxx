@@ -393,6 +393,16 @@ public:
 
     virtual bool                HasMirroredGraphics() const;
 
+    virtual void                DrawOutDev( const Point& rDestPt, const Size& rDestSize,
+                                            const Point& rSrcPt,  const Size& rSrcSize );
+    virtual void                DrawOutDev( const Point& rDestPt, const Size& rDestSize,
+                                            const Point& rSrcPt,  const Size& rSrcSize,
+                                            const OutputDevice& rOutDev );
+    virtual void                CopyArea( const Point& rDestPt,
+                                          const Point& rSrcPt,  const Size& rSrcSize,
+                                          sal_uInt16 nFlags = 0 );
+
+
     // implementation detail of PrintJob being asynchronous
     // not exported, not usable outside vcl
     static void SAL_DLLPRIVATE  ImplPrintJob( const boost::shared_ptr<vcl::PrinterController>& i_pController,
