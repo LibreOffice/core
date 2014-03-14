@@ -3763,10 +3763,6 @@ void Test::testMoveBlock()
     pNoteC1->SetText(aAddrC1, aHelloC1);
     ScAddress aAddrD1 (3, 0, 0);
 
-    std::cout << "B1 note before moveblock: " << m_pDoc->GetNote(aAddrB1)->GetText() << std::endl;
-    std::cout << "B1 note before moveblock pNoteB1: " << pNoteB1->GetText() << std::endl;
-    std::cout << "B1 note before moveblock should be: " << aHelloB1 << std::endl;
-
     // previous tests on cell note content are ok. this one fails !!! :(
     //CPPUNIT_ASSERT_MESSAGE("Note content in B1 before move block", m_pDoc->GetNote(aAddrB1)->GetText() == aHelloB1);
 
@@ -3774,8 +3770,6 @@ void Test::testMoveBlock()
     bool bCut = true;
     ScDocFunc& rDocFunc = getDocShell().GetDocFunc();
     bool bMoveDone = rDocFunc.MoveBlock(ScRange(0, 0 ,0 ,2 ,0 ,0), ScAddress(1, 0, 0), bCut, false, false, false);
-
-  //  std::cout << "B1 note after moveblock: " << m_pDoc->GetNote(aAddrB1)->GetText() << std::endl;
 
     CPPUNIT_ASSERT_MESSAGE("Cells not moved", bMoveDone);
 
@@ -3885,7 +3879,6 @@ void Test::testMergedCells()
     aMark.SetMarkArea(aRange);
     getDocShell().GetDocFunc().InsertCells(aRange, &aMark, INS_INSROWS, true, true);
     m_pDoc->ExtendMerge(1, 1, nEndCol, nEndRow, 0, false);
-    cout << nEndRow << nEndCol;
     CPPUNIT_ASSERT_MESSAGE("did not increase merge area", nEndCol == 3 && nEndRow == 4);
     m_pDoc->DeleteTab(0);
 }
@@ -4034,8 +4027,7 @@ void Test::testUpdateReference()
     m_pDoc->GetValue(2, 0, 2, aValue);
     OUString aFormula;
     m_pDoc->GetFormula(2,0,2, aFormula);
-    std::cout << "formel: " << OUStringToOString(aFormula, RTL_TEXTENCODING_UTF8).getStr() << std::endl;
-    std::cout << std::endl << aValue << std::endl;
+
     ASSERT_DOUBLES_EQUAL_MESSAGE("after inserting sheets formula does not return correct result", aValue, 3);
     m_pDoc->GetValue(2, 1, 2, aValue);
     ASSERT_DOUBLES_EQUAL_MESSAGE("after inserting sheets formula does not return correct result", aValue, 5);
