@@ -569,7 +569,7 @@ public:
     SC_DLLPUBLIC bool SetCodeName( SCTAB nTab, const OUString& rName );
     SC_DLLPUBLIC bool GetTable( const OUString& rName, SCTAB& rTab ) const;
 
-    std::vector<OUString> GetAllTableNames() const;
+    SC_DLLPUBLIC std::vector<OUString> GetAllTableNames() const;
 
     OUString   GetCopyTabName(SCTAB nTab) const;
 

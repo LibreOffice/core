@@ -87,6 +87,8 @@ public:
     void testCellBordersXLS();
     void testCellBordersXLSX();
 
+    void testSheetTabColorsXLSX();
+
     void testSharedFormulaExportXLS();
     void testSharedFormulaExportXLSX();
     void testSharedFormulaStringResultExportXLSX();
@@ -114,6 +116,7 @@ public:
     CPPUNIT_TEST(testSheetProtectionXLSX);
     CPPUNIT_TEST(testCellBordersXLS);
     CPPUNIT_TEST(testCellBordersXLSX);
+    CPPUNIT_TEST(testSheetTabColorsXLSX);
     CPPUNIT_TEST(testSharedFormulaExportXLS);
     CPPUNIT_TEST(testSharedFormulaExportXLSX);
     CPPUNIT_TEST(testSharedFormulaStringResultExportXLSX);
@@ -1087,6 +1090,71 @@ void ScExportTest::testCellBordersXLS()
 void ScExportTest::testCellBordersXLSX()
 {
     testExcelCellBorders(XLSX);
+}
+
+void ScExportTest::testSheetTabColorsXLSX()
+{
+    struct
+    {
+        bool checkContent( ScDocument* pDoc )
+        {
+
+            std::vector<OUString> aTabNames = pDoc->GetAllTableNames();
+
+            // green, red, blue, yellow (from left to right).
+            if (aTabNames.size() != 4)
+            {
+                cerr << "There should be exactly 4 sheets." << endl;
+                return false;
+            }
+
+            const char* pNames[] = { "Green", "Red", "Blue", "Yellow" };
+            for (size_t i = 0, n = SAL_N_ELEMENTS(pNames); i < n; ++i)
+            {
+                OUString aExpected = OUString::createFromAscii(pNames[i]);
+                if (aExpected != aTabNames[i])
+                {
+                    cerr << "incorrect sheet name: expected='" << aExpected <<"', actual='" << aTabNames[i] << "'" << endl;
+                    return false;
+                }
+            }
+
+            const ColorData aXclColors[] =
+            {
+                0x0000B050, // green
+                0x00FF0000, // red
+                0x000070C0, // blue
+                0x00FFFF00, // yellow
+            };
+
+            for (size_t i = 0, n = SAL_N_ELEMENTS(aXclColors); i < n; ++i)
+            {
+                if (aXclColors[i] != pDoc->GetTabBgColor(i).GetColor())
+                {
+                    cerr << "wrong sheet color for sheet " << i << endl;
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
+    } aTest;
+
+    ScDocShellRef xDocSh = loadDoc("sheet-tab-color.", XLSX);
+    CPPUNIT_ASSERT_MESSAGE("Failed to load file.", xDocSh.Is());
+    ScDocument* pDoc = xDocSh->GetDocument();
+    bool bRes = aTest.checkContent(pDoc);
+    CPPUNIT_ASSERT_MESSAGE("Failed on the initial content check.", bRes);
+
+    ScDocShellRef xDocSh2 = saveAndReload(xDocSh, XLSX);
+    CPPUNIT_ASSERT_MESSAGE("Failed to reload file.", xDocSh2.Is());
+    xDocSh->DoClose();
+    pDoc = xDocSh2->GetDocument();
+    bRes = aTest.checkContent(pDoc);
+    CPPUNIT_ASSERT_MESSAGE("Failed on the content check after reload.", bRes);
+
+    xDocSh2->DoClose();
 }
 
 void ScExportTest::testSharedFormulaExportXLS()
