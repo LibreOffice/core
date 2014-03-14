@@ -51,6 +51,14 @@ inline clang::QualType getReturnType(clang::FunctionDecl const & decl) {
 #endif
 }
 
+inline clang::QualType getReturnType(clang::FunctionProtoType const & type) {
+#if (__clang_major__ == 3 && __clang_minor__ >= 5) || __clang_major__ > 3
+    return type.getReturnType();
+#else
+    return type.getResultType();
+#endif
+}
+
 inline unsigned getNumParams(clang::FunctionProtoType const & type) {
 #if (__clang_major__ == 3 && __clang_minor__ >= 5) || __clang_major__ > 3
     return type.getNumParams();
