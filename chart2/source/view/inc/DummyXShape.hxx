@@ -13,6 +13,7 @@
 #include <cppuhelper/implbase6.hxx>
 
 #include <vcl/OpenGLRender.hxx>
+#include <vcl/OpenGLContext.hxx>
 
 #include <com/sun/star/drawing/XShape.hpp>
 #include <com/sun/star/drawing/XShapes.hpp>
@@ -59,33 +60,7 @@
 
 #include <vector>
 #include <map>
-#include <boost/scoped_ptr.hpp>
 #include <boost/unordered_map.hpp>
-
-#if defined( MACOSX )
-#include <OpenGL/gl.h>
-#include <OpenGL/glu.h>
-#else
-#include <GL/gl.h>
-#include <GL/glu.h>
-#endif
-
-#include <vcl/window.hxx>
-#include <vcl/syschild.hxx>
-#include <vcl/sysdata.hxx>
-
-#if defined( _WIN32 )
-    #include <GL/glu.h>
-    #include <GL/glext.h>
-    #include <GL/wglext.h>
-#elif defined( MACOSX )
-#elif defined( UNX )
-    #include <GL/glu.h>
-    #include <GL/glext.h>
-#endif
-
-class SystemWindow;
-class SystemChildWindow;
 
 using namespace com::sun::star;
 
@@ -431,15 +406,9 @@ public:
 
 private:
 
-    GLWindow GLWin;    /// Holds the information of our new child window
-
-    void createGLContext();
-
-    bool initWindow();
-    bool initOpengl();
-    boost::scoped_ptr<Window> mpWindow;
-    boost::scoped_ptr<SystemChildWindow> pWindow;
     TextCache maTextCache;
+    OpenGLContext m_aGLContext;
+
 public:
     OpenGLRender m_GLRender;
 };

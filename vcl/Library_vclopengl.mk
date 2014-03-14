@@ -35,13 +35,14 @@ $(eval $(call gb_Library_use_libraries,vclopengl,\
 
 $(eval $(call gb_Library_add_exception_objects,vclopengl,\
     vcl/source/opengl/OpenGLRender \
+    vcl/source/opengl/OpenGLContext \
 ))
 
 ifeq ($(strip $(OS)),WNT)
 $(eval $(call gb_Library_use_system_win32_libs,vclopengl,\
     opengl32 \
-	gdi32 \
-	glu32 \
+    gdi32 \
+    glu32 \
 ))
 else ifeq ($(OS),MACOSX)
 $(eval $(call gb_Library_use_system_darwin_frameworks,vclopengl,\
