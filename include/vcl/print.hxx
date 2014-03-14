@@ -223,18 +223,18 @@ private:
     Printer*                    mpNext;
     VirtualDevice*              mpDisplayDev;
     PrinterOptions*             mpPrinterOptions;
-    OUString                   maPrinterName;
-    OUString                   maDriver;
-    OUString                   maPrintFile;
-    OUString                   maJobName;
+    OUString                    maPrinterName;
+    OUString                    maDriver;
+    OUString                    maPrintFile;
+    OUString                    maJobName;
     JobSetup                    maJobSetup;
     Point                       maPageOffset;
     Size                        maPaperSize;
-    sal_uLong                       mnError;
-    sal_uInt16                      mnCurPage;
-    sal_uInt16                      mnCurPrintPage;
-    sal_uInt16                      mnPageQueueSize;
-    sal_uInt16                      mnCopyCount;
+    sal_uLong                   mnError;
+    sal_uInt16                  mnCurPage;
+    sal_uInt16                  mnCurPrintPage;
+    sal_uInt16                  mnPageQueueSize;
+    sal_uInt16                  mnCopyCount;
     bool                        mbDefPrinter;
     bool                        mbPrinting;
     bool                        mbJobActive;
@@ -265,9 +265,14 @@ private:
     SAL_DLLPRIVATE bool         EndJob();
     SAL_DLLPRIVATE              Printer( const Printer& rPrinter );
     SAL_DLLPRIVATE Printer&     operator =( const Printer& rPrinter );
+
 public:
     SAL_DLLPRIVATE void         ImplStartPage();
     SAL_DLLPRIVATE void         ImplEndPage();
+
+protected:
+    long                        ImplGetGradientStepCount( long nMinRect );
+
 public:
     void                        DrawGradientEx( OutputDevice* pOut, const Rectangle& rRect, const Gradient& rGradient );
 
