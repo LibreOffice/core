@@ -142,24 +142,24 @@ public:
 
     bool IsTransparent() const;
 
-    inline bool IsAnimated() const              { return maGrfObj.IsAnimated(); }
+    bool IsAnimated() const              { return maGrfObj.IsAnimated(); }
 
-    inline bool IsChgTwipSize() const           { return bChgTwipSize; }
-    inline bool IsChgTwipSizeFromPixel() const  { return bChgTwipSizeFromPixel; }
-    inline void SetChgTwipSize( bool b, bool bFromPx=false )
+    bool IsChgTwipSize() const           { return bChgTwipSize; }
+    bool IsChgTwipSizeFromPixel() const  { return bChgTwipSizeFromPixel; }
+    void SetChgTwipSize( bool b, bool bFromPx=false )
     {
         bChgTwipSize = b;
         bChgTwipSizeFromPixel = bFromPx;
     }
 
-    inline bool IsGraphicArrived() const        { return bGraphicArrived; }
-    inline void SetGraphicArrived( bool b )     { bGraphicArrived = b; }
+    bool IsGraphicArrived() const        { return bGraphicArrived; }
+    void SetGraphicArrived( bool b )     { bGraphicArrived = b; }
 
-    inline bool IsFrameInPaint() const          { return bFrameInPaint; }
-    inline void SetFrameInPaint( bool b )       { bFrameInPaint = b; }
+    bool IsFrameInPaint() const          { return bFrameInPaint; }
+    void SetFrameInPaint( bool b )       { bFrameInPaint = b; }
 
-    inline bool IsScaleImageMap() const         { return bScaleImageMap; }
-    inline void SetScaleImageMap( bool b )      { bScaleImageMap = b; }
+    bool IsScaleImageMap() const         { return bScaleImageMap; }
+    void SetScaleImageMap( bool b )      { bScaleImageMap = b; }
 
     /// in ndcopy.cxx
     virtual SwCntntNode* MakeCopy( SwDoc*, const SwNodeIndex& ) const;
@@ -185,8 +185,8 @@ public:
 
     /// Query link-data.
     bool IsGrfLink() const                  { return refLink.Is(); }
-    inline bool IsLinkedFile() const;
-    inline bool IsLinkedDDE() const;
+    bool IsLinkedFile() const;
+    bool IsLinkedDDE() const;
     ::sfx2::SvBaseLinkRef GetLink() const    { return refLink; }
     bool GetFileFilterNms( OUString* pFileNm, OUString* pFilterNm ) const;
     void ReleaseLink();
