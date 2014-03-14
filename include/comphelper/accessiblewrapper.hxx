@@ -201,9 +201,9 @@ namespace comphelper
         DECLARE_XTYPEPROVIDER( )
 
         // XAccessibleContext
-        virtual sal_Int32 SAL_CALL getAccessibleChildCount(  ) throw (::com::sun::star::uno::RuntimeException, std::exception);
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > SAL_CALL getAccessibleChild( sal_Int32 i ) throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException, std::exception);
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessibleRelationSet > SAL_CALL getAccessibleRelationSet(  ) throw (::com::sun::star::uno::RuntimeException, std::exception);
+        sal_Int32 baseGetAccessibleChildCount(  ) throw (::com::sun::star::uno::RuntimeException, std::exception);
+        ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > baseGetAccessibleChild( sal_Int32 i ) throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException, std::exception);
+        ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessibleRelationSet > baseGetAccessibleRelationSet(  ) throw (::com::sun::star::uno::RuntimeException, std::exception);
 
         // XAccessibleEventListener
         virtual void SAL_CALL notifyEvent( const ::com::sun::star::accessibility::AccessibleEventObject& aEvent ) throw (::com::sun::star::uno::RuntimeException, std::exception);

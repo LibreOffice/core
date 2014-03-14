@@ -433,13 +433,13 @@ namespace comphelper
     IMPLEMENT_FORWARD_XTYPEPROVIDER2( OAccessibleContextWrapperHelper, OComponentProxyAggregationHelper, OAccessibleContextWrapperHelper_Base )
 
 
-    sal_Int32 SAL_CALL OAccessibleContextWrapperHelper::getAccessibleChildCount(  ) throw (RuntimeException, std::exception)
+    sal_Int32 OAccessibleContextWrapperHelper::baseGetAccessibleChildCount(  ) throw (RuntimeException, std::exception)
     {
         return m_xInnerContext->getAccessibleChildCount();
     }
 
 
-    Reference< XAccessible > SAL_CALL OAccessibleContextWrapperHelper::getAccessibleChild( sal_Int32 i ) throw (IndexOutOfBoundsException, RuntimeException, std::exception)
+    Reference< XAccessible > OAccessibleContextWrapperHelper::baseGetAccessibleChild( sal_Int32 i ) throw (IndexOutOfBoundsException, RuntimeException, std::exception)
     {
         // get the child of the wrapped component
         Reference< XAccessible > xInnerChild = m_xInnerContext->getAccessibleChild( i );
@@ -447,7 +447,7 @@ namespace comphelper
     }
 
 
-    Reference< XAccessibleRelationSet > SAL_CALL OAccessibleContextWrapperHelper::getAccessibleRelationSet(  ) throw (RuntimeException, std::exception)
+    Reference< XAccessibleRelationSet > OAccessibleContextWrapperHelper::baseGetAccessibleRelationSet(  ) throw (RuntimeException, std::exception)
     {
         return m_xInnerContext->getAccessibleRelationSet();
             // TODO: if this relation set would contain relations to siblings, we would normally need
@@ -545,13 +545,13 @@ namespace comphelper
 
     sal_Int32 SAL_CALL OAccessibleContextWrapper::getAccessibleChildCount(  ) throw (RuntimeException, std::exception)
     {
-        return OAccessibleContextWrapperHelper::getAccessibleChildCount();
+        return baseGetAccessibleChildCount();
     }
 
 
     Reference< XAccessible > SAL_CALL OAccessibleContextWrapper::getAccessibleChild( sal_Int32 i ) throw (IndexOutOfBoundsException, RuntimeException, std::exception)
     {
-        return OAccessibleContextWrapperHelper::getAccessibleChild( i );
+        return baseGetAccessibleChild( i );
     }
 
 
@@ -587,7 +587,7 @@ namespace comphelper
 
     Reference< XAccessibleRelationSet > SAL_CALL OAccessibleContextWrapper::getAccessibleRelationSet(  ) throw (RuntimeException, std::exception)
     {
-        return OAccessibleContextWrapperHelper::getAccessibleRelationSet();
+        return baseGetAccessibleRelationSet();
     }
 
 

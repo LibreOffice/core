@@ -110,7 +110,7 @@ namespace accessibility
     Reference< XAccessibleRelationSet > SAL_CALL EditBrowseBoxTableCell::getAccessibleRelationSet() throw ( RuntimeException, std::exception )
     {
         SolarMethodGuard aGuard( *this );
-        return OAccessibleContextWrapperHelper::getAccessibleRelationSet( );
+        return baseGetAccessibleRelationSet( );
     }
 
     Reference<XAccessibleStateSet > SAL_CALL EditBrowseBoxTableCell::getAccessibleStateSet() throw ( RuntimeException, std::exception )
@@ -123,13 +123,13 @@ namespace accessibility
     sal_Int32 SAL_CALL EditBrowseBoxTableCell::getAccessibleChildCount(  ) throw (RuntimeException, std::exception)
     {
         SolarMethodGuard aGuard( *this );
-        return OAccessibleContextWrapperHelper::getAccessibleChildCount();
+        return baseGetAccessibleChildCount();
     }
 
     Reference< XAccessible > SAL_CALL EditBrowseBoxTableCell::getAccessibleChild( sal_Int32 i ) throw (::com::sun::star::lang::IndexOutOfBoundsException, RuntimeException, std::exception)
     {
         SolarMethodGuard aGuard( *this );
-        return OAccessibleContextWrapperHelper::getAccessibleChild( i );
+        return baseGetAccessibleChild( i );
     }
 
     sal_Int16 SAL_CALL EditBrowseBoxTableCell::getAccessibleRole() throw ( RuntimeException, std::exception )
