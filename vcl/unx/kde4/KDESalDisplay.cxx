@@ -51,6 +51,10 @@ void SalKDEDisplay::Yield()
     if( DispatchInternalEvent() )
         return;
 
+    // Prevent blocking from Drag'n'Drop events, which may have already have processed the event
+    if (XEventsQueued( pDisp_, QueuedAfterReading ) == 0)
+        return;
+
     DBG_ASSERT( static_cast<SalYieldMutex*>(GetSalData()->m_pInstance->GetYieldMutex())->GetThreadId() ==
                 osl::Thread::getCurrentIdentifier(),
                 "will crash soon since solar mutex not locked in SalKDEDisplay::Yield" );
