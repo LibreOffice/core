@@ -127,6 +127,7 @@ inline lru_cache< t_key, t_val, t_hashKey, t_equalKey >::lru_cache(
     ::std::size_t size ) SAL_THROW(())
     : m_size( 0 )
     , m_block( 0 )
+    , m_tail( 0 )
 {
     setSize( size );
 }
