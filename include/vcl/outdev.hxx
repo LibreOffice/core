@@ -798,6 +798,8 @@ public:
 protected:
                                 OutputDevice();
 
+    virtual long                ImplGetGradientStepCount( long nMinRect );
+
 private:
     typedef void ( OutputDevice::* FontUpdateHandler_t )( bool );
 
@@ -807,6 +809,7 @@ private:
     SAL_DLLPRIVATE void         ImplClearFontData( bool bNewFontLists );
     SAL_DLLPRIVATE void         ImplRefreshFontData( bool bNewFontLists );
     SAL_DLLPRIVATE static void  ImplUpdateFontDataForAllFrames( FontUpdateHandler_t pHdl, bool bNewFontLists );
+    SAL_DLLPRIVATE long         ImplGetGradientSteps( const Gradient& rGradient, const Rectangle& rRect, bool bMtf );
 
 public:
     virtual                     ~OutputDevice();
