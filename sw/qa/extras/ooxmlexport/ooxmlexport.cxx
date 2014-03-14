@@ -2719,6 +2719,17 @@ DECLARE_OOXMLEXPORT_TEST(test_OpeningBrace, "2120112713_OpenBrace.docx")
     assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/m:oMath[1]/m:d[1]/m:dPr[1]/m:begChr[1]","val","");
 }
 
+DECLARE_OOXMLEXPORT_TEST(test_FieldType, "99_Fields.docx")
+{
+    xmlDocPtr pXmlDoc = parseExport("word/document.xml");
+    if (!pXmlDoc)
+        return;
+    // Checking for three field types (BIBLIOGRAPHY, BIDIOUTLINE, CITATION) in sequence
+    assertXPath(pXmlDoc, "/w:document[1]/w:body[1]/w:p[2]/w:r[2]/w:instrText[1]",1);
+    assertXPath(pXmlDoc, "/w:document[1]/w:body[1]/w:p[5]/w:r[2]/w:instrText[1]",1);
+    assertXPath(pXmlDoc, "/w:document[1]/w:body[1]/w:p[6]/w:r[2]/w:instrText[1]",1);
+}
+
 DECLARE_OOXMLEXPORT_TEST(testComboBoxControl, "combobox-control.docx")
 {
     // check XML
