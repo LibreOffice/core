@@ -48,7 +48,6 @@
 #include "optdict.hxx"
 #include "dlgname.hxx"
 #include "multipat.hxx"
-#include "multifil.hxx"
 #include "cuihyperdlg.hxx"
 #include "cuifmsearch.hxx"
 #include "cuigrfflt.hxx"
@@ -136,7 +135,6 @@ IMPL_ABSTDLG_BASE(AbstractSvxObjectTitleDescDialog_Impl);
 
 IMPL_ABSTDLG_BASE(AbstractSvxMessDialog_Impl);
 IMPL_ABSTDLG_BASE(AbstractSvxMultiPathDialog_Impl);
-IMPL_ABSTDLG_BASE(AbstractSvxMultiFileDialog_Impl);
 IMPL_ABSTDLG_BASE(AbstractSvxHpLinkDlg_Impl);
 IMPL_ABSTDLG_BASE(AbstractFmSearchDialog_Impl);
 IMPL_ABSTDLG_BASE(AbstractGraphicFilterDialog_Impl);
@@ -808,46 +806,6 @@ void AbstractSvxMultiPathDialog_Impl::SetTitle( const OUString& rNewTitle )
     pDlg->SetText( rNewTitle );
 }
 
-OUString AbstractSvxMultiFileDialog_Impl::GetPath() const
-{
-    return pDlg->GetPath();
-}
-
-void AbstractSvxMultiFileDialog_Impl::SetPath( const OUString& rPath )
-{
-    pDlg->SetPath( rPath );
-}
-
-OUString AbstractSvxMultiFileDialog_Impl::GetFiles() const
-{
-    return pDlg->GetFiles();
-}
-
-void AbstractSvxMultiFileDialog_Impl::SetFiles( const OUString& rPath )
-{
-    pDlg->SetFiles( rPath );
-}
-
-void AbstractSvxMultiFileDialog_Impl::SetClassPathMode()
-{
-    pDlg->SetClassPathMode();
-}
-
-void AbstractSvxMultiFileDialog_Impl::EnableRadioButtonMode()
-{
-    pDlg->EnableRadioButtonMode();
-}
-
-void AbstractSvxMultiFileDialog_Impl::SetTitle( const OUString& rNewTitle )
-{
-    pDlg->SetText( rNewTitle );
-}
-
-void AbstractSvxMultiFileDialog_Impl::SetHelpId( const OString& aHelpId )
-{
-    pDlg->SetHelpId( aHelpId );
-}
-
 Window * AbstractSvxHpLinkDlg_Impl::GetWindow()
 {
     return (Window *)pDlg;
@@ -1454,16 +1412,10 @@ AbstractSvxMessDialog * AbstractDialogFactory_Impl::CreateSvxMessDialog( Window*
     return new AbstractSvxMessDialog_Impl( pDlg );
 }
 
-AbstractSvxMultiPathDialog * AbstractDialogFactory_Impl::CreateSvxMultiPathDialog( Window* pParent, bool bEmptyAllowed )
+AbstractSvxMultiPathDialog * AbstractDialogFactory_Impl::CreateSvxMultiPathDialog(Window* pParent)
 {
-    SvxMultiPathDialog* pDlg = new SvxMultiPathDialog( pParent, bEmptyAllowed );
+    SvxMultiPathDialog* pDlg = new SvxMultiPathDialog(pParent);
     return new AbstractSvxMultiPathDialog_Impl( pDlg );
-}
-
-AbstractSvxMultiFileDialog * AbstractDialogFactory_Impl::CreateSvxMultiFileDialog( Window* pParent, bool bEmptyAllowed )
-{
-    SvxMultiFileDialog* pDlg = new SvxMultiFileDialog( pParent, bEmptyAllowed );
-    return new AbstractSvxMultiFileDialog_Impl( pDlg );
 }
 
 AbstractSvxHpLinkDlg * AbstractDialogFactory_Impl::CreateSvxHpLinkDlg (Window* pParent,

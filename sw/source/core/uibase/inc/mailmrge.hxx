@@ -117,7 +117,6 @@ class SwMailMergeDlg : public SvxStandardDialog
 
     DECL_LINK( ButtonHdl, Button* pBtn );
     DECL_LINK(InsertPathHdl, void *);
-    DECL_LINK(AttachFileHdl, void *);
     DECL_LINK( OutputTypeHdl, RadioButton* pBtn );
     DECL_LINK( FilenameHdl, CheckBox* pBtn );
     DECL_LINK(ModifyHdl, void *);

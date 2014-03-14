@@ -42,7 +42,6 @@ class SvxObjectTitleDescDialog;
 
 class SvxMessDialog;
 class SvxMultiPathDialog;
-class SvxMultiFileDialog;
 class SvxHpLinkDlg;
 class FmSearchDialog;
 class Graphic;
@@ -402,23 +401,6 @@ class AbstractSvxMultiPathDialog_Impl :public AbstractSvxMultiPathDialog
     virtual void            SetTitle( const OUString& rNewTitle );
 };
 
-class SvxMultiFileDialog;
-class AbstractSvxMultiFileDialog_Impl :public AbstractSvxMultiFileDialog
-{
-    DECL_ABSTDLG_BASE(AbstractSvxMultiFileDialog_Impl,SvxMultiFileDialog)
-    virtual OUString        GetFiles() const ;
-    virtual void            SetFiles( const OUString& rPath ) ;
-    //from SvxMultiPathDialog
-    virtual OUString        GetPath() const;
-    virtual void            SetPath( const OUString& rPath );
-    virtual void            SetClassPathMode();
-    virtual void            EnableRadioButtonMode();
-    virtual void            SetTitle( const OUString& rNewTitle );
-    //From Class Window
-    virtual void            SetHelpId( const OString& ) ;
-
-};
-
 class SvxHpLinkDlg;
 class AbstractSvxHpLinkDlg_Impl :public AbstractSvxHpLinkDlg
 {
@@ -643,8 +625,7 @@ public:
     virtual AbstractSvxMessDialog *         CreateSvxMessDialog( Window* pParent, sal_uInt32 nResId,
                                                 const OUString& rText, const OUString& rDesc,
                                                 Image* pImg = NULL );
-    virtual AbstractSvxMultiPathDialog *    CreateSvxMultiPathDialog( Window* pParent, bool bEmptyAllowed = false );
-    virtual AbstractSvxMultiFileDialog *    CreateSvxMultiFileDialog( Window* pParent, bool bEmptyAllowed = false );
+    virtual AbstractSvxMultiPathDialog *    CreateSvxMultiPathDialog(Window* pParent);
     virtual AbstractSvxHpLinkDlg *          CreateSvxHpLinkDlg (Window* pParent,
                                                 SfxBindings* pBindings,
                                                 sal_uInt32 nResId);

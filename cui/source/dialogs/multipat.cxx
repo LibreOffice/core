@@ -40,27 +40,15 @@ using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::ui::dialogs;
 using namespace ::com::sun::star::uno;
 
-// struct MultiPath_Impl -------------------------------------------------
-
-struct MultiPath_Impl
-{
-    sal_Bool    bEmptyAllowed;
-    sal_Bool    bIsClassPathMode;
-    bool    bIsRadioButtonMode;
-
-    MultiPath_Impl( sal_Bool bAllowed ) :
-        bEmptyAllowed( bAllowed ), bIsClassPathMode( sal_False ), bIsRadioButtonMode( false )  {}
-};
-
 // class SvxMultiPathDialog ----------------------------------------------
 
 IMPL_LINK_NOARG(SvxMultiPathDialog, SelectHdl_Impl)
 {
-    sal_uLong nCount = pImpl->bIsRadioButtonMode ? aRadioLB.GetEntryCount() : aPathLB.GetEntryCount();
-    bool bIsSelected = pImpl->bIsRadioButtonMode
+    sal_uLong nCount = bIsRadioButtonMode ? aRadioLB.GetEntryCount() : aPathLB.GetEntryCount();
+    bool bIsSelected = bIsRadioButtonMode
         ? aRadioLB.FirstSelected() != NULL
         : aPathLB.GetSelectEntryPos() != LISTBOX_ENTRY_NOTFOUND;
-    sal_Bool bEnable = ( pImpl->bEmptyAllowed || nCount > 1 );
+    bool bEnable = nCount > 1;
     aDelBtn.Enable( bEnable && bIsSelected );
     return 0;
 }
@@ -91,7 +79,7 @@ IMPL_LINK_NOARG(SvxMultiPathDialog, AddHdl_Impl)
         OUString sInsPath;
         ::utl::LocalFileHelper::ConvertURLToSystemPath( aURL, sInsPath );
 
-        if ( pImpl->bIsRadioButtonMode )
+        if ( bIsRadioButtonMode )
         {
             sal_uLong nPos = aRadioLB.GetEntryPos( sInsPath, 1 );
             if ( 0xffffffff == nPos ) //See svtools/source/contnr/svtabbx.cxx SvTabListBox::GetEntryPos
@@ -132,7 +120,7 @@ IMPL_LINK_NOARG(SvxMultiPathDialog, AddHdl_Impl)
 
 IMPL_LINK_NOARG(SvxMultiPathDialog, DelHdl_Impl)
 {
-    if ( pImpl->bIsRadioButtonMode )
+    if ( bIsRadioButtonMode )
     {
         SvTreeListEntry* pEntry = aRadioLB.FirstSelected();
         delete (OUString*)pEntry->GetUserData();
@@ -176,7 +164,7 @@ IMPL_LINK_NOARG(SvxMultiPathDialog, DelHdl_Impl)
 
 
 
-SvxMultiPathDialog::SvxMultiPathDialog( Window* pParent, sal_Bool bEmptyAllowed ) :
+SvxMultiPathDialog::SvxMultiPathDialog( Window* pParent ) :
 
     ModalDialog( pParent, CUI_RES( RID_SVXDLG_MULTIPATH ) ),
 
@@ -190,7 +178,7 @@ SvxMultiPathDialog::SvxMultiPathDialog( Window* pParent, sal_Bool bEmptyAllowed 
     aOKBtn      ( this, CUI_RES( BTN_MULTIPATH_OK ) ),
     aCancelBtn  ( this, CUI_RES( BTN_MULTIPATH_CANCEL ) ),
     aHelpButton ( this, CUI_RES( BTN_MULTIPATH_HELP ) ),
-    pImpl       ( new MultiPath_Impl( bEmptyAllowed ) )
+    bIsRadioButtonMode( false )
 
 {
     static long aStaticTabs[]= { 2, 0, 12 };
@@ -214,8 +202,6 @@ SvxMultiPathDialog::SvxMultiPathDialog( Window* pParent, sal_Bool bEmptyAllowed 
     aDelBtn.SetAccessibleRelationMemberOf(&aPathLB);
 }
 
-
-
 SvxMultiPathDialog::~SvxMultiPathDialog()
 {
     sal_uInt16 nPos = aPathLB.GetEntryCount();
@@ -227,17 +213,14 @@ SvxMultiPathDialog::~SvxMultiPathDialog()
         SvTreeListEntry* pEntry = aRadioLB.GetEntry( nPos );
         delete (OUString*)pEntry->GetUserData();
     }
-    delete pImpl;
 }
-
-
 
 OUString SvxMultiPathDialog::GetPath() const
 {
     OUString sNewPath;
-    sal_Unicode cDelim = pImpl->bIsClassPathMode ? CLASSPATH_DELIMITER : SVT_SEARCHPATH_DELIMITER;
+    sal_Unicode cDelim = SVT_SEARCHPATH_DELIMITER;
 
-    if ( pImpl->bIsRadioButtonMode )
+    if ( bIsRadioButtonMode )
     {
         OUString sWritable;
         for ( sal_uInt16 i = 0; i < aRadioLB.GetEntryCount(); ++i )
@@ -272,7 +255,7 @@ OUString SvxMultiPathDialog::GetPath() const
 
 void SvxMultiPathDialog::SetPath( const OUString& rPath )
 {
-    sal_Unicode cDelim = pImpl->bIsClassPathMode ? CLASSPATH_DELIMITER : SVT_SEARCHPATH_DELIMITER;
+    sal_Unicode cDelim = SVT_SEARCHPATH_DELIMITER;
     sal_uInt16 nPos, nCount = comphelper::string::getTokenCount(rPath, cDelim);
 
     for ( sal_uInt16 i = 0; i < nCount; ++i )
@@ -282,7 +265,7 @@ void SvxMultiPathDialog::SetPath( const OUString& rPath )
         sal_Bool bIsSystemPath =
             ::utl::LocalFileHelper::ConvertURLToSystemPath( sPath, sSystemPath );
 
-        if ( pImpl->bIsRadioButtonMode )
+        if ( bIsRadioButtonMode )
         {
             OUString sEntry( '\t' );
             sEntry += (bIsSystemPath ? sSystemPath : OUString(sPath));
@@ -300,7 +283,7 @@ void SvxMultiPathDialog::SetPath( const OUString& rPath )
         }
     }
 
-    if ( pImpl->bIsRadioButtonMode && nCount > 0 )
+    if ( bIsRadioButtonMode && nCount > 0 )
     {
         SvTreeListEntry* pEntry = aRadioLB.GetEntry( nCount - 1 );
         if ( pEntry )
@@ -313,27 +296,9 @@ void SvxMultiPathDialog::SetPath( const OUString& rPath )
     SelectHdl_Impl( NULL );
 }
 
-
-
-void SvxMultiPathDialog::SetClassPathMode()
-{
-    pImpl->bIsClassPathMode = sal_True;
-    SetText( CUI_RES( RID_SVXSTR_ARCHIVE_TITLE ));
-    aPathFL.SetText( CUI_RES( RID_SVXSTR_ARCHIVE_HEADLINE ) );
-}
-
-
-
-sal_Bool SvxMultiPathDialog::IsClassPathMode() const
-{
-    return pImpl->bIsClassPathMode;
-}
-
-
-
 void SvxMultiPathDialog::EnableRadioButtonMode()
 {
-    pImpl->bIsRadioButtonMode = true;
+    bIsRadioButtonMode = true;
 
     aPathFL.Hide();
     aPathLB.Hide();

@@ -218,16 +218,12 @@
 // icon choice
 #define RID_SVXSTR_ICONCHOICEDLG_RESETBUT   (RID_SVX_START + 580)
 
-// SvxMultiFileDialog
-#define RID_SVXSTR_FILE_TITLE               (RID_SVX_START + 482)
-#define RID_SVXSTR_FILE_HEADLINE            (RID_SVX_START + 483)
-#define RID_SVXSTR_ARCHIVE_TITLE            (RID_SVX_START + 484)
-#define RID_SVXSTR_ARCHIVE_HEADLINE         (RID_SVX_START + 485)
-#define RID_SVXSTR_MULTIFILE_DBL_ERR        (RID_SVX_START + 486)
-
 // multi path dialog
 #define RID_SVXDLG_MULTIPATH                (RID_SVX_START + 201)
 #define RID_MULTIPATH_DBL_ERR               (RID_SVX_START + 207)
+#define RID_SVXSTR_ARCHIVE_TITLE            (RID_SVX_START + 484)
+#define RID_SVXSTR_ARCHIVE_HEADLINE         (RID_SVX_START + 485)
+#define RID_SVXSTR_MULTIFILE_DBL_ERR        (RID_SVX_START + 486)
 
 // script organizer
 #define RID_SVXSTR_DELQUERY                 (RID_SVX_START + 1027)

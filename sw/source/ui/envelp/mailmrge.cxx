@@ -325,11 +325,9 @@ SwMailMergeDlg::SwMailMergeDlg(Window* pParent, SwWrtShell& rShell,
     aOkBTN.SetClickHdl(aLk);
 
     aPathPB.SetClickHdl(LINK(this, SwMailMergeDlg, InsertPathHdl));
-    aAttachPB.SetClickHdl(LINK(this, SwMailMergeDlg, AttachFileHdl));
 
     aLk = LINK(this, SwMailMergeDlg, OutputTypeHdl);
     aPrinterRB.SetClickHdl(aLk);
-    aMailingRB.SetClickHdl(aLk);
     aFileRB.SetClickHdl(aLk);
 
     //#i63267# printing might be disabled
@@ -655,13 +653,6 @@ bool SwMailMergeDlg::ExecQryShell()
 
     if (aPrinterRB.IsChecked())
         nMergeType = DBMGR_MERGE_MAILMERGE;
-    else if (aMailingRB.IsChecked())
-    {
-        nMergeType = DBMGR_MERGE_MAILING;
-        pMgr->SetEMailColumn(aAddressFldLB.GetSelectEntry());
-        pMgr->SetSubject(aSubjectED.GetText());
-        pMgr->SetAttachment(aAttachED.GetText());
-    }
     else
     {
         nMergeType = static_cast< sal_uInt16 >( aSaveSingleDocRB.IsChecked() ?
@@ -777,24 +768,6 @@ IMPL_LINK_NOARG(SwMailMergeDlg, InsertPathHdl)
             aPathED.SetText(aURL.PathToFileName());
         else
             aPathED.SetText(aURL.GetFull());
-    }
-    return 0;
-}
-
-IMPL_LINK_NOARG(SwMailMergeDlg, AttachFileHdl)
-{
-    SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-    if(pFact)
-    {
-        AbstractSvxMultiFileDialog* pFileDlg = pFact->CreateSvxMultiFileDialog( this );
-        OSL_ENSURE(pFileDlg, "Dialogdiet fail!");
-        pFileDlg->SetFiles(aAttachED.GetText());
-        pFileDlg->SetHelpId(HID_FILEDLG_MAILMRGE2);
-
-        if (pFileDlg->Execute())
-            aAttachED.SetText(pFileDlg->GetFiles());
-
-        delete pFileDlg;
     }
     return 0;
 }

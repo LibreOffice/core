@@ -105,7 +105,6 @@ $(eval $(call gb_Library_add_exception_objects,cui,\
     cui/source/dialogs/insdlg \
     cui/source/dialogs/insrc \
     cui/source/dialogs/linkdlg \
-    cui/source/dialogs/multifil \
     cui/source/dialogs/multipat \
     cui/source/dialogs/newtabledlg \
     cui/source/dialogs/passwdomdlg \

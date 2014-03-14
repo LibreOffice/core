@@ -96,26 +96,22 @@ ModalDialog RID_SVXDLG_MULTIPATH
         Text [ en-US ] = "Path list" ;
     };
 };
+
 String RID_MULTIPATH_DBL_ERR
 {
     Text [ en-US ] = "The path %1 already exists." ;
 };
-String RID_SVXSTR_FILE_TITLE
-{
-    Text [ en-US ] = "Select files" ;
-};
-String RID_SVXSTR_FILE_HEADLINE
-{
-    Text [ en-US ] = "Files" ;
-};
+
 String RID_SVXSTR_ARCHIVE_TITLE
 {
     Text [ en-US ] = "Select Archives" ;
 };
+
 String RID_SVXSTR_ARCHIVE_HEADLINE
 {
     Text [ en-US ] = "Archives" ;
 };
+
 String RID_SVXSTR_MULTIFILE_DBL_ERR
 {
     Text [ en-US ] = "The file %1 already exists." ;

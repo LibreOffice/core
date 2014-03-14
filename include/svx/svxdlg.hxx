@@ -402,8 +402,7 @@ public:
                                             const OUString& rText, const OUString& rDesc,
                                             Image* pImg = NULL ) = 0;
 
-    virtual AbstractSvxMultiPathDialog *    CreateSvxMultiPathDialog( Window* pParent, bool bEmptyAllowed = false ) = 0 ;
-    virtual AbstractSvxMultiFileDialog *    CreateSvxMultiFileDialog( Window* pParent, bool bEmptyAllowed = false ) = 0 ;
+    virtual AbstractSvxMultiPathDialog *    CreateSvxMultiPathDialog(Window* pParent) = 0 ;
     virtual AbstractSvxHpLinkDlg *  CreateSvxHpLinkDlg (Window* pParent,
                                             SfxBindings* pBindings,
                                             sal_uInt32 nResId)=0;

@@ -36,10 +36,6 @@
 #define CLASSPATH_DELIMITER ';'
 #endif
 
-// forward ---------------------------------------------------------------
-
-struct MultiPath_Impl;
-
 // class SvxMultiPathDialog ----------------------------------------------
 
 class SvxMultiPathDialog : public ModalDialog
@@ -56,7 +52,7 @@ protected:
     CancelButton                aCancelBtn;
     HelpButton                  aHelpButton;
 
-    MultiPath_Impl* pImpl;
+    bool                        bIsRadioButtonMode;
 
     DECL_LINK(AddHdl_Impl, void *);
     DECL_LINK(DelHdl_Impl, void *);
@@ -64,13 +60,11 @@ protected:
     DECL_LINK( CheckHdl_Impl, svx::SvxRadioButtonListBox * );
 
 public:
-    SvxMultiPathDialog( Window* pParent, sal_Bool bEmptyAllowed = sal_False );
+    SvxMultiPathDialog(Window* pParent);
     ~SvxMultiPathDialog();
 
     OUString        GetPath() const;
     void            SetPath( const OUString& rPath );
-    void            SetClassPathMode();
-    sal_Bool        IsClassPathMode() const;
     void            EnableRadioButtonMode();
 };
 

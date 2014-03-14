@@ -124,7 +124,6 @@
 
 #define HID_FILEDLG_LOADTEMPLATE                                "SW_HID_FILEDLG_LOADTEMPLATE"
 #define HID_FILEDLG_MAILMRGE1                                   "SW_HID_FILEDLG_MAILMRGE1"
-#define HID_FILEDLG_MAILMRGE2                                   "SW_HID_FILEDLG_MAILMRGE2"
 #define HID_FILEDLG_FRMPAGE                                     "SW_HID_FILEDLG_FRMPAGE"
 #define HID_FILEDLG_SRCVIEW                                     "SW_HID_FILEDLG_SRCVIEW"
 #define HID_FILEDLG_WIZDOKU                                     "SW_HID_FILEDLG_WIZDOKU"
