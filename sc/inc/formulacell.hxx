@@ -203,6 +203,7 @@ public:
     void            SetDirtyAfterLoad();
     void ResetTableOpDirtyVar();
     void            SetTableOpDirty();
+    bool            SwapWithinGroup( ScFormulaCell *pSwap );
     bool            IsDirtyOrInTableOpDirty() const;
     bool GetDirty() const;
     void ResetDirty();

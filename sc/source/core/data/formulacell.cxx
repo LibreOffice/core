@@ -1977,15 +1977,55 @@ void ScFormulaCell::SetTableOpDirty()
     }
 }
 
-
 bool ScFormulaCell::IsDirtyOrInTableOpDirty() const
 {
     return bDirty || (bTableOpDirty && pDocument->IsInInterpreterTableOp());
 }
 
+/** Exchange formulae cell result data inside a formula
+    group if possible. Return true if both Formula cells
+    are inside the same formula group and the data has
+    been successfully exchanged; otherwise false - leaving
+    the formulae untouched.
+ */
+bool ScFormulaCell::SwapWithinGroup( ScFormulaCell *pSwap )
+{
+    if (!mxGroup || // ungrouped
+         mxGroup != pSwap->mxGroup)
+        return false;
+
+    if (pDocument != pSwap->pDocument ||
+        nSeenInIteration != pSwap->nSeenInIteration ||
+        eTempGrammar != pSwap->eTempGrammar ||
+        cMatrixFlag != pSwap->cMatrixFlag ||
+        nFormatType != pSwap->nFormatType ||
+        bDirty != pSwap->bDirty ||
+        bChanged != pSwap->bChanged ||
+        bRunning != pSwap->bRunning ||
+        bCompile != pSwap->bCompile ||
+        bSubTotal != pSwap->bSubTotal ||
+        bIsIterCell != pSwap->bIsIterCell ||
+        bInChangeTrack != pSwap->bInChangeTrack ||
+        bTableOpDirty != pSwap->bTableOpDirty ||
+        bNeedListening != pSwap->bNeedListening ||
+        mbNeedsNumberFormat != pSwap->mbNeedsNumberFormat ||
+        mbPostponedDirty != pSwap->mbPostponedDirty
+        )
+        return false; // we are paranoid for good reason.
+
+    // retain aPos as is.
+
+    // swap result value
+    ScFormulaResult aTemp(aResult);
+    aResult = pSwap->aResult;
+    pSwap->aResult.Assign(aTemp);
+
+    return true;
+}
+
 void ScFormulaCell::SetResultDouble( double n )
 {
-    aResult.SetDouble( n);
+    aResult.SetDouble(n);
 }
 
 void ScFormulaCell::SetResultToken( const formula::FormulaToken* pToken )

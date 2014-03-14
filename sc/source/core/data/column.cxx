@@ -871,18 +871,25 @@ void ScColumn::SwapRow(SCROW nRow1, SCROW nRow2)
                 std::advance(itf1, aPos1.second);
                 std::advance(itf2, aPos2.second);
 
-                // TODO: Find out a way to adjust references without cloning new instances.
-                boost::scoped_ptr<ScFormulaCell> pOld1(*itf1);
-                boost::scoped_ptr<ScFormulaCell> pOld2(*itf2);
-                DetachFormulaCell(aPos1, **itf1);
-                DetachFormulaCell(aPos2, **itf2);
-                ScFormulaCell* pNew1 = cloneFormulaCell(pDocument, ScAddress(nCol, nRow1, nTab), *pOld2);
-                ScFormulaCell* pNew2 = cloneFormulaCell(pDocument, ScAddress(nCol, nRow2, nTab), *pOld1);
-                *itf1 = pNew1;
-                *itf2 = pNew2;
+                // Is it an identical formula in the same group - if so,
+                // take a shortcut to swap the result data:
+                if(!(*itf1)->SwapWithinGroup(*itf2))
+                {
+                    // otherwise we need to really move the formula &
+                    // re-write dependencies etc.
+                    boost::scoped_ptr<ScFormulaCell> pOld1(*itf1);
+                    boost::scoped_ptr<ScFormulaCell> pOld2(*itf2);
 
-                ActivateNewFormulaCell(aPos1, *pNew1);
-                ActivateNewFormulaCell(aPos2, *pNew2);
+                    DetachFormulaCell(aPos1, **itf1);
+                    DetachFormulaCell(aPos2, **itf2);
+                    ScFormulaCell* pNew1 = cloneFormulaCell(pDocument, ScAddress(nCol, nRow1, nTab), *pOld2);
+                    ScFormulaCell* pNew2 = cloneFormulaCell(pDocument, ScAddress(nCol, nRow2, nTab), *pOld1);
+                    *itf1 = pNew1;
+                    *itf2 = pNew2;
+
+                    ActivateNewFormulaCell(aPos1, *pNew1);
+                    ActivateNewFormulaCell(aPos2, *pNew2);
+                }
             }
             break;
             default:
