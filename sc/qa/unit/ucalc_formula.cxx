@@ -1571,6 +1571,122 @@ void Test::testFormulaRefUpdateMove()
     m_pDoc->DeleteTab(0);
 }
 
+void Test::testFormulaRefUpdateMoveUndo()
+{
+    m_pDoc->InsertTab(0, "Test");
+
+    sc::AutoCalcSwitch aACSwitch(*m_pDoc, true); // turn auto calc on.
+
+    // Set values in A1:A4.
+    m_pDoc->SetValue(ScAddress(0,0,0), 1.0);
+    m_pDoc->SetValue(ScAddress(0,1,0), 2.0);
+    m_pDoc->SetValue(ScAddress(0,2,0), 3.0);
+    m_pDoc->SetValue(ScAddress(0,3,0), 4.0);
+
+    // Set formulas with single cell references in A6:A8.
+    m_pDoc->SetString(ScAddress(0,5,0), "=A1");
+    CPPUNIT_ASSERT_EQUAL(1.0, m_pDoc->GetValue(ScAddress(0,5,0)));
+    if (!checkFormula(*m_pDoc, ScAddress(0,5,0), "A1"))
+        CPPUNIT_FAIL("Wrong formula.");
+
+    m_pDoc->SetString(ScAddress(0,6,0), "=A1+A2+A3");
+    CPPUNIT_ASSERT_EQUAL(6.0, m_pDoc->GetValue(ScAddress(0,6,0)));
+    if (!checkFormula(*m_pDoc, ScAddress(0,6,0), "A1+A2+A3"))
+        CPPUNIT_FAIL("Wrong formula.");
+
+    m_pDoc->SetString(ScAddress(0,7,0), "=A1+A3+A4");
+    CPPUNIT_ASSERT_EQUAL(8.0, m_pDoc->GetValue(ScAddress(0,7,0)));
+    if (!checkFormula(*m_pDoc, ScAddress(0,7,0), "A1+A3+A4"))
+        CPPUNIT_FAIL("Wrong formula.");
+
+    // Set formulas with range references in A10:A12.
+    m_pDoc->SetString(ScAddress(0,9,0), "=SUM(A1:A2)");
+    CPPUNIT_ASSERT_EQUAL(3.0, m_pDoc->GetValue(ScAddress(0,9,0)));
+    if (!checkFormula(*m_pDoc, ScAddress(0,9,0), "SUM(A1:A2)"))
+        CPPUNIT_FAIL("Wrong formula.");
+
+    m_pDoc->SetString(ScAddress(0,10,0), "=SUM(A1:A3)");
+    CPPUNIT_ASSERT_EQUAL(6.0, m_pDoc->GetValue(ScAddress(0,10,0)));
+    if (!checkFormula(*m_pDoc, ScAddress(0,10,0), "SUM(A1:A3)"))
+        CPPUNIT_FAIL("Wrong formula.");
+
+    m_pDoc->SetString(ScAddress(0,11,0), "=SUM(A1:A4)");
+    CPPUNIT_ASSERT_EQUAL(10.0, m_pDoc->GetValue(ScAddress(0,11,0)));
+    if (!checkFormula(*m_pDoc, ScAddress(0,11,0), "SUM(A1:A4)"))
+        CPPUNIT_FAIL("Wrong formula.");
+
+    // Move A1:A3 to C1:C3. Note that A4 remains.
+    ScDocFunc& rFunc = getDocShell().GetDocFunc();
+    bool bMoved = rFunc.MoveBlock(ScRange(0,0,0,0,2,0), ScAddress(2,0,0), true, true, false, true);
+    CPPUNIT_ASSERT(bMoved);
+
+    CPPUNIT_ASSERT_EQUAL(1.0, m_pDoc->GetValue(ScAddress(0,5,0)));
+    if (!checkFormula(*m_pDoc, ScAddress(0,5,0), "C1"))
+        CPPUNIT_FAIL("Wrong formula.");
+
+    CPPUNIT_ASSERT_EQUAL(6.0, m_pDoc->GetValue(ScAddress(0,6,0)));
+    if (!checkFormula(*m_pDoc, ScAddress(0,6,0), "C1+C2+C3"))
+        CPPUNIT_FAIL("Wrong formula.");
+
+    CPPUNIT_ASSERT_EQUAL(8.0, m_pDoc->GetValue(ScAddress(0,7,0)));
+    if (!checkFormula(*m_pDoc, ScAddress(0,7,0), "C1+C3+A4"))
+        CPPUNIT_FAIL("Wrong formula.");
+
+    CPPUNIT_ASSERT_EQUAL(3.0, m_pDoc->GetValue(ScAddress(0,9,0)));
+    if (!checkFormula(*m_pDoc, ScAddress(0,9,0), "SUM(C1:C2)"))
+        CPPUNIT_FAIL("Wrong formula.");
+
+    CPPUNIT_ASSERT_EQUAL(6.0, m_pDoc->GetValue(ScAddress(0,10,0)));
+    if (!checkFormula(*m_pDoc, ScAddress(0,10,0), "SUM(C1:C3)"))
+        CPPUNIT_FAIL("Wrong formula.");
+
+    CPPUNIT_ASSERT_EQUAL(4.0, m_pDoc->GetValue(ScAddress(0,11,0)));
+    if (!checkFormula(*m_pDoc, ScAddress(0,11,0), "SUM(A1:A4)"))
+        CPPUNIT_FAIL("Wrong formula.");
+
+    // Undo the move.
+    SfxUndoManager* pUndoMgr = m_pDoc->GetUndoManager();
+    CPPUNIT_ASSERT(pUndoMgr);
+    pUndoMgr->Undo();
+
+    CPPUNIT_ASSERT_EQUAL(1.0, m_pDoc->GetValue(ScAddress(0,5,0)));
+    if (!checkFormula(*m_pDoc, ScAddress(0,5,0), "A1"))
+        CPPUNIT_FAIL("Wrong formula.");
+
+    CPPUNIT_ASSERT_EQUAL(6.0, m_pDoc->GetValue(ScAddress(0,6,0)));
+    if (!checkFormula(*m_pDoc, ScAddress(0,6,0), "A1+A2+A3"))
+        CPPUNIT_FAIL("Wrong formula.");
+
+    CPPUNIT_ASSERT_EQUAL(8.0, m_pDoc->GetValue(ScAddress(0,7,0)));
+    if (!checkFormula(*m_pDoc, ScAddress(0,7,0), "A1+A3+A4"))
+        CPPUNIT_FAIL("Wrong formula.");
+
+    CPPUNIT_ASSERT_EQUAL(3.0, m_pDoc->GetValue(ScAddress(0,9,0)));
+    if (!checkFormula(*m_pDoc, ScAddress(0,9,0), "SUM(A1:A2)"))
+        CPPUNIT_FAIL("Wrong formula.");
+
+    CPPUNIT_ASSERT_EQUAL(6.0, m_pDoc->GetValue(ScAddress(0,10,0)));
+    if (!checkFormula(*m_pDoc, ScAddress(0,10,0), "SUM(A1:A3)"))
+        CPPUNIT_FAIL("Wrong formula.");
+
+    CPPUNIT_ASSERT_EQUAL(10.0, m_pDoc->GetValue(ScAddress(0,11,0)));
+    if (!checkFormula(*m_pDoc, ScAddress(0,11,0), "SUM(A1:A4)"))
+        CPPUNIT_FAIL("Wrong formula.");
+
+    // Make sure the broadcasters are still valid by changing the value of A1.
+    m_pDoc->SetValue(ScAddress(0,0,0), 20);
+
+    CPPUNIT_ASSERT_EQUAL(20.0, m_pDoc->GetValue(ScAddress(0,5,0)));
+    CPPUNIT_ASSERT_EQUAL( 6.0, m_pDoc->GetValue(ScAddress(0,6,0)));
+    CPPUNIT_ASSERT_EQUAL(27.0, m_pDoc->GetValue(ScAddress(0,7,0)));
+
+    CPPUNIT_ASSERT_EQUAL(22.0, m_pDoc->GetValue(ScAddress(0,9,0)));
+    CPPUNIT_ASSERT_EQUAL(25.0, m_pDoc->GetValue(ScAddress(0,10,0)));
+    CPPUNIT_ASSERT_EQUAL(29.0, m_pDoc->GetValue(ScAddress(0,11,0)));
+
+    m_pDoc->DeleteTab(0);
+}
+
 void Test::testFormulaRefUpdateNamedExpression()
 {
     m_pDoc->InsertTab(0, "Formula");
