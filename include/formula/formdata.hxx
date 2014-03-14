@@ -55,7 +55,7 @@ public:
     inline void             SetEdFocus( sal_uInt16 nNew )               { nEdFocus = nNew; }
     inline void             SetUndoStr( const OUString& rNew )          { aUndoStr = rNew; }
     inline void             SetMatrixFlag(bool bNew)                    { bMatrix=bNew;}
-    inline void             SetUniqueId(const OString nNew)             { aUniqueId=nNew;}
+    inline void             SetUniqueId(const OString& nNew)            { aUniqueId=nNew;}
     inline void             SetSelection(const Selection& aSel)         { aSelection=aSel;}
 protected:
     void                Reset();

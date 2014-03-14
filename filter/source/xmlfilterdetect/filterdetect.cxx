@@ -75,7 +75,7 @@ using namespace com::sun::star::beans;
 
 namespace {
 
-OUString supportedByType( const OUString clipBoardFormat ,  const OUString resultString, const OUString checkType)
+OUString supportedByType( const OUString& clipBoardFormat,  const OUString& resultString, const OUString& checkType)
 {
     OUString sTypeName;
     if ( clipBoardFormat.match("doctype:") )

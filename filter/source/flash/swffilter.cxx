@@ -177,7 +177,7 @@ FlashExportFilter::FlashExportFilter(const Reference< XComponentContext > &rxCon
 
 
 
-OUString exportBackground(FlashExporter &aFlashExporter, Reference< XDrawPage > xDrawPage, OUString sPath, sal_uInt32 nPage, const char* suffix)
+OUString exportBackground(FlashExporter &aFlashExporter, Reference< XDrawPage > xDrawPage, const OUString& sPath, sal_uInt32 nPage, const char* suffix)
 {
     OUString filename = STR("slide") + VAL(nPage+1) + STR(suffix) + STR(".swf");
     OUString fullpath = sPath + STR("/") + filename;

@@ -125,7 +125,7 @@ public:
     }
     virtual ~TextField() {}
 protected:
-    void implGrowCharSet( SVGFilter::UCharSetMapMap & aTextFieldCharSets, OUString sText, OUString sTextFieldId ) const
+    void implGrowCharSet( SVGFilter::UCharSetMapMap & aTextFieldCharSets, const OUString& sText, const OUString& sTextFieldId ) const
     {
         const sal_Unicode * ustr = sText.getStr();
         sal_Int32 nLength = sText.getLength();

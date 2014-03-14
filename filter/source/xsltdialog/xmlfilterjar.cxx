@@ -102,15 +102,14 @@ static Reference< XInterface > addFolder( Reference< XInterface >& xRootFolder, 
     return xFolder;
 }
 
-static void _addFile( Reference< XInterface >& xRootFolder, Reference< XSingleServiceFactory >& xFactory, Reference< XInputStream >& xInput, OUString aName ) throw( Exception )
+static void _addFile( Reference< XInterface >& xRootFolder, Reference< XSingleServiceFactory >& xFactory, Reference< XInputStream >& xInput, const OUString& aName ) throw( Exception )
 {
-
     Reference< XActiveDataSink > xSink( xFactory->createInstance(), UNO_QUERY );
     Reference< XUnoTunnel > xTunnel( xSink, UNO_QUERY );
     if( xSink.is() && xTunnel.is())
     {
         Reference< XNameContainer > xNameContainer(xRootFolder, UNO_QUERY );
-        xNameContainer->insertByName(aName = encodeZipUri( aName ), makeAny(xTunnel));
+        xNameContainer->insertByName(encodeZipUri( aName ), makeAny(xTunnel));
         xSink->setInputStream( xInput );
     }
 }

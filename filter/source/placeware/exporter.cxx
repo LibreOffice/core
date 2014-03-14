@@ -172,7 +172,7 @@ static void encodeFile( osl::File& rSourceFile, Reference< XOutputStream >& xOut
     }
 }
 
-static OString convertString( OUString aInput )
+static OString convertString( const OUString& aInput )
 {
     OString aRet( aInput.getStr(), aInput.getLength(), RTL_TEXTENCODING_ASCII_US );
     aRet = aRet.replace( '\r', ' ' );
