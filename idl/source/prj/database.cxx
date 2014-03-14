@@ -34,7 +34,6 @@ SvIdlDataBase::SvIdlDataBase( const SvCommand& rCmd )
     , aPersStream( *IDLAPP->pClassMgr, NULL )
     , pIdTable( NULL )
 {
-    sSlotMapFile = rCmd.aSlotMapFile;
 }
 
 SvIdlDataBase::~SvIdlDataBase()

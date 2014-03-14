@@ -81,8 +81,6 @@ protected:
         aIFaceName = OString();
     }
 public:
-    OUString sSlotMapFile;
-
                 explicit SvIdlDataBase( const SvCommand& rCmd );
                 ~SvIdlDataBase();
     static sal_Bool IsBinaryFormat( SvStream & rInStm );
