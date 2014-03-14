@@ -562,9 +562,9 @@ IMAGE_SETEVENT:
 
     Size aGrfSz( 0, 0 );
     sal_Bool bSetTwipSize = sal_True;       // Twip-Size am Node setzen?
-    sal_Bool bChangeFrmSize = sal_False;    // Frame-Format nachtraeglich anpassen?
+    bool bChangeFrmSize = false;    // Frame-Format nachtraeglich anpassen?
     sal_Bool bRequestGrfNow = sal_False;
-    sal_Bool bSetScaleImageMap = sal_False;
+    bool bSetScaleImageMap = false;
     sal_uInt8 nPrcWidth = 0, nPrcHeight = 0;
 
     if( !nWidth || !nHeight )
@@ -580,7 +580,7 @@ IMAGE_SETEVENT:
         }
 
         // Die Groesse des Rahmens wird nachtraeglich gesetzt
-        bChangeFrmSize = sal_True;
+        bChangeFrmSize = true;
         aGrfSz = aTwipSz;
         if( !nWidth && !nHeight )
         {
@@ -657,7 +657,7 @@ IMAGE_SETEVENT:
             // die Grafik muss beim SetTwipSize skaliert werden, wenn
             // wir keine Groesse am Node gesetzt haben oder die Groesse
             // nicht der Grafikgroesse entsprach.
-            bSetScaleImageMap = sal_True;
+            bSetScaleImageMap = true;
         }
     }
 
@@ -733,13 +733,13 @@ IMAGE_SETEVENT:
         if( !sAltNm.isEmpty() )
             pGrfNd->SetTitle( sAltNm );
 
-        if( bSetTwipSize )
-            pGrfNd->SetTwipSize( aGrfSz );
+    if( bSetTwipSize )
+        pGrfNd->SetTwipSize( aGrfSz );
 
-        pGrfNd->SetChgTwipSize( bChangeFrmSize, bChangeFrmSize );
+    pGrfNd->SetChgTwipSize( bChangeFrmSize, bChangeFrmSize );
 
         if( bSetScaleImageMap )
-            pGrfNd->SetScaleImageMap( sal_True );
+            pGrfNd->SetScaleImageMap( true );
     }
 
     if( aAttrTab.pINetFmt )

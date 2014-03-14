@@ -1675,7 +1675,7 @@ uno::Any SwXFrame::getPropertyValue(const OUString& rPropertyName)
                         if ( aActSize.Width() == 0 && aActSize.Height() == 0 &&
                              pGrfNode->IsLinkedFile() )
                         {
-                            pGrfNode->SwapIn( sal_True );
+                            pGrfNode->SwapIn( true );
                             aActSize = pGrfNode->GetTwipSize();
                         }
                     }

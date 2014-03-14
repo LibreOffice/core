@@ -232,7 +232,7 @@ void SwNoTxtFrm::Paint(SwRect const& rRect, SwPrintData const*const) const
     SwNoTxtNode& rNoTNd = *(SwNoTxtNode*)GetNode();
     SwGrfNode* pGrfNd = rNoTNd.GetGrfNode();
     if( pGrfNd )
-        pGrfNd->SetFrameInPaint( sal_True );
+        pGrfNd->SetFrameInPaint( true );
 
     // #i13147# - add 2nd parameter with value <sal_True> to
     // method call <FindFlyFrm().GetContour(..)> to indicate that it is called
@@ -287,7 +287,7 @@ void SwNoTxtFrm::Paint(SwRect const& rRect, SwPrintData const*const) const
         // If it's not visible, simply delete the given Area
         lcl_ClearArea( *this, *pSh->GetOut(), aPaintArea, SwRect() );
     if( pGrfNd )
-        pGrfNd->SetFrameInPaint( sal_False );
+        pGrfNd->SetFrameInPaint( false );
 
     pOut->Pop();
     SfxProgress::LeaveLock();

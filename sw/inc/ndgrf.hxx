@@ -42,18 +42,18 @@ class SW_DLLPUBLIC SwGrfNode: public SwNoTxtNode
     ::sfx2::SvBaseLinkRef refLink;       ///< If graphics only as link then pointer is set.
     Size nGrfSize;
     OUString aLowResGrf;                   ///< HTML: LowRes graphics (substitute until regular HighRes graphics is loaded).
-    sal_Bool bInSwapIn              :1;
+    bool bInSwapIn              :1;
 
-    sal_Bool bGraphicArrived        :1;
-    sal_Bool bChgTwipSize           :1;
-    sal_Bool bChgTwipSizeFromPixel  :1;
-    sal_Bool bFrameInPaint          :1; ///< To avoid Start-/EndActions in Paint via SwapIn.
-    sal_Bool bScaleImageMap         :1; ///< Scale image map in SetTwipSize.
+    bool bGraphicArrived        :1;
+    bool bChgTwipSize           :1;
+    bool bChgTwipSizeFromPixel  :1;
+    bool bFrameInPaint          :1; ///< To avoid Start-/EndActions in Paint via SwapIn.
+    bool bScaleImageMap         :1; ///< Scale image map in SetTwipSize.
 
     boost::shared_ptr< SwAsyncRetrieveInputStreamThreadConsumer > mpThreadConsumer;
     bool mbLinkedInputStreamReady;
     com::sun::star::uno::Reference<com::sun::star::io::XInputStream> mxInputStream;
-    sal_Bool mbIsStreamReadOnly;
+    bool mbIsStreamReadOnly;
 
     SwGrfNode( const SwNodeIndex& rWhere,
                const OUString& rGrfName, const OUString& rFltName,
@@ -71,8 +71,8 @@ class SW_DLLPUBLIC SwGrfNode: public SwNoTxtNode
                SwAttrSet* pAutoAttr = 0 );
 
     void InsertLink( const OUString& rGrfName, const OUString& rFltName );
-    sal_Bool ImportGraphic( SvStream& rStrm );
-    sal_Bool HasStreamName() const { return maGrfObj.HasUserData(); }
+    bool ImportGraphic( SvStream& rStrm );
+    bool HasStreamName() const { return maGrfObj.HasUserData(); }
     /** adjust return type and rename method to
        indicate that its an private one. */
 
@@ -140,40 +140,44 @@ public:
     virtual Size GetTwipSize() const;
     void SetTwipSize( const Size& rSz );
 
-    sal_Bool IsTransparent() const;
+    bool IsTransparent() const;
 
-    inline sal_Bool IsAnimated() const              { return maGrfObj.IsAnimated(); }
+    inline bool IsAnimated() const              { return maGrfObj.IsAnimated(); }
 
-    inline sal_Bool IsChgTwipSize() const           { return bChgTwipSize; }
-    inline sal_Bool IsChgTwipSizeFromPixel() const  { return bChgTwipSizeFromPixel; }
-    inline void SetChgTwipSize( sal_Bool b, sal_Bool bFromPx=sal_False )        { bChgTwipSize = b; bChgTwipSizeFromPixel = bFromPx; }
+    inline bool IsChgTwipSize() const           { return bChgTwipSize; }
+    inline bool IsChgTwipSizeFromPixel() const  { return bChgTwipSizeFromPixel; }
+    inline void SetChgTwipSize( bool b, bool bFromPx=false )
+    {
+        bChgTwipSize = b;
+        bChgTwipSizeFromPixel = bFromPx;
+    }
 
-    inline sal_Bool IsGraphicArrived() const         { return bGraphicArrived; }
-    inline void SetGraphicArrived( sal_Bool b )      { bGraphicArrived = b; }
+    inline bool IsGraphicArrived() const        { return bGraphicArrived; }
+    inline void SetGraphicArrived( bool b )     { bGraphicArrived = b; }
 
-    inline sal_Bool IsFrameInPaint() const          { return bFrameInPaint; }
-    inline void SetFrameInPaint( sal_Bool b )       { bFrameInPaint = b; }
+    inline bool IsFrameInPaint() const          { return bFrameInPaint; }
+    inline void SetFrameInPaint( bool b )       { bFrameInPaint = b; }
 
-    inline sal_Bool IsScaleImageMap() const         { return bScaleImageMap; }
-    inline void SetScaleImageMap( sal_Bool b )      { bScaleImageMap = b; }
+    inline bool IsScaleImageMap() const         { return bScaleImageMap; }
+    inline void SetScaleImageMap( bool b )      { bScaleImageMap = b; }
 
     /// in ndcopy.cxx
     virtual SwCntntNode* MakeCopy( SwDoc*, const SwNodeIndex& ) const;
 
     /** Re-read in case graphic was not OK. The current one
        gets replaced by the new one. */
-    sal_Bool ReRead( const OUString& rGrfName, const OUString& rFltName,
+    bool ReRead( const OUString& rGrfName, const OUString& rFltName,
                  const Graphic* pGraphic = 0,
                  const GraphicObject* pGrfObj = 0,
-                 sal_Bool bModify = sal_True );
+                 bool bModify = true );
     /// Loading of graphic immediately before displaying.
-    short SwapIn( sal_Bool bWaitForData = sal_False );
+    short SwapIn( bool bWaitForData = false );
     /// Remove graphic in order to free memory.
     short SwapOut();
     /// Access to storage stream-name.
     void SetStreamName( const OUString& r ) { maGrfObj.SetUserData( r ); }
     /// Is this node selected by any shell?
-    sal_Bool IsSelected() const;
+    bool IsSelected() const;
 
     /// Communicate to graphic that node is in Undo-range.
     virtual sal_Bool SavePersistentData();
@@ -199,7 +203,7 @@ public:
     void TriggerAsyncRetrieveInputStream();
     void ApplyInputStream(
         com::sun::star::uno::Reference<com::sun::star::io::XInputStream> xInputStream,
-        const sal_Bool bIsStreamReadOnly );
+        const bool bIsStreamReadOnly );
     void UpdateLinkWithInputStream();
     bool IsAsyncRetrieveInputStreamPossible() const;
 };

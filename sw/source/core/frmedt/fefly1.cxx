@@ -1662,7 +1662,7 @@ const Graphic *SwFEShell::GetGrfAtPos( const Point &rPt,
                 pNd->GetFileFilterNms( &rName, 0 );
                 if ( rName.isEmpty() )
                     rName = pFly->GetFmt()->GetName();
-                pNd->SwapIn( sal_True );
+                pNd->SwapIn( true );
                 return &pNd->GetGrf();
             }
         }

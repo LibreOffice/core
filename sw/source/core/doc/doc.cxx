@@ -1965,7 +1965,7 @@ void SwDoc::ReRead( SwPaM& rPam, const OUString& rGrfName,
                                                 GetMirrorGrf().GetValue() )
             pGrfNd->SetAttr( SwMirrorGrf() );
 
-        pGrfNd->ReRead( rGrfName, rFltName, pGraphic, pGrafObj, sal_True );
+        pGrfNd->ReRead( rGrfName, rFltName, pGraphic, pGrafObj, true );
         SetModified();
     }
 }

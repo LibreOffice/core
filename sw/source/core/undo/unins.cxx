@@ -815,13 +815,13 @@ void SwUndoReRead::SetAndSave(::sw::UndoRedoContext & rContext)
 
     if( pOldNm )
     {
-        pGrfNd->ReRead( *pOldNm, pFltr ? *pFltr : OUString(), 0, 0, sal_True );
+        pGrfNd->ReRead( *pOldNm, pFltr ? *pFltr : OUString(), 0, 0, true );
         delete pOldNm;
         delete pOldFltr;
     }
     else
     {
-        pGrfNd->ReRead( OUString(), OUString(), pOldGrf, 0, sal_True );
+        pGrfNd->ReRead( OUString(), OUString(), pOldGrf, 0, true );
         delete pOldGrf;
     }
 
@@ -852,7 +852,7 @@ void SwUndoReRead::SaveGraphicData( const SwGrfNode& rGrfNd )
     }
     else
     {
-        ((SwGrfNode&)rGrfNd).SwapIn( sal_True );
+        ((SwGrfNode&)rGrfNd).SwapIn( true );
         pGrf = new Graphic( rGrfNd.GetGrf() );
         pNm = pFltr = 0;
     }

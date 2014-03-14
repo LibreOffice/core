@@ -67,20 +67,20 @@ SwGrfNode::SwGrfNode(
     mpReplacementGraphic(0),
     // #i73788#
     mbLinkedInputStreamReady( false ),
-    mbIsStreamReadOnly( sal_False )
+    mbIsStreamReadOnly( false )
 {
     maGrfObj.SetSwapStreamHdl( LINK(this, SwGrfNode, SwapGraphic) );
     bInSwapIn = bChgTwipSize = bChgTwipSizeFromPixel =
-        bFrameInPaint = bScaleImageMap = sal_False;
+        bFrameInPaint = bScaleImageMap = false;
 
-    bGraphicArrived = sal_True;
+    bGraphicArrived = true;
 
     // fdo#50763 inline image has already been read into memory
     if (rGrfName.startsWith("data:")) {
         maGrfObj.SetGraphic( *pGraphic, rGrfName );
     }
     else {
-        ReRead(rGrfName,rFltName, pGraphic, 0, sal_False);
+        ReRead(rGrfName,rFltName, pGraphic, 0, false);
     }
 }
 
@@ -92,14 +92,14 @@ SwGrfNode::SwGrfNode( const SwNodeIndex & rWhere,
     mpReplacementGraphic(0),
     // #i73788#
     mbLinkedInputStreamReady( false ),
-    mbIsStreamReadOnly( sal_False )
+    mbIsStreamReadOnly( false )
 {
     maGrfObj.SetSwapStreamHdl( LINK(this, SwGrfNode, SwapGraphic) );
     if( rGrfObj.HasUserData() && rGrfObj.IsSwappedOut() )
         maGrfObj.SetSwapState();
     bInSwapIn = bChgTwipSize = bChgTwipSizeFromPixel =
-        bFrameInPaint = bScaleImageMap = sal_False;
-    bGraphicArrived = sal_True;
+        bFrameInPaint = bScaleImageMap = false;
+    bGraphicArrived = true;
 }
 
 /** Create new SW/G reader.
@@ -117,7 +117,7 @@ SwGrfNode::SwGrfNode( const SwNodeIndex & rWhere,
     mpReplacementGraphic(0),
     // #i73788#
     mbLinkedInputStreamReady( false ),
-    mbIsStreamReadOnly( sal_False )
+    mbIsStreamReadOnly( false )
 {
     maGrfObj.SetSwapStreamHdl( LINK(this, SwGrfNode, SwapGraphic) );
 
@@ -125,8 +125,8 @@ SwGrfNode::SwGrfNode( const SwNodeIndex & rWhere,
     maGrfObj.SetGraphic( aGrf, rGrfName );
 
     bInSwapIn = bChgTwipSize = bChgTwipSizeFromPixel =
-        bFrameInPaint = bScaleImageMap = sal_False;
-    bGraphicArrived = sal_True;
+        bFrameInPaint = bScaleImageMap = false;
+    bGraphicArrived = true;
 
     InsertLink( rGrfName, rFltName );
     if( IsLinkedFile() )
@@ -141,12 +141,13 @@ SwGrfNode::SwGrfNode( const SwNodeIndex & rWhere,
     }
 }
 
-sal_Bool SwGrfNode::ReRead(
+bool SwGrfNode::ReRead(
     const OUString& rGrfName, const OUString& rFltName,
     const Graphic* pGraphic, const GraphicObject* pGrfObj,
-    sal_Bool bNewGrf )
+    bool bNewGrf )
 {
-    sal_Bool bReadGrf = sal_False, bSetTwipSize = sal_True;
+    bool bReadGrf = false;
+    bool bSetTwipSize = true;
     delete mpReplacementGraphic;
     mpReplacementGraphic = 0;
 
@@ -192,7 +193,7 @@ sal_Bool SwGrfNode::ReRead(
         {
             maGrfObj.SetGraphic( *pGraphic, rGrfName );
             onGraphicChanged();
-            bReadGrf = sal_True;
+            bReadGrf = true;
         }
         else if( pGrfObj )
         {
@@ -201,7 +202,7 @@ sal_Bool SwGrfNode::ReRead(
                 maGrfObj.SetSwapState();
             maGrfObj.SetLink( rGrfName );
             onGraphicChanged();
-            bReadGrf = sal_True;
+            bReadGrf = true;
         }
         else
         {
@@ -225,7 +226,7 @@ sal_Bool SwGrfNode::ReRead(
                 }
             }
             onGraphicChanged();
-            bSetTwipSize = sal_False;
+            bSetTwipSize = false;
         }
     }
     else if( pGraphic && rGrfName.isEmpty() )
@@ -236,7 +237,7 @@ sal_Bool SwGrfNode::ReRead(
 
         maGrfObj.SetGraphic( *pGraphic );
         onGraphicChanged();
-        bReadGrf = sal_True;
+        bReadGrf = true;
     }
     else if( pGrfObj && rGrfName.isEmpty() )
     {
@@ -248,11 +249,11 @@ sal_Bool SwGrfNode::ReRead(
         onGraphicChanged();
         if( pGrfObj->HasUserData() && pGrfObj->IsSwappedOut() )
             maGrfObj.SetSwapState();
-        bReadGrf = sal_True;
+        bReadGrf = true;
     }
     // Was the graphic already loaded?
     else if( !bNewGrf && GRAPHIC_NONE != maGrfObj.GetType() )
-        return sal_True;
+        return true;
     else
     {
         if( HasStreamName() )
@@ -267,7 +268,7 @@ sal_Bool SwGrfNode::ReRead(
             {
                 maGrfObj.SetGraphic( *pGraphic, rGrfName );
                 onGraphicChanged();
-                bReadGrf = sal_True;
+                bReadGrf = true;
                 // create connection without update, as we have the graphic
                 ((SwBaseLink*)&refLink)->Connect();
             }
@@ -276,7 +277,7 @@ sal_Bool SwGrfNode::ReRead(
                 maGrfObj = *pGrfObj;
                 maGrfObj.SetLink( rGrfName );
                 onGraphicChanged();
-                bReadGrf = sal_True;
+                bReadGrf = true;
                 // create connection without update, as we have the graphic
                 ((SwBaseLink*)&refLink)->Connect();
             }
@@ -455,7 +456,7 @@ Size SwGrfNode::GetTwipSize() const
     return nGrfSize;
 }
 
-sal_Bool SwGrfNode::ImportGraphic( SvStream& rStrm )
+bool SwGrfNode::ImportGraphic( SvStream& rStrm )
 {
     Graphic aGraphic;
     const OUString aURL(maGrfObj.GetUserData());
@@ -468,10 +469,10 @@ sal_Bool SwGrfNode::ImportGraphic( SvStream& rStrm )
         maGrfObj.SetGraphic( aGraphic );
         maGrfObj.SetUserData( aURL );
         onGraphicChanged();
-        return sal_True;
+        return true;
     }
 
-    return sal_False;
+    return false;
 }
 
 namespace
@@ -520,13 +521,13 @@ StreamAndStorageNames lcl_GetStreamStorageNames( const OUString sUserData )
  *          1 if reading successful,
  *          0 if not loaded
  */
-short SwGrfNode::SwapIn( sal_Bool bWaitForData )
+short SwGrfNode::SwapIn( bool bWaitForData )
 {
     if( bInSwapIn ) // not recursively!
         return short(!maGrfObj.IsSwappedOut());
 
     short nRet = 0;
-    bInSwapIn = sal_True;
+    bInSwapIn = true;
     SwBaseLink* pLink = (SwBaseLink*)(::sfx2::SvBaseLink*) refLink;
 
     if( pLink )
@@ -597,7 +598,7 @@ short SwGrfNode::SwapIn( sal_Bool bWaitForData )
         if( !nGrfSize.Width() && !nGrfSize.Height() )
             SetTwipSize( ::GetGraphicSizeTwip( maGrfObj.GetGraphic(), 0 ) );
     }
-    bInSwapIn = sal_False;
+    bInSwapIn = false;
     return nRet;
 }
 
@@ -715,7 +716,7 @@ void SwGrfNode::InsertLink( const OUString& rGrfName, const OUString& rFltName )
         }
         else
         {
-            sal_Bool bSync = rFltName == "SYNCHRON";
+            const bool bSync = rFltName == "SYNCHRON";
             refLink->SetSynchron( bSync );
             refLink->SetContentType( SOT_FORMATSTR_ID_SVXB );
 
@@ -737,10 +738,10 @@ void SwGrfNode::ReleaseLink()
         const bool bHasOriginalData(aLocalGraphic.IsLink());
 
         {
-            bInSwapIn = sal_True;
+            bInSwapIn = true;
             SwBaseLink* pLink = (SwBaseLink*)(::sfx2::SvBaseLink*) refLink;
-            pLink->SwapIn( sal_True, sal_True );
-            bInSwapIn = sal_False;
+            pLink->SwapIn( true, true );
+            bInSwapIn = false;
         }
 
         getIDocumentLinksAdministration()->GetLinkManager().Remove( refLink );
@@ -790,7 +791,7 @@ void SwGrfNode::SetTwipSize( const Size& rSz )
         ScaleImageMap();
 
         // do not re-scale Image-Map
-        SetScaleImageMap( sal_False );
+        SetScaleImageMap( false );
     }
 }
 
@@ -1029,9 +1030,9 @@ IMPL_LINK( SwGrfNode, SwapGraphic, GraphicObject*, pGrfObj )
             // then make it by your self
             if( !bInSwapIn )
             {
-                bool bIsModifyLocked = IsModifyLocked();
+                const bool bIsModifyLocked = IsModifyLocked();
                 LockModify();
-                SwapIn( sal_False );
+                SwapIn( false );
                 if( !bIsModifyLocked )
                     UnlockModify();
             }
@@ -1156,18 +1157,15 @@ GraphicAttr& SwGrfNode::GetGraphicAttr( GraphicAttr& rGA,
     return rGA;
 }
 
-sal_Bool SwGrfNode::IsTransparent() const
+bool SwGrfNode::IsTransparent() const
 {
-    sal_Bool bRet = maGrfObj.IsTransparent();
-    if( !bRet ) // ask the attribut
-        bRet = 0 != GetSwAttrSet().GetTransparencyGrf().GetValue();
-
-    return bRet;
+    return maGrfObj.IsTransparent() ||
+        GetSwAttrSet().GetTransparencyGrf().GetValue() != 0;
 }
 
-sal_Bool SwGrfNode::IsSelected() const
+bool SwGrfNode::IsSelected() const
 {
-    sal_Bool bRet = sal_False;
+    bool bRet = false;
     const SwEditShell* pESh = GetDoc()->GetEditShell();
     if( pESh )
     {
@@ -1177,7 +1175,7 @@ sal_Bool SwGrfNode::IsSelected() const
             if( pV->ISA( SwEditShell ) && pN == &((SwCrsrShell*)pV)
                                 ->GetCrsr()->GetPoint()->nNode.GetNode() )
             {
-                bRet = sal_True;
+                bRet = true;
                 break;
             }
         }
@@ -1223,7 +1221,7 @@ bool SwGrfNode::IsLinkedInputStreamReady() const
 
 void SwGrfNode::ApplyInputStream(
     com::sun::star::uno::Reference<com::sun::star::io::XInputStream> xInputStream,
-    const sal_Bool bIsStreamReadOnly )
+    const bool bIsStreamReadOnly )
 {
     if ( IsLinkedFile() )
     {

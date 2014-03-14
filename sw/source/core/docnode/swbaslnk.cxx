@@ -125,9 +125,9 @@ static void lcl_CallModify( SwGrfNode& rGrfNd, SfxPoolItem& rItem )
     }
 
     bool bUpdate = false;
-    sal_Bool bGraphicArrived = sal_False;
+    bool bGraphicArrived = false;
     sal_Bool bGraphicPieceArrived = sal_False;
-    sal_Bool bDontNotify = sal_False;
+    bool bDontNotify = false;
     Size aGrfSz, aFrmFmtSz;
 
     if( pCntntNode->IsGrfNode() )
@@ -167,7 +167,7 @@ static void lcl_CallModify( SwGrfNode& rGrfNd, SfxPoolItem& rItem )
                 // If only a part arrives, but the size is not set
                 // we need to go through bGraphicArrived down there.
                 // Or else the graphic is painted at its definitive size
-                bGraphicArrived = sal_True;
+                bGraphicArrived = true;
                 bGraphicPieceArrived = sal_False;
             }
 
