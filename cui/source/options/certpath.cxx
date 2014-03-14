@@ -16,7 +16,6 @@
 #include <unotools/securityoptions.hxx>
 #include <cuires.hrc>
 #include "certpath.hxx"
-#include "certpath.hrc"
 #include "dialmgr.hxx"
 
 #include <com/sun/star/mozilla/MozillaBootstrap.hpp>
@@ -26,39 +25,37 @@
 
 using namespace ::com::sun::star;
 
-CertPathDialog::CertPathDialog( Window* pParent ) :
-     ModalDialog( pParent, CUI_RES( RID_SVXDLG_CERTPATH ) )
-    , m_aCertPathFL       ( this, CUI_RES( FL_CERTPATH ) )
-    , m_aCertPathFT       ( this, CUI_RES( FT_CERTPATH ) )
-    , m_aCertPathListContainer( this, CUI_RES( LB_CERTPATH ) )
-    , m_aCertPathList( m_aCertPathListContainer, WB_BORDER )
-    , m_aAddBtn           ( this, CUI_RES( PB_ADD ) )
-    , m_aButtonsFL       ( this, CUI_RES( FL_BUTTONS ) )
-    , m_aOKBtn           ( this, CUI_RES( PB_OK ) )
-    , m_aCancelBtn       ( this, CUI_RES( PB_CANCEL ) )
-    , m_aHelpBtn         ( this, CUI_RES( PB_HELP ) )
-    , m_sAddDialogText(CUI_RESSTR(STR_ADDDLGTEXT))
-    , m_sManual(CUI_RESSTR(STR_MANUAL))
+CertPathDialog::CertPathDialog(Window* pParent)
+    : ModalDialog(pParent, "CertDialog", "cui/ui/certdialog.ui")
 {
+    get(m_pOKBtn, "ok");
+    get(m_pAddBtn, "add");
+    get(m_pCertPathListContainer, "paths");
+    Size aSize(LogicToPixel(Size(210, 60), MAP_APPFONT));
+    m_pCertPathListContainer->set_width_request(aSize.Width());
+    m_pCertPathListContainer->set_height_request(aSize.Height());
+    m_pCertPathList =
+        new svx::SvxRadioButtonListBox(*m_pCertPathListContainer, 0);
+    m_sAddDialogText = get<FixedText>("certdir")->GetText();
+    m_sManual = get<FixedText>("manual")->GetText();
+
     static long aStaticTabs[]=
     {
         3, 0, 15, 75
     };
 
-    m_aCertPathList.SvSimpleTable::SetTabs( aStaticTabs );
+    m_pCertPathList->SvSimpleTable::SetTabs( aStaticTabs );
 
-    OUString sProfile(CUI_RESSTR(STR_PROFILE));
-    OUString sDirectory(CUI_RESSTR(STR_DIRECTORY));
+    OUString sProfile(get<FixedText>("profile")->GetText());
+    OUString sDirectory(get<FixedText>("dir")->GetText());
 
     OUStringBuffer sHeader;
     sHeader.append('\t').append(sProfile).append('\t').append(sDirectory);
-    m_aCertPathList.InsertHeaderEntry( sHeader.makeStringAndClear(), HEADERBAR_APPEND, HIB_LEFT );
-    m_aCertPathList.SetCheckButtonHdl( LINK( this, CertPathDialog, CheckHdl_Impl ) );
+    m_pCertPathList->InsertHeaderEntry( sHeader.makeStringAndClear(), HEADERBAR_APPEND, HIB_LEFT );
+    m_pCertPathList->SetCheckButtonHdl( LINK( this, CertPathDialog, CheckHdl_Impl ) );
 
-    m_aAddBtn.SetClickHdl( LINK( this, CertPathDialog, AddHdl_Impl ) );
-    m_aOKBtn.SetClickHdl( LINK( this, CertPathDialog, OKHdl_Impl ) );
-
-    FreeResource();
+    m_pAddBtn->SetClickHdl( LINK( this, CertPathDialog, AddHdl_Impl ) );
+    m_pOKBtn->SetClickHdl( LINK( this, CertPathDialog, OKHdl_Impl ) );
 
     try
     {
@@ -83,7 +80,7 @@ CertPathDialog::CertPathDialog( Window* pParent ) :
                 OUString sProfilePath = xMozillaBootstrap->getProfilePath( productTypes[i], profile );
                 OUStringBuffer sEntry;
                 sEntry.append('\t').appendAscii(productNames[i]).append(':').append(profile).append('\t').append(sProfilePath);
-                SvTreeListEntry *pEntry = m_aCertPathList.InsertEntry(sEntry.makeStringAndClear());
+                SvTreeListEntry *pEntry = m_pCertPathList->InsertEntry(sEntry.makeStringAndClear());
                 OUString* pCertPath = new OUString(sProfilePath);
                 pEntry->SetUserData(pCertPath);
             }
@@ -93,10 +90,10 @@ CertPathDialog::CertPathDialog( Window* pParent ) :
     {
     }
 
-    SvTreeListEntry *pEntry = m_aCertPathList.GetEntry(0);
+    SvTreeListEntry *pEntry = m_pCertPathList->GetEntry(0);
     if (pEntry)
     {
-        m_aCertPathList.SetCheckButtonState(pEntry, SV_BUTTON_CHECKED);
+        m_pCertPathList->SetCheckButtonState(pEntry, SV_BUTTON_CHECKED);
         HandleCheckEntry(pEntry);
     }
 
@@ -140,73 +137,74 @@ IMPL_LINK_NOARG(CertPathDialog, OKHdl_Impl)
 
 OUString CertPathDialog::getDirectory() const
 {
-    SvTreeListEntry* pEntry = m_aCertPathList.FirstSelected();
+    SvTreeListEntry* pEntry = m_pCertPathList->FirstSelected();
     void* pCertPath = pEntry ? pEntry->GetUserData() : NULL;
     return pCertPath ? *static_cast<OUString*>(pCertPath) : OUString();
 }
 
 CertPathDialog::~CertPathDialog()
 {
-    SvTreeListEntry* pEntry = m_aCertPathList.First();
+    SvTreeListEntry* pEntry = m_pCertPathList->First();
     while (pEntry)
     {
         OUString* pCertPath = static_cast<OUString*>(pEntry->GetUserData());
         delete pCertPath;
-        pEntry = m_aCertPathList.Next( pEntry );
+        pEntry = m_pCertPathList->Next( pEntry );
     }
+    delete m_pCertPathList;
 }
 
 IMPL_LINK( CertPathDialog, CheckHdl_Impl, SvSimpleTable *, pList )
 {
-    SvTreeListEntry* pEntry = pList ? m_aCertPathList.GetEntry(m_aCertPathList.GetCurMousePoint())
-                                : m_aCertPathList.FirstSelected();
+    SvTreeListEntry* pEntry = pList ? m_pCertPathList->GetEntry(m_pCertPathList->GetCurMousePoint())
+                                : m_pCertPathList->FirstSelected();
     if (pEntry)
-        m_aCertPathList.HandleEntryChecked(pEntry);
+        m_pCertPathList->HandleEntryChecked(pEntry);
     return 0;
 }
 
 void CertPathDialog::HandleCheckEntry( SvTreeListEntry* _pEntry )
 {
-    m_aCertPathList.Select( _pEntry, true );
-    SvButtonState eState = m_aCertPathList.GetCheckButtonState( _pEntry );
+    m_pCertPathList->Select( _pEntry, true );
+    SvButtonState eState = m_pCertPathList->GetCheckButtonState( _pEntry );
 
     if (SV_BUTTON_CHECKED == eState)
     {
         // uncheck the other entries
-        SvTreeListEntry* pEntry = m_aCertPathList.First();
+        SvTreeListEntry* pEntry = m_pCertPathList->First();
         while (pEntry)
         {
             if (pEntry != _pEntry)
-                m_aCertPathList.SetCheckButtonState(pEntry, SV_BUTTON_UNCHECKED);
-            pEntry = m_aCertPathList.Next(pEntry);
+                m_pCertPathList->SetCheckButtonState(pEntry, SV_BUTTON_UNCHECKED);
+            pEntry = m_pCertPathList->Next(pEntry);
         }
     }
     else
-        m_aCertPathList.SetCheckButtonState(_pEntry, SV_BUTTON_CHECKED);
+        m_pCertPathList->SetCheckButtonState(_pEntry, SV_BUTTON_CHECKED);
 }
 
 void CertPathDialog::AddCertPath(const OUString &rProfile, const OUString &rPath)
 {
-    SvTreeListEntry* pEntry = m_aCertPathList.First();
+    SvTreeListEntry* pEntry = m_pCertPathList->First();
     while (pEntry)
     {
         OUString* pCertPath = static_cast<OUString*>(pEntry->GetUserData());
         //already exists, just select the original one
         if (pCertPath->equals(rPath))
         {
-            m_aCertPathList.SetCheckButtonState(pEntry, SV_BUTTON_CHECKED);
+            m_pCertPathList->SetCheckButtonState(pEntry, SV_BUTTON_CHECKED);
             HandleCheckEntry(pEntry);
             return;
         }
-        pEntry = m_aCertPathList.Next(pEntry);
+        pEntry = m_pCertPathList->Next(pEntry);
     }
 
     OUStringBuffer sEntry;
     sEntry.append('\t').append(rProfile).append('\t').append(rPath);
-    pEntry = m_aCertPathList.InsertEntry(sEntry.makeStringAndClear());
+    pEntry = m_pCertPathList->InsertEntry(sEntry.makeStringAndClear());
     OUString* pCertPath = new OUString(rPath);
     pEntry->SetUserData(pCertPath);
-    m_aCertPathList.SetCheckButtonState(pEntry, SV_BUTTON_CHECKED);
+    m_pCertPathList->SetCheckButtonState(pEntry, SV_BUTTON_CHECKED);
     HandleCheckEntry(pEntry);
 }
 

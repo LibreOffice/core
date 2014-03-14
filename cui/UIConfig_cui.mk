@@ -32,6 +32,7 @@ $(eval $(call gb_UIConfig_add_uifiles,cui,\
 	cui/uiconfig/ui/calloutdialog \
 	cui/uiconfig/ui/calloutpage \
 	cui/uiconfig/ui/cellalignment \
+	cui/uiconfig/ui/certdialog \
 	cui/uiconfig/ui/charnamepage \
 	cui/uiconfig/ui/colorpage \
 	cui/uiconfig/ui/comment \

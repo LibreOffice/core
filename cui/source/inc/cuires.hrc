@@ -374,7 +374,6 @@
 #define RID_SVXSTR_ROW                                      (RID_SVX_START + 1201)
 #define RID_SVXSTR_COL                                      (RID_SVX_START + 1202)
 #define RID_SVXSTR_AUTO_ENTRY                               (RID_SVX_START + 1203)
-#define RID_SVXDLG_CERTPATH                                 (RID_SVX_START + 1204)
 
 #define RID_SVXSTR_USE_REPLACE                              (RID_SVX_START + 1205)
 #define RID_SVXSTR_CPTL_STT_WORD                            (RID_SVX_START + 1206)

@@ -39,7 +39,6 @@ $(eval $(call gb_SrsTarget_add_files,cui/res,\
     cui/source/dialogs/passwdomdlg.src \
     cui/source/dialogs/scriptdlg.src \
     cui/source/dialogs/svuidlg.src \
-    cui/source/options/certpath.src \
     cui/source/options/connpooloptions.src \
     cui/source/options/dbregister.src \
     cui/source/options/doclinkdialog.src \

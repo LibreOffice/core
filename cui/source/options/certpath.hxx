@@ -19,16 +19,11 @@
 class CertPathDialog : public ModalDialog
 {
 private:
-    FixedLine       m_aCertPathFL;
-    FixedText       m_aCertPathFT;
-    SvSimpleTableContainer m_aCertPathListContainer;
-    svx::SvxRadioButtonListBox m_aCertPathList;
-    PushButton      m_aAddBtn;
-    FixedLine       m_aButtonsFL;
-    OKButton        m_aOKBtn;
-    CancelButton    m_aCancelBtn;
-    HelpButton      m_aHelpBtn;
-    OUString   m_sAddDialogText;
+    SvSimpleTableContainer* m_pCertPathListContainer;
+    svx::SvxRadioButtonListBox* m_pCertPathList;
+    PushButton* m_pAddBtn;
+    OKButton*   m_pOKBtn;
+    OUString    m_sAddDialogText;
     OUString    m_sManual;
 
     DECL_LINK(CheckHdl_Impl, SvSimpleTable *);
