@@ -91,6 +91,7 @@ public:
 // (for calculation in table).
 class SwTableSortBoxes : public o3tl::sorted_vector<SwTableBox*> {};
 
+/// SwTable is one table in the document model, containing rows (which contain cells).
 class SW_DLLPUBLIC SwTable: public SwClient          //Client of FrmFmt.
 {
 
@@ -336,6 +337,7 @@ public:
     bool HasLayout() const;
 };
 
+/// SwTableLine is one table row in the document model.
 class SW_DLLPUBLIC SwTableLine: public SwClient     // Client of FrmFmt.
 {
     SwTableBoxes aBoxes;
@@ -375,6 +377,7 @@ public:
     void RegisterToFormat( SwFmt& rFmt );
 };
 
+/// SwTableBox is one table cell in the document model.
 class SW_DLLPUBLIC SwTableBox: public SwClient      //Client of FrmFmt.
 {
     friend class SwNodes;           // Transpose index.

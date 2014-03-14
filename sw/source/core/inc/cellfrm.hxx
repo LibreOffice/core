@@ -27,6 +27,7 @@ class SwTableBox;
 struct SwCrsrMoveState;
 class SwBorderAttrs;
 
+/// SwCellFrm is one table cell in the document layout.
 class SwCellFrm: public SwLayoutFrm
 {
     const SwTableBox* pTabBox;

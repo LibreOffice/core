@@ -27,6 +27,7 @@ class SwTable;
 class SwBorderAttrs;
 class SwAttrSetChg;
 
+/// SwTabFrm is one table in the document layout, containing rows (which contain cells).
 class SwTabFrm: public SwLayoutFrm, public SwFlowFrm
 {
     friend void CalcCntnt( SwLayoutFrm *pLay, bool bNoColl, bool bNoCalcFollow );

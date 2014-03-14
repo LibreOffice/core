@@ -26,6 +26,7 @@
 class SwTableLine;
 class SwBorderAttrs;
 
+/// SwRowFrm is one table row in the document layout.
 class SwRowFrm: public SwLayoutFrm
 {
     virtual void Format( const SwBorderAttrs *pAttrs = 0 );
