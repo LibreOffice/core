@@ -106,6 +106,7 @@ $(eval $(call gb_Library_use_system_win32_libs,merged,\
 	ole32 \
 	oleaut32 \
 	shell32 \
+	shlwapi \
 	user32 \
 	usp10 \
 	uuid \
