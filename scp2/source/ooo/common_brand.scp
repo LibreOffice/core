@@ -61,7 +61,6 @@ Module gid_Module_Root_Brand
              gid_Brand_File_Bin_Unopkgcom,
              gid_Brand_File_Bin_Unopkgexe,
              gid_Brand_File_Bin_Unopkg,
-             gid_Brand_File_Bin_Libxml2,
              gid_Brand_File_Bmp_IntroAboutShell,
              gid_Brand_File_Bmp_IntroAboutShell_custom,
 	     gid_Brand_File_Desktophelper_Txt,
@@ -615,24 +614,6 @@ File gid_Brand_File_Bin_Unopkg
     Styles = (PACKED);
     Name = "unopkg.bin";
 End
-
-// Due to Windows DLL search order, OOo executables might pick up a libxml2 DLL
-// from a Windows system directory instead of the one from the URE; to avoid
-// problems, as a HACK, for now a copy of the URE libxml2 DLL is placed next to
-// the OOo executables (where it takes precedence even over DLLs from the
-// Windows system directory):
-#if defined WNT && !defined SYSTEM_LIBXML
-File gid_Brand_File_Bin_Libxml2
-    TXT_FILE_BODY;
-    Dir = gid_Brand_Dir_Program;
-#if defined _gcc3
-    Name = SCP2_URE_DL_NORMAL("libxml2-2");
-#else
-    Name = SCP2_URE_DL_NORMAL("libxml2");
-#endif
-    Styles = (PACKED);
-End
-#endif
 
 #if defined ENABLE_NPAPI_INTO_BROWSER
 File gid_Brand_File_Lib_Npsoplugin

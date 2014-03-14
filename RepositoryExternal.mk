@@ -868,6 +868,14 @@ gb_ExternalProject__use_libxml2:=
 
 else # !SYSTEM_LIBXML
 
+$(eval $(call gb_Helper_register_packages_for_install,ure,\
+	xml2 \
+))
+
+$(eval $(call gb_Helper_register_packages_for_install,ooo,\
+	xml2_win32 \
+))
+
 define gb_LinkTarget__use_libxml2
 $(call gb_LinkTarget_use_package,$(1),xml2)
 $(call gb_LinkTarget_set_include,$(1),\

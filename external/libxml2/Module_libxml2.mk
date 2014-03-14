@@ -11,6 +11,7 @@ $(eval $(call gb_Module_Module,libxml2))
 
 $(eval $(call gb_Module_add_targets,libxml2,\
 	ExternalPackage_xml2 \
+	ExternalPackage_xml2_win32 \
 	ExternalProject_xml2 \
 	UnpackedTarball_xml2 \
 ))

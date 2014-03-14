@@ -370,25 +370,6 @@ End
 
 #endif
 
-#if !defined SYSTEM_LIBXML
-File gid_File_Dl_Libxml2
-    LIB_FILE_BODY;
-    Dir = SCP2_URE_DL_DIR;
-#if defined WNT
-#if defined _gcc3
-    Name = SCP2_URE_DL_NORMAL("libxml2-2");
-#else
-    Name = SCP2_URE_DL_NORMAL("libxml2");
-#endif
-#elif defined MACOSX
-    Name = SCP2_URE_DL_NORMAL("xml2.2");
-#else
-    Name = SCP2_URE_DL_VER("xml2", "2");
-#endif
-    Styles = (PACKED);
-End
-#endif
-
 #ifdef AIX
 Unixlink gid_Unixlink_File_Dl_Libxml2
     BIN_FILE_BODY;
@@ -488,7 +469,6 @@ Module gid_Module_Root_Ure_Hidden
             gid_Unixlink_File_Dl_Salhelper,
             gid_File_Dl_Profile_Uno,
             gid_Unixlink_File_Dl_Rmcxt,
-            gid_File_Dl_Libxml2,
             gid_File_Lib_Mingw_GccS_Ure,
             gid_File_Lib_Mingw_Stdcpp_Ure,
             gid_File_Dl_Uwinapi,

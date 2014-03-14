@@ -17,12 +17,8 @@ $(eval $(call gb_ExternalPackage_add_file,xml2,$(LIBO_URE_LIB_FOLDER)/libxml2.2.
 else ifeq ($(OS),WNT)
 ifeq ($(COM),GCC)
 $(eval $(call gb_ExternalPackage_add_file,xml2,$(LIBO_URE_LIB_FOLDER)/libxml2.dll,.libs/libxml2.dll))
-$(eval $(call gb_ExternalPackage_add_file,xml2,$(LIBO_LIB_FOLDER)/libxml2.dll,.libs/libxml2.dll))
 else # COM=MSC
 $(eval $(call gb_ExternalPackage_add_file,xml2,$(LIBO_URE_LIB_FOLDER)/libxml2.dll,win32/bin.msvc/libxml2.dll))
-# duplicate copy next to executables due to idiotic Win32 DLL search order
-# see 5a5dab5167d136c315e81448ea8eca59e60067da
-$(eval $(call gb_ExternalPackage_add_file,xml2,$(LIBO_LIB_FOLDER)/libxml2.dll,win32/bin.msvc/libxml2.dll))
 endif
 else # OS!=WNT
 $(eval $(call gb_ExternalPackage_add_file,xml2,$(LIBO_URE_LIB_FOLDER)/libxml2.so.2,.libs/libxml2.so.2.9.1))
