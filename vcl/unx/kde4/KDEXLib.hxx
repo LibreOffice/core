@@ -51,8 +51,8 @@ class KDEXLib : public QObject, public SalXLib
         QHash< int, SocketData > socketData; // key is fd
         QTimer timeoutTimer;
         QTimer userEventTimer;
-        enum { LibreOfficeEventLoop, GlibEventLoop, QtUnixEventLoop } eventLoopType;
         int m_frameWidth;
+        bool m_isGlibEventLoopType;
 
     private:
         void setupEventLoop();
