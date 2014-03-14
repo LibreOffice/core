@@ -80,7 +80,7 @@ Sequence< Type > OColumn::getTypes() throw (RuntimeException, std::exception)
 {
     return ::comphelper::concatSequences(
         OColumnBase::getTypes(),
-        ::comphelper::OPropertyContainer::getTypes()
+        getBaseTypes()
     );
 }
 

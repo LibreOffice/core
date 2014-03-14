@@ -49,7 +49,7 @@ protected:
     OPropertyContainer(::cppu::OBroadcastHelper& _rBHelper);
 
     /// for scripting : the types of the interfaces supported by this class
-    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL getTypes() throw (::com::sun::star::uno::RuntimeException, std::exception);
+    ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > getBaseTypes() throw (::com::sun::star::uno::RuntimeException, std::exception);
 
 // OPropertySetHelper overridables
     virtual sal_Bool SAL_CALL convertFastPropertyValue(

@@ -153,7 +153,7 @@ css::uno::Sequence<css::uno::Type> ToolboxController::getTypes()
     throw (css::uno::RuntimeException, std::exception)
 {
     css::uno::Sequence<css::uno::Type> s1(ToolboxController_Base::getTypes());
-    css::uno::Sequence<css::uno::Type> s2(OPropertyContainer::getTypes());
+    css::uno::Sequence<css::uno::Type> s2(getBaseTypes());
     sal_Int32 n = s1.getLength();
     s1.realloc(n + s2.getLength());
     for (sal_Int32 i = 0; i != s2.getLength(); ++i) {

@@ -732,7 +732,7 @@ Sequence< Type > SAL_CALL OEvoabResultSet::getTypes(  ) throw( RuntimeException,
 {
     return ::comphelper::concatSequences(
         OResultSet_BASE::getTypes(),
-        ::comphelper::OPropertyContainer::getTypes()
+        getBaseTypes()
     );
 }
 

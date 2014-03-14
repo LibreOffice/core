@@ -139,7 +139,7 @@
         // our own types
         Sequence< Type > aTypes = ::comphelper::concatSequences(
             OPropertySetAggregationHelper::getTypes(),
-            OPropertyContainer::getTypes(),
+            getBaseTypes(),
             OGCM_Base::getTypes()
         );
 

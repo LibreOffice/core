@@ -82,7 +82,7 @@ Sequence< Type > SAL_CALL Controller::getTypes() throw(RuntimeException, std::ex
 {
     Sequence< Type > aTypes = ::comphelper::concatSequences(
         SfxBaseController::getTypes(),
-        OPropertyContainer::getTypes()
+        getBaseTypes()
     );
 
     return aTypes;

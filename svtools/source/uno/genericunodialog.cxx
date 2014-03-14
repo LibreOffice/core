@@ -93,7 +93,7 @@ Sequence<Type> SAL_CALL OGenericUnoDialog::getTypes(  ) throw(RuntimeException, 
 {
     return ::comphelper::concatSequences(
         OGenericUnoDialogBase::getTypes(),
-        ::comphelper::OPropertyContainer::getTypes()
+        getBaseTypes()
     );
 }
 

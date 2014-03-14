@@ -52,7 +52,7 @@ OPropertyContainer::~OPropertyContainer()
 }
 
 
-Sequence< Type > SAL_CALL OPropertyContainer::getTypes() throw (RuntimeException, std::exception)
+Sequence< Type > OPropertyContainer::getBaseTypes() throw (RuntimeException, std::exception)
 {
     // just the types from our one and only base class
     ::cppu::OTypeCollection aTypes(
