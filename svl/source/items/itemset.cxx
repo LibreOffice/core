@@ -222,11 +222,12 @@ void SfxItemSet::InitRanges_Impl(const sal_uInt16 *pWhichPairTable)
 
 
 
-SfxItemSet::SfxItemSet( SfxItemPool& rPool, const sal_uInt16* pWhichPairTable ):
-    _pPool( &rPool ),
-    _pParent( 0 ),
-    _pWhichRanges(0),
-    _nCount( 0 )
+SfxItemSet::SfxItemSet( SfxItemPool& rPool, const sal_uInt16* pWhichPairTable )
+    : _pPool(&rPool)
+    , _pParent(0)
+    , _aItems(0)
+    , _pWhichRanges(0)
+    , _nCount(0)
 {
     DBG_CTOR(SfxItemSet, 0);
     DBG_ASSERTWARNING( _pPool == _pPool->GetMasterPool(), "kein Master-Pool" );
@@ -236,8 +237,6 @@ SfxItemSet::SfxItemSet( SfxItemPool& rPool, const sal_uInt16* pWhichPairTable ):
     if ( pWhichPairTable )
         InitRanges_Impl(pWhichPairTable);
 }
-
-
 
 SfxItemSet::SfxItemSet( const SfxItemSet& rASet ):
     _pPool( rASet._pPool ),
