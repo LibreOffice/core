@@ -69,14 +69,14 @@ inline ::rtl::OUString getDllURL( void )
     return dllPath;
 }
 
-inline bool isURL( const ::rtl::OUString pathname )
+inline bool isURL( const ::rtl::OUString& pathname )
 {
     return pathname.startsWith( "file:///" );
 }
 
 /** create a temp test directory using OUString name of full qualified URL or system path.
 */
-inline void createTestDirectory( const ::rtl::OUString dirname )
+inline void createTestDirectory( const ::rtl::OUString& dirname )
 {
     ::rtl::OUString     aPathURL   = dirname.copy( 0 );
     ::osl::FileBase::RC nError;
@@ -89,7 +89,7 @@ inline void createTestDirectory( const ::rtl::OUString dirname )
 
 /** delete a temp test directory using OUString name of full qualified URL or system path.
 */
-inline void deleteTestDirectory( const ::rtl::OUString dirname )
+inline void deleteTestDirectory( const ::rtl::OUString& dirname )
 {
     ::rtl::OUString     aPathURL   = dirname.copy( 0 );
     ::osl::FileBase::RC nError;
@@ -127,7 +127,7 @@ inline bool ifFileExist( const ::rtl::OUString & str )
 
 /** detete a temp test file using OUString name.
 */
-inline void deleteTestFile( const ::rtl::OUString filename )
+inline void deleteTestFile( const ::rtl::OUString& filename )
 {
     ::rtl::OUString aPathURL   = filename.copy( 0 );
     ::osl::FileBase::RC nError;

@@ -36,7 +36,7 @@ namespace toolkit
 // Hashtable to optimize
 struct hashName_Impl
 {
-    size_t operator()(const OUString Str) const
+    size_t operator()(const OUString& Str) const
     {
         return (size_t)Str.hashCode();
     }
@@ -44,7 +44,7 @@ struct hashName_Impl
 
 struct eqName_Impl
 {
-    bool operator()(const OUString Str1, const OUString Str2) const
+    bool operator()(const OUString& Str1, const OUString& Str2) const
     {
         return ( Str1 == Str2 );
     }

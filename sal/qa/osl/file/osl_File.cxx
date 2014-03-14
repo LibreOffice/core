@@ -321,7 +321,7 @@ inline bool isURL( const sal_Char *pathname )
 /** simple version to judge if a file name or directory name is a URL or a system path, just to see if it
     is start with "file:///";.
 */
-inline bool isURL( const ::rtl::OUString pathname )
+inline bool isURL( const ::rtl::OUString& pathname )
 {
     return pathname.startsWith( aPreURL );
 }
@@ -346,7 +346,7 @@ inline void concatURL( ::rtl::OUString & pathname1, const ::rtl::OUString & path
 
 /** create a temp test file using OUString name of full qualified URL or system path.
 */
-inline void createTestFile( const ::rtl::OUString filename )
+inline void createTestFile( const ::rtl::OUString& filename )
 {
     ::rtl::OUString     aPathURL   = filename.copy( 0 );
     ::osl::FileBase::RC nError;
@@ -367,7 +367,7 @@ inline void createTestFile( const ::rtl::OUString filename )
 
 /** create a temp test file using OUString name of full qualified URL or system path in a base directory.
 */
-inline void createTestFile( const ::rtl::OUString basename, const ::rtl::OUString filename )
+inline void createTestFile( const ::rtl::OUString& basename, const ::rtl::OUString& filename )
 {
     ::rtl::OUString aBaseURL = basename.copy( 0 );
 
@@ -377,7 +377,7 @@ inline void createTestFile( const ::rtl::OUString basename, const ::rtl::OUStrin
 
 /** detete a temp test file using OUString name.
 */
-inline void deleteTestFile( const ::rtl::OUString filename )
+inline void deleteTestFile( const ::rtl::OUString& filename )
 {
     // LLA: printf("deleteTestFile\n");
     ::rtl::OUString     aPathURL   = filename.copy( 0 );
@@ -395,7 +395,7 @@ inline void deleteTestFile( const ::rtl::OUString filename )
 
 /** delete a temp test file using OUString name of full qualified URL or system path in a base directory.
 */
-inline void deleteTestFile( const ::rtl::OUString basename, const ::rtl::OUString filename )
+inline void deleteTestFile( const ::rtl::OUString& basename, const ::rtl::OUString& filename )
 {
     ::rtl::OUString     aBaseURL   = basename.copy( 0 );
 
@@ -405,7 +405,7 @@ inline void deleteTestFile( const ::rtl::OUString basename, const ::rtl::OUStrin
 
 /** create a temp test directory using OUString name of full qualified URL or system path.
 */
-inline void createTestDirectory( const ::rtl::OUString dirname )
+inline void createTestDirectory( const ::rtl::OUString& dirname )
 {
     ::rtl::OUString     aPathURL   = dirname.copy( 0 );
     ::osl::FileBase::RC nError;
@@ -420,7 +420,7 @@ inline void createTestDirectory( const ::rtl::OUString dirname )
 
 /** create a temp test directory using OUString name of full qualified URL or system path in a base directory.
 */
-inline void createTestDirectory( const ::rtl::OUString basename, const ::rtl::OUString dirname )
+inline void createTestDirectory( const ::rtl::OUString& basename, const ::rtl::OUString& dirname )
 {
     ::rtl::OUString     aBaseURL   = basename.copy( 0 );
 
@@ -430,7 +430,7 @@ inline void createTestDirectory( const ::rtl::OUString basename, const ::rtl::OU
 
 /** delete a temp test directory using OUString name of full qualified URL or system path.
 */
-inline void deleteTestDirectory( const ::rtl::OUString dirname )
+inline void deleteTestDirectory( const ::rtl::OUString& dirname )
 {
     ::rtl::OUString     aPathURL   = dirname.copy( 0 );
     ::osl::FileBase::RC nError;
@@ -450,7 +450,7 @@ inline void deleteTestDirectory( const ::rtl::OUString dirname )
 
 /** delete a temp test directory using OUString name of full qualified URL or system path in a base directory.
 */
-inline void deleteTestDirectory( const ::rtl::OUString basename, const ::rtl::OUString dirname )
+inline void deleteTestDirectory( const ::rtl::OUString& basename, const ::rtl::OUString& dirname )
 {
     ::rtl::OUString     aBaseURL   = basename.copy( 0 );
 
