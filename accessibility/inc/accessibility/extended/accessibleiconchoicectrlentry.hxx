@@ -36,7 +36,7 @@
 #include <comphelper/accessibletexthelper.hxx>
 #include <tools/gen.hxx>
 
-// forward ---------------------------------------------------------------
+// forward
 
 class SvxIconChoiceCtrlEntry;
 class SvtIconChoiceCtrl;
@@ -45,8 +45,7 @@ class SvtIconChoiceCtrl;
 namespace accessibility
 {
 
-
-// class AccessibleIconChoiceCtrlEntry ------------------------------------------
+// class AccessibleIconChoiceCtrlEntry
 
     typedef ::cppu::WeakAggComponentImplHelper8< ::com::sun::star::accessibility::XAccessible
                                                 , ::com::sun::star::accessibility::XAccessibleContext
@@ -108,7 +107,7 @@ namespace accessibility
                 is our parent accessible object
         */
         AccessibleIconChoiceCtrlEntry( SvtIconChoiceCtrl& _rIconCtrl,
-                                       sal_uLong _nPos,
+                                       sal_Int32 _nPos,
                                        const ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >& _xParent );
 
         // XTypeProvider

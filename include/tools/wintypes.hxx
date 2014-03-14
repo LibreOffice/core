@@ -19,7 +19,6 @@
 #ifndef INCLUDED_TOOLS_WINTYPES_HXX
 #define INCLUDED_TOOLS_WINTYPES_HXX
 
-#include <tools/solar.h>
 #include <sal/types.h>
 
 // Window-Types

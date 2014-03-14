@@ -163,7 +163,7 @@ public:
     void                RemoveCharAttribs( sal_Int32 nPara, sal_uInt16 nWhich = 0 );
     void                RemoveAttribsKeepLanguages( bool bRemoveParaAttribs = false );
 
-    sal_uLong           Read( SvStream& rInput, const OUString& rBaseURL, EETextFormat eFormat, bool bSelect = false, SvKeyValueIterator* pHTTPHeaderAttrs = NULL );
+    sal_uInt32          Read( SvStream& rInput, const OUString& rBaseURL, EETextFormat eFormat, bool bSelect = false, SvKeyValueIterator* pHTTPHeaderAttrs = NULL );
 
     void            SetBackgroundColor( const Color& rColor );
     Color           GetBackgroundColor() const;
