@@ -1250,7 +1250,8 @@ sal_Bool SwView::HandleWheelCommands( const CommandEvent& rCEvt )
             m_bWheelScrollInProgress=true;
         }
 
-        if (pWData && (COMMAND_WHEEL_SCROLL==pWData->GetMode()) && (((sal_uLong)0xFFFFFFFF) == pWData->GetScrollLines()))
+        if (pWData && (COMMAND_WHEEL_SCROLL==pWData->GetMode()) &&
+                (COMMAND_WHEEL_PAGESCROLL == pWData->GetScrollLines()))
         {
             if (pWData->GetDelta()<0)
                 PhyPageDown();
