@@ -458,6 +458,9 @@ bool Printer::ImplInitGraphics() const
 {
     DBG_TESTSOLARMUTEX();
 
+    if ( mpGraphics )
+        return true;
+
     mbInitLineColor     = true;
     mbInitFillColor     = true;
     mbInitFont          = true;
@@ -466,13 +469,11 @@ bool Printer::ImplInitGraphics() const
 
     ImplSVData* pSVData = ImplGetSVData();
 
-    const Printer* pPrinter = (const Printer*)this;
-
-    if ( pPrinter->mpJobGraphics )
-        mpGraphics = pPrinter->mpJobGraphics;
-    else if ( pPrinter->mpDisplayDev )
+    if ( mpJobGraphics )
+        mpGraphics = mpJobGraphics;
+    else if ( mpDisplayDev )
     {
-        const VirtualDevice* pVirDev = pPrinter->mpDisplayDev;
+        const VirtualDevice* pVirDev = mpDisplayDev;
         mpGraphics = pVirDev->mpVirDev->AcquireGraphics();
         // if needed retry after releasing least recently used virtual device graphics
         while ( !mpGraphics )
@@ -495,14 +496,14 @@ bool Printer::ImplInitGraphics() const
     }
     else
     {
-        mpGraphics = pPrinter->mpInfoPrinter->AcquireGraphics();
+        mpGraphics = mpInfoPrinter->AcquireGraphics();
         // if needed retry after releasing least recently used printer graphics
         while ( !mpGraphics )
         {
             if ( !pSVData->maGDIData.mpLastPrnGraphics )
                 break;
             pSVData->maGDIData.mpLastPrnGraphics->ImplReleaseGraphics();
-            mpGraphics = pPrinter->mpInfoPrinter->AcquireGraphics();
+            mpGraphics = mpInfoPrinter->AcquireGraphics();
         }
         // update global LRU list of printer graphics
         if ( mpGraphics )
