@@ -110,49 +110,6 @@ End
 #endif
 #endif
 
-#ifndef SYSTEM_ICU
-
-File gid_File_Lib_Icudata
-    PACKED_LIB_FILE_BODY;
-  #ifdef UNX
-    Name = STRING(CONCAT4(libicudata,UNXSUFFIX,.,ICU_MAJOR));
-  #else
-  #ifdef MSVC_PKG_DEBUG_RUNTIME
-    Name = STRING(CONCAT3(icudtd,ICU_MAJOR,.dll));
-  #else
-    Name = STRING(CONCAT3(icudt,ICU_MAJOR,.dll));
-  #endif // MSVC_PKG_DEBUG_RUNTIME
-  #endif
-End
-
-File gid_File_Lib_Icui18n
-    PACKED_LIB_FILE_BODY;
-  #ifdef UNX
-    Name = STRING(CONCAT4(libicui18n,UNXSUFFIX,.,ICU_MAJOR));
-  #else
-  #ifdef MSVC_PKG_DEBUG_RUNTIME
-    Name = STRING(CONCAT3(icuind,ICU_MAJOR,.dll));
-  #else
-    Name = STRING(CONCAT3(icuin,ICU_MAJOR,.dll));
-  #endif // MSVC_PKG_DEBUG_RUNTIME
-  #endif
-End
-
-File gid_File_Lib_Icuuc
-    PACKED_LIB_FILE_BODY;
-  #ifdef UNX
-    Name = STRING(CONCAT4(libicuuc,UNXSUFFIX,.,ICU_MAJOR));
-  #else
-  #ifdef MSVC_PKG_DEBUG_RUNTIME
-    Name = STRING(CONCAT3(icuucd,ICU_MAJOR,.dll));
-  #else
-    Name = STRING(CONCAT3(icuuc,ICU_MAJOR,.dll));
-  #endif // MSVC_PKG_DEBUG_RUNTIME
-  #endif
-End
-
-#endif
-
 #if defined(MACOSX)
 File gid_File_Lib_Basebmp
     Name = LIBNAME(basebmp);

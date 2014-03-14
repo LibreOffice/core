@@ -1337,6 +1337,10 @@ endef
 
 else # !SYSTEM_ICU
 
+$(eval $(call gb_Helper_register_packages_for_install,ooo, \
+	icu \
+))
+
 ifeq ($(OS)$(DISABLE_DYNLOADING),ANDROID)
 gb_ICU_suffix:=lo
 else
