@@ -663,6 +663,15 @@ void Printer::ImplUpdateFontList()
     ImplUpdateFontData( true );
 }
 
+long Printer::ImplGetGradientStepCount( long nMinRect )
+{
+    long nInc = 1;
+
+    // use display-equivalent step size calculation
+    nInc = (nMinRect < 800) ? 10 : 20;
+
+    return nInc;
+}
 
 Printer::Printer()
 {
