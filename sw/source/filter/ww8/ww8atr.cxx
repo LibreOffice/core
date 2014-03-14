@@ -745,10 +745,13 @@ void MSWordExportBase::OutputFormat( const SwFmt& rFmt, bool bPapFmt, bool bChpF
     case RES_TXTFMTCOLL:
         if( bPapFmt )
         {
-            if (((const SwTxtFmtColl&)rFmt).IsAssignedToListLevelOfOutlineStyle())
-            {
-                int nLvl = ((const SwTxtFmtColl&)rFmt).GetAssignedOutlineStyleLevel();
+            int nLvl = MAXLEVEL;
 
+            if (((const SwTxtFmtColl&)rFmt).IsAssignedToListLevelOfOutlineStyle())
+                nLvl = ((const SwTxtFmtColl&)rFmt).GetAssignedOutlineStyleLevel();
+
+            if (nLvl >= 0 && nLvl < MAXLEVEL)
+            {
                 //if outline numbered
                 // if Write StyleDefinition then write the OutlineRule
                 const SwNumFmt& rNFmt = pDoc->GetOutlineNumRule()->Get( static_cast<sal_uInt16>( nLvl ) );
