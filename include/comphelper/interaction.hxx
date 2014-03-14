@@ -73,7 +73,7 @@ namespace comphelper
         OInteraction() { }
 
     // XInteractionContinuation
-        virtual void SAL_CALL select(  ) throw(::com::sun::star::uno::RuntimeException);
+        virtual void SAL_CALL select(  ) throw(::com::sun::star::uno::RuntimeException) SAL_OVERRIDE;
     };
 
 
