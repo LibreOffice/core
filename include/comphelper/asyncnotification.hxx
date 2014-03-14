@@ -76,8 +76,8 @@ namespace comphelper
         */
         virtual void processEvent( const AnyEvent& _rEvent ) = 0;
 
-        virtual void SAL_CALL acquire() = 0;
-        virtual void SAL_CALL release() = 0;
+        virtual void SAL_CALL acquire() throw () = 0;
+        virtual void SAL_CALL release() throw () = 0;
 
     protected:
         ~IEventProcessor() {}
