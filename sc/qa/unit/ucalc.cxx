@@ -4525,10 +4525,8 @@ void Test::testFindAreaPosColRight()
 void Test::testSortWithFormulaRefs()
 {
     ScDocument* pDoc = getDocShell().GetDocument();
-    OUString aTabName1("List1");
-    OUString aTabName2("List2");
-    pDoc->InsertTab(0, aTabName1);
-    pDoc->InsertTab(1, aTabName2);
+    pDoc->InsertTab(0, "List1");
+    pDoc->InsertTab(1, "List2");
 
     const char* aFormulaData[6] = {
         "=IF($List1.A2<>\"\",$List1.A2,\"\")",
@@ -4627,8 +4625,7 @@ void Test::testSortWithStrings()
 
 void Test::testSort()
 {
-    OUString aTabName1("test1");
-    m_pDoc->InsertTab(0, aTabName1);
+    m_pDoc->InsertTab(0, "test1");
 
     ScRange aDataRange;
     ScAddress aPos(0,0,0);
@@ -4715,6 +4712,72 @@ void Test::testSort()
     CPPUNIT_ASSERT_EQUAL(CELLTYPE_NONE, m_pDoc->GetCellType(aPos));
 
     m_pDoc->DeleteTab(0);
+}
+
+void Test::testSortInFormulaGroup()
+{
+    static struct {
+        SCCOL nCol;
+        SCROW nRow;
+        const char *pData;
+    } aEntries[] = {
+        { 0, 0, "3" },   { 1, 0, "=A1" },
+        { 0, 1, "1" },   { 1, 1, "=A2" },
+        { 0, 2, "20" },  { 1, 2, "=A3" },
+        { 0, 3, "10" },  { 1, 3, "=A4+1" }, // swap across groups
+        { 0, 4, "2"  },  { 1, 4, "=A5+1" },
+        { 0, 5, "101" }, { 1, 5, "=A6" }, // swap inside contiguious group
+        { 0, 6, "100" }, { 1, 6, "=A7" },
+        { 0, 7, "102" }, { 1, 7, "=A8" },
+        { 0, 8, "104" }, { 1, 8, "=A9" },
+        { 0, 9, "103" }, { 1, 9, "=A10" },
+    };
+
+    m_pDoc->InsertTab(0, "sorttest");
+
+    for ( SCROW i = 0; i < (SCROW) SAL_N_ELEMENTS( aEntries ); ++i )
+        m_pDoc->SetString( aEntries[i].nCol, aEntries[i].nRow, 0,
+                           OUString::createFromAscii( aEntries[i].pData) );
+
+    ScSortParam aSortData;
+    aSortData.nCol1 = 0;
+    aSortData.nCol2 = 1;
+    aSortData.nRow1 = 0;
+    aSortData.nRow2 = 9;
+    aSortData.maKeyState[0].bDoSort = true;
+    aSortData.maKeyState[0].nField = 0;
+    aSortData.maKeyState[0].bAscending = true;
+
+    m_pDoc->Sort(0, aSortData, false, NULL);
+
+    static struct {
+        SCCOL nCol;
+        SCROW nRow;
+        double fValue;
+    } aResults[] = {
+        { 0, 0, 1.0 },   { 1, 0, 1.0 },
+        { 0, 1, 2.0 },   { 1, 1, 3.0 },
+        { 0, 2, 3.0 },   { 1, 2, 3.0 },
+        { 0, 3, 10.0 },  { 1, 3, 11.0 },
+        { 0, 4, 20.0 },  { 1, 4, 20.0 },
+        { 0, 5, 100.0 }, { 1, 5, 100.0 },
+        { 0, 6, 101.0 }, { 1, 6, 101.0 },
+        { 0, 7, 102.0 }, { 1, 7, 102.0 },
+        { 0, 8, 103.0 }, { 1, 8, 103.0 },
+        { 0, 9, 104.0 }, { 1, 9, 104.0 },
+    };
+
+    for ( SCROW i = 0; i < (SCROW) SAL_N_ELEMENTS( aEntries ); ++i )
+    {
+        double val = m_pDoc->GetValue( aEntries[i].nCol, aEntries[i].nRow, 0 );
+//        fprintf(stderr, "value at %d %d is %g = %g\n",
+//                (int)aResults[i].nRow, (int)aResults[i].nCol,
+//                val, aResults[i].fValue);
+        CPPUNIT_ASSERT_MESSAGE("Mis-matching value after sort.",
+                               rtl::math::approxEqual(val, aResults[i].fValue));
+    }
+
+    m_pDoc->DeleteTab( 0 );
 }
 
 void Test::testShiftCells()
