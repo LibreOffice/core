@@ -10,9 +10,10 @@
 #ifndef VCL_OPENGL_CONTEXT_HXX
 #define VCL_OPENGL_CONTEXT_HXX
 
+#include <vcl/vclopengl_dllapi.hxx>
 #include <vcl/OpenGLRender.hxx>
 
-class VCL_DLLPUBLIC OpenGLContext
+class VCLOPENGL_DLLPUBLIC OpenGLContext
 {
 public:
     bool init(OpenGLRender& rGLRender);

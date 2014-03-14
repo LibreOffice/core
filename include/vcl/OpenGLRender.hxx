@@ -30,6 +30,7 @@
 #include <com/sun/star/drawing/HomogenMatrix3.hpp>
 #include <com/sun/star/drawing/XDrawPage.hpp>
 #include <vcl/font.hxx>
+#include <vcl/vclopengl_dllapi.hxx>
 
 
 #if defined( _WIN32 )
@@ -93,7 +94,7 @@ typedef std::vector<GLfloat> PieSegment2DPointList;
 typedef std::vector<GLfloat> PointList;
 
 /// Holds the information of our new child window
-struct VCL_DLLPUBLIC GLWindow
+struct VCLOPENGL_DLLPUBLIC GLWindow
 {
 #if defined( _WIN32 )
     HWND                    hWnd;
@@ -143,7 +144,7 @@ struct VCL_DLLPUBLIC GLWindow
     }
 };
 
-class VCL_DLLPUBLIC OpenGLRender
+class VCLOPENGL_DLLPUBLIC OpenGLRender
 {
 public:
     OpenGLRender(com::sun::star::uno::Reference<
