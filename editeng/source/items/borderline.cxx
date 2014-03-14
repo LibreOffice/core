@@ -177,9 +177,11 @@ static const double OUTSET_line1 = 15.0;
 static const double INSET_line2  = 15.0;
 
 double
-ConvertBorderWidthFromWord(SvxBorderStyle const eStyle, double const fWidth,
+ConvertBorderWidthFromWord(SvxBorderStyle const eStyle, double const i_fWidth,
         int const nWordLineStyle)
 {
+    // fdo#68779: at least for RTF, 0.75pt is the default if width is missing
+    double const fWidth((i_fWidth == 0.0) ? 15.0 : i_fWidth);
     switch (eStyle)
     {
         // Single lines
