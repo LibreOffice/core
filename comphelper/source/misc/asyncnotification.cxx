@@ -23,8 +23,8 @@
 #include <osl/conditn.hxx>
 #include <comphelper/guarding.hxx>
 
+#include <cassert>
 #include <deque>
-#include <set>
 #include <functional>
 #include <algorithm>
 
@@ -72,23 +72,14 @@ namespace comphelper
         AnyEventRef                         aEvent;
         ::rtl::Reference< IEventProcessor > xProcessor;
 
+        ProcessableEvent()
+        {
+        }
+
         ProcessableEvent( const AnyEventRef& _rEvent, const ::rtl::Reference< IEventProcessor >& _xProcessor )
             :aEvent( _rEvent )
             ,xProcessor( _xProcessor )
         {
-        }
-
-        ProcessableEvent( const ProcessableEvent& _rRHS )
-            :aEvent( _rRHS.aEvent )
-            ,xProcessor( _rRHS.xProcessor )
-        {
-        }
-
-        ProcessableEvent& operator=( const ProcessableEvent& _rRHS )
-        {
-            aEvent = _rRHS.aEvent;
-            xProcessor = _rRHS.xProcessor;
-            return *this;
         }
     };
 
@@ -113,20 +104,14 @@ namespace comphelper
     struct EventNotifierImpl
     {
         ::osl::Mutex        aMutex;
-        oslInterlockedCount m_refCount;
         ::osl::Condition    aPendingActions;
         EventQueue          aEvents;
-        ::std::set< ::rtl::Reference< IEventProcessor > >
-                            m_aDeadProcessors;
+        bool                bTerminate;
 
         EventNotifierImpl()
-            :m_refCount( 0 )
+            :bTerminate( false )
         {
         }
-
-    private:
-        EventNotifierImpl( const EventNotifierImpl& );              // never implemented
-        EventNotifierImpl& operator=( const EventNotifierImpl& );   // never implemented
     };
 
 
@@ -150,10 +135,6 @@ namespace comphelper
 
         // remove all events for this processor
         ::std::remove_if( m_pImpl->aEvents.begin(), m_pImpl->aEvents.end(), EqualProcessor( _xProcessor ) );
-
-        // and just in case that an event for exactly this processor has just been
-        // popped from the queue, but not yet processed: remember it:
-        m_pImpl->m_aDeadProcessors.insert( _xProcessor );
     }
 
 
@@ -162,7 +143,7 @@ namespace comphelper
         ::osl::MutexGuard aGuard( m_pImpl->aMutex );
 
         // remember the termination request
-        Thread::terminate();
+        m_pImpl->bTerminate = true;
 
         // awake the thread
         m_pImpl->aPendingActions.set();
@@ -184,56 +165,35 @@ namespace comphelper
 
     void AsyncEventNotifier::execute()
     {
-        do
+        for (;;)
         {
-            AnyEventRef aNextEvent;
-            ::rtl::Reference< IEventProcessor > xNextProcessor;
-
-            ::osl::ClearableMutexGuard aGuard( m_pImpl->aMutex );
-            while ( m_pImpl->aEvents.size() > 0 )
+            m_pImpl->aPendingActions.wait();
+            ProcessableEvent aEvent;
             {
-                ProcessableEvent aEvent( m_pImpl->aEvents.front() );
-                aNextEvent = aEvent.aEvent;
-                xNextProcessor = aEvent.xProcessor;
-                m_pImpl->aEvents.pop_front();
-
-                OSL_TRACE( "AsyncEventNotifier(%p): popping %p", this, aNextEvent.get() );
-
-                if ( !aNextEvent.get() )
-                    continue;
-
-                // process the event, but only if it's processor did not die inbetween
-                ::std::set< ::rtl::Reference< IEventProcessor > >::iterator deadPos = m_pImpl->m_aDeadProcessors.find( xNextProcessor );
-                if ( deadPos != m_pImpl->m_aDeadProcessors.end() )
+                osl::MutexGuard aGuard(m_pImpl->aMutex);
+                if (m_pImpl->bTerminate)
                 {
-                    m_pImpl->m_aDeadProcessors.erase( xNextProcessor );
-                    xNextProcessor.clear();
-                    OSL_TRACE( "AsyncEventNotifier(%p): removing %p", this, aNextEvent.get() );
+                    break;
                 }
-
-                // if there was a termination request (->terminate), respect it
-                if ( !schedule() )
-                    return;
-
+                if (!m_pImpl->aEvents.empty())
                 {
-                    ::comphelper::MutexRelease aReleaseOnce( m_pImpl->aMutex );
-                    if ( xNextProcessor.get() )
-                        xNextProcessor->processEvent( *aNextEvent.get() );
+                    aEvent = m_pImpl->aEvents.front();
+                    m_pImpl->aEvents.pop_front();
+                    OSL_TRACE(
+                        "AsyncEventNotifier(%p): popping %p", this,
+                        aEvent.aEvent.get());
+                }
+                if (m_pImpl->aEvents.empty())
+                {
+                    m_pImpl->aPendingActions.reset();
                 }
             }
-
-            // if there was a termination request (->terminate), respect it
-            if ( !schedule() )
-                return;
-
-            // wait for new events to process
-            aGuard.clear();
-            m_pImpl->aPendingActions.reset();
-            m_pImpl->aPendingActions.wait();
+            if (aEvent.aEvent.is()) {
+                assert(aEvent.xProcessor.is());
+                aEvent.xProcessor->processEvent(*aEvent.aEvent);
+            }
         }
-        while ( true );
     }
-
 
 } // namespace comphelper
 
