@@ -119,12 +119,12 @@ void RTFSdrImport::popParent()
     m_aParents.pop();
 }
 
-void RTFSdrImport::resolveDhgt(uno::Reference<beans::XPropertySet> xPropertySet, sal_Int32 nZOrder)
+void RTFSdrImport::resolveDhgt(uno::Reference<beans::XPropertySet> xPropertySet, sal_Int32 nZOrder, bool bOldStyle)
 {
     writerfilter::dmapper::DomainMapper& rMapper =
         dynamic_cast<writerfilter::dmapper::DomainMapper&>(m_rImport.Mapper());
     writerfilter::dmapper::GraphicZOrderHelper* pHelper = rMapper.graphicZOrderHelper();
-    xPropertySet->setPropertyValue("ZOrder", uno::makeAny(pHelper->findZOrder(nZOrder)));
+    xPropertySet->setPropertyValue("ZOrder", uno::makeAny(pHelper->findZOrder(nZOrder, bOldStyle)));
     pHelper->addItem(xPropertySet, nZOrder);
 }
 
@@ -455,7 +455,7 @@ void RTFSdrImport::resolve(RTFShape& rShape, bool bClose)
         {
             // dhgt is Word 2007, \shpz is Word 97-2003, the later has priority.
             if (!rShape.oZ)
-                resolveDhgt(xPropertySet, i->second.toInt32());
+                resolveDhgt(xPropertySet, i->second.toInt32(), /*bOldStyle=*/false);
         }
         // These are in EMU, convert to mm100.
         else if (i->first == "dxTextLeft")
@@ -565,7 +565,7 @@ void RTFSdrImport::resolve(RTFShape& rShape, bool bClose)
             }
         }
         if (rShape.oZ)
-            resolveDhgt(xPropertySet, *rShape.oZ);
+            resolveDhgt(xPropertySet, *rShape.oZ, /*bOldStyle=*/false);
         if (m_bTextFrame)
             // Writer textframes implement text::WritingMode2, which is a different data type.
             xPropertySet->setPropertyValue("WritingMode", uno::makeAny(sal_Int16(eWritingMode)));

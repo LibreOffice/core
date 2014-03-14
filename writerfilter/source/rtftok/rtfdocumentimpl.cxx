@@ -19,6 +19,7 @@
 #include <com/sun/star/text/VertOrientation.hpp>
 #include <com/sun/star/text/RelOrientation.hpp>
 #include <com/sun/star/text/WrapTextMode.hpp>
+#include <com/sun/star/text/TextContentAnchorType.hpp>
 #include <rtl/tencinfo.h>
 #include <svl/lngmisc.hxx>
 #include <unotools/ucbstreamhelper.hxx>
@@ -2184,6 +2185,17 @@ int RTFDocumentImpl::dispatchSymbol(RTFKeyword nKeyword)
     return 0;
 }
 
+// Checks if rName is contained at least once in rProperties as a key.
+bool lcl_findPropertyName(const std::vector<beans::PropertyValue>& rProperties, const OUString& rName)
+{
+    for (std::vector<beans::PropertyValue>::const_iterator it = rProperties.begin(); it != rProperties.end(); ++it)
+    {
+        if (it->Name == rName)
+            return true;
+    }
+    return false;
+}
+
 int RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
 {
     setNeedSect();
@@ -2798,7 +2810,10 @@ int RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
                                 m_aStates.top().aDrawingObject.xShape.set(getModelFactory()->createInstance("com.sun.star.text.TextFrame"), uno::UNO_QUERY);
                                 std::vector<beans::PropertyValue> aDefaults = m_pSdrImport->getTextFrameDefaults(false);
                                 for (size_t i = 0; i < aDefaults.size(); ++i)
-                                    m_aStates.top().aDrawingObject.aPendingProperties.push_back(aDefaults[i]);
+                                {
+                                    if (!lcl_findPropertyName(m_aStates.top().aDrawingObject.aPendingProperties, aDefaults[i].Name))
+                                        m_aStates.top().aDrawingObject.aPendingProperties.push_back(aDefaults[i]);
+                                }
                                 checkFirstRun();
                                 Mapper().startShape(m_aStates.top().aDrawingObject.xShape);
                                 m_aStates.top().aDrawingObject.bHadShapeText = true;
@@ -2825,7 +2840,7 @@ int RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
                     std::vector<beans::PropertyValue>& rPendingProperties = m_aStates.top().aDrawingObject.aPendingProperties;
                     for (std::vector<beans::PropertyValue>::iterator i = rPendingProperties.begin(); i != rPendingProperties.end(); ++i)
                         m_aStates.top().aDrawingObject.xPropertySet->setPropertyValue(i->Name, i->Value);
-                    m_pSdrImport->resolveDhgt(m_aStates.top().aDrawingObject.xPropertySet, m_aStates.top().aDrawingObject.nDhgt);
+                    m_pSdrImport->resolveDhgt(m_aStates.top().aDrawingObject.xPropertySet, m_aStates.top().aDrawingObject.nDhgt, /*bOldStyle=*/true);
                 }
                 break;
         case RTF_DOBXMARGIN:
@@ -4466,6 +4481,9 @@ int RTFDocumentImpl::popState()
 
                 uno::Reference<lang::XServiceInfo> xServiceInfo(xShape, uno::UNO_QUERY);
                 bool bTextFrame = xServiceInfo->supportsService("com.sun.star.text.TextFrame");
+
+                // The default is certainly not inline, but then what Word supports is just at-character.
+                xPropertySet->setPropertyValue("AnchorType", uno::makeAny(text::TextContentAnchorType_AT_CHARACTER));
 
                 if (bTextFrame)
                 {

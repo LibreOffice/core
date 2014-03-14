@@ -1007,6 +1007,23 @@ DECLARE_RTFIMPORT_TEST(testFdo60722, "fdo60722.rtf")
     CPPUNIT_ASSERT_EQUAL(sal_uInt32(0), getProperty<sal_uInt32>(xShape, "LineColor"));
 }
 
+DECLARE_RTFIMPORT_TEST(testDoDhgtOld, "do-dhgt-old.rtf")
+{
+    // The file contains 3 shapes which have the same dhgt (z-order).
+    // Test that the order is 1) a 2) black rectangle 3) b, and not something else
+    uno::Reference<text::XText> xShape(getShape(1), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty<sal_Int32>(xShape, "ZOrder"));
+    CPPUNIT_ASSERT_EQUAL(OUString("a"), xShape->getString());
+
+    xShape.set(getShape(2), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), getProperty<sal_Int32>(xShape, "ZOrder"));
+    CPPUNIT_ASSERT_EQUAL(COL_BLACK, getProperty<sal_uInt32>(xShape, "FillColor"));
+
+    xShape.set(getShape(3), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(2), getProperty<sal_Int32>(xShape, "ZOrder"));
+    CPPUNIT_ASSERT_EQUAL(OUString("b"), xShape->getString());
+}
+
 DECLARE_RTFIMPORT_TEST(testFdo61909, "fdo61909.rtf")
 {
     uno::Reference<text::XTextRange> xTextRange = getRun(getParagraph(1), 1);
@@ -1574,6 +1591,18 @@ DECLARE_RTFIMPORT_TEST(testFdo69289, "fdo69289.rtf")
     uno::Reference<table::XTableRows> xTableRows(xTable->getRows(), uno::UNO_QUERY);
     // There were only 2 cells (1 separators) in the table, should be 3 (2 separators).
     CPPUNIT_ASSERT_EQUAL(sal_Int32(2), getProperty< uno::Sequence<text::TableColumnSeparator> >(xTableRows->getByIndex(0), "TableColumnSeparators").getLength());
+}
+
+DECLARE_RTFIMPORT_TEST(testDptxbxRelation, "dptxbx-relation.rtf")
+{
+    // This was FRAME, not PAGE_FRAME, even if dobxpage is in the document.
+    CPPUNIT_ASSERT_EQUAL(text::RelOrientation::PAGE_FRAME, getProperty<sal_Int16>(getShape(1), "HoriOrientRelation"));
+}
+
+DECLARE_RTFIMPORT_TEST(testDprectAnchor, "dprect-anchor.rtf")
+{
+    // This was at-page, which is not something Word supports, so clearly an import error.
+    CPPUNIT_ASSERT_EQUAL(text::TextContentAnchorType_AT_CHARACTER, getProperty<text::TextContentAnchorType>(getShape(1), "AnchorType"));
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
