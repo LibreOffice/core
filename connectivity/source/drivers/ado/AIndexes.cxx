@@ -71,7 +71,7 @@ sdbcx::ObjectType OIndexes::appendObject( const OUString& _rForName, const Refer
 }
 
 // XDrop
-void OIndexes::dropObject(sal_Int32 /*_nPos*/,const OUString _sElementName)
+void OIndexes::dropObject(sal_Int32 /*_nPos*/,const OUString& _sElementName)
 {
     m_aCollection.Delete(_sElementName);
 }

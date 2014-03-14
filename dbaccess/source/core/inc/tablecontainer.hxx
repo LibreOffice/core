@@ -59,7 +59,7 @@ namespace dbaccess
         virtual connectivity::sdbcx::ObjectType     createObject(const OUString& _rName);
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >   createDescriptor();
         virtual connectivity::sdbcx::ObjectType appendObject( const OUString& _rForName, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& descriptor );
-        virtual void dropObject(sal_Int32 _nPos,const OUString _sElementName);
+        virtual void dropObject(sal_Int32 _nPos, const OUString& _sElementName);
 
         virtual void SAL_CALL disposing();
 

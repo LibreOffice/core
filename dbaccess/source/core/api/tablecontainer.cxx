@@ -348,7 +348,7 @@ ObjectType OTableContainer::appendObject( const OUString& _rForName, const Refer
 }
 
 // XDrop
-void OTableContainer::dropObject(sal_Int32 _nPos,const OUString _sElementName)
+void OTableContainer::dropObject(sal_Int32 _nPos, const OUString& _sElementName)
 {
    SAL_INFO("dbaccess", "dbaccess Ocke.Janssen@sun.com OTableContainer::dropObject" );
     m_bInDrop = sal_True;

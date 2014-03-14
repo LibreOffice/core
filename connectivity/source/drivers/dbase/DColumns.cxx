@@ -70,7 +70,7 @@ sdbcx::ObjectType ODbaseColumns::appendObject( const OUString& _rForName, const 
 
 
 // XDrop
-void ODbaseColumns::dropObject(sal_Int32 _nPos,const OUString /*_sElementName*/)
+void ODbaseColumns::dropObject(sal_Int32 _nPos, const OUString& /*_sElementName*/)
 {
     if(!m_pTable->isNew())
         m_pTable->dropColumn(_nPos);

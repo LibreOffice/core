@@ -51,7 +51,7 @@ namespace connectivity
         class ProfileStruct
         {
         public:
-            ProfileStruct(MozillaProductType aProduct,OUString aProfileName,
+            ProfileStruct(MozillaProductType aProduct, const OUString& aProfileName,
 #ifdef MINIMAL_PROFILEDISCOVER
                           const OUString &aProfilePath
 #else
@@ -77,7 +77,7 @@ namespace connectivity
         class ProductStruct
         {
         public:
-            void setCurrentProfile(OUString aProfileName){mCurrentProfileName = aProfileName;}
+            void setCurrentProfile(const OUString& aProfileName){mCurrentProfileName = aProfileName;}
 
             OUString mCurrentProfileName;
 

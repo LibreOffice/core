@@ -81,9 +81,9 @@ namespace connectivity
 
         public:
 
-            MQueryExpressionString( OUString&    lhs,
+            MQueryExpressionString( const OUString&     lhs,
                                     MQueryOp::cond_type cond,
-                                    OUString     rhs )
+                                    const OUString&     rhs )
                 : MQueryExpressionBase( MQueryExpressionBase::StringExpr )
                 , m_aName( lhs )
                 , m_aBooleanCondition( cond )
@@ -91,7 +91,7 @@ namespace connectivity
             {
             }
 
-            MQueryExpressionString( OUString&    lhs,
+            MQueryExpressionString( const OUString&     lhs,
                                     MQueryOp::cond_type cond )
                 : MQueryExpressionBase( MQueryExpressionBase::StringExpr )
                 , m_aName( lhs )

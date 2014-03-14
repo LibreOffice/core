@@ -118,7 +118,7 @@ namespace
                 m_aElements.push_back(m_aNameMap.insert(m_aNameMap.begin(), ObjectEntry(*i,ObjectType())));
         }
 
-        virtual bool rename(const OUString _sOldName,const OUString _sNewName)
+        virtual bool rename(const OUString& _sOldName, const OUString& _sNewName)
         {
             bool bRet = false;
             ObjectIter aIter = m_aNameMap.find(_sOldName);
@@ -518,7 +518,7 @@ void OCollection::insertElement(const OUString& _sElementName,const ObjectType& 
         m_pElements->insert(_sElementName,_xElement);
 }
 
-void OCollection::renameObject(const OUString _sOldName,const OUString _sNewName)
+void OCollection::renameObject(const OUString& _sOldName, const OUString& _sNewName)
 {
     OSL_ENSURE(m_pElements->exists(_sOldName),"Element doesn't exist");
     OSL_ENSURE(!m_pElements->exists(_sNewName),"Element already exists");
@@ -583,7 +583,7 @@ ObjectType OCollection::appendObject( const OUString& /*_rForName*/, const Refer
     return cloneDescriptor( descriptor );
 }
 
-void OCollection::dropObject(sal_Int32 /*_nPos*/,const OUString /*_sElementName*/)
+void OCollection::dropObject(sal_Int32 /*_nPos*/, const OUString& /*_sElementName*/)
 {
 }
 

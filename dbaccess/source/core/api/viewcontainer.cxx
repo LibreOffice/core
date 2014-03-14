@@ -163,7 +163,7 @@ ObjectType OViewContainer::appendObject( const OUString& _rForName, const Refere
 }
 
 // XDrop
-void OViewContainer::dropObject(sal_Int32 _nPos,const OUString _sElementName)
+void OViewContainer::dropObject(sal_Int32 _nPos, const OUString& _sElementName)
 {
     if ( !m_bInElementRemoved )
     {

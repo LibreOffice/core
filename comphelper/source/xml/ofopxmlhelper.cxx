@@ -38,7 +38,7 @@ using namespace ::com::sun::star;
 namespace comphelper {
 
 
-uno::Sequence< uno::Sequence< beans::StringPair > > SAL_CALL OFOPXMLHelper::ReadRelationsInfoSequence( const uno::Reference< io::XInputStream >& xInStream, const OUString aStreamName, const uno::Reference< uno::XComponentContext > xContext )
+uno::Sequence< uno::Sequence< beans::StringPair > > SAL_CALL OFOPXMLHelper::ReadRelationsInfoSequence( const uno::Reference< io::XInputStream >& xInStream, const OUString & aStreamName, const uno::Reference< uno::XComponentContext > xContext )
     throw( uno::Exception )
 {
     OUString aStringID = "_rels/";

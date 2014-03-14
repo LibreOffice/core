@@ -72,7 +72,7 @@ public:
     SAL_CALL
     ReadRelationsInfoSequence(
         const ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >& xInStream,
-        const OUString aStreamName,
+        const OUString & aStreamName,
         const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > xContext )
             throw( ::com::sun::star::uno::Exception );
 

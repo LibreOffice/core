@@ -53,7 +53,7 @@ bool isWhitespace( sal_Unicode c );
 
 OUString concatQualified( const OUString & a, const OUString &b);
 
-OString OUStringToOString( OUString str, ConnectionSettings *settings);
+OString OUStringToOString( const OUString& str, ConnectionSettings *settings);
 
 void bufferQuoteConstant( OUStringBuffer & buf, const OUString & str, ConnectionSettings *settings );
 void bufferQuoteAnyConstant( OUStringBuffer & buf, const com::sun::star::uno::Any &val, ConnectionSettings *settings );

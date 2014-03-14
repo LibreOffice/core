@@ -49,7 +49,7 @@ namespace connectivity
             // XAppend,  etc., but all are optional.
 
             // XDrop
-            virtual void dropObject(sal_Int32 nPosition, const ::rtl::OUString rName);
+            virtual void dropObject(sal_Int32 nPosition, const ::rtl::OUString& rName);
 
         };
 

@@ -70,7 +70,7 @@ ObjectType OIndexes::appendObject( const OUString& _rForName, const Reference< X
 }
 
 // XDrop
-void OIndexes::dropObject(sal_Int32 _nPos,const OUString _sElementName)
+void OIndexes::dropObject(sal_Int32 _nPos, const OUString& _sElementName)
 {
     if ( m_xIndexes.is() )
     {

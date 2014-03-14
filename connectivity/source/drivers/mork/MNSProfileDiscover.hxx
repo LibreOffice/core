@@ -49,7 +49,7 @@ namespace connectivity
         class ProfileStruct
         {
         public:
-            ProfileStruct(MozillaProductType aProduct,OUString aProfileName,
+            ProfileStruct(MozillaProductType aProduct, const OUString& aProfileName,
                           const OUString &aProfilePath
                             );
             MozillaProductType getProductType() { return product;}
@@ -64,7 +64,7 @@ namespace connectivity
         class ProductStruct
         {
         public:
-            void setCurrentProfile(OUString aProfileName){mCurrentProfileName = aProfileName;}
+            void setCurrentProfile(const OUString& aProfileName){mCurrentProfileName = aProfileName;}
 
             OUString mCurrentProfileName;
 

@@ -92,7 +92,7 @@ sdbcx::ObjectType ODbaseTables::appendObject( const OUString& _rForName, const R
 }
 
 // XDrop
-void ODbaseTables::dropObject(sal_Int32 _nPos,const OUString _sElementName)
+void ODbaseTables::dropObject(sal_Int32 _nPos, const OUString& _sElementName)
 {
     Reference< XUnoTunnel> xTunnel;
     try

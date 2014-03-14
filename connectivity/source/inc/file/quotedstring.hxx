@@ -39,7 +39,7 @@ namespace connectivity
         sal_Int32  GetTokenCount( sal_Unicode cTok , sal_Unicode cStrDel ) const;
         OUString   GetTokenSpecial(sal_Int32& nStartPos, sal_Unicode cTok = ';', sal_Unicode cStrDel = '\0') const;
         inline OUString& GetString() { return m_sString; }
-        inline void SetString(OUString aStr) { m_sString = aStr;}
+        inline void SetString(const OUString& aStr) { m_sString = aStr;}
         inline sal_Int32 Len() const { return m_sString.getLength(); }
         inline operator OUString&() { return m_sString; }
     };

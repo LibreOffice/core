@@ -390,7 +390,7 @@ sdbcx::ObjectType OColumns::appendObject( const OUString& _rForName, const Refer
 }
 
 // XDrop
-void OColumns::dropObject(sal_Int32 _nPos,const OUString _sElementName)
+void OColumns::dropObject(sal_Int32 _nPos, const OUString& _sElementName)
 {
     Reference< XDrop > xDrop( m_xDrvColumns, UNO_QUERY );
     if ( xDrop.is() )

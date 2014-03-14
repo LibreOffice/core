@@ -57,7 +57,7 @@ class DatabaseMetaData :
     ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XPreparedStatement > m_getColumnPrivs_stmt;
 
     void checkClosed() throw (::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
-    sal_Int32 getIntSetting(OUString settingName) throw (::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
+    sal_Int32 getIntSetting(const OUString& settingName) throw (::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
     sal_Int32 getMaxIndexKeys()  throw (::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
     sal_Int32 getMaxNameLength() throw (::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
     ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet > getImportedExportedKeys(

@@ -119,7 +119,7 @@ namespace connectivity
         OUString                         m_sForbiddenQueryName;
 
     public:
-        ForbidQueryName( OSQLParseTreeIteratorImpl& _rIteratorImpl, const OUString _rForbiddenQueryName )
+        ForbidQueryName( OSQLParseTreeIteratorImpl& _rIteratorImpl, const OUString& _rForbiddenQueryName )
             :m_rpAllForbiddenNames( _rIteratorImpl.m_pForbiddenQueryNames )
             ,m_sForbiddenQueryName( _rForbiddenQueryName )
         {

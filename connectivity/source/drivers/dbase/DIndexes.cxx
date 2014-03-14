@@ -104,7 +104,7 @@ sdbcx::ObjectType ODbaseIndexes::appendObject( const OUString& _rForName, const 
 }
 
 // XDrop
-void ODbaseIndexes::dropObject(sal_Int32 _nPos,const OUString /*_sElementName*/)
+void ODbaseIndexes::dropObject(sal_Int32 _nPos, const OUString& /*_sElementName*/)
 {
     Reference< XUnoTunnel> xTunnel(getObject(_nPos),UNO_QUERY);
     if ( xTunnel.is() )
