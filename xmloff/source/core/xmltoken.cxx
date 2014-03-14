@@ -1793,7 +1793,6 @@ namespace xmloff { namespace token {
         TOKEN( "table-index-entry-template",      XML_TABLE_INDEX_ENTRY_TEMPLATE ),
         TOKEN( "table-index-source",              XML_TABLE_INDEX_SOURCE ),
         TOKEN( "table-name",                      XML_TABLE_NAME ),
-        TOKEN( "table-number-list",               XML_TABLE_NUMBER_LIST ),
         TOKEN( "table-of-content",                XML_TABLE_OF_CONTENT ),
         TOKEN( "table-of-content-entry-template",     XML_TABLE_OF_CONTENT_ENTRY_TEMPLATE ),
         TOKEN( "table-of-content-source",         XML_TABLE_OF_CONTENT_SOURCE ),

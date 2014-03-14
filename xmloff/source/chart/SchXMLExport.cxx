@@ -1927,31 +1927,6 @@ void SchXMLExportHelper_Impl::exportPlotArea(
             }
         }
 
-        // #i72973#, #144135# only export table-number-list in OOo format (also for binary)
-        Reference< beans::XPropertySet > xExportInfo( mrExport.getExportInfo());
-        if( !msTableNumberList.isEmpty() && xExportInfo.is())
-        {
-            try
-            {
-                OUString sExportTableNumListPropName( "ExportTableNumberList");
-                Reference< beans::XPropertySetInfo > xInfo( xExportInfo->getPropertySetInfo());
-                bool bExportTableNumberList = false;
-                if( xInfo.is() && xInfo->hasPropertyByName( sExportTableNumListPropName ) &&
-                    (xExportInfo->getPropertyValue( sExportTableNumListPropName ) >>= bExportTableNumberList) &&
-                    bExportTableNumberList )
-                {
-                    // this attribute is for charts embedded in calc documents only.
-                    // With this you are able to store a file again in 5.0 binary format
-                    mrExport.AddAttribute( XML_NAMESPACE_CHART, XML_TABLE_NUMBER_LIST, msTableNumberList );
-                }
-            }
-            catch( const uno::Exception & rEx )
-            {
-                OString aBStr(OUStringToOString(rEx.Message, RTL_TEXTENCODING_ASCII_US));
-                SAL_INFO("xmloff.chart", "chart:TableNumberList property caught: " << aBStr );
-            }
-        }
-
         // attributes
         Reference< drawing::XShape > xShape ( xDiagram, uno::UNO_QUERY );
         if( xShape.is())

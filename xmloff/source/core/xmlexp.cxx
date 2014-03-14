@@ -2118,7 +2118,6 @@ sal_Int64 SAL_CALL SvXMLExport::getSomething( const uno::Sequence< sal_Int8 >& r
 sal_Bool SvXMLExport::ExportEmbeddedOwnObject( Reference< XComponent >& rComp )
 {
     OUString sFilterService;
-    bool bIsChart = false;
 
     Reference < lang::XServiceInfo > xServiceInfo( rComp, UNO_QUERY );
     if( xServiceInfo.is() )
@@ -2134,7 +2133,6 @@ sal_Bool SvXMLExport::ExportEmbeddedOwnObject( Reference< XComponent >& rComp )
                 sFilterService = OUString( pEntry->sFilterService,
                                            pEntry->nFilterServiceLen,
                                               RTL_TEXTENCODING_ASCII_US );
-                bIsChart = sModelService == XML_MODEL_SERVICE_CHART;
                 break;
             }
             pEntry++;
@@ -2150,30 +2148,6 @@ sal_Bool SvXMLExport::ExportEmbeddedOwnObject( Reference< XComponent >& rComp )
         new XMLEmbeddedObjectExportFilter( mxHandler );
 
     Sequence < Any > aArgs( 1 );
-    // #144135# the filters for embedded objects in flat format are always
-    // instantiated as Oasis filters and transformed afterwards. Therefore, all
-    // special handling that is done if the exportFlags do not contain
-    // EXPORT_OASIS must be changed to properties being passed in the info
-    // propertyset
-
-    if( ! (getExportFlags() & EXPORT_OASIS) &&
-        bIsChart )
-    {
-        static ::comphelper::PropertyMapEntry const aInfoMap[] =
-        {
-            { OUString("ExportTableNumberList"), 0, ::getBooleanCppuType(), PropertyAttribute::MAYBEVOID, 0},
-            { OUString(), 0, css::uno::Type(), 0, 0 }
-        };
-        Reference< XPropertySet > xInfoProp(
-            ::comphelper::GenericPropertySet_CreateInstance(
-                new ::comphelper::PropertySetInfo( aInfoMap )));
-
-        if( bIsChart )
-            xInfoProp->setPropertyValue("ExportTableNumberList", makeAny( true ));
-
-        aArgs.realloc( 2 );
-        aArgs[1] <<= xInfoProp;
-    }
     aArgs[0] <<= xHdl;
 
     Reference< document::XExporter > xExporter(
