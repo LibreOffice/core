@@ -45,21 +45,15 @@
 
 #include <config_kde4.h>
 
-#if KDE_HAVE_GLIB
-#define GLIB_EVENT_LOOP_SUPPORT 1
-#else
-#define GLIB_EVENT_LOOP_SUPPORT 0
-#endif
-
-#if GLIB_EVENT_LOOP_SUPPORT
-#include <glib-2.0/glib.h>
-#endif
-
 KDEXLib::KDEXLib() :
     SalXLib(),  m_bStartupDone(false), m_pApplication(0),
     m_pFreeCmdLineArgs(0), m_pAppCmdLineArgs(0), m_nFakeCmdLineArgs( 0 ),
-    eventLoopType( LibreOfficeEventLoop ), m_frameWidth( -1 )
+    m_frameWidth( -1 ), m_isGlibEventLoopType(false)
 {
+#if KDE_HAVE_GLIB
+    m_isGlibEventLoopType = QAbstractEventDispatcher::instance()->inherits( "QEventDispatcherGlib" );
+#endif
+
     // the timers created here means they belong to the main thread.
     // As the timeoutTimer runs the LO event queue, which may block on a dialog,
     // the timer has to use a Qt::QueuedConnection, otherwise the nested event
@@ -190,9 +184,17 @@ void KDEXLib::Init()
 // needs to be unlocked shortly before entering the main sleep (e.g. select()) and locked
 // immediatelly after. So we need to know which event loop implementation is used and
 // hook accordingly.
-#if GLIB_EVENT_LOOP_SUPPORT
+#if KDE_HAVE_GLIB
+#include <glib.h>
+
 static GPollFunc old_gpoll = NULL;
 static gint gpoll_wrapper( GPollFD*, guint, gint );
+
+gint gpoll_wrapper( GPollFD* ufds, guint nfds, gint timeout )
+{
+    SalYieldMutexReleaser release; // release YieldMutex (and re-acquire at block end)
+    return old_gpoll( ufds, nfds, timeout );
+}
 #endif
 
 static bool ( *old_qt_event_filter )( void* );
@@ -208,35 +210,19 @@ static bool qt_event_filter( void* m )
 void KDEXLib::setupEventLoop()
 {
     old_qt_event_filter = QAbstractEventDispatcher::instance()->setEventFilter( qt_event_filter );
-#if GLIB_EVENT_LOOP_SUPPORT
-// Glib is simple, it has g_main_context_set_poll_func() for wrapping the sleep call.
-// The catch is that Qt has a bug that allows triggering timers even when they should
-// not be, leading to crashes caused by QClipboard re-entering the event loop.
-// (http://bugreports.qt.nokia.com/browse/QTBUG-14461), so enable only with Qt>=4.8.0,
-// where it is fixed.
-#if QT_VERSION >= QT_VERSION_CHECK( 4, 8, 0 )
-    if( QAbstractEventDispatcher::instance()->inherits( "QEventDispatcherGlib" ))
+#if KDE_HAVE_GLIB
+    if( m_isGlibEventLoopType )
     {
-        eventLoopType = GlibEventLoop;
         old_gpoll = g_main_context_get_poll_func( NULL );
         g_main_context_set_poll_func( NULL, gpoll_wrapper );
         return;
     }
 #endif
-#endif
 }
-
-#if GLIB_EVENT_LOOP_SUPPORT
-gint gpoll_wrapper( GPollFD* ufds, guint nfds, gint timeout )
-{
-    SalYieldMutexReleaser release; // release YieldMutex (and re-acquire at block end)
-    return old_gpoll( ufds, nfds, timeout );
-}
-#endif
 
 void KDEXLib::Insert( int fd, void* data, YieldFunc pending, YieldFunc queued, YieldFunc handle )
 {
-    if( eventLoopType == LibreOfficeEventLoop )
+    if( !m_isGlibEventLoopType )
         return SalXLib::Insert( fd, data, pending, queued, handle );
     SocketData sdata;
     sdata.data = data;
@@ -251,7 +237,7 @@ void KDEXLib::Insert( int fd, void* data, YieldFunc pending, YieldFunc queued, Y
 
 void KDEXLib::Remove( int fd )
 {
-    if( eventLoopType == LibreOfficeEventLoop )
+    if( !m_isGlibEventLoopType )
         return SalXLib::Remove( fd );
     SocketData sdata = socketData.take( fd );// according to SalXLib::Remove() this should be safe
     delete sdata.notifier;
@@ -265,7 +251,7 @@ void KDEXLib::socketNotifierActivated( int fd )
 
 void KDEXLib::Yield( bool bWait, bool bHandleAllCurrentEvents )
 {
-    if( eventLoopType == LibreOfficeEventLoop )
+    if( !m_isGlibEventLoopType )
     {
         if( qApp->thread() == QThread::currentThread())
         {
@@ -307,7 +293,7 @@ void KDEXLib::processYield( bool bWait, bool bHandleAllCurrentEvents )
 
 void KDEXLib::StartTimer( sal_uLong nMS )
 {
-    if( eventLoopType == LibreOfficeEventLoop )
+    if( !m_isGlibEventLoopType )
         return SalXLib::StartTimer( nMS );
     timeoutTimer.setInterval( nMS );
     // QTimer's can be started only in their thread (main thread here)
@@ -324,7 +310,7 @@ void KDEXLib::startTimeoutTimer()
 
 void KDEXLib::StopTimer()
 {
-    if( eventLoopType == LibreOfficeEventLoop )
+    if( !m_isGlibEventLoopType )
         return SalXLib::StopTimer();
     timeoutTimer.stop();
 }
@@ -338,14 +324,14 @@ void KDEXLib::timeoutActivated()
 
 void KDEXLib::Wakeup()
 {
-    if( eventLoopType == LibreOfficeEventLoop )
+    if( !m_isGlibEventLoopType )
         return SalXLib::Wakeup();
     QAbstractEventDispatcher::instance( qApp->thread())->wakeUp(); // main thread event loop
 }
 
 void KDEXLib::PostUserEvent()
 {
-    if( eventLoopType == LibreOfficeEventLoop )
+    if( !m_isGlibEventLoopType )
         return SalXLib::PostUserEvent();
     if( qApp->thread() == QThread::currentThread())
         startUserEventTimer();
