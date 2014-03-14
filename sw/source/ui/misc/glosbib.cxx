@@ -59,6 +59,7 @@ SwGlossaryGroupDlg::SwGlossaryGroupDlg(Window * pParent,
     m_pPathLB->set_width_request(nWidth);
     //just has to be something small, real size will be available space
     m_pGroupTLB->set_width_request(nWidth);
+    m_pGroupTLB->set_height_request(GetTextHeight() * 10);
 
     long nTabs[] =
     {   2, // Number of Tabs
