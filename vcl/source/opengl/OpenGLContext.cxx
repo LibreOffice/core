@@ -98,8 +98,7 @@ debug_callback(GLenum source, GLenum type, GLuint id,
 
 #endif
 
-
-#if defined( UNX )
+#if defined UNX && !defined MACOSX
 
 namespace {
 
