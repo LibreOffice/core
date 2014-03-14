@@ -2890,7 +2890,7 @@ int RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
                     std::vector<beans::PropertyValue>& rPendingProperties = m_aStates.top().aDrawingObject.aPendingProperties;
                     for (std::vector<beans::PropertyValue>::iterator i = rPendingProperties.begin(); i != rPendingProperties.end(); ++i)
                         m_aStates.top().aDrawingObject.xPropertySet->setPropertyValue(i->Name, i->Value);
-                    m_pSdrImport->resolveDhgt(m_aStates.top().aDrawingObject.xPropertySet, m_aStates.top().aDrawingObject.nDhgt);
+                    m_pSdrImport->resolveDhgt(m_aStates.top().aDrawingObject.xPropertySet, m_aStates.top().aDrawingObject.nDhgt, /*bOldStyle=*/true);
                 }
                 break;
         case RTF_DOBXMARGIN:

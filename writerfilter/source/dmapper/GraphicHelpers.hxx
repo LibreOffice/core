@@ -75,7 +75,7 @@ class GraphicZOrderHelper
 {
 public:
     void addItem( uno::Reference< beans::XPropertySet > props, sal_Int32 relativeHeight );
-    sal_Int32 findZOrder( sal_Int32 relativeHeight );
+    sal_Int32 findZOrder( sal_Int32 relativeHeight, bool bOldStyle = false );
 private:
     typedef std::map< sal_Int32, uno::Reference< beans::XPropertySet > > Items;
     Items items;

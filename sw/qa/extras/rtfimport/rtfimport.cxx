@@ -1009,6 +1009,23 @@ DECLARE_RTFIMPORT_TEST(testFdo60722, "fdo60722.rtf")
     CPPUNIT_ASSERT_EQUAL(sal_uInt32(0), getProperty<sal_uInt32>(xShape, "LineColor"));
 }
 
+DECLARE_RTFIMPORT_TEST(testDoDhgtOld, "do-dhgt-old.rtf")
+{
+    // The file contains 3 shapes which have the same dhgt (z-order).
+    // Test that the order is 1) a 2) black rectangle 3) b, and not something else
+    uno::Reference<text::XText> xShape(getShape(1), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty<sal_Int32>(xShape, "ZOrder"));
+    CPPUNIT_ASSERT_EQUAL(OUString("a"), xShape->getString());
+
+    xShape.set(getShape(2), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), getProperty<sal_Int32>(xShape, "ZOrder"));
+    CPPUNIT_ASSERT_EQUAL(COL_BLACK, getProperty<sal_uInt32>(xShape, "FillColor"));
+
+    xShape.set(getShape(3), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(2), getProperty<sal_Int32>(xShape, "ZOrder"));
+    CPPUNIT_ASSERT_EQUAL(OUString("b"), xShape->getString());
+}
+
 DECLARE_RTFIMPORT_TEST(testFdo61909, "fdo61909.rtf")
 {
     uno::Reference<text::XTextRange> xTextRange = getRun(getParagraph(1), 1);
