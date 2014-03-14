@@ -60,22 +60,6 @@
 #define MENUITEM_TOOLBAR_LOCKTOOLBARPOSITION    5
 #define MENUITEM_TOOLBAR_CLOSE                  6
 
-// License Dialog
-#define DLG_LICENSE                             (RID_FWK_DIALOG_START+256)
-#define ML_LICENSE                              (RID_FWK_DIALOG_START+11)
-#define FT_INFO1                                (RID_FWK_DIALOG_START+12)
-#define FT_INFO2                                (RID_FWK_DIALOG_START+13)
-#define FT_INFO3                                (RID_FWK_DIALOG_START+14)
-#define FT_INFO2_1                              (RID_FWK_DIALOG_START+15)
-#define FT_INFO3_1                              (RID_FWK_DIALOG_START+16)
-#define FL_DIVIDE                               (RID_FWK_DIALOG_START+17)
-#define PB_PAGEDOWN                             (RID_FWK_DIALOG_START+18)
-#define IMG_ARROW                               (RID_FWK_DIALOG_START+19)
-#define LICENSE_ACCEPT                          (RID_FWK_DIALOG_START+20)
-#define LICENSE_NOTACCEPT                       (RID_FWK_DIALOG_START+21)
-#define PB_DECLINE                              (RID_FWK_DIALOG_START+22)
-#define PB_ACCEPT                               (RID_FWK_DIALOG_START+23)
-
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

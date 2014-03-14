@@ -58,7 +58,6 @@ $(eval $(call gb_Library_add_exception_objects,fwl,\
     framework/source/recording/dispatchrecordersupplier \
     framework/source/register/registertemp \
     framework/source/services/dispatchhelper \
-    framework/source/services/license \
     framework/source/services/mediatypedetectionhelper \
     framework/source/services/uriabbreviation \
     framework/source/uielement/fontmenucontroller \

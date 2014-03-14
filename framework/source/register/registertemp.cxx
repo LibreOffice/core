@@ -40,7 +40,6 @@
 #include <services/dispatchhelper.hxx>
 #include <recording/dispatchrecorder.hxx>
 #include <recording/dispatchrecordersupplier.hxx>
-#include <services/license.hxx>
 #include <services/uriabbreviation.hxx>
 #include <uielement/fontmenucontroller.hxx>
 #include <uielement/fontsizemenucontroller.hxx>
@@ -55,7 +54,6 @@ COMPONENTGETFACTORY ( fwl,
                         IFFACTORY( ::framework::MediaTypeDetectionHelper        )
                         IFFACTORY( ::framework::MailToDispatcher                        ) else
                         IFFACTORY( ::framework::ServiceHandler                          )   else
-                        IFFACTORY( ::framework::License                                 )   else
                         IFFACTORY( ::framework::PopupMenuDispatcher                     )   else
                         IFFACTORY( ::framework::DispatchHelper                          )   else
                         IFFACTORY( ::framework::DispatchRecorder                        )   else

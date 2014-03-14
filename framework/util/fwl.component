@@ -40,9 +40,6 @@
   <implementation name="com.sun.star.comp.framework.HeaderMenuController">
     <service name="com.sun.star.frame.PopupMenuController"/>
   </implementation>
-  <implementation name="com.sun.star.comp.framework.License">
-    <service name="com.sun.star.task.Job"/>
-  </implementation>
   <implementation name="com.sun.star.comp.framework.MacrosMenuController">
     <service name="com.sun.star.frame.PopupMenuController"/>
   </implementation>
