@@ -855,7 +855,7 @@ void SwNoTxtFrm::PaintPicture( OutputDevice* pOut, const SwRect &rGrfArea ) cons
         if( bContinue )
         {
             const sal_Bool bSwapped = rGrfObj.IsSwappedOut();
-            const bool bSwappedIn = 0 != pGrfNd->SwapIn( bPrn );
+            const bool bSwappedIn = pGrfNd->SwapIn( bPrn );
             if( bSwappedIn && rGrfObj.GetGraphic().IsSupportedGraphic())
             {
                 const bool bAnimate = rGrfObj.IsAnimated() &&

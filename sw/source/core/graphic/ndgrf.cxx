@@ -517,16 +517,15 @@ StreamAndStorageNames lcl_GetStreamStorageNames( const OUString sUserData )
 }
 
 /**
- * @return -1 if ReRead successful,
- *          1 if reading successful,
- *          0 if not loaded
+ * @return true if ReRead or reading successful,
+ *         false if not loaded
  */
-short SwGrfNode::SwapIn( bool bWaitForData )
+bool SwGrfNode::SwapIn( bool bWaitForData )
 {
     if( bInSwapIn ) // not recursively!
-        return short(!maGrfObj.IsSwappedOut());
+        return !maGrfObj.IsSwappedOut();
 
-    short nRet = 0;
+    bool bRet = false;
     bInSwapIn = true;
     SwBaseLink* pLink = (SwBaseLink*)(::sfx2::SvBaseLink*) refLink;
 
@@ -537,7 +536,9 @@ short SwGrfNode::SwapIn( bool bWaitForData )
         {
             // link was not loaded yet
             if( pLink->SwapIn( bWaitForData ) )
-                nRet = -1;
+            {
+                bRet = true;
+            }
             else if( GRAPHIC_DEFAULT == maGrfObj.GetType() )
             {
                 // no default bitmap anymore, thus re-paint
@@ -550,18 +551,21 @@ short SwGrfNode::SwapIn( bool bWaitForData )
                 ModifyNotification( &aMsgHint, &aMsgHint );
             }
         }
-        else if( maGrfObj.IsSwappedOut() ) {
+        else if( maGrfObj.IsSwappedOut() )
+        {
             // link to download
-            nRet = pLink->SwapIn( bWaitForData ) ? 1 : 0;
+            bRet = pLink->SwapIn( bWaitForData );
         }
         else
-            nRet = 1;
+            bRet = true;
     }
     else if( maGrfObj.IsSwappedOut() )
     {
         // graphic is in storage or in a temp file
         if( !HasStreamName() )
-            nRet = (short)maGrfObj.SwapIn();
+        {
+            bRet = maGrfObj.SwapIn();
+        }
         else
         {
             try
@@ -571,8 +575,7 @@ short SwGrfNode::SwapIn( bool bWaitForData )
                 SvStream* pStrm = _GetStreamForEmbedGrf( refPics, aNames.sStream );
                 if ( pStrm )
                 {
-                    if ( ImportGraphic( *pStrm ) )
-                        nRet = 1;
+                    bRet = ImportGraphic( *pStrm );
                     delete pStrm;
                 }
             }
@@ -583,26 +586,26 @@ short SwGrfNode::SwapIn( bool bWaitForData )
             }
         }
 
-        if( 1 == nRet )
+        if( bRet )
         {
             SwMsgPoolItem aMsg( RES_GRAPHIC_SWAPIN );
             ModifyNotification( &aMsg, &aMsg );
         }
     }
     else
-        nRet = 1;
-    OSL_ENSURE( nRet, "Cannot swap in graphic" );
+        bRet = true;
+    OSL_ENSURE( bRet, "Cannot swap in graphic" );
 
-    if( nRet )
+    if( bRet )
     {
         if( !nGrfSize.Width() && !nGrfSize.Height() )
             SetTwipSize( ::GetGraphicSizeTwip( maGrfObj.GetGraphic(), 0 ) );
     }
     bInSwapIn = false;
-    return nRet;
+    return bRet;
 }
 
-short SwGrfNode::SwapOut()
+bool SwGrfNode::SwapOut()
 {
     if( maGrfObj.GetType() != GRAPHIC_DEFAULT &&
         maGrfObj.GetType() != GRAPHIC_NONE &&
@@ -615,12 +618,12 @@ short SwGrfNode::SwapOut()
             // if there is no stream name in the storage yet
             if( !HasStreamName() )
                 if( !maGrfObj.SwapOut() )
-                    return 0;
+                    return false;
         }
         // written graphics and links are removed here
-        return (short) maGrfObj.SwapOut( NULL );
+        return maGrfObj.SwapOut( NULL );
     }
-    return 1;
+    return true;
 }
 
 bool SwGrfNode::GetFileFilterNms( OUString* pFileNm, OUString* pFilterNm ) const

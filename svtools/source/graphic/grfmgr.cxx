@@ -1055,9 +1055,9 @@ Graphic GraphicObject::GetTransformedGraphic( const GraphicAttr* pAttr ) const /
     return aGraphic;
 }
 
-sal_Bool GraphicObject::SwapOut()
+bool GraphicObject::SwapOut()
 {
-    sal_Bool bRet = ( !mbAutoSwapped ? maGraphic.SwapOut() : sal_False );
+    const bool bRet = !mbAutoSwapped && maGraphic.SwapOut();
 
     if( bRet && mpMgr )
         mpMgr->ImplGraphicObjectWasSwappedOut( *this );
@@ -1065,9 +1065,9 @@ sal_Bool GraphicObject::SwapOut()
     return bRet;
 }
 
-sal_Bool GraphicObject::SwapOut( SvStream* pOStm )
+bool GraphicObject::SwapOut( SvStream* pOStm )
 {
-    sal_Bool bRet = ( !mbAutoSwapped ? maGraphic.SwapOut( pOStm ) : sal_False );
+    const bool bRet = !mbAutoSwapped && maGraphic.SwapOut( pOStm );
 
     if( bRet && mpMgr )
         mpMgr->ImplGraphicObjectWasSwappedOut( *this );
@@ -1075,17 +1075,17 @@ sal_Bool GraphicObject::SwapOut( SvStream* pOStm )
     return bRet;
 }
 
-sal_Bool GraphicObject::SwapIn()
+bool GraphicObject::SwapIn()
 {
-    sal_Bool bRet;
+    bool bRet = false;
 
     if( mbAutoSwapped )
     {
         ImplAutoSwapIn();
-        bRet = sal_True;
+        bRet = true;
     }
     else if( mpMgr && mpMgr->ImplFillSwappedGraphicObject( *this, maGraphic ) )
-        bRet = sal_True;
+        bRet = true;
     else
     {
         bRet = maGraphic.SwapIn();

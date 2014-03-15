@@ -171,9 +171,9 @@ public:
                  const GraphicObject* pGrfObj = 0,
                  bool bModify = true );
     /// Loading of graphic immediately before displaying.
-    short SwapIn( bool bWaitForData = false );
+    bool SwapIn( bool bWaitForData = false );
     /// Remove graphic in order to free memory.
-    short SwapOut();
+    bool SwapOut();
     /// Access to storage stream-name.
     void SetStreamName( const OUString& r ) { maGrfObj.SetUserData( r ); }
     /// Is this node selected by any shell?

@@ -403,9 +403,9 @@ public:
 
     Link                    GetAnimationNotifyHdl() const { return maGraphic.GetAnimationNotifyHdl(); }
 
-    sal_Bool                SwapOut();
-    sal_Bool                SwapOut( SvStream* pOStm );
-    sal_Bool                SwapIn();
+    bool                    SwapOut();
+    bool                    SwapOut( SvStream* pOStm );
+    bool                    SwapIn();
 
     sal_Bool                IsInSwapIn() const { return mbIsInSwapIn; }
     sal_Bool                IsInSwapOut() const { return mbIsInSwapOut; }

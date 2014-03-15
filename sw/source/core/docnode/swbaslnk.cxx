@@ -369,11 +369,9 @@ sal_Bool SetGrfFlySize( const Size& rGrfSz, const Size& rFrmSz, SwGrfNode* pGrfN
     return bRet;
 }
 
-sal_Bool SwBaseLink::SwapIn( sal_Bool bWaitForData, sal_Bool bNativFormat )
+bool SwBaseLink::SwapIn( bool bWaitForData, bool bNativFormat )
 {
-    bSwapIn = sal_True;
-
-    sal_Bool bRes;
+    bSwapIn = true;
 
     if( !GetObj() && ( bNativFormat || ( !IsSynchron() && bWaitForData ) ))
     {
@@ -392,6 +390,8 @@ sal_Bool SwBaseLink::SwapIn( sal_Bool bWaitForData, sal_Bool bNativFormat )
     }
 #endif
 
+    bool bRes = false;
+
     if( GetObj() )
     {
         OUString aMimeType( SotExchange::GetFormatMimeType( GetContentType() ));
@@ -401,14 +401,17 @@ sal_Bool SwBaseLink::SwapIn( sal_Bool bWaitForData, sal_Bool bNativFormat )
         if( bWaitForData && !GetObj() )
         {
             OSL_ENSURE( !this, "The SvxFileObject was deleted in a GetData!" );
-            bRes = sal_False;
         }
-        else if( 0 != ( bRes = aValue.hasValue() ) )
+        else
         {
-            // The Flag needs to be reset on a SwapIn, because
-            // we want to reapply the data.
-            bIgnoreDataChanged = sal_False;
-            DataChanged( aMimeType, aValue );
+            bRes = aValue.hasValue();
+            if ( bRes )
+            {
+                // The Flag needs to be reset on a SwapIn, because
+                // we want to reapply the data.
+                bIgnoreDataChanged = sal_False;
+                DataChanged( aMimeType, aValue );
+            }
         }
     }
     else if( !IsSynchron() && bWaitForData )
@@ -420,7 +423,7 @@ sal_Bool SwBaseLink::SwapIn( sal_Bool bWaitForData, sal_Bool bNativFormat )
     else
         bRes = Update();
 
-    bSwapIn = sal_False;
+    bSwapIn = false;
     return bRes;
 }
 

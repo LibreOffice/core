@@ -31,7 +31,7 @@ class SwBaseLink : public ::sfx2::SvBaseLink
     friend long GrfNodeChanged( void* pLink, void* pCaller );
 
     SwCntntNode* pCntntNode;
-    sal_Bool bSwapIn : 1;
+    bool bSwapIn : 1;
     sal_Bool bNoDataFlag : 1;
     sal_Bool bIgnoreDataChanged : 1;
     ReReadThread* m_pReReadThread;
@@ -42,7 +42,7 @@ protected:
     SwBaseLink( const OUString& rNm, sal_uInt16 nObjectType, ::sfx2::SvLinkSource* pObj,
                  SwCntntNode* pNode = 0 )
         : ::sfx2::SvBaseLink( rNm, nObjectType, pObj ), pCntntNode( pNode ),
-        bSwapIn( sal_False ), bNoDataFlag( sal_False ), bIgnoreDataChanged( sal_False ),
+        bSwapIn( false ), bNoDataFlag( sal_False ), bIgnoreDataChanged( sal_False ),
         m_pReReadThread(0)
     {}
 
@@ -51,7 +51,7 @@ public:
 
     SwBaseLink( sal_uInt16 nMode, sal_uInt16 nFormat, SwCntntNode* pNode = 0 )
         : ::sfx2::SvBaseLink( nMode, nFormat ), pCntntNode( pNode ),
-        bSwapIn( sal_False ), bNoDataFlag( sal_False ), bIgnoreDataChanged( sal_False ),
+        bSwapIn( false ), bNoDataFlag( sal_False ), bIgnoreDataChanged( sal_False ),
         m_pReReadThread(0)
     {}
     virtual ~SwBaseLink();
@@ -66,7 +66,7 @@ public:
     SwCntntNode *GetCntntNode() { return pCntntNode; }
 
     // For graphics only.
-    sal_Bool SwapIn( sal_Bool bWaitForData = sal_False, sal_Bool bNativFormat = sal_False );
+    bool SwapIn( bool bWaitForData = false, bool bNativFormat = false );
 
     sal_Bool Connect() { return 0 != SvBaseLink::GetRealObject(); }
 
