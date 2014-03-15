@@ -410,15 +410,23 @@ void ScXMLChangeTrackingImportHelper::AddGenerated(ScMyCellInfo* pCellInfo, cons
 
 void ScXMLChangeTrackingImportHelper::EndChangeAction()
 {
+    if (!pCurrentAction)
+    {
+        OSL_FAIL("no current action");
+        return;
+    }
+
     if ((pCurrentAction->nActionType == SC_CAT_DELETE_COLS) ||
         (pCurrentAction->nActionType == SC_CAT_DELETE_ROWS))
         GetMultiSpannedRange();
-    if (pCurrentAction && pCurrentAction->nActionNumber > 0)
+
+    if  (pCurrentAction->nActionNumber > 0)
         aActions.push_back(pCurrentAction);
     else
     {
         OSL_FAIL("no current action");
     }
+
     pCurrentAction = NULL;
 }
 
