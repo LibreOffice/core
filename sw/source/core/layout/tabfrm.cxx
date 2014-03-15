@@ -3555,7 +3555,7 @@ void SwRowFrm::Modify( const SfxPoolItem* pOld, const SfxPoolItem * pNew )
         if ( !pItem )
             pChgSet->GetItemState( RES_ROW_SPLIT, false, &pItem);
     }
-    else if ( RES_FRM_SIZE == pNew->Which() || RES_ROW_SPLIT == pNew->Which() )
+    else if (pNew && (RES_FRM_SIZE == pNew->Which() || RES_ROW_SPLIT == pNew->Which()))
         pItem = pNew;
 
     if ( pItem )
