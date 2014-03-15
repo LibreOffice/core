@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da86d52c_49f3810a",
+        "filename": "sw/source/filter/ww8/docxattributeoutput.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 3325,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2014-03-15T10:08:02Z",
+      "side": 1,
+      "message": "If you really want to delete that code, then please just remove it, don\u0027t do #if 0. Or you just forgot to remove the #if and #endif?",
+      "revId": "277cec72019bbf8b9d2114a661dd2307be58b51f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
