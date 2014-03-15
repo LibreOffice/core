@@ -13,32 +13,6 @@
 
 namespace sc {
 
-namespace {
-
-class PurgeAction : public ColumnSpanSet::Action
-{
-    ScDocument& mrDoc;
-    sc::ColumnBlockPosition maBlockPos;
-
-public:
-    PurgeAction(ScDocument& rDoc) : mrDoc(rDoc) {}
-
-    virtual void startColumn(SCTAB nTab, SCCOL nCol)
-    {
-        mrDoc.InitColumnBlockPosition(maBlockPos, nTab, nCol);
-    }
-
-    virtual void execute(const ScAddress& rPos, SCROW nLength, bool bVal)
-    {
-        if (bVal)
-        {
-            mrDoc.DeleteBroadcasters(maBlockPos, rPos, nLength);
-        }
-    };
-};
-
-}
-
 StartListeningContext::StartListeningContext(ScDocument& rDoc) :
     mrDoc(rDoc), mpSet(new ColumnBlockPositionSet(rDoc)) {}
 
@@ -92,9 +66,25 @@ void EndListeningContext::addEmptyBroadcasterPosition(SCTAB nTab, SCCOL nCol, SC
 
 void EndListeningContext::purgeEmptyBroadcasters()
 {
-    PurgeAction aAction(mrDoc);
+    PurgeListenerAction aAction(mrDoc);
     maSet.executeAction(aAction);
 }
+
+PurgeListenerAction::PurgeListenerAction(ScDocument& rDoc) :
+    mrDoc(rDoc), mpBlockPos(new ColumnBlockPosition) {}
+
+void PurgeListenerAction::startColumn( SCTAB nTab, SCCOL nCol )
+{
+    mrDoc.InitColumnBlockPosition(*mpBlockPos, nTab, nCol);
+}
+
+void PurgeListenerAction::execute( const ScAddress& rPos, SCROW nLength, bool bVal )
+{
+    if (bVal)
+    {
+        mrDoc.DeleteBroadcasters(*mpBlockPos, rPos, nLength);
+    }
+};
 
 }
 
