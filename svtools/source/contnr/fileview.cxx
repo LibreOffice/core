@@ -1011,7 +1011,9 @@ sal_Bool ViewTabListBox_Impl::EditedEntry( SvTreeListEntry* pEntry,
             aContent.setPropertyValue( aPropName, aValue );
             mpParent->EntryRenamed( aURL, rNewText );
 
-            pData->maURL = aURL;
+            if (pData)
+                pData->maURL = aURL;
+
             pEntry->SetUserData( pData );
 
             bRet = sal_True;
