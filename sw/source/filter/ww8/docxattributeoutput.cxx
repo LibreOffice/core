@@ -827,13 +827,14 @@ void DocxAttributeOutput::EndRun()
         m_closeHyperlinkInThisRun = false;
     }
 
-    while ( m_Fields.begin() != m_Fields.end() )
-    {
-        EndField_Impl( m_Fields.front( ) );
-        if (m_Fields.front().pField)
-            delete m_Fields.front().pField;
-        m_Fields.erase( m_Fields.begin( ) );
-    }
+    if(!m_startedHyperlink)
+        while ( m_Fields.begin() != m_Fields.end() )
+        {
+            EndField_Impl( m_Fields.front( ) );
+            if (m_Fields.front().pField)
+                delete m_Fields.front().pField;
+            m_Fields.erase( m_Fields.begin( ) );
+        }
 }
 
 void DocxAttributeOutput::DoWriteBookmarks()
