@@ -512,10 +512,14 @@ OString HTMLOutFuncs::ConvertStringToHTML( const OUString& rSrc,
 SvStream& HTMLOutFuncs::Out_AsciiTag( SvStream& rStream, const sal_Char *pStr,
                                       bool bOn, rtl_TextEncoding )
 {
-    sal_Char sStt[3] = "</";
-    if( bOn )
-        sStt[1] = 0;
-    return (rStream.WriteCharPtr( sStt ).WriteCharPtr( pStr ).WriteChar( '>' ));
+    if(bOn)
+        rStream.WriteCharPtr("<");
+    else
+        rStream.WriteCharPtr("</");
+
+    rStream.WriteCharPtr(pStr).WriteChar('>');
+
+    return rStream;
 }
 
 SvStream& HTMLOutFuncs::Out_Char( SvStream& rStream, sal_Unicode c,
