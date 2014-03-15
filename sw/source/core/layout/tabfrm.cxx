@@ -4939,7 +4939,7 @@ void SwCellFrm::Modify( const SfxPoolItem* pOld, const SfxPoolItem * pNew )
 
     if( bAttrSetChg )
         ((SwAttrSetChg*)pNew)->GetChgSet()->GetItemState( RES_VERT_ORIENT, false, &pItem);
-    else if ( RES_VERT_ORIENT == pNew->Which() )
+    else if (pNew && RES_VERT_ORIENT == pNew->Which())
         pItem = pNew;
 
     if ( pItem )
