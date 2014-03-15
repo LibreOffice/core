@@ -3422,6 +3422,7 @@ eF_ResT SwWW8ImplReader::Read_F_Hyperlink( WW8FieldDesc* /*pF*/, OUString& rStr 
                 case 'h':
                 case 'm':
                     OSL_ENSURE( !this, "Auswertung fehlt noch - Daten unbekannt" );
+                    //fall-through
                 case 's':   //worthless fake anchor option
                     bOptions = true;
                     break;
