@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da86d52c_c9c77163",
+        "filename": ".gitignore",
+        "patchSetId": 3
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2014-03-15T23:07:44Z",
+      "side": 1,
+      "message": "as said earlier these are deprecated..\nthey should no be hidden but cleaned-up",
+      "revId": "5d6737a506693c3030c4c93d179b5c068f1b7d77",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da86d52c_e9c43561",
+        "filename": ".gitignore",
+        "patchSetId": 3
+      },
+      "lineNbr": 102,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2014-03-15T23:07:44Z",
+      "side": 1,
+      "message": "that\u0027s another issue.. doxygen output as no business generating in the root of the tree...\nit should be under workdir really",
+      "revId": "5d6737a506693c3030c4c93d179b5c068f1b7d77",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da86d52c_09a189a9",
+        "filename": ".gitignore",
+        "patchSetId": 3
+      },
+      "lineNbr": 105,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2014-03-15T23:07:44Z",
+      "side": 1,
+      "message": "that the kind of thing that is best handled in the dev\nown gitignore.. via he local ~/.gitconfig\n\nI know you\u0027re not the first.. adn that .gitingore file is prone to bloat-creep... but still..",
+      "revId": "5d6737a506693c3030c4c93d179b5c068f1b7d77",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
