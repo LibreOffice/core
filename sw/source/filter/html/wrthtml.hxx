@@ -54,7 +54,7 @@ class SwHTMLNumRuleInfo;
 class SwHTMLPosFlyFrms;
 class SwTxtFtn;
 
-typedef std::vector<SwTxtFtn *> SwHTMLTxtFtns;
+typedef std::vector<SwTxtFtn*> SwHTMLTxtFtns;
 
 extern SwAttrFnTab aHTMLAttrFnTab;
 
@@ -184,12 +184,11 @@ const sal_uInt32 HTML_FRMOPTS_GENIMG    =
 struct HTMLControl
 {
     // die Form, zu der das Control gehoert
-    ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexContainer > xFormComps;
+    css::uno::Reference<css::container::XIndexContainer> xFormComps;
     sal_uLong nNdIdx;                   // der Node, in dem es verankert ist
     sal_Int32 nCount;              // wie viele Controls sind in dem Node
 
-    HTMLControl( const ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexContainer > & rForm,
-                 sal_uInt32 nIdx );
+    HTMLControl( const css::uno::Reference<css::container::XIndexContainer>& rForm, sal_uInt32 nIdx );
     ~HTMLControl();
 
     // operatoren fuer das Sort-Array
@@ -232,7 +231,11 @@ struct SwHTMLFmtInfo
 
     // Konstruktor fuer einen Dummy zum Suchen
     SwHTMLFmtInfo( const SwFmt *pF ) :
-        pFmt( pF ), pRefFmt(0), pItemSet( 0 ), nFirstLineIndent(0), bScriptDependent(false)
+        pFmt( pF ),
+        pRefFmt(0),
+        pItemSet( 0 ),
+        nFirstLineIndent(0),
+        bScriptDependent(false)
     {}
 
     // Konstruktor zum Erstellen der Format-Info
@@ -297,7 +300,7 @@ public:
     OUString aNonConvertableCharacters;
     OUString aBulletGrfs[MAXLEVEL];   // die Grafiken fuer Listen
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexContainer >  *pxFormComps; // die aktuelle Form
+    css::uno::Reference<css::container::XIndexContainer>* pxFormComps; // die aktuelle Form
 
     SwDoc *pTemplate;               // die HTML-Vorlage
     Color *pDfltColor;              // default Farbe
@@ -410,14 +413,11 @@ public:
 
     void OutForm( sal_Bool bTagOn=sal_True, const SwStartNode *pStNd=0 );
     void OutHiddenForms();
-    void OutHiddenForm( const ::com::sun::star::uno::Reference<
-                                ::com::sun::star::form::XForm > & rForm );
+    void OutHiddenForm( const css::uno::Reference<css::form::XForm>& rForm );
 
-    void OutForm( sal_Bool bOn, const ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexContainer > & rFormComps );
-    void OutHiddenControls( const ::com::sun::star::uno::Reference<
-                ::com::sun::star::container::XIndexContainer > & rFormComps,
-            const ::com::sun::star::uno::Reference<
-                ::com::sun::star::beans::XPropertySet > & rPropSet );
+    void OutForm( sal_Bool bOn, const css::uno::Reference<css::container::XIndexContainer>& rFormComps );
+    void OutHiddenControls( const css::uno::Reference<css::container::XIndexContainer>& rFormComps,
+                            const css::uno::Reference<css::beans::XPropertySet>& rPropSet );
     sal_Bool HasControls() const;
 
     void OutFootEndNoteInfo();
@@ -470,11 +470,20 @@ public:
 
     void ChangeParaToken( sal_uInt16 nNew );
 
-    void IncIndentLevel() { nIndentLvl++; }
-    void DecIndentLevel() { if ( nIndentLvl ) nIndentLvl--; }
+    void IncIndentLevel()
+    {
+        nIndentLvl++;
+    }
+    void DecIndentLevel()
+    {
+        if ( nIndentLvl ) nIndentLvl--;
+    }
     OString GetIndentString(sal_uInt16 nIncLvl = 0);
 
-    sal_Int32 GetLineLen() { return (sal_Int32)(Strm().Tell()-nLastLFPos); }
+    sal_Int32 GetLineLen()
+    {
+        return (sal_Int32)(Strm().Tell()-nLastLFPos);
+    }
     void OutNewLine( sal_Bool bCheck=sal_False );
 
     // fuer HTMLSaveData
@@ -507,8 +516,8 @@ public:
     // Die Numerierungs-Information des naeschten Absatz loeschen.
     void ClearNextNumInfo();
 
-    static const SdrObject *GetHTMLControl( const SwDrawFrmFmt& rFmt );
-    static const SdrObject *GetMarqueeTextObj( const SwDrawFrmFmt& rFmt );
+    static const SdrObject* GetHTMLControl( const SwDrawFrmFmt& rFmt );
+    static const SdrObject* GetMarqueeTextObj( const SwDrawFrmFmt& rFmt );
     static sal_uInt16 GetCSS1Selector( const SwFmt *pFmt, OString& rToken,
                                    OUString& rClass, sal_uInt16& rRefPoolId,
                                    OUString *pPseudo=0 );
@@ -530,8 +539,14 @@ public:
 
     static sal_uInt16 GetDefListLvl( const OUString& rNm, sal_uInt16 nPoolId );
 
-    sal_uInt32 GetHTMLMode() const { return nHTMLMode; }
-    sal_Bool IsHTMLMode( sal_uInt32 nMode ) const { return (nHTMLMode & nMode) != 0; }
+    sal_uInt32 GetHTMLMode() const
+    {
+        return nHTMLMode;
+    }
+    sal_Bool IsHTMLMode( sal_uInt32 nMode ) const
+    {
+        return (nHTMLMode & nMode) != 0;
+    }
 
     inline bool IsCSS1Source( sal_uInt16 n ) const;
     inline bool IsCSS1Script( sal_uInt16 n ) const;
