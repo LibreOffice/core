@@ -75,14 +75,14 @@ void SwNoTxtNode::NewAttrSet( SwAttrPool& rPool )
 
 /// Dummies for loading/saving of persistent data
 /// when working with graphics and OLE objects
-sal_Bool SwNoTxtNode::RestorePersistentData()
+bool SwNoTxtNode::RestorePersistentData()
 {
-    return sal_True;
+    return true;
 }
 
-sal_Bool SwNoTxtNode::SavePersistentData()
+bool SwNoTxtNode::SavePersistentData()
 {
-    return sal_True;
+    return true;
 }
 
 void SwNoTxtNode::SetContour( const PolyPolygon *pPoly, sal_Bool bAutomatic )

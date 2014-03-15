@@ -655,18 +655,18 @@ bool SwGrfNode::GetFileFilterNms( OUString* pFileNm, OUString* pFilterNm ) const
  *
  * If it is already in storage, it needs to be loaded.
  */
-sal_Bool SwGrfNode::SavePersistentData()
+bool SwGrfNode::SavePersistentData()
 {
     if( refLink.Is() )
     {
         OSL_ENSURE( !bInSwapIn, "SavePersistentData: I am still in SwapIn" );
         GetDoc()->GetLinkManager().Remove( refLink );
-        return sal_True;
+        return true;
     }
 
     // swap in first if already in storage
     if( HasStreamName() && !SwapIn() )
-        return sal_False;
+        return false;
 
     // #i44367#
     // Do not delete graphic file in storage, because the graphic file could
@@ -680,10 +680,10 @@ sal_Bool SwGrfNode::SavePersistentData()
     // Important note: see also fix for #i40014#
 
     // swap out into temp file
-    return (sal_Bool) SwapOut();
+    return SwapOut();
 }
 
-sal_Bool SwGrfNode::RestorePersistentData()
+bool SwGrfNode::RestorePersistentData()
 {
     if( refLink.Is() )
     {
@@ -693,7 +693,7 @@ sal_Bool SwGrfNode::RestorePersistentData()
         if( getIDocumentLayoutAccess()->GetCurrentLayout() )
             refLink->Update();
     }
-    return sal_True;
+    return true;
 }
 
 void SwGrfNode::InsertLink( const OUString& rGrfName, const OUString& rFltName )

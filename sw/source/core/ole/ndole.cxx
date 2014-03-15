@@ -266,7 +266,7 @@ SwCntntNode *SwOLENode::SplitCntntNode( const SwPosition & )
 
 // Laden eines in den Undo-Bereich verschobenen OLE-Objekts
 
-sal_Bool SwOLENode::RestorePersistentData()
+bool SwOLENode::RestorePersistentData()
 {
     OSL_ENSURE( aOLEObj.GetOleRef().is(), "No object to restore!" );
     if ( aOLEObj.xOLERef.is() )
@@ -302,11 +302,11 @@ sal_Bool SwOLENode::RestorePersistentData()
         }
     }
 
-    return sal_True;
+    return true;
 }
 
 // OLE object is transported into UNDO area
-sal_Bool SwOLENode::SavePersistentData()
+bool SwOLENode::SavePersistentData()
 {
     if( aOLEObj.xOLERef.is() )
     {
@@ -337,18 +337,18 @@ sal_Bool SwOLENode::SavePersistentData()
            Resolution:
            In pCnt->RemoveEmbeddedObject in SaveSection process of table chart, only remove the object from the object container,
            without removing it's storage and graphic stream. The chart already removed from formatter.> */
-           sal_Bool bChartWithInternalProvider = sal_False;
-           sal_Bool bKeepObjectToTempStorage = sal_True;
+           bool bChartWithInternalProvider = false;
            uno::Reference < embed::XEmbeddedObject > xIP = GetOLEObj().GetOleRef();
            if ( svt::EmbeddedObjectRef::TryRunningState( xIP ) )
            {
                uno::Reference< chart2::XChartDocument > xChart( xIP->getComponent(), UNO_QUERY );
                if ( xChart.is() && xChart->hasInternalDataProvider() )
-                   bChartWithInternalProvider = sal_True;
+                   bChartWithInternalProvider = true;
            }
 
-           if ( IsChart() && !sChartTblName.isEmpty() && !bChartWithInternalProvider )
-               bKeepObjectToTempStorage = sal_False;
+           const bool bKeepObjectToTempStorage = !IsChart() ||
+                                                 sChartTblName.isEmpty() ||
+                                                 bChartWithInternalProvider;
            pCnt->RemoveEmbeddedObject( aOLEObj.aName, false, bKeepObjectToTempStorage );
            // modify end
 
@@ -368,7 +368,7 @@ sal_Bool SwOLENode::SavePersistentData()
 
     DisconnectFileLink_Impl();
 
-    return sal_True;
+    return true;
 }
 
 SwOLENode * SwNodes::MakeOLENode( const SwNodeIndex & rWhere,

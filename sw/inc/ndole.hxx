@@ -111,8 +111,8 @@ public:
 
     void GetNewReplacement();
 
-    virtual sal_Bool SavePersistentData();
-    virtual sal_Bool RestorePersistentData();
+    virtual bool SavePersistentData();
+    virtual bool RestorePersistentData();
 
     sal_Bool IsInGlobalDocSection() const;
     sal_Bool IsOLEObjectDeleted() const;

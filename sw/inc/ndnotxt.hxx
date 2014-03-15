@@ -57,8 +57,8 @@ public:
 
     virtual Size GetTwipSize() const = 0;
 
-    virtual sal_Bool SavePersistentData();
-    virtual sal_Bool RestorePersistentData();
+    virtual bool SavePersistentData();
+    virtual bool RestorePersistentData();
 
     OUString GetTitle() const;
     void SetTitle( const OUString& rTitle, bool bBroadcast = false );

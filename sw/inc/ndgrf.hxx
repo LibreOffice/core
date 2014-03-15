@@ -180,8 +180,8 @@ public:
     bool IsSelected() const;
 
     /// Communicate to graphic that node is in Undo-range.
-    virtual sal_Bool SavePersistentData();
-    virtual sal_Bool RestorePersistentData();
+    virtual bool SavePersistentData();
+    virtual bool RestorePersistentData();
 
     /// Query link-data.
     bool IsGrfLink() const                  { return refLink.Is(); }
