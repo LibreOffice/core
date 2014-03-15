@@ -58,11 +58,6 @@
 
 #define TWIP_TO_MM100(TWIP)     ((TWIP) >= 0 ? (((TWIP)*127L+36L)/72L) : (((TWIP)*127L-36L)/72L))
 #define MM100_TO_EMU(MM100)     (MM100 * 360)
-#define OPEN_M_TOKEN( rtftok, ooxtok ) \
-        case RTF_M##rtftok: \
-            m_aMathBuffer.appendOpeningTag(M_TOKEN(ooxtok)); \
-            m_aStates.top().nDestinationState = DESTINATION_M##rtftok; \
-            break
 
 using std::make_pair;
 
@@ -1827,51 +1822,6 @@ int RTFDocumentImpl::dispatchDestination(RTFKeyword nKeyword)
         case RTF_MBEGCHR: m_aStates.top().nDestinationState = DESTINATION_MBEGCHR; break;
         case RTF_MSEPCHR: m_aStates.top().nDestinationState = DESTINATION_MSEPCHR; break;
         case RTF_MENDCHR: m_aStates.top().nDestinationState = DESTINATION_MENDCHR; break;
-        OPEN_M_TOKEN(OMATH, oMath);
-        OPEN_M_TOKEN(F, f);
-        OPEN_M_TOKEN(FPR, fPr);
-        OPEN_M_TOKEN(CTRLPR, ctrlPr);
-        OPEN_M_TOKEN(NUM, num);
-        OPEN_M_TOKEN(DEN, den);
-        OPEN_M_TOKEN(ACC, acc);
-        OPEN_M_TOKEN(ACCPR, accPr);
-        OPEN_M_TOKEN(BAR, bar);
-        OPEN_M_TOKEN(BARPR, barPr);
-        OPEN_M_TOKEN(E, e);
-        OPEN_M_TOKEN(D, d);
-        OPEN_M_TOKEN(DPR, dPr);
-        OPEN_M_TOKEN(FUNC, func);
-        OPEN_M_TOKEN(FUNCPR, funcPr);
-        OPEN_M_TOKEN(FNAME, fName);
-        OPEN_M_TOKEN(LIMLOW, limLow);
-        OPEN_M_TOKEN(LIMLOWPR, limLowPr);
-        OPEN_M_TOKEN(LIM, lim);
-        OPEN_M_TOKEN(M, m);
-        OPEN_M_TOKEN(MPR, mPr);
-        OPEN_M_TOKEN(MR, mr);
-        OPEN_M_TOKEN(NARY, nary);
-        OPEN_M_TOKEN(NARYPR, naryPr);
-        OPEN_M_TOKEN(SUB, sub);
-        OPEN_M_TOKEN(SUP, sup);
-        OPEN_M_TOKEN(LIMUPP, limUpp);
-        OPEN_M_TOKEN(LIMUPPPR, limUppPr);
-        OPEN_M_TOKEN(GROUPCHR, groupChr);
-        OPEN_M_TOKEN(GROUPCHRPR, groupChrPr);
-        OPEN_M_TOKEN(BORDERBOX, borderBox);
-        OPEN_M_TOKEN(BORDERBOXPR, borderBoxPr);
-        OPEN_M_TOKEN(RAD, rad);
-        OPEN_M_TOKEN(RADPR, radPr);
-        OPEN_M_TOKEN(DEG, deg);
-        OPEN_M_TOKEN(SSUB, sSub);
-        OPEN_M_TOKEN(SSUBPR, sSubPr);
-        OPEN_M_TOKEN(SSUP, sSup);
-        OPEN_M_TOKEN(SSUPPR, sSupPr);
-        OPEN_M_TOKEN(SSUBSUP, sSubSup);
-        OPEN_M_TOKEN(SSUBSUPPR, sSubSupPr);
-        OPEN_M_TOKEN(SPRE, sPre);
-        OPEN_M_TOKEN(SPREPR, sPrePr);
-        OPEN_M_TOKEN(BOX, box);
-        OPEN_M_TOKEN(EQARR, eqArr);
         case RTF_UPR:
             m_aStates.top().nDestinationState = DESTINATION_UPR;
             break;
@@ -1907,10 +1857,22 @@ int RTFDocumentImpl::dispatchDestination(RTFKeyword nKeyword)
             m_aStates.top().aCharacterAttributes.set(NS_ooxml::LN_CT_FtnEdn_type, RTFValue::Pointer_t(new RTFValue(NS_ooxml::LN_Value_wordprocessingml_ST_FtnEdn_separator)));
             break;
         default:
-            SAL_INFO("writerfilter", "TODO handle destination '" << lcl_RtfToString(nKeyword) << "'");
-            // Make sure we skip destinations (even without \*) till we don't handle them
-            m_aStates.top().nDestinationState = DESTINATION_SKIP;
-            aSkip.setParsed(false);
+            {
+                // Check if it's a math token.
+                RTFMathSymbol aSymbol;
+                aSymbol.eKeyword = nKeyword;
+                if (RTFTokenizer::lookupMathKeyword(aSymbol))
+                {
+                    m_aMathBuffer.appendOpeningTag(aSymbol.nToken);
+                    m_aStates.top().nDestinationState = aSymbol.eDestination;
+                    return 0;
+                }
+
+                SAL_INFO("writerfilter", "TODO handle destination '" << lcl_RtfToString(nKeyword) << "'");
+                // Make sure we skip destinations (even without \*) till we don't handle them
+                m_aStates.top().nDestinationState = DESTINATION_SKIP;
+                aSkip.setParsed(false);
+            }
             break;
     }
 
