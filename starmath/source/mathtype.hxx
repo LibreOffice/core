@@ -53,10 +53,30 @@ typedef ::std::set< MathTypeFont, LessMathTypeFont > MathTypeFontSet;
 class MathType
 {
 public:
-    MathType(OUString &rIn) :
-        rRet(rIn), nHAlign(0), nVAlign(0), nDefaultSize(12),
-        nLSize(0), nDSize(0), nCurSize(0), nLastSize(0), bIsSilent(sal_False),
-        nTypeFace(0)
+    MathType(OUString &rIn)
+        : nVersion(0)
+        , nPlatform(0)
+        , nProduct(0)
+        , nProdVersion(0)
+        , nProdSubVersion(0)
+        , pS(NULL)
+        , rRet(rIn)
+        , pTree(NULL)
+        , nHAlign(0)
+        , nVAlign(0)
+        , nPendingAttributes(0)
+        , nInsertion(0)
+        , nDefaultSize(12)
+        , nLSize(0)
+        , nDSize(0)
+        , nCurSize(0)
+        , nLastSize(0)
+        , nSpec(0)
+        , bIsSilent(sal_False)
+        , bIsReInterpBrace(sal_False)
+        , nPostSup(0)
+        , nPostlSup(0)
+        , nTypeFace(0)
     {
         Init();
     }
