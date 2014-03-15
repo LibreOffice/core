@@ -92,8 +92,8 @@
 
 #include <rtl/strbuf.hxx>
 
-using namespace ::com::sun::star;
-using ::editeng::SvxBorderLine;
+using namespace css;
+using editeng::SvxBorderLine;
 
 #define HTML_HEADSPACE (12*20)
 
@@ -109,12 +109,6 @@ using ::editeng::SvxBorderLine;
 #define CSS1_FRMSIZE_FIXHEIGHT  0x08
 #define CSS1_FRMSIZE_ANYHEIGHT  0x0e
 #define CSS1_FRMSIZE_PIXEL      0x10
-
-const sal_Char* sCSS1_rule_end      = " }";
-const sal_Char* sCSS1_span_tag_end  = "\">";
-const sal_Char cCSS1_style_opt_end  = '\"';
-
-const sal_Char* sHTML_FTN_fontheight = "57%";
 
 extern SwAttrFnTab aCSS1AttrFnTab;
 
@@ -154,7 +148,16 @@ static Writer& OutCSS1_SvxFmtBreak_SwFmtPDesc_SvxFmtKeep( Writer& rWrt,
                                         sal_Bool bDeep );
 static Writer& OutCSS1_SwFmtLayoutSplit( Writer& rWrt, const SfxPoolItem& rHt );
 
-static OString ConvToHex(sal_uInt16 nHex)
+namespace
+{
+
+const sal_Char* sCSS1_rule_end      = " }";
+const sal_Char* sCSS1_span_tag_end  = "\">";
+const sal_Char cCSS1_style_opt_end  = '\"';
+
+const sal_Char* sHTML_FTN_fontheight = "57%";
+
+OString lclConvToHex(sal_uInt16 nHex)
 {
     sal_Char aNToABuf[] = "00";
 
@@ -171,9 +174,11 @@ static OString ConvToHex(sal_uInt16 nHex)
     return OString(aNToABuf, 2);
 }
 
-static OString GetCSS1Color(const Color& rColor)
+static OString lclGetCSS1Color(const Color& rColor)
 {
-    return "#" + ConvToHex(rColor.GetRed()) + ConvToHex(rColor.GetGreen()) + ConvToHex(rColor.GetBlue());
+    return "#" + lclConvToHex(rColor.GetRed()) + lclConvToHex(rColor.GetGreen()) + lclConvToHex(rColor.GetBlue());
+}
+
 }
 
 class SwCSS1OutMode
@@ -2280,7 +2285,7 @@ void SwHTMLWriter::OutCSS1_FrmFmtBackground( const SwFrmFmt& rFrmFmt )
                 aColor = pVSh->GetViewOptions()->GetRetoucheColor().GetColor();
         }
 
-        OutCSS1_PropertyAscii(sCSS1_P_background, GetCSS1Color(aColor));
+        OutCSS1_PropertyAscii(sCSS1_P_background, lclGetCSS1Color(aColor));
     }
 }
 
@@ -2455,7 +2460,7 @@ static Writer& OutCSS1_SvxColor( Writer& rWrt, const SfxPoolItem& rHt )
     if( COL_AUTO == aColor.GetColor() )
         aColor.SetColor( COL_BLACK );
 
-    rHTMLWrt.OutCSS1_PropertyAscii(sCSS1_P_color, GetCSS1Color(aColor));
+    rHTMLWrt.OutCSS1_PropertyAscii(sCSS1_P_color, lclGetCSS1Color(aColor));
 
     return rWrt;
 }
@@ -3292,7 +3297,7 @@ static Writer& OutCSS1_SvxBrush( Writer& rWrt, const SfxPoolItem& rHt,
     {
         if( bColor )
         {
-            OString sTmp(GetCSS1Color(aColor));
+            OString sTmp(lclGetCSS1Color(aColor));
             sOut += OStringToOUString(sTmp, RTL_TEXTENCODING_ASCII_US);
         }
 
@@ -3398,7 +3403,7 @@ static void OutCSS1_SvxBorderLine( SwHTMLWriter& rHTMLWrt,
     sOut.append(' ');
 
     // and also the color
-    sOut.append(GetCSS1Color(pLine->GetColor()));
+    sOut.append(lclGetCSS1Color(pLine->GetColor()));
 
     rHTMLWrt.OutCSS1_PropertyAscii(pProperty, sOut.makeStringAndClear());
 }
