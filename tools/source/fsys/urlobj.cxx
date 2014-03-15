@@ -5061,6 +5061,7 @@ sal_uInt32 INetURLObject::getUTF32(sal_Unicode const *& rBegin,
                     default:
                         OSL_FAIL(
                             "INetURLObject::getUTF32(): Unsupported charset");
+                        //fall-through
                     case RTL_TEXTENCODING_ASCII_US:
                         rEscapeType = rtl::isAscii(nUTF32) ?
                                           ESCAPE_UTF32 : ESCAPE_OCTET;
