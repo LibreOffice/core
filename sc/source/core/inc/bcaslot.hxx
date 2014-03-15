@@ -210,6 +210,8 @@ public:
         Meant to be used internally and from ScBroadcastAreaSlotMachine only.
      */
     void                EraseArea( ScBroadcastAreas::iterator& rIter );
+
+    void GetAllListeners( const ScRange& rRange, std::vector<SvtListener*>& rListeners );
 };
 
 
@@ -304,6 +306,8 @@ public:
                                             ScBroadcastAreas::iterator& rIter );
     // only for ScBroadcastAreaSlot
     void                FinallyEraseAreas( ScBroadcastAreaSlot* pSlot );
+
+    std::vector<SvtListener*> GetAllListeners( const ScRange& rRange );
 };
 
 

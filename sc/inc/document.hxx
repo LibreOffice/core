@@ -74,6 +74,7 @@ struct FormulaGroupContext;
 class DocumentStreamAccess;
 class DocumentLinkManager;
 struct SetFormulaDirtyContext;
+class RefMovedHint;
 
 }
 
@@ -1822,6 +1823,7 @@ public:
     void                Broadcast( const ScHint& rHint );
 
     void BroadcastCells( const ScRange& rRange, sal_uLong nHint );
+    void BroadcastRefMoved( const sc::RefMovedHint& rHint );
 
                         /// only area, no cell broadcast
     void                AreaBroadcast( const ScHint& rHint );
