@@ -1496,7 +1496,7 @@ const SwCellFrm& SwCellFrm::FindStartEndOfRowSpanCell( bool bStart, bool bCurren
 
     const SwTabFrm* pTableFrm = dynamic_cast<const SwTabFrm*>(GetUpper()->GetUpper());
 
-    if ( !bStart && pTableFrm->IsFollow() && pTableFrm->IsInHeadline( *this ) )
+    if ( !bStart && pTableFrm && pTableFrm->IsFollow() && pTableFrm->IsInHeadline( *this ) )
         return *this;
 
     OSL_ENSURE( pTableFrm &&
