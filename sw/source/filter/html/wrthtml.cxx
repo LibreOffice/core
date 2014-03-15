@@ -521,8 +521,7 @@ static void lcl_html_OutSectionStartTag( SwHTMLWriter& rHTMLWrt,
     const OUString& rName = rSection.GetSectionName();
     if( !rName.isEmpty() && !bContinued )
     {
-        sOut.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_id).
-            append("=\"");
+        sOut.append(" " + OString(OOO_STRING_SVTOOLS_HTML_O_id) + "=\"");
         rHTMLWrt.Strm().WriteCharPtr( sOut.makeStringAndClear().getStr() );
         HTMLOutFuncs::Out_String( rHTMLWrt.Strm(), rName, rHTMLWrt.eDestEnc, &rHTMLWrt.aNonConvertableCharacters );
         sOut.append('\"');
@@ -534,8 +533,7 @@ static void lcl_html_OutSectionStartTag( SwHTMLWriter& rHTMLWrt,
 
     if( FILE_LINK_SECTION == rSection.GetType() )
     {
-        sOut.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_href).
-            append("=\"");
+        sOut.append(" " + OString(OOO_STRING_SVTOOLS_HTML_O_href) + "=\"");
         rHTMLWrt.Strm().WriteCharPtr( sOut.makeStringAndClear().getStr() );
 
         const OUString& aFName = rSection.GetLinkFileName();
@@ -550,12 +548,11 @@ static void lcl_html_OutSectionStartTag( SwHTMLWriter& rHTMLWrt,
         HTMLOutFuncs::Out_String( rHTMLWrt.Strm(), aEncURL,
                                   rHTMLWrt.eDestEnc,
                                   &rHTMLWrt.aNonConvertableCharacters );
-        const sal_Char *pDelim = "&#255;";
+        const sal_Char* pDelim = "&#255;";
         if( !aFilter.isEmpty() || !aSection.isEmpty() || bURLContainsDelim )
             rHTMLWrt.Strm().WriteCharPtr( pDelim );
         if( !aFilter.isEmpty() )
-            HTMLOutFuncs::Out_String( rHTMLWrt.Strm(), aFilter,
-                                      rHTMLWrt.eDestEnc, &rHTMLWrt.aNonConvertableCharacters );
+            HTMLOutFuncs::Out_String( rHTMLWrt.Strm(), aFilter, rHTMLWrt.eDestEnc, &rHTMLWrt.aNonConvertableCharacters );
         if( !aSection.isEmpty() || bURLContainsDelim  )
                 rHTMLWrt.Strm().WriteCharPtr( pDelim );
         if( !aSection.isEmpty() )
@@ -586,11 +583,9 @@ static void lcl_html_OutSectionStartTag( SwHTMLWriter& rHTMLWrt,
             if( nGutter && Application::GetDefaultDevice() )
             {
                 nGutter = (sal_uInt16)Application::GetDefaultDevice()
-                                ->LogicToPixel( Size(nGutter,0),
-                                                MapMode(MAP_TWIP) ).Width();
+                                ->LogicToPixel( Size(nGutter, 0), MapMode(MAP_TWIP) ).Width();
             }
-            sOut.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_gutter).
-                append("=\"").append(static_cast<sal_Int32>(nGutter)).append("\"");
+            sOut.append(" " + OString(OOO_STRING_SVTOOLS_HTML_O_gutter) + "=\"" + OString::number(nGutter) + "\"");
         }
     }
 
@@ -777,7 +772,7 @@ void SwHTMLWriter::Out_SwDoc( SwPaM* pPam )
 }
 
 // schreibe die StyleTabelle, algemeine Angaben,Header/Footer/Footnotes
-static void OutBodyColor( const sal_Char *pTag, const SwFmt *pFmt,
+static void OutBodyColor( const sal_Char* pTag, const SwFmt *pFmt,
                           SwHTMLWriter& rHWrt )
 {
     const SwFmt *pRefFmt = 0;
@@ -831,7 +826,7 @@ static void OutBodyColor( const sal_Char *pTag, const SwFmt *pFmt,
     if( pColorItem )
     {
         OStringBuffer sOut;
-        sOut.append(' ').append(pTag).append("=");
+        sOut.append(" " + OString(pTag) + "=");
         rHWrt.Strm().WriteCharPtr( sOut.makeStringAndClear().getStr() );
         Color aColor( pColorItem->GetValue() );
         if( COL_AUTO == aColor.GetColor() )
@@ -889,8 +884,7 @@ sal_uInt16 SwHTMLWriter::OutHeaderAttrs()
 const SwPageDesc *SwHTMLWriter::MakeHeader( sal_uInt16 &rHeaderAttrs )
 {
     OStringBuffer sOut;
-    sOut.append(OOO_STRING_SVTOOLS_HTML_doctype).append(' ')
-        .append(OOO_STRING_SVTOOLS_HTML_doctype40);
+    sOut.append(OString(OOO_STRING_SVTOOLS_HTML_doctype) + " " + OString(OOO_STRING_SVTOOLS_HTML_doctype40));
     HTMLOutFuncs::Out_AsciiTag( Strm(), sOut.makeStringAndClear().getStr() );
 
     // baue den Vorspann
@@ -968,7 +962,7 @@ const SwPageDesc *SwHTMLWriter::MakeHeader( sal_uInt16 &rHeaderAttrs )
 
     // der Body wird nicht eingerueckt, weil sonst alles eingerueckt waere!
     OutNewLine();
-    sOut.append('<').append(OOO_STRING_SVTOOLS_HTML_body);
+    sOut.append("<" + OString(OOO_STRING_SVTOOLS_HTML_body));
     Strm().WriteCharPtr( sOut.makeStringAndClear().getStr() );
 
     // language
@@ -1010,8 +1004,7 @@ const SwPageDesc *SwHTMLWriter::MakeHeader( sal_uInt16 &rHeaderAttrs )
 void SwHTMLWriter::OutAnchor( const OUString& rName )
 {
     OStringBuffer sOut;
-    sOut.append('<').append(OOO_STRING_SVTOOLS_HTML_anchor).append(' ')
-        .append(OOO_STRING_SVTOOLS_HTML_O_name).append("=\"");
+    sOut.append("<" + OString(OOO_STRING_SVTOOLS_HTML_anchor) + " " + OString(OOO_STRING_SVTOOLS_HTML_O_name) + "=\"");
     Strm().WriteCharPtr( sOut.makeStringAndClear().getStr() );
     HTMLOutFuncs::Out_String( Strm(), rName, eDestEnc, &aNonConvertableCharacters ).WriteCharPtr( "\">" );
     HTMLOutFuncs::Out_AsciiTag( Strm(), OOO_STRING_SVTOOLS_HTML_anchor, false );
