@@ -382,22 +382,20 @@ void SwFlyAtCntFrm::MakeAll()
                 // wrapping style influence is considered on object positioning
                 if ( bFormatAnchor )
                 {
-                    SwTxtFrm* pAnchPosAnchorFrm =
-                            dynamic_cast<SwTxtFrm*>(GetAnchorFrmContainingAnchPos());
-                    OSL_ENSURE( pAnchPosAnchorFrm,
-                            "<SwFlyAtCntFrm::MakeAll()> - anchor frame of wrong type -> crash" );
+                    SwTxtFrm& rAnchPosAnchorFrm =
+                            dynamic_cast<SwTxtFrm&>(*GetAnchorFrmContainingAnchPos());
                     // #i58182# - For the usage of new method
                     // <SwObjectFormatterTxtFrm::CheckMovedFwdCondition(..)>
                     // to check move forward of anchor frame due to the object
                     // positioning it's needed to know, if the object is anchored
                     // at the master frame before the anchor frame is formatted.
-                    const bool bAnchoredAtMaster( !pAnchPosAnchorFrm->IsFollow() );
+                    const bool bAnchoredAtMaster(!rAnchPosAnchorFrm.IsFollow());
 
                     // #i56300#
                     // perform complete format of anchor text frame and its
                     // previous frames, which have become invalid due to the
                     // fly frame format.
-                    SwObjectFormatterTxtFrm::FormatAnchorFrmAndItsPrevs( *pAnchPosAnchorFrm );
+                    SwObjectFormatterTxtFrm::FormatAnchorFrmAndItsPrevs( rAnchPosAnchorFrm );
                     // #i35911#
                     // #i40444#
                     // #i58182# - usage of new method
