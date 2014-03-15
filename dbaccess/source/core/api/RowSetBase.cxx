@@ -77,6 +77,7 @@ connectivity::sdbcx::ObjectType OEmptyCollection::createObject(const OUString& /
 ORowSetBase::ORowSetBase( const Reference<XComponentContext>& _rContext, ::cppu::OBroadcastHelper& _rBHelper, ::osl::Mutex* _pMutex )
     :OPropertyStateContainer(_rBHelper)
     ,m_pMutex(_pMutex)
+    ,m_pMySelf(NULL)
     ,m_pCache(NULL)
     ,m_pColumns(NULL)
     ,m_rBHelper(_rBHelper)
