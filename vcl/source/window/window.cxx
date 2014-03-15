@@ -420,6 +420,37 @@ bool Window::ImplInitGraphics() const
     return mpGraphics ? true : false;
 }
 
+void Window::CopyAreaFinal( SalTwoRect& aPosAry, sal_uInt32 nFlags )
+{
+
+    const Rectangle aSrcOutRect( Point( mnOutOffX, mnOutOffY ),
+                                 Size( mnOutWidth, mnOutHeight ) );
+    const Rectangle aSrcRect   ( Point( aPosAry.mnSrcX, aPosAry.mnSrcY ),
+                                 Size( aPosAry.mnSrcWidth, aPosAry.mnSrcHeight ) );
+
+    if ( aPosAry.mnSrcWidth && aPosAry.mnSrcHeight && aPosAry.mnDestWidth && aPosAry.mnDestHeight )
+    {
+        if ( nFlags & COPYAREA_WINDOWINVALIDATE )
+        {
+            ImplMoveAllInvalidateRegions( aSrcRect,
+                                          aPosAry.mnDestX-aPosAry.mnSrcX,
+                                          aPosAry.mnDestY-aPosAry.mnSrcY,
+                                          false );
+
+            mpGraphics->CopyArea( aPosAry.mnDestX, aPosAry.mnDestY,
+                                  aPosAry.mnSrcX, aPosAry.mnSrcY,
+                                  aPosAry.mnSrcWidth, aPosAry.mnSrcHeight,
+                                  SAL_COPYAREA_WINDOWINVALIDATE, this );
+        }
+        else
+        {
+            aPosAry.mnDestWidth  = aPosAry.mnSrcWidth;
+            aPosAry.mnDestHeight = aPosAry.mnSrcHeight;
+            mpGraphics->CopyBits( aPosAry, NULL, this, NULL );
+        }
+    }
+}
+
 void Window::ImplReleaseGraphics( bool bRelease )
 {
     DBG_TESTSOLARMUTEX();
@@ -988,7 +1019,7 @@ void Window::ImplInit( Window* pParent, WinBits nStyle, SystemParentData* pSyste
         mpWindowImpl->mpFrameData->mpMouseMoveWin     = NULL;
         mpWindowImpl->mpFrameData->mpMouseDownWin     = NULL;
         mpWindowImpl->mpFrameData->mpFirstBackWin     = NULL;
-        mpWindowImpl->mpFrameData->mpFontCollection         = pSVData->maGDIData.mpScreenFontList;
+        mpWindowImpl->mpFrameData->mpFontCollection   = pSVData->maGDIData.mpScreenFontList;
         mpWindowImpl->mpFrameData->mpFontCache        = pSVData->maGDIData.mpScreenFontCache;
         mpWindowImpl->mpFrameData->mnAllSaveBackSize  = 0;
         mpWindowImpl->mpFrameData->mnFocusId          = 0;

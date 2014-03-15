@@ -369,38 +369,28 @@ void OutputDevice::CopyArea( const Point& rDestPt,
 
         const Rectangle aSrcOutRect( Point( mnOutOffX, mnOutOffY ),
                                      Size( mnOutWidth, mnOutHeight ) );
-        const Rectangle aSrcRect( Point( aPosAry.mnSrcX, aPosAry.mnSrcY ),
-                                  Size( aPosAry.mnSrcWidth, aPosAry.mnSrcHeight ) );
 
         ImplAdjustTwoRect( aPosAry, aSrcOutRect );
 
-        if ( aPosAry.mnSrcWidth && aPosAry.mnSrcHeight && aPosAry.mnDestWidth && aPosAry.mnDestHeight )
-        {
-            if ( (meOutDevType == OUTDEV_WINDOW) && (nFlags & COPYAREA_WINDOWINVALIDATE) )
-            {
-                ((Window*)this)->ImplMoveAllInvalidateRegions( aSrcRect,
-                                                               aPosAry.mnDestX-aPosAry.mnSrcX,
-                                                               aPosAry.mnDestY-aPosAry.mnSrcY,
-                                                               false );
-
-                mpGraphics->CopyArea( aPosAry.mnDestX, aPosAry.mnDestY,
-                                      aPosAry.mnSrcX, aPosAry.mnSrcY,
-                                      aPosAry.mnSrcWidth, aPosAry.mnSrcHeight,
-                                      SAL_COPYAREA_WINDOWINVALIDATE, this );
-            }
-            else
-            {
-                aPosAry.mnDestWidth  = aPosAry.mnSrcWidth;
-                aPosAry.mnDestHeight = aPosAry.mnSrcHeight;
-                mpGraphics->CopyBits( aPosAry, NULL, this, NULL );
-            }
-        }
+        CopyAreaFinal ( aPosAry, nFlags );
     }
 
     SetRasterOp( eOldRop );
 
     if( mpAlphaVDev )
         mpAlphaVDev->CopyArea( rDestPt, rSrcPt, rSrcSize, nFlags );
+}
+
+void OutputDevice::CopyAreaFinal( SalTwoRect& aPosAry, sal_uInt32 nFlags )
+{
+    (void) nFlags;
+
+    if ( aPosAry.mnSrcWidth && aPosAry.mnSrcHeight && aPosAry.mnDestWidth && aPosAry.mnDestHeight )
+    {
+        aPosAry.mnDestWidth  = aPosAry.mnSrcWidth;
+        aPosAry.mnDestHeight = aPosAry.mnSrcHeight;
+        mpGraphics->CopyBits( aPosAry, NULL, this, NULL );
+    }
 }
 
 void OutputDevice::ImplDrawFrameDev( const Point& rPt, const Point& rDevPt, const Size& rDevSize,

@@ -285,7 +285,6 @@ protected:
     virtual void                ImplPrintMask ( const Bitmap& rMask, const Color& rMaskColor,
                                                 const Point& rDestPt, const Size& rDestSize,
                                                 const Point& rSrcPtPixel, const Size& rSrcSizePixel );
-
     bool                        DrawTransformBitmapExDirect(
                                     const basegfx::B2DHomMatrix& aFullTransform,
                                     const BitmapEx& rBitmapEx);
