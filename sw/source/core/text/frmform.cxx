@@ -1099,14 +1099,6 @@ void SwTxtFrm::FormatAdjust( SwTxtFormatter &rLine,
     const SwTwips nDocPrtTop = Frm().Top() + Prt().Top();
     const SwTwips nOldHeight = Prt().SSize().Height();
     SwTwips nChg = rLine.CalcBottomLine() - nDocPrtTop - nOldHeight;
-    // --> OD #i84870# - no shrink of text frame, if it only contains one
-    // as-character anchored object.
-    if ( nChg < 0 &&
-         bOnlyContainsAsCharAnchoredObj )
-    {
-        nChg = 0;
-    }
-    // <--
 
     // Vertical Formatting:
     // The (rotated) repaint rectangle's x coordinate referes to the frame.
