@@ -1677,7 +1677,7 @@ void Test::testFormulaRefUpdateMoveUndo()
     m_pDoc->SetValue(ScAddress(0,0,0), 20);
 
     CPPUNIT_ASSERT_EQUAL(20.0, m_pDoc->GetValue(ScAddress(0,5,0)));
-    CPPUNIT_ASSERT_EQUAL( 6.0, m_pDoc->GetValue(ScAddress(0,6,0)));
+    CPPUNIT_ASSERT_EQUAL(25.0, m_pDoc->GetValue(ScAddress(0,6,0)));
     CPPUNIT_ASSERT_EQUAL(27.0, m_pDoc->GetValue(ScAddress(0,7,0)));
 
     CPPUNIT_ASSERT_EQUAL(22.0, m_pDoc->GetValue(ScAddress(0,9,0)));
