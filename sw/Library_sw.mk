@@ -495,6 +495,8 @@ $(eval $(call gb_Library_add_exception_objects,sw,\
     sw/source/filter/html/htmlftn \
     sw/source/filter/html/htmlgrin \
     sw/source/filter/html/htmlnum \
+    sw/source/filter/html/htmlnumreader \
+    sw/source/filter/html/htmlnumwriter \
     sw/source/filter/html/htmlplug \
     sw/source/filter/html/htmlsect \
     sw/source/filter/html/htmltab \

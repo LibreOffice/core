@@ -28,6 +28,11 @@
 class SwTxtNode;
 class SwNumRule;
 
+// TODO: Unicode: Are these characters the correct ones?
+#define HTML_BULLETCHAR_DISC    (0xe008)
+#define HTML_BULLETCHAR_CIRCLE  (0xe009)
+#define HTML_BULLETCHAR_SQUARE  (0xe00b)
+
 class SwHTMLNumRuleInfo
 {
     sal_uInt16      aNumStarts[MAXLEVEL];
