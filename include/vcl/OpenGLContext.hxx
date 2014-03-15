@@ -17,6 +17,9 @@
 class VCLOPENGL_DLLPUBLIC OpenGLContext
 {
 public:
+    OpenGLContext();
+    ~OpenGLContext();
+
     bool init(OpenGLRender& rGLRender);
     void setWinSize(const Size& rSize);
 

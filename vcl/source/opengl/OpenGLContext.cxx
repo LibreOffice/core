@@ -12,6 +12,14 @@
 
 using namespace com::sun::star;
 
+OpenGLContext::OpenGLContext()
+{
+}
+
+OpenGLContext::~OpenGLContext()
+{
+}
+
 #ifdef DBG_UTIL
 
 namespace {
