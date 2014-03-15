@@ -485,7 +485,8 @@ $(eval $(call gb_Library_add_exception_objects,sw,\
     sw/source/filter/html/htmlbas \
     sw/source/filter/html/htmlcss1 \
     sw/source/filter/html/htmlctxt \
-    sw/source/filter/html/htmldraw \
+    sw/source/filter/html/htmldrawreader \
+    sw/source/filter/html/htmldrawwriter \
     sw/source/filter/html/htmlfld \
     sw/source/filter/html/htmlfldw \
     sw/source/filter/html/htmlfly \
