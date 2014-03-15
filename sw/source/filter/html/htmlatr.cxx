@@ -74,7 +74,9 @@
 #include <numrule.hxx>
 #include <rtl/strbuf.hxx>
 
-using namespace ::com::sun::star;
+#include <boost/scoped_ptr.hpp>
+
+using namespace css;
 
 HTMLOutEvent aAnchorEventTable[] =
 {
@@ -197,7 +199,7 @@ sal_uInt16 SwHTMLWriter::GetCSS1ScriptForScriptType( sal_uInt16 nScriptType )
 struct SwHTMLTxtCollOutputInfo
 {
     OString aToken;        // auszugendens End-Token
-    SfxItemSet *pItemSet;       // harte Attributierung
+    boost::scoped_ptr<SfxItemSet> pItemSet;       // harte Attributierung
 
     sal_Bool bInNumBulList;         // in einer Aufzaehlungs-Liste;
     sal_Bool bParaPossible;         // ein </P> darf zusaetzlich ausgegeben werden
@@ -205,7 +207,7 @@ struct SwHTMLTxtCollOutputInfo
     sal_Bool bOutDiv;               // write a </DIV>
 
     SwHTMLTxtCollOutputInfo() :
-        pItemSet( 0 ),
+        pItemSet(NULL),
         bInNumBulList( sal_False ),
         bParaPossible( sal_False ),
         bOutPara( sal_False ),
@@ -220,7 +222,6 @@ struct SwHTMLTxtCollOutputInfo
 
 SwHTMLTxtCollOutputInfo::~SwHTMLTxtCollOutputInfo()
 {
-    delete pItemSet;
 }
 
 SwHTMLFmtInfo::SwHTMLFmtInfo( const SwFmt *pF, SwDoc *pDoc, SwDoc *pTemplate,
@@ -585,17 +586,17 @@ void OutHTML_SwFmt( Writer& rWrt, const SwFmt& rFmt,
     // Falls noetig, die harte Attributierung der Vorlage uebernehmen
     if( pFmtInfo->pItemSet )
     {
-        OSL_ENSURE( !rInfo.pItemSet, "Wo kommt der Item-Set her?" );
-        rInfo.pItemSet = new SfxItemSet( *pFmtInfo->pItemSet );
+        OSL_ENSURE( !rInfo.pItemSet.get(), "Wo kommt der Item-Set her?" );
+        rInfo.pItemSet.reset(new SfxItemSet( *pFmtInfo->pItemSet ));
     }
 
     // und noch die harte Attributierung des Absatzes dazunehmen
     if( pNodeItemSet )
     {
-        if( rInfo.pItemSet )
+        if( rInfo.pItemSet.get() )
             rInfo.pItemSet->Put( *pNodeItemSet );
         else
-            rInfo.pItemSet = new SfxItemSet( *pNodeItemSet );
+            rInfo.pItemSet.reset(new SfxItemSet( *pNodeItemSet ));
     }
 
     // den unteren Absatz-Abstand brauchen wir noch
@@ -616,10 +617,10 @@ void OutHTML_SwFmt( Writer& rWrt, const SwFmt& rFmt,
             else
                 aULSpaceItem.SetUpper( rHWrt.nHeaderFooterSpace );
 
-            if( !rInfo.pItemSet )
-                rInfo.pItemSet = new SfxItemSet(
-                                    *rFmt.GetAttrSet().GetPool(),
-                                    RES_UL_SPACE, RES_UL_SPACE );
+            if (!rInfo.pItemSet.get())
+            {
+                rInfo.pItemSet.reset(new SfxItemSet(*rFmt.GetAttrSet().GetPool(), RES_UL_SPACE, RES_UL_SPACE));
+            }
             rInfo.pItemSet->Put( aULSpaceItem );
         }
         rHWrt.bOutHeader = sal_False;
