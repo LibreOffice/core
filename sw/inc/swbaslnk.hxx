@@ -32,8 +32,8 @@ class SwBaseLink : public ::sfx2::SvBaseLink
 
     SwCntntNode* pCntntNode;
     bool bSwapIn : 1;
-    sal_Bool bNoDataFlag : 1;
-    sal_Bool bIgnoreDataChanged : 1;
+    bool bNoDataFlag : 1;
+    bool bIgnoreDataChanged : 1;
     ReReadThread* m_pReReadThread;
 
 protected:
@@ -42,7 +42,7 @@ protected:
     SwBaseLink( const OUString& rNm, sal_uInt16 nObjectType, ::sfx2::SvLinkSource* pObj,
                  SwCntntNode* pNode = 0 )
         : ::sfx2::SvBaseLink( rNm, nObjectType, pObj ), pCntntNode( pNode ),
-        bSwapIn( false ), bNoDataFlag( sal_False ), bIgnoreDataChanged( sal_False ),
+        bSwapIn( false ), bNoDataFlag( false ), bIgnoreDataChanged( false ),
         m_pReReadThread(0)
     {}
 
@@ -51,7 +51,7 @@ public:
 
     SwBaseLink( sal_uInt16 nMode, sal_uInt16 nFormat, SwCntntNode* pNode = 0 )
         : ::sfx2::SvBaseLink( nMode, nFormat ), pCntntNode( pNode ),
-        bSwapIn( false ), bNoDataFlag( sal_False ), bIgnoreDataChanged( sal_False ),
+        bSwapIn( false ), bNoDataFlag( false ), bIgnoreDataChanged( false ),
         m_pReReadThread(0)
     {}
     virtual ~SwBaseLink();
@@ -68,18 +68,18 @@ public:
     // For graphics only.
     bool SwapIn( bool bWaitForData = false, bool bNativFormat = false );
 
-    sal_Bool Connect() { return 0 != SvBaseLink::GetRealObject(); }
+    bool Connect() { return 0 != SvBaseLink::GetRealObject(); }
 
     // Only for graphics-links (for switching between DDE / Grf-link).
     void SetObjType( sal_uInt16 nType ) { SvBaseLink::SetObjType( nType ); }
 
-    sal_Bool IsRecursion( const SwBaseLink* pChkLnk ) const;
-    virtual sal_Bool IsInRange( sal_uLong nSttNd, sal_uLong nEndNd, sal_Int32 nStt = 0,
+    bool IsRecursion( const SwBaseLink* pChkLnk ) const;
+    virtual bool IsInRange( sal_uLong nSttNd, sal_uLong nEndNd, sal_Int32 nStt = 0,
                             sal_Int32 nEnd = -1 ) const;
 
-    void SetNoDataFlag()    { bNoDataFlag = sal_True; }
-    sal_Bool ChkNoDataFlag()    { sal_Bool bRet = bNoDataFlag; bNoDataFlag = sal_False; return bRet; }
-    sal_Bool IsNoDataFlag() const           { return bNoDataFlag; }
+    void SetNoDataFlag() { bNoDataFlag = true; }
+    bool ChkNoDataFlag() { const bool bRet = bNoDataFlag; bNoDataFlag = false; return bRet; }
+    bool IsNoDataFlag() const { return bNoDataFlag; }
 };
 
 #endif

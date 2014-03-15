@@ -49,7 +49,7 @@ public:
         const OUString& rMimeType, const ::com::sun::star::uno::Any & rValue );
 
     virtual const SwNode* GetAnchor() const;
-    virtual sal_Bool IsInRange( sal_uLong nSttNd, sal_uLong nEndNd, sal_Int32 nStt = 0,
+    virtual bool IsInRange( sal_uLong nSttNd, sal_uLong nEndNd, sal_Int32 nStt = 0,
                             sal_Int32 nEnd = -1 ) const;
 };
 
@@ -188,7 +188,7 @@ const SwNode* SwIntrnlRefLink::GetAnchor() const
     return pNd;
 }
 
-sal_Bool SwIntrnlRefLink::IsInRange( sal_uLong nSttNd, sal_uLong nEndNd,
+bool SwIntrnlRefLink::IsInRange( sal_uLong nSttNd, sal_uLong nEndNd,
                                 sal_Int32 nStt, sal_Int32 nEnd ) const
 {
     // here, any anchor of the normal NodesArray should be sufficient
@@ -207,7 +207,7 @@ sal_Bool SwIntrnlRefLink::IsInRange( sal_uLong nSttNd, sal_uLong nEndNd,
                 if( pTblNd->GetNodes().IsDocNodes() &&
                     nSttNd < pTblNd->EndOfSectionIndex() &&
                     nEndNd > pTblNd->GetIndex() )
-                    return sal_True;
+                    return true;
             }
             else if( ((SwFmtFld*)pLast)->GetTxtFld() )
             {
@@ -219,12 +219,12 @@ sal_Bool SwIntrnlRefLink::IsInRange( sal_uLong nSttNd, sal_uLong nEndNd,
                     if( nSttNd <= nNdPos && nNdPos <= nEndNd &&
                         ( nNdPos != nSttNd || *pTFld->GetStart() >= nStt ) &&
                         ( nNdPos != nEndNd || *pTFld->GetStart() < nEnd ))
-                        return sal_True;
+                        return true;
                 }
             }
         } while( 0 != ( pLast = ++aIter ));
 
-    return sal_False;
+    return false;
 }
 
 SwDDEFieldType::SwDDEFieldType(const OUString& rName,

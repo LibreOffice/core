@@ -76,7 +76,7 @@ public:
         const OUString& rMimeType, const ::com::sun::star::uno::Any & rValue );
 
     virtual const SwNode* GetAnchor() const;
-    virtual sal_Bool IsInRange( sal_uLong nSttNd, sal_uLong nEndNd, sal_Int32 nStt = 0,
+    virtual bool IsInRange( sal_uLong nSttNd, sal_uLong nEndNd, sal_Int32 nStt = 0,
                             sal_Int32 nEnd = -1 ) const;
 
     inline SwSectionNode* GetSectNode()
@@ -1586,7 +1586,7 @@ const SwNode* SwIntrnlSectRefLink::GetAnchor() const
     return rSectFmt.GetSectionNode( false );
 }
 
-sal_Bool SwIntrnlSectRefLink::IsInRange( sal_uLong nSttNd, sal_uLong nEndNd,
+bool SwIntrnlSectRefLink::IsInRange( sal_uLong nSttNd, sal_uLong nEndNd,
                                      sal_Int32 , sal_Int32 ) const
 {
     SwStartNode* pSttNd = rSectFmt.GetSectionNode( false );

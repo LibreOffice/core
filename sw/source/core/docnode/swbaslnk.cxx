@@ -51,7 +51,7 @@
 
 using namespace com::sun::star;
 
-sal_Bool SetGrfFlySize( const Size& rGrfSz, const Size& rFrmSz, SwGrfNode* pGrfNd );
+static bool SetGrfFlySize( const Size& rGrfSz, const Size& rFrmSz, SwGrfNode* pGrfNd );
 
 TYPEINIT1( SwBaseLink, ::sfx2::SvBaseLink );
 
@@ -92,7 +92,7 @@ static void lcl_CallModify( SwGrfNode& rGrfNd, SfxPoolItem& rItem )
     SwDoc* pDoc = pCntntNode->GetDoc();
     if( pDoc->IsInDtor() || ChkNoDataFlag() || bIgnoreDataChanged )
     {
-        bIgnoreDataChanged = sal_False;
+        bIgnoreDataChanged = false;
         return SUCCESS;
     }
 
@@ -126,7 +126,7 @@ static void lcl_CallModify( SwGrfNode& rGrfNd, SfxPoolItem& rItem )
 
     bool bUpdate = false;
     bool bGraphicArrived = false;
-    sal_Bool bGraphicPieceArrived = sal_False;
+    bool bGraphicPieceArrived = false;
     bool bDontNotify = false;
     Size aGrfSz, aFrmFmtSz;
 
@@ -168,7 +168,7 @@ static void lcl_CallModify( SwGrfNode& rGrfNd, SfxPoolItem& rItem )
                 // we need to go through bGraphicArrived down there.
                 // Or else the graphic is painted at its definitive size
                 bGraphicArrived = true;
-                bGraphicPieceArrived = sal_False;
+                bGraphicPieceArrived = false;
             }
 
             pSwGrfNode->SetGraphic(aGrf, rGrfObj.GetLink());
@@ -210,11 +210,11 @@ static void lcl_CallModify( SwGrfNode& rGrfNd, SfxPoolItem& rItem )
     if( bUpdate && !bDontNotify && (!bSwapIn || bGraphicArrived) &&
         !bInNotifyLinks)
     {
-        sal_Bool bLockView = sal_False;
+        bool bLockView = false;
         if( pSh )
         {
             bLockView = pSh->IsViewLocked();
-            pSh->LockView( sal_True );
+            pSh->LockView( true );
         }
 
         if( pESh )
@@ -244,9 +244,9 @@ static void lcl_CallModify( SwGrfNode& rGrfNd, SfxPoolItem& rItem )
                         ( !bSwapIn ||
                             GRAPHIC_DEFAULT == pGrfNd->GetGrfObj().GetType()))
                     {
-                        pBLink->bIgnoreDataChanged = sal_False;
+                        pBLink->bIgnoreDataChanged = false;
                         pBLink->DataChanged( rMimeType, rValue );
-                        pBLink->bIgnoreDataChanged = sal_True;
+                        pBLink->bIgnoreDataChanged = true;
 
                         pGrfNd->SetGraphicArrived( ((SwGrfNode*)pCntntNode)->
                                                     IsGraphicArrived() );
@@ -271,7 +271,7 @@ static void lcl_CallModify( SwGrfNode& rGrfNd, SfxPoolItem& rItem )
 
         if( pESh )
         {
-            const sal_Bool bEndActionByVirDev = pESh->IsEndActionByVirDev();
+            const bool bEndActionByVirDev = pESh->IsEndActionByVirDev();
             pESh->SetEndActionByVirDev( sal_True );
             pESh->EndAllAction();
             pESh->SetEndActionByVirDev( bEndActionByVirDev );
@@ -280,15 +280,15 @@ static void lcl_CallModify( SwGrfNode& rGrfNd, SfxPoolItem& rItem )
             pSh->EndAction();
 
         if( pSh && !bLockView )
-            pSh->LockView( sal_False );
+            pSh->LockView( false );
     }
 
     return SUCCESS;
 }
 
-sal_Bool SetGrfFlySize( const Size& rGrfSz, const Size& rFrmSz, SwGrfNode* pGrfNd )
+static bool SetGrfFlySize( const Size& rGrfSz, const Size& rFrmSz, SwGrfNode* pGrfNd )
 {
-    sal_Bool bRet = sal_False;
+    bool bRet = false;
     SwViewShell *pSh;
     CurrShell *pCurr = 0;
     if ( pGrfNd->GetDoc()->GetEditShell( &pSh ) )
@@ -326,7 +326,7 @@ sal_Bool SetGrfFlySize( const Size& rGrfSz, const Size& rFrmSz, SwGrfNode* pGrfN
                 SwFmtFrmSize aAttr( rOldAttr  );
                 aAttr.SetSize( aCalcSz );
                 pFmt->SetFmtAttr( aAttr );
-                bRet = sal_True;
+                bRet = true;
             }
 
             if( !aSz.Width() )
@@ -341,7 +341,7 @@ sal_Bool SetGrfFlySize( const Size& rGrfSz, const Size& rFrmSz, SwGrfNode* pGrfN
                     0 != (pANd = & pAPos->nNode.GetNode()) &&
                     0 != (pTblNd = pANd->FindTableNode()) )
                 {
-                    const sal_Bool bLastGrf = !pTblNd->GetTable().DecGrfsThatResize();
+                    const bool bLastGrf = !pTblNd->GetTable().DecGrfsThatResize();
                     SwHTMLTableLayout *pLayout =
                         pTblNd->GetTable().GetHTMLTableLayout();
                     if( pLayout )
@@ -409,7 +409,7 @@ bool SwBaseLink::SwapIn( bool bWaitForData, bool bNativFormat )
             {
                 // The Flag needs to be reset on a SwapIn, because
                 // we want to reapply the data.
-                bIgnoreDataChanged = sal_False;
+                bIgnoreDataChanged = false;
                 DataChanged( aMimeType, aValue );
             }
         }
@@ -463,7 +463,7 @@ const SwNode* SwBaseLink::GetAnchor() const
     return 0;
 }
 
-sal_Bool SwBaseLink::IsRecursion( const SwBaseLink* pChkLnk ) const
+bool SwBaseLink::IsRecursion( const SwBaseLink* pChkLnk ) const
 {
     SwServerObjectRef aRef( (SwServerObject*)GetObj() );
     if( aRef.Is() )
@@ -472,14 +472,14 @@ sal_Bool SwBaseLink::IsRecursion( const SwBaseLink* pChkLnk ) const
         // if we are contained in them. Else we have a recursion.
         return aRef->IsLinkInServer( pChkLnk );
     }
-    return sal_False;
+    return false;
 }
 
-sal_Bool SwBaseLink::IsInRange( sal_uLong, sal_uLong, sal_Int32, sal_Int32 ) const
+bool SwBaseLink::IsInRange( sal_uLong, sal_uLong, sal_Int32, sal_Int32 ) const
 {
     // Not Graphic or OLE Links
     // Fields or Sections have their own derivation!
-    return sal_False;
+    return false;
 }
 
 SwBaseLink::~SwBaseLink()
