@@ -179,6 +179,8 @@ public:
     virtual void    AdjustLayout( ImplLayoutArgs& );    // adjusting after fallback etc.
     virtual void    InitFont() const {}
     virtual void    DrawText( SalGraphics& ) const = 0;
+    virtual bool    DrawTextSpecial( SalGraphics& /* rGraphics */, sal_uInt32 /* flags */ ) const { return false; }
+#define DRAWTEXT_F_OUTLINE ((sal_uInt32)(1<<0))
 
     int             GetUnitsPerPixel() const                { return mnUnitsPerPixel; }
     int             GetOrientation() const                  { return mnOrientation; }

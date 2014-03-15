@@ -31,6 +31,7 @@ public:
     virtual bool    LayoutText( ImplLayoutArgs& ) SAL_OVERRIDE;
     virtual void    AdjustLayout( ImplLayoutArgs& ) SAL_OVERRIDE;
     virtual void    DrawText( SalGraphics& ) const SAL_OVERRIDE;
+    virtual bool    DrawTextSpecial( SalGraphics& rGraphics, sal_uInt32 flags ) const SAL_OVERRIDE;
 
     virtual int     GetNextGlyphs( int nLen, sal_GlyphId* pOutGlyphIds, Point& rPos, int&,
                                    sal_Int32* pGlyphAdvances, int* pCharIndexes,
@@ -48,6 +49,7 @@ public:
     virtual void    Simplify( bool bIsBase ) SAL_OVERRIDE;
 
 private:
+    void            drawCTLine(AquaSalGraphics& rAquaGraphics, CTLineRef ctline, const CoreTextStyle* const pStyle) const;
     CGPoint         GetTextDrawPosition(void) const;
     double          GetWidth(void) const;
 
@@ -244,14 +246,50 @@ CGPoint CTLayout::GetTextDrawPosition(void) const
     return aTextPos;
 }
 
-void CTLayout::DrawText( SalGraphics& rGraphics ) const
+/* use to deal with special font decoration like 'outline' drawing
+ * return true if it was able to handle the drawing
+ * false if not, in which case the caller
+ * is supposed to fallback to 'generic' method
+ */
+bool CTLayout::DrawTextSpecial( SalGraphics& rGraphics, sal_uInt32 flags ) const
 {
     AquaSalGraphics& rAquaGraphics = static_cast<AquaSalGraphics&>(rGraphics);
 
     // short circuit if there is nothing to do
     if( (mnCharCount <= 0) || !rAquaGraphics.CheckContext() )
-        return;
+        return true;
 
+    if (flags & DRAWTEXT_F_OUTLINE)
+    {
+        CFMutableDictionaryRef styledict = CFDictionaryCreateMutableCopy(
+                CFAllocatorGetDefault(),
+                CFDictionaryGetCount(mpTextStyle->GetStyleDict()),
+                mpTextStyle->GetStyleDict());
+
+        int nStroke = 2;
+        CFNumberRef rStroke = CFNumberCreate(NULL, kCFNumberSInt32Type, &nStroke);
+        CFDictionarySetValue(styledict, kCTStrokeWidthAttributeName, rStroke);
+
+        CFAttributedStringRef pAttrStr = CFAttributedStringCreate(
+                NULL,
+                CFAttributedStringGetString(mpAttrString),
+                styledict);
+        CTLineRef pCTLine = CTLineCreateWithAttributedString( pAttrStr );
+        CFRelease( pAttrStr );
+
+        /* draw the text in 'outline' */
+        drawCTLine(rAquaGraphics, pCTLine, mpTextStyle);
+        CFRelease(pCTLine);
+        return true;
+    }
+    else
+    {
+        return SalLayout::DrawTextSpecial(rGraphics, flags);
+    }
+}
+
+void CTLayout::drawCTLine(AquaSalGraphics& rAquaGraphics, CTLineRef ctline, const CoreTextStyle* const pStyle) const
+{
     // the view is vertically flipped => flipped glyphs
     // so apply a temporary transformation that it flips back
     // also compensate if the font was size limited
@@ -262,9 +300,9 @@ void CTLayout::DrawText( SalGraphics& rGraphics ) const
     // Draw the text
     CGPoint aTextPos = GetTextDrawPosition();
 
-    if( mpTextStyle->mfFontRotation != 0.0 )
+    if( pStyle->mfFontRotation != 0.0 )
     {
-        const CGFloat fRadians = mpTextStyle->mfFontRotation;
+        const CGFloat fRadians = pStyle->mfFontRotation;
         CGContextRotateCTM( rAquaGraphics.mrContext, +fRadians );
 
         const CGAffineTransform aInvMatrix = CGAffineTransformMakeRotation( -fRadians );
@@ -272,7 +310,7 @@ void CTLayout::DrawText( SalGraphics& rGraphics ) const
     }
 
     CGContextSetTextPosition( rAquaGraphics.mrContext, aTextPos.x, aTextPos.y );
-    CTLineDraw( mpCTLine, rAquaGraphics.mrContext );
+    CTLineDraw( ctline, rAquaGraphics.mrContext );
 #ifndef IOS
     // request an update of the changed window area
     if( rAquaGraphics.IsWindowGraphics() )
@@ -284,6 +322,17 @@ void CTLayout::DrawText( SalGraphics& rGraphics ) const
 #endif
     // restore the original graphic context transformations
     CGContextRestoreGState( rAquaGraphics.mrContext );
+}
+
+void CTLayout::DrawText( SalGraphics& rGraphics ) const
+{
+    AquaSalGraphics& rAquaGraphics = static_cast<AquaSalGraphics&>(rGraphics);
+
+    // short circuit if there is nothing to do
+    if( (mnCharCount <= 0) || !rAquaGraphics.CheckContext() )
+        return;
+
+    drawCTLine(rAquaGraphics, mpCTLine, mpTextStyle);
 }
 
 int CTLayout::GetNextGlyphs( int nLen, sal_GlyphId* pOutGlyphIds, Point& rPos, int& nStart,
