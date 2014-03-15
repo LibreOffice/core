@@ -1006,7 +1006,10 @@ public:
     virtual void                CopyArea( const Point& rDestPt,
                                           const Point& rSrcPt,  const Size& rSrcSize,
                                           sal_uInt16 nFlags = 0 );
+protected:
+    virtual void                CopyAreaFinal( SalTwoRect& aPosAry, sal_uInt32 nFlags);
 
+public:
     void                        DrawBitmap( const Point& rDestPt,
                                             const Bitmap& rBitmap );
     void                        DrawBitmap( const Point& rDestPt, const Size& rDestSize,
