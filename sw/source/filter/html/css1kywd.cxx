@@ -21,14 +21,10 @@
 
 const sal_Char* sCSS_mimetype = "text/css";
 
-// ein par allgemeine Strings
-
 const sal_Char* sCSS1_import = "import";
 
-// Feature: PrintExt
 const sal_Char* sCSS1_page = "page";
 //const sal_Char* sCSS1_media = "media";
-// /Feature: PrintExt
 
 const sal_Char* sCSS1_important = "important";
 
@@ -36,11 +32,9 @@ const sal_Char* sCSS1_link = "link";
 const sal_Char* sCSS1_visited = "visited";
 const sal_Char* sCSS1_first_letter = "first-letter";
 
-// Feature: PrintExt
 const sal_Char* sCSS1_left = "left";
 const sal_Char* sCSS1_right = "right";
 const sal_Char* sCSS1_first = "first";
-// /Feature: PrintExt
 
 const sal_Char* sCSS1_url = "url";
 const sal_Char* sCSS1_rgb = "rgb";
@@ -54,7 +48,7 @@ const sal_Char* sCSS1_UNIT_px = "px";
 const sal_Char* sCSS1_UNIT_em = "em";
 const sal_Char* sCSS1_UNIT_ex = "ex";
 
-// Strings fuer Font-Properties
+// Strings for font properties
 
 const sal_Char* sCSS1_P_font_family = "font-family";
 
@@ -108,7 +102,7 @@ const sal_Char* sCSS1_PV_smaller = "smaller";
 
 const sal_Char* sCSS1_P_font = "font";
 
-// Strings fuer Farb- und Hintergrund-Properties
+// Strings for color and background properties
 
 const sal_Char* sCSS1_P_color = "color";
 
@@ -128,7 +122,7 @@ const sal_Char* sCSS1_PV_bottom = "bottom";
 
 const sal_Char* sCSS1_PV_scroll = "scroll";
 
-// Strings fuer Text-Properties
+// Strings for text properties
 
 const sal_Char* sCSS1_P_letter_spacing = "letter-spacing";
 
@@ -151,7 +145,7 @@ const sal_Char* sCSS1_P_text_indent = "text-indent";
 
 const sal_Char* sCSS1_P_line_height = "line-height";
 
-// Strings fuer Box-Properties
+// Strings for box properties
 
 const sal_Char* sCSS1_P_margin_left = "margin-left";
 const sal_Char* sCSS1_P_margin_right = "margin-right";
@@ -202,7 +196,7 @@ const sal_Char* sCSS1_P_float = "float";
 
 const sal_Char* sCSS1_P_column_count = "column-count";
 
-// Strings fuer Positioning
+// Strings for positioning
 
 const sal_Char* sCSS1_P_position = "position";
 
@@ -214,9 +208,7 @@ const sal_Char* sCSS1_P_left = "left";
 
 const sal_Char* sCSS1_P_top = "top";
 
-// Feature: PrintExt
-
-// Strings fuer Printing Extensions
+// Strings for printing extensions
 
 const sal_Char* sCSS1_P_page_break_before = "page-break-before";
 const sal_Char* sCSS1_P_page_break_after = "page-break-after";
@@ -234,8 +226,6 @@ const sal_Char* sCSS1_PV_landscape = "landscape";
 
 //const sal_Char* sCSS1_PV_crop = "crop";
 //const sal_Char* sCSS1_PV_cross = "cross";
-
-// /Feature: PrintExt
 
 const sal_Char* sCSS1_class_abs_pos = "sd-abs-pos";
 

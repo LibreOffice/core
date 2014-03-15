@@ -24,8 +24,6 @@
 
 extern const sal_Char* sCSS_mimetype;
 
-// ein par allgemeine Strings
-
 extern const sal_Char* sCSS1_import;
 
 extern const sal_Char* sCSS1_page;
@@ -52,7 +50,7 @@ extern const sal_Char* sCSS1_UNIT_px;
 extern const sal_Char* sCSS1_UNIT_em;
 extern const sal_Char* sCSS1_UNIT_ex;
 
-// Strings fuer Font-Properties
+// Strings for font properties
 
 extern const sal_Char* sCSS1_P_font_family;
 
@@ -70,7 +68,7 @@ extern const sal_Char* sCSS1_PV_oblique;
 
 extern const sal_Char* sCSS1_P_font_variant;
 
-//sal_Char CSS1_CONSTASCII_DECL( sCSS1_PV_normal, "normal" );
+//extern const sal_Char* sCSS1_PV_normal;
 extern const sal_Char* sCSS1_PV_small_caps;
 
 extern const sal_Char* sCSS1_P_text_transform;
@@ -84,7 +82,7 @@ extern const sal_Char* sCSS1_P_font_weight;
 extern const sal_Char* sCSS1_PV_extra_light;
 extern const sal_Char* sCSS1_PV_light;
 extern const sal_Char* sCSS1_PV_demi_light;
-//sal_Char CSS1_CONSTASCII_DECL( sCSS1_PV_medium, "medium" );
+//extern const sal_Char* sCSS1_PV_medium;
 extern const sal_Char* sCSS1_PV_demi_bold;
 extern const sal_Char* sCSS1_PV_bold;
 extern const sal_Char* sCSS1_PV_extra_bold;
@@ -106,7 +104,7 @@ extern const sal_Char* sCSS1_PV_smaller;
 
 extern const sal_Char* sCSS1_P_font;
 
-// Strings fuer Farb- und Hintergrund-Properties
+// Strings for color and background properties
 
 extern const sal_Char* sCSS1_P_color;
 
@@ -126,7 +124,7 @@ extern const sal_Char* sCSS1_PV_bottom;
 
 extern const sal_Char* sCSS1_PV_scroll;
 
-// Strings fuer Text-Properties
+// Strings for text properties
 
 extern const sal_Char* sCSS1_P_letter_spacing;
 
@@ -149,7 +147,7 @@ extern const sal_Char* sCSS1_P_text_indent;
 
 extern const sal_Char* sCSS1_P_line_height;
 
-// Strings fuer Box-Properties
+// Strings for box properties
 
 extern const sal_Char* sCSS1_P_margin_left;
 extern const sal_Char* sCSS1_P_margin_right;
@@ -179,10 +177,10 @@ extern const sal_Char* sCSS1_P_border_bottom;
 extern const sal_Char* sCSS1_P_border;
 
 extern const sal_Char* sCSS1_PV_thin;
-//sal_Char CSS1_CONSTASCII_DECL( sCSS1_PV_medium, "medium" );
+//extern const sal_Char* sCSS1_PV_medium;
 extern const sal_Char* sCSS1_PV_thick;
 
-//sal_Char CSS1_CONSTASCII_DECL( sCSS1_PV_none, "none" );
+//extern const sal_Char* sCSS1_PV_none;
 extern const sal_Char* sCSS1_PV_dotted;
 extern const sal_Char* sCSS1_PV_dashed;
 extern const sal_Char* sCSS1_PV_solid;
@@ -200,7 +198,7 @@ extern const sal_Char* sCSS1_P_float;
 
 extern const sal_Char* sCSS1_P_column_count;
 
-// Strings fuer Positioning
+// Strings for positioning
 
 extern const sal_Char* sCSS1_P_position;
 
@@ -212,9 +210,7 @@ extern const sal_Char* sCSS1_P_left;
 
 extern const sal_Char* sCSS1_P_top;
 
-// Feature: PrintExt
-
-// Strings fuer Printing Extensions
+// Strings for printing extensions
 
 extern const sal_Char* sCSS1_P_page_break_before;
 extern const sal_Char* sCSS1_P_page_break_after;
@@ -222,7 +218,7 @@ extern const sal_Char* sCSS1_P_page_break_inside;
 extern const sal_Char* sCSS1_P_size;
 extern const sal_Char* sCSS1_P_widows;
 extern const sal_Char* sCSS1_P_orphans;
-//sal_Char CSS1_CONSTASCII_DECL( sCSS1_P_marks, "marks" );
+//extern const sal_Char* sCSS1_P_marks;
 
 extern const sal_Char* sCSS1_PV_always;
 extern const sal_Char* sCSS1_PV_avoid;
@@ -230,10 +226,9 @@ extern const sal_Char* sCSS1_PV_avoid;
 extern const sal_Char* sCSS1_PV_portrait;
 extern const sal_Char* sCSS1_PV_landscape;
 
-//sal_Char CSS1_CONSTASCII_DECL( sCSS1_PV_crop, "crop" );
-//sal_Char CSS1_CONSTASCII_DECL( sCSS1_PV_cross, "cross" );
+//extern const sal_Char* sCSS1_PV_crop;
+//extern const sal_Char* sCSS1_PV_cross;
 
-// /Feature: PrintExt
 
 extern const sal_Char* sCSS1_class_abs_pos;
 
