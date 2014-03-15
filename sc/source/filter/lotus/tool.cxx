@@ -94,6 +94,9 @@ void PutFormString( SCCOL nCol, SCROW nRow, SCTAB nTab, sal_Char* pString )
             pJustify = pAttrStandard;
     }
 
+    if (!pString)
+        return;
+
     pDoc->ApplyAttr( nCol, nRow, nTab, *pJustify );
     ScSetStringParam aParam;
     aParam.setTextInput();
