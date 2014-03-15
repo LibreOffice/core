@@ -613,7 +613,9 @@ bool OGLTransitionerImpl::createWindow( Window* pPWindow )
     pWindow->GetSystemData();
 #endif
 
-    if( pWindow )
+#if defined( UNX )
+    if (pWindow && pChildSysData)
+#endif
     {
         pWindow->SetMouseTransparent( true );
         pWindow->SetParentClipMode( PARENTCLIPMODE_NOCLIP );
