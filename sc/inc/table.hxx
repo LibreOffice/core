@@ -72,6 +72,7 @@ class CellValues;
 class RowHeightContext;
 class CompileFormulaContext;
 struct SetFormulaDirtyContext;
+class RefMovedHint;
 
 }
 
@@ -895,6 +896,15 @@ public:
      * COLUMN() or ROW() which may change its value on move.
      */
     void BroadcastRecalcOnRefMove();
+
+    /**
+     * Broadcast all listeners of specified range that the range have moved.
+     */
+    void BroadcastRefMoved( const sc::RefMovedHint& rHint );
+
+    void TransferListeners(
+        ScTable& rDestTab, SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
+        SCCOL nColDelta, SCROW nRowDelta );
 
     void TransferCellValuesTo( SCCOL nCol, SCROW nRow, size_t nLen, sc::CellValues& rDest );
     void CopyCellValuesFrom( SCCOL nCol, SCROW nRow, const sc::CellValues& rSrc );

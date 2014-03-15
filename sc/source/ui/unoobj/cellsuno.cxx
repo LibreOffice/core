@@ -891,7 +891,7 @@ ScLinkListener::~ScLinkListener()
 {
 }
 
-void ScLinkListener::Notify( SvtBroadcaster&, const SfxHint& rHint )
+void ScLinkListener::Notify( const SfxHint& rHint )
 {
     aLink.Call( (SfxHint*)&rHint );
 }

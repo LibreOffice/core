@@ -61,7 +61,7 @@ ScServerObjectSvtListenerForwarder::~ScServerObjectSvtListenerForwarder()
     //! do NOT access pObj
 }
 
-void ScServerObjectSvtListenerForwarder::Notify( SvtBroadcaster& /* rBC */, const SfxHint& rHint)
+void ScServerObjectSvtListenerForwarder::Notify( const SfxHint& rHint )
 {
     pObj->Notify( aBroadcaster, rHint);
 }

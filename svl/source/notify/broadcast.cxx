@@ -132,7 +132,7 @@ void SvtBroadcaster::Broadcast( const SfxHint &rHint )
             ++dest;
 
         if (dest == maDestructedListeners.end() || *dest != *it)
-            (*it)->Notify(*this, rHint);
+            (*it)->Notify(rHint);
     }
 }
 

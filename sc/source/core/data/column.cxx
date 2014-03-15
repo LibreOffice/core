@@ -42,6 +42,7 @@
 #include "sharedformula.hxx"
 #include "refupdatecontext.hxx"
 #include <listenercontext.hxx>
+#include <refhint.hxx>
 
 #include <svl/poolcach.hxx>
 #include <svl/zforlist.hxx>
@@ -3444,6 +3445,97 @@ void ScColumn::BroadcastRecalcOnRefMove()
     RecalcOnRefMoveCollector aFunc;
     sc::ProcessFormula(maCells, aFunc);
     BroadcastCells(aFunc.getDirtyRows(), SC_HINT_DATACHANGED);
+}
+
+namespace {
+
+class BroadcastRefMovedHandler
+{
+    const sc::RefMovedHint& mrHint;
+public:
+    BroadcastRefMovedHandler( const sc::RefMovedHint& rHint ) : mrHint(rHint) {}
+
+    void operator() ( size_t, SvtBroadcaster* p )
+    {
+        p->Broadcast(mrHint);
+    }
+};
+
+}
+
+void ScColumn::BroadcastRefMoved( const sc::RefMovedHint& rHint )
+{
+    const ScRange& rRange = rHint.getRange();
+    SCROW nRow1 = rRange.aStart.Row();
+    SCROW nRow2 = rRange.aEnd.Row();
+
+    // Notify all listeners within specified rows.
+    BroadcastRefMovedHandler aFunc(rHint);
+    sc::ProcessBroadcaster(maBroadcasters.begin(), maBroadcasters, nRow1, nRow2, aFunc);
+}
+
+namespace {
+
+class TransferListenersHandler
+{
+    sc::BroadcasterStoreType& mrDestBroadcasters;
+    sc::BroadcasterStoreType::iterator miDestPos;
+    SCROW mnRowDelta; /// Add this to the source row to get the destination row.
+
+public:
+    TransferListenersHandler( sc::BroadcasterStoreType& rDestBrd, SCROW nRowDelta ) :
+        mrDestBroadcasters(rDestBrd), miDestPos(rDestBrd.begin()), mnRowDelta(nRowDelta) {}
+
+    void operator() ( size_t nRow, SvtBroadcaster* pBroadcaster )
+    {
+        assert(pBroadcaster);
+
+        SvtBroadcaster::ListenersType& rLis = pBroadcaster->GetAllListeners();
+        if (rLis.empty())
+            // No listeners to transfer.
+            return;
+
+        SCROW nDestRow = nRow + mnRowDelta;
+
+        sc::BroadcasterStoreType::position_type aPos = mrDestBroadcasters.position(miDestPos, nDestRow);
+        miDestPos = aPos.first;
+        SvtBroadcaster* pDestBrd = NULL;
+        if (aPos.first->type == sc::element_type_broadcaster)
+        {
+            // Existing broadcaster.
+            pDestBrd = sc::broadcaster_block::at(*aPos.first->data, aPos.second);
+        }
+        else
+        {
+            // No existing broadcaster. Create a new one.
+            assert(aPos.first->type == sc::element_type_empty);
+            pDestBrd = new SvtBroadcaster;
+            miDestPos = mrDestBroadcasters.set(miDestPos, nDestRow, pDestBrd);
+        }
+
+        // Transfer all listeners from the source to the destination.
+        SvtBroadcaster::ListenersType::iterator it = rLis.begin(), itEnd = rLis.end();
+        for (; it != itEnd; ++it)
+        {
+            SvtListener* pLis = *it;
+            pLis->EndListening(*pBroadcaster);
+            pLis->StartListening(*pDestBrd);
+        }
+
+        // At this point, the source broadcaster should have no more listeners.
+        assert(!pBroadcaster->HasListeners());
+    }
+};
+
+}
+
+void ScColumn::TransferListeners(
+    ScColumn& rDestCol, SCROW nRow1, SCROW nRow2, SCROW nRowDelta )
+{
+    TransferListenersHandler aFunc(rDestCol.maBroadcasters, nRowDelta);
+    sc::ProcessBroadcaster(maBroadcasters.begin(), maBroadcasters, nRow1, nRow2, aFunc);
+
+    maBroadcasters.set_empty(nRow1, nRow2); // Remove all source broadcaster.
 }
 
 void ScColumn::CalcAll()

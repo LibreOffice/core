@@ -258,6 +258,7 @@ $(eval $(call gb_Library_add_exception_objects,sc,\
     sc/source/core/tool/recursionhelper \
     sc/source/core/tool/refdata \
     sc/source/core/tool/reffind \
+    sc/source/core/tool/refhint \
     sc/source/core/tool/refreshtimer \
     sc/source/core/tool/reftokenhelper \
     sc/source/core/tool/refupdat \

@@ -50,6 +50,7 @@
 #include "refupdatecontext.hxx"
 #include "scopetools.hxx"
 #include <rowheightcontext.hxx>
+#include <refhint.hxx>
 
 #include "scitems.hxx"
 #include <editeng/boxitem.hxx>
@@ -1714,6 +1715,25 @@ void ScTable::BroadcastRecalcOnRefMove()
     sc::AutoCalcSwitch aSwitch(*pDocument, false);
     for (SCCOL i = 0; i <= MAXCOL; ++i)
         aCol[i].BroadcastRecalcOnRefMove();
+}
+
+void ScTable::BroadcastRefMoved( const sc::RefMovedHint& rHint )
+{
+    const ScRange& rRange = rHint.getRange();
+    for (SCCOL nCol = rRange.aStart.Col(); nCol <= rRange.aEnd.Col(); ++nCol)
+        aCol[nCol].BroadcastRefMoved(rHint);
+}
+
+void ScTable::TransferListeners(
+    ScTable& rDestTab, SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
+    SCCOL nColDelta, SCROW nRowDelta )
+{
+    for (SCCOL nCol = nCol1; nCol <= nCol2; ++nCol)
+    {
+        ScColumn& rSrcCol = aCol[nCol];
+        ScColumn& rDestCol = rDestTab.aCol[nCol+nColDelta];
+        rSrcCol.TransferListeners(rDestCol, nRow1, nRow2, nRowDelta);
+    }
 }
 
 void ScTable::SetLoadingMedium(bool bLoading)

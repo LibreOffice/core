@@ -45,7 +45,7 @@ public:
 
     bool HasBroadcaster() const;
 
-    virtual void        Notify( SvtBroadcaster& rBC, const SfxHint& rHint );
+    virtual void Notify( const SfxHint& rHint );
 };
 
 

@@ -48,6 +48,7 @@
 #include "clipparam.hxx"
 #include "sc.hrc"
 #include <rowheightcontext.hxx>
+#include <refhint.hxx>
 
 #include <set>
 
@@ -1251,6 +1252,15 @@ void ScUndoDragDrop::Undo()
     maPaintRanges.RemoveAll();
 
     BeginUndo();
+
+    // Notify all listeners of the destination range, and have them update their references.
+    ScDocument* pDoc = pDocShell->GetDocument();
+    SCCOL nColDelta = aSrcRange.aStart.Col() - aDestRange.aStart.Col();
+    SCROW nRowDelta = aSrcRange.aStart.Row() - aDestRange.aStart.Row();
+    SCTAB nTabDelta = aSrcRange.aStart.Tab() - aDestRange.aStart.Tab();
+    sc::RefMovedHint aHint(aDestRange, ScAddress(nColDelta, nRowDelta, nTabDelta));
+    pDoc->BroadcastRefMoved(aHint);
+
     DoUndo(aDestRange);
     if (bCut)
         DoUndo(aSrcRange);

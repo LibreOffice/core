@@ -2845,6 +2845,45 @@ sc::RefUpdateResult ScTokenArray::AdjustReferenceOnMove(
     return aRes;
 }
 
+void ScTokenArray::MoveReference(
+    const ScAddress& rPos, const ScRange& rMovedRange, const ScAddress& rDelta )
+{
+    FormulaToken** p = pCode;
+    FormulaToken** pEnd = p + static_cast<size_t>(nLen);
+    for (; p != pEnd; ++p)
+    {
+        switch ((*p)->GetType())
+        {
+            case svSingleRef:
+            {
+                ScToken* pToken = static_cast<ScToken*>(*p);
+                ScSingleRefData& rRef = pToken->GetSingleRef();
+                ScAddress aAbs = rRef.toAbs(rPos);
+                if (rMovedRange.In(aAbs))
+                {
+                    aAbs.Move(rDelta.Col(), rDelta.Row(), rDelta.Tab());
+                    rRef.SetAddress(aAbs, rPos);
+                }
+            }
+            break;
+            case svDoubleRef:
+            {
+                ScToken* pToken = static_cast<ScToken*>(*p);
+                ScComplexRefData& rRef = pToken->GetDoubleRef();
+                ScRange aAbs = rRef.toAbs(rPos);
+                if (rMovedRange.In(aAbs))
+                {
+                    aAbs.Move(rDelta.Col(), rDelta.Row(), rDelta.Tab());
+                    rRef.SetRange(aAbs, rPos);
+                }
+            }
+            break;
+            default:
+                ;
+        }
+    }
+}
+
 namespace {
 
 bool adjustSingleRefInName(

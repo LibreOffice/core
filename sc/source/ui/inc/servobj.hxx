@@ -36,7 +36,7 @@ class ScServerObjectSvtListenerForwarder : public SvtListener
 public:
                     ScServerObjectSvtListenerForwarder( ScServerObject* pObjP);
     virtual         ~ScServerObjectSvtListenerForwarder();
-    virtual void    Notify( SvtBroadcaster& rBC, const SfxHint& rHint);
+    virtual void Notify( const SfxHint& rHint );
 };
 
 class ScServerObject : public ::sfx2::SvLinkSource, public SfxListener

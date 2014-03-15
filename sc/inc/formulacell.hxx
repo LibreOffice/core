@@ -314,7 +314,7 @@ public:
     void            SetPreviousTrack( ScFormulaCell* pF );
     void            SetNextTrack( ScFormulaCell* pF );
 
-    virtual void    Notify( SvtBroadcaster& rBC, const SfxHint& rHint);
+    virtual void Notify( const SfxHint& rHint );
     void SetCompile( bool bVal );
     ScDocument* GetDocument() const;
     void            SetMatColsRows( SCCOL nCols, SCROW nRows, bool bDirtyFlag=true );

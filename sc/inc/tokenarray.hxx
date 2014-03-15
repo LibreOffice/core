@@ -144,6 +144,16 @@ public:
         const sc::RefUpdateContext& rCxt, const ScAddress& rOldPos, const ScAddress& rNewPos );
 
     /**
+     * Move reference positions that are within specified moved range.
+     *
+     * @param rPos position of this formula cell
+     * @param rMovedRange range that has been moved.
+     * @param rDelta movement vector.
+     */
+    void MoveReference(
+        const ScAddress& rPos, const ScRange& rMovedRange, const ScAddress& rDelta );
+
+    /**
      * Adjust all references in named expression. In named expression, we only
      * update absolute positions, and leave relative positions intact.
      *

@@ -55,6 +55,7 @@
 #include "scopetools.hxx"
 #include "refupdatecontext.hxx"
 #include <tokenstringcontext.hxx>
+#include <refhint.hxx>
 
 #include <boost/scoped_ptr.hpp>
 
@@ -1867,12 +1868,30 @@ bool ScFormulaCell::IsInChangeTrack() const
     return bInChangeTrack;
 }
 
-void ScFormulaCell::Notify( SvtBroadcaster&, const SfxHint& rHint)
+void ScFormulaCell::Notify( const SfxHint& rHint )
 {
+    const SfxSimpleHint* pSimpleHint = dynamic_cast<const SfxSimpleHint*>(&rHint);
+    if (!pSimpleHint)
+        return;
+
+    sal_uLong nHint = pSimpleHint->GetId();
+    if (nHint == SC_HINT_REFERENCE)
+    {
+        const sc::RefHint& rRefHint = static_cast<const sc::RefHint&>(rHint);
+
+        if (rRefHint.getType() == sc::RefHint::Moved)
+        {
+            // One of the references has moved.
+
+            const sc::RefMovedHint& rRefMoved = static_cast<const sc::RefMovedHint&>(rRefHint);
+            pCode->MoveReference(aPos, rRefMoved.getRange(), rRefMoved.getDelta());
+        }
+
+        return;
+    }
+
     if ( !pDocument->IsInDtorClear() && !pDocument->GetHardRecalcState() )
     {
-        const ScHint* p = PTR_CAST( ScHint, &rHint );
-        sal_uLong nHint = (p ? p->GetId() : 0);
         if (nHint & (SC_HINT_DATACHANGED | SC_HINT_TABLEOPDIRTY))
         {
             bool bForceTrack = false;

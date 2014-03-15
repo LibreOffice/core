@@ -92,7 +92,7 @@ public:
 
     bool            IsUno() const   { return (pUnoData != NULL); }
 
-    virtual void    Notify( SvtBroadcaster& rBC, const SfxHint& rHint );
+    virtual void Notify( const SfxHint& rHint );
     void            StartListeningTo();
     void            EndListeningTo();
     void            ChangeListening( const ScRangeListRef& rRangeListRef,

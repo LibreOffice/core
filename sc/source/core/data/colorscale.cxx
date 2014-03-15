@@ -33,7 +33,7 @@ public:
     ScFormulaListener(ScFormulaCell* pCell);
     virtual ~ScFormulaListener();
 
-    void Notify( SvtBroadcaster& rBC, const SfxHint& rHint );
+    void Notify( const SfxHint& rHint );
 
     bool NeedsRepaint() const;
 };
@@ -129,7 +129,7 @@ ScFormulaListener::~ScFormulaListener()
     std::for_each(maCells.begin(), maCells.end(), StopListeningCell(mpDoc, this));
 }
 
-void ScFormulaListener::Notify(SvtBroadcaster&, const SfxHint&)
+void ScFormulaListener::Notify( const SfxHint& )
 {
     mbDirty = true;
 }

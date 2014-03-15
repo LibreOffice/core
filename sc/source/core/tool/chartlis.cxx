@@ -202,7 +202,7 @@ uno::Reference< chart::XChartData > ScChartListener::GetUnoSource() const
     return uno::Reference< chart::XChartData >();
 }
 
-void ScChartListener::Notify( SvtBroadcaster&, const SfxHint& rHint )
+void ScChartListener::Notify( const SfxHint& rHint )
 {
     const ScHint* p = dynamic_cast<const ScHint*>(&rHint);
     if (p && (p->GetId() & SC_HINT_DATACHANGED))

@@ -110,7 +110,7 @@ bool ScLookupCache::insert( const ScAddress & rResultAddress,
 }
 
 
-void ScLookupCache::Notify( SvtBroadcaster & /* rBC */ , const SfxHint &  rHint )
+void ScLookupCache::Notify( const SfxHint& rHint )
 {
     if (!mpDoc->IsInDtorClear())
     {

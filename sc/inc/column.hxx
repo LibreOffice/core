@@ -61,6 +61,7 @@ struct RowSpan;
 class RowHeightContext;
 class CompileFormulaContext;
 struct SetFormulaDirtyContext;
+class RefMovedHint;
 
 }
 
@@ -462,6 +463,8 @@ public:
     void        StartNeededListeners(); // only for cells where NeedsListening()==true
     void        SetDirtyIfPostponed();
     void BroadcastRecalcOnRefMove();
+    void BroadcastRefMoved( const sc::RefMovedHint& rHint );
+    void TransferListeners( ScColumn& rDestCol, SCROW nRow1, SCROW nRow2, SCROW nRowDelta );
 
     void CompileDBFormula( sc::CompileFormulaContext& rCxt );
     void CompileDBFormula( sc::CompileFormulaContext& rCxt, bool bCreateFormulaString );
