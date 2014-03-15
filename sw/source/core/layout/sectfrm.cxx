@@ -2357,8 +2357,12 @@ void SwSectionFrm::_UpdateAttr( const SfxPoolItem *pOld, const SfxPoolItem *pNew
         case RES_COL:
             if( !IsInFtn() )
             {
-                ChgColumns( *(const SwFmtCol*)pOld, *(const SwFmtCol*)pNew );
-                rInvFlags |= 0x11;
+                assert(pOld && pNew);
+                if (pOld && pNew)
+                {
+                    ChgColumns( *(const SwFmtCol*)pOld, *(const SwFmtCol*)pNew );
+                    rInvFlags |= 0x11;
+                }
             }
             break;
 
