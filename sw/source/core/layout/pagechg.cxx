@@ -549,34 +549,36 @@ void SwPageFrm::_UpdateAttr( const SfxPoolItem *pOld, const SfxPoolItem *pNew,
         {
             // If the frame format is changed, several things might also change:
             // 1. columns:
-            OSL_ENSURE( pOld && pNew, "FMT_CHG Missing Format." );
-            const SwFmt* pOldFmt = ((SwFmtChg*)pOld)->pChangedFmt;
-            const SwFmt* pNewFmt = ((SwFmtChg*)pNew)->pChangedFmt;
-            OSL_ENSURE( pOldFmt && pNewFmt, "FMT_CHG Missing Format." );
-
-            const SwFmtCol &rOldCol = pOldFmt->GetCol();
-            const SwFmtCol &rNewCol = pNewFmt->GetCol();
-            if( rOldCol != rNewCol )
+            assert(pOld && pNew); //FMT_CHG Missing Format
+            const SwFmt* pOldFmt = pOld ? ((SwFmtChg*)pOld)->pChangedFmt : NULL;
+            const SwFmt* pNewFmt = pNew ? ((SwFmtChg*)pNew)->pChangedFmt : NULL;
+            assert(pOldFmt && pNewFmt); //FMT_CHG Missing Format
+            if (pOldFmt && pNewFmt)
             {
-                SwLayoutFrm *pB = FindBodyCont();
-                OSL_ENSURE( pB, "Seite ohne Body." );
-                pB->ChgColumns( rOldCol, rNewCol );
-                rInvFlags |= 0x20;
+                const SwFmtCol &rOldCol = pOldFmt->GetCol();
+                const SwFmtCol &rNewCol = pNewFmt->GetCol();
+                if( rOldCol != rNewCol )
+                {
+                    SwLayoutFrm *pB = FindBodyCont();
+                    OSL_ENSURE( pB, "Seite ohne Body." );
+                    pB->ChgColumns( rOldCol, rNewCol );
+                    rInvFlags |= 0x20;
+                }
+
+                // 2. header and footer:
+                const SwFmtHeader &rOldH = pOldFmt->GetHeader();
+                const SwFmtHeader &rNewH = pNewFmt->GetHeader();
+                if( rOldH != rNewH )
+                    rInvFlags |= 0x08;
+
+                const SwFmtFooter &rOldF = pOldFmt->GetFooter();
+                const SwFmtFooter &rNewF = pNewFmt->GetFooter();
+                if( rOldF != rNewF )
+                    rInvFlags |= 0x10;
+                CheckDirChange();
             }
-
-            // 2. header and footer:
-            const SwFmtHeader &rOldH = pOldFmt->GetHeader();
-            const SwFmtHeader &rNewH = pNewFmt->GetHeader();
-            if( rOldH != rNewH )
-                rInvFlags |= 0x08;
-
-            const SwFmtFooter &rOldF = pOldFmt->GetFooter();
-            const SwFmtFooter &rNewF = pNewFmt->GetFooter();
-            if( rOldF != rNewF )
-                rInvFlags |= 0x10;
-            CheckDirChange();
         }
-            // no break
+        // no break
         case RES_FRM_SIZE:
         {
             const SwRect aOldPageFrmRect( Frm() );
@@ -625,12 +627,14 @@ void SwPageFrm::_UpdateAttr( const SfxPoolItem *pOld, const SfxPoolItem *pNew,
         break;
 
         case RES_COL:
-        {
-            SwLayoutFrm *pB = FindBodyCont();
-            OSL_ENSURE( pB, "page without body." );
-            pB->ChgColumns( *(const SwFmtCol*)pOld, *(const SwFmtCol*)pNew );
-            rInvFlags |= 0x22;
-        }
+            assert(pOld && pNew); //COL Missing Format
+            if (pOld && pNew)
+            {
+                SwLayoutFrm *pB = FindBodyCont();
+                assert(pB); //page without body
+                pB->ChgColumns( *(const SwFmtCol*)pOld, *(const SwFmtCol*)pNew );
+                rInvFlags |= 0x22;
+            }
         break;
 
         case RES_HEADER:
