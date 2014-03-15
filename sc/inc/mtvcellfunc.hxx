@@ -187,6 +187,16 @@ ProcessNote(
         CellNoteStoreType, cellnote_block, _FuncElem, FuncElseNoOp<size_t> >(it, rStore, nRow1, nRow2, rFuncElem, aElse);
 }
 
+template<typename _FuncElem>
+typename BroadcasterStoreType::iterator
+ProcessBroadcaster(
+    const BroadcasterStoreType::iterator& it, BroadcasterStoreType& rStore, SCROW nRow1, SCROW nRow2, _FuncElem& rFuncElem)
+{
+    FuncElseNoOp<size_t> aElse;
+    return ProcessElements1<
+        BroadcasterStoreType, broadcaster_block, _FuncElem, FuncElseNoOp<size_t> >(it, rStore, nRow1, nRow2, rFuncElem, aElse);
+}
+
 }
 
 #endif
