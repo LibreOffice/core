@@ -974,7 +974,7 @@ void SdrGrafObj::SetPage( SdrPage* pNewPage )
             ImpLinkAbmeldung();
     }
 
-    if(!pModel && !GetStyleSheet() && pNewPage->GetModel())
+    if(!pModel && !GetStyleSheet() && pNewPage && pNewPage->GetModel())
     {
         // #i119287# Set default StyleSheet for SdrGrafObj here, it is different from 'Default'. This
         // needs to be done before the style 'Default' is set from the :SetModel() call which is triggered
