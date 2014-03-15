@@ -2029,7 +2029,7 @@ void SwCntntFrm::_UpdateAttr( const SfxPoolItem* pOld, const SfxPoolItem* pNew,
                 SwPageFrm *pPage = FindPageFrm();
                 if ( !GetPrev() )
                     CheckPageDescs( pPage );
-                if ( pPage && GetAttrSet()->GetPageDesc().GetNumOffset() )
+                if ( GetAttrSet()->GetPageDesc().GetNumOffset() )
                     ((SwRootFrm*)pPage->GetUpper())->SetVirtPageNum( sal_True );
                 SwDocPosUpdate aMsgHnt( pPage->Frm().Top() );
                 pPage->GetFmt()->GetDoc()->UpdatePageFlds( &aMsgHnt );
