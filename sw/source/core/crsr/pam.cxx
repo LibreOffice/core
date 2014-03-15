@@ -708,7 +708,7 @@ bool SwPaM::HasReadonlySel( bool bFormView, bool bAnnotationMode ) const
             bool bAtStartA = pA != NULL && pA->GetMarkStart() == *GetPoint();
             bool bAtStartB = pB != NULL && pB->GetMarkStart() == *GetMark();
             bRet = ( pA != pB ) || bAtStartA || bAtStartB;
-            bool bProtectForm = pDoc->get( IDocumentSettingAccess::PROTECT_FORM );
+            bool bProtectForm = pDoc ? pDoc->get( IDocumentSettingAccess::PROTECT_FORM ) : false;
             if ( bProtectForm )
                 bRet |= ( pA == NULL || pB == NULL );
         }
