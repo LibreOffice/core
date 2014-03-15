@@ -81,10 +81,30 @@ public:
         Init();
     }
 
-    MathType(OUString &rIn,SmNode *pIn) :
-        rRet(rIn), pTree(pIn), nHAlign(2), nVAlign(0), nInsertion(0), nDefaultSize(12),
-        nLSize(0), nDSize(0), nCurSize(0), nLastSize(0), nSpec(0), bIsSilent(sal_False),
-        nTypeFace(0)
+    MathType(OUString &rIn,SmNode *pIn)
+        : nVersion(0)
+        , nPlatform(0)
+        , nProduct(0)
+        , nProdVersion(0)
+        , nProdSubVersion(0)
+        , pS(NULL)
+        , rRet(rIn)
+        , pTree(pIn)
+        , nHAlign(2)
+        , nVAlign(0)
+        , nPendingAttributes(0)
+        , nInsertion(0)
+        , nDefaultSize(12)
+        , nLSize(0)
+        , nDSize(0)
+        , nCurSize(0)
+        , nLastSize(0)
+        , nSpec(0)
+        , bIsSilent(sal_False)
+        , bIsReInterpBrace(sal_False)
+        , nPostSup(0)
+        , nPostlSup(0)
+        , nTypeFace(0)
     {
         Init();
     }
