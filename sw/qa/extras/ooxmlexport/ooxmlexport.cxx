@@ -2781,6 +2781,14 @@ DECLARE_OOXMLEXPORT_TEST(testCitation,"FDO74775.docx")
     CPPUNIT_ASSERT(contents.match(" CITATION [Kra06]"));
 }
 
+DECLARE_OOXMLEXPORT_TEST(test76108, "test76108.docx")
+{
+    xmlDocPtr pXmlDoc = parseExport("word/document.xml");
+    if (!pXmlDoc) return;
+    //docx file after RT is getting corrupted.
+    assertXPath(pXmlDoc, "/w:document[1]/w:body[1]/w:p[1]/w:r[1]/w:fldChar[1]", "fldCharType", "begin");
+}
+
 #endif
 
 CPPUNIT_PLUGIN_IMPLEMENT();
