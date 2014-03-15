@@ -21,15 +21,11 @@
 
 #include "global.hxx"
 #include "address.hxx"
+#include <simplehintids.hxx>
 #include <tools/rtti.hxx>
 #include <svl/hint.hxx>
-#include <svl/smplhint.hxx>
 
 class SvtBroadcaster;
-
-#define SC_HINT_DATACHANGED SFX_HINT_DATACHANGED
-#define SC_HINT_TABLEOPDIRTY    SFX_HINT_USER00
-#define SC_HINT_CALCALL         SFX_HINT_USER01
 
 class ScHint : public SfxSimpleHint
 {

@@ -446,6 +446,23 @@ void ScBroadcastAreaSlot::EraseArea( ScBroadcastAreas::iterator& rIter )
     }
 }
 
+void ScBroadcastAreaSlot::GetAllListeners( const ScRange& rRange, std::vector<SvtListener*>& rListeners )
+{
+    for (ScBroadcastAreas::const_iterator aIter( aBroadcastAreaTbl.begin()),
+            aIterEnd( aBroadcastAreaTbl.end()); aIter != aIterEnd; ++aIter )
+    {
+        if (isMarkedErased( aIter))
+            continue;
+
+        ScBroadcastArea* pArea = (*aIter).mpArea;
+        const ScRange& rAreaRange = pArea->GetRange();
+        if (!rAreaRange.Intersects(rRange))
+            continue;
+
+        SvtBroadcaster::ListenersType& rLst = pArea->GetBroadcaster().GetAllListeners();
+        std::copy(rLst.begin(), rLst.end(), std::back_inserter(rListeners));
+    }
+}
 
 void ScBroadcastAreaSlot::FinallyEraseAreas()
 {
@@ -974,6 +991,31 @@ void ScBroadcastAreaSlotMachine::FinallyEraseAreas( ScBroadcastAreaSlot* pSlot )
             aCopy.push_back( *aIt);
     }
     maAreasToBeErased.swap( aCopy);
+}
+
+std::vector<SvtListener*> ScBroadcastAreaSlotMachine::GetAllListeners( const ScRange& rRange )
+{
+    std::vector<SvtListener*> aRet;
+
+    SCTAB nEndTab = rRange.aEnd.Tab();
+    for (TableSlotsMap::const_iterator iTab( aTableSlotsMap.lower_bound( rRange.aStart.Tab()));
+            iTab != aTableSlotsMap.end() && (*iTab).first <= nEndTab; ++iTab)
+    {
+        ScBroadcastAreaSlot** ppSlots = (*iTab).second->getSlots();
+        SCSIZE nStart, nEnd, nRowBreak;
+        ComputeAreaPoints( rRange, nStart, nEnd, nRowBreak );
+        SCSIZE nOff = nStart;
+        SCSIZE nBreak = nOff + nRowBreak;
+        ScBroadcastAreaSlot** pp = ppSlots + nOff;
+        while ( nOff <= nEnd )
+        {
+            ScBroadcastAreaSlot* p = *pp;
+            p->GetAllListeners(rRange, aRet);
+            ComputeNextSlot( nOff, nBreak, pp, nStart, ppSlots, nRowBreak);
+        }
+    }
+
+    return aRet;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -80,15 +80,7 @@ bool SvtListener::HasBroadcaster() const
     return !maBroadcasters.empty();
 }
 
-void SvtListener::Notify( SvtBroadcaster&
-#ifdef DBG_UTIL
-rBC
-#endif
-, const SfxHint& )
-{
-    DBG_ASSERT( IsListening( rBC ),
-                "notification from unregistered broadcaster" );
-}
+void SvtListener::Notify( const SfxHint& ) {}
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
