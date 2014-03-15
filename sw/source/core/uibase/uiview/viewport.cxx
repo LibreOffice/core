@@ -62,8 +62,13 @@ static sal_uInt16 nPgNum = 0;
 
 bool SwView::IsDocumentBorder()
 {
-    return GetDocShell()->GetCreateMode() == SFX_CREATE_MODE_EMBEDDED ||
-           m_pWrtShell->GetViewOptions()->getBrowseMode() ||
+    if (GetDocShell()->GetCreateMode() == SFX_CREATE_MODE_EMBEDDED)
+        return true;
+
+    if (!m_pWrtShell)
+        return false;
+
+    return m_pWrtShell->GetViewOptions()->getBrowseMode() ||
            SVX_ZOOM_PAGEWIDTH_NOBORDER == (SvxZoomType)m_pWrtShell->GetViewOptions()->GetZoomType();
 }
 
