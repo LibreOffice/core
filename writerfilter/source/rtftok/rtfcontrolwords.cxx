@@ -7,7 +7,9 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include <rtfcontrolwords.hxx>
+#include <rtflistener.hxx>
+#include <oox/token/namespaces.hxx>
+#include <oox/token/tokens.hxx>
 #include <sal/macros.h>
 #include <string.h>
 
@@ -1847,6 +1849,61 @@ int nRTFControlWords = SAL_N_ELEMENTS(aRTFControlWords);
 bool RTFSymbol::operator<(const RTFSymbol& rOther) const
 {
     return strcmp(sKeyword, rOther.sKeyword) < 0;
+}
+
+RTFMathSymbol aRTFMathControlWords[] = {
+    // eKeyword nToken eDestination
+    {RTF_MOMATH, M_TOKEN(oMath), DESTINATION_MOMATH},
+    {RTF_MF, M_TOKEN(f), DESTINATION_MF},
+    {RTF_MFPR, M_TOKEN(fPr), DESTINATION_MFPR},
+    {RTF_MCTRLPR, M_TOKEN(ctrlPr), DESTINATION_MCTRLPR},
+    {RTF_MNUM, M_TOKEN(num), DESTINATION_MNUM},
+    {RTF_MDEN, M_TOKEN(den), DESTINATION_MDEN},
+    {RTF_MACC, M_TOKEN(acc), DESTINATION_MACC},
+    {RTF_MACCPR, M_TOKEN(accPr), DESTINATION_MACCPR},
+    {RTF_MBAR, M_TOKEN(bar), DESTINATION_MBAR},
+    {RTF_MBARPR, M_TOKEN(barPr), DESTINATION_MBARPR},
+    {RTF_ME, M_TOKEN(e), DESTINATION_ME},
+    {RTF_MD, M_TOKEN(d), DESTINATION_MD},
+    {RTF_MDPR, M_TOKEN(dPr), DESTINATION_MDPR},
+    {RTF_MFUNC, M_TOKEN(func), DESTINATION_MFUNC},
+    {RTF_MFUNCPR, M_TOKEN(funcPr), DESTINATION_MFUNCPR},
+    {RTF_MFNAME, M_TOKEN(fName), DESTINATION_MFNAME},
+    {RTF_MLIMLOW, M_TOKEN(limLow), DESTINATION_MLIMLOW},
+    {RTF_MLIMLOWPR, M_TOKEN(limLowPr), DESTINATION_MLIMLOWPR},
+    {RTF_MLIM, M_TOKEN(lim), DESTINATION_MLIM},
+    {RTF_MM, M_TOKEN(m), DESTINATION_MM},
+    {RTF_MMPR, M_TOKEN(mPr), DESTINATION_MMPR},
+    {RTF_MMR, M_TOKEN(mr), DESTINATION_MMR},
+    {RTF_MNARY, M_TOKEN(nary), DESTINATION_MNARY},
+    {RTF_MNARYPR, M_TOKEN(naryPr), DESTINATION_MNARYPR},
+    {RTF_MSUB, M_TOKEN(sub), DESTINATION_MSUB},
+    {RTF_MSUP, M_TOKEN(sup), DESTINATION_MSUP},
+    {RTF_MLIMUPP, M_TOKEN(limUpp), DESTINATION_MLIMUPP},
+    {RTF_MLIMUPPPR, M_TOKEN(limUppPr), DESTINATION_MLIMUPPPR},
+    {RTF_MGROUPCHR, M_TOKEN(groupChr), DESTINATION_MGROUPCHR},
+    {RTF_MGROUPCHRPR, M_TOKEN(groupChrPr), DESTINATION_MGROUPCHRPR},
+    {RTF_MBORDERBOX, M_TOKEN(borderBox), DESTINATION_MBORDERBOX},
+    {RTF_MBORDERBOXPR, M_TOKEN(borderBoxPr), DESTINATION_MBORDERBOXPR},
+    {RTF_MRAD, M_TOKEN(rad), DESTINATION_MRAD},
+    {RTF_MRADPR, M_TOKEN(radPr), DESTINATION_MRADPR},
+    {RTF_MDEG, M_TOKEN(deg), DESTINATION_MDEG},
+    {RTF_MSSUB, M_TOKEN(sSub), DESTINATION_MSSUB},
+    {RTF_MSSUBPR, M_TOKEN(sSubPr), DESTINATION_MSSUBPR},
+    {RTF_MSSUP, M_TOKEN(sSup), DESTINATION_MSSUP},
+    {RTF_MSSUPPR, M_TOKEN(sSupPr), DESTINATION_MSSUPPR},
+    {RTF_MSSUBSUP, M_TOKEN(sSubSup), DESTINATION_MSSUBSUP},
+    {RTF_MSSUBSUPPR, M_TOKEN(sSubSupPr), DESTINATION_MSSUBSUPPR},
+    {RTF_MSPRE, M_TOKEN(sPre), DESTINATION_MSPRE},
+    {RTF_MSPREPR, M_TOKEN(sPrePr), DESTINATION_MSPREPR},
+    {RTF_MBOX, M_TOKEN(box), DESTINATION_MBOX},
+    {RTF_MEQARR, M_TOKEN(eqArr), DESTINATION_MEQARR},
+};
+int nRTFMathControlWords = SAL_N_ELEMENTS(aRTFMathControlWords);
+
+bool RTFMathSymbol::operator<(const RTFMathSymbol& rOther) const
+{
+    return eKeyword < rOther.eKeyword;
 }
 
 } // namespace rtftok

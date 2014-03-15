@@ -34,6 +34,8 @@ namespace writerfilter {
                 void popGroup();
                 OUString getPosition();
                 sal_Size getGroupStart();
+                /// To look up additional properties of a math symbol.
+                static bool lookupMathKeyword(RTFMathSymbol& rSymbol);
             private:
                 SvStream& Strm();
                 int resolveKeyword();
@@ -45,6 +47,9 @@ namespace writerfilter {
                 // This is the same as aRTFControlWords, but sorted
                 static std::vector<RTFSymbol> m_aRTFControlWords;
                 static bool m_bControlWordsSorted;
+                // This is the same as aRTFMathControlWords, but sorted
+                static std::vector<RTFMathSymbol> m_aRTFMathControlWords;
+                static bool m_bMathControlWordsSorted;
                 /// Same as the size of the importer's states, except that this can be negative for invalid input.
                 int m_nGroup;
                 sal_Int32 m_nLineNumber;

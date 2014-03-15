@@ -25,6 +25,8 @@ namespace rtftok {
 
 std::vector<RTFSymbol> RTFTokenizer::m_aRTFControlWords;
 bool RTFTokenizer::m_bControlWordsSorted;
+std::vector<RTFMathSymbol> RTFTokenizer::m_aRTFMathControlWords;
+bool RTFTokenizer::m_bMathControlWordsSorted;
 
 RTFTokenizer::RTFTokenizer(RTFListener& rImport, SvStream* pInStream, uno::Reference<task::XStatusIndicator> const& xStatusIndicator)
     : m_rImport(rImport),
@@ -40,6 +42,12 @@ RTFTokenizer::RTFTokenizer(RTFListener& rImport, SvStream* pInStream, uno::Refer
         RTFTokenizer::m_bControlWordsSorted = true;
         m_aRTFControlWords = std::vector<RTFSymbol>(aRTFControlWords, aRTFControlWords + nRTFControlWords);
         std::sort(m_aRTFControlWords.begin(), m_aRTFControlWords.end());
+    }
+    if (!RTFTokenizer::m_bMathControlWordsSorted)
+    {
+        RTFTokenizer::m_bMathControlWordsSorted = true;
+        m_aRTFMathControlWords = std::vector<RTFMathSymbol>(aRTFMathControlWords, aRTFMathControlWords + nRTFMathControlWords);
+        std::sort(m_aRTFMathControlWords.begin(), m_aRTFMathControlWords.end());
     }
 }
 
@@ -271,6 +279,16 @@ int RTFTokenizer::resolveKeyword()
         Strm().SeekRel(-1);
     OString aKeyword = aBuf.makeStringAndClear();
     return dispatchKeyword(aKeyword, bParam, nParam);
+}
+
+bool RTFTokenizer::lookupMathKeyword(RTFMathSymbol& rSymbol)
+{
+    std::vector<RTFMathSymbol>::iterator low = std::lower_bound(m_aRTFMathControlWords.begin(), m_aRTFMathControlWords.end(), rSymbol);
+    int i = low - m_aRTFMathControlWords.begin();
+    if (low == m_aRTFMathControlWords.end() || rSymbol < *low)
+        return false;
+    rSymbol = m_aRTFMathControlWords[i];
+    return true;
 }
 
 int RTFTokenizer::dispatchKeyword(OString& rKeyword, bool bParam, int nParam)
