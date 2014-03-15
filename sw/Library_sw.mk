@@ -489,6 +489,7 @@ $(eval $(call gb_Library_add_exception_objects,sw,\
     sw/source/filter/html/htmlfld \
     sw/source/filter/html/htmlfldw \
     sw/source/filter/html/htmlfly \
+    sw/source/filter/html/htmlflywriter \
     sw/source/filter/html/htmlflyt \
     sw/source/filter/html/htmlform \
     sw/source/filter/html/htmlforw \
