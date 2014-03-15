@@ -379,7 +379,7 @@ bool FuSelection::MouseButtonUp(const MouseEvent& rMEvt)
     SetMouseButtonCode(rMEvt.GetButtons());
 
     bool bReturn = FuDraw::MouseButtonUp(rMEvt);
-    bool bOle = pViewShell->GetViewFrame()->GetFrame().IsInPlace();
+    bool bOle = pViewShell ? pViewShell->GetViewFrame()->GetFrame().IsInPlace() : false;
 
     SdrObject* pObj = NULL;
     SdrPageView* pPV = NULL;
