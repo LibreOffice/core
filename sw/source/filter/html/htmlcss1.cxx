@@ -646,7 +646,7 @@ static CSS1SelectorType GetTokenAndClass( const CSS1Selector *pSelector,
         }
     }
 
-    rToken = rToken.toAsciiUpperCase();
+    rToken = rToken.toAsciiLowerCase();
     return eType;
 }
 
