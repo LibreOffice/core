@@ -149,10 +149,11 @@ SwSpellDialogChildWindow::SwSpellDialogChildWindow (
             Window* _pParent,
             sal_uInt16 nId,
             SfxBindings* pBindings,
-            SfxChildWinInfo* pInfo) :
-                svx::SpellDialogChildWindow (
-                    _pParent, nId, pBindings, pInfo),
-                    m_pSpellState(new SpellState)
+            SfxChildWinInfo* pInfo)
+    : svx::SpellDialogChildWindow (
+        _pParent, nId, pBindings, pInfo)
+    , m_bIsGrammarCheckingOn(false)
+    , m_pSpellState(new SpellState)
 {
     OUString aPropName(UPN_IS_GRAMMAR_INTERACTIVE);
     SvtLinguConfig().GetProperty( aPropName ) >>= m_bIsGrammarCheckingOn;
