@@ -278,7 +278,6 @@ protected:
     virtual void                ImplPrintMask ( const Bitmap& rMask, const Color& rMaskColor,
                                                 const Point& rDestPt, const Size& rDestSize,
                                                 const Point& rSrcPtPixel, const Size& rSrcSizePixel );
-
 public:
                                 Printer();
                                 Printer( const JobSetup& rJobSetup );
@@ -387,7 +386,6 @@ public:
     virtual void                CopyArea( const Point& rDestPt,
                                           const Point& rSrcPt,  const Size& rSrcSize,
                                           sal_uInt16 nFlags = 0 );
-
 
     // implementation detail of PrintJob being asynchronous
     // not exported, not usable outside vcl
