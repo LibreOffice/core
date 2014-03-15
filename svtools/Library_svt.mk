@@ -197,6 +197,7 @@ $(eval $(call gb_Library_add_exception_objects,svt,\
     svtools/source/svhtml/htmlkywd \
     svtools/source/svhtml/htmlout \
     svtools/source/svhtml/htmlsupp \
+    svtools/source/svhtml/HtmlWriter \
     svtools/source/svhtml/parhtml \
     svtools/source/svrtf/parrtf \
     svtools/source/svrtf/rtfkeywd \
