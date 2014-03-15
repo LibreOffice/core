@@ -22,240 +22,228 @@
 
 #include <sal/types.h>
 
-#ifndef CSS1_CONSTASCII_DECL
-#define CSS1_CONSTASCII_DECL( n, s ) n[sizeof(s)]
-#endif
-#ifndef CSS1_CONSTASCII_DEF
-#define CSS1_CONSTASCII_DEF( n, s ) n[sizeof(s)] = s
-#endif
-
-extern sal_Char CSS1_CONSTASCII_DECL( sCSS_mimetype, "text/css" );
+extern const sal_Char* sCSS_mimetype;
 
 // ein par allgemeine Strings
 
-extern sal_Char CSS1_CONSTASCII_DECL( sCSS1_import, "import" );
+extern const sal_Char* sCSS1_import;
 
-// Feature: PrintExt
-extern sal_Char CSS1_CONSTASCII_DECL( sCSS1_page, "page" );
-//sal_Char CSS1_CONSTASCII_DECL( sCSS1_media, "media" );
-// /Feature: PrintExt
+extern const sal_Char* sCSS1_page;
 
-extern sal_Char CSS1_CONSTASCII_DECL( sCSS1_important, "important" );
+extern const sal_Char* sCSS1_important;
 
-extern sal_Char CSS1_CONSTASCII_DECL( sCSS1_link, "link" );
-extern sal_Char CSS1_CONSTASCII_DECL( sCSS1_visited, "visited" );
-extern sal_Char CSS1_CONSTASCII_DECL( sCSS1_first_letter, "first-letter" );
+extern const sal_Char* sCSS1_link;
+extern const sal_Char* sCSS1_visited;
+extern const sal_Char* sCSS1_first_letter;
 
-// Feature: PrintExt
-extern sal_Char CSS1_CONSTASCII_DECL( sCSS1_left, "left" );
-extern sal_Char CSS1_CONSTASCII_DECL( sCSS1_right, "right" );
-extern sal_Char CSS1_CONSTASCII_DECL( sCSS1_first, "first" );
-// /Feature: PrintExt
+extern const sal_Char* sCSS1_left;
+extern const sal_Char* sCSS1_right;
+extern const sal_Char* sCSS1_first;
 
-extern sal_Char CSS1_CONSTASCII_DECL( sCSS1_url, "url" );
-extern sal_Char CSS1_CONSTASCII_DECL( sCSS1_rgb, "rgb" );
+extern const sal_Char* sCSS1_url;
+extern const sal_Char* sCSS1_rgb;
 
-extern sal_Char CSS1_CONSTASCII_DECL( sCSS1_UNIT_pt, "pt" );
-extern sal_Char CSS1_CONSTASCII_DECL( sCSS1_UNIT_mm, "mm" );
-extern sal_Char CSS1_CONSTASCII_DECL( sCSS1_UNIT_cm, "cm" );
-extern sal_Char CSS1_CONSTASCII_DECL( sCSS1_UNIT_pc, "pc" );
-extern sal_Char CSS1_CONSTASCII_DECL( sCSS1_UNIT_inch, "in" );
-extern sal_Char CSS1_CONSTASCII_DECL( sCSS1_UNIT_px, "px" );
-extern sal_Char CSS1_CONSTASCII_DECL( sCSS1_UNIT_em, "em" );
-extern sal_Char CSS1_CONSTASCII_DECL( sCSS1_UNIT_ex, "ex" );
+extern const sal_Char* sCSS1_UNIT_pt;
+extern const sal_Char* sCSS1_UNIT_mm;
+extern const sal_Char* sCSS1_UNIT_cm;
+extern const sal_Char* sCSS1_UNIT_pc;
+extern const sal_Char* sCSS1_UNIT_inch;
+extern const sal_Char* sCSS1_UNIT_px;
+extern const sal_Char* sCSS1_UNIT_em;
+extern const sal_Char* sCSS1_UNIT_ex;
 
 // Strings fuer Font-Properties
 
-extern sal_Char CSS1_CONSTASCII_DECL( sCSS1_P_font_family, "font-family" );
+extern const sal_Char* sCSS1_P_font_family;
 
-extern sal_Char CSS1_CONSTASCII_DECL( sCSS1_PV_serif, "serif" );
-extern sal_Char CSS1_CONSTASCII_DECL( sCSS1_PV_sans_serif, "sans-serif" );
-extern sal_Char CSS1_CONSTASCII_DECL( sCSS1_PV_cursive, "cursive" );
-extern sal_Char CSS1_CONSTASCII_DECL( sCSS1_PV_fantasy, "fantasy" );
-extern sal_Char CSS1_CONSTASCII_DECL( sCSS1_PV_monospace, "monospace" );
+extern const sal_Char* sCSS1_PV_serif;
+extern const sal_Char* sCSS1_PV_sans_serif;
+extern const sal_Char* sCSS1_PV_cursive;
+extern const sal_Char* sCSS1_PV_fantasy;
+extern const sal_Char* sCSS1_PV_monospace;
 
-extern sal_Char CSS1_CONSTASCII_DECL( sCSS1_P_font_style, "font-style" );
+extern const sal_Char* sCSS1_P_font_style;
 
-extern sal_Char CSS1_CONSTASCII_DECL( sCSS1_PV_normal, "normal" );
-extern sal_Char CSS1_CONSTASCII_DECL( sCSS1_PV_italic, "italic" );
-extern sal_Char CSS1_CONSTASCII_DECL( sCSS1_PV_oblique, "oblique" );
+extern const sal_Char* sCSS1_PV_normal;
+extern const sal_Char* sCSS1_PV_italic;
+extern const sal_Char* sCSS1_PV_oblique;
 
-extern sal_Char CSS1_CONSTASCII_DECL( sCSS1_P_font_variant, "font-variant" );
+extern const sal_Char* sCSS1_P_font_variant;
 
 //sal_Char CSS1_CONSTASCII_DECL( sCSS1_PV_normal, "normal" );
-extern sal_Char CSS1_CONSTASCII_DECL( sCSS1_PV_small_caps, "small-caps" );
+extern const sal_Char* sCSS1_PV_small_caps;
 
-extern sal_Char CSS1_CONSTASCII_DECL( sCSS1_P_text_transform, "text-transform" );
+extern const sal_Char* sCSS1_P_text_transform;
 
-extern sal_Char CSS1_CONSTASCII_DECL( sCSS1_PV_capitalize, "capitalize" );
-extern sal_Char CSS1_CONSTASCII_DECL( sCSS1_PV_uppercase, "uppercase" );
-extern sal_Char CSS1_CONSTASCII_DECL( sCSS1_PV_lowercase, "lowercase" );
+extern const sal_Char* sCSS1_PV_capitalize;
+extern const sal_Char* sCSS1_PV_uppercase;
+extern const sal_Char* sCSS1_PV_lowercase;
 
-extern sal_Char CSS1_CONSTASCII_DECL( sCSS1_P_font_weight, "font-weight" );
+extern const sal_Char* sCSS1_P_font_weight;
 
-extern sal_Char CSS1_CONSTASCII_DECL( sCSS1_PV_extra_light, "extra-light" );
-extern sal_Char CSS1_CONSTASCII_DECL( sCSS1_PV_light, "light" );
-extern sal_Char CSS1_CONSTASCII_DECL( sCSS1_PV_demi_light, "demi-light" );
+extern const sal_Char* sCSS1_PV_extra_light;
+extern const sal_Char* sCSS1_PV_light;
+extern const sal_Char* sCSS1_PV_demi_light;
 //sal_Char CSS1_CONSTASCII_DECL( sCSS1_PV_medium, "medium" );
-extern sal_Char CSS1_CONSTASCII_DECL( sCSS1_PV_demi_bold, "demi-bold" );
-extern sal_Char CSS1_CONSTASCII_DECL( sCSS1_PV_bold, "bold" );
-extern sal_Char CSS1_CONSTASCII_DECL( sCSS1_PV_extra_bold, "extra-bold" );
-extern sal_Char CSS1_CONSTASCII_DECL( sCSS1_PV_lighter, "lighter" );
-extern sal_Char CSS1_CONSTASCII_DECL( sCSS1_PV_bolder, "bolder" );
+extern const sal_Char* sCSS1_PV_demi_bold;
+extern const sal_Char* sCSS1_PV_bold;
+extern const sal_Char* sCSS1_PV_extra_bold;
+extern const sal_Char* sCSS1_PV_lighter;
+extern const sal_Char* sCSS1_PV_bolder;
 
-extern sal_Char CSS1_CONSTASCII_DECL( sCSS1_P_font_size, "font-size" );
+extern const sal_Char* sCSS1_P_font_size;
 
-extern sal_Char CSS1_CONSTASCII_DECL( sCSS1_PV_xx_small, "xx-small" );
-extern sal_Char CSS1_CONSTASCII_DECL( sCSS1_PV_x_small, "x-small" );
-extern sal_Char CSS1_CONSTASCII_DECL( sCSS1_PV_small, "small" );
-extern sal_Char CSS1_CONSTASCII_DECL( sCSS1_PV_medium, "medium" );
-extern sal_Char CSS1_CONSTASCII_DECL( sCSS1_PV_large, "large" );
-extern sal_Char CSS1_CONSTASCII_DECL( sCSS1_PV_x_large, "x-large" );
-extern sal_Char CSS1_CONSTASCII_DECL( sCSS1_PV_xx_large, "xx-large" );
+extern const sal_Char* sCSS1_PV_xx_small;
+extern const sal_Char* sCSS1_PV_x_small;
+extern const sal_Char* sCSS1_PV_small;
+extern const sal_Char* sCSS1_PV_medium;
+extern const sal_Char* sCSS1_PV_large;
+extern const sal_Char* sCSS1_PV_x_large;
+extern const sal_Char* sCSS1_PV_xx_large;
 
-extern sal_Char CSS1_CONSTASCII_DECL( sCSS1_PV_larger, "larger" );
-extern sal_Char CSS1_CONSTASCII_DECL( sCSS1_PV_smaller, "smaller" );
+extern const sal_Char* sCSS1_PV_larger;
+extern const sal_Char* sCSS1_PV_smaller;
 
-extern sal_Char CSS1_CONSTASCII_DECL( sCSS1_P_font, "font" );
+extern const sal_Char* sCSS1_P_font;
 
 // Strings fuer Farb- und Hintergrund-Properties
 
-extern sal_Char CSS1_CONSTASCII_DECL( sCSS1_P_color, "color" );
+extern const sal_Char* sCSS1_P_color;
 
-extern sal_Char CSS1_CONSTASCII_DECL( sCSS1_P_background, "background" );
-extern sal_Char CSS1_CONSTASCII_DECL( sCSS1_P_background_color, "background-color" );
+extern const sal_Char* sCSS1_P_background;
+extern const sal_Char* sCSS1_P_background_color;
 
-extern sal_Char CSS1_CONSTASCII_DECL( sCSS1_PV_transparent, "transparent" );
+extern const sal_Char* sCSS1_PV_transparent;
 
-extern sal_Char CSS1_CONSTASCII_DECL( sCSS1_PV_repeat, "repeat" );
-extern sal_Char CSS1_CONSTASCII_DECL( sCSS1_PV_repeat_x, "repeat-x" );
-extern sal_Char CSS1_CONSTASCII_DECL( sCSS1_PV_repeat_y, "repeat-y" );
-extern sal_Char CSS1_CONSTASCII_DECL( sCSS1_PV_no_repeat, "no-repeat" );
+extern const sal_Char* sCSS1_PV_repeat;
+extern const sal_Char* sCSS1_PV_repeat_x;
+extern const sal_Char* sCSS1_PV_repeat_y;
+extern const sal_Char* sCSS1_PV_no_repeat;
 
-extern sal_Char CSS1_CONSTASCII_DECL( sCSS1_PV_top, "top" );
-extern sal_Char CSS1_CONSTASCII_DECL( sCSS1_PV_middle, "middle" );
-extern sal_Char CSS1_CONSTASCII_DECL( sCSS1_PV_bottom, "bottom" );
+extern const sal_Char* sCSS1_PV_top;
+extern const sal_Char* sCSS1_PV_middle;
+extern const sal_Char* sCSS1_PV_bottom;
 
-extern sal_Char CSS1_CONSTASCII_DECL( sCSS1_PV_scroll, "scroll" );
+extern const sal_Char* sCSS1_PV_scroll;
 
 // Strings fuer Text-Properties
 
-extern sal_Char CSS1_CONSTASCII_DECL( sCSS1_P_letter_spacing, "letter-spacing" );
+extern const sal_Char* sCSS1_P_letter_spacing;
 
-extern sal_Char CSS1_CONSTASCII_DECL( sCSS1_P_text_decoration, "text-decoration" );
+extern const sal_Char* sCSS1_P_text_decoration;
 
-extern sal_Char CSS1_CONSTASCII_DECL( sCSS1_PV_none, "none" );
-extern sal_Char CSS1_CONSTASCII_DECL( sCSS1_PV_underline, "underline" );
-extern sal_Char CSS1_CONSTASCII_DECL( sCSS1_PV_overline, "overline" );
-extern sal_Char CSS1_CONSTASCII_DECL( sCSS1_PV_line_through, "line-through" );
-extern sal_Char CSS1_CONSTASCII_DECL( sCSS1_PV_blink, "blink" );
+extern const sal_Char* sCSS1_PV_none;
+extern const sal_Char* sCSS1_PV_underline;
+extern const sal_Char* sCSS1_PV_overline;
+extern const sal_Char* sCSS1_PV_line_through;
+extern const sal_Char* sCSS1_PV_blink;
 
-extern sal_Char CSS1_CONSTASCII_DECL( sCSS1_P_text_align, "text-align" );
+extern const sal_Char* sCSS1_P_text_align;
 
-extern sal_Char CSS1_CONSTASCII_DECL( sCSS1_PV_left, "left" );
-extern sal_Char CSS1_CONSTASCII_DECL( sCSS1_PV_center, "center" );
-extern sal_Char CSS1_CONSTASCII_DECL( sCSS1_PV_right, "right" );
-extern sal_Char CSS1_CONSTASCII_DECL( sCSS1_PV_justify, "justify" );
+extern const sal_Char* sCSS1_PV_left;
+extern const sal_Char* sCSS1_PV_center;
+extern const sal_Char* sCSS1_PV_right;
+extern const sal_Char* sCSS1_PV_justify;
 
-extern sal_Char CSS1_CONSTASCII_DECL( sCSS1_P_text_indent, "text-indent" );
+extern const sal_Char* sCSS1_P_text_indent;
 
-extern sal_Char CSS1_CONSTASCII_DECL( sCSS1_P_line_height, "line-height" );
+extern const sal_Char* sCSS1_P_line_height;
 
 // Strings fuer Box-Properties
 
-extern sal_Char CSS1_CONSTASCII_DECL( sCSS1_P_margin_left, "margin-left" );
-extern sal_Char CSS1_CONSTASCII_DECL( sCSS1_P_margin_right, "margin-right" );
-extern sal_Char CSS1_CONSTASCII_DECL( sCSS1_P_margin_top, "margin-top" );
-extern sal_Char CSS1_CONSTASCII_DECL( sCSS1_P_margin_bottom, "margin-bottom" );
-extern sal_Char CSS1_CONSTASCII_DECL( sCSS1_P_margin, "margin" );
+extern const sal_Char* sCSS1_P_margin_left;
+extern const sal_Char* sCSS1_P_margin_right;
+extern const sal_Char* sCSS1_P_margin_top;
+extern const sal_Char* sCSS1_P_margin_bottom;
+extern const sal_Char* sCSS1_P_margin;
 
-extern sal_Char CSS1_CONSTASCII_DECL( sCSS1_P_padding_top, "padding-top" );
-extern sal_Char CSS1_CONSTASCII_DECL( sCSS1_P_padding_bottom, "padding-bottom" );
-extern sal_Char CSS1_CONSTASCII_DECL( sCSS1_P_padding_left, "padding-left" );
-extern sal_Char CSS1_CONSTASCII_DECL( sCSS1_P_padding_right, "padding-right" );
-extern sal_Char CSS1_CONSTASCII_DECL( sCSS1_P_padding, "padding" );
+extern const sal_Char* sCSS1_P_padding_top;
+extern const sal_Char* sCSS1_P_padding_bottom;
+extern const sal_Char* sCSS1_P_padding_left;
+extern const sal_Char* sCSS1_P_padding_right;
+extern const sal_Char* sCSS1_P_padding;
 
-extern sal_Char CSS1_CONSTASCII_DECL( sCSS1_PV_auto, "auto" );
+extern const sal_Char* sCSS1_PV_auto;
 
-extern sal_Char CSS1_CONSTASCII_DECL( sCSS1_P_border_left_width, "border-left-width" );
-extern sal_Char CSS1_CONSTASCII_DECL( sCSS1_P_border_right_width, "border-right-width" );
-extern sal_Char CSS1_CONSTASCII_DECL( sCSS1_P_border_top_width, "border-top-width" );
-extern sal_Char CSS1_CONSTASCII_DECL( sCSS1_P_border_bottom_width, "border-bottom-width" );
-extern sal_Char CSS1_CONSTASCII_DECL( sCSS1_P_border_width, "border-width" );
-extern sal_Char CSS1_CONSTASCII_DECL( sCSS1_P_border_color, "border-color" );
-extern sal_Char CSS1_CONSTASCII_DECL( sCSS1_P_border_style, "border-style" );
-extern sal_Char CSS1_CONSTASCII_DECL( sCSS1_P_border_left, "border-left" );
-extern sal_Char CSS1_CONSTASCII_DECL( sCSS1_P_border_right, "border-right" );
-extern sal_Char CSS1_CONSTASCII_DECL( sCSS1_P_border_top, "border-top" );
-extern sal_Char CSS1_CONSTASCII_DECL( sCSS1_P_border_bottom, "border-bottom" );
-extern sal_Char CSS1_CONSTASCII_DECL( sCSS1_P_border, "border" );
+extern const sal_Char* sCSS1_P_border_left_width;
+extern const sal_Char* sCSS1_P_border_right_width;
+extern const sal_Char* sCSS1_P_border_top_width;
+extern const sal_Char* sCSS1_P_border_bottom_width;
+extern const sal_Char* sCSS1_P_border_width;
+extern const sal_Char* sCSS1_P_border_color;
+extern const sal_Char* sCSS1_P_border_style;
+extern const sal_Char* sCSS1_P_border_left;
+extern const sal_Char* sCSS1_P_border_right;
+extern const sal_Char* sCSS1_P_border_top;
+extern const sal_Char* sCSS1_P_border_bottom;
+extern const sal_Char* sCSS1_P_border;
 
-extern sal_Char CSS1_CONSTASCII_DECL( sCSS1_PV_thin, "thin" );
+extern const sal_Char* sCSS1_PV_thin;
 //sal_Char CSS1_CONSTASCII_DECL( sCSS1_PV_medium, "medium" );
-extern sal_Char CSS1_CONSTASCII_DECL( sCSS1_PV_thick, "thick" );
+extern const sal_Char* sCSS1_PV_thick;
 
 //sal_Char CSS1_CONSTASCII_DECL( sCSS1_PV_none, "none" );
-extern sal_Char CSS1_CONSTASCII_DECL( sCSS1_PV_dotted, "dotted" );
-extern sal_Char CSS1_CONSTASCII_DECL( sCSS1_PV_dashed, "dashed" );
-extern sal_Char CSS1_CONSTASCII_DECL( sCSS1_PV_solid, "solid" );
-extern sal_Char CSS1_CONSTASCII_DECL( sCSS1_PV_double, "double" );
-extern sal_Char CSS1_CONSTASCII_DECL( sCSS1_PV_groove, "groove" );
-extern sal_Char CSS1_CONSTASCII_DECL( sCSS1_PV_ridge, "ridge" );
-extern sal_Char CSS1_CONSTASCII_DECL( sCSS1_PV_inset, "inset" );
-extern sal_Char CSS1_CONSTASCII_DECL( sCSS1_PV_outset, "outset" );
+extern const sal_Char* sCSS1_PV_dotted;
+extern const sal_Char* sCSS1_PV_dashed;
+extern const sal_Char* sCSS1_PV_solid;
+extern const sal_Char* sCSS1_PV_double;
+extern const sal_Char* sCSS1_PV_groove;
+extern const sal_Char* sCSS1_PV_ridge;
+extern const sal_Char* sCSS1_PV_inset;
+extern const sal_Char* sCSS1_PV_outset;
 
-extern sal_Char CSS1_CONSTASCII_DECL( sCSS1_P_width, "width" );
+extern const sal_Char* sCSS1_P_width;
 
-extern sal_Char CSS1_CONSTASCII_DECL( sCSS1_P_height, "height" );
+extern const sal_Char* sCSS1_P_height;
 
-extern sal_Char CSS1_CONSTASCII_DECL( sCSS1_P_float, "float" );
+extern const sal_Char* sCSS1_P_float;
 
-extern sal_Char CSS1_CONSTASCII_DECL( sCSS1_P_column_count, "column-count" );
+extern const sal_Char* sCSS1_P_column_count;
 
 // Strings fuer Positioning
 
-extern sal_Char CSS1_CONSTASCII_DECL( sCSS1_P_position, "position" );
+extern const sal_Char* sCSS1_P_position;
 
-extern sal_Char CSS1_CONSTASCII_DECL( sCSS1_PV_absolute, "absolute" );
-extern sal_Char CSS1_CONSTASCII_DECL( sCSS1_PV_relative, "relative" );
-extern sal_Char CSS1_CONSTASCII_DECL( sCSS1_PV_static, "static" );
+extern const sal_Char* sCSS1_PV_absolute;
+extern const sal_Char* sCSS1_PV_relative;
+extern const sal_Char* sCSS1_PV_static;
 
-extern sal_Char CSS1_CONSTASCII_DECL( sCSS1_P_left, "left" );
+extern const sal_Char* sCSS1_P_left;
 
-extern sal_Char CSS1_CONSTASCII_DECL( sCSS1_P_top, "top" );
+extern const sal_Char* sCSS1_P_top;
 
 // Feature: PrintExt
 
 // Strings fuer Printing Extensions
 
-extern sal_Char CSS1_CONSTASCII_DECL( sCSS1_P_page_break_before, "page-break-before" );
-extern sal_Char CSS1_CONSTASCII_DECL( sCSS1_P_page_break_after, "page-break-after" );
-extern sal_Char CSS1_CONSTASCII_DECL( sCSS1_P_page_break_inside, "page-break-inside" );
-extern sal_Char CSS1_CONSTASCII_DECL( sCSS1_P_size, "size" );
-extern sal_Char CSS1_CONSTASCII_DECL( sCSS1_P_widows, "widows" );
-extern sal_Char CSS1_CONSTASCII_DECL( sCSS1_P_orphans, "orphans" );
+extern const sal_Char* sCSS1_P_page_break_before;
+extern const sal_Char* sCSS1_P_page_break_after;
+extern const sal_Char* sCSS1_P_page_break_inside;
+extern const sal_Char* sCSS1_P_size;
+extern const sal_Char* sCSS1_P_widows;
+extern const sal_Char* sCSS1_P_orphans;
 //sal_Char CSS1_CONSTASCII_DECL( sCSS1_P_marks, "marks" );
 
-extern sal_Char CSS1_CONSTASCII_DECL( sCSS1_PV_always, "always" );
-extern sal_Char CSS1_CONSTASCII_DECL( sCSS1_PV_avoid, "avoid" );
+extern const sal_Char* sCSS1_PV_always;
+extern const sal_Char* sCSS1_PV_avoid;
 
-extern sal_Char CSS1_CONSTASCII_DECL( sCSS1_PV_portrait, "portrait" );
-extern sal_Char CSS1_CONSTASCII_DECL( sCSS1_PV_landscape, "landscape" );
+extern const sal_Char* sCSS1_PV_portrait;
+extern const sal_Char* sCSS1_PV_landscape;
 
 //sal_Char CSS1_CONSTASCII_DECL( sCSS1_PV_crop, "crop" );
 //sal_Char CSS1_CONSTASCII_DECL( sCSS1_PV_cross, "cross" );
 
 // /Feature: PrintExt
 
-extern sal_Char CSS1_CONSTASCII_DECL( sCSS1_class_abs_pos, "sd-abs-pos" );
+extern const sal_Char* sCSS1_class_abs_pos;
 
-extern sal_Char CSS1_CONSTASCII_DECL( sCSS1_P_so_language, "so-language" );
-extern sal_Char CSS1_CONSTASCII_DECL( sCSS1_P_direction, "direction" );
-extern sal_Char CSS1_CONSTASCII_DECL( sCSS1_PV_ltr, "ltr" );
-extern sal_Char CSS1_CONSTASCII_DECL( sCSS1_PV_rtl, "rtl" );
-extern sal_Char CSS1_CONSTASCII_DECL( sCSS1_PV_inherit, "inherit" );
+extern const sal_Char* sCSS1_P_so_language;
+extern const sal_Char* sCSS1_P_direction;
+extern const sal_Char* sCSS1_PV_ltr;
+extern const sal_Char* sCSS1_PV_rtl;
+extern const sal_Char* sCSS1_PV_inherit;
 
-extern sal_Char CSS1_CONSTASCII_DECL( sCSS1_P_display, "display" );
+extern const sal_Char* sCSS1_P_display;
 
 #endif
 

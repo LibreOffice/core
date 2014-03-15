@@ -110,11 +110,11 @@ using ::editeng::SvxBorderLine;
 #define CSS1_FRMSIZE_ANYHEIGHT  0x0e
 #define CSS1_FRMSIZE_PIXEL      0x10
 
-sal_Char CSS1_CONSTASCII_DEF( sCSS1_rule_end, " }" );
-sal_Char CSS1_CONSTASCII_DEF( sCSS1_span_tag_end, "\">" );
-const sal_Char cCSS1_style_opt_end = '\"';
+const sal_Char* sCSS1_rule_end      = " }";
+const sal_Char* sCSS1_span_tag_end  = "\">";
+const sal_Char cCSS1_style_opt_end  = '\"';
 
-sal_Char CSS1_CONSTASCII_DEF( sHTML_FTN_fontheight, "57%" );
+const sal_Char* sHTML_FTN_fontheight = "57%";
 
 extern SwAttrFnTab aCSS1AttrFnTab;
 
@@ -3486,7 +3486,7 @@ static Writer& OutCSS1_SvxFrameDirection( Writer& rWrt, const SfxPoolItem& rHt )
 
     sal_uInt16 nDir =
         static_cast< const SvxFrameDirectionItem& >( rHt ).GetValue();
-    sal_Char *pStr = 0;
+    const sal_Char* pStr = NULL;
     switch( nDir )
     {
     case FRMDIR_HORI_LEFT_TOP:
