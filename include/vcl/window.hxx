@@ -577,6 +577,8 @@ protected:
     virtual sal_uInt16 getDefaultAccessibleRole() const;
     virtual OUString getDefaultAccessibleName() const;
 
+    virtual void               CopyAreaFinal( SalTwoRect& aPosAry, sal_uInt32 nFlags);
+
 public:
     bool HasMirroredGraphics() const;
 
