@@ -28,6 +28,16 @@
 #include "global.hxx"
 #include "brdcst.hxx"
 
+namespace sc {
+
+struct AreaListener
+{
+    ScRange maArea;
+    SvtListener* mpListener;
+};
+
+}
+
 /**
     Used in a Unique Associative Container.
  */
@@ -211,7 +221,7 @@ public:
      */
     void                EraseArea( ScBroadcastAreas::iterator& rIter );
 
-    void GetAllListeners( const ScRange& rRange, std::vector<SvtListener*>& rListeners );
+    void GetAllListeners( const ScRange& rRange, std::vector<sc::AreaListener>& rListeners );
 };
 
 
@@ -307,7 +317,7 @@ public:
     // only for ScBroadcastAreaSlot
     void                FinallyEraseAreas( ScBroadcastAreaSlot* pSlot );
 
-    std::vector<SvtListener*> GetAllListeners( const ScRange& rRange );
+    std::vector<sc::AreaListener> GetAllListeners( const ScRange& rRange );
 };
 
 

@@ -140,14 +140,13 @@ void ScDocument::BroadcastRefMoved( const sc::RefMovedHint& rHint )
     const ScAddress& rDelta = rHint.getDelta();
 
     // Get all area listeners that listens on the old range, and end their listening.
-    std::vector<SvtListener*> aAreaListeners = pBASM->GetAllListeners(rSrcRange);
+    std::vector<sc::AreaListener> aAreaListeners = pBASM->GetAllListeners(rSrcRange);
     {
-        std::vector<SvtListener*>::iterator it = aAreaListeners.begin(), itEnd = aAreaListeners.end();
+        std::vector<sc::AreaListener>::iterator it = aAreaListeners.begin(), itEnd = aAreaListeners.end();
         for (; it != itEnd; ++it)
         {
-            SvtListener* p = *it;
-            pBASM->EndListeningArea(rSrcRange, p);
-            p->Notify(rHint); // Adjust the references.
+            pBASM->EndListeningArea(it->maArea, it->mpListener);
+            it->mpListener->Notify(rHint); // Adjust the references.
         }
     }
 
@@ -171,14 +170,13 @@ void ScDocument::BroadcastRefMoved( const sc::RefMovedHint& rHint )
     }
 
     // Re-start area listeners on the new range.
-    ScRange aNewRange = rSrcRange;
-    aNewRange.Move(rDelta.Col(), rDelta.Row(), rDelta.Tab());
     {
-        std::vector<SvtListener*>::iterator it = aAreaListeners.begin(), itEnd = aAreaListeners.end();
+        std::vector<sc::AreaListener>::iterator it = aAreaListeners.begin(), itEnd = aAreaListeners.end();
         for (; it != itEnd; ++it)
         {
-            SvtListener* p = *it;
-            pBASM->StartListeningArea(aNewRange, p);
+            ScRange aNewRange = it->maArea;
+            aNewRange.Move(rDelta.Col(), rDelta.Row(), rDelta.Tab());
+            pBASM->StartListeningArea(aNewRange, it->mpListener);
         }
     }
 }
