@@ -31,7 +31,6 @@
 
 #include <map>
 
-
 class PhysicalFontCollection;
 class SalBitmap;
 class FontSelectPattern;
@@ -46,6 +45,8 @@ class OutputDevice;
 class ServerFontLayout;
 struct SystemGraphicsData;
 struct SystemFontData;
+class PhysicalFontCollection;
+class PhysicalFontFace;
 
 namespace basegfx {
     class B2DVector;
