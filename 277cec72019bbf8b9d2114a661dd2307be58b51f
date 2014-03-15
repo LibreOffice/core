@@ -16,6 +16,24 @@
       "revId": "277cec72019bbf8b9d2114a661dd2307be58b51f",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da86d52c_e9e35531",
+        "filename": "sw/source/filter/ww8/docxattributeoutput.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 3325,
+      "author": {
+        "id": 1000599
+      },
+      "writtenOn": "2014-03-15T11:29:47Z",
+      "side": 1,
+      "message": "I was not sure why this code was added here, I intentionally kept the #if\u0027s so that in future if we would want to completely expunge the unhandled graphic type we could take off the #if\u0027s. Please let me know if you still want me to remove this code.",
+      "parentUuid": "da86d52c_49f3810a",
+      "revId": "277cec72019bbf8b9d2114a661dd2307be58b51f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
