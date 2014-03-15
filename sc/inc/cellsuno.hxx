@@ -115,7 +115,7 @@ class ScLinkListener : public SvtListener
 public:
                     ScLinkListener(const Link& rL) : aLink(rL) {}
     virtual         ~ScLinkListener();
-    virtual void    Notify( SvtBroadcaster& rBC, const SfxHint& rHint );
+    virtual void Notify( const SfxHint& rHint );
 };
 
 typedef ::com::sun::star::uno::Reference<

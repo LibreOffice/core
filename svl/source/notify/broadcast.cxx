@@ -56,7 +56,7 @@ public:
 
     void operator() ( SvtListener* p )
     {
-        p->Notify(mrBC, mrHint);
+        p->Notify(mrHint);
     }
 };
 
