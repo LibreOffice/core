@@ -361,7 +361,7 @@ SwXTextDocument::SwXTextDocument(SwDocShell* pShell)
 
     pDrawPage(0),
     pxXDrawPage(0),
-
+    pBodyText(0),
     pxXNumberingRules(0),
     pxXFootnotes(0),
     pxXFootnoteSettings(0),
@@ -385,6 +385,7 @@ SwXTextDocument::SwXTextDocument(SwDocShell* pShell)
     pxLinkTargetSupplier(0),
     pxXRedlines(0),
     m_pHiddenViewFrame(0),
+    pPropertyHelper(0),
     m_pPrintUIOptions( NULL ),
     m_pRenderData( NULL ),
     // #i117783#
