@@ -37,6 +37,7 @@
 #include "tokenarray.hxx"
 #include "listenercontext.hxx"
 #include "formulagroup.hxx"
+#include <refhint.hxx>
 
 #include <tools/shl.hxx>
 
@@ -127,6 +128,57 @@ void ScDocument::BroadcastCells( const ScRange& rRange, sal_uLong nHint )
     }
 
     BroadcastUno(SfxSimpleHint(SC_HINT_DATACHANGED));
+}
+
+void ScDocument::BroadcastRefMoved( const sc::RefMovedHint& rHint )
+{
+    if (!pBASM)
+        // clipboard or undo document.
+        return;
+
+    const ScRange& rSrcRange = rHint.getRange(); // old range
+    const ScAddress& rDelta = rHint.getDelta();
+
+    // Get all area listeners that listens on the old range, and end their listening.
+    std::vector<sc::AreaListener> aAreaListeners = pBASM->GetAllListeners(rSrcRange);
+    {
+        std::vector<sc::AreaListener>::iterator it = aAreaListeners.begin(), itEnd = aAreaListeners.end();
+        for (; it != itEnd; ++it)
+        {
+            pBASM->EndListeningArea(it->maArea, it->mpListener);
+            it->mpListener->Notify(rHint); // Adjust the references.
+        }
+    }
+
+    for (SCTAB nTab = rSrcRange.aStart.Tab(); nTab <= rSrcRange.aEnd.Tab(); ++nTab)
+    {
+        ScTable* pTab = FetchTable(nTab);
+        if (!pTab)
+            continue;
+
+        SCTAB nDestTab = nTab + rDelta.Tab();
+        ScTable* pDestTab = FetchTable(nDestTab);
+        if (!pDestTab)
+            continue;
+
+        // Adjust the references.
+        pTab->BroadcastRefMoved(rHint);
+        // Move the listeners from the old location to the new.
+        pTab->TransferListeners(
+            *pDestTab, rSrcRange.aStart.Col(), rSrcRange.aStart.Row(),
+            rSrcRange.aEnd.Col(), rSrcRange.aEnd.Row(), rDelta.Col(), rDelta.Row());
+    }
+
+    // Re-start area listeners on the new range.
+    {
+        std::vector<sc::AreaListener>::iterator it = aAreaListeners.begin(), itEnd = aAreaListeners.end();
+        for (; it != itEnd; ++it)
+        {
+            ScRange aNewRange = it->maArea;
+            aNewRange.Move(rDelta.Col(), rDelta.Row(), rDelta.Tab());
+            pBASM->StartListeningArea(aNewRange, it->mpListener);
+        }
+    }
 }
 
 void ScDocument::AreaBroadcast( const ScHint& rHint )

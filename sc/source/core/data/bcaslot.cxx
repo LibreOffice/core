@@ -446,6 +446,30 @@ void ScBroadcastAreaSlot::EraseArea( ScBroadcastAreas::iterator& rIter )
     }
 }
 
+void ScBroadcastAreaSlot::GetAllListeners( const ScRange& rRange, std::vector<sc::AreaListener>& rListeners )
+{
+    for (ScBroadcastAreas::const_iterator aIter( aBroadcastAreaTbl.begin()),
+            aIterEnd( aBroadcastAreaTbl.end()); aIter != aIterEnd; ++aIter )
+    {
+        if (isMarkedErased( aIter))
+            continue;
+
+        ScBroadcastArea* pArea = (*aIter).mpArea;
+        const ScRange& rAreaRange = pArea->GetRange();
+        if (!rRange.In(rAreaRange))
+            continue;
+
+        SvtBroadcaster::ListenersType& rLst = pArea->GetBroadcaster().GetAllListeners();
+        SvtBroadcaster::ListenersType::iterator itLst = rLst.begin(), itLstEnd = rLst.end();
+        for (; itLst != itLstEnd; ++itLst)
+        {
+            sc::AreaListener aEntry;
+            aEntry.maArea = rAreaRange;
+            aEntry.mpListener = *itLst;
+            rListeners.push_back(aEntry);
+        }
+    }
+}
 
 void ScBroadcastAreaSlot::FinallyEraseAreas()
 {
@@ -974,6 +998,31 @@ void ScBroadcastAreaSlotMachine::FinallyEraseAreas( ScBroadcastAreaSlot* pSlot )
             aCopy.push_back( *aIt);
     }
     maAreasToBeErased.swap( aCopy);
+}
+
+std::vector<sc::AreaListener> ScBroadcastAreaSlotMachine::GetAllListeners( const ScRange& rRange )
+{
+    std::vector<sc::AreaListener> aRet;
+
+    SCTAB nEndTab = rRange.aEnd.Tab();
+    for (TableSlotsMap::const_iterator iTab( aTableSlotsMap.lower_bound( rRange.aStart.Tab()));
+            iTab != aTableSlotsMap.end() && (*iTab).first <= nEndTab; ++iTab)
+    {
+        ScBroadcastAreaSlot** ppSlots = (*iTab).second->getSlots();
+        SCSIZE nStart, nEnd, nRowBreak;
+        ComputeAreaPoints( rRange, nStart, nEnd, nRowBreak );
+        SCSIZE nOff = nStart;
+        SCSIZE nBreak = nOff + nRowBreak;
+        ScBroadcastAreaSlot** pp = ppSlots + nOff;
+        while ( nOff <= nEnd )
+        {
+            ScBroadcastAreaSlot* p = *pp;
+            p->GetAllListeners(rRange, aRet);
+            ComputeNextSlot( nOff, nBreak, pp, nStart, ppSlots, nRowBreak);
+        }
+    }
+
+    return aRet;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
