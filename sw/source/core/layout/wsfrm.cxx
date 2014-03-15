@@ -235,7 +235,7 @@ void SwFrm::Modify( const SfxPoolItem* pOld, const SfxPoolItem * pNew )
 {
     sal_uInt8 nInvFlags = 0;
 
-    if( pNew && RES_ATTRSET_CHG == pNew->Which() )
+    if( pOld && pNew && RES_ATTRSET_CHG == pNew->Which() )
     {
         SfxItemIter aNIter( *((SwAttrSetChg*)pNew)->GetChgSet() );
         SfxItemIter aOIter( *((SwAttrSetChg*)pOld)->GetChgSet() );
