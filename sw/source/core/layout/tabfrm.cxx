@@ -3222,7 +3222,7 @@ SwCntntFrm *SwTabFrm::FindLastCntnt()
             const SwFrm* pRow = pRet->GetUpper();
             while ( pRow && !pRow->GetUpper()->IsTabFrm() )
                 pRow = pRow->GetUpper();
-            SwCntntFrm* pCntntFrm = ((SwLayoutFrm*)pRow)->ContainsCntnt();
+            SwCntntFrm* pCntntFrm = pRow ? ((SwLayoutFrm*)pRow)->ContainsCntnt() : NULL;
             pRet = 0;
 
             while ( pCntntFrm && ((SwLayoutFrm*)pRow)->IsAnLower( pCntntFrm ) )
