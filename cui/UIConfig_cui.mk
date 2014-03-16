@@ -43,6 +43,7 @@ $(eval $(call gb_UIConfig_add_uifiles,cui,\
 	cui/uiconfig/ui/dimensionlinestabpage \
 	cui/uiconfig/ui/editdictionarydialog \
 	cui/uiconfig/ui/editmodulesdialog \
+	cui/uiconfig/ui/editpathsdialog \
 	cui/uiconfig/ui/embossdialog \
 	cui/uiconfig/ui/eventassigndialog \
 	cui/uiconfig/ui/eventassignpage \
@@ -54,6 +55,7 @@ $(eval $(call gb_UIConfig_add_uifiles,cui,\
 	cui/uiconfig/ui/dbregisterpage \
 	cui/uiconfig/ui/distributiondialog \
 	cui/uiconfig/ui/distributionpage \
+	cui/uiconfig/ui/editpathsdialog \
 	cui/uiconfig/ui/effectspage \
 	cui/uiconfig/ui/eventsconfigpage \
 	cui/uiconfig/ui/formatcellsdialog \
