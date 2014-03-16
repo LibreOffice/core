@@ -41,12 +41,12 @@ class GetDevSizeList;
 #define IMPL_DEVFONT_NONEITALIC     ((sal_uIntPtr)0x00000100)
 #define IMPL_DEVFONT_ITALIC         ((sal_uIntPtr)0x00000200)
 
-// TODO: rename ImplDevFontListData to PhysicalFontFamily
-class ImplDevFontListData
+
+class PhysicalFontFamily
 {
 public:
-                        ImplDevFontListData( const OUString& rSearchName );
-                        ~ImplDevFontListData();
+                        PhysicalFontFamily( const OUString& rSearchName );
+                        ~PhysicalFontFamily();
 
     const OUString&     GetFamilyName() const    { return maName; }
     const OUString&       GetSearchName() const    { return maSearchName; }
