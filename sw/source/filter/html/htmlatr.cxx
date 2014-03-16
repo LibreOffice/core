@@ -74,6 +74,8 @@
 #include <numrule.hxx>
 #include <rtl/strbuf.hxx>
 
+#include <svtools/HtmlWriter.hxx>
+
 #include <boost/scoped_ptr.hpp>
 
 using namespace css;
@@ -784,14 +786,11 @@ void OutHTML_SwFmt( Writer& rWrt, const SwFmt& rFmt,
     // ggf ein List-Item aufmachen
     if( rInfo.bInNumBulList && bNumbered )
     {
-        OString sOut = "<" + OString(OOO_STRING_SVTOOLS_HTML_li);
+        HtmlWriter html(rWrt.Strm());
+        html.start(OOO_STRING_SVTOOLS_HTML_li);
         if( USHRT_MAX != nNumStart )
-        {
-            sOut += " " + OString(OOO_STRING_SVTOOLS_HTML_O_value) + "=\"" +
-                    OString::number(static_cast<sal_Int32>(nNumStart)) + "=\"";
-        }
-        sOut += ">";
-        rWrt.Strm().WriteOString( sOut );
+            html.attribute(OOO_STRING_SVTOOLS_HTML_O_value, OString::number(nNumStart));
+        html.endAttribute();
     }
 
     if( rHWrt.nDefListLvl > 0 && !bForceDL )
@@ -2050,14 +2049,15 @@ Writer& OutHTML_SwTxtNode( Writer& rWrt, const SwCntntNode& rNode )
     SwHTMLWriter & rHTMLWrt = (SwHTMLWriter&)rWrt;
 
     const OUString& rStr = pNd->GetTxt();
-    sal_Int32 nEnde = rStr.getLength();
+    sal_Int32 nEnd = rStr.getLength();
 
     // Besonderheit: leere Node und HR-Vorlage (horizontaler Strich)
     //              nur ein <HR> ausgeben
     sal_uInt16 nPoolId = pNd->GetAnyFmtColl().GetPoolFmtId();
 
-    if( !nEnde && (RES_POOLCOLL_HTML_HR==nPoolId ||
-                   pNd->GetAnyFmtColl().GetName() == OOO_STRING_SVTOOLS_HTML_horzrule) )
+    // Handle horizontal rule <hr>
+    if (!nEnd &&
+        (RES_POOLCOLL_HTML_HR==nPoolId || pNd->GetAnyFmtColl().GetName() == OOO_STRING_SVTOOLS_HTML_horzrule))
     {
         // dann die absatz-gebundenen Grafiken/OLE-Objekte im Absatz
         // MIB 8.7.97: Ein <PRE> spannen wir um die Linie auf. Dann stimmen
@@ -2073,12 +2073,13 @@ Writer& OutHTML_SwTxtNode( Writer& rWrt, const SwCntntNode& rNode )
 
         rHTMLWrt.bLFPossible = sal_True;
 
-        OString sOut = "<" + OString(OOO_STRING_SVTOOLS_HTML_horzrule);
+        HtmlWriter aHtml(rWrt.Strm());
+        aHtml.start(OOO_STRING_SVTOOLS_HTML_horzrule);
 
         const SfxItemSet* pItemSet = pNd->GetpSwAttrSet();
         if( !pItemSet )
         {
-            rWrt.Strm().WriteOString( sOut ).WriteChar( '>' );
+            aHtml.endAttribute();
             return rHTMLWrt;
         }
         const SfxPoolItem* pItem;
@@ -2109,25 +2110,18 @@ Writer& OutHTML_SwTxtNode( Writer& rWrt, const SwCntntNode& rNode )
                         nPageWidth = pBox->GetFrmFmt()->GetFrmSize().GetWidth();
                 }
 
-                sOut += " " + OString(OOO_STRING_SVTOOLS_HTML_O_width) + "=\"";
-                rWrt.Strm().WriteOString( sOut );
-                rWrt.OutULong( rHTMLWrt.ToPixel(nPageWidth-nLeft-nRight,false) ).WriteCharPtr( "\"" );
-
-                sOut = " " + OString(OOO_STRING_SVTOOLS_HTML_O_align) + "=\"";
-
-                const sal_Char* pStr = 0;
+                OString sWidth = OString::number(rHTMLWrt.ToPixel(nPageWidth - nLeft - nRight, false));
+                aHtml.attribute(OOO_STRING_SVTOOLS_HTML_O_width, sWidth);
 
                 if( !nLeft )
-                    pStr = OOO_STRING_SVTOOLS_HTML_AL_left;
+                    aHtml.attribute(OOO_STRING_SVTOOLS_HTML_O_align, OOO_STRING_SVTOOLS_HTML_AL_left);
                 else if( !nRight )
-                    pStr = OOO_STRING_SVTOOLS_HTML_AL_right;
+                    aHtml.attribute(OOO_STRING_SVTOOLS_HTML_O_align, OOO_STRING_SVTOOLS_HTML_AL_right);
                 else
-                    pStr = OOO_STRING_SVTOOLS_HTML_AL_center;
-
-                sOut += OString(pStr) + "\"";
+                    aHtml.attribute(OOO_STRING_SVTOOLS_HTML_O_align, OOO_STRING_SVTOOLS_HTML_AL_center);
             }
         }
-        rWrt.Strm().WriteOString( sOut );
+
         if( SFX_ITEM_SET == pItemSet->GetItemState( RES_BOX, false, &pItem ))
         {
             const SvxBoxItem* pBoxItem = (const SvxBoxItem*)pItem;
@@ -2135,27 +2129,22 @@ Writer& OutHTML_SwTxtNode( Writer& rWrt, const SwCntntNode& rNode )
             if( pBorderLine )
             {
                 sal_uInt16 nWidth = pBorderLine->GetScaledWidth();
-                sOut = " " + OString(OOO_STRING_SVTOOLS_HTML_O_size) + "=\"";
-                rWrt.Strm().WriteOString( sOut );
-                rWrt.OutULong( rHTMLWrt.ToPixel(nWidth,false) ).WriteCharPtr( "\"" );
+                OString sWidth = OString::number(rHTMLWrt.ToPixel(nWidth, false));
+                aHtml.attribute(OOO_STRING_SVTOOLS_HTML_O_size, sWidth);
 
                 const Color& rBorderColor = pBorderLine->GetColor();
                 if( !rBorderColor.IsRGBEqual( Color(COL_GRAY) ) )
                 {
-                    sOut = " " + OString(OOO_STRING_SVTOOLS_HTML_O_color) + "=";
-                    rWrt.Strm().WriteOString( sOut );
-                    HTMLOutFuncs::Out_Color( rWrt.Strm(), rBorderColor,
-                                             rHTMLWrt.eDestEnc );
+                    HtmlWriterHelper::applyColor(aHtml, OOO_STRING_SVTOOLS_HTML_O_color, rBorderColor);
                 }
 
                 if( !pBorderLine->GetInWidth() )
                 {
-                    sOut = " " + OString(OOO_STRING_SVTOOLS_HTML_O_noshade);
-                    rWrt.Strm().WriteOString( sOut );
+                    aHtml.attribute(OOO_STRING_SVTOOLS_HTML_O_noshade, OOO_STRING_SVTOOLS_HTML_O_noshade);
                 }
             }
         }
-        rWrt.Strm().WriteChar( '>' );
+        aHtml.end();
         return rHTMLWrt;
     }
 
@@ -2163,7 +2152,7 @@ Writer& OutHTML_SwTxtNode( Writer& rWrt, const SwCntntNode& rNode )
     // vor Tabellen und Bereichen eingefuegt werden, nicht exportieren,
     // Bookmarks oder absatzgebundene Grafiken aber schon.
     // MIB 21.7.97: Ausserdem auch keine leeren Tabellen-Zellen exportieren.
-    if( !nEnde && (nPoolId == RES_POOLCOLL_STANDARD ||
+    if( !nEnd && (nPoolId == RES_POOLCOLL_STANDARD ||
                    nPoolId == RES_POOLCOLL_TABLE ||
                    nPoolId == RES_POOLCOLL_TABLE_HDLN) )
     {
@@ -2254,7 +2243,7 @@ Writer& OutHTML_SwTxtNode( Writer& rWrt, const SwCntntNode& rNode )
                                         0, HTML_POS_BEFORE );
 
     if( rHTMLWrt.pCurPam->GetPoint()->nNode == rHTMLWrt.pCurPam->GetMark()->nNode )
-        nEnde = rHTMLWrt.pCurPam->GetMark()->nContent.GetIndex();
+        nEnd = rHTMLWrt.pCurPam->GetMark()->nContent.GetIndex();
 
     // gibt es harte Attribute, die als Optionen geschrieben werden muessen?
     rHTMLWrt.bTagOn = sal_True;
@@ -2314,7 +2303,7 @@ Writer& OutHTML_SwTxtNode( Writer& rWrt, const SwCntntNode& rNode )
                                  rHTMLWrt.aScriptTextStyles );
     if( aFmtInfo.pItemSet )
     {
-        aEndPosLst.Insert( *aFmtInfo.pItemSet, 0, nEnde + nOffset,
+        aEndPosLst.Insert( *aFmtInfo.pItemSet, 0, nEnd + nOffset,
                            rHTMLWrt.aChrFmtInfos, sal_False, sal_True );
     }
 
@@ -2378,7 +2367,7 @@ Writer& OutHTML_SwTxtNode( Writer& rWrt, const SwCntntNode& rNode )
                 else
                 {
                     sal_Int32 nTmpStt = nHtStt < nStrPos ? nStrPos : nHtStt;
-                    sal_Int32 nTmpEnd = nHtEnd < nEnde ? nHtEnd : nEnde;
+                    sal_Int32 nTmpEnd = nHtEnd < nEnd ? nHtEnd : nEnd;
                     aEndPosLst.Insert( pHt->GetAttr(), nTmpStt + nOffset,
                                        nTmpEnd + nOffset,
                                        rHTMLWrt.aChrFmtInfos );
@@ -2403,7 +2392,7 @@ Writer& OutHTML_SwTxtNode( Writer& rWrt, const SwCntntNode& rNode )
         HTMLOutContext aContext( rHTMLWrt.eDestEnc );
 
         sal_Int32 nPreSplitPos = 0;
-        for( ; nStrPos < nEnde; nStrPos++ )
+        for( ; nStrPos < nEnd; nStrPos++ )
         {
             // Die an der aktuellen Position verankerten Rahmen ausgeben
             if( bFlysLeft )
@@ -2417,7 +2406,7 @@ Writer& OutHTML_SwTxtNode( Writer& rWrt, const SwCntntNode& rNode )
             sal_Bool bOutChar = sal_True;
             const SwTxtAttr * pTxtHt = 0;
             if( nAttrPos < nCntAttr && *pHt->GetStart() == nStrPos
-                && nStrPos != nEnde )
+                && nStrPos != nEnd )
             {
                 do {
                     if ( pHt->End() && !pHt->HasDummyChar() )
@@ -2489,7 +2478,7 @@ Writer& OutHTML_SwTxtNode( Writer& rWrt, const SwCntntNode& rNode )
             {
                 // #i120442#: get the UTF-32 codepoint by converting an eventual UTF-16 unicode surrogate pair
                 sal_uInt64 c = rStr[nStrPos];
-                if( nStrPos < nEnde - 1 )
+                if( nStrPos < nEnd - 1 )
                 {
                     const sal_Unicode d = rStr[nStrPos + 1];
                     if( (c >= 0xd800 && c <= 0xdbff) && (d >= 0xdc00 && d <= 0xdfff) )
@@ -2513,7 +2502,7 @@ Writer& OutHTML_SwTxtNode( Writer& rWrt, const SwCntntNode& rNode )
 
                     sal_Int32 nWordLen = rStr.indexOf( ' ', nStrPos+1 );
                     if( nWordLen == -1 )
-                        nWordLen = nEnde;
+                        nWordLen = nEnd;
                     nWordLen -= nStrPos;
 
                     if( nLineLen >= rHTMLWrt.nWhishLineLen ||
@@ -2561,7 +2550,7 @@ Writer& OutHTML_SwTxtNode( Writer& rWrt, const SwCntntNode& rNode )
     // Die an der letzten Position verankerten Rahmen ausgeben
     if( bFlysLeft )
         bFlysLeft = rHTMLWrt.OutFlyFrm( rNode.GetIndex(),
-                                       nEnde, HTML_POS_INSIDE );
+                                       nEnd, HTML_POS_INSIDE );
     OSL_ENSURE( !bFlysLeft, "Es wurden nicht alle Rahmen gespeichert!" );
 
     rHTMLWrt.bTxtAttr = sal_False;
@@ -2572,7 +2561,7 @@ Writer& OutHTML_SwTxtNode( Writer& rWrt, const SwCntntNode& rNode )
                          rWrt.pCurPam->GetPoint()->nNode.GetIndex() ==
                          rWrt.pCurPam->GetMark()->nNode.GetIndex();
 
-        if( bEndOfCell && !nEnde &&
+        if( bEndOfCell && !nEnd &&
             rHTMLWrt.IsHTMLMode(HTMLMODE_NBSP_IN_TABLES) )
         {
             // Wenn der letzte Absatz einer Tabellezelle leer ist und
@@ -2582,32 +2571,38 @@ Writer& OutHTML_SwTxtNode( Writer& rWrt, const SwCntntNode& rNode )
         }
         else
         {
-            HTMLOutFuncs::Out_AsciiTag( rWrt.Strm(), OOO_STRING_SVTOOLS_HTML_linebreak );
-            const SvxULSpaceItem& rULSpace =
-                (const SvxULSpaceItem &)pNd->GetSwAttrSet().Get(RES_UL_SPACE);
-            if( rULSpace.GetLower() > 0 && !bEndOfCell &&
+            HtmlWriter aHtml(rHTMLWrt.Strm());
+            aHtml.single(OOO_STRING_SVTOOLS_HTML_linebreak);
+            const SvxULSpaceItem& rULSpace = (const SvxULSpaceItem&) pNd->GetSwAttrSet().Get(RES_UL_SPACE);
+            if (rULSpace.GetLower() > 0 &&
+                !bEndOfCell &&
                 !rHTMLWrt.IsHTMLMode(HTMLMODE_NO_BR_AT_PAREND) )
-                HTMLOutFuncs::Out_AsciiTag( rWrt.Strm(), OOO_STRING_SVTOOLS_HTML_linebreak );
+            {
+                aHtml.single(OOO_STRING_SVTOOLS_HTML_linebreak);
+            }
             rHTMLWrt.bLFPossible = sal_True;
         }
     }
 
     if( rHTMLWrt.bClearLeft || rHTMLWrt.bClearRight )
     {
-        const sal_Char *pStr;
+        const sal_Char* pString;
         if( rHTMLWrt.bClearLeft )
         {
             if( rHTMLWrt.bClearRight )
-                pStr = OOO_STRING_SVTOOLS_HTML_AL_all;
+                pString = OOO_STRING_SVTOOLS_HTML_AL_all;
             else
-                pStr = OOO_STRING_SVTOOLS_HTML_AL_left;
+                pString = OOO_STRING_SVTOOLS_HTML_AL_left;
         }
         else
-            pStr = OOO_STRING_SVTOOLS_HTML_AL_right;
+        {
+            pString = OOO_STRING_SVTOOLS_HTML_AL_right;
+        }
 
-        OString sOut = OString(OOO_STRING_SVTOOLS_HTML_linebreak) + " " +
-            OString(OOO_STRING_SVTOOLS_HTML_O_clear) + "=" + OString(pStr) + "\"";
-        HTMLOutFuncs::Out_AsciiTag( rHTMLWrt.Strm(), sOut.getStr() );
+        HtmlWriter aHtml(rHTMLWrt.Strm());
+        aHtml.start(OOO_STRING_SVTOOLS_HTML_linebreak);
+        aHtml.attribute(OOO_STRING_SVTOOLS_HTML_O_clear, pString);
+        aHtml.end();
 
         rHTMLWrt.bClearLeft = sal_False;
         rHTMLWrt.bClearRight = sal_False;
@@ -2618,7 +2613,7 @@ Writer& OutHTML_SwTxtNode( Writer& rWrt, const SwCntntNode& rNode )
     // wenn ein LF nicht schon erlaubt ist wird es erlaubt, wenn der
     // Absatz mit einem ' ' endet
     if( !rHTMLWrt.bLFPossible && !rHTMLWrt.nLastParaToken &&
-        nEnde > 0 && ' ' == rStr[nEnde-1] )
+        nEnd > 0 && ' ' == rStr[nEnd-1] )
         rHTMLWrt.bLFPossible = sal_True;
 
     rHTMLWrt.bTagOn = sal_False;
