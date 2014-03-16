@@ -41,16 +41,11 @@
 class SvxMultiPathDialog : public ModalDialog
 {
 protected:
-    FixedLine                   aPathFL;
-    ListBox                     aPathLB;
-    SvSimpleTableContainer m_aRadioLBContainer;
-    svx::SvxRadioButtonListBox  aRadioLB;
-    FixedText                   aRadioFT;
-    PushButton                  aAddBtn;
-    PushButton                  aDelBtn;
-    OKButton                    aOKBtn;
-    CancelButton                aCancelBtn;
-    HelpButton                  aHelpButton;
+    ListBox*                     aPathLB;
+    SvSimpleTableContainer* m_aRadioLBContainer;
+    svx::SvxRadioButtonListBox*  aRadioLB;
+    PushButton*                  aAddBtn;
+    PushButton*                  aDelBtn;
 
     bool                        bIsRadioButtonMode;
 
