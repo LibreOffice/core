@@ -19,20 +19,24 @@
 class SVT_DLLPUBLIC HtmlWriter
 {
 private:
-    std::vector<OString>  mElementStack;
-    SvStream&             mStream;
+    std::vector<OString> maElementStack;
+    SvStream&            mrStream;
 
-    bool                  mElementOpen;
-    bool                  mContentWritten;
+    bool                 mbElementOpen;
+    bool                 mbContentWritten;
+    bool                 mbPrettyPrint;
 
 public:
     HtmlWriter(SvStream& rStream);
     virtual ~HtmlWriter();
 
+    void prettyPrint(bool bChoice);
+
     void start(OString aElement);
     void end();
     void write(OString aContent);
     void attribute(OString aAttribute, OString aValue);
+    void single(OString aContent);
     void endAttribute();
 };
 

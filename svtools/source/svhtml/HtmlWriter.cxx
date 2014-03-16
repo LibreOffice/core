@@ -11,89 +11,110 @@
 #include <svtools/HtmlWriter.hxx>
 
 HtmlWriter::HtmlWriter(SvStream& rStream) :
-    mStream(rStream),
-    mElementOpen(false),
-    mContentWritten(false)
+    mrStream(rStream),
+    mbElementOpen(false),
+    mbContentWritten(false),
+    mbPrettyPrint(true)
 {}
 
 HtmlWriter::~HtmlWriter()
 {}
 
+void HtmlWriter::prettyPrint(bool bChoice)
+{
+    mbPrettyPrint = bChoice;
+}
+
 void HtmlWriter::start(OString aElement)
 {
-    if (mElementOpen)
+    if (mbElementOpen)
     {
-        mStream.WriteChar('>');
-        if (!mContentWritten)
-            mStream.WriteChar('\n');
-        mContentWritten = false;
+        mrStream.WriteChar('>');
+        if (!mbContentWritten && mbPrettyPrint)
+            mrStream.WriteChar('\n');
+        mbContentWritten = false;
     }
-    mElementStack.push_back(aElement);
+    maElementStack.push_back(aElement);
 
-    for(size_t i = 0; i < mElementStack.size() - 1; i++)
-        mStream.WriteCharPtr("  ");
+    if (mbPrettyPrint)
+    {
+        for(size_t i = 0; i < maElementStack.size() - 1; i++)
+        {
+            mrStream.WriteCharPtr("  ");
+        }
+    }
 
-    mStream.WriteChar('<');
-    mStream.WriteOString(aElement);
-    mElementOpen = true;
+    mrStream.WriteChar('<');
+    mrStream.WriteOString(aElement);
+    mbElementOpen = true;
+}
+
+void HtmlWriter::single(OString aContent)
+{
+    start(aContent);
+    end();
 }
 
 void HtmlWriter::endAttribute()
 {
-    if (mElementOpen)
+    if (mbElementOpen)
     {
-        mStream.WriteCharPtr(" />");
-        mStream.WriteCharPtr("\n");
-        mElementOpen = false;
+        mrStream.WriteCharPtr("/>");
+        if (mbPrettyPrint)
+            mrStream.WriteCharPtr("\n");
+        mbElementOpen = false;
     }
 }
 
 void HtmlWriter::end()
 {
-    if (mElementOpen)
+    if (mbElementOpen)
     {
-        mStream.WriteCharPtr(" />");
-        mStream.WriteCharPtr("\n");
+        mrStream.WriteCharPtr("/>");
+        if (mbPrettyPrint)
+            mrStream.WriteCharPtr("\n");
     }
     else
     {
-        if (!mContentWritten)
+        if (!mbContentWritten && mbPrettyPrint)
         {
-            for(size_t i = 0; i < mElementStack.size() - 1; i++)
+            for(size_t i = 0; i < maElementStack.size() - 1; i++)
             {
-                mStream.WriteCharPtr("  ");
+                mrStream.WriteCharPtr("  ");
             }
         }
-        mStream.WriteCharPtr("</");
-        mStream.WriteOString(mElementStack.back());
-        mStream.WriteCharPtr(">\n");
+        mrStream.WriteCharPtr("</");
+        mrStream.WriteOString(maElementStack.back());
+        mrStream.WriteCharPtr(">");
+        if (mbPrettyPrint)
+            mrStream.WriteCharPtr("\n");
     }
-    mElementStack.pop_back();
-    mElementOpen = false;
-    mContentWritten = false;
+    maElementStack.pop_back();
+    mbElementOpen = false;
+    mbContentWritten = false;
 }
 
 void HtmlWriter::write(OString aContent)
 {
-    if (mElementOpen)
+    if (mbElementOpen)
     {
-        mStream.WriteChar('>');
-        mElementOpen = false;
+        mrStream.WriteChar('>');
+        mbElementOpen = false;
     }
-    mContentWritten = true;
-    mStream.WriteOString(aContent);
+    mbContentWritten = true;
+    mrStream.WriteOString(aContent);
 }
 
 void HtmlWriter::attribute(OString aAttribute, OString aValue)
 {
-    if (mElementOpen && !aAttribute.isEmpty() && !aValue.isEmpty())
+    if (mbElementOpen && !aAttribute.isEmpty() && !aValue.isEmpty())
     {
-        mStream.WriteChar(' ');
-        mStream.WriteOString(aAttribute);
-        mStream.WriteChar('=');
-        mStream.WriteChar('"');
-        mStream.WriteOString(aValue);
-        mStream.WriteChar('"');
+        mrStream.WriteChar(' ');
+        mrStream.WriteOString(aAttribute);
+        mrStream.WriteChar('=');
+        mrStream.WriteChar('"');
+        mrStream.WriteOString(aValue);
+        mrStream.WriteChar('"');
     }
 }
 
