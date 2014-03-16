@@ -1071,14 +1071,14 @@ HTMLSttEndPos::~HTMLSttEndPos()
 
 typedef std::vector<HTMLSttEndPos *> _HTMLEndLst;
 
-enum HTMLOnOffState { HTML_NOT_SUPPORTED,   // nicht unterst. Attribut
-                      HTML_REAL_VALUE,      // Attribut mit Wert
-                      HTML_ON_VALUE,        // Attribut entspricht On-Tag
-                      HTML_OFF_VALUE,       // Attribut entspricht Off-Tag
-                      HTML_CHRFMT_VALUE,    // Attribut fuer Zeichenvorlage
-                      HTML_COLOR_VALUE,     // Attribut fuer Vordergrundfarbe
-                      HTML_STYLE_VALUE,     // Attribut muss als Style exp.
-                      HTML_DROPCAP_VALUE,   // DropCap-Attributs
+enum HTMLOnOffState { HTML_NOT_SUPPORTED,   // unsupported Attribute
+                      HTML_REAL_VALUE,      // Attribute with value
+                      HTML_ON_VALUE,        // Attribute is On-Tag
+                      HTML_OFF_VALUE,       // Attribute is Off-Tag
+                      HTML_CHRFMT_VALUE,    // Attribute for character format
+                      HTML_COLOR_VALUE,     // Attribute for forground color
+                      HTML_STYLE_VALUE,     // Attribute must be exported as style
+                      HTML_DROPCAP_VALUE,   // DropCap-Attribute
                       HTML_AUTOFMT_VALUE }; // Attribute for automatic character styles
 
 class HTMLEndPosLst
@@ -1426,7 +1426,7 @@ sal_Bool HTMLEndPosLst::ExistsOffTagItem( sal_uInt16 nWhich, sal_Int32 nStartPos
             // das Attribut beginnt vor oder an der aktuellen Position
             // und endet hinter ihr
             const SfxPoolItem *pItem = pTest->GetItem();
-            sal_uInt16 nTstWhich = pItem->Which() ;
+            sal_uInt16 nTstWhich = pItem->Which();
             if( (nTstWhich == RES_CHRATR_CROSSEDOUT ||
                  nTstWhich == RES_CHRATR_UNDERLINE ||
                  nTstWhich == RES_CHRATR_BLINK) &&
@@ -1884,10 +1884,7 @@ void HTMLEndPosLst::Insert( const SfxItemSet& rItemSet,
 void HTMLEndPosLst::Insert( const SwDrawFrmFmt& rFmt, sal_Int32 nPos,
                             SwHTMLFmtInfos& rFmtInfos )
 {
-    // der Type-Cast ist nur noetig, um nicht seinetwegen
-    // svdrwobt.hxx zu includem
-    const SdrObject* pTextObj =
-        (const SdrObject *)SwHTMLWriter::GetMarqueeTextObj( rFmt );
+    const SdrObject* pTextObj = (const SdrObject*) SwHTMLWriter::GetMarqueeTextObj( rFmt );
 
     if( pTextObj )
     {
@@ -1905,8 +1902,7 @@ void HTMLEndPosLst::Insert( const SwDrawFrmFmt& rFmt, sal_Int32 nPos,
     }
 }
 
-sal_uInt16 HTMLEndPosLst::GetScriptAtPos( sal_Int32 nPos ,
-                                             sal_uInt16 nWeak )
+sal_uInt16 HTMLEndPosLst::GetScriptAtPos( sal_Int32 nPos, sal_uInt16 nWeak )
 {
     sal_uInt16 nRet = CSS1_OUTMODE_ANY_SCRIPT;
 
@@ -2153,12 +2149,12 @@ Writer& OutHTML_SwTxtNode( Writer& rWrt, const SwCntntNode& rNode )
     // Bookmarks oder absatzgebundene Grafiken aber schon.
     // MIB 21.7.97: Ausserdem auch keine leeren Tabellen-Zellen exportieren.
     if( !nEnd && (nPoolId == RES_POOLCOLL_STANDARD ||
-                   nPoolId == RES_POOLCOLL_TABLE ||
-                   nPoolId == RES_POOLCOLL_TABLE_HDLN) )
+                  nPoolId == RES_POOLCOLL_TABLE ||
+                  nPoolId == RES_POOLCOLL_TABLE_HDLN) )
     {
         // Der aktuelle Node ist leer und enthaelt Standard-Vorlage ...
         const SfxPoolItem* pItem;
-        const SfxItemSet *pItemSet = pNd->GetpSwAttrSet();
+        const SfxItemSet* pItemSet = pNd->GetpSwAttrSet();
         if( pItemSet && pItemSet->Count() &&
             SFX_ITEM_SET == pItemSet->GetItemState( RES_CHRATR_FONTSIZE, false, &pItem ) &&
             40 == ((const SvxFontHeightItem *)pItem)->GetHeight() )
@@ -2168,12 +2164,11 @@ Writer& OutHTML_SwTxtNode( Writer& rWrt, const SwCntntNode& rNode )
             const SwNode *pNextNd = rWrt.pDoc->GetNodes()[nNdPos+1];
             const SwNode *pPrevNd = rWrt.pDoc->GetNodes()[nNdPos-1];
             sal_Bool bStdColl = nPoolId == RES_POOLCOLL_STANDARD;
-            if( ( bStdColl && (pNextNd->IsTableNode() ||
-                               pNextNd->IsSectionNode()) ) ||
-                ( !bStdColl && pNextNd->IsEndNode() &&
-                               pPrevNd->IsStartNode() &&
-                               SwTableBoxStartNode==
-                                pPrevNd->GetStartNode()->GetStartNodeType() ) )
+            if( ( bStdColl && (pNextNd->IsTableNode() || pNextNd->IsSectionNode()) ) ||
+                ( !bStdColl &&
+                   pNextNd->IsEndNode() &&
+                   pPrevNd->IsStartNode() &&
+                   SwTableBoxStartNode == pPrevNd->GetStartNode()->GetStartNodeType() ) )
             {
                 // ... und er steht vor einer Tabelle ohne einem Bereich
                 rHTMLWrt.OutBookmarks();
@@ -2192,8 +2187,7 @@ Writer& OutHTML_SwTxtNode( Writer& rWrt, const SwCntntNode& rNode )
     sal_Bool bPageBreakBehind = sal_False;
     if( rHTMLWrt.bCfgFormFeed &&
         !(rHTMLWrt.bOutTable || rHTMLWrt.bOutFlyFrame) &&
-        rHTMLWrt.pStartNdIdx->GetIndex() !=
-        rHTMLWrt.pCurPam->GetPoint()->nNode.GetIndex() )
+        rHTMLWrt.pStartNdIdx->GetIndex() != rHTMLWrt.pCurPam->GetPoint()->nNode.GetIndex() )
     {
         sal_Bool bPageBreakBefore = sal_False;
         const SfxPoolItem* pItem;
@@ -2201,12 +2195,12 @@ Writer& OutHTML_SwTxtNode( Writer& rWrt, const SwCntntNode& rNode )
 
         if( pItemSet )
         {
-            if( SFX_ITEM_SET ==
-                pItemSet->GetItemState( RES_PAGEDESC, true, &pItem ) &&
+            if( SFX_ITEM_SET == pItemSet->GetItemState( RES_PAGEDESC, true, &pItem ) &&
                 ((SwFmtPageDesc *)pItem)->GetPageDesc() )
+            {
                 bPageBreakBefore = sal_True;
-            else if( SFX_ITEM_SET ==
-                     pItemSet->GetItemState( RES_BREAK, true, &pItem ) )
+            }
+            else if( SFX_ITEM_SET == pItemSet->GetItemState( RES_BREAK, true, &pItem ) )
             {
                 switch( ((SvxFmtBreakItem *)pItem)->GetBreak() )
                 {
@@ -2221,7 +2215,7 @@ Writer& OutHTML_SwTxtNode( Writer& rWrt, const SwCntntNode& rNode )
                     bPageBreakBehind = sal_True;
                     break;
                 default:
-                    ;
+                    break;
                 }
             }
         }
@@ -2234,16 +2228,19 @@ Writer& OutHTML_SwTxtNode( Writer& rWrt, const SwCntntNode& rNode )
     rHTMLWrt.OutForm();
 
     // An dem Node "verankerte" Seitenegebunde Rahmen ausgeben
-    sal_Bool bFlysLeft = rHTMLWrt.OutFlyFrm( rNode.GetIndex(),
-                                         0, HTML_POS_PREFIX );
+    sal_Bool bFlysLeft = rHTMLWrt.OutFlyFrm( rNode.GetIndex(), 0, HTML_POS_PREFIX );
+
     // An dem Node verankerte Rahmen ausgeben, die vor dem
     // Absatz-Tag geschrieben werden sollen.
     if( bFlysLeft )
-        bFlysLeft = rHTMLWrt.OutFlyFrm( rNode.GetIndex(),
-                                        0, HTML_POS_BEFORE );
+    {
+        bFlysLeft = rHTMLWrt.OutFlyFrm( rNode.GetIndex(), 0, HTML_POS_BEFORE );
+    }
 
     if( rHTMLWrt.pCurPam->GetPoint()->nNode == rHTMLWrt.pCurPam->GetMark()->nNode )
+    {
         nEnd = rHTMLWrt.pCurPam->GetMark()->nContent.GetIndex();
+    }
 
     // gibt es harte Attribute, die als Optionen geschrieben werden muessen?
     rHTMLWrt.bTagOn = sal_True;
