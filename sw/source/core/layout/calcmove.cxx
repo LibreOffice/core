@@ -86,7 +86,7 @@ bool SwCntntFrm::ShouldBwdMoved( SwLayoutFrm *pNewUpper, bool, bool & )
                     pSect = pSect->GetUpper()->FindSctFrm();
                 OSL_ENSURE( pSect, "Escaping footnote" );
                 if( pSect != pMySect )
-                    return sal_False;
+                    return false;
             }
         }
         SWRECTFN( this )
