@@ -30,7 +30,7 @@
 
 #include <boost/unordered_map.hpp>
 
-class ImplDevFontListData;
+class PhysicalFontFamily;
 class ImplGetDevFontList;
 class ImplGetDevSizeList;
 class ImplFontEntry;
@@ -150,7 +150,7 @@ protected:
     long                    mnHeight;   // Height (in pixels)
 
 private:
-friend class ImplDevFontListData;
+friend class PhysicalFontFamily;
     const int               mnMagic;    // poor man's RTTI
     PhysicalFontFace*       mpNext;
 };
@@ -217,7 +217,7 @@ private:
     mutable bool            mbMatchData;    // true if matching attributes are initialized
     bool                    mbMapNames;     // true if MapNames are available
 
-    typedef boost::unordered_map<const OUString, ImplDevFontListData*,FontNameHash> DevFontList;
+    typedef boost::unordered_map<const OUString, PhysicalFontFamily*,FontNameHash> DevFontList;
     DevFontList             maDevFontList;
 
     ImplPreMatchFontSubstitution* mpPreMatchHook;       // device specific prematch substitution
@@ -233,12 +233,12 @@ public:
     int                     Count() const { return maDevFontList.size(); }
 
     // find the device font
-    ImplDevFontListData*    FindFontFamily( const OUString& rFontName ) const;
-    ImplDevFontListData*    ImplFindByFont( FontSelectPattern& ) const;
-    ImplDevFontListData*    ImplFindBySearchName( const OUString& ) const;
+    PhysicalFontFamily*    FindFontFamily( const OUString& rFontName ) const;
+    PhysicalFontFamily*    ImplFindByFont( FontSelectPattern& ) const;
+    PhysicalFontFamily*    ImplFindBySearchName( const OUString& ) const;
 
     // suggest fonts for glyph fallback
-    ImplDevFontListData*    GetGlyphFallbackFont( FontSelectPattern&,
+    PhysicalFontFamily*    GetGlyphFallbackFont( FontSelectPattern&,
                         OUString& rMissingCodes, int nFallbackLevel ) const;
 
     // prepare platform specific font substitutions
@@ -250,22 +250,22 @@ public:
     ImplGetDevFontList*     GetDevFontList() const;
     ImplGetDevSizeList*     GetDevSizeList( const OUString& rFontName ) const;
 
-    ImplDevFontListData*    ImplFindByTokenNames(const OUString& rTokenStr) const;
+    PhysicalFontFamily*    ImplFindByTokenNames(const OUString& rTokenStr) const;
 
 protected:
     void                    InitMatchData() const;
     bool                    AreMapNamesAvailable() const { return mbMapNames; }
 
-    ImplDevFontListData*    ImplFindByAliasName(const OUString& rSearchName,
+    PhysicalFontFamily*    ImplFindByAliasName(const OUString& rSearchName,
         const OUString& rShortName) const;
-    ImplDevFontListData*    ImplFindBySubstFontAttr( const utl::FontNameAttr& ) const;
-    ImplDevFontListData*    ImplFindByAttributes(sal_uLong nSearchType, FontWeight, FontWidth,
+    PhysicalFontFamily*    ImplFindBySubstFontAttr( const utl::FontNameAttr& ) const;
+    PhysicalFontFamily*    ImplFindByAttributes(sal_uLong nSearchType, FontWeight, FontWidth,
                                                  FontItalic, const OUString& rSearchFamily) const;
-    ImplDevFontListData*    FindDefaultFont() const;
+    PhysicalFontFamily*    FindDefaultFont() const;
 
 private:
     void                    InitGenericGlyphFallback() const;
-    mutable ImplDevFontListData**   mpFallbackList;
+    mutable PhysicalFontFamily**   mpFallbackList;
     mutable int                     mnFallbackCount;
 };
 
