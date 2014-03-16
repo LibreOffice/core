@@ -32,6 +32,8 @@
 #include <svtools/imappoly.hxx>
 #include "svl/urihelper.hxx"
 
+#include <sstream>
+
 #define TXTCONV_BUFFER_SIZE 20
 
 HTMLOutContext::HTMLOutContext( rtl_TextEncoding eDestEnc )
@@ -973,6 +975,30 @@ OString HTMLOutFuncs::CreateTableDataOptionsValNum(
         aStrTD.append('\"');
     }
     return aStrTD.makeStringAndClear();
+}
+
+void HtmlWriterHelper::applyColor(HtmlWriter& rHtmlWriter, OString aAttributeName, const Color& rColor)
+{
+    OStringBuffer sBuffer;
+
+    if( rColor.GetColor() == COL_AUTO )
+    {
+        sBuffer.append("#000000");
+    }
+    else
+    {
+        sBuffer.append('#');
+        std::ostringstream sStringStream;
+        sStringStream
+            << std::right
+            << std::setfill('0')
+            << std::setw(6)
+            << std::hex
+            << rColor.GetRGBColor();
+        sBuffer.append(sStringStream.str().c_str());
+    }
+
+    rHtmlWriter.attribute(aAttributeName, sBuffer.makeStringAndClear());
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

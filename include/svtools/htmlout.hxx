@@ -26,6 +26,8 @@
 #include <rtl/string.hxx>
 #include <svl/macitem.hxx>
 
+#include "HtmlWriter.hxx"
+
 class Color;
 class ImageMap;
 class SvStream;
@@ -102,6 +104,11 @@ struct HTMLOutFuncs
                 SvNumberFormatter& rFormatter,
                 rtl_TextEncoding eDestEnc = RTL_TEXTENCODING_MS_1252,
                 OUString *pNonConvertableChars = 0);
+};
+
+struct HtmlWriterHelper
+{
+    SVT_DLLPUBLIC static void applyColor( HtmlWriter& rHtmlWriter, OString aAttributeName, const Color& rColor);
 };
 
 #endif
