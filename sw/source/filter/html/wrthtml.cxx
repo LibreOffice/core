@@ -131,10 +131,9 @@ SwHTMLWriter::~SwHTMLWriter()
 
 sal_uLong SwHTMLWriter::WriteStream()
 {
-    // neue Konfiguration setzen
     SvxHtmlOptions& rHtmlOptions = SvxHtmlOptions::Get();
 
-    // die Fontgroessen 1-7
+    // font heights 1-7
     aFontHeights[0] = rHtmlOptions.GetFontSize( 0 ) * 20;
     aFontHeights[1] = rHtmlOptions.GetFontSize( 1 ) * 20;
     aFontHeights[2] = rHtmlOptions.GetFontSize( 2 ) * 20;
@@ -147,24 +146,23 @@ sal_uLong SwHTMLWriter::WriteStream()
     // (dann auch obere und untere Absatz-Abstaende)
     nExportMode = rHtmlOptions.GetExportMode();
     nHTMLMode = GetHtmlMode(0);
-    if( HTML_CFG_WRITER==nExportMode ||
-        HTML_CFG_NS40==nExportMode )
+
+    if( HTML_CFG_WRITER == nExportMode || HTML_CFG_NS40 == nExportMode )
         nHTMLMode |= HTMLMODE_BLOCK_SPACER;
 
-    if( HTML_CFG_WRITER==nExportMode || HTML_CFG_MSIE==nExportMode )
+    if( HTML_CFG_WRITER == nExportMode || HTML_CFG_MSIE == nExportMode )
         nHTMLMode |= (HTMLMODE_FLOAT_FRAME | HTMLMODE_LSPACE_IN_NUMBUL);
 
-    if( HTML_CFG_MSIE==nExportMode )
+    if( HTML_CFG_MSIE == nExportMode )
         nHTMLMode |= HTMLMODE_NBSP_IN_TABLES;
 
-    if( HTML_CFG_WRITER==nExportMode || HTML_CFG_NS40==nExportMode ||
-        HTML_CFG_MSIE==nExportMode )
-        nHTMLMode |= HTMLMODE_ABS_POS_FLY|HTMLMODE_ABS_POS_DRAW;
+    if( HTML_CFG_WRITER == nExportMode || HTML_CFG_NS40 == nExportMode || HTML_CFG_MSIE == nExportMode )
+        nHTMLMode |= HTMLMODE_ABS_POS_FLY | HTMLMODE_ABS_POS_DRAW;
 
-    if( HTML_CFG_WRITER==nExportMode )
+    if( HTML_CFG_WRITER == nExportMode )
         nHTMLMode |= HTMLMODE_FLY_MARGINS;
 
-    if( HTML_CFG_NS40==nExportMode )
+    if( HTML_CFG_NS40 == nExportMode )
         nHTMLMode |= HTMLMODE_BORDER_NONE;
 
     nHTMLMode |= HTMLMODE_FONT_GENERIC;
@@ -172,9 +170,8 @@ sal_uLong SwHTMLWriter::WriteStream()
     if( HTML_CFG_NS40==nExportMode )
         nHTMLMode |= HTMLMODE_NO_CONTROL_CENTERING;
 
-    bCfgOutStyles = IsHTMLMode(HTMLMODE_SOME_STYLES |
-                               HTMLMODE_FULL_STYLES);
-    bCfgNetscape4 = (HTML_CFG_NS40==nExportMode);
+    bCfgOutStyles = IsHTMLMode(HTMLMODE_SOME_STYLES | HTMLMODE_FULL_STYLES);
+    bCfgNetscape4 = (HTML_CFG_NS40 == nExportMode);
 
     if( IsHTMLMode(HTMLMODE_SOME_STYLES | HTMLMODE_FULL_STYLES) )
         nHTMLMode |= HTMLMODE_PRINT_EXT;
@@ -190,14 +187,12 @@ sal_uLong SwHTMLWriter::WriteStream()
     eCSS1Unit = (FieldUnit)SW_MOD()->GetMetric( pDoc->get(IDocumentSettingAccess::HTML_MODE) );
 
     sal_Bool bWriteUTF8 = bWriteClipboardDoc;
-    eDestEnc = bWriteUTF8 ? RTL_TEXTENCODING_UTF8
-                          : rHtmlOptions.GetTextEncoding();
-    const sal_Char *pCharSet =
-        rtl_getBestMimeCharsetFromTextEncoding( eDestEnc );
+    eDestEnc = bWriteUTF8 ? RTL_TEXTENCODING_UTF8 : rHtmlOptions.GetTextEncoding();
+    const sal_Char *pCharSet = rtl_getBestMimeCharsetFromTextEncoding( eDestEnc );
     eDestEnc = rtl_getTextEncodingFromMimeCharset( pCharSet );
 
     // Nur noch fuer den MS-IE ziehen wir den Export von Styles vor.
-    bCfgPreferStyles = HTML_CFG_MSIE==nExportMode;
+    bCfgPreferStyles = HTML_CFG_MSIE == nExportMode;
 
     bCfgStarBasic = rHtmlOptions.IsStarBasic();
 
