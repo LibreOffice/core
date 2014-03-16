@@ -28,6 +28,10 @@ $(eval $(call gb_Module_add_l10n_targets,svtools,\
     UIConfig_svt \
 ))
 
+$(eval $(call gb_Module_add_check_targets,svtools,\
+    CppunitTest_svtools_html \
+))
+
 ifeq ($(CROSS_COMPILING),)
 
 ifneq ($(OS),WNT)
