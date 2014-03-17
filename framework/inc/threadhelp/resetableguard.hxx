@@ -21,7 +21,7 @@
 #define INCLUDED_FRAMEWORK_INC_THREADHELP_RESETABLEGUARD_HXX
 
 #include <boost/noncopyable.hpp>
-#include <framework/imutex.hxx>
+#include <threadhelp/lockhelper.hxx>
 
 #include <sal/types.h>
 
@@ -62,7 +62,7 @@ class ResetableGuard : private boost::noncopyable
 
             @onerror    -
         *//*-*****************************************************************************************************/
-        inline ResetableGuard( IMutex* pLock )
+        inline ResetableGuard( LockHelper* pLock )
             :   m_pLock    ( pLock     )
             ,   m_bLocked  ( sal_False )
         {
@@ -70,7 +70,7 @@ class ResetableGuard : private boost::noncopyable
         }
 
 
-        inline ResetableGuard( IMutex& rLock )
+        inline ResetableGuard( LockHelper& rLock )
             :   m_pLock    ( &rLock    )
             ,   m_bLocked  ( sal_False )
         {
@@ -154,7 +154,7 @@ class ResetableGuard : private boost::noncopyable
 
     private:
 
-        IMutex*         m_pLock     ;   /// pointer to safed lock member of user
+        LockHelper*         m_pLock     ;   /// pointer to safed lock member of user
         sal_Bool        m_bLocked   ;   /// protection against multiple lock() calls without unlock()
 
 };      //  class ResetableGuard
