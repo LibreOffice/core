@@ -144,7 +144,8 @@ struct DocxSdrExport::Impl
 };
 
 DocxSdrExport::DocxSdrExport(DocxExport& rExport, sax_fastparser::FSHelperPtr pSerializer, oox::drawingml::DrawingML* pDrawingML)
-    : m_pImpl(new Impl(*this, rExport, pSerializer, pDrawingML))
+    : m_pImpl(new Impl(*this, rExport, pSerializer, pDrawingML)),
+      mbIsInDMLTextFrame(false)
 {
 }
 
@@ -550,6 +551,31 @@ void DocxSdrExport::writeDMLDrawing(const SdrObject* pSdrObject, const SwFrmFmt*
 
     uno::Reference<drawing::XShape> xShape(const_cast<SdrObject*>(pSdrObject)->getUnoShape(), uno::UNO_QUERY_THROW);
     uno::Reference<lang::XServiceInfo> xServiceInfo(xShape, uno::UNO_QUERY_THROW);
+    uno::Reference< beans::XPropertySet > xPropertySet(xShape, uno::UNO_QUERY);
+    uno::Reference< beans::XPropertySetInfo > xPropSetInfo;
+    if (xPropertySet.is())
+        xPropSetInfo = xPropertySet->getPropertySetInfo();
+
+    bool bLockedCanvas = false;
+    if (xPropSetInfo.is() && xPropSetInfo->hasPropertyByName("InteropGrabBag"))
+    {
+        uno::Sequence< beans::PropertyValue > propList;
+        xPropertySet->getPropertyValue("InteropGrabBag") >>= propList;
+        for (sal_Int32 nProp=0; nProp < propList.getLength(); ++nProp)
+        {
+            OUString propName = propList[nProp].Name;
+            if (propName == "LockedCanvas")
+            {
+                /*
+                 * Export as Locked Canvas only if the drawing
+                 * was originally a Locked Canvas and is now inside a Text Frame.
+                 */
+
+                bLockedCanvas = true && getIsInDMLTextFrame();
+                break;
+            }
+        }
+    }
     const char* pNamespace = "http://schemas.microsoft.com/office/word/2010/wordprocessingShape";
     if (xServiceInfo->supportsService("com.sun.star.drawing.GroupShape"))
         pNamespace = "http://schemas.microsoft.com/office/word/2010/wordprocessingGroup";
@@ -562,8 +588,15 @@ void DocxSdrExport::writeDMLDrawing(const SdrObject* pSdrObject, const SwFrmFmt*
                         XML_uri, pNamespace,
                         FSEND);
 
+    if (bLockedCanvas)
+        pFS->startElementNS(XML_lc, XML_lockedCanvas,
+                                FSNS(XML_xmlns, XML_lc), "http://schemas.openxmlformats.org/drawingml/2006/lockedCanvas",
+                                FSEND);
+
     m_pImpl->m_rExport.OutputDML(xShape);
 
+    if (bLockedCanvas)
+        pFS->endElementNS(XML_lc, XML_lockedCanvas);
     pFS->endElementNS(XML_a, XML_graphicData);
     pFS->endElementNS(XML_a, XML_graphic);
 
@@ -993,6 +1026,7 @@ void DocxSdrExport::writeDiagram(const SdrObject* sdrObject, const SwFrmFmt& rFr
 
 void DocxSdrExport::writeDMLTextFrame(sw::Frame* pParentFrame, int nAnchorId)
 {
+    setIsInDMLTextFrame(true);
     sax_fastparser::FSHelperPtr pFS = m_pImpl->m_pSerializer;
     const SwFrmFmt& rFrmFmt = pParentFrame->GetFrmFmt();
     const SwNodeIndex* pNodeIndex = rFrmFmt.GetCntnt().GetCntntIdx();
@@ -1154,6 +1188,7 @@ void DocxSdrExport::writeDMLTextFrame(sw::Frame* pParentFrame, int nAnchorId)
     }
 
     endDMLAnchorInline(&rFrmFmt);
+    setIsInDMLTextFrame(false);
 }
 
 void DocxSdrExport::writeVMLTextFrame(sw::Frame* pParentFrame)
