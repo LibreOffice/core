@@ -85,7 +85,6 @@ class FWI_DLLPUBLIC LockHelper : public  IMutex
         void releaseReadAccess   ();
         void acquireWriteAccess  ();
         void releaseWriteAccess  ();
-        void downgradeWriteAccess();
 
         //  something else
 

@@ -209,33 +209,6 @@ void LockHelper::releaseWriteAccess()
 }
 
 /*-************************************************************************************************************
-    @short      downgrade a write access to a read access
-    @descr      A guard should call this method to change a write to a read access.
-                New readers can work too - new writer are blocked!
-
-    @attention  Ignore shareable mutex(!) - because this call never should release a lock completely!
-                We change a write access to a read access only.
-
-    @attention  a) Don't call this method if you are not a writer!
-                    Results are not defined then ...
-                    An upgrade can't be implemented really ... because acquiring new access
-                    will be the same - there no differences!
-                b) Without function ...
-                    because, a mutex don't support it really.
-
-    @seealso    -
-
-    @param      -
-    @return     -
-
-    @onerror    -
-*//*-*************************************************************************************************************/
-void LockHelper::downgradeWriteAccess()
-{
-    // Not supported for mutex!
-}
-
-/*-************************************************************************************************************
     @short      return a reference to a static lock helper
     @descr      Sometimes we need the global mutex or rw-lock! (e.g. in our own static methods)
                 But it's not a good idea to use these global one very often ...

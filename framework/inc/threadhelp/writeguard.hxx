@@ -171,7 +171,6 @@ class WriteGuard : private boost::noncopyable
         {
             if( m_eMode == E_WRITELOCK )
             {
-                m_pLock->downgradeWriteAccess();
                 m_eMode = E_READLOCK;
             }
         }
