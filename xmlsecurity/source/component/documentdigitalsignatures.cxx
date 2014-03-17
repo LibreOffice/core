@@ -293,7 +293,7 @@ DocumentDigitalSignatures::ImplVerifySignatures(
                 m_sODFVersion, aSignInfos[n]);
             const std::vector< OUString > aElementsToBeVerified =
                 DocumentSignatureHelper::CreateElementList(
-                rxStorage, OUString(), eMode, mode);
+                rxStorage, eMode, mode);
 
             const SignatureInformation& rInfo = aSignInfos[n];
             css::security::DocumentSignatureInformation& rSigInfo = arInfos[n];

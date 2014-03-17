@@ -75,7 +75,7 @@ bool XMLSignatureHelper::Init()
 
 void XMLSignatureHelper::SetStorage(
     const Reference < css::embed::XStorage >& rxStorage,
-    OUString sODFVersion)
+    const OUString& sODFVersion)
 {
     DBG_ASSERT( !mxUriBinding.is(), "SetStorage - UriBinding already set!" );
     mxUriBinding = new UriBindingHelper( rxStorage );

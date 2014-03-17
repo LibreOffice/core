@@ -25,7 +25,7 @@
 
 using namespace ::com::sun::star::uno ;
 
-Sequence< sal_Int8 > numericStringToBigInteger ( OUString numeral )
+Sequence< sal_Int8 > numericStringToBigInteger ( const OUString& numeral )
 {
     if( numeral.getStr() != NULL )
     {

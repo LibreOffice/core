@@ -35,11 +35,11 @@
 
 struct SignatureReferenceInformation
 {
-    sal_Int32       nType;
+    sal_Int32  nType;
     OUString   ouURI;
     OUString   ouDigestValue;
 
-    SignatureReferenceInformation( sal_Int32 type, OUString uri )
+    SignatureReferenceInformation( sal_Int32 type, const OUString& uri )
     {
         nType = type;
         ouURI = uri;

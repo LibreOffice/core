@@ -131,7 +131,7 @@ public:
         xReferenceResolvedListener = xListener;
     }
 
-    void addReference( sal_Int32 type, OUString uri, sal_Int32 keeperId )
+    void addReference( sal_Int32 type, const OUString& uri, sal_Int32 keeperId )
     {
         signatureInfor.vSignatureReferenceInfors.push_back(
                 SignatureReferenceInformation(type, uri));

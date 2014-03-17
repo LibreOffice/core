@@ -76,7 +76,7 @@ int compareVersions(
 //then mimetype and all content of META-INF must be excluded.
 void ImplFillElementList(
     std::vector< OUString >& rList, const Reference < css::embed::XStorage >& rxStore,
-    const OUString rRootStorageName, const bool bRecursive,
+    const OUString& rRootStorageName, const bool bRecursive,
     const DocumentSignatureAlgorithm mode)
 {
     OUString aMetaInfName(  "META-INF"  );
@@ -185,7 +185,7 @@ DocumentSignatureHelper::getDocumentAlgorithm(
 std::vector< OUString >
 DocumentSignatureHelper::CreateElementList(
     const Reference < css::embed::XStorage >& rxStore,
-    const OUString /*rRootStorageName*/, DocumentSignatureMode eMode,
+    DocumentSignatureMode eMode,
     const DocumentSignatureAlgorithm mode)
 {
     std::vector< OUString > aElements;

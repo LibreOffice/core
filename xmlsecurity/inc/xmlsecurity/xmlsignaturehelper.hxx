@@ -126,7 +126,7 @@ public:
     // Set the storage which should be used by the default UriBinding
     // Must be set before StatrtMission().
     //sODFVersion indicates  the ODF version
-    void        SetStorage( const com::sun::star::uno::Reference < com::sun::star::embed::XStorage >& rxStorage, OUString sODFVersion );
+    void        SetStorage( const com::sun::star::uno::Reference < com::sun::star::embed::XStorage >& rxStorage, const OUString& sODFVersion );
 
                 // Argument for the Link is a uno::Reference< xml::sax::XAttributeList >*
                 // Return 1 to verify, 0 to skip.
