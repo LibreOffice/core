@@ -472,7 +472,7 @@ public:
      list Id of a list, which has to be continued by applying the given list style. */
     void SetCurNumRule( const SwNumRule&,
                         const bool bCreateNewList /*= false*/,
-                        const OUString sContinuedListId = OUString(),
+                        const OUString& sContinuedListId = OUString(),
                         const bool bResetIndentAttrs = false );
 
     /// Paragraphs without enumeration but with indents.

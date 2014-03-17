@@ -358,7 +358,7 @@ OString DocxExport::OutputChart( uno::Reference< frame::XModel >& xModel, sal_In
     return OUStringToOString( sId, RTL_TEXTENCODING_UTF8 );
 }
 
-OString DocxExport::WriteOLEObject( SwOLEObj& rObject, OUString sMediaType, OUString sRelationType )
+OString DocxExport::WriteOLEObject( SwOLEObj& rObject, const OUString& sMediaType, const OUString& sRelationType )
 {
     uno::Reference <embed::XEmbeddedObject> xObj( rObject.GetOleRef() );
     comphelper::EmbeddedObjectContainer* aContainer = rObject.GetObject().GetContainer();

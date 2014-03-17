@@ -568,7 +568,7 @@ static bool lcl_IsSpecialCharacter(sal_Unicode nChar)
     return false;
 }
 
-static OUString lcl_DenotedPortion(OUString rStr, sal_Int32 nStart, sal_Int32 nEnd)
+static OUString lcl_DenotedPortion(const OUString& rStr, sal_Int32 nStart, sal_Int32 nEnd)
 {
     OUString aResult;
 

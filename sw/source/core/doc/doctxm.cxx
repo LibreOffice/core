@@ -610,7 +610,7 @@ const SwTOXType* SwDoc::InsertTOXType( const SwTOXType& rTyp )
 }
 
 OUString SwDoc::GetUniqueTOXBaseName( const SwTOXType& rType,
-                                      const OUString sChkStr ) const
+                                      const OUString& sChkStr ) const
 {
     bool bUseChkStr = !sChkStr.isEmpty();
     const OUString aName( rType.GetTypeName() );

@@ -50,9 +50,9 @@ SwFrmDlg::SwFrmDlg( SfxViewFrame*       pViewFrame,
                     Window*             pParent,
                     const SfxItemSet&   rCoreSet,
                     bool                bNewFrm,
-                    OString             sResType,
+                    const OString&      sResType,
                     bool                bFormat,
-                    OString             sDefPage,
+                    const OString&      sDefPage,
                     const OUString*     pStr)
 
     : SfxTabDialog(pViewFrame, pParent, sResType,

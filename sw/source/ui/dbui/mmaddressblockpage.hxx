@@ -125,7 +125,7 @@ public:
                                 sal_uInt16 nSelected);
     const com::sun::star::uno::Sequence< OUString>&    GetAddressBlocks();
 
-    void                SetSettings(sal_Bool bIsCountry, OUString sCountry);
+    void                SetSettings(sal_Bool bIsCountry, const OUString& sCountry);
     sal_Bool            IsIncludeCountry() const {return !m_pNeverRB->IsChecked();}
     OUString     GetCountry() const;
 };

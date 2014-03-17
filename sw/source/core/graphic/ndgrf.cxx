@@ -484,7 +484,7 @@ struct StreamAndStorageNames
     OUString sStorage;
 };
 
-StreamAndStorageNames lcl_GetStreamStorageNames( const OUString sUserData )
+StreamAndStorageNames lcl_GetStreamStorageNames( const OUString& sUserData )
 {
     StreamAndStorageNames aNames;
     if( sUserData.isEmpty() )

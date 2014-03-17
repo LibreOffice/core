@@ -84,7 +84,7 @@ public:
 
 protected:
     /// Copy&paste helper.
-    void paste(OUString aFilename, uno::Reference<text::XTextRange> xTextRange = uno::Reference<text::XTextRange>())
+    void paste(const OUString& aFilename, uno::Reference<text::XTextRange> xTextRange = uno::Reference<text::XTextRange>())
     {
         uno::Reference<document::XFilter> xFilter(m_xSFactory->createInstance("com.sun.star.comp.Writer.RtfFilter"), uno::UNO_QUERY_THROW);
         uno::Reference<document::XImporter> xImporter(xFilter, uno::UNO_QUERY_THROW);

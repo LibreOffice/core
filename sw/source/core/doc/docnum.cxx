@@ -822,7 +822,7 @@ static void lcl_ChgNumRule( SwDoc& rDoc, const SwNumRule& rRule )
 void SwDoc::SetNumRule( const SwPaM& rPam,
                         const SwNumRule& rRule,
                         const bool bCreateNewList,
-                        const OUString sContinuedListId,
+                        const OUString& sContinuedListId,
                         bool bSetItem,
                         const bool bResetIndentAttrs )
 {
@@ -2583,7 +2583,7 @@ void SwDoc::trackChangeOfListStyleName( const OUString& sListStyleName,
 namespace listfunc
 {
     const OUString MakeListIdUnique( const SwDoc& rDoc,
-                                   const OUString aSuggestedUniqueListId )
+                                   const OUString& aSuggestedUniqueListId )
     {
         long nHitCount = 0;
         OUString aTmpStr = aSuggestedUniqueListId;

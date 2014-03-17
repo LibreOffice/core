@@ -50,7 +50,7 @@ using namespace ::com::sun::star::uno;
 namespace
 {
 
-inline OUString lcl_FullPathName(const OUString sPath, const OUString sName)
+inline OUString lcl_FullPathName(const OUString& sPath, const OUString& sName)
 {
     return sPath + OUString(INET_PATH_TOKEN) + sName + SwGlossaries::GetExtension();
 }

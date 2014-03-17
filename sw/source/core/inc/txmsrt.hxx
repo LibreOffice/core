@@ -63,7 +63,7 @@ struct TextAndReading
 
     TextAndReading() {}
 
-    TextAndReading(OUString sTxt, OUString sRdng)
+    TextAndReading(const OUString& sTxt, const OUString& sRdng)
     : sText(sTxt)
     , sReading(sRdng)
     {}
@@ -234,7 +234,7 @@ private:
 
 struct SwTOXPara : public SwTOXSortTabBase
 {
-    SwTOXPara( const SwCntntNode&, SwTOXElement, sal_uInt16 nLevel = FORM_ALPHA_DELIMITTER, OUString sSeqName = OUString() );
+    SwTOXPara( const SwCntntNode&, SwTOXElement, sal_uInt16 nLevel = FORM_ALPHA_DELIMITTER, const OUString& sSeqName = OUString() );
     virtual ~SwTOXPara() {}
 
     void    SetStartIndex(sal_Int32 nSet)    { nStartIndex = nSet; }

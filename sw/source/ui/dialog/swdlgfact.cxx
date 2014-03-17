@@ -798,7 +798,7 @@ SfxAbstractTabDialog* SwAbstractDialogFactory_Impl::CreateSwParaDlg ( Window *pP
                                                     sal_uInt8 nDialogMode,
                                                     const OUString *pCollName,
                                                     sal_Bool bDraw ,
-                                                    OString sDefPage)
+                                                    const OString& sDefPage)
 {
     SfxTabDialog* pDlg = new SwParaDlg( pParent, rVw, rCoreSet,nDialogMode, pCollName, bDraw, sDefPage );
     return new AbstractTabDialog_Impl( pDlg );
@@ -943,7 +943,7 @@ SfxAbstractTabDialog* SwAbstractDialogFactory_Impl::CreateFrmTabDialog(const OSt
                                                 const SfxItemSet& rCoreSet,
                                                 bool        bNewFrm,
                                                 bool        bFmt,
-                                                OString     sDefPage,
+                                                const OString&  sDefPage,
                                                 const OUString* pFmtStr )
 {
     SfxTabDialog* pDlg = new SwFrmDlg(pFrame, pParent, rCoreSet, bNewFrm, rDialogType, bFmt, sDefPage, pFmtStr);
@@ -954,7 +954,7 @@ SfxAbstractApplyTabDialog* SwAbstractDialogFactory_Impl::CreateTemplateDialog(
                                                 Window*             pParent,
                                                 SfxStyleSheetBase&  rBase,
                                                 sal_uInt16          nRegion,
-                                                OString             sPage,
+                                                const OString&      sPage,
                                                 SwWrtShell*         pActShell,
                                                 bool                bNew )
 {

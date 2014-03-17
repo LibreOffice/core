@@ -75,7 +75,7 @@ extern SW_DLLPUBLIC SwWrtShell* GetActiveWrtShell();
 SwTemplateDlg::SwTemplateDlg(Window* pParent,
                              SfxStyleSheetBase& rBase,
                              sal_uInt16 nRegion,
-                             OString sPage,
+                             const OString& sPage,
                              SwWrtShell* pActShell,
                              bool bNew)
     : SfxStyleDialog(pParent,

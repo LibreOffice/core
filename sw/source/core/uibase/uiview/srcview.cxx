@@ -188,26 +188,27 @@ static rtl_TextEncoding lcl_GetStreamCharSet(rtl_TextEncoding eLoadEncoding)
     return eRet;
 }
 
-static OUString lcl_ConvertTabsToSpaces( OUString sLine )
+static OUString lcl_ConvertTabsToSpaces( const OUString& sLine )
 {
-    if (!sLine.isEmpty())
+    if (sLine.isEmpty())
+        return sLine;
+
+    OUString aRet = sLine;
+    const sal_Unicode aPadSpaces[4] = {' ', ' ', ' ', ' '};
+    sal_Int32 nPos = 0;
+    for (;;)
     {
-        const sal_Unicode aPadSpaces[4] = {' ', ' ', ' ', ' '};
-        sal_Int32 nPos = 0;
-        for (;;)
+        nPos = aRet.indexOf('\t', nPos);
+        if (nPos<0)
         {
-            nPos = sLine.indexOf('\t', nPos);
-            if (nPos<0)
-            {
-                break;
-            }
-            // Not 4 blanks, but on 4th TabPos:
-            const sal_Int32 nPadLen = 4 - (nPos % 4);
-            sLine = sLine.replaceAt(nPos, 1, OUString(aPadSpaces, nPadLen));
-            nPos += nPadLen;
+            break;
         }
+        // Not 4 blanks, but on 4th TabPos:
+        const sal_Int32 nPadLen = 4 - (nPos % 4);
+        aRet = aRet.replaceAt(nPos, 1, OUString(aPadSpaces, nPadLen));
+        nPos += nPadLen;
     }
-    return sLine;
+    return aRet;
 }
 
 SwSrcView::SwSrcView(SfxViewFrame* pViewFrame, SfxViewShell*) :

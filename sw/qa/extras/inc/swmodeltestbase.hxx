@@ -242,7 +242,7 @@ protected:
     }
 
     /// Get a family of styles, see com.sun.star.style.StyleFamilies for possible values.
-    uno::Reference<container::XNameAccess> getStyles(OUString aFamily)
+    uno::Reference<container::XNameAccess> getStyles(const OUString& aFamily)
     {
         uno::Reference<style::XStyleFamiliesSupplier> xStyleFamiliesSupplier(mxComponent, uno::UNO_QUERY);
         uno::Reference<container::XNameAccess> xStyleFamilies(xStyleFamiliesSupplier->getStyleFamilies(), uno::UNO_QUERY);
@@ -251,7 +251,7 @@ protected:
     }
 
     /// Get a family of auto styles, see com.sun.star.style.StyleFamilies for possible values.
-    uno::Reference<style::XAutoStyleFamily> getAutoStyles(OUString aFamily)
+    uno::Reference<style::XAutoStyleFamily> getAutoStyles(const OUString& aFamily)
     {
         uno::Reference< style::XAutoStylesSupplier > xAutoStylesSupplier(mxComponent, uno::UNO_QUERY);
         uno::Reference< style::XAutoStyles > xAutoStyles(xAutoStylesSupplier->getAutoStyles());
@@ -264,7 +264,7 @@ protected:
      *
      * If the attribute is omitted, the text of the node is returned.
      */
-    OUString parseDump(OString aXPath, OString aAttribute = OString())
+    OUString parseDump(const OString& aXPath, const OString& aAttribute = OString())
     {
         if (!mpXmlBuffer)
             dumpLayout();
@@ -347,7 +347,7 @@ protected:
     }
 
     // Get paragraph (counted from 1), optionally check it contains the given text.
-    uno::Reference< text::XTextRange > getParagraph( int number, OUString content = OUString() ) const
+    uno::Reference< text::XTextRange > getParagraph( int number, const OUString& content = OUString() ) const
     {
         uno::Reference<text::XTextRange> const xParagraph(
                 getParagraphOrTable(number), uno::UNO_QUERY_THROW);
@@ -356,7 +356,7 @@ protected:
         return xParagraph;
     }
 
-    uno::Reference<text::XTextRange> getParagraphOfText(int number, uno::Reference<text::XText> xText, OUString content = OUString()) const
+    uno::Reference<text::XTextRange> getParagraphOfText(int number, uno::Reference<text::XText> xText, const OUString& content = OUString()) const
     {
         uno::Reference<text::XTextRange> const xParagraph(getParagraphOrTable(number, xText), uno::UNO_QUERY_THROW);
         if (!content.isEmpty())
@@ -365,7 +365,7 @@ protected:
     }
 
     /// Get run (counted from 1) of a paragraph, optionally check it contains the given text.
-    uno::Reference<text::XTextRange> getRun(uno::Reference<text::XTextRange> xParagraph, int number, OUString content = OUString()) const
+    uno::Reference<text::XTextRange> getRun(uno::Reference<text::XTextRange> xParagraph, int number, const OUString& content = OUString()) const
     {
         uno::Reference<container::XEnumerationAccess> xRunEnumAccess(xParagraph, uno::UNO_QUERY);
         uno::Reference<container::XEnumeration> xRunEnum = xRunEnumAccess->createEnumeration();
@@ -414,7 +414,7 @@ protected:
     }
 
     /// Get TextFrame by name
-    uno::Reference<drawing::XShape> getTextFrameByName(OUString aName)
+    uno::Reference<drawing::XShape> getTextFrameByName(const OUString& aName)
     {
         uno::Reference<text::XTextFramesSupplier> xTextFramesSupplier(mxComponent, uno::UNO_QUERY);
         uno::Reference<container::XNameAccess> xNameAccess(xTextFramesSupplier->getTextFrames(), uno::UNO_QUERY);
@@ -473,7 +473,7 @@ protected:
     }
 
     /// Save the loaded document to a tempfile. Can be used to check the resulting docx/odt directly as a ZIP file.
-    void save(OUString aFilter, utl::TempFile& rTempFile)
+    void save(const OUString& aFilter, utl::TempFile& rTempFile)
     {
         rTempFile.EnableKillingFile();
         uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);

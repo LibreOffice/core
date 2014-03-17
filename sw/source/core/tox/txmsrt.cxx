@@ -498,7 +498,7 @@ sal_uInt16 SwTOXContent::GetLevel() const
    The position must not come from the document, but from the "anchor"!
  --------------------------------------------------------------------*/
 
-SwTOXPara::SwTOXPara( const SwCntntNode& rNd, SwTOXElement eT, sal_uInt16 nLevel, OUString sSeqName )
+SwTOXPara::SwTOXPara( const SwCntntNode& rNd, SwTOXElement eT, sal_uInt16 nLevel, const OUString& sSeqName )
     : SwTOXSortTabBase( TOX_SORT_PARA, &rNd, 0, 0 ),
     eType( eT ),
     m_nLevel(nLevel),

@@ -62,7 +62,7 @@ inline OUString GetCachedString(CachedStringID id)
     return StringCache[id] ? *StringCache[id] : OUString();
 }
 
-inline void SetCachedString(CachedStringID id, OUString sStr)
+inline void SetCachedString(CachedStringID id, const OUString& sStr)
 {
     if (StringCache[id])
     {
@@ -89,7 +89,7 @@ OUString GetOldGrfCat()
     return GetCachedString(OldGrfCat);
 }
 
-void SetOldGrfCat(OUString sStr)
+void SetOldGrfCat(const OUString& sStr)
 {
     SetCachedString(OldGrfCat, sStr);
 }
@@ -99,7 +99,7 @@ OUString GetOldTabCat()
     return GetCachedString(OldTabCat);
 }
 
-void SetOldTabCat(OUString sStr)
+void SetOldTabCat(const OUString& sStr)
 {
     SetCachedString(OldTabCat, sStr);
 }
@@ -109,7 +109,7 @@ OUString GetOldFrmCat()
     return GetCachedString(OldFrmCat);
 }
 
-void SetOldFrmCat(OUString sStr)
+void SetOldFrmCat(const OUString& sStr)
 {
     SetCachedString(OldFrmCat, sStr);
 }
@@ -119,7 +119,7 @@ OUString GetOldDrwCat()
     return GetCachedString(OldDrwCat);
 }
 
-void SetOldDrwCat(OUString sStr)
+void SetOldDrwCat(const OUString& sStr)
 {
     SetCachedString(OldDrwCat, sStr);
 }
@@ -129,7 +129,7 @@ OUString GetCurrGlosGroup()
     return GetCachedString(CurrGlosGroup);
 }
 
-void SetCurrGlosGroup(OUString sStr)
+void SetCurrGlosGroup(const OUString& sStr)
 {
     SetCachedString(CurrGlosGroup, sStr);
 }

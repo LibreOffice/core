@@ -50,7 +50,7 @@ SwParaDlg::SwParaDlg(Window *pParent,
                     sal_uInt8 nDialogMode,
                     const OUString *pTitle,
                     sal_Bool bDraw,
-                    OString sDefPage)
+                    const OString& sDefPage)
     : SfxTabDialog(pParent,
                  "ParagraphPropertiesDialog",
                  "modules/swriter/ui/paradialog.ui",

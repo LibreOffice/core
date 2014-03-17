@@ -715,7 +715,7 @@ const SwNumRule* SwEditShell::GetCurNumRule() const
 
 void SwEditShell::SetCurNumRule( const SwNumRule& rRule,
                                  const bool bCreateNewList,
-                                 const OUString sContinuedListId,
+                                 const OUString& sContinuedListId,
                                  const bool bResetIndentAttrs )
 {
     StartAllAction();

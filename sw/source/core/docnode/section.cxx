@@ -174,7 +174,7 @@ bool SwSectionData::operator==(SwSectionData const& rOther) const
     // FIXME: old code ignored m_bCondHiddenFlag m_bHiddenFlag m_bConnectFlag
 }
 
-OUString SwSectionData::CollapseWhiteSpaces(const OUString sName)
+OUString SwSectionData::CollapseWhiteSpaces(const OUString& sName)
 {
     const sal_Int32 nLen = sName.getLength();
     const sal_Unicode cRef = ' ';

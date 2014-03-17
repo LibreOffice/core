@@ -502,9 +502,9 @@ class SwXLinkNameAccessWrapper : public cppu::WeakImplHelper4
 
 public:
     SwXLinkNameAccessWrapper(css::uno::Reference< css::container::XNameAccess >  xAccess,
-            const OUString& rLinkDisplayName, OUString sSuffix);
+            const OUString& rLinkDisplayName, const OUString& sSuffix);
     SwXLinkNameAccessWrapper(SwXTextDocument& rxDoc,
-            const OUString& rLinkDisplayName, OUString sSuffix);
+            const OUString& rLinkDisplayName, const OUString& sSuffix);
     ~SwXLinkNameAccessWrapper();
 
     //XNameAccess

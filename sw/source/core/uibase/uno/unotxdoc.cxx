@@ -3477,7 +3477,7 @@ Sequence< OUString > SwXLinkTargetSupplier::getSupportedServiceNames(void)
 }
 
 SwXLinkNameAccessWrapper::SwXLinkNameAccessWrapper(
-            Reference< XNameAccess >  xAccess, const OUString& rLinkDisplayName, OUString sSuffix ) :
+            Reference< XNameAccess >  xAccess, const OUString& rLinkDisplayName, const OUString& sSuffix ) :
     xRealAccess(xAccess),
     pPropSet(aSwMapProvider.GetPropertySet(PROPERTY_MAP_LINK_TARGET)),
     sLinkSuffix(sSuffix),
@@ -3487,7 +3487,7 @@ SwXLinkNameAccessWrapper::SwXLinkNameAccessWrapper(
 }
 
 SwXLinkNameAccessWrapper::SwXLinkNameAccessWrapper(SwXTextDocument& rxDoc,
-            const OUString& rLinkDisplayName, OUString sSuffix) :
+            const OUString& rLinkDisplayName, const OUString& sSuffix) :
     pPropSet(aSwMapProvider.GetPropertySet(PROPERTY_MAP_LINK_TARGET)),
     sLinkSuffix(sSuffix),
     sLinkDisplayName(rLinkDisplayName),
@@ -3666,9 +3666,10 @@ void SwXLinkNameAccessWrapper::setPropertyValue(
     throw UnknownPropertyException();
 }
 
-static Any lcl_GetDisplayBitmap(OUString sLinkSuffix)
+static Any lcl_GetDisplayBitmap(const OUString& _sLinkSuffix)
 {
     Any aRet;
+    OUString sLinkSuffix = _sLinkSuffix;
     if(!sLinkSuffix.isEmpty())
         sLinkSuffix = sLinkSuffix.copy(1);
     sal_uInt16 nImgId = USHRT_MAX;

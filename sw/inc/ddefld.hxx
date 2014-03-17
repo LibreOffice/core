@@ -59,7 +59,7 @@ public:
     virtual bool PutValue( const com::sun::star::uno::Any& rVal, sal_uInt16 nWhich );
 
     OUString GetCmd() const;
-    void SetCmd( OUString aStr );
+    void SetCmd( const OUString& aStr );
 
     sal_uInt16 GetType() const          { return refLink->GetUpdateMode();  }
     void SetType( sal_uInt16 nType )    { refLink->SetUpdateMode( nType );  }

@@ -44,7 +44,7 @@ public:
                 sal_uInt8 nDialogMode,
                 const OUString *pCollName = 0,
                 sal_Bool bDraw = sal_False,
-                OString sDefPage = OString());
+                const OString& sDefPage = OString());
     ~SwParaDlg();
 };
 

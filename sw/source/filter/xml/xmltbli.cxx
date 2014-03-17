@@ -1155,7 +1155,7 @@ void SwXMLDDETableContext_Impl::StartElement(
 }
 
 // generate a new name for DDE field type (called by lcl_GetDDEFieldType below)
-static OUString lcl_GenerateFldTypeName(OUString sPrefix, SwTableNode* pTableNode)
+static OUString lcl_GenerateFldTypeName(const OUString& sPrefix, SwTableNode* pTableNode)
 {
     OUString sPrefixStr(sPrefix);
 

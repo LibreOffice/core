@@ -32,7 +32,7 @@ using namespace ::com::sun::star;
 namespace
 {
 
-OUString removeControlChars(OUString sIn)
+OUString removeControlChars(const OUString& sIn)
 {
     OUStringBuffer aBuf(sIn.replace('\n', ' '));
     sal_Int32 nLen = aBuf.getLength();

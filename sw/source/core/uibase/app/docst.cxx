@@ -596,7 +596,7 @@ sal_uInt16 SwDocShell::Edit(
     const sal_uInt16 nFamily,
     sal_uInt16 nMask,
     const sal_Bool bNew,
-    const OString sPage,
+    const OString& sPage,
     SwWrtShell* pActShell,
     const sal_Bool bBasic )
 {

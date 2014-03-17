@@ -951,7 +951,7 @@ bool WW8ListManager::ReadLVL(SwNumFmt& rNumFmt, SfxItemSet*& rpItemSet,
 
 void WW8ListManager::AdjustLVL( sal_uInt8 nLevel, SwNumRule& rNumRule,
     WW8aISet& rListItemSet, WW8aCFmt& rCharFmt, bool& bNewCharFmtCreated,
-    OUString sPrefix )
+    const OUString& sPrefix )
 {
     bNewCharFmtCreated = false;
     SfxItemSet* pThisLevelItemSet;

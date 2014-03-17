@@ -189,7 +189,7 @@ private:
 
     void AdjustLVL(sal_uInt8 nLevel, SwNumRule& rNumRule, WW8aISet& rListItemSet,
         WW8aCFmt& aCharFmt, bool& bNewCharFmtCreated,
-        OUString aPrefix = OUString());
+        const OUString& aPrefix = OUString());
 
     //No copying
     WW8ListManager(const WW8ListManager&);
@@ -542,9 +542,9 @@ class WW8FieldEntry
 
         OUString GetBookmarkName();
         OUString GetBookmarkCode();
-        void SetBookmarkName(OUString bookmarkName);
-        void SetBookmarkType(OUString bookmarkType);
-        void SetBookmarkCode(OUString bookmarkCode);
+        void SetBookmarkName(const OUString& bookmarkName);
+        void SetBookmarkType(const OUString& bookmarkType);
+        void SetBookmarkCode(const OUString& bookmarkCode);
         ::sw::mark::IFieldmark::parameter_map_t& getParameters();
 };
 
@@ -1408,7 +1408,7 @@ private:
     void Read_HdFtFtnText( const SwNodeIndex* pSttIdx, long nStartCp,
                            long nLen, ManTypes nType );
 
-    void ImportTox( int nFldId, OUString aStr );
+    void ImportTox( int nFldId, const OUString& aStr );
 
     void EndSprm( sal_uInt16 nId );
     // #i103711#

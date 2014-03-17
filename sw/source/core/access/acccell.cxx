@@ -391,28 +391,26 @@ uno::Any SwAccessibleCell::getMinimumValue(  )
     return aAny;
 }
 
-static OUString ReplaceOneChar(OUString oldOUString, OUString replacedChar, OUString replaceStr)
+static OUString ReplaceOneChar(const OUString& oldOUString, const OUString& replacedChar, const OUString& replaceStr)
 {
     int iReplace = oldOUString.lastIndexOf(replacedChar);
-    if (iReplace > -1)
+    OUString aRet = oldOUString;
+    while(iReplace > -1)
     {
-        for(;iReplace>-1;)
-        {
-            oldOUString = oldOUString.replaceAt(iReplace,1, replaceStr);
-            iReplace=oldOUString.lastIndexOf(replacedChar,iReplace);
-        }
+        aRet = aRet.replaceAt(iReplace,1, replaceStr);
+        iReplace = aRet.lastIndexOf(replacedChar,iReplace);
     }
-    return oldOUString;
+    return aRet;
 }
 
-static OUString ReplaceFourChar(OUString oldOUString)
+static OUString ReplaceFourChar(const OUString& oldOUString)
 {
-    oldOUString = ReplaceOneChar(oldOUString,OUString("\\"),OUString("\\\\"));
-    oldOUString = ReplaceOneChar(oldOUString,OUString(";"),OUString("\\;"));
-    oldOUString = ReplaceOneChar(oldOUString,OUString("="),OUString("\\="));
-    oldOUString = ReplaceOneChar(oldOUString,OUString(","),OUString("\\,"));
-    oldOUString = ReplaceOneChar(oldOUString,OUString(":"),OUString("\\:"));
-    return oldOUString;
+    OUString aRet = ReplaceOneChar(oldOUString,OUString("\\"),OUString("\\\\"));
+    aRet = ReplaceOneChar(aRet,OUString(";"),OUString("\\;"));
+    aRet = ReplaceOneChar(aRet,OUString("="),OUString("\\="));
+    aRet = ReplaceOneChar(aRet,OUString(","),OUString("\\,"));
+    aRet = ReplaceOneChar(aRet,OUString(":"),OUString("\\:"));
+    return aRet;
 }
 
 ::com::sun::star::uno::Any SAL_CALL SwAccessibleCell::getExtendedAttributes()

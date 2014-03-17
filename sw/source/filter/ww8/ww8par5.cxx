@@ -662,17 +662,17 @@ OUString WW8FieldEntry::GetBookmarkCode()
     return msMarkCode;
 }
 
-void WW8FieldEntry::SetBookmarkName(OUString bookmarkName)
+void WW8FieldEntry::SetBookmarkName(const OUString& bookmarkName)
 {
     msBookmarkName=bookmarkName;
 }
 
-void WW8FieldEntry::SetBookmarkType(OUString bookmarkType)
+void WW8FieldEntry::SetBookmarkType(const OUString& bookmarkType)
 {
     msMarkType=bookmarkType;
 }
 
-void WW8FieldEntry::SetBookmarkCode(OUString bookmarkCode)
+void WW8FieldEntry::SetBookmarkCode(const OUString& bookmarkCode)
 {
     msMarkCode = bookmarkCode;
 }
@@ -3536,7 +3536,7 @@ void sw::ms::ImportXE(SwDoc &rDoc, SwPaM &rPaM, const OUString &rStr)
     lcl_ImportTox(rDoc, rPaM, rStr, true);
 }
 
-void SwWW8ImplReader::ImportTox( int nFldId, OUString aStr )
+void SwWW8ImplReader::ImportTox( int nFldId, const OUString& aStr )
 {
     bool bIdx = (nFldId != 9);
     lcl_ImportTox(rDoc, *pPaM, aStr, bIdx);

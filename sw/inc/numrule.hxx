@@ -193,7 +193,7 @@ public:
     void AddParagraphStyle( SwTxtFmtColl& rTxtFmtColl );
     void RemoveParagraphStyle( SwTxtFmtColl& rTxtFmtColl );
 
-    inline void SetDefaultListId( const OUString sDefaultListId )
+    inline void SetDefaultListId( const OUString& sDefaultListId )
     {
         msDefaultListId = sDefaultListId;
     }

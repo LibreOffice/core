@@ -1168,7 +1168,7 @@ void SwPostItMgr::RemoveSidebarWin()
 // copy to new vector, otherwise RemoveItem would operate and delete stuff on mvPostItFlds as well
 // RemoveItem will clean up the core field and visible postit if necessary
 // we cannot just delete everything as before, as postits could move into change tracking
-void SwPostItMgr::Delete(OUString aAuthor)
+void SwPostItMgr::Delete(const OUString& aAuthor)
 {
     mpWrtShell->StartAllAction();
     if ( HasActiveSidebarWin() && (GetActiveSidebarWin()->GetAuthor()==aAuthor) )

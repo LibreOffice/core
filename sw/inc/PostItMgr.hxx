@@ -214,7 +214,7 @@ class SwPostItMgr: public SfxListener
             void CorrectPositions();
 
             void SetLayout() { mbLayout = true; };
-            void Delete(OUString aAuthor);
+            void Delete(const OUString& aAuthor);
             void Delete();
 
             void Hide( const OUString& rAuthor );
