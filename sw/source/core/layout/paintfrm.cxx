@@ -2371,9 +2371,6 @@ void SwTabFrmPainter::PaintLines(OutputDevice& rDev, const SwRect& rRect) const
     // #i16816# tagged pdf support
     SwTaggedPDFHelper aTaggedPDFHelper( 0, 0, 0, rDev );
 
-    const SwFrm* pTmpFrm = &mrTabFrm;
-    const bool bVert = pTmpFrm->IsVertical();
-
     SwLineEntryMapConstIter aIter = maHoriLines.begin();
     bool bHori = true;
 
@@ -2391,17 +2388,6 @@ void SwTabFrmPainter::PaintLines(OutputDevice& rDev, const SwRect& rRect) const
         rDev.SetDrawMode( 0 );
     }
 
-    // set clip region:
-    rDev.Push( PUSH_CLIPREGION );
-    Size aSize( rRect.SSize() );
-    // Hack! Necessary, because the layout is not pixel aligned!
-    aSize.Width() += nPixelSzW; aSize.Height() += nPixelSzH;
-    rDev.SetClipRegion(Region(Rectangle(rRect.Pos(), aSize)));
-
-    // The following stuff is necessary to have the new table borders fit
-    // into a ::SwAlignRect adjusted world.
-    const SwTwips nTwipXCorr =  bVert ? 0 : std::max( 0L, nHalfPixelSzW - 2 );    // 1 < 2 < 3 ;-)
-    const SwTwips nTwipYCorr = !bVert ? 0 : std::max( 0L, nHalfPixelSzW - 2 );    // 1 < 2 < 3 ;-)
     const SwFrm* pUpper = mrTabFrm.GetUpper();
     SwRect aUpper( pUpper->Prt() );
     aUpper.Pos() += pUpper->Frm().Pos();
@@ -2513,25 +2499,6 @@ void SwTabFrmPainter::PaintLines(OutputDevice& rDev, const SwRect& rRect) const
             else
                 pTmpColor = pHCColor;
 
-            // The line sizes stored in the line style have to be adjusted as
-            // well.  This will guarantee that lines with the same twip size
-            // will have the same pixel size.
-            for ( int i = 0; i < 7; ++i )
-            {
-                sal_uInt16 nPrim = aStyles[ i ].Prim();
-                sal_uInt16 nDist = aStyles[ i ].Dist();
-                sal_uInt16 nSecn = aStyles[ i ].Secn();
-
-                if (nPrim > 0)
-                    nPrim = (sal_uInt16)( std::max( 1L, nPixelSzH * ( nPrim / nPixelSzH ) ) );
-                if (nDist > 0)
-                    nDist = (sal_uInt16)( std::max( 1L, nPixelSzH * ( nDist / nPixelSzH ) ) );
-                if (nSecn > 0)
-                    nSecn = (sal_uInt16)( std::max( 1L, nPixelSzH * ( nSecn / nPixelSzH ) ) );
-
-                aStyles[ i ].Set( nPrim, nDist, nSecn );
-            }
-
             // The (twip) positions will be adjusted to meet these requirements:
             // 1. The y coordinates are located in the middle of the pixel grid
             // 2. The x coordinated are located at the beginning of the pixel grid
@@ -2589,12 +2556,6 @@ void SwTabFrmPainter::PaintLines(OutputDevice& rDev, const SwRect& rRect) const
                 aPaintEnd.Y()   += static_cast<long>(offsetEnd   + 0.5);
             }
 
-            aPaintStart.X() -= nTwipXCorr; // nHalfPixelSzW - 2 to assure that we do not leave the pixel
-            aPaintEnd.X()   -= nTwipXCorr;
-            aPaintStart.Y() -= nTwipYCorr;
-            aPaintEnd.Y()   -= nTwipYCorr;
-
-            // Here comes the painting stuff: Thank you, DR, great job!!!
             if (bHori)
             {
                 mrTabFrm.ProcessPrimitives( svx::frame::CreateBorderPrimitives(
@@ -2631,7 +2592,6 @@ void SwTabFrmPainter::PaintLines(OutputDevice& rDev, const SwRect& rRect) const
     }
 
     // restore output device:
-    rDev.Pop();
     rDev.SetDrawMode( nOldDrawMode );
 }
 
@@ -2755,13 +2715,17 @@ void calcOffsetForDoubleLine( SwLineEntryMap& rLines )
             for (size_t i = 0; itSet != itSetEnd; ++itSet, ++i)
             {
                 SwLineEntry aLine = *itSet;
-                aLine.mnOffset = static_cast<SwTwips>(aLine.maAttribute.Dist());
-                aLine.mbOffsetPerp = true;
+                if (aLine.maAttribute.Secn())
+                {
+                    // Apply offset only for double lines.
+                    aLine.mnOffset = static_cast<SwTwips>(aLine.maAttribute.Dist());
+                    aLine.mbOffsetPerp = true;
 
-                if (i == 0)
-                    aLine.mbOffsetStart = true;
-                if (i == nEntryCount - 1)
-                    aLine.mbOffsetEnd = true;
+                    if (i == 0)
+                        aLine.mbOffsetStart = true;
+                    if (i == nEntryCount - 1)
+                        aLine.mbOffsetEnd = true;
+                }
 
                 aNewSet.insert(aLine);
             }
@@ -2823,10 +2787,14 @@ void SwTabFrmPainter::Insert( const SwFrm& rFrm, const SvxBoxItem& rBoxItem )
     const Fraction& rFracX = rMapMode.GetScaleX();
     const Fraction& rFracY = rMapMode.GetScaleY();
 
-    svx::frame::Style aL(rBoxItem.GetLeft(), rFracX);
-    svx::frame::Style aR(rBoxItem.GetRight(), rFracY);
-    svx::frame::Style aT(rBoxItem.GetTop(), rFracX);
-    svx::frame::Style aB(rBoxItem.GetBottom(), rFracY);
+    svx::frame::Style aL(rBoxItem.GetLeft());
+    aL.SetPatternScale(rFracY);
+    svx::frame::Style aR(rBoxItem.GetRight());
+    aR.SetPatternScale(rFracY);
+    svx::frame::Style aT(rBoxItem.GetTop());
+    aT.SetPatternScale(rFracX);
+    svx::frame::Style aB(rBoxItem.GetBottom());
+    aB.SetPatternScale(rFracX);
 
     aR.MirrorSelf();
     aB.MirrorSelf();
