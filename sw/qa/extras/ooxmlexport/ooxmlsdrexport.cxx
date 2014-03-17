@@ -937,6 +937,21 @@ DECLARE_OOXMLEXPORT_TEST(testPictureWatermark, "pictureWatermark.docx")
     assertXPath(pXmlHeader1, "/w:hdr[1]/w:p[1]/w:r[1]/mc:AlternateContent[1]/mc:Fallback[1]/w:pict[1]/v:rect[1]","id","WordPictureWatermark11962361");
 }
 
+
+DECLARE_OOXMLEXPORT_TEST(testFdo76249, "fdo76249.docx")
+{
+    /*
+     * The Locked Canvas is imported correctly, but while exporting
+     * the drawing element is exported inside a textbox. However a the drawing has to exported
+     * as a Locked Canvas inside a text-box for the RT file to work in MS Word, as drawing elements
+     * are not allowed inside the textboxes.
+     */
+    xmlDocPtr pXmlDoc = parseExport("word/document.xml");
+    if (!pXmlDoc)
+       return;
+    assertXPath(pXmlDoc, "//mc:Choice/w:drawing//w:txbxContent//w:drawing//lc:lockedCanvas", 1);
+}
+
 #endif
 
 CPPUNIT_PLUGIN_IMPLEMENT();

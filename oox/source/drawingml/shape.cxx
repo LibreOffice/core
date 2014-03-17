@@ -790,11 +790,15 @@ Reference< XShape > Shape::createAndInsert(
             }
 
             PropertySet( xSet ).setProperties( aShapeProps );
-            if (mbLockedCanvas && aServiceName == "com.sun.star.drawing.LineShape")
+            if (mbLockedCanvas)
             {
-                // It seems the position and size for lines inside a locked canvas is absolute.
-                mxShape->setPosition(awt::Point(aShapeRectHmm.X, aShapeRectHmm.Y));
-                mxShape->setSize(awt::Size(aShapeRectHmm.Width, aShapeRectHmm.Height));
+                putPropertyToGrabBag( "LockedCanvas", Any( true ) );
+                if (aServiceName == "com.sun.star.drawing.LineShape")
+                {
+                    // It seems the position and size for lines inside a locked canvas is absolute.
+                    mxShape->setPosition(awt::Point(aShapeRectHmm.X, aShapeRectHmm.Y));
+                    mxShape->setSize(awt::Size(aShapeRectHmm.Width, aShapeRectHmm.Height));
+                }
             }
 
             // Store original fill and line colors of the shape and the theme color name to InteropGrabBag
