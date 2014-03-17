@@ -37,8 +37,9 @@ using namespace ::com::sun::star::uno;
 
 namespace {
 
-void lclSplitFirstElement( OUString& orElement, OUString& orRemainder, OUString aFullName )
+void lclSplitFirstElement( OUString& orElement, OUString& orRemainder, const OUString& _aFullName )
 {
+    OUString aFullName = _aFullName;
     sal_Int32  nSlashPos = aFullName.indexOf( '/' );
 
     // strip leading slashes

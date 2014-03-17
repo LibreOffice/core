@@ -286,7 +286,7 @@ class SimpleShape : public ShapeBase
 public:
     explicit            SimpleShape( Drawing& rDrawing, const OUString& rService );
 
-    void setService( OUString aService ) { maService = aService; }
+    void setService( const OUString& aService ) { maService = aService; }
 
 protected:
     /** Creates the corresponding XShape and inserts it into the passed container. */

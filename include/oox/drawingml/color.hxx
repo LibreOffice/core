@@ -61,7 +61,7 @@ public:
     /** Sets a scheme color from the a:schemeClr element. */
     void                setSchemeClr( sal_Int32 nToken );
     /** Sets the scheme name from the a:schemeClr element for interoperability purposes */
-    void                setSchemeName( OUString sSchemeName ) { msSchemeName = sSchemeName; }
+    void                setSchemeName( const OUString& sSchemeName ) { msSchemeName = sSchemeName; }
     /** Sets a system color from the a:sysClr element. */
     void                setSysClr( sal_Int32 nToken, sal_Int32 nLastRgb );
     /** Sets a palette color index. */
@@ -102,7 +102,7 @@ public:
     /** Translates between color transformation tokens and their names */
     static OUString     getColorTransformationName( sal_Int32 nElement );
     /** Translates between color transformation token names and the corresponding token */
-    static sal_Int32    getColorTransformationToken( OUString sName );
+    static sal_Int32    getColorTransformationToken( const OUString& sName );
 
 private:
     /** Internal helper for getColor(). */

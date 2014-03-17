@@ -123,7 +123,7 @@ void DrawingML::ResetCounters()
     mnImageCounter = 1;
 }
 
-bool DrawingML::GetProperty( Reference< XPropertySet > rXPropSet, OUString aName )
+bool DrawingML::GetProperty( Reference< XPropertySet > rXPropSet, const OUString& aName )
 {
     bool bRetValue = false;
 
@@ -136,7 +136,7 @@ bool DrawingML::GetProperty( Reference< XPropertySet > rXPropSet, OUString aName
     return bRetValue;
 }
 
-bool DrawingML::GetPropertyAndState( Reference< XPropertySet > rXPropSet, Reference< XPropertyState > rXPropState, OUString aName, PropertyState& eState )
+bool DrawingML::GetPropertyAndState( Reference< XPropertySet > rXPropSet, Reference< XPropertyState > rXPropState, const OUString& aName, PropertyState& eState )
 {
     bool bRetValue = false;
 
@@ -180,7 +180,7 @@ void DrawingML::WriteColor( sal_uInt32 nColor, sal_Int32 nAlpha )
     }
 }
 
-void DrawingML::WriteColor( OUString sColorSchemeName, Sequence< PropertyValue > aTransformations )
+void DrawingML::WriteColor( const OUString& sColorSchemeName, Sequence< PropertyValue > aTransformations )
 {
     // prevent writing a tag with empty val attribute
     if( sColorSchemeName.isEmpty() )
@@ -220,7 +220,7 @@ void DrawingML::WriteSolidFill( sal_uInt32 nColor, sal_Int32 nAlpha )
     mpFS->endElementNS( XML_a, XML_solidFill );
 }
 
-void DrawingML::WriteSolidFill( OUString sSchemeName, Sequence< PropertyValue > aTransformations )
+void DrawingML::WriteSolidFill( const OUString& sSchemeName, Sequence< PropertyValue > aTransformations )
 {
     mpFS->startElementNS( XML_a, XML_solidFill, FSEND );
     WriteColor( sSchemeName, aTransformations );

@@ -57,7 +57,7 @@ class Comment
         OUString text;
         ::com::sun::star::util::DateTime aDateTime;
 
-        void setDateTime (OUString datetime);
+        void setDateTime (const OUString& datetime);
 
     public:
         void setAuthorId(const OUString& _aId)

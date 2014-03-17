@@ -34,7 +34,7 @@ private:
     GrabBagStackElement mCurrentElement;
 
 public:
-    GrabBagStack(OUString aName);
+    GrabBagStack(const OUString& aName);
 
     virtual ~GrabBagStack();
 
@@ -42,11 +42,11 @@ public:
 
     css::beans::PropertyValue getRootProperty();
 
-    void appendElement(OUString aName, css::uno::Any aAny);
-    void push(OUString aKey);
+    void appendElement(const OUString& aName, css::uno::Any aAny);
+    void push(const OUString& aKey);
     void pop();
-    void addInt32(OUString aElementName, sal_Int32 aIntValue);
-    void addString(OUString aElementName, OUString aStringValue);
+    void addInt32(const OUString& aElementName, sal_Int32 aIntValue);
+    void addString(const OUString& aElementName, const OUString& aStringValue);
     bool isStackEmpty();
 };
 

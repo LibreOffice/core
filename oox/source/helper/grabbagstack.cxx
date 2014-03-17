@@ -17,7 +17,7 @@ namespace oox
 using namespace css::beans;
 using namespace css::uno;
 
-GrabBagStack::GrabBagStack(OUString aName)
+GrabBagStack::GrabBagStack(const OUString& aName)
 {
     mCurrentElement.maName = aName;
 }
@@ -54,7 +54,7 @@ PropertyValue GrabBagStack::getRootProperty()
     return aProperty;
 }
 
-void GrabBagStack::appendElement(OUString aName, Any aAny)
+void GrabBagStack::appendElement(const OUString& aName, Any aAny)
 {
     PropertyValue aValue;
     aValue.Name = aName;
@@ -62,7 +62,7 @@ void GrabBagStack::appendElement(OUString aName, Any aAny)
     mCurrentElement.maPropertyList.push_back(aValue);
 }
 
-void GrabBagStack::push(OUString aKey)
+void GrabBagStack::push(const OUString& aKey)
 {
     mStack.push(mCurrentElement);
     mCurrentElement.maName = aKey;
@@ -83,12 +83,12 @@ void GrabBagStack::pop()
     appendElement(aName, makeAny(aSequence));
 }
 
-void GrabBagStack::addInt32(OUString aElementName, sal_Int32 aIntValue)
+void GrabBagStack::addInt32(const OUString& aElementName, sal_Int32 aIntValue)
 {
     appendElement(aElementName, makeAny(aIntValue));
 }
 
-void GrabBagStack::addString(OUString aElementName, OUString aStringValue)
+void GrabBagStack::addString(const OUString& aElementName, const OUString& aStringValue)
 {
     appendElement(aElementName, makeAny(aStringValue));
 }
