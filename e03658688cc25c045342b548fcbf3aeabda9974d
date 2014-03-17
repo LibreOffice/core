@@ -1,0 +1,106 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da86d52c_cc33fff4",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2014-03-17T20:38:44Z",
+      "side": 1,
+      "message": "\"/home/michael\" is perhaps a bit overly specific :) better to say what the patch does i.e. create it if it doesn\u0027t exist",
+      "revId": "e03658688cc25c045342b548fcbf3aeabda9974d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da86d52c_4c20ef9b",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2014-03-17T20:38:44Z",
+      "side": 1,
+      "message": "that would be because instdir has a different bootstraprc, which puts the config dir below instdir via:\nUserInstallation\u003d$ORIGIN/..\n\na \"real\" install has this:\nUserInstallation\u003d$SYSUSERCONFIG/libreoffice/4",
+      "revId": "e03658688cc25c045342b548fcbf3aeabda9974d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da86d52c_2c2bbb83",
+        "filename": "sal/osl/unx/security.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 416,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2014-03-17T20:38:44Z",
+      "side": 1,
+      "message": "OSL_TRACE is deprecated - use SAL_INFO instead\n\noh wait - this is a .c file... guess have to use OSL_TRACE then",
+      "revId": "e03658688cc25c045342b548fcbf3aeabda9974d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da86d52c_8c3907db",
+        "filename": "sal/osl/unx/security.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 419,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2014-03-17T20:38:44Z",
+      "side": 1,
+      "message": "that\u0027s some weird formatting - either put every brace on its own line, or both on the same line with else",
+      "revId": "e03658688cc25c045342b548fcbf3aeabda9974d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da86d52c_6c25b3aa",
+        "filename": "sal/osl/unx/security.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 424,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2014-03-17T20:38:44Z",
+      "side": 1,
+      "message": "you could check all flags at once like mode \u0026 (S_IRUSR|S_IWUSR|...)",
+      "revId": "e03658688cc25c045342b548fcbf3aeabda9974d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da86d52c_ac36cbe5",
+        "filename": "sal/osl/unx/security.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 425,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2014-03-17T20:38:44Z",
+      "side": 1,
+      "message": "typo: \"had bads\" \u003d\u003e \"has bad\"",
+      "revId": "e03658688cc25c045342b548fcbf3aeabda9974d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
