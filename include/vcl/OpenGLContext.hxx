@@ -99,6 +99,7 @@ public:
 
     bool init();
     void setWinSize(const Size& rSize);
+    GLWindow& getOpenGLWindow();
 
 private:
     SAL_DLLPRIVATE bool initWindow();

@@ -341,6 +341,7 @@ int OpenGLRender::InitOpenGL(GLWindow aWindow)
     glMaterialfv(GL_FRONT,GL_DIFFUSE,materialDiffuse);
     glEnable(GL_LIGHT0);
     glEnable(GL_NORMALIZE);
+
     return 0;
 }
 

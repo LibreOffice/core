@@ -1151,6 +1151,7 @@ DummyChart::DummyChart(uno::Reference< drawing::XShape > xTarget):
     SAL_INFO("chart2.opengl", "DummyXShape::DummyChart()-----test: ");
     setName("com.sun.star.chart2.shapes");
     m_aGLContext.init();
+    m_GLRender.InitOpenGL(m_aGLContext.getOpenGLWindow());
 }
 
 void SAL_CALL DummyChart::setPosition( const awt::Point& aPosition )

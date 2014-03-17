@@ -437,29 +437,6 @@ bool OpenGLContext::init()
 
 #endif
 
-    glEnable(GL_TEXTURE_2D);
-    glEnable(GL_CULL_FACE);
-    glCullFace(GL_BACK);
-    // Enable depth test
-    glEnable(GL_DEPTH_TEST);
-    // Accept fragment if it closer to the camera than the former one
-    glDepthFunc(GL_LESS);
-
-#if defined( WNT )
-    SwapBuffers(m_aGLWin.hDC);
-    glFlush();
-#elif defined( MACOSX )
-
-#elif defined( UNX )
-    glXSwapBuffers(m_aGLWin.dpy, m_aGLWin.win);
-#endif
-    glEnable(GL_LIGHTING);
-    GLfloat light_direction[] = { 0.0 , 0.0 , 1.0 };
-    GLfloat materialDiffuse[] = { 1.0 , 1.0 , 1.0 , 1.0};
-    glLightfv(GL_LIGHT0, GL_SPOT_DIRECTION, light_direction);
-    glMaterialfv(GL_FRONT,GL_DIFFUSE,materialDiffuse);
-    glEnable(GL_LIGHT0);
-    glEnable(GL_NORMALIZE);
     SAL_INFO("vcl.opengl", "OpenGLContext::init----end");
     return true;
 }
@@ -468,6 +445,11 @@ void OpenGLContext::setWinSize(const Size& rSize)
 {
     m_pWindow->SetSizePixel(rSize);
     m_pChildWindow->SetSizePixel(rSize);
+}
+
+GLWindow& OpenGLContext::getOpenGLWindow()
+{
+    return m_aGLWin;
 }
 
 #if defined( WNT )
