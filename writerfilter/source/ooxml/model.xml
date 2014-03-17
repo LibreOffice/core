@@ -18855,7 +18855,7 @@
             <optional>
               <choice>
                 <element name="equation">
-                  <ref name="CT_Empty"/>
+                  <ref name="CT_OnOff"/>
                 </element>
                 <element name="comboBox">
                   <ref name="CT_SdtComboBox"/>
@@ -18873,7 +18873,7 @@
                   <ref name="CT_SdtDropDownList"/>
                 </element>
                 <element name="picture">
-                  <ref name="CT_Empty"/>
+                  <ref name="CT_OnOff"/>
                 </element>
                 <element name="richText">
                   <ref name="CT_Empty"/>
@@ -18882,10 +18882,10 @@
                   <ref name="CT_SdtText"/>
                 </element>
                 <element name="citation">
-                  <ref name="CT_Empty"/>
+                  <ref name="CT_OnOff"/>
                 </element>
                 <element name="group">
-                  <ref name="CT_Empty"/>
+                  <ref name="CT_OnOff"/>
                 </element>
                 <element name="bibliography">
                   <ref name="CT_Empty"/>

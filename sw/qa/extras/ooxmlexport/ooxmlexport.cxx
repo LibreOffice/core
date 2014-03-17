@@ -2805,7 +2805,7 @@ DECLARE_OOXMLEXPORT_TEST(testCitation,"FDO74775.docx")
     xmlDocPtr pXmlDoc = parseExport();
     if (!pXmlDoc)
         return;
-    xmlNodeSetPtr pXmlNodes = getXPathNode(pXmlDoc,"/w:document/w:body/w:p[1]/w:r[3]/w:instrText");
+    xmlNodeSetPtr pXmlNodes = getXPathNode(pXmlDoc,"/w:document/w:body/w:sdt/w:sdtContent/w:p[1]/w:r[3]/w:instrText");
     xmlNodePtr pXmlNode = pXmlNodes->nodeTab[0];
     OUString contents = OUString::createFromAscii((const char*)((pXmlNode->children[0]).content));
     CPPUNIT_ASSERT(contents.match(" CITATION [Kra06]"));
@@ -2861,6 +2861,20 @@ DECLARE_OOXMLEXPORT_TEST(test76108, "test76108.docx")
     //docx file after RT is getting corrupted.
     assertXPath(pXmlDoc, "/w:document[1]/w:body[1]/w:p[1]/w:r[1]/w:fldChar[1]", "fldCharType", "begin");
 }
+
+DECLARE_OOXMLEXPORT_TEST(testSimpleSdts, "simple-sdts.docx")
+{
+    xmlDocPtr pXmlDoc = parseExport("word/document.xml");
+
+    if (!pXmlDoc)
+       return;
+
+    assertXPath(pXmlDoc, "/w:body/w:sdt/w:sdtPr/w:picture", 0);
+    assertXPath(pXmlDoc, "/w:body/w:sdt/w:sdtPr/w:group", 0);
+    assertXPath(pXmlDoc, "/w:body/w:sdt/w:sdtPr/w:citation", 0);
+
+}
+
 
 #endif
 

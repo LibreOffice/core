@@ -2229,7 +2229,11 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, PropertyMapPtr rContext )
         m_pImpl->m_pSdtHelper->getLocale().append(sStringValue);
     }
     break;
+    case NS_ooxml::LN_CT_SdtPr_equation:
     case NS_ooxml::LN_CT_SdtPr_docPartObj:
+    case NS_ooxml::LN_CT_SdtPr_picture:
+    case NS_ooxml::LN_CT_SdtPr_citation:
+    case NS_ooxml::LN_CT_SdtPr_group:
     {
         // this is an unsupported SDT property, create a grab bag for it
         OUString sName = OUString::createFromAscii((*QNameToString::Instance())(nSprmId).c_str());

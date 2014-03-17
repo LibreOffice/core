@@ -382,16 +382,23 @@ void DocxAttributeOutput::WriteParagraphSdt()
 
         // output sdt properties
         m_pSerializer->startElementNS( XML_w, XML_sdtPr, FSEND );
-        m_pSerializer->startElement( m_nSdtPrToken, FSEND );
 
-        uno::Sequence<xml::FastAttribute> aChildren = m_pSdtPrTokenChildren->getFastAttributes();
-        for( sal_Int32 i=0; i < aChildren.getLength(); ++i )
-            m_pSerializer->singleElement( aChildren[i].Token,
-                                          FSNS(XML_w, XML_val),
-                                          rtl::OUStringToOString( aChildren[i].Value, RTL_TEXTENCODING_UTF8 ).getStr(),
-                                          FSEND );
+        if( m_pSdtPrTokenChildren )
+        {
+            m_pSerializer->startElement( m_nSdtPrToken, FSEND );
 
-        m_pSerializer->endElement( m_nSdtPrToken );
+            uno::Sequence<xml::FastAttribute> aChildren = m_pSdtPrTokenChildren->getFastAttributes();
+            for( sal_Int32 i=0; i < aChildren.getLength(); ++i )
+                m_pSerializer->singleElement( aChildren[i].Token,
+                                              FSNS(XML_w, XML_val),
+                                              rtl::OUStringToOString( aChildren[i].Value, RTL_TEXTENCODING_UTF8 ).getStr(),
+                                              FSEND );
+
+            m_pSerializer->endElement( m_nSdtPrToken );
+        }
+        else
+            m_pSerializer->singleElement( m_nSdtPrToken, FSEND );
+
         m_pSerializer->endElementNS( XML_w, XML_sdtPr );
 
         // sdt contents start tag
@@ -6889,6 +6896,14 @@ void DocxAttributeOutput::ParaGrabBag(const SfxGrabBagItem& rItem)
                         AddToAttrList( m_pSdtPrTokenChildren, FSNS( XML_w, XML_docPartUnique ), "" );
                 }
             }
+            else if (aPropertyValue.Name == "ooxml:CT_SdtPr_equation")
+                m_nSdtPrToken = FSNS( XML_w, XML_equation );
+            else if (aPropertyValue.Name == "ooxml:CT_SdtPr_picture")
+                m_nSdtPrToken = FSNS( XML_w, XML_picture );
+            else if (aPropertyValue.Name == "ooxml:CT_SdtPr_citation")
+                m_nSdtPrToken = FSNS( XML_w, XML_citation );
+            else if (aPropertyValue.Name == "ooxml:CT_SdtPr_group")
+                m_nSdtPrToken = FSNS( XML_w, XML_group );
         }
         else
             SAL_INFO("sw.ww8", "DocxAttributeOutput::ParaGrabBag: unhandled grab bag property " << i->first );
