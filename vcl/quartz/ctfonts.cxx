@@ -455,11 +455,11 @@ void SystemFontList::AddFont( CoreTextFontData* pFontData )
 
 
 
-void SystemFontList::AnnounceFonts( ImplDevFontList& rFontList ) const
+void SystemFontList::AnnounceFonts( PhysicalFontCollection& rFontCollection ) const
 {
     CTFontContainer::const_iterator it = maFontContainer.begin();
     for(; it != maFontContainer.end(); ++it )
-        rFontList.Add( (*it).second->Clone() );
+        rFontCollection.Add( (*it).second->Clone() );
 }
 
 

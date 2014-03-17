@@ -547,7 +547,7 @@ void Window::ImplUpdateGlobalSettings( AllSettings& rSettings, bool bCallHdl )
         while( nIndex != -1 )
         {
             OUString aName( aConfigFont.getToken( 0, ';', nIndex ) );
-            if ( !aName.isEmpty() && mpWindowImpl->mpFrameData->mpFontList->FindFontFamily( aName ) )
+            if ( !aName.isEmpty() && mpWindowImpl->mpFrameData->mpFontCollection->FindFontFamily( aName ) )
             {
                 aUserInterfaceFont = aConfigFont;
                 break;
@@ -557,7 +557,7 @@ void Window::ImplUpdateGlobalSettings( AllSettings& rSettings, bool bCallHdl )
         if ( aUserInterfaceFont.isEmpty() )
         {
             OUString aFallbackFont ("Andale Sans UI" );
-            if ( mpWindowImpl->mpFrameData->mpFontList->FindFontFamily( aFallbackFont ) )
+            if ( mpWindowImpl->mpFrameData->mpFontCollection->FindFontFamily( aFallbackFont ) )
                 aUserInterfaceFont = aFallbackFont;
         }
     }
@@ -958,7 +958,7 @@ void Window::ImplInit( Window* pParent, WinBits nStyle, SystemParentData* pSyste
         mpWindowImpl->mpFrameData->mpMouseMoveWin     = NULL;
         mpWindowImpl->mpFrameData->mpMouseDownWin     = NULL;
         mpWindowImpl->mpFrameData->mpFirstBackWin     = NULL;
-        mpWindowImpl->mpFrameData->mpFontList         = pSVData->maGDIData.mpScreenFontList;
+        mpWindowImpl->mpFrameData->mpFontCollection         = pSVData->maGDIData.mpScreenFontList;
         mpWindowImpl->mpFrameData->mpFontCache        = pSVData->maGDIData.mpScreenFontCache;
         mpWindowImpl->mpFrameData->mnAllSaveBackSize  = 0;
         mpWindowImpl->mpFrameData->mnFocusId          = 0;
@@ -1008,7 +1008,7 @@ void Window::ImplInit( Window* pParent, WinBits nStyle, SystemParentData* pSyste
     mpWindowImpl->mpRealParent = pRealParent;
 
     // #99318: make sure fontcache and list is available before call to SetSettings
-    mpFontList      = mpWindowImpl->mpFrameData->mpFontList;
+    mpFontCollection      = mpWindowImpl->mpFrameData->mpFontCollection;
     mpFontCache     = mpWindowImpl->mpFrameData->mpFontCache;
 
     if ( mpWindowImpl->mbFrame )
@@ -4331,7 +4331,7 @@ void Window::ImplNewInputContext()
             else
                 aSize.Height() = (12*pFocusWin->mnDPIY)/72;
         }
-        pFontEntry = pFocusWin->mpFontCache->GetFontEntry( pFocusWin->mpFontList,
+        pFontEntry = pFocusWin->mpFontCache->GetFontEntry( pFocusWin->mpFontCollection,
                          rFont, aSize, static_cast<float>(aSize.Height()) );
         if ( pFontEntry )
             aNewContext.mpFont = &pFontEntry->maFontSelData;

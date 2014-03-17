@@ -61,11 +61,11 @@ public:
 
     void                GetFontHeights( std::set<int>& rHeights ) const;
     void                UpdateDevFontList( ImplGetDevFontList& ) const;
-    void                UpdateCloneFontList( ImplDevFontList&,
+    void                UpdateCloneFontList( PhysicalFontCollection&,
                                              bool bScalable, bool bEmbeddable ) const;
 
 private:
-friend class ImplDevFontList; // TODO: remove soon
+friend class PhysicalFontCollection; // TODO: remove soon
     PhysicalFontFace*   mpFirst;            // linked list of physical font faces
     OUString            maName;             // Fontname (original font family name)
     OUString            maSearchName;       // normalized font family name
@@ -80,8 +80,8 @@ friend class ImplDevFontList; // TODO: remove soon
     int                 mnMinQuality;       // quality of the worst font face
 };
 
-// an ImplGetDevFontList is created by an ImplDevFontList
-// it becomes invalid when original ImplDevFontList is modified
+// an ImplGetDevFontList is created by an PhysicalFontCollection
+// it becomes invalid when original PhysicalFontCollection is modified
 class ImplGetDevFontList
 {
 private:
@@ -174,7 +174,7 @@ public:
     virtual bool FindFontSubstitute( FontSelectPattern&, OUString& rMissingCodes ) const = 0;
 };
 
-// TODO: closely couple with ImplDevFontList
+// TODO: closely couple with PhysicalFontCollection
 
 class ImplFontCache
 {
@@ -192,10 +192,10 @@ public:
                         ImplFontCache();
                         ~ImplFontCache();
 
-    ImplFontEntry*      GetFontEntry( ImplDevFontList*,
+    ImplFontEntry*      GetFontEntry( PhysicalFontCollection*,
                              const Font&, const Size& rPixelSize, float fExactHeight);
-    ImplFontEntry*      GetFontEntry( ImplDevFontList*, FontSelectPattern& );
-    ImplFontEntry*      GetGlyphFallbackFont( ImplDevFontList*, FontSelectPattern&,
+    ImplFontEntry*      GetFontEntry( PhysicalFontCollection*, FontSelectPattern& );
+    ImplFontEntry*      GetGlyphFallbackFont( PhysicalFontCollection*, FontSelectPattern&,
                             int nFallbackLevel, OUString& rMissingCodes );
     void                Release( ImplFontEntry* );
     void                Invalidate();

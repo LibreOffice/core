@@ -316,7 +316,7 @@ OutputDevice::OutputDevice() :
     mpMetaFile          = NULL;
     mpFontEntry         = NULL;
     mpFontCache         = NULL;
-    mpFontList          = NULL;
+    mpFontCollection   = NULL;
     mpGetDevFontList    = NULL;
     mpGetDevSizeList    = NULL;
     mpObjStack          = NULL;
@@ -436,13 +436,13 @@ OutputDevice::~OutputDevice()
 
     // release ImplFontList specific to this OutputDevice
     // TODO: refcount ImplFontList
-    if( mpFontList
-    && (mpFontList != ImplGetSVData()->maGDIData.mpScreenFontList)
+    if( mpFontCollection
+    && (mpFontCollection != ImplGetSVData()->maGDIData.mpScreenFontList)
     && (ImplGetSVData()->maGDIData.mpScreenFontList != NULL) )
     {
-        mpFontList->Clear();
-        delete mpFontList;
-        mpFontList = NULL;
+        mpFontCollection->Clear();
+        delete mpFontCollection;
+        mpFontCollection = NULL;
     }
 
     delete mpAlphaVDev;

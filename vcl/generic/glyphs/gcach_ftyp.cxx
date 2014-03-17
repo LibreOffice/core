@@ -373,10 +373,10 @@ const unsigned char* FtFontInfo::GetTable( const char* pTag, sal_uLong* pLength 
 
 
 
-void FtFontInfo::AnnounceFont( ImplDevFontList* pFontList )
+void FtFontInfo::AnnounceFont( PhysicalFontCollection* pFontCollection )
 {
     ImplFTSFontData* pFD = new ImplFTSFontData( this, maDevFontAttributes );
-    pFontList->Add( pFD );
+    pFontCollection->Add( pFD );
 }
 
 
@@ -442,7 +442,7 @@ void FreetypeManager::AddFontFile( const OString& rNormalizedName,
 
 
 
-void FreetypeManager::AnnounceFonts( ImplDevFontList* pToAdd ) const
+void FreetypeManager::AnnounceFonts( PhysicalFontCollection* pToAdd ) const
 {
     for( FontList::const_iterator it = maFontList.begin(); it != maFontList.end(); ++it )
     {

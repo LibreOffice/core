@@ -888,12 +888,12 @@ void GenPspGraphics::SetTextColor( SalColor nSalColor )
     m_pPrinterGfx->SetTextColor (aColor);
 }
 
-bool GenPspGraphics::AddTempDevFont( ImplDevFontList*, const OUString&,const OUString& )
+bool GenPspGraphics::AddTempDevFont( PhysicalFontCollection*, const OUString&,const OUString& )
 {
     return false;
 }
 
-void GenPspGraphics::GetDevFontList( ImplDevFontList *pList )
+void GenPspGraphics::GetDevFontList( PhysicalFontCollection *pFontCollection )
 {
     ::std::list< psp::fontID > aList;
     psp::PrintFontManager& rMgr = psp::PrintFontManager::get();
@@ -903,10 +903,10 @@ void GenPspGraphics::GetDevFontList( ImplDevFontList *pList )
     psp::FastPrintFontInfo aInfo;
     for (it = aList.begin(); it != aList.end(); ++it)
         if (rMgr.getFontFastInfo (*it, aInfo))
-            AnnounceFonts( pList, aInfo );
+            AnnounceFonts( pFontCollection, aInfo );
 
     // register platform specific font substitutions if available
-    SalGenericInstance::RegisterFontSubstitutors( pList );
+    SalGenericInstance::RegisterFontSubstitutors( pFontCollection );
 }
 
 void GenPspGraphics::ClearDevFontCache()
@@ -1167,7 +1167,7 @@ namespace vcl
 
 
 
-void GenPspGraphics::AnnounceFonts( ImplDevFontList* pFontList, const psp::FastPrintFontInfo& aInfo )
+void GenPspGraphics::AnnounceFonts( PhysicalFontCollection* pFontCollection, const psp::FastPrintFontInfo& aInfo )
 {
     int nQuality = 0;
 
@@ -1197,7 +1197,7 @@ void GenPspGraphics::AnnounceFonts( ImplDevFontList* pFontList, const psp::FastP
 
     ImplPspFontData* pFD = new ImplPspFontData( aInfo );
     pFD->mnQuality += nQuality;
-    pFontList->Add( pFD );
+    pFontCollection->Add( pFD );
 }
 
 bool GenPspGraphics::filterText( const OUString& rOrig, OUString& rNewText, sal_Int32 nIndex, sal_Int32& rLen, sal_Int32& rCutStart, sal_Int32& rCutStop )

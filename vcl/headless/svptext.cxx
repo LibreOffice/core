@@ -255,7 +255,7 @@ bool SvpSalGraphics::GetImplFontCapabilities(vcl::FontCapabilities &rFontCapabil
 }
 
 
-void SvpSalGraphics::GetDevFontList( ImplDevFontList* pDevFontList )
+void SvpSalGraphics::GetDevFontList( PhysicalFontCollection* pFontCollection )
 {
     GlyphCache& rGC = SvpGlyphCache::GetInstance();
 
@@ -280,10 +280,10 @@ void SvpSalGraphics::GetDevFontList( ImplDevFontList* pDevFontList )
    }
 
     // announce glyphcache fonts
-    rGC.AnnounceFonts( pDevFontList );
+    rGC.AnnounceFonts( pFontCollection );
 
     // register platform specific font substitutions if available
-    SalGenericInstance::RegisterFontSubstitutors( pDevFontList );
+    SalGenericInstance::RegisterFontSubstitutors( pFontCollection );
 
     ImplGetSVData()->maGDIData.mbNativeFontConfig = true;
 }
@@ -295,7 +295,7 @@ void SvpSalGraphics::ClearDevFontCache()
 }
 
 
-bool SvpSalGraphics::AddTempDevFont( ImplDevFontList*,
+bool SvpSalGraphics::AddTempDevFont( PhysicalFontCollection*,
     const OUString&, const OUString& )
 {
     return false;
