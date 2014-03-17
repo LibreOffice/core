@@ -19,7 +19,7 @@
 
 
 #include <uiconfiguration/imagemanager.hxx>
-#include <threadhelp/resetableguard.hxx>
+#include <threadhelp/guard.hxx>
 #include <xml/imagesconfiguration.hxx>
 #include <uiconfiguration/graphicnameaccess.hxx>
 #include "imagemanagerimpl.hxx"
@@ -91,7 +91,7 @@ void SAL_CALL ImageManager::removeEventListener( const uno::Reference< XEventLis
 void ImageManager::setStorage( const uno::Reference< XStorage >& Storage )
 throw (::com::sun::star::uno::RuntimeException)
 {
-    ResetableGuard aLock( m_pImpl->m_aLock );
+    Guard aLock( m_pImpl->m_aLock );
 
     m_pImpl->m_xUserConfigStorage = Storage;
     m_pImpl->implts_initialize();

@@ -21,7 +21,6 @@
 
 #include <algorithm>
 
-#include <threadhelp/resetableguard.hxx>
 #include "services.h"
 #include <classes/resource.hrc>
 #include <classes/fwkresid.hxx>

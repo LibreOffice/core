@@ -20,7 +20,7 @@
 #include <tabwin/tabwindow.hxx>
 #include <properties.h>
 
-#include <threadhelp/resetableguard.hxx>
+#include <threadhelp/guard.hxx>
 
 #include <com/sun/star/util/XURLTransformer.hpp>
 #include <com/sun/star/awt/Toolkit.hpp>
@@ -112,7 +112,7 @@ void TabWindow::implts_LayoutWindows() const
     const sal_Int32 nTabControlHeight = 30;
 
     /* SAFE AREA ----------------------------------------------------------------------------------------------- */
-    ResetableGuard aLock( m_aLock );
+    Guard aLock( m_aLock );
     css::uno::Reference< css::awt::XDevice > xDevice( m_xTopWindow, css::uno::UNO_QUERY );
     css::uno::Reference< css::awt::XWindow > xWindow( m_xTopWindow, css::uno::UNO_QUERY );
     css::uno::Reference< css::awt::XWindow > xTabControlWindow( m_xTabControlWindow );
@@ -239,7 +239,7 @@ void TabWindow::implts_SendNotification( Notification eNotify, sal_Int32 ID, con
 IMPL_LINK( TabWindow, Activate, TabControl*, pTabControl )
 {
     /* SAFE AREA ----------------------------------------------------------------------------------------------- */
-    ResetableGuard aLock( m_aLock );
+    Guard aLock( m_aLock );
 
     sal_Int32 nPageId = pTabControl->GetCurPageId();
 
@@ -256,7 +256,7 @@ IMPL_LINK( TabWindow, Activate, TabControl*, pTabControl )
 IMPL_LINK( TabWindow, Deactivate, TabControl*, pTabControl )
 {
     /* SAFE AREA ----------------------------------------------------------------------------------------------- */
-    ResetableGuard aLock( m_aLock );
+    Guard aLock( m_aLock );
     sal_Int32 nPageId = pTabControl->GetCurPageId();
     aLock.unlock();
     /* SAFE AREA ----------------------------------------------------------------------------------------------- */
@@ -280,7 +280,7 @@ throw (css::uno::Exception, css::uno::RuntimeException, std::exception)
     css::awt::Size aSize( aDefaultSize );
 
     /* SAFE AREA ----------------------------------------------------------------------------------------------- */
-    ResetableGuard aLock( m_aLock );
+    Guard aLock( m_aLock );
     sal_Bool                                               bInitalized( m_bInitialized );
     css::uno::Reference< css::uno::XComponentContext >     xContext( m_xContext );
     aLock.unlock();
@@ -436,7 +436,7 @@ void SAL_CALL TabWindow::dispose() throw (css::uno::RuntimeException, std::excep
     m_aListenerContainer.disposeAndClear( aEvent );
 
     /* SAFE AREA ----------------------------------------------------------------------------------------------- */
-    ResetableGuard aLock( m_aLock );
+    Guard aLock( m_aLock );
     css::uno::Reference< css::awt::XWindow > xTabControlWindow( m_xTabControlWindow );
     css::uno::Reference< css::awt::XWindow > xContainerWindow( m_xContainerWindow );
     css::uno::Reference< css::awt::XTopWindow > xTopWindow( m_xTopWindow );
@@ -469,7 +469,7 @@ void SAL_CALL TabWindow::addEventListener( const css::uno::Reference< css::lang:
 throw (css::uno::RuntimeException, std::exception)
 {
     /* SAFE AREA ----------------------------------------------------------------------------------------------- */
-    ResetableGuard aLock( m_aLock );
+    Guard aLock( m_aLock );
     if ( m_bDisposed )
         return;
     aLock.unlock();
@@ -482,7 +482,7 @@ void SAL_CALL TabWindow::removeEventListener( const css::uno::Reference< css::la
 throw (css::uno::RuntimeException, std::exception)
 {
     /* SAFE AREA ----------------------------------------------------------------------------------------------- */
-    ResetableGuard aLock( m_aLock );
+    Guard aLock( m_aLock );
     if ( m_bDisposed )
         return;
     aLock.unlock();
@@ -517,7 +517,7 @@ void SAL_CALL TabWindow::windowShown( const css::lang::EventObject& )
 throw( css::uno::RuntimeException, std::exception )
 {
     /* SAFE AREA ----------------------------------------------------------------------------------------------- */
-    ResetableGuard aLock( m_aLock );
+    Guard aLock( m_aLock );
 
     TabControl* pTabControl = impl_GetTabControl( m_xTabControlWindow );
     if ( pTabControl )
@@ -535,7 +535,7 @@ void SAL_CALL TabWindow::windowHidden( const css::lang::EventObject& )
 throw( css::uno::RuntimeException, std::exception )
 {
     /* SAFE AREA ----------------------------------------------------------------------------------------------- */
-    ResetableGuard aLock( m_aLock );
+    Guard aLock( m_aLock );
     if ( m_xContainerWindow.is() )
     {
         Window* pWindow = VCLUnoHelper::GetWindow( m_xContainerWindow );
@@ -597,7 +597,7 @@ throw (css::uno::RuntimeException, std::exception)
 throw (css::uno::RuntimeException, std::exception)
 {
     /* SAFE AREA ----------------------------------------------------------------------------------------------- */
-    ResetableGuard aLock( m_aLock );
+    Guard aLock( m_aLock );
 
     if ( m_bDisposed )
         throw css::lang::DisposedException();
@@ -620,7 +620,7 @@ void SAL_CALL TabWindow::removeTab( ::sal_Int32 ID )
 throw (css::lang::IndexOutOfBoundsException, css::uno::RuntimeException, std::exception)
 {
     /* SAFE AREA ----------------------------------------------------------------------------------------------- */
-    ResetableGuard aLock( m_aLock );
+    Guard aLock( m_aLock );
 
     if ( m_bDisposed )
         throw css::lang::DisposedException();
@@ -653,7 +653,7 @@ void SAL_CALL TabWindow::setTabProps( ::sal_Int32 ID, const css::uno::Sequence< 
 throw (css::lang::IndexOutOfBoundsException, css::uno::RuntimeException, std::exception)
 {
     /* SAFE AREA ----------------------------------------------------------------------------------------------- */
-    ResetableGuard aLock( m_aLock );
+    Guard aLock( m_aLock );
 
     if ( m_bDisposed )
         throw css::lang::DisposedException();
@@ -699,7 +699,7 @@ css::uno::Sequence< css::beans::NamedValue > SAL_CALL TabWindow::getTabProps( ::
 throw (css::lang::IndexOutOfBoundsException, css::uno::RuntimeException, std::exception)
 {
     /* SAFE AREA ----------------------------------------------------------------------------------------------- */
-    ResetableGuard aLock( m_aLock );
+    Guard aLock( m_aLock );
 
     if ( m_bDisposed )
         throw css::lang::DisposedException();
@@ -734,7 +734,7 @@ void SAL_CALL TabWindow::activateTab( ::sal_Int32 ID )
 throw (css::lang::IndexOutOfBoundsException, css::uno::RuntimeException, std::exception)
 {
     /* SAFE AREA ----------------------------------------------------------------------------------------------- */
-    ResetableGuard aLock( m_aLock );
+    Guard aLock( m_aLock );
 
     if ( m_bDisposed )
         throw css::lang::DisposedException();
@@ -767,7 +767,7 @@ throw (css::lang::IndexOutOfBoundsException, css::uno::RuntimeException, std::ex
 throw (css::uno::RuntimeException, std::exception)
 {
     /* SAFE AREA ----------------------------------------------------------------------------------------------- */
-    ResetableGuard aLock( m_aLock );
+    Guard aLock( m_aLock );
 
     if ( m_bDisposed )
         throw css::lang::DisposedException();
@@ -791,7 +791,7 @@ void SAL_CALL TabWindow::addTabListener(
 throw (css::uno::RuntimeException, std::exception)
 {
     /* SAFE AREA ----------------------------------------------------------------------------------------------- */
-    ResetableGuard aLock( m_aLock );
+    Guard aLock( m_aLock );
     if ( m_bDisposed )
         return;
     aLock.unlock();
@@ -805,7 +805,7 @@ void SAL_CALL TabWindow::removeTabListener( const css::uno::Reference< css::awt:
 throw (css::uno::RuntimeException, std::exception)
 {
     /* SAFE AREA ----------------------------------------------------------------------------------------------- */
-    ResetableGuard aLock( m_aLock );
+    Guard aLock( m_aLock );
     if ( m_bDisposed )
         return;
     aLock.unlock();

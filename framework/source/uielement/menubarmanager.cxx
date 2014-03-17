@@ -22,7 +22,7 @@
 #include <framework/bmkmenu.hxx>
 #include <framework/addonmenu.hxx>
 #include <framework/imageproducer.hxx>
-#include <threadhelp/resetableguard.hxx>
+#include <threadhelp/guard.hxx>
 #include "framework/addonsoptions.hxx"
 #include <classes/fwkresid.hxx>
 #include <classes/menumanager.hxx>
@@ -258,7 +258,7 @@ void SAL_CALL MenuBarManager::release() throw()
 
 Any SAL_CALL MenuBarManager::getMenuHandle( const Sequence< sal_Int8 >& /*ProcessId*/, sal_Int16 SystemType ) throw (RuntimeException, std::exception)
 {
-    ResetableGuard aGuard( m_aLock );
+    Guard aGuard( m_aLock );
 
     if ( m_bDisposed )
         throw com::sun::star::lang::DisposedException();
@@ -335,7 +335,7 @@ void SAL_CALL MenuBarManager::dispose() throw( RuntimeException, std::exception 
     m_aListenerContainer.disposeAndClear( aEvent );
 
     {
-        ResetableGuard aGuard( m_aLock );
+        Guard aGuard( m_aLock );
         Destroy();
         m_bDisposed = sal_True;
 
@@ -379,7 +379,7 @@ void SAL_CALL MenuBarManager::dispose() throw( RuntimeException, std::exception 
 
 void SAL_CALL MenuBarManager::addEventListener( const Reference< XEventListener >& xListener ) throw( RuntimeException, std::exception )
 {
-    ResetableGuard aGuard( m_aLock );
+    Guard aGuard( m_aLock );
 
     /* SAFE AREA ----------------------------------------------------------------------------------------------- */
     if ( m_bDisposed )
@@ -390,7 +390,7 @@ void SAL_CALL MenuBarManager::addEventListener( const Reference< XEventListener 
 
 void SAL_CALL MenuBarManager::removeEventListener( const Reference< XEventListener >& xListener ) throw( RuntimeException, std::exception )
 {
-    ResetableGuard aGuard( m_aLock );
+    Guard aGuard( m_aLock );
     /* SAFE AREA ----------------------------------------------------------------------------------------------- */
     m_aListenerContainer.removeInterface( ::getCppuType( ( const Reference< XEventListener >* ) NULL ), xListener );
 }
@@ -398,7 +398,7 @@ void SAL_CALL MenuBarManager::removeEventListener( const Reference< XEventListen
 void SAL_CALL MenuBarManager::elementInserted( const ::com::sun::star::ui::ConfigurationEvent& Event )
 throw (RuntimeException, std::exception)
 {
-    ResetableGuard aGuard( m_aLock );
+    Guard aGuard( m_aLock );
 
     /* SAFE AREA ----------------------------------------------------------------------------------------------- */
     if ( m_bDisposed )
@@ -427,7 +427,7 @@ throw (RuntimeException, std::exception)
 void SAL_CALL MenuBarManager::frameAction( const FrameActionEvent& Action )
 throw ( RuntimeException, std::exception )
 {
-    ResetableGuard aGuard( m_aLock );
+    Guard aGuard( m_aLock );
 
     if ( m_bDisposed )
         throw com::sun::star::lang::DisposedException();
@@ -452,7 +452,7 @@ throw ( RuntimeException, std::exception )
 
     SolarMutexGuard aSolarGuard;
     {
-        ResetableGuard aGuard( m_aLock );
+        Guard aGuard( m_aLock );
 
         if ( m_bDisposed )
             return;
@@ -541,7 +541,7 @@ throw ( RuntimeException, std::exception )
 // Helper to retrieve own structure from item ID
 MenuBarManager::MenuItemHandler* MenuBarManager::GetMenuItemHandler( sal_uInt16 nItemId )
 {
-    ResetableGuard aGuard( m_aLock );
+    Guard aGuard( m_aLock );
 
     std::vector< MenuItemHandler* >::iterator p;
     for ( p = m_aMenuItemHandlerVector.begin(); p != m_aMenuItemHandlerVector.end(); ++p )
@@ -574,7 +574,7 @@ void MenuBarManager::RequestImages()
 // Helper to reset objects to prepare shutdown
 void MenuBarManager::RemoveListener()
 {
-    ResetableGuard aGuard( m_aLock );
+    Guard aGuard( m_aLock );
 
     // Check service manager reference. Remove listener can be called due
     // to a disposing call from the frame and therefore we already removed
@@ -657,7 +657,7 @@ void SAL_CALL MenuBarManager::disposing( const EventObject& Source ) throw ( Run
 {
     MenuItemHandler* pMenuItemDisposing = NULL;
 
-    ResetableGuard aGuard( m_aLock );
+    Guard aGuard( m_aLock );
 
     std::vector< MenuItemHandler* >::iterator p;
     for ( p = m_aMenuItemHandlerVector.begin(); p != m_aMenuItemHandlerVector.end(); ++p )
@@ -802,7 +802,7 @@ IMPL_LINK( MenuBarManager, Activate, Menu *, pMenu )
         sal_Bool bShowMenuImages     = rSettings.GetUseImagesInMenus();
         sal_Bool bHasDisabledEntries = SvtCommandOptions().HasEntries( SvtCommandOptions::CMDOPTION_DISABLED );
 
-        ResetableGuard aGuard( m_aLock );
+        Guard aGuard( m_aLock );
 
         sal_uInt16 nFlag = pMenu->GetMenuFlags();
         if ( bDontHide )
@@ -1028,7 +1028,7 @@ IMPL_LINK( MenuBarManager, Select, Menu *, pMenu )
     Reference< XDispatch >  xDispatch;
 
     {
-        ResetableGuard aGuard( m_aLock );
+        Guard aGuard( m_aLock );
 
         sal_uInt16 nCurItemId = pMenu->GetCurItemId();
         sal_uInt16 nCurPos    = pMenu->GetItemPos( nCurItemId );
@@ -1823,7 +1823,7 @@ void MenuBarManager::MergeAddonMenus(
 void MenuBarManager::SetItemContainer( const Reference< XIndexAccess >& rItemContainer )
 {
 
-    ResetableGuard aGuard( m_aLock );
+    Guard aGuard( m_aLock );
 
     Reference< XFrame > xFrame = m_xFrame;
 

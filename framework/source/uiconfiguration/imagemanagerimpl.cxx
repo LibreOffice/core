@@ -19,7 +19,7 @@
 
 
 #include <imagemanagerimpl.hxx>
-#include <threadhelp/resetableguard.hxx>
+#include <threadhelp/guard.hxx>
 #include <xml/imagesconfiguration.hxx>
 #include <uiconfiguration/graphicnameaccess.hxx>
 #include <services.h>
@@ -421,7 +421,7 @@ static sal_Int16 implts_convertImageTypeToIndex( sal_Int16 nImageType )
 
 ImageList* ImageManagerImpl::implts_getUserImageList( ImageType nImageType )
 {
-    ResetableGuard aGuard( m_aLock );
+    Guard aGuard( m_aLock );
     if ( !m_pUserImageList[nImageType] )
         implts_loadUserImages( nImageType, m_xUserImageStorage, m_xUserBitmapsStorage );
 
@@ -468,7 +468,7 @@ sal_Bool ImageManagerImpl::implts_loadUserImages(
     const uno::Reference< XStorage >& xUserImageStorage,
     const uno::Reference< XStorage >& xUserBitmapsStorage )
 {
-    ResetableGuard aGuard( m_aLock );
+    Guard aGuard( m_aLock );
 
     if ( xUserImageStorage.is() && xUserBitmapsStorage.is() )
     {
@@ -548,7 +548,7 @@ sal_Bool ImageManagerImpl::implts_storeUserImages(
     const uno::Reference< XStorage >& xUserImageStorage,
     const uno::Reference< XStorage >& xUserBitmapsStorage )
 {
-    ResetableGuard aGuard( m_aLock );
+    Guard aGuard( m_aLock );
 
     if ( m_bModified )
     {
@@ -650,7 +650,7 @@ sal_Bool ImageManagerImpl::implts_storeUserImages(
 
 const rtl::Reference< GlobalImageList >& ImageManagerImpl::implts_getGlobalImageList()
 {
-    ResetableGuard aGuard( m_aLock );
+    Guard aGuard( m_aLock );
 
     if ( !m_pGlobalImageList.is() )
         m_pGlobalImageList = getGlobalImageList( m_xContext );
@@ -659,7 +659,7 @@ const rtl::Reference< GlobalImageList >& ImageManagerImpl::implts_getGlobalImage
 
 CmdImageList* ImageManagerImpl::implts_getDefaultImageList()
 {
-    ResetableGuard aGuard( m_aLock );
+    Guard aGuard( m_aLock );
 
     if ( !m_pDefaultImageList )
         m_pDefaultImageList = new CmdImageList( m_xContext, m_aModuleIdentifier );
@@ -701,7 +701,7 @@ void ImageManagerImpl::dispose()
     m_aListenerContainer.disposeAndClear( aEvent );
 
     {
-        ResetableGuard aGuard( m_aLock );
+        Guard aGuard( m_aLock );
         m_xUserConfigStorage.clear();
         m_xUserImageStorage.clear();
         m_xUserRootCommit.clear();
@@ -723,7 +723,7 @@ void ImageManagerImpl::dispose()
 void ImageManagerImpl::addEventListener( const uno::Reference< XEventListener >& xListener ) throw (::com::sun::star::uno::RuntimeException)
 {
     {
-        ResetableGuard aGuard( m_aLock );
+        Guard aGuard( m_aLock );
 
         /* SAFE AREA ----------------------------------------------------------------------------------------------- */
         if ( m_bDisposed )
@@ -742,7 +742,7 @@ void ImageManagerImpl::removeEventListener( const uno::Reference< XEventListener
 // XInitialization
 void ImageManagerImpl::initialize( const Sequence< Any >& aArguments )
 {
-    ResetableGuard aLock( m_aLock );
+    Guard aLock( m_aLock );
 
     if ( !m_bInitialized )
     {
@@ -787,7 +787,7 @@ void ImageManagerImpl::initialize( const Sequence< Any >& aArguments )
 void ImageManagerImpl::reset()
 throw (::com::sun::star::uno::RuntimeException)
 {
-    ResetableGuard aLock( m_aLock );
+    Guard aLock( m_aLock );
 
     /* SAFE AREA ----------------------------------------------------------------------------------------------- */
     if ( m_bDisposed )
@@ -817,7 +817,7 @@ throw (::com::sun::star::uno::RuntimeException)
 Sequence< OUString > ImageManagerImpl::getAllImageNames( ::sal_Int16 nImageType )
 throw (::com::sun::star::uno::RuntimeException)
 {
-    ResetableGuard aLock( m_aLock );
+    Guard aLock( m_aLock );
 
     /* SAFE AREA ----------------------------------------------------------------------------------------------- */
     if ( m_bDisposed )
@@ -862,7 +862,7 @@ throw (::com::sun::star::uno::RuntimeException)
 ::sal_Bool ImageManagerImpl::hasImage( ::sal_Int16 nImageType, const OUString& aCommandURL )
 throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException)
 {
-    ResetableGuard aLock( m_aLock );
+    Guard aLock( m_aLock );
 
     /* SAFE AREA ----------------------------------------------------------------------------------------------- */
     if ( m_bDisposed )
@@ -895,7 +895,7 @@ Sequence< uno::Reference< XGraphic > > ImageManagerImpl::getImages(
     const Sequence< OUString >& aCommandURLSequence )
 throw ( ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException )
 {
-    ResetableGuard aLock( m_aLock );
+    Guard aLock( m_aLock );
 
     /* SAFE AREA ----------------------------------------------------------------------------------------------- */
     if ( m_bDisposed )
@@ -950,7 +950,7 @@ throw ( ::com::sun::star::lang::IllegalArgumentException,
     CmdToXGraphicNameAccess* pReplacedImages( 0 );
 
     {
-        ResetableGuard aLock( m_aLock );
+        Guard aLock( m_aLock );
 
         /* SAFE AREA ----------------------------------------------------------------------------------------------- */
         if ( m_bDisposed )
@@ -1033,7 +1033,7 @@ throw ( ::com::sun::star::lang::IllegalArgumentException,
     CmdToXGraphicNameAccess* pReplacedImages( 0 );
 
     {
-        ResetableGuard aLock( m_aLock );
+        Guard aLock( m_aLock );
 
         /* SAFE AREA ----------------------------------------------------------------------------------------------- */
         if ( m_bDisposed )
@@ -1143,7 +1143,7 @@ void ImageManagerImpl::reload()
 throw ( ::com::sun::star::uno::Exception,
         ::com::sun::star::uno::RuntimeException )
 {
-    ResetableGuard aGuard( m_aLock );
+    Guard aGuard( m_aLock );
 
     if ( m_bDisposed )
         throw DisposedException();
@@ -1295,7 +1295,7 @@ void ImageManagerImpl::store()
            ::com::sun::star::uno::RuntimeException,
            std::exception)
 {
-    ResetableGuard aGuard( m_aLock );
+    Guard aGuard( m_aLock );
 
     if ( m_bDisposed )
         throw DisposedException();
@@ -1330,7 +1330,7 @@ void ImageManagerImpl::storeToStorage( const uno::Reference< XStorage >& Storage
            ::com::sun::star::uno::RuntimeException,
            std::exception)
 {
-    ResetableGuard aGuard( m_aLock );
+    Guard aGuard( m_aLock );
 
     if ( m_bDisposed )
         throw DisposedException();
@@ -1361,13 +1361,13 @@ void ImageManagerImpl::storeToStorage( const uno::Reference< XStorage >& Storage
 sal_Bool ImageManagerImpl::isModified()
 throw (::com::sun::star::uno::RuntimeException)
 {
-    ResetableGuard aGuard( m_aLock );
+    Guard aGuard( m_aLock );
     return m_bModified;
 }
 
 sal_Bool ImageManagerImpl::isReadOnly() throw (::com::sun::star::uno::RuntimeException)
 {
-    ResetableGuard aGuard( m_aLock );
+    Guard aGuard( m_aLock );
     return m_bReadOnly;
 }
 // XUIConfiguration
@@ -1375,7 +1375,7 @@ void ImageManagerImpl::addConfigurationListener( const uno::Reference< ::com::su
 throw (::com::sun::star::uno::RuntimeException)
 {
     {
-        ResetableGuard aGuard( m_aLock );
+        Guard aGuard( m_aLock );
 
         /* SAFE AREA ----------------------------------------------------------------------------------------------- */
         if ( m_bDisposed )
@@ -1426,7 +1426,7 @@ void ImageManagerImpl::implts_notifyContainerListener( const ConfigurationEvent&
 }
 void ImageManagerImpl::clear()
 {
-    ResetableGuard aGuard( m_aLock );
+    Guard aGuard( m_aLock );
 
     for ( sal_Int32 n = 0; n < ImageType_COUNT; n++ )
     {

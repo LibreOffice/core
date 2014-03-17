@@ -18,7 +18,7 @@
  */
 
 #include <uielement/menubarwrapper.hxx>
-#include <threadhelp/resetableguard.hxx>
+#include <threadhelp/guard.hxx>
 #include <framework/actiontriggerhelper.hxx>
 #include <services.h>
 
@@ -98,7 +98,7 @@ void SAL_CALL MenuBarWrapper::dispose() throw (::com::sun::star::uno::RuntimeExc
     com::sun::star::lang::EventObject aEvent( xThis );
     m_aListenerContainer.disposeAndClear( aEvent );
 
-    ResetableGuard aLock( m_aLock );
+    Guard aLock( m_aLock );
 
     m_xMenuBarManager->dispose();
     m_xMenuBarManager.clear();
@@ -113,7 +113,7 @@ void SAL_CALL MenuBarWrapper::dispose() throw (::com::sun::star::uno::RuntimeExc
 void SAL_CALL MenuBarWrapper::initialize( const Sequence< Any >& aArguments ) throw ( Exception, RuntimeException, std::exception )
 {
 
-    ResetableGuard aLock( m_aLock );
+    Guard aLock( m_aLock );
 
     if ( m_bDisposed )
         throw DisposedException();
@@ -202,7 +202,7 @@ void SAL_CALL MenuBarWrapper::initialize( const Sequence< Any >& aArguments ) th
 // XUIElementSettings
 void SAL_CALL MenuBarWrapper::updateSettings() throw ( RuntimeException, std::exception )
 {
-    ResetableGuard aLock( m_aLock );
+    Guard aLock( m_aLock );
 
     if ( m_bDisposed )
         throw DisposedException();
@@ -261,7 +261,7 @@ throw (::com::sun::star::uno::RuntimeException, std::exception)
 ::sal_Bool SAL_CALL MenuBarWrapper::hasElements()
 throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
-    ResetableGuard aLock( m_aLock );
+    Guard aLock( m_aLock );
 
     if ( m_bDisposed )
         throw DisposedException();
@@ -277,7 +277,7 @@ throw ( container::NoSuchElementException,
         lang::WrappedTargetException,
         uno::RuntimeException, std::exception)
 {
-    ResetableGuard aLock( m_aLock );
+    Guard aLock( m_aLock );
 
     if ( m_bDisposed )
         throw DisposedException();
@@ -298,7 +298,7 @@ throw ( container::NoSuchElementException,
 Sequence< OUString > SAL_CALL MenuBarWrapper::getElementNames()
 throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
-    ResetableGuard aLock( m_aLock );
+    Guard aLock( m_aLock );
 
     if ( m_bDisposed )
         throw DisposedException();
@@ -322,7 +322,7 @@ throw (::com::sun::star::uno::RuntimeException, std::exception)
     const OUString& aName )
 throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
-    ResetableGuard aLock( m_aLock );
+    Guard aLock( m_aLock );
 
     if ( m_bDisposed )
         throw DisposedException();

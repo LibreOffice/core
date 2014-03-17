@@ -19,7 +19,6 @@
 
 
 #include <uiconfiguration/moduleimagemanager.hxx>
-#include <threadhelp/resetableguard.hxx>
 #include <xml/imagesconfiguration.hxx>
 #include <uiconfiguration/graphicnameaccess.hxx>
 #include <services.h>

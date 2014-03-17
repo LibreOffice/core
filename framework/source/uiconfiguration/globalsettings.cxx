@@ -18,7 +18,7 @@
  */
 
 #include "uiconfiguration/globalsettings.hxx"
-#include <threadhelp/resetableguard.hxx>
+#include <threadhelp/guard.hxx>
 #include "services.h"
 
 #include <com/sun/star/beans/PropertyValue.hpp>
@@ -119,7 +119,7 @@ void SAL_CALL GlobalSettings_Access::dispose()
 throw ( css::uno::RuntimeException, std::exception )
 {
     // SAFE
-    ResetableGuard aLock( m_aLock );
+    Guard aLock( m_aLock );
 
     m_xConfigAccess.clear();
     m_bDisposed = sal_True;
@@ -140,14 +140,14 @@ void SAL_CALL GlobalSettings_Access::disposing( const css::lang::EventObject& )
 throw (css::uno::RuntimeException, std::exception)
 {
     // SAFE
-    ResetableGuard aLock( m_aLock );
+    Guard aLock( m_aLock );
     m_xConfigAccess.clear();
 }
 
 // settings access
 sal_Bool GlobalSettings_Access::HasStatesInfo( GlobalSettings::UIElementType eElementType )
 {
-    ResetableGuard aLock( m_aLock );
+    Guard aLock( m_aLock );
     if ( eElementType == GlobalSettings::UIELEMENT_TYPE_DOCKWINDOW )
         return sal_False;
     else if ( eElementType == GlobalSettings::UIELEMENT_TYPE_STATUSBAR )
@@ -185,7 +185,7 @@ sal_Bool GlobalSettings_Access::HasStatesInfo( GlobalSettings::UIElementType eEl
 
 sal_Bool GlobalSettings_Access::GetStateInfo( GlobalSettings::UIElementType eElementType, GlobalSettings::StateInfo eStateInfo, ::com::sun::star::uno::Any& aValue )
 {
-    ResetableGuard aLock( m_aLock );
+    Guard aLock( m_aLock );
     if ( eElementType == GlobalSettings::UIELEMENT_TYPE_DOCKWINDOW )
         return sal_False;
     else if ( eElementType == GlobalSettings::UIELEMENT_TYPE_STATUSBAR )

@@ -22,7 +22,7 @@
 
 
 #include <threadhelp/threadhelpbase.hxx>
-#include <threadhelp/resetableguard.hxx>
+#include <threadhelp/guard.hxx>
 
 #include <com/sun/star/document/XActionLockable.hpp>
 
@@ -104,7 +104,7 @@ class ActionLockGuard : private ThreadHelpBase
         virtual sal_Bool setResource(const css::uno::Reference< css::document::XActionLockable >& xLock)
         {
             // SAFE -> ..........................
-            ResetableGuard aMutexLock(m_aLock);
+            Guard aMutexLock(m_aLock);
 
             if (m_bActionLocked || !xLock.is())
                 return sal_False;
@@ -132,7 +132,7 @@ class ActionLockGuard : private ThreadHelpBase
         virtual void freeResource()
         {
             // SAFE -> ..........................
-            ResetableGuard aMutexLock(m_aLock);
+            Guard aMutexLock(m_aLock);
 
             css::uno::Reference< css::document::XActionLockable > xLock   = m_xActionLock  ;
             sal_Bool                                              bLocked = m_bActionLocked;
@@ -152,7 +152,7 @@ class ActionLockGuard : private ThreadHelpBase
         virtual void lock()
         {
             // SAFE -> ..........................
-            ResetableGuard aMutexLock(m_aLock);
+            Guard aMutexLock(m_aLock);
 
             if (!m_bActionLocked && m_xActionLock.is())
             {
@@ -167,7 +167,7 @@ class ActionLockGuard : private ThreadHelpBase
         virtual void unlock()
         {
             // SAFE -> ..........................
-            ResetableGuard aMutexLock(m_aLock);
+            Guard aMutexLock(m_aLock);
 
             if (m_bActionLocked && m_xActionLock.is())
             {

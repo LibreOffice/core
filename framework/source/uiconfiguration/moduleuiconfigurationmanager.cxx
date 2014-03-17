@@ -20,7 +20,7 @@
 #include <accelerators/presethandler.hxx>
 #include <uiconfiguration/moduleimagemanager.hxx>
 #include <threadhelp/threadhelpbase.hxx>
-#include <threadhelp/resetableguard.hxx>
+#include <threadhelp/guard.hxx>
 #include <stdtypes.h>
 #include <uielement/constitemcontainer.hxx>
 #include <uielement/rootitemcontainer.hxx>
@@ -869,7 +869,7 @@ ModuleUIConfigurationManager::ModuleUIConfigurationManager(
     m_aUIElements[LAYER_DEFAULT].resize( ::com::sun::star::ui::UIElementType::COUNT );
     m_aUIElements[LAYER_USERDEFINED].resize( ::com::sun::star::ui::UIElementType::COUNT );
 
-    ResetableGuard aLock( m_aLock );
+    Guard aLock( m_aLock );
 
     if( aArguments.getLength() == 2 && (aArguments[0] >>= m_aModuleShortName) && (aArguments[1] >>= m_aModuleIdentifier))
     {
@@ -939,7 +939,7 @@ void SAL_CALL ModuleUIConfigurationManager::dispose() throw (::com::sun::star::u
     m_aListenerContainer.disposeAndClear( aEvent );
 
     /* SAFE AREA ----------------------------------------------------------------------------------------------- */
-    ResetableGuard aGuard( m_aLock );
+    Guard aGuard( m_aLock );
     Reference< XComponent > xModuleImageManager( m_xModuleImageManager );
     m_xModuleImageManager.clear();
     Reference< XComponent > xCompMAM( m_xModuleAcceleratorManager, UNO_QUERY );
@@ -970,7 +970,7 @@ void SAL_CALL ModuleUIConfigurationManager::dispose() throw (::com::sun::star::u
 void SAL_CALL ModuleUIConfigurationManager::addEventListener( const Reference< XEventListener >& xListener ) throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
     {
-        ResetableGuard aGuard( m_aLock );
+        Guard aGuard( m_aLock );
 
         /* SAFE AREA ----------------------------------------------------------------------------------------------- */
         if ( m_bDisposed )
@@ -990,7 +990,7 @@ void SAL_CALL ModuleUIConfigurationManager::removeEventListener( const Reference
 void SAL_CALL ModuleUIConfigurationManager::addConfigurationListener( const Reference< ::com::sun::star::ui::XUIConfigurationListener >& xListener ) throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
     {
-        ResetableGuard aGuard( m_aLock );
+        Guard aGuard( m_aLock );
 
         /* SAFE AREA ----------------------------------------------------------------------------------------------- */
         if ( m_bDisposed )
@@ -1010,7 +1010,7 @@ void SAL_CALL ModuleUIConfigurationManager::removeConfigurationListener( const R
 // XUIConfigurationManager
 void SAL_CALL ModuleUIConfigurationManager::reset() throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
-    ResetableGuard aGuard( m_aLock );
+    Guard aGuard( m_aLock );
 
     /* SAFE AREA ----------------------------------------------------------------------------------------------- */
     if ( m_bDisposed )
@@ -1101,7 +1101,7 @@ throw ( IllegalArgumentException, RuntimeException, std::exception )
     if (( ElementType < 0 ) || ( ElementType >= ::com::sun::star::ui::UIElementType::COUNT ))
         throw IllegalArgumentException();
 
-    ResetableGuard aGuard( m_aLock );
+    Guard aGuard( m_aLock );
     if ( m_bDisposed )
         throw DisposedException();
 
@@ -1137,7 +1137,7 @@ throw ( IllegalArgumentException, RuntimeException, std::exception )
 
 Reference< XIndexContainer > SAL_CALL ModuleUIConfigurationManager::createSettings() throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
-    ResetableGuard aGuard( m_aLock );
+    Guard aGuard( m_aLock );
 
     if ( m_bDisposed )
         throw DisposedException();
@@ -1156,7 +1156,7 @@ throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::
         throw IllegalArgumentException();
     else
     {
-        ResetableGuard aGuard( m_aLock );
+        Guard aGuard( m_aLock );
 
         if ( m_bDisposed )
             throw DisposedException();
@@ -1179,7 +1179,7 @@ throw (::com::sun::star::container::NoSuchElementException, ::com::sun::star::la
         throw IllegalArgumentException();
     else
     {
-        ResetableGuard aGuard( m_aLock );
+        Guard aGuard( m_aLock );
 
         if ( m_bDisposed )
             throw DisposedException();
@@ -1210,7 +1210,7 @@ throw (::com::sun::star::container::NoSuchElementException, ::com::sun::star::la
         throw IllegalAccessException();
     else
     {
-        ResetableGuard aGuard( m_aLock );
+        Guard aGuard( m_aLock );
 
         if ( m_bDisposed )
             throw DisposedException();
@@ -1317,7 +1317,7 @@ throw ( NoSuchElementException, IllegalArgumentException, IllegalAccessException
         throw IllegalAccessException();
     else
     {
-        ResetableGuard aGuard( m_aLock );
+        Guard aGuard( m_aLock );
 
         if ( m_bDisposed )
             throw DisposedException();
@@ -1395,7 +1395,7 @@ throw ( ElementExistException, IllegalArgumentException, IllegalAccessException,
         throw IllegalAccessException();
     else
     {
-        ResetableGuard aGuard( m_aLock );
+        Guard aGuard( m_aLock );
 
         if ( m_bDisposed )
             throw DisposedException();
@@ -1447,7 +1447,7 @@ throw ( ElementExistException, IllegalArgumentException, IllegalAccessException,
 
 Reference< XInterface > SAL_CALL ModuleUIConfigurationManager::getImageManager() throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
-    ResetableGuard aGuard( m_aLock );
+    Guard aGuard( m_aLock );
 
     if ( m_bDisposed )
         throw DisposedException();
@@ -1478,7 +1478,7 @@ Reference< XInterface > SAL_CALL ModuleUIConfigurationManager::getImageManager()
 
 Reference< ui::XAcceleratorConfiguration > SAL_CALL ModuleUIConfigurationManager::getShortCutManager() throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
-    ResetableGuard aGuard( m_aLock );
+    Guard aGuard( m_aLock );
 
     if ( m_bDisposed )
         throw DisposedException();
@@ -1513,7 +1513,7 @@ throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::
         throw IllegalArgumentException();
     else
     {
-        ResetableGuard aGuard( m_aLock );
+        Guard aGuard( m_aLock );
 
         if ( m_bDisposed )
             throw DisposedException();
@@ -1536,7 +1536,7 @@ throw (::com::sun::star::container::NoSuchElementException, ::com::sun::star::la
         throw IllegalArgumentException();
     else
     {
-        ResetableGuard aGuard( m_aLock );
+        Guard aGuard( m_aLock );
 
         if ( m_bDisposed )
             throw DisposedException();
@@ -1562,7 +1562,7 @@ throw (::com::sun::star::container::NoSuchElementException, ::com::sun::star::la
 // XUIConfigurationPersistence
 void SAL_CALL ModuleUIConfigurationManager::reload() throw (::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException, std::exception)
 {
-    ResetableGuard aGuard( m_aLock );
+    Guard aGuard( m_aLock );
 
     if ( m_bDisposed )
         throw DisposedException();
@@ -1603,7 +1603,7 @@ void SAL_CALL ModuleUIConfigurationManager::reload() throw (::com::sun::star::un
 
 void SAL_CALL ModuleUIConfigurationManager::store() throw (::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException, std::exception)
 {
-    ResetableGuard aGuard( m_aLock );
+    Guard aGuard( m_aLock );
 
     if ( m_bDisposed )
         throw DisposedException();
@@ -1636,7 +1636,7 @@ void SAL_CALL ModuleUIConfigurationManager::store() throw (::com::sun::star::uno
 
 void SAL_CALL ModuleUIConfigurationManager::storeToStorage( const Reference< XStorage >& Storage ) throw (::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException, std::exception)
 {
-    ResetableGuard aGuard( m_aLock );
+    Guard aGuard( m_aLock );
 
     if ( m_bDisposed )
         throw DisposedException();
@@ -1669,14 +1669,14 @@ void SAL_CALL ModuleUIConfigurationManager::storeToStorage( const Reference< XSt
 
 sal_Bool SAL_CALL ModuleUIConfigurationManager::isModified() throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
-    ResetableGuard aGuard( m_aLock );
+    Guard aGuard( m_aLock );
 
     return m_bModified;
 }
 
 sal_Bool SAL_CALL ModuleUIConfigurationManager::isReadOnly() throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
-    ResetableGuard aGuard( m_aLock );
+    Guard aGuard( m_aLock );
 
     return m_bReadOnly;
 }

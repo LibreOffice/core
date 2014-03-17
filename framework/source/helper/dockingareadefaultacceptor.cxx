@@ -18,7 +18,7 @@
  */
 
 #include <helper/dockingareadefaultacceptor.hxx>
-#include <threadhelp/resetableguard.hxx>
+#include <threadhelp/guard.hxx>
 
 #include <com/sun/star/awt/XDevice.hpp>
 #include <com/sun/star/awt/PosSize.hpp>
@@ -58,7 +58,7 @@ DockingAreaDefaultAcceptor::~DockingAreaDefaultAcceptor()
 css::uno::Reference< css::awt::XWindow > SAL_CALL DockingAreaDefaultAcceptor::getContainerWindow() throw (css::uno::RuntimeException, std::exception)
 {
     // Ready for multithreading
-    ResetableGuard aGuard( m_aLock );
+    Guard aGuard( m_aLock );
 
     // Try to "lock" the frame for access to taskscontainer.
     css::uno::Reference< XFrame > xFrame( m_xOwner.get(), UNO_QUERY );
@@ -70,7 +70,7 @@ css::uno::Reference< css::awt::XWindow > SAL_CALL DockingAreaDefaultAcceptor::ge
 sal_Bool SAL_CALL DockingAreaDefaultAcceptor::requestDockingAreaSpace( const css::awt::Rectangle& RequestedSpace ) throw (css::uno::RuntimeException, std::exception)
 {
     // Ready for multithreading
-    ResetableGuard aGuard( m_aLock );
+    Guard aGuard( m_aLock );
 
     // Try to "lock" the frame for access to taskscontainer.
     css::uno::Reference< XFrame > xFrame( m_xOwner.get(), UNO_QUERY );
@@ -107,7 +107,7 @@ sal_Bool SAL_CALL DockingAreaDefaultAcceptor::requestDockingAreaSpace( const css
 void SAL_CALL DockingAreaDefaultAcceptor::setDockingAreaSpace( const css::awt::Rectangle& BorderSpace ) throw (css::uno::RuntimeException, std::exception)
 {
     // Ready for multithreading
-    ResetableGuard aGuard( m_aLock );
+    Guard aGuard( m_aLock );
 
     // Try to "lock" the frame for access to taskscontainer.
     css::uno::Reference< XFrame > xFrame( m_xOwner.get(), UNO_QUERY );

@@ -20,7 +20,7 @@
 
 #include <stdio.h>
 
-#include <threadhelp/resetableguard.hxx>
+#include <threadhelp/guard.hxx>
 #include <xml/toolboxdocumenthandler.hxx>
 #include <xml/toolboxconfigurationdefines.hxx>
 
@@ -204,7 +204,7 @@ throw ( SAXException, RuntimeException, std::exception )
 void SAL_CALL OReadToolBoxDocumentHandler::endDocument(void)
 throw(  SAXException, RuntimeException, std::exception )
 {
-    ResetableGuard aGuard( m_aLock );
+    Guard aGuard( m_aLock );
 
     if (( m_bToolBarStartFound && !m_bToolBarEndFound ) ||
         ( !m_bToolBarStartFound && m_bToolBarEndFound )     )
@@ -219,7 +219,7 @@ void SAL_CALL OReadToolBoxDocumentHandler::startElement(
     const OUString& aName, const Reference< XAttributeList > &xAttribs )
 throw(  SAXException, RuntimeException, std::exception )
 {
-    ResetableGuard aGuard( m_aLock );
+    Guard aGuard( m_aLock );
 
     ToolBoxHashMap::const_iterator pToolBoxEntry = m_aToolBoxMap.find( aName ) ;
     if ( pToolBoxEntry != m_aToolBoxMap.end() )
@@ -537,7 +537,7 @@ throw(  SAXException, RuntimeException, std::exception )
 void SAL_CALL OReadToolBoxDocumentHandler::endElement(const OUString& aName)
 throw(  SAXException, RuntimeException, std::exception )
 {
-    ResetableGuard aGuard( m_aLock );
+    Guard aGuard( m_aLock );
 
     ToolBoxHashMap::const_iterator pToolBoxEntry = m_aToolBoxMap.find( aName ) ;
     if ( pToolBoxEntry != m_aToolBoxMap.end() )
@@ -635,14 +635,14 @@ void SAL_CALL OReadToolBoxDocumentHandler::setDocumentLocator(
     const Reference< XLocator > &xLocator)
 throw(  SAXException, RuntimeException, std::exception )
 {
-    ResetableGuard aGuard( m_aLock );
+    Guard aGuard( m_aLock );
 
     m_xLocator = xLocator;
 }
 
 OUString OReadToolBoxDocumentHandler::getErrorLineString()
 {
-    ResetableGuard aGuard( m_aLock );
+    Guard aGuard( m_aLock );
 
     char buffer[32];
 
@@ -681,7 +681,7 @@ OWriteToolBoxDocumentHandler::~OWriteToolBoxDocumentHandler()
 void OWriteToolBoxDocumentHandler::WriteToolBoxDocument() throw
 ( SAXException, RuntimeException )
 {
-    ResetableGuard aGuard( m_aLock );
+    Guard aGuard( m_aLock );
 
     m_xWriteDocumentHandler->startDocument();
 

@@ -20,7 +20,7 @@
 #include <tabwin/tabwinfactory.hxx>
 #include <tabwin/tabwindow.hxx>
 
-#include <threadhelp/resetableguard.hxx>
+#include <threadhelp/guard.hxx>
 
 #include <com/sun/star/util/XURLTransformer.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
@@ -80,7 +80,7 @@ throw ( css::uno::Exception, css::uno::RuntimeException, std::exception )
     const OUString aTopWindowArgName( "TopWindow");
 
     /* SAFE AREA ----------------------------------------------------------------------------------------------- */
-    ResetableGuard aLock( m_aLock );
+    Guard aLock( m_aLock );
     css::uno::Reference< css::awt::XToolkit2 > xToolkit = m_xToolkit;
     css::uno::Reference< css::uno::XComponentContext > xContext( m_xContext );
     aLock.unlock();

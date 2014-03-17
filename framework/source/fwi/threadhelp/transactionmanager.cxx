@@ -18,7 +18,6 @@
  */
 
 #include <threadhelp/transactionmanager.hxx>
-#include <threadhelp/resetableguard.hxx>
 
 #include <macros/generic.hxx>
 
@@ -137,7 +136,7 @@ void  TransactionManager::setWorkingMode( EWorkingMode eMode )
                                 {
                                     // Object is uninitialized ...
                                     // Make member access threadsafe!
-                                    ResetableGuard aGuard( m_aMutex );
+                                    Guard aGuard( m_aMutex );
 
                                     // Check working mode again .. because another instance could be faster.
                                     // (It's possible to set this guard at first of this method too!)

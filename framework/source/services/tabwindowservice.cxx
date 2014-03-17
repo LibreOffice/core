@@ -18,7 +18,7 @@
  */
 
 #include <classes/fwktabwindow.hxx>
-#include <threadhelp/resetableguard.hxx>
+#include <threadhelp/guard.hxx>
 #include <services.h>
 #include <properties.h>
 
@@ -241,7 +241,7 @@ void TabWindowService::initProperties()
 TabWindowService::~TabWindowService()
 {
     // SAFE->
-    ResetableGuard aGuard(m_aLock);
+    Guard aGuard(m_aLock);
 
     if (m_pTabWin)
         m_pTabWin->RemoveEventListener( LINK( this, TabWindowService, EventListener ) );
@@ -254,7 +254,7 @@ TabWindowService::~TabWindowService()
     throw ( css::uno::RuntimeException, std::exception )
 {
     // SAFE ->
-    ResetableGuard aGuard( m_aLock );
+    Guard aGuard( m_aLock );
 
     ::sal_Int32  nID  = m_nPageIndexCounter++;
     TTabPageInfo aInfo(nID);
@@ -272,7 +272,7 @@ void SAL_CALL TabWindowService::removeTab(::sal_Int32 nID)
            css::uno::RuntimeException, std::exception          )
 {
     // SAFE ->
-    ResetableGuard aGuard(m_aLock);
+    Guard aGuard(m_aLock);
 
     // throws suitable IndexOutOfBoundsException .-)
     TTabPageInfoHash::iterator pIt = impl_getTabPageInfo (nID);
@@ -292,7 +292,7 @@ void SAL_CALL TabWindowService::setTabProps(      ::sal_Int32                   
            css::uno::RuntimeException, std::exception          )
 {
     // SAFE ->
-    ResetableGuard aGuard(m_aLock);
+    Guard aGuard(m_aLock);
 
     // throws suitable IndexOutOfBoundsException .-)
     TTabPageInfoHash::iterator pIt   = impl_getTabPageInfo (nID);
@@ -318,7 +318,7 @@ css::uno::Sequence< css::beans::NamedValue > SAL_CALL TabWindowService::getTabPr
            css::uno::RuntimeException, std::exception          )
 {
     // SAFE ->
-    ResetableGuard aGuard(m_aLock);
+    Guard aGuard(m_aLock);
 
     // throws suitable IndexOutOfBoundsException .-)
     TTabPageInfoHash::const_iterator pIt   = impl_getTabPageInfo (nID);
@@ -335,7 +335,7 @@ void SAL_CALL TabWindowService::activateTab(::sal_Int32 nID)
            css::uno::RuntimeException, std::exception          )
 {
     // SAFE ->
-    ResetableGuard aGuard(m_aLock);
+    Guard aGuard(m_aLock);
 
     // throws suitable IndexOutOfBoundsException .-)
     impl_checkTabIndex (nID);
@@ -353,7 +353,7 @@ void SAL_CALL TabWindowService::activateTab(::sal_Int32 nID)
     throw (css::uno::RuntimeException, std::exception)
 {
     // SAFE->
-    ResetableGuard aGuard( m_aLock );
+    Guard aGuard( m_aLock );
     return m_nCurrentPageIndex;
 }
 
@@ -382,7 +382,7 @@ void SAL_CALL TabWindowService::dispose()
     throw (css::uno::RuntimeException, std::exception)
 {
     // SAFE->
-    ResetableGuard aGuard(m_aLock);
+    Guard aGuard(m_aLock);
 
     css::uno::Reference< css::uno::XInterface > xThis(static_cast< ::cppu::OWeakObject* >(this), css::uno::UNO_QUERY);
     css::lang::EventObject aEvent(xThis);

@@ -20,7 +20,7 @@
 #include <helper/ocomponentaccess.hxx>
 #include <helper/ocomponentenumeration.hxx>
 
-#include <threadhelp/resetableguard.hxx>
+#include <threadhelp/guard.hxx>
 
 #include <com/sun/star/frame/FrameSearchFlag.hpp>
 
@@ -61,7 +61,7 @@ OComponentAccess::~OComponentAccess()
 css::uno::Reference< XEnumeration > SAL_CALL OComponentAccess::createEnumeration() throw( RuntimeException, std::exception )
 {
     // Ready for multithreading
-    ResetableGuard aGuard( m_aLock );
+    Guard aGuard( m_aLock );
 
     // Set default return value, if method failed.
     // If no desktop exist and there is no task container - return an empty enumeration!
@@ -99,7 +99,7 @@ Type SAL_CALL OComponentAccess::getElementType() throw( RuntimeException, std::e
 sal_Bool SAL_CALL OComponentAccess::hasElements() throw( RuntimeException, std::exception )
 {
     // Ready for multithreading
-    ResetableGuard aGuard( m_aLock );
+    Guard aGuard( m_aLock );
 
     // Set default return value, if method failed.
     sal_Bool bReturn = sal_False;

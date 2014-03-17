@@ -18,7 +18,7 @@
  */
 
 #include <uielement/addonstoolbarwrapper.hxx>
-#include <threadhelp/resetableguard.hxx>
+#include <threadhelp/guard.hxx>
 
 #include <com/sun/star/util/XURLTransformer.hpp>
 #include <com/sun/star/frame/ModuleManager.hpp>
@@ -180,7 +180,7 @@ throw ( ::com::sun::star::container::NoSuchElementException,
         ::com::sun::star::uno::RuntimeException, std::exception )
 {
     // SAFE
-    ResetableGuard aLock( m_aLock );
+    Guard aLock( m_aLock );
 
     Sequence< Sequence< PropertyValue > >   aConfigData;
     Reference< XFrame >                     xFrame;

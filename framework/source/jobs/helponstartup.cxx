@@ -21,7 +21,7 @@
 
 // include own header
 #include <jobs/helponstartup.hxx>
-#include <threadhelp/resetableguard.hxx>
+#include <threadhelp/guard.hxx>
 #include <loadenv/targethelper.hxx>
 #include <services.h>
 
@@ -164,7 +164,7 @@ void SAL_CALL HelpOnStartup::disposing(const css::lang::EventObject& aEvent)
     throw(css::uno::RuntimeException, std::exception)
 {
     // SAFE ->
-    ResetableGuard aLock(m_aLock);
+    Guard aLock(m_aLock);
 
     if (aEvent.Source == m_xModuleManager)
         m_xModuleManager.clear();
@@ -211,7 +211,7 @@ OUString HelpOnStartup::its_getModuleIdFromEnv(const css::uno::Sequence< css::be
     // OK - now we are sure this document is a top level document.
     // Classify it.
     // SAFE ->
-    ResetableGuard aLock(m_aLock);
+    Guard aLock(m_aLock);
     css::uno::Reference< css::frame::XModuleManager2 > xModuleManager = m_xModuleManager;
     aLock.unlock();
     // <- SAFE
@@ -233,7 +233,7 @@ OUString HelpOnStartup::its_getModuleIdFromEnv(const css::uno::Sequence< css::be
 OUString HelpOnStartup::its_getCurrentHelpURL()
 {
     // SAFE ->
-    ResetableGuard aLock(m_aLock);
+    Guard aLock(m_aLock);
     css::uno::Reference< css::frame::XDesktop2 > xDesktop = m_xDesktop;
     aLock.unlock();
     // <- SAFE
@@ -278,7 +278,7 @@ OUString HelpOnStartup::its_getCurrentHelpURL()
         return sal_False;
 
     // SAFE ->
-    ResetableGuard aLock(m_aLock);
+    Guard aLock(m_aLock);
     css::uno::Reference< css::container::XNameAccess >     xConfig = m_xConfig;
     OUString                                        sLocale = m_sLocale;
     OUString                                        sSystem = m_sSystem;
@@ -322,7 +322,7 @@ OUString HelpOnStartup::its_getCurrentHelpURL()
 OUString HelpOnStartup::its_checkIfHelpEnabledAndGetURL(const OUString& sModule)
 {
     // SAFE ->
-    ResetableGuard aLock(m_aLock);
+    Guard aLock(m_aLock);
     css::uno::Reference< css::container::XNameAccess > xConfig = m_xConfig;
     OUString                                    sLocale = m_sLocale;
     OUString                                    sSystem = m_sSystem;

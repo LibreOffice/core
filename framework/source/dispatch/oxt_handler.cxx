@@ -18,6 +18,7 @@
  */
 
 #include <dispatch/oxt_handler.hxx>
+#include <threadhelp/guard.hxx>
 #include <threadhelp/transactionguard.hxx>
 #include <services.h>
 #include <unotools/mediadescriptor.hxx>
@@ -117,7 +118,7 @@ void SAL_CALL Oxt_Handler::dispatchWithNotification( const css::util::URL& aURL,
     throw( css::uno::RuntimeException, std::exception )
 {
     // SAFE {
-    ResetableGuard aLock( m_aLock );
+    Guard aLock( m_aLock );
 
     OUString sServiceName = "com.sun.star.deployment.ui.PackageManagerDialog";
     css::uno::Sequence< css::uno::Any > lParams(1);

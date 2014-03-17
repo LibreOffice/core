@@ -24,7 +24,6 @@
 
 #include <interaction/quietinteraction.hxx>
 #include <threadhelp/guard.hxx>
-#include <threadhelp/resetableguard.hxx>
 #include <properties.h>
 #include <protocols.h>
 #include <services.h>

@@ -18,7 +18,7 @@
  */
 
 #include "uifactory/factoryconfiguration.hxx"
-#include <threadhelp/resetableguard.hxx>
+#include <threadhelp/guard.hxx>
 #include "services.h"
 
 #include "helper/mischelper.hxx"
@@ -75,7 +75,7 @@ ConfigurationAccess_ControllerFactory::ConfigurationAccess_ControllerFactory( co
 ConfigurationAccess_ControllerFactory::~ConfigurationAccess_ControllerFactory()
 {
     // SAFE
-    ResetableGuard aLock( m_aLock );
+    Guard aLock( m_aLock );
 
     Reference< XContainer > xContainer( m_xConfigAccess, UNO_QUERY );
     if ( xContainer.is() )
@@ -85,7 +85,7 @@ ConfigurationAccess_ControllerFactory::~ConfigurationAccess_ControllerFactory()
 OUString ConfigurationAccess_ControllerFactory::getServiceFromCommandModule( const OUString& rCommandURL, const OUString& rModule ) const
 {
     // SAFE
-    ResetableGuard aLock( m_aLock );
+    Guard aLock( m_aLock );
     MenuControllerMap::const_iterator pIter = m_aMenuControllerMap.find( getHashKeyFromStrings( rCommandURL, rModule ));
 
     if ( pIter != m_aMenuControllerMap.end() )
@@ -104,7 +104,7 @@ OUString ConfigurationAccess_ControllerFactory::getServiceFromCommandModule( con
 OUString ConfigurationAccess_ControllerFactory::getValueFromCommandModule( const OUString& rCommandURL, const OUString& rModule ) const
 {
     // SAFE
-    ResetableGuard aLock( m_aLock );
+    Guard aLock( m_aLock );
 
     MenuControllerMap::const_iterator pIter = m_aMenuControllerMap.find( getHashKeyFromStrings( rCommandURL, rModule ));
 
@@ -129,7 +129,7 @@ void ConfigurationAccess_ControllerFactory::addServiceToCommandModule(
     const OUString& rServiceSpecifier )
 {
     // SAFE
-    ResetableGuard aLock( m_aLock );
+    Guard aLock( m_aLock );
 
     OUString aHashKey = getHashKeyFromStrings( rCommandURL, rModule );
     m_aMenuControllerMap.insert( MenuControllerMap::value_type( aHashKey,ControllerInfo(rServiceSpecifier,OUString()) ));
@@ -140,7 +140,7 @@ void ConfigurationAccess_ControllerFactory::removeServiceFromCommandModule(
     const OUString& rModule )
 {
     // SAFE
-    ResetableGuard aLock( m_aLock );
+    Guard aLock( m_aLock );
 
     OUString aHashKey = getHashKeyFromStrings( rCommandURL, rModule );
     m_aMenuControllerMap.erase( aHashKey );
@@ -155,7 +155,7 @@ void SAL_CALL ConfigurationAccess_ControllerFactory::elementInserted( const Cont
     OUString   aValue;
 
     // SAFE
-    ResetableGuard aLock( m_aLock );
+    Guard aLock( m_aLock );
 
     if ( impl_getElementProps( aEvent.Element, aCommand, aModule, aService, aValue ))
     {
@@ -176,7 +176,7 @@ void SAL_CALL ConfigurationAccess_ControllerFactory::elementRemoved ( const Cont
     OUString   aValue;
 
     // SAFE
-    ResetableGuard aLock( m_aLock );
+    Guard aLock( m_aLock );
 
     if ( impl_getElementProps( aEvent.Element, aCommand, aModule, aService, aValue ))
     {
@@ -197,14 +197,14 @@ void SAL_CALL ConfigurationAccess_ControllerFactory::disposing( const EventObjec
 {
     // SAFE
     // remove our reference to the config access
-    ResetableGuard aLock( m_aLock );
+    Guard aLock( m_aLock );
     m_xConfigAccess.clear();
 }
 
 void ConfigurationAccess_ControllerFactory::readConfigurationData()
 {
     // SAFE
-    ResetableGuard aLock( m_aLock );
+    Guard aLock( m_aLock );
 
     if ( !m_bConfigAccessInitialized )
     {
@@ -246,7 +246,7 @@ void ConfigurationAccess_ControllerFactory::readConfigurationData()
 void ConfigurationAccess_ControllerFactory::updateConfigurationData()
 {
     // SAFE
-    ResetableGuard aLock( m_aLock );
+    Guard aLock( m_aLock );
     if ( m_xConfigAccess.is() )
     {
         Sequence< OUString >   aPopupMenuControllers = m_xConfigAccess->getElementNames();

@@ -21,7 +21,6 @@
 #define INCLUDED_FRAMEWORK_INC_SERVICES_LAYOUTMANAGER_HXX
 
 #include <threadhelp/threadhelpbase.hxx>
-#include <threadhelp/resetableguard.hxx>
 #include <macros/xinterface.hxx>
 #include <macros/xtypeprovider.hxx>
 #include <properties.h>

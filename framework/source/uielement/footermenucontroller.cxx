@@ -19,7 +19,6 @@
 
 #include <uielement/footermenucontroller.hxx>
 
-#include <threadhelp/resetableguard.hxx>
 #include "services.h"
 #include <classes/resource.hrc>
 #include <classes/fwlresid.hxx>

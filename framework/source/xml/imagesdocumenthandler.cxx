@@ -20,7 +20,7 @@
 
 #include <stdio.h>
 
-#include <threadhelp/resetableguard.hxx>
+#include <threadhelp/guard.hxx>
 #include <xml/imagesdocumenthandler.hxx>
 
 #include <com/sun/star/xml/sax/XExtendedDocumentHandler.hpp>
@@ -152,7 +152,7 @@ throw ( SAXException, RuntimeException, std::exception )
 void SAL_CALL OReadImagesDocumentHandler::endDocument(void)
 throw(  SAXException, RuntimeException, std::exception )
 {
-    ResetableGuard aGuard( m_aLock );
+    Guard aGuard( m_aLock );
 
     if (( m_bImageContainerStartFound && !m_bImageContainerEndFound ) ||
         ( !m_bImageContainerStartFound && m_bImageContainerEndFound )    )
@@ -169,7 +169,7 @@ void SAL_CALL OReadImagesDocumentHandler::startElement(
               RuntimeException,
               std::exception)
 {
-    ResetableGuard aGuard( m_aLock );
+    Guard aGuard( m_aLock );
 
     ImageHashMap::const_iterator pImageEntry = m_aImageMap.find( aName ) ;
     if ( pImageEntry != m_aImageMap.end() )
@@ -503,7 +503,7 @@ void SAL_CALL OReadImagesDocumentHandler::endElement(const OUString& aName)
           RuntimeException,
           std::exception)
 {
-    ResetableGuard aGuard( m_aLock );
+    Guard aGuard( m_aLock );
 
     ImageHashMap::const_iterator pImageEntry = m_aImageMap.find( aName ) ;
     if ( pImageEntry != m_aImageMap.end() )
@@ -579,14 +579,14 @@ void SAL_CALL OReadImagesDocumentHandler::setDocumentLocator(
     const Reference< XLocator > &xLocator)
 throw(  SAXException, RuntimeException, std::exception )
 {
-    ResetableGuard aGuard( m_aLock );
+    Guard aGuard( m_aLock );
 
     m_xLocator = xLocator;
 }
 
 OUString OReadImagesDocumentHandler::getErrorLineString()
 {
-    ResetableGuard aGuard( m_aLock );
+    Guard aGuard( m_aLock );
 
 
     if ( m_xLocator.is() )
@@ -628,7 +628,7 @@ OWriteImagesDocumentHandler::~OWriteImagesDocumentHandler()
 void OWriteImagesDocumentHandler::WriteImagesDocument() throw
 ( SAXException, RuntimeException )
 {
-    ResetableGuard aGuard( m_aLock );
+    Guard aGuard( m_aLock );
 
     m_xWriteDocumentHandler->startDocument();
 

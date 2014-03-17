@@ -22,7 +22,7 @@
 #include <framework/bmkmenu.hxx>
 #include <framework/addonmenu.hxx>
 #include <framework/imageproducer.hxx>
-#include <threadhelp/resetableguard.hxx>
+#include <threadhelp/guard.hxx>
 #include "framework/addonsoptions.hxx"
 #include <classes/fwkresid.hxx>
 #include <services.h>
@@ -293,7 +293,7 @@ MenuManager::~MenuManager()
 
 MenuManager::MenuItemHandler* MenuManager::GetMenuItemHandler( sal_uInt16 nItemId )
 {
-    ResetableGuard aGuard( m_aLock );
+    Guard aGuard( m_aLock );
 
     std::vector< MenuItemHandler* >::iterator p;
     for ( p = m_aMenuItemHandlerVector.begin(); p != m_aMenuItemHandlerVector.end(); ++p )
@@ -314,7 +314,7 @@ throw ( RuntimeException, std::exception )
     MenuItemHandler* pStatusChangedMenu = NULL;
 
     {
-        ResetableGuard aGuard( m_aLock );
+        Guard aGuard( m_aLock );
 
         std::vector< MenuItemHandler* >::iterator p;
         for ( p = m_aMenuItemHandlerVector.begin(); p != m_aMenuItemHandlerVector.end(); ++p )
@@ -332,7 +332,7 @@ throw ( RuntimeException, std::exception )
     {
         SolarMutexGuard aSolarGuard;
         {
-            ResetableGuard aGuard( m_aLock );
+            Guard aGuard( m_aLock );
 
             sal_Bool bSetCheckmark      = sal_False;
             sal_Bool bCheckmark         = sal_False;
@@ -372,7 +372,7 @@ throw ( RuntimeException, std::exception )
 
 void MenuManager::RemoveListener()
 {
-    ResetableGuard aGuard( m_aLock );
+    Guard aGuard( m_aLock );
     ClearMenuDispatch();
 }
 
@@ -411,7 +411,7 @@ void SAL_CALL MenuManager::disposing( const EventObject& Source ) throw ( Runtim
 {
     if ( Source.Source == m_xFrame )
     {
-        ResetableGuard aGuard( m_aLock );
+        Guard aGuard( m_aLock );
         ClearMenuDispatch(Source,false);
     }
     else
@@ -420,7 +420,7 @@ void SAL_CALL MenuManager::disposing( const EventObject& Source ) throw ( Runtim
         MenuItemHandler* pMenuItemDisposing = NULL;
 
         {
-            ResetableGuard aGuard( m_aLock );
+            Guard aGuard( m_aLock );
 
             std::vector< MenuItemHandler* >::iterator p;
             for ( p = m_aMenuItemHandlerVector.begin(); p != m_aMenuItemHandlerVector.end(); ++p )
@@ -517,7 +517,7 @@ void MenuManager::UpdateSpecialFileMenu( Menu* pMenu )
         }
 
         {
-            ResetableGuard aGuard( m_aLock );
+            Guard aGuard( m_aLock );
 
             int nRemoveItemCount = 0;
             int nItemCount       = pMenu->GetItemCount();
@@ -648,7 +648,7 @@ void MenuManager::UpdateSpecialWindowMenu( Menu* pMenu,const Reference< XCompone
     }
 
     {
-        ResetableGuard aGuard( _rMutex );
+        Guard aGuard( _rMutex );
 
         int nItemCount = pMenu->GetItemCount();
 
@@ -771,7 +771,7 @@ IMPL_LINK( MenuManager, Activate, Menu *, pMenu )
         {
             URL aTargetURL;
 
-            ResetableGuard aGuard( m_aLock );
+            Guard aGuard( m_aLock );
 
             Reference< XDispatchProvider > xDispatchProvider( m_xFrame, UNO_QUERY );
             if ( xDispatchProvider.is() )
@@ -841,7 +841,7 @@ IMPL_LINK( MenuManager, Select, Menu *, pMenu )
     Reference< XDispatch >  xDispatch;
 
     {
-        ResetableGuard aGuard( m_aLock );
+        Guard aGuard( m_aLock );
 
         sal_uInt16 nCurItemId = pMenu->GetCurItemId();
         if ( pMenu == m_pVCLMenu &&

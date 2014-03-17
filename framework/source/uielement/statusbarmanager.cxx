@@ -21,7 +21,7 @@
 #include <uielement/genericstatusbarcontroller.hxx>
 
 #include <threadhelp/threadhelpbase.hxx>
-#include <threadhelp/resetableguard.hxx>
+#include <threadhelp/guard.hxx>
 #include <framework/sfxhelperfunctions.hxx>
 #include <framework/addonsoptions.hxx>
 #include <uielement/statusbarmerger.hxx>
@@ -159,14 +159,14 @@ StatusBarManager::~StatusBarManager()
 
 StatusBar* StatusBarManager::GetStatusBar() const
 {
-    ResetableGuard aGuard( m_aLock );
+    Guard aGuard( m_aLock );
     return m_pStatusBar;
 }
 
 void StatusBarManager::frameAction( const frame::FrameActionEvent& Action )
 throw ( uno::RuntimeException, std::exception )
 {
-    ResetableGuard aGuard( m_aLock );
+    Guard aGuard( m_aLock );
     if ( Action.Action == frame::FrameAction_CONTEXT_CHANGED )
         UpdateControllers();
 }
@@ -174,7 +174,7 @@ throw ( uno::RuntimeException, std::exception )
 void SAL_CALL StatusBarManager::disposing( const lang::EventObject& Source ) throw ( uno::RuntimeException, std::exception )
 {
     {
-        ResetableGuard aGuard( m_aLock );
+        Guard aGuard( m_aLock );
         if ( m_bDisposed )
             return;
     }
@@ -182,7 +182,7 @@ void SAL_CALL StatusBarManager::disposing( const lang::EventObject& Source ) thr
     RemoveControllers();
 
     {
-        ResetableGuard aGuard( m_aLock );
+        Guard aGuard( m_aLock );
         if ( Source.Source == uno::Reference< uno::XInterface >( m_xFrame, uno::UNO_QUERY ))
             m_xFrame.clear();
 
@@ -200,7 +200,7 @@ void SAL_CALL StatusBarManager::dispose() throw( uno::RuntimeException, std::exc
     m_aListenerContainer.disposeAndClear( aEvent );
 
     {
-        ResetableGuard aGuard( m_aLock );
+        Guard aGuard( m_aLock );
         if ( !m_bDisposed )
         {
             RemoveControllers();
@@ -240,7 +240,7 @@ void SAL_CALL StatusBarManager::dispose() throw( uno::RuntimeException, std::exc
 
 void SAL_CALL StatusBarManager::addEventListener( const uno::Reference< lang::XEventListener >& xListener ) throw( uno::RuntimeException, std::exception )
 {
-    ResetableGuard aGuard( m_aLock );
+    Guard aGuard( m_aLock );
 
     /* SAFE AREA ----------------------------------------------------------------------------------------------- */
     if ( m_bDisposed )
@@ -259,7 +259,7 @@ void SAL_CALL StatusBarManager::removeEventListener( const uno::Reference< lang:
 // XUIConfigurationListener
 void SAL_CALL StatusBarManager::elementInserted( const css::ui::ConfigurationEvent& ) throw ( uno::RuntimeException, std::exception )
 {
-    ResetableGuard aGuard( m_aLock );
+    Guard aGuard( m_aLock );
 
     if ( m_bDisposed )
         return;
@@ -267,7 +267,7 @@ void SAL_CALL StatusBarManager::elementInserted( const css::ui::ConfigurationEve
 
 void SAL_CALL StatusBarManager::elementRemoved( const css::ui::ConfigurationEvent& ) throw ( uno::RuntimeException, std::exception )
 {
-    ResetableGuard aGuard( m_aLock );
+    Guard aGuard( m_aLock );
 
     if ( m_bDisposed )
         return;
@@ -275,7 +275,7 @@ void SAL_CALL StatusBarManager::elementRemoved( const css::ui::ConfigurationEven
 
 void SAL_CALL StatusBarManager::elementReplaced( const css::ui::ConfigurationEvent& ) throw ( uno::RuntimeException, std::exception )
 {
-    ResetableGuard aGuard( m_aLock );
+    Guard aGuard( m_aLock );
 
     if ( m_bDisposed )
         return;
@@ -295,7 +295,7 @@ void StatusBarManager::UpdateControllers()
 
 void StatusBarManager::RemoveControllers()
 {
-    ResetableGuard aGuard( m_aLock );
+    Guard aGuard( m_aLock );
 
     if ( m_bDisposed )
         return;
@@ -427,7 +427,7 @@ void StatusBarManager::AddFrameActionListener()
 void StatusBarManager::FillStatusBar( const uno::Reference< container::XIndexAccess >& rItemContainer )
 {
 
-    ResetableGuard aGuard( m_aLock );
+    Guard aGuard( m_aLock );
 
     if ( m_bDisposed || !m_pStatusBar )
         return;
@@ -554,7 +554,7 @@ void StatusBarManager::StateChanged( StateChangedType )
 
 void StatusBarManager::DataChanged( const DataChangedEvent& rDCEvt )
 {
-    ResetableGuard aGuard( m_aLock );
+    Guard aGuard( m_aLock );
 
     if ((( rDCEvt.GetType() == DATACHANGED_SETTINGS         ) ||
          ( rDCEvt.GetType() == DATACHANGED_FONTS            ) ||
@@ -576,7 +576,7 @@ void StatusBarManager::DataChanged( const DataChangedEvent& rDCEvt )
 
 void StatusBarManager::UserDraw( const UserDrawEvent& rUDEvt )
 {
-    ResetableGuard aGuard( m_aLock );
+    Guard aGuard( m_aLock );
 
     if ( m_bDisposed )
         return;
@@ -603,7 +603,7 @@ void StatusBarManager::UserDraw( const UserDrawEvent& rUDEvt )
 
 void StatusBarManager::Command( const CommandEvent& rEvt )
 {
-    ResetableGuard aGuard( m_aLock );
+    Guard aGuard( m_aLock );
 
     if ( m_bDisposed )
         return;
@@ -633,7 +633,7 @@ void StatusBarManager::MouseMove( const MouseEvent& rMEvt )
 
 void StatusBarManager::MouseButton( const MouseEvent& rMEvt ,sal_Bool ( SAL_CALL frame::XStatusbarController::*_pMethod )(const ::com::sun::star::awt::MouseEvent&))
 {
-    ResetableGuard aGuard( m_aLock );
+    Guard aGuard( m_aLock );
 
     if ( !m_bDisposed )
     {
@@ -667,7 +667,7 @@ void StatusBarManager::MouseButtonUp( const MouseEvent& rMEvt )
 
 IMPL_LINK_NOARG(StatusBarManager, Click)
 {
-    ResetableGuard aGuard( m_aLock );
+    Guard aGuard( m_aLock );
 
     if ( m_bDisposed )
         return 1;
@@ -690,7 +690,7 @@ IMPL_LINK_NOARG(StatusBarManager, Click)
 
 IMPL_LINK_NOARG(StatusBarManager, DoubleClick)
 {
-    ResetableGuard aGuard( m_aLock );
+    Guard aGuard( m_aLock );
 
     if ( m_bDisposed )
         return 1;

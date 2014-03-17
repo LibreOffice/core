@@ -20,7 +20,7 @@
 #include <helper/uiconfigelementwrapperbase.hxx>
 #include <general.h>
 #include <properties.h>
-#include <threadhelp/resetableguard.hxx>
+#include <threadhelp/guard.hxx>
 #include <uielement/constitemcontainer.hxx>
 #include <uielement/rootitemcontainer.hxx>
 
@@ -109,14 +109,14 @@ void SAL_CALL UIConfigElementWrapperBase::removeEventListener( const ::com::sun:
 void SAL_CALL UIConfigElementWrapperBase::disposing( const EventObject& )
 throw( RuntimeException, std::exception )
 {
-    ResetableGuard aLock( m_aLock );
+    Guard aLock( m_aLock );
     m_xConfigSource.clear();
 }
 
 void SAL_CALL UIConfigElementWrapperBase::initialize( const Sequence< Any >& aArguments )
 throw ( Exception, RuntimeException, std::exception )
 {
-    ResetableGuard aLock( m_aLock );
+    Guard aLock( m_aLock );
 
     if ( !m_bInitialized )
     {
@@ -452,7 +452,7 @@ const com::sun::star::uno::Sequence< com::sun::star::beans::Property > UIConfigE
 }
 void SAL_CALL UIConfigElementWrapperBase::setSettings( const Reference< XIndexAccess >& xSettings ) throw ( RuntimeException, std::exception )
 {
-    ResetableGuard aLock( m_aLock );
+    Guard aLock( m_aLock );
 
 
     if ( xSettings.is() )
@@ -491,7 +491,7 @@ void UIConfigElementWrapperBase::impl_fillNewData()
 }
 Reference< XIndexAccess > SAL_CALL UIConfigElementWrapperBase::getSettings( sal_Bool bWriteable ) throw ( RuntimeException, std::exception )
 {
-    ResetableGuard aLock( m_aLock );
+    Guard aLock( m_aLock );
 
 
     if ( bWriteable )
@@ -502,20 +502,20 @@ Reference< XIndexAccess > SAL_CALL UIConfigElementWrapperBase::getSettings( sal_
 
 Reference< XFrame > SAL_CALL UIConfigElementWrapperBase::getFrame() throw (RuntimeException, std::exception)
 {
-    ResetableGuard aLock( m_aLock );
+    Guard aLock( m_aLock );
     Reference< XFrame > xFrame( m_xWeakFrame );
     return xFrame;
 }
 
 OUString SAL_CALL UIConfigElementWrapperBase::getResourceURL() throw (RuntimeException, std::exception)
 {
-    ResetableGuard aLock( m_aLock );
+    Guard aLock( m_aLock );
     return m_aResourceURL;
 }
 
 ::sal_Int16 SAL_CALL UIConfigElementWrapperBase::getType() throw (RuntimeException, std::exception)
 {
-    ResetableGuard aLock( m_aLock );
+    Guard aLock( m_aLock );
     return m_nType;
 }
 

@@ -21,7 +21,6 @@
 #include <jobs/joburl.hxx>
 #include <jobs/job.hxx>
 #include <threadhelp/guard.hxx>
-#include <threadhelp/resetableguard.hxx>
 #include <threadhelp/threadhelpbase.hxx>
 #include <classes/converter.hxx>
 #include <general.h>

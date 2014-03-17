@@ -19,7 +19,7 @@
 
 #include <helper/oframes.hxx>
 
-#include <threadhelp/resetableguard.hxx>
+#include <threadhelp/guard.hxx>
 
 #include <com/sun/star/frame/XDesktop.hpp>
 #include <com/sun/star/frame/FrameSearchFlag.hpp>
@@ -68,7 +68,7 @@ OFrames::~OFrames()
 void SAL_CALL OFrames::append( const css::uno::Reference< XFrame >& xFrame ) throw( RuntimeException, std::exception )
 {
     // Ready for multithreading
-    ResetableGuard aGuard( m_aLock );
+    Guard aGuard( m_aLock );
 
     // Safe impossible cases
     // Method is not defined for ALL incoming parameters!
@@ -93,7 +93,7 @@ void SAL_CALL OFrames::append( const css::uno::Reference< XFrame >& xFrame ) thr
 void SAL_CALL OFrames::remove( const css::uno::Reference< XFrame >& xFrame ) throw( RuntimeException, std::exception )
 {
     // Ready for multithreading
-    ResetableGuard aGuard( m_aLock );
+    Guard aGuard( m_aLock );
 
     // Safe impossible cases
     // Method is not defined for ALL incoming parameters!
@@ -119,7 +119,7 @@ void SAL_CALL OFrames::remove( const css::uno::Reference< XFrame >& xFrame ) thr
 Sequence< css::uno::Reference< XFrame > > SAL_CALL OFrames::queryFrames( sal_Int32 nSearchFlags ) throw( RuntimeException, std::exception )
 {
     // Ready for multithreading
-    ResetableGuard aGuard( m_aLock );
+    Guard aGuard( m_aLock );
 
     // Safe impossible cases
     // Method is not defined for ALL incoming parameters!
@@ -225,7 +225,7 @@ Sequence< css::uno::Reference< XFrame > > SAL_CALL OFrames::queryFrames( sal_Int
 sal_Int32 SAL_CALL OFrames::getCount() throw( RuntimeException, std::exception )
 {
     // Ready for multithreading
-    ResetableGuard aGuard( m_aLock );
+    Guard aGuard( m_aLock );
 
     // Set default return value.
     sal_Int32 nCount = 0;
@@ -251,7 +251,7 @@ Any SAL_CALL OFrames::getByIndex( sal_Int32 nIndex ) throw( IndexOutOfBoundsExce
                                                             RuntimeException, std::exception            )
 {
     // Ready for multithreading
-    ResetableGuard aGuard( m_aLock );
+    Guard aGuard( m_aLock );
 
       sal_uInt32 nCount = m_pFrameContainer->getCount();
       if ( nIndex < 0 || ( sal::static_int_cast< sal_uInt32 >( nIndex ) >= nCount ))
@@ -288,7 +288,7 @@ Type SAL_CALL OFrames::getElementType() throw( RuntimeException, std::exception 
 sal_Bool SAL_CALL OFrames::hasElements() throw( RuntimeException, std::exception )
 {
     // Ready for multithreading
-    ResetableGuard aGuard( m_aLock );
+    Guard aGuard( m_aLock );
 
     // Set default return value.
     sal_Bool bHasElements = sal_False;

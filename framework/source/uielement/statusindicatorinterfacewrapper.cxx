@@ -19,7 +19,6 @@
 
 #include <uielement/statusindicatorinterfacewrapper.hxx>
 #include <uielement/progressbarwrapper.hxx>
-#include <threadhelp/resetableguard.hxx>
 
 #include <vcl/svapp.hxx>
 #include <osl/mutex.hxx>

@@ -22,7 +22,6 @@
 #include <uielement/constitemcontainer.hxx>
 #include <uielement/rootitemcontainer.hxx>
 #include <uielement/itemcontainer.hxx>
-#include <threadhelp/resetableguard.hxx>
 
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 

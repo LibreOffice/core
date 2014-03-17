@@ -20,7 +20,6 @@
 
 #include <stdio.h>
 
-#include <threadhelp/resetableguard.hxx>
 #include <xml/toolboxlayoutdocumenthandler.hxx>
 #include <xml/toolboxconfigurationdefines.hxx>
 

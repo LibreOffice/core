@@ -24,7 +24,6 @@
 #include <uielement/rootitemcontainer.hxx>
 #include <uielement/itemcontainer.hxx>
 #include <uielement/constitemcontainer.hxx>
-#include <threadhelp/resetableguard.hxx>
 #include <general.h>
 #include <properties.h>
 

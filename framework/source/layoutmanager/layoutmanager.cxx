@@ -20,7 +20,6 @@
 #include <services/layoutmanager.hxx>
 #include <helpers.hxx>
 #include <threadhelp/guard.hxx>
-#include <threadhelp/resetableguard.hxx>
 
 #include <framework/sfxhelperfunctions.hxx>
 #include <uielement/menubarwrapper.hxx>

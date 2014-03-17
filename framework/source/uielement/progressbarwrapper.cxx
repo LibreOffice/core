@@ -20,7 +20,7 @@
 #include <uielement/progressbarwrapper.hxx>
 
 #include <helper/statusindicator.hxx>
-#include <threadhelp/resetableguard.hxx>
+#include <threadhelp/guard.hxx>
 #include <uielement/statusindicatorinterfacewrapper.hxx>
 
 #include <com/sun/star/ui/UIElementType.hpp>
@@ -49,7 +49,7 @@ ProgressBarWrapper::~ProgressBarWrapper()
 // public interfaces
 void ProgressBarWrapper::setStatusBar( const uno::Reference< awt::XWindow >& rStatusBar, sal_Bool bOwnsInstance )
 {
-    ResetableGuard aGuard( m_aLock );
+    Guard aGuard( m_aLock );
 
     if ( m_bDisposed )
         return;
@@ -75,7 +75,7 @@ void ProgressBarWrapper::setStatusBar( const uno::Reference< awt::XWindow >& rSt
 
 uno::Reference< awt::XWindow > ProgressBarWrapper::getStatusBar() const
 {
-    ResetableGuard aGuard( m_aLock );
+    Guard aGuard( m_aLock );
 
     if ( m_bDisposed )
         return uno::Reference< awt::XWindow >();
@@ -91,7 +91,7 @@ throw (uno::RuntimeException)
     sal_Int32                      nValue( 0 );
 
     {
-        ResetableGuard aGuard( m_aLock );
+        Guard aGuard( m_aLock );
 
         if ( m_bDisposed )
             return;
@@ -130,7 +130,7 @@ throw (uno::RuntimeException)
     uno::Reference< awt::XWindow > xWindow;
 
     {
-        ResetableGuard aGuard( m_aLock );
+        Guard aGuard( m_aLock );
 
         if ( m_bDisposed )
             return;
@@ -160,7 +160,7 @@ throw (uno::RuntimeException)
     sal_Int32 nValue( 0 );
 
     {
-        ResetableGuard aGuard( m_aLock );
+        Guard aGuard( m_aLock );
 
         if ( m_bDisposed )
             return;
@@ -199,7 +199,7 @@ throw (uno::RuntimeException)
     sal_Bool      bSetValue( sal_False );
 
     {
-        ResetableGuard aGuard( m_aLock );
+        Guard aGuard( m_aLock );
 
         if ( m_bDisposed )
             return;
@@ -267,7 +267,7 @@ throw (uno::RuntimeException, std::exception)
         uno::UNO_QUERY );
 
     {
-        ResetableGuard aLock( m_aLock );
+        Guard aLock( m_aLock );
 
         if ( m_bDisposed )
             return;
@@ -277,7 +277,7 @@ throw (uno::RuntimeException, std::exception)
         lang::EventObject aEvent( xThis );
         m_aListenerContainer.disposeAndClear( aEvent );
 
-        ResetableGuard aLock( m_aLock );
+        Guard aLock( m_aLock );
         if ( m_bOwnsInstance )
         {
             try
@@ -302,7 +302,7 @@ throw (uno::RuntimeException, std::exception)
 {
     /* SAFE AREA ----------------------------------------------------------------------------------------------- */
     // Ready for multithreading
-    ResetableGuard aLock( m_aLock );
+    Guard aLock( m_aLock );
 
     if ( m_bDisposed )
         return uno::Reference< uno::XInterface >();

@@ -19,7 +19,7 @@
 
 #include <helper/ocomponentenumeration.hxx>
 
-#include <threadhelp/resetableguard.hxx>
+#include <threadhelp/guard.hxx>
 
 #include <vcl/svapp.hxx>
 
@@ -66,7 +66,7 @@ OComponentEnumeration::~OComponentEnumeration()
 void SAL_CALL OComponentEnumeration::disposing( const EventObject& aEvent ) throw( RuntimeException, std::exception )
 {
     // Ready for multithreading
-    ResetableGuard aGuard( m_aLock );
+    Guard aGuard( m_aLock );
 
     // Safe impossible cases
     // This method is not specified for all incoming parameters.
@@ -82,7 +82,7 @@ void SAL_CALL OComponentEnumeration::disposing( const EventObject& aEvent ) thro
 sal_Bool SAL_CALL OComponentEnumeration::hasMoreElements() throw( RuntimeException, std::exception )
 {
     // Ready for multithreading
-    ResetableGuard aGuard( m_aLock );
+    Guard aGuard( m_aLock );
 
     // First position in a valid list is 0.
     // => The last one is getLength() - 1!
@@ -99,7 +99,7 @@ Any SAL_CALL OComponentEnumeration::nextElement() throw(    NoSuchElementExcepti
                                                             RuntimeException, std::exception        )
 {
     // Ready for multithreading
-    ResetableGuard aGuard( m_aLock );
+    Guard aGuard( m_aLock );
 
     // If we have no elements or end of enumeration is arrived ...
     if ( hasMoreElements() == sal_False )

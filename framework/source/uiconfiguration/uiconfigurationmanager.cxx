@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <threadhelp/resetableguard.hxx>
+#include <threadhelp/guard.hxx>
 #include <threadhelp/threadhelpbase.hxx>
 #include <uiconfiguration/imagemanager.hxx>
 #include <uielement/rootitemcontainer.hxx>
@@ -717,7 +717,7 @@ void SAL_CALL UIConfigurationManager::dispose() throw (::com::sun::star::uno::Ru
     m_aListenerContainer.disposeAndClear( aEvent );
 
     {
-        ResetableGuard aGuard( m_aLock );
+        Guard aGuard( m_aLock );
         try
         {
             if ( m_xImageManager.is() )
@@ -739,7 +739,7 @@ void SAL_CALL UIConfigurationManager::dispose() throw (::com::sun::star::uno::Ru
 void SAL_CALL UIConfigurationManager::addEventListener( const Reference< XEventListener >& xListener ) throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
     {
-        ResetableGuard aGuard( m_aLock );
+        Guard aGuard( m_aLock );
 
         /* SAFE AREA ----------------------------------------------------------------------------------------------- */
         if ( m_bDisposed )
@@ -759,7 +759,7 @@ void SAL_CALL UIConfigurationManager::removeEventListener( const Reference< XEve
 void SAL_CALL UIConfigurationManager::addConfigurationListener( const Reference< ::com::sun::star::ui::XUIConfigurationListener >& xListener ) throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
     {
-        ResetableGuard aGuard( m_aLock );
+        Guard aGuard( m_aLock );
 
         /* SAFE AREA ----------------------------------------------------------------------------------------------- */
         if ( m_bDisposed )
@@ -778,7 +778,7 @@ void SAL_CALL UIConfigurationManager::removeConfigurationListener( const Referen
 
 void SAL_CALL UIConfigurationManager::reset() throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
-    ResetableGuard aGuard( m_aLock );
+    Guard aGuard( m_aLock );
 
     /* SAFE AREA ----------------------------------------------------------------------------------------------- */
     if ( m_bDisposed )
@@ -867,7 +867,7 @@ throw ( IllegalArgumentException, RuntimeException, std::exception )
     if (( ElementType < 0 ) || ( ElementType >= ::com::sun::star::ui::UIElementType::COUNT ))
         throw IllegalArgumentException();
 
-    ResetableGuard aGuard( m_aLock );
+    Guard aGuard( m_aLock );
     if ( m_bDisposed )
         throw DisposedException();
 
@@ -903,7 +903,7 @@ throw ( IllegalArgumentException, RuntimeException, std::exception )
 
 Reference< XIndexContainer > SAL_CALL UIConfigurationManager::createSettings() throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
-    ResetableGuard aGuard( m_aLock );
+    Guard aGuard( m_aLock );
 
     if ( m_bDisposed )
         throw DisposedException();
@@ -940,7 +940,7 @@ throw (::com::sun::star::container::NoSuchElementException, ::com::sun::star::la
         throw IllegalArgumentException();
     else
     {
-        ResetableGuard aGuard( m_aLock );
+        Guard aGuard( m_aLock );
 
         if ( m_bDisposed )
             throw DisposedException();
@@ -971,7 +971,7 @@ throw (::com::sun::star::container::NoSuchElementException, ::com::sun::star::la
         throw IllegalAccessException();
     else
     {
-        ResetableGuard aGuard( m_aLock );
+        Guard aGuard( m_aLock );
 
         if ( m_bDisposed )
             throw DisposedException();
@@ -1029,7 +1029,7 @@ throw ( NoSuchElementException, IllegalArgumentException, IllegalAccessException
         throw IllegalAccessException();
     else
     {
-        ResetableGuard aGuard( m_aLock );
+        Guard aGuard( m_aLock );
 
         if ( m_bDisposed )
             throw DisposedException();
@@ -1086,7 +1086,7 @@ throw ( ElementExistException, IllegalArgumentException, IllegalAccessException,
         throw IllegalAccessException();
     else
     {
-        ResetableGuard aGuard( m_aLock );
+        Guard aGuard( m_aLock );
 
         if ( m_bDisposed )
             throw DisposedException();
@@ -1176,7 +1176,7 @@ Reference< XInterface > SAL_CALL UIConfigurationManager::getImageManager() throw
 Reference< XAcceleratorConfiguration > SAL_CALL UIConfigurationManager::getShortCutManager() throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
     // SAFE ->
-    ResetableGuard aGuard( m_aLock );
+    Guard aGuard( m_aLock );
 
     if (!m_xAccConfig.is()) try
     {
@@ -1200,7 +1200,7 @@ Reference< XInterface > SAL_CALL UIConfigurationManager::getEventsManager() thro
 // XUIConfigurationStorage
 void SAL_CALL UIConfigurationManager::setStorage( const Reference< XStorage >& Storage ) throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
-    ResetableGuard aGuard( m_aLock );
+    Guard aGuard( m_aLock );
 
     if ( m_bDisposed )
         throw DisposedException();
@@ -1260,7 +1260,7 @@ void SAL_CALL UIConfigurationManager::setStorage( const Reference< XStorage >& S
 
 sal_Bool SAL_CALL UIConfigurationManager::hasStorage() throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
-    ResetableGuard aGuard( m_aLock );
+    Guard aGuard( m_aLock );
 
     if ( m_bDisposed )
         throw DisposedException();
@@ -1271,7 +1271,7 @@ sal_Bool SAL_CALL UIConfigurationManager::hasStorage() throw (::com::sun::star::
 // XUIConfigurationPersistence
 void SAL_CALL UIConfigurationManager::reload() throw (::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException, std::exception)
 {
-    ResetableGuard aGuard( m_aLock );
+    Guard aGuard( m_aLock );
 
     if ( m_bDisposed )
         throw DisposedException();
@@ -1310,7 +1310,7 @@ void SAL_CALL UIConfigurationManager::reload() throw (::com::sun::star::uno::Exc
 
 void SAL_CALL UIConfigurationManager::store() throw (::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException, std::exception)
 {
-    ResetableGuard aGuard( m_aLock );
+    Guard aGuard( m_aLock );
 
     if ( m_bDisposed )
         throw DisposedException();
@@ -1343,7 +1343,7 @@ void SAL_CALL UIConfigurationManager::store() throw (::com::sun::star::uno::Exce
 
 void SAL_CALL UIConfigurationManager::storeToStorage( const Reference< XStorage >& Storage ) throw (::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException, std::exception)
 {
-    ResetableGuard aGuard( m_aLock );
+    Guard aGuard( m_aLock );
 
     if ( m_bDisposed )
         throw DisposedException();
@@ -1376,14 +1376,14 @@ void SAL_CALL UIConfigurationManager::storeToStorage( const Reference< XStorage 
 
 sal_Bool SAL_CALL UIConfigurationManager::isModified() throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
-    ResetableGuard aGuard( m_aLock );
+    Guard aGuard( m_aLock );
 
     return m_bModified;
 }
 
 sal_Bool SAL_CALL UIConfigurationManager::isReadOnly() throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
-    ResetableGuard aGuard( m_aLock );
+    Guard aGuard( m_aLock );
 
     return m_bReadOnly;
 }

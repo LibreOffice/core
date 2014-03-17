@@ -32,7 +32,6 @@
 #include <dispatch/dispatchinformationprovider.hxx>
 #include <classes/framecontainer.hxx>
 #include <classes/propertysethelper.hxx>
-#include <threadhelp/resetableguard.hxx>
 #include <threadhelp/guard.hxx>
 #include <threadhelp/threadhelpbase.hxx>
 #include <threadhelp/transactionguard.hxx>

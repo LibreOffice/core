@@ -21,7 +21,7 @@
 #include <general.h>
 #include <framework/menuconfiguration.hxx>
 #include <framework/addonmenu.hxx>
-#include <threadhelp/resetableguard.hxx>
+#include <threadhelp/guard.hxx>
 #include <services.h>
 
 #include <com/sun/star/frame/FrameSearchFlag.hpp>
@@ -113,7 +113,7 @@ void SAL_CALL MenuDispatcher::addStatusListener(   const   uno::Reference< XStat
                                                     const   URL&                            aURL    ) throw( RuntimeException, std::exception )
 {
     // Ready for multithreading
-    ResetableGuard aGuard( m_aLock );
+    Guard aGuard( m_aLock );
     // Safe impossible cases
     // Method not defined for all incoming parameter
     SAL_WARN_IF( !impldbg_checkParameter_addStatusListener( xControl, aURL ), "fwk", "MenuDispatcher::addStatusListener(): Invalid parameter detected." );
@@ -128,7 +128,7 @@ void SAL_CALL MenuDispatcher::removeStatusListener(    const   uno::Reference< X
                                                         const   URL&                            aURL    ) throw( RuntimeException, std::exception )
 {
     // Ready for multithreading
-    ResetableGuard aGuard( m_aLock );
+    Guard aGuard( m_aLock );
     // Safe impossible cases
     // Method not defined for all incoming parameter
     SAL_WARN_IF( !impldbg_checkParameter_removeStatusListener( xControl, aURL ), "fwk", "MenuDispatcher::removeStatusListener(): Invalid parameter detected." );
@@ -142,7 +142,7 @@ void SAL_CALL MenuDispatcher::removeStatusListener(    const   uno::Reference< X
 
 void SAL_CALL MenuDispatcher::frameAction( const FrameActionEvent& aEvent ) throw ( RuntimeException, std::exception )
 {
-    ResetableGuard aGuard( m_aLock );
+    Guard aGuard( m_aLock );
 
     if ( m_pMenuManager && aEvent.Action == FrameAction_FRAME_UI_ACTIVATED )
     {
@@ -180,7 +180,7 @@ void SAL_CALL MenuDispatcher::frameAction( const FrameActionEvent& aEvent ) thro
 void SAL_CALL MenuDispatcher::disposing( const EventObject& ) throw( RuntimeException, std::exception )
 {
     // Ready for multithreading
-    ResetableGuard aGuard( m_aLock );
+    Guard aGuard( m_aLock );
     // Safe impossible cases
     SAL_WARN_IF( m_bAlreadyDisposed, "fwk", "MenuDispatcher::disposing(): Object already disposed .. don't call it again!" );
 
@@ -255,7 +255,7 @@ sal_Bool MenuDispatcher::impl_setMenuBar( MenuBar* pMenuBar, sal_Bool bMenuFromR
         if ( pWindow )
         {
             // Ready for multithreading
-            ResetableGuard aGuard( m_aLock );
+            Guard aGuard( m_aLock );
 
             SystemWindow* pSysWindow = (SystemWindow *)pWindow;
 

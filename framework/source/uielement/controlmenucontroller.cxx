@@ -19,7 +19,6 @@
 
 #include <sal/config.h>
 
-#include <threadhelp/resetableguard.hxx>
 #include <stdtypes.h>
 
 #include <com/sun/star/beans/PropertyValue.hpp>

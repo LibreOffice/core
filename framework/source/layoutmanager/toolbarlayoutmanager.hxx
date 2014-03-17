@@ -26,7 +26,6 @@
 #include <vector>
 
 #include <threadhelp/threadhelpbase.hxx>
-#include <threadhelp/resetableguard.hxx>
 #include <macros/generic.hxx>
 #include <macros/xinterface.hxx>
 #include <macros/xtypeprovider.hxx>

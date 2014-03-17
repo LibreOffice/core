@@ -20,7 +20,7 @@
 #include <helper/uielementwrapperbase.hxx>
 #include <general.h>
 #include <properties.h>
-#include <threadhelp/resetableguard.hxx>
+#include <threadhelp/guard.hxx>
 
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
@@ -88,7 +88,7 @@ void SAL_CALL UIElementWrapperBase::removeEventListener( const ::com::sun::star:
 void SAL_CALL UIElementWrapperBase::initialize( const Sequence< Any >& aArguments )
 throw ( Exception, RuntimeException, std::exception )
 {
-    ResetableGuard aLock( m_aLock );
+    Guard aLock( m_aLock );
 
     if ( !m_bInitialized )
     {

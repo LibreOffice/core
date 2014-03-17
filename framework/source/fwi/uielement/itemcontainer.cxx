@@ -19,7 +19,6 @@
 
 #include <uielement/itemcontainer.hxx>
 #include <uielement/constitemcontainer.hxx>
-#include <threadhelp/resetableguard.hxx>
 #include <comphelper/servicehelper.hxx>
 
 using namespace cppu;

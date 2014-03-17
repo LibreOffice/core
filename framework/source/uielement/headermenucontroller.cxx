@@ -19,7 +19,6 @@
 
 #include <uielement/headermenucontroller.hxx>
 
-#include <threadhelp/resetableguard.hxx>
 #include "services.h"
 
 #include <classes/resource.hrc>

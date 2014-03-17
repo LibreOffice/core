@@ -19,7 +19,6 @@
 
 #include <uielement/fontmenucontroller.hxx>
 
-#include <threadhelp/resetableguard.hxx>
 #include "services.h"
 
 #include <com/sun/star/awt/XDevice.hpp>

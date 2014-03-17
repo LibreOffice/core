@@ -21,7 +21,6 @@
 #define INCLUDED_FRAMEWORK_INC_DISPATCH_OXT_HANDLER_HXX
 
 #include <threadhelp/threadhelpbase.hxx>
-#include <threadhelp/resetableguard.hxx>
 #include <macros/xinterface.hxx>
 #include <macros/xtypeprovider.hxx>
 #include <macros/xserviceinfo.hxx>

@@ -18,7 +18,6 @@
  */
 
 #include "helpers.hxx"
-#include <threadhelp/resetableguard.hxx>
 #include <services.h>
 
 #include <com/sun/star/ui/DockingArea.hpp>

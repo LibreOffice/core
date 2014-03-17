@@ -20,7 +20,7 @@
 
 #include <stdio.h>
 
-#include <threadhelp/resetableguard.hxx>
+#include <threadhelp/guard.hxx>
 #include <xml/statusbardocumenthandler.hxx>
 
 #include <com/sun/star/xml/sax/XExtendedDocumentHandler.hpp>
@@ -191,7 +191,7 @@ throw ( SAXException, RuntimeException, std::exception )
 void SAL_CALL OReadStatusBarDocumentHandler::endDocument(void)
 throw(  SAXException, RuntimeException, std::exception )
 {
-    ResetableGuard aGuard( m_aLock );
+    Guard aGuard( m_aLock );
 
     if (( m_bStatusBarStartFound && !m_bStatusBarEndFound ) ||
         ( !m_bStatusBarStartFound && m_bStatusBarEndFound )     )
@@ -206,7 +206,7 @@ void SAL_CALL OReadStatusBarDocumentHandler::startElement(
     const OUString& aName, const Reference< XAttributeList > &xAttribs )
 throw(  SAXException, RuntimeException, std::exception )
 {
-    ResetableGuard aGuard( m_aLock );
+    Guard aGuard( m_aLock );
 
     StatusBarHashMap::const_iterator pStatusBarEntry = m_aStatusBarMap.find( aName ) ;
     if ( pStatusBarEntry != m_aStatusBarMap.end() )
@@ -405,7 +405,7 @@ throw(  SAXException, RuntimeException, std::exception )
 void SAL_CALL OReadStatusBarDocumentHandler::endElement(const OUString& aName)
 throw(  SAXException, RuntimeException, std::exception )
 {
-    ResetableGuard aGuard( m_aLock );
+    Guard aGuard( m_aLock );
 
     StatusBarHashMap::const_iterator pStatusBarEntry = m_aStatusBarMap.find( aName ) ;
     if ( pStatusBarEntry != m_aStatusBarMap.end() )
@@ -464,14 +464,14 @@ void SAL_CALL OReadStatusBarDocumentHandler::setDocumentLocator(
     const Reference< XLocator > &xLocator)
 throw(  SAXException, RuntimeException, std::exception )
 {
-    ResetableGuard aGuard( m_aLock );
+    Guard aGuard( m_aLock );
 
     m_xLocator = xLocator;
 }
 
 OUString OReadStatusBarDocumentHandler::getErrorLineString()
 {
-    ResetableGuard aGuard( m_aLock );
+    Guard aGuard( m_aLock );
 
     char buffer[32];
 
@@ -510,7 +510,7 @@ OWriteStatusBarDocumentHandler::~OWriteStatusBarDocumentHandler()
 void OWriteStatusBarDocumentHandler::WriteStatusBarDocument() throw
 ( SAXException, RuntimeException )
 {
-    ResetableGuard aGuard( m_aLock );
+    Guard aGuard( m_aLock );
 
     m_xWriteDocumentHandler->startDocument();
 

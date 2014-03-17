@@ -21,7 +21,7 @@
 #include <uielement/toolbarmerger.hxx>
 
 #include <uielement/generictoolbarcontroller.hxx>
-#include <threadhelp/resetableguard.hxx>
+#include <threadhelp/guard.hxx>
 #include "services.h"
 #include <framework/imageproducer.hxx>
 #include <framework/sfxhelperfunctions.hxx>
@@ -145,7 +145,7 @@ void SAL_CALL AddonsToolBarManager::dispose() throw( RuntimeException, std::exce
 
     {
         // Remove addon specific data from toolbar items.
-        ResetableGuard aGuard( m_aLock );
+        Guard aGuard( m_aLock );
         for ( sal_uInt16 n = 0; n < m_pToolBar->GetItemCount(); n++ )
         {
             sal_uInt16 nId( m_pToolBar->GetItemId( n ) );
@@ -201,7 +201,7 @@ void AddonsToolBarManager::RefreshImages()
 
 void AddonsToolBarManager::FillToolbar( const Sequence< Sequence< PropertyValue > >& rAddonToolbar )
 {
-    ResetableGuard aGuard( m_aLock );
+    Guard aGuard( m_aLock );
 
     if ( m_bDisposed )
         return;
@@ -422,7 +422,7 @@ IMPL_LINK_NOARG(AddonsToolBarManager, DoubleClick)
 
 IMPL_LINK_NOARG(AddonsToolBarManager, Command)
 {
-    ResetableGuard aGuard( m_aLock );
+    Guard aGuard( m_aLock );
 
     if ( m_bDisposed )
         return 1;

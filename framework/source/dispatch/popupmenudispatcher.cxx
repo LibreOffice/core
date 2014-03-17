@@ -21,7 +21,6 @@
 #include <general.h>
 #include <framework/menuconfiguration.hxx>
 #include <framework/addonmenu.hxx>
-#include <threadhelp/resetableguard.hxx>
 #include <threadhelp/guard.hxx>
 #include <services.h>
 #include <properties.h>
@@ -181,7 +180,7 @@ throw( css::uno::RuntimeException, std::exception )
     if ( rURL.Complete.startsWith( "vnd.sun.star.popup:" ) )
     {
         // --- SAFE ---
-        ResetableGuard aGuard( m_aLock );
+        Guard aGuard( m_aLock );
         impl_RetrievePopupControllerQuery();
         impl_CreateUriRefFactory();
 
@@ -260,7 +259,7 @@ void SAL_CALL PopupMenuDispatcher::addStatusListener( const uno::Reference< XSta
 throw( RuntimeException, std::exception )
 {
     // Ready for multithreading
-    ResetableGuard aGuard( m_aLock );
+    Guard aGuard( m_aLock );
     // Safe impossible cases
     // Add listener to container.
     m_aListenerContainer.addInterface( aURL.Complete, xControl );
@@ -271,7 +270,7 @@ void SAL_CALL PopupMenuDispatcher::removeStatusListener( const uno::Reference< X
 throw( RuntimeException, std::exception )
 {
     // Ready for multithreading
-    ResetableGuard aGuard( m_aLock );
+    Guard aGuard( m_aLock );
     // Safe impossible cases
     // Add listener to container.
     m_aListenerContainer.removeInterface( aURL.Complete, xControl );
@@ -280,7 +279,7 @@ throw( RuntimeException, std::exception )
 void SAL_CALL PopupMenuDispatcher::frameAction( const FrameActionEvent& aEvent )
 throw ( RuntimeException, std::exception )
 {
-    ResetableGuard aGuard( m_aLock );
+    Guard aGuard( m_aLock );
 
     if (( aEvent.Action == css::frame::FrameAction_COMPONENT_DETACHING ) ||
         ( aEvent.Action == css::frame::FrameAction_COMPONENT_ATTACHED  ))
@@ -293,7 +292,7 @@ throw ( RuntimeException, std::exception )
 void SAL_CALL PopupMenuDispatcher::disposing( const EventObject& ) throw( RuntimeException, std::exception )
 {
     // Ready for multithreading
-    ResetableGuard aGuard( m_aLock );
+    Guard aGuard( m_aLock );
     // Safe impossible cases
     SAL_WARN_IF( m_bAlreadyDisposed, "fwk", "MenuDispatcher::disposing(): Object already disposed .. don't call it again!" );
 

@@ -20,7 +20,7 @@
 
 #include <uielement/statusbarwrapper.hxx>
 
-#include <threadhelp/resetableguard.hxx>
+#include <threadhelp/guard.hxx>
 #include <framework/actiontriggerhelper.hxx>
 #include <uielement/constitemcontainer.hxx>
 #include <uielement/rootitemcontainer.hxx>
@@ -71,7 +71,7 @@ void SAL_CALL StatusBarWrapper::dispose() throw (::com::sun::star::uno::RuntimeE
     com::sun::star::lang::EventObject aEvent( xThis );
     m_aListenerContainer.disposeAndClear( aEvent );
 
-    ResetableGuard aLock( m_aLock );
+    Guard aLock( m_aLock );
     if ( !m_bDisposed )
     {
         if ( m_xStatusBarManager.is() )
@@ -90,7 +90,7 @@ void SAL_CALL StatusBarWrapper::dispose() throw (::com::sun::star::uno::RuntimeE
 // XInitialization
 void SAL_CALL StatusBarWrapper::initialize( const Sequence< Any >& aArguments ) throw ( Exception, RuntimeException, std::exception )
 {
-    ResetableGuard aLock( m_aLock );
+    Guard aLock( m_aLock );
 
     if ( m_bDisposed )
         throw DisposedException();
@@ -139,7 +139,7 @@ void SAL_CALL StatusBarWrapper::initialize( const Sequence< Any >& aArguments ) 
 // XUIElementSettings
 void SAL_CALL StatusBarWrapper::updateSettings() throw ( RuntimeException, std::exception )
 {
-    ResetableGuard aLock( m_aLock );
+    Guard aLock( m_aLock );
 
     if ( m_bDisposed )
         throw DisposedException();
@@ -164,7 +164,7 @@ void SAL_CALL StatusBarWrapper::updateSettings() throw ( RuntimeException, std::
 
 Reference< XInterface > SAL_CALL StatusBarWrapper::getRealInterface() throw ( RuntimeException, std::exception )
 {
-    ResetableGuard aLock( m_aLock );
+    Guard aLock( m_aLock );
 
     if ( m_xStatusBarManager.is() )
     {

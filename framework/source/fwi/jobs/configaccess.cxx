@@ -19,7 +19,6 @@
 
 #include <jobs/configaccess.hxx>
 #include <threadhelp/guard.hxx>
-#include <threadhelp/resetableguard.hxx>
 #include <general.h>
 #include <services.h>
 

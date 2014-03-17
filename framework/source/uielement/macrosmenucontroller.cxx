@@ -20,7 +20,6 @@
 
 #include <uielement/macrosmenucontroller.hxx>
 #include <uielement/menubarmanager.hxx>
-#include <threadhelp/resetableguard.hxx>
 #include "services.h"
 #include <classes/resource.hrc>
 #include <classes/fwkresid.hxx>
