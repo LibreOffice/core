@@ -99,7 +99,7 @@ public:
     const StyleSheetEntryPtr FindStyleSheetByConvertedStyleName(const OUString& rIndex);
     const StyleSheetEntryPtr FindDefaultParaStyle();
     // returns the parent of the one with the given name - if empty the parent of the current style sheet is returned
-    const StyleSheetEntryPtr FindParentStyleSheet(OUString sBaseStyle);
+    const StyleSheetEntryPtr FindParentStyleSheet(const OUString& sBaseStyle);
 
     OUString ConvertStyleName( const OUString& rWWName, bool bExtendedSearch = false );
     OUString GetStyleIdFromIndex(const sal_uInt32 sti);

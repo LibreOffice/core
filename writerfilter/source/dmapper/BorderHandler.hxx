@@ -58,7 +58,7 @@ private:
     ::com::sun::star::table::BorderLine2        m_aBorderLines[BORDER_COUNT];
     OUString m_aInteropGrabBagName;
     std::vector<beans::PropertyValue> m_aInteropGrabBag;
-    void appendGrabBag(OUString aKey, OUString aValue);
+    void appendGrabBag(const OUString& aKey, const OUString& aValue);
 
     // Properties
     virtual void lcl_attribute(Id Name, Value & val);
@@ -72,8 +72,8 @@ public:
     ::com::sun::star::table::BorderLine2        getBorderLine();
     sal_Int32                                   getLineDistance() const { return m_nLineDistance;}
     bool                                        getShadow();
-    void enableInteropGrabBag(OUString aName);
-    beans::PropertyValue getInteropGrabBag(OUString aName = OUString());
+    void enableInteropGrabBag(const OUString& aName);
+    beans::PropertyValue getInteropGrabBag(const OUString& aName = OUString());
 };
 typedef boost::shared_ptr< BorderHandler >          BorderHandlerPtr;
 }}

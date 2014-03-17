@@ -64,7 +64,7 @@ void lcl_printProperties( uno::Sequence< beans::PropertyValue > aProps )
     }
 }
 
-sal_Int32 lcl_findProperty( uno::Sequence< beans::PropertyValue > aProps, OUString sName )
+sal_Int32 lcl_findProperty( uno::Sequence< beans::PropertyValue > aProps, const OUString& sName )
 {
     sal_Int32 i = 0;
     sal_Int32 nLen = aProps.getLength( );
@@ -151,7 +151,7 @@ void ListLevel::SetParaStyle( boost::shared_ptr< StyleSheetEntry > pStyle )
         && styleId[ RTL_CONSTASCII_LENGTH( "Heading" ) ] <= '9' );
 }
 
-sal_Int16 ListLevel::GetParentNumbering( OUString sText, sal_Int16 nLevel,
+sal_Int16 ListLevel::GetParentNumbering( const OUString& sText, sal_Int16 nLevel,
         OUString& rPrefix, OUString& rSuffix )
 {
     sal_Int16 nParentNumbering = 1;

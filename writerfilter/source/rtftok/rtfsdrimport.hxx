@@ -25,9 +25,9 @@ namespace writerfilter {
 
                 void resolve(RTFShape& rShape, bool bClose);
                 void close();
-                void append(OUString aKey, OUString aValue);
+                void append(const OUString& aKey, const OUString& aValue);
                 /// Append property on the current parent.
-                void appendGroupProperty(OUString aKey, OUString aValue);
+                void appendGroupProperty(const OUString& aKey, const OUString& aValue);
                 void resolveDhgt(uno::Reference<beans::XPropertySet> xPropertySet, sal_Int32 nZOrder, bool bOldStyle);
                 void resolveFLine(uno::Reference<beans::XPropertySet> xPropertySet, sal_Int32 nFLine);
                 /**
@@ -41,8 +41,8 @@ namespace writerfilter {
                 /// Pop the current group shape from the parent stack.
                 void popParent();
             private:
-                void createShape(OUString aService, uno::Reference<drawing::XShape>& xShape, uno::Reference<beans::XPropertySet>& xPropertySet);
-                void applyProperty(uno::Reference<drawing::XShape> xShape, OUString aKey, OUString aValue);
+                void createShape(const OUString& aService, uno::Reference<drawing::XShape>& xShape, uno::Reference<beans::XPropertySet>& xPropertySet);
+                void applyProperty(uno::Reference<drawing::XShape> xShape, const OUString& aKey, const OUString& aValue);
 
                 RTFDocumentImpl& m_rImport;
                 std::stack< uno::Reference<drawing::XShapes> > m_aParents;

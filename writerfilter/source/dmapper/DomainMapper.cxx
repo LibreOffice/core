@@ -916,7 +916,7 @@ void DomainMapper::lcl_sprm(Sprm & rSprm)
         sprmWithProps( rSprm, m_pImpl->GetTopContext() );
 }
 
-sal_Int32 lcl_getCurrentNumberingProperty(uno::Reference<container::XIndexAccess> xNumberingRules, sal_Int32 nNumberingLevel, OUString aProp)
+sal_Int32 lcl_getCurrentNumberingProperty(uno::Reference<container::XIndexAccess> xNumberingRules, sal_Int32 nNumberingLevel, const OUString& aProp)
 {
     sal_Int32 nRet = 0;
 
@@ -3076,7 +3076,7 @@ bool DomainMapper::IsInHeaderFooter() const
     return m_pImpl->IsInHeaderFooter();
 }
 
-void DomainMapper::enableInteropGrabBag(OUString aName)
+void DomainMapper::enableInteropGrabBag(const OUString& aName)
 {
     m_pImpl->m_aInteropGrabBagName = aName;
 }

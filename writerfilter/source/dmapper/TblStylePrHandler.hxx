@@ -71,8 +71,8 @@ public:
     inline PropertyMapPtr       getProperties() { return m_pProperties; };
     inline TblStyleType         getType() { return m_nType; };
     OUString getTypeString();
-    void appendInteropGrabBag(OUString aKey, OUString aValue);
-    beans::PropertyValue getInteropGrabBag(OUString aName);
+    void appendInteropGrabBag(const OUString& aKey, const OUString& aValue);
+    beans::PropertyValue getInteropGrabBag(const OUString& aName);
 
 private:
 

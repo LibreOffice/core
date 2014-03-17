@@ -79,12 +79,12 @@ public:
 
     // Setters for the import
     void SetValue( Id nId, sal_Int32 nValue );
-    void SetBulletChar( OUString sValue ) { m_sBulletChar = sValue; };
-    void SetGraphicURL( OUString sValue ) { m_sGraphicURL = sValue; };
+    void SetBulletChar( const OUString& sValue ) { m_sBulletChar = sValue; };
+    void SetGraphicURL( const OUString& sValue ) { m_sGraphicURL = sValue; };
     void SetGraphicBitmap( com::sun::star::uno::Reference< com::sun::star::graphic::XGraphic > sValue )
         { m_sGraphicBitmap = sValue; }
     void SetParaStyle( boost::shared_ptr< StyleSheetEntry > pStyle );
-    void AddRGBXchNums( OUString sValue ) { m_sRGBXchNums += sValue; };
+    void AddRGBXchNums( const OUString& sValue ) { m_sRGBXchNums += sValue; };
 
     // Getters
     OUString GetBulletChar( ) { return m_sBulletChar; };
@@ -94,7 +94,7 @@ public:
     // UNO mapping functions
 
     // rPrefix and rSuffix are out parameters
-    static sal_Int16 GetParentNumbering( OUString sText, sal_Int16 nLevel,
+    static sal_Int16 GetParentNumbering( const OUString& sText, sal_Int16 nLevel,
         OUString& rPrefix, OUString& rSuffix );
 
     com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue >
@@ -156,7 +156,7 @@ public:
     // Setters using during the import
     void SetId( sal_Int32 nId ) { m_nId = nId; };
     void SetValue( sal_uInt32 nSprmId, sal_Int32 nValue );
-    void AddRGISTD( OUString sValue ) { m_sRGISTD += sValue; };
+    void AddRGISTD( const OUString& sValue ) { m_sRGISTD += sValue; };
 
     // Accessors
     sal_Int32             GetId( ) { return m_nId; };
@@ -171,8 +171,8 @@ public:
         com::sun::star::uno::Sequence<
             com::sun::star::beans::PropertyValue > > GetPropertyValues( );
 
-    void                  SetNumStyleLink(rtl::OUString sValue) { m_sNumStyleLink = sValue; };
-    ::rtl::OUString       GetNumStyleLink() { return m_sNumStyleLink; };
+    void                  SetNumStyleLink(const OUString& sValue) { m_sNumStyleLink = sValue; };
+    OUString              GetNumStyleLink() { return m_sNumStyleLink; };
 };
 
 class ListDef : public AbstractListDef

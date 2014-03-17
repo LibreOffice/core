@@ -528,8 +528,8 @@ public:
     ::com::sun::star::uno::Sequence< ::com::sun::star::style::TabStop >     GetCurrentTabStopAndClear();
     void                                NextTabStop() {++m_nCurrentTabStopIndex;}
 
-    void        SetCurrentParaStyleId(OUString sStringValue) {m_sCurrentParaStyleId = sStringValue;}
-    OUString   GetCurrentParaStyleId() const {return m_sCurrentParaStyleId;}
+    void        SetCurrentParaStyleId(const OUString& sStringValue) {m_sCurrentParaStyleId = sStringValue;}
+    OUString    GetCurrentParaStyleId() const {return m_sCurrentParaStyleId;}
 
     ::com::sun::star::uno::Any    GetPropertyFromStyleSheet(PropertyIds eId);
     void        SetStyleSheetImport( bool bSet ) { m_bInStyleSheetImport = bSet;}
@@ -685,14 +685,14 @@ public:
     RedlineParamsPtr GetTopRedline( );
 
     sal_Int32 GetCurrentRedlineToken( );
-    void SetCurrentRedlineAuthor( OUString sAuthor );
-    void SetCurrentRedlineDate( OUString sDate );
+    void SetCurrentRedlineAuthor( const OUString& sAuthor );
+    void SetCurrentRedlineDate( const OUString& sDate );
     void SetCurrentRedlineId( sal_Int32 nId );
     void SetCurrentRedlineToken( sal_Int32 nToken );
     void SetCurrentRedlineRevertProperties( uno::Sequence<beans::PropertyValue> aProperties );
     void RemoveCurrentRedline( );
     void ResetParaMarkerRedline( );
-    void SetCurrentRedlineInitials( OUString sInitials );
+    void SetCurrentRedlineInitials( const OUString& sInitials );
     bool IsFirstRun() { return m_bIsFirstRun;}
     void SetIsFirstRun(bool bval) { m_bIsFirstRun = bval;}
 
@@ -716,7 +716,7 @@ public:
     void processDeferredCharacterProperties();
 
     /// Get a property of the current numbering style's current level.
-    sal_Int32 getCurrentNumberingProperty(OUString aProp);
+    sal_Int32 getCurrentNumberingProperty(const OUString& aProp);
 
     /// If we're importing into a new document, or just pasting to an existing one.
     bool IsNewDoc();
@@ -750,11 +750,11 @@ public:
     std::vector<FloatingTableInfo> m_aPendingFloatingTables;
 
     /// Append a property to a sub-grabbag if necessary (e.g. 'lineRule', 'auto')
-    void appendGrabBag(std::vector<beans::PropertyValue>& rInteropGrabBag, OUString aKey, OUString aValue);
-    void appendGrabBag(std::vector<beans::PropertyValue>& rInteropGrabBag, OUString aKey, std::vector<beans::PropertyValue>& rValue);
+    void appendGrabBag(std::vector<beans::PropertyValue>& rInteropGrabBag, const OUString& aKey, const OUString& aValue);
+    void appendGrabBag(std::vector<beans::PropertyValue>& rInteropGrabBag, const OUString& aKey, std::vector<beans::PropertyValue>& rValue);
 
     /// Enable, disable an check status of grabbags
-    void enableInteropGrabBag(OUString aName);
+    void enableInteropGrabBag(const OUString& aName);
     void disableInteropGrabBag();
     bool isInteropGrabBagEnabled();
 

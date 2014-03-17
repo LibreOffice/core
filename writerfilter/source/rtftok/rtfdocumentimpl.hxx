@@ -358,7 +358,7 @@ namespace writerfilter {
                 /// Return the style name of an RTF style index.
                 OUString getStyleName(int nIndex);
                 /// Return the encoding associated with a font name.
-                rtl_TextEncoding getEncoding(OUString aFontName);
+                rtl_TextEncoding getEncoding(const OUString& aFontName);
                 /// Get the default parser state.
                 RTFParserState& getDefaultState();
                 oox::GraphicHelper& getGraphicHelper();

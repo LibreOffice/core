@@ -158,7 +158,7 @@ void TblStylePrHandler::resolveSprmProps(Sprm & rSprm)
         pProperties->resolve(*this);
 }
 
-void TblStylePrHandler::appendInteropGrabBag(OUString aKey, OUString aValue)
+void TblStylePrHandler::appendInteropGrabBag(const OUString& aKey, const OUString& aValue)
 {
     beans::PropertyValue aProperty;
     aProperty.Name = aKey;
@@ -166,7 +166,7 @@ void TblStylePrHandler::appendInteropGrabBag(OUString aKey, OUString aValue)
     m_aInteropGrabBag.push_back(aProperty);
 }
 
-beans::PropertyValue TblStylePrHandler::getInteropGrabBag(OUString aName)
+beans::PropertyValue TblStylePrHandler::getInteropGrabBag(const OUString& aName)
 {
     beans::PropertyValue aRet;
     aRet.Name = aName;

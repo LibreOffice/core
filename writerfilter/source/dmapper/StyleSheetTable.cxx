@@ -308,7 +308,7 @@ struct StyleSheetTable_Impl
     OUString HasListCharStyle( const PropertyValueVector_t& rCharProperties );
 
     /// Appends the given key-value pair to the list of latent style properties of the current entry.
-    void AppendLatentStyleProperty(OUString aName, Value& rValue);
+    void AppendLatentStyleProperty(const OUString& aName, Value& rValue);
 };
 
 
@@ -372,7 +372,7 @@ OUString StyleSheetTable_Impl::HasListCharStyle( const PropertyValueVector_t& rP
     return sRet;
 }
 
-void StyleSheetTable_Impl::AppendLatentStyleProperty(OUString aName, Value& rValue)
+void StyleSheetTable_Impl::AppendLatentStyleProperty(const OUString& aName, Value& rValue)
 {
     beans::PropertyValue aValue;
     aValue.Name = aName;
@@ -1272,13 +1272,14 @@ const StyleSheetEntryPtr StyleSheetTable::FindDefaultParaStyle()
     return pRet;
 }
 
-const StyleSheetEntryPtr StyleSheetTable::FindParentStyleSheet(OUString sBaseStyle)
+const StyleSheetEntryPtr StyleSheetTable::FindParentStyleSheet(const OUString& _sBaseStyle)
 {
-    if( sBaseStyle.isEmpty() )
+    if( _sBaseStyle.isEmpty() )
     {
         StyleSheetEntryPtr pEmptyPtr;
         return pEmptyPtr;
     }
+    OUString sBaseStyle = _sBaseStyle;
     if( m_pImpl->m_pCurrentEntry)
         sBaseStyle = m_pImpl->m_pCurrentEntry->sBaseStyleIdentifier;
 

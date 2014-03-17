@@ -60,7 +60,7 @@ RTFSdrImport::~RTFSdrImport()
         m_aParents.pop();
 }
 
-void RTFSdrImport::createShape(OUString aStr, uno::Reference<drawing::XShape>& xShape, uno::Reference<beans::XPropertySet>& xPropertySet)
+void RTFSdrImport::createShape(const OUString& aStr, uno::Reference<drawing::XShape>& xShape, uno::Reference<beans::XPropertySet>& xPropertySet)
 {
     if (m_rImport.getModelFactory().is())
         xShape.set(m_rImport.getModelFactory()->createInstance(aStr), uno::UNO_QUERY);
@@ -134,7 +134,7 @@ void RTFSdrImport::resolveFLine(uno::Reference<beans::XPropertySet> xPropertySet
         xPropertySet->setPropertyValue("LineStyle", uno::makeAny(drawing::LineStyle_NONE));
 }
 
-void RTFSdrImport::applyProperty(uno::Reference<drawing::XShape> xShape, OUString aKey, OUString aValue)
+void RTFSdrImport::applyProperty(uno::Reference<drawing::XShape> xShape, const OUString& aKey, const OUString& aValue)
 {
     uno::Reference<beans::XPropertySet> xPropertySet(xShape, uno::UNO_QUERY);
     sal_Int16 nHoriOrient = 0;
@@ -703,12 +703,12 @@ void RTFSdrImport::close()
     m_rImport.Mapper().endShape();
 }
 
-void RTFSdrImport::append(OUString aKey, OUString aValue)
+void RTFSdrImport::append(const OUString& aKey, const OUString& aValue)
 {
     applyProperty(m_xShape, aKey, aValue);
 }
 
-void RTFSdrImport::appendGroupProperty(OUString aKey, OUString aValue)
+void RTFSdrImport::appendGroupProperty(const OUString& aKey, const OUString& aValue)
 {
     uno::Reference<drawing::XShape> xShape(m_aParents.top(), uno::UNO_QUERY);
     if (xShape.is())

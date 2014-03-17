@@ -46,7 +46,7 @@ private:
     virtual void lcl_attribute(Id Name, Value & val);
     virtual void lcl_sprm(Sprm & sprm);
 
-    void createGrabBag(OUString aName, uno::Any aValue);
+    void createGrabBag(const OUString& aName, uno::Any aValue);
 
 public:
     CellColorHandler( );
@@ -56,7 +56,7 @@ public:
 
     void setOutputFormat( OutputFormat format ) { m_OutputFormat = format; }
 
-    void enableInteropGrabBag(OUString aName);
+    void enableInteropGrabBag(const OUString& aName);
     beans::PropertyValue getInteropGrabBag();
     void disableInteropGrabBag();
     sal_Bool isInteropGrabBagEnabled();

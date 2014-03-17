@@ -54,7 +54,7 @@ public:
     sal_Int32 getUnit() const { return m_nUnit; }
 
     sal_Int16 GetRowHeightSizeType() const { return m_nRowHeightSizeType;}
-    void enableInteropGrabBag(OUString aName);
+    void enableInteropGrabBag(const OUString& aName);
     beans::PropertyValue getInteropGrabBag();
 };
 typedef boost::shared_ptr

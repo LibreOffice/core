@@ -71,7 +71,7 @@ class OLEHandler : public LoggedProperties
 
     // Interoperability
     virtual void saveInteropProperties( ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextDocument > xTextDocument,
-                                        OUString sObjectName );
+                                        const OUString& sObjectName );
 
 public:
     OLEHandler();

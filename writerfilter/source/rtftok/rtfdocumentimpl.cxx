@@ -614,7 +614,7 @@ sal_uInt32 RTFDocumentImpl::getColorTable(sal_uInt32 nIndex)
         return m_pSuperstream->getColorTable(nIndex);
 }
 
-rtl_TextEncoding RTFDocumentImpl::getEncoding(OUString aFontName)
+rtl_TextEncoding RTFDocumentImpl::getEncoding(const OUString& aFontName)
 {
     if (!m_pSuperstream)
     {

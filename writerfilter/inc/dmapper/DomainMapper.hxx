@@ -123,7 +123,7 @@ public:
     void setInTableStyleRunProps(bool bInTableStyleRunProps);
 
     /// Enable storing of seen tokens in a named grab bag.
-    void enableInteropGrabBag(OUString aName);
+    void enableInteropGrabBag(const OUString& aName);
     /// Get the stored tokens and clear the internal storage.
     beans::PropertyValue getInteropGrabBag();
 

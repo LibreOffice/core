@@ -495,12 +495,12 @@ size_t TDefTableHandler::getCellCount() const
     return m_aCellVertAlign.size();
 }
 
-void TDefTableHandler::enableInteropGrabBag(OUString aName)
+void TDefTableHandler::enableInteropGrabBag(const OUString& aName)
 {
     m_aInteropGrabBagName = aName;
 }
 
-beans::PropertyValue TDefTableHandler::getInteropGrabBag(OUString aName)
+beans::PropertyValue TDefTableHandler::getInteropGrabBag(const OUString& aName)
 {
     beans::PropertyValue aRet;
     if (aName.isEmpty())
@@ -518,7 +518,7 @@ beans::PropertyValue TDefTableHandler::getInteropGrabBag(OUString aName)
     return aRet;
 }
 
-void TDefTableHandler::appendGrabBag(OUString aKey, OUString aValue)
+void TDefTableHandler::appendGrabBag(const OUString& aKey, const OUString& aValue)
 {
     beans::PropertyValue aProperty;
     aProperty.Name = aKey;
