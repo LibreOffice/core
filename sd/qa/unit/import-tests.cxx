@@ -61,6 +61,7 @@ public:
     void testFdo68594();
     void testFdo72998();
     void testStrictOOXML();
+    void testN862510_1();
 
     CPPUNIT_TEST_SUITE(SdFiltersTest);
     CPPUNIT_TEST(testDocumentLayout);
@@ -78,6 +79,7 @@ public:
     CPPUNIT_TEST(testFdo68594);
     CPPUNIT_TEST(testFdo72998);
     CPPUNIT_TEST(testStrictOOXML);
+    CPPUNIT_TEST(testN862510_1);
 
     CPPUNIT_TEST_SUITE_END();
 };
@@ -233,6 +235,31 @@ void SdFiltersTest::testN821567()
         aAny >>= bgImage;
     }
     CPPUNIT_ASSERT_MESSAGE("Slide Background is not exported properly", !bgImage.isEmpty());
+}
+
+void SdFiltersTest::testN862510_1()
+{
+    ::sd::DrawDocShellRef xDocShRef = loadURL( getURLFromSrc("/sd/qa/unit/data/pptx/n862510_1.pptx") );
+    CPPUNIT_ASSERT_MESSAGE( "failed to load", xDocShRef.Is() );
+    CPPUNIT_ASSERT_MESSAGE( "in destruction", !xDocShRef->IsInDestruction() );
+
+    SdDrawDocument *pDoc = xDocShRef->GetDoc();
+    CPPUNIT_ASSERT_MESSAGE( "no document", pDoc != NULL );
+    const SdrPage *pPage = pDoc->GetPage(1);
+    CPPUNIT_ASSERT_MESSAGE( "no page", pPage != NULL );
+    {
+        std::vector<EECharAttrib> rLst;
+        SdrObject *pObj = pPage->GetObj( 0 );
+        SdrTextObj *pTxtObj = dynamic_cast<SdrTextObj *>( pObj );
+        CPPUNIT_ASSERT( pTxtObj );
+        const EditTextObject& aEdit = pTxtObj->GetOutlinerParaObject()->GetTextObject();
+        aEdit.GetCharAttribs( 0, rLst );
+        for( std::vector<EECharAttrib>::reverse_iterator it = rLst.rbegin(); it!=rLst.rend(); ++it)
+        {
+            const SvxEscapementItem *pFontEscapement = dynamic_cast<const SvxEscapementItem *>( (*it).pAttr );
+            CPPUNIT_ASSERT_MESSAGE( "Baseline attribute not handled properly", !( pFontEscapement && pFontEscapement->GetProp() != 100 ) );
+        }
+    }
 }
 
 void SdFiltersTest::testN828390()
