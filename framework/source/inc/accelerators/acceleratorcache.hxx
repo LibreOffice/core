@@ -20,7 +20,6 @@
 #ifndef INCLUDED_FRAMEWORK_SOURCE_INC_ACCELERATORS_ACCELERATORCACHE_HXX
 #define INCLUDED_FRAMEWORK_SOURCE_INC_ACCELERATORS_ACCELERATORCACHE_HXX
 
-#include <threadhelp/threadhelpbase.hxx>
 #include <general.h>
 #include <stdtypes.h>
 
@@ -44,7 +43,7 @@ namespace framework
 
             copy-on-write ... How? Do the following:
  */
-class AcceleratorCache : public ThreadHelpBase // attention! Must be the first base class to guarentee right initialize lock ...
+class AcceleratorCache
 {
 
     // const, types

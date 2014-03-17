@@ -20,7 +20,6 @@
 #include <accelerators/acceleratorcache.hxx>
 
 #include <xml/acceleratorconfigurationreader.hxx>
-#include <threadhelp/guard.hxx>
 
 #include <com/sun/star/container/ElementExistException.hpp>
 
@@ -33,13 +32,11 @@ namespace framework
 
 
 AcceleratorCache::AcceleratorCache()
-    : ThreadHelpBase(&Application::GetSolarMutex())
 {
 }
 
 
 AcceleratorCache::AcceleratorCache(const AcceleratorCache& rCopy)
-    : ThreadHelpBase(&Application::GetSolarMutex())
 {
     m_lCommand2Keys = rCopy.m_lCommand2Keys;
     m_lKey2Commands = rCopy.m_lKey2Commands;
@@ -55,14 +52,9 @@ AcceleratorCache::~AcceleratorCache()
 
 void AcceleratorCache::takeOver(const AcceleratorCache& rCopy)
 {
-    // SAFE -> ----------------------------------
-    Guard aWriteLock(m_aLock);
-
+    SolarMutexGuard g;
     m_lCommand2Keys = rCopy.m_lCommand2Keys;
     m_lKey2Commands = rCopy.m_lKey2Commands;
-
-    aWriteLock.unlock();
-    // <- SAFE ----------------------------------
 }
 
 
@@ -75,30 +67,22 @@ AcceleratorCache& AcceleratorCache::operator=(const AcceleratorCache& rCopy)
 
 sal_Bool AcceleratorCache::hasKey(const css::awt::KeyEvent& aKey) const
 {
-    // SAFE -> ----------------------------------
-    Guard aReadLock(m_aLock);
-
+    SolarMutexGuard g;
     return (m_lKey2Commands.find(aKey) != m_lKey2Commands.end());
-    // <- SAFE ----------------------------------
 }
 
 
 sal_Bool AcceleratorCache::hasCommand(const OUString& sCommand) const
 {
-    // SAFE -> ----------------------------------
-    Guard aReadLock(m_aLock);
-
+    SolarMutexGuard g;
     return (m_lCommand2Keys.find(sCommand) != m_lCommand2Keys.end());
-    // <- SAFE ----------------------------------
 }
 
 
 AcceleratorCache::TKeyList AcceleratorCache::getAllKeys() const
 {
+    SolarMutexGuard g;
     TKeyList lKeys;
-
-    // SAFE -> ----------------------------------
-    Guard aReadLock(m_aLock);
     lKeys.reserve(m_lKey2Commands.size());
 
     TKey2Commands::const_iterator pIt;
@@ -110,9 +94,6 @@ AcceleratorCache::TKeyList AcceleratorCache::getAllKeys() const
         lKeys.push_back(pIt->first);
     }
 
-    aReadLock.unlock();
-    // <- SAFE ----------------------------------
-
     return lKeys;
 }
 
@@ -120,8 +101,7 @@ AcceleratorCache::TKeyList AcceleratorCache::getAllKeys() const
 void AcceleratorCache::setKeyCommandPair(const css::awt::KeyEvent& aKey    ,
                                          const OUString&    sCommand)
 {
-    // SAFE -> ----------------------------------
-    Guard aWriteLock(m_aLock);
+    SolarMutexGuard g;
 
     // register command for the specified key
     m_lKey2Commands[aKey] = sCommand;
@@ -129,56 +109,34 @@ void AcceleratorCache::setKeyCommandPair(const css::awt::KeyEvent& aKey    ,
     // update optimized structure to bind multiple keys to one command
     TKeyList& rKeyList = m_lCommand2Keys[sCommand];
     rKeyList.push_back(aKey);
-
-    aWriteLock.unlock();
-    // <- SAFE ----------------------------------
 }
 
 
 AcceleratorCache::TKeyList AcceleratorCache::getKeysByCommand(const OUString& sCommand) const
 {
-    TKeyList lKeys;
-
-    // SAFE -> ----------------------------------
-    Guard aReadLock(m_aLock);
-
+    SolarMutexGuard g;
     TCommand2Keys::const_iterator pCommand = m_lCommand2Keys.find(sCommand);
     if (pCommand == m_lCommand2Keys.end())
         throw css::container::NoSuchElementException(
                 OUString(), css::uno::Reference< css::uno::XInterface >());
-    lKeys = pCommand->second;
-
-    aReadLock.unlock();
-    // <- SAFE ----------------------------------
-
-    return lKeys;
+    return pCommand->second;
 }
 
 
 OUString AcceleratorCache::getCommandByKey(const css::awt::KeyEvent& aKey) const
 {
-    OUString sCommand;
-
-    // SAFE -> ----------------------------------
-    Guard aReadLock(m_aLock);
-
+    SolarMutexGuard g;
     TKey2Commands::const_iterator pKey = m_lKey2Commands.find(aKey);
     if (pKey == m_lKey2Commands.end())
         throw css::container::NoSuchElementException(
                 OUString(), css::uno::Reference< css::uno::XInterface >());
-    sCommand = pKey->second;
-
-    aReadLock.unlock();
-    // <- SAFE ----------------------------------
-
-    return sCommand;
+    return pKey->second;
 }
 
 
 void AcceleratorCache::removeKey(const css::awt::KeyEvent& aKey)
 {
-    // SAFE -> ----------------------------------
-    Guard aWriteLock(m_aLock);
+    SolarMutexGuard g;
 
     // check if key exists
     TKey2Commands::const_iterator pKey = m_lKey2Commands.find(aKey);
@@ -196,16 +154,12 @@ void AcceleratorCache::removeKey(const css::awt::KeyEvent& aKey)
 
     // remove key from optimized command list
     m_lCommand2Keys.erase(sCommand);
-
-    aWriteLock.unlock();
-    // <- SAFE ----------------------------------
 }
 
 
 void AcceleratorCache::removeCommand(const OUString& sCommand)
 {
-    // SAFE -> ----------------------------------
-    Guard aWriteLock(m_aLock);
+    SolarMutexGuard g;
 
     const TKeyList&                            lKeys = getKeysByCommand(sCommand);
     AcceleratorCache::TKeyList::const_iterator pKey ;
@@ -217,9 +171,6 @@ void AcceleratorCache::removeCommand(const OUString& sCommand)
         removeKey(rKey);
     }
     m_lCommand2Keys.erase(sCommand);
-
-    aWriteLock.unlock();
-    // <- SAFE ----------------------------------
 }
 
 } // namespace framework
