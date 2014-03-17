@@ -81,7 +81,7 @@ public:
     bool                  IsSymbolFont() const      { return maDevFontAttributes.IsSymbolFont(); }
     const ImplFontAttributes& GetFontAttributes() const { return maDevFontAttributes; }
 
-    void                  AnnounceFont( ImplDevFontList* );
+    void                  AnnounceFont( PhysicalFontCollection* );
 
     int                   GetGlyphIndex( sal_UCS4 cChar ) const;
     void                  CacheGlyphIndex( sal_UCS4 cChar, int nGI ) const;
@@ -142,7 +142,7 @@ public:
 
     void                AddFontFile( const OString& rNormalizedName,
                             int nFaceNum, sal_IntPtr nFontId, const ImplDevFontAttributes&);
-    void                AnnounceFonts( ImplDevFontList* ) const;
+    void                AnnounceFonts( PhysicalFontCollection* ) const;
     void                ClearFontList();
 
     ServerFont* CreateFont( const FontSelectPattern& );

@@ -82,7 +82,7 @@ int SalGenericInstance::FetchFontSubstitutionFlags()
     return nDisableBits;
 }
 
-void SalGenericInstance::RegisterFontSubstitutors( ImplDevFontList* pList )
+void SalGenericInstance::RegisterFontSubstitutors( PhysicalFontCollection* pFontCollection )
 {
     // init font substitution defaults
     int nDisableBits = 0;
@@ -103,14 +103,14 @@ void SalGenericInstance::RegisterFontSubstitutors( ImplDevFontList* pList )
     if( (nDisableBits & 1) == 0 )
     {
         static FcPreMatchSubstititution aSubstPreMatch;
-        pList->SetPreMatchHook( &aSubstPreMatch );
+        pFontCollection->SetPreMatchHook( &aSubstPreMatch );
     }
 
     // register glyph fallback substitutions (unless disabled by bit1)
     if( (nDisableBits & 2) == 0 )
     {
         static FcGlyphFallbackSubstititution aSubstFallback;
-        pList->SetFallbackHook( &aSubstFallback );
+        pFontCollection->SetFallbackHook( &aSubstFallback );
     }
 }
 

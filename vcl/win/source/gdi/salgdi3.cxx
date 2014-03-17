@@ -514,14 +514,13 @@ bool WinGlyphFallbackSubstititution::HasMissingChars( const PhysicalFontFace* pF
 namespace
 {
     //used by 2-level font fallback
-    PhysicalFontFamily* findDevFontListByLocale(const ImplDevFontList &rDevFontList,
-        const LanguageTag& rLanguageTag )
+    PhysicalFontFamily* findDevFontListByLocale(const PhysicalFontCollection &rFontCollection,
+                                                const LanguageTag& rLanguageTag )
     {
         // get the default font for a specified locale
-        const utl::DefaultFontConfiguration& rDefaults =
-            utl::DefaultFontConfiguration::get();
+        const utl::DefaultFontConfiguration& rDefaults = utl::DefaultFontConfiguration::get();
         const OUString aDefault = rDefaults.getUserInterfaceFont(rLanguageTag);
-        return rDevFontList.ImplFindByTokenNames(aDefault);
+        return rFontCollection.ImplFindByTokenNames(aDefault);
     }
 }
 
@@ -551,34 +550,36 @@ bool WinGlyphFallbackSubstititution::FindFontSubstitute( FontSelectPattern& rFon
 
     // first level fallback:
     // try use the locale specific default fonts defined in VCL.xcu
-    const ImplDevFontList* pDevFontList = ImplGetSVData()->maGDIData.mpScreenFontList;
-    /*const*/ PhysicalFontFamily* pDevFont = findDevFontListByLocale(*pDevFontList, aLanguageTag);
-    if( pDevFont )
+    const PhysicalFontCollection* pFontCollection = ImplGetSVData()->maGDIData.mpScreenFontList;
+    /*const*/ PhysicalFontFamily* pFontFamily = findDevFontListByLocale(*pFontCollection, aLanguageTag);
+    if( pFontFamily )
     {
-        const PhysicalFontFace* pFace = pDevFont->FindBestFontFace( rFontSelData );
+        const PhysicalFontFace* pFace = pFontFamily->FindBestFontFace( rFontSelData );
         if( HasMissingChars( pFace, rMissingChars ) )
         {
-            rFontSelData.maSearchName = pDevFont->GetSearchName();
+            rFontSelData.maSearchName = pFontFamily->GetSearchName();
             return true;
         }
     }
 
     // are the missing characters symbols?
-    pDevFont = pDevFontList->ImplFindByAttributes( IMPL_FONT_ATTR_SYMBOL,
-                    rFontSelData.GetWeight(), rFontSelData.GetWidthType(),
-                    rFontSelData.GetSlant(), rFontSelData.maSearchName );
-    if( pDevFont )
+    pFontFamily = pFontCollection->ImplFindByAttributes( IMPL_FONT_ATTR_SYMBOL,
+                                                         rFontSelData.GetWeight(),
+                                                         rFontSelData.GetWidthType(),
+                                                         rFontSelData.GetSlant(),
+                                                         rFontSelData.maSearchName );
+    if( pFontFamily )
     {
-        const PhysicalFontFace* pFace = pDevFont->FindBestFontFace( rFontSelData );
+        const PhysicalFontFace* pFace = pFontFamily->FindBestFontFace( rFontSelData );
         if( HasMissingChars( pFace, rMissingChars ) )
         {
-            rFontSelData.maSearchName = pDevFont->GetSearchName();
+            rFontSelData.maSearchName = pFontFamily->GetSearchName();
             return true;
         }
     }
 
     // last level fallback, check each font type face one by one
-    ImplGetDevFontList* pTestFontList = pDevFontList->GetDevFontList();
+    ImplGetDevFontList* pTestFontList = pFontCollection->GetDevFontList();
     // limit the count of fonts to be checked to prevent hangs
     static const int MAX_GFBFONT_COUNT = 600;
     int nTestFontCount = pTestFontList->Count();
@@ -606,7 +607,7 @@ bool WinGlyphFallbackSubstititution::FindFontSubstitute( FontSelectPattern& rFon
 struct ImplEnumInfo
 {
     HDC                 mhDC;
-    ImplDevFontList*    mpList;
+    PhysicalFontCollection* mpList;
     OUString*           mpName;
     LOGFONTA*           mpLogFontA;
     LOGFONTW*           mpLogFontW;
@@ -2105,7 +2106,7 @@ static bool ImplGetFontAttrFromFile( const OUString& rFontFileURL,
 
 
 
-bool WinSalGraphics::AddTempDevFont( ImplDevFontList* pFontList,
+bool WinSalGraphics::AddTempDevFont( PhysicalFontCollection* pFontCollection,
     const OUString& rFontFileURL, const OUString& rFontName )
 {
     SAL_INFO( "vcl.gdi", "WinSalGraphics::AddTempDevFont(): " << OUStringToOString( rFontFileURL, RTL_TEXTENCODING_UTF8 ).getStr() );
@@ -2157,13 +2158,13 @@ bool WinSalGraphics::AddTempDevFont( ImplDevFontList* pFontList,
         sal::static_int_cast<BYTE>(nPreferredCharSet),
         sal::static_int_cast<BYTE>(TMPF_VECTOR|TMPF_TRUETYPE) );
     pFontData->SetFontId( reinterpret_cast<sal_IntPtr>(pFontData) );
-    pFontList->Add( pFontData );
+    pFontCollection->Add( pFontData );
     return true;
 }
 
 
 
-void WinSalGraphics::GetDevFontList( ImplDevFontList* pFontList )
+void WinSalGraphics::GetDevFontList( PhysicalFontCollection* pFontCollection )
 {
     // make sure all fonts are registered at least temporarily
     static bool bOnce = true;
@@ -2204,7 +2205,7 @@ void WinSalGraphics::GetDevFontList( ImplDevFontList* pFontList )
                 osl::FileStatus aFileStatus( osl_FileStatus_Mask_FileURL );
                 rcOSL = aDirItem.getFileStatus( aFileStatus );
                 if ( rcOSL == osl::FileBase::E_None )
-                    AddTempDevFont( pFontList, aFileStatus.getFileURL(), aEmptyString );
+                    AddTempDevFont( pFontCollection, aFileStatus.getFileURL(), aEmptyString );
             }
 
             delete mpFontAttrCache; // destructor rewrites the cache file if needed
@@ -2214,7 +2215,7 @@ void WinSalGraphics::GetDevFontList( ImplDevFontList* pFontList )
 
     ImplEnumInfo aInfo;
     aInfo.mhDC          = getHDC();
-    aInfo.mpList        = pFontList;
+    aInfo.mpList        = pFontCollection;
     aInfo.mpName        = NULL;
     aInfo.mpLogFontA    = NULL;
     aInfo.mpLogFontW    = NULL;
@@ -2255,7 +2256,7 @@ void WinSalGraphics::GetDevFontList( ImplDevFontList* pFontList )
 
     // set glyph fallback hook
     static WinGlyphFallbackSubstititution aSubstFallback( getHDC() );
-    pFontList->SetFallbackHook( &aSubstFallback );
+    pFontCollection->SetFallbackHook( &aSubstFallback );
 }
 
 void WinSalGraphics::ClearDevFontCache()

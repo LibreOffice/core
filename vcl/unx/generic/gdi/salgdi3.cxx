@@ -498,8 +498,9 @@ X11SalGraphics::SetTextColor( SalColor nSalColor )
 
 
 
-bool X11SalGraphics::AddTempDevFont( ImplDevFontList* pFontList,
-    const OUString& rFileURL, const OUString& rFontName )
+bool X11SalGraphics::AddTempDevFont( PhysicalFontCollection* pFontCollection,
+                                     const OUString& rFileURL,
+                                     const OUString& rFontName )
 {
     // inform PSP font manager
     OUString aUSystemPath;
@@ -531,7 +532,7 @@ bool X11SalGraphics::AddTempDevFont( ImplDevFontList* pFontList,
     }
 
     // announce new font to device's font list
-    rGC.AnnounceFonts( pFontList );
+    rGC.AnnounceFonts( pFontCollection );
     return true;
 }
 
@@ -541,7 +542,7 @@ void X11SalGraphics::ClearDevFontCache()
     rGC.ClearFontCache();
 }
 
-void X11SalGraphics::GetDevFontList( ImplDevFontList *pList )
+void X11SalGraphics::GetDevFontList( PhysicalFontCollection* pFontCollection )
 {
     // prepare the GlyphCache using psprint's font infos
     X11GlyphCache& rGC = X11GlyphCache::GetInstance();
@@ -567,10 +568,10 @@ void X11SalGraphics::GetDevFontList( ImplDevFontList *pList )
    }
 
     // announce glyphcache fonts
-    rGC.AnnounceFonts( pList );
+    rGC.AnnounceFonts( pFontCollection );
 
     // register platform specific font substitutions if available
-    SalGenericInstance::RegisterFontSubstitutors( pList );
+    SalGenericInstance::RegisterFontSubstitutors( pFontCollection );
 
     ImplGetSVData()->maGDIData.mbNativeFontConfig = true;
 }

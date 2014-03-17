@@ -47,7 +47,7 @@ struct SystemGraphicsData;
 struct SystemFontData;
 struct SystemTextLayoutData;
 class ImplFontCache;
-class ImplDevFontList;
+class PhysicalFontCollection;
 class ImplGetDevFontList;
 class ImplGetDevSizeList;
 class ImplMultiTextLineInfo;
@@ -273,7 +273,7 @@ private:
     GDIMetaFile*                mpMetaFile;
     mutable ImplFontEntry*      mpFontEntry;
     mutable ImplFontCache*      mpFontCache;
-    mutable ImplDevFontList*    mpFontList;
+    mutable PhysicalFontCollection* mpFontCollection;
     mutable ImplGetDevFontList* mpGetDevFontList;
     mutable ImplGetDevSizeList* mpGetDevSizeList;
     ImplObjStack*               mpObjStack;

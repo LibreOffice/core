@@ -401,9 +401,9 @@ static void AddLocalTempFontDirs()
     AddTempFontDir( aBrandStr + "/" LIBO_SHARE_FOLDER "/fonts/truetype/" );
 }
 
-void AquaSalGraphics::GetDevFontList( ImplDevFontList* pFontList )
+void AquaSalGraphics::GetDevFontList( PhysicalFontCollection* pFontCollection )
 {
-    DBG_ASSERT( pFontList, "AquaSalGraphics::GetDevFontList(NULL) !");
+    DBG_ASSERT( pFontCollection, "AquaSalGraphics::GetDevFontList(NULL) !");
 
     AddLocalTempFontDirs();
 
@@ -420,7 +420,7 @@ void AquaSalGraphics::GetDevFontList( ImplDevFontList* pFontList )
         pSalData->mpFontList = GetCoretextFontList();
 
     // Copy all PhysicalFontFace objects contained in the SystemFontList
-    pSalData->mpFontList->AnnounceFonts( *pFontList );
+    pSalData->mpFontList->AnnounceFonts( *pFontCollection );
 }
 
 void AquaSalGraphics::ClearDevFontCache()
@@ -432,7 +432,7 @@ void AquaSalGraphics::ClearDevFontCache()
 
 
 
-bool AquaSalGraphics::AddTempDevFont( ImplDevFontList*,
+bool AquaSalGraphics::AddTempDevFont( PhysicalFontCollection*,
     const OUString& rFontFileURL, const OUString& /*rFontName*/ )
 {
     return ::AddTempDevFont(rFontFileURL);

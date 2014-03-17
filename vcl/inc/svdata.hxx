@@ -56,7 +56,7 @@ struct ImplEventHook;
 class Point;
 class ResMgr;
 class ImplAccelManager;
-class ImplDevFontList;
+class PhysicalFontCollection;
 class ImplFontCache;
 class HelpTextWindow;
 class ImplTBDragMgr;
@@ -168,7 +168,7 @@ struct ImplSVGDIData
     Printer*                mpFirstPrinter;     // First Printer
     Printer*                mpLastPrinter;      // Last Printer
     ImplPrnQueueList*       mpPrinterQueueList; // List of all printer queue
-    ImplDevFontList*        mpScreenFontList;   // Screen-Font-List
+    PhysicalFontCollection* mpScreenFontList;   // Screen-Font-List
     ImplFontCache*          mpScreenFontCache;  // Screen-Font-Cache
     ImplDirectFontSubstitution* mpDirectFontSubst;// Font-Substitutons defined in Tools->Options->Fonts
     GraphicConverter*       mpGrfConverter;     // Converter for graphics

@@ -73,8 +73,9 @@ public:
     static GlyphCache&      GetInstance();
 
     void                        AddFontFile( const OString& rNormalizedName,
-                                    int nFaceNum, sal_IntPtr nFontId, const ImplDevFontAttributes&);
-    void                        AnnounceFonts( ImplDevFontList* ) const;
+                                             int nFaceNum, sal_IntPtr nFontId,
+                                             const ImplDevFontAttributes&);
+    void                        AnnounceFonts( PhysicalFontCollection* ) const;
 
     ServerFont*                 CacheFont( const FontSelectPattern& );
     void                        UncacheFont( ServerFont& );
