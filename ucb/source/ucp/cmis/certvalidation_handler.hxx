@@ -30,7 +30,7 @@ namespace cmis
                                    com::sun::star::ucb::XCommandEnvironment>& xEnv,
                            const com::sun::star::uno::Reference<
                                    com::sun::star::uno::XComponentContext>& xContext,
-                           OUString sHostname ):
+                           const OUString& sHostname ):
                 m_xEnv( xEnv ), m_xContext( xContext ), m_sHostname( sHostname ) { }
 
             bool validateCertificate( std::vector< std::string > certificates );

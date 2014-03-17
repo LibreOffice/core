@@ -59,12 +59,12 @@ namespace cmis
         return m_sRepositoryId;
     }
 
-    void URL::setObjectPath( OUString sPath )
+    void URL::setObjectPath( const OUString& sPath )
     {
         m_sPath = sPath;
     }
 
-    void URL::setObjectId( OUString sId )
+    void URL::setObjectId( const OUString& sId )
     {
         m_sId = sId;
     }

@@ -68,7 +68,7 @@ class XResultSet_impl : public Notifier,
             return 0;
         }
 
-        virtual ContentEventNotifier*        cEXC( const OUString )
+        virtual ContentEventNotifier*        cEXC( const OUString& )
         {
             return 0;
         }

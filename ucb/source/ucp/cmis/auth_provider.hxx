@@ -24,8 +24,8 @@ namespace cmis
         public:
             AuthProvider ( const com::sun::star::uno::Reference<
                                    com::sun::star::ucb::XCommandEnvironment>& xEnv,
-                           OUString sUrl,
-                           OUString sBindingUrl ):
+                           const OUString& sUrl,
+                           const OUString& sBindingUrl ):
                 m_xEnv( xEnv ), m_sUrl( sUrl ), m_sBindingUrl( sBindingUrl ) { }
 
             bool authenticationQuery( std::string& username, std::string& password );
