@@ -21,7 +21,6 @@
 #define INCLUDED_FRAMEWORK_INC_THREADHELP_LOCKHELPER_HXX
 
 #include <boost/noncopyable.hpp>
-#include <framework/imutex.hxx>
 
 #include <comphelper/solarmutex.hxx>
 #include <fwidllapi.h>
@@ -44,14 +43,9 @@ namespace framework{
                             An object use an implementation of a fair rw-lock. This increase granularity of t hreadsafe mechanism
                             and should be used for high performance threadsafe code!
 
-    @implements     IMutex
-
-    @base           IMutex
-
     @devstatus      draft
 *//*-*************************************************************************************************************/
-class FWI_DLLPUBLIC LockHelper : public  IMutex
-                 , private boost::noncopyable
+class FWI_DLLPUBLIC LockHelper : private boost::noncopyable
 {
 
     //  public methods
@@ -62,13 +56,10 @@ class FWI_DLLPUBLIC LockHelper : public  IMutex
         //  ctor/dtor
 
                  LockHelper( comphelper::SolarMutex* pSolarMutex = NULL );
-        virtual ~LockHelper(                                   );
+                ~LockHelper(                                   );
 
-
-        //  interface ::framework::IMutex
-
-        virtual void acquire();
-        virtual void release();
+        void acquire();
+        void release();
 
         //  something else
 

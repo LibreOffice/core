@@ -85,7 +85,6 @@ LockHelper::~LockHelper()
 }
 
 /*-************************************************************************************************************
-    @interface  IMutex
     @short      set an exclusiv lock
     @descr      We must match this lock call with current set lock type and used lock member.
                 If a mutex should be used - it will be easy ... but if a rw-lock should be used
@@ -105,7 +104,6 @@ void LockHelper::acquire()
 }
 
 /*-************************************************************************************************************
-    @interface  IMutex
     @short      release exclusiv lock
     @descr      We must match this unlock call with current set lock type and used lock member.
                 If a mutex should be used - it will be easy ... but if a rw-lock should be used
