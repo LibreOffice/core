@@ -536,7 +536,7 @@ void DocxSdrExport::writeDMLDrawing(const SdrObject* pSdrObject, const SwFrmFmt*
 {
     sax_fastparser::FSHelperPtr pFS = m_pImpl->m_pSerializer;
     Size aSize(pSdrObject->GetLogicRect().GetWidth(), pSdrObject->GetLogicRect().GetHeight());
-    m_pImpl->m_rSdrExport.startDMLAnchorInline(pFrmFmt, aSize);
+    startDMLAnchorInline(pFrmFmt, aSize);
 
     sax_fastparser::FastAttributeList* pDocPrAttrList = pFS->createAttrList();
     pDocPrAttrList->add(XML_id, OString::number(nAnchorId).getStr());
@@ -590,7 +590,7 @@ void DocxSdrExport::writeDMLDrawing(const SdrObject* pSdrObject, const SwFrmFmt*
         pFS->endElementNS(XML_wp14, XML_sizeRelV);
     }
 
-    m_pImpl->m_rSdrExport.endDMLAnchorInline(pFrmFmt);
+    endDMLAnchorInline(pFrmFmt);
 }
 
 void DocxSdrExport::Impl::textFrameShadow(const SwFrmFmt& rFrmFmt)
