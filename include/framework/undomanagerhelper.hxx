@@ -48,10 +48,6 @@ namespace framework
         */
         virtual void clear() = 0;
 
-        /** attempts to re-establishes the lock, blocking until the attempt is successful.
-        */
-        virtual void reset() = 0;
-
         /** returns the mutex guarded by the instance.
 
             Even if the guard currently has not a lock on the mutex, this method must succeed.

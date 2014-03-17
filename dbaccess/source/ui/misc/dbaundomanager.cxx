@@ -138,7 +138,6 @@ namespace dbaui
 
         // IMutexGuard
         virtual void clear();
-        virtual void reset();
         virtual ::framework::IMutex& getGuardedMutex();
 
     private:
@@ -154,11 +153,6 @@ namespace dbaui
     void UndoManagerMethodGuard::clear()
     {
         m_aGuard.clear();
-    }
-
-    void UndoManagerMethodGuard::reset()
-    {
-        m_aGuard.reset();
     }
 
     // UndoManager

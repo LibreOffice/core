@@ -202,11 +202,6 @@ namespace sfx2
         {
         }
 
-        virtual void reset()
-        {
-            m_guard.reset();
-        }
-
         virtual void clear()
         {
             m_guard.clear();

@@ -156,7 +156,6 @@ namespace chart
 
             // IMutexGuard
             virtual void clear();
-            virtual void reset();
             virtual ::framework::IMutex& getGuardedMutex();
         };
 
@@ -175,11 +174,6 @@ namespace chart
         }
 
         void UndoManagerMethodGuard::clear()
-        {
-            // nothing to do. This interface implementation is a dummy.
-        }
-
-        void UndoManagerMethodGuard::reset()
         {
             // nothing to do. This interface implementation is a dummy.
         }
