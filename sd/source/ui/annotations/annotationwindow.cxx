@@ -648,7 +648,7 @@ void AnnotationWindow::Deactivate()
                 if( mpDoc->IsUndoEnabled() )
                     mpDoc->EndUndo();
 
-                DocView()->GetDocSh()->SetModified(sal_True);
+                DocView()->GetDocSh()->SetModified(true);
             }
 
         }

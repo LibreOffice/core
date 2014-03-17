@@ -946,7 +946,7 @@ void ScDocShell::Execute( SfxRequest& rReq )
                                 EnableSharedSettings( true );
 
                                 SC_MOD()->SetInSharedDocSaving( true );
-                                if ( !SwitchToShared( sal_True, sal_True ) )
+                                if ( !SwitchToShared( true, true ) )
                                 {
                                     // TODO/LATER: what should be done in case the switch has failed?
                                     // for example in case the user has cancelled the saveAs operation
@@ -1037,7 +1037,7 @@ void ScDocShell::Execute( SfxRequest& rReq )
                                         {
                                             xCloseable->close( sal_True );
 
-                                            if ( !SwitchToShared( false, sal_True ) )
+                                            if ( !SwitchToShared( false, true ) )
                                             {
                                                 // TODO/LATER: what should be done in case the switch has failed?
                                                 // for example in case the user has cancelled the saveAs operation

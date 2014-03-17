@@ -146,7 +146,7 @@ void SwGlosDocShell::GetState( SfxItemSet& rSet )
     ::lcl_GetState( *this, rSet );
 }
 
-sal_Bool SwGlosDocShell::Save()
+bool SwGlosDocShell::Save()
 {
     // In case of an API object which holds this document, it is possible that the WrtShell is already
     // dead. For instance, if the doc is modified via this API object, and then, upon office shutdown,
@@ -157,8 +157,8 @@ sal_Bool SwGlosDocShell::Save()
         return ::lcl_Save( *GetWrtShell(), aGroupName, aShortName, aLongName );
     else
     {
-        SetModified( sal_False );
-        return sal_False;
+        SetModified( false );
+        return false;
     }
 }
 
@@ -182,15 +182,15 @@ void SwWebGlosDocShell::GetState( SfxItemSet& rSet )
     ::lcl_GetState( *this, rSet );
 }
 
-sal_Bool SwWebGlosDocShell::Save()
+bool SwWebGlosDocShell::Save()
 {
     // same comment as in SwGlosDocShell::Save - see there
     if ( GetWrtShell() )
         return ::lcl_Save( *GetWrtShell(), aGroupName, aShortName, aLongName );
     else
     {
-        SetModified( sal_False );
-        return sal_False;
+        SetModified( false );
+        return false;
     }
 }
 

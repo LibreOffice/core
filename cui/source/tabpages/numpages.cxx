@@ -1893,8 +1893,8 @@ IMPL_LINK( SvxNumOptionsTabPage, GraphicHdl_Impl, MenuButton *, pButton )
     }
     else
     {
-        aGrfDlg.EnableLink( sal_False );
-        aGrfDlg.AsLink( sal_False );
+        aGrfDlg.EnableLink( false );
+        aGrfDlg.AsLink( false );
         if ( !aGrfDlg.Execute() )
         {
             // memorize selected filter

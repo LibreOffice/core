@@ -50,7 +50,7 @@ sal_uIntPtr SvxGraphicFilter::ExecuteGrfFilterSlot( SfxRequest& rReq, GraphicObj
             case( SID_GRFFILTER_INVERT ):
             {
                 if( pShell )
-                    pShell->SetWaitCursor( sal_True );
+                    pShell->SetWaitCursor( true );
 
                 if( rGraphic.IsAnimated() )
                 {
@@ -68,7 +68,7 @@ sal_uIntPtr SvxGraphicFilter::ExecuteGrfFilterSlot( SfxRequest& rReq, GraphicObj
                 }
 
                 if( pShell )
-                    pShell->SetWaitCursor( sal_False );
+                    pShell->SetWaitCursor( false );
             }
             break;
 
@@ -89,7 +89,7 @@ sal_uIntPtr SvxGraphicFilter::ExecuteGrfFilterSlot( SfxRequest& rReq, GraphicObj
             case( SID_GRFFILTER_SHARPEN ):
             {
                 if( pShell )
-                    pShell->SetWaitCursor( sal_True );
+                    pShell->SetWaitCursor( true );
 
                 if( rGraphic.IsAnimated() )
                 {
@@ -107,14 +107,14 @@ sal_uIntPtr SvxGraphicFilter::ExecuteGrfFilterSlot( SfxRequest& rReq, GraphicObj
                 }
 
                 if( pShell )
-                    pShell->SetWaitCursor( sal_False );
+                    pShell->SetWaitCursor( false );
             }
             break;
 
             case( SID_GRFFILTER_REMOVENOISE ):
             {
                 if( pShell )
-                    pShell->SetWaitCursor( sal_True );
+                    pShell->SetWaitCursor( true );
 
                 if( rGraphic.IsAnimated() )
                 {
@@ -132,14 +132,14 @@ sal_uIntPtr SvxGraphicFilter::ExecuteGrfFilterSlot( SfxRequest& rReq, GraphicObj
                 }
 
                 if( pShell )
-                    pShell->SetWaitCursor( sal_False );
+                    pShell->SetWaitCursor( false );
             }
             break;
 
             case( SID_GRFFILTER_SOBEL ):
             {
                 if( pShell )
-                    pShell->SetWaitCursor( sal_True );
+                    pShell->SetWaitCursor( true );
 
                 if( rGraphic.IsAnimated() )
                 {
@@ -157,7 +157,7 @@ sal_uIntPtr SvxGraphicFilter::ExecuteGrfFilterSlot( SfxRequest& rReq, GraphicObj
                 }
 
                 if( pShell )
-                    pShell->SetWaitCursor( sal_False );
+                    pShell->SetWaitCursor( false );
             }
             break;
 
@@ -206,7 +206,7 @@ sal_uIntPtr SvxGraphicFilter::ExecuteGrfFilterSlot( SfxRequest& rReq, GraphicObj
             case( SID_GRFFILTER_POPART  ):
             {
                 if( pShell )
-                    pShell->SetWaitCursor( sal_True );
+                    pShell->SetWaitCursor( true );
 
                 if( rGraphic.IsAnimated() )
                 {
@@ -224,7 +224,7 @@ sal_uIntPtr SvxGraphicFilter::ExecuteGrfFilterSlot( SfxRequest& rReq, GraphicObj
                 }
 
                 if( pShell )
-                    pShell->SetWaitCursor( sal_False );
+                    pShell->SetWaitCursor( false );
             }
             break;
 

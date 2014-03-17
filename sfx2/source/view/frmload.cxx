@@ -405,7 +405,7 @@ void SfxFrameLoader_Impl::impl_determineFilter( ::comphelper::NamedValueCollecti
 
 SfxObjectShellRef SfxFrameLoader_Impl::impl_findObjectShell( const Reference< XModel2 >& i_rxDocument ) const
 {
-    for ( SfxObjectShell* pDoc = SfxObjectShell::GetFirst( NULL, sal_False ); pDoc; pDoc = SfxObjectShell::GetNext( *pDoc, NULL, sal_False ) )
+    for ( SfxObjectShell* pDoc = SfxObjectShell::GetFirst( NULL, false ); pDoc; pDoc = SfxObjectShell::GetNext( *pDoc, NULL, false ) )
     {
         if ( i_rxDocument == pDoc->GetModel() )
         {

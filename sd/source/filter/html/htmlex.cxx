@@ -801,7 +801,7 @@ void HtmlExport::ExportWebCast()
     mnPagesWritten = 0;
     InitProgress( mnSdPageCount + 9 );
 
-    mpDocSh->SetWaitCursor( sal_True );
+    mpDocSh->SetWaitCursor( true );
 
     CreateFileNames();
 

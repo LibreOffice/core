@@ -249,7 +249,7 @@ struct IMPL_SfxBaseModel_DataContainer : public ::sfx2::IModifiableDocument
     virtual void storageIsModified()
     {
         if ( m_pObjectShell.Is() && !m_pObjectShell->IsModified() )
-            m_pObjectShell->SetModified( sal_True );
+            m_pObjectShell->SetModified( true );
     }
 
     void impl_setDocumentProperties(
@@ -1289,7 +1289,7 @@ sal_Bool SAL_CALL SfxBaseModel::disableSetModified() throw (RuntimeException, st
         throw RuntimeException();
 
     sal_Bool bResult = m_pData->m_pObjectShell->IsEnableSetModified();
-    m_pData->m_pObjectShell->EnableSetModified( sal_False );
+    m_pData->m_pObjectShell->EnableSetModified( false );
 
     return bResult;
 }
@@ -1302,7 +1302,7 @@ sal_Bool SAL_CALL SfxBaseModel::enableSetModified() throw (RuntimeException, std
         throw RuntimeException();
 
     sal_Bool bResult = m_pData->m_pObjectShell->IsEnableSetModified();
-    m_pData->m_pObjectShell->EnableSetModified( sal_True );
+    m_pData->m_pObjectShell->EnableSetModified( true );
 
     return bResult;
 }
@@ -1915,7 +1915,7 @@ void SAL_CALL SfxBaseModel::load(   const Sequence< beans::PropertyValue >& seqA
         SfxFilterMatcher& rMatcher = SFX_APP()->GetFilterMatcher();
         const SfxFilter* pSetFilter = rMatcher.GetFilter4FilterName( pFilterItem->GetValue() );
         pMedium->SetFilter( pSetFilter );
-        m_pData->m_pObjectShell->SetModified(sal_True);
+        m_pData->m_pObjectShell->SetModified(true);
     }
 
     // TODO/LATER: may be the mode should be retrieved from outside and the preused filter should not be set
@@ -2016,7 +2016,7 @@ Any SAL_CALL SfxBaseModel::getTransferData( const datatransfer::DataFlavor& aFla
             {
 
                 ::boost::shared_ptr<GDIMetaFile> pMetaFile =
-                    m_pData->m_pObjectShell->GetPreviewMetaFile( sal_True );
+                    m_pData->m_pObjectShell->GetPreviewMetaFile( true );
 
                 if ( pMetaFile )
                 {
@@ -2036,7 +2036,7 @@ Any SAL_CALL SfxBaseModel::getTransferData( const datatransfer::DataFlavor& aFla
             if ( aFlavor.DataType == getCppuType( (const Sequence< sal_Int8 >*) 0 ) )
             {
                 ::boost::shared_ptr<GDIMetaFile> pMetaFile =
-                    m_pData->m_pObjectShell->CreatePreviewMetaFile_Impl( sal_True );
+                    m_pData->m_pObjectShell->CreatePreviewMetaFile_Impl( true );
 
                 if ( pMetaFile )
                 {
@@ -2056,7 +2056,7 @@ Any SAL_CALL SfxBaseModel::getTransferData( const datatransfer::DataFlavor& aFla
             if ( aFlavor.DataType == getCppuType( (const Sequence< sal_Int8 >*) 0 ) )
             {
                 ::boost::shared_ptr<GDIMetaFile> pMetaFile =
-                    m_pData->m_pObjectShell->GetPreviewMetaFile( sal_True );
+                    m_pData->m_pObjectShell->GetPreviewMetaFile( true );
 
                 if ( pMetaFile )
                 {
@@ -2075,7 +2075,7 @@ Any SAL_CALL SfxBaseModel::getTransferData( const datatransfer::DataFlavor& aFla
               && aFlavor.DataType == getCppuType( (const sal_uInt64*) 0 ) )
             {
                 ::boost::shared_ptr<GDIMetaFile> pMetaFile =
-                    m_pData->m_pObjectShell->GetPreviewMetaFile( sal_True );
+                    m_pData->m_pObjectShell->GetPreviewMetaFile( true );
 
                 if ( pMetaFile )
                 {
@@ -2091,7 +2091,7 @@ Any SAL_CALL SfxBaseModel::getTransferData( const datatransfer::DataFlavor& aFla
             if ( aFlavor.DataType == getCppuType( (const Sequence< sal_Int8 >*) 0 ) )
             {
                 ::boost::shared_ptr<GDIMetaFile> pMetaFile =
-                    m_pData->m_pObjectShell->GetPreviewMetaFile( sal_True );
+                    m_pData->m_pObjectShell->GetPreviewMetaFile( true );
 
                 if ( pMetaFile )
                 {
@@ -2113,7 +2113,7 @@ Any SAL_CALL SfxBaseModel::getTransferData( const datatransfer::DataFlavor& aFla
                 // means HGLOBAL handler to memory storage containing METAFILEPICT structure
 
                 ::boost::shared_ptr<GDIMetaFile> pMetaFile =
-                    m_pData->m_pObjectShell->GetPreviewMetaFile( sal_True );
+                    m_pData->m_pObjectShell->GetPreviewMetaFile( true );
 
                 if ( pMetaFile )
                 {
@@ -2131,7 +2131,7 @@ Any SAL_CALL SfxBaseModel::getTransferData( const datatransfer::DataFlavor& aFla
             if ( aFlavor.DataType == getCppuType( (const Sequence< sal_Int8 >*) 0 ) )
             {
                 ::boost::shared_ptr<GDIMetaFile> pMetaFile =
-                    m_pData->m_pObjectShell->GetPreviewMetaFile( sal_True );
+                    m_pData->m_pObjectShell->GetPreviewMetaFile( true );
 
                 if ( pMetaFile )
                 {
@@ -2155,7 +2155,7 @@ Any SAL_CALL SfxBaseModel::getTransferData( const datatransfer::DataFlavor& aFla
             if ( aFlavor.DataType == getCppuType( (const Sequence< sal_Int8 >*) 0 ) )
             {
                 ::boost::shared_ptr<GDIMetaFile> pMetaFile =
-                    m_pData->m_pObjectShell->GetPreviewMetaFile( sal_True );
+                    m_pData->m_pObjectShell->GetPreviewMetaFile( true );
 
                 if ( pMetaFile )
                 {
@@ -3459,7 +3459,7 @@ sal_Bool SfxBaseModel::hasValidSignatures() const
 {
     SolarMutexGuard aGuard;
     if ( m_pData->m_pObjectShell.Is() )
-        return ( m_pData->m_pObjectShell->ImplGetSignatureState( sal_False ) == SIGNATURESTATE_SIGNATURES_OK );
+        return ( m_pData->m_pObjectShell->ImplGetSignatureState( false ) == SIGNATURESTATE_SIGNATURES_OK );
     return sal_False;
 }
 
@@ -3811,7 +3811,7 @@ void SAL_CALL SfxBaseModel::storeToStorage( const Reference< embed::XStorage >& 
         if ( aMedium.GetFilter() )
         {
             // storing without a valid filter will often crash
-            bSuccess = m_pData->m_pObjectShell->DoSaveObjectAs( aMedium, sal_True );
+            bSuccess = m_pData->m_pObjectShell->DoSaveObjectAs( aMedium, true );
             m_pData->m_pObjectShell->DoSaveCompleted( NULL );
         }
     }

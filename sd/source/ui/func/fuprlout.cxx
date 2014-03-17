@@ -176,7 +176,7 @@ void FuPresentationLayout::DoExecute( SfxRequest& rReq )
 
     if (!bError)
     {
-        mpDocSh->SetWaitCursor( sal_True );
+        mpDocSh->SetWaitCursor( true );
 
         /* Here, we only exchange masterpages, therefore the current page
            remains the current page. To prevent calling PageOrderChangedHint
@@ -250,7 +250,7 @@ void FuPresentationLayout::DoExecute( SfxRequest& rReq )
             pDrawViewSh->ChangeEditMode( eMode, bLayer );
         }
 
-        mpDocSh->SetWaitCursor( sal_False );
+        mpDocSh->SetWaitCursor( false );
     }
 }
 

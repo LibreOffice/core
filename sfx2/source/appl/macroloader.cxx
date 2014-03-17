@@ -280,7 +280,7 @@ ErrCode SfxMacroLoader::loadMacro( const OUString& rURL, com::sun::star::uno::An
                 if ( bSetDocMacroMode )
                 {
                     // mark document: it executes an own macro, so it's in a modal mode
-                    pDoc->SetMacroMode_Impl( sal_True );
+                    pDoc->SetMacroMode_Impl( true );
                 }
 
                 if ( bSetGlobalThisComponent )
@@ -313,7 +313,7 @@ ErrCode SfxMacroLoader::loadMacro( const OUString& rURL, com::sun::star::uno::An
                 if ( bSetDocMacroMode )
                 {
                     // remove flag for modal mode
-                    pDoc->SetMacroMode_Impl( sal_False );
+                    pDoc->SetMacroMode_Impl( false );
                 }
             }
             else

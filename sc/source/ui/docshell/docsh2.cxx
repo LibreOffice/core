@@ -34,9 +34,9 @@ using namespace com::sun::star;
 
 
 
-sal_Bool ScDocShell::InitNew( const uno::Reference < embed::XStorage >& xStor )
+bool ScDocShell::InitNew( const uno::Reference < embed::XStorage >& xStor )
 {
-    sal_Bool bRet = SfxObjectShell::InitNew( xStor );
+    bool bRet = SfxObjectShell::InitNew( xStor );
 
     aDocument.MakeTable(0);
 

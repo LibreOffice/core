@@ -34,14 +34,14 @@ public:
     short                   Execute();
 
     void                    SetPath( const OUString& rPath );
-    void                    SetPath( const OUString& rPath, sal_Bool bLinkState );
+    void                    SetPath( const OUString& rPath, bool bLinkState );
     OUString                GetPath() const;
 
     int                     GetGraphic(Graphic&) const;
 
-    void                    EnableLink(sal_Bool);
-    void                    AsLink(sal_Bool);
-    sal_Bool                IsAsLink() const;
+    void                    EnableLink(bool);
+    void                    AsLink(bool);
+    bool                    IsAsLink() const;
 
     OUString                GetCurrentFilter() const;
     void                    SetCurrentFilter(const OUString&);

@@ -302,7 +302,7 @@ void SAL_CALL SfxInPlaceClient_Impl::saveObject()
     if ( !pDocShell )
         throw uno::RuntimeException();
 
-    pDocShell->SetModified( sal_True );
+    pDocShell->SetModified( true );
 
     //TODO/LATER: invalidation might be necessary when object was modified, but is not
     //saved through this method

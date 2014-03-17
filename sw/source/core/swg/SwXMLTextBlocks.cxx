@@ -372,7 +372,7 @@ sal_uLong SwXMLTextBlocks::PutBlock( SwPaM& , const OUString& )
                 pTmpMedium = new SfxMedium( xTempStorage, GetBaseURL() );
                 sal_Bool bTmpOK = pDocSh->SaveAsChildren( *pTmpMedium );
                 if( bTmpOK )
-                    bTmpOK = pDocSh->SaveCompletedChildren( sal_False );
+                    bTmpOK = pDocSh->SaveCompletedChildren( false );
 
                 xTempStorage->copyToStorage( xRoot );
                 bOK = bTmpOK;

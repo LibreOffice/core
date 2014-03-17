@@ -199,7 +199,7 @@ void ImportExcel::ReadFileSharing()
         if( SfxObjectShell* pShell = GetDocShell() )
         {
             if( nRecommendReadOnly != 0 )
-                pShell->SetLoadReadonly( sal_True );
+                pShell->SetLoadReadonly( true );
             if( nPasswordHash != 0 )
                 pShell->SetModifyPasswordHash( nPasswordHash );
         }

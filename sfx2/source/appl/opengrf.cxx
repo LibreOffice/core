@@ -186,14 +186,14 @@ void SvxOpenGraphicDialog::SetPath( const OUString& rPath )
     mpImpl->aFileDlg.SetDisplayDirectory(rPath);
 }
 
-void SvxOpenGraphicDialog::SetPath( const OUString& rPath, sal_Bool bLinkState )
+void SvxOpenGraphicDialog::SetPath( const OUString& rPath, bool bLinkState )
 {
     SetPath(rPath);
     AsLink(bLinkState);
 }
 
 
-void SvxOpenGraphicDialog::EnableLink( sal_Bool  state  )
+void SvxOpenGraphicDialog::EnableLink( bool state )
 {
     if( mpImpl->xCtrlAcc.is() )
     {
@@ -211,7 +211,7 @@ void SvxOpenGraphicDialog::EnableLink( sal_Bool  state  )
 }
 
 
-void SvxOpenGraphicDialog::AsLink(sal_Bool  bState)
+void SvxOpenGraphicDialog::AsLink(bool bState)
 {
     if( mpImpl->xCtrlAcc.is() )
     {
@@ -230,7 +230,7 @@ void SvxOpenGraphicDialog::AsLink(sal_Bool  bState)
 }
 
 
-sal_Bool SvxOpenGraphicDialog::IsAsLink() const
+bool SvxOpenGraphicDialog::IsAsLink() const
 {
     try
     {
@@ -238,7 +238,7 @@ sal_Bool SvxOpenGraphicDialog::IsAsLink() const
         {
             Any aVal = mpImpl->xCtrlAcc->getValue( ExtendedFilePickerElementIds::CHECKBOX_LINK, 0 );
             DBG_ASSERT(aVal.hasValue(), "Value CBX_INSERT_AS_LINK not found");
-            return aVal.hasValue() ? *(sal_Bool*) aVal.getValue() : sal_False;
+            return aVal.hasValue() && ( *(sal_Bool*) aVal.getValue() );
         }
     }
     catch(const IllegalArgumentException&)
@@ -248,7 +248,7 @@ sal_Bool SvxOpenGraphicDialog::IsAsLink() const
 #endif
     }
 
-    return sal_False;
+    return false;
 }
 
 

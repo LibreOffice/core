@@ -749,7 +749,7 @@ void FmXUndoEnvironment::implSetModified()
 {
     if ( !IsLocked() && rModel.GetObjectShell() )
     {
-        rModel.GetObjectShell()->SetModified( sal_True );
+        rModel.GetObjectShell()->SetModified( true );
     }
 }
 
@@ -974,7 +974,7 @@ FmUndoPropertyAction::FmUndoPropertyAction(FmFormModel& rNewMod, const PropertyC
                      ,aOldValue(evt.OldValue)
 {
     if (rNewMod.GetObjectShell())
-        rNewMod.GetObjectShell()->SetModified(sal_True);
+        rNewMod.GetObjectShell()->SetModified(true);
     if(static_STR_UNDO_PROPERTY.isEmpty())
         static_STR_UNDO_PROPERTY = SVX_RESSTR(RID_STR_UNDO_PROPERTY);
 }

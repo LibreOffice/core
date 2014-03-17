@@ -225,7 +225,7 @@ sal_Bool SfxSecurityPage_Impl::FillItemSet_Impl( SfxItemSet & )
         }
 
         // open read-only?
-        const sal_Bool bDoOpenReadonly = m_pOpenReadonlyCB->IsChecked();
+        const bool bDoOpenReadonly = m_pOpenReadonlyCB->IsChecked();
         if (pCurDocShell->HasSecurityOptOpenReadOnly() &&
             bDoOpenReadonly != pCurDocShell->IsSecurityOptOpenReadOnly())
         {

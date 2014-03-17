@@ -707,7 +707,7 @@ SfxFrame* SdModule::ExecuteNewDocument( SfxRequest& rReq )
 
                             pDoc->SetChanged(!bIsDocEmpty);
 
-                            pDocShell->SetUseUserData(sal_True);
+                            pDocShell->SetUseUserData(true);
 
                             // clear UNDO stack after autopilot
                             pDocShell->ClearUndoBuffer();

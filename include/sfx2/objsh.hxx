@@ -174,15 +174,15 @@ private:
                                           // storage that contains the object
     SfxStyleSheetBasePool*      pStyleSheetPool;    // StyleSheets
     SfxObjectCreateMode         eCreateMode;      // Purpose of the object
-    sal_Bool                    bHasName :1;      // sal_True  := existing object,
+    bool                        bHasName :1;      // sal_True  := existing object,
                                                   // sal_False := new object
-    sal_Bool                    bIsInGenerateThumbnail; //optimize thumbnail generate and store procedure to improve odt saving performance, i120030
+    bool                        bIsInGenerateThumbnail; //optimize thumbnail generate and store procedure to improve odt saving performance, i120030
 
 private:
     SAL_DLLPRIVATE void UpdateTime_Impl(const ::com::sun::star::uno::Reference<
         ::com::sun::star::document::XDocumentProperties> & i_xDocProps);
 
-    SAL_DLLPRIVATE sal_Bool SaveTo_Impl(SfxMedium &rMedium, const SfxItemSet* pSet );
+    SAL_DLLPRIVATE bool SaveTo_Impl(SfxMedium &rMedium, const SfxItemSet* pSet );
 
 protected:
                                 SfxObjectShell(SfxObjectCreateMode);
@@ -209,17 +209,17 @@ public:
     static const com::sun::star::uno::Sequence<sal_Int8>& getUnoTunnelId();
     /* Stampit disable/enable cancel button for print jobs
        default = true = enable! */
-    void                        Stamp_SetPrintCancelState(sal_Bool bState);
-    sal_Bool                    Stamp_GetPrintCancelState() const;
+    void                        Stamp_SetPrintCancelState(bool bState);
+    bool                        Stamp_GetPrintCancelState() const;
 
     using SotObject::GetInterface;
 
     // Document-Shell Iterator
     static SfxObjectShell*      GetFirst( const TypeId* pType = 0,
-                                          sal_Bool bOnlyVisible = sal_True );
+                                          bool bOnlyVisible = true );
     static SfxObjectShell*      GetNext( const SfxObjectShell& rPrev,
                                          const TypeId* pType = 0,
-                                         sal_Bool bOnlyVisible = sal_True );
+                                         bool bOnlyVisible = true );
     static SfxObjectShell*      Current();
     static ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >
                                 GetCurrentComponent();
@@ -237,38 +237,38 @@ public:
         ::com::sun::star::document::XDocumentProperties > getDocProperties();
     void                        UpdateDocInfoForSave(  );
     void                        FlushDocInfo();
-    sal_Bool                    HasName() const { return bHasName; }
+    bool                        HasName() const { return bHasName; }
     virtual OUString            GetAPIName() const;
     void                        SetReadOnly();
-    sal_Bool                    IsReadOnly() const;
-    sal_Bool                    IsReadOnlyMedium() const;
+    bool                        IsReadOnly() const;
+    bool                        IsReadOnlyMedium() const;
     bool                        IsOriginallyReadOnlyMedium() const;
-    void                        SetReadOnlyUI( sal_Bool bReadOnly = sal_True );
-    sal_Bool                    IsReadOnlyUI() const;
+    void                        SetReadOnlyUI( bool bReadOnly = true );
+    bool                        IsReadOnlyUI() const;
     void                        SetNoName();
-    sal_Bool                    IsInModalMode() const;
-    sal_Bool                    IsInPrepareClose() const;
-    virtual sal_Bool            AcceptStateUpdate() const;
-    sal_Bool                    IsHelpDocument() const;
+    bool                        IsInModalMode() const;
+    bool                        IsInPrepareClose() const;
+    virtual bool                AcceptStateUpdate() const;
+    bool                        IsHelpDocument() const;
 
 #if HAVE_FEATURE_MULTIUSER_ENVIRONMENT
-    sal_Bool                    IsDocShared() const;
-    OUString             GetSharedFileURL() const;
-    sal_Bool                    SwitchToShared( sal_Bool bShared, sal_Bool bSave );
+    bool                        IsDocShared() const;
+    OUString                    GetSharedFileURL() const;
+    bool                        SwitchToShared( bool bShared, bool bSave );
     SAL_DLLPRIVATE void         FreeSharedFile();
     SAL_DLLPRIVATE void         FreeSharedFile( const OUString& aTempFileURL );
     SAL_DLLPRIVATE void         DoNotCleanShareControlFile();
-    void                        SetSharedXMLFlag( sal_Bool bFlag ) const;
-    sal_Bool                    HasSharedXMLFlagSet() const;
+    void                        SetSharedXMLFlag( bool bFlag ) const;
+    bool                        HasSharedXMLFlagSet() const;
 #else
-    sal_Bool                    IsDocShared() const
+    bool                        IsDocShared() const
         { return sal_False; };
     OUString             GetSharedFileURL() const
         { return OUString(); };
 #endif
 
-    SAL_DLLPRIVATE void SetModalMode_Impl(sal_Bool bModal=sal_True);
-    SAL_DLLPRIVATE void SetMacroMode_Impl(sal_Bool bModal=sal_True);
+    SAL_DLLPRIVATE void SetModalMode_Impl(bool bModal=true);
+    SAL_DLLPRIVATE void SetMacroMode_Impl(bool bModal=true);
 
     void                        ResetError();
     sal_uInt32                  GetError() const;
@@ -284,27 +284,27 @@ public:
      * @return true if the initialization is successful, false otherwise.
      */
     bool                        DoInitUnitTest();
-    sal_Bool                    DoInitNew( SfxMedium* pMedium=0 );
-    sal_Bool                    DoLoad( SfxMedium* pMedium );
+    bool                        DoInitNew( SfxMedium* pMedium=0 );
+    bool                        DoLoad( SfxMedium* pMedium );
     bool                        DoLoadExternal( SfxMedium* pMed );
-    sal_Bool                    DoSave();
-    sal_Bool                    DoSaveAs( SfxMedium &rNewStor );
-    sal_Bool                    DoSaveObjectAs( SfxMedium &rNewStor, sal_Bool bCommit );
+    bool                        DoSave();
+    bool                        DoSaveAs( SfxMedium &rNewStor );
+    bool                        DoSaveObjectAs( SfxMedium &rNewStor, bool bCommit );
 
     // TODO/LATER: currently only overloaded in Calc, should be made non-virtual
-    virtual sal_Bool            DoSaveCompleted( SfxMedium* pNewStor=0 );
+    virtual bool                DoSaveCompleted( SfxMedium* pNewStor=0 );
 
-    virtual sal_Bool            LoadOwnFormat( SfxMedium& pMedium );
-    virtual sal_Bool            SaveAsOwnFormat( SfxMedium& pMedium );
-    virtual sal_Bool            ConvertFrom( SfxMedium &rMedium );
-    virtual sal_Bool            ConvertTo( SfxMedium &rMedium );
-    virtual sal_Bool            InitNew( const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& xStorage );
-    virtual sal_Bool            Load( SfxMedium &rMedium  );
-    virtual sal_Bool            LoadFrom( SfxMedium& rMedium );
-    virtual sal_Bool            Save();
-    virtual sal_Bool            SaveAs( SfxMedium &rMedium  );
-    virtual sal_Bool            SaveCompleted( const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& xStorage );
-    virtual sal_Bool            SwitchPersistance(
+    virtual bool                LoadOwnFormat( SfxMedium& pMedium );
+    virtual bool                SaveAsOwnFormat( SfxMedium& pMedium );
+    virtual bool                ConvertFrom( SfxMedium &rMedium );
+    virtual bool                ConvertTo( SfxMedium &rMedium );
+    virtual bool                InitNew( const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& xStorage );
+    virtual bool                Load( SfxMedium &rMedium  );
+    virtual bool                LoadFrom( SfxMedium& rMedium );
+    virtual bool                Save();
+    virtual bool                SaveAs( SfxMedium &rMedium  );
+    virtual bool                SaveCompleted( const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& xStorage );
+    virtual bool                SwitchPersistance(
                                     const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& xStorage );
     virtual void                UpdateLinks();
     virtual bool                LoadExternal( SfxMedium& rMedium );
@@ -313,18 +313,18 @@ public:
      * handle potentially conflicting option settings.
      */
     virtual void                CheckConfigOptions();
-    sal_Bool                    IsConfigOptionsChecked() const;
-    void                        SetConfigOptionsChecked( sal_Bool bChecked );
+    bool                        IsConfigOptionsChecked() const;
+    void                        SetConfigOptionsChecked( bool bChecked );
 
     // called for a few slots like SID_SAVE[AS]DOC, SID_PRINTDOC[DIRECT], derived classes may abort the action
-    virtual sal_Bool            QuerySlotExecutable( sal_uInt16 nSlotId );
+    virtual bool                QuerySlotExecutable( sal_uInt16 nSlotId );
 
-    sal_Bool                    SaveChildren(sal_Bool bObjectsOnly=sal_False);
-    sal_Bool                    SaveAsChildren( SfxMedium &rMedium );
-    sal_Bool                    SwitchChildrenPersistance(
+    bool                        SaveChildren(bool bObjectsOnly=false);
+    bool                        SaveAsChildren( SfxMedium &rMedium );
+    bool                        SwitchChildrenPersistance(
                                     const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& xStorage,
-                                    sal_Bool bForceNonModified = sal_False );
-    sal_Bool                    SaveCompletedChildren( sal_Bool bSuccess );
+                                    bool bForceNonModified = false );
+    bool                        SaveCompletedChildren( bool bSuccess );
 
     /** a very special case to insert at a position in Writer from UNO,
         via OwnSubFilterService */
@@ -332,7 +332,7 @@ public:
             css::uno::Reference<css::text::XTextRange> const& xInsertPosition);
     virtual bool                ImportFrom( SfxMedium &rMedium,
             css::uno::Reference<css::text::XTextRange> const& xInsertPosition);
-    sal_Bool                    ExportTo( SfxMedium &rMedium );
+    bool                        ExportTo( SfxMedium &rMedium );
 
     // xmlsec05, check with SFX team
     sal_uInt16                  GetDocumentSignatureState();
@@ -379,71 +379,71 @@ public:
     void                        ClearHeaderAttributesForSourceViewHack();
     void                        SetHeaderAttributesForSourceViewHack();
 
-    sal_Bool                    IsTemplate() const;
+    bool                        IsTemplate() const;
 
-    sal_Bool                    IsQueryLoadTemplate() const;
-    sal_Bool                    IsUseUserData() const;
-    sal_Bool                    IsLoadReadonly() const;
-    sal_Bool                    IsSaveVersionOnClose() const;
-    void                        SetQueryLoadTemplate( sal_Bool b );
-    void                        SetUseUserData( sal_Bool bNew );
-    void                        SetLoadReadonly( sal_Bool _bReadonly );
-    void                        SetSaveVersionOnClose( sal_Bool bSet );
+    bool                        IsQueryLoadTemplate() const;
+    bool                        IsUseUserData() const;
+    bool                        IsLoadReadonly() const;
+    bool                        IsSaveVersionOnClose() const;
+    void                        SetQueryLoadTemplate( bool b );
+    void                        SetUseUserData( bool bNew );
+    void                        SetLoadReadonly( bool _bReadonly );
+    void                        SetSaveVersionOnClose( bool bSet );
     void                        ResetFromTemplate( const OUString& rTemplateName, const OUString& rFileName );
 
     // TODO/LATER: the following two methods should be replaced by Get/SetModifPasswordInfo in future
     sal_uInt32                  GetModifyPasswordHash() const;
-    sal_Bool                    SetModifyPasswordHash( sal_uInt32 nHash );
+    bool                        SetModifyPasswordHash( sal_uInt32 nHash );
 
     ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > GetModifyPasswordInfo() const;
-    sal_Bool                    SetModifyPasswordInfo( const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& aInfo );
+    bool                        SetModifyPasswordInfo( const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& aInfo );
 
     static sal_uInt32           HandleFilter( SfxMedium* pMedium, SfxObjectShell* pDoc );
 
     virtual void                ViewAssigned();
     virtual bool                PrepareClose( sal_Bool bUI = sal_True );
-    virtual sal_Bool            IsInformationLost();
+    virtual bool                IsInformationLost();
     virtual sal_uInt16          GetHiddenInformationState( sal_uInt16 nStates );
     sal_Int16                   QueryHiddenInformation( HiddenWarningFact eFact, Window* pParent );
-    virtual sal_Bool            HasSecurityOptOpenReadOnly() const;
-    sal_Bool                    IsSecurityOptOpenReadOnly() const;
-    void                        SetSecurityOptOpenReadOnly( sal_Bool bOpenReadOnly = sal_True );
+    virtual bool                HasSecurityOptOpenReadOnly() const;
+    bool                        IsSecurityOptOpenReadOnly() const;
+    void                        SetSecurityOptOpenReadOnly( bool bOpenReadOnly = true );
 
     virtual Size                GetFirstPageSize();
-    virtual sal_Bool            DoClose();
+    virtual bool                DoClose();
     virtual void                PrepareReload();
-    virtual ::boost::shared_ptr<GDIMetaFile> GetPreviewMetaFile( sal_Bool bFullContent = sal_False ) const;
+    virtual ::boost::shared_ptr<GDIMetaFile> GetPreviewMetaFile( bool bFullContent = false ) const;
     virtual void                CancelTransfers();
 
-    sal_Bool                    GenerateAndStoreThumbnail(
-                                    sal_Bool bEncrypted,
-                                    sal_Bool bIsTemplate,
+    bool                        GenerateAndStoreThumbnail(
+                                    bool bEncrypted,
+                                    bool bIsTemplate,
                                     const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& xStor );
 
-    sal_Bool                    WriteThumbnail(
-                                    sal_Bool bEncrypted,
-                                    sal_Bool bIsTemplate,
+    bool                        WriteThumbnail(
+                                    bool bEncrypted,
+                                    bool bIsTemplate,
                                     const ::com::sun::star::uno::Reference< ::com::sun::star::io::XStream >& xStream );
 
-    sal_Bool                    IsInGenerateAndStoreThumbnail() const {return bIsInGenerateThumbnail;}//optimize thumbnail generate and store procedure to improve odt saving performance, i120030
+    bool                        IsInGenerateAndStoreThumbnail() const {return bIsInGenerateThumbnail;}//optimize thumbnail generate and store procedure to improve odt saving performance, i120030
 
     // Transfer IFace
     void                        AbortImport();
-    sal_Bool                    IsAbortingImport() const;
-    sal_Bool                    IsReloading() const;
+    bool                        IsAbortingImport() const;
+    bool                        IsReloading() const;
     void                        FinishedLoading( sal_uInt16 nWhich = SFX_LOADED_ALL );
     void                        TemplateDisconnectionAfterLoad();
-    sal_Bool                    IsLoading() const;
-    sal_Bool                    IsLoadingFinished() const;
-    void                        SetAutoLoad( const INetURLObject&, sal_uInt32 nTime, sal_Bool bReload = sal_True );
-    sal_Bool                    IsAutoLoadLocked() const;
+    bool                        IsLoading() const;
+    bool                        IsLoadingFinished() const;
+    void                        SetAutoLoad( const INetURLObject&, sal_uInt32 nTime, bool bReload = true );
+    bool                        IsAutoLoadLocked() const;
     void                        NotifyReloadAvailable();
 
     // Misc
-    sal_Bool                    IsPreview() const;
+    bool                        IsPreview() const;
     SfxObjectCreateMode         GetCreateMode() const { return eCreateMode; }
     SfxProgress*                GetProgress() const;
-    void                        SetWaitCursor( sal_Bool bSet ) const;
+    void                        SetWaitCursor( bool bSet ) const;
 
     // Naming Interface
     void                        SetTitle( const OUString& rTitle );
@@ -471,7 +471,7 @@ public:
     // Determine the position of the "Automatic" filter in the stylist
     void                        SetAutoStyleFilterIndex(sal_uInt16 nSet);
     sal_uInt16                  GetAutoStyleFilterIndex();
-    virtual sal_Bool            HasBasic() const;
+    virtual bool                HasBasic() const;
     BasicManager*               GetBasicManager() const;
     com::sun::star::uno::Reference< com::sun::star::script::XLibraryContainer >
                                 GetBasicContainer();
@@ -512,20 +512,20 @@ public:
                                 CreateAndLoadComponent( const SfxItemSet& rSet, SfxFrame* pFrame = NULL );
     static SfxObjectShell*      GetShellFromComponent( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent >& xComp );
     static OUString             GetServiceNameFromFactory( const OUString& rFact );
-    sal_Bool                        IsInPlaceActive();
-    sal_Bool                        IsUIActive();
-    virtual void                InPlaceActivate( sal_Bool );
-    virtual void                UIActivate( sal_Bool );
+    bool                        IsInPlaceActive();
+    bool                        IsUIActive();
+    virtual void                InPlaceActivate( bool );
+    virtual void                UIActivate( bool );
 
-    static sal_Bool             CopyStoragesOfUnknownMediaType(
+    static bool                 CopyStoragesOfUnknownMediaType(
                                     const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& xSource,
                                     const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& xTarget );
 
     // The functions from SvPersist
-    void            EnableSetModified( sal_Bool bEnable = sal_True );
-    sal_Bool        IsEnableSetModified() const;
-    virtual void    SetModified( sal_Bool bModified = sal_True );
-    sal_Bool        IsModified();
+    void            EnableSetModified( bool bEnable = true );
+    bool            IsEnableSetModified() const;
+    virtual void    SetModified( bool bModified = true );
+    bool            IsModified();
 
     /**
      * @param bChart true if the file is a chart doc and FillClass should not be called
@@ -594,16 +594,16 @@ public:
     virtual bool    SetProtectionPassword( const OUString &rPassword );
     virtual bool    GetProtectionHash( /*out*/ ::com::sun::star::uno::Sequence< sal_Int8 > &rPasswordHash );
 
-    SAL_DLLPRIVATE ::boost::shared_ptr<GDIMetaFile> CreatePreviewMetaFile_Impl( sal_Bool bFullContent ) const;
+    SAL_DLLPRIVATE ::boost::shared_ptr<GDIMetaFile> CreatePreviewMetaFile_Impl( bool bFullContent ) const;
 
-    SAL_DLLPRIVATE sal_Bool IsOwnStorageFormat_Impl(const SfxMedium &) const;
+    SAL_DLLPRIVATE bool IsOwnStorageFormat_Impl(const SfxMedium &) const;
 
-    SAL_DLLPRIVATE sal_Bool IsPackageStorageFormat_Impl(const SfxMedium &) const;
+    SAL_DLLPRIVATE bool IsPackageStorageFormat_Impl(const SfxMedium &) const;
 
-    SAL_DLLPRIVATE sal_Bool ConnectTmpStorage_Impl( const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& xStorage, SfxMedium* pMedium );
-    SAL_DLLPRIVATE sal_Bool DisconnectStorage_Impl( SfxMedium& rSrcMedium, SfxMedium& rTargetMedium );
+    SAL_DLLPRIVATE bool ConnectTmpStorage_Impl( const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& xStorage, SfxMedium* pMedium );
+    SAL_DLLPRIVATE bool DisconnectStorage_Impl( SfxMedium& rSrcMedium, SfxMedium& rTargetMedium );
 
-    SAL_DLLPRIVATE sal_Bool PutURLContentsToVersionStream_Impl(
+    SAL_DLLPRIVATE bool PutURLContentsToVersionStream_Impl(
                     const OUString& aURL,
                     const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& xDocStorage,
                     const OUString& aStreamName );
@@ -612,19 +612,19 @@ public:
                     const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& xStorage );
 
     SAL_DLLPRIVATE void InitOwnModel_Impl();
-    SAL_DLLPRIVATE void BreakMacroSign_Impl( sal_Bool bBreakMacroSing );
+    SAL_DLLPRIVATE void BreakMacroSign_Impl( bool bBreakMacroSing );
     SAL_DLLPRIVATE void CheckSecurityOnLoading_Impl();
     SAL_DLLPRIVATE void CheckForBrokenDocSignatures_Impl( const ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionHandler >& xHandler );
     SAL_DLLPRIVATE sal_uInt16 ImplCheckSignaturesInformation(
                 const ::com::sun::star::uno::Sequence< ::com::sun::star::security::DocumentSignatureInformation >& aInfos );
     SAL_DLLPRIVATE void CheckEncryption_Impl( const ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionHandler >& xHandler );
-    SAL_DLLPRIVATE void SetModifyPasswordEntered( sal_Bool bEntered = sal_True );
-    SAL_DLLPRIVATE sal_Bool IsModifyPasswordEntered();
+    SAL_DLLPRIVATE void SetModifyPasswordEntered( bool bEntered = true );
+    SAL_DLLPRIVATE bool IsModifyPasswordEntered();
 
     SAL_DLLPRIVATE void InitBasicManager_Impl();
     SAL_DLLPRIVATE SfxObjectShell_Impl* Get_Impl() { return pImp; }
 
-    SAL_DLLPRIVATE static sal_Bool UseInteractionToHandleError(
+    SAL_DLLPRIVATE static bool UseInteractionToHandleError(
                     const ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionHandler >& xHandler,
                     sal_uInt32 nError );
     SAL_DLLPRIVATE const SfxObjectShell_Impl* Get_Impl() const { return pImp; }
@@ -649,21 +649,21 @@ public:
     SAL_DLLPRIVATE void StateView_Impl(SfxItemSet &);
 
     // Load/Save public internals
-    SAL_DLLPRIVATE sal_Bool ImportFromGeneratedStream_Impl(
+    SAL_DLLPRIVATE bool ImportFromGeneratedStream_Impl(
                     const ::com::sun::star::uno::Reference< ::com::sun::star::io::XStream >& xStream,
                     const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& aMediaDescr );
     SAL_DLLPRIVATE void PositionView_Impl();
     SAL_DLLPRIVATE void UpdateFromTemplate_Impl();
-    SAL_DLLPRIVATE sal_Bool CanReload_Impl();
+    SAL_DLLPRIVATE bool CanReload_Impl();
     SAL_DLLPRIVATE void SetNamedVisibility_Impl();
-    SAL_DLLPRIVATE sal_Bool DoSave_Impl( const SfxItemSet* pSet=0 );
-    SAL_DLLPRIVATE sal_Bool Save_Impl( const SfxItemSet* pSet=0 );
-    SAL_DLLPRIVATE sal_Bool PreDoSaveAs_Impl(const OUString &rFileName, const OUString &rFiltName, SfxItemSet *);
-    SAL_DLLPRIVATE sal_Bool APISaveAs_Impl ( const OUString& aFileName, SfxItemSet* aParams );
-    SAL_DLLPRIVATE sal_Bool CommonSaveAs_Impl ( const INetURLObject& aURL, const OUString& aFilterName, SfxItemSet* aParams );
-    SAL_DLLPRIVATE sal_Bool GeneralInit_Impl(
+    SAL_DLLPRIVATE bool DoSave_Impl( const SfxItemSet* pSet=0 );
+    SAL_DLLPRIVATE bool Save_Impl( const SfxItemSet* pSet=0 );
+    SAL_DLLPRIVATE bool PreDoSaveAs_Impl(const OUString &rFileName, const OUString &rFiltName, SfxItemSet *);
+    SAL_DLLPRIVATE bool APISaveAs_Impl ( const OUString& aFileName, SfxItemSet* aParams );
+    SAL_DLLPRIVATE bool CommonSaveAs_Impl ( const INetURLObject& aURL, const OUString& aFilterName, SfxItemSet* aParams );
+    SAL_DLLPRIVATE bool GeneralInit_Impl(
                                     const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& xStorage,
-                                    sal_Bool bTypeMustBeSetAlready );
+                                    bool bTypeMustBeSetAlready );
     SAL_DLLPRIVATE void PrepareSecondTryLoad_Impl();
     SAL_DLLPRIVATE void SetInitialized_Impl( const bool i_fromInitNew );
 
@@ -676,16 +676,16 @@ public:
 
     // configuration items
     SAL_DLLPRIVATE SfxToolBoxConfig* GetToolBoxConfig_Impl();
-    SAL_DLLPRIVATE sal_uInt16 ImplGetSignatureState( sal_Bool bScriptingContent = sal_False );
+    SAL_DLLPRIVATE sal_uInt16 ImplGetSignatureState( bool bScriptingContent = false );
 
     SAL_DLLPRIVATE ::com::sun::star::uno::Sequence< ::com::sun::star::security::DocumentSignatureInformation >
         ImplAnalyzeSignature(
-            sal_Bool bScriptingContent,
+            bool bScriptingContent,
             const ::com::sun::star::uno::Reference< ::com::sun::star::security::XDocumentDigitalSignatures >& xSigner
                 = ::com::sun::star::uno::Reference< ::com::sun::star::security::XDocumentDigitalSignatures >() );
 
-    SAL_DLLPRIVATE void ImplSign( sal_Bool bScriptingContent = sal_False );
-    SAL_DLLPRIVATE sal_Bool QuerySaveSizeExceededModules_Impl( const ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionHandler >& xHandler );
+    SAL_DLLPRIVATE void ImplSign( bool bScriptingContent = false );
+    SAL_DLLPRIVATE bool QuerySaveSizeExceededModules_Impl( const ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionHandler >& xHandler );
 
     SAL_DLLPRIVATE void CheckOut( );
     SAL_DLLPRIVATE void CancelCheckOut( );
@@ -700,12 +700,12 @@ public:
     struct ModifyBlocker_Impl
     {
         SfxObjectShell* pPersist;
-        sal_Bool bWasEnabled;
+        bool bWasEnabled;
         ModifyBlocker_Impl( SfxObjectShell* pPersistP ) : pPersist( pPersistP )
         {
             bWasEnabled = pPersistP->IsEnableSetModified();
             if ( bWasEnabled )
-                pPersistP->EnableSetModified( sal_False );
+                pPersistP->EnableSetModified( false );
         }
         ~ModifyBlocker_Impl()
         {

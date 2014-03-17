@@ -865,7 +865,7 @@ IMPL_LINK( SwFieldDialog, MyListBoxHandler, ListBox *, pBox )
             (*pFieldmark->GetParameters())[ sKey ] = makeAny(selection);
             pFieldmark->Invalidate();
             SwView& rView = ( ( SwEditWin* )GetParent() )->GetView();
-            rView.GetDocShell()->SetModified( sal_True );
+            rView.GetDocShell()->SetModified( true );
         }
 
         EndPopupMode();

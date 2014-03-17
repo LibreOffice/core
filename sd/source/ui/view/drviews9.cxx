@@ -75,7 +75,7 @@ void DrawViewShell::ExecGallery(SfxRequest& rReq)
     if ( !pGalleryItem )
         return;
 
-    GetDocSh()->SetWaitCursor( sal_True );
+    GetDocSh()->SetWaitCursor( true );
 
     sal_Int8 nType( pGalleryItem->GetType() );
     // insert graphic
@@ -180,7 +180,7 @@ void DrawViewShell::ExecGallery(SfxRequest& rReq)
         GetViewFrame()->GetDispatcher()->Execute( SID_INSERT_AVMEDIA, SFX_CALLMODE_SYNCHRON, &aMediaURLItem, 0L );
     }
 
-    GetDocSh()->SetWaitCursor( sal_False );
+    GetDocSh()->SetWaitCursor( false );
 }
 
 

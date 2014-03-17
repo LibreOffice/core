@@ -2590,14 +2590,14 @@ sal_Int32 SAL_CALL SwXTextDocument::getRendererCount(
             bool bStateChanged = false;
             if ( bOrigStatus && !SvtPrintWarningOptions().IsModifyDocumentOnPrintingAllowed() )
             {
-                pRenderDocShell->EnableSetModified( sal_False );
+                pRenderDocShell->EnableSetModified( false );
                 bStateChanged = true;
             }
 
             // #122919# Force field update before PDF export
             pViewShell->SwViewShell::UpdateFlds(sal_True);
             if( bStateChanged )
-                pRenderDocShell->EnableSetModified( sal_True );
+                pRenderDocShell->EnableSetModified( true );
 
             // there is some redundancy between those two function calls, but right now
             // there is no time to sort this out.

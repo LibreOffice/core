@@ -109,7 +109,7 @@ void ScTabViewShell::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
                 //  dieser Hint kommt, den Design-Modus immer dann umschalten, wenn der
                 //  ReadOnly-Status sich wirklich geaendert hat:
 
-                if ( GetViewData()->GetSfxDocShell()->IsReadOnly() != (bReadOnly ? 1 : 0) )
+                if ( GetViewData()->GetSfxDocShell()->IsReadOnly() != bReadOnly )
                 {
                     bReadOnly = GetViewData()->GetSfxDocShell()->IsReadOnly();
 

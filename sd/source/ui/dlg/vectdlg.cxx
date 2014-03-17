@@ -134,7 +134,7 @@ Bitmap SdVectorizeDlg::GetPreparedBitmap( Bitmap& rBmp, Fraction& rScale )
 
 void SdVectorizeDlg::Calculate( Bitmap& rBmp, GDIMetaFile& rMtf )
 {
-    mpDocSh->SetWaitCursor( sal_True );
+    mpDocSh->SetWaitCursor( true );
     m_pPrgs->SetValue( 0 );
 
     Fraction    aScale;
@@ -202,7 +202,7 @@ void SdVectorizeDlg::Calculate( Bitmap& rBmp, GDIMetaFile& rMtf )
     }
 
     m_pPrgs->SetValue( 0 );
-    mpDocSh->SetWaitCursor( sal_False );
+    mpDocSh->SetWaitCursor( false );
 }
 
 void SdVectorizeDlg::AddTile( BitmapReadAccess* pRAcc, GDIMetaFile& rMtf,

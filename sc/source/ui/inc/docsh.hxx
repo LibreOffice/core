@@ -201,22 +201,22 @@ public:
                                sal_Int32 nFileFormat,
                                bool bTemplate = false ) const;
 
-    virtual sal_Bool    InitNew( const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& );
-    virtual sal_Bool    Load( SfxMedium& rMedium );
-    virtual sal_Bool    LoadFrom( SfxMedium& rMedium );
-    virtual sal_Bool    ConvertFrom( SfxMedium &rMedium );
+    virtual bool    InitNew( const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& );
+    virtual bool    Load( SfxMedium& rMedium );
+    virtual bool    LoadFrom( SfxMedium& rMedium );
+    virtual bool    ConvertFrom( SfxMedium &rMedium );
     virtual bool    LoadExternal( SfxMedium& rMedium );
-    virtual sal_Bool    Save();
-    virtual sal_Bool    SaveAs( SfxMedium& rMedium );
-    virtual sal_Bool    ConvertTo( SfxMedium &rMedium );
+    virtual bool    Save();
+    virtual bool    SaveAs( SfxMedium& rMedium );
+    virtual bool    ConvertTo( SfxMedium &rMedium );
     virtual bool    PrepareClose( sal_Bool bUI = sal_True ) SAL_OVERRIDE;
     virtual void    PrepareReload();
-    virtual sal_Bool    IsInformationLost();
+    virtual bool    IsInformationLost();
     virtual void    LoadStyles( SfxObjectShell &rSource );
 
-    virtual sal_Bool    SaveCompleted( const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& );      // SfxInPlaceObject
-    virtual sal_Bool    DoSaveCompleted( SfxMedium * pNewStor);     // SfxObjectShell
-    virtual sal_Bool    QuerySlotExecutable( sal_uInt16 nSlotId );
+    virtual bool    SaveCompleted( const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& );      // SfxInPlaceObject
+    virtual bool    DoSaveCompleted( SfxMedium * pNewStor);     // SfxObjectShell
+    virtual bool    QuerySlotExecutable( sal_uInt16 nSlotId );
 
     virtual void    Draw( OutputDevice *, const JobSetup & rSetup,
                                 sal_uInt16 nAspect = ASPECT_CONTENT );
@@ -228,7 +228,7 @@ public:
 
     virtual Printer* GetDocumentPrinter();
 
-    virtual void    SetModified( sal_Bool = sal_True );
+    virtual void    SetModified( bool = true );
 
     void            SetVisAreaOrSize( const Rectangle& rVisArea, bool bModifyStart );
 

@@ -247,7 +247,7 @@ void FuInsertFile::DoExecute( SfxRequest& rReq )
             aFilterName = pFilterName->GetValue ();
     }
 
-    mpDocSh->SetWaitCursor( sal_True );
+    mpDocSh->SetWaitCursor( true );
 
     SfxMedium*          pMedium = new SfxMedium( aFile, STREAM_READ | STREAM_NOCREATE );
     const SfxFilter*    pFilter = NULL;
@@ -303,7 +303,7 @@ void FuInsertFile::DoExecute( SfxRequest& rReq )
         }
     }
 
-    mpDocSh->SetWaitCursor( sal_False );
+    mpDocSh->SetWaitCursor( false );
 
     if( !bInserted )
     {
@@ -319,7 +319,7 @@ sal_Bool FuInsertFile::InsSDDinDrMode(SfxMedium* pMedium)
 {
     sal_Bool bOK = sal_False;
 
-    mpDocSh->SetWaitCursor( sal_False );
+    mpDocSh->SetWaitCursor( false );
     SdAbstractDialogFactory* pFact = SdAbstractDialogFactory::Create();
     AbstractSdInsertPagesObjsDlg* pDlg = pFact ? pFact->CreateSdInsertPagesObjsDlg( NULL, mpDoc, pMedium, aFile ) : 0;
 
@@ -335,7 +335,7 @@ sal_Bool FuInsertFile::InsSDDinDrMode(SfxMedium* pMedium)
 
     GetpApp()->SetDefDialogParent(pDefParent);
 
-    mpDocSh->SetWaitCursor( sal_True );
+    mpDocSh->SetWaitCursor( true );
 
     if( nRet == RET_OK )
     {
@@ -418,10 +418,10 @@ void FuInsertFile::InsTextOrRTFinDrMode(SfxMedium* pMedium)
     if( !pDlg )
         return;
 
-    mpDocSh->SetWaitCursor( sal_False );
+    mpDocSh->SetWaitCursor( false );
 
     sal_uInt16 nRet = pDlg->Execute();
-    mpDocSh->SetWaitCursor( sal_True );
+    mpDocSh->SetWaitCursor( true );
 
     if( nRet == RET_OK )
     {
@@ -629,7 +629,7 @@ void FuInsertFile::InsTextOrRTFinOlMode(SfxMedium* pMedium)
             pPara = pOutliner->GetParagraph( ++nPos );
         }
 
-        mpDocSh->SetWaitCursor( sal_False );
+        mpDocSh->SetWaitCursor( false );
 
         SfxProgress* pProgress = new SfxProgress( mpDocSh, SD_RESSTR(STR_CREATE_PAGES), nNewPages);
         if( pProgress )
@@ -678,7 +678,7 @@ void FuInsertFile::InsTextOrRTFinOlMode(SfxMedium* pMedium)
         if( pProgress )
             delete pProgress;
 
-        mpDocSh->SetWaitCursor( sal_True );
+        mpDocSh->SetWaitCursor( true );
     }
 
     delete pOutliner;

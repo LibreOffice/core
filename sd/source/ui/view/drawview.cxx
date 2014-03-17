@@ -177,7 +177,7 @@ sal_Bool DrawView::SetAttributes(const SfxItemSet& rSet,
                     ::Outliner* pOutliner = pOV->GetOutliner();
 
                     pOutliner->SetUpdateMode(false);
-                    mpDocSh->SetWaitCursor( sal_True );
+                    mpDocSh->SetWaitCursor( true );
 
                     // replace placeholder by template name
                     OUString aComment(SD_RESSTR(STR_UNDO_CHANGE_PRES_OBJECT));
@@ -236,7 +236,7 @@ sal_Bool DrawView::SetAttributes(const SfxItemSet& rSet,
                             pPara = pOutliner->GetParagraph( 0 );  // Put NumBulletItem in outline level 1
                     }
 
-                    mpDocSh->SetWaitCursor( sal_False );
+                    mpDocSh->SetWaitCursor( false );
                     pOV->GetOutliner()->SetUpdateMode(true);
 
                     mpDocSh->GetUndoManager()->LeaveListAction();

@@ -232,7 +232,7 @@ void FmFormModel::implSetOpenInDesignMode( bool _bOpenDesignMode, bool _bForce )
         m_bOpenInDesignMode = _bOpenDesignMode;
 
         if ( m_pObjShell )
-            m_pObjShell->SetModified( sal_True );
+            m_pObjShell->SetModified( true );
     }
     // no matter if we really did it or not - from now on, it does not count as defaulted anymore
     m_pImpl->bOpenInDesignIsDefaulted = sal_False;
@@ -269,7 +269,7 @@ void FmFormModel::SetAutoControlFocus( bool _bAutoControlFocus )
     if( _bAutoControlFocus != m_bAutoControlFocus )
     {
         m_bAutoControlFocus = _bAutoControlFocus;
-        m_pObjShell->SetModified( sal_True );
+        m_pObjShell->SetModified( true );
     }
 }
 

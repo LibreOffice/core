@@ -458,7 +458,7 @@ throw (UnknownPropertyException, PropertyVetoException,
 
             case HANDLE_APPLYUSERDATA:
                 {
-                    sal_Bool bApplyUserData = sal_False;
+                    bool bApplyUserData = false;
                     if( *pValues >>= bApplyUserData )
                     {
                         bChanged = ( bApplyUserData != pDocSh->IsUseUserData() );
@@ -858,7 +858,7 @@ throw (UnknownPropertyException, PropertyVetoException,
             }
             case HANDLE_UPDATEFROMTEMPLATE:
             {
-                sal_Bool value = sal_False;
+                bool value = false;
                 if( *pValues >>= value )
                 {
                     bChanged = ( value != pDocSh->IsQueryLoadTemplate() );
@@ -888,7 +888,7 @@ throw (UnknownPropertyException, PropertyVetoException,
             // --> #i33095#
             case HANDLE_LOAD_READONLY:
             {
-                sal_Bool bNewValue = sal_False;
+                bool bNewValue = false;
                 if ( *pValues >>= bNewValue )
                 {
                     bChanged = ( pDocSh->IsLoadReadonly() != bNewValue );
@@ -900,7 +900,7 @@ throw (UnknownPropertyException, PropertyVetoException,
 
             case HANDLE_SAVE_VERSION:
             {
-                sal_Bool bNewValue = sal_False;
+                bool bNewValue = false;
                 if ( *pValues >>= bNewValue )
                 {
                     bChanged = ( pDocSh->IsSaveVersionOnClose() != bNewValue );

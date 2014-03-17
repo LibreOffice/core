@@ -291,8 +291,8 @@ SfxObjectShell::SfxObjectShell( const sal_uInt64 i_nCreationFlags )
     ,   pMedium(0)
     ,   pStyleSheetPool(0)
     ,   eCreateMode( ( i_nCreationFlags & SFXMODEL_EMBEDDED_OBJECT ) ? SFX_CREATE_MODE_EMBEDDED : SFX_CREATE_MODE_STANDARD )
-    ,   bHasName( sal_False )
-    ,   bIsInGenerateThumbnail ( sal_False )
+    ,   bHasName( false )
+    ,   bIsInGenerateThumbnail ( false )
 {
 
     const bool bScriptSupport = ( i_nCreationFlags & SFXMODEL_DISABLE_EMBEDDED_SCRIPTS ) == 0;
@@ -338,8 +338,8 @@ SfxObjectShell::SfxObjectShell
     pMedium(0),
     pStyleSheetPool(0),
     eCreateMode(eMode),
-    bHasName( sal_False ),
-    bIsInGenerateThumbnail ( sal_False )
+    bHasName( false ),
+    bIsInGenerateThumbnail ( false )
 {
 }
 
@@ -351,7 +351,7 @@ SfxObjectShell::~SfxObjectShell()
 {
 
     if ( IsEnableSetModified() )
-        EnableSetModified( sal_False );
+        EnableSetModified( false );
 
     // Never call GetInPlaceObject(), the access to the derivative branch
     // SfxInternObject is not allowed because of a compiler bug
@@ -409,14 +409,14 @@ SfxObjectShell::~SfxObjectShell()
 
 
 
-void SfxObjectShell::Stamp_SetPrintCancelState(sal_Bool bState)
+void SfxObjectShell::Stamp_SetPrintCancelState(bool bState)
 {
     pImp->bIsPrintJobCancelable = bState;
 }
 
 
 
-sal_Bool SfxObjectShell::Stamp_GetPrintCancelState() const
+bool SfxObjectShell::Stamp_GetPrintCancelState() const
 {
     return pImp->bIsPrintJobCancelable;
 }
@@ -482,7 +482,7 @@ bool SfxObjectShell::Close()
 SfxObjectShell* SfxObjectShell::GetFirst
 (
     const TypeId* pType ,
-    sal_Bool            bOnlyVisible
+    bool          bOnlyVisible
 )
 {
     SfxObjectShellArr_Impl &rDocs = SFX_APP()->GetObjectShells_Impl();
@@ -509,7 +509,7 @@ SfxObjectShell* SfxObjectShell::GetNext
 (
     const SfxObjectShell&   rPrev,
     const TypeId*           pType,
-    sal_Bool                    bOnlyVisible
+    bool                    bOnlyVisible
 )
 {
     SfxObjectShellArr_Impl &rDocs = SFX_APP()->GetObjectShells_Impl();
@@ -544,7 +544,7 @@ SfxObjectShell* SfxObjectShell::Current()
 
 
 
-sal_Bool SfxObjectShell::IsInPrepareClose() const
+bool SfxObjectShell::IsInPrepareClose() const
 {
     return pImp->bInPrepareClose;
 }
@@ -711,13 +711,13 @@ void SfxObjectShell::SetHasNoBasic()
 
 
 
-sal_Bool SfxObjectShell::HasBasic() const
+bool SfxObjectShell::HasBasic() const
 {
 #ifdef DISABLE_SCRIPTING
-    return sal_False;
+    return false;
 #else
     if ( pImp->m_bNoBasicCapabilities )
-        return sal_False;
+        return false;
 
     if ( !pImp->bBasicInitialized )
         const_cast< SfxObjectShell* >( this )->InitBasicManager_Impl();
@@ -851,7 +851,7 @@ void SfxObjectShell::InitBasicManager_Impl()
 
 
 
-sal_Bool SfxObjectShell::DoClose()
+bool SfxObjectShell::DoClose()
 {
     return Close();
 }

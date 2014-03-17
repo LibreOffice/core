@@ -1096,7 +1096,7 @@ SwFltShell::~SwFltShell()
         if( !IsFlagSet(SwFltControlStack::DONT_HARD_PROTECT) ){
             SwDocShell* pDocSh = rDoc.GetDocShell();
             if( pDocSh )
-                pDocSh->SetReadOnlyUI( sal_True );
+                pDocSh->SetReadOnlyUI( true );
         }
     }
         // Update document page descriptors (only this way also left

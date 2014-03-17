@@ -617,7 +617,7 @@ IMPL_LINK( OutlineView, DepthChangedHdl, ::Outliner *, pOutliner )
             }
             else
             {
-                mpDocSh->SetWaitCursor( sal_True );
+                mpDocSh->SetWaitCursor( true );
             }
         }
 
@@ -641,7 +641,7 @@ IMPL_LINK( OutlineView, DepthChangedHdl, ::Outliner *, pOutliner )
                 mpProgress = NULL;
             }
             else
-                mpDocSh->SetWaitCursor( sal_False );
+                mpDocSh->SetWaitCursor( false );
 
             mnPagesToProcess = 0;
             mnPagesProcessed = 0;

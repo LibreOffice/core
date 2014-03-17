@@ -387,7 +387,7 @@ bool Outliner::SpellNextDocument (void)
     {
         if (mpView->ISA(OutlineView))
             ((OutlineView*)mpView)->PrepareClose(sal_False);
-        mpDrawDocument->GetDocSh()->SetWaitCursor( sal_True );
+        mpDrawDocument->GetDocSh()->SetWaitCursor( true );
 
         Initialize (true);
 
@@ -397,7 +397,7 @@ bool Outliner::SpellNextDocument (void)
             pOutlinerView->SetWindow(mpWindow);
         ProvideNextTextObject ();
 
-        mpDrawDocument->GetDocSh()->SetWaitCursor( sal_False );
+        mpDrawDocument->GetDocSh()->SetWaitCursor( false );
         ClearModifyFlag();
     }
 
@@ -460,7 +460,7 @@ bool Outliner::StartSearchAndReplace (const SvxSearchItem* pSearchItem)
 {
     sal_Bool bEndOfSearch = sal_True;
 
-    mpDrawDocument->GetDocSh()->SetWaitCursor( sal_True );
+    mpDrawDocument->GetDocSh()->SetWaitCursor( true );
     if (mbPrepareSpellingPending)
         PrepareSpelling();
     ViewShellBase* pBase = PTR_CAST(ViewShellBase,SfxViewShell::Current());
@@ -530,7 +530,7 @@ bool Outliner::StartSearchAndReplace (const SvxSearchItem* pSearchItem)
         }
     }
     else
-        mpDrawDocument->GetDocSh()->SetWaitCursor( sal_False );
+        mpDrawDocument->GetDocSh()->SetWaitCursor( false );
 
     return bEndOfSearch;
 }
@@ -713,7 +713,7 @@ bool Outliner::SearchAndReplaceOnce (void)
                         "SearchAndReplace without valid view!" );
                     if ( ! GetEditEngine().HasView( &pOutlinerView->GetEditView() ) )
                     {
-                        mpDrawDocument->GetDocSh()->SetWaitCursor( sal_False );
+                        mpDrawDocument->GetDocSh()->SetWaitCursor( false );
                         return true;
                     }
 
@@ -724,7 +724,7 @@ bool Outliner::SearchAndReplaceOnce (void)
         }
         else if (pViewShell->ISA(OutlineViewShell))
         {
-            mpDrawDocument->GetDocSh()->SetWaitCursor (sal_False);
+            mpDrawDocument->GetDocSh()->SetWaitCursor(false);
             // The following loop is executed more then once only when a
             // wrap arround search is done.
             while (true)
@@ -745,7 +745,7 @@ bool Outliner::SearchAndReplaceOnce (void)
         }
     }
 
-    mpDrawDocument->GetDocSh()->SetWaitCursor( sal_False );
+    mpDrawDocument->GetDocSh()->SetWaitCursor( false );
 
     return mbEndOfSearch;
 }
@@ -1251,7 +1251,7 @@ void Outliner::PrepareSearchAndReplace (void)
 
         EnterEditMode ();
 
-        mpDrawDocument->GetDocSh()->SetWaitCursor( sal_False );
+        mpDrawDocument->GetDocSh()->SetWaitCursor( false );
         // Start seach at the right end of the current object's text
         // depending on the search direction.
         OutlinerView* pOutlinerView = mpImpl->GetOutlinerView();
@@ -1590,7 +1590,7 @@ void Outliner::PrepareConversion (void)
 
         EnterEditMode ();
 
-        mpDrawDocument->GetDocSh()->SetWaitCursor( sal_False );
+        mpDrawDocument->GetDocSh()->SetWaitCursor( false );
         // Start seach at the right end of the current object's text
         // depending on the search direction.
     }
@@ -1649,7 +1649,7 @@ bool Outliner::ConvertNextDocument()
     if (pViewShell && pViewShell->ISA(OutlineViewShell) )
         return false;
 
-    mpDrawDocument->GetDocSh()->SetWaitCursor( sal_True );
+    mpDrawDocument->GetDocSh()->SetWaitCursor( true );
 
     Initialize ( true );
 
@@ -1661,7 +1661,7 @@ bool Outliner::ConvertNextDocument()
     }
     ProvideNextTextObject ();
 
-    mpDrawDocument->GetDocSh()->SetWaitCursor( sal_False );
+    mpDrawDocument->GetDocSh()->SetWaitCursor( false );
     ClearModifyFlag();
 
     // for text conversion we automaticly wrap around one

@@ -664,7 +664,7 @@ void SwWrtShell::CalcAndSetScale( svt::EmbeddedObjectRef& xObj,
                     bool bResetEnableSetModified(false);
                     if ( GetDoc()->GetDocShell()->IsEnableSetModified() )
                     {
-                        GetDoc()->GetDocShell()->EnableSetModified( sal_False );
+                        GetDoc()->GetDocShell()->EnableSetModified( false );
                         bResetEnableSetModified = true;
                     }
 
@@ -677,7 +677,7 @@ void SwWrtShell::CalcAndSetScale( svt::EmbeddedObjectRef& xObj,
 
                     if ( bResetEnableSetModified )
                     {
-                        GetDoc()->GetDocShell()->EnableSetModified( sal_True );
+                        GetDoc()->GetDocShell()->EnableSetModified( true );
                     }
                 }
             }

@@ -579,7 +579,7 @@ IMPL_LINK_NOARG(SvxBitmapTabPage, ClickImportHdl_Impl)
 {
     ResMgr& rMgr = CUI_MGR();
     SvxOpenGraphicDialog aDlg( OUString("Import") );
-    aDlg.EnableLink(sal_False);
+    aDlg.EnableLink(false);
 
     if( !aDlg.Execute() )
     {

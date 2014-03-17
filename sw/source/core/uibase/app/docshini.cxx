@@ -89,11 +89,11 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star;
 
 // Load Document
-sal_Bool SwDocShell::InitNew( const uno::Reference < embed::XStorage >& xStor )
+bool SwDocShell::InitNew( const uno::Reference < embed::XStorage >& xStor )
 {
-    sal_Bool bRet = SfxObjectShell::InitNew( xStor );
+    bool bRet = SfxObjectShell::InitNew( xStor );
     OSL_ENSURE( GetMapUnit() == MAP_TWIP, "map unit is not twip!" );
-    sal_Bool bHTMLTemplSet = sal_False;
+    bool bHTMLTemplSet = false;
     if( bRet )
     {
         AddLink();      // create pDoc / pIo if applicable
@@ -464,9 +464,9 @@ void SwDocShell::ReactivateModel()
 }
 
 // Load, Default-Format
-sal_Bool  SwDocShell::Load( SfxMedium& rMedium )
+bool  SwDocShell::Load( SfxMedium& rMedium )
 {
-    sal_Bool bRet = sal_False;
+    bool bRet = false;
     if( SfxObjectShell::Load( rMedium ))
     {
         SAL_INFO( "sw.ui", "after SfxInPlaceObject::Load" );
@@ -563,9 +563,9 @@ sal_Bool  SwDocShell::Load( SfxMedium& rMedium )
     return bRet;
 }
 
-sal_Bool  SwDocShell::LoadFrom( SfxMedium& rMedium )
+bool  SwDocShell::LoadFrom( SfxMedium& rMedium )
 {
-    sal_Bool bRet = sal_False;
+    bool bRet = false;
     if( pDoc )
         RemoveLink();
 

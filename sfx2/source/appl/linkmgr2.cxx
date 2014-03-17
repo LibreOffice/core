@@ -588,7 +588,7 @@ bool SvxInternalLink::Connect( sfx2::SvBaseLink* pLink )
         if ( !pShell )
         {
             bFirst = sal_False;
-            pShell = SfxObjectShell::GetFirst( &aType, sal_False );
+            pShell = SfxObjectShell::GetFirst( &aType, false );
         }
 
         OUString sTmp;
@@ -611,10 +611,10 @@ bool SvxInternalLink::Connect( sfx2::SvBaseLink* pLink )
             if( bFirst )
             {
                 bFirst = sal_False;
-                pShell = SfxObjectShell::GetFirst( &aType, sal_False );
+                pShell = SfxObjectShell::GetFirst( &aType, false );
             }
             else
-                pShell = SfxObjectShell::GetNext( *pShell, &aType, sal_False );
+                pShell = SfxObjectShell::GetNext( *pShell, &aType, false );
 
             sTmp = "";
         }

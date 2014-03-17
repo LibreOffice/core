@@ -289,7 +289,7 @@ void DrawDocShell::GetState(SfxItemSet &rSet)
     }
 }
 
-void DrawDocShell::InPlaceActivate( sal_Bool bActive )
+void DrawDocShell::InPlaceActivate( bool bActive )
 {
     ViewShell* pViewSh = NULL;
     SfxViewShell* pSfxViewSh = NULL;
@@ -407,7 +407,7 @@ void DrawDocShell::ApplySlotFilter() const
     }
 }
 
-void DrawDocShell::SetModified( sal_Bool bSet /* = sal_True */ )
+void DrawDocShell::SetModified( bool bSet /* = true */ )
 {
     SfxObjectShell::SetModified( bSet );
 

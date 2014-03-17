@@ -229,12 +229,12 @@ Reader* SwDocShell::StartConvertFrom(SfxMedium& rMedium, SwReader** ppRdr,
 }
 
 // Loading
-sal_Bool SwDocShell::ConvertFrom( SfxMedium& rMedium )
+bool SwDocShell::ConvertFrom( SfxMedium& rMedium )
 {
     SwReader* pRdr;
     SwRead pRead = StartConvertFrom(rMedium, &pRdr);
     if (!pRead)
-      return sal_False; // #129881# return if no reader is found
+      return false; // #129881# return if no reader is found
     SotStorageRef pStg=pRead->getSotStorageRef(); // #i45333# save sot storage ref in case of recursive calls
 
     pDoc->setDocAccTitle(OUString());
@@ -284,7 +284,7 @@ sal_Bool SwDocShell::ConvertFrom( SfxMedium& rMedium )
     SW_MOD()->SetEmbeddedLoadSave( sal_False );
 
     SetError( nErr, OUString(  OSL_LOG_PREFIX  ) );
-    sal_Bool bOk = !IsError( nErr );
+    bool bOk = !IsError( nErr );
 
     if ( bOk && !pDoc->IsInLoadAsynchron() )
     {
@@ -297,7 +297,7 @@ sal_Bool SwDocShell::ConvertFrom( SfxMedium& rMedium )
 }
 
 // Saving the Default-Format, Stg present
-sal_Bool SwDocShell::Save()
+bool SwDocShell::Save()
 {
     //#i3370# remove quick help to prevent saving of autocorrection suggestions
     if(pView)
@@ -385,7 +385,7 @@ sal_Bool SwDocShell::Save()
 }
 
 // Save using the Defaultformat
-sal_Bool SwDocShell::SaveAs( SfxMedium& rMedium )
+bool SwDocShell::SaveAs( SfxMedium& rMedium )
 {
     SwWait aWait( *this, true );
     //#i3370# remove quick help to prevent saving of autocorrection suggestions
@@ -519,11 +519,11 @@ static SwSrcView* lcl_GetSourceView( SwDocShell* pSh )
     return PTR_CAST( SwSrcView, pViewShell);
 }
 
-sal_Bool SwDocShell::ConvertTo( SfxMedium& rMedium )
+bool SwDocShell::ConvertTo( SfxMedium& rMedium )
 {
     const SfxFilter* pFlt = rMedium.GetFilter();
     if( !pFlt )
-        return sal_False;
+        return false;
 
     WriterRef xWriter;
     SwReaderWriter::GetWriter( pFlt->GetUserData(), rMedium.GetBaseURL( true ), xWriter );
@@ -531,7 +531,7 @@ sal_Bool SwDocShell::ConvertTo( SfxMedium& rMedium )
     {   // Filter not available
         InfoBox( 0,
                  SW_RESSTR(STR_DLLNOTFOUND) ).Execute();
-        return sal_False;
+        return false;
     }
 
     //#i3370# remove quick help to prevent saving of autocorrection suggestions
@@ -668,7 +668,7 @@ sal_Bool SwDocShell::ConvertTo( SfxMedium& rMedium )
         }
 
         // Now normally save the Document
-        sal_Bool bRet = SaveAs( rMedium );
+        bool bRet = SaveAs( rMedium );
 
         if( nMyType != nSaveType )
         {
@@ -753,9 +753,9 @@ sal_Bool SwDocShell::ConvertTo( SfxMedium& rMedium )
 
 // Hands off
 // do not yet activate, must deliver TRUE
-sal_Bool SwDocShell::SaveCompleted( const uno::Reference < embed::XStorage >& xStor  )
+bool SwDocShell::SaveCompleted( const uno::Reference < embed::XStorage >& xStor  )
 {
-    sal_Bool bRet = SfxObjectShell::SaveCompleted( xStor );
+    bool bRet = SfxObjectShell::SaveCompleted( xStor );
     if( bRet )
     {
         // Do not decide until here, whether Saving was successful or not
@@ -769,7 +769,7 @@ sal_Bool SwDocShell::SaveCompleted( const uno::Reference < embed::XStorage >& xS
     {
         sal_Bool bResetModified = IsEnableSetModified();
         if( bResetModified )
-            EnableSetModified( sal_False );
+            EnableSetModified( false );
 
         uno::Sequence < OUString > aNames = pOLEChildList->GetObjectNames();
         for( sal_Int32 n = aNames.getLength(); n; n-- )
@@ -782,7 +782,7 @@ sal_Bool SwDocShell::SaveCompleted( const uno::Reference < embed::XStorage >& xS
 
         DELETEZ( pOLEChildList );
         if( bResetModified )
-            EnableSetModified( sal_True );
+            EnableSetModified( true );
     }
     return bRet;
 }
@@ -794,7 +794,7 @@ void SwDocShell::Draw( OutputDevice* pDev, const JobSetup& rSetup,
     //fix #25341# Draw should not affect the Modified
     sal_Bool bResetModified;
     if ( sal_True == (bResetModified = IsEnableSetModified()) )
-        EnableSetModified( sal_False );
+        EnableSetModified( false );
 
     // When there is a JobSetup connected to the Document, we copy it to
     // reconnect it after PrtOle2. We don't use an empty JobSetup because
@@ -827,7 +827,7 @@ void SwDocShell::Draw( OutputDevice* pDev, const JobSetup& rSetup,
         delete pOrig;
     }
     if ( bResetModified )
-        EnableSetModified( sal_True );
+        EnableSetModified( true );
 }
 
 void SwDocShell::SetVisArea( const Rectangle &rRect )

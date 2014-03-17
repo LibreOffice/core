@@ -108,13 +108,13 @@ bool operator> (const util::DateTime& i_rLeft, const util::DateTime& i_rRight)
 }
 
 ::boost::shared_ptr<GDIMetaFile>
-SfxObjectShell::GetPreviewMetaFile( sal_Bool bFullContent ) const
+SfxObjectShell::GetPreviewMetaFile( bool bFullContent ) const
 {
     return CreatePreviewMetaFile_Impl( bFullContent );
 }
 
 ::boost::shared_ptr<GDIMetaFile>
-SfxObjectShell::CreatePreviewMetaFile_Impl( sal_Bool bFullContent ) const
+SfxObjectShell::CreatePreviewMetaFile_Impl( bool bFullContent ) const
 {
     // DoDraw can only be called when no printing is done, otherwise
     // the printer may be turned off
@@ -427,7 +427,7 @@ void SfxObjectShell::UpdateFromTemplate_Impl(  )
     {
         // check existence of template storage
         aTemplURL = aFoundName;
-        sal_Bool bLoad = sal_False;
+        bool bLoad = false;
 
         // should the document checked against changes in the template ?
         if ( IsQueryLoadTemplate() )
@@ -460,21 +460,21 @@ void SfxObjectShell::UpdateFromTemplate_Impl(  )
                     // ask user
                     if( bCanUpdateFromTemplate == document::UpdateDocMode::QUIET_UPDATE
                     || bCanUpdateFromTemplate == document::UpdateDocMode::FULL_UPDATE )
-                        bLoad = sal_True;
+                        bLoad = true;
                     else if ( bCanUpdateFromTemplate == document::UpdateDocMode::ACCORDING_TO_CONFIG )
                     {
                         OUString sMessage( SfxResId(STR_QRYTEMPL_MESSAGE).toString() );
                         sMessage = sMessage.replaceAll( "$(ARG1)", aTemplName );
                         sfx2::QueryTemplateBox aBox( GetDialogParent(), sMessage );
                         if ( RET_YES == aBox.Execute() )
-                            bLoad = sal_True;
+                            bLoad = true;
                     }
 
                     if( !bLoad )
                     {
                         // user refuses, so don't ask again for this document
-                        SetQueryLoadTemplate(sal_False);
-                        SetModified( sal_True );
+                        SetQueryLoadTemplate(false);
+                        SetModified( true );
                     }
                 }
             }
@@ -506,7 +506,7 @@ void SfxObjectShell::UpdateFromTemplate_Impl(  )
     }
 }
 
-sal_Bool SfxObjectShell::IsHelpDocument() const
+bool SfxObjectShell::IsHelpDocument() const
 {
     const SfxFilter* pFilter = GetMedium()->GetFilter();
     return (pFilter && pFilter->GetFilterName() == "writer_web_HTML_help");
@@ -541,57 +541,57 @@ void SfxObjectShell::ResetFromTemplate( const OUString& rTemplateName, const OUS
                     now.GetHour(), now.GetDay(), now.GetMonth(),
                     now.GetYear(), false) );
 
-                SetQueryLoadTemplate( sal_True );
+                SetQueryLoadTemplate( true );
             }
         }
     }
 }
 
-sal_Bool SfxObjectShell::IsQueryLoadTemplate() const
+bool SfxObjectShell::IsQueryLoadTemplate() const
 {
     return pImp->bQueryLoadTemplate;
 }
 
-sal_Bool SfxObjectShell::IsUseUserData() const
+bool SfxObjectShell::IsUseUserData() const
 {
     return pImp->bUseUserData;
 }
 
-void SfxObjectShell::SetQueryLoadTemplate( sal_Bool bNew )
+void SfxObjectShell::SetQueryLoadTemplate( bool bNew )
 {
-    if ( pImp->bQueryLoadTemplate != bNew )
-        SetModified( sal_True );
+    if ( pImp->bQueryLoadTemplate != (bNew ? 1 : 0) )
+        SetModified( true );
     pImp->bQueryLoadTemplate = bNew;
 }
 
-void SfxObjectShell::SetUseUserData( sal_Bool bNew )
+void SfxObjectShell::SetUseUserData( bool bNew )
 {
-    if ( pImp->bUseUserData != bNew )
-        SetModified( sal_True );
+    if ( pImp->bUseUserData != (bNew ? 1 : 0) )
+        SetModified( true );
     pImp->bUseUserData = bNew;
 }
 
-sal_Bool SfxObjectShell::IsLoadReadonly() const
+bool SfxObjectShell::IsLoadReadonly() const
 {
     return pImp->bLoadReadonly;
 }
 
-sal_Bool SfxObjectShell::IsSaveVersionOnClose() const
+bool SfxObjectShell::IsSaveVersionOnClose() const
 {
     return pImp->bSaveVersionOnClose;
 }
 
-void SfxObjectShell::SetLoadReadonly( sal_Bool bNew )
+void SfxObjectShell::SetLoadReadonly( bool bNew )
 {
-    if ( pImp->bLoadReadonly != bNew )
-        SetModified( sal_True );
+    if ( pImp->bLoadReadonly != (bNew ? 1 : 0) )
+        SetModified( true );
     pImp->bLoadReadonly = bNew;
 }
 
-void SfxObjectShell::SetSaveVersionOnClose( sal_Bool bNew )
+void SfxObjectShell::SetSaveVersionOnClose( bool bNew )
 {
-    if ( pImp->bSaveVersionOnClose != bNew )
-        SetModified( sal_True );
+    if ( pImp->bSaveVersionOnClose != (bNew ? 1 : 0) )
+        SetModified( true );
     pImp->bSaveVersionOnClose = bNew;
 }
 
@@ -600,7 +600,7 @@ sal_uInt32 SfxObjectShell::GetModifyPasswordHash() const
     return pImp->m_nModifyPasswordHash;
 }
 
-sal_Bool SfxObjectShell::SetModifyPasswordHash( sal_uInt32 nHash )
+bool SfxObjectShell::SetModifyPasswordHash( sal_uInt32 nHash )
 {
     if ( ( !IsReadOnly() && !IsReadOnlyUI() )
       || !(pImp->nFlagsInProgress & SFX_LOADED_MAINDOCUMENT ) )
@@ -608,10 +608,10 @@ sal_Bool SfxObjectShell::SetModifyPasswordHash( sal_uInt32 nHash )
         // the hash can be changed only in editable documents,
         // or during loading of document
         pImp->m_nModifyPasswordHash = nHash;
-        return sal_True;
+        return true;
     }
 
-    return sal_False;
+    return false;
 }
 
 uno::Sequence< beans::PropertyValue > SfxObjectShell::GetModifyPasswordInfo() const
@@ -619,7 +619,7 @@ uno::Sequence< beans::PropertyValue > SfxObjectShell::GetModifyPasswordInfo() co
     return pImp->m_aModifyPasswordInfo;
 }
 
-sal_Bool SfxObjectShell::SetModifyPasswordInfo( const uno::Sequence< beans::PropertyValue >& aInfo )
+bool SfxObjectShell::SetModifyPasswordInfo( const uno::Sequence< beans::PropertyValue >& aInfo )
 {
     if ( ( !IsReadOnly() && !IsReadOnlyUI() )
       || !(pImp->nFlagsInProgress & SFX_LOADED_MAINDOCUMENT ) )
@@ -627,18 +627,18 @@ sal_Bool SfxObjectShell::SetModifyPasswordInfo( const uno::Sequence< beans::Prop
         // the hash can be changed only in editable documents,
         // or during loading of document
         pImp->m_aModifyPasswordInfo = aInfo;
-        return sal_True;
+        return true;
     }
 
-    return sal_False;
+    return false;
 }
 
-void SfxObjectShell::SetModifyPasswordEntered( sal_Bool bEntered )
+void SfxObjectShell::SetModifyPasswordEntered( bool bEntered )
 {
     pImp->m_bModifyPasswordEntered = bEntered;
 }
 
-sal_Bool SfxObjectShell::IsModifyPasswordEntered()
+bool SfxObjectShell::IsModifyPasswordEntered()
 {
     return pImp->m_bModifyPasswordEntered;
 }

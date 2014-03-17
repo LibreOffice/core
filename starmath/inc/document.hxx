@@ -133,13 +133,13 @@ class SmDocShell : public SfxObjectShell, public SfxListener
     virtual sal_Bool        SetData( const OUString& rData );
     virtual sal_uLong       GetMiscStatus() const;
     virtual void        OnDocumentPrinterChanged( Printer * );
-    virtual sal_Bool    InitNew( const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& xStorage );
-    virtual sal_Bool        Load( SfxMedium& rMedium );
+    virtual bool        InitNew( const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& xStorage );
+    virtual bool        Load( SfxMedium& rMedium );
             void        ImplSave(  SvStorageStreamRef xStrm  );
-    virtual sal_Bool        Save();
-    virtual sal_Bool        SaveAs( SfxMedium& rMedium );
-    virtual sal_Bool        ConvertTo( SfxMedium &rMedium );
-    virtual sal_Bool        SaveCompleted( const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& xStorage );
+    virtual bool        Save();
+    virtual bool        SaveAs( SfxMedium& rMedium );
+    virtual bool        ConvertTo( SfxMedium &rMedium );
+    virtual bool        SaveCompleted( const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& xStorage );
 
     Printer             *GetPrt();
     OutputDevice*       GetRefDev();
@@ -147,7 +147,7 @@ class SmDocShell : public SfxObjectShell, public SfxListener
     bool                IsFormulaArranged() const { return bIsFormulaArranged; }
     void                SetFormulaArranged(bool bVal) { bIsFormulaArranged = bVal; }
 
-    virtual sal_Bool        ConvertFrom(SfxMedium &rMedium);
+    virtual bool        ConvertFrom(SfxMedium &rMedium);
 
     /** Called whenever the formula is changed
      * Deletes the current cursor
@@ -215,7 +215,7 @@ public:
     void        GetState(SfxItemSet &);
 
     virtual void SetVisArea (const Rectangle & rVisArea);
-    virtual void SetModified(sal_Bool bModified);
+    virtual void SetModified(bool bModified);
 
     /** Get a cursor for modifying this document
      * @remarks Don't store this reference, a new cursor may be made...

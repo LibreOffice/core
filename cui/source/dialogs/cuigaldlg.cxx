@@ -1086,8 +1086,8 @@ IMPL_LINK_NOARG(TPGalleryThemeProperties, ClickTakeHdl)
         if( !m_pLbxFound->GetSelectEntryCount() || !bEntriesFound )
         {
             SvxOpenGraphicDialog aDlg("Gallery");
-            aDlg.EnableLink(sal_False);
-            aDlg.AsLink(sal_False);
+            aDlg.EnableLink(false);
+            aDlg.AsLink(false);
 
             if( !aDlg.Execute() )
                 pData->pTheme->InsertURL( INetURLObject( aDlg.GetPath() ) );

@@ -593,7 +593,7 @@ void SwHTMLParser::Continue( int nToken )
     if( pDoc->GetDocShell() &&
         (bSetModEnabled = pDoc->GetDocShell()->IsEnableSetModified()) )
     {
-        pDoc->GetDocShell()->EnableSetModified( sal_False );
+        pDoc->GetDocShell()->EnableSetModified( false );
     }
 
     // waehrend des einlesens kein OLE-Modified rufen
@@ -879,7 +879,7 @@ if( pSttNdIdx->GetIndex()+1 == pPam->GetBound( false ).nNode.GetIndex() )
             pDoc->ResetModified();
         if( bSetModEnabled && pDoc->GetDocShell() )
         {
-            pDoc->GetDocShell()->EnableSetModified( sal_True );
+            pDoc->GetDocShell()->EnableSetModified( true );
             bSetModEnabled = false; // this is unnecessary here
         }
     }

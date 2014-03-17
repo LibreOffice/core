@@ -740,7 +740,7 @@ sal_Bool SmDocShell::SetData( const OUString& rData )
 }
 
 
-sal_Bool SmDocShell::ConvertFrom(SfxMedium &rMedium)
+bool SmDocShell::ConvertFrom(SfxMedium &rMedium)
 {
     SAL_INFO( "starmath", "SmDocShell::ConvertFrom" );
 
@@ -791,7 +791,7 @@ sal_Bool SmDocShell::ConvertFrom(SfxMedium &rMedium)
 }
 
 
-sal_Bool SmDocShell::InitNew( const uno::Reference < embed::XStorage >& xStorage )
+bool SmDocShell::InitNew( const uno::Reference < embed::XStorage >& xStorage )
 {
     SAL_INFO( "starmath", "SmDocShell::InitNew" );
 
@@ -805,7 +805,7 @@ sal_Bool SmDocShell::InitNew( const uno::Reference < embed::XStorage >& xStorage
 }
 
 
-sal_Bool SmDocShell::Load( SfxMedium& rMedium )
+bool SmDocShell::Load( SfxMedium& rMedium )
 {
     SAL_INFO( "starmath", "SmDocShell::Load" );
 
@@ -846,7 +846,7 @@ sal_Bool SmDocShell::Load( SfxMedium& rMedium )
 
 
 
-sal_Bool SmDocShell::Save()
+bool SmDocShell::Save()
 {
     SAL_INFO( "starmath", "SmDocShell::Save" );
 
@@ -910,7 +910,7 @@ void SmDocShell::UpdateText()
 }
 
 
-sal_Bool SmDocShell::SaveAs( SfxMedium& rMedium )
+bool SmDocShell::SaveAs( SfxMedium& rMedium )
 {
     SAL_INFO( "starmath", "SmDocShell::SaveAs" );
 
@@ -934,7 +934,7 @@ sal_Bool SmDocShell::SaveAs( SfxMedium& rMedium )
     return bRet;
 }
 
-sal_Bool SmDocShell::ConvertTo( SfxMedium &rMedium )
+bool SmDocShell::ConvertTo( SfxMedium &rMedium )
 {
     SAL_INFO( "starmath", "SmDocShell::ConvertTo" );
 
@@ -998,7 +998,7 @@ void SmDocShell::readFormulaOoxml( oox::formulaimport::XmlStream& stream )
     SetText( aEquation.ConvertToStarMath());
 }
 
-sal_Bool SmDocShell::SaveCompleted( const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& xStorage )
+bool SmDocShell::SaveCompleted( const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& xStorage )
 {
     SAL_INFO( "starmath", "SmDocShell::SaveCompleted" );
 
@@ -1419,7 +1419,7 @@ sal_uLong SmDocShell::GetMiscStatus() const
                                              | SVOBJ_MISCSTATUS_RESIZEONPRINTERCHANGE;
 }
 
-void SmDocShell::SetModified(sal_Bool bModified)
+void SmDocShell::SetModified(bool bModified)
 {
     SAL_INFO( "starmath", "SmDocShell::SetModified" );
 

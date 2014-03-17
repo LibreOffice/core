@@ -1353,13 +1353,13 @@ void ModifyGuard::init()
     mbIsDocumentChanged = mpDoc ? mpDoc->IsChanged() : false;
 
     if( mbIsEnableSetModified )
-        mpDocShell->EnableSetModified( sal_False );
+        mpDocShell->EnableSetModified( false );
 }
 
 ModifyGuard::~ModifyGuard()
 {
     if( mbIsEnableSetModified )
-        mpDocShell->EnableSetModified( sal_True );
+        mpDocShell->EnableSetModified( true );
 
     if( mpDoc && (mpDoc->IsChanged() != mbIsDocumentChanged) )
         mpDoc->SetChanged(mbIsDocumentChanged);

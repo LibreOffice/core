@@ -454,8 +454,8 @@ void SvFileObject::Edit( Window* pParent, sfx2::SvBaseLink* pLink, const Link& r
                 nType = FILETYPE_GRF;       // If not set already
 
                 SvxOpenGraphicDialog aDlg(SfxResId(RID_SVXSTR_EDITGRFLINK).toString());
-                aDlg.EnableLink(sal_False);
-                aDlg.SetPath( sFile, sal_True );
+                aDlg.EnableLink(false);
+                aDlg.SetPath( sFile, true );
                 aDlg.SetCurrentFilter( sTmpFilter );
 
                 if( !aDlg.Execute() )

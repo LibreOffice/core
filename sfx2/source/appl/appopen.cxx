@@ -416,7 +416,7 @@ sal_uIntPtr SfxApplication::LoadTemplate( SfxObjectShellLock& xDoc, const OUStri
 
     xDoc->SetNoName();
     xDoc->InvalidateName();
-    xDoc->SetModified(sal_False);
+    xDoc->SetModified(false);
     xDoc->ResetError();
 
     ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >  xModel ( xDoc->GetModel(), ::com::sun::star::uno::UNO_QUERY );

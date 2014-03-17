@@ -856,7 +856,7 @@ SwNavigationPI::~SwNavigationPI()
         SwView *pView = GetCreateView();
         SwWrtShell &rSh = pView->GetWrtShell();
         if( !rSh.IsAllProtect() )
-            pView->GetDocShell()->SetReadOnlyUI(sal_False);
+            pView->GetDocShell()->SetReadOnlyUI(false);
     }
 
     EndListening(*SFX_APP());

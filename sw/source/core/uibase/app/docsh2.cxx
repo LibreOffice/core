@@ -280,7 +280,7 @@ void SwDocShell::Notify( SfxBroadcaster&, const SfxHint& rHint )
             {
                 const bool bResetModified = IsEnableSetModified();
                 if ( bResetModified )
-                    EnableSetModified( sal_False );
+                    EnableSetModified( false );
                 // #i41679#
                 const bool bIsDocModified = pDoc->IsModified();
 
@@ -290,7 +290,7 @@ void SwDocShell::Notify( SfxBroadcaster&, const SfxHint& rHint )
                 if ( !bIsDocModified )
                     pDoc->ResetModified();
                 if ( bResetModified )
-                    EnableSetModified( sal_True );
+                    EnableSetModified( true );
             }
             break;
         }
@@ -757,7 +757,7 @@ void SwDocShell::Execute(SfxRequest& rReq)
         case FN_OUTLINE_TO_IMPRESS:
             {
                 sal_Bool bEnable = IsEnableSetModified();
-                EnableSetModified( sal_False );
+                EnableSetModified( false );
                 WriterRef xWrt;
                 // mba: looks as if relative URLs don't make sense here
                 ::GetRTFWriter( OUString('O'), OUString(), xWrt );
@@ -1219,14 +1219,14 @@ void SwDocShell::FillClass( SvGlobalName * pClassName,
     *pUserName = SW_RESSTR(STR_HUMAN_SWDOC_NAME);
 }
 
-void SwDocShell::SetModified( sal_Bool bSet )
+void SwDocShell::SetModified( bool bSet )
 {
     SfxObjectShell::SetModified( bSet );
     if( IsEnableSetModified())
     {
          if (!pDoc->IsInCallModified() )
          {
-            EnableSetModified( sal_False );
+            EnableSetModified( false );
             if( bSet )
             {
                 sal_Bool bOld = pDoc->IsModified();
@@ -1239,7 +1239,7 @@ void SwDocShell::SetModified( sal_Bool bSet )
             else
                 pDoc->ResetModified();
 
-            EnableSetModified( sal_True );
+            EnableSetModified( true );
          }
 
         UpdateChildWindows();

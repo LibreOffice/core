@@ -430,11 +430,11 @@ void SfxViewFrame::ExecReload_Impl( SfxRequest& rReq )
                     // open mode among other things, so call SetOpenMode before
                     // SetReadOnlyUI:
                     pMed->SetOpenMode( nOpenMode );
-                    pSh->SetReadOnlyUI( sal_False );
+                    pSh->SetReadOnlyUI( false );
                     return;
                 }
 
-                pSh->SetReadOnlyUI( sal_False );
+                pSh->SetReadOnlyUI( false );
             }
 
             if ( rReq.IsAPI() )
@@ -716,7 +716,7 @@ void SfxViewFrame::ExecReload_Impl( SfxRequest& rReq )
                 if (!pDocTemplateItem)
                     pNewSet->Put( SfxUInt16Item(SID_UPDATEDOCMODE,::com::sun::star::document::UpdateDocMode::ACCORDING_TO_CONFIG) );
 
-                xOldObj->SetModified( sal_False );
+                xOldObj->SetModified( false );
                 // Do not chache the old Document! Is invalid when loading
                 // another document.
 
@@ -792,7 +792,7 @@ void SfxViewFrame::ExecReload_Impl( SfxRequest& rReq )
                 {
                     if ( xNewObj->GetModifyPasswordHash() && xNewObj->GetModifyPasswordHash() != xOldObj->GetModifyPasswordHash() )
                     {
-                        xNewObj->SetModifyPasswordEntered( sal_False );
+                        xNewObj->SetModifyPasswordEntered( false );
                         xNewObj->SetReadOnly();
                     }
                     else if ( rReq.GetSlot() == SID_EDITDOC )

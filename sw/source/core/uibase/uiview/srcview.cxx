@@ -863,7 +863,7 @@ void SwSrcView::Load(SwDocShell* pDocShell)
     if(bDocModified)
         pDocShell->SetModified();// The flag will be reset in between times.
     // Disable AutoLoad
-    pDocShell->SetAutoLoad(INetURLObject(), 0, sal_False);
+    pDocShell->SetAutoLoad(INetURLObject(), 0, false);
     OSL_ENSURE(PTR_CAST(SwWebDocShell, pDocShell), "Why no WebDocShell?");
     sal_uInt16 nLine = ((SwWebDocShell*)pDocShell)->GetSourcePara();
     aEditWin.SetStartLine(nLine);

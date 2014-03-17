@@ -736,7 +736,7 @@ sal_Bool ViewShell::ActivateObject(SdrOle2Obj* pObj, long nVerb)
 
     SfxErrorContext aEC(ERRCTX_SO_DOVERB, GetActiveWindow(), RID_SO_ERRCTX);
     sal_Bool bAbort = sal_False;
-    GetDocSh()->SetWaitCursor( sal_True );
+    GetDocSh()->SetWaitCursor( true );
     SfxViewShell* pViewShell = GetViewShell();
     OSL_ASSERT (pViewShell!=NULL);
     bool bChangeDefaultsForChart = false;
@@ -777,12 +777,12 @@ sal_Bool ViewShell::ActivateObject(SdrOle2Obj* pObj, long nVerb)
             aName = "";
 
             // call dialog "insert OLE object"
-            GetDocSh()->SetWaitCursor( sal_False );
+            GetDocSh()->SetWaitCursor( false );
             pViewShell->GetViewFrame()->GetDispatcher()->Execute(
                 SID_INSERT_OBJECT,
                 SFX_CALLMODE_SYNCHRON | SFX_CALLMODE_RECORD);
             xObj = pObj->GetObjRef();
-            GetDocSh()->SetWaitCursor( sal_True );
+            GetDocSh()->SetWaitCursor( true );
 
             if (!xObj.is())
             {
@@ -886,7 +886,7 @@ sal_Bool ViewShell::ActivateObject(SdrOle2Obj* pObj, long nVerb)
             SID_NAVIGATOR_STATE, true, false);
     }
 
-    GetDocSh()->SetWaitCursor( sal_False );
+    GetDocSh()->SetWaitCursor( false );
 
     if (aErrCode != 0 && !bAbort)
     {

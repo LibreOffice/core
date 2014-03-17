@@ -753,7 +753,7 @@ SwView::SwView( SfxViewFrame *_pFrame, SfxViewShell* pOldSh )
     SwDocShell* pDocSh = PTR_CAST( SwDocShell, _pFrame->GetObjectShell() );
     sal_Bool bOldModifyFlag = pDocSh->IsEnableSetModified();
     if(bOldModifyFlag)
-        pDocSh->EnableSetModified( sal_False );
+        pDocSh->EnableSetModified( false );
     // HACK: SwDocShell has some cached font info, VCL informs about font updates,
     // but loading of docs with embedded fonts happens after SwDocShell is created
     // but before SwEditWin (which handles the VCL event) is created. So update
@@ -1016,7 +1016,7 @@ SwView::SwView( SfxViewFrame *_pFrame, SfxViewShell* pOldSh )
     m_aTimer.SetTimeoutHdl(LINK(this, SwView, TimeoutHdl));
     m_bAttrChgNotified = m_bAttrChgNotifiedWithRegistrations = sal_False;
     if(bOldModifyFlag)
-        pDocSh->EnableSetModified( sal_True );
+        pDocSh->EnableSetModified( true );
     InvalidateBorder();
 
     if( !m_pHScrollbar->IsVisible( sal_True ) )
@@ -1617,7 +1617,7 @@ void SwView::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
                 /* no break here */
 
             case SFX_HINT_TITLECHANGED:
-                if ( GetDocShell()->IsReadOnly() != GetWrtShell().GetViewOptions()->IsReadonly() )
+                if ( (GetDocShell()->IsReadOnly() ? 1 : 0) != GetWrtShell().GetViewOptions()->IsReadonly() )
                 {
                     SwWrtShell &rSh = GetWrtShell();
                     rSh.SetReadonlyOption( GetDocShell()->IsReadOnly() );

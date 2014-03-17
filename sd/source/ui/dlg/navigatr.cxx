@@ -709,7 +709,7 @@ void SdNavigatorWin::RefreshDocumentLB( const OUString* pDocName )
 
         ::sd::DrawDocShell* pCurrentDocShell =
               PTR_CAST(::sd::DrawDocShell, SfxObjectShell::Current() );
-        SfxObjectShell* pSfxDocShell = SfxObjectShell::GetFirst(0, sal_False);
+        SfxObjectShell* pSfxDocShell = SfxObjectShell::GetFirst(0, false);
         while( pSfxDocShell )
         {
             ::sd::DrawDocShell* pDocShell = PTR_CAST(::sd::DrawDocShell, pSfxDocShell );
@@ -738,7 +738,7 @@ void SdNavigatorWin::RefreshDocumentLB( const OUString* pDocName )
 
                 maDocList.push_back( aInfo );
             }
-            pSfxDocShell = SfxObjectShell::GetNext( *pSfxDocShell, 0 , sal_False );
+            pSfxDocShell = SfxObjectShell::GetNext( *pSfxDocShell, 0, false );
         }
     }
     maLbDocs.SelectEntryPos( nPos );

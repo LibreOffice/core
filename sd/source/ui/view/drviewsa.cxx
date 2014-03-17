@@ -796,7 +796,7 @@ void DrawViewShell::Notify (SfxBroadcaster&, const SfxHint& rHint)
         }
 
         // Turn on design mode when document is not read-only.
-        if (GetDocSh()->IsReadOnly() != mbReadOnly )
+        if ((GetDocSh()->IsReadOnly() ? 1 : 0) != mbReadOnly )
         {
             mbReadOnly = GetDocSh()->IsReadOnly();
 

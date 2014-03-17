@@ -73,19 +73,19 @@ public:
     void                    UpdateRefDevice();
     virtual void            Activate( sal_Bool bMDI );
     virtual void            Deactivate( sal_Bool bMDI );
-    virtual sal_Bool            InitNew( const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& xStorage );
+    virtual bool            InitNew( const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& xStorage );
     virtual bool            ImportFrom(SfxMedium &rMedium,
             css::uno::Reference<css::text::XTextRange> const& xInsertPosition)
         SAL_OVERRIDE;
-    virtual sal_Bool            ConvertFrom( SfxMedium &rMedium );
-    virtual sal_Bool            Save();
-    virtual sal_Bool            SaveAsOwnFormat( SfxMedium& rMedium );
-    virtual sal_Bool            ConvertTo( SfxMedium &rMedium );
-    virtual sal_Bool            SaveCompleted( const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& xStorage );
+    virtual bool            ConvertFrom( SfxMedium &rMedium );
+    virtual bool            Save();
+    virtual bool            SaveAsOwnFormat( SfxMedium& rMedium );
+    virtual bool            ConvertTo( SfxMedium &rMedium );
+    virtual bool            SaveCompleted( const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& xStorage );
 
-    virtual sal_Bool        Load( SfxMedium &rMedium  );
-    virtual sal_Bool        LoadFrom( SfxMedium& rMedium );
-    virtual sal_Bool        SaveAs( SfxMedium &rMedium  );
+    virtual bool            Load( SfxMedium &rMedium  );
+    virtual bool            LoadFrom( SfxMedium& rMedium );
+    virtual bool            SaveAs( SfxMedium &rMedium  );
 
     virtual Rectangle       GetVisArea(sal_uInt16 nAspect) const;
     virtual void            Draw(OutputDevice*, const JobSetup& rSetup, sal_uInt16 nAspect = ASPECT_CONTENT);
@@ -96,7 +96,7 @@ public:
     virtual SfxStyleSheetBasePool* GetStyleSheetPool();
     virtual Size            GetFirstPageSize();
     virtual void            FillClass(SvGlobalName* pClassName, sal_uInt32*  pFormat, OUString* pAppName, OUString* pFullTypeName, OUString* pShortTypeName, sal_Int32 nFileFormat, bool bTemplate = false ) const;
-    virtual void            SetModified( sal_Bool = sal_True );
+    virtual void            SetModified( bool = true );
     virtual SfxDocumentInfoDialog*  CreateDocumentInfoDialog( ::Window *pParent,
                                                               const SfxItemSet &rSet );
 
@@ -221,7 +221,7 @@ protected:
 
     bool                    mbOwnDocument;          // if true, we own mpDoc and will delete it in our d'tor
     void                    Construct(bool bClipboard);
-    virtual void            InPlaceActivate( sal_Bool bActive );
+    virtual void            InPlaceActivate( bool bActive );
 public:
     virtual void setDocAccTitle( const OUString& rTitle );
     virtual const OUString getDocAccTitle() const;

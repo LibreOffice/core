@@ -242,9 +242,9 @@ void DrawDocShell::UpdateRefDevice()
 /**
  * Creates new document, opens streams
  */
-sal_Bool DrawDocShell::InitNew( const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& xStorage )
+bool DrawDocShell::InitNew( const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& xStorage )
 {
-    sal_Bool bRet = SfxObjectShell::InitNew( xStorage );
+    bool bRet = SfxObjectShell::InitNew( xStorage );
 
     Rectangle aVisArea( Point(0, 0), Size(14100, 10000) );
     SetVisArea(aVisArea);
@@ -262,12 +262,12 @@ sal_Bool DrawDocShell::InitNew( const ::com::sun::star::uno::Reference< ::com::s
 /**
  * loads pools and document
  */
-sal_Bool DrawDocShell::Load( SfxMedium& rMedium )
+bool DrawDocShell::Load( SfxMedium& rMedium )
 {
     mbNewDocument = sal_False;
 
     sal_Bool    bRet = sal_False;
-    bool    bStartPresentation = false;
+    bool       bStartPresentation = false;
     ErrCode nError = ERRCODE_NONE;
 
     SfxItemSet* pSet = rMedium.GetItemSet();
@@ -314,7 +314,7 @@ sal_Bool DrawDocShell::Load( SfxMedium& rMedium )
         FinishedLoading( SFX_LOADED_ALL );
 
         const INetURLObject aUrl;
-        SfxObjectShell::SetAutoLoad( aUrl, 0, sal_False );
+        SfxObjectShell::SetAutoLoad( aUrl, 0, false );
     }
     else
     {
@@ -341,7 +341,7 @@ sal_Bool DrawDocShell::Load( SfxMedium& rMedium )
 /**
  * loads content for organizer
  */
-sal_Bool DrawDocShell::LoadFrom( SfxMedium& rMedium )
+bool DrawDocShell::LoadFrom( SfxMedium& rMedium )
 {
     mbNewDocument = sal_False;
 
@@ -355,7 +355,7 @@ sal_Bool DrawDocShell::LoadFrom( SfxMedium& rMedium )
 
     // TODO/LATER: nobody is interested in the error code?!
     ErrCode nError = ERRCODE_NONE;
-    sal_Bool bRet = SdXMLFilter( rMedium, *this, sal_True, SDXMLMODE_Organizer, SotStorage::GetVersion( rMedium.GetStorage() ) ).Import( nError );
+    bool bRet = SdXMLFilter( rMedium, *this, sal_True, SDXMLMODE_Organizer, SotStorage::GetVersion( rMedium.GetStorage() ) ).Import( nError );
 
 
     // tell SFX to change viewshell when in preview mode
@@ -404,15 +404,15 @@ bool DrawDocShell::ImportFrom(SfxMedium &rMedium,
 /**
  * load from a foreign format
  */
-sal_Bool DrawDocShell::ConvertFrom( SfxMedium& rMedium )
+bool DrawDocShell::ConvertFrom( SfxMedium& rMedium )
 {
     mbNewDocument = sal_False;
 
-    const OUString    aFilterName( rMedium.GetFilter()->GetFilterName() );
-    sal_Bool            bRet = sal_False;
-    bool    bStartPresentation = false;
+    const OUString  aFilterName( rMedium.GetFilter()->GetFilterName() );
+    bool            bRet = false;
+    bool            bStartPresentation = false;
 
-    SetWaitCursor( sal_True );
+    SetWaitCursor( true );
 
     SfxItemSet* pSet = rMedium.GetItemSet();
     if( pSet )
@@ -479,7 +479,7 @@ sal_Bool DrawDocShell::ConvertFrom( SfxMedium& rMedium )
         if( pMediumSet )
             pMediumSet->Put( SfxUInt16Item( SID_VIEW_ID, 5 ) );
     }
-    SetWaitCursor( sal_False );
+    SetWaitCursor( false );
 
     // tell SFX to change viewshell when in preview mode
     if( IsPreview() || bStartPresentation )
@@ -495,7 +495,7 @@ sal_Bool DrawDocShell::ConvertFrom( SfxMedium& rMedium )
 /**
  * Writes pools and document to the open streams
  */
-sal_Bool DrawDocShell::Save()
+bool DrawDocShell::Save()
 {
     mpDoc->StopWorkStartupDelay();
 
@@ -503,7 +503,7 @@ sal_Bool DrawDocShell::Save()
     if( GetCreateMode() == SFX_CREATE_MODE_STANDARD )
         SfxObjectShell::SetVisArea( Rectangle() );
 
-    sal_Bool bRet = SfxObjectShell::Save();
+    bool bRet = SfxObjectShell::Save();
 
     if( bRet )
     {
@@ -519,7 +519,7 @@ sal_Bool DrawDocShell::Save()
 /**
  * Writes pools and document to the provided storage
  */
-sal_Bool DrawDocShell::SaveAs( SfxMedium& rMedium )
+bool DrawDocShell::SaveAs( SfxMedium& rMedium )
 {
     mpDoc->setDocAccTitle(OUString());
     SfxViewFrame* pFrame1 = SfxViewFrame::GetFirst( this );
@@ -542,7 +542,7 @@ sal_Bool DrawDocShell::SaveAs( SfxMedium& rMedium )
         SfxObjectShell::SetVisArea( Rectangle() );
 
     sal_uInt32  nVBWarning = ERRCODE_NONE;
-    sal_Bool    bRet = SfxObjectShell::SaveAs( rMedium );
+    bool    bRet = SfxObjectShell::SaveAs( rMedium );
 
     if( bRet )
     {
@@ -560,9 +560,9 @@ sal_Bool DrawDocShell::SaveAs( SfxMedium& rMedium )
 /**
  * save to foreign format
  */
-sal_Bool DrawDocShell::ConvertTo( SfxMedium& rMedium )
+bool DrawDocShell::ConvertTo( SfxMedium& rMedium )
 {
-    sal_Bool bRet = sal_False;
+    bool bRet = false;
 
     if( mpDoc->GetPageCount() )
     {
@@ -621,9 +621,9 @@ sal_Bool DrawDocShell::ConvertTo( SfxMedium& rMedium )
  * Reopen own streams to ensure that nobody else can prevent use from opening
  * them.
  */
-sal_Bool DrawDocShell::SaveCompleted( const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& xStorage )
+bool DrawDocShell::SaveCompleted( const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& xStorage )
 {
-    sal_Bool bRet = sal_False;
+    bool bRet = false;
 
     if( SfxObjectShell::SaveCompleted(xStorage) )
     {
@@ -646,7 +646,7 @@ sal_Bool DrawDocShell::SaveCompleted( const ::com::sun::star::uno::Reference< ::
             }
         }
 
-        bRet = sal_True;
+        bRet = true;
 
         SfxViewFrame* pFrame = ( mpViewShell && mpViewShell->GetViewFrame() ) ?
                                mpViewShell->GetViewFrame() :
@@ -1080,7 +1080,7 @@ sal_Bool DrawDocShell::GotoTreeBookmark(const OUString& rBookmark)
 /**
  * If it should become a document template.
  */
-sal_Bool DrawDocShell::SaveAsOwnFormat( SfxMedium& rMedium )
+bool DrawDocShell::SaveAsOwnFormat( SfxMedium& rMedium )
 {
 
     const SfxFilter* pFilter = rMedium.GetFilter();

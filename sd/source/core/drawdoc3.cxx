@@ -1393,7 +1393,7 @@ void SdDrawDocument::SetMasterPage(sal_uInt16 nSdPageNum,
                                    sal_Bool bCheckMasters)
 {
     if( mpDocSh )
-        mpDocSh->SetWaitCursor( sal_True );
+        mpDocSh->SetWaitCursor( true );
 
     ::svl::IUndoManager* pUndoMgr = mpDocSh->GetUndoManager();
 
@@ -1467,7 +1467,7 @@ void SdDrawDocument::SetMasterPage(sal_uInt16 nSdPageNum,
             pUndoMgr->LeaveListAction();
 
             if( mpDocSh )
-                mpDocSh->SetWaitCursor( sal_False );
+                mpDocSh->SetWaitCursor( false );
 
             OSL_FAIL( "SdDrawDocument::SetMasterPage() failed!" );
 
@@ -1892,7 +1892,7 @@ void SdDrawDocument::SetMasterPage(sal_uInt16 nSdPageNum,
         pUndoMgr->LeaveListAction();
 
     if( mpDocSh )
-        mpDocSh->SetWaitCursor( sal_False );
+        mpDocSh->SetWaitCursor( false );
 }
 
 void SdDrawDocument::Merge(SdrModel& rSourceModel,

@@ -1415,7 +1415,7 @@ void SmCursor::BeginEdit(){
 
     bIsEnabledSetModifiedSmDocShell = pDocShell->IsEnableSetModified();
     if( bIsEnabledSetModifiedSmDocShell )
-        pDocShell->EnableSetModified( sal_False );
+        pDocShell->EnableSetModified( false );
 }
 
 void SmCursor::EndEdit(){
@@ -1429,7 +1429,7 @@ void SmCursor::EndEdit(){
     if ( bIsEnabledSetModifiedSmDocShell )
         pDocShell->EnableSetModified( bIsEnabledSetModifiedSmDocShell );
     //I think this notifies people around us that we've modified this document...
-    pDocShell->SetModified(sal_True);
+    pDocShell->SetModified(true);
     //I think SmDocShell uses this value when it sends an update graphics event
     //Anyway comments elsewhere suggests it need to be updated...
     pDocShell->nModifyCount++;

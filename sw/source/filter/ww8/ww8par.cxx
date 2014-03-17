@@ -4836,7 +4836,7 @@ sal_uLong SwWW8ImplReader::CoreLoad(WW8Glossary *pGloss, const SwPosition &rPos)
     {
         SwDocShell * pDocShell = rDoc.GetDocShell();
         if (pDocShell)
-            pDocShell->SetReadOnlyUI(sal_True);
+            pDocShell->SetReadOnlyUI(true);
     }
 
     pPaM = new SwPaM(rPos);

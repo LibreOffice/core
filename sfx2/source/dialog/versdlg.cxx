@@ -431,7 +431,7 @@ IMPL_LINK( SfxVersionDialog, ButtonHdl_Impl, Button*, pButton )
         if ( nRet == RET_OK )
         {
             SfxStringItem aComment( SID_DOCINFO_COMMENTS, aInfo.aComment );
-            pObjShell->SetModified( sal_True );
+            pObjShell->SetModified( true );
             const SfxPoolItem* aItems[2];
             aItems[0] = &aComment;
             aItems[1] = NULL;
@@ -447,7 +447,7 @@ IMPL_LINK( SfxVersionDialog, ButtonHdl_Impl, Button*, pButton )
     if (pButton == m_pDeleteButton && pEntry)
     {
         pObjShell->GetMedium()->RemoveVersion_Impl( ((SfxVersionInfo*) pEntry->GetUserData())->aName );
-        pObjShell->SetModified( sal_True );
+        pObjShell->SetModified( true );
         m_pVersionBox->SetUpdateMode( sal_False );
         m_pVersionBox->Clear();
         Init_Impl();

@@ -287,7 +287,7 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
                         continue;
 
                     if ( pObjSh->PrepareClose(2) )
-                        pObjSh->SetModified( sal_False );
+                        pObjSh->SetModified( false );
                     else
                         return;
                 }
@@ -1078,7 +1078,7 @@ void SfxApplication::OfaExec_Impl( SfxRequest& rReq )
             {
                 SfxObjectShell* pBasicIDE = SfxObjectShell::CreateObject( lcl_getBasicIDEServiceName() );
                 pBasicIDE->DoInitNew( 0 );
-                pBasicIDE->SetModified( sal_False );
+                pBasicIDE->SetModified( false );
                 try
                 {
                     // load the Basic IDE via direct access to the SFX frame loader. A generic loadComponentFromURL

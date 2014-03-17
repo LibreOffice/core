@@ -300,7 +300,7 @@ void SfxPrinterController::jobStarted()
         // check configuration: shall update of printing information in DocInfo set the document to "modified"?
         if ( m_bOrigStatus && !SvtPrintWarningOptions().IsModifyDocumentOnPrintingAllowed() )
         {
-            mpObjectShell->EnableSetModified( sal_False );
+            mpObjectShell->EnableSetModified( false );
             m_bNeedsChange = sal_True;
         }
 

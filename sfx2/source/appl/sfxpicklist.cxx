@@ -382,7 +382,7 @@ void SfxPickList::Notify( SfxBroadcaster&, const SfxHint& rHint )
             {
                 sal_Bool bAllowModif = pDocSh->IsEnableSetModified();
                 if ( bAllowModif )
-                    pDocSh->EnableSetModified( sal_False );
+                    pDocSh->EnableSetModified( false );
 
                 using namespace ::com::sun::star;
                 uno::Reference<document::XDocumentProperties> xDocProps(

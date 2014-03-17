@@ -1114,7 +1114,7 @@ IMPL_LINK(SwSidebarWin, ScrollHdl, ScrollBar*, pScroll)
 
 IMPL_LINK_NOARG(SwSidebarWin, ModifyHdl)
 {
-    mrView.GetDocShell()->SetModified(sal_True);
+    mrView.GetDocShell()->SetModified(true);
     return 0;
 }
 

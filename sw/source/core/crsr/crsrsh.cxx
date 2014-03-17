@@ -848,7 +848,7 @@ int SwCrsrShell::SetCrsr( const Point &rLPt, sal_Bool bOnlyText, bool bBlock )
             m_bAllProtect = sal_True;
             if( GetDoc()->GetDocShell() )
             {
-                GetDoc()->GetDocShell()->SetReadOnlyUI( sal_True );
+                GetDoc()->GetDocShell()->SetReadOnlyUI( true );
                 CallChgLnk(); // notify UI
             }
         }
@@ -1592,7 +1592,7 @@ void SwCrsrShell::UpdateCrsr( sal_uInt16 eFlags, sal_Bool bIdleEnd )
                     m_bAllProtect = sal_True;
                     if( GetDoc()->GetDocShell() )
                     {
-                        GetDoc()->GetDocShell()->SetReadOnlyUI( sal_True );
+                        GetDoc()->GetDocShell()->SetReadOnlyUI( true );
                         CallChgLnk();       // notify UI!
                     }
                     return;
@@ -1606,7 +1606,7 @@ void SwCrsrShell::UpdateCrsr( sal_uInt16 eFlags, sal_Bool bIdleEnd )
             if( bWasAllProtect && GetDoc()->GetDocShell() &&
                 GetDoc()->GetDocShell()->IsReadOnlyUI() )
             {
-                GetDoc()->GetDocShell()->SetReadOnlyUI( sal_False );
+                GetDoc()->GetDocShell()->SetReadOnlyUI( false );
                 CallChgLnk();       // notify UI!
             }
         }
@@ -1695,7 +1695,7 @@ void SwCrsrShell::UpdateCrsr( sal_uInt16 eFlags, sal_Bool bIdleEnd )
                         m_bAllProtect = sal_True;
                         if( GetDoc()->GetDocShell() )
                         {
-                            GetDoc()->GetDocShell()->SetReadOnlyUI( sal_True );
+                            GetDoc()->GetDocShell()->SetReadOnlyUI( true );
                             CallChgLnk();       // notify UI!
                         }
                         return;
@@ -1709,7 +1709,7 @@ void SwCrsrShell::UpdateCrsr( sal_uInt16 eFlags, sal_Bool bIdleEnd )
                     if( bWasAllProtect && GetDoc()->GetDocShell() &&
                         GetDoc()->GetDocShell()->IsReadOnlyUI() )
                     {
-                        GetDoc()->GetDocShell()->SetReadOnlyUI( sal_False );
+                        GetDoc()->GetDocShell()->SetReadOnlyUI( false );
                         CallChgLnk();       // notify UI!
                     }
                     m_bAllProtect = sal_False;

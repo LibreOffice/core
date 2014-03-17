@@ -858,7 +858,7 @@ LanguageType SdDrawDocument::GetLanguage( const sal_uInt16 nId ) const
 IMPL_LINK_NOARG(SdDrawDocument, WorkStartupHdl)
 {
     if( mpDocSh )
-        mpDocSh->SetWaitCursor( sal_True );
+        mpDocSh->SetWaitCursor( true );
 
     sal_Bool bChanged = IsChanged();        // remember this
 
@@ -890,7 +890,7 @@ IMPL_LINK_NOARG(SdDrawDocument, WorkStartupHdl)
     SetChanged(bChanged);
 
     if( mpDocSh )
-        mpDocSh->SetWaitCursor( sal_False );
+        mpDocSh->SetWaitCursor( false );
     return 0;
 }
 

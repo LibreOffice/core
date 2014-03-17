@@ -77,7 +77,7 @@ void SAL_CALL SfxEvents_Impl::replaceByName( const OUString & aName, const uno::
             // create Configuration at first, creation might call this method also and that would overwrite everything
             // we might have stored before!
             if ( mpObjShell && !mpObjShell->IsLoading() )
-                mpObjShell->SetModified( sal_True );
+                mpObjShell->SetModified( true );
 
             ::comphelper::NamedValueCollection aNormalizedDescriptor;
             NormalizeMacro( aEventDescriptor, aNormalizedDescriptor, mpObjShell );

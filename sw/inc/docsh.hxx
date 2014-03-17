@@ -82,13 +82,13 @@ class SW_DLLPUBLIC SwDocShell: public SfxObjectShell, public SfxListener
     SAL_DLLPRIVATE virtual void          Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
 
     /// FileIO
-    SAL_DLLPRIVATE virtual sal_Bool InitNew( const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& xStorage );
-    SAL_DLLPRIVATE virtual sal_Bool Load( SfxMedium& rMedium );
-    SAL_DLLPRIVATE virtual sal_Bool LoadFrom( SfxMedium& rMedium );
-    SAL_DLLPRIVATE virtual sal_Bool            ConvertFrom( SfxMedium &rMedium );
-    SAL_DLLPRIVATE virtual sal_Bool            ConvertTo( SfxMedium &rMedium );
-    SAL_DLLPRIVATE virtual sal_Bool SaveAs( SfxMedium& rMedium );
-    SAL_DLLPRIVATE virtual sal_Bool SaveCompleted( const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& xStorage );
+    SAL_DLLPRIVATE virtual bool InitNew( const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& xStorage );
+    SAL_DLLPRIVATE virtual bool Load( SfxMedium& rMedium );
+    SAL_DLLPRIVATE virtual bool LoadFrom( SfxMedium& rMedium );
+    SAL_DLLPRIVATE virtual bool ConvertFrom( SfxMedium &rMedium );
+    SAL_DLLPRIVATE virtual bool ConvertTo( SfxMedium &rMedium );
+    SAL_DLLPRIVATE virtual bool SaveAs( SfxMedium& rMedium );
+    SAL_DLLPRIVATE virtual bool SaveCompleted( const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& xStorage );
 
     SAL_DLLPRIVATE virtual bool     PrepareClose( sal_Bool bUI = sal_True ) SAL_OVERRIDE;
 
@@ -171,7 +171,7 @@ public:
     virtual sal_uLong     GetMiscStatus() const;
 
     virtual void            PrepareReload();
-    virtual void            SetModified( sal_Bool = sal_True );
+    virtual void            SetModified( bool = true );
 
     /// Dispatcher
     void                    Execute(SfxRequest &);
@@ -193,7 +193,7 @@ public:
     void                    UpdateChildWindows();
 
     /// global IO.
-    virtual sal_Bool            Save();
+    virtual bool            Save();
 
     /// For Style PI.
     virtual SfxStyleSheetBasePool*  GetStyleSheetPool();

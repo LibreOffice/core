@@ -254,7 +254,7 @@ void SfxViewFrame::Exec_Impl(SfxRequest &rReq )
                 if ( ( bOther || pDocSh->PrepareClose( bUI ) ) )
                 {
                     if ( !bOther )
-                        pDocSh->SetModified( sal_False );
+                        pDocSh->SetModified( false );
                     rReq.Done(); // Must call this before Close()!
                     bClosed = sal_False;
                     try

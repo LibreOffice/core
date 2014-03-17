@@ -284,13 +284,13 @@ void SfxObjectShell::PrintState_Impl(SfxItemSet &rSet)
 
 
 
-sal_Bool SfxObjectShell::APISaveAs_Impl
+bool SfxObjectShell::APISaveAs_Impl
 (
     const OUString& aFileName,
     SfxItemSet*   aParams
 )
 {
-    sal_Bool bOk = sal_False;
+    bool bOk = false;
 
 
     if ( GetMedium() )
@@ -851,7 +851,7 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
                     }
                 }
                 else
-                    SetModified(sal_False);
+                    SetModified(false);
             }
 
             // Cancelled by the user?
@@ -862,7 +862,7 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
                 return;
             }
 
-            SetModified( sal_False );
+            SetModified( false );
             sal_uIntPtr lErr = GetErrorCode();
             ErrorHandler::HandleError(lErr);
 
@@ -1346,7 +1346,7 @@ sal_uInt16 SfxObjectShell::ImplCheckSignaturesInformation( const uno::Sequence< 
     return nResult;
 }
 
-uno::Sequence< security::DocumentSignatureInformation > SfxObjectShell::ImplAnalyzeSignature( sal_Bool bScriptingContent, const uno::Reference< security::XDocumentDigitalSignatures >& xSigner )
+uno::Sequence< security::DocumentSignatureInformation > SfxObjectShell::ImplAnalyzeSignature( bool bScriptingContent, const uno::Reference< security::XDocumentDigitalSignatures >& xSigner )
 {
     uno::Sequence< security::DocumentSignatureInformation > aResult;
     uno::Reference< security::XDocumentDigitalSignatures > xLocSigner = xSigner;
@@ -1386,7 +1386,7 @@ uno::Sequence< security::DocumentSignatureInformation > SfxObjectShell::ImplAnal
     return aResult;
 }
 
-sal_uInt16 SfxObjectShell::ImplGetSignatureState( sal_Bool bScriptingContent )
+sal_uInt16 SfxObjectShell::ImplGetSignatureState( bool bScriptingContent )
 {
     sal_Int16* pState = bScriptingContent ? &pImp->nScriptingSignatureState : &pImp->nDocumentSignatureState;
 
@@ -1408,7 +1408,7 @@ sal_uInt16 SfxObjectShell::ImplGetSignatureState( sal_Bool bScriptingContent )
     return (sal_uInt16)*pState;
 }
 
-void SfxObjectShell::ImplSign( sal_Bool bScriptingContent )
+void SfxObjectShell::ImplSign( bool bScriptingContent )
 {
     // Check if it is stored in OASIS format...
     if  (   GetMedium()
@@ -1425,8 +1425,8 @@ void SfxObjectShell::ImplSign( sal_Bool bScriptingContent )
     }
 
     // check whether the document is signed
-    ImplGetSignatureState( sal_False ); // document signature
-    ImplGetSignatureState( sal_True ); // script signature
+    ImplGetSignatureState( false ); // document signature
+    ImplGetSignatureState( true ); // script signature
     sal_Bool bHasSign = ( pImp->nScriptingSignatureState != SIGNATURESTATE_NOSIGNATURES || pImp->nDocumentSignatureState != SIGNATURESTATE_NOSIGNATURES );
 
     // the target ODF version on saving
@@ -1462,7 +1462,7 @@ void SfxObjectShell::ImplSign( sal_Bool bScriptingContent )
                     nId = SID_SAVEASDOC;
                 SfxRequest aSaveRequest( nId, 0, GetPool() );
                 //ToDo: Review. We needed to call SetModified, otherwise the document would not be saved.
-                SetModified(sal_True);
+                SetModified(true);
                 ExecFile_Impl( aSaveRequest );
 
                 // Check if it is stored in OASIS format...
@@ -1495,11 +1495,11 @@ void SfxObjectShell::ImplSign( sal_Bool bScriptingContent )
     }
 
     // the document is not modified currently, so it can not become modified after signing
-    sal_Bool bAllowModifiedBack = sal_False;
+    bool bAllowModifiedBack = false;
     if ( IsEnableSetModified() )
     {
-        EnableSetModified( sal_False );
-        bAllowModifiedBack = sal_True;
+        EnableSetModified( false );
+        bAllowModifiedBack = true;
     }
 
     // we have to store to the original document, the original medium should be closed for this time
@@ -1541,27 +1541,27 @@ void SfxObjectShell::ImplSign( sal_Bool bScriptingContent )
     }
 
     if ( bAllowModifiedBack )
-        EnableSetModified( sal_True );
+        EnableSetModified( true );
 }
 
 sal_uInt16 SfxObjectShell::GetDocumentSignatureState()
 {
-    return ImplGetSignatureState( sal_False );
+    return ImplGetSignatureState( false );
 }
 
 void SfxObjectShell::SignDocumentContent()
 {
-    ImplSign( sal_False );
+    ImplSign( false );
 }
 
 sal_uInt16 SfxObjectShell::GetScriptingSignatureState()
 {
-    return ImplGetSignatureState( sal_True );
+    return ImplGetSignatureState( true );
 }
 
 void SfxObjectShell::SignScriptingContent()
 {
-    ImplSign( sal_True );
+    ImplSign( true );
 }
 
 namespace

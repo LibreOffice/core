@@ -176,7 +176,7 @@ void FuCopy::DoExecute( SfxRequest& rReq )
             aStr += " " + SD_RESSTR( STR_UNDO_COPYOBJECTS );
 
             pProgress = new SfxProgress( mpDocSh, aStr, nNumber );
-            mpDocSh->SetWaitCursor( sal_True );
+            mpDocSh->SetWaitCursor( true );
             bWaiting = sal_True;
         }
 
@@ -281,7 +281,7 @@ void FuCopy::DoExecute( SfxRequest& rReq )
             delete pProgress;
 
         if ( bWaiting )
-            mpDocSh->SetWaitCursor( sal_False );
+            mpDocSh->SetWaitCursor( false );
 
         // show handles
         mpView->AdjustMarkHdl(); //HMH sal_True );
