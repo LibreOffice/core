@@ -2022,11 +2022,11 @@ void SfxViewShell::TakeFrameOwnership_Impl()
     pImp->m_bGotFrameOwnership = true;
 }
 
-long SfxViewShell::HandleNotifyEvent_Impl( NotifyEvent& rEvent )
+bool SfxViewShell::HandleNotifyEvent_Impl( NotifyEvent& rEvent )
 {
     if (pImp->m_pController.is())
-        return pImp->m_pController->HandleEvent_Impl( rEvent ) ? 1 : 0;
-    return 0;
+        return pImp->m_pController->HandleEvent_Impl( rEvent );
+    return false;
 }
 
 sal_Bool SfxViewShell::HasKeyListeners_Impl()

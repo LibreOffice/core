@@ -276,7 +276,7 @@ public:
     SAL_DLLPRIVATE SfxPrinter* SetPrinter_Impl( SfxPrinter *pNewPrinter );
     SAL_DLLPRIVATE sal_Bool IsShowView_Impl() const;
 
-    SAL_DLLPRIVATE long HandleNotifyEvent_Impl( NotifyEvent& rEvent );
+    SAL_DLLPRIVATE bool HandleNotifyEvent_Impl( NotifyEvent& rEvent );
     SAL_DLLPRIVATE sal_Bool HasKeyListeners_Impl();
     SAL_DLLPRIVATE sal_Bool HasMouseClickListeners_Impl();
 
