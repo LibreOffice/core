@@ -80,7 +80,7 @@ getContentPart( const OUString& _rRawString )
 
 bool
 isDomainMatch(
-              OUString hostName, uno::Sequence< OUString > certHostNames)
+              const OUString& hostName, uno::Sequence< OUString > certHostNames)
 {
     for ( int i = 0; i < certHostNames.getLength(); i++){
         OUString element = certHostNames[i];

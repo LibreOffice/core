@@ -27,7 +27,7 @@ using namespace ::com::sun::star;
 
 PasswordDialog::PasswordDialog(Window* _pParent,
     task::PasswordRequestMode nDlgMode, ResMgr * pResMgr,
-    OUString& aDocURL, bool bOpenToModify, bool bIsSimplePasswordRequest)
+    const OUString& aDocURL, bool bOpenToModify, bool bIsSimplePasswordRequest)
     : ModalDialog(_pParent, "PasswordDialog", "uui/ui/password.ui")
     , nMinLen(1)
     , aPasswdMismatch(ResId(STR_PASSWORD_MISMATCH, *pResMgr))

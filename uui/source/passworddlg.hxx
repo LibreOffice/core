@@ -44,7 +44,7 @@ class PasswordDialog : public ModalDialog
     DECL_LINK(OKHdl_Impl, void *);
 
 public:
-    PasswordDialog( Window* pParent, ::com::sun::star::task::PasswordRequestMode nDlgMode, ResMgr * pResMgr, OUString& aDocURL,
+    PasswordDialog( Window* pParent, ::com::sun::star::task::PasswordRequestMode nDlgMode, ResMgr * pResMgr, const OUString& aDocURL,
             bool bOpenToModify = false, bool bIsSimplePasswordRequest = false );
 
     void            SetMinLen( sal_uInt16 nMin ) { nMinLen = nMin; }

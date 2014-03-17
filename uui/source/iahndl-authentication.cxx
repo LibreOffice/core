@@ -507,7 +507,7 @@ executePasswordDialog(
     Window * pParent,
     LoginErrorInfo & rInfo,
     task::PasswordRequestMode nMode,
-    OUString aDocName,
+    const OUString& aDocName,
     bool bMSCryptoMode,
     bool bIsPasswordToModify,
     bool bIsSimplePasswordRequest )
@@ -569,7 +569,7 @@ handlePasswordRequest_(
     task::PasswordRequestMode nMode,
     uno::Sequence< uno::Reference< task::XInteractionContinuation > > const &
         rContinuations,
-    OUString aDocumentName,
+    const OUString& aDocumentName,
     bool bMSCryptoMode,
     bool bIsPasswordToModify,
     bool bIsSimplePasswordRequest = false )
