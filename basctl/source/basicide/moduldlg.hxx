@@ -257,7 +257,7 @@ public:
 
 // Helper functions
 SbModule* createModImpl( Window* pWin, const ScriptDocument& rDocument,
-    TreeListBox& rBasicBox, const OUString& rLibName, OUString aModName, bool bMain = false );
+    TreeListBox& rBasicBox, const OUString& rLibName, const OUString& aModName, bool bMain = false );
 void createLibImpl( Window* pWin, const ScriptDocument& rDocument,
                     CheckBox* pLibBox, TreeListBox* pBasicBox );
 

@@ -939,7 +939,7 @@ void LibDialog::SetStorageName( const OUString& rName )
 
 // Helper function
 SbModule* createModImpl( Window* pWin, const ScriptDocument& rDocument,
-    TreeListBox& rBasicBox, const OUString& rLibName, OUString aModName, bool bMain )
+    TreeListBox& rBasicBox, const OUString& rLibName, const OUString& _aModName, bool bMain )
 {
     OSL_ENSURE( rDocument.isAlive(), "createModImpl: invalid document!" );
     if ( !rDocument.isAlive() )
@@ -951,6 +951,7 @@ SbModule* createModImpl( Window* pWin, const ScriptDocument& rDocument,
     if ( aLibName.isEmpty() )
         aLibName = "Standard" ;
     rDocument.getOrCreateLibrary( E_SCRIPTS, aLibName );
+    OUString aModName = _aModName;
     if ( aModName.isEmpty() )
         aModName = rDocument.createObjectName( E_SCRIPTS, aLibName );
 

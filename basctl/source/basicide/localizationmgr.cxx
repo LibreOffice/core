@@ -102,7 +102,7 @@ namespace
 
 }
 
-bool isLanguageDependentProperty( OUString aName )
+bool isLanguageDependentProperty( const OUString& aName )
 {
     static struct Prop
     {

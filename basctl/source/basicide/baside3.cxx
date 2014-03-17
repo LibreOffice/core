@@ -78,7 +78,7 @@ TYPEINIT1( DialogWindow, BaseWindow );
 DialogWindow::DialogWindow (
     DialogWindowLayout* pParent,
     ScriptDocument const& rDocument,
-    OUString aLibName, OUString aName,
+    const OUString& aLibName, const OUString& aName,
     com::sun::star::uno::Reference<com::sun::star::container::XNameContainer> const& xDialogModel
 ) :
     BaseWindow(pParent, rDocument, aLibName, aName),

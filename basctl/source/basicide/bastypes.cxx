@@ -55,7 +55,7 @@ DBG_NAME( BaseWindow )
 TYPEINIT0( BaseWindow )
 TYPEINIT1( SbxItem, SfxPoolItem );
 
-BaseWindow::BaseWindow( Window* pParent, const ScriptDocument& rDocument, OUString aLibName, OUString aName )
+BaseWindow::BaseWindow( Window* pParent, const ScriptDocument& rDocument, const OUString& aLibName, const OUString& aName )
     :Window( pParent, WinBits( WB_3DLOOK ) )
     ,m_aDocument( rDocument )
     ,m_aLibName( aLibName )

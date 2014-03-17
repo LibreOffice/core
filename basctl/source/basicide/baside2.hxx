@@ -337,7 +337,7 @@ protected:
 public:
                     TYPEINFO();
 
-    ModulWindow( ModulWindowLayout* pParent, const ScriptDocument& rDocument, OUString aLibName, OUString aName, OUString& aModule );
+    ModulWindow( ModulWindowLayout* pParent, const ScriptDocument& rDocument, const OUString& aLibName, const OUString& aName, OUString& aModule );
 
                     ~ModulWindow();
 

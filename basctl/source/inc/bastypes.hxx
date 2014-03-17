@@ -166,7 +166,7 @@ protected:
 
 public:
                     TYPEINFO();
-    BaseWindow( Window* pParent, const ScriptDocument& rDocument, OUString aLibName, OUString aName );
+    BaseWindow( Window* pParent, const ScriptDocument& rDocument, const OUString& aLibName, const OUString& aName );
     virtual         ~BaseWindow();
 
     void            Init();
