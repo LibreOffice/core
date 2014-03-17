@@ -287,7 +287,7 @@ void SbiCodeGen::Save()
                     // The parameter:
                     SbxInfo* pInfo = pMeth->GetInfo();
                     OUString aHelpFile, aComment;
-                    sal_uIntPtr nHelpId = 0;
+                    sal_uInt32 nHelpId = 0;
                     if( pInfo )
                     {
                         // Rescue the additional data

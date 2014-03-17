@@ -167,7 +167,7 @@ void SbxDecimal::setUShort( sal_uInt16 val )
 
 void SbxDecimal::setULong( sal_uInt32 val )
 {
-    VarDecFromUI4( (sal_uIntPtr)val, &maDec );
+    VarDecFromUI4( static_cast<sal_uLong>(val), &maDec );
 }
 
 bool SbxDecimal::setSingle( float val )

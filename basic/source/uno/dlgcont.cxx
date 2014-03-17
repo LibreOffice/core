@@ -325,8 +325,7 @@ Any SAL_CALL SfxDialogLibraryContainer::importLibraryElement
     {
         OSL_FAIL( "Parsing error\n" );
         SfxErrorContext aEc( ERRCTX_SFX_LOADBASIC, aFile );
-        sal_uIntPtr nErrorCode = ERRCODE_IO_GENERAL;
-        ErrorHandler::HandleError( nErrorCode );
+        ErrorHandler::HandleError( ERRCODE_IO_GENERAL );
         return aRetAny;
     }
 
