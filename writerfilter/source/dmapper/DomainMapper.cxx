@@ -18,6 +18,7 @@
  */
 #include "PageBordersHandler.hxx"
 
+#include <resourcemodel/QNameToString.hxx>
 #include <resourcemodel/ResourceModelHelper.hxx>
 #include <SdtHelper.hxx>
 #include <TDefTableHandler.hxx>
@@ -2228,6 +2229,27 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, PropertyMapPtr rContext )
         m_pImpl->m_pSdtHelper->getLocale().append(sStringValue);
     }
     break;
+    case NS_ooxml::LN_CT_SdtPr_docPartObj:
+    {
+        // this is an unsupported SDT property, create a grab bag for it
+        OUString sName = OUString::createFromAscii((*QNameToString::Instance())(nSprmId).c_str());
+        m_pImpl->m_pSdtHelper->enableInteropGrabBag(sName);
+
+        // process subitems
+        writerfilter::Reference<Properties>::Pointer_t pProperties = rSprm.getProps();
+        if (pProperties.get() != NULL)
+            pProperties->resolve(*this);
+    }
+    break;
+    case NS_ooxml::LN_CT_SdtDocPart_docPartGallery:
+    case NS_ooxml::LN_CT_SdtDocPart_docPartCategory:
+    case NS_ooxml::LN_CT_SdtDocPart_docPartUnique:
+    {
+        // this is a child of an unsupported SDT property, store in the grab bag
+        OUString sName = OUString::createFromAscii((*QNameToString::Instance())(nSprmId).c_str());
+        m_pImpl->m_pSdtHelper->appendToInteropGrabBag(sName, uno::Any(sStringValue));
+    }
+    break;
     case NS_ooxml::LN_EG_SectPrContents_pgNumType:
     {
         writerfilter::Reference<Properties>::Pointer_t pProperties = rSprm.getProps();
@@ -2613,6 +2635,13 @@ void DomainMapper::lcl_utext(const sal_uInt8 * data_, size_t len)
          */
         m_pImpl->m_pSdtHelper->createDateControl(sText);
         return;
+    }
+    else if (m_pImpl->m_pSdtHelper->isInteropGrabBagEnabled())
+    {
+        // there are unsupported SDT properties in the document
+        // save them in the paragraph interop grab bag
+        uno::Any aPropValue = uno::makeAny(m_pImpl->m_pSdtHelper->getInteropGrabBagAndClear());
+        m_pImpl->GetTopContextOfType(CONTEXT_PARAGRAPH)->Insert(PROP_PARA_SDTPR, aPropValue, true, PARA_GRAB_BAG);
     }
     else if (len == 1 && sText[0] == 0x03)
     {

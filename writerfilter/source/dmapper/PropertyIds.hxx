@@ -359,6 +359,7 @@ enum PropertyIds
         ,PROP_CHAR_NUMSPACING_TEXT_EFFECT
         ,PROP_CHAR_STYLISTICSETS_TEXT_EFFECT
         ,PROP_CHAR_CNTXTALTS_TEXT_EFFECT
+        ,PROP_PARA_SDTPR
     };
 struct PropertyNameSupplier_Impl;
 class PropertyNameSupplier

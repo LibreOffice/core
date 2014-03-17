@@ -387,6 +387,7 @@ OUString PropertyNameSupplier::GetName( PropertyIds eId ) const
             case PROP_CHAR_NUMSPACING_TEXT_EFFECT    :   sName = "CharNumSpacingTextEffect"; break;
             case PROP_CHAR_STYLISTICSETS_TEXT_EFFECT :   sName = "CharStylisticSetsTextEffect"; break;
             case PROP_CHAR_CNTXTALTS_TEXT_EFFECT     :   sName = "CharCntxtAltsTextEffect"; break;
+            case PROP_PARA_SDTPR                     :   sName = "ParaSdtPr"; break;
         }
         ::std::pair<PropertyNameMap_t::iterator,bool> aInsertIt =
                 m_pImpl->aNameMap.insert( PropertyNameMap_t::value_type( eId, sName ));

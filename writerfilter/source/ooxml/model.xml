@@ -24571,6 +24571,11 @@
       <element name="dateFormat" tokenid="ooxml:CT_SdtDate_dateFormat"/>
       <element name="lid" tokenid="ooxml:CT_SdtDate_lid"/>
     </resource>
+    <resource name="CT_SdtDocPart" resource="Properties" tag="field">
+      <element name="docPartGallery" tokenid="ooxml:CT_SdtDocPart_docPartGallery"/>
+      <element name="docPartCategory" tokenid="ooxml:CT_SdtDocPart_docPartCategory"/>
+      <element name="docPartUnique" tokenid="ooxml:CT_SdtDocPart_docPartUnique"/>
+    </resource>
     <resource name="CT_SdtListItem" resource="Properties" tag="field">
       <attribute name="displayText" tokenid="ooxml:CT_SdtListItem_displayText"/>
       <attribute name="value" tokenid="ooxml:CT_SdtListItem_value"/>

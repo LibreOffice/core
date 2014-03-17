@@ -188,6 +188,41 @@ bool SdtHelper::hasElements()
     return m_bHasElements;
 }
 
+void SdtHelper::appendToInteropGrabBag(const OUString& rName, const css::uno::Any& rValue)
+{
+    if(isInteropGrabBagEnabled())
+    {
+        sal_Int32 nLength = m_aGrabBag.getLength();
+        m_aGrabBag.realloc(nLength + 1);
+        m_aGrabBag[nLength].Name = rName;
+        m_aGrabBag[nLength].Value = rValue;
+    }
+}
+
+beans::PropertyValue SdtHelper::getInteropGrabBagAndClear()
+{
+    beans::PropertyValue aProp;
+    if(isInteropGrabBagEnabled())
+    {
+        aProp.Name = m_sGrabBagName;
+        aProp.Value = uno::Any(m_aGrabBag);
+
+        m_aGrabBag.realloc(0);
+        m_sGrabBagName = "";
+    }
+    return aProp;
+}
+
+void SdtHelper::enableInteropGrabBag(const OUString& rName)
+{
+    m_sGrabBagName = rName;
+}
+
+bool SdtHelper::isInteropGrabBagEnabled()
+{
+    return !m_sGrabBagName.isEmpty();
+}
+
 } // namespace dmapper
 } // namespace writerfilter
 

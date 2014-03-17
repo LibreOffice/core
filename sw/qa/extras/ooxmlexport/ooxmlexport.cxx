@@ -2165,9 +2165,7 @@ DECLARE_OOXMLEXPORT_TEST(testPreserveZfield,"preserve_Z_field_TOC.docx")
     if (!pXmlDoc)
         return;
 
-    // FIXME "p[2]" will have to be "p[1]", once the TOC import code is fixed
-    // not to insert an empty paragraph before TOC.
-    assertXPathContent(pXmlDoc, "/w:document/w:body/w:p[2]/w:r[2]/w:instrText", " TOC \\z \\f \\o \"1-3\" \\h");
+    assertXPathContent(pXmlDoc, "/w:document/w:body/w:sdt/w:sdtContent/w:p[1]/w:r[2]/w:instrText", " TOC \\z \\f \\o \"1-3\" \\h");
 }
 
 DECLARE_OOXMLEXPORT_TEST(testPreserveWfieldTOC, "PreserveWfieldTOC.docx")
@@ -2176,7 +2174,7 @@ DECLARE_OOXMLEXPORT_TEST(testPreserveWfieldTOC, "PreserveWfieldTOC.docx")
     if (!pXmlDoc)
         return;
 
-    assertXPathContent(pXmlDoc, "/w:document/w:body/w:p[2]/w:r[2]/w:instrText", " TOC \\z \\w \\f \\o \"1-3\" \\h");
+    assertXPathContent(pXmlDoc, "/w:document/w:body/w:p/w:r[2]/w:instrText", " TOC \\z \\w \\f \\o \"1-3\" \\h");
 }
 
 DECLARE_OOXMLEXPORT_TEST(testFieldFlagB,"TOC_field_b.docx")
@@ -2197,7 +2195,7 @@ DECLARE_OOXMLEXPORT_TEST(testPreserveXfieldTOC, "PreserveXfieldTOC.docx")
     if (!pXmlDoc)
         return;
 
-    assertXPathContent(pXmlDoc, "/w:document/w:body/w:p[2]/w:r[2]/w:instrText", " TOC \\x \\f \\o \"1-3\" \\h");
+    assertXPathContent(pXmlDoc, "/w:document/w:body/w:p/w:r[2]/w:instrText", " TOC \\x \\f \\o \"1-3\" \\h");
 }
 
 DECLARE_OOXMLEXPORT_TEST(testTrackChangesParagraphProperties, "testTrackChangesParagraphProperties.docx")
@@ -2260,7 +2258,7 @@ DECLARE_OOXMLEXPORT_TEST(testTOCFlag_u,"testTOCFlag_u.docx")
 
     // FIXME "p[2]" will have to be "p[1]", once the TOC import code is fixed
     // not to insert an empty paragraph before TOC.
-    assertXPathContent(pXmlDoc, "/w:document/w:body/w:p[2]/w:r[2]/w:instrText", " TOC \\z \\o \"1-9\" \\u \\h");
+    assertXPathContent(pXmlDoc, "/w:document/w:body/w:p/w:r[2]/w:instrText", " TOC \\z \\o \"1-9\" \\u \\h");
 }
 
 DECLARE_OOXMLEXPORT_TEST(testTestTitlePage, "testTitlePage.docx")
@@ -2610,7 +2608,7 @@ DECLARE_OOXMLEXPORT_TEST(testPageref, "testPageref.docx")
     if (!pXmlDoc)
         return;
 
-    assertXPathContent(pXmlDoc, "/w:document/w:body/w:p[2]/w:hyperlink/w:r[3]/w:instrText", "PAGEREF _Toc355095261 \\h");
+    assertXPathContent(pXmlDoc, "/w:document/w:body/w:p[1]/w:hyperlink/w:r[3]/w:instrText", "PAGEREF _Toc355095261 \\h");
 }
 
 DECLARE_OOXMLEXPORT_TEST(testAlphabeticalIndex_AutoColumn,"alphabeticalIndex_AutoColumn.docx")
@@ -2637,7 +2635,9 @@ DECLARE_OOXMLEXPORT_TEST(testBibliography,"FDO75133.docx")
     if (!pXmlDoc)
         return;
 
-    assertXPathContent(pXmlDoc, "/w:document/w:body/w:p[3]/w:r[2]/w:instrText", " BIBLIOGRAPHY ");
+    assertXPathContent(pXmlDoc, "/w:document/w:body/w:p/w:r[2]/w:instrText", " BIBLIOGRAPHY ");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:sdt/w:sdtPr/w:docPartObj/w:docPartGallery", "val", "Bibliographies");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:sdt/w:sdtPr/w:docPartObj/w:docPartUnique", 1);
 }
 
 DECLARE_OOXMLEXPORT_TEST(testOleObject, "test_ole_object.docx")

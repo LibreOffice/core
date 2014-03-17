@@ -682,6 +682,8 @@ private:
     void WritePostponedVMLDrawing();
     void WritePostponedDMLDrawing();
 
+    void WriteParagraphSdt();
+
     void StartField_Impl( FieldInfos& rInfos, bool bWriteRun = false );
     void DoWriteCmd( const OUString& rCmd );
     void CmdField_Impl( FieldInfos& rInfos );
@@ -853,6 +855,10 @@ private:
 
     /// RelId <-> Graphic* cache, so that in case of alternate content, the same graphic only gets written once.
     std::map<const Graphic*, OString> m_aRelIdCache;
+
+    /// members to control the existence of grabbagged SDT properties in the paragraph
+    sal_Int32 m_nSdtPrToken;
+    ::sax_fastparser::FastAttributeList *m_pSdtPrTokenChildren;
 
 public:
     DocxAttributeOutput( DocxExport &rExport, ::sax_fastparser::FSHelperPtr pSerializer, oox::drawingml::DrawingML* pDrawingML );

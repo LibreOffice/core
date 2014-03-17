@@ -750,7 +750,7 @@ DECLARE_OOXMLEXPORT_TEST(testFdo69616, "fdo69616.docx")
     if (!pXmlDoc)
         return;
     // VML
-    CPPUNIT_ASSERT(getXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:r[1]/mc:AlternateContent/mc:Fallback/w:pict/v:group", "coordorigin").match("696,725"));
+    CPPUNIT_ASSERT(getXPath(pXmlDoc, "/w:document/w:body/w:sdt/w:sdtContent/w:p[1]/w:r[1]/mc:AlternateContent/mc:Fallback/w:pict/v:group", "coordorigin").match("696,725"));
 }
 
 DECLARE_OOXMLEXPORT_TEST(testAlignForShape,"Shape.docx")

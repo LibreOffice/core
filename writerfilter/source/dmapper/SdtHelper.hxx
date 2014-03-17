@@ -57,6 +57,9 @@ class SdtHelper
     OUStringBuffer m_sDateFormat;
     /// Locale string as it comes from the ooxml document.
     OUStringBuffer m_sLocale;
+    /// Grab bag to store unsupported SDTs, aiming to save them back on export.
+    com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue> m_aGrabBag;
+    OUString m_sGrabBagName;
 
     bool m_bHasElements;
 
@@ -80,6 +83,11 @@ public:
     void createDropDownControl();
     /// Create date control from w:sdt's w:date.
     void createDateControl(OUString& rContentText);
+
+    void appendToInteropGrabBag(const OUString& rName, const css::uno::Any& rValue);
+    com::sun::star::beans::PropertyValue getInteropGrabBagAndClear();
+    void enableInteropGrabBag(const OUString& rName);
+    bool isInteropGrabBagEnabled();
 };
 
 } // namespace dmapper
