@@ -191,7 +191,7 @@ namespace pcr
 
     namespace
     {
-        bool lcl_isLanguageDependentProperty( OUString aName )
+        bool lcl_isLanguageDependentProperty( const OUString& aName )
         {
             bool bRet = false;
 

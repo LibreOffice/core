@@ -432,7 +432,7 @@ void BibGeneralPage::CommitActiveControl()
 }
 
 void BibGeneralPage::AddControlWithError( const OUString& rColumnName, const ::Point& rPos, const ::Size& rSize,
-                                OUString& rErrorString, OUString aColumnUIName, const OString& sHelpId, sal_uInt16 nIndexInFTArray )
+                                OUString& rErrorString, const OUString& aColumnUIName, const OString& sHelpId, sal_uInt16 nIndexInFTArray )
 {
     // adds also the XControl and creates a map entry in nFT2CtrlMap[] for mapping between control and FT
 

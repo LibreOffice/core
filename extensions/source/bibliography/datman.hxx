@@ -110,7 +110,7 @@ protected:
         void                        SetMeAsUidListener();
         void                        RemoveMeAsUidListener();
 
-        void                        UpdateAddressbookCursor(OUString aSourceName);
+        void                        UpdateAddressbookCursor(const OUString& aSourceName);
 
         ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel >
                                     updateGridModel(const ::com::sun::star::uno::Reference< ::com::sun::star::form::XForm > & xDbForm);
