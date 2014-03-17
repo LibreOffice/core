@@ -437,14 +437,14 @@ Sequence< Sequence< PropertyValue > > SAL_CALL OSingleSelectQueryComposer::getSt
 void SAL_CALL OSingleSelectQueryComposer::appendHavingClauseByColumn( const Reference< XPropertySet >& column, sal_Bool andCriteria,sal_Int32 filterOperator ) throw (SQLException, RuntimeException, std::exception)
 {
     SAL_INFO("dbaccess", "OSingleSelectQueryComposer::appendHavingClauseByColumn" );
-    ::std::mem_fun1_t<bool,OSingleSelectQueryComposer,OUString> F_tmp(&OSingleSelectQueryComposer::implSetHavingClause);
+    ::std::mem_fun1_t<bool,OSingleSelectQueryComposer,const OUString&> F_tmp(&OSingleSelectQueryComposer::implSetHavingClause);
     setConditionByColumn(column,andCriteria,F_tmp,filterOperator);
 }
 
 void SAL_CALL OSingleSelectQueryComposer::appendFilterByColumn( const Reference< XPropertySet >& column, sal_Bool andCriteria,sal_Int32 filterOperator ) throw(SQLException, RuntimeException, std::exception)
 {
     SAL_INFO("dbaccess", "OSingleSelectQueryComposer::appendFilterByColumn" );
-    ::std::mem_fun1_t<bool,OSingleSelectQueryComposer,OUString> F_tmp(&OSingleSelectQueryComposer::implSetFilter);
+    ::std::mem_fun1_t<bool,OSingleSelectQueryComposer,const OUString&> F_tmp(&OSingleSelectQueryComposer::implSetFilter);
     setConditionByColumn(column,andCriteria,F_tmp,filterOperator);
 }
 
@@ -643,8 +643,8 @@ void SAL_CALL OSingleSelectQueryComposer::setElementaryQuery( const OUString& _r
 
 namespace
 {
-    OUString getComposedClause( const OUString _rElementaryClause, const OUString _rAdditionalClause,
-        TokenComposer& _rComposer, const OUString _rKeyword )
+    OUString getComposedClause( const OUString& _rElementaryClause, const OUString& _rAdditionalClause,
+        TokenComposer& _rComposer, const OUString& _rKeyword )
     {
         _rComposer.clear();
         _rComposer.append( _rElementaryClause );
@@ -1548,7 +1548,7 @@ void SAL_CALL OSingleSelectQueryComposer::setStructuredHavingClause( const Seque
     setHavingClause(lcl_getCondition(filter,aPredicateInput,getColumns()));
 }
 
-void OSingleSelectQueryComposer::setConditionByColumn( const Reference< XPropertySet >& column, sal_Bool andCriteria ,::std::mem_fun1_t<bool,OSingleSelectQueryComposer,OUString>& _aSetFunctor,sal_Int32 filterOperator)
+void OSingleSelectQueryComposer::setConditionByColumn( const Reference< XPropertySet >& column, sal_Bool andCriteria ,::std::mem_fun1_t<bool,OSingleSelectQueryComposer,const OUString& >& _aSetFunctor,sal_Int32 filterOperator)
 {
     SAL_INFO("dbaccess", "OSingleSelectQueryComposer::setConditionByColumn" );
     ::connectivity::checkDisposed(OSubComponent::rBHelper.bDisposed);

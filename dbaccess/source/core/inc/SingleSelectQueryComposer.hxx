@@ -133,7 +133,7 @@ namespace dbaccess
 
         void setConditionByColumn( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& column
                                 , sal_Bool andCriteria
-                                ,::std::mem_fun1_t<bool,OSingleSelectQueryComposer,OUString>& _aSetFunctor
+                                ,::std::mem_fun1_t<bool,OSingleSelectQueryComposer,const OUString& >& _aSetFunctor
                                 ,sal_Int32 filterOperator);
 
         /** getStructuredCondition returns the structured condition for the where or having clause
@@ -150,8 +150,8 @@ namespace dbaccess
                     setCurrentColumns( EColumnType _eType, const ::rtl::Reference< ::connectivity::OSQLColumns >& _rCols );
 
         //helper methods for mem_fun_t
-        inline bool implSetFilter(OUString _sFilter) { setFilter(_sFilter); return true;}
-        inline bool implSetHavingClause(OUString _sFilter) { setHavingClause(_sFilter); return true;}
+        inline bool implSetFilter(const OUString& _sFilter) { setFilter(_sFilter); return true;}
+        inline bool implSetHavingClause(const OUString& _sFilter) { setHavingClause(_sFilter); return true;}
 
         /** returns the part of the seelect statement
             @param  _ePart

@@ -84,7 +84,7 @@ namespace dbaui
         return s_aMappings;
     }
 
-    static const FeatureSet& lcl_getFeatureSet( const OUString _rURL )
+    static const FeatureSet& lcl_getFeatureSet( const OUString& _rURL )
     {
         typedef ::std::map< OUString, FeatureSet > FeatureSets;
         static FeatureSets s_aFeatureSets;

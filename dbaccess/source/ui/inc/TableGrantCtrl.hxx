@@ -62,7 +62,7 @@ public:
     OTableGrantControl( Window* pParent,const ResId& _RsId);
     virtual ~OTableGrantControl();
     void UpdateTables();
-    void setUserName(const OUString _sUserName);
+    void setUserName(const OUString& _sUserName);
     void setGrantUser(const ::com::sun::star::uno::Reference< ::com::sun::star::sdbcx::XAuthorizable>& _xGrantUser);
 
     void setTablesSupplier(const ::com::sun::star::uno::Reference< ::com::sun::star::sdbcx::XTablesSupplier >& _xTablesSup);

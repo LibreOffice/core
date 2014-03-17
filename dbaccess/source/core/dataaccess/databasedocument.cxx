@@ -349,7 +349,7 @@ namespace
         }
     }
 
-    static Sequence< PropertyValue > lcl_appendFileNameToDescriptor( const ::comphelper::NamedValueCollection& _rDescriptor, const OUString _rURL )
+    static Sequence< PropertyValue > lcl_appendFileNameToDescriptor( const ::comphelper::NamedValueCollection& _rDescriptor, const OUString& _rURL )
     {
         ::comphelper::NamedValueCollection aMutableDescriptor( _rDescriptor );
         if ( !_rURL.isEmpty() )

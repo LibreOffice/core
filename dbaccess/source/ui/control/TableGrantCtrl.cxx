@@ -341,7 +341,7 @@ sal_Bool OTableGrantControl::isAllowed(sal_uInt16 _nColumnId,sal_Int32 _nPrivile
     return bAllowed;
 }
 
-void OTableGrantControl::setUserName(const OUString _sUserName)
+void OTableGrantControl::setUserName(const OUString& _sUserName)
 {
     m_sUserName = _sUserName;
     m_aPrivMap = TTablePrivilegeMap();

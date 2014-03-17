@@ -371,7 +371,7 @@ namespace dbmm
     {
         bool    lcl_equalURLs_nothrow(
             const Reference< XComponentContext >& context,
-            const OUString& _lhs, const OUString _rhs )
+            const OUString& _lhs, const OUString& _rhs )
         {
             // the cheap situation: the URLs are equal
             if ( _lhs == _rhs )
