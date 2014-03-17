@@ -720,10 +720,11 @@ void DummyRectangle::render()
     }
 
     bool bFill = true;
+    drawing::FillStyle eStyle = drawing::FillStyle_NONE;
     itr = maProperties.find("FillStyle");
     if(itr != maProperties.end())
     {
-        drawing::FillStyle eStyle = itr->second.get<drawing::FillStyle>();
+        eStyle = itr->second.get<drawing::FillStyle>();
         if(eStyle == drawing::FillStyle_NONE)
         {
             bFill = false;
@@ -735,15 +736,8 @@ void DummyRectangle::render()
     {
         uno::Any co =  itr->second;
         sal_Int32 nColorValue = co.get<sal_Int32>();
-
-        itr = maProperties.find("FillTransparence");
-        sal_uInt8 nAlpha = 255;
-        if(itr != maProperties.end())
-        {
-            uno::Any al = itr->second;
-            nAlpha = 255 - al.get<sal_Int32>()/100.0*255;
-        }
-        pChart->m_GLRender.SetBackGroundColor(nColorValue, nColorValue, nAlpha);
+        //here FillStyle works for background color and gradients
+        pChart->m_GLRender.SetBackGroundColor(nColorValue, nColorValue, eStyle);
     }
 
     bool bBorder = true;
