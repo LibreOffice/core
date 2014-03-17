@@ -21,6 +21,8 @@
 #  include "postwin.h"
 #endif
 
+#include <GL/glew.h>
+
 #if defined( _WIN32 )
 #include <GL/glext.h>
 #include <GL/wglext.h>
@@ -31,8 +33,6 @@
 #include <GL/glx.h>
 #include <GL/glxext.h>
 #endif
-
-#include <GL/glew.h>
 
 #include <vcl/vclopengl_dllapi.hxx>
 #include <boost/scoped_ptr.hpp>

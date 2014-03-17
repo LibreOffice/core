@@ -48,7 +48,7 @@ static LRESULT CALLBACK WndProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM l
     }
 }
 
-int InitTempWindow(HWND *hwnd, int width, int height, PIXELFORMATDESCRIPTOR inPfd)
+int InitTempWindow(HWND *hwnd, int width, int height, PIXELFORMATDESCRIPTOR inPfd, GLWindow glWin)
 {
     PIXELFORMATDESCRIPTOR  pfd = inPfd;
     int  pfmt;
@@ -126,11 +126,12 @@ bool WGLisExtensionSupported(const char *extension)
     }
 }
 
-bool InitMultisample(PIXELFORMATDESCRIPTOR pfd)
+bool InitMultisample(PIXELFORMATDESCRIPTOR pfd, int& rPixelFormat)
 {
     HWND hWnd = NULL;
+    GLWindow glWin;
     //create a temp windwo to check whether support multi-sample, if support, get the format
-    if (InitTempWindow(&hWnd, m_iWidth, m_iHeight, pfd) < 0)
+    if (InitTempWindow(&hWnd, 1, 1, pfd, glWin) < 0)
     {
         SAL_WARN("vcl.opengl", "Can't create temp window to test");
         return false;
@@ -139,7 +140,6 @@ bool InitMultisample(PIXELFORMATDESCRIPTOR pfd)
     // See If The String Exists In WGL!
     if (!WGLisExtensionSupported("WGL_ARB_multisample"))
     {
-        mbArbMultisampleSupported = false;
         SAL_WARN("vcl.opengl", "Device doesn't support multi sample");
         return false;
     }
@@ -147,7 +147,6 @@ bool InitMultisample(PIXELFORMATDESCRIPTOR pfd)
     PFNWGLCHOOSEPIXELFORMATARBPROC wglChoosePixelFormatARB = (PFNWGLCHOOSEPIXELFORMATARBPROC)wglGetProcAddress("wglChoosePixelFormatARB");
     if (!wglChoosePixelFormatARB)
     {
-        mbArbMultisampleSupported = false;
         return false;
     }
     // Get Our Current Device Context
@@ -176,38 +175,42 @@ bool InitMultisample(PIXELFORMATDESCRIPTOR pfd)
         WGL_SAMPLES_ARB,8,
         0,0
     };
+
+    bool bArbMultisampleSupported = true;
+
     // First We Check To See If We Can Get A Pixel Format For 4 Samples
     valid = wglChoosePixelFormatARB(hDC, iAttributes, fAttributes, 1, &pixelFormat, &numFormats);
     // If We Returned True, And Our Format Count Is Greater Than 1
     if (valid && numFormats >= 1)
     {
-        mbArbMultisampleSupported = true;
-        m_iArbMultisampleFormat = pixelFormat;
+        bArbMultisampleSupported = true;
+        rPixelFormat = pixelFormat;
         wglMakeCurrent(NULL, NULL);
         wglDeleteContext(glWin.hRC);
         ReleaseDC(hWnd, glWin.hDC);
         DestroyWindow(hWnd);
-        return mbArbMultisampleSupported;
+        return bArbMultisampleSupported;
     }
     // Our Pixel Format With 4 Samples Failed, Test For 2 Samples
     iAttributes[19] = 2;
     valid = wglChoosePixelFormatARB(hDC, iAttributes, fAttributes, 1, &pixelFormat, &numFormats);
     if (valid && numFormats >= 1)
     {
-        mbArbMultisampleSupported = true;
-        m_iArbMultisampleFormat = pixelFormat;
+        bArbMultisampleSupported = true;
+        rPixelFormat = pixelFormat;
         wglMakeCurrent(NULL, NULL);
         wglDeleteContext(glWin.hRC);
         ReleaseDC(hWnd, glWin.hDC);
         DestroyWindow(hWnd);
-        return mbArbMultisampleSupported;
+        return bArbMultisampleSupported;
     }
     // Return The Valid Format
     wglMakeCurrent(NULL, NULL);
     wglDeleteContext(glWin.hRC);
     ReleaseDC(hWnd, glWin.hDC);
     DestroyWindow(hWnd);
-    return  mbArbMultisampleSupported;
+
+    return  bArbMultisampleSupported;
 }
 #endif
 
@@ -363,10 +366,9 @@ bool OpenGLContext::init()
 
     //  we must check whether can set the MSAA
     int WindowPix;
-    rGLRender.InitMultisample(PixelFormatFront);
-    if (rGLRender.GetMSAASupport())
+    bool bMultiSampleSupport = InitMultisample(PixelFormatFront, WindowPix);
+    if (bMultiSampleSupport)
     {
-        WindowPix = rGLRender.GetMSAAFormat();
     }
     else
     {
