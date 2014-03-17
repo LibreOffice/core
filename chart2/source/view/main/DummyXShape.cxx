@@ -741,7 +741,7 @@ void DummyRectangle::render()
         if(itr != maProperties.end())
         {
             uno::Any al = itr->second;
-            nAlpha = al.get<sal_Int32>();
+            nAlpha = 255 - al.get<sal_Int32>()/100.0*255;
         }
         pChart->m_GLRender.SetBackGroundColor(nColorValue, nColorValue, nAlpha);
     }
