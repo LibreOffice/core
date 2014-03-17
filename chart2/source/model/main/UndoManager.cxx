@@ -155,11 +155,9 @@ namespace chart
             }
 
             // IMutexGuard
-            virtual ::framework::IMutex& getGuardedMutex();
-
-            // IGuard
             virtual void clear();
             virtual void reset();
+            virtual ::framework::IMutex& getGuardedMutex();
         };
 
         class DummyMutex : public ::framework::IMutex

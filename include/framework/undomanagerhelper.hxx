@@ -21,7 +21,6 @@
 #define INCLUDED_FRAMEWORK_UNDOMANAGERHELPER_HXX
 
 #include <framework/fwedllapi.h>
-#include <framework/iguard.hxx>
 #include <framework/imutex.hxx>
 
 #include <com/sun/star/document/XUndoManager.hpp>
@@ -42,9 +41,17 @@ namespace framework
 
     //= IMutexGuard
 
-    class SAL_NO_VTABLE IMutexGuard : public IGuard
+    class SAL_NO_VTABLE IMutexGuard
     {
     public:
+        /** clears the lock. If the guard does not currently hold the lock, nothing happens.
+        */
+        virtual void clear() = 0;
+
+        /** attempts to re-establishes the lock, blocking until the attempt is successful.
+        */
+        virtual void reset() = 0;
+
         /** returns the mutex guarded by the instance.
 
             Even if the guard currently has not a lock on the mutex, this method must succeed.
