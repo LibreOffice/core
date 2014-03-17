@@ -104,10 +104,6 @@ void FrameContainer::remove( const css::uno::Reference< css::frame::XFrame >& xF
         // If removed frame was the current active frame - reset state variable.
         if (m_xActiveFrame==xFrame)
             m_xActiveFrame = css::uno::Reference< css::frame::XFrame >();
-
-        // We don't need the write lock any longer ...
-        // downgrade to read access.
-        aWriteLock.downgrade();
     }
 
     aWriteLock.unlock();

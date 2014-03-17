@@ -102,24 +102,11 @@ class WriteGuard : private boost::noncopyable
         *//*-*****************************************************************************************************/
         inline void lock()
         {
-            switch( m_eMode )
-            {
-                case E_NOLOCK       :   {
-                                            // Acquire write access and set return state.
-                                            // Mode is set later if it was successful!
-                                            m_pLock->acquire();
-                                            m_eMode = E_WRITELOCK;
-                                        }
-                                        break;
-                case E_READLOCK     :   {
-                                            // User has downgrade to read access before!
-                                            // We must release it before we can set a new write access!
-                                            m_pLock->release();
-                                            m_pLock->acquire();
-                                            m_eMode = E_WRITELOCK;
-                                        }
-                                        break;
-                default:                break; // nothing to do
+            if ( m_eMode == E_NOLOCK ) {
+                // Acquire write access and set return state.
+                // Mode is set later if it was successful!
+                m_pLock->acquire();
+                m_eMode = E_WRITELOCK;
             }
         }
 
@@ -137,41 +124,9 @@ class WriteGuard : private boost::noncopyable
         *//*-*****************************************************************************************************/
         inline void unlock()
         {
-            switch( m_eMode )
-            {
-                case E_READLOCK     :   {
-                                            // User has downgraded to a read lock before!
-                                            // => There isn't really a write lock ...
-                                            m_pLock->release();
-                                            m_eMode = E_NOLOCK;
-                                        }
-                                        break;
-                case E_WRITELOCK    :   {
-                                            m_pLock->release();
-                                            m_eMode = E_NOLOCK;
-                                        }
-                                        break;
-                default:                break; // nothing to do
-            }
-        }
-
-        /*-****************************************************************************************************
-            @short      downgrade write access to read access without new blocking!
-            @descr      If this write lock is set you can change it to a "read lock".
-                        An "upgrade" is the same like new calling "lock()"!
-
-            @seealso    -
-
-            @param      -
-            @return     -
-
-            @onerror    -
-        *//*-*****************************************************************************************************/
-        inline void downgrade()
-        {
-            if( m_eMode == E_WRITELOCK )
-            {
-                m_eMode = E_READLOCK;
+            if ( m_eMode == E_WRITELOCK ) {
+                m_pLock->release();
+                m_eMode = E_NOLOCK;
             }
         }
 
