@@ -44,6 +44,7 @@
 #include <vcl/metaact.hxx>
 #include <drawinglayer/primitive2d/texthierarchyprimitive2d.hxx>
 #include <drawinglayer/primitive2d/textdecoratedprimitive2d.hxx>
+#include <drawinglayer/primitive2d/openglprimitive2d.hxx>
 #include <comphelper/processfactory.hxx>
 #include <rtl/ustring.hxx>
 #include <com/sun/star/i18n/BreakIterator.hpp>
@@ -2135,6 +2136,11 @@ namespace drawinglayer
                 case PRIMITIVE2D_ID_EPSPRIMITIVE2D :
                 {
                     RenderEpsPrimitive2D(static_cast< const primitive2d::EpsPrimitive2D& >(rCandidate));
+                    break;
+                }
+                case PRIMITIVE2D_ID_OPENGLPRIMITIVE2D:
+                {
+                    RenderOpenGLPrimitive2D(static_cast< const primitive2d::OpenGLPrimitive2D& >(rCandidate));
                     break;
                 }
                 default :

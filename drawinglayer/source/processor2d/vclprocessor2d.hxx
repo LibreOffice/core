@@ -52,6 +52,7 @@ namespace drawinglayer { namespace primitive2d {
     class EpsPrimitive2D;
     class SvgLinearAtomPrimitive2D;
     class SvgRadialAtomPrimitive2D;
+    class OpenGLPrimitive2D;
 }}
 
 
@@ -107,7 +108,7 @@ namespace drawinglayer
             void RenderSvgLinearAtomPrimitive2D(const primitive2d::SvgLinearAtomPrimitive2D& rCandidate);
             void RenderSvgRadialAtomPrimitive2D(const primitive2d::SvgRadialAtomPrimitive2D& rCandidate);
             void RenderMetafilePrimitive2D(const primitive2d::MetafilePrimitive2D& rPolygonCandidate);
-
+            void RenderOpenGLPrimitive2D(const primitive2d::OpenGLPrimitive2D& rCandidate);
 
             // DrawMode adaption support
             void adaptLineToFillDrawMode() const;

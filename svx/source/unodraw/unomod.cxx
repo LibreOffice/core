@@ -493,6 +493,10 @@ uno::Reference< uno::XInterface > SAL_CALL SvxUnoDrawingModel::createInstance( c
         {
             nType = OBJ_TABLE;
         }
+        else if( aTypeName.startsWith( "OpenGLObject" ) )
+        {
+            nType = OBJ_OPENGL;
+        }
         else
         {
             throw lang::ServiceNotRegisteredException();

@@ -122,7 +122,7 @@ uno::Reference< drawing::XShapes > OpenglShapeFactory::getOrCreateChartRootShape
         SAL_WARN("chart2.opengl", "getOrCreateChartRootShape");
 
         uno::Reference< drawing::XShape > xTarget (m_xShapeFactory->createInstance(
-                "com.sun.star.drawing.GraphicObjectShape" ), uno::UNO_QUERY );
+                "com.sun.star.drawing.OpenGLObject" ), uno::UNO_QUERY );
         dummy::DummyChart *pChart = new dummy::DummyChart(xTarget);
         SvxDummyShapeContainer* pContainer = new SvxDummyShapeContainer(pChart);
         pContainer->setSize(awt::Size(0,0));
