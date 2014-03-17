@@ -165,7 +165,7 @@ IXFStyle*   XFStyleContainer::FindSameStyle(IXFStyle *pStyle)
     return NULL;
 }
 
-IXFStyle*   XFStyleContainer::FindStyle(OUString name)
+IXFStyle*   XFStyleContainer::FindStyle(const OUString& name)
 {
     std::vector<IXFStyle*>::iterator it;
     for( it = m_aStyles.begin(); it != m_aStyles.end(); ++it )

@@ -134,7 +134,7 @@ OUString LwpPara::GetContentText(sal_Bool bAllText)
 /**
  * @short   set text of paragraph
  */
-void LwpPara::SetAllText(OUString sText)
+void LwpPara::SetAllText(const OUString& sText)
 {
     m_AllText+=sText;
 }
@@ -142,7 +142,7 @@ void LwpPara::SetAllText(OUString sText)
 /**
  * @short   set first frib content
  */
-void LwpPara::SetFirstFrib(OUString Content,sal_uInt32 FontID)
+void LwpPara::SetFirstFrib(const OUString& Content,sal_uInt32 FontID)
 {
     m_FontID= FontID;
     m_Content=Content;

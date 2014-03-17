@@ -75,14 +75,14 @@ public:
     }
 
     OUString GetDivision(){return m_strDivision;}
-    void SetDivision(OUString sDivName){m_strDivision = sDivName;}
+    void SetDivision(const OUString& sDivName){m_strDivision = sDivName;}
     OUString GetName(){return m_strName;}
 
 public:
     /**
      * @descr   Set bookmark name, which will be used in bookmark-ref or formula.
      */
-    void    SetName(OUString name)
+    void    SetName(const OUString& name)
     {
         m_strName = name;
     }

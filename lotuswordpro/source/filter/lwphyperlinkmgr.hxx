@@ -73,7 +73,7 @@ public:
     ~LwpHyperlinkMgr();
     void SetHyperlinkFlag(sal_Bool bFlag){m_bIsHyperlink = bFlag;}
     sal_Bool GetHyperlinkFlag(){return m_bIsHyperlink;}
-    void SetHyperlink(OUString hyperlink);
+    void SetHyperlink(const OUString& hyperlink);
     OUString GetHyperlink();
 private:
     OUString m_Hyperlink;

@@ -101,7 +101,7 @@ public:
      * @descr   Set layout for the paragraph.When such property was setted, this paragraph will
      *          start at an new page.
      */
-    void    SetMasterPage(OUString master);
+    void    SetMasterPage(const OUString& master);
 
     OUString GetMasterPage();
 
@@ -267,7 +267,7 @@ protected:
     sal_Bool m_bNumberRight;
 };
 
-inline void XFParaStyle::SetMasterPage(OUString master)
+inline void XFParaStyle::SetMasterPage(const OUString& master)
 {
     m_strMasterPage = master;
 }

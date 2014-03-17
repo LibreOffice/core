@@ -219,7 +219,7 @@ IXFStyle*   XFStyleManager::AddStyle(IXFStyle *pStyle)
     return pStyleRet;
 }
 
-IXFStyle*   XFStyleManager::FindStyle(OUString name)
+IXFStyle*   XFStyleManager::FindStyle(const OUString& name)
 {
     IXFStyle *pStyle = (IXFStyle*)FindParaStyle(name);
     if( pStyle )
@@ -272,7 +272,7 @@ IXFStyle*   XFStyleManager::FindStyle(OUString name)
     return NULL;
 }
 
-XFParaStyle*    XFStyleManager::FindParaStyle(OUString name)
+XFParaStyle*    XFStyleManager::FindParaStyle(const OUString& name)
 {
     IXFStyle *pStyle = s_aParaStyles.FindStyle(name);
     if( pStyle )
@@ -281,7 +281,7 @@ XFParaStyle*    XFStyleManager::FindParaStyle(OUString name)
         return (XFParaStyle*)s_aStdParaStyles.FindStyle(name);
 }
 
-XFTextStyle*    XFStyleManager::FindTextStyle(OUString name)
+XFTextStyle*    XFStyleManager::FindTextStyle(const OUString& name)
 {
     IXFStyle *pStyle = s_aTextStyles.FindStyle(name);
     if( pStyle )

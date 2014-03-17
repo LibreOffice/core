@@ -92,7 +92,7 @@ XFIndex::~XFIndex()
     }
 }
 
-void    XFIndex::AddTemplate(OUString level, OUString style, XFIndexTemplate* templ)
+void    XFIndex::AddTemplate(const OUString& level, const OUString& style, XFIndexTemplate* templ)
 {
     templ->SetLevel( level );
     if(m_eType != enumXFIndexTOC) // TOC's styles are applied to template entries separately
@@ -112,7 +112,7 @@ void    XFIndex::SetSeparator(sal_Bool sep)
     m_bSeparator = sep;
 }
 
-void XFIndex::AddTocSource(sal_uInt16 nLevel, const OUString sStyleName)
+void XFIndex::AddTocSource(sal_uInt16 nLevel, const OUString& sStyleName)
 {
     if (nLevel > MAX_TOC_LEVEL)
     {

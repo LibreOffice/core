@@ -184,7 +184,7 @@ public:
     void SetBulletStyleName(const OUString& rNewName);
     void SetBulletFlag(sal_Bool bFlag);
     void SetIndent(LwpIndentOverride* pIndentOverride);
-    void SetFirstFrib(OUString Content,sal_uInt32 FontID);
+    void SetFirstFrib(const OUString& Content,sal_uInt32 FontID);
     OUString GetContentText(sal_Bool bAllText = sal_False);
 
     void SetParaDropcap(sal_Bool bFlag);
@@ -206,7 +206,7 @@ public:
 
     sal_Bool IsInCell();
 
-    void SetAllText(OUString sText);
+    void SetAllText(const OUString& sText);
     OUString GetStyleName(){return m_StyleName;}
 
 protected:

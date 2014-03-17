@@ -68,11 +68,11 @@ public:
     XFArrowStyle();
 
 public:
-    void    SetArrowName(OUString name);
+    void    SetArrowName(const OUString& name);
 
-    void    SetViewbox(OUString viewBox);
+    void    SetViewbox(const OUString& viewBox);
 
-    void    SetSVGPath(OUString path);
+    void    SetSVGPath(const OUString& path);
 
     virtual enumXFStyle GetStyleFamily();
 
@@ -88,17 +88,17 @@ inline XFArrowStyle::XFArrowStyle()
 {
 }
 
-inline void XFArrowStyle::SetArrowName(OUString name)
+inline void XFArrowStyle::SetArrowName(const OUString& name)
 {
     m_strName = name;
 }
 
-inline void XFArrowStyle::SetViewbox(OUString viewBox)
+inline void XFArrowStyle::SetViewbox(const OUString& viewBox)
 {
     m_strViewBox = viewBox;
 }
 
-inline void XFArrowStyle::SetSVGPath(OUString path)
+inline void XFArrowStyle::SetSVGPath(const OUString& path)
 {
     m_strPath = path;
 }

@@ -59,7 +59,7 @@
  ************************************************************************/
 #include "xffontdecl.hxx"
 
-XFFontDecl::XFFontDecl(OUString name, OUString family, sal_Bool fixed)
+XFFontDecl::XFFontDecl(const OUString& name, const OUString& family, sal_Bool fixed)
 {
     m_strFontName = name;
     m_strFontFamily = family;

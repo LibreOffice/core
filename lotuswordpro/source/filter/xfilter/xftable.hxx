@@ -79,19 +79,19 @@ public:
     virtual ~XFTable();
 
 public:
-    void    SetTableName(OUString name);
+    void    SetTableName(const OUString& name);
 
-    void    SetColumnStyle(sal_Int32 col, OUString style);
+    void    SetColumnStyle(sal_Int32 col, const OUString& style);
 
     void    AddRow(XFRow *pRow);
 
     void    AddHeaderRow(XFRow *pRow);
 
-    void    SetDefaultCellStyle(OUString style);
+    void    SetDefaultCellStyle(const OUString& style);
 
-    void    SetDefaultRowStyle(OUString style);
+    void    SetDefaultRowStyle(const OUString& style);
 
-    void    SetDefaultColStyle(OUString style);
+    void    SetDefaultColStyle(const OUString& style);
 
 public:
     void    SetOwnerCell(XFCell *pCell);
@@ -129,7 +129,7 @@ private:
     OUString   m_strDefColStyle;
 };
 
-inline void XFTable::SetTableName(OUString name)
+inline void XFTable::SetTableName(const OUString& name)
 {
     m_strName = name;
 }
@@ -145,17 +145,17 @@ inline sal_Bool XFTable::IsSubTable()
     return m_bSubTable;
 }
 
-inline void XFTable::SetDefaultCellStyle(OUString style)
+inline void XFTable::SetDefaultCellStyle(const OUString& style)
 {
     m_strDefCellStyle = style;
 }
 
-inline void XFTable::SetDefaultRowStyle(OUString style)
+inline void XFTable::SetDefaultRowStyle(const OUString& style)
 {
     m_strDefRowStyle = style;
 }
 
-inline void XFTable::SetDefaultColStyle(OUString style)
+inline void XFTable::SetDefaultColStyle(const OUString& style)
 {
     m_strDefColStyle = style;
 }

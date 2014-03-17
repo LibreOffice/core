@@ -75,7 +75,7 @@ public:
     LwpPropListElement(LwpObjectHeader &objHdr, LwpSvStream *pStrm);
     ~LwpPropListElement(){}
     void Read();
-    sal_Bool IsNamed(OUString name);
+    sal_Bool IsNamed(const OUString& name);
     LwpPropListElement* GetNext();
     LwpAtomHolder GetValue(){return m_Value;}
     LwpAtomHolder GetName(){return m_Name;}
@@ -91,10 +91,10 @@ public:
     ~LwpPropList(){}
     void Read(LwpObjectStream* pObjStrm);
     LwpPropListElement* GetFirst();
-    OUString GetNamedProperty(OUString name);
+    OUString GetNamedProperty(const OUString& name);
     OUString EnumNamedProperty(OUString& name,OUString& value);
 private:
-    LwpPropListElement* FindPropByName(OUString name);
+    LwpPropListElement* FindPropByName(const OUString& name);
 };
 
 #endif

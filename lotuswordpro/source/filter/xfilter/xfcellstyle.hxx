@@ -86,7 +86,7 @@ public:
     /**
      * @descr   Set cell data format style name.
      */
-    void    SetDataStyle(OUString style);
+    void    SetDataStyle(const OUString& style);
 
     /**
      * @descr:  Set the pading of the paragraph.This is the distance
@@ -154,7 +154,7 @@ inline void XFCellStyle::SetAlignType(enumXFAlignType hori, enumXFAlignType vert
     m_eVertAlign = vert;
 }
 
-inline void XFCellStyle::SetDataStyle(OUString style)
+inline void XFCellStyle::SetDataStyle(const OUString& style)
 {
     m_strDataStyle = style;
 }

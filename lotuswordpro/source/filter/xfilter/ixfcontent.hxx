@@ -79,7 +79,7 @@ public:
      * @descr   Set style to apply. You can get the style name by use XFStyleManager::AddStyle(pStyle),
      *          or just set a fixed style name.
      */
-    virtual void            SetStyleName(OUString style) = 0;
+    virtual void            SetStyleName(const OUString& style) = 0;
 
     /**
      * @descr   return the style name.

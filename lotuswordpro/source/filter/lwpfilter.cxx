@@ -98,7 +98,7 @@ using namespace ::com::sun::star;
 using ::com::sun::star::uno::Sequence;
 
 sal_Bool IsWordproFile( uno::Reference<XInputStream>& rInputStream);
-sal_Bool IsWordproFile(OUString file);
+sal_Bool IsWordproFile(const OUString& file);
 
 LWPFilterReader::LWPFilterReader()
 {
@@ -442,7 +442,7 @@ sal_Bool IsWordProStr(const sal_Int8 *pBuf)
     return bRet;
 }
 
-sal_Bool IsWordproFile(OUString file)
+sal_Bool IsWordproFile(const OUString& file)
 {
     sal_Bool bRet = sal_False;
     SfxMedium aMedium( file, STREAM_STD_READ);

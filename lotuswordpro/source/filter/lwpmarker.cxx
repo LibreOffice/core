@@ -91,7 +91,7 @@ void LwpMarker::Read()
     m_pObjStrm->SkipExtra();
 }
 
-OUString LwpMarker::GetNamedProperty(OUString name)
+OUString LwpMarker::GetNamedProperty(const OUString& name)
 {
     LwpPropList* pProp = GetPropList();
     if (pProp)

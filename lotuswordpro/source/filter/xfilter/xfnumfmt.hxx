@@ -82,7 +82,7 @@ public:
                     (2 item2
      * @param:      prefix
      *********************************************************************/
-    void    SetPrefix(OUString prefix)
+    void    SetPrefix(const OUString& prefix)
     {
         m_strPrefix = prefix;
     }
@@ -93,7 +93,7 @@ public:
                     2) item2
      * @param:      prefix
      *********************************************************************/
-    void    SetSuffix(OUString suffix)
+    void    SetSuffix(const OUString& suffix)
     {
         m_strSuffix = suffix;
     }
@@ -117,7 +117,7 @@ public:
                         '','','','','',
      * @param:      prefix
      *********************************************************************/
-    void    SetFormat(OUString format)
+    void    SetFormat(const OUString& format)
     {
         m_strFormat = format;
     }

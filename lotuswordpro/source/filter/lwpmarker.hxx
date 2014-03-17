@@ -77,7 +77,7 @@ public:
     LwpMarker(LwpObjectHeader &objHdr, LwpSvStream *pStrm);
     ~LwpMarker(){}
     void Read();
-    OUString GetNamedProperty(OUString name);
+    OUString GetNamedProperty(const OUString& name);
 protected:
     enum{
         MARKER_START=1,
@@ -262,11 +262,11 @@ public:
     ~LwpRubyMarker(){}
     void Read();
     OUString GetRubyText(){return m_strRubyText;}
-    void SetRubyText(OUString sText){m_strRubyText = sText;}
+    void SetRubyText(const OUString& sText){m_strRubyText = sText;}
     OUString GetTextStyleName(){return m_TextStyle;}
-    void SetTextStyleName(OUString sName){m_TextStyle = sName;}
+    void SetTextStyleName(const OUString& sName){m_TextStyle = sName;}
     OUString GetRubyStyleName(){return m_RubyStyle;}
-    void SetRubyStyleName(OUString sName){m_RubyStyle = sName;}
+    void SetRubyStyleName(const OUString& sName){m_RubyStyle = sName;}
 private:
     LwpObjectID m_objLayout;
     OUString m_strRubyText;

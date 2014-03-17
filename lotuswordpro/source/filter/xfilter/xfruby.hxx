@@ -71,7 +71,7 @@ public:
 class XFRubyEnd : public XFContent
 {
 public:
-    void SetText(OUString sText);
+    void SetText(const OUString& sText);
     virtual void    ToXml(IXFStream *pStrm);
 private:
     OUString m_strText;
@@ -88,7 +88,7 @@ void XFRubyStart::ToXml(IXFStream *pStrm)
     pStrm->StartElement( "text:ruby-base" );
 }
 
-void XFRubyEnd::SetText(OUString sText)
+void XFRubyEnd::SetText(const OUString& sText)
 {
     m_strText = sText;
 }

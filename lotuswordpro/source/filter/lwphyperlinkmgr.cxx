@@ -77,7 +77,7 @@ OUString LwpHyperlinkMgr::GetHyperlink()
     return m_Hyperlink;
 }
 
-void LwpHyperlinkMgr::SetHyperlink(OUString hyperlink)
+void LwpHyperlinkMgr::SetHyperlink(const OUString& hyperlink)
 {
     m_Hyperlink = hyperlink;
 }

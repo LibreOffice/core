@@ -85,25 +85,25 @@ public:
     /**
      * @descr   Set template level.
      */
-    void    SetLevel(OUString level);
+    void    SetLevel(const OUString& level);
     /**
      * @descr   Set style.
      */
-    void    SetStyleName(OUString style);
+    void    SetStyleName(const OUString& style);
     /**
      * @descr   Add a entry in the template.
      */
-    void    AddEntry(enumXFIndexTemplate entry, OUString styleName = "");
+    void    AddEntry(enumXFIndexTemplate entry, const OUString& styleName = "");
 
     /**
      * @descr   Add a tab entry in the template.
      */
-    void    AddTabEntry(enumXFTab type, double len, sal_Unicode leader = '*', sal_Unicode delimiter='.', OUString styleName = "");
+    void    AddTabEntry(enumXFTab type, double len, sal_Unicode leader = '*', sal_Unicode delimiter='.', const OUString& styleName = "");
 
     /**
      * @descr   Add a entry in the template.
      */
-    void    AddTextEntry(OUString sSpan, OUString styleName = "");
+    void    AddTextEntry(const OUString& sSpan, const OUString& styleName = "");
 
     /**
      * @descr   clear all index template parts.
@@ -115,7 +115,7 @@ private:
     /**
      * @descr   Helper function.
      */
-    void    SetTagName(OUString tag);
+    void    SetTagName(const OUString& tag);
 
     friend class XFIndex;
 private:
@@ -153,7 +153,7 @@ public:
     /**
      * @descr   Add index templaet entry.
      */
-    void    AddTemplate(OUString level, OUString style, XFIndexTemplate* templ);
+    void    AddTemplate(const OUString& level, const OUString& style, XFIndexTemplate* templ);
 
     /**
      * @descr   Set if protected index to prevent handly-revise.
@@ -167,7 +167,7 @@ public:
 
     virtual void ToXml(IXFStream *pStrm);
 
-    void AddTocSource(sal_uInt16 nLevel, const OUString sStyleName);
+    void AddTocSource(sal_uInt16 nLevel, const OUString& sStyleName);
 
 private:
     enumXFIndex     m_eType;
@@ -192,27 +192,27 @@ inline XFIndexTemplate::XFIndexTemplate()
     m_nLevel = OUString::number(0);
 }
 
-inline void XFIndexTemplate::SetLevel(OUString level)
+inline void XFIndexTemplate::SetLevel(const OUString& level)
 {
     m_nLevel = level;
 }
-inline void XFIndexTemplate::SetStyleName(OUString style)
+inline void XFIndexTemplate::SetStyleName(const OUString& style)
 {
     m_strStyle = style;
 }
 
-inline void XFIndexTemplate::SetTagName(OUString tag)
+inline void XFIndexTemplate::SetTagName(const OUString& tag)
 {
     m_strTagName = tag;
 }
 
-inline void XFIndexTemplate::AddEntry(enumXFIndexTemplate entry, OUString styleName)
+inline void XFIndexTemplate::AddEntry(enumXFIndexTemplate entry, const OUString& styleName)
 {
     std::pair<enumXFIndexTemplate, OUString> pair(entry, styleName);
     m_aEntries.push_back(pair);
 }
 
-inline void XFIndexTemplate::AddTabEntry(enumXFTab type, double len, sal_Unicode leader, sal_Unicode delimiter, OUString styleName)
+inline void XFIndexTemplate::AddTabEntry(enumXFTab type, double len, sal_Unicode leader, sal_Unicode delimiter, const OUString& styleName)
 {
     m_eTabType = type;
     m_strTabLeader = OUString( leader );
@@ -222,7 +222,7 @@ inline void XFIndexTemplate::AddTabEntry(enumXFTab type, double len, sal_Unicode
     AddEntry(enumXFIndexTemplateTab, styleName);
 }
 
-inline void XFIndexTemplate::AddTextEntry(OUString sText, OUString styleName)
+inline void XFIndexTemplate::AddTextEntry(const OUString& sText, const OUString& styleName)
 {
     sal_uInt16 nLen = m_aEntries.size();
     AddEntry(enumXFIndexTemplateSpan, styleName);

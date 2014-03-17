@@ -75,7 +75,7 @@ public:
     /**
      * @descr   Use file link as image source.
      */
-    void    SetFileLink(OUString fileName);
+    void    SetFileLink(const OUString& fileName);
 
     /**
      * @descr   Use base64 stream as image source.
@@ -118,7 +118,7 @@ private:
     enumXFAlignType m_eVertAlign;
 };
 
-inline void XFBGImage::SetFileLink(OUString fileName)
+inline void XFBGImage::SetFileLink(const OUString& fileName)
 {
     m_strFileName = fileName;
     m_bUserFileLink = sal_True;

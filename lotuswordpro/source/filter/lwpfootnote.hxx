@@ -286,7 +286,7 @@ public:
     sal_Bool GetContinuedOn(){ return ((m_nFlag & FO_CONTINUEON) != 0);}
     OUString GetContinuedOnMessage();
     OUString GetContinuedFromMessage();
-    void SetMasterPage(OUString strMasterPage){ m_strMasterPage = strMasterPage;}
+    void SetMasterPage(const OUString& strMasterPage){ m_strMasterPage = strMasterPage;}
 };
 
 #endif

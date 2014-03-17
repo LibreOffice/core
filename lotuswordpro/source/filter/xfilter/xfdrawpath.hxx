@@ -76,7 +76,7 @@ public:
     /**
      * @descr   Set svg path command,L for line,M for move,...
      */
-    void    SetCommand(OUString cmd);
+    void    SetCommand(const OUString& cmd);
 
     /**
      * @descr   Set svg path point.
@@ -127,7 +127,7 @@ private:
     std::vector<XFSvgPathEntry> m_aPaths;
 };
 
-inline void XFSvgPathEntry::SetCommand(OUString cmd)
+inline void XFSvgPathEntry::SetCommand(const OUString& cmd)
 {
     m_strCommand = cmd;
 }

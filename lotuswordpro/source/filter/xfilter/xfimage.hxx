@@ -76,7 +76,7 @@ public:
     /**
      * @descr   Use file link source.a
      */
-    void    SetFileURL(OUString url);
+    void    SetFileURL(const OUString& url);
 
     /**
      * @descr   Use base64 stream.

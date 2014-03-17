@@ -66,7 +66,7 @@
 class XFFileName : public XFContent
 {
 public:
-    void SetType(OUString sType);
+    void SetType(const OUString& sType);
     virtual void    ToXml(IXFStream *pStrm);
 private:
     OUString m_strType;

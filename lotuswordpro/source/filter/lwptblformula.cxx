@@ -456,7 +456,7 @@ OUString LwpFormulaConst::ToString(LwpTableLayout* /*pCellsMap*/)
 *   @param
 *   @return
 */
-LwpFormulaText::LwpFormulaText( OUString aText)
+LwpFormulaText::LwpFormulaText( const OUString& aText)
 {
     m_aText = aText;
 }

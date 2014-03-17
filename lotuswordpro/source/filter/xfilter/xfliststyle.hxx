@@ -150,15 +150,15 @@ public:
     {
         m_chBullet = ch;
     }
-    void    SetPrefix(OUString prefix)
+    void    SetPrefix(const OUString& prefix)
     {
         m_aNumFmt.SetPrefix(prefix);
     }
-    void    SetSuffix(OUString suffix)
+    void    SetSuffix(const OUString& suffix)
     {
         m_aNumFmt.SetSuffix(suffix);
     }
-    void    SetFontName(OUString name)
+    void    SetFontName(const OUString& name)
     {
         m_strFontName = name;
     }
@@ -204,9 +204,9 @@ public:
 
     void    SetListBullet(sal_Int32 level,
                             UChar32 bullet_char,
-                            OUString fontname = "",
-                            OUString prefix = "",
-                            OUString suffix = ""
+                            const OUString& fontname = "",
+                            const OUString& prefix = "",
+                            const OUString& suffix = ""
                             );
 
     void    SetListNumber( sal_Int32 level, XFNumFmt& numFmt,   sal_Int16 nStartValue = 1 );

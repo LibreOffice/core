@@ -72,7 +72,7 @@ public:
     XFCrossRefStart();
     ~XFCrossRefStart();
     void SetRefType(sal_uInt8 nType);
-    void SetMarkName(OUString sName);
+    void SetMarkName(const OUString& sName);
     void ToXml(IXFStream *pStrm);
 private:
     enum{
@@ -90,7 +90,7 @@ inline void XFCrossRefStart::SetRefType(sal_uInt8 nType)
     m_nType = nType;
 }
 
-inline void XFCrossRefStart::SetMarkName(OUString sName)
+inline void XFCrossRefStart::SetMarkName(const OUString& sName)
 {
     m_strMarkName = sName;
 }

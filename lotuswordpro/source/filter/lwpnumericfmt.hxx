@@ -102,7 +102,7 @@ struct LwpCurrencyInfo
     OUString sSymbol;
     sal_Bool bPost;
     sal_Bool bShowSpace;
-    LwpCurrencyInfo(OUString sSym)
+    LwpCurrencyInfo(const OUString& sSym)
     {
         sSymbol = sSym;
         bPost = sal_False;
@@ -113,7 +113,7 @@ struct LwpCurrencyInfo
         bPost = sal_False;
         bShowSpace = sal_False;
     }
-    LwpCurrencyInfo(OUString sSym,sal_Bool bPost_, sal_Bool bShowSpace_)
+    LwpCurrencyInfo(const OUString& sSym, sal_Bool bPost_, sal_Bool bShowSpace_)
     {
         sSymbol = sSym;
         bPost = bPost_;
@@ -282,7 +282,7 @@ private:
 
     void GetCurrencyStr(LwpNumericFormatSubset aNumber, OUString& aPrefix, OUString& aSuffix, sal_Bool bNegtive=sal_False);
     void SetNumberType(XFNumberStyle* pStyle);
-    OUString    reencode(OUString sCode);
+    OUString    reencode(const OUString& sCode);
 };
 
 inline sal_Bool

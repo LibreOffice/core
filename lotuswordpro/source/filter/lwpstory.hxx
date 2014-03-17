@@ -122,7 +122,7 @@ public:
     inline void SetPMModified(sal_Bool bPMModified);
     inline void SetDropcapFlag(sal_Bool bFlag);
     inline void SetTabLayout(LwpLayout* pLayout);
-    inline void SetSectionName(OUString StyleName);
+    inline void SetSectionName(const OUString& StyleName);
 
     void SetCurrentLayout(LwpPageLayout* pPageLayout);
     void AddPageLayout(LwpPageLayout* pObject);
@@ -173,7 +173,7 @@ void LwpStory::SetTabLayout(LwpLayout* pLayout)
 {
     m_pTabLayout = pLayout;
 }
-void LwpStory::SetSectionName(OUString StyleName)
+void LwpStory::SetSectionName(const OUString& StyleName)
 {
     m_CurrSectionName = StyleName;
 }

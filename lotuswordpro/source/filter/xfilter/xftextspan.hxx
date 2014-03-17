@@ -70,12 +70,12 @@ class XFTextSpan : public XFContent
 {
 public:
     XFTextSpan();
-    XFTextSpan(OUString& text, OUString& style );
+    XFTextSpan(const OUString& text, const OUString& style );
 
     virtual ~XFTextSpan();
 
     void            Add(IXFContent *pContent);
-    void            Add(OUString& text);
+    void            Add(const OUString& text);
 
     virtual enumXFContent GetContentType();
     virtual void    ToXml(IXFStream *pStrm);
