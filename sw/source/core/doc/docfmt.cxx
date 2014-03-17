@@ -2343,7 +2343,8 @@ void SwDoc::MoveLeftMargin( const SwPaM& rPam, bool bRight, bool bModulus )
             if( bRight )
                 nNext += nDefDist;
             else
-                nNext -= nDefDist;
+                if(nNext >0) // fdo#75936 set limit for decreasing indent
+                    nNext -= nDefDist;
 
             aLS.SetTxtLeft( nNext );
 
