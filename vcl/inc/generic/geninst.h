@@ -70,7 +70,7 @@ public:
  * Abstract generic class to build vclplugin's instance classes from
  */
 class GenPspGraphics;
-class ImplDevFontList;
+class PhysicalFontCollection;
 class VCL_DLLPUBLIC SalGenericInstance : public SalInstance
 {
 protected:
@@ -106,7 +106,7 @@ public:
     virtual GenPspGraphics     *CreatePrintGraphics() = 0;
 
     // prolly belongs somewhere else ... just a font help
-    static void RegisterFontSubstitutors( ImplDevFontList* pList );
+    static void RegisterFontSubstitutors( PhysicalFontCollection* pFontCollection );
     static int  FetchFontSubstitutionFlags();
 
 protected:

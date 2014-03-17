@@ -161,10 +161,10 @@ void GlyphCache::AddFontFile( const OString& rNormalizedName, int nFaceNum,
 }
 
 
-void GlyphCache::AnnounceFonts( ImplDevFontList* pList ) const
+void GlyphCache::AnnounceFonts( PhysicalFontCollection* pFontCollection ) const
 {
     if( mpFtManager )
-        mpFtManager->AnnounceFonts( pList );
+        mpFtManager->AnnounceFonts( pFontCollection );
 }
 
 void GlyphCache::ClearFontCache()

@@ -64,7 +64,7 @@ public:
                                   Ucs2UIntMap& rUnicodeEnc );
 
     static ImplDevFontAttributes Info2DevFontAttributes( const psp::FastPrintFontInfo& );
-    static void AnnounceFonts( ImplDevFontList*, const psp::FastPrintFontInfo& );
+    static void AnnounceFonts( PhysicalFontCollection*, const psp::FastPrintFontInfo& );
 
     // overload all pure virtual methods
     virtual void            GetResolution( sal_Int32& rDPIX, sal_Int32& rDPIY );
@@ -87,10 +87,10 @@ public:
     virtual void            GetFontMetric( ImplFontMetricData*, int nFallbackLevel );
     virtual const ImplFontCharMap* GetImplFontCharMap() const;
     virtual bool GetImplFontCapabilities(vcl::FontCapabilities &rFontCapabilities) const;
-    virtual void            GetDevFontList( ImplDevFontList* );
+    virtual void            GetDevFontList( PhysicalFontCollection* );
     // graphics must drop any cached font info
     virtual void ClearDevFontCache();
-    virtual bool            AddTempDevFont( ImplDevFontList*, const OUString& rFileURL, const OUString& rFontName );
+    virtual bool            AddTempDevFont( PhysicalFontCollection*, const OUString& rFileURL, const OUString& rFontName );
 
     virtual bool            CreateFontSubset( const OUString& rToFile,
                                               const PhysicalFontFace*,

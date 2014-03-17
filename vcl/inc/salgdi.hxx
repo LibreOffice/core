@@ -32,7 +32,7 @@
 #include <map>
 
 
-class ImplDevFontList;
+class PhysicalFontCollection;
 class SalBitmap;
 class FontSelectPattern;
 class ImplFontMetricData;
@@ -241,12 +241,12 @@ public:
     virtual bool            GetImplFontCapabilities(vcl::FontCapabilities &rFontCapabilities) const = 0;
 
     // graphics must fill supplied font list
-    virtual void            GetDevFontList( ImplDevFontList* ) = 0;
+    virtual void            GetDevFontList( PhysicalFontCollection* ) = 0;
 
     // graphics must drop any cached font info
     virtual void            ClearDevFontCache() = 0;
 
-    virtual bool            AddTempDevFont( ImplDevFontList*, const OUString& rFileURL, const OUString& rFontName ) = 0;
+    virtual bool            AddTempDevFont( PhysicalFontCollection*, const OUString& rFileURL, const OUString& rFontName ) = 0;
 
     // CreateFontSubset: a method to get a subset of glyhps of a font
     // inside a new valid font file

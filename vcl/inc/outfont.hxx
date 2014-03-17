@@ -205,12 +205,12 @@ public: // TODO: change to private
 };
 
 
-// - ImplDevFontList -
+// - PhysicalFontCollection -
 
 // TODO: merge with ImplFontCache
 // TODO: rename to LogicalFontManager
 
-class VCL_PLUGIN_PUBLIC ImplDevFontList
+class VCL_PLUGIN_PUBLIC PhysicalFontCollection
 {
 private:
     friend class WinGlyphFallbackSubstititution;
@@ -224,8 +224,8 @@ private:
     ImplGlyphFallbackFontSubstitution* mpFallbackHook;  // device specific glyh fallback substitution
 
 public:
-    explicit                ImplDevFontList();
-    virtual                 ~ImplDevFontList();
+    explicit                PhysicalFontCollection();
+    virtual                 ~PhysicalFontCollection();
 
     // fill the list with device fonts
     void                    Add( PhysicalFontFace* );
@@ -246,7 +246,7 @@ public:
     void                    SetFallbackHook( ImplGlyphFallbackFontSubstitution* );
 
     // misc utilities
-    ImplDevFontList*        Clone( bool bScalable, bool bEmbeddable ) const;
+    PhysicalFontCollection* Clone( bool bScalable, bool bEmbeddable ) const;
     ImplGetDevFontList*     GetDevFontList() const;
     ImplGetDevSizeList*     GetDevSizeList( const OUString& rFontName ) const;
 

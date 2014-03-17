@@ -197,16 +197,16 @@ void OutputDevice::ImplClearFontData( const bool bNewFontLists )
             // we need a graphics
             if ( ImplGetGraphics() )
             {
-                if( mpFontList && mpFontList != pSVData->maGDIData.mpScreenFontList )
-                    mpFontList->Clear();
+                if( mpFontCollection && mpFontCollection != pSVData->maGDIData.mpScreenFontList )
+                    mpFontCollection->Clear();
 
                 if( mpPDFWriter )
                 {
-                    if( mpFontList && mpFontList != pSVData->maGDIData.mpScreenFontList )
-                        delete mpFontList;
+                    if( mpFontCollection && mpFontCollection != pSVData->maGDIData.mpScreenFontList )
+                        delete mpFontCollection;
                     if( mpFontCache && mpFontCache != pSVData->maGDIData.mpScreenFontCache )
                         delete mpFontCache;
-                    mpFontList = 0;
+                    mpFontCollection = 0;
                     mpFontCache = 0;
                 }
             }
@@ -238,12 +238,12 @@ void OutputDevice::ImplRefreshFontData( const bool bNewFontLists )
             {
                 if( mpPDFWriter )
                 {
-                    mpFontList = pSVData->maGDIData.mpScreenFontList->Clone( true, true );
+                    mpFontCollection = pSVData->maGDIData.mpScreenFontList->Clone( true, true );
                     mpFontCache = new ImplFontCache();
                 }
                 else
                 {
-                    mpGraphics->GetDevFontList( mpFontList );
+                    mpGraphics->GetDevFontList( mpFontCollection );
                 }
             }
         }
@@ -286,7 +286,7 @@ void OutputDevice::ImplUpdateAllFontData( bool bNewFontLists )
                 // Stupid typecast here and somewhere ((OutputDevice*)&aVDev)->, because bug in .NET2002 compiler
                 OutputDevice *pDevice = (OutputDevice*)pFrame;
                 pDevice->mpGraphics->ClearDevFontCache();
-                pDevice->mpGraphics->GetDevFontList(pFrame->mpWindowImpl->mpFrameData->mpFontList);
+                pDevice->mpGraphics->GetDevFontList(pFrame->mpWindowImpl->mpFrameData->mpFontCollection);
             }
         }
     }
@@ -531,7 +531,7 @@ Font OutputDevice::GetDefaultFont( sal_uInt16 nType, LanguageType eLang,
             {
                 aSearchName = GetNextFontToken( aSearch, nIndex );
                 GetEnglishSearchFontName( aSearchName );
-                PhysicalFontFamily* pFontFamily = pOutDev->mpFontList->ImplFindBySearchName( aSearchName );
+                PhysicalFontFamily* pFontFamily = pOutDev->mpFontCollection->ImplFindBySearchName( aSearchName );
                 if( pFontFamily )
                 {
                     AddTokenFontName( aName, pFontFamily->GetFamilyName() );
@@ -579,7 +579,7 @@ Font OutputDevice::GetDefaultFont( sal_uInt16 nType, LanguageType eLang,
 
                     // get the name of the first available font
                     float fExactHeight = static_cast<float>(aSize.Height());
-                    ImplFontEntry* pEntry = pOutDev->mpFontCache->GetFontEntry( pOutDev->mpFontList, aFont, aSize, fExactHeight );
+                    ImplFontEntry* pEntry = pOutDev->mpFontCache->GetFontEntry( pOutDev->mpFontCollection, aFont, aSize, fExactHeight );
                     if (pEntry)
                     {
                         if( pEntry->maFontSelData.mpFontData )
@@ -1157,8 +1157,8 @@ void PhysicalFontFamily::GetFontHeights( std::set<int>& rHeights ) const
         rHeights.insert( pFace->GetHeight() );
 }
 
-void PhysicalFontFamily::UpdateCloneFontList( ImplDevFontList& rDevFontList,
-    bool bScalable, bool bEmbeddable ) const
+void PhysicalFontFamily::UpdateCloneFontList( PhysicalFontCollection& rFontCollection,
+                                              bool bScalable, bool bEmbeddable ) const
 {
     for( PhysicalFontFace* pFace = mpFirst; pFace; pFace = pFace->GetNextFace() )
     {
@@ -1168,11 +1168,11 @@ void PhysicalFontFamily::UpdateCloneFontList( ImplDevFontList& rDevFontList,
             continue;
 
         PhysicalFontFace* pClonedFace = pFace->Clone();
-        rDevFontList.Add( pClonedFace );
+        rFontCollection.Add( pClonedFace );
     }
 }
 
-ImplDevFontList::ImplDevFontList()
+PhysicalFontCollection::PhysicalFontCollection()
 :   mbMatchData( false )
 ,   mbMapNames( false )
 ,   mpPreMatchHook( NULL )
@@ -1181,22 +1181,22 @@ ImplDevFontList::ImplDevFontList()
 ,   mnFallbackCount( -1 )
 {}
 
-ImplDevFontList::~ImplDevFontList()
+PhysicalFontCollection::~PhysicalFontCollection()
 {
     Clear();
 }
 
-void ImplDevFontList::SetPreMatchHook( ImplPreMatchFontSubstitution* pHook )
+void PhysicalFontCollection::SetPreMatchHook( ImplPreMatchFontSubstitution* pHook )
 {
     mpPreMatchHook = pHook;
 }
 
-void ImplDevFontList::SetFallbackHook( ImplGlyphFallbackFontSubstitution* pHook )
+void PhysicalFontCollection::SetFallbackHook( ImplGlyphFallbackFontSubstitution* pHook )
 {
     mpFallbackHook = pHook;
 }
 
-void ImplDevFontList::Clear()
+void PhysicalFontCollection::Clear()
 {
     // remove fallback lists
     delete[] mpFallbackList;
@@ -1217,7 +1217,7 @@ void ImplDevFontList::Clear()
     mbMatchData = false;
 }
 
-void ImplDevFontList::InitGenericGlyphFallback( void ) const
+void PhysicalFontCollection::InitGenericGlyphFallback( void ) const
 {
     // normalized family names of fonts suited for glyph fallback
     // if a font is available related fonts can be ignored
@@ -1307,7 +1307,7 @@ void ImplDevFontList::InitGenericGlyphFallback( void ) const
     mpFallbackList  = pFallbackList;
 }
 
-PhysicalFontFamily* ImplDevFontList::GetGlyphFallbackFont( FontSelectPattern& rFontSelData,
+PhysicalFontFamily* PhysicalFontCollection::GetGlyphFallbackFont( FontSelectPattern& rFontSelData,
     OUString& rMissingCodes, int nFallbackLevel ) const
 {
     PhysicalFontFamily* pFallbackData = NULL;
@@ -1403,7 +1403,7 @@ PhysicalFontFamily* ImplDevFontList::GetGlyphFallbackFont( FontSelectPattern& rF
     return pFallbackData;
 }
 
-void ImplDevFontList::Add( PhysicalFontFace* pNewData )
+void PhysicalFontCollection::Add( PhysicalFontFace* pNewData )
 {
     OUString aSearchName = pNewData->GetFamilyName();
     GetEnglishSearchFontName( aSearchName );
@@ -1426,12 +1426,12 @@ void ImplDevFontList::Add( PhysicalFontFace* pNewData )
 }
 
 // find the font from the normalized font family name
-PhysicalFontFamily* ImplDevFontList::ImplFindBySearchName( const OUString& rSearchName ) const
+PhysicalFontFamily* PhysicalFontCollection::ImplFindBySearchName( const OUString& rSearchName ) const
 {
 #ifdef DEBUG
     OUString aTempName = rSearchName;
     GetEnglishSearchFontName( aTempName );
-    DBG_ASSERT( aTempName == rSearchName, "ImplDevFontList::ImplFindBySearchName() called with non-normalized name" );
+    DBG_ASSERT( aTempName == rSearchName, "PhysicalFontCollection::ImplFindBySearchName() called with non-normalized name" );
 #endif
 
     PhysicalFontFamilies::const_iterator it = maPhysicalFontFamilies.find( rSearchName );
@@ -1442,7 +1442,7 @@ PhysicalFontFamily* ImplDevFontList::ImplFindBySearchName( const OUString& rSear
     return pFoundData;
 }
 
-PhysicalFontFamily* ImplDevFontList::ImplFindByAliasName(const OUString& rSearchName,
+PhysicalFontFamily* PhysicalFontCollection::ImplFindByAliasName(const OUString& rSearchName,
     const OUString& rShortName) const
 {
     // short circuit for impossible font name alias
@@ -1478,7 +1478,7 @@ PhysicalFontFamily* ImplDevFontList::ImplFindByAliasName(const OUString& rSearch
      return NULL;
 }
 
-PhysicalFontFamily* ImplDevFontList::FindFontFamily( const OUString& rFontName ) const
+PhysicalFontFamily* PhysicalFontCollection::FindFontFamily( const OUString& rFontName ) const
 {
     // normalize the font family name and
     OUString aName = rFontName;
@@ -1487,7 +1487,7 @@ PhysicalFontFamily* ImplDevFontList::FindFontFamily( const OUString& rFontName )
     return pFound;
 }
 
-PhysicalFontFamily* ImplDevFontList::ImplFindByTokenNames(const OUString& rTokenStr) const
+PhysicalFontFamily* PhysicalFontCollection::ImplFindByTokenNames(const OUString& rTokenStr) const
 {
     PhysicalFontFamily* pFoundData = NULL;
 
@@ -1506,7 +1506,7 @@ PhysicalFontFamily* ImplDevFontList::ImplFindByTokenNames(const OUString& rToken
     return pFoundData;
 }
 
-PhysicalFontFamily* ImplDevFontList::ImplFindBySubstFontAttr( const utl::FontNameAttr& rFontAttr ) const
+PhysicalFontFamily* PhysicalFontCollection::ImplFindBySubstFontAttr( const utl::FontNameAttr& rFontAttr ) const
 {
     PhysicalFontFamily* pFoundData = NULL;
 
@@ -1539,7 +1539,7 @@ PhysicalFontFamily* ImplDevFontList::ImplFindBySubstFontAttr( const utl::FontNam
     return NULL;
 }
 
-void ImplDevFontList::InitMatchData() const
+void PhysicalFontCollection::InitMatchData() const
 {
     // short circuit if already done
     if( mbMatchData )
@@ -1559,7 +1559,7 @@ void ImplDevFontList::InitMatchData() const
     }
 }
 
-PhysicalFontFamily* ImplDevFontList::ImplFindByAttributes( sal_uLong nSearchType,
+PhysicalFontFamily* PhysicalFontCollection::ImplFindByAttributes( sal_uLong nSearchType,
     FontWeight eSearchWeight, FontWidth eSearchWidth,
     FontItalic eSearchItalic, const OUString& rSearchFamilyName ) const
 {
@@ -1916,7 +1916,7 @@ PhysicalFontFamily* ImplDevFontList::ImplFindByAttributes( sal_uLong nSearchType
     return pFoundData;
 }
 
-PhysicalFontFamily* ImplDevFontList::FindDefaultFont() const
+PhysicalFontFamily* PhysicalFontCollection::FindDefaultFont() const
 {
     // try to find one of the default fonts of the
     // UNICODE, SANSSERIF, SERIF or FIXED default font lists
@@ -1967,27 +1967,27 @@ PhysicalFontFamily* ImplDevFontList::FindDefaultFont() const
     return pFoundData;
 }
 
-ImplDevFontList* ImplDevFontList::Clone( bool bScalable, bool bEmbeddable ) const
+PhysicalFontCollection* PhysicalFontCollection::Clone( bool bScalable, bool bEmbeddable ) const
 {
-    ImplDevFontList* pClonedList = new ImplDevFontList;
-    pClonedList->mbMapNames     = mbMapNames;
-    pClonedList->mpPreMatchHook = mpPreMatchHook;
-    pClonedList->mpFallbackHook = mpFallbackHook;
+    PhysicalFontCollection* pClonedCollection = new PhysicalFontCollection;
+    pClonedCollection->mbMapNames     = mbMapNames;
+    pClonedCollection->mpPreMatchHook = mpPreMatchHook;
+    pClonedCollection->mpFallbackHook = mpFallbackHook;
 
     // TODO: clone the config-font attributes too?
-    pClonedList->mbMatchData    = false;
+    pClonedCollection->mbMatchData    = false;
 
     PhysicalFontFamilies::const_iterator it = maPhysicalFontFamilies.begin();
     for(; it != maPhysicalFontFamilies.end(); ++it )
     {
         const PhysicalFontFamily* pFontFace = (*it).second;
-        pFontFace->UpdateCloneFontList( *pClonedList, bScalable, bEmbeddable );
+        pFontFace->UpdateCloneFontList( *pClonedCollection, bScalable, bEmbeddable );
     }
 
-    return pClonedList;
+    return pClonedCollection;
 }
 
-ImplGetDevFontList* ImplDevFontList::GetDevFontList() const
+ImplGetDevFontList* PhysicalFontCollection::GetDevFontList() const
 {
     ImplGetDevFontList* pGetDevFontList = new ImplGetDevFontList;
 
@@ -2001,7 +2001,7 @@ ImplGetDevFontList* ImplDevFontList::GetDevFontList() const
     return pGetDevFontList;
 }
 
-ImplGetDevSizeList* ImplDevFontList::GetDevSizeList( const OUString& rFontName ) const
+ImplGetDevSizeList* PhysicalFontCollection::GetDevSizeList( const OUString& rFontName ) const
 {
     ImplGetDevSizeList* pGetDevSizeList = new ImplGetDevSizeList( rFontName );
 
@@ -2232,7 +2232,7 @@ ImplFontCache::~ImplFontCache()
     }
 }
 
-ImplFontEntry* ImplFontCache::GetFontEntry( ImplDevFontList* pFontList,
+ImplFontEntry* ImplFontCache::GetFontEntry( PhysicalFontCollection* pFontList,
     const Font& rFont, const Size& rSize, float fExactHeight )
 {
     OUString aSearchName = rFont.GetName();
@@ -2242,7 +2242,7 @@ ImplFontEntry* ImplFontCache::GetFontEntry( ImplDevFontList* pFontList,
     return GetFontEntry( pFontList, aFontSelData );
 }
 
-ImplFontEntry* ImplFontCache::GetFontEntry( ImplDevFontList* pFontList,
+ImplFontEntry* ImplFontCache::GetFontEntry( PhysicalFontCollection* pFontList,
     FontSelectPattern& aFontSelData )
 {
     // check if a directly matching logical font instance is already cached,
@@ -2378,7 +2378,7 @@ namespace
     }
 }
 
-PhysicalFontFamily* ImplDevFontList::ImplFindByFont( FontSelectPattern& rFSD ) const
+PhysicalFontFamily* PhysicalFontCollection::ImplFindByFont( FontSelectPattern& rFSD ) const
 {
     // give up if no fonts are available
     if( !Count() )
@@ -2688,7 +2688,7 @@ PhysicalFontFamily* ImplDevFontList::ImplFindByFont( FontSelectPattern& rFSD ) c
     return pFoundData;
 }
 
-ImplFontEntry* ImplFontCache::GetGlyphFallbackFont( ImplDevFontList* pFontList,
+ImplFontEntry* ImplFontCache::GetGlyphFallbackFont( PhysicalFontCollection* pFontCollection,
     FontSelectPattern& rFontSelData, int nFallbackLevel, OUString& rMissingCodes )
 {
     // get a candidate font for glyph fallback
@@ -2707,9 +2707,9 @@ ImplFontEntry* ImplFontCache::GetGlyphFallbackFont( ImplDevFontList* pFontList,
         //sufficient heavy-weight code that's likely to undo the value of the
         //optimization
         if (nFallbackLevel == 1)
-            pFallbackData = pFontList->FindFontFamily(OUString("EUDC"));
+            pFallbackData = pFontCollection->FindFontFamily(OUString("EUDC"));
         if (!pFallbackData)
-            pFallbackData = pFontList->GetGlyphFallbackFont(rFontSelData, rMissingCodes, nFallbackLevel-1);
+            pFallbackData = pFontCollection->GetGlyphFallbackFont(rFontSelData, rMissingCodes, nFallbackLevel-1);
         // escape when there are no font candidates
         if( !pFallbackData  )
             return NULL;
@@ -2719,7 +2719,7 @@ ImplFontEntry* ImplFontCache::GetGlyphFallbackFont( ImplDevFontList* pFontList,
         rFontSelData.maSearchName = "";
     }
 
-    ImplFontEntry* pFallbackFont = GetFontEntry( pFontList, rFontSelData );
+    ImplFontEntry* pFallbackFont = GetFontEntry( pFontCollection, rFontSelData );
     return pFallbackFont;
 }
 
@@ -2853,15 +2853,15 @@ bool OutputDevice::ImplIsUnderlineAbove( const Font& rFont )
 
 void OutputDevice::ImplInitFontList() const
 {
-    if( ! mpFontList->Count() )
+    if( ! mpFontCollection->Count() )
     {
         if( mpGraphics || ImplGetGraphics() )
         {
             SAL_INFO( "vcl.gdi", "OutputDevice::ImplInitFontList()" );
-            mpGraphics->GetDevFontList( mpFontList );
+            mpGraphics->GetDevFontList( mpFontCollection );
         }
     }
-    if( meOutDevType == OUTDEV_WINDOW && ! mpFontList->Count() )
+    if( meOutDevType == OUTDEV_WINDOW && ! mpFontCollection->Count() )
     {
         OUString aError( "Application error: no fonts and no vcl resource found on your system" );
         ResMgr* pMgr = ImplGetResMgr();
@@ -2919,7 +2919,7 @@ bool OutputDevice::ImplNewFont() const
     if( mpPDFWriter )
     {
         const ImplSVData* pSVData = ImplGetSVData();
-        if( mpFontList == pSVData->maGDIData.mpScreenFontList
+        if( mpFontCollection == pSVData->maGDIData.mpScreenFontList
         ||  mpFontCache == pSVData->maGDIData.mpScreenFontCache )
             const_cast<OutputDevice&>(*this).ImplUpdateFontData( true );
     }
@@ -2953,7 +2953,7 @@ bool OutputDevice::ImplNewFont() const
 
     // get font entry
     ImplFontEntry* pOldEntry = mpFontEntry;
-    mpFontEntry = mpFontCache->GetFontEntry( mpFontList, maFont, aSize, fExactHeight );
+    mpFontEntry = mpFontCache->GetFontEntry( mpFontCollection, maFont, aSize, fExactHeight );
     if( pOldEntry )
         mpFontCache->Release( pOldEntry );
 
@@ -5954,7 +5954,7 @@ SalLayout* OutputDevice::ImplGlyphFallbackLayout( SalLayout* pSalLayout, ImplLay
         // if the system-specific glyph fallback is active
         aFontSelData.mpFontEntry = mpFontEntry; // reset the fontentry to base-level
 #endif
-        ImplFontEntry* pFallbackFont = mpFontCache->GetGlyphFallbackFont( mpFontList,
+        ImplFontEntry* pFallbackFont = mpFontCache->GetGlyphFallbackFont( mpFontCollection,
             aFontSelData, nFallbackLevel, aMissingCodes );
         if( !pFallbackFont )
             break;
@@ -6916,7 +6916,7 @@ int OutputDevice::GetDevFontCount() const
 {
 
     if( !mpGetDevFontList )
-        mpGetDevFontList = mpFontList->GetDevFontList();
+        mpGetDevFontList = mpFontCollection->GetDevFontList();
     return mpGetDevFontList->Count();
 }
 
@@ -6956,7 +6956,7 @@ bool OutputDevice::AddTempDevFont( const OUString& rFileURL, const OUString& rFo
     if( !mpGraphics && !ImplGetGraphics() )
         return false;
 
-    bool bRC = mpGraphics->AddTempDevFont( mpFontList, rFileURL, rFontName );
+    bool bRC = mpGraphics->AddTempDevFont( mpFontCollection, rFileURL, rFontName );
     if( !bRC )
         return false;
 
@@ -6973,7 +6973,7 @@ int OutputDevice::GetDevFontSizeCount( const Font& rFont ) const
     delete mpGetDevSizeList;
 
     ImplInitFontList();
-    mpGetDevSizeList = mpFontList->GetDevSizeList( rFont.GetName() );
+    mpGetDevSizeList = mpFontCollection->GetDevSizeList( rFont.GetName() );
     return mpGetDevSizeList->Count();
 }
 
@@ -7011,7 +7011,7 @@ Size OutputDevice::GetDevFontSize( const Font& rFont, int nSizeIndex ) const
 bool OutputDevice::IsFontAvailable( const OUString& rFontName ) const
 {
 
-    PhysicalFontFamily* pFound = mpFontList->FindFontFamily( rFontName );
+    PhysicalFontFamily* pFound = mpFontCollection->FindFontFamily( rFontName );
     return (pFound != NULL);
 }
 

@@ -231,7 +231,7 @@ OUString EmbeddedFontsHelper::fontFileUrl( const OUString& familyName, FontFamil
     }
     bool ok = false;
     SalGraphics* graphics = Application::GetDefaultDevice()->ImplGetGraphics();
-    ImplDevFontList fonts;
+    PhysicalFontCollection fonts;
     graphics->GetDevFontList( &fonts );
     boost::scoped_ptr< ImplGetDevFontList > fontInfo( fonts.GetDevFontList());
     PhysicalFontFace* selected = NULL;
