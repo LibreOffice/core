@@ -95,8 +95,6 @@ LockHelper::~LockHelper()
     @attention  If a shareable osl mutex exist, he must be used as twice!
                 It's necessary for some cppu-helper classes ...
 
-    @seealso    method acquireWriteAccess()
-
     @param      -
     @return     -
 
@@ -117,93 +115,12 @@ void LockHelper::acquire()
     @attention  If a shareable osl mutex exist, he must be used as twice!
                 It's necessary for some cppu-helper classes ...
 
-    @seealso    method releaseWriteAccess()
-
     @param      -
     @return     -
 
     @onerror    -
 *//*-*************************************************************************************************************/
 void LockHelper::release()
-{
-    m_pSolarMutex->release();
-}
-
-/*-************************************************************************************************************
-    @short      set lock for reading
-    @descr      A guard should call this method to acquire read access on your member.
-                Writing isn't allowed then - but nobody could check it for you!
-
-    @attention  If a shareable osl mutex exist, he must be used as twice!
-                It's necessary for some cppu-helper classes ...
-
-    @seealso    method releaseReadAccess()
-
-    @param      -
-    @return     -
-
-    @onerror    -
-*//*-*************************************************************************************************************/
-void LockHelper::acquireReadAccess()
-{
-    m_pSolarMutex->acquire();
-}
-
-/*-************************************************************************************************************
-    @short      reset lock for reading
-    @descr      A guard should call this method to release read access on your member.
-
-    @attention  If a shareable osl mutex exist, he must be used as twice!
-                It's necessary for some cppu-helper classes ...
-
-    @seealso    method acquireReadAccess()
-
-    @param      -
-    @return     -
-
-    @onerror    -
-*//*-*************************************************************************************************************/
-void LockHelper::releaseReadAccess()
-{
-    m_pSolarMutex->release();
-}
-
-/*-************************************************************************************************************
-    @short      set lock for writing
-    @descr      A guard should call this method to acquire write access on your member.
-                Reading is allowed too - of course.
-                After successfully calling of this method you are the only writer.
-
-    @attention  If a shareable osl mutex exist, he must be used as twice!
-                It's necessary for some cppu-helper classes ...
-
-    @seealso    method releaseWriteAccess()
-
-    @param      -
-    @return     -
-
-    @onerror    -
-*//*-*************************************************************************************************************/
-void LockHelper::acquireWriteAccess()
-{
-    m_pSolarMutex->acquire();
-}
-
-/*-************************************************************************************************************
-    @short      reset lock for writing
-    @descr      A guard should call this method to release write access on your member.
-
-    @attention  If a shareable osl mutex exist, he must be used as twice!
-                It's necessary for some cppu-helper classes ...
-
-    @seealso    method acquireWriteAccess()
-
-    @param      -
-    @return     -
-
-    @onerror    -
-*//*-*************************************************************************************************************/
-void LockHelper::releaseWriteAccess()
 {
     m_pSolarMutex->release();
 }

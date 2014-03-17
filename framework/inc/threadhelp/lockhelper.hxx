@@ -81,11 +81,6 @@ class FWI_DLLPUBLIC LockHelper : public  IMutex
         virtual void acquire();
         virtual void release();
 
-        void acquireReadAccess   ();
-        void releaseReadAccess   ();
-        void acquireWriteAccess  ();
-        void releaseWriteAccess  ();
-
         //  something else
 
         static LockHelper&  getGlobalLock();

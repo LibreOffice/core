@@ -107,7 +107,7 @@ class ReadGuard : private boost::noncopyable
         {
             if( m_bLocked == sal_False )
             {
-                m_pLock->acquireReadAccess();
+                m_pLock->acquire();
                 m_bLocked = sal_True;
             }
         }
@@ -128,7 +128,7 @@ class ReadGuard : private boost::noncopyable
         {
             if( m_bLocked == sal_True )
             {
-                m_pLock->releaseReadAccess();
+                m_pLock->release();
                 m_bLocked = sal_False;
             }
         }

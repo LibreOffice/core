@@ -107,15 +107,15 @@ class WriteGuard : private boost::noncopyable
                 case E_NOLOCK       :   {
                                             // Acquire write access and set return state.
                                             // Mode is set later if it was successful!
-                                            m_pLock->acquireWriteAccess();
+                                            m_pLock->acquire();
                                             m_eMode = E_WRITELOCK;
                                         }
                                         break;
                 case E_READLOCK     :   {
                                             // User has downgrade to read access before!
                                             // We must release it before we can set a new write access!
-                                            m_pLock->releaseReadAccess();
-                                            m_pLock->acquireWriteAccess();
+                                            m_pLock->release();
+                                            m_pLock->acquire();
                                             m_eMode = E_WRITELOCK;
                                         }
                                         break;
@@ -142,12 +142,12 @@ class WriteGuard : private boost::noncopyable
                 case E_READLOCK     :   {
                                             // User has downgraded to a read lock before!
                                             // => There isn't really a write lock ...
-                                            m_pLock->releaseReadAccess();
+                                            m_pLock->release();
                                             m_eMode = E_NOLOCK;
                                         }
                                         break;
                 case E_WRITELOCK    :   {
-                                            m_pLock->releaseWriteAccess();
+                                            m_pLock->release();
                                             m_eMode = E_NOLOCK;
                                         }
                                         break;
