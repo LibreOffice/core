@@ -130,10 +130,11 @@ static sal_Int32 lcl_SeqGetEntryPos(
     return i < nLen ? i : -1;
 }
 
-static void lcl_OpenURL( OUString sURL )
+static void lcl_OpenURL( const OUString& _sURL )
 {
-    if ( !sURL.isEmpty() )
+    if ( !_sURL.isEmpty() )
     {
+        OUString sURL = _sURL;
         localizeWebserviceURI(sURL);
         try
         {
@@ -200,7 +201,7 @@ class ModuleUserData_Impl
     OUString  sImplName;
 
 public:
-    ModuleUserData_Impl( OUString sImpName, sal_Bool bIsParent, sal_Bool bChecked, sal_uInt8 nSetType, sal_uInt8 nSetIndex ) :
+    ModuleUserData_Impl( const OUString& sImpName, sal_Bool bIsParent, sal_Bool bChecked, sal_uInt8 nSetType, sal_uInt8 nSetIndex ) :
         bParent(bIsParent),
         bIsChecked(bChecked),
         nType(nSetType),

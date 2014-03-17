@@ -56,7 +56,7 @@ struct TargetData
     OUString aUStrLinkname;
     bool     bIsTarget;
 
-    TargetData (OUString aUStrLName, bool bTarget)
+    TargetData (const OUString& aUStrLName, bool bTarget)
         : bIsTarget(bTarget)
     {
         if (bIsTarget)
@@ -269,7 +269,7 @@ void SvxHlinkDlgMarkWnd::RestoreLastSelection()
 |*
 |************************************************************************/
 
-void SvxHlinkDlgMarkWnd::RefreshTree (OUString aStrURL)
+void SvxHlinkDlgMarkWnd::RefreshTree (const OUString& aStrURL)
 {
     OUString aUStrURL;
 
@@ -307,7 +307,7 @@ void SvxHlinkDlgMarkWnd::RefreshTree (OUString aStrURL)
 |*
 |************************************************************************/
 
-sal_Bool SvxHlinkDlgMarkWnd::RefreshFromDoc(OUString aURL)
+sal_Bool SvxHlinkDlgMarkWnd::RefreshFromDoc(const OUString& aURL)
 {
     mnError = LERR_NOERROR;
 
@@ -497,7 +497,7 @@ void SvxHlinkDlgMarkWnd::ClearTree()
 |*
 |************************************************************************/
 
-SvTreeListEntry* SvxHlinkDlgMarkWnd::FindEntry (OUString aStrName)
+SvTreeListEntry* SvxHlinkDlgMarkWnd::FindEntry (const OUString& aStrName)
 {
     sal_Bool bFound=sal_False;
     SvTreeListEntry* pEntry = maLbTree.First();
@@ -520,7 +520,7 @@ SvTreeListEntry* SvxHlinkDlgMarkWnd::FindEntry (OUString aStrName)
 |*
 |************************************************************************/
 
-bool SvxHlinkDlgMarkWnd::SelectEntry(OUString aStrMark)
+bool SvxHlinkDlgMarkWnd::SelectEntry(const OUString& aStrMark)
 {
     SvTreeListEntry* pEntry = FindEntry(aStrMark);
     if (!pEntry)

@@ -345,7 +345,7 @@ sal_Bool SfxSaveTabPage::FillItemSet( SfxItemSet& rSet )
 
 
 
-sal_Bool isODFFormat( OUString sFilter )
+sal_Bool isODFFormat( const OUString& sFilter )
 {
     static const char* aODFFormats[] =
     {

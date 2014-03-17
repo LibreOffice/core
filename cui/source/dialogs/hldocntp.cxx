@@ -56,7 +56,7 @@ struct DocumentTypeData
 {
     OUString aStrURL;
     OUString aStrExt;
-    DocumentTypeData (OUString aURL, OUString aExt) : aStrURL(aURL), aStrExt(aExt)
+    DocumentTypeData (const OUString& aURL, const OUString& aExt) : aStrURL(aURL), aStrExt(aExt)
     {}
 };
 

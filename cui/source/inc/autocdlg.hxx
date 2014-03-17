@@ -273,8 +273,8 @@ public:
     virtual void        StateChanged(StateChangedType nStateChange);
 
     void    SetLanguage(LanguageType eSet);
-    void    DeleteEntry(OUString sShort, OUString sLong);
-    void    NewEntry(OUString sShort, OUString sLong, bool bKeepSourceFormatting);
+    void    DeleteEntry(const OUString& sShort, const OUString& sLong);
+    void    NewEntry(const OUString& sShort, const OUString& sLong, bool bKeepSourceFormatting);
 };
 
 // class OfaAutocorrExceptPage ---------------------------------------------
