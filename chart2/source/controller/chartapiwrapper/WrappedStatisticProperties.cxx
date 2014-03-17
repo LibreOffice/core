@@ -205,7 +205,7 @@ class WrappedConstantErrorLowProperty : public WrappedStatisticProperty< double 
 {
 public:
     virtual double getValueFromSeries( const Reference< beans::XPropertySet >& xSeriesPropertySet ) const;
-    virtual void setValueToSeries( const Reference< beans::XPropertySet >& xSeriesPropertySet, double aNewValue ) const;
+    virtual void setValueToSeries( const Reference< beans::XPropertySet >& xSeriesPropertySet, const double& aNewValue ) const;
 
     explicit WrappedConstantErrorLowProperty( ::boost::shared_ptr< Chart2ModelContact > spChart2ModelContact,
                                               tSeriesOrDiagramPropertyType ePropertyType );
@@ -241,7 +241,7 @@ double WrappedConstantErrorLowProperty::getValueFromSeries( const Reference< bea
     return aRet;
 }
 
-void WrappedConstantErrorLowProperty::setValueToSeries( const Reference< beans::XPropertySet >& xSeriesPropertySet, double aNewValue ) const
+void WrappedConstantErrorLowProperty::setValueToSeries( const Reference< beans::XPropertySet >& xSeriesPropertySet, const double& aNewValue ) const
 {
     uno::Reference< beans::XPropertySet > xErrorBarProperties( getOrCreateErrorBarProperties(xSeriesPropertySet) );
     if( xErrorBarProperties.is() )
@@ -259,7 +259,7 @@ class WrappedConstantErrorHighProperty : public WrappedStatisticProperty< double
 {
 public:
     virtual double getValueFromSeries( const Reference< beans::XPropertySet >& xSeriesPropertySet ) const;
-    virtual void setValueToSeries( const Reference< beans::XPropertySet >& xSeriesPropertySet, double aNewValue ) const;
+    virtual void setValueToSeries( const Reference< beans::XPropertySet >& xSeriesPropertySet, const double& aNewValue ) const;
 
     explicit WrappedConstantErrorHighProperty( ::boost::shared_ptr< Chart2ModelContact > spChart2ModelContact,
                                                tSeriesOrDiagramPropertyType ePropertyType );
@@ -295,7 +295,7 @@ double WrappedConstantErrorHighProperty::getValueFromSeries( const Reference< be
     return aRet;
 }
 
-void WrappedConstantErrorHighProperty::setValueToSeries( const Reference< beans::XPropertySet >& xSeriesPropertySet, double aNewValue ) const
+void WrappedConstantErrorHighProperty::setValueToSeries( const Reference< beans::XPropertySet >& xSeriesPropertySet, const double& aNewValue ) const
 {
     uno::Reference< beans::XPropertySet > xErrorBarProperties( getOrCreateErrorBarProperties(xSeriesPropertySet) );
     if( xErrorBarProperties.is() )
@@ -313,7 +313,7 @@ class WrappedMeanValueProperty : public WrappedStatisticProperty< sal_Bool >
 {
 public:
     virtual sal_Bool getValueFromSeries( const Reference< beans::XPropertySet >& xSeriesPropertySet ) const;
-    virtual void setValueToSeries( const Reference< beans::XPropertySet >& xSeriesPropertySet, sal_Bool aNewValue ) const;
+    virtual void setValueToSeries( const Reference< beans::XPropertySet >& xSeriesPropertySet, const sal_Bool& aNewValue ) const;
 
     explicit WrappedMeanValueProperty( ::boost::shared_ptr< Chart2ModelContact > spChart2ModelContact,
                                        tSeriesOrDiagramPropertyType ePropertyType );
@@ -339,7 +339,7 @@ sal_Bool WrappedMeanValueProperty::getValueFromSeries( const Reference< beans::X
     return bRet;
 }
 
-void WrappedMeanValueProperty::setValueToSeries( const Reference< beans::XPropertySet >& xSeriesPropertySet, sal_Bool aNewValue ) const
+void WrappedMeanValueProperty::setValueToSeries( const Reference< beans::XPropertySet >& xSeriesPropertySet, const sal_Bool& aNewValue ) const
 {
     uno::Reference< chart2::XRegressionCurveContainer > xRegCnt( xSeriesPropertySet, uno::UNO_QUERY );
     if( xRegCnt.is() )
@@ -357,7 +357,7 @@ class WrappedErrorCategoryProperty : public WrappedStatisticProperty< ::com::sun
 {
 public:
     virtual ::com::sun::star::chart::ChartErrorCategory getValueFromSeries( const Reference< beans::XPropertySet >& xSeriesPropertySet ) const;
-    virtual void setValueToSeries( const Reference< beans::XPropertySet >& xSeriesPropertySet, ::com::sun::star::chart::ChartErrorCategory aNewValue ) const;
+    virtual void setValueToSeries( const Reference< beans::XPropertySet >& xSeriesPropertySet, const ::com::sun::star::chart::ChartErrorCategory& aNewValue ) const;
 
     explicit WrappedErrorCategoryProperty( ::boost::shared_ptr< Chart2ModelContact > spChart2ModelContact,
                                            tSeriesOrDiagramPropertyType ePropertyType );
@@ -414,7 +414,7 @@ WrappedErrorCategoryProperty::~WrappedErrorCategoryProperty()
     }
     return aRet;
 }
-void WrappedErrorCategoryProperty::setValueToSeries( const Reference< beans::XPropertySet >& xSeriesPropertySet, ::com::sun::star::chart::ChartErrorCategory aNewValue ) const
+void WrappedErrorCategoryProperty::setValueToSeries( const Reference< beans::XPropertySet >& xSeriesPropertySet, const ::com::sun::star::chart::ChartErrorCategory& aNewValue ) const
 {
     if( !xSeriesPropertySet.is() )
         return;
@@ -455,7 +455,7 @@ class WrappedPercentageErrorProperty : public WrappedStatisticProperty< double >
 {
 public:
     virtual double getValueFromSeries( const Reference< beans::XPropertySet >& xSeriesPropertySet ) const;
-    virtual void setValueToSeries( const Reference< beans::XPropertySet >& xSeriesPropertySet, double aNewValue ) const;
+    virtual void setValueToSeries( const Reference< beans::XPropertySet >& xSeriesPropertySet, const double& aNewValue ) const;
 
     explicit WrappedPercentageErrorProperty( ::boost::shared_ptr< Chart2ModelContact > spChart2ModelContact,
                                              tSeriesOrDiagramPropertyType ePropertyType );
@@ -490,7 +490,7 @@ double WrappedPercentageErrorProperty::getValueFromSeries( const Reference< bean
     }
     return aRet;
 }
-void WrappedPercentageErrorProperty::setValueToSeries( const Reference< beans::XPropertySet >& xSeriesPropertySet, double aNewValue ) const
+void WrappedPercentageErrorProperty::setValueToSeries( const Reference< beans::XPropertySet >& xSeriesPropertySet, const double& aNewValue ) const
 {
     uno::Reference< beans::XPropertySet > xErrorBarProperties( getOrCreateErrorBarProperties(xSeriesPropertySet) );
     if( xErrorBarProperties.is() )
@@ -509,7 +509,7 @@ class WrappedErrorMarginProperty : public WrappedStatisticProperty< double >
 {
 public:
     virtual double getValueFromSeries( const Reference< beans::XPropertySet >& xSeriesPropertySet ) const;
-    virtual void setValueToSeries( const Reference< beans::XPropertySet >& xSeriesPropertySet, double aNewValue ) const;
+    virtual void setValueToSeries( const Reference< beans::XPropertySet >& xSeriesPropertySet, const double& aNewValue ) const;
 
     explicit WrappedErrorMarginProperty( ::boost::shared_ptr< Chart2ModelContact > spChart2ModelContact,
                                          tSeriesOrDiagramPropertyType ePropertyType );
@@ -544,7 +544,7 @@ double WrappedErrorMarginProperty::getValueFromSeries( const Reference< beans::X
     }
     return aRet;
 }
-void WrappedErrorMarginProperty::setValueToSeries( const Reference< beans::XPropertySet >& xSeriesPropertySet, double aNewValue ) const
+void WrappedErrorMarginProperty::setValueToSeries( const Reference< beans::XPropertySet >& xSeriesPropertySet, const double& aNewValue ) const
 {
     uno::Reference< beans::XPropertySet > xErrorBarProperties( getOrCreateErrorBarProperties(xSeriesPropertySet) );
     if( xErrorBarProperties.is() )
@@ -563,7 +563,7 @@ class WrappedErrorIndicatorProperty : public WrappedStatisticProperty< ::com::su
 {
 public:
     virtual ::com::sun::star::chart::ChartErrorIndicatorType getValueFromSeries( const Reference< beans::XPropertySet >& xSeriesPropertySet ) const;
-    virtual void setValueToSeries( const Reference< beans::XPropertySet >& xSeriesPropertySet, ::com::sun::star::chart::ChartErrorIndicatorType aNewValue ) const;
+    virtual void setValueToSeries( const Reference< beans::XPropertySet >& xSeriesPropertySet, const ::com::sun::star::chart::ChartErrorIndicatorType& aNewValue ) const;
 
     explicit WrappedErrorIndicatorProperty( ::boost::shared_ptr< Chart2ModelContact > spChart2ModelContact,
                                             tSeriesOrDiagramPropertyType ePropertyType );
@@ -602,7 +602,7 @@ WrappedErrorIndicatorProperty::~WrappedErrorIndicatorProperty()
     }
     return aRet;
 }
-void WrappedErrorIndicatorProperty::setValueToSeries( const Reference< beans::XPropertySet >& xSeriesPropertySet, ::com::sun::star::chart::ChartErrorIndicatorType aNewValue ) const
+void WrappedErrorIndicatorProperty::setValueToSeries( const Reference< beans::XPropertySet >& xSeriesPropertySet, const ::com::sun::star::chart::ChartErrorIndicatorType& aNewValue ) const
 {
     uno::Reference< beans::XPropertySet > xErrorBarProperties( getOrCreateErrorBarProperties(xSeriesPropertySet) );
     if( xErrorBarProperties.is() )
@@ -636,7 +636,7 @@ class WrappedErrorBarStyleProperty : public WrappedStatisticProperty< sal_Int32 
 {
 public:
     virtual sal_Int32 getValueFromSeries( const Reference< beans::XPropertySet >& xSeriesPropertySet ) const;
-    virtual void setValueToSeries( const Reference< beans::XPropertySet >& xSeriesPropertySet, sal_Int32 nNewValue ) const;
+    virtual void setValueToSeries( const Reference< beans::XPropertySet >& xSeriesPropertySet, const sal_Int32& nNewValue ) const;
 
     explicit WrappedErrorBarStyleProperty( ::boost::shared_ptr< Chart2ModelContact > spChart2ModelContact1,
                                            tSeriesOrDiagramPropertyType ePropertyType );
@@ -665,7 +665,7 @@ sal_Int32 WrappedErrorBarStyleProperty::getValueFromSeries( const Reference< bea
     }
     return nRet;
 }
-void WrappedErrorBarStyleProperty::setValueToSeries( const Reference< beans::XPropertySet >& xSeriesPropertySet, sal_Int32 nNewValue ) const
+void WrappedErrorBarStyleProperty::setValueToSeries( const Reference< beans::XPropertySet >& xSeriesPropertySet, const sal_Int32& nNewValue ) const
 {
     if( !xSeriesPropertySet.is() )
         return;
@@ -682,7 +682,7 @@ class WrappedErrorBarRangePositiveProperty : public WrappedStatisticProperty< OU
 {
 public:
     virtual OUString getValueFromSeries( const Reference< beans::XPropertySet >& xSeriesPropertySet ) const;
-    virtual void setValueToSeries( const Reference< beans::XPropertySet >& xSeriesPropertySet, OUString aNewValue ) const;
+    virtual void setValueToSeries( const Reference< beans::XPropertySet >& xSeriesPropertySet, const OUString& aNewValue ) const;
 
     explicit WrappedErrorBarRangePositiveProperty( ::boost::shared_ptr< Chart2ModelContact > spChart2ModelContact,
                                                    tSeriesOrDiagramPropertyType ePropertyType );
@@ -724,7 +724,7 @@ OUString WrappedErrorBarRangePositiveProperty::getValueFromSeries( const Referen
     return aRet;
 }
 
-void WrappedErrorBarRangePositiveProperty::setValueToSeries( const Reference< beans::XPropertySet >& xSeriesPropertySet, OUString aNewValue ) const
+void WrappedErrorBarRangePositiveProperty::setValueToSeries( const Reference< beans::XPropertySet >& xSeriesPropertySet, const OUString& aNewValue ) const
 {
     uno::Reference< beans::XPropertySet > xErrorBarProperties( getOrCreateErrorBarProperties(xSeriesPropertySet) );
     if( xErrorBarProperties.is() )
@@ -734,11 +734,12 @@ void WrappedErrorBarRangePositiveProperty::setValueToSeries( const Reference< be
         uno::Reference< chart2::data::XDataSource > xDataSource( xErrorBarProperties, uno::UNO_QUERY );
         if( xDataSource.is() && xDataProvider.is())
         {
+            OUString aTmp( aNewValue );
             OUString aXMLRange( aNewValue );
-            lcl_ConvertRangeFromXML( aNewValue, m_spChart2ModelContact );
+            lcl_ConvertRangeFromXML( aTmp, m_spChart2ModelContact );
             StatisticsHelper::setErrorDataSequence(
-                xDataSource, xDataProvider, aNewValue, true /* positive */, true /* y-error */, &aXMLRange );
-            m_aOuterValue <<= aNewValue;
+                xDataSource, xDataProvider, aTmp, true /* positive */, true /* y-error */, &aXMLRange );
+            m_aOuterValue <<= aTmp;
         }
     }
 }
@@ -748,7 +749,7 @@ class WrappedErrorBarRangeNegativeProperty : public WrappedStatisticProperty< OU
 {
 public:
     virtual OUString getValueFromSeries( const Reference< beans::XPropertySet >& xSeriesPropertySet ) const;
-    virtual void setValueToSeries( const Reference< beans::XPropertySet >& xSeriesPropertySet, OUString aNewValue ) const;
+    virtual void setValueToSeries( const Reference< beans::XPropertySet >& xSeriesPropertySet, const OUString& aNewValue ) const;
 
     explicit WrappedErrorBarRangeNegativeProperty( ::boost::shared_ptr< Chart2ModelContact > spChart2ModelContact,
                                                    tSeriesOrDiagramPropertyType ePropertyType );
@@ -790,7 +791,7 @@ OUString WrappedErrorBarRangeNegativeProperty::getValueFromSeries( const Referen
     return aRet;
 }
 
-void WrappedErrorBarRangeNegativeProperty::setValueToSeries( const Reference< beans::XPropertySet >& xSeriesPropertySet, OUString aNewValue ) const
+void WrappedErrorBarRangeNegativeProperty::setValueToSeries( const Reference< beans::XPropertySet >& xSeriesPropertySet, const OUString& aNewValue ) const
 {
     uno::Reference< beans::XPropertySet > xErrorBarProperties( getOrCreateErrorBarProperties(xSeriesPropertySet) );
     if( xErrorBarProperties.is() )
@@ -800,11 +801,12 @@ void WrappedErrorBarRangeNegativeProperty::setValueToSeries( const Reference< be
         uno::Reference< chart2::data::XDataSource > xDataSource( xErrorBarProperties, uno::UNO_QUERY );
         if( xDataSource.is() && xDataProvider.is())
         {
+            OUString aTmp( aNewValue );
             OUString aXMLRange( aNewValue );
-            lcl_ConvertRangeFromXML( aNewValue, m_spChart2ModelContact );
+            lcl_ConvertRangeFromXML( aTmp, m_spChart2ModelContact );
             StatisticsHelper::setErrorDataSequence(
-                xDataSource, xDataProvider, aNewValue, false /* positive */, true /* y-error */, &aXMLRange );
-            m_aOuterValue <<= aNewValue;
+                xDataSource, xDataProvider, aTmp, false /* positive */, true /* y-error */, &aXMLRange );
+            m_aOuterValue <<= aTmp;
         }
     }
 }
@@ -814,7 +816,7 @@ class WrappedRegressionCurvesProperty : public WrappedStatisticProperty< ::com::
 {
 public:
     virtual ::com::sun::star::chart::ChartRegressionCurveType getValueFromSeries( const Reference< beans::XPropertySet >& xSeriesPropertySet ) const;
-    virtual void setValueToSeries( const Reference< beans::XPropertySet >& xSeriesPropertySet, ::com::sun::star::chart::ChartRegressionCurveType aNewValue ) const;
+    virtual void setValueToSeries( const Reference< beans::XPropertySet >& xSeriesPropertySet, const ::com::sun::star::chart::ChartRegressionCurveType & aNewValue ) const;
 
     explicit WrappedRegressionCurvesProperty( ::boost::shared_ptr< Chart2ModelContact > spChart2ModelContact,
                                               tSeriesOrDiagramPropertyType ePropertyType );
@@ -844,7 +846,7 @@ WrappedRegressionCurvesProperty::~WrappedRegressionCurvesProperty()
     }
     return aRet;
 }
-void WrappedRegressionCurvesProperty::setValueToSeries( const Reference< beans::XPropertySet >& xSeriesPropertySet, ::com::sun::star::chart::ChartRegressionCurveType aNewValue ) const
+void WrappedRegressionCurvesProperty::setValueToSeries( const Reference< beans::XPropertySet >& xSeriesPropertySet, const ::com::sun::star::chart::ChartRegressionCurveType& aNewValue ) const
 {
     uno::Reference< chart2::XRegressionCurveContainer > xRegressionCurveContainer( xSeriesPropertySet, uno::UNO_QUERY );
     uno::Reference< chart2::XRegressionCurve > xRegressionCurve( xSeriesPropertySet, uno::UNO_QUERY );
@@ -869,7 +871,7 @@ class WrappedStatisticPropertySetProperty : public WrappedStatisticProperty< Ref
 public:
     virtual Reference< beans::XPropertySet > getValueFromSeries( const Reference< beans::XPropertySet >& xSeriesPropertySet ) const;
     // properties are read-only, so this method should never be called
-    virtual void setValueToSeries( const Reference< beans::XPropertySet >& xSeriesPropertySet, Reference< beans::XPropertySet > xNewValue ) const;
+    virtual void setValueToSeries( const Reference< beans::XPropertySet >& xSeriesPropertySet, const Reference< beans::XPropertySet > & xNewValue ) const;
 
     enum PropertySetType
     {
@@ -931,7 +933,7 @@ Reference< beans::XPropertySet > WrappedStatisticPropertySetProperty::getValueFr
 
 void WrappedStatisticPropertySetProperty::setValueToSeries(
     const Reference< beans::XPropertySet >& /* xSeriesPropertySet */
-    , Reference< beans::XPropertySet > /* xNewValue */ ) const
+    , const Reference< beans::XPropertySet >& /* xNewValue */ ) const
 {
 }
 

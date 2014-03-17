@@ -36,13 +36,13 @@ public:
         createGroup2D(
             const ::com::sun::star::uno::Reference<
                 ::com::sun::star::drawing::XShapes >& xTarget
-                , OUString aName = OUString() );
+                , const OUString& aName = OUString() );
 
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShapes >
         createGroup3D(
             const ::com::sun::star::uno::Reference<
                 ::com::sun::star::drawing::XShapes >& xTarget
-                , OUString aName = OUString() );
+                , const OUString& aName = OUString() );
 
 
 

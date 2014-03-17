@@ -277,7 +277,7 @@ void checkCommonTrendline(
     CPPUNIT_ASSERT_EQUAL(aExpectedR2, aShowCorrelationCoefficient);
 }
 
-void checkNameAndType(Reference<XPropertySet> xProperties, OUString aExpectedName, OUString aExpectedServiceName)
+void checkNameAndType(Reference<XPropertySet> xProperties, const OUString& aExpectedName, const OUString& aExpectedServiceName)
 {
     Reference< lang::XServiceName > xServiceName( xProperties, UNO_QUERY );
     CPPUNIT_ASSERT(xServiceName.is());
@@ -291,7 +291,7 @@ void checkNameAndType(Reference<XPropertySet> xProperties, OUString aExpectedNam
 }
 
 void checkLinearTrendline(
-        Reference<chart2::XRegressionCurve> xCurve, OUString aExpectedName,
+        Reference<chart2::XRegressionCurve> xCurve, const OUString& aExpectedName,
         double aExpectedExtrapolateForward, double aExpectedExtrapolateBackward,
         sal_Bool aExpectedForceIntercept, double aExpectedInterceptValue,
         sal_Bool aExpectedShowEquation, sal_Bool aExpectedR2)
@@ -309,7 +309,7 @@ void checkLinearTrendline(
 }
 
 void checkPolynomialTrendline(
-        Reference<chart2::XRegressionCurve> xCurve, OUString aExpectedName,
+        Reference<chart2::XRegressionCurve> xCurve, const OUString& aExpectedName,
         sal_Int32 aExpectedDegree,
         double aExpectedExtrapolateForward, double aExpectedExtrapolateBackward,
         sal_Bool aExpectedForceIntercept, double aExpectedInterceptValue,
@@ -332,7 +332,7 @@ void checkPolynomialTrendline(
 }
 
 void checkMovingAverageTrendline(
-        Reference<chart2::XRegressionCurve> xCurve, OUString aExpectedName, sal_Int32 aExpectedPeriod)
+        Reference<chart2::XRegressionCurve> xCurve, const OUString& aExpectedName, sal_Int32 aExpectedPeriod)
 {
     Reference<XPropertySet> xProperties( xCurve , uno::UNO_QUERY );
     CPPUNIT_ASSERT(xProperties.is());

@@ -46,7 +46,7 @@ class WrappedSeriesOrDiagramProperty : public WrappedProperty
 {
 public:
     virtual PROPERTYTYPE getValueFromSeries( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& xSeriesPropertySet ) const =0;
-    virtual void setValueToSeries( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& xSeriesPropertySet, PROPERTYTYPE aNewValue ) const =0;
+    virtual void setValueToSeries( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& xSeriesPropertySet, const PROPERTYTYPE & aNewValue ) const =0;
 
     explicit WrappedSeriesOrDiagramProperty( const OUString& rName, const ::com::sun::star::uno::Any& rDefaulValue
         , ::boost::shared_ptr< Chart2ModelContact > spChart2ModelContact

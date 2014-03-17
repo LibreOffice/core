@@ -93,7 +93,7 @@ Reference< XRegressionCurve > RegressionCurveHelper::createMeanValueLine(
 
 Reference< XRegressionCurve > RegressionCurveHelper::createRegressionCurveByServiceName(
     const Reference< XComponentContext > & xContext,
-    OUString aServiceName )
+    const OUString& aServiceName )
 {
     Reference< XRegressionCurve > xResult;
 
@@ -127,7 +127,7 @@ Reference< XRegressionCurve > RegressionCurveHelper::createRegressionCurveByServ
 }
 
 Reference< XRegressionCurveCalculator > RegressionCurveHelper::createRegressionCurveCalculatorByServiceName(
-    OUString aServiceName )
+    const OUString& aServiceName )
 {
     Reference< XRegressionCurveCalculator > xResult;
 

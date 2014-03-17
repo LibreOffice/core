@@ -74,7 +74,7 @@ void PlotterBase::setTransformationSceneToScreen( const drawing::HomogenMatrix& 
 
 uno::Reference< drawing::XShapes > PlotterBase::createGroupShape(
             const uno::Reference< drawing::XShapes >& xTarget
-            , OUString rName )
+            , const OUString& rName )
 {
     if(!m_xShapeFactory.is())
         return NULL;

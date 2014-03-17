@@ -70,7 +70,7 @@ protected: //methods
     ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShapes >
         createGroupShape( const ::com::sun::star::uno::Reference<
                 ::com::sun::star::drawing::XShapes >& xTarget
-                , OUString rName=OUString() );
+                , const OUString& rName=OUString() );
 
 protected: //member
     ::com::sun::star::uno::Reference<

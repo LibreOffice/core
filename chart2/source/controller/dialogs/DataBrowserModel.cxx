@@ -247,7 +247,7 @@ struct DataBrowserModel::tDataColumn
         const ::com::sun::star::uno::Reference<
         ::com::sun::star::chart2::XDataSeries > & xDataSeries,
         sal_Int32 nIndexInDataSeries,
-        OUString aUIRoleName,
+        const OUString& aUIRoleName,
         ::com::sun::star::uno::Reference<
         ::com::sun::star::chart2::data::XLabeledDataSequence >  xLabeledDataSequence,
         eCellType aCellType,

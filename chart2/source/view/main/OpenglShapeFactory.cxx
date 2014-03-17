@@ -288,7 +288,7 @@ uno::Reference< drawing::XShape >
 
 uno::Reference< drawing::XShapes >
         OpenglShapeFactory::createGroup2D( const uno::Reference< drawing::XShapes >& xTarget
-        , OUString aName)
+        , const OUString& aName)
 {
     dummy::DummyGroup2D* pNewShape = new dummy::DummyGroup2D(aName);
     xTarget->add(pNewShape);
@@ -297,7 +297,7 @@ uno::Reference< drawing::XShapes >
 
 uno::Reference< drawing::XShapes >
         OpenglShapeFactory::createGroup3D( const uno::Reference< drawing::XShapes >& xTarget
-        , OUString aName )
+        , const OUString& aName )
 {
     dummy::DummyGroup3D* pNewShape = new dummy::DummyGroup3D(aName);
     xTarget->add(pNewShape);
