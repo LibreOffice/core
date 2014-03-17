@@ -17,7 +17,8 @@ oox_GENHEADERPATH := $(oox_INC)/oox/token
 $(oox_MISC)/vmlexport-shape-types.cxx : \
 		$(SRCDIR)/oox/source/export/preset-definitions-to-shape-types.pl \
 		$(SRCDIR)/oox/source/drawingml/customshapes/presetShapeDefinitions.xml \
-		$(SRCDIR)/oox/source/export/presetTextWarpDefinitions.xml
+		$(SRCDIR)/oox/source/export/presetTextWarpDefinitions.xml \
+		$(SRCDIR)/oox/CustomTarget_generated.mk
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),build,PRL,1)
 	mkdir -p $(dir $@)
 	perl $^ > $@.in_progress 2> $@.log && mv $@.in_progress $@
