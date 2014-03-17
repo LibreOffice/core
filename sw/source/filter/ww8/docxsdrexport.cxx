@@ -107,6 +107,7 @@ struct DocxSdrExport::Impl
     OStringBuffer m_aTextFrameStyle;
     bool m_bFrameBtLr;
     bool m_bFlyFrameGraphic;
+    bool mbIsInDMLTextFrame;
     sax_fastparser::FastAttributeList* m_pFlyFillAttrList;
     sax_fastparser::FastAttributeList* m_pFlyWrapAttrList;
     sax_fastparser::FastAttributeList* m_pBodyPrAttrList;
@@ -124,6 +125,7 @@ struct DocxSdrExport::Impl
           m_pTextboxAttrList(0),
           m_bFrameBtLr(false),
           m_bFlyFrameGraphic(false),
+          mbIsInDMLTextFrame(false),
           m_pFlyFillAttrList(0),
           m_pFlyWrapAttrList(0),
           m_pBodyPrAttrList(0),
@@ -141,6 +143,8 @@ struct DocxSdrExport::Impl
     void writeDMLDrawing(const SdrObject* pSdrObj, const SwFrmFmt* pFrmFmt, int nAnchorId);
     void textFrameShadow(const SwFrmFmt& rFrmFmt);
     bool isSupportedDMLShape(com::sun::star::uno::Reference<com::sun::star::drawing::XShape> xShape);
+    bool getIsInDMLTextFrame() { return mbIsInDMLTextFrame; }
+    void setIsInDMLTextFrame(bool bIsInDMLTextFrame) { mbIsInDMLTextFrame = bIsInDMLTextFrame; }
 };
 
 DocxSdrExport::DocxSdrExport(DocxExport& rExport, sax_fastparser::FSHelperPtr pSerializer, oox::drawingml::DrawingML* pDrawingML)
@@ -550,6 +554,31 @@ void DocxSdrExport::Impl::writeDMLDrawing(const SdrObject* pSdrObject, const SwF
 
     uno::Reference<drawing::XShape> xShape(const_cast<SdrObject*>(pSdrObject)->getUnoShape(), uno::UNO_QUERY_THROW);
     uno::Reference<lang::XServiceInfo> xServiceInfo(xShape, uno::UNO_QUERY_THROW);
+    uno::Reference< beans::XPropertySet > xPropertySet(xShape, uno::UNO_QUERY);
+    uno::Reference< beans::XPropertySetInfo > xPropSetInfo;
+    if (xPropertySet.is())
+        xPropSetInfo = xPropertySet->getPropertySetInfo();
+
+    bool bLockedCanvas = false;
+    if (xPropSetInfo.is() && xPropSetInfo->hasPropertyByName("InteropGrabBag"))
+    {
+        uno::Sequence< beans::PropertyValue > propList;
+        xPropertySet->getPropertyValue("InteropGrabBag") >>= propList;
+        for (sal_Int32 nProp=0; nProp < propList.getLength(); ++nProp)
+        {
+            OUString propName = propList[nProp].Name;
+            if (propName == "LockedCanvas")
+            {
+                /*
+                 * Export as Locked Canvas only if the drawing
+                 * was originally a Locked Canvas and is now inside a Text Frame.
+                 */
+
+                bLockedCanvas = true && getIsInDMLTextFrame();
+                break;
+            }
+        }
+    }
     const char* pNamespace = "http://schemas.microsoft.com/office/word/2010/wordprocessingShape";
     if (xServiceInfo->supportsService("com.sun.star.drawing.GroupShape"))
         pNamespace = "http://schemas.microsoft.com/office/word/2010/wordprocessingGroup";
@@ -562,8 +591,14 @@ void DocxSdrExport::Impl::writeDMLDrawing(const SdrObject* pSdrObject, const SwF
                         XML_uri, pNamespace,
                         FSEND);
 
+    if (bLockedCanvas)
+        pFS->startElementNS(XML_lc, XML_lockedCanvas,
+                                FSNS(XML_xmlns, XML_lc), "http://schemas.openxmlformats.org/drawingml/2006/lockedCanvas",
+                                FSEND);
     m_rExport.OutputDML(xShape);
 
+    if (bLockedCanvas)
+        pFS->endElementNS(XML_lc, XML_lockedCanvas);
     pFS->endElementNS(XML_a, XML_graphicData);
     pFS->endElementNS(XML_a, XML_graphic);
 
@@ -993,6 +1028,7 @@ void DocxSdrExport::writeDiagram(const SdrObject* sdrObject, const SwFrmFmt& rFr
 
 void DocxSdrExport::writeDMLTextFrame(sw::Frame* pParentFrame, int nAnchorId)
 {
+    m_pImpl->setIsInDMLTextFrame(true);
     sax_fastparser::FSHelperPtr pFS = m_pImpl->m_pSerializer;
     const SwFrmFmt& rFrmFmt = pParentFrame->GetFrmFmt();
     const SwNodeIndex* pNodeIndex = rFrmFmt.GetCntnt().GetCntntIdx();
@@ -1154,6 +1190,7 @@ void DocxSdrExport::writeDMLTextFrame(sw::Frame* pParentFrame, int nAnchorId)
     }
 
     endDMLAnchorInline(&rFrmFmt);
+    m_pImpl->setIsInDMLTextFrame(false);
 }
 
 void DocxSdrExport::writeVMLTextFrame(sw::Frame* pParentFrame)
