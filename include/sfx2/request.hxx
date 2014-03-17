@@ -88,20 +88,20 @@ public:
     const SfxPoolItem*  GetReturnValue() const;
 
     static com::sun::star::uno::Reference< com::sun::star::frame::XDispatchRecorder > GetMacroRecorder( SfxViewFrame* pFrame=NULL );
-    static sal_Bool         HasMacroRecorder( SfxViewFrame* pFrame=NULL );
-    sal_uInt16              GetCallMode() const;
-    void                AllowRecording( sal_Bool );
-    sal_Bool                AllowsRecording() const;
-    sal_Bool                IsAPI() const;
-    sal_Bool                IsSynchronCall() const;
-    void                SetSynchronCall( sal_Bool bSynchron );
+    static bool         HasMacroRecorder( SfxViewFrame* pFrame=NULL );
+    sal_uInt16          GetCallMode() const;
+    void                AllowRecording( bool );
+    bool                AllowsRecording() const;
+    bool                IsAPI() const;
+    bool                IsSynchronCall() const;
+    void                SetSynchronCall( bool bSynchron );
 
-    sal_Bool                IsDone() const;
-    void                Done( sal_Bool bRemove = sal_False );
+    bool                IsDone() const;
+    void                Done( bool bRemove = false );
 
     void                Ignore();
     void                Cancel();
-    sal_Bool                IsCancelled() const;
+    bool                IsCancelled() const;
     void                Done(const SfxItemSet &, bool bKeep = true );
 
     void                ForgetAllArgs();

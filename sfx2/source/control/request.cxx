@@ -59,15 +59,15 @@ struct SfxRequest_Impl: public SfxListener
     SfxPoolItem*    pRetVal;     // Return value belongs to itself
     SfxShell*       pShell;      // run from this shell
     const SfxSlot*  pSlot;       // executed Slot
-    sal_uInt16          nModifier;   // which Modifier was pressed?
-    sal_Bool            bDone;       // at all executed
-    sal_Bool            bIgnored;    // Cancelled by the User
-    sal_Bool            bCancelled;  // no longer notify
-    sal_Bool            bUseTarget;  // aTarget was set by Application
-    sal_uInt16              nCallMode;   // Synch/Asynch/API/Record
-    sal_Bool                bAllowRecording;
-    SfxAllItemSet*      pInternalArgs;
-    SfxViewFrame*       pViewFrame;
+    sal_uInt16      nModifier;   // which Modifier was pressed?
+    bool            bDone;       // at all executed
+    bool            bIgnored;    // Cancelled by the User
+    bool            bCancelled;  // no longer notify
+    bool            bUseTarget;  // aTarget was set by Application
+    sal_uInt16      nCallMode;   // Synch/Asynch/API/Record
+    bool            bAllowRecording;
+    SfxAllItemSet*  pInternalArgs;
+    SfxViewFrame*   pViewFrame;
 
     com::sun::star::uno::Reference< com::sun::star::frame::XDispatchRecorder > xRecorder;
 
@@ -78,9 +78,9 @@ struct SfxRequest_Impl: public SfxListener
                         , pShell(0)
                         , pSlot(0)
                         , nModifier(0)
-                        , bCancelled(sal_False)
+                        , bCancelled(false)
                         , nCallMode( SFX_CALLMODE_SYNCHRON )
-                        , bAllowRecording( sal_False )
+                        , bAllowRecording( false )
                         , pInternalArgs( 0 )
                         , pViewFrame(0)
                         {}
@@ -144,8 +144,8 @@ SfxRequest::SfxRequest
     pImp( new SfxRequest_Impl(this) )
 {
     pImp->bAllowRecording = rOrig.pImp->bAllowRecording;
-    pImp->bDone = sal_False;
-    pImp->bIgnored = sal_False;
+    pImp->bDone = false;
+    pImp->bIgnored = false;
     pImp->pRetVal = 0;
     pImp->pShell = 0;
     pImp->pSlot = 0;
@@ -185,14 +185,14 @@ SfxRequest::SfxRequest
     pArgs(0),
     pImp( new SfxRequest_Impl(this) )
 {
-    pImp->bDone = sal_False;
-    pImp->bIgnored = sal_False;
+    pImp->bDone = false;
+    pImp->bIgnored = false;
     pImp->SetPool( &pViewFrame->GetPool() );
     pImp->pRetVal = 0;
     pImp->pShell = 0;
     pImp->pSlot = 0;
     pImp->nCallMode = SFX_CALLMODE_SYNCHRON;
-    pImp->bUseTarget = sal_False;
+    pImp->bUseTarget = false;
     pImp->pViewFrame = pViewFrame;
     if( pImp->pViewFrame->GetDispatcher()->GetShellAndSlot_Impl( nSlotId, &pImp->pShell, &pImp->pSlot, true, true ) )
     {
@@ -226,14 +226,14 @@ SfxRequest::SfxRequest
     pArgs(0),
     pImp( new SfxRequest_Impl(this) )
 {
-    pImp->bDone = sal_False;
-    pImp->bIgnored = sal_False;
+    pImp->bDone = false;
+    pImp->bIgnored = false;
     pImp->SetPool( &rPool );
     pImp->pRetVal = 0;
     pImp->pShell = 0;
     pImp->pSlot = 0;
     pImp->nCallMode = nMode;
-    pImp->bUseTarget = sal_False;
+    pImp->bUseTarget = false;
 }
 
 SfxRequest::SfxRequest
@@ -247,14 +247,14 @@ SfxRequest::SfxRequest
     pArgs(new SfxAllItemSet(rPool)),
     pImp( new SfxRequest_Impl(this) )
 {
-    pImp->bDone = sal_False;
-    pImp->bIgnored = sal_False;
+    pImp->bDone = false;
+    pImp->bIgnored = false;
     pImp->SetPool( &rPool );
     pImp->pRetVal = 0;
     pImp->pShell = 0;
     pImp->pSlot = 0;
     pImp->nCallMode = nMode;
-    pImp->bUseTarget = sal_False;
+    pImp->bUseTarget = false;
     TransformParameters( nSlot, rArgs, *pArgs, pSlot );
 }
 
@@ -273,14 +273,14 @@ SfxRequest::SfxRequest
     pArgs(new SfxAllItemSet(rSfxArgs)),
     pImp( new SfxRequest_Impl(this) )
 {
-    pImp->bDone = sal_False;
-    pImp->bIgnored = sal_False;
+    pImp->bDone = false;
+    pImp->bIgnored = false;
     pImp->SetPool( rSfxArgs.GetPool() );
     pImp->pRetVal = 0;
     pImp->pShell = 0;
     pImp->pSlot = 0;
     pImp->nCallMode = nMode;
-    pImp->bUseTarget = sal_False;
+    pImp->bUseTarget = false;
 }
 
 
@@ -291,14 +291,14 @@ sal_uInt16 SfxRequest::GetCallMode() const
 
 
 
-sal_Bool SfxRequest::IsSynchronCall() const
+bool SfxRequest::IsSynchronCall() const
 {
     return SFX_CALLMODE_SYNCHRON == ( SFX_CALLMODE_SYNCHRON & pImp->nCallMode );
 }
 
 
 
-void SfxRequest::SetSynchronCall( sal_Bool bSynchron )
+void SfxRequest::SetSynchronCall( bool bSynchron )
 {
     if ( bSynchron )
         pImp->nCallMode |= SFX_CALLMODE_SYNCHRON;
@@ -590,7 +590,7 @@ void SfxRequest::Done
 
 
 
-void SfxRequest::Done( sal_Bool bRelease )
+void SfxRequest::Done( bool bRelease )
 //  [<SfxRequest::Done(SfxItemSet&)>]
 {
     Done_Impl( pArgs );
@@ -608,7 +608,7 @@ void SfxRequest::ForgetAllArgs()
 
 
 
-sal_Bool SfxRequest::IsCancelled() const
+bool SfxRequest::IsCancelled() const
 {
     return pImp->bCancelled;
 }
@@ -624,7 +624,7 @@ void SfxRequest::Cancel()
 */
 
 {
-    pImp->bCancelled = sal_True;
+    pImp->bCancelled = true;
     pImp->SetPool( 0 );
     DELETEZ( pArgs );
 }
@@ -648,7 +648,7 @@ void SfxRequest::Ignore()
 
 {
     // Mark as actually executed
-    pImp->bIgnored = sal_True;
+    pImp->bIgnored = true;
 }
 
 
@@ -670,7 +670,7 @@ void SfxRequest::Done_Impl
 
 {
     // Mark as actually executed
-    pImp->bDone = sal_True;
+    pImp->bDone = true;
 
     // not Recording
     if ( !pImp->xRecorder.is() )
@@ -768,7 +768,7 @@ void SfxRequest::Done_Impl
 
 
 
-sal_Bool SfxRequest::IsDone() const
+bool SfxRequest::IsDone() const
 
 /*  [Description]
 
@@ -777,7 +777,7 @@ sal_Bool SfxRequest::IsDone() const
     because it was canceled by the user or the context for this request was
     wrong, this was not implemented on a separate <SfxShell>.
 
-    SfxRequest instances that return sal_False will not be recorded.
+    SfxRequest instances that return false will not be recorded.
 
     [Cross-reference]
 
@@ -821,7 +821,7 @@ com::sun::star::uno::Reference< com::sun::star::frame::XDispatchRecorder > SfxRe
     return xRecorder;
 }
 
-sal_Bool SfxRequest::HasMacroRecorder( SfxViewFrame* pView )
+bool SfxRequest::HasMacroRecorder( SfxViewFrame* pView )
 {
     return GetMacroRecorder( pView ).is();
 }
@@ -829,12 +829,12 @@ sal_Bool SfxRequest::HasMacroRecorder( SfxViewFrame* pView )
 
 
 
-sal_Bool SfxRequest::IsAPI() const
+bool SfxRequest::IsAPI() const
 
 /*  [Description]
 
-    Returns sal_True if this SfxRequest was generated by an API (for example BASIC),
-    otherwise sal_False.
+    Returns true if this SfxRequest was generated by an API (for example BASIC),
+    otherwise false.
 */
 
 {
@@ -855,14 +855,14 @@ sal_uInt16 SfxRequest::GetModifier() const
 
 
 
-void SfxRequest::AllowRecording( sal_Bool bSet )
+void SfxRequest::AllowRecording( bool bSet )
 {
     pImp->bAllowRecording = bSet;
 }
 
-sal_Bool SfxRequest::AllowsRecording() const
+bool SfxRequest::AllowsRecording() const
 {
-    sal_Bool bAllow = pImp->bAllowRecording;
+    bool bAllow = pImp->bAllowRecording;
     if( !bAllow )
         bAllow = ( SFX_CALLMODE_API != ( SFX_CALLMODE_API & pImp->nCallMode ) ) &&
                  ( SFX_CALLMODE_RECORD == ( SFX_CALLMODE_RECORD & pImp->nCallMode ) );

@@ -657,7 +657,7 @@ void SfxViewShell::ExecMisc_Impl( SfxRequest &rReq )
                 // No type and no location => error
                 if ( aFilterName.isEmpty() ||  aTypeName.isEmpty())
                 {
-                    rReq.Done(sal_False);
+                    rReq.Done(false);
                     return;
                 }
 
@@ -698,7 +698,7 @@ void SfxViewShell::ExecMisc_Impl( SfxRequest &rReq )
                 }
                 catch (const io::IOException&)
                 {
-                    rReq.Done(sal_False);
+                    rReq.Done(false);
                     return;
                 }
 
@@ -707,7 +707,7 @@ void SfxViewShell::ExecMisc_Impl( SfxRequest &rReq )
             }
             else
             {
-                rReq.Done(sal_False);
+                rReq.Done(false);
                 return;
             }
         }
@@ -725,7 +725,7 @@ void SfxViewShell::ExecMisc_Impl( SfxRequest &rReq )
 
             // Jetzt schon DONE aufrufen, da die Argumente evtl. einen Pool
             // benutzen, der demn"achst weg ist
-            rReq.Done(sal_True);
+            rReq.Done(true);
 
             // ausfuehren
             if (!pShowItem || (bActive != pImp->m_bPlugInsActive))

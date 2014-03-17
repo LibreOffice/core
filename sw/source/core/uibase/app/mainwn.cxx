@@ -68,8 +68,8 @@ void StartProgress( sal_uInt16 nMessResId, long nStartValue, long nEndValue,
             pProgress->pProgress = new SfxProgress( pDocShell,
                                                     SW_RESSTR(nMessResId),
                                                     nEndValue - nStartValue,
-                                                    sal_False,
-                                                    sal_True );
+                                                    false,
+                                                    true );
             pProgress->nStartCount = 1;
             pProgress->pDocShell = pDocShell;
             pProgressContainer->insert( pProgressContainer->begin(), pProgress );

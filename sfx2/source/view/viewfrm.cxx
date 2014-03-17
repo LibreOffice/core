@@ -504,7 +504,7 @@ void SfxViewFrame::ExecReload_Impl( SfxRequest& rReq )
                     }
 
                     // Readonly document can not be switched to edit mode?
-                    rReq.Done( sal_False );
+                    rReq.Done( false );
 
                     if ( nOpenMode == SFX_STREAM_READWRITE && !rReq.IsAPI() )
                     {
@@ -548,7 +548,7 @@ void SfxViewFrame::ExecReload_Impl( SfxRequest& rReq )
                     pSh->DoSaveCompleted( pMed );
                     pSh->Broadcast( SfxSimpleHint(SFX_HINT_MODECHANGED) );
                     rReq.SetReturnValue( SfxBoolItem( rReq.GetSlot(), true ) );
-                    rReq.Done( sal_True );
+                    rReq.Done( true );
                     return;
                 }
             }
@@ -840,7 +840,7 @@ void SfxViewFrame::ExecReload_Impl( SfxRequest& rReq )
                 }
 
                 // Record as done
-                rReq.Done( sal_True );
+                rReq.Done( true );
                 rReq.SetReturnValue(SfxBoolItem(rReq.GetSlot(), true));
                 return;
             }

@@ -37,25 +37,25 @@
 
 struct SfxPrinter_Impl
 {
-    sal_Bool            mbAll;
-    sal_Bool            mbSelection;
-    sal_Bool            mbFromTo;
-    sal_Bool            mbRange;
+    bool            mbAll;
+    bool            mbSelection;
+    bool            mbFromTo;
+    bool            mbRange;
 
     SfxPrinter_Impl() :
-        mbAll       ( sal_True ),
-        mbSelection ( sal_True ),
-        mbFromTo    ( sal_True ),
-        mbRange     ( sal_True ) {}
+        mbAll       ( true ),
+        mbSelection ( true ),
+        mbFromTo    ( true ),
+        mbRange     ( true ) {}
     ~SfxPrinter_Impl() {}
 };
 
 struct SfxPrintOptDlg_Impl
 {
-    sal_Bool        mbHelpDisabled;
+    bool        mbHelpDisabled;
 
     SfxPrintOptDlg_Impl() :
-        mbHelpDisabled  ( sal_False ) {}
+        mbHelpDisabled  ( false ) {}
 };
 
 // class SfxPrinter ------------------------------------------------------
@@ -106,7 +106,7 @@ SfxPrinter::SfxPrinter( SfxItemSet* pTheOptions ) :
 */
 
     pOptions( pTheOptions ),
-    bKnown(sal_True)
+    bKnown(true)
 
 {
     pImpl = new SfxPrinter_Impl;
@@ -262,7 +262,7 @@ bool SfxPrintOptionsDialog::Notify( NotifyEvent& rNEvt )
 
 void SfxPrintOptionsDialog::DisableHelp()
 {
-    pDlgImpl->mbHelpDisabled = sal_True;
+    pDlgImpl->mbHelpDisabled = true;
 
     get<HelpButton>("help")->Disable();
 }

@@ -307,7 +307,7 @@ int SfxDispatcher::Call_Impl( SfxShell& rShell, const SfxSlot &rSlot, SfxRequest
                 }
 
                 // do nothing after this object is dead
-                return rReq.IsDone();
+                return rReq.IsDone() ? 1 : 0;
             }
         }
 
@@ -960,7 +960,7 @@ void SfxDispatcher::_Execute
                 if ( &rShell == *(pDispat->pImp->aStack.rbegin() + n) )
                 {
                     if ( eCallMode & SFX_CALLMODE_RECORD )
-                        rReq.AllowRecording( sal_True );
+                        rReq.AllowRecording( true );
                     pDispat->pImp->xPoster->Post(new SfxRequest(rReq));
                     return;
                 }
@@ -1267,7 +1267,7 @@ IMPL_LINK( SfxDispatcher, PostMsgHandler, SfxRequest*, pReq )
 
                 // When the pSlot is a "Pseudoslot" for macros or Verbs, it can
                 // be destroyed in the Call_Impl, thus do not use it anymore!
-                pReq->SetSynchronCall( sal_False );
+                pReq->SetSynchronCall( false );
                 Call_Impl( *pSh, *pSlot, *pReq, pReq->AllowsRecording() ); //! why bRecord?
                 DBG( pSfxApp->LeaveAsynchronCall_Impl() );
             }

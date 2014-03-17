@@ -37,7 +37,7 @@ private:
     JobSetup                aOrigJobSetup;
     SfxItemSet*             pOptions;
     SfxPrinter_Impl*        pImpl;
-    sal_Bool                    bKnown;
+    bool                    bKnown;
 
     SAL_DLLPRIVATE void operator =(SfxPrinter &); // not defined
 
@@ -66,8 +66,8 @@ public:
     const SfxItemSet&       GetOptions() const { return *pOptions; }
     void                    SetOptions( const SfxItemSet &rNewOptions );
 
-    sal_Bool                    IsKnown() const { return bKnown; }
-    sal_Bool                    IsOriginal() const { return bKnown; }
+    bool                    IsKnown() const { return bKnown; }
+    bool                    IsOriginal() const { return bKnown; }
 };
 
 #endif

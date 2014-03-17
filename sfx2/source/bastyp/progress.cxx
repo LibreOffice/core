@@ -55,10 +55,10 @@ struct SfxProgress_Impl
     sal_uIntPtr             nMax;
     clock_t                 nCreate;
     clock_t                 nNextReschedule;
-    sal_Bool                bLocked, bAllDocs;
-    sal_Bool                bWaitMode;
-    sal_Bool                bAllowRescheduling;
-    sal_Bool                bRunning;
+    bool                    bLocked, bAllDocs;
+    bool                    bWaitMode;
+    bool                    bAllowRescheduling;
+    bool                    bRunning;
 
     SfxProgress*            pActiveProgress;
     SfxObjectShellRef       xObjSh;
@@ -66,7 +66,7 @@ struct SfxProgress_Impl
     SfxViewFrame*           pView;
 
                             SfxProgress_Impl( const OUString& );
-    void                    Enable_Impl( sal_Bool );
+    void                    Enable_Impl( bool );
 
 };
 
@@ -79,7 +79,7 @@ extern sal_uInt32 Get10ThSec();
 
 
 
-void SfxProgress_Impl::Enable_Impl( sal_Bool bEnable )
+void SfxProgress_Impl::Enable_Impl( bool bEnable )
 {
     SfxObjectShell* pDoc = bAllDocs ? NULL : (SfxObjectShell*) xObjSh;
     SfxViewFrame *pFrame= SfxViewFrame::GetFirst(pDoc);
@@ -131,8 +131,8 @@ SfxProgress::SfxProgress
 
     sal_uIntPtr         nRange, /* Max value for range  */
 
-    sal_Bool            bAll,    /* Disable all documents or only the document of the ViewFram */
-    sal_Bool            bWait    /* Activate the wait-Pointer initially (TRUE) */
+    bool                bAll,    /* Disable all documents or only the document of the ViewFram */
+    bool                bWait    /* Activate the wait-Pointer initially (TRUE) */
 )
 
 /*  [Description]
@@ -146,15 +146,15 @@ SfxProgress::SfxProgress
 
 :       pImp( new SfxProgress_Impl( rText ) ),
     nVal(0),
-    bSuspended(sal_True)
+    bSuspended(true)
 {
-    pImp->bRunning = sal_True;
+    pImp->bRunning = true;
     pImp->bAllowRescheduling = Application::IsInExecute();
 
     pImp->xObjSh = pObjSh;
     pImp->aText = rText;
     pImp->nMax = nRange;
-    pImp->bLocked = sal_False;
+    pImp->bLocked = false;
     pImp->bWaitMode = bWait;
     pImp->nCreate = Get10ThSec();
     pImp->nNextReschedule = pImp->nCreate;
@@ -208,7 +208,7 @@ void SfxProgress::Stop()
 
     if ( !pImp->bRunning )
         return;
-    pImp->bRunning = sal_False;
+    pImp->bRunning = false;
     DBG( DbgOutf( "SfxProgress: destroyed at %luds", Get10ThSec() ) );
 
     Suspend();
@@ -217,7 +217,7 @@ void SfxProgress::Stop()
     else
         SFX_APP()->SetProgress_Impl(0);
     if ( pImp->bLocked )
-        pImp->Enable_Impl(sal_True);
+        pImp->Enable_Impl(true);
 }
 
 
@@ -257,7 +257,7 @@ long TimeOut_Impl( void*, void* pArgV )
 
 
 
-sal_Bool SfxProgress::SetStateText
+bool SfxProgress::SetStateText
 (
     sal_uLong       nNewVal,     /* New value for the progress-bar */
     const OUString& rNewVal,     /* Status as Text */
@@ -271,7 +271,7 @@ sal_Bool SfxProgress::SetStateText
 
 
 
-sal_Bool SfxProgress::SetState
+bool SfxProgress::SetState
 (
     sal_uLong   nNewVal,    /* new value for the progress bar */
 
@@ -283,7 +283,7 @@ sal_Bool SfxProgress::SetState
 
     [Return value]
 
-    sal_Bool                TRUE
+    bool                TRUE
                         Proceed with the action
 
                         FALSE
@@ -291,7 +291,7 @@ sal_Bool SfxProgress::SetState
 */
 
 {
-    if( pImp->pActiveProgress ) return sal_True;
+    if( pImp->pActiveProgress ) return true;
 
     nVal = nNewVal;
 
@@ -351,7 +351,7 @@ sal_Bool SfxProgress::SetState
         pImp->xStatusInd->setValue( nNewVal );
     }
 
-    return sal_True;
+    return true;
 }
 
 
@@ -396,7 +396,7 @@ void SfxProgress::Resume()
                 pFrame->GetBindings().ENTERREGISTRATIONS();
         }
 
-        bSuspended = sal_False;
+        bSuspended = false;
     }
 }
 
@@ -418,7 +418,7 @@ void SfxProgress::Suspend()
     if ( !bSuspended )
     {
         DBG( DbgOutf( "SfxProgress: suspended" ) );
-        bSuspended = sal_True;
+        bSuspended = true;
 
         if ( pImp->xStatusInd.is() )
         {
@@ -451,8 +451,8 @@ void SfxProgress::UnLock()
         return;
 
     DBG( DbgOutf( "SfxProgress: unlocked" ) );
-    pImp->bLocked = sal_False;
-    pImp->Enable_Impl(sal_True);
+    pImp->bLocked = false;
+    pImp->Enable_Impl(true);
 }
 
 
