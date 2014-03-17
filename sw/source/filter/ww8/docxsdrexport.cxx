@@ -635,7 +635,7 @@ bool DocxSdrExport::Impl::isSupportedDMLShape(uno::Reference<drawing::XShape> xS
     bool supported = true;
 
     uno::Reference<lang::XServiceInfo> xServiceInfo(xShape, uno::UNO_QUERY_THROW);
-    if (xServiceInfo->supportsService("com.sun.star.drawing.PolyPolygonShape"))
+    if (xServiceInfo->supportsService("com.sun.star.drawing.PolyPolygonShape") || xServiceInfo->supportsService("com.sun.star.drawing.PolyLineShape"))
         supported = false;
 
     return supported;
