@@ -79,11 +79,6 @@ public:
     void SetLine2DColor(sal_uInt8 r, sal_uInt8 g, sal_uInt8 b, sal_uInt8 nAlpha);
     void SetLine2DWidth(int width);
     BitmapEx GetAsBitmap();
-#if defined( _WIN32 )
-    bool InitMultisample(PIXELFORMATDESCRIPTOR pfd);
-    bool GetMSAASupport();
-    int GetMSAAFormat();
-#endif
     void SetColor(sal_uInt32 color, sal_uInt8 nAlpha);
     int Bubble2DShapePoint(float x, float y, float directionX, float directionY);
     int RenderBubble2FBO(int wholeFlag);
@@ -117,10 +112,6 @@ private:
     int CreateTextureObj(int width, int height);
     int CreateRenderObj(int width, int height);
     int CreateFrameBufferObj();
-#if defined( _WIN32 )
-    int InitTempWindow(HWND *hwnd, int width, int height, PIXELFORMATDESCRIPTOR inPfd);
-    bool WGLisExtensionSupported(const char *extension);
-#endif
     int CreateMultiSampleFrameBufObj();
     int Create2DCircle(int detail);
 
