@@ -21,7 +21,7 @@
 #define INCLUDED_FRAMEWORK_INC_THREADHELP_READGUARD_HXX
 
 #include <boost/noncopyable.hpp>
-#include <threadhelp/irwlock.h>
+#include <threadhelp/lockhelper.hxx>
 
 #include <sal/types.h>
 
@@ -35,9 +35,7 @@ namespace framework{
                     We never need a own mutex to safe our internal member access - because
                     a guard is used as function-local member only. There exist no multithreaded access to it really ...
 
-    @attention      a) To prevent us against wrong using, the default ctor, copy ctor and the =operator are maked private!
-                    b) Use interface "IRWLock" of set LockHelper only - because we must support a finer granularity of locking.
-                       Interface "IMutex" should be used by easier guard implementations ... like "ResetableGuard"!
+    @attention      To prevent us against wrong using, the default ctor, copy ctor and the =operator are maked private!
 
     @implements     -
 
@@ -63,7 +61,7 @@ class ReadGuard : private boost::noncopyable
 
             @onerror    -
         *//*-*****************************************************************************************************/
-        inline ReadGuard( IRWLock* pLock )
+        inline ReadGuard( LockHelper* pLock )
             :   m_pLock     ( pLock     )
             ,   m_bLocked   ( sal_False )
         {
@@ -71,7 +69,7 @@ class ReadGuard : private boost::noncopyable
         }
 
 
-        inline ReadGuard( IRWLock& rLock )
+        inline ReadGuard( LockHelper& rLock )
             :   m_pLock     ( &rLock    )
             ,   m_bLocked   ( sal_False )
         {
@@ -159,7 +157,7 @@ class ReadGuard : private boost::noncopyable
 
     private:
 
-        IRWLock*    m_pLock     ;   /// reference to lock-member of protected object
+        LockHelper*    m_pLock     ;   /// reference to lock-member of protected object
         sal_Bool    m_bLocked   ;   /// protection against multiple lock calls without unlock!
 
 };      //  class ReadGuard

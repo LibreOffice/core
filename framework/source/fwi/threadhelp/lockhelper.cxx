@@ -130,7 +130,6 @@ void LockHelper::release()
 }
 
 /*-************************************************************************************************************
-    @interface  IRWLock
     @short      set lock for reading
     @descr      A guard should call this method to acquire read access on your member.
                 Writing isn't allowed then - but nobody could check it for you!
@@ -151,7 +150,6 @@ void LockHelper::acquireReadAccess()
 }
 
 /*-************************************************************************************************************
-    @interface  IRWLock
     @short      reset lock for reading
     @descr      A guard should call this method to release read access on your member.
 
@@ -171,7 +169,6 @@ void LockHelper::releaseReadAccess()
 }
 
 /*-************************************************************************************************************
-    @interface  IRWLock
     @short      set lock for writing
     @descr      A guard should call this method to acquire write access on your member.
                 Reading is allowed too - of course.
@@ -193,7 +190,6 @@ void LockHelper::acquireWriteAccess()
 }
 
 /*-************************************************************************************************************
-    @interface  IRWLock
     @short      reset lock for writing
     @descr      A guard should call this method to release write access on your member.
 
@@ -213,7 +209,6 @@ void LockHelper::releaseWriteAccess()
 }
 
 /*-************************************************************************************************************
-    @interface  IRWLock
     @short      downgrade a write access to a read access
     @descr      A guard should call this method to change a write to a read access.
                 New readers can work too - new writer are blocked!

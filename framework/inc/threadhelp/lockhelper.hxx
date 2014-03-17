@@ -22,7 +22,6 @@
 
 #include <boost/noncopyable.hpp>
 #include <framework/imutex.hxx>
-#include <threadhelp/irwlock.h>
 
 #include <comphelper/solarmutex.hxx>
 #include <fwidllapi.h>
@@ -30,6 +29,17 @@
 namespace osl { class Mutex; }
 
 namespace framework{
+
+/*-************************************************************************************************************
+    @descr          A guard (specialy a write guard) support different internal working states.
+                    His lock can set for reading or writing/reading! Or he was unlocked by user ...
+*//*-*************************************************************************************************************/
+enum ELockMode
+{
+    E_NOLOCK    ,
+    E_READLOCK  ,
+    E_WRITELOCK
+};
 
 /*-************************************************************************************************************
     @short          helper to set right lock in right situation
@@ -45,19 +55,13 @@ namespace framework{
                             An object use an implementation of a fair rw-lock. This increase granularity of t hreadsafe mechanism
                             and should be used for high performance threadsafe code!
 
-    @attention      We support two interfaces - "IMutex" and "IRWLock". Don't mix using of it!
-                    A guard implementation should use one interface only!
-
     @implements     IMutex
-    @implements     IRWLock
 
     @base           IMutex
-                    IRWLock
 
     @devstatus      draft
 *//*-*************************************************************************************************************/
 class FWI_DLLPUBLIC LockHelper : public  IMutex
-                 , public  IRWLock
                  , private boost::noncopyable
 {
 
@@ -77,15 +81,11 @@ class FWI_DLLPUBLIC LockHelper : public  IMutex
         virtual void acquire();
         virtual void release();
 
-
-        //  interface ::framework::IRWLock
-
-        virtual void acquireReadAccess   ();
-        virtual void releaseReadAccess   ();
-        virtual void acquireWriteAccess  ();
-        virtual void releaseWriteAccess  ();
-        virtual void downgradeWriteAccess();
-
+        void acquireReadAccess   ();
+        void releaseReadAccess   ();
+        void acquireWriteAccess  ();
+        void releaseWriteAccess  ();
+        void downgradeWriteAccess();
 
         //  something else
 

@@ -21,7 +21,7 @@
 #define INCLUDED_FRAMEWORK_INC_THREADHELP_WRITEGUARD_HXX
 
 #include <boost/noncopyable.hpp>
-#include <threadhelp/irwlock.h>
+#include <threadhelp/lockhelper.hxx>
 
 
 namespace framework{
@@ -32,9 +32,7 @@ namespace framework{
                     We never need a own mutex to safe our internal member access - because
                     a guard is used as function-local member only. There exist no multithreaded access to it really ...
 
-    @attention      a) To prevent us against wrong using, the default ctor, copy ctor and the =operator are maked private!
-                    b) Use interface "IRWLock" of set LockHelper only - because we must support a finer granularity of locking.
-                       Interface "IMutex" should be used by easier guard implementations ... like "ResetableGuard"!
+    @attention      To prevent us against wrong using, the default ctor, copy ctor and the =operator are maked private!
 
     @implements     -
 
@@ -60,7 +58,7 @@ class WriteGuard : private boost::noncopyable
 
             @onerror    -
         *//*-*****************************************************************************************************/
-        inline WriteGuard( IRWLock* pLock )
+        inline WriteGuard( LockHelper* pLock )
             :   m_pLock ( pLock     )
             ,   m_eMode ( E_NOLOCK  )
         {
@@ -68,7 +66,7 @@ class WriteGuard : private boost::noncopyable
         }
 
 
-        inline WriteGuard( IRWLock& rLock )
+        inline WriteGuard( LockHelper& rLock )
             :   m_pLock ( &rLock    )
             ,   m_eMode ( E_NOLOCK  )
         {
@@ -218,7 +216,7 @@ class WriteGuard : private boost::noncopyable
 
     private:
 
-        IRWLock*    m_pLock ;   /// reference to lock-member of protected object
+        LockHelper*    m_pLock ;   /// reference to lock-member of protected object
         ELockMode   m_eMode ;   /// protection against multiple lock calls without unlock and difference between supported lock modi
 
 };      //  class WriteGuard
