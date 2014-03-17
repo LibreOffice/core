@@ -74,7 +74,7 @@ void FontTable::lcl_attribute(Id Name, Value & val)
             break;
         case NS_ooxml::LN_CT_Font_name:
             m_pImpl->pCurrentEntry->sFontName = sValue;
-        break;
+            break;
         case NS_ooxml::LN_CT_Charset_val:
             // w:characterSet has higher priority, set only if that one is not set
             if( m_pImpl->pCurrentEntry->nTextEncoding == RTL_TEXTENCODING_DONTKNOW )
@@ -83,7 +83,7 @@ void FontTable::lcl_attribute(Id Name, Value & val)
                 if( IsStarSymbol( m_pImpl->pCurrentEntry->sFontName ))
                     m_pImpl->pCurrentEntry->nTextEncoding = RTL_TEXTENCODING_SYMBOL;
             }
-        break;
+            break;
         case NS_ooxml::LN_CT_Charset_characterSet:
         {
             OString tmp;
@@ -92,7 +92,7 @@ void FontTable::lcl_attribute(Id Name, Value & val)
             // Older LO versions used to write incorrect character set for OpenSymbol, fix.
             if( IsStarSymbol( m_pImpl->pCurrentEntry->sFontName ))
                 m_pImpl->pCurrentEntry->nTextEncoding = RTL_TEXTENCODING_SYMBOL;
-        break;
+            break;
         }
         default:
         {
@@ -137,6 +137,8 @@ void FontTable::lcl_sprm(Sprm& rSprm)
             }
             break;
         }
+        case NS_ooxml::LN_CT_Font_altName:
+            break;
         case NS_ooxml::LN_CT_Font_panose1:
             break;
         case NS_ooxml::LN_CT_Font_family:
