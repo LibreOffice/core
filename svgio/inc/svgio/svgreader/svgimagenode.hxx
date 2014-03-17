@@ -82,9 +82,6 @@ namespace svgio
             /// height content, set if found in current context
             const SvgNumber& getHeight() const { return maHeight; }
             void setHeight(const SvgNumber& rHeight = SvgNumber()) { maHeight = rHeight; }
-
-            /// XLink access
-            const OUString& getXLink() const { return maXLink; }
         };
     } // end of namespace svgreader
 } // end of namespace svgio
