@@ -398,7 +398,7 @@ struct IMPL_SfxBaseController_DataContainer
     SfxViewShell*                           m_pViewShell            ;
     SfxBaseController*                      m_pController           ;
     bool                                    m_bDisposing            ;
-    sal_Bool                                m_bSuspendState         ;
+    bool                                    m_bSuspendState         ;
     Reference< XTitle >                     m_xTitleHelper          ;
     Sequence< PropertyValue >               m_aCreationArgs         ;
 
@@ -413,7 +413,7 @@ struct IMPL_SfxBaseController_DataContainer
             ,   m_pViewShell            ( pViewShell                                            )
             ,   m_pController           ( pController                                           )
             ,   m_bDisposing            ( false                                                 )
-            ,   m_bSuspendState                 ( sal_False                                              )
+            ,   m_bSuspendState         ( false                                              )
     {
     }
 
@@ -606,14 +606,14 @@ sal_Bool SAL_CALL SfxBaseController::suspend( sal_Bool bSuspend ) throw( Runtime
     SolarMutexGuard aGuard;
 
     // ignore dublicate calls, which doesn't change anything real
-    if (bSuspend == m_pData->m_bSuspendState)
+    if (bSuspend == (m_pData->m_bSuspendState ? 1 : 0))
        return sal_True;
 
     if ( bSuspend == sal_True )
     {
         if ( !m_pData->m_pViewShell )
         {
-            m_pData->m_bSuspendState = sal_True;
+            m_pData->m_bSuspendState = true;
             return sal_True;
         }
 
@@ -635,7 +635,7 @@ sal_Bool SAL_CALL SfxBaseController::suspend( sal_Bool bSuspend ) throw( Runtime
         if ( bRet )
         {
             ConnectSfxFrame_Impl( E_DISCONNECT );
-            m_pData->m_bSuspendState = sal_True;
+            m_pData->m_bSuspendState = true;
         }
 
         return bRet;
@@ -650,7 +650,7 @@ sal_Bool SAL_CALL SfxBaseController::suspend( sal_Bool bSuspend ) throw( Runtime
             ConnectSfxFrame_Impl( E_RECONNECT );
         }
 
-        m_pData->m_bSuspendState = sal_False;
+        m_pData->m_bSuspendState = false;
         return sal_True ;
     }
 }
@@ -743,7 +743,7 @@ Reference< frame::XDispatch > SAL_CALL SfxBaseController::queryDispatch(   const
             if ( aURL.Protocol == ".uno:" )
             {
                 OUString aMasterCommand = SfxOfficeDispatch::GetMasterUnoCommand( aURL );
-                sal_Bool      bMasterCommand( !aMasterCommand.isEmpty() );
+                bool     bMasterCommand( !aMasterCommand.isEmpty() );
 
                 pAct = m_pData->m_pViewShell->GetViewFrame() ;
                 SfxSlotPool& rSlotPool = SfxSlotPool::GetSlotPool( pAct );
@@ -1210,17 +1210,17 @@ throw (RuntimeException, std::exception)
     return aSeq;
 }
 
-sal_Bool SfxBaseController::HandleEvent_Impl( NotifyEvent& rEvent )
+bool SfxBaseController::HandleEvent_Impl( NotifyEvent& rEvent )
 {
     return m_pData->m_aUserInputInterception.handleNotifyEvent( rEvent );
 }
 
-sal_Bool SfxBaseController::HasKeyListeners_Impl()
+bool SfxBaseController::HasKeyListeners_Impl()
 {
     return m_pData->m_aUserInputInterception.hasKeyHandlers();
 }
 
-sal_Bool SfxBaseController::HasMouseClickListeners_Impl()
+bool SfxBaseController::HasMouseClickListeners_Impl()
 {
     return m_pData->m_aUserInputInterception.hasMouseClickListeners();
 }
@@ -1431,7 +1431,7 @@ void SfxBaseController::ShowInfoBars( )
                 // Loop over the CMIS Properties to find cmis:isVersionSeriesCheckedOut
                 // and find if it is a Google Drive file.
                 bool bIsGoogleFile = false;
-                sal_Bool bCheckedOut = sal_False;
+                bool bCheckedOut = false;
                 for ( sal_Int32 i = 0; i < aCmisProperties.getLength(); ++i )
                 {
                     if ( aCmisProperties[i].Id == "cmis:isVersionSeriesCheckedOut" ) {

@@ -2025,7 +2025,7 @@ void SfxViewShell::TakeFrameOwnership_Impl()
 long SfxViewShell::HandleNotifyEvent_Impl( NotifyEvent& rEvent )
 {
     if (pImp->m_pController.is())
-        return pImp->m_pController->HandleEvent_Impl( rEvent );
+        return pImp->m_pController->HandleEvent_Impl( rEvent ) ? 1 : 0;
     return 0;
 }
 
