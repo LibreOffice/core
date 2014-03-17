@@ -23,10 +23,11 @@
 #include <threadhelp/inoncopyable.h>
 #include <framework/imutex.hxx>
 #include <threadhelp/irwlock.h>
-#include <threadhelp/fairrwlock.hxx>
 
 #include <comphelper/solarmutex.hxx>
 #include <fwidllapi.h>
+
+namespace osl { class Mutex; }
 
 namespace framework{
 

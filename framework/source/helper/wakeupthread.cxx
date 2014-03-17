@@ -17,7 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
 
+#include <osl/conditn.hxx>
 
 // include files of own module
 #include <helper/wakeupthread.hxx>

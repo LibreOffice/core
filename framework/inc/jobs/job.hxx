@@ -38,6 +38,7 @@
 #include <com/sun/star/frame/DispatchResultEvent.hpp>
 
 #include <cppuhelper/implbase3.hxx>
+#include <osl/conditn.hxx>
 #include <rtl/ustring.hxx>
 
 
