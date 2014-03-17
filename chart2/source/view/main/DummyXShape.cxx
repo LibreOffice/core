@@ -546,8 +546,11 @@ void DummyCircle::render()
     std::map<OUString, uno::Any>::const_iterator itr = maProperties.find("FillTransparence");
     if(itr != maProperties.end())
     {
-        sal_Int32 nTrans = itr->second.get<sal_Int32>();
+        sal_Int32 nTrans = itr->second.get<sal_Int32>()/100.0*255;
         nAlpha = 255 - static_cast<sal_uInt8>(nTrans & 0xFF);
+
+        if(nAlpha == 0)
+            return;
     }
 
     itr = maProperties.find("FillColor");
