@@ -12461,11 +12461,11 @@ if test -n "$enable_mergelibs" -a "$enable_mergelibs" != "no"; then
     if test "$enable_mergelibs" = "all"; then
         MERGELIBS="ALL"
         URELIBS="TRUE"
+        AC_DEFINE(STATIC_LINKING)
     else
         MERGELIBS="CORE"
     fi
     AC_MSG_RESULT([yes])
-    AC_DEFINE(STATIC_LINKING)
 else
     AC_MSG_RESULT([no])
 fi
