@@ -239,7 +239,7 @@ public:
 
     virtual void SAL_CALL join();
     virtual void SAL_CALL terminate();
-    virtual void SAL_CALL cancel();
+    virtual void cancel();
 
 protected:
     virtual ~UpdateCheckThread();
@@ -323,7 +323,7 @@ public:
         const OUString& rURL );
 
     virtual void SAL_CALL run();
-    virtual void SAL_CALL cancel();
+    virtual void cancel();
     virtual void SAL_CALL suspend();
     virtual void SAL_CALL onTerminated();
 
@@ -401,7 +401,7 @@ UpdateCheckThread::join()
 
 
 
-void SAL_CALL
+void
 UpdateCheckThread::cancel()
 {
     uno::Reference< deployment::XUpdateInformationProvider > xProvider(getProvider());
@@ -669,7 +669,7 @@ DownloadThread::run()
 
 
 
-void SAL_CALL DownloadThread::cancel()
+void DownloadThread::cancel()
 {
     m_aDownload.stop();
     resume();

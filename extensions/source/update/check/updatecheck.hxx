@@ -45,7 +45,7 @@ public:
 class WorkerThread : public osl::Thread
 {
 public:
-    virtual void SAL_CALL cancel() = 0;
+    virtual void cancel() = 0;
 };
 
 class UpdateCheck :
