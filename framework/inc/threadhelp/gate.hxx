@@ -20,9 +20,9 @@
 #ifndef INCLUDED_FRAMEWORK_INC_THREADHELP_GATE_HXX
 #define INCLUDED_FRAMEWORK_INC_THREADHELP_GATE_HXX
 
-#include <threadhelp/inoncopyable.h>
 #include <threadhelp/igate.h>
 
+#include <boost/noncopyable.hpp>
 #include <osl/mutex.hxx>
 #include <osl/conditn.hxx>
 
@@ -39,12 +39,11 @@ namespace framework{
 
     @implements     IGate
     @base           IGate
-                    INonCopyable
 
     @devstatus      ready to use
 *//*-*************************************************************************************************************/
 class Gate : public  IGate
-           , private INonCopyable
+           , private boost::noncopyable
 {
 
     //  public methods

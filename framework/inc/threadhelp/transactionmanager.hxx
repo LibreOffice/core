@@ -20,7 +20,7 @@
 #ifndef INCLUDED_FRAMEWORK_INC_THREADHELP_TRANSACTIONMANAGER_HXX
 #define INCLUDED_FRAMEWORK_INC_THREADHELP_TRANSACTIONMANAGER_HXX
 
-#include <threadhelp/inoncopyable.h>
+#include <boost/noncopyable.hpp>
 #include <threadhelp/itransactionmanager.h>
 #include <threadhelp/gate.hxx>
 
@@ -43,13 +43,12 @@ namespace framework{
                     and react for it. You can enable automaticly throwing of exceptions too.
 
     @implements     ITransactionManager
-    @base           INonCopyable
-                    ITransactionManager
+    @base           ITransactionManager
 
     @devstatus      draft
 *//*-*************************************************************************************************************/
 class FWI_DLLPUBLIC TransactionManager : public  ITransactionManager
-                         , private INonCopyable
+                         , private boost::noncopyable
 {
 
     //  public methods

@@ -20,7 +20,7 @@
 #ifndef INCLUDED_FRAMEWORK_INC_THREADHELP_LOCKHELPER_HXX
 #define INCLUDED_FRAMEWORK_INC_THREADHELP_LOCKHELPER_HXX
 
-#include <threadhelp/inoncopyable.h>
+#include <boost/noncopyable.hpp>
 #include <framework/imutex.hxx>
 #include <threadhelp/irwlock.h>
 
@@ -51,15 +51,14 @@ namespace framework{
     @implements     IMutex
     @implements     IRWLock
 
-    @base           INonCopyable
-                    IMutex
+    @base           IMutex
                     IRWLock
 
     @devstatus      draft
 *//*-*************************************************************************************************************/
 class FWI_DLLPUBLIC LockHelper : public  IMutex
                  , public  IRWLock
-                 , private INonCopyable
+                 , private boost::noncopyable
 {
 
     //  public methods

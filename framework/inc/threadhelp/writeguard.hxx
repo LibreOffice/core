@@ -20,7 +20,7 @@
 #ifndef INCLUDED_FRAMEWORK_INC_THREADHELP_WRITEGUARD_HXX
 #define INCLUDED_FRAMEWORK_INC_THREADHELP_WRITEGUARD_HXX
 
-#include <threadhelp/inoncopyable.h>
+#include <boost/noncopyable.hpp>
 #include <threadhelp/irwlock.h>
 
 
@@ -37,11 +37,10 @@ namespace framework{
                        Interface "IMutex" should be used by easier guard implementations ... like "ResetableGuard"!
 
     @implements     -
-    @base           INonCopyable
 
     @devstatus      ready to use
 *//*-*************************************************************************************************************/
-class WriteGuard : private INonCopyable
+class WriteGuard : private boost::noncopyable
 {
 
     //  public methods

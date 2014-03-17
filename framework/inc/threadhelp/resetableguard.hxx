@@ -20,7 +20,7 @@
 #ifndef INCLUDED_FRAMEWORK_INC_THREADHELP_RESETABLEGUARD_HXX
 #define INCLUDED_FRAMEWORK_INC_THREADHELP_RESETABLEGUARD_HXX
 
-#include <threadhelp/inoncopyable.h>
+#include <boost/noncopyable.hpp>
 #include <framework/imutex.hxx>
 
 #include <sal/types.h>
@@ -40,11 +40,10 @@ namespace framework{
                        Interface "IRWLock" should be used by special guard implementations ... like "ReadGuard" or "WriteGuard"!
 
     @implements     -
-    @base           INonCopyable
 
     @devstatus      ready to use
 *//*-*************************************************************************************************************/
-class ResetableGuard : private INonCopyable
+class ResetableGuard : private boost::noncopyable
 {
 
     //  public methods

@@ -20,7 +20,7 @@
 #ifndef INCLUDED_FRAMEWORK_INC_THREADHELP_TRANSACTIONGUARD_HXX
 #define INCLUDED_FRAMEWORK_INC_THREADHELP_TRANSACTIONGUARD_HXX
 
-#include <threadhelp/inoncopyable.h>
+#include <boost/noncopyable.hpp>
 #include <threadhelp/itransactionmanager.h>
 
 namespace framework{
@@ -38,11 +38,10 @@ namespace framework{
     @attention      To prevent us against wrong using, the default ctor, copy ctor and the =operator are maked private!
 
     @implements     -
-    @base           INonCopyable
 
     @devstatus      draft
 *//*-*************************************************************************************************************/
-class TransactionGuard : private INonCopyable
+class TransactionGuard : private boost::noncopyable
 {
 
     //  public methods
