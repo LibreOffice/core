@@ -3405,28 +3405,27 @@ void ScOpenclTest:: testFinancialXirrFormula()
 {
     if (!detectOpenCLDevice())
         return;
-    ScDocShellRef xDocSh = loadDoc("opencl/financial/XIRR.", XLS);
+
+    ScDocShellRef xDocSh = loadDoc("opencl/financial/XIRR.", ODS);
+    CPPUNIT_ASSERT(xDocSh.Is());
     ScDocument *pDoc = xDocSh->GetDocument();
-    CPPUNIT_ASSERT(pDoc);
     enableOpenCL();
     pDoc->CalcAll();
-    ScDocShellRef xDocShRes = loadDoc("opencl/financial/XIRR.", XLS);
-    ScDocument *pDocRes = xDocShRes->GetDocument();
-    CPPUNIT_ASSERT(pDocRes);
-    for (SCROW i = 0; i <= 9; ++i)
+
+    for (SCROW i = 1; i <= 10; ++i)
     {
-        double fLibre = pDoc->GetValue(ScAddress(2, i, 0));
-        double fExcel = pDocRes->GetValue(ScAddress(2, i, 0));
-        CPPUNIT_ASSERT_DOUBLES_EQUAL(fExcel, fLibre, fabs(0.0001*fExcel));
+        double fFormula  = pDoc->GetValue(ScAddress(2, i, 0));
+        double fExpected = pDoc->GetValue(ScAddress(3, i, 0));
+        CPPUNIT_ASSERT(rtl::math::approxEqual(fExpected, fFormula));
     }
-    for (SCROW i = 18; i <= 26; ++i)
+    for (SCROW i = 18; i <= 27; ++i)
     {
-        double fLibre = pDoc->GetValue(ScAddress(2, i, 0));
-        double fExcel = pDocRes->GetValue(ScAddress(2, i, 0));
-        CPPUNIT_ASSERT_DOUBLES_EQUAL(fExcel, fLibre, fabs(0.0001*fExcel));
+        double fFormula = pDoc->GetValue(ScAddress(2, i, 0));
+        double fExpected = pDoc->GetValue(ScAddress(3, i, 0));
+        CPPUNIT_ASSERT(rtl::math::approxEqual(fExpected, fFormula));
     }
+
     xDocSh->DoClose();
-    xDocShRes->DoClose();
 }
 //[AMLOEXT-139]
 void ScOpenclTest::testStatisticalFormulaChiSqDist()
