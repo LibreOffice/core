@@ -733,12 +733,16 @@ void DomainMapper::lcl_attribute(Id nName, Value & val)
                     break;
                     case NS_ooxml::LN_CT_FramePr_wrap:
                     {
-                        //should be either LN_Value_wordprocessingml_ST_Wrap_notBeside or LN_Value_wordprocessingml_ST_Wrap_around
+                        //should be either LN_Value_wordprocessingml_ST_Wrap_notBeside or LN_Value_wordprocessingml_ST_Wrap_around or LN_Value_wordprocessingml_ST_Wrap_auto
                         OSL_ENSURE( sal::static_int_cast<Id>(nIntValue) == NS_ooxml::LN_Value_wordprocessingml_ST_Wrap_around ||
-                                    sal::static_int_cast<Id>(nIntValue) == NS_ooxml::LN_Value_wordprocessingml_ST_Wrap_notBeside,
-                            "wrap not around or not_Beside?");
-                        pParaProperties->SetWrap(sal::static_int_cast<Id>(nIntValue) == NS_ooxml::LN_Value_wordprocessingml_ST_Wrap_around ?
-                                                 text::WrapTextMode_DYNAMIC : text::WrapTextMode_NONE );
+                                    sal::static_int_cast<Id>(nIntValue) == NS_ooxml::LN_Value_wordprocessingml_ST_Wrap_notBeside ||
+                                    sal::static_int_cast<Id>(nIntValue) == NS_ooxml::LN_Value_wordprocessingml_ST_Wrap_auto,
+                            "wrap not around, not_Beside or auto?");
+                        if( sal::static_int_cast<Id>(nIntValue) == NS_ooxml::LN_Value_wordprocessingml_ST_Wrap_around ||
+                            sal::static_int_cast<Id>(nIntValue) == NS_ooxml::LN_Value_wordprocessingml_ST_Wrap_auto )
+                            pParaProperties->SetWrap ( text::WrapTextMode_DYNAMIC ) ;
+                        else
+                            pParaProperties->SetWrap ( text::WrapTextMode_NONE ) ;
                     }
                     break;
                     case NS_ooxml::LN_CT_FramePr_w:
