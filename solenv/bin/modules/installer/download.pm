@@ -669,11 +669,6 @@ sub get_install_type
             $type = $type . "-arc";
         }
 
-        if (( $allvariables->{'WITHJREPRODUCT'} ) && ( $allvariables->{'WITHJREPRODUCT'} == 1 ))
-        {
-            $type = $type . "-wJRE";
-        }
-
     }
 
     return $type;
@@ -688,8 +683,6 @@ sub get_downloadname_addon
     my $addon = "";
 
     if ( $installer::globals::islinuxdebbuild ) { $addon = $addon . "_deb"; }
-
-    if ( $installer::globals::product =~ /_wJRE\s*$/ ) { $addon = "_wJRE"; }
 
     return $addon;
 }

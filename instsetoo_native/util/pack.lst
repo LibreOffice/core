@@ -9,7 +9,6 @@
 
 OpenOffice      unxlngi6.pro,unxmacxi.pro,unxsoli4.pro,unxsols4.pro,wntmsci12.pro,unxlngx6.pro    en-US   openoffice
 OpenOffice      unxlngi6,unxmacxi,unxsoli4,unxsols4,wntmsci12                                     en-US   openoffice
-#OpenOffice_wJRE unxlngi6.pro,unxsoli4.pro,unxsols4.pro,wntmsci12.pro,wntmsci12                    en-US   openofficewithjre
 OpenOffice_Dev  unxlngi6.pro,unxsoli4.pro,unxsols4.pro,wntmsci12.pro,unxmacxi.pro,unxlngx6.pro    en-US   openofficedev
 #OpenOffice_SDK  unxlngi6.pro,unxmacxi.pro,unxsoli4.pro,unxsols4.pro,wntmsci12.pro,unxlngx6.pro,unxlngi6,unxmacxi,unxsoli4,unxsols4,wntmsci12  en-US   sdkoo
 OpenOffice_Dev_SDK  unxlngi6.pro,unxmacxi.pro,unxsoli4.pro,unxsols4.pro,wntmsci12.pro,unxlngx6.pro,unxlngi6,unxmacxi,unxsoli4,unxsols4,wntmsci12  en-US   sdkoodev

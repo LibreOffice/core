@@ -78,7 +78,6 @@ help .PHONY :
     @echo "    aoo_srcrelease         packs the source release package"
     @echo "    updatepack"
     @echo "    openofficedev          devloper snapshot"
-    @echo "    openofficewithjre"
     @echo "    ooolanguagepack"
     @echo "    ooobetalanguagepack"
     @echo "    ooodevlanguagepack"
@@ -185,7 +184,6 @@ openoffice:
 openoffice: $(foreach,i,$(alllangiso) openoffice_$i)
 openofficedev: $(foreach,i,$(alllangiso) openofficedev_$i)
 openofficebeta: $(foreach,i,$(alllangiso) openofficebeta_$i)
-openofficewithjre: $(foreach,i,$(alllangiso) openofficewithjre_$i)
 ooolanguagepack : $(foreach,i,$(alllangiso) ooolanguagepack_$i)
 ooobetalanguagepack : $(foreach,i,$(alllangiso) ooobetalanguagepack_$i)
 ooodevlanguagepack: $(foreach,i,$(alllangiso) ooodevlanguagepack_$i)
@@ -223,7 +221,6 @@ $(foreach,i,$(alllangiso) openoffice_$i) : adddeps
 openoffice_$(defaultlangiso).archive : adddeps
 $(foreach,i,$(alllangiso) openofficedev_$i) : adddeps
 $(foreach,i,$(alllangiso) openofficebeta_$i) : adddeps $(BETA_LOGO_SPLASH)
-$(foreach,i,$(alllangiso) openofficewithjre_$i) : adddeps
 $(foreach,i,$(alllangiso) ooolanguagepack_$i) : adddeps
 $(foreach,i,$(alllangiso) ooobetalanguagepack_$i) : adddeps
 $(foreach,i,$(alllangiso) ooodevlanguagepack_$i) : adddeps
@@ -236,7 +233,6 @@ $(foreach,i,$(alllangiso) sdkoodev_$i) : adddeps
 # where $language ranges over all languages in $(alllangiso) 
 # and $package ranges over all package formats in $(PKGFORMAT)
 $(foreach,i,$(alllangiso) openoffice_$i) : $$@{$(PKGFORMAT:^".")}
-$(foreach,i,$(alllangiso) openofficewithjre_$i) : $$@{$(PKGFORMAT:^".")}
 $(foreach,i,$(alllangiso) openofficedev_$i) : $$@{$(PKGFORMAT:^".")}
 $(foreach,i,$(alllangiso) openofficebeta_$i) : $$@{$(PKGFORMAT:^".")}
 $(foreach,i,$(alllangiso) ooolanguagepack_$i) : $$@{$(PKGFORMAT:^".")}
@@ -281,9 +277,6 @@ $(foreach,P,$(PACKAGE_FORMATS) $(foreach,L,$(alllangiso) openoffice_$L.$P)) .PHO
         $(PRJ)$/util$/update.xml	\
         > $(MISC)/$(@:b)_$(RTL_OS)_$(RTL_ARCH)$(@:e).update.xml
 
-#openofficewithjre_%{$(PKGFORMAT:^".")} :
-$(foreach,P,$(PACKAGE_FORMATS) $(foreach,L,$(alllangiso) openofficewithjre_$L.$P)) .PHONY :
-    $(MAKE_INSTALLER_COMMAND) -p Apache_OpenOffice_wJRE -msitemplate $(MSIOFFICETEMPLATEDIR)
 
 #openofficedev_%{$(PKGFORMAT:^".")} :
 $(foreach,P,$(PACKAGE_FORMATS) $(foreach,L,$(alllangiso) openofficedev_$L.$P)) .PHONY :
