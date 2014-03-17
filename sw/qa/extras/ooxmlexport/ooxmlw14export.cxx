@@ -277,13 +277,13 @@ DECLARE_OOXMLEXPORT_TEST(Test_McIgnorable, "TextEffects_StylisticSets_CntxtAlts.
     if (!pXmlDocument)
         return;
 
-     assertXPath(pXmlDocument, "/w:document", "Ignorable", "w14 wp14");
+    assertXPath(pXmlDocument, "/w:document", "Ignorable", "w14 wp14");
 
     xmlDocPtr pXmlStyles = parseExport("word/styles.xml");
     if (!pXmlStyles)
         return;
 
-     assertXPath(pXmlStyles, "/w:styles", "Ignorable", "w14");
+    assertXPath(pXmlStyles, "/w:styles", "Ignorable", "w14");
 }
 
 DECLARE_OOXMLEXPORT_TEST(Test_CompatSettingsForW14, "TextEffects_StylisticSets_CntxtAlts.docx")
