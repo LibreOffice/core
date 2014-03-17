@@ -1828,12 +1828,12 @@ sal_Int16 implGetDateDay( double aDate )
     if ( aDate >= 0.0 )
     {
         aDate = floor( aDate );
-        aRefDate += (sal_uIntPtr)aDate;
+        aRefDate += static_cast<long>(aDate);
     }
     else
     {
         aDate = ceil( aDate );
-        aRefDate -= (sal_uIntPtr)(-1.0 * aDate);
+        aRefDate -= static_cast<long>(-1.0 * aDate);
     }
 
     sal_Int16 nRet = (sal_Int16)( aRefDate.GetDay() );

@@ -357,7 +357,7 @@ void SAL_CALL BasMgrContainerListenerImpl::elementRemoved( const container::Cont
     }
 }
 
-BasicError::BasicError( sal_uIntPtr nId, sal_uInt16 nR, const OUString& rErrStr ) :
+BasicError::BasicError( sal_uInt64 nId, sal_uInt16 nR, const OUString& rErrStr ) :
     aErrStr( rErrStr )
 {
     nErrorId    = nId;

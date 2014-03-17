@@ -271,8 +271,7 @@ Any SAL_CALL SfxScriptLibraryContainer::importLibraryElement
     catch(const Exception& )
     {
         SfxErrorContext aEc( ERRCTX_SFX_LOADBASIC, aFile );
-        sal_uIntPtr nErrorCode = ERRCODE_IO_GENERAL;
-        ErrorHandler::HandleError( nErrorCode );
+        ErrorHandler::HandleError( ERRCODE_IO_GENERAL );
     }
 
     aRetAny <<= aMod.aCode;

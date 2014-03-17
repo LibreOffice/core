@@ -828,7 +828,7 @@ void SbiStdObject::SFX_NOTIFY( SfxBroadcaster& rBC, const TypeId& rBCType,
     {
         SbxVariable* pVar = pHint->GetVar();
         SbxArray* pPar_ = pVar->GetParameters();
-        sal_uIntPtr t = pHint->GetId();
+        sal_uLong t = pHint->GetId();
         sal_uInt16 nCallId = (sal_uInt16) pVar->GetUserData();
         if( nCallId )
         {

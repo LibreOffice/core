@@ -313,11 +313,11 @@ class OslStream : public SvStream
 public:
                         OslStream( const OUString& rName, short nStrmMode );
                        ~OslStream();
-    virtual sal_uIntPtr GetData( void* pData, sal_uIntPtr nSize ) SAL_OVERRIDE;
-    virtual sal_uIntPtr PutData( const void* pData, sal_uIntPtr nSize ) SAL_OVERRIDE;
-    virtual sal_uIntPtr SeekPos( sal_uIntPtr nPos ) SAL_OVERRIDE;
+    virtual sal_uInt64 GetData( void* pData, sal_uInt64 nSize ) SAL_OVERRIDE;
+    virtual sal_uInt64 PutData( const void* pData, sal_uInt64 nSize ) SAL_OVERRIDE;
+    virtual sal_uInt64 SeekPos( sal_uInt64 nPos ) SAL_OVERRIDE;
     virtual void        FlushData() SAL_OVERRIDE;
-    virtual void        SetSize( sal_uIntPtr nSize ) SAL_OVERRIDE;
+    virtual void        SetSize( sal_uInt64 nSize) SAL_OVERRIDE;
 };
 
 OslStream::OslStream( const OUString& rName, short nStrmMode )
@@ -357,21 +357,21 @@ OslStream::~OslStream()
     maFile.close();
 }
 
-sal_uIntPtr OslStream::GetData( void* pData, sal_uIntPtr nSize )
+sal_uInt64 OslStream::GetData( void* pData, sal_uInt64 nSize )
 {
     sal_uInt64 nBytesRead = nSize;
     maFile.read( pData, nBytesRead, nBytesRead );
-    return (sal_uIntPtr)nBytesRead;
+    return nBytesRead;
 }
 
-sal_uIntPtr OslStream::PutData( const void* pData, sal_uIntPtr nSize )
+sal_uInt64 OslStream::PutData( const void* pData, sal_uInt64 nSize )
 {
     sal_uInt64 nBytesWritten;
-    maFile.write( pData, (sal_uInt64)nSize, nBytesWritten );
-    return (sal_uIntPtr)nBytesWritten;
+    maFile.write( pData, nSize, nBytesWritten );
+    return nBytesWritten;
 }
 
-sal_uIntPtr OslStream::SeekPos( sal_uIntPtr nPos )
+sal_uInt64 OslStream::SeekPos( sal_uInt64 nPos )
 {
     ::osl::FileBase::RC rc = ::osl::FileBase::E_None;
     if( nPos == STREAM_SEEK_TO_END )
@@ -385,16 +385,16 @@ sal_uIntPtr OslStream::SeekPos( sal_uIntPtr nPos )
     OSL_VERIFY(rc == ::osl::FileBase::E_None);
     sal_uInt64 nRealPos(0);
     maFile.getPos( nRealPos );
-    return sal::static_int_cast<sal_uIntPtr>(nRealPos);
+    return nRealPos;
 }
 
 void OslStream::FlushData()
 {
 }
 
-void OslStream::SetSize( sal_uIntPtr nSize )
+void OslStream::SetSize( sal_uInt64 nSize )
 {
-    maFile.setSize( (sal_uInt64)nSize );
+    maFile.setSize( nSize );
 }
 
 
@@ -407,11 +407,11 @@ public:
                         UCBStream( Reference< XInputStream > & xIS );
                         UCBStream( Reference< XStream > & xS );
                        ~UCBStream();
-    virtual sal_uIntPtr GetData( void* pData, sal_uIntPtr nSize ) SAL_OVERRIDE;
-    virtual sal_uIntPtr PutData( const void* pData, sal_uIntPtr nSize ) SAL_OVERRIDE;
-    virtual sal_uIntPtr SeekPos( sal_uIntPtr nPos ) SAL_OVERRIDE;
+    virtual sal_uInt64 GetData( void* pData, sal_uInt64 nSize ) SAL_OVERRIDE;
+    virtual sal_uInt64 PutData( const void* pData, sal_uInt64 nSize ) SAL_OVERRIDE;
+    virtual sal_uInt64 SeekPos( sal_uInt64 nPos ) SAL_OVERRIDE;
     virtual void        FlushData() SAL_OVERRIDE;
-    virtual void        SetSize( sal_uIntPtr nSize ) SAL_OVERRIDE;
+    virtual void        SetSize( sal_uInt64 nSize ) SAL_OVERRIDE;
 };
 
 UCBStream::UCBStream( Reference< XInputStream > & rStm )
@@ -450,7 +450,7 @@ UCBStream::~UCBStream()
     }
 }
 
-sal_uIntPtr UCBStream::GetData( void* pData, sal_uIntPtr nSize )
+sal_uInt64 UCBStream::GetData( void* pData, sal_uInt64 nSize )
 {
     try
     {
@@ -481,7 +481,7 @@ sal_uIntPtr UCBStream::GetData( void* pData, sal_uIntPtr nSize )
     return 0;
 }
 
-sal_uIntPtr UCBStream::PutData( const void* pData, sal_uIntPtr nSize )
+sal_uInt64 UCBStream::PutData( const void* pData, sal_uInt64 nSize )
 {
     try
     {
@@ -504,13 +504,13 @@ sal_uIntPtr UCBStream::PutData( const void* pData, sal_uIntPtr nSize )
     return 0;
 }
 
-sal_uIntPtr UCBStream::SeekPos( sal_uIntPtr nPos )
+sal_uInt64 UCBStream::SeekPos( sal_uInt64 nPos )
 {
     try
     {
         if( xSeek.is() )
         {
-            sal_uIntPtr nLen = sal::static_int_cast<sal_uIntPtr>( xSeek->getLength() );
+            sal_uInt64 nLen = static_cast<sal_uInt64>( xSeek->getLength() );
             if( nPos > nLen )
             {
                 nPos = nLen;
@@ -550,7 +550,7 @@ void UCBStream::FlushData()
     }
 }
 
-void    UCBStream::SetSize( sal_uIntPtr nSize )
+void    UCBStream::SetSize( sal_uInt64 nSize )
 {
     (void)nSize;
 
@@ -687,10 +687,10 @@ void SbiStream::ExpandFile()
 {
     if ( nExpandOnWriteTo )
     {
-        sal_uIntPtr nCur = pStrm->Seek(STREAM_SEEK_TO_END);
+        sal_uInt64 nCur = pStrm->Seek(STREAM_SEEK_TO_END);
         if( nCur < nExpandOnWriteTo )
         {
-            sal_uIntPtr nDiff = nExpandOnWriteTo - nCur;
+            sal_uInt64 nDiff = nExpandOnWriteTo - nCur;
             char c = 0;
             while( nDiff-- )
             {

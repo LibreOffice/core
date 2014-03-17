@@ -148,7 +148,7 @@ RTLFUNC(InputBox)
     (void)pBasic;
     (void)bWrite;
 
-    sal_uIntPtr nArgCount = rPar.Count();
+    sal_uInt32 nArgCount = rPar.Count();
     if ( nArgCount < 2 )
         StarBASIC::Error( SbERR_BAD_ARGUMENT );
     else

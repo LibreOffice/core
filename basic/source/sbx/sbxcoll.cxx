@@ -120,7 +120,7 @@ void SbxCollection::SFX_NOTIFY( SfxBroadcaster& rCst, const TypeId& rId1,
     const SbxHint* p = PTR_CAST(SbxHint,&rHint);
     if( p )
     {
-        sal_uIntPtr nId = p->GetId();
+        sal_uLong nId = p->GetId();
         bool bRead  = ( nId == SBX_HINT_DATAWANTED );
         bool bWrite = ( nId == SBX_HINT_DATACHANGED );
         SbxVariable* pVar = p->GetVar();

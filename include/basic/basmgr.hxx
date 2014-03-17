@@ -46,19 +46,19 @@ class SotStorage;
 class BASIC_DLLPUBLIC BasicError
 {
 private:
-    sal_uIntPtr nErrorId;
+    sal_uInt64 nErrorId;
     sal_uInt16  nReason;
     OUString  aErrStr;
 
 public:
             BasicError( const BasicError& rErr );
-            BasicError( sal_uIntPtr nId, sal_uInt16 nR, const OUString& rErrStr );
+            BasicError( sal_uInt64 nId, sal_uInt16 nR, const OUString& rErrStr );
 
-    sal_uIntPtr GetErrorId() const                  { return nErrorId; }
+    sal_uInt64 GetErrorId() const                  { return nErrorId; }
     sal_uInt16  GetReason() const                   { return nReason; }
     OUString    GetErrorStr()                       { return aErrStr; }
 
-    void    SetErrorId( sal_uIntPtr n )             { nErrorId = n; }
+    void    SetErrorId( sal_uInt64 n )             { nErrorId = n; }
     void    SetReason( sal_uInt16 n )               { nReason = n; }
     void    SetErrorStr( const OUString& rStr)      { aErrStr = rStr; }
 };
