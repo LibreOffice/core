@@ -107,13 +107,6 @@ using ::drawinglayer::primitive2d::BorderLinePrimitive2D;
 using ::std::pair;
 using ::std::make_pair;
 
-//subsidiary lines enabled?
-#define IS_SUBS_TABLE \
-    (pGlobalShell->GetViewOptions()->IsTable() && \
-    !pGlobalShell->GetViewOptions()->IsPagePreview()&&\
-    !pGlobalShell->GetViewOptions()->IsReadonly()&&\
-    !pGlobalShell->GetViewOptions()->IsFormView() &&\
-     SwViewOption::IsTableBoundaries())
 //other subsidiary lines enabled?
 #define IS_SUBS (!pGlobalShell->GetViewOptions()->IsPagePreview() && \
         !pGlobalShell->GetViewOptions()->IsReadonly() && \
@@ -258,6 +251,27 @@ static sal_Bool bTableHack = sal_False;
 
 //To optimize the expensive RetouchColor determination
 Color aGlobalRetoucheColor;
+
+namespace {
+
+bool isTableBoundariesEnabled()
+{
+    if (!pGlobalShell->GetViewOptions()->IsTable())
+        return false;
+
+    if (pGlobalShell->GetViewOptions()->IsPagePreview())
+        return false;
+
+    if (pGlobalShell->GetViewOptions()->IsReadonly())
+        return false;
+
+    if (pGlobalShell->GetViewOptions()->IsFormView())
+        return false;
+
+    return SwViewOption::IsTableBoundaries();
+}
+
+}
 
 // Set borders alignment statics.
 // adjustment for 'small' twip-to-pixel relations:
@@ -2491,8 +2505,10 @@ void SwTabFrmPainter::PaintLines(OutputDevice& rDev, const SwRect& rRect) const
             const Color* pTmpColor = 0;
             if (0 == aStyles[ 0 ].GetWidth())
             {
-                if (IS_SUBS_TABLE && pGlobalShell->GetWin())
+                if (isTableBoundariesEnabled() && pGlobalShell->GetWin())
                     aStyles[ 0 ].Set( rCol, rCol, rCol, false, 1, 0, 0 );
+                else
+                    aStyles[0].SetType(table::BorderLineStyle::NONE);
             }
             else
                 pTmpColor = pHCColor;
@@ -4227,12 +4243,8 @@ void SwTabFrm::Paint(SwRect const& rRect, SwPrintData const*const) const
                 PaintShadow( rRect, aRect, rAttrs );
             }
 
-            if (pViewOption->IsTableBoundaries())
-            {
-                // fdo#75118 Paint border lines only when it's enabled.
-                SwTabFrmPainter aHelper(*this);
-                aHelper.PaintLines(*pGlobalShell->GetOut(), rRect);
-            }
+            SwTabFrmPainter aHelper(*this);
+            aHelper.PaintLines(*pGlobalShell->GetOut(), rRect);
         }
         // <-- collapsing
 
@@ -6343,7 +6355,7 @@ void SwFrm::PaintBackground( const SwRect &rRect, const SwPageFrm *pPage,
 
 void SwPageFrm::RefreshSubsidiary( const SwRect &rRect ) const
 {
-    if ( IS_SUBS || IS_SUBS_TABLE || IS_SUBS_SECTION || IS_SUBS_FLYS )
+    if ( IS_SUBS || isTableBoundariesEnabled() || IS_SUBS_SECTION || IS_SUBS_FLYS )
     {
         SwRect aRect( rRect );
         // OD 18.02.2003 #104989# - Not necessary and incorrect alignment of
