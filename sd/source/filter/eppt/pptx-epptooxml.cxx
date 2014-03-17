@@ -1226,7 +1226,7 @@ void PowerPointExport::WriteAnimations( FSHelperPtr pFS )
 }
 
 
-static OUString lcl_GetInitials( OUString sName )
+static OUString lcl_GetInitials( const OUString& sName )
 {
     OUStringBuffer sRet;
 
@@ -1272,7 +1272,7 @@ void PowerPointExport::WriteAuthors()
     pFS->endElementNS( XML_p, XML_cmAuthorLst );
 }
 
-sal_Int32 PowerPointExport::GetAuthorIdAndLastIndex( OUString sAuthor, sal_Int32& nLastIndex )
+sal_Int32 PowerPointExport::GetAuthorIdAndLastIndex( const OUString& sAuthor, sal_Int32& nLastIndex )
 {
     if ( maAuthors.count( sAuthor ) <= 0 ) {
         struct AuthorComments aAuthorComments;

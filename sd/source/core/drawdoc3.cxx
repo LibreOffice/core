@@ -356,7 +356,7 @@ lcl_removeUnusedStyles(SfxStyleSheetBasePool* const pStyleSheetPool, SdStyleShee
     rStyles = aUsedStyles;
 }
 
-SfxStyleSheet *lcl_findStyle(SdStyleSheetVector& rStyles, OUString aStyleName)
+SfxStyleSheet *lcl_findStyle(SdStyleSheetVector& rStyles, const OUString& aStyleName)
 {
     for(SdStyleSheetVector::const_iterator aIt(rStyles.begin()), aLast(rStyles.end()); aIt != aLast; ++aIt)
     {

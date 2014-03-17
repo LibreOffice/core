@@ -104,7 +104,7 @@ public:
             { bOldDimHide = bTheOldDimHide; bNewDimHide = bTheNewDimHide; }
         void SetSoundOn(sal_Bool bTheOldSoundOn, sal_Bool bTheNewSoundOn)
             { bOldSoundOn = bTheOldSoundOn; bNewSoundOn = bTheNewSoundOn; }
-        void SetSound(OUString aTheOldSound, OUString aTheNewSound)
+        void SetSound(const OUString& aTheOldSound, const OUString& aTheNewSound)
             { aOldSoundFile = aTheOldSound; aNewSoundFile = aTheNewSound; }
         void SetBlueScreen(Color aTheOldBlueScreen, Color aTheNewBlueScreen)
             { aOldBlueScreen = aTheOldBlueScreen; aNewBlueScreen = aTheNewBlueScreen; }
@@ -114,7 +114,7 @@ public:
             { pOldPathObj = pTheOldPath; pNewPathObj = pTheNewPath; }
         void SetClickAction(::com::sun::star::presentation::ClickAction eTheOldAction, ::com::sun::star::presentation::ClickAction eTheNewAction)
             { eOldClickAction = eTheOldAction; eNewClickAction = eTheNewAction; }
-        void SetBookmark(OUString aTheOldBookmark, OUString aTheNewBookmark)
+        void SetBookmark(const OUString& aTheOldBookmark, const OUString& aTheNewBookmark)
             { aOldBookmark = aTheOldBookmark; aNewBookmark = aTheNewBookmark; }
         void SetInvisibleInPres(sal_Bool bTheOldInvisibleInPres, sal_Bool bTheNewInvisibleInPres)
             { bOldInvisibleInPres = bTheOldInvisibleInPres; bNewInvisibleInPres = bTheNewInvisibleInPres; }

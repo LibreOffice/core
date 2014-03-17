@@ -260,7 +260,7 @@ public:
     virtual void Changed(const SdrObject& rObj, SdrUserCallType eType,
                          const Rectangle& rOldBoundRect);
 
-    void            SetLayoutName(OUString aName);
+    void            SetLayoutName(const OUString& aName);
     virtual OUString GetLayoutName() const       { return maLayoutName; }
 
     void            SetFileName(const OUString& aName) { maFileName = aName; }

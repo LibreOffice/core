@@ -45,7 +45,7 @@ public:
     ModifyPageUndoAction(
         SdDrawDocument*         pTheDoc,
         SdPage*                 pThePage,
-        OUString                aTheNewName,
+        const OUString&         aTheNewName,
         AutoLayout              eTheNewAutoLayout,
         sal_Bool                    bTheNewBckgrndVisible,
         sal_Bool                    bTheNewBckgrndObjsVisible);

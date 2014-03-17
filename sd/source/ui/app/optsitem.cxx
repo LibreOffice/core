@@ -49,7 +49,7 @@ template< class T > T getSafeValue( const Any& rAny )
 // - SdOptionsItem -
 
 
-SdOptionsItem::SdOptionsItem( const SdOptionsGeneric& rParent, const OUString rSubTree ) :
+SdOptionsItem::SdOptionsItem( const SdOptionsGeneric& rParent, const OUString& rSubTree ) :
     ConfigItem  ( rSubTree ),
     mrParent    ( rParent )
 {

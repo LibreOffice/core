@@ -494,7 +494,7 @@ void SdDrawDocument::CreateLayoutTemplates()
     pSSPool->CreateLayoutStyleSheets(aPrefix);
 }
 
-static Any implMakeSolidCellStyle( SdStyleSheetPool* pSSPool, const OUString& rName, const OUString rParent, const Color& rColor )
+static Any implMakeSolidCellStyle( SdStyleSheetPool* pSSPool, const OUString& rName, const OUString& rParent, const Color& rColor )
 {
     SfxStyleSheetBase* pSheet = &(pSSPool->Make(rName, SD_STYLE_FAMILY_CELL, SFXSTYLEBIT_AUTO));
     pSheet->SetParent(rParent);

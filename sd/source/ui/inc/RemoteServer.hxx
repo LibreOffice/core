@@ -45,7 +45,7 @@ namespace sd
         OUString mAddress;
 
         enum PROTOCOL { NETWORK = 1, BLUETOOTH };
-        ClientInfo( const OUString rName, const OUString rAddress ) :
+        ClientInfo( const OUString& rName, const OUString& rAddress ) :
             mName( rName ),
             mAddress( rAddress ) {}
     };
@@ -66,7 +66,7 @@ namespace sd
             // For the control dialog
             SD_DLLPUBLIC static std::vector<ClientInfo*> getClients();
             SD_DLLPUBLIC static sal_Bool connectClient( ClientInfo *pClient,
-                                                        OUString aPin );
+                                                        const OUString& aPin );
 
             /// ensure that discoverability (eg. for Bluetooth) is enabled
             SD_DLLPUBLIC static void ensureDiscoverable();

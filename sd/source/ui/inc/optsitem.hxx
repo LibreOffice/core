@@ -59,7 +59,7 @@ private:
 
 public:
 
-    SdOptionsItem( const SdOptionsGeneric& rParent, const OUString rSubTree );
+    SdOptionsItem( const SdOptionsGeneric& rParent, const OUString& rSubTree );
     virtual ~SdOptionsItem();
 
     virtual void            Commit();

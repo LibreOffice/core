@@ -52,9 +52,10 @@ namespace sd {
         BufferedStreamSocket *mpStreamSocket;
         OUString mPin;
 
-        ClientInfoInternal( const OUString rName,
-                            const OUString rAddress,
-                            BufferedStreamSocket *pSocket, OUString rPin ):
+        ClientInfoInternal( const OUString& rName,
+                            const OUString& rAddress,
+                            BufferedStreamSocket *pSocket,
+                            const OUString& rPin ):
                 ClientInfo( rName, rAddress ),
                 mpStreamSocket( pSocket ),
                 mPin( rPin ) {}
@@ -249,7 +250,7 @@ std::vector<ClientInfo*> RemoteServer::getClients()
     return aClients;
 }
 
-sal_Bool RemoteServer::connectClient( ClientInfo* pClient, OUString aPin )
+sal_Bool RemoteServer::connectClient( ClientInfo* pClient, const OUString& aPin )
 {
     SAL_INFO( "sdremote", "RemoteServer::connectClient called" );
     if ( !spServer )

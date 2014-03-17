@@ -125,7 +125,7 @@ protected:
 
     sal_uInt32 GetNewSlideId() { return mnSlideIdMax ++; }
     sal_uInt32 GetNewSlideMasterId() { return mnSlideMasterIdMax ++; }
-    sal_Int32 GetAuthorIdAndLastIndex( OUString sAuthor, sal_Int32& nLastIndex );
+    sal_Int32 GetAuthorIdAndLastIndex( const OUString& sAuthor, sal_Int32& nLastIndex );
 
 private:
     void AddLayoutIdAndRelation( ::sax_fastparser::FSHelperPtr pFS, sal_Int32 nLayoutFileId );

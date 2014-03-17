@@ -150,7 +150,7 @@ class STLPropertySet;
 class CustomAnimationDialog : public TabDialog
 {
 public:
-    CustomAnimationDialog(Window* pParent, STLPropertySet* pSet, OString Page = OString());
+    CustomAnimationDialog(Window* pParent, STLPropertySet* pSet, const OString& Page = OString());
     ~CustomAnimationDialog();
 
     STLPropertySet* getDefaultSet() { return mpSet; }

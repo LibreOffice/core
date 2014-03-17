@@ -1556,7 +1556,7 @@ void CustomAnimationPane::changeSelection( STLPropertySet* pResultSet, STLProper
     }
 }
 
-void CustomAnimationPane::showOptions(OString sPage)
+void CustomAnimationPane::showOptions(const OString& sPage)
 {
     STLPropertySet* pSet = createSelectionSet();
 

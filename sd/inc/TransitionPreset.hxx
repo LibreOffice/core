@@ -69,7 +69,7 @@ private:
     static bool importTransitionsFile( TransitionPresetList& rList,
                                        ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceFactory,
                                        UStringMap& rTransitionNameMape,
-                                       OUString aFilename );
+                                       const OUString& aFilename );
 };
 
 }
