@@ -72,6 +72,24 @@
     },
     {
       "key": {
+        "uuid": "da86d52c_69bbe572",
+        "filename": ".gitignore",
+        "patchSetId": 3
+      },
+      "lineNbr": 102,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2014-03-17T12:47:22Z",
+      "side": 1,
+      "message": "Probably it\u0027s better to leave it in docs. The doxygen output is independent of the compilation, just like the tags DB. Probably it shouldn\u0027t be removed by \"make clean\", just like tags, which would be the result of moving it to \"workdir/Doxygen\".",
+      "parentUuid": "da86d52c_e98fd5ca",
+      "revId": "5d6737a506693c3030c4c93d179b5c068f1b7d77",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "da86d52c_09a189a9",
         "filename": ".gitignore",
         "patchSetId": 3
