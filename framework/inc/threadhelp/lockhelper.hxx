@@ -31,17 +31,6 @@ namespace osl { class Mutex; }
 namespace framework{
 
 /*-************************************************************************************************************
-    @descr          A guard (specialy a write guard) support different internal working states.
-                    His lock can set for reading or writing/reading! Or he was unlocked by user ...
-*//*-*************************************************************************************************************/
-enum ELockMode
-{
-    E_NOLOCK    ,
-    E_READLOCK  ,
-    E_WRITELOCK
-};
-
-/*-************************************************************************************************************
     @short          helper to set right lock in right situation
     @descr          This helper support different types of locking:
                         a)  no locks - transparent for user!

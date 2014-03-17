@@ -60,7 +60,7 @@ class WriteGuard : private boost::noncopyable
         *//*-*****************************************************************************************************/
         inline WriteGuard( LockHelper* pLock )
             :   m_pLock ( pLock     )
-            ,   m_eMode ( E_NOLOCK  )
+            ,   m_locked(false)
         {
             lock();
         }
@@ -68,7 +68,7 @@ class WriteGuard : private boost::noncopyable
 
         inline WriteGuard( LockHelper& rLock )
             :   m_pLock ( &rLock    )
-            ,   m_eMode ( E_NOLOCK  )
+            ,   m_locked(false)
         {
             lock();
         }
@@ -102,11 +102,11 @@ class WriteGuard : private boost::noncopyable
         *//*-*****************************************************************************************************/
         inline void lock()
         {
-            if ( m_eMode == E_NOLOCK ) {
+            if (!m_locked) {
                 // Acquire write access and set return state.
                 // Mode is set later if it was successful!
                 m_pLock->acquire();
-                m_eMode = E_WRITELOCK;
+                m_locked = true;
             }
         }
 
@@ -124,28 +124,11 @@ class WriteGuard : private boost::noncopyable
         *//*-*****************************************************************************************************/
         inline void unlock()
         {
-            if ( m_eMode == E_WRITELOCK ) {
+            if (m_locked) {
                 m_pLock->release();
-                m_eMode = E_NOLOCK;
+                m_locked = false;
             }
         }
-
-        /*-****************************************************************************************************
-            @short      return internal states
-            @descr      For user they dont know what they are doing ...
-
-            @seealso    -
-
-            @param      -
-            @return     Current set lock mode.
-
-            @onerror    No error should occur.
-        *//*-*****************************************************************************************************/
-        inline ELockMode getMode() const
-        {
-            return m_eMode;
-        }
-
 
     //  private methods
 
@@ -171,7 +154,7 @@ class WriteGuard : private boost::noncopyable
     private:
 
         LockHelper*    m_pLock ;   /// reference to lock-member of protected object
-        ELockMode   m_eMode ;   /// protection against multiple lock calls without unlock and difference between supported lock modi
+        bool m_locked;
 
 };      //  class WriteGuard
 
