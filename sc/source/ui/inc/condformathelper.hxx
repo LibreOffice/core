@@ -32,7 +32,7 @@ public:
     static SC_DLLPUBLIC OUString GetExpression(const ScConditionalFormat& rFormat, const ScAddress& rPos);
 
     static SC_DLLPUBLIC OUString GetExpression( ScCondFormatEntryType eType, sal_Int32 nIndex,
-            OUString aStr1 = OUString(), OUString aStr2 = OUString() );
+            const OUString& aStr1 = OUString(), const OUString& aStr2 = OUString() );
 };
 
 #endif

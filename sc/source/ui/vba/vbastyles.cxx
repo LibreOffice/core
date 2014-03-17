@@ -141,7 +141,7 @@ ScVbaStyles::Add( const OUString& _sName, const uno::Any& _aBasedOn ) throw (scr
 }
 
 void
-ScVbaStyles::Delete(const OUString _sStyleName) throw ( script::BasicErrorException )
+ScVbaStyles::Delete(const OUString& _sStyleName) throw ( script::BasicErrorException )
 {
     try
     {

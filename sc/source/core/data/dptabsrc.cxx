@@ -635,7 +635,7 @@ static long lcl_CountMinMembers(const vector<ScDPDimension*>& ppDim, const vecto
     return nTotal;
 }
 
-static long lcl_GetIndexFromName( const OUString rName, const uno::Sequence<OUString>& rElements )
+static long lcl_GetIndexFromName( const OUString& rName, const uno::Sequence<OUString>& rElements )
 {
     long nCount = rElements.getLength();
     const OUString* pArray = rElements.getConstArray();

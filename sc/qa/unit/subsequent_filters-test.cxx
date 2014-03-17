@@ -1104,8 +1104,8 @@ struct ValDataTestParams
     sal_uLong nExpectedIndex;
 
     ValDataTestParams( ScValidationMode eMode, ScConditionMode eOp,
-                       OUString aExpr1, OUString aExpr2, ScDocument* pDoc,
-                       ScAddress aPos, OUString aETitle, OUString aEMsg,
+                       const OUString& aExpr1, const OUString& aExpr2, ScDocument* pDoc,
+                       ScAddress aPos, const OUString& aETitle, const OUString& aEMsg,
                        ScValidErrorStyle eEStyle, sal_uLong nIndex ):
                             eValMode(eMode), eCondOp(eOp), aStrVal1(aExpr1),
                             aStrVal2(aExpr2), pDocument(pDoc), aPosition(aPos),

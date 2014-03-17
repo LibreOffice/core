@@ -34,7 +34,7 @@ class ScVbaStyles: public ScVbaStyles_BASE
 public:
     ScVbaStyles( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext > & xContext, const css::uno::Reference< css::frame::XModel >& xModel ) throw ( css::script::BasicErrorException );
     css::uno::Sequence< OUString > getStyleNames() throw ( css::uno::RuntimeException );
-    void Delete(const OUString _sStyleName) throw ( css::script::BasicErrorException );
+    void Delete(const OUString& _sStyleName) throw ( css::script::BasicErrorException );
     // XStyles
      virtual css::uno::Reference< ov::excel::XStyle > SAL_CALL Add( const OUString& Name, const css::uno::Any& BasedOn ) throw (css::script::BasicErrorException, css::uno::RuntimeException, std::exception);
     // XEnumerationAccess

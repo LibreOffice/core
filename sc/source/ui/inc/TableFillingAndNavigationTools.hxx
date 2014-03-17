@@ -37,18 +37,18 @@ private:
 public:
     FormulaTemplate(ScDocument* aDocument, ScAddress::Details aAddressDetails);
 
-    void      setTemplate(OUString aTemplate);
+    void      setTemplate(const OUString& aTemplate);
     void      setTemplate(const char* aTemplate);
     OUString& getTemplate();
 
-    void      autoReplaceRange(OUString aVariable, ScRange aRange);
-    void      autoReplaceAddress(OUString aVariable, ScAddress aAddress);
+    void      autoReplaceRange(const OUString& aVariable, ScRange aRange);
+    void      autoReplaceAddress(const OUString& aVariable, ScAddress aAddress);
 
-    void      applyRange(OUString aVariable, ScRange aRange);
-    void      applyRangeList(OUString aVariable, ScRangeList aRangeList);
-    void      applyAddress(OUString aVariable, ScAddress aAddress);
-    void      applyString(OUString aVariable, OUString aValue);
-    void      applyNumber(OUString aVariable, sal_Int32 aValue);
+    void      applyRange(const OUString& aVariable, ScRange aRange);
+    void      applyRangeList(const OUString& aVariable, ScRangeList aRangeList);
+    void      applyAddress(const OUString& aVariable, ScAddress aAddress);
+    void      applyString(const OUString& aVariable, const OUString& aValue);
+    void      applyNumber(const OUString& aVariable, sal_Int32 aValue);
 };
 
 class AddressWalker
@@ -82,11 +82,11 @@ public:
     AddressWalkerWriter(ScAddress aInitialAddress, ScDocShell* pDocShell, ScDocument* pDocument,
             formula::FormulaGrammar::Grammar eGrammar );
 
-    void writeFormula(OUString aFormula);
-    void writeMatrixFormula(OUString aFormula);
-    void writeString(OUString aString);
+    void writeFormula(const OUString& aFormula);
+    void writeMatrixFormula(const OUString& aFormula);
+    void writeString(const OUString& aString);
     void writeString(const char* aCharArray);
-    void writeBoldString(OUString aString);
+    void writeBoldString(const OUString& aString);
     void writeValue(double aValue);
 };
 

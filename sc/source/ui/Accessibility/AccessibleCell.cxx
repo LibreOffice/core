@@ -485,29 +485,26 @@ void ScAccessibleCell::AddRelation(const ScRange& rRange,
     }
 }
 
-static OUString ReplaceOneChar(OUString oldOUString, OUString replacedChar, OUString replaceStr)
+static OUString ReplaceOneChar(const OUString& oldOUString, const OUString& replacedChar, const OUString& replaceStr)
 {
-    int iReplace = -1;
-    iReplace = oldOUString.lastIndexOf(replacedChar);
-    if (iReplace > -1)
+    int iReplace = oldOUString.lastIndexOf(replacedChar);
+    OUString aRet = oldOUString;
+    while(iReplace > -1)
     {
-        for(;iReplace>-1;)
-        {
-            oldOUString = oldOUString.replaceAt(iReplace,1, replaceStr);
-            iReplace=oldOUString.lastIndexOf(replacedChar,iReplace);
-        }
+        aRet = aRet.replaceAt(iReplace, 1, replaceStr);
+        iReplace = aRet.lastIndexOf(replacedChar, iReplace);
     }
-    return oldOUString;
+    return aRet;
 }
 
-static OUString ReplaceFourChar(OUString oldOUString)
+static OUString ReplaceFourChar(const OUString& oldOUString)
 {
-    oldOUString = ReplaceOneChar(oldOUString, "\\", "\\\\");
-    oldOUString = ReplaceOneChar(oldOUString, ";", "\\;");
-    oldOUString = ReplaceOneChar(oldOUString, "=", "\\=");
-    oldOUString = ReplaceOneChar(oldOUString, ",", "\\,");
-    oldOUString = ReplaceOneChar(oldOUString, ":", "\\:");
-    return oldOUString;
+    OUString aRet = ReplaceOneChar(oldOUString, "\\", "\\\\");
+    aRet = ReplaceOneChar(aRet, ";", "\\;");
+    aRet = ReplaceOneChar(aRet, "=", "\\=");
+    aRet = ReplaceOneChar(aRet, ",", "\\,");
+    aRet = ReplaceOneChar(aRet, ":", "\\:");
+    return aRet;
 }
 
 uno::Any SAL_CALL ScAccessibleCell::getExtendedAttributes()

@@ -342,7 +342,7 @@ public:
                                           ::com::sun::star::xml::sax::XAttributeList>& xAttrList );
 
     void getOperatorXML(
-        const OUString sTempOperator, ScQueryOp& aFilterOperator, bool& bUseRegularExpressions) const;
+        const OUString& sTempOperator, ScQueryOp& aFilterOperator, bool& bUseRegularExpressions) const;
     virtual void EndElement();
 };
 

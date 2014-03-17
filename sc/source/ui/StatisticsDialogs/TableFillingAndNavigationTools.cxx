@@ -23,7 +23,7 @@ FormulaTemplate::FormulaTemplate(ScDocument* aDocument, ScAddress::Details aAddr
     mAddressDetails(aAddressDetails)
 {}
 
-void FormulaTemplate::setTemplate(OUString aTemplate)
+void FormulaTemplate::setTemplate(const OUString& aTemplate)
 {
     mTemplate = aTemplate;
 }
@@ -48,41 +48,41 @@ OUString& FormulaTemplate::getTemplate()
     return mTemplate;
 }
 
-void FormulaTemplate::autoReplaceRange(OUString aVariable, ScRange aRange)
+void FormulaTemplate::autoReplaceRange(const OUString& aVariable, ScRange aRange)
 {
     mRangeReplacementMap.insert ( std::pair<OUString, ScRange>(aVariable, aRange) );
 }
 
-void FormulaTemplate::autoReplaceAddress(OUString aVariable, ScAddress aAddress)
+void FormulaTemplate::autoReplaceAddress(const OUString& aVariable, ScAddress aAddress)
 {
     mAddressReplacementMap.insert ( std::pair<OUString, ScAddress>(aVariable, aAddress) );
 }
 
-void FormulaTemplate::applyRange(OUString aVariable, ScRange aRange)
+void FormulaTemplate::applyRange(const OUString& aVariable, ScRange aRange)
 {
     OUString aString = aRange.Format(SCR_ABS, mDocument, mAddressDetails);
     mTemplate = mTemplate.replaceAll(aVariable, aString);
 }
 
-void FormulaTemplate::applyRangeList(OUString aVariable, ScRangeList aRangeList)
+void FormulaTemplate::applyRangeList(const OUString& aVariable, ScRangeList aRangeList)
 {
     OUString aString;
     aRangeList.Format(aString, SCR_ABS, mDocument);
     mTemplate = mTemplate.replaceAll(aVariable, aString);
 }
 
-void FormulaTemplate::applyAddress(OUString aVariable, ScAddress aAddress)
+void FormulaTemplate::applyAddress(const OUString& aVariable, ScAddress aAddress)
 {
     OUString aString = aAddress.Format(SCR_ABS, mDocument, mAddressDetails);
     mTemplate = mTemplate.replaceAll(aVariable, aString);
 }
 
-void FormulaTemplate::applyString(OUString aVariable, OUString aValue)
+void FormulaTemplate::applyString(const OUString& aVariable, const OUString& aValue)
 {
     mTemplate = mTemplate.replaceAll(aVariable, aValue);
 }
 
-void FormulaTemplate::applyNumber(OUString aVariable, sal_Int32 aValue)
+void FormulaTemplate::applyNumber(const OUString& aVariable, sal_Int32 aValue)
 {
     mTemplate = mTemplate.replaceAll(aVariable, OUString::number(aValue));
 }
@@ -154,13 +154,13 @@ AddressWalkerWriter::AddressWalkerWriter(ScAddress aInitialAddress, ScDocShell* 
     meGrammar(eGrammar)
 {}
 
-void AddressWalkerWriter::writeFormula(OUString aFormula)
+void AddressWalkerWriter::writeFormula(const OUString& aFormula)
 {
     mpDocShell->GetDocFunc().SetFormulaCell(mCurrentAddress,
             new ScFormulaCell(mpDocument, mCurrentAddress, aFormula, meGrammar), true);
 }
 
-void AddressWalkerWriter::writeMatrixFormula(OUString aFormula)
+void AddressWalkerWriter::writeMatrixFormula(const OUString& aFormula)
 {
     ScRange aRange;
     aRange.aStart = mCurrentAddress;
@@ -168,7 +168,7 @@ void AddressWalkerWriter::writeMatrixFormula(OUString aFormula)
     mpDocShell->GetDocFunc().EnterMatrix(aRange, NULL, NULL, aFormula, false, false, OUString(), meGrammar );
 }
 
-void AddressWalkerWriter::writeString(OUString aString)
+void AddressWalkerWriter::writeString(const OUString& aString)
 {
     mpDocShell->GetDocFunc().SetStringCell(mCurrentAddress, aString, true);
 }
@@ -178,7 +178,7 @@ void AddressWalkerWriter::writeString(const char* aCharArray)
     writeString(OUString::createFromAscii(aCharArray));
 }
 
-void AddressWalkerWriter::writeBoldString(OUString aString)
+void AddressWalkerWriter::writeBoldString(const OUString& aString)
 {
     ScFieldEditEngine& rEngine = mpDocument->GetEditEngine();
     rEngine.SetText(aString);

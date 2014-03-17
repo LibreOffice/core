@@ -1872,7 +1872,7 @@ void ScTextWnd::StopEditEngine( bool bAll )
     }
 }
 
-static sal_Int32 findFirstNonMatchingChar(const OUString& rStr1, const OUString rStr2)
+static sal_Int32 findFirstNonMatchingChar(const OUString& rStr1, const OUString& rStr2)
 {
     // Search the string for unmatching chars
     const sal_Unicode*  pStr1 = rStr1.getStr();

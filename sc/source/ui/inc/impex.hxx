@@ -181,7 +181,7 @@ inline void ScImportExport::SetNoEndianSwap( SvStream& rStrm )
 class ScImportStringStream : public SvMemoryStream
 {
 public:
-    ScImportStringStream( const OUString rStr )
+    ScImportStringStream( const OUString& rStr )
         : SvMemoryStream( (void*)rStr.getStr(),
                 rStr.getLength() * sizeof(sal_Unicode), STREAM_READ)
     {

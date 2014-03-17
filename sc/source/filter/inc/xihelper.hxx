@@ -277,7 +277,7 @@ public:
         @descr  For DDE links: Decodes to application name and topic.
         For OLE object links: Decodes to class name and document URL.
         @return  true = decoding was successful, returned strings are valid (not empty). */
-    static bool         DecodeLink( OUString& rApplic, OUString& rTopic, const OUString rEncUrl );
+    static bool         DecodeLink( OUString& rApplic, OUString& rTopic, const OUString& rEncUrl );
 
 private:
     /** We don't want anybody to instantiate this class, since it is just a

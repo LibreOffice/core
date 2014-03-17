@@ -763,7 +763,7 @@ void XclImpUrlHelper::DecodeUrl(
     OSL_ENSURE( aTabName.isEmpty(), "XclImpUrlHelper::DecodeUrl - sheet name ignored" );
 }
 
-bool XclImpUrlHelper::DecodeLink( OUString& rApplic, OUString& rTopic, const OUString rEncUrl )
+bool XclImpUrlHelper::DecodeLink( OUString& rApplic, OUString& rTopic, const OUString& rEncUrl )
 {
     sal_Int32 nPos = rEncUrl.indexOf( EXC_DDE_DELIM );
     if( (nPos != -1) && (0 < nPos) && (nPos + 1 < rEncUrl.getLength()) )

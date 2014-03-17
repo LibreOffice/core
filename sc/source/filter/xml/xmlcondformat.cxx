@@ -591,7 +591,7 @@ ScXMLCondContext::ScXMLCondContext( ScXMLImport& rImport, sal_uInt16 nPrfx,
 
 namespace {
 
-void setColorEntryType(const OUString& rType, ScColorScaleEntry* pEntry, const OUString rFormula,
+void setColorEntryType(const OUString& rType, ScColorScaleEntry* pEntry, const OUString& rFormula,
         ScXMLImport& rImport)
 {
     if(rType == "minimum")

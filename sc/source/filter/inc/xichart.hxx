@@ -736,7 +736,7 @@ public:
     /** Sets formatting information for the trend line. */
     inline void         SetDataFormat( XclImpChDataFormatRef xDataFmt ) { mxDataFmt = xDataFmt; }
 
-    inline void         SetTrendlineName( OUString aTrendlineName) { maTrendLineName = aTrendlineName; }
+    inline void         SetTrendlineName( const OUString& aTrendlineName) { maTrendLineName = aTrendlineName; }
 
     /** Creates an API object representing this trend line. */
     XRegressionCurveRef CreateRegressionCurve() const;

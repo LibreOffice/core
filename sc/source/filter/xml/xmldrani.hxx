@@ -121,9 +121,9 @@ public:
 
     virtual void EndElement();
 
-    void SetDatabaseName(const OUString sTempDatabaseName) { sDatabaseName = sTempDatabaseName; }
-    void SetConnectionResource(const OUString sTempConRes) { sConnectionResource = sTempConRes; }
-    void SetSourceObject(const OUString sTempSourceObject) { sSourceObject = sTempSourceObject; }
+    void SetDatabaseName(const OUString& sTempDatabaseName) { sDatabaseName = sTempDatabaseName; }
+    void SetConnectionResource(const OUString& sTempConRes) { sConnectionResource = sTempConRes; }
+    void SetSourceObject(const OUString& sTempSourceObject) { sSourceObject = sTempSourceObject; }
     void SetSourceType(const com::sun::star::sheet::DataImportMode nTempSourceType) { nSourceType = nTempSourceType; }
     void SetNative(const bool bTempNative) { bNative = bTempNative; }
     void SetSubTotalsBindFormatsToContent(const bool bTemp ) { bSubTotalsBindFormatsToContent = bTemp; }

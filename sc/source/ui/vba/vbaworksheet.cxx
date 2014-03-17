@@ -106,7 +106,7 @@
 using namespace com::sun::star;
 using namespace ooo::vba;
 
-static void getNewSpreadsheetName (OUString &aNewName, OUString aOldName, uno::Reference <sheet::XSpreadsheetDocument>& xSpreadDoc )
+static void getNewSpreadsheetName (OUString &aNewName, const OUString& aOldName, uno::Reference <sheet::XSpreadsheetDocument>& xSpreadDoc )
 {
     if (!xSpreadDoc.is())
         throw lang::IllegalArgumentException( OUString( "getNewSpreadsheetName() xSpreadDoc is null" ), uno::Reference< uno::XInterface  >(), 1 );
@@ -120,7 +120,7 @@ static void getNewSpreadsheetName (OUString &aNewName, OUString aOldName, uno::R
     }
 }
 
-static void removeAllSheets( uno::Reference <sheet::XSpreadsheetDocument>& xSpreadDoc, OUString aSheetName)
+static void removeAllSheets( uno::Reference <sheet::XSpreadsheetDocument>& xSpreadDoc, const OUString& aSheetName)
 {
     if (!xSpreadDoc.is())
         throw lang::IllegalArgumentException( OUString( "removeAllSheets() xSpreadDoc is null" ), uno::Reference< uno::XInterface  >(), 1 );
@@ -150,7 +150,7 @@ static void removeAllSheets( uno::Reference <sheet::XSpreadsheetDocument>& xSpre
 }
 
 static uno::Reference<frame::XModel>
-openNewDoc(OUString aSheetName )
+openNewDoc(const OUString& aSheetName )
 {
     uno::Reference<frame::XModel> xModel;
     try
@@ -212,7 +212,7 @@ const uno::Sequence<sal_Int8>& ScVbaWorksheet::getUnoTunnelId()
 }
 
 uno::Reference< ov::excel::XWorksheet >
-ScVbaWorksheet::createSheetCopyInNewDoc(OUString aCurrSheetName)
+ScVbaWorksheet::createSheetCopyInNewDoc(const OUString& aCurrSheetName)
 {
     uno::Reference< sheet::XSheetCellCursor > xSheetCellCursor = getSheet()->createCursor( );
     uno::Reference<sheet::XUsedAreaCursor> xUsedCursor(xSheetCellCursor,uno::UNO_QUERY_THROW);

@@ -177,7 +177,7 @@ static void load_Separators( OUString &sFieldSeparators, OUString &sTextSeparato
 }
 
 static void save_Separators(
-    OUString maSeparators, OUString maTxtSep, bool bMergeDelimiters, bool bQuotedAsText,
+    const OUString& maSeparators, const OUString& maTxtSep, bool bMergeDelimiters, bool bQuotedAsText,
     bool bDetectSpecialNum, bool bFixedWidth, sal_Int32 nFromRow,
     sal_Int32 nCharSet, sal_Int32 nLanguage, ScImportAsciiCall eCall )
 {
@@ -235,7 +235,7 @@ static void save_Separators(
 
 
 
-ScImportAsciiDlg::ScImportAsciiDlg( Window* pParent,OUString aDatName,
+ScImportAsciiDlg::ScImportAsciiDlg( Window* pParent, const OUString& aDatName,
                                     SvStream* pInStream, ScImportAsciiCall eCall ) :
         ModalDialog (pParent, "TextImportCsvDialog",
             "modules/scalc/ui/textimportcsv.ui"),

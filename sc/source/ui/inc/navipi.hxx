@@ -279,10 +279,10 @@ private:
                     { return rBindings; }
 
     void    SetCurrentCell( SCCOL nCol, SCROW Row );
-    void    SetCurrentCellStr( const OUString rName );
+    void    SetCurrentCellStr( const OUString& rName );
     void    SetCurrentTable( SCTAB nTab );
     void    SetCurrentTableStr( const OUString& rName );
-    void    SetCurrentObject( const OUString rName );
+    void    SetCurrentObject( const OUString& rName );
     void    SetCurrentDoc( const OUString& rDocName );
 
     ScTabViewShell*         GetTabViewShell() const;
