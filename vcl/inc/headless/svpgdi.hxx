@@ -152,9 +152,9 @@ public:
     virtual void            GetFontMetric( ImplFontMetricData*, int nFallbackLevel );
     virtual const ImplFontCharMap* GetImplFontCharMap() const;
     virtual bool GetImplFontCapabilities(vcl::FontCapabilities &rFontCapabilities) const;
-    virtual void            GetDevFontList( ImplDevFontList* );
+    virtual void            GetDevFontList( PhysicalFontCollection* );
     virtual void ClearDevFontCache();
-    virtual bool            AddTempDevFont( ImplDevFontList*, const OUString& rFileURL, const OUString& rFontName );
+    virtual bool            AddTempDevFont( PhysicalFontCollection*, const OUString& rFileURL, const OUString& rFontName );
     virtual bool        CreateFontSubset( const OUString& rToFile,
                                               const PhysicalFontFace*,
                                               sal_GlyphId* pGlyphIds,

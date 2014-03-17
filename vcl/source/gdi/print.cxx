@@ -573,9 +573,9 @@ void Printer::ImplInit( SalPrinterQueueInfo* pInfo )
 
     // Init data
     ImplUpdatePageData();
-    mpFontList = new ImplDevFontList();
+    mpFontCollection = new PhysicalFontCollection();
     mpFontCache = new ImplFontCache();
-    mpGraphics->GetDevFontList( mpFontList );
+    mpGraphics->GetDevFontList( mpFontCollection );
 }
 
 
@@ -591,7 +591,7 @@ void Printer::ImplInitDisplay( const Window* pWindow )
         mpDisplayDev = new VirtualDevice( *pWindow );
     else
         mpDisplayDev = new VirtualDevice();
-    mpFontList          = pSVData->maGDIData.mpScreenFontList;
+    mpFontCollection          = pSVData->maGDIData.mpScreenFontList;
     mpFontCache         = pSVData->maGDIData.mpScreenFontCache;
     mnDPIX              = mpDisplayDev->mnDPIX;
     mnDPIY              = mpDisplayDev->mnDPIY;
@@ -907,9 +907,9 @@ bool Printer::SetPrinterProps( const Printer* pPrinter )
             }
             // clean up font list
             delete mpFontCache;
-            delete mpFontList;
+            delete mpFontCollection;
             mpFontCache = NULL;
-            mpFontList = NULL;
+            mpFontCollection = NULL;
 
             mbInitFont = true;
             mbNewFont = true;
@@ -950,9 +950,9 @@ bool Printer::SetPrinterProps( const Printer* pPrinter )
                 mpGetDevSizeList = NULL;
             }
             delete mpFontCache;
-            delete mpFontList;
+            delete mpFontCollection;
             mpFontCache = NULL;
-            mpFontList = NULL;
+            mpFontCollection = NULL;
             mbInitFont = true;
             mbNewFont = true;
             mpInfoPrinter = NULL;

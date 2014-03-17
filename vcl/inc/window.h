@@ -41,7 +41,7 @@ class Window;
 class VclSizeGroup;
 class VirtualDevice;
 class Cursor;
-class ImplDevFontList;
+class PhysicalFontCollection;
 class ImplFontCache;
 class VCLXWindow;
 class SalFrame;
@@ -135,7 +135,7 @@ struct ImplFrameData
     Window*             mpMouseDownWin;     // last window, where MouseButtonDown() called
     Window*             mpFirstBackWin;     // first overlap-window with saved background
     ::std::vector<Window *> maOwnerDrawList; // List of system windows with owner draw decoration
-    ImplDevFontList*    mpFontList;         // Font-List for this frame
+    PhysicalFontCollection* mpFontCollection;         // Font-List for this frame
     ImplFontCache*      mpFontCache;        // Font-Cache for this frame
     sal_Int32           mnDPIX;             // Original Screen Resolution
     sal_Int32           mnDPIY;             // Original Screen Resolution

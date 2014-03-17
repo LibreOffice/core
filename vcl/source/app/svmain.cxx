@@ -284,7 +284,7 @@ bool InitVCL()
     pSVData->maAppData.mpAppFileName = new OUString( aNativeFileName );
 
     // Initialize global data
-    pSVData->maGDIData.mpScreenFontList     = new ImplDevFontList;
+    pSVData->maGDIData.mpScreenFontList     = new PhysicalFontCollection;
     pSVData->maGDIData.mpScreenFontCache    = new ImplFontCache;
     pSVData->maGDIData.mpGrfConverter       = new GraphicConverter;
 

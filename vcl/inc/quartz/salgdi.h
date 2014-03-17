@@ -134,7 +134,7 @@ public:
     bool        Init( void );
     void        AddFont( CoreTextFontData* );
 
-    void    AnnounceFonts( ImplDevFontList& ) const;
+    void    AnnounceFonts( PhysicalFontCollection& ) const;
     CoreTextFontData* GetFontDataFromId( sal_IntPtr nFontId ) const;
 
 private:
@@ -334,10 +334,10 @@ public:
     virtual const ImplFontCharMap* GetImplFontCharMap() const;
     virtual bool GetImplFontCapabilities(vcl::FontCapabilities &rFontCapabilities) const;
     // graphics must fill supplied font list
-    virtual void            GetDevFontList( ImplDevFontList* );
+    virtual void            GetDevFontList( PhysicalFontCollection* );
     // graphics must drop any cached font info
     virtual void ClearDevFontCache();
-    virtual bool            AddTempDevFont( ImplDevFontList*, const OUString& rFileURL, const OUString& rFontName );
+    virtual bool            AddTempDevFont( PhysicalFontCollection*, const OUString& rFileURL, const OUString& rFontName );
     // CreateFontSubset: a method to get a subset of glyhps of a font
     // inside a new valid font file
     // returns TRUE if creation of subset was successful
