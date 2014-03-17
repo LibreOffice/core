@@ -2420,9 +2420,6 @@ void SwTabFrmPainter::PaintLines(OutputDevice& rDev, const SwRect& rRect) const
     // #i16816# tagged pdf support
     SwTaggedPDFHelper aTaggedPDFHelper( 0, 0, 0, rDev );
 
-    const SwFrm* pTmpFrm = &mrTabFrm;
-    const bool bVert = pTmpFrm->IsVertical();
-
     SwLineEntryMapConstIter aIter = maHoriLines.begin();
     bool bHori = true;
 
@@ -2440,17 +2437,6 @@ void SwTabFrmPainter::PaintLines(OutputDevice& rDev, const SwRect& rRect) const
         rDev.SetDrawMode( 0 );
     }
 
-    // set clip region:
-    rDev.Push( PUSH_CLIPREGION );
-    Size aSize( rRect.SSize() );
-    // Hack! Necessary, because the layout is not pixel aligned!
-    aSize.Width() += nPixelSzW; aSize.Height() += nPixelSzH;
-    rDev.SetClipRegion(Region(Rectangle(rRect.Pos(), aSize)));
-
-    // The following stuff is necessary to have the new table borders fit
-    // into a ::SwAlignRect adjusted world.
-    const SwTwips nTwipXCorr =  bVert ? 0 : std::max( 0L, nHalfPixelSzW - 2 );    // 1 < 2 < 3 ;-)
-    const SwTwips nTwipYCorr = !bVert ? 0 : std::max( 0L, nHalfPixelSzW - 2 );    // 1 < 2 < 3 ;-)
     const SwFrm* pUpper = mrTabFrm.GetUpper();
     SwRect aUpper( pUpper->Prt() );
     aUpper.Pos() += pUpper->Frm().Pos();
@@ -2636,12 +2622,6 @@ void SwTabFrmPainter::PaintLines(OutputDevice& rDev, const SwRect& rRect) const
                 aPaintEnd.Y()   += static_cast<long>(offsetEnd   + 0.5);
             }
 
-            aPaintStart.X() -= nTwipXCorr; // nHalfPixelSzW - 2 to assure that we do not leave the pixel
-            aPaintEnd.X()   -= nTwipXCorr;
-            aPaintStart.Y() -= nTwipYCorr;
-            aPaintEnd.Y()   -= nTwipYCorr;
-
-            // Here comes the painting stuff: Thank you, DR, great job!!!
             if (bHori)
             {
                 mrTabFrm.ProcessPrimitives( svx::frame::CreateBorderPrimitives(
@@ -2678,7 +2658,6 @@ void SwTabFrmPainter::PaintLines(OutputDevice& rDev, const SwRect& rRect) const
     }
 
     // restore output device:
-    rDev.Pop();
     rDev.SetDrawMode( nOldDrawMode );
 }
 
