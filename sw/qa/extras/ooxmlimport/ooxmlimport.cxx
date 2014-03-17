@@ -1976,6 +1976,13 @@ DECLARE_OOXMLIMPORT_TEST(testSmartartStrict, "strict-smartart.docx")
     CPPUNIT_ASSERT_EQUAL(sal_Int32(6), xGroup->getCount()); // 3 ellipses + 3 arrows
 }
 
+DECLARE_OOXMLIMPORT_TEST(testLibreOfficeHang, "frame-wrap-auto.docx")
+{
+    // fdo#72775
+    // This was text::WrapTextMode_NONE.
+    CPPUNIT_ASSERT_EQUAL(text::WrapTextMode_DYNAMIC, getProperty<text::WrapTextMode>(getShape(1), "Surround"));
+}
+
 DECLARE_OOXMLIMPORT_TEST(testI124106, "i124106.docx")
 {
     // This was 2.
