@@ -7,9 +7,9 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
-$(eval $(call gb_Package_Package,vcl_opengl_shader,$(SRCDIR)/vcl/source/opengl/shaders))
+$(eval $(call gb_Package_Package,chart2_opengl_shader,$(SRCDIR)/chart2/opengl))
 
-$(eval $(call gb_Package_add_files,vcl_opengl_shader,$(LIBO_BIN_FOLDER)/opengl,\
+$(eval $(call gb_Package_add_files,chart2_opengl_shader,$(LIBO_BIN_FOLDER)/opengl,\
 	backgroundFragmentShader.glsl \
 	backgroundVertexShader.glsl \
 	commonFragmentShader.glsl \

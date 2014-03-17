@@ -7,43 +7,11 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef VCL_OPENGL_RENDER_HXX
-#define VCL_OPENGL_RENDER_HXX
-
-#if defined( MACOSX )
-#elif defined( UNX )
-#  include <prex.h>
-#  include "GL/glxew.h"
-#  include <postx.h>
-#elif defined( _WIN32 )
-#  include "prewin.h"
-#  include "windows.h"
-#  include "postwin.h"
-#endif
-
-#include <GL/glew.h>
-
-#include <vcl/window.hxx>
-#include <vcl/syschild.hxx>
-#include <vcl/sysdata.hxx>
 #include <vcl/bitmapex.hxx>
 #include <com/sun/star/drawing/HomogenMatrix3.hpp>
 #include <com/sun/star/drawing/XDrawPage.hpp>
 #include <vcl/font.hxx>
-#include <vcl/vclopengl_dllapi.hxx>
-
-
-#if defined( _WIN32 )
-#include <GL/glext.h>
-#include <GL/wglext.h>
-#elif defined( MACOSX )
-#elif defined( UNX )
-#include <GL/glext.h>
-#define GLX_GLXEXT_PROTOTYPES 1
-#include <GL/glx.h>
-#include <GL/glxext.h>
-
-#endif
+#include <vcl/OpenGLContext.hxx>
 
 // Include GLM
 #include <list>
@@ -93,58 +61,7 @@ typedef std::vector<GLfloat> Area2DPointList;
 typedef std::vector<GLfloat> PieSegment2DPointList;
 typedef std::vector<GLfloat> PointList;
 
-/// Holds the information of our new child window
-struct GLWindow
-{
-#if defined( _WIN32 )
-    HWND                    hWnd;
-    HDC                     hDC;
-    HGLRC                   hRC;
-#elif defined( MACOSX )
-#elif defined( UNX )
-    Display*           dpy;
-    int                     screen;
-    XLIB_Window             win;
-#if defined( GLX_VERSION_1_3 ) && defined( GLX_EXT_texture_from_pixmap )
-    GLXFBConfig        fbc;
-#endif
-    XVisualInfo*       vi;
-    GLXContext         ctx;
-
-    bool HasGLXExtension( const char* name ) { return gluCheckExtension( (const GLubyte*) name, (const GLubyte*) GLXExtensions ); }
-    const char*             GLXExtensions;
-#endif
-    unsigned int            bpp;
-    unsigned int            Width;
-    unsigned int            Height;
-    const GLubyte*          GLExtensions;
-
-    bool HasGLExtension( const char* name ) { return gluCheckExtension( (const GLubyte*) name, GLExtensions ); }
-
-    GLWindow()
-        :
-#if defined( _WIN32 )
-#elif defined( MACOSX )
-#elif defined( UNX )
-        dpy(NULL),
-        screen(0),
-        win(0),
-#if defined( GLX_VERSION_1_3 ) && defined( GLX_EXT_texture_from_pixmap )
-        fbc(0),
-#endif
-        vi(NULL),
-        ctx(0),
-        GLXExtensions(NULL),
-#endif
-        bpp(0),
-        Width(0),
-        Height(0),
-        GLExtensions(NULL)
-    {
-    }
-};
-
-class VCLOPENGL_DLLPUBLIC OpenGLRender
+class OpenGLRender
 {
 public:
     OpenGLRender(com::sun::star::uno::Reference<
@@ -196,16 +113,16 @@ public:
 
     void SetBackGroundColor(sal_uInt32 color1, sal_uInt32 color2, sal_uInt8 nAlpha);
 private:
-    SAL_DLLPRIVATE GLint LoadShaders(const OUString& rVertexShaderName, const OUString& rFragmentShaderName);
-    SAL_DLLPRIVATE int CreateTextureObj(int width, int height);
-    SAL_DLLPRIVATE int CreateRenderObj(int width, int height);
-    SAL_DLLPRIVATE int CreateFrameBufferObj();
+    GLint LoadShaders(const OUString& rVertexShaderName, const OUString& rFragmentShaderName);
+    int CreateTextureObj(int width, int height);
+    int CreateRenderObj(int width, int height);
+    int CreateFrameBufferObj();
 #if defined( _WIN32 )
-    SAL_DLLPRIVATE int InitTempWindow(HWND *hwnd, int width, int height, PIXELFORMATDESCRIPTOR inPfd);
-    SAL_DLLPRIVATE bool WGLisExtensionSupported(const char *extension);
+    int InitTempWindow(HWND *hwnd, int width, int height, PIXELFORMATDESCRIPTOR inPfd);
+    bool WGLisExtensionSupported(const char *extension);
 #endif
-    SAL_DLLPRIVATE int CreateMultiSampleFrameBufObj();
-    SAL_DLLPRIVATE int Create2DCircle(int detail);
+    int CreateMultiSampleFrameBufObj();
+    int Create2DCircle(int detail);
 
 private:
     // Projection matrix : default 45 degree Field of View, 4:3 ratio, display range : 0.1 unit <-> 100 units
@@ -298,7 +215,5 @@ private:
     GLuint m_DebugColorID;
 #endif
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

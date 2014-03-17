@@ -33,7 +33,6 @@ $(eval $(call gb_Library_use_libraries,vclopengl,\
 ))
 
 $(eval $(call gb_Library_add_exception_objects,vclopengl,\
-    vcl/source/opengl/OpenGLRender \
     vcl/source/opengl/OpenGLContext \
 ))
 

@@ -8,7 +8,8 @@
  */
 
 #include <vcl/OpenGLContext.hxx>
-
+#include <vcl/syschild.hxx>
+#include <vcl/sysdata.hxx>
 
 using namespace com::sun::star;
 
@@ -119,9 +120,10 @@ int oglErrorHandler( Display* /*dpy*/, XErrorEvent* /*evnt*/ )
 }
 
 }
+
 #endif
 
-bool OpenGLContext::init(OpenGLRender& rGLRender)
+bool OpenGLContext::init()
 {
     m_pWindow.reset(new Window(0, WB_NOBORDER|WB_NODIALOGCONTROL));
     SAL_INFO("vcl.opengl", "OpenGLContext::OpenGLContext----start");
@@ -233,7 +235,7 @@ bool OpenGLContext::init(OpenGLRender& rGLRender)
 
 #endif
 
-    rGLRender.InitOpenGL(m_aGLWin);
+    //rGLRender.InitOpenGL(m_aGLWin);
 
 #ifdef DBG_UTIL
     // only enable debug output in dbgutil build

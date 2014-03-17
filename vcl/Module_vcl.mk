@@ -27,7 +27,6 @@ $(eval $(call gb_Module_add_targets,vcl,\
 		Executable_ui-previewer) \
 	$(if $(filter FREEBSD LINUX MACOSX WNT,$(OS)), \
 		Library_vclopengl \
-		Package_opengl \
 	) \
 ))
 

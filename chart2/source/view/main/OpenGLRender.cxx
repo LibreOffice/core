@@ -9,7 +9,7 @@
 
 #include <GL/glew.h>
 #include <vector>
-#include <vcl/OpenGLRender.hxx>
+#include "OpenGLRender.hxx"
 #include <vcl/bmpacc.hxx>
 #include <vcl/graph.hxx>
 #include <com/sun/star/awt/XBitmap.hpp>
@@ -73,9 +73,9 @@ int static checkGLError(const char *file, int line)
         const GLubyte* sError = gluErrorString(glErr);
 
         if (sError)
-            SAL_WARN("vcl.opengl", "GL Error #" << glErr << "(" << gluErrorString(glErr) << ") " << " in File " << file << " at line: " << line);
+            SAL_WARN("chart2.opengl", "GL Error #" << glErr << "(" << gluErrorString(glErr) << ") " << " in File " << file << " at line: " << line);
         else
-            SAL_WARN("vcl.opengl", "GL Error #" << glErr << " (no message available)" << " in File " << file << " at line: " << line);
+            SAL_WARN("chart2.opengl", "GL Error #" << glErr << " (no message available)" << " in File " << file << " at line: " << line);
 
         retCode = -1;
         return retCode;
@@ -90,7 +90,7 @@ static bool bGlewInit = false;
 #define CHECK_GL_FRAME_BUFFER_STATUS() \
     status = glCheckFramebufferStatus(GL_FRAMEBUFFER);\
     if( status != GL_FRAMEBUFFER_COMPLETE ) {\
-        SAL_WARN("vcl.opengl", "OpenGL error: " << status );\
+        SAL_WARN("chart2.opengl", "OpenGL error: " << status );\
         return -1;\
     }
 
@@ -125,7 +125,7 @@ OString loadShader(const OUString& rFilename)
     }
     else
     {
-        SAL_WARN("vcl.opengl", "could not load the file: " << aFileURL);
+        SAL_WARN("chart2.opengl", "could not load the file: " << aFileURL);
     }
 
     return OString();
@@ -158,10 +158,10 @@ GLint OpenGLRender::LoadShaders(const OUString& rVertexShaderName,const OUString
             std::vector<char> VertexShaderErrorMessage(InfoLogLength+1);
             glGetShaderInfoLog(VertexShaderID, InfoLogLength, NULL, &VertexShaderErrorMessage[0]);
             VertexShaderErrorMessage.push_back('\0');
-            SAL_WARN("vcl.opengl", "vertex shader compile failed : " << &VertexShaderErrorMessage[0]);
+            SAL_WARN("chart2.opengl", "vertex shader compile failed : " << &VertexShaderErrorMessage[0]);
         }
         else
-            SAL_WARN("vcl.opengl", "vertex shader compile failed without error log");
+            SAL_WARN("chart2.opengl", "vertex shader compile failed without error log");
 
         return 0;
     }
@@ -182,10 +182,10 @@ GLint OpenGLRender::LoadShaders(const OUString& rVertexShaderName,const OUString
             std::vector<char> FragmentShaderErrorMessage(InfoLogLength+1);
             glGetShaderInfoLog(FragmentShaderID, InfoLogLength, NULL, &FragmentShaderErrorMessage[0]);
             FragmentShaderErrorMessage.push_back('\0');
-            SAL_WARN("vcl.opengl", "fragment shader compile failed : " << &FragmentShaderErrorMessage[0]);
+            SAL_WARN("chart2.opengl", "fragment shader compile failed : " << &FragmentShaderErrorMessage[0]);
         }
         else
-            SAL_WARN("vcl.opengl", "fragment shader compile failed without error log");
+            SAL_WARN("chart2.opengl", "fragment shader compile failed without error log");
 
 
         return 0;
@@ -207,10 +207,10 @@ GLint OpenGLRender::LoadShaders(const OUString& rVertexShaderName,const OUString
             std::vector<char> ProgramErrorMessage(InfoLogLength+1);
             glGetProgramInfoLog(ProgramID, InfoLogLength, NULL, &ProgramErrorMessage[0]);
             ProgramErrorMessage.push_back('\0');
-            SAL_WARN("vcl.opengl", "Shader Program failed : " << &ProgramErrorMessage[0]);
+            SAL_WARN("chart2.opengl", "Shader Program failed : " << &ProgramErrorMessage[0]);
         }
         else
-            SAL_WARN("vcl.opengl", "shader program link failed without error log");
+            SAL_WARN("chart2.opengl", "shader program link failed without error log");
 
         return 0;
     }
@@ -240,7 +240,7 @@ int OpenGLRender::InitOpenGL(GLWindow aWindow)
         glewExperimental = GL_TRUE;
         if (glewInit() != GLEW_OK)
         {
-            SAL_WARN("vcl.opengl", "Failed to initialize GLEW");
+            SAL_WARN("chart2.opengl", "Failed to initialize GLEW");
             return -1;
         }
         else
@@ -250,7 +250,7 @@ int OpenGLRender::InitOpenGL(GLWindow aWindow)
     // These guys don't just check support but setup the vtables.
     if (glewIsSupported("framebuffer_object") != GLEW_OK)
     {
-        SAL_WARN("vcl.opengl", "GL stack has no framebuffer support");
+        SAL_WARN("chart2.opengl", "GL stack has no framebuffer support");
         return -1;
     }
 
@@ -384,7 +384,7 @@ BitmapEx OpenGLRender::GetAsBitmap()
         aWriter.Write( sOutput );
         sOutput.Close();
     } catch (...) {
-        SAL_WARN("vcl.opengl", "Error writing png to " << aName);
+        SAL_WARN("chart2.opengl", "Error writing png to " << aName);
     }
 #endif
 
@@ -534,13 +534,13 @@ void OpenGLRender::renderToBitmap()
         status = glCheckFramebufferStatus(GL_READ_FRAMEBUFFER);
         if (status != GL_FRAMEBUFFER_COMPLETE)
         {
-            SAL_INFO("vcl.opengl", "The frame buffer status is not complete!");
+            SAL_INFO("chart2.opengl", "The frame buffer status is not complete!");
         }
         glBindFramebuffer(GL_DRAW_FRAMEBUFFER, m_FboID);
         status = glCheckFramebufferStatus(GL_DRAW_FRAMEBUFFER);
         if (status != GL_FRAMEBUFFER_COMPLETE)
         {
-            SAL_INFO("vcl.opengl", "The frame buffer status is not complete!");
+            SAL_INFO("chart2.opengl", "The frame buffer status is not complete!");
         }
         glBlitFramebuffer(0, 0 ,m_iWidth, m_iHeight, 0, 0,m_iWidth ,m_iHeight, GL_COLOR_BUFFER_BIT, GL_LINEAR);
         glBindFramebuffer(GL_READ_FRAMEBUFFER,0);
@@ -658,7 +658,7 @@ void OpenGLRender::Release()
 
     glXMakeCurrent(glWin.dpy, None, NULL);
     if( glGetError() != GL_NO_ERROR ) {
-        SAL_INFO("vcl.opengl", "glError: " << (char *)gluErrorString(glGetError()));
+        SAL_INFO("chart2.opengl", "glError: " << (char *)gluErrorString(glGetError()));
     }
     glXDestroyContext(glWin.dpy, glWin.ctx);
     glWin.ctx = NULL;
@@ -804,7 +804,7 @@ bool OpenGLRender::InitMultisample(PIXELFORMATDESCRIPTOR pfd)
     //create a temp windwo to check whether support multi-sample, if support, get the format
     if (InitTempWindow(&hWnd, m_iWidth, m_iHeight, pfd) < 0)
     {
-        SAL_WARN("vcl.opengl", "Can't create temp window to test");
+        SAL_WARN("chart2.opengl", "Can't create temp window to test");
         return false;
     }
 
@@ -812,7 +812,7 @@ bool OpenGLRender::InitMultisample(PIXELFORMATDESCRIPTOR pfd)
     if (!WGLisExtensionSupported("WGL_ARB_multisample"))
     {
         mbArbMultisampleSupported = false;
-        SAL_WARN("vcl.opengl", "Device doesn't support multi sample");
+        SAL_WARN("chart2.opengl", "Device doesn't support multi sample");
         return false;
     }
     // Get Our Pixel Format
@@ -1111,7 +1111,7 @@ int OpenGLRender::RenderBubble2FBO(int)
     GLenum fbResult = glCheckFramebufferStatus(GL_FRAMEBUFFER);
     if( fbResult != GL_FRAMEBUFFER_COMPLETE )
     {
-        SAL_WARN("vcl.opengl", "error");
+        SAL_WARN("chart2.opengl", "error");
         return -1;
     }
     CHECK_GL_ERROR();
@@ -1269,7 +1269,7 @@ int OpenGLRender::CreateTextTexture(const BitmapEx& rBitmapEx, const awt::Point&
         aWriter.Write( sOutput );
         sOutput.Close();
     } catch (...) {
-        SAL_WARN("vcl.opengl", "Error writing png to " << aName);
+        SAL_WARN("chart2.opengl", "Error writing png to " << aName);
     }
 #endif
 
@@ -1532,7 +1532,7 @@ void OpenGLRender::SetBackGroundColor(sal_uInt32 color1, sal_uInt32 color2, sal_
     m_BackgroundColor[13] = (float)g / 255.0f;
     m_BackgroundColor[14] = (float)b / 255.0f;
     m_BackgroundColor[15] = nAlpha / 255.0f;
-    SAL_INFO("vcl.opengl", "color1 = " << color1 << ", color2 = " << color2);
+    SAL_INFO("chart2.opengl", "color1 = " << color1 << ", color2 = " << color2);
 
 }
 

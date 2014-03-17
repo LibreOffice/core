@@ -12,8 +12,8 @@
 
 #include <cppuhelper/implbase6.hxx>
 
-#include <vcl/OpenGLRender.hxx>
 #include <vcl/OpenGLContext.hxx>
+#include "OpenGLRender.hxx"
 
 #include <com/sun/star/drawing/XShape.hpp>
 #include <com/sun/star/drawing/XShapes.hpp>
