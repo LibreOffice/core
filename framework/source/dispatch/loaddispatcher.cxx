@@ -25,10 +25,10 @@
 
 namespace framework{
 
-LoadDispatcher::LoadDispatcher(const css::uno::Reference< css::uno::XComponentContext >& xContext       ,
+LoadDispatcher::LoadDispatcher(const css::uno::Reference< css::uno::XComponentContext >& xContext    ,
                                const css::uno::Reference< css::frame::XFrame >&          xOwnerFrame ,
-                               const OUString                                         sTargetName ,
-                                     sal_Int32                                               nSearchFlags)
+                               const OUString&                                           sTargetName ,
+                                     sal_Int32                                           nSearchFlags)
     : ThreadHelpBase(            )
     , m_xContext    (xContext    )
     , m_xOwnerFrame (xOwnerFrame )

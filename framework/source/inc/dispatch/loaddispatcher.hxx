@@ -85,8 +85,8 @@ class LoadDispatcher : private ThreadHelpBase
          */
         LoadDispatcher(const css::uno::Reference< css::uno::XComponentContext >& xContext,
                        const css::uno::Reference< css::frame::XFrame >&          xOwnerFrame ,
-                       const OUString                                         sTargetName ,
-                             sal_Int32                                               nSearchFlags);
+                       const OUString&                                           sTargetName ,
+                             sal_Int32                                           nSearchFlags);
 
 
 

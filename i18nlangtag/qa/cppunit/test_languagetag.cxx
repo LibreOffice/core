@@ -579,7 +579,7 @@ void TestLanguageTag::testAllTags()
     }
 }
 
-static bool checkMapping( const OUString rStr1, const OUString& rStr2 )
+static bool checkMapping( const OUString& rStr1, const OUString& rStr2 )
 {
     if (rStr1 == "la-Latn"     ) return rStr2 == "la";
     if (rStr1 == "tzm-Latn-DZ" ) return rStr2 == "kab-DZ";

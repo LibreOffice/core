@@ -151,7 +151,7 @@ sal_uInt16 AddonMenuManager::GetNextPos( sal_uInt16 nPos )
 }
 
 
-static sal_uInt16 FindMenuId( Menu* pMenu, const OUString aCommand )
+static sal_uInt16 FindMenuId( Menu* pMenu, const OUString& aCommand )
 {
     sal_uInt16 nPos = 0;
     OUString aCmd;
