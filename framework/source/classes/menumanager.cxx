@@ -614,7 +614,7 @@ void MenuManager::UpdateSpecialFileMenu( Menu* pMenu )
     }
 }
 
-void MenuManager::UpdateSpecialWindowMenu( Menu* pMenu,const Reference< XComponentContext >& xContext,framework::IMutex& _rMutex )
+void MenuManager::UpdateSpecialWindowMenu( Menu* pMenu,const Reference< XComponentContext >& xContext, LockHelper& _rMutex )
 {
     // update window list
     ::std::vector< OUString > aNewWindowListVector;

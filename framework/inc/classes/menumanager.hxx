@@ -69,7 +69,7 @@ class MenuManager : public ThreadHelpBase           ,
 
         void    RemoveListener();
 
-        static void UpdateSpecialWindowMenu( Menu* pMenu ,const css::uno::Reference< css::uno::XComponentContext >& xContext,IMutex& _rMutex);
+        static void UpdateSpecialWindowMenu( Menu* pMenu ,const css::uno::Reference< css::uno::XComponentContext >& xContext, LockHelper& _rMutex);
         static void FillMenuImages(
             css::uno::Reference< css::frame::XFrame >& xFrame,
             Menu* _pMenu,
