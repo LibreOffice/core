@@ -217,8 +217,8 @@ private:
     mutable bool            mbMatchData;    // true if matching attributes are initialized
     bool                    mbMapNames;     // true if MapNames are available
 
-    typedef boost::unordered_map<const OUString, PhysicalFontFamily*,FontNameHash> DevFontList;
-    DevFontList             maDevFontList;
+    typedef boost::unordered_map<const OUString, PhysicalFontFamily*,FontNameHash> PhysicalFontFamilies;
+    PhysicalFontFamilies    maPhysicalFontFamilies;
 
     ImplPreMatchFontSubstitution* mpPreMatchHook;       // device specific prematch substitution
     ImplGlyphFallbackFontSubstitution* mpFallbackHook;  // device specific glyh fallback substitution
@@ -230,7 +230,7 @@ public:
     // fill the list with device fonts
     void                    Add( PhysicalFontFace* );
     void                    Clear();
-    int                     Count() const { return maDevFontList.size(); }
+    int                     Count() const { return maPhysicalFontFamilies.size(); }
 
     // find the device font
     PhysicalFontFamily*    FindFontFamily( const OUString& rFontName ) const;

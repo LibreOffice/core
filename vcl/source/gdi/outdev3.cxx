@@ -1204,14 +1204,14 @@ void ImplDevFontList::Clear()
     mnFallbackCount = -1;
 
     // clear all entries in the device font list
-    DevFontList::iterator it = maDevFontList.begin();
-    for(; it != maDevFontList.end(); ++it )
+    PhysicalFontFamilies::iterator it = maPhysicalFontFamilies.begin();
+    for(; it != maPhysicalFontFamilies.end(); ++it )
     {
         PhysicalFontFamily* pEntry = (*it).second;
         delete pEntry;
     }
 
-    maDevFontList.clear();
+    maPhysicalFontFamilies.clear();
 
     // match data must be recalculated too
     mbMatchData = false;
@@ -1408,15 +1408,15 @@ void ImplDevFontList::Add( PhysicalFontFace* pNewData )
     OUString aSearchName = pNewData->GetFamilyName();
     GetEnglishSearchFontName( aSearchName );
 
-    DevFontList::const_iterator it = maDevFontList.find( aSearchName );
+    PhysicalFontFamilies::const_iterator it = maPhysicalFontFamilies.find( aSearchName );
     PhysicalFontFamily* pFoundData = NULL;
-    if( it != maDevFontList.end() )
+    if( it != maPhysicalFontFamilies.end() )
         pFoundData = (*it).second;
 
     if( !pFoundData )
     {
         pFoundData = new PhysicalFontFamily( aSearchName );
-        maDevFontList[ aSearchName ] = pFoundData;
+        maPhysicalFontFamilies[ aSearchName ] = pFoundData;
     }
 
     bool bKeepNewData = pFoundData->AddFontFace( pNewData );
@@ -1434,8 +1434,8 @@ PhysicalFontFamily* ImplDevFontList::ImplFindBySearchName( const OUString& rSear
     DBG_ASSERT( aTempName == rSearchName, "ImplDevFontList::ImplFindBySearchName() called with non-normalized name" );
 #endif
 
-    DevFontList::const_iterator it = maDevFontList.find( rSearchName );
-    if( it == maDevFontList.end() )
+    PhysicalFontFamilies::const_iterator it = maPhysicalFontFamilies.find( rSearchName );
+    if( it == maPhysicalFontFamilies.end() )
         return NULL;
 
     PhysicalFontFamily* pFoundData = (*it).second;
@@ -1455,8 +1455,8 @@ PhysicalFontFamily* ImplDevFontList::ImplFindByAliasName(const OUString& rSearch
 
     // use the font's alias names to find the font
     // TODO: get rid of linear search
-    DevFontList::const_iterator it = maDevFontList.begin();
-    while( it != maDevFontList.end() )
+    PhysicalFontFamilies::const_iterator it = maPhysicalFontFamilies.begin();
+    while( it != maPhysicalFontFamilies.end() )
     {
         PhysicalFontFamily* pData = (*it).second;
         if( pData->maMapNames.isEmpty() )
@@ -1549,8 +1549,8 @@ void ImplDevFontList::InitMatchData() const
     // calculate MatchData for all entries
     const FontSubstConfiguration& rFontSubst = FontSubstConfiguration::get();
 
-    DevFontList::const_iterator it = maDevFontList.begin();
-    for(; it != maDevFontList.end(); ++it )
+    PhysicalFontFamilies::const_iterator it = maPhysicalFontFamilies.begin();
+    for(; it != maPhysicalFontFamilies.end(); ++it )
     {
         const OUString& rSearchName = (*it).first;
         PhysicalFontFamily* pEntry = (*it).second;
@@ -1579,8 +1579,8 @@ PhysicalFontFamily* ImplDevFontList::ImplFindByAttributes( sal_uLong nSearchType
     long    nBestMatch = 40000;
     sal_uLong   nBestType = 0;
 
-    DevFontList::const_iterator it = maDevFontList.begin();
-    for(; it != maDevFontList.end(); ++it )
+    PhysicalFontFamilies::const_iterator it = maPhysicalFontFamilies.begin();
+    for(; it != maPhysicalFontFamilies.end(); ++it )
     {
         PhysicalFontFamily* pData = (*it).second;
 
@@ -1946,8 +1946,8 @@ PhysicalFontFamily* ImplDevFontList::FindDefaultFont() const
 
     InitMatchData();
 
-    DevFontList::const_iterator it = maDevFontList.begin();
-    for(; it !=  maDevFontList.end(); ++it )
+    PhysicalFontFamilies::const_iterator it = maPhysicalFontFamilies.begin();
+    for(; it !=  maPhysicalFontFamilies.end(); ++it )
     {
         PhysicalFontFamily* pData = (*it).second;
         if( pData->mnMatchType & IMPL_FONT_ATTR_SYMBOL )
@@ -1960,8 +1960,8 @@ PhysicalFontFamily* ImplDevFontList::FindDefaultFont() const
         return pFoundData;
 
     // finding any font is better than finding no font at all
-    it = maDevFontList.begin();
-    if( it !=  maDevFontList.end() )
+    it = maPhysicalFontFamilies.begin();
+    if( it !=  maPhysicalFontFamilies.end() )
         pFoundData = (*it).second;
 
     return pFoundData;
@@ -1977,8 +1977,8 @@ ImplDevFontList* ImplDevFontList::Clone( bool bScalable, bool bEmbeddable ) cons
     // TODO: clone the config-font attributes too?
     pClonedList->mbMatchData    = false;
 
-    DevFontList::const_iterator it = maDevFontList.begin();
-    for(; it != maDevFontList.end(); ++it )
+    PhysicalFontFamilies::const_iterator it = maPhysicalFontFamilies.begin();
+    for(; it != maPhysicalFontFamilies.end(); ++it )
     {
         const PhysicalFontFamily* pFontFace = (*it).second;
         pFontFace->UpdateCloneFontList( *pClonedList, bScalable, bEmbeddable );
@@ -1991,8 +1991,8 @@ ImplGetDevFontList* ImplDevFontList::GetDevFontList() const
 {
     ImplGetDevFontList* pGetDevFontList = new ImplGetDevFontList;
 
-    DevFontList::const_iterator it = maDevFontList.begin();
-    for(; it != maDevFontList.end(); ++it )
+    PhysicalFontFamilies::const_iterator it = maPhysicalFontFamilies.begin();
+    for(; it != maPhysicalFontFamilies.end(); ++it )
     {
         const PhysicalFontFamily* pFontFamily = (*it).second;
         pFontFamily->UpdateDevFontList( *pGetDevFontList );
