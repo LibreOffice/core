@@ -29,8 +29,7 @@
 #include <dispatch/interceptionhelper.hxx>
 #include <classes/taskcreator.hxx>
 #include <threadhelp/transactionguard.hxx>
-#include <threadhelp/writeguard.hxx>
-#include <threadhelp/readguard.hxx>
+#include <threadhelp/guard.hxx>
 #include <general.h>
 #include <properties.h>
 
@@ -221,7 +220,7 @@ sal_Bool SAL_CALL Desktop::terminate()
 {
     TransactionGuard aTransaction( m_aTransactionManager, E_HARDEXCEPTIONS );
 
-    ReadGuard aReadLock( m_aLock ); // start synchronize
+    Guard aReadLock( m_aLock ); // start synchronize
 
     css::uno::Reference< css::frame::XTerminateListener > xPipeTerminator    = m_xPipeTerminator;
     css::uno::Reference< css::frame::XTerminateListener > xQuickLauncher     = m_xQuickLauncher;
@@ -316,7 +315,7 @@ sal_Bool SAL_CALL Desktop::terminate()
             // "Protect" us against dispose before terminate calls!
             // see dispose() for further information.
             /* SAFE AREA --------------------------------------------------------------------------------------- */
-            WriteGuard aWriteLock( m_aLock );
+            Guard aWriteLock( m_aLock );
             m_bIsTerminated = sal_True;
             aWriteLock.unlock();
             /* UNSAFE AREA ------------------------------------------------------------------------------------- */
@@ -389,7 +388,7 @@ void SAL_CALL Desktop::addTerminateListener( const css::uno::Reference< css::fra
         OUString sImplementationName = xInfo->getImplementationName();
 
         // SYCNHRONIZED ->
-        WriteGuard aWriteLock( m_aLock );
+        Guard aWriteLock( m_aLock );
 
         if( sImplementationName == "com.sun.star.comp.sfx2.SfxTerminateListener" )
         {
@@ -432,7 +431,7 @@ void SAL_CALL Desktop::removeTerminateListener( const css::uno::Reference< css::
         OUString sImplementationName = xInfo->getImplementationName();
 
         // SYCNHRONIZED ->
-        WriteGuard aWriteLock( m_aLock );
+        Guard aWriteLock( m_aLock );
 
         if( sImplementationName == "com.sun.star.comp.sfx2.SfxTerminateListener" )
         {
@@ -848,7 +847,7 @@ css::uno::Reference< css::frame::XFramesSupplier > SAL_CALL Desktop::getCreator(
 OUString SAL_CALL Desktop::getName() throw( css::uno::RuntimeException, std::exception )
 {
     /* SAFE { */
-    ReadGuard aReadLock( m_aLock );
+    Guard aReadLock( m_aLock );
     return m_sName;
     /* } SAFE */
 }
@@ -856,7 +855,7 @@ OUString SAL_CALL Desktop::getName() throw( css::uno::RuntimeException, std::exc
 void SAL_CALL Desktop::setName( const OUString& sName ) throw( css::uno::RuntimeException, std::exception )
 {
     /* SAFE { */
-    WriteGuard aWriteLock( m_aLock );
+    Guard aWriteLock( m_aLock );
     m_sName = sName;
     aWriteLock.unlock();
     /* } SAFE */
@@ -1088,7 +1087,7 @@ void SAL_CALL Desktop::disposing()
     // tests for instance in sc/qa/unit) nothing bad happens.
     SAL_WARN_IF( !m_bIsTerminated, "fwk", "Desktop disposed before terminating it" );
 
-    WriteGuard aWriteLock( m_aLock ); // start synchronize
+    Guard aWriteLock( m_aLock ); // start synchronize
 
     // Look for multiple calls of this method!
     // If somewhere call dispose() twice - he will be stopped here really!!!
@@ -1212,7 +1211,7 @@ void SAL_CALL Desktop::dispatchFinished( const css::frame::DispatchResultEvent& 
     TransactionGuard aTransaction( m_aTransactionManager, E_HARDEXCEPTIONS );
 
     /* SAFE AREA ------------------------------------------------------------------------------------------- */
-    WriteGuard aWriteLock( m_aLock );
+    Guard aWriteLock( m_aLock );
     if( m_eLoadState != E_INTERACTION )
     {
         m_xLastFrame = css::uno::Reference< css::frame::XFrame >();
@@ -1341,7 +1340,7 @@ void SAL_CALL Desktop::handle( const css::uno::Reference< css::task::XInteractio
     // For example warnings will be approved and we wait for any success story ...
     if (bAbort)
     {
-        WriteGuard aWriteLock( m_aLock );
+        Guard aWriteLock( m_aLock );
         m_eLoadState          = E_INTERACTION;
         m_aInteractionRequest = aRequest     ;
         aWriteLock.unlock();
@@ -1805,7 +1804,7 @@ void Desktop::impl_sendNotifyTerminationEvent()
 
 ::sal_Bool Desktop::impl_closeFrames(::sal_Bool bAllowUI)
 {
-    ReadGuard aReadLock( m_aLock ); // start synchronize
+    Guard aReadLock( m_aLock ); // start synchronize
     css::uno::Sequence< css::uno::Reference< css::frame::XFrame > > lFrames = m_aChildTaskContainer.getAllElements();
     aReadLock.unlock(); // end synchronize
 

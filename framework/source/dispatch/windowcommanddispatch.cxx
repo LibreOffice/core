@@ -18,8 +18,7 @@
  */
 
 #include <dispatch/windowcommanddispatch.hxx>
-#include <threadhelp/readguard.hxx>
-#include <threadhelp/writeguard.hxx>
+#include <threadhelp/guard.hxx>
 #include <targets.h>
 #include <services.h>
 
@@ -59,7 +58,7 @@ WindowCommandDispatch::~WindowCommandDispatch()
 
 void WindowCommandDispatch::impl_startListening()
 {
-    ReadGuard aReadLock(m_aLock);
+    Guard aReadLock(m_aLock);
     css::uno::Reference< css::awt::XWindow > xWindow( m_xWindow.get(), css::uno::UNO_QUERY );
     aReadLock.unlock();
 
@@ -79,7 +78,7 @@ void WindowCommandDispatch::impl_startListening()
 
 void WindowCommandDispatch::impl_stopListening()
 {
-    ReadGuard aReadLock(m_aLock);
+    Guard aReadLock(m_aLock);
     css::uno::Reference< css::awt::XWindow > xWindow( m_xWindow.get(), css::uno::UNO_QUERY );
     aReadLock.unlock();
 
@@ -153,7 +152,7 @@ void WindowCommandDispatch::impl_dispatchCommand(const OUString& sCommand)
     try
     {
         // SYNCHRONIZED ->
-        ReadGuard aReadLock(m_aLock);
+        Guard aReadLock(m_aLock);
         css::uno::Reference< css::frame::XDispatchProvider >   xProvider(m_xFrame.get(), css::uno::UNO_QUERY_THROW);
         css::uno::Reference< css::uno::XComponentContext >     xContext    = m_xContext;
         aReadLock.unlock();

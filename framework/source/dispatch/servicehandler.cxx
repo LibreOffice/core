@@ -18,7 +18,7 @@
  */
 
 #include <dispatch/servicehandler.hxx>
-#include <threadhelp/readguard.hxx>
+#include <threadhelp/guard.hxx>
 #include <general.h>
 #include <services.h>
 
@@ -200,7 +200,7 @@ css::uno::Reference< css::uno::XInterface > ServiceHandler::implts_dispatch( con
                                                                              const css::uno::Sequence< css::beans::PropertyValue >& /*lArguments*/ ) throw( css::uno::RuntimeException )
 {
     /* SAFE */
-    ReadGuard aReadLock( m_aLock );
+    Guard aReadLock( m_aLock );
     css::uno::Reference< css::lang::XMultiServiceFactory > xFactory = m_xFactory;
     aReadLock.unlock();
     /* SAFE */

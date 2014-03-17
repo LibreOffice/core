@@ -17,55 +17,55 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#ifndef INCLUDED_FRAMEWORK_INC_THREADHELP_GUARD_HXX
+#define INCLUDED_FRAMEWORK_INC_THREADHELP_GUARD_HXX
+
 #include <sal/config.h>
 
-#include <osl/conditn.hxx>
+#include <boost/noncopyable.hpp>
 
-// include files of own module
-#include <helper/wakeupthread.hxx>
-#include <threadhelp/guard.hxx>
+#include <threadhelp/lockhelper.hxx>
 
 namespace framework{
 
-
-
-WakeUpThread::WakeUpThread(const css::uno::Reference< css::util::XUpdatable >& xListener)
-    : ThreadHelpBase(         )
-    , m_xListener   (xListener)
+class Guard : private boost::noncopyable
 {
-}
-
-
-void SAL_CALL WakeUpThread::run()
-{
-    ::osl::Condition aSleeper;
-
-    TimeValue aTime;
-    aTime.Seconds = 0;
-    aTime.Nanosec = 25000000; // 25 msec
-
-    while(schedule())
+public:
+    Guard( LockHelper& rLock )
+        :   m_pLock ( &rLock    )
+        ,   m_locked(false)
     {
-        aSleeper.reset();
-        aSleeper.wait(&aTime);
-
-        // SAFE ->
-        Guard aReadLock(m_aLock);
-        css::uno::Reference< css::util::XUpdatable > xListener(m_xListener.get(), css::uno::UNO_QUERY);
-        aReadLock.unlock();
-        // <- SAFE
-
-        if (xListener.is())
-            xListener->update();
+        lock();
     }
+
+    ~Guard()
+    {
+        unlock();
+    }
+
+    void lock()
+    {
+        if (!m_locked) {
+            m_pLock->acquire();
+            m_locked = true;
+        }
+    }
+
+    void unlock()
+    {
+        if (m_locked) {
+            m_pLock->release();
+            m_locked = false;
+        }
+    }
+
+private:
+        LockHelper* m_pLock;
+        bool m_locked;
+};
+
 }
 
-
-void SAL_CALL WakeUpThread::onTerminated()
-{
-    delete this;
-}
-
-} // namespace framework
+#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

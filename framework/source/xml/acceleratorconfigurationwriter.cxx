@@ -20,7 +20,7 @@
 #include <xml/acceleratorconfigurationwriter.hxx>
 
 #include <acceleratorconst.h>
-#include <threadhelp/readguard.hxx>
+#include <threadhelp/guard.hxx>
 
 #include <com/sun/star/xml/sax/XExtendedDocumentHandler.hpp>
 #include <com/sun/star/xml/sax/XAttributeList.hpp>
@@ -53,7 +53,7 @@ AcceleratorConfigurationWriter::~AcceleratorConfigurationWriter()
 void AcceleratorConfigurationWriter::flush()
 {
     // SAFE -> ----------------------------------
-    ReadGuard aReadLock(m_aLock);
+    Guard aReadLock(m_aLock);
 
     css::uno::Reference< css::xml::sax::XDocumentHandler >         xCFG        = m_xConfig;
     css::uno::Reference< css::xml::sax::XExtendedDocumentHandler > xExtendedCFG(m_xConfig, css::uno::UNO_QUERY_THROW);

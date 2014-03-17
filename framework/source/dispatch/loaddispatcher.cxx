@@ -18,8 +18,7 @@
  */
 
 #include <dispatch/loaddispatcher.hxx>
-#include <threadhelp/readguard.hxx>
-#include <threadhelp/writeguard.hxx>
+#include <threadhelp/guard.hxx>
 
 #include <com/sun/star/frame/DispatchResultState.hpp>
 
@@ -87,7 +86,7 @@ css::uno::Any LoadDispatcher::impl_dispatch( const css::util::URL& rURL,
     css::uno::Reference< css::uno::XInterface > xThis(static_cast< css::frame::XNotifyingDispatch* >(this), css::uno::UNO_QUERY);
 
     // SAFE -> ----------------------------------
-    ReadGuard aReadLock(m_aLock);
+    Guard aReadLock(m_aLock);
 
     // We are the only client of this load env object ... but
     // may a dispatch request before is still in progress (?!).

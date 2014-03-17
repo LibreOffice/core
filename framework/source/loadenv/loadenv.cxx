@@ -23,8 +23,7 @@
 #include <framework/framelistanalyzer.hxx>
 
 #include <interaction/quietinteraction.hxx>
-#include <threadhelp/writeguard.hxx>
-#include <threadhelp/readguard.hxx>
+#include <threadhelp/guard.hxx>
 #include <threadhelp/resetableguard.hxx>
 #include <properties.h>
 #include <protocols.h>
@@ -236,7 +235,7 @@ void LoadEnv::initializeLoading(const OUString&                                 
                                       EContentType                                               eContentType    ) // => use default ...
 {
     // SAFE -> ----------------------------------
-    WriteGuard aWriteLock(m_aLock);
+    Guard aWriteLock(m_aLock);
 
     // Handle still running processes!
     if (m_xAsynchronousJob.is())
@@ -361,7 +360,7 @@ void LoadEnv::initializeUIDefaults( const css::uno::Reference< css::uno::XCompon
 void LoadEnv::startLoading()
 {
     // SAFE ->
-    ReadGuard aReadLock(m_aLock);
+    Guard aReadLock(m_aLock);
 
     // Handle still running processes!
     if (m_xAsynchronousJob.is())
@@ -423,7 +422,7 @@ sal_Bool LoadEnv::waitWhileLoading(sal_uInt32 nTimeout)
     while(true)
     {
         // SAFE -> ------------------------------
-        ReadGuard aReadLock1(m_aLock);
+        Guard aReadLock1(m_aLock);
         if (!m_xAsynchronousJob.is())
             break;
         aReadLock1.unlock();
@@ -442,7 +441,7 @@ sal_Bool LoadEnv::waitWhileLoading(sal_uInt32 nTimeout)
     }
 
     // SAFE -> ----------------------------------
-    ReadGuard aReadLock2(m_aLock);
+    Guard aReadLock2(m_aLock);
     return !m_xAsynchronousJob.is();
     // <- SAFE ----------------------------------
 }
@@ -450,7 +449,7 @@ sal_Bool LoadEnv::waitWhileLoading(sal_uInt32 nTimeout)
 css::uno::Reference< css::lang::XComponent > LoadEnv::getTargetComponent() const
 {
     // SAFE ->
-    ReadGuard aReadLock(m_aLock);
+    Guard aReadLock(m_aLock);
 
     if (!m_xTargetFrame.is())
         return css::uno::Reference< css::lang::XComponent >();
@@ -472,7 +471,7 @@ void SAL_CALL LoadEnvListener::loadFinished(const css::uno::Reference< css::fram
     throw(css::uno::RuntimeException, std::exception)
 {
     // SAFE -> ----------------------------------
-    WriteGuard aWriteLock(m_aLock);
+    Guard aWriteLock(m_aLock);
 
     if (m_bWaitingResult)
         m_pLoadEnv->impl_setResult(sal_True);
@@ -487,7 +486,7 @@ void SAL_CALL LoadEnvListener::loadCancelled(const css::uno::Reference< css::fra
     throw(css::uno::RuntimeException, std::exception)
 {
     // SAFE -> ----------------------------------
-    WriteGuard aWriteLock(m_aLock);
+    Guard aWriteLock(m_aLock);
 
     if (m_bWaitingResult)
         m_pLoadEnv->impl_setResult(sal_False);
@@ -502,7 +501,7 @@ void SAL_CALL LoadEnvListener::dispatchFinished(const css::frame::DispatchResult
     throw(css::uno::RuntimeException, std::exception)
 {
     // SAFE -> ----------------------------------
-    WriteGuard aWriteLock(m_aLock);
+    Guard aWriteLock(m_aLock);
 
     if (!m_bWaitingResult)
         return;
@@ -532,7 +531,7 @@ void SAL_CALL LoadEnvListener::disposing(const css::lang::EventObject&)
     throw(css::uno::RuntimeException, std::exception)
 {
     // SAFE -> ----------------------------------
-    WriteGuard aWriteLock(m_aLock);
+    Guard aWriteLock(m_aLock);
 
     if (m_bWaitingResult)
         m_pLoadEnv->impl_setResult(sal_False);
@@ -546,7 +545,7 @@ void SAL_CALL LoadEnvListener::disposing(const css::lang::EventObject&)
 void LoadEnv::impl_setResult(sal_Bool bResult)
 {
     // SAFE -> ----------------------------------
-    WriteGuard aWriteLock(m_aLock);
+    Guard aWriteLock(m_aLock);
 
     m_bLoaded = bResult;
 
@@ -798,7 +797,7 @@ void LoadEnv::impl_detectTypeAndFilter()
     static sal_Int32       FILTERFLAG_TEMPLATEPATH  = 16;
 
     // SAFE ->
-    ReadGuard aReadLock(m_aLock);
+    Guard aReadLock(m_aLock);
 
     // Attention: Because our stl media descriptor is a copy of an uno sequence
     // we can't use as an in/out parameter here. Copy it before and don't forget to
@@ -833,7 +832,7 @@ void LoadEnv::impl_detectTypeAndFilter()
             LoadEnvException::ID_UNSUPPORTED_CONTENT, "type detection failed");
 
     // SAFE ->
-    WriteGuard aWriteLock(m_aLock);
+    Guard aWriteLock(m_aLock);
 
     // detection was successfully => update the descriptor member of this class
     m_lMediaDescriptor << lDescriptor;
@@ -913,7 +912,7 @@ sal_Bool LoadEnv::impl_handleContent()
     throw(LoadEnvException, css::uno::RuntimeException)
 {
     // SAFE -> -----------------------------------
-    ReadGuard aReadLock(m_aLock);
+    Guard aReadLock(m_aLock);
 
     // the type must exist inside the descriptor ... otherwise this class is implemented wrong :-)
     OUString sType = m_lMediaDescriptor.getUnpackedValueOrDefault(utl::MediaDescriptor::PROP_TYPENAME(), OUString());
@@ -960,7 +959,7 @@ sal_Bool LoadEnv::impl_handleContent()
             { continue; }
 
         // SAFE -> -----------------------------------
-        WriteGuard aWriteLock(m_aLock);
+        Guard aWriteLock(m_aLock);
         m_xAsynchronousJob = xHandler;
         LoadEnvListener* pListener = new LoadEnvListener(this);
         aWriteLock.unlock();
@@ -979,7 +978,7 @@ sal_Bool LoadEnv::impl_handleContent()
 sal_Bool LoadEnv::impl_furtherDocsAllowed()
 {
     // SAFE ->
-    ReadGuard aReadLock(m_aLock);
+    Guard aReadLock(m_aLock);
     css::uno::Reference< css::uno::XComponentContext > xContext = m_xContext;
     aReadLock.unlock();
     // <- SAFE
@@ -1061,7 +1060,7 @@ sal_Bool LoadEnv::impl_loadContent()
     throw(LoadEnvException, css::uno::RuntimeException)
 {
     // SAFE -> -----------------------------------
-    WriteGuard aWriteLock(m_aLock);
+    Guard aWriteLock(m_aLock);
 
     // search or create right target frame
     OUString sTarget = m_sTarget;
@@ -1199,7 +1198,7 @@ sal_Bool LoadEnv::impl_loadContent()
 css::uno::Reference< css::uno::XInterface > LoadEnv::impl_searchLoader()
 {
     // SAFE -> -----------------------------------
-    ReadGuard aReadLock(m_aLock);
+    Guard aReadLock(m_aLock);
 
     // special mode to set an existing component on this frame
     // In such case the loader is fix. It must be the SFX based implementation,
@@ -1274,7 +1273,7 @@ void LoadEnv::impl_jumpToMark(const css::uno::Reference< css::frame::XFrame >& x
         return;
 
     // SAFE ->
-    ReadGuard aReadLock(m_aLock);
+    Guard aReadLock(m_aLock);
     css::uno::Reference< css::uno::XComponentContext > xContext = m_xContext;
     aReadLock.unlock();
     // <- SAFE
@@ -1299,7 +1298,7 @@ css::uno::Reference< css::frame::XFrame > LoadEnv::impl_searchAlreadyLoaded()
     throw(LoadEnvException, css::uno::RuntimeException)
 {
     // SAFE ->
-    ReadGuard aReadLock(m_aLock);
+    Guard aReadLock(m_aLock);
 
     // such search is allowed for special requests only ...
     // or better its not allowed for some requests in general :-)
@@ -1459,7 +1458,7 @@ css::uno::Reference< css::frame::XFrame > LoadEnv::impl_searchRecycleTarget()
     throw(LoadEnvException, css::uno::RuntimeException)
 {
     // SAFE -> ..................................
-    ReadGuard aReadLock(m_aLock);
+    Guard aReadLock(m_aLock);
 
     // The special backing mode frame will be recycled by definition!
     // It doesn't matter if somewhere wants to create a new view
@@ -1570,7 +1569,7 @@ css::uno::Reference< css::frame::XFrame > LoadEnv::impl_searchRecycleTarget()
     }
 
     // SAFE -> ..................................
-    WriteGuard aWriteLock(m_aLock);
+    Guard aWriteLock(m_aLock);
 
     css::uno::Reference< css::document::XActionLockable > xLock(xTask, css::uno::UNO_QUERY);
     if (!m_aTargetLock.setResource(xLock))
@@ -1593,7 +1592,7 @@ void LoadEnv::impl_reactForLoadingState()
     /*TODO reset action locks */
 
     // SAFE -> ----------------------------------
-    ReadGuard aReadLock(m_aLock);
+    Guard aReadLock(m_aLock);
 
     if (m_bLoaded)
     {
@@ -1711,7 +1710,7 @@ void LoadEnv::impl_makeFrameWindowVisible(const css::uno::Reference< css::awt::X
                                                 sal_Bool bForceToFront)
 {
     // SAFE -> ----------------------------------
-    ReadGuard aReadLock(m_aLock);
+    Guard aReadLock(m_aLock);
     css::uno::Reference< css::uno::XComponentContext > xContext = m_xContext;
     aReadLock.unlock();
     // <- SAFE ----------------------------------
@@ -1783,7 +1782,7 @@ void LoadEnv::impl_applyPersistentWindowState(const css::uno::Reference< css::aw
     // <- SOLAR SAFE
 
     // SAFE ->
-    ReadGuard aReadLock(m_aLock);
+    Guard aReadLock(m_aLock);
 
     // no filter -> no module -> no persistent window state
     OUString sFilter = m_lMediaDescriptor.getUnpackedValueOrDefault(

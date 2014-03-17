@@ -18,7 +18,7 @@
  */
 
 #include <dispatch/systemexec.hxx>
-#include <threadhelp/readguard.hxx>
+#include <threadhelp/guard.hxx>
 #include <general.h>
 #include <services.h>
 
@@ -123,7 +123,7 @@ void SAL_CALL SystemExec::dispatchWithNotification( const css::util::URL&       
     OUString sSystemURLWithVariables = aURL.Complete.copy(PROTOCOL_LENGTH, c);
 
     // SAFE ->
-    ReadGuard aReadLock(m_aLock);
+    Guard aReadLock(m_aLock);
     css::uno::Reference< css::uno::XComponentContext > xContext = m_xContext;
     aReadLock.unlock();
     // <- SAFE

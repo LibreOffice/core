@@ -18,8 +18,7 @@
  */
 
 #include <dispatch/interceptionhelper.hxx>
-#include <threadhelp/readguard.hxx>
-#include <threadhelp/writeguard.hxx>
+#include <threadhelp/guard.hxx>
 
 #include <com/sun/star/frame/XInterceptorInfo.hpp>
 
@@ -53,7 +52,7 @@ css::uno::Reference< css::frame::XDispatch > SAL_CALL InterceptionHelper::queryD
     throw(css::uno::RuntimeException, std::exception)
 {
     // SAFE {
-    ReadGuard aReadLock(m_aLock);
+    Guard aReadLock(m_aLock);
 
     // a) first search an interceptor, which match to this URL by it's URL pattern registration
     //    Note: if it return NULL - it does not mean an empty interceptor list automaticly!
@@ -126,7 +125,7 @@ void SAL_CALL InterceptionHelper::registerDispatchProviderInterceptor(const css:
     }
 
     // SAFE {
-    WriteGuard aWriteLock(m_aLock);
+    Guard aWriteLock(m_aLock);
 
     // a) no interceptor at all - set this instance as master for given interceptor
     //    and set our slave as it's slave - and put this interceptor to the list.
@@ -191,7 +190,7 @@ void SAL_CALL InterceptionHelper::releaseDispatchProviderInterceptor(const css::
         throw css::uno::RuntimeException("NULL references not allowed as in parameter", xThis);
 
     // SAFE {
-    WriteGuard aWriteLock(m_aLock);
+    Guard aWriteLock(m_aLock);
 
     // search this interceptor ...
     // If it could be located inside cache -
@@ -235,7 +234,7 @@ void SAL_CALL InterceptionHelper::disposing(const css::lang::EventObject& aEvent
 {
     #ifdef FORCE_DESTRUCTION_OF_INTERCEPTION_CHAIN
     // SAFE ->
-    ReadGuard aReadLock(m_aLock);
+    Guard aReadLock(m_aLock);
 
     // check calli ... we accept such disposing call's only from our onwer frame.
     css::uno::Reference< css::frame::XFrame > xOwner(m_xOwnerWeak.get(), css::uno::UNO_QUERY);

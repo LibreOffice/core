@@ -22,8 +22,7 @@
 #include <classes/fwkresid.hxx>
 
 #include "classes/resource.hrc"
-#include <threadhelp/readguard.hxx>
-#include <threadhelp/writeguard.hxx>
+#include <threadhelp/guard.hxx>
 #include <services.h>
 
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -147,7 +146,7 @@ PresetHandler::~PresetHandler()
 void PresetHandler::forgetCachedStorages()
 {
     // SAFE -> ----------------------------------
-    WriteGuard aWriteLock(m_aLock);
+    Guard aWriteLock(m_aLock);
 
     if (m_eConfigType == E_DOCUMENT)
     {
@@ -210,7 +209,7 @@ css::uno::Reference< css::embed::XStorage > PresetHandler::getOrCreateRootStorag
         return xRoot;
 
     // SAFE -> ----------------------------------
-    ReadGuard aReadLock(m_aLock);
+    Guard aReadLock(m_aLock);
     css::uno::Reference< css::uno::XComponentContext > xContext = m_xContext;
     aReadLock.unlock();
     // <- SAFE ----------------------------------
@@ -268,7 +267,7 @@ css::uno::Reference< css::embed::XStorage > PresetHandler::getOrCreateRootStorag
         return xRoot;
 
     // SAFE -> ----------------------------------
-    ReadGuard aReadLock(m_aLock);
+    Guard aReadLock(m_aLock);
     css::uno::Reference< css::uno::XComponentContext > xContext = m_xContext;
     aReadLock.unlock();
     // <- SAFE ----------------------------------
@@ -312,7 +311,7 @@ css::uno::Reference< css::embed::XStorage > PresetHandler::getOrCreateRootStorag
 css::uno::Reference< css::embed::XStorage > PresetHandler::getWorkingStorageShare()
 {
     // SAFE -> ----------------------------------
-    ReadGuard aReadLock(m_aLock);
+    Guard aReadLock(m_aLock);
     return m_xWorkingStorageShare;
     // <- SAFE ----------------------------------
 }
@@ -321,7 +320,7 @@ css::uno::Reference< css::embed::XStorage > PresetHandler::getWorkingStorageShar
 css::uno::Reference< css::embed::XStorage > PresetHandler::getWorkingStorageUser()
 {
     // SAFE -> ----------------------------------
-    ReadGuard aReadLock(m_aLock);
+    Guard aReadLock(m_aLock);
     return m_xWorkingStorageUser;
     // <- SAFE ----------------------------------
 }
@@ -330,7 +329,7 @@ css::uno::Reference< css::embed::XStorage > PresetHandler::getWorkingStorageUser
 css::uno::Reference< css::embed::XStorage > PresetHandler::getParentStorageShare(const css::uno::Reference< css::embed::XStorage >& /*xChild*/)
 {
     // SAFE -> ----------------------------------
-    ReadGuard aReadLock(m_aLock);
+    Guard aReadLock(m_aLock);
     css::uno::Reference< css::embed::XStorage > xWorking = m_xWorkingStorageShare;
     aReadLock.unlock();
     // <- SAFE ----------------------------------
@@ -342,7 +341,7 @@ css::uno::Reference< css::embed::XStorage > PresetHandler::getParentStorageShare
 css::uno::Reference< css::embed::XStorage > PresetHandler::getParentStorageUser(const css::uno::Reference< css::embed::XStorage >& /*xChild*/)
 {
     // SAFE -> ----------------------------------
-    ReadGuard aReadLock(m_aLock);
+    Guard aReadLock(m_aLock);
     css::uno::Reference< css::embed::XStorage > xWorking = m_xWorkingStorageUser;
     aReadLock.unlock();
     // <- SAFE ----------------------------------
@@ -360,7 +359,7 @@ void PresetHandler::connectToResource(      PresetHandler::EConfigType          
     // TODO free all current open storages!
 
     // SAFE -> ----------------------------------
-    WriteGuard aWriteLock(m_aLock);
+    Guard aWriteLock(m_aLock);
 
     m_eConfigType   = eConfigType  ;
     m_sResourceType = sResource    ;
@@ -565,7 +564,7 @@ void PresetHandler::copyPresetToTarget(const OUString& sPreset,
     // We try to open it and forward all errors to the user!
 
     // SAFE -> ----------------------------------
-    ReadGuard aReadLock(m_aLock);
+    Guard aReadLock(m_aLock);
     css::uno::Reference< css::embed::XStorage > xWorkingShare = m_xWorkingStorageShare;
     css::uno::Reference< css::embed::XStorage > xWorkingNoLang= m_xWorkingStorageNoLang;
     css::uno::Reference< css::embed::XStorage > xWorkingUser  = m_xWorkingStorageUser ;
@@ -605,7 +604,7 @@ css::uno::Reference< css::io::XStream > PresetHandler::openPreset(const OUString
                                                                   sal_Bool bUseNoLangGlobal)
 {
     // SAFE -> ----------------------------------
-    ReadGuard aReadLock(m_aLock);
+    Guard aReadLock(m_aLock);
     css::uno::Reference< css::embed::XStorage > xFolder = bUseNoLangGlobal? m_xWorkingStorageNoLang: m_xWorkingStorageShare;
     aReadLock.unlock();
     // <- SAFE ----------------------------------
@@ -627,7 +626,7 @@ css::uno::Reference< css::io::XStream > PresetHandler::openTarget(const OUString
                                                                         sal_Bool         bCreateIfMissing)
 {
     // SAFE -> ----------------------------------
-    ReadGuard aReadLock(m_aLock);
+    Guard aReadLock(m_aLock);
     css::uno::Reference< css::embed::XStorage > xFolder = m_xWorkingStorageUser;
     aReadLock.unlock();
     // <- SAFE ----------------------------------
@@ -667,7 +666,7 @@ css::uno::Reference< css::io::XStream > PresetHandler::openTarget(const OUString
 void PresetHandler::commitUserChanges()
 {
     // SAFE -> ----------------------------------
-    ReadGuard aReadLock(m_aLock);
+    Guard aReadLock(m_aLock);
     css::uno::Reference< css::embed::XStorage > xWorking = m_xWorkingStorageUser;
     EConfigType                                 eCfgType = m_eConfigType;
     aReadLock.unlock();
@@ -704,7 +703,7 @@ void PresetHandler::commitUserChanges()
 void PresetHandler::addStorageListener(IStorageListener* pListener)
 {
     // SAFE -> ----------------------------------
-    ReadGuard aReadLock(m_aLock);
+    Guard aReadLock(m_aLock);
     OUString sRelPath = m_sRelPathUser; // use user path ... because we dont work directly on the share layer!
     EConfigType     eCfgType = m_eConfigType;
     aReadLock.unlock();
@@ -734,7 +733,7 @@ void PresetHandler::addStorageListener(IStorageListener* pListener)
 void PresetHandler::removeStorageListener(IStorageListener* pListener)
 {
     // SAFE -> ----------------------------------
-    ReadGuard aReadLock(m_aLock);
+    Guard aReadLock(m_aLock);
     OUString sRelPath = m_sRelPathUser; // use user path ... because we dont work directly on the share layer!
     EConfigType     eCfgType = m_eConfigType;
     aReadLock.unlock();

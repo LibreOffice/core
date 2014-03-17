@@ -27,8 +27,7 @@
 
 #include <pattern/window.hxx>
 #include <threadhelp/transactionguard.hxx>
-#include <threadhelp/readguard.hxx>
-#include <threadhelp/writeguard.hxx>
+#include <threadhelp/guard.hxx>
 #include <dispatchcommands.h>
 #include <protocols.h>
 #include <services.h>
@@ -107,7 +106,7 @@ css::uno::Reference< css::frame::XDispatch > SAL_CALL DispatchProvider::queryDis
     css::uno::Reference< css::frame::XDispatch > xDispatcher;
 
     /* SAFE { */
-    ReadGuard aReadLock( m_aLock );
+    Guard aReadLock( m_aLock );
     css::uno::Reference< css::frame::XFrame > xOwner( m_xFrame.get(), css::uno::UNO_QUERY );
     aReadLock.unlock();
     /* } SAFE */
@@ -492,7 +491,7 @@ css::uno::Reference< css::frame::XDispatch > DispatchProvider::implts_searchProt
     if (m_aProtocolHandlerCache.search(aURL,&aHandler))
     {
         /* SAFE { */
-        ReadGuard aReadLock( m_aLock );
+        Guard aReadLock( m_aLock );
 
         // create it
         css::uno::Reference< css::frame::XDispatchProvider > xHandler;
@@ -568,7 +567,7 @@ css::uno::Reference< css::frame::XDispatch > DispatchProvider::implts_getOrCreat
     css::uno::Reference< css::frame::XDispatch > xDispatchHelper;
 
     /* SAFE { */
-    ReadGuard aReadLock( m_aLock );
+    Guard aReadLock( m_aLock );
     css::uno::Reference< css::uno::XComponentContext > xContext = m_xContext;
     aReadLock.unlock();
     /* } SAFE */
@@ -580,7 +579,7 @@ css::uno::Reference< css::frame::XDispatch > DispatchProvider::implts_getOrCreat
                     // Attention: Such menue dispatcher must be a singleton for this frame - means our owner frame.
                     // Otherwhise he can make some trouble.
                     /* SAFE { */
-                    WriteGuard aWriteLock( m_aLock );
+                    Guard aWriteLock( m_aLock );
                     if ( ! m_xMenuDispatcher.is() )
                     {
                         MenuDispatcher* pDispatcher = new MenuDispatcher( xContext, xOwner );

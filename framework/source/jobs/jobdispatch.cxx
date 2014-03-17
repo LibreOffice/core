@@ -20,10 +20,9 @@
 #include <jobs/configaccess.hxx>
 #include <jobs/joburl.hxx>
 #include <jobs/job.hxx>
-#include <threadhelp/readguard.hxx>
+#include <threadhelp/guard.hxx>
 #include <threadhelp/resetableguard.hxx>
 #include <threadhelp/threadhelpbase.hxx>
-#include <threadhelp/writeguard.hxx>
 #include <classes/converter.hxx>
 #include <general.h>
 
@@ -181,7 +180,7 @@ void SAL_CALL JobDispatch::initialize( const css::uno::Sequence< css::uno::Any >
                                                                                                      css::uno::RuntimeException, std::exception)
 {
     /* SAFE { */
-    WriteGuard aWriteLock(m_aLock);
+    Guard aWriteLock(m_aLock);
 
     for (int a=0; a<lArguments.getLength(); ++a)
     {
@@ -330,7 +329,7 @@ void JobDispatch::impl_dispatchEvent( /*IN*/ const OUString&                    
     // The called static helper methods read it from the configuration and
     // filter disabled jobs using it's time stamp values.
     /* SAFE { */
-    ReadGuard aReadLock(m_aLock);
+    Guard aReadLock(m_aLock);
     css::uno::Sequence< OUString > lJobs = JobData::getEnabledJobsForEvent(m_xContext, sEvent);
     aReadLock.unlock();
     /* } SAFE */
@@ -410,7 +409,7 @@ void JobDispatch::impl_dispatchService( /*IN*/ const OUString&                  
                                         /*IN*/ const css::uno::Reference< css::frame::XDispatchResultListener >& xListener )
 {
     /* SAFE { */
-    ReadGuard aReadLock(m_aLock);
+    Guard aReadLock(m_aLock);
 
     JobData aCfg(m_xContext);
     aCfg.setService(sService);
@@ -461,7 +460,7 @@ void JobDispatch::impl_dispatchAlias( /*IN*/ const OUString&                    
                                       /*IN*/ const css::uno::Reference< css::frame::XDispatchResultListener >& xListener )
 {
     /* SAFE { */
-    ReadGuard aReadLock(m_aLock);
+    Guard aReadLock(m_aLock);
 
     JobData aCfg(m_xContext);
     aCfg.setAlias(sAlias);

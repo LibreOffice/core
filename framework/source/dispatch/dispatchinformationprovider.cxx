@@ -19,8 +19,7 @@
 
 #include <dispatch/dispatchinformationprovider.hxx>
 #include <dispatch/closedispatcher.hxx>
-#include <threadhelp/readguard.hxx>
-#include <threadhelp/writeguard.hxx>
+#include <threadhelp/guard.hxx>
 #include <stdtypes.h>
 #include <services.h>
 
@@ -132,7 +131,7 @@ css::uno::Sequence< css::frame::DispatchInformation > SAL_CALL DispatchInformati
 css::uno::Sequence< css::uno::Reference< css::frame::XDispatchInformationProvider > > DispatchInformationProvider::implts_getAllSubProvider()
 {
     // SAFE -> ----------------------------------
-    ReadGuard aReadLock(m_aLock);
+    Guard aReadLock(m_aLock);
     css::uno::Reference< css::uno::XComponentContext > xContext = m_xContext;
     css::uno::Reference< css::frame::XFrame >          xFrame(m_xFrame.get(), css::uno::UNO_QUERY);
     aReadLock.unlock();

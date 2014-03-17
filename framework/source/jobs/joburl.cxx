@@ -18,8 +18,7 @@
  */
 
 #include <jobs/joburl.hxx>
-#include <threadhelp/readguard.hxx>
-#include <threadhelp/writeguard.hxx>
+#include <threadhelp/guard.hxx>
 #include <general.h>
 
 #include <rtl/ustrbuf.hxx>
@@ -109,7 +108,7 @@ JobURL::JobURL( /*IN*/ const OUString& sURL )
 sal_Bool JobURL::isValid() const
 {
     /* SAFE { */
-    ReadGuard aReadLock(m_aLock);
+    Guard aReadLock(m_aLock);
     return (m_eRequest!=E_UNKNOWN);
 }
 
@@ -133,7 +132,7 @@ sal_Bool JobURL::isValid() const
 sal_Bool JobURL::getEvent( /*OUT*/ OUString& sEvent ) const
 {
     /* SAFE { */
-    ReadGuard aReadLock(m_aLock);
+    Guard aReadLock(m_aLock);
 
              sEvent = OUString();
     sal_Bool bSet   = ((m_eRequest & E_EVENT) == E_EVENT);
@@ -166,7 +165,7 @@ sal_Bool JobURL::getEvent( /*OUT*/ OUString& sEvent ) const
 sal_Bool JobURL::getAlias( /*OUT*/ OUString& sAlias ) const
 {
     /* SAFE { */
-    ReadGuard aReadLock(m_aLock);
+    Guard aReadLock(m_aLock);
 
              sAlias = OUString();
     sal_Bool bSet   = ((m_eRequest & E_ALIAS) == E_ALIAS);
@@ -199,7 +198,7 @@ sal_Bool JobURL::getAlias( /*OUT*/ OUString& sAlias ) const
 sal_Bool JobURL::getService( /*OUT*/ OUString& sService ) const
 {
     /* SAFE { */
-    ReadGuard aReadLock(m_aLock);
+    Guard aReadLock(m_aLock);
 
              sService = OUString();
     sal_Bool bSet     = ((m_eRequest & E_SERVICE) == E_SERVICE);
@@ -539,7 +538,7 @@ void JobURL::impldbg_checkURL( /*IN*/ const sal_Char*  pURL                 ,
 OUString JobURL::impldbg_toString() const
 {
     /* SAFE { */
-    ReadGuard aReadLock(m_aLock);
+    Guard aReadLock(m_aLock);
 
     OUStringBuffer sBuffer(256);
 
@@ -570,7 +569,7 @@ OUString JobURL::impldbg_toString() const
 sal_Bool JobURL::getServiceArgs( /*OUT*/ OUString& sServiceArgs ) const
 {
     /* SAFE { */
-    ReadGuard aReadLock(m_aLock);
+    Guard aReadLock(m_aLock);
 
              sServiceArgs = OUString();
     sal_Bool bSet         = ((m_eRequest & E_SERVICE) == E_SERVICE);
@@ -588,7 +587,7 @@ sal_Bool JobURL::getServiceArgs( /*OUT*/ OUString& sServiceArgs ) const
 sal_Bool JobURL::getEventArgs( /*OUT*/ OUString& sEventArgs ) const
 {
     /* SAFE { */
-    ReadGuard aReadLock(m_aLock);
+    Guard aReadLock(m_aLock);
 
              sEventArgs = OUString();
     sal_Bool bSet       = ((m_eRequest & E_EVENT) == E_EVENT);
@@ -606,7 +605,7 @@ sal_Bool JobURL::getEventArgs( /*OUT*/ OUString& sEventArgs ) const
 sal_Bool JobURL::getAliasArgs( /*OUT*/ OUString& sAliasArgs ) const
 {
     /* SAFE { */
-    ReadGuard aReadLock(m_aLock);
+    Guard aReadLock(m_aLock);
 
              sAliasArgs = OUString();
     sal_Bool bSet       = ((m_eRequest & E_ALIAS) == E_ALIAS);

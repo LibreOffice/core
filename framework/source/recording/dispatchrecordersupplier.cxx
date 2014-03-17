@@ -18,8 +18,7 @@
  */
 
 #include <recording/dispatchrecordersupplier.hxx>
-#include <threadhelp/writeguard.hxx>
-#include <threadhelp/readguard.hxx>
+#include <threadhelp/guard.hxx>
 #include <services.h>
 
 #include <com/sun/star/frame/XRecordableDispatch.hpp>
@@ -97,7 +96,7 @@ DispatchRecorderSupplier::~DispatchRecorderSupplier()
 void SAL_CALL DispatchRecorderSupplier::setDispatchRecorder( const css::uno::Reference< css::frame::XDispatchRecorder >& xRecorder ) throw (css::uno::RuntimeException, std::exception)
 {
     // SAFE =>
-    WriteGuard aWriteLock(m_aLock);
+    Guard aWriteLock(m_aLock);
     m_xDispatchRecorder=xRecorder;
     // => SAFE
 }
@@ -119,7 +118,7 @@ void SAL_CALL DispatchRecorderSupplier::setDispatchRecorder( const css::uno::Ref
 css::uno::Reference< css::frame::XDispatchRecorder > SAL_CALL DispatchRecorderSupplier::getDispatchRecorder() throw (css::uno::RuntimeException, std::exception)
 {
     // SAFE =>
-    ReadGuard aReadLock(m_aLock);
+    Guard aReadLock(m_aLock);
     return m_xDispatchRecorder;
     // => SAFE
 }
@@ -143,7 +142,7 @@ void SAL_CALL DispatchRecorderSupplier::dispatchAndRecord( const css::util::URL&
                                                            const css::uno::Reference< css::frame::XDispatch >&    xDispatcher ) throw (css::uno::RuntimeException, std::exception)
 {
     // SAFE =>
-    ReadGuard aReadLock(m_aLock);
+    Guard aReadLock(m_aLock);
     css::uno::Reference< css::frame::XDispatchRecorder > xRecorder = m_xDispatchRecorder;
     aReadLock.unlock();
     // => SAFE

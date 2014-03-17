@@ -21,9 +21,7 @@
 
 
 #include <helper/statusindicator.hxx>
-#include <threadhelp/readguard.hxx>
-#include <threadhelp/writeguard.hxx>
-
+#include <threadhelp/guard.hxx>
 
 namespace framework{
 
@@ -50,7 +48,7 @@ void SAL_CALL StatusIndicator::start(const OUString& sText ,
     (void) nRange;
 #else
     // SAFE ->
-    ReadGuard aReadLock(m_aLock);
+    Guard aReadLock(m_aLock);
     css::uno::Reference< css::task::XStatusIndicatorFactory > xFactory(m_xFactory.get(), css::uno::UNO_QUERY);
     aReadLock.unlock();
     // <- SAFE
@@ -68,7 +66,7 @@ void SAL_CALL StatusIndicator::end()
 {
 #if HAVE_FEATURE_DESKTOP
     // SAFE ->
-    ReadGuard aReadLock(m_aLock);
+    Guard aReadLock(m_aLock);
     css::uno::Reference< css::task::XStatusIndicatorFactory > xFactory(m_xFactory.get(), css::uno::UNO_QUERY);
     aReadLock.unlock();
     // <- SAFE
@@ -86,7 +84,7 @@ void SAL_CALL StatusIndicator::reset()
 {
 #if HAVE_FEATURE_DESKTOP
     // SAFE ->
-    ReadGuard aReadLock(m_aLock);
+    Guard aReadLock(m_aLock);
     css::uno::Reference< css::task::XStatusIndicatorFactory > xFactory(m_xFactory.get(), css::uno::UNO_QUERY);
     aReadLock.unlock();
     // <- SAFE
@@ -106,7 +104,7 @@ void SAL_CALL StatusIndicator::setText(const OUString& sText)
     (void) sText;
 #else
     // SAFE ->
-    ReadGuard aReadLock(m_aLock);
+    Guard aReadLock(m_aLock);
     css::uno::Reference< css::task::XStatusIndicatorFactory > xFactory(m_xFactory.get(), css::uno::UNO_QUERY);
     aReadLock.unlock();
     // <- SAFE
@@ -126,7 +124,7 @@ void SAL_CALL StatusIndicator::setValue(sal_Int32 nValue)
     (void) nValue;
 #else
     // SAFE ->
-    ReadGuard aReadLock(m_aLock);
+    Guard aReadLock(m_aLock);
     css::uno::Reference< css::task::XStatusIndicatorFactory > xFactory(m_xFactory.get(), css::uno::UNO_QUERY);
     aReadLock.unlock();
     // <- SAFE

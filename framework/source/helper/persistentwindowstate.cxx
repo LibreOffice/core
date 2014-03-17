@@ -19,8 +19,7 @@
 
 #include <pattern/window.hxx>
 #include <helper/persistentwindowstate.hxx>
-#include <threadhelp/writeguard.hxx>
-#include <threadhelp/readguard.hxx>
+#include <threadhelp/guard.hxx>
 #include <macros/generic.hxx>
 #include <services.h>
 
@@ -78,7 +77,7 @@ void SAL_CALL PersistentWindowState::initialize(const css::uno::Sequence< css::u
                 1);
 
     // SAFE -> ----------------------------------
-    WriteGuard aWriteLock(m_aLock);
+    Guard aWriteLock(m_aLock);
     // hold the frame as weak reference(!) so it can die everytimes :-)
     m_xFrame = xFrame;
     aWriteLock.unlock();
@@ -93,7 +92,7 @@ void SAL_CALL PersistentWindowState::frameAction(const css::frame::FrameActionEv
     throw(css::uno::RuntimeException, std::exception)
 {
     // SAFE -> ----------------------------------
-    ReadGuard aReadLock(m_aLock);
+    Guard aReadLock(m_aLock);
     css::uno::Reference< css::uno::XComponentContext >     xContext = m_xContext;
     css::uno::Reference< css::frame::XFrame >              xFrame(m_xFrame.get(), css::uno::UNO_QUERY);
     sal_Bool                                               bRestoreWindowState = !m_bWindowStateAlreadySet;
@@ -123,7 +122,7 @@ void SAL_CALL PersistentWindowState::frameAction(const css::frame::FrameActionEv
                     OUString sWindowState = PersistentWindowState::implst_getWindowStateFromConfig(xContext, sModuleName);
                     PersistentWindowState::implst_setWindowStateOnWindow(xWindow,sWindowState);
                     // SAFE -> ----------------------------------
-                    WriteGuard aWriteLock(m_aLock);
+                    Guard aWriteLock(m_aLock);
                     m_bWindowStateAlreadySet = sal_True;
                     aWriteLock.unlock();
                     // <- SAFE ----------------------------------

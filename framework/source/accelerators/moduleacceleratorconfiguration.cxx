@@ -19,8 +19,7 @@
 
 #include <accelerators/acceleratorconfiguration.hxx>
 #include <accelerators/presethandler.hxx>
-#include <threadhelp/readguard.hxx>
-#include <threadhelp/writeguard.hxx>
+#include <threadhelp/guard.hxx>
 #include "helper/mischelper.hxx"
 
 #include <acceleratorconst.h>
@@ -110,7 +109,7 @@ ModuleAcceleratorConfiguration::ModuleAcceleratorConfiguration(
         const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& lArguments)
     : ModuleAcceleratorConfiguration_BASE(xContext)
 {
-    WriteGuard aWriteLock(m_aLock);
+    Guard aWriteLock(m_aLock);
 
     OUString sModule;
     if (lArguments.getLength() == 1 && (lArguments[0] >>= sModule))
@@ -138,7 +137,7 @@ ModuleAcceleratorConfiguration::~ModuleAcceleratorConfiguration()
 void ModuleAcceleratorConfiguration::fillCache()
 {
     // SAFE -> ----------------------------------
-    ReadGuard aReadLock(m_aLock);
+    Guard aReadLock(m_aLock);
     m_sModuleCFG = m_sModule;
     aReadLock.unlock();
     // <- SAFE ----------------------------------

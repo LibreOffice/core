@@ -21,8 +21,7 @@
 #include <dispatch/startmoduledispatcher.hxx>
 
 #include <pattern/frame.hxx>
-#include <threadhelp/readguard.hxx>
-#include <threadhelp/writeguard.hxx>
+#include <threadhelp/guard.hxx>
 #include <framework/framelistanalyzer.hxx>
 #include <dispatchcommands.h>
 #include <targets.h>
@@ -133,7 +132,7 @@ void SAL_CALL StartModuleDispatcher::removeStatusListener(const css::uno::Refere
         return sal_False;
 
     // SAFE -> ----------------------------------
-    ReadGuard aReadLock(m_aLock);
+    Guard aReadLock(m_aLock);
     css::uno::Reference< css::uno::XComponentContext > xContext = m_xContext;
     aReadLock.unlock();
     // <- SAFE ----------------------------------
@@ -164,7 +163,7 @@ void SAL_CALL StartModuleDispatcher::removeStatusListener(const css::uno::Refere
 ::sal_Bool StartModuleDispatcher::implts_establishBackingMode()
 {
     // SAFE -> ----------------------------------
-    ReadGuard aReadLock(m_aLock);
+    Guard aReadLock(m_aLock);
     css::uno::Reference< css::uno::XComponentContext > xContext  = m_xContext;
     aReadLock.unlock();
     // <- SAFE ----------------------------------

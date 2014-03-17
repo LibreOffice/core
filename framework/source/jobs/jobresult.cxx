@@ -19,8 +19,7 @@
 
 #include <jobs/jobresult.hxx>
 #include <jobs/jobconst.hxx>
-#include <threadhelp/readguard.hxx>
-#include <threadhelp/writeguard.hxx>
+#include <threadhelp/guard.hxx>
 #include <general.h>
 #include <services.h>
 
@@ -167,7 +166,7 @@ JobResult::~JobResult()
 void JobResult::operator=( const JobResult& rCopy )
 {
     /* SAFE { */
-    WriteGuard aWriteLock(m_aLock);
+    Guard aWriteLock(m_aLock);
     m_aPureResult     = rCopy.m_aPureResult     ;
     m_eParts          = rCopy.m_eParts          ;
     m_lArguments      = rCopy.m_lArguments      ;
@@ -193,7 +192,7 @@ void JobResult::operator=( const JobResult& rCopy )
 sal_Bool JobResult::existPart( sal_uInt32 eParts ) const
 {
     /* SAFE { */
-    ReadGuard aReadLock(m_aLock);
+    Guard aReadLock(m_aLock);
     return ((m_eParts & eParts) == eParts);
     /* } SAFE */
 }
@@ -210,7 +209,7 @@ sal_Bool JobResult::existPart( sal_uInt32 eParts ) const
 css::uno::Sequence< css::beans::NamedValue > JobResult::getArguments() const
 {
     /* SAFE { */
-    ReadGuard aReadLock(m_aLock);
+    Guard aReadLock(m_aLock);
     return m_lArguments;
     /* } SAFE */
 }
@@ -220,7 +219,7 @@ css::uno::Sequence< css::beans::NamedValue > JobResult::getArguments() const
 css::frame::DispatchResultEvent JobResult::getDispatchResult() const
 {
     /* SAFE { */
-    ReadGuard aReadLock(m_aLock);
+    Guard aReadLock(m_aLock);
     return m_aDispatchResult;
     /* } SAFE */
 }

@@ -20,8 +20,7 @@
 #include <helper/titlebarupdate.hxx>
 
 #include <pattern/window.hxx>
-#include <threadhelp/writeguard.hxx>
-#include <threadhelp/readguard.hxx>
+#include <threadhelp/guard.hxx>
 #include <macros/generic.hxx>
 #include <services.h>
 #include <properties.h>
@@ -87,7 +86,7 @@ void SAL_CALL TitleBarUpdate::initialize(const css::uno::Sequence< css::uno::Any
                 1);
 
     // SYNCHRONIZED ->
-    WriteGuard aWriteLock(m_aLock);
+    Guard aWriteLock(m_aLock);
     // hold the frame as weak reference(!) so it can die everytimes :-)
     m_xFrame = xFrame;
     aWriteLock.unlock();
@@ -146,7 +145,7 @@ void TitleBarUpdate::impl_updateApplicationID(const css::uno::Reference< css::fr
     try
     {
         // SYNCHRONIZED ->
-        ReadGuard aReadLock(m_aLock);
+        Guard aReadLock(m_aLock);
         css::uno::Reference< css::uno::XComponentContext > xContext = m_xContext;
         aReadLock.unlock();
         // <- SYNCHRONIZED
@@ -217,7 +216,7 @@ void TitleBarUpdate::impl_updateApplicationID(const css::uno::Reference< css::fr
         return sal_False;
 
     // SYNCHRONIZED ->
-    ReadGuard aReadLock(m_aLock);
+    Guard aReadLock(m_aLock);
     css::uno::Reference< css::uno::XComponentContext > xContext = m_xContext;
     aReadLock.unlock();
     // <- SYNCHRONIZED
@@ -248,7 +247,7 @@ void TitleBarUpdate::impl_updateApplicationID(const css::uno::Reference< css::fr
 void TitleBarUpdate::impl_forceUpdate()
 {
     // SYNCHRONIZED ->
-    ReadGuard aReadLock(m_aLock);
+    Guard aReadLock(m_aLock);
     css::uno::Reference< css::frame::XFrame >              xFrame(m_xFrame.get(), css::uno::UNO_QUERY);
     aReadLock.unlock();
     // <- SYNCHRONIZED

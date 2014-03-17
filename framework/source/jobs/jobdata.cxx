@@ -18,8 +18,7 @@
  */
 
 #include <jobs/jobdata.hxx>
-#include <threadhelp/readguard.hxx>
-#include <threadhelp/writeguard.hxx>
+#include <threadhelp/guard.hxx>
 #include <classes/converter.hxx>
 #include <general.h>
 #include <services.h>
@@ -81,7 +80,7 @@ JobData::JobData( const JobData& rCopy )
 void JobData::operator=( const JobData& rCopy )
 {
     /* SAFE { */
-    WriteGuard aWriteLock(m_aLock);
+    Guard aWriteLock(m_aLock);
     // Please don't copy the uno service manager reference.
     // That can change the uno context, which isn't a good idea!
     m_eMode                = rCopy.m_eMode               ;
@@ -120,7 +119,7 @@ JobData::~JobData()
 void JobData::setAlias( const OUString& sAlias )
 {
     /* SAFE { */
-    WriteGuard aWriteLock(m_aLock);
+    Guard aWriteLock(m_aLock);
     // delete all old information! Otherwhise we mix it with the new one ...
     impl_reset();
 
@@ -190,7 +189,7 @@ void JobData::setAlias( const OUString& sAlias )
 void JobData::setService( const OUString& sService )
 {
     /* SAFE { */
-    WriteGuard aWriteLock(m_aLock);
+    Guard aWriteLock(m_aLock);
 
     // delete all old information! Otherwhise we mix it with the new one ...
     impl_reset();
@@ -228,7 +227,7 @@ void JobData::setEvent( const OUString& sEvent ,
     setAlias(sAlias);
 
     /* SAFE { */
-    WriteGuard aWriteLock(m_aLock);
+    Guard aWriteLock(m_aLock);
 
     // take over the new information - which differ against set on of method setAlias()!
     m_sEvent = sEvent;
@@ -253,7 +252,7 @@ void JobData::setEvent( const OUString& sEvent ,
 void JobData::setJobConfig( const css::uno::Sequence< css::beans::NamedValue >& lArguments )
 {
     /* SAFE { */
-    WriteGuard aWriteLock(m_aLock);
+    Guard aWriteLock(m_aLock);
 
     // update member
     m_lArguments = lArguments;
@@ -310,7 +309,7 @@ void JobData::setJobConfig( const css::uno::Sequence< css::beans::NamedValue >& 
 void JobData::setResult( const JobResult& aResult )
 {
     /* SAFE { */
-    WriteGuard aWriteLock(m_aLock);
+    Guard aWriteLock(m_aLock);
 
     // overwrite the last saved result
     m_aLastExecutionResult = aResult;
@@ -333,7 +332,7 @@ void JobData::setResult( const JobResult& aResult )
 void JobData::setEnvironment( EEnvironment eEnvironment )
 {
     /* SAFE { */
-    WriteGuard aWriteLock(m_aLock);
+    Guard aWriteLock(m_aLock);
     m_eEnvironment = eEnvironment;
     aWriteLock.unlock();
     /* } SAFE */
@@ -348,7 +347,7 @@ void JobData::setEnvironment( EEnvironment eEnvironment )
 JobData::EMode JobData::getMode() const
 {
     /* SAFE { */
-    ReadGuard aReadLock(m_aLock);
+    Guard aReadLock(m_aLock);
     return m_eMode;
     /* } SAFE */
 }
@@ -358,7 +357,7 @@ JobData::EMode JobData::getMode() const
 JobData::EEnvironment JobData::getEnvironment() const
 {
     /* SAFE { */
-    ReadGuard aReadLock(m_aLock);
+    Guard aReadLock(m_aLock);
     return m_eEnvironment;
     /* } SAFE */
 }
@@ -369,7 +368,7 @@ OUString JobData::getEnvironmentDescriptor() const
 {
     OUString sDescriptor;
     /* SAFE { */
-    ReadGuard aReadLock(m_aLock);
+    Guard aReadLock(m_aLock);
     switch(m_eEnvironment)
     {
         case E_EXECUTION :
@@ -395,7 +394,7 @@ OUString JobData::getEnvironmentDescriptor() const
 OUString JobData::getService() const
 {
     /* SAFE { */
-    ReadGuard aReadLock(m_aLock);
+    Guard aReadLock(m_aLock);
     return m_sService;
     /* } SAFE */
 }
@@ -405,7 +404,7 @@ OUString JobData::getService() const
 OUString JobData::getEvent() const
 {
     /* SAFE { */
-    ReadGuard aReadLock(m_aLock);
+    Guard aReadLock(m_aLock);
     return m_sEvent;
     /* } SAFE */
 }
@@ -415,7 +414,7 @@ OUString JobData::getEvent() const
 css::uno::Sequence< css::beans::NamedValue > JobData::getJobConfig() const
 {
     /* SAFE { */
-    ReadGuard aReadLock(m_aLock);
+    Guard aReadLock(m_aLock);
     return m_lArguments;
     /* } SAFE */
 }
@@ -425,7 +424,7 @@ css::uno::Sequence< css::beans::NamedValue > JobData::getJobConfig() const
 css::uno::Sequence< css::beans::NamedValue > JobData::getConfig() const
 {
     /* SAFE { */
-    ReadGuard aReadLock(m_aLock);
+    Guard aReadLock(m_aLock);
     css::uno::Sequence< css::beans::NamedValue > lConfig;
     if (m_eMode==E_ALIAS)
     {
@@ -464,7 +463,7 @@ css::uno::Sequence< css::beans::NamedValue > JobData::getConfig() const
 sal_Bool JobData::hasConfig() const
 {
     /* SAFE { */
-    ReadGuard aReadLock(m_aLock);
+    Guard aReadLock(m_aLock);
     return (m_eMode==E_ALIAS || m_eMode==E_EVENT);
     /* } SAFE */
 }
@@ -483,7 +482,7 @@ sal_Bool JobData::hasConfig() const
 void JobData::disableJob()
 {
     /* SAFE { */
-    WriteGuard aWriteLock(m_aLock);
+    Guard aWriteLock(m_aLock);
 
     // No configuration - not used from EXECUTOR and not triggered from an event => no chance!
     if (m_eMode!=E_EVENT)
@@ -671,7 +670,7 @@ css::uno::Sequence< OUString > JobData::getEnabledJobsForEvent( const css::uno::
 void JobData::impl_reset()
 {
     /* SAFE { */
-    WriteGuard aWriteLock(m_aLock);
+    Guard aWriteLock(m_aLock);
     m_eMode        = E_UNKNOWN_MODE;
     m_eEnvironment = E_UNKNOWN_ENVIRONMENT;
     m_sAlias       = "";

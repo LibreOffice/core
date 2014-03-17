@@ -19,8 +19,7 @@
 
 #include <helper/vclstatusindicator.hxx>
 
-#include <threadhelp/readguard.hxx>
-#include <threadhelp/writeguard.hxx>
+#include <threadhelp/guard.hxx>
 
 #include <toolkit/helper/vclunohelper.hxx>
 #include <vcl/svapp.hxx>
@@ -54,7 +53,7 @@ void SAL_CALL VCLStatusIndicator::start(const OUString& sText ,
     throw(css::uno::RuntimeException, std::exception)
 {
     // SAFE -> ----------------------------------
-    ReadGuard aReadLock(m_aLock);
+    Guard aReadLock(m_aLock);
     css::uno::Reference< css::awt::XWindow > xParentWindow = m_xParentWindow;
     aReadLock.unlock();
     // <- SAFE ----------------------------------
@@ -81,7 +80,7 @@ void SAL_CALL VCLStatusIndicator::start(const OUString& sText ,
     // <- SOLAR SAFE ----------------------------
 
     // SAFE -> ----------------------------------
-    WriteGuard aWriteLock(m_aLock);
+    Guard aWriteLock(m_aLock);
     m_sText  = sText;
     m_nRange = nRange;
     m_nValue = 0;
@@ -108,7 +107,7 @@ void SAL_CALL VCLStatusIndicator::end()
     throw(css::uno::RuntimeException, std::exception)
 {
     // SAFE -> ----------------------------------
-    WriteGuard aWriteLock(m_aLock);
+    Guard aWriteLock(m_aLock);
     m_sText  = OUString();
     m_nRange = 0;
     m_nValue = 0;
@@ -135,7 +134,7 @@ void SAL_CALL VCLStatusIndicator::setText(const OUString& sText)
     throw(css::uno::RuntimeException, std::exception)
 {
     // SAFE -> ----------------------------------
-    WriteGuard aWriteLock(m_aLock);
+    Guard aWriteLock(m_aLock);
     m_sText = sText;
     aWriteLock.unlock();
     // <- SAFE ----------------------------------
@@ -154,7 +153,7 @@ void SAL_CALL VCLStatusIndicator::setValue(sal_Int32 nValue)
     throw(css::uno::RuntimeException, std::exception)
 {
     // SAFE -> ----------------------------------
-    WriteGuard aWriteLock(m_aLock);
+    Guard aWriteLock(m_aLock);
 
     if (nValue <= m_nRange)
         m_nValue = nValue;

@@ -19,8 +19,7 @@
 
 #include <dispatch/closedispatcher.hxx>
 #include <pattern/frame.hxx>
-#include <threadhelp/readguard.hxx>
-#include <threadhelp/writeguard.hxx>
+#include <threadhelp/guard.hxx>
 #include <framework/framelistanalyzer.hxx>
 #include <services.h>
 #include <general.h>
@@ -150,7 +149,7 @@ void SAL_CALL CloseDispatcher::dispatchWithNotification(const css::util::URL&   
     throw(css::uno::RuntimeException, std::exception)
 {
     // SAFE -> ----------------------------------
-    WriteGuard aWriteLock(m_aLock);
+    Guard aWriteLock(m_aLock);
 
     // This reference indicates, that we was already called before and
     // our asynchronous process was not finished yet.
@@ -260,7 +259,7 @@ IMPL_LINK_NOARG(CloseDispatcher, impl_asyncCallback)
     sal_Bool bControllerSuspended = sal_False;
 
     // SAFE -> ----------------------------------
-    ReadGuard aReadLock(m_aLock);
+    Guard aReadLock(m_aLock);
 
     // Closing of all views, related to the same document, is allowed
     // only if the dispatched URL was ".uno:CloseDoc"!
@@ -411,7 +410,7 @@ IMPL_LINK_NOARG(CloseDispatcher, impl_asyncCallback)
     implts_notifyResultListener(xListener, nState, css::uno::Any());
 
     // SAFE -> ----------------------------------
-    WriteGuard aWriteLock(m_aLock);
+    Guard aWriteLock(m_aLock);
 
     // This method was called asynchronous from our main thread by using a pointer.
     // We reached this method only, by using a reference to ourself :-)
@@ -450,7 +449,7 @@ sal_Bool CloseDispatcher::implts_prepareFrameForClosing(const css::uno::Referenc
     if (bCloseAllOtherViewsToo)
     {
         // SAFE -> ----------------------------------
-        ReadGuard aReadLock(m_aLock);
+        Guard aReadLock(m_aLock);
         css::uno::Reference< css::uno::XComponentContext > xContext  = m_xContext;
         aReadLock.unlock();
         // <- SAFE ----------------------------------
@@ -490,7 +489,7 @@ sal_Bool CloseDispatcher::implts_prepareFrameForClosing(const css::uno::Referenc
 sal_Bool CloseDispatcher::implts_closeFrame()
 {
     // SAFE -> ----------------------------------
-    ReadGuard aReadLock(m_aLock);
+    Guard aReadLock(m_aLock);
     css::uno::Reference< css::frame::XFrame > xFrame (m_xCloseFrame.get(), css::uno::UNO_QUERY);
     aReadLock.unlock();
     // <- SAFE ----------------------------------
@@ -506,7 +505,7 @@ sal_Bool CloseDispatcher::implts_closeFrame()
         return sal_False;
 
     // SAFE -> ----------------------------------
-    WriteGuard aWriteLock(m_aLock);
+    Guard aWriteLock(m_aLock);
     m_xCloseFrame = css::uno::WeakReference< css::frame::XFrame >();
     aWriteLock.unlock();
     // <- SAFE ----------------------------------
@@ -518,7 +517,7 @@ sal_Bool CloseDispatcher::implts_closeFrame()
 sal_Bool CloseDispatcher::implts_establishBackingMode()
 {
     // SAFE -> ----------------------------------
-    ReadGuard aReadLock(m_aLock);
+    Guard aReadLock(m_aLock);
     css::uno::Reference< css::uno::XComponentContext > xContext  = m_xContext;
     css::uno::Reference< css::frame::XFrame >          xFrame (m_xCloseFrame.get(), css::uno::UNO_QUERY);
     aReadLock.unlock();
@@ -549,7 +548,7 @@ sal_Bool CloseDispatcher::implts_establishBackingMode()
 sal_Bool CloseDispatcher::implts_terminateApplication()
 {
     // SAFE -> ----------------------------------
-    ReadGuard aReadLock(m_aLock);
+    Guard aReadLock(m_aLock);
     css::uno::Reference< css::uno::XComponentContext > xContext = m_xContext;
     aReadLock.unlock();
     // <- SAFE ----------------------------------

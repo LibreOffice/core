@@ -18,8 +18,7 @@
  */
 
 #include <classes/framecontainer.hxx>
-#include <threadhelp/writeguard.hxx>
-#include <threadhelp/readguard.hxx>
+#include <threadhelp/guard.hxx>
 
 #include <com/sun/star/frame/FrameSearchFlag.hpp>
 
@@ -72,7 +71,7 @@ void FrameContainer::append( const css::uno::Reference< css::frame::XFrame >& xF
     if (xFrame.is() && ! exist(xFrame))
     {
         /* SAFE { */
-        WriteGuard aWriteLock( m_aLock );
+        Guard aWriteLock( m_aLock );
         m_aContainer.push_back( xFrame );
         aWriteLock.unlock();
         /* } SAFE */
@@ -94,7 +93,7 @@ void FrameContainer::remove( const css::uno::Reference< css::frame::XFrame >& xF
 {
     /* SAFE { */
     // write lock necessary for follwing erase()!
-    WriteGuard aWriteLock( m_aLock );
+    Guard aWriteLock( m_aLock );
 
     TFrameIterator aSearchedItem = ::std::find( m_aContainer.begin(), m_aContainer.end(), xFrame );
     if (aSearchedItem!=m_aContainer.end())
@@ -125,7 +124,7 @@ void FrameContainer::remove( const css::uno::Reference< css::frame::XFrame >& xF
 sal_Bool FrameContainer::exist( const css::uno::Reference< css::frame::XFrame >& xFrame ) const
 {
     /* SAFE { */
-    ReadGuard aReadLock( m_aLock );
+    Guard aReadLock( m_aLock );
     return( ::std::find( m_aContainer.begin(), m_aContainer.end(), xFrame ) != m_aContainer.end() );
     /* } SAFE */
 }
@@ -139,7 +138,7 @@ sal_Bool FrameContainer::exist( const css::uno::Reference< css::frame::XFrame >&
 void FrameContainer::clear()
 {
     // SAFE {
-    WriteGuard aWriteLock( m_aLock );
+    Guard aWriteLock( m_aLock );
 
     // Clear the container ...
     m_aContainer.clear();
@@ -166,7 +165,7 @@ void FrameContainer::clear()
 sal_uInt32 FrameContainer::getCount() const
 {
     /* SAFE { */
-    ReadGuard aReadLock( m_aLock );
+    Guard aReadLock( m_aLock );
     return( (sal_uInt32)m_aContainer.size() );
     /* } SAFE */
 }
@@ -194,7 +193,7 @@ css::uno::Reference< css::frame::XFrame > FrameContainer::operator[]( sal_uInt32
         // Get element form container WITH automatic test of ranges!
         // If index not valid, a out_of_range exception is thrown.
         /* SAFE { */
-        ReadGuard aReadLock( m_aLock );
+        Guard aReadLock( m_aLock );
         xFrame = m_aContainer.at( nIndex );
         aReadLock.unlock();
         /* } SAFE */
@@ -219,7 +218,7 @@ css::uno::Reference< css::frame::XFrame > FrameContainer::operator[]( sal_uInt32
 css::uno::Sequence< css::uno::Reference< css::frame::XFrame > > FrameContainer::getAllElements() const
 {
     /* SAFE { */
-    ReadGuard aReadLock( m_aLock );
+    Guard aReadLock( m_aLock );
 
     sal_Int32                                                       nPosition = 0;
     css::uno::Sequence< css::uno::Reference< css::frame::XFrame > > lElements ( (sal_uInt32)m_aContainer.size() );
@@ -247,7 +246,7 @@ void FrameContainer::setActive( const css::uno::Reference< css::frame::XFrame >&
     if ( !xFrame.is() || exist(xFrame) )
     {
         /* SAFE { */
-        WriteGuard aWriteLock( m_aLock );
+        Guard aWriteLock( m_aLock );
         m_xActiveFrame = xFrame;
         aWriteLock.unlock();
         /* } SAFE */
@@ -267,7 +266,7 @@ void FrameContainer::setActive( const css::uno::Reference< css::frame::XFrame >&
 css::uno::Reference< css::frame::XFrame > FrameContainer::getActive() const
 {
     /* SAFE { */
-    ReadGuard aReadLock( m_aLock );
+    Guard aReadLock( m_aLock );
     return m_xActiveFrame;
     /* } SAFE */
 }
@@ -286,7 +285,7 @@ css::uno::Reference< css::frame::XFrame > FrameContainer::getActive() const
 css::uno::Reference< css::frame::XFrame > FrameContainer::searchOnAllChildrens( const OUString& sName ) const
 {
     /* SAFE { */
-    ReadGuard aReadLock( m_aLock );
+    Guard aReadLock( m_aLock );
 
     // Step over all child frames. But if direct child isn't the right one search on his children first - before
     // you go to next direct child of this container!
@@ -324,7 +323,7 @@ css::uno::Reference< css::frame::XFrame > FrameContainer::searchOnAllChildrens( 
 css::uno::Reference< css::frame::XFrame > FrameContainer::searchOnDirectChildrens( const OUString& sName ) const
 {
     /* SAFE { */
-    ReadGuard aReadLock( m_aLock );
+    Guard aReadLock( m_aLock );
 
     css::uno::Reference< css::frame::XFrame > xSearchedFrame;
     for( TConstFrameIterator pIterator=m_aContainer.begin(); pIterator!=m_aContainer.end(); ++pIterator )

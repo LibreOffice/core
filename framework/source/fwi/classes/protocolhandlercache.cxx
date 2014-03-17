@@ -25,8 +25,7 @@
 
 #include <classes/protocolhandlercache.hxx>
 #include <classes/converter.hxx>
-#include <threadhelp/readguard.hxx>
-#include <threadhelp/writeguard.hxx>
+#include <threadhelp/guard.hxx>
 #include <threadhelp/lockhelper.hxx>
 
 #include <tools/wldcrd.hxx>
@@ -83,7 +82,7 @@ HandlerCFGAccess* HandlerCache::m_pConfig = NULL;
 HandlerCache::HandlerCache()
 {
     /* SAFE */{
-        WriteGuard aGlobalLock( LockHelper::getGlobalLock() );
+        Guard aGlobalLock( LockHelper::getGlobalLock() );
 
         if (m_nRefCount==0)
         {
@@ -106,7 +105,7 @@ HandlerCache::HandlerCache()
 HandlerCache::~HandlerCache()
 {
     /* SAFE */{
-        WriteGuard aGlobalLock( LockHelper::getGlobalLock() );
+        Guard aGlobalLock( LockHelper::getGlobalLock() );
 
         if( m_nRefCount==1)
         {
@@ -135,7 +134,7 @@ sal_Bool HandlerCache::search( const OUString& sURL, ProtocolHandler* pReturn ) 
 {
     sal_Bool bFound = sal_False;
     /* SAFE */{
-        ReadGuard aReadLock( LockHelper::getGlobalLock() );
+        Guard aReadLock( LockHelper::getGlobalLock() );
         PatternHash::const_iterator pItem = m_pPattern->findPatternKey(sURL);
         if (pItem!=m_pPattern->end())
         {
@@ -160,7 +159,7 @@ sal_Bool HandlerCache::search( const css::util::URL& aURL, ProtocolHandler* pRet
 void HandlerCache::takeOver(HandlerHash* pHandler, PatternHash* pPattern)
 {
     // SAFE ->
-    WriteGuard aWriteLock( LockHelper::getGlobalLock() );
+    Guard aWriteLock( LockHelper::getGlobalLock() );
 
     HandlerHash* pOldHandler = m_pHandler;
     PatternHash* pOldPattern = m_pPattern;

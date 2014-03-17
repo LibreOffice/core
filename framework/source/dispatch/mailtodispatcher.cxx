@@ -18,7 +18,7 @@
  */
 
 #include <dispatch/mailtodispatcher.hxx>
-#include <threadhelp/readguard.hxx>
+#include <threadhelp/guard.hxx>
 #include <general.h>
 #include <services.h>
 
@@ -202,7 +202,7 @@ sal_Bool MailToDispatcher::implts_dispatch( const css::util::URL&               
 
     css::uno::Reference< css::uno::XComponentContext > xContext;
     /* SAFE */{
-        ReadGuard aReadLock( m_aLock );
+        Guard aReadLock( m_aLock );
         xContext = m_xContext;
     /* SAFE */}
 

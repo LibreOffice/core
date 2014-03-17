@@ -25,8 +25,7 @@
 #include <xml/acceleratorconfigurationreader.hxx>
 #include <xml/acceleratorconfigurationwriter.hxx>
 
-#include <threadhelp/readguard.hxx>
-#include <threadhelp/writeguard.hxx>
+#include <threadhelp/guard.hxx>
 
 #include <acceleratorconst.h>
 #include <services.h>
@@ -93,7 +92,7 @@ css::uno::Sequence< css::awt::KeyEvent > SAL_CALL XMLBasedAcceleratorConfigurati
     throw(css::uno::RuntimeException, std::exception)
 {
     // SAFE -> ----------------------------------
-    ReadGuard aReadLock(m_aLock);
+    Guard aReadLock(m_aLock);
 
     AcceleratorCache&          rCache = impl_getCFG();
     AcceleratorCache::TKeyList lKeys  = rCache.getAllKeys();
@@ -108,7 +107,7 @@ OUString SAL_CALL XMLBasedAcceleratorConfiguration::getCommandByKeyEvent(const c
           css::uno::RuntimeException, std::exception            )
 {
     // SAFE -> ----------------------------------
-    ReadGuard aReadLock(m_aLock);
+    Guard aReadLock(m_aLock);
 
     AcceleratorCache& rCache = impl_getCFG();
     if (!rCache.hasKey(aKeyEvent))
@@ -144,7 +143,7 @@ void SAL_CALL XMLBasedAcceleratorConfiguration::setKeyEvent(const css::awt::KeyE
         1);
 
     // SAFE -> ----------------------------------
-    WriteGuard aWriteLock(m_aLock);
+    Guard aWriteLock(m_aLock);
 
     AcceleratorCache& rCache = impl_getCFG(sal_True); // sal_True => force getting of a writeable cache!
     rCache.setKeyCommandPair(aKeyEvent, sCommand);
@@ -159,7 +158,7 @@ throw(css::container::NoSuchElementException,
       css::uno::RuntimeException, std::exception            )
 {
     // SAFE -> ----------------------------------
-    WriteGuard aWriteLock(m_aLock);
+    Guard aWriteLock(m_aLock);
 
     AcceleratorCache& rCache = impl_getCFG(sal_True); // true => force using of a writeable cache
     if (!rCache.hasKey(aKeyEvent))
@@ -184,7 +183,7 @@ css::uno::Sequence< css::awt::KeyEvent > SAL_CALL XMLBasedAcceleratorConfigurati
                 1);
 
     // SAFE -> ----------------------------------
-    ReadGuard aReadLock(m_aLock);
+    Guard aReadLock(m_aLock);
 
     AcceleratorCache& rCache = impl_getCFG();
     if (!rCache.hasCommand(sCommand))
@@ -204,7 +203,7 @@ css::uno::Sequence< css::uno::Any > SAL_CALL XMLBasedAcceleratorConfiguration::g
           css::uno::RuntimeException, std::exception            )
 {
     // SAFE -> ----------------------------------
-    ReadGuard aReadLock(m_aLock);
+    Guard aReadLock(m_aLock);
 
     sal_Int32                           i              = 0;
     sal_Int32                           c              = lCommandList.getLength();
@@ -250,7 +249,7 @@ void SAL_CALL XMLBasedAcceleratorConfiguration::removeCommandFromAllKeyEvents(co
                 0);
 
     // SAFE -> ----------------------------------
-    WriteGuard aWriteLock(m_aLock);
+    Guard aWriteLock(m_aLock);
 
     AcceleratorCache& rCache = impl_getCFG(sal_True); // sal_True => force getting of a writeable cache!
     if (!rCache.hasCommand(sCommand))
@@ -271,7 +270,7 @@ void SAL_CALL XMLBasedAcceleratorConfiguration::reload()
     css::uno::Reference< css::io::XStream > xStreamNoLang;
 
     // SAFE -> ----------------------------------
-    ReadGuard aReadLock(m_aLock);
+    Guard aReadLock(m_aLock);
     css::uno::Reference< css::io::XStream > xStream = m_aPresetHandler.openTarget(PresetHandler::TARGET_CURRENT(), sal_True); // sal_True => open or create!
     try
     {
@@ -291,7 +290,7 @@ void SAL_CALL XMLBasedAcceleratorConfiguration::reload()
 
     // impl_ts_load() does not clear the cache
     // SAFE -> ----------------------------------
-    WriteGuard aWriteLock(m_aLock);
+    Guard aWriteLock(m_aLock);
     m_aReadCache = AcceleratorCache();
     aWriteLock.unlock();
     // <- SAFE ----------------------------------
@@ -314,7 +313,7 @@ void SAL_CALL XMLBasedAcceleratorConfiguration::store()
         css::uno::RuntimeException, std::exception)
 {
     // SAFE -> ----------------------------------
-    ReadGuard aReadLock(m_aLock);
+    Guard aReadLock(m_aLock);
     css::uno::Reference< css::io::XStream > xStream = m_aPresetHandler.openTarget(PresetHandler::TARGET_CURRENT(), sal_True); // sal_True => open or create!
     aReadLock.unlock();
     // <- SAFE ----------------------------------
@@ -365,7 +364,7 @@ void SAL_CALL XMLBasedAcceleratorConfiguration::storeToStorage(const css::uno::R
     throw(css::uno::RuntimeException, std::exception)
 {
     // SAFE -> ----------------------------------
-    ReadGuard aReadLock(m_aLock);
+    Guard aReadLock(m_aLock);
     return (m_pWriteCache != 0);
     // <- SAFE ----------------------------------
 }
@@ -375,7 +374,7 @@ void SAL_CALL XMLBasedAcceleratorConfiguration::storeToStorage(const css::uno::R
     throw(css::uno::RuntimeException, std::exception)
 {
     // SAFE -> ----------------------------------
-    ReadGuard aReadLock(m_aLock);
+    Guard aReadLock(m_aLock);
     css::uno::Reference< css::io::XStream > xStream = m_aPresetHandler.openTarget(PresetHandler::TARGET_CURRENT(), sal_True); // sal_True => open or create!
     aReadLock.unlock();
     // <- SAFE ----------------------------------
@@ -420,7 +419,7 @@ void SAL_CALL XMLBasedAcceleratorConfiguration::reset()
 throw(css::uno::RuntimeException, std::exception)
 {
     // SAFE -> ----------------------------------
-    WriteGuard aWriteLock(m_aLock);
+    Guard aWriteLock(m_aLock);
     m_aPresetHandler.copyPresetToTarget(PresetHandler::PRESET_DEFAULT(), PresetHandler::TARGET_CURRENT());
     aWriteLock.unlock();
     // <- SAFE ----------------------------------
@@ -453,7 +452,7 @@ void XMLBasedAcceleratorConfiguration::changesOccurred(const OUString& /*sPath*/
 void XMLBasedAcceleratorConfiguration::impl_ts_load(const css::uno::Reference< css::io::XInputStream >& xStream)
 {
     // SAFE -> ----------------------------------
-    WriteGuard aWriteLock(m_aLock);
+    Guard aWriteLock(m_aLock);
 
     css::uno::Reference< css::uno::XComponentContext > xContext = m_xContext;
     if (m_pWriteCache)
@@ -502,7 +501,7 @@ void XMLBasedAcceleratorConfiguration::impl_ts_load(const css::uno::Reference< c
 void XMLBasedAcceleratorConfiguration::impl_ts_save(const css::uno::Reference< css::io::XOutputStream >& xStream)
 {
     // SAFE -> ----------------------------------
-    ReadGuard aReadLock(m_aLock);
+    Guard aReadLock(m_aLock);
 
     AcceleratorCache aCache;
     sal_Bool bChanged = (m_pWriteCache != 0);
@@ -534,7 +533,7 @@ void XMLBasedAcceleratorConfiguration::impl_ts_save(const css::uno::Reference< c
 
     // take over all changes into the original container
     // SAFE -> ----------------------------------
-    WriteGuard aWriteLock(m_aLock);
+    Guard aWriteLock(m_aLock);
 
     // take over all changes into the readonly cache ...
     // and forget the copy-on-write copied cache
@@ -555,7 +554,7 @@ void XMLBasedAcceleratorConfiguration::impl_ts_save(const css::uno::Reference< c
 AcceleratorCache& XMLBasedAcceleratorConfiguration::impl_getCFG(sal_Bool bWriteAccessRequested)
 {
     // SAFE -> ----------------------------------
-    WriteGuard aWriteLock(m_aLock);
+    Guard aWriteLock(m_aLock);
 
     //create copy of our readonly-cache, if write access is forced ... but
     //not still possible!
@@ -615,7 +614,7 @@ css::uno::Sequence< css::awt::KeyEvent > SAL_CALL XCUBasedAcceleratorConfigurati
     throw(css::uno::RuntimeException, std::exception)
 {
     // SAFE -> ----------------------------------
-    ReadGuard aReadLock(m_aLock);
+    Guard aReadLock(m_aLock);
 
     AcceleratorCache::TKeyList lKeys  = impl_getCFG(sal_True).getAllKeys(); //get keys from PrimaryKeys set
 
@@ -637,7 +636,7 @@ OUString SAL_CALL XCUBasedAcceleratorConfiguration::getCommandByKeyEvent(const c
           css::uno::RuntimeException, std::exception            )
 {
     // SAFE -> ----------------------------------
-    ReadGuard aReadLock(m_aLock);
+    Guard aReadLock(m_aLock);
 
     AcceleratorCache& rPrimaryCache   = impl_getCFG(sal_True );
     AcceleratorCache& rSecondaryCache = impl_getCFG(sal_False);
@@ -681,7 +680,7 @@ void SAL_CALL XCUBasedAcceleratorConfiguration::setKeyEvent(const css::awt::KeyE
                 1);
 
     // SAFE -> ----------------------------------
-    WriteGuard aWriteLock(m_aLock);
+    Guard aWriteLock(m_aLock);
 
     AcceleratorCache& rPrimaryCache   = impl_getCFG(sal_True, sal_True ); // sal_True => force getting of a writeable cache!
     AcceleratorCache& rSecondaryCache = impl_getCFG(sal_False, sal_True); // sal_True => force getting of a writeable cache!
@@ -748,7 +747,7 @@ void SAL_CALL XCUBasedAcceleratorConfiguration::removeKeyEvent(const css::awt::K
           css::uno::RuntimeException, std::exception            )
 {
     // SAFE -> ----------------------------------
-    WriteGuard aWriteLock(m_aLock);
+    Guard aWriteLock(m_aLock);
 
     AcceleratorCache& rPrimaryCache   = impl_getCFG(sal_True, sal_True );
     AcceleratorCache& rSecondaryCache = impl_getCFG(sal_False, sal_True);
@@ -798,7 +797,7 @@ css::uno::Sequence< css::awt::KeyEvent > SAL_CALL XCUBasedAcceleratorConfigurati
                 1);
 
     // SAFE -> ----------------------------------
-    ReadGuard aReadLock(m_aLock);
+    Guard aReadLock(m_aLock);
 
     AcceleratorCache& rPrimaryCache   = impl_getCFG(sal_True );
     AcceleratorCache& rSecondaryCache = impl_getCFG(sal_False);
@@ -845,7 +844,7 @@ css::uno::Sequence< css::uno::Any > SAL_CALL XCUBasedAcceleratorConfiguration::g
         css::uno::RuntimeException, std::exception            )
 {
     // SAFE -> ----------------------------------
-    ReadGuard aReadLock(m_aLock);
+    Guard aReadLock(m_aLock);
 
     sal_Int32                           i              = 0;
     sal_Int32                           c              = lCommandList.getLength();
@@ -895,7 +894,7 @@ void SAL_CALL XCUBasedAcceleratorConfiguration::removeCommandFromAllKeyEvents(co
                 0);
 
     // SAFE -> ----------------------------------
-    WriteGuard aWriteLock(m_aLock);
+    Guard aWriteLock(m_aLock);
 
     AcceleratorCache& rPrimaryCache   = impl_getCFG(sal_True, sal_True );
     AcceleratorCache& rSecondaryCache = impl_getCFG(sal_False, sal_True);
@@ -922,7 +921,7 @@ void SAL_CALL XCUBasedAcceleratorConfiguration::reload()
     SAL_INFO( "fwk.accelerators", "XCUBasedAcceleratorConfiguration::reload()" );
 
     // SAFE -> ----------------------------------
-    WriteGuard aWriteLock(m_aLock);
+    Guard aWriteLock(m_aLock);
 
     sal_Bool bPreferred;
     css::uno::Reference< css::container::XNameAccess > xAccess;
@@ -963,7 +962,7 @@ void SAL_CALL XCUBasedAcceleratorConfiguration::store()
     SAL_INFO( "fwk.accelerators", "XCUBasedAcceleratorConfiguration::store()" );
 
     // SAFE -> ----------------------------------
-    ReadGuard aReadLock(m_aLock);
+    Guard aReadLock(m_aLock);
 
     sal_Bool bPreferred;
     css::uno::Reference< css::container::XNameAccess > xAccess;
@@ -1010,7 +1009,7 @@ void SAL_CALL XCUBasedAcceleratorConfiguration::storeToStorage(const css::uno::R
     // the original m_aCache has been split into primay cache and secondary cache...
     // we should merge them before storing to storage
     // SAFE -> ----------------------------------
-    WriteGuard aWriteLock(m_aLock);
+    Guard aWriteLock(m_aLock);
 
     AcceleratorCache aCache;
     if (m_pPrimaryWriteCache != 0)
@@ -1350,7 +1349,7 @@ void XCUBasedAcceleratorConfiguration::impl_ts_save(sal_Bool bPreferred, const c
 
         // take over all changes into the original container
         // SAFE -> ----------------------------------
-        WriteGuard aWriteLock(m_aLock);
+        Guard aWriteLock(m_aLock);
 
         if (m_pPrimaryWriteCache)
         {
@@ -1394,7 +1393,7 @@ void XCUBasedAcceleratorConfiguration::impl_ts_save(sal_Bool bPreferred, const c
 
         // take over all changes into the original container
         // SAFE -> ----------------------------------
-        WriteGuard aWriteLock(m_aLock);
+        Guard aWriteLock(m_aLock);
 
         if (m_pSecondaryWriteCache)
         {
@@ -1559,7 +1558,7 @@ void XCUBasedAcceleratorConfiguration::reloadChanged( const OUString& sPrimarySe
 AcceleratorCache& XCUBasedAcceleratorConfiguration::impl_getCFG(sal_Bool bPreferred, sal_Bool bWriteAccessRequested)
 {
     // SAFE -> ----------------------------------
-    WriteGuard aWriteLock(m_aLock);
+    Guard aWriteLock(m_aLock);
 
     if (bPreferred)
     {

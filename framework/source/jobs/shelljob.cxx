@@ -23,7 +23,7 @@
 
 #include <jobs/shelljob.hxx>
 #include <jobs/jobconst.hxx>
-#include <threadhelp/readguard.hxx>
+#include <threadhelp/guard.hxx>
 #include <services.h>
 
 
@@ -142,7 +142,7 @@ css::uno::Any ShellJob::impl_generateAnswer4Deactivation()
 OUString ShellJob::impl_substituteCommandVariables(const OUString& sCommand)
 {
     // SYNCHRONIZED ->
-    ReadGuard aReadLock(m_aLock);
+    Guard aReadLock(m_aLock);
     css::uno::Reference< css::uno::XComponentContext > xContext = m_xContext;
     aReadLock.unlock();
     // <- SYNCHRONIZED

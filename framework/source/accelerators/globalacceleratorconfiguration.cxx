@@ -19,8 +19,6 @@
 
 #include <accelerators/acceleratorconfiguration.hxx>
 #include <accelerators/presethandler.hxx>
-#include <threadhelp/readguard.hxx>
-#include <threadhelp/writeguard.hxx>
 #include <helper/mischelper.hxx>
 
 #include <acceleratorconst.h>

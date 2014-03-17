@@ -20,8 +20,7 @@
 #include <accelerators/acceleratorcache.hxx>
 
 #include <xml/acceleratorconfigurationreader.hxx>
-#include <threadhelp/readguard.hxx>
-#include <threadhelp/writeguard.hxx>
+#include <threadhelp/guard.hxx>
 
 #include <com/sun/star/container/ElementExistException.hpp>
 
@@ -57,7 +56,7 @@ AcceleratorCache::~AcceleratorCache()
 void AcceleratorCache::takeOver(const AcceleratorCache& rCopy)
 {
     // SAFE -> ----------------------------------
-    WriteGuard aWriteLock(m_aLock);
+    Guard aWriteLock(m_aLock);
 
     m_lCommand2Keys = rCopy.m_lCommand2Keys;
     m_lKey2Commands = rCopy.m_lKey2Commands;
@@ -77,7 +76,7 @@ AcceleratorCache& AcceleratorCache::operator=(const AcceleratorCache& rCopy)
 sal_Bool AcceleratorCache::hasKey(const css::awt::KeyEvent& aKey) const
 {
     // SAFE -> ----------------------------------
-    ReadGuard aReadLock(m_aLock);
+    Guard aReadLock(m_aLock);
 
     return (m_lKey2Commands.find(aKey) != m_lKey2Commands.end());
     // <- SAFE ----------------------------------
@@ -87,7 +86,7 @@ sal_Bool AcceleratorCache::hasKey(const css::awt::KeyEvent& aKey) const
 sal_Bool AcceleratorCache::hasCommand(const OUString& sCommand) const
 {
     // SAFE -> ----------------------------------
-    ReadGuard aReadLock(m_aLock);
+    Guard aReadLock(m_aLock);
 
     return (m_lCommand2Keys.find(sCommand) != m_lCommand2Keys.end());
     // <- SAFE ----------------------------------
@@ -99,7 +98,7 @@ AcceleratorCache::TKeyList AcceleratorCache::getAllKeys() const
     TKeyList lKeys;
 
     // SAFE -> ----------------------------------
-    ReadGuard aReadLock(m_aLock);
+    Guard aReadLock(m_aLock);
     lKeys.reserve(m_lKey2Commands.size());
 
     TKey2Commands::const_iterator pIt;
@@ -122,7 +121,7 @@ void AcceleratorCache::setKeyCommandPair(const css::awt::KeyEvent& aKey    ,
                                          const OUString&    sCommand)
 {
     // SAFE -> ----------------------------------
-    WriteGuard aWriteLock(m_aLock);
+    Guard aWriteLock(m_aLock);
 
     // register command for the specified key
     m_lKey2Commands[aKey] = sCommand;
@@ -141,7 +140,7 @@ AcceleratorCache::TKeyList AcceleratorCache::getKeysByCommand(const OUString& sC
     TKeyList lKeys;
 
     // SAFE -> ----------------------------------
-    ReadGuard aReadLock(m_aLock);
+    Guard aReadLock(m_aLock);
 
     TCommand2Keys::const_iterator pCommand = m_lCommand2Keys.find(sCommand);
     if (pCommand == m_lCommand2Keys.end())
@@ -161,7 +160,7 @@ OUString AcceleratorCache::getCommandByKey(const css::awt::KeyEvent& aKey) const
     OUString sCommand;
 
     // SAFE -> ----------------------------------
-    ReadGuard aReadLock(m_aLock);
+    Guard aReadLock(m_aLock);
 
     TKey2Commands::const_iterator pKey = m_lKey2Commands.find(aKey);
     if (pKey == m_lKey2Commands.end())
@@ -179,7 +178,7 @@ OUString AcceleratorCache::getCommandByKey(const css::awt::KeyEvent& aKey) const
 void AcceleratorCache::removeKey(const css::awt::KeyEvent& aKey)
 {
     // SAFE -> ----------------------------------
-    WriteGuard aWriteLock(m_aLock);
+    Guard aWriteLock(m_aLock);
 
     // check if key exists
     TKey2Commands::const_iterator pKey = m_lKey2Commands.find(aKey);
@@ -206,7 +205,7 @@ void AcceleratorCache::removeKey(const css::awt::KeyEvent& aKey)
 void AcceleratorCache::removeCommand(const OUString& sCommand)
 {
     // SAFE -> ----------------------------------
-    WriteGuard aWriteLock(m_aLock);
+    Guard aWriteLock(m_aLock);
 
     const TKeyList&                            lKeys = getKeysByCommand(sCommand);
     AcceleratorCache::TKeyList::const_iterator pKey ;

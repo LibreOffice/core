@@ -18,8 +18,7 @@
  */
 
 #include <services/dispatchhelper.hxx>
-#include <threadhelp/readguard.hxx>
-#include <threadhelp/writeguard.hxx>
+#include <threadhelp/guard.hxx>
 #include <services.h>
 
 #include <com/sun/star/util/URLTransformer.hpp>
@@ -103,7 +102,7 @@ css::uno::Any SAL_CALL DispatchHelper::executeDispatch(
 
     // parse given URL
     /* SAFE { */
-    ReadGuard aReadLock(m_aLock);
+    Guard aReadLock(m_aLock);
     css::uno::Reference< css::util::XURLTransformer > xParser = css::util::URLTransformer::create(m_xContext);
     aReadLock.unlock();
     /* } SAFE */
@@ -130,7 +129,7 @@ css::uno::Any SAL_CALL DispatchHelper::executeDispatch(
         // Here we can hope for a result ... instead of the normal dispatch.
         css::uno::Reference< css::frame::XDispatchResultListener > xListener(xTHIS, css::uno::UNO_QUERY);
         /* SAFE { */
-        WriteGuard aWriteLock(m_aLock);
+        Guard aWriteLock(m_aLock);
         m_xBroadcaster = css::uno::Reference< css::uno::XInterface >(xNotifyDispatch, css::uno::UNO_QUERY);
         m_aResult      = css::uno::Any();
         m_aBlock.reset();
@@ -166,7 +165,7 @@ void SAL_CALL DispatchHelper::dispatchFinished( const css::frame::DispatchResult
     throw(css::uno::RuntimeException, std::exception)
 {
     /* SAFE { */
-    WriteGuard aWriteLock(m_aLock);
+    Guard aWriteLock(m_aLock);
 
     m_aResult <<= aResult;
     m_aBlock.set();
@@ -186,7 +185,7 @@ void SAL_CALL DispatchHelper::disposing( const css::lang::EventObject& )
     throw(css::uno::RuntimeException, std::exception)
 {
     /* SAFE { */
-    WriteGuard aWriteLock(m_aLock);
+    Guard aWriteLock(m_aLock);
 
     m_aResult.clear();
     m_aBlock.set();

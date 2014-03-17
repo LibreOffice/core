@@ -18,8 +18,7 @@
  */
 
 #include <jobs/job.hxx>
-#include <threadhelp/readguard.hxx>
-#include <threadhelp/writeguard.hxx>
+#include <threadhelp/guard.hxx>
 #include <general.h>
 #include <services.h>
 
@@ -122,7 +121,7 @@ void Job::setDispatchResultFake( /*IN*/ const css::uno::Reference< css::frame::X
                                  /*IN*/ const css::uno::Reference< css::uno::XInterface >&                xSourceFake )
 {
     /* SAFE { */
-    WriteGuard aWriteLock(m_aLock);
+    Guard aWriteLock(m_aLock);
 
     // reject dangerous calls
     if (m_eRunState != E_NEW)
@@ -140,7 +139,7 @@ void Job::setDispatchResultFake( /*IN*/ const css::uno::Reference< css::frame::X
 void Job::setJobData( const JobData& aData )
 {
     /* SAFE { */
-    WriteGuard aWriteLock(m_aLock);
+    Guard aWriteLock(m_aLock);
 
     // reject dangerous calls
     if (m_eRunState != E_NEW)
@@ -169,7 +168,7 @@ void Job::setJobData( const JobData& aData )
 void Job::execute( /*IN*/ const css::uno::Sequence< css::beans::NamedValue >& lDynamicArgs )
 {
     /* SAFE { */
-    WriteGuard aWriteLock(m_aLock);
+    Guard aWriteLock(m_aLock);
 
     // reject dangerous calls
     if (m_eRunState != E_NEW)
@@ -293,7 +292,7 @@ void Job::execute( /*IN*/ const css::uno::Sequence< css::beans::NamedValue >& lD
 void Job::die()
 {
     /* SAFE { */
-    WriteGuard aWriteLock(m_aLock);
+    Guard aWriteLock(m_aLock);
 
     impl_stopListening();
 
@@ -348,7 +347,7 @@ css::uno::Sequence< css::beans::NamedValue > Job::impl_generateJobArgs( /*IN*/ c
     css::uno::Sequence< css::beans::NamedValue > lAllArgs;
 
     /* SAFE { */
-    ReadGuard aReadLock(m_aLock);
+    Guard aReadLock(m_aLock);
 
     // the real structure of the returned list depends from the environment of this job!
     JobData::EMode eMode = m_aJobCfg.getMode();
@@ -443,7 +442,7 @@ css::uno::Sequence< css::beans::NamedValue > Job::impl_generateJobArgs( /*IN*/ c
 void Job::impl_reactForJobResult( /*IN*/ const css::uno::Any& aResult )
 {
     /* SAFE { */
-    WriteGuard aWriteLock(m_aLock);
+    Guard aWriteLock(m_aLock);
 
     // analyze the result set ...
     JobResult aAnalyzedResult(aResult);
@@ -514,7 +513,7 @@ void Job::impl_reactForJobResult( /*IN*/ const css::uno::Any& aResult )
 void Job::impl_startListening()
 {
     /* SAFE { */
-    WriteGuard aWriteLock(m_aLock);
+    Guard aWriteLock(m_aLock);
 
     // listening for office shutdown
     if (!m_xDesktop.is() && !m_bListenOnDesktop)
@@ -582,7 +581,7 @@ void Job::impl_startListening()
 void Job::impl_stopListening()
 {
     /* SAFE { */
-    WriteGuard aWriteLock(m_aLock);
+    Guard aWriteLock(m_aLock);
 
     // stop listening for office shutdown
     if (m_xDesktop.is() && m_bListenOnDesktop)
@@ -658,7 +657,7 @@ void SAL_CALL Job::jobFinished( /*IN*/ const css::uno::Reference< css::task::XAs
                                 /*IN*/ const css::uno::Any&                               aResult ) throw(css::uno::RuntimeException, std::exception)
 {
     /* SAFE { */
-    WriteGuard aWriteLock(m_aLock);
+    Guard aWriteLock(m_aLock);
 
     // It's necessary to check this.
     // May this job was cancelled by any other reason
@@ -702,7 +701,7 @@ void SAL_CALL Job::queryTermination( /*IN*/ const css::lang::EventObject& ) thro
                                                                                          css::uno::RuntimeException, std::exception          )
 {
     /* SAFE { */
-    ReadGuard aReadLock(m_aLock);
+    Guard aReadLock(m_aLock);
 
 
     // Otherwhise try to close() it
@@ -772,7 +771,7 @@ void SAL_CALL Job::queryClosing( const css::lang::EventObject& aEvent         ,
                                                                                       css::uno::RuntimeException, std::exception   )
 {
     /* SAFE { */
-    WriteGuard aWriteLock(m_aLock);
+    Guard aWriteLock(m_aLock);
 
     // do nothing, if no internal job is still running ...
     // The frame or model can be closed then successfully.
@@ -860,7 +859,7 @@ void SAL_CALL Job::notifyClosing( const css::lang::EventObject& ) throw(css::uno
 void SAL_CALL Job::disposing( const css::lang::EventObject& aEvent ) throw(css::uno::RuntimeException, std::exception)
 {
     /* SAFE { */
-    WriteGuard aWriteLock(m_aLock);
+    Guard aWriteLock(m_aLock);
 
     if (m_xDesktop.is() && aEvent.Source == m_xDesktop)
     {

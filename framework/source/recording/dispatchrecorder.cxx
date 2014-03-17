@@ -21,8 +21,7 @@
 #include <recording/dispatchrecorder.hxx>
 #include <com/sun/star/frame/DispatchStatement.hpp>
 #include <com/sun/star/script/Converter.hpp>
-#include <threadhelp/writeguard.hxx>
-#include <threadhelp/readguard.hxx>
+#include <threadhelp/guard.hxx>
 #include <services.h>
 #include <vcl/svapp.hxx>
 #include <comphelper/processfactory.hxx>
@@ -144,7 +143,7 @@ void SAL_CALL  DispatchRecorder::recordDispatchAsComment( const css::util::URL& 
 void SAL_CALL DispatchRecorder::endRecording() throw( css::uno::RuntimeException, std::exception )
 {
     /* SAFE{ */
-    WriteGuard aWriteLock(m_aLock);
+    Guard aWriteLock(m_aLock);
     m_aStatements.clear();
     /* } */
 }
@@ -152,7 +151,7 @@ void SAL_CALL DispatchRecorder::endRecording() throw( css::uno::RuntimeException
 OUString SAL_CALL DispatchRecorder::getRecordedMacro() throw( css::uno::RuntimeException, std::exception )
 {
     /* SAFE{ */
-    WriteGuard aWriteLock(m_aLock);
+    Guard aWriteLock(m_aLock);
 
     if ( m_aStatements.empty() )
         return OUString();

@@ -25,8 +25,7 @@
 #include <xml/acceleratorconfigurationwriter.hxx>
 #include <xml/saxnamespacefilter.hxx>
 
-#include <threadhelp/readguard.hxx>
-#include <threadhelp/writeguard.hxx>
+#include <threadhelp/guard.hxx>
 #include <acceleratorconst.h>
 
 #include <com/sun/star/lang/XServiceInfo.hpp>
@@ -116,7 +115,7 @@ DocumentAcceleratorConfiguration::DocumentAcceleratorConfiguration(
         const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& lArguments)
     : DocumentAcceleratorConfiguration_BASE(xContext)
 {
-    WriteGuard aWriteLock(m_aLock);
+    Guard aWriteLock(m_aLock);
 
     css::uno::Reference<css::embed::XStorage> xRoot;
     if (lArguments.getLength() == 1 && (lArguments[0] >>= xRoot))
@@ -149,7 +148,7 @@ void SAL_CALL DocumentAcceleratorConfiguration::setStorage(const css::uno::Refer
     // Attention! xStorage must be accepted too, if it's NULL !
 
     // SAFE -> ----------------------------------
-    WriteGuard aWriteLock(m_aLock);
+    Guard aWriteLock(m_aLock);
     sal_Bool bForgetOldStorages = m_xDocumentRoot.is();
     m_xDocumentRoot = xStorage;
     aWriteLock.unlock();
@@ -167,7 +166,7 @@ sal_Bool SAL_CALL DocumentAcceleratorConfiguration::hasStorage()
     throw(css::uno::RuntimeException, std::exception)
 {
     // SAFE -> ----------------------------------
-    ReadGuard aReadLock(m_aLock);
+    Guard aReadLock(m_aLock);
     return m_xDocumentRoot.is();
     // <- SAFE ----------------------------------
 }
@@ -176,7 +175,7 @@ sal_Bool SAL_CALL DocumentAcceleratorConfiguration::hasStorage()
 void DocumentAcceleratorConfiguration::impl_ts_fillCache()
 {
     // SAFE -> ----------------------------------
-    ReadGuard aReadLock(m_aLock);
+    Guard aReadLock(m_aLock);
     css::uno::Reference< css::embed::XStorage > xDocumentRoot = m_xDocumentRoot;
     aReadLock.unlock();
     // <- SAFE ----------------------------------

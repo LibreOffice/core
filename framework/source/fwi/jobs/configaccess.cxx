@@ -18,8 +18,7 @@
  */
 
 #include <jobs/configaccess.hxx>
-#include <threadhelp/readguard.hxx>
-#include <threadhelp/writeguard.hxx>
+#include <threadhelp/guard.hxx>
 #include <threadhelp/resetableguard.hxx>
 #include <general.h>
 #include <services.h>
@@ -79,7 +78,7 @@ ConfigAccess::~ConfigAccess()
 ConfigAccess::EOpenMode ConfigAccess::getMode() const
 {
     /* SAFE { */
-    ReadGuard aReadLock(m_aLock);
+    Guard aReadLock(m_aLock);
     return m_eMode;
     /* } SAFE */
 }
@@ -104,7 +103,7 @@ void ConfigAccess::open( /*IN*/ EOpenMode eMode )
     /* SAFE { */
     // We must lock the whole method to be shure, that nobody
     // outside uses our internal member m_xAccess!
-    WriteGuard aWriteLock(m_aLock);
+    Guard aWriteLock(m_aLock);
 
     // check if configuration is already open in the right mode.
     // By the way: Don't allow closing by using this method!
@@ -164,7 +163,7 @@ void ConfigAccess::close()
     /* SAFE { */
     // Lock the whole method, to be shure that nobody else uses our internal members
     // during this time.
-    WriteGuard aWriteLock(m_aLock);
+    Guard aWriteLock(m_aLock);
 
     // check already closed configuration
     if (m_xConfig.is())
@@ -189,7 +188,7 @@ void ConfigAccess::close()
             methods. Acquire it before you call cfg() and release it afterwards immediately.
 
             E.g.:   ConfigAccess aAccess(...);
-                    ReadGuard aReadLock(aAccess.m_aLock);
+                    Guard aReadLock(aAccess.m_aLock);
                     Reference< XPropertySet > xSet(aAccess.cfg(), UNO_QUERY);
                     Any aProp = xSet->getPropertyValue("...");
                     aReadLock.unlock();

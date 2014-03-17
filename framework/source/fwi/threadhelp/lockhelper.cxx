@@ -30,8 +30,7 @@ namespace framework{
 /*-************************************************************************************************************
     @short      use ctor to initialize instance
 
-    @seealso    class ReadGuard
-    @seealso    class WriteGuard
+    @seealso    class Guard
 
     @param      "rSolarMutex", for some components we must be "vcl-free"! So we can't work with our solar mutex
                                 directly. User must set his reference at this instance - so we can work with it!

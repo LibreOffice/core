@@ -19,9 +19,7 @@
 
 #include <classes/propertysethelper.hxx>
 #include <threadhelp/transactionguard.hxx>
-#include <threadhelp/readguard.hxx>
-#include <threadhelp/writeguard.hxx>
-
+#include <threadhelp/guard.hxx>
 
 namespace framework{
 
@@ -49,7 +47,7 @@ void PropertySetHelper::impl_setPropertyChangeBroadcaster(const css::uno::Refere
     TransactionGuard aTransaction(m_rTransactionManager, E_SOFTEXCEPTIONS);
 
     // SAFE ->
-    WriteGuard aWriteLock(m_rLock);
+    Guard aWriteLock(m_rLock);
     m_xBroadcaster = xBroadcaster;
     aWriteLock.unlock();
     // <- SAFE
@@ -63,7 +61,7 @@ void SAL_CALL PropertySetHelper::impl_addPropertyInfo(const css::beans::Property
     TransactionGuard aTransaction(m_rTransactionManager, E_SOFTEXCEPTIONS);
 
     // SAFE ->
-    WriteGuard aWriteLock(m_rLock);
+    Guard aWriteLock(m_rLock);
 
     PropertySetHelper::TPropInfoHash::const_iterator pIt = m_lProps.find(aProperty.Name);
     if (pIt != m_lProps.end())
@@ -81,7 +79,7 @@ void SAL_CALL PropertySetHelper::impl_removePropertyInfo(const OUString& sProper
     TransactionGuard aTransaction(m_rTransactionManager, E_SOFTEXCEPTIONS);
 
     // SAFE ->
-    WriteGuard aWriteLock(m_rLock);
+    Guard aWriteLock(m_rLock);
 
     PropertySetHelper::TPropInfoHash::iterator pIt = m_lProps.find(sProperty);
     if (pIt == m_lProps.end())
@@ -102,7 +100,7 @@ void SAL_CALL PropertySetHelper::impl_disablePropertySet()
     TransactionGuard aTransaction(m_rTransactionManager, E_SOFTEXCEPTIONS);
 
     // SAFE ->
-    WriteGuard aWriteLock(m_rLock);
+    Guard aWriteLock(m_rLock);
 
     css::uno::Reference< css::uno::XInterface > xThis(static_cast< css::beans::XPropertySet* >(this), css::uno::UNO_QUERY);
     css::lang::EventObject aEvent(xThis);
@@ -195,7 +193,7 @@ void SAL_CALL PropertySetHelper::setPropertyValue(const OUString& sProperty,
     TransactionGuard aTransaction(m_rTransactionManager, E_HARDEXCEPTIONS);
 
     // SAFE ->
-    WriteGuard aWriteLock(m_rLock);
+    Guard aWriteLock(m_rLock);
 
     PropertySetHelper::TPropInfoHash::const_iterator pIt = m_lProps.find(sProperty);
     if (pIt == m_lProps.end())
@@ -256,7 +254,7 @@ css::uno::Any SAL_CALL PropertySetHelper::getPropertyValue(const OUString& sProp
     TransactionGuard aTransaction(m_rTransactionManager, E_HARDEXCEPTIONS);
 
     // SAFE ->
-    ReadGuard aReadLock(m_rLock);
+    Guard aReadLock(m_rLock);
 
     PropertySetHelper::TPropInfoHash::const_iterator pIt = m_lProps.find(sProperty);
     if (pIt == m_lProps.end())
@@ -280,7 +278,7 @@ void SAL_CALL PropertySetHelper::addPropertyChangeListener(const OUString&      
     TransactionGuard aTransaction(m_rTransactionManager, E_HARDEXCEPTIONS);
 
     // SAFE ->
-    ReadGuard aReadLock(m_rLock);
+    Guard aReadLock(m_rLock);
 
     PropertySetHelper::TPropInfoHash::const_iterator pIt = m_lProps.find(sProperty);
     if (pIt == m_lProps.end())
@@ -302,7 +300,7 @@ void SAL_CALL PropertySetHelper::removePropertyChangeListener(const OUString&   
     TransactionGuard aTransaction(m_rTransactionManager, E_SOFTEXCEPTIONS);
 
     // SAFE ->
-    ReadGuard aReadLock(m_rLock);
+    Guard aReadLock(m_rLock);
 
     PropertySetHelper::TPropInfoHash::const_iterator pIt = m_lProps.find(sProperty);
     if (pIt == m_lProps.end())
@@ -324,7 +322,7 @@ void SAL_CALL PropertySetHelper::addVetoableChangeListener(const OUString&      
     TransactionGuard aTransaction(m_rTransactionManager, E_HARDEXCEPTIONS);
 
     // SAFE ->
-    ReadGuard aReadLock(m_rLock);
+    Guard aReadLock(m_rLock);
 
     PropertySetHelper::TPropInfoHash::const_iterator pIt = m_lProps.find(sProperty);
     if (pIt == m_lProps.end())
@@ -346,7 +344,7 @@ void SAL_CALL PropertySetHelper::removeVetoableChangeListener(const OUString&   
     TransactionGuard aTransaction(m_rTransactionManager, E_SOFTEXCEPTIONS);
 
     // SAFE ->
-    ReadGuard aReadLock(m_rLock);
+    Guard aReadLock(m_rLock);
 
     PropertySetHelper::TPropInfoHash::const_iterator pIt = m_lProps.find(sProperty);
     if (pIt == m_lProps.end())
@@ -365,7 +363,7 @@ css::uno::Sequence< css::beans::Property > SAL_CALL PropertySetHelper::getProper
     TransactionGuard aTransaction(m_rTransactionManager, E_HARDEXCEPTIONS);
 
     // SAFE ->
-    ReadGuard aReadLock(m_rLock);
+    Guard aReadLock(m_rLock);
 
     sal_Int32                                        c     = (sal_Int32)m_lProps.size();
     css::uno::Sequence< css::beans::Property >       lProps(c);
@@ -390,7 +388,7 @@ css::beans::Property SAL_CALL PropertySetHelper::getPropertyByName(const OUStrin
     TransactionGuard aTransaction(m_rTransactionManager, E_HARDEXCEPTIONS);
 
     // SAFE ->
-    ReadGuard aReadLock(m_rLock);
+    Guard aReadLock(m_rLock);
 
     PropertySetHelper::TPropInfoHash::const_iterator pIt = m_lProps.find(sName);
     if (pIt == m_lProps.end())
@@ -407,7 +405,7 @@ sal_Bool SAL_CALL PropertySetHelper::hasPropertyByName(const OUString& sName)
     TransactionGuard aTransaction(m_rTransactionManager, E_HARDEXCEPTIONS);
 
     // SAFE ->
-    ReadGuard aReadLock(m_rLock);
+    Guard aReadLock(m_rLock);
 
     PropertySetHelper::TPropInfoHash::iterator pIt    = m_lProps.find(sName);
     sal_Bool                                   bExist = (pIt != m_lProps.end());

@@ -19,8 +19,6 @@
 
 #include <dispatch/oxt_handler.hxx>
 #include <threadhelp/transactionguard.hxx>
-#include <threadhelp/writeguard.hxx>
-#include <threadhelp/readguard.hxx>
 #include <services.h>
 #include <unotools/mediadescriptor.hxx>
 

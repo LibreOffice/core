@@ -21,9 +21,8 @@
 #include <general.h>
 #include <framework/menuconfiguration.hxx>
 #include <framework/addonmenu.hxx>
-#include <threadhelp/readguard.hxx>
 #include <threadhelp/resetableguard.hxx>
-#include <threadhelp/writeguard.hxx>
+#include <threadhelp/guard.hxx>
 #include <services.h>
 #include <properties.h>
 
@@ -150,7 +149,7 @@ throw( css::uno::Exception, css::uno::RuntimeException, std::exception)
     css::uno::Reference< css::frame::XFrame > xFrame;
 
     /* SAFE { */
-    WriteGuard aWriteLock(m_aLock);
+    Guard aWriteLock(m_aLock);
 
     for (int a=0; a<lArguments.getLength(); ++a)
     {

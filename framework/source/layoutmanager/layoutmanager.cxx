@@ -19,6 +19,7 @@
 
 #include <services/layoutmanager.hxx>
 #include <helpers.hxx>
+#include <threadhelp/guard.hxx>
 #include <threadhelp/resetableguard.hxx>
 
 #include <framework/sfxhelperfunctions.hxx>
@@ -222,13 +223,13 @@ void LayoutManager::impl_clearUpMenuBar()
 
 void LayoutManager::implts_lock()
 {
-    WriteGuard aWriteLock( m_aLock );
+    Guard aWriteLock( m_aLock );
     ++m_nLockCount;
 }
 
 sal_Bool LayoutManager::implts_unlock()
 {
-    WriteGuard aWriteLock( m_aLock );
+    Guard aWriteLock( m_aLock );
     m_nLockCount = std::max( m_nLockCount-1, static_cast<sal_Int32>(0) );
     return ( m_nLockCount == 0 );
 }
@@ -236,7 +237,7 @@ sal_Bool LayoutManager::implts_unlock()
 void LayoutManager::implts_reset( sal_Bool bAttached )
 {
     /* SAFE AREA ----------------------------------------------------------------------------------------------- */
-    ReadGuard aReadLock( m_aLock );
+    Guard aReadLock( m_aLock );
     Reference< XFrame > xFrame = m_xFrame;
     Reference< awt::XWindow > xContainerWindow( m_xContainerWindow );
     Reference< XUIConfiguration > xModuleCfgMgr( m_xModuleCfgMgr, UNO_QUERY );
@@ -376,7 +377,7 @@ void LayoutManager::implts_reset( sal_Bool bAttached )
         Reference< XUIConfigurationManager > xDokCfgMgr( xDocCfgMgr, UNO_QUERY );
 
         /* SAFE AREA ----------------------------------------------------------------------------------------------- */
-        WriteGuard aWriteLock( m_aLock );
+        Guard aWriteLock( m_aLock );
         m_xModel = xModel;
         m_aDockingArea = awt::Rectangle();
         m_bComponentAttached = bAttached;
@@ -412,7 +413,7 @@ void LayoutManager::implts_reset( sal_Bool bAttached )
 
 sal_Bool LayoutManager::implts_isEmbeddedLayoutManager() const
 {
-    ReadGuard aReadLock( m_aLock );
+    Guard aReadLock( m_aLock );
     Reference< XFrame > xFrame = m_xFrame;
     Reference< awt::XWindow > xContainerWindow( m_xContainerWindow );
     aReadLock.unlock();
@@ -426,7 +427,7 @@ sal_Bool LayoutManager::implts_isEmbeddedLayoutManager() const
 
 void LayoutManager::implts_destroyElements()
 {
-    WriteGuard aWriteLock( m_aLock );
+    Guard aWriteLock( m_aLock );
     ToolbarLayoutManager* pToolbarManager = m_pToolbarManager;
     aWriteLock.unlock();
 
@@ -442,7 +443,7 @@ void LayoutManager::implts_destroyElements()
 
 void LayoutManager::implts_toggleFloatingUIElementsVisibility( sal_Bool bActive )
 {
-    ReadGuard aReadLock( m_aLock );
+    Guard aReadLock( m_aLock );
     ToolbarLayoutManager* pToolbarManager = m_pToolbarManager;
     aReadLock.unlock();
 
@@ -483,7 +484,7 @@ sal_Bool LayoutManager::readWindowStateData( const OUString& aName, UIElement& r
 {
     bool bGetSettingsState( false );
 
-    WriteGuard aWriteLock( rLock );
+    Guard aWriteLock( rLock );
     Reference< XNameAccess > xPersistentWindowState( rPersistentWindowState );
     aWriteLock.unlock();
 
@@ -583,7 +584,7 @@ sal_Bool LayoutManager::readWindowStateData( const OUString& aName, UIElement& r
             {
                 if ( pGlobalSettings->HasStatesInfo( GlobalSettings::UIELEMENT_TYPE_TOOLBAR ))
                 {
-                    WriteGuard aWriteLock2( rLock );
+                    Guard aWriteLock2( rLock );
                     bInGlobalSettings = true;
                     aWriteLock2.unlock();
 
@@ -615,7 +616,7 @@ sal_Bool LayoutManager::readWindowStateData( const OUString& aName, UIElement& r
 
 void LayoutManager::implts_writeWindowStateData( const OUString& aName, const UIElement& rElementData )
 {
-    WriteGuard aWriteLock( m_aLock );
+    Guard aWriteLock( m_aLock );
     Reference< XNameAccess > xPersistentWindowState( m_xPersistentWindowState );
 
     // set flag to determine that we triggered the notification
@@ -708,7 +709,7 @@ Reference< XUIElement > LayoutManager::implts_createElement( const OUString& aNa
 {
     Reference< ui::XUIElement > xUIElement;
 
-    ReadGuard   aReadLock( m_aLock );
+    Guard   aReadLock( m_aLock );
     Sequence< PropertyValue > aPropSeq( 2 );
     aPropSeq[0].Name = "Frame";
     aPropSeq[0].Value <<= m_xFrame;
@@ -731,7 +732,7 @@ Reference< XUIElement > LayoutManager::implts_createElement( const OUString& aNa
 
 void LayoutManager::implts_setVisibleState( sal_Bool bShow )
 {
-    WriteGuard aWriteLock( m_aLock );
+    Guard aWriteLock( m_aLock );
     m_aStatusBarElement.m_bMasterHide = !bShow;
     aWriteLock.unlock();
 
@@ -747,7 +748,7 @@ void LayoutManager::implts_updateUIElementsVisibleState( sal_Bool bSetVisible )
     else
         implts_notifyListeners( frame::LayoutManagerEvents::INVISIBLE, a );
 
-    WriteGuard aWriteLock( m_aLock );
+    Guard aWriteLock( m_aLock );
     Reference< XUIElement >   xMenuBar( m_xMenuBar, UNO_QUERY );
     Reference< awt::XWindow > xContainerWindow( m_xContainerWindow );
     Reference< XComponent >   xInplaceMenuBar( m_xInplaceMenuBar );
@@ -801,7 +802,7 @@ void LayoutManager::implts_updateUIElementsVisibleState( sal_Bool bSetVisible )
 
 void LayoutManager::implts_setCurrentUIVisibility( sal_Bool bShow )
 {
-    WriteGuard aWriteLock( m_aLock );
+    Guard aWriteLock( m_aLock );
     if ( !bShow && m_aStatusBarElement.m_bVisible && m_aStatusBarElement.m_xUIElement.is() )
         m_aStatusBarElement.m_bMasterHide = true;
     else if ( bShow && m_aStatusBarElement.m_bVisible )
@@ -815,7 +816,7 @@ void LayoutManager::implts_destroyStatusBar()
 {
     Reference< XComponent > xCompStatusBar;
 
-    WriteGuard aWriteLock( m_aLock );
+    Guard aWriteLock( m_aLock );
     m_aStatusBarElement.m_aName = OUString();
     xCompStatusBar = Reference< XComponent >( m_aStatusBarElement.m_xUIElement, UNO_QUERY );
     m_aStatusBarElement.m_xUIElement.clear();
@@ -829,7 +830,7 @@ void LayoutManager::implts_destroyStatusBar()
 
 void LayoutManager::implts_createStatusBar( const OUString& aStatusBarName )
 {
-    WriteGuard aWriteLock( m_aLock );
+    Guard aWriteLock( m_aLock );
     if ( !m_aStatusBarElement.m_xUIElement.is() )
     {
         implts_readStatusBarState( aStatusBarName );
@@ -843,7 +844,7 @@ void LayoutManager::implts_createStatusBar( const OUString& aStatusBarName )
 
 void LayoutManager::implts_readStatusBarState( const OUString& rStatusBarName )
 {
-    WriteGuard aWriteLock( m_aLock );
+    Guard aWriteLock( m_aLock );
     if ( !m_aStatusBarElement.m_bStateRead )
     {
         // Read persistent data for status bar if not yet read!
@@ -859,7 +860,7 @@ void LayoutManager::implts_createProgressBar()
     Reference< XUIElement > xProgressBarBackup;
     Reference< awt::XWindow > xContainerWindow;
 
-    WriteGuard aWriteLock( m_aLock );
+    Guard aWriteLock( m_aLock );
     xStatusBar = Reference< XUIElement >( m_aStatusBarElement.m_xUIElement, UNO_QUERY );
     xProgressBar = Reference< XUIElement >( m_aProgressBarElement.m_xUIElement, UNO_QUERY );
     xProgressBarBackup = m_xProgressBarBackup;
@@ -913,7 +914,7 @@ void LayoutManager::implts_createProgressBar()
 void LayoutManager::implts_backupProgressBarWrapper()
 {
     // SAFE -> ----------------------------------
-    WriteGuard aWriteLock(m_aLock);
+    Guard aWriteLock(m_aLock);
 
     if (m_xProgressBarBackup.is())
         return;
@@ -956,7 +957,7 @@ void LayoutManager::implts_setStatusBarPosSize( const ::Point& rPos, const ::Siz
     Reference< awt::XWindow > xContainerWindow;
 
     /* SAFE AREA ----------------------------------------------------------------------------------------------- */
-    ReadGuard aReadLock( m_aLock );
+    Guard aReadLock( m_aLock );
     xStatusBar = Reference< XUIElement >( m_aStatusBarElement.m_xUIElement, UNO_QUERY );
     xProgressBar = Reference< XUIElement >( m_aProgressBarElement.m_xUIElement, UNO_QUERY );
     xContainerWindow = m_xContainerWindow;
@@ -995,7 +996,7 @@ sal_Bool LayoutManager::implts_showProgressBar()
     Reference< awt::XWindow > xWindow;
 
     /* SAFE AREA ----------------------------------------------------------------------------------------------- */
-    WriteGuard aWriteLock( m_aLock );
+    Guard aWriteLock( m_aLock );
     xStatusBar = Reference< XUIElement >( m_aStatusBarElement.m_xUIElement, UNO_QUERY );
     xProgressBar = Reference< XUIElement >( m_aProgressBarElement.m_xUIElement, UNO_QUERY );
     sal_Bool bVisible( m_bVisible );
@@ -1040,7 +1041,7 @@ sal_Bool LayoutManager::implts_hideProgressBar()
     sal_Bool bHideStatusBar( sal_False );
 
     /* SAFE AREA ----------------------------------------------------------------------------------------------- */
-    WriteGuard aWriteLock( m_aLock );
+    Guard aWriteLock( m_aLock );
     xProgressBar = Reference< XUIElement >( m_aProgressBarElement.m_xUIElement, UNO_QUERY );
 
     sal_Bool bInternalStatusBar( sal_False );
@@ -1076,7 +1077,7 @@ sal_Bool LayoutManager::implts_hideProgressBar()
 
 sal_Bool LayoutManager::implts_showStatusBar( sal_Bool bStoreState )
 {
-    WriteGuard aWriteLock( m_aLock );
+    Guard aWriteLock( m_aLock );
     Reference< ui::XUIElement > xStatusBar = m_aStatusBarElement.m_xUIElement;
     if ( bStoreState )
         m_aStatusBarElement.m_bVisible = true;
@@ -1102,7 +1103,7 @@ sal_Bool LayoutManager::implts_showStatusBar( sal_Bool bStoreState )
 
 sal_Bool LayoutManager::implts_hideStatusBar( sal_Bool bStoreState )
 {
-    WriteGuard aWriteLock( m_aLock );
+    Guard aWriteLock( m_aLock );
     Reference< ui::XUIElement > xStatusBar = m_aStatusBarElement.m_xUIElement;
     if ( bStoreState )
         m_aStatusBarElement.m_bVisible = false;
@@ -1140,7 +1141,7 @@ void LayoutManager::implts_setInplaceMenuBar( const Reference< XIndexAccess >& x
 throw (uno::RuntimeException)
 {
     /* SAFE AREA ----------------------------------------------------------------------------------------------- */
-    WriteGuard aWriteLock( m_aLock );
+    Guard aWriteLock( m_aLock );
 
     if ( !m_bInplaceMenuSet )
     {
@@ -1181,7 +1182,7 @@ void LayoutManager::implts_resetInplaceMenuBar()
 throw (uno::RuntimeException)
 {
     /* SAFE AREA ----------------------------------------------------------------------------------------------- */
-    WriteGuard aWriteLock( m_aLock );
+    Guard aWriteLock( m_aLock );
     m_bInplaceMenuSet = false;
 
     if ( m_xContainerWindow.is() )
@@ -1209,7 +1210,7 @@ throw (uno::RuntimeException)
 void SAL_CALL LayoutManager::attachFrame( const Reference< XFrame >& xFrame )
 throw (uno::RuntimeException, std::exception)
 {
-    WriteGuard aWriteLock( m_aLock );
+    Guard aWriteLock( m_aLock );
     m_xFrame = xFrame;
 }
 
@@ -1242,14 +1243,14 @@ throw (uno::RuntimeException, std::exception)
 awt::Rectangle SAL_CALL LayoutManager::getCurrentDockingArea()
 throw ( RuntimeException, std::exception )
 {
-    ReadGuard aReadLock( m_aLock );
+    Guard aReadLock( m_aLock );
     return m_aDockingArea;
 }
 
 Reference< XDockingAreaAcceptor > SAL_CALL LayoutManager::getDockingAreaAcceptor()
 throw (uno::RuntimeException, std::exception)
 {
-    ReadGuard aReadLock( m_aLock );
+    Guard aReadLock( m_aLock );
     return m_xDockingAreaAcceptor;
 }
 
@@ -1257,7 +1258,7 @@ void SAL_CALL LayoutManager::setDockingAreaAcceptor( const Reference< ui::XDocki
 throw ( RuntimeException, std::exception )
 {
     /* SAFE AREA ----------------------------------------------------------------------------------------------- */
-    WriteGuard aWriteLock( m_aLock );
+    Guard aWriteLock( m_aLock );
 
     if (( m_xDockingAreaAcceptor == xDockingAreaAcceptor ) || !m_xFrame.is() )
         return;
@@ -1354,7 +1355,7 @@ throw ( RuntimeException, std::exception )
 
 void LayoutManager::implts_reparentChildWindows()
 {
-    WriteGuard aWriteLock( m_aLock );
+    Guard aWriteLock( m_aLock );
     UIElement aStatusBarElement = m_aStatusBarElement;
     uno::Reference< awt::XWindow > xContainerWindow  = m_xContainerWindow;
     aWriteLock.unlock();
@@ -1408,7 +1409,7 @@ IMPL_LINK( LayoutManager, WindowEventListener, VclSimpleEvent*, pEvent )
         Window* pWindow = static_cast< VclWindowEvent* >(pEvent)->GetWindow();
         if ( pWindow && pWindow->GetType() == WINDOW_TOOLBOX )
         {
-            ReadGuard aReadLock( m_aLock );
+            Guard aReadLock( m_aLock );
             ToolbarLayoutManager* pToolbarManager( m_pToolbarManager );
             aReadLock.unlock();
 
@@ -1425,7 +1426,7 @@ throw (RuntimeException, std::exception)
 {
     SAL_INFO( "fwk", "framework (cd100003) ::LayoutManager::createElement" );
 
-    ReadGuard aReadLock( m_aLock );
+    Guard aReadLock( m_aLock );
     Reference< XFrame > xFrame = m_xFrame;
     Reference< XURLTransformer > xURLTransformer = m_xURLTransformer;
     sal_Bool    bInPlaceMenu = m_bInplaceMenuSet;
@@ -1435,7 +1436,7 @@ throw (RuntimeException, std::exception)
         return;
 
     /* SAFE AREA ----------------------------------------------------------------------------------------------- */
-    WriteGuard aWriteLock( m_aLock );
+    Guard aWriteLock( m_aLock );
 
     bool bMustBeLayouted( false );
     bool bNotify( false );
@@ -1560,7 +1561,7 @@ throw (RuntimeException, std::exception)
     SAL_INFO( "fwk", "framework (cd100003) ::LayoutManager::destroyElement" );
 
     /* SAFE AREA ----------------------------------------------------------------------------------------------- */
-    WriteGuard aWriteLock( m_aLock );
+    Guard aWriteLock( m_aLock );
 
     bool            bMustBeLayouted( false );
     bool            bNotify( false );
@@ -1633,7 +1634,7 @@ throw (uno::RuntimeException, std::exception)
 
     parseResourceURL( rResourceURL, aElementType, aElementName );
 
-    WriteGuard aWriteLock( m_aLock );
+    Guard aWriteLock( m_aLock );
 
     OString aResName = OUStringToOString( aElementName, RTL_TEXTENCODING_ASCII_US );
     SAL_INFO( "fwk", "framework (cd100003) Element " << aResName.getStr() << " requested." );
@@ -1706,7 +1707,7 @@ throw (RuntimeException, std::exception)
     Reference< XUIElement > xUIElement = implts_findElement( aName );
     if ( !xUIElement.is() )
     {
-        ReadGuard aReadLock( m_aLock );
+        Guard aReadLock( m_aLock );
         ToolbarLayoutManager*             pToolbarManager( m_pToolbarManager );
         aReadLock.unlock();
 
@@ -1720,7 +1721,7 @@ throw (RuntimeException, std::exception)
 Sequence< Reference< ui::XUIElement > > SAL_CALL LayoutManager::getElements()
 throw (uno::RuntimeException, std::exception)
 {
-    ReadGuard aReadLock( m_aLock );
+    Guard aReadLock( m_aLock );
     uno::Reference< ui::XUIElement >  xMenuBar( m_xMenuBar );
     uno::Reference< ui::XUIElement >  xStatusBar( m_aStatusBarElement.m_xUIElement );
     ToolbarLayoutManager*             pToolbarManager( m_pToolbarManager );
@@ -1772,7 +1773,7 @@ throw (RuntimeException, std::exception)
     if ( aElementType.equalsIgnoreAsciiCase("menubar") &&
          aElementName.equalsIgnoreAsciiCase("menubar") )
     {
-        WriteGuard aWriteLock( m_aLock );
+        Guard aWriteLock( m_aLock );
         m_bMenuVisible = true;
         aWriteLock.unlock();
 
@@ -1783,7 +1784,7 @@ throw (RuntimeException, std::exception)
                aElementName.equalsIgnoreAsciiCase("statusbar") ) ||
              ( m_aStatusBarElement.m_aName == aName ))
     {
-        WriteGuard aWriteLock( m_aLock );
+        Guard aWriteLock( m_aLock );
         if ( m_aStatusBarElement.m_xUIElement.is() && !m_aStatusBarElement.m_bMasterHide &&
              implts_showStatusBar( sal_True ))
         {
@@ -1802,7 +1803,7 @@ throw (RuntimeException, std::exception)
     }
     else if ( aElementType.equalsIgnoreAsciiCase( UIRESOURCETYPE_TOOLBAR ))
     {
-        ReadGuard aReadLock( m_aLock );
+        Guard aReadLock( m_aLock );
         ToolbarLayoutManager* pToolbarManager = m_pToolbarManager;
         aReadLock.unlock();
 
@@ -1814,7 +1815,7 @@ throw (RuntimeException, std::exception)
     }
     else if ( aElementType.equalsIgnoreAsciiCase("dockingwindow"))
     {
-        ReadGuard aReadGuard( m_aLock );
+        Guard aReadGuard( m_aLock );
         uno::Reference< frame::XFrame > xFrame( m_xFrame );
         uno::Reference< XComponentContext > xContext( m_xContext );
         aReadGuard.unlock();
@@ -1823,7 +1824,7 @@ throw (RuntimeException, std::exception)
     }
     else if ( aElementType.equalsIgnoreAsciiCase("toolpanel"))
     {
-        ReadGuard aReadGuard( m_aLock );
+        Guard aReadGuard( m_aLock );
         uno::Reference< frame::XFrame > xFrame( m_xFrame );
         aReadGuard.unlock();
         ActivateToolPanel( m_xFrame, aName );
@@ -1855,7 +1856,7 @@ throw (RuntimeException, std::exception)
     if ( aElementType.equalsIgnoreAsciiCase("menubar") &&
          aElementName.equalsIgnoreAsciiCase("menubar") )
     {
-        WriteGuard aWriteLock( m_aLock );
+        Guard aWriteLock( m_aLock );
 
         if ( m_xContainerWindow.is() )
         {
@@ -1878,7 +1879,7 @@ throw (RuntimeException, std::exception)
                aElementName.equalsIgnoreAsciiCase("statusbar") ) ||
              ( m_aStatusBarElement.m_aName == aName ))
     {
-        WriteGuard aWriteLock( m_aLock );
+        Guard aWriteLock( m_aLock );
         if ( m_aStatusBarElement.m_xUIElement.is() && !m_aStatusBarElement.m_bMasterHide &&
              implts_hideStatusBar( sal_True ))
         {
@@ -1894,7 +1895,7 @@ throw (RuntimeException, std::exception)
     }
     else if ( aElementType.equalsIgnoreAsciiCase( UIRESOURCETYPE_TOOLBAR ))
     {
-        ReadGuard aReadLock( m_aLock );
+        Guard aReadLock( m_aLock );
         ToolbarLayoutManager* pToolbarManager = m_pToolbarManager;
         aReadLock.unlock();
 
@@ -1906,7 +1907,7 @@ throw (RuntimeException, std::exception)
     }
     else if ( aElementType.equalsIgnoreAsciiCase("dockingwindow"))
     {
-        ReadGuard aReadGuard( m_aLock );
+        Guard aReadGuard( m_aLock );
         uno::Reference< frame::XFrame > xFrame( m_xFrame );
         uno::Reference< XComponentContext > xContext( m_xContext );
         aReadGuard.unlock();
@@ -1932,7 +1933,7 @@ throw (RuntimeException, std::exception)
     parseResourceURL( aName, aElementType, aElementName );
     if ( aElementType.equalsIgnoreAsciiCase( UIRESOURCETYPE_TOOLBAR ))
     {
-        ReadGuard aReadLock( m_aLock );
+        Guard aReadLock( m_aLock );
         ToolbarLayoutManager*             pToolbarManager = m_pToolbarManager;
         aReadLock.unlock();
 
@@ -1948,7 +1949,7 @@ throw (RuntimeException, std::exception)
 
 ::sal_Bool SAL_CALL LayoutManager::dockAllWindows( ::sal_Int16 /*nElementType*/ ) throw (uno::RuntimeException, std::exception)
 {
-    ReadGuard aReadLock( m_aLock );
+    Guard aReadLock( m_aLock );
     bool bResult( false );
     ToolbarLayoutManager*             pToolbarManager = m_pToolbarManager;
     aReadLock.unlock();
@@ -1968,7 +1969,7 @@ throw (RuntimeException, std::exception)
     bool bResult( false );
     if ( getElementTypeFromResourceURL( aName ).equalsIgnoreAsciiCase( UIRESOURCETYPE_TOOLBAR ))
     {
-        ReadGuard aReadLock( m_aLock );
+        Guard aReadLock( m_aLock );
         ToolbarLayoutManager*             pToolbarManager = m_pToolbarManager;
         aReadLock.unlock();
 
@@ -1988,7 +1989,7 @@ throw (uno::RuntimeException, std::exception)
     bool bResult( false );
     if ( getElementTypeFromResourceURL( aName ).equalsIgnoreAsciiCase( UIRESOURCETYPE_TOOLBAR ))
     {
-        ReadGuard aReadLock( m_aLock );
+        Guard aReadLock( m_aLock );
         ToolbarLayoutManager*             pToolbarManager = m_pToolbarManager;
         aReadLock.unlock();
 
@@ -2008,7 +2009,7 @@ throw (uno::RuntimeException, std::exception)
     bool bResult( false );
     if ( getElementTypeFromResourceURL( aName ).equalsIgnoreAsciiCase( UIRESOURCETYPE_TOOLBAR ))
     {
-        ReadGuard aReadLock( m_aLock );
+        Guard aReadLock( m_aLock );
         ToolbarLayoutManager*             pToolbarManager = m_pToolbarManager;
         aReadLock.unlock();
 
@@ -2027,7 +2028,7 @@ throw (RuntimeException, std::exception)
 {
     if ( getElementTypeFromResourceURL( aName ).equalsIgnoreAsciiCase( UIRESOURCETYPE_TOOLBAR ))
     {
-        ReadGuard aReadLock( m_aLock );
+        Guard aReadLock( m_aLock );
         ToolbarLayoutManager*             pToolbarManager = m_pToolbarManager;
         aReadLock.unlock();
 
@@ -2045,7 +2046,7 @@ throw (RuntimeException, std::exception)
 {
     if ( getElementTypeFromResourceURL( aName ).equalsIgnoreAsciiCase( UIRESOURCETYPE_TOOLBAR ))
     {
-        ReadGuard aReadLock( m_aLock );
+        Guard aReadLock( m_aLock );
         ToolbarLayoutManager* pToolbarManager( m_pToolbarManager );
         aReadLock.unlock();
 
@@ -2063,7 +2064,7 @@ throw (RuntimeException, std::exception)
 {
     if ( getElementTypeFromResourceURL( aName ).equalsIgnoreAsciiCase( UIRESOURCETYPE_TOOLBAR ))
     {
-        ReadGuard aReadLock( m_aLock );
+        Guard aReadLock( m_aLock );
         ToolbarLayoutManager* pToolbarManager( m_pToolbarManager );
         aReadLock.unlock();
 
@@ -2086,7 +2087,7 @@ throw (RuntimeException, std::exception)
     if ( aElementType.equalsIgnoreAsciiCase("menubar") &&
          aElementName.equalsIgnoreAsciiCase("menubar") )
     {
-        ReadGuard aReadLock( m_aLock );
+        Guard aReadLock( m_aLock );
         if ( m_xContainerWindow.is() )
         {
             aReadLock.unlock();
@@ -2131,7 +2132,7 @@ throw (RuntimeException, std::exception)
     }
     else if ( aElementType.equalsIgnoreAsciiCase( UIRESOURCETYPE_TOOLBAR ))
     {
-        ReadGuard aReadLock( m_aLock );
+        Guard aReadLock( m_aLock );
         ToolbarLayoutManager* pToolbarManager = m_pToolbarManager;
         aReadLock.unlock();
 
@@ -2140,7 +2141,7 @@ throw (RuntimeException, std::exception)
     }
     else if ( aElementType.equalsIgnoreAsciiCase("dockingwindow"))
     {
-        ReadGuard aReadGuard( m_aLock );
+        Guard aReadGuard( m_aLock );
         uno::Reference< frame::XFrame > xFrame( m_xFrame );
         aReadGuard.unlock();
 
@@ -2155,7 +2156,7 @@ throw (RuntimeException, std::exception)
 {
     if ( getElementTypeFromResourceURL( aName ).equalsIgnoreAsciiCase( UIRESOURCETYPE_TOOLBAR ))
     {
-        ReadGuard aReadLock( m_aLock );
+        Guard aReadLock( m_aLock );
         ToolbarLayoutManager* pToolbarManager = m_pToolbarManager;
         aReadLock.unlock();
 
@@ -2171,7 +2172,7 @@ throw (RuntimeException, std::exception)
 {
     if ( getElementTypeFromResourceURL( aName ).equalsIgnoreAsciiCase( UIRESOURCETYPE_TOOLBAR ))
     {
-        ReadGuard aReadLock( m_aLock );
+        Guard aReadLock( m_aLock );
         ToolbarLayoutManager* pToolbarManager = m_pToolbarManager;
         aReadLock.unlock();
 
@@ -2187,7 +2188,7 @@ throw (uno::RuntimeException, std::exception)
 {
     if ( getElementTypeFromResourceURL( aName ).equalsIgnoreAsciiCase( UIRESOURCETYPE_TOOLBAR ))
     {
-        ReadGuard aReadLock( m_aLock );
+        Guard aReadLock( m_aLock );
         ToolbarLayoutManager* pToolbarManager = m_pToolbarManager;
         aReadLock.unlock();
 
@@ -2203,7 +2204,7 @@ throw (RuntimeException, std::exception)
 {
     if ( getElementTypeFromResourceURL( aName ).equalsIgnoreAsciiCase( UIRESOURCETYPE_TOOLBAR ))
     {
-        ReadGuard aReadLock( m_aLock );
+        Guard aReadLock( m_aLock );
         ToolbarLayoutManager* pToolbarManager = m_pToolbarManager;
         aReadLock.unlock();
 
@@ -2219,7 +2220,7 @@ throw (RuntimeException, std::exception)
 {
     if ( getElementTypeFromResourceURL( aName ).equalsIgnoreAsciiCase( UIRESOURCETYPE_TOOLBAR ))
     {
-        ReadGuard aReadLock( m_aLock );
+        Guard aReadLock( m_aLock );
         ToolbarLayoutManager* pToolbarManager = m_pToolbarManager;
         aReadLock.unlock();
 
@@ -2235,7 +2236,7 @@ throw (RuntimeException, std::exception)
 {
     implts_lock();
 
-    ReadGuard aReadLock( m_aLock );
+    Guard aReadLock( m_aLock );
     sal_Int32 nLockCount( m_nLockCount );
     aReadLock.unlock();
 
@@ -2257,7 +2258,7 @@ throw (RuntimeException, std::exception)
 {
     sal_Bool bDoLayout( implts_unlock() );
 
-    ReadGuard aReadLock( m_aLock );
+    Guard aReadLock( m_aLock );
     sal_Int32 nLockCount( m_nLockCount );
     aReadLock.unlock();
 
@@ -2271,7 +2272,7 @@ throw (RuntimeException, std::exception)
 #endif
     // conform to documentation: unlock with lock count == 0 means force a layout
 
-    WriteGuard aWriteLock( m_aLock );
+    Guard aWriteLock( m_aLock );
         if ( bDoLayout )
                 m_aAsyncLayoutTimer.Stop();
         aWriteLock.unlock();
@@ -2310,7 +2311,7 @@ sal_Bool LayoutManager::implts_doLayout( sal_Bool bForceRequestBorderSpace, sal_
     SAL_INFO( "fwk", "framework (cd100003) ::LayoutManager::implts_doLayout" );
 
     /* SAFE AREA ----------------------------------------------------------------------------------------------- */
-    ReadGuard aReadLock( m_aLock );
+    Guard aReadLock( m_aLock );
 
     if ( !m_xFrame.is() || !m_bParentWindowVisible )
         return sal_False;
@@ -2332,7 +2333,7 @@ sal_Bool LayoutManager::implts_doLayout( sal_Bool bForceRequestBorderSpace, sal_
     {
         bLayouted = sal_True;
 
-        WriteGuard aWriteGuard( m_aLock );
+        Guard aWriteGuard( m_aLock );
         m_bDoLayout = true;
         aWriteGuard.unlock();
 
@@ -2427,7 +2428,7 @@ sal_Bool LayoutManager::implts_doLayout( sal_Bool bForceRequestBorderSpace, sal_
 sal_Bool LayoutManager::implts_resizeContainerWindow( const awt::Size& rContainerSize,
                                                       const awt::Point& rComponentPos )
 {
-    ReadGuard aReadLock( m_aLock );
+    Guard aReadLock( m_aLock );
     Reference< awt::XWindow >               xContainerWindow    = m_xContainerWindow;
     Reference< awt::XTopWindow2 >           xContainerTopWindow = m_xContainerTopWindow;
     Reference< awt::XWindow >               xComponentWindow    = m_xFrame->getComponentWindow();
@@ -2459,7 +2460,7 @@ sal_Bool LayoutManager::implts_resizeContainerWindow( const awt::Size& rContaine
 void SAL_CALL LayoutManager::setVisible( sal_Bool bVisible )
 throw (uno::RuntimeException, std::exception)
 {
-    WriteGuard aWriteLock( m_aLock );
+    Guard aWriteLock( m_aLock );
     sal_Bool bWasVisible( m_bVisible );
     m_bVisible = bVisible;
     aWriteLock.unlock();
@@ -2471,13 +2472,13 @@ throw (uno::RuntimeException, std::exception)
 sal_Bool SAL_CALL LayoutManager::isVisible()
 throw (uno::RuntimeException, std::exception)
 {
-    ReadGuard aReadLock( m_aLock );
+    Guard aReadLock( m_aLock );
     return m_bVisible;
 }
 
 ::Size LayoutManager::implts_getStatusBarSize()
 {
-    ReadGuard aReadLock( m_aLock );
+    Guard aReadLock( m_aLock );
     bool bStatusBarVisible( isElementVisible( STATUS_BAR_ALIAS ));
     bool bProgressBarVisible( isElementVisible( PROGRESS_BAR_ALIAS ));
     bool bVisible( m_bVisible );
@@ -2506,7 +2507,7 @@ throw (uno::RuntimeException, std::exception)
 
 awt::Rectangle LayoutManager::implts_calcDockingAreaSizes()
 {
-    ReadGuard aReadLock( m_aLock );
+    Guard aReadLock( m_aLock );
     Reference< awt::XWindow > xContainerWindow( m_xContainerWindow );
     Reference< XDockingAreaAcceptor > xDockingAreaAcceptor( m_xDockingAreaAcceptor );
     aReadLock.unlock();
@@ -2520,7 +2521,7 @@ awt::Rectangle LayoutManager::implts_calcDockingAreaSizes()
 
 void LayoutManager::implts_setDockingAreaWindowSizes( const awt::Rectangle& /*rBorderSpace*/ )
 {
-    ReadGuard aReadLock( m_aLock );
+    Guard aReadLock( m_aLock );
     Reference< awt::XWindow > xContainerWindow( m_xContainerWindow );
     aReadLock.unlock();
 
@@ -2545,7 +2546,7 @@ void LayoutManager::implts_setDockingAreaWindowSizes( const awt::Rectangle& /*rB
 
 void LayoutManager::implts_updateMenuBarClose()
 {
-    WriteGuard aWriteLock( m_aLock );
+    Guard aWriteLock( m_aLock );
     bool                      bShowCloser( m_bMenuBarCloser );
     Reference< awt::XWindow > xContainerWindow( m_xContainerWindow );
     aWriteLock.unlock();
@@ -2571,7 +2572,7 @@ void LayoutManager::implts_updateMenuBarClose()
 sal_Bool LayoutManager::implts_resetMenuBar()
 {
     /* SAFE AREA ----------------------------------------------------------------------------------------------- */
-    WriteGuard aWriteLock( m_aLock );
+    Guard aWriteLock( m_aLock );
     sal_Bool bMenuVisible( m_bMenuVisible );
     Reference< awt::XWindow > xContainerWindow( m_xContainerWindow );
 
@@ -2601,7 +2602,7 @@ sal_Bool LayoutManager::implts_resetMenuBar()
 
 IMPL_LINK_NOARG(LayoutManager, MenuBarClose)
 {
-    ReadGuard aReadLock( m_aLock );
+    Guard aReadLock( m_aLock );
     uno::Reference< frame::XDispatchProvider >   xProvider(m_xFrame, uno::UNO_QUERY);
     uno::Reference< XComponentContext > xContext( m_xContext );
     aReadLock.unlock();
@@ -2669,7 +2670,7 @@ void SAL_CALL LayoutManager::windowResized( const awt::WindowEvent& aEvent )
 throw( uno::RuntimeException, std::exception )
 {
     /* SAFE AREA ----------------------------------------------------------------------------------------------- */
-    WriteGuard aWriteLock( m_aLock );
+    Guard aWriteLock( m_aLock );
 
     if ( !m_xDockingAreaAcceptor.is() )
         return;
@@ -2721,7 +2722,7 @@ void SAL_CALL LayoutManager::windowMoved( const awt::WindowEvent& ) throw( uno::
 
 void SAL_CALL LayoutManager::windowShown( const lang::EventObject& aEvent ) throw( uno::RuntimeException, std::exception )
 {
-    ReadGuard aReadLock( m_aLock );
+    Guard aReadLock( m_aLock );
     Reference< awt::XWindow >  xContainerWindow( m_xContainerWindow );
     bool                       bParentWindowVisible( m_bParentWindowVisible );
     aReadLock.unlock();
@@ -2729,7 +2730,7 @@ void SAL_CALL LayoutManager::windowShown( const lang::EventObject& aEvent ) thro
     Reference< XInterface > xIfac( xContainerWindow, UNO_QUERY );
     if ( xIfac == aEvent.Source )
     {
-        WriteGuard aWriteLock( m_aLock );
+        Guard aWriteLock( m_aLock );
         m_bParentWindowVisible = true;
         bool bSetVisible = ( m_bParentWindowVisible != bParentWindowVisible );
         aWriteLock.unlock();
@@ -2741,7 +2742,7 @@ void SAL_CALL LayoutManager::windowShown( const lang::EventObject& aEvent ) thro
 
 void SAL_CALL LayoutManager::windowHidden( const lang::EventObject& aEvent ) throw( uno::RuntimeException, std::exception )
 {
-    ReadGuard aReadLock( m_aLock );
+    Guard aReadLock( m_aLock );
     Reference< awt::XWindow > xContainerWindow( m_xContainerWindow );
     bool                      bParentWindowVisible( m_bParentWindowVisible );
     aReadLock.unlock();
@@ -2749,7 +2750,7 @@ void SAL_CALL LayoutManager::windowHidden( const lang::EventObject& aEvent ) thr
     Reference< XInterface > xIfac( xContainerWindow, UNO_QUERY );
     if ( xIfac == aEvent.Source )
     {
-        WriteGuard aWriteLock( m_aLock );
+        Guard aWriteLock( m_aLock );
         m_bParentWindowVisible = false;
         bool bSetInvisible = ( m_bParentWindowVisible != bParentWindowVisible );
         aWriteLock.unlock();
@@ -2761,7 +2762,7 @@ void SAL_CALL LayoutManager::windowHidden( const lang::EventObject& aEvent ) thr
 
 IMPL_LINK_NOARG(LayoutManager, AsyncLayoutHdl)
 {
-    ReadGuard aReadLock( m_aLock );
+    Guard aReadLock( m_aLock );
     m_aAsyncLayoutTimer.Stop();
 
     if( !m_xContainerWindow.is() )
@@ -2790,7 +2791,7 @@ throw ( RuntimeException, std::exception )
     {
         SAL_INFO( "fwk", "framework (cd100003) ::LayoutManager::frameAction (COMPONENT_ATTACHED|REATTACHED)" );
 
-        WriteGuard aWriteLock( m_aLock );
+        Guard aWriteLock( m_aLock );
         m_bComponentAttached = true;
         m_bMustDoLayout = true;
         aWriteLock.unlock();
@@ -2803,7 +2804,7 @@ throw ( RuntimeException, std::exception )
     {
         SAL_INFO( "fwk", "framework (cd100003) ::LayoutManager::frameAction (FRAME_UI_ACTIVATED|DEACTIVATING)" );
 
-        WriteGuard aWriteLock( m_aLock );
+        Guard aWriteLock( m_aLock );
         m_bActive = ( aEvent.Action == FrameAction_FRAME_UI_ACTIVATED );
         aWriteLock.unlock();
 
@@ -2813,7 +2814,7 @@ throw ( RuntimeException, std::exception )
     {
         SAL_INFO( "fwk", "framework (cd100003) ::LayoutManager::frameAction (COMPONENT_DETACHING)" );
 
-        WriteGuard aWriteLock( m_aLock );
+        Guard aWriteLock( m_aLock );
         m_bComponentAttached = false;
         aWriteLock.unlock();
 
@@ -2829,7 +2830,7 @@ throw( RuntimeException, std::exception )
     sal_Bool bDisposeAndClear( sal_False );
 
     /* SAFE AREA ----------------------------------------------------------------------------------------------- */
-    WriteGuard aWriteLock( m_aLock );
+    Guard aWriteLock( m_aLock );
 
     if ( rEvent.Source == Reference< XInterface >( m_xFrame, UNO_QUERY ))
     {
@@ -2929,7 +2930,7 @@ throw( RuntimeException, std::exception )
 
 void SAL_CALL LayoutManager::elementInserted( const ui::ConfigurationEvent& Event ) throw (uno::RuntimeException, std::exception)
 {
-    ReadGuard aReadLock( m_aLock );
+    Guard aReadLock( m_aLock );
     Reference< XFrame > xFrame( m_xFrame );
     Reference< ui::XUIConfigurationListener > xUICfgListener( m_xToolbarManager );
     ToolbarLayoutManager* pToolbarManager = m_pToolbarManager;
@@ -2974,7 +2975,7 @@ void SAL_CALL LayoutManager::elementInserted( const ui::ConfigurationEvent& Even
 
 void SAL_CALL LayoutManager::elementRemoved( const ui::ConfigurationEvent& Event ) throw (uno::RuntimeException, std::exception)
 {
-    ReadGuard aReadLock( m_aLock );
+    Guard aReadLock( m_aLock );
     Reference< frame::XFrame >                xFrame( m_xFrame );
     Reference< ui::XUIConfigurationListener > xToolbarManager( m_xToolbarManager );
     Reference< awt::XWindow >                 xContainerWindow( m_xContainerWindow );
@@ -3048,7 +3049,7 @@ void SAL_CALL LayoutManager::elementRemoved( const ui::ConfigurationEvent& Event
                         if ( xComp.is() )
                             xComp->dispose();
 
-                        WriteGuard aWriteLock( m_aLock );
+                        Guard aWriteLock( m_aLock );
                         m_xMenuBar.clear();
                     }
                 }
@@ -3062,7 +3063,7 @@ void SAL_CALL LayoutManager::elementRemoved( const ui::ConfigurationEvent& Event
 
 void SAL_CALL LayoutManager::elementReplaced( const ui::ConfigurationEvent& Event ) throw (uno::RuntimeException, std::exception)
 {
-    ReadGuard aReadLock( m_aLock );
+    Guard aReadLock( m_aLock );
     Reference< XFrame >                       xFrame( m_xFrame );
     Reference< ui::XUIConfigurationListener > xToolbarManager( m_xToolbarManager );
     ToolbarLayoutManager*                     pToolbarManager = m_pToolbarManager;
@@ -3138,7 +3139,7 @@ void SAL_CALL LayoutManager::setFastPropertyValue_NoBroadcast( sal_Int32       n
             sal_Bool bValue(sal_False);
             if (( aValue >>= bValue ) && bValue )
             {
-                ReadGuard aReadLock( m_aLock );
+                Guard aReadLock( m_aLock );
                 ToolbarLayoutManager* pToolbarManager = m_pToolbarManager;
                 bool bAutomaticToolbars( m_bAutomaticToolbars );
                 aReadLock.unlock();

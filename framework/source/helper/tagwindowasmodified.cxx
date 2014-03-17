@@ -19,8 +19,7 @@
 
 #include <helper/tagwindowasmodified.hxx>
 #include <pattern/window.hxx>
-#include <threadhelp/writeguard.hxx>
-#include <threadhelp/readguard.hxx>
+#include <threadhelp/guard.hxx>
 #include <macros/generic.hxx>
 #include <services.h>
 
@@ -67,7 +66,7 @@ void SAL_CALL TagWindowAsModified::initialize(const css::uno::Sequence< css::uno
         return;
 
     // SAFE -> ----------------------------------
-    WriteGuard aWriteLock(m_aLock);
+    Guard aWriteLock(m_aLock);
     m_xFrame = xFrame ;
     aWriteLock.unlock();
     // <- SAFE ----------------------------------
@@ -81,7 +80,7 @@ void SAL_CALL TagWindowAsModified::modified(const css::lang::EventObject& aEvent
     throw(css::uno::RuntimeException, std::exception)
 {
     // SAFE -> ----------------------------------
-    ReadGuard aReadLock(m_aLock);
+    Guard aReadLock(m_aLock);
 
     css::uno::Reference< css::util::XModifiable > xModel (m_xModel.get (), css::uno::UNO_QUERY);
     css::uno::Reference< css::awt::XWindow >      xWindow(m_xWindow.get(), css::uno::UNO_QUERY);
@@ -127,7 +126,7 @@ void SAL_CALL TagWindowAsModified::frameAction(const css::frame::FrameActionEven
         return;
 
     // SAFE -> ----------------------------------
-    WriteGuard aWriteLock(m_aLock);
+    Guard aWriteLock(m_aLock);
 
     css::uno::Reference< css::frame::XFrame > xFrame(m_xFrame.get(), css::uno::UNO_QUERY);
     if (
@@ -147,7 +146,7 @@ void SAL_CALL TagWindowAsModified::disposing(const css::lang::EventObject& aEven
     throw(css::uno::RuntimeException, std::exception)
 {
     // SAFE -> ----------------------------------
-    WriteGuard aWriteLock(m_aLock);
+    Guard aWriteLock(m_aLock);
 
     css::uno::Reference< css::frame::XFrame > xFrame(m_xFrame.get(), css::uno::UNO_QUERY);
     if (
@@ -192,7 +191,7 @@ void TagWindowAsModified::impl_update (const css::uno::Reference< css::frame::XF
         return;
 
     // SAFE -> ----------------------------------
-    WriteGuard aWriteLock(m_aLock);
+    Guard aWriteLock(m_aLock);
     // Note: frame was set as member outside ! we have to refresh connections
     // regarding window and model only here.
     m_xWindow = xWindow;

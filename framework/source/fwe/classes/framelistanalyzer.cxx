@@ -19,8 +19,6 @@
 
 #include "framework/framelistanalyzer.hxx"
 
-#include <threadhelp/writeguard.hxx>
-#include <threadhelp/readguard.hxx>
 #include <targets.h>
 #include <properties.h>
 #include <services.h>

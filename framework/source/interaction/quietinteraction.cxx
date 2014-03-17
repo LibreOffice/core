@@ -19,8 +19,7 @@
 
 #include "interaction/quietinteraction.hxx"
 
-#include <threadhelp/readguard.hxx>
-#include <threadhelp/writeguard.hxx>
+#include <threadhelp/guard.hxx>
 #include <macros/generic.hxx>
 
 #include <com/sun/star/task/XInteractionAbort.hpp>
@@ -56,7 +55,7 @@ void SAL_CALL QuietInteraction::handle( const css::uno::Reference< css::task::XI
     // safe the request for outside analyzing everytime!
     css::uno::Any aRequest = xRequest->getRequest();
     /* SAFE { */
-    WriteGuard aWriteLock(m_aLock);
+    Guard aWriteLock(m_aLock);
     m_aRequest = aRequest;
     aWriteLock.unlock();
     /* } SAFE */
@@ -143,7 +142,7 @@ void SAL_CALL QuietInteraction::handle( const css::uno::Reference< css::task::XI
 css::uno::Any QuietInteraction::getRequest() const
 {
     /* SAFE { */
-    ReadGuard aReadLock(m_aLock);
+    Guard aReadLock(m_aLock);
     return m_aRequest;
     /* } SAFE */
 }
@@ -153,7 +152,7 @@ css::uno::Any QuietInteraction::getRequest() const
 sal_Bool QuietInteraction::wasUsed() const
 {
     /* SAFE { */
-    ReadGuard aReadLock(m_aLock);
+    Guard aReadLock(m_aLock);
     return m_aRequest.hasValue();
     /* } SAFE */
 }
