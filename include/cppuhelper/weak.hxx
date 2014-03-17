@@ -163,8 +163,8 @@ public:
     To be used like:
 
     css::uno::XInterface * FOO_constructor_function(...) {
-        return cppu::acquire(new FOO(...));
-    }
+        return cppu::acquire(new FOO(...));
+    }
 
     @param instance
     Newly created instance that should be acquired.
