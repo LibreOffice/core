@@ -65,6 +65,7 @@ struct GLWindow
     unsigned int            Width;
     unsigned int            Height;
     const GLubyte*          GLExtensions;
+    bool bMultiSampleSupported;
 
     bool HasGLExtension( const char* name ) { return gluCheckExtension( (const GLubyte*) name, GLExtensions ); }
 
@@ -86,7 +87,8 @@ struct GLWindow
         bpp(0),
         Width(0),
         Height(0),
-        GLExtensions(NULL)
+        GLExtensions(NULL),
+        bMultiSampleSupported(false)
     {
     }
 };

@@ -369,6 +369,7 @@ bool OpenGLContext::init()
     bool bMultiSampleSupport = InitMultisample(PixelFormatFront, WindowPix);
     if (bMultiSampleSupport)
     {
+        m_aGLWin.bMultiSampleSupported = true;
     }
     else
     {
@@ -567,6 +568,9 @@ bool OpenGLContext::initWindow()
         }
         XFree( pVi );
     }
+
+    if(best_num_samp > 0)
+        m_aGLWin.bMultiSampleSupported = true;
 
     XVisualInfo* vi = glXGetVisualFromFBConfig( m_aGLWin.dpy, pFBC[best_fbc] );
     if( vi )

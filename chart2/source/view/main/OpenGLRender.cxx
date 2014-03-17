@@ -235,6 +235,7 @@ GLfloat texCoords[] = {
 int OpenGLRender::InitOpenGL(GLWindow aWindow)
 {
     glWin = aWindow;
+    mbArbMultisampleSupported = glWin.bMultiSampleSupported;
     if(!bGlewInit)
     {
         glewExperimental = GL_TRUE;
