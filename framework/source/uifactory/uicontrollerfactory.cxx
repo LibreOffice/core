@@ -25,6 +25,7 @@
 #include <com/sun/star/frame/XUIControllerFactory.hpp>
 
 #include <rtl/ustrbuf.hxx>
+#include <cppuhelper/basemutex.hxx>
 #include <cppuhelper/compbase2.hxx>
 #include <cppuhelper/supportsservice.hxx>
 
@@ -41,7 +42,7 @@ typedef ::cppu::WeakComponentImplHelper2<
     css::lang::XServiceInfo,
     css::frame::XUIControllerFactory > UIControllerFactory_BASE;
 
-class UIControllerFactory : private osl::Mutex,
+class UIControllerFactory : private cppu::BaseMutex,
                             public UIControllerFactory_BASE
 {
 public:
@@ -75,7 +76,7 @@ private:
 UIControllerFactory::UIControllerFactory(
     const Reference< XComponentContext >& xContext,
     const rtl::OUString &rConfigurationNode )
-    : UIControllerFactory_BASE(*static_cast<osl::Mutex *>(this))
+    : UIControllerFactory_BASE(m_aMutex)
     , m_bConfigRead( sal_False )
     , m_xContext( xContext )
     , m_pConfigAccess()
