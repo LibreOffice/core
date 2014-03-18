@@ -36,6 +36,7 @@
 #include <com/sun/star/util/XChangesBatch.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 
+#include <cppuhelper/basemutex.hxx>
 #include <cppuhelper/compbase2.hxx>
 #include <cppuhelper/implbase2.hxx>
 #include <cppuhelper/supportsservice.hxx>
@@ -1282,7 +1283,7 @@ sal_Bool ConfigurationAccess_WindowState::impl_initializeConfigAccess()
 typedef ::cppu::WeakComponentImplHelper2< css::container::XNameAccess,
         css::lang::XServiceInfo> WindowStateConfiguration_BASE;
 
-class WindowStateConfiguration : private osl::Mutex,
+class WindowStateConfiguration : private cppu::BaseMutex,
                                  public WindowStateConfiguration_BASE
 {
 public:
@@ -1342,7 +1343,7 @@ private:
 };
 
 WindowStateConfiguration::WindowStateConfiguration( const Reference< XComponentContext >& rxContext ) :
-    WindowStateConfiguration_BASE(*static_cast<osl::Mutex *>(this)),
+    WindowStateConfiguration_BASE(m_aMutex),
     m_xContext( rxContext )
 {
     css::uno::Reference< css::frame::XModuleManager2 > xModuleManager =
