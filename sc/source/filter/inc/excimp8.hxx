@@ -58,7 +58,7 @@ public:
     void                    Labelsst( void );               // 0xFD
 
     void                    Hlink( void );                  // 0x01B8
-    void                    SheetProtection( void );        // 0x0867
+    void                    FeatHdr( void );                // 0x0867
 
     virtual void            EndSheet( void );
     virtual void            PostDocLoad( void );

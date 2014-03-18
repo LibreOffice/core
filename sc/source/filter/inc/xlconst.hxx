@@ -256,7 +256,11 @@ const sal_uInt16 EXC_BORDER_MEDIUM = 35;
 const sal_uInt16 EXC_BORDER_THIN   = 15;
 const sal_uInt16 EXC_BORDER_HAIR   = 1;
 
-
+// SharedFeatureType enumeration
+const sal_uInt16 EXC_ISFPROTECTION = 0x0002;
+const sal_uInt16 EXC_ISFFEC2       = 0x0003;
+const sal_uInt16 EXC_ISFFACTOID    = 0x0004;
+const sal_uInt16 EXC_ISFLIST       = 0x0005;
 
 #endif
 

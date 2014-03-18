@@ -302,8 +302,20 @@ void ImportExcel8::Labelsst( void )
 }
 
 
-void ImportExcel8::SheetProtection( void )
+void ImportExcel8::FeatHdr( void )
 {
+    aIn.Ignore(12);
+
+    // Feature type (isf) can be EXC_ISFPROTECTION, EXC_ISFFEC2 or
+    // EXC_ISFFACTOID.
+    sal_uInt16 nFeatureType(0);
+    aIn >> nFeatureType;
+    if (nFeatureType != EXC_ISFPROTECTION)
+        // We currently only support import of enhanced protection data.
+        return;
+
+    aIn.Ignore(1); // always 1
+
     GetSheetProtectBuffer().ReadOptions( aIn, GetCurrScTab() );
 }
 

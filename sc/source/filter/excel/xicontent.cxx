@@ -1227,18 +1227,6 @@ void XclImpSheetProtectBuffer::ReadProtect( XclImpStream& rStrm, SCTAB nTab )
 
 void XclImpSheetProtectBuffer::ReadOptions( XclImpStream& rStrm, SCTAB nTab )
 {
-    rStrm.Ignore(12);
-
-    // feature type can be either 2 or 4.  If 2, this record stores flag for
-    // enhanced protection, whereas if 4 it stores flag for smart tag.
-    sal_uInt16 nFeatureType(0);
-    rStrm >> nFeatureType;
-    if (nFeatureType != 2)
-        // We currently only support import of enhanced protection data.
-        return;
-
-    rStrm.Ignore(1); // always 1
-
     // The flag size specifies the size of bytes that follows that stores
     // feature data.  If -1 it depends on the feature type imported earlier.
     // For enhanced protection data, the size is always 4.  For the most xls
