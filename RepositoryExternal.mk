@@ -973,10 +973,6 @@ endef
 
 endif # SYSTEM_LIBXSLT
 
-define gb_LinkTarget__use_glib
-$(error gb_LinkTarget__use_glib should not be called any more)
-endef
-
 ifeq ($(ENABLE_LIBLANGTAG),TRUE)
 
 ifneq ($(SYSTEM_LIBLANGTAG),)
@@ -2214,22 +2210,6 @@ else # !ENABLE_TELEPATHY
 gb_LinkTarget__use_telepathy :=
 
 endif # ENABLE_TELEPATHY
-
-define gb_LinkTarget__use_croco
-$(error gb_LinkTarget__use_croco should not be used any more)
-endef
-
-define gb_LinkTarget__use_pango
-$(error gb_LinkTarget__use_pango should not be used any more)
-endef
-
-define gb_LinkTarget__use_gsf
-$(error gb_LinkTarget__use_gsf should not be used any more)
-endef
-
-define gb_LinkTarget__use_pixbuf
-$(error gb_LinkTarget__use_pixbuf should not be used any more)
-endef
 
 ifneq ($(SYSTEM_LIBPNG),)
 
