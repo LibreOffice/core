@@ -29,7 +29,6 @@
 #include <dispatch/interceptionhelper.hxx>
 #include <classes/taskcreator.hxx>
 #include <threadhelp/transactionguard.hxx>
-#include <threadhelp/guard.hxx>
 #include <general.h>
 #include <properties.h>
 
@@ -154,15 +153,14 @@ void Desktop::constructorInit()
     @onerror    We throw an ASSERT in debug version or do nothing in relaese version.
 *//*-*************************************************************************************************************/
 Desktop::Desktop( const css::uno::Reference< css::uno::XComponentContext >& xContext )
-        :   ThreadHelpBase          ( &Application::GetSolarMutex()                 )
-        ,   TransactionBase         (                                               )
+        :   TransactionBase         (                                               )
         ,   Desktop_BASE            ( m_aMutex )
         ,   cppu::OPropertySetHelper( cppu::WeakComponentImplHelperBase::rBHelper   )
         // Init member
         ,   m_bIsTerminated         ( sal_False                                     )   // see dispose() for further information!
         ,   m_xContext              ( xContext                                      )
         ,   m_aChildTaskContainer   (                                               )
-        ,   m_aListenerContainer    ( m_aLock.getShareableOslMutex()                )
+        ,   m_aListenerContainer    ( m_aMutex )
         ,   m_xFramesHelper         (                                               )
         ,   m_xDispatchHelper       (                                               )
         ,   m_eLoadState            ( E_NOTSET                                      )
@@ -220,7 +218,7 @@ sal_Bool SAL_CALL Desktop::terminate()
 {
     TransactionGuard aTransaction( m_aTransactionManager, E_HARDEXCEPTIONS );
 
-    Guard aReadLock( m_aLock ); // start synchronize
+    SolarMutexClearableGuard aReadLock;
 
     css::uno::Reference< css::frame::XTerminateListener > xPipeTerminator    = m_xPipeTerminator;
     css::uno::Reference< css::frame::XTerminateListener > xQuickLauncher     = m_xQuickLauncher;
@@ -230,7 +228,7 @@ sal_Bool SAL_CALL Desktop::terminate()
     css::lang::EventObject                                aEvent             ( static_cast< ::cppu::OWeakObject* >(this) );
     ::sal_Bool                                            bAskQuickStart     = !m_bSuspendQuickstartVeto                  ;
 
-    aReadLock.unlock(); // end synchronize
+    aReadLock.clear();
 
 
     // Ask normal terminate listener. They could stop terminate without closing any open document.
@@ -315,9 +313,9 @@ sal_Bool SAL_CALL Desktop::terminate()
             // "Protect" us against dispose before terminate calls!
             // see dispose() for further information.
             /* SAFE AREA --------------------------------------------------------------------------------------- */
-            Guard aWriteLock( m_aLock );
+            SolarMutexClearableGuard aWriteLock;
             m_bIsTerminated = sal_True;
-            aWriteLock.unlock();
+            aWriteLock.clear();
             /* UNSAFE AREA ------------------------------------------------------------------------------------- */
 
         impl_sendNotifyTerminationEvent();
@@ -387,8 +385,7 @@ void SAL_CALL Desktop::addTerminateListener( const css::uno::Reference< css::fra
     {
         OUString sImplementationName = xInfo->getImplementationName();
 
-        // SYCNHRONIZED ->
-        Guard aWriteLock( m_aLock );
+        SolarMutexGuard g;
 
         if( sImplementationName == "com.sun.star.comp.sfx2.SfxTerminateListener" )
         {
@@ -410,9 +407,6 @@ void SAL_CALL Desktop::addTerminateListener( const css::uno::Reference< css::fra
             m_xSWThreadManager = xListener;
             return;
         }
-
-        aWriteLock.unlock();
-        // <- SYCNHRONIZED
     }
 
     // No lock required ... container is threadsafe by itself.
@@ -430,8 +424,7 @@ void SAL_CALL Desktop::removeTerminateListener( const css::uno::Reference< css::
     {
         OUString sImplementationName = xInfo->getImplementationName();
 
-        // SYCNHRONIZED ->
-        Guard aWriteLock( m_aLock );
+        SolarMutexGuard g;
 
         if( sImplementationName == "com.sun.star.comp.sfx2.SfxTerminateListener" )
         {
@@ -456,9 +449,6 @@ void SAL_CALL Desktop::removeTerminateListener( const css::uno::Reference< css::
             m_xSWThreadManager.clear();
             return;
         }
-
-        aWriteLock.unlock();
-        // <- SYCNHRONIZED
     }
 
     // No lock required ... container is threadsafe by itself.
@@ -846,19 +836,14 @@ css::uno::Reference< css::frame::XFramesSupplier > SAL_CALL Desktop::getCreator(
 
 OUString SAL_CALL Desktop::getName() throw( css::uno::RuntimeException, std::exception )
 {
-    /* SAFE { */
-    Guard aReadLock( m_aLock );
+    SolarMutexGuard g;
     return m_sName;
-    /* } SAFE */
 }
 
 void SAL_CALL Desktop::setName( const OUString& sName ) throw( css::uno::RuntimeException, std::exception )
 {
-    /* SAFE { */
-    Guard aWriteLock( m_aLock );
+    SolarMutexGuard g;
     m_sName = sName;
-    aWriteLock.unlock();
-    /* } SAFE */
 }
 
 sal_Bool SAL_CALL Desktop::isTop() throw( css::uno::RuntimeException, std::exception )
@@ -1087,7 +1072,7 @@ void SAL_CALL Desktop::disposing()
     // tests for instance in sc/qa/unit) nothing bad happens.
     SAL_WARN_IF( !m_bIsTerminated, "fwk", "Desktop disposed before terminating it" );
 
-    Guard aWriteLock( m_aLock ); // start synchronize
+    SolarMutexClearableGuard aWriteLock;
 
     // Look for multiple calls of this method!
     // If somewhere call dispose() twice - he will be stopped here really!!!
@@ -1108,7 +1093,7 @@ void SAL_CALL Desktop::disposing()
     // and reject all new incoming requests!
     m_aTransactionManager.setWorkingMode( E_BEFORECLOSE );
 
-    aWriteLock.unlock(); // end synchronize
+    aWriteLock.clear();
 
     // Following lines of code can be called outside a synchronized block ...
     // Because our transaction manager will block all new requests to this object.
@@ -1210,8 +1195,7 @@ void SAL_CALL Desktop::dispatchFinished( const css::frame::DispatchResultEvent& 
     // Register transaction and reject wrong calls.
     TransactionGuard aTransaction( m_aTransactionManager, E_HARDEXCEPTIONS );
 
-    /* SAFE AREA ------------------------------------------------------------------------------------------- */
-    Guard aWriteLock( m_aLock );
+    SolarMutexGuard g;
     if( m_eLoadState != E_INTERACTION )
     {
         m_xLastFrame = css::uno::Reference< css::frame::XFrame >();
@@ -1223,7 +1207,6 @@ void SAL_CALL Desktop::dispatchFinished( const css::frame::DispatchResultEvent& 
                 m_eLoadState = E_SUCCESSFUL;
         }
     }
-    /* UNSAFE AREA ----------------------------------------------------------------------------------------- */
 }
 
 /*-************************************************************************************************************
@@ -1334,18 +1317,15 @@ void SAL_CALL Desktop::handle( const css::uno::Reference< css::task::XInteractio
         bAbort = sal_True;
     }
 
-    /* SAFE AREA ------------------------------------------------------------------------------------------- */
     // Ok now it's time to break yield loop of loadComponentFromURL().
     // But only for really aborted requests!
     // For example warnings will be approved and we wait for any success story ...
     if (bAbort)
     {
-        Guard aWriteLock( m_aLock );
+        SolarMutexGuard g;
         m_eLoadState          = E_INTERACTION;
         m_aInteractionRequest = aRequest     ;
-        aWriteLock.unlock();
     }
-    /* UNSAFE AREA ----------------------------------------------------------------------------------------- */
 }
 
 
@@ -1804,9 +1784,9 @@ void Desktop::impl_sendNotifyTerminationEvent()
 
 ::sal_Bool Desktop::impl_closeFrames(::sal_Bool bAllowUI)
 {
-    Guard aReadLock( m_aLock ); // start synchronize
+    SolarMutexClearableGuard aReadLock;
     css::uno::Sequence< css::uno::Reference< css::frame::XFrame > > lFrames = m_aChildTaskContainer.getAllElements();
-    aReadLock.unlock(); // end synchronize
+    aReadLock.clear();
 
     ::sal_Int32 c                = lFrames.getLength();
     ::sal_Int32 i                = 0;
