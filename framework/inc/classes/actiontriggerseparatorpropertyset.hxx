@@ -20,7 +20,7 @@
 #ifndef INCLUDED_FRAMEWORK_INC_CLASSES_ACTIONTRIGGERSEPARATORPROPERTYSET_HXX
 #define INCLUDED_FRAMEWORK_INC_CLASSES_ACTIONTRIGGERSEPARATORPROPERTYSET_HXX
 
-#include <threadhelp/threadhelpbase.hxx>
+#include <cppuhelper/basemutex.hxx>
 #include <cppuhelper/propshlp.hxx>
 #include <cppuhelper/weak.hxx>
 #include <osl/mutex.hxx>
@@ -37,7 +37,7 @@
 namespace framework
 {
 
-class ActionTriggerSeparatorPropertySet :   public ThreadHelpBase                       ,   // Struct for right initalization of mutex member! Must be first of baseclasses.
+class ActionTriggerSeparatorPropertySet :   private cppu::BaseMutex,
                                             public ::com::sun::star::lang::XServiceInfo ,
                                             public ::com::sun::star::lang::XTypeProvider,
                                             public ::cppu::OBroadcastHelper             ,

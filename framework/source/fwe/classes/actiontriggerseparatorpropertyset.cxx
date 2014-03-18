@@ -19,6 +19,7 @@
 
 
 #include <classes/actiontriggerseparatorpropertyset.hxx>
+#include <threadhelp/lockhelper.hxx>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <cppuhelper/proptypehlp.hxx>
 #include <cppuhelper/supportsservice.hxx>
@@ -47,8 +48,7 @@ namespace framework
 {
 
 ActionTriggerSeparatorPropertySet::ActionTriggerSeparatorPropertySet()
-        :   ThreadHelpBase          ( &Application::GetSolarMutex()                     )
-        ,   OBroadcastHelper        ( m_aLock.getShareableOslMutex()                    )
+        :   OBroadcastHelper        ( m_aMutex )
         ,   OPropertySetHelper      ( *(static_cast< OBroadcastHelper * >(this))        )
         ,   OWeakObject             (                                                   )
         ,   m_nSeparatorType( 0 )
