@@ -6889,9 +6889,14 @@ void DocxAttributeOutput::ParaGrabBag(const SfxGrabBagItem& rItem)
         else if (i->first == "ParaSdtPr")
         {
             beans::PropertyValue aPropertyValue = i->second.get<beans::PropertyValue>();
-            if (aPropertyValue.Name == "ooxml:CT_SdtPr_docPartObj")
+            if (aPropertyValue.Name == "ooxml:CT_SdtPr_docPartObj" ||
+                    aPropertyValue.Name == "ooxml:CT_SdtPr_docPartList")
             {
-                m_nSdtPrToken = FSNS( XML_w, XML_docPartObj );
+                if (aPropertyValue.Name == "ooxml:CT_SdtPr_docPartObj")
+                    m_nSdtPrToken = FSNS( XML_w, XML_docPartObj );
+                else if (aPropertyValue.Name == "ooxml:CT_SdtPr_docPartList")
+                    m_nSdtPrToken = FSNS( XML_w, XML_docPartList );
+
                 uno::Sequence<beans::PropertyValue> aGrabBag;
                 aPropertyValue.Value >>= aGrabBag;
                 for (sal_Int32 j=0; j < aGrabBag.getLength(); ++j)

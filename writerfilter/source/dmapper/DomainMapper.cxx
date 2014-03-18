@@ -2235,6 +2235,7 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, PropertyMapPtr rContext )
     break;
     case NS_ooxml::LN_CT_SdtPr_equation:
     case NS_ooxml::LN_CT_SdtPr_docPartObj:
+    case NS_ooxml::LN_CT_SdtPr_docPartList:
     case NS_ooxml::LN_CT_SdtPr_picture:
     case NS_ooxml::LN_CT_SdtPr_citation:
     case NS_ooxml::LN_CT_SdtPr_group:
