@@ -2797,7 +2797,7 @@ void calcOffsetForDoubleLine( SwLineEntryMap& rLines )
             for (size_t i = 0; itSet != itSetEnd; ++itSet, ++i)
             {
                 SwLineEntry aLine = *itSet;
-                aLine.mnOffset = static_cast<SwTwips>(aLine.maAttribute.Dist());
+                aLine.mnOffset = static_cast<SwTwips>(aLine.maAttribute.Prim()+aLine.maAttribute.Dist());
                 aLine.mbOffsetPerp = true;
 
                 if (i == 0)
