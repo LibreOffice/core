@@ -20,7 +20,6 @@
 #ifndef INCLUDED_FRAMEWORK_INC_HELPER_TAGWINDOWASMODIFIED_HXX
 #define INCLUDED_FRAMEWORK_INC_HELPER_TAGWINDOWASMODIFIED_HXX
 
-#include <threadhelp/threadhelpbase.hxx>
 #include <macros/xinterface.hxx>
 #include <macros/xtypeprovider.hxx>
 #include <general.h>
@@ -41,19 +40,13 @@ namespace framework{
     @descr          Used e.g. by our MAC port where such state is shown separately on some controls of the
                     title bar.
 
-    @base           ThreadHelpBase
-                        guarantee right initialized lock member during startup of instances of this class.
-
     @base           OWeakObject
                         implements ref counting for this class.
 
     @devstatus      draft
     @threadsafe     yes
 *//*-*************************************************************************************************************/
-class TagWindowAsModified :   // baseclasses (order necessary for right initialization!)
-                              private ThreadHelpBase,
-                              // interfaces
-                              public  ::cppu::WeakImplHelper3<
+class TagWindowAsModified :   public  ::cppu::WeakImplHelper3<
                                           css::lang::XInitialization,
                                           css::frame::XFrameActionListener, // => XEventListener
                                           css::util::XModifyListener >       // => XEventListener

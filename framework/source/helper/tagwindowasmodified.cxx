@@ -19,7 +19,6 @@
 
 #include <helper/tagwindowasmodified.hxx>
 #include <pattern/window.hxx>
-#include <threadhelp/guard.hxx>
 #include <macros/generic.hxx>
 #include <services.h>
 
@@ -43,7 +42,6 @@ namespace framework{
 
 
 TagWindowAsModified::TagWindowAsModified()
-    : ThreadHelpBase          (&Application::GetSolarMutex())
 {
 }
 
@@ -65,11 +63,10 @@ void SAL_CALL TagWindowAsModified::initialize(const css::uno::Sequence< css::uno
     if ( ! xFrame.is ())
         return;
 
-    // SAFE -> ----------------------------------
-    Guard aWriteLock(m_aLock);
-    m_xFrame = xFrame ;
-    aWriteLock.unlock();
-    // <- SAFE ----------------------------------
+    {
+        SolarMutexGuard g;
+        m_xFrame = xFrame ;
+    }
 
     xFrame->addFrameActionListener(this);
     impl_update (xFrame);
@@ -79,20 +76,19 @@ void SAL_CALL TagWindowAsModified::initialize(const css::uno::Sequence< css::uno
 void SAL_CALL TagWindowAsModified::modified(const css::lang::EventObject& aEvent)
     throw(css::uno::RuntimeException, std::exception)
 {
-    // SAFE -> ----------------------------------
-    Guard aReadLock(m_aLock);
-
-    css::uno::Reference< css::util::XModifiable > xModel (m_xModel.get (), css::uno::UNO_QUERY);
-    css::uno::Reference< css::awt::XWindow >      xWindow(m_xWindow.get(), css::uno::UNO_QUERY);
-    if (
-        ( ! xModel.is  ()       ) ||
-        ( ! xWindow.is ()       ) ||
-        (aEvent.Source != xModel)
-       )
-        return;
-
-    aReadLock.unlock();
-    // <- SAFE ----------------------------------
+    css::uno::Reference< css::util::XModifiable > xModel;
+    css::uno::Reference< css::awt::XWindow >      xWindow;
+    {
+        SolarMutexGuard g;
+        xModel.set(m_xModel.get (), css::uno::UNO_QUERY);
+        xWindow.set(m_xWindow.get(), css::uno::UNO_QUERY);
+        if (
+            ( ! xModel.is  ()       ) ||
+            ( ! xWindow.is ()       ) ||
+            (aEvent.Source != xModel)
+        )
+            return;
+    }
 
     ::sal_Bool bModified = xModel->isModified ();
 
@@ -125,18 +121,16 @@ void SAL_CALL TagWindowAsModified::frameAction(const css::frame::FrameActionEven
        )
         return;
 
-    // SAFE -> ----------------------------------
-    Guard aWriteLock(m_aLock);
-
-    css::uno::Reference< css::frame::XFrame > xFrame(m_xFrame.get(), css::uno::UNO_QUERY);
-    if (
-        ( ! xFrame.is ()        ) ||
-        (aEvent.Source != xFrame)
-       )
-        return;
-
-    aWriteLock.unlock();
-    // <- SAFE ----------------------------------
+    css::uno::Reference< css::frame::XFrame > xFrame;
+    {
+        SolarMutexGuard g;
+        xFrame.set(m_xFrame.get(), css::uno::UNO_QUERY);
+        if (
+            ( ! xFrame.is ()        ) ||
+            (aEvent.Source != xFrame)
+        )
+            return;
+    }
 
     impl_update (xFrame);
 }
@@ -145,8 +139,7 @@ void SAL_CALL TagWindowAsModified::frameAction(const css::frame::FrameActionEven
 void SAL_CALL TagWindowAsModified::disposing(const css::lang::EventObject& aEvent)
     throw(css::uno::RuntimeException, std::exception)
 {
-    // SAFE -> ----------------------------------
-    Guard aWriteLock(m_aLock);
+    SolarMutexGuard g;
 
     css::uno::Reference< css::frame::XFrame > xFrame(m_xFrame.get(), css::uno::UNO_QUERY);
     if (
@@ -167,9 +160,6 @@ void SAL_CALL TagWindowAsModified::disposing(const css::lang::EventObject& aEven
         m_xModel = css::uno::Reference< css::frame::XModel >();
         return;
     }
-
-    aWriteLock.unlock();
-    // <- SAFE ----------------------------------
 }
 
 
@@ -190,14 +180,13 @@ void TagWindowAsModified::impl_update (const css::uno::Reference< css::frame::XF
        )
         return;
 
-    // SAFE -> ----------------------------------
-    Guard aWriteLock(m_aLock);
-    // Note: frame was set as member outside ! we have to refresh connections
-    // regarding window and model only here.
-    m_xWindow = xWindow;
-    m_xModel  = xModel ;
-    aWriteLock.unlock();
-    // <- SAFE ----------------------------------
+    {
+        SolarMutexGuard g;
+        // Note: frame was set as member outside ! we have to refresh connections
+        // regarding window and model only here.
+        m_xWindow = xWindow;
+        m_xModel  = xModel ;
+    }
 
     css::uno::Reference< css::util::XModifyBroadcaster > xModifiable(xModel, css::uno::UNO_QUERY);
     if (xModifiable.is ())
