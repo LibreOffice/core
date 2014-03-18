@@ -20,7 +20,6 @@
 #include <ucbhelper/contentidentifier.hxx>
 #include "webdavprovider.hxx"
 #include "webdavcontent.hxx"
-#include "webdavuseragent.hxx"
 
 #include <osl/mutex.hxx>
 #include <rtl/ustrbuf.hxx>
@@ -30,30 +29,6 @@
 
 using namespace com::sun::star;
 using namespace http_dav_ucp;
-
-
-OUString &WebDAVUserAgent::operator()() const
-{
-    OUStringBuffer aBuffer;
-    aBuffer.append( "$ooName/$ooSetupVersion" );
-#if OSL_DEBUG_LEVEL > 0
-#ifdef APR_VERSION
-    aBuffer.append( " apr/" APR_VERSION );
-#endif
-
-#ifdef APR_UTIL_VERSION
-    aBuffer.append( " apr-util/" APR_UTIL_VERSION );
-#endif
-
-#ifdef SERF_VERSION
-    aBuffer.append( " serf/" SERF_VERSION );
-#endif
-#endif
-    static OUString aUserAgent( aBuffer.makeStringAndClear() );
-    return aUserAgent;
-}
-
-
 
 
 // ContentProvider Implementation.
@@ -67,50 +42,6 @@ ContentProvider::ContentProvider(
   m_xDAVSessionFactory( new DAVSessionFactory() ),
   m_pProps( 0 )
 {
-    static bool bInit = false;
-    if ( bInit )
-        return;
-    bInit = true;
-    try
-    {
-        uno::Reference< lang::XMultiServiceFactory > xConfigProvider(
-            rContext->getServiceManager()->createInstanceWithContext(
-                OUString("com.sun.star.configuration.ConfigurationProvider"), rContext),
-            uno::UNO_QUERY_THROW );
-
-        beans::NamedValue aNodePath;
-        aNodePath.Name = "nodepath";
-        aNodePath.Value <<= OUString( "/org.openoffice.Setup/Product");
-
-        uno::Sequence< uno::Any > aArgs( 1 );
-        aArgs[0] <<= aNodePath;
-
-        uno::Reference< container::XNameAccess > xConfigAccess(
-            xConfigProvider->createInstanceWithArguments(
-                OUString("com.sun.star.configuration.ConfigurationAccess"), aArgs),
-            uno::UNO_QUERY_THROW );
-
-        OUString aVal;
-        xConfigAccess->getByName(OUString("ooName")) >>= aVal;
-
-        OUString &aUserAgent = WebDAVUserAgent::get();
-        sal_Int32 nIndex = aUserAgent.indexOf( "$ooName" );
-        if ( !aVal.getLength() || nIndex == -1 )
-            return;
-        aUserAgent = aUserAgent.replaceAt( nIndex, RTL_CONSTASCII_LENGTH( "$ooName" ), aVal );
-
-        xConfigAccess->getByName(OUString("ooSetupVersion")) >>= aVal;
-        nIndex = aUserAgent.indexOf( "$ooSetupVersion" );
-        if ( !aVal.getLength() || nIndex == -1 )
-            return;
-        aUserAgent = aUserAgent.replaceAt( nIndex, RTL_CONSTASCII_LENGTH( "$ooSetupVersion" ), aVal );
-
-    }
-    catch ( const uno::Exception &e )
-    {
-        SAL_INFO("ucb.ucp.webdav",  "ContentProvider -caught exception! : " << e.Message);
-        (void) e;
-    }
 }
 
 

@@ -18,7 +18,6 @@
  */
 
 #include "SerfRequestProcessorImpl.hxx"
-#include "webdavuseragent.hxx"
 
 namespace
 {
@@ -105,10 +104,8 @@ void SerfRequestProcessorImpl::setRequestHeaders( serf_bucket_t* inoutSerfHeader
 
     if ( !bHasUserAgent )
     {
-        const OUString &rUserAgent = WebDAVUserAgent::get();
         serf_bucket_headers_set( inoutSerfHeaderBucket,
-                                 "User-Agent",
-                                 OUStringToOString( rUserAgent, RTL_TEXTENCODING_UTF8 ).getStr() );
+                                 "User-Agent", "LibreOffice" );
     }
 
     serf_bucket_headers_set( inoutSerfHeaderBucket, "Accept-Encoding", "gzip");
