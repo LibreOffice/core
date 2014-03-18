@@ -28,6 +28,7 @@
 #include <osl/diagnose.h>
 #include <osl/mutex.hxx>
 #include <osl/thread.h>
+#include <cppuhelper/basemutex.hxx>
 #include <cppuhelper/compbase2.hxx>
 #include <cppuhelper/queryinterface.hxx>
 #include <cppuhelper/weak.hxx>
@@ -1573,11 +1574,11 @@ typedef
         css::lang::XServiceInfo, css::beans::XIntrospection>
     Implementation_Base;
 
-class Implementation: private osl::Mutex, public Implementation_Base {
+class Implementation: private cppu::BaseMutex, public Implementation_Base {
 public:
     explicit Implementation(
         css::uno::Reference<css::uno::XComponentContext> const & context):
-        Implementation_Base(*static_cast<Mutex *>(this)),
+        Implementation_Base(m_aMutex),
         reflection_(css::reflection::theCoreReflection::get(context))
     {}
 
@@ -1618,7 +1619,7 @@ css::uno::Reference<css::beans::XIntrospectionAccess> Implementation::inspect(
     css::uno::Any const & aObject)
     throw (css::uno::RuntimeException, std::exception)
 {
-    osl::MutexGuard g(this);
+    osl::MutexGuard g(m_aMutex);
     if (rBHelper.bDisposed) {
         throw css::lang::DisposedException(
             getImplementationName(), static_cast<OWeakObject *>(this));
