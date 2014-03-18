@@ -18,7 +18,6 @@
  */
 
 #include <jobs/jobdata.hxx>
-#include <threadhelp/guard.hxx>
 #include <classes/converter.hxx>
 #include <general.h>
 #include <services.h>
@@ -45,8 +44,7 @@ namespace framework{
                     reference to the uno service manager
 */
 JobData::JobData( const css::uno::Reference< css::uno::XComponentContext >& rxContext )
-    : ThreadHelpBase(&Application::GetSolarMutex())
-    , m_xContext    (rxContext                    )
+    : m_xContext    (rxContext                    )
 {
     // share code for member initialization with defaults!
     impl_reset();
@@ -62,7 +60,6 @@ JobData::JobData( const css::uno::Reference< css::uno::XComponentContext >& rxCo
                 the original instance, from which we must copy all data
 */
 JobData::JobData( const JobData& rCopy )
-    : ThreadHelpBase(&Application::GetSolarMutex())
 {
     // use the copy operator to share the same code
     *this = rCopy;
@@ -79,8 +76,7 @@ JobData::JobData( const JobData& rCopy )
 */
 void JobData::operator=( const JobData& rCopy )
 {
-    /* SAFE { */
-    Guard aWriteLock(m_aLock);
+    SolarMutexGuard g;
     // Please don't copy the uno service manager reference.
     // That can change the uno context, which isn't a good idea!
     m_eMode                = rCopy.m_eMode               ;
@@ -91,8 +87,6 @@ void JobData::operator=( const JobData& rCopy )
     m_sEvent               = rCopy.m_sEvent              ;
     m_lArguments           = rCopy.m_lArguments          ;
     m_aLastExecutionResult = rCopy.m_aLastExecutionResult;
-    aWriteLock.unlock();
-    /* } SAFE */
 }
 
 
@@ -118,8 +112,7 @@ JobData::~JobData()
 */
 void JobData::setAlias( const OUString& sAlias )
 {
-    /* SAFE { */
-    Guard aWriteLock(m_aLock);
+    SolarMutexGuard g;
     // delete all old information! Otherwhise we mix it with the new one ...
     impl_reset();
 
@@ -173,8 +166,6 @@ void JobData::setAlias( const OUString& sAlias )
     }
 
     aConfig.close();
-    aWriteLock.unlock();
-    /* } SAFE */
 }
 
 
@@ -188,17 +179,12 @@ void JobData::setAlias( const OUString& sAlias )
 */
 void JobData::setService( const OUString& sService )
 {
-    /* SAFE { */
-    Guard aWriteLock(m_aLock);
-
+    SolarMutexGuard g;
     // delete all old information! Otherwhise we mix it with the new one ...
     impl_reset();
     // take over the new information
     m_sService = sService;
     m_eMode    = E_SERVICE;
-
-    aWriteLock.unlock();
-    /* } SAFE */
 }
 
 
@@ -226,15 +212,10 @@ void JobData::setEvent( const OUString& sEvent ,
     // share code to read all job properties!
     setAlias(sAlias);
 
-    /* SAFE { */
-    Guard aWriteLock(m_aLock);
-
+    SolarMutexGuard g;
     // take over the new information - which differ against set on of method setAlias()!
     m_sEvent = sEvent;
     m_eMode  = E_EVENT;
-
-    aWriteLock.unlock();
-    /* } SAFE */
 }
 
 
@@ -251,8 +232,7 @@ void JobData::setEvent( const OUString& sEvent ,
  */
 void JobData::setJobConfig( const css::uno::Sequence< css::beans::NamedValue >& lArguments )
 {
-    /* SAFE { */
-    Guard aWriteLock(m_aLock);
+    SolarMutexGuard g;
 
     // update member
     m_lArguments = lArguments;
@@ -288,9 +268,6 @@ void JobData::setJobConfig( const css::uno::Sequence< css::beans::NamedValue >& 
         }
         aConfig.close();
     }
-
-    aWriteLock.unlock();
-    /* } SAFE */
 }
 
 
@@ -308,8 +285,7 @@ void JobData::setJobConfig( const css::uno::Sequence< css::beans::NamedValue >& 
  */
 void JobData::setResult( const JobResult& aResult )
 {
-    /* SAFE { */
-    Guard aWriteLock(m_aLock);
+    SolarMutexGuard g;
 
     // overwrite the last saved result
     m_aLastExecutionResult = aResult;
@@ -317,9 +293,6 @@ void JobData::setResult( const JobResult& aResult )
     // Don't use his information to update
     // e.g. the arguments of this job. It must be done
     // from outside! Here we save this information only.
-
-    aWriteLock.unlock();
-    /* } SAFE */
 }
 
 
@@ -331,11 +304,8 @@ void JobData::setResult( const JobResult& aResult )
  */
 void JobData::setEnvironment( EEnvironment eEnvironment )
 {
-    /* SAFE { */
-    Guard aWriteLock(m_aLock);
+    SolarMutexGuard g;
     m_eEnvironment = eEnvironment;
-    aWriteLock.unlock();
-    /* } SAFE */
 }
 
 
@@ -346,20 +316,16 @@ void JobData::setEnvironment( EEnvironment eEnvironment )
  */
 JobData::EMode JobData::getMode() const
 {
-    /* SAFE { */
-    Guard aReadLock(m_aLock);
+    SolarMutexGuard g;
     return m_eMode;
-    /* } SAFE */
 }
 
 
 
 JobData::EEnvironment JobData::getEnvironment() const
 {
-    /* SAFE { */
-    Guard aReadLock(m_aLock);
+    SolarMutexGuard g;
     return m_eEnvironment;
-    /* } SAFE */
 }
 
 
@@ -367,8 +333,7 @@ JobData::EEnvironment JobData::getEnvironment() const
 OUString JobData::getEnvironmentDescriptor() const
 {
     OUString sDescriptor;
-    /* SAFE { */
-    Guard aReadLock(m_aLock);
+    SolarMutexGuard g;
     switch(m_eEnvironment)
     {
         case E_EXECUTION :
@@ -385,7 +350,6 @@ OUString JobData::getEnvironmentDescriptor() const
         default:
             break;
     }
-    /* } SAFE */
     return sDescriptor;
 }
 
@@ -393,38 +357,31 @@ OUString JobData::getEnvironmentDescriptor() const
 
 OUString JobData::getService() const
 {
-    /* SAFE { */
-    Guard aReadLock(m_aLock);
+    SolarMutexGuard g;
     return m_sService;
-    /* } SAFE */
 }
 
 
 
 OUString JobData::getEvent() const
 {
-    /* SAFE { */
-    Guard aReadLock(m_aLock);
+    SolarMutexGuard g;
     return m_sEvent;
-    /* } SAFE */
 }
 
 
 
 css::uno::Sequence< css::beans::NamedValue > JobData::getJobConfig() const
 {
-    /* SAFE { */
-    Guard aReadLock(m_aLock);
+    SolarMutexGuard g;
     return m_lArguments;
-    /* } SAFE */
 }
 
 
 
 css::uno::Sequence< css::beans::NamedValue > JobData::getConfig() const
 {
-    /* SAFE { */
-    Guard aReadLock(m_aLock);
+    SolarMutexGuard g;
     css::uno::Sequence< css::beans::NamedValue > lConfig;
     if (m_eMode==E_ALIAS)
     {
@@ -443,8 +400,6 @@ css::uno::Sequence< css::beans::NamedValue > JobData::getConfig() const
         lConfig[i].Value <<= m_sContext;
         ++i;
     }
-    aReadLock.unlock();
-    /* } SAFE */
     return lConfig;
 }
 
@@ -462,10 +417,8 @@ css::uno::Sequence< css::beans::NamedValue > JobData::getConfig() const
  */
 sal_Bool JobData::hasConfig() const
 {
-    /* SAFE { */
-    Guard aReadLock(m_aLock);
+    SolarMutexGuard g;
     return (m_eMode==E_ALIAS || m_eMode==E_EVENT);
-    /* } SAFE */
 }
 
 
@@ -481,8 +434,7 @@ sal_Bool JobData::hasConfig() const
  */
 void JobData::disableJob()
 {
-    /* SAFE { */
-    Guard aWriteLock(m_aLock);
+    SolarMutexGuard g;
 
     // No configuration - not used from EXECUTOR and not triggered from an event => no chance!
     if (m_eMode!=E_EVENT)
@@ -511,9 +463,6 @@ void JobData::disableJob()
     }
 
     aConfig.close();
-
-    aWriteLock.unlock();
-    /* } SAFE */
 }
 
 
@@ -669,8 +618,7 @@ css::uno::Sequence< OUString > JobData::getEnabledJobsForEvent( const css::uno::
  */
 void JobData::impl_reset()
 {
-    /* SAFE { */
-    Guard aWriteLock(m_aLock);
+    SolarMutexGuard g;
     m_eMode        = E_UNKNOWN_MODE;
     m_eEnvironment = E_UNKNOWN_ENVIRONMENT;
     m_sAlias       = "";
@@ -678,8 +626,6 @@ void JobData::impl_reset()
     m_sContext     = "";
     m_sEvent       = "";
     m_lArguments   = css::uno::Sequence< css::beans::NamedValue >();
-    aWriteLock.unlock();
-    /* } SAFE */
 }
 
 } // namespace framework

@@ -22,7 +22,6 @@
 
 #include <jobs/configaccess.hxx>
 #include <jobs/jobresult.hxx>
-#include <threadhelp/threadhelpbase.hxx>
 #include <stdtypes.h>
 #include <general.h>
 
@@ -45,7 +44,7 @@ namespace framework{
             (or proxy) for all config data of a registered job.
             But it doesn't implement any execute functionality!
  */
-class JobData : private ThreadHelpBase
+class JobData
 {
     public:
 
