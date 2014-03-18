@@ -18,7 +18,6 @@
  */
 
 #include <dispatch/mailtodispatcher.hxx>
-#include <threadhelp/guard.hxx>
 #include <general.h>
 #include <services.h>
 
@@ -58,10 +57,7 @@ DEFINE_INIT_SERVICE(MailToDispatcher,
                     reference to uno servicemanager for creation of new services
 */
 MailToDispatcher::MailToDispatcher( const css::uno::Reference< css::uno::XComponentContext >& rxContext )
-        //  Init baseclasses first
-        : ThreadHelpBase( &Application::GetSolarMutex() )
-        // Init member
-        , m_xContext    ( rxContext                     )
+        : m_xContext    ( rxContext                     )
 {
 }
 
@@ -73,7 +69,6 @@ MailToDispatcher::MailToDispatcher( const css::uno::Reference< css::uno::XCompon
 */
 MailToDispatcher::~MailToDispatcher()
 {
-    m_xContext = NULL;
 }
 
 
@@ -200,13 +195,7 @@ sal_Bool MailToDispatcher::implts_dispatch( const css::util::URL&               
 {
     sal_Bool bSuccess = sal_False;
 
-    css::uno::Reference< css::uno::XComponentContext > xContext;
-    /* SAFE */{
-        Guard aReadLock( m_aLock );
-        xContext = m_xContext;
-    /* SAFE */}
-
-    css::uno::Reference< css::system::XSystemShellExecute > xSystemShellExecute = css::system::SystemShellExecute::create( xContext );
+    css::uno::Reference< css::system::XSystemShellExecute > xSystemShellExecute = css::system::SystemShellExecute::create( m_xContext );
 
     try
     {

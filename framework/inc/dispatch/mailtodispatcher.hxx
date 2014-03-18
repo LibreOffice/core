@@ -24,7 +24,6 @@
 #include <macros/xinterface.hxx>
 #include <macros/xtypeprovider.hxx>
 #include <macros/xserviceinfo.hxx>
-#include <threadhelp/threadhelpbase.hxx>
 #include <general.h>
 #include <stdtypes.h>
 
@@ -46,18 +45,12 @@ namespace framework{
     @descr          It's a special dispatch object which is used registered for "mailto:*" URLs and
                     will be automaticly used from the framework dispatch mechanism if such URL occurred.
 
-    @base           ThreadHelpBase
-                        exports a lock member to guarantee right initialize value of it
     @base           OWeakObject
                         provides XWeak and ref count mechanism
 
     @devstatus      ready to use
 */
-class MailToDispatcher : // baseclasses
-                         // Order is necessary for right initialization!
-                         private ThreadHelpBase                ,
-                         // interfaces
-                         public  ::cppu::WeakImplHelper3<
+class MailToDispatcher : public  ::cppu::WeakImplHelper3<
                                      css::lang::XServiceInfo,
                                      css::frame::XDispatchProvider,
                                      css::frame::XNotifyingDispatch> // => XDispatch
