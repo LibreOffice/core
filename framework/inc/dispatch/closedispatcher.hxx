@@ -20,7 +20,6 @@
 #ifndef INCLUDED_FRAMEWORK_INC_DISPATCH_CLOSEDISPATCHER_HXX
 #define INCLUDED_FRAMEWORK_INC_DISPATCH_CLOSEDISPATCHER_HXX
 
-#include <threadhelp/threadhelpbase.hxx>
 #include <macros/xinterface.hxx>
 #include <macros/xtypeprovider.hxx>
 #include <macros/generic.hxx>
@@ -56,9 +55,7 @@ namespace framework{
                     or some other menu entries. Or we terminate the whole application in case this backing mode should not
                     be used.
  */
-class CloseDispatcher : // baseclasses ... order is necessary for right initialization!
-                        private ThreadHelpBase
-                      , public  ::cppu::WeakImplHelper2<
+class CloseDispatcher : public  ::cppu::WeakImplHelper2<
                                     css::frame::XNotifyingDispatch,             // => XDispatch
                                     css::frame::XDispatchInformationProvider >
 {
@@ -111,6 +108,7 @@ class CloseDispatcher : // baseclasses ... order is necessary for right initiali
 
 
         /** @short  list of registered status listener */
+        osl::Mutex m_mutex;
         ListenerHash m_lStatusListener;
 
 

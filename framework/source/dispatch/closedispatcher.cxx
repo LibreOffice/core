@@ -19,7 +19,6 @@
 
 #include <dispatch/closedispatcher.hxx>
 #include <pattern/frame.hxx>
-#include <threadhelp/guard.hxx>
 #include <framework/framelistanalyzer.hxx>
 #include <services.h>
 #include <general.h>
@@ -60,11 +59,10 @@ const char URL_CLOSEFRAME[] = ".uno:CloseFrame";
 CloseDispatcher::CloseDispatcher(const css::uno::Reference< css::uno::XComponentContext >& rxContext ,
                                  const css::uno::Reference< css::frame::XFrame >&          xFrame ,
                                  const OUString&                                           sTarget)
-    : ThreadHelpBase     (&Application::GetSolarMutex()                   )
-    , m_xContext         (rxContext                                       )
+    : m_xContext         (rxContext                                       )
     , m_aAsyncCallback   (LINK( this, CloseDispatcher, impl_asyncCallback))
     , m_eOperation(E_CLOSE_DOC)
-    , m_lStatusListener  (m_aLock.getShareableOslMutex()                  )
+    , m_lStatusListener(m_mutex)
     , m_pSysWindow(NULL)
 {
     uno::Reference<frame::XFrame> xTarget = static_impl_searchRightTargetFrame(xFrame, sTarget);
@@ -149,7 +147,7 @@ void SAL_CALL CloseDispatcher::dispatchWithNotification(const css::util::URL&   
     throw(css::uno::RuntimeException, std::exception)
 {
     // SAFE -> ----------------------------------
-    Guard aWriteLock(m_aLock);
+    SolarMutexClearableGuard aWriteLock;
 
     // This reference indicates, that we was already called before and
     // our asynchronous process was not finished yet.
@@ -159,7 +157,7 @@ void SAL_CALL CloseDispatcher::dispatchWithNotification(const css::util::URL&   
     // non of these jobs was successfully.
     if (m_xSelfHold.is())
     {
-        aWriteLock.unlock();
+        aWriteLock.clear();
         // <- SAFE ------------------------------
 
         implts_notifyResultListener(
@@ -181,7 +179,7 @@ void SAL_CALL CloseDispatcher::dispatchWithNotification(const css::util::URL&   
         m_eOperation = E_CLOSE_FRAME;
     else
     {
-        aWriteLock.unlock();
+        aWriteLock.clear();
         // <- SAFE ------------------------------
 
         implts_notifyResultListener(
@@ -211,7 +209,7 @@ void SAL_CALL CloseDispatcher::dispatchWithNotification(const css::util::URL&   
     m_xResultListener = xListener;
     m_xSelfHold       = css::uno::Reference< css::uno::XInterface >(static_cast< ::cppu::OWeakObject* >(this), css::uno::UNO_QUERY);
 
-    aWriteLock.unlock();
+    aWriteLock.clear();
     // <- SAFE ----------------------------------
 
     sal_Bool bIsSynchron = sal_False;
@@ -258,21 +256,23 @@ IMPL_LINK_NOARG(CloseDispatcher, impl_asyncCallback)
     sal_Bool bAllowSuspend        = sal_True;
     sal_Bool bControllerSuspended = sal_False;
 
-    // SAFE -> ----------------------------------
-    Guard aReadLock(m_aLock);
+    sal_Bool bCloseAllViewsToo;
+    EOperation                                                  eOperation;
+    css::uno::Reference< css::uno::XComponentContext >          xContext;
+    css::uno::Reference< css::frame::XFrame >                   xCloseFrame;
+    css::uno::Reference< css::frame::XDispatchResultListener >  xListener;
+    {
+        SolarMutexGuard g;
 
-    // Closing of all views, related to the same document, is allowed
-    // only if the dispatched URL was ".uno:CloseDoc"!
-    sal_Bool bCloseAllViewsToo = (m_eOperation == E_CLOSE_DOC);
+        // Closing of all views, related to the same document, is allowed
+        // only if the dispatched URL was ".uno:CloseDoc"!
+        bCloseAllViewsToo = (m_eOperation == E_CLOSE_DOC);
 
-    // BTW: Make some copies, which are needed later ...
-    EOperation                                                  eOperation  = m_eOperation;
-    css::uno::Reference< css::uno::XComponentContext >          xContext    = m_xContext;
-    css::uno::Reference< css::frame::XFrame >                   xCloseFrame (m_xCloseFrame.get(), css::uno::UNO_QUERY);
-    css::uno::Reference< css::frame::XDispatchResultListener >  xListener   = m_xResultListener;
-
-    aReadLock.unlock();
-    // <- SAFE ----------------------------------
+        eOperation  = m_eOperation;
+        xContext    = m_xContext;
+        xCloseFrame.set(m_xCloseFrame.get(), css::uno::UNO_QUERY);
+        xListener   = m_xResultListener;
+    }
 
     // frame already dead ?!
     // Nothing to do !
@@ -409,9 +409,7 @@ IMPL_LINK_NOARG(CloseDispatcher, impl_asyncCallback)
         nState = css::frame::DispatchResultState::SUCCESS;
     implts_notifyResultListener(xListener, nState, css::uno::Any());
 
-    // SAFE -> ----------------------------------
-    Guard aWriteLock(m_aLock);
-
+    SolarMutexGuard g;
     // This method was called asynchronous from our main thread by using a pointer.
     // We reached this method only, by using a reference to ourself :-)
     // Further this member is used to detect still running and not yet finished
@@ -420,10 +418,6 @@ IMPL_LINK_NOARG(CloseDispatcher, impl_asyncCallback)
     css::uno::Reference< css::uno::XInterface > xTempHold = m_xSelfHold;
     m_xSelfHold.clear();
     m_xResultListener.clear();
-
-    aWriteLock.unlock();
-    // <- SAFE ----------------------------------
-
     }
     catch(const css::lang::DisposedException&)
     {
@@ -448,11 +442,11 @@ sal_Bool CloseDispatcher::implts_prepareFrameForClosing(const css::uno::Referenc
     // will show the "save/discard/cancel" dialog for the last view only!
     if (bCloseAllOtherViewsToo)
     {
-        // SAFE -> ----------------------------------
-        Guard aReadLock(m_aLock);
-        css::uno::Reference< css::uno::XComponentContext > xContext  = m_xContext;
-        aReadLock.unlock();
-        // <- SAFE ----------------------------------
+        css::uno::Reference< css::uno::XComponentContext > xContext;
+        {
+            SolarMutexGuard g;
+            xContext = m_xContext;
+        }
 
         css::uno::Reference< css::frame::XFramesSupplier > xDesktop( css::frame::Desktop::create( xContext ), css::uno::UNO_QUERY_THROW);
         FrameListAnalyzer aCheck(xDesktop, xFrame, FrameListAnalyzer::E_ALL);
@@ -488,11 +482,11 @@ sal_Bool CloseDispatcher::implts_prepareFrameForClosing(const css::uno::Referenc
 
 sal_Bool CloseDispatcher::implts_closeFrame()
 {
-    // SAFE -> ----------------------------------
-    Guard aReadLock(m_aLock);
-    css::uno::Reference< css::frame::XFrame > xFrame (m_xCloseFrame.get(), css::uno::UNO_QUERY);
-    aReadLock.unlock();
-    // <- SAFE ----------------------------------
+    css::uno::Reference< css::frame::XFrame > xFrame;
+    {
+        SolarMutexGuard g;
+        xFrame.set(m_xCloseFrame.get(), css::uno::UNO_QUERY);
+    }
 
     // frame already dead ? => so it's closed ... it's closed ...
     if ( ! xFrame.is() )
@@ -504,11 +498,10 @@ sal_Bool CloseDispatcher::implts_closeFrame()
     if (!fpf::closeIt(xFrame, sal_False))
         return sal_False;
 
-    // SAFE -> ----------------------------------
-    Guard aWriteLock(m_aLock);
-    m_xCloseFrame = css::uno::WeakReference< css::frame::XFrame >();
-    aWriteLock.unlock();
-    // <- SAFE ----------------------------------
+    {
+        SolarMutexGuard g;
+        m_xCloseFrame = css::uno::WeakReference< css::frame::XFrame >();
+    }
 
     return sal_True;
 }
@@ -516,12 +509,13 @@ sal_Bool CloseDispatcher::implts_closeFrame()
 
 sal_Bool CloseDispatcher::implts_establishBackingMode()
 {
-    // SAFE -> ----------------------------------
-    Guard aReadLock(m_aLock);
-    css::uno::Reference< css::uno::XComponentContext > xContext  = m_xContext;
-    css::uno::Reference< css::frame::XFrame >          xFrame (m_xCloseFrame.get(), css::uno::UNO_QUERY);
-    aReadLock.unlock();
-    // <- SAFE ----------------------------------
+    css::uno::Reference< css::uno::XComponentContext > xContext;
+    css::uno::Reference< css::frame::XFrame >          xFrame;
+    {
+        SolarMutexGuard g;
+        xContext  = m_xContext;
+        xFrame.set(m_xCloseFrame.get(), css::uno::UNO_QUERY);
+    }
 
     if (!xFrame.is())
         return sal_False;
@@ -547,11 +541,11 @@ sal_Bool CloseDispatcher::implts_establishBackingMode()
 
 sal_Bool CloseDispatcher::implts_terminateApplication()
 {
-    // SAFE -> ----------------------------------
-    Guard aReadLock(m_aLock);
-    css::uno::Reference< css::uno::XComponentContext > xContext = m_xContext;
-    aReadLock.unlock();
-    // <- SAFE ----------------------------------
+    css::uno::Reference< css::uno::XComponentContext > xContext;
+    {
+        SolarMutexGuard g;
+        xContext = m_xContext;
+    }
 
     css::uno::Reference< css::frame::XDesktop2 > xDesktop = css::frame::Desktop::create( xContext );
 
