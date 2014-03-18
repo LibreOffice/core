@@ -172,7 +172,7 @@ void SvpGlyphPeer::RemovingFont( ServerFont& )
 
 void SvpGlyphPeer::RemovingGlyph( ServerFont&, GlyphData& rGlyphData, int /*nGlyphIndex*/ )
 {
-    if( rGlyphData.ExtDataRef().mpData != Format::NONE )
+    if( rGlyphData.ExtDataRef().mpData != 0 )
     {
         // release the glyph related resources
         DBG_ASSERT( (rGlyphData.ExtDataRef().meInfo <= Format::MAX), "SVP::RG() invalid alpha format" );
