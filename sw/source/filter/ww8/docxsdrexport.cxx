@@ -572,7 +572,7 @@ void DocxSdrExport::writeDMLDrawing(const SdrObject* pSdrObject, const SwFrmFmt*
                  * was originally a Locked Canvas and is now inside a Text Frame.
                  */
 
-                bLockedCanvas = getIsInDMLTextFrame();
+                bLockedCanvas = m_pImpl->m_bIsInDMLTextFrame;
                 break;
             }
         }
@@ -1027,7 +1027,7 @@ void DocxSdrExport::writeDiagram(const SdrObject* sdrObject, const SwFrmFmt& rFr
 
 void DocxSdrExport::writeDMLTextFrame(sw::Frame* pParentFrame, int nAnchorId)
 {
-    setIsInDMLTextFrame(true);
+    m_pImpl->m_bIsInDMLTextFrame = true;
     sax_fastparser::FSHelperPtr pFS = m_pImpl->m_pSerializer;
     const SwFrmFmt& rFrmFmt = pParentFrame->GetFrmFmt();
     const SwNodeIndex* pNodeIndex = rFrmFmt.GetCntnt().GetCntntIdx();
@@ -1189,7 +1189,7 @@ void DocxSdrExport::writeDMLTextFrame(sw::Frame* pParentFrame, int nAnchorId)
     }
 
     endDMLAnchorInline(&rFrmFmt);
-    setIsInDMLTextFrame(false);
+    m_pImpl->m_bIsInDMLTextFrame = false;
 }
 
 void DocxSdrExport::writeVMLTextFrame(sw::Frame* pParentFrame)
@@ -1313,16 +1313,6 @@ bool DocxSdrExport::checkFrameBtlr(SwNode* pStartNode, sax_fastparser::FastAttri
         }
     }
     return false;
-}
-
-bool DocxSdrExport::getIsInDMLTextFrame()
-{
-    return m_pImpl->m_bIsInDMLTextFrame;
-}
-
-void DocxSdrExport::setIsInDMLTextFrame(bool bIsInDMLTextFrame)
-{
-    m_pImpl->m_bIsInDMLTextFrame = bIsInDMLTextFrame;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
