@@ -53,50 +53,45 @@ static void lcl_Move(Control* pCtrl, long nYOffset)
 }
 
 SwMailMergeAddressBlockPage::SwMailMergeAddressBlockPage( SwMailMergeWizard* _pParent) :
-    svt::OWizardPage(_pParent, SW_RES(DLG_MM_ADDRESSBLOCK_PAGE)),
-    m_aHeaderFI(        this, SW_RES(  FI_HEADER           ) ),
-    m_aFirstFI(         this, SW_RES( FI_FIRST ) ),
-    m_aAddressListFI(   this, SW_RES( FI_ADDRESSLIST ) ),
-    m_aAddressListPB(   this, SW_RES( PB_ADDRESSLIST ) ),
-    m_aCurrentAddressFI( this, SW_RES( FI_CURRENTADDRESS ) ),
-    m_aFirstFL(         this, SW_RES( FL_FIRST ) ),
-    m_aSecondFI(        this, SW_RES( FI_SECOND )),
-    m_aSettingsFI(      this, SW_RES( FI_SECOND    ) ),
-    m_aAddressCB(       this, SW_RES( CB_ADDRESS   ) ),
-    m_aSettingsWIN(     this, SW_RES( WIN_SETTINGS   ) ),
-    m_aSettingsPB(      this, SW_RES( PB_SETTINGS    ) ),
-    m_aHideEmptyParagraphsCB( this, SW_RES( CB_HIDE_EMPTY_PARA ) ),
-    m_aSecondFL(        this, SW_RES( FL_SECOND )),
-    m_aThirdFI(         this, SW_RES( FI_THIRD ) ),
-    m_aMatchFieldsFI(   this, SW_RES( FI_MATCH_FIELDS ) ),
-    m_aAssignPB(        this, SW_RES( PB_ASSIGN      ) ),
-    m_aThirdFL(         this, SW_RES( FL_THIRD ) ),
-    m_aFourthFI(        this, SW_RES( FI_FOURTH ) ),
-    m_aPreviewFI(       this, SW_RES( FI_PREVIEW     ) ),
-    m_aPreviewWIN(      this, SW_RES( WIN_PREVIEW    ) ),
-    m_aDocumentIndexFI( this, SW_RES( FI_DOCINDEX    ) ),
-    m_aPrevSetIB(       this, SW_RES( IB_PREVSET     ) ),
-    m_aNextSetIB(       this, SW_RES( IB_NEXTSET     ) ),
-    m_sDocument(        SW_RES(       STR_DOCUMENT  ) ),
-    m_sChangeAddress(   SW_RES(      STR_CHANGEADDRESS )),
-    m_pWizard(_pParent)
+    svt::OWizardPage(_pParent, "MMAddressBlockPage",
+        "modules/swriter/ui/mmaddressblockpage.ui")
+    , m_pWizard(_pParent)
 {
-    FreeResource();
-    m_sCurrentAddress = m_aCurrentAddressFI.GetText();
-    m_aAddressListPB.SetClickHdl(LINK(this, SwMailMergeAddressBlockPage, AddressListHdl_Impl));
-    m_aSettingsPB.SetClickHdl(LINK(this, SwMailMergeAddressBlockPage, SettingsHdl_Impl));
-    m_aAssignPB.SetClickHdl(LINK(this, SwMailMergeAddressBlockPage, AssignHdl_Impl ));
-    m_aAddressCB.SetClickHdl(LINK(this, SwMailMergeAddressBlockPage, AddressBlockHdl_Impl));
-    m_aSettingsWIN.SetSelectHdl(LINK(this, SwMailMergeAddressBlockPage, AddressBlockSelectHdl_Impl));
-    m_aHideEmptyParagraphsCB.SetClickHdl(LINK(this, SwMailMergeAddressBlockPage, HideParagraphsHdl_Impl));
+    get(m_pAddressListPB, "addresslist");
+    get(m_pCurrentAddressFI, "currentaddress");
+    get(m_pStep2, "step2");
+    get(m_pStep3, "step3");
+    get(m_pStep4, "step4");
+    get(m_pSettingsFI, "settingsft");
+    get(m_pAddressCB, "address");
+    get(m_pSettingsWIN, "settingspreview");
+    Size aSize(LogicToPixel(Size(164 , 45), MapMode(MAP_APPFONT)));
+    m_pSettingsWIN->set_width_request(aSize.Width());
+    m_pSettingsWIN->set_height_request(aSize.Height());
+    get(m_pSettingsPB, "settings");
+    get(m_pHideEmptyParagraphsCB, "hideempty");
+    get(m_pAssignPB, "assign");
+    get(m_pPreviewWIN, "addresspreview");
+    aSize = LogicToPixel(Size(176, 46), MapMode(MAP_APPFONT));
+    m_pPreviewWIN->set_width_request(aSize.Width());
+    m_pPreviewWIN->set_height_request(aSize.Height());
+    get(m_pDocumentIndexFI, "documentindex");
+    get(m_pPrevSetIB, "prev");
+    get(m_pNextSetIB, "next");
+    m_sDocument = m_pDocumentIndexFI->GetText();
+    m_sChangeAddress = get<Button>("differentlist")->GetText();
+
+    m_sCurrentAddress = m_pCurrentAddressFI->GetText();
+    m_pAddressListPB->SetClickHdl(LINK(this, SwMailMergeAddressBlockPage, AddressListHdl_Impl));
+    m_pSettingsPB->SetClickHdl(LINK(this, SwMailMergeAddressBlockPage, SettingsHdl_Impl));
+    m_pAssignPB->SetClickHdl(LINK(this, SwMailMergeAddressBlockPage, AssignHdl_Impl ));
+    m_pAddressCB->SetClickHdl(LINK(this, SwMailMergeAddressBlockPage, AddressBlockHdl_Impl));
+    m_pSettingsWIN->SetSelectHdl(LINK(this, SwMailMergeAddressBlockPage, AddressBlockSelectHdl_Impl));
+    m_pHideEmptyParagraphsCB->SetClickHdl(LINK(this, SwMailMergeAddressBlockPage, HideParagraphsHdl_Impl));
 
     Link aLink = LINK(this, SwMailMergeAddressBlockPage, InsertDataHdl_Impl);
-    m_aPrevSetIB.SetClickHdl(aLink);
-    m_aNextSetIB.SetClickHdl(aLink);
-}
-
-SwMailMergeAddressBlockPage::~SwMailMergeAddressBlockPage()
-{
+    m_pPrevSetIB->SetClickHdl(aLink);
+    m_pNextSetIB->SetClickHdl(aLink);
 }
 
 bool SwMailMergeAddressBlockPage::canAdvance() const
@@ -110,39 +105,24 @@ void SwMailMergeAddressBlockPage::ActivatePage()
     bool bIsLetter = rConfigItem.IsOutputToLetter();
 
     //no address block is created for e-Mail
-    m_aSettingsFI.Show( bIsLetter );
-    m_aAddressCB.Show( bIsLetter );
-    m_aSettingsWIN.Show( bIsLetter );
-    m_aSettingsPB.Show( bIsLetter );
-    m_aPreviewFI.Show( bIsLetter );
-    m_aPreviewWIN.Show( bIsLetter );
-    m_aAssignPB.Show( bIsLetter );
-    m_aDocumentIndexFI.Show( bIsLetter );
-    m_aPrevSetIB.Show( bIsLetter );
-    m_aNextSetIB.Show( bIsLetter );
-    m_aHideEmptyParagraphsCB.Show( bIsLetter );
-    m_aSecondFL.Show( bIsLetter );
-    m_aSecondFI.Show( bIsLetter );
-    m_aSettingsFI.Show( bIsLetter );
-    m_aMatchFieldsFI.Show( bIsLetter );
-    m_aThirdFI.Show( bIsLetter );
-    m_aThirdFL.Show( bIsLetter );
-    m_aFourthFI.Show( bIsLetter );
+    m_pStep2->Show(bIsLetter);
+    m_pStep3->Show(bIsLetter);
+    m_pStep4->Show(bIsLetter);
 
-    if(bIsLetter)
+    if (bIsLetter)
     {
-        m_aHideEmptyParagraphsCB.Check( rConfigItem.IsHideEmptyParagraphs() );
-        m_aDocumentIndexFI.SetText(m_sDocument.replaceFirst("%1", OUString::number(1)));
+        m_pHideEmptyParagraphsCB->Check( rConfigItem.IsHideEmptyParagraphs() );
+        m_pDocumentIndexFI->SetText(m_sDocument.replaceFirst("%1", OUString::number(1)));
 
-        m_aSettingsWIN.Clear();
+        m_pSettingsWIN->Clear();
         const uno::Sequence< OUString> aBlocks =
                     m_pWizard->GetConfigItem().GetAddressBlocks();
         for(sal_Int32 nAddress = 0; nAddress < aBlocks.getLength(); ++nAddress)
-            m_aSettingsWIN.AddAddress(aBlocks[nAddress]);
-        m_aSettingsWIN.SelectAddress((sal_uInt16)rConfigItem.GetCurrentAddressBlockIndex());
-        m_aAddressCB.Check(rConfigItem.IsAddressBlock());
-        AddressBlockHdl_Impl(&m_aAddressCB);
-        m_aSettingsWIN.SetLayout(1, 2);
+            m_pSettingsWIN->AddAddress(aBlocks[nAddress]);
+        m_pSettingsWIN->SelectAddress((sal_uInt16)rConfigItem.GetCurrentAddressBlockIndex());
+        m_pAddressCB->Check(rConfigItem.IsAddressBlock());
+        AddressBlockHdl_Impl(m_pAddressCB);
+        m_pSettingsWIN->SetLayout(1, 2);
         InsertDataHdl_Impl(0);
     }
 }
@@ -187,7 +167,7 @@ IMPL_LINK(SwMailMergeAddressBlockPage, SettingsHdl_Impl, PushButton*, pButton)
     SwSelectAddressBlockDialog* pDlg =
                 new SwSelectAddressBlockDialog(pButton, m_pWizard->GetConfigItem());
     SwMailMergeConfigItem& rConfig = m_pWizard->GetConfigItem();
-    pDlg->SetAddressBlocks(rConfig.GetAddressBlocks(), m_aSettingsWIN.GetSelectedAddress());
+    pDlg->SetAddressBlocks(rConfig.GetAddressBlocks(), m_pSettingsWIN->GetSelectedAddress());
     pDlg->SetSettings(rConfig.IsIncludeCountry(), rConfig.GetExcludeCountry());
     if(RET_OK == pDlg->Execute())
     {
@@ -195,11 +175,11 @@ IMPL_LINK(SwMailMergeAddressBlockPage, SettingsHdl_Impl, PushButton*, pButton)
         const uno::Sequence< OUString> aBlocks =
                     pDlg->GetAddressBlocks();
         rConfig.SetAddressBlocks(aBlocks);
-        m_aSettingsWIN.Clear();
+        m_pSettingsWIN->Clear();
         for(sal_Int32 nAddress = 0; nAddress < aBlocks.getLength(); ++nAddress)
-            m_aSettingsWIN.AddAddress(aBlocks[nAddress]);
-        m_aSettingsWIN.SelectAddress(0);
-        m_aSettingsWIN.Invalidate();    // #i40408
+            m_pSettingsWIN->AddAddress(aBlocks[nAddress]);
+        m_pSettingsWIN->SelectAddress(0);
+        m_pSettingsWIN->Invalidate();    // #i40408
         rConfig.SetCountrySettings(pDlg->IsIncludeCountry(), pDlg->GetCountry());
         InsertDataHdl_Impl(0);
     }
@@ -212,7 +192,7 @@ IMPL_LINK(SwMailMergeAddressBlockPage, SettingsHdl_Impl, PushButton*, pButton)
 IMPL_LINK(SwMailMergeAddressBlockPage, AssignHdl_Impl, PushButton*, pButton)
 {
     SwMailMergeConfigItem& rConfigItem = m_pWizard->GetConfigItem();
-    sal_uInt16 nSel = m_aSettingsWIN.GetSelectedAddress();
+    sal_uInt16 nSel = m_pSettingsWIN->GetSelectedAddress();
     const uno::Sequence< OUString> aBlocks = rConfigItem.GetAddressBlocks();
     boost::scoped_ptr<SwAssignFieldsDialog> pDlg(
             new SwAssignFieldsDialog(pButton, m_pWizard->GetConfigItem(), aBlocks[nSel], true));
@@ -228,38 +208,32 @@ IMPL_LINK(SwMailMergeAddressBlockPage, AssignHdl_Impl, PushButton*, pButton)
 
 void SwMailMergeAddressBlockPage::EnableAddressBlock(sal_Bool bAll, sal_Bool bSelective)
 {
-    m_aSettingsFI.Enable(bAll);
-    m_aAddressCB.Enable(bAll);
+    m_pSettingsFI->Enable(bAll);
+    m_pAddressCB->Enable(bAll);
     bSelective &= bAll;
-    m_aHideEmptyParagraphsCB.Enable(bSelective);
-    m_aSettingsWIN.Enable(bSelective);
-    m_aSettingsPB.Enable(bSelective);
-    m_aPreviewFI.Enable(bSelective);
-    m_aPreviewWIN.Enable(bSelective);
-    m_aThirdFI.Enable(bSelective);
-    m_aMatchFieldsFI.Enable(bSelective);
-    m_aAssignPB.Enable(bSelective);
-    m_aDocumentIndexFI.Enable(bSelective);
-    m_aPrevSetIB.Enable(bSelective);
-    m_aNextSetIB.Enable(bSelective);
+    m_pHideEmptyParagraphsCB->Enable(bSelective);
+    m_pSettingsWIN->Enable(bSelective);
+    m_pSettingsPB->Enable(bSelective);
+    m_pStep3->Enable(bSelective);
+    m_pStep4->Enable(bSelective);
 }
 
 IMPL_LINK(SwMailMergeAddressBlockPage, AddressBlockHdl_Impl, CheckBox*, pBox)
 {
     EnableAddressBlock(pBox->IsEnabled(), pBox->IsChecked());
     SwMailMergeConfigItem& rConfigItem = m_pWizard->GetConfigItem();
-    rConfigItem.SetAddressBlock(m_aAddressCB.IsChecked());
+    rConfigItem.SetAddressBlock(m_pAddressCB->IsChecked());
     m_pWizard->UpdateRoadmap();
     return 0;
 }
 
 IMPL_LINK_NOARG(SwMailMergeAddressBlockPage, AddressBlockSelectHdl_Impl)
 {
-    sal_uInt16 nSel = m_aSettingsWIN.GetSelectedAddress();
+    sal_uInt16 nSel = m_pSettingsWIN->GetSelectedAddress();
     const uno::Sequence< OUString> aBlocks =
                 m_pWizard->GetConfigItem().GetAddressBlocks();
     OUString sPreview = SwAddressPreview::FillData(aBlocks[nSel], m_pWizard->GetConfigItem());
-    m_aPreviewWIN.SetAddress(sPreview);
+    m_pPreviewWIN->SetAddress(sPreview);
     m_pWizard->GetConfigItem().SetCurrentAddressBlockIndex( nSel );
     GetWizard()->UpdateRoadmap();
     GetWizard()->enableButtons(WZB_NEXT, GetWizard()->isStateEnabled(MM_GREETINGSPAGE));
@@ -284,7 +258,7 @@ IMPL_LINK(SwMailMergeAddressBlockPage, InsertDataHdl_Impl, ImageButton*, pButton
     }
     else
     {
-        bool bNext = pButton == &m_aNextSetIB;
+        bool bNext = pButton == m_pNextSetIB;
         sal_Int32 nPos = rConfig.GetResultSetPosition();
         rConfig.MoveResultSet( bNext ? ++nPos : --nPos);
     }
@@ -299,28 +273,28 @@ IMPL_LINK(SwMailMergeAddressBlockPage, InsertDataHdl_Impl, ImageButton*, pButton
     else
     {
         //if output type is letter
-        if(m_aSettingsWIN.IsVisible())
+        if(m_pSettingsWIN->IsVisible())
         {
             //Fill data into preview
-            sal_uInt16 nSel = m_aSettingsWIN.GetSelectedAddress();
+            sal_uInt16 nSel = m_pSettingsWIN->GetSelectedAddress();
             const uno::Sequence< OUString> aBlocks =
                         m_pWizard->GetConfigItem().GetAddressBlocks();
             OUString sPreview = SwAddressPreview::FillData(aBlocks[nSel], rConfig);
-            m_aPreviewWIN.SetAddress(sPreview);
+            m_pPreviewWIN->SetAddress(sPreview);
         }
     }
-    m_aPrevSetIB.Enable(bEnable);
-    m_aDocumentIndexFI.SetText(m_sDocument.replaceFirst("%1", OUString::number(nPos)));
+    m_pPrevSetIB->Enable(bEnable);
+    m_pDocumentIndexFI->SetText(m_sDocument.replaceFirst("%1", OUString::number(nPos)));
 
     GetWizard()->enableButtons(WZB_NEXT, GetWizard()->isStateEnabled(MM_GREETINGSPAGE));
     sal_Bool bHasResultSet = rConfig.GetResultSet().is();
-    m_aCurrentAddressFI.Show(bHasResultSet);
+    m_pCurrentAddressFI->Show(bHasResultSet);
     if(bHasResultSet)
     {
-        m_aCurrentAddressFI.SetText(m_sCurrentAddress.replaceFirst("%1", rConfig.GetCurrentDBData().sDataSource));
-        m_aAddressListPB.SetText(m_sChangeAddress);
+        m_pCurrentAddressFI->SetText(m_sCurrentAddress.replaceFirst("%1", rConfig.GetCurrentDBData().sDataSource));
+        m_pAddressListPB->SetText(m_sChangeAddress);
     }
-    EnableAddressBlock(bHasResultSet, m_aAddressCB.IsChecked());
+    EnableAddressBlock(bHasResultSet, m_pAddressCB->IsChecked());
     return 0;
 }
 

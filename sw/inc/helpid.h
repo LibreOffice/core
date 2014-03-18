@@ -364,7 +364,6 @@
 #define HID_PRINT_AS_MERGE                                      "SW_HID_PRINT_AS_MERGE"
 #define HID_MODULE_TOOLBOX                                      "SW_HID_MODULE_TOOLBOX"
 
-#define HID_MM_ADDRESSBLOCKPAGE                                 "SW_HID_MM_ADDRESSBLOCKPAGE"
 #define HID_MM_GREETINGSPAGE                                    "SW_HID_MM_GREETINGSPAGE"
 #define HID_MM_PREPAREMERGEPAGE                                 "SW_HID_MM_PREPAREMERGEPAGE"
 #define HID_MM_MERGEPAGE                                        "SW_HID_MM_MERGEPAGE"
