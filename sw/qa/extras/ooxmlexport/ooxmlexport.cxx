@@ -2727,7 +2727,7 @@ DECLARE_OOXMLEXPORT_TEST(test_FieldType, "99_Fields.docx")
     // Checking for three field types (BIBLIOGRAPHY, BIDIOUTLINE, CITATION) in sequence
     assertXPath(pXmlDoc, "/w:document[1]/w:body[1]/w:p[2]/w:r[2]/w:instrText[1]",1);
     assertXPath(pXmlDoc, "/w:document[1]/w:body[1]/w:p[5]/w:r[2]/w:instrText[1]",1);
-    assertXPath(pXmlDoc, "/w:document[1]/w:body[1]/w:p[6]/w:r[2]/w:instrText[1]",1);
+    assertXPath(pXmlDoc, "/w:document[1]/w:body[1]/w:sdt/w:sdtContent/w:p/w:r[2]/w:instrText[1]",1);
 }
 
 DECLARE_OOXMLEXPORT_TEST(testComboBoxControl, "combobox-control.docx")
