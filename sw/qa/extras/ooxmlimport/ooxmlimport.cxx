@@ -1997,6 +1997,13 @@ DECLARE_OOXMLIMPORT_TEST(testLargeTwips, "large-twips.docx" )
     CPPUNIT_ASSERT( width.toInt32() > 0 );
 }
 
+DECLARE_OOXMLIMPORT_TEST(testFdo38414, "fdo38414.docx" )
+{
+    // The cells in the last (4th) column were merged properly and so the result didn't have the same height.
+    OUString height3 = parseDump("/root/page/body/tab/row[1]/cell[3]/infos/bounds", "height" );
+    OUString height4 = parseDump("/root/page/body/tab/row[1]/cell[4]/infos/bounds", "height" );
+    CPPUNIT_ASSERT_EQUAL( height3, height4 );
+}
 #endif
 
 CPPUNIT_PLUGIN_IMPLEMENT();
