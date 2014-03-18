@@ -95,7 +95,6 @@ $(eval $(call gb_SrsTarget_add_files,sw/res,\
     sw/source/ui/dbui/mailmergewizard.src \
     sw/source/ui/dbui/mmaddressblockpage.src \
     sw/source/ui/dbui/mmgreetingspage.src \
-    sw/source/ui/dbui/mmlayoutpage.src \
     sw/source/ui/dbui/mmmergepage.src \
     sw/source/ui/dbui/mmoutputpage.src \
     sw/source/ui/dbui/mmpreparemergepage.src \

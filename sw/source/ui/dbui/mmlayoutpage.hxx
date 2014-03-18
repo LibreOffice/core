@@ -24,6 +24,7 @@
 #include <vcl/button.hxx>
 #include <svtools/stdctrl.hxx>
 #include <vcl/field.hxx>
+#include <vcl/layout.hxx>
 #include <vcl/lstbox.hxx>
 #include <com/sun/star/uno/Reference.h>
 
@@ -37,26 +38,20 @@ namespace com{ namespace sun{ namespace star{ namespace beans{ class XPropertySe
 
 class SwMailMergeLayoutPage : public svt::OWizardPage
 {
-    SwBoldFixedInfo     m_aHeaderFI;
+    VclContainer*       m_pPosition;
 
-    FixedLine           m_aPositionFL;
+    CheckBox*           m_pAlignToBodyCB;
+    FixedText*          m_pLeftFT;
+    MetricField*        m_pLeftMF;
+    MetricField*        m_pTopMF;
 
-    CheckBox            m_aAlignToBodyCB;
-    FixedText           m_aLeftFT;
-    MetricField         m_aLeftMF;
-    FixedText           m_aTopFT;
-    MetricField         m_aTopMF;
+    VclContainer*       m_pGreetingLine;
+    PushButton*         m_pUpPB;
+    PushButton*         m_pDownPB;
 
-    FixedLine           m_aGreetingLineFL;
-    FixedText           m_aUpFT;
-    PushButton          m_aUpPB;
-    FixedText           m_aDownFT;
-    PushButton          m_aDownPB;
+    Window*             m_pExampleContainerWIN;
 
-    Window              m_aExampleContainerWIN;
-
-    FixedText           m_aZoomFT;
-    ListBox             m_aZoomLB;
+    ListBox*            m_pZoomLB;
 
     SwOneExampleFrame*  m_pExampleFrame;
     SwWrtShell*         m_pExampleWrtShell;

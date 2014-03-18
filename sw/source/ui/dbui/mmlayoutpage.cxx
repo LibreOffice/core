@@ -73,29 +73,27 @@ using namespace ::com::sun::star::view;
 #define DEFAULT_ADDRESS_HEIGHT (MM50*7) // 3,5cm
 
 SwMailMergeLayoutPage::SwMailMergeLayoutPage( SwMailMergeWizard* _pParent) :
-    svt::OWizardPage( _pParent, SW_RES(DLG_MM_LAYOUT_PAGE)),
-    m_aHeaderFI( this, SW_RES(         FI_HEADER             )),
-    m_aPositionFL( this, SW_RES(       FL_POSITION           )),
-    m_aAlignToBodyCB( this, SW_RES(      CB_ALIGN              )),
-    m_aLeftFT( this, SW_RES(           FT_LEFT               )),
-    m_aLeftMF( this, SW_RES(           MF_LEFT               )),
-    m_aTopFT( this, SW_RES(            FT_TOP                )),
-    m_aTopMF( this, SW_RES(            MF_TOP                )),
-    m_aGreetingLineFL( this, SW_RES(   FL_GREETINGLINE       )),
-    m_aUpFT( this, SW_RES(             FT_UP                 )),
-    m_aUpPB( this, SW_RES(             MF_UP                 )),
-    m_aDownFT( this, SW_RES(           FT_DOWN               )),
-    m_aDownPB( this, SW_RES(           PB_DOWN               )),
-    m_aExampleContainerWIN( this, SW_RES(  WIN_EXAMPLECONTAINER      )),
-    m_aZoomFT( this, SW_RES(           FT_ZOOM               )),
-    m_aZoomLB( this, SW_RES(           LB_ZOOM               )),
-    m_pExampleFrame(0),
-    m_pExampleWrtShell(0),
-    m_pAddressBlockFormat(0),
-    m_bIsGreetingInserted(false),
-    m_pWizard(_pParent)
+    svt::OWizardPage(_pParent, "MMLayoutPage",
+        "modules/swriter/ui/mmlayoutpage.ui")
+    , m_pExampleFrame(0)
+    , m_pExampleWrtShell(0)
+    , m_pAddressBlockFormat(0)
+    , m_bIsGreetingInserted(false)
+    , m_pWizard(_pParent)
 {
-    FreeResource();
+    get(m_pPosition, "addresspos");
+    get(m_pGreetingLine, "greetingspos");
+    get(m_pAlignToBodyCB, "align");
+    get(m_pLeftFT, "leftft");
+    get(m_pLeftMF, "left");
+    get(m_pTopMF, "top");
+    get(m_pUpPB, "up");
+    get(m_pDownPB, "down");
+    get(m_pExampleContainerWIN, "example");
+    Size aSize(LogicToPixel(Size(124, 159), MAP_APPFONT));
+    m_pExampleContainerWIN->set_width_request(aSize.Width());
+    m_pExampleContainerWIN->set_height_request(aSize.Height());
+    get(m_pZoomLB, "zoom");
 
     const SfxFilter *pSfxFlt = SwIoSystem::GetFilterOfFormat(
             OUString( FILTER_XML ),
@@ -120,37 +118,37 @@ SwMailMergeLayoutPage::SwMailMergeLayoutPage( SwMailMergeWizard* _pParent) :
     xStore->storeToURL( m_sExampleURL, aValues   );
 
     Link aLink(LINK(this, SwMailMergeLayoutPage, PreviewLoadedHdl_Impl));
-    m_pExampleFrame = new SwOneExampleFrame( m_aExampleContainerWIN,
+    m_pExampleFrame = new SwOneExampleFrame( *m_pExampleContainerWIN,
                                     EX_SHOW_DEFAULT_PAGE, &aLink, &m_sExampleURL );
 
-    m_aExampleContainerWIN.Show(false);
+    m_pExampleContainerWIN->Show(false);
 
-    m_aLeftMF.SetValue(m_aLeftMF.Normalize(DEFAULT_LEFT_DISTANCE), FUNIT_TWIP);
-    m_aTopMF.SetValue(m_aTopMF.Normalize(DEFAULT_TOP_DISTANCE), FUNIT_TWIP);
+    m_pLeftMF->SetValue(m_pLeftMF->Normalize(DEFAULT_LEFT_DISTANCE), FUNIT_TWIP);
+    m_pTopMF->SetValue(m_pTopMF->Normalize(DEFAULT_TOP_DISTANCE), FUNIT_TWIP);
 
-    m_aZoomLB.InsertEntry(OUString("50 %"), 1);
-    m_aZoomLB.InsertEntry(OUString("75 %"), 2);
-    m_aZoomLB.InsertEntry(OUString("100 %"), 3);
-    m_aZoomLB.SelectEntryPos(0); //page size
-    m_aZoomLB.SetSelectHdl(LINK(this, SwMailMergeLayoutPage, ZoomHdl_Impl));
+    m_pZoomLB->InsertEntry(OUString("50 %"), 1);
+    m_pZoomLB->InsertEntry(OUString("75 %"), 2);
+    m_pZoomLB->InsertEntry(OUString("100 %"), 3);
+    m_pZoomLB->SelectEntryPos(0); //page size
+    m_pZoomLB->SetSelectHdl(LINK(this, SwMailMergeLayoutPage, ZoomHdl_Impl));
 
     Link aFrameHdl = LINK(this, SwMailMergeLayoutPage, ChangeAddressHdl_Impl);
-    m_aLeftMF.SetUpHdl(aFrameHdl);
-    m_aLeftMF.SetDownHdl(aFrameHdl);
-    m_aLeftMF.SetLoseFocusHdl(aFrameHdl);
-    m_aTopMF.SetUpHdl(aFrameHdl);
-    m_aTopMF.SetDownHdl(aFrameHdl);
-    m_aTopMF.SetLoseFocusHdl(aFrameHdl);
+    m_pLeftMF->SetUpHdl(aFrameHdl);
+    m_pLeftMF->SetDownHdl(aFrameHdl);
+    m_pLeftMF->SetLoseFocusHdl(aFrameHdl);
+    m_pTopMF->SetUpHdl(aFrameHdl);
+    m_pTopMF->SetDownHdl(aFrameHdl);
+    m_pTopMF->SetLoseFocusHdl(aFrameHdl);
 
     FieldUnit eFieldUnit = ::GetDfltMetric(sal_False);
-    ::SetFieldUnit( m_aLeftMF, eFieldUnit );
-    ::SetFieldUnit( m_aTopMF, eFieldUnit );
+    ::SetFieldUnit( *m_pLeftMF, eFieldUnit );
+    ::SetFieldUnit( *m_pTopMF, eFieldUnit );
 
     Link aUpDownHdl = LINK(this, SwMailMergeLayoutPage, GreetingsHdl_Impl );
-    m_aUpPB.SetClickHdl(aUpDownHdl);
-    m_aDownPB.SetClickHdl(aUpDownHdl);
-    m_aAlignToBodyCB.SetClickHdl(LINK(this, SwMailMergeLayoutPage, AlignToTextHdl_Impl));
-    m_aAlignToBodyCB.Check();
+    m_pUpPB->SetClickHdl(aUpDownHdl);
+    m_pDownPB->SetClickHdl(aUpDownHdl);
+    m_pAlignToBodyCB->SetClickHdl(LINK(this, SwMailMergeLayoutPage, AlignToTextHdl_Impl));
+    m_pAlignToBodyCB->Check();
 }
 
 SwMailMergeLayoutPage::~SwMailMergeLayoutPage()
@@ -166,18 +164,10 @@ void SwMailMergeLayoutPage::ActivatePage()
     sal_Bool bGreetingLine = rConfigItem.IsGreetingLine(sal_False) && !rConfigItem.IsGreetingInserted();
     sal_Bool bAddressBlock = rConfigItem.IsAddressBlock() && !rConfigItem.IsAddressInserted();
 
-    m_aPositionFL.Enable(bAddressBlock);
-    m_aLeftFT.Enable(bAddressBlock);
-    m_aTopFT.Enable(bAddressBlock);
-    m_aLeftMF.Enable(bAddressBlock);
-    m_aTopMF.Enable(bAddressBlock);
-    AlignToTextHdl_Impl( &m_aAlignToBodyCB );
+    m_pPosition->Enable(bAddressBlock);
+    AlignToTextHdl_Impl(m_pAlignToBodyCB);
 
-    m_aGreetingLineFL.Enable(bGreetingLine);
-    m_aUpPB.Enable(bGreetingLine);
-    m_aDownPB.Enable(bGreetingLine);
-    m_aUpFT.Enable(bGreetingLine);
-    m_aDownFT.Enable(bGreetingLine);
+    m_pGreetingLine->Enable(bGreetingLine);
 
     //check if greeting and/or address frame have to be inserted/removed
     if(m_pExampleWrtShell) // initially there's nothing to check
@@ -209,12 +199,12 @@ void SwMailMergeLayoutPage::ActivatePage()
             }
             else
             {
-                long nLeft = static_cast< long >(m_aLeftMF.Denormalize(m_aLeftMF.GetValue(FUNIT_TWIP)));
-                long nTop  = static_cast< long >(m_aTopMF.Denormalize(m_aTopMF.GetValue(FUNIT_TWIP)));
+                long nLeft = static_cast< long >(m_pLeftMF->Denormalize(m_pLeftMF->GetValue(FUNIT_TWIP)));
+                long nTop  = static_cast< long >(m_pTopMF->Denormalize(m_pTopMF->GetValue(FUNIT_TWIP)));
                 m_pAddressBlockFormat = InsertAddressFrame(
                         *m_pExampleWrtShell, m_pWizard->GetConfigItem(),
                         Point(nLeft, nTop),
-                        m_aAlignToBodyCB.IsChecked(), true);
+                        m_pAlignToBodyCB->IsChecked(), true);
             }
         }
 
@@ -227,13 +217,13 @@ sal_Bool SwMailMergeLayoutPage::commitPage( ::svt::WizardTypes::CommitPageReason
     SwMailMergeConfigItem& rConfigItem = m_pWizard->GetConfigItem();
     if(::svt::WizardTypes::eTravelForward == _eReason)
     {
-        long nLeft = static_cast< long >(m_aLeftMF.Denormalize(m_aLeftMF.GetValue(FUNIT_TWIP)));
-        long nTop  = static_cast< long >(m_aTopMF.Denormalize(m_aTopMF.GetValue(FUNIT_TWIP)));
+        long nLeft = static_cast< long >(m_pLeftMF->Denormalize(m_pLeftMF->GetValue(FUNIT_TWIP)));
+        long nTop  = static_cast< long >(m_pTopMF->Denormalize(m_pTopMF->GetValue(FUNIT_TWIP)));
         InsertAddressAndGreeting(
                     m_pWizard->GetSwView(),
                     rConfigItem,
                     Point(nLeft, nTop),
-                    m_aAlignToBodyCB.IsChecked());
+                    m_pAlignToBodyCB->IsChecked());
     }
     return sal_True;
 }
@@ -637,7 +627,7 @@ void SwMailMergeLayoutPage::InsertGreeting(SwWrtShell& rShell, SwMailMergeConfig
 
 IMPL_LINK_NOARG(SwMailMergeLayoutPage, PreviewLoadedHdl_Impl)
 {
-    m_aExampleContainerWIN.Show(true);
+    m_pExampleContainerWIN->Show(true);
 
     Reference< XModel > & xModel = m_pExampleFrame->GetModel();
     //now the ViewOptions should be set properly
@@ -657,7 +647,7 @@ IMPL_LINK_NOARG(SwMailMergeLayoutPage, PreviewLoadedHdl_Impl)
         m_pAddressBlockFormat = InsertAddressFrame(
                 *m_pExampleWrtShell, rConfigItem,
                 Point(DEFAULT_LEFT_DISTANCE, DEFAULT_TOP_DISTANCE),
-                m_aAlignToBodyCB.IsChecked(), true);
+                m_pAlignToBodyCB->IsChecked(), true);
     }
     if(rConfigItem.IsGreetingLine(sal_False))
     {
@@ -671,8 +661,8 @@ IMPL_LINK_NOARG(SwMailMergeLayoutPage, PreviewLoadedHdl_Impl)
 
     const SwFmtFrmSize& rPageSize = m_pExampleWrtShell->GetPageDesc(
                                      m_pExampleWrtShell->GetCurPageDesc()).GetMaster().GetFrmSize();
-    m_aLeftMF.SetMax(rPageSize.GetWidth() - DEFAULT_LEFT_DISTANCE);
-    m_aTopMF.SetMax(rPageSize.GetHeight() - DEFAULT_TOP_DISTANCE);
+    m_pLeftMF->SetMax(rPageSize.GetWidth() - DEFAULT_LEFT_DISTANCE);
+    m_pTopMF->SetMax(rPageSize.GetHeight() - DEFAULT_TOP_DISTANCE);
     return 0;
 }
 
@@ -703,14 +693,14 @@ IMPL_LINK_NOARG(SwMailMergeLayoutPage, ChangeAddressHdl_Impl)
 {
     if(m_pExampleWrtShell && m_pAddressBlockFormat)
     {
-        long nLeft = static_cast< long >(m_aLeftMF.Denormalize(m_aLeftMF.GetValue(FUNIT_TWIP)));
-        long nTop  = static_cast< long >(m_aTopMF.Denormalize(m_aTopMF.GetValue(FUNIT_TWIP)));
+        long nLeft = static_cast< long >(m_pLeftMF->Denormalize(m_pLeftMF->GetValue(FUNIT_TWIP)));
+        long nTop  = static_cast< long >(m_pTopMF->Denormalize(m_pTopMF->GetValue(FUNIT_TWIP)));
 
         SfxItemSet aSet(m_pExampleWrtShell->GetAttrPool(), RES_ANCHOR, RES_ANCHOR,
                             RES_VERT_ORIENT, RES_VERT_ORIENT,
                             RES_HORI_ORIENT, RES_HORI_ORIENT,
                             0 );
-        if(m_aAlignToBodyCB.IsChecked())
+        if(m_pAlignToBodyCB->IsChecked())
             aSet.Put(SwFmtHoriOrient( 0, text::HoriOrientation::NONE, text::RelOrientation::PAGE_PRINT_AREA ));
         else
             aSet.Put(SwFmtHoriOrient( nLeft, text::HoriOrientation::NONE, text::RelOrientation::PAGE_FRAME ));
@@ -722,7 +712,7 @@ IMPL_LINK_NOARG(SwMailMergeLayoutPage, ChangeAddressHdl_Impl)
 
 IMPL_LINK(SwMailMergeLayoutPage, GreetingsHdl_Impl, PushButton*, pButton)
 {
-    bool bDown = pButton == &m_aDownPB;
+    bool bDown = pButton == m_pDownPB;
     bool bMoved = m_pExampleWrtShell->MoveParagraph( bDown ? 1 : -1 );
     if (bMoved || bDown)
         m_pWizard->GetConfigItem().MoveGreeting(bDown ? 1 : -1 );
@@ -738,8 +728,8 @@ IMPL_LINK(SwMailMergeLayoutPage, GreetingsHdl_Impl, PushButton*, pButton)
 IMPL_LINK(SwMailMergeLayoutPage, AlignToTextHdl_Impl, CheckBox*, pBox)
 {
     sal_Bool bCheck = pBox->IsChecked() && pBox->IsEnabled();
-    m_aLeftFT.Enable(!bCheck);
-    m_aLeftMF.Enable(!bCheck);
+    m_pLeftFT->Enable(!bCheck);
+    m_pLeftMF->Enable(!bCheck);
     ChangeAddressHdl_Impl( 0 );
     return 0;
 }
