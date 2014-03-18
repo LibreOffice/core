@@ -44,6 +44,7 @@
 #include "com/sun/star/util/XRefreshListener.hpp"
 #include "com/sun/star/util/XRefreshable.hpp"
 #include "cppu/unotype.hxx"
+#include "cppuhelper/basemutex.hxx"
 #include "cppuhelper/compbase5.hxx"
 #include "cppuhelper/factory.hxx"
 #include "cppuhelper/implbase2.hxx"
@@ -87,13 +88,12 @@ typedef
     ServiceBase;
 
 class Service:
-    private osl::Mutex, public ServiceBase, private boost::noncopyable
+    private cppu::BaseMutex, public ServiceBase, private boost::noncopyable
 {
 public:
     Service(
         css::uno::Reference< css::uno::XComponentContext > const context):
-        ServiceBase(*static_cast< osl::Mutex * >(this)), context_(context),
-        default_(true)
+        ServiceBase(m_aMutex), context_(context), default_(true)
     {
         lock_ = lock();
         assert(context.is());
@@ -102,8 +102,8 @@ public:
     Service(
         css::uno::Reference< css::uno::XComponentContext > const context,
         OUString const & locale):
-        ServiceBase(*static_cast< osl::Mutex * >(this)), context_(context),
-        locale_(locale), default_(false)
+        ServiceBase(m_aMutex), context_(context), locale_(locale),
+        default_(false)
     {
         lock_ = lock();
         assert(context.is());
