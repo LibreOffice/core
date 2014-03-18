@@ -21,7 +21,6 @@
 #define INCLUDED_FRAMEWORK_SOURCE_INC_ACCELERATORS_PRESETHANDLER_HXX
 
 #include <accelerators/storageholder.hxx>
-#include <threadhelp/threadhelpbase.hxx>
 #include <general.h>
 #include <stdtypes.h>
 
@@ -92,12 +91,10 @@ class PresetHandler
             @descr  This struct makes it possible to use any shared storage
                     in combination with a SingletonRef<> template ...
 
-                    Attention: Because these struct is shared it must be
-                    used within a synchronized section. Thats why this struct
-                    uses a base class ThreadHelpBase and can be locked
-                    from outside doing so!
+                    This struct is allegedly shared and must be used within a
+                    synchronized section. But it isn't.
          */
-        struct TSharedStorages : public ThreadHelpBase
+        struct TSharedStorages
         {
             public:
 
