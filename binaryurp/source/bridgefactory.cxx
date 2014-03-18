@@ -62,7 +62,7 @@ void BridgeFactory::removeBridge(
 {
     assert(bridge.is());
     OUString n(bridge->getName());
-    osl::MutexGuard g(*this);
+    osl::MutexGuard g(m_aMutex);
     if (n.isEmpty()) {
         BridgeList::iterator i(
             std::find(unnamed_.begin(), unnamed_.end(), bridge));
@@ -79,7 +79,7 @@ void BridgeFactory::removeBridge(
 
 BridgeFactory::BridgeFactory(
     css::uno::Reference< css::uno::XComponentContext > const & context):
-    BridgeFactoryBase(*static_cast< osl::Mutex * >(this)), context_(context)
+    BridgeFactoryBase(m_aMutex), context_(context)
 {
     assert(context.is());
 }
@@ -115,7 +115,7 @@ css::uno::Reference< css::bridge::XBridge > BridgeFactory::createBridge(
 {
     rtl::Reference< Bridge > b;
     {
-        osl::MutexGuard g(*this);
+        osl::MutexGuard g(m_aMutex);
         if (named_.find(sName) != named_.end()) {
             throw css::bridge::BridgeExistsException(
                 sName, static_cast< cppu::OWeakObject * >(this));
@@ -141,7 +141,7 @@ css::uno::Reference< css::bridge::XBridge > BridgeFactory::createBridge(
 css::uno::Reference< css::bridge::XBridge > BridgeFactory::getBridge(
     OUString const & sName) throw (css::uno::RuntimeException, std::exception)
 {
-    osl::MutexGuard g(*this);
+    osl::MutexGuard g(m_aMutex);
     BridgeMap::iterator i(named_.find(sName));
     return i == named_.end()
         ? css::uno::Reference< css::bridge::XBridge >() : i->second;
@@ -149,7 +149,7 @@ css::uno::Reference< css::bridge::XBridge > BridgeFactory::getBridge(
 
 css::uno::Sequence< css::uno::Reference< css::bridge::XBridge > >
 BridgeFactory::getExistingBridges() throw (css::uno::RuntimeException, std::exception) {
-    osl::MutexGuard g(*this);
+    osl::MutexGuard g(m_aMutex);
     if (unnamed_.size() > SAL_MAX_INT32) {
         throw css::uno::RuntimeException(
             "BridgeFactory::getExistingBridges: too many",

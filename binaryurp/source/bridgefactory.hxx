@@ -32,6 +32,7 @@
 #include "com/sun/star/uno/Exception.hpp"
 #include "com/sun/star/uno/Reference.hxx"
 #include "com/sun/star/uno/RuntimeException.hpp"
+#include "cppuhelper/basemutex.hxx"
 #include "cppuhelper/compbase2.hxx"
 #include "sal/types.h"
 
@@ -55,7 +56,8 @@ typedef
     BridgeFactoryBase;
 
 class BridgeFactory:
-    private osl::Mutex, public BridgeFactoryBase, private boost::noncopyable
+    private cppu::BaseMutex, public BridgeFactoryBase,
+    private boost::noncopyable
 {
 public:
     static com::sun::star::uno::Reference< com::sun::star::uno::XInterface >
