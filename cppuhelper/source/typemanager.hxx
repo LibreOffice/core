@@ -25,8 +25,8 @@
 #include "com/sun/star/uno/Reference.hxx"
 #include "com/sun/star/uno/RuntimeException.hpp"
 #include "com/sun/star/uno/Sequence.hxx"
+#include "cppuhelper/basemutex.hxx"
 #include "cppuhelper/compbase4.hxx"
-#include "osl/mutex.hxx"
 #include "rtl/ref.hxx"
 #include "sal/types.h"
 
@@ -49,7 +49,7 @@ typedef cppu::WeakComponentImplHelper4<
     css::container::XSet, css::reflection::XTypeDescriptionEnumerationAccess >
 TypeManager_Base;
 
-class TypeManager: private osl::Mutex, public TypeManager_Base {
+class TypeManager: private cppu::BaseMutex, public TypeManager_Base {
 public:
     TypeManager();
 

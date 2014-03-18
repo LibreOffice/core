@@ -1865,7 +1865,7 @@ void Enumeration::findNextMatch() {
 }
 
 cppuhelper::TypeManager::TypeManager():
-    TypeManager_Base(*static_cast< osl::Mutex * >(this)),
+    TypeManager_Base(m_aMutex),
     manager_(new unoidl::Manager)
 {}
 

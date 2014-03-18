@@ -29,6 +29,7 @@
 #include "com/sun/star/lang/XSingleServiceFactory.hpp"
 #include "com/sun/star/uno/XComponentContext.hpp"
 #include "com/sun/star/uno/Reference.hxx"
+#include "cppuhelper/basemutex.hxx"
 #include "cppuhelper/compbase8.hxx"
 #include "osl/mutex.hxx"
 #include "registry/registry.hxx"
@@ -57,7 +58,8 @@ typedef cppu::WeakComponentImplHelper8<
 ServiceManagerBase;
 
 class ServiceManager:
-    private osl::Mutex, public ServiceManagerBase, private boost::noncopyable
+    private cppu::BaseMutex, public ServiceManagerBase,
+    private boost::noncopyable
 {
 public:
     struct Data: private boost::noncopyable {
@@ -174,7 +176,7 @@ public:
         ImplementationMap singletons;
     };
 
-    ServiceManager(): ServiceManagerBase(*static_cast< osl::Mutex * >(this)) {}
+    ServiceManager(): ServiceManagerBase(m_aMutex) {}
 
     using ServiceManagerBase::acquire;
     using ServiceManagerBase::release;
