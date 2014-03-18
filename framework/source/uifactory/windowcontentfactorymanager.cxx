@@ -30,6 +30,7 @@
 #include <com/sun/star/lang/XSingleComponentFactory.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 
+#include <cppuhelper/basemutex.hxx>
 #include <cppuhelper/compbase2.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <tools/diagnose_ex.h>
@@ -43,7 +44,7 @@ typedef ::cppu::WeakComponentImplHelper2<
     com::sun::star::lang::XServiceInfo,
     com::sun::star::lang::XSingleComponentFactory > WindowContentFactoryManager_BASE;
 
-class WindowContentFactoryManager : private osl::Mutex,
+class WindowContentFactoryManager : private cppu::BaseMutex,
                                     public WindowContentFactoryManager_BASE
 {
 public:
@@ -83,7 +84,7 @@ private:
 };
 
 WindowContentFactoryManager::WindowContentFactoryManager( const uno::Reference< uno::XComponentContext >& rxContext ) :
-    WindowContentFactoryManager_BASE(*static_cast<osl::Mutex *>(this)),
+    WindowContentFactoryManager_BASE(m_aMutex),
     m_xContext( rxContext ),
     m_bConfigRead( sal_False )
 {
