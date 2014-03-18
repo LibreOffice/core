@@ -20,7 +20,6 @@
 #ifndef INCLUDED_FRAMEWORK_INC_HELPER_OCOMPONENTENUMERATION_HXX
 #define INCLUDED_FRAMEWORK_INC_HELPER_OCOMPONENTENUMERATION_HXX
 
-#include <threadhelp/threadhelpbase.hxx>
 #include <macros/generic.hxx>
 #include <macros/xinterface.hxx>
 #include <macros/xtypeprovider.hxx>
@@ -45,15 +44,13 @@ namespace framework{
                     XEventListener
                     XEnumeration
 
-    @base           ThreadHelpBase
-                    OWeakObject
+    @base           OWeakObject
 
     @devstatus      ready to use
     @threadsafe     yes
 *//*-*************************************************************************************************************/
 
-class OComponentEnumeration :   public ThreadHelpBase               ,
-                                public ::cppu::WeakImplHelper2< ::com::sun::star::container::XEnumeration,::com::sun::star::lang::XEventListener >
+class OComponentEnumeration :   public ::cppu::WeakImplHelper2< ::com::sun::star::container::XEnumeration,::com::sun::star::lang::XEventListener >
 {
 
     //  public methods

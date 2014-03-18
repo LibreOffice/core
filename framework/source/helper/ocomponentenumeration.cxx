@@ -19,8 +19,6 @@
 
 #include <helper/ocomponentenumeration.hxx>
 
-#include <threadhelp/guard.hxx>
-
 #include <vcl/svapp.hxx>
 
 namespace framework{
@@ -36,15 +34,7 @@ using namespace ::rtl                           ;
 //  constructor
 
 OComponentEnumeration::OComponentEnumeration( const Sequence< css::uno::Reference< XComponent > >& seqComponents )
-        //  Init baseclasses first
-        //  Attention:
-        //      Don't change order of initialization!
-        //      ThreadHelpBase is a struct with a mutex as member. We can't use a mutex as member, while
-        //      we must garant right initialization and a valid value of this! First initialize
-        //      baseclasses and then members. And we need the mutex for other baseclasses !!!
-        :   ThreadHelpBase  ( &Application::GetSolarMutex() )
-        // Init member
-        ,   m_nPosition     ( 0                             )   // 0 is the first position for a valid list and the right value for an invalid list to!
+        :   m_nPosition     ( 0                             )   // 0 is the first position for a valid list and the right value for an invalid list to!
         ,   m_seqComponents ( seqComponents                 )
 {
     // Safe impossible states
@@ -65,8 +55,7 @@ OComponentEnumeration::~OComponentEnumeration()
 //  XEventListener
 void SAL_CALL OComponentEnumeration::disposing( const EventObject& aEvent ) throw( RuntimeException, std::exception )
 {
-    // Ready for multithreading
-    Guard aGuard( m_aLock );
+    SolarMutexGuard g;
 
     // Safe impossible cases
     // This method is not specified for all incoming parameters.
@@ -81,8 +70,7 @@ void SAL_CALL OComponentEnumeration::disposing( const EventObject& aEvent ) thro
 //  XEnumeration
 sal_Bool SAL_CALL OComponentEnumeration::hasMoreElements() throw( RuntimeException, std::exception )
 {
-    // Ready for multithreading
-    Guard aGuard( m_aLock );
+    SolarMutexGuard g;
 
     // First position in a valid list is 0.
     // => The last one is getLength() - 1!
@@ -98,8 +86,7 @@ Any SAL_CALL OComponentEnumeration::nextElement() throw(    NoSuchElementExcepti
                                                              WrappedTargetException ,
                                                             RuntimeException, std::exception        )
 {
-    // Ready for multithreading
-    Guard aGuard( m_aLock );
+    SolarMutexGuard g;
 
     // If we have no elements or end of enumeration is arrived ...
     if ( hasMoreElements() == sal_False )
