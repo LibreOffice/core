@@ -21,7 +21,6 @@
 #include <recording/dispatchrecorder.hxx>
 #include <com/sun/star/frame/DispatchStatement.hpp>
 #include <com/sun/star/script/Converter.hpp>
-#include <threadhelp/guard.hxx>
 #include <services.h>
 #include <vcl/svapp.hxx>
 #include <comphelper/processfactory.hxx>
@@ -101,8 +100,7 @@ Sequence< Any > make_seq_out_of_struct(
 
 
 DispatchRecorder::DispatchRecorder( const css::uno::Reference< css::uno::XComponentContext >& xContext )
-        : ThreadHelpBase     ( &Application::GetSolarMutex() )
-        , m_xConverter( css::script::Converter::create(xContext) )
+        : m_xConverter( css::script::Converter::create(xContext) )
 {
 }
 
@@ -142,16 +140,13 @@ void SAL_CALL  DispatchRecorder::recordDispatchAsComment( const css::util::URL& 
 
 void SAL_CALL DispatchRecorder::endRecording() throw( css::uno::RuntimeException, std::exception )
 {
-    /* SAFE{ */
-    Guard aWriteLock(m_aLock);
+    SolarMutexGuard g;
     m_aStatements.clear();
-    /* } */
 }
 
 OUString SAL_CALL DispatchRecorder::getRecordedMacro() throw( css::uno::RuntimeException, std::exception )
 {
-    /* SAFE{ */
-    Guard aWriteLock(m_aLock);
+    SolarMutexGuard g;
 
     if ( m_aStatements.empty() )
         return OUString();
@@ -174,7 +169,6 @@ OUString SAL_CALL DispatchRecorder::getRecordedMacro() throw( css::uno::RuntimeE
         implts_recordMacro( p->aCommand, p->aArgs, p->bIsComment, aScriptBuffer );
     OUString sScript = aScriptBuffer.makeStringAndClear();
     return sScript;
-    /* } */
 }
 
 

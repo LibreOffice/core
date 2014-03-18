@@ -25,7 +25,6 @@
 */
 #include <vector>
 
-#include <threadhelp/threadhelpbase.hxx>
 #include <macros/xinterface.hxx>
 #include <macros/xtypeprovider.hxx>
 #include <macros/xserviceinfo.hxx>
@@ -49,8 +48,7 @@ namespace framework{
 typedef ::std::vector < com::sun::star::frame::DispatchStatement > DispatchStatementList;
 
 class DispatchRecorder
-    : private ThreadHelpBase
-    , public  ::cppu::WeakImplHelper3<
+    : public  ::cppu::WeakImplHelper3<
                 css::lang::XServiceInfo
               , css::frame::XDispatchRecorder
               , css::container::XIndexReplace >
