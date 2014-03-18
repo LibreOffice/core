@@ -213,10 +213,6 @@ End
 
 #if defined ENABLE_JAVA && !defined WITHOUT_SCRIPTING_BEANSHELL
 
-#if !defined SYSTEM_BSH
-STD_JAR_FILE( gid_File_Jar_Bsh, bsh )
-#endif
-
 STD_JAR_FILE( gid_File_Jar_Scriptproviderforbeanshell, ScriptProviderForBeanShell )
 
 File gid_File_Rdb_Scriptproviderforbeanshell

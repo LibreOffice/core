@@ -18,6 +18,8 @@
 
 #include "macros.inc"
 
+#include "AutoInstall/extensions_bsh"
+
 Module gid_Module_Optional_Extensions
     MOD_NAME_DESC(MODULE_OPTIONAL_EXTENSIONS);
     ParentID = gid_Module_Optional;
@@ -246,8 +248,7 @@ Module gid_Module_Optional_Extensions_Script_Provider_For_BS
     PackageInfo = "packinfo_extensions.txt";
     MOD_NAME_DESC(MODULE_OPTIONAL_EXTENSIONS_SCRIPT_PROVIDER_FOR_BEANSHELL);
     ParentID = gid_Module_Optional_Extensions;
-    Files = (
-        gid_File_Jar_Bsh,
+    Files = (auto_extensions_bsh_ALL,
         gid_File_Jar_Scriptproviderforbeanshell,
         gid_File_Rdb_Scriptproviderforbeanshell );
     Minimal = NO;

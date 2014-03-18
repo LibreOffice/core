@@ -251,6 +251,14 @@ End
         Styles   = (PACKED); \
     End
 
+#define LIBO_JAR_FILE(id,name) \
+    File id \
+        TXT_FILE_BODY; \
+        Name = name; \
+        Dir = gid_Dir_Classes; \
+        Styles = (PACKED); \
+    End
+
 #define URE_JAR_FILE(id,name) \
     File id \
         TXT_FILE_BODY; \

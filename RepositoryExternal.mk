@@ -3112,7 +3112,7 @@ endef
 
 else # !SYSTEM_BSH
 
-$(eval $(call gb_Helper_register_jars,OOO,\
+$(eval $(call gb_Helper_register_jars_for_install,OOO,extensions_bsh, \
 	bsh \
 ))
 
