@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da86d52c_8cdca776",
+        "filename": "sw/qa/extras/ooxmlimport/ooxmlimport.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1983,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2014-03-18T14:41:24Z",
+      "side": 1,
+      "message": "Please test what you changed in the code: if you changed how a wrap type is imported, that should be tested. Importing such a large document during every toplevel \"make\" on every developer\u0027s machine is a bad idea. :-)",
+      "revId": "28c4c152ea6cad9c16b5cdfd61ba882150ca1b56",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
