@@ -38,7 +38,6 @@ namespace framework{
 
 
 SaxNamespaceFilter::SaxNamespaceFilter( Reference< XDocumentHandler >& rSax1DocumentHandler ) :
-    ThreadHelpBase( &Application::GetSolarMutex() ),
      m_xLocator( 0 ),
      xDocumentHandler( rSax1DocumentHandler ),
      m_nDepth( 0 ),

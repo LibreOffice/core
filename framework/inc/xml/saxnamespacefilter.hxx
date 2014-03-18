@@ -21,7 +21,6 @@
 #define INCLUDED_FRAMEWORK_INC_XML_SAXNAMESPACEFILTER_HXX
 
 #include <com/sun/star/xml/sax/XDocumentHandler.hpp>
-#include <threadhelp/threadhelpbase.hxx>
 #include <xml/xmlnamespaces.hxx>
 #include <rtl/ustring.hxx>
 #include <vcl/menu.hxx>
@@ -33,7 +32,7 @@
 namespace framework
 {
 
-class FWE_DLLPUBLIC SaxNamespaceFilter : public ThreadHelpBase, // Struct for right initalization of mutex member! Must be first of baseclasses.
+class FWE_DLLPUBLIC SaxNamespaceFilter :
                            public ::cppu::WeakImplHelper1< ::com::sun::star::xml::sax::XDocumentHandler >
 {
     public:
