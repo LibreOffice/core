@@ -3257,7 +3257,7 @@ endef
 
 else # !SYSTEM_JFREEREPORT
 
-$(eval $(call gb_Helper_register_jars,OOO,\
+$(eval $(call gb_Helper_register_jars_for_install,OOO,reportbuilder,\
 	flow-engine \
 	flute-1.1.6 \
 	libbase-1.1.6 \

@@ -20,19 +20,6 @@ Module gid_Module_Reportbuilder
     Default = YES; 
     Dirs = (gid_Dir_Share_Reportbuilder);
     Files = (auto_reportbuilder_ALL,
-#if ! defined SYSTEM_JFREEREPORT
-        gid_File_Jar_FlowEngine,
-        gid_File_Jar_Flute,
-        gid_File_Jar_Libbase,
-        gid_File_Jar_Libfonts,
-        gid_File_Jar_Libformula,
-        gid_File_Jar_Liblayout,
-        gid_File_Jar_Libloader,
-        gid_File_Jar_Librepository,
-        gid_File_Jar_Libserializer,
-        gid_File_Jar_Libxml,
-        gid_File_Jar_Sac,
-#endif
         gid_File_Lib_Rpt,
         gid_File_Lib_Rptui,
         gid_File_Lib_Rptxml,
@@ -49,21 +36,6 @@ End
 
 STD_JAR_FILE( gid_File_Jar_Reportbuilder, reportbuilder )
 STD_JAR_FILE( gid_File_Jar_Reportbuilderwizard, reportbuilderwizard )
-
-/* Not sure, if can we use CONCAT3 in that context here? */
-#ifndef SYSTEM_JFREEREPORT
-    STD_JAR_FILE( gid_File_Jar_FlowEngine, flow-engine )
-    STD_JAR_FILE( gid_File_Jar_Flute, CONCAT3(flute,-,FLUTE_VERSION) )
-    STD_JAR_FILE( gid_File_Jar_Libbase, CONCAT3(libbase,-,LIBBASE_VERSION) )
-    STD_JAR_FILE( gid_File_Jar_Libfonts, CONCAT3(libfonts,-,LIBFONTS_VERSION) )
-    STD_JAR_FILE( gid_File_Jar_Libformula, CONCAT3(libformula,-,LIBFORMULA_VERSION) )
-    STD_JAR_FILE( gid_File_Jar_Liblayout, liblayout )
-    STD_JAR_FILE( gid_File_Jar_Libloader, CONCAT3(libloader,-,LIBLOADER_VERSION) )
-    STD_JAR_FILE( gid_File_Jar_Librepository, CONCAT3(librepository,-,LIBREPOSITORY_VERSION) )
-    STD_JAR_FILE( gid_File_Jar_Libserializer, CONCAT3(libserializer,-,LIBSERIALIZER_VERSION) )
-    STD_JAR_FILE( gid_File_Jar_Libxml, CONCAT3(libxml,-,LIBXML_VERSION) )
-    STD_JAR_FILE( gid_File_Jar_Sac, sac )
-#endif
 
 File gid_File_Xcd_Reportbuilder
     TXT_FILE_BODY;

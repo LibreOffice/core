@@ -7,12 +7,6 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
-ifeq ($(ENABLE_REPORTBUILDER),TRUE)
-ifeq ($(SYSTEM_JFREEREPORT),)
-include $(SRCDIR)/external/jfreereport/version.mk
-endif
-endif
-
 $(eval $(call gb_InstallModule_InstallModule,scp2/ooo))
 
 $(eval $(call gb_InstallModule_use_auto_install_libs,scp2/ooo,\
@@ -40,7 +34,6 @@ $(eval $(call gb_InstallModule_define_if_set,scp2/ooo,\
 	SYSTEM_HUNSPELL \
 	SYSTEM_HYPH \
 	SYSTEM_ICU \
-	SYSTEM_JFREEREPORT \
 	SYSTEM_JPEG \
 	SYSTEM_LCMS2 \
 	SYSTEM_LIBEXTTEXTCAT \
@@ -104,21 +97,6 @@ endif
 $(eval $(call gb_InstallModule_add_defs,scp2/ooo,\
 	-DICU_MAJOR=$(ICU_MAJOR) \
 ))
-
-ifeq ($(SYSTEM_JFREEREPORT),)
-
-$(eval $(call gb_InstallModule_add_defs,scp2/ooo,\
-	-DFLUTE_VERSION=$(FLUTE_VERSION) \
-	-DLIBBASE_VERSION=$(LIBBASE_VERSION) \
-	-DLIBFONTS_VERSION=$(LIBFONTS_VERSION) \
-	-DLIBFORMULA_VERSION=$(LIBFORMULA_VERSION) \
-	-DLIBLOADER_VERSION=$(LIBLOADER_VERSION) \
-	-DLIBREPOSITORY_VERSION=$(LIBREPOSITORY_VERSION) \
-	-DLIBSERIALIZER_VERSION=$(LIBSERIALIZER_VERSION) \
-	-DLIBXML_VERSION=$(LIBXML_VERSION) \
-))
-
-endif
 
 $(eval $(call gb_InstallModule_add_templates,scp2/ooo,\
     scp2/source/templates/module_helppack \
