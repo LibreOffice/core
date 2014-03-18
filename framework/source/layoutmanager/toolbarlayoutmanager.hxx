@@ -25,7 +25,6 @@
 */
 #include <vector>
 
-#include <threadhelp/threadhelpbase.hxx>
 #include <macros/generic.hxx>
 #include <macros/xinterface.hxx>
 #include <macros/xtypeprovider.hxx>
@@ -62,8 +61,7 @@ namespace framework
 
 class ToolbarLayoutManager : public ::cppu::WeakImplHelper3< ::com::sun::star::awt::XDockableWindowListener,
                                                              ::com::sun::star::ui::XUIConfigurationListener,
-                                                             ::com::sun::star::awt::XWindowListener >,
-                             private ThreadHelpBase // Struct for right initalization of mutex member! Must be first of baseclasses.
+                                                             ::com::sun::star::awt::XWindowListener >
 {
     public:
         enum { DOCKINGAREAS_COUNT = 4 };
