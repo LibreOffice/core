@@ -85,15 +85,6 @@ File gid_File_Extra_Databasebiblio
     Name = "extras_databasebiblio.filelist";
 End
 
-#if defined( ENABLE_LIBLANGTAG ) && !defined( SYSTEM_LIBLANGTAG )
-File gid_File_Extra_Liblangtag
-    Dir = FILELIST_DIR;
-    USER_FILE_BODY;
-    Styles = (FILELIST);
-    Name = "liblangtag_data.filelist";
-End
-#endif
-
 #ifdef UNX
 
 #ifndef WITHOUT_PPDS

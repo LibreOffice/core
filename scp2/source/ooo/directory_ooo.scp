@@ -242,14 +242,6 @@ Directory gid_Dir_Autotext
     DosName = "autotext";
 End
 
-#if defined( ENABLE_LIBLANGTAG ) && !defined( SYSTEM_LIBLANGTAG )
-Directory gid_Dir_Share_Liblangtag
-    ParentID = gid_Brand_Dir_Share;
-    DosName = "liblangtag";
-    Styles = (WORKSTATION, CREATE);
-End
-#endif
-
 Directory gid_Dir_Basic
     ParentID = gid_Brand_Dir_Share;
     DosName = "basic";

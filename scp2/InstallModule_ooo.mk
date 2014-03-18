@@ -23,7 +23,6 @@ $(eval $(call gb_InstallModule_use_auto_install_libs,scp2/ooo,\
 $(eval $(call gb_InstallModule_define_if_set,scp2/ooo,\
 	ENABLE_GTK \
 	ENABLE_KDE \
-	ENABLE_LIBLANGTAG \
 	ENABLE_MACOSX_MACLIKE_APP_STRUCTURE \
 	ENABLE_MACOSX_SANDBOX \
 	ENABLE_NPAPI_FROM_BROWSER \
@@ -46,7 +45,6 @@ $(eval $(call gb_InstallModule_define_if_set,scp2/ooo,\
 	SYSTEM_LCMS2 \
 	SYSTEM_LIBEXTTEXTCAT \
 	SYSTEM_LIBJPEG \
-	SYSTEM_LIBLANGTAG \
 	SYSTEM_LIBXML \
 	SYSTEM_LIBXSLT \
 	SYSTEM_LUCENE \
