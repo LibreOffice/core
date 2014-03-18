@@ -18,7 +18,6 @@
  */
 
 #include <dispatch/servicehandler.hxx>
-#include <threadhelp/guard.hxx>
 #include <general.h>
 #include <services.h>
 
@@ -60,10 +59,7 @@ DEFINE_INIT_SERVICE(ServiceHandler,
                 reference to uno servicemanager for creation of new services
 */
 ServiceHandler::ServiceHandler( const css::uno::Reference< css::lang::XMultiServiceFactory >& xFactory )
-        //  Init baseclasses first
-        : ThreadHelpBase( &Application::GetSolarMutex() )
-        // Init member
-        , m_xFactory    ( xFactory                      )
+        : m_xFactory    ( xFactory                      )
 {
 }
 
@@ -75,7 +71,6 @@ ServiceHandler::ServiceHandler( const css::uno::Reference< css::lang::XMultiServ
 */
 ServiceHandler::~ServiceHandler()
 {
-    m_xFactory = NULL;
 }
 
 
@@ -199,13 +194,7 @@ void SAL_CALL ServiceHandler::dispatchWithNotification( const css::util::URL&   
 css::uno::Reference< css::uno::XInterface > ServiceHandler::implts_dispatch( const css::util::URL&                                  aURL       ,
                                                                              const css::uno::Sequence< css::beans::PropertyValue >& /*lArguments*/ ) throw( css::uno::RuntimeException )
 {
-    /* SAFE */
-    Guard aReadLock( m_aLock );
-    css::uno::Reference< css::lang::XMultiServiceFactory > xFactory = m_xFactory;
-    aReadLock.unlock();
-    /* SAFE */
-
-    if (!xFactory.is())
+    if (!m_xFactory.is())
         return css::uno::Reference< css::uno::XInterface >();
 
     // extract service name and may optional given parameters from given URL
@@ -237,7 +226,7 @@ css::uno::Reference< css::uno::XInterface > ServiceHandler::implts_dispatch( con
     try
     {
         // => a) a service starts running inside his own ctor and we create it only
-        xService = xFactory->createInstance(sServiceName);
+        xService = m_xFactory->createInstance(sServiceName);
         // or b) he implements the right interface and starts there (may with optional parameters)
         css::uno::Reference< css::task::XJobExecutor > xExecuteable(xService, css::uno::UNO_QUERY);
         if (xExecuteable.is())

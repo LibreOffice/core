@@ -24,7 +24,6 @@
 #include <macros/xinterface.hxx>
 #include <macros/xtypeprovider.hxx>
 #include <macros/xserviceinfo.hxx>
-#include <threadhelp/threadhelpbase.hxx>
 #include <general.h>
 #include <stdtypes.h>
 
@@ -49,18 +48,12 @@ namespace framework{
                     service must be hold his self alive. Such mechanism can be useful for UI components
                     (e.g. Dialogs, Wizards) only.
 
-    @base           ThreadHelpBase
-                        exports a lock member to guarantee right initialize value of it
     @base           OWeakObject
                         provides XWeak and ref count mechanism
 
     @devstatus      ready to use
 */
-class ServiceHandler : // baseclasses
-                       // Order is necessary for right initialization!
-                       private ThreadHelpBase                ,
-                       // interfaces
-                       public  ::cppu::WeakImplHelper3<
+class ServiceHandler : public  ::cppu::WeakImplHelper3<
                                    css::lang::XServiceInfo       ,
                                    css::frame::XDispatchProvider ,
                                    css::frame::XNotifyingDispatch > // => XDispatch
