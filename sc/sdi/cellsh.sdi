@@ -404,6 +404,7 @@ interface CellMovement
     SID_SELECTALL   [ ExecMethod = Execute;     StateMethod = GetState;       ]
     SID_STATUS_SUM      [ ExecMethod = Execute; StateMethod = GetState; ]
     SID_STATUS_DOCPOS   [ ExecMethod = Execute; StateMethod = GetState; ]
+    SID_ROWCOL_SELCOUNT [ ExecMethod = Execute; StateMethod = GetState; ]
     SID_STATUS_SELMODE  [ ExecMethod = Execute; StateMethod = GetState; ]
     SID_STATUS_SELMODE_ERG  [ ExecMethod = Execute; ]
     SID_STATUS_SELMODE_ERW  [ ExecMethod = Execute; ]

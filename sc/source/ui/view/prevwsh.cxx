@@ -881,6 +881,9 @@ void ScPreviewShell::GetState( SfxItemSet& rSet )
             case SID_STATUS_DOCPOS:
                 rSet.Put( SfxStringItem( nWhich, pPreview->GetPosString() ) );
                 break;
+            case SID_ROWCOL_SELCOUNT:
+                rSet.Put( SfxStringItem( nWhich, pPreview->GetPosString() ) );
+                break;
             case SID_PRINTPREVIEW:
                 rSet.Put( SfxBoolItem( nWhich, true ) );
                 break;
