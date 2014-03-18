@@ -274,7 +274,7 @@ protected:
         xmlXPathContextPtr pXmlXpathCtx = xmlXPathNewContext(pXmlDoc);
         xmlXPathObjectPtr pXmlXpathObj = xmlXPathEvalExpression(BAD_CAST(aXPath.getStr()), pXmlXpathCtx);
         xmlNodeSetPtr pXmlNodes = pXmlXpathObj->nodesetval;
-        CPPUNIT_ASSERT_EQUAL(1, xmlXPathNodeSetGetLength(pXmlNodes));
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("parsing dump failed", 1, xmlXPathNodeSetGetLength(pXmlNodes));
         xmlNodePtr pXmlNode = pXmlNodes->nodeTab[0];
         OUString aRet;
         if (aAttribute.getLength())
@@ -352,7 +352,7 @@ protected:
         uno::Reference<text::XTextRange> const xParagraph(
                 getParagraphOrTable(number), uno::UNO_QUERY_THROW);
         if( !content.isEmpty())
-            CPPUNIT_ASSERT_EQUAL( content, xParagraph->getString());
+            CPPUNIT_ASSERT_EQUAL_MESSAGE( "paragraph does not have expected content", content, xParagraph->getString());
         return xParagraph;
     }
 
@@ -360,7 +360,7 @@ protected:
     {
         uno::Reference<text::XTextRange> const xParagraph(getParagraphOrTable(number, xText), uno::UNO_QUERY_THROW);
         if (!content.isEmpty())
-            CPPUNIT_ASSERT_EQUAL(content, xParagraph->getString());
+            CPPUNIT_ASSERT_EQUAL_MESSAGE( "paragraph does not contain expected content", content, xParagraph->getString());
         return xParagraph;
     }
 
@@ -373,7 +373,7 @@ protected:
             xRunEnum->nextElement();
         uno::Reference<text::XTextRange> xRun(xRunEnum->nextElement(), uno::UNO_QUERY);
         if( !content.isEmpty())
-            CPPUNIT_ASSERT_EQUAL( content, xRun->getString());
+            CPPUNIT_ASSERT_EQUAL_MESSAGE( "run does not contain expected content", content, xRun->getString());
         return xRun;
     }
 
@@ -399,7 +399,7 @@ protected:
         {
             uno::Reference<text::XText> const xCellText(xCell,
                     uno::UNO_QUERY_THROW);
-            CPPUNIT_ASSERT_EQUAL(rContent, xCellText->getString());
+            CPPUNIT_ASSERT_EQUAL_MESSAGE("cell does not contain expected content", rContent, xCellText->getString());
         }
         return xCell;
     }
