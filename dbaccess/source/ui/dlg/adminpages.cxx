@@ -66,7 +66,7 @@ namespace dbaui
         ,m_pFT_HeaderText(NULL)
     {
 
-        SetExchangeSupport(sal_True);
+        SetExchangeSupport(true);
     }
 
     OGenericAdministrationPage::OGenericAdministrationPage(Window* _pParent, const OString& _rId, const OUString& _rUIXMLDescription, const SfxItemSet& _rAttrSet)
@@ -77,7 +77,7 @@ namespace dbaui
         ,m_pFT_HeaderText(NULL)
     {
 
-        SetExchangeSupport(sal_True);
+        SetExchangeSupport(true);
     }
 
     OGenericAdministrationPage::~OGenericAdministrationPage()

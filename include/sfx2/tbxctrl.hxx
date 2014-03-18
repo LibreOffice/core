@@ -102,10 +102,10 @@ class SfxFrameStatusListener : public svt::FrameStatusListener
 
 class SFX2_DLLPUBLIC SfxPopupWindow: public FloatingWindow, public SfxStatusListenerInterface
 {
-    sal_Bool                                                                             m_bFloating;
-    sal_Bool                                                                             m_bCascading;
+    bool                                                                             m_bFloating;
+    bool                                                                             m_bCascading;
     Link                                                                             m_aDeleteLink;
-    sal_uInt16                                                                           m_nId;
+    sal_uInt16                                                                       m_nId;
     ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >              m_xFrame;
     SfxFrameStatusListener*                                                          m_pStatusListener;
     ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent >           m_xStatusListener;
@@ -195,7 +195,7 @@ protected:
 
     // old SfxToolBoxControl methods
     virtual void               StateChanged( sal_uInt16 nSID, SfxItemState eState, const SfxPoolItem* pState );
-    virtual void               Select( sal_Bool bMod1 = sal_False );
+    virtual void               Select( bool bMod1 = false );
     virtual void               Select( sal_uInt16 nModifier );
 
     virtual void               DoubleClick();
@@ -260,7 +260,7 @@ protected:
 public:
                                SFX_DECL_TOOLBOX_CONTROL();
 
-                               SfxToolBoxControl( sal_uInt16 nSlotID, sal_uInt16 nId, ToolBox& rBox, sal_Bool bShowStrings = sal_False );
+                               SfxToolBoxControl( sal_uInt16 nSlotID, sal_uInt16 nId, ToolBox& rBox, bool bShowStrings = false );
     virtual                    ~SfxToolBoxControl();
 
     ToolBox&                   GetToolBox() const;
@@ -312,7 +312,7 @@ public:
                             SfxDragToolBoxControl_Impl( sal_uInt16 nId, ToolBox& rBox );
     virtual Window*         CreateItemWindow( Window *pParent );
     using SfxToolBoxControl::Select;
-    virtual void            Select( sal_Bool bMod1 = sal_False );
+    virtual void            Select( bool bMod1 = false );
 };
 
 
@@ -359,14 +359,14 @@ class SfxAddonsToolBoxControl_Impl : public SfxToolBoxControl
 */
 
 {
-    sal_Bool        bBigImages;
+    bool        bBigImages;
     PopupMenu*  pMenu;
-    sal_Bool        m_bShowMenuImages;
+    bool        m_bShowMenuImages;
 
 protected:
     virtual void            Click();
     using SfxToolBoxControl::Select;
-    virtual void            Select( sal_Bool );
+    virtual void            Select( bool );
     virtual void            StateChanged( sal_uInt16 nSID, SfxItemState eState, const SfxPoolItem* pState );
                             DECL_LINK( Activate, Menu * );
 public:

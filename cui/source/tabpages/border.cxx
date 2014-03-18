@@ -214,7 +214,7 @@ SvxBorderTabPage::SvxBorderTabPage(Window* pParent, const SfxItemSet& rCoreAttrs
 
     SetFieldUnit(*m_pEdShadowSize, eFUnit);
 
-    sal_uInt16 nWhich = GetWhich( SID_ATTR_BORDER_INNER, sal_False );
+    sal_uInt16 nWhich = GetWhich( SID_ATTR_BORDER_INNER, false );
     sal_Bool bIsDontCare = sal_True;
 
     if ( rCoreAttrs.GetItemState( nWhich, true ) >= SFX_ITEM_AVAILABLE )
@@ -390,7 +390,7 @@ void SvxBorderTabPage::Reset( const SfxItemSet& rSet )
 
     pBoxItem  = (const SvxBoxItem*)GetItem( rSet, SID_ATTR_BORDER_OUTER );
 
-    pBoxInfoItem = (const SvxBoxInfoItem*)GetItem( rSet, SID_ATTR_BORDER_INNER, sal_False );
+    pBoxInfoItem = (const SvxBoxInfoItem*)GetItem( rSet, SID_ATTR_BORDER_INNER, false );
 
     eCoreUnit = rSet.GetPool()->GetMetric( nWhichBox );
 
@@ -727,7 +727,7 @@ sal_Bool SvxBorderTabPage::FillItemSet( SfxItemSet& rCoreAttrs )
             rCoreAttrs.Put( aBoxItem );
             bAttrsChanged |= true;
         }
-        const SfxPoolItem* pOld = GetOldItem( rCoreAttrs, SID_ATTR_BORDER_INNER, sal_False );
+        const SfxPoolItem* pOld = GetOldItem( rCoreAttrs, SID_ATTR_BORDER_INNER, false );
 
         if ( !pOld || !( *(const SvxBoxInfoItem*)pOld == aBoxInfoItem ) )
         {

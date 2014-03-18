@@ -250,7 +250,7 @@ void _SfxMacroTabPage::Reset( const SfxItemSet& rSet )
         rListBox.SetCurEntry( pE );
 }
 
-sal_Bool _SfxMacroTabPage::IsReadOnly() const
+bool _SfxMacroTabPage::IsReadOnly() const
 {
     return mpImpl->bReadOnly;
 }

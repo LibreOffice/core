@@ -3578,7 +3578,7 @@ SwTOXStylesTabPage::SwTOXStylesTabPage(Window* pParent, const SfxItemSet& rAttrS
     m_pLevelLB->set_height_request(nHeight);
     m_pParaLayLB->set_height_request(nHeight);
 
-    SetExchangeSupport( sal_True );
+    SetExchangeSupport( true );
 
     m_pEditStyleBT->SetClickHdl   (LINK(   this, SwTOXStylesTabPage, EditStyleHdl));
     m_pAssignBT->SetClickHdl      (LINK(   this, SwTOXStylesTabPage, AssignHdl));

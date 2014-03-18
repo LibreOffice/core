@@ -417,7 +417,7 @@ void _SvxMacroTabPage::SetReadOnly( sal_Bool bSet )
     mpImpl->bReadOnly = bSet;
 }
 
-sal_Bool _SvxMacroTabPage::IsReadOnly() const
+bool _SvxMacroTabPage::IsReadOnly() const
 {
     return mpImpl->bReadOnly;
 }

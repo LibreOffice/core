@@ -105,7 +105,7 @@ using namespace ::com::sun::star::ui;
 
 
 
-SFX_IMPL_TOOLBOX_CONTROL_ARG(SfxToolBoxControl, SfxStringItem, sal_True);
+SFX_IMPL_TOOLBOX_CONTROL_ARG(SfxToolBoxControl, SfxStringItem, true);
 SFX_IMPL_TOOLBOX_CONTROL(SfxRecentFilesToolBoxControl, SfxStringItem);
 
 static Window* GetTopMostParentSystemWindow( Window* pWindow )
@@ -187,11 +187,11 @@ svt::ToolboxController* SAL_CALL SfxToolBoxControllerFactory( const Reference< X
 struct SfxToolBoxControl_Impl
 {
     ToolBox*                pBox;
-    sal_Bool                    bShowString;
-    sal_uInt16                  nSelectModifier;
+    bool                    bShowString;
+    sal_uInt16              nSelectModifier;
     SfxTbxCtrlFactory*      pFact;
-    sal_uInt16                  nTbxId;
-    sal_uInt16                  nSlotId;
+    sal_uInt16              nTbxId;
+    sal_uInt16              nSlotId;
     SfxPopupWindow*         mpFloatingWindow;
     SfxPopupWindow*         mpPopupWindow;
     Reference< XUIElement > mxUIElement;
@@ -221,10 +221,10 @@ IMPL_LINK( SfxToolBoxControl_Impl, WindowEventListener, VclSimpleEvent*, pEvent 
 
 
 SfxToolBoxControl::SfxToolBoxControl(
-    sal_uInt16          nSlotID,
-    sal_uInt16          nID,
+    sal_uInt16      nSlotID,
+    sal_uInt16      nID,
     ToolBox&        rBox,
-    sal_Bool            bShowStringItems     )
+    bool            bShowStringItems     )
 :   svt::ToolboxController()
 {
     pImpl = new SfxToolBoxControl_Impl;
@@ -970,12 +970,12 @@ void SfxToolBoxControl::StateChanged
 void SfxToolBoxControl::Select( sal_uInt16 nModifier )
 {
     pImpl->nSelectModifier = nModifier;
-    Select( sal_Bool((nModifier & KEY_MOD1)!=0) );
+    Select( (nModifier & KEY_MOD1) != 0 );
 }
 
 
 
-void SfxToolBoxControl::Select( sal_Bool /*bMod1*/ )
+void SfxToolBoxControl::Select( bool /*bMod1*/ )
 {
     svt::ToolboxController::execute( pImpl->nSelectModifier );
 }
@@ -1159,8 +1159,8 @@ SfxPopupWindow::SfxPopupWindow(
     const Reference< XFrame >& rFrame,
     WinBits nBits ) :
     FloatingWindow( SFX_APP()->GetTopWindow(), nBits )
-    , m_bFloating(sal_False)
-    , m_bCascading( sal_False )
+    , m_bFloating( false )
+    , m_bCascading( false )
     , m_nId( nId )
     , m_xFrame( rFrame )
     , m_pStatusListener( 0 )
@@ -1177,8 +1177,8 @@ SfxPopupWindow::SfxPopupWindow(
     const Reference< XFrame >& rFrame,
     const ResId &rId ) :
     FloatingWindow( SFX_APP()->GetTopWindow(), rId )
-    , m_bFloating(sal_False)
-    , m_bCascading( sal_False )
+    , m_bFloating( false )
+    , m_bCascading( false )
     , m_nId( nId )
     , m_xFrame( rFrame )
     , m_pStatusListener( 0 )
@@ -1196,8 +1196,8 @@ SfxPopupWindow::SfxPopupWindow(
     Window* pParentWindow,
     WinBits nBits ) :
     FloatingWindow( pParentWindow, nBits )
-    , m_bFloating(sal_False)
-    , m_bCascading( sal_False )
+    , m_bFloating( false )
+    , m_bCascading( false )
     , m_nId( nId )
     , m_xFrame( rFrame )
     , m_pStatusListener( 0 )
@@ -1213,8 +1213,8 @@ SfxPopupWindow::SfxPopupWindow(
     Window* pParentWindow,
     const ResId &rId ) :
     FloatingWindow( pParentWindow, rId )
-    , m_bFloating(sal_False)
-    , m_bCascading( sal_False )
+    , m_bFloating( false )
+    , m_bCascading( false )
     , m_nId( nId )
     , m_xFrame( rFrame )
     , m_pStatusListener( 0 )
@@ -1287,7 +1287,7 @@ void SfxPopupWindow::AddStatusListener( const OUString& rCommandURL )
 
 bool SfxPopupWindow::Close()
 {
-    m_bFloating = sal_False;
+    m_bFloating = false;
     FloatingWindow::Close();
 
     Delete();
@@ -1305,7 +1305,7 @@ void SfxPopupWindow::PopupModeEnd()
     {
         // was teared-off
         DeleteFloatingWindow();
-        m_bFloating = sal_True;
+        m_bFloating = true;
     }
     else
         Close();
@@ -1326,7 +1326,7 @@ void SfxPopupWindow::DeleteFloatingWindow()
 
 void SfxPopupWindow::MouseMove( const ::MouseEvent& rMEvt )
 {
-    if ( m_bCascading == sal_False )
+    if ( !m_bCascading )
         FloatingWindow::MouseMove( rMEvt );
     else
     {
@@ -1352,7 +1352,7 @@ void SfxPopupWindow::MouseMove( const ::MouseEvent& rMEvt )
 
 void SfxPopupWindow::StartCascading()
 {
-    m_bCascading= sal_True;
+    m_bCascading = true;
 }
 
 

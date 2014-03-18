@@ -90,7 +90,7 @@ public:
 
     void                        DisplayAppEvents( bool appEvents);
     void                        SetReadOnly( sal_Bool bSet );
-    sal_Bool                        IsReadOnly() const;
+    bool                        IsReadOnly() const;
 };
 
 class SvxMacroTabPage : public _SvxMacroTabPage

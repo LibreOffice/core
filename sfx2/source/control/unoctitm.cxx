@@ -398,19 +398,16 @@ void SfxOfficeDispatch::SetFrame(const ::com::sun::star::uno::Reference< ::com::
         pControllerItem->SetFrame( xFrame );
 }
 
-void SfxOfficeDispatch::SetMasterUnoCommand( sal_Bool bSet )
+void SfxOfficeDispatch::SetMasterUnoCommand( bool bSet )
 {
     if ( pControllerItem )
         pControllerItem->setMasterSlaveCommand( bSet );
 }
 
 // Determine if URL contains a master/slave command which must be handled a little bit different
-sal_Bool SfxOfficeDispatch::IsMasterUnoCommand( const ::com::sun::star::util::URL& aURL )
+bool SfxOfficeDispatch::IsMasterUnoCommand( const ::com::sun::star::util::URL& aURL )
 {
-    if ( aURL.Protocol == ".uno:" && ( aURL.Path.indexOf( '.' ) > 0 ))
-        return sal_True;
-
-    return sal_False;
+    return aURL.Protocol == ".uno:" && ( aURL.Path.indexOf( '.' ) > 0 );
 }
 
 OUString SfxOfficeDispatch::GetMasterUnoCommand( const ::com::sun::star::util::URL& aURL )
@@ -438,8 +435,8 @@ SfxDispatchController_Impl::SfxDispatchController_Impl(
     , pLastState( 0 )
     , nSlot( pSlot->GetSlotId() )
     , pDispatch( pDisp )
-    , bMasterSlave( sal_False )
-    , bVisible( sal_True )
+    , bMasterSlave( false )
+    , bVisible( true )
     , pUnoName( pSlot->pUnoName )
 {
     if ( aDispatchURL.Protocol == "slot:" && pUnoName )
@@ -484,7 +481,7 @@ void SfxDispatchController_Impl::SetFrame(const ::com::sun::star::uno::Reference
     xFrame = _xFrame;
 }
 
-void SfxDispatchController_Impl::setMasterSlaveCommand( sal_Bool bSet )
+void SfxDispatchController_Impl::setMasterSlaveCommand( bool bSet )
 {
     bMasterSlave = bSet;
 }
@@ -862,7 +859,7 @@ void SfxDispatchController_Impl::StateChanged( sal_uInt16 nSID, SfxItemState eSt
             if ( pLastState && !IsInvalidItem( pLastState ) )
                 delete pLastState;
             pLastState = !IsInvalidItem(pState) ? pState->Clone() : pState;
-            bVisible = sal_True;
+            bVisible = true;
         }
         else
             bVisible = ((SfxVisibilityItem *)pState)->GetValue();

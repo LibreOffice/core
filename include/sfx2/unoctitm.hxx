@@ -132,12 +132,12 @@ public:
     virtual sal_Int64 SAL_CALL getSomething( const ::com::sun::star::uno::Sequence< sal_Int8 >& aIdentifier ) throw(::com::sun::star::uno::RuntimeException, std::exception) ;
     static const ::com::sun::star::uno::Sequence< sal_Int8 >& impl_getStaticIdentifier();
 
-    static sal_Bool         IsMasterUnoCommand( const ::com::sun::star::util::URL& aURL );
+    static bool        IsMasterUnoCommand( const ::com::sun::star::util::URL& aURL );
     static OUString    GetMasterUnoCommand( const ::com::sun::star::util::URL& aURL );
 
     void                    SetFrame(const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& xFrame);
 
-    void                    SetMasterUnoCommand( sal_Bool bSet );
+    void                    SetMasterUnoCommand( bool bSet );
 
     SfxDispatcher*          GetDispatcher_Impl();
 };
@@ -150,8 +150,8 @@ class SfxDispatchController_Impl : public SfxControllerItem
     const SfxPoolItem*          pLastState;
     sal_uInt16                  nSlot;
     SfxOfficeDispatch*          pDispatch;
-    sal_Bool                    bMasterSlave;
-    sal_Bool                    bVisible;
+    bool                        bMasterSlave;
+    bool                        bVisible;
     const char*                 pUnoName;
     ::com::sun::star::uno::WeakReference< ::com::sun::star::frame::XFrame > xFrame;
 
@@ -171,7 +171,7 @@ public:
 
     void                StateChanged( sal_uInt16 nSID, SfxItemState eState, const SfxPoolItem* pState, SfxSlotServer* pServ );
     virtual void        StateChanged( sal_uInt16 nSID, SfxItemState eState, const SfxPoolItem* pState );
-    void                setMasterSlaveCommand( sal_Bool bSet );
+    void                setMasterSlaveCommand( bool bSet );
     void SAL_CALL       dispatch( const ::com::sun::star::util::URL& aURL,
                                   const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& aArgs,
                                   const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatchResultListener >& rListener ) throw( ::com::sun::star::uno::RuntimeException );

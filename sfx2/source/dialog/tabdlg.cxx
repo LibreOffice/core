@@ -49,11 +49,11 @@ TYPEINIT1(SfxTabDialogItem,SfxSetItem);
 
 struct TabPageImpl
 {
-    sal_Bool                        mbStandard;
+    bool                        mbStandard;
     sfx::ItemConnectionArray    maItemConn;
     ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame > mxFrame;
 
-    TabPageImpl() : mbStandard( sal_False ) {}
+    TabPageImpl() : mbStandard( false ) {}
 };
 
 struct Data_Impl
@@ -62,19 +62,19 @@ struct Data_Impl
     CreateTabPage fnCreatePage;   // Pointer to Factory
     GetTabPageRanges fnGetRanges; // Pointer to Ranges-Function
     SfxTabPage* pTabPage;         // The TabPage itself
-    sal_Bool bOnDemand;              // Flag: ItemSet onDemand
-    sal_Bool bRefresh;                // Flag: Page must be re-initialized
+    bool bOnDemand;              // Flag: ItemSet onDemand
+    bool bRefresh;                // Flag: Page must be re-initialized
 
     // Constructor
     Data_Impl( sal_uInt16 Id, CreateTabPage fnPage,
-               GetTabPageRanges fnRanges, sal_Bool bDemand ) :
+               GetTabPageRanges fnRanges, bool bDemand ) :
 
         nId         ( Id ),
         fnCreatePage( fnPage ),
         fnGetRanges ( fnRanges ),
         pTabPage    ( 0 ),
         bOnDemand   ( bDemand ),
-        bRefresh    ( sal_False )
+        bRefresh    ( false )
     {
         if ( !fnCreatePage  )
         {
@@ -136,7 +136,7 @@ void SfxTabDialogController::StateChanged( sal_uInt16 /*nSID*/, SfxItemState /*e
     if ( pSetItem )
     {
         pSet = pDialog->pSet = pSetItem->GetItemSet().Clone();
-        sal_Bool bDialogStarted = sal_False;
+        bool bDialogStarted = false;
         for ( sal_uInt16 n=0; n<pDialog->m_pTabCtrl->GetPageCount(); n++ )
         {
             sal_uInt16 nPageId = pDialog->m_pTabCtrl->GetPageId( n );
@@ -144,7 +144,7 @@ void SfxTabDialogController::StateChanged( sal_uInt16 /*nSID*/, SfxItemState /*e
             if ( pTabPage )
             {
                 pTabPage->Reset( pSetItem->GetItemSet() );
-                bDialogStarted = sal_True;
+                bDialogStarted = true;
             }
         }
 
@@ -159,7 +159,7 @@ typedef std::vector<Data_Impl*> SfxTabDlgData_Impl;
 
 struct TabDlg_Impl
 {
-    sal_Bool            bModified       : 1,
+    bool                bModified       : 1,
                         bModal          : 1,
                         bHideResetBtn   : 1;
     SfxTabDlgData_Impl  aData;
@@ -168,9 +168,9 @@ struct TabDlg_Impl
 
     TabDlg_Impl( sal_uInt8 nCnt ) :
 
-        bModified       ( sal_False ),
-        bModal          ( sal_True ),
-        bHideResetBtn   ( sal_False ),
+        bModified       ( false ),
+        bModal          ( true ),
+        bHideResetBtn   ( false ),
         pController     ( NULL )
     {
         aData.reserve( nCnt );
@@ -224,7 +224,7 @@ SfxTabPage::SfxTabPage( Window *pParent,
     TabPage( pParent, rResId ),
 
     pSet                ( &rAttrSet ),
-    bHasExchangeSupport ( sal_False ),
+    bHasExchangeSupport ( false ),
     pImpl               ( new TabPageImpl )
 
 {
@@ -234,7 +234,7 @@ SfxTabPage::SfxTabPage( Window *pParent,
 SfxTabPage::SfxTabPage(Window *pParent, const OString& rID, const OUString& rUIXMLDescription, const SfxItemSet &rAttrSet)
     : TabPage(pParent, rID, rUIXMLDescription)
     , pSet                ( &rAttrSet )
-    , bHasExchangeSupport ( sal_False )
+    , bHasExchangeSupport ( false )
     , pImpl               ( new TabPageImpl )
 {
 }
@@ -320,14 +320,14 @@ void SfxTabPage::FillUserData()
 
 
 
-sal_Bool SfxTabPage::IsReadOnly() const
+bool SfxTabPage::IsReadOnly() const
 {
-    return sal_False;
+    return false;
 }
 
 
 
-const SfxPoolItem* SfxTabPage::GetItem( const SfxItemSet& rSet, sal_uInt16 nSlot, sal_Bool bDeep )
+const SfxPoolItem* SfxTabPage::GetItem( const SfxItemSet& rSet, sal_uInt16 nSlot, bool bDeep )
 
 /*  [Description]
 
@@ -349,7 +349,7 @@ const SfxPoolItem* SfxTabPage::GetItem( const SfxItemSet& rSet, sal_uInt16 nSlot
 
 
 const SfxPoolItem* SfxTabPage::GetOldItem( const SfxItemSet& rSet,
-                                           sal_uInt16 nSlot, sal_Bool bDeep )
+                                           sal_uInt16 nSlot, bool bDeep )
 
 /*  [Description]
 
@@ -407,7 +407,7 @@ SfxTabDialog::SfxTabDialog
     , pRanges(0)
     , nResId(0)
     , nAppPageId(USHRT_MAX)
-    , bItemsReset(sal_False)
+    , bItemsReset(false)
     , bFmt(bEditFmt)
     , pExampleSet(0)
 {
@@ -438,7 +438,7 @@ SfxTabDialog::SfxTabDialog
     , pRanges(0)
     , nResId(0)
     , nAppPageId(USHRT_MAX)
-    , bItemsReset(sal_False)
+    , bItemsReset(false)
     , bFmt(bEditFmt)
     , pExampleSet(0)
 {
@@ -631,7 +631,7 @@ void SfxTabDialog::Init_Impl( sal_Bool bFmtFlag, const OUString* pUserButtonText
 void SfxTabDialog::RemoveResetButton()
 {
     m_pResetBtn->Hide();
-    pImpl->bHideResetBtn = sal_True;
+    pImpl->bHideResetBtn = true;
 }
 
 
@@ -656,9 +656,9 @@ void SfxTabDialog::StartExecuteModal( const Link& rEndDialogHdl )
 
 
 
-void SfxTabDialog::Start( sal_Bool bShow )
+void SfxTabDialog::Start( bool bShow )
 {
-    pImpl->bModal = sal_False;
+    pImpl->bModal = false;
     Start_Impl();
 
     if ( bShow )
@@ -712,7 +712,7 @@ void SfxTabDialog::Start_Impl()
     ActivatePageHdl( m_pTabCtrl );
 }
 
-void SfxTabDialog::AddTabPage( sal_uInt16 nId, const OUString &rRiderText, sal_Bool bItemsOnDemand, sal_uInt16 nPos )
+void SfxTabDialog::AddTabPage( sal_uInt16 nId, const OUString &rRiderText, bool bItemsOnDemand, sal_uInt16 nPos )
 {
     AddTabPage( nId, rRiderText, 0, 0, bItemsOnDemand, nPos );
 }
@@ -727,7 +727,7 @@ sal_uInt16 SfxTabDialog::AddTabPage
     CreateTabPage pCreateFunc,     // Pointer to the Factory Method
     GetTabPageRanges pRangesFunc,  // Pointer to the Method for quering
                                    // Ranges onDemand
-    sal_Bool bItemsOnDemand        // indicates whether the set of this page is
+    bool bItemsOnDemand            // indicates whether the set of this page is
                                    // requested when created
 )
 {
@@ -772,7 +772,7 @@ void SfxTabDialog::AddTabPage
     const OUString& rRiderText,
     CreateTabPage pCreateFunc,
     GetTabPageRanges pRangesFunc,
-    sal_Bool bItemsOnDemand,
+    bool bItemsOnDemand,
     sal_uInt16 nPos
 )
 {
@@ -1190,7 +1190,7 @@ IMPL_LINK_NOARG(SfxTabDialog, BaseFmtHdl)
         // Set all Items as new  -> the call the current Page Reset()
         DBG_ASSERT( pDataObject->pTabPage, "the Page is gone" );
         pDataObject->pTabPage->Reset( aTmpSet );
-        pDataObject->pTabPage->pImpl->mbStandard = sal_True;
+        pDataObject->pTabPage->pImpl->mbStandard = true;
     }
     return 1;
 }
@@ -1268,11 +1268,11 @@ IMPL_LINK( SfxTabDialog, ActivatePageHdl, TabControl *, pTabCtrl )
     }
     else if ( pDataObject->bRefresh )
         pTabPage->Reset( *pSet );
-    pDataObject->bRefresh = sal_False;
+    pDataObject->bRefresh = false;
 
     if ( pExampleSet )
         pTabPage->ActivatePage( *pExampleSet );
-    sal_Bool bReadOnly = pTabPage->IsReadOnly();
+    bool bReadOnly = pTabPage->IsReadOnly();
     ( bReadOnly || pImpl->bHideResetBtn ) ? m_pResetBtn->Hide() : m_pResetBtn->Show();
     return 0;
 }
@@ -1353,9 +1353,9 @@ IMPL_LINK( SfxTabDialog, DeactivatePageHdl, TabControl *, pTabCtrl )
             Data_Impl* pObj = *it;
 
             if ( pObj->pTabPage != pPage ) // Do not refresh own Page anymore
-                pObj->bRefresh = sal_True;
+                pObj->bRefresh = true;
             else
-                pObj->bRefresh = sal_False;
+                pObj->bRefresh = false;
         }
     }
     if ( nRet & SfxTabPage::LEAVE_PAGE )
@@ -1395,9 +1395,9 @@ const sal_uInt16* SfxTabDialog::GetInputRanges( const SfxItemPool& rPool )
 
     [Cross-reference]
 
-    <SfxTabDialog::AddTabPage(sal_uInt16, CreateTabPage, GetTabPageRanges, sal_Bool)>
-    <SfxTabDialog::AddTabPage(sal_uInt16, const String &, CreateTabPage, GetTabPageRanges, sal_Bool, sal_uInt16)>
-    <SfxTabDialog::AddTabPage(sal_uInt16, const Bitmap &, CreateTabPage, GetTabPageRanges, sal_Bool, sal_uInt16)>
+    <SfxTabDialog::AddTabPage(sal_uInt16, CreateTabPage, GetTabPageRanges, bool)>
+    <SfxTabDialog::AddTabPage(sal_uInt16, const String &, CreateTabPage, GetTabPageRanges, bool, sal_uInt16)>
+    <SfxTabDialog::AddTabPage(sal_uInt16, const Bitmap &, CreateTabPage, GetTabPageRanges, bool, sal_uInt16)>
 */
 
 {

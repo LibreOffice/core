@@ -548,7 +548,7 @@ IMPL_LINK_NOARG(SvxHFPage, BackgroundHdl)
         // Use only the necessary items for border and background
         sal_uInt16 nBrush = GetWhich( SID_ATTR_BRUSH );
         sal_uInt16 nOuter = GetWhich( SID_ATTR_BORDER_OUTER );
-        sal_uInt16 nInner = GetWhich( SID_ATTR_BORDER_INNER, sal_False );
+        sal_uInt16 nInner = GetWhich( SID_ATTR_BORDER_INNER, false );
         sal_uInt16 nShadow = GetWhich( SID_ATTR_BORDER_SHADOW );
 
         // Create an empty set

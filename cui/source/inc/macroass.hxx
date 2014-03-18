@@ -73,7 +73,7 @@ public:
     virtual sal_Bool                FillItemSet( SfxItemSet& rSet );
     virtual void                Reset( const SfxItemSet& rSet );
 
-    sal_Bool                        IsReadOnly() const;
+    bool                        IsReadOnly() const;
 };
 
 inline const SvxMacroTableDtor& _SfxMacroTabPage::GetMacroTbl() const

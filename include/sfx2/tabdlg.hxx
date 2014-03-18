@@ -90,11 +90,11 @@ friend class SfxTabDialogController;
     const SfxItemSet*   pSet;
     SfxItemSet*         pOutSet;
     TabDlg_Impl*        pImpl;
-    sal_uInt16*             pRanges;
+    sal_uInt16*         pRanges;
     sal_uInt32          nResId;
-    sal_uInt16              nAppPageId;
-    sal_Bool                bItemsReset;
-    sal_Bool                bFmt;
+    sal_uInt16          nAppPageId;
+    bool                bItemsReset;
+    sal_Bool            bFmt;
 
     DECL_DLLPRIVATE_LINK( ActivatePageHdl, TabControl * );
     DECL_DLLPRIVATE_LINK( DeactivatePageHdl, TabControl * );
@@ -140,7 +140,7 @@ public:
     sal_uInt16          AddTabPage( const OString& rName,           // Name of the label for the page in the notebook .ui
                                     CreateTabPage pCreateFunc,      // != 0
                                     GetTabPageRanges pRangesFunc,   // can be 0
-                                    sal_Bool bItemsOnDemand = sal_False);
+                                    bool bItemsOnDemand = false);
 
     sal_uInt16          AddTabPage ( const OString &rName,          // Name of the label for the page in the notebook .ui
                                      sal_uInt16 nPageCreateId );    // Identifier of the Factory Method to create the page
@@ -149,22 +149,22 @@ public:
                                     const OUString &rRiderText,
                                     CreateTabPage pCreateFunc,      // != 0
                                     GetTabPageRanges pRangesFunc,   // can be 0
-                                    sal_Bool bItemsOnDemand = sal_False,
+                                    bool bItemsOnDemand = false,
                                     sal_uInt16 nPos = TAB_APPEND);
     void                AddTabPage( sal_uInt16 nId,
                                     const Bitmap &rRiderBitmap,
                                     CreateTabPage pCreateFunc,      // != 0
                                     GetTabPageRanges pRangesFunc,   // can be 0
-                                    sal_Bool bItemsOnDemand = sal_False,
+                                    bool bItemsOnDemand = false,
                                     sal_uInt16 nPos = TAB_APPEND);
 
     void                AddTabPage( sal_uInt16 nId,
                                     const OUString &rRiderText,
-                                    sal_Bool bItemsOnDemand = sal_False,
+                                    bool bItemsOnDemand = false,
                                     sal_uInt16 nPos = TAB_APPEND);
     void                AddTabPage( sal_uInt16 nId,
                                     const Bitmap &rRiderBitmap,
-                                    sal_Bool bItemsOnDemand = sal_False,
+                                    bool bItemsOnDemand = false,
                                     sal_uInt16 nPos = TAB_APPEND);
 
     void                RemoveTabPage( const OString& rName ); // Name of the label for the page in the notebook .ui
@@ -199,7 +199,7 @@ public:
     const sal_uInt16*       GetInputRanges( const SfxItemPool& );
     void                SetInputSet( const SfxItemSet* pInSet );
     const SfxItemSet*   GetOutputItemSet() const { return pOutSet; }
-    sal_Bool IsFormat() const { return bFmt; }
+    bool                IsFormat() const { return bFmt; }
 
     const PushButton&   GetOKButton() const { return *m_pOKBtn; }
     PushButton&         GetOKButton() { return *m_pOKBtn; }
@@ -214,7 +214,7 @@ public:
 
     short               Execute();
     void                StartExecuteModal( const Link& rEndDialogHdl );
-    void                Start( sal_Bool bShow = sal_True );
+    void                Start( bool bShow = true );
 
     const SfxItemSet*   GetExampleSet() const { return pExampleSet; }
     SfxViewFrame*       GetViewFrame() const { return pFrame; }
@@ -236,7 +236,7 @@ friend class SfxTabDialog;
 private:
     const SfxItemSet*   pSet;
     OUString            aUserString;
-    sal_Bool            bHasExchangeSupport;
+    bool                bHasExchangeSupport;
     TabPageImpl*        pImpl;
 
     SAL_DLLPRIVATE void SetInputSet( const SfxItemSet* pNew ) { pSet = pNew; }
@@ -247,9 +247,9 @@ protected:
 
     sal_uInt16              GetSlot( sal_uInt16 nWhich ) const
                             { return pSet->GetPool()->GetSlotId( nWhich ); }
-    sal_uInt16              GetWhich( sal_uInt16 nSlot, sal_Bool bDeep = sal_True ) const
+    sal_uInt16              GetWhich( sal_uInt16 nSlot, bool bDeep = true ) const
                             { return pSet->GetPool()->GetWhich( nSlot, bDeep ); }
-    const SfxPoolItem*  GetOldItem( const SfxItemSet& rSet, sal_uInt16 nSlot, sal_Bool bDeep = sal_True );
+    const SfxPoolItem*  GetOldItem( const SfxItemSet& rSet, sal_uInt16 nSlot, bool bDeep = true );
     SfxTabDialog*       GetTabDialog() const;
 
     void                AddItemConnection( sfx::ItemConnectionBase* pConnection );
@@ -262,9 +262,9 @@ public:
     virtual sal_Bool        FillItemSet( SfxItemSet& );
     virtual void        Reset( const SfxItemSet& );
 
-    sal_Bool                HasExchangeSupport() const
+    bool                HasExchangeSupport() const
                             { return bHasExchangeSupport; }
-    void                SetExchangeSupport( sal_Bool bNew = sal_True )
+    void                SetExchangeSupport( bool bNew = true )
                             { bHasExchangeSupport = bNew; }
 
     enum sfxpg {
@@ -284,9 +284,9 @@ public:
                               { aUserString = rString; }
     OUString                GetUserData() { return aUserString; }
     virtual void            FillUserData();
-    virtual sal_Bool        IsReadOnly() const;
+    virtual bool            IsReadOnly() const;
     virtual void PageCreated (SfxAllItemSet aSet);
-    static const SfxPoolItem* GetItem( const SfxItemSet& rSet, sal_uInt16 nSlot, sal_Bool bDeep = sal_True );
+    static const SfxPoolItem* GetItem( const SfxItemSet& rSet, sal_uInt16 nSlot, bool bDeep = true );
 
     void SetFrame(const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& xFrame);
     ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame > GetFrame();
