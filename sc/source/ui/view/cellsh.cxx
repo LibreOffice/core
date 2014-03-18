@@ -679,6 +679,26 @@ void ScCellShell::GetState(SfxItemSet &rSet)
                 }
                 break;
 
+            case SID_ROWCOL_SELCOUNT:
+                {
+                    ScRange aMarkRange;
+                    GetViewData()->GetSimpleArea( aMarkRange );
+                    SCCOL nCol1, nCol2;
+                    SCROW nRow1, nRow2;
+                    nCol1 = aMarkRange.aStart.Col();
+                    nRow1 = aMarkRange.aStart.Row();
+                    nCol2 = aMarkRange.aEnd.Col();
+                    nRow2 = aMarkRange.aEnd.Row();
+                    if( nCol2 != nCol1 || nRow1 != nRow2 )
+                    {
+                        OUString aStr = ScGlobal::GetRscString( STR_ROWCOL_SELCOUNT );
+                        aStr = aStr.replaceAll( "$1", OUString::number( nRow2 - nRow1 + 1 ));
+                        aStr = aStr.replaceAll( "$2", OUString::number( nCol2 - nCol1 + 1 ));
+                        rSet.Put( SfxStringItem( nWhich, aStr ) );
+                    }
+                }
+                break;
+
             //  calculations etc. with date/time/Fail/position&size together
 
             // #i34458# The SfxStringItem belongs only into SID_TABLE_CELL. It no longer has to be

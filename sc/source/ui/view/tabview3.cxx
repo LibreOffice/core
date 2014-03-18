@@ -355,6 +355,7 @@ void ScTabView::CellContentChanged()
     rBindings.Invalidate( SID_ATTR_SIZE );      // -> Fehlermeldungen anzeigen
     rBindings.Invalidate( SID_THESAURUS );
     rBindings.Invalidate( SID_HYPERLINK_GETLINK );
+    rBindings.Invalidate( SID_ROWCOL_SELCOUNT );
 
     InvalidateAttribs();                    // Attribut-Updates
 
@@ -385,6 +386,7 @@ void ScTabView::SelectionChanged()
     rBindings.Invalidate( FID_SHOW_NOTE );
     rBindings.Invalidate( FID_HIDE_NOTE );
     rBindings.Invalidate( SID_DELETE_NOTE );
+    rBindings.Invalidate( SID_ROWCOL_SELCOUNT );
 
         //  Funktionen, die evtl disabled werden muessen
 
@@ -1748,6 +1750,7 @@ void ScTabView::SetTabNo( SCTAB nTab, bool bNew, bool bExtendSelection, bool bSa
         rBindings.Invalidate( FID_DEL_MANUALBREAKS );
         rBindings.Invalidate( FID_RESET_PRINTZOOM );
         rBindings.Invalidate( SID_STATUS_DOCPOS );      // Statusbar
+        rBindings.Invalidate( SID_ROWCOL_SELCOUNT );    // Statusbar
         rBindings.Invalidate( SID_STATUS_PAGESTYLE );   // Statusbar
         rBindings.Invalidate( SID_CURRENTTAB );         // Navigator
         rBindings.Invalidate( SID_STYLE_FAMILY2 );  // Gestalter

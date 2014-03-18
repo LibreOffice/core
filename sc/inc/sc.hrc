@@ -242,6 +242,7 @@
 #define SC_HINT_DOC_SAVED       (SC_MESSAGE_START + 35)
 #define SC_HINT_FORCESETTAB     (SC_MESSAGE_START + 36)
 #define SID_ENTER_STRING        (SC_MESSAGE_START + 37)
+#define SID_ROWCOL_SELCOUNT     (SC_MESSAGE_START + 38)
 
 // messages for opening dialogs:
 #define SID_OPENDLG_CONSOLIDATE     (SC_MESSAGE_START + 50)

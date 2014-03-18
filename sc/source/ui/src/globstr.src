@@ -585,6 +585,10 @@ Resource RID_GLOBSTR
     {
         Text [ en-US ] = "Sheet" ;
     };
+    String STR_ROWCOL_SELCOUNT
+    {
+        Text [ en-US ] = "Selected $1 rows, $2 columns";
+    };
     String STR_COLUMN
     {
         Text [ en-US ] = "Column" ;

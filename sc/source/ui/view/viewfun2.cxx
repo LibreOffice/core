@@ -1874,6 +1874,7 @@ void ScViewFunc::MakeScenario( const OUString& rName, const OUString& rComment,
     {
         SfxBindings& rBindings = GetViewData()->GetBindings();
         rBindings.Invalidate( SID_STATUS_DOCPOS );      // Statusbar
+        rBindings.Invalidate( SID_ROWCOL_SELCOUNT );    // Statusbar
         rBindings.Invalidate( SID_TABLES_COUNT );
         rBindings.Invalidate( SID_SELECT_SCENARIO );
         rBindings.Invalidate( FID_TABLE_SHOW );
