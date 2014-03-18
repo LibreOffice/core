@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da86d52c_ccb85f2d",
+        "filename": "sw/source/filter/ww8/docxsdrexport.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 574,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2014-03-18T13:29:17Z",
+      "side": 1,
+      "message": "The \"true \u0026\u0026\" part is just a debugging leftover, I guess.",
+      "revId": "54e131e9d633096509db0d68c7a5290153273d60",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da86d52c_ecb52332",
+        "filename": "sw/source/filter/ww8/docxsdrexport.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 593,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2014-03-18T13:29:17Z",
+      "side": 1,
+      "message": "The indentation style of this file has been consistent so far, please don\u0027t break that. (Too much indentation here.)",
+      "revId": "54e131e9d633096509db0d68c7a5290153273d60",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da86d52c_acab2bd5",
+        "filename": "sw/source/filter/ww8/docxsdrexport.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 50,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2014-03-18T13:29:17Z",
+      "side": 1,
+      "message": "Please don\u0027t add new members here, add them to the Impl class.",
+      "revId": "54e131e9d633096509db0d68c7a5290153273d60",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
