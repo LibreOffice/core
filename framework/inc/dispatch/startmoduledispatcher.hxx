@@ -20,7 +20,6 @@
 #ifndef INCLUDED_FRAMEWORK_INC_DISPATCH_STARTMODULEDISPATCHER_HXX
 #define INCLUDED_FRAMEWORK_INC_DISPATCH_STARTMODULEDISPATCHER_HXX
 
-#include <threadhelp/threadhelpbase.hxx>
 #include <macros/xinterface.hxx>
 #include <macros/xtypeprovider.hxx>
 #include <macros/generic.hxx>
@@ -48,9 +47,7 @@ namespace framework{
 /**
     @short          helper to handle all URLs related to the StartModule
  */
-class StartModuleDispatcher : // baseclasses ... order is necessary for right initialization!
-                              private ThreadHelpBase,
-                              public  ::cppu::WeakImplHelper2<
+class StartModuleDispatcher : public  ::cppu::WeakImplHelper2<
                                          css::frame::XNotifyingDispatch,             // => XDispatch
                                          css::frame::XDispatchInformationProvider >
 {
@@ -75,6 +72,7 @@ class StartModuleDispatcher : // baseclasses ... order is necessary for right in
 
 
         /** @short  list of registered status listener */
+        osl::Mutex m_mutex;
         ListenerHash m_lStatusListener;
 
 

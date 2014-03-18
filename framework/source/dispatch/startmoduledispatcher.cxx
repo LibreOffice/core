@@ -21,7 +21,6 @@
 #include <dispatch/startmoduledispatcher.hxx>
 
 #include <pattern/frame.hxx>
-#include <threadhelp/guard.hxx>
 #include <framework/framelistanalyzer.hxx>
 #include <dispatchcommands.h>
 #include <targets.h>
@@ -56,11 +55,10 @@ namespace fpf = ::framework::pattern::frame;
 StartModuleDispatcher::StartModuleDispatcher(const css::uno::Reference< css::uno::XComponentContext >&     rxContext,
                                              const css::uno::Reference< css::frame::XFrame >&              xFrame ,
                                              const OUString&                                        sTarget)
-    : ThreadHelpBase     (&Application::GetSolarMutex() )
-    , m_xContext         (rxContext                         )
+    : m_xContext         (rxContext                         )
     , m_xOwner           (xFrame                        )
     , m_sDispatchTarget  (sTarget                       )
-    , m_lStatusListener  (m_aLock.getShareableOslMutex())
+    , m_lStatusListener  (m_mutex)
 {
 }
 
@@ -131,14 +129,8 @@ void SAL_CALL StartModuleDispatcher::removeStatusListener(const css::uno::Refere
     if ( ! SvtModuleOptions().IsModuleInstalled(SvtModuleOptions::E_SSTARTMODULE))
         return sal_False;
 
-    // SAFE -> ----------------------------------
-    Guard aReadLock(m_aLock);
-    css::uno::Reference< css::uno::XComponentContext > xContext = m_xContext;
-    aReadLock.unlock();
-    // <- SAFE ----------------------------------
-
     css::uno::Reference< css::frame::XFramesSupplier > xDesktop(
-        css::frame::Desktop::create( xContext ), css::uno::UNO_QUERY);
+        css::frame::Desktop::create( m_xContext ), css::uno::UNO_QUERY);
 
     FrameListAnalyzer aCheck(
         xDesktop,
@@ -162,17 +154,11 @@ void SAL_CALL StartModuleDispatcher::removeStatusListener(const css::uno::Refere
 
 ::sal_Bool StartModuleDispatcher::implts_establishBackingMode()
 {
-    // SAFE -> ----------------------------------
-    Guard aReadLock(m_aLock);
-    css::uno::Reference< css::uno::XComponentContext > xContext  = m_xContext;
-    aReadLock.unlock();
-    // <- SAFE ----------------------------------
-
-    css::uno::Reference< css::frame::XDesktop2> xDesktop       = css::frame::Desktop::create( xContext );
+    css::uno::Reference< css::frame::XDesktop2> xDesktop       = css::frame::Desktop::create( m_xContext );
     css::uno::Reference< css::frame::XFrame > xFrame           = xDesktop->findFrame(SPECIALTARGET_BLANK, 0);
     css::uno::Reference< css::awt::XWindow  > xContainerWindow = xFrame->getContainerWindow();
 
-    css::uno::Reference< css::frame::XController > xStartModule = css::frame::StartModule::createWithParentWindow(xContext, xContainerWindow);
+    css::uno::Reference< css::frame::XController > xStartModule = css::frame::StartModule::createWithParentWindow(m_xContext, xContainerWindow);
     css::uno::Reference< css::awt::XWindow > xComponentWindow(xStartModule, css::uno::UNO_QUERY);
     xFrame->setComponent(xComponentWindow, xStartModule);
     xStartModule->attachFrame(xFrame);
