@@ -2794,6 +2794,10 @@ endef
 
 else # !SYSTEM_PYTHON
 
+$(eval $(call gb_Helper_register_packages_for_install,python,\
+	python3 \
+))
+
 # depend on external project because on MACOSX the Package is disabled...
 define gb_LinkTarget__use_python_headers
 $(call gb_LinkTarget_use_external_project,$(1),python3)

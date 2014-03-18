@@ -18,6 +18,8 @@
 
 #include "macros.inc"
 
+#include "AutoInstall/python"
+
 #ifndef DISABLE_PYUNO
 
 Module gid_Module_Pyuno
@@ -36,7 +38,8 @@ Module gid_Module_Pyuno
             gid_Dir_Py_PythonCore,
             gid_Dir_Py_PythonCore_Bin,
             gid_Dir_Py_PythonCore_Lib);
-    Files = (gid_File_Pyuno,
+    Files = (auto_python_ALL,
+             gid_File_Pyuno,
              gid_File_Pyuno_Rdb,
              gid_File_Lib_Pyuno,
              gid_File_Lib_Pythonloader,

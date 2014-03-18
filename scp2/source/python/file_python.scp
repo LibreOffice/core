@@ -82,13 +82,6 @@ Directory gid_Dir_Py_PythonCore_Lib
 End
 #endif
 
-File gid_File_Py_Python_Core
-    TXT_FILE_BODY;
-    Dir = FILELIST_DIR;
-    Name = "python3.filelist";
-    Styles = (FILELIST,USE_INTERNAL_RIGHTS);
-End
-
 #ifdef WNT
 Directory gid_Dir_Py_PythonCore_Bin
     ParentID = gid_Dir_Py_PythonCore;
