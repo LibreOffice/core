@@ -35,6 +35,7 @@
 #include <com/sun/star/ui/XUIElementFactoryManager.hpp>
 
 #include <rtl/ustrbuf.hxx>
+#include <cppuhelper/basemutex.hxx>
 #include <cppuhelper/compbase2.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <vcl/svapp.hxx>
@@ -352,7 +353,7 @@ typedef ::cppu::WeakComponentImplHelper2<
     css::lang::XServiceInfo,
     css::ui::XUIElementFactoryManager> UIElementFactoryManager_BASE;
 
-class UIElementFactoryManager : private osl::Mutex,
+class UIElementFactoryManager : private cppu::BaseMutex,
                                 public UIElementFactoryManager_BASE
 {
     virtual void SAL_CALL disposing() SAL_OVERRIDE;
@@ -396,7 +397,7 @@ private:
 };
 
 UIElementFactoryManager::UIElementFactoryManager( const Reference< XComponentContext >& rxContext ) :
-    UIElementFactoryManager_BASE(*static_cast<osl::Mutex *>(this)),
+    UIElementFactoryManager_BASE(m_aMutex),
     m_bConfigRead( sal_False ),
     m_xContext(rxContext)
 {
