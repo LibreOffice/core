@@ -27,7 +27,6 @@
 
 #include <pattern/window.hxx>
 #include <threadhelp/transactionguard.hxx>
-#include <threadhelp/guard.hxx>
 #include <dispatchcommands.h>
 #include <protocols.h>
 #include <services.h>
@@ -64,10 +63,7 @@ namespace framework{
 */
 DispatchProvider::DispatchProvider( const css::uno::Reference< css::uno::XComponentContext >& rxContext  ,
                                     const css::uno::Reference< css::frame::XFrame >&              xFrame    )
-        //  Init baseclasses first
-        : ThreadHelpBase( &Application::GetSolarMutex() )
-        // Init member
-        , m_xContext    ( rxContext                     )
+        : m_xContext    ( rxContext                     )
         , m_xFrame      ( xFrame                        )
 {
 }
@@ -105,11 +101,7 @@ css::uno::Reference< css::frame::XDispatch > SAL_CALL DispatchProvider::queryDis
 {
     css::uno::Reference< css::frame::XDispatch > xDispatcher;
 
-    /* SAFE { */
-    Guard aReadLock( m_aLock );
-    css::uno::Reference< css::frame::XFrame > xOwner( m_xFrame.get(), css::uno::UNO_QUERY );
-    aReadLock.unlock();
-    /* } SAFE */
+    css::uno::Reference< css::frame::XFrame > xOwner(m_xFrame);
 
     css::uno::Reference< css::frame::XDesktop > xDesktopCheck( xOwner, css::uno::UNO_QUERY );
 
@@ -490,41 +482,39 @@ css::uno::Reference< css::frame::XDispatch > DispatchProvider::implts_searchProt
     // This member is threadsafe by himself and lives if we live - we don't need any mutex here.
     if (m_aProtocolHandlerCache.search(aURL,&aHandler))
     {
-        /* SAFE { */
-        Guard aReadLock( m_aLock );
-
-        // create it
         css::uno::Reference< css::frame::XDispatchProvider > xHandler;
-        try
         {
-            xHandler = css::uno::Reference< css::frame::XDispatchProvider >(
-                            css::uno::Reference<css::lang::XMultiServiceFactory>(m_xContext->getServiceManager(), css::uno::UNO_QUERY_THROW)
-                               ->createInstance(aHandler.m_sUNOName),
-                            css::uno::UNO_QUERY);
-        }
-        catch(const css::uno::Exception&) {}
+            SolarMutexGuard g;
 
-        // look if initialization is necessary
-        css::uno::Reference< css::lang::XInitialization > xInit( xHandler, css::uno::UNO_QUERY );
-        if (xInit.is())
-        {
-            css::uno::Reference< css::frame::XFrame > xOwner( m_xFrame.get(), css::uno::UNO_QUERY );
-            SAL_WARN_IF(!xOwner.is(), "fwk", "DispatchProvider::implts_searchProtocolHandler(): Couldn't get reference to my owner frame. So I can't set may needed context information for this protocol handler.");
-            if (xOwner.is())
+            // create it
+            try
             {
-                try
+                xHandler = css::uno::Reference< css::frame::XDispatchProvider >(
+                    css::uno::Reference<css::lang::XMultiServiceFactory>(m_xContext->getServiceManager(), css::uno::UNO_QUERY_THROW)
+                    ->createInstance(aHandler.m_sUNOName),
+                    css::uno::UNO_QUERY);
+            }
+            catch(const css::uno::Exception&) {}
+
+            // look if initialization is necessary
+            css::uno::Reference< css::lang::XInitialization > xInit( xHandler, css::uno::UNO_QUERY );
+            if (xInit.is())
+            {
+                css::uno::Reference< css::frame::XFrame > xOwner( m_xFrame.get(), css::uno::UNO_QUERY );
+                SAL_WARN_IF(!xOwner.is(), "fwk", "DispatchProvider::implts_searchProtocolHandler(): Couldn't get reference to my owner frame. So I can't set may needed context information for this protocol handler.");
+                if (xOwner.is())
                 {
-                    // but do it only, if all context information are OK
-                    css::uno::Sequence< css::uno::Any > lContext(1);
-                    lContext[0] <<= xOwner;
-                    xInit->initialize(lContext);
+                    try
+                    {
+                        // but do it only, if all context information are OK
+                        css::uno::Sequence< css::uno::Any > lContext(1);
+                        lContext[0] <<= xOwner;
+                        xInit->initialize(lContext);
+                    }
+                    catch(const css::uno::Exception&) {}
                 }
-                catch(const css::uno::Exception&) {}
             }
         }
-
-        aReadLock.unlock();
-        /* } SAFE */
 
         // ask for his (sub)dispatcher for the given URL
         if (xHandler.is())
@@ -566,34 +556,25 @@ css::uno::Reference< css::frame::XDispatch > DispatchProvider::implts_getOrCreat
 {
     css::uno::Reference< css::frame::XDispatch > xDispatchHelper;
 
-    /* SAFE { */
-    Guard aReadLock( m_aLock );
-    css::uno::Reference< css::uno::XComponentContext > xContext = m_xContext;
-    aReadLock.unlock();
-    /* } SAFE */
-
     switch (eHelper)
     {
         case E_MENUDISPATCHER :
                 {
                     // Attention: Such menue dispatcher must be a singleton for this frame - means our owner frame.
                     // Otherwhise he can make some trouble.
-                    /* SAFE { */
-                    Guard aWriteLock( m_aLock );
+                    SolarMutexGuard g;
                     if ( ! m_xMenuDispatcher.is() )
                     {
-                        MenuDispatcher* pDispatcher = new MenuDispatcher( xContext, xOwner );
+                        MenuDispatcher* pDispatcher = new MenuDispatcher( m_xContext, xOwner );
                         m_xMenuDispatcher = css::uno::Reference< css::frame::XDispatch >( static_cast< ::cppu::OWeakObject* >(pDispatcher), css::uno::UNO_QUERY );
                     }
                     xDispatchHelper = m_xMenuDispatcher;
-                    aWriteLock.unlock();
-                    /* } SAFE */
                 }
                 break;
 
         case E_CREATEDISPATCHER :
                 {
-                    LoadDispatcher* pDispatcher = new LoadDispatcher(xContext, xOwner, sTarget, nSearchFlags);
+                    LoadDispatcher* pDispatcher = new LoadDispatcher(m_xContext, xOwner, sTarget, nSearchFlags);
                     xDispatchHelper = css::uno::Reference< css::frame::XDispatch >( static_cast< ::cppu::OWeakObject* >(pDispatcher), css::uno::UNO_QUERY );
                 }
                 break;
@@ -603,7 +584,7 @@ css::uno::Reference< css::frame::XDispatch > DispatchProvider::implts_getOrCreat
                     css::uno::Reference< css::frame::XFrame > xDesktop( xOwner, css::uno::UNO_QUERY );
                     if (xDesktop.is())
                     {
-                        LoadDispatcher* pDispatcher = new LoadDispatcher(xContext, xOwner, SPECIALTARGET_BLANK, 0);
+                        LoadDispatcher* pDispatcher = new LoadDispatcher(m_xContext, xOwner, SPECIALTARGET_BLANK, 0);
                         xDispatchHelper = css::uno::Reference< css::frame::XDispatch >( static_cast< ::cppu::OWeakObject* >(pDispatcher), css::uno::UNO_QUERY );
                     }
                 }
@@ -614,7 +595,7 @@ css::uno::Reference< css::frame::XDispatch > DispatchProvider::implts_getOrCreat
                     css::uno::Reference< css::frame::XFrame > xDesktop( xOwner, css::uno::UNO_QUERY );
                     if (xDesktop.is())
                     {
-                        LoadDispatcher* pDispatcher = new LoadDispatcher(xContext, xOwner, SPECIALTARGET_DEFAULT, 0);
+                        LoadDispatcher* pDispatcher = new LoadDispatcher(m_xContext, xOwner, SPECIALTARGET_DEFAULT, 0);
                         xDispatchHelper = css::uno::Reference< css::frame::XDispatch >( static_cast< ::cppu::OWeakObject* >(pDispatcher), css::uno::UNO_QUERY );
                     }
                 }
@@ -622,21 +603,21 @@ css::uno::Reference< css::frame::XDispatch > DispatchProvider::implts_getOrCreat
 
         case E_SELFDISPATCHER :
                 {
-                    LoadDispatcher* pDispatcher = new LoadDispatcher(xContext, xOwner, SPECIALTARGET_SELF, 0);
+                    LoadDispatcher* pDispatcher = new LoadDispatcher(m_xContext, xOwner, SPECIALTARGET_SELF, 0);
                     xDispatchHelper = css::uno::Reference< css::frame::XDispatch >( static_cast< ::cppu::OWeakObject* >(pDispatcher), css::uno::UNO_QUERY );
                 }
                 break;
 
         case E_CLOSEDISPATCHER :
                 {
-                    CloseDispatcher* pDispatcher = new CloseDispatcher( xContext, xOwner, sTarget );
+                    CloseDispatcher* pDispatcher = new CloseDispatcher( m_xContext, xOwner, sTarget );
                     xDispatchHelper = css::uno::Reference< css::frame::XDispatch >( static_cast< ::cppu::OWeakObject* >(pDispatcher), css::uno::UNO_QUERY );
                 }
                 break;
 
         case E_STARTMODULEDISPATCHER :
                 {
-                    StartModuleDispatcher* pDispatcher = new StartModuleDispatcher( xContext, xOwner, sTarget );
+                    StartModuleDispatcher* pDispatcher = new StartModuleDispatcher( m_xContext, xOwner, sTarget );
                     xDispatchHelper = css::uno::Reference< css::frame::XDispatch >( static_cast< ::cppu::OWeakObject* >(pDispatcher), css::uno::UNO_QUERY );
                 }
                 break;

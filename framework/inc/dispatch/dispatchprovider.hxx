@@ -21,7 +21,6 @@
 #define INCLUDED_FRAMEWORK_INC_DISPATCH_DISPATCHPROVIDER_HXX
 
 #include <classes/protocolhandlercache.hxx>
-#include <threadhelp/threadhelpbase.hxx>
 
 #include <threadhelp/transactionbase.hxx>
 #include <macros/xinterface.hxx>
@@ -69,18 +68,13 @@ enum EDispatchHelper
     @attention      Use this class as member only! Never use it as baseclass.
                     XInterface will be ambigous and we hold a weakreference to ouer OWNER - not to ouer SUPERCLASS!
 
-    @base           ThreadHelpBase
-                        supports threadsafe mechanism
     @base           OWeakObject
                         provides ref count and weak mechanism
 
     @devstatus      ready to use
     @threadsafe     yes
 */
-class DispatchProvider  :   // baseclasses
-                            // Order is necessary for right initialization!
-                            private ThreadHelpBase                      ,
-                            private TransactionBase                     ,
+class DispatchProvider  :   private TransactionBase                     ,
                             // interfaces
                             public  ::cppu::WeakImplHelper1< css::frame::XDispatchProvider >
 {
