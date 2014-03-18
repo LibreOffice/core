@@ -20,7 +20,6 @@
 
 #include <stdio.h>
 
-#include <threadhelp/guard.hxx>
 #include <xml/statusbardocumenthandler.hxx>
 
 #include <com/sun/star/xml/sax/XExtendedDocumentHandler.hpp>
@@ -147,7 +146,6 @@ StatusBarEntryProperty StatusBarEntries[OReadStatusBarDocumentHandler::SB_XML_EN
 
 OReadStatusBarDocumentHandler::OReadStatusBarDocumentHandler(
     const Reference< XIndexContainer >& rStatusBarItems ) :
-    ThreadHelpBase( &Application::GetSolarMutex() ),
     m_aStatusBarItems( rStatusBarItems )
 {
     OUString aNamespaceStatusBar( XMLNS_STATUSBAR );
@@ -191,7 +189,7 @@ throw ( SAXException, RuntimeException, std::exception )
 void SAL_CALL OReadStatusBarDocumentHandler::endDocument(void)
 throw(  SAXException, RuntimeException, std::exception )
 {
-    Guard aGuard( m_aLock );
+    SolarMutexGuard g;
 
     if (( m_bStatusBarStartFound && !m_bStatusBarEndFound ) ||
         ( !m_bStatusBarStartFound && m_bStatusBarEndFound )     )
@@ -206,7 +204,7 @@ void SAL_CALL OReadStatusBarDocumentHandler::startElement(
     const OUString& aName, const Reference< XAttributeList > &xAttribs )
 throw(  SAXException, RuntimeException, std::exception )
 {
-    Guard aGuard( m_aLock );
+    SolarMutexGuard g;
 
     StatusBarHashMap::const_iterator pStatusBarEntry = m_aStatusBarMap.find( aName ) ;
     if ( pStatusBarEntry != m_aStatusBarMap.end() )
@@ -405,7 +403,7 @@ throw(  SAXException, RuntimeException, std::exception )
 void SAL_CALL OReadStatusBarDocumentHandler::endElement(const OUString& aName)
 throw(  SAXException, RuntimeException, std::exception )
 {
-    Guard aGuard( m_aLock );
+    SolarMutexGuard g;
 
     StatusBarHashMap::const_iterator pStatusBarEntry = m_aStatusBarMap.find( aName ) ;
     if ( pStatusBarEntry != m_aStatusBarMap.end() )
@@ -464,14 +462,14 @@ void SAL_CALL OReadStatusBarDocumentHandler::setDocumentLocator(
     const Reference< XLocator > &xLocator)
 throw(  SAXException, RuntimeException, std::exception )
 {
-    Guard aGuard( m_aLock );
+    SolarMutexGuard g;
 
     m_xLocator = xLocator;
 }
 
 OUString OReadStatusBarDocumentHandler::getErrorLineString()
 {
-    Guard aGuard( m_aLock );
+    SolarMutexGuard g;
 
     char buffer[32];
 
@@ -492,7 +490,6 @@ OUString OReadStatusBarDocumentHandler::getErrorLineString()
 OWriteStatusBarDocumentHandler::OWriteStatusBarDocumentHandler(
     const Reference< XIndexAccess >& aStatusBarItems,
     const Reference< XDocumentHandler >& rWriteDocumentHandler ) :
-    ThreadHelpBase( &Application::GetSolarMutex() ),
     m_aStatusBarItems( aStatusBarItems ),
     m_xWriteDocumentHandler( rWriteDocumentHandler )
 {
@@ -510,7 +507,7 @@ OWriteStatusBarDocumentHandler::~OWriteStatusBarDocumentHandler()
 void OWriteStatusBarDocumentHandler::WriteStatusBarDocument() throw
 ( SAXException, RuntimeException )
 {
-    Guard aGuard( m_aLock );
+    SolarMutexGuard g;
 
     m_xWriteDocumentHandler->startDocument();
 
