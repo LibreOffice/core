@@ -19,6 +19,7 @@
 
 
 #include <classes/actiontriggerpropertyset.hxx>
+#include <threadhelp/lockhelper.hxx>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <cppuhelper/proptypehlp.hxx>
 #include <cppuhelper/supportsservice.hxx>
@@ -53,8 +54,7 @@ namespace framework
 {
 
 ActionTriggerPropertySet::ActionTriggerPropertySet()
-    : ThreadHelpBase           ( &Application::GetSolarMutex()               )
-    , OBroadcastHelper         ( m_aLock.getShareableOslMutex()              )
+    : OBroadcastHelper         ( m_aMutex )
     ,   OPropertySetHelper       ( *(static_cast< OBroadcastHelper * >(this)))
     , OWeakObject              ()
     , m_xBitmap                ( 0 )
