@@ -54,9 +54,7 @@ OUString makeMacroURL( const OUString& sMacroName )
 
 OUString extractMacroName( const OUString& rMacroUrl )
 {
-    if( (rMacroUrl.getLength() > sUrlPart0.getLength() + sUrlPart1.getLength()) &&
-        rMacroUrl.match( sUrlPart0 ) &&
-        rMacroUrl.match( sUrlPart1, rMacroUrl.getLength() - sUrlPart1.getLength() ) )
+    if( rMacroUrl.startsWith( sUrlPart0 ) && rMacroUrl.endsWith( sUrlPart1 ) )
     {
         return rMacroUrl.copy( sUrlPart0.getLength(),
             rMacroUrl.getLength() - sUrlPart0.getLength() - sUrlPart1.getLength() );

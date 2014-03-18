@@ -598,7 +598,7 @@ namespace pcr
         case TypeClass_STRING:
         {
             // some special handling for URL properties
-            bool bIsURLProperty = ( _rPropertyName.getLength() >= 3 ) && _rPropertyName.matchAsciiL( "URL", 3, _rPropertyName.getLength() - 3 );
+            bool bIsURLProperty = _rPropertyName.endsWithAsciiL( "URL", 3 );
             if ( bIsURLProperty )
             {
                 aDescriptor.Control = _rxControlFactory->createPropertyControl(

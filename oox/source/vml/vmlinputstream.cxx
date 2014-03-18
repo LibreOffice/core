@@ -355,7 +355,7 @@ void InputStream::updateBuffer() throw (IOException, RuntimeException)
             if( aElement.match( maOpeningCData ) )
             {
                 // search the end tag ']]>'
-                while( ((aElement.getLength() < maClosingCData.getLength()) || !aElement.match( maClosingCData, aElement.getLength() - maClosingCData.getLength() )) && !mxTextStrm->isEOF() )
+                while( ((aElement.getLength() < maClosingCData.getLength()) || !aElement.endsWith( maClosingCData )) && !mxTextStrm->isEOF() )
                     aElement += readToElementEnd();
                 // copy the entire CDATA part
                 aBuffer.append( aElement );

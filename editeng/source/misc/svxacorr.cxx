@@ -1322,8 +1322,7 @@ SvxAutoCorrect::DoAutoCorrect( SvxAutoCorrDoc& rDoc, const OUString& rTxt,
 
             // since LibO 4.1, '-' is a word separator
             // fdo#67742 avoid "--" to be replaced by "–" if next is "-"
-            if( rTxt.getLength() >= 3 &&
-                rTxt.match( OUString("---"), rTxt.getLength()-3 ) )
+            if( rTxt.endsWith( "---" ) )
                     break;
             bool bChgWord = rDoc.ChgAutoCorrWord( nCapLttrPos, nInsPos,
                                                     *this, pPara );

@@ -1767,7 +1767,7 @@ bool checkUnoObjectType( SbUnoObject* pUnoObj, const OUString& rClass )
             // match interface name with passed class name
             OSL_TRACE("Checking if object implements %s", OUStringToOString( aClassName, RTL_TEXTENCODING_UTF8 ).getStr() );
             if ( (aClassName.getLength() <= aInterfaceName.getLength()) &&
-                    aInterfaceName.matchIgnoreAsciiCase( aClassName, aInterfaceName.getLength() - aClassName.getLength() ) )
+                    aInterfaceName.endsWithIgnoreAsciiCase( aClassName ) )
             {
                 result = true;
                 break;

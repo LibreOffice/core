@@ -704,8 +704,8 @@ OUString XclTools::GetXclMacroName( const OUString& rSbMacroUrl )
 {
     sal_Int32 nSbMacroUrlLen = rSbMacroUrl.getLength();
     sal_Int32 nMacroNameLen = nSbMacroUrlLen - maSbMacroPrefix.getLength() - maSbMacroSuffix.getLength();
-    if( (nMacroNameLen > 0) && rSbMacroUrl.matchIgnoreAsciiCase( maSbMacroPrefix, 0 ) &&
-            rSbMacroUrl.matchIgnoreAsciiCase( maSbMacroSuffix, nSbMacroUrlLen - maSbMacroSuffix.getLength() ) )
+    if( (nMacroNameLen > 0) && rSbMacroUrl.startsWithIgnoreAsciiCase( maSbMacroPrefix ) &&
+            rSbMacroUrl.endsWithIgnoreAsciiCase( maSbMacroSuffix ) )
     {
         sal_Int32 nPrjDot = rSbMacroUrl.indexOf( '.', maSbMacroPrefix.getLength() ) + 1;
         return rSbMacroUrl.copy( nPrjDot, nSbMacroUrlLen - nPrjDot - maSbMacroSuffix.getLength() );

@@ -240,7 +240,7 @@ void ColorConfig_Impl::Load(const OUString& rScheme)
         if(nIndex >= aColors.getLength())
             break;
         //test for visibility property
-        if(pColorNames[nIndex].match(m_sIsVisible, pColorNames[nIndex].getLength() - m_sIsVisible.getLength()))
+        if(pColorNames[nIndex].endsWith(m_sIsVisible))
              m_aConfigValues[i / 2].bIsVisible = Any2Bool(pColors[nIndex++]);
     }
     // fdo#71511: check if we are running in a11y autodetect
@@ -280,7 +280,7 @@ void ColorConfig_Impl::Commit()
         if(nIndex >= aColorNames.getLength())
             break;
         //test for visibility property
-        if(pColorNames[nIndex].match(m_sIsVisible, pColorNames[nIndex].getLength() - m_sIsVisible.getLength()))
+        if(pColorNames[nIndex].endsWith(m_sIsVisible))
         {
              pPropValues[nIndex].Name = pColorNames[nIndex];
              pPropValues[nIndex].Value.setValue(&m_aConfigValues[i/2].bIsVisible, rBoolType);
