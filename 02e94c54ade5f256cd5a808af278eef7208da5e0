@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da86d52c_cc54dfcc",
+        "filename": "scp2/InstallModule_base.mk",
+        "patchSetId": 1
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2014-03-18T20:05:34Z",
+      "side": 1,
+      "message": "i think you need to add the base/firebird.scp file here? did you check in workdir/ScpTarget/... if the firebird.filelist is in there?",
+      "revId": "02e94c54ade5f256cd5a808af278eef7208da5e0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
