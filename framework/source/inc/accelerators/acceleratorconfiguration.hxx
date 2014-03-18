@@ -26,7 +26,6 @@
 #include <accelerators/keymapping.hxx>
 #include <macros/xinterface.hxx>
 #include <macros/xtypeprovider.hxx>
-#include <threadhelp/threadhelpbase.hxx>
 #include <general.h>
 #include <stdtypes.h>
 
@@ -281,8 +280,7 @@ class XMLBasedAcceleratorConfiguration : public    IStorageListener,
 
 };
 
-class XCUBasedAcceleratorConfiguration : protected ThreadHelpBase,                       // attention! Must be the first base class to guarentee right initialize lock ...
-                                         public  ::cppu::WeakImplHelper4<
+class XCUBasedAcceleratorConfiguration : public  ::cppu::WeakImplHelper4<
                                                      css::util::XChangesListener,
                                                      css::lang::XComponent,
                                                      css::form::XReset,                    // TODO use XPresetHandler instead if available

@@ -19,7 +19,6 @@
 
 #include <accelerators/acceleratorconfiguration.hxx>
 #include <accelerators/presethandler.hxx>
-#include <threadhelp/guard.hxx>
 #include "helper/mischelper.hxx"
 
 #include <acceleratorconst.h>
@@ -109,7 +108,7 @@ ModuleAcceleratorConfiguration::ModuleAcceleratorConfiguration(
         const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& lArguments)
     : ModuleAcceleratorConfiguration_BASE(xContext)
 {
-    Guard aWriteLock(m_aLock);
+    SolarMutexGuard g;
 
     OUString sModule;
     if (lArguments.getLength() == 1 && (lArguments[0] >>= sModule))
@@ -126,8 +125,6 @@ ModuleAcceleratorConfiguration::ModuleAcceleratorConfiguration(
         throw css::uno::RuntimeException(
                 OUString("The module dependend accelerator configuration service was initialized with an empty module identifier!"),
                 static_cast< ::cppu::OWeakObject* >(this));
-
-    aWriteLock.unlock();
 }
 
 ModuleAcceleratorConfiguration::~ModuleAcceleratorConfiguration()
@@ -136,11 +133,10 @@ ModuleAcceleratorConfiguration::~ModuleAcceleratorConfiguration()
 
 void ModuleAcceleratorConfiguration::fillCache()
 {
-    // SAFE -> ----------------------------------
-    Guard aReadLock(m_aLock);
-    m_sModuleCFG = m_sModule;
-    aReadLock.unlock();
-    // <- SAFE ----------------------------------
+    {
+        SolarMutexGuard g;
+        m_sModuleCFG = m_sModule;
+    }
 
 #if 0
     // get current office locale ... but dont cache it.
