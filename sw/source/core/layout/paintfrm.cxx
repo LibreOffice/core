@@ -4814,6 +4814,16 @@ static void lcl_PaintLeftRightLine( const bool         _bLeft,
     {
         (aRect.*_rRectFn->fnAddRight)( ::lcl_AlignWidth( lcl_GetLineWidth( pLeftRightBorder ) ) -
                                        (aRect.*_rRectFn->fnGetWidth)() );
+
+        // Shift the left border to the left.
+        Point aCurPos = aRect.Pos();
+        sal_uInt16 nOffset = pLeftRightBorder->GetDistance();
+        aCurPos.X() -= nOffset;
+        aCurPos.Y() -= nOffset;
+        aRect.Pos(aCurPos);
+        Size aCurSize = aRect.SSize();
+        aCurSize.Height() += nOffset * 2;
+        aRect.SSize(aCurSize);
     }
     else
     {
@@ -4880,6 +4890,16 @@ static void lcl_PaintTopBottomLine( const bool         _bTop,
     {
         (aRect.*_rRectFn->fnAddBottom)( ::lcl_AlignHeight( lcl_GetLineWidth( pTopBottomBorder ) ) -
                                         (aRect.*_rRectFn->fnGetHeight)() );
+
+        // Push the top border up a bit.
+        sal_uInt16 nOffset = pTopBottomBorder->GetDistance();
+        Point aCurPos = aRect.Pos();
+        aCurPos.X() -= nOffset;
+        aCurPos.Y() -= nOffset;
+        aRect.Pos(aCurPos);
+        Size aCurSize = aRect.SSize();
+        aCurSize.Width() += nOffset * 2;
+        aRect.SSize(aCurSize);
     }
     else
     {
