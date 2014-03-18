@@ -17,6 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <config_features.h>
+
 #include <com/sun/star/document/XDocumentProperties.hpp>
 #include <unotools/historyoptions.hxx>
 #include <unotools/useroptions.hxx>
@@ -192,7 +194,8 @@ void SfxPickList::AddDocumentToPickList( SfxObjectShell* pDocSh )
 
     // generate a thumbnail
     OUString aThumbnail;
-    // don't generate thumbnail when in headless mode
+    // don't generate thumbnail when in headless mode, or on non-desktop (?)
+#if HAVE_FEATURE_DESKTOP
     if (!pDocSh->IsModified() && !Application::IsHeadlessModeRequested())
     {
         // not modified => the document matches what is in the shell
@@ -211,7 +214,7 @@ void SfxPickList::AddDocumentToPickList( SfxObjectShell* pDocSh )
             }
         }
     }
-
+#endif
     // add to svtool history options
     SvtHistoryOptions().AppendItem( ePICKLIST,
             aURL.GetURLNoPass( INetURLObject::NO_DECODE ),
