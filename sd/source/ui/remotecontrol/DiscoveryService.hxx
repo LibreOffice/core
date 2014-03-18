@@ -30,6 +30,12 @@ namespace sd
             DiscoveryService();
             ~DiscoveryService();
 
+            /**
+             * Networking related setup -- must be run within our own thread
+             * to prevent the application blocking (fdo#75328).
+             */
+            void setupSockets();
+
             static DiscoveryService *spService;
             virtual void SAL_CALL run();
             int mSocket;
