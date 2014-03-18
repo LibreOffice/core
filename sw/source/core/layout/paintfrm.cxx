@@ -4965,23 +4965,25 @@ void PaintCharacterBorder(
 
     // Init borders, after this initialization top, bottom, right and left means the
     // absolute position
-    const boost::optional<editeng::SvxBorderLine> aTopBorder =
+    boost::optional<editeng::SvxBorderLine> aTopBorder =
         (bTop ? rFont.GetAbsTopBorder(bVerticalLayout) : boost::none);
-    const boost::optional<editeng::SvxBorderLine> aBottomBorder =
+    boost::optional<editeng::SvxBorderLine> aBottomBorder =
         (bBottom ? rFont.GetAbsBottomBorder(bVerticalLayout) : boost::none);
-    const boost::optional<editeng::SvxBorderLine> aLeftBorder =
+    boost::optional<editeng::SvxBorderLine> aLeftBorder =
         (bLeft ? rFont.GetAbsLeftBorder(bVerticalLayout) : boost::none);
-    const boost::optional<editeng::SvxBorderLine> aRightBorder =
+    boost::optional<editeng::SvxBorderLine> aRightBorder =
         (bRight ? rFont.GetAbsRightBorder(bVerticalLayout) : boost::none);
 
     if( aTopBorder )
     {
+        sal_uInt16 nOffset = aTopBorder->GetDistance();
+
         Point aLeftTop(
-            aAlignedRect.Left(),
-            aAlignedRect.Top());
+            aAlignedRect.Left() - nOffset,
+            aAlignedRect.Top() - nOffset);
         Point aRightBottom(
-            aAlignedRect.Right(),
-            aAlignedRect.Top() + aTopBorder.get().GetScaledWidth());
+            aAlignedRect.Right() + nOffset,
+            aAlignedRect.Top() - nOffset + aTopBorder->GetScaledWidth());
 
         lcl_MakeBorderLine(
             SwRect(aLeftTop, aRightBottom),
@@ -4993,6 +4995,8 @@ void PaintCharacterBorder(
 
     if( aBottomBorder )
     {
+        aBottomBorder->SetMirrorWidths(true);
+
         Point aLeftTop(
             aAlignedRect.Left(),
             aAlignedRect.Bottom() - aBottomBorder.get().GetScaledWidth());
@@ -5010,12 +5014,14 @@ void PaintCharacterBorder(
 
     if( aLeftBorder )
     {
+        sal_uInt16 nOffset = aLeftBorder->GetDistance();
+
         Point aLeftTop(
-            aAlignedRect.Left(),
-            aAlignedRect.Top());
+            aAlignedRect.Left() - nOffset,
+            aAlignedRect.Top() - nOffset);
         Point aRightBottom(
-            aAlignedRect.Left() + aLeftBorder.get().GetScaledWidth(),
-            aAlignedRect.Bottom());
+            aAlignedRect.Left() - nOffset + aLeftBorder->GetScaledWidth(),
+            aAlignedRect.Bottom() + nOffset);
 
         lcl_MakeBorderLine(
             SwRect(aLeftTop, aRightBottom),
@@ -5027,6 +5033,8 @@ void PaintCharacterBorder(
 
     if( aRightBorder )
     {
+        aRightBorder->SetMirrorWidths(true);
+
         Point aLeftTop(
             aAlignedRect.Right() - aRightBorder.get().GetScaledWidth(),
             aAlignedRect.Top());
