@@ -37,11 +37,7 @@
 #include <vcl/window.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 
-
-
 using namespace com::sun::star;
-
-
 
 namespace drawinglayer
 {

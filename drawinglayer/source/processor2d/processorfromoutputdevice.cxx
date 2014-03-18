@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <vcl/outdev.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/range/b2drange.hxx>
@@ -28,11 +27,7 @@
 #include "vclpixelprocessor2d.hxx"
 #include <vcl/window.hxx>
 
-
-
 using namespace com::sun::star;
-
-
 
 namespace drawinglayer
 {

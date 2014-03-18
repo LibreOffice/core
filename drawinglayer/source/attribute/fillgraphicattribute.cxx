@@ -20,8 +20,6 @@
 #include <drawinglayer/attribute/fillgraphicattribute.hxx>
 #include <vcl/graph.hxx>
 
-
-
 namespace drawinglayer
 {
     namespace attribute

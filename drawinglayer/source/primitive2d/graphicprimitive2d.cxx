@@ -28,8 +28,6 @@
 #include <vcl/svapp.hxx>
 #include <vcl/outdev.hxx>
 
-
-
 namespace drawinglayer
 {
     namespace primitive2d

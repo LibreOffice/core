@@ -58,35 +58,24 @@
 #include <basegfx/polygon/b2dlinegeometry.hxx>
 #include <vcl/dibtools.hxx>
 
-
 // for PDFExtOutDevData Graphic support
-
 #include <vcl/graph.hxx>
 #include <vcl/svapp.hxx>
 #include <toolkit/helper/formpdfexport.hxx>
 
-
 // for Control printing
-
 #include <com/sun/star/beans/XPropertySet.hpp>
 
-
 // for StructureTagPrimitive support in sd's unomodel.cxx
-
 #include <drawinglayer/primitive2d/structuretagprimitive2d.hxx>
 
-
-
 using namespace com::sun::star;
-
 
 // #112245# definition for maximum allowed point count due to Metafile target.
 // To be on the safe side with the old tools polygon, use slightly less then
 // the theoretical maximum (bad experiences with tools polygon)
 
 #define MAX_POLYGON_POINT_COUNT_METAFILE    (0x0000fff0)
-
-
 
 namespace
 {
@@ -243,8 +232,6 @@ namespace
     }
 
 } // end of anonymous namespace
-
-
 
 namespace drawinglayer
 {
