@@ -125,7 +125,8 @@ public:
     inline double       Prim() const { return mfPrim; }
     inline double       Dist() const { return mfDist; }
     inline double       Secn() const { return mfSecn; }
-    double Scale() const;
+    double PatternScale() const;
+    void SetPatternScale( double fScale );
     inline editeng::SvxBorderStyle Type() const { return mnType; }
 
     /** Returns the total width of this frame style. */
@@ -166,7 +167,7 @@ private:
     double              mfPrim;     /// Width of primary (single, left, or top) line.
     double              mfDist;     /// Distance between primary and secondary line.
     double              mfSecn;     /// Width of secondary (right or bottom) line.
-    double              mfScale;
+    double mfPatternScale; /// Scale used for line pattern spacing.
     editeng::SvxBorderStyle      mnType;
 };
 

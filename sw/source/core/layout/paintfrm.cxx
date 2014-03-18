@@ -2797,13 +2797,17 @@ void calcOffsetForDoubleLine( SwLineEntryMap& rLines )
             for (size_t i = 0; itSet != itSetEnd; ++itSet, ++i)
             {
                 SwLineEntry aLine = *itSet;
-                aLine.mnOffset = static_cast<SwTwips>(aLine.maAttribute.Prim()+aLine.maAttribute.Dist());
-                aLine.mbOffsetPerp = true;
+                if (aLine.maAttribute.Secn())
+                {
+                    // Apply offset only for double lines.
+                    aLine.mnOffset = static_cast<SwTwips>(aLine.maAttribute.Prim()+aLine.maAttribute.Dist());
+                    aLine.mbOffsetPerp = true;
 
-                if (i == 0)
-                    aLine.mbOffsetStart = true;
-                if (i == nEntryCount - 1)
-                    aLine.mbOffsetEnd = true;
+                    if (i == 0)
+                        aLine.mbOffsetStart = true;
+                    if (i == nEntryCount - 1)
+                        aLine.mbOffsetEnd = true;
+                }
 
                 aNewSet.insert(aLine);
             }
@@ -2865,10 +2869,14 @@ void SwTabFrmPainter::Insert( const SwFrm& rFrm, const SvxBoxItem& rBoxItem )
     const Fraction& rFracX = rMapMode.GetScaleX();
     const Fraction& rFracY = rMapMode.GetScaleY();
 
-    svx::frame::Style aL(rBoxItem.GetLeft(), rFracX);
-    svx::frame::Style aR(rBoxItem.GetRight(), rFracY);
-    svx::frame::Style aT(rBoxItem.GetTop(), rFracX);
-    svx::frame::Style aB(rBoxItem.GetBottom(), rFracY);
+    svx::frame::Style aL(rBoxItem.GetLeft());
+    aL.SetPatternScale(rFracY);
+    svx::frame::Style aR(rBoxItem.GetRight());
+    aR.SetPatternScale(rFracY);
+    svx::frame::Style aT(rBoxItem.GetTop());
+    aT.SetPatternScale(rFracX);
+    svx::frame::Style aB(rBoxItem.GetBottom());
+    aB.SetPatternScale(rFracX);
 
     aR.MirrorSelf();
     aB.MirrorSelf();

@@ -1130,7 +1130,7 @@ void lclDrawDiagFrameBorders(
 
 Style::Style() :
     meRefMode(REFMODE_CENTERED),
-    mfScale(1.0),
+    mfPatternScale(1.0),
     mnType(table::BorderLineStyle::SOLID)
 {
     Clear();
@@ -1138,7 +1138,7 @@ Style::Style() :
 
 Style::Style( double nP, double nD, double nS, editeng::SvxBorderStyle nType ) :
     meRefMode(REFMODE_CENTERED),
-    mfScale(1.0),
+    mfPatternScale(1.0),
     mnType(nType)
 {
     Clear();
@@ -1148,7 +1148,7 @@ Style::Style( double nP, double nD, double nS, editeng::SvxBorderStyle nType ) :
 Style::Style( const Color& rColorPrim, const Color& rColorSecn, const Color& rColorGap, bool bUseGapColor,
               double nP, double nD, double nS, editeng::SvxBorderStyle nType ) :
     meRefMode(REFMODE_CENTERED),
-    mfScale(1.0),
+    mfPatternScale(1.0),
     mnType(nType)
 {
     Set( rColorPrim, rColorSecn, rColorGap, bUseGapColor, nP, nD, nS );
@@ -1156,14 +1156,19 @@ Style::Style( const Color& rColorPrim, const Color& rColorSecn, const Color& rCo
 
 Style::Style( const editeng::SvxBorderLine* pBorder, double fScale, sal_uInt16 nMaxWidth ) :
     meRefMode(REFMODE_CENTERED),
-    mfScale(fScale)
+    mfPatternScale(1.0)
 {
     Set( pBorder, fScale, nMaxWidth );
 }
 
-double Style::Scale() const
+double Style::PatternScale() const
 {
-    return mfScale;
+    return mfPatternScale;
+}
+
+void Style::SetPatternScale( double fScale )
+{
+    mfPatternScale = fScale;
 }
 
 void Style::Clear()
@@ -1426,7 +1431,7 @@ drawinglayer::primitive2d::Primitive2DSequence CreateClippedBorderPrimitives (
         rBorder.GetColorSecn().getBColor(),
         rBorder.GetColorPrim().getBColor(),
         rBorder.GetColorGap().getBColor(),
-        rBorder.UseGapColor(), rBorder.Type(), rBorder.Scale() );
+        rBorder.UseGapColor(), rBorder.Type(), rBorder.PatternScale() );
 
     return aSequence;
 }
@@ -1454,7 +1459,7 @@ drawinglayer::primitive2d::Primitive2DSequence CreateBorderPrimitives(
         rBorder.GetColorSecn().getBColor(),
         rBorder.GetColorPrim().getBColor(),
         rBorder.GetColorGap().getBColor(),
-        rBorder.UseGapColor(), rBorder.Type(), rBorder.Scale() );
+        rBorder.UseGapColor(), rBorder.Type(), rBorder.PatternScale() );
 
     return aSequence;
 }
