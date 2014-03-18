@@ -306,8 +306,7 @@ Module gid_Module_Root_Files_7
 	Sortkey = "1900";
 	Default = YES;
 	Styles = (HIDDEN_ROOT);
-	Files = (gid_File_Help_Help_Zip,
-             gid_File_Mozilla_Runtime);
+	Files = (gid_File_Help_Help_Zip);
 End
 
 #ifndef LIBO_HEADLESS

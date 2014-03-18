@@ -415,17 +415,6 @@ File gid_File_xmloff_dtd
     Name = "xmloff_dtd.filelist";
 End
 
-#if defined WITH_MOZAB4WIN
-
-File gid_File_Mozilla_Runtime
-    TXT_FILE_BODY;
-    Styles = (FILELIST);
-    Dir = FILELIST_DIR;
-    Name = "moz_runtime.filelist";
-End
-
-#endif
-
 File gid_File_Share_Labels_Xml
     TXT_FILE_BODY;
     Styles = (FILELIST, PACKED);

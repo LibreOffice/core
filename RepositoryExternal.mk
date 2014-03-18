@@ -2566,7 +2566,11 @@ endef
 
 endif # SYSTEM_POSTGRESQL
 
-ifneq (,$(filter DESKTOP,$(BUILD_TYPE)))
+ifneq ($(WITH_MOZAB4WIN),)
+
+$(eval $(call gb_Helper_register_packages_for_install,ooo,\
+	moz_runtime \
+))
 
 define gb_LinkTarget__use_mozilla
 
@@ -2646,7 +2650,7 @@ endif # !GCC
 
 endef
 
-endif # DESKTOP
+endif # WITH_MOZAB4WIN
 
 ifeq ($(ENABLE_KDE),TRUE)
 
