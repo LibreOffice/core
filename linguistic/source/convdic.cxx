@@ -141,7 +141,7 @@ sal_Bool IsConvDic( const OUString &rFileURL, sal_Int16 &nLang, sal_Int16 &nConv
     // first argument being 0 should stop the file from being parsed
     // up to the end (reading all entries) when the required
     // data (language, conversion type) is found.
-    ConvDicXMLImport *pImport = new ConvDicXMLImport( 0, rFileURL );
+    ConvDicXMLImport *pImport = new ConvDicXMLImport( 0 );
 
     //!! keep a first reference to ensure the lifetime of the object !!
     uno::Reference< XInterface > xRef( (document::XFilter *) pImport, UNO_QUERY );
@@ -220,7 +220,7 @@ void ConvDic::Load()
 
     //!! prevent function from being called recursively via HasEntry, AddEntry
     bNeedEntries = sal_False;
-    ConvDicXMLImport *pImport = new ConvDicXMLImport( this, aMainURL );
+    ConvDicXMLImport *pImport = new ConvDicXMLImport( this );
     //!! keep a first reference to ensure the lifetime of the object !!
     uno::Reference< XInterface > xRef( (document::XFilter *) pImport, UNO_QUERY );
     ReadThroughDic( aMainURL, *pImport );    // will implicitly add the entries
