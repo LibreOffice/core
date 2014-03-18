@@ -20,7 +20,6 @@
 #ifndef INCLUDED_FRAMEWORK_INC_CLASSES_IMAGEWRAPPER_HXX
 #define INCLUDED_FRAMEWORK_INC_CLASSES_IMAGEWRAPPER_HXX
 
-#include <threadhelp/threadhelpbase.hxx>
 #include <com/sun/star/awt/XBitmap.hpp>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <com/sun/star/lang/XTypeProvider.hpp>
@@ -31,7 +30,7 @@
 namespace framework
 {
 
-class FWE_DLLPUBLIC ImageWrapper : public ThreadHelpBase                            ,   // Struct for right initalization of mutex member! Must be first of baseclasses.
+class FWE_DLLPUBLIC ImageWrapper :
                      public ::cppu::WeakImplHelper2< ::com::sun::star::awt::XBitmap,
                                                     ::com::sun::star::lang::XUnoTunnel >
 {

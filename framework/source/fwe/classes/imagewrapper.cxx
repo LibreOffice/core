@@ -41,8 +41,7 @@ static Sequence< sal_Int8 > impl_getStaticIdentifier()
 }
 
 
-ImageWrapper::ImageWrapper( const Image& aImage ) : ThreadHelpBase( &Application::GetSolarMutex() )
-                                                    ,   m_aImage( aImage )
+ImageWrapper::ImageWrapper( const Image& aImage ) : m_aImage( aImage )
 {
 }
 
