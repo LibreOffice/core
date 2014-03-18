@@ -37,6 +37,7 @@
 #include <com/sun/star/document/XEventListener.hpp>
 #include <com/sun/star/frame/XModuleManager2.hpp>
 
+#include <cppuhelper/basemutex.hxx>
 #include <cppuhelper/compbase4.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <unotools/configpaths.hxx>
@@ -61,7 +62,7 @@ typedef cppu::WeakComponentImplHelper4<
             inside the configuration and execute it. Of course it controls the
             liftime of such jobs too.
  */
-class JobExecutor : private osl::Mutex, public Base
+class JobExecutor : private cppu::BaseMutex, public Base
 {
 private:
 
@@ -130,7 +131,7 @@ public:
                     reference to the uno service manager
  */
 JobExecutor::JobExecutor( /*IN*/ const css::uno::Reference< css::uno::XComponentContext >& xContext )
-    : Base                (*static_cast<Mutex *>(this))
+    : Base                (m_aMutex)
     , m_xContext          (xContext                                                        )
     , m_aConfig           (xContext, "/org.openoffice.Office.Jobs/Events")
 {
