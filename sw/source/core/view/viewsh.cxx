@@ -1784,7 +1784,7 @@ extern "C"
 void touch_lo_draw_tile(void *context, int contextWidth, int contextHeight, MLODpxPoint tileDpxPosition, MLODpxSize tileDpxSize)
 {
 #ifdef IOS
-    SAL_INFO("sw", "touch_lo_draw_tile(" << contextWidth << ", " << contextHeight << ", (" << tileDpxPosition.x << "," << tileDpxPosition.y << "), " << tileDpxSize.width << "x" << tileDpxSize.height << ")");
+    SAL_INFO("sw.tiled", "touch_lo_draw_tile(" << contextWidth << "x" << contextHeight << ", (" << tileDpxPosition.x << "," << tileDpxPosition.y << "), " << tileDpxSize.width << "x" << tileDpxSize.height << ")");
     MLORipPoint tileRipPosition = MLORipPointByDpxPoint(tileDpxPosition);
     MLORipSize rileRipSize = MLORipSizeByDpxSize(tileDpxSize);
     MLORip tileRipPosX = tileRipPosition.x;
@@ -1823,6 +1823,7 @@ void touch_lo_draw_tile(void *context, int contextWidth, int contextHeight, MLOD
         pViewShell->PaintTile(aDevice, contextWidth, contextHeight, tilePosX, tilePosY, tileWidth, tileHeight);
     }
     Application::ReleaseSolarMutex();
+    SAL_INFO("sw.tiled", "touch_lo_draw_tile(" << contextWidth << "x" << contextHeight << ", (" << tileDpxPosition.x << "," << tileDpxPosition.y << "), " << tileDpxSize.width << "x" << tileDpxSize.height << ") return");
 #else
     (void) context;
     (void) contextWidth;

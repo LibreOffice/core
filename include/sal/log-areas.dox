@@ -386,8 +386,10 @@ certain functionality.
 @li @c sw.docx
 @li @c sw.envelp
 @li @c sw.filter
+@li @c sw.idle
 @li @c sw.level2
 @li @c sw.rtf - .rtf export filter
+@li @c sw.tiled
 @li @c sw.ui
 @li @c sw.uno - Writer UNO interfaces
 @li @c sw.ww8 - .doc/.docx export filter, .doc import filter (not writerfilter)

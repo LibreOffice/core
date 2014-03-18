@@ -2159,6 +2159,8 @@ SwLayIdle::SwLayIdle( SwRootFrm *pRt, SwViewImp *pI ) :
     , m_bIndicator( false )
 #endif
 {
+    SAL_INFO("sw.idle", "SwLayIdle() entry");
+
     pImp->pIdleAct = this;
 
     SHOW_IDLE( COL_LIGHTRED );
@@ -2329,6 +2331,8 @@ SwLayIdle::SwLayIdle( SwRootFrm *pRt, SwViewImp *pI ) :
 
     if( pImp->IsAccessible() )
         pImp->FireAccessibleEvents();
+
+    SAL_INFO("sw.idle", "SwLayIdle() return");
 
 #ifdef DBG_UTIL
     if ( m_bIndicator && pImp->GetShell()->GetWin() )
