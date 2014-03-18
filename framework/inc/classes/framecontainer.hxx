@@ -27,8 +27,6 @@
 #include <stdexcept>
 #include <algorithm>
 
-#include <threadhelp/threadhelpbase.hxx>
-
 #include <threadhelp/transactionbase.hxx>
 #include <general.h>
 
@@ -54,13 +52,10 @@ typedef TFrameContainer::const_iterator                             TConstFrameI
                     It's possible to set one of these frames as active or deactive. You could have full index-access to
                     container-items.
 
-    @base           ThreadHelpBase
-                        guarantee right initialized lock member during boostrap!
-
     @devstatus      ready to use
     @threadsafe     yes
 *//*-*************************************************************************************************************/
-class FrameContainer : private ThreadHelpBase
+class FrameContainer
 {
 
     // member

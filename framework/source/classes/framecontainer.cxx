@@ -18,7 +18,6 @@
  */
 
 #include <classes/framecontainer.hxx>
-#include <threadhelp/guard.hxx>
 
 #include <com/sun/star/frame/FrameSearchFlag.hpp>
 
@@ -33,9 +32,6 @@ namespace framework{
     @threadsafe not necessary - its not a singleton
  *****************************************************************************************************************/
 FrameContainer::FrameContainer()
-        // initialize base classes first.
-        // Order is necessary for right initilization of his and OUR member ... m_aLock
-        : ThreadHelpBase ( &Application::GetSolarMutex()                  )
 /*DEPRECATEME
         , m_bAsyncQuit   ( sal_False                                      ) // default must be "disabled"!
         , m_aAsyncCall   ( LINK( this, FrameContainer, implts_asyncQuit ) )
@@ -70,11 +66,8 @@ void FrameContainer::append( const css::uno::Reference< css::frame::XFrame >& xF
 {
     if (xFrame.is() && ! exist(xFrame))
     {
-        /* SAFE { */
-        Guard aWriteLock( m_aLock );
+        SolarMutexGuard g;
         m_aContainer.push_back( xFrame );
-        aWriteLock.unlock();
-        /* } SAFE */
     }
 }
 
@@ -91,9 +84,7 @@ void FrameContainer::append( const css::uno::Reference< css::frame::XFrame >& xF
  *****************************************************************************************************************/
 void FrameContainer::remove( const css::uno::Reference< css::frame::XFrame >& xFrame )
 {
-    /* SAFE { */
-    // write lock necessary for follwing erase()!
-    Guard aWriteLock( m_aLock );
+    SolarMutexGuard g;
 
     TFrameIterator aSearchedItem = ::std::find( m_aContainer.begin(), m_aContainer.end(), xFrame );
     if (aSearchedItem!=m_aContainer.end())
@@ -104,9 +95,6 @@ void FrameContainer::remove( const css::uno::Reference< css::frame::XFrame >& xF
         if (m_xActiveFrame==xFrame)
             m_xActiveFrame = css::uno::Reference< css::frame::XFrame >();
     }
-
-    aWriteLock.unlock();
-    // } SAFE
 }
 
 /**-***************************************************************************************************************
@@ -123,10 +111,8 @@ void FrameContainer::remove( const css::uno::Reference< css::frame::XFrame >& xF
  *****************************************************************************************************************/
 sal_Bool FrameContainer::exist( const css::uno::Reference< css::frame::XFrame >& xFrame ) const
 {
-    /* SAFE { */
-    Guard aReadLock( m_aLock );
+    SolarMutexGuard g;
     return( ::std::find( m_aContainer.begin(), m_aContainer.end(), xFrame ) != m_aContainer.end() );
-    /* } SAFE */
 }
 
 /**-***************************************************************************************************************
@@ -137,18 +123,13 @@ sal_Bool FrameContainer::exist( const css::uno::Reference< css::frame::XFrame >&
  *****************************************************************************************************************/
 void FrameContainer::clear()
 {
-    // SAFE {
-    Guard aWriteLock( m_aLock );
-
+    SolarMutexGuard g;
     // Clear the container ...
     m_aContainer.clear();
     // ... and don't forget to reset the active frame.
     // Its an reference to a valid container-item.
     // But no container item => no active frame!
     m_xActiveFrame = css::uno::Reference< css::frame::XFrame >();
-
-    aWriteLock.unlock();
-    // } SAFE
 }
 
 /**-***************************************************************************************************************
@@ -164,10 +145,8 @@ void FrameContainer::clear()
  *****************************************************************************************************************/
 sal_uInt32 FrameContainer::getCount() const
 {
-    /* SAFE { */
-    Guard aReadLock( m_aLock );
+    SolarMutexGuard g;
     return( (sal_uInt32)m_aContainer.size() );
-    /* } SAFE */
 }
 
 /**-***************************************************************************************************************
@@ -192,11 +171,8 @@ css::uno::Reference< css::frame::XFrame > FrameContainer::operator[]( sal_uInt32
     {
         // Get element form container WITH automatic test of ranges!
         // If index not valid, a out_of_range exception is thrown.
-        /* SAFE { */
-        Guard aReadLock( m_aLock );
+        SolarMutexGuard g;
         xFrame = m_aContainer.at( nIndex );
-        aReadLock.unlock();
-        /* } SAFE */
     }
     catch( const std::out_of_range& )
     {
@@ -217,17 +193,11 @@ css::uno::Reference< css::frame::XFrame > FrameContainer::operator[]( sal_uInt32
  *****************************************************************************************************************/
 css::uno::Sequence< css::uno::Reference< css::frame::XFrame > > FrameContainer::getAllElements() const
 {
-    /* SAFE { */
-    Guard aReadLock( m_aLock );
-
+    SolarMutexGuard g;
     sal_Int32                                                       nPosition = 0;
     css::uno::Sequence< css::uno::Reference< css::frame::XFrame > > lElements ( (sal_uInt32)m_aContainer.size() );
     for (TConstFrameIterator pItem=m_aContainer.begin(); pItem!=m_aContainer.end(); ++pItem)
         lElements[nPosition++] = *pItem;
-
-    aReadLock.unlock();
-    /* } SAFE */
-
     return lElements;
 }
 
@@ -245,11 +215,8 @@ void FrameContainer::setActive( const css::uno::Reference< css::frame::XFrame >&
 {
     if ( !xFrame.is() || exist(xFrame) )
     {
-        /* SAFE { */
-        Guard aWriteLock( m_aLock );
+        SolarMutexGuard g;
         m_xActiveFrame = xFrame;
-        aWriteLock.unlock();
-        /* } SAFE */
     }
 }
 
@@ -265,10 +232,8 @@ void FrameContainer::setActive( const css::uno::Reference< css::frame::XFrame >&
  *****************************************************************************************************************/
 css::uno::Reference< css::frame::XFrame > FrameContainer::getActive() const
 {
-    /* SAFE { */
-    Guard aReadLock( m_aLock );
+    SolarMutexGuard g;
     return m_xActiveFrame;
-    /* } SAFE */
 }
 
 /**-***************************************************************************************************************
@@ -284,9 +249,7 @@ css::uno::Reference< css::frame::XFrame > FrameContainer::getActive() const
  *****************************************************************************************************************/
 css::uno::Reference< css::frame::XFrame > FrameContainer::searchOnAllChildrens( const OUString& sName ) const
 {
-    /* SAFE { */
-    Guard aReadLock( m_aLock );
-
+    SolarMutexGuard g;
     // Step over all child frames. But if direct child isn't the right one search on his children first - before
     // you go to next direct child of this container!
     css::uno::Reference< css::frame::XFrame > xSearchedFrame;
@@ -304,8 +267,6 @@ css::uno::Reference< css::frame::XFrame > FrameContainer::searchOnAllChildrens( 
                 break;
         }
     }
-    aReadLock.unlock();
-    /* } SAFE */
     return xSearchedFrame;
 }
 
@@ -322,9 +283,7 @@ css::uno::Reference< css::frame::XFrame > FrameContainer::searchOnAllChildrens( 
  *****************************************************************************************************************/
 css::uno::Reference< css::frame::XFrame > FrameContainer::searchOnDirectChildrens( const OUString& sName ) const
 {
-    /* SAFE { */
-    Guard aReadLock( m_aLock );
-
+    SolarMutexGuard g;
     css::uno::Reference< css::frame::XFrame > xSearchedFrame;
     for( TConstFrameIterator pIterator=m_aContainer.begin(); pIterator!=m_aContainer.end(); ++pIterator )
     {
@@ -334,8 +293,6 @@ css::uno::Reference< css::frame::XFrame > FrameContainer::searchOnDirectChildren
             break;
         }
     }
-    aReadLock.unlock();
-    /* } SAFE */
     return xSearchedFrame;
 }
 

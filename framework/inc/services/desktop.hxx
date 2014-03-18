@@ -23,6 +23,7 @@
 #include <sal/config.h>
 
 #include <classes/framecontainer.hxx>
+#include <threadhelp/threadhelpbase.hxx>
 
 #include <com/sun/star/frame/XUntitledNumbers.hpp>
 #include <com/sun/star/frame/XController.hpp>
