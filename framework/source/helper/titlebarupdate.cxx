@@ -20,7 +20,6 @@
 #include <helper/titlebarupdate.hxx>
 
 #include <pattern/window.hxx>
-#include <threadhelp/guard.hxx>
 #include <macros/generic.hxx>
 #include <services.h>
 #include <properties.h>
@@ -54,8 +53,7 @@ static const ::sal_Int32 DEFAULT_ICON_ID =  0;
 
 
 TitleBarUpdate::TitleBarUpdate(const css::uno::Reference< css::uno::XComponentContext >& xContext)
-    : ThreadHelpBase          (&Application::GetSolarMutex())
-    , m_xContext              (xContext                     )
+    : m_xContext              (xContext                     )
     , m_xFrame                (                             )
 {
 }
@@ -85,12 +83,11 @@ void SAL_CALL TitleBarUpdate::initialize(const css::uno::Sequence< css::uno::Any
                 static_cast< ::cppu::OWeakObject* >(this),
                 1);
 
-    // SYNCHRONIZED ->
-    Guard aWriteLock(m_aLock);
-    // hold the frame as weak reference(!) so it can die everytimes :-)
-    m_xFrame = xFrame;
-    aWriteLock.unlock();
-    // <- SYNCHRONIZED
+    {
+        SolarMutexGuard g;
+        // hold the frame as weak reference(!) so it can die everytimes :-)
+        m_xFrame = xFrame;
+    }
 
     // start listening
     xFrame->addFrameActionListener(this);
@@ -144,14 +141,8 @@ void TitleBarUpdate::impl_updateApplicationID(const css::uno::Reference< css::fr
 #if !defined(MACOSX)
     try
     {
-        // SYNCHRONIZED ->
-        Guard aReadLock(m_aLock);
-        css::uno::Reference< css::uno::XComponentContext > xContext = m_xContext;
-        aReadLock.unlock();
-        // <- SYNCHRONIZED
-
         css::uno::Reference< css::frame::XModuleManager2 > xModuleManager =
-            css::frame::ModuleManager::create( xContext );
+            css::frame::ModuleManager::create( m_xContext );
 
         OUString sDesktopName;
         OUString aModuleId = xModuleManager->identify(xFrame);
@@ -215,16 +206,10 @@ void TitleBarUpdate::impl_updateApplicationID(const css::uno::Reference< css::fr
     if ( ! xFrame.is ())
         return sal_False;
 
-    // SYNCHRONIZED ->
-    Guard aReadLock(m_aLock);
-    css::uno::Reference< css::uno::XComponentContext > xContext = m_xContext;
-    aReadLock.unlock();
-    // <- SYNCHRONIZED
-
     try
     {
         css::uno::Reference< css::frame::XModuleManager2 > xModuleManager =
-            css::frame::ModuleManager::create( xContext );
+            css::frame::ModuleManager::create( m_xContext );
 
         rInfo.sID = xModuleManager->identify(xFrame);
         ::comphelper::SequenceAsHashMap lProps    = xModuleManager->getByName (rInfo.sID);
@@ -246,11 +231,11 @@ void TitleBarUpdate::impl_updateApplicationID(const css::uno::Reference< css::fr
 
 void TitleBarUpdate::impl_forceUpdate()
 {
-    // SYNCHRONIZED ->
-    Guard aReadLock(m_aLock);
-    css::uno::Reference< css::frame::XFrame >              xFrame(m_xFrame.get(), css::uno::UNO_QUERY);
-    aReadLock.unlock();
-    // <- SYNCHRONIZED
+    css::uno::Reference< css::frame::XFrame > xFrame;
+    {
+        SolarMutexGuard g;
+        xFrame.set(m_xFrame.get(), css::uno::UNO_QUERY);
+    }
 
     // frame already gone ? We hold it weak only ...
     if ( ! xFrame.is())

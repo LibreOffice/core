@@ -20,7 +20,6 @@
 #ifndef INCLUDED_FRAMEWORK_INC_HELPER_TITLEBARUPDATE_HXX
 #define INCLUDED_FRAMEWORK_INC_HELPER_TITLEBARUPDATE_HXX
 
-#include <threadhelp/threadhelpbase.hxx>
 #include <macros/xinterface.hxx>
 #include <macros/xtypeprovider.hxx>
 #include <general.h>
@@ -43,10 +42,7 @@ namespace framework{
     @devstatus      draft
     @threadsafe     yes
 *//*-*************************************************************************************************************/
-class TitleBarUpdate : // baseclasses (order necessary for right initialization!)
-                       private ThreadHelpBase
-                        // interfaces
-                     , public  ::cppu::WeakImplHelper3<
+class TitleBarUpdate : public  ::cppu::WeakImplHelper3<
                                    css::lang::XInitialization
                                  , css::frame::XTitleChangeListener // => XEventListener
                                  , css::frame::XFrameActionListener > // => XEventListener
