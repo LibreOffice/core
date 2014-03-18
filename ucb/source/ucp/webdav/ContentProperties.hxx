@@ -24,6 +24,7 @@
 
 #include <memory>
 #include <vector>
+#include <boost/scoped_ptr.hpp>
 #include <boost/unordered_map.hpp>
 #include <rtl/ustring.hxx>
 #include <com/sun/star/uno/Any.hxx>
@@ -173,12 +174,12 @@ public:
 
     // Not good to expose implementation details, but this is actually an
     // internal class.
-    const std::auto_ptr< PropertyValueMap > & getProperties() const
+    const boost::scoped_ptr< PropertyValueMap > & getProperties() const
     { return m_xProps; }
 
 private:
     OUString m_aEscapedTitle;
-    std::auto_ptr< PropertyValueMap > m_xProps;
+    boost::scoped_ptr< PropertyValueMap > m_xProps;
     bool m_bTrailingSlash;
 
     static com::sun::star::uno::Any m_aEmptyAny;

@@ -59,8 +59,6 @@ $(eval $(call gb_Library_add_exception_objects,ucpdav1,\
 
 else # WITH_WEBDAV == serf
 
-$(eval $(call gb_Library_set_warnings_not_errors,ucpdav1))
-
 $(eval $(call gb_Library_use_externals,ucpdav1,\
 	boost_headers \
 	apr \

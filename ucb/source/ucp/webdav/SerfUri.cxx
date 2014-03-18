@@ -33,24 +33,6 @@ using namespace http_dav_ucp;
 # pragma enable_warn
 #endif
 
-// -------------------------------------------------------------------
-// Constructor
-// -------------------------------------------------------------------
-
-namespace {
-
-inline bool matchIgnoreAsciiCase(OString const & rStr1,
-                                 sal_Char const * pStr2,
-                                 sal_Int32 nStr2Len) SAL_THROW(())
-{
-    return
-        rtl_str_shortenedCompareIgnoreAsciiCase_WithLength(
-                rStr1.getStr(), rStr1.getLength(), pStr2, nStr2Len, nStr2Len)
-            == 0;
-}
-
-}
-
 SerfUri::SerfUri( const apr_uri_t * inUri )
     throw ( DAVException )
     : mAprUri( *inUri )
@@ -104,7 +86,7 @@ SerfUri::SerfUri( const OUString & inUri )
     }
     if ( !mAprUri.path )
     {
-        mAprUri.path = "/";
+        mAprUri.path = (char *)"/";
     }
 
     init( &mAprUri );
@@ -174,7 +156,7 @@ void SerfUri::calculateURI ()
     if ( bAppendPort )
     {
         aBuf.append( ":" );
-        aBuf.append( OUString::valueOf( mPort ) );
+        aBuf.append( OUString::number( mPort ) );
     }
     aBuf.append( mPath );
 
@@ -268,7 +250,7 @@ OUString SerfUri::makeConnectionEndPointString(
     if ( ( nPort != DEFAULT_HTTP_PORT ) && ( nPort != DEFAULT_HTTPS_PORT ) )
     {
         aBuf.append( ":" );
-        aBuf.append( OUString::valueOf( sal_Int32( nPort ) ) );
+        aBuf.append( OUString::number( sal_Int32( nPort ) ) );
     }
     return aBuf.makeStringAndClear();
 }
