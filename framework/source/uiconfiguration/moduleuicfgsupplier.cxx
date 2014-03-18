@@ -34,6 +34,7 @@
 #include <com/sun/star/ui/XModuleUIConfigurationManager2.hpp>
 #include <com/sun/star/frame/XModuleManager2.hpp>
 
+#include <cppuhelper/basemutex.hxx>
 #include <cppuhelper/compbase2.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <vcl/svapp.hxx>
@@ -57,7 +58,7 @@ typedef cppu::WeakComponentImplHelper2<
     css::ui::XModuleUIConfigurationManagerSupplier >
         ModuleUIConfigurationManagerSupplier_BASE;
 
-class ModuleUIConfigurationManagerSupplier : private osl::Mutex,
+class ModuleUIConfigurationManagerSupplier : private cppu::BaseMutex,
                                              public ModuleUIConfigurationManagerSupplier_BASE
 {
 public:
@@ -102,7 +103,7 @@ private:
 };
 
 ModuleUIConfigurationManagerSupplier::ModuleUIConfigurationManagerSupplier( const Reference< XComponentContext >& xContext ) :
-    ModuleUIConfigurationManagerSupplier_BASE(*static_cast<osl::Mutex *>(this))
+    ModuleUIConfigurationManagerSupplier_BASE(m_aMutex)
     , m_xModuleMgr( ModuleManager::create( xContext ) )
     , m_xContext( xContext )
 {
