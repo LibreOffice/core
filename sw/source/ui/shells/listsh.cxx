@@ -149,7 +149,7 @@ void SwListShell::Execute(SfxRequest &rReq)
     SwWrtShell& rSh = GetShell();
 
     // --> FME 2005-01-04 #i35572#
-    const SwNumRule* pCurRule = rSh.GetCurNumRule();
+    const SwNumRule* pCurRule = rSh.GetNumRuleAtCurrCrsrPos();
     ASSERT( pCurRule, "SwListShell::Execute without NumRule" )
     bool bOutline = pCurRule && pCurRule->IsOutlineRule();
     // <--

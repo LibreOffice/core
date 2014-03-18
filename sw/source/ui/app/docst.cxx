@@ -219,7 +219,7 @@ void  SwDocShell::StateStyleSheet(SfxItemSet& rSet, SwWrtShell* pSh)
             break;
             case SID_STYLE_FAMILY5:
                 {
-                    const SwNumRule* pRule = pShell->GetCurNumRule();
+                    const SwNumRule* pRule = pShell->GetNumRuleAtCurrCrsrPos();
                     if( pRule )
                         aName = pRule->GetName();
 
@@ -239,7 +239,7 @@ void  SwDocShell::StateStyleSheet(SfxItemSet& rSet, SwWrtShell* pSh)
                         ? SFX_STYLE_FAMILY_FRAME != nActualFamily
                         : ( SFX_STYLE_FAMILY_FRAME == nActualFamily ||
                             SFX_STYLE_FAMILY_PAGE == nActualFamily ||
-                            (SFX_STYLE_FAMILY_PSEUDO == nActualFamily && !pShell->GetCurNumRule())) )
+                            (SFX_STYLE_FAMILY_PSEUDO == nActualFamily && !pShell->GetNumRuleAtCurrCrsrPos())) )
                 {
                     rSet.DisableItem( nWhich );
                 }
@@ -249,7 +249,7 @@ void  SwDocShell::StateStyleSheet(SfxItemSet& rSet, SwWrtShell* pSh)
                 if( (pShell->IsFrmSelected()
                         ? SFX_STYLE_FAMILY_FRAME != nActualFamily
                         : SFX_STYLE_FAMILY_FRAME == nActualFamily) ||
-                    (SFX_STYLE_FAMILY_PSEUDO == nActualFamily && !pShell->GetCurNumRule()) )
+                    (SFX_STYLE_FAMILY_PSEUDO == nActualFamily && !pShell->GetNumRuleAtCurrCrsrPos()) )
                 {
                     rSet.DisableItem( nWhich );
                 }
@@ -857,65 +857,68 @@ sal_uInt16 SwDocShell::Delete(const String &rName, sal_uInt16 nFamily)
  --------------------------------------------------------------------*/
 
 
-sal_uInt16 SwDocShell::ApplyStyles(const String &rName, sal_uInt16 nFamily,
-                               SwWrtShell* pShell, sal_uInt16 nMode )
+sal_uInt16 SwDocShell::ApplyStyles(
+    const String &rName,
+    const sal_uInt16 nFamily,
+    SwWrtShell* pShell,
+    const sal_uInt16 nMode )
 {
-    SwDocStyleSheet* pStyle =
-        (SwDocStyleSheet*)mxBasePool->Find(rName, (SfxStyleFamily)nFamily);
+    SwDocStyleSheet* pStyle = (SwDocStyleSheet*) mxBasePool->Find( rName, (SfxStyleFamily) nFamily );
 
-    ASSERT(pStyle, "Wo ist der StyleSheet");
-    if(!pStyle)
+    ASSERT( pStyle, "Wo ist der StyleSheet" );
+    if ( !pStyle )
         return sal_False;
 
     SwWrtShell *pSh = pShell ? pShell : GetWrtShell();
 
-    ASSERT( pSh, "Keine Shell, keine Styles");
+    ASSERT( pSh, "Keine Shell, keine Styles" );
 
     pSh->StartAllAction();
 
-    switch(nFamily)
+    switch (nFamily)
     {
-        case SFX_STYLE_FAMILY_CHAR:
-        {
-            SwFmtCharFmt aFmt(pStyle->GetCharFmt());
-            pSh->SetAttrItem( aFmt, (nMode & KEY_SHIFT) ?
-                nsSetAttrMode::SETATTR_DONTREPLACE : nsSetAttrMode::SETATTR_DEFAULT );
-            break;
-        }
-        case SFX_STYLE_FAMILY_PARA:
-        {
-            // --> OD 2007-11-06 #i62675#
-            // clear also list attributes at affected text nodes, if paragraph
-            // style has the list style attribute set.
-            pSh->SetTxtFmtColl( pStyle->GetCollection(), true );
-            // <--
-            break;
-        }
-        case SFX_STYLE_FAMILY_FRAME:
-        {
-            if ( pSh->IsFrmSelected() )
-                pSh->SetFrmFmt( pStyle->GetFrmFmt() );
-            break;
-        }
-        case SFX_STYLE_FAMILY_PAGE:
-        {
-            pSh->SetPageStyle(pStyle->GetPageDesc()->GetName());
-            break;
-        }
-        case SFX_STYLE_FAMILY_PSEUDO:
-        {
-            // --> OD 2008-02-08 #newlistlevelattrs#
-            // reset indent attribute on applying list style
-            // --> OD 2008-03-17 #refactorlists#
-            // continue list of list style
-            const SwNumRule* pNumRule = pStyle->GetNumRule();
-            const String sListIdForStyle =pNumRule->GetDefaultListId();
-            pSh->SetCurNumRule( *pNumRule, false, sListIdForStyle, true );
-            // <--
-            break;
-        }
-        default:
-            DBG_ERROR("Unbekannte Familie");
+    case SFX_STYLE_FAMILY_CHAR:
+    {
+        SwFmtCharFmt aFmt( pStyle->GetCharFmt() );
+        pSh->SetAttrItem( aFmt, ( nMode & KEY_SHIFT ) ? nsSetAttrMode::SETATTR_DONTREPLACE : nsSetAttrMode::SETATTR_DEFAULT );
+        break;
+    }
+    case SFX_STYLE_FAMILY_PARA:
+    {
+        // --> OD 2007-11-06 #i62675#
+        // clear also list attributes at affected text nodes, if paragraph
+        // style has the list style attribute set.
+        pSh->SetTxtFmtColl( pStyle->GetCollection(), true );
+        // <--
+        break;
+    }
+    case SFX_STYLE_FAMILY_FRAME:
+    {
+        if ( pSh->IsFrmSelected() )
+            pSh->SetFrmFmt( pStyle->GetFrmFmt() );
+        break;
+    }
+    case SFX_STYLE_FAMILY_PAGE:
+    {
+        pSh->SetPageStyle( pStyle->GetPageDesc()->GetName() );
+        break;
+    }
+
+    case SFX_STYLE_FAMILY_PSEUDO:
+    {
+        // --> OD 2008-02-08 #newlistlevelattrs#
+        // reset indent attribute on applying list style
+        // --> OD 2008-03-17 #refactorlists#
+        // continue list of list style
+        const SwNumRule* pNumRule = pStyle->GetNumRule();
+        const String sListIdForStyle = pNumRule->GetDefaultListId();
+        pSh->SetCurNumRule( *pNumRule, false, sListIdForStyle, true );
+        // <--
+        break;
+    }
+
+    default:
+        DBG_ERROR( "Unbekannte Familie" );
     }
     pSh->EndAllAction();
 
@@ -1058,7 +1061,7 @@ sal_uInt16 SwDocShell::UpdateStyle(const String &rName, sal_uInt16 nFamily, SwWr
         {
             const SwNumRule* pCurRule;
             if( pStyle->GetNumRule() &&
-                0 != ( pCurRule = pCurrWrtShell->GetCurNumRule() ))
+                0 != ( pCurRule = pCurrWrtShell->GetNumRuleAtCurrCrsrPos() ))
             {
                 SwNumRule aRule( *pCurRule );
                 // --> OD 2008-07-08 #i91400#
@@ -1219,7 +1222,7 @@ sal_uInt16 SwDocShell::MakeByExample( const String &rName, sal_uInt16 nFamily,
         {
             pCurrWrtShell->StartAllAction();
 
-            SwNumRule aRule( *pCurrWrtShell->GetCurNumRule() );
+            SwNumRule aRule( *pCurrWrtShell->GetNumRuleAtCurrCrsrPos() );
             String sOrigRule( aRule.GetName() );
             // --> OD 2008-07-08 #i91400#
             aRule.SetName( pStyle->GetNumRule()->GetName(),

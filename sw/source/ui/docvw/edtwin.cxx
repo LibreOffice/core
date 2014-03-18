@@ -1819,8 +1819,8 @@ KEYINPUT_CHECKTABLE_INSDEL:
 
                         //RETURN und leerer Absatz in Numerierung -> Num. beenden
                         else if( !aInBuffer.Len() &&
-                                 rSh.GetCurNumRule() &&
-                                 !rSh.GetCurNumRule()->IsOutlineRule() &&
+                                 rSh.GetNumRuleAtCurrCrsrPos() &&
+                                 !rSh.GetNumRuleAtCurrCrsrPos()->IsOutlineRule() &&
                                  !rSh.HasSelection() &&
                                 rSh.IsSttPara() && rSh.IsEndPara() )
                             eKeyState = KS_NumOff, eNextKeyState = KS_OutlineLvOff;
@@ -1840,7 +1840,7 @@ KEYINPUT_CHECKTABLE_INSDEL:
                 case KEY_RETURN | KEY_MOD2:     // ALT-Return
                     if ( !rSh.HasReadonlySel()
                          && !rSh.IsSttPara()
-                         && rSh.GetCurNumRule()
+                         && rSh.GetNumRuleAtCurrCrsrPos()
                          && !rSh.CrsrInsideInputFld() )
                     {
                         eKeyState = KS_NoNum;
@@ -1864,7 +1864,7 @@ KEYINPUT_CHECKTABLE_INSDEL:
                         const bool bOnlyBackspaceKey( KEY_BACKSPACE == rKeyCode.GetFullCode() );
                         if ( rSh.IsSttPara()
                              && !rSh.HasSelection()
-                             && ( rSh.GetCurNumRule() == NULL
+                             && ( rSh.GetNumRuleAtCurrCrsrPos() == NULL
                                   || ( rSh.IsNoNum() && bOnlyBackspaceKey ) ) )
                         {
                             bDone = rSh.TryRemoveIndent();
@@ -1917,7 +1917,7 @@ KEYINPUT_CHECKTABLE_INSDEL:
                                           && rSh.IsEndPara()
                                           && !rSh.HasSelection() )
                                 {
-                                    const SwNumRule* pCurrNumRule( rSh.GetCurNumRule() );
+                                    const SwNumRule* pCurrNumRule( rSh.GetNumRuleAtCurrCrsrPos() );
                                     if ( pCurrNumRule != NULL
                                          && pCurrNumRule != rSh.GetOutlineNumRule() )
                                     {
@@ -1957,12 +1957,13 @@ KEYINPUT_CHECKTABLE_INSDEL:
                         GetView().GetViewFrame()->GetDispatcher()->Execute( FN_GOTO_NEXT_INPUTFLD );
                         eKeyState = KS_Ende;
                     }
-                    else if( rSh.GetCurNumRule()
+                    else if( rSh.GetNumRuleAtCurrCrsrPos()
                              && rSh.IsSttOfPara()
                              && !rSh.HasReadonlySel() )
                     {
-                        if ( rSh.IsFirstOfNumRule() &&
-                             numfunc::ChangeIndentOnTabAtFirstPosOfFirstListItem() )
+                        if ( !rSh.IsMultiSelection()
+                             && rSh.IsFirstOfNumRuleAtCrsrPos()
+                             && numfunc::ChangeIndentOnTabAtFirstPosOfFirstListItem() )
                             eKeyState = KS_NumIndentInc;
                         else
                             eKeyState = KS_NumDown;
@@ -2016,12 +2017,13 @@ KEYINPUT_CHECKTABLE_INSDEL:
                         GetView().GetViewFrame()->GetDispatcher()->Execute( FN_GOTO_PREV_INPUTFLD );
                         eKeyState = KS_Ende;
                     }
-                    else if( rSh.GetCurNumRule()
+                    else if( rSh.GetNumRuleAtCurrCrsrPos()
                              && rSh.IsSttOfPara()
                              && !rSh.HasReadonlySel() )
                     {
-                        if ( rSh.IsFirstOfNumRule() &&
-                             numfunc::ChangeIndentOnTabAtFirstPosOfFirstListItem() )
+                        if ( !rSh.IsMultiSelection()
+                             && rSh.IsFirstOfNumRuleAtCrsrPos()
+                             && numfunc::ChangeIndentOnTabAtFirstPosOfFirstListItem() )
                             eKeyState = KS_NumIndentDec;
                         else
                             eKeyState = KS_NumUp;
@@ -4896,11 +4898,11 @@ void SwEditWin::Command( const CommandEvent& rCEvt )
                                                         pItem = new SvxPostureItem( ITALIC_NONE, RES_CHRATR_POSTURE );
                                                         break;
                     case DICTATIONCOMMAND_NUMBERING_ON:
-                                    if ( !rSh.GetCurNumRule() )
+                                    if ( !rSh.GetNumRuleAtCurrCrsrPos() )
                                         nSlotId = FN_NUM_NUMBERING_ON;
                                     break;
                     case DICTATIONCOMMAND_NUMBERING_OFF:
-                                    if ( rSh.GetCurNumRule() )
+                                    if ( rSh.GetNumRuleAtCurrCrsrPos() )
                                        nSlotId = FN_NUM_NUMBERING_ON;
                                     break;
                     case DICTATIONCOMMAND_TAB:

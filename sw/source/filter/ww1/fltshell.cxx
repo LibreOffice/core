@@ -521,34 +521,31 @@ void SwFltControlStack::SetAttrInDoc(const SwPosition& rTmpPos, SwFltStackEntry*
         break;
 
     case RES_FLTR_NUMRULE:          // Numrule 'reinsetzen
+    {
+        const String& rNumNm = ( (SfxStringItem*) pEntry->pAttr )->GetValue();
+        SwNumRule* pNumRule = pDoc->FindNumRulePtr( rNumNm );
+        if ( pNumRule )
         {
-            const String& rNumNm = ((SfxStringItem*)pEntry->pAttr)->GetValue();
-            SwNumRule* pRul = pDoc->FindNumRulePtr( rNumNm );
-            if( pRul )
+            if ( pEntry->MakeRegion( pDoc, aRegion, sal_True ) )
             {
-                if( pEntry->MakeRegion(pDoc, aRegion, sal_True))
+                SwNodeIndex aTmpStart( aRegion.Start()->nNode );
+                SwNodeIndex aTmpEnd( aTmpStart );
+                SwNodeIndex& rRegEndNd = aRegion.End()->nNode;
+                while (IterateNumrulePiece( rRegEndNd, aTmpStart, aTmpEnd ))
                 {
-                    SwNodeIndex aTmpStart( aRegion.Start()->nNode );
-                    SwNodeIndex aTmpEnd( aTmpStart );
-                    SwNodeIndex& rRegEndNd = aRegion.End()->nNode;
-                    while( IterateNumrulePiece( rRegEndNd,
-                                                aTmpStart, aTmpEnd ) )
-                    {
-                        SwPaM aTmpPam( aTmpStart, aTmpEnd );
-                        // --> OD 2008-03-17 #refactorlists#
-                        // no start of a new list
-                        pDoc->SetNumRule( aTmpPam, *pRul, false );
-                        // <--
+                    SwPaM aTmpPam( aTmpStart, aTmpEnd );
+                    pDoc->SetNumRule( aTmpPam, *pNumRule, false );
 
-                        aTmpStart = aTmpEnd;    // Start fuer naechstes Teilstueck
-                        aTmpStart++;
-                    }
+                    aTmpStart = aTmpEnd;    // Start fuer naechstes Teilstueck
+                    aTmpStart++;
                 }
-                else
-                    pDoc->DelNumRule( rNumNm );
             }
+            else
+                pDoc->DelNumRule( rNumNm );
         }
+    }
         break;
+
     case RES_FLTR_NUMRULE_NUM:
         break;
     case RES_FLTR_BOOKMARK:

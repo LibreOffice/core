@@ -1473,7 +1473,7 @@ void SwView::StateStatusLine(SfxItemSet &rSet)
                 //}//<-removed end ,zhaojianwei
 
                 //-->#outline level,added by zhaojianwei
-                const SwNumRule* pNumRule = rShell.GetCurNumRule();
+                const SwNumRule* pNumRule = rShell.GetNumRuleAtCurrCrsrPos();
                 const bool bOutlineNum = pNumRule ? pNumRule->IsOutlineRule() : 0;
                        //((SwTxtFmtColl*)rShell.GetCrsr()->GetNode()->GetTxtNode()->GetFmtColl())->IsAssignedToListLevelOfOutlineStyle();
 
@@ -1739,7 +1739,7 @@ void SwView::ExecuteStatusLine(SfxRequest &rReq)
                 nId = FN_EDIT_REGION;
             else
             {
-                const SwNumRule* pNumRule = rSh.GetCurNumRule();
+                const SwNumRule* pNumRule = rSh.GetNumRuleAtCurrCrsrPos();
                 if( pNumRule )  // Cursor in Numerierung
                 {
                     if( pNumRule->IsAutoRule() )

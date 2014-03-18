@@ -868,67 +868,44 @@ sal_Bool SwDoc::GotoOutline( SwPosition& rPos, const String& rName ) const
 // <--
 
 
-void lcl_ChgNumRule( SwDoc& rDoc, const SwNumRule& rRule )
+void lcl_ChgNumRule(
+    SwDoc& rDoc,
+    const SwNumRule& rRule )
 {
     SwNumRule* pOld = rDoc.FindNumRulePtr( rRule.GetName() );
     ASSERT( pOld, "ohne die alte NumRule geht gar nichts" );
 
-    sal_uInt16 nChgFmtLevel = 0, nMask = 1;
-    sal_uInt8 n;
+    sal_uInt16 nChgFmtLevel = 0;
+    sal_uInt16 nMask = 1;
 
-    for( n = 0; n < MAXLEVEL; ++n, nMask <<= 1 )
+    for ( sal_uInt8 n = 0; n < MAXLEVEL; ++n, nMask <<= 1 )
     {
-        const SwNumFmt& rOldFmt = pOld->Get( n ),
-                      & rNewFmt = rRule.Get( n );
+        const SwNumFmt& rOldFmt = pOld->Get( n ), &rNewFmt = rRule.Get( n );
 
-        if( rOldFmt != rNewFmt )
+        if ( rOldFmt != rNewFmt )
         {
             nChgFmtLevel |= nMask;
         }
-        else if( SVX_NUM_NUMBER_NONE > rNewFmt.GetNumberingType() && 1 < rNewFmt.GetIncludeUpperLevels() &&
-                0 != (nChgFmtLevel & GetUpperLvlChg( n, rNewFmt.GetIncludeUpperLevels(),nMask )) )
+        else if ( SVX_NUM_NUMBER_NONE > rNewFmt.GetNumberingType()
+                  && 1 < rNewFmt.GetIncludeUpperLevels()
+                  && 0 != ( nChgFmtLevel & GetUpperLvlChg( n, rNewFmt.GetIncludeUpperLevels(), nMask ) ) )
+        {
             nChgFmtLevel |= nMask;
+        }
     }
 
     if( !nChgFmtLevel )         // es wurde nichts veraendert?
     {
-        // --> OD 2006-04-27 #i64311#
         const bool bInvalidateNumRule( pOld->IsContinusNum() != rRule.IsContinusNum() );
-        // <--
         pOld->CheckCharFmts( &rDoc );
         pOld->SetContinusNum( rRule.IsContinusNum() );
-        // --> OD 2008-06-17 #i87166#
-        // Do NOT change list style type
-//        pOld->SetRuleType( rRule.GetRuleType() );
-        // <--
-        // --> OD 2006-04-27 #i64311#
         if ( bInvalidateNumRule )
         {
             pOld->SetInvalidRule(sal_True);
         }
-        // <--
         return ;
     }
 
-    // --> OD 2008-02-19 #refactorlists#
-//    SwNumRuleInfo* pUpd = new SwNumRuleInfo( rRule.GetName() );
-//    pUpd->MakeList( rDoc );
-
-//    sal_uInt8 nLvl;
-//    for( sal_uLong nFirst = 0, nLast = pUpd->GetList().Count();
-//        nFirst < nLast; ++nFirst )
-//    {
-//        SwTxtNode* pTxtNd = pUpd->GetList().GetObject( nFirst );
-//        nLvl = static_cast<sal_uInt8>(pTxtNd->GetLevel());
-
-//        if( nLvl < MAXLEVEL )
-//        {
-//            if( nChgFmtLevel & ( 1 << nLvl ))
-//            {
-//                pTxtNd->NumRuleChgd();
-//            }
-//        }
-//    }
     SwNumRule::tTxtNodeList aTxtNodeList;
     pOld->GetTxtNodeList( aTxtNodeList );
     sal_uInt8 nLvl( 0 );
@@ -946,34 +923,24 @@ void lcl_ChgNumRule( SwDoc& rDoc, const SwNumRule& rRule )
             }
         }
     }
-    // <--
 
-    for( n = 0; n < MAXLEVEL; ++n )
-        if( nChgFmtLevel & ( 1 << n ))
-            pOld->Set( n, rRule.GetNumFmt( n ));
+    for ( sal_uInt8 n = 0; n < MAXLEVEL; ++n )
+        if ( nChgFmtLevel & ( 1 << n ) )
+            pOld->Set( n, rRule.GetNumFmt( n ) );
 
     pOld->CheckCharFmts( &rDoc );
-    pOld->SetInvalidRule(sal_True);
+    pOld->SetInvalidRule( sal_True );
     pOld->SetContinusNum( rRule.IsContinusNum() );
-    // --> OD 2008-06-17 #i87166#
-    // Do NOT change list style type
-//    pOld->SetRuleType( rRule.GetRuleType() );
-    // <--
-
-    // --> OD 2008-02-19 #refactorlists#
-//    delete pUpd;
-    // <--
 
     rDoc.UpdateNumRule();
 }
 
-// OD 2008-02-08 #newlistlevelattrs# - add handling of parameter <bResetIndentAttrs>
-// --> OD 2008-03-17 #refactorlists#
+
 void SwDoc::SetNumRule( const SwPaM& rPam,
                         const SwNumRule& rRule,
                         const bool bCreateNewList,
                         const String sContinuedListId,
-                        sal_Bool bSetItem,
+                        bool bSetItem,
                         const bool bResetIndentAttrs )
 {
     SwUndoInsNum * pUndo = NULL;
@@ -985,70 +952,69 @@ void SwDoc::SetNumRule( const SwPaM& rPam,
         GetIDocumentUndoRedo().AppendUndo(pUndo);
     }
 
-    SwNumRule * pNew = FindNumRulePtr( rRule.GetName() );
-    bool bUpdateRule = false;
-
-    if( !pNew )
+    SwNumRule* pNewOrChangedNumRule = FindNumRulePtr( rRule.GetName() );
+    bool bNewNumRuleCreated = false;
+    if ( pNewOrChangedNumRule == NULL )
     {
-        pNew = (*pNumRuleTbl)[ MakeNumRule( rRule.GetName(), &rRule ) ];
+        // create new numbering rule based on given one
+        pNewOrChangedNumRule = ( *pNumRuleTbl )[MakeNumRule( rRule.GetName(), &rRule )];
+        bNewNumRuleCreated = true;
     }
-    else if (rRule != *pNew)
+    else if ( rRule != *pNewOrChangedNumRule )
     {
-        bUpdateRule = true;
-    }
-
-    if (bUpdateRule)
-    {
-        if( pUndo )
+        // change existing numbering rule
+        if( pUndo != NULL )
         {
-            pUndo->SaveOldNumRule( *pNew );
-            ::lcl_ChgNumRule( *this, rRule );
-            pUndo->SetLRSpaceEndPos();
+            pUndo->SaveOldNumRule( *pNewOrChangedNumRule );
         }
-        else
+        ::lcl_ChgNumRule( *this, rRule );
+        if( pUndo != NULL )
         {
-            ::lcl_ChgNumRule( *this, rRule );
+            pUndo->SetLRSpaceEndPos();
         }
     }
 
     if ( bSetItem )
     {
+        String sListId;
         if ( bCreateNewList )
         {
-            String sListId;
-            if ( !bUpdateRule )
+            if ( bNewNumRuleCreated )
             {
                 // apply list id of list, which has been created for the new list style
-                sListId = pNew->GetDefaultListId();
+                sListId = pNewOrChangedNumRule->GetDefaultListId();
             }
             else
             {
                 // create new list and apply its list id
-                SwList* pNewList = createList( String(), pNew->GetName() );
+                const SwList* pNewList = createList( String(), pNewOrChangedNumRule->GetName() );
                 ASSERT( pNewList,
                         "<SwDoc::SetNumRule(..)> - could not create new list. Serious defect -> please inform OD." );
                 sListId = pNewList->GetListId();
             }
-            InsertPoolItem( rPam, SfxStringItem( RES_PARATR_LIST_ID, sListId ), 0 );
         }
         else if ( sContinuedListId.Len() > 0 )
         {
             // apply given list id
-            InsertPoolItem( rPam, SfxStringItem( RES_PARATR_LIST_ID, sContinuedListId ), 0 );
+            sListId = sContinuedListId;
+        }
+        if ( sListId.Len() > 0 )
+        {
+            InsertPoolItem( rPam, SfxStringItem( RES_PARATR_LIST_ID, sListId ), 0 );
         }
     }
 
-    if ( ! rPam.HasMark())
+    if ( !rPam.HasMark() )
     {
         SwTxtNode * pTxtNd = rPam.GetPoint()->nNode.GetNode().GetTxtNode();
-        // consider case that the PaM doesn't denote a text node - e.g. it denotes a graphic node
-        if ( pTxtNd )
+        // robust code: consider case that the PaM doesn't denote a text node - e.g. it denotes a graphic node
+        if ( pTxtNd != NULL )
         {
             SwNumRule * pRule = pTxtNd->GetNumRule();
 
-            if (pRule && pRule->GetName() == pNew->GetName())
+            if (pRule && pRule->GetName() == pNewOrChangedNumRule->GetName())
             {
-                bSetItem = sal_False;
+                bSetItem = false;
                 if ( !pTxtNd->IsInList() )
                 {
                     pTxtNd->AddToList();
@@ -1062,10 +1028,10 @@ void SwDoc::SetNumRule( const SwPaM& rPam,
                 if ( pColl )
                 {
                     SwNumRule* pCollRule = FindNumRulePtr(pColl->GetNumRule().GetValue());
-                    if ( pCollRule && pCollRule->GetName() == pNew->GetName() )
+                    if ( pCollRule && pCollRule->GetName() == pNewOrChangedNumRule->GetName() )
                     {
                         pTxtNd->ResetAttr( RES_PARATR_NUMRULE );
-                        bSetItem = sal_False;
+                        bSetItem = false;
                     }
                 }
             }
@@ -1074,11 +1040,11 @@ void SwDoc::SetNumRule( const SwPaM& rPam,
 
     if ( bSetItem )
     {
-        InsertPoolItem( rPam, SwNumRuleItem( pNew->GetName() ), 0 );
+        InsertPoolItem( rPam, SwNumRuleItem( pNewOrChangedNumRule->GetName() ), 0 );
     }
 
-    if ( bResetIndentAttrs &&
-         pNew && pNew->Get( 0 ).GetPositionAndSpaceMode() == SvxNumberFormat::LABEL_ALIGNMENT )
+    if ( bResetIndentAttrs
+         && pNewOrChangedNumRule->Get( 0 ).GetPositionAndSpaceMode() == SvxNumberFormat::LABEL_ALIGNMENT )
     {
         SvUShortsSort aResetAttrsArray;
         aResetAttrsArray.Insert( RES_LR_SPACE );
@@ -1106,6 +1072,7 @@ void SwDoc::SetNumRule( const SwPaM& rPam,
 
     SetModified();
 }
+
 
 void SwDoc::SetCounted(const SwPaM & rPam, bool bCounted)
 {
@@ -1347,15 +1314,18 @@ void SwDoc::StopNumRuleAnimations( OutputDevice* pOut )
     }
 }
 
-sal_Bool SwDoc::ReplaceNumRule( const SwPosition& rPos,
-                            const String& rOldRule, const String& rNewRule )
+sal_Bool SwDoc::ReplaceNumRule(
+    const SwPosition& rPos,
+    const String& rOldRule,
+    const String& rNewRule )
 {
     sal_Bool bRet = sal_False;
-    SwNumRule *pOldRule = FindNumRulePtr( rOldRule ),
-              *pNewRule = FindNumRulePtr( rNewRule );
-    if( pOldRule && pNewRule && pOldRule != pNewRule )
+    SwNumRule* pOldRule = FindNumRulePtr( rOldRule );
+    SwNumRule* pNewRule = FindNumRulePtr( rNewRule );
+    if ( pOldRule != NULL
+         && pNewRule != NULL
+         && pOldRule != pNewRule )
     {
-        // --> OD 2008-02-19 #refactorlists#
         SwUndoInsNum* pUndo = 0;
         if (GetIDocumentUndoRedo().DoesUndo())
         {
@@ -1365,49 +1335,10 @@ sal_Bool SwDoc::ReplaceNumRule( const SwPosition& rPos,
             GetIDocumentUndoRedo().AppendUndo(pUndo);
         }
 
-        // --> OD 2008-02-19 #refactorlists#
-        // apply new list style <pNewRule> to all text nodes, which have the
-        // old list style <pOldNRule> applied and belong to the same list as
-        // the text node of the given <SwPosition>.
-//        SwNumRuleInfo aUpd( rOldRule );
-//        aUpd.MakeList( *this );
-
-//        if (aUpd.GetList().Count() > 0)    // #106897#
         SwNumRule::tTxtNodeList aTxtNodeList;
         pOldRule->GetTxtNodeList( aTxtNodeList );
         if ( aTxtNodeList.size() > 0 )
         {
-//            // Position suchen und bestimme ob ein Node davor oder dahinter
-//            // einen Start erzwingt
-//            SwTxtNode* pTxtNd;
-//            sal_uLong nFndPos, nFirst, nLast;
-
-//            if( TABLE_ENTRY_NOTFOUND != aUpd.GetList().SearchKey(
-//                                                                 rPos.nNode.GetIndex(), &nFndPos ))
-//                ++nFndPos;
-
-//            for( nLast = nFndPos; nLast < aUpd.GetList().Count(); ++nLast )
-//            {
-//                pTxtNd = aUpd.GetList().GetObject( nLast );
-//                if(pTxtNd->IsRestart())
-//                    break;
-//            }
-//            for( nFirst = nFndPos; nFirst; )
-//            {
-//                pTxtNd = aUpd.GetList().GetObject( --nFirst );
-//                if( pTxtNd->IsRestart() )
-//                    break;
-//            }
-//            // dann neue Numerierung ueber diesen Bereich
-//            // definieren und den Start am Anfang/Ende zurueck setzen
-//            pTxtNd = aUpd.GetList().GetObject( nFirst );
-//            if( pTxtNd->IsRestart() )
-//            {
-//                pTxtNd->SetRestart(false);
-//                if( pUndo )
-//                    pUndo->SetSttNum( pTxtNd->GetIndex() );
-//            }
-
             SwRegHistory aRegH( pUndo ? pUndo->GetHistory() : 0 );
             sal_uInt16 nChgFmtLevel = 0;
             for( sal_uInt8 n = 0; n < MAXLEVEL; ++n )
@@ -1422,15 +1353,6 @@ sal_Bool SwDoc::ReplaceNumRule( const SwPosition& rPos,
 
             const SwTxtNode* pGivenTxtNode = rPos.nNode.GetNode().GetTxtNode();
             SwNumRuleItem aRule( rNewRule );
-//            for( ; nFirst < nLast; ++nFirst )
-//            {
-//                pTxtNd = aUpd.GetList().GetObject( nFirst );
-
-//                aRegH.RegisterInModify( pTxtNd, *pTxtNd );
-
-//                pTxtNd->SwCntntNode::SetAttr( aRule );
-//                pTxtNd->NumRuleChgd();
-//            }
             for ( SwNumRule::tTxtNodeList::iterator aIter = aTxtNodeList.begin();
                   aIter != aTxtNodeList.end(); ++aIter )
             {
@@ -1455,7 +1377,7 @@ sal_Bool SwDoc::ReplaceNumRule( const SwPosition& rPos,
     return bRet;
 }
 
-// --> OD 2008-03-18 #refactorlists#
+
 namespace
 {
     struct ListStyleData
@@ -1471,22 +1393,17 @@ namespace
         {}
     };
 }
-// <--
 
 void SwDoc::MakeUniqueNumRules(const SwPaM & rPaM)
 {
     ASSERT( rPaM.GetDoc() == this, "need same doc" );
 
-    // --> OD 2008-03-18 #refactorlists#
-//    map<SwNumRule *, SwNumRule *> aMyNumRuleMap;
     ::std::map<SwNumRule *, ListStyleData> aMyNumRuleMap;
-    // <--
-
-     sal_uLong nStt = rPaM.Start()->nNode.GetIndex();
-    sal_uLong nEnd = rPaM.End()->nNode.GetIndex();
 
     bool bFirst = true;
 
+    const sal_uLong nStt = rPaM.Start()->nNode.GetIndex();
+    const sal_uLong nEnd = rPaM.End()->nNode.GetIndex();
     for (sal_uLong n = nStt; n <= nEnd; n++)
     {
         SwTxtNode * pCNd = GetNodes()[n]->GetTxtNode();
@@ -1497,11 +1414,8 @@ void SwDoc::MakeUniqueNumRules(const SwPaM & rPaM)
 
             if (pRule && pRule->IsAutoRule() && ! pRule->IsOutlineRule())
             {
-                // --> OD 2008-03-18 #refactorlists#
-//                SwNumRule * pReplaceNumRule = aMyNumRuleMap[pRule];
                 ListStyleData aListStyleData = aMyNumRuleMap[pRule];
 
-//                if (! pReplaceNumRule)
                 if ( aListStyleData.pReplaceNumRule == 0 )
                 {
                     if (bFirst)
@@ -1514,26 +1428,20 @@ void SwDoc::MakeUniqueNumRules(const SwPaM & rPaM)
                                             aListStyleData.sListId, true ));
                     }
 
-//                    if (! pReplaceNumRule)
                     if ( aListStyleData.pReplaceNumRule == 0 )
                     {
-//                        pReplaceNumRule = new SwNumRule(*pRule);
-//                        pReplaceNumRule->SetName(GetUniqueNumRuleName());
                         aListStyleData.pReplaceNumRule = new SwNumRule(*pRule);
-                        // --> OD 2008-07-08 #i91400#
-                        aListStyleData.pReplaceNumRule->SetName(
-                                                GetUniqueNumRuleName(), *this );
-                        // <--
+                        aListStyleData.pReplaceNumRule->SetName( GetUniqueNumRuleName(), *this );
                         aListStyleData.bCreateNewList = true;
                     }
 
-//                    aMyNumRuleMap[pRule] = pReplaceNumRule;
                     aMyNumRuleMap[pRule] = aListStyleData;
                 }
 
                 SwPaM aPam(*pCNd);
 
-                SetNumRule( aPam, *aListStyleData.pReplaceNumRule,
+                SetNumRule( aPam,
+                            *aListStyleData.pReplaceNumRule,
                             aListStyleData.bCreateNewList,
                             aListStyleData.sListId );
                 if ( aListStyleData.bCreateNewList )
@@ -2401,16 +2309,13 @@ sal_Bool SwDoc::NumOrNoNum( const SwNodeIndex& rIdx, sal_Bool bDel )
     return bResult;
 }
 
-SwNumRule* SwDoc::GetCurrNumRule( const SwPosition& rPos ) const
+SwNumRule* SwDoc::GetNumRuleAtPos( const SwPosition& rPos ) const
 {
-    SwNumRule* pRet = 0;
+    SwNumRule* pRet = NULL;
     SwTxtNode* pTNd = rPos.nNode.GetNode().GetTxtNode();
 
-    if( pTNd )
+    if ( pTNd != NULL )
     {
-        // --> OD 2008-02-20 #refactorlists#
-//        pTNd->SyncNumberAndNumRule();
-        // <--
         pRet = pTNd->GetNumRule();
     }
 
@@ -2602,7 +2507,7 @@ void SwDoc::UpdateNumRule()
             rNmTbl[ n ]->Validate();
 }
 
-// --> OD 2008-04-02 #refactorlists#
+
 void SwDoc::MarkListLevel( const String& sListId,
                            const int nListLevel,
                            const sal_Bool bValue )
@@ -2622,27 +2527,22 @@ void SwDoc::MarkListLevel( SwList& rList,
     // Set new marked list level and notify all affected nodes of the changed mark.
     rList.MarkListLevel( nListLevel, bValue );
 }
-// <- #i27615#
-// <--
 
-// #i23726#
-sal_Bool SwDoc::IsFirstOfNumRule(SwPosition & rPos)
+
+bool SwDoc::IsFirstOfNumRuleAtPos( const SwPosition & rPos )
 {
-    sal_Bool bResult = sal_False;
-    SwTxtNode * pTxtNode = rPos.nNode.GetNode().GetTxtNode();
+    bool bResult = false;
 
-    if (pTxtNode)
+    const SwTxtNode* pTxtNode = rPos.nNode.GetNode().GetTxtNode();
+    if ( pTxtNode != NULL )
     {
-        SwNumRule * pNumRule = pTxtNode->GetNumRule();
-
-        if (pNumRule)
-            bResult = pTxtNode->IsFirstOfNumRule();
+        bResult = pTxtNode->IsFirstOfNumRule();
     }
 
     return bResult;
 }
 
-// --> OD 2007-10-26 #i83479#
+
 // implementation for interface <IDocumentListItems>
 bool SwDoc::lessThanNodeNum::operator()( const SwNodeNum* pNodeNumOne,
                                          const SwNodeNum* pNodeNumTwo ) const
@@ -2722,9 +2622,8 @@ void SwDoc::getNumItems( tSortedNodeNumList& orNodeNumList ) const
         }
     }
 }
-// <--
 
-// --> OD 2007-11-15 #i83479#
+
 // implementation for interface <IDocumentOutlineNodes>
 sal_Int32 SwDoc::getOutlineNodesCount() const
 {

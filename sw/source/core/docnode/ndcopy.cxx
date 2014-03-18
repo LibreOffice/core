@@ -1306,13 +1306,16 @@ bool SwDoc::CopyImpl( SwPaM& rPam, SwPosition& rPos,
         *pCpyRange->GetMark() = *aCpyPam.GetMark();
     }
 
-    if ( pNumRuleToPropagate )
+    if ( pNumRuleToPropagate != NULL )
     {
-        // --> OD 2009-08-25 #i86492#
-        // use <SwDoc::SetNumRule(..)>, because it also handles the <ListId>
-//        pDoc->ReplaceNumRule(aCpyPam, *pNumRuleToPropagate);
-        pDoc->SetNumRule( aCpyPam, *pNumRuleToPropagate, false,
-                          aListIdToPropagate, sal_True, true );
+        // replace list
+        pDoc->SetNumRule(
+            aCpyPam,
+            *pNumRuleToPropagate,
+            false,
+            aListIdToPropagate,
+            true,
+            true );
     }
 
     pDoc->SetRedlineMode_intern( eOld );

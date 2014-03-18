@@ -136,22 +136,18 @@ void SwUndoInsNum::RedoImpl(::sw::UndoRedoContext & rContext)
 {
     SwDoc & rDoc = rContext.GetDoc();
 
-    if( pOldNumRule )
+    if ( pOldNumRule )
         rDoc.ChgNumRuleFmts( aNumRule );
-    else if( pHistory )
+    else if ( pHistory )
     {
-        SwPaM & rPam( AddUndoRedoPaM(rContext) );
-        if( sReplaceRule.Len() )
+        SwPaM & rPam( AddUndoRedoPaM( rContext ) );
+        if ( sReplaceRule.Len() )
         {
-            rDoc.ReplaceNumRule(*rPam.GetPoint(),
-                                sReplaceRule, aNumRule.GetName() );
+            rDoc.ReplaceNumRule( *rPam.GetPoint(), sReplaceRule, aNumRule.GetName() );
         }
         else
         {
-            // --> OD 2005-02-25 #i42921# - adapt to changed signature
-            // --> OD 2008-03-18 #refactorlists#
-            rDoc.SetNumRule(rPam, aNumRule, false);
-            // <--
+            rDoc.SetNumRule( rPam, aNumRule, false );
         }
     }
 }
@@ -164,15 +160,12 @@ void SwUndoInsNum::SetLRSpaceEndPos()
 
 void SwUndoInsNum::RepeatImpl(::sw::RepeatContext & rContext)
 {
-    SwDoc & rDoc(rContext.GetDoc());
-    if( nSttNode )
+    SwDoc & rDoc( rContext.GetDoc() );
+    if ( nSttNode )
     {
-        if( !sReplaceRule.Len() )
+        if ( !sReplaceRule.Len() )
         {
-            // --> OD 2005-02-25 #i42921# - adapt to changed signature
-            // --> OD 2008-03-18 #refactorlists#
-            rDoc.SetNumRule(rContext.GetRepeatPaM(), aNumRule, false);
-            // <--
+            rDoc.SetNumRule( rContext.GetRepeatPaM(), aNumRule, false );
         }
     }
     else
