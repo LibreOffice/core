@@ -28,7 +28,10 @@ $(eval $(call gb_Library_set_include,swui,\
     $$(INCLUDE) \
 ))
 
-$(eval $(call gb_Library_use_external,swui,boost_headers))
+$(eval $(call gb_Library_use_externals,swui,\
+	boost_headers \
+	icu_headers \
+))
 
 $(eval $(call gb_Library_use_custom_headers,swui,\
 	officecfg/registry \
