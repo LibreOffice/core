@@ -55,8 +55,24 @@ using namespace rtl;
 using namespace sd;
 
 DiscoveryService::DiscoveryService()
+    : zService( 0 )
 {
-    zService = NULL;
+}
+
+DiscoveryService::~DiscoveryService()
+{
+  #ifdef WNT
+    closesocket( mSocket );
+  #else
+    close( mSocket );
+  #endif
+
+     if (zService)
+         zService->clear();
+}
+
+void DiscoveryService::setupSockets()
+{
 
 #ifdef MACOSX
     // Bonjour for OSX
@@ -114,21 +130,12 @@ DiscoveryService::DiscoveryService()
     }
 }
 
-DiscoveryService::~DiscoveryService()
-{
-  #ifdef WNT
-    closesocket( mSocket );
-  #else
-    close( mSocket );
-  #endif
-
-     if (zService)
-         zService->clear();
-}
-
 void SAL_CALL DiscoveryService::run()
 {
     osl::Thread::setName("DiscoveryService");
+
+    setupSockets();
+
     // Kept for backwrad compatibility
     char aBuffer[BUFFER_SIZE];
     while ( true )
