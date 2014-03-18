@@ -22,7 +22,6 @@
 
 #include <jobs/jobresult.hxx>
 #include <jobs/jobdata.hxx>
-#include <threadhelp/threadhelpbase.hxx>
 #include <macros/xinterface.hxx>
 #include <macros/xtypeprovider.hxx>
 #include <stdtypes.h>
@@ -54,8 +53,7 @@ namespace framework{
             synchronously or asynchronous, control it's lifetime
             and differe between jobs with and without configuration.
  */
-class Job : private ThreadHelpBase
-          , public  ::cppu::WeakImplHelper3<
+class Job : public  ::cppu::WeakImplHelper3<
                         css::task::XJobListener
                       , css::frame::XTerminateListener
                       , css::util::XCloseListener >

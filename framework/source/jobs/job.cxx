@@ -18,7 +18,6 @@
  */
 
 #include <jobs/job.hxx>
-#include <threadhelp/guard.hxx>
 #include <general.h>
 #include <services.h>
 
@@ -51,8 +50,7 @@ namespace framework{
 */
 Job::Job( /*IN*/ const css::uno::Reference< css::uno::XComponentContext >& xContext  ,
           /*IN*/ const css::uno::Reference< css::frame::XFrame >&              xFrame )
-    : ThreadHelpBase       (&Application::GetSolarMutex())
-    , m_aJobCfg            (xContext                     )
+    : m_aJobCfg            (xContext                     )
     , m_xContext           (xContext                     )
     , m_xFrame             (xFrame                       )
     , m_bListenOnDesktop   (sal_False                    )
@@ -80,8 +78,7 @@ Job::Job( /*IN*/ const css::uno::Reference< css::uno::XComponentContext >& xCont
 */
 Job::Job( /*IN*/ const css::uno::Reference< css::uno::XComponentContext >& xContext  ,
           /*IN*/ const css::uno::Reference< css::frame::XModel >&              xModel )
-    : ThreadHelpBase       (&Application::GetSolarMutex())
-    , m_aJobCfg            (xContext                     )
+    : m_aJobCfg            (xContext                     )
     , m_xContext           (xContext                     )
     , m_xModel             (xModel                       )
     , m_bListenOnDesktop   (sal_False                    )
@@ -120,8 +117,7 @@ Job::~Job()
 void Job::setDispatchResultFake( /*IN*/ const css::uno::Reference< css::frame::XDispatchResultListener >& xListener   ,
                                  /*IN*/ const css::uno::Reference< css::uno::XInterface >&                xSourceFake )
 {
-    /* SAFE { */
-    Guard aWriteLock(m_aLock);
+    SolarMutexGuard g;
 
     // reject dangerous calls
     if (m_eRunState != E_NEW)
@@ -132,14 +128,11 @@ void Job::setDispatchResultFake( /*IN*/ const css::uno::Reference< css::frame::X
 
     m_xResultListener   = xListener  ;
     m_xResultSourceFake = xSourceFake;
-    aWriteLock.unlock();
-    /* } SAFE */
 }
 
 void Job::setJobData( const JobData& aData )
 {
-    /* SAFE { */
-    Guard aWriteLock(m_aLock);
+    SolarMutexGuard g;
 
     // reject dangerous calls
     if (m_eRunState != E_NEW)
@@ -149,8 +142,6 @@ void Job::setJobData( const JobData& aData )
     }
 
     m_aJobCfg = aData;
-    aWriteLock.unlock();
-    /* } SAFE */
 }
 
 
@@ -168,7 +159,7 @@ void Job::setJobData( const JobData& aData )
 void Job::execute( /*IN*/ const css::uno::Sequence< css::beans::NamedValue >& lDynamicArgs )
 {
     /* SAFE { */
-    Guard aWriteLock(m_aLock);
+    SolarMutexResettableGuard aWriteLock;
 
     // reject dangerous calls
     if (m_eRunState != E_NEW)
@@ -203,23 +194,23 @@ void Job::execute( /*IN*/ const css::uno::Sequence< css::beans::NamedValue >& lD
         if (xAJob.is())
         {
             m_aAsyncWait.reset();
-            aWriteLock.unlock();
+            aWriteLock.clear();
             /* } SAFE */
             xAJob->executeAsync(lJobArgs, xThis);
             // wait for finishing this job - so this method
             // does the same for synchronous and asynchronous jobs!
             m_aAsyncWait.wait();
-            aWriteLock.lock();
+            aWriteLock.reset();
             /* SAFE { */
             // Note: Result handling was already done inside the callback!
         }
         // execute it synchron
         else if (xSJob.is())
         {
-            aWriteLock.unlock();
+            aWriteLock.clear();
             /* } SAFE */
             css::uno::Any aResult = xSJob->execute(lJobArgs);
-            aWriteLock.lock();
+            aWriteLock.reset();
             /* SAFE { */
             impl_reactForJobResult(aResult);
         }
@@ -273,7 +264,7 @@ void Job::execute( /*IN*/ const css::uno::Sequence< css::beans::NamedValue >& lD
         }
     }
 
-    aWriteLock.unlock();
+    aWriteLock.clear();
     /* SAFE { */
 
     // release this instance ...
@@ -291,8 +282,7 @@ void Job::execute( /*IN*/ const css::uno::Sequence< css::beans::NamedValue >& lD
 */
 void Job::die()
 {
-    /* SAFE { */
-    Guard aWriteLock(m_aLock);
+    SolarMutexGuard g;
 
     impl_stopListening();
 
@@ -321,9 +311,6 @@ void Job::die()
     m_xResultSourceFake  = css::uno::Reference< css::uno::XInterface >();
     m_bPendingCloseFrame = sal_False;
     m_bPendingCloseModel = sal_False;
-
-    aWriteLock.unlock();
-    /* SAFE { */
 }
 
 
@@ -347,7 +334,7 @@ css::uno::Sequence< css::beans::NamedValue > Job::impl_generateJobArgs( /*IN*/ c
     css::uno::Sequence< css::beans::NamedValue > lAllArgs;
 
     /* SAFE { */
-    Guard aReadLock(m_aLock);
+    SolarMutexClearableGuard aReadLock;
 
     // the real structure of the returned list depends from the environment of this job!
     JobData::EMode eMode = m_aJobCfg.getMode();
@@ -391,7 +378,7 @@ css::uno::Sequence< css::beans::NamedValue > Job::impl_generateJobArgs( /*IN*/ c
         lJobConfigArgs = m_aJobCfg.getJobConfig();
     }
 
-    aReadLock.unlock();
+    aReadLock.clear();
     /* } SAFE */
 
     // Add all valid (not empty) lists to the return list
@@ -441,8 +428,7 @@ css::uno::Sequence< css::beans::NamedValue > Job::impl_generateJobArgs( /*IN*/ c
 */
 void Job::impl_reactForJobResult( /*IN*/ const css::uno::Any& aResult )
 {
-    /* SAFE { */
-    Guard aWriteLock(m_aLock);
+    SolarMutexGuard g;
 
     // analyze the result set ...
     JobResult aAnalyzedResult(aResult);
@@ -488,9 +474,6 @@ void Job::impl_reactForJobResult( /*IN*/ const css::uno::Any& aResult )
                                         aEvent.Source = m_xResultSourceFake;
         m_xResultListener->dispatchFinished(aEvent);
     }
-
-    aWriteLock.unlock();
-    /* SAFE { */
 }
 
 
@@ -512,8 +495,7 @@ void Job::impl_reactForJobResult( /*IN*/ const css::uno::Any& aResult )
 */
 void Job::impl_startListening()
 {
-    /* SAFE { */
-    Guard aWriteLock(m_aLock);
+    SolarMutexGuard g;
 
     // listening for office shutdown
     if (!m_xDesktop.is() && !m_bListenOnDesktop)
@@ -568,9 +550,6 @@ void Job::impl_startListening()
             m_bListenOnModel = sal_False;
         }
     }
-
-    aWriteLock.unlock();
-    /* } SAFE */
 }
 
 
@@ -580,8 +559,7 @@ void Job::impl_startListening()
 */
 void Job::impl_stopListening()
 {
-    /* SAFE { */
-    Guard aWriteLock(m_aLock);
+    SolarMutexGuard g;
 
     // stop listening for office shutdown
     if (m_xDesktop.is() && m_bListenOnDesktop)
@@ -633,9 +611,6 @@ void Job::impl_stopListening()
         {
         }
     }
-
-    aWriteLock.unlock();
-    /* } SAFE */
 }
 
 
@@ -656,8 +631,7 @@ void Job::impl_stopListening()
 void SAL_CALL Job::jobFinished( /*IN*/ const css::uno::Reference< css::task::XAsyncJob >& xJob    ,
                                 /*IN*/ const css::uno::Any&                               aResult ) throw(css::uno::RuntimeException, std::exception)
 {
-    /* SAFE { */
-    Guard aWriteLock(m_aLock);
+    SolarMutexGuard g;
 
     // It's necessary to check this.
     // May this job was cancelled by any other reason
@@ -677,9 +651,6 @@ void SAL_CALL Job::jobFinished( /*IN*/ const css::uno::Reference< css::task::XAs
     // But do it everytime. So any outside blocking code can finish
     // his work too.
     m_aAsyncWait.set();
-
-    aWriteLock.unlock();
-    /* } SAFE */
 }
 
 
@@ -700,9 +671,7 @@ void SAL_CALL Job::jobFinished( /*IN*/ const css::uno::Reference< css::task::XAs
 void SAL_CALL Job::queryTermination( /*IN*/ const css::lang::EventObject& ) throw(css::frame::TerminationVetoException,
                                                                                          css::uno::RuntimeException, std::exception          )
 {
-    /* SAFE { */
-    Guard aReadLock(m_aLock);
-
+    SolarMutexGuard g;
 
     // Otherwhise try to close() it
     css::uno::Reference< css::util::XCloseable > xClose(m_xJob, css::uno::UNO_QUERY);
@@ -721,9 +690,6 @@ void SAL_CALL Job::queryTermination( /*IN*/ const css::lang::EventObject& ) thro
         css::uno::Reference< css::uno::XInterface > xThis(static_cast< ::cppu::OWeakObject* >(this), css::uno::UNO_QUERY);
         throw css::frame::TerminationVetoException("job still in progress", xThis);
     }
-
-    aReadLock.unlock();
-    /* } SAFE */
 }
 
 
@@ -770,8 +736,7 @@ void SAL_CALL Job::queryClosing( const css::lang::EventObject& aEvent         ,
                                        sal_Bool                bGetsOwnership ) throw(css::util::CloseVetoException,
                                                                                       css::uno::RuntimeException, std::exception   )
 {
-    /* SAFE { */
-    Guard aWriteLock(m_aLock);
+    SolarMutexGuard g;
 
     // do nothing, if no internal job is still running ...
     // The frame or model can be closed then successfully.
@@ -827,9 +792,6 @@ void SAL_CALL Job::queryClosing( const css::lang::EventObject& aEvent         ,
     // This must be done inside notifyClosing() only. Otherwhise the
     // might stopped job has no chance to return it's results or
     // call us back. We must give him the chance to finish it's work successfully.
-
-    aWriteLock.unlock();
-    /* } SAFE */
 }
 
 
@@ -859,7 +821,7 @@ void SAL_CALL Job::notifyClosing( const css::lang::EventObject& ) throw(css::uno
 void SAL_CALL Job::disposing( const css::lang::EventObject& aEvent ) throw(css::uno::RuntimeException, std::exception)
 {
     /* SAFE { */
-    Guard aWriteLock(m_aLock);
+    SolarMutexClearableGuard aWriteLock;
 
     if (m_xDesktop.is() && aEvent.Source == m_xDesktop)
     {
@@ -877,7 +839,7 @@ void SAL_CALL Job::disposing( const css::lang::EventObject& aEvent ) throw(css::
         m_bListenOnModel = sal_False;
     }
 
-    aWriteLock.unlock();
+    aWriteLock.clear();
     /* } SAFE */
 
     die();
