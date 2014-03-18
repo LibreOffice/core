@@ -45,7 +45,7 @@ protected:
     ListBox*            m_pMaleLB;
     PushButton*         m_pMalePB;
 
-    FixedInfo*          m_pFemaleFI;
+    FixedText*          m_pFemaleFI;
     FixedText*          m_pFemaleColumnFT;
     ListBox*            m_pFemaleColumnLB;
     FixedText*          m_pFemaleFieldFT;
@@ -70,35 +70,12 @@ protected:
 class SwMailMergeGreetingsPage : public svt::OWizardPage,
                                     public SwGreetingsHandler
 {
-    SwBoldFixedInfo     m_aHeaderFI;
-
-    CheckBox            m_aGreetingLineCB;
-
-    CheckBox            m_aPersonalizedCB;
-
-    FixedText           m_aFemaleFT;
-    ListBox             m_aFemaleLB;
-    PushButton          m_aFemalePB;
-
-    FixedText           m_aMaleFT;
-    ListBox             m_aMaleLB;
-    PushButton          m_aMalePB;
-
-    FixedInfo           m_aFemaleFI;
-    FixedText           m_aFemaleColumnFT;
-    ListBox             m_aFemaleColumnLB;
-    FixedText           m_aFemaleFieldFT;
-    ComboBox            m_aFemaleFieldCB;
-
-    FixedText           m_aNeutralFT;
-    ComboBox            m_aNeutralCB;
-
-    FixedInfo           m_aPreviewFI;
-    SwAddressPreview    m_aPreviewWIN;
-    PushButton          m_aAssignPB;
-    FixedInfo           m_aDocumentIndexFI;
-    ImageButton         m_aPrevSetIB;
-    ImageButton         m_aNextSetIB;
+    FixedText*          m_pPreviewFI;
+    SwAddressPreview*   m_pPreviewWIN;
+    PushButton*         m_pAssignPB;
+    FixedText*          m_pDocumentIndexFI;
+    PushButton*         m_pPrevSetIB;
+    PushButton*         m_pNextSetIB;
 
     OUString            m_sDocument;
 
