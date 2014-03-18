@@ -19,7 +19,6 @@
 
 #include <jobs/jobresult.hxx>
 #include <jobs/jobconst.hxx>
-#include <threadhelp/guard.hxx>
 #include <general.h>
 #include <services.h>
 
@@ -35,8 +34,7 @@ namespace framework{
                 but it marks this new instance as non valid!
 */
 JobResult::JobResult()
-    : ThreadHelpBase(&Application::GetSolarMutex())
-    , m_bDeactivate(false)
+    : m_bDeactivate(false)
 {
     // reset the flag mask!
     // It will reset the accessible state of this object.
@@ -89,8 +87,7 @@ JobResult::JobResult()
                     the job result
 */
 JobResult::JobResult( /*IN*/ const css::uno::Any& aResult )
-    : ThreadHelpBase(&Application::GetSolarMutex())
-    , m_bDeactivate(false)
+    : m_bDeactivate(false)
 {
     // safe the pure result
     // May someone need it later ...
@@ -136,7 +133,6 @@ JobResult::JobResult( /*IN*/ const css::uno::Any& aResult )
     @descr      -
 */
 JobResult::JobResult( const JobResult& rCopy )
-    : ThreadHelpBase(&Application::GetSolarMutex())
 {
     m_aPureResult     = rCopy.m_aPureResult     ;
     m_eParts          = rCopy.m_eParts          ;
@@ -165,15 +161,12 @@ JobResult::~JobResult()
 */
 void JobResult::operator=( const JobResult& rCopy )
 {
-    /* SAFE { */
-    Guard aWriteLock(m_aLock);
+    SolarMutexGuard g;
     m_aPureResult     = rCopy.m_aPureResult     ;
     m_eParts          = rCopy.m_eParts          ;
     m_lArguments      = rCopy.m_lArguments      ;
     m_bDeactivate     = rCopy.m_bDeactivate     ;
     m_aDispatchResult = rCopy.m_aDispatchResult ;
-    aWriteLock.unlock();
-    /* } SAFE */
 }
 
 
@@ -191,10 +184,8 @@ void JobResult::operator=( const JobResult& rCopy )
 */
 sal_Bool JobResult::existPart( sal_uInt32 eParts ) const
 {
-    /* SAFE { */
-    Guard aReadLock(m_aLock);
+    SolarMutexGuard g;
     return ((m_eParts & eParts) == eParts);
-    /* } SAFE */
 }
 
 
@@ -208,20 +199,16 @@ sal_Bool JobResult::existPart( sal_uInt32 eParts ) const
 */
 css::uno::Sequence< css::beans::NamedValue > JobResult::getArguments() const
 {
-    /* SAFE { */
-    Guard aReadLock(m_aLock);
+    SolarMutexGuard g;
     return m_lArguments;
-    /* } SAFE */
 }
 
 
 
 css::frame::DispatchResultEvent JobResult::getDispatchResult() const
 {
-    /* SAFE { */
-    Guard aReadLock(m_aLock);
+    SolarMutexGuard g;
     return m_aDispatchResult;
-    /* } SAFE */
 }
 
 } // namespace framework

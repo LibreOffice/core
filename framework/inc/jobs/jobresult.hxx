@@ -20,7 +20,6 @@
 #ifndef INCLUDED_FRAMEWORK_INC_JOBS_JOBRESULT_HXX
 #define INCLUDED_FRAMEWORK_INC_JOBS_JOBRESULT_HXX
 
-#include <threadhelp/threadhelpbase.hxx>
 #include <stdtypes.h>
 #include <general.h>
 
@@ -40,7 +39,7 @@ namespace framework{
             data from the code place where the job was finished
             to the outside code, where e.g. listener must be notified.
  */
-class JobResult : private ThreadHelpBase
+class JobResult
 {
 
     // types
