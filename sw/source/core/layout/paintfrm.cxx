@@ -2562,25 +2562,6 @@ void SwTabFrmPainter::PaintLines(OutputDevice& rDev, const SwRect& rRect) const
             else
                 pTmpColor = pHCColor;
 
-            // The line sizes stored in the line style have to be adjusted as
-            // well.  This will guarantee that lines with the same twip size
-            // will have the same pixel size.
-            for ( int i = 0; i < 7; ++i )
-            {
-                sal_uInt16 nPrim = aStyles[ i ].Prim();
-                sal_uInt16 nDist = aStyles[ i ].Dist();
-                sal_uInt16 nSecn = aStyles[ i ].Secn();
-
-                if (nPrim > 0)
-                    nPrim = (sal_uInt16)( std::max( 1L, nPixelSzH * ( nPrim / nPixelSzH ) ) );
-                if (nDist > 0)
-                    nDist = (sal_uInt16)( std::max( 1L, nPixelSzH * ( nDist / nPixelSzH ) ) );
-                if (nSecn > 0)
-                    nSecn = (sal_uInt16)( std::max( 1L, nPixelSzH * ( nSecn / nPixelSzH ) ) );
-
-                aStyles[ i ].Set( nPrim, nDist, nSecn );
-            }
-
             // The (twip) positions will be adjusted to meet these requirements:
             // 1. The y coordinates are located in the middle of the pixel grid
             // 2. The x coordinated are located at the beginning of the pixel grid
@@ -2800,7 +2781,7 @@ void calcOffsetForDoubleLine( SwLineEntryMap& rLines )
                 if (aLine.maAttribute.Secn())
                 {
                     // Apply offset only for double lines.
-                    aLine.mnOffset = static_cast<SwTwips>(aLine.maAttribute.Prim()+aLine.maAttribute.Dist());
+                    aLine.mnOffset = static_cast<SwTwips>(aLine.maAttribute.Dist());
                     aLine.mbOffsetPerp = true;
 
                     if (i == 0)

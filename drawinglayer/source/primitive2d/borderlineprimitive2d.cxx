@@ -200,7 +200,7 @@ primitive2d::Primitive2DReference makeSolidLinePrimitive(
                             getStart(), getEnd(), aVector, getRGBColorLeft(), 0.0);
                     else
                         xRetval[0] = makeSolidLinePrimitive(
-                            aClipRegion, aTmpStart, aTmpEnd, aVector, getRGBColorLeft(), fLeftWidth, 0.0);
+                            aClipRegion, aTmpStart, aTmpEnd, aVector, getRGBColorLeft(), fLeftWidth, -fLeftWidth/2.0);
 
                     // "outside" line
 
@@ -209,7 +209,7 @@ primitive2d::Primitive2DReference makeSolidLinePrimitive(
                             getStart(), getEnd(), aVector, getRGBColorRight(), fLeftWidth+mfDistance);
                     else
                         xRetval[1] = makeSolidLinePrimitive(
-                            aClipRegion, aTmpStart, aTmpEnd, aVector, getRGBColorRight(), fRightWidth, fLeftWidth+mfDistance);
+                            aClipRegion, aTmpStart, aTmpEnd, aVector, getRGBColorRight(), fRightWidth, mfDistance+fRightWidth/2.0);
                 }
                 else
                 {
