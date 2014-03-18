@@ -19,8 +19,6 @@
 
 #include <helper/vclstatusindicator.hxx>
 
-#include <threadhelp/guard.hxx>
-
 #include <toolkit/helper/vclunohelper.hxx>
 #include <vcl/svapp.hxx>
 
@@ -30,8 +28,7 @@ namespace framework {
 
 
 VCLStatusIndicator::VCLStatusIndicator(const css::uno::Reference< css::awt::XWindow >&               xParentWindow)
-    : ThreadHelpBase     (&Application::GetSolarMutex())
-    , m_xParentWindow    (xParentWindow                )
+    : m_xParentWindow    (xParentWindow                )
     , m_pStatusBar       (0                            )
     , m_nRange           (0                            )
     , m_nValue           (0                            )
@@ -52,108 +49,75 @@ void SAL_CALL VCLStatusIndicator::start(const OUString& sText ,
                                               sal_Int32        nRange)
     throw(css::uno::RuntimeException, std::exception)
 {
-    // SAFE -> ----------------------------------
-    Guard aReadLock(m_aLock);
-    css::uno::Reference< css::awt::XWindow > xParentWindow = m_xParentWindow;
-    aReadLock.unlock();
-    // <- SAFE ----------------------------------
+    SolarMutexGuard aSolarGuard;
 
-    // SOLAR SAFE -> ----------------------------
-    {
-        SolarMutexGuard aSolarGuard;
+    Window* pParentWindow = VCLUnoHelper::GetWindow(m_xParentWindow);
+    if (!m_pStatusBar)
+        m_pStatusBar = new StatusBar(pParentWindow, WB_3DLOOK|WB_BORDER);
 
-        Window* pParentWindow = VCLUnoHelper::GetWindow(xParentWindow);
-        if (!m_pStatusBar)
-            m_pStatusBar = new StatusBar(pParentWindow, WB_3DLOOK|WB_BORDER);
+    VCLStatusIndicator::impl_recalcLayout(m_pStatusBar, pParentWindow);
 
-        VCLStatusIndicator::impl_recalcLayout(m_pStatusBar, pParentWindow);
+    m_pStatusBar->Show();
+    m_pStatusBar->StartProgressMode(sText);
+    m_pStatusBar->SetProgressValue(0);
 
-        m_pStatusBar->Show();
-        m_pStatusBar->StartProgressMode(sText);
-        m_pStatusBar->SetProgressValue(0);
+    // force repaint!
+    pParentWindow->Show();
+    pParentWindow->Invalidate(INVALIDATE_CHILDREN);
+    pParentWindow->Flush();
 
-        // force repaint!
-        pParentWindow->Show();
-        pParentWindow->Invalidate(INVALIDATE_CHILDREN);
-        pParentWindow->Flush();
-    }
-    // <- SOLAR SAFE ----------------------------
-
-    // SAFE -> ----------------------------------
-    Guard aWriteLock(m_aLock);
     m_sText  = sText;
     m_nRange = nRange;
     m_nValue = 0;
-    aWriteLock.unlock();
-    // <- SAFE ----------------------------------
 }
 
 
 void SAL_CALL VCLStatusIndicator::reset()
     throw(css::uno::RuntimeException, std::exception)
 {
-    // SOLAR SAFE -> ----------------------------
     SolarMutexGuard aSolarGuard;
     if (m_pStatusBar)
     {
         m_pStatusBar->SetProgressValue(0);
         m_pStatusBar->SetText(OUString());
     }
-    // <- SOLAR SAFE ----------------------------
 }
 
 
 void SAL_CALL VCLStatusIndicator::end()
     throw(css::uno::RuntimeException, std::exception)
 {
-    // SAFE -> ----------------------------------
-    Guard aWriteLock(m_aLock);
+    SolarMutexGuard aSolarGuard;
+
     m_sText  = OUString();
     m_nRange = 0;
     m_nValue = 0;
-    aWriteLock.unlock();
-    // <- SAFE ----------------------------------
 
-    // SOLAR SAFE -> ----------------------------
+    if (m_pStatusBar)
     {
-        SolarMutexGuard aSolarGuard;
-        if (m_pStatusBar)
-        {
-            m_pStatusBar->EndProgressMode();
-            m_pStatusBar->Show(false);
+        m_pStatusBar->EndProgressMode();
+        m_pStatusBar->Show(false);
 
-            delete m_pStatusBar;
-            m_pStatusBar = 0;
-        }
+        delete m_pStatusBar;
+        m_pStatusBar = 0;
     }
-    // <- SOLAR SAFE ----------------------------
 }
 
 
 void SAL_CALL VCLStatusIndicator::setText(const OUString& sText)
     throw(css::uno::RuntimeException, std::exception)
 {
-    // SAFE -> ----------------------------------
-    Guard aWriteLock(m_aLock);
+    SolarMutexGuard aSolarGuard;
     m_sText = sText;
-    aWriteLock.unlock();
-    // <- SAFE ----------------------------------
-
-    // SOLAR SAFE -> ----------------------------
-    {
-        SolarMutexGuard aSolarGuard;
-        if (m_pStatusBar)
-            m_pStatusBar->SetText(sText);
-    }
-    // <- SOLAR SAFE ----------------------------
+    if (m_pStatusBar)
+        m_pStatusBar->SetText(sText);
 }
 
 
 void SAL_CALL VCLStatusIndicator::setValue(sal_Int32 nValue)
     throw(css::uno::RuntimeException, std::exception)
 {
-    // SAFE -> ----------------------------------
-    Guard aWriteLock(m_aLock);
+    SolarMutexGuard aSolarGuard;
 
     if (nValue <= m_nRange)
         m_nValue = nValue;
@@ -161,23 +125,15 @@ void SAL_CALL VCLStatusIndicator::setValue(sal_Int32 nValue)
         m_nValue = m_nRange;
 
     sal_Int32 nRange = m_nRange;
-              nValue = m_nValue;
-
-    aWriteLock.unlock();
-    // <- SAFE ----------------------------------
+    nValue = m_nValue;
 
     // normalize value to fit the range of 0-100 %
     sal_uInt16 nPercent = sal::static_int_cast< sal_uInt16 >(
         ::std::min(
             ((nValue*100) / ::std::max(nRange,(sal_Int32)1)), (sal_Int32)100));
 
-    // SOLAR SAFE -> ----------------------------
-    {
-        SolarMutexGuard aSolarGuard;
-        if (m_pStatusBar)
-            m_pStatusBar->SetProgressValue(nPercent);
-    }
-    // <- SOLAR SAFE ----------------------------
+    if (m_pStatusBar)
+        m_pStatusBar->SetProgressValue(nPercent);
 }
 
 

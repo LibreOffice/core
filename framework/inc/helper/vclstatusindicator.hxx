@@ -20,7 +20,6 @@
 #ifndef INCLUDED_FRAMEWORK_INC_HELPER_VCLSTATUSINDICATOR_HXX
 #define INCLUDED_FRAMEWORK_INC_HELPER_VCLSTATUSINDICATOR_HXX
 
-#include <threadhelp/threadhelpbase.hxx>
 #include <macros/generic.hxx>
 #include <macros/xinterface.hxx>
 #include <general.h>
@@ -38,8 +37,7 @@ namespace framework {
 
 // declaration
 
-class VCLStatusIndicator : private ThreadHelpBase, // must be the first real base class!
-                           public  ::cppu::WeakImplHelper1< css::task::XStatusIndicator >
+class VCLStatusIndicator : public  ::cppu::WeakImplHelper1< css::task::XStatusIndicator >
 {
 
     // member
