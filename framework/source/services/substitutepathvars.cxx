@@ -21,6 +21,7 @@
 
 #include <helper/networkdomain.hxx>
 
+#include <cppuhelper/basemutex.hxx>
 #include <cppuhelper/compbase2.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <unotools/configitem.hxx>
@@ -237,7 +238,7 @@ typedef ::cppu::WeakComponentImplHelper2<
     css::util::XStringSubstitution,
     css::lang::XServiceInfo > SubstitutePathVariables_BASE;
 
-class SubstitutePathVariables : private osl::Mutex,
+class SubstitutePathVariables : private cppu::BaseMutex,
                                 public SubstitutePathVariables_BASE
 {
 friend class SubstitutePathVariables_Impl;
@@ -747,7 +748,7 @@ void SubstitutePathVariables_Impl::ReadSharePointRuleSetFromConfiguration(
 }
 
 SubstitutePathVariables::SubstitutePathVariables( const Reference< XComponentContext >& xContext ) :
-    SubstitutePathVariables_BASE(*static_cast<osl::Mutex *>(this)),
+    SubstitutePathVariables_BASE(m_aMutex),
     m_aImpl( LINK( this, SubstitutePathVariables, implts_ConfigurationNotify )),
     m_xContext( xContext )
 {
