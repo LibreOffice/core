@@ -603,7 +603,7 @@ void SAL_CALL ConfigurationAccess_UICommand::disposing( const EventObject& aEven
 }
 
 UICommandDescription::UICommandDescription( const Reference< XComponentContext >& rxContext ) :
-    UICommandDescription_BASE(*static_cast<osl::Mutex *>(this)),
+    UICommandDescription_BASE(m_aMutex),
     m_aPrivateResourceURL( PRIVATE_RESOURCE_URL ),
     m_xContext( rxContext )
 {
@@ -619,7 +619,7 @@ UICommandDescription::UICommandDescription( const Reference< XComponentContext >
         pIter->second = m_xGenericUICommands;
 }
 UICommandDescription::UICommandDescription(const Reference< XComponentContext >& rxContext, bool)
-    : UICommandDescription_BASE(*static_cast<osl::Mutex *>(this))
+    : UICommandDescription_BASE(m_aMutex)
     , m_bConfigRead(false)
     , m_xContext(rxContext)
 {

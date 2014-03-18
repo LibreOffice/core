@@ -29,6 +29,7 @@
 #include <com/sun/star/frame/XModuleManager2.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 
+#include <cppuhelper/basemutex.hxx>
 #include <cppuhelper/compbase2.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <rtl/ustring.hxx>
@@ -38,7 +39,7 @@ namespace framework
 typedef ::cppu::WeakComponentImplHelper2< com::sun::star::lang::XServiceInfo,
         com::sun::star::container::XNameAccess > UICommandDescription_BASE;
 
-class UICommandDescription : private osl::Mutex,
+class UICommandDescription : private cppu::BaseMutex,
                              public UICommandDescription_BASE
 {
     public:
