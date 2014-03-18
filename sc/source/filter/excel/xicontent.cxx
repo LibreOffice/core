@@ -64,6 +64,22 @@
 using ::com::sun::star::uno::Sequence;
 using ::std::auto_ptr;
 
+
+const XclRef8U & XclRef8U::read( XclImpStream & rStrm )
+{
+    mnRow1 = rStrm.ReaduInt16();
+    mnRow2 = rStrm.ReaduInt16();
+    mnCol1 = rStrm.ReaduInt16();
+    mnCol2 = rStrm.ReaduInt16();
+    return *this;
+}
+
+ScRange XclRef8U::convertToScRange( SCTAB nTab )
+{
+    return ScRange( mnCol1, mnRow1, nTab, mnCol2, mnRow2, nTab);
+}
+
+
 // Shared string table ========================================================
 
 XclImpSst::XclImpSst( const XclImpRoot& rRoot ) :
@@ -1246,6 +1262,13 @@ void XclImpSheetProtectBuffer::ReadOptions( XclImpStream& rStrm, SCTAB nTab )
         pSheet->mnOptions = nOptions;
 }
 
+void XclImpSheetProtectBuffer::AppendEnhancedProtection( const XclEnhancedProtection & rProt, SCTAB nTab )
+{
+    Sheet* pSheet = GetSheetItem(nTab);
+    if (pSheet)
+        pSheet->maEnhancedProtections.push_back( rProt);
+}
+
 void XclImpSheetProtectBuffer::ReadPasswordHash( XclImpStream& rStrm, SCTAB nTab )
 {
     sal_uInt16 nHash(0);
@@ -1278,6 +1301,8 @@ void XclImpSheetProtectBuffer::Apply() const
             aPass[1] = nHash & 0xFF;
             pProtect->setPasswordHash(aPass, PASSHASH_XL);
         }
+
+        // ranges the protection is applied to
 
         // sheet protection options
         const sal_uInt16 nOptions = itr->second.mnOptions;

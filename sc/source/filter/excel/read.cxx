@@ -1143,6 +1143,7 @@ FltError ImportExcel8::Read( void )
                     case EXC_ID3_ARRAY: Array34(); break;      // ARRAY        [  34    ]
                     case 0x0225: Defrowheight345();break;//DEFAULTROWHEI[  345   ]
                     case 0x0867: FeatHdr(); break;      // FEATHDR
+                    case 0x0868: Feat(); break;         // FEAT
                 }
             }
             break;

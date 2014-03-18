@@ -187,6 +187,22 @@ public:
     }
 };
 
+
+namespace {
+
+/** Future Record Type header.
+    @return whether read rt matches nRecordID
+ */
+bool readFrtHeader( XclImpStream& rStrm, sal_uInt16 nRecordID )
+{
+    sal_uInt16 nRt = rStrm.ReaduInt16();
+    rStrm.Ignore(10);   // grbitFrt (2 bytes) and reserved (8 bytes)
+    return nRt == nRecordID;
+}
+
+}
+
+
 ImportExcel8::ImportExcel8( XclImpRootData& rImpData, SvStream& rStrm ) :
     ImportExcel( rImpData, rStrm )
 {
@@ -304,12 +320,12 @@ void ImportExcel8::Labelsst( void )
 
 void ImportExcel8::FeatHdr( void )
 {
-    aIn.Ignore(12);
+    if (!readFrtHeader( aIn, 0x0867))
+        return;
 
     // Feature type (isf) can be EXC_ISFPROTECTION, EXC_ISFFEC2 or
     // EXC_ISFFACTOID.
-    sal_uInt16 nFeatureType(0);
-    aIn >> nFeatureType;
+    sal_uInt16 nFeatureType = aIn.ReaduInt16();
     if (nFeatureType != EXC_ISFPROTECTION)
         // We currently only support import of enhanced protection data.
         return;
@@ -318,6 +334,50 @@ void ImportExcel8::FeatHdr( void )
 
     GetSheetProtectBuffer().ReadOptions( aIn, GetCurrScTab() );
 }
+
+
+void ImportExcel8::Feat( void )
+{
+    if (!readFrtHeader( aIn, 0x0868))
+        return;
+
+    // Feature type (isf) can be EXC_ISFPROTECTION, EXC_ISFFEC2 or
+    // EXC_ISFFACTOID.
+    sal_uInt16 nFeatureType = aIn.ReaduInt16();
+    if (nFeatureType != EXC_ISFPROTECTION)
+        // We currently only support import of enhanced protection data.
+        return;
+
+    aIn.Ignore(5);                          // reserved1 (1 byte) and reserved2 (4 bytes)
+
+    sal_uInt16 nCref = aIn.ReaduInt16();    // number of ref elements
+    aIn.Ignore(4);                          // size if EXC_ISFFEC2, else 0 and to be ignored
+    aIn.Ignore(2);                          // reserved3 (2 bytes)
+
+    XclEnhancedProtection aProt;
+    aProt.maRefs.reserve( nCref);
+    XclRef8U aRef;
+    for (sal_uInt16 i=0; i < nCref && aIn.IsValid(); ++i)
+    {
+        aProt.maRefs.push_back( aRef.read( aIn));
+    }
+
+    // FeatProtection structure follows in record.
+
+    aProt.mnAreserved = aIn.ReaduInt32();
+    aProt.mnPasswordVerifier = aIn.ReaduInt32();
+    aProt.maTitle = aIn.ReadUniString();
+    if ((aProt.mnAreserved & 1) == 1)
+    {
+        sal_uInt32 nCbSD = aIn.ReaduInt32();
+        // TODO: could here be some sanity check applied to not allocate 4GB?
+        aProt.maSecurityDescriptor.reserve( nCbSD);
+        aIn.Read( &aProt.maSecurityDescriptor.front(), nCbSD);
+    }
+
+    GetSheetProtectBuffer().AppendEnhancedProtection( aProt, GetCurrScTab() );
+}
+
 
 void ImportExcel8::ReadBasic( void )
 {

@@ -59,6 +59,7 @@ public:
 
     void                    Hlink( void );                  // 0x01B8
     void                    FeatHdr( void );                // 0x0867
+    void                    Feat( void );                   // 0x0868
 
     virtual void            EndSheet( void );
     virtual void            PostDocLoad( void );
