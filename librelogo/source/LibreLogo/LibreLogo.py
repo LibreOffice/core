@@ -48,6 +48,10 @@ __COLORS__ = ['BLACK', 0x000000], ['SILVER', 0xc0c0c0], ['GRAY', 0x808080], \
     ['ORANGE', 0xffa500], ['GOLD', 0xffd700], ['VIOLET', 0x9400d3], \
     ['SKYBLUE', 0x87ceeb], ['CHOCOLATE', 0xd2691e], ['BROWN', 0xa52a2a], \
     ['INVISIBLE', 0xffffffff]
+__NORMCOLORS__ = [[[255, 255, 0], 0, -11, 1, -11],
+    [[255, 128, 0], 1, 116, 1, -33], [[255, 0, 0], 1, 95, 2, 42],
+    [[255, 0, 255], 2, -213, 0, -106], [[0, 0, 255], 0, 148, 1, 127],
+    [[0, 255, 255], 1, -128, 2, -63], [[0, 255, 0], 2, 192, 0, 244]]
 __STRCONST__ = [i[0] for i in __COLORS__] + ['NONE', 'BEVEL', 'MITER', 'ROUNDED', 'SOLID', 'DASH', 'DOTTED', 'BOLD', 'ITALIC', 'UPRIGHT', 'NORMAL', "HOUR", "PT", "INCH", "MM", "CM"]
 __SLEEP_SLICE_IN_MILLISECONDS__ = 500
 __PT_TO_TWIP__ = 20
@@ -91,6 +95,7 @@ class __Doc__:
         self.oldlj = __ROUNDED__
         self.continuous = True
         self.areacolor = __FILLCOLOR__
+        self.t10y = int((__FILLCOLOR__ >> 24) / (255.0/100))
         self.hatch = None
         self.textcolor = 0
         self.fontfamily = __BASEFONTFAMILY__
@@ -98,9 +103,11 @@ class __Doc__:
         self.fontweight = 100
         self.fontstyle = 0
 
-from math import pi, sin, cos, asin, sqrt
+from math import pi, sin, cos, asin, sqrt, log10
 
 from com.sun.star.awt import Point as __Point__
+from com.sun.star.awt import Gradient as __Gradient__
+from com.sun.star.awt.GradientStyle import LINEAR as __GradientStyle_LINEAR__
 from com.sun.star.drawing import LineDash as __LineDash__
 from com.sun.star.drawing import Hatch as __Hatch__
 from com.sun.star.drawing import PolyPolygonBezierCoords as __Bezier__
@@ -114,6 +121,7 @@ from com.sun.star.drawing.LineJoint import BEVEL as __BEVEL__
 from com.sun.star.drawing.LineJoint import MITER as __MITER__
 from com.sun.star.drawing.LineJoint import ROUND as __ROUNDED__
 from com.sun.star.drawing.FillStyle import NONE as __FillStyle_NONE__
+from com.sun.star.drawing.FillStyle import GRADIENT as __FillStyle_GRADIENT__
 from com.sun.star.drawing.LineStyle import NONE as __LineStyle_NONE__
 from com.sun.star.drawing.LineStyle import SOLID as __LineStyle_SOLID__
 from com.sun.star.drawing.LineStyle import DASH as __LineStyle_DASHED__
@@ -174,11 +182,10 @@ def __getdocument__():
     global __docs__, _
     doc = XSCRIPTCONTEXT.getDocument()
     try:
-        _ = __docs__[doc.Title]
-        _.doc.Title # Is existing instance (not the garbage of the previous instance of a reopened document or a new "Untitled 1")?
+        _ = __docs__[doc.RuntimeUID]
     except:
         _ = __Doc__(doc)
-        __docs__[doc.Title] = _
+        __docs__[doc.RuntimeUID] = _
 
 # input function, result: input string or 0
 def Input(s):
@@ -306,20 +313,22 @@ def __locname__(name, l = -1):
     return to_unicode(name)
 
 def __getcursor__(fulltext):
+    realselection = False
     try:
         text = _.doc.getCurrentController().getViewCursor().getText().createTextCursor() # copy selection (also in frames)
         text.gotoRange(_.doc.getCurrentController().getViewCursor(), False)
         if fulltext:
             1/len(text.getString()) # exception, if zero length
+        realselection = True
     except:
         text = _.doc.getText().createTextCursorByRange(_.doc.getText().getStart())
         text.gotoEnd(True)
-    return text
+    return text, realselection
 
 def __translate__(arg = None):
     global _
     __getdocument__()
-    selection = __getcursor__(True)
+    selection = __getcursor__(True)[0]
     __initialize__()
     __setlang__()
     # detect language
@@ -374,11 +383,20 @@ def __translate__(arg = None):
     for i in __STRCONST__:
         text = re.sub(quoted % lang[i], __l12n__(_.lng)[i].split("|")[0].upper(), text)
     text = re.sub(__DECODE_COMMENT_REGEX__, __decodecomment__, text)
-    selection.setString(text)
+    if _.doc.getText().compareRegionStarts(selection.getStart(), _.doc.getText().getStart()) == 0:
+        pagebreak = True
+        selection.setString("\n" + text.lstrip("\n"))
+    else:
+        pagebreak = False
+        selection.setString(text)
     # convert to paragraphs
     __dispatcher__(".uno:ExecuteSearch", (__getprop__("SearchItem.SearchString", r"\n"), __getprop__("SearchItem.ReplaceString", r"\n"), \
         __getprop__("Quiet", True), __getprop__("SearchItem.Command", 3), __getprop__("SearchItem.StyleFamily", 2), \
         __getprop__("SearchItem.AlgorithmType", 1), __getprop__("SearchItem.RowDirection", 1), __getprop__("SearchItem.SearchFlags", 65536)))
+    # set 2-page layout
+    if pagebreak:
+        selection.getStart().BreakType = 4
+    __dispatcher__(".uno:ZoomPage")
 
 class LogoProgram(threading.Thread):
     def __init__(self, code):
@@ -389,12 +407,12 @@ class LogoProgram(threading.Thread):
         global __thread__
         try:
             exec(self.code)
-            if _.origcursor:
+            if _.origcursor[0] and _.origcursor[1]:
                 __dispatcher__(".uno:Escape")
                 try:
-                    _.doc.CurrentController.getViewCursor().gotoRange(_.origcursor, False)
+                    _.doc.CurrentController.getViewCursor().gotoRange(_.origcursor[0], False)
                 except:
-                    _.doc.CurrentController.getViewCursor().gotoRange(_.origcursor.getStart(), False)
+                    _.doc.CurrentController.getViewCursor().gotoRange(_.origcursor[0].getStart(), False)
         except Exception as e:
             try:
               TRACEPATTERN = '"<string>", line '
@@ -473,7 +491,7 @@ def __initialize__():
         _.initialize()
         turtlehome()
         _.doc.CurrentController.select(shape)
-        shape.FillColor, transparence = __splitcolor__(_.areacolor)
+        shape.FillColor, transparence = __splitcolor__(_.areacolor, shape)
         shape.LineColor, shape.LineTransparence = __splitcolor__(_.pencolor)
     elif shape.Visible:
         if shape.FillStyle == __FillStyle_NONE__:
@@ -490,7 +508,7 @@ def __initialize__():
             _.pencolor = shape.LineColor + (int(255.0 * shape.LineTransparence/100) << 24)
     shape.LineJoint = __ROUNDED__
     shape.Shadow = True
-    shape.FillColor, transparence = __splitcolor__(_.areacolor)
+    shape.FillColor, transparence = __splitcolor__(_.areacolor, shape)
     shape.FillTransparence = min(95, transparence)
     shape.ShadowColor, shape.ShadowTransparence, shape.ShadowXDistance, shape.ShadowYDistance = (0, 20, 0, 0)
     shape.LineWidth = min(_.pensize, (1 + _.pen * 2) * __PT_TO_TWIP__) / __MM10_TO_TWIP__
@@ -634,9 +652,9 @@ def run(arg=None, arg2 = -1):
         __thread__ = 1
     try:
         __getdocument__()
-        _.origcursor = None
+        _.origcursor = [None, None]
         if arg2 == -1:
-            _.origcursor, _.cursor = __getcursor__(False), __getcursor__(True)
+            _.origcursor, _.cursor = __getcursor__(False), __getcursor__(True)[0]
             __dispatcher__(".uno:Escape")
             c = _.doc.Text.createTextCursor() # go to the first page
             c.gotoStart(False)
@@ -649,6 +667,11 @@ def run(arg=None, arg2 = -1):
                     with __lock__:
                         __thread__ = None
                     return None
+            elif len(arg2) == 0 and _.origcursor[1]:
+                _.origcursor[0].setString("fontcolor 'green'\nlabel 'LIBRE'\npu\nback 30\npic [\n\tfc any\n\tcircle 40\n\tfontcolor 'black'\n\tlabel 'LOGO'\n\tleft 180\n\tfd 20\n\tpd\n\tpc any\n\tps 1\n\tfd 40\n\trepeat 20 [\n\t\tfd repcount*2\n\t\trt 90\n\t]\n]\npu pos any pd")
+                __translate__()
+                _.origcursor, _.cursor = __getcursor__(False), __getcursor__(True)[0]
+                arg2 = _.cursor.getString()
         else:
             __initialize__()
             __setlang__()
@@ -706,6 +729,9 @@ def clearscreen(arg=None):
     if not turtle:
         __initialize__()
         if not __halt__:
+            # avoid unintentional image deletion in large documents
+            if len(__getcursor__(True)[0].getString()) < 5000:
+                __cs__(False)
             return
     __cs__(False)
     __dispatcher__(".uno:Escape")
@@ -949,12 +975,12 @@ def __fillit__(filled = True):
         shape.LineCap = _.linecap
         shape.LineWidth = _.pensize / __MM10_TO_TWIP__
         shape.LineColor, shape.LineTransparence = __splitcolor__(_.pencolor)
-        shape.FillColor, shape.FillTransparence = __splitcolor__(_.areacolor)
+        shape.FillColor, shape.FillTransparence = __splitcolor__(_.areacolor, shape)
         if _.hatch:
             shape.FillBackground = True if shape.FillTransparence != 100 else False
             shape.FillHatch = _.hatch
             shape.FillStyle = 3
-        else:
+        elif type(_.areacolor) != tuple:
             shape.FillStyle = int(filled)
         if shape.LineTransparence == 100:
             shape.LineStyle = 0
@@ -982,7 +1008,7 @@ def __fillit__(filled = True):
             oldshape.FillStyle = int(filled)
         oldshape.LineWidth = _.pensize / __MM10_TO_TWIP__
         oldshape.LineColor, oldshape.LineTransparence = __splitcolor__(_.pencolor)
-        oldshape.FillColor, oldshape.FillTransparence = __splitcolor__(_.areacolor)
+        oldshape.FillColor, oldshape.FillTransparence = __splitcolor__(_.areacolor, oldshape)
 
 def point():
     oldpen, _.pen = _.pen, 1
@@ -1003,12 +1029,12 @@ def __boxshape__(shapetype, l):
     shape.LineJoint = _.linejoint
     shape.LineCap = _.linecap
     shape.LineColor, shape.LineTransparence = __splitcolor__(_.pencolor)
-    shape.FillColor, shape.FillTransparence = __splitcolor__(_.areacolor)
+    shape.FillColor, shape.FillTransparence = __splitcolor__(_.areacolor, shape, turtle.RotateAngle)
     if _.hatch:
         shape.FillBackground = True if shape.FillTransparence != 100 else False
         shape.FillHatch = _.hatch
         shape.FillStyle = 3
-    else:
+    elif type(_.areacolor) != tuple:
         shape.FillStyle = 1
     if shape.LineTransparence == 100:
         shape.LineStyle = 0
@@ -1163,7 +1189,18 @@ def __color__(c):
         return c
     if type(c) == unicode:
         if c == u'any':
-            return int(random.random() * 2**31) # max. 50% transparency
+            rc, rv, rgray = __NORMCOLORS__[int(random.random()*7)], random.random(), random.random() ** 0.5
+            ratio = 1.0*abs(rc[2])/(abs(rc[2]) + abs(rc[4]))
+            newcol = list(rc[0])
+            if rv < ratio:
+                newcol[rc[1]] += rc[2] * rv/ratio
+            else:
+                newcol[rc[3]] += rc[4] * (rv - ratio)/(1 - ratio)
+            # random grayness
+            rdark = 1 - 2**4 * (random.random()-0.5)**4
+            for i in range(0, 3):
+                newcol[i] = 255 * (rgray + (newcol[i]/255.0 - rgray) * rdark)
+            return __color__(newcol)
         if c[0:1] == '~':
             c = __componentcolor__(__colors__[_.lng][c[1:].lower()])
             for i in range(3):
@@ -1171,11 +1208,13 @@ def __color__(c):
             return __color__(c)
         return __colors__[_.lng][c.lower()]
     if type(c) == list:
-        if len(c) == 1:
+        if len(c) == 1: # color index
             return __COLORS__[int(c[0])][1]
-        if len(c) == 3:
+        elif len(c) == 3: # RGB
             return (int(c[0])%256 << 16) + (int(c[1])%256 << 8) + int(c[2])%256
-    return (int(c[3])%256 << 24) + (int(c[0])%256 << 16) + (int(c[1])%256 << 8) + int(c[2])%256
+        elif len(c) == 2 or len(c) > 4: # gradient
+           return (__color__(c[0]), __color__(c[1])) + tuple(c[2:])
+    return (int(c[3])%256 << 24) + (int(c[0])%256 << 16) + (int(c[1])%256 << 8) + int(c[2])%256 # RGB + alpha
 
 def __linestyle__(s):
     if _.pen == 0:
@@ -1197,7 +1236,24 @@ def fillstyle(s):
     elif s <= 10: # using hatching styles of Writer
         fillstyle([[1, 0, 5, 0], [1, 0, 5, 45], [1, 0, 5, -45], [1, 0, 5, 90], [2, [127, 0, 0], 5, 45], [2, [127, 0, 0], 5, 0], [2, [0, 0, 127], 5, 45], [2, [0, 0, 127], 5, 0], [3, [0, 0, 127], 5, 0], [1, 0, 25, 45]][s-1])
 
-def __splitcolor__(c):
+def __splitcolor__(c, shape = None, angle = None):
+    if shape and (type(c) == tuple or type(_.t10y) == list):
+        angle = heading() if angle == None else -angle / 100 + 360
+        if type(c) == tuple:
+            shape.FillStyle = __FillStyle_GRADIENT__
+            # gradient color: [color1, color2, style, angle(must be positive for I/O), border, x_percent, y_percent, color1_intensity_percent, color2_intensity_percent]
+            d, d[0:len(c)], c = [0, 0, __GradientStyle_LINEAR__, 0, 0, 0, 0, 100, 100], c, c[0]
+            shape.FillGradient = __Gradient__(d[2], d[0], d[1], (-angle + d[3]) * 10 % 3600, d[4], d[5], d[6], d[7], d[8], 0)
+        if type(_.t10y) == list: # transparency gradient: [begin_percent, end_percent, style, angle, border, x_percent, y_percent]
+            table = _.doc.createInstance("com.sun.star.drawing.TransparencyGradientTable")
+            if not table.hasByName(str(_.t10y) + str(angle)):
+                t, t[0:len(_.t10y)] = [100, __GradientStyle_LINEAR__, 0, 0, 0, 0, 0], _.t10y
+                table.insertByName(str(_.t10y) + str(angle), __Gradient__(t[2], t[0] * 0xffffff / 100.0, t[1] * 0xffffff / 100.0, (-angle + t[3]) * 10 % 3600, t[4], t[5], t[6], 100, 100, 0))
+            shape.FillTransparenceGradientName = str(_.t10y) + str(angle)
+            c = 0 if type(c) == tuple else c & 0xffffff
+        else:
+            shape.FillStyle = __FillStyle_GRADIENT__
+            c = int(_.t10y * 255.0/100) << 24
     """Split color constants to RGB (3-byte) + transparency (%)"""
     return int(c) & 0xffffff, (int(c) >> 24) / (255.0/100)
 
@@ -1267,12 +1323,38 @@ def pencap(n = -1):
 def fillcolor(n = -1):
     if n != -1:
         _.areacolor = __color__(n)
+        if type(_.areacolor) != tuple:
+            _.t10y = (int(_.areacolor) >> 24) / (255.0/100)
+        else:
+            _.t10y = 0
         turtle = __getshape__(__TURTLE__)
         if turtle and __visible__(turtle):
-            turtle.FillColor, transparence = __splitcolor__(_.areacolor)
+            turtle.FillColor, transparence = __splitcolor__(_.areacolor, turtle)
             turtle.FillTransparence = min(95, transparence)
     else:
         return __componentcolor__(_.areacolor)
+
+def filltransparency(n = -1):
+    if n != -1:
+        if n == u'any':
+            n = 100 * random.random()
+        if type(n) != list:
+            if type(_.areacolor) != tuple:
+                fillcolor((_.areacolor & 0xffffff) + (int(n * (255.0/100)) << 24))
+            else:
+                _.t10y = n
+        else:
+            _.t10y = n
+    else:
+        return _.t10y
+
+def pentransparency(n = -1):
+    if n != -1:
+        if n == u'any':
+            n = 100 * random.random()
+        pencolor((_.pencolor & 0xffffff) + (int(n * (255.0/100)) << 24))
+    else:
+        return _.pencolor >> 24
 
 def fontcolor(n = -1):
     if n != -1:
@@ -1430,7 +1512,7 @@ def __loadlang__(lang, a):
     __colors__[lang] = {}
     for i in __COLORS__:
         for j in a[i[0]].split("|"):
-            __colors__[lang][j] = i[1]
+            __colors__[lang][j.lower()] = i[1]
     for i in a:
         if not i[0:3] in ["LIB", "ERR", "PT", "INC", "MM", "CM", "HOU", "DEG"] and not i in __STRCONST__: # uppercase native commands
             a[i] = a[i].upper()
@@ -1485,6 +1567,7 @@ def __loadlang__(lang, a):
     [r"(?<!:)\b(?:%s)\b" % a['COS'], "cos"],
     [r"(?<!:)\b(?:%s)\b" % a['PI'], "pi"],
     [r"(?<!:)\b(?:%s)\b" % a['SQRT'], "sqrt"],
+    [r"(?<!:)\b(?:%s)\b" % a['LOG10'], "log10"],
     [r"(?<!:)\b(?:%s)\b" % a['MIN'], "min"],
     [r"(?<!:)\b(?:%s)\b" % a['MAX'], "max"],
     [r"(?<!:)\b(?:%s)\b" % a['STOP'], "\nreturn None"],
@@ -1494,6 +1577,8 @@ def __loadlang__(lang, a):
     [r"(?<!:)\b(?:%s)(\s+|$)" % a['PENJOINT'], "\n)penjoint("],
     [r"(?<!:)\b(?:%s)(\s+|$)" % a['PENCAP'], "\n)pencap("],
     [r"(?<!:)\b(?:%s)(\s+|$)" % a['FILLCOLOR'], "\n)fillcolor("],
+    [r"(?<!:)\b(?:%s)(\s+|$)" % a['FILLTRANSPARENCY'], "\n)filltransparency("],
+    [r"(?<!:)\b(?:%s)(\s+|$)" % a['PENTRANSPARENCY'], "\n)pentransparency("],
     [r"(?<!:)\b(?:%s)(\s+|$)" % a['FILLSTYLE'], "\n)fillstyle("],
     [r"(?<!:)\b(?:%s)(\s+|$)" % a['FONTCOLOR'], "\n)fontcolor("],
     [r"(?<!:)\b(?:%s)(\s+|$)" % a['FONTFAMILY'], "\n)fontfamily("],
@@ -1540,7 +1625,7 @@ def __loadlang__(lang, a):
     [r"\b([0-9]+([,.][0-9]+)?)(%s)(?!\w)" % a['INCH'], lambda r: str(float(r.group(1).replace(",", "."))*72)],
     [r"\b([0-9]+([,.][0-9]+)?)(%s)\b" % a['MM'], lambda r: str(float(r.group(1).replace(",", "."))*__MM_TO_PT__)],
     [r"\b([0-9]+([,.][0-9]+)?)(%s)\b" % a['CM'], lambda r: str(float(r.group(1).replace(",", "."))*__MM_TO_PT__*10)],
-    [r"\b(__(?:int|float|string)__len|round|abs|sin|cos|sqrt|set|list|tuple|sorted)\b ((?:\w|\d+([,.]\d+)?|0[xX][0-9a-fA-F]+|[-+*/]| )+)\)" , "\\1(\\2))" ], # fix parsing: (1 + sqrt x) -> (1 + sqrt(x))
+    [r"\b(__(?:int|float|string)__len|round|abs|sin|cos|sqrt|log10|set|list|tuple|sorted)\b ((?:\w|\d+([,.]\d+)?|0[xX][0-9a-fA-F]+|[-+*/]| )+)\)" , "\\1(\\2))" ], # fix parsing: (1 + sqrt x) -> (1 + sqrt(x))
     [r"(?<=[-*/=+,]) ?\n\)(\w+)\(", "\\1()"], # read attributes, eg. x = fillcolor
     [r"(?<=return) ?\n\)(\w+)\(", "\\1()"], # return + user function
     [r"(?<=(?:Print|label)\() ?\n\)(\w+)\(", "\\1()\n"] # Print/label + user function
@@ -1613,7 +1698,7 @@ def __compil__(s):
     s = re.sub(r"(?i)\n[ ]*(%s)[ ]+" % __l12n__(_.lng)['TO'], "\n__def__ ", s)
     subnames = re.findall(u"(?iu)(?<=__def__ )\w+", s)
     globs = ""
-    functions = ["range", "__int__", "__float__", "Random", "Input", "__string__", "len", "round", "abs", "sin", "cos", "sqrt", "set", "list", "tuple", "re.sub", "re.search", "re.findall", "sorted", "min", "max"]
+    functions = ["range", "__int__", "__float__", "Random", "Input", "__string__", "len", "round", "abs", "sin", "cos", "sqrt", "log10", "set", "list", "tuple", "re.sub", "re.search", "re.findall", "sorted", "min", "max"]
 
     if len(subnames) > 0:
         globs = "global %s" % ", ".join(subnames)

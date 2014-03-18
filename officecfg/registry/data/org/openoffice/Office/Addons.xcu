@@ -143,7 +143,7 @@
             <value>300</value>
           </prop>
         </node>
-        <node oor:name="m10" oor:op="replace">
+        <node oor:name="m08b" oor:op="replace">
           <prop oor:name="Context" oor:type="xs:string">
             <value>com.sun.star.text.TextDocument</value>
           </prop>

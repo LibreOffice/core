@@ -1,3 +1,48 @@
+2014-03-18 László Németh:
+    * Start icon inserts and starts a simple localized demo program in an empty
+      document (UI fix for the missing feedback)
+    * LOG10 function
+    * PENTRANSPARENCY, FILLTRANSPARENCY: set transparency of the actual color:
+      - PENTRANSPARENCY 50 ; 50% transparency of the lines
+      - FILLTRANSPARENCY 20 ; 20% transparency of the areas
+    * fill gradient support
+      - FILLCOLOR ['red', 'blue'] ; gradient between red and blue
+      - FILLCOLOR [[255, 255, 255], [255, 128, 0]] ; between white and orange
+      - FILLCOLOR ['red', 'blue', 0, 90, 20] ; linear, 90deg gradient with 20% border
+      - FILLCOLOR ['red', 'blue', 0, 90, 20, 0, 0, 200, 50] ; from 200% to 50% intensity
+      - FILLCOLOR ['red', 'blue', 2, 0, 0, 50, 50] ; radial, with 50-50% x, y (centre)
+    * transparency gradient support (similar settings, without intensity values)
+      - FILLTRANSPARENCY [75] ; linear gradient from 75% to 0% transparency
+      - FILLTRANSPARENCY [75, 25] ; linear gradient from 75% to 25% transparency
+      - FILLTRANSPARENCY [75, 25, 2, 0, 20, 50, 50] ; radial with 20% border, 50-50% x, y
+    * normalized random colors for the visible spectrum (check FILLCOLOR ANY)
+    * magic icon sets also page zoom + page break for 2-page program editing
+    * fix multiple document handling using OfficeDocument.RuntimeUID
+      instead of Document.Title:
+      - "Saving as" doesn't create a new turtle
+      - use current doc. instead of old ones (eg. new Untitled 1 instead of the renamed one)
+    * change icon order: magic icon before input bar for better undocked Logo
+      toolbar (two-line, instead of three-line), suggested by Gilvan Vilarim
+    * keep turtle selection instead of the bad text selection at the end of the run 
+    * support capitalized color names in the translations (fix Slovak translation)
+
+2014-02-04 László Németh:
+    * avoid to translate comments: http://bug.openscope.org/browse/OOO-837,
+      reported by Levente Kovács
+
+2014-01-07 László Németh:
+    * fix messagebox (API changes)
+
+2014-01-01 László Németh:
+    * path, interop. and color name fixes
+
+2013-10-28: László Németh
+    * fix parsing problem of functions
+
+2013-10-25:
+    * fix Logo program halt at font settings (Windows)
+    * fix division with measurements
+
 2013-10-24 László Németh:
     * synchronize Writer/Draw when saving cropped SVG to avoid program halt,
       huge sleeps (the workaround) have been removed
