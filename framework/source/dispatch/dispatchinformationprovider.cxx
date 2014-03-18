@@ -19,7 +19,6 @@
 
 #include <dispatch/dispatchinformationprovider.hxx>
 #include <dispatch/closedispatcher.hxx>
-#include <threadhelp/guard.hxx>
 #include <stdtypes.h>
 #include <services.h>
 
@@ -34,8 +33,7 @@ namespace framework{
 
 DispatchInformationProvider::DispatchInformationProvider(const css::uno::Reference< css::uno::XComponentContext >& xContext ,
                                                          const css::uno::Reference< css::frame::XFrame >&          xFrame)
-    : ThreadHelpBase(&Application::GetSolarMutex())
-    , m_xContext    (xContext                     )
+    : m_xContext    (xContext                     )
     , m_xFrame      (xFrame                       )
 {
 }
@@ -130,22 +128,16 @@ css::uno::Sequence< css::frame::DispatchInformation > SAL_CALL DispatchInformati
 
 css::uno::Sequence< css::uno::Reference< css::frame::XDispatchInformationProvider > > DispatchInformationProvider::implts_getAllSubProvider()
 {
-    // SAFE -> ----------------------------------
-    Guard aReadLock(m_aLock);
-    css::uno::Reference< css::uno::XComponentContext > xContext = m_xContext;
-    css::uno::Reference< css::frame::XFrame >          xFrame(m_xFrame.get(), css::uno::UNO_QUERY);
-    aReadLock.unlock();
-    // <- SAFE ----------------------------------
-
+    css::uno::Reference< css::frame::XFrame > xFrame(m_xFrame);
     if (!xFrame.is())
         return css::uno::Sequence< css::uno::Reference< css::frame::XDispatchInformationProvider > >();
 
-    CloseDispatcher* pCloser = new CloseDispatcher(xContext, xFrame, OUString("_self")); // explicit "_self" ... not "" ... see implementation of close dispatcher itself!
+    CloseDispatcher* pCloser = new CloseDispatcher(m_xContext, xFrame, OUString("_self")); // explicit "_self" ... not "" ... see implementation of close dispatcher itself!
     css::uno::Reference< css::uno::XInterface > xCloser(static_cast< css::frame::XDispatch* >(pCloser), css::uno::UNO_QUERY);
 
     css::uno::Reference< css::frame::XDispatchInformationProvider > xCloseDispatch(xCloser                                                      , css::uno::UNO_QUERY);
     css::uno::Reference< css::frame::XDispatchInformationProvider > xController   (xFrame->getController()                                      , css::uno::UNO_QUERY);
-    css::uno::Reference< css::frame::XDispatchInformationProvider > xAppDispatcher = css::frame::AppDispatchProvider::create(xContext);
+    css::uno::Reference< css::frame::XDispatchInformationProvider > xAppDispatcher = css::frame::AppDispatchProvider::create(m_xContext);
     css::uno::Sequence< css::uno::Reference< css::frame::XDispatchInformationProvider > > lProvider(3);
     lProvider[0] = xController   ;
     lProvider[1] = xCloseDispatch;

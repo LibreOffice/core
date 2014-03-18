@@ -20,7 +20,6 @@
 #ifndef INCLUDED_FRAMEWORK_INC_DISPATCH_DISPATCHINFORMATIONPROVIDER_HXX
 #define INCLUDED_FRAMEWORK_INC_DISPATCH_DISPATCHINFORMATIONPROVIDER_HXX
 
-#include <threadhelp/threadhelpbase.hxx>
 #include <macros/generic.hxx>
 #include <macros/xinterface.hxx>
 #include <general.h>
@@ -39,8 +38,7 @@ namespace framework{
 /*-************************************************************************************************************
     @short          a helper to merge dispatch information of different sources together.
 *//*-*************************************************************************************************************/
-class DispatchInformationProvider : private ThreadHelpBase
-                                  , public  ::cppu::WeakImplHelper1< css::frame::XDispatchInformationProvider >
+class DispatchInformationProvider : public  ::cppu::WeakImplHelper1< css::frame::XDispatchInformationProvider >
 {
 
     // member
