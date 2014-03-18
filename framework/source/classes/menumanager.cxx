@@ -22,7 +22,6 @@
 #include <framework/bmkmenu.hxx>
 #include <framework/addonmenu.hxx>
 #include <framework/imageproducer.hxx>
-#include <threadhelp/guard.hxx>
 #include "framework/addonsoptions.hxx"
 #include <classes/fwkresid.hxx>
 #include <services.h>
@@ -107,7 +106,6 @@ MenuManager::MenuManager(
     const Reference< XComponentContext >& rxContext,
     Reference< XFrame >& rFrame, Menu* pMenu, sal_Bool bDelete, sal_Bool bDeleteChildren )
 :
-    ThreadHelpBase( &Application::GetSolarMutex() ),
     m_xContext(rxContext)
 {
     m_bActive           = sal_False;
@@ -293,7 +291,7 @@ MenuManager::~MenuManager()
 
 MenuManager::MenuItemHandler* MenuManager::GetMenuItemHandler( sal_uInt16 nItemId )
 {
-    Guard aGuard( m_aLock );
+    SolarMutexGuard g;
 
     std::vector< MenuItemHandler* >::iterator p;
     for ( p = m_aMenuItemHandlerVector.begin(); p != m_aMenuItemHandlerVector.end(); ++p )
@@ -314,7 +312,7 @@ throw ( RuntimeException, std::exception )
     MenuItemHandler* pStatusChangedMenu = NULL;
 
     {
-        Guard aGuard( m_aLock );
+        SolarMutexGuard g;
 
         std::vector< MenuItemHandler* >::iterator p;
         for ( p = m_aMenuItemHandlerVector.begin(); p != m_aMenuItemHandlerVector.end(); ++p )
@@ -332,8 +330,6 @@ throw ( RuntimeException, std::exception )
     {
         SolarMutexGuard aSolarGuard;
         {
-            Guard aGuard( m_aLock );
-
             sal_Bool bSetCheckmark      = sal_False;
             sal_Bool bCheckmark         = sal_False;
             sal_Bool bMenuItemEnabled   = m_pVCLMenu->IsItemEnabled( pStatusChangedMenu->nItemId );
@@ -372,7 +368,7 @@ throw ( RuntimeException, std::exception )
 
 void MenuManager::RemoveListener()
 {
-    Guard aGuard( m_aLock );
+    SolarMutexGuard g;
     ClearMenuDispatch();
 }
 
@@ -411,7 +407,7 @@ void SAL_CALL MenuManager::disposing( const EventObject& Source ) throw ( Runtim
 {
     if ( Source.Source == m_xFrame )
     {
-        Guard aGuard( m_aLock );
+        SolarMutexGuard g;
         ClearMenuDispatch(Source,false);
     }
     else
@@ -420,7 +416,7 @@ void SAL_CALL MenuManager::disposing( const EventObject& Source ) throw ( Runtim
         MenuItemHandler* pMenuItemDisposing = NULL;
 
         {
-            Guard aGuard( m_aLock );
+            SolarMutexGuard g;
 
             std::vector< MenuItemHandler* >::iterator p;
             for ( p = m_aMenuItemHandlerVector.begin(); p != m_aMenuItemHandlerVector.end(); ++p )
@@ -517,7 +513,7 @@ void MenuManager::UpdateSpecialFileMenu( Menu* pMenu )
         }
 
         {
-            Guard aGuard( m_aLock );
+            SolarMutexGuard g;
 
             int nRemoveItemCount = 0;
             int nItemCount       = pMenu->GetItemCount();
@@ -614,7 +610,7 @@ void MenuManager::UpdateSpecialFileMenu( Menu* pMenu )
     }
 }
 
-void MenuManager::UpdateSpecialWindowMenu( Menu* pMenu,const Reference< XComponentContext >& xContext, LockHelper& _rMutex )
+void MenuManager::UpdateSpecialWindowMenu( Menu* pMenu,const Reference< XComponentContext >& xContext )
 {
     // update window list
     ::std::vector< OUString > aNewWindowListVector;
@@ -648,7 +644,7 @@ void MenuManager::UpdateSpecialWindowMenu( Menu* pMenu,const Reference< XCompone
     }
 
     {
-        Guard aGuard( _rMutex );
+        SolarMutexGuard g;
 
         int nItemCount = pMenu->GetItemCount();
 
@@ -755,7 +751,7 @@ IMPL_LINK( MenuManager, Activate, Menu *, pMenu )
         if ( m_aMenuItemCommand == aSpecialFileMenu || m_aMenuItemCommand == aSlotSpecialFileMenu || aCommand == aSpecialFileCommand )
             UpdateSpecialFileMenu( pMenu );
         else if ( m_aMenuItemCommand == aSpecialWindowMenu || m_aMenuItemCommand == aSlotSpecialWindowMenu || aCommand == aSpecialWindowCommand )
-            UpdateSpecialWindowMenu( pMenu, m_xContext, m_aLock );
+            UpdateSpecialWindowMenu( pMenu, m_xContext );
 
         // Check if some modes have changed so we have to update our menu images
         if ( bShowMenuImages != m_bShowMenuImages )
@@ -771,7 +767,7 @@ IMPL_LINK( MenuManager, Activate, Menu *, pMenu )
         {
             URL aTargetURL;
 
-            Guard aGuard( m_aLock );
+            SolarMutexGuard g;
 
             Reference< XDispatchProvider > xDispatchProvider( m_xFrame, UNO_QUERY );
             if ( xDispatchProvider.is() )
@@ -841,7 +837,7 @@ IMPL_LINK( MenuManager, Select, Menu *, pMenu )
     Reference< XDispatch >  xDispatch;
 
     {
-        Guard aGuard( m_aLock );
+        SolarMutexGuard g;
 
         sal_uInt16 nCurItemId = pMenu->GetCurItemId();
         if ( pMenu == m_pVCLMenu &&

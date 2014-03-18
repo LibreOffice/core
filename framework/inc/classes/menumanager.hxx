@@ -32,7 +32,6 @@
 #include <vcl/menu.hxx>
 #include <vcl/accel.hxx>
 #include <cppuhelper/implbase1.hxx>
-#include <threadhelp/threadhelpbase.hxx>
 
 namespace com { namespace sun { namespace star { namespace uno {
     class XComponentContext;
@@ -44,8 +43,7 @@ namespace framework
 class BmkMenu;
 class AddonMenu;
 class AddonPopupMenu;
-class MenuManager : public ThreadHelpBase           ,
-                    public ::cppu::WeakImplHelper1< css::frame::XStatusListener >
+class MenuManager : public ::cppu::WeakImplHelper1< css::frame::XStatusListener >
 {
     public:
         MenuManager(
@@ -69,7 +67,7 @@ class MenuManager : public ThreadHelpBase           ,
 
         void    RemoveListener();
 
-        static void UpdateSpecialWindowMenu( Menu* pMenu ,const css::uno::Reference< css::uno::XComponentContext >& xContext, LockHelper& _rMutex);
+        static void UpdateSpecialWindowMenu( Menu* pMenu ,const css::uno::Reference< css::uno::XComponentContext >& xContext);
         static void FillMenuImages(
             css::uno::Reference< css::frame::XFrame >& xFrame,
             Menu* _pMenu,

@@ -818,7 +818,7 @@ IMPL_LINK( MenuBarManager, Activate, Menu *, pMenu )
 
         OUString aMenuCommand( m_aMenuItemCommand );
         if ( m_aMenuItemCommand == aSpecialWindowMenu || m_aMenuItemCommand == aSlotSpecialWindowMenu || aMenuCommand == aSpecialWindowCommand )
-             MenuManager::UpdateSpecialWindowMenu( pMenu, m_xContext, m_aLock );
+             MenuManager::UpdateSpecialWindowMenu( pMenu, m_xContext );
 
         // Check if some modes have changed so we have to update our menu images
         OUString sIconTheme = SvtMiscOptions().GetIconTheme();
