@@ -1354,7 +1354,7 @@ struct OutlineNumberingLevel_Impl
     sal_Int16       nNumType; //com::sun::star::style::NumberingType
     OUString        sSuffix;
     sal_Unicode     cBulletChar;
-    const sal_Char* sBulletFontName;
+    OUString        sBulletFontName;
     sal_Int16       nParentNumbering;
     sal_Int32       nLeftMargin;
     sal_Int32       nSymbolTextDistance;
@@ -1382,17 +1382,6 @@ public:
     virtual Type SAL_CALL getElementType(  ) throw(RuntimeException, std::exception);
     virtual sal_Bool SAL_CALL hasElements(  ) throw(RuntimeException, std::exception);
 };
-
-static sal_Char* U2C( const OUString& str )
-{
-    sal_Char* s = new sal_Char[ str.getLength()+1 ];
-    int i;
-    for( i = 0; i < str.getLength(); i++)
-        s[i] = sal::static_int_cast<sal_Char>( str[i] );
-    s[i]='\0';
-    return s;
-}
-
 
 Sequence< Reference<container::XIndexAccess> > SAL_CALL
 LocaleDataImpl::getOutlineNumberingLevels( const lang::Locale& rLocale ) throw(RuntimeException)
@@ -1432,7 +1421,7 @@ LocaleDataImpl::getOutlineNumberingLevels( const lang::Locale& rLocale ) throw(R
                         case 1: level[j].nNumType            = sal::static_int_cast<sal_Int16>(tmp.toInt32()); break;
                         case 2: level[j].sSuffix             = tmp;             break;
                         case 3: level[j].cBulletChar         = sal::static_int_cast<sal_Unicode>(tmp.toUInt32(16)); break; // base 16
-                        case 4: level[j].sBulletFontName     = U2C( tmp );      break;
+                        case 4: level[j].sBulletFontName     = tmp;             break;
                         case 5: level[j].nParentNumbering    = sal::static_int_cast<sal_Int16>(tmp.toInt32()); break;
                         case 6: level[j].nLeftMargin         = tmp.toInt32();   break;
                         case 7: level[j].nSymbolTextDistance = tmp.toInt32();   break;
@@ -1449,7 +1438,7 @@ LocaleDataImpl::getOutlineNumberingLevels( const lang::Locale& rLocale ) throw(R
             level[j].nNumType            = 0;
             level[j].sSuffix             = aEmptyStr;
             level[j].cBulletChar         = 0;
-            level[j].sBulletFontName     = 0;
+            level[j].sBulletFontName     = aEmptyStr;
             level[j].nParentNumbering    = 0;
             level[j].nLeftMargin         = 0;
             level[j].nSymbolTextDistance = 0;
@@ -1585,7 +1574,7 @@ Any OutlineNumbering::getByIndex( sal_Int32 nIndex )
     pValues[3].Name = "BulletChar";
     pValues[3].Value <<= OUString(&pTemp->cBulletChar, 1);
     pValues[4].Name = "BulletFontName";
-    pValues[4].Value <<= OUString::createFromAscii(pTemp->sBulletFontName);
+    pValues[4].Value <<= pTemp->sBulletFontName;
     pValues[5].Name = "ParentNumbering";
     pValues[5].Value <<= OUString::number(pTemp->nParentNumbering);
     pValues[6].Name = "LeftMargin";
