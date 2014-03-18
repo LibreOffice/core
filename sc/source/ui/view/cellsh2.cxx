@@ -234,7 +234,7 @@ void ScCellShell::ExecuteDB( SfxRequest& rReq )
                 {
                     //  show database beamer: SfxViewFrame call must be synchronous
 
-                    pViewFrame->ExecuteSlot( rReq, (sal_Bool) false );      // sal_False = synchronous
+                    pViewFrame->ExecuteSlot( rReq, false );      // false = synchronous
 
                     //  select current database in database beamer
 

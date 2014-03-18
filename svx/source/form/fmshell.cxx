@@ -321,9 +321,9 @@ void FmFormShell::impl_setDesignMode(bool bDesign)
 }
 
 
-sal_Bool FmFormShell::HasUIFeature( sal_uInt32 nFeature )
+bool FmFormShell::HasUIFeature( sal_uInt32 nFeature )
 {
-    sal_Bool bResult = sal_False;
+    bool bResult = false;
     if ((nFeature & FM_UI_FEATURE_SHOW_DATABASEBAR) == FM_UI_FEATURE_SHOW_DATABASEBAR)
     {
         // nur wenn auch formulare verfuegbar
@@ -363,7 +363,7 @@ sal_Bool FmFormShell::HasUIFeature( sal_uInt32 nFeature )
             || ( ( nFeature & FM_UI_FEATURE_TB_FORMDESIGN ) == FM_UI_FEATURE_TB_FORMDESIGN )
             )
     {
-        bResult = sal_True;
+        bResult = true;
     }
 
     return bResult;
@@ -1251,7 +1251,7 @@ void FmFormShell::SetY2KState(sal_uInt16 n)
 }
 
 
-void FmFormShell::Activate(sal_Bool bMDI)
+void FmFormShell::Activate(bool bMDI)
 {
     SfxShell::Activate(bMDI);
 
@@ -1260,7 +1260,7 @@ void FmFormShell::Activate(sal_Bool bMDI)
 }
 
 
-void FmFormShell::Deactivate(sal_Bool bMDI)
+void FmFormShell::Deactivate(bool bMDI)
 {
     SfxShell::Deactivate(bMDI);
 

@@ -218,7 +218,7 @@ OUString SfxHelp_Impl::GetHelpText( const OUString& aCommandURL, const OUString&
 }
 
 SfxHelp::SfxHelp() :
-    bIsDebug( sal_False ),
+    bIsDebug( false ),
     pImp    ( NULL )
 {
     // read the environment variable "HELP_DEBUG"
@@ -528,7 +528,7 @@ static bool impl_showOnlineHelp( const OUString& rURL )
     return false;
 }
 
-sal_Bool SfxHelp::Start_Impl(const OUString& rURL, const Window* pWindow, const OUString& rKeyword)
+bool SfxHelp::Start_Impl(const OUString& rURL, const Window* pWindow, const OUString& rKeyword)
 {
     OUStringBuffer aHelpRootURL("vnd.sun.star.help://");
     AppendConfigToken(aHelpRootURL, sal_True);
@@ -605,13 +605,11 @@ sal_Bool SfxHelp::Start_Impl(const OUString& rURL, const Window* pWindow, const 
     if ( !impl_hasHelpInstalled() )
     {
         if ( impl_showOnlineHelp( aHelpURL ) )
-            return sal_True;
-        else
-        {
-            NoHelpErrorBox aErrBox( const_cast< Window* >( pWindow ) );
-            aErrBox.Execute();
-            return sal_False;
-        }
+            return true;
+
+        NoHelpErrorBox aErrBox( const_cast< Window* >( pWindow ) );
+        aErrBox.Execute();
+        return false;
     }
 
     Reference < XDesktop2 > xDesktop = Desktop::create( ::comphelper::getProcessComponentContext() );
@@ -632,7 +630,7 @@ sal_Bool SfxHelp::Start_Impl(const OUString& rURL, const Window* pWindow, const 
     else
         pHelpWindow = (SfxHelpWindow_Impl*)VCLUnoHelper::GetWindow(xHelp->getComponentWindow());
     if (!xHelp.is() || !xHelpContent.is() || !pHelpWindow)
-        return sal_False;
+        return false;
 
 #ifdef DBG_UTIL
     OStringBuffer aTmp("SfxHelp: HelpId = ");
@@ -649,7 +647,7 @@ sal_Bool SfxHelp::Start_Impl(const OUString& rURL, const Window* pWindow, const 
     if ( xTopWindow.is() )
         xTopWindow->toFront();
 
-    return sal_True;
+    return true;
 }
 
 OUString SfxHelp::CreateHelpURL(const OUString& aCommandURL, const OUString& rModuleName)

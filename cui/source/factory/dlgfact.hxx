@@ -443,7 +443,7 @@ class AbstractInsertObjectDialog_Impl : public SfxAbstractInsertObjectDialog
     DECL_ABSTDLG_BASE(AbstractInsertObjectDialog_Impl, InsertObjectDialog_Impl)
     virtual com::sun::star::uno::Reference < com::sun::star::embed::XEmbeddedObject > GetObject();
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream > GetIconIfIconified( OUString* pGraphicMediaType );
-    virtual sal_Bool IsCreateNew();
+    virtual bool IsCreateNew();
 };
 
 class AbstractPasteDialog_Impl : public SfxAbstractPasteDialog
@@ -548,7 +548,7 @@ public:
     virtual VclAbstractDialog*          CreateEditObjectDialog( Window* pParent, const OUString& rCommmand,
             const com::sun::star::uno::Reference < com::sun::star::embed::XEmbeddedObject >& xObj );
    virtual  SfxAbstractPasteDialog*         CreatePasteDialog( Window* pParent );
-   virtual  SfxAbstractLinksDialog*         CreateLinksDialog( Window* pParent, sfx2::LinkManager* pMgr, sal_Bool bHTML, sfx2::SvBaseLink* p=0  );
+   virtual  SfxAbstractLinksDialog*         CreateLinksDialog( Window* pParent, sfx2::LinkManager* pMgr, bool bHTML, sfx2::SvBaseLink* p=0  );
 
    virtual AbstractHangulHanjaConversionDialog * CreateHangulHanjaConversionDialog( Window* _pParent,
                                             editeng::HangulHanjaConversion::ConversionDirection _ePrimaryDirection );
@@ -671,7 +671,7 @@ public:
     virtual AbstractScriptSelectorDialog*
         CreateScriptSelectorDialog(
             Window* pParent,
-            sal_Bool bShowSlots,
+            bool bShowSlots,
             const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& _rxFrame
         );
 

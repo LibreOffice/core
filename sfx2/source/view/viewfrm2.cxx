@@ -390,7 +390,7 @@ void SfxViewFrame::SetZoomFactor( const Fraction &rZoomX, const Fraction &rZoomY
     GetViewShell()->SetZoomFactor( rZoomX, rZoomY );
 }
 
-void SfxViewFrame::Activate( sal_Bool bMDI )
+void SfxViewFrame::Activate( bool bMDI )
 {
     DBG_ASSERT(GetViewShell(), "No Shell");
     if ( bMDI )
@@ -398,7 +398,7 @@ void SfxViewFrame::Activate( sal_Bool bMDI )
 //(mba): here maybe as in Beanframe NotifyEvent ?!
 }
 
-void SfxViewFrame::Deactivate( sal_Bool bMDI )
+void SfxViewFrame::Deactivate( bool bMDI )
 {
     DBG_ASSERT(GetViewShell(), "No Shell");
     if ( bMDI )

@@ -126,9 +126,9 @@ SfxStyleFamilies::~SfxStyleFamilies()
 
 
 
-sal_Bool SfxStyleFamilies::updateImages( const ResId& _rId )
+bool SfxStyleFamilies::updateImages( const ResId& _rId )
 {
-    sal_Bool bSuccess = sal_False;
+    bool bSuccess = false;
 
     {
         ::svt::OLocalResourceAccess aLocalRes( _rId );
@@ -154,7 +154,7 @@ sal_Bool SfxStyleFamilies::updateImages( const ResId& _rId )
                 pItem->SetImage( aImages.GetImage( aImages.GetImageId( i ) ) );
             }
 
-            bSuccess = sal_True;
+            bSuccess = true;
         }
     }
 

@@ -548,7 +548,7 @@ SfxTabPage* ScPreviewShell::CreatePrintOptionsPage( Window *pParent, const SfxIt
     return 0;
 }
 
-void ScPreviewShell::Activate(sal_Bool bMDI)
+void ScPreviewShell::Activate(bool bMDI)
 {
     SfxViewShell::Activate(bMDI);
 
@@ -563,7 +563,7 @@ void ScPreviewShell::Activate(sal_Bool bMDI)
     }
 }
 
-void ScPreviewShell::Deactivate(sal_Bool bMDI)
+void ScPreviewShell::Deactivate(bool bMDI)
 {
     SfxViewShell::Deactivate(bMDI);
 

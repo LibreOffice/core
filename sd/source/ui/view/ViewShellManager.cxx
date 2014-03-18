@@ -1334,7 +1334,7 @@ void ViewShellManager::Implementation::Deactivate (SfxShell* pShell)
     }
 
     // Now we can deactivate the shell.
-    pShell->Deactivate(sal_True);
+    pShell->Deactivate(true);
 }
 
 

@@ -287,7 +287,7 @@ void ViewShell::Exit (void)
         pView->UnmarkAll();
     }
 
-    Deactivate (sal_True);
+    Deactivate (true);
 
     if (IsMainViewShell())
     {
@@ -303,7 +303,7 @@ void ViewShell::Exit (void)
 /**
  * set focus to working window
  */
-void ViewShell::Activate(sal_Bool bIsMDIActivate)
+void ViewShell::Activate(bool bIsMDIActivate)
 {
     // Do not forward to SfxShell::Activate()
 
@@ -371,7 +371,7 @@ void ViewShell::UIDeactivated( SfxInPlaceClient*  )
 }
 
 
-void ViewShell::Deactivate(sal_Bool bIsMDIActivate)
+void ViewShell::Deactivate(bool bIsMDIActivate)
 {
     // remove view from a still active drag'n'drop session
     SdTransferable* pDragTransferable = SD_MOD()->pTransferDrag;

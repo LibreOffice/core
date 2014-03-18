@@ -983,7 +983,7 @@ SfxInPlaceClient* SfxViewShell::GetUIActiveClient() const
 
 
 
-void SfxViewShell::Activate( sal_Bool bMDI )
+void SfxViewShell::Activate( bool bMDI )
 {
     if ( bMDI )
     {
@@ -997,7 +997,7 @@ void SfxViewShell::Activate( sal_Bool bMDI )
 
 
 
-void SfxViewShell::Deactivate(sal_Bool /*bMDI*/)
+void SfxViewShell::Deactivate(bool /*bMDI*/)
 {
 }
 

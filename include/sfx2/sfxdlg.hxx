@@ -87,7 +87,7 @@ class SfxAbstractInsertObjectDialog : virtual public VclAbstractDialog
 public:
     virtual com::sun::star::uno::Reference < com::sun::star::embed::XEmbeddedObject > GetObject()=0;
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream > GetIconIfIconified( OUString* pGraphicMediaType )=0;
-    virtual sal_Bool IsCreateNew()=0;
+    virtual bool IsCreateNew()=0;
 };
 
 class SfxAbstractPasteDialog : virtual public VclAbstractDialog
@@ -140,13 +140,13 @@ public:
     virtual VclAbstractDialog*          CreateEditObjectDialog( Window* pParent, const OUString& rCommand,
             const com::sun::star::uno::Reference < com::sun::star::embed::XEmbeddedObject >& xObj )=0;
     virtual  SfxAbstractPasteDialog*         CreatePasteDialog( Window* pParent )=0;
-    virtual  SfxAbstractLinksDialog*         CreateLinksDialog( Window* pParent, sfx2::LinkManager* pMgr, sal_Bool bHTML=sal_False, sfx2::SvBaseLink* p=0 )=0;
+    virtual  SfxAbstractLinksDialog*         CreateLinksDialog( Window* pParent, sfx2::LinkManager* pMgr, bool bHTML=false, sfx2::SvBaseLink* p=0 )=0;
     virtual VclAbstractDialog *         CreateSvxScriptOrgDialog( Window* pParent,  const rtl::OUString& rLanguage ) = 0;
 
     virtual AbstractScriptSelectorDialog*
         CreateScriptSelectorDialog(
             Window* pParent,
-            sal_Bool bShowSlots,
+            bool bShowSlots,
             const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& _rxFrame
         ) = 0;
 

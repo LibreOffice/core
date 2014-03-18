@@ -135,8 +135,8 @@ public:
     void                    ToTop();
     void                    Enable( sal_Bool bEnable );
     virtual sal_Bool            Close();
-    virtual void            Activate( sal_Bool bUI );
-    virtual void            Deactivate( sal_Bool bUI );
+    virtual void            Activate( bool bUI );
+    virtual void            Deactivate( bool bUI );
 
     // DDE-Interface
     virtual long            DdeExecute( const OUString& rCmd );

@@ -31,11 +31,11 @@ class SFX2_DLLPUBLIC SfxHelp : public Help
 {
     OUString        aTicket;        // for Plugins
     OUString        aUser;
-    sal_Bool        bIsDebug;
+    bool            bIsDebug;
     SfxHelp_Impl*   pImp;
 
 private:
-    SAL_DLLPRIVATE sal_Bool Start_Impl( const OUString& rURL, const Window* pWindow, const OUString& rKeyword );
+    SAL_DLLPRIVATE bool Start_Impl( const OUString& rURL, const Window* pWindow, const OUString& rKeyword );
     SAL_DLLPRIVATE virtual bool SearchKeyword( const OUString& rKeyWord );
     SAL_DLLPRIVATE virtual bool Start( const OUString& rURL, const Window* pWindow );
     SAL_DLLPRIVATE OUString GetHelpModuleName_Impl();

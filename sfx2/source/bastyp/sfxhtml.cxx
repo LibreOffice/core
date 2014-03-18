@@ -62,7 +62,7 @@ static HTMLOptionEnum const aAreaShapeOptEnums[] =
     { 0,                    0                   }
 };
 
-SfxHTMLParser::SfxHTMLParser( SvStream& rStream, sal_Bool bIsNewDoc,
+SfxHTMLParser::SfxHTMLParser( SvStream& rStream, bool bIsNewDoc,
                               SfxMedium *pMed )
     : HTMLParser(rStream, bIsNewDoc)
     , pMedium(pMed)
@@ -238,9 +238,9 @@ void SfxHTMLParser::StartFileDownload(const OUString& rURL)
     pDLMedium->DownLoad();
 }
 
-sal_Bool SfxHTMLParser::FinishFileDownload( OUString& rStr )
+bool SfxHTMLParser::FinishFileDownload( OUString& rStr )
 {
-    sal_Bool bOK = pDLMedium && pDLMedium->GetErrorCode()==0;
+    bool bOK = pDLMedium && pDLMedium->GetErrorCode()==0;
     if( bOK )
     {
         SvStream* pStream = pDLMedium->GetInStream();

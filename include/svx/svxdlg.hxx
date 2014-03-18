@@ -459,7 +459,7 @@ public:
     virtual AbstractScriptSelectorDialog*
         CreateScriptSelectorDialog(
             Window* pParent,
-            sal_Bool bShowSlots,
+            bool bShowSlots,
             const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& _rxFrame
         ) = 0;
 

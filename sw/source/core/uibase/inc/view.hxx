@@ -378,8 +378,8 @@ protected:
 
     virtual void    SelectShell();
 
-    virtual void    Activate(sal_Bool);
-    virtual void    Deactivate(sal_Bool);
+    virtual void    Activate(bool);
+    virtual void    Deactivate(bool);
     virtual void    InnerResizePixel( const Point &rOfs, const Size &rSize );
     virtual void    OuterResizePixel( const Point &rOfs, const Size &rSize );
 
@@ -403,7 +403,7 @@ public:
 
     void                    GotFocus() const;
     virtual SdrView*        GetDrawView() const;
-    virtual sal_Bool        HasUIFeature( sal_uInt32 nFeature );
+    virtual bool            HasUIFeature( sal_uInt32 nFeature );
     virtual void            ShowCursor( bool bOn = true );
     virtual ErrCode         DoVerb( long nVerb );
 

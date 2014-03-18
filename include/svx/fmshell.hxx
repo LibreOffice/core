@@ -108,7 +108,7 @@ public:
 
     virtual void Execute( SfxRequest& );
     virtual void GetState( SfxItemSet& );
-    virtual sal_Bool HasUIFeature( sal_uInt32 nFeature );
+    virtual bool HasUIFeature( sal_uInt32 nFeature );
 
     void ExecuteTextAttribute( SfxRequest& );
     void GetTextAttributeState( SfxItemSet& );
@@ -129,8 +129,8 @@ public:
     void        ForgetActiveControl();
     void        SetControlActivationHandler( const Link& _rHdl );
 
-    virtual void    Activate(sal_Bool bMDI);
-    virtual void    Deactivate(sal_Bool bMDI);
+    virtual void    Activate(bool bMDI);
+    virtual void    Deactivate(bool bMDI);
 
     // helper methods for implementing XFormLayerAccess
     SdrUnoObj* GetFormControl(

@@ -512,9 +512,9 @@ void SwView::GetDrawState(SfxItemSet &rSet)
         }
 }
 
-sal_Bool SwView::HasUIFeature( sal_uInt32 nFeature )
+bool SwView::HasUIFeature( sal_uInt32 nFeature )
 {
-    sal_Bool bRet = sal_False;
+    bool bRet = false;
     switch(nFeature)
     {
         case CHILDWIN_LABEL     : bRet = m_pWrtShell->IsLabelDoc(); break;

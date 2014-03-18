@@ -380,7 +380,7 @@ Reference < com::sun::star::embed::XEmbeddedObject > AbstractInsertObjectDialog_
    return pDlg->GetObject();
 }
 
-sal_Bool AbstractInsertObjectDialog_Impl::IsCreateNew()
+bool AbstractInsertObjectDialog_Impl::IsCreateNew()
 {
     return pDlg->IsCreateNew();
 }
@@ -1182,7 +1182,7 @@ AbstractDialogFactory_Impl::CreateScriptErrorDialog(
 
 AbstractScriptSelectorDialog*
 AbstractDialogFactory_Impl::CreateScriptSelectorDialog(
-    Window* pParent, sal_Bool bShowSlots, const Reference< frame::XFrame >& _rxFrame )
+    Window* pParent, bool bShowSlots, const Reference< frame::XFrame >& _rxFrame )
 {
     SvxScriptSelectorDialog* pDlg = new SvxScriptSelectorDialog(pParent, bShowSlots, _rxFrame);
     return new AbstractScriptSelectorDialog_Impl(pDlg);
@@ -1792,7 +1792,7 @@ SfxAbstractPasteDialog* AbstractDialogFactory_Impl::CreatePasteDialog( Window* p
     return new AbstractPasteDialog_Impl( new SvPasteObjectDialog( pParent ) );
 }
 
-SfxAbstractLinksDialog* AbstractDialogFactory_Impl::CreateLinksDialog( Window* pParent, sfx2::LinkManager* pMgr, sal_Bool bHTML, sfx2::SvBaseLink* p)
+SfxAbstractLinksDialog* AbstractDialogFactory_Impl::CreateLinksDialog( Window* pParent, sfx2::LinkManager* pMgr, bool bHTML, sfx2::SvBaseLink* p)
 {
     SvBaseLinksDlg* pLinkDlg = new SvBaseLinksDlg( pParent, pMgr, bHTML );
     if ( p )

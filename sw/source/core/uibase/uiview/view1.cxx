@@ -42,7 +42,7 @@
 
 extern int bDocSzUpdated;
 
-void SwView::Activate(sal_Bool bMDIActivate)
+void SwView::Activate(bool bMDIActivate)
 {
     // fdo#40438 Update the layout to make sure everything is correct before showing the content
     m_pWrtShell->StartAction();
@@ -115,7 +115,7 @@ void SwView::Activate(sal_Bool bMDIActivate)
     SfxViewShell::Activate(bMDIActivate);
 }
 
-void SwView::Deactivate(sal_Bool bMDIActivate)
+void SwView::Deactivate(bool bMDIActivate)
 {
     extern bool bFlushCharBuffer ;
         // Are Characters still in the input buffer?

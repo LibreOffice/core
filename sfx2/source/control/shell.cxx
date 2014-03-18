@@ -90,10 +90,10 @@ struct SfxShell_Impl: public SfxBroadcaster
                                             // ViewFrame/ViewShell/SubShell list
     SfxViewFrame*            pFrame;        // Frame, if  <UI-active>
     SfxRepeatTarget*         pRepeatTarget; // SbxObjectRef xParent;
-    sal_Bool                        bInAppBASIC;
-    sal_Bool                        bActive;
-    sal_uIntPtr                     nDisableFlags;
-    sal_uIntPtr                       nHelpId;
+    bool                        bInAppBASIC;
+    bool                        bActive;
+    sal_uIntPtr                 nDisableFlags;
+    sal_uIntPtr                 nHelpId;
     svtools::AsynchronLink*     pExecuter;
     svtools::AsynchronLink*     pUpdater;
     SfxVerbSlotArr_Impl         aSlotArr;
@@ -134,9 +134,9 @@ SfxShell::SfxShell()
     pImp->pViewSh = 0;
     pImp->pFrame = 0;
     pImp->pRepeatTarget = 0;
-    pImp->bInAppBASIC = sal_False;
+    pImp->bInAppBASIC = false;
     pImp->nHelpId = 0L;
-    pImp->bActive = sal_False;
+    pImp->bActive = false;
     pImp->nDisableFlags = 0;
 }
 
@@ -159,9 +159,9 @@ SfxShell::SfxShell( SfxViewShell *pViewSh )
     pImp->pViewSh = pViewSh;
     pImp->pFrame = 0;
     pImp->pRepeatTarget = 0;
-    pImp->bInAppBASIC = sal_False;
+    pImp->bInAppBASIC = false;
     pImp->nHelpId = 0L;
-    pImp->bActive = sal_False;
+    pImp->bActive = false;
 }
 
 
@@ -547,7 +547,7 @@ void SfxShell::Invalidate_Impl( SfxBindings& rBindings, sal_uInt16 nId )
 
 
 
-void SfxShell::DoActivate_Impl( SfxViewFrame *pFrame, sal_Bool bMDI )
+void SfxShell::DoActivate_Impl( SfxViewFrame *pFrame, bool bMDI )
 
 /*  [Description]
 
@@ -575,7 +575,7 @@ void SfxShell::DoActivate_Impl( SfxViewFrame *pFrame, sal_Bool bMDI )
     {
         // Remember Frame, in which it was activated
         pImp->pFrame = pFrame;
-        pImp->bActive = sal_True;
+        pImp->bActive = true;
     }
 
     // Notify Subclass
@@ -584,7 +584,7 @@ void SfxShell::DoActivate_Impl( SfxViewFrame *pFrame, sal_Bool bMDI )
 
 
 
-void SfxShell::DoDeactivate_Impl( SfxViewFrame *pFrame, sal_Bool bMDI )
+void SfxShell::DoDeactivate_Impl( SfxViewFrame *pFrame, bool bMDI )
 
 /*  [Description]
 
@@ -613,7 +613,7 @@ void SfxShell::DoDeactivate_Impl( SfxViewFrame *pFrame, sal_Bool bMDI )
     {
         // deliver
         pImp->pFrame = 0;
-        pImp->bActive = sal_False;
+        pImp->bActive = false;
     }
 
     // Notify Subclass
@@ -622,7 +622,7 @@ void SfxShell::DoDeactivate_Impl( SfxViewFrame *pFrame, sal_Bool bMDI )
 
 
 
-sal_Bool SfxShell::IsActive() const
+bool SfxShell::IsActive() const
 {
     return pImp->bActive;
 }
@@ -631,7 +631,7 @@ sal_Bool SfxShell::IsActive() const
 
 void SfxShell::Activate
 (
-    sal_Bool    /*bMDI*/        /*  TRUE
+    bool    /*bMDI*/        /*  TRUE
                             the <SfxDispatcher>, on which the SfxShell is
                             located, is activated or the SfxShell instance
                             was pushed on an active SfxDispatcher.
@@ -651,7 +651,7 @@ void SfxShell::Activate
 
     [Cross-reference]
 
-    StarView SystemWindow::Activate(sal_Bool)
+    StarView SystemWindow::Activate(bool)
 */
 
 {
@@ -662,7 +662,7 @@ void SfxShell::Activate
 
 void SfxShell::Deactivate
 (
-    sal_Bool    /*bMDI*/        /*  TRUE
+    bool    /*bMDI*/        /*  TRUE
                             the <SfxDispatcher>, on which the SfxShell is
                             located, is inactivated or the SfxShell instance
                             was popped on an active SfxDispatcher.
@@ -682,7 +682,7 @@ void SfxShell::Deactivate
 
     [Cross-reference]
 
-    StarView SystemWindow::Dectivate(sal_Bool)
+    StarView SystemWindow::Dectivate(bool)
 */
 
 {
@@ -777,7 +777,7 @@ long ShellCall_Impl( void* pObj, void* pArg )
  */
 
 
-const SfxPoolItem* SfxShell::ExecuteSlot( SfxRequest& rReq, sal_Bool bAsync )
+const SfxPoolItem* SfxShell::ExecuteSlot( SfxRequest& rReq, bool bAsync )
 {
     if( !bAsync )
         return ExecuteSlot( rReq, (SfxInterface*)0L );
@@ -1048,7 +1048,7 @@ void SfxShell::VerbExec(SfxRequest& rReq)
     SfxViewShell *pViewShell = GetViewShell();
     if ( pViewShell )
     {
-        sal_Bool bReadOnly = pViewShell->GetObjectShell()->IsReadOnly();
+        bool bReadOnly = pViewShell->GetObjectShell()->IsReadOnly();
         com::sun::star::uno::Sequence < com::sun::star::embed::VerbDescriptor > aList = pViewShell->GetVerbs();
         for (sal_Int32 n=0, nVerb=0; n<aList.getLength(); n++)
         {
@@ -1118,9 +1118,9 @@ SfxObjectShell* SfxShell::GetObjectShell()
 
 
 
-sal_Bool SfxShell::HasUIFeature( sal_uInt32 )
+bool SfxShell::HasUIFeature( sal_uInt32 )
 {
-    return sal_False;
+    return false;
 }
 
 long DispatcherUpdate_Impl( void*, void* pArg )

@@ -150,8 +150,8 @@ public:
 
     void            SelectionHasChanged();
     void            ModelHasChanged();
-    virtual void    Activate(sal_Bool bIsMDIActivate);
-    virtual void    Deactivate(sal_Bool IsMDIActivate);
+    virtual void    Activate(bool bIsMDIActivate);
+    virtual void    Deactivate(bool IsMDIActivate);
     virtual void    UIActivating( SfxInPlaceClient* );
     virtual void    UIDeactivated( SfxInPlaceClient* );
     virtual OUString GetSelectionText( bool bCompleteWords = false );

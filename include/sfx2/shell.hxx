@@ -187,7 +187,7 @@ public:
 
     const SfxPoolItem*          GetSlotState( sal_uInt16 nSlotId, const SfxInterface *pIF = 0, SfxItemSet *pStateSet = 0 );
     const SfxPoolItem*          ExecuteSlot( SfxRequest &rReq, const SfxInterface *pIF = 0 );
-    const SfxPoolItem*          ExecuteSlot( SfxRequest &rReq, sal_Bool bAsync );
+    const SfxPoolItem*          ExecuteSlot( SfxRequest &rReq, bool bAsync );
     sal_uIntPtr                       ExecuteSlot( sal_uInt16 nSlot, sal_uInt16 nMemberId, SbxVariable& rRet, SbxBase* pArgs = 0 );
 
     inline SfxItemPool&         GetPool() const;
@@ -202,16 +202,16 @@ public:
 
     virtual void                Invalidate(sal_uInt16 nId = 0);
 
-    sal_Bool                        IsActive() const;
-    virtual void                Activate(sal_Bool bMDI);
-    virtual void                Deactivate(sal_Bool bMDI);
+    bool                        IsActive() const;
+    virtual void                Activate(bool bMDI);
+    virtual void                Deactivate(bool bMDI);
     virtual void                ParentActivate();
     virtual void                ParentDeactivate();
 
     SfxDispatcher*              GetDispatcher() const;
     SfxViewFrame*               GetFrame() const;
     ResMgr*                     GetResMgr() const;
-    virtual sal_Bool            HasUIFeature( sal_uInt32 nFeature );
+    virtual bool                HasUIFeature( sal_uInt32 nFeature );
     void                        UIFeatureChanged();
 
     // Items
@@ -254,8 +254,8 @@ public:
     bool SetContextBroadcasterEnabled (const bool bIsEnabled);
 
     SAL_DLLPRIVATE bool CanExecuteSlot_Impl( const SfxSlot &rSlot );
-    SAL_DLLPRIVATE void DoActivate_Impl( SfxViewFrame *pFrame, sal_Bool bMDI);
-    SAL_DLLPRIVATE void DoDeactivate_Impl( SfxViewFrame *pFrame, sal_Bool bMDI);
+    SAL_DLLPRIVATE void DoActivate_Impl( SfxViewFrame *pFrame, bool bMDI);
+    SAL_DLLPRIVATE void DoDeactivate_Impl( SfxViewFrame *pFrame, bool bMDI);
 };
 
 

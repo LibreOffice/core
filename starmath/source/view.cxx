@@ -2023,7 +2023,7 @@ SmViewShell::~SmViewShell()
     delete pImpl;
 }
 
-void SmViewShell::Deactivate( sal_Bool bIsMDIActivate )
+void SmViewShell::Deactivate( bool bIsMDIActivate )
 {
     SAL_INFO( "starmath", "SmViewShell::Deactivate" );
 
@@ -2035,7 +2035,7 @@ void SmViewShell::Deactivate( sal_Bool bIsMDIActivate )
 }
 
 
-void SmViewShell::Activate( sal_Bool bIsMDIActivate )
+void SmViewShell::Activate( bool bIsMDIActivate )
 {
     SAL_INFO( "starmath", "SmViewShell::Activate" );
 

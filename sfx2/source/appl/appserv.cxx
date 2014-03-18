@@ -1194,7 +1194,7 @@ void SfxApplication::OfaExec_Impl( SfxRequest& rReq )
             do  // artificial loop for flow control
             {
                 AbstractScriptSelectorDialog* pDlg = pFact->CreateScriptSelectorDialog(
-                    lcl_getDialogParent( xFrame, GetTopWindow() ), sal_False, xFrame );
+                    lcl_getDialogParent( xFrame, GetTopWindow() ), false, xFrame );
                 OSL_ENSURE( pDlg, "SfxApplication::OfaExec_Impl( SID_RUNMACRO ): no dialog!" );
                 if ( !pDlg )
                     break;

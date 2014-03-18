@@ -340,7 +340,7 @@ void DrawDocShell::InPlaceActivate( bool bActive )
     }
 }
 
-void DrawDocShell::Activate( sal_Bool bMDI)
+void DrawDocShell::Activate( bool bMDI)
 {
     if (bMDI)
     {
@@ -349,7 +349,7 @@ void DrawDocShell::Activate( sal_Bool bMDI)
     }
 }
 
-void DrawDocShell::Deactivate( sal_Bool )
+void DrawDocShell::Deactivate( bool )
 {
 }
 

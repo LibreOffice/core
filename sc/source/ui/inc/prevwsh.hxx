@@ -64,8 +64,8 @@ private:
     void ExitPreview();
 
 protected:
-    virtual void    Activate(sal_Bool bMDI);
-    virtual void    Deactivate(sal_Bool bMDI);
+    virtual void    Activate(bool bMDI);
+    virtual void    Deactivate(bool bMDI);
     virtual void    AdjustPosSizePixel( const Point &rPos, const Size &rSize );
 
     virtual void    InnerResizePixel( const Point &rOfs, const Size &rSize );

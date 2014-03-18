@@ -153,8 +153,8 @@ public:
 
     virtual void UIActivating( SfxInPlaceClient* );
     virtual void UIDeactivated( SfxInPlaceClient* );
-    virtual void Activate (sal_Bool IsMDIActivate);
-    virtual void Deactivate (sal_Bool IsMDIActivate);
+    virtual void Activate (bool IsMDIActivate);
+    virtual void Deactivate (bool IsMDIActivate);
     virtual void SetZoomFactor (
         const Fraction &rZoomX,
         const Fraction &rZoomY);

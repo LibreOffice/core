@@ -293,7 +293,7 @@ IMPL_LINK_NOARG(SvxHyperlinkMailTp, ClickAdrBookHdl_Impl)
     {
         SfxItemPool &rPool = pViewFrame->GetPool();
         SfxRequest aReq(SID_VIEW_DATA_SOURCE_BROWSER, 0, rPool);
-        pViewFrame->ExecuteSlot( aReq, sal_True );
+        pViewFrame->ExecuteSlot( aReq, true );
     }
 
 

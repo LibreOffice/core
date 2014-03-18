@@ -127,7 +127,7 @@ SvxRuler* PresentationViewShell::CreateVRuler(::sd::Window*)
 }
 
 
-void PresentationViewShell::Activate( sal_Bool bIsMDIActivate )
+void PresentationViewShell::Activate( bool bIsMDIActivate )
 {
     DrawViewShell::Activate( bIsMDIActivate );
 

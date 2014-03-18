@@ -130,8 +130,8 @@ private:
     virtual void        SFX_NOTIFY( SfxBroadcaster& rBC, const TypeId& rBCType,
                                 const SfxHint& rHint, const TypeId& rHintType );
 
-    virtual void        Activate(sal_Bool bMDI);
-    virtual void        Deactivate(sal_Bool bMDI);
+    virtual void        Activate(bool bMDI);
+    virtual void        Deactivate(bool bMDI);
 
     virtual void        Move();
     virtual void        ShowCursor( bool bOn = true );
@@ -185,7 +185,7 @@ public:
     void                ExecuteBasic( SfxRequest& rReq );
     void                ExecuteDialog( SfxRequest& rReq );
 
-    virtual sal_Bool    HasUIFeature( sal_uInt32 nFeature );
+    virtual bool        HasUIFeature( sal_uInt32 nFeature );
 
     bool                CallBasicErrorHdl( StarBASIC* pBasic );
     long                CallBasicBreakHdl( StarBASIC* pBasic );

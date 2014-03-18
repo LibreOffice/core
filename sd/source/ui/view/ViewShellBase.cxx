@@ -793,7 +793,7 @@ void ViewShellBase::ReadUserDataSequence (
 
 
 
-void ViewShellBase::Activate (sal_Bool bIsMDIActivate)
+void ViewShellBase::Activate (bool bIsMDIActivate)
 {
     SfxViewShell::Activate(bIsMDIActivate);
 
@@ -811,7 +811,7 @@ void ViewShellBase::Activate (sal_Bool bIsMDIActivate)
 
 
 
-void ViewShellBase::Deactivate (sal_Bool bIsMDIActivate)
+void ViewShellBase::Deactivate (bool bIsMDIActivate)
 {
     SfxViewShell::Deactivate(bIsMDIActivate);
 }

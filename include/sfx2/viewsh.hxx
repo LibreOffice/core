@@ -141,8 +141,8 @@ friend class SfxPrinterController;
     sal_Bool                        bNoNewWindow;
 
 protected:
-    virtual void                Activate(sal_Bool IsMDIActivate);
-    virtual void                Deactivate(sal_Bool IsMDIActivate);
+    virtual void                Activate(bool IsMDIActivate);
+    virtual void                Deactivate(bool IsMDIActivate);
 
     virtual void                InnerResizePixel( const Point &rOfs, const Size &rSize );
     virtual void                OuterResizePixel( const Point &rOfs, const Size &rSize );

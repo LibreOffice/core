@@ -1390,9 +1390,9 @@ public:
 
     SfxObjectShell* GetObjectShell() const ;
 
-    SAL_DLLPRIVATE sal_Bool impl_isDisposed() const ;
-    sal_Bool IsInitialized() const;
-    sal_Bool IsDisposed() const { return impl_isDisposed(); }
+    SAL_DLLPRIVATE bool impl_isDisposed() const ;
+    bool IsInitialized() const;
+    bool IsDisposed() const { return impl_isDisposed(); }
     void MethodEntryCheck( const bool i_mustBeInitialized ) const;
     ::osl::Mutex& getMutex() const { return m_aMutex; }
 
@@ -1403,7 +1403,7 @@ public:
     void notifyEvent( const css::document::EventObject& aEvent ) const;
 
     /** returns true if someone added a XEventListener to this XEventBroadcaster */
-    sal_Bool hasEventListeners() const;
+    bool hasEventListeners() const;
 
 protected:
 
@@ -1412,7 +1412,7 @@ protected:
     OUString getRuntimeUID() const;
 
     /* returns true if the document signatures are valid, otherwise false */
-    sal_Bool hasValidSignatures() const;
+    bool hasValidSignatures() const;
 
     /* GrabBagItem for interim interop purposes */
     void getGrabBagItem(com::sun::star::uno::Any& rVal) const;
@@ -1445,7 +1445,7 @@ private:
 
     SAL_DLLPRIVATE void impl_store( const OUString& sURL,
                         const   css::uno::Sequence< css::beans::PropertyValue >&   seqArguments    ,
-                                sal_Bool                    bSaveTo         ) ;
+                                bool                    bSaveTo         ) ;
 
     SAL_DLLPRIVATE void postEvent_Impl( const OUString& aName, const css::uno::Reference< css::frame::XController2 >& xController = css::uno::Reference< css::frame::XController2 >() );
 

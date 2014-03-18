@@ -1692,9 +1692,9 @@ void SfxDispatcher::FlushImpl()
         if (!pImp->bActive)
             continue;
         if (i->bPush)
-            i->pCluster->DoActivate_Impl(pImp->pFrame, sal_True);
+            i->pCluster->DoActivate_Impl(pImp->pFrame, true);
         else
-            i->pCluster->DoDeactivate_Impl(pImp->pFrame, sal_True);
+            i->pCluster->DoDeactivate_Impl(pImp->pFrame, true);
     }
 
     aToDoCopy = pImp->aToDoCopyStack.back();
@@ -2354,7 +2354,7 @@ void SfxDispatcher::RemoveShell_Impl( SfxShell& rShell )
         {
             pImp->aStack.erase( pImp->aStack.begin() + n );
             rShell.SetDisableFlags( 0 );
-            rShell.DoDeactivate_Impl(pImp->pFrame, sal_True);
+            rShell.DoDeactivate_Impl(pImp->pFrame, true);
             break;
         }
     }

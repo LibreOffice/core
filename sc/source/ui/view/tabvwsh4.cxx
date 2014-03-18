@@ -103,7 +103,7 @@ sal_uInt16 ScTabViewShell::nInsObjCtrlState = SID_INSERT_DIAGRAM;
 
 
 
-void ScTabViewShell::Activate(sal_Bool bMDI)
+void ScTabViewShell::Activate(bool bMDI)
 {
     SfxViewShell::Activate(bMDI);
     bIsActive = true;
@@ -225,7 +225,7 @@ void ScTabViewShell::Activate(sal_Bool bMDI)
         ::sfx2::sidebar::EnumContext::Context_Default);
 }
 
-void ScTabViewShell::Deactivate(sal_Bool bMDI)
+void ScTabViewShell::Deactivate(bool bMDI)
 {
     HideTip();
 

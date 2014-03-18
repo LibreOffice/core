@@ -78,8 +78,8 @@ public:
     virtual void AddWindow(::sd::Window* pWin);
     virtual void RemoveWindow(::sd::Window* pWin);
 
-    virtual void Activate( sal_Bool IsMDIActivate );
-    virtual void Deactivate( sal_Bool IsMDIActivate );
+    virtual void Activate( bool IsMDIActivate );
+    virtual void Deactivate( bool IsMDIActivate );
 
     virtual SdPage* GetActualPage();
 

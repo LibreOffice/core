@@ -400,7 +400,7 @@ void ScDrawShell::GetDrawAttrStateForIFBX( SfxItemSet& rSet )
 
 
 
-void ScDrawShell::Activate (const sal_Bool bMDI)
+void ScDrawShell::Activate (const bool bMDI)
 {
     (void)bMDI;
 

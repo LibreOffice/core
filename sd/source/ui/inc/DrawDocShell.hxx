@@ -71,8 +71,8 @@ public:
     virtual ~DrawDocShell();
 
     void                    UpdateRefDevice();
-    virtual void            Activate( sal_Bool bMDI );
-    virtual void            Deactivate( sal_Bool bMDI );
+    virtual void            Activate( bool bMDI );
+    virtual void            Deactivate( bool bMDI );
     virtual bool            InitNew( const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& xStorage );
     virtual bool            ImportFrom(SfxMedium &rMedium,
             css::uno::Reference<css::text::XTextRange> const& xInsertPosition)

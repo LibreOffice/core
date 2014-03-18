@@ -965,7 +965,7 @@ void Shell::GetState(SfxItemSet &rSet)
         pCurWin->GetState( rSet );
 }
 
-sal_Bool Shell::HasUIFeature( sal_uInt32 nFeature )
+bool Shell::HasUIFeature( sal_uInt32 nFeature )
 {
     bool bResult = false;
 
@@ -1230,7 +1230,7 @@ Reference< XModel > Shell::GetCurrentDocument() const
     return xDocument;
 }
 
-void Shell::Activate( sal_Bool bMDI )
+void Shell::Activate( bool bMDI )
 {
     SfxViewShell::Activate( bMDI );
 
@@ -1241,7 +1241,7 @@ void Shell::Activate( sal_Bool bMDI )
     }
 }
 
-void Shell::Deactivate( sal_Bool bMDI )
+void Shell::Deactivate( bool bMDI )
 {
     // bMDI == true means that another MDI has been activated; in case of a
     // deactivate due to a MessageBox bMDI is false

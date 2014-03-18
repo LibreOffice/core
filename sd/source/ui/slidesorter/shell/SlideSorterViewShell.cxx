@@ -562,7 +562,7 @@ void SlideSorterViewShell::ArrangeGUIElements (void)
 
 
 
-void SlideSorterViewShell::Activate (sal_Bool bIsMDIActivate)
+void SlideSorterViewShell::Activate (bool bIsMDIActivate)
 {
     ViewShell::Activate(bIsMDIActivate);
     if (mbIsArrangeGUIElementsPending)
@@ -601,7 +601,7 @@ void SlideSorterViewShell::Activate (sal_Bool bIsMDIActivate)
 
 
 
-void SlideSorterViewShell::Deactivate (sal_Bool /*bIsMDIActivate*/)
+void SlideSorterViewShell::Deactivate (bool /*bIsMDIActivate*/)
 {
     // Save Settings - Specifically SlidesPerRow to retrieve it later
     WriteFrameViewData();

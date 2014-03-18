@@ -45,7 +45,7 @@ class SFX2_DLLPUBLIC SfxHTMLParser : public HTMLParser
 
 protected:
 
-    SfxHTMLParser( SvStream& rStream, sal_Bool bNewDoc=sal_True, SfxMedium *pMedium=0 );
+    SfxHTMLParser( SvStream& rStream, bool bNewDoc=true, SfxMedium *pMedium=0 );
 
     virtual ~SfxHTMLParser();
 
@@ -60,7 +60,7 @@ public:
                                  const HTMLOptions& rOptions,
                                  sal_uInt16 nEventMouseOver = 0,
                                  sal_uInt16 nEventMouseOut = 0 );
-    inline sal_Bool ParseAreaOptions(ImageMap * pImageMap, const OUString& rBaseURL,
+    inline bool ParseAreaOptions(ImageMap * pImageMap, const OUString& rBaseURL,
                                  sal_uInt16 nEventMouseOver = 0,
                                  sal_uInt16 nEventMouseOut = 0);
 
@@ -84,11 +84,11 @@ protected:
 
     // End of an asynchronous file download. Returns TRUE if the download
     // was successful. The read file is then passed into String.
-    sal_Bool FinishFileDownload( OUString& rStr );
+    bool FinishFileDownload( OUString& rStr );
 
     // Returns TRUE if a file was downloaded and if FileDownloadFinished
     // has not yet been called
-    sal_Bool ShouldFinishFileDownload() const { return pDLMedium != 0; }
+    bool ShouldFinishFileDownload() const { return pDLMedium != 0; }
 
     SfxMedium *GetMedium() { return pMedium; }
     const SfxMedium *GetMedium() const { return pMedium; }
@@ -98,7 +98,7 @@ protected:
     const OUString& GetScriptTypeString( SvKeyValueIterator* ) const;
 };
 
-inline sal_Bool SfxHTMLParser::ParseAreaOptions(ImageMap * pImageMap, const OUString& rBaseURL,
+inline bool SfxHTMLParser::ParseAreaOptions(ImageMap * pImageMap, const OUString& rBaseURL,
                                             sal_uInt16 nEventMouseOver,
                                             sal_uInt16 nEventMouseOut)
 {

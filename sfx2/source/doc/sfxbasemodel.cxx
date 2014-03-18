@@ -198,13 +198,13 @@ struct IMPL_SfxBaseModel_DataContainer : public ::sfx2::IModifiableDocument
     Sequence< Reference< frame::XController > >                m_seqControllers         ;
     Reference< container::XIndexAccess >                       m_contViewData           ;
     sal_uInt16                                                 m_nControllerLockCount   ;
-    sal_Bool                                                   m_bClosed                ;
-    sal_Bool                                                   m_bClosing               ;
-    sal_Bool                                                   m_bSaving                ;
-    sal_Bool                                                   m_bSuicide               ;
-    sal_Bool                                                   m_bInitialized           ;
-    sal_Bool                                                   m_bExternalTitle         ;
-    sal_Bool                                                   m_bModifiedSinceLastSave ;
+    bool                                                       m_bClosed                ;
+    bool                                                       m_bClosing               ;
+    bool                                                       m_bSaving                ;
+    bool                                                       m_bSuicide               ;
+    bool                                                       m_bInitialized           ;
+    bool                                                       m_bExternalTitle         ;
+    bool                                                       m_bModifiedSinceLastSave ;
     Reference< view::XPrintable>                               m_xPrintable             ;
     Reference< script::provider::XScriptProvider >             m_xScriptProvider        ;
     Reference< ui::XUIConfigurationManager2 >                  m_xUIConfigurationManager;
@@ -221,13 +221,13 @@ struct IMPL_SfxBaseModel_DataContainer : public ::sfx2::IModifiableDocument
             :   m_pObjectShell          ( pObjectShell  )
             ,   m_aInterfaceContainer   ( rMutex        )
             ,   m_nControllerLockCount  ( 0             )
-            ,   m_bClosed               ( sal_False     )
-            ,   m_bClosing              ( sal_False     )
-            ,   m_bSaving               ( sal_False     )
-            ,   m_bSuicide              ( sal_False     )
-            ,   m_bInitialized          ( sal_False     )
-            ,   m_bExternalTitle        ( sal_False     )
-            ,   m_bModifiedSinceLastSave( sal_False     )
+            ,   m_bClosed               ( false     )
+            ,   m_bClosing              ( false     )
+            ,   m_bSaving               ( false     )
+            ,   m_bSuicide              ( false     )
+            ,   m_bInitialized          ( false     )
+            ,   m_bExternalTitle        ( false     )
+            ,   m_bModifiedSinceLastSave( false     )
             ,   m_pStorageModifyListen  ( NULL          )
             ,   m_xTitleHelper          ()
             ,   m_xNumberedControllers  ()
@@ -453,13 +453,13 @@ class SfxSaveGuard
     public:
         SfxSaveGuard(const Reference< frame::XModel >&             xModel                      ,
                            IMPL_SfxBaseModel_DataContainer* pData                       ,
-                           sal_Bool                         bRejectConcurrentSaveRequest);
+                           bool                             bRejectConcurrentSaveRequest);
         ~SfxSaveGuard();
 };
 
 SfxSaveGuard::SfxSaveGuard(const Reference< frame::XModel >&             xModel                      ,
                                  IMPL_SfxBaseModel_DataContainer* pData                       ,
-                                 sal_Bool                         bRejectConcurrentSaveRequest)
+                                 bool                             bRejectConcurrentSaveRequest)
     : m_xModel     (xModel)
     , m_pData      (pData )
     , m_pFramesLock(0     )
@@ -477,7 +477,7 @@ SfxSaveGuard::SfxSaveGuard(const Reference< frame::XModel >&             xModel 
                 OUString("Concurrent save requests on the same document are not possible."),
                 Reference< XInterface >());
 
-    m_pData->m_bSaving = sal_True;
+    m_pData->m_bSaving = true;
     m_pFramesLock = new SfxOwnFramesLocker(m_pData->m_pObjectShell);
 }
 
@@ -487,7 +487,7 @@ SfxSaveGuard::~SfxSaveGuard()
     m_pFramesLock = 0;
     delete pFramesLock;
 
-    m_pData->m_bSaving = sal_False;
+    m_pData->m_bSaving = false;
 
     // m_bSuicide was set e.g. in case someone tried to close a document, while it was used for
     // storing at the same time. Further m_bSuicide was set to sal_True only if close(sal_True) was called.
@@ -499,7 +499,7 @@ SfxSaveGuard::~SfxSaveGuard()
     {
         // Reset this state. In case the new close() request is not accepted by someone else ...
         // it's not a good idea to have two "owners" for close .-)
-        m_pData->m_bSuicide = sal_False;
+        m_pData->m_bSuicide = false;
         try
         {
             Reference< util::XCloseable > xClose(m_xModel, UNO_QUERY);
@@ -893,7 +893,7 @@ sal_Bool SAL_CALL SfxBaseModel::attachResource( const   OUString&               
         // but _only_ before load() or initNew() methods
         if ( m_pData->m_pObjectShell.Is() && !m_pData->m_pObjectShell->GetMedium() )
         {
-            sal_Bool bEmb = sal_Bool();
+            sal_Bool bEmb(sal_False);
             if ( ( rArgs[0].Value >>= bEmb ) && bEmb )
                 m_pData->m_pObjectShell->SetCreateMode_Impl( SFX_CREATE_MODE_EMBEDDED );
         }
@@ -1395,14 +1395,14 @@ void SAL_CALL SfxBaseModel::close( sal_Bool bDeliverOwnership ) throw (util::Clo
     if ( m_pData->m_bSaving )
     {
         if (bDeliverOwnership)
-            m_pData->m_bSuicide = sal_True;
+            m_pData->m_bSuicide = true;
         throw util::CloseVetoException(
                 OUString("Cant close while saving."),
                 static_cast< util::XCloseable* >(this));
     }
 
     // no own objections against closing!
-    m_pData->m_bClosing = sal_True;
+    m_pData->m_bClosing = true;
     pContainer = m_pData->m_aInterfaceContainer.getContainer( ::getCppuType( ( const Reference< util::XCloseListener >*) NULL ) );
     if (pContainer!=NULL)
     {
@@ -1420,8 +1420,8 @@ void SAL_CALL SfxBaseModel::close( sal_Bool bDeliverOwnership ) throw (util::Clo
         }
     }
 
-    m_pData->m_bClosed = sal_True;
-    m_pData->m_bClosing = sal_False;
+    m_pData->m_bClosed = true;
+    m_pData->m_bClosing = false;
 
     dispose();
 }
@@ -1537,7 +1537,7 @@ void SAL_CALL SfxBaseModel::storeSelf( const    Sequence< beans::PropertyValue >
     if ( m_pData->m_pObjectShell.Is() )
     {
         m_pData->m_pObjectShell->AddLog( OUString( OSL_LOG_PREFIX "storeSelf"  ) );
-        SfxSaveGuard aSaveGuard(this, m_pData, sal_False);
+        SfxSaveGuard aSaveGuard(this, m_pData, false);
 
         sal_Bool bCheckIn = sal_False;
         for ( sal_Int32 nInd = 0; nInd < aSeqArgs.getLength(); nInd++ )
@@ -1667,9 +1667,9 @@ void SAL_CALL SfxBaseModel::storeAsURL( const   OUString&                   rURL
     if ( m_pData->m_pObjectShell.Is() )
     {
         m_pData->m_pObjectShell->AddLog( OUString( OSL_LOG_PREFIX "storeAsURL"  ) );
-        SfxSaveGuard aSaveGuard(this, m_pData, sal_False);
+        SfxSaveGuard aSaveGuard(this, m_pData, false);
 
-        impl_store( rURL, rArgs, sal_False );
+        impl_store( rURL, rArgs, false );
 
         Sequence< beans::PropertyValue > aSequence ;
         TransformItems( SID_OPENDOC, *m_pData->m_pObjectShell->GetMedium()->GetItemSet(), aSequence );
@@ -1708,12 +1708,12 @@ void SAL_CALL SfxBaseModel::storeToURL( const   OUString&                   rURL
     if ( m_pData->m_pObjectShell.Is() )
     {
         m_pData->m_pObjectShell->AddLog( OUString( OSL_LOG_PREFIX "storeToURL"  ) );
-        SfxSaveGuard aSaveGuard(this, m_pData, sal_False);
-        impl_store( rURL, rArgs, sal_True );
+        SfxSaveGuard aSaveGuard(this, m_pData, false);
+        impl_store( rURL, rArgs, true );
     }
 }
 
-::sal_Bool SAL_CALL SfxBaseModel::wasModifiedSinceLastSave() throw ( RuntimeException, std::exception )
+sal_Bool SAL_CALL SfxBaseModel::wasModifiedSinceLastSave() throw ( RuntimeException, std::exception )
 {
     SfxModelGuard aGuard( *this );
     return m_pData->m_bModifiedSinceLastSave;
@@ -1724,11 +1724,11 @@ void SAL_CALL SfxBaseModel::storeToRecoveryFile( const OUString& i_TargetLocatio
     SfxModelGuard aGuard( *this );
 
     // delegate
-    SfxSaveGuard aSaveGuard( this, m_pData, sal_False );
-    impl_store( i_TargetLocation, i_MediaDescriptor, sal_True );
+    SfxSaveGuard aSaveGuard( this, m_pData, false );
+    impl_store( i_TargetLocation, i_MediaDescriptor, true );
 
     // no need for subsequent calls to storeToRecoveryFile, unless we're modified, again
-    m_pData->m_bModifiedSinceLastSave = sal_False;
+    m_pData->m_bModifiedSinceLastSave = false;
 }
 
 void SAL_CALL SfxBaseModel::recoverFromFile( const OUString& i_SourceLocation, const OUString& i_SalvagedFile, const Sequence< PropertyValue >& i_MediaDescriptor ) throw ( RuntimeException, IOException, WrappedTargetException, std::exception )
@@ -2790,7 +2790,7 @@ void SfxBaseModel::Notify(          SfxBroadcaster& rBC     ,
             {
                 impl_getPrintHelper();
                 ListenForStorage_Impl( m_pData->m_pObjectShell->GetStorage() );
-                m_pData->m_bModifiedSinceLastSave = sal_False;
+                m_pData->m_bModifiedSinceLastSave = false;
             }
             break;
 
@@ -2810,7 +2810,7 @@ void SfxBaseModel::Notify(          SfxBroadcaster& rBC     ,
             case SFX_EVENT_DOCCREATED:
             {
                 impl_getPrintHelper();
-                m_pData->m_bModifiedSinceLastSave = sal_False;
+                m_pData->m_bModifiedSinceLastSave = false;
             }
             break;
 
@@ -2884,12 +2884,12 @@ SfxObjectShell* SfxBaseModel::GetObjectShell() const
 //  public impl.
 
 
-sal_Bool SfxBaseModel::IsInitialized() const
+bool SfxBaseModel::IsInitialized() const
 {
     if ( !m_pData || !m_pData->m_pObjectShell )
     {
         OSL_FAIL( "SfxBaseModel::IsInitialized: this should have been caught earlier!" );
-        return sal_False;
+        return false;
     }
 
     return m_pData->m_pObjectShell->GetMedium() != NULL;
@@ -2903,7 +2903,7 @@ void SfxBaseModel::MethodEntryCheck( const bool i_mustBeInitialized ) const
         throw lang::NotInitializedException( OUString(), *const_cast< SfxBaseModel* >( this ) );
 }
 
-sal_Bool SfxBaseModel::impl_isDisposed() const
+bool SfxBaseModel::impl_isDisposed() const
 {
     return ( m_pData == NULL ) ;
 }
@@ -2927,7 +2927,7 @@ OUString SfxBaseModel::GetMediumFilterName_Impl()
 
 void SfxBaseModel::impl_store(  const   OUString&                   sURL            ,
                                 const   Sequence< beans::PropertyValue >&  seqArguments    ,
-                                        sal_Bool                    bSaveTo         )
+                                        bool                        bSaveTo         )
 {
     if( sURL.isEmpty() )
         throw frame::IllegalArgumentIOException();
@@ -3284,7 +3284,7 @@ void SfxBaseModel::notifyEvent( const document::EventObject& aEvent ) const
 }
 
 /** returns true if someone added a XEventListener to this XEventBroadcaster */
-sal_Bool SfxBaseModel::hasEventListeners() const
+bool SfxBaseModel::hasEventListeners() const
 {
     return !impl_isDisposed() && (NULL != m_pData->m_aInterfaceContainer.getContainer( ::getCppuType((const Reference< document::XEventListener >*)0) ) );
 }
@@ -3455,12 +3455,12 @@ OUString SfxBaseModel::getRuntimeUID() const
     return m_pData->m_sRuntimeUID;
 }
 
-sal_Bool SfxBaseModel::hasValidSignatures() const
+bool SfxBaseModel::hasValidSignatures() const
 {
     SolarMutexGuard aGuard;
     if ( m_pData->m_pObjectShell.Is() )
         return ( m_pData->m_pObjectShell->ImplGetSignatureState( false ) == SIGNATURESTATE_SIGNATURES_OK );
-    return sal_False;
+    return false;
 }
 
 void SfxBaseModel::getGrabBagItem(com::sun::star::uno::Any& rVal) const
@@ -4034,7 +4034,7 @@ void SAL_CALL SfxBaseModel::setTitle( const OUString& sTitle )
     SfxModelGuard aGuard( *this );
 
     impl_getTitleHelper()->setTitle (sTitle);
-    m_pData->m_bExternalTitle = sal_True;
+    m_pData->m_bExternalTitle = true;
 }
 
 

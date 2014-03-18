@@ -88,7 +88,7 @@ using namespace com::sun::star;
 
 namespace sd {
 
-void DrawViewShell::Activate(sal_Bool bIsMDIActivate)
+void DrawViewShell::Activate(bool bIsMDIActivate)
 {
     ViewShell::Activate(bIsMDIActivate);
 }
@@ -114,7 +114,7 @@ void DrawViewShell::UIDeactivated( SfxInPlaceClient* pCli )
 }
 
 
-void DrawViewShell::Deactivate(sal_Bool bIsMDIActivate)
+void DrawViewShell::Deactivate(bool bIsMDIActivate)
 {
     // Temporarily disable context broadcasting while the Deactivate()
     // call is forwarded to our base class.

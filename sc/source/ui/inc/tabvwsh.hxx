@@ -200,8 +200,8 @@ private:
     DECL_LINK( FormControlActivated, void* );
 
 protected:
-    virtual void    Activate(sal_Bool bMDI);
-    virtual void    Deactivate(sal_Bool bMDI);
+    virtual void    Activate(bool bMDI);
+    virtual void    Deactivate(bool bMDI);
     virtual bool    PrepareClose( sal_Bool bUI = sal_True ) SAL_OVERRIDE;
 
     virtual void    ShowCursor(bool bOn);

@@ -42,7 +42,7 @@
 #include <rtl/ustring.hxx>
 
 
-inline sal_Bool operator==( const css::util::URL& aURL1, const css::util::URL& aURL2 )
+inline bool operator==( const css::util::URL& aURL1, const css::util::URL& aURL2 )
 {
     return aURL1.Complete == aURL2.Complete;
 }

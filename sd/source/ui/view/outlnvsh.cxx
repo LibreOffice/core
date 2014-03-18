@@ -359,7 +359,7 @@ void OutlineViewShell::RemoveWindow (::sd::Window* pWin)
 /**
  * Activate(): during the first invocation the fields get updated
  */
-void OutlineViewShell::Activate( sal_Bool bIsMDIActivate )
+void OutlineViewShell::Activate( bool bIsMDIActivate )
 {
     if ( ! mbInitialized)
     {
@@ -382,7 +382,7 @@ void OutlineViewShell::Activate( sal_Bool bIsMDIActivate )
     }
 }
 
-void OutlineViewShell::Deactivate( sal_Bool bIsMDIActivate )
+void OutlineViewShell::Deactivate( bool bIsMDIActivate )
 {
     pOlView->DisconnectFromApplication();
 
