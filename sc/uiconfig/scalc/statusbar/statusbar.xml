@@ -19,6 +19,7 @@
 -->
 <statusbar:statusbar xmlns:statusbar="http://openoffice.org/2001/statusbar" xmlns:xlink="http://www.w3.org/1999/xlink">
  <statusbar:statusbaritem xlink:href=".uno:StatusDocPos" statusbar:align="left" statusbar:autosize="true" statusbar:width="58"/>
+ <statusbar:statusbaritem xlink:href=".uno:RowColSelCount" statusbar:align="left" statusbar:autosize="true" statusbar:width="58"/>
  <statusbar:statusbaritem xlink:href=".uno:StatusPageStyle" statusbar:align="left" statusbar:autosize="true" statusbar:width="83"/>
  <statusbar:statusbaritem xlink:href=".uno:InsertMode" statusbar:align="center" statusbar:width="55"/>
  <statusbar:statusbaritem xlink:href=".uno:StatusSelectionMode" statusbar:align="center" statusbar:ownerdraw="true" statusbar:width="16"/>
