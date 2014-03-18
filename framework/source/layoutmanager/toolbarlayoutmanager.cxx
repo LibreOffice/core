@@ -1573,7 +1573,7 @@ void ToolbarLayoutManager::implts_destroyDockingAreaWindows()
 
 sal_Bool ToolbarLayoutManager::implts_readWindowStateData( const OUString& aName, UIElement& rElementData )
 {
-    return LayoutManager::readWindowStateData( aName, rElementData, m_aLock, m_xPersistentWindowState,
+    return LayoutManager::readWindowStateData( aName, rElementData, m_xPersistentWindowState,
             m_pGlobalSettings, m_bGlobalSettings, m_xContext );
 }
 

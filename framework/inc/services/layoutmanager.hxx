@@ -20,7 +20,6 @@
 #ifndef INCLUDED_FRAMEWORK_INC_SERVICES_LAYOUTMANAGER_HXX
 #define INCLUDED_FRAMEWORK_INC_SERVICES_LAYOUTMANAGER_HXX
 
-#include <threadhelp/threadhelpbase.hxx>
 #include <macros/xinterface.hxx>
 #include <macros/xtypeprovider.hxx>
 #include <properties.h>
@@ -48,6 +47,7 @@
 #include <com/sun/star/frame/XMenuBarMergingAcceptor.hpp>
 #include <com/sun/star/frame/XLayoutManagerEventBroadcaster.hpp>
 
+#include <cppuhelper/basemutex.hxx>
 #include <cppuhelper/propshlp.hxx>
 #include <cppuhelper/implbase3.hxx>
 #include <cppuhelper/interfacecontainer.hxx>
@@ -73,9 +73,7 @@ namespace framework
                                     >   LayoutManager_Base;
     typedef ::comphelper::OPropertyContainer    LayoutManager_PBase;
     class LayoutManager : public  LayoutManager_Base                    ,
-                          // base classes
-                          // Order is necessary for right initialization!
-                          private ThreadHelpBase                        ,   // Struct for right initalization of mutex member! Must be first of baseclasses.
+                          private cppu::BaseMutex,
                           public  ::cppu::OBroadcastHelper              ,
                           public  ILayoutNotifications                  ,
                           public  LayoutManager_PBase
@@ -183,7 +181,7 @@ namespace framework
 
             /// Reading of settings - shared with ToolbarLayoutManager.
             static sal_Bool readWindowStateData( const OUString& rName, UIElement& rElementData,
-                    LockHelper &rLock, const css::uno::Reference< css::container::XNameAccess > &rPersistentWindowState,
+                    const css::uno::Reference< css::container::XNameAccess > &rPersistentWindowState,
                     GlobalSettings* &rGlobalSettings, bool &bInGlobalSettings,
                     const css::uno::Reference< css::uno::XComponentContext > &rComponentContext );
 
