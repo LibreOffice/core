@@ -20,7 +20,6 @@
 
 #include <stdio.h>
 
-#include <threadhelp/guard.hxx>
 #include <xml/toolboxdocumenthandler.hxx>
 #include <xml/toolboxconfigurationdefines.hxx>
 
@@ -139,7 +138,6 @@ ToolBarEntryProperty ToolBoxEntries[OReadToolBoxDocumentHandler::TB_XML_ENTRY_CO
 };
 
 OReadToolBoxDocumentHandler::OReadToolBoxDocumentHandler( const Reference< XIndexContainer >& rItemContainer ) :
-    ThreadHelpBase( &Application::GetSolarMutex() ),
     m_rItemContainer( rItemContainer ),
     m_aType( ITEM_DESCRIPTOR_TYPE ),
     m_aLabel( ITEM_DESCRIPTOR_LABEL ),
@@ -204,7 +202,7 @@ throw ( SAXException, RuntimeException, std::exception )
 void SAL_CALL OReadToolBoxDocumentHandler::endDocument(void)
 throw(  SAXException, RuntimeException, std::exception )
 {
-    Guard aGuard( m_aLock );
+    SolarMutexGuard g;
 
     if (( m_bToolBarStartFound && !m_bToolBarEndFound ) ||
         ( !m_bToolBarStartFound && m_bToolBarEndFound )     )
@@ -219,7 +217,7 @@ void SAL_CALL OReadToolBoxDocumentHandler::startElement(
     const OUString& aName, const Reference< XAttributeList > &xAttribs )
 throw(  SAXException, RuntimeException, std::exception )
 {
-    Guard aGuard( m_aLock );
+    SolarMutexGuard g;
 
     ToolBoxHashMap::const_iterator pToolBoxEntry = m_aToolBoxMap.find( aName ) ;
     if ( pToolBoxEntry != m_aToolBoxMap.end() )
@@ -537,7 +535,7 @@ throw(  SAXException, RuntimeException, std::exception )
 void SAL_CALL OReadToolBoxDocumentHandler::endElement(const OUString& aName)
 throw(  SAXException, RuntimeException, std::exception )
 {
-    Guard aGuard( m_aLock );
+    SolarMutexGuard g;
 
     ToolBoxHashMap::const_iterator pToolBoxEntry = m_aToolBoxMap.find( aName ) ;
     if ( pToolBoxEntry != m_aToolBoxMap.end() )
@@ -635,14 +633,14 @@ void SAL_CALL OReadToolBoxDocumentHandler::setDocumentLocator(
     const Reference< XLocator > &xLocator)
 throw(  SAXException, RuntimeException, std::exception )
 {
-    Guard aGuard( m_aLock );
+    SolarMutexGuard g;
 
     m_xLocator = xLocator;
 }
 
 OUString OReadToolBoxDocumentHandler::getErrorLineString()
 {
-    Guard aGuard( m_aLock );
+    SolarMutexGuard g;
 
     char buffer[32];
 
@@ -663,7 +661,6 @@ OUString OReadToolBoxDocumentHandler::getErrorLineString()
 OWriteToolBoxDocumentHandler::OWriteToolBoxDocumentHandler(
     const Reference< XIndexAccess >& rItemAccess,
     Reference< XDocumentHandler >& rWriteDocumentHandler ) :
-    ThreadHelpBase( &Application::GetSolarMutex() ),
     m_xWriteDocumentHandler( rWriteDocumentHandler ),
     m_rItemAccess( rItemAccess )
 {
@@ -681,7 +678,7 @@ OWriteToolBoxDocumentHandler::~OWriteToolBoxDocumentHandler()
 void OWriteToolBoxDocumentHandler::WriteToolBoxDocument() throw
 ( SAXException, RuntimeException )
 {
-    Guard aGuard( m_aLock );
+    SolarMutexGuard g;
 
     m_xWriteDocumentHandler->startDocument();
 
