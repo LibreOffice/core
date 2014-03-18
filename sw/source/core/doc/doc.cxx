@@ -53,6 +53,7 @@
 #include <editeng/pbinitem.hxx>
 #include <unotools/charclass.hxx>
 #include <unotools/localedatawrapper.hxx>
+#include <unotools/compatibility.hxx>
 #include <vcl/timer.hxx>
 
 #include <swatrset.hxx>
@@ -154,6 +155,176 @@ sal_Int32 SwDoc::getReferenceCount() const
 /* IDocumentSettingAccess */
 bool SwDoc::get(/*[in]*/ DocumentSettingId id) const
 {
+    return m_pDocumentSettingManager->get(id);
+}
+
+void SwDoc::set(/*[in]*/ DocumentSettingId id, /*[in]*/ bool value)
+{
+    m_pDocumentSettingManager->set(id,value);
+}
+
+const i18n::ForbiddenCharacters*
+    SwDoc::getForbiddenCharacters(/*[in]*/ sal_uInt16 nLang, /*[in]*/ bool bLocaleData ) const
+{
+     return m_pDocumentSettingManager->getForbiddenCharacters(nLang,bLocaleData);
+}
+
+void SwDoc::setForbiddenCharacters(/*[in]*/ sal_uInt16 nLang,
+                                   /*[in]*/ const com::sun::star::i18n::ForbiddenCharacters& rFChars )
+{
+    m_pDocumentSettingManager->setForbiddenCharacters(nLang,rFChars);
+}
+
+rtl::Reference<SvxForbiddenCharactersTable>& SwDoc::getForbiddenCharacterTable()
+{
+    return m_pDocumentSettingManager->getForbiddenCharacterTable();
+}
+
+const rtl::Reference<SvxForbiddenCharactersTable>& SwDoc::getForbiddenCharacterTable() const
+{
+    return m_pDocumentSettingManager->getForbiddenCharacterTable();
+}
+
+sal_uInt16 SwDoc::getLinkUpdateMode( /*[in]*/bool bGlobalSettings ) const
+{
+    return m_pDocumentSettingManager->getLinkUpdateMode(bGlobalSettings);
+}
+
+void SwDoc::setLinkUpdateMode( /*[in]*/sal_uInt16 eMode )
+{
+   m_pDocumentSettingManager->setLinkUpdateMode(eMode);
+}
+
+sal_uInt32 SwDoc::getRsid() const
+{
+    return mnRsid;
+}
+
+void SwDoc::setRsid( sal_uInt32 nVal )
+{
+    static bool bHack = (getenv("LIBO_ONEWAY_STABLE_ODF_EXPORT") != NULL);
+
+    sal_uInt32 nIncrease = 0;
+    if (!bHack)
+    {
+        // Increase the rsid with a random number smaller than 2^17. This way we
+        // expect to be able to edit a document 2^12 times before rsid overflows.
+        static rtlRandomPool aPool = rtl_random_createPool();
+        rtl_random_getBytes( aPool, &nIncrease, sizeof ( nIncrease ) );
+        nIncrease &= ( 1<<17 ) - 1;
+        nIncrease++; // make sure the new rsid is not the same
+    }
+    mnRsid = nVal + nIncrease;
+}
+
+sal_uInt32 SwDoc::getRsidRoot() const
+{
+    return mnRsidRoot;
+}
+
+void SwDoc::setRsidRoot( sal_uInt32 nVal )
+{
+    mnRsidRoot = nVal;
+}
+
+SwFldUpdateFlags SwDoc::getFieldUpdateFlags( /*[in]*/bool bGlobalSettings ) const
+{
+    return m_pDocumentSettingManager->getFieldUpdateFlags(bGlobalSettings);
+}
+
+void SwDoc::setFieldUpdateFlags(/*[in]*/SwFldUpdateFlags eMode )
+{
+    m_pDocumentSettingManager->setFieldUpdateFlags(eMode);
+}
+
+SwCharCompressType SwDoc::getCharacterCompressionType() const
+{
+    return m_pDocumentSettingManager->getCharacterCompressionType();
+}
+
+void SwDoc::setCharacterCompressionType( /*[in]*/SwCharCompressType n )
+{
+    m_pDocumentSettingManager->setCharacterCompressionType(n);
+}
+
+sw::DocumentSettingManager::DocumentSettingManager(SwDoc &rDoc)
+    :m_rDoc(rDoc)
+    ,
+    mnLinkUpdMode( GLOBALSETTING ),
+    meFldUpdMode( AUTOUPD_GLOBALSETTING ),
+    meChrCmprType( CHARCOMPRESS_NONE ),
+    mbHTMLMode(false),
+    mbIsGlobalDoc(false),
+    mbGlblDocSaveLinks(false),
+    mbIsLabelDoc(false),
+    mbPurgeOLE(true),
+    mbKernAsianPunctuation(false),
+
+    // COMPATIBILITY FLAGS START
+
+    mbAddFlyOffsets(false),
+    mbUseHiResolutionVirtualDevice(true),
+    mbMathBaselineAlignment(false), // default for *old* documents is 'off'
+    mbStylesNoDefault(false),
+    mbFloattableNomargins(false),
+    mEmbedFonts(false),
+    mEmbedSystemFonts(false),
+    mbOldNumbering(false),
+    mbIgnoreFirstLineIndentInNumbering(false),
+    mbDoNotResetParaAttrsForNumFont(false),
+    mbTableRowKeep(false),
+    mbIgnoreTabsAndBlanksForLineCalculation(false),
+    mbDoNotCaptureDrawObjsOnPage(false),
+    mbOutlineLevelYieldsOutlineRule(false),
+    mbClipAsCharacterAnchoredWriterFlyFrames(false),
+    mbUnixForceZeroExtLeading(false),
+    mbTabRelativeToIndent(true),
+    mbProtectForm(false), // i#78591#
+    mbInvertBorderSpacing (false),
+    mbCollapseEmptyCellPara(true),
+    mbTabAtLeftIndentForParagraphsInList(false), //#i89181#
+    mbSmallCapsPercentage66(false),
+    mbTabOverflow(true),
+    mbUnbreakableNumberings(false),
+    mbClippedPictures(false),
+    mbBackgroundParaOverDrawings(false),
+    mbTabOverMargin(false),
+    mbSurroundTextWrapSmall(false),
+    mbLastBrowseMode( false )
+
+    // COMPATIBILITY FLAGS END
+{
+    // COMPATIBILITY FLAGS START
+
+    // Note: Any non-hidden compatibility flag should obtain its default
+    // by asking SvtCompatibilityOptions, see below.
+
+    const SvtCompatibilityOptions aOptions;
+    mbParaSpaceMax                      = aOptions.IsAddSpacing();
+    mbParaSpaceMaxAtPages               = aOptions.IsAddSpacingAtPages();
+    mbTabCompat                         = !aOptions.IsUseOurTabStops();
+    mbUseVirtualDevice                  = !aOptions.IsUsePrtDevice();
+    mbAddExternalLeading                = !aOptions.IsNoExtLeading();
+    mbOldLineSpacing                    = aOptions.IsUseLineSpacing();
+    mbAddParaSpacingToTableCells        = aOptions.IsAddTableSpacing();
+    mbUseFormerObjectPos                = aOptions.IsUseObjectPositioning();
+    mbUseFormerTextWrapping             = aOptions.IsUseOurTextWrapping();
+    mbConsiderWrapOnObjPos              = aOptions.IsConsiderWrappingStyle();
+
+    mbDoNotJustifyLinesWithManualBreak      = !aOptions.IsExpandWordSpace();
+
+    // COMPATIBILITY FLAGS END
+
+}
+
+
+sw::DocumentSettingManager::~DocumentSettingManager()
+{
+}
+
+/* IDocumentSettingAccess */
+bool sw::DocumentSettingManager::get(/*[in]*/ DocumentSettingId id) const
+{
     switch (id)
     {
         // COMPATIBILITY FLAGS START
@@ -212,7 +383,7 @@ bool SwDoc::get(/*[in]*/ DocumentSettingId id) const
     return false;
 }
 
-void SwDoc::set(/*[in]*/ DocumentSettingId id, /*[in]*/ bool value)
+void sw::DocumentSettingManager::set(/*[in]*/ DocumentSettingId id, /*[in]*/ bool value)
 {
     switch (id)
     {
@@ -243,17 +414,18 @@ void SwDoc::set(/*[in]*/ DocumentSettingId id, /*[in]*/ bool value)
             {
                 mbOldNumbering = value;
 
-                const SwNumRuleTbl& rNmTbl = GetNumRuleTbl();
+                const SwNumRuleTbl& rNmTbl = m_rDoc.GetNumRuleTbl();
                 for( sal_uInt16 n = 0; n < rNmTbl.size(); ++n )
                     rNmTbl[n]->SetInvalidRule(sal_True);
 
-                UpdateNumRule();
+                m_rDoc.UpdateNumRule();
 
-                if (mpOutlineRule)
+                SwNumRule *pOutlineRule = m_rDoc.GetOutlineNumRule();
+                if (pOutlineRule)
                 {
-                    mpOutlineRule->Validate();
+                    pOutlineRule->Validate();
                     // counting of phantoms depends on <IsOldNumbering()>
-                    mpOutlineRule->SetCountPhantoms( !mbOldNumbering );
+                    pOutlineRule->SetCountPhantoms( !mbOldNumbering );
                 }
             }
             break;
@@ -406,7 +578,7 @@ void SwDoc::set(/*[in]*/ DocumentSettingId id, /*[in]*/ bool value)
 }
 
 const i18n::ForbiddenCharacters*
-    SwDoc::getForbiddenCharacters(/*[in]*/ sal_uInt16 nLang, /*[in]*/ bool bLocaleData ) const
+    sw::DocumentSettingManager::getForbiddenCharacters(/*[in]*/ sal_uInt16 nLang, /*[in]*/ bool bLocaleData ) const
 {
     const i18n::ForbiddenCharacters* pRet = 0;
     if( mxForbiddenCharsTable.is() )
@@ -416,7 +588,7 @@ const i18n::ForbiddenCharacters*
     return pRet;
 }
 
-void SwDoc::setForbiddenCharacters(/*[in]*/ sal_uInt16 nLang,
+void sw::DocumentSettingManager::setForbiddenCharacters(/*[in]*/ sal_uInt16 nLang,
                                    /*[in]*/ const com::sun::star::i18n::ForbiddenCharacters& rFChars )
 {
     if( !mxForbiddenCharsTable.is() )
@@ -424,25 +596,27 @@ void SwDoc::setForbiddenCharacters(/*[in]*/ sal_uInt16 nLang,
         mxForbiddenCharsTable = new SvxForbiddenCharactersTable( ::comphelper::getProcessComponentContext() );
     }
     mxForbiddenCharsTable->SetForbiddenCharacters( nLang, rFChars );
-    if( mpDrawModel )
+
+    SdrModel *pDrawModel = m_rDoc.GetDrawModel();
+    if( pDrawModel )
     {
-        mpDrawModel->SetForbiddenCharsTable( mxForbiddenCharsTable );
-        if( !mbInReading )
-            mpDrawModel->ReformatAllTextObjects();
+        pDrawModel->SetForbiddenCharsTable( mxForbiddenCharsTable );
+        if( !m_rDoc.IsInReading() )
+            pDrawModel->ReformatAllTextObjects();
     }
 
-    SwRootFrm* pTmpRoot = GetCurrentLayout();
-    if( pTmpRoot && !mbInReading )
+    SwRootFrm* pTmpRoot = m_rDoc.GetCurrentLayout();
+    if( pTmpRoot && !m_rDoc.IsInReading() )
     {
         pTmpRoot->StartAllAction();
-        std::set<SwRootFrm*> aAllLayouts = GetAllLayouts();
+        std::set<SwRootFrm*> aAllLayouts = m_rDoc.GetAllLayouts();
         std::for_each( aAllLayouts.begin(), aAllLayouts.end(), std::bind2nd(std::mem_fun(&SwRootFrm::InvalidateAllCntnt), INV_SIZE));
         pTmpRoot->EndAllAction();
     }
-    SetModified();
+    m_rDoc.SetModified();
 }
 
-rtl::Reference<SvxForbiddenCharactersTable>& SwDoc::getForbiddenCharacterTable()
+rtl::Reference<SvxForbiddenCharactersTable>& sw::DocumentSettingManager::getForbiddenCharacterTable()
 {
     if( !mxForbiddenCharsTable.is() )
     {
@@ -451,12 +625,12 @@ rtl::Reference<SvxForbiddenCharactersTable>& SwDoc::getForbiddenCharacterTable()
     return mxForbiddenCharsTable;
 }
 
-const rtl::Reference<SvxForbiddenCharactersTable>& SwDoc::getForbiddenCharacterTable() const
+const rtl::Reference<SvxForbiddenCharactersTable>& sw::DocumentSettingManager::getForbiddenCharacterTable() const
 {
     return mxForbiddenCharsTable;
 }
 
-sal_uInt16 SwDoc::getLinkUpdateMode( /*[in]*/bool bGlobalSettings ) const
+sal_uInt16 sw::DocumentSettingManager::getLinkUpdateMode( /*[in]*/bool bGlobalSettings ) const
 {
     sal_uInt16 nRet = mnLinkUpdMode;
     if( bGlobalSettings && GLOBALSETTING == nRet )
@@ -464,44 +638,12 @@ sal_uInt16 SwDoc::getLinkUpdateMode( /*[in]*/bool bGlobalSettings ) const
     return nRet;
 }
 
-void SwDoc::setLinkUpdateMode( /*[in]*/sal_uInt16 eMode )
+void sw::DocumentSettingManager::setLinkUpdateMode( /*[in]*/sal_uInt16 eMode )
 {
     mnLinkUpdMode = eMode;
 }
 
-sal_uInt32 SwDoc::getRsid() const
-{
-    return mnRsid;
-}
-
-void SwDoc::setRsid( sal_uInt32 nVal )
-{
-    static bool bHack = (getenv("LIBO_ONEWAY_STABLE_ODF_EXPORT") != NULL);
-
-    sal_uInt32 nIncrease = 0;
-    if (!bHack)
-    {
-        // Increase the rsid with a random number smaller than 2^17. This way we
-        // expect to be able to edit a document 2^12 times before rsid overflows.
-        static rtlRandomPool aPool = rtl_random_createPool();
-        rtl_random_getBytes( aPool, &nIncrease, sizeof ( nIncrease ) );
-        nIncrease &= ( 1<<17 ) - 1;
-        nIncrease++; // make sure the new rsid is not the same
-    }
-    mnRsid = nVal + nIncrease;
-}
-
-sal_uInt32 SwDoc::getRsidRoot() const
-{
-    return mnRsidRoot;
-}
-
-void SwDoc::setRsidRoot( sal_uInt32 nVal )
-{
-    mnRsidRoot = nVal;
-}
-
-SwFldUpdateFlags SwDoc::getFieldUpdateFlags( /*[in]*/bool bGlobalSettings ) const
+SwFldUpdateFlags sw::DocumentSettingManager::getFieldUpdateFlags( /*[in]*/bool bGlobalSettings ) const
 {
     SwFldUpdateFlags eRet = meFldUpdMode;
     if( bGlobalSettings && AUTOUPD_GLOBALSETTING == eRet )
@@ -509,38 +651,69 @@ SwFldUpdateFlags SwDoc::getFieldUpdateFlags( /*[in]*/bool bGlobalSettings ) cons
     return eRet;
 }
 
-void SwDoc::setFieldUpdateFlags(/*[in]*/SwFldUpdateFlags eMode )
+void sw::DocumentSettingManager::setFieldUpdateFlags(/*[in]*/SwFldUpdateFlags eMode )
 {
     meFldUpdMode = eMode;
 }
 
-SwCharCompressType SwDoc::getCharacterCompressionType() const
+SwCharCompressType sw::DocumentSettingManager::getCharacterCompressionType() const
 {
     return meChrCmprType;
 }
 
-void SwDoc::setCharacterCompressionType( /*[in]*/SwCharCompressType n )
+void sw::DocumentSettingManager::setCharacterCompressionType( /*[in]*/SwCharCompressType n )
 {
     if( meChrCmprType != n )
     {
         meChrCmprType = n;
-        if( mpDrawModel )
+
+        SdrModel *pDrawModel = m_rDoc.GetDrawModel();
+        if( pDrawModel )
         {
-            mpDrawModel->SetCharCompressType( static_cast<sal_uInt16>(n) );
-            if( !mbInReading )
-                mpDrawModel->ReformatAllTextObjects();
+            pDrawModel->SetCharCompressType( static_cast<sal_uInt16>(n) );
+            if( !m_rDoc.IsInReading() )
+                pDrawModel->ReformatAllTextObjects();
         }
 
-        SwRootFrm* pTmpRoot = GetCurrentLayout();
-        if( pTmpRoot && !mbInReading )
+        SwRootFrm* pTmpRoot = m_rDoc.GetCurrentLayout();
+        if( pTmpRoot && !m_rDoc.IsInReading() )
         {
             pTmpRoot->StartAllAction();
-            std::set<SwRootFrm*> aAllLayouts = GetAllLayouts();
+            std::set<SwRootFrm*> aAllLayouts = m_rDoc.GetAllLayouts();
             std::for_each( aAllLayouts.begin(), aAllLayouts.end(), std::bind2nd(std::mem_fun(&SwRootFrm::InvalidateAllCntnt), INV_SIZE));
             pTmpRoot->EndAllAction();
         }
-        SetModified();
+        m_rDoc.SetModified();
     }
+}
+
+
+void sw::DocumentSettingManager::ReplaceCompatabilityOptions(const DocumentSettingManager& rSource)
+{
+    mbParaSpaceMax = rSource.mbParaSpaceMax;
+    mbParaSpaceMaxAtPages = rSource.mbParaSpaceMaxAtPages;
+    mbTabCompat = rSource.mbTabCompat;
+    mbUseVirtualDevice = rSource.mbUseVirtualDevice;
+    mbAddExternalLeading = rSource.mbAddExternalLeading;
+    mbOldLineSpacing = rSource.mbOldLineSpacing;
+    mbAddParaSpacingToTableCells = rSource.mbAddParaSpacingToTableCells;
+    mbUseFormerObjectPos = rSource.mbUseFormerObjectPos;
+    mbUseFormerTextWrapping = rSource.mbUseFormerTextWrapping;
+    mbConsiderWrapOnObjPos = rSource.mbConsiderWrapOnObjPos;
+    mbAddFlyOffsets = rSource.mbAddFlyOffsets;
+    mbOldNumbering = rSource.mbOldNumbering;
+    mbUseHiResolutionVirtualDevice = rSource.mbUseHiResolutionVirtualDevice;
+    mbIgnoreFirstLineIndentInNumbering = rSource.mbIgnoreFirstLineIndentInNumbering;
+    mbDoNotJustifyLinesWithManualBreak = rSource.mbDoNotJustifyLinesWithManualBreak;
+    mbDoNotResetParaAttrsForNumFont = rSource.mbDoNotResetParaAttrsForNumFont;
+    mbOutlineLevelYieldsOutlineRule = rSource.mbOutlineLevelYieldsOutlineRule;
+    mbTableRowKeep = rSource.mbTableRowKeep;
+    mbIgnoreTabsAndBlanksForLineCalculation = rSource.mbIgnoreTabsAndBlanksForLineCalculation;
+    mbDoNotCaptureDrawObjsOnPage = rSource.mbDoNotCaptureDrawObjsOnPage;
+    mbClipAsCharacterAnchoredWriterFlyFrames = rSource.mbClipAsCharacterAnchoredWriterFlyFrames;
+    mbUnixForceZeroExtLeading = rSource.mbUnixForceZeroExtLeading;
+    mbTabRelativeToIndent = rSource.mbTabRelativeToIndent;
+    mbTabAtLeftIndentForParagraphsInList = rSource.mbTabAtLeftIndentForParagraphsInList;
 }
 
 /* IDocumentDeviceAccess */
