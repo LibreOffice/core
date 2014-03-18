@@ -20,7 +20,6 @@
 #ifndef INCLUDED_FRAMEWORK_INC_HELPER_PERSISTENTWINDOWSTATE_HXX
 #define INCLUDED_FRAMEWORK_INC_HELPER_PERSISTENTWINDOWSTATE_HXX
 
-#include <threadhelp/threadhelpbase.hxx>
 #include <macros/xinterface.hxx>
 #include <macros/xtypeprovider.hxx>
 #include <general.h>
@@ -47,19 +46,13 @@ namespace framework{
                     we store its current position and size to the configuration. Every time a new component is
                     attached to a frame first time(!) we restore this information again.
 
-    @base           ThreadHelpBase
-                        guarantee right initialized lock member during startup of instances of this class.
-
     @base           OWeakObject
                         implements ref counting for this class.
 
     @devstatus      ready
     @threadsafe     yes
 *//*-*************************************************************************************************************/
-class PersistentWindowState :   // baseclasses (order necessary for right initialization!)
-                                private ThreadHelpBase,
-                                // interfaces
-                                public  ::cppu::WeakImplHelper2<
+class PersistentWindowState :   public  ::cppu::WeakImplHelper2<
                                            css::lang::XInitialization,
                                            css::frame::XFrameActionListener > // => XEventListener
 {

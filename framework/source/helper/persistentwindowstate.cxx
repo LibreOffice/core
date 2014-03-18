@@ -19,7 +19,6 @@
 
 #include <pattern/window.hxx>
 #include <helper/persistentwindowstate.hxx>
-#include <threadhelp/guard.hxx>
 #include <macros/generic.hxx>
 #include <services.h>
 
@@ -45,8 +44,7 @@ namespace framework{
 
 
 PersistentWindowState::PersistentWindowState(const css::uno::Reference< css::uno::XComponentContext >& xContext)
-    : ThreadHelpBase          (&Application::GetSolarMutex())
-    , m_xContext              (xContext                     )
+    : m_xContext              (xContext                     )
     , m_bWindowStateAlreadySet(sal_False                    )
 {
 }
@@ -76,12 +74,10 @@ void SAL_CALL PersistentWindowState::initialize(const css::uno::Sequence< css::u
                 static_cast< ::cppu::OWeakObject* >(this),
                 1);
 
-    // SAFE -> ----------------------------------
-    Guard aWriteLock(m_aLock);
-    // hold the frame as weak reference(!) so it can die everytimes :-)
-    m_xFrame = xFrame;
-    aWriteLock.unlock();
-    // <- SAFE ----------------------------------
+    {
+        SolarMutexGuard g;
+        m_xFrame = xFrame;
+    }
 
     // start listening
     xFrame->addFrameActionListener(this);
@@ -91,13 +87,15 @@ void SAL_CALL PersistentWindowState::initialize(const css::uno::Sequence< css::u
 void SAL_CALL PersistentWindowState::frameAction(const css::frame::FrameActionEvent& aEvent)
     throw(css::uno::RuntimeException, std::exception)
 {
-    // SAFE -> ----------------------------------
-    Guard aReadLock(m_aLock);
-    css::uno::Reference< css::uno::XComponentContext >     xContext = m_xContext;
-    css::uno::Reference< css::frame::XFrame >              xFrame(m_xFrame.get(), css::uno::UNO_QUERY);
-    sal_Bool                                               bRestoreWindowState = !m_bWindowStateAlreadySet;
-    aReadLock.unlock();
-    // <- SAFE ----------------------------------
+    css::uno::Reference< css::uno::XComponentContext >     xContext;
+    css::uno::Reference< css::frame::XFrame >              xFrame;
+    sal_Bool                                               bRestoreWindowState;
+    {
+        SolarMutexGuard g;
+        xContext = m_xContext;
+        xFrame.set(m_xFrame.get(), css::uno::UNO_QUERY);
+        bRestoreWindowState = !m_bWindowStateAlreadySet;
+    }
 
     // frame already gone ? We hold it weak only ...
     if (!xFrame.is())
@@ -121,11 +119,8 @@ void SAL_CALL PersistentWindowState::frameAction(const css::frame::FrameActionEv
                 {
                     OUString sWindowState = PersistentWindowState::implst_getWindowStateFromConfig(xContext, sModuleName);
                     PersistentWindowState::implst_setWindowStateOnWindow(xWindow,sWindowState);
-                    // SAFE -> ----------------------------------
-                    Guard aWriteLock(m_aLock);
+                    SolarMutexGuard g;
                     m_bWindowStateAlreadySet = sal_True;
-                    aWriteLock.unlock();
-                    // <- SAFE ----------------------------------
                 }
             }
             break;
