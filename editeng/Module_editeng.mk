@@ -20,23 +20,18 @@
 $(eval $(call gb_Module_Module,editeng))
 
 $(eval $(call gb_Module_add_targets,editeng,\
-    Library_editeng \
+	Library_editeng \
 ))
 
 $(eval $(call gb_Module_add_l10n_targets,editeng,\
-    AllLangResTarget_editeng \
+	AllLangResTarget_editeng \
 ))
 
-# add any runtime tests (unit tests) here
-# remove if no tests
 $(eval $(call gb_Module_add_check_targets,editeng,\
-    CppunitTest_editeng_core \
-    CppunitTest_editeng_borderline \
-    CppunitTest_editeng_lookuptree \
-))
-
-# add any subsequent checks (e.g. complex tests) here
-$(eval $(call gb_Module_add_subsequentcheck_targets,editeng,\
+	$(if $(and $(filter $(COM),MSC),$(MERGELIBS)),, \
+		CppunitTest_editeng_core) \
+	CppunitTest_editeng_borderline \
+	CppunitTest_editeng_lookuptree \
 ))
 
 # vim: set noet sw=4 ts=4:

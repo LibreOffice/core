@@ -26,14 +26,12 @@ $(eval $(call gb_Module_add_targets,xmloff,\
 ))
 
 $(eval $(call gb_Module_add_check_targets,xmloff,\
-    CppunitTest_xmloff_uxmloff \
+	$(if $(and $(filter $(COM),MSC),$(MERGELIBS)),, \
+		CppunitTest_xmloff_uxmloff) \
 ))
 
 $(eval $(call gb_Module_add_subsequentcheck_targets,xmloff,\
     JunitTest_xmloff_unoapi \
 ))
-
-#todo: map file
-#todo: xmlkywd.lib - built, but never used?!
 
 # vim: set noet sw=4 ts=4:
