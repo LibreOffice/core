@@ -19,7 +19,6 @@
 
 #include "interaction/quietinteraction.hxx"
 
-#include <threadhelp/guard.hxx>
 #include <macros/generic.hxx>
 
 #include <com/sun/star/task/XInteractionAbort.hpp>
@@ -43,8 +42,7 @@ namespace framework{
 
 
 QuietInteraction::QuietInteraction()
-    : ThreadHelpBase     ( &Application::GetSolarMutex() )
-    , m_aRequest         (                               )
+    : m_aRequest         (                               )
 {
 }
 
@@ -54,11 +52,10 @@ void SAL_CALL QuietInteraction::handle( const css::uno::Reference< css::task::XI
 {
     // safe the request for outside analyzing everytime!
     css::uno::Any aRequest = xRequest->getRequest();
-    /* SAFE { */
-    Guard aWriteLock(m_aLock);
-    m_aRequest = aRequest;
-    aWriteLock.unlock();
-    /* } SAFE */
+    {
+        SolarMutexGuard g;
+        m_aRequest = aRequest;
+    }
 
     // analyze the request
     // We need XAbort as possible continuation as minimum!
@@ -141,20 +138,16 @@ void SAL_CALL QuietInteraction::handle( const css::uno::Reference< css::task::XI
 
 css::uno::Any QuietInteraction::getRequest() const
 {
-    /* SAFE { */
-    Guard aReadLock(m_aLock);
+    SolarMutexGuard g;
     return m_aRequest;
-    /* } SAFE */
 }
 
 
 
 sal_Bool QuietInteraction::wasUsed() const
 {
-    /* SAFE { */
-    Guard aReadLock(m_aLock);
+    SolarMutexGuard g;
     return m_aRequest.hasValue();
-    /* } SAFE */
 }
 
 } // namespace framework

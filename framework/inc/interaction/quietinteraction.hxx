@@ -20,7 +20,6 @@
 #ifndef INCLUDED_FRAMEWORK_INC_INTERACTION_QUIETINTERACTION_HXX
 #define INCLUDED_FRAMEWORK_INC_INTERACTION_QUIETINTERACTION_HXX
 
-#include <threadhelp/threadhelpbase.hxx>
 #include <macros/xinterface.hxx>
 #include <macros/xtypeprovider.hxx>
 #include <general.h>
@@ -44,8 +43,7 @@ namespace framework{
                     - InteractiveAugmentedIOException
                 All other requests will be aborted.
  */
-class QuietInteraction : private ThreadHelpBase
-                       , public  ::cppu::WeakImplHelper1<
+class QuietInteraction : public  ::cppu::WeakImplHelper1<
                                     css::task::XInteractionHandler >
 {
     // member
