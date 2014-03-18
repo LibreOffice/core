@@ -70,13 +70,13 @@ public:
 
     virtual void preTest(const char* filename) SAL_OVERRIDE
     {
-        if (OString(filename) == "smartart.docx")
+        if (OString(filename) == "smartart.docx" || OString(filename) == "strict-smartart.docx")
             SvtFilterOptions::Get().SetSmartArt2Shape(true);
     }
 
     virtual void postTest(const char* filename) SAL_OVERRIDE
     {
-        if (OString(filename) == "smartart.docx")
+        if (OString(filename) == "smartart.docx" || OString(filename) == "strict-smartart.docx")
             SvtFilterOptions::Get().SetSmartArt2Shape(false);
     }
 };
@@ -1967,6 +1967,13 @@ DECLARE_OOXMLIMPORT_TEST(testStrictLockedcanvas, "strict-lockedcanvas.docx")
 {
     // locked canvas shape was missing.
     getShape(1);
+}
+
+DECLARE_OOXMLIMPORT_TEST(testSmartartStrict, "strict-smartart.docx")
+{
+    uno::Reference<container::XIndexAccess> xGroup(getShape(1), uno::UNO_QUERY);
+    // This was 0, SmartArt was visually missing.
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(6), xGroup->getCount()); // 3 ellipses + 3 arrows
 }
 
 DECLARE_OOXMLIMPORT_TEST(testI124106, "i124106.docx")

@@ -90,8 +90,11 @@ struct NamespaceIds: public rtl::StaticWithInit<
             "http://www.w3.org/XML/1998/namespace",
             "http://schemas.openxmlformats.org/package/2006/relationships",
             "http://schemas.openxmlformats.org/officeDocument/2006/relationships",
+            "http://purl.oclc.org/ooxml/officeDocument/relationships",
             "http://schemas.openxmlformats.org/drawingml/2006/main",
+            "http://purl.oclc.org/ooxml/drawingml/main",
             "http://schemas.openxmlformats.org/drawingml/2006/diagram",
+            "http://purl.oclc.org/ooxml/drawingml/diagram",
             "http://schemas.openxmlformats.org/drawingml/2006/chart",
             "http://schemas.openxmlformats.org/drawingml/2006/chartDrawing",
             "urn:schemas-microsoft-com:vml",
@@ -114,7 +117,10 @@ struct NamespaceIds: public rtl::StaticWithInit<
             NMSP_xml,
             NMSP_packageRel,
             NMSP_officeRel,
+            NMSP_officeRel,
             NMSP_dml,
+            NMSP_dml,
+            NMSP_dmlDiagram,
             NMSP_dmlDiagram,
             NMSP_dmlChart,
             NMSP_dmlChartDr,
@@ -146,8 +152,15 @@ struct NamespaceIds: public rtl::StaticWithInit<
 void registerNamespaces( FastParser& rParser )
 {
     const Sequence< beans::Pair<OUString, sal_Int32> > ids = NamespaceIds::get();
+
+    // Filter out duplicates: a namespace can have multiple URL's, think of
+    // strict vs trasitional.
+    std::set<sal_Int32> aSet;
     for (sal_Int32 i = 0; i < ids.getLength(); ++i)
-        rParser.registerNamespace(ids[i].Second);
+        aSet.insert(ids[i].Second);
+
+    for (std::set<sal_Int32>::iterator it = aSet.begin(); it != aSet.end(); ++it)
+        rParser.registerNamespace(*it);
 }
 
 } // namespace
