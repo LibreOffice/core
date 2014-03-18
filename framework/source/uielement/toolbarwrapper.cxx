@@ -93,7 +93,7 @@ void SAL_CALL ToolBarWrapper::dispose() throw ( RuntimeException, std::exception
     Reference< XComponent > xThis( static_cast< OWeakObject* >(this), UNO_QUERY );
 
     {
-        Guard aLock( m_aLock );
+        SolarMutexGuard g;
         if ( m_bDisposed )
             return;
     }
@@ -101,7 +101,7 @@ void SAL_CALL ToolBarWrapper::dispose() throw ( RuntimeException, std::exception
     com::sun::star::lang::EventObject aEvent( xThis );
     m_aListenerContainer.disposeAndClear( aEvent );
 
-    Guard aLock( m_aLock );
+    SolarMutexGuard g;
 
     if ( m_xToolBarManager.is() )
         m_xToolBarManager->dispose();
@@ -115,7 +115,7 @@ void SAL_CALL ToolBarWrapper::dispose() throw ( RuntimeException, std::exception
 // XInitialization
 void SAL_CALL ToolBarWrapper::initialize( const Sequence< Any >& aArguments ) throw ( Exception, RuntimeException, std::exception )
 {
-    Guard aLock( m_aLock );
+    SolarMutexGuard g;
 
     if ( m_bDisposed )
         throw DisposedException();
@@ -201,7 +201,7 @@ void SAL_CALL ToolBarWrapper::disposing( const ::com::sun::star::lang::EventObje
 // XUpdatable
 void SAL_CALL ToolBarWrapper::update() throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
-    Guard aLock( m_aLock );
+    SolarMutexGuard g;
 
     if ( m_bDisposed )
         throw DisposedException();
@@ -214,7 +214,7 @@ void SAL_CALL ToolBarWrapper::update() throw (::com::sun::star::uno::RuntimeExce
 // XUIElementSettings
 void SAL_CALL ToolBarWrapper::updateSettings() throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
-    Guard aLock( m_aLock );
+    SolarMutexGuard g;
 
     if ( m_bDisposed )
         throw DisposedException();
@@ -253,7 +253,7 @@ void ToolBarWrapper::impl_fillNewData()
 // XUIElement interface
 Reference< XInterface > SAL_CALL ToolBarWrapper::getRealInterface(  ) throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
-    Guard aLock( m_aLock );
+    SolarMutexGuard g;
 
     if ( m_xToolBarManager.is() )
     {
@@ -274,7 +274,7 @@ void SAL_CALL ToolBarWrapper::functionExecute(
     const OUString& aCommand )
 throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
-    Guard aLock( m_aLock );
+    SolarMutexGuard g;
 
     if ( m_xToolBarManager.is() )
     {
@@ -286,13 +286,13 @@ throw (::com::sun::star::uno::RuntimeException, std::exception)
 
 void SAL_CALL ToolBarWrapper::setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, const com::sun::star::uno::Any&  aValue ) throw( com::sun::star::uno::Exception, std::exception )
 {
-    Guard aLock( m_aLock );
+    SolarMutexResettableGuard aLock;
     sal_Bool bNoClose( m_bNoClose );
-    aLock.unlock();
+    aLock.clear();
 
     UIConfigElementWrapperBase::setFastPropertyValue_NoBroadcast( nHandle, aValue );
 
-    aLock.lock();
+    aLock.reset();
 
     sal_Bool bNewNoClose( m_bNoClose );
     if ( m_xToolBarManager.is() && !m_bDisposed && ( bNewNoClose != bNoClose ))

@@ -20,7 +20,6 @@
 #ifndef INCLUDED_FRAMEWORK_INC_HELPER_UICONFIGELEMENTWRAPPERBASE_HXX
 #define INCLUDED_FRAMEWORK_INC_HELPER_UICONFIGELEMENTWRAPPERBASE_HXX
 
-#include <threadhelp/threadhelpbase.hxx>
 #include <macros/generic.hxx>
 #include <macros/xinterface.hxx>
 #include <macros/xtypeprovider.hxx>
@@ -36,6 +35,7 @@
 #include <com/sun/star/lang/XComponent.hpp>
 
 #include <rtl/ustring.hxx>
+#include <cppuhelper/basemutex.hxx>
 #include <cppuhelper/propshlp.hxx>
 #include <cppuhelper/implbase6.hxx>
 
@@ -50,7 +50,7 @@ typedef ::cppu::WeakImplHelper6<
            ::com::sun::star::util::XUpdatable,
            ::com::sun::star::ui::XUIConfigurationListener > UIConfigElementWrapperBase_BASE;
 
-class UIConfigElementWrapperBase : protected ThreadHelpBase                                      ,
+class UIConfigElementWrapperBase : private cppu::BaseMutex,
                                    public ::cppu::OBroadcastHelper                               ,
                                    public ::cppu::OPropertySetHelper                             ,
                                    public UIConfigElementWrapperBase_BASE

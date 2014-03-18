@@ -98,7 +98,7 @@ void SAL_CALL MenuBarWrapper::dispose() throw (::com::sun::star::uno::RuntimeExc
     com::sun::star::lang::EventObject aEvent( xThis );
     m_aListenerContainer.disposeAndClear( aEvent );
 
-    Guard aLock( m_aLock );
+    SolarMutexGuard g;
 
     m_xMenuBarManager->dispose();
     m_xMenuBarManager.clear();
@@ -112,8 +112,7 @@ void SAL_CALL MenuBarWrapper::dispose() throw (::com::sun::star::uno::RuntimeExc
 // XInitialization
 void SAL_CALL MenuBarWrapper::initialize( const Sequence< Any >& aArguments ) throw ( Exception, RuntimeException, std::exception )
 {
-
-    Guard aLock( m_aLock );
+    SolarMutexGuard g;
 
     if ( m_bDisposed )
         throw DisposedException();
@@ -202,7 +201,7 @@ void SAL_CALL MenuBarWrapper::initialize( const Sequence< Any >& aArguments ) th
 // XUIElementSettings
 void SAL_CALL MenuBarWrapper::updateSettings() throw ( RuntimeException, std::exception )
 {
-    Guard aLock( m_aLock );
+    SolarMutexGuard g;
 
     if ( m_bDisposed )
         throw DisposedException();
@@ -261,7 +260,7 @@ throw (::com::sun::star::uno::RuntimeException, std::exception)
 ::sal_Bool SAL_CALL MenuBarWrapper::hasElements()
 throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
-    Guard aLock( m_aLock );
+    SolarMutexGuard g;
 
     if ( m_bDisposed )
         throw DisposedException();
@@ -277,7 +276,7 @@ throw ( container::NoSuchElementException,
         lang::WrappedTargetException,
         uno::RuntimeException, std::exception)
 {
-    Guard aLock( m_aLock );
+    SolarMutexGuard g;
 
     if ( m_bDisposed )
         throw DisposedException();
@@ -298,7 +297,7 @@ throw ( container::NoSuchElementException,
 Sequence< OUString > SAL_CALL MenuBarWrapper::getElementNames()
 throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
-    Guard aLock( m_aLock );
+    SolarMutexGuard g;
 
     if ( m_bDisposed )
         throw DisposedException();
@@ -322,7 +321,7 @@ throw (::com::sun::star::uno::RuntimeException, std::exception)
     const OUString& aName )
 throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
-    Guard aLock( m_aLock );
+    SolarMutexGuard g;
 
     if ( m_bDisposed )
         throw DisposedException();

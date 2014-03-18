@@ -20,7 +20,6 @@
 #include <helper/uiconfigelementwrapperbase.hxx>
 #include <general.h>
 #include <properties.h>
-#include <threadhelp/guard.hxx>
 #include <uielement/constitemcontainer.hxx>
 #include <uielement/rootitemcontainer.hxx>
 
@@ -60,8 +59,7 @@ namespace framework
 {
 
 UIConfigElementWrapperBase::UIConfigElementWrapperBase( sal_Int16 nType )
-    :   ThreadHelpBase              ( &Application::GetSolarMutex()                      )
-    ,   ::cppu::OBroadcastHelperVar< ::cppu::OMultiTypeInterfaceContainerHelper, ::cppu::OMultiTypeInterfaceContainerHelper::keyType >( m_aLock.getShareableOslMutex() )
+    :   ::cppu::OBroadcastHelperVar< ::cppu::OMultiTypeInterfaceContainerHelper, ::cppu::OMultiTypeInterfaceContainerHelper::keyType >( m_aMutex )
     ,   ::cppu::OPropertySetHelper  ( *(static_cast< ::cppu::OBroadcastHelper* >(this)) )
     ,   m_nType                     ( nType                                             )
     ,   m_bPersistent               ( true                                          )
@@ -70,7 +68,7 @@ UIConfigElementWrapperBase::UIConfigElementWrapperBase( sal_Int16 nType )
     ,   m_bConfigListening          ( false                                         )
     ,   m_bDisposed                 ( false                                         )
     ,   m_bNoClose                  ( false                                         )
-    ,   m_aListenerContainer        ( m_aLock.getShareableOslMutex()                    )
+    ,   m_aListenerContainer        ( m_aMutex )
 {
 }
 
@@ -109,14 +107,14 @@ void SAL_CALL UIConfigElementWrapperBase::removeEventListener( const ::com::sun:
 void SAL_CALL UIConfigElementWrapperBase::disposing( const EventObject& )
 throw( RuntimeException, std::exception )
 {
-    Guard aLock( m_aLock );
+    SolarMutexGuard g;
     m_xConfigSource.clear();
 }
 
 void SAL_CALL UIConfigElementWrapperBase::initialize( const Sequence< Any >& aArguments )
 throw ( Exception, RuntimeException, std::exception )
 {
-    Guard aLock( m_aLock );
+    SolarMutexGuard g;
 
     if ( !m_bInitialized )
     {
@@ -452,7 +450,7 @@ const com::sun::star::uno::Sequence< com::sun::star::beans::Property > UIConfigE
 }
 void SAL_CALL UIConfigElementWrapperBase::setSettings( const Reference< XIndexAccess >& xSettings ) throw ( RuntimeException, std::exception )
 {
-    Guard aLock( m_aLock );
+    SolarMutexClearableGuard aLock;
 
 
     if ( xSettings.is() )
@@ -469,7 +467,7 @@ void SAL_CALL UIConfigElementWrapperBase::setSettings( const Reference< XIndexAc
             OUString aResourceURL( m_aResourceURL );
             Reference< XUIConfigurationManager > xUICfgMgr( m_xConfigSource );
 
-            aLock.unlock();
+            aLock.clear();
 
             try
             {
@@ -491,7 +489,7 @@ void UIConfigElementWrapperBase::impl_fillNewData()
 }
 Reference< XIndexAccess > SAL_CALL UIConfigElementWrapperBase::getSettings( sal_Bool bWriteable ) throw ( RuntimeException, std::exception )
 {
-    Guard aLock( m_aLock );
+    SolarMutexGuard g;
 
 
     if ( bWriteable )
@@ -502,20 +500,20 @@ Reference< XIndexAccess > SAL_CALL UIConfigElementWrapperBase::getSettings( sal_
 
 Reference< XFrame > SAL_CALL UIConfigElementWrapperBase::getFrame() throw (RuntimeException, std::exception)
 {
-    Guard aLock( m_aLock );
+    SolarMutexGuard g;
     Reference< XFrame > xFrame( m_xWeakFrame );
     return xFrame;
 }
 
 OUString SAL_CALL UIConfigElementWrapperBase::getResourceURL() throw (RuntimeException, std::exception)
 {
-    Guard aLock( m_aLock );
+    SolarMutexGuard g;
     return m_aResourceURL;
 }
 
 ::sal_Int16 SAL_CALL UIConfigElementWrapperBase::getType() throw (RuntimeException, std::exception)
 {
-    Guard aLock( m_aLock );
+    SolarMutexGuard g;
     return m_nType;
 }
 
