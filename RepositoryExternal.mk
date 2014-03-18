@@ -3165,7 +3165,7 @@ gb_ExternalProject__use_commons-logging :=
 
 else # !SYSTEM_APACHE_COMMONS
 
-$(eval $(call gb_Helper_register_jars,OOO,\
+$(eval $(call gb_Helper_register_jars_for_install,OOO,reportbuilder,\
 	commons-logging-1.1.1 \
 ))
 $(eval $(call gb_Helper_register_jars,OXT,\

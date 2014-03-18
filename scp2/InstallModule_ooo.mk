@@ -18,6 +18,7 @@ $(eval $(call gb_InstallModule_InstallModule,scp2/ooo))
 $(eval $(call gb_InstallModule_use_auto_install_libs,scp2/ooo,\
 	ooo \
 	ooobinarytable \
+	reportbuilder \
 ))
 
 $(eval $(call gb_InstallModule_define_if_set,scp2/ooo,\
@@ -29,7 +30,6 @@ $(eval $(call gb_InstallModule_define_if_set,scp2/ooo,\
 	ENABLE_NPAPI_INTO_BROWSER \
 	ENABLE_ONLINE_UPDATE \
 	ENABLE_TDE \
-	SYSTEM_APACHE_COMMONS \
 	SYSTEM_BOOST \
 	SYSTEM_CAIRO \
 	SYSTEM_CLUCENE \
