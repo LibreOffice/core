@@ -20,7 +20,6 @@
 #ifndef INCLUDED_FRAMEWORK_INC_RECORDING_DISPATCHRECORDERSUPPLIER_HXX
 #define INCLUDED_FRAMEWORK_INC_RECORDING_DISPATCHRECORDERSUPPLIER_HXX
 
-#include <threadhelp/threadhelpbase.hxx>
 #include <macros/xinterface.hxx>
 #include <macros/xtypeprovider.hxx>
 #include <macros/xserviceinfo.hxx>
@@ -45,11 +44,7 @@ namespace framework{
 
     @threadsafe     yes
  */
-class DispatchRecorderSupplier  :   // baseclasses
-                                    // Order is necessary for right initialization!
-                                    private ThreadHelpBase                          ,
-                                    // interfaces
-                                    public  ::cppu::WeakImplHelper2<
+class DispatchRecorderSupplier  :   public  ::cppu::WeakImplHelper2<
                                                 css::lang::XServiceInfo             ,
                                                 css::frame::XDispatchRecorderSupplier >
 {

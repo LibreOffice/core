@@ -18,7 +18,6 @@
  */
 
 #include <recording/dispatchrecordersupplier.hxx>
-#include <threadhelp/guard.hxx>
 #include <services.h>
 
 #include <com/sun/star/frame/XRecordableDispatch.hpp>
@@ -55,11 +54,7 @@ DEFINE_INIT_SERVICE(
             it's not necessary to do anything here.
  */
 DispatchRecorderSupplier::DispatchRecorderSupplier( const css::uno::Reference< css::lang::XMultiServiceFactory >& )
-        //  init baseclasses first!
-        //  Attention: Don't change order of initialization!
-        : ThreadHelpBase     ( &Application::GetSolarMutex() )
-        //  init member
-        , m_xDispatchRecorder( NULL                          )
+        : m_xDispatchRecorder( NULL                          )
 {
 }
 
@@ -95,10 +90,8 @@ DispatchRecorderSupplier::~DispatchRecorderSupplier()
  */
 void SAL_CALL DispatchRecorderSupplier::setDispatchRecorder( const css::uno::Reference< css::frame::XDispatchRecorder >& xRecorder ) throw (css::uno::RuntimeException, std::exception)
 {
-    // SAFE =>
-    Guard aWriteLock(m_aLock);
+    SolarMutexGuard g;
     m_xDispatchRecorder=xRecorder;
-    // => SAFE
 }
 
 /**
@@ -117,10 +110,8 @@ void SAL_CALL DispatchRecorderSupplier::setDispatchRecorder( const css::uno::Ref
  */
 css::uno::Reference< css::frame::XDispatchRecorder > SAL_CALL DispatchRecorderSupplier::getDispatchRecorder() throw (css::uno::RuntimeException, std::exception)
 {
-    // SAFE =>
-    Guard aReadLock(m_aLock);
+    SolarMutexGuard g;
     return m_xDispatchRecorder;
-    // => SAFE
 }
 
 
@@ -141,11 +132,9 @@ void SAL_CALL DispatchRecorderSupplier::dispatchAndRecord( const css::util::URL&
                                                            const css::uno::Sequence< css::beans::PropertyValue >& lArguments  ,
                                                            const css::uno::Reference< css::frame::XDispatch >&    xDispatcher ) throw (css::uno::RuntimeException, std::exception)
 {
-    // SAFE =>
-    Guard aReadLock(m_aLock);
+    SolarMutexClearableGuard aReadLock;
     css::uno::Reference< css::frame::XDispatchRecorder > xRecorder = m_xDispatchRecorder;
-    aReadLock.unlock();
-    // => SAFE
+    aReadLock.clear();
 
     // clear unspecific situations
     if (!xDispatcher.is())
