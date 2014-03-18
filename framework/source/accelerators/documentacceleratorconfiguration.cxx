@@ -25,7 +25,6 @@
 #include <xml/acceleratorconfigurationwriter.hxx>
 #include <xml/saxnamespacefilter.hxx>
 
-#include <threadhelp/guard.hxx>
 #include <acceleratorconst.h>
 
 #include <com/sun/star/lang/XServiceInfo.hpp>
@@ -36,6 +35,7 @@
 #include <comphelper/sequenceashashmap.hxx>
 #include <i18nlangtag/languagetag.hxx>
 #include <rtl/ref.hxx>
+#include <vcl/svapp.hxx>
 
 using namespace framework;
 
@@ -115,22 +115,21 @@ DocumentAcceleratorConfiguration::DocumentAcceleratorConfiguration(
         const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& lArguments)
     : DocumentAcceleratorConfiguration_BASE(xContext)
 {
-    Guard aWriteLock(m_aLock);
-
-    css::uno::Reference<css::embed::XStorage> xRoot;
-    if (lArguments.getLength() == 1 && (lArguments[0] >>= xRoot))
     {
-        m_xDocumentRoot = xRoot;
+        SolarMutexGuard g;
+        css::uno::Reference<css::embed::XStorage> xRoot;
+        if (lArguments.getLength() == 1 && (lArguments[0] >>= xRoot))
+        {
+            m_xDocumentRoot = xRoot;
+        }
+        else
+        {
+            ::comphelper::SequenceAsHashMap lArgs(lArguments);
+            m_xDocumentRoot = lArgs.getUnpackedValueOrDefault(
+                OUString("DocumentRoot"),
+                css::uno::Reference< css::embed::XStorage >());
+        }
     }
-    else
-    {
-        ::comphelper::SequenceAsHashMap lArgs(lArguments);
-        m_xDocumentRoot = lArgs.getUnpackedValueOrDefault(
-                            OUString("DocumentRoot"),
-                            css::uno::Reference< css::embed::XStorage >());
-    }
-
-    aWriteLock.unlock();
 
     impl_ts_fillCache();
 }
@@ -147,12 +146,12 @@ void SAL_CALL DocumentAcceleratorConfiguration::setStorage(const css::uno::Refer
 {
     // Attention! xStorage must be accepted too, if it's NULL !
 
-    // SAFE -> ----------------------------------
-    Guard aWriteLock(m_aLock);
-    sal_Bool bForgetOldStorages = m_xDocumentRoot.is();
-    m_xDocumentRoot = xStorage;
-    aWriteLock.unlock();
-    // <- SAFE ----------------------------------
+    sal_Bool bForgetOldStorages;
+    {
+        SolarMutexGuard g;
+        bForgetOldStorages = m_xDocumentRoot.is();
+        m_xDocumentRoot = xStorage;
+    }
 
     if (bForgetOldStorages)
         impl_ts_clearCache();
@@ -165,20 +164,18 @@ void SAL_CALL DocumentAcceleratorConfiguration::setStorage(const css::uno::Refer
 sal_Bool SAL_CALL DocumentAcceleratorConfiguration::hasStorage()
     throw(css::uno::RuntimeException, std::exception)
 {
-    // SAFE -> ----------------------------------
-    Guard aReadLock(m_aLock);
+    SolarMutexGuard g;
     return m_xDocumentRoot.is();
-    // <- SAFE ----------------------------------
 }
 
 
 void DocumentAcceleratorConfiguration::impl_ts_fillCache()
 {
-    // SAFE -> ----------------------------------
-    Guard aReadLock(m_aLock);
-    css::uno::Reference< css::embed::XStorage > xDocumentRoot = m_xDocumentRoot;
-    aReadLock.unlock();
-    // <- SAFE ----------------------------------
+    css::uno::Reference< css::embed::XStorage > xDocumentRoot;
+    {
+        SolarMutexGuard g;
+        xDocumentRoot = m_xDocumentRoot;
+    }
 
     // Sometimes we must live without a document root.
     // E.g. if the document is readonly ...

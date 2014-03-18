@@ -74,8 +74,7 @@ namespace framework
 
 
 XMLBasedAcceleratorConfiguration::XMLBasedAcceleratorConfiguration(const css::uno::Reference< css::uno::XComponentContext >& xContext)
-    : ThreadHelpBase  (&Application::GetSolarMutex())
-    , m_xContext      (xContext                     )
+    : m_xContext      (xContext                     )
     , m_aPresetHandler(xContext                     )
     , m_pWriteCache   (0                            )
 {
@@ -91,14 +90,10 @@ XMLBasedAcceleratorConfiguration::~XMLBasedAcceleratorConfiguration()
 css::uno::Sequence< css::awt::KeyEvent > SAL_CALL XMLBasedAcceleratorConfiguration::getAllKeyEvents()
     throw(css::uno::RuntimeException, std::exception)
 {
-    // SAFE -> ----------------------------------
-    Guard aReadLock(m_aLock);
-
+    SolarMutexGuard g;
     AcceleratorCache&          rCache = impl_getCFG();
     AcceleratorCache::TKeyList lKeys  = rCache.getAllKeys();
     return lKeys.getAsConstList();
-
-    // <- SAFE ----------------------------------
 }
 
 
@@ -106,17 +101,13 @@ OUString SAL_CALL XMLBasedAcceleratorConfiguration::getCommandByKeyEvent(const c
     throw(css::container::NoSuchElementException,
           css::uno::RuntimeException, std::exception            )
 {
-    // SAFE -> ----------------------------------
-    Guard aReadLock(m_aLock);
-
+    SolarMutexGuard g;
     AcceleratorCache& rCache = impl_getCFG();
     if (!rCache.hasKey(aKeyEvent))
         throw css::container::NoSuchElementException(
                 OUString(),
                 static_cast< ::cppu::OWeakObject* >(this));
     return rCache.getCommandByKey(aKeyEvent);
-
-    // <- SAFE ----------------------------------
 }
 
 
@@ -142,14 +133,9 @@ void SAL_CALL XMLBasedAcceleratorConfiguration::setKeyEvent(const css::awt::KeyE
         static_cast< ::cppu::OWeakObject* >(this),
         1);
 
-    // SAFE -> ----------------------------------
-    Guard aWriteLock(m_aLock);
-
+    SolarMutexGuard g;
     AcceleratorCache& rCache = impl_getCFG(sal_True); // sal_True => force getting of a writeable cache!
     rCache.setKeyCommandPair(aKeyEvent, sCommand);
-
-    aWriteLock.unlock();
-    // <- SAFE ----------------------------------
 }
 
 
@@ -157,17 +143,13 @@ void SAL_CALL XMLBasedAcceleratorConfiguration::removeKeyEvent(const css::awt::K
 throw(css::container::NoSuchElementException,
       css::uno::RuntimeException, std::exception            )
 {
-    // SAFE -> ----------------------------------
-    Guard aWriteLock(m_aLock);
-
+    SolarMutexGuard g;
     AcceleratorCache& rCache = impl_getCFG(sal_True); // true => force using of a writeable cache
     if (!rCache.hasKey(aKeyEvent))
         throw css::container::NoSuchElementException(
         OUString(),
         static_cast< ::cppu::OWeakObject* >(this));
     rCache.removeKey(aKeyEvent);
-
-    // <- SAFE ----------------------------------
 }
 
 
@@ -182,9 +164,7 @@ css::uno::Sequence< css::awt::KeyEvent > SAL_CALL XMLBasedAcceleratorConfigurati
                 static_cast< ::cppu::OWeakObject* >(this),
                 1);
 
-    // SAFE -> ----------------------------------
-    Guard aReadLock(m_aLock);
-
+    SolarMutexGuard g;
     AcceleratorCache& rCache = impl_getCFG();
     if (!rCache.hasCommand(sCommand))
         throw css::container::NoSuchElementException(
@@ -193,8 +173,6 @@ css::uno::Sequence< css::awt::KeyEvent > SAL_CALL XMLBasedAcceleratorConfigurati
 
     AcceleratorCache::TKeyList lKeys  = rCache.getKeysByCommand(sCommand);
     return lKeys.getAsConstList();
-
-    // <- SAFE ----------------------------------
 }
 
 
@@ -202,8 +180,7 @@ css::uno::Sequence< css::uno::Any > SAL_CALL XMLBasedAcceleratorConfiguration::g
     throw(css::lang::IllegalArgumentException   ,
           css::uno::RuntimeException, std::exception            )
 {
-    // SAFE -> ----------------------------------
-    Guard aReadLock(m_aLock);
+    SolarMutexGuard g;
 
     sal_Int32                           i              = 0;
     sal_Int32                           c              = lCommandList.getLength();
@@ -230,9 +207,6 @@ css::uno::Sequence< css::uno::Any > SAL_CALL XMLBasedAcceleratorConfiguration::g
         rAny <<= *(lKeys.begin());
     }
 
-    aReadLock.unlock();
-    // <- SAFE ----------------------------------
-
     return lPreferredOnes;
 }
 
@@ -248,18 +222,13 @@ void SAL_CALL XMLBasedAcceleratorConfiguration::removeCommandFromAllKeyEvents(co
                 static_cast< ::cppu::OWeakObject* >(this),
                 0);
 
-    // SAFE -> ----------------------------------
-    Guard aWriteLock(m_aLock);
-
+    SolarMutexGuard g;
     AcceleratorCache& rCache = impl_getCFG(sal_True); // sal_True => force getting of a writeable cache!
     if (!rCache.hasCommand(sCommand))
         throw css::container::NoSuchElementException(
                 OUString("Command does not exists inside this container."),
                 static_cast< ::cppu::OWeakObject* >(this));
     rCache.removeCommand(sCommand);
-
-    aWriteLock.unlock();
-    // <- SAFE ----------------------------------
 }
 
 
@@ -267,18 +236,17 @@ void SAL_CALL XMLBasedAcceleratorConfiguration::reload()
     throw(css::uno::Exception       ,
         css::uno::RuntimeException, std::exception)
 {
+    css::uno::Reference< css::io::XStream > xStream;
     css::uno::Reference< css::io::XStream > xStreamNoLang;
-
-    // SAFE -> ----------------------------------
-    Guard aReadLock(m_aLock);
-    css::uno::Reference< css::io::XStream > xStream = m_aPresetHandler.openTarget(PresetHandler::TARGET_CURRENT(), sal_True); // sal_True => open or create!
-    try
     {
-        xStreamNoLang = m_aPresetHandler.openPreset(PresetHandler::PRESET_DEFAULT(), sal_True);
+        SolarMutexGuard g;
+        xStream = m_aPresetHandler.openTarget(PresetHandler::TARGET_CURRENT(), sal_True); // sal_True => open or create!
+        try
+        {
+            xStreamNoLang = m_aPresetHandler.openPreset(PresetHandler::PRESET_DEFAULT(), sal_True);
+        }
+        catch(const css::io::IOException&) {} // does not have to exist
     }
-    catch(const css::io::IOException&) {} // does not have to exist
-    aReadLock.unlock();
-    // <- SAFE ----------------------------------
 
     css::uno::Reference< css::io::XInputStream > xIn;
     if (xStream.is())
@@ -289,11 +257,10 @@ void SAL_CALL XMLBasedAcceleratorConfiguration::reload()
         static_cast< ::cppu::OWeakObject* >(this));
 
     // impl_ts_load() does not clear the cache
-    // SAFE -> ----------------------------------
-    Guard aWriteLock(m_aLock);
-    m_aReadCache = AcceleratorCache();
-    aWriteLock.unlock();
-    // <- SAFE ----------------------------------
+    {
+        SolarMutexGuard g;
+        m_aReadCache = AcceleratorCache();
+    }
 
     impl_ts_load(xIn);
 
@@ -312,11 +279,11 @@ void SAL_CALL XMLBasedAcceleratorConfiguration::store()
     throw(css::uno::Exception       ,
         css::uno::RuntimeException, std::exception)
 {
-    // SAFE -> ----------------------------------
-    Guard aReadLock(m_aLock);
-    css::uno::Reference< css::io::XStream > xStream = m_aPresetHandler.openTarget(PresetHandler::TARGET_CURRENT(), sal_True); // sal_True => open or create!
-    aReadLock.unlock();
-    // <- SAFE ----------------------------------
+    css::uno::Reference< css::io::XStream > xStream;
+    {
+        SolarMutexGuard g;
+        xStream = m_aPresetHandler.openTarget(PresetHandler::TARGET_CURRENT(), sal_True); // sal_True => open or create!
+    }
 
     css::uno::Reference< css::io::XOutputStream > xOut;
     if (xStream.is())
@@ -363,21 +330,19 @@ void SAL_CALL XMLBasedAcceleratorConfiguration::storeToStorage(const css::uno::R
 ::sal_Bool SAL_CALL XMLBasedAcceleratorConfiguration::isModified()
     throw(css::uno::RuntimeException, std::exception)
 {
-    // SAFE -> ----------------------------------
-    Guard aReadLock(m_aLock);
+    SolarMutexGuard g;
     return (m_pWriteCache != 0);
-    // <- SAFE ----------------------------------
 }
 
 
 ::sal_Bool SAL_CALL XMLBasedAcceleratorConfiguration::isReadOnly()
     throw(css::uno::RuntimeException, std::exception)
 {
-    // SAFE -> ----------------------------------
-    Guard aReadLock(m_aLock);
-    css::uno::Reference< css::io::XStream > xStream = m_aPresetHandler.openTarget(PresetHandler::TARGET_CURRENT(), sal_True); // sal_True => open or create!
-    aReadLock.unlock();
-    // <- SAFE ----------------------------------
+    css::uno::Reference< css::io::XStream > xStream;
+    {
+        SolarMutexGuard g;
+        xStream = m_aPresetHandler.openTarget(PresetHandler::TARGET_CURRENT(), sal_True); // sal_True => open or create!
+    }
 
     css::uno::Reference< css::io::XOutputStream > xOut;
     if (xStream.is())
@@ -418,11 +383,10 @@ void SAL_CALL XMLBasedAcceleratorConfiguration::removeConfigurationListener(cons
 void SAL_CALL XMLBasedAcceleratorConfiguration::reset()
 throw(css::uno::RuntimeException, std::exception)
 {
-    // SAFE -> ----------------------------------
-    Guard aWriteLock(m_aLock);
-    m_aPresetHandler.copyPresetToTarget(PresetHandler::PRESET_DEFAULT(), PresetHandler::TARGET_CURRENT());
-    aWriteLock.unlock();
-    // <- SAFE ----------------------------------
+    {
+        SolarMutexGuard g;
+        m_aPresetHandler.copyPresetToTarget(PresetHandler::PRESET_DEFAULT(), PresetHandler::TARGET_CURRENT());
+    }
 
     reload();
 }
@@ -451,28 +415,24 @@ void XMLBasedAcceleratorConfiguration::changesOccurred(const OUString& /*sPath*/
 
 void XMLBasedAcceleratorConfiguration::impl_ts_load(const css::uno::Reference< css::io::XInputStream >& xStream)
 {
-    // SAFE -> ----------------------------------
-    Guard aWriteLock(m_aLock);
-
-    css::uno::Reference< css::uno::XComponentContext > xContext = m_xContext;
-    if (m_pWriteCache)
+    css::uno::Reference< css::uno::XComponentContext > xContext;
     {
-        // be aware of reentrance problems - use temp variable for calling delete ... :-)
-        AcceleratorCache* pTemp = m_pWriteCache;
-        m_pWriteCache = 0;
-        delete pTemp;
+        SolarMutexGuard g;
+        xContext = m_xContext;
+        if (m_pWriteCache)
+        {
+            // be aware of reentrance problems - use temp variable for calling delete ... :-)
+            AcceleratorCache* pTemp = m_pWriteCache;
+            m_pWriteCache = 0;
+            delete pTemp;
+        }
     }
-
-    aWriteLock.unlock();
-    // <- SAFE ----------------------------------
 
     css::uno::Reference< css::io::XSeekable > xSeek(xStream, css::uno::UNO_QUERY);
     if (xSeek.is())
         xSeek->seek(0);
 
-    // add accelerators to the cache (the cache is not cleared)
-    // SAFE -> ----------------------------------
-    aWriteLock.lock();
+    SolarMutexGuard g;
 
     // create the parser queue
     // Note: Use special filter object between parser and reader
@@ -492,27 +452,23 @@ void XMLBasedAcceleratorConfiguration::impl_ts_load(const css::uno::Reference< c
 
     // TODO think about error handling
     xParser->parseStream(aSource);
-
-    aWriteLock.unlock();
-    // <- SAFE ----------------------------------
 }
 
 
 void XMLBasedAcceleratorConfiguration::impl_ts_save(const css::uno::Reference< css::io::XOutputStream >& xStream)
 {
-    // SAFE -> ----------------------------------
-    Guard aReadLock(m_aLock);
-
+    sal_Bool bChanged;
     AcceleratorCache aCache;
-    sal_Bool bChanged = (m_pWriteCache != 0);
-    if (bChanged)
-        aCache.takeOver(*m_pWriteCache);
-    else
-        aCache.takeOver(m_aReadCache);
-    css::uno::Reference< css::uno::XComponentContext > xContext = m_xContext;
-
-    aReadLock.unlock();
-    // <- SAFE ----------------------------------
+    css::uno::Reference< css::uno::XComponentContext > xContext;
+    {
+        SolarMutexGuard g;
+        bChanged = (m_pWriteCache != 0);
+        if (bChanged)
+            aCache.takeOver(*m_pWriteCache);
+        else
+            aCache.takeOver(m_aReadCache);
+        xContext = m_xContext;
+    }
 
     css::uno::Reference< css::io::XTruncate > xClearable(xStream, css::uno::UNO_QUERY_THROW);
     xClearable->truncate();
@@ -531,10 +487,7 @@ void XMLBasedAcceleratorConfiguration::impl_ts_save(const css::uno::Reference< c
     AcceleratorConfigurationWriter aWriter(aCache, xHandler);
     aWriter.flush();
 
-    // take over all changes into the original container
-    // SAFE -> ----------------------------------
-    Guard aWriteLock(m_aLock);
-
+    SolarMutexGuard g;
     // take over all changes into the readonly cache ...
     // and forget the copy-on-write copied cache
     if (bChanged)
@@ -545,16 +498,12 @@ void XMLBasedAcceleratorConfiguration::impl_ts_save(const css::uno::Reference< c
         m_pWriteCache = 0;
         delete pTemp;
     }
-
-    aWriteLock.unlock();
-    // <- SAFE ----------------------------------
 }
 
 
 AcceleratorCache& XMLBasedAcceleratorConfiguration::impl_getCFG(sal_Bool bWriteAccessRequested)
 {
-    // SAFE -> ----------------------------------
-    Guard aWriteLock(m_aLock);
+    SolarMutexGuard g;
 
     //create copy of our readonly-cache, if write access is forced ... but
     //not still possible!
@@ -572,7 +521,6 @@ AcceleratorCache& XMLBasedAcceleratorConfiguration::impl_getCFG(sal_Bool bWriteA
         return *m_pWriteCache;
     else
         return m_aReadCache;
-    // <- SAFE ----------------------------------
 }
 
 
