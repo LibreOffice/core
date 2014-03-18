@@ -1272,7 +1272,7 @@ private:
         OUString     maName;
         bool                mbStorage;
 
-        explicit     PreferredItem( const OUString rName, bool bStorage ) :
+        explicit     PreferredItem( const OUString& rName, bool bStorage ) :
                                 maName( rName ), mbStorage( bStorage ) {}
     };
     typedef ::std::vector< PreferredItem > PreferredItemVector;
