@@ -198,10 +198,20 @@ static SwTableBox* lcl_LeftBorder2Box( long nLeft, const SwTableLine* pLine )
     {
         SwTableBox* pBox = pLine->GetTabBoxes()[nCurrBox];
         OSL_ENSURE( pBox, "Missing table box" );
-        if( nCurrLeft >= nLeft && pBox->GetFrmFmt()->GetFrmSize().GetWidth() )
+        if( pBox->GetFrmFmt()->GetFrmSize().GetWidth() )
         {
-            OSL_ENSURE( nCurrLeft == nLeft, "Wrong box found" );
-            return pBox;
+            if( nCurrLeft == nLeft )
+                return pBox;
+            // HACK: It appears that rounding errors may result in positions not matching
+            // exactly, so allow a little tolerance. This happens at least with merged cells
+            // in the doc from fdo#38414 .
+            if( abs( nCurrLeft - nLeft ) <= ( nLeft / 1000 ))
+                return pBox;
+            if( nCurrLeft >= nLeft )
+            {
+                SAL_WARN( "sw.core", "Possibly wrong box found" );
+                return pBox;
+            }
         }
         nCurrLeft += pBox->GetFrmFmt()->GetFrmSize().GetWidth();
     }
