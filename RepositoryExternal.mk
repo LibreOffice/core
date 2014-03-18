@@ -3090,7 +3090,7 @@ endef
 
 else # !SYSTEM_HSQLDB
 
-$(eval $(call gb_Helper_register_jars,OOO,\
+$(eval $(call gb_Helper_register_jars_for_install,OOO,ooo, \
 	hsqldb \
 ))
 

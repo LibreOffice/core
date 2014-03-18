@@ -316,9 +316,6 @@ STD_JAR_FILE( gid_File_Jar_Xmergebridge, XMergeBridge )
 #endif
 
 #ifdef ENABLE_JAVA
-#ifndef SYSTEM_HSQLDB
-STD_JAR_FILE( gid_File_Jar_Hsqldb, hsqldb )
-#endif
 STD_JAR_FILE( gid_File_Jar_Hsqldb_Sdbc, sdbc_hsqldb )
 #endif
 
