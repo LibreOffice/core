@@ -21,7 +21,6 @@
 #include <general.h>
 #include <framework/menuconfiguration.hxx>
 #include <framework/addonmenu.hxx>
-#include <threadhelp/guard.hxx>
 #include <services.h>
 #include <properties.h>
 
@@ -60,11 +59,8 @@ using namespace ::rtl                           ;
 
 PopupMenuDispatcher::PopupMenuDispatcher(
     const uno::Reference< XComponentContext >& xContext )
-        //  Init baseclasses first
-        :   ThreadHelpBase          ( &Application::GetSolarMutex()  )
-        // Init member
-        ,   m_xContext              ( xContext                       )
-        ,   m_aListenerContainer    ( m_aLock.getShareableOslMutex() )
+        :   m_xContext              ( xContext                       )
+        ,   m_aListenerContainer    ( m_mutex )
         ,   m_bAlreadyDisposed      ( sal_False                      )
         ,   m_bActivateListener     ( sal_False                      )
 {
@@ -147,9 +143,7 @@ throw( css::uno::Exception, css::uno::RuntimeException, std::exception)
 {
     css::uno::Reference< css::frame::XFrame > xFrame;
 
-    /* SAFE { */
-    Guard aWriteLock(m_aLock);
-
+    SolarMutexGuard g;
     for (int a=0; a<lArguments.getLength(); ++a)
     {
         if (a==0)
@@ -163,9 +157,6 @@ throw( css::uno::Exception, css::uno::RuntimeException, std::exception)
             xFrame->addFrameActionListener( xFrameActionListener );
         }
     }
-
-    aWriteLock.unlock();
-    /* } SAFE */
 }
 
 css::uno::Reference< css::frame::XDispatch >
@@ -180,13 +171,13 @@ throw( css::uno::RuntimeException, std::exception )
     if ( rURL.Complete.startsWith( "vnd.sun.star.popup:" ) )
     {
         // --- SAFE ---
-        Guard aGuard( m_aLock );
+        SolarMutexClearableGuard aGuard;
         impl_RetrievePopupControllerQuery();
         impl_CreateUriRefFactory();
 
         css::uno::Reference< css::container::XNameAccess > xPopupCtrlQuery( m_xPopupCtrlQuery );
         css::uno::Reference< css::uri::XUriReferenceFactory > xUriRefFactory( m_xUriRefFactory );
-        aGuard.unlock();
+        aGuard.clear();
         // --- SAFE ---
 
         if ( xPopupCtrlQuery.is() )
@@ -214,7 +205,7 @@ throw( css::uno::RuntimeException, std::exception )
 
                 // Find popup menu controller using the base URL
                 xPopupCtrlQuery->getByName( aBaseURL ) >>= xDispatchProvider;
-                aGuard.unlock();
+                aGuard.clear();
 
                 // Ask popup menu dispatch provider for dispatch object
                 if ( xDispatchProvider.is() )
@@ -258,8 +249,7 @@ void SAL_CALL PopupMenuDispatcher::addStatusListener( const uno::Reference< XSta
                                                       const URL& aURL )
 throw( RuntimeException, std::exception )
 {
-    // Ready for multithreading
-    Guard aGuard( m_aLock );
+    SolarMutexGuard g;
     // Safe impossible cases
     // Add listener to container.
     m_aListenerContainer.addInterface( aURL.Complete, xControl );
@@ -269,8 +259,7 @@ void SAL_CALL PopupMenuDispatcher::removeStatusListener( const uno::Reference< X
                                                          const URL& aURL )
 throw( RuntimeException, std::exception )
 {
-    // Ready for multithreading
-    Guard aGuard( m_aLock );
+    SolarMutexGuard g;
     // Safe impossible cases
     // Add listener to container.
     m_aListenerContainer.removeInterface( aURL.Complete, xControl );
@@ -279,8 +268,7 @@ throw( RuntimeException, std::exception )
 void SAL_CALL PopupMenuDispatcher::frameAction( const FrameActionEvent& aEvent )
 throw ( RuntimeException, std::exception )
 {
-    Guard aGuard( m_aLock );
-
+    SolarMutexGuard g;
     if (( aEvent.Action == css::frame::FrameAction_COMPONENT_DETACHING ) ||
         ( aEvent.Action == css::frame::FrameAction_COMPONENT_ATTACHED  ))
     {
@@ -291,8 +279,7 @@ throw ( RuntimeException, std::exception )
 
 void SAL_CALL PopupMenuDispatcher::disposing( const EventObject& ) throw( RuntimeException, std::exception )
 {
-    // Ready for multithreading
-    Guard aGuard( m_aLock );
+    SolarMutexGuard g;
     // Safe impossible cases
     SAL_WARN_IF( m_bAlreadyDisposed, "fwk", "MenuDispatcher::disposing(): Object already disposed .. don't call it again!" );
 

@@ -23,7 +23,6 @@
 #include <macros/xinterface.hxx>
 #include <macros/xtypeprovider.hxx>
 #include <macros/xserviceinfo.hxx>
-#include <threadhelp/threadhelpbase.hxx>
 #include <general.h>
 #include <stdtypes.h>
 
@@ -69,16 +68,11 @@ typedef ::cppu::OMultiTypeInterfaceContainerHelperVar<  OUString         ,
                     XLoadEventListener
                     XFrameActionListener
                     XEventListener
-    @base           ThreadHelpBase
-                    OWeakObject
+    @base           OWeakObject
 
     @devstatus      ready to use
 *//*-*************************************************************************************************************/
-class PopupMenuDispatcher :     // baseclasses
-                                // Order is necessary for right initialization!
-                                public ThreadHelpBase                   ,
-                                // interfaces
-                                public  ::cppu::WeakImplHelper5<
+class PopupMenuDispatcher :     public  ::cppu::WeakImplHelper5<
                                            css::lang::XServiceInfo,
                                            css::frame::XDispatchProvider,
                                            css::frame::XDispatch,
@@ -142,6 +136,7 @@ class PopupMenuDispatcher :     // baseclasses
         css::uno::Reference< css::container::XNameAccess >      m_xPopupCtrlQuery   ;   /// reference to query for popup controller
         css::uno::Reference< css::uri::XUriReferenceFactory >   m_xUriRefFactory    ;   /// reference to the uri reference factory
         css::uno::Reference< css::uno::XComponentContext >      m_xContext          ;   /// factory shared with our owner to create new services!
+        osl::Mutex m_mutex;
         IMPL_ListenerHashContainer                              m_aListenerContainer;   /// hash table for listener at specified URLs
         sal_Bool                                                m_bAlreadyDisposed  ;   /// Protection against multiple disposing calls.
         sal_Bool                                                m_bActivateListener ;   /// dispatcher is listener for frame activation
