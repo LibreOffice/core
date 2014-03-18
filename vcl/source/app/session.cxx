@@ -20,6 +20,7 @@
 #include "sal/config.h"
 
 #include <boost/scoped_ptr.hpp>
+#include <cppuhelper/basemutex.hxx>
 #include <cppuhelper/compbase1.hxx>
 
 #include <tools/debug.hxx>
@@ -46,7 +47,7 @@ SalSession::~SalSession()
 }
 
 class VCLSession:
-    private osl::Mutex,
+    private cppu::BaseMutex,
     public cppu::WeakComponentImplHelper1 < XSessionManagerClient >
 {
     struct Listener
@@ -92,7 +93,7 @@ public:
 };
 
 VCLSession::VCLSession()
-        : cppu::WeakComponentImplHelper1< XSessionManagerClient >( *static_cast< osl::Mutex * >(this) ),
+        : cppu::WeakComponentImplHelper1< XSessionManagerClient >( m_aMutex ),
           m_pSession( ImplGetSVData()->mpDefInst->CreateSalSession() ),
           m_bInteractionRequested( false ),
           m_bInteractionGranted( false ),
@@ -107,7 +108,7 @@ void VCLSession::callSaveRequested( bool bShutdown, bool bCancelable )
 {
     std::list< Listener > aListeners;
     {
-        osl::MutexGuard aGuard( *this );
+        osl::MutexGuard aGuard( m_aMutex );
         // reset listener states
         for( std::list< Listener >::iterator it = m_aListeners.begin();
              it != m_aListeners.end(); ++it )
@@ -144,7 +145,7 @@ void VCLSession::callInteractionGranted( bool bInteractionGranted )
 {
     std::list< Listener > aListeners;
     {
-        osl::MutexGuard aGuard( *this );
+        osl::MutexGuard aGuard( m_aMutex );
         // copy listener list since calling a listener may remove it.
         for( std::list< Listener >::const_iterator it = m_aListeners.begin(); it != m_aListeners.end(); ++it )
             if( it->m_bInteractionRequested )
@@ -173,7 +174,7 @@ void VCLSession::callShutdownCancelled()
 {
     std::list< Listener > aListeners;
     {
-        osl::MutexGuard aGuard( *this );
+        osl::MutexGuard aGuard( m_aMutex );
         // copy listener list since calling a listener may remove it.
         aListeners = m_aListeners;
         // set back interaction state
@@ -190,7 +191,7 @@ void VCLSession::callQuit()
 {
     std::list< Listener > aListeners;
     {
-        osl::MutexGuard aGuard( *this );
+        osl::MutexGuard aGuard( m_aMutex );
         // copy listener list since calling a listener may remove it.
         aListeners = m_aListeners;
         // set back interaction state
@@ -235,14 +236,14 @@ void VCLSession::SalSessionEventProc( void* pData, SalSessionEvent* pEvent )
 
 void SAL_CALL VCLSession::addSessionManagerListener( const css::uno::Reference<XSessionManagerListener>& xListener ) throw( RuntimeException, std::exception )
 {
-    osl::MutexGuard aGuard( *this );
+    osl::MutexGuard aGuard( m_aMutex );
 
     m_aListeners.push_back( Listener( xListener ) );
 }
 
 void SAL_CALL VCLSession::removeSessionManagerListener( const css::uno::Reference<XSessionManagerListener>& xListener ) throw( RuntimeException, std::exception )
 {
-    osl::MutexGuard aGuard( *this );
+    osl::MutexGuard aGuard( m_aMutex );
 
     std::list< Listener >::iterator it = m_aListeners.begin();
     while( it != m_aListeners.end() )
@@ -267,7 +268,7 @@ void SAL_CALL VCLSession::queryInteraction( const css::uno::Reference<XSessionMa
         return;
     }
 
-    osl::MutexGuard aGuard( *this );
+    osl::MutexGuard aGuard( m_aMutex );
     if( ! m_bInteractionRequested )
     {
         m_pSession->queryInteraction();
@@ -285,7 +286,7 @@ void SAL_CALL VCLSession::queryInteraction( const css::uno::Reference<XSessionMa
 
 void SAL_CALL VCLSession::interactionDone( const css::uno::Reference< XSessionManagerListener >& xListener ) throw( RuntimeException, std::exception )
 {
-    osl::MutexGuard aGuard( *this );
+    osl::MutexGuard aGuard( m_aMutex );
     int nRequested = 0, nDone = 0;
     for( std::list< Listener >::iterator it = m_aListeners.begin(); it != m_aListeners.end(); ++it )
     {
@@ -308,7 +309,7 @@ void SAL_CALL VCLSession::interactionDone( const css::uno::Reference< XSessionMa
 
 void SAL_CALL VCLSession::saveDone( const css::uno::Reference< XSessionManagerListener >& xListener ) throw( RuntimeException, std::exception )
 {
-    osl::MutexGuard aGuard( *this );
+    osl::MutexGuard aGuard( m_aMutex );
 
     bool bSaveDone = true;
     for( std::list< Listener >::iterator it = m_aListeners.begin();
