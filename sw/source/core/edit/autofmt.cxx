@@ -1561,7 +1561,7 @@ void SwAutoFormat::BuildEnum( sal_uInt16 nLvl, sal_uInt16 nDigitLevel )
             bChgEnum = false;
     }
 
-    if( bChgEnum || bChgBullet )
+    if ( bChgEnum || bChgBullet )
     {
         m_aDelPam.DeleteMark();
         m_aDelPam.GetPoint()->nNode = m_aNdIdx;
@@ -1589,7 +1589,7 @@ void SwAutoFormat::BuildEnum( sal_uInt16 nLvl, sal_uInt16 nDigitLevel )
                         bChgEnum ? nTxtStt : 0 );
         m_aDelPam.SetMark();
 
-        if( bChgBullet )
+        if ( bChgBullet )
             nTxtStt += 2;
 
         while( nTxtStt < rStr.getLength() && IsSpace( rStr[ nTxtStt ] ))
@@ -1623,7 +1623,8 @@ void SwAutoFormat::BuildEnum( sal_uInt16 nLvl, sal_uInt16 nDigitLevel )
                 nAutoCorrPos = 2;
                 aSet.ClearItem();
             }
-            SvxTabStopItem aTStops( RES_PARATR_TABSTOP );    aTStops.Insert( SvxTabStop( 0 ));
+            SvxTabStopItem aTStops( RES_PARATR_TABSTOP );
+            aTStops.Insert( SvxTabStop( 0 ) );
             aSet.Put( aTStops );
             m_pDoc->SetFmtItemByAutoFmt( m_aDelPam, aSet );
         }

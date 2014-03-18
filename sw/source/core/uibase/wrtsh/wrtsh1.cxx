@@ -971,7 +971,7 @@ void SwWrtShell::SplitNode( sal_Bool bAutoFmt, sal_Bool bCheckTableStart )
 void SwWrtShell::NumOrBulletOn(sal_Bool bNum)
 {
     // determine numbering rule found at current cursor position in the document.
-    const SwNumRule* pCurRule = GetCurNumRule();
+    const SwNumRule* pCurRule = GetNumRuleAtCurrCrsrPos();
 
     StartUndo(UNDO_NUMORNONUM);
 
@@ -1282,7 +1282,7 @@ void SwWrtShell::NumOn()
 
 void SwWrtShell::NumOrBulletOff()
 {
-    const SwNumRule * pCurNumRule = GetCurNumRule();
+    const SwNumRule * pCurNumRule = GetNumRuleAtCurrCrsrPos();
 
     if (pCurNumRule)
     {
@@ -1398,7 +1398,7 @@ SelectionType SwWrtShell::GetSelectionType() const
         nCnt |= (nsSelectionType::SEL_TBL | nsSelectionType::SEL_TBL_CELLS);
 
     // Do not pop up numbering toolbar, if the text node has a numbering of type SVX_NUM_NUMBER_NONE.
-    const SwNumRule* pNumRule = GetCurNumRule();
+    const SwNumRule* pNumRule = GetNumRuleAtCurrCrsrPos();
     if ( pNumRule )
     {
         const SwTxtNode* pTxtNd =

@@ -119,8 +119,10 @@ class SW_DLLPUBLIC SwDocShell: public SfxObjectShell, public SfxListener
 
     SAL_DLLPRIVATE sal_uInt16            Delete(const OUString &rName, sal_uInt16 nFamily);
     SAL_DLLPRIVATE sal_uInt16            Hide(const OUString &rName, sal_uInt16 nFamily, bool bHidden);
-    SAL_DLLPRIVATE sal_uInt16            ApplyStyles(const OUString &rName, sal_uInt16 nFamily, SwWrtShell* pShell = 0,
-                                                    sal_uInt16 nMode = 0 );
+    SAL_DLLPRIVATE sal_uInt16            ApplyStyles(const OUString &rName,
+        const sal_uInt16 nFamily,
+        SwWrtShell* pShell = 0,
+        sal_uInt16 nMode = 0);
     SAL_DLLPRIVATE sal_uInt16            DoWaterCan( const OUString &rName, sal_uInt16 nFamily);
     SAL_DLLPRIVATE sal_uInt16            UpdateStyle(const OUString &rName, sal_uInt16 nFamily, SwWrtShell* pShell = 0);
     SAL_DLLPRIVATE sal_uInt16            MakeByExample(const OUString &rName,

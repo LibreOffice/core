@@ -33,10 +33,11 @@ class SwTextShell: public SwBaseShell
     RotateTransliteration m_aRotateCase;
 
     void InsertSymbol( SfxRequest& );
-    void InsertHyperlink(const SvxHyperlinkItem& rHlnkItem);
+    void InsertHyperlink( const SvxHyperlinkItem& rHlnkItem );
     bool InsertMediaDlg( SfxRequest& );
 
 public:
+
     SFX_DECL_INTERFACE(SW_TEXTSHELL)
     TYPEINFO();
 

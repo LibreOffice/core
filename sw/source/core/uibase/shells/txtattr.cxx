@@ -355,7 +355,7 @@ SET_LINESPACE:
                 aAdjust.SetWhich(SID_ATTR_PARA_ADJUST);
                 GetView().GetViewFrame()->GetBindings().SetState( aAdjust );
                 // Toggle numbering alignment
-                const SwNumRule* pCurRule = GetShell().GetCurNumRule();
+                const SwNumRule* pCurRule = GetShell().GetNumRuleAtCurrCrsrPos();
                 if( pCurRule )
                 {
                     SvxNumRule aRule = pCurRule->MakeSvxNumRule();

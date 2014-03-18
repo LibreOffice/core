@@ -464,7 +464,7 @@ bool getCrsrPropertyValue(const SfxItemPropertySimpleEntry& rEntry
                 getNumberingProperty(rPam, eNewState, pAny);
             else
             {
-                if( !rPam.GetDoc()->GetCurrNumRule( *rPam.GetPoint() ) )
+                if( !rPam.GetDoc()->GetNumRuleAtPos( *rPam.GetPoint() ) )
                     eNewState = PropertyState_DEFAULT_VALUE;
             }
             break;
@@ -841,7 +841,7 @@ void setNumberingProperty(const Any& rValue, SwPaM& rPam)
                     pDoc->GetIDocumentUndoRedo().StartUndo( UNDO_START, NULL );
                     SwPamRanges aRangeArr( rPam );
                     SwPaM aPam( *rPam.GetPoint() );
-                    for( sal_uInt16 n = 0; n < aRangeArr.Count(); ++n )
+                    for ( sal_uInt16 n = 0; n < aRangeArr.Count(); ++n )
                     {
                         // no start of a new list
                         pDoc->SetNumRule( aRangeArr.SetPam( n, aPam ), aRule, false );
@@ -857,9 +857,9 @@ void setNumberingProperty(const Any& rValue, SwPaM& rPam)
             }
             else if(!pSwNum->GetCreatedNumRuleName().isEmpty())
             {
-                UnoActionContext aAction(pDoc);
+                UnoActionContext aAction( pDoc );
                 SwNumRule* pRule = pDoc->FindNumRulePtr( pSwNum->GetCreatedNumRuleName() );
-                if(!pRule)
+                if ( !pRule )
                     throw RuntimeException();
                 // no start of a new list
                 pDoc->SetNumRule( rPam, *pRule, false );
@@ -868,6 +868,7 @@ void setNumberingProperty(const Any& rValue, SwPaM& rPam)
             // outline numbering
             else
             {
+                // outline numbering
                 UnoActionContext aAction(pDoc);
                 SwNumRule* pRule = pDoc->GetOutlineNumRule();
                 if(!pRule)
@@ -876,7 +877,7 @@ void setNumberingProperty(const Any& rValue, SwPaM& rPam)
             }
         }
     }
-    else if(rValue.getValueType() == ::getVoidCppuType())
+    else if ( rValue.getValueType() == ::getVoidCppuType() )
     {
         rPam.GetDoc()->DelNumRules(rPam);
     }
@@ -884,7 +885,7 @@ void setNumberingProperty(const Any& rValue, SwPaM& rPam)
 
 void  getNumberingProperty(SwPaM& rPam, PropertyState& eState, Any * pAny )
 {
-    const SwNumRule* pNumRule = rPam.GetDoc()->GetCurrNumRule( *rPam.GetPoint() );
+    const SwNumRule* pNumRule = rPam.GetDoc()->GetNumRuleAtPos( *rPam.GetPoint() );
     if(pNumRule)
     {
         uno::Reference< XIndexReplace >  xNum = new SwXNumberingRules(*pNumRule);

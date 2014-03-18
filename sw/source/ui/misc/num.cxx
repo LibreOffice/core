@@ -921,7 +921,7 @@ SwSvxNumBulletTabDialog::SwSvxNumBulletTabDialog(Window* pParent,
     , rWrtSh(rSh)
 {
     GetUserButton()->SetClickHdl(LINK(this, SwSvxNumBulletTabDialog, RemoveNumberingHdl));
-    GetUserButton()->Enable(rWrtSh.GetCurNumRule() != NULL);
+    GetUserButton()->Enable(rWrtSh.GetNumRuleAtCurrCrsrPos() != NULL);
     m_nSingleNumPageId = AddTabPage("singlenum", RID_SVXPAGE_PICK_SINGLE_NUM );
     m_nBulletPageId = AddTabPage("bullets", RID_SVXPAGE_PICK_BULLET );
     AddTabPage("outlinenum", RID_SVXPAGE_PICK_NUM );

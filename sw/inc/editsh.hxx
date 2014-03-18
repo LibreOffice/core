@@ -456,20 +456,20 @@ public:
 
     sal_Bool IsProtectedOutlinePara() const;
 
-    /// @return numbering rulse pf current enumeration list (else FALSE).
-    const SwNumRule* GetCurNumRule() const;
+    const SwNumRule* GetNumRuleAtCurrCrsrPos() const;
 
-    /** If there is not already a numbering, set one, else change.
-     Works with old and new rules. Update only differences.
-     Add optional parameter @param <bResetIndentAttrs> (default value sal_False).
-     If @param <bResetIndentAttrs> equals true, the indent attributes "before text"
-     and "first line indent" are additionally reset at the current selection,
-     if the list style makes use of the new list level attributes.
-     introduce parameters @param <bCreateNewList> and @param <sContinuedListId>
-     @param <bCreateNewList> indicates, if a new list is created by applying the
-     given list style.
-     If @param <bCreateNewList> equals sal_False, @param <sContinuedListId> may contain the
-     list Id of a list, which has to be continued by applying the given list style. */
+    /** Returns the numbering rule found at the paragraphs of the current selection,
+       if all paragraphs of the current selection have the same or none numbering rule applied. */
+    const SwNumRule* GetNumRuleAtCurrentSelection() const;
+
+    /** Optional parameter <bResetIndentAttrs> (default value sal_False).
+        If <bResetIndentAttrs> equals true, the indent attributes "before text"
+        and "first line indent" are additionally reset at the current selection,
+        if the list style makes use of the new list level attributes.
+       Parameters <bCreateNewList> and <sContinuedListId>
+        <bCreateNewList> indicates, if a new list is created by applying the given list style.
+        If <bCreateNewList> equals false, <sContinuedListId> may contain the
+        list Id of a list, which has to be continued by applying the given list style */
     void SetCurNumRule( const SwNumRule&,
                         const bool bCreateNewList /*= false*/,
                         const OUString& sContinuedListId = OUString(),
@@ -496,8 +496,7 @@ public:
     void ChangeIndentOfAllListLevels( short nDiff );
     // Adjust method name
     void SetIndent(short nIndent, const SwPosition & rPos);
-    bool IsFirstOfNumRule() const;
-    bool IsFirstOfNumRule(const SwPaM & rPaM) const;
+    bool IsFirstOfNumRuleAtCrsrPos() const;
 
     sal_Bool IsNoNum( sal_Bool bChkStart = sal_True ) const;
 

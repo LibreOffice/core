@@ -940,7 +940,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
             ::SwToSfxPageDescAttr( aCoreSet );
 
             // Properties of numbering
-            if( rWrtSh.GetDoc()->GetCurrNumRule( *pPaM->GetPoint() ) )
+            if (rWrtSh.GetNumRuleAtCurrCrsrPos())
             {
                 SfxBoolItem aStart( FN_NUMBER_NEWSTART, rWrtSh.IsNumRuleStart( pPaM ) );
                 aCoreSet.Put(aStart);
@@ -1089,49 +1089,49 @@ void SwTextShell::Execute(SfxRequest &rReq)
             }
         }
         break;
+
         case FN_SELECT_PARA:
         {
-            if(!rWrtSh.IsSttOfPara())
-                rWrtSh.SttPara(sal_False);
+            if ( !rWrtSh.IsSttOfPara() )
+                rWrtSh.SttPara( sal_False );
             else
                 rWrtSh.EnterStdMode();
-            rWrtSh.EndPara(sal_True);
+            rWrtSh.EndPara( sal_True );
         }
         break;
 
         case SID_DEC_INDENT:
         case SID_INC_INDENT:
-            //According to the requirement, modified the behavior when user
-            //using the indent button on the toolbar. Now if we increase/decrease indent for a
-            //paragraph which has bullet style it will increase/decrease the bullet level.
+        //According to the requirement, modified the behavior when user
+        //using the indent button on the toolbar. Now if we increase/decrease indent for a
+        //paragraph which has bullet style it will increase/decrease the bullet level.
+        {
+            //If the current paragraph has bullet call the function to
+            //increase or decrease the bullet level.
+            //Why could I know wheter a paragraph has bullet or not by checking the below conditions?
+            //Please refer to the "case KEY_TAB:" section in SwEditWin::KeyInput(..) :
+            //      if( rSh.GetCurNumRule() && rSh.IsSttOfPara() &&
+            //                  !rSh.HasReadonlySel() )
+            //              eKeyState = KS_NumDown;
+            //Above code demonstrates that when the cursor is at the start of a paragraph which has bullet,
+            //press TAB will increase the bullet level.
+            //So I copied from that ^^
+            if ( rWrtSh.GetNumRuleAtCurrCrsrPos() && !rWrtSh.HasReadonlySel() )
             {
-                //If the current paragraph has bullet call the function to
-                //increase or decrease the bullet level.
-                //Why could I know wheter a paragraph has bullet or not by checking the below conditions?
-                //Please refer to the "case KEY_TAB:" section in SwEditWin::KeyInput(..) :
-                //      if( rSh.GetCurNumRule() && rSh.IsSttOfPara() &&
-                //                  !rSh.HasReadonlySel() )
-                //              eKeyState = KS_NumDown;
-                //Above code demonstrates that when the cursor is at the start of a paragraph which has bullet,
-                //press TAB will increase the bullet level.
-                //So I copied from that ^^
-                if ( rWrtSh.GetCurNumRule() && !rWrtSh.HasReadonlySel() )
-                {
-                    rWrtSh.NumUpDown( SID_INC_INDENT == nSlot );
-                }
-                else//execute the original processing functions
-                {
-                    //below is copied of the old codes
-                    rWrtSh.MoveLeftMargin( SID_INC_INDENT == nSlot,
-                                    rReq.GetModifier() != KEY_MOD1 );
-                }
+                rWrtSh.NumUpDown( SID_INC_INDENT == nSlot );
             }
-            rReq.Done();
-            break;
+            else                //execute the original processing functions
+            {
+                //below is copied of the old codes
+                rWrtSh.MoveLeftMargin( SID_INC_INDENT == nSlot, rReq.GetModifier() != KEY_MOD1 );
+            }
+        }
+        rReq.Done();
+        break;
+
         case FN_DEC_INDENT_OFFSET:
         case FN_INC_INDENT_OFFSET:
-            rWrtSh.MoveLeftMargin( FN_INC_INDENT_OFFSET == nSlot,
-                                    rReq.GetModifier() == KEY_MOD1 );
+            rWrtSh.MoveLeftMargin( FN_INC_INDENT_OFFSET == nSlot, rReq.GetModifier() == KEY_MOD1 );
             rReq.Done();
             break;
 
@@ -1422,7 +1422,7 @@ void SwTextShell::GetState( SfxItemSet &rSet )
         break;
 
         case FN_NUMBER_NEWSTART :
-            if(!rSh.GetCurNumRule())
+            if(!rSh.GetNumRuleAtCurrCrsrPos())
                     rSet.DisableItem(nWhich);
             else
                 rSet.Put(SfxBoolItem(FN_NUMBER_NEWSTART,
@@ -1501,30 +1501,31 @@ void SwTextShell::GetState( SfxItemSet &rSet )
 
         case SID_DEC_INDENT:
         case SID_INC_INDENT:
+        {
+            //if the paragrah has bullet we'll do the following things:
+            //1: if the bullet level is the first level, disable the decrease-indent button
+            //2: if the bullet level is the last level, disable the increase-indent button
+            if ( rSh.GetNumRuleAtCurrCrsrPos() && !rSh.HasReadonlySel() )
             {
-                //if the paragrah has bullet we'll do the following things:
-                //1: if the bullet level is the first level, disable the decrease-indent button
-                //2: if the bullet level is the last level, disable the increase-indent button
-                if ( rSh.GetCurNumRule() && !rSh.HasReadonlySel() )
+                const sal_uInt8 nLevel = rSh.GetNumLevel();
+                if ( ( nLevel == ( MAXLEVEL - 1 ) && nWhich == SID_INC_INDENT )
+                     || ( nLevel == 0 && nWhich == SID_DEC_INDENT ) )
                 {
-                    sal_uInt8 nLevel = rSh.GetNumLevel();
-                    if ( (nLevel == (MAXLEVEL-1) && nWhich == SID_INC_INDENT) ||
-                        (nLevel == 0 && nWhich == SID_DEC_INDENT) )
-                    {
-                        rSet.DisableItem( nWhich );
-                    }
-                }
-                else//if the paragraph has no bullet, execute the original functions
-                {
-                    //below is copied of the old codes
-                    sal_uInt16 nHtmlMode = ::GetHtmlMode(GetView().GetDocShell());
-                    nHtmlMode &= HTMLMODE_ON|HTMLMODE_SOME_STYLES;
-                    if( (nHtmlMode == HTMLMODE_ON) || !rSh.IsMoveLeftMargin(
-                                            SID_INC_INDENT == nWhich, true ))
-                        rSet.DisableItem( nWhich );
+                    rSet.DisableItem( nWhich );
                 }
             }
-            break;
+            else
+            {
+                sal_uInt16 nHtmlMode = ::GetHtmlMode( GetView().GetDocShell() );
+                nHtmlMode &= HTMLMODE_ON | HTMLMODE_SOME_STYLES;
+                if ( ( nHtmlMode == HTMLMODE_ON )
+                     || !rSh.IsMoveLeftMargin( SID_INC_INDENT == nWhich, sal_True ) )
+                {
+                    rSet.DisableItem( nWhich );
+                }
+            }
+        }
+        break;
 
         case FN_DEC_INDENT_OFFSET:
         case FN_INC_INDENT_OFFSET:
@@ -1729,16 +1730,19 @@ void SwTextShell::GetState( SfxItemSet &rSet )
                      rSet.DisableItem(nWhich);
             }
             break;
+
             case FN_NUM_NUMBERING_ON:
                 rSet.Put(SfxBoolItem(FN_NUM_NUMBERING_ON,rSh.SelectionHasNumber()));
             break;
+
             case FN_NUM_BULLET_ON:
                 rSet.Put(SfxBoolItem(FN_NUM_BULLET_ON,rSh.SelectionHasBullet()));
             break;
+
             case FN_BUL_NUM_RULE_INDEX:
             case FN_NUM_NUM_RULE_INDEX:
         {
-            SwNumRule* pCurRule = (SwNumRule*)(GetShell().GetCurNumRule());
+            SwNumRule* pCurRule = (SwNumRule*)(GetShell().GetNumRuleAtCurrCrsrPos());
             sal_uInt16  nActNumLvl = (sal_uInt16)0xFFFF;
             rSet.Put(SfxUInt16Item(FN_NUM_NUM_RULE_INDEX,DEFAULT_NONE));
             rSet.Put(SfxUInt16Item(FN_BUL_NUM_RULE_INDEX,DEFAULT_NONE));

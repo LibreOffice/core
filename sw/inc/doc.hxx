@@ -1486,13 +1486,14 @@ public:
 
     /** Accept changes of outline styles for OUtlineRule.
      re-use unused 3rd parameter
-     Add optional parameter <bResetIndentAttrs> - default value sal_False.
-     If <bResetIndentAttrs> equals true, the indent attributes "before text"
-     and "first line indent" are additionally reset at the provided PaM, if
-     the list style makes use of the new list level attributes.
-     introduce parameters <bCreateNewList> and <sContinuedListId>
-     <bCreateNewList> indicates, if a new list is created by applying the
-     given list style. */
+     Optional parameter <bResetIndentAttrs> - default value false:
+      If <bResetIndentAttrs> equals true, the indent attributes "before text"
+      and "first line indent" are additionally reset at the provided PaM, if
+      the list style makes use of the new list level attributes.
+     Parameters <bCreateNewList> and <sContinuedListId>:
+      <bCreateNewList> indicates, if a new list is created by applying the given list style.
+      If <bCreateNewList> equals false, <sContinuedListId> may contain the
+      list Id of a list, which has to be continued by applying the given list style */
     void SetNumRule( const SwPaM&,
                      const SwNumRule&,
                      const bool bCreateNewList,
@@ -1506,7 +1507,7 @@ public:
     void SetNumRuleStart( const SwPosition& rPos, sal_Bool bFlag = sal_True );
     void SetNodeNumStart( const SwPosition& rPos, sal_uInt16 nStt );
 
-    SwNumRule* GetCurrNumRule( const SwPosition& rPos ) const;
+    SwNumRule* GetNumRuleAtPos( const SwPosition& rPos ) const;
 
     const SwNumRuleTbl& GetNumRuleTbl() const { return *mpNumRuleTbl; }
 
@@ -2023,7 +2024,7 @@ public:
      */
     OUString GetPaMDescr(const SwPaM & rPaM) const;
 
-    bool IsFirstOfNumRule(SwPosition & rPos);
+    bool IsFirstOfNumRuleAtPos( const SwPosition & rPos );
 
     // access methods for XForms model(s)
 
@@ -2046,19 +2047,19 @@ public:
     void SetDefaultPageMode(bool bSquaredPageMode);
     sal_Bool IsSquaredPageMode() const;
 
-    void Setn32DummyCompatabilityOptions1( sal_uInt32 CompatabilityOptions1 )
+    void Setn32DummyCompatabilityOptions1( const sal_uInt32 CompatabilityOptions1 )
     {
         mn32DummyCompatabilityOptions1 = CompatabilityOptions1;
     }
-    sal_uInt32 Getn32DummyCompatabilityOptions1( )
+    sal_uInt32 Getn32DummyCompatabilityOptions1()
     {
         return mn32DummyCompatabilityOptions1;
     }
-    void Setn32DummyCompatabilityOptions2( sal_uInt32 CompatabilityOptions2 )
+    void Setn32DummyCompatabilityOptions2( const sal_uInt32 CompatabilityOptions2 )
     {
         mn32DummyCompatabilityOptions2 = CompatabilityOptions2;
     }
-    sal_uInt32 Getn32DummyCompatabilityOptions2( )
+    sal_uInt32 Getn32DummyCompatabilityOptions2()
     {
         return mn32DummyCompatabilityOptions2;
     }

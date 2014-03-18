@@ -207,7 +207,7 @@ void  SwDocShell::StateStyleSheet(SfxItemSet& rSet, SwWrtShell* pSh)
             break;
             case SID_STYLE_FAMILY5:
                 {
-                    const SwNumRule* pRule = pShell->GetCurNumRule();
+                    const SwNumRule* pRule = pShell->GetNumRuleAtCurrCrsrPos();
                     if( pRule )
                         aName = pRule->GetName();
 
@@ -227,7 +227,7 @@ void  SwDocShell::StateStyleSheet(SfxItemSet& rSet, SwWrtShell* pSh)
                         ? SFX_STYLE_FAMILY_FRAME != nActualFamily
                         : ( SFX_STYLE_FAMILY_FRAME == nActualFamily ||
                             SFX_STYLE_FAMILY_PAGE == nActualFamily ||
-                            (SFX_STYLE_FAMILY_PSEUDO == nActualFamily && !pShell->GetCurNumRule())) )
+                            (SFX_STYLE_FAMILY_PSEUDO == nActualFamily && !pShell->GetNumRuleAtCurrCrsrPos())) )
                 {
                     rSet.DisableItem( nWhich );
                 }
@@ -237,7 +237,7 @@ void  SwDocShell::StateStyleSheet(SfxItemSet& rSet, SwWrtShell* pSh)
                 if( (pShell->IsFrmSelected()
                         ? SFX_STYLE_FAMILY_FRAME != nActualFamily
                         : SFX_STYLE_FAMILY_FRAME == nActualFamily) ||
-                    (SFX_STYLE_FAMILY_PSEUDO == nActualFamily && !pShell->GetCurNumRule()) )
+                    (SFX_STYLE_FAMILY_PSEUDO == nActualFamily && !pShell->GetNumRuleAtCurrCrsrPos()) )
                 {
                     rSet.DisableItem( nWhich );
                 }
@@ -840,10 +840,9 @@ sal_uInt16 SwDocShell::Hide(const OUString &rName, sal_uInt16 nFamily, bool bHid
 
 // apply template
 sal_uInt16 SwDocShell::ApplyStyles(const OUString &rName, sal_uInt16 nFamily,
-                               SwWrtShell* pShell, sal_uInt16 nMode )
+                               SwWrtShell* pShell, const sal_uInt16 nMode )
 {
-    SwDocStyleSheet* pStyle =
-        (SwDocStyleSheet*)mxBasePool->Find(rName, (SfxStyleFamily)nFamily);
+    SwDocStyleSheet* pStyle = (SwDocStyleSheet*) mxBasePool->Find( rName, (SfxStyleFamily) nFamily );
 
     SAL_WARN_IF( !pStyle, "sw.ui", "Style not found" );
 
@@ -856,7 +855,7 @@ sal_uInt16 SwDocShell::ApplyStyles(const OUString &rName, sal_uInt16 nFamily,
 
     pSh->StartAllAction();
 
-    switch(nFamily)
+    switch (nFamily)
     {
         case SFX_STYLE_FAMILY_CHAR:
         {
@@ -1026,7 +1025,7 @@ sal_uInt16 SwDocShell::UpdateStyle(const OUString &rName, sal_uInt16 nFamily, Sw
         {
             const SwNumRule* pCurRule;
             if( pStyle->GetNumRule() &&
-                0 != ( pCurRule = pCurrWrtShell->GetCurNumRule() ))
+                0 != ( pCurRule = pCurrWrtShell->GetNumRuleAtCurrCrsrPos() ))
             {
                 SwNumRule aRule( *pCurRule );
                 // #i91400#
@@ -1164,7 +1163,7 @@ sal_uInt16 SwDocShell::MakeByExample( const OUString &rName, sal_uInt16 nFamily,
 
         case SFX_STYLE_FAMILY_PSEUDO:
         {
-            const SwNumRule* pCurRule = pCurrWrtShell->GetCurNumRule();
+            const SwNumRule* pCurRule = pCurrWrtShell->GetNumRuleAtCurrCrsrPos();
 
             if (pCurRule)
             {

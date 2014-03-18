@@ -1512,7 +1512,7 @@ void SwView::StateStatusLine(SfxItemSet &rSet)
                     }
                 }
 
-                const SwNumRule* pNumRule = rShell.GetCurNumRule();
+                const SwNumRule* pNumRule = rShell.GetNumRuleAtCurrCrsrPos();
                 const bool bOutlineNum = pNumRule ? pNumRule->IsOutlineRule() : 0;
 
                 if (pNumRule && !bOutlineNum )  // cursor in numbering
@@ -1767,7 +1767,7 @@ void SwView::ExecuteStatusLine(SfxRequest &rReq)
                 nId = FN_EDIT_REGION;
             else
             {
-                const SwNumRule* pNumRule = rSh.GetCurNumRule();
+                const SwNumRule* pNumRule = rSh.GetNumRuleAtCurrCrsrPos();
                 if( pNumRule )  // cursor in numbering
                 {
                     if( pNumRule->IsAutoRule() )

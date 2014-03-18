@@ -107,15 +107,14 @@ void SwUndoInsNum::RedoImpl(::sw::UndoRedoContext & rContext)
 {
     SwDoc & rDoc = rContext.GetDoc();
 
-    if( pOldNumRule )
+    if ( pOldNumRule )
         rDoc.ChgNumRuleFmts( aNumRule );
-    else if( pHistory )
+    else if ( pHistory )
     {
         SwPaM & rPam( AddUndoRedoPaM(rContext) );
         if( !sReplaceRule.isEmpty() )
         {
-            rDoc.ReplaceNumRule(*rPam.GetPoint(),
-                                sReplaceRule, aNumRule.GetName() );
+            rDoc.ReplaceNumRule( *rPam.GetPoint(), sReplaceRule, aNumRule.GetName() );
         }
         else
         {
@@ -133,8 +132,8 @@ void SwUndoInsNum::SetLRSpaceEndPos()
 
 void SwUndoInsNum::RepeatImpl(::sw::RepeatContext & rContext)
 {
-    SwDoc & rDoc(rContext.GetDoc());
-    if( nSttNode )
+    SwDoc & rDoc( rContext.GetDoc() );
+    if ( nSttNode )
     {
         if( sReplaceRule.isEmpty() )
         {

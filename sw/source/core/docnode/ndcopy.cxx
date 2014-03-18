@@ -1304,7 +1304,7 @@ bool SwDoc::CopyImpl( SwPaM& rPam, SwPosition& rPos,
         *pCpyRange->GetMark() = *pCopyPam->GetMark();
     }
 
-    if ( pNumRuleToPropagate )
+    if ( pNumRuleToPropagate != NULL )
     {
         // #i86492# - use <SwDoc::SetNumRule(..)>, because it also handles the <ListId>
         pDoc->SetNumRule( *pCopyPam, *pNumRuleToPropagate, false,

@@ -522,8 +522,8 @@ void SwFltControlStack::SetAttrInDoc(const SwPosition& rTmpPos,
     case RES_FLTR_NUMRULE:          // insert Numrule
         {
             const OUString& rNumNm = ((SfxStringItem*)rEntry.pAttr)->GetValue();
-            SwNumRule* pRul = pDoc->FindNumRulePtr( rNumNm );
-            if( pRul )
+            SwNumRule* pNumRule = pDoc->FindNumRulePtr( rNumNm );
+            if( pNumRule )
             {
                 if( rEntry.MakeRegion(pDoc, aRegion, true))
                 {
@@ -535,7 +535,7 @@ void SwFltControlStack::SetAttrInDoc(const SwPosition& rTmpPos,
                     {
                         SwPaM aTmpPam( aTmpStart, aTmpEnd );
                         // no start of a new list
-                        pDoc->SetNumRule( aTmpPam, *pRul, false );
+                        pDoc->SetNumRule( aTmpPam, *pNumRule, false );
 
                         aTmpStart = aTmpEnd;    // here starts the next range
                         ++aTmpStart;
@@ -546,6 +546,7 @@ void SwFltControlStack::SetAttrInDoc(const SwPosition& rTmpPos,
             }
         }
         break;
+
     case RES_FLTR_NUMRULE_NUM:
         break;
     case RES_FLTR_BOOKMARK:
