@@ -852,7 +852,7 @@ int OpenGLRender::RenderBubble2FBO(int)
         Bubble2DPointList &pointList = m_Bubble2DShapePointList.front();
         PosVecf3 trans = {pointList.x, pointList.y, m_fZStep};
         PosVecf3 angle = {0.0f, 0.0f, 0.0f};
-        PosVecf3 scale = {pointList.xScale, pointList.yScale, 1.0f};
+        PosVecf3 scale = {pointList.xScale / 2, pointList.yScale / 2 , 1.0f};
         MoveModelf(trans, angle, scale);
         m_MVP = m_Projection * m_View * m_Model;
         //render to fbo
