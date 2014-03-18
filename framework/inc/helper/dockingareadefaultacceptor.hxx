@@ -21,7 +21,6 @@
 #define INCLUDED_FRAMEWORK_INC_HELPER_DOCKINGAREADEFAULTACCEPTOR_HXX
 
 #include <classes/framecontainer.hxx>
-#include <threadhelp/threadhelpbase.hxx>
 #include <macros/generic.hxx>
 #include <macros/xinterface.hxx>
 #include <macros/xtypeprovider.hxx>
@@ -37,8 +36,7 @@ namespace framework{
 
 
 
-class DockingAreaDefaultAcceptor    :   private ThreadHelpBase                                      ,
-                                        public ::cppu::WeakImplHelper1< ::com::sun::star::ui::XDockingAreaAcceptor >
+class DockingAreaDefaultAcceptor    :   public ::cppu::WeakImplHelper1< ::com::sun::star::ui::XDockingAreaAcceptor >
 {
     public:
 

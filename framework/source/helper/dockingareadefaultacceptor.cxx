@@ -18,7 +18,6 @@
  */
 
 #include <helper/dockingareadefaultacceptor.hxx>
-#include <threadhelp/guard.hxx>
 
 #include <com/sun/star/awt/XDevice.hpp>
 #include <com/sun/star/awt/PosSize.hpp>
@@ -39,10 +38,7 @@ using namespace ::osl                           ;
 //  constructor
 
 DockingAreaDefaultAcceptor::DockingAreaDefaultAcceptor( const   css::uno::Reference< XFrame >&      xOwner  )
-        //  Init baseclasses first
-        :   ThreadHelpBase  ( &Application::GetSolarMutex() )
-        // Init member
-        ,   m_xOwner        ( xOwner    )
+        :   m_xOwner        ( xOwner    )
 {
 }
 
@@ -57,11 +53,11 @@ DockingAreaDefaultAcceptor::~DockingAreaDefaultAcceptor()
 //  XDockingAreaAcceptor
 css::uno::Reference< css::awt::XWindow > SAL_CALL DockingAreaDefaultAcceptor::getContainerWindow() throw (css::uno::RuntimeException, std::exception)
 {
-    // Ready for multithreading
-    Guard aGuard( m_aLock );
+    SolarMutexGuard g;
 
     // Try to "lock" the frame for access to taskscontainer.
-    css::uno::Reference< XFrame > xFrame( m_xOwner.get(), UNO_QUERY );
+    css::uno::Reference< XFrame > xFrame( m_xOwner );
+    //TODO: check xFrame for null?
     css::uno::Reference< css::awt::XWindow > xContainerWindow( xFrame->getContainerWindow() );
 
     return xContainerWindow;
@@ -69,12 +65,8 @@ css::uno::Reference< css::awt::XWindow > SAL_CALL DockingAreaDefaultAcceptor::ge
 
 sal_Bool SAL_CALL DockingAreaDefaultAcceptor::requestDockingAreaSpace( const css::awt::Rectangle& RequestedSpace ) throw (css::uno::RuntimeException, std::exception)
 {
-    // Ready for multithreading
-    Guard aGuard( m_aLock );
-
     // Try to "lock" the frame for access to taskscontainer.
-    css::uno::Reference< XFrame > xFrame( m_xOwner.get(), UNO_QUERY );
-    aGuard.unlock();
+    css::uno::Reference< XFrame > xFrame( m_xOwner );
 
     if ( xFrame.is() )
     {
@@ -106,11 +98,10 @@ sal_Bool SAL_CALL DockingAreaDefaultAcceptor::requestDockingAreaSpace( const css
 
 void SAL_CALL DockingAreaDefaultAcceptor::setDockingAreaSpace( const css::awt::Rectangle& BorderSpace ) throw (css::uno::RuntimeException, std::exception)
 {
-    // Ready for multithreading
-    Guard aGuard( m_aLock );
+    SolarMutexGuard g;
 
     // Try to "lock" the frame for access to taskscontainer.
-    css::uno::Reference< XFrame > xFrame( m_xOwner.get(), UNO_QUERY );
+    css::uno::Reference< XFrame > xFrame( m_xOwner );
     if ( xFrame.is() )
     {
         css::uno::Reference< css::awt::XWindow > xContainerWindow( xFrame->getContainerWindow() );
