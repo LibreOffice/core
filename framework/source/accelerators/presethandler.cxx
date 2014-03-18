@@ -22,7 +22,6 @@
 #include <classes/fwkresid.hxx>
 
 #include "classes/resource.hrc"
-#include <threadhelp/guard.hxx>
 #include <services.h>
 
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -86,8 +85,7 @@ OUString PresetHandler::RESOURCETYPE_STATUSBAR()
 
 
 PresetHandler::PresetHandler(const css::uno::Reference< css::uno::XComponentContext >& xContext)
-    : ThreadHelpBase     (&Application::GetSolarMutex()        )
-    , m_xContext         (xContext                                )
+    : m_xContext         (xContext                                )
     , m_aSharedStorages  (                                     )
     , m_lDocumentStorages()
     , m_aLanguageTag     (LANGUAGE_USER_PRIV_NOTRANSLATE)
@@ -96,8 +94,7 @@ PresetHandler::PresetHandler(const css::uno::Reference< css::uno::XComponentCont
 
 
 PresetHandler::PresetHandler(const PresetHandler& rCopy)
-    : ThreadHelpBase     (&Application::GetSolarMutex()        )
-    , m_aLanguageTag( rCopy.m_aLanguageTag)
+    : m_aLanguageTag( rCopy.m_aLanguageTag)
 {
     m_xContext              = rCopy.m_xContext;
     m_eConfigType           = rCopy.m_eConfigType;
@@ -145,8 +142,7 @@ PresetHandler::~PresetHandler()
 
 void PresetHandler::forgetCachedStorages()
 {
-    // SAFE -> ----------------------------------
-    Guard aWriteLock(m_aLock);
+    SolarMutexGuard g;
 
     if (m_eConfigType == E_DOCUMENT)
     {
@@ -156,9 +152,6 @@ void PresetHandler::forgetCachedStorages()
     }
 
     m_lDocumentStorages.forgetCachedStorages();
-
-    aWriteLock.unlock();
-    // <- SAFE ----------------------------------
 }
 
 namespace {
@@ -208,11 +201,11 @@ css::uno::Reference< css::embed::XStorage > PresetHandler::getOrCreateRootStorag
     if (xRoot.is())
         return xRoot;
 
-    // SAFE -> ----------------------------------
-    Guard aReadLock(m_aLock);
-    css::uno::Reference< css::uno::XComponentContext > xContext = m_xContext;
-    aReadLock.unlock();
-    // <- SAFE ----------------------------------
+    css::uno::Reference< css::uno::XComponentContext > xContext;
+    {
+        SolarMutexGuard g;
+        xContext = m_xContext;
+    }
 
     css::uno::Reference< css::util::XPathSettings > xPathSettings =
         css::util::thePathSettings::get( xContext );
@@ -266,11 +259,11 @@ css::uno::Reference< css::embed::XStorage > PresetHandler::getOrCreateRootStorag
     if (xRoot.is())
         return xRoot;
 
-    // SAFE -> ----------------------------------
-    Guard aReadLock(m_aLock);
-    css::uno::Reference< css::uno::XComponentContext > xContext = m_xContext;
-    aReadLock.unlock();
-    // <- SAFE ----------------------------------
+    css::uno::Reference< css::uno::XComponentContext > xContext;
+    {
+        SolarMutexGuard g;
+        xContext = m_xContext;
+    }
 
     css::uno::Reference< css::util::XPathSettings > xPathSettings =
         css::util::thePathSettings::get( xContext );
@@ -310,29 +303,25 @@ css::uno::Reference< css::embed::XStorage > PresetHandler::getOrCreateRootStorag
 
 css::uno::Reference< css::embed::XStorage > PresetHandler::getWorkingStorageShare()
 {
-    // SAFE -> ----------------------------------
-    Guard aReadLock(m_aLock);
+    SolarMutexGuard g;
     return m_xWorkingStorageShare;
-    // <- SAFE ----------------------------------
 }
 
 
 css::uno::Reference< css::embed::XStorage > PresetHandler::getWorkingStorageUser()
 {
-    // SAFE -> ----------------------------------
-    Guard aReadLock(m_aLock);
+    SolarMutexGuard g;
     return m_xWorkingStorageUser;
-    // <- SAFE ----------------------------------
 }
 
 
 css::uno::Reference< css::embed::XStorage > PresetHandler::getParentStorageShare(const css::uno::Reference< css::embed::XStorage >& /*xChild*/)
 {
-    // SAFE -> ----------------------------------
-    Guard aReadLock(m_aLock);
-    css::uno::Reference< css::embed::XStorage > xWorking = m_xWorkingStorageShare;
-    aReadLock.unlock();
-    // <- SAFE ----------------------------------
+    css::uno::Reference< css::embed::XStorage > xWorking;
+    {
+        SolarMutexGuard g;
+        xWorking = m_xWorkingStorageShare;
+    }
 
     return m_aSharedStorages->m_lStoragesShare.getParentStorage(xWorking);
 }
@@ -340,11 +329,11 @@ css::uno::Reference< css::embed::XStorage > PresetHandler::getParentStorageShare
 
 css::uno::Reference< css::embed::XStorage > PresetHandler::getParentStorageUser(const css::uno::Reference< css::embed::XStorage >& /*xChild*/)
 {
-    // SAFE -> ----------------------------------
-    Guard aReadLock(m_aLock);
-    css::uno::Reference< css::embed::XStorage > xWorking = m_xWorkingStorageUser;
-    aReadLock.unlock();
-    // <- SAFE ----------------------------------
+    css::uno::Reference< css::embed::XStorage > xWorking;
+    {
+        SolarMutexGuard g;
+        xWorking = m_xWorkingStorageUser;
+    }
 
     return m_aSharedStorages->m_lStoragesUser.getParentStorage(xWorking);
 }
@@ -358,16 +347,13 @@ void PresetHandler::connectToResource(      PresetHandler::EConfigType          
 {
     // TODO free all current open storages!
 
-    // SAFE -> ----------------------------------
-    Guard aWriteLock(m_aLock);
-
-    m_eConfigType   = eConfigType  ;
-    m_sResourceType = sResource    ;
-    m_sModule       = sModule      ;
-    m_aLanguageTag  = rLanguageTag ;
-
-    aWriteLock.unlock();
-    // <- SAFE ----------------------------------
+    {
+        SolarMutexGuard g;
+        m_eConfigType   = eConfigType  ;
+        m_sResourceType = sResource    ;
+        m_sModule       = sModule      ;
+        m_aLanguageTag  = rLanguageTag ;
+    }
 
     css::uno::Reference< css::embed::XStorage > xShare;
     css::uno::Reference< css::embed::XStorage > xNoLang;
@@ -532,20 +518,17 @@ void PresetHandler::connectToResource(      PresetHandler::EConfigType          
         }
     }
 
-    // SAFE -> ----------------------------------
-    aWriteLock.lock();
-
-    m_xWorkingStorageShare = xShare  ;
-    m_xWorkingStorageNoLang= xNoLang;
-    m_xWorkingStorageUser  = xUser   ;
-    m_lPresets             = lPresets;
-    m_lTargets             = lTargets;
-    m_sRelPathShare        = sRelPathShare;
-    m_sRelPathNoLang       = sRelPathNoLang;
-    m_sRelPathUser         = sRelPathUser;
-
-    aWriteLock.unlock();
-    // <- SAFE ----------------------------------
+    {
+        SolarMutexGuard g;
+        m_xWorkingStorageShare = xShare  ;
+        m_xWorkingStorageNoLang= xNoLang;
+        m_xWorkingStorageUser  = xUser   ;
+        m_lPresets             = lPresets;
+        m_lTargets             = lTargets;
+        m_sRelPathShare        = sRelPathShare;
+        m_sRelPathNoLang       = sRelPathNoLang;
+        m_sRelPathUser         = sRelPathUser;
+    }
 
     }
     catch(const css::uno::Exception&)
@@ -563,13 +546,15 @@ void PresetHandler::copyPresetToTarget(const OUString& sPreset,
     // dont check our preset list, if element exists
     // We try to open it and forward all errors to the user!
 
-    // SAFE -> ----------------------------------
-    Guard aReadLock(m_aLock);
-    css::uno::Reference< css::embed::XStorage > xWorkingShare = m_xWorkingStorageShare;
-    css::uno::Reference< css::embed::XStorage > xWorkingNoLang= m_xWorkingStorageNoLang;
-    css::uno::Reference< css::embed::XStorage > xWorkingUser  = m_xWorkingStorageUser ;
-    aReadLock.unlock();
-    // <- SAFE ----------------------------------
+    css::uno::Reference< css::embed::XStorage > xWorkingShare;
+    css::uno::Reference< css::embed::XStorage > xWorkingNoLang;
+    css::uno::Reference< css::embed::XStorage > xWorkingUser;
+    {
+        SolarMutexGuard g;
+        xWorkingShare = m_xWorkingStorageShare;
+        xWorkingNoLang= m_xWorkingStorageNoLang;
+        xWorkingUser  = m_xWorkingStorageUser ;
+    }
 
     // e.g. module without any config data ?!
     if (
@@ -603,11 +588,11 @@ void PresetHandler::copyPresetToTarget(const OUString& sPreset,
 css::uno::Reference< css::io::XStream > PresetHandler::openPreset(const OUString& sPreset,
                                                                   sal_Bool bUseNoLangGlobal)
 {
-    // SAFE -> ----------------------------------
-    Guard aReadLock(m_aLock);
-    css::uno::Reference< css::embed::XStorage > xFolder = bUseNoLangGlobal? m_xWorkingStorageNoLang: m_xWorkingStorageShare;
-    aReadLock.unlock();
-    // <- SAFE ----------------------------------
+    css::uno::Reference< css::embed::XStorage > xFolder;
+    {
+        SolarMutexGuard g;
+        xFolder = bUseNoLangGlobal? m_xWorkingStorageNoLang: m_xWorkingStorageShare;
+    }
 
     // e.g. module without any config data ?!
     if (!xFolder.is())
@@ -625,11 +610,11 @@ css::uno::Reference< css::io::XStream > PresetHandler::openPreset(const OUString
 css::uno::Reference< css::io::XStream > PresetHandler::openTarget(const OUString& sTarget         ,
                                                                         sal_Bool         bCreateIfMissing)
 {
-    // SAFE -> ----------------------------------
-    Guard aReadLock(m_aLock);
-    css::uno::Reference< css::embed::XStorage > xFolder = m_xWorkingStorageUser;
-    aReadLock.unlock();
-    // <- SAFE ----------------------------------
+    css::uno::Reference< css::embed::XStorage > xFolder;
+    {
+        SolarMutexGuard g;
+        xFolder = m_xWorkingStorageUser;
+    }
 
     // e.g. module without any config data ?!
     if (!xFolder.is())
@@ -665,12 +650,13 @@ css::uno::Reference< css::io::XStream > PresetHandler::openTarget(const OUString
 
 void PresetHandler::commitUserChanges()
 {
-    // SAFE -> ----------------------------------
-    Guard aReadLock(m_aLock);
-    css::uno::Reference< css::embed::XStorage > xWorking = m_xWorkingStorageUser;
-    EConfigType                                 eCfgType = m_eConfigType;
-    aReadLock.unlock();
-    // <- SAFE ----------------------------------
+    css::uno::Reference< css::embed::XStorage > xWorking;
+    EConfigType                                 eCfgType;
+    {
+        SolarMutexGuard g;
+        xWorking = m_xWorkingStorageUser;
+        eCfgType = m_eConfigType;
+    }
 
     // e.g. module without any config data ?!
     if (!xWorking.is())
@@ -702,12 +688,13 @@ void PresetHandler::commitUserChanges()
 
 void PresetHandler::addStorageListener(IStorageListener* pListener)
 {
-    // SAFE -> ----------------------------------
-    Guard aReadLock(m_aLock);
-    OUString sRelPath = m_sRelPathUser; // use user path ... because we dont work directly on the share layer!
-    EConfigType     eCfgType = m_eConfigType;
-    aReadLock.unlock();
-    // <- SAFE ----------------------------------
+    OUString sRelPath;
+    EConfigType eCfgType;
+    {
+        SolarMutexGuard g;
+        sRelPath = m_sRelPathUser; // use user path ... because we dont work directly on the share layer!
+        eCfgType = m_eConfigType;
+    }
 
     if (sRelPath.isEmpty())
         return;
@@ -732,12 +719,13 @@ void PresetHandler::addStorageListener(IStorageListener* pListener)
 
 void PresetHandler::removeStorageListener(IStorageListener* pListener)
 {
-    // SAFE -> ----------------------------------
-    Guard aReadLock(m_aLock);
-    OUString sRelPath = m_sRelPathUser; // use user path ... because we dont work directly on the share layer!
-    EConfigType     eCfgType = m_eConfigType;
-    aReadLock.unlock();
-    // <- SAFE ----------------------------------
+    OUString sRelPath;
+    EConfigType eCfgType;
+    {
+        SolarMutexGuard g;
+        sRelPath = m_sRelPathUser; // use user path ... because we dont work directly on the share layer!
+        eCfgType = m_eConfigType;
+    }
 
     if (sRelPath.isEmpty())
         return;

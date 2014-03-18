@@ -50,7 +50,7 @@ namespace framework
         "menubar"           "default"     "menubar"
 
  */
-class PresetHandler : private ThreadHelpBase // attention! Must be the first base class to guarentee right initialize lock ...
+class PresetHandler
 {
 
 
