@@ -190,7 +190,7 @@ bool SdtHelper::hasElements()
 
 void SdtHelper::appendToInteropGrabBag(const OUString& rName, const css::uno::Any& rValue)
 {
-    if(isInteropGrabBagEnabled())
+    if (isInteropGrabBagEnabled())
     {
         sal_Int32 nLength = m_aGrabBag.getLength();
         m_aGrabBag.realloc(nLength + 1);
@@ -202,7 +202,7 @@ void SdtHelper::appendToInteropGrabBag(const OUString& rName, const css::uno::An
 beans::PropertyValue SdtHelper::getInteropGrabBagAndClear()
 {
     beans::PropertyValue aProp;
-    if(isInteropGrabBagEnabled())
+    if (isInteropGrabBagEnabled())
     {
         aProp.Name = m_sGrabBagName;
         aProp.Value = uno::Any(m_aGrabBag);
