@@ -28,10 +28,10 @@
 #include "com/sun/star/java/XJavaVM.hpp"
 #include "com/sun/star/lang/XServiceInfo.hpp"
 #include "com/sun/star/uno/Reference.hxx"
+#include "cppuhelper/basemutex.hxx"
 #include "cppuhelper/compbase5.hxx"
 #include "osl/thread.hxx"
 #include "rtl/ref.hxx"
-#include <osl/mutex.hxx>
 #include <rtl/ustring.hxx>
 
 namespace com { namespace sun { namespace star {
@@ -57,7 +57,8 @@ cppu::WeakComponentImplHelper5< com::sun::star::lang::XInitialization,
                                 com::sun::star::container::XContainerListener >
 JavaVirtualMachine_Impl;
 
-class JavaVirtualMachine: private osl::Mutex, public JavaVirtualMachine_Impl
+class JavaVirtualMachine:
+    private cppu::BaseMutex, public JavaVirtualMachine_Impl
 {
 public:
     explicit JavaVirtualMachine(
@@ -141,7 +142,7 @@ private:
     com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >
         m_xContext;
 
-    // the following are controlled by the 'this' mutex:
+    // the following are controlled by BaseMutex::m_aMutex:
     bool m_bDisposed;
     rtl::Reference< jvmaccess::VirtualMachine > m_xVirtualMachine;
     rtl::Reference< jvmaccess::UnoVirtualMachine > m_xUnoVirtualMachine;

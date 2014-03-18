@@ -575,7 +575,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT void * SAL_CALL javavm_component_getFactory(sal_
 
 JavaVirtualMachine::JavaVirtualMachine(
     css::uno::Reference< css::uno::XComponentContext > const & rContext):
-    JavaVirtualMachine_Impl(*static_cast< osl::Mutex * >(this)),
+    JavaVirtualMachine_Impl(m_aMutex),
     m_xContext(rContext),
     m_bDisposed(false),
     m_pJavaVm(0),
@@ -588,7 +588,7 @@ JavaVirtualMachine::initialize(css::uno::Sequence< css::uno::Any > const &
                                    rArguments)
     throw (css::uno::Exception, std::exception)
 {
-    osl::MutexGuard aGuard(*this);
+    osl::MutexGuard aGuard(m_aMutex);
     if (m_bDisposed)
         throw css::lang::DisposedException(
             OUString(), static_cast< cppu::OWeakObject * >(this));
@@ -681,7 +681,7 @@ css::uno::Any SAL_CALL
 JavaVirtualMachine::getJavaVM(css::uno::Sequence< sal_Int8 > const & rProcessId)
     throw (css::uno::RuntimeException, std::exception)
 {
-    osl::MutexGuard aGuard(*this);
+    osl::MutexGuard aGuard(m_aMutex);
     if (m_bDisposed)
         throw css::lang::DisposedException(
             OUString(), static_cast< cppu::OWeakObject * >(this));
@@ -930,7 +930,7 @@ JavaVirtualMachine::getJavaVM(css::uno::Sequence< sal_Int8 > const & rProcessId)
 sal_Bool SAL_CALL JavaVirtualMachine::isVMStarted()
     throw (css::uno::RuntimeException, std::exception)
 {
-    osl::MutexGuard aGuard(*this);
+    osl::MutexGuard aGuard(m_aMutex);
     if (m_bDisposed)
         throw css::lang::DisposedException(
             OUString(), static_cast< cppu::OWeakObject * >(this));
@@ -941,7 +941,7 @@ sal_Bool SAL_CALL JavaVirtualMachine::isVMEnabled()
     throw (css::uno::RuntimeException, std::exception)
 {
     {
-        osl::MutexGuard aGuard(*this);
+        osl::MutexGuard aGuard(m_aMutex);
         if (m_bDisposed)
             throw css::lang::DisposedException(
                 OUString(), static_cast< cppu::OWeakObject * >(this));
@@ -959,7 +959,7 @@ sal_Bool SAL_CALL JavaVirtualMachine::isVMEnabled()
 sal_Bool SAL_CALL JavaVirtualMachine::isThreadAttached()
     throw (css::uno::RuntimeException, std::exception)
 {
-    osl::MutexGuard aGuard(*this);
+    osl::MutexGuard aGuard(m_aMutex);
     if (m_bDisposed)
         throw css::lang::DisposedException(
             OUString(), static_cast< cppu::OWeakObject * >(this));
@@ -973,7 +973,7 @@ sal_Bool SAL_CALL JavaVirtualMachine::isThreadAttached()
 void SAL_CALL JavaVirtualMachine::registerThread()
     throw (css::uno::RuntimeException, std::exception)
 {
-    osl::MutexGuard aGuard(*this);
+    osl::MutexGuard aGuard(m_aMutex);
     if (m_bDisposed)
         throw css::lang::DisposedException(
             OUString(), static_cast< cppu::OWeakObject * >(this));
@@ -1006,7 +1006,7 @@ void SAL_CALL JavaVirtualMachine::registerThread()
 void SAL_CALL JavaVirtualMachine::revokeThread()
     throw (css::uno::RuntimeException, std::exception)
 {
-    osl::MutexGuard aGuard(*this);
+    osl::MutexGuard aGuard(m_aMutex);
     if (m_bDisposed)
         throw css::lang::DisposedException(
             OUString(), static_cast< cppu::OWeakObject * >(this));
@@ -1028,7 +1028,7 @@ void SAL_CALL
 JavaVirtualMachine::disposing(css::lang::EventObject const & rSource)
     throw (css::uno::RuntimeException, std::exception)
 {
-    osl::MutexGuard aGuard(*this);
+    osl::MutexGuard aGuard(m_aMutex);
     if (rSource.Source == m_xInetConfiguration)
         m_xInetConfiguration.clear();
     if (rSource.Source == m_xJavaConfiguration)
@@ -1156,7 +1156,7 @@ void SAL_CALL JavaVirtualMachine::elementReplaced(
 
     rtl::Reference< jvmaccess::VirtualMachine > xVirtualMachine;
     {
-        osl::MutexGuard aGuard(*this);
+        osl::MutexGuard aGuard(m_aMutex);
         if (m_xUnoVirtualMachine.is()) {
             xVirtualMachine = m_xUnoVirtualMachine->getVirtualMachine();
         }
@@ -1310,7 +1310,7 @@ void SAL_CALL JavaVirtualMachine::disposing()
     css::uno::Reference< css::container::XContainer > xContainer1;
     css::uno::Reference< css::container::XContainer > xContainer2;
     {
-        osl::MutexGuard aGuard(*this);
+        osl::MutexGuard aGuard(m_aMutex);
         m_bDisposed = true;
         xContainer1 = m_xInetConfiguration;
         m_xInetConfiguration.clear();
@@ -1404,7 +1404,7 @@ void JavaVirtualMachine::registerConfigChangesListener()
 // false: the Java net properties are set to empty value.
 void JavaVirtualMachine::setINetSettingsInVM(bool set_reset)
 {
-    osl::MutexGuard aGuard(*this);
+    osl::MutexGuard aGuard(m_aMutex);
     try
     {
         if (m_xUnoVirtualMachine.is())
