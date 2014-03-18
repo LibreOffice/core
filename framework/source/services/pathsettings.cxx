@@ -36,6 +36,7 @@
 #include <tools/urlobj.hxx>
 #include <rtl/ustrbuf.hxx>
 
+#include <cppuhelper/basemutex.hxx>
 #include <cppuhelper/propshlp.hxx>
 #include <cppuhelper/compbase3.hxx>
 #include <cppuhelper/supportsservice.hxx>
@@ -84,7 +85,7 @@ typedef ::cppu::WeakComponentImplHelper3<
             css::util::XPathSettings>       // => XPropertySet
                 PathSettings_BASE;
 
-class PathSettings : private osl::Mutex
+class PathSettings : private cppu::BaseMutex
                    , public  PathSettings_BASE
                    , public  ::cppu::OPropertySetHelper
 {
@@ -458,7 +459,7 @@ private:
 
 
 PathSettings::PathSettings( const css::uno::Reference< css::uno::XComponentContext >& xContext )
-    : PathSettings_BASE(*(static_cast<osl::Mutex *>(this)))
+    : PathSettings_BASE(m_aMutex)
     , ::cppu::OPropertySetHelper(cppu::WeakComponentImplHelperBase::rBHelper)
     ,   m_xContext (xContext)
     ,   m_pPropHelp(0    )
