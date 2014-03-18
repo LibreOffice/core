@@ -30,6 +30,7 @@
 #include <rtl/strbuf.hxx>
 
 #include <cvtsvm.hxx>
+#include <boost/scoped_array.hpp>
 
 // Inlines
 void ImplReadRect( SvStream& rIStm, Rectangle& rRect )
@@ -851,7 +852,6 @@ void SVMConverter::ImplConvertFromSVM1( SvStream& rIStm, GDIMetaFile& rMtf )
 
                 case( GDI_TEXTARRAY_ACTION ):
                 {
-                    sal_Int32*  pDXAry = NULL;
                     sal_Int32   nIndex, nLen, nAryLen;
 
                     ReadPair( rIStm, aPt ).ReadInt32( nIndex ).ReadInt32( nLen ).ReadInt32( nTmp ).ReadInt32( nAryLen );
@@ -864,11 +864,12 @@ void SVMConverter::ImplConvertFromSVM1( SvStream& rIStm, GDIMetaFile& rMtf )
 
                         OUString aStr(OStringToOUString(aByteStr, eActualCharSet));
 
+                        boost::scoped_array<sal_Int32> pDXAry;
                         if (nAryLen > 0)
                         {
                             sal_Int32 nStrLen( aStr.getLength() );
 
-                            pDXAry = new sal_Int32[ std::max( nAryLen, nStrLen ) ];
+                            pDXAry.reset(new sal_Int32[ std::max( nAryLen, nStrLen ) ]);
 
                             for (sal_Int32 j = 0; j < nAryLen; ++j)
                                 rIStm.ReadInt32( nTmp ), pDXAry[ j ] = nTmp;
@@ -878,9 +879,9 @@ void SVMConverter::ImplConvertFromSVM1( SvStream& rIStm, GDIMetaFile& rMtf )
                             {
                                 if( nAryLen+1 == nStrLen )
                                 {
-                                    sal_Int32* pTmpAry = new sal_Int32[nStrLen];
+                                    boost::scoped_array<sal_Int32> pTmpAry(new sal_Int32[nStrLen]);
 
-                                    aFontVDev.GetTextArray( aStr, pTmpAry, nIndex, nLen );
+                                    aFontVDev.GetTextArray( aStr, pTmpAry.get(), nIndex, nLen );
 
                                     // now, the difference between the
                                     // last and the second last DX array
@@ -893,8 +894,6 @@ void SVMConverter::ImplConvertFromSVM1( SvStream& rIStm, GDIMetaFile& rMtf )
                                         pDXAry[ nStrLen-1 ] = pDXAry[ nStrLen-2 ] + pTmpAry[ nStrLen-1 ] - pTmpAry[ nStrLen-2 ];
                                     else
                                         pDXAry[ nStrLen-1 ] = pTmpAry[ nStrLen-1 ]; // len=1: 0th position taken to be 0
-
-                                    delete[] pTmpAry;
                                 }
     #ifdef DBG_UTIL
                                 else
@@ -904,9 +903,7 @@ void SVMConverter::ImplConvertFromSVM1( SvStream& rIStm, GDIMetaFile& rMtf )
                         }
                         if ( nUnicodeCommentActionNumber == i )
                             ImplReadUnicodeComment( nUnicodeCommentStreamPos, rIStm, aStr );
-                        rMtf.AddAction( new MetaTextArrayAction( aPt, aStr, pDXAry, nIndex, nLen ) );
-
-                        delete[] pDXAry;
+                        rMtf.AddAction( new MetaTextArrayAction( aPt, aStr, pDXAry.get(), nIndex, nLen ) );
                     }
                     rIStm.Seek( nActBegin + nActionSize );
                 }
