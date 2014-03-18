@@ -241,6 +241,10 @@ endef
 
 else # !SYSTEM_GLEW
 
+$(eval $(call gb_Helper_register_packages_for_install,ooo,\
+	glew \
+))
+
 define gb_LinkTarget__use_glew
 $(call gb_LinkTarget_use_external_project,$(1),glew)
 $(call gb_LinkTarget_set_include,$(1),\
