@@ -43,6 +43,7 @@
 #include <com/sun/star/accessibility/XAccessibleEventBroadcaster.hpp>
 #include <com/sun/star/accessibility/XAccessibleComponent.hpp>
 #include <toolkit/awt/vclxwindow.hxx>
+#include <cppuhelper/basemutex.hxx>
 #include <cppuhelper/compbase7.hxx>
 #include <comphelper/accessiblecontexthelper.hxx>
 #include <comphelper/accessibletexthelper.hxx>
@@ -61,7 +62,6 @@ class TextView;
 namespace accessibility
 {
 
-class Paragraph;
 class Document;
 
 class SfxListenerGuard
@@ -140,12 +140,12 @@ typedef ::cppu::WeakAggComponentImplHelper7<
 // 0 to N - 1), whereas the Paragraph's index is the position within the text
 // view/accessible parent (from 0 to M - 1).  Paragraphs outside the currently
 // visible range have an index of -1.
-class ParagraphImpl:
-    public ParagraphBase, private ::comphelper::OCommonAccessibleText
+class Paragraph:
+    private cppu::BaseMutex, public ParagraphBase, private ::comphelper::OCommonAccessibleText
 {
 public:
-    ParagraphImpl(::rtl::Reference< Document > const & rDocument,
-                  Paragraphs::size_type nNumber, ::osl::Mutex & rMutex);
+    Paragraph(::rtl::Reference< Document > const & rDocument,
+                  Paragraphs::size_type nNumber);
 
     // Not thread-safe.
     inline Paragraphs::size_type getNumber() const { return m_nNumber; }
@@ -406,153 +406,153 @@ public:
     // Must be called only after init has been called.
     // To make it possible for this method to be (indirectly) called from
     // within Paragraph's constructor (i.e., when the Paragraph's ref count is
-    // still zero), pass a "ParagraphImpl const *" instead of a
-    // "::rtl::Reference< ParagraphImpl > const &".
-    ::sal_Int32 retrieveParagraphIndex(ParagraphImpl const * pParagraph);
+    // still zero), pass a "Paragraph const *" instead of a
+    // "::rtl::Reference< Paragraph > const &".
+    ::sal_Int32 retrieveParagraphIndex(Paragraph const * pParagraph);
 
     // Must be called only after init has been called.
     // To make it possible for this method to be (indirectly) called from
     // within Paragraph's constructor (i.e., when the Paragraph's ref count is
-    // still zero), pass a "ParagraphImpl const *" instead of a
-    // "::rtl::Reference< ParagraphImpl > const &".
-    ::sal_Int64 retrieveParagraphState(ParagraphImpl const * pParagraph);
+    // still zero), pass a "Paragraph const *" instead of a
+    // "::rtl::Reference< Paragraph > const &".
+    ::sal_Int64 retrieveParagraphState(Paragraph const * pParagraph);
 
     // Must be called only after init has been called.
     // To make it possible for this method to be (indirectly) called from
     // within Paragraph's constructor (i.e., when the Paragraph's ref count is
-    // still zero), pass a "ParagraphImpl const &" instead of a
-    // "::rtl::Reference< ParagraphImpl > const &".
+    // still zero), pass a "Paragraph const &" instead of a
+    // "::rtl::Reference< Paragraph > const &".
     css::awt::Rectangle
-    retrieveParagraphBounds(ParagraphImpl const * pParagraph, bool bAbsolute);
+    retrieveParagraphBounds(Paragraph const * pParagraph, bool bAbsolute);
 
     // Must be called only after init has been called.
     // To make it possible for this method to be (indirectly) called from
     // within Paragraph's constructor (i.e., when the Paragraph's ref count is
-    // still zero), pass a "ParagraphImpl const &" instead of a
-    // "::rtl::Reference< ParagraphImpl > const &".
-    OUString retrieveParagraphText(ParagraphImpl const * pParagraph);
+    // still zero), pass a "Paragraph const &" instead of a
+    // "::rtl::Reference< Paragraph > const &".
+    OUString retrieveParagraphText(Paragraph const * pParagraph);
 
     // Must be called only after init has been called.
     // To make it possible for this method to be (indirectly) called from
     // within Paragraph's constructor (i.e., when the Paragraph's ref count is
-    // still zero), pass a "ParagraphImpl const &" instead of a
-    // "::rtl::Reference< ParagraphImpl > const &".
-    void retrieveParagraphSelection(ParagraphImpl const * pParagraph,
+    // still zero), pass a "Paragraph const &" instead of a
+    // "::rtl::Reference< Paragraph > const &".
+    void retrieveParagraphSelection(Paragraph const * pParagraph,
                                     ::sal_Int32 * pBegin, ::sal_Int32 * pEnd);
 
     // Must be called only after init has been called.
     // To make it possible for this method to be (indirectly) called from
     // within Paragraph's constructor (i.e., when the Paragraph's ref count is
-    // still zero), pass a "ParagraphImpl const *" instead of a
-    // "::rtl::Reference< ParagraphImpl > const &".
-    ::sal_Int32 retrieveParagraphCaretPosition(ParagraphImpl const * pParagraph);
+    // still zero), pass a "Paragraph const *" instead of a
+    // "::rtl::Reference< Paragraph > const &".
+    ::sal_Int32 retrieveParagraphCaretPosition(Paragraph const * pParagraph);
 
     // Must be called only after init has been called.
     // To make it possible for this method to be (indirectly) called from
     // within Paragraph's constructor (i.e., when the Paragraph's ref count is
-    // still zero), pass a "ParagraphImpl const &" instead of a
-    // "::rtl::Reference< ParagraphImpl > const &".
+    // still zero), pass a "Paragraph const &" instead of a
+    // "::rtl::Reference< Paragraph > const &".
     // Throws css::lang::IndexOutOfBoundsException.
     css::awt::Rectangle
-    retrieveCharacterBounds(ParagraphImpl const * pParagraph,
+    retrieveCharacterBounds(Paragraph const * pParagraph,
                             ::sal_Int32 nIndex);
 
     // Must be called only after init has been called.
     // To make it possible for this method to be (indirectly) called from
     // within Paragraph's constructor (i.e., when the Paragraph's ref count is
-    // still zero), pass a "ParagraphImpl const &" instead of a
-    // "::rtl::Reference< ParagraphImpl > const &".
-    ::sal_Int32 retrieveCharacterIndex(ParagraphImpl const * pParagraph,
+    // still zero), pass a "Paragraph const &" instead of a
+    // "::rtl::Reference< Paragraph > const &".
+    ::sal_Int32 retrieveCharacterIndex(Paragraph const * pParagraph,
                                        css::awt::Point const & rPoint);
 
     // Must be called only after init has been called.
     // To make it possible for this method to be (indirectly) called from
     // within Paragraph's constructor (i.e., when the Paragraph's ref count is
-    // still zero), pass a "ParagraphImpl const &" instead of a
-    // "::rtl::Reference< ParagraphImpl > const &".
+    // still zero), pass a "Paragraph const &" instead of a
+    // "::rtl::Reference< Paragraph > const &".
     // Throws css::lang::IndexOutOfBoundsException.
     css::uno::Sequence< css::beans::PropertyValue > retrieveCharacterAttributes(
-        ParagraphImpl const * pParagraph, ::sal_Int32 nIndex,
+        Paragraph const * pParagraph, ::sal_Int32 nIndex,
         const css::uno::Sequence< OUString >& aRequestedAttributes);
 
     // Must be called only after init has been called.
     // To make it possible for this method to be (indirectly) called from
     // within Paragraph's constructor (i.e., when the Paragraph's ref count is
-    // still zero), pass a "ParagraphImpl const &" instead of a
-    // "::rtl::Reference< ParagraphImpl > const &".
+    // still zero), pass a "Paragraph const &" instead of a
+    // "::rtl::Reference< Paragraph > const &".
     css::uno::Sequence< css::beans::PropertyValue > retrieveDefaultAttributes(
-        ParagraphImpl const * pParagraph,
+        Paragraph const * pParagraph,
         const css::uno::Sequence< OUString >& RequestedAttributes);
 
     // Must be called only after init has been called.
     // To make it possible for this method to be (indirectly) called from
     // within Paragraph's constructor (i.e., when the Paragraph's ref count is
-    // still zero), pass a "ParagraphImpl const &" instead of a
-    // "::rtl::Reference< ParagraphImpl > const &".
+    // still zero), pass a "Paragraph const &" instead of a
+    // "::rtl::Reference< Paragraph > const &".
     // Throws css::lang::IndexOutOfBoundsException.
     css::uno::Sequence< css::beans::PropertyValue > retrieveRunAttributes(
-        ParagraphImpl const * pParagraph, ::sal_Int32 Index,
+        Paragraph const * pParagraph, ::sal_Int32 Index,
         const css::uno::Sequence< OUString >& RequestedAttributes);
 
     // Must be called only after init has been called.
     // To make it possible for this method to be (indirectly) called from
     // within Paragraph's constructor (i.e., when the Paragraph's ref count is
-    // still zero), pass a "ParagraphImpl const &" instead of a
-    // "::rtl::Reference< ParagraphImpl > const &".
-    void changeParagraphText(ParagraphImpl * pParagraph,
+    // still zero), pass a "Paragraph const &" instead of a
+    // "::rtl::Reference< Paragraph > const &".
+    void changeParagraphText(Paragraph * pParagraph,
                              OUString const & rText);
 
     // Must be called only after init has been called.
     // To make it possible for this method to be (indirectly) called from
     // within Paragraph's constructor (i.e., when the Paragraph's ref count is
-    // still zero), pass a "ParagraphImpl const &" instead of a
-    // "::rtl::Reference< ParagraphImpl > const &".
+    // still zero), pass a "Paragraph const &" instead of a
+    // "::rtl::Reference< Paragraph > const &".
     // Throws css::lang::IndexOutOfBoundsException.
-    void changeParagraphText(ParagraphImpl * pParagraph, ::sal_Int32 nBegin,
+    void changeParagraphText(Paragraph * pParagraph, ::sal_Int32 nBegin,
                              ::sal_Int32 nEnd, bool bCut, bool bPaste,
                              OUString const & rText);
 
     // Must be called only after init has been called.
     // To make it possible for this method to be (indirectly) called from
     // within Paragraph's constructor (i.e., when the Paragraph's ref count is
-    // still zero), pass a "ParagraphImpl const &" instead of a
-    // "::rtl::Reference< ParagraphImpl > const &".
+    // still zero), pass a "Paragraph const &" instead of a
+    // "::rtl::Reference< Paragraph > const &".
     // Throws css::lang::IndexOutOfBoundsException.
-    void copyParagraphText(ParagraphImpl const * pParagraph,
+    void copyParagraphText(Paragraph const * pParagraph,
                            ::sal_Int32 nBegin, ::sal_Int32 nEnd);
 
     // Must be called only after init has been called.
     // To make it possible for this method to be (indirectly) called from
     // within Paragraph's constructor (i.e., when the Paragraph's ref count is
-    // still zero), pass a "ParagraphImpl const &" instead of a
-    // "::rtl::Reference< ParagraphImpl > const &".
+    // still zero), pass a "Paragraph const &" instead of a
+    // "::rtl::Reference< Paragraph > const &".
     // Throws css::lang::IndexOutOfBoundsException.
     void changeParagraphAttributes(
-        ParagraphImpl * pParagraph, ::sal_Int32 nBegin, ::sal_Int32 nEnd,
+        Paragraph * pParagraph, ::sal_Int32 nBegin, ::sal_Int32 nEnd,
         css::uno::Sequence< css::beans::PropertyValue > const &
         rAttributeSet);
 
     // Must be called only after init has been called.
     // To make it possible for this method to be (indirectly) called from
     // within Paragraph's constructor (i.e., when the Paragraph's ref count is
-    // still zero), pass a "ParagraphImpl const &" instead of a
-    // "::rtl::Reference< ParagraphImpl > const &".
+    // still zero), pass a "Paragraph const &" instead of a
+    // "::rtl::Reference< Paragraph > const &".
     // Throws css::lang::IndexOutOfBoundsException.
-    void changeParagraphSelection(ParagraphImpl * pParagraph,
+    void changeParagraphSelection(Paragraph * pParagraph,
                                   ::sal_Int32 nBegin, ::sal_Int32 nEnd);
 
     css::i18n::Boundary
-    retrieveParagraphLineBoundary( ParagraphImpl const * pParagraph,
+    retrieveParagraphLineBoundary( Paragraph const * pParagraph,
                                    ::sal_Int32 nIndex, ::sal_Int32 *pLineNo = NULL);
 
     css::i18n::Boundary
-    retrieveParagraphBoundaryOfLine( ParagraphImpl const * pParagraph,
+    retrieveParagraphBoundaryOfLine( Paragraph const * pParagraph,
                                      ::sal_Int32 nIndex );
 
-    sal_Int32 retrieveParagraphLineWithCursor( ParagraphImpl const * pParagraph );
+    sal_Int32 retrieveParagraphLineWithCursor( Paragraph const * pParagraph );
 
     css::uno::Reference< css::accessibility::XAccessibleRelationSet >
-    retrieveParagraphRelationSet( ParagraphImpl const * pParagraph );
+    retrieveParagraphRelationSet( Paragraph const * pParagraph );
 
 private:
     virtual ::sal_Int32 SAL_CALL getAccessibleChildCount()
@@ -592,7 +592,7 @@ private:
 
     // Must be called with both the external (Solar) and internal mutex
     // locked, and after init has been called:
-    ::rtl::Reference< ParagraphImpl >
+    ::rtl::Reference< Paragraph >
     getParagraph(Paragraphs::iterator const & rIt);
 
     // Must be called with both the external (Solar) and internal mutex
@@ -637,12 +637,12 @@ private:
     static ::FontWeight mapFontWeight(css::uno::Any const & rWeight);
 
     void retrieveDefaultAttributesImpl(
-        ParagraphImpl const * pParagraph,
+        Paragraph const * pParagraph,
         const css::uno::Sequence< OUString >& RequestedAttributes,
         tPropValMap& rDefAttrSeq);
 
     void retrieveRunAttributesImpl(
-        ParagraphImpl const * pParagraph, ::sal_Int32 Index,
+        Paragraph const * pParagraph, ::sal_Int32 Index,
         const css::uno::Sequence< OUString >& RequestedAttributes,
         tPropValMap& rRunAttrSeq);
 
