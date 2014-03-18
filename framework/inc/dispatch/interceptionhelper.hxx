@@ -20,7 +20,6 @@
 #ifndef INCLUDED_FRAMEWORK_INC_DISPATCH_INTERCEPTIONHELPER_HXX
 #define INCLUDED_FRAMEWORK_INC_DISPATCH_INTERCEPTIONHELPER_HXX
 
-#include <threadhelp/threadhelpbase.hxx>
 #include <macros/xinterface.hxx>
 #include <macros/generic.hxx>
 #include <general.h>
@@ -48,9 +47,7 @@ namespace framework{
     @attention  Don't use this class as direct member - use it dynamicly. Do not derive from this class.
                 We hold a weakreference to ouer owner not to ouer superclass.
  */
-class InterceptionHelper : // order of base classes is important for right initialization of mutex member!
-                           private ThreadHelpBase,
-                           public  ::cppu::WeakImplHelper3<
+class InterceptionHelper : public  ::cppu::WeakImplHelper3<
                                      css::frame::XDispatchProvider,
                                      css::frame::XDispatchProviderInterception,
                                      css::lang::XEventListener >

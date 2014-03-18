@@ -18,7 +18,6 @@
  */
 
 #include <dispatch/interceptionhelper.hxx>
-#include <threadhelp/guard.hxx>
 
 #include <com/sun/star/frame/XInterceptorInfo.hpp>
 
@@ -34,10 +33,7 @@ sal_Bool InterceptionHelper::m_bPreferrFirstInterceptor = sal_True;
 
 InterceptionHelper::InterceptionHelper(const css::uno::Reference< css::frame::XFrame >&            xOwner,
                                        const css::uno::Reference< css::frame::XDispatchProvider >& xSlave)
-    //  Init baseclasses first
-    : ThreadHelpBase(&Application::GetSolarMutex())
-    // Init member
-    , m_xOwnerWeak  (xOwner                       )
+    : m_xOwnerWeak  (xOwner                       )
     , m_xSlave      (xSlave                       )
 {
 }
@@ -52,7 +48,7 @@ css::uno::Reference< css::frame::XDispatch > SAL_CALL InterceptionHelper::queryD
     throw(css::uno::RuntimeException, std::exception)
 {
     // SAFE {
-    Guard aReadLock(m_aLock);
+    SolarMutexClearableGuard aReadLock;
 
     // a) first search an interceptor, which match to this URL by it's URL pattern registration
     //    Note: if it return NULL - it does not mean an empty interceptor list automaticly!
@@ -78,7 +74,7 @@ css::uno::Reference< css::frame::XDispatch > SAL_CALL InterceptionHelper::queryD
     if (!xInterceptor.is() && m_xSlave.is())
         xInterceptor = m_xSlave;
 
-    aReadLock.unlock();
+    aReadLock.clear();
     // } SAFE
 
     css::uno::Reference< css::frame::XDispatch > xReturn;
@@ -125,7 +121,7 @@ void SAL_CALL InterceptionHelper::registerDispatchProviderInterceptor(const css:
     }
 
     // SAFE {
-    Guard aWriteLock(m_aLock);
+    SolarMutexClearableGuard aWriteLock;
 
     // a) no interceptor at all - set this instance as master for given interceptor
     //    and set our slave as it's slave - and put this interceptor to the list.
@@ -172,7 +168,7 @@ void SAL_CALL InterceptionHelper::registerDispatchProviderInterceptor(const css:
 
     css::uno::Reference< css::frame::XFrame > xOwner(m_xOwnerWeak.get(), css::uno::UNO_QUERY);
 
-    aWriteLock.unlock();
+    aWriteLock.clear();
     // } SAFE
 
     // Don't forget to send a frame action event "context changed".
@@ -190,7 +186,7 @@ void SAL_CALL InterceptionHelper::releaseDispatchProviderInterceptor(const css::
         throw css::uno::RuntimeException("NULL references not allowed as in parameter", xThis);
 
     // SAFE {
-    Guard aWriteLock(m_aLock);
+    SolarMutexClearableGuard aWriteLock;
 
     // search this interceptor ...
     // If it could be located inside cache -
@@ -219,7 +215,7 @@ void SAL_CALL InterceptionHelper::releaseDispatchProviderInterceptor(const css::
 
     css::uno::Reference< css::frame::XFrame > xOwner(m_xOwnerWeak.get(), css::uno::UNO_QUERY);
 
-    aWriteLock.unlock();
+    aWriteLock.clear();
     // } SAFE
 
     // Don't forget to send a frame action event "context changed".
@@ -234,7 +230,7 @@ void SAL_CALL InterceptionHelper::disposing(const css::lang::EventObject& aEvent
 {
     #ifdef FORCE_DESTRUCTION_OF_INTERCEPTION_CHAIN
     // SAFE ->
-    Guard aReadLock(m_aLock);
+    SolarMutexResettableGuard aReadLock;
 
     // check calli ... we accept such disposing call's only from our onwer frame.
     css::uno::Reference< css::frame::XFrame > xOwner(m_xOwnerWeak.get(), css::uno::UNO_QUERY);
@@ -250,7 +246,7 @@ void SAL_CALL InterceptionHelper::disposing(const css::lang::EventObject& aEvent
     // Because this vetor will be influenced by every deregistered interceptor.
     InterceptionHelper::InterceptorList aCopy = m_lInterceptionRegs;
 
-    aReadLock.unlock();
+    aReadLock.clear();
     // <- SAFE
 
     InterceptionHelper::InterceptorList::iterator pIt;
@@ -271,10 +267,10 @@ void SAL_CALL InterceptionHelper::disposing(const css::lang::EventObject& aEvent
 
     #if OSL_DEBUG_LEVEL > 0
     // SAFE ->
-    aReadLock.lock();
+    aReadLock.reset();
     if (!m_lInterceptionRegs.empty() )
         OSL_FAIL("There are some pending interceptor objects, which seems to be registered during (!) the destruction of a frame.");
-    aReadLock.unlock();
+    aReadLock.clear();
     // <- SAFE
     #endif // ODL_DEBUG_LEVEL>0
 
