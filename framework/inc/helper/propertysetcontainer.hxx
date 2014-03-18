@@ -27,14 +27,12 @@
 #include <cppuhelper/weak.hxx>
 #include <com/sun/star/container/XIndexContainer.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
-#include <threadhelp/threadhelpbase.hxx>
 #include <framework/fwedllapi.h>
 
 namespace framework
 {
 
 class FWE_DLLPUBLIC PropertySetContainer : public com::sun::star::container::XIndexContainer    ,
-                             public ThreadHelpBase                              ,   // Struct for right initalization of mutex member! Must be first of baseclasses.
                              public ::cppu::OWeakObject
 {
     public:

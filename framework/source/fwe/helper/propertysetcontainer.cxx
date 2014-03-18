@@ -18,7 +18,6 @@
  */
 
 #include <helper/propertysetcontainer.hxx>
-#include <threadhelp/guard.hxx>
 
 #include <vcl/svapp.hxx>
 
@@ -34,8 +33,7 @@ namespace framework
 {
 
 PropertySetContainer::PropertySetContainer()
-        :   ThreadHelpBase( &Application::GetSolarMutex() )
-        ,   OWeakObject()
+        :   OWeakObject()
 
 {
 }
@@ -79,7 +77,7 @@ throw ( RuntimeException, std::exception )
 void SAL_CALL PropertySetContainer::insertByIndex( sal_Int32 Index, const ::com::sun::star::uno::Any& Element )
     throw ( IllegalArgumentException, IndexOutOfBoundsException, WrappedTargetException, RuntimeException, std::exception )
 {
-    Guard aGuard( m_aLock );
+    SolarMutexGuard g;
 
     sal_Int32 nSize = m_aPropertySetVector.size();
 
@@ -112,7 +110,7 @@ void SAL_CALL PropertySetContainer::insertByIndex( sal_Int32 Index, const ::com:
 void SAL_CALL PropertySetContainer::removeByIndex( sal_Int32 nIndex )
     throw ( IndexOutOfBoundsException, WrappedTargetException, RuntimeException, std::exception )
 {
-    Guard aGuard( m_aLock );
+    SolarMutexGuard g;
 
     if ( (sal_Int32)m_aPropertySetVector.size() > nIndex )
     {
@@ -149,7 +147,7 @@ void SAL_CALL PropertySetContainer::replaceByIndex( sal_Int32 Index, const ::com
 sal_Int32 SAL_CALL PropertySetContainer::getCount()
     throw ( RuntimeException, std::exception )
 {
-    Guard aGuard( m_aLock );
+    SolarMutexGuard g;
 
     return m_aPropertySetVector.size();
 }
@@ -157,7 +155,7 @@ sal_Int32 SAL_CALL PropertySetContainer::getCount()
 Any SAL_CALL PropertySetContainer::getByIndex( sal_Int32 Index )
     throw ( IndexOutOfBoundsException, WrappedTargetException, RuntimeException, std::exception )
 {
-    Guard aGuard( m_aLock );
+    SolarMutexGuard g;
 
     if ( (sal_Int32)m_aPropertySetVector.size() > Index )
     {
@@ -174,7 +172,7 @@ Any SAL_CALL PropertySetContainer::getByIndex( sal_Int32 Index )
 sal_Bool SAL_CALL PropertySetContainer::hasElements()
     throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
-    Guard aGuard( m_aLock );
+    SolarMutexGuard g;
 
     return !( m_aPropertySetVector.empty() );
 }

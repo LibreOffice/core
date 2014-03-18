@@ -126,7 +126,7 @@ throw ( RuntimeException, std::exception )
 void SAL_CALL RootActionTriggerContainer::insertByIndex( sal_Int32 Index, const Any& Element )
 throw ( IllegalArgumentException, IndexOutOfBoundsException, WrappedTargetException, RuntimeException, std::exception )
 {
-    Guard aGuard( m_aLock );
+    SolarMutexGuard g;
 
     if ( !m_bContainerCreated )
         FillContainer();
@@ -139,7 +139,7 @@ throw ( IllegalArgumentException, IndexOutOfBoundsException, WrappedTargetExcept
 void SAL_CALL RootActionTriggerContainer::removeByIndex( sal_Int32 Index )
 throw ( IndexOutOfBoundsException, WrappedTargetException, RuntimeException, std::exception )
 {
-    Guard aGuard( m_aLock );
+    SolarMutexGuard g;
 
     if ( !m_bContainerCreated )
         FillContainer();
@@ -153,7 +153,7 @@ throw ( IndexOutOfBoundsException, WrappedTargetException, RuntimeException, std
 void SAL_CALL RootActionTriggerContainer::replaceByIndex( sal_Int32 Index, const Any& Element )
 throw ( IllegalArgumentException, IndexOutOfBoundsException, WrappedTargetException, RuntimeException, std::exception )
 {
-    Guard aGuard( m_aLock );
+    SolarMutexGuard g;
 
     if ( !m_bContainerCreated )
         FillContainer();
@@ -167,7 +167,7 @@ throw ( IllegalArgumentException, IndexOutOfBoundsException, WrappedTargetExcept
 sal_Int32 SAL_CALL RootActionTriggerContainer::getCount()
 throw ( RuntimeException, std::exception )
 {
-    Guard aGuard( m_aLock );
+    SolarMutexGuard g;
 
     if ( !m_bContainerCreated )
     {
@@ -188,7 +188,7 @@ throw ( RuntimeException, std::exception )
 Any SAL_CALL RootActionTriggerContainer::getByIndex( sal_Int32 Index )
 throw ( IndexOutOfBoundsException, WrappedTargetException, RuntimeException, std::exception )
 {
-    Guard aGuard( m_aLock );
+    SolarMutexGuard g;
 
     if ( !m_bContainerCreated )
         FillContainer();
