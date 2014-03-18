@@ -21,7 +21,6 @@
 #define INCLUDED_FRAMEWORK_INC_HELPER_OFRAMES_HXX
 
 #include <classes/framecontainer.hxx>
-#include <threadhelp/threadhelpbase.hxx>
 #include <macros/generic.hxx>
 #include <macros/xinterface.hxx>
 #include <macros/xtypeprovider.hxx>
@@ -55,8 +54,7 @@ namespace framework{
 
     @devstatus      deprecated
 *//*-*************************************************************************************************************/
-class OFrames   :   private ThreadHelpBase      ,   // Must be the first of baseclasses - Is necessary for right initialization of objects!
-                    public ::cppu::WeakImplHelper1< ::com::sun::star::frame::XFrames >
+class OFrames   :   public ::cppu::WeakImplHelper1< ::com::sun::star::frame::XFrames >
 {
     public:
 

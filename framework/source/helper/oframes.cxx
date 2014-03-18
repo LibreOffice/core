@@ -19,8 +19,6 @@
 
 #include <helper/oframes.hxx>
 
-#include <threadhelp/guard.hxx>
-
 #include <com/sun/star/frame/XDesktop.hpp>
 #include <com/sun/star/frame/FrameSearchFlag.hpp>
 
@@ -42,10 +40,7 @@ using namespace ::std                           ;
 
 OFrames::OFrames( const   css::uno::Reference< XFrame >&              xOwner          ,
                             FrameContainer*                     pFrameContainer )
-        //  Init baseclasses first
-        :   ThreadHelpBase              ( &Application::GetSolarMutex() )
-        // Init member
-        ,   m_xOwner                    ( xOwner                        )
+        :   m_xOwner                    ( xOwner                        )
         ,   m_pFrameContainer           ( pFrameContainer               )
         ,   m_bRecursiveSearchProtection( sal_False                     )
 {
@@ -67,8 +62,7 @@ OFrames::~OFrames()
 //  XFrames
 void SAL_CALL OFrames::append( const css::uno::Reference< XFrame >& xFrame ) throw( RuntimeException, std::exception )
 {
-    // Ready for multithreading
-    Guard aGuard( m_aLock );
+    SolarMutexGuard g;
 
     // Safe impossible cases
     // Method is not defined for ALL incoming parameters!
@@ -92,8 +86,7 @@ void SAL_CALL OFrames::append( const css::uno::Reference< XFrame >& xFrame ) thr
 //  XFrames
 void SAL_CALL OFrames::remove( const css::uno::Reference< XFrame >& xFrame ) throw( RuntimeException, std::exception )
 {
-    // Ready for multithreading
-    Guard aGuard( m_aLock );
+    SolarMutexGuard g;
 
     // Safe impossible cases
     // Method is not defined for ALL incoming parameters!
@@ -118,8 +111,7 @@ void SAL_CALL OFrames::remove( const css::uno::Reference< XFrame >& xFrame ) thr
 //  XFrames
 Sequence< css::uno::Reference< XFrame > > SAL_CALL OFrames::queryFrames( sal_Int32 nSearchFlags ) throw( RuntimeException, std::exception )
 {
-    // Ready for multithreading
-    Guard aGuard( m_aLock );
+    SolarMutexGuard g;
 
     // Safe impossible cases
     // Method is not defined for ALL incoming parameters!
@@ -224,8 +216,7 @@ Sequence< css::uno::Reference< XFrame > > SAL_CALL OFrames::queryFrames( sal_Int
 //  XIndexAccess
 sal_Int32 SAL_CALL OFrames::getCount() throw( RuntimeException, std::exception )
 {
-    // Ready for multithreading
-    Guard aGuard( m_aLock );
+    SolarMutexGuard g;
 
     // Set default return value.
     sal_Int32 nCount = 0;
@@ -250,8 +241,7 @@ Any SAL_CALL OFrames::getByIndex( sal_Int32 nIndex ) throw( IndexOutOfBoundsExce
                                                             WrappedTargetException      ,
                                                             RuntimeException, std::exception            )
 {
-    // Ready for multithreading
-    Guard aGuard( m_aLock );
+    SolarMutexGuard g;
 
       sal_uInt32 nCount = m_pFrameContainer->getCount();
       if ( nIndex < 0 || ( sal::static_int_cast< sal_uInt32 >( nIndex ) >= nCount ))
@@ -287,8 +277,7 @@ Type SAL_CALL OFrames::getElementType() throw( RuntimeException, std::exception 
 //  XElementAccess
 sal_Bool SAL_CALL OFrames::hasElements() throw( RuntimeException, std::exception )
 {
-    // Ready for multithreading
-    Guard aGuard( m_aLock );
+    SolarMutexGuard g;
 
     // Set default return value.
     sal_Bool bHasElements = sal_False;
