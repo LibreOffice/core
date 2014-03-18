@@ -618,7 +618,10 @@ Color SvxBorderLine::GetColorGap( ) const
     return aResult;
 }
 
-
+void SvxBorderLine::SetWidth( long nWidth )
+{
+    m_nWidth = nWidth;
+}
 
 OUString SvxBorderLine::GetValueString( SfxMapUnit eSrcUnit,
                                       SfxMapUnit eDestUnit,

@@ -86,7 +86,7 @@ namespace editeng {
         bool            HasGapColor() const { return m_pColorGapFn != NULL; }
         Color           GetColorGap() const;
 
-        void            SetWidth( long nWidth = 0 ) { m_nWidth = nWidth; }
+        void SetWidth( long nWidth = 0 );
         /** Guess the style and width from the three lines widths values.
 
             When the value of nStyle is SvxBorderLine::DOUBLE, the style set will be guessed
