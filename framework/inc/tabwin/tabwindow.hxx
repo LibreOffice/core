@@ -21,7 +21,6 @@
 #define INCLUDED_FRAMEWORK_INC_TABWIN_TABWINDOW_HXX
 
 #include <stdtypes.h>
-#include <threadhelp/threadhelpbase.hxx>
 #include <macros/generic.hxx>
 #include <macros/xinterface.hxx>
 #include <macros/xtypeprovider.hxx>
@@ -39,6 +38,7 @@
 #include <com/sun/star/awt/XSimpleTabController.hpp>
 #include <com/sun/star/awt/XTabListener.hpp>
 
+#include <cppuhelper/basemutex.hxx>
 #include <cppuhelper/propshlp.hxx>
 #include <cppuhelper/interfacecontainer.hxx>
 #include <cppuhelper/weak.hxx>
@@ -55,7 +55,7 @@ class TabWindow :  public ::com::sun::star::lang::XTypeProvider             ,
                    public ::com::sun::star::awt::XWindowListener            ,
                    public ::com::sun::star::awt::XTopWindowListener         ,
                    public ::com::sun::star::awt::XSimpleTabController       ,
-                   protected ThreadHelpBase                                 ,   // Struct for right initalization of mutex member! Must be first of baseclasses.
+                   private cppu::BaseMutex,
                    public ::cppu::OBroadcastHelper                          ,
                    public ::cppu::OPropertySetHelper                        ,   // => XPropertySet / XFastPropertySet / XMultiPropertySet
                    public ::cppu::OWeakObject
