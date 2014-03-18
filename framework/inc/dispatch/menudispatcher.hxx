@@ -24,7 +24,6 @@
 #include <macros/generic.hxx>
 #include <macros/xinterface.hxx>
 #include <macros/xtypeprovider.hxx>
-#include <threadhelp/threadhelpbase.hxx>
 #include <classes/menumanager.hxx>
 #include <general.h>
 #include <stdtypes.h>
@@ -67,16 +66,11 @@ typedef ::cppu::OMultiTypeInterfaceContainerHelperVar<  OUString         ,
                     XLoadEventListener
                     XFrameActionListener
                     XEventListener
-    @base           ThreadHelpBase
-                    OWeakObject
+    @base           OWeakObject
 
     @devstatus      ready to use
 *//*-*************************************************************************************************************/
-class MenuDispatcher   :        // baseclasses
-                                // Order is necessary for right initialization!
-                                public ThreadHelpBase                       ,
-                                // interfaces
-                                public  ::cppu::WeakImplHelper2<
+class MenuDispatcher   :        public  ::cppu::WeakImplHelper2<
                                             css::frame::XDispatch           ,
                                             css::frame::XFrameActionListener >
 {
@@ -250,6 +244,7 @@ class MenuDispatcher   :        // baseclasses
 
         css::uno::WeakReference< css::frame::XFrame >           m_xOwnerWeak        ;   /// css::uno::WeakReference to owner (Don't use a hard css::uno::Reference. Owner can't delete us then!)
         css::uno::Reference< css::uno::XComponentContext >      m_xContext          ;   /// factory shared with our owner to create new services!
+        osl::Mutex m_mutex;
         IMPL_ListenerHashContainer                              m_aListenerContainer;   /// hash table for listener at specified URLs
         sal_Bool                                                m_bAlreadyDisposed  ;   /// Protection against multiple disposing calls.
         sal_Bool                                                m_bActivateListener ;   /// dispatcher is listener for frame activation

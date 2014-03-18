@@ -21,7 +21,6 @@
 #include <general.h>
 #include <framework/menuconfiguration.hxx>
 #include <framework/addonmenu.hxx>
-#include <threadhelp/guard.hxx>
 #include <services.h>
 
 #include <com/sun/star/frame/FrameSearchFlag.hpp>
@@ -70,12 +69,9 @@ static sal_Bool impldbg_checkParameter_removeStatusListener (   const   css::uno
 
 MenuDispatcher::MenuDispatcher(   const   uno::Reference< XComponentContext >&  xContext    ,
                                   const   uno::Reference< XFrame >&             xOwner      )
-        //  Init baseclasses first
-        :   ThreadHelpBase          ( &Application::GetSolarMutex()  )
-        // Init member
-        ,   m_xOwnerWeak            ( xOwner                         )
+        :   m_xOwnerWeak            ( xOwner                         )
         ,   m_xContext              ( xContext                       )
-        ,   m_aListenerContainer    ( m_aLock.getShareableOslMutex() )
+        ,   m_aListenerContainer    ( m_mutex )
         ,   m_bAlreadyDisposed      ( sal_False                      )
         ,   m_bActivateListener     ( sal_False                      )
         ,   m_pMenuManager          ( NULL                           )
@@ -112,8 +108,7 @@ void SAL_CALL MenuDispatcher::dispatch(    const   URL&                        /
 void SAL_CALL MenuDispatcher::addStatusListener(   const   uno::Reference< XStatusListener >&   xControl,
                                                     const   URL&                            aURL    ) throw( RuntimeException, std::exception )
 {
-    // Ready for multithreading
-    Guard aGuard( m_aLock );
+    SolarMutexGuard g;
     // Safe impossible cases
     // Method not defined for all incoming parameter
     SAL_WARN_IF( !impldbg_checkParameter_addStatusListener( xControl, aURL ), "fwk", "MenuDispatcher::addStatusListener(): Invalid parameter detected." );
@@ -127,8 +122,7 @@ void SAL_CALL MenuDispatcher::addStatusListener(   const   uno::Reference< XStat
 void SAL_CALL MenuDispatcher::removeStatusListener(    const   uno::Reference< XStatusListener >&   xControl,
                                                         const   URL&                            aURL    ) throw( RuntimeException, std::exception )
 {
-    // Ready for multithreading
-    Guard aGuard( m_aLock );
+    SolarMutexGuard g;
     // Safe impossible cases
     // Method not defined for all incoming parameter
     SAL_WARN_IF( !impldbg_checkParameter_removeStatusListener( xControl, aURL ), "fwk", "MenuDispatcher::removeStatusListener(): Invalid parameter detected." );
@@ -142,19 +136,19 @@ void SAL_CALL MenuDispatcher::removeStatusListener(    const   uno::Reference< X
 
 void SAL_CALL MenuDispatcher::frameAction( const FrameActionEvent& aEvent ) throw ( RuntimeException, std::exception )
 {
-    Guard aGuard( m_aLock );
+    SolarMutexResettableGuard aGuard;
 
     if ( m_pMenuManager && aEvent.Action == FrameAction_FRAME_UI_ACTIVATED )
     {
         MenuBar* pMenuBar = (MenuBar *)m_pMenuManager->GetMenu();
         uno::Reference< XFrame > xFrame( m_xOwnerWeak.get(), UNO_QUERY );
-        aGuard.unlock();
+        aGuard.clear();
 
         if ( xFrame.is() && pMenuBar )
         {
             uno::Reference< ::com::sun::star::awt::XWindow >xContainerWindow = xFrame->getContainerWindow();
 
-            SolarMutexGuard aSolarGuard;
+            aGuard.reset();
             {
                 Window* pWindow = VCLUnoHelper::GetWindow( xContainerWindow );
                 while ( pWindow && !pWindow->IsSystemWindow() )
@@ -179,8 +173,7 @@ void SAL_CALL MenuDispatcher::frameAction( const FrameActionEvent& aEvent ) thro
 //   XEventListener
 void SAL_CALL MenuDispatcher::disposing( const EventObject& ) throw( RuntimeException, std::exception )
 {
-    // Ready for multithreading
-    Guard aGuard( m_aLock );
+    SolarMutexGuard g;
     // Safe impossible cases
     SAL_WARN_IF( m_bAlreadyDisposed, "fwk", "MenuDispatcher::disposing(): Object already disposed .. don't call it again!" );
 
@@ -244,7 +237,6 @@ sal_Bool MenuDispatcher::impl_setMenuBar( MenuBar* pMenuBar, sal_Bool bMenuFromR
         uno::Reference< ::com::sun::star::awt::XWindow >xContainerWindow = xFrame->getContainerWindow();
         Window* pWindow = NULL;
 
-        // Use SolarMutex for threadsafe code too!
         SolarMutexGuard aSolarGuard;
         {
             pWindow = VCLUnoHelper::GetWindow( xContainerWindow );
@@ -254,9 +246,6 @@ sal_Bool MenuDispatcher::impl_setMenuBar( MenuBar* pMenuBar, sal_Bool bMenuFromR
 
         if ( pWindow )
         {
-            // Ready for multithreading
-            Guard aGuard( m_aLock );
-
             SystemWindow* pSysWindow = (SystemWindow *)pWindow;
 
             if ( m_pMenuManager )
