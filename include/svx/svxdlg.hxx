@@ -212,16 +212,15 @@ public:
     virtual void    SetButtonText( sal_uInt16 nBtnId, const OUString& rNewTxt ) = 0;
 };
 
-class AbstractSvxMultiPathDialog :public VclAbstractDialog
+class AbstractSvxMultiPathDialog : public VclAbstractDialog
 {
 public:
     virtual OUString        GetPath() const = 0;
     virtual void            SetPath( const OUString& rPath ) = 0;
-    virtual void            EnableRadioButtonMode() = 0;
     virtual void            SetTitle( const OUString& rNewTitle ) = 0;
 };
 
-class AbstractSvxMultiFileDialog :public AbstractSvxMultiPathDialog
+class AbstractSvxMultiFileDialog : public AbstractSvxMultiPathDialog
 {
 public:
     virtual OUString GetFiles() const = 0;
@@ -403,6 +402,7 @@ public:
                                             Image* pImg = NULL ) = 0;
 
     virtual AbstractSvxMultiPathDialog *    CreateSvxMultiPathDialog(Window* pParent) = 0 ;
+    virtual AbstractSvxMultiPathDialog *    CreateSvxPathSelectDialog(Window* pParent) = 0 ;
     virtual AbstractSvxHpLinkDlg *  CreateSvxHpLinkDlg (Window* pParent,
                                             SfxBindings* pBindings,
                                             sal_uInt32 nResId)=0;

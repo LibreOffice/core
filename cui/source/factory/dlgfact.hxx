@@ -392,12 +392,20 @@ class AbstractSvxMessDialog_Impl :public AbstractSvxMessDialog
 };
 
 class SvxMultiPathDialog;
-class AbstractSvxMultiPathDialog_Impl :public AbstractSvxMultiPathDialog
+class AbstractSvxMultiPathDialog_Impl : public AbstractSvxMultiPathDialog
 {
     DECL_ABSTDLG_BASE(AbstractSvxMultiPathDialog_Impl,SvxMultiPathDialog)
     virtual OUString        GetPath() const;
     virtual void            SetPath( const OUString& rPath );
-    virtual void            EnableRadioButtonMode();
+    virtual void            SetTitle( const OUString& rNewTitle );
+};
+
+class SvxPathSelectDialog;
+class AbstractSvxPathSelectDialog_Impl : public AbstractSvxMultiPathDialog
+{
+    DECL_ABSTDLG_BASE(AbstractSvxPathSelectDialog_Impl,SvxPathSelectDialog)
+    virtual OUString        GetPath() const;
+    virtual void            SetPath( const OUString& rPath );
     virtual void            SetTitle( const OUString& rNewTitle );
 };
 
@@ -626,6 +634,7 @@ public:
                                                 const OUString& rText, const OUString& rDesc,
                                                 Image* pImg = NULL );
     virtual AbstractSvxMultiPathDialog *    CreateSvxMultiPathDialog(Window* pParent);
+    virtual AbstractSvxMultiPathDialog *    CreateSvxPathSelectDialog(Window* pParent);
     virtual AbstractSvxHpLinkDlg *          CreateSvxHpLinkDlg (Window* pParent,
                                                 SfxBindings* pBindings,
                                                 sal_uInt32 nResId);

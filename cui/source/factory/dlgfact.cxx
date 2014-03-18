@@ -135,6 +135,7 @@ IMPL_ABSTDLG_BASE(AbstractSvxObjectTitleDescDialog_Impl);
 
 IMPL_ABSTDLG_BASE(AbstractSvxMessDialog_Impl);
 IMPL_ABSTDLG_BASE(AbstractSvxMultiPathDialog_Impl);
+IMPL_ABSTDLG_BASE(AbstractSvxPathSelectDialog_Impl);
 IMPL_ABSTDLG_BASE(AbstractSvxHpLinkDlg_Impl);
 IMPL_ABSTDLG_BASE(AbstractFmSearchDialog_Impl);
 IMPL_ABSTDLG_BASE(AbstractGraphicFilterDialog_Impl);
@@ -796,12 +797,22 @@ void AbstractSvxMultiPathDialog_Impl::SetPath( const OUString& rPath )
     pDlg->SetPath( rPath );
 }
 
-void AbstractSvxMultiPathDialog_Impl::EnableRadioButtonMode()
+void AbstractSvxMultiPathDialog_Impl::SetTitle( const OUString& rNewTitle )
 {
-    pDlg->EnableRadioButtonMode();
+    pDlg->SetText( rNewTitle );
 }
 
-void AbstractSvxMultiPathDialog_Impl::SetTitle( const OUString& rNewTitle )
+OUString AbstractSvxPathSelectDialog_Impl::GetPath() const
+{
+    return pDlg->GetPath();
+}
+
+void AbstractSvxPathSelectDialog_Impl::SetPath( const OUString& rPath )
+{
+    pDlg->SetPath( rPath );
+}
+
+void AbstractSvxPathSelectDialog_Impl::SetTitle( const OUString& rNewTitle )
 {
     pDlg->SetText( rNewTitle );
 }
@@ -1416,6 +1427,12 @@ AbstractSvxMultiPathDialog * AbstractDialogFactory_Impl::CreateSvxMultiPathDialo
 {
     SvxMultiPathDialog* pDlg = new SvxMultiPathDialog(pParent);
     return new AbstractSvxMultiPathDialog_Impl( pDlg );
+}
+
+AbstractSvxMultiPathDialog * AbstractDialogFactory_Impl::CreateSvxPathSelectDialog(Window* pParent)
+{
+    SvxPathSelectDialog* pDlg = new SvxPathSelectDialog(pParent);
+    return new AbstractSvxPathSelectDialog_Impl( pDlg );
 }
 
 AbstractSvxHpLinkDlg * AbstractDialogFactory_Impl::CreateSvxHpLinkDlg (Window* pParent,

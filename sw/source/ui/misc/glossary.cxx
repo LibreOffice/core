@@ -1022,7 +1022,7 @@ IMPL_LINK( SwGlossaryDlg, PathHdl, Button *, pBtn )
     SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
     if(pFact)
     {
-        boost::scoped_ptr<AbstractSvxMultiPathDialog> pDlg(pFact->CreateSvxMultiPathDialog( pBtn ));
+        boost::scoped_ptr<AbstractSvxMultiPathDialog> pDlg(pFact->CreateSvxPathSelectDialog(pBtn));
         OSL_ENSURE(pDlg, "Dialogdiet fail!");
         SvtPathOptions aPathOpt;
         const OUString sGlosPath( aPathOpt.GetAutoTextPath() );

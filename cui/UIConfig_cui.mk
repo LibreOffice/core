@@ -86,6 +86,7 @@ $(eval $(call gb_UIConfig_add_uifiles,cui,\
 	cui/uiconfig/ui/messbox \
 	cui/uiconfig/ui/mosaicdialog \
 	cui/uiconfig/ui/movemenu \
+	cui/uiconfig/ui/multipathdialog \
 	cui/uiconfig/ui/namedialog \
 	cui/uiconfig/ui/newlibdialog \
 	cui/uiconfig/ui/newtabledialog \
@@ -158,6 +159,7 @@ $(eval $(call gb_UIConfig_add_uifiles,cui,\
 	cui/uiconfig/ui/searchformatdialog \
 	cui/uiconfig/ui/securityoptionsdialog \
 	cui/uiconfig/ui/select_persona_dialog \
+	cui/uiconfig/ui/selectpathdialog \
 	cui/uiconfig/ui/shadowtabpage \
 	cui/uiconfig/ui/showcoldialog \
 	cui/uiconfig/ui/similaritysearchdialog \

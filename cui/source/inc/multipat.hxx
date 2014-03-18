@@ -36,28 +36,17 @@
 #define CLASSPATH_DELIMITER ';'
 #endif
 
-// class SvxMultiPathDialog ----------------------------------------------
-
 class SvxMultiPathDialog : public ModalDialog
 {
-protected:
-    FixedLine                   aPathFL;
-    ListBox                     aPathLB;
-    SvSimpleTableContainer m_aRadioLBContainer;
-    svx::SvxRadioButtonListBox  aRadioLB;
-    FixedText                   aRadioFT;
-    PushButton                  aAddBtn;
-    PushButton                  aDelBtn;
-    OKButton                    aOKBtn;
-    CancelButton                aCancelBtn;
-    HelpButton                  aHelpButton;
-
-    bool                        bIsRadioButtonMode;
+private:
+    svx::SvxRadioButtonListBox* m_pRadioLB;
+    PushButton*                 m_pAddBtn;
+    PushButton*                 m_pDelBtn;
 
     DECL_LINK(AddHdl_Impl, void *);
     DECL_LINK(DelHdl_Impl, void *);
-    DECL_LINK( SelectHdl_Impl, void * );
-    DECL_LINK( CheckHdl_Impl, svx::SvxRadioButtonListBox * );
+    DECL_LINK(SelectHdl_Impl, void *);
+    DECL_LINK(CheckHdl_Impl, svx::SvxRadioButtonListBox*);
 
 public:
     SvxMultiPathDialog(Window* pParent);
@@ -65,7 +54,25 @@ public:
 
     OUString        GetPath() const;
     void            SetPath( const OUString& rPath );
-    void            EnableRadioButtonMode();
+};
+
+class SvxPathSelectDialog : public ModalDialog
+{
+private:
+    ListBox*                    m_pPathLB;
+    PushButton*                 m_pAddBtn;
+    PushButton*                 m_pDelBtn;
+
+    DECL_LINK(AddHdl_Impl, void *);
+    DECL_LINK(DelHdl_Impl, void *);
+    DECL_LINK(SelectHdl_Impl, void *);
+
+public:
+    SvxPathSelectDialog(Window* pParent);
+    ~SvxPathSelectDialog();
+
+    OUString        GetPath() const;
+    void            SetPath( const OUString& rPath );
 };
 
 #endif // INCLUDED_CUI_SOURCE_INC_MULTIPAT_HXX
