@@ -13,6 +13,7 @@ $(eval $(call gb_AutoInstall_add_module,activexbinarytable,LIBO_LIB_FILE_BINARYT
 $(eval $(call gb_AutoInstall_add_module,base,LIBO_LIB_FILE))
 $(eval $(call gb_AutoInstall_add_module,calc,LIBO_LIB_FILE))
 $(eval $(call gb_AutoInstall_add_module,extensions_bsh,,,LIBO_JAR_FILE))
+$(eval $(call gb_AutoInstall_add_module,extensions_rhino,,,LIBO_JAR_FILE))
 $(eval $(call gb_AutoInstall_add_module,gnome,LIBO_LIB_FILE))
 $(eval $(call gb_AutoInstall_add_module,graphicfilter,LIBO_LIB_FILE))
 $(eval $(call gb_AutoInstall_add_module,impress,LIBO_LIB_FILE))

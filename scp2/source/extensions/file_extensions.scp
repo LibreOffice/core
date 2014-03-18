@@ -228,8 +228,6 @@ End
 
 #if defined ENABLE_JAVA && !defined WITHOUT_SCRIPTING_JAVASCRIPT
 
-STD_JAR_FILE( gid_File_Jar_Js, js )
-
 STD_JAR_FILE( gid_File_Jar_Scriptproviderforjavascript, ScriptProviderForJavaScript )
 
 File gid_File_Rdb_Scriptproviderforjavascript

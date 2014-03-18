@@ -19,6 +19,7 @@
 #include "macros.inc"
 
 #include "AutoInstall/extensions_bsh"
+#include "AutoInstall/extensions_rhino"
 
 Module gid_Module_Optional_Extensions
     MOD_NAME_DESC(MODULE_OPTIONAL_EXTENSIONS);
@@ -266,8 +267,7 @@ Module gid_Module_Optional_Extensions_Script_Provider_For_JS
     PackageInfo = "packinfo_extensions.txt";
     MOD_NAME_DESC(MODULE_OPTIONAL_EXTENSIONS_SCRIPT_PROVIDER_FOR_JAVASCRIPT);
     ParentID = gid_Module_Optional_Extensions;
-    Files = (
-        gid_File_Jar_Js,
+    Files = (auto_extensions_rhino_ALL,
         gid_File_Jar_Scriptproviderforjavascript,
         gid_File_Rdb_Scriptproviderforjavascript );
     Minimal = NO;
