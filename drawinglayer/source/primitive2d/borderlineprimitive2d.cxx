@@ -183,37 +183,33 @@ primitive2d::Primitive2DReference makeSolidLinePrimitive(
 
                     xRetval.realloc(2);
 
-                    {
-                        // "inside" line
-                        double fWidth = getLeftWidth();
-                        basegfx::BColor aColor = getRGBColorLeft();
-                        bool bIsHairline = lcl_UseHairline(
-                                fWidth, getStart(), getEnd(), rViewInformation);
-                        fWidth = lcl_GetCorrectedWidth(fWidth,
-                                    getStart(), getEnd(), rViewInformation);
+                    double fLeftWidth = getLeftWidth();
+                    bool bLeftHairline = lcl_UseHairline(fLeftWidth, getStart(), getEnd(), rViewInformation);
+                    if (bLeftHairline)
+                        fLeftWidth = 0.0;
 
-                        if (bIsHairline)
-                            xRetval[0] = makeHairLinePrimitive(getStart(), getEnd(), aVector, aColor, 0.0);
-                        else
-                            xRetval[0] = makeSolidLinePrimitive(
-                                aClipRegion, aTmpStart, aTmpEnd, aVector, aColor, fWidth, 0.0);
-                    }
+                    double fRightWidth = getRightWidth();
+                    bool bRightHairline = lcl_UseHairline(fRightWidth, getStart(), getEnd(), rViewInformation);
+                    if (bRightHairline)
+                        fRightWidth = 0.0;
 
-                    {
-                        // "outside" line
-                        double fWidth = getRightWidth();
-                        basegfx::BColor aColor = getRGBColorRight();
-                        bool bIsHairline = lcl_UseHairline(
-                                fWidth, getStart(), getEnd(), rViewInformation);
-                        fWidth = lcl_GetCorrectedWidth(fWidth,
-                                    getStart(), getEnd(), rViewInformation);
+                    // "inside" line
 
-                        if (bIsHairline)
-                            xRetval[1] = makeHairLinePrimitive(getStart(), getEnd(), aVector, aColor, mfDistance);
-                        else
-                            xRetval[1] = makeSolidLinePrimitive(
-                                aClipRegion, aTmpStart, aTmpEnd, aVector, aColor, fWidth, mfDistance);
-                    }
+                    if (bLeftHairline)
+                        xRetval[0] = makeHairLinePrimitive(
+                            getStart(), getEnd(), aVector, getRGBColorLeft(), 0.0);
+                    else
+                        xRetval[0] = makeSolidLinePrimitive(
+                            aClipRegion, aTmpStart, aTmpEnd, aVector, getRGBColorLeft(), fLeftWidth, 0.0);
+
+                    // "outside" line
+
+                    if (bRightHairline)
+                        xRetval[1] = makeHairLinePrimitive(
+                            getStart(), getEnd(), aVector, getRGBColorRight(), fLeftWidth+mfDistance);
+                    else
+                        xRetval[1] = makeSolidLinePrimitive(
+                            aClipRegion, aTmpStart, aTmpEnd, aVector, getRGBColorRight(), fRightWidth, fLeftWidth+mfDistance);
                 }
                 else
                 {
