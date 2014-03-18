@@ -156,7 +156,7 @@ void Desktop::constructorInit()
 Desktop::Desktop( const css::uno::Reference< css::uno::XComponentContext >& xContext )
         :   ThreadHelpBase          ( &Application::GetSolarMutex()                 )
         ,   TransactionBase         (                                               )
-        ,   Desktop_BASE            ( *static_cast<osl::Mutex *>(this)              )
+        ,   Desktop_BASE            ( m_aMutex )
         ,   cppu::OPropertySetHelper( cppu::WeakComponentImplHelperBase::rBHelper   )
         // Init member
         ,   m_bIsTerminated         ( sal_False                                     )   // see dispose() for further information!

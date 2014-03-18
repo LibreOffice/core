@@ -97,7 +97,7 @@ typedef cppu::WeakComponentImplHelper6<
            css::task::XInteractionHandler       ,
            css::frame::XUntitledNumbers > Desktop_BASE;
 
-class Desktop : private osl::Mutex,
+class Desktop : private cppu::BaseMutex,
                 private ThreadHelpBase,
                 private TransactionBase,
                 public Desktop_BASE,
