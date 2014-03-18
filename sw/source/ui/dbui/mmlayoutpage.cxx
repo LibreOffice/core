@@ -24,6 +24,7 @@
 #include <mailmergehelper.hxx>
 #include <unotools.hxx>
 #include <comphelper/string.hxx>
+#include <i18nutil/unicode.hxx>
 #include <unotools/tempfile.hxx>
 #include <uitool.hxx>
 #include <svx/dlgutil.hxx>
@@ -51,6 +52,7 @@
 #include <svl/urihelper.hxx>
 #include <shellio.hxx>
 #include <osl/file.hxx>
+#include <vcl/settings.hxx>
 #include <unoprnms.hxx>
 
 #include <mmlayoutpage.hrc>
@@ -126,9 +128,10 @@ SwMailMergeLayoutPage::SwMailMergeLayoutPage( SwMailMergeWizard* _pParent) :
     m_pLeftMF->SetValue(m_pLeftMF->Normalize(DEFAULT_LEFT_DISTANCE), FUNIT_TWIP);
     m_pTopMF->SetValue(m_pTopMF->Normalize(DEFAULT_TOP_DISTANCE), FUNIT_TWIP);
 
-    m_pZoomLB->InsertEntry(OUString("50 %"), 1);
-    m_pZoomLB->InsertEntry(OUString("75 %"), 2);
-    m_pZoomLB->InsertEntry(OUString("100 %"), 3);
+    const LanguageTag& rLang = Application::GetSettings().GetUILanguageTag();
+    m_pZoomLB->InsertEntry(unicode::formatPercent(50, rLang), 1);
+    m_pZoomLB->InsertEntry(unicode::formatPercent(75, rLang), 2);
+    m_pZoomLB->InsertEntry(unicode::formatPercent(100, rLang), 3);
     m_pZoomLB->SelectEntryPos(0); //page size
     m_pZoomLB->SetSelectHdl(LINK(this, SwMailMergeLayoutPage, ZoomHdl_Impl));
 

@@ -48,6 +48,7 @@ $(eval $(call gb_Library_use_libraries,swui,\
     cppuhelper \
     editeng \
     i18nlangtag \
+    i18nutil \
     msfilter \
     sal \
     sfx \
