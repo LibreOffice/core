@@ -69,6 +69,7 @@
 #include <com/sun/star/util/XModifyListener.hpp>
 
 #include <comphelper/configurationhelper.hxx>
+#include <cppuhelper/basemutex.hxx>
 #include <cppuhelper/exc_hlp.hxx>
 #include <cppuhelper/compbase5.hxx>
 #include <cppuhelper/propshlp.hxx>
@@ -173,7 +174,7 @@ typedef ::cppu::WeakComponentImplHelper5<
             css::util::XModifyListener >      // => css.lang.XEventListener
          AutoRecovery_BASE;
 
-class AutoRecovery  : private osl::Mutex
+class AutoRecovery  : private cppu::BaseMutex
                     , public  AutoRecovery_BASE
                     , public  ::cppu::OPropertySetHelper            // => XPropertySet, XFastPropertySet, XMultiPropertySet
 {
@@ -1363,7 +1364,7 @@ void DispatchParams::forget()
 
 
 AutoRecovery::AutoRecovery(const css::uno::Reference< css::uno::XComponentContext >& xContext)
-    : AutoRecovery_BASE         (*static_cast<Mutex *>(this))
+    : AutoRecovery_BASE         (m_aMutex)
     , ::cppu::OPropertySetHelper(cppu::WeakComponentImplHelperBase::rBHelper)
     , m_xContext                (xContext                                           )
     , m_bListenForDocEvents     (sal_False                                          )
