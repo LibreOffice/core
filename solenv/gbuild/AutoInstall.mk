@@ -11,7 +11,7 @@
 
 define gb_AutoInstall__make_define
 echo "#define auto_$*_ALL \ " >> $@
-$(foreach binary,$(filter-out $(lastword $(1)),$(1)),echo "    $(subst -,_,$(binary)), \ " >> $@;)
+$(foreach binary,$(filter-out $(lastword $(1)),$(1)),echo "    $(subst .,_,$(subst -,_,$(binary))), \ " >> $@;)
 echo "    $(lastword $(1))" >> $@;
 echo "" >> $@
 endef
@@ -34,9 +34,9 @@ $(call gb_AutoInstall_get_target,%) : $(GBUILDDIR)/AutoInstall.mk \
 	$(foreach lib,$(gb_SdkLinkLibrary_MODULE_$*),\
 		echo 'SDK_LIBRARY_LINK(auto_$*_link_$(lib),$(notdir $(call gb_Library_get_sdk_link_lib,$(lib))),../../ure-link/lib/$(call gb_Library_get_runtime_filename,$(lib)))' >> $@;)
 	$(foreach exe,$(gb_Executable_MODULE_$*),\
-		echo "$(SCP2EXETEMPLATE)(auto_$*_exe_$(subst -,_,$(exe)),$(call gb_Executable_get_filename,$(exe)))" >> $@;)
+		echo "$(SCP2EXETEMPLATE)(auto_$*_exe_$(subst .,_,$(subst -,_,$(exe))),$(call gb_Executable_get_filename,$(exe)))" >> $@;)
 	$(foreach jar,$(gb_Jar_MODULE_$*),\
-		echo '$(SCP2JARTEMPLATE)(auto_$*_jar_$(subst -,_,$(jar)),$(jar).jar)' >> $@;)
+		echo '$(SCP2JARTEMPLATE)(auto_$*_jar_$(subst .,_,$(subst -,_,$(jar))),$(jar).jar)' >> $@;)
 	$(foreach pkg,$(gb_Package_MODULE_$*),\
 		echo 'PACKAGE_FILELIST(auto_$*_pkg_$(subst -,_,$(pkg)),$(pkg).filelist)' >> $@;)
 
