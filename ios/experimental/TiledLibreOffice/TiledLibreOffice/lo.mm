@@ -38,19 +38,20 @@ static NSString *createPaths(NSString *base, NSString *appRootEscaped, NSArray *
     return result;
 }
 
-extern "C" void lo_initialize(void)
+extern "C" void lo_initialize(NSString *documentPath)
 {
-    NSString * bundlePath = [[NSBundle mainBundle] bundlePath];
-    NSString * app_root_escaped = [bundlePath stringByAddingPercentEscapesUsingEncoding: NSUTF8StringEncoding];
-    NSString * uno_types = createPaths(@"-env:UNO_TYPES=", app_root_escaped, @[@"offapi.rdb", @"oovbaapi.rdb", @"types.rdb"]);
-    NSString * uno_services = createPaths(@"-env:UNO_SERVICES=", app_root_escaped, @[@"ure/services.rdb", @"services.rdb"]);
+    NSString *bundlePath = [[NSBundle mainBundle] bundlePath];
+    NSString *app_root_escaped = [bundlePath stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+    NSString *uno_types = createPaths(@"-env:UNO_TYPES=", app_root_escaped, @[@"offapi.rdb", @"oovbaapi.rdb", @"types.rdb"]);
+    NSString *uno_services = createPaths(@"-env:UNO_SERVICES=", app_root_escaped, @[@"ure/services.rdb", @"services.rdb"]);
 
     const char *argv[] = {
         [[[NSBundle mainBundle] executablePath] UTF8String],
         "-env:URE_INTERNAL_LIB_DIR=file:///",
         [uno_types UTF8String],
         [uno_services UTF8String],
-        [[@"file://" stringByAppendingString: [app_root_escaped stringByAppendingPathComponent: @"test1.odt"]] UTF8String]};
+        [[@"file://" stringByAppendingString: [documentPath stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]] UTF8String]
+    };
 
     const int argc = sizeof(argv)/sizeof(*argv);
 

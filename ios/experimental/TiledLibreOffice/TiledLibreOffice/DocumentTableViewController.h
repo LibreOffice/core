@@ -8,11 +8,11 @@
 
 #import <UIKit/UIKit.h>
 
-@interface AppDelegate : UIResponder <UIApplicationDelegate>
+#import "AppDelegate.h"
 
-@property (strong, nonatomic) UIWindow *window;
+@interface DocumentTableViewController : UITableViewController
 
-- (void)startDisplaying:(NSString*)documentPath;
++ (id)createForDocuments:(NSArray*)documents forAppDelegate:(AppDelegate*)appDelegate;
 
 @end
 

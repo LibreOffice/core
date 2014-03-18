@@ -9,9 +9,17 @@
 #include <touch/touch.h>
 
 #import "AppDelegate.h"
+#import "DocumentTableViewController.h"
 #import "View.h"
 #import "ViewController.h"
 #import "lo.h"
+
+@interface AppDelegate ()
+
+- (void)showDocumentList:(NSArray*)documents inFolder:(NSString*)folder;
+- (void)threadMainMethod:(NSString *)documentPath;
+
+@end
 
 @implementation AppDelegate
 
@@ -21,24 +29,53 @@
     self.window.backgroundColor = [UIColor whiteColor];
     [self.window makeKeyAndVisible];
 
-    ViewController *vc = [[ViewController alloc] init];
-    self.window.rootViewController = vc;
+    NSFileManager *fileManager = [NSFileManager defaultManager];
+    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+    NSString *documentsDirectory = [paths objectAtIndex:0];
 
-    [[[NSThread alloc] initWithTarget:self selector:@selector(threadMainMethod:) object:nil] start];
+    NSDirectoryEnumerator *dirEnumerator = [fileManager enumeratorAtPath:documentsDirectory];
+    int nDocs = 0;
+    NSString *document;
+    NSMutableArray *documents = [[NSMutableArray alloc] init];
+    NSString *test1 = [[[NSBundle mainBundle] bundlePath] stringByAppendingPathComponent: @"test1.odt"];
+    [documents addObject:test1];
 
-    vc.view = [[View alloc] initWithFrame:[self.window frame]];
+    while ((document = [dirEnumerator nextObject])) {
+        nDocs++;
+        [documents addObject:[documentsDirectory stringByAppendingPathComponent:document]];
+    }
+
+    if (nDocs == 0) {
+        [self startDisplaying:test1];
+    } else {
+        [documents sortUsingSelector:@selector(localizedStandardCompare:)];
+        [self showDocumentList:documents inFolder:documentsDirectory];
+    }
 
     return YES;
 }
 
-- (void)threadMainMethod:(id)argument
+- (void)startDisplaying:(NSString*)documentPath;
 {
-    (void) argument;
+    ViewController *vc = [[ViewController alloc] init];
+    self.window.rootViewController = vc;
 
+    [[[NSThread alloc] initWithTarget:self selector:@selector(threadMainMethod:) object:documentPath] start];
+    vc.view = [[View alloc] initWithFrame:[self.window frame]];
+}
+
+- (void)threadMainMethod:(NSString *)documentPath
+{
     @autoreleasepool {
-        lo_initialize();
+        lo_initialize(documentPath);
         touch_lo_runMain();
     }
+}
+
+- (void)showDocumentList:(NSArray*)documents inFolder:(NSString*)folder
+{
+    UITableViewController *vc = [DocumentTableViewController createForDocuments:documents forAppDelegate:self];
+    self.window.rootViewController = vc;
 }
 
 - (void)applicationWillResignActive:(UIApplication *)application

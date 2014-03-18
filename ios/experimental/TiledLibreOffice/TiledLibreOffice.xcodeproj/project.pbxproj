@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		BE55B06D18D87CC600950228 /* DocumentTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BE55B06C18D87CC600950228 /* DocumentTableViewController.m */; };
 		BE82BD7618218E2E00A447B5 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BE82BD7518218E2E00A447B5 /* Foundation.framework */; };
 		BE82BD7818218E2E00A447B5 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BE82BD7718218E2E00A447B5 /* CoreGraphics.framework */; };
 		BE82BD7A18218E2E00A447B5 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BE82BD7918218E2E00A447B5 /* UIKit.framework */; };
@@ -166,6 +167,8 @@
 		BE35B5A2188FFA88001B7439 /* unourl.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = unourl.cxx; path = ../../../cppuhelper/source/unourl.cxx; sourceTree = "<group>"; };
 		BE35B5A3188FFA88001B7439 /* weak.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = weak.cxx; path = ../../../cppuhelper/source/weak.cxx; sourceTree = "<group>"; };
 		BE35B5A71890520E001B7439 /* objface.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = objface.cxx; path = ../../../sfx2/source/control/objface.cxx; sourceTree = "<group>"; };
+		BE55B06B18D87CC600950228 /* DocumentTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DocumentTableViewController.h; sourceTree = "<group>"; };
+		BE55B06C18D87CC600950228 /* DocumentTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DocumentTableViewController.m; sourceTree = "<group>"; };
 		BE7C277218D1DDF600C4908C /* acmplwrd.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = acmplwrd.cxx; path = ../../../sw/source/core/doc/acmplwrd.cxx; sourceTree = "<group>"; };
 		BE7C277318D1DDF600C4908C /* dbgoutsw.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = dbgoutsw.cxx; path = ../../../sw/source/core/doc/dbgoutsw.cxx; sourceTree = "<group>"; };
 		BE7C277418D1DDF600C4908C /* doc.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = doc.cxx; path = ../../../sw/source/core/doc/doc.cxx; sourceTree = "<group>"; };
@@ -802,6 +805,8 @@
 				BECAB371186054DE00F814F9 /* lo.mm */,
 				BE82BD8418218E2E00A447B5 /* AppDelegate.h */,
 				BE82BD8518218E2E00A447B5 /* AppDelegate.m */,
+				BE55B06B18D87CC600950228 /* DocumentTableViewController.h */,
+				BE55B06C18D87CC600950228 /* DocumentTableViewController.m */,
 				BE82BDAA182190E400A447B5 /* TiledView.h */,
 				BE82BDAB182190E400A447B5 /* TiledView.m */,
 				BE82BDAD1821A1D000A447B5 /* View.h */,
@@ -1236,6 +1241,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				BECAB372186054DE00F814F9 /* lo.mm in Sources */,
+				BE55B06D18D87CC600950228 /* DocumentTableViewController.m in Sources */,
 				BE82BDAF1821A1D000A447B5 /* View.m in Sources */,
 				BE82BDAC182190E400A447B5 /* TiledView.m in Sources */,
 				BE82BD8C18218E2E00A447B5 /* ViewController.m in Sources */,
