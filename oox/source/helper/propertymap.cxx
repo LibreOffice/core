@@ -98,7 +98,7 @@ typedef ::cppu::WeakImplHelper2< XPropertySet, XPropertySetInfo > GenericPropert
     Properties of all names and types can be set and later retrieved.
     TODO: move this to comphelper or better find an existing implementation
  */
-class GenericPropertySet : public GenericPropertySetBase, private ::osl::Mutex
+class GenericPropertySet : public GenericPropertySetBase
 {
 public:
     explicit            GenericPropertySet( const PropertyMap& rPropMap );
@@ -118,6 +118,7 @@ public:
     virtual sal_Bool SAL_CALL hasPropertyByName( const OUString& Name ) throw (RuntimeException, std::exception);
 
 private:
+    osl::Mutex mMutex;
     PropertyNameMap     maPropMap;
 };
 
@@ -133,7 +134,7 @@ Reference< XPropertySetInfo > SAL_CALL GenericPropertySet::getPropertySetInfo() 
 
 void SAL_CALL GenericPropertySet::setPropertyValue( const OUString& rPropertyName, const Any& rValue ) throw (UnknownPropertyException, PropertyVetoException, IllegalArgumentException, WrappedTargetException, RuntimeException, std::exception)
 {
-    ::osl::MutexGuard aGuard( *this );
+    ::osl::MutexGuard aGuard( mMutex );
     maPropMap[ rPropertyName ] = rValue;
 }
 
