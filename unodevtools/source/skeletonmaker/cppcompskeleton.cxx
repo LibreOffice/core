@@ -34,8 +34,8 @@ namespace skeletonmaker { namespace cpp {
 
 void generateIncludes(std::ostream & o,
          const std::set< OUString >& interfaces,
-         OUString & propertyhelper, bool serviceobject,
-         bool supportxcomponent)
+         const OUString & propertyhelper, const bool serviceobject,
+         const bool supportxcomponent)
 {
     o << "#include \"sal/config.h\"\n";
     if (serviceobject) {
