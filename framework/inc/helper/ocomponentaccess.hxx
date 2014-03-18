@@ -20,7 +20,6 @@
 #ifndef INCLUDED_FRAMEWORK_INC_HELPER_OCOMPONENTACCESS_HXX
 #define INCLUDED_FRAMEWORK_INC_HELPER_OCOMPONENTACCESS_HXX
 
-#include <threadhelp/threadhelpbase.hxx>
 #include <macros/generic.hxx>
 #include <macros/xinterface.hxx>
 #include <macros/xtypeprovider.hxx>
@@ -50,14 +49,12 @@ namespace framework{
                     XEnumerationAccess
                     XElementAccess
 
-    @base           ThreadHelpBase
-                    OWeakObject
+    @base           OWeakObject
 
     @devstatus      ready to use
 *//*-*************************************************************************************************************/
 
-class OComponentAccess  :   private ThreadHelpBase                      ,   // Must be the first of baseclasses - Is necessary for right initialization of objects!
-                            public ::cppu::WeakImplHelper1< ::com::sun::star::container::XEnumerationAccess >
+class OComponentAccess  :   public ::cppu::WeakImplHelper1< ::com::sun::star::container::XEnumerationAccess >
 {
 
     //  public methods
