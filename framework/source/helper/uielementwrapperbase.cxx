@@ -20,7 +20,6 @@
 #include <helper/uielementwrapperbase.hxx>
 #include <general.h>
 #include <properties.h>
-#include <threadhelp/guard.hxx>
 
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
@@ -45,10 +44,9 @@ namespace framework
 {
 
 UIElementWrapperBase::UIElementWrapperBase( sal_Int16 nType )
-    :   ThreadHelpBase              ( &Application::GetSolarMutex()                      )
-    ,   ::cppu::OBroadcastHelperVar< ::cppu::OMultiTypeInterfaceContainerHelper, ::cppu::OMultiTypeInterfaceContainerHelper::keyType >( m_aLock.getShareableOslMutex() )
+    :   ::cppu::OBroadcastHelperVar< ::cppu::OMultiTypeInterfaceContainerHelper, ::cppu::OMultiTypeInterfaceContainerHelper::keyType >( m_aMutex )
     ,   ::cppu::OPropertySetHelper  ( *(static_cast< ::cppu::OBroadcastHelper* >(this)) )
-    ,   m_aListenerContainer        ( m_aLock.getShareableOslMutex()                    )
+    ,   m_aListenerContainer        ( m_aMutex )
     ,   m_nType                     ( nType                                             )
     ,   m_bInitialized              ( sal_False                                         )
     ,   m_bDisposed                 ( sal_False                                         )
@@ -88,7 +86,7 @@ void SAL_CALL UIElementWrapperBase::removeEventListener( const ::com::sun::star:
 void SAL_CALL UIElementWrapperBase::initialize( const Sequence< Any >& aArguments )
 throw ( Exception, RuntimeException, std::exception )
 {
-    Guard aLock( m_aLock );
+    SolarMutexGuard g;
 
     if ( !m_bInitialized )
     {

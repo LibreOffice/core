@@ -71,7 +71,7 @@ void SAL_CALL AddonsToolBarWrapper::dispose() throw ( RuntimeException, std::exc
     com::sun::star::lang::EventObject aEvent( xThis );
     m_aListenerContainer.disposeAndClear( aEvent );
 
-    Guard aLock( m_aLock );
+    SolarMutexGuard g;
 
     if ( m_xToolBarManager.is() )
         m_xToolBarManager->dispose();
@@ -83,7 +83,7 @@ void SAL_CALL AddonsToolBarWrapper::dispose() throw ( RuntimeException, std::exc
 // XInitialization
 void SAL_CALL AddonsToolBarWrapper::initialize( const Sequence< Any >& aArguments ) throw ( Exception, RuntimeException, std::exception )
 {
-    Guard aLock( m_aLock );
+    SolarMutexGuard g;
 
     if ( m_bDisposed )
         throw DisposedException();
@@ -145,7 +145,7 @@ void SAL_CALL AddonsToolBarWrapper::initialize( const Sequence< Any >& aArgument
 // XUIElement interface
 Reference< XInterface > SAL_CALL AddonsToolBarWrapper::getRealInterface() throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
-    Guard aLock( m_aLock );
+    SolarMutexGuard g;
 
     if ( m_xToolBarManager.is() )
     {
@@ -163,7 +163,7 @@ Reference< XInterface > SAL_CALL AddonsToolBarWrapper::getRealInterface() throw 
 // allow late population of images for add-on toolbars
 void AddonsToolBarWrapper::populateImages()
 {
-    Guard aLock( m_aLock );
+    SolarMutexGuard g;
 
     if (m_bCreatedImages)
         return;

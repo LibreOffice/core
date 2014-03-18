@@ -19,6 +19,7 @@
 
 #include <uielement/addonstoolbarwrapper.hxx>
 #include <threadhelp/guard.hxx>
+#include <threadhelp/threadhelpbase.hxx>
 
 #include <com/sun/star/util/XURLTransformer.hpp>
 #include <com/sun/star/frame/ModuleManager.hpp>

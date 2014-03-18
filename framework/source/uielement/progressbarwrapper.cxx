@@ -49,7 +49,7 @@ ProgressBarWrapper::~ProgressBarWrapper()
 // public interfaces
 void ProgressBarWrapper::setStatusBar( const uno::Reference< awt::XWindow >& rStatusBar, sal_Bool bOwnsInstance )
 {
-    Guard aGuard( m_aLock );
+    SolarMutexGuard g;
 
     if ( m_bDisposed )
         return;
@@ -75,7 +75,7 @@ void ProgressBarWrapper::setStatusBar( const uno::Reference< awt::XWindow >& rSt
 
 uno::Reference< awt::XWindow > ProgressBarWrapper::getStatusBar() const
 {
-    Guard aGuard( m_aLock );
+    SolarMutexGuard g;
 
     if ( m_bDisposed )
         return uno::Reference< awt::XWindow >();
@@ -91,7 +91,7 @@ throw (uno::RuntimeException)
     sal_Int32                      nValue( 0 );
 
     {
-        Guard aGuard( m_aLock );
+        SolarMutexGuard g;
 
         if ( m_bDisposed )
             return;
@@ -130,7 +130,7 @@ throw (uno::RuntimeException)
     uno::Reference< awt::XWindow > xWindow;
 
     {
-        Guard aGuard( m_aLock );
+        SolarMutexGuard g;
 
         if ( m_bDisposed )
             return;
@@ -160,7 +160,7 @@ throw (uno::RuntimeException)
     sal_Int32 nValue( 0 );
 
     {
-        Guard aGuard( m_aLock );
+        SolarMutexGuard g;
 
         if ( m_bDisposed )
             return;
@@ -199,7 +199,7 @@ throw (uno::RuntimeException)
     sal_Bool      bSetValue( sal_False );
 
     {
-        Guard aGuard( m_aLock );
+        SolarMutexGuard g;
 
         if ( m_bDisposed )
             return;
@@ -267,7 +267,7 @@ throw (uno::RuntimeException, std::exception)
         uno::UNO_QUERY );
 
     {
-        Guard aLock( m_aLock );
+        SolarMutexGuard g;
 
         if ( m_bDisposed )
             return;
@@ -277,7 +277,7 @@ throw (uno::RuntimeException, std::exception)
         lang::EventObject aEvent( xThis );
         m_aListenerContainer.disposeAndClear( aEvent );
 
-        Guard aLock( m_aLock );
+        SolarMutexGuard g;
         if ( m_bOwnsInstance )
         {
             try
@@ -300,9 +300,7 @@ throw (uno::RuntimeException, std::exception)
 uno::Reference< uno::XInterface > SAL_CALL ProgressBarWrapper::getRealInterface()
 throw (uno::RuntimeException, std::exception)
 {
-    /* SAFE AREA ----------------------------------------------------------------------------------------------- */
-    // Ready for multithreading
-    Guard aLock( m_aLock );
+    SolarMutexGuard g;
 
     if ( m_bDisposed )
         return uno::Reference< uno::XInterface >();

@@ -20,7 +20,6 @@
 #ifndef INCLUDED_FRAMEWORK_INC_HELPER_UIELEMENTWRAPPERBASE_HXX
 #define INCLUDED_FRAMEWORK_INC_HELPER_UIELEMENTWRAPPERBASE_HXX
 
-#include <threadhelp/threadhelpbase.hxx>
 #include <macros/generic.hxx>
 #include <macros/xinterface.hxx>
 #include <macros/xtypeprovider.hxx>
@@ -32,6 +31,7 @@
 #include <com/sun/star/util/XUpdatable.hpp>
 
 #include <rtl/ustring.hxx>
+#include <cppuhelper/basemutex.hxx>
 #include <cppuhelper/propshlp.hxx>
 #include <cppuhelper/implbase4.hxx>
 
@@ -44,7 +44,7 @@ typedef ::cppu::WeakImplHelper4<
            ::com::sun::star::lang::XComponent,
            ::com::sun::star::util::XUpdatable > UIElementWrapperBase_BASE;
 
-class UIElementWrapperBase : protected ThreadHelpBase                           ,
+class UIElementWrapperBase : private cppu::BaseMutex,
                              public ::cppu::OBroadcastHelper                    ,
                              public ::cppu::OPropertySetHelper                  ,
                              public UIElementWrapperBase_BASE
