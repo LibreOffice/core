@@ -24,6 +24,7 @@
 #include <vcl/jobset.hxx>
 
 #include <jobset.h>
+#include <boost/scoped_array.hpp>
 
 
 #define JOBSET_FILE364_SYSTEM   ((sal_uInt16)0xFFFF)
@@ -236,11 +237,11 @@ SvStream& ReadJobSetup( SvStream& rIStream, JobSetup& rJobSetup )
         sal_uInt16 nSystem = 0;
         rIStream.ReadUInt16( nSystem );
 
-        char* pTempBuf = new char[nLen];
-        rIStream.Read( pTempBuf,  nLen - sizeof( nLen ) - sizeof( nSystem ) );
+        boost::scoped_array<char> pTempBuf(new char[nLen]);
+        rIStream.Read( pTempBuf.get(),  nLen - sizeof( nLen ) - sizeof( nSystem ) );
         if ( nLen >= sizeof(ImplOldJobSetupData)+4 )
         {
-            ImplOldJobSetupData* pData = (ImplOldJobSetupData*)pTempBuf;
+            ImplOldJobSetupData* pData = (ImplOldJobSetupData*)pTempBuf.get();
             if ( rJobSetup.mpData )
             {
                 if ( rJobSetup.mpData->mnRefCount == 1 )
@@ -262,7 +263,7 @@ SvStream& ReadJobSetup( SvStream& rIStream, JobSetup& rJobSetup )
             if ( nSystem == JOBSET_FILE364_SYSTEM ||
                  nSystem == JOBSET_FILE605_SYSTEM )
             {
-                Impl364JobSetupData* pOldJobData    = (Impl364JobSetupData*)(pTempBuf + sizeof( ImplOldJobSetupData ));
+                Impl364JobSetupData* pOldJobData    = (Impl364JobSetupData*)(pTempBuf.get() + sizeof( ImplOldJobSetupData ));
                 sal_uInt16 nOldJobDataSize              = SVBT16ToShort( pOldJobData->nSize );
                 pJobData->mnSystem                  = SVBT16ToShort( pOldJobData->nSystem );
                 pJobData->mnDriverDataLen           = SVBT32ToUInt32( pOldJobData->nDriverDataLen );
@@ -305,7 +306,6 @@ SvStream& ReadJobSetup( SvStream& rIStream, JobSetup& rJobSetup )
                 }
             }
         }
-        delete[] pTempBuf;
     }
 
     return rIStream;

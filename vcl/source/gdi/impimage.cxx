@@ -28,6 +28,7 @@
 #include <vcl/settings.hxx>
 
 #include <image.h>
+#include <boost/scoped_array.hpp>
 
 #define IMPSYSIMAGEITEM_MASK        ( 0x01 )
 #define IMPSYSIMAGEITEM_ALPHA       ( 0x02 )
@@ -211,9 +212,9 @@ void ImplImageBmp::Draw( sal_uInt16 nPos, OutputDevice* pOutDev,
                         BitmapColor             aCol;
                         const long              nW = pAcc->Width();
                         const long              nH = pAcc->Height();
-                        sal_uInt8*                  pMapR = new sal_uInt8[ 256 ];
-                        sal_uInt8*                  pMapG = new sal_uInt8[ 256 ];
-                        sal_uInt8*                  pMapB = new sal_uInt8[ 256 ];
+                        boost::scoped_array<sal_uInt8> pMapR(new sal_uInt8[ 256 ]);
+                        boost::scoped_array<sal_uInt8> pMapG(new sal_uInt8[ 256 ]);
+                        boost::scoped_array<sal_uInt8> pMapB(new sal_uInt8[ 256 ]);
                         long                    nX, nY;
 
                         if( nStyle & IMAGE_DRAW_HIGHLIGHT )
@@ -272,9 +273,6 @@ void ImplImageBmp::Draw( sal_uInt16 nPos, OutputDevice* pOutDev,
                             }
                         }
 
-                        delete[] pMapR;
-                        delete[] pMapG;
-                        delete[] pMapB;
                         aTmpBmp.ReleaseAccess( pAcc );
                     }
                 }

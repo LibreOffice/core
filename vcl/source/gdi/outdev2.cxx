@@ -38,7 +38,7 @@
 #include <outdata.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
-
+#include <boost/scoped_array.hpp>
 
 #define OUTDEV_INIT()                       \
 {                                           \
@@ -1671,13 +1671,12 @@ void OutputDevice::DrawPixel( const Polygon& rPts, const Color& rColor )
     if( rColor != COL_TRANSPARENT && ! ImplIsRecordLayout() )
     {
         const sal_uInt16    nSize = rPts.GetSize();
-        Color*          pColArray = new Color[ nSize ];
+        boost::scoped_array<Color> pColArray(new Color[ nSize ]);
 
         for( sal_uInt16 i = 0; i < nSize; i++ )
             pColArray[ i ] = rColor;
 
-        DrawPixel( rPts, pColArray );
-        delete[] pColArray;
+        DrawPixel( rPts, pColArray.get() );
     }
 
     if( mpAlphaVDev )
@@ -2097,8 +2096,8 @@ void OutputDevice::ImplDrawAlpha( const Bitmap& rBmp, const AlphaMask& rAlpha,
             long            nX, nOutX, nY, nOutY;
             long            nMirrOffX = 0;
             long            nMirrOffY = 0;
-            long*           pMapX = new long[ nDstWidth ];
-            long*           pMapY = new long[ nDstHeight ];
+            boost::scoped_array<long> pMapX(new long[ nDstWidth ]);
+            boost::scoped_array<long> pMapY(new long[ nDstHeight ]);
 
             // create horizontal mapping table
             if( bHMirr )
@@ -2142,7 +2141,7 @@ void OutputDevice::ImplDrawAlpha( const Bitmap& rBmp, const AlphaMask& rAlpha,
                         aDstRect,
                         nOffY,nDstHeight,
                         nOffX,nDstWidth,
-                        pMapX,pMapY );
+                        pMapX.get(),pMapY.get() );
                 }
                 else
                 {
@@ -2152,7 +2151,7 @@ void OutputDevice::ImplDrawAlpha( const Bitmap& rBmp, const AlphaMask& rAlpha,
                         nOffX,nDstWidth,
                         aBmpRect,aOutSz,
                         bHMirr,bVMirr,
-                        pMapX,pMapY );
+                        pMapX.get(),pMapY.get() );
                 }
 
                 // #110958# Disable alpha VDev, we're doing the necessary
@@ -2170,8 +2169,6 @@ void OutputDevice::ImplDrawAlpha( const Bitmap& rBmp, const AlphaMask& rAlpha,
             ( (Bitmap&) rBmp ).ReleaseAccess( pP );
             ( (AlphaMask&) rAlpha ).ReleaseAccess( pA );
 
-            delete[] pMapX;
-            delete[] pMapY;
             mbMap = bOldMap;
             mpMetaFile = pOldMetaFile;
         }
@@ -2237,8 +2234,8 @@ void OutputDevice::ImplPrintTransparent( const Bitmap& rBmp, const Bitmap& rMask
         // do painting
         const long      nSrcWidth = aSrcRect.GetWidth(), nSrcHeight = aSrcRect.GetHeight();
         long            nX, nY; // , nWorkX, nWorkY, nWorkWidth, nWorkHeight;
-        long*           pMapX = new long[ nSrcWidth + 1 ];
-        long*           pMapY = new long[ nSrcHeight + 1 ];
+        boost::scoped_array<long> pMapX(new long[ nSrcWidth + 1 ]);
+        boost::scoped_array<long> pMapY(new long[ nSrcHeight + 1 ]);
         const bool      bOldMap = mbMap;
 
         mbMap = false;
@@ -2284,9 +2281,6 @@ void OutputDevice::ImplPrintTransparent( const Bitmap& rBmp, const Bitmap& rMask
         //}
 
         mbMap = bOldMap;
-
-        delete[] pMapX;
-        delete[] pMapY;
     }
 }
 
@@ -2336,8 +2330,8 @@ void OutputDevice::ImplPrintMask( const Bitmap& rMask, const Color& rMaskColor,
         // do painting
         const long      nSrcWidth = aSrcRect.GetWidth(), nSrcHeight = aSrcRect.GetHeight();
         long            nX, nY; //, nWorkX, nWorkY, nWorkWidth, nWorkHeight;
-        long*           pMapX = new long[ nSrcWidth + 1 ];
-        long*           pMapY = new long[ nSrcHeight + 1 ];
+        boost::scoped_array<long> pMapX(new long[ nSrcWidth + 1 ]);
+        boost::scoped_array<long> pMapY(new long[ nSrcHeight + 1 ]);
         GDIMetaFile*    pOldMetaFile = mpMetaFile;
         const bool      bOldMap = mbMap;
 
@@ -2385,8 +2379,6 @@ void OutputDevice::ImplPrintMask( const Bitmap& rMask, const Color& rMaskColor,
         //}
 
         Pop();
-        delete[] pMapX;
-        delete[] pMapY;
         mbMap = bOldMap;
         mpMetaFile = pOldMetaFile;
     }

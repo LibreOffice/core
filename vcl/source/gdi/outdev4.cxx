@@ -43,6 +43,7 @@
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
+#include <boost/scoped_array.hpp>
 #include <boost/scoped_ptr.hpp>
 
 #define HATCH_MAXPOINTS             1024
@@ -101,8 +102,8 @@ void OutputDevice::ImplDrawPolyPolygon( const PolyPolygon& rPolyPoly, const Poly
     else if( pPolyPoly->Count() )
     {
         sal_uInt16              nCount = pPolyPoly->Count();
-        sal_uInt32*         pPointAry = new sal_uInt32[nCount];
-        PCONSTSALPOINT*     pPointAryAry = new PCONSTSALPOINT[nCount];
+        boost::scoped_array<sal_uInt32> pPointAry(new sal_uInt32[nCount]);
+        boost::scoped_array<PCONSTSALPOINT> pPointAryAry(new PCONSTSALPOINT[nCount]);
         sal_uInt16              i = 0;
         do
         {
@@ -120,12 +121,9 @@ void OutputDevice::ImplDrawPolyPolygon( const PolyPolygon& rPolyPoly, const Poly
         while( i < nCount );
 
         if( nCount == 1 )
-            mpGraphics->DrawPolygon( *pPointAry, *pPointAryAry, this );
+            mpGraphics->DrawPolygon( pPointAry[0], pPointAryAry[0], this );
         else
-            mpGraphics->DrawPolyPolygon( nCount, pPointAry, pPointAryAry, this );
-
-        delete[] pPointAry;
-        delete[] pPointAryAry;
+            mpGraphics->DrawPolyPolygon( nCount, pPointAry.get(), pPointAryAry.get(), this );
     }
 
     if( pClipPolyPoly )
@@ -1061,7 +1059,7 @@ void OutputDevice::ImplDrawHatch( const PolyPolygon& rPolyPoly, const Hatch& rHa
             Rectangle   aRect( rPolyPoly.GetBoundRect() );
             const long  nLogPixelWidth = ImplDevicePixelToLogicWidth( 1 );
             const long  nWidth = ImplDevicePixelToLogicWidth( std::max( ImplLogicWidthToDevicePixel( rHatch.GetDistance() ), 3L ) );
-            Point*      pPtBuffer = new Point[ HATCH_MAXPOINTS ];
+            boost::scoped_array<Point> pPtBuffer(new Point[ HATCH_MAXPOINTS ]);
             Point       aPt1, aPt2, aEndPt1;
             Size        aInc;
 
@@ -1070,7 +1068,7 @@ void OutputDevice::ImplDrawHatch( const PolyPolygon& rPolyPoly, const Hatch& rHa
             ImplCalcHatchValues( aRect, nWidth, rHatch.GetAngle(), aPt1, aPt2, aInc, aEndPt1 );
             do
             {
-                ImplDrawHatchLine( Line( aPt1, aPt2 ), rPolyPoly, pPtBuffer, bMtf );
+                ImplDrawHatchLine( Line( aPt1, aPt2 ), rPolyPoly, pPtBuffer.get(), bMtf );
                 aPt1.X() += aInc.Width(); aPt1.Y() += aInc.Height();
                 aPt2.X() += aInc.Width(); aPt2.Y() += aInc.Height();
             }
@@ -1082,7 +1080,7 @@ void OutputDevice::ImplDrawHatch( const PolyPolygon& rPolyPoly, const Hatch& rHa
                 ImplCalcHatchValues( aRect, nWidth, rHatch.GetAngle() + 900, aPt1, aPt2, aInc, aEndPt1 );
                 do
                 {
-                    ImplDrawHatchLine( Line( aPt1, aPt2 ), rPolyPoly, pPtBuffer, bMtf );
+                    ImplDrawHatchLine( Line( aPt1, aPt2 ), rPolyPoly, pPtBuffer.get(), bMtf );
                     aPt1.X() += aInc.Width(); aPt1.Y() += aInc.Height();
                     aPt2.X() += aInc.Width(); aPt2.Y() += aInc.Height();
                 }
@@ -1094,15 +1092,13 @@ void OutputDevice::ImplDrawHatch( const PolyPolygon& rPolyPoly, const Hatch& rHa
                     ImplCalcHatchValues( aRect, nWidth, rHatch.GetAngle() + 450, aPt1, aPt2, aInc, aEndPt1 );
                     do
                     {
-                        ImplDrawHatchLine( Line( aPt1, aPt2 ), rPolyPoly, pPtBuffer, bMtf );
+                        ImplDrawHatchLine( Line( aPt1, aPt2 ), rPolyPoly, pPtBuffer.get(), bMtf );
                         aPt1.X() += aInc.Width(); aPt1.Y() += aInc.Height();
                         aPt2.X() += aInc.Width(); aPt2.Y() += aInc.Height();
                     }
                     while( ( aPt1.X() <= aEndPt1.X() ) && ( aPt1.Y() <= aEndPt1.Y() ) );
                 }
             }
-
-            delete[] pPtBuffer;
         }
     }
 }
