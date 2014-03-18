@@ -24,7 +24,6 @@
 #include <macros/xinterface.hxx>
 #include <macros/xtypeprovider.hxx>
 #include <macros/xserviceinfo.hxx>
-#include <threadhelp/threadhelpbase.hxx>
 #include <general.h>
 #include <stdtypes.h>
 
@@ -47,18 +46,12 @@ namespace framework{
                     It forwards all URL's to the underlying operating system.
                     So it would e.g. be possible to open HTML files outside the office within a web browser.
 
-    @base           ThreadHelpBase
-                        exports a lock member to guarantee right initialize value of it
     @base           OWeakObject
                         provides XWeak and ref count mechanism
 
     @devstatus      ready to use
 */
-class SystemExec :     // baseclasses
-                       // Order is necessary for right initialization!
-                       private ThreadHelpBase                ,
-                       // interfaces
-                       public  ::cppu::WeakImplHelper3<
+class SystemExec :     public  ::cppu::WeakImplHelper3<
                                    css::lang::XServiceInfo       ,
                                    css::frame::XDispatchProvider ,
                                    css::frame::XNotifyingDispatch > // => XDispatch

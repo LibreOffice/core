@@ -18,7 +18,6 @@
  */
 
 #include <dispatch/systemexec.hxx>
-#include <threadhelp/guard.hxx>
 #include <general.h>
 #include <services.h>
 
@@ -57,10 +56,7 @@ DEFINE_INIT_SERVICE(SystemExec,
 
 
 SystemExec::SystemExec( const css::uno::Reference< css::uno::XComponentContext >& rxContext )
-        //  Init baseclasses first
-        : ThreadHelpBase( &Application::GetSolarMutex() )
-        // Init member
-        , m_xContext    ( rxContext                     )
+        : m_xContext    ( rxContext                     )
 {
 }
 
@@ -68,7 +64,6 @@ SystemExec::SystemExec( const css::uno::Reference< css::uno::XComponentContext >
 
 SystemExec::~SystemExec()
 {
-    m_xContext = NULL;
 }
 
 
@@ -122,21 +117,15 @@ void SAL_CALL SystemExec::dispatchWithNotification( const css::util::URL&       
     }
     OUString sSystemURLWithVariables = aURL.Complete.copy(PROTOCOL_LENGTH, c);
 
-    // SAFE ->
-    Guard aReadLock(m_aLock);
-    css::uno::Reference< css::uno::XComponentContext > xContext = m_xContext;
-    aReadLock.unlock();
-    // <- SAFE
-
     // TODO check security settings ...
 
     try
     {
-        css::uno::Reference< css::util::XStringSubstitution > xPathSubst( css::util::PathSubstitution::create(xContext) );
+        css::uno::Reference< css::util::XStringSubstitution > xPathSubst( css::util::PathSubstitution::create(m_xContext) );
 
         OUString sSystemURL = xPathSubst->substituteVariables(sSystemURLWithVariables, sal_True); // sal_True force an exception if unknown variables exists !
 
-        css::uno::Reference< css::system::XSystemShellExecute > xShell = css::system::SystemShellExecute::create( xContext );
+        css::uno::Reference< css::system::XSystemShellExecute > xShell = css::system::SystemShellExecute::create( m_xContext );
 
         xShell->execute(sSystemURL, OUString(), css::system::SystemShellExecuteFlags::URIS_ONLY);
         impl_notifyResultListener(xListener, css::frame::DispatchResultState::SUCCESS);
