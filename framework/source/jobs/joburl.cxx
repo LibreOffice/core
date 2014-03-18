@@ -18,7 +18,6 @@
  */
 
 #include <jobs/joburl.hxx>
-#include <threadhelp/guard.hxx>
 #include <general.h>
 
 #include <rtl/ustrbuf.hxx>
@@ -38,7 +37,6 @@ namespace framework{
                     the job URL for parsing
 */
 JobURL::JobURL( /*IN*/ const OUString& sURL )
-    : ThreadHelpBase( &Application::GetSolarMutex() )
 {
     #ifdef ENABLE_COMPONENT_SELF_CHECK
     JobURL::impldbg_checkIt();
@@ -107,8 +105,7 @@ JobURL::JobURL( /*IN*/ const OUString& sURL )
 */
 sal_Bool JobURL::isValid() const
 {
-    /* SAFE { */
-    Guard aReadLock(m_aLock);
+    SolarMutexGuard g;
     return (m_eRequest!=E_UNKNOWN);
 }
 
@@ -131,16 +128,12 @@ sal_Bool JobURL::isValid() const
 */
 sal_Bool JobURL::getEvent( /*OUT*/ OUString& sEvent ) const
 {
-    /* SAFE { */
-    Guard aReadLock(m_aLock);
+    SolarMutexGuard g;
 
              sEvent = OUString();
     sal_Bool bSet   = ((m_eRequest & E_EVENT) == E_EVENT);
     if (bSet)
         sEvent = m_sEvent;
-
-    aReadLock.unlock();
-    /* } SAFE */
 
     return bSet;
 }
@@ -164,16 +157,12 @@ sal_Bool JobURL::getEvent( /*OUT*/ OUString& sEvent ) const
 */
 sal_Bool JobURL::getAlias( /*OUT*/ OUString& sAlias ) const
 {
-    /* SAFE { */
-    Guard aReadLock(m_aLock);
+    SolarMutexGuard g;
 
              sAlias = OUString();
     sal_Bool bSet   = ((m_eRequest & E_ALIAS) == E_ALIAS);
     if (bSet)
         sAlias = m_sAlias;
-
-    aReadLock.unlock();
-    /* } SAFE */
 
     return bSet;
 }
@@ -197,16 +186,12 @@ sal_Bool JobURL::getAlias( /*OUT*/ OUString& sAlias ) const
 */
 sal_Bool JobURL::getService( /*OUT*/ OUString& sService ) const
 {
-    /* SAFE { */
-    Guard aReadLock(m_aLock);
+    SolarMutexGuard g;
 
              sService = OUString();
     sal_Bool bSet     = ((m_eRequest & E_SERVICE) == E_SERVICE);
     if (bSet)
         sService = m_sService;
-
-    aReadLock.unlock();
-    /* } SAFE */
 
     return bSet;
 }
@@ -537,8 +522,7 @@ void JobURL::impldbg_checkURL( /*IN*/ const sal_Char*  pURL                 ,
 */
 OUString JobURL::impldbg_toString() const
 {
-    /* SAFE { */
-    Guard aReadLock(m_aLock);
+    SolarMutexGuard g;
 
     OUStringBuffer sBuffer(256);
 
@@ -558,9 +542,6 @@ OUString JobURL::impldbg_toString() const
     sBuffer.append     (m_sService );
     sBuffer.appendAscii("\" }"     );
 
-    aReadLock.unlock();
-    /* } SAFE */
-
     return sBuffer.makeStringAndClear();
 }
 
@@ -568,16 +549,12 @@ OUString JobURL::impldbg_toString() const
 
 sal_Bool JobURL::getServiceArgs( /*OUT*/ OUString& sServiceArgs ) const
 {
-    /* SAFE { */
-    Guard aReadLock(m_aLock);
+    SolarMutexGuard g;
 
              sServiceArgs = OUString();
     sal_Bool bSet         = ((m_eRequest & E_SERVICE) == E_SERVICE);
     if (bSet)
         sServiceArgs = m_sServiceArgs;
-
-    aReadLock.unlock();
-    /* } SAFE */
 
     return bSet;
 }
@@ -586,16 +563,12 @@ sal_Bool JobURL::getServiceArgs( /*OUT*/ OUString& sServiceArgs ) const
 
 sal_Bool JobURL::getEventArgs( /*OUT*/ OUString& sEventArgs ) const
 {
-    /* SAFE { */
-    Guard aReadLock(m_aLock);
+    SolarMutexGuard g;
 
              sEventArgs = OUString();
     sal_Bool bSet       = ((m_eRequest & E_EVENT) == E_EVENT);
     if (bSet)
         sEventArgs = m_sEventArgs;
-
-    aReadLock.unlock();
-    /* } SAFE */
 
     return bSet;
 }
@@ -604,16 +577,12 @@ sal_Bool JobURL::getEventArgs( /*OUT*/ OUString& sEventArgs ) const
 
 sal_Bool JobURL::getAliasArgs( /*OUT*/ OUString& sAliasArgs ) const
 {
-    /* SAFE { */
-    Guard aReadLock(m_aLock);
+    SolarMutexGuard g;
 
              sAliasArgs = OUString();
     sal_Bool bSet       = ((m_eRequest & E_ALIAS) == E_ALIAS);
     if (bSet)
         sAliasArgs = m_sAliasArgs;
-
-    aReadLock.unlock();
-    /* } SAFE */
 
     return bSet;
 }

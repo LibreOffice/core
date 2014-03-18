@@ -20,7 +20,6 @@
 #ifndef INCLUDED_FRAMEWORK_INC_JOBS_JOBURL_HXX
 #define INCLUDED_FRAMEWORK_INC_JOBS_JOBURL_HXX
 
-#include <threadhelp/threadhelpbase.hxx>
 #include <stdtypes.h>
 #include <general.h>
 
@@ -53,7 +52,7 @@ namespace framework{
             This class can analyze this structure and separate it into his different parts.
             After doing that these parts are accessible by the methods of this class.
  */
-class JobURL : private ThreadHelpBase
+class JobURL
 {
 
     // types
