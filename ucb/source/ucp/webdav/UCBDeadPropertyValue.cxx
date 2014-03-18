@@ -64,13 +64,13 @@ const OUString UCBDeadPropertyValue::aXMLMid
 const OUString UCBDeadPropertyValue::aXMLEnd
     = OUString( "</value></ucbprop>" );
 
+/*
+
 #define STATE_TOP (1)
 
 #define STATE_UCBPROP   (STATE_TOP)
 #define STATE_TYPE      (STATE_TOP + 1)
 #define STATE_VALUE     (STATE_TOP + 2)
-
-/*
 
 extern "C" int UCBDeadPropertyValue_startelement_callback(
     void *,
@@ -456,7 +456,7 @@ bool UCBDeadPropertyValue::toXML( const uno::Any & rInData,
         // long
         sal_Int32 nValue = 0;
         rInData >>= nValue;
-        aStringValue = OUString::valueOf( nValue );
+        aStringValue = OUString::number( nValue );
         aStringType = aTypeLong;
     }
     else if ( rType == getCppuType( static_cast< const sal_Int16 * >( 0 ) ) )
@@ -464,7 +464,7 @@ bool UCBDeadPropertyValue::toXML( const uno::Any & rInData,
         // short
         sal_Int32 nValue = 0;
         rInData >>= nValue;
-        aStringValue = OUString::valueOf( nValue );
+        aStringValue = OUString::number( nValue );
         aStringType = aTypeShort;
     }
     else if ( rType == getCppuBooleanType() )
@@ -472,7 +472,7 @@ bool UCBDeadPropertyValue::toXML( const uno::Any & rInData,
         // boolean
         sal_Bool bValue = false;
         rInData >>= bValue;
-        aStringValue = OUString::valueOf( bValue );
+        aStringValue = OUString::boolean( bValue );
         aStringType = aTypeBoolean;
     }
     else if ( rType == getCppuCharType() )
@@ -480,7 +480,7 @@ bool UCBDeadPropertyValue::toXML( const uno::Any & rInData,
         // char
         sal_Unicode cValue = 0;
         rInData >>= cValue;
-        aStringValue = OUString::valueOf( cValue );
+        aStringValue = OUString( cValue );
         aStringType = aTypeChar;
     }
     else if ( rType == getCppuType( static_cast< const sal_Int8 * >( 0 ) ) )
@@ -488,7 +488,7 @@ bool UCBDeadPropertyValue::toXML( const uno::Any & rInData,
         // byte
         sal_Int8 nValue = 0;
         rInData >>= nValue;
-        aStringValue = OUString::valueOf( sal_Unicode( nValue ) );
+        aStringValue = OUString( sal_Unicode( nValue ) );
         aStringType = aTypeByte;
     }
     else if ( rType == getCppuType( static_cast< const sal_Int64 * >( 0 ) ) )
@@ -496,7 +496,7 @@ bool UCBDeadPropertyValue::toXML( const uno::Any & rInData,
         // hyper
         sal_Int64 nValue = 0;
         rInData >>= nValue;
-        aStringValue = OUString::valueOf( nValue );
+        aStringValue = OUString::number( nValue );
         aStringType = aTypeHyper;
     }
     else if ( rType == getCppuType( static_cast< const float * >( 0 ) ) )
@@ -504,7 +504,7 @@ bool UCBDeadPropertyValue::toXML( const uno::Any & rInData,
         // float
         float nValue = 0;
         rInData >>= nValue;
-        aStringValue = OUString::valueOf( nValue );
+        aStringValue = OUString::number( nValue );
         aStringType = aTypeFloat;
     }
     else if ( rType == getCppuType( static_cast< const double * >( 0 ) ) )
@@ -512,7 +512,7 @@ bool UCBDeadPropertyValue::toXML( const uno::Any & rInData,
         // double
         double nValue = 0;
         rInData >>= nValue;
-        aStringValue = OUString::valueOf( nValue );
+        aStringValue = OUString::number( nValue );
         aStringType = aTypeDouble;
     }
     else

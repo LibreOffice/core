@@ -170,8 +170,8 @@ namespace
 
         const OUString& getNamespace() const { return maNamespace; }
         const OUString& getName() const { return maName; }
-        const WebDAVNamespace getWebDAVNamespace() const { return maWebDAVNamespace; }
-        const WebDAVName getWebDAVName() const { return maWebDAVName; }
+        const WebDAVNamespace& getWebDAVNamespace() const { return maWebDAVNamespace; }
+        const WebDAVName& getWebDAVName() const { return maWebDAVName; }
     };
 
     void WebDAVContext::parseForNamespaceTokens(const uno::Reference< xml::sax::XAttributeList >& xAttribs)

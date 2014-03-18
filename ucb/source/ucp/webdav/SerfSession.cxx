@@ -161,11 +161,11 @@ void SerfSession::Init()
         if ( m_aProxyName.getLength() )
         {
             apr_sockaddr_t *proxy_address = NULL;
-            const apr_status_t status = apr_sockaddr_info_get( &proxy_address,
-                                                               OUStringToOString( m_aProxyName, RTL_TEXTENCODING_UTF8 ).getStr(),
-                                                               APR_UNSPEC,
-                                                               static_cast<apr_port_t>(m_nProxyPort),
-                                                               0, getAprPool() );
+            status = apr_sockaddr_info_get( &proxy_address,
+                                            OUStringToOString( m_aProxyName, RTL_TEXTENCODING_UTF8 ).getStr(),
+                                            APR_UNSPEC,
+                                            static_cast<apr_port_t>(m_nProxyPort),
+                                            0, getAprPool() );
 
             if ( status != APR_SUCCESS )
             {
@@ -345,25 +345,6 @@ apr_status_t SerfSession::provideSerfCredentials( bool bGiveProvidedCredentialsA
     return theRetVal != 0 ? SERF_ERROR_AUTHN_FAILED : APR_SUCCESS;
 }
 
-namespace {
-
-    // Helper function
-    OUString GetHostnamePart( const OUString& _rRawString )
-    {
-        OUString sPart;
-        OUString sPartId = "CN=";
-        sal_Int32 nContStart = _rRawString.indexOf( sPartId );
-        if ( nContStart != -1 )
-        {
-            nContStart += sPartId.getLength();
-            sal_Int32 nContEnd = _rRawString.indexOf( ',', nContStart );
-            sPart = _rRawString.copy( nContStart, nContEnd - nContStart );
-        }
-        return sPart;
-    }
-} // namespace
-
-
 apr_status_t SerfSession::verifySerfCertificateChain (
     int,
     const serf_ssl_certificate_t * const * pCertificateChainBase64Encoded,
@@ -456,7 +437,7 @@ apr_status_t SerfSession::verifySerfCertificateChain (
     // done outside the isDomainMatch() block because the result is
     // used by the interaction handler.
     std::vector< uno::Reference< security::XCertificate > > aChain;
-    for (int nIndex=1; nIndex<nCertificateChainLength; ++nIndex)
+    for (nIndex = 1; nIndex < nCertificateChainLength; ++nIndex)
     {
         const char* sBase64EncodedCertificate (
             serf_ssl_cert_export(

@@ -59,7 +59,7 @@ extern "C" apr_status_t Serf_Credentials( char **username,
 extern "C" apr_status_t Serf_CertificateChainValidation(
     void* pSerfSession,
     int nFailures,
-    int nErrorCode,
+    int /*nErrorCode*/,
     const serf_ssl_certificate_t * const * pCertificateChainBase64Encoded,
     apr_size_t nCertificateChainLength)
 {
