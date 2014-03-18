@@ -1095,7 +1095,7 @@ public:
 
       @since LibreOffice 3.6
     */
-    bool endsWithIgnoreAsciiCase(OUString const & str, OUString * rest) const
+    bool endsWithIgnoreAsciiCase(OUString const & str, OUString * rest = 0) const
     {
         bool b =  str.getLength() <= getLength()
             && matchIgnoreAsciiCase(str, getLength() - str.getLength());
