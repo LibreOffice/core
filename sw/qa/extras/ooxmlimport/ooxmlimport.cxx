@@ -2004,6 +2004,15 @@ DECLARE_OOXMLIMPORT_TEST(testFdo38414, "fdo38414.docx" )
     OUString height4 = parseDump("/root/page/body/tab/row[1]/cell[4]/infos/bounds", "height" );
     CPPUNIT_ASSERT_EQUAL( height3, height4 );
 }
+
+DECLARE_OOXMLIMPORT_TEST(testFdo74401, "fdo74401.docx")
+{
+    uno::Reference<drawing::XShapes> xGroupShape(getShape(1), uno::UNO_QUERY);
+    uno::Reference<drawing::XShapeDescriptor> xShape(xGroupShape->getByIndex(1), uno::UNO_QUERY);
+    // The triangle (second child) was a TextShape before, so it was shown as a rectangle.
+    CPPUNIT_ASSERT_EQUAL(OUString("com.sun.star.drawing.CustomShape"), xShape->getShapeType());
+}
+
 #endif
 
 CPPUNIT_PLUGIN_IMPLEMENT();
