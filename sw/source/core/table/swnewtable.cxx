@@ -205,7 +205,7 @@ static SwTableBox* lcl_LeftBorder2Box( long nLeft, const SwTableLine* pLine )
             // HACK: It appears that rounding errors may result in positions not matching
             // exactly, so allow a little tolerance. This happens at least with merged cells
             // in the doc from fdo#38414 .
-            if( abs( nCurrLeft - nLeft ) <= ( nLeft / 1000 ))
+            if( std::abs( nCurrLeft - nLeft ) <= ( nLeft / 1000 ))
                 return pBox;
             if( nCurrLeft >= nLeft )
             {
