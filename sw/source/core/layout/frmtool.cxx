@@ -1430,7 +1430,7 @@ void _InsertCnt( SwLayoutFrm *pLay, SwDoc *pDoc,
 
             //Close the section, where appropriate activate the surrounding
             //section again.
-            SwActualSection *pTmp = pActualSection->GetUpper();
+            SwActualSection *pTmp = pActualSection ? pActualSection->GetUpper() : NULL;
             delete pActualSection;
             pLay = pLay->FindSctFrm();
             if ( 0 != (pActualSection = pTmp) )
