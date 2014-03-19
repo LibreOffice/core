@@ -53,26 +53,9 @@ protected:
     Point     aRealLast; // RealPos of the last Point (for MinMoved)
     Rectangle aActionRect;
 
-    // Backup for compatible extensions which otherwise would become incompatible
-    Point     aReservePoint1;
-    Point     aReservePoint2;
-    Point     aReservePoint3;
-    Point     aReservePoint4;
-    Rectangle aReserveRect1;
-    Rectangle aReserveRect2;
     bool      bEndDragChangesAttributes;
     bool      bEndDragChangesGeoAndAttributes;
     bool      bMouseIsUp;
-    bool      aReserveBool3;
-    bool      aReserveBool4;
-    long      aReserveLong1;
-    long      aReserveLong2;
-    long      aReserveLong3;
-    long      aReserveLong4;
-    void*     aReservePtr1;
-    void*     aReservePtr2;
-    void*     aReservePtr3;
-    void*     aReservePtr4;
 
     bool      bShown;    // Xor visible?
     sal_uInt16    nMinMov;   // So much has to be minimally moved first
