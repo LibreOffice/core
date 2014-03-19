@@ -378,7 +378,7 @@ void LwpPara::RegisterStyle()
         LwpParaProperty* pProps = m_pProps;
         sal_uInt32 PropType;
         LwpParaStyle* pParaStyle = dynamic_cast<LwpParaStyle*>(m_ParaStyle.obj());
-        while(pProps)
+        while (pProps)
         {
             PropType = pProps->GetType();
             switch(PropType)
@@ -424,97 +424,96 @@ void LwpPara::RegisterStyle()
                 }
             }
                 break;
-        // 01/25/2005
-        case PP_LOCAL_BORDER:
-        {
-            OverrideParaBorder(pProps, pOverStyle);
-            break;
-        }
-        case PP_LOCAL_BREAKS:
-        {
-            OverrideParaBreaks(pProps, pOverStyle);
-            break;
-        }
-        case PP_LOCAL_BULLET:
-        {
-            pBulletProps = pProps;
-//          OverrideParaBullet(pProps);
-            break;
-        }
-        case PP_LOCAL_NUMBERING:
-        {
-            pNumberingProps = pProps;
-//          OverrideParaNumbering(pProps);
-            break;
-        }
-        //end
-        case PP_LOCAL_TABRACK:
-        {
-            //, 01/28/05
-            /*LwpTabOverride* pTabOverride=pParaStyle->GetTabOverride();
-            if(!pTabOverride)
+            case PP_LOCAL_BORDER:
             {
-                OverrideTab(NULL,static_cast<LwpParaTabRackProperty*>(pProps)->GetTab(),pOverStyle);
+                OverrideParaBorder(pProps, pOverStyle);
+                break;
             }
-            else
+            case PP_LOCAL_BREAKS:
             {
-                OverrideTab(pTabOverride,static_cast<LwpParaTabRackProperty*>(pProps)->GetTab(),pOverStyle);
-            }*/
-            break;
-        }
-        case PP_LOCAL_BACKGROUND:
-        {
-/*          LwpBackgroundOverride aBackground;
-            if (!pParaStyle->GetBackground())
-                OverrideBackground(NULL,static_cast<LwpParaBackGroundProperty*>(pProps)->GetBackground(),pOverStyle);
-            else
-            {
-                aBackground = *(pParaStyle->GetaBackground());
-                OverrideBackground(&aBackground,static_cast<LwpParaBackGroundProperty*>(pProps)->GetBackground(),pOverStyle);
+                OverrideParaBreaks(pProps, pOverStyle);
+                break;
             }
-*/
-            // modified by , 06/03/2005
-            LwpBackgroundOverride* pBGOver = static_cast<LwpParaBackGroundProperty*>(pProps)->GetBackground();
-            if (pBGOver)
+            case PP_LOCAL_BULLET:
             {
-                LwpBackgroundStuff* pBGStuff = pBGOver->GetBGStuff();
-                if (pBGStuff && !pBGStuff->IsTransparent() )
+                pBulletProps = pProps;
+    //          OverrideParaBullet(pProps);
+                break;
+            }
+            case PP_LOCAL_NUMBERING:
+            {
+                pNumberingProps = pProps;
+    //          OverrideParaNumbering(pProps);
+                break;
+            }
+            //end
+            case PP_LOCAL_TABRACK:
+            {
+                //, 01/28/05
+                /*LwpTabOverride* pTabOverride=pParaStyle->GetTabOverride();
+                if(!pTabOverride)
                 {
-                    if (pBGStuff->IsPatternFill())
+                    OverrideTab(NULL,static_cast<LwpParaTabRackProperty*>(pProps)->GetTab(),pOverStyle);
+                }
+                else
+                {
+                    OverrideTab(pTabOverride,static_cast<LwpParaTabRackProperty*>(pProps)->GetTab(),pOverStyle);
+                }*/
+                break;
+            }
+            case PP_LOCAL_BACKGROUND:
+            {
+    /*          LwpBackgroundOverride aBackground;
+                if (!pParaStyle->GetBackground())
+                    OverrideBackground(NULL,static_cast<LwpParaBackGroundProperty*>(pProps)->GetBackground(),pOverStyle);
+                else
+                {
+                    aBackground = *(pParaStyle->GetaBackground());
+                    OverrideBackground(&aBackground,static_cast<LwpParaBackGroundProperty*>(pProps)->GetBackground(),pOverStyle);
+                }
+    */
+                // modified by , 06/03/2005
+                LwpBackgroundOverride* pBGOver = static_cast<LwpParaBackGroundProperty*>(pProps)->GetBackground();
+                if (pBGOver)
+                {
+                    LwpBackgroundStuff* pBGStuff = pBGOver->GetBGStuff();
+                    if (pBGStuff && !pBGStuff->IsTransparent() )
                     {
-                        XFBGImage* pXFBGImage = pBGStuff->GetFillPattern();
-                        pOverStyle->SetBackImage(pXFBGImage);
-                    }
-                    else
-                    {
-                        LwpColor* pColor = pBGStuff->GetFillColor();
-                        if (pColor && pColor->IsValidColor())
+                        if (pBGStuff->IsPatternFill())
                         {
-                            XFColor aXFColor( pColor->To24Color());
-                            pOverStyle->SetBackColor( aXFColor );
+                            XFBGImage* pXFBGImage = pBGStuff->GetFillPattern();
+                            pOverStyle->SetBackImage(pXFBGImage);
+                        }
+                        else
+                        {
+                            LwpColor* pColor = pBGStuff->GetFillColor();
+                            if (pColor && pColor->IsValidColor())
+                            {
+                                XFColor aXFColor( pColor->To24Color());
+                                pOverStyle->SetBackColor( aXFColor );
+                            }
                         }
                     }
                 }
+                // end modified
+                        break;
             }
-            // end modified
-                    break;
-        }
-                default:
-                    break;
-                }
+            default:
+                break;
+            }
             pProps = pProps->GetNext();
         }
 
         if (noIndent && m_pIndentOverride)
+        {
+            if (m_pIndentOverride->IsUseRelative() && GetParent())
             {
-                if (m_pIndentOverride->IsUseRelative() && GetParent())
-                {
                 OverrideIndent(NULL,m_pIndentOverride,pOverStyle);
-                }
             }
-            if (!m_ParentStyleName.isEmpty())
-                pOverStyle->SetParentStyleName(m_ParentStyleName);
-            m_StyleName = pXFStyleManager->AddStyle(pOverStyle)->GetStyleName();
+        }
+        if (!m_ParentStyleName.isEmpty())
+            pOverStyle->SetParentStyleName(m_ParentStyleName);
+        m_StyleName = pXFStyleManager->AddStyle(pOverStyle)->GetStyleName();
 
     }
     else //use named style
