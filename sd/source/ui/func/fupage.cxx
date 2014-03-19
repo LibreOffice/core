@@ -112,7 +112,8 @@ FuPage::FuPage( ViewShell* pViewSh, ::sd::Window* pWin, ::sd::View* pView,
     mbPageBckgrdDeleted( false ),
     mbMasterPage( false ),
     mbDisplayBackgroundTabPage( true ),
-    mpPage(0)
+    mpPage(0),
+    mpDrawViewShell(0)
 {
 }
 
