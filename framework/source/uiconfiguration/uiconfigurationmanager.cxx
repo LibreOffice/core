@@ -17,8 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <threadhelp/guard.hxx>
-#include <threadhelp/threadhelpbase.hxx>
 #include <uiconfiguration/imagemanager.hxx>
 #include <uielement/rootitemcontainer.hxx>
 #include <uielement/constitemcontainer.hxx>
@@ -61,8 +59,7 @@ using namespace framework;
 
 namespace {
 
-class UIConfigurationManager :   private ThreadHelpBase,   // Struct for right initalization of mutex member! Must be first of baseclasses.
-                                 public ::cppu::WeakImplHelper2<
+class UIConfigurationManager :   public ::cppu::WeakImplHelper2<
                                         css::lang::XServiceInfo  ,
                                         css::ui::XUIConfigurationManager2 >
 {
@@ -197,6 +194,7 @@ private:
     OUString                                                  m_aPropResourceURL;
     OUString                                                  m_aModuleIdentifier;
     css::uno::Reference< css::uno::XComponentContext >        m_xContext;
+    osl::Mutex m_mutex;
     cppu::OMultiTypeInterfaceContainerHelper                  m_aListenerContainer;   /// container for ALL Listener
     css::uno::Reference< css::lang::XComponent >              m_xImageManager;
     css::uno::Reference< css::ui::XAcceleratorConfiguration > m_xAccConfig;
@@ -687,8 +685,7 @@ void UIConfigurationManager::impl_Initialize()
 }
 
 UIConfigurationManager::UIConfigurationManager( const com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext > & rxContext ) :
-    ThreadHelpBase( &Application::GetSolarMutex() )
-    , m_xDocConfigStorage( 0 )
+    m_xDocConfigStorage( 0 )
     , m_bReadOnly( true )
     , m_bModified( false )
     , m_bConfigRead( false )
@@ -697,7 +694,7 @@ UIConfigurationManager::UIConfigurationManager( const com::sun::star::uno::Refer
     , m_aPropUIName( "UIName" )
     , m_aPropResourceURL( "ResourceURL" )
     , m_xContext( rxContext )
-    , m_aListenerContainer( m_aLock.getShareableOslMutex() )
+    , m_aListenerContainer( m_mutex )
 {
     // Make sure we have a default initialized entry for every layer and user interface element type!
     // The following code depends on this!
@@ -717,7 +714,7 @@ void SAL_CALL UIConfigurationManager::dispose() throw (::com::sun::star::uno::Ru
     m_aListenerContainer.disposeAndClear( aEvent );
 
     {
-        Guard aGuard( m_aLock );
+        SolarMutexGuard g;
         try
         {
             if ( m_xImageManager.is() )
@@ -739,7 +736,7 @@ void SAL_CALL UIConfigurationManager::dispose() throw (::com::sun::star::uno::Ru
 void SAL_CALL UIConfigurationManager::addEventListener( const Reference< XEventListener >& xListener ) throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
     {
-        Guard aGuard( m_aLock );
+        SolarMutexGuard g;
 
         /* SAFE AREA ----------------------------------------------------------------------------------------------- */
         if ( m_bDisposed )
@@ -759,7 +756,7 @@ void SAL_CALL UIConfigurationManager::removeEventListener( const Reference< XEve
 void SAL_CALL UIConfigurationManager::addConfigurationListener( const Reference< ::com::sun::star::ui::XUIConfigurationListener >& xListener ) throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
     {
-        Guard aGuard( m_aLock );
+        SolarMutexGuard g;
 
         /* SAFE AREA ----------------------------------------------------------------------------------------------- */
         if ( m_bDisposed )
@@ -778,7 +775,7 @@ void SAL_CALL UIConfigurationManager::removeConfigurationListener( const Referen
 
 void SAL_CALL UIConfigurationManager::reset() throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
-    Guard aGuard( m_aLock );
+    SolarMutexClearableGuard aGuard;
 
     /* SAFE AREA ----------------------------------------------------------------------------------------------- */
     if ( m_bDisposed )
@@ -840,7 +837,7 @@ void SAL_CALL UIConfigurationManager::reset() throw (::com::sun::star::uno::Runt
             m_bModified = false;
 
             // Unlock mutex before notify our listeners
-            aGuard.unlock();
+            aGuard.clear();
 
             // Notify our listeners
             for ( sal_uInt32 k = 0; k < aRemoveEventNotifyContainer.size(); k++ )
@@ -867,7 +864,7 @@ throw ( IllegalArgumentException, RuntimeException, std::exception )
     if (( ElementType < 0 ) || ( ElementType >= ::com::sun::star::ui::UIElementType::COUNT ))
         throw IllegalArgumentException();
 
-    Guard aGuard( m_aLock );
+    SolarMutexGuard g;
     if ( m_bDisposed )
         throw DisposedException();
 
@@ -903,7 +900,7 @@ throw ( IllegalArgumentException, RuntimeException, std::exception )
 
 Reference< XIndexContainer > SAL_CALL UIConfigurationManager::createSettings() throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
-    Guard aGuard( m_aLock );
+    SolarMutexGuard g;
 
     if ( m_bDisposed )
         throw DisposedException();
@@ -940,7 +937,7 @@ throw (::com::sun::star::container::NoSuchElementException, ::com::sun::star::la
         throw IllegalArgumentException();
     else
     {
-        Guard aGuard( m_aLock );
+        SolarMutexGuard g;
 
         if ( m_bDisposed )
             throw DisposedException();
@@ -971,7 +968,7 @@ throw (::com::sun::star::container::NoSuchElementException, ::com::sun::star::la
         throw IllegalAccessException();
     else
     {
-        Guard aGuard( m_aLock );
+        SolarMutexClearableGuard aGuard;
 
         if ( m_bDisposed )
             throw DisposedException();
@@ -1008,7 +1005,7 @@ throw (::com::sun::star::container::NoSuchElementException, ::com::sun::star::la
             aEvent.ReplacedElement <<= xOldSettings;
             aEvent.Element <<= pDataSettings->xSettings;
 
-            aGuard.unlock();
+            aGuard.clear();
 
             implts_notifyContainerListener( aEvent, NotifyOp_Replace );
         }
@@ -1029,7 +1026,7 @@ throw ( NoSuchElementException, IllegalArgumentException, IllegalAccessException
         throw IllegalAccessException();
     else
     {
-        Guard aGuard( m_aLock );
+        SolarMutexClearableGuard aGuard;
 
         if ( m_bDisposed )
             throw DisposedException();
@@ -1064,7 +1061,7 @@ throw ( NoSuchElementException, IllegalArgumentException, IllegalAccessException
                 aEvent.Source = xThis;
                 aEvent.Element <<= xRemovedSettings;
 
-                aGuard.unlock();
+                aGuard.clear();
 
                 implts_notifyContainerListener( aEvent, NotifyOp_Remove );
             }
@@ -1086,7 +1083,7 @@ throw ( ElementExistException, IllegalArgumentException, IllegalAccessException,
         throw IllegalAccessException();
     else
     {
-        Guard aGuard( m_aLock );
+        SolarMutexClearableGuard aGuard;
 
         if ( m_bDisposed )
             throw DisposedException();
@@ -1140,7 +1137,7 @@ throw ( ElementExistException, IllegalArgumentException, IllegalAccessException,
             aEvent.Source = xThis;
             aEvent.Element <<= xInsertSettings;
 
-            aGuard.unlock();
+            aGuard.clear();
 
             implts_notifyContainerListener( aEvent, NotifyOp_Insert );
         }
@@ -1176,7 +1173,7 @@ Reference< XInterface > SAL_CALL UIConfigurationManager::getImageManager() throw
 Reference< XAcceleratorConfiguration > SAL_CALL UIConfigurationManager::getShortCutManager() throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
     // SAFE ->
-    Guard aGuard( m_aLock );
+    SolarMutexGuard g;
 
     if (!m_xAccConfig.is()) try
     {
@@ -1200,7 +1197,7 @@ Reference< XInterface > SAL_CALL UIConfigurationManager::getEventsManager() thro
 // XUIConfigurationStorage
 void SAL_CALL UIConfigurationManager::setStorage( const Reference< XStorage >& Storage ) throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
-    Guard aGuard( m_aLock );
+    SolarMutexGuard g;
 
     if ( m_bDisposed )
         throw DisposedException();
@@ -1260,7 +1257,7 @@ void SAL_CALL UIConfigurationManager::setStorage( const Reference< XStorage >& S
 
 sal_Bool SAL_CALL UIConfigurationManager::hasStorage() throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
-    Guard aGuard( m_aLock );
+    SolarMutexGuard g;
 
     if ( m_bDisposed )
         throw DisposedException();
@@ -1271,7 +1268,7 @@ sal_Bool SAL_CALL UIConfigurationManager::hasStorage() throw (::com::sun::star::
 // XUIConfigurationPersistence
 void SAL_CALL UIConfigurationManager::reload() throw (::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException, std::exception)
 {
-    Guard aGuard( m_aLock );
+    SolarMutexClearableGuard aGuard;
 
     if ( m_bDisposed )
         throw DisposedException();
@@ -1298,7 +1295,7 @@ void SAL_CALL UIConfigurationManager::reload() throw (::com::sun::star::uno::Exc
         m_bModified = false;
 
         // Unlock mutex before notify our listeners
-        aGuard.unlock();
+        aGuard.clear();
 
         // Notify our listeners
         for ( sal_uInt32 j = 0; j < aRemoveNotifyContainer.size(); j++ )
@@ -1310,7 +1307,7 @@ void SAL_CALL UIConfigurationManager::reload() throw (::com::sun::star::uno::Exc
 
 void SAL_CALL UIConfigurationManager::store() throw (::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException, std::exception)
 {
-    Guard aGuard( m_aLock );
+    SolarMutexGuard g;
 
     if ( m_bDisposed )
         throw DisposedException();
@@ -1343,7 +1340,7 @@ void SAL_CALL UIConfigurationManager::store() throw (::com::sun::star::uno::Exce
 
 void SAL_CALL UIConfigurationManager::storeToStorage( const Reference< XStorage >& Storage ) throw (::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException, std::exception)
 {
-    Guard aGuard( m_aLock );
+    SolarMutexGuard g;
 
     if ( m_bDisposed )
         throw DisposedException();
@@ -1376,14 +1373,14 @@ void SAL_CALL UIConfigurationManager::storeToStorage( const Reference< XStorage 
 
 sal_Bool SAL_CALL UIConfigurationManager::isModified() throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
-    Guard aGuard( m_aLock );
+    SolarMutexGuard g;
 
     return m_bModified;
 }
 
 sal_Bool SAL_CALL UIConfigurationManager::isReadOnly() throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
-    Guard aGuard( m_aLock );
+    SolarMutexGuard g;
 
     return m_bReadOnly;
 }
