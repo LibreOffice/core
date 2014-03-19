@@ -252,7 +252,8 @@ void SwFmt::Modify( const SfxPoolItem* pOldValue, const SfxPoolItem* pNewValue )
     {
     case 0:     break;          // Which-Id of 0?
 
-    case RES_OBJECTDYING :
+    case RES_OBJECTDYING:
+        if (pNewValue)
         {
             // If the dying object is the parent format of this format so
             // attach this to the parent of the parent
