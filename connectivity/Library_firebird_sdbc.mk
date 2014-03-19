@@ -18,6 +18,7 @@ $(eval $(call gb_Library_use_externals,firebird_sdbc,\
 
 $(eval $(call gb_Library_set_include,firebird_sdbc,\
 	-I$(SRCDIR)/connectivity/source/inc \
+	-I$(SRCDIR)/connectivity/source/drivers/firebird \
 	$$(INCLUDE) \
 	-I$(WORKDIR)/YaccTarget/connectivity/source/parse \
 ))
@@ -57,6 +58,7 @@ $(eval $(call gb_Library_add_exception_objects,firebird_sdbc,\
     connectivity/source/drivers/firebird/User \
     connectivity/source/drivers/firebird/Users \
     connectivity/source/drivers/firebird/Util \
+    connectivity/source/drivers/firebird/wrapper/Sqlda \
 ))
 
 # vim: set noet sw=4 ts=4:
