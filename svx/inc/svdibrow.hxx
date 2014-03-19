@@ -57,7 +57,7 @@ private:
 
 protected:
     virtual long GetRowCount() const;
-    virtual sal_Bool SeekRow(long nRow);
+    virtual bool SeekRow(long nRow);
     virtual void PaintField(OutputDevice& rDev, const Rectangle& rRect, sal_uInt16 nColumnId) const;
     virtual void DoubleClick(const BrowserMouseEvent&);
     virtual void KeyInput(const KeyEvent& rEvt);

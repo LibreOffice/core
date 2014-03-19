@@ -63,7 +63,7 @@ namespace
 void BrowseBox::ConstructImpl( BrowserMode nMode )
 {
     OSL_TRACE( "BrowseBox: %p->ConstructImpl", this );
-    bMultiSelection = sal_False;
+    bMultiSelection = false;
     pColSel = 0;
     pDataWin = 0;
     pVScroll = 0;
@@ -76,26 +76,26 @@ void BrowseBox::ConstructImpl( BrowserMode nMode )
     InitSettings_Impl( this );
     InitSettings_Impl( pDataWin );
 
-    bBootstrapped = sal_False;
+    bBootstrapped = false;
     nDataRowHeight = 0;
     nTitleLines = 1;
     nFirstCol = 0;
     nTopRow = 0;
     nCurRow = BROWSER_ENDOFSELECTION;
     nCurColId = 0;
-    bResizing = sal_False;
+    bResizing = false;
     bSelect = false;
-    bSelecting = sal_False;
-    bScrolling = sal_False;
-    bSelectionIsVisible = sal_False;
-    bNotToggleSel = sal_False;
-    bRowDividerDrag = sal_False;
-    bHit = sal_False;
-    mbInteractiveRowHeight = sal_False;
-    bHideSelect = sal_False;
+    bSelecting = false;
+    bScrolling = false;
+    bSelectionIsVisible = false;
+    bNotToggleSel = false;
+    bRowDividerDrag = false;
+    bHit = false;
+    mbInteractiveRowHeight = false;
+    bHideSelect = false;
     bHideCursor = TRISTATE_FALSE;
     nRowCount = 0;
-    m_bFocusOnlyCursor = sal_True;
+    m_bFocusOnlyCursor = true;
     m_aCursorColor = COL_TRANSPARENT;
     m_nCurrentMode = 0;
     nControlAreaWidth = USHRT_MAX;
@@ -324,7 +324,7 @@ void BrowseBox::SetToggledSelectedColumn(sal_uInt16 _nSelectedColumnId)
     }
 }
 
-void BrowseBox::FreezeColumn( sal_uInt16 nItemId, sal_Bool bFreeze )
+void BrowseBox::FreezeColumn( sal_uInt16 nItemId, bool bFreeze )
 {
 
     // never unfreeze the handle-column
@@ -338,7 +338,7 @@ void BrowseBox::FreezeColumn( sal_uInt16 nItemId, sal_Bool bFreeze )
         return;
 
     // doesn't the state change?
-    if ( (*pCols)[ nItemPos ]->IsFrozen() == bFreeze )
+    if ( (*pCols)[ nItemPos ]->IsFrozen() == (bFreeze ? 1 : 0) )
         return;
 
     // remark the column selection
@@ -602,7 +602,7 @@ void BrowseBox::SetColumnWidth( sal_uInt16 nItemId, sal_uLong nWidth )
             return;
 
         // do we want to display the change immediately?
-        sal_Bool bUpdate = GetUpdateMode() &&
+        bool bUpdate = GetUpdateMode() &&
                        ( (*pCols)[ nItemPos ]->IsFrozen() || nItemPos >= nFirstCol );
 
         if ( bUpdate )
@@ -631,8 +631,8 @@ void BrowseBox::SetColumnWidth( sal_uInt16 nItemId, sal_uLong nWidth )
 
             // actually scroll+invalidate
             pDataWin->SetClipRegion();
-            sal_Bool bSelVis = bSelectionIsVisible;
-            bSelectionIsVisible = sal_False;
+            bool bSelVis = bSelectionIsVisible;
+            bSelectionIsVisible = false;
             if( GetBackground().IsScrollable() )
             {
 
@@ -764,7 +764,7 @@ void BrowseBox::RemoveColumn( sal_uInt16 nItemId )
             CHILD,
             Any(),
             makeAny( CreateAccessibleColumnHeader( nPos ) ),
-            sal_True
+            true
         );
     }
 }
@@ -907,9 +907,9 @@ long BrowseBox::ScrollColumns( long nCols )
 
     // implicitly hides cursor while scrolling
     StartScroll();
-    bScrolling = sal_True;
-    sal_Bool bScrollable = pDataWin->GetBackground().IsScrollable();
-    sal_Bool bInvalidateView = sal_False;
+    bScrolling = true;
+    bool bScrollable = pDataWin->GetBackground().IsScrollable();
+    bool bInvalidateView = false;
 
     // scrolling one column to the right?
     if ( nCols == 1 )
@@ -920,7 +920,7 @@ long BrowseBox::ScrollColumns( long nCols )
 
         if ( !bScrollable )
         {
-            bInvalidateView = sal_True;
+            bInvalidateView = true;
         }
         else
         {
@@ -966,7 +966,7 @@ long BrowseBox::ScrollColumns( long nCols )
 
         if ( !bScrollable )
         {
-            bInvalidateView = sal_True;
+            bInvalidateView = true;
         }
         else
         {
@@ -1033,7 +1033,7 @@ long BrowseBox::ScrollColumns( long nCols )
         getDataWindow()->Update();
         Update();
     }
-    bScrolling = sal_False;
+    bScrolling = false;
     EndScroll();
 
     return nCols;
@@ -1112,7 +1112,7 @@ void BrowseBox::RowModified( long nRow, sal_uInt16 nColId )
     else
     {
         // invalidate the specific field
-        aRect = GetFieldRectPixel( nRow, nColId, sal_False );
+        aRect = GetFieldRectPixel( nRow, nColId, false );
     }
     getDataWindow()->Invalidate( aRect );
 }
@@ -1183,7 +1183,7 @@ void BrowseBox::Clear()
     }
 }
 
-void BrowseBox::RowInserted( long nRow, long nNumRows, sal_Bool bDoPaint, sal_Bool bKeepSelection )
+void BrowseBox::RowInserted( long nRow, long nNumRows, bool bDoPaint, bool bKeepSelection )
 {
 
     if (nRow < 0)
@@ -1195,7 +1195,7 @@ void BrowseBox::RowInserted( long nRow, long nNumRows, sal_Bool bDoPaint, sal_Bo
         return;
 
     // adjust total row count
-    sal_Bool bLastRow = nRow >= nRowCount;
+    bool bLastRow = nRow >= nRowCount;
     nRowCount += nNumRows;
 
     DoHideCursor( "RowInserted" );
@@ -1239,9 +1239,9 @@ void BrowseBox::RowInserted( long nRow, long nNumRows, sal_Bool bDoPaint, sal_Bo
 
     // adjust the cursor
     if ( nCurRow == BROWSER_ENDOFSELECTION )
-        GoToRow( 0, sal_False, bKeepSelection );
+        GoToRow( 0, false, bKeepSelection );
     else if ( nRow <= nCurRow )
-        GoToRow( nCurRow += nNumRows, sal_False, bKeepSelection );
+        GoToRow( nCurRow += nNumRows, false, bKeepSelection );
 
     // adjust the vertical scrollbar
     if ( bDoPaint )
@@ -1273,7 +1273,7 @@ void BrowseBox::RowInserted( long nRow, long nNumRows, sal_Bool bDoPaint, sal_Bo
                 CHILD,
                 makeAny( CreateAccessibleRowHeader( i ) ),
                 Any(),
-                sal_False
+                false
             );
         }
     }
@@ -1288,7 +1288,7 @@ void BrowseBox::RowInserted( long nRow, long nNumRows, sal_Bool bDoPaint, sal_Bo
 
 
 
-void BrowseBox::RowRemoved( long nRow, long nNumRows, sal_Bool bDoPaint )
+void BrowseBox::RowRemoved( long nRow, long nNumRows, bool bDoPaint )
 {
 
     if ( nRow < 0 )
@@ -1444,7 +1444,7 @@ void BrowseBox::RowRemoved( long nRow, long nNumRows, sal_Bool bDoPaint )
                     CHILD,
                     Any(),
                     makeAny( CreateAccessibleRowHeader( i ) ),
-                    sal_False
+                    false
                 );
             }
         }
@@ -1460,29 +1460,29 @@ void BrowseBox::RowRemoved( long nRow, long nNumRows, sal_Bool bDoPaint )
 
 
 
-sal_Bool BrowseBox::GoToRow( long nRow)
+bool BrowseBox::GoToRow( long nRow)
 {
-    return GoToRow(nRow, sal_False, sal_False);
+    return GoToRow(nRow, false, false);
 }
 
 
 
-sal_Bool BrowseBox::GoToRow( long nRow, sal_Bool bRowColMove, sal_Bool bKeepSelection )
+bool BrowseBox::GoToRow( long nRow, bool bRowColMove, bool bKeepSelection )
 {
 
     long nOldCurRow = nCurRow;
 
     // nothing to do?
     if ( nRow == nCurRow && ( bMultiSelection || uRow.nSel == nRow ) )
-        return sal_True;
+        return true;
 
     // out of range?
     if ( nRow < 0 || nRow >= nRowCount )
-        return sal_False;
+        return false;
 
     // not allowed?
     if ( ( !bRowColMove && !IsCursorMoveAllowed( nRow, nCurColId ) ) )
-        return sal_False;
+        return false;
 
     if ( getDataWindow()->bNoScrollBack && nRow < nTopRow )
         nRow = nTopRow;
@@ -1501,11 +1501,11 @@ sal_Bool BrowseBox::GoToRow( long nRow, sal_Bool bRowColMove, sal_Bool bKeepSele
     DoHideCursor( "GoToRow" );
 
     // must we scroll?
-    sal_Bool bWasVisible = bSelectionIsVisible;
+    bool bWasVisible = bSelectionIsVisible;
     if (! bMultiSelection)
     {
         if( !bKeepSelection )
-            bSelectionIsVisible = sal_False;
+            bSelectionIsVisible = false;
     }
     if ( nRow < nTopRow )
         ScrollRows( nRow - nTopRow );
@@ -1549,34 +1549,34 @@ sal_Bool BrowseBox::GoToRow( long nRow, sal_Bool bRowColMove, sal_Bool bKeepSele
         else
             bSelect = true;
     }
-    return sal_True;
+    return true;
 }
 
 
 
-sal_Bool BrowseBox::GoToColumnId( sal_uInt16 nColId)
+bool BrowseBox::GoToColumnId( sal_uInt16 nColId)
 {
-    return GoToColumnId(nColId,sal_True,sal_False);
+    return GoToColumnId(nColId, true, false);
 }
 
 
-sal_Bool BrowseBox::GoToColumnId( sal_uInt16 nColId, sal_Bool bMakeVisible, sal_Bool bRowColMove)
+bool BrowseBox::GoToColumnId( sal_uInt16 nColId, bool bMakeVisible, bool bRowColMove)
 {
 
     if (!bColumnCursor)
-        return sal_False;
+        return false;
 
     // allowed?
     if (!bRowColMove && !IsCursorMoveAllowed( nCurRow, nColId ) )
-        return sal_False;
+        return false;
 
-    if ( nColId != nCurColId || (bMakeVisible && !IsFieldVisible(nCurRow, nColId, sal_True)))
+    if ( nColId != nCurColId || (bMakeVisible && !IsFieldVisible(nCurRow, nColId, true)))
     {
         sal_uInt16 nNewPos = GetColumnPos(nColId);
         BrowserColumn* pColumn = (nNewPos < pCols->size()) ? (*pCols)[ nNewPos ] : NULL;
         DBG_ASSERT( pColumn, "no column object - invalid id?" );
         if ( !pColumn )
-            return sal_False;
+            return false;
 
         DoHideCursor( "GoToColumnId" );
         nCurColId = nColId;
@@ -1584,7 +1584,7 @@ sal_Bool BrowseBox::GoToColumnId( sal_uInt16 nColId, sal_Bool bMakeVisible, sal_
         sal_uInt16 nFirstPos = nFirstCol;
         sal_uInt16 nWidth = (sal_uInt16)pColumn->Width();
         sal_uInt16 nLastPos = GetColumnAtXPosPixel(
-                            pDataWin->GetSizePixel().Width()-nWidth, sal_False );
+                            pDataWin->GetSizePixel().Width()-nWidth, false );
         sal_uInt16 nFrozen = FrozenColCount();
         if ( bMakeVisible && nLastPos &&
              nNewPos >= nFrozen && ( nNewPos < nFirstPos || nNewPos > nLastPos ) )
@@ -1598,34 +1598,34 @@ sal_Bool BrowseBox::GoToColumnId( sal_uInt16 nColId, sal_Bool bMakeVisible, sal_
         DoShowCursor( "GoToColumnId" );
         if (!bRowColMove)
             CursorMoved();
-        return sal_True;
+        return true;
     }
-    return sal_True;
+    return true;
 }
 
 
 
-sal_Bool BrowseBox::GoToRowColumnId( long nRow, sal_uInt16 nColId )
+bool BrowseBox::GoToRowColumnId( long nRow, sal_uInt16 nColId )
 {
 
     // out of range?
     if ( nRow < 0 || nRow >= nRowCount )
-        return sal_False;
+        return false;
 
     if (!bColumnCursor)
-        return sal_False;
+        return false;
 
     // nothing to do ?
     if ( nRow == nCurRow && ( bMultiSelection || uRow.nSel == nRow ) &&
-         nColId == nCurColId && IsFieldVisible(nCurRow, nColId, sal_True))
-        return sal_True;
+         nColId == nCurColId && IsFieldVisible(nCurRow, nColId, true))
+        return true;
 
     // allowed?
     if (!IsCursorMoveAllowed(nRow, nColId))
-        return sal_False;
+        return false;
 
     DoHideCursor( "GoToRowColumnId" );
-    sal_Bool bMoved = GoToRow(nRow, sal_True) && GoToColumnId(nColId, sal_True, sal_True);
+    bool bMoved = GoToRow(nRow, true) && GoToColumnId(nColId, true, true);
     DoShowCursor( "GoToRowColumnId" );
 
     if (bMoved)
@@ -1728,14 +1728,14 @@ void BrowseBox::SelectAll()
             SELECTION_CHANGED,
             Any(),
             Any(),
-            sal_True
+            true
         ); // column header event
 
         commitHeaderBarEvent(
             SELECTION_CHANGED,
             Any(),
             Any(),
-            sal_False
+            false
         ); // row header event
     }
 }
@@ -1749,7 +1749,7 @@ void BrowseBox::SelectRow( long nRow, bool _bSelect, bool bExpand )
     {
         // deselecting is impossible, selecting via cursor
         if ( _bSelect )
-            GoToRow(nRow, sal_False);
+            GoToRow(nRow, false);
         return;
     }
 
@@ -1808,7 +1808,7 @@ void BrowseBox::SelectRow( long nRow, bool _bSelect, bool bExpand )
             SELECTION_CHANGED,
             Any(),
             Any(),
-            sal_False
+            false
         ); // row header event
     }
 }
@@ -1824,7 +1824,7 @@ long BrowseBox::GetSelectRowCount() const
 
 
 
-void BrowseBox::SelectColumnPos( sal_uInt16 nNewColPos, sal_Bool _bSelect, sal_Bool bMakeVisible )
+void BrowseBox::SelectColumnPos( sal_uInt16 nNewColPos, bool _bSelect, bool bMakeVisible )
 {
 
     if ( !bColumnCursor || nNewColPos == BROWSER_INVALIDID )
@@ -1856,7 +1856,7 @@ void BrowseBox::SelectColumnPos( sal_uInt16 nNewColPos, sal_Bool _bSelect, sal_B
 
         // only highlight painted areas
         pDataWin->Update();
-        Rectangle aFieldRectPix( GetFieldRectPixel( nCurRow, nCurColId, sal_False ) );
+        Rectangle aFieldRectPix( GetFieldRectPixel( nCurRow, nCurColId, false ) );
         Rectangle aRect(
             Point( aFieldRectPix.Left() - MIN_COLUMNWIDTH, 0 ),
             Size( (*pCols)[ nNewColPos ]->Width(),
@@ -1878,7 +1878,7 @@ void BrowseBox::SelectColumnPos( sal_uInt16 nNewColPos, sal_Bool _bSelect, sal_B
                 SELECTION_CHANGED,
                 Any(),
                 Any(),
-                sal_True
+                true
             ); // column header event
         }
     }
@@ -1905,7 +1905,7 @@ long BrowseBox::FirstSelectedColumn( ) const
 
 
 
-long BrowseBox::FirstSelectedRow( sal_Bool bInverse )
+long BrowseBox::FirstSelectedRow( bool bInverse )
 {
 
     return bMultiSelection ? uRow.pSel->FirstSelected(bInverse) : uRow.nSel;
@@ -1946,11 +1946,11 @@ bool BrowseBox::IsColumnSelected( sal_uInt16 nColumnId ) const
 
 
 
-sal_Bool BrowseBox::MakeFieldVisible
+bool BrowseBox::MakeFieldVisible
 (
     long    nRow,       // line number of the field (starting with 0)
     sal_uInt16  nColId,     // column ID of the field
-    sal_Bool    bComplete   // (== sal_False), sal_True => make visible in its entirety
+    bool    bComplete   // (== false), true => make visible in its entirety
 )
 
 /*  [Description]
@@ -1961,10 +1961,10 @@ sal_Bool BrowseBox::MakeFieldVisible
 
     [Returned Value]
 
-    sal_Bool        sal_True
+    bool            true
                     The given field is already visible or was already visible.
 
-                    sal_False
+                    false
                     The given field could not be made visible or in the case of
                     'bComplete' could not be made visible in its entirety.
 */
@@ -1974,16 +1974,16 @@ sal_Bool BrowseBox::MakeFieldVisible
 
     if ( !bBootstrapped ||
          ( aTestSize.Width() == 0 && aTestSize.Height() == 0 ) )
-        return sal_False;
+        return false;
 
     // is it visible already?
-    sal_Bool bVisible = IsFieldVisible( nRow, nColId, bComplete );
+    bool bVisible = IsFieldVisible( nRow, nColId, bComplete );
     if ( bVisible )
-        return sal_True;
+        return true;
 
     // calculate column position, field rectangle and painting area
     sal_uInt16 nColPos = GetColumnPos( nColId );
-    Rectangle aFieldRect = GetFieldRectPixel( nRow, nColId, sal_False );
+    Rectangle aFieldRect = GetFieldRectPixel( nRow, nColId, false );
     Rectangle aDataRect = Rectangle( Point(0, 0), pDataWin->GetSizePixel() );
 
     // positioned outside on the left?
@@ -2000,7 +2000,7 @@ sal_Bool BrowseBox::MakeFieldVisible
         if ( ScrollColumns( 1 ) != 1 )
             // no more need to scroll
             break;
-        aFieldRect = GetFieldRectPixel( nRow, nColId, sal_False );
+        aFieldRect = GetFieldRectPixel( nRow, nColId, false );
     }
 
     // positioned outside above?
@@ -2026,18 +2026,18 @@ sal_Bool BrowseBox::MakeFieldVisible
 
 
 
-sal_Bool BrowseBox::IsFieldVisible( long nRow, sal_uInt16 nColumnId,
-                                sal_Bool bCompletely ) const
+bool BrowseBox::IsFieldVisible( long nRow, sal_uInt16 nColumnId,
+                                bool bCompletely ) const
 {
 
     // hidden by frozen column?
     sal_uInt16 nColPos = GetColumnPos( nColumnId );
     if ( nColPos >= FrozenColCount() && nColPos < nFirstCol )
-        return sal_False;
+        return false;
 
     Rectangle aRect( ImplFieldRectPixel( nRow, nColumnId ) );
     if ( aRect.IsEmpty() )
-        return sal_False;
+        return false;
 
     // get the visible area
     Rectangle aOutRect( Point(0, 0), pDataWin->GetOutputSizePixel() );
@@ -2053,7 +2053,7 @@ sal_Bool BrowseBox::IsFieldVisible( long nRow, sal_uInt16 nColumnId,
 
 
 Rectangle BrowseBox::GetFieldRectPixel( long nRow, sal_uInt16 nColumnId,
-                                        sal_Bool bRelToBrowser) const
+                                        bool bRelToBrowser) const
 {
 
     // get the rectangle relative to DataWin
@@ -2074,7 +2074,7 @@ Rectangle BrowseBox::GetFieldRectPixel( long nRow, sal_uInt16 nColumnId,
 
 
 
-Rectangle BrowseBox::GetRowRectPixel( long nRow, sal_Bool bRelToBrowser  ) const
+Rectangle BrowseBox::GetRowRectPixel( long nRow, bool bRelToBrowser  ) const
 {
 
     // get the rectangle relative to DataWin
@@ -2132,7 +2132,7 @@ Rectangle BrowseBox::ImplFieldRectPixel( long nRow, sal_uInt16 nColumnId ) const
 
 
 
-long BrowseBox::GetRowAtYPosPixel( long nY, sal_Bool bRelToBrowser ) const
+long BrowseBox::GetRowAtYPosPixel( long nY, bool bRelToBrowser ) const
 {
 
     // compute the Y-coordinate
@@ -2160,7 +2160,7 @@ Rectangle BrowseBox::GetFieldRect( sal_uInt16 nColumnId ) const
 
 
 
-sal_uInt16 BrowseBox::GetColumnAtXPosPixel( long nX, sal_Bool ) const
+sal_uInt16 BrowseBox::GetColumnAtXPosPixel( long nX, bool ) const
 {
 
     // accumulate the widths of the visible columns
@@ -2340,17 +2340,17 @@ void BrowseBox::VisibleRowsChanged( long, sal_uInt16 )
     // old behavior: automatically correct NumRows:
     if ( nRowCount < GetRowCount() )
     {
-        RowInserted(nRowCount,GetRowCount() - nRowCount,sal_False);
+        RowInserted(nRowCount,GetRowCount() - nRowCount, false);
     }
     else if ( nRowCount > GetRowCount() )
     {
-        RowRemoved(nRowCount-(nRowCount - GetRowCount()),nRowCount - GetRowCount(),sal_False);
+        RowRemoved(nRowCount-(nRowCount - GetRowCount()),nRowCount - GetRowCount(), false);
     }
 }
 
 
 
-sal_Bool BrowseBox::IsCursorMoveAllowed( long, sal_uInt16 ) const
+bool BrowseBox::IsCursorMoveAllowed( long, sal_uInt16 ) const
 
 /*  [Description]
 
@@ -2361,11 +2361,11 @@ sal_Bool BrowseBox::IsCursorMoveAllowed( long, sal_uInt16 ) const
     This method is not called, if the cursor movement results from removing or
     deleting a row/column (thus, in cases where only a "cursor correction" happens).
 
-    The base implementation currently always returns sal_True.
+    The base implementation currently always returns true.
 */
 
 {
-    return sal_True;
+    return true;
 }
 
 
@@ -2467,10 +2467,10 @@ void BrowseBox::LoseFocus()
         if ( !bKeepHighlight )
         {
             ToggleSelection();
-            bSelectionIsVisible = sal_False;
+            bSelectionIsVisible = false;
         }
 
-        bHasFocus = sal_False;
+        bHasFocus = false;
     }
     Control::LoseFocus();
 }
@@ -2485,12 +2485,12 @@ void BrowseBox::GetFocus()
     {
         if ( !bSelectionIsVisible )
         {
-            bSelectionIsVisible = sal_True;
+            bSelectionIsVisible = true;
             if ( bBootstrapped )
                 ToggleSelection();
         }
 
-        bHasFocus = sal_True;
+        bHasFocus = true;
         DoShowCursor( "GetFocus" );
     }
     Control::GetFocus();

@@ -552,10 +552,10 @@ void GalleryListView::DataChanged( const DataChangedEvent& rDCEvt )
         BrowseBox::DataChanged( rDCEvt );
 }
 
-sal_Bool GalleryListView::SeekRow( long nRow )
+bool GalleryListView::SeekRow( long nRow )
 {
     mnCurRow = nRow;
-    return sal_True;
+    return true;
 }
 
 OUString GalleryListView::GetCellText(long _nRow, sal_uInt16 nColumnId) const

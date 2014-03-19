@@ -406,7 +406,7 @@ void BrowserDataWin::Command( const CommandEvent& rEvt )
       return;
 
     Point aEventPos( rEvt.GetMousePosPixel() );
-    long nRow = pBox->GetRowAtYPosPixel( aEventPos.Y(), sal_False);
+    long nRow = pBox->GetRowAtYPosPixel( aEventPos.Y(), false);
     MouseEvent aMouseEvt( aEventPos, 1, MOUSE_SELECT, MOUSE_LEFT );
     if ( COMMAND_CONTEXTMENU == rEvt.GetCommand() && rEvt.IsMouseEvent() &&
          nRow < pBox->GetRowCount() && !pBox->IsRowSelected(nRow) )
@@ -552,7 +552,7 @@ void BrowserDataWin::StartRowDividerDrag( const Point& _rStartPos )
 
     m_nDragRowDividerLimit = nDragRowDividerCurrentPos - nDataRowHeight;
 
-    GetParent()->bRowDividerDrag = sal_True;
+    GetParent()->bRowDividerDrag = true;
     GetParent()->ImplStartTracking();
 
     Rectangle aDragSplitRect( 0, m_nDragRowDividerLimit, GetOutputSizePixel().Width(), nDragRowDividerCurrentPos );
@@ -576,7 +576,7 @@ void BrowserDataWin::Tracking( const TrackingEvent& rTEvt )
     if ( rTEvt.IsTrackingEnded() )
     {
         HideTracking();
-        GetParent()->bRowDividerDrag = sal_False;
+        GetParent()->bRowDividerDrag = false;
         GetParent()->ImplEndTracking();
 
         if ( !rTEvt.IsTrackingCanceled() )

@@ -238,10 +238,10 @@ namespace svt
     }
 
 
-    sal_Bool EditBrowseBox::SeekRow(long nRow)
+    bool EditBrowseBox::SeekRow(long nRow)
     {
         nPaintRow = nRow;
-        return sal_True;
+        return true;
     }
 
 
@@ -600,7 +600,7 @@ namespace svt
                 while ( GetSelectColumnCount( ) )
                     SelectColumnPos(
                         sal::static_int_cast< sal_uInt16 >(FirstSelectedColumn()),
-                        sal_False );
+                        false );
                 Select();
             }
         }
@@ -861,7 +861,7 @@ namespace svt
     }
 
 
-    sal_Bool EditBrowseBox::IsCursorMoveAllowed(long nNewRow, sal_uInt16 nNewColId) const
+    bool EditBrowseBox::IsCursorMoveAllowed(long nNewRow, sal_uInt16 nNewColId) const
     {
         sal_uInt16 nInfo = 0;
 
@@ -876,7 +876,7 @@ namespace svt
             nInfo |= COLCHANGE;
 
         if (nInfo == 0)   // nothing happened
-            return sal_True;
+            return true;
 
         // save the cell content
         if (IsEditing() && aController->IsModified() && !((EditBrowseBox *) this)->SaveModified())
@@ -884,7 +884,7 @@ namespace svt
             // maybe we're not visible ...
             EnableAndShow();
             aController->GetWindow().GrabFocus();
-            return sal_False;
+            return false;
         }
 
         EditBrowseBox * pTHIS = const_cast<EditBrowseBox *> (this);
@@ -910,7 +910,7 @@ namespace svt
                 }
                 aController->GetWindow().GrabFocus();
             }
-            return sal_False;
+            return false;
         }
 
         if (nNewRow != nEditRow)
@@ -918,7 +918,7 @@ namespace svt
             Window& rWindow = GetDataWindow();
             if ((nEditRow >= 0) && (GetBrowserFlags() & EBBF_NO_HANDLE_COLUMN_CONTENT) == 0)
             {
-                Rectangle aRect = GetFieldRectPixel(nEditRow, 0, sal_False );
+                Rectangle aRect = GetFieldRectPixel(nEditRow, 0, false );
                 // status cell should be painted if and only if text is displayed
                 // note: bPaintStatus is mutable, but Solaris has problems with assigning
                 // probably because it is part of a bitfield
@@ -936,12 +936,12 @@ namespace svt
             {
                 pTHIS->InvalidateStatusCell(nEditRow);
                 rWindow.EnablePaint(true);
-                return sal_False;
+                return false;
             }
             else
             {
                 rWindow.EnablePaint(true);
-                return sal_True;
+                return true;
             }
         }
         else

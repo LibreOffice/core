@@ -406,7 +406,7 @@ OUString BrowseBox::GetCellText(long, sal_uInt16 ) const
 
 
 void BrowseBox::commitHeaderBarEvent(sal_Int16 nEventId,
-        const Any& rNewValue, const Any& rOldValue, sal_Bool _bColumnHeaderBar )
+        const Any& rNewValue, const Any& rOldValue, bool _bColumnHeaderBar )
 {
     if ( isAccessibleAlive() )
         m_pImpl->m_pAccessible->commitHeaderBarEvent( nEventId,
@@ -433,7 +433,7 @@ void BrowseBox::commitBrowseBoxEvent( sal_Int16 _nEventId, const Any& _rNewValue
 }
 
 
-sal_Bool BrowseBox::isAccessibleAlive( ) const
+bool BrowseBox::isAccessibleAlive( ) const
 {
     return ( NULL != m_pImpl->m_pAccessible ) && m_pImpl->m_pAccessible->isAlive();
 }

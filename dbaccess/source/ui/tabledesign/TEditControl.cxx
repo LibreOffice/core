@@ -131,12 +131,12 @@ void OTableEditorCtrl::Init()
     InitCellController();
 
     // Insert the rows
-    RowInserted(0, m_pRowList->size(), sal_True);
+    RowInserted(0, m_pRowList->size(), true);
 }
 
 void OTableEditorCtrl::UpdateAll()
 {
-    RowRemoved(0, GetRowCount(), sal_False);
+    RowRemoved(0, GetRowCount(), false);
     m_nDataPos = 0;
 
     InvalidateFeatures();
@@ -306,7 +306,7 @@ sal_Bool OTableEditorCtrl::SetDataPtr( long nRow )
     return pActRow != 0;
 }
 
-sal_Bool OTableEditorCtrl::SeekRow(long _nRow)
+bool OTableEditorCtrl::SeekRow(long _nRow)
 {
     // Call the Base class to remember which row must be repainted
     EditBrowseBox::SeekRow(_nRow);
@@ -835,7 +835,7 @@ void OTableEditorCtrl::InsertRows( long nRow )
     // RowInserted calls CursorMoved.
     // The UI data should not be stored here.
     bSaveOnMove = sal_False;
-    RowInserted( nRow,vInsertedUndoRedoRows.size(),sal_True );
+    RowInserted( nRow,vInsertedUndoRedoRows.size(), true );
     bSaveOnMove = sal_True;
 
     // Create the Undo-Action
@@ -859,11 +859,11 @@ void OTableEditorCtrl::DeleteRows()
     {
         // Remove rows
         m_pRowList->erase( m_pRowList->begin()+nIndex );
-        RowRemoved( nIndex, 1, sal_True );
+        RowRemoved( nIndex, 1, true );
 
         // Insert the empty row at the end
         m_pRowList->push_back( ::boost::shared_ptr<OTableRow>(new OTableRow()));
-        RowInserted( GetRowCount()-1, 1, sal_True );
+        RowInserted( GetRowCount()-1, 1, true );
 
         nIndex = FirstSelectedRow();
     }
@@ -892,7 +892,7 @@ void OTableEditorCtrl::InsertNewRows( long nRow )
     // Insert the number of of selected rows
     for( long i=nRow; i<(nRow+nInsertRows); i++ )
         m_pRowList->insert( m_pRowList->begin()+i ,::boost::shared_ptr<OTableRow>(new OTableRow()));
-    RowInserted( nRow, nInsertRows, sal_True );
+    RowInserted( nRow, nInsertRows, true );
 
     GetView()->getController().setModified( sal_True );
     InvalidateFeatures();
@@ -1379,13 +1379,13 @@ void OTableEditorCtrl::Command(const CommandEvent& rEvt)
                     sal_uInt16 nSelId = GetColumnId(
                         sal::static_int_cast< sal_uInt16 >(
                             FirstSelectedColumn() ) );
-                    ::Rectangle aColRect( GetFieldRectPixel( 0, nSelId, sal_False ) );
+                    ::Rectangle aColRect( GetFieldRectPixel( 0, nSelId, false ) );
 
                     aMenuPos = aColRect.TopCenter();
                 }
                 else if ( GetSelectRowCount() > 0 )
                 {
-                    ::Rectangle aColRect( GetFieldRectPixel( FirstSelectedRow(), HANDLE_ID, sal_True ) );
+                    ::Rectangle aColRect( GetFieldRectPixel( FirstSelectedRow(), HANDLE_ID, true ) );
 
                     aMenuPos = aColRect.TopCenter();
                 }

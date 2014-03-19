@@ -126,7 +126,7 @@ private:
     void                InitSettings();
 
     // BrowseBox
-    virtual sal_Bool        SeekRow( long nRow );
+    virtual bool        SeekRow( long nRow );
     virtual void        PaintField( OutputDevice& rDev, const Rectangle& rRect, sal_uInt16 nColumnId ) const;
     virtual void        DoubleClick( const BrowserMouseEvent& rEvt );
     virtual void        Select();

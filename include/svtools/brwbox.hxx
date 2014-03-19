@@ -226,45 +226,45 @@ private:
     ScrollBar       aHScroll;       // horizontal scrollbar
 
     long            nDataRowHeight; // height of a single data-row
-    sal_uInt16          nTitleLines;    // number of lines in title row
-    sal_uLong           nControlAreaWidth; // width of fixed area beneeth hscroll
-    sal_Bool            bThumbDragging; // handle thumb dragging
-    sal_Bool            bColumnCursor;  // single columns and fields selectable
-    sal_Bool            bMultiSelection;// allow multiple selected rows
-    sal_Bool            bKeepHighlight; // don't hide selection on LoseFocus
+    sal_uInt16      nTitleLines;    // number of lines in title row
+    sal_uLong       nControlAreaWidth; // width of fixed area beneeth hscroll
+    bool            bThumbDragging; // handle thumb dragging
+    bool            bColumnCursor;  // single columns and fields selectable
+    bool            bMultiSelection;// allow multiple selected rows
+    bool            bKeepHighlight; // don't hide selection on LoseFocus
 
-    sal_Bool            bHLines;        // draw lines between rows
-    sal_Bool            bVLines;        // draw lines between columns
-    sal_Bool            bHDots;         // draw lines between rows dotted
-    sal_Bool            bVDots;         // draw lines between columns dotted
+    bool            bHLines;        // draw lines between rows
+    bool            bVLines;        // draw lines between columns
+    bool            bHDots;         // draw lines between rows dotted
+    bool            bVDots;         // draw lines between columns dotted
     Color           aGridLineColor;     // color for lines, default dark grey
-    sal_Bool            bBootstrapped;  // child windows resized etc.
+    bool            bBootstrapped;  // child windows resized etc.
     long            nTopRow;        // no. of first visible row (0...)
     long            nCurRow;        // no. of row with cursor
     long            nRowCount;      // total number of rows in model
-    sal_uInt16          nFirstCol;      // no. of first visible scrollable column
-    sal_uInt16          nCurColId;      // column id of cursor
+    sal_uInt16      nFirstCol;      // no. of first visible scrollable column
+    sal_uInt16      nCurColId;      // column id of cursor
 
-    sal_Bool            bSelecting;
-    sal_Bool            bRowDividerDrag;
-    sal_Bool            bHit;
-    sal_Bool            mbInteractiveRowHeight;
+    bool            bSelecting;
+    bool            bRowDividerDrag;
+    bool            bHit;
+    bool            mbInteractiveRowHeight;
     Point           a1stPoint;
     Point           a2ndPoint;
 
     long            nResizeX;       // mouse position at start of resizing
     long            nMinResizeX;    // never drag more left
     long            nDragX;         // last dragged column (MouseMove)
-    sal_uInt16          nResizeCol;     // resize this column in MouseMove
-    sal_Bool            bResizing;      // mouse captured for column resizing
+    sal_uInt16      nResizeCol;     // resize this column in MouseMove
+    bool            bResizing;      // mouse captured for column resizing
 
-    bool                bSelect;        /// select or deselect
-    sal_Bool            bSelectionIsVisible; // depending on focus
-    sal_Bool            bScrolling;     // hidden cursor while scrolling
-    sal_Bool            bNotToggleSel;  // set while in ToggleSelection() etc.
-    sal_Bool            bHasFocus;      // set/unset in Get/LoseFocus
-    sal_Bool            bHideSelect;    // hide selection (highlight)
-    TriState            bHideCursor;    // hide cursor (frame)
+    bool            bSelect;        /// select or deselect
+    bool            bSelectionIsVisible; // depending on focus
+    bool            bScrolling;     // hidden cursor while scrolling
+    bool            bNotToggleSel;  // set while in ToggleSelection() etc.
+    bool            bHasFocus;      // set/unset in Get/LoseFocus
+    bool            bHideSelect;    // hide selection (highlight)
+    TriState        bHideCursor;    // hide cursor (frame)
     Range           aSelRange;      // for selection expansion
 
     BrowserColumns* pCols;          // array of column-descriptions
@@ -277,14 +277,14 @@ private:
 
     ::std::auto_ptr< ::svt::BrowseBoxImpl >  m_pImpl;       // impl structure of the BrowseBox object
 
-    sal_Bool            m_bFocusOnlyCursor; // hide cursor if we don't have the focus
+    bool            m_bFocusOnlyCursor; // hide cursor if we don't have the focus
     Color           m_aCursorColor;     // special color for cursor, COL_TRANSPARENT for usual (VCL-painted) "inverted" cursor
     BrowserMode     m_nCurrentMode;     // last argument of SetMode (redundant, as our other members represent the current settings, too)
 
 private:
     SVT_DLLPRIVATE void            ConstructImpl(BrowserMode nMode);
     SVT_DLLPRIVATE void            ExpandRowSelection( const BrowserMouseEvent& rEvt );
-    SVT_DLLPRIVATE void            ToggleSelection( sal_Bool bForce = sal_False );
+    SVT_DLLPRIVATE void            ToggleSelection( bool bForce = false );
 
     SVT_DLLPRIVATE void            UpdateScrollbars();
     SVT_DLLPRIVATE void            AutoSizeLastColumn();
@@ -301,18 +301,18 @@ private:
 
     SVT_DLLPRIVATE long            GetFrozenWidth() const;
 
-    sal_Bool            GoToRow(long nRow, sal_Bool bRowColMove, sal_Bool bDoNotModifySelection = sal_False );
+    bool            GoToRow(long nRow, bool bRowColMove, bool bDoNotModifySelection = false );
 
-    sal_Bool            GoToColumnId( sal_uInt16 nColId, sal_Bool bMakeVisible, sal_Bool bRowColMove = sal_False);
-    void            SelectColumnPos( sal_uInt16 nCol, sal_Bool _bSelect, sal_Bool bMakeVisible);
-    void            SelectColumnId( sal_uInt16 nColId, sal_Bool _bSelect, sal_Bool bMakeVisible)
+    bool            GoToColumnId( sal_uInt16 nColId, bool bMakeVisible, bool bRowColMove = false);
+    void            SelectColumnPos( sal_uInt16 nCol, bool _bSelect, bool bMakeVisible);
+    void            SelectColumnId( sal_uInt16 nColId, bool _bSelect, bool bMakeVisible)
                         { SelectColumnPos( GetColumnPos(nColId), _bSelect, bMakeVisible); }
 
-    void            ImplPaintData(OutputDevice& _rOut, const Rectangle& _rRect, sal_Bool _bForeignDevice, sal_Bool _bDrawSelections);
+    void            ImplPaintData(OutputDevice& _rOut, const Rectangle& _rRect, bool _bForeignDevice, bool _bDrawSelections);
 
-    sal_Bool            PaintCursorIfHiddenOnce() const { return !m_bFocusOnlyCursor && !HasFocus(); }
+    bool            PaintCursorIfHiddenOnce() const { return !m_bFocusOnlyCursor && !HasFocus(); }
 
-    sal_uInt16          ToggleSelectedColumn();
+    sal_uInt16      ToggleSelectedColumn();
     void            SetToggledSelectedColumn(sal_uInt16 _nSelectedColumnId);
 
 protected:
@@ -340,7 +340,7 @@ protected:
         @param nRow
             nRow starts at 0
     */
-    virtual sal_Bool SeekRow( long nRow ) = 0;
+    virtual bool    SeekRow( long nRow ) = 0;
     virtual void    DrawCursor();
     virtual void    PaintRow( OutputDevice &rDev, const Rectangle &rRect );
     virtual void    PaintData( Window& rWin, const Rectangle& rRect );
@@ -386,11 +386,11 @@ protected:
     inline const DataFlavorExVector&
                     GetDataFlavors() const;
 
-    sal_Bool        IsDropFormatSupported( SotFormatStringId nFormat );     // need this because the base class' IsDropFormatSupported is not const ...
-    sal_Bool        IsDropFormatSupported( SotFormatStringId nFormat ) const;
+    bool            IsDropFormatSupported( SotFormatStringId nFormat );     // need this because the base class' IsDropFormatSupported is not const ...
+    bool            IsDropFormatSupported( SotFormatStringId nFormat ) const;
 
-    sal_Bool        IsDropFormatSupported( const css::datatransfer::DataFlavor& _rFlavor );        // need this because the base class' IsDropFormatSupported is not const ...
-    sal_Bool        IsDropFormatSupported( const css::datatransfer::DataFlavor& _rFlavor ) const;
+    bool            IsDropFormatSupported( const css::datatransfer::DataFlavor& _rFlavor );        // need this because the base class' IsDropFormatSupported is not const ...
+    bool            IsDropFormatSupported( const css::datatransfer::DataFlavor& _rFlavor ) const;
 
 private:
     void*           implGetDataFlavors() const;
@@ -438,7 +438,7 @@ public:
     virtual void    EndScroll();
     virtual void    Select();
     virtual void    DoubleClick( const BrowserMouseEvent& rEvt );
-    virtual sal_Bool    IsCursorMoveAllowed( long nNewRow, sal_uInt16 nNewColId ) const;
+    virtual bool    IsCursorMoveAllowed( long nNewRow, sal_uInt16 nNewColId ) const;
     virtual void    CursorMoved();
     virtual void    ColumnMoved( sal_uInt16 nColId );
     virtual void    ColumnResized( sal_uInt16 nColId );
@@ -448,8 +448,8 @@ public:
     virtual long    QueryMinimumRowHeight();
 
     // Window-Control (pass to DataWindow)
-    void            SetUpdateMode( sal_Bool bUpdate );
-    sal_Bool            GetUpdateMode() const;
+    void            SetUpdateMode( bool bUpdate );
+    bool            GetUpdateMode() const;
 
     // map-mode and font control
     void            SetFont( const Font& rNewFont );
@@ -470,7 +470,7 @@ public:
     void            SetColumnTitle( sal_uInt16 nColumnId, const OUString &rTitle );
     void            SetColumnWidth( sal_uInt16 nColumnId, sal_uLong nWidth );
     void            SetColumnPos( sal_uInt16 nColumnId, sal_uInt16 nPos );
-    void            FreezeColumn( sal_uInt16 nColumnId, sal_Bool bFreeze = sal_True );
+    void            FreezeColumn( sal_uInt16 nColumnId, bool bFreeze = true );
     void            UnfreezeColumns();
     void            RemoveColumn( sal_uInt16 nColumnId );
     void            RemoveColumns();
@@ -485,37 +485,37 @@ public:
     // access to dynamic values of cursor row
     OUString        GetColumnTitle( sal_uInt16 nColumnId ) const;
     Rectangle       GetFieldRect( sal_uInt16 nColumnId ) const;
-    sal_uLong           GetColumnWidth( sal_uInt16 nColumnId ) const;
-    sal_uInt16          GetColumnId( sal_uInt16 nPos ) const;
-    sal_uInt16          GetColumnPos( sal_uInt16 nColumnId ) const;
-    sal_Bool            IsFrozen( sal_uInt16 nColumnId ) const;
+    sal_uLong       GetColumnWidth( sal_uInt16 nColumnId ) const;
+    sal_uInt16      GetColumnId( sal_uInt16 nPos ) const;
+    sal_uInt16      GetColumnPos( sal_uInt16 nColumnId ) const;
+    bool            IsFrozen( sal_uInt16 nColumnId ) const;
 
     // movement of visible area
     void            ResetScroll();
     long            ScrollColumns( long nColumns );
     long            ScrollRows( long nRows );
-    sal_Bool            MakeFieldVisible( long nRow, sal_uInt16 nColId, sal_Bool bComplete = sal_False );
+    bool            MakeFieldVisible( long nRow, sal_uInt16 nColId, bool bComplete = false );
 
     // access and movement of cursor
     long            GetCurRow() const { return nCurRow; }
-    sal_uInt16          GetCurColumnId() const { return nCurColId; }
-    sal_Bool            GoToRow( long nRow );
-    sal_Bool            GoToColumnId( sal_uInt16 nColId );
-    sal_Bool            GoToRowColumnId( long nRow, sal_uInt16 nColId );
+    sal_uInt16      GetCurColumnId() const { return nCurColId; }
+    bool            GoToRow( long nRow );
+    bool            GoToColumnId( sal_uInt16 nColId );
+    bool            GoToRowColumnId( long nRow, sal_uInt16 nColId );
 
     // selections
     virtual void    SetNoSelection();
     virtual void    SelectAll();
     virtual void    SelectRow( long nRow, bool _bSelect = true, bool bExpand = true );
-    void            SelectColumnPos( sal_uInt16 nCol, sal_Bool _bSelect = sal_True )
-                        { SelectColumnPos( nCol, _bSelect, sal_True); }
-    void            SelectColumnId( sal_uInt16 nColId, sal_Bool _bSelect = sal_True )
-                        { SelectColumnPos( GetColumnPos(nColId), _bSelect, sal_True); }
+    void            SelectColumnPos( sal_uInt16 nCol, bool _bSelect = true )
+                        { SelectColumnPos( nCol, _bSelect, true); }
+    void            SelectColumnId( sal_uInt16 nColId, bool _bSelect = true )
+                        { SelectColumnPos( GetColumnPos(nColId), _bSelect, true); }
     long            GetSelectRowCount() const;
     sal_uInt16          GetSelectColumnCount() const;
     virtual bool    IsRowSelected( long nRow ) const;
     bool            IsColumnSelected( sal_uInt16 nColumnId ) const;
-    long            FirstSelectedRow( sal_Bool bInverse = sal_False );
+    long            FirstSelectedRow( bool bInverse = false );
     long            LastSelectedRow();
     long            NextSelectedRow();
     const MultiSelection* GetColumnSelection() const { return pColSel; }
@@ -524,38 +524,38 @@ public:
 
     long            FirstSelectedColumn( ) const;
 
-    sal_Bool            IsResizing() const { return bResizing; }
+    bool            IsResizing() const { return bResizing; }
 
     // access to positions of fields, column and rows
     Window&         GetDataWindow() const { return *pDataWin; }
     Rectangle       GetRowRectPixel( long nRow,
-                                     sal_Bool bRelToBrowser = sal_True ) const;
+                                     bool bRelToBrowser = true ) const;
     Rectangle       GetFieldRectPixel( long nRow, sal_uInt16 nColId,
-                                       sal_Bool bRelToBrowser = sal_True) const;
-    sal_Bool            IsFieldVisible( long nRow, sal_uInt16 nColId,
-                                    sal_Bool bComplete = sal_False ) const;
+                                       bool bRelToBrowser = true) const;
+    bool            IsFieldVisible( long nRow, sal_uInt16 nColId,
+                                    bool bComplete = false ) const;
     long            GetRowAtYPosPixel( long nY,
-                                        sal_Bool bRelToBrowser = sal_True  ) const;
+                                        bool bRelToBrowser = true  ) const;
     sal_uInt16          GetColumnAtXPosPixel( long nX,
-                                          sal_Bool bRelToBrowser = sal_True  ) const;
+                                          bool bRelToBrowser = true  ) const;
 
     // invalidations
     void            Clear();
-    void            RowRemoved( long nRow, long nNumRows = 1, sal_Bool bDoPaint = sal_True );
+    void            RowRemoved( long nRow, long nNumRows = 1, bool bDoPaint = true );
     void            RowModified( long nRow, sal_uInt16 nColId = BROWSER_INVALIDID );
-    void            RowInserted( long nRow, long nNumRows = 1, sal_Bool bDoPaint = sal_True, sal_Bool bKeepSelection = sal_False );
+    void            RowInserted( long nRow, long nNumRows = 1, bool bDoPaint = true, bool bKeepSelection = false );
 
     // miscellanous
     void            ReserveControlArea( sal_uInt16 nWidth = USHRT_MAX );
     Rectangle       GetControlArea() const;
-    sal_Bool            ProcessKey( const KeyEvent& rEvt );
+    bool            ProcessKey( const KeyEvent& rEvt );
     void            Dispatch( sal_uInt16 nId );
     void            SetMode( BrowserMode nMode = 0 );
     BrowserMode     GetMode( ) const { return m_nCurrentMode; }
 
     void            SetCursorColor(const Color& _rCol);
     Color           GetCursorColor() const { return m_aCursorColor; }
-    void            ResetSelecting() { bSelecting = sal_False; }
+    void            ResetSelecting() { bSelecting = false; }
 
     /** specifies that the user is allowed to interactively change the height of a row,
         by simply dragging an arbitrary row separator.
@@ -563,8 +563,8 @@ public:
         Note that this works only if there's a handle column, since only in this case,
         there *is* something for the user to click onto
     */
-    void            EnableInteractiveRowHeight( sal_Bool _bEnable = sal_True ) { mbInteractiveRowHeight = _bEnable; }
-    sal_Bool            IsInteractiveRowHeightEnabled( ) const { return mbInteractiveRowHeight; }
+    void            EnableInteractiveRowHeight( bool _bEnable = true ) { mbInteractiveRowHeight = _bEnable; }
+    bool            IsInteractiveRowHeightEnabled( ) const { return mbInteractiveRowHeight; }
 
     /// access to selected methods, to be granted to the BrowserColumn
     struct BrowserColumnAccess { friend class BrowserColumn; private: BrowserColumnAccess() { } };
@@ -630,7 +630,7 @@ public:
     void commitHeaderBarEvent(sal_Int16 nEventId,
             const css::uno::Any& rNewValue,
             const css::uno::Any& rOldValue,
-            sal_Bool _bColumnHeaderBar
+            bool _bColumnHeaderBar
          );
 
     /** returns the Rectangle for either the column header bar ot the row header bar
@@ -664,7 +664,7 @@ public:
     virtual Rectangle GetFieldRectPixelAbs(sal_Int32 _nRowId, sal_uInt16 _nColId, bool _bIsHeader, bool _bOnScreen = true);
 
     /// return <TRUE/> if and only if the accessible object for this instance has been created and is alive
-    sal_Bool isAccessibleAlive( ) const;
+    bool isAccessibleAlive( ) const;
 
     // ACCESSIBILITY ==========================================================
 public:

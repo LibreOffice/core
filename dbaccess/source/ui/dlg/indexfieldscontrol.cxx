@@ -109,10 +109,10 @@ namespace dbaui
 
     }
 
-    sal_Bool IndexFieldsControl::SeekRow(long nRow)
+    bool IndexFieldsControl::SeekRow(long nRow)
     {
         if (!EditBrowseBox::SeekRow(nRow))
-            return sal_False;
+            return false;
 
         if (nRow < 0)
         {
@@ -124,7 +124,7 @@ namespace dbaui
             OSL_ENSURE(m_aSeekRow <= m_aFields.end(), "IndexFieldsControl::SeekRow: invalid row!");
         }
 
-        return sal_True;
+        return true;
     }
 
     void IndexFieldsControl::PaintCell( OutputDevice& _rDev, const Rectangle& _rRect, sal_uInt16 _nColumnId ) const
@@ -163,14 +163,14 @@ namespace dbaui
         m_aFields = _rFields;
         m_aSeekRow = m_aFields.end();
 
-        SetUpdateMode(sal_False);
+        SetUpdateMode(false);
         // remove all rows
         RowRemoved(1, GetRowCount());
         // insert rows for the fields
-        RowInserted(GetRowCount(), m_aFields.size(), sal_False);
+        RowInserted(GetRowCount(), m_aFields.size(), false);
         // insert an additional row for a new field for that index
-        RowInserted(GetRowCount(), 1, sal_False);
-        SetUpdateMode(sal_True);
+        RowInserted(GetRowCount(), 1, false);
+        SetUpdateMode(true);
 
         GoToRowColumnId(0, COLUMN_ID_FIELDNAME);
     }
@@ -319,7 +319,7 @@ namespace dbaui
                         OIndexField aNewField;
                         aNewField.sFieldName = sFieldSelected;
                         m_aFields.push_back(aNewField);
-                        RowInserted(GetRowCount(), 1, sal_True);
+                        RowInserted(GetRowCount(), 1, true);
                     }
                 }
                 else

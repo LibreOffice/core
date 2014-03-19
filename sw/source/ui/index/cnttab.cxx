@@ -166,7 +166,7 @@ class SwEntryBrowseBox : public SwEntryBrowseBox_Base
     void                            SetModified() {bModified = true;}
 
 protected:
-    virtual sal_Bool                SeekRow( long nRow );
+    virtual bool                    SeekRow( long nRow );
     virtual void                    PaintCell(OutputDevice& rDev, const Rectangle& rRect, sal_uInt16 nColId) const;
     virtual void                    InitController(::svt::CellControllerRef& rController, long nRow, sal_uInt16 nCol);
     virtual ::svt::CellController*  GetController(long nRow, sal_uInt16 nCol);
@@ -3901,10 +3901,10 @@ Size SwEntryBrowseBox::GetOptimalSize() const
     return aSize;
 }
 
-sal_Bool SwEntryBrowseBox::SeekRow( long nRow )
+bool SwEntryBrowseBox::SeekRow( long nRow )
 {
     nCurrentRow = nRow;
-    return sal_True;
+    return true;
 }
 
 OUString SwEntryBrowseBox::GetCellText(long nRow, sal_uInt16 nColumn) const
@@ -3974,7 +3974,7 @@ sal_Bool SwEntryBrowseBox::SaveModified()
     if(nRow >= aEntryArr.size())
     {
         aEntryArr.push_back( pEntry );
-        RowInserted(nRow, 1, sal_True, sal_True);
+        RowInserted(nRow, 1, true, true);
         if(nCol < ITEM_WORDONLY)
         {
             pController->ClearModified();
@@ -4051,7 +4051,7 @@ void SwEntryBrowseBox::ReadEntries(SvStream& rInStr)
     }
     if( pToInsert )
         aEntryArr.push_back(pToInsert);
-    RowInserted(0, aEntryArr.size() + 1, sal_True);
+    RowInserted(0, aEntryArr.size() + 1, true);
 }
 
 void SwEntryBrowseBox::WriteEntries(SvStream& rOutStr)
@@ -4129,7 +4129,7 @@ SwAutoMarkDlg_Impl::SwAutoMarkDlg_Impl(Window* pParent, const OUString& rAutoMar
     SetText(sTitle);
     bool bError = false;
     if( bCreateMode )
-        m_pEntriesBB->RowInserted(0, 1, sal_True);
+        m_pEntriesBB->RowInserted(0, 1, true);
     else
     {
         SfxMedium aMed( sAutoMarkURL, STREAM_STD_READ );

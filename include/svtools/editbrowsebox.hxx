@@ -514,7 +514,7 @@ namespace svt
         virtual void ColumnResized(sal_uInt16 nColId);
         virtual void Resize();
         virtual void ArrangeControls(sal_uInt16& nX, sal_uInt16 nY);
-        virtual sal_Bool SeekRow(long nRow);
+        virtual bool SeekRow(long nRow);
 
         virtual void GetFocus();
         virtual void LoseFocus();
@@ -583,7 +583,7 @@ namespace svt
         // result in traveling to the next or to th previous cell
         virtual sal_Bool IsTabAllowed(sal_Bool bForward) const;
 
-        virtual sal_Bool IsCursorMoveAllowed(long nNewRow, sal_uInt16 nNewColId) const;
+        virtual bool IsCursorMoveAllowed(long nNewRow, sal_uInt16 nNewColId) const;
 
         void    PaintTristate(OutputDevice& rDev, const Rectangle& rRect,const TriState& eState,sal_Bool _bEnabled=sal_True) const;
 

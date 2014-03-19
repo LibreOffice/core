@@ -138,7 +138,7 @@ protected:
     virtual void InitController( ::svt::CellControllerRef& rController, long nRow, sal_uInt16 nCol );
     virtual ::svt::CellController* GetController( long nRow, sal_uInt16 nCol );
     virtual void PaintCell( OutputDevice& rDev, const Rectangle& rRect, sal_uInt16 nColId ) const;
-    virtual sal_Bool SeekRow( long nRow );
+    virtual bool SeekRow( long nRow );
     virtual sal_Bool SaveModified();
     virtual OUString GetCellText( long nRow, sal_uInt16 nColId ) const;
     virtual RowStatus GetRowStatus(long nRow) const;
@@ -270,7 +270,7 @@ sal_Int8 OFieldExpressionControl::ExecuteDrop( const BrowserExecuteDropEvent& rE
     sal_Int8 nAction = DND_ACTION_NONE;
     if ( IsDropFormatSupported( OGroupExchange::getReportGroupId() ) )
     {
-        sal_Int32   nRow = GetRowAtYPosPixel(rEvt.maPosPixel.Y(), sal_False);
+        sal_Int32   nRow = GetRowAtYPosPixel(rEvt.maPosPixel.Y(), false);
         SetNoSelection();
 
         TransferableDataHelper aDropped( rEvt.maDropEvent.Transferable );
@@ -380,7 +380,7 @@ void OFieldExpressionControl::lateInit()
         // not the first call
         RowRemoved(0, GetRowCount());
 
-    RowInserted(0, m_aGroupPositions.size(), sal_True);
+    RowInserted(0, m_aGroupPositions.size(), true);
 }
 
 
@@ -542,12 +542,12 @@ CellController* OFieldExpressionControl::GetController( long /*nRow*/, sal_uInt1
 }
 
 
-sal_Bool OFieldExpressionControl::SeekRow( long _nRow )
+bool OFieldExpressionControl::SeekRow( long _nRow )
 {
     // die Basisklasse braucht den Aufruf, da sie sich dort merkt, welche Zeile gepainted wird
     EditBrowseBox::SeekRow(_nRow);
     m_nCurrentPos = _nRow;
-    return sal_True;
+    return true;
 }
 
 
@@ -909,7 +909,7 @@ void OFieldExpressionControl::InsertRows( long nRow )
         }
     }
 
-    RowInserted( nRow,nSize,sal_True );
+    RowInserted( nRow, nSize, true );
 }
 
 

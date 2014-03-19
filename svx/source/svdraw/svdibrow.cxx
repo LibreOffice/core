@@ -288,10 +288,10 @@ long _SdrItemBrowserControl::GetRowCount() const
     return aList.size();
 }
 
-sal_Bool _SdrItemBrowserControl::SeekRow(long nRow)
+bool _SdrItemBrowserControl::SeekRow(long nRow)
 {
-    nAktPaintRow=nRow;
-    return sal_True;
+    nAktPaintRow = nRow;
+    return true;
 }
 
 OUString _SdrItemBrowserControl::GetCellText(long _nRow, sal_uInt16 _nColId) const
@@ -491,7 +491,7 @@ bool _SdrItemBrowserControl::BegChangeEntry(sal_uIntPtr nPos)
     if (pEntry!=NULL && !pEntry->bComment) {
         SetMode(MYBROWSEMODE & ~BROWSER_KEEPHIGHLIGHT);
         pEditControl=new ImpItemEdit(&GetDataWindow(),this,0);
-        Rectangle aRect(GetFieldRectPixel(nPos,ITEMBROWSER_VALUECOL_ID,sal_False));
+        Rectangle aRect(GetFieldRectPixel(nPos, ITEMBROWSER_VALUECOL_ID, false));
         aRect.Left()+=2; // little offset for the Edit, so it's exact to the pixel
         aRect.Right()--;
         pEditControl->SetPosSizePixel(aRect.TopLeft(),aRect.GetSize());

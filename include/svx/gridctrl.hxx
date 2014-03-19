@@ -299,7 +299,7 @@ protected:
     bool                m_bUpdating : 1;            // are any updates being executed right now?
 
 protected:
-    virtual sal_Bool SeekRow(long nRow);
+    virtual bool SeekRow(long nRow);
     virtual void VisibleRowsChanged( long nNewTopRow, sal_uInt16 nNumRows);
     virtual void PaintStatusCell(OutputDevice& rDev, const Rectangle& rRect) const;
     virtual void PaintCell(OutputDevice& rDev, const Rectangle& rRect, sal_uInt16 nColId) const;

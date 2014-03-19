@@ -180,7 +180,7 @@ namespace dbaui
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > CreateAccessibleCell( sal_Int32 nRow, sal_uInt16 nColumnId );
 
     protected:
-        virtual sal_Bool            SeekRow( long nRow );
+        virtual bool                SeekRow( long nRow );
 
         virtual void                PaintStatusCell(OutputDevice& rDev, const Rectangle& rRect) const;
         virtual void                PaintCell(OutputDevice& rDev, const Rectangle& rRect,

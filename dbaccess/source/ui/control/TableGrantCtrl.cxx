@@ -380,7 +380,7 @@ CellController* OTableGrantControl::GetController( long nRow, sal_uInt16 nColumn
     return pController;
 }
 
-sal_Bool OTableGrantControl::SeekRow( long nRow )
+bool OTableGrantControl::SeekRow( long nRow )
 {
     m_nDataPos = nRow;
 

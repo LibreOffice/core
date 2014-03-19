@@ -71,7 +71,7 @@ namespace dbaui
     protected:
         // EditBrowseBox overridables
         virtual void PaintCell( OutputDevice& _rDev, const Rectangle& _rRect, sal_uInt16 _nColumnId ) const;
-        virtual sal_Bool SeekRow(long nRow);
+        virtual bool SeekRow(long nRow);
         virtual sal_uInt32 GetTotalCellWidth(long nRow, sal_uInt16 nColId);
         virtual sal_Bool IsTabAllowed(sal_Bool bForward) const;
 

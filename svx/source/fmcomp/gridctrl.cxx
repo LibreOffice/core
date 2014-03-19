@@ -1356,7 +1356,7 @@ void DbGridControl::setDataSource(const Reference< XRowSet >& _xCursor, sal_uInt
     // did the data cursor change?
     sal_uInt16 nCurPos = GetColumnPos(GetCurColumnId());
 
-    SetUpdateMode(sal_False);
+    SetUpdateMode(false);
     RemoveRows();
     DisconnectFromFields();
 
@@ -1557,7 +1557,7 @@ void DbGridControl::setDataSource(const Reference< XRowSet >& _xCursor, sal_uInt
         RecalcRows(GetTopRow(), GetVisibleRows(), true);
 
     m_aBar.InvalidateAll(m_nCurrentPos, true);
-    SetUpdateMode(sal_True);
+    SetUpdateMode(true);
 
     // start listening on the seek cursor
     if (m_pSeekCursor)
@@ -1732,11 +1732,11 @@ void DbGridControl::ColumnMoved(sal_uInt16 nId)
     m_aColumns.insert( it, temp );
 }
 
-sal_Bool DbGridControl::SeekRow(long nRow)
+bool DbGridControl::SeekRow(long nRow)
 {
     // in filter mode or in insert only mode we don't have any cursor!
     if ( !SeekCursor( nRow ) )
-        return sal_False;
+        return false;
 
     if ( IsFilterMode() )
     {
@@ -2559,7 +2559,7 @@ void DbGridControl::SetFilterMode(bool bMode)
 
         if (bMode)
         {
-            SetUpdateMode(sal_False);
+            SetUpdateMode(false);
 
             // there is no cursor anymore
             if (IsEditing())
@@ -2578,7 +2578,7 @@ void DbGridControl::SetFilterMode(bool bMode)
 
             // one row for filtering
             RowInserted(0, 1, true);
-            SetUpdateMode(sal_True);
+            SetUpdateMode(true);
         }
         else
             setDataSource(Reference< XRowSet > ());
@@ -2774,7 +2774,7 @@ void DbGridControl::Command(const CommandEvent& rEvt)
                 {
                     long nRow = FirstSelectedRow( );
 
-                    ::Rectangle aRowRect( GetRowRectPixel( nRow, sal_True ) );
+                    ::Rectangle aRowRect( GetRowRectPixel( nRow, true ) );
                     executeRowContextMenu( nRow, aRowRect.LeftCenter() );
 
                     // handled

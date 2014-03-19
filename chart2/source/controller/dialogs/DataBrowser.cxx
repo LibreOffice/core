@@ -565,7 +565,7 @@ void DataBrowser::RenewTable()
     sal_uInt16 nOldColId   = GetCurColumnId();
 
     sal_Bool bLastUpdateMode = GetUpdateMode();
-    SetUpdateMode( sal_False );
+    SetUpdateMode( false );
 
     if( IsModified() )
         SaveModified();
@@ -719,7 +719,7 @@ double DataBrowser::GetCellNumber( long nRow, sal_uInt16 nColumnId ) const
 void DataBrowser::Resize()
 {
     sal_Bool bLastUpdateMode = GetUpdateMode();
-    SetUpdateMode( sal_False );
+    SetUpdateMode( false );
 
     ::svt::EditBrowseBox::Resize();
     ImplAdjustHeaderControls();
@@ -1026,17 +1026,17 @@ void DataBrowser::PaintCell(
         rDev.SetClipRegion();
 }
 
-sal_Bool DataBrowser::SeekRow( long nRow )
+bool DataBrowser::SeekRow( long nRow )
 {
     if( ! EditBrowseBox::SeekRow( nRow ))
-        return sal_False;
+        return false;
 
     if( nRow < 0 )
         m_nSeekRow = - 1;
     else
         m_nSeekRow = nRow;
 
-    return sal_True;
+    return true;
 }
 
 sal_Bool DataBrowser::IsTabAllowed( sal_Bool bForward ) const
@@ -1222,7 +1222,7 @@ sal_Int16 DataBrowser::GetFirstVisibleColumNumber() const
 void DataBrowser::ColumnResized( sal_uInt16 nColId )
 {
     sal_Bool bLastUpdateMode = GetUpdateMode();
-    SetUpdateMode( sal_False );
+    SetUpdateMode( false );
 
     EditBrowseBox::ColumnResized( nColId );
     ImplAdjustHeaderControls();
@@ -1232,7 +1232,7 @@ void DataBrowser::ColumnResized( sal_uInt16 nColId )
 void DataBrowser::EndScroll()
 {
     sal_Bool bLastUpdateMode = GetUpdateMode();
-    SetUpdateMode( sal_False );
+    SetUpdateMode( false );
 
     EditBrowseBox::EndScroll();
     RenewSeriesHeaders();

@@ -114,7 +114,7 @@ namespace dbaui
         virtual void InitController( ::svt::CellControllerRef& rController, long nRow, sal_uInt16 nCol );
         virtual ::svt::CellController* GetController( long nRow, sal_uInt16 nCol );
         virtual void PaintCell( OutputDevice& rDev, const Rectangle& rRect, sal_uInt16 nColId ) const;
-        virtual sal_Bool SeekRow( long nRow );
+        virtual bool SeekRow( long nRow );
         virtual sal_Bool SaveModified();
         virtual OUString GetCellText( long nRow, sal_uInt16 nColId ) const;
 
@@ -185,7 +185,7 @@ namespace dbaui
             // not the first call
             RowRemoved(0, GetRowCount());
 
-        RowInserted(0, m_pConnData->GetConnLineDataList()->size() + 1, sal_True); // add one extra row
+        RowInserted(0, m_pConnData->GetConnLineDataList()->size() + 1, true); // add one extra row
     }
 
     void ORelationControl::Resize()
@@ -337,10 +337,10 @@ namespace dbaui
         return new ListBoxCellController( m_pListCell.get() );
     }
 
-    sal_Bool ORelationControl::SeekRow( long nRow )
+    bool ORelationControl::SeekRow( long nRow )
     {
         m_nDataPos = nRow;
-        return sal_True;
+        return true;
     }
 
     void ORelationControl::PaintCell( OutputDevice& rDev, const Rectangle& rRect, sal_uInt16 nColumnId ) const

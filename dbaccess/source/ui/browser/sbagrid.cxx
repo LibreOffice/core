@@ -1264,8 +1264,8 @@ sal_Int8 SbaGridControl::AcceptDrop( const BrowserAcceptDropEvent& rEvt )
             // without an empty row we're not in update mode
             break;
 
-        long    nRow = GetRowAtYPosPixel(rEvt.maPosPixel.Y(), sal_False);
-        sal_uInt16  nCol = GetColumnAtXPosPixel(rEvt.maPosPixel.X(), sal_False);
+        long    nRow = GetRowAtYPosPixel(rEvt.maPosPixel.Y(), false);
+        sal_uInt16  nCol = GetColumnAtXPosPixel(rEvt.maPosPixel.X(), false);
 
         long nCorrectRowCount = GetRowCount();
         if (GetOptions() & OPT_INSERT)
@@ -1358,8 +1358,8 @@ sal_Int8 SbaGridControl::ExecuteDrop( const BrowserExecuteDropEvent& rEvt )
 
     if ( IsDropFormatSupported( FORMAT_STRING ) )
     {
-        long    nRow = GetRowAtYPosPixel(rEvt.maPosPixel.Y(), sal_False);
-        sal_uInt16  nCol = GetColumnAtXPosPixel(rEvt.maPosPixel.X(), sal_False);
+        long    nRow = GetRowAtYPosPixel(rEvt.maPosPixel.Y(), false);
+        sal_uInt16  nCol = GetColumnAtXPosPixel(rEvt.maPosPixel.X(), false);
 
         long nCorrectRowCount = GetRowCount();
         if (GetOptions() & OPT_INSERT)

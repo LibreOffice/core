@@ -351,7 +351,7 @@ void OSelectionBrowseBox::Init()
         if(m_bVisibleRow[i])
             m_nVisibleCount++;
     }
-    RowInserted(0, m_nVisibleCount, sal_False);
+    RowInserted(0, m_nVisibleCount, false);
     try
     {
         Reference< XConnection> xConnection = static_cast<OQueryController&>(getDesignView()->getController()).getConnection();
@@ -373,7 +373,7 @@ void OSelectionBrowseBox::Init()
 
 void OSelectionBrowseBox::PreFill()
 {
-    SetUpdateMode(sal_False);
+    SetUpdateMode(false);
 
     if (GetCurRow() != 0)
         GoToRow(0);
@@ -384,12 +384,12 @@ void OSelectionBrowseBox::PreFill()
 
     RemoveColumns();
     InsertHandleColumn( HANDLE_COLUMN_WITDH );
-    SetUpdateMode(sal_True);
+    SetUpdateMode(true);
 }
 
 void OSelectionBrowseBox::ClearAll()
 {
-    SetUpdateMode(sal_False);
+    SetUpdateMode(false);
 
     OTableFields::reverse_iterator aIter = getFields().rbegin();
     for ( ;aIter != getFields().rend(); ++aIter )
@@ -401,7 +401,7 @@ void OSelectionBrowseBox::ClearAll()
         }
     }
     m_nLastSortColumn = SORT_COLUMN_NONE;
-    SetUpdateMode(sal_True);
+    SetUpdateMode(true);
 }
 
 void OSelectionBrowseBox::SetReadOnly(sal_Bool bRO)
@@ -1177,7 +1177,7 @@ sal_Bool OSelectionBrowseBox::SaveModified()
 
         if ( bAppendRow )
         {
-            RowInserted( GetRowCount()-1, 1, sal_True );
+            RowInserted( GetRowCount()-1, 1, true );
             m_bVisibleRow.push_back(true);
             ++m_nVisibleCount;
         }
@@ -1209,15 +1209,10 @@ sal_Bool OSelectionBrowseBox::SaveModified()
     return pEntry != NULL && !bError;
 }
 
-sal_Bool OSelectionBrowseBox::SeekRow(long nRow)
+bool OSelectionBrowseBox::SeekRow(long nRow)
 {
-    sal_Bool bRet = sal_False;
-
     m_nSeekRow = nRow;
-    if (nRow < m_nVisibleCount )
-        bRet = sal_True;
-
-    return bRet;
+    return nRow < m_nVisibleCount;
 }
 
 void OSelectionBrowseBox::PaintCell(OutputDevice& rDev, const Rectangle& rRect, sal_uInt16 nColumnId) const
@@ -1712,7 +1707,7 @@ void OSelectionBrowseBox::DuplicateConditionLevel( const sal_uInt16 nLevel)
             pEntry->SetCriteria( nNewLevel, sValue);
             if ( nNewLevel == (m_nVisibleCount-BROW_CRIT1_ROW-1) )
             {
-                RowInserted( GetRowCount()-1, 1, sal_True );
+                RowInserted( GetRowCount()-1, 1, true );
                 m_bVisibleRow.push_back(true);
                 ++m_nVisibleCount;
             }
@@ -1759,7 +1754,7 @@ void OSelectionBrowseBox::AddCondition( const OTableFieldDescRef& rInfo, const O
                 pEntry->SetCriteria( nLevel, rValue);
                 if(nLevel == (m_nVisibleCount-BROW_CRIT1_ROW-1))
                 {
-                    RowInserted( GetRowCount()-1, 1, sal_True );
+                    RowInserted( GetRowCount()-1, 1, true );
                     m_bVisibleRow.push_back(true);
                     ++m_nVisibleCount;
                 }
@@ -1787,7 +1782,7 @@ void OSelectionBrowseBox::AddCondition( const OTableFieldDescRef& rInfo, const O
         pLastEntry->SetCriteria( nLevel, sCriteria);
         if(nLevel == (m_nVisibleCount-BROW_CRIT1_ROW-1))
         {
-            RowInserted( GetRowCount()-1, 1, sal_True );
+            RowInserted( GetRowCount()-1, 1, true );
             m_bVisibleRow.push_back(true);
             ++m_nVisibleCount;
         }
@@ -1803,7 +1798,7 @@ void OSelectionBrowseBox::AddCondition( const OTableFieldDescRef& rInfo, const O
             pTmp->SetCriteria( nLevel, rValue);
             if(nLevel == (m_nVisibleCount-BROW_CRIT1_ROW-1))
             {
-                RowInserted( GetRowCount()-1, 1, sal_True );
+                RowInserted( GetRowCount()-1, 1, true );
                 m_bVisibleRow.push_back(true);
                 ++m_nVisibleCount;
             }
@@ -1938,7 +1933,7 @@ void OSelectionBrowseBox::Command(const CommandEvent& rEvt)
                     sal_uInt16 nSelId = GetColumnId(
                         sal::static_int_cast< sal_uInt16 >(
                             FirstSelectedColumn() ) );
-                    ::Rectangle aColRect( GetFieldRectPixel( 0, nSelId, sal_False ) );
+                    ::Rectangle aColRect( GetFieldRectPixel( 0, nSelId, false ) );
 
                     aMenuPos = aColRect.TopCenter();
                 }

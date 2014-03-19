@@ -1025,7 +1025,7 @@ void FmGridControl::Command(const CommandEvent& _rEvt)
             {
                 sal_uInt16 nSelId = GetColumnId(
                     sal::static_int_cast< sal_uInt16 >( FirstSelectedColumn() ) );
-                ::Rectangle aColRect( GetFieldRectPixel( 0, nSelId, sal_False ) );
+                ::Rectangle aColRect( GetFieldRectPixel( 0, nSelId, false ) );
 
                 Point aRelativePos( pMyHeader->ScreenToOutputPixel( OutputToScreenPixel( aColRect.TopCenter() ) ) );
                 pMyHeader->triggerColumnContextMenu( aRelativePos, FmGridHeader::AccessControl() );
@@ -1159,7 +1159,7 @@ void FmGridControl::DeleteSelectedRows()
             while( pCursor->next() )
                 xUpdateCursor->deleteRow();
 
-            SetUpdateMode(sal_False);
+            SetUpdateMode(false);
             SetNoSelection();
 
             xUpdateCursor->moveToInsertRow();
@@ -1171,7 +1171,7 @@ void FmGridControl::DeleteSelectedRows()
         // An den DatenCursor anpassen
         AdjustDataSource(true);
         EndCursorAction();
-        SetUpdateMode(sal_True);
+        SetUpdateMode(true);
     }
     else
     {
@@ -1230,8 +1230,8 @@ void FmGridControl::DeleteSelectedRows()
         BeginCursorAction();
 
         // now delete the row
-        Sequence <sal_Int32> aDeletedRows;
-        SetUpdateMode( sal_False );
+        Sequence<sal_Int32> aDeletedRows;
+        SetUpdateMode( false );
         try
         {
             aDeletedRows = xDeleteThem->deleteRows(aBookmarks);
@@ -1239,7 +1239,7 @@ void FmGridControl::DeleteSelectedRows()
         catch(SQLException&)
         {
         }
-        SetUpdateMode( sal_True );
+        SetUpdateMode( true );
 
         // how many rows are deleted?
         sal_Int32 nDeletedRows = 0;
@@ -1253,7 +1253,7 @@ void FmGridControl::DeleteSelectedRows()
         // sind Zeilen geloescht worden?
         if (nDeletedRows)
         {
-            SetUpdateMode(sal_False);
+            SetUpdateMode(false);
             SetNoSelection();
             try
             {
@@ -1355,7 +1355,7 @@ void FmGridControl::DeleteSelectedRows()
             }
 
             EndCursorAction();
-            SetUpdateMode(sal_True);
+            SetUpdateMode(true);
         }
         else // Zeile konnte nicht geloescht werden
         {
@@ -1562,7 +1562,7 @@ void FmGridControl::InitColumnsByModels(const Reference< ::com::sun::star::conta
     if (!xColumns.is())
         return;
 
-    SetUpdateMode(sal_False);
+    SetUpdateMode(false);
 
     // Einfuegen muss sich an den Column Positionen orientieren
     sal_Int32 i;
@@ -1599,7 +1599,7 @@ void FmGridControl::InitColumnsByModels(const Reference< ::com::sun::star::conta
             HideColumn(GetColumnIdFromModelPos((sal_uInt16)i));
     }
 
-    SetUpdateMode(sal_True);
+    SetUpdateMode(true);
 }
 
 void FmGridControl::InitColumnByField(
@@ -1786,7 +1786,7 @@ bool FmGridControl::selectBookmarks(const Sequence< Any >& _rBookmarks)
 Sequence< Any> FmGridControl::getSelectionBookmarks()
 {
     // lock our update so no paint-triggered seeks interfere ...
-    SetUpdateMode(sal_False);
+    SetUpdateMode(false);
 
     sal_Int32 nSelectedRows = GetSelectRowCount(), i = 0;
     Sequence< Any> aBookmarks(nSelectedRows);
@@ -1842,7 +1842,7 @@ Sequence< Any> FmGridControl::getSelectionBookmarks()
     #endif
         }
     }
-    SetUpdateMode(sal_True);
+    SetUpdateMode(true);
 
     // if one of the SeekCursor-calls failed ....
     aBookmarks.realloc(i);

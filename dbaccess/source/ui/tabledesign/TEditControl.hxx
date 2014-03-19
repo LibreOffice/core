@@ -88,7 +88,7 @@ namespace dbaui
 
     protected:
         virtual void Command( const CommandEvent& rEvt );
-        virtual sal_Bool SeekRow(long nRow);
+        virtual bool SeekRow(long nRow);
         virtual void PaintCell(OutputDevice& rDev, const Rectangle& rRect,
                                sal_uInt16 nColumnId ) const;
 

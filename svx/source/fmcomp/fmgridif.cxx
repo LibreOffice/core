@@ -2335,7 +2335,7 @@ void FmXGridPeer::selectionChanged(const EventObject& evt) throw( RuntimeExcepti
                 // if this does not ?hold?catch?, the selectionChanged is cleared by the Control itself
                 if ( i < nColCount )
                 {
-                    pGrid->SelectColumnPos(pGrid->GetViewColumnPos(pGrid->GetColumnIdFromModelPos( (sal_uInt16)i )) + 1, sal_True);
+                    pGrid->SelectColumnPos(pGrid->GetViewColumnPos(pGrid->GetColumnIdFromModelPos( (sal_uInt16)i )) + 1, true);
                     // SelectColumnPos has led to an implicit ActivateCell again
                     if (pGrid->IsEditing())
                         pGrid->DeactivateCell();

@@ -254,7 +254,7 @@ void OTableEditorInsUndoAct::Undo()
         pOriginalRows->erase(pOriginalRows->begin()+i);
     }
 
-    pTabEdCtrl->RowRemoved( m_nInsPos, m_vInsertedRows.size(), sal_True );
+    pTabEdCtrl->RowRemoved( m_nInsPos, m_vInsertedRows.size(), true );
     pTabEdCtrl->InvalidateHandleColumn();
 
     OTableEditorUndoAct::Undo();
@@ -275,7 +275,7 @@ void OTableEditorInsUndoAct::Redo()
         nInsertRow++;
     }
 
-    pTabEdCtrl->RowInserted( m_nInsPos, m_vInsertedRows.size(), sal_True );
+    pTabEdCtrl->RowInserted( m_nInsPos, m_vInsertedRows.size(), true );
     pTabEdCtrl->InvalidateHandleColumn();
 
     OTableEditorUndoAct::Redo();
@@ -303,7 +303,7 @@ void OTableEditorInsNewUndoAct::Undo()
         pOriginalRows->erase(pOriginalRows->begin()+i);
     }
 
-    pTabEdCtrl->RowRemoved( m_nInsPos, m_nInsRows, sal_True );
+    pTabEdCtrl->RowRemoved( m_nInsPos, m_nInsRows, true );
     pTabEdCtrl->InvalidateHandleColumn();
 
     OTableEditorUndoAct::Undo();
@@ -317,7 +317,7 @@ void OTableEditorInsNewUndoAct::Redo()
     for( long i=m_nInsPos; i<(m_nInsPos+m_nInsRows); i++ )
         pRowList->insert( pRowList->begin()+i,::boost::shared_ptr<OTableRow>(new OTableRow()) );
 
-    pTabEdCtrl->RowInserted( m_nInsPos, m_nInsRows, sal_True );
+    pTabEdCtrl->RowInserted( m_nInsPos, m_nInsRows, true );
     pTabEdCtrl->InvalidateHandleColumn();
 
     OTableEditorUndoAct::Redo();

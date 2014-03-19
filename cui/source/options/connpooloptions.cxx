@@ -71,7 +71,7 @@ namespace offapp
 
         virtual void PaintCell( OutputDevice& rDev, const Rectangle& rRect, sal_uInt16 nColId ) const;
 
-        virtual sal_Bool SeekRow( long nRow );
+        virtual bool SeekRow( long nRow );
         virtual sal_Bool SaveModified();
 
         virtual sal_Bool IsTabAllowed(sal_Bool _bForward) const;
@@ -194,10 +194,10 @@ namespace offapp
     {
         m_aSettings = _rSettings;
 
-        SetUpdateMode(sal_False);
+        SetUpdateMode(false);
         RowRemoved(0, GetRowCount());
         RowInserted(0, m_aSettings.size());
-        SetUpdateMode(sal_True);
+        SetUpdateMode(true);
 
         ActivateCell(1, 0);
     }
@@ -274,7 +274,7 @@ namespace offapp
     }
 
 
-    sal_Bool DriverListControl::SeekRow( long _nRow )
+    bool DriverListControl::SeekRow( long _nRow )
     {
         EditBrowseBox::SeekRow(_nRow);
 
