@@ -1204,7 +1204,7 @@ IMPL_LINK( OGroupsSortingDialog, LBChangeHdl, ListBox*, pListBox )
         sal_Int32 nGroupPos = m_pFieldExpression->getGroupPosition(nRow);
         if ( pListBox != &m_aHeaderLst && pListBox != &m_aFooterLst)
         {
-            if ( pListBox && pListBox->GetSavedValue() != pListBox->GetSelectEntryPos() )
+            if ( pListBox->GetSavedValue() != pListBox->GetSelectEntryPos() )
                 SaveData(nRow);
             if ( pListBox == &m_aGroupOnLst )
                 m_aGroupIntervalEd.Enable( pListBox->GetSelectEntryPos() != 0 );
