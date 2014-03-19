@@ -921,7 +921,10 @@ LwpTabOverride* LwpMiddleLayout::GetTabOverride()
     if(m_nAttributes & OVER_TABS)
     {
         if(!m_TabPiece.IsNull())
-            return (LwpTabOverride*) dynamic_cast<LwpTabPiece*>(m_TabPiece.obj())->GetOverride();
+        {
+            LwpTabPiece *pPiece = dynamic_cast<LwpTabPiece*>(m_TabPiece.obj());
+            return (LwpTabOverride*)(pPiece ? pPiece->GetOverride() : NULL);
+        }
         return NULL;
     }
     else if( !m_BasedOnStyle.IsNull() )
