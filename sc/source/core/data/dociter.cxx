@@ -2413,11 +2413,15 @@ inline bool IsGreater( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2 )
 }
 
 ScUsedAreaIterator::ScUsedAreaIterator( ScDocument* pDocument, SCTAB nTable,
-                            SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2 ) :
-    aCellIter( pDocument, nTable, nCol1, nRow1, nCol2, nRow2 ),
-    aAttrIter( pDocument, nTable, nCol1, nRow1, nCol2, nRow2 ),
-    nNextCol( nCol1 ),
-    nNextRow( nRow1 )
+                            SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2 )
+    : aCellIter( pDocument, nTable, nCol1, nRow1, nCol2, nRow2 )
+    , aAttrIter( pDocument, nTable, nCol1, nRow1, nCol2, nRow2 )
+    , nNextCol( nCol1 )
+    , nNextRow( nRow1 )
+    , nFoundStartCol( 0 )
+    , nFoundEndCol( 0 )
+    , nFoundRow( 0 )
+    , pFoundPattern( NULL )
 {
     pCell    = aCellIter.GetNext( nCellCol, nCellRow );
     pPattern = aAttrIter.GetNext( nAttrCol1, nAttrCol2, nAttrRow );
