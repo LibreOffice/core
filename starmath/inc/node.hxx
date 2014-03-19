@@ -621,7 +621,7 @@ public:
 
 /** Dynamic Integral symbol node
  *
- * Node for drawing dynamicall sized integral symbols.
+ * Node for drawing dynamically sized integral symbols.
  *
  * TODO: It might be created a parent class SmDynamicSizedNode
         (for both dynamic integrals, roots and other dynamic symbols)
