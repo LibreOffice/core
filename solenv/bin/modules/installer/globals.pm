@@ -170,6 +170,7 @@ BEGIN
     @binarytableonlyfiles = ();
     @allscpactions = ();
     $languagepackaddon = "LanguagePack";
+    $helppackaddon = "HelpPack";
     $ooodownloadfilename = "";
     $downloadfilename = "";
     $downloadfileextension = "";
