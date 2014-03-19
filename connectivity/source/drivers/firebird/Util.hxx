@@ -52,10 +52,6 @@ namespace connectivity
          * between the two when retrieving column metadata.
          */
         short getFBTypeFromBlrType(short blrType);
-
-        void mallocSQLVAR(XSQLDA* pSqlda);
-
-        void freeSQLVAR(XSQLDA* pSqlda);
     }
 }
 #endif //CONNECTIVITY_FIREBIRD_UTIL_HXX
