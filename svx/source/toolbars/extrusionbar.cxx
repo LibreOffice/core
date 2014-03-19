@@ -561,31 +561,34 @@ void ExtrusionBar::execute( SdrView* pSdrView, SfxRequest& rReq, SfxBindings& rB
             if ( !nStrResId )
                 nStrResId = RID_SVXSTR_UNDO_APPLY_EXTRUSION_LIGHTING;
 
-            const SdrMarkList& rMarkList = pSdrView->GetMarkedObjectList();
-            sal_uIntPtr nCount = rMarkList.GetMarkCount(), i;
-
-            for(i=0; i<nCount; i++)
+            if (pSdrView)
             {
-                SdrObject* pObj = rMarkList.GetMark(i)->GetMarkedSdrObj();
-                if( pObj->ISA(SdrObjCustomShape) )
-                {
-                    if( bUndo )
-                    {
-                        OUString aStr( SVX_RESSTR( nStrResId ) );
-                        pSdrView->BegUndo( aStr );
-                        pSdrView->AddUndo( pSdrView->GetModel()->GetSdrUndoFactory().CreateUndoAttrObject( *pObj ) );
-                    }
-                    SdrCustomShapeGeometryItem aGeometryItem( (SdrCustomShapeGeometryItem&)pObj->GetMergedItem( SDRATTR_CUSTOMSHAPE_GEOMETRY ) );
-                    impl_execute( pSdrView, rReq, aGeometryItem, pObj );
-                    pObj->SetMergedItem( aGeometryItem );
-                    pObj->BroadcastObjectChange();
-                    if( bUndo )
-                        pSdrView->EndUndo();
+                const SdrMarkList& rMarkList = pSdrView->GetMarkedObjectList();
+                sal_uIntPtr nCount = rMarkList.GetMarkCount(), i;
 
-                    // simulate a context change:
-                    // force SelectionHasChanged() being called
-                    // so that extrusion bar will be visible/hidden
-                    pSdrView->MarkListHasChanged();
+                for(i=0; i<nCount; i++)
+                {
+                    SdrObject* pObj = rMarkList.GetMark(i)->GetMarkedSdrObj();
+                    if( pObj->ISA(SdrObjCustomShape) )
+                    {
+                        if( bUndo )
+                        {
+                            OUString aStr( SVX_RESSTR( nStrResId ) );
+                            pSdrView->BegUndo( aStr );
+                            pSdrView->AddUndo( pSdrView->GetModel()->GetSdrUndoFactory().CreateUndoAttrObject( *pObj ) );
+                        }
+                        SdrCustomShapeGeometryItem aGeometryItem( (SdrCustomShapeGeometryItem&)pObj->GetMergedItem( SDRATTR_CUSTOMSHAPE_GEOMETRY ) );
+                        impl_execute( pSdrView, rReq, aGeometryItem, pObj );
+                        pObj->SetMergedItem( aGeometryItem );
+                        pObj->BroadcastObjectChange();
+                        if( bUndo )
+                            pSdrView->EndUndo();
+
+                        // simulate a context change:
+                        // force SelectionHasChanged() being called
+                        // so that extrusion bar will be visible/hidden
+                        pSdrView->MarkListHasChanged();
+                    }
                 }
             }
         }
