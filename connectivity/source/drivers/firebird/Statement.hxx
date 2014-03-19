@@ -21,6 +21,7 @@
 #define CONNECTIVITY_FIREBIRD_STATEMENT_HXX
 
 #include "StatementCommonBase.hxx"
+#include "wrapper/Sqlda.hxx"
 
 #include <cppuhelper/implbase1.hxx>
 
@@ -40,13 +41,12 @@ namespace connectivity
         protected:
             virtual ~OStatement(){}
 
-            XSQLDA* m_pSqlda;
+            wrapper::Sqlda m_aSqlda;
 
         public:
             // a constructor, which is required for returning objects:
             OStatement( Connection* _pConnection)
-                : OStatementCommonBase( _pConnection),
-                  m_pSqlda(0)
+                : OStatementCommonBase( _pConnection)
             {}
 
             virtual void disposeResultSet();

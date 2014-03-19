@@ -56,7 +56,6 @@ OPreparedStatement::OPreparedStatement( Connection* _pConnection,
     :OStatementCommonBase(_pConnection)
     ,m_aTypeInfo(_TypeInfo)
     ,m_sSqlStatement(sql)
-    ,m_pOutSqlda(0)
     ,m_pInSqlda(0)
 {
     SAL_INFO("connectivity.firebird", "OPreparedStatement(). "
@@ -82,8 +81,8 @@ void OPreparedStatement::ensurePrepared()
     }
 
     prepareAndDescribeStatement(m_sSqlStatement,
-                               m_pOutSqlda,
-                               m_pInSqlda);
+                                m_aOutSqlda,
+                                m_pInSqlda);
 
 
     aErr = isc_dsql_describe_bind(m_statusVector,
@@ -152,7 +151,7 @@ Reference< XResultSetMetaData > SAL_CALL OPreparedStatement::getMetaData()
     ensurePrepared();
 
     if(!m_xMetaData.is())
-        m_xMetaData = new OResultSetMetaData(m_pConnection, m_pOutSqlda);
+        m_xMetaData = new OResultSetMetaData(m_pConnection, &m_aOutSqlda);
 
     return m_xMetaData;
 }
@@ -168,12 +167,6 @@ void SAL_CALL OPreparedStatement::close() throw(SQLException, RuntimeException, 
         freeSQLVAR(m_pInSqlda);
         free(m_pInSqlda);
         m_pInSqlda = 0;
-    }
-    if (m_pOutSqlda)
-    {
-        freeSQLVAR(m_pOutSqlda);
-        free(m_pOutSqlda);
-        m_pOutSqlda = 0;
     }
 }
 
@@ -286,7 +279,7 @@ sal_Bool SAL_CALL OPreparedStatement::execute()
                                   m_aMutex,
                                   uno::Reference< XInterface >(*this),
                                   m_aStatementHandle,
-                                  m_pOutSqlda);
+                                  &m_aOutSqlda);
 
     if (getStatementChangeCount() > 0)
         m_pConnection->notifyDatabaseModified();

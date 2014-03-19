@@ -21,6 +21,7 @@
 #define CONNECTIVITY_FIREBIRD_PREPAREDSTATEMENT_HXX
 
 #include "Statement.hxx"
+#include "wrapper/Sqlda.hxx"
 
 #include <cppuhelper/implbase5.hxx>
 
@@ -69,7 +70,7 @@ namespace connectivity
             ::rtl::OUString                                                                 m_sSqlStatement;
             ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSetMetaData >  m_xMetaData;
 
-            XSQLDA*         m_pOutSqlda;
+            wrapper::Sqlda  m_aOutSqlda;
             XSQLDA*         m_pInSqlda;
             void checkParameterIndex(sal_Int32 nParameterIndex)
                 throw(::com::sun::star::sdbc::SQLException,

@@ -28,6 +28,7 @@
 #include <TConnection.hxx>
 
 using namespace ::connectivity::firebird;
+using namespace ::connectivity::firebird::wrapper;
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -123,35 +124,22 @@ void SAL_CALL OStatementCommonBase::close()
 }
 
 void OStatementCommonBase::prepareAndDescribeStatement(const OUString& sql,
-                                                      XSQLDA*& pOutSqlda,
-                                                      XSQLDA* pInSqlda)
+                                                       Sqlda& rOutSqlda,
+                                                       XSQLDA* pInSqlda)
     throw (SQLException)
 {
     MutexGuard aGuard(m_aMutex);
 
     freeStatementHandle();
 
-    if (!pOutSqlda)
-    {
-        pOutSqlda = (XSQLDA*) malloc(XSQLDA_LENGTH(10));
-        pOutSqlda->version = SQLDA_VERSION1;
-        pOutSqlda->sqln = 10;
-    }
-
     ISC_STATUS aErr = 0;
 
-    aErr = isc_dsql_allocate_statement(m_statusVector,
-                                       &m_pConnection->getDBHandle(),
-                                       &m_aStatementHandle);
-
-    if (aErr)
-    {
-        free(pOutSqlda);
-        pOutSqlda = 0;
+    if (isc_dsql_allocate_statement(m_statusVector,
+                                    &m_pConnection->getDBHandle(),
+                                    &m_aStatementHandle))
         evaluateStatusVector(m_statusVector,
                              "isc_dsql_allocate_statement",
                              *this);
-    }
 
     aErr = isc_dsql_prepare(m_statusVector,
                             &m_pConnection->getTransaction(),
@@ -164,49 +152,12 @@ void OStatementCommonBase::prepareAndDescribeStatement(const OUString& sql,
     if (aErr)
     {
         // TODO: free statement handle?
-        free(pOutSqlda);
-        pOutSqlda = 0;
         evaluateStatusVector(m_statusVector,
                              "isc_dsql_prepare",
                              *this);
     }
 
-    aErr = isc_dsql_describe(m_statusVector,
-                             &m_aStatementHandle,
-                             1,
-                             pOutSqlda);
-
-
-    if (aErr)
-    {
-        // TODO: free statement handle, etc.?
-        free(pOutSqlda);
-        pOutSqlda = 0;
-        evaluateStatusVector(m_statusVector,
-                             "isc_dsql_describe",
-                             *this);
-    }
-
-    // Ensure we have enough space in pOutSqlda
-    if (pOutSqlda->sqld > pOutSqlda->sqln)
-    {
-        int n = pOutSqlda->sqld;
-        free(pOutSqlda);
-        pOutSqlda = (XSQLDA*) malloc(XSQLDA_LENGTH(n));
-        pOutSqlda->version = SQLDA_VERSION1;
-        aErr = isc_dsql_describe(m_statusVector,
-                                 &m_aStatementHandle,
-                                 1,
-                                 pOutSqlda);
-    }
-
-    // Process each XSQLVAR parameter structure in the output XSQLDA
-    if (aErr)
-        evaluateStatusVector(m_statusVector,
-                             "isc_dsql_describe",
-                             *this);
-
-    mallocSQLVAR(pOutSqlda);
+    rOutSqlda.describeStatement(m_aStatementHandle);
 }
 
 // ---- XMultipleResults - UNSUPPORTED ----------------------------------------

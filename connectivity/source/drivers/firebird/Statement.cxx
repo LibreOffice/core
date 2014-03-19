@@ -34,6 +34,7 @@
 #include <com/sun/star/sdbc/FetchDirection.hpp>
 
 using namespace connectivity::firebird;
+using namespace connectivity::firebird::wrapper;
 
 using namespace com::sun::star;
 using namespace com::sun::star::uno;
@@ -84,13 +85,6 @@ void OStatement::disposeResultSet()
     checkDisposed(OStatementCommonBase_Base::rBHelper.bDisposed);
 
     OStatementCommonBase::disposeResultSet();
-
-    if (m_pSqlda)
-    {
-        freeSQLVAR(m_pSqlda);
-        free(m_pSqlda);
-        m_pSqlda = 0;
-    }
 }
 
 // ---- XStatement -----------------------------------------------------------
@@ -115,7 +109,7 @@ uno::Reference< XResultSet > SAL_CALL OStatement::executeQuery(const OUString& s
     disposeResultSet();
 
     prepareAndDescribeStatement(sql,
-                                m_pSqlda);
+                                m_aSqlda);
 
     aErr = isc_dsql_execute(m_statusVector,
                             &m_pConnection->getTransaction(),
@@ -129,7 +123,7 @@ uno::Reference< XResultSet > SAL_CALL OStatement::executeQuery(const OUString& s
                                   m_aMutex,
                                   uno::Reference< XInterface >(*this),
                                   m_aStatementHandle,
-                                  m_pSqlda);
+                                  &m_aSqlda);
 
     // TODO: deal with cleanup
 

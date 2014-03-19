@@ -21,6 +21,7 @@
 #define CONNECTIVITY_FIREBIRD_STATEMENT_BASE_HXX
 
 #include "Connection.hxx"
+#include "wrapper/Sqlda.hxx"
 
 #include <ibase.h>
 
@@ -90,7 +91,7 @@ namespace connectivity
             virtual ~OStatementCommonBase();
 
             void prepareAndDescribeStatement(const OUString& sqlIn,
-                                             XSQLDA*& pOutSqlda,
+                                             wrapper::Sqlda& aOutSqlda,
                                              XSQLDA* pInSqlda=0)
                 throw (::com::sun::star::sdbc::SQLException);
 
