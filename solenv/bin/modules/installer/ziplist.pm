@@ -834,7 +834,7 @@ sub add_variables_to_allvariableshashref
     }
 
     if ( $installer::globals::languagepack ) { $variableshashref->{'PRODUCTADDON'} = $installer::globals::languagepackaddon; }
-    elsif ( $installer::globals::helppack ) { $variableshashref->{'PRODUCTADDON'} = $installer::globals::helppackpackaddon; }
+    elsif ( $installer::globals::helppack ) { $variableshashref->{'PRODUCTADDON'} = $installer::globals::helppackaddon; }
     else { $variableshashref->{'PRODUCTADDON'} = ""; }
 
     my $localbuild = $installer::globals::build;
