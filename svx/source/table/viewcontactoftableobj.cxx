@@ -298,8 +298,13 @@ namespace drawinglayer
             if(!getLeftLine().isEmpty())
             {
                 // create left line from top to bottom
-                const basegfx::B2DPoint aStart(getTransform() * basegfx::B2DPoint(0.0, 0.0));
-                const basegfx::B2DPoint aEnd(getTransform() * basegfx::B2DPoint(0.0, 1.0));
+                basegfx::B2DPoint aStart(getTransform() * basegfx::B2DPoint(0.0, 0.0));
+                basegfx::B2DPoint aEnd(getTransform() * basegfx::B2DPoint(0.0, 1.0));
+
+                // Move the left border to the left.
+                double fOffset = getChangedValue(getLeftLine().GetDistance(), getInTwips());
+                aStart += basegfx::B2DPoint(-fOffset,-fOffset);
+                aEnd += basegfx::B2DPoint(-fOffset,fOffset);
 
                 if(!aStart.equal(aEnd))
                 {
@@ -391,8 +396,13 @@ namespace drawinglayer
             if(!getTopLine().isEmpty())
             {
                 // create top line from left to right
-                const basegfx::B2DPoint aStart(getTransform() * basegfx::B2DPoint(0.0, 0.0));
-                const basegfx::B2DPoint aEnd(getTransform() * basegfx::B2DPoint(1.0, 0.0));
+                basegfx::B2DPoint aStart(getTransform() * basegfx::B2DPoint(0.0, 0.0));
+                basegfx::B2DPoint aEnd(getTransform() * basegfx::B2DPoint(1.0, 0.0));
+
+                // Move the top border up a bit.
+                double fOffset = getChangedValue(getTopLine().GetDistance(), getInTwips());
+                aStart += basegfx::B2DPoint(-fOffset,-fOffset);
+                aEnd += basegfx::B2DPoint(fOffset,-fOffset);
 
                 if(!aStart.equal(aEnd))
                 {
