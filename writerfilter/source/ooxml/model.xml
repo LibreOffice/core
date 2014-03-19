@@ -18774,19 +18774,6 @@
           </attribute>
         </optional>
       </define>
-      <define name="CT_SdtComboBox">
-        <zeroOrMore>
-          <element name="listItem">
-            <ref name="CT_SdtListItem"/>
-          </element>
-        </zeroOrMore>
-        <optional>
-          <attribute name="lastValue">
-            <text/>
-            <xs:documentation>Combo Box Last Saved Value</xs:documentation>
-          </attribute>
-        </optional>
-      </define>
       <define name="CT_SdtDocPart">
         <optional>
           <element name="docPartGallery">
@@ -18896,7 +18883,7 @@
                   <ref name="CT_OnOff"/>
                 </element>
                 <element name="comboBox">
-                  <ref name="CT_SdtComboBox"/>
+                  <ref name="CT_SdtDropDownList"/>
                 </element>
                 <element name="w14:checkbox">
                   <ref name="CT_SdtCheckbox"/>

@@ -2203,6 +2203,7 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, PropertyMapPtr rContext )
     }
     break;
     case NS_ooxml::LN_CT_SdtPr_dropDownList:
+    case NS_ooxml::LN_CT_SdtPr_comboBox:
     {
         writerfilter::Reference<Properties>::Pointer_t pProperties = rSprm.getProps();
         if (pProperties.get() != NULL)
