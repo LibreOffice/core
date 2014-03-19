@@ -21,7 +21,7 @@ class DocxTableStyleExport
     struct Impl;
     boost::shared_ptr<Impl> m_pImpl;
 public:
-    void TableStyles();
+    void TableStyles(sal_uInt16 nCountStylesToWrite);
     void SetSerializer(sax_fastparser::FSHelperPtr pSerializer);
     DocxTableStyleExport(SwDoc* pDoc, sax_fastparser::FSHelperPtr pSerializer);
     ~DocxTableStyleExport();

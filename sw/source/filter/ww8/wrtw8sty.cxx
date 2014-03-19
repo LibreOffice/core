@@ -692,6 +692,8 @@ void WW8AttributeOutput::EndStyles( sal_uInt16 nNumberOfStyles )
     SwWW8Writer::WriteShort( *m_rWW8Export.pTableStrm, m_nStyAnzPos, nNumberOfStyles );
 }
 
+#define MSWORD_MAX_STYLES_LIMIT 4091;
+
 void MSWordStyles::OutputStylesTable()
 {
     m_rExport.bStyDef = true;
@@ -699,6 +701,14 @@ void MSWordStyles::OutputStylesTable()
     m_rExport.AttrOutput().StartStyles();
 
     sal_uInt16 n;
+    // HACK
+    // Ms Office seems to have an internal limitation of 4091 styles
+    // and refuses to load .docx with more, even though the spec seems to allow that;
+    // so simply if there are more styles, don't export those
+    // Implementing check for all exports DOCX, DOC, RTF
+    sal_uInt16 nLimit = MSWORD_MAX_STYLES_LIMIT;
+    nUsedSlots = (nLimit > nUsedSlots)? nUsedSlots : nLimit;
+
     for ( n = 0; n < nUsedSlots; n++ )
     {
         if (m_aNumRules.find(n) != m_aNumRules.end())
