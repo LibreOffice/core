@@ -1223,8 +1223,7 @@ IMPL_LINK( OGroupsSortingDialog, LBChangeHdl, ListBox*, pListBox )
 
             aArgs[0].Value <<= pListBox->GetSelectEntryPos() == 0;
             m_pController->executeChecked(&m_aHeaderLst  == pListBox ? SID_GROUPHEADER : SID_GROUPFOOTER,aArgs);
-            if ( m_pFieldExpression )
-                m_pFieldExpression->InvalidateHandleColumn();
+            m_pFieldExpression->InvalidateHandleColumn();
         }
     }
     return 1L;
