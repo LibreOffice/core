@@ -873,7 +873,7 @@ XFCell* LwpHiddenCellLayout::ConvertCell(LwpObjectID aTableID, sal_uInt16 nRow, 
         return NULL;
     LwpConnectedCellLayout* pConnCell = dynamic_cast<LwpConnectedCellLayout* >(cconnectedlayout.obj());
 
-    if (nRow < (pConnCell->GetNumrows()+pConnCell->GetRowID()))
+    if (!pConnCell || nRow < (pConnCell->GetNumrows()+pConnCell->GetRowID()))
         return NULL;
     // if the hidden cell should be displayed for limit of SODC
     // use the default cell layout
