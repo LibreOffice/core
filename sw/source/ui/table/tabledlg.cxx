@@ -393,10 +393,8 @@ sal_Bool  SwFormatTablePage::FillItemSet( SfxItemSet& rCoreSet )
             m_pTopMF->GetText() != m_pTopMF->GetSavedValue() )
         {
             SvxULSpaceItem aULSpace(RES_UL_SPACE);
-            aULSpace.SetUpper( (sal_uInt16) m_pTopMF->Denormalize(
-                                        m_pTopMF->GetValue( FUNIT_TWIP )));
-            aULSpace.SetLower( (sal_uInt16) m_pBottomMF->Denormalize(
-                                        m_pBottomMF->GetValue( FUNIT_TWIP )));
+            aULSpace.SetUpper( m_pTopMF->Denormalize(m_pTopMF->GetValue( FUNIT_TWIP )));
+            aULSpace.SetLower( m_pBottomMF->Denormalize(m_pBottomMF->GetValue( FUNIT_TWIP )));
             rCoreSet.Put(aULSpace);
         }
 
@@ -407,14 +405,16 @@ sal_Bool  SwFormatTablePage::FillItemSet( SfxItemSet& rCoreSet )
         bModified = sal_True;
     }
 
-    sal_uInt16 nPos;
-    if( m_pTextDirectionLB->IsVisible() &&
-        ( nPos = m_pTextDirectionLB->GetSelectEntryPos() ) !=
-                                            m_pTextDirectionLB->GetSavedValue() )
+    if( m_pTextDirectionLB->IsVisible() )
     {
-        sal_uInt32 nDirection = (sal_uInt32)(sal_uIntPtr)m_pTextDirectionLB->GetEntryData( nPos );
-        rCoreSet.Put( SvxFrameDirectionItem( (SvxFrameDirection)nDirection, RES_FRAMEDIR));
-        bModified = sal_True;
+        const sal_Int32 nPos = m_pTextDirectionLB->GetSelectEntryPos();
+        if ( nPos != m_pTextDirectionLB->GetSavedValue() )
+        {
+            const sal_uInt32 nDirection =
+                             (sal_uInt32)(sal_uIntPtr)m_pTextDirectionLB->GetEntryData( nPos );
+            rCoreSet.Put( SvxFrameDirectionItem( (SvxFrameDirection)nDirection, RES_FRAMEDIR));
+            bModified = sal_True;
+        }
     }
 
     return bModified;
@@ -555,7 +555,7 @@ void  SwFormatTablePage::Reset( const SfxItemSet& )
     if( SFX_ITEM_SET == rSet.GetItemState( RES_FRAMEDIR, true, &pItem ) )
     {
         sal_uIntPtr nVal  = ((SvxFrameDirectionItem*)pItem)->GetValue();
-        sal_uInt16 nPos = m_pTextDirectionLB->GetEntryPos( (void*) nVal );
+        const sal_Int32 nPos = m_pTextDirectionLB->GetEntryPos( (void*) nVal );
         m_pTextDirectionLB->SelectEntryPos( nPos );
         m_pTextDirectionLB->SaveValue();
     }
@@ -626,7 +626,7 @@ int  SwFormatTablePage::DeactivatePage( SfxItemSet* _pSet )
             if (m_pRelWidthCB->IsChecked() && m_pRelWidthCB->IsEnabled())
             {
                 lWidth = pTblData->GetSpace() - lRight - lLeft;
-                sal_uInt16 nPercentWidth = (sal_uInt16)m_aWidthMF.GetValue(FUNIT_CUSTOM);
+                const sal_uInt16 nPercentWidth = m_aWidthMF.GetValue(FUNIT_CUSTOM);
                 if(pTblData->GetWidthPercent() != nPercentWidth)
                 {
                     pTblData->SetWidthPercent(nPercentWidth);
@@ -641,9 +641,8 @@ int  SwFormatTablePage::DeactivatePage( SfxItemSet* _pSet )
             pTblData->SetWidth(lWidth);
 
             SwTwips nColSum = 0;
-            sal_uInt16 i;
 
-            for( i = 0; i < pTblData->GetColCount(); i++)
+            for( sal_uInt16 i = 0; i < pTblData->GetColCount(); i++)
             {
                 nColSum += pTblData->GetColumns()[i].nWidth;
             }
@@ -656,7 +655,7 @@ int  SwFormatTablePage::DeactivatePage( SfxItemSet* _pSet )
                 while ( std::abs(nDiff) > pTblData->GetColCount() + 1 )
                 {
                     SwTwips nSub = nDiff / pTblData->GetColCount();
-                    for( i = 0; i < pTblData->GetColCount(); i++)
+                    for( sal_uInt16 i = 0; i < pTblData->GetColCount(); i++)
                     {
                         if(pTblData->GetColumns()[i].nWidth - nMinWidth > nSub)
                         {
@@ -773,15 +772,14 @@ void  SwTableColumnPage::Reset( const SfxItemSet& )
                             pTblData->GetAlign() != text::HoriOrientation::LEFT_AND_WIDTH?
                         pTblData->GetWidth() : pTblData->GetSpace();
 
-        sal_uInt16 i;
-        for( i = 0; i < nNoOfCols; i++ )
+        for( sal_uInt16 i = 0; i < nNoOfCols; i++ )
         {
             if( pTblData->GetColumns()[i].nWidth  < nMinWidth )
                     nMinWidth = pTblData->GetColumns()[i].nWidth;
         }
         sal_Int64 nMinTwips = m_aFieldArr[0].NormalizePercent( nMinWidth );
         sal_Int64 nMaxTwips = m_aFieldArr[0].NormalizePercent( nTableWidth );
-        for( i = 0; (i < MET_FIELDS) && (i < nNoOfVisibleCols); i++ )
+        for( sal_uInt16 i = 0; (i < MET_FIELDS) && (i < nNoOfVisibleCols); i++ )
         {
             m_aFieldArr[i].SetPrcntValue( m_aFieldArr[i].NormalizePercent(
                                                 GetVisibleWidth(i) ), FUNIT_TWIP );
@@ -793,12 +791,11 @@ void  SwTableColumnPage::Reset( const SfxItemSet& )
 
         if( nNoOfVisibleCols > MET_FIELDS )
             m_pUpBtn->Enable();
-        i = nNoOfVisibleCols;
-        while( i < MET_FIELDS )
+
+        for( sal_uInt16 i = nNoOfVisibleCols; i < MET_FIELDS; ++i )
         {
             m_aFieldArr[i].SetText( OUString() );
             m_pTextArr[i]->Disable();
-            i++;
         }
     }
     ActivatePage(rSet);
@@ -928,7 +925,6 @@ sal_Bool  SwTableColumnPage::FillItemSet( SfxItemSet& )
 void   SwTableColumnPage::ModifyHdl( MetricField* pField )
 {
         PercentField *pEdit = NULL;
-        sal_uInt16 nAktPos;
         sal_uInt16 i;
 
         for( i = 0; i < MET_FIELDS; i++)
@@ -947,17 +943,15 @@ void   SwTableColumnPage::ModifyHdl( MetricField* pField )
         }
 
         SetVisibleWidth(aValueTbl[i], static_cast< SwTwips >(pEdit->DenormalizePercent(pEdit->GetValue( FUNIT_TWIP ))) );
-        nAktPos = aValueTbl[i];
 
-        UpdateCols( nAktPos );
+        UpdateCols( aValueTbl[i] );
 };
 
 void   SwTableColumnPage::UpdateCols( sal_uInt16 nAktPos )
 {
     SwTwips nSum = 0;
-    sal_uInt16 i;
 
-    for( i = 0; i < nNoOfCols; i++ )
+    for( sal_uInt16 i = 0; i < nNoOfCols; i++ )
     {
         nSum += (pTblData->GetColumns())[i].nWidth;
     }
@@ -1035,7 +1029,7 @@ void   SwTableColumnPage::UpdateCols( sal_uInt16 nAktPos )
             nDiff = nAdd;
         }
         if(nAdd)
-            for(i = 0; i < nNoOfVisibleCols; i++ )
+            for( sal_uInt16 i = 0; i < nNoOfVisibleCols; i++ )
             {
                 if(i == nAktPos)
                     continue;
@@ -1058,7 +1052,7 @@ void   SwTableColumnPage::UpdateCols( sal_uInt16 nAktPos )
     if(!bPercentMode)
         m_pSpaceED->SetValue(m_pSpaceED->Normalize( pTblData->GetSpace() - nTableWidth) , FUNIT_TWIP);
 
-    for( i = 0; ( i < nNoOfVisibleCols ) && ( i < MET_FIELDS ); i++)
+    for( sal_uInt16 i = 0; ( i < nNoOfVisibleCols ) && ( i < MET_FIELDS ); i++)
     {
         m_aFieldArr[i].SetPrcntValue(m_aFieldArr[i].NormalizePercent(
                         GetVisibleWidth(aValueTbl[i]) ), FUNIT_TWIP);
@@ -1075,7 +1069,7 @@ void    SwTableColumnPage::ActivatePage( const SfxItemSet& )
         m_aFieldArr[i].ShowPercent( bPercentMode );
     }
 
-    sal_uInt16 nTblAlign = pTblData->GetAlign();
+    const sal_uInt16 nTblAlign = pTblData->GetAlign();
     if((text::HoriOrientation::FULL != nTblAlign && nTableWidth != pTblData->GetWidth()) ||
     (text::HoriOrientation::FULL == nTblAlign && nTableWidth != pTblData->GetSpace()))
     {
@@ -1448,16 +1442,15 @@ void   SwTextFlowPage::Reset( const SfxItemSet& rSet )
     {
         //Inserting of the existing page templates in the list box
         const sal_uInt16 nCount = pShell->GetPageDescCnt();
-        sal_uInt16 i;
 
-        for( i = 0; i < nCount; ++i)
+        for( sal_uInt16 i = 0; i < nCount; ++i)
         {
             const SwPageDesc &rPageDesc = pShell->GetPageDesc(i);
             m_pPageCollLB->InsertEntry(rPageDesc.GetName());
         }
 
         OUString aFmtName;
-        for(i = RES_POOLPAGE_BEGIN; i < RES_POOLPAGE_END; ++i)
+        for(sal_uInt16 i = RES_POOLPAGE_BEGIN; i < RES_POOLPAGE_END; ++i)
             if( LISTBOX_ENTRY_NOTFOUND == m_pPageCollLB->GetEntryPos(
                     aFmtName = SwStyleNameMapper::GetUIName( i, aFmtName ) ))
                 m_pPageCollLB->InsertEntry( aFmtName );
