@@ -2993,6 +2993,7 @@ sal_Int32 SwEscherEx::WriteTxtFlyFrame(const DrawObj &rObj, sal_uInt32 nShapeId,
     {
         default:
             OSL_ENSURE(!this, "unknown direction type");
+            //fall-through
         case FRMDIR_HORI_LEFT_TOP:
             nFlow=mso_txflHorzN;
         break;
