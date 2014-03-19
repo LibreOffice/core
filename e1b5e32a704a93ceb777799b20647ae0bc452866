@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da86d52c_acca4b6c",
+        "filename": "sw/qa/extras/ooxmlexport/ooxmlexport.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 2823,
+      "author": {
+        "id": 1000210
+      },
+      "writtenOn": "2014-03-19T03:52:27Z",
+      "side": 1,
+      "message": "Relying on the ordering of Override elements here appears to be brittle. See that the following buildbot has found something else at position [2]:\n\nhttp://ci.libreoffice.org/job/buildbot/1709/console\n\nPerhaps we could search on the PartName attribute instead of using the index?  Something like:\n\n \"/ContentType:Types/ContentType:Override[@PartName\u003d\u0027/word/embeddings/Microsoft_Excel_Macro-Enabled_Worksheet1.xlsm\u0027]\"",
+      "revId": "e1b5e32a704a93ceb777799b20647ae0bc452866",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
