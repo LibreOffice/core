@@ -277,7 +277,7 @@ void SwFmt::Modify( const SfxPoolItem* pOldValue, const SfxPoolItem* pNewValue )
         }
         break;
     case RES_ATTRSET_CHG:
-        if( ((SwAttrSetChg*)pOldValue)->GetTheChgdSet() != &aSet )
+        if (pOldValue && pNewValue && ((SwAttrSetChg*)pOldValue)->GetTheChgdSet() != &aSet)
         {
             // pass only those that are not set
             SwAttrSetChg aOld( *(SwAttrSetChg*)pOldValue );
