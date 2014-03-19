@@ -1830,11 +1830,11 @@ sal_Bool SwCrsrShell::SetShadowCrsrPos( const Point& rPt, SwFillMode eFillMode )
             GetDoc()->GetIDocumentUndoRedo().StartUndo( nUndoId, NULL );
 
             SwTxtFmtColl* pNextFmt = 0;
-            SwTxtNode* pTNd = pCNd->GetTxtNode();
+            SwTxtNode* pTNd = pCNd ? pCNd->GetTxtNode() : NULL;
             if( pTNd )
                 pNextFmt = &pTNd->GetTxtColl()->GetNextTxtFmtColl();
 
-            const SwSectionNode* pSectNd = pCNd->FindSectionNode();
+            const SwSectionNode* pSectNd = pCNd ? pCNd->FindSectionNode() : NULL;
             if( pSectNd && aFPos.nParaCnt )
             {
                 SwNodeIndex aEnd( aPos.nNode, 1 );
