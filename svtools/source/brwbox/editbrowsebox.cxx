@@ -138,26 +138,7 @@ namespace svt
                   ,nStartEvent(0)
                   ,nEndEvent(0)
                   ,nCellModifiedEvent(0)
-                  ,nPaintRow(-1)
-                  ,nEditRow(-1)
-                  ,nOldEditRow(-1)
-                  ,nEditCol(0)
-                  ,nOldEditCol(0)
-                  ,bHasFocus(sal_False)
-                  ,bPaintStatus(sal_True)
-                  ,bActiveBeforeTracking( sal_False )
-                  ,m_nBrowserFlags(nBrowserFlags)
-    {
-
-        impl_construct();
-    }
-
-
-    EditBrowseBox::EditBrowseBox( Window* pParent, sal_Int32 nBrowserFlags, WinBits nBits, BrowserMode _nMode )
-                  :BrowseBox( pParent, nBits, _nMode )
-                  ,nStartEvent(0)
-                  ,nEndEvent(0)
-                  ,nCellModifiedEvent(0)
+                  ,m_pFocusWhileRequest(0)
                   ,nPaintRow(-1)
                   ,nEditRow(-1)
                   ,nOldEditRow(-1)
@@ -169,7 +150,27 @@ namespace svt
                   ,m_nBrowserFlags(nBrowserFlags)
                   ,pHeader(NULL)
     {
+        impl_construct();
+    }
 
+
+    EditBrowseBox::EditBrowseBox( Window* pParent, sal_Int32 nBrowserFlags, WinBits nBits, BrowserMode _nMode )
+                  :BrowseBox( pParent, nBits, _nMode )
+                  ,nStartEvent(0)
+                  ,nEndEvent(0)
+                  ,nCellModifiedEvent(0)
+                  ,m_pFocusWhileRequest(0)
+                  ,nPaintRow(-1)
+                  ,nEditRow(-1)
+                  ,nOldEditRow(-1)
+                  ,nEditCol(0)
+                  ,nOldEditCol(0)
+                  ,bHasFocus(sal_False)
+                  ,bPaintStatus(sal_True)
+                  ,bActiveBeforeTracking( sal_False )
+                  ,m_nBrowserFlags(nBrowserFlags)
+                  ,pHeader(NULL)
+    {
         impl_construct();
     }
 
