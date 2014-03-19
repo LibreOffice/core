@@ -32,6 +32,7 @@ namespace connectivity
                 Sqlda();
                 ~Sqlda();
                 XSQLDA* operator&() { return mpSqlda; };
+                XSQLDA* operator->() { return mpSqlda; };
 
                 /**
                  * Set up the Sqlda for a given statement, is equivalent to
