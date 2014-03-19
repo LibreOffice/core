@@ -263,7 +263,7 @@ ScVbaUserForm::getValue( const OUString& aPropertyName ) throw (beans::UnknownPr
         {
             uno::Reference< msforms::XControl > xVBAControl = ScVbaControlFactory::createUserformControl( mxContext, xControl, xDialogControl, m_xModel, mpGeometryHelper->getOffsetX(), mpGeometryHelper->getOffsetY() );
             ScVbaControl* pControl  = dynamic_cast< ScVbaControl* >( xVBAControl.get() );
-            if ( !m_sLibName.isEmpty() )
+            if (pControl && !m_sLibName.isEmpty())
                 pControl->setLibraryAndCodeName( m_sLibName.concat( "." ).concat( getName() ) );
             aResult = uno::makeAny( xVBAControl );
         }
