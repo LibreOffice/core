@@ -504,6 +504,7 @@ void SvtPrintOptions_Impl::impl_setValue (const OUString& sProp,
 }
 
 SvtBasePrintOptions::SvtBasePrintOptions()
+    : m_pDataContainer(NULL)
 {
 }
 
