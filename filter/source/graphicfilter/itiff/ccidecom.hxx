@@ -53,7 +53,7 @@ public:
 
     void StartDecompression( SvStream & rIStream );
 
-    sal_Bool DecompressScanline(sal_uInt8 * pTarget, sal_uLong nTargetBits );
+    sal_Bool DecompressScanline(sal_uInt8 * pTarget, sal_uLong nTargetBits, bool bLastLine );
 
 private:
 

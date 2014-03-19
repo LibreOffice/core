@@ -559,7 +559,7 @@ sal_Bool TIFFReader::ReadMap( sal_uLong nMinPercent, sal_uLong nMaxPercent )
                     pTIFF->Seek( pStripOffsets[ nStrip ] );
                     aCCIDecom.StartDecompression( *pTIFF );
                 }
-                if ( aCCIDecom.DecompressScanline( pMap[ np ], nImageWidth * nBitsPerSample * nSamplesPerPixel / nPlanes ) == sal_False )
+                if ( aCCIDecom.DecompressScanline( pMap[ np ], nImageWidth * nBitsPerSample * nSamplesPerPixel / nPlanes, np + 1 == nPlanes ) == sal_False )
                     return sal_False;
                 if ( pTIFF->GetError() )
                     return sal_False;

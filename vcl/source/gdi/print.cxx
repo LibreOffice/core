@@ -1213,11 +1213,25 @@ bool Printer::SetPaperSizeUser( const Size& rSize, bool bMatchNearest )
     if ( mbInPrintPage )
         return false;
 
-    Size    aPixSize = LogicToPixel( rSize );
-    Size    aPageSize = PixelToLogic( aPixSize, MAP_100TH_MM );
-    if ( (maJobSetup.ImplGetConstData()->mePaperFormat != PAPER_USER)       ||
-         (maJobSetup.ImplGetConstData()->mnPaperWidth  != aPageSize.Width()) ||
-         (maJobSetup.ImplGetConstData()->mnPaperHeight != aPageSize.Height()) )
+    const Size aPixSize = LogicToPixel( rSize );
+    const Size aPageSize = PixelToLogic( aPixSize, MAP_100TH_MM );
+    bool bNeedToChange(maJobSetup.ImplGetConstData()->mnPaperWidth != aPageSize.Width() ||
+        maJobSetup.ImplGetConstData()->mnPaperHeight != aPageSize.Height());
+
+    if(!bNeedToChange)
+    {
+        // #i122984# only need to change when Paper is different from PAPER_USER and
+        // the mapped Paper which will created below in the call to ImplFindPaperFormatForUserSize
+        // and will replace maJobSetup.ImplGetConstData()->mePaperFormat. This leads to
+        // unnecessary JobSetups, e.g. when printing a multi-page fax, but also with
+        // normal print
+        const Paper aPaper = ImplGetPaperFormat(aPageSize.Width(), aPageSize.Height());
+
+        bNeedToChange = maJobSetup.ImplGetConstData()->mePaperFormat != PAPER_USER &&
+            maJobSetup.ImplGetConstData()->mePaperFormat != aPaper;
+    }
+
+    if(bNeedToChange)
     {
         JobSetup        aJobSetup = maJobSetup;
         ImplJobSetup*   pSetupData = aJobSetup.ImplGetData();
