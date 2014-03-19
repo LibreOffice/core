@@ -43,11 +43,23 @@ class SVT_DLLPUBLIC AsynchronLink
     SVT_DLLPRIVATE void Call_Impl( void* pArg );
 
 public:
-    AsynchronLink( const Link& rLink ) :
-        _aLink( rLink ), _nEventId( 0 ), _pTimer( 0 ), _bInCall( sal_False ),
-        _pDeleted( 0 ), _pMutex( 0 ){}
-    AsynchronLink() : _nEventId( 0 ), _pTimer( 0 ), _bInCall( sal_False ),
-            _pDeleted( 0 ), _pMutex( 0 ){}
+    AsynchronLink( const Link& rLink )
+        : _aLink( rLink )
+        , _nEventId( 0 )
+        , _pTimer( 0 )
+        , _bInCall( sal_False )
+        , _pDeleted( 0 )
+        , _pArg( 0 )
+        , _pMutex( 0 )
+    {}
+    AsynchronLink()
+        : _nEventId( 0 )
+        , _pTimer( 0 )
+        , _bInCall( sal_False )
+        , _pDeleted( 0 )
+        , _pArg( 0 )
+        , _pMutex( 0 )
+    {}
     ~AsynchronLink();
 
     void CreateMutex();
