@@ -130,15 +130,11 @@ class VCL_DLLPUBLIC Animation
     BitmapEx                maBitmapEx;
     Timer                   maTimer;
     Size                    maGlobalSize;
-    void*                   mpExtraData;
     long                    mnLoopCount;
     long                    mnLoops;
     size_t                  mnPos;
-    Disposal                meLastDisposal;
     CycleMode               meCycleMode;
-    bool                mbFirst;
     bool                mbIsInAnimation;
-    bool                mbWithSize;
     bool                mbLoopTerminated;
     bool                mbIsWaiting;
 
