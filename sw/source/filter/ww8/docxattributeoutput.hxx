@@ -771,6 +771,8 @@ private:
     bool m_closeHyperlinkInThisRun;
     bool m_closeHyperlinkInPreviousRun;
     bool m_startedHyperlink;
+    // Count nested HyperLinks
+    sal_Int32 m_nHyperLinkCount;
 
     struct PostponedGraphic
     {

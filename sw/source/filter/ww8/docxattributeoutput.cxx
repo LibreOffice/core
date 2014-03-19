@@ -359,6 +359,16 @@ void DocxAttributeOutput::EndParagraph( ww8::WW8TableNodeInfoInner::Pointer_t pT
 
     --m_nTextFrameLevel;
 
+    /* If m_nHyperLinkCount > 0 that means hyperlink tag is not yet colsed.
+     * This is due to nested hyperlink tags. So close it before end of paragraph.
+     */
+    if(m_nHyperLinkCount > 0)
+    {
+        for(sal_Int32 nHyperLinkToClose = 0; nHyperLinkToClose < m_nHyperLinkCount; ++nHyperLinkToClose)
+            m_pSerializer->endElementNS( XML_w, XML_hyperlink );
+        m_nHyperLinkCount = 0;
+    }
+
     m_pSerializer->endElementNS( XML_w, XML_p );
 
     WriteParagraphSdt();
@@ -712,6 +722,7 @@ void DocxAttributeOutput::EndRun()
         {
             m_pSerializer->endElementNS( XML_w, XML_hyperlink );
             m_startedHyperlink = false;
+            m_nHyperLinkCount--;
         }
         m_closeHyperlinkInPreviousRun = false;
     }
@@ -743,6 +754,7 @@ void DocxAttributeOutput::EndRun()
         m_pSerializer->startElementNS( XML_w, XML_hyperlink, xAttrList );
         m_pHyperlinkAttrList = NULL;
         m_startedHyperlink = true;
+        m_nHyperLinkCount++;
     }
 
     // if there is some redlining in the document, output it
@@ -830,6 +842,7 @@ void DocxAttributeOutput::EndRun()
 
             m_pSerializer->endElementNS( XML_w, XML_hyperlink );
             m_startedHyperlink = false;
+            m_nHyperLinkCount--;
         }
         m_closeHyperlinkInThisRun = false;
     }
@@ -7060,6 +7073,7 @@ DocxAttributeOutput::DocxAttributeOutput( DocxExport &rExport, FSHelperPtr pSeri
       m_closeHyperlinkInThisRun( false ),
       m_closeHyperlinkInPreviousRun( false ),
       m_startedHyperlink( false ),
+      m_nHyperLinkCount(0),
       m_postponedGraphic( NULL ),
       m_postponedDiagram( NULL ),
       m_postponedVMLDrawing(NULL),

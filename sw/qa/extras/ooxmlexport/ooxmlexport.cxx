@@ -2865,6 +2865,19 @@ DECLARE_OOXMLEXPORT_TEST(test76108, "test76108.docx")
     assertXPath(pXmlDoc, "/w:document[1]/w:body[1]/w:p[1]/w:r[1]/w:fldChar[1]", "fldCharType", "begin");
 }
 
+DECLARE_OOXMLEXPORT_TEST(testHyperLinkTagEnded, "fdo76316.docx")
+{
+    /* XML tag <w:hyperlink> was not getting closed when its inside another
+     * <w:hyperlink> tag.
+     */
+    xmlDocPtr pXmlDoc = parseExport("word/document.xml");
+
+    if (!pXmlDoc) return;
+
+    CPPUNIT_ASSERT(pXmlDoc);
+    assertXPath(pXmlDoc, "/w:document[1]/w:body[1]/w:tbl[1]/w:tr[2]/w:tc[1]/w:tbl[1]/w:tr[1]/w:tc[1]/w:tbl[1]/w:tr[7]/w:tc[1]/w:tbl[1]/w:tr[2]/w:tc[6]/w:tbl[1]/w:tr[1]/w:tc[1]/w:p[1]/w:hyperlink[1]/w:hyperlink[1]",1);
+}
+
 DECLARE_OOXMLEXPORT_TEST(testSimpleSdts, "simple-sdts.docx")
 {
     xmlDocPtr pXmlDoc = parseExport("word/document.xml");
