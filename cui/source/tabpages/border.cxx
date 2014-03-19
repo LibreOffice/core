@@ -1038,10 +1038,12 @@ void SvxBorderTabPage::FillLineListBox_Impl()
         LineListBox::ColorDistFunc mpColorDistFn;
     } aLines[] = {
         // Simple lines
-        { SOLID,       0, &sameColor, &sameColor, &sameDistColor },
-        { DOTTED,      0, &sameColor, &sameColor, &sameDistColor },
-        { DASHED,      0, &sameColor, &sameColor, &sameDistColor },
-        { FINE_DASHED, 0, &sameColor, &sameColor, &sameDistColor },
+        { SOLID,        0, &sameColor, &sameColor, &sameDistColor },
+        { DOTTED,       0, &sameColor, &sameColor, &sameDistColor },
+        { DASHED,       0, &sameColor, &sameColor, &sameDistColor },
+        { FINE_DASHED,  0, &sameColor, &sameColor, &sameDistColor },
+        { DASH_DOT,     0, &sameColor, &sameColor, &sameDistColor },
+        { DASH_DOT_DOT, 0, &sameColor, &sameColor, &sameDistColor },
 
         // Double lines
         { DOUBLE,              10, &sameColor, &sameColor, &sameDistColor },

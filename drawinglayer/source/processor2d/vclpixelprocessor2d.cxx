@@ -402,6 +402,8 @@ namespace drawinglayer
                 break;
                 case table::BorderLineStyle::DOTTED:
                 case table::BorderLineStyle::DASHED:
+                case table::BorderLineStyle::DASH_DOT:
+                case table::BorderLineStyle::DASH_DOT_DOT:
                 case table::BorderLineStyle::FINE_DASHED:
                 {
                     std::vector<double> aPattern =

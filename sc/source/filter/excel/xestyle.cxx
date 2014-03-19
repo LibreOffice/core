@@ -1561,8 +1561,20 @@ void lclGetBorderLine(
         else if( nOuterWidth >= EXC_BORDER_MEDIUM )
         {
             rnXclLine = EXC_LINE_MEDIUM;
-            if (pLine->GetBorderLineStyle( ) == table::BorderLineStyle::DASHED)
-                rnXclLine = EXC_LINE_MEDIUMDASHED;
+            switch (pLine->GetBorderLineStyle())
+            {
+                case table::BorderLineStyle::DASHED:
+                    rnXclLine = EXC_LINE_MEDIUM_DASHED;
+                break;
+                case table::BorderLineStyle::DASH_DOT:
+                    rnXclLine = EXC_LINE_MEDIUM_DASHDOT;
+                    break;
+                case table::BorderLineStyle::DASH_DOT_DOT:
+                    rnXclLine = EXC_LINE_MEDIUM_DASHDOTDOT;
+                    break;
+                default:
+                    ;
+            }
         }
         else if( nOuterWidth >= EXC_BORDER_THIN )
         {
@@ -1572,6 +1584,12 @@ void lclGetBorderLine(
                 case table::BorderLineStyle::DASHED:
                 case table::BorderLineStyle::FINE_DASHED:
                     rnXclLine = EXC_LINE_DASHED;
+                    break;
+                case table::BorderLineStyle::DASH_DOT:
+                    rnXclLine = EXC_LINE_THIN_DASHDOT;
+                    break;
+                case table::BorderLineStyle::DASH_DOT_DOT:
+                    rnXclLine = EXC_LINE_THIN_DASHDOTDOT;
                     break;
                 case table::BorderLineStyle::DOTTED:
                     rnXclLine = EXC_LINE_DOTTED;
@@ -1718,15 +1736,19 @@ static const char* ToLineStyle( sal_uInt8 nLineStyle )
 {
     switch( nLineStyle )
     {
-        case EXC_LINE_NONE:     return "none";
-        case EXC_LINE_THIN:     return "thin";
-        case EXC_LINE_MEDIUM:   return "medium";
-        case EXC_LINE_THICK:    return "thick";
-        case EXC_LINE_DOUBLE:   return "double";
-        case EXC_LINE_HAIR:     return "hair";
-        case EXC_LINE_DOTTED:     return "dotted";
-        case EXC_LINE_DASHED:     return "dashed";
-        case EXC_LINE_MEDIUMDASHED: return "mediumDashed";
+        case EXC_LINE_NONE:              return "none";
+        case EXC_LINE_THIN:              return "thin";
+        case EXC_LINE_MEDIUM:            return "medium";
+        case EXC_LINE_THICK:             return "thick";
+        case EXC_LINE_DOUBLE:            return "double";
+        case EXC_LINE_HAIR:              return "hair";
+        case EXC_LINE_DOTTED:            return "dotted";
+        case EXC_LINE_DASHED:            return "dashed";
+        case EXC_LINE_MEDIUM_DASHED:     return "mediumDashed";
+        case EXC_LINE_THIN_DASHDOT:      return "dashDot";
+        case EXC_LINE_THIN_DASHDOTDOT:   return "dashDotDot";
+        case EXC_LINE_MEDIUM_DASHDOT:    return "mediumDashDot";
+        case EXC_LINE_MEDIUM_DASHDOTDOT: return "mediumDashDotDot";
     }
     return "*unknown*";
 }

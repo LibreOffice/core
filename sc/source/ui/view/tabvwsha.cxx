@@ -490,6 +490,8 @@ void ScTabViewShell::ExecuteCellFormatDlg(SfxRequest& rReq, const OString &rName
     aBorderStyles.push_back(table::BorderLineStyle::DOTTED);
     aBorderStyles.push_back(table::BorderLineStyle::DASHED);
     aBorderStyles.push_back(table::BorderLineStyle::FINE_DASHED);
+    aBorderStyles.push_back(table::BorderLineStyle::DASH_DOT);
+    aBorderStyles.push_back(table::BorderLineStyle::DASH_DOT_DOT);
     aBorderStyles.push_back(table::BorderLineStyle::DOUBLE_THIN);
 
     SfxIntegerListItem aBorderStylesItem(SID_ATTR_BORDER_STYLES, aBorderStyles);

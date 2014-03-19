@@ -1725,8 +1725,14 @@ bool Border::convertBorderLine( BorderLine2& rBorderLine, const BorderLineModel&
     rBorderLine.Color = rModel.maColor.getColor( getBaseFilter().getGraphicHelper(), API_RGB_BLACK );
     switch( rModel.mnStyle )
     {
-        case XML_dashDot:           lclSetBorderLineWidth( rBorderLine, API_LINE_THIN );    break;
-        case XML_dashDotDot:        lclSetBorderLineWidth( rBorderLine, API_LINE_THIN );    break;
+        case XML_dashDot:
+            lclSetBorderLineWidth( rBorderLine, API_LINE_THIN );
+            rBorderLine.LineStyle = table::BorderLineStyle::DASH_DOT;
+        break;
+        case XML_dashDotDot:
+            lclSetBorderLineWidth( rBorderLine, API_LINE_THIN );
+            rBorderLine.LineStyle = table::BorderLineStyle::DASH_DOT_DOT;
+        break;
         case XML_dashed:
             lclSetBorderLineWidth( rBorderLine, API_LINE_THIN );
             rBorderLine.LineStyle = table::BorderLineStyle::FINE_DASHED;

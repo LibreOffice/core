@@ -101,9 +101,15 @@ constants BorderLineStyle
      */
     const short DOUBLE_THIN = 15;
 
+    /** Line consisting of a repetition of one dash and one dot. */
+    const short DASH_DOT = 16;
+
+    /** Line consisting of a repetition of one dash and 2 dots. */
+    const short DASH_DOT_DOT = 17;
+
     /** Maximum valid border line style value.
      */
-    const short BORDER_LINE_STYLE_MAX = 15;
+    const short BORDER_LINE_STYLE_MAX = 17;
 };
 
 

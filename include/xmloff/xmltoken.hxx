@@ -532,6 +532,8 @@ namespace xmloff { namespace token {
         XML_CYLINDER,
         XML_D,
         XML_DASH,
+        XML_DASH_DOT,
+        XML_DASH_DOT_DOT,
         XML_DASHED,
         XML_DATA,
         XML_DATA_BAR,

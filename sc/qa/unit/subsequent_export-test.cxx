@@ -1022,6 +1022,8 @@ const char* toBorderName( sal_Int16 eStyle )
         case table::BorderLineStyle::SOLID: return "SOLID";
         case table::BorderLineStyle::DOTTED: return "DOTTED";
         case table::BorderLineStyle::DASHED: return "DASHED";
+        case table::BorderLineStyle::DASH_DOT: return "DASH_DOT";
+        case table::BorderLineStyle::DASH_DOT_DOT: return "DASH_DOT_DOT";
         case table::BorderLineStyle::DOUBLE_THIN: return "DOUBLE_THIN";
         case table::BorderLineStyle::FINE_DASHED: return "FINE_DASHED";
         default:

@@ -510,6 +510,8 @@ OString ScHTMLExport::BorderToStyle(const char* pBorderName,
                 aOut.append("dotted");
                 break;
             case table::BorderLineStyle::DASHED:
+            case table::BorderLineStyle::DASH_DOT:
+            case table::BorderLineStyle::DASH_DOT_DOT:
                 aOut.append("dashed");
                 break;
             case table::BorderLineStyle::DOUBLE:

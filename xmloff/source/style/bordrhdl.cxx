@@ -51,6 +51,8 @@ SvXMLEnumMapEntry pXML_BorderStyles[] =
     { XML_INSET,         table::BorderLineStyle::INSET  },
     { XML_OUTSET,        table::BorderLineStyle::OUTSET },
     { XML_FINE_DASHED,   table::BorderLineStyle::FINE_DASHED },
+    { XML_DASH_DOT,      table::BorderLineStyle::DASH_DOT },
+    { XML_DASH_DOT_DOT,  table::BorderLineStyle::DASH_DOT_DOT },
     { XML_TOKEN_INVALID, 0 }
 };
 
@@ -324,6 +326,12 @@ bool XMLBorderHdl::exportXML( OUString& rStrExpValue, const uno::Any& rValue, co
                 break;
             case table::BorderLineStyle::FINE_DASHED:
                 eStyleToken = XML_FINE_DASHED;
+                break;
+            case table::BorderLineStyle::DASH_DOT:
+                eStyleToken = XML_DASH_DOT;
+                break;
+            case table::BorderLineStyle::DASH_DOT_DOT:
+                eStyleToken = XML_DASH_DOT_DOT;
                 break;
             case table::BorderLineStyle::DOUBLE_THIN:
                 eStyleToken = XML_DOUBLE_THIN;

@@ -897,20 +897,20 @@ bool lclConvertBorderLine( ::editeng::SvxBorderLine& rLine, const XclImpPalette&
     static const sal_uInt16 ppnLineParam[][ 4 ] =
     {
         //  outer width,        type
-        {   0,                  table::BorderLineStyle::SOLID },  // 0 = none
-        {   EXC_BORDER_THIN,    table::BorderLineStyle::SOLID },  // 1 = thin
-        {   EXC_BORDER_MEDIUM,  table::BorderLineStyle::SOLID },  // 2 = medium
-        {   EXC_BORDER_THIN,    table::BorderLineStyle::FINE_DASHED }, // 3 = dashed
-        {   EXC_BORDER_THIN,    table::BorderLineStyle::DOTTED }, // 4 = dotted
-        {   EXC_BORDER_THICK,   table::BorderLineStyle::SOLID },  // 5 = thick
-        {   EXC_BORDER_THICK,   table::BorderLineStyle::DOUBLE_THIN }, // 6 = double
-        {   EXC_BORDER_HAIR,    table::BorderLineStyle::SOLID },  // 7 = hair
-        {   EXC_BORDER_MEDIUM,  table::BorderLineStyle::DASHED }, // 8 = med dash
-        {   EXC_BORDER_THIN,    table::BorderLineStyle::SOLID },  // 9 = thin dashdot
-        {   EXC_BORDER_MEDIUM,  table::BorderLineStyle::SOLID },  // A = med dashdot
-        {   EXC_BORDER_THIN,    table::BorderLineStyle::SOLID },  // B = thin dashdotdot
-        {   EXC_BORDER_MEDIUM,  table::BorderLineStyle::SOLID },  // C = med dashdotdot
-        {   EXC_BORDER_MEDIUM,  table::BorderLineStyle::SOLID }   // D = med slant dashdot
+        {   0,                  table::BorderLineStyle::SOLID        }, // 0 = none
+        {   EXC_BORDER_THIN,    table::BorderLineStyle::SOLID        }, // 1 = thin
+        {   EXC_BORDER_MEDIUM,  table::BorderLineStyle::SOLID        }, // 2 = medium
+        {   EXC_BORDER_THIN,    table::BorderLineStyle::FINE_DASHED  }, // 3 = dashed
+        {   EXC_BORDER_THIN,    table::BorderLineStyle::DOTTED       }, // 4 = dotted
+        {   EXC_BORDER_THICK,   table::BorderLineStyle::SOLID        }, // 5 = thick
+        {   EXC_BORDER_THICK,   table::BorderLineStyle::DOUBLE_THIN  }, // 6 = double
+        {   EXC_BORDER_HAIR,    table::BorderLineStyle::SOLID        }, // 7 = hair
+        {   EXC_BORDER_MEDIUM,  table::BorderLineStyle::DASHED       }, // 8 = med dash
+        {   EXC_BORDER_THIN,    table::BorderLineStyle::DASH_DOT     }, // 9 = thin dashdot
+        {   EXC_BORDER_MEDIUM,  table::BorderLineStyle::DASH_DOT     }, // A = med dashdot
+        {   EXC_BORDER_THIN,    table::BorderLineStyle::DASH_DOT_DOT }, // B = thin dashdotdot
+        {   EXC_BORDER_MEDIUM,  table::BorderLineStyle::DASH_DOT_DOT }, // C = med dashdotdot
+        {   EXC_BORDER_MEDIUM,  table::BorderLineStyle::DASH_DOT     }  // D = med slant dashdot
     };
 
     if( nXclLine == EXC_LINE_NONE )

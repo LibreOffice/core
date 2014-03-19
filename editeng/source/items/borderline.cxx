@@ -305,6 +305,8 @@ BorderWidthImpl SvxBorderLine::getWidthImpl( SvxBorderStyle nStyle )
         case DOTTED:
         case DASHED:
         case FINE_DASHED:
+        case DASH_DOT:
+        case DASH_DOT_DOT:
             aImpl = BorderWidthImpl( CHANGE_LINE1, 1.0 );
             break;
 
@@ -490,6 +492,8 @@ void SvxBorderLine::GuessLinesWidths( SvxBorderStyle nStyle, sal_uInt16 nOut, sa
                 case DOTTED:
                 case DASHED:
                 case FINE_DASHED:
+                case DASH_DOT:
+                case DASH_DOT_DOT:
                     ::std::swap( nOut, nIn);
                     break;
                 default:

@@ -37,15 +37,20 @@ class XclRoot;
 
 // Line styles ----------------------------------------------------------------
 
-const sal_uInt8 EXC_LINE_NONE               = 0x00;
-const sal_uInt8 EXC_LINE_THIN               = 0x01;
-const sal_uInt8 EXC_LINE_MEDIUM             = 0x02;
-const sal_uInt8 EXC_LINE_DASHED             = 0x03;
-const sal_uInt8 EXC_LINE_DOTTED             = 0x04;
-const sal_uInt8 EXC_LINE_THICK              = 0x05;
-const sal_uInt8 EXC_LINE_DOUBLE             = 0x06;
-const sal_uInt8 EXC_LINE_HAIR               = 0x07;
-const sal_uInt8 EXC_LINE_MEDIUMDASHED       = 0x08;
+const sal_uInt8 EXC_LINE_NONE                 = 0x00;
+const sal_uInt8 EXC_LINE_THIN                 = 0x01;
+const sal_uInt8 EXC_LINE_MEDIUM               = 0x02;
+const sal_uInt8 EXC_LINE_DASHED               = 0x03;
+const sal_uInt8 EXC_LINE_DOTTED               = 0x04;
+const sal_uInt8 EXC_LINE_THICK                = 0x05;
+const sal_uInt8 EXC_LINE_DOUBLE               = 0x06;
+const sal_uInt8 EXC_LINE_HAIR                 = 0x07;
+const sal_uInt8 EXC_LINE_MEDIUM_DASHED        = 0x08;
+const sal_uInt8 EXC_LINE_THIN_DASHDOT         = 0x09;
+const sal_uInt8 EXC_LINE_MEDIUM_DASHDOT       = 0x0A;
+const sal_uInt8 EXC_LINE_THIN_DASHDOTDOT      = 0x0B;
+const sal_uInt8 EXC_LINE_MEDIUM_DASHDOTDOT    = 0x0C;
+const sal_uInt8 EXC_LINE_MEDIUM_SLANT_DASHDOT = 0x0D;
 
 // Background patterns --------------------------------------------------------
 

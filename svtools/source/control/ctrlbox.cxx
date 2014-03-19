@@ -608,6 +608,20 @@ std::vector<double> GetDashing( sal_uInt16 nDashing )
             aPattern.push_back( 6.0 ); // line
             aPattern.push_back( 2.0 ); // blank
         break;
+        case table::BorderLineStyle::DASH_DOT:
+            aPattern.push_back( 16.0 ); // line
+            aPattern.push_back( 5.0 );  // blank
+            aPattern.push_back( 5.0 );  // line
+            aPattern.push_back( 5.0 );  // blank
+        break;
+        case table::BorderLineStyle::DASH_DOT_DOT:
+            aPattern.push_back( 16.0 ); // line
+            aPattern.push_back( 5.0 );  // blank
+            aPattern.push_back( 5.0 );  // line
+            aPattern.push_back( 5.0 );  // blank
+            aPattern.push_back( 5.0 );  // line
+            aPattern.push_back( 5.0 );  // blank
+        break;
         default:
             ;
     }
