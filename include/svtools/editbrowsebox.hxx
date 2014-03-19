@@ -471,7 +471,6 @@ namespace svt
             void Set(const BrowserMouseEvent* pEvt, sal_Bool bIsDown);
         } aMouseEvent;
 
-        const BrowserMouseEvent* pMouseEvent;   // is set during a mouse event
         CellControllerRef        aController,
                                  aOldController;
 
