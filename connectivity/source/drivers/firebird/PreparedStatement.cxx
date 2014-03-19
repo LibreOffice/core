@@ -56,7 +56,6 @@ OPreparedStatement::OPreparedStatement( Connection* _pConnection,
     :OStatementCommonBase(_pConnection)
     ,m_aTypeInfo(_TypeInfo)
     ,m_sSqlStatement(sql)
-    ,m_pInSqlda(0)
 {
     SAL_INFO("connectivity.firebird", "OPreparedStatement(). "
              "sql: " << sql);
@@ -71,46 +70,12 @@ void OPreparedStatement::ensurePrepared()
     if (m_aStatementHandle)
         return;
 
-    ISC_STATUS aErr = 0;
-
-    if (!m_pInSqlda)
-    {
-        m_pInSqlda = (XSQLDA*) malloc(XSQLDA_LENGTH(10));
-        m_pInSqlda->version = SQLDA_VERSION1;
-        m_pInSqlda->sqln = 10;
-    }
-
     prepareAndDescribeStatement(m_sSqlStatement,
                                 m_aOutSqlda,
-                                m_pInSqlda);
+                                &m_aInSqlda);
 
 
-    aErr = isc_dsql_describe_bind(m_statusVector,
-                                  &m_aStatementHandle,
-                                  1,
-                                  m_pInSqlda);
-
-    if (aErr)
-    {
-        SAL_WARN("connectivity.firebird", "isc_dsql_describe_bind failed");
-    }
-    else if (m_pInSqlda->sqld > m_pInSqlda->sqln) // Not large enough
-    {
-        short nItems = m_pInSqlda->sqld;
-        free(m_pInSqlda);
-        m_pInSqlda = (XSQLDA*) malloc(XSQLDA_LENGTH(nItems));
-        m_pInSqlda->version = SQLDA_VERSION1;
-        m_pInSqlda->sqln = nItems;
-        isc_dsql_describe_bind(m_statusVector,
-                               &m_aStatementHandle,
-                               1,
-                               m_pInSqlda);
-    }
-
-    if (!aErr)
-        mallocSQLVAR(m_pInSqlda);
-    else
-        evaluateStatusVector(m_statusVector, m_sSqlStatement, *this);
+    m_aInSqlda.describeStatement(m_aStatementHandle, true);
 }
 
 OPreparedStatement::~OPreparedStatement()
@@ -162,12 +127,6 @@ void SAL_CALL OPreparedStatement::close() throw(SQLException, RuntimeException, 
     checkDisposed(OStatementCommonBase_Base::rBHelper.bDisposed);
 
     OStatementCommonBase::close();
-    if (m_pInSqlda)
-    {
-        freeSQLVAR(m_pInSqlda);
-        free(m_pInSqlda);
-        m_pInSqlda = 0;
-    }
 }
 
 void SAL_CALL OPreparedStatement::disposing()
@@ -191,7 +150,7 @@ void SAL_CALL OPreparedStatement::setString(sal_Int32 nParameterIndex,
 
     OString str = OUStringToOString(x , RTL_TEXTENCODING_UTF8 );
 
-    XSQLVAR* pVar = m_pInSqlda->sqlvar + (nParameterIndex - 1);
+    XSQLVAR* pVar = m_aInSqlda->sqlvar + (nParameterIndex - 1);
 
     int dtype = (pVar->sqltype & ~1); // drop flag bit for now
 
@@ -268,7 +227,7 @@ sal_Bool SAL_CALL OPreparedStatement::execute()
                                 &m_pConnection->getTransaction(),
                                 &m_aStatementHandle,
                                 1,
-                                m_pInSqlda);
+                                &m_aInSqlda);
     if (aErr)
     {
         SAL_WARN("connectivity.firebird", "isc_dsql_execute failed" );
@@ -331,7 +290,7 @@ void OPreparedStatement::setValue(sal_Int32 nIndex, T& nValue, ISC_SHORT nType)
     checkParameterIndex(nIndex);
     setParameterNull(nIndex, false);
 
-    XSQLVAR* pVar = m_pInSqlda->sqlvar + (nIndex - 1);
+    XSQLVAR* pVar = m_aInSqlda->sqlvar + (nIndex - 1);
 
     if ((pVar->sqltype & ~1) != nType)
     {
@@ -686,7 +645,7 @@ void OPreparedStatement::checkParameterIndex(sal_Int32 nParameterIndex)
     throw(SQLException, RuntimeException)
 {
     ensurePrepared();
-    if ((nParameterIndex == 0) || (nParameterIndex > m_pInSqlda->sqld))
+    if ((nParameterIndex == 0) || (nParameterIndex > m_aInSqlda->sqld))
     {
         ::dbtools::throwSQLException(
             "No column " + OUString::number(nParameterIndex),
@@ -698,7 +657,7 @@ void OPreparedStatement::checkParameterIndex(sal_Int32 nParameterIndex)
 void OPreparedStatement::setParameterNull(sal_Int32 nParameterIndex,
                                           bool bSetNull)
 {
-    XSQLVAR* pVar = m_pInSqlda->sqlvar + (nParameterIndex - 1);
+    XSQLVAR* pVar = m_aInSqlda->sqlvar + (nParameterIndex - 1);
     if (pVar->sqltype & 1)
     {
         if (bSetNull)

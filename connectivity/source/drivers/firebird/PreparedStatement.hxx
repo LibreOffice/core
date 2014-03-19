@@ -71,7 +71,7 @@ namespace connectivity
             ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSetMetaData >  m_xMetaData;
 
             wrapper::Sqlda  m_aOutSqlda;
-            XSQLDA*         m_pInSqlda;
+            wrapper::Sqlda  m_aInSqlda;
             void checkParameterIndex(sal_Int32 nParameterIndex)
                 throw(::com::sun::star::sdbc::SQLException,
                       ::com::sun::star::uno::RuntimeException);
