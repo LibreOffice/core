@@ -663,8 +663,8 @@ void LwpCellLayout::ApplyProtect(XFCell * pCell, LwpObjectID aTableID)
         {
             // judge whole table
             LwpTable * pTable = dynamic_cast<LwpTable *>(aTableID.obj());
-            LwpTableLayout * pTableLayout = static_cast<LwpTableLayout *>(pTable->GetTableLayout());
-            LwpSuperTableLayout * pSuper = pTableLayout->GetSuperTableLayout();
+            LwpTableLayout * pTableLayout = pTable ? static_cast<LwpTableLayout *>(pTable->GetTableLayout()) : NULL;
+            LwpSuperTableLayout * pSuper = pTableLayout ? pTableLayout->GetSuperTableLayout() : NULL;
             if (pSuper && pSuper->IsProtected())
             {
                 bProtected = sal_True;
