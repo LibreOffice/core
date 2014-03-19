@@ -3518,7 +3518,7 @@ else # ! SYSTEM_GENBRK
 
 define gb_ExternalExecutable__register_genbrk
 $(call gb_ExternalExecutable_set_internal,genbrk,$(WORKDIR_FOR_BUILD)/UnpackedTarball/icu/source/bin/genbrk$(gb_Executable_EXT_for_build))
-$(call gb_ExternalExecutable_set_precommand,genbrk,$(gb_ICU_PRECOMMAND))
+$(call gb_ExternalExecutable_set_precommand,genbrk,$(subst $$,$$$$,$(gb_ICU_PRECOMMAND)))
 $(call gb_ExternalExecutable_add_dependencies,genbrk,\
 	$(call gb_Package_get_target_for_build,icu) \
 )
@@ -3538,7 +3538,7 @@ else # ! SYSTEM_GENCCODE
 
 define gb_ExternalExecutable__register_genccode
 $(call gb_ExternalExecutable_set_internal,genccode,$(WORKDIR_FOR_BUILD)/UnpackedTarball/icu/source/bin/genccode$(gb_Executable_EXT_for_build))
-$(call gb_ExternalExecutable_set_precommand,genccode,$(gb_ICU_PRECOMMAND))
+$(call gb_ExternalExecutable_set_precommand,genccode,$(subst $$,$$$$,$(gb_ICU_PRECOMMAND)))
 $(call gb_ExternalExecutable_add_dependencies,genccode,\
 	$(call gb_Package_get_target_for_build,icu) \
 )
@@ -3558,7 +3558,7 @@ else # ! SYSTEM_GENCMN
 
 define gb_ExternalExecutable__register_gencmn
 $(call gb_ExternalExecutable_set_internal,gencmn,$(WORKDIR_FOR_BUILD)/UnpackedTarball/icu/source/bin/gencmn$(gb_Executable_EXT_for_build))
-$(call gb_ExternalExecutable_set_precommand,gencmn,$(gb_ICU_PRECOMMAND))
+$(call gb_ExternalExecutable_set_precommand,gencmn,$(subst $$,$$$$,$(gb_ICU_PRECOMMAND)))
 $(call gb_ExternalExecutable_add_dependencies,gencmn,\
 	$(call gb_Package_get_target_for_build,icu) \
 )
