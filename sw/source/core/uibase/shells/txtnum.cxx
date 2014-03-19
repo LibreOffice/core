@@ -210,7 +210,7 @@ void SwTextShell::ExecEnterNum(SfxRequest &rReq)
             // If the Dialog was leaved with OK but nothing was chosen then the
             // numbering must be at least activated, if it is not already.
             else if ( pNumRuleAtCurrentSelection == NULL
-                      && SFX_ITEM_SET == aSet.GetItemState( SID_ATTR_NUMBERING_RULE, sal_False, &pItem ) )
+                      && SFX_ITEM_SET == aSet.GetItemState( SID_ATTR_NUMBERING_RULE, false, &pItem ) )
             {
                 rReq.AppendItem( *pItem );
                 rReq.Done();
@@ -246,7 +246,7 @@ void SwTextShell::ExecSetNumber(SfxRequest &rReq)
     case FN_SVX_SET_NUMBER:
     case FN_SVX_SET_BULLET:
         {
-            SFX_REQUEST_ARG( rReq, pItem, SfxUInt16Item, nSlot, sal_False );
+            SFX_REQUEST_ARG( rReq, pItem, SfxUInt16Item, nSlot, false );
             if ( pItem != NULL )
             {
                 const sal_uInt16 nChoosenItemIdx = pItem->GetValue();
