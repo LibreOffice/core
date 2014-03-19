@@ -145,7 +145,7 @@ void SAL_CALL AddonsToolBarManager::dispose() throw( RuntimeException, std::exce
 
     {
         // Remove addon specific data from toolbar items.
-        Guard aGuard( m_aLock );
+        SolarMutexGuard g;
         for ( sal_uInt16 n = 0; n < m_pToolBar->GetItemCount(); n++ )
         {
             sal_uInt16 nId( m_pToolBar->GetItemId( n ) );
@@ -201,7 +201,7 @@ void AddonsToolBarManager::RefreshImages()
 
 void AddonsToolBarManager::FillToolbar( const Sequence< Sequence< PropertyValue > >& rAddonToolbar )
 {
-    Guard aGuard( m_aLock );
+    SolarMutexGuard g;
 
     if ( m_bDisposed )
         return;
@@ -422,7 +422,7 @@ IMPL_LINK_NOARG(AddonsToolBarManager, DoubleClick)
 
 IMPL_LINK_NOARG(AddonsToolBarManager, Command)
 {
-    Guard aGuard( m_aLock );
+    SolarMutexGuard g;
 
     if ( m_bDisposed )
         return 1;

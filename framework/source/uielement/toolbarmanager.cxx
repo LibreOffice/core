@@ -20,7 +20,6 @@
 #include <uielement/toolbarmanager.hxx>
 
 #include <uielement/generictoolbarcontroller.hxx>
-#include <threadhelp/guard.hxx>
 #include "services.h"
 #include "general.h"
 #include "properties.h"
@@ -186,7 +185,6 @@ ToolBarManager::ToolBarManager( const Reference< XComponentContext >& rxContext,
                                 const Reference< XFrame >& rFrame,
                                 const OUString& rResourceName,
                                 ToolBox* pToolBar ) :
-    ThreadHelpBase( &Application::GetSolarMutex() ),
     m_bDisposed( false ),
     m_bSmallSymbols( !SvtMiscOptions().AreCurrentSymbolsLarge() ),
     m_bModuleIdentified( false ),
@@ -199,7 +197,7 @@ ToolBarManager::ToolBarManager( const Reference< XComponentContext >& rxContext,
     m_pToolBar( pToolBar ),
     m_aResourceName( rResourceName ),
     m_xFrame( rFrame ),
-    m_aListenerContainer( m_aLock.getShareableOslMutex() ),
+    m_aListenerContainer( m_mutex ),
     m_xContext( rxContext ),
     m_sIconTheme( SvtMiscOptions().GetIconTheme() ),
     m_bAcceleratorCfg( sal_False )
@@ -261,7 +259,7 @@ ToolBarManager::~ToolBarManager()
 void ToolBarManager::Destroy()
 {
     OSL_ASSERT( m_pToolBar != 0 );
-    Guard aGuard( m_aLock );
+    SolarMutexGuard g;
     if ( m_bAddedToTaskPaneList )
     {
         Window* pWindow = m_pToolBar;
@@ -305,13 +303,13 @@ void ToolBarManager::Destroy()
 
 ToolBox* ToolBarManager::GetToolBar() const
 {
-    Guard aGuard( m_aLock );
+    SolarMutexGuard g;
     return m_pToolBar;
 }
 
 void ToolBarManager::CheckAndUpdateImages()
 {
-    Guard aGuard( m_aLock );
+    SolarMutexGuard g;
     sal_Bool bRefreshImages = sal_False;
 
     SvtMiscOptions aMiscOptions;
@@ -336,7 +334,7 @@ void ToolBarManager::CheckAndUpdateImages()
 
 void ToolBarManager::RefreshImages()
 {
-    Guard aGuard( m_aLock );
+    SolarMutexGuard g;
 
     sal_Bool  bBigImages( SvtMiscOptions().AreCurrentSymbolsLarge() );
     for ( sal_uInt16 nPos = 0; nPos < m_pToolBar->GetItemCount(); nPos++ )
@@ -362,7 +360,7 @@ void ToolBarManager::RefreshImages()
 
 void ToolBarManager::UpdateImageOrientation()
 {
-    Guard aGuard( m_aLock );
+    SolarMutexGuard g;
 
     if ( m_xUICommandLabels.is() )
     {
@@ -485,7 +483,7 @@ void ToolBarManager::UpdateController( ::com::sun::star::uno::Reference< ::com::
 void ToolBarManager::frameAction( const FrameActionEvent& Action )
 throw ( RuntimeException, std::exception )
 {
-    Guard aGuard( m_aLock );
+    SolarMutexGuard g;
     if ( Action.Action == FrameAction_CONTEXT_CHANGED )
         m_aAsyncUpdateControllersTimer.Start();
 }
@@ -493,7 +491,7 @@ throw ( RuntimeException, std::exception )
 void SAL_CALL ToolBarManager::statusChanged( const ::com::sun::star::frame::FeatureStateEvent& Event )
 throw ( ::com::sun::star::uno::RuntimeException, std::exception )
 {
-    Guard aGuard( m_aLock );
+    SolarMutexGuard g;
     if ( m_bDisposed )
         return;
 
@@ -511,7 +509,7 @@ throw ( ::com::sun::star::uno::RuntimeException, std::exception )
 void SAL_CALL ToolBarManager::disposing( const EventObject& Source ) throw ( RuntimeException, std::exception )
 {
     {
-        Guard aGuard( m_aLock );
+        SolarMutexGuard g;
         if ( m_bDisposed )
             return;
     }
@@ -519,7 +517,7 @@ void SAL_CALL ToolBarManager::disposing( const EventObject& Source ) throw ( Run
     RemoveControllers();
 
     {
-        Guard aGuard( m_aLock );
+        SolarMutexGuard g;
         if ( m_xDocImageManager.is() )
         {
             try
@@ -573,7 +571,7 @@ void SAL_CALL ToolBarManager::dispose() throw( RuntimeException, std::exception 
     m_aListenerContainer.disposeAndClear( aEvent );
 
     {
-        Guard aGuard( m_aLock );
+        SolarMutexGuard g;
 
         // stop timer to prevent timer events after dispose
         m_aAsyncUpdateControllersTimer.Stop();
@@ -647,7 +645,7 @@ void SAL_CALL ToolBarManager::dispose() throw( RuntimeException, std::exception 
 
 void SAL_CALL ToolBarManager::addEventListener( const Reference< XEventListener >& xListener ) throw( RuntimeException, std::exception )
 {
-    Guard aGuard( m_aLock );
+    SolarMutexGuard g;
 
     /* SAFE AREA ----------------------------------------------------------------------------------------------- */
     if ( m_bDisposed )
@@ -673,7 +671,7 @@ void SAL_CALL ToolBarManager::elementRemoved( const ::com::sun::star::ui::Config
 }
 void ToolBarManager::impl_elementChanged(bool _bRemove,const ::com::sun::star::ui::ConfigurationEvent& Event )
 {
-    Guard aGuard( m_aLock );
+    SolarMutexGuard g;
 
     /* SAFE AREA ----------------------------------------------------------------------------------------------- */
     if ( m_bDisposed )
@@ -745,7 +743,7 @@ void SAL_CALL ToolBarManager::elementReplaced( const ::com::sun::star::ui::Confi
 
 void ToolBarManager::RemoveControllers()
 {
-    Guard aGuard( m_aLock );
+    SolarMutexGuard g;
 
     if ( m_bDisposed )
         return;
@@ -1151,7 +1149,7 @@ void ToolBarManager::FillToolbar( const Reference< XIndexAccess >& rItemContaine
     OString aTbxName = OUStringToOString( m_aResourceName, RTL_TEXTENCODING_ASCII_US );
     SAL_INFO( "fwk.uielement", "framework (cd100003) ::ToolBarManager::FillToolbar " << aTbxName.getStr() );
 
-    Guard aGuard( m_aLock );
+    SolarMutexGuard g;
 
     if ( m_bDisposed )
         return;
@@ -1503,7 +1501,7 @@ void ToolBarManager::RequestImages()
 
 void ToolBarManager::notifyRegisteredControllers( const OUString& aUIElementName, const OUString& aCommand )
 {
-    Guard aGuard( m_aLock );
+    SolarMutexClearableGuard aGuard;
     if ( !m_aSubToolBarControllerMap.empty() )
     {
         SubToolBarToSubToolBarControllerMap::const_iterator pIter =
@@ -1515,7 +1513,7 @@ void ToolBarManager::notifyRegisteredControllers( const OUString& aUIElementName
             if ( !rSubToolBarVector.empty() )
             {
                 SubToolBarControllerVector aNotifyVector = rSubToolBarVector;
-                aGuard.unlock();
+                aGuard.clear();
 
                 const sal_uInt32 nCount = aNotifyVector.size();
                 for ( sal_uInt32 i=0; i < nCount; i++ )
@@ -1540,7 +1538,7 @@ void ToolBarManager::notifyRegisteredControllers( const OUString& aUIElementName
 }
 long ToolBarManager::HandleClick(void ( SAL_CALL XToolbarController::*_pClick )())
 {
-    Guard aGuard( m_aLock );
+    SolarMutexGuard g;
 
     if ( m_bDisposed )
         return 1;
@@ -1564,7 +1562,7 @@ IMPL_LINK_NOARG(ToolBarManager, Click)
 
 IMPL_LINK_NOARG(ToolBarManager, DropdownClick)
 {
-    Guard aGuard( m_aLock );
+    SolarMutexGuard g;
 
     if ( m_bDisposed )
         return 1;
@@ -1621,7 +1619,7 @@ void ToolBarManager::ImplClearPopupMenu( ToolBox *pToolBar )
 
 IMPL_LINK( ToolBarManager, MenuDeactivate, Menu*, pMenu )
 {
-    Guard aGuard( m_aLock );
+    SolarMutexGuard g;
 
     if ( m_bDisposed )
         return 1;
@@ -1786,7 +1784,7 @@ bool ToolBarManager::MenuItemAllowed( sal_uInt16 ) const
 
 IMPL_LINK( ToolBarManager, Command, CommandEvent*, pCmdEvt )
 {
-    Guard aGuard( m_aLock );
+    SolarMutexGuard g;
 
     if ( m_bDisposed )
         return 1;
@@ -1807,7 +1805,7 @@ IMPL_LINK( ToolBarManager, Command, CommandEvent*, pCmdEvt )
 
 IMPL_LINK( ToolBarManager, MenuButton, ToolBox*, pToolBar )
 {
-   Guard aGuard( m_aLock );
+    SolarMutexGuard g;
 
     if ( m_bDisposed )
         return 1;
@@ -1828,7 +1826,7 @@ IMPL_LINK( ToolBarManager, MenuSelect, Menu*, pMenu )
     {
         // The guard must be in its own context as the we can get destroyed when our
         // own xInterface reference get destroyed!
-        Guard aGuard( m_aLock );
+        SolarMutexGuard g;
 
         if ( m_bDisposed )
             return 1;
@@ -2085,7 +2083,7 @@ IMPL_LINK_NOARG(ToolBarManager, AsyncUpdateControllersHdl)
     // own xInterface reference get destroyed!
     Reference< XComponent > xThis( static_cast< OWeakObject* >(this), UNO_QUERY );
 
-    Guard aGuard( m_aLock );
+    SolarMutexGuard g;
 
     if ( m_bDisposed )
         return 1;

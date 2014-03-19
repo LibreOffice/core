@@ -20,7 +20,6 @@
 #ifndef INCLUDED_FRAMEWORK_INC_UIELEMENT_TOOLBARMANAGER_HXX
 #define INCLUDED_FRAMEWORK_INC_UIELEMENT_TOOLBARMANAGER_HXX
 
-#include <threadhelp/threadhelpbase.hxx>
 #include <macros/generic.hxx>
 #include <macros/xinterface.hxx>
 #include <macros/xtypeprovider.hxx>
@@ -66,8 +65,7 @@ typedef ::cppu::WeakImplHelper4<
            ::com::sun::star::ui::XUIConfigurationListener
         > ToolbarManager_Base;
 
-class ToolBarManager : public ToolbarManager_Base,
-                       public ThreadHelpBase
+class ToolBarManager : public ToolbarManager_Base
 {
     public:
         ToolBarManager( const com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >& rxContext,
@@ -198,6 +196,7 @@ class ToolBarManager : public ToolbarManager_Base,
         com::sun::star::uno::Reference< com::sun::star::frame::XFrame >                        m_xFrame;
         com::sun::star::uno::Reference< com::sun::star::container::XNameAccess >               m_xUICommandLabels;
         ToolBarControllerMap                                                                   m_aControllerMap;
+        osl::Mutex m_mutex;
         ::cppu::OMultiTypeInterfaceContainerHelper                                             m_aListenerContainer;   /// container for ALL Listener
         ::com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >             m_xContext;
         ::com::sun::star::uno::Reference< ::com::sun::star::frame::XUIControllerFactory > m_xToolbarControllerFactory;
