@@ -377,7 +377,7 @@ void LwpPara::RegisterStyle()
         pOverStyle->SetStyleName("");
         LwpParaProperty* pProps = m_pProps;
         sal_uInt32 PropType;
-        LwpParaStyle* pParaStyle = dynamic_cast<LwpParaStyle*>(m_ParaStyle.obj());
+        LwpParaStyle& rParaStyle = dynamic_cast<LwpParaStyle&>(*m_ParaStyle.obj());
         while (pProps)
         {
             PropType = pProps->GetType();
@@ -385,12 +385,12 @@ void LwpPara::RegisterStyle()
             {
             case PP_LOCAL_ALIGN:
             {
-                if (!pParaStyle->GetAlignment())
+                if (!rParaStyle.GetAlignment())
                     OverrideAlignment(NULL,static_cast<LwpParaAlignProperty*>(pProps)->GetAlignment(),pOverStyle);
                 else
                 {
                     boost::scoped_ptr<LwpAlignmentOverride> const pAlign(
-                            pParaStyle->GetAlignment()->clone());
+                            rParaStyle.GetAlignment()->clone());
                     OverrideAlignment(pAlign.get(),
                             static_cast<LwpParaAlignProperty*>(pProps)->GetAlignment(),
                             pOverStyle);
@@ -400,7 +400,7 @@ void LwpPara::RegisterStyle()
             case PP_LOCAL_INDENT:
             {
                 noIndent = sal_False;
-                if (!pParaStyle->GetIndent())
+                if (!rParaStyle.GetIndent())
                     OverrideIndent(NULL,static_cast<LwpParaIndentProperty*>(pProps)->GetIndent(),pOverStyle);
 
                 else
@@ -412,12 +412,12 @@ void LwpPara::RegisterStyle()
             case PP_LOCAL_SPACING:
             {
                 noSpacing = sal_False;
-                if (!pParaStyle->GetSpacing())
+                if (!rParaStyle.GetSpacing())
                     OverrideSpacing(NULL,static_cast<LwpParaSpacingProperty*>(pProps)->GetSpacing(),pOverStyle);
                 else
                 {
                     boost::scoped_ptr<LwpSpacingOverride> const
-                        pSpacing(pParaStyle->GetSpacing()->clone());
+                        pSpacing(rParaStyle.GetSpacing()->clone());
                     OverrideSpacing(pSpacing.get(),
                             static_cast<LwpParaSpacingProperty*>(pProps)->GetSpacing(),
                             pOverStyle);
@@ -450,7 +450,7 @@ void LwpPara::RegisterStyle()
             case PP_LOCAL_TABRACK:
             {
                 //, 01/28/05
-                /*LwpTabOverride* pTabOverride=pParaStyle->GetTabOverride();
+                /*LwpTabOverride* pTabOverride=rParaStyle.GetTabOverride();
                 if(!pTabOverride)
                 {
                     OverrideTab(NULL,static_cast<LwpParaTabRackProperty*>(pProps)->GetTab(),pOverStyle);
@@ -464,11 +464,11 @@ void LwpPara::RegisterStyle()
             case PP_LOCAL_BACKGROUND:
             {
     /*          LwpBackgroundOverride aBackground;
-                if (!pParaStyle->GetBackground())
+                if (!rParaStyle.GetBackground())
                     OverrideBackground(NULL,static_cast<LwpParaBackGroundProperty*>(pProps)->GetBackground(),pOverStyle);
                 else
                 {
-                    aBackground = *(pParaStyle->GetaBackground());
+                    aBackground = *(rParaStyle.GetaBackground());
                     OverrideBackground(&aBackground,static_cast<LwpParaBackGroundProperty*>(pProps)->GetBackground(),pOverStyle);
                 }
     */
