@@ -127,7 +127,7 @@ void MacabResultSet::sortMacabRecords(const MacabOrder *pOrder)
 
 }
 
-void MacabResultSet::setTableName(OUString _sTableName)
+void MacabResultSet::setTableName(OUString const & _sTableName)
 {
     m_sTableName = _sTableName;
 }

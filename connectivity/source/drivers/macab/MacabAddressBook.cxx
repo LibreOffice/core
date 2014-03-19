@@ -93,7 +93,7 @@ MacabRecords *MacabAddressBook::getMacabRecords()
 /* Get the MacabRecords for a given name: either a group name or the
  * default table name.
  */
-MacabRecords *MacabAddressBook::getMacabRecords(const OUString _tableName)
+MacabRecords *MacabAddressBook::getMacabRecords(const OUString& _tableName)
 {
     if(_tableName == getDefaultTableName())
     {
@@ -106,7 +106,7 @@ MacabRecords *MacabAddressBook::getMacabRecords(const OUString _tableName)
 }
 
 
-MacabRecords *MacabAddressBook::getMacabRecordsMatch(const OUString _tableName)
+MacabRecords *MacabAddressBook::getMacabRecordsMatch(const OUString& _tableName)
 {
     if(match(_tableName, getDefaultTableName(), '\0'))
     {
@@ -155,7 +155,7 @@ MacabRecords *MacabAddressBook::getMacabRecordsMatch(const OUString _tableName)
 }
 
 
-MacabGroup *MacabAddressBook::getMacabGroup(OUString _groupName)
+MacabGroup *MacabAddressBook::getMacabGroup(OUString const & _groupName)
 {
     // initialize groups if not already initialized
     if(m_bRetrievedGroups == sal_False)
@@ -179,7 +179,7 @@ MacabGroup *MacabAddressBook::getMacabGroup(OUString _groupName)
 }
 
 
-MacabGroup *MacabAddressBook::getMacabGroupMatch(OUString _groupName)
+MacabGroup *MacabAddressBook::getMacabGroupMatch(OUString const & _groupName)
 {
     // initialize groups if not already initialized
     if(m_bRetrievedGroups == sal_False)

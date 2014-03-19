@@ -37,7 +37,7 @@ namespace connectivity
                 void operator+= (const MacabHeader *r);
                 OUString getString(const sal_Int32 i) const;
                 void sortRecord();
-                sal_Int32 getColumnNumber(const OUString s) const;
+                sal_Int32 getColumnNumber(const OUString& s) const;
 
                 static sal_Int32 compareFields(const macabfield *_field1, const macabfield *_field2);
 

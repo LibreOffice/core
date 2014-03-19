@@ -101,7 +101,7 @@ namespace connectivity
             void allMacabRecords();
             void someMacabRecords(const class MacabCondition *pCondition);
             void sortMacabRecords(const class MacabOrder *pOrder);
-            void setTableName(const OUString _sTableName);
+            void setTableName(const OUString& _sTableName);
 
             // ::cppu::OComponentHelper
             virtual void SAL_CALL disposing(void);

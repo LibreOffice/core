@@ -47,7 +47,7 @@ namespace connectivity
             virtual ~MacabResultSetMetaData();
 
         public:
-            MacabResultSetMetaData(MacabConnection* _pConnection, OUString _sTableName);
+            MacabResultSetMetaData(MacabConnection* _pConnection, OUString const & _sTableName);
 
             // avoid ambigous cast error from the compiler
             inline operator ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSetMetaData > () throw()

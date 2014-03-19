@@ -30,7 +30,7 @@ using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::sdbc;
 
-MacabResultSetMetaData::MacabResultSetMetaData(MacabConnection* _pConnection, OUString _sTableName)
+MacabResultSetMetaData::MacabResultSetMetaData(MacabConnection* _pConnection, OUString const & _sTableName)
     : m_pConnection(_pConnection),
         m_sTableName(_sTableName),
       m_aMacabFields()

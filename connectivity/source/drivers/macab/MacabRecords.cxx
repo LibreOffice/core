@@ -229,7 +229,7 @@ macabfield *MacabRecords::getField(const sal_Int32 _recordNumber, const sal_Int3
 }
 
 
-macabfield *MacabRecords::getField(const sal_Int32 _recordNumber, const OUString _columnName) const
+macabfield *MacabRecords::getField(const sal_Int32 _recordNumber, const OUString& _columnName) const
 {
     if(header != NULL)
     {
@@ -247,7 +247,7 @@ macabfield *MacabRecords::getField(const sal_Int32 _recordNumber, const OUString
 }
 
 
-sal_Int32 MacabRecords::getFieldNumber(const OUString _columnName) const
+sal_Int32 MacabRecords::getFieldNumber(const OUString& _columnName) const
 {
     if(header != NULL)
         return header->getColumnNumber(_columnName);
@@ -895,7 +895,7 @@ MacabRecord *MacabRecords::createMacabRecord(const ABRecordRef _abrecord, const 
  * receives the property value). It is called when we aren't given the
  * property's type already.
  */
-void MacabRecords::insertPropertyIntoMacabRecord(MacabRecord *_abrecord, const MacabHeader *_header, const OUString _propertyName, const CFTypeRef _propertyValue) const
+void MacabRecords::insertPropertyIntoMacabRecord(MacabRecord *_abrecord, const MacabHeader *_header, const OUString& _propertyName, const CFTypeRef _propertyValue) const
 {
     CFTypeID cf_type = CFGetTypeID(_propertyValue);
     ABPropertyType ab_type = getABTypeFromCFType( cf_type );
@@ -908,7 +908,7 @@ void MacabRecords::insertPropertyIntoMacabRecord(MacabRecord *_abrecord, const M
 /* Inserts a given property into a MacabRecord. This method is recursive
  * because properties can contain many sub-properties.
  */
-void MacabRecords::insertPropertyIntoMacabRecord(const ABPropertyType _propertyType, MacabRecord *_abrecord, const MacabHeader *_header, const OUString _propertyName, const CFTypeRef _propertyValue) const
+void MacabRecords::insertPropertyIntoMacabRecord(const ABPropertyType _propertyType, MacabRecord *_abrecord, const MacabHeader *_header, const OUString& _propertyName, const CFTypeRef _propertyValue) const
 {
     /* If there is no value, return */
     if(_propertyValue == NULL)
@@ -1190,7 +1190,7 @@ void MacabRecords::swap(const sal_Int32 _id1, const sal_Int32 _id2)
 }
 
 
-void MacabRecords::setName(const OUString _sName)
+void MacabRecords::setName(const OUString& _sName)
 {
     m_sName = _sName;
 }

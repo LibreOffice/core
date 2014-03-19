@@ -97,7 +97,7 @@ namespace connectivity
         }
 
 
-        inline OUString fixLabel(const OUString _originalLabel)
+        inline OUString fixLabel(const OUString& _originalLabel)
         {
             /* Get the length, and make sure that there is actually a string
              * here.

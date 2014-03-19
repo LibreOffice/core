@@ -223,7 +223,7 @@ sal_Int32 MacabRecord::compareFields(const macabfield *_field1, const macabfield
  * between an OUString and a macabfield (for use when creating and handling
  * SQL statement).
  */
-macabfield *MacabRecord::createMacabField(const OUString _newFieldString, const ABPropertyType _abType)
+macabfield *MacabRecord::createMacabField(const OUString& _newFieldString, const ABPropertyType _abType)
 {
     macabfield *newField = NULL;
     switch(_abType)

@@ -51,11 +51,11 @@ namespace connectivity
                 MacabRecords *getMacabRecords();
                 ::std::vector<MacabGroup *> getMacabGroups();
 
-                MacabGroup *getMacabGroup(OUString _groupName);
-                MacabRecords *getMacabRecords(const OUString _tableName);
+                MacabGroup *getMacabGroup(const OUString& _groupName);
+                MacabRecords *getMacabRecords(const OUString& _tableName);
 
-                MacabGroup *getMacabGroupMatch(OUString _groupName);
-                MacabRecords *getMacabRecordsMatch(const OUString _tableName);
+                MacabGroup *getMacabGroupMatch(const OUString& _groupName);
+                MacabRecords *getMacabRecordsMatch(const OUString& _tableName);
         };
 
     }
