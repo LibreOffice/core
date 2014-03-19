@@ -25,9 +25,6 @@
 namespace chart
 {
 
-/**
-*/
-
 class DateHelper
 {
 public:
