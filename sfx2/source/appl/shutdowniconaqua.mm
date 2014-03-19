@@ -295,7 +295,7 @@ class RecentFilesStringLength : public ::cppu::WeakImplHelper1< ::com::sun::star
 
 static RecentMenuDelegate* pRecentDelegate = nil;
 
-static rtl::OUString getShortCut( const rtl::OUString i_rTitle )
+static rtl::OUString getShortCut( const rtl::OUString& i_rTitle )
 {
     // create shortcut
     rtl::OUString aKeyEquiv;
