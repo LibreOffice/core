@@ -68,7 +68,7 @@ namespace connectivity
             virtual void construct(const OUString& _rUrl,const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& _rInfo ) throw( ::com::sun::star::sdbc::SQLException);
 
             inline OString getPassword() { return m_aPassword; }
-            inline void         setPassword( OString aStr ) { m_aPassword = aStr; }
+            inline void         setPassword( OString const & aStr ) { m_aPassword = aStr; }
             // own methods
             inline const OEvoabDriver& getDriver() const { return m_rDriver; }
 
