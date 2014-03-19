@@ -233,9 +233,25 @@ namespace sdr
                 uno::Sequence<beans::PropertyValue>());
             updateViewInformation2D(aNewViewInformation2D);
 
-            // get whole Primitive2DSequence; this will already make use of updated ViewInformation2D
-            // and may use the MapMode from the Target OutDev in the DisplayInfo
-            drawinglayer::primitive2d::Primitive2DSequence xPrimitiveSequence(rDrawPageVOContact.getPrimitive2DSequenceHierarchy(rDisplayInfo));
+            drawinglayer::primitive2d::Primitive2DSequence xPrimitiveSequence;
+            // Only get the expensive hierarchy if we can be sure that the
+            // returned sequence won't be empty anyway.
+            bool bGetHierarchy = false;
+            sal_Int32 nObjCount = GetSdrPage()->GetObjCount();
+            for (sal_Int32 i = 0; i < nObjCount; ++i)
+            {
+                SdrObject* pObject = GetSdrPage()->GetObj(i);
+                if (rRedrawArea.IsOver(pObject->GetSnapRect()))
+                {
+                    bGetHierarchy = true;
+                    break;
+                }
+            }
+
+            if (bGetHierarchy)
+                // get whole Primitive2DSequence; this will already make use of updated ViewInformation2D
+                // and may use the MapMode from the Target OutDev in the DisplayInfo
+                xPrimitiveSequence = rDrawPageVOContact.getPrimitive2DSequenceHierarchy(rDisplayInfo);
 
             // if there is something to show, use a primitive processor to render it. There
             // is a choice between VCL and Canvas processors currently. The decision is made in
