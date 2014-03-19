@@ -23,9 +23,6 @@
 
 #include <cmdid.h>
 
-/******************************************************************************
- *  Methode     :   SwDocFac::SwDocFac( SwDoc *pDoc )
- ******************************************************************************/
 
 SwDocFac::SwDocFac( SwDoc *pDc )
     : pDoc( pDc )
@@ -34,9 +31,6 @@ SwDocFac::SwDocFac( SwDoc *pDc )
         pDoc->acquire();
 }
 
-/******************************************************************************
- *  Methode     :   SwDocFac::~SwDocFac()
- ******************************************************************************/
 
 SwDocFac::~SwDocFac()
 {
@@ -44,10 +38,6 @@ SwDocFac::~SwDocFac()
         delete pDoc;
 }
 
-/******************************************************************************
- *  Methode     :   SwDoc *SwDocFac::GetDoc()
- *  Beschreibung:   Diese Methode legt immer einen Drucker an.
- ******************************************************************************/
 
 SwDoc *SwDocFac::GetDoc()
 {
