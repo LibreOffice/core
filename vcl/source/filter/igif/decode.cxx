@@ -27,12 +27,15 @@ struct GIFLZWTableEntry
     sal_uInt8               nData;
 };
 
-GIFLZWDecompressor::GIFLZWDecompressor( sal_uInt8 cDataSize ) :
-            nInputBitsBuf       ( 0 ),
-            nOutBufDataLen      ( 0 ),
-            nInputBitsBufSize   ( 0 ),
-            bEOIFound           ( false ),
-            nDataSize           ( cDataSize )
+GIFLZWDecompressor::GIFLZWDecompressor(sal_uInt8 cDataSize)
+    : pBlockBuf(NULL)
+    , nInputBitsBuf(0)
+    , nOutBufDataLen(0)
+    , nInputBitsBufSize(0)
+    , bEOIFound(false)
+    , nDataSize(cDataSize)
+    , nBlockBufSize(0)
+    , nBlockBufPos(0)
 {
     pOutBuf = new sal_uInt8[ 4096 ];
 
