@@ -24536,6 +24536,11 @@
       <attribute name="val" tokenid="ooxml:CT_CalendarType_val" action="setValue"/>
       <action name="start" action="setDefaultStringValue"/>
     </resource>
+    <resource name="CT_DataBinding" resource="Properties">
+      <attribute name="prefixMappings" tokenid="ooxml:CT_DataBinding_prefixMappings"/>
+      <attribute name="xpath" tokenid="ooxml:CT_DataBinding_xpath"/>
+      <attribute name="storeItemID" tokenid="ooxml:CT_DataBinding_storeItemID"/>
+    </resource>
     <resource xmlns:w14="http://schemas.microsoft.com/office/word/2010/wordml" name="CT_SdtPr" resource="Properties" tag="field">
       <element name="rPr" tokenid="ooxml:CT_SdtPr_rPr"/>
       <element name="alias" tokenid="ooxml:CT_SdtPr_alias"/>

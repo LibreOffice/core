@@ -898,6 +898,14 @@ void DomainMapper::lcl_attribute(Id nName, Value & val)
             if (static_cast<sal_uInt32>(nIntValue) == NS_ooxml::LN_Value_wordprocessingml_ST_FtnEdn_separator)
                 m_pImpl->m_bIgnoreNextPara = true;
         break;
+        case NS_ooxml::LN_CT_DataBinding_prefixMappings:
+        case NS_ooxml::LN_CT_DataBinding_xpath:
+        case NS_ooxml::LN_CT_DataBinding_storeItemID:
+        {
+            OUString sName = OUString::createFromAscii((*QNameToString::Instance())(nName).c_str());
+            m_pImpl->m_pSdtHelper->appendToInteropGrabBag(sName, uno::Any(sStringValue));
+        }
+        break;
         default:
             {
 #if OSL_DEBUG_LEVEL > 0
@@ -2234,6 +2242,7 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, PropertyMapPtr rContext )
         m_pImpl->m_pSdtHelper->getLocale().append(sStringValue);
     }
     break;
+    case NS_ooxml::LN_CT_SdtPr_dataBinding:
     case NS_ooxml::LN_CT_SdtPr_equation:
     case NS_ooxml::LN_CT_SdtPr_checkbox:
     case NS_ooxml::LN_CT_SdtPr_docPartObj:
@@ -2656,7 +2665,7 @@ void DomainMapper::lcl_utext(const sal_uInt8 * data_, size_t len)
         // save them in the paragraph interop grab bag
         OUString sName = m_pImpl->m_pSdtHelper->getInteropGrabBagName();
         uno::Any aPropValue = uno::makeAny(m_pImpl->m_pSdtHelper->getInteropGrabBagAndClear());
-        if(sName == "ooxml:CT_SdtPr_checkbox")
+        if(sName == "ooxml:CT_SdtPr_checkbox" || sName == "ooxml:CT_SdtPr_dataBinding")
             m_pImpl->GetTopContextOfType(CONTEXT_CHARACTER)->Insert(PROP_SDTPR, aPropValue, true, CHAR_GRAB_BAG);
         else
             m_pImpl->GetTopContextOfType(CONTEXT_PARAGRAPH)->Insert(PROP_SDTPR, aPropValue, true, PARA_GRAB_BAG);

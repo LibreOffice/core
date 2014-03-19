@@ -371,7 +371,7 @@ void DocxAttributeOutput::EndParagraph( ww8::WW8TableNodeInfoInner::Pointer_t pT
 
     m_pSerializer->endElementNS( XML_w, XML_p );
 
-    WriteSdtBlock( m_nParagraphSdtPrToken, m_pParagraphSdtPrTokenChildren );
+    WriteSdtBlock( m_nParagraphSdtPrToken, m_pParagraphSdtPrTokenChildren, m_pParagraphSdtPrDataBindingAttrs );
     m_pSerializer->mergeTopMarks();
 
     // Check for end of cell, rows, tables here
@@ -381,9 +381,9 @@ void DocxAttributeOutput::EndParagraph( ww8::WW8TableNodeInfoInner::Pointer_t pT
 
 }
 
-void DocxAttributeOutput::WriteSdtBlock( sal_Int32& nSdtPrToken, ::sax_fastparser::FastAttributeList* &pSdtPrTokenChildren )
+void DocxAttributeOutput::WriteSdtBlock( sal_Int32& nSdtPrToken, ::sax_fastparser::FastAttributeList* &pSdtPrTokenChildren, ::sax_fastparser::FastAttributeList* &pSdtPrDataBindingAttrs )
 {
-    if( nSdtPrToken > 0 )
+    if( nSdtPrToken > 0 || pSdtPrDataBindingAttrs )
     {
         // sdt start mark
         m_pSerializer->mark();
@@ -393,7 +393,7 @@ void DocxAttributeOutput::WriteSdtBlock( sal_Int32& nSdtPrToken, ::sax_fastparse
         // output sdt properties
         m_pSerializer->startElementNS( XML_w, XML_sdtPr, FSEND );
 
-        if( pSdtPrTokenChildren )
+        if( nSdtPrToken > 0 && pSdtPrTokenChildren )
         {
             m_pSerializer->startElement( nSdtPrToken, FSEND );
 
@@ -406,8 +406,14 @@ void DocxAttributeOutput::WriteSdtBlock( sal_Int32& nSdtPrToken, ::sax_fastparse
 
             m_pSerializer->endElement( nSdtPrToken );
         }
-        else
+        else if( nSdtPrToken > 0 )
             m_pSerializer->singleElement( nSdtPrToken, FSEND );
+
+        if( pSdtPrDataBindingAttrs )
+        {
+            XFastAttributeListRef xAttrList( pSdtPrDataBindingAttrs );
+            m_pSerializer->singleElementNS( XML_w, XML_dataBinding, xAttrList );
+        }
 
         m_pSerializer->endElementNS( XML_w, XML_sdtPr );
 
@@ -424,6 +430,11 @@ void DocxAttributeOutput::WriteSdtBlock( sal_Int32& nSdtPrToken, ::sax_fastparse
         // clear sdt status
         nSdtPrToken = 0;
         delete pSdtPrTokenChildren; pSdtPrTokenChildren = NULL;
+        if( pSdtPrDataBindingAttrs )
+        {
+            // do not delete yet; it's in xAttrList inside the parser
+            pSdtPrDataBindingAttrs = NULL;
+        }
     }
 }
 
@@ -812,7 +823,7 @@ void DocxAttributeOutput::EndRun()
     m_pSerializer->endElementNS( XML_w, XML_r );
 
     // enclose in a sdt block, if necessary
-    WriteSdtBlock( m_nRunSdtPrToken, m_pRunSdtPrTokenChildren );
+    WriteSdtBlock( m_nRunSdtPrToken, m_pRunSdtPrTokenChildren, m_pRunSdtPrDataBindingAttrs );
     m_pSerializer->mergeTopMarks();
 
     WritePostponedMath();
@@ -7072,6 +7083,27 @@ void DocxAttributeOutput::CharGrabBag( const SfxGrabBagItem& rItem )
                                        rtl::OUStringToOString( sValue, RTL_TEXTENCODING_UTF8 ).getStr() );
                 }
             }
+            else if (aPropertyValue.Name == "ooxml:CT_SdtPr_dataBinding")
+            {
+                uno::Sequence<beans::PropertyValue> aGrabBag;
+                aPropertyValue.Value >>= aGrabBag;
+                for (sal_Int32 j=0; j < aGrabBag.getLength(); ++j)
+                {
+                    OUString sValue = aGrabBag[j].Value.get<OUString>();
+                    if (aGrabBag[j].Name == "ooxml:CT_DataBinding_prefixMappings")
+                        AddToAttrList( m_pRunSdtPrDataBindingAttrs,
+                                       FSNS( XML_w, XML_prefixMappings ),
+                                       rtl::OUStringToOString( sValue, RTL_TEXTENCODING_UTF8 ).getStr() );
+                    else if (aGrabBag[j].Name == "ooxml:CT_DataBinding_xpath")
+                        AddToAttrList( m_pRunSdtPrDataBindingAttrs,
+                                       FSNS( XML_w, XML_xpath ),
+                                       rtl::OUStringToOString( sValue, RTL_TEXTENCODING_UTF8 ).getStr() );
+                    else if (aGrabBag[j].Name == "ooxml:CT_DataBinding_storeItemID")
+                        AddToAttrList( m_pRunSdtPrDataBindingAttrs,
+                                       FSNS( XML_w, XML_storeItemID ),
+                                       rtl::OUStringToOString( sValue, RTL_TEXTENCODING_UTF8 ).getStr() );
+                }
+            }
         }
         else
             SAL_INFO("sw.ww8", "DocxAttributeOutput::CharGrabBag: unhandled grab bag property " << i->first);
@@ -7135,8 +7167,10 @@ DocxAttributeOutput::DocxAttributeOutput( DocxExport &rExport, FSHelperPtr pSeri
       m_setFootnote(false)
     , m_nParagraphSdtPrToken(0)
     , m_pParagraphSdtPrTokenChildren(NULL)
+    , m_pParagraphSdtPrDataBindingAttrs(NULL)
     , m_nRunSdtPrToken(0)
     , m_pRunSdtPrTokenChildren(NULL)
+    , m_pRunSdtPrDataBindingAttrs(NULL)
 {
 }
 
@@ -7156,7 +7190,9 @@ DocxAttributeOutput::~DocxAttributeOutput()
 
     delete m_pTableWrt, m_pTableWrt = NULL;
     delete m_pParagraphSdtPrTokenChildren; m_pParagraphSdtPrTokenChildren = NULL;
+    delete m_pParagraphSdtPrDataBindingAttrs; m_pParagraphSdtPrDataBindingAttrs = NULL;
     delete m_pRunSdtPrTokenChildren; m_pRunSdtPrTokenChildren = NULL;
+    delete m_pRunSdtPrDataBindingAttrs; m_pRunSdtPrDataBindingAttrs = NULL;
 }
 
 DocxExport& DocxAttributeOutput::GetExport()
