@@ -210,6 +210,9 @@ class FieldMarkParamsHelper
         return bResult;
     }
 };
+
+sal_uInt64 DocxAttributeOutput::nHyperLinkCount = 0;
+
 void DocxAttributeOutput::RTLAndCJKState( bool bIsRTL, sal_uInt16 /*nScript*/ )
 {
     if (bIsRTL)
@@ -358,6 +361,16 @@ void DocxAttributeOutput::EndParagraph( ww8::WW8TableNodeInfoInner::Pointer_t pT
     }
 
     --m_nTextFrameLevel;
+
+    /* If nHyperLinkCount > 0 that means hyperlink tag is not yet colsed.
+     * This is due to nested hyperlink tags. So close it before end of paragraph.
+     */
+    if(nHyperLinkCount > 0)
+    {
+        for(sal_uInt64 HyperLinkToClose = 0; HyperLinkToClose<nHyperLinkCount; HyperLinkToClose++)
+            m_pSerializer->endElementNS( XML_w, XML_hyperlink );
+        nHyperLinkCount = 0;
+    }
 
     m_pSerializer->endElementNS( XML_w, XML_p );
 
@@ -712,6 +725,7 @@ void DocxAttributeOutput::EndRun()
         {
             m_pSerializer->endElementNS( XML_w, XML_hyperlink );
             m_startedHyperlink = false;
+            nHyperLinkCount--;
         }
         m_closeHyperlinkInPreviousRun = false;
     }
@@ -743,6 +757,7 @@ void DocxAttributeOutput::EndRun()
         m_pSerializer->startElementNS( XML_w, XML_hyperlink, xAttrList );
         m_pHyperlinkAttrList = NULL;
         m_startedHyperlink = true;
+        nHyperLinkCount++;
     }
 
     // if there is some redlining in the document, output it
@@ -830,6 +845,7 @@ void DocxAttributeOutput::EndRun()
 
             m_pSerializer->endElementNS( XML_w, XML_hyperlink );
             m_startedHyperlink = false;
+            nHyperLinkCount--;
         }
         m_closeHyperlinkInThisRun = false;
     }
