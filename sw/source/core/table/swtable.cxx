@@ -397,7 +397,7 @@ void SwTable::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew )
 
     if( RES_ATTRSET_CHG == nWhich )
     {
-        if (pOld && SFX_ITEM_SET == ((SwAttrSetChg*)pNew)->GetChgSet()->GetItemState(
+        if (pOld && pNew && SFX_ITEM_SET == ((SwAttrSetChg*)pNew)->GetChgSet()->GetItemState(
             RES_FRM_SIZE, false, (const SfxPoolItem**)&pNewSize))
         {
             pOldSize = &((SwAttrSetChg*)pOld)->GetChgSet()->GetFrmSize();
