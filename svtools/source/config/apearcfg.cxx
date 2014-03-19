@@ -36,7 +36,7 @@
 using namespace ::rtl;
 using namespace ::com::sun::star::uno;
 
-sal_Bool SvtTabAppearanceCfg::bInitialized = sal_False;
+bool SvtTabAppearanceCfg::bInitialized = false;
 
 SvtTabAppearanceCfg::SvtTabAppearanceCfg()
     :ConfigItem(OUString("Office.Common/View"))
@@ -47,9 +47,9 @@ SvtTabAppearanceCfg::SvtTabAppearanceCfg()
 #if defined( UNX )
     ,nAAMinPixelHeight  ( DEFAULT_AAMINHEIGHT )
 #endif
-    ,bMenuMouseFollow(sal_False)
+    ,bMenuMouseFollow   ( false )
 #if defined( UNX )
-    ,bFontAntialiasing  ( sal_True )
+    ,bFontAntialiasing  ( true )
 #endif
 {
     const Sequence<OUString>& rNames = GetPropertyNames();

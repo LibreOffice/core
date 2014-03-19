@@ -1142,7 +1142,7 @@ void SfxShell::UIFeatureChanged()
             pImp->pUpdater = new svtools::AsynchronLink( Link( this, DispatcherUpdate_Impl ) );
 
         // Multiple views allowed
-        pImp->pUpdater->Call( pFrame->GetDispatcher(), sal_True );
+        pImp->pUpdater->Call( pFrame->GetDispatcher(), true );
     }
 }
 

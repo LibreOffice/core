@@ -112,7 +112,7 @@ namespace svt
         virtual bool        PreNotify( NotifyEvent& _rNEvt );
 
         // implementations
-        void    implScrollFields(sal_Int32 _nPos, sal_Bool _bAdjustFocus, sal_Bool _bAdjustScrollbar);
+        void    implScrollFields(sal_Int32 _nPos, bool _bAdjustFocus, bool _bAdjustScrollbar);
         void    implSelectField(ListBox* _pBox, const OUString& _rText);
 
         void    initalizeListBox(ListBox* _pList);

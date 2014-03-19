@@ -47,12 +47,12 @@ class SVT_DLLPUBLIC SvtTabAppearanceCfg : public utl::ConfigItem
     short           nAAMinPixelHeight   ;
 #endif
 
-    sal_Bool            bMenuMouseFollow        ;
+    bool            bMenuMouseFollow        ;
 #if defined( UNX )
-    sal_Bool            bFontAntialiasing       ;
+    bool            bFontAntialiasing       ;
 #endif
 
-    static sal_Bool  bInitialized ;
+    static bool  bInitialized ;
 
     SVT_DLLPRIVATE const com::sun::star::uno::Sequence<OUString>& GetPropertyNames();
 
@@ -76,19 +76,19 @@ public:
 
     void        SetApplicationDefaults ( Application* pApp );
 
-    void        SetMenuMouseFollow(sal_Bool bSet) {bMenuMouseFollow = bSet; SetModified();}
-    sal_Bool        IsMenuMouseFollow() const{return bMenuMouseFollow;}
+    void        SetMenuMouseFollow(bool bSet) {bMenuMouseFollow = bSet; SetModified();}
+    bool        IsMenuMouseFollow() const{return bMenuMouseFollow;}
 
 #if defined( UNX )
-    void        SetFontAntiAliasing( sal_Bool bSet )    { bFontAntialiasing = bSet; SetModified(); }
-    sal_Bool        IsFontAntiAliasing() const { return bFontAntialiasing; }
+    void        SetFontAntiAliasing( bool bSet )    { bFontAntialiasing = bSet; SetModified(); }
+    bool        IsFontAntiAliasing() const { return bFontAntialiasing; }
 
-    sal_uInt16      GetFontAntialiasingMinPixelHeight( ) const { return nAAMinPixelHeight; }
+    sal_uInt16  GetFontAntialiasingMinPixelHeight( ) const { return nAAMinPixelHeight; }
     void        SetFontAntialiasingMinPixelHeight( sal_uInt16 _nMinHeight ) { nAAMinPixelHeight = _nMinHeight; SetModified(); }
 #endif
 
-    static sal_Bool IsInitialized()  { return bInitialized; }
-    static void    SetInitialized() { bInitialized = sal_True; }
+    static bool IsInitialized()  { return bInitialized; }
+    static void SetInitialized() { bInitialized = true; }
 };
 
 #endif //  _OFA_APEARCFG_HXX

@@ -32,11 +32,11 @@ void AsynchronLink::CreateMutex()
     if( !_pMutex ) _pMutex = new osl::Mutex;
 }
 
-void AsynchronLink::Call( void* pObj, sal_Bool
+void AsynchronLink::Call( void* pObj, bool
 #ifdef DBG_UTIL
 bAllowDoubles
 #endif
-, sal_Bool bUseTimer )
+, bool bUseTimer )
 {
 #ifdef DBG_UTIL
     if ( bUseTimer || !_bInCall )
@@ -82,7 +82,7 @@ AsynchronLink::~AsynchronLink()
         Application::RemoveUserEvent( _nEventId );
     }
     delete _pTimer;
-    if( _pDeleted ) *_pDeleted = sal_True;
+    if( _pDeleted ) *_pDeleted = true;
     delete _pMutex;
 }
 
@@ -109,13 +109,13 @@ void AsynchronLink::ClearPendingCall()
 
 void AsynchronLink::Call_Impl( void* pArg )
 {
-    _bInCall = sal_True;
-    sal_Bool bDeleted = sal_False;
+    _bInCall = true;
+    bool bDeleted = false;
     _pDeleted = &bDeleted;
     _aLink.Call( pArg );
     if( !bDeleted )
     {
-        _bInCall = sal_False;
+        _bInCall = false;
         _pDeleted = 0;
     }
 }

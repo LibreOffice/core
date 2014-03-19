@@ -34,8 +34,8 @@ class SVT_DLLPUBLIC AsynchronLink
     Link   _aLink;
     sal_uLong  _nEventId;
     Timer* _pTimer;
-    sal_Bool   _bInCall;
-    sal_Bool*  _pDeleted;
+    bool   _bInCall;
+    bool*  _pDeleted;
     void*  _pArg;
     ::osl::Mutex* _pMutex;
 
@@ -47,7 +47,7 @@ public:
         : _aLink( rLink )
         , _nEventId( 0 )
         , _pTimer( 0 )
-        , _bInCall( sal_False )
+        , _bInCall( false )
         , _pDeleted( 0 )
         , _pArg( 0 )
         , _pMutex( 0 )
@@ -55,7 +55,7 @@ public:
     AsynchronLink()
         : _nEventId( 0 )
         , _pTimer( 0 )
-        , _bInCall( sal_False )
+        , _bInCall( false )
         , _pDeleted( 0 )
         , _pArg( 0 )
         , _pMutex( 0 )
@@ -64,10 +64,9 @@ public:
 
     void CreateMutex();
     void operator=( const Link& rLink ) { _aLink = rLink; }
-    void Call( void* pObj, sal_Bool bAllowDoubles = sal_False,
-               sal_Bool bUseTimer = sal_False );
+    void Call( void* pObj, bool bAllowDoubles = false, bool bUseTimer = false );
     void ClearPendingCall( );
-    sal_Bool IsSet() const { return _aLink.IsSet(); }
+    bool IsSet() const { return _aLink.IsSet(); }
     Link GetLink() const { return _aLink; }
 };
 

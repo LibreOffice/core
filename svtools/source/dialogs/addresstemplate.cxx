@@ -680,7 +680,7 @@ void AssignmentPersistentData::Commit()
         resetFields();
         m_pFieldScroller->SetThumbPos(0);
         m_pImpl->nFieldScrollPos = -1;
-        implScrollFields(0, sal_False, sal_False);
+        implScrollFields(0, false, false);
 
         // the logical names
         OUString sLogicalFieldNames(SVT_RESSTR(STR_LOGICAL_FIELD_NAMES));
@@ -813,7 +813,7 @@ void AssignmentPersistentData::Commit()
 
     IMPL_LINK(AddressBookSourceDialog, OnFieldScroll, ScrollBar*, _pScrollBar)
     {
-        implScrollFields( _pScrollBar->GetThumbPos(), sal_True, sal_True );
+        implScrollFields( _pScrollBar->GetThumbPos(), true, true );
         return 0L;
     }
 
@@ -1026,7 +1026,7 @@ void AssignmentPersistentData::Commit()
     }
 
 
-    void AddressBookSourceDialog::implScrollFields(sal_Int32 _nPos, sal_Bool _bAdjustFocus, sal_Bool _bAdjustScrollbar)
+    void AddressBookSourceDialog::implScrollFields(sal_Int32 _nPos, bool _bAdjustFocus, bool _bAdjustScrollbar)
     {
         if (_nPos == m_pImpl->nFieldScrollPos)
             // nothing to do
@@ -1283,7 +1283,7 @@ void AssignmentPersistentData::Commit()
                             {   // we can still scroll down
                                 sal_Int32 nNextFocusList = m_pImpl->nLastVisibleListIndex + 1 - 2;
                                 // -> scroll down
-                                implScrollFields(m_pImpl->nFieldScrollPos + 1, sal_False, sal_True);
+                                implScrollFields(m_pImpl->nFieldScrollPos + 1, false, true);
                                 // give the left control in the "next" line the focus
                                 m_pImpl->pFields[nNextFocusList]->GrabFocus();
                                 // return saying "have handled this"
@@ -1297,7 +1297,7 @@ void AssignmentPersistentData::Commit()
                             if (m_pImpl->nFieldScrollPos > 0)
                             {   // we can still scroll up
                                 // -> scroll up
-                                implScrollFields(m_pImpl->nFieldScrollPos - 1, sal_False, sal_True);
+                                implScrollFields(m_pImpl->nFieldScrollPos - 1, false, true);
                                 // give the right control in the "prebious" line the focus
                                 m_pImpl->pFields[0 - 1 + 2]->GrabFocus();
                                 // return saying "have handled this"
