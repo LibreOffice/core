@@ -1782,19 +1782,23 @@ void DrawingML::WritePresetShape( const char* pShape, MSO_SPT eShapeType, sal_Bo
             EscherPropertyContainer::LookForPolarHandles( eShapeType, nAdjustmentsWhichNeedsToBeConverted );
 
         sal_Int32 nValue, nLength = aAdjustmentSeq.getLength();
-        for( sal_Int32 i=0; i < nLength; i++ )
-            if( EscherPropertyContainer::GetAdjustmentValue( aAdjustmentSeq[ i ], i, nAdjustmentsWhichNeedsToBeConverted, nValue ) )
-            {
-                // If the document model doesn't have an adjustment name (e.g. shape was created from VML), then take it from the predefined list.
-                OString aAdjName;
-                if (aAdjustmentSeq[i].Name.isEmpty() && static_cast<sal_uInt32>(i) < aAdjustments.size())
-                    aAdjName = aAdjustments[i];
+        //aAdjustments will give info about the number of adj values for a particular geomtery.For example for hexagon aAdjustments.size() will be 2 and for circular arrow it will be 5 as per ooxDrawingMLGetAdjNames.
+        if(aAdjustments.size() == static_cast<sal_uInt32>(nLength))// In case there is a mismatch do not write the XML_gd tag.
+        {
+            for( sal_Int32 i=0; i < nLength; i++ )
+                if( EscherPropertyContainer::GetAdjustmentValue( aAdjustmentSeq[ i ], i, nAdjustmentsWhichNeedsToBeConverted, nValue ) )
+                {
+                    // If the document model doesn't have an adjustment name (e.g. shape was created from VML), then take it from the predefined list.
+                    OString aAdjName;
+                    if (aAdjustmentSeq[i].Name.isEmpty() && static_cast<sal_uInt32>(i) < aAdjustments.size())
+                        aAdjName = aAdjustments[i];
 
-                mpFS->singleElementNS( XML_a, XML_gd,
+                    mpFS->singleElementNS( XML_a, XML_gd,
                                        XML_name, aAdjustmentSeq[ i ].Name.getLength() > 0 ? USS(aAdjustmentSeq[ i ].Name) : aAdjName.getStr(),
                                        XML_fmla, OString("val " + OString::number( nValue )).getStr(),
                                        FSEND );
             }
+        }
     }
 
     mpFS->endElementNS( XML_a, XML_avLst );
