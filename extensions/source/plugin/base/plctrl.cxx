@@ -37,21 +37,19 @@
 #include <vcl/syschild.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 
-
-
-PluginControl_Impl::PluginControl_Impl() :
-    _pMultiplexer( NULL )
+PluginControl_Impl::PluginControl_Impl()
+    : _pMultiplexer( NULL )
     , _nX( 0 )
     , _nY( 0 )
     , _nWidth( 100 )
     , _nHeight( 100 )
     , _nFlags( WINDOW_POSSIZE_ALL )
-    , _bVisible( sal_False )
-    , _bInDesignMode( sal_False )
-    , _bEnable( sal_True )
+    , _bVisible(false)
+    , _bInDesignMode(false)
+    , _bEnable(true)
+    , _pSysChild(NULL)
 {
 }
-
 
 PluginControl_Impl::~PluginControl_Impl()
 {
