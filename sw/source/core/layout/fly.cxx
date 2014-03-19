@@ -791,19 +791,19 @@ void SwFlyFrm::_UpdateAttr( const SfxPoolItem *pOld, const SfxPoolItem *pNew,
         break;
 
         case RES_PROTECT:
+            if (pNew)
             {
-            const SvxProtectItem *pP = (SvxProtectItem*)pNew;
-            GetVirtDrawObj()->SetMoveProtect( pP->IsPosProtected()   );
-            GetVirtDrawObj()->SetResizeProtect( pP->IsSizeProtected() );
-            if( pSh )
-            {
-                SwRootFrm* pLayout = getRootFrm();
-                if( pLayout && pLayout->IsAnyShellAccessible() )
-                pSh->Imp()->InvalidateAccessibleEditableState( true, this );
+                const SvxProtectItem *pP = (SvxProtectItem*)pNew;
+                GetVirtDrawObj()->SetMoveProtect( pP->IsPosProtected()   );
+                GetVirtDrawObj()->SetResizeProtect( pP->IsSizeProtected() );
+                if( pSh )
+                {
+                    SwRootFrm* pLayout = getRootFrm();
+                    if( pLayout && pLayout->IsAnyShellAccessible() )
+                    pSh->Imp()->InvalidateAccessibleEditableState( true, this );
+                }
             }
             break;
-            }
-
         case RES_COL:
             if (pOld && pNew)
             {
