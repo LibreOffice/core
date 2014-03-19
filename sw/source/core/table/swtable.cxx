@@ -427,11 +427,11 @@ void SwTable::AdjustWidths( const long nOld, const long nNew )
 |*  SwTable::GetTabCols()
 |*
 |*************************************************************************/
-static void lcl_RefreshHidden( SwTabCols &rToFill, sal_uInt16 nPos )
+static void lcl_RefreshHidden( SwTabCols &rToFill, size_t nPos )
 {
-    for ( sal_uInt16 i = 0; i < rToFill.Count(); ++i )
+    for ( size_t i = 0; i < rToFill.Count(); ++i )
     {
-        if ( std::abs((long)(nPos - rToFill[i])) <= COLFUZZY )
+        if ( std::abs(static_cast<long>(nPos) - rToFill[i]) <= COLFUZZY )
         {
             rToFill.SetHidden( i, sal_False );
             break;
@@ -488,7 +488,7 @@ static void lcl_SortedTabColInsert( SwTabCols &rToFill, const SwTableBox *pBox,
     }
 
     bool bInsert = !bRefreshHidden;
-    for ( sal_uInt16 j = 0; bInsert && (j < rToFill.Count()); ++j )
+    for ( size_t j = 0; bInsert && (j < rToFill.Count()); ++j )
     {
         long nCmp = rToFill[j];
         if ( (nPos >= ((nCmp >= COLFUZZY) ? nCmp - COLFUZZY : nCmp)) &&
@@ -516,7 +516,7 @@ static void lcl_SortedTabColInsert( SwTabCols &rToFill, const SwTableBox *pBox,
         // check if nPos is entry:
         bool bFoundPos = false;
         bool bFoundMax = false;
-        for ( sal_uInt16 j = 0; !(bFoundPos && bFoundMax ) && j < rToFill.Count(); ++j )
+        for ( size_t j = 0; !(bFoundPos && bFoundMax ) && j < rToFill.Count(); ++j )
         {
             SwTabColsEntry& rEntry = rToFill.GetEntry( j );
             long nCmp = rToFill[j];
@@ -586,8 +586,7 @@ void SwTable::GetTabCols( SwTabCols &rToFill, const SwTableBox *pStart,
     if ( bRefreshHidden )
     {
         // remove corrections
-        sal_uInt16 i;
-        for ( i = 0; i < rToFill.Count(); ++i )
+        for ( size_t i = 0; i < rToFill.Count(); ++i )
         {
             SwTabColsEntry& rEntry = rToFill.GetEntry( i );
             rEntry.nPos -= rToFill.GetLeft();
@@ -596,7 +595,7 @@ void SwTable::GetTabCols( SwTabCols &rToFill, const SwTableBox *pStart,
         }
 
         // All are hidden, so add the visible ones.
-        for ( i = 0; i < rToFill.Count(); ++i )
+        for ( size_t i = 0; i < rToFill.Count(); ++i )
             rToFill.SetHidden( i, sal_True );
     }
     else
@@ -623,8 +622,7 @@ void SwTable::GetTabCols( SwTabCols &rToFill, const SwTableBox *pStart,
     // 1.
     const SwTableBoxes &rBoxes = pStart->GetUpper()->GetTabBoxes();
 
-    sal_uInt16 i;
-    for ( i = 0; i < rBoxes.size(); ++i )
+    for ( size_t i = 0; i < rBoxes.size(); ++i )
         ::lcl_ProcessBoxGet( rBoxes[i], rToFill, pTabFmt, bRefreshHidden );
 
     // 2. and 3.
@@ -644,7 +642,7 @@ void SwTable::GetTabCols( SwTabCols &rToFill, const SwTableBox *pStart,
         // 4.
         if ( !bCurRowOnly )
         {
-            for ( i = 0; i < aLines.size(); ++i )
+            for ( size_t i = 0; i < aLines.size(); ++i )
                 ::lcl_ProcessLineGet( aLines[i], rToFill, pTabFmt );
         }
 
@@ -655,7 +653,7 @@ void SwTable::GetTabCols( SwTabCols &rToFill, const SwTableBox *pStart,
     // relative to SwTabCols.nLeft. However, they are expected
     // relative to the left document border, i.e. SwTabCols.nLeftMin.
     // So all values need to be extended by nLeft.
-    for ( i = 0; i < rToFill.Count(); ++i )
+    for ( size_t i = 0; i < rToFill.Count(); ++i )
     {
         SwTabColsEntry& rEntry = rToFill.GetEntry( i );
         rEntry.nPos += rToFill.GetLeft();
@@ -729,7 +727,7 @@ static void lcl_ProcessBoxSet( SwTableBox *pBox, Parm &rParm )
             pCur  = pLine->GetUpper();
             pLine = pCur ? pCur->GetUpper() : 0;
         }
-        long nLeftDiff;
+        long nLeftDiff = 0;
         long nRightDiff = 0;
         if ( nLeft != rParm.rOld.GetLeft() ) // There are still boxes before this.
         {
@@ -738,44 +736,49 @@ static void lcl_ProcessBoxSet( SwTableBox *pBox, Parm &rParm )
             nWidth *= nOldAct;
             nWidth /= rParm.nOldWish;
             long nRight = nLeft + (long)nWidth;
-            sal_uInt16 nLeftPos  = USHRT_MAX,
-                   nRightPos = USHRT_MAX;
-            for ( sal_uInt16 i = 0; i < rParm.rOld.Count(); ++i )
+            size_t nLeftPos  = 0;
+            size_t nRightPos = 0;
+            bool bFoundLeftPos = false;
+            bool bFoundRightPos = false;
+            for ( size_t i = 0; i < rParm.rOld.Count(); ++i )
             {
                 if ( nLeft >= (rParm.rOld[i] - COLFUZZY) &&
                      nLeft <= (rParm.rOld[i] + COLFUZZY) )
+                {
                     nLeftPos = i;
+                    bFoundLeftPos = true;
+                }
                 else if ( nRight >= (rParm.rOld[i] - COLFUZZY) &&
                           nRight <= (rParm.rOld[i] + COLFUZZY) )
+                {
                     nRightPos = i;
+                    bFoundRightPos = true;
+                }
             }
-            nLeftDiff = nLeftPos != USHRT_MAX ?
-                    (int)rParm.rOld[nLeftPos] - (int)rParm.rNew[nLeftPos] : 0;
-            nRightDiff= nRightPos!= USHRT_MAX ?
-                    (int)rParm.rNew[nRightPos] - (int)rParm.rOld[nRightPos] : 0;
+            nLeftDiff = bFoundLeftPos ?
+                rParm.rOld[nLeftPos] - rParm.rNew[nLeftPos] : 0;
+            nRightDiff= bFoundRightPos ?
+                rParm.rNew[nRightPos] - rParm.rOld[nRightPos] : 0;
         }
         else    // The first box.
         {
-            nLeftDiff = (long)rParm.rOld.GetLeft() - (long)rParm.rNew.GetLeft();
+            nLeftDiff = rParm.rOld.GetLeft() - rParm.rNew.GetLeft();
             if ( rParm.rOld.Count() )
             {
                 // Calculate the difference to the edge touching the first box.
                 sal_uInt64 nWidth = pBox->GetFrmFmt()->GetFrmSize().GetWidth();
                 nWidth *= nOldAct;
                 nWidth /= rParm.nOldWish;
-                long nTmp = (long)nWidth;
-                nTmp += rParm.rOld.GetLeft();
-                sal_uInt16 nLeftPos = USHRT_MAX;
-                for ( sal_uInt16 i = 0; i < rParm.rOld.Count() &&
-                                    nLeftPos == USHRT_MAX; ++i )
+                const long nTmp = (long)nWidth + rParm.rOld.GetLeft();
+                for ( size_t i = 0; i < rParm.rOld.Count(); ++i )
                 {
                     if ( nTmp >= (rParm.rOld[i] - COLFUZZY) &&
                          nTmp <= (rParm.rOld[i] + COLFUZZY) )
-                        nLeftPos = i;
+                    {
+                        nRightDiff = rParm.rNew[i] - rParm.rOld[i];
+                        break;
+                    }
                 }
-                if ( nLeftPos != USHRT_MAX )
-                    nRightDiff = (long)rParm.rNew[nLeftPos] -
-                                 (long)rParm.rOld[nLeftPos];
             }
         }
 
@@ -1237,7 +1240,7 @@ void SwTable::NewSetTabCols( Parm &rParm, const SwTabCols &rNew,
     const long nOldWidth = rParm.rOld.GetRight() - rParm.rOld.GetLeft();
     if( nNewWidth < 1 || nOldWidth < 1 )
         return;
-    for( sal_uInt16 i = 0; i <= rOld.Count(); ++i )
+    for( size_t i = 0; i <= rOld.Count(); ++i )
     {
         sal_uInt64 nNewPos;
         sal_uInt64 nOldPos;

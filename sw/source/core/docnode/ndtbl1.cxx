@@ -1305,7 +1305,7 @@ static void lcl_CalcSubColValues( std::vector<sal_uInt16> &rToFill, const SwTabC
 
     SWRECTFN( pTab )
 
-    for ( sal_uInt16 i = 0 ; i <= rCols.Count(); ++i )
+    for ( size_t i = 0 ; i <= rCols.Count(); ++i )
     {
         long nColLeft  = i == 0             ? rCols.GetLeft()  : rCols[i-1];
         long nColRight = i == rCols.Count() ? rCols.GetRight() : rCols[i];
@@ -1313,7 +1313,7 @@ static void lcl_CalcSubColValues( std::vector<sal_uInt16> &rToFill, const SwTabC
         nColRight += rCols.GetLeftMin();
 
         // Adapt values to the proportions of the Table (Follows)
-        if ( rCols.GetLeftMin() !=  sal_uInt16((pTab->Frm().*fnRect->fnGetLeft)()) )
+        if ( rCols.GetLeftMin() != (pTab->Frm().*fnRect->fnGetLeft)() )
         {
             const long nDiff = (pTab->Frm().*fnRect->fnGetLeft)() - rCols.GetLeftMin();
             nColLeft  += nDiff;
@@ -1383,7 +1383,7 @@ static void lcl_CalcColValues( std::vector<sal_uInt16> &rToFill, const SwTabCols
 
                 bool bNotInCols = true;
 
-                for ( sal_uInt16 i = 0; i <= rCols.Count(); ++i )
+                for ( size_t i = 0; i <= rCols.Count(); ++i )
                 {
                     sal_uInt16 nFit = rToFill[i];
                     long nColLeft  = i == 0             ? rCols.GetLeft()  : rCols[i-1];
@@ -1467,8 +1467,6 @@ void SwDoc::AdjustCellWidth( const SwCursor& rCursor, sal_Bool bBalance )
     std::vector<sal_uInt16> aWish(aTabCols.Count() + 1);
     std::vector<sal_uInt16> aMins(aTabCols.Count() + 1);
 
-    sal_uInt16 i;
-
     ::lcl_CalcColValues( aWish, aTabCols, pStart, pEnd, sal_True  );
 
     // It's more robust if we calculate the minimum values for the whole Table
@@ -1485,27 +1483,27 @@ void SwDoc::AdjustCellWidth( const SwCursor& rCursor, sal_Bool bBalance )
         // We add up the current values, divide the result by their
         // count and get a desired value for balancing.
         sal_uInt16 nWish = 0, nCnt = 0;
-        for ( i = 0; i <= aTabCols.Count(); ++i )
+        for ( size_t i = 0; i <= aTabCols.Count(); ++i )
         {
             int nDiff = aWish[i];
             if ( nDiff )
             {
                 if ( i == 0 )
-                    nWish = static_cast<sal_uInt16>( nWish + aTabCols[i] - aTabCols.GetLeft() );
+                    nWish += aTabCols[i] - aTabCols.GetLeft();
                 else if ( i == aTabCols.Count() )
-                    nWish = static_cast<sal_uInt16>(nWish + aTabCols.GetRight() - aTabCols[i-1] );
+                    nWish += aTabCols.GetRight() - aTabCols[i-1];
                 else
-                    nWish = static_cast<sal_uInt16>(nWish + aTabCols[i] - aTabCols[i-1] );
+                    nWish += aTabCols[i] - aTabCols[i-1];
                 ++nCnt;
             }
         }
-        nWish = nWish / nCnt;
-        for ( i = 0; i < aWish.size(); ++i )
+        nWish /= nCnt;
+        for ( size_t i = 0; i < aWish.size(); ++i )
             if ( aWish[i] )
                 aWish[i] = nWish;
     }
 
-    const sal_uInt16 nOldRight = static_cast<sal_uInt16>(aTabCols.GetRight());
+    const long nOldRight = aTabCols.GetRight();
 
     // In order to make the implementation easier, but still use the available
     // space properly, we do this twice.
@@ -1516,7 +1514,7 @@ void SwDoc::AdjustCellWidth( const SwCursor& rCursor, sal_Bool bBalance )
     // the Table's width to exceed the maximum width.
     for ( sal_uInt16 k = 0; k < 2; ++k )
     {
-        for ( i = 0; i <= aTabCols.Count(); ++i )
+        for ( size_t i = 0; i <= aTabCols.Count(); ++i )
         {
             int nDiff = aWish[i];
             if ( nDiff )
@@ -1547,14 +1545,14 @@ void SwDoc::AdjustCellWidth( const SwCursor& rCursor, sal_Bool bBalance )
                     nDiff     -= nTmpD;
                     nTabRight -= nTmpD;
                 }
-                for ( sal_uInt16 i2 = i; i2 < aTabCols.Count(); ++i2 )
+                for ( size_t i2 = i; i2 < aTabCols.Count(); ++i2 )
                     aTabCols[i2] += nDiff;
                 aTabCols.SetRight( nTabRight );
             }
         }
     }
 
-    const sal_uInt16 nNewRight = static_cast<sal_uInt16>(aTabCols.GetRight());
+    const long nNewRight = aTabCols.GetRight();
 
     SwFrmFmt *pFmt = pTblNd->GetTable().GetFrmFmt();
     const sal_Int16 nOriHori = pFmt->GetHoriOrient().GetHoriOrient();

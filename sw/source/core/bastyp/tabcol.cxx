@@ -41,7 +41,7 @@ SwTabCols::SwTabCols( const SwTabCols& rCpy ) :
     aData( rCpy.GetData() )
 {
 #if OSL_DEBUG_LEVEL > 0
-    for ( sal_uInt16 i = 0; i < Count(); ++i )
+    for ( size_t i = 0; i < Count(); ++i )
     {
         SwTabColsEntry aEntry1 = aData[i];
         SwTabColsEntry aEntry2 = rCpy.GetData()[i];
@@ -72,8 +72,6 @@ SwTabCols &SwTabCols::operator=( const SwTabCols& rCpy )
 
 bool SwTabCols::operator==( const SwTabCols& rCmp ) const
 {
-    sal_uInt16 i;
-
     if ( !(nLeftMin == rCmp.GetLeftMin() &&
            nLeft    == rCmp.GetLeft()    &&
            nRight   == rCmp.GetRight()   &&
@@ -82,7 +80,7 @@ bool SwTabCols::operator==( const SwTabCols& rCmp ) const
            Count()== rCmp.Count()) )
         return false;
 
-    for ( i = 0; i < Count(); ++i )
+    for ( size_t i = 0; i < Count(); ++i )
     {
         SwTabColsEntry aEntry1 = aData[i];
         SwTabColsEntry aEntry2 = rCmp.GetData()[i];
@@ -94,7 +92,7 @@ bool SwTabCols::operator==( const SwTabCols& rCmp ) const
 }
 
 void SwTabCols::Insert( long nValue, long nMin, long nMax,
-                        sal_Bool bValue, sal_uInt16 nPos )
+                        sal_Bool bValue, size_t nPos )
 {
     SwTabColsEntry aEntry;
     aEntry.nPos = nValue;
@@ -104,7 +102,7 @@ void SwTabCols::Insert( long nValue, long nMin, long nMax,
     aData.insert( aData.begin() + nPos, aEntry );
 }
 
-void SwTabCols::Insert( long nValue, sal_Bool bValue, sal_uInt16 nPos )
+void SwTabCols::Insert( long nValue, sal_Bool bValue, size_t nPos )
 {
     SwTabColsEntry aEntry;
     aEntry.nPos = nValue;
@@ -122,7 +120,7 @@ void SwTabCols::Insert( long nValue, sal_Bool bValue, sal_uInt16 nPos )
 #endif
 }
 
-void SwTabCols::Remove( sal_uInt16 nPos, sal_uInt16 nAnz )
+void SwTabCols::Remove( size_t nPos, size_t nAnz )
 {
     SwTabColsEntries::iterator aStart = aData.begin() + nPos;
     aData.erase( aStart, aStart + nAnz );

@@ -169,7 +169,7 @@ void SwVbaTableHelper::InitTabCols( SwTabCols& rCols, const SwTableBox *pStart, 
 sal_Int32 SwVbaTableHelper::GetColCount( SwTabCols& rCols ) const
 {
     sal_Int32 nCount = 0;
-    for(sal_Int32 i = 0; i < rCols.Count(); i++ )
+    for( size_t i = 0; i < rCols.Count(); ++i )
         if(rCols.IsHidden(i))
             nCount ++;
     return rCols.Count() - nCount;
@@ -177,11 +177,11 @@ sal_Int32 SwVbaTableHelper::GetColCount( SwTabCols& rCols ) const
 
 sal_Int32 SwVbaTableHelper::GetRightSeparator( SwTabCols& rCols, sal_Int32 nNum) const
 {
-    OSL_ENSURE( nNum < (sal_Int32)GetColCount( rCols ) ,"Index out of range");
+    OSL_ENSURE( nNum < GetColCount( rCols ) ,"Index out of range");
     sal_Int32 i = 0;
     while( nNum >= 0 )
     {
-        if( !rCols.IsHidden( static_cast< sal_uInt16 >(i)) )
+        if( !rCols.IsHidden(i) )
             nNum--;
         i++;
     }
@@ -206,9 +206,9 @@ sal_Int32 SwVbaTableHelper::GetColWidth( SwTabCols& rCols, sal_Int32 nNum ) thro
 
     if( rCols.Count() > 0 )
     {
-        if(rCols.Count() == GetColCount( rCols ))
+        if(rCols.Count() == static_cast<size_t>(GetColCount( rCols )))
         {
-            nWidth = (SwTwips)((nNum == rCols.Count()) ?
+            nWidth = ((static_cast<size_t>(nNum) == rCols.Count()) ?
                     rCols.GetRight() - rCols[nNum-1] :
                     nNum == 0 ? rCols[nNum] - rCols.GetLeft() :
                                 rCols[nNum] - rCols[nNum-1]);
@@ -216,10 +216,10 @@ sal_Int32 SwVbaTableHelper::GetColWidth( SwTabCols& rCols, sal_Int32 nNum ) thro
         else
         {
             SwTwips nRValid = nNum < GetColCount( rCols ) ?
-                            rCols[(sal_uInt16)GetRightSeparator( rCols, nNum)]:
+                            rCols[GetRightSeparator( rCols, nNum )]:
                                     rCols.GetRight();
             SwTwips nLValid = nNum ?
-                            rCols[(sal_uInt16)GetRightSeparator( rCols, nNum - 1)]:
+                            rCols[GetRightSeparator( rCols, nNum - 1 )]:
                                     rCols.GetLeft();
             nWidth = nRValid - nLValid;
         }
@@ -234,7 +234,7 @@ void SwVbaTableHelper::SetColWidth( sal_Int32 _width, sal_Int32 nCol, sal_Int32 
 {
     double dAbsWidth = Millimeter::getInHundredthsOfOneMillimeter( _width );
     sal_Int32 nTableWidth = getTableWidth( );
-    sal_Int32 nNewWidth = (sal_Int32)( dAbsWidth/nTableWidth * UNO_TABLE_COLUMN_SUM );
+    sal_Int32 nNewWidth = dAbsWidth/nTableWidth * UNO_TABLE_COLUMN_SUM;
 
     SwTableBox* pStart = GetTabBox( nCol, nRow );
     SwTabCols aOldCols;
@@ -245,22 +245,22 @@ void SwVbaTableHelper::SetColWidth( sal_Int32 _width, sal_Int32 nCol, sal_Int32 
     {
         SwTwips nWidth = GetColWidth( aCols, nCol);
 
-        int nDiff = (int)(nNewWidth - nWidth);
+        int nDiff = nNewWidth - nWidth;
         if( !nCol )
-            aCols[ static_cast< sal_uInt16 >(GetRightSeparator(aCols, 0)) ] += nDiff;
+            aCols[ GetRightSeparator(aCols, 0) ] += nDiff;
         else if( nCol < GetColCount( aCols )  )
         {
             if(nDiff < GetColWidth( aCols, nCol + 1) - MINLAY)
-                aCols[ static_cast< sal_uInt16 >(GetRightSeparator( aCols, nCol)) ] += nDiff;
+                aCols[ GetRightSeparator( aCols, nCol ) ] += nDiff;
             else
             {
                 int nDiffLeft = nDiff - (int)GetColWidth( aCols, nCol + 1) + (int)MINLAY;
-                aCols[ static_cast< sal_uInt16 >(GetRightSeparator( aCols, nCol)) ] += (nDiff - nDiffLeft);
-                aCols[ static_cast< sal_uInt16 >(GetRightSeparator( aCols, nCol - 1)) ] -= nDiffLeft;
+                aCols[ GetRightSeparator( aCols, nCol ) ] += (nDiff - nDiffLeft);
+                aCols[ GetRightSeparator( aCols, nCol - 1 ) ] -= nDiffLeft;
             }
         }
         else
-            aCols[ static_cast< sal_uInt16 >(GetRightSeparator( aCols, nCol-1)) ] -= nDiff;
+            aCols[ GetRightSeparator( aCols, nCol-1 ) ] -= nDiff;
     }
     else
         aCols.SetRight( std::min( (long)nNewWidth, aCols.GetRightMax()) );

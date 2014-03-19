@@ -701,8 +701,8 @@ public:
     sal_uInt16 GetCurColNum( SwGetCurColNumPara* pPara = 0 ) const; //0 == not in any column.
     sal_uInt16 GetCurMouseColNum( const Point &rPt,
                             SwGetCurColNumPara* pPara = 0 ) const;
-    sal_uInt16 GetCurTabColNum() const;     //0 == not in any table.
-    sal_uInt16 GetCurMouseTabColNum( const Point &rPt ) const;
+    size_t GetCurTabColNum() const;     //0 == not in any table.
+    size_t GetCurMouseTabColNum( const Point &rPt ) const;
     sal_uInt16 GetCurOutColNum( SwGetCurColNumPara* pPara = 0 ) const;  ///< Current outer column.
 
     sal_Bool IsTableRightToLeft() const;

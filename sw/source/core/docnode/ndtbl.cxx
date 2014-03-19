@@ -2655,7 +2655,7 @@ void SwDoc::GetTabRows( SwTabCols &rFill, const SwCursor* ,
     }
 
     // transfer calculated values from BoundaryMap and HiddenMap into rFill:
-    sal_uInt16 nIdx = 0;
+    size_t nIdx = 0;
     for ( aIter = aBoundaries.begin(); aIter != aBoundaries.end(); ++aIter )
     {
         const long nTabTop = (pTab->*fnRect->fnGetPrtTop)();
@@ -2793,14 +2793,14 @@ void SwDoc::SetTabRows( const SwTabCols &rNew, sal_Bool bCurColOnly, const SwCur
     GetIDocumentUndoRedo().StartUndo( UNDO_TABLE_ATTR, NULL );
 
     // check for differences between aOld and rNew:
-    const sal_uInt16 nCount = rNew.Count();
+    const size_t nCount = rNew.Count();
     const SwTable* pTable = pTab->GetTable();
     OSL_ENSURE( pTable, "My colleague told me, this couldn't happen" );
 
-    for ( sal_uInt16 i = 0; i <= nCount; ++i )
+    for ( size_t i = 0; i <= nCount; ++i )
     {
-        const sal_uInt16 nIdxStt = bVert ? nCount - i : i - 1;
-        const sal_uInt16 nIdxEnd = bVert ? nCount - i - 1 : i;
+        const size_t nIdxStt = bVert ? nCount - i : i - 1;
+        const size_t nIdxEnd = bVert ? nCount - i - 1 : i;
 
         const long nOldRowStart = i == 0  ? 0 : aOld[ nIdxStt ];
         const long nOldRowEnd =   i == nCount ? aOld.GetRight() : aOld[ nIdxEnd ];

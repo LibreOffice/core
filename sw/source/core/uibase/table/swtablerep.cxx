@@ -94,15 +94,15 @@ sal_Bool SwTableRep::FillTabCols( SwTabCols& rTabCols ) const
          nOldRight = rTabCols.GetRight();
 
     sal_Bool bSingleLine = sal_False;
-    sal_uInt16 i;
 
-    for ( i = 0; i < rTabCols.Count(); ++i )
+    for ( size_t i = 0; i < rTabCols.Count(); ++i )
         if(!pTColumns[i].bVisible)
         {
             bSingleLine = sal_True;
             break;
         }
 
+    sal_uInt16 i;
     SwTwips nPos = 0;
     SwTwips nLeft = GetLeftSpace();
     rTabCols.SetLeft(nLeft);
@@ -171,10 +171,10 @@ sal_Bool SwTableRep::FillTabCols( SwTabCols& rTabCols ) const
     }
 
     // intercept rounding errors
-    if(std::abs((long)nOldLeft - (long)rTabCols.GetLeft()) < 3)
+    if(std::abs(nOldLeft - rTabCols.GetLeft()) < 3)
         rTabCols.SetLeft(nOldLeft);
 
-    if(std::abs((long)nOldRight - (long)rTabCols.GetRight()) < 3)
+    if(std::abs(nOldRight - rTabCols.GetRight()) < 3)
         rTabCols.SetRight(nOldRight);
 
     if(GetRightSpace() >= 0 &&

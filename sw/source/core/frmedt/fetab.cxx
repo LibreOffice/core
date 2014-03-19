@@ -1372,10 +1372,10 @@ sal_Bool SwFEShell::DeleteTblSel()
 |*  SwFEShell::GetCurTabColNum()
 |*
 |*************************************************************************/
-sal_uInt16 SwFEShell::GetCurTabColNum() const
+size_t SwFEShell::GetCurTabColNum() const
 {
     //!!!GetCurMouseTabColNum() mitpflegen!!!!
-    sal_uInt16 nRet = 0;
+    size_t nRet = 0;
 
     SwFrm *pFrm = GetCurrFrm();
     OSL_ENSURE( pFrm, "Crsr parked?" );
@@ -1404,7 +1404,7 @@ sal_uInt16 SwFEShell::GetCurTabColNum() const
             if ( !::IsSame( nX, nRight ) )
             {
                 nX = nRight - nX + aTabCols.GetLeft();
-                for ( sal_uInt16 i = 0; i < aTabCols.Count(); ++i )
+                for ( size_t i = 0; i < aTabCols.Count(); ++i )
                     if ( ::IsSame( nX, aTabCols[i] ) )
                     {
                         nRet = i + 1;
@@ -1421,7 +1421,7 @@ sal_uInt16 SwFEShell::GetCurTabColNum() const
 
             if ( !::IsSame( nX, nLeft + aTabCols.GetLeft() ) )
             {
-                for ( sal_uInt16 i = 0; i < aTabCols.Count(); ++i )
+                for ( size_t i = 0; i < aTabCols.Count(); ++i )
                     if ( ::IsSame( nX, nLeft + aTabCols[i] ) )
                     {
                         nRet = i + 1;
@@ -2124,10 +2124,10 @@ sal_uInt16 SwFEShell::GetCurMouseColNum( const Point &rPt,
     return _GetCurColNum( GetBox( rPt ), pPara );
 }
 
-sal_uInt16 SwFEShell::GetCurMouseTabColNum( const Point &rPt ) const
+size_t SwFEShell::GetCurMouseTabColNum( const Point &rPt ) const
 {
     //!!!GetCurTabColNum() mitpflegen!!!!
-    sal_uInt16 nRet = 0;
+    size_t nRet = 0;
 
     const SwFrm *pFrm = GetBox( rPt );
     OSL_ENSURE( pFrm, "Table not found" );
@@ -2143,7 +2143,7 @@ sal_uInt16 SwFEShell::GetCurMouseTabColNum( const Point &rPt ) const
 
         if ( !::IsSame( nX, nLeft + aTabCols.GetLeft() ) )
         {
-            for ( sal_uInt16 i = 0; i < aTabCols.Count(); ++i )
+            for ( size_t i = 0; i < aTabCols.Count(); ++i )
                 if ( ::IsSame( nX, nLeft + aTabCols[i] ) )
                 {
                     nRet = i + 1;

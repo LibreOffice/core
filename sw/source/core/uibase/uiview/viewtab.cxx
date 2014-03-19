@@ -1430,7 +1430,7 @@ void SwView::StateTabWin(SfxItemSet& rSet)
             else if ( bHasTable )
             {
                 SwTabCols aTabCols;
-                sal_uInt16    nNum;
+                size_t nNum = 0;
                 if ( 0 != ( m_bSetTabColFromDoc = IsTabColFromDoc() ) )
                 {
                     rSh.GetMouseTabCols( aTabCols, m_aTabColFromDocPos );
@@ -1446,9 +1446,8 @@ void SwView::StateTabWin(SfxItemSet& rSet)
 
                 OSL_ENSURE(nNum <= aTabCols.Count(), "TabCol not found");
                 const int nLft = aTabCols.GetLeftMin() + aTabCols.GetLeft();
-                const int nRgt = (sal_uInt16)(bTableVertical ? nPageHeight : nPageWidth) -
-                                  (aTabCols.GetLeftMin() +
-                                  aTabCols.GetRight());
+                const int nRgt = (bTableVertical ? nPageHeight : nPageWidth) -
+                                 (aTabCols.GetLeftMin() + aTabCols.GetRight());
 
                 const sal_uInt16 nL = static_cast< sal_uInt16 >(nLft > 0 ? nLft : 0);
                 const sal_uInt16 nR = static_cast< sal_uInt16 >(nRgt > 0 ? nRgt : 0);
@@ -1465,7 +1464,7 @@ void SwView::StateTabWin(SfxItemSet& rSet)
                         : rSh.IsTableRightToLeft();
                 if(bIsTableRTL)
                 {
-                    for ( sal_uInt16 i = aTabCols.Count(); i ; --i )
+                    for ( size_t i = aTabCols.Count(); i; --i )
                     {
                         const SwTabColsEntry& rEntry = aTabCols.GetEntry( i - 1 );
                         nEnd  = (sal_uInt16)aTabCols.GetRight();
@@ -1483,7 +1482,7 @@ void SwView::StateTabWin(SfxItemSet& rSet)
                 }
                 else
                 {
-                    for ( sal_uInt16 i = 0; i < aTabCols.Count(); ++i )
+                    for ( size_t i = 0; i < aTabCols.Count(); ++i )
                     {
                         const SwTabColsEntry& rEntry = aTabCols.GetEntry( i );
                         nEnd  = static_cast< sal_uInt16 >(rEntry.nPos - aTabCols.GetLeft());
@@ -1697,7 +1696,7 @@ void SwView::StateTabWin(SfxItemSet& rSet)
                 sal_uInt16 nStart = 0,
                        nEnd;
 
-                for ( sal_uInt16 i = 0; i < aTabCols.Count(); ++i )
+                for ( size_t i = 0; i < aTabCols.Count(); ++i )
                 {
                     const SwTabColsEntry& rEntry = aTabCols.GetEntry( i );
                     if(bVerticalWriting)
@@ -1756,7 +1755,7 @@ void SwView::StateTabWin(SfxItemSet& rSet)
             {
                 if( nFrmType & FRMTYPE_TABLE )
                 {
-                    const sal_uInt16 nNum = rSh.GetCurTabColNum();
+                    const size_t nNum = rSh.GetCurTabColNum();
                     SwTabCols aTabCols;
                     rSh.GetTabCols( aTabCols );
 

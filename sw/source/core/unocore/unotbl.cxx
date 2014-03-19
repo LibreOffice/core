@@ -644,11 +644,11 @@ static void lcl_GetTblSeparators(uno::Any& rRet, SwTable* pTable, SwTableBox* pB
 
     pTable->GetTabCols( aCols, pBox, sal_False, bRow );
 
-    sal_uInt16 nSepCount = aCols.Count();
+    const size_t nSepCount = aCols.Count();
     uno::Sequence< text::TableColumnSeparator> aColSeq(nSepCount);
-     text::TableColumnSeparator* pArray = aColSeq.getArray();
+    text::TableColumnSeparator* pArray = aColSeq.getArray();
     bool bError = false;
-    for(sal_uInt16 i = 0; i < nSepCount; i++)
+    for(size_t i = 0; i < nSepCount; ++i)
     {
         pArray[i].Position = static_cast< sal_Int16 >(aCols[i]);
         pArray[i].IsVisible = !aCols.IsHidden(i);
@@ -673,26 +673,26 @@ static void lcl_SetTblSeparators(const uno::Any& rVal, SwTable* pTable, SwTableB
     aOldCols.SetRightMax( UNO_TABLE_COLUMN_SUM );
 
     pTable->GetTabCols( aOldCols, pBox, sal_False, bRow );
-    sal_uInt16 nOldCount = aOldCols.Count();
+    const size_t nOldCount = aOldCols.Count();
     // there is no use in setting tab cols if there is only one column
     if( !nOldCount )
         return;
 
     const uno::Sequence< text::TableColumnSeparator>* pSepSeq =
                 (uno::Sequence< text::TableColumnSeparator>*) rVal.getValue();
-    if(pSepSeq && pSepSeq->getLength() == nOldCount)
+    if(pSepSeq && static_cast<size_t>(pSepSeq->getLength()) == nOldCount)
     {
         SwTabCols aCols(aOldCols);
         sal_Bool bError = sal_False;
         const text::TableColumnSeparator* pArray = pSepSeq->getConstArray();
-        sal_Int32 nLastValue = 0;
+        long nLastValue = 0;
         //sal_Int32 nTblWidth = aCols.GetRight() - aCols.GetLeft();
-        for(sal_uInt16 i = 0; i < nOldCount; i++)
+        for(size_t i = 0; i < nOldCount; ++i)
         {
             aCols[i] = pArray[i].Position;
             if(pArray[i].IsVisible == aCols.IsHidden(i) ||
                 (!bRow && aCols.IsHidden(i)) ||
-                long(aCols[i] - long(nLastValue)) < 0 ||
+                aCols[i] < nLastValue ||
                 UNO_TABLE_COLUMN_SUM < aCols[i] )
             {
                 bError = sal_True;

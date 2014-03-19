@@ -60,19 +60,19 @@ public:
     SwTabCols( const SwTabCols& );
     SwTabCols &operator=( const SwTabCols& );
     bool operator==( const SwTabCols& rCmp ) const;
-    long& operator[]( sal_uInt16 nPos ) { return aData[nPos].nPos; }
-    long operator[]( sal_uInt16 nPos ) const { return aData[nPos].nPos; }
-    sal_uInt16 Count() const { return sal::static_int_cast< sal_uInt16 >(aData.size()); }
+    long& operator[]( size_t nPos ) { return aData[nPos].nPos; }
+    long operator[]( size_t nPos ) const { return aData[nPos].nPos; }
+    size_t Count() const { return aData.size(); }
 
-    sal_Bool IsHidden( sal_uInt16 nPos ) const         { return aData[nPos].bHidden; }
-    void SetHidden( sal_uInt16 nPos, sal_Bool bValue ) { aData[nPos].bHidden = bValue; }
+    sal_Bool IsHidden( size_t nPos ) const         { return aData[nPos].bHidden; }
+    void SetHidden( size_t nPos, sal_Bool bValue ) { aData[nPos].bHidden = bValue; }
 
-    void Insert( long nValue, sal_Bool bValue, sal_uInt16 nPos );
-    void Insert( long nValue, long nMin, long nMax, sal_Bool bValue, sal_uInt16 nPos );
-    void Remove( sal_uInt16 nPos, sal_uInt16 nAnz = 1 );
+    void Insert( long nValue, sal_Bool bValue, size_t nPos );
+    void Insert( long nValue, long nMin, long nMax, sal_Bool bValue, size_t nPos );
+    void Remove( size_t nPos, size_t nAnz = 1 );
 
-    const SwTabColsEntry& GetEntry( sal_uInt16 nPos ) const { return aData[nPos]; }
-          SwTabColsEntry& GetEntry( sal_uInt16 nPos )  { return aData[nPos]; }
+    const SwTabColsEntry& GetEntry( size_t nPos ) const { return aData[nPos]; }
+          SwTabColsEntry& GetEntry( size_t nPos )  { return aData[nPos]; }
 
     long GetLeftMin() const { return nLeftMin; }
     long GetLeft()  const { return nLeft;    }
