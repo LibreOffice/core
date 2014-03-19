@@ -1171,24 +1171,22 @@ sal_uInt16 ToolBox::ImplFindItemPos( ToolBox* pBox, const Point& rPos )
     return nPos;
 }
 
-
-
 ImplTBDragMgr::ImplTBDragMgr()
+    : mpBoxList(new ImplTBList())
+    , mpDragBox(NULL)
+    , mnMinWidth(0)
+    , mnMaxWidth(0)
+    , mnLineMode(0)
+    , mnStartLines(0)
+    , mpCustomizeData(NULL)
+    , mbCustomizeMode(false)
+    , mbResizeMode(false)
+    , mbShowDragRect(false)
 {
-    mpBoxList       = new ImplTBList();
-    mnLineMode      = 0;
-    mnStartLines    = 0;
-    mbCustomizeMode = false;
-    mbResizeMode    = false;
-    mbShowDragRect  = false;
-    mpDragBox       = NULL;
-
     maAccel.InsertItem( KEY_RETURN, KeyCode( KEY_RETURN ) );
     maAccel.InsertItem( KEY_ESCAPE, KeyCode( KEY_ESCAPE ) );
     maAccel.SetSelectHdl( LINK( this, ImplTBDragMgr, SelectHdl ) );
 }
-
-
 
 ImplTBDragMgr::~ImplTBDragMgr()
 {
