@@ -192,7 +192,7 @@ packageversion = "%PACKAGEVERSION"
 End
 
 Start
-module = "gid_Module_Firebird"
+module = "gid_Module_Optional_Firebird"
 solarispackagename = "%BASISPACKAGEPREFIX%WITHOUTDOTPRODUCTVERSION-Firebird"
 solarisrequires = "%BASISPACKAGEPREFIX%WITHOUTDOTPRODUCTVERSION-core01"
 packagename = "%BASISPACKAGEPREFIX%PRODUCTVERSION-firebird"
