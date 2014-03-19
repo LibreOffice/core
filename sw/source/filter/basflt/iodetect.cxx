@@ -47,7 +47,7 @@ SwIoDetect aFilterDetect[] =
 
 OUString SwIoDetect::IsReader(const sal_Char* pHeader, sal_uLong nLen_) const
 {
-    // Filter erkennung
+    // Filter recognition
     struct W1_FIB
     {
         SVBT16 wIdent;      // 0x0 int magic number
@@ -92,7 +92,7 @@ OUString SwIoDetect::IsReader(const sal_Char* pHeader, sal_uLong nLen_) const
 
 const OUString SwIoSystem::GetSubStorageName( const SfxFilter& rFltr )
 {
-    /* bei den StorageFiltern noch den SubStorageNamen setzen */
+    // for StorageFilters also set the SubStorageName
     const OUString& rUserData = rFltr.GetUserData();
     if (rUserData == FILTER_XML ||
         rUserData == FILTER_XMLV ||
@@ -159,8 +159,8 @@ sal_Bool SwIoSystem::IsValidStgFilter(SotStorage& rStg, const SfxFilter& rFilter
         ( rStg.IsContained( SwIoSystem::GetSubStorageName( rFilter )) );
     if( bRet )
     {
-        /* Bug 53445 - es gibt Excel Docs ohne ClipBoardId! */
-        /* Bug 62703 - und auch WinWord Docs ohne ClipBoardId! */
+        /* Bug 53445 - there are Excel Docs w/o ClipBoardId! */
+        /* Bug 62703 - and also WinWord Docs w/o ClipBoardId! */
         if (rFilter.GetUserData() == FILTER_WW8 || rFilter.GetUserData() == sWW6)
         {
             bRet = (rStg.IsContained(OUString("0Table"))
@@ -195,8 +195,8 @@ void TerminateBuffer(sal_Char *pBuffer, sal_uLong nBytesRead, sal_uLong nBufferL
     }
 }
 
-/* Feststellen ob das File in dem entsprechenden Format vorliegt. */
-/* Z.z werden nur unsere eigene Filter unterstuetzt               */
+// Check if the file fits the corresponding format
+// Currently we only support our own filters
 sal_Bool SwIoSystem::IsFileFilter(SfxMedium& rMedium, const OUString& rFmtName)
 {
     sal_Bool bRet = sal_False;
@@ -266,12 +266,10 @@ sal_Bool SwIoSystem::IsFileFilter(SfxMedium& rMedium, const OUString& rFmtName)
     return bRet;
 }
 
-/* die Methode stellt fest, von welchem Typ der stream (File) ist.        */
-/* Es wird versucht, eine dem Filter entsprechende Byte-Folge zu finden.  */
-/* Wird kein entsprechender gefunden, wird zur Zeit der ASCII-Reader      */
-/* returnt !! Der Returnwert ist der interne Filtername!                  */
-/* rPrefFltName ist der interne Name des Filters, den der Benutzer im     */
-/* Open-Dialog eingestellt hat.                                           */
+// Check the type of the stream (file) by searching for corresponding set of bytes.
+// If no known type is found, return ASCII for now!
+// Returns the internal FilterName.
+// rPrefFltName is the internal FilterName that was chosen by the user in the Open Dlg.
 const SfxFilter* SwIoSystem::GetFileFilter(const OUString& rFileName,
     const OUString& rPrefFltName, SfxMedium* pMedium)
 {
@@ -372,12 +370,6 @@ const SfxFilter* SwIoSystem::GetFileFilter(const OUString& rFileName,
 
     TerminateBuffer(aBuffer, nBytesRead, sizeof(aBuffer));
 
-    /* !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!*/
-    /* suche nach dem bestimmten Filter, falls kein entsprechender        */
-    /* gefunden wird, so wird der ASCII-Filter returnt.                   */
-    /* Gibt es Filter ohne einen Identifizierungs-String, so werden diese */
-    /* nie erkannt und es wird auch der ASCII-Filter returnt.             */
-    /* !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!*/
     {
         for( sal_uInt16 n = 0; n < MAXFILTER; ++n )
         {
@@ -391,8 +383,7 @@ const SfxFilter* SwIoSystem::GetFileFilter(const OUString& rFileName,
         }
     }
 
-    /* Ok, bis jetzt kein Filter gefunden, also befrage mal die */
-    /* "WORD 4 WORD" Filter                                     */
+    // no filter recognized so far; thus check "WORD 4 WORD" Filter
     if( !rFileName.isEmpty() )
     {
         if( pMedium )
