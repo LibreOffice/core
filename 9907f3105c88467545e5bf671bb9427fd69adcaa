@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da86d52c_2c173ba5",
+        "filename": "sw/source/filter/ww8/docxattributeoutput.hxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 775,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2014-03-19T13:51:52Z",
+      "side": 1,
+      "message": "Why static?\n\nAlso, surrounding code typically uses sal_Int32 for counting objects, why sal_uInt64 here?\n\nFinally, all other member variables have the m_ prefix, why do you omit that here?",
+      "revId": "9907f3105c88467545e5bf671bb9427fd69adcaa",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
