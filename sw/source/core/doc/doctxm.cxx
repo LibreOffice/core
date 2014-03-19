@@ -767,9 +767,9 @@ void SwTOXBaseSection::Update(const SfxItemSet* pAttr,
 
     SwDoc* pDoc = (SwDoc*)pSectNd->GetDoc();
 
-    OSL_ENSURE(pDoc != NULL, "Where is the document?");
+    assert(pDoc); //Where is the document?
 
-    if(pAttr && pDoc && GetFmt())
+    if (pAttr && GetFmt())
         pDoc->ChgFmt(*GetFmt(), *pAttr);
 
     // determine default page description, which will be used by the content nodes,
