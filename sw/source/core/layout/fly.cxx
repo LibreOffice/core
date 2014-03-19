@@ -805,6 +805,7 @@ void SwFlyFrm::_UpdateAttr( const SfxPoolItem *pOld, const SfxPoolItem *pNew,
             }
 
         case RES_COL:
+            if (pOld && pNew)
             {
                 ChgColumns( *(const SwFmtCol*)pOld, *(const SwFmtCol*)pNew );
                 const SwFmtFrmSize &rNew = GetFmt()->GetFrmSize();
