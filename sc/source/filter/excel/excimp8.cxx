@@ -372,7 +372,9 @@ void ImportExcel8::Feat( void )
         sal_uInt32 nCbSD = aIn.ReaduInt32();
         // TODO: could here be some sanity check applied to not allocate 4GB?
         aProt.maSecurityDescriptor.reserve( nCbSD);
-        aIn.Read( &aProt.maSecurityDescriptor.front(), nCbSD);
+        sal_Size nRead = aIn.Read( &aProt.maSecurityDescriptor.front(), nCbSD);
+        if (nRead != nCbSD)
+            aProt.maSecurityDescriptor.resize( nRead);
     }
 
     GetSheetProtectBuffer().AppendEnhancedProtection( aProt, GetCurrScTab() );
