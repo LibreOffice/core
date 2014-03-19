@@ -41,8 +41,8 @@ struct ReleaseNote
     sal_uInt8 Pos2;
     OUString URL2;
 
-    ReleaseNote(sal_uInt8 pos, const OUString aURL) : Pos(pos), URL(aURL), Pos2(0), URL2() {};
-    ReleaseNote(sal_uInt8 pos, const OUString aURL, sal_uInt8 pos2, const OUString aURL2) : Pos(pos), URL(aURL), Pos2(pos2), URL2(aURL2) {};
+    ReleaseNote(sal_uInt8 pos, const OUString& aURL) : Pos(pos), URL(aURL), Pos2(0), URL2() {};
+    ReleaseNote(sal_uInt8 pos, const OUString& aURL, sal_uInt8 pos2, const OUString& aURL2) : Pos(pos), URL(aURL), Pos2(pos2), URL2(aURL2) {};
 
     ReleaseNote(const ReleaseNote& rn) :Pos(rn.Pos), URL(rn.URL), Pos2(rn.Pos2), URL2(rn.URL2) {};
     ReleaseNote & operator=( const ReleaseNote& rn) { Pos=rn.Pos; URL=rn.URL; Pos2=rn.Pos2; URL2=rn.URL2; return *this; };
