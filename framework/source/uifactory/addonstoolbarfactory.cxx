@@ -18,8 +18,6 @@
  */
 
 #include <uielement/addonstoolbarwrapper.hxx>
-#include <threadhelp/guard.hxx>
-#include <threadhelp/threadhelpbase.hxx>
 
 #include <com/sun/star/util/XURLTransformer.hpp>
 #include <com/sun/star/frame/ModuleManager.hpp>
@@ -53,8 +51,7 @@ using namespace framework;
 
 namespace {
 
-class AddonsToolBarFactory :  protected ThreadHelpBase,   // Struct for right initalization of mutex member! Must be first of baseclasses.
-                              public ::cppu::WeakImplHelper2< css::lang::XServiceInfo ,
+class AddonsToolBarFactory :  public ::cppu::WeakImplHelper2< css::lang::XServiceInfo ,
                                                               css::ui::XUIElementFactory >
 {
 public:
@@ -94,8 +91,7 @@ private:
 
 AddonsToolBarFactory::AddonsToolBarFactory(
     const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& xContext ) :
-    ThreadHelpBase( &Application::GetSolarMutex() )
-    , m_xContext( xContext )
+    m_xContext( xContext )
     , m_xModuleManager( ModuleManager::create( xContext ) )
 {
 }
@@ -180,8 +176,7 @@ throw ( ::com::sun::star::container::NoSuchElementException,
         ::com::sun::star::lang::IllegalArgumentException,
         ::com::sun::star::uno::RuntimeException, std::exception )
 {
-    // SAFE
-    Guard aLock( m_aLock );
+    SolarMutexGuard g;
 
     Sequence< Sequence< PropertyValue > >   aConfigData;
     Reference< XFrame >                     xFrame;
