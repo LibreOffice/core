@@ -71,9 +71,7 @@ protected:
 #endif
 
 public:
-    SvxAreaTabDialog( Window* pParent,
-                      const SfxItemSet* pAttr, SdrModel* pModel,
-                      const SdrView* pSdrView = NULL );
+    SvxAreaTabDialog( Window* pParent, const SfxItemSet* pAttr, SdrModel* pModel, bool bShadow );
     ~SvxAreaTabDialog();
 
     void SetNewColorTable( XColorListSharedPtr aColTab ) { maNewColorTab = aColTab; }
@@ -107,10 +105,8 @@ class SvxTransparenceTabPage : public SvxTabPage
     const SfxItemSet&   rOutAttrs;
     RECT_POINT          eRP;
 
-    //CHINA001 sal_uInt16*             pPageType;
-    //CHINA001 sal_uInt16*             pDlgType;
-    sal_uInt16             nPageType; //add CHINA001
-    sal_uInt16             nDlgType;  //add CHINA001
+    sal_uInt16             nPageType;
+    sal_uInt16             nDlgType;
 
     // main selection
     FixedLine           aFlProp;
@@ -240,19 +236,23 @@ private:
     XHatchListSharedPtr     maHatchingList;
     XBitmapListSharedPtr    maBitmapList;
 
+    // Placeholders for pointer-based entries; these will be inited
+    // to point to these so that the page is usable without that
+    // SvxAreaTabDialog has to call the setter methods (e.g. SetColorChgd).
+    // Without that the pages used in SvxAreaTabDialog are not usable
+    ChangeType          maFixed_ChangeType;
+    sal_Bool            maFixed_sal_Bool;
+
     ChangeType*         pnColorTableState;
     ChangeType*         pnBitmapListState;
     ChangeType*         pnGradientListState;
     ChangeType*         pnHatchingListState;
 
-    //CHINA001 sal_uInt16*             pPageType;
-    //CHINA001 sal_uInt16*             pDlgType;
-    //CHINA001 sal_uInt16*             pPos;
-    sal_uInt16 nPageType; //add CHINA001
-    sal_uInt16 nDlgType;//add CHINA001
-    sal_uInt16 nPos; //add CHINA001
+    sal_uInt16          nPageType;
+    sal_uInt16          nDlgType;
+    sal_uInt16          nPos;
 
-    sal_Bool*               pbAreaTP;
+    sal_Bool*           pbAreaTP;
 
     XOutdevItemPool*    pXPool;
     XFillAttrSetItem    aXFillAttr;
@@ -260,6 +260,14 @@ private:
 
     SfxMapUnit          ePoolUnit;
     FieldUnit           eFUnit;
+
+    //UUUU
+    bool                mbOfferImportButton;
+    bool                mbPositionsAdapted;
+    bool                mbDirectGraphicSet;
+    Graphic             maDirectGraphic;
+    String              maDirectName;
+    PushButton          maBtnImport;
 
 #ifdef _SVX_TPAREA_CXX
     DECL_LINK( SelectDialogTypeHdl_Impl, ListBox * );
@@ -276,12 +284,16 @@ private:
     DECL_LINK( ModifyBitmapHdl_Impl, void * );
 //  DECL_LINK( ModifyTransparentHdl_Impl, void * );
     DECL_LINK( ModifyStepCountHdl_Impl, void * );
+
+    //UUUU
+    DECL_LINK( ClickImportHdl_Impl, void * );
+
     DECL_LINK( ModifyTileHdl_Impl, void * );
     DECL_LINK( ClickScaleHdl_Impl, void * );
 #endif
 
 public:
-    SvxAreaTabPage( Window* pParent, const SfxItemSet& rInAttrs  );
+    SvxAreaTabPage( Window* pParent, const SfxItemSet& rInAttrs );
 
     void    Construct();
 

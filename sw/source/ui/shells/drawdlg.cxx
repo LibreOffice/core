@@ -101,10 +101,11 @@ void SwDrawShell::ExecDrawDlg(SfxRequest& rReq)
 
             SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
             DBG_ASSERT(pFact, "Dialogdiet Factory fail!");
-            AbstractSvxAreaTabDialog * pDlg = pFact->CreateSvxAreaTabDialog( NULL,
-                                                                            &aNewAttr,
-                                                                            pDoc,
-                                                                            pView);
+            AbstractSvxAreaTabDialog * pDlg = pFact->CreateSvxAreaTabDialog(
+                NULL,
+                &aNewAttr,
+                pDoc,
+                true);
             DBG_ASSERT(pDlg, "Dialogdiet fail!");
             // const SvxColorTableItem* pColorItem = (const SvxColorTableItem*)
                                     GetView().GetDocShell()->GetItem(SID_COLOR_TABLE);

@@ -70,6 +70,9 @@
 #include <cstdio>
 #include <EnhancedPDFExportHelper.hxx>
 
+//UUUU
+#include <frmfmt.hxx>
+
 #include <unomid.h>
 
 using namespace ::com::sun::star;
@@ -606,13 +609,16 @@ sal_Bool lcl_IsDarkBackground( const SwTxtPaintInfo& rInf )
         const SvxBrushItem* pItem;
         SwRect aOrigBackRect;
 
+        //UUUU
+        FillAttributesPtr aFillAttributes;
+
         /// OD 21.08.2002
         ///     consider, that [GetBackgroundBrush(...)] can set <pCol>
         ///     - see implementation in /core/layout/paintfrm.cxx
         /// OD 21.08.2002 #99657#
         ///     There is a background color, if there is a background brush and
         ///     its color is *not* "no fill"/"auto fill".
-        if( rInf.GetTxtFrm()->GetBackgroundBrush( pItem, pCol, aOrigBackRect, sal_False ) )
+        if( rInf.GetTxtFrm()->GetBackgroundBrush( aFillAttributes, pItem, pCol, aOrigBackRect, sal_False ) )
         {
             if ( !pCol )
                 pCol = &pItem->GetColor();
@@ -986,8 +992,14 @@ void SwTxtPaintInfo::DrawRect( const SwRect &rRect, sal_Bool bNoGraphic,
             pOut->DrawRect( rRect.SVRect() );
         else
         {
-            ASSERT( ((SvxBrushItem*)-1) != pBrushItem, "DrawRect: Uninitialized BrushItem!" );
-            ::DrawGraphic( pBrushItem, pOut, aItemRect, rRect );
+            if(pBrushItem != ((SvxBrushItem*)-1))
+            {
+                ::DrawGraphic( pBrushItem, pOut, aItemRect, rRect );
+            }
+            else
+            {
+                OSL_ENSURE(false, "DrawRect: Uninitialized BrushItem!" );
+            }
         }
     }
 }

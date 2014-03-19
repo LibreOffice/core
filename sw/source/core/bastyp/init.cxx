@@ -157,6 +157,10 @@ sal_uInt16 __FAR_DATA aTxtFmtCollSetRange[] = {
     RES_CHRATR_BEGIN, RES_CHRATR_END-1,
     RES_PARATR_BEGIN, RES_PARATR_END-1,
     RES_UNKNOWNATR_BEGIN, RES_UNKNOWNATR_END-1,
+
+    //UUUU FillAttribute support
+    XATTR_FILL_FIRST, XATTR_FILL_LAST,
+
     0
 };
 
@@ -230,6 +234,10 @@ sal_uInt16 __FAR_DATA aTableBoxSetRange[] = {
 sal_uInt16 __FAR_DATA aFrmFmtSetRange[] = {
     RES_FRMATR_BEGIN, RES_FRMATR_END-1,
     RES_UNKNOWNATR_BEGIN, RES_UNKNOWNATR_END-1,
+
+    //UUUU FillAttribute support
+    XATTR_FILL_FIRST, XATTR_FILL_LAST,
+
     0
 };
 

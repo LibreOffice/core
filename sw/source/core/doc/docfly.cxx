@@ -64,6 +64,10 @@
 #include <undoflystrattr.hxx>
 #include <switerator.hxx>
 
+//UUUU
+#include <svx/xbtmpit.hxx>
+#include <svx/xflftrit.hxx>
+
 extern sal_uInt16 GetHtmlMode( const SwDocShell* );
 
 
@@ -428,6 +432,62 @@ lcl_SetFlyFrmAttr(SwDoc & rDoc,
     return aTmpSet.Count() || MAKEFRMS == nMakeFrms;
 }
 
+void SwDoc::CheckForUniqueItemForLineFillNameOrIndex(SfxItemSet& rSet)
+{
+    SdrModel* pDrawModel = GetOrCreateDrawModel();
+    SfxItemIter aIter(rSet);
+
+    for(const SfxPoolItem* pItem = aIter.FirstItem(); pItem; pItem = aIter.NextItem())
+    {
+        const SfxPoolItem* pResult = pItem;
+
+        switch(pItem->Which())
+        {
+            case XATTR_FILLBITMAP:
+            {
+                pResult = static_cast< const XFillBitmapItem* >(pItem)->checkForUniqueItem(pDrawModel);
+                break;
+            }
+            case XATTR_LINEDASH:
+            {
+                pResult = static_cast< const XLineDashItem* >(pItem)->checkForUniqueItem(pDrawModel);
+                break;
+            }
+            case XATTR_LINESTART:
+            {
+                pResult = static_cast< const XLineStartItem* >(pItem)->checkForUniqueItem(pDrawModel);
+                break;
+            }
+            case XATTR_LINEEND:
+            {
+                pResult = static_cast< const XLineEndItem* >(pItem)->checkForUniqueItem(pDrawModel);
+                break;
+            }
+            case XATTR_FILLGRADIENT:
+            {
+                pResult = static_cast< const XFillGradientItem* >(pItem)->checkForUniqueItem(pDrawModel);
+                break;
+            }
+            case XATTR_FILLFLOATTRANSPARENCE:
+            {
+                pResult = static_cast< const XFillFloatTransparenceItem* >(pItem)->checkForUniqueItem(pDrawModel);
+                break;
+            }
+            case XATTR_FILLHATCH:
+            {
+                pResult = static_cast< const XFillHatchItem* >(pItem)->checkForUniqueItem(pDrawModel);
+                break;
+            }
+        }
+
+        if(pResult != pItem)
+        {
+            rSet.Put(*pResult);
+            delete pResult;
+        }
+    }
+}
+
 sal_Bool SwDoc::SetFlyFrmAttr( SwFrmFmt& rFlyFmt, SfxItemSet& rSet )
 {
     if( !rSet.Count() )
@@ -440,6 +500,11 @@ sal_Bool SwDoc::SetFlyFrmAttr( SwFrmFmt& rFlyFmt, SfxItemSet& rSet )
         GetIDocumentUndoRedo().ClearRedo(); // AppendUndo far below, so leave it
         pSaveUndo.reset( new SwUndoFmtAttrHelper( rFlyFmt ) );
     }
+
+    //UUUU Need to check for unique item for DrawingLayer items of type NameOrIndex
+    // and evtl. correct that item to ensure unique names for that type. This call may
+    // modify/correct entries inside of the given SfxItemSet
+    CheckForUniqueItemForLineFillNameOrIndex(rSet);
 
     bool const bRet =
         lcl_SetFlyFrmAttr(*this, &SwDoc::SetFlyFrmAnchor, rFlyFmt, rSet);

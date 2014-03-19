@@ -508,6 +508,9 @@ void SwDocShell::ExecStyleSheet( SfxRequest& rReq )
     Beschreibung:   Edit
  --------------------------------------------------------------------*/
 
+//UUUU
+//#include <svx/svdmodel.hxx>
+//#include <svx/drawitem.hxx>
 
 sal_uInt16 SwDocShell::Edit(
     const String &rName,
@@ -666,6 +669,20 @@ sal_uInt16 SwDocShell::Edit(
     }
     if (!bBasic)
     {
+        //UUUU
+        //if(SFX_STYLE_FAMILY_FRAME == nFamily)
+        //{
+        //    //UUUU create needed items for XPropertyList entries from the DrawModel so that
+        //    // the Area TabPage can access them
+        //    SfxItemSet& rSet = xTmp->GetItemSet();
+        //    const SdrModel* pDrawModel = GetDoc()->GetDrawModel();
+        //
+        //    rSet.Put(SvxColorTableItem(pDrawModel->GetColorTableFromSdrModel(), SID_COLOR_TABLE));
+        //    rSet.Put(SvxGradientListItem(pDrawModel->GetGradientListFromSdrModel(), SID_GRADIENT_LIST));
+        //    rSet.Put(SvxHatchListItem(pDrawModel->GetHatchListFromSdrModel(), SID_HATCH_LIST));
+        //    rSet.Put(SvxBitmapListItem(pDrawModel->GetBitmapListFromSdrModel(), SID_BITMAP_LIST));
+        //}
+
         // vor dem Dialog wird der HtmlMode an der DocShell versenkt
         sal_uInt16 nHtmlMode = ::GetHtmlMode(this);
 
@@ -733,6 +750,14 @@ sal_uInt16 SwDocShell::Edit(
                     }
                     aTmpSet.ClearItem( RES_BACKGROUND );
                 }
+
+                //UUUU
+                if(bNew && SFX_STYLE_FAMILY_FRAME == nFamily)
+                {
+                    // clear FillStyle so that it works as a derived attribute
+                    aTmpSet.ClearItem(XATTR_FILLSTYLE);
+                }
+
                 xTmp->SetItemSet( aTmpSet );
 
                 if( SFX_STYLE_FAMILY_PAGE == nFamily && SvtLanguageOptions().IsCTLFontEnabled() )

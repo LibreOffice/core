@@ -58,6 +58,8 @@ class SwFmt;
 class SwPrintData;
 class SwSortedObjs;
 class SwAnchoredObject;
+//UUUU
+class FillAttributes;
 
 //Jeder FrmTyp findet sich hier in einem Bit wieder.
 //Die Bits muessen so gesetzt werden, dass mit einer Maskierung festgestellt
@@ -570,10 +572,12 @@ public:
     //Retouche, nicht im Bereich des uebergebenen Rect!
     void Retouche( const SwPageFrm *pPage, const SwRect &rRect ) const;
 
-    sal_Bool GetBackgroundBrush( const SvxBrushItem*& rpBrush,
-                             const Color*& rpColor,
-                             SwRect &rOrigRect,
-                             sal_Bool bLowerMode ) const;
+    sal_Bool GetBackgroundBrush(
+        boost::shared_ptr< FillAttributes >& rFillAttributes,
+        const SvxBrushItem*& rpBrush,
+        const Color*& rpColor,
+        SwRect &rOrigRect,
+        sal_Bool bLowerMode ) const;
 
     inline void SetCompletePaint() const;
     inline void ResetCompletePaint() const;

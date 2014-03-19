@@ -19,36 +19,15 @@
  *
  *************************************************************/
 
+#ifndef _UNOBRUSHITEMHELPER_HXX
+#define _UNOBRUSHITEMHELPER_HXX
 
-#ifndef _SWFRMSH_HXX
-#define _SWFRMSH_HXX
+#include <editeng/brshitem.hxx>
 
-#include "basesh.hxx"
+//UUUU helper function definintions for UNO API fallbacks to replace SvxBrushItem
+void setSvxBrushItemAsFillAttributesToTargetSet(const SvxBrushItem& rBrush, SfxItemSet& rToSet);
+SvxBrushItem getSvxBrushItemFromSourceSet(const SfxItemSet& rSourceSet, sal_Bool bSearchInParents = sal_True);
 
-class SwFrameShell: public SwBaseShell
-{
+#endif // _UNOBRUSHITEMHELPER_HXX
 
-public:
-    SFX_DECL_INTERFACE(SW_FRAMESHELL)
-
-            SwFrameShell(SwView &rView);
-    virtual ~SwFrameShell();
-
-    void    Execute(SfxRequest &);
-    void    GetState(SfxItemSet &);
-    void    ExecFrameStyle(SfxRequest& rReq);
-    void    GetLineStyleState(SfxItemSet &rSet);
-    void    StateInsert(SfxItemSet &rSet);
-
-    void    StateStatusline(SfxItemSet &rSet);
-
-    //UUUU
-    void GetDrawAttrStateTextFrame(SfxItemSet &rSet);
-    void ExecDrawAttrArgsTextFrame(SfxRequest& rReq);
-
-    //UUUU
-    void ExecDrawDlgTextFrame(SfxRequest& rReq);
-    void DisableStateTextFrame(SfxItemSet &rSet);
-};
-
-#endif
+//eof

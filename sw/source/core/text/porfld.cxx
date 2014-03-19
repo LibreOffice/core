@@ -49,7 +49,6 @@
 #include <porftn.hxx>   // SwFtnPortion
 #include <accessibilityoptions.hxx>
 #include <editeng/lrspitem.hxx>
-
 #include <unicode/ubidi.h>
 
 using namespace ::com::sun::star;
@@ -1036,8 +1035,10 @@ void SwGrfNumPortion::Paint( const SwTxtPaintInfo &rInf ) const
     }
 
     if( bDraw && aTmp.HasArea() )
+    {
         DrawGraphic( pBrush, (OutputDevice*)rInf.GetOut(),
             aTmp, aRepaint, bReplace ? GRFNUM_REPLACE : GRFNUM_YES );
+    }
 }
 
 void SwGrfNumPortion::SetBase( long nLnAscent, long nLnDescent,

@@ -107,6 +107,10 @@
 #include <switerator.hxx>
 #include <pagedeschint.hxx>
 
+//UUUU
+#include <fillattributes.hxx>
+#include <svx/xfillit0.hxx>
+
 using namespace ::com::sun::star;
 using ::rtl::OUString;
 
@@ -2470,12 +2474,72 @@ SfxPoolItem* SwHeaderAndFooterEatSpacingItem::Clone( SfxItemPool* ) const
     return new SwHeaderAndFooterEatSpacingItem( Which(), GetValue() );
 }
 
-
+//////////////////////////////////////////////////////////////////////////////
 //  class SwFrmFmt
 //  Implementierung teilweise inline im hxx
 
 TYPEINIT1( SwFrmFmt, SwFmt );
 IMPL_FIXEDMEMPOOL_NEWDEL_DLL( SwFrmFmt, 20, 20 )
+
+SwFrmFmt::SwFrmFmt(
+    SwAttrPool& rPool,
+    const sal_Char* pFmtNm,
+    SwFrmFmt *pDrvdFrm,
+    sal_uInt16 nFmtWhich,
+    const sal_uInt16* pWhichRange)
+:   SwFmt(rPool, pFmtNm, (pWhichRange ? pWhichRange : aFrmFmtSetRange), pDrvdFrm, nFmtWhich),
+    m_wXObject(),
+    maFillAttributes(),
+    pCaptionFmt(0)
+{
+    //UUUU
+    if(RES_FLYFRMFMT == nFmtWhich)
+    {
+        // when its a SwFlyFrmFmt do not do this, this setting
+        // will be derived from the parent style. In the future this
+        // may be needed for more formats; all which use the
+        // XATTR_FILL_FIRST, XATTR_FILL_LAST range as fill attributes
+#ifdef DBG_UTIL
+        bool bBla = true; // allow setting a breakpoint here in debug mode
+#endif
+    }
+    else
+    {
+        // set FillStyle to none; this is necessary since the pool default is
+        // to fill objects by color (blue8)
+        SetFmtAttr(XFillStyleItem(XFILL_NONE));
+    }
+}
+
+SwFrmFmt::SwFrmFmt(
+    SwAttrPool& rPool,
+    const String &rFmtNm,
+    SwFrmFmt *pDrvdFrm,
+    sal_uInt16 nFmtWhich,
+    const sal_uInt16* pWhichRange)
+:   SwFmt(rPool, rFmtNm, (pWhichRange ? pWhichRange : aFrmFmtSetRange), pDrvdFrm, nFmtWhich),
+    m_wXObject(),
+    maFillAttributes(),
+    pCaptionFmt(0)
+{
+    //UUUU
+    if(RES_FLYFRMFMT == nFmtWhich)
+    {
+        // when its a SwFlyFrmFmt do not do this, this setting
+        // will be derived from the parent style. In the future this
+        // may be needed for more formats; all which use the
+        // XATTR_FILL_FIRST, XATTR_FILL_LAST range as fill attributes
+#ifdef DBG_UTIL
+        bool bBla = true; // allow setting a breakpoint here in debug mode
+#endif
+    }
+    else
+    {
+        // set FillStyle to none; this is necessary since the pool default is
+        // to fill objects by color (blue8)
+        SetFmtAttr(XFillStyleItem(XFILL_NONE));
+    }
+}
 
 void SwFrmFmt::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
 {
@@ -2490,6 +2554,31 @@ void SwFrmFmt::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
             RES_HEADER, sal_False, (const SfxPoolItem**)&pH );
         ((SwAttrSetChg*)pNew)->GetChgSet()->GetItemState(
             RES_FOOTER, sal_False, (const SfxPoolItem**)&pF );
+
+        //UUUU reset fill information
+        if(RES_FLYFRMFMT == Which() && maFillAttributes.get())
+        {
+            SfxItemIter aIter(*((SwAttrSetChg*)pNew)->GetChgSet());
+            bool bReset(false);
+
+            for(const SfxPoolItem* pItem = aIter.FirstItem(); pItem && !bReset; pItem = aIter.NextItem())
+            {
+                bReset = !IsInvalidItem(pItem) && pItem->Which() >= XATTR_FILL_FIRST && pItem->Which() <= XATTR_FILL_LAST;
+            }
+
+            if(bReset)
+            {
+                maFillAttributes.reset();
+            }
+        }
+    }
+    else if(RES_FMT_CHG == nWhich) //UUUU
+    {
+        //UUUU reset fill information on format change (e.g. style changed)
+        if(RES_FLYFRMFMT == Which() && maFillAttributes.get())
+        {
+            maFillAttributes.reset();
+        }
     }
     else if( RES_HEADER == nWhich )
         pH = (SwFmtHeader*)pNew;
@@ -3029,7 +3118,11 @@ const String SwFlyFrmFmt::GetObjDescription() const
 */
 sal_Bool SwFlyFrmFmt::IsBackgroundTransparent() const
 {
-    sal_Bool bReturn = sal_False;
+    //UUUU
+    if(RES_FLYFRMFMT == Which() && getFillAttributes())
+    {
+        return getFillAttributes()->isTransparent();
+    }
 
     /// NOTE: If background color is "no fill"/"auto fill" (COL_TRANSPARENT)
     ///     and there is no background graphic, it "inherites" the background
@@ -3038,7 +3131,7 @@ sal_Bool SwFlyFrmFmt::IsBackgroundTransparent() const
          (GetBackground().GetColor() != COL_TRANSPARENT)
        )
     {
-        bReturn = sal_True;
+        return sal_True;
     }
     else
     {
@@ -3048,11 +3141,11 @@ sal_Bool SwFlyFrmFmt::IsBackgroundTransparent() const
              (pTmpGrf->GetAttr().GetTransparency() != 0)
            )
         {
-            bReturn = sal_True;
+            return sal_True;
         }
     }
 
-    return bReturn;
+    return sal_False;
 }
 
 /** SwFlyFrmFmt::IsBackgroundBrushInherited - for #103898#
@@ -3069,15 +3162,18 @@ sal_Bool SwFlyFrmFmt::IsBackgroundTransparent() const
 */
 sal_Bool SwFlyFrmFmt::IsBackgroundBrushInherited() const
 {
-    sal_Bool bReturn = sal_False;
-
-    if ( (GetBackground().GetColor() == COL_TRANSPARENT) &&
+    //UUUU
+    if(RES_FLYFRMFMT == Which() && getFillAttributes())
+    {
+        return !getFillAttributes()->isUsed();
+    }
+    else if ( (GetBackground().GetColor() == COL_TRANSPARENT) &&
          !(GetBackground().GetGraphicObject()) )
     {
-        bReturn = sal_True;
+        return sal_True;
     }
 
-    return bReturn;
+    return sal_False;
 }
 
 // --> OD 2006-02-28 #125892#
@@ -3310,3 +3406,25 @@ SwFrmFmt* SwFrmFmt::GetCaptionFmt() const
 {
     return pCaptionFmt;
 }
+
+//UUUU
+FillAttributesPtr SwFrmFmt::getFillAttributes() const
+{
+    if(RES_FLYFRMFMT == Which())
+    {
+        // create FillAttributes on demand
+        if(!maFillAttributes.get())
+        {
+            const_cast< SwFrmFmt* >(this)->maFillAttributes.reset(new FillAttributes(GetAttrSet()));
+        }
+    }
+    else
+    {
+        // FALLBACKBREAKHERE assert wrong usage
+        OSL_ENSURE(false, "getFillAttributes() call only valid for RES_FLYFRMFMT currently (!)");
+    }
+
+    return maFillAttributes;
+}
+
+// eof

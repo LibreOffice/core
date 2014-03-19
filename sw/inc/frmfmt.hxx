@@ -47,23 +47,25 @@ class SW_DLLPUBLIC SwFrmFmt: public SwFmt
     ::com::sun::star::uno::WeakReference<
         ::com::sun::star::uno::XInterface> m_wXObject;
 
+    //UUUU
+    FillAttributesPtr           maFillAttributes;
+
 protected:
     SwFrmFmt* pCaptionFmt;
-    SwFrmFmt( SwAttrPool& rPool, const sal_Char* pFmtNm,
-                SwFrmFmt *pDrvdFrm, sal_uInt16 nFmtWhich = RES_FRMFMT,
-                const sal_uInt16* pWhichRange = 0 )
-          : SwFmt( rPool, pFmtNm, (pWhichRange ? pWhichRange : aFrmFmtSetRange),
-                pDrvdFrm, nFmtWhich )
-                ,pCaptionFmt( NULL )
-    {}
 
-    SwFrmFmt( SwAttrPool& rPool, const String &rFmtNm,
-                SwFrmFmt *pDrvdFrm, sal_uInt16 nFmtWhich = RES_FRMFMT,
-                const sal_uInt16* pWhichRange = 0 )
-          : SwFmt( rPool, rFmtNm, (pWhichRange ? pWhichRange : aFrmFmtSetRange),
-                pDrvdFrm, nFmtWhich )
-                ,pCaptionFmt( NULL )
-    {}
+    SwFrmFmt(
+        SwAttrPool& rPool,
+        const sal_Char* pFmtNm,
+        SwFrmFmt *pDrvdFrm,
+        sal_uInt16 nFmtWhich = RES_FRMFMT,
+        const sal_uInt16* pWhichRange = 0);
+
+    SwFrmFmt(
+        SwAttrPool& rPool,
+        const String &rFmtNm,
+        SwFrmFmt *pDrvdFrm,
+        sal_uInt16 nFmtWhich = RES_FRMFMT,
+        const sal_uInt16* pWhichRange = 0);
 
    virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNewValue );
 
@@ -144,6 +146,9 @@ public:
 
     DECL_FIXEDMEMPOOL_NEWDEL_DLL(SwFrmFmt)
     void RegisterToFormat( SwFmt& rFmt );
+
+    //UUUU
+    virtual FillAttributesPtr getFillAttributes() const;
 };
 
 //Das FlyFrame-Format ------------------------------

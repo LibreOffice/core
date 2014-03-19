@@ -142,6 +142,8 @@
 #define RBT_COLUMN 7
 #define MTR_FLD_OFFSET 3
 #define GRP_OFFSET 8
+//UUUU
+#define BTN_IMPORTOPTIONAL 1
 
 #define FT_TRANSPARENT 9
 #define FT_X_SIZE 10

@@ -281,13 +281,13 @@ RES_UNKNOWNATR_END
 enum RES_FMT
 {
 RES_FMT_BEGIN = RES_UNKNOWNATR_END,
-    RES_CHRFMT = RES_FMT_BEGIN,
-    RES_FRMFMT,
-    RES_FLYFRMFMT,
-    RES_TXTFMTCOLL,
-    RES_GRFFMTCOLL,
-    RES_DRAWFRMFMT,
-    RES_CONDTXTFMTCOLL,
+    RES_CHRFMT = RES_FMT_BEGIN,                     // 144
+    RES_FRMFMT,                                     // 145
+    RES_FLYFRMFMT,                                  // 146
+    RES_TXTFMTCOLL,                                 // 147
+    RES_GRFFMTCOLL,                                 // 148
+    RES_DRAWFRMFMT,                                 // 149
+    RES_CONDTXTFMTCOLL,                             // 150
 RES_FMT_END
 };
 
@@ -295,7 +295,7 @@ RES_FMT_END
 enum RES_MSG
 {
 RES_MSG_BEGIN = RES_FMT_END,
-    RES_OBJECTDYING = RES_MSG_BEGIN,
+    RES_OBJECTDYING = RES_MSG_BEGIN,                // 151
     RES_FMT_CHG,
     RES_ATTRSET_CHG,
     RES_FRM_SIZECHG,

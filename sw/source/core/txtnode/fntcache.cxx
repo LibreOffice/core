@@ -2670,13 +2670,16 @@ sal_Bool SwDrawTextInfo::ApplyAutoColor( Font* pFont )
                 const SvxBrushItem* pItem;
                 SwRect aOrigBackRect;
 
+                //UUUU
+                FillAttributesPtr aFillAttributes;
+
                 /// OD 21.08.2002
                 ///     consider, that [GetBackgroundBrush(...)] can set <pCol>
                 ///     - see implementation in /core/layout/paintfrm.cxx
                 /// OD 21.08.2002 #99657#
                 ///     There is a user defined setting for the background, if there
                 ///     is a background brush and its color is *not* "no fill"/"auto fill".
-                if( GetFrm()->GetBackgroundBrush( pItem, pCol, aOrigBackRect, sal_False ) )
+                if( GetFrm()->GetBackgroundBrush( aFillAttributes, pItem, pCol, aOrigBackRect, sal_False ) )
                 {
                     if ( !pCol )
                     {

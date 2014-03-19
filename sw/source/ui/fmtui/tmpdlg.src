@@ -305,12 +305,29 @@ TabDialog DLG_TEMPLATE_3
                 Text [ en-US ] = "Wrap" ;
                 PageResID = TP_FRM_WRAP ;
             };
+
+            //UUUU new Area and Transparence TabPages
             PageItem
             {
-                Identifier = TP_BACKGROUND ;
-                Text [ en-US ] = "Background" ;
-                PageResID = TP_BACKGROUND ;
+                Identifier = RID_SVXPAGE_AREA;
+                PageResID = RID_SVXPAGE_AREA;
+                Text [ en-US ] = "Area" ;
             };
+            PageItem
+            {
+                Identifier = RID_SVXPAGE_TRANSPARENCE;
+                PageResID = RID_SVXPAGE_TRANSPARENCE;
+                Text [ en-US ] = "Transparency" ;
+            };
+
+            //UUUU Remove?
+            //PageItem
+            //{
+            //    Identifier = TP_BACKGROUND ;
+            //    Text [ en-US ] = "Background" ;
+            //    PageResID = TP_BACKGROUND ;
+            //};
+
             PageItem
             {
                 Identifier = TP_BORDER ;

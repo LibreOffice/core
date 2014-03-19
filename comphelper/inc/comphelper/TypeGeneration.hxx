@@ -113,6 +113,13 @@ namespace comphelper
         CPPUTYPE_TABLEBORDERDISTANCES, //getCppuType( (table::TableBorderDistances*)0 )
         CPPUTPYE_REFEMBEDDEDOBJECT, // XEmbeddedObject::static_type
 
+        //UUUU add types needed for fill style definitions in SW
+        CPPUTYPE_RECTANGLEPOINT,    //getCppuType((drawing::RectanglePoint*)0)
+        CPPUTYPE_BITMAPMODE,        // getCppuType((drawing::BitmapMode*)0)
+        CPPUTYPE_GRADIENT,          // getCppuType((awt::Gradient*)0)
+        CPPUTYPE_HATCH,             // getCppuType((drawing::Hatch*)0)
+        CPPUTYPE_FILLSTYLE,         // getCppuType((drawing::FillStyle*)0)
+
         CPPUTYPE_END
     };
     COMPHELPER_DLLPUBLIC void GenerateCppuType (

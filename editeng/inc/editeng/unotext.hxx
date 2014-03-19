@@ -255,7 +255,7 @@ class EDITENG_DLLPUBLIC SvxUnoTextRangeBase : public ::com::sun::star::text::XTe
 
 {
     friend class SvxUnoTextRangeEnumeration;
-    friend class accessibility::AccessibleEditableTextPara;
+    friend class ::accessibility::AccessibleEditableTextPara;
 
 protected:
     SvxEditSource*          mpEditSource;

@@ -234,9 +234,22 @@ void lcl_ClearArea( const SwFrm &rFrm,
     if ( aRegion.Count() )
     {
         const SvxBrushItem *pItem; const Color *pCol; SwRect aOrigRect;
-        if ( rFrm.GetBackgroundBrush( pItem, pCol, aOrigRect, sal_False ) )
-            for( sal_uInt16 i = 0; i < aRegion.Count(); ++i )
-                ::DrawGraphic( pItem, &rOut, aOrigRect, aRegion[i] );
+
+        //UUUU
+        FillAttributesPtr aFillAttributes;
+
+        if ( rFrm.GetBackgroundBrush( aFillAttributes, pItem, pCol, aOrigRect, sal_False ) )
+        {
+            const bool bDone(::DrawFillAttributes(aFillAttributes, aOrigRect, rPtArea, rOut));
+
+            if(!bDone)
+            {
+                for( sal_uInt16 i = 0; i < aRegion.Count(); ++i )
+                {
+                    ::DrawGraphic( pItem, &rOut, aOrigRect, aRegion[i] );
+                }
+            }
+        }
         else
         {
             // OD 2004-04-23 #116347#

@@ -1114,13 +1114,19 @@ void SwTxtFly::DrawFlyRect( OutputDevice* pOut, const SwRect &rRect,
     for( MSHORT i = 0; i < aRegion.Count(); ++i )
     {
         if ( bNoGraphic )
+        {
             pOut->DrawRect( aRegion[i].SVRect() );
+        }
         else
         {
-            ASSERT( ((SvxBrushItem*)-1) != rInf.GetBrushItem(),
-                    "DrawRect: Uninitialized BrushItem!" );
-            ::DrawGraphic( rInf.GetBrushItem(), pOut, rInf.GetBrushRect(),
-                       aRegion[i] );
+            if(((SvxBrushItem*)-1) != rInf.GetBrushItem())
+            {
+                ::DrawGraphic(rInf.GetBrushItem(), pOut, rInf.GetBrushRect(), aRegion[i] );
+            }
+            else
+            {
+                OSL_ENSURE(false, "DrawRect: Uninitialized BrushItem!" );
+            }
         }
     }
 }

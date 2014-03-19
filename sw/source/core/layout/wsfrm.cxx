@@ -358,6 +358,11 @@ void SwFrm::_UpdateAttrFrm( const SfxPoolItem *pOld, const SfxPoolItem *pNew,
             break;
 
         default:
+            //UUUU the new FillStyle has to do the same as previous RES_BACKGROUND
+            if(nWhich >= XATTR_FILL_FIRST && nWhich <= XATTR_FILL_LAST)
+            {
+                rInvFlags |= 0x28;
+            }
             /* do Nothing */;
     }
 }

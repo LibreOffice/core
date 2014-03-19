@@ -1394,7 +1394,7 @@ IMPL_LINK( SfxTabDialog, ActivatePageHdl, TabControl *, pTabCtrl )
 */
 
 {
-    sal_uInt16 const nId = pTabCtrl->GetCurPageId();
+    sal_uInt16 nId = pTabCtrl->GetCurPageId();
 
     DBG_ASSERT( pImpl->pData->Count(), "keine Pages angemeldet" );
     SFX_APP();
@@ -1402,6 +1402,16 @@ IMPL_LINK( SfxTabDialog, ActivatePageHdl, TabControl *, pTabCtrl )
     // Tab Page schon da?
     SfxTabPage* pTabPage = dynamic_cast<SfxTabPage*> (pTabCtrl->GetTabPage( nId ));
     Data_Impl* pDataObject = Find( *pImpl->pData, nId );
+
+    //UUUU fallback to 1st page when requested one does not exist
+    if(!pDataObject && pTabCtrl->GetPageCount())
+    {
+        pTabCtrl->SetCurPageId(pTabCtrl->GetPageId(0));
+        nId = pTabCtrl->GetCurPageId();
+        pTabPage = dynamic_cast< SfxTabPage* >(pTabCtrl->GetTabPage(nId));
+        Data_Impl* pDataObject = Find(*pImpl->pData, nId);
+    }
+
     DBG_ASSERT( pDataObject, "Id nicht bekannt" );
 
     // ggf. TabPage erzeugen:

@@ -467,6 +467,10 @@ void XMLTextExportPropertySetMapper::ContextFilter(
     XMLPropertyState* pAllParaMargin = NULL;
     XMLPropertyState* pAllMargin = NULL;
 
+    //UUUU
+    XMLPropertyState* pRepeatOffsetX = NULL;
+    XMLPropertyState* pRepeatOffsetY = NULL;
+
     sal_Bool bNeedsAnchor = sal_False;
 
     for( ::std::vector< XMLPropertyState >::iterator aIter = rProperties.begin();
@@ -585,7 +589,39 @@ void XMLTextExportPropertySetMapper::ContextFilter(
         case CTF_TEXT_CLIP:             pClipState = propertie; break;
         case CTF_PARAMARGINALL:         pAllParaMargin = propertie; break;
         case CTF_MARGINALL:             pAllMargin = propertie; break;
+
+        //UUUU
+        case CTF_SW_REPEAT_OFFSET_X:
+            pRepeatOffsetX = propertie;
+            break;
+
+        //UUUU
+        case CTF_SW_REPEAT_OFFSET_Y:
+            pRepeatOffsetY = propertie;
+            break;
+
+        //UUUU
+        case CTF_SW_FILLGRADIENTNAME:
+        case CTF_SW_FILLHATCHNAME:
+        case CTF_SW_FILLBITMAPNAME:
+        case CTF_SW_FILLTRANSNAME:
+            {
+                OUString aStr;
+                if( (propertie->maValue >>= aStr) && 0 == aStr.getLength() )
+                    propertie->mnIndex = -1;
+            }
+            break;
         }
+    }
+
+    //UUUU
+    if( pRepeatOffsetX && pRepeatOffsetY )
+    {
+        sal_Int32 nOffset = 0;
+        if( ( pRepeatOffsetX->maValue >>= nOffset ) && ( nOffset == 0 ) )
+            pRepeatOffsetX->mnIndex = -1;
+        else
+            pRepeatOffsetY->mnIndex = -1;
     }
 
     if( pFontNameState )

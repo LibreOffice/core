@@ -74,14 +74,14 @@ namespace drawinglayer
     namespace texture
     {
         GeoTexSvxGradient::GeoTexSvxGradient(
-            const basegfx::B2DRange& rTargetRange,
+            const basegfx::B2DRange& rDefinitionRange,
             const basegfx::BColor& rStart,
             const basegfx::BColor& rEnd,
             sal_uInt32 /* nSteps */,
             double fBorder)
         :   GeoTexSvx(),
             maGradientInfo(),
-            maTargetRange(rTargetRange),
+            maDefinitionRange(rDefinitionRange),
             maStart(rStart),
             maEnd(rEnd),
             mfBorder(fBorder)
@@ -98,7 +98,7 @@ namespace drawinglayer
 
             return (pCompare
                 && maGradientInfo == pCompare->maGradientInfo
-                && maTargetRange == pCompare->maTargetRange
+                && maDefinitionRange == pCompare->maDefinitionRange
                 && mfBorder == pCompare->mfBorder);
         }
     } // end of namespace texture
@@ -111,19 +111,33 @@ namespace drawinglayer
     namespace texture
     {
         GeoTexSvxGradientLinear::GeoTexSvxGradientLinear(
-            const basegfx::B2DRange& rTargetRange,
+            const basegfx::B2DRange& rDefinitionRange,
+            const basegfx::B2DRange& rOutputRange,
             const basegfx::BColor& rStart,
             const basegfx::BColor& rEnd,
             sal_uInt32 nSteps,
             double fBorder,
             double fAngle)
-        :   GeoTexSvxGradient(rTargetRange, rStart, rEnd, nSteps, fBorder)
+        :   GeoTexSvxGradient(rDefinitionRange, rStart, rEnd, nSteps, fBorder),
+            mfUnitMinX(0.0),
+            mfUnitWidth(1.0),
+            mfUnitMaxY(1.0)
         {
             maGradientInfo = basegfx::tools::createLinearODFGradientInfo(
-                rTargetRange,
+                rDefinitionRange,
                 nSteps,
                 fBorder,
                 fAngle);
+
+            if(rDefinitionRange != rOutputRange)
+            {
+                basegfx::B2DRange aInvOutputRange(rOutputRange);
+
+                aInvOutputRange.transform(maGradientInfo.getBackTextureTransform());
+                mfUnitMinX = aInvOutputRange.getMinX();
+                mfUnitWidth = aInvOutputRange.getWidth();
+                mfUnitMaxY = aInvOutputRange.getMaxY();
+            }
         }
 
         GeoTexSvxGradientLinear::~GeoTexSvxGradientLinear()
@@ -132,29 +146,46 @@ namespace drawinglayer
 
         void GeoTexSvxGradientLinear::appendTransformationsAndColors(
             std::vector< B2DHomMatrixAndBColor >& rEntries,
-            basegfx::BColor& rOutmostColor)
+            basegfx::BColor& rOuterColor)
         {
-            rOutmostColor = maStart;
+            rOuterColor = maStart;
 
             if(maGradientInfo.getSteps())
             {
                 const double fStripeWidth(1.0 / maGradientInfo.getSteps());
                 B2DHomMatrixAndBColor aB2DHomMatrixAndBColor;
+                basegfx::B2DHomMatrix aPattern;
+
+                // bring from unit circle [-1, -1, 1, 1] to unit range [0, 0, 1, 1]
+                aPattern.scale(0.5, 0.5);
+                aPattern.translate(0.5, 0.5);
+
+                // scale and translate in X
+                aPattern.scale(mfUnitWidth, 1.0);
+                aPattern.translate(mfUnitMinX, 0.0);
 
                 for(sal_uInt32 a(1); a < maGradientInfo.getSteps(); a++)
                 {
                     const double fPos(fStripeWidth * a);
-                    // optimized below...
-                    //
-                    // basegfx::B2DHomMatrix aNew;
-                    // aNew.scale(0.5, 0.5);
-                    // aNew.translate(0.5, 0.5);
-                    // aNew.scale(1.0, (1.0 - fPos));
-                    // aNew.translate(0.0, fPos);
-                    // aNew = maGradientInfo.getTextureTransform() * aNew;
-                    aB2DHomMatrixAndBColor.maB2DHomMatrix = maGradientInfo.getTextureTransform() *
-                        basegfx::tools::createScaleTranslateB2DHomMatrix(0.5, 0.5 * (1.0 - fPos), 0.5, 0.5 * (1.0 + fPos));
+                    basegfx::B2DHomMatrix aNew(aPattern);
+
+                    // scale and translate in Y
+                    double fHeight(1.0 - fPos);
+
+                    if(a + 1 == maGradientInfo.getSteps() && mfUnitMaxY > 1.0)
+                    {
+                        fHeight += mfUnitMaxY - 1.0;
+                    }
+
+                    aNew.scale(1.0, fHeight);
+                    aNew.translate(0.0, fPos);
+
+                    // set at target
+                    aB2DHomMatrixAndBColor.maB2DHomMatrix = maGradientInfo.getTextureTransform() * aNew;
+
+                    // interpolate and set color
                     aB2DHomMatrixAndBColor.maBColor = interpolate(maStart, maEnd, double(a) / double(maGradientInfo.getSteps() - 1));
+
                     rEntries.push_back(aB2DHomMatrixAndBColor);
                 }
             }
@@ -176,19 +207,31 @@ namespace drawinglayer
     namespace texture
     {
         GeoTexSvxGradientAxial::GeoTexSvxGradientAxial(
-            const basegfx::B2DRange& rTargetRange,
+            const basegfx::B2DRange& rDefinitionRange,
+            const basegfx::B2DRange& rOutputRange,
             const basegfx::BColor& rStart,
             const basegfx::BColor& rEnd,
             sal_uInt32 nSteps,
             double fBorder,
             double fAngle)
-        :   GeoTexSvxGradient(rTargetRange, rStart, rEnd, nSteps, fBorder)
+        :   GeoTexSvxGradient(rDefinitionRange, rStart, rEnd, nSteps, fBorder),
+            mfUnitMinX(0.0),
+            mfUnitWidth(1.0)
         {
             maGradientInfo = basegfx::tools::createAxialODFGradientInfo(
-                rTargetRange,
+                rDefinitionRange,
                 nSteps,
                 fBorder,
                 fAngle);
+
+            if(rDefinitionRange != rOutputRange)
+            {
+                basegfx::B2DRange aInvOutputRange(rOutputRange);
+
+                aInvOutputRange.transform(maGradientInfo.getBackTextureTransform());
+                mfUnitMinX = aInvOutputRange.getMinX();
+                mfUnitWidth = aInvOutputRange.getWidth();
+            }
         }
 
         GeoTexSvxGradientAxial::~GeoTexSvxGradientAxial()
@@ -197,9 +240,9 @@ namespace drawinglayer
 
         void GeoTexSvxGradientAxial::appendTransformationsAndColors(
             std::vector< B2DHomMatrixAndBColor >& rEntries,
-            basegfx::BColor& rOutmostColor)
+            basegfx::BColor& rOuterColor)
         {
-            rOutmostColor = maEnd;
+            rOuterColor = maEnd;
 
             if(maGradientInfo.getSteps())
             {
@@ -208,16 +251,26 @@ namespace drawinglayer
 
                 for(sal_uInt32 a(1); a < maGradientInfo.getSteps(); a++)
                 {
-                    // const double fPos(fStripeWidth * a);
-                    // optimized below...
-                    //
-                    // basegfx::B2DHomMatrix aNew;
-                    // aNew.scale(0.50, (1.0 - fPos));
-                    // aNew.translate(0.5, 0.0);
-                    // aNew = maGradientInfo.getTextureTransform() * aNew;
-                    aB2DHomMatrixAndBColor.maB2DHomMatrix = maGradientInfo.getTextureTransform() *
-                        basegfx::tools::createScaleTranslateB2DHomMatrix(0.5, 1.0 - (fStripeWidth * a), 0.5, 0.0);
+                    const double fPos(fStripeWidth * a);
+                    basegfx::B2DHomMatrix aNew;
+
+                    // bring in X from unit circle [-1, -1, 1, 1] to unit range [0, 0, 1, 1]
+                    aNew.scale(0.5, 1.0);
+                    aNew.translate(0.5, 0.0);
+
+                    // scale/translate in X
+                    aNew.scale(mfUnitWidth, 1.0);
+                    aNew.translate(mfUnitMinX, 0.0);
+
+                    // already centerd in Y on X-Axis, just scale in Y
+                    aNew.scale(1.0, 1.0 - fPos);
+
+                    // set at target
+                    aB2DHomMatrixAndBColor.maB2DHomMatrix = maGradientInfo.getTextureTransform() * aNew;
+
+                    // interpolate and set color
                     aB2DHomMatrixAndBColor.maBColor = interpolate(maEnd, maStart, double(a) / double(maGradientInfo.getSteps() - 1));
+
                     rEntries.push_back(aB2DHomMatrixAndBColor);
                 }
             }
@@ -239,17 +292,17 @@ namespace drawinglayer
     namespace texture
     {
         GeoTexSvxGradientRadial::GeoTexSvxGradientRadial(
-            const basegfx::B2DRange& rTargetRange,
+            const basegfx::B2DRange& rDefinitionRange,
             const basegfx::BColor& rStart,
             const basegfx::BColor& rEnd,
             sal_uInt32 nSteps,
             double fBorder,
             double fOffsetX,
             double fOffsetY)
-        :   GeoTexSvxGradient(rTargetRange, rStart, rEnd, nSteps, fBorder)
+        :   GeoTexSvxGradient(rDefinitionRange, rStart, rEnd, nSteps, fBorder)
         {
             maGradientInfo = basegfx::tools::createRadialODFGradientInfo(
-                rTargetRange,
+                rDefinitionRange,
                 basegfx::B2DVector(fOffsetX,fOffsetY),
                 nSteps,
                 fBorder);
@@ -261,9 +314,9 @@ namespace drawinglayer
 
         void GeoTexSvxGradientRadial::appendTransformationsAndColors(
             std::vector< B2DHomMatrixAndBColor >& rEntries,
-            basegfx::BColor& rOutmostColor)
+            basegfx::BColor& rOuterColor)
         {
-            rOutmostColor = maStart;
+            rOuterColor = maStart;
 
             if(maGradientInfo.getSteps())
             {
@@ -296,7 +349,7 @@ namespace drawinglayer
     namespace texture
     {
         GeoTexSvxGradientElliptical::GeoTexSvxGradientElliptical(
-            const basegfx::B2DRange& rTargetRange,
+            const basegfx::B2DRange& rDefinitionRange,
             const basegfx::BColor& rStart,
             const basegfx::BColor& rEnd,
             sal_uInt32 nSteps,
@@ -304,10 +357,10 @@ namespace drawinglayer
             double fOffsetX,
             double fOffsetY,
             double fAngle)
-        :   GeoTexSvxGradient(rTargetRange, rStart, rEnd, nSteps, fBorder)
+        :   GeoTexSvxGradient(rDefinitionRange, rStart, rEnd, nSteps, fBorder)
         {
             maGradientInfo = basegfx::tools::createEllipticalODFGradientInfo(
-                rTargetRange,
+                rDefinitionRange,
                 basegfx::B2DVector(fOffsetX,fOffsetY),
                 nSteps,
                 fBorder,
@@ -320,9 +373,9 @@ namespace drawinglayer
 
         void GeoTexSvxGradientElliptical::appendTransformationsAndColors(
             std::vector< B2DHomMatrixAndBColor >& rEntries,
-            basegfx::BColor& rOutmostColor)
+            basegfx::BColor& rOuterColor)
         {
-            rOutmostColor = maStart;
+            rOuterColor = maStart;
 
             if(maGradientInfo.getSteps())
             {
@@ -373,7 +426,7 @@ namespace drawinglayer
     namespace texture
     {
         GeoTexSvxGradientSquare::GeoTexSvxGradientSquare(
-            const basegfx::B2DRange& rTargetRange,
+            const basegfx::B2DRange& rDefinitionRange,
             const basegfx::BColor& rStart,
             const basegfx::BColor& rEnd,
             sal_uInt32 nSteps,
@@ -381,10 +434,10 @@ namespace drawinglayer
             double fOffsetX,
             double fOffsetY,
             double fAngle)
-        :   GeoTexSvxGradient(rTargetRange, rStart, rEnd, nSteps, fBorder)
+        :   GeoTexSvxGradient(rDefinitionRange, rStart, rEnd, nSteps, fBorder)
         {
             maGradientInfo = basegfx::tools::createSquareODFGradientInfo(
-                rTargetRange,
+                rDefinitionRange,
                 basegfx::B2DVector(fOffsetX,fOffsetY),
                 nSteps,
                 fBorder,
@@ -397,9 +450,9 @@ namespace drawinglayer
 
         void GeoTexSvxGradientSquare::appendTransformationsAndColors(
             std::vector< B2DHomMatrixAndBColor >& rEntries,
-            basegfx::BColor& rOutmostColor)
+            basegfx::BColor& rOuterColor)
         {
-            rOutmostColor = maStart;
+            rOuterColor = maStart;
 
             if(maGradientInfo.getSteps())
             {
@@ -432,7 +485,7 @@ namespace drawinglayer
     namespace texture
     {
         GeoTexSvxGradientRect::GeoTexSvxGradientRect(
-            const basegfx::B2DRange& rTargetRange,
+            const basegfx::B2DRange& rDefinitionRange,
             const basegfx::BColor& rStart,
             const basegfx::BColor& rEnd,
             sal_uInt32 nSteps,
@@ -440,10 +493,10 @@ namespace drawinglayer
             double fOffsetX,
             double fOffsetY,
             double fAngle)
-        :   GeoTexSvxGradient(rTargetRange, rStart, rEnd, nSteps, fBorder)
+        :   GeoTexSvxGradient(rDefinitionRange, rStart, rEnd, nSteps, fBorder)
         {
             maGradientInfo = basegfx::tools::createRectangularODFGradientInfo(
-                rTargetRange,
+                rDefinitionRange,
                 basegfx::B2DVector(fOffsetX,fOffsetY),
                 nSteps,
                 fBorder,
@@ -456,9 +509,9 @@ namespace drawinglayer
 
         void GeoTexSvxGradientRect::appendTransformationsAndColors(
             std::vector< B2DHomMatrixAndBColor >& rEntries,
-            basegfx::BColor& rOutmostColor)
+            basegfx::BColor& rOuterColor)
         {
-            rOutmostColor = maStart;
+            rOuterColor = maStart;
 
             if(maGradientInfo.getSteps())
             {
@@ -509,17 +562,22 @@ namespace drawinglayer
     namespace texture
     {
         GeoTexSvxHatch::GeoTexSvxHatch(
-            const basegfx::B2DRange& rTargetRange,
+            const basegfx::B2DRange& rDefinitionRange,
+            const basegfx::B2DRange& rOutputRange,
             double fDistance,
             double fAngle)
-        :   mfDistance(0.1),
+        :   maOutputRange(rOutputRange),
+            maTextureTransform(),
+            maBackTextureTransform(),
+            mfDistance(0.1),
             mfAngle(fAngle),
-            mnSteps(10L)
+            mnSteps(10),
+            mbDefinitionRangeEqualsOutputRange(rDefinitionRange == rOutputRange)
         {
-            double fTargetSizeX(rTargetRange.getWidth());
-            double fTargetSizeY(rTargetRange.getHeight());
-            double fTargetOffsetX(rTargetRange.getMinX());
-            double fTargetOffsetY(rTargetRange.getMinY());
+            double fTargetSizeX(rDefinitionRange.getWidth());
+            double fTargetSizeY(rDefinitionRange.getHeight());
+            double fTargetOffsetX(rDefinitionRange.getMinX());
+            double fTargetOffsetY(rDefinitionRange.getMinY());
 
             fAngle = -fAngle;
 
@@ -566,6 +624,7 @@ namespace drawinglayer
         {
             const GeoTexSvxHatch* pCompare = dynamic_cast< const GeoTexSvxHatch* >(&rGeoTexSvx);
             return (pCompare
+                && maOutputRange == pCompare->maOutputRange
                 && maTextureTransform == pCompare->maTextureTransform
                 && mfDistance == pCompare->mfDistance
                 && mfAngle == pCompare->mfAngle
@@ -574,13 +633,54 @@ namespace drawinglayer
 
         void GeoTexSvxHatch::appendTransformations(::std::vector< basegfx::B2DHomMatrix >& rMatrices)
         {
-            for(sal_uInt32 a(1L); a < mnSteps; a++)
+            if(mbDefinitionRangeEqualsOutputRange)
             {
-                // create matrix
-                const double fOffset(mfDistance * (double)a);
-                basegfx::B2DHomMatrix aNew;
-                aNew.set(1, 2, fOffset);
-                rMatrices.push_back(maTextureTransform * aNew);
+                // simple hatch where the definition area equals the output area
+                for(sal_uInt32 a(1); a < mnSteps; a++)
+                {
+                    // create matrix
+                    const double fOffset(mfDistance * (double)a);
+                    basegfx::B2DHomMatrix aNew;
+                    aNew.set(1, 2, fOffset);
+                    rMatrices.push_back(maTextureTransform * aNew);
+                }
+            }
+            else
+            {
+                // output area is different from definition area, back-transform to get
+                // the output area in unit coordinates and fill this with hatch lines
+                // using the settings derived from the definition area
+                basegfx::B2DRange aBackUnitRange(maOutputRange);
+
+                aBackUnitRange.transform(getBackTextureTransform());
+
+                // calculate vertical start value and a security maximum integer value to avoid death loops
+                double fStart(basegfx::snapToNearestMultiple(aBackUnitRange.getMinY(), mfDistance));
+                const sal_uInt32 nNeededIntegerSteps(basegfx::fround((aBackUnitRange.getHeight() / mfDistance) + 0.5));
+                sal_uInt32 nMaxIntegerSteps(::std::min(nNeededIntegerSteps, sal_uInt32(10000)));
+
+                while(fStart < aBackUnitRange.getMaxY() && nMaxIntegerSteps)
+                {
+                    // create new transform for
+                    basegfx::B2DHomMatrix aNew;
+
+                    // adapt x scale and position
+                    //aNew.scale(aBackUnitRange.getWidth(), 1.0);
+                    //aNew.translate(aBackUnitRange.getMinX(), 0.0);
+                    aNew.set(0, 0, aBackUnitRange.getWidth());
+                    aNew.set(0, 2, aBackUnitRange.getMinX());
+
+                    // adapt y position to current step
+                    aNew.set(1, 2, fStart);
+                    //aNew.translate(0.0, fStart);
+
+                    // add new transformation
+                    rMatrices.push_back(maTextureTransform * aNew);
+
+                    // next step
+                    fStart += mfDistance;
+                    nMaxIntegerSteps--;
+                }
             }
         }
 

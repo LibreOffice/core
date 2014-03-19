@@ -560,6 +560,15 @@ TabPage RID_SVXPAGE_AREA
         Last = 100 ;
         SpinSize = 5 ;
     };
+    //UUUU
+    PushButton BTN_IMPORTOPTIONAL
+    {
+        HelpID = "cui:PushButton:MD_ICONSELECTOR:BTN_IMPORTOPTIONAL";
+        Pos = MAP_APPFONT ( 132 + 12, 157 + 6 ) ;
+        Size = MAP_APPFONT ( 100 , 14 ) ;
+        TabStop = TRUE ;
+        Text[ en-US ] = "Import Graphic...";
+    };
 };
  // RID_SVXPAGE_SHADOW ------------------------------------------------------
 TabPage RID_SVXPAGE_SHADOW

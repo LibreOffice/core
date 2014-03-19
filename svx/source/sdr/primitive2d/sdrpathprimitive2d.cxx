@@ -49,10 +49,12 @@ namespace drawinglayer
             {
                 // #i108255# no need to use correctOrientations here; target is
                 // straight visualisation
+                basegfx::B2DPolyPolygon aTransformed(getUnitPolyPolygon());
+
+                aTransformed.transform(getTransform());
                 appendPrimitive2DReferenceToPrimitive2DSequence(aRetval,
                     createPolyPolygonFillPrimitive(
-                        getUnitPolyPolygon(),
-                        getTransform(),
+                        aTransformed,
                         getSdrLFSTAttribute().getFill(),
                         getSdrLFSTAttribute().getFillFloatTransGradient()));
             }
@@ -73,9 +75,11 @@ namespace drawinglayer
 
                 for(sal_uInt32 a(0); a < getUnitPolyPolygon().count(); a++)
                 {
+                    basegfx::B2DPolygon aTransformed(getUnitPolyPolygon().getB2DPolygon(a));
+
+                    aTransformed.transform(getTransform());
                     aTemp[a] = createPolygonLinePrimitive(
-                        getUnitPolyPolygon().getB2DPolygon(a),
-                        getTransform(),
+                        aTransformed,
                         getSdrLFSTAttribute().getLine(),
                         getSdrLFSTAttribute().getLineStartEnd());
                 }

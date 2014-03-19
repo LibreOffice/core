@@ -29,6 +29,8 @@
 #include <swatrset.hxx>     // fuer SfxItemPool/-Set, Attr forward decl.
 #include <calbck.hxx>       // fuer SwModify
 #include <hintids.hxx>
+//UUUU
+#include <fillattributes.hxx>
 
 class IDocumentSettingAccess;
 class IDocumentDrawModelAccess;
@@ -89,10 +91,11 @@ public:
 
     // Ist bInParents sal_False,
     // wird nur in diesem Format nach dem Attribut gesucht.
-    inline const SfxPoolItem& GetFmtAttr( sal_uInt16 nWhich,
-                                          sal_Bool bInParents = sal_True ) const;
-    inline SfxItemState GetItemState( sal_uInt16 nWhich, sal_Bool bSrchInParent = sal_True,
-                                    const SfxPoolItem **ppItem = 0 ) const;
+    //UUUUinline
+    const SfxPoolItem& GetFmtAttr( sal_uInt16 nWhich, sal_Bool bInParents = sal_True ) const;
+    //UUUUinline
+    SfxItemState GetItemState( sal_uInt16 nWhich, sal_Bool bSrchInParent = sal_True, const SfxPoolItem **ppItem = 0 ) const;
+
     // --> OD 2008-03-03 #refactorlists#
     // methods renamed and made virtual
     virtual sal_Bool SetFmtAttr( const SfxPoolItem& rAttr );
@@ -239,7 +242,10 @@ public:
     inline const SwFmtVertOrient      &GetVertOrient( sal_Bool = sal_True ) const;
     inline const SvxBoxItem               &GetBox( sal_Bool = sal_True ) const;
     inline const SvxFmtKeepItem         &GetKeep( sal_Bool = sal_True ) const;
-    inline const SvxBrushItem           &GetBackground( sal_Bool = sal_True ) const;
+
+    //UUUU
+    const SvxBrushItem& GetBackground( sal_Bool = sal_True ) const;
+
     inline const SvxShadowItem            &GetShadow( sal_Bool = sal_True ) const;
     inline const SwFmtPageDesc            &GetPageDesc( sal_Bool = sal_True ) const;
     inline const SvxFmtBreakItem      &GetBreak( sal_Bool = sal_True ) const;
@@ -323,15 +329,18 @@ public:
         @return false, default implementation
     */
     virtual sal_Bool IsShadowTransparent() const;
+
+    //UUUU
+    virtual FillAttributesPtr getFillAttributes() const;
 };
 
 // --------------- inline Implementierungen ------------------------
 
-inline const SfxPoolItem& SwFmt::GetFmtAttr( sal_uInt16 nWhich,
-                                             sal_Bool bInParents ) const
-{
-    return aSet.Get( nWhich, bInParents );
-}
+//UUUUinline const SfxPoolItem& SwFmt::GetFmtAttr( sal_uInt16 nWhich,
+//UUUU                                             sal_Bool bInParents ) const
+//UUUU{
+//UUUU  return aSet.Get( nWhich, bInParents );
+//UUUU}
 
 inline void SwFmt::SetName( const sal_Char* pNewName,
                              sal_Bool bBroadcast )
@@ -340,11 +349,11 @@ inline void SwFmt::SetName( const sal_Char* pNewName,
     SetName( aTmp, bBroadcast );
 }
 
-inline SfxItemState SwFmt::GetItemState( sal_uInt16 nWhich, sal_Bool bSrchInParent,
-                                        const SfxPoolItem **ppItem ) const
-{
-    return aSet.GetItemState( nWhich, bSrchInParent, ppItem );
-}
+//UUUUinline SfxItemState SwFmt::GetItemState( sal_uInt16 nWhich, sal_Bool bSrchInParent,
+//UUUU                                      const SfxPoolItem **ppItem ) const
+//UUUU{
+//UUUU  return aSet.GetItemState( nWhich, bSrchInParent, ppItem );
+//UUUU}
 
 #undef inline
 

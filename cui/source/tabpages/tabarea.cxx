@@ -62,7 +62,7 @@ SvxAreaTabDialog::SvxAreaTabDialog
     Window* pParent,
     const SfxItemSet* pAttr,
     SdrModel* pModel,
-    const SdrView* /* pSdrView */
+    bool bShadow
 ) :
 
     SfxTabDialog( pParent, CUI_RES( RID_SVXDLG_AREA ), pAttr ),
@@ -89,7 +89,16 @@ SvxAreaTabDialog::SvxAreaTabDialog
     FreeResource();
 
     AddTabPage( RID_SVXPAGE_AREA, SvxAreaTabPage::Create, 0 );
-    AddTabPage( RID_SVXPAGE_SHADOW, SvxShadowTabPage::Create, 0 );
+
+    if(bShadow)
+    {
+        AddTabPage( RID_SVXPAGE_SHADOW, SvxShadowTabPage::Create, 0 );
+    }
+    else
+    {
+        RemoveTabPage( RID_SVXPAGE_SHADOW );
+    }
+
     AddTabPage( RID_SVXPAGE_TRANSPARENCE, SvxTransparenceTabPage::Create,  0);
     AddTabPage( RID_SVXPAGE_COLOR, SvxColorTabPage::Create, 0 );
     AddTabPage( RID_SVXPAGE_GRADIENT, SvxGradientTabPage::Create, 0 );

@@ -140,6 +140,12 @@ class SwTblBoxValue;
 
 class SwAttrPool : public SfxItemPool
 {
+private:
+    ///UUUU helpers to add/rmove DrawingLayer ItemPool, used in constructor
+    /// and destructor; still isolated to evtl. allow other use later
+    void createAndAddSecondaryPools();
+    void removeAndDeleteSecondaryPools();
+
     friend void _InitCore();            // fuers anlegen/zerstoeren der
     friend void _FinitCore();           // Versionsmaps
     static sal_uInt16* pVersionMap1;

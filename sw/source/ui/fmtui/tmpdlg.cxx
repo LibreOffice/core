@@ -250,7 +250,14 @@ SwTemplateDlg::SwTemplateDlg(Window*            pParent,
                                         SwWrapTabPage::GetRanges );
             DBG_ASSERT(pFact->GetTabPageCreatorFunc( RID_SVXPAGE_BACKGROUND ), "GetTabPageCreatorFunc fail!");
             DBG_ASSERT(pFact->GetTabPageRangesFunc( RID_SVXPAGE_BACKGROUND ), "GetTabPageRangesFunc fail!");
-            AddTabPage(TP_BACKGROUND, pFact->GetTabPageCreatorFunc( RID_SVXPAGE_BACKGROUND ), pFact->GetTabPageRangesFunc( RID_SVXPAGE_BACKGROUND ) );
+
+            //UUUU remove?
+            //AddTabPage(TP_BACKGROUND, pFact->GetTabPageCreatorFunc( RID_SVXPAGE_BACKGROUND ), pFact->GetTabPageRangesFunc( RID_SVXPAGE_BACKGROUND ) );
+
+            //UUUU add Area and Transparence TabPages
+            AddTabPage(RID_SVXPAGE_AREA);
+            AddTabPage(RID_SVXPAGE_TRANSPARENCE);
+
             DBG_ASSERT(pFact->GetTabPageCreatorFunc( RID_SVXPAGE_BORDER ), "GetTabPageCreatorFunc fail!");
             DBG_ASSERT(pFact->GetTabPageRangesFunc( RID_SVXPAGE_BORDER ), "GetTabPageRangesFunc fail!");
             AddTabPage(TP_BORDER, pFact->GetTabPageCreatorFunc( RID_SVXPAGE_BORDER ), pFact->GetTabPageRangesFunc( RID_SVXPAGE_BORDER ) );
@@ -510,6 +517,8 @@ void SwTemplateDlg::PageCreated( sal_uInt16 nId, SfxTabPage &rPage )
             ((SwColumnPage&)rPage).SetFormatUsed( sal_True );
             break;
 
+        //UUUU do not remove; many other style dialog combinations still use the SfxTabPage
+        // for the SvxBrushItem (see RID_SVXPAGE_BACKGROUND)
         case TP_BACKGROUND:
         {
             sal_Int32 nFlagType = 0;
@@ -633,8 +642,34 @@ void SwTemplateDlg::PageCreated( sal_uInt16 nId, SfxTabPage &rPage )
             rPage.PageCreated(aSet);
 
         break;
+
+        //UUUU inits for Area and Transparency TabPages
+        // The selection attribute lists (XPropertyList derivates, e.g. XColorList for
+        // the color table) need to be added as items (e.g. SvxColorTableItem) to make
+        // these pages find the needed attributes for fill style suggestions.
+        // These are added in SwDocStyleSheet::GetItemSet() for the SFX_STYLE_FAMILY_PARA on
+        // demand, but could also be directly added from the DrawModel.
+        case RID_SVXPAGE_AREA:
+        {
+            SfxItemSet aNew(*aSet.GetPool(),
+                SID_COLOR_TABLE, SID_BITMAP_LIST,
+                SID_OFFER_IMPORT, SID_OFFER_IMPORT, 0, 0);
+
+            aNew.Put(GetStyleSheet().GetItemSet());
+
+            // add flag for direct graphic content selection
+            aNew.Put(SfxBoolItem(SID_OFFER_IMPORT, true));
+
+            rPage.PageCreated(aNew);
+        }
+        break;
+
+        case RID_SVXPAGE_TRANSPARENCE:
+        {
+            rPage.PageCreated(GetStyleSheet().GetItemSet());
+        }
+        break;
     }
 }
 
-
-
+// eof

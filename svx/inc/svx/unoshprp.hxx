@@ -254,17 +254,17 @@
     FILL_PROPERTIES_DEFAULTS \
     { MAP_CHAR_LEN(UNO_NAME_FILLBACKGROUND),    XATTR_FILLBACKGROUND    , &::getBooleanCppuType(),              0,   0}, \
     { MAP_CHAR_LEN(UNO_NAME_FILLBITMAP),        XATTR_FILLBITMAP        , &::getCppuType((const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XBitmap >*)0)  ,       0,     MID_BITMAP}, \
-    { MAP_CHAR_LEN("FillBitmapName"),           XATTR_FILLBITMAP        , &::getCppuType((const ::rtl::OUString*)0), 0, MID_NAME }, \
-    { MAP_CHAR_LEN("FillBitmapURL"),            XATTR_FILLBITMAP        , &::getCppuType((const ::rtl::OUString*)0), 0, MID_GRAFURL }, \
-    { MAP_CHAR_LEN("FillGradientStepCount"),    XATTR_GRADIENTSTEPCOUNT , &::getCppuType((const sal_Int16*)0), 0, 0}, \
+    { MAP_CHAR_LEN(UNO_NAME_FILLBITMAPNAME),            XATTR_FILLBITMAP        , &::getCppuType((const ::rtl::OUString*)0), 0, MID_NAME }, \
+    { MAP_CHAR_LEN(UNO_NAME_FILLBITMAPURL),         XATTR_FILLBITMAP        , &::getCppuType((const ::rtl::OUString*)0), 0, MID_GRAFURL }, \
+    { MAP_CHAR_LEN(UNO_NAME_FILLGRADIENTSTEPCOUNT), XATTR_GRADIENTSTEPCOUNT , &::getCppuType((const sal_Int16*)0), 0, 0}, \
     { MAP_CHAR_LEN(UNO_NAME_FILLGRADIENT),      XATTR_FILLGRADIENT      , &::getCppuType((const ::com::sun::star::awt::Gradient*)0),        0,     MID_FILLGRADIENT}, \
-    { MAP_CHAR_LEN("FillGradientName"),         XATTR_FILLGRADIENT      , &::getCppuType((const ::rtl::OUString*)0), 0, MID_NAME }, \
+    { MAP_CHAR_LEN(UNO_NAME_FILLGRADIENTNAME),          XATTR_FILLGRADIENT      , &::getCppuType((const ::rtl::OUString*)0), 0, MID_NAME }, \
     { MAP_CHAR_LEN(UNO_NAME_FILLHATCH),         XATTR_FILLHATCH         , &::getCppuType((const ::com::sun::star::drawing::Hatch*)0),           0,     MID_FILLHATCH}, \
-    { MAP_CHAR_LEN("FillHatchName"),            XATTR_FILLHATCH         , &::getCppuType((const ::rtl::OUString*)0), 0, MID_NAME }, \
+    { MAP_CHAR_LEN(UNO_NAME_FILLHATCHNAME),         XATTR_FILLHATCH         , &::getCppuType((const ::rtl::OUString*)0), 0, MID_NAME }, \
     { MAP_CHAR_LEN(UNO_NAME_FILLSTYLE),         XATTR_FILLSTYLE         , &::getCppuType((const ::com::sun::star::drawing::FillStyle*)0) ,      0,     0}, \
     { MAP_CHAR_LEN(UNO_NAME_FILL_TRANSPARENCE), XATTR_FILLTRANSPARENCE, &::getCppuType((const sal_Int16*)0) ,           0,     0}, \
-    { MAP_CHAR_LEN("FillTransparenceGradient"), XATTR_FILLFLOATTRANSPARENCE, &::getCppuType((const ::com::sun::star::awt::Gradient*)0),         0,     MID_FILLGRADIENT}, \
-    { MAP_CHAR_LEN("FillTransparenceGradientName"), XATTR_FILLFLOATTRANSPARENCE, &::getCppuType((const ::rtl::OUString*)0), 0, MID_NAME }, \
+    { MAP_CHAR_LEN(UNO_NAME_FILLTRANSPARENCEGRADIENT),  XATTR_FILLFLOATTRANSPARENCE, &::getCppuType((const ::com::sun::star::awt::Gradient*)0),         0,     MID_FILLGRADIENT}, \
+    { MAP_CHAR_LEN(UNO_NAME_FILLTRANSPARENCEGRADIENTNAME),  XATTR_FILLFLOATTRANSPARENCE, &::getCppuType((const ::rtl::OUString*)0), 0, MID_NAME }, \
     { MAP_CHAR_LEN(UNO_NAME_FILLCOLOR_2),       XATTR_SECONDARYFILLCOLOR, &::getCppuType((const sal_Int32*)0),          0,     0},
 
 #define EDGERADIUS_PROPERTIES \

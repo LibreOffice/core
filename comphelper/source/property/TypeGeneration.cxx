@@ -131,6 +131,13 @@
 #include <com/sun/star/graphic/XGraphic.hpp>
 #include <com/sun/star/embed/XEmbeddedObject.hpp>
 
+//UUUU add types needed for fill style definitions in SW
+#include <com/sun/star/drawing/RectanglePoint.hpp>
+#include <com/sun/star/drawing/BitmapMode.hpp>
+#include <com/sun/star/awt/Gradient.hpp>
+#include <com/sun/star/drawing/Hatch.hpp>
+#include <com/sun/star/drawing/FillStyle.hpp>
+
 using ::rtl::OUString;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::container;
@@ -228,6 +235,14 @@ namespace comphelper
             case CPPUTYPE_REFXGRAPHIC:      pType = &::getCppuType( (Reference< graphic::XGraphic >*)0); break;
             case CPPUTYPE_TABLEBORDERDISTANCES:     pType = &::getCppuType( (table::TableBorderDistances*)0 ); break;
             case CPPUTPYE_REFEMBEDDEDOBJECT:        pType = &embed::XEmbeddedObject::static_type(); break;
+
+            //UUUU add types needed for fill style definitions in SW
+            case CPPUTYPE_RECTANGLEPOINT:   pType = &getCppuType((drawing::RectanglePoint*)0); break;
+            case CPPUTYPE_BITMAPMODE:       pType = &getCppuType((drawing::BitmapMode*)0); break;
+            case CPPUTYPE_GRADIENT:         pType = &getCppuType((awt::Gradient*)0); break;
+            case CPPUTYPE_HATCH:            pType = &getCppuType((drawing::Hatch*)0); break;
+            case CPPUTYPE_FILLSTYLE:        pType = &getCppuType((drawing::FillStyle*)0); break;
+
             default:
                 OSL_ASSERT( "Unknown CPPU type" );
         }

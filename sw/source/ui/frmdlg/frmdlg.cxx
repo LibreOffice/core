@@ -105,7 +105,14 @@ SwFrmDlg::SwFrmDlg( SfxViewFrame*       pViewFrame,
     }
     SfxAbstractDialogFactory* pFact = SfxAbstractDialogFactory::Create();
     DBG_ASSERT(pFact, "Dialogdiet fail!");
-    AddTabPage(TP_BACKGROUND, pFact->GetTabPageCreatorFunc( RID_SVXPAGE_BACKGROUND ), 0 );
+
+    //UUUU remove?
+    // AddTabPage(TP_BACKGROUND, pFact->GetTabPageCreatorFunc( RID_SVXPAGE_BACKGROUND ), 0 );
+
+    //UUUU add Area and Transparence TabPages
+    AddTabPage(RID_SVXPAGE_AREA);
+    AddTabPage(RID_SVXPAGE_TRANSPARENCE);
+
     AddTabPage( TP_MACRO_ASSIGN, pFact->GetTabPageCreatorFunc(RID_SVXPAGE_MACROASSIGN), 0);
     AddTabPage( TP_BORDER, pFact->GetTabPageCreatorFunc( RID_SVXPAGE_BORDER ), 0 );
 
@@ -126,9 +133,12 @@ SwFrmDlg::SwFrmDlg( SfxViewFrame*       pViewFrame,
                 RemoveTabPage(RID_SVXPAGE_GRFCROP);
             break;
         }
-        if( 0  == (nHtmlMode & HTMLMODE_SOME_ABS_POS) ||
-            m_nDlgType != DLG_FRM_STD )
-            RemoveTabPage(TP_BACKGROUND);
+        if( 0  == (nHtmlMode & HTMLMODE_SOME_ABS_POS) || m_nDlgType != DLG_FRM_STD )
+        {
+            //UUUU RemoveTabPage(TP_BACKGROUND);
+            RemoveTabPage(RID_SVXPAGE_AREA);
+            RemoveTabPage(RID_SVXPAGE_TRANSPARENCE);
+        }
     }
 
     if (m_bNew)
@@ -151,7 +161,6 @@ SwFrmDlg::~SwFrmDlg()
 
 void SwFrmDlg::PageCreated( sal_uInt16 nId, SfxTabPage &rPage )
 {
-    SfxAllItemSet aSet(*(GetInputSetImpl()->GetPool()));
     switch ( nId )
     {
     case TP_FRM_STD:
@@ -186,7 +195,7 @@ void SwFrmDlg::PageCreated( sal_uInt16 nId, SfxTabPage &rPage )
 
     case TP_MACRO_ASSIGN:
         {
-        SfxAllItemSet aNewSet(*aSet.GetPool());
+        SfxAllItemSet aNewSet(*GetInputSetImpl()->GetPool());
         aNewSet.Put( SwMacroAssignDlg::AddEvents(
             DLG_FRM_GRF == m_nDlgType ? MACASSGN_GRAPHIC : DLG_FRM_OLE == m_nDlgType ? MACASSGN_OLE : MACASSGN_FRMURL ) );
         if ( m_pWrtShell )
@@ -195,23 +204,54 @@ void SwFrmDlg::PageCreated( sal_uInt16 nId, SfxTabPage &rPage )
         break;
         }
 
-    case TP_BACKGROUND:
-        if( DLG_FRM_STD == m_nDlgType )
+    //UUUU
+    //case TP_BACKGROUND:
+    //    if( DLG_FRM_STD == m_nDlgType )
+    //    {
+    //        sal_Int32 nFlagType = SVX_SHOW_SELECTOR;
+    //        if(!m_bHTMLMode)
+    //            nFlagType |= SVX_ENABLE_TRANSPARENCY;
+    //        SfxAllItemSet aSet(*(GetInputSetImpl()->GetPool()));
+    //        aSet.Put (SfxUInt32Item(SID_FLAG_TYPE, nFlagType));
+    //        rPage.PageCreated(aSet);
+    //    }
+    //  break;
+
+    case TP_BORDER:
         {
-            sal_Int32 nFlagType = SVX_SHOW_SELECTOR;
-            if(!m_bHTMLMode)
-                nFlagType |= SVX_ENABLE_TRANSPARENCY;
-            aSet.Put (SfxUInt32Item(SID_FLAG_TYPE, nFlagType));
+            SfxAllItemSet aSet(*(GetInputSetImpl()->GetPool()));
+            aSet.Put (SfxUInt16Item(SID_SWMODE_TYPE,SW_BORDER_MODE_FRAME));
             rPage.PageCreated(aSet);
         }
         break;
 
-    case TP_BORDER:
+        //UUUU inits for Area and Transparency TabPages
+        // The selection attribute lists (XPropertyList derivates, e.g. XColorList for
+        // the color table) need to be added as items (e.g. SvxColorTableItem) to make
+        // these pages find the needed attributes for fill style suggestions.
+        // These are set in preparation to trigger this dialog (FN_FORMAT_FRAME_DLG and
+        // FN_DRAW_WRAP_DLG), but could also be directly added from the DrawModel.
+        case RID_SVXPAGE_AREA:
         {
-            aSet.Put (SfxUInt16Item(SID_SWMODE_TYPE,SW_BORDER_MODE_FRAME));
-            rPage.PageCreated(aSet);
+            SfxItemSet aNew(*GetInputSetImpl()->GetPool(),
+                SID_COLOR_TABLE, SID_BITMAP_LIST,
+                SID_OFFER_IMPORT, SID_OFFER_IMPORT, 0, 0);
+
+            aNew.Put(m_rSet);
+
+            // add flag for direct graphic content selection
+            aNew.Put(SfxBoolItem(SID_OFFER_IMPORT, true));
+
+            rPage.PageCreated(aNew);
+        }
+        break;
+
+        case RID_SVXPAGE_TRANSPARENCE:
+        {
+            rPage.PageCreated(m_rSet);
         }
         break;
     }
 }
 
+// eof
