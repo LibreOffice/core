@@ -491,6 +491,8 @@ OUString LwpStory::GetContentText(sal_Bool bAllText)
 OUString LwpStory::RegisterFirstFribStyle()
 {
     LwpPara* pPara = dynamic_cast<LwpPara*>(GetFirstPara()->obj());
+    if (!pPara)
+        return OUString("");
     pPara->SetFoundry(m_pFoundry);
     LwpFribPtr* pFribs = pPara->GetFribs();
     if (pFribs)
