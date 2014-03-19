@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da86d52c_8c6ca738",
+        "filename": "oox/source/export/drawingml.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1786,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2014-03-19T14:52:33Z",
+      "side": 1,
+      "message": "error: comparison between signed and unsigned integer expressions [-Werror\u003dsign-compare]",
+      "revId": "fafc75895ad07b05cb47e5f32955f14930f7029b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
