@@ -2920,6 +2920,16 @@ DECLARE_OOXMLEXPORT_TEST(test76317, "test76317.docx")
     assertXPath(pXmlDoc, "/w:document[1]/w:body[1]/w:p[1]/w:r[1]/mc:AlternateContent[1]/mc:Choice[1]/w:drawing[1]/wp:anchor[1]/a:graphic[1]/a:graphicData[1]/wps:wsp[1]/wps:spPr[1]/a:prstGeom[1]", "prst", "hexagon");
 }
 
+DECLARE_OOXMLEXPORT_TEST(testFdo76101, "fdo76101.docx")
+{
+    xmlDocPtr pXmlDoc = parseExport("word/styles.xml");
+
+    if (!pXmlDoc)
+       return;
+    xmlNodeSetPtr pXmlNodes = getXPathNode(pXmlDoc, "/w:styles/w:style");
+    CPPUNIT_ASSERT(4091 >= xmlXPathNodeSetGetLength(pXmlNodes));
+}
+
 DECLARE_OOXMLEXPORT_TEST(test76317_2K10, "test76317_2K10.docx")
 {
     xmlDocPtr pXmlDoc = parseExport("word/document.xml");

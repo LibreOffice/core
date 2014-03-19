@@ -3314,9 +3314,14 @@ void DocxAttributeOutput::DocDefaults( )
     m_pSerializer->endElementNS(XML_w, XML_docDefaults);
 }
 
-void DocxAttributeOutput::EndStyles( sal_uInt16 /*nNumberOfStyles*/ )
+void DocxAttributeOutput::EndStyles( sal_uInt16 nNumberOfStyles )
 {
-    m_pTableStyleExport->TableStyles();
+    // HACK
+    // Ms Office seems to have an internal limitation of 4091 styles
+    // and refuses to load .docx with more, even though the spec seems to allow that;
+    // so simply if there are more styles, don't export those
+    sal_uInt16 nCountStylesToWrite =  (4091 == nNumberOfStyles) ? 0 : (4091 - nNumberOfStyles);
+    m_pTableStyleExport->TableStyles(nCountStylesToWrite);
     m_pSerializer->endElementNS( XML_w, XML_styles );
 }
 
