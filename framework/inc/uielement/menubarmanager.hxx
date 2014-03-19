@@ -25,7 +25,6 @@
 */
 #include <vector>
 
-#include <threadhelp/threadhelpbase.hxx>
 #include <stdtypes.h>
 
 #include <com/sun/star/frame/XFrame.hpp>
@@ -74,7 +73,6 @@ class MenuBarManager : public com::sun::star::frame::XStatusListener            
                        public com::sun::star::ui::XUIConfigurationListener          ,
                        public com::sun::star::lang::XComponent                      ,
                        public com::sun::star::awt::XSystemDependentMenuPeer         ,
-                       public ThreadHelpBase                                        ,
                        public ::cppu::OWeakObject
 {
     protected:
@@ -234,6 +232,7 @@ class MenuBarManager : public com::sun::star::frame::XStatusListener            
         ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >           m_xUICommandLabels;
         ::com::sun::star::uno::Reference< ::com::sun::star::frame::XUIControllerFactory > m_xPopupMenuControllerFactory;
         ::std::vector< MenuItemHandler* >                                                      m_aMenuItemHandlerVector;
+        osl::Mutex m_mutex;
         ::cppu::OMultiTypeInterfaceContainerHelper                                             m_aListenerContainer;   /// container for ALL Listener
         ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatchProvider >         m_xDispatchProvider;
         ::com::sun::star::uno::Reference< ::com::sun::star::ui::XImageManager >                m_xDocImageManager;

@@ -22,7 +22,6 @@
 #include <framework/bmkmenu.hxx>
 #include <framework/addonmenu.hxx>
 #include <framework/imageproducer.hxx>
-#include <threadhelp/guard.hxx>
 #include "framework/addonsoptions.hxx"
 #include <classes/fwkresid.hxx>
 #include <classes/menumanager.hxx>
@@ -169,13 +168,13 @@ MenuBarManager::MenuBarManager(
     const Reference< XURLTransformer >& _xURLTransformer,
     const Reference< XDispatchProvider >& rDispatchProvider,
     const OUString& rModuleIdentifier,
-    Menu* pMenu, sal_Bool bDelete, sal_Bool bDeleteChildren )
-: ThreadHelpBase( &Application::GetSolarMutex() ), OWeakObject()
+    Menu* pMenu, sal_Bool bDelete, sal_Bool bDeleteChildren ):
+    OWeakObject()
     , m_bDisposed( sal_False )
     , m_bRetrieveImages( sal_False )
     , m_bAcceleratorCfg( sal_False )
     , m_bModuleIdentified( sal_False )
-    , m_aListenerContainer( m_aLock.getShareableOslMutex() )
+    , m_aListenerContainer( m_mutex )
     , m_xContext(rxContext)
     , m_xURLTransformer(_xURLTransformer)
     , m_sIconTheme( SvtMiscOptions().GetIconTheme() )
@@ -190,14 +189,13 @@ MenuBarManager::MenuBarManager(
     const Reference< XURLTransformer >& _xURLTransformer,
     AddonMenu* pAddonMenu,
     sal_Bool bDelete,
-    sal_Bool bDeleteChildren )
-:   ThreadHelpBase( &Application::GetSolarMutex() )
-    , OWeakObject()
+    sal_Bool bDeleteChildren ):
+    OWeakObject()
     , m_bDisposed( sal_False )
     , m_bRetrieveImages( sal_True )
     , m_bAcceleratorCfg( sal_False )
     , m_bModuleIdentified( sal_False )
-    , m_aListenerContainer( m_aLock.getShareableOslMutex() )
+    , m_aListenerContainer( m_mutex )
     , m_xContext(rxContext)
     , m_xURLTransformer(_xURLTransformer)
     , m_sIconTheme( SvtMiscOptions().GetIconTheme() )
@@ -211,14 +209,13 @@ MenuBarManager::MenuBarManager(
     const Reference< XURLTransformer >& _xURLTransformer,
     AddonPopupMenu* pAddonPopupMenu,
     sal_Bool bDelete,
-    sal_Bool bDeleteChildren )
-:     ThreadHelpBase( &Application::GetSolarMutex() )
-    , OWeakObject()
+    sal_Bool bDeleteChildren ):
+    OWeakObject()
     , m_bDisposed( sal_False )
     , m_bRetrieveImages( sal_True )
     , m_bAcceleratorCfg( sal_False )
     , m_bModuleIdentified( sal_False )
-    , m_aListenerContainer( m_aLock.getShareableOslMutex() )
+    , m_aListenerContainer( m_mutex )
     , m_xContext(rxContext)
     , m_xURLTransformer(_xURLTransformer)
     , m_sIconTheme( SvtMiscOptions().GetIconTheme() )
@@ -258,7 +255,7 @@ void SAL_CALL MenuBarManager::release() throw()
 
 Any SAL_CALL MenuBarManager::getMenuHandle( const Sequence< sal_Int8 >& /*ProcessId*/, sal_Int16 SystemType ) throw (RuntimeException, std::exception)
 {
-    Guard aGuard( m_aLock );
+    SolarMutexGuard aSolarGuard;
 
     if ( m_bDisposed )
         throw com::sun::star::lang::DisposedException();
@@ -267,8 +264,6 @@ Any SAL_CALL MenuBarManager::getMenuHandle( const Sequence< sal_Int8 >& /*Proces
 
     if ( m_pVCLMenu )
     {
-        SolarMutexGuard aSolarGuard;
-
         SystemMenuData aSystemMenuData;
         aSystemMenuData.nSize = sizeof( SystemMenuData );
 
@@ -335,7 +330,7 @@ void SAL_CALL MenuBarManager::dispose() throw( RuntimeException, std::exception 
     m_aListenerContainer.disposeAndClear( aEvent );
 
     {
-        Guard aGuard( m_aLock );
+        SolarMutexGuard g;
         Destroy();
         m_bDisposed = sal_True;
 
@@ -379,7 +374,7 @@ void SAL_CALL MenuBarManager::dispose() throw( RuntimeException, std::exception 
 
 void SAL_CALL MenuBarManager::addEventListener( const Reference< XEventListener >& xListener ) throw( RuntimeException, std::exception )
 {
-    Guard aGuard( m_aLock );
+    SolarMutexGuard g;
 
     /* SAFE AREA ----------------------------------------------------------------------------------------------- */
     if ( m_bDisposed )
@@ -390,7 +385,7 @@ void SAL_CALL MenuBarManager::addEventListener( const Reference< XEventListener 
 
 void SAL_CALL MenuBarManager::removeEventListener( const Reference< XEventListener >& xListener ) throw( RuntimeException, std::exception )
 {
-    Guard aGuard( m_aLock );
+    SolarMutexGuard g;
     /* SAFE AREA ----------------------------------------------------------------------------------------------- */
     m_aListenerContainer.removeInterface( ::getCppuType( ( const Reference< XEventListener >* ) NULL ), xListener );
 }
@@ -398,7 +393,7 @@ void SAL_CALL MenuBarManager::removeEventListener( const Reference< XEventListen
 void SAL_CALL MenuBarManager::elementInserted( const ::com::sun::star::ui::ConfigurationEvent& Event )
 throw (RuntimeException, std::exception)
 {
-    Guard aGuard( m_aLock );
+    SolarMutexGuard g;
 
     /* SAFE AREA ----------------------------------------------------------------------------------------------- */
     if ( m_bDisposed )
@@ -427,7 +422,7 @@ throw (RuntimeException, std::exception)
 void SAL_CALL MenuBarManager::frameAction( const FrameActionEvent& Action )
 throw ( RuntimeException, std::exception )
 {
-    Guard aGuard( m_aLock );
+    SolarMutexGuard g;
 
     if ( m_bDisposed )
         throw com::sun::star::lang::DisposedException();
@@ -452,8 +447,6 @@ throw ( RuntimeException, std::exception )
 
     SolarMutexGuard aSolarGuard;
     {
-        Guard aGuard( m_aLock );
-
         if ( m_bDisposed )
             return;
 
@@ -541,7 +534,7 @@ throw ( RuntimeException, std::exception )
 // Helper to retrieve own structure from item ID
 MenuBarManager::MenuItemHandler* MenuBarManager::GetMenuItemHandler( sal_uInt16 nItemId )
 {
-    Guard aGuard( m_aLock );
+    SolarMutexGuard g;
 
     std::vector< MenuItemHandler* >::iterator p;
     for ( p = m_aMenuItemHandlerVector.begin(); p != m_aMenuItemHandlerVector.end(); ++p )
@@ -574,7 +567,7 @@ void MenuBarManager::RequestImages()
 // Helper to reset objects to prepare shutdown
 void MenuBarManager::RemoveListener()
 {
-    Guard aGuard( m_aLock );
+    SolarMutexGuard g;
 
     // Check service manager reference. Remove listener can be called due
     // to a disposing call from the frame and therefore we already removed
@@ -600,7 +593,6 @@ void MenuBarManager::RemoveListener()
             {
                 {
                     // Remove popup menu from menu structure
-                    SolarMutexGuard aGuard2;
                     m_pVCLMenu->SetPopupMenu( pItemHandler->nItemId, 0 );
                 }
 
@@ -657,7 +649,7 @@ void SAL_CALL MenuBarManager::disposing( const EventObject& Source ) throw ( Run
 {
     MenuItemHandler* pMenuItemDisposing = NULL;
 
-    Guard aGuard( m_aLock );
+    SolarMutexGuard g;
 
     std::vector< MenuItemHandler* >::iterator p;
     for ( p = m_aMenuItemHandlerVector.begin(); p != m_aMenuItemHandlerVector.end(); ++p )
@@ -696,7 +688,6 @@ void SAL_CALL MenuBarManager::disposing( const EventObject& Source ) throw ( Run
                 {
                     // Remove popup menu from menu structure as we release our reference to
                     // the controller.
-                    SolarMutexGuard aGuard2;
                     m_pVCLMenu->SetPopupMenu( pMenuItemDisposing->nItemId, 0 );
                 }
 
@@ -802,7 +793,7 @@ IMPL_LINK( MenuBarManager, Activate, Menu *, pMenu )
         sal_Bool bShowMenuImages     = rSettings.GetUseImagesInMenus();
         sal_Bool bHasDisabledEntries = SvtCommandOptions().HasEntries( SvtCommandOptions::CMDOPTION_DISABLED );
 
-        Guard aGuard( m_aLock );
+        SolarMutexGuard g;
 
         sal_uInt16 nFlag = pMenu->GetMenuFlags();
         if ( bDontHide )
@@ -1007,7 +998,7 @@ IMPL_LINK( MenuBarManager, Deactivate, Menu *, pMenu )
 
 IMPL_LINK( MenuBarManager, AsyncSettingsHdl, Timer*,)
 {
-    SolarMutexGuard aGuard;
+    SolarMutexGuard g;
     Reference< XInterface > xSelfHold(
         static_cast< ::cppu::OWeakObject* >( this ), UNO_QUERY_THROW );
 
@@ -1028,7 +1019,7 @@ IMPL_LINK( MenuBarManager, Select, Menu *, pMenu )
     Reference< XDispatch >  xDispatch;
 
     {
-        Guard aGuard( m_aLock );
+        SolarMutexGuard g;
 
         sal_uInt16 nCurItemId = pMenu->GetCurItemId();
         sal_uInt16 nCurPos    = pMenu->GetItemPos( nCurItemId );
@@ -1822,8 +1813,7 @@ void MenuBarManager::MergeAddonMenus(
 
 void MenuBarManager::SetItemContainer( const Reference< XIndexAccess >& rItemContainer )
 {
-
-    Guard aGuard( m_aLock );
+    SolarMutexGuard aSolarMutexGuard;
 
     Reference< XFrame > xFrame = m_xFrame;
 
@@ -1843,8 +1833,6 @@ void MenuBarManager::SetItemContainer( const Reference< XIndexAccess >& rItemCon
 
     // Clear MenuBarManager structures
     {
-        SolarMutexGuard aSolarMutexGuard;
-
         // Check active state as we cannot change our VCL menu during activation by the user
         if ( m_bActive )
         {
