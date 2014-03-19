@@ -29,7 +29,6 @@
 #include <boost/unordered_map.hpp>
 #include <memory>
 
-#include <threadhelp/threadhelpbase.hxx>
 #include <macros/generic.hxx>
 #include <macros/xinterface.hxx>
 #include <macros/xtypeprovider.hxx>
@@ -59,8 +58,7 @@ namespace framework
 {
     class ImageManagerImpl;
 
-    class ModuleImageManager :    private ThreadHelpBase                                          , // Struct for right initalization of mutex member! Must be first of baseclasses.
-                                  public ::cppu::WeakImplHelper1< ::com::sun::star::ui::XImageManager>
+    class ModuleImageManager :    public ::cppu::WeakImplHelper1< ::com::sun::star::ui::XImageManager>
     {
         public:
             ModuleImageManager( const com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >& xContext );
