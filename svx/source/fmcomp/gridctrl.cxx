@@ -3076,7 +3076,7 @@ sal_Bool DbGridControl::SaveModified()
 
     size_t Location = GetModelColumnPos( GetCurColumnId() );
     DbGridColumn* pColumn = ( Location < m_aColumns.size() ) ? m_aColumns[ Location ] : NULL;
-    sal_Bool bOK = pColumn->Commit();
+    sal_Bool bOK = pColumn ? pColumn->Commit() : sal_False;
     DBG_ASSERT( Controller().Is(), "DbGridControl::SaveModified: was modified, by have no controller?!" );
     if ( !Controller().Is() )
         // this might happen if the callbacks implicitly triggered by Commit
