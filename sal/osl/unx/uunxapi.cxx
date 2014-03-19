@@ -111,14 +111,14 @@ typedef void accessFilePathState;
  * Helper function for resolving Mac native alias files (not the same as unix alias files)
  * and to return the resolved alias as rtl::OString
  */
-static rtl::OString macxp_resolveAliasAndConvert(rtl::OString p)
+static rtl::OString macxp_resolveAliasAndConvert(rtl::OString const & p)
 {
     sal_Char path[PATH_MAX];
     if (p.getLength() < PATH_MAX)
     {
         strcpy(path, p.getStr());
         macxp_resolveAlias(path, PATH_MAX);
-        p = rtl::OString(path);
+        return rtl::OString(path);
     }
     return p;
 }
