@@ -169,6 +169,51 @@
 		BE35B5A71890520E001B7439 /* objface.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = objface.cxx; path = ../../../sfx2/source/control/objface.cxx; sourceTree = "<group>"; };
 		BE55B06B18D87CC600950228 /* DocumentTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DocumentTableViewController.h; sourceTree = "<group>"; };
 		BE55B06C18D87CC600950228 /* DocumentTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DocumentTableViewController.m; sourceTree = "<group>"; };
+		BE55B06F18D96FB000950228 /* displayinfo.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = displayinfo.cxx; path = ../../../svx/source/sdr/contact/displayinfo.cxx; sourceTree = "<group>"; };
+		BE55B07018D96FB000950228 /* objectcontact.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = objectcontact.cxx; path = ../../../svx/source/sdr/contact/objectcontact.cxx; sourceTree = "<group>"; };
+		BE55B07118D96FB000950228 /* objectcontactofobjlistpainter.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = objectcontactofobjlistpainter.cxx; path = ../../../svx/source/sdr/contact/objectcontactofobjlistpainter.cxx; sourceTree = "<group>"; };
+		BE55B07218D96FB000950228 /* objectcontactofpageview.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = objectcontactofpageview.cxx; path = ../../../svx/source/sdr/contact/objectcontactofpageview.cxx; sourceTree = "<group>"; };
+		BE55B07318D96FB000950228 /* sdrmediawindow.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = sdrmediawindow.cxx; path = ../../../svx/source/sdr/contact/sdrmediawindow.cxx; sourceTree = "<group>"; };
+		BE55B07418D96FB000950228 /* viewcontact.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = viewcontact.cxx; path = ../../../svx/source/sdr/contact/viewcontact.cxx; sourceTree = "<group>"; };
+		BE55B07518D96FB000950228 /* viewcontactofe3d.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = viewcontactofe3d.cxx; path = ../../../svx/source/sdr/contact/viewcontactofe3d.cxx; sourceTree = "<group>"; };
+		BE55B07618D96FB000950228 /* viewcontactofe3dcube.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = viewcontactofe3dcube.cxx; path = ../../../svx/source/sdr/contact/viewcontactofe3dcube.cxx; sourceTree = "<group>"; };
+		BE55B07718D96FB000950228 /* viewcontactofe3dextrude.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = viewcontactofe3dextrude.cxx; path = ../../../svx/source/sdr/contact/viewcontactofe3dextrude.cxx; sourceTree = "<group>"; };
+		BE55B07818D96FB000950228 /* viewcontactofe3dlathe.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = viewcontactofe3dlathe.cxx; path = ../../../svx/source/sdr/contact/viewcontactofe3dlathe.cxx; sourceTree = "<group>"; };
+		BE55B07918D96FB000950228 /* viewcontactofe3dpolygon.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = viewcontactofe3dpolygon.cxx; path = ../../../svx/source/sdr/contact/viewcontactofe3dpolygon.cxx; sourceTree = "<group>"; };
+		BE55B07A18D96FB000950228 /* viewcontactofe3dscene.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = viewcontactofe3dscene.cxx; path = ../../../svx/source/sdr/contact/viewcontactofe3dscene.cxx; sourceTree = "<group>"; };
+		BE55B07B18D96FB000950228 /* viewcontactofe3dsphere.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = viewcontactofe3dsphere.cxx; path = ../../../svx/source/sdr/contact/viewcontactofe3dsphere.cxx; sourceTree = "<group>"; };
+		BE55B07C18D96FB000950228 /* viewcontactofgraphic.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = viewcontactofgraphic.cxx; path = ../../../svx/source/sdr/contact/viewcontactofgraphic.cxx; sourceTree = "<group>"; };
+		BE55B07D18D96FB000950228 /* viewcontactofgroup.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = viewcontactofgroup.cxx; path = ../../../svx/source/sdr/contact/viewcontactofgroup.cxx; sourceTree = "<group>"; };
+		BE55B07E18D96FB000950228 /* viewcontactofmasterpagedescriptor.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = viewcontactofmasterpagedescriptor.cxx; path = ../../../svx/source/sdr/contact/viewcontactofmasterpagedescriptor.cxx; sourceTree = "<group>"; };
+		BE55B07F18D96FB000950228 /* viewcontactofopengl.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = viewcontactofopengl.cxx; path = ../../../svx/source/sdr/contact/viewcontactofopengl.cxx; sourceTree = "<group>"; };
+		BE55B08018D96FB000950228 /* viewcontactofpageobj.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = viewcontactofpageobj.cxx; path = ../../../svx/source/sdr/contact/viewcontactofpageobj.cxx; sourceTree = "<group>"; };
+		BE55B08118D96FB000950228 /* viewcontactofsdrcaptionobj.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = viewcontactofsdrcaptionobj.cxx; path = ../../../svx/source/sdr/contact/viewcontactofsdrcaptionobj.cxx; sourceTree = "<group>"; };
+		BE55B08218D96FB000950228 /* viewcontactofsdrcircobj.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = viewcontactofsdrcircobj.cxx; path = ../../../svx/source/sdr/contact/viewcontactofsdrcircobj.cxx; sourceTree = "<group>"; };
+		BE55B08318D96FB000950228 /* viewcontactofsdredgeobj.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = viewcontactofsdredgeobj.cxx; path = ../../../svx/source/sdr/contact/viewcontactofsdredgeobj.cxx; sourceTree = "<group>"; };
+		BE55B08418D96FB000950228 /* viewcontactofsdrmeasureobj.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = viewcontactofsdrmeasureobj.cxx; path = ../../../svx/source/sdr/contact/viewcontactofsdrmeasureobj.cxx; sourceTree = "<group>"; };
+		BE55B08518D96FB000950228 /* viewcontactofsdrmediaobj.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = viewcontactofsdrmediaobj.cxx; path = ../../../svx/source/sdr/contact/viewcontactofsdrmediaobj.cxx; sourceTree = "<group>"; };
+		BE55B08618D96FB000950228 /* viewcontactofsdrobj.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = viewcontactofsdrobj.cxx; path = ../../../svx/source/sdr/contact/viewcontactofsdrobj.cxx; sourceTree = "<group>"; };
+		BE55B08718D96FB000950228 /* viewcontactofsdrobjcustomshape.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = viewcontactofsdrobjcustomshape.cxx; path = ../../../svx/source/sdr/contact/viewcontactofsdrobjcustomshape.cxx; sourceTree = "<group>"; };
+		BE55B08818D96FB000950228 /* viewcontactofsdrole2obj.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = viewcontactofsdrole2obj.cxx; path = ../../../svx/source/sdr/contact/viewcontactofsdrole2obj.cxx; sourceTree = "<group>"; };
+		BE55B08918D96FB000950228 /* viewcontactofsdrpage.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = viewcontactofsdrpage.cxx; path = ../../../svx/source/sdr/contact/viewcontactofsdrpage.cxx; sourceTree = "<group>"; };
+		BE55B08A18D96FB000950228 /* viewcontactofsdrpathobj.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = viewcontactofsdrpathobj.cxx; path = ../../../svx/source/sdr/contact/viewcontactofsdrpathobj.cxx; sourceTree = "<group>"; };
+		BE55B08B18D96FB000950228 /* viewcontactofsdrrectobj.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = viewcontactofsdrrectobj.cxx; path = ../../../svx/source/sdr/contact/viewcontactofsdrrectobj.cxx; sourceTree = "<group>"; };
+		BE55B08C18D96FB000950228 /* viewcontactoftextobj.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = viewcontactoftextobj.cxx; path = ../../../svx/source/sdr/contact/viewcontactoftextobj.cxx; sourceTree = "<group>"; };
+		BE55B08D18D96FB000950228 /* viewcontactofunocontrol.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = viewcontactofunocontrol.cxx; path = ../../../svx/source/sdr/contact/viewcontactofunocontrol.cxx; sourceTree = "<group>"; };
+		BE55B08E18D96FB000950228 /* viewcontactofvirtobj.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = viewcontactofvirtobj.cxx; path = ../../../svx/source/sdr/contact/viewcontactofvirtobj.cxx; sourceTree = "<group>"; };
+		BE55B08F18D96FB000950228 /* viewobjectcontact.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = viewobjectcontact.cxx; path = ../../../svx/source/sdr/contact/viewobjectcontact.cxx; sourceTree = "<group>"; };
+		BE55B09018D96FB000950228 /* viewobjectcontactofe3d.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = viewobjectcontactofe3d.cxx; path = ../../../svx/source/sdr/contact/viewobjectcontactofe3d.cxx; sourceTree = "<group>"; };
+		BE55B09118D96FB000950228 /* viewobjectcontactofe3dscene.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = viewobjectcontactofe3dscene.cxx; path = ../../../svx/source/sdr/contact/viewobjectcontactofe3dscene.cxx; sourceTree = "<group>"; };
+		BE55B09218D96FB000950228 /* viewobjectcontactofgraphic.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = viewobjectcontactofgraphic.cxx; path = ../../../svx/source/sdr/contact/viewobjectcontactofgraphic.cxx; sourceTree = "<group>"; };
+		BE55B09318D96FB000950228 /* viewobjectcontactofgroup.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = viewobjectcontactofgroup.cxx; path = ../../../svx/source/sdr/contact/viewobjectcontactofgroup.cxx; sourceTree = "<group>"; };
+		BE55B09418D96FB000950228 /* viewobjectcontactofmasterpagedescriptor.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = viewobjectcontactofmasterpagedescriptor.cxx; path = ../../../svx/source/sdr/contact/viewobjectcontactofmasterpagedescriptor.cxx; sourceTree = "<group>"; };
+		BE55B09518D96FB000950228 /* viewobjectcontactofpageobj.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = viewobjectcontactofpageobj.cxx; path = ../../../svx/source/sdr/contact/viewobjectcontactofpageobj.cxx; sourceTree = "<group>"; };
+		BE55B09618D96FB000950228 /* viewobjectcontactofsdrmediaobj.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = viewobjectcontactofsdrmediaobj.cxx; path = ../../../svx/source/sdr/contact/viewobjectcontactofsdrmediaobj.cxx; sourceTree = "<group>"; };
+		BE55B09718D96FB000950228 /* viewobjectcontactofsdrobj.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = viewobjectcontactofsdrobj.cxx; path = ../../../svx/source/sdr/contact/viewobjectcontactofsdrobj.cxx; sourceTree = "<group>"; };
+		BE55B09818D96FB000950228 /* viewobjectcontactofsdrole2obj.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = viewobjectcontactofsdrole2obj.cxx; path = ../../../svx/source/sdr/contact/viewobjectcontactofsdrole2obj.cxx; sourceTree = "<group>"; };
+		BE55B09918D96FB000950228 /* viewobjectcontactofsdrpage.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = viewobjectcontactofsdrpage.cxx; path = ../../../svx/source/sdr/contact/viewobjectcontactofsdrpage.cxx; sourceTree = "<group>"; };
+		BE55B09A18D96FB000950228 /* viewobjectcontactofunocontrol.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = viewobjectcontactofunocontrol.cxx; path = ../../../svx/source/sdr/contact/viewobjectcontactofunocontrol.cxx; sourceTree = "<group>"; };
+		BE55B09B18D96FB000950228 /* viewobjectcontactredirector.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = viewobjectcontactredirector.cxx; path = ../../../svx/source/sdr/contact/viewobjectcontactredirector.cxx; sourceTree = "<group>"; };
 		BE7C277218D1DDF600C4908C /* acmplwrd.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = acmplwrd.cxx; path = ../../../sw/source/core/doc/acmplwrd.cxx; sourceTree = "<group>"; };
 		BE7C277318D1DDF600C4908C /* dbgoutsw.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = dbgoutsw.cxx; path = ../../../sw/source/core/doc/dbgoutsw.cxx; sourceTree = "<group>"; };
 		BE7C277418D1DDF600C4908C /* doc.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = doc.cxx; path = ../../../sw/source/core/doc/doc.cxx; sourceTree = "<group>"; };
@@ -715,6 +760,58 @@
 			name = sfx2;
 			sourceTree = "<group>";
 		};
+		BE55B06E18D96F5B00950228 /* sdr */ = {
+			isa = PBXGroup;
+			children = (
+				BE55B06F18D96FB000950228 /* displayinfo.cxx */,
+				BE55B07018D96FB000950228 /* objectcontact.cxx */,
+				BE55B07118D96FB000950228 /* objectcontactofobjlistpainter.cxx */,
+				BE55B07218D96FB000950228 /* objectcontactofpageview.cxx */,
+				BE55B07318D96FB000950228 /* sdrmediawindow.cxx */,
+				BE55B07418D96FB000950228 /* viewcontact.cxx */,
+				BE55B07518D96FB000950228 /* viewcontactofe3d.cxx */,
+				BE55B07618D96FB000950228 /* viewcontactofe3dcube.cxx */,
+				BE55B07718D96FB000950228 /* viewcontactofe3dextrude.cxx */,
+				BE55B07818D96FB000950228 /* viewcontactofe3dlathe.cxx */,
+				BE55B07918D96FB000950228 /* viewcontactofe3dpolygon.cxx */,
+				BE55B07A18D96FB000950228 /* viewcontactofe3dscene.cxx */,
+				BE55B07B18D96FB000950228 /* viewcontactofe3dsphere.cxx */,
+				BE55B07C18D96FB000950228 /* viewcontactofgraphic.cxx */,
+				BE55B07D18D96FB000950228 /* viewcontactofgroup.cxx */,
+				BE55B07E18D96FB000950228 /* viewcontactofmasterpagedescriptor.cxx */,
+				BE55B07F18D96FB000950228 /* viewcontactofopengl.cxx */,
+				BE55B08018D96FB000950228 /* viewcontactofpageobj.cxx */,
+				BE55B08118D96FB000950228 /* viewcontactofsdrcaptionobj.cxx */,
+				BE55B08218D96FB000950228 /* viewcontactofsdrcircobj.cxx */,
+				BE55B08318D96FB000950228 /* viewcontactofsdredgeobj.cxx */,
+				BE55B08418D96FB000950228 /* viewcontactofsdrmeasureobj.cxx */,
+				BE55B08518D96FB000950228 /* viewcontactofsdrmediaobj.cxx */,
+				BE55B08618D96FB000950228 /* viewcontactofsdrobj.cxx */,
+				BE55B08718D96FB000950228 /* viewcontactofsdrobjcustomshape.cxx */,
+				BE55B08818D96FB000950228 /* viewcontactofsdrole2obj.cxx */,
+				BE55B08918D96FB000950228 /* viewcontactofsdrpage.cxx */,
+				BE55B08A18D96FB000950228 /* viewcontactofsdrpathobj.cxx */,
+				BE55B08B18D96FB000950228 /* viewcontactofsdrrectobj.cxx */,
+				BE55B08C18D96FB000950228 /* viewcontactoftextobj.cxx */,
+				BE55B08D18D96FB000950228 /* viewcontactofunocontrol.cxx */,
+				BE55B08E18D96FB000950228 /* viewcontactofvirtobj.cxx */,
+				BE55B08F18D96FB000950228 /* viewobjectcontact.cxx */,
+				BE55B09018D96FB000950228 /* viewobjectcontactofe3d.cxx */,
+				BE55B09118D96FB000950228 /* viewobjectcontactofe3dscene.cxx */,
+				BE55B09218D96FB000950228 /* viewobjectcontactofgraphic.cxx */,
+				BE55B09318D96FB000950228 /* viewobjectcontactofgroup.cxx */,
+				BE55B09418D96FB000950228 /* viewobjectcontactofmasterpagedescriptor.cxx */,
+				BE55B09518D96FB000950228 /* viewobjectcontactofpageobj.cxx */,
+				BE55B09618D96FB000950228 /* viewobjectcontactofsdrmediaobj.cxx */,
+				BE55B09718D96FB000950228 /* viewobjectcontactofsdrobj.cxx */,
+				BE55B09818D96FB000950228 /* viewobjectcontactofsdrole2obj.cxx */,
+				BE55B09918D96FB000950228 /* viewobjectcontactofsdrpage.cxx */,
+				BE55B09A18D96FB000950228 /* viewobjectcontactofunocontrol.cxx */,
+				BE55B09B18D96FB000950228 /* viewobjectcontactredirector.cxx */,
+			);
+			name = sdr;
+			sourceTree = "<group>";
+		};
 		BE7C277118D1DDC500C4908C /* doc */ = {
 			isa = PBXGroup;
 			children = (
@@ -872,6 +969,7 @@
 		BE82C42718CA17A60050EB79 /* svx */ = {
 			isa = PBXGroup;
 			children = (
+				BE55B06E18D96F5B00950228 /* sdr */,
 				BE82C42818CA184E0050EB79 /* svdraw */,
 			);
 			name = svx;
