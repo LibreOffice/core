@@ -1141,8 +1141,10 @@ chartStar
 chartX
 chartreuse
 chartsheet
+checkbox
 checkBox
 checkCompatibility
+checkedState
 checkErrors
 checkStyle
 checked
@@ -5395,6 +5397,7 @@ unbalanced
 unbalancedGroup
 unboundColumnsLeft
 unboundColumnsRight
+uncheckedState
 undOvr
 underDot
 underlineTabInNumList

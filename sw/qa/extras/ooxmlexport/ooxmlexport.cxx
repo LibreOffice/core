@@ -2751,6 +2751,19 @@ DECLARE_OOXMLEXPORT_TEST(testComboBoxControl, "combobox-control.docx")
     CPPUNIT_ASSERT_EQUAL(OUString("pepito"), aItems[1]);
 }
 
+DECLARE_OOXMLEXPORT_TEST(testCheckBoxControl, "checkbox-control.docx")
+{
+    // check XML
+    xmlDocPtr pXmlDoc = parseExport("word/document.xml");
+    if (!pXmlDoc)
+        return;
+    assertXPath(pXmlDoc, "/w:document/w:body/w:sdt/w:sdtPr/w14:checkbox/w14:checked", "val", "1");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:sdt/w:sdtPr/w14:checkbox/w14:checkedState", "val", "2612");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:sdt/w:sdtPr/w14:checkbox/w14:uncheckedState", "val", "2610");
+
+    // TODO: import control and add a check here
+}
+
 DECLARE_OOXMLEXPORT_TEST(testParagraphWithComments, "paragraphWithComments.docx")
 {
     /* Comment id's were getting overwritten for annotation mark(s),

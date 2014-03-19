@@ -6280,9 +6280,47 @@
           <ref name="CT_OnOff"/>
         </element>
       </define>
+
+      <define name="ST_String">
+        <data type="string">
+          <xs:documentation>String</xs:documentation>
+        </data>
+      </define>
+      <define name="CT_String">
+        <attribute name="val">
+          <ref name="ST_String"/>
+          <xs:documentation>value</xs:documentation>
+        </attribute>
+      </define>
+      <define name="CT_SdtCheckbox">
+        <optional>
+          <element name="checked">
+            <ref name="CT_String"/>
+          </element>
+        </optional>
+        <optional>
+          <element name="checkedState">
+            <ref name="CT_String"/>
+          </element>
+        </optional>
+        <optional>
+          <element name="uncheckedState">
+            <ref name="CT_String"/>
+          </element>
+        </optional>
+      </define>
     </grammar>
 
     <!-- Simple Types Resource Definitions -->
+    <resource name="CT_String" resource="Value" tag="attribute">
+      <attribute name="val" tokenid="ooxml:CT_String_val" action="setValue"/>
+      <action name="start" action="setDefaultStringValue"/>
+    </resource>
+    <resource name="CT_SdtCheckbox" resource="Properties" tag="field">
+      <element name="checked" tokenid="ooxml:CT_SdtCheckbox_checked">checked</element>
+      <element name="checkedState" tokenid="ooxml:CT_SdtCheckbox_checkedState">checkedState</element>
+      <element name="uncheckedState" tokenid="ooxml:CT_SdtCheckbox_uncheckedState">uncheckedState</element>
+    </resource>
     <resource name="ST_SchemeColorVal" resource="List" generated="yes">
       <value name="bg1" tokenid="ooxml:ST_SchemeColorVal_bg1">bg1</value>
       <value name="tx1" tokenid="ooxml:ST_SchemeColorVal_tx1">tx1</value>
@@ -18860,6 +18898,9 @@
                 <element name="comboBox">
                   <ref name="CT_SdtComboBox"/>
                 </element>
+                <element name="w14:checkbox">
+                  <ref name="CT_SdtCheckbox"/>
+                </element>
                 <element name="date">
                   <ref name="CT_SdtDate"/>
                 </element>
@@ -24508,7 +24549,7 @@
       <attribute name="val" tokenid="ooxml:CT_CalendarType_val" action="setValue"/>
       <action name="start" action="setDefaultStringValue"/>
     </resource>
-    <resource name="CT_SdtPr" resource="Properties" tag="field">
+    <resource xmlns:w14="http://schemas.microsoft.com/office/word/2010/wordml" name="CT_SdtPr" resource="Properties" tag="field">
       <element name="rPr" tokenid="ooxml:CT_SdtPr_rPr"/>
       <element name="alias" tokenid="ooxml:CT_SdtPr_alias"/>
       <element name="lock" tokenid="ooxml:CT_SdtPr_lock"/>
@@ -24520,6 +24561,7 @@
       <element name="tag" tokenid="ooxml:CT_SdtPr_tag"/>
       <element name="equation" tokenid="ooxml:CT_SdtPr_equation"/>
       <element name="comboBox" tokenid="ooxml:CT_SdtPr_comboBox"/>
+      <element name="w14:checkbox" tokenid="ooxml:CT_SdtPr_checkbox"/>
       <element name="date" tokenid="ooxml:CT_SdtPr_date"/>
       <element name="docPartObj" tokenid="ooxml:CT_SdtPr_docPartObj"/>
       <element name="docPartList" tokenid="ooxml:CT_SdtPr_docPartList"/>

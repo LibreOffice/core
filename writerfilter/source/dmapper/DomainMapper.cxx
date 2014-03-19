@@ -2234,6 +2234,7 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, PropertyMapPtr rContext )
     }
     break;
     case NS_ooxml::LN_CT_SdtPr_equation:
+    case NS_ooxml::LN_CT_SdtPr_checkbox:
     case NS_ooxml::LN_CT_SdtPr_docPartObj:
     case NS_ooxml::LN_CT_SdtPr_docPartList:
     case NS_ooxml::LN_CT_SdtPr_picture:
@@ -2250,6 +2251,9 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, PropertyMapPtr rContext )
             pProperties->resolve(*this);
     }
     break;
+    case NS_ooxml::LN_CT_SdtCheckbox_checked:
+    case NS_ooxml::LN_CT_SdtCheckbox_checkedState:
+    case NS_ooxml::LN_CT_SdtCheckbox_uncheckedState:
     case NS_ooxml::LN_CT_SdtDocPart_docPartGallery:
     case NS_ooxml::LN_CT_SdtDocPart_docPartCategory:
     case NS_ooxml::LN_CT_SdtDocPart_docPartUnique:

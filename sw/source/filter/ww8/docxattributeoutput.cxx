@@ -6914,6 +6914,28 @@ void DocxAttributeOutput::ParaGrabBag(const SfxGrabBagItem& rItem)
                         AddToAttrList( m_pSdtPrTokenChildren, FSNS( XML_w, XML_docPartUnique ), "" );
                 }
             }
+            else if (aPropertyValue.Name == "ooxml:CT_SdtPr_checkbox")
+            {
+                m_nSdtPrToken = FSNS( XML_w14, XML_checkbox );
+                uno::Sequence<beans::PropertyValue> aGrabBag;
+                aPropertyValue.Value >>= aGrabBag;
+                for (sal_Int32 j=0; j < aGrabBag.getLength(); ++j)
+                {
+                    OUString sValue = aGrabBag[j].Value.get<OUString>();
+                    if (aGrabBag[j].Name == "ooxml:CT_SdtCheckbox_checked")
+                        AddToAttrList( m_pSdtPrTokenChildren,
+                                       FSNS( XML_w14, XML_checked ),
+                                       rtl::OUStringToOString( sValue, RTL_TEXTENCODING_UTF8 ).getStr() );
+                    else if (aGrabBag[j].Name == "ooxml:CT_SdtCheckbox_checkedState")
+                        AddToAttrList( m_pSdtPrTokenChildren,
+                                       FSNS( XML_w14, XML_checkedState ),
+                                       rtl::OUStringToOString( sValue, RTL_TEXTENCODING_UTF8 ).getStr() );
+                    else if (aGrabBag[j].Name == "ooxml:CT_SdtCheckbox_uncheckedState")
+                        AddToAttrList( m_pSdtPrTokenChildren,
+                                       FSNS( XML_w14, XML_uncheckedState ),
+                                       rtl::OUStringToOString( sValue, RTL_TEXTENCODING_UTF8 ).getStr() );
+                }
+            }
             else if (aPropertyValue.Name == "ooxml:CT_SdtPr_equation")
                 m_nSdtPrToken = FSNS( XML_w, XML_equation );
             else if (aPropertyValue.Name == "ooxml:CT_SdtPr_picture")
