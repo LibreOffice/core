@@ -49,14 +49,14 @@ bool PassStringByRef::VisitFunctionDecl(const FunctionDecl * functionDecl) {
         if (typeName == "class rtl::OUString") {
             report(
                 DiagnosticsEngine::Warning,
-                "passing OUString by value, rather pass by reference",
+                "passing OUString by value, rather pass by reference .e.g. 'const OUString&'",
                 pvDecl->getSourceRange().getBegin())
               << pvDecl->getSourceRange();
         }
         else if (typeName == "class rtl::OString") {
             report(
                 DiagnosticsEngine::Warning,
-                "passing OString by value, rather pass by reference",
+                "passing OString by value, rather pass by reference .e.g. 'const OString&'",
                 pvDecl->getSourceRange().getBegin())
               << pvDecl->getSourceRange();
         }
