@@ -1559,7 +1559,7 @@ SerfSession::getDataFromInputStream(
 
 
 sal_Bool
-SerfSession::isDomainMatch( OUString certHostName )
+SerfSession::isDomainMatch( const OUString & certHostName )
 {
     OUString hostName = getHostName();
 

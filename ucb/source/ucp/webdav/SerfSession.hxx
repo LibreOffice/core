@@ -250,7 +250,7 @@ public:
     const OUString & getHostName() const { return m_aUri.GetHost(); }
     int getPort() const { return m_aUri.GetPort(); }
 
-    sal_Bool isDomainMatch( OUString certHostName );
+    sal_Bool isDomainMatch( const OUString & certHostName );
 
 private:
     friend class SerfLockStore;

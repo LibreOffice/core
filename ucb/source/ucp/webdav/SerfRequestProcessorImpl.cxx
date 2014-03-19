@@ -119,7 +119,7 @@ bool SerfRequestProcessorImpl::processSerfResponseBucket( serf_request_t * /*inS
     const char* data;
     apr_size_t len;
 
-    while (1) {
+    while (true) {
         outStatus = serf_bucket_read(inSerfResponseBucket, 8096, &data, &len);
         if (SERF_BUCKET_READ_ERROR(outStatus))
         {

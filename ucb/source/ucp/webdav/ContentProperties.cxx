@@ -113,27 +113,27 @@ ContentProperties::ContentProperties( const DAVResource& rResource )
     }
 
     if ( rResource.uri.endsWith("/") )
-        m_bTrailingSlash = sal_True;
+        m_bTrailingSlash = true;
 }
 
 
 ContentProperties::ContentProperties(
-                        const OUString & rTitle, sal_Bool bFolder )
+                        const OUString & rTitle, bool bFolder )
 : m_xProps( new PropertyValueMap ),
-  m_bTrailingSlash( sal_False )
+  m_bTrailingSlash( false )
 {
     (*m_xProps)[ OUString( "Title" ) ]
         = PropertyValue( uno::makeAny( rTitle ), true );
     (*m_xProps)[ OUString( "IsFolder" ) ]
         = PropertyValue( uno::makeAny( bFolder ), true );
     (*m_xProps)[ OUString( "IsDocument" ) ]
-        = PropertyValue( uno::makeAny( sal_Bool( !bFolder ) ), true );
+        = PropertyValue( uno::makeAny( bool( !bFolder ) ), true );
 }
 
 
 ContentProperties::ContentProperties( const OUString & rTitle )
 : m_xProps( new PropertyValueMap ),
-  m_bTrailingSlash( sal_False )
+  m_bTrailingSlash( false )
 {
     (*m_xProps)[ OUString( "Title" ) ]
         = PropertyValue( uno::makeAny( rTitle ), true );
@@ -142,7 +142,7 @@ ContentProperties::ContentProperties( const OUString & rTitle )
 
 ContentProperties::ContentProperties()
 : m_xProps( new PropertyValueMap ),
-  m_bTrailingSlash( sal_False )
+  m_bTrailingSlash( false )
 {
 }
 
@@ -219,11 +219,11 @@ void ContentProperties::UCBNamesToDAVNames(
     // resourcetype     <- IsFolder, IsDocument, ContentType
     // (taken from URI) <- Title
 
-    sal_Bool bCreationDate  = sal_False;
-    sal_Bool bLastModified  = sal_False;
-    sal_Bool bContentType   = sal_False;
-    sal_Bool bContentLength = sal_False;
-    sal_Bool bResourceType  = sal_False;
+    bool bCreationDate  = false;
+    bool bLastModified  = false;
+    bool bContentType   = false;
+    bool bContentLength = false;
+    bool bResourceType  = false;
 
     sal_Int32 nCount = rProps.getLength();
     for ( sal_Int32 n = 0; n < nCount; ++n )
@@ -241,7 +241,7 @@ void ContentProperties::UCBNamesToDAVNames(
             if ( !bCreationDate )
             {
                     propertyNames.push_back( DAVProperties::CREATIONDATE );
-                bCreationDate = sal_True;
+                bCreationDate = true;
             }
         }
         else if ( rProp.Name == "DateModified" ||
@@ -251,7 +251,7 @@ void ContentProperties::UCBNamesToDAVNames(
             {
                     propertyNames.push_back(
                     DAVProperties::GETLASTMODIFIED );
-                bLastModified = sal_True;
+                bLastModified = true;
             }
         }
         else if ( rProp.Name == "MediaType" ||
@@ -261,7 +261,7 @@ void ContentProperties::UCBNamesToDAVNames(
             {
                     propertyNames.push_back(
                         DAVProperties::GETCONTENTTYPE );
-                bContentType = sal_True;
+                bContentType = true;
             }
         }
         else if ( rProp.Name == "Size" ||
@@ -271,7 +271,7 @@ void ContentProperties::UCBNamesToDAVNames(
             {
                     propertyNames.push_back(
                     DAVProperties::GETCONTENTLENGTH );
-                bContentLength = sal_True;
+                bContentLength = true;
             }
         }
         else if ( rProp.Name == "ContentType" ||
@@ -282,7 +282,7 @@ void ContentProperties::UCBNamesToDAVNames(
             if ( !bResourceType )
             {
                     propertyNames.push_back( DAVProperties::RESOURCETYPE );
-                bResourceType = sal_True;
+                bResourceType = true;
             }
         }
         else
@@ -514,13 +514,13 @@ void ContentProperties::addProperty( const OUString & rName,
         rValue >>= aValue;
 
         // Map DAV:resourceype to UCP:IsFolder, UCP:IsDocument, UCP:ContentType
-        sal_Bool bFolder =
+        bool bFolder =
             aValue.equalsIgnoreAsciiCase( "collection" );
 
         (*m_xProps)[ OUString( "IsFolder" ) ]
             = PropertyValue( uno::makeAny( bFolder ), true );
         (*m_xProps)[ OUString( "IsDocument" ) ]
-            = PropertyValue( uno::makeAny( sal_Bool( !bFolder ) ), true );
+            = PropertyValue( uno::makeAny( bool( !bFolder ) ), true );
         (*m_xProps)[ OUString( "ContentType" ) ]
             = PropertyValue( uno::makeAny( bFolder
                 ? OUString( WEBDAV_COLLECTION_TYPE )
