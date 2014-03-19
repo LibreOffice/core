@@ -100,7 +100,7 @@ void TextObjectBar::Execute( SfxRequest &rReq )
             if( pArgs )
             {
                 SdDrawDocument& rDoc = mpView->GetDoc();
-                OSL_ASSERT (mpViewShell->GetViewShell()!=NULL);
+                assert(mpViewShell->GetViewShell());
                 rtl::Reference<FuPoor> xFunc( FuTemplate::Create( mpViewShell, static_cast< ::sd::Window*>( mpViewShell->GetViewShell()->GetWindow()), mpView, &rDoc, rReq ) );
 
                 if(xFunc.is())
@@ -110,7 +110,7 @@ void TextObjectBar::Execute( SfxRequest &rReq )
 
                     if( rReq.GetSlot() == SID_STYLE_APPLY )
                     {
-                        if( mpViewShell && mpViewShell->GetViewFrame() )
+                        if (mpViewShell->GetViewFrame())
                             mpViewShell->GetViewFrame()->GetBindings().Invalidate( SID_STYLE_APPLY );
                     }
                 }
