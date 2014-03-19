@@ -701,6 +701,7 @@ TypeWriter::TypeWriter(typereg_Version version,
     , m_fieldCount(fieldCount)
     , m_methodCount(methodCount)
     , m_referenceCount(referenceCount)
+    , m_references(NULL)
     , m_blop(NULL)
     , m_blopSize(0)
 {
