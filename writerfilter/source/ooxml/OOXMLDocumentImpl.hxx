@@ -53,6 +53,7 @@ class OOXMLDocumentImpl : public OOXMLDocument
     uno::Reference<io::XInputStream> mxActiveXBin;
     uno::Reference<io::XInputStream> mxEmbeddings;
     uno::Sequence < beans::PropertyValue > mxEmbeddingsList;
+    std::vector<beans::PropertyValue> mxEmbeddingsListTemp;
     bool mbIsSubstream;
     /// How many paragraphs equal to 1 percent?
     sal_Int32 mnPercentSize;
@@ -87,7 +88,7 @@ protected:
     void resolveCustomXmlStream(Stream & rStream);
     void resolveActiveXStream(Stream & rStream);
     void resolveGlossaryStream(Stream & rStream);
-    void resolveEmbeddingsStream(Stream & rStream);
+    void resolveEmbeddingsStream(OOXMLStream::Pointer_t pStream);
 public:
     OOXMLDocumentImpl(OOXMLStream::Pointer_t pStream, const uno::Reference<task::XStatusIndicator>& xStatusIndicator);
     virtual ~OOXMLDocumentImpl();

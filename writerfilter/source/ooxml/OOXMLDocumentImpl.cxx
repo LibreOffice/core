@@ -233,6 +233,10 @@ void OOXMLDocumentImpl::importSubStreamRelations(OOXMLStream::Pointer_t pStream,
             // imporing activex.bin files for activex.xml from activeX folder.
             mxEmbeddings = xcpInputStream;
         }
+        else if(OOXMLStream::CHARTS == nType)
+        {
+            importSubStreamRelations(cStream, OOXMLStream::EMBEDDINGS);
+        }
     }
 
 
@@ -494,7 +498,7 @@ void OOXMLDocumentImpl::resolve(Stream & rStream)
         if (mxGlossaryDocDom.is())
             resolveGlossaryStream(rStream);
 
-        resolveEmbeddingsStream(rStream);
+        resolveEmbeddingsStream(mpStream);
 
         // Custom xml's are handled as part of grab bag.
         resolveCustomXmlStream(rStream);
@@ -705,20 +709,25 @@ void OOXMLDocumentImpl::resolveGlossaryStream(Stream & /*rStream*/)
       }
 }
 
-void OOXMLDocumentImpl::resolveEmbeddingsStream(Stream & /*rStream*/)
+void OOXMLDocumentImpl::resolveEmbeddingsStream(OOXMLStream::Pointer_t pStream)
 {
     uno::Reference<embed::XRelationshipAccess> mxRelationshipAccess;
-    mxRelationshipAccess.set((dynamic_cast<OOXMLStreamImpl&>(*mpStream.get())).accessDocumentStream(), uno::UNO_QUERY_THROW);
+    mxRelationshipAccess.set((dynamic_cast<OOXMLStreamImpl&>(*pStream.get())).accessDocumentStream(), uno::UNO_QUERY_THROW);
     if (mxRelationshipAccess.is())
     {
         OUString sChartType("http://schemas.openxmlformats.org/officeDocument/2006/relationships/chart");
         OUString sChartTypeStrict("http://purl.oclc.org/ooxml/officeDocument/relationships/chart");
+        OUString sFootersType("http://schemas.openxmlformats.org/officeDocument/2006/relationships/footer");
+        OUString sFootersTypeStrict("http://purl.oclc.org/ooxml/officeDocument/relationships/footer");
+        OUString sHeaderType("http://schemas.openxmlformats.org/officeDocument/2006/relationships/header");
+        OUString sHeaderTypeStrict("http://purl.oclc.org/ooxml/officeDocument/relationships/header");
+
         OUString sTarget("Target");
         bool bFound = false;
-        sal_Int32 counter = 0;
+        bool bHeaderFooterFound = false;
+        OOXMLStream::StreamType_t streamType;
         uno::Sequence< uno::Sequence< beans::StringPair > >aSeqs =
                 mxRelationshipAccess->getAllRelationships();
-        uno::Sequence<beans::PropertyValue > mxEmbeddingsListTemp(aSeqs.getLength());
         for (sal_Int32 j = 0; j < aSeqs.getLength(); j++)
         {
             uno::Sequence< beans::StringPair > aSeq = aSeqs[j];
@@ -727,34 +736,65 @@ void OOXMLDocumentImpl::resolveEmbeddingsStream(Stream & /*rStream*/)
                 beans::StringPair aPair = aSeq[i];
                 if (aPair.Second.compareTo(sChartType) == 0 ||
                         aPair.Second.compareTo(sChartTypeStrict) == 0)
+                {
                     bFound = true;
-                else if(aPair.First.compareTo(sTarget) == 0 && bFound)
+                }
+                else if(aPair.Second.compareTo(sFootersType) == 0 ||
+                        aPair.Second.compareTo(sFootersTypeStrict) == 0)
+                {
+                    bHeaderFooterFound = true;
+                    streamType = OOXMLStream::FOOTER;
+                }
+                else if(aPair.Second.compareTo(sHeaderType) == 0 ||
+                        aPair.Second.compareTo(sHeaderTypeStrict) == 0)
+                {
+                    bHeaderFooterFound = true;
+                    streamType = OOXMLStream::HEADER;
+                }
+                else if(aPair.First.compareTo(sTarget) == 0 && ( bFound || bHeaderFooterFound ))
                 {
                     // Adding value to extern variable customTarget. It will be used in ooxmlstreamimpl
                     // to ensure chart.xml target is visited in lcl_getTarget.
                     customTarget = aPair.Second;
                 }
             }
-            if(bFound)
+            if(( bFound || bHeaderFooterFound))
             {
-                uno::Reference<xml::dom::XDocument> chartTemp = importSubStream(OOXMLStream::CHARTS);
+                if(bFound)
+                {
+                    importSubStreamRelations(pStream, OOXMLStream::CHARTS);
+                }
+                if(bHeaderFooterFound)
+                {
+                    OOXMLStream::Pointer_t Stream = OOXMLDocumentFactory::createStream(pStream, streamType);
+                    if(Stream)
+                        resolveEmbeddingsStream(Stream);
+                }
+
                 beans::PropertyValue embeddingsTemp;
-                // This will add all ActiveX[n].xml to grabbag list.
-                if(chartTemp.is())
+                // This will add all .xlsx and .bin to grabbag list.
+                if(bFound)
                 {
                     if(mxEmbeddings.is())
                     {
                         embeddingsTemp.Name = embeddingsTarget;
                         embeddingsTemp.Value = uno::makeAny(mxEmbeddings);
-                        mxEmbeddingsListTemp[counter] = embeddingsTemp;
+                        mxEmbeddingsListTemp.push_back(embeddingsTemp);
+                        mxEmbeddings.clear();
                     }
-                    counter++;
                 }
                 bFound = false;
+                bHeaderFooterFound = false;
             }
         }
-        mxEmbeddingsListTemp.realloc(counter);
-        mxEmbeddingsList = mxEmbeddingsListTemp;
+    }
+    if(0 != mxEmbeddingsListTemp.size())
+    {
+        mxEmbeddingsList.realloc(mxEmbeddingsListTemp.size());
+        for (size_t i = 0; i < mxEmbeddingsListTemp.size(); i++)
+        {
+            mxEmbeddingsList[i] = mxEmbeddingsListTemp[i];
+        }
     }
 }
 

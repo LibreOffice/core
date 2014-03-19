@@ -801,8 +801,12 @@ void ChartExport::exportExternalData( Reference< ::com::sun::star::chart::XChart
             }
         }
         FSHelperPtr pFS = GetFS();
+        OUString type = "http://schemas.openxmlformats.org/officeDocument/2006/relationships/package";
+        if (relationPath.endsWith(OUString(".bin")))
+            type = "http://schemas.openxmlformats.org/officeDocument/2006/relationships/oleObject";
+
         OUString sRelId = GetFB()->addRelation(pFS->getOutputStream(),
-                        "http://schemas.openxmlformats.org/officeDocument/2006/relationships/package",
+                        type,
                         relationPath);
         pFS->singleElementNS( XML_c, XML_externalData,
                 FSNS(XML_r, XML_id), OUStringToOString(sRelId, RTL_TEXTENCODING_UTF8),
