@@ -37,8 +37,13 @@ namespace connectivity
                  * Set up the Sqlda for a given statement, is equivalent to
                  * using isc_dsql_describe, but with all the details handled
                  * within.
+                 *
+                 * Use bDescribeBind if we are binding an input sqlda, i.e.
+                 * if we want isc_dsql_describe_bind instead of isc_dsql_describe.
                  */
-                void describeStatement(isc_stmt_handle& aStatementHandle);
+                void describeStatement(
+                    isc_stmt_handle& aStatementHandle,
+                    bool bDescribeBind = false);
             };
         }
     }

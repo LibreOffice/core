@@ -152,7 +152,9 @@ Sqlda::~Sqlda()
     }
 }
 
-void Sqlda::describeStatement(isc_stmt_handle& aStatementHandle)
+void Sqlda::describeStatement(
+    isc_stmt_handle& aStatementHandle,
+    bool bDescribeBind)
 {
     if (!mpSqlda)
     {
@@ -169,7 +171,13 @@ void Sqlda::describeStatement(isc_stmt_handle& aStatementHandle)
     {
         ISC_STATUS_ARRAY aStatusVector;
 
-        if (isc_dsql_describe(aStatusVector,
+        if (!bDescribeBind ?
+            isc_dsql_describe(aStatusVector,
+                              &aStatementHandle,
+                              FIREBIRD_SQL_DIALECT,
+                              mpSqlda)
+            :
+            isc_dsql_describe_bind(aStatusVector,
                               &aStatementHandle,
                               FIREBIRD_SQL_DIALECT,
                               mpSqlda))
@@ -184,7 +192,13 @@ void Sqlda::describeStatement(isc_stmt_handle& aStatementHandle)
             mpSqlda = lcl_allocateSqlda(mpSqlda->sqld);
         }
 
-        if (isc_dsql_describe(aStatusVector,
+        if (!bDescribeBind ?
+            isc_dsql_describe(aStatusVector,
+                              &aStatementHandle,
+                              FIREBIRD_SQL_DIALECT,
+                              mpSqlda)
+            :
+            isc_dsql_describe_bind(aStatusVector,
                               &aStatementHandle,
                               FIREBIRD_SQL_DIALECT,
                               mpSqlda))
