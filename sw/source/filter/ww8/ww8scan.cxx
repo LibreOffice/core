@@ -2989,7 +2989,7 @@ void WW8PLCFx_Fc_FKP::advance()
 
     pFkp->advance();
     if( pFkp->Where() == WW8_FC_MAX )
-        NewFkp();
+        (void)NewFkp();
 }
 
 sal_uInt16 WW8PLCFx_Fc_FKP::GetIstd() const
