@@ -149,7 +149,7 @@ void FuInsertFile::DoExecute( SfxRequest& rReq )
                         xFilterManager->appendFilter( pFilter->GetUIName(), pFilter->GetDefaultExtension() );
                 }
 
-                // get femplate filter
+                // get template filter
                 if( mpDoc->GetDocumentType() == DOCUMENT_TYPE_IMPRESS )
                     pFilter = DrawDocShell::Factory().GetTemplateFilter();
                 else
