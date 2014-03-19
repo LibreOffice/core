@@ -1747,14 +1747,23 @@ bool Border::convertBorderLine( BorderLine2& rBorderLine, const BorderLineModel&
         break;
         case XML_hair:              lclSetBorderLineWidth( rBorderLine, API_LINE_HAIR );    break;
         case XML_medium:            lclSetBorderLineWidth( rBorderLine, API_LINE_MEDIUM );  break;
-        case XML_mediumDashDot:     lclSetBorderLineWidth( rBorderLine, API_LINE_MEDIUM );  break;
-        case XML_mediumDashDotDot:  lclSetBorderLineWidth( rBorderLine, API_LINE_MEDIUM );  break;
+        case XML_mediumDashDot:
+            lclSetBorderLineWidth( rBorderLine, API_LINE_MEDIUM );
+            rBorderLine.LineStyle = table::BorderLineStyle::DASH_DOT;
+            break;
+        case XML_mediumDashDotDot:
+            lclSetBorderLineWidth( rBorderLine, API_LINE_MEDIUM );
+            rBorderLine.LineStyle = table::BorderLineStyle::DASH_DOT_DOT;
+            break;
         case XML_mediumDashed:
             lclSetBorderLineWidth( rBorderLine, API_LINE_MEDIUM );
             rBorderLine.LineStyle = table::BorderLineStyle::DASHED;
         break;
         case XML_none:              lclSetBorderLineWidth( rBorderLine, API_LINE_NONE );    break;
-        case XML_slantDashDot:      lclSetBorderLineWidth( rBorderLine, API_LINE_MEDIUM );  break;
+        case XML_slantDashDot:
+            lclSetBorderLineWidth( rBorderLine, API_LINE_MEDIUM );
+            rBorderLine.LineStyle = table::BorderLineStyle::DASH_DOT;
+            break;
         case XML_thick:             lclSetBorderLineWidth( rBorderLine, API_LINE_THICK );   break;
         case XML_thin:              lclSetBorderLineWidth( rBorderLine, API_LINE_THIN );    break;
         default:                    lclSetBorderLineWidth( rBorderLine, API_LINE_NONE );    break;

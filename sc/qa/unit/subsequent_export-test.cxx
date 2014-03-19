@@ -1048,14 +1048,18 @@ void ScExportTest::testExcelCellBorders( sal_uLong nFormatType )
         sal_Int16 mnStyle;
         long mnWidth;
     } aChecks[] = {
-        {  1, table::BorderLineStyle::SOLID,        1L }, // hair
-        {  3, table::BorderLineStyle::DOTTED,      15L }, // thin
-        {  9, table::BorderLineStyle::FINE_DASHED, 15L }, // dashed
-        { 11, table::BorderLineStyle::SOLID,       15L }, // thin
-        { 19, table::BorderLineStyle::DASHED,      35L }, // medium dashed
-        { 21, table::BorderLineStyle::SOLID,       35L }, // medium
-        { 23, table::BorderLineStyle::SOLID,       50L }, // thick
-        { 25, table::BorderLineStyle::DOUBLE_THIN, -1L }, // double (don't check width)
+        {  1, table::BorderLineStyle::SOLID,         1L }, // hair
+        {  3, table::BorderLineStyle::DOTTED,       15L }, // dotted
+        {  5, table::BorderLineStyle::DASH_DOT_DOT, 15L }, // dash dot dot
+        {  7, table::BorderLineStyle::DASH_DOT,     15L }, // dash dot
+        {  9, table::BorderLineStyle::FINE_DASHED,  15L }, // dashed
+        { 11, table::BorderLineStyle::SOLID,        15L }, // thin
+        { 13, table::BorderLineStyle::DASH_DOT_DOT, 35L }, // medium dash dot dot
+        { 17, table::BorderLineStyle::DASH_DOT,     35L }, // medium dash dot
+        { 19, table::BorderLineStyle::DASHED,       35L }, // medium dashed
+        { 21, table::BorderLineStyle::SOLID,        35L }, // medium
+        { 23, table::BorderLineStyle::SOLID,        50L }, // thick
+        { 25, table::BorderLineStyle::DOUBLE_THIN,  -1L }, // double (don't check width)
     };
 
     for (size_t i = 0; i < SAL_N_ELEMENTS(aChecks); ++i)
