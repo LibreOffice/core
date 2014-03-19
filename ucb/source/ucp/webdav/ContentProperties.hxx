@@ -102,7 +102,7 @@ public:
     ContentProperties( const DAVResource& rResource );
 
     // Mini props for transient contents.
-    ContentProperties( const OUString & rTitle, sal_Bool bFolder );
+    ContentProperties( const OUString & rTitle, bool bFolder );
 
     // Micro props for non-existing contents.
     ContentProperties( const OUString & rTitle );
