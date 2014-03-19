@@ -20,7 +20,6 @@
 #include <xml/acceleratorconfigurationwriter.hxx>
 
 #include <acceleratorconst.h>
-#include <threadhelp/guard.hxx>
 
 #include <com/sun/star/xml/sax/XExtendedDocumentHandler.hpp>
 #include <com/sun/star/xml/sax/XAttributeList.hpp>
@@ -38,8 +37,7 @@ namespace framework{
 
 AcceleratorConfigurationWriter::AcceleratorConfigurationWriter(const AcceleratorCache&                                       rContainer,
                                                                const css::uno::Reference< css::xml::sax::XDocumentHandler >& xConfig   )
-    : ThreadHelpBase(&Application::GetSolarMutex())
-    , m_xConfig     (xConfig                      )
+    : m_xConfig     (xConfig                      )
     , m_rContainer  (rContainer                   )
 {
 }
@@ -52,14 +50,7 @@ AcceleratorConfigurationWriter::~AcceleratorConfigurationWriter()
 
 void AcceleratorConfigurationWriter::flush()
 {
-    // SAFE -> ----------------------------------
-    Guard aReadLock(m_aLock);
-
-    css::uno::Reference< css::xml::sax::XDocumentHandler >         xCFG        = m_xConfig;
     css::uno::Reference< css::xml::sax::XExtendedDocumentHandler > xExtendedCFG(m_xConfig, css::uno::UNO_QUERY_THROW);
-
-    aReadLock.unlock();
-    // <- SAFE ----------------------------------
 
     // prepare attribute list
     ::comphelper::AttributeList* pAttribs = new ::comphelper::AttributeList;
@@ -69,13 +60,13 @@ void AcceleratorConfigurationWriter::flush()
     pAttribs->AddAttribute(AL_XMLNS_XLINK, ATTRIBUTE_TYPE_CDATA, NS_XMLNS_XLINK);
 
     // generate xml
-    xCFG->startDocument();
+    xExtendedCFG->startDocument();
 
     xExtendedCFG->unknown(DOCTYPE_ACCELERATORS);
-    xCFG->ignorableWhitespace(OUString());
+    xExtendedCFG->ignorableWhitespace(OUString());
 
-    xCFG->startElement(AL_ELEMENT_ACCELERATORLIST, xAttribs);
-    xCFG->ignorableWhitespace(OUString());
+    xExtendedCFG->startElement(AL_ELEMENT_ACCELERATORLIST, xAttribs);
+    xExtendedCFG->ignorableWhitespace(OUString());
 
     // TODO think about threadsafe using of cache
     AcceleratorCache::TKeyList                 lKeys = m_rContainer.getAllKeys();
@@ -86,7 +77,7 @@ void AcceleratorConfigurationWriter::flush()
     {
         const css::awt::KeyEvent& rKey     = *pKey;
         const OUString&    rCommand = m_rContainer.getCommandByKey(rKey);
-        impl_ts_writeKeyCommandPair(rKey, rCommand, xCFG);
+        impl_ts_writeKeyCommandPair(rKey, rCommand, xExtendedCFG);
     }
 
     /* TODO write key-command list
@@ -95,10 +86,10 @@ void AcceleratorConfigurationWriter::flush()
         WriteAcceleratorItem( *p );
     */
 
-    xCFG->ignorableWhitespace(OUString());
-    xCFG->endElement(AL_ELEMENT_ACCELERATORLIST);
-    xCFG->ignorableWhitespace(OUString());
-    xCFG->endDocument();
+    xExtendedCFG->ignorableWhitespace(OUString());
+    xExtendedCFG->endElement(AL_ELEMENT_ACCELERATORLIST);
+    xExtendedCFG->ignorableWhitespace(OUString());
+    xExtendedCFG->endDocument();
 }
 
 

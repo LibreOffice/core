@@ -22,7 +22,6 @@
 
 #include <accelerators/acceleratorcache.hxx>
 #include <accelerators/keymapping.hxx>
-#include <threadhelp/threadhelpbase.hxx>
 #include <general.h>
 
 #include <com/sun/star/xml/sax/XDocumentHandler.hpp>
@@ -32,7 +31,7 @@
 
 namespace framework{
 
-class AcceleratorConfigurationWriter : private ThreadHelpBase
+class AcceleratorConfigurationWriter
 {
 
     // member
