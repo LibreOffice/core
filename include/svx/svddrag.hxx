@@ -48,9 +48,7 @@ protected:
     Point     aRef1;     // Referencepoint: Resize fixed point, (axis of rotation,
     Point     aRef2;     // axis of reflection, ...)
     Point     aPos0;     // Position at the last Event
-    Point     aRealPos0; // Position at the last Event
     Point     aRealNow;  // Current dragging position without Snap, Ortho and Limit
-    Point     aRealLast; // RealPos of the last Point (for MinMoved)
     Rectangle aActionRect;
 
     bool      bEndDragChangesAttributes;

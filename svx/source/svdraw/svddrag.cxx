@@ -60,13 +60,11 @@ void SdrDragStat::Reset(const Point& rPnt)
     Reset();
     Start()=rPnt;
     aPos0=rPnt;
-    aRealPos0=rPnt;
     RealNow()=rPnt;
 }
 
 void SdrDragStat::NextMove(const Point& rPnt)
 {
-    aRealPos0=GetRealNow();
     aPos0=GetNow();
     RealNow()=rPnt;
     Point aBla=KorregPos(GetRealNow(),GetPrev());
