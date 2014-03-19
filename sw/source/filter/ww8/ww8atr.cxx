@@ -4789,6 +4789,7 @@ void WW8AttributeOutput::FormatFrameDirection( const SvxFrameDirectionItem& rDir
         default:
             //Can't get an unknown type here
             OSL_FAIL("Unknown frame direction");
+            //fall-through
         case FRMDIR_HORI_LEFT_TOP:
             nTextFlow = 0;
             break;
