@@ -297,7 +297,7 @@ IMPL_LINK_NOARG(SwAutoFormatDlg, AddHdl)
 
             if ( !aFormatName.isEmpty() )
             {
-                sal_uInt16 n;
+                size_t n;
                 for( n = 0; n < pTableTbl->size(); ++n )
                     if( (*pTableTbl)[n].GetName() == aFormatName )
                         break;
@@ -396,7 +396,7 @@ IMPL_LINK_NOARG(SwAutoFormatDlg, RenameHdl)
 
             if ( !aFormatName.isEmpty() )
             {
-                sal_uInt16 n;
+                size_t n;
                 for( n = 0; n < pTableTbl->size(); ++n )
                     if ((*pTableTbl)[n].GetName() == aFormatName)
                         break;
@@ -668,7 +668,7 @@ MAKENUMSTR:
         sal_uInt8           nFmtIndex       = GetFormatIndex( nCol, nRow );
         Rectangle           cellRect        = maArray.GetCellRect( nCol, nRow );
         Point               aPos            = cellRect.TopLeft();
-        sal_uInt16          nRightX         = 0;
+        long                nRightX         = 0;
 
         Size theMaxStrSize( cellRect.GetWidth() - FRAME_OFFSET,
                             cellRect.GetHeight() - FRAME_OFFSET );
@@ -702,20 +702,16 @@ MAKENUMSTR:
             aStrSize = aScriptedText.GetTextSize();
         }
 
-        nRightX  = (sal_uInt16)(  cellRect.GetWidth()
-                                - aStrSize.Width()
-                                - FRAME_OFFSET );
+        nRightX = cellRect.GetWidth() - aStrSize.Width() - FRAME_OFFSET;
 
         // vertical (always centering):
-        aPos.Y() += (nRowHeight - (sal_uInt16)aStrSize.Height()) / 2;
+        aPos.Y() += (nRowHeight - aStrSize.Height()) / 2;
 
         // horizontal
         if( mbRTL )
             aPos.X() += nRightX;
         else if (aCurData.IsJustify())
         {
-            sal_uInt16 nHorPos = (sal_uInt16)
-                    ((cellRect.GetWidth()-aStrSize.Width())/2);
             const SvxAdjustItem& rAdj = aCurData.GetBoxFmt(nFmtIndex).GetAdjust();
             switch ( rAdj.GetAdjust() )
             {
@@ -726,7 +722,7 @@ MAKENUMSTR:
                     aPos.X() += nRightX;
                     break;
                 default:
-                    aPos.X() += nHorPos;
+                    aPos.X() += (cellRect.GetWidth() - aStrSize.Width())/2;
                     break;
             }
         }
