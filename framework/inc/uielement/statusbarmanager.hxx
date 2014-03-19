@@ -20,7 +20,6 @@
 #ifndef INCLUDED_FRAMEWORK_INC_UIELEMENT_STATUSBARMANAGER_HXX
 #define INCLUDED_FRAMEWORK_INC_UIELEMENT_STATUSBARMANAGER_HXX
 
-#include <threadhelp/threadhelpbase.hxx>
 #include <macros/generic.hxx>
 #include <macros/xinterface.hxx>
 #include <macros/xtypeprovider.hxx>
@@ -44,8 +43,7 @@ namespace framework
 {
 
 class FrameworkStatusBar;
-class StatusBarManager : public ThreadHelpBase,
-                         public ::cppu::WeakImplHelper3<
+class StatusBarManager : public ::cppu::WeakImplHelper3<
                                    css::frame::XFrameActionListener,
                                    css::lang::XComponent,
                                    css::ui::XUIConfigurationListener >
@@ -111,6 +109,7 @@ class StatusBarManager : public ThreadHelpBase,
         com::sun::star::uno::Reference< com::sun::star::frame::XFrame >                                 m_xFrame;
         com::sun::star::uno::Reference< com::sun::star::container::XNameAccess >                        m_xUICommandLabels;
         StatusBarControllerMap                                                                          m_aControllerMap;
+        osl::Mutex m_mutex;
         ::cppu::OMultiTypeInterfaceContainerHelper                                                      m_aListenerContainer;   /// container for ALL Listener
         ::com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >                      m_xContext;
         ::com::sun::star::uno::Reference< ::com::sun::star::frame::XUIControllerFactory >               m_xStatusbarControllerFactory;

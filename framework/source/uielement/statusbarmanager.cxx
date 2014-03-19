@@ -20,8 +20,6 @@
 #include <uielement/statusbarmanager.hxx>
 #include <uielement/genericstatusbarcontroller.hxx>
 
-#include <threadhelp/threadhelpbase.hxx>
-#include <threadhelp/guard.hxx>
 #include <framework/sfxhelperfunctions.hxx>
 #include <framework/addonsoptions.hxx>
 #include <uielement/statusbarmerger.hxx>
@@ -134,7 +132,6 @@ StatusBarManager::StatusBarManager(
     const uno::Reference< frame::XFrame >& rFrame,
     const OUString& rResourceName,
     StatusBar* pStatusBar ) :
-    ThreadHelpBase( &Application::GetSolarMutex() ),
     m_bDisposed( sal_False ),
     m_bFrameActionRegistered( sal_False ),
     m_bUpdateControllers( sal_False ),
@@ -142,7 +139,7 @@ StatusBarManager::StatusBarManager(
     m_pStatusBar( pStatusBar ),
     m_aResourceName( rResourceName ),
     m_xFrame( rFrame ),
-    m_aListenerContainer( m_aLock.getShareableOslMutex() ),
+    m_aListenerContainer( m_mutex ),
     m_xContext( rxContext )
 {
 
@@ -159,14 +156,14 @@ StatusBarManager::~StatusBarManager()
 
 StatusBar* StatusBarManager::GetStatusBar() const
 {
-    Guard aGuard( m_aLock );
+    SolarMutexGuard g;
     return m_pStatusBar;
 }
 
 void StatusBarManager::frameAction( const frame::FrameActionEvent& Action )
 throw ( uno::RuntimeException, std::exception )
 {
-    Guard aGuard( m_aLock );
+    SolarMutexGuard g;
     if ( Action.Action == frame::FrameAction_CONTEXT_CHANGED )
         UpdateControllers();
 }
@@ -174,7 +171,7 @@ throw ( uno::RuntimeException, std::exception )
 void SAL_CALL StatusBarManager::disposing( const lang::EventObject& Source ) throw ( uno::RuntimeException, std::exception )
 {
     {
-        Guard aGuard( m_aLock );
+        SolarMutexGuard g;
         if ( m_bDisposed )
             return;
     }
@@ -182,7 +179,7 @@ void SAL_CALL StatusBarManager::disposing( const lang::EventObject& Source ) thr
     RemoveControllers();
 
     {
-        Guard aGuard( m_aLock );
+        SolarMutexGuard g;
         if ( Source.Source == uno::Reference< uno::XInterface >( m_xFrame, uno::UNO_QUERY ))
             m_xFrame.clear();
 
@@ -200,7 +197,7 @@ void SAL_CALL StatusBarManager::dispose() throw( uno::RuntimeException, std::exc
     m_aListenerContainer.disposeAndClear( aEvent );
 
     {
-        Guard aGuard( m_aLock );
+        SolarMutexGuard g;
         if ( !m_bDisposed )
         {
             RemoveControllers();
@@ -240,7 +237,7 @@ void SAL_CALL StatusBarManager::dispose() throw( uno::RuntimeException, std::exc
 
 void SAL_CALL StatusBarManager::addEventListener( const uno::Reference< lang::XEventListener >& xListener ) throw( uno::RuntimeException, std::exception )
 {
-    Guard aGuard( m_aLock );
+    SolarMutexGuard g;
 
     /* SAFE AREA ----------------------------------------------------------------------------------------------- */
     if ( m_bDisposed )
@@ -259,7 +256,7 @@ void SAL_CALL StatusBarManager::removeEventListener( const uno::Reference< lang:
 // XUIConfigurationListener
 void SAL_CALL StatusBarManager::elementInserted( const css::ui::ConfigurationEvent& ) throw ( uno::RuntimeException, std::exception )
 {
-    Guard aGuard( m_aLock );
+    SolarMutexGuard g;
 
     if ( m_bDisposed )
         return;
@@ -267,7 +264,7 @@ void SAL_CALL StatusBarManager::elementInserted( const css::ui::ConfigurationEve
 
 void SAL_CALL StatusBarManager::elementRemoved( const css::ui::ConfigurationEvent& ) throw ( uno::RuntimeException, std::exception )
 {
-    Guard aGuard( m_aLock );
+    SolarMutexGuard g;
 
     if ( m_bDisposed )
         return;
@@ -275,7 +272,7 @@ void SAL_CALL StatusBarManager::elementRemoved( const css::ui::ConfigurationEven
 
 void SAL_CALL StatusBarManager::elementReplaced( const css::ui::ConfigurationEvent& ) throw ( uno::RuntimeException, std::exception )
 {
-    Guard aGuard( m_aLock );
+    SolarMutexGuard g;
 
     if ( m_bDisposed )
         return;
@@ -295,7 +292,7 @@ void StatusBarManager::UpdateControllers()
 
 void StatusBarManager::RemoveControllers()
 {
-    Guard aGuard( m_aLock );
+    SolarMutexGuard g;
 
     if ( m_bDisposed )
         return;
@@ -426,8 +423,7 @@ void StatusBarManager::AddFrameActionListener()
 
 void StatusBarManager::FillStatusBar( const uno::Reference< container::XIndexAccess >& rItemContainer )
 {
-
-    Guard aGuard( m_aLock );
+    SolarMutexGuard g;
 
     if ( m_bDisposed || !m_pStatusBar )
         return;
@@ -554,7 +550,7 @@ void StatusBarManager::StateChanged( StateChangedType )
 
 void StatusBarManager::DataChanged( const DataChangedEvent& rDCEvt )
 {
-    Guard aGuard( m_aLock );
+    SolarMutexClearableGuard aGuard;
 
     if ((( rDCEvt.GetType() == DATACHANGED_SETTINGS         ) ||
          ( rDCEvt.GetType() == DATACHANGED_FONTS            ) ||
@@ -568,7 +564,7 @@ void StatusBarManager::DataChanged( const DataChangedEvent& rDCEvt )
             xPropSet->getPropertyValue("LayoutManager") >>= xLayoutManager;
         if ( xLayoutManager.is() )
         {
-            aGuard.unlock();
+            aGuard.clear();
             xLayoutManager->doLayout();
         }
     }
@@ -576,7 +572,7 @@ void StatusBarManager::DataChanged( const DataChangedEvent& rDCEvt )
 
 void StatusBarManager::UserDraw( const UserDrawEvent& rUDEvt )
 {
-    Guard aGuard( m_aLock );
+    SolarMutexClearableGuard aGuard;
 
     if ( m_bDisposed )
         return;
@@ -595,7 +591,7 @@ void StatusBarManager::UserDraw( const UserDrawEvent& rUDEvt )
                                   rUDEvt.GetRect().Top(),
                                   rUDEvt.GetRect().GetWidth(),
                                   rUDEvt.GetRect().GetHeight() );
-            aGuard.unlock();
+            aGuard.clear();
             xController->paint( xGraphics, aRect, rUDEvt.GetStyle() );
         }
     }
@@ -603,7 +599,7 @@ void StatusBarManager::UserDraw( const UserDrawEvent& rUDEvt )
 
 void StatusBarManager::Command( const CommandEvent& rEvt )
 {
-    Guard aGuard( m_aLock );
+    SolarMutexGuard g;
 
     if ( m_bDisposed )
         return;
@@ -633,7 +629,7 @@ void StatusBarManager::MouseMove( const MouseEvent& rMEvt )
 
 void StatusBarManager::MouseButton( const MouseEvent& rMEvt ,sal_Bool ( SAL_CALL frame::XStatusbarController::*_pMethod )(const ::com::sun::star::awt::MouseEvent&))
 {
-    Guard aGuard( m_aLock );
+    SolarMutexGuard g;
 
     if ( !m_bDisposed )
     {
@@ -667,7 +663,7 @@ void StatusBarManager::MouseButtonUp( const MouseEvent& rMEvt )
 
 IMPL_LINK_NOARG(StatusBarManager, Click)
 {
-    Guard aGuard( m_aLock );
+    SolarMutexGuard g;
 
     if ( m_bDisposed )
         return 1;
@@ -690,7 +686,7 @@ IMPL_LINK_NOARG(StatusBarManager, Click)
 
 IMPL_LINK_NOARG(StatusBarManager, DoubleClick)
 {
-    Guard aGuard( m_aLock );
+    SolarMutexGuard g;
 
     if ( m_bDisposed )
         return 1;
