@@ -379,7 +379,7 @@ void SfxPrinterController::jobFinished( com::sun::star::view::PrintableState nSt
             // by a new one. The reason for this is that otherwise we would not get
             // the printer's SfxItemSet here to copy. Awkward, but at the moment there is no
             // other way here to get the item set.
-            SfxPrinter* pDocPrt = mpViewShell->GetPrinter(sal_True);
+            SfxPrinter* pDocPrt = mpViewShell->GetPrinter(true);
             if( pDocPrt )
             {
                 if( pDocPrt->GetName() == getPrinter()->GetName() )
@@ -571,7 +571,7 @@ SfxPrinter* SfxViewShell::SetPrinter_Impl( SfxPrinter *pNewPrinter )
     return pDocPrinter;
 }
 
-void SfxViewShell::ExecPrint( const uno::Sequence < beans::PropertyValue >& rProps, sal_Bool bIsAPI, sal_Bool bIsDirect )
+void SfxViewShell::ExecPrint( const uno::Sequence < beans::PropertyValue >& rProps, bool bIsAPI, bool bIsDirect )
 {
     // get the current selection; our controller should know it
     Reference< frame::XController > xController( GetController() );
@@ -616,7 +616,7 @@ void SfxViewShell::ExecPrint( const uno::Sequence < beans::PropertyValue >& rPro
                         makeAny( OUString( pObjShell->GetTitle(0) ) ) );
 
     // FIXME: job setup
-    SfxPrinter* pDocPrt = GetPrinter(sal_False);
+    SfxPrinter* pDocPrt = GetPrinter(false);
     JobSetup aJobSetup = pDocPrt ? pDocPrt->GetJobSetup() : GetJobSetup();
     if( bIsDirect )
         aJobSetup.SetValue( OUString( "IsQuickJob"  ),
@@ -761,7 +761,7 @@ void SfxViewShell::ExecPrint_Impl( SfxRequest &rReq )
         case SID_PRINTER_NAME : // only for recorded macros
         {
             // get printer and printer settings from the document
-            SfxPrinter *pDocPrinter = GetPrinter(sal_True);
+            SfxPrinter *pDocPrinter = GetPrinter(true);
 
             // look for printer in parameters
             SFX_REQUEST_ARG( rReq, pPrinterItem, SfxStringItem, SID_PRINTER_NAME, false );
@@ -878,7 +878,7 @@ void SfxViewShell::ExecPrint_Impl( SfxRequest &rReq )
     }
 }
 
-SfxPrinter* SfxViewShell::GetPrinter( sal_Bool /*bCreate*/ )
+SfxPrinter* SfxViewShell::GetPrinter( bool /*bCreate*/ )
 {
     return 0;
 }

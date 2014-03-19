@@ -111,7 +111,7 @@ bool SfxFrameWindow_Impl::Notify( NotifyEvent& rNEvt )
         if ( pView->GetViewShell() && !pView->GetViewShell()->GetUIActiveIPClient_Impl() && !pFrame->IsInPlace() )
         {
             OSL_TRACE("SfxFrame: GotFocus");
-            pView->MakeActive_Impl( sal_False );
+            pView->MakeActive_Impl( false );
         }
 
         // if focus was on an external window, the clipboard content might have been changed
@@ -126,12 +126,12 @@ bool SfxFrameWindow_Impl::Notify( NotifyEvent& rNEvt )
     }
     else if ( rNEvt.GetType() == EVENT_EXECUTEDIALOG /*|| rNEvt.GetType() == EVENT_INPUTDISABLE*/ )
     {
-        pView->SetModalMode( sal_True );
+        pView->SetModalMode( true );
         return true;
     }
     else if ( rNEvt.GetType() == EVENT_ENDEXECUTEDIALOG /*|| rNEvt.GetType() == EVENT_INPUTENABLE*/ )
     {
-        pView->SetModalMode( sal_False );
+        pView->SetModalMode( false );
         return true;
     }
 
@@ -175,7 +175,7 @@ bool SfxFrameWindow_Impl::PreNotify( NotifyEvent& rNEvt )
 void SfxFrameWindow_Impl::GetFocus()
 {
     if ( pFrame && !pFrame->IsClosing_Impl() && pFrame->GetCurrentViewFrame() && pFrame->GetFrameInterface().is() )
-        pFrame->GetCurrentViewFrame()->MakeActive_Impl( sal_True );
+        pFrame->GetCurrentViewFrame()->MakeActive_Impl( true );
 }
 
 void SfxFrameWindow_Impl::Resize()

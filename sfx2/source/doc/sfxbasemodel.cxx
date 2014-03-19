@@ -3652,7 +3652,7 @@ void SAL_CALL SfxBaseModel::setVisualAreaSize( sal_Int64 nAspect, const awt::Siz
     if ( !m_pData->m_pObjectShell.Is() )
         throw Exception(); // TODO: error handling
 
-    SfxViewFrame* pViewFrm = SfxViewFrame::GetFirst( m_pData->m_pObjectShell, sal_False );
+    SfxViewFrame* pViewFrm = SfxViewFrame::GetFirst( m_pData->m_pObjectShell, false );
     if ( pViewFrm && m_pData->m_pObjectShell->GetCreateMode() == SFX_CREATE_MODE_EMBEDDED && !pViewFrm->GetFrame().IsInPlace() )
     {
         Window* pWindow = VCLUnoHelper::GetWindow( pViewFrm->GetFrame().GetFrameInterface()->getContainerWindow() );
@@ -4206,9 +4206,9 @@ namespace sfx { namespace intern {
 SfxViewFrame* SfxBaseModel::FindOrCreateViewFrame_Impl( const Reference< XFrame >& i_rFrame, ::sfx::intern::ViewCreationGuard& i_rGuard ) const
 {
     SfxViewFrame* pViewFrame = NULL;
-    for (   pViewFrame = SfxViewFrame::GetFirst( GetObjectShell(), sal_False );
+    for (   pViewFrame = SfxViewFrame::GetFirst( GetObjectShell(), false );
             pViewFrame;
-            pViewFrame= SfxViewFrame::GetNext( *pViewFrame, GetObjectShell(), sal_False )
+            pViewFrame= SfxViewFrame::GetNext( *pViewFrame, GetObjectShell(), false )
         )
     {
         if ( pViewFrame->GetFrame().GetFrameInterface() == i_rFrame )
@@ -4320,7 +4320,7 @@ Reference< frame::XController2 > SAL_CALL SfxBaseModel::createViewController(
     const sal_Int16 nPluginMode = aDocumentLoadArgs.getOrDefault( "PluginMode", sal_Int16( 0 ) );
     if ( nPluginMode == 1 )
     {
-        pViewFrame->ForceOuterResize_Impl( sal_False );
+        pViewFrame->ForceOuterResize_Impl( false );
         pViewFrame->GetBindings().HidePopups( true );
 
         SfxFrame& rFrame = pViewFrame->GetFrame();

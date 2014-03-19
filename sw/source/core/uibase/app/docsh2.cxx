@@ -159,16 +159,16 @@ void SwDocShell::ToggleBrowserMode(sal_Bool bSet, SwView* _pView )
         if( !GetDoc()->getPrinter( false ) )
             pTempView->SetPrinter( GetDoc()->getPrinter( false ), SFX_PRINTER_PRINTER | SFX_PRINTER_JOBSETUP );
         GetDoc()->CheckDefaultPageFmt();
-        SfxViewFrame *pTmpFrm = SfxViewFrame::GetFirst(this, sal_False);
+        SfxViewFrame *pTmpFrm = SfxViewFrame::GetFirst(this, false);
         while (pTmpFrm)
         {
             if( pTmpFrm != pTempView->GetViewFrame() )
             {
                 pTmpFrm->DoClose();
-                pTmpFrm = SfxViewFrame::GetFirst(this, sal_False);
+                pTmpFrm = SfxViewFrame::GetFirst(this, false);
             }
             else
-                pTmpFrm = pTmpFrm->GetNext(*pTmpFrm, this, sal_False);
+                pTmpFrm = pTmpFrm->GetNext(*pTmpFrm, this, false);
         }
         const SwViewOption& rViewOptions = *pTempView->GetWrtShell().GetViewOptions();
         pTempView->GetWrtShell().CheckBrowseView( sal_True );

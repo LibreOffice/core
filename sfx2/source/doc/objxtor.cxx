@@ -495,7 +495,7 @@ SfxObjectShell* SfxObjectShell::GetFirst
             continue;
 
         if ( ( !pType || pSh->IsA(*pType) ) &&
-             ( !bOnlyVisible || SfxViewFrame::GetFirst( pSh, sal_True )))
+             ( !bOnlyVisible || SfxViewFrame::GetFirst( pSh, true )))
             return pSh;
     }
 
@@ -528,7 +528,7 @@ SfxObjectShell* SfxObjectShell::GetNext
             continue;
 
         if ( ( !pType || pSh->IsA(*pType) ) &&
-             ( !bOnlyVisible || SfxViewFrame::GetFirst( pSh, sal_True )))
+             ( !bOnlyVisible || SfxViewFrame::GetFirst( pSh, true )))
             return pSh;
     }
     return 0;

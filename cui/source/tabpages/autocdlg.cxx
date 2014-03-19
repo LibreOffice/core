@@ -1059,7 +1059,7 @@ void OfaAutocorrReplacePage::RefillReplaceBox(sal_Bool bFromReset,
     }
 
     SfxViewShell* pViewShell = SfxViewShell::Current();
-    if( pViewShell && pViewShell->HasSelection( sal_True ) )
+    if( pViewShell && pViewShell->HasSelection( true ) )
     {
         bHasSelectionText = sal_True;
         const OUString sSelection( pViewShell->GetSelectionText() );

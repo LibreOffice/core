@@ -76,8 +76,8 @@ protected:
     virtual void    WriteUserData(OUString &, bool bBrowse = false);
     virtual void    ReadUserData(const OUString &, bool bBrowse = false);
 
-    virtual void    WriteUserDataSequence (::com::sun::star::uno::Sequence < ::com::sun::star::beans::PropertyValue >&, sal_Bool bBrowse = false );
-    virtual void    ReadUserDataSequence (const ::com::sun::star::uno::Sequence < ::com::sun::star::beans::PropertyValue >&, sal_Bool bBrowse = false );
+    virtual void    WriteUserDataSequence (::com::sun::star::uno::Sequence < ::com::sun::star::beans::PropertyValue >&, bool bBrowse = false );
+    virtual void    ReadUserDataSequence (const ::com::sun::star::uno::Sequence < ::com::sun::star::beans::PropertyValue >&, bool bBrowse = false );
 
 public:
                     TYPEINFO_VISIBILITY( SC_DLLPUBLIC );
@@ -107,7 +107,7 @@ public:
 
     virtual void Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
 
-    virtual SfxPrinter*     GetPrinter( sal_Bool bCreate = false );
+    virtual SfxPrinter*     GetPrinter( bool bCreate = false );
     virtual sal_uInt16      SetPrinter( SfxPrinter* pNewPrinter, sal_uInt16 nDiffFlags = SFX_PRINTER_ALL, bool bIsAPI=false );
     virtual bool            HasPrintOptionsPage() const;
     virtual SfxTabPage*     CreatePrintOptionsPage( Window *pParent, const SfxItemSet &rOptions );

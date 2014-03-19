@@ -163,7 +163,7 @@ static SwPrintUIOptions * lcl_GetPrintUIOptions(
     const sal_Bool bWebDoc      = NULL != dynamic_cast< const SwWebDocShell * >(pDocShell);
     const bool bSwSrcView   = NULL != dynamic_cast< const SwSrcView * >(pView);
     const SwView * pSwView = dynamic_cast< const SwView * >(pView);
-    const bool bHasSelection    = pSwView ? pSwView->HasSelection( sal_False ) : false;  // check for any selection, not just text selection
+    const bool bHasSelection    = pSwView && pSwView->HasSelection( false );  // check for any selection, not just text selection
     const bool bHasPostIts      = sw_GetPostIts( pDocShell->GetDoc(), 0 );
 
     // get default values to use in dialog from documents SwPrintData
@@ -202,8 +202,7 @@ static SwTxtFmtColl *lcl_GetParaStyle(const OUString& rCollName, SwDoc* pDoc)
 static void lcl_DisposeView( SfxViewFrame* pToClose, SwDocShell* pDocShell )
 {
     // check if the view frame still exists
-    SfxViewFrame* pFound = SfxViewFrame::GetFirst( pDocShell,
-                                sal_False );
+    SfxViewFrame* pFound = SfxViewFrame::GetFirst( pDocShell, false );
     while(pFound)
     {
         if( pFound == pToClose)
@@ -211,9 +210,7 @@ static void lcl_DisposeView( SfxViewFrame* pToClose, SwDocShell* pDocShell )
             pToClose->DoClose();
             break;
         }
-        pFound = SfxViewFrame::GetNext( *pFound,
-                                pDocShell,
-                                sal_False );
+        pFound = SfxViewFrame::GetNext( *pFound, pDocShell, false );
     }
 }
 
@@ -2887,7 +2884,7 @@ SfxViewShell * SwXTextDocument::GuessViewShell(
     SwView          *pSwView = 0;
     SwPagePreview   *pSwPagePreview = 0;
     SwSrcView       *pSwSrcView = 0;
-    SfxViewFrame    *pFrame = SfxViewFrame::GetFirst( pDocShell, sal_False );
+    SfxViewFrame    *pFrame = SfxViewFrame::GetFirst( pDocShell, false );
 
     // look for the view shell with the same controller in use,
     // otherwise look for a suitable view, preferably a SwView,
@@ -2906,7 +2903,7 @@ SfxViewShell * SwXTextDocument::GuessViewShell(
         }
         else if (pSwView || pSwSrcView)
             break;
-        pFrame = SfxViewFrame::GetNext( *pFrame, pDocShell,  sal_False );
+        pFrame = SfxViewFrame::GetNext( *pFrame, pDocShell,  false );
     }
 
     OSL_ENSURE( pSwView || pSwPagePreview || pSwSrcView, "failed to get view shell" );

@@ -280,7 +280,7 @@ void ScTabViewShell::SetActive()
     ActiveGrabFocus();
 }
 
-bool ScTabViewShell::PrepareClose(sal_Bool bUI)
+bool ScTabViewShell::PrepareClose(bool bUI)
 {
     // Call EnterHandler even in formula mode here,
     // so a formula change in an embedded object isn't lost
@@ -489,7 +489,7 @@ void ScTabViewShell::WriteUserData(OUString& rData, bool /* bBrowse */)
     GetViewData()->WriteUserData(rData);
 }
 
-void ScTabViewShell::WriteUserDataSequence (uno::Sequence < beans::PropertyValue >& rSettings, sal_Bool /* bBrowse */ )
+void ScTabViewShell::WriteUserDataSequence (uno::Sequence < beans::PropertyValue >& rSettings, bool /* bBrowse */ )
 {
     GetViewData()->WriteUserDataSequence (rSettings);
 }
@@ -500,7 +500,7 @@ void ScTabViewShell::ReadUserData(const OUString& rData, bool /* bBrowse */)
         DoReadUserData( rData );
 }
 
-void ScTabViewShell::ReadUserDataSequence (const uno::Sequence < beans::PropertyValue >& rSettings, sal_Bool /* bBrowse */ )
+void ScTabViewShell::ReadUserDataSequence (const uno::Sequence < beans::PropertyValue >& rSettings, bool /* bBrowse */ )
 {
     if ( !GetViewData()->GetDocShell()->IsPreview() )
         DoReadUserDataSequence( rSettings );
@@ -1065,7 +1065,7 @@ ScTabViewShell* ScTabViewShell::GetActiveViewShell()
 
 
 
-SfxPrinter* ScTabViewShell::GetPrinter( sal_Bool bCreate )
+SfxPrinter* ScTabViewShell::GetPrinter( bool bCreate )
 {
     //  Drucker ist immer da (wird fuer die FontListe schon beim Starten angelegt)
     return GetViewData()->GetDocShell()->GetPrinter(bCreate);

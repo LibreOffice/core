@@ -199,7 +199,7 @@ void SfxViewFrame::Exec_Impl(SfxRequest &rReq )
 
         case SID_ACTIVATE:
         {
-            MakeActive_Impl( sal_True );
+            MakeActive_Impl( true );
             rReq.SetReturnValue( SfxObjectItem( 0, this ) );
             break;
         }

@@ -886,7 +886,7 @@ MOVEPAGE:
             // The thing with the orientation
             if(pPPVPD)
             {
-                SfxPrinter* pPrinter = GetPrinter( sal_True );
+                SfxPrinter* pPrinter = GetPrinter( true );
                 if((pPrinter->GetOrientation() == ORIENTATION_LANDSCAPE)
                         != pPPVPD->GetLandscape())
                     pPrinter->SetOrientation(pPPVPD->GetLandscape() ? ORIENTATION_LANDSCAPE : ORIENTATION_PORTRAIT);
@@ -1629,7 +1629,7 @@ void SwPagePreview::ScrollDocSzChg()
 }
 
 // All about printing
-SfxPrinter*  SwPagePreview::GetPrinter( sal_Bool bCreate )
+SfxPrinter*  SwPagePreview::GetPrinter( bool bCreate )
 {
     return pViewWin->GetViewShell()->getIDocumentDeviceAccess()->getPrinter( bCreate );
 }

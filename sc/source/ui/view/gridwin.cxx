@@ -2191,7 +2191,7 @@ void ScGridWindow::MouseButtonUp( const MouseEvent& rMEvt )
                                                                 pStyleSheet->GetName() );
 
                         ScPrintFunc( pViewData->GetDocShell(),
-                                     pViewData->GetViewShell()->GetPrinter(sal_True),
+                                     pViewData->GetViewShell()->GetPrinter(true),
                                      pViewData->GetTabNo() ).UpdatePages();
 
                         rBindings.Invalidate( SID_STATUS_PAGESTYLE );

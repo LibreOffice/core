@@ -523,7 +523,7 @@ bool ScPreviewShell::ScrollCommand( const CommandEvent& rCEvt )
     return bDone;
 }
 
-SfxPrinter* ScPreviewShell::GetPrinter( sal_Bool bCreate )
+SfxPrinter* ScPreviewShell::GetPrinter( bool bCreate )
 {
     return pDocShell->GetPrinter(bCreate);
 }
@@ -948,7 +948,7 @@ void ScPreviewShell::ReadUserData(const OUString& rData, bool /* bBrowse */)
     }
 }
 
-void ScPreviewShell::WriteUserDataSequence(uno::Sequence < beans::PropertyValue >& rSeq, sal_Bool /* bBrowse */)
+void ScPreviewShell::WriteUserDataSequence(uno::Sequence < beans::PropertyValue >& rSeq, bool /* bBrowse */)
 {
     rSeq.realloc(3);
     beans::PropertyValue* pSeq = rSeq.getArray();
@@ -967,7 +967,7 @@ void ScPreviewShell::WriteUserDataSequence(uno::Sequence < beans::PropertyValue 
     }
 }
 
-void ScPreviewShell::ReadUserDataSequence(const uno::Sequence < beans::PropertyValue >& rSeq, sal_Bool /* bBrowse */)
+void ScPreviewShell::ReadUserDataSequence(const uno::Sequence < beans::PropertyValue >& rSeq, bool /* bBrowse */)
 {
     sal_Int32 nCount(rSeq.getLength());
     if (nCount)

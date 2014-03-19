@@ -414,7 +414,7 @@ OUString impl_searchFormatTypeForApp(const css::uno::Reference< css::frame::XFra
 
 void SfxViewShell::IPClientGone_Impl( SfxInPlaceClient *pIPClient )
 {
-    SfxInPlaceClientList* pClientList = GetIPClientList_Impl(sal_True);
+    SfxInPlaceClientList* pClientList = GetIPClientList_Impl(true);
 
     for( SfxInPlaceClientList::iterator it = pClientList->begin(); it != pClientList->end(); ++it )
     {
@@ -753,7 +753,7 @@ void SfxViewShell::ExecMisc_Impl( SfxRequest &rReq )
                             VisAreaChanged(aVisArea);
 
                             // the plugins might need change in their state
-                            SfxInPlaceClientList *pClients = pView->GetIPClientList_Impl(sal_False);
+                            SfxInPlaceClientList *pClients = pView->GetIPClientList_Impl(false);
                             if ( pClients )
                             {
                                 for ( size_t n = 0; n < pClients->size(); n++)
@@ -798,7 +798,7 @@ void SfxViewShell::GetState_Impl( SfxItemSet &rSet )
                 bEnabled = bEnabled  && !Application::GetSettings().GetMiscSettings().GetDisablePrinting();
                 if ( bEnabled )
                 {
-                    SfxPrinter *pPrinter = GetPrinter(sal_False);
+                    SfxPrinter *pPrinter = GetPrinter(false);
 
                     if ( SID_PRINTDOCDIRECT == nSID )
                     {
@@ -870,7 +870,7 @@ ErrCode SfxViewShell::DoVerb(long /*nVerb*/)
 
 
 
-void SfxViewShell::OutplaceActivated( sal_Bool bActive, SfxInPlaceClient* /*pClient*/ )
+void SfxViewShell::OutplaceActivated( bool bActive, SfxInPlaceClient* /*pClient*/ )
 {
     if ( !bActive )
         GetFrame()->GetFrame().Appear();
@@ -923,7 +923,7 @@ SfxInPlaceClient* SfxViewShell::FindIPClient
     Window*             pObjParentWin
 )   const
 {
-    SfxInPlaceClientList *pClients = GetIPClientList_Impl(sal_False);
+    SfxInPlaceClientList *pClients = GetIPClientList_Impl(false);
     if ( !pClients )
         return 0;
 
@@ -951,7 +951,7 @@ SfxInPlaceClient* SfxViewShell::GetIPClient() const
 SfxInPlaceClient* SfxViewShell::GetUIActiveIPClient_Impl() const
 {
     // this method is needed as long as SFX still manages the border space for ChildWindows (see SfxFrame::Resize)
-    SfxInPlaceClientList *pClients = GetIPClientList_Impl(sal_False);
+    SfxInPlaceClientList *pClients = GetIPClientList_Impl(false);
     if ( !pClients )
         return 0;
 
@@ -967,7 +967,7 @@ SfxInPlaceClient* SfxViewShell::GetUIActiveIPClient_Impl() const
 
 SfxInPlaceClient* SfxViewShell::GetUIActiveClient() const
 {
-    SfxInPlaceClientList *pClients = GetIPClientList_Impl(sal_False);
+    SfxInPlaceClientList *pClients = GetIPClientList_Impl(false);
     if ( !pClients )
         return 0;
 
@@ -1197,7 +1197,7 @@ void SfxViewShell::SetWindow
     DiscardClients_Impl();
 
     // Switch View-Port
-    sal_Bool bHadFocus = pWindow ? pWindow->HasChildPathFocus( true ) : sal_False;
+    bool bHadFocus = pWindow && pWindow->HasChildPathFocus( true );
     pWindow = pViewPort;
 
     if( pWindow )
@@ -1277,7 +1277,7 @@ SfxViewShell::~SfxViewShell()
 
 bool SfxViewShell::PrepareClose
 (
-    sal_Bool bUI     // TRUE: Allow Dialog and so on, FALSE: silent-mode
+    bool bUI     // TRUE: Allow Dialog and so on, FALSE: silent-mode
 )
 {
     SfxPrinter *pPrinter = GetPrinter();
@@ -1316,9 +1316,9 @@ SfxViewShell* SfxViewShell::Get( const Reference< XController>& i_rController )
     if ( !i_rController.is() )
         return NULL;
 
-    for (   SfxViewShell* pViewShell = SfxViewShell::GetFirst( NULL, sal_False );
+    for (   SfxViewShell* pViewShell = SfxViewShell::GetFirst( NULL, false );
             pViewShell;
-            pViewShell = SfxViewShell::GetNext( *pViewShell, NULL, sal_False )
+            pViewShell = SfxViewShell::GetNext( *pViewShell, NULL, false )
         )
     {
         if ( pViewShell->GetController() == i_rController )
@@ -1375,7 +1375,7 @@ OUString SfxViewShell::GetSelectionText
 
 
 
-sal_Bool SfxViewShell::HasSelection( sal_Bool ) const
+bool SfxViewShell::HasSelection( bool ) const
 
 /*  [Description]
 
@@ -1385,7 +1385,7 @@ sal_Bool SfxViewShell::HasSelection( sal_Bool ) const
 */
 
 {
-    return sal_False;
+    return false;
 }
 
 void SfxViewShell::AddSubShell( SfxShell& rShell )
@@ -1436,7 +1436,7 @@ SfxShell* SfxViewShell::GetSubShell( sal_uInt16 nNo )
     return NULL;
 }
 
-void SfxViewShell::PushSubShells_Impl( sal_Bool bPush )
+void SfxViewShell::PushSubShells_Impl( bool bPush )
 {
     SfxDispatcher *pDisp = pFrame->GetDispatcher();
     if ( bPush )
@@ -1466,11 +1466,11 @@ void SfxViewShell::ReadUserData(const OUString&, bool )
 {
 }
 
-void SfxViewShell::ReadUserDataSequence ( const uno::Sequence < beans::PropertyValue >&, sal_Bool )
+void SfxViewShell::ReadUserDataSequence ( const uno::Sequence < beans::PropertyValue >&, bool )
 {
 }
 
-void SfxViewShell::WriteUserDataSequence ( uno::Sequence < beans::PropertyValue >&, sal_Bool )
+void SfxViewShell::WriteUserDataSequence ( uno::Sequence < beans::PropertyValue >&, bool )
 {
 }
 
@@ -1481,7 +1481,7 @@ void SfxViewShell::WriteUserDataSequence ( uno::Sequence < beans::PropertyValue 
 SfxViewShell* SfxViewShell::GetFirst
 (
     const TypeId* pType,
-    sal_Bool          bOnlyVisible
+    bool          bOnlyVisible
 )
 {
     // search for a SfxViewShell of the specified type
@@ -1519,7 +1519,7 @@ SfxViewShell* SfxViewShell::GetNext
 (
     const SfxViewShell& rPrev,
     const TypeId*       pType,
-    sal_Bool                bOnlyVisible
+    bool                bOnlyVisible
 )
 {
     SfxViewShellArr_Impl &rShells = SFX_APP()->GetViewShells_Impl();
@@ -1595,7 +1595,7 @@ void SfxViewShell::Notify( SfxBroadcaster& rBC,
 
 
 
-sal_Bool SfxViewShell::ExecKey_Impl(const KeyEvent& aKey)
+bool SfxViewShell::ExecKey_Impl(const KeyEvent& aKey)
 {
     if (!pImp->m_pAccExec.get())
     {
@@ -1678,7 +1678,7 @@ void SfxViewShell::GotFocus() const
 void SfxViewShell::ResetAllClients_Impl( SfxInPlaceClient *pIP )
 {
 
-    SfxInPlaceClientList *pClients = GetIPClientList_Impl(sal_False);
+    SfxInPlaceClientList *pClients = GetIPClientList_Impl(false);
     if ( !pClients )
         return;
 
@@ -1694,7 +1694,7 @@ void SfxViewShell::ResetAllClients_Impl( SfxInPlaceClient *pIP )
 
 void SfxViewShell::DisconnectAllClients()
 {
-    SfxInPlaceClientList *pClients = GetIPClientList_Impl(sal_False);
+    SfxInPlaceClientList *pClients = GetIPClientList_Impl(false);
     if ( !pClients )
         return;
 
@@ -1713,7 +1713,7 @@ void SfxViewShell::QueryObjAreaPixel( Rectangle& ) const
 
 void SfxViewShell::VisAreaChanged(const Rectangle& /*rVisArea*/)
 {
-    SfxInPlaceClientList *pClients = GetIPClientList_Impl(sal_False);
+    SfxInPlaceClientList *pClients = GetIPClientList_Impl(false);
     if ( !pClients )
         return;
 
@@ -1732,9 +1732,9 @@ void SfxViewShell::CheckIPClient_Impl( SfxInPlaceClient *pIPClient, const Rectan
     if ( GetObjectShell()->IsInClose() )
         return;
 
-    sal_Bool bAlwaysActive =
+    bool bAlwaysActive =
         ( ( pIPClient->GetObjectMiscStatus() & embed::EmbedMisc::EMBED_ACTIVATEIMMEDIATELY ) != 0 );
-    sal_Bool bActiveWhenVisible =
+    bool bActiveWhenVisible =
         ( ( pIPClient->GetObjectMiscStatus() & embed::EmbedMisc::MS_EMBED_ACTIVATEWHENVISIBLE ) != 0 );
 
     // this method is called when either a client is created or the "Edit/Plugins" checkbox is checked
@@ -1774,7 +1774,7 @@ void SfxViewShell::DiscardClients_Impl()
 */
 
 {
-    SfxInPlaceClientList *pClients = GetIPClientList_Impl(sal_False);
+    SfxInPlaceClientList *pClients = GetIPClientList_Impl(false);
     if ( !pClients )
         return;
 
@@ -1844,7 +1844,7 @@ void SfxViewShell::MarginChanged()
 
 
 
-sal_Bool SfxViewShell::IsShowView_Impl() const
+bool SfxViewShell::IsShowView_Impl() const
 {
     return pImp->m_bIsShowView;
 }
@@ -1869,7 +1869,7 @@ void SfxViewShell::JumpToMark( const OUString& rMark )
 
 
 
-SfxInPlaceClientList* SfxViewShell::GetIPClientList_Impl( sal_Bool bCreate ) const
+SfxInPlaceClientList* SfxViewShell::GetIPClientList_Impl( bool bCreate ) const
 {
     if ( !pIPClientList && bCreate )
         ( (SfxViewShell*) this )->pIPClientList = new SfxInPlaceClientList;
@@ -1947,10 +1947,10 @@ void Change( Menu* pMenu, SfxViewShell* pView )
 }
 
 
-sal_Bool SfxViewShell::TryContextMenuInterception( Menu& rIn, const OUString& rMenuIdentifier, Menu*& rpOut, ui::ContextMenuExecuteEvent aEvent )
+bool SfxViewShell::TryContextMenuInterception( Menu& rIn, const OUString& rMenuIdentifier, Menu*& rpOut, ui::ContextMenuExecuteEvent aEvent )
 {
     rpOut = NULL;
-    sal_Bool bModified = sal_False;
+    bool bModified = false;
 
     // create container from menu
     aEvent.ActionTriggerContainer = ::framework::ActionTriggerHelper::CreateActionTriggerContainerFromMenu(
@@ -1971,14 +1971,14 @@ sal_Bool SfxViewShell::TryContextMenuInterception( Menu& rIn, const OUString& rM
             {
                 case ui::ContextMenuInterceptorAction_CANCELLED :
                     // interceptor does not want execution
-                    return sal_False;
+                    return false;
                 case ui::ContextMenuInterceptorAction_EXECUTE_MODIFIED :
                     // interceptor wants his modified menu to be executed
-                    bModified = sal_True;
+                    bModified = true;
                     break;
                 case ui::ContextMenuInterceptorAction_CONTINUE_MODIFIED :
                     // interceptor has modified menu, but allows for calling other interceptors
-                    bModified = sal_True;
+                    bModified = true;
                     continue;
                 case ui::ContextMenuInterceptorAction_IGNORED :
                     // interceptor is indifferent
@@ -2005,7 +2005,7 @@ sal_Bool SfxViewShell::TryContextMenuInterception( Menu& rIn, const OUString& rM
         Change( rpOut, this );
     }
 
-    return sal_True;
+    return true;
 }
 
 void SfxViewShell::TakeOwnership_Impl()
@@ -2029,19 +2029,19 @@ bool SfxViewShell::HandleNotifyEvent_Impl( NotifyEvent& rEvent )
     return false;
 }
 
-sal_Bool SfxViewShell::HasKeyListeners_Impl()
+bool SfxViewShell::HasKeyListeners_Impl()
 {
     return (pImp->m_pController.is())
-        ? pImp->m_pController->HasKeyListeners_Impl() : sal_False;
+        && pImp->m_pController->HasKeyListeners_Impl();
 }
 
-sal_Bool SfxViewShell::HasMouseClickListeners_Impl()
+bool SfxViewShell::HasMouseClickListeners_Impl()
 {
     return (pImp->m_pController.is())
-        ? pImp->m_pController->HasMouseClickListeners_Impl() : sal_False;
+        && pImp->m_pController->HasMouseClickListeners_Impl();
 }
 
-sal_Bool SfxViewShell::Escape()
+bool SfxViewShell::Escape()
 {
     return GetViewFrame()->GetBindings().Execute( SID_TERMINATE_INPLACEACTIVATION );
 }
@@ -2069,7 +2069,7 @@ uno::Reference< datatransfer::clipboard::XClipboardNotifier > SfxViewShell::GetC
     return xClipboardNotifier;
 }
 
-void SfxViewShell::AddRemoveClipboardListener( const uno::Reference < datatransfer::clipboard::XClipboardListener >& rClp, sal_Bool bAdd )
+void SfxViewShell::AddRemoveClipboardListener( const uno::Reference < datatransfer::clipboard::XClipboardListener >& rClp, bool bAdd )
 {
     try
     {

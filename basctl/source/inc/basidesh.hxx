@@ -115,8 +115,8 @@ private:
 private:
     virtual void        AdjustPosSizePixel( const Point &rPos, const Size &rSize );
     virtual void        OuterResizePixel( const Point &rPos, const Size &rSize );
-    sal_uInt16              InsertWindowInTable (BaseWindow* pNewWin);
-    virtual bool        PrepareClose( sal_Bool bUI ) SAL_OVERRIDE;
+    sal_uInt16          InsertWindowInTable (BaseWindow* pNewWin);
+    virtual bool        PrepareClose( bool bUI ) SAL_OVERRIDE;
 
     void                SetCurWindow (BaseWindow* pNewWin, bool bUpdateTabBar = false, bool bRememberAsCurrent = true);
     void                ManageToolbars();
@@ -174,10 +174,10 @@ public:
     virtual com::sun::star::uno::Reference< com::sun::star::view::XRenderable > GetRenderable();
 
     // virtual sal_uInt16           Print( SfxProgress &rProgress, sal_Bool bIsAPI, PrintDialog *pPrintDialog = 0 );
-    virtual SfxPrinter*     GetPrinter( sal_Bool bCreate );
+    virtual SfxPrinter*     GetPrinter( bool bCreate );
     virtual sal_uInt16      SetPrinter( SfxPrinter *pNewPrinter, sal_uInt16 nDiffFlags = SFX_PRINTER_ALL, bool bIsAPI=false );
     virtual OUString        GetSelectionText( bool bCompleteWords );
-    virtual sal_Bool        HasSelection( sal_Bool bText ) const;
+    virtual bool            HasSelection( bool bText ) const;
 
     void                GetState( SfxItemSet& );
     void                ExecuteGlobal( SfxRequest& rReq );

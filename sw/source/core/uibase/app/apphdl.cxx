@@ -296,7 +296,7 @@ void SwMailMergeWizardExecutor::ExecuteMailMergeWizard( const SfxItemSet * pArgs
                 m_pMMConfig->SetSourceView( m_pView );
             m_pView->SetMailMergeConfigItem(0, 0, sal_True);
             SfxViewFrame* pViewFrame = m_pView->GetViewFrame();
-            pViewFrame->ShowChildWindow(FN_MAILMERGE_CHILDWINDOW, sal_False);
+            pViewFrame->ShowChildWindow(FN_MAILMERGE_CHILDWINDOW, false);
             OSL_ENSURE(m_pMMConfig, "no MailMergeConfigItem available");
             bRestoreWizard = true;
         }

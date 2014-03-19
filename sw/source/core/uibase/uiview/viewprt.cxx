@@ -68,7 +68,7 @@ using namespace ::com::sun::star;
 
 // Hand over the printer to Sfx
 
-SfxPrinter* SwView::GetPrinter( sal_Bool bCreate )
+SfxPrinter* SwView::GetPrinter( bool bCreate )
 {
     const IDocumentDeviceAccess* pIDDA = GetWrtShell().getIDocumentDeviceAccess();
     SfxPrinter *pOld = pIDDA->getPrinter( false );

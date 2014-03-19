@@ -260,17 +260,17 @@ uno::Sequence< beans::PropertyValue > SAL_CALL SfxPrintHelper::getPrinter() thro
 
     // search for any view of this document that is currently printing
     const Printer *pPrinter = NULL;
-    SfxViewFrame *pViewFrm = m_pData->m_pObjectShell.Is() ? SfxViewFrame::GetFirst( m_pData->m_pObjectShell, sal_False ) : 0;
+    SfxViewFrame *pViewFrm = m_pData->m_pObjectShell.Is() ? SfxViewFrame::GetFirst( m_pData->m_pObjectShell, false ) : 0;
     SfxViewFrame* pFirst = pViewFrm;
     while ( pViewFrm && !pPrinter )
     {
         pPrinter = pViewFrm->GetViewShell()->GetActivePrinter();
-        pViewFrm = SfxViewFrame::GetNext( *pViewFrm, m_pData->m_pObjectShell, sal_False );
+        pViewFrm = SfxViewFrame::GetNext( *pViewFrm, m_pData->m_pObjectShell, false );
     }
 
     // if no view is printing currently, use the permanent SfxPrinter instance
     if ( !pPrinter && pFirst )
-        pPrinter = pFirst->GetViewShell()->GetPrinter(sal_True);
+        pPrinter = pFirst->GetViewShell()->GetPrinter(true);
 
     if ( !pPrinter )
         return uno::Sequence< beans::PropertyValue >();
@@ -317,12 +317,12 @@ void SfxPrintHelper::impl_setPrinter(const uno::Sequence< beans::PropertyValue >
 {
     // Get old Printer
     SfxViewFrame *pViewFrm = m_pData->m_pObjectShell.Is() ?
-                                SfxViewFrame::GetFirst( m_pData->m_pObjectShell, sal_False ) : 0;
+                                SfxViewFrame::GetFirst( m_pData->m_pObjectShell, false ) : 0;
     if ( !pViewFrm )
         return;
 
     pViewSh = pViewFrm->GetViewShell();
-    pPrinter = pViewSh->GetPrinter(sal_True);
+    pPrinter = pViewSh->GetPrinter(true);
     if ( !pPrinter )
         return;
 
@@ -592,7 +592,7 @@ void SAL_CALL SfxPrintHelper::print(const uno::Sequence< beans::PropertyValue >&
 
     // get view for sfx printing capabilities
     SfxViewFrame *pViewFrm = m_pData->m_pObjectShell.Is() ?
-                                SfxViewFrame::GetFirst( m_pData->m_pObjectShell, sal_False ) : 0;
+                                SfxViewFrame::GetFirst( m_pData->m_pObjectShell, false ) : 0;
     if ( !pViewFrm )
         return;
     SfxViewShell* pView = pViewFrm->GetViewShell();
@@ -765,7 +765,7 @@ void SAL_CALL SfxPrintHelper::print(const uno::Sequence< beans::PropertyValue >&
     // It doesn'tmatter if it is a real printer used or we print to a local file
     // nor if we print to a temp file and move it afterwards by using the ucb.
     // That will be handled later. see pUCBPrintFile below!
-    pView->ExecPrint( aCheckedArgs, sal_True, sal_False );
+    pView->ExecPrint( aCheckedArgs, true, false );
 
     // Ok - may be execution before has finished (or started!) printing.
     // And may it was a printing to a file.

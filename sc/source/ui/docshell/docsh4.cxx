@@ -761,7 +761,7 @@ void ScDocShell::Execute( SfxRequest& rReq )
                             SfxViewFrame* pViewFrm = SfxViewFrame::Current();
                             if ( pViewFrm )
                             {
-                                pViewFrm->ShowChildWindow( ScAcceptChgDlgWrapper::GetChildWindowId(), sal_True ); //@51669
+                                pViewFrm->ShowChildWindow( ScAcceptChgDlgWrapper::GetChildWindowId(), true ); //@51669
                             }
                             if ( pBindings )
                             {

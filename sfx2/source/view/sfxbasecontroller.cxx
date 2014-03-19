@@ -360,7 +360,7 @@ void SAL_CALL IMPL_SfxBaseController_CloseListenerHelper::queryClosing( const la
     SfxViewShell* pShell = m_pController->GetViewShell_Impl();
     if  (pShell)
     {
-        bool bCanClose = pShell->PrepareClose( sal_False );
+        bool bCanClose = pShell->PrepareClose( false );
         if ( !bCanClose )
         {
             if ( bDeliverOwnership && ( !pShell->GetWindow() || !pShell->GetWindow()->IsReallyVisible() ) )
@@ -448,7 +448,7 @@ void SAL_CALL IMPL_SfxBaseController_ListenerHelper::frameAction( const frame::F
         if ( aEvent.Action == frame::FrameAction_FRAME_UI_ACTIVATED )
         {
             if ( !m_pController->GetViewShell_Impl()->GetUIActiveIPClient_Impl() )
-                m_pController->GetViewShell_Impl()->GetViewFrame()->MakeActive_Impl( sal_False );
+                m_pController->GetViewShell_Impl()->GetViewFrame()->MakeActive_Impl( false );
         }
         else if ( aEvent.Action == frame::FrameAction_CONTEXT_CHANGED )
         {
@@ -727,7 +727,7 @@ Reference< frame::XDispatch > SAL_CALL SfxBaseController::queryDispatch(   const
             {
                 SfxViewFrame *pFrame = m_pData->m_pViewShell->GetViewFrame();
                 if ( eSearchFlags & ( frame::FrameSearchFlag::CREATE ))
-                    pFrame->SetChildWindow( SID_BROWSER, sal_True );
+                    pFrame->SetChildWindow( SID_BROWSER, true );
                 SfxChildWindow* pChildWin = pFrame->GetChildWindow( SID_BROWSER );
                 Reference < frame::XFrame > xFrame;
                 if ( pChildWin )
@@ -1322,7 +1322,7 @@ void SfxBaseController::ConnectSfxFrame_Impl( const ConnectSfxFrame i_eConnect )
                     // force resize for OLE server to fix layout problems of writer and math
                     // see i53651
                     if ( nPluginMode == 3 )
-                        pViewFrame->Resize( sal_True );
+                        pViewFrame->Resize( true );
                 }
             }
             else
@@ -1335,7 +1335,7 @@ void SfxBaseController::ConnectSfxFrame_Impl( const ConnectSfxFrame i_eConnect )
             pViewFrame->UpdateTitle();
 
             if ( !rFrame.IsInPlace() )
-                pViewFrame->Resize( sal_True );
+                pViewFrame->Resize( true );
 
             // if there's a JumpMark given, then, well, jump to it
             ::comphelper::NamedValueCollection aViewArgs( getCreationArguments() );
@@ -1398,7 +1398,7 @@ void SfxBaseController::ConnectSfxFrame_Impl( const ConnectSfxFrame i_eConnect )
                         Sequence< PropertyValue > aViewData;
                         OSL_VERIFY( xViewData->getByIndex( nViewDataIndex ) >>= aViewData );
                         if ( aViewData.getLength() > 0 )
-                            m_pData->m_pViewShell->ReadUserDataSequence( aViewData, sal_True );
+                            m_pData->m_pViewShell->ReadUserDataSequence( aViewData, true );
                     }
                 }
                 catch (const Exception&)

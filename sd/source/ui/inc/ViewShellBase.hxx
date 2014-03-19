@@ -113,7 +113,7 @@ public:
 
     /* override these from SfxViewShell */
     virtual OUString GetSelectionText(bool);
-    virtual sal_Bool HasSelection(sal_Bool) const;
+    virtual bool HasSelection(bool) const;
 
     SvBorder GetBorder (bool bOuterResize);
     virtual void InnerResizePixel (const Point& rOrigin, const Size& rSize);
@@ -129,7 +129,7 @@ public:
     virtual com::sun::star::uno::Reference<com::sun::star::view::XRenderable> GetRenderable (void);
 
     /// Forwarded to the print manager.
-    virtual SfxPrinter* GetPrinter (sal_Bool bCreate = sal_False);
+    virtual SfxPrinter* GetPrinter (bool bCreate = false);
 
     /// Forwarded to the print manager.
     virtual sal_uInt16 SetPrinter (
@@ -140,7 +140,7 @@ public:
     virtual void WriteUserDataSequence (
         ::com::sun::star::uno::Sequence <
         ::com::sun::star::beans::PropertyValue >&,
-        sal_Bool bBrowse = sal_False);
+        bool bBrowse = false);
 
     /** Pass the given properties to the main view shell.  After that we
         ensure that the right view shell type is displayed in the center
@@ -149,7 +149,7 @@ public:
     virtual void ReadUserDataSequence (
         const ::com::sun::star::uno::Sequence <
         ::com::sun::star::beans::PropertyValue >&,
-        sal_Bool bBrowse = sal_False);
+        bool bBrowse = false);
 
     virtual void UIActivating( SfxInPlaceClient* );
     virtual void UIDeactivated( SfxInPlaceClient* );
@@ -158,7 +158,7 @@ public:
     virtual void SetZoomFactor (
         const Fraction &rZoomX,
         const Fraction &rZoomY);
-    virtual bool PrepareClose (sal_Bool bUI = sal_True) SAL_OVERRIDE;
+    virtual bool PrepareClose (bool bUI = true) SAL_OVERRIDE;
     virtual void WriteUserData (OUString&, bool bBrowse = false);
     virtual void ReadUserData (const OUString&, bool bBrowse = false);
     virtual SdrView* GetDrawView (void) const;

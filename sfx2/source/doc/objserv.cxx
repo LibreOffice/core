@@ -1274,7 +1274,7 @@ void SfxObjectShell::ExecView_Impl(SfxRequest &rReq)
     {
         case SID_ACTIVATE:
         {
-            SfxViewFrame *pFrame = SfxViewFrame::GetFirst( this, sal_True );
+            SfxViewFrame *pFrame = SfxViewFrame::GetFirst( this, true );
             if ( pFrame )
                 pFrame->GetFrame().Appear();
             rReq.SetReturnValue( SfxObjectItem( 0, pFrame ) );

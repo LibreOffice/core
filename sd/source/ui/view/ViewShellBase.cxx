@@ -469,7 +469,7 @@ OUString ViewShellBase::GetSelectionText(bool bCompleteWords)
         :   SfxViewShell::GetSelectionText(bCompleteWords);
 }
 
-sal_Bool ViewShellBase::HasSelection(sal_Bool bText) const
+bool ViewShellBase::HasSelection(bool bText) const
 {
     ::boost::shared_ptr<ViewShell> const pMainShell(GetMainViewShell());
     DrawViewShell *const pDrawViewShell(
@@ -526,7 +526,7 @@ void ViewShellBase::Rearrange (void)
         OSL_TRACE("Rearrange: window missing");
     }
 
-    GetViewFrame()->Resize(sal_True);
+    GetViewFrame()->Resize(true);
 }
 
 
@@ -556,7 +556,7 @@ Reference<view::XRenderable> ViewShellBase::GetRenderable (void)
 
 
 
-SfxPrinter* ViewShellBase::GetPrinter (sal_Bool bCreate)
+SfxPrinter* ViewShellBase::GetPrinter (bool bCreate)
 {
     OSL_ASSERT(mpImpl.get()!=NULL);
 
@@ -732,7 +732,7 @@ void ViewShellBase::GetState (SfxItemSet& rSet)
 void ViewShellBase::WriteUserDataSequence (
     ::com::sun::star::uno::Sequence <
     ::com::sun::star::beans::PropertyValue >& rSequence,
-    sal_Bool bBrowse)
+    bool bBrowse)
 {
     // Forward call to main sub shell.
     ViewShell* pShell = GetMainViewShell().get();
@@ -746,7 +746,7 @@ void ViewShellBase::WriteUserDataSequence (
 void ViewShellBase::ReadUserDataSequence (
     const ::com::sun::star::uno::Sequence <
     ::com::sun::star::beans::PropertyValue >& rSequence,
-    sal_Bool bBrowse)
+    bool bBrowse)
 {
     // Forward call to main sub shell.
     ViewShell* pShell = GetMainViewShell().get();
@@ -833,7 +833,7 @@ void ViewShellBase::SetZoomFactor (
 
 
 
-bool ViewShellBase::PrepareClose (sal_Bool bUI)
+bool ViewShellBase::PrepareClose (bool bUI)
 {
     bool nResult = SfxViewShell::PrepareClose (bUI);
 

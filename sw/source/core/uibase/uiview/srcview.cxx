@@ -262,7 +262,7 @@ void SwSrcView::Init()
         aEditWin.SetReadonly(sal_True);
     }
 
-    SetNewWindowAllowed( sal_False );
+    SetNewWindowAllowed( false );
     StartListening(*pDocShell,true);
 }
 
@@ -677,7 +677,7 @@ sal_uInt16 SwSrcView::SetPrinter(SfxPrinter* pNew, sal_uInt16 nDiffFlags, bool )
     return 0;
 }
 
-SfxPrinter* SwSrcView::GetPrinter( sal_Bool bCreate )
+SfxPrinter* SwSrcView::GetPrinter( bool bCreate )
 {
     return  GetDocShell()->GetDoc()->getPrinter( bCreate );
 }

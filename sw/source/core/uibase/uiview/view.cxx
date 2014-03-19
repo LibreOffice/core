@@ -1242,7 +1242,7 @@ void SwView::ReadUserData( const OUString &rUserData, bool bBrowse )
     }
 }
 
-void SwView::ReadUserDataSequence ( const uno::Sequence < beans::PropertyValue >& rSequence, sal_Bool bBrowse )
+void SwView::ReadUserDataSequence ( const uno::Sequence < beans::PropertyValue >& rSequence, bool bBrowse )
 {
     if(GetDocShell()->IsPreview()||m_bIsPreviewDoubleClick)
         return;
@@ -1460,7 +1460,7 @@ void SwView::ReadUserDataSequence ( const uno::Sequence < beans::PropertyValue >
 }
 
 #define NUM_VIEW_SETTINGS 12
-void SwView::WriteUserDataSequence ( uno::Sequence < beans::PropertyValue >& rSequence, sal_Bool bBrowse )
+void SwView::WriteUserDataSequence ( uno::Sequence < beans::PropertyValue >& rSequence, bool bBrowse )
 {
     const SwRect& rRect = m_pWrtShell->GetCharRect();
     const Rectangle& rVis = GetVisArea();
@@ -1558,7 +1558,7 @@ ErrCode SwView::DoVerb( long nVerb )
 
 //   only return sal_True for a text selection
 
-sal_Bool SwView::HasSelection( sal_Bool  bText ) const
+bool SwView::HasSelection( bool  bText ) const
 {
     return bText ? GetWrtShell().SwCrsrShell::HasSelection()
                  : GetWrtShell().HasSelection();
@@ -1726,10 +1726,10 @@ void    SwView::StopShellTimer()
     }
 }
 
-bool SwView::PrepareClose( sal_Bool bUI )
+bool SwView::PrepareClose( bool bUI )
 {
     SfxViewFrame* pVFrame = GetViewFrame();
-    pVFrame->SetChildWindow( SwInputChild::GetChildWindowId(), sal_False );
+    pVFrame->SetChildWindow( SwInputChild::GetChildWindowId(), false );
     if( pVFrame->GetDispatcher()->IsLocked() )
         pVFrame->GetDispatcher()->Lock(false);
 

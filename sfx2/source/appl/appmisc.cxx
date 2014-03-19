@@ -131,7 +131,7 @@ SfxModule* SfxApplication::GetModule_Impl()
 {
     SfxModule* pModule = SfxModule::GetActiveModule();
     if ( !pModule )
-        pModule = SfxModule::GetActiveModule( SfxViewFrame::GetFirst( 0, sal_False ) );
+        pModule = SfxModule::GetActiveModule( SfxViewFrame::GetFirst( 0, false ) );
     if( pModule )
         return pModule;
     else

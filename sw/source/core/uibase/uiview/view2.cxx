@@ -775,7 +775,7 @@ void SwView::Execute(SfxRequest &rReq)
         break;
         case FN_SYNC_LABELS:
         case FN_MAILMERGE_CHILDWINDOW:
-            GetViewFrame()->ShowChildWindow(nSlot, sal_True);
+            GetViewFrame()->ShowChildWindow(nSlot, true);
         break;
         case FN_ESCAPE:
         {
@@ -2325,7 +2325,7 @@ void SwView::GenerateFormLetter(sal_Bool bUseCurrentDocument)
             //call insert fields with database field page available, only
             SfxViewFrame* pVFrame = GetViewFrame();
             //at first hide the default field dialog if currently visible
-            pVFrame->SetChildWindow(FN_INSERT_FIELD, sal_False);
+            pVFrame->SetChildWindow(FN_INSERT_FIELD, false);
             //enable the status of the db field dialog - it is disabled in the status method
             //to prevent creation of the dialog without mail merge active
             EnableMailMerge();

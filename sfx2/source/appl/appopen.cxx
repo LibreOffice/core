@@ -1122,7 +1122,7 @@ void SfxApplication::OpenDocExec_Impl( SfxRequest& rReq )
     {
         // try to find the SfxFrame for the controller
         SfxFrame* pCntrFrame = NULL;
-        for ( SfxViewShell* pShell = SfxViewShell::GetFirst( 0, sal_False ); pShell; pShell = SfxViewShell::GetNext( *pShell, 0, sal_False ) )
+        for ( SfxViewShell* pShell = SfxViewShell::GetFirst( 0, false ); pShell; pShell = SfxViewShell::GetNext( *pShell, 0, false ) )
         {
             if ( pShell->GetController() == xController )
             {

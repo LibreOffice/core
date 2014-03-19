@@ -41,7 +41,7 @@ SwWait::~SwWait()
 
 void SwWait::EnterWaitAndLockDispatcher()
 {
-    SfxViewFrame *pFrame = SfxViewFrame::GetFirst( &mrDoc, sal_False );
+    SfxViewFrame *pFrame = SfxViewFrame::GetFirst( &mrDoc, false );
     while ( pFrame )
     {
         pFrame->GetWindow().EnterWait();
@@ -56,13 +56,13 @@ void SwWait::EnterWaitAndLockDispatcher()
             }
         }
 
-        pFrame = SfxViewFrame::GetNext( *pFrame, &mrDoc, sal_False );
+        pFrame = SfxViewFrame::GetNext( *pFrame, &mrDoc, false );
     }
 }
 
 void SwWait::LeaveWaitAndUnlockDispatcher()
 {
-    SfxViewFrame *pFrame = SfxViewFrame::GetFirst( &mrDoc, sal_False );
+    SfxViewFrame *pFrame = SfxViewFrame::GetFirst( &mrDoc, false );
     while ( pFrame )
     {
         pFrame->GetWindow().LeaveWait();
@@ -77,7 +77,7 @@ void SwWait::LeaveWaitAndUnlockDispatcher()
             }
         }
 
-        pFrame = SfxViewFrame::GetNext( *pFrame, &mrDoc, sal_False );
+        pFrame = SfxViewFrame::GetNext( *pFrame, &mrDoc, false );
     }
 }
 

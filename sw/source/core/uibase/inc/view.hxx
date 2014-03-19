@@ -336,8 +336,8 @@ class SW_DLLPUBLIC SwView: public SfxViewShell
                             { m_bCenterCrsr = bOn; m_bAlwaysShowSel = bOn; }
 
     // methods for printing
-    SAL_DLLPRIVATE virtual   SfxPrinter*     GetPrinter( sal_Bool bCreate = sal_False );
-    SAL_DLLPRIVATE virtual bool  HasPrintOptionsPage() const;
+    SAL_DLLPRIVATE virtual SfxPrinter*       GetPrinter( bool bCreate = false );
+    SAL_DLLPRIVATE virtual bool              HasPrintOptionsPage() const;
     SAL_DLLPRIVATE virtual SfxTabPage*       CreatePrintOptionsPage( Window* pParent,
                                                     const SfxItemSet& rSet);
     // for readonly switching
@@ -415,9 +415,9 @@ public:
 
     OUString                GetSelectionTextParam( bool bCompleteWords,
                                                    bool bEraseTrail );
-    virtual sal_Bool            HasSelection( sal_Bool  bText ) const;
+    virtual bool            HasSelection( bool bText ) const;
     virtual OUString        GetSelectionText( bool bCompleteWords = false );
-    virtual bool            PrepareClose( sal_Bool bUI = sal_True ) SAL_OVERRIDE;
+    virtual bool            PrepareClose( bool bUI = true ) SAL_OVERRIDE;
     virtual void            MarginChanged();
 
     // replace word/selection with text from the thesaurus
@@ -597,8 +597,8 @@ public:
 
     virtual void    WriteUserData(OUString &, bool bBrowse = false);
     virtual void    ReadUserData(const OUString &, bool bBrowse = false);
-    virtual void    ReadUserDataSequence ( const com::sun::star::uno::Sequence < com::sun::star::beans::PropertyValue >&, sal_Bool bBrowse );
-    virtual void    WriteUserDataSequence ( com::sun::star::uno::Sequence < com::sun::star::beans::PropertyValue >&, sal_Bool bBrowse );
+    virtual void    ReadUserDataSequence ( const com::sun::star::uno::Sequence < com::sun::star::beans::PropertyValue >&, bool bBrowse );
+    virtual void    WriteUserDataSequence ( com::sun::star::uno::Sequence < com::sun::star::beans::PropertyValue >&, bool bBrowse );
 
     void SetCrsrAtTop( sal_Bool bFlag, sal_Bool bCenter = sal_False )
         { m_bTopCrsr = bFlag, m_bCenterCrsr = bCenter; }

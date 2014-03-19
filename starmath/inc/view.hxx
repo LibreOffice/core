@@ -256,7 +256,7 @@ protected:
                   sal_uInt16        MaxWidth);
 
     virtual sal_uInt16 Print(SfxProgress &rProgress, sal_Bool bIsAPI);
-    virtual SfxPrinter *GetPrinter(sal_Bool bCreate = sal_False);
+    virtual SfxPrinter *GetPrinter(bool bCreate = false);
     virtual sal_uInt16 SetPrinter(SfxPrinter *pNewPrinter,
                               sal_uInt16     nDiffFlags = SFX_PRINTER_ALL, bool bIsAPI=false);
 

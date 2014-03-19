@@ -1350,7 +1350,7 @@ sal_uInt16 SmViewShell::Print(SfxProgress & /*rProgress*/, sal_Bool /*bIsAPI*/)
 }
 
 
-SfxPrinter* SmViewShell::GetPrinter(sal_Bool bCreate)
+SfxPrinter* SmViewShell::GetPrinter(bool bCreate)
 {
     SAL_INFO( "starmath", "SmViewShell::GetPrinter" );
 

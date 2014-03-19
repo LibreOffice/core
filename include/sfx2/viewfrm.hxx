@@ -102,13 +102,13 @@ public:
     static SfxViewFrame*    DisplayNewDocument( SfxObjectShell& i_rDoc, const SfxRequest& i_rCreateDocRequest, const sal_uInt16 i_nViewId = 0 );
 
     static SfxViewFrame*    Current();
-    static SfxViewFrame*    GetFirst( const SfxObjectShell* pDoc = 0, sal_Bool bOnlyVisible = sal_True );
-    static SfxViewFrame*    GetNext( const SfxViewFrame& rPrev, const SfxObjectShell* pDoc = 0, sal_Bool bOnlyVisible = sal_True );
+    static SfxViewFrame*    GetFirst( const SfxObjectShell* pDoc = 0, bool bOnlyVisible = true );
+    static SfxViewFrame*    GetNext( const SfxViewFrame& rPrev, const SfxObjectShell* pDoc = 0, bool bOnlyVisible = true );
 
     static SfxViewFrame*    Get( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XController>& i_rController, const SfxObjectShell* i_pDoc = NULL );
 
-            void            DoActivate(sal_Bool bMDI, SfxViewFrame *pOld=NULL);
-            void            DoDeactivate(sal_Bool bMDI, SfxViewFrame *pOld=NULL);
+            void            DoActivate(bool bMDI, SfxViewFrame *pOld=NULL);
+            void            DoDeactivate(bool bMDI, SfxViewFrame *pOld=NULL);
 
     SfxViewFrame*           GetParentViewFrame() const;
 
@@ -131,10 +131,10 @@ public:
     void                    DoAdjustPosSizePixel( SfxViewShell * pSh,
                                         const Point &rPos, const Size &rSize );
     void                    Show();
-    sal_Bool                    IsVisible() const;
+    bool                    IsVisible() const;
     void                    ToTop();
-    void                    Enable( sal_Bool bEnable );
-    virtual sal_Bool            Close();
+    void                    Enable( bool bEnable );
+    virtual bool            Close();
     virtual void            Activate( bool bUI );
     virtual void            Deactivate( bool bUI );
 
@@ -153,7 +153,7 @@ public:
     static void ActivateToolPanel( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& i_rFrame, const OUString& i_rPanelURL );
 
     // interne Handler
-    SAL_DLLPRIVATE virtual sal_Bool SetBorderPixelImpl( const SfxViewShell *pSh, const SvBorder &rBorder );
+    SAL_DLLPRIVATE virtual bool SetBorderPixelImpl( const SfxViewShell *pSh, const SvBorder &rBorder );
     SAL_DLLPRIVATE virtual const SvBorder& GetBorderPixelImpl( const SfxViewShell *pSh ) const;
     SAL_DLLPRIVATE virtual void InvalidateBorderImpl( const SfxViewShell *pSh );
 
@@ -162,7 +162,7 @@ public:
     SfxFrame&               GetFrame() const;
     SfxViewFrame*           GetTopViewFrame() const;
 
-    sal_Bool                    DoClose();
+    bool                    DoClose();
     sal_uIntPtr                 GetFrameType() const
                             { return GetFrame().GetFrameType(); }
     SfxFrame&               GetTopFrame() const
@@ -172,15 +172,15 @@ public:
     void                    CancelTransfers()
                             { GetFrame().CancelTransfers(); }
 
-    void                    SetModalMode( sal_Bool );
-    sal_Bool                    IsInModalMode() const;
-    void                    Resize(sal_Bool bForce=sal_False);
+    void                    SetModalMode( bool );
+    bool                    IsInModalMode() const;
+    void                    Resize(bool bForce=false);
 
-    void                        SetChildWindow(sal_uInt16 nId, sal_Bool bVisible, sal_Bool bSetFocus=sal_True);
+    void                        SetChildWindow(sal_uInt16 nId, bool bVisible, bool bSetFocus=true);
     void                        ToggleChildWindow(sal_uInt16);
     bool                        HasChildWindow(sal_uInt16);
-    sal_Bool                        KnowsChildWindow(sal_uInt16);
-    void                        ShowChildWindow(sal_uInt16,sal_Bool bVisible=sal_True);
+    bool                        KnowsChildWindow(sal_uInt16);
+    void                        ShowChildWindow(sal_uInt16,bool bVisible=true);
     SfxChildWindow*             GetChildWindow(sal_uInt16);
     void                        ChildWindowExecute(SfxRequest&);
     void                        ChildWindowState(SfxItemSet&);
@@ -195,7 +195,7 @@ public:
 
     SAL_DLLPRIVATE void SetDowning_Impl();
     SAL_DLLPRIVATE void GetDocNumber_Impl();
-    SAL_DLLPRIVATE sal_Bool IsDowning_Impl() const;
+    SAL_DLLPRIVATE bool IsDowning_Impl() const;
     SAL_DLLPRIVATE void SetViewShell_Impl( SfxViewShell *pVSh );
     SAL_DLLPRIVATE void ReleaseObjectShell_Impl();
 
@@ -207,16 +207,16 @@ public:
     SAL_DLLPRIVATE void ExecHistory_Impl( SfxRequest &rReq );
     SAL_DLLPRIVATE void StateHistory_Impl( SfxItemSet &rSet );
     SAL_DLLPRIVATE SfxViewFrame* GetParentViewFrame_Impl() const;
-    SAL_DLLPRIVATE void ForceOuterResize_Impl(sal_Bool bOn=sal_True);
-    SAL_DLLPRIVATE sal_Bool IsResizeInToOut_Impl() const;
-    SAL_DLLPRIVATE sal_Bool IsAdjustPosSizePixelLocked_Impl() const
+    SAL_DLLPRIVATE void ForceOuterResize_Impl(bool bOn=true);
+    SAL_DLLPRIVATE bool IsResizeInToOut_Impl() const;
+    SAL_DLLPRIVATE bool IsAdjustPosSizePixelLocked_Impl() const
                             { return nAdjustPosPixelLock != 0; }
     SAL_DLLPRIVATE void UpdateDocument_Impl();
 
-    SAL_DLLPRIVATE void LockObjectShell_Impl(sal_Bool bLock=sal_True);
+    SAL_DLLPRIVATE void LockObjectShell_Impl(bool bLock=true);
 
-    SAL_DLLPRIVATE void MakeActive_Impl( sal_Bool bActivate );
-    SAL_DLLPRIVATE void SetQuietMode_Impl( sal_Bool );
+    SAL_DLLPRIVATE void MakeActive_Impl( bool bActivate );
+    SAL_DLLPRIVATE void SetQuietMode_Impl( bool );
     SAL_DLLPRIVATE const Size& GetMargin_Impl() const;
     SAL_DLLPRIVATE void SetActiveChildFrame_Impl( SfxViewFrame* );
     SAL_DLLPRIVATE SfxViewFrame* GetActiveChildFrame_Impl() const;
@@ -234,7 +234,7 @@ public:
     SAL_DLLPRIVATE void ActivateToolPanel_Impl( const OUString& i_rPanelURL );
 
 private:
-    SAL_DLLPRIVATE sal_Bool SwitchToViewShell_Impl( sal_uInt16 nNo, sal_Bool bIsIndex = sal_False );
+    SAL_DLLPRIVATE bool SwitchToViewShell_Impl( sal_uInt16 nNo, bool bIsIndex = false );
     SAL_DLLPRIVATE void PopShellAndSubShells_Impl( SfxViewShell& i_rViewShell );
     SAL_DLLPRIVATE void SaveCurrentViewData_Impl( const sal_uInt16 i_nNewViewId );
 

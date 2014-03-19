@@ -138,7 +138,7 @@ friend class SfxPrinterController;
     SfxViewFrame*               pFrame;
     SfxShell*                   pSubShell;
     Window*                     pWindow;
-    sal_Bool                        bNoNewWindow;
+    bool                        bNoNewWindow;
 
 protected:
     virtual void                Activate(bool IsMDIActivate);
@@ -154,9 +154,9 @@ protected:
 
 public:
     // Iteration
-    static SfxViewShell*        GetFirst( const TypeId* pType = 0, sal_Bool bOnlyVisible = sal_True );
+    static SfxViewShell*        GetFirst( const TypeId* pType = 0, bool bOnlyVisible = true );
     static SfxViewShell*        GetNext( const SfxViewShell& rPrev,
-                                         const TypeId* pType = 0, sal_Bool bOnlyVisible = sal_True );
+                                         const TypeId* pType = 0, bool bOnlyVisible = true );
     static SfxViewShell*        Current();
 
     static SfxViewShell*        Get( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XController>& i_rController );
@@ -174,7 +174,7 @@ public:
 
     virtual ErrCode             DoVerb(long nVerb);
 
-    virtual void                OutplaceActivated( sal_Bool bActive, SfxInPlaceClient* pClient );
+    virtual void                OutplaceActivated( bool bActive, SfxInPlaceClient* pClient );
     virtual void                InplaceActivating( SfxInPlaceClient* pClient );
     virtual void                InplaceDeactivated( SfxInPlaceClient* pClient );
     virtual void                UIActivating( SfxInPlaceClient* pClient );
@@ -184,9 +184,9 @@ public:
     void                        VisAreaChanged(const Rectangle& rRect);
 
     // Misc
-    virtual bool                PrepareClose( sal_Bool bUI = sal_True );
+    virtual bool                PrepareClose( bool bUI = true );
     virtual OUString            GetSelectionText( bool bCompleteWords = false );
-    virtual sal_Bool                HasSelection( sal_Bool bText = sal_True ) const;
+    virtual bool                HasSelection( bool bText = true ) const;
     virtual SdrView*            GetDrawView() const;
 
     SfxShell*                   GetSubShell() const { return pSubShell; }
@@ -199,7 +199,7 @@ public:
     inline void                 LostFocus() const;
     virtual void                ShowCursor( bool bOn = true );
     virtual bool                KeyInput( const KeyEvent &rKeyEvent );
-    sal_Bool                        Escape();
+    bool                        Escape();
 
     // Viewing Interface
     Window*                     GetWindow() const { return pWindow; }
@@ -211,7 +211,7 @@ public:
     inline SfxViewFrame*        GetViewFrame() const;
 
     // Printing Interface
-    virtual SfxPrinter*         GetPrinter( sal_Bool bCreate = sal_False );
+    virtual SfxPrinter*         GetPrinter( bool bCreate = false );
     virtual sal_uInt16          SetPrinter( SfxPrinter *pNewPrinter, sal_uInt16 nDiffFlags = SFX_PRINTER_ALL, bool bIsAPI=false );
     virtual bool                HasPrintOptionsPage() const;
     virtual SfxTabPage*         CreatePrintOptionsPage( Window *pParent, const SfxItemSet &rOptions );
@@ -221,8 +221,8 @@ public:
     // Working set
     virtual void                WriteUserData( OUString&, bool bBrowse = false );
     virtual void                ReadUserData( const OUString&, bool bBrowse = false );
-    virtual void                WriteUserDataSequence ( ::com::sun::star::uno::Sequence < ::com::sun::star::beans::PropertyValue >&, sal_Bool bBrowse = sal_False );
-    virtual void                ReadUserDataSequence ( const ::com::sun::star::uno::Sequence < ::com::sun::star::beans::PropertyValue >&, sal_Bool bBrowse = sal_False );
+    virtual void                WriteUserDataSequence ( ::com::sun::star::uno::Sequence < ::com::sun::star::beans::PropertyValue >&, bool bBrowse = false );
+    virtual void                ReadUserDataSequence ( const ::com::sun::star::uno::Sequence < ::com::sun::star::beans::PropertyValue >&, bool bBrowse = false );
     virtual void                QueryObjAreaPixel( Rectangle& rRect ) const;
 
     virtual SfxObjectShell*     GetObjectShell();
@@ -247,18 +247,18 @@ public:
     void                        SetMargin( const Size& );
     void                        DisconnectAllClients();
     virtual SfxFrame*           GetSmartSelf( SfxFrame* pSelf, SfxMedium& rMedium );
-    sal_Bool                        NewWindowAllowed() const            { return !bNoNewWindow; }
-    void                        SetNewWindowAllowed( sal_Bool bSet )    { bNoNewWindow = !bSet; }
+    bool                        NewWindowAllowed() const            { return !bNoNewWindow; }
+    void                        SetNewWindowAllowed( bool bSet )    { bNoNewWindow = !bSet; }
 
     void                        SetController( SfxBaseController* pController );
     ::com::sun::star::uno::Reference< ::com::sun::star::frame::XController >
                                 GetController();
 
-    sal_Bool                        TryContextMenuInterception( Menu& rIn, const OUString& rMenuIdentifier, Menu*& rpOut, ::com::sun::star::ui::ContextMenuExecuteEvent aEvent );
+    bool                        TryContextMenuInterception( Menu& rIn, const OUString& rMenuIdentifier, Menu*& rpOut, ::com::sun::star::ui::ContextMenuExecuteEvent aEvent );
 
-    void                        ExecPrint( const com::sun::star::uno::Sequence < com::sun::star::beans::PropertyValue >&, sal_Bool, sal_Bool );
+    void                        ExecPrint( const com::sun::star::uno::Sequence < com::sun::star::beans::PropertyValue >&, bool, bool );
 
-    void                        AddRemoveClipboardListener( const com::sun::star::uno::Reference < com::sun::star::datatransfer::clipboard::XClipboardListener>&, sal_Bool );
+    void                        AddRemoveClipboardListener( const com::sun::star::uno::Reference < com::sun::star::datatransfer::clipboard::XClipboardListener>&, bool );
     ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::clipboard::XClipboardNotifier > GetClipboardNotifier();
 
     SAL_DLLPRIVATE SfxInPlaceClient* GetUIActiveIPClient_Impl() const;
@@ -267,18 +267,18 @@ public:
     SAL_DLLPRIVATE bool GlobalKeyInput_Impl( const KeyEvent &rKeyEvent );
 
     SAL_DLLPRIVATE void NewIPClient_Impl( SfxInPlaceClient *pIPClient )
-                                { GetIPClientList_Impl(sal_True)->push_back(pIPClient); }
+                                { GetIPClientList_Impl(true)->push_back(pIPClient); }
     SAL_DLLPRIVATE void IPClientGone_Impl( SfxInPlaceClient *pIPClient );
-    SAL_DLLPRIVATE SfxInPlaceClientList* GetIPClientList_Impl( sal_Bool bCreate = sal_True ) const;
+    SAL_DLLPRIVATE SfxInPlaceClientList* GetIPClientList_Impl( bool bCreate = true ) const;
     SAL_DLLPRIVATE void ResetAllClients_Impl( SfxInPlaceClient *pIP );
     SAL_DLLPRIVATE void DiscardClients_Impl();
 
     SAL_DLLPRIVATE SfxPrinter* SetPrinter_Impl( SfxPrinter *pNewPrinter );
-    SAL_DLLPRIVATE sal_Bool IsShowView_Impl() const;
+    SAL_DLLPRIVATE bool IsShowView_Impl() const;
 
     SAL_DLLPRIVATE bool HandleNotifyEvent_Impl( NotifyEvent& rEvent );
-    SAL_DLLPRIVATE sal_Bool HasKeyListeners_Impl();
-    SAL_DLLPRIVATE sal_Bool HasMouseClickListeners_Impl();
+    SAL_DLLPRIVATE bool HasKeyListeners_Impl();
+    SAL_DLLPRIVATE bool HasMouseClickListeners_Impl();
 
     SAL_DLLPRIVATE SfxBaseController*   GetBaseController_Impl() const;
 
@@ -289,11 +289,11 @@ public:
     SAL_DLLPRIVATE SfxFrameSetDescriptor* GetFrameSet_Impl() const;
     SAL_DLLPRIVATE void SetFrameSet_Impl(SfxFrameSetDescriptor*);
     SAL_DLLPRIVATE void CheckIPClient_Impl( SfxInPlaceClient*, const Rectangle& );
-    SAL_DLLPRIVATE void PushSubShells_Impl( sal_Bool bPush=sal_True );
-    SAL_DLLPRIVATE void PopSubShells_Impl() { PushSubShells_Impl( sal_False ); }
+    SAL_DLLPRIVATE void PushSubShells_Impl( bool bPush=true );
+    SAL_DLLPRIVATE void PopSubShells_Impl() { PushSubShells_Impl( false ); }
     SAL_DLLPRIVATE void TakeOwnership_Impl();
     SAL_DLLPRIVATE void TakeFrameOwnership_Impl();
-    SAL_DLLPRIVATE sal_Bool ExecKey_Impl(const KeyEvent& aKey);
+    SAL_DLLPRIVATE bool ExecKey_Impl(const KeyEvent& aKey);
 };
 
 

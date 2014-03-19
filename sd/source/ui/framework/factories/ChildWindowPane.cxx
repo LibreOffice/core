@@ -59,7 +59,7 @@ ChildWindowPane::ChildWindowPane (
                 {
                     // The ViewShellBase has already been activated.  Make
                     // the child window visible as soon as possible.
-                    pViewFrame->SetChildWindow(mnChildWindowId, sal_True);
+                    pViewFrame->SetChildWindow(mnChildWindowId, true);
                     OSL_TRACE("ChildWindowPane:activating now");
                 }
                 else
@@ -81,7 +81,7 @@ ChildWindowPane::ChildWindowPane (
             // The ViewShellBase has not yet been activated.  Hide the
             // window and wait a little before it is made visible.  See
             // comments in the GetWindow() method for an explanation.
-            pViewFrame->SetChildWindow(mnChildWindowId, sal_False);
+            pViewFrame->SetChildWindow(mnChildWindowId, false);
             OSL_TRACE("ChildWindowPane:base not active");
         }
     }
@@ -103,7 +103,7 @@ void ChildWindowPane::Hide (void)
     if (pViewFrame != NULL)
         if (pViewFrame->KnowsChildWindow(mnChildWindowId))
             if (pViewFrame->HasChildWindow(mnChildWindowId))
-                pViewFrame->SetChildWindow(mnChildWindowId, sal_False);
+                pViewFrame->SetChildWindow(mnChildWindowId, false);
 
     // Release the window because when the child window is shown again it
     // may use a different window.
@@ -159,7 +159,7 @@ void SAL_CALL ChildWindowPane::disposing (void)
         if ( ! pViewFrame->KnowsChildWindow(mnChildWindowId))
             break;
 
-        pViewFrame->SetChildWindow(mnChildWindowId, sal_True);
+        pViewFrame->SetChildWindow(mnChildWindowId, true);
         SfxChildWindow* pChildWindow = pViewFrame->GetChildWindow(mnChildWindowId);
         if (pChildWindow == NULL)
             if (pViewFrame->HasChildWindow(mnChildWindowId))
@@ -167,7 +167,7 @@ void SAL_CALL ChildWindowPane::disposing (void)
                 // The child window is not yet visible.  Ask the view frame
                 // to show it and try again to get access to the child
                 // window.
-                pViewFrame->ShowChildWindow(mnChildWindowId, sal_True);
+                pViewFrame->ShowChildWindow(mnChildWindowId, true);
                 pChildWindow = pViewFrame->GetChildWindow(mnChildWindowId);
             }
 

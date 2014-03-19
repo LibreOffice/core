@@ -202,7 +202,7 @@ private:
 protected:
     virtual void    Activate(bool bMDI);
     virtual void    Deactivate(bool bMDI);
-    virtual bool    PrepareClose( sal_Bool bUI = sal_True ) SAL_OVERRIDE;
+    virtual bool    PrepareClose( bool bUI = true ) SAL_OVERRIDE;
 
     virtual void    ShowCursor(bool bOn);
 
@@ -217,13 +217,13 @@ protected:
     virtual void    QueryObjAreaPixel( Rectangle& rRect ) const;
 
     virtual OUString GetSelectionText( bool bWholeWord );
-    virtual sal_Bool    HasSelection( sal_Bool bText ) const;
+    virtual bool     HasSelection( bool bText ) const;
     virtual OUString GetDescription() const;
 
     virtual void    WriteUserData(OUString &, bool bBrowse = false);
     virtual void    ReadUserData(const OUString &, bool bBrowse = false);
-    virtual void    WriteUserDataSequence (::com::sun::star::uno::Sequence < ::com::sun::star::beans::PropertyValue >&, sal_Bool bBrowse = false );
-    virtual void    ReadUserDataSequence (const ::com::sun::star::uno::Sequence < ::com::sun::star::beans::PropertyValue >&, sal_Bool bBrowse = false );
+    virtual void    WriteUserDataSequence (::com::sun::star::uno::Sequence < ::com::sun::star::beans::PropertyValue >&, bool bBrowse = false );
+    virtual void    ReadUserDataSequence (const ::com::sun::star::uno::Sequence < ::com::sun::star::beans::PropertyValue >&, bool bBrowse = false );
 
     virtual void    UIDeactivated( SfxInPlaceClient* pClient );
 
@@ -350,7 +350,7 @@ public:
     ScNavigatorSettings*    GetNavigatorSettings();
 
     // Drucken:
-    virtual SfxPrinter*     GetPrinter( sal_Bool bCreate = false );
+    virtual SfxPrinter*     GetPrinter( bool bCreate = false );
     virtual sal_uInt16      SetPrinter( SfxPrinter* pNewPrinter,
                                           sal_uInt16 nDiffFlags = SFX_PRINTER_ALL, bool bIsApi=false );
 

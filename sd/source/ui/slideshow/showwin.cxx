@@ -326,7 +326,7 @@ bool ShowWindow::SetEndMode()
         // hide navigator if it is visible
         if( mpViewShell->GetViewFrame()->GetChildWindow( SID_NAVIGATOR ) )
         {
-            mpViewShell->GetViewFrame()->ShowChildWindow( SID_NAVIGATOR, sal_False );
+            mpViewShell->GetViewFrame()->ShowChildWindow( SID_NAVIGATOR, false );
             mbShowNavigatorAfterSpecialMode = true;
         }
 
@@ -360,7 +360,7 @@ bool ShowWindow::SetPauseMode( sal_Int32 nPageIndexToRestart, sal_Int32 nTimeout
         // hide navigator if it is visible
         if( mpViewShell->GetViewFrame()->GetChildWindow( SID_NAVIGATOR ) )
         {
-            mpViewShell->GetViewFrame()->ShowChildWindow( SID_NAVIGATOR, sal_False );
+            mpViewShell->GetViewFrame()->ShowChildWindow( SID_NAVIGATOR, false );
             mbShowNavigatorAfterSpecialMode = true;
         }
 
@@ -390,7 +390,7 @@ bool ShowWindow::SetBlankMode( sal_Int32 nPageIndexToRestart, const Color& rBlan
         // hide navigator if it is visible
         if( mpViewShell->GetViewFrame()->GetChildWindow( SID_NAVIGATOR ) )
         {
-            mpViewShell->GetViewFrame()->ShowChildWindow( SID_NAVIGATOR, sal_False );
+            mpViewShell->GetViewFrame()->ShowChildWindow( SID_NAVIGATOR, false );
             mbShowNavigatorAfterSpecialMode = true;
         }
 
@@ -424,7 +424,7 @@ void ShowWindow::TerminateShow()
         // show navigator?
         if( mbShowNavigatorAfterSpecialMode )
         {
-            mpViewShell->GetViewFrame()->ShowChildWindow( SID_NAVIGATOR, sal_True );
+            mpViewShell->GetViewFrame()->ShowChildWindow( SID_NAVIGATOR, true );
             mbShowNavigatorAfterSpecialMode = false;
         }
     }
@@ -482,7 +482,7 @@ void ShowWindow::RestartShow( sal_Int32 nPageIndexToRestart )
     if( mbShowNavigatorAfterSpecialMode )
     {
         if (mpViewShell)
-            mpViewShell->GetViewFrame()->ShowChildWindow( SID_NAVIGATOR, sal_True );
+            mpViewShell->GetViewFrame()->ShowChildWindow( SID_NAVIGATOR, true );
         mbShowNavigatorAfterSpecialMode = false;
     }
 }

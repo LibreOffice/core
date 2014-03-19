@@ -374,7 +374,7 @@ void Shell::StoreAllWindowData( bool bPersistent )
 }
 
 
-bool Shell::PrepareClose( sal_Bool bUI )
+bool Shell::PrepareClose( bool bUI )
 {
     // reset here because it's modified after printing etc. (DocInfo)
     GetViewFrame()->GetObjectShell()->SetModified(false);

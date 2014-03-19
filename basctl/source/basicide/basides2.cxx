@@ -52,7 +52,7 @@ Reference< view::XRenderable > Shell::GetRenderable()
     return Reference<view::XRenderable>( new Renderable(pCurWin) );
 }
 
-sal_Bool Shell::HasSelection( sal_Bool /* bText */ ) const
+bool Shell::HasSelection( bool /* bText */ ) const
 {
     if (ModulWindow* pMCurWin = dynamic_cast<ModulWindow*>(pCurWin))
     {
@@ -85,7 +85,7 @@ OUString Shell::GetSelectionText( bool bWholeWord )
     return aText;
 }
 
-SfxPrinter* Shell::GetPrinter( sal_Bool bCreate )
+SfxPrinter* Shell::GetPrinter( bool bCreate )
 {
     if ( pCurWin )
     {

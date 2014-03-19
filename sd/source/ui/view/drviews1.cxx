@@ -400,7 +400,7 @@ void DrawViewShell::ChangeEditMode(EditMode eEMode, bool bIsLayerModeActive)
             * MASTERPAGE
             ******************************************************************/
             GetViewFrame()->SetChildWindow(
-                AnimationChildWindow::GetChildWindowId(), sal_False );
+                AnimationChildWindow::GetChildWindowId(), false );
 
             if (!mpActualPage)
             {
