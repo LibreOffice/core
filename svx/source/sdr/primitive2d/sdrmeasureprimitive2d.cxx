@@ -52,12 +52,12 @@ namespace drawinglayer
 
             aPolygon.append(rStart);
             aPolygon.append(rEnd);
+            aPolygon.transform(rObjectMatrix);
 
             if(rLineStartEnd.isDefault() || (!bLeftActive && !bRightActive))
             {
                 return createPolygonLinePrimitive(
                     aPolygon,
-                    rObjectMatrix,
                     rLineAttribute,
                     attribute::SdrLineStartEndAttribute());
             }
@@ -66,7 +66,6 @@ namespace drawinglayer
             {
                 return createPolygonLinePrimitive(
                     aPolygon,
-                    rObjectMatrix,
                     rLineAttribute,
                     rLineStartEnd);
             }
@@ -78,7 +77,10 @@ namespace drawinglayer
                 bLeftActive ? rLineStartEnd.isStartActive() : false, bRightActive ? rLineStartEnd.isEndActive() : false,
                 bLeftActive ? rLineStartEnd.isStartCentered() : false, bRightActive? rLineStartEnd.isEndCentered() : false);
 
-            return createPolygonLinePrimitive(aPolygon, rObjectMatrix, rLineAttribute, aLineStartEnd);
+            return createPolygonLinePrimitive(
+                aPolygon,
+                rLineAttribute,
+                aLineStartEnd);
         }
 
         Primitive2DSequence SdrMeasurePrimitive2D::create2DDecomposition(const geometry::ViewInformation2D& aViewInformation) const

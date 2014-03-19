@@ -16,10 +16,10 @@
 #   the License at http://www.apache.org/licenses/LICENSE-2.0 .
 #
 
--o sw.CharacterStyle
--o sw.ConditionalParagraphStyle
+# FIXME port to FillAttributes -o sw.CharacterStyle
+# FIXME port to FillAttributes -o sw.ConditionalParagraphStyle
 -o sw.PageStyle
--o sw.ParagraphStyle
+# FIXME port to FillAttributes -o sw.ParagraphStyle
 #i111197 -o sw.SwAccessibleDocumentPageView
 #i86751 -o sw.SwAccessibleDocumentView
 -o sw.SwAccessibleEndnoteView

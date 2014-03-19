@@ -209,11 +209,11 @@ namespace drawinglayer
             // get logical size of bitmap (before expanding eventually)
             Graphic aGraphic(getFillGraphic());
 
-            // init values with defaults
+            // init values with defaults for stretched
             basegfx::B2DPoint aBitmapSize(1.0, 1.0);
             basegfx::B2DVector aBitmapTopLeft(0.0, 0.0);
 
-            // are changes needed?
+            //UUUU are changes needed? When streched we are already done, all other values will have no influence
             if(getTiling() || !getStretch())
             {
                 // init values with range sizes
@@ -258,34 +258,33 @@ namespace drawinglayer
                     aBitmapSize.setY(getGraphicLogicSize().getY());
                 }
 
-                // get values, force to centered if necessary
-                const basegfx::B2DVector aRectPoint(getTiling() ? getRectPoint() : basegfx::B2DVector(0.0, 0.0));
-
                 // position changes X
-                if(0.0 == aRectPoint.getX())
+                if(0.0 == getRectPoint().getX())
                 {
                     aBitmapTopLeft.setX((fRangeWidth - aBitmapSize.getX()) * 0.5);
                 }
-                else if(1.0 == aRectPoint.getX())
+                else if(1.0 == getRectPoint().getX())
                 {
                     aBitmapTopLeft.setX(fRangeWidth - aBitmapSize.getX());
                 }
 
+                // offset positions are only meaningful when tiled
                 if(getTiling() && 0.0 != getOffsetPosition().getX())
                 {
                     aBitmapTopLeft.setX(aBitmapTopLeft.getX() + (aBitmapSize.getX() * (getOffsetPosition().getX() * 0.01)));
                 }
 
                 // position changes Y
-                if(0.0 == aRectPoint.getY())
+                if(0.0 == getRectPoint().getY())
                 {
                     aBitmapTopLeft.setY((fRangeHeight - aBitmapSize.getY()) * 0.5);
                 }
-                else if(1.0 == aRectPoint.getY())
+                else if(1.0 == getRectPoint().getY())
                 {
                     aBitmapTopLeft.setY(fRangeHeight - aBitmapSize.getY());
                 }
 
+                // offset positions are only meaningful when tiled
                 if(getTiling() && 0.0 != getOffsetPosition().getY())
                 {
                     aBitmapTopLeft.setY(aBitmapTopLeft.getY() + (aBitmapSize.getY() * (getOffsetPosition().getY() * 0.01)));

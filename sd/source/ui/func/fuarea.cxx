@@ -64,7 +64,7 @@ void FuArea::DoExecute( SfxRequest& rReq )
         AbstractSvxAreaTabDialog * pDlg = pFact ? pFact->CreateSvxAreaTabDialog( NULL,
                                                                         &aNewAttr,
                                                                         mpDoc,
-                                                                        mpView) : 0;
+                                                                        true) : 0;
         if( pDlg && (pDlg->Execute() == RET_OK) )
         {
             mpView->SetAttributes (*(pDlg->GetOutputItemSet ()));

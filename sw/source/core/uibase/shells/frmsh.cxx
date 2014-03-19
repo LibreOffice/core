@@ -64,7 +64,6 @@
 #include <swwait.hxx>
 #include <docstat.hxx>
 #include <IDocumentStatistics.hxx>
-
 #include <comphelper/processfactory.hxx>
 #include <com/sun/star/ui/dialogs/XSLTFilterDialog.hpp>
 
@@ -79,6 +78,9 @@
 // #i73249#
 #include <svx/dialogs.hrc>
 #include <wordcountdialog.hxx>
+
+#include <docsh.hxx>
+#include <svx/drawitem.hxx>
 
 using ::editeng::SvxBorderLine;
 using namespace ::com::sun::star;
@@ -408,22 +410,44 @@ void SwFrameShell::Execute(SfxRequest &rReq)
             }
             else
             {
-                SfxItemSet aSet(GetPool(),  RES_FRMATR_BEGIN,       RES_FRMATR_END-1,
-                                            SID_ATTR_BORDER_INNER,  SID_ATTR_BORDER_INNER,
-                                            FN_GET_PRINT_AREA,      FN_GET_PRINT_AREA,
-                                            SID_ATTR_PAGE_SIZE,     SID_ATTR_PAGE_SIZE,
-                                            SID_ATTR_BRUSH,         SID_ATTR_BRUSH,
-                                            SID_ATTR_LRSPACE,       SID_ATTR_ULSPACE,
-                                            FN_SURROUND,            FN_HORI_ORIENT,
-                                            FN_SET_FRM_NAME,        FN_SET_FRM_NAME,
-                                            FN_KEEP_ASPECT_RATIO,   FN_KEEP_ASPECT_RATIO,
-                                            SID_DOCFRAME,           SID_DOCFRAME,
-                                            SID_HTML_MODE,          SID_HTML_MODE,
-                                            FN_SET_FRM_ALT_NAME,    FN_SET_FRM_ALT_NAME,
-                                            FN_PARAM_CHAIN_PREVIOUS, FN_PARAM_CHAIN_NEXT,
-                                            FN_OLE_IS_MATH,         FN_OLE_IS_MATH,
-                                            FN_MATH_BASELINE_ALIGNMENT, FN_MATH_BASELINE_ALIGNMENT,
-                                            0);
+                SfxItemSet aSet(GetPool(),  //UUUU sorted by indices
+                    RES_FRMATR_BEGIN,       RES_FRMATR_END-1,                       // [82
+
+                    //UUUU FillAttribute support
+                    XATTR_FILL_FIRST,       XATTR_FILL_LAST,                        // [1014
+
+                    SID_DOCFRAME,           SID_DOCFRAME,                           // [5598
+
+                    SID_ATTR_BRUSH,         SID_ATTR_BRUSH,                         // [10001
+                    SID_ATTR_BORDER_INNER,  SID_ATTR_BORDER_INNER,                  // [10023
+                    SID_ATTR_LRSPACE,       SID_ATTR_ULSPACE,                       // [10048
+                    SID_ATTR_PAGE_SIZE,     SID_ATTR_PAGE_SIZE,                     // [10051
+
+                    //UUUU items to hand over XPropertyList things like
+                    // XColorList, XHatchList, XGradientList and XBitmapList
+                    // to the Area TabPage
+                    SID_COLOR_TABLE,        SID_BITMAP_LIST,                        // [10179
+
+                    SID_HTML_MODE,          SID_HTML_MODE,                          // [10414
+                    FN_GET_PRINT_AREA,      FN_GET_PRINT_AREA,                      // [21032
+                    FN_SURROUND,            FN_HORI_ORIENT,                         // [21303
+                    FN_SET_FRM_NAME,        FN_SET_FRM_NAME,                        // [21306
+                    FN_KEEP_ASPECT_RATIO,   FN_KEEP_ASPECT_RATIO,                   // [21307
+                    FN_SET_FRM_ALT_NAME,    FN_SET_FRM_ALT_NAME,                    // [21318
+                    FN_OLE_IS_MATH,         FN_OLE_IS_MATH,                         // [22314
+                    FN_MATH_BASELINE_ALIGNMENT, FN_MATH_BASELINE_ALIGNMENT,         // [22315
+                    FN_PARAM_CHAIN_PREVIOUS, FN_PARAM_CHAIN_NEXT,                   // [22420
+
+                    0);
+
+                //UUUU create needed items for XPropertyList entries from the DrawModel so that
+                // the Area TabPage can access them
+                const SdrModel* pDrawModel = rSh.GetView().GetDocShell()->GetDoc()->GetDrawModel();
+
+                aSet.Put(SvxColorListItem(pDrawModel->GetColorList(), SID_COLOR_TABLE));
+                aSet.Put(SvxGradientListItem(pDrawModel->GetGradientList(), SID_GRADIENT_LIST));
+                aSet.Put(SvxHatchListItem(pDrawModel->GetHatchList(), SID_HATCH_LIST));
+                aSet.Put(SvxBitmapListItem(pDrawModel->GetBitmapList(), SID_BITMAP_LIST));
 
                 const SwViewOption* pVOpt = rSh.GetViewOptions();
                 if(nSel & nsSelectionType::SEL_OLE)
@@ -1179,6 +1203,159 @@ void  SwFrameShell::StateInsert(SfxItemSet &rSet)
     else if ( GetShell().CrsrInsideInputFld() )
     {
         rSet.DisableItem(FN_INSERT_FRAME);
+    }
+}
+
+//UUUU
+void SwFrameShell::GetDrawAttrStateTextFrame(SfxItemSet &rSet)
+{
+    SwWrtShell &rSh = GetShell();
+
+    if(rSh.IsFrmSelected())
+    {
+        rSh.GetFlyFrmAttr(rSet);
+    }
+    else
+    {
+        SdrView* pSdrView = rSh.GetDrawViewWithValidMarkList();
+
+        if(pSdrView)
+        {
+            rSet.Put(pSdrView->GetDefaultAttr());
+        }
+    }
+}
+
+//UUUU
+void SwFrameShell::ExecDrawAttrArgsTextFrame(SfxRequest& rReq)
+{
+    const SfxItemSet* pArgs = rReq.GetArgs();
+    SwWrtShell& rSh = GetShell();
+
+    if(pArgs)
+    {
+        if(rSh.IsFrmSelected())
+        {
+            rSh.SetFlyFrmAttr(const_cast< SfxItemSet& >(*pArgs));
+        }
+        else
+        {
+            SdrView* pSdrView = rSh.GetDrawViewWithValidMarkList();
+
+            if(pSdrView)
+            {
+                pSdrView->SetDefaultAttr(*pArgs, sal_False);
+            }
+        }
+    }
+    else
+    {
+        SfxDispatcher* pDis = rSh.GetView().GetViewFrame()->GetDispatcher();
+
+        switch(rReq.GetSlot())
+        {
+            case SID_ATTR_FILL_STYLE:
+            case SID_ATTR_FILL_COLOR:
+            case SID_ATTR_FILL_GRADIENT:
+            case SID_ATTR_FILL_HATCH:
+            case SID_ATTR_FILL_BITMAP:
+            case SID_ATTR_FILL_TRANSPARENCE:
+            case SID_ATTR_FILL_FLOATTRANSPARENCE:
+            {
+                pDis->Execute(SID_ATTRIBUTES_AREA, sal_False);
+                break;
+            }
+        }
+    }
+}
+
+//UUUU
+void SwFrameShell::ExecDrawDlgTextFrame(SfxRequest& rReq)
+{
+    switch(rReq.GetSlot())
+    {
+        case SID_ATTRIBUTES_AREA:
+        {
+            SwWrtShell& rSh = GetShell();
+
+            if(rSh.IsFrmSelected())
+            {
+                SdrView* pView = rSh.GetDrawView();
+                SdrModel* pDoc = pView->GetModel();
+                SfxItemSet aNewAttr(pDoc->GetItemPool());
+
+                // get attributes from FlyFrame
+                rSh.GetFlyFrmAttr(aNewAttr);
+
+                SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
+                DBG_ASSERT(pFact, "Dialogdiet Factory fail!");
+                AbstractSvxAreaTabDialog * pDlg = pFact->CreateSvxAreaTabDialog(
+                    NULL,
+                    &aNewAttr,
+                    pDoc,
+                    false);
+                DBG_ASSERT(pDlg, "Dialogdiet fail!");
+
+                if(RET_OK == pDlg->Execute())
+                {
+                    // set attributes at FlyFrame
+                    rSh.SetFlyFrmAttr(const_cast< SfxItemSet& >(*pDlg->GetOutputItemSet()));
+
+                    static sal_uInt16 aInval[] =
+                    {
+                        SID_ATTR_FILL_STYLE,
+                        SID_ATTR_FILL_COLOR,
+                        SID_ATTR_FILL_TRANSPARENCE,
+                        SID_ATTR_FILL_FLOATTRANSPARENCE,
+                        0
+                    };
+
+                    SfxBindings &rBnd = GetView().GetViewFrame()->GetBindings();
+
+                    rBnd.Invalidate(aInval);
+                    rBnd.Update(SID_ATTR_FILL_STYLE);
+                    rBnd.Update(SID_ATTR_FILL_COLOR);
+                    rBnd.Update(SID_ATTR_FILL_TRANSPARENCE);
+                    rBnd.Update(SID_ATTR_FILL_FLOATTRANSPARENCE);
+                }
+
+                delete pDlg;
+            }
+
+            break;
+        }
+    }
+}
+
+//UUUU
+void SwFrameShell::DisableStateTextFrame(SfxItemSet &rSet)
+{
+    SfxWhichIter aIter(rSet);
+    sal_uInt16 nWhich(aIter.FirstWhich());
+
+    while(nWhich)
+    {
+        switch(nWhich)
+        {
+            case SID_ATTRIBUTES_AREA:
+            {
+                SwWrtShell& rSh = GetShell();
+
+                if(!rSh.IsFrmSelected())
+                {
+                    rSet.DisableItem(nWhich);
+                }
+
+                break;
+            }
+            default:
+            {
+                rSet.DisableItem(nWhich);
+                break;
+            }
+        }
+
+        nWhich = aIter.NextWhich();
     }
 }
 

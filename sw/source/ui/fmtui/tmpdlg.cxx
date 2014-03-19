@@ -98,6 +98,8 @@ SwTemplateDlg::SwTemplateDlg(Window* pParent,
     , m_nOutlineId(0)
     , m_nDropCapsId(0)
     , m_nBackgroundId(0)
+    , m_nAreaId(0)
+    , m_nTransparenceId(0)
     , m_nBorderId(0)
     , m_nConditionId(0)
     , m_nTypeId(0)
@@ -247,9 +249,16 @@ SwTemplateDlg::SwTemplateDlg(Window* pParent,
                                         SwWrapTabPage::GetRanges);
             OSL_ENSURE(pFact->GetTabPageCreatorFunc( RID_SVXPAGE_BACKGROUND ), "GetTabPageCreatorFunc fail!");
             OSL_ENSURE(pFact->GetTabPageRangesFunc( RID_SVXPAGE_BACKGROUND ), "GetTabPageRangesFunc fail!");
-            m_nBackgroundId = AddTabPage("background", pFact->GetTabPageCreatorFunc( RID_SVXPAGE_BACKGROUND ), pFact->GetTabPageRangesFunc( RID_SVXPAGE_BACKGROUND ) );
-            OSL_ENSURE(pFact->GetTabPageCreatorFunc( RID_SVXPAGE_BORDER ), "GetTabPageCreatorFunc fail!");
-            OSL_ENSURE(pFact->GetTabPageRangesFunc( RID_SVXPAGE_BORDER ), "GetTabPageRangesFunc fail!");
+
+            //UUUU remove?
+            //m_nBackgroundId = AddTabPage("background", pFact->GetTabPageCreatorFunc( RID_SVXPAGE_BACKGROUND ), pFact->GetTabPageRangesFunc( RID_SVXPAGE_BACKGROUND ) );
+            //OSL_ENSURE(pFact->GetTabPageCreatorFunc( RID_SVXPAGE_BORDER ), "GetTabPageCreatorFunc fail!");
+            //OSL_ENSURE(pFact->GetTabPageRangesFunc( RID_SVXPAGE_BORDER ), "GetTabPageRangesFunc fail!");
+
+            //UUUU add Area and Transparence TabPages
+            m_nAreaId = AddTabPage("area", pFact->GetTabPageCreatorFunc( RID_SVXPAGE_AREA ), pFact->GetTabPageRangesFunc( RID_SVXPAGE_AREA ));
+            m_nTransparenceId = AddTabPage("transparence", pFact->GetTabPageCreatorFunc( RID_SVXPAGE_TRANSPARENCE ), pFact->GetTabPageRangesFunc( RID_SVXPAGE_TRANSPARENCE ) );
+
             m_nBorderId = AddTabPage("borders", pFact->GetTabPageCreatorFunc( RID_SVXPAGE_BORDER ), pFact->GetTabPageRangesFunc( RID_SVXPAGE_BORDER ) );
 
             m_nColumnId = AddTabPage("columns", SwColumnPage::Create,
@@ -451,6 +460,8 @@ void SwTemplateDlg::PageCreated( sal_uInt16 nId, SfxTabPage &rPage )
             ((SwColumnPage&)rPage).SetFrmMode(sal_True);
         ((SwColumnPage&)rPage).SetFormatUsed( sal_True );
     }
+    //UUUU do not remove; many other style dialog combinations still use the SfxTabPage
+    // for the SvxBrushItem (see RID_SVXPAGE_BACKGROUND)
     else if (nId == m_nBackgroundId)
     {
         sal_Int32 nFlagType = 0;
@@ -561,6 +572,29 @@ void SwTemplateDlg::PageCreated( sal_uInt16 nId, SfxTabPage &rPage )
             aSet.Put (SfxUInt16Item(SID_SWMODE_TYPE,SW_BORDER_MODE_FRAME));
         }
         rPage.PageCreated(aSet);
+    }
+    //UUUU inits for Area and Transparency TabPages
+    // The selection attribute lists (XPropertyList derivates, e.g. XColorList for
+    // the color table) need to be added as items (e.g. SvxColorTableItem) to make
+    // these pages find the needed attributes for fill style suggestions.
+    // These are added in SwDocStyleSheet::GetItemSet() for the SFX_STYLE_FAMILY_PARA on
+    // demand, but could also be directly added from the DrawModel.
+    else if (nId == m_nAreaId)
+    {
+        SfxItemSet aNew(*aSet.GetPool(),
+                        SID_COLOR_TABLE, SID_BITMAP_LIST,
+                        SID_OFFER_IMPORT, SID_OFFER_IMPORT, 0, 0);
+
+        aNew.Put(GetStyleSheet().GetItemSet());
+
+        // add flag for direct graphic content selection
+        aNew.Put(SfxBoolItem(SID_OFFER_IMPORT, true));
+
+        rPage.PageCreated(aNew);
+    }
+    else if (nId == m_nTransparenceId)
+    {
+        rPage.PageCreated(GetStyleSheet().GetItemSet());
     }
 }
 

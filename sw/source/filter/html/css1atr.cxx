@@ -3647,8 +3647,6 @@ SwAttrFnTab aCSS1AttrFnTab = {
 /* RES_AUTO_STYLE */                0,
 /* RES_FRMATR_STYLE_NAME */         0,
 /* RES_FRMATR_CONDITIONAL_STYLE_NAME */ 0,
-/* RES_FILL_STYLE */                0,
-/* RES_FILL_GRADIENT */             0,
 /* RES_FRMATR_GRABBAG */            0,
 /* RES_TEXT_VERT_ADJUST */          0,
 

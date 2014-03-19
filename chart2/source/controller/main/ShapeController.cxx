@@ -307,8 +307,7 @@ void ShapeController::executeDispatch_FormatArea()
             if ( pFact )
             {
                 ::boost::scoped_ptr< AbstractSvxAreaTabDialog > pDlg(
-                    pFact->CreateSvxAreaTabDialog( pParent, &aAttr, &pDrawModelWrapper->getSdrModel(),
-                        pDrawViewWrapper ) );
+                    pFact->CreateSvxAreaTabDialog( pParent, &aAttr, &pDrawModelWrapper->getSdrModel(), true ) );
                 if ( pDlg.get() )
                 {
                     SfxItemPool& rItemPool = pDrawViewWrapper->GetModel()->GetItemPool();

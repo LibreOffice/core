@@ -247,17 +247,17 @@
     FILL_PROPERTIES_DEFAULTS \
     { OUString(UNO_NAME_FILLBACKGROUND),    XATTR_FILLBACKGROUND    , ::getBooleanCppuType(),              0,   0}, \
     { OUString(UNO_NAME_FILLBITMAP),        XATTR_FILLBITMAP        , ::getCppuType((const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XBitmap >*)0)  ,       0,     MID_BITMAP}, \
-    { OUString("FillBitmapName"),           XATTR_FILLBITMAP        , ::getCppuType((const OUString*)0), 0, MID_NAME }, \
-    { OUString("FillBitmapURL"),            XATTR_FILLBITMAP        , ::getCppuType((const OUString*)0), 0, MID_GRAFURL }, \
-    { OUString("FillGradientStepCount"),    XATTR_GRADIENTSTEPCOUNT , ::getCppuType((const sal_Int16*)0), 0, 0}, \
+    { OUString(UNO_NAME_FILLBITMAPNAME),           XATTR_FILLBITMAP        , ::getCppuType((const OUString*)0), 0, MID_NAME }, \
+    { OUString(UNO_NAME_FILLBITMAPURL),            XATTR_FILLBITMAP        , ::getCppuType((const OUString*)0), 0, MID_GRAFURL }, \
+    { OUString(UNO_NAME_FILLGRADIENTSTEPCOUNT),    XATTR_GRADIENTSTEPCOUNT , ::getCppuType((const sal_Int16*)0), 0, 0}, \
     { OUString(UNO_NAME_FILLGRADIENT),      XATTR_FILLGRADIENT      , ::getCppuType((const ::com::sun::star::awt::Gradient*)0),        0,     MID_FILLGRADIENT}, \
-    { OUString("FillGradientName"),         XATTR_FILLGRADIENT      , ::getCppuType((const OUString*)0), 0, MID_NAME }, \
+    { OUString(UNO_NAME_FILLGRADIENTNAME),         XATTR_FILLGRADIENT      , ::getCppuType((const OUString*)0), 0, MID_NAME }, \
     { OUString(UNO_NAME_FILLHATCH),         XATTR_FILLHATCH         , ::getCppuType((const ::com::sun::star::drawing::Hatch*)0),           0,     MID_FILLHATCH}, \
-    { OUString("FillHatchName"),            XATTR_FILLHATCH         , ::getCppuType((const OUString*)0), 0, MID_NAME }, \
+    { OUString(UNO_NAME_FILLHATCHNAME),            XATTR_FILLHATCH         , ::getCppuType((const OUString*)0), 0, MID_NAME }, \
     { OUString(UNO_NAME_FILLSTYLE),         XATTR_FILLSTYLE         , ::getCppuType((const ::com::sun::star::drawing::FillStyle*)0) ,      0,     0}, \
     { OUString(UNO_NAME_FILL_TRANSPARENCE), XATTR_FILLTRANSPARENCE, ::getCppuType((const sal_Int16*)0) ,           0,     0}, \
-    { OUString("FillTransparenceGradient"), XATTR_FILLFLOATTRANSPARENCE, ::getCppuType((const ::com::sun::star::awt::Gradient*)0),         0,     MID_FILLGRADIENT}, \
-    { OUString("FillTransparenceGradientName"), XATTR_FILLFLOATTRANSPARENCE, ::getCppuType((const OUString*)0), 0, MID_NAME }, \
+    { OUString(UNO_NAME_FILLTRANSPARENCEGRADIENT), XATTR_FILLFLOATTRANSPARENCE, ::getCppuType((const ::com::sun::star::awt::Gradient*)0),         0,     MID_FILLGRADIENT}, \
+    { OUString(UNO_NAME_FILLTRANSPARENCEGRADIENTNAME), XATTR_FILLFLOATTRANSPARENCE, ::getCppuType((const OUString*)0), 0, MID_NAME }, \
     { OUString(UNO_NAME_FILLCOLOR_2),       XATTR_SECONDARYFILLCOLOR, ::getCppuType((const sal_Int32*)0),          0,     0}, \
     { OUString(UNO_NAME_GRAPHIC_GRAPHICCROP), SDRATTR_GRAFCROP      , ::getCppuType((const ::com::sun::star::text::GraphicCrop*)0), 0, 0 },
 

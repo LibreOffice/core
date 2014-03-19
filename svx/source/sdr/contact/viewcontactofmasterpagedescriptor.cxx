@@ -68,11 +68,9 @@ namespace sdr
                     rOwnerPage.GetWdt() - rOwnerPage.GetRgtBorder(),
                     rOwnerPage.GetHgt() - rOwnerPage.GetLwrBorder());
                 const basegfx::B2DPolygon aInnerPolgon(basegfx::tools::createPolygonFromRect(aInnerRange));
-                const basegfx::B2DHomMatrix aEmptyTransform;
                 const drawinglayer::primitive2d::Primitive2DReference xReference(
                     drawinglayer::primitive2d::createPolyPolygonFillPrimitive(
                         basegfx::B2DPolyPolygon(aInnerPolgon),
-                        aEmptyTransform,
                         aFill,
                         drawinglayer::attribute::FillGradientAttribute()));
 

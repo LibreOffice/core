@@ -25,6 +25,7 @@
 #include <editeng/brushitem.hxx>
 #include <editeng/lineitem.hxx>
 #include <editeng/boxitem.hxx>
+#include <editeng/editeng.hxx>
 #include <fmtpdsc.hxx>
 #include <hintids.hxx>
 #include <istyleaccess.hxx>
@@ -35,6 +36,10 @@
 #include <paratr.hxx>
 #include <svl/whiter.hxx>
 #include <svx/xtable.hxx>
+
+#include <svx/svdpool.hxx>
+#include <svx/sxenditm.hxx>
+#include <svx/sdsxyitm.hxx>
 
 // SwAttrPool
 
@@ -52,10 +57,92 @@ SwAttrPool::SwAttrPool( SwDoc* pD )
     SetVersionMap( 5, 1,130, pVersionMap5 );
     SetVersionMap( 6, 1,136, pVersionMap6 );
     SetVersionMap( 7, 1,144, pVersionMap7 );
+
+    //UUUU create secondary pools immediately
+    createAndAddSecondaryPools();
 }
 
 SwAttrPool::~SwAttrPool()
 {
+    //UUUU cleanup secondary pools first
+    removeAndDeleteSecondaryPools();
+}
+
+//UUUU
+void SwAttrPool::createAndAddSecondaryPools()
+{
+    const SfxItemPool* pCheckAlreadySet = GetSecondaryPool();
+
+    if(pCheckAlreadySet)
+    {
+        OSL_ENSURE(false, "SwAttrPool already has a secondary pool (!)");
+        return;
+    }
+
+    // create SfxItemPool and EditEngine pool and add these in a chain. These
+    // belomg us and will be removed/destroyed in removeAndDeleteSecondaryPools() used from
+    // the destructor
+    SfxItemPool *pSdrPool = new SdrItemPool(this);
+
+    // #75371# change DefaultItems for the SdrEdgeObj distance items
+    // to TWIPS.
+    if(pSdrPool)
+    {
+        // 1/100th mm in twips
+        const long nDefEdgeDist = ((500 * 72) / 127);
+
+        pSdrPool->SetPoolDefaultItem(SdrEdgeNode1HorzDistItem(nDefEdgeDist));
+        pSdrPool->SetPoolDefaultItem(SdrEdgeNode1VertDistItem(nDefEdgeDist));
+        pSdrPool->SetPoolDefaultItem(SdrEdgeNode2HorzDistItem(nDefEdgeDist));
+        pSdrPool->SetPoolDefaultItem(SdrEdgeNode2VertDistItem(nDefEdgeDist));
+
+        // #i33700# // Set shadow distance defaults as PoolDefaultItems
+        pSdrPool->SetPoolDefaultItem(SdrShadowXDistItem((300 * 72) / 127));
+        pSdrPool->SetPoolDefaultItem(SdrShadowYDistItem((300 * 72) / 127));
+    }
+
+    SfxItemPool *pEEgPool = EditEngine::CreatePool(sal_False);
+
+    pSdrPool->SetSecondaryPool(pEEgPool);
+
+    if(!GetFrozenIdRanges())
+    {
+        FreezeIdRanges();
+    }
+    else
+    {
+        pSdrPool->FreezeIdRanges();
+    }
+}
+
+//UUUU
+void SwAttrPool::removeAndDeleteSecondaryPools()
+{
+    SfxItemPool *pSdrPool = GetSecondaryPool();
+
+    if(!pSdrPool)
+    {
+        OSL_ENSURE(false, "SwAttrPool has no secondary pool, it's missing (!)");
+        return;
+    }
+
+    SfxItemPool *pEEgPool = pSdrPool->GetSecondaryPool();
+
+    if(!pEEgPool)
+    {
+        OSL_ENSURE(false, "i don't accept additional pools");
+        return;
+    }
+
+    // first delete the items, then break the linking
+    pSdrPool->Delete();
+
+    SetSecondaryPool(0);
+    pSdrPool->SetSecondaryPool(0);
+
+    // final cleanup of secondary pool(s)
+    SfxItemPool::Free(pSdrPool);
+    SfxItemPool::Free(pEEgPool);
 }
 
 // SwAttrSet

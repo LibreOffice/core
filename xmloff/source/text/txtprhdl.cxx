@@ -52,6 +52,8 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::style;
 using namespace ::com::sun::star::text;
 using namespace ::xmloff::token;
+//UUUU
+using namespace ::com::sun::star::drawing;
 
 static SvXMLEnumMapEntry const pXML_HoriPos_Enum[] =
 {
@@ -1222,6 +1224,18 @@ public:
     ~XMLTextPropertyHandlerFactory_Impl();
 };
 
+//UUUU
+#include <xmloff/EnumPropertyHdl.hxx>
+#include <com/sun/star/drawing/FillStyle.hpp>
+#include "XMLFillBitmapSizePropertyHandler.hxx"
+#include "XMLBitmapLogicalSizePropertyHandler.hxx"
+#include <com/sun/star/drawing/RectanglePoint.hpp>
+#include <com/sun/star/drawing/BitmapMode.hpp>
+#include "XMLBitmapRepeatOffsetPropertyHandler.hxx"
+extern SvXMLEnumMapEntry aXML_FillStyle_EnumMap[];
+extern SvXMLEnumMapEntry aXML_RefPoint_EnumMap[];
+extern SvXMLEnumMapEntry aXML_BitmapMode_EnumMap[];
+
 const XMLPropertyHandler *XMLTextPropertyHandlerFactory_Impl::GetPropertyHandler
     ( sal_Int32 nType ) const
 {
@@ -1390,12 +1404,31 @@ const XMLPropertyHandler *XMLTextPropertyHandlerFactory_Impl::GetPropertyHandler
     case XML_TYPE_TEXT_NUMBER8_ONE_BASED:
         pHdl = new XMLNumber8OneBasedHdl();
         break;
-    case XML_TYPE_FILLSTYLE:
-        pHdl = new XMLConstantsPropertyHandler( pXML_FillStyle_Enum, XML_TOKEN_INVALID );
-        break;
     case XML_TYPE_VERTICAL_ALIGN:
         pHdl = new XMLConstantsPropertyHandler( pXML_VerticalAlign_Enum, XML_TOKEN_INVALID );
         break;
+
+    //UUUU
+    case XML_SW_TYPE_FILLSTYLE:
+        pHdl = new XMLEnumPropertyHdl( aXML_FillStyle_EnumMap, ::getCppuType((const FillStyle*)0) );
+        break;
+    case XML_SW_TYPE_FILLBITMAPSIZE:
+        pHdl = new XMLFillBitmapSizePropertyHandler();
+        break;
+    case XML_SW_TYPE_LOGICAL_SIZE:
+        pHdl = new XMLBitmapLogicalSizePropertyHandler();
+        break;
+    case XML_SW_TYPE_BITMAP_REFPOINT:
+        pHdl = new XMLEnumPropertyHdl( aXML_RefPoint_EnumMap, getCppuType((const RectanglePoint*)0) );
+        break;
+    case XML_SW_TYPE_BITMAP_MODE:
+        pHdl = new XMLEnumPropertyHdl( aXML_BitmapMode_EnumMap, getCppuType((const BitmapMode*)0) );
+        break;
+    case XML_SW_TYPE_BITMAPREPOFFSETX:
+    case XML_SW_TYPE_BITMAPREPOFFSETY:
+        pHdl = new XMLBitmapRepeatOffsetPropertyHandler(XML_SW_TYPE_BITMAPREPOFFSETX == nType);
+        break;
+
     }
 
     return pHdl;

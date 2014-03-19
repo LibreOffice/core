@@ -136,6 +136,18 @@ namespace basegfx
         return v / M_PI_2 * 90.0;
     }
 
+    /** Snap v to nearest multiple of fStep, from negative and
+        positive side.
+
+        Examples:
+
+        snapToNearestMultiple(-0.1, 0.5) = 0.0
+        snapToNearestMultiple(0.1, 0.5) = 0.0
+        snapToNearestMultiple(0.25, 0.5) = 0.0
+        snapToNearestMultiple(0.26, 0.5) = 0.5
+     */
+    BASEGFX_DLLPUBLIC double snapToNearestMultiple(double v, const double fStep);
+
     /** return fValue with the sign of fSignCarrier, thus evtl. changed
     */
     inline double copySign(double fValue, double fSignCarrier)

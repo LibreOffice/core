@@ -111,6 +111,11 @@ public:
     OUString                GetGraphicFilter() const    { return maStrFilter; }
 
     void                SetShadingValue( const sal_uInt32 nNew );
+
+    //UUUU get graphic transparency in percent
+    sal_Int8 getGraphicTransparency() const;
+    void setGraphicTransparency(sal_Int8 nNew);
+
     void                SetGraphicPos( SvxGraphicPosition eNew );
     void                SetGraphic( const Graphic& rNew );
     void                SetGraphicObject( const GraphicObject& rNewObj );

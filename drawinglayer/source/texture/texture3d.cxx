@@ -334,16 +334,28 @@ namespace drawinglayer
             const double fAngleA(rHatch.getAngle());
             maColor = rHatch.getColor();
             mbFillBackground = rHatch.isFillBackground();
-            mp0 = new GeoTexSvxHatch(aOutlineRange, rHatch.getDistance(), fAngleA);
+            mp0 = new GeoTexSvxHatch(
+                aOutlineRange,
+                aOutlineRange,
+                rHatch.getDistance(),
+                fAngleA);
 
             if(attribute::HATCHSTYLE_DOUBLE == rHatch.getStyle() || attribute::HATCHSTYLE_TRIPLE == rHatch.getStyle())
             {
-                mp1 = new GeoTexSvxHatch(aOutlineRange, rHatch.getDistance(), fAngleA + F_PI2);
+                mp1 = new GeoTexSvxHatch(
+                    aOutlineRange,
+                    aOutlineRange,
+                    rHatch.getDistance(),
+                    fAngleA + F_PI2);
             }
 
             if(attribute::HATCHSTYLE_TRIPLE == rHatch.getStyle())
             {
-                mp2 = new GeoTexSvxHatch(aOutlineRange, rHatch.getDistance(), fAngleA + F_PI4);
+                mp2 = new GeoTexSvxHatch(
+                    aOutlineRange,
+                    aOutlineRange,
+                    rHatch.getDistance(),
+                    fAngleA + F_PI4);
             }
         }
 

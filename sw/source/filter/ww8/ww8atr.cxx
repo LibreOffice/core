@@ -5345,12 +5345,15 @@ void AttributeOutputBase::OutputItem( const SfxPoolItem& rHt )
         case RES_BACKGROUND:
             FormatBackground( static_cast< const SvxBrushItem& >( rHt ) );
             break;
+#if 0
+        // FIXME port to FillAttributes
         case RES_FILL_STYLE:
             FormatFillStyle( static_cast< const XFillStyleItem& >( rHt ) );
             break;
         case RES_FILL_GRADIENT:
             FormatFillGradient( static_cast< const XFillGradientItem& >( rHt ) );
             break;
+#endif
         case RES_BOX:
             FormatBox( static_cast< const SvxBoxItem& >( rHt ) );
             break;

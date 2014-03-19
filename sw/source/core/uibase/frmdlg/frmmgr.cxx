@@ -28,6 +28,7 @@
 #include <editeng/ulspitem.hxx>
 #include <editeng/shaditem.hxx>
 #include <svx/swframevalidation.hxx>
+#include <svx/xdef.hxx>
 #include <fmtclds.hxx>
 #include "wrtsh.hxx"
 #include "view.hxx"
@@ -46,6 +47,10 @@ using namespace ::com::sun::star;
 
 static sal_uInt16 aFrmMgrRange[] = {
                             RES_FRMATR_BEGIN, RES_FRMATR_END-1,
+
+                            //UUUU FillAttribute support
+                            XATTR_FILL_FIRST, XATTR_FILL_LAST,
+
                             SID_ATTR_BORDER_INNER, SID_ATTR_BORDER_INNER,
                             FN_SET_FRM_NAME, FN_SET_FRM_NAME,
                             0};

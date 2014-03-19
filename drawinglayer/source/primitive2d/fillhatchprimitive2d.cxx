@@ -67,7 +67,12 @@ namespace drawinglayer
                     case attribute::HATCHSTYLE_TRIPLE:
                     {
                         // rotated 45 degrees
-                        texture::GeoTexSvxHatch aHatch(getObjectRange(), fDistance, fAngle - F_PI4);
+                        texture::GeoTexSvxHatch aHatch(
+                            getDefinitionRange(),
+                            getOutputRange(),
+                            fDistance,
+                            fAngle - F_PI4);
+
                         aHatch.appendTransformations(aMatrices);
 
                         // fall-through by purpose
@@ -75,7 +80,12 @@ namespace drawinglayer
                     case attribute::HATCHSTYLE_DOUBLE:
                     {
                         // rotated 90 degrees
-                        texture::GeoTexSvxHatch aHatch(getObjectRange(), fDistance, fAngle - F_PI2);
+                        texture::GeoTexSvxHatch aHatch(
+                            getDefinitionRange(),
+                            getOutputRange(),
+                            fDistance,
+                            fAngle - F_PI2);
+
                         aHatch.appendTransformations(aMatrices);
 
                         // fall-through by purpose
@@ -83,7 +93,12 @@ namespace drawinglayer
                     case attribute::HATCHSTYLE_SINGLE:
                     {
                         // angle as given
-                        texture::GeoTexSvxHatch aHatch(getObjectRange(), fDistance, fAngle);
+                        texture::GeoTexSvxHatch aHatch(
+                            getDefinitionRange(),
+                            getOutputRange(),
+                            fDistance,
+                            fAngle);
+
                         aHatch.appendTransformations(aMatrices);
                     }
                 }
@@ -99,7 +114,7 @@ namespace drawinglayer
                     const Primitive2DReference xRef(
                         new PolyPolygonColorPrimitive2D(
                             basegfx::B2DPolyPolygon(
-                                basegfx::tools::createPolygonFromRect(getObjectRange())), getBColor()));
+                                basegfx::tools::createPolygonFromRect(getOutputRange())), getBColor()));
                     aRetval[0] = xRef;
                 }
 
@@ -125,11 +140,25 @@ namespace drawinglayer
         }
 
         FillHatchPrimitive2D::FillHatchPrimitive2D(
-            const basegfx::B2DRange& rObjectRange,
+            const basegfx::B2DRange& rOutputRange,
             const basegfx::BColor& rBColor,
             const attribute::FillHatchAttribute& rFillHatch)
         :   DiscreteMetricDependentPrimitive2D(),
-            maObjectRange(rObjectRange),
+            maOutputRange(rOutputRange),
+            maDefinitionRange(rOutputRange),
+            maFillHatch(rFillHatch),
+            maBColor(rBColor)
+        {
+        }
+
+        FillHatchPrimitive2D::FillHatchPrimitive2D(
+            const basegfx::B2DRange& rOutputRange,
+            const basegfx::B2DRange& rDefinitionRange,
+            const basegfx::BColor& rBColor,
+            const attribute::FillHatchAttribute& rFillHatch)
+        :   DiscreteMetricDependentPrimitive2D(),
+            maOutputRange(rOutputRange),
+            maDefinitionRange(rDefinitionRange),
             maFillHatch(rFillHatch),
             maBColor(rBColor)
         {
@@ -141,7 +170,8 @@ namespace drawinglayer
             {
                 const FillHatchPrimitive2D& rCompare = (FillHatchPrimitive2D&)rPrimitive;
 
-                return (getObjectRange() == rCompare.getObjectRange()
+                return (getOutputRange() == rCompare.getOutputRange()
+                    && getDefinitionRange() == rCompare.getDefinitionRange()
                     && getFillHatch() == rCompare.getFillHatch()
                     && getBColor() == rCompare.getBColor());
             }
@@ -151,8 +181,8 @@ namespace drawinglayer
 
         basegfx::B2DRange FillHatchPrimitive2D::getB2DRange(const geometry::ViewInformation2D& /*rViewInformation*/) const
         {
-            // return ObjectRange
-            return getObjectRange();
+            // return the geometrically visible area
+            return getOutputRange();
         }
 
         Primitive2DSequence FillHatchPrimitive2D::get2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const

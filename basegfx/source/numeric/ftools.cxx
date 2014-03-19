@@ -16,37 +16,34 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_SW_SOURCE_UI_INC_FRMSH_HXX
-#define INCLUDED_SW_SOURCE_UI_INC_FRMSH_HXX
 
-#include "basesh.hxx"
+#include <basegfx/numeric/ftools.hxx>
+#include <algorithm>
 
-class SwFrameShell: public SwBaseShell
+namespace basegfx
 {
+    double snapToNearestMultiple(double v, const double fStep)
+    {
+        if(fTools::equalZero(fStep))
+        {
+            // with a zero step, all snaps to 0.0
+            return 0.0;
+        }
+        else
+        {
+            const double fHalfStep(fStep * 0.5);
+            const double fChange(fHalfStep - fmod(v + fHalfStep, fStep));
 
-public:
-    SFX_DECL_INTERFACE(SW_FRAMESHELL)
-
-            SwFrameShell(SwView &rView);
-    virtual ~SwFrameShell();
-
-    void    Execute(SfxRequest &);
-    void    GetState(SfxItemSet &);
-    void    ExecFrameStyle(SfxRequest& rReq);
-    void    GetLineStyleState(SfxItemSet &rSet);
-    void    StateInsert(SfxItemSet &rSet);
-
-    void    StateStatusline(SfxItemSet &rSet);
-
-    //UUUU
-    void GetDrawAttrStateTextFrame(SfxItemSet &rSet);
-    void ExecDrawAttrArgsTextFrame(SfxRequest& rReq);
-
-    //UUUU
-    void ExecDrawDlgTextFrame(SfxRequest& rReq);
-    void DisableStateTextFrame(SfxItemSet &rSet);
-};
-
-#endif
+            if(basegfx::fTools::equal(fabs(v), fabs(fChange)))
+            {
+                return 0.0;
+            }
+            else
+            {
+                return v + fChange;
+            }
+        }
+    }
+} // end of namespace basegfx
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

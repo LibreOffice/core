@@ -61,6 +61,8 @@ class SwPrintData;
 class SwSortedObjs;
 class SwAnchoredObject;
 typedef struct _xmlTextWriter *xmlTextWriterPtr;
+//UUUU
+class FillAttributes;
 
 // Each FrmType is represented here as a bit.
 // The bits must be set in a way that it can be determined with masking of
@@ -511,12 +513,12 @@ public:
     // retouch, not in the area of the given Rect!
     void Retouche( const SwPageFrm *pPage, const SwRect &rRect ) const;
 
-    sal_Bool GetBackgroundBrush( const SvxBrushItem*& rpBrush,
-                             const XFillStyleItem* & rpFillStyle,
-                             const XFillGradientItem* & rpFillGradient,
-                             const Color*& rpColor,
-                             SwRect &rOrigRect,
-                             sal_Bool bLowerMode ) const;
+    sal_Bool GetBackgroundBrush(
+        boost::shared_ptr< FillAttributes >& rFillAttributes,
+        const SvxBrushItem*& rpBrush,
+        const Color*& rpColor,
+        SwRect &rOrigRect,
+        sal_Bool bLowerMode ) const;
 
     inline void SetCompletePaint() const;
     inline void ResetCompletePaint() const;

@@ -309,6 +309,14 @@
 #define WID_TXTCOL_AUTO_DISTANCE        6
 #define WID_TXTCOL_LINE_STYLE           7
 
+//UUUU This define would need the include of <svx/unoshprp.hxx>, but this ends
+// in a mess; there *are* double used symbols which are used in a #define in
+// editengine and as an enum in sw; these will then collide and lead to severe
+// problems which will be hard to detect at all (e.g. look for UNO_NAME_CHAR_COLOR).
+// More of these are likely, so better use a local define here, but at least the same
+// as in svx/inc/unoshprp.hxx
+#define OWN_ATTR_FILLBMP_MODE   (OWN_ATTR_VALUE_START+45)
+
 class SwUnoPropertyMapProvider
 {
     SfxItemPropertyMapEntry const * aMapEntriesArr[PROPERTY_MAP_END];

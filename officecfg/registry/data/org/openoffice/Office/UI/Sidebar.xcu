@@ -323,6 +323,7 @@
             DrawImpress,    TextObject, hidden  ;
             DrawImpress,    OLE,        hidden  ;
             WriterVariants, Draw,       visible ;
+            Writer,         Frame,      visible ;
           </value>
         </prop>
         <prop oor:name="ImplementationURL" oor:type="xs:string">

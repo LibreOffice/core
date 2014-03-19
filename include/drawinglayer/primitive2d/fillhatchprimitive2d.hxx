@@ -51,8 +51,12 @@ namespace drawinglayer
         class DRAWINGLAYER_DLLPUBLIC FillHatchPrimitive2D : public DiscreteMetricDependentPrimitive2D
         {
         private:
-            /// the geometric definition
-            basegfx::B2DRange                       maObjectRange;
+            /// the geometrically visible area
+            basegfx::B2DRange                       maOutputRange;
+
+            /// the area the gradient definition is based on
+            /// in the simplest case identical to OutputRange
+            basegfx::B2DRange                       maDefinitionRange;
 
             /// the hatch definition
             attribute::FillHatchAttribute           maFillHatch;
@@ -65,14 +69,20 @@ namespace drawinglayer
             virtual Primitive2DSequence create2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const SAL_OVERRIDE;
 
         public:
-            /// constructor
+            /// constructors. The one without definition range will use output range as definition range
             FillHatchPrimitive2D(
-                const basegfx::B2DRange& rObjectRange,
+                const basegfx::B2DRange& rOutputRange,
+                const basegfx::BColor& rBColor,
+                const attribute::FillHatchAttribute& rFillHatch);
+            FillHatchPrimitive2D(
+                const basegfx::B2DRange& rOutputRange,
+                const basegfx::B2DRange& rDefinitionRange,
                 const basegfx::BColor& rBColor,
                 const attribute::FillHatchAttribute& rFillHatch);
 
             /// data read access
-            const basegfx::B2DRange& getObjectRange() const { return maObjectRange; }
+            const basegfx::B2DRange& getOutputRange() const { return maOutputRange; }
+            const basegfx::B2DRange& getDefinitionRange() const { return maDefinitionRange; }
             const attribute::FillHatchAttribute& getFillHatch() const { return maFillHatch; }
             const basegfx::BColor& getBColor() const { return maBColor; }
 

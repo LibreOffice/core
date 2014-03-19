@@ -56,32 +56,62 @@ namespace drawinglayer
     namespace primitive2d
     {
         Primitive2DReference createPolyPolygonFillPrimitive(
-            const basegfx::B2DPolyPolygon& rUnitPolyPolygon,
-            const basegfx::B2DHomMatrix& rObjectTransform,
+            const basegfx::B2DPolyPolygon& rPolyPolygon,
             const attribute::SdrFillAttribute& rFill,
             const attribute::FillGradientAttribute& rFillGradient)
         {
+            // when we have no given definition range, use the range of the given geometry
+            // also for definition (simplest case)
+            const basegfx::B2DRange aRange(basegfx::tools::getRange(rPolyPolygon));
+
+            return createPolyPolygonFillPrimitive(
+                rPolyPolygon,
+                aRange,
+                rFill,
+                rFillGradient);
+        }
+
+        Primitive2DReference createPolyPolygonFillPrimitive(
+            const basegfx::B2DPolyPolygon& rPolyPolygon,
+            const basegfx::B2DRange& rDefinitionRange,
+            const attribute::SdrFillAttribute& rFill,
+            const attribute::FillGradientAttribute& rFillGradient)
+        {
+            if(basegfx::fTools::moreOrEqual(rFill.getTransparence(), 1.0))
+            {
+                return Primitive2DReference();
+            }
+
             // prepare fully scaled polygon
-            basegfx::B2DPolyPolygon aScaledPolyPolygon(rUnitPolyPolygon);
-            aScaledPolyPolygon.transform(rObjectTransform);
             BasePrimitive2D* pNewFillPrimitive = 0;
 
             if(!rFill.getGradient().isDefault())
             {
-                pNewFillPrimitive = new PolyPolygonGradientPrimitive2D(aScaledPolyPolygon, rFill.getGradient());
+                pNewFillPrimitive = new PolyPolygonGradientPrimitive2D(
+                    rPolyPolygon,
+                    rDefinitionRange,
+                    rFill.getGradient());
             }
             else if(!rFill.getHatch().isDefault())
             {
-                pNewFillPrimitive = new PolyPolygonHatchPrimitive2D(aScaledPolyPolygon, rFill.getColor(), rFill.getHatch());
+                pNewFillPrimitive = new PolyPolygonHatchPrimitive2D(
+                    rPolyPolygon,
+                    rDefinitionRange,
+                    rFill.getColor(),
+                    rFill.getHatch());
             }
             else if(!rFill.getFillGraphic().isDefault())
             {
-                const basegfx::B2DRange aRange(basegfx::tools::getRange(aScaledPolyPolygon));
-                pNewFillPrimitive = new PolyPolygonGraphicPrimitive2D(aScaledPolyPolygon, rFill.getFillGraphic().createFillGraphicAttribute(aRange));
+                pNewFillPrimitive = new PolyPolygonGraphicPrimitive2D(
+                    rPolyPolygon,
+                    rDefinitionRange,
+                    rFill.getFillGraphic().createFillGraphicAttribute(rDefinitionRange));
             }
             else
             {
-                pNewFillPrimitive = new PolyPolygonColorPrimitive2D(aScaledPolyPolygon, rFill.getColor());
+                pNewFillPrimitive = new PolyPolygonColorPrimitive2D(
+                    rPolyPolygon,
+                    rFill.getColor());
             }
 
             if(0.0 != rFill.getTransparence())
@@ -99,7 +129,7 @@ namespace drawinglayer
 
                 // create FillGradientPrimitive2D for transparence and add to new sequence
                 // fillGradientPrimitive is enough here (compared to PolyPolygonGradientPrimitive2D) since float transparence will be masked anyways
-                const basegfx::B2DRange aRange(basegfx::tools::getRange(aScaledPolyPolygon));
+                const basegfx::B2DRange aRange(basegfx::tools::getRange(rPolyPolygon));
                 const Primitive2DReference xRefB(new FillGradientPrimitive2D(aRange, rFillGradient));
                 const Primitive2DSequence aAlpha(&xRefB, 1L);
 
@@ -114,32 +144,27 @@ namespace drawinglayer
         }
 
         Primitive2DReference createPolygonLinePrimitive(
-            const basegfx::B2DPolygon& rUnitPolygon,
-            const basegfx::B2DHomMatrix& rObjectTransform,
+            const basegfx::B2DPolygon& rPolygon,
             const attribute::SdrLineAttribute& rLine,
             const attribute::SdrLineStartEndAttribute& rStroke)
         {
-            // prepare fully scaled polygon
-            basegfx::B2DPolygon aScaledPolygon(rUnitPolygon);
-            aScaledPolygon.transform(rObjectTransform);
-
             // create line and stroke attribute
             const attribute::LineAttribute aLineAttribute(rLine.getColor(), rLine.getWidth(), rLine.getJoin(), rLine.getCap());
             const attribute::StrokeAttribute aStrokeAttribute(rLine.getDotDashArray(), rLine.getFullDotDashLen());
             BasePrimitive2D* pNewLinePrimitive = 0L;
 
-            if(!rUnitPolygon.isClosed() && !rStroke.isDefault())
+            if(!rPolygon.isClosed() && !rStroke.isDefault())
             {
                 attribute::LineStartEndAttribute aStart(rStroke.getStartWidth(), rStroke.getStartPolyPolygon(), rStroke.isStartCentered());
                 attribute::LineStartEndAttribute aEnd(rStroke.getEndWidth(), rStroke.getEndPolyPolygon(), rStroke.isEndCentered());
 
                 // create data
-                pNewLinePrimitive = new PolygonStrokeArrowPrimitive2D(aScaledPolygon, aLineAttribute, aStrokeAttribute, aStart, aEnd);
+                pNewLinePrimitive = new PolygonStrokeArrowPrimitive2D(rPolygon, aLineAttribute, aStrokeAttribute, aStart, aEnd);
             }
             else
             {
                 // create data
-                pNewLinePrimitive = new PolygonStrokePrimitive2D(aScaledPolygon, aLineAttribute, aStrokeAttribute);
+                pNewLinePrimitive = new PolygonStrokePrimitive2D(rPolygon, aLineAttribute, aStrokeAttribute);
             }
 
             if(0.0 != rLine.getTransparence())

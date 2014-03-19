@@ -145,19 +145,34 @@ namespace drawinglayer
                                                 case attribute::HATCHSTYLE_TRIPLE:
                                                 {
                                                     // rotated 45 degrees
-                                                    texture::GeoTexSvxHatch aHatch(aOutlineRange, getHatch().getDistance(), fAngle - F_PI4);
+                                                    texture::GeoTexSvxHatch aHatch(
+                                                        aOutlineRange,
+                                                        aOutlineRange,
+                                                        getHatch().getDistance(),
+                                                        fAngle - F_PI4);
+
                                                     aHatch.appendTransformations(aMatrices);
                                                 }
                                                 case attribute::HATCHSTYLE_DOUBLE:
                                                 {
                                                     // rotated 90 degrees
-                                                    texture::GeoTexSvxHatch aHatch(aOutlineRange, getHatch().getDistance(), fAngle - F_PI2);
+                                                    texture::GeoTexSvxHatch aHatch(
+                                                        aOutlineRange,
+                                                        aOutlineRange,
+                                                        getHatch().getDistance(),
+                                                        fAngle - F_PI2);
+
                                                     aHatch.appendTransformations(aMatrices);
                                                 }
                                                 case attribute::HATCHSTYLE_SINGLE:
                                                 {
                                                     // angle as given
-                                                    texture::GeoTexSvxHatch aHatch(aOutlineRange, getHatch().getDistance(), fAngle);
+                                                    texture::GeoTexSvxHatch aHatch(
+                                                        aOutlineRange,
+                                                        aOutlineRange,
+                                                        getHatch().getDistance(),
+                                                        fAngle);
+
                                                     aHatch.appendTransformations(aMatrices);
                                                 }
                                             }

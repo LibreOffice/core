@@ -179,7 +179,6 @@ namespace sdr
                             // if there is shadow, create the specialized shadow primitive
                             xSpecialShadow = drawinglayer::primitive2d::createPolyPolygonFillPrimitive(
                                 aClippedShadow,
-                                basegfx::B2DHomMatrix(),
                                 aFill,
                                 drawinglayer::attribute::FillGradientAttribute());
                         }

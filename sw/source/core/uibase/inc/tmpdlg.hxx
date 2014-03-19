@@ -49,6 +49,8 @@ class SwTemplateDlg: public SfxStyleDialog
     sal_uInt16 m_nOutlineId;
     sal_uInt16 m_nDropCapsId;
     sal_uInt16 m_nBackgroundId;
+    sal_uInt16 m_nAreaId;
+    sal_uInt16 m_nTransparenceId;
     sal_uInt16 m_nBorderId;
     sal_uInt16 m_nConditionId;
     sal_uInt16 m_nTypeId;

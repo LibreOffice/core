@@ -1089,7 +1089,7 @@ namespace drawinglayer
                         const attribute::FillHatchAttribute& rFillHatchAttributes = rFillHatchPrimitive.getFillHatch();
 
                         // create hatch polygon in range size and discrete coordinates
-                        basegfx::B2DRange aHatchRange(rFillHatchPrimitive.getObjectRange());
+                        basegfx::B2DRange aHatchRange(rFillHatchPrimitive.getOutputRange());
                         aHatchRange.transform(maCurrentTransformation);
                         const basegfx::B2DPolygon aHatchPolygon(basegfx::tools::createPolygonFromRect(aHatchRange));
 

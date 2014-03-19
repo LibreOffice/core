@@ -274,12 +274,19 @@
 // same id for two different attributes
 
 
+// CAUTION! Range <1 .. 22> used by EditEngine (!)
+
 #define SID_ATTR_BORDER_INNER                           ( SID_SVX_START + 23 )
+
+// CAUTION! Range <24 .. 43> used by EditEngine (!)
 
 #define SID_ATTR_POSTIT_AUTHOR                          ( SID_SVX_START + 44 )
 #define SID_ATTR_POSTIT_DATE                            ( SID_SVX_START + 45 )
 #define SID_ATTR_POSTIT_TEXT                            ( SID_SVX_START + 46 )
 #define SID_ATTR_SEARCH                                 ( SID_SVX_START + 47 )
+
+// CAUTION! Range <48 .. 49> used by EditEngine (!)
+
 #define SID_ATTR_PAGE                                   ( SID_SVX_START + 50 )
 #define SID_ATTR_PAGE_SIZE                              ( SID_SVX_START + 51 )
 #define SID_ATTR_PAGE_MAXSIZE                           ( SID_SVX_START + 52 )
@@ -293,6 +300,9 @@
 #define SID_ATTR_PAGE_DYNAMIC                           ( SID_SVX_START + 61 )
 #define SID_ATTR_PAGE_SHARED                            ( SID_SVX_START + 62 )
 #define SID_ATTR_PAGE_BSP                               ( SID_SVX_START + 63 )
+
+// CAUTION! Range <64 .. 67> used by EditEngine (!)
+
 #define SID_RULER_NULL_OFFSET                           ( SID_SVX_START + 79 )
 #define SID_RULER_BORDERS                               ( SID_SVX_START + 80 )
 #define SID_RULER_OBJECT                                ( SID_SVX_START + 81 )
@@ -426,6 +436,9 @@
 #define SID_SPELL_DIALOG                                ( SID_SVX_START + 243 )
 #define SID_INSERT_DRAW                                 ( SID_SVX_START + 244 )
 #define SID_THESAURUS                                   ( SID_SVX_START + 245 )
+
+// CAUTION! Range <250 .. 250> used by EditEngine (!)
+
 #define SID_DRAW_TEXT                                   ( SID_SVX_START + 253 )
 #define SID_DRAW_CAPTION                                ( SID_SVX_START + 254 )
 #define SID_DRAW_SELECT                                 ( SID_SVX_START + 255 )
@@ -458,6 +471,9 @@
 #define SID_PARA_DLG                                    ( SID_SVX_START + 297 )
 #define SID_ATTR_GRID_OPTIONS                           ( SID_SVX_START + 298 )
 #define SID_ATTR_FILL_SHADOW                            ( SID_SVX_START + 299 )
+
+// CAUTION! Range <300 .. 300> used by EditEngine (!)
+
 #define SID_ATTR_LINEEND_STYLE                          ( SID_SVX_START + 301 )
 #define SID_ATTR_TRANSFORM_SHEAR                        ( SID_SVX_START + 304 )
 #define SID_ATTR_TRANSFORM_SHEAR_X                      ( SID_SVX_START + 305 )
@@ -489,6 +505,9 @@
 #define SID_BMPMASK                                     ( SID_SVX_START + 350 )
 #define SID_BMPMASK_PIPETTE                             ( SID_SVX_START + 351 )
 #define SID_BMPMASK_EXEC                                ( SID_SVX_START + 353 )
+
+// CAUTION! Range <363 .. 363> used by EditEngine (!)
+
 #define SID_ATTR_TEXT_FITTOSIZE                         ( SID_SVX_START + 367 )
 #define SID_ATTR_BRUSH_ROW                              ( SID_SVX_START + 368 )
 #define SID_OPTFILTER_MSOFFICE                          ( SID_SVX_START + 369 )
@@ -525,6 +544,8 @@
 #define SID_ATTR_3D_LIGHT                               ( SID_SVX_START + 407 ) /* Slots mit --> koennen demnaechst entfallen */
 #define SID_ATTR_3D_START                                   SID_ATTR_3D_LIGHT
 
+// CAUTION! Range <413 .. 413> used by EditEngine (!)
+
 #define SID_RULER_PROTECT                               ( SID_SVX_START + 415 )
 #define SID_COLOR_CONTROL                               ( SID_SVX_START + 417 )
 #define SID_ATTR_3D_INTERN                              ( SID_SVX_START + 422 )
@@ -555,6 +576,9 @@
 #define SID_GROUP                                       ( SID_SVX_START + 454 )
 #define SID_UNGROUP                                     ( SID_SVX_START + 455 )
 #define SID_SET_DEFAULT                                 ( SID_SVX_START + 456 )
+
+// CAUTION! Range <457 .. 457> used by EditEngine (!)
+
 #define SID_ATTR_ALIGN_INDENT                           ( SID_SVX_START + 460 )
 #define SID_DEC_INDENT                                  ( SID_SVX_START + 461 )
 #define SID_INC_INDENT                                  ( SID_SVX_START + 462 )
@@ -579,7 +603,12 @@
 #define SID_ATTR_ALIGN_LOCKPOS                          ( SID_SVX_START + 578 )
 #define SID_ATTR_LINEEND_WIDTH_DEFAULT                  ( SID_SVX_START + 579 )
 #define SID_ATTR_NUMBERFORMAT_ONE_AREA                  ( SID_SVX_START + 580 )
+
+// CAUTION! Range <587 .. 587> used by EditEngine (!)
+
 #define SID_PARA_BACKGRND_DESTINATION                   ( SID_SVX_START + 590 )
+
+// CAUTION! Range <591 .. 591> used by EditEngine (!)
 
 #define SID_FMSLOTS_START                               ( SID_SVX_START + 592 )
 #define SID_FM_CONFIG                                   ( SID_SVX_START + 593 )
@@ -716,6 +745,9 @@
 #define SID_HLINKBAR_LINK                               ( SID_SVX_START + 851 )
 #define SID_HLINKBAR_SEARCH                             ( SID_SVX_START + 853 )
 #define SID_HLINKBAR_TARGET                             ( SID_SVX_START + 854 )
+
+// CAUTION! Range <855 .. 855> used by EditEngine (!)
+
 #define SID_PARAM_NUM_PRESET                            ( SID_SVX_START + 856 )
 #define SID_PARAM_CUR_NUM_LEVEL                         ( SID_SVX_START + 859 )
 #define SID_CREATE_SW_DRAWVIEW                          ( SID_SVX_START + 860 )
@@ -728,15 +760,26 @@
 #define SID_ATTR_GRAF_TRANSPARENCE                      ( SID_SVX_START + 869 )
 #define SID_ATTR_GRAF_INVERT                            ( SID_SVX_START + 870 )
 #define SID_ATTR_GRAF_MODE                              ( SID_SVX_START + 871 )
+
+// CAUTION! Range <877 .. 877> used by EditEngine (!)
+
 #define SID_ATTR_GRAF_KEEP_ZOOM                         ( SID_SVX_START + 882 )
 #define SID_ATTR_GRAF_CROP                              ( SID_SVX_START + 883 )
 #define SID_ATTR_GRAF_FRMSIZE                           ( SID_SVX_START + 884 )
 #define SID_ATTR_GRAF_FRMSIZE_PERCENT                   ( SID_SVX_START + 885 )
 #define SID_ATTR_GRAF_GRAPHIC                           ( SID_SVX_START + 886 )
 #define SID_DRAW_TEXT_VERTICAL                              SID_ATTR_CHAR_VERTICAL
+
+// CAUTION! Range <887 .. 903> used by EditEngine (!)
+
+// CAUTION! Range <905 .. 905> used by EditEngine (!)
+
 #define SID_DRAW_CAPTION_VERTICAL                       ( SID_SVX_START + 906 )
 #define SID_TEXTDIRECTION_LEFT_TO_RIGHT                 ( SID_SVX_START + 907 )
 #define SID_TEXTDIRECTION_TOP_TO_BOTTOM                 ( SID_SVX_START + 908 )
+
+// CAUTION! Range <910 .. 911> used by EditEngine (!)
+
 #define SID_TRANSLITERATE_UPPER                         ( SID_SVX_START + 912 )
 #define SID_TRANSLITERATE_LOWER                         ( SID_SVX_START + 913 )
 #define SID_TRANSLITERATE_HALFWIDTH                     ( SID_SVX_START + 914 )
@@ -744,9 +787,14 @@
 #define SID_TRANSLITERATE_HIRAGANA                      ( SID_SVX_START + 916 )
 #define SID_TRANSLITERATE_KATAGANA                      ( SID_SVX_START + 917 )
 #define SID_MN_SUB_TRANSLITERATE                        ( SID_SVX_START + 918 )
+
+// CAUTION! Range <919 .. 920> used by EditEngine (!)
+
 #define SID_LANGUAGE_OPTIONS                            ( SID_SVX_START + 921 )
 #define SID_GETUNDOSTRINGS                              ( SID_SVX_START + 923 )
 #define SID_GETREDOSTRINGS                              ( SID_SVX_START + 924 )
+
+// CAUTION! Range <925 .. 925> used by EditEngine (!)
 
 #define SID_INSERT_IMAGECONTROL                         ( SID_SVX_START + 926 )
 #define SID_INSERT_PROGRESSBAR                          ( SID_SVX_START + 927 )
@@ -765,9 +813,18 @@
 #define SID_INSERT_PATTERNFIELD                         ( SID_SVX_START + 941 )
 #define SID_INSERT_FILECONTROL                          ( SID_SVX_START + 942 )
 #define SID_SHOW_PROPERTYBROWSER                        ( SID_SVX_START + 943 )
+
+// CAUTION! Range <944 .. 945> used by EditEngine (!)
+
 #define SID_ATTR_TABSTOP_VERTICAL                       ( SID_SVX_START + 946 )
+
+// CAUTION! Range <947 .. 947> used by EditEngine (!)
+
 #define SID_RULER_BORDERS_VERTICAL                      ( SID_SVX_START + 948 )
 #define SID_ATTR_ALIGN_ASIANVERTICAL                    ( SID_SVX_START + 949 )
+
+// CAUTION! Range <950 .. 951> used by EditEngine (!)
+
 #define SID_RULER_TEXT_RIGHT_TO_LEFT                    ( SID_SVX_START + 952 )
 #define SID_ATTR_HDFT_DYNAMIC_SPACING                   ( SID_SVX_START + 953 )
 #define SID_ATTR_NUMBERFORMAT_ADD_AUTO                  ( SID_SVX_START + 954 )
@@ -805,10 +862,16 @@
 #define SID_FONTWORK_KERN_CHARACTER_PAIRS               ( SID_SVX_START + 986 )
 #define SID_DRAW_FONTWORK                               ( SID_SVX_START + 987 )
 #define SID_DRAW_FONTWORK_VERTICAL                      ( SID_SVX_START + 988 )
+
+// CAUTION! Range <989 .. 989> used by EditEngine (!)
+
 #define SID_ATTR_BORDER_CONNECT                         ( SID_SVX_START + 990 )
 #define SID_SW_FOLLOW_TEXT_FLOW                         ( SID_SVX_START + 991 ) /* #i18732# - slot-id for new option IsFollowingTextFlow' */
 #define SID_RULER_ROWS                                  ( SID_SVX_START + 992 )
 #define SID_RULER_ROWS_VERTICAL                         ( SID_SVX_START + 993 )
+
+// CAUTION! Range <994 .. 998> used by EditEngine (!)
+
 #define SID_ATTR_TRANSFORM_HORI_POSITION                ( SID_SVX_START + 999 )
 #define SID_ATTR_TRANSFORM_VERT_POSITION                ( SID_SVX_START + 1000 )
 #define SID_SHOW_ITEMBROWSER                            ( SID_SVX_START + 1001 )
@@ -954,15 +1017,15 @@
 
 #define FN_SVX_SET_NUMBER                               ( SID_SVX_START + 1136 )
 #define FN_SVX_SET_BULLET                               ( SID_SVX_START + 1137 )
-#define SID_SW_ATTR_FILL_STYLE                          ( SID_SVX_START + 1138 )
-#define SID_SW_ATTR_FILL_GRADIENT                       ( SID_SVX_START + 1139 )
 
 #define SID_ATTR_BORDER_STYLES                          ( SID_SVX_START + 1140 )
 #define SID_ATTR_BORDER_DEFAULT_WIDTH                   ( SID_SVX_START + 1141 )
 
+//UUUU
+#define SID_OFFER_IMPORT                                ( SID_SVX_START + 1142 )
 
 // IMPORTANT NOTE: adjust SID_SVX_FIRSTFREE, when adding new slot id
-#define SID_SVX_FIRSTFREE                               (SID_ATTR_BORDER_DEFAULT_WIDTH + 1)
+#define SID_SVX_FIRSTFREE                               (SID_OFFER_IMPORT + 1)
 
 
 // Overflow check for slot IDs

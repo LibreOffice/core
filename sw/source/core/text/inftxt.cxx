@@ -65,6 +65,9 @@
 #include <EnhancedPDFExportHelper.hxx>
 #include <docufld.hxx>
 
+//UUUU
+#include <frmfmt.hxx>
+
 #include <unomid.h>
 
 #if OSL_DEBUG_LEVEL > 1
@@ -505,15 +508,16 @@ static bool lcl_IsDarkBackground( const SwTxtPaintInfo& rInf )
     if( ! pCol || COL_TRANSPARENT == pCol->GetColor() )
     {
         const SvxBrushItem* pItem;
-        const XFillStyleItem* pFillStyleItem;
-        const XFillGradientItem* pFillGradientItem;
         SwRect aOrigBackRect;
+
+        //UUUU
+        FillAttributesPtr aFillAttributes;
 
         // Consider, that [GetBackgroundBrush(...)] can set <pCol>
         // See implementation in /core/layout/paintfrm.cxx
         // There is a background color, if there is a background brush and
         // its color is *not* "no fill"/"auto fill".
-        if( rInf.GetTxtFrm()->GetBackgroundBrush( pItem, pFillStyleItem, pFillGradientItem, pCol, aOrigBackRect, false ) )
+        if( rInf.GetTxtFrm()->GetBackgroundBrush( aFillAttributes, pItem, pCol, aOrigBackRect, false ) )
         {
             if ( !pCol )
                 pCol = &pItem->GetColor();
@@ -915,8 +919,14 @@ void SwTxtPaintInfo::DrawRect( const SwRect &rRect, bool bNoGraphic,
             m_pOut->DrawRect( rRect.SVRect() );
         else
         {
-            OSL_ENSURE( ((SvxBrushItem*)-1) != pBrushItem, "DrawRect: Uninitialized BrushItem!" );
-            ::DrawGraphic( pBrushItem, 0, 0, m_pOut, aItemRect, rRect );
+            if(pBrushItem != ((SvxBrushItem*)-1))
+            {
+                ::DrawGraphic( pBrushItem, m_pOut, aItemRect, rRect );
+            }
+            else
+            {
+                OSL_ENSURE(false, "DrawRect: Uninitialized BrushItem!" );
+            }
         }
     }
 }

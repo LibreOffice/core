@@ -2573,9 +2573,10 @@ sal_Bool SwDrawTextInfo::ApplyAutoColor( Font* pFont )
             if( ! pCol || COL_TRANSPARENT == pCol->GetColor() )
             {
                 const SvxBrushItem* pItem;
-                const XFillStyleItem* pFillStyleItem;
-                const XFillGradientItem* pFillGradientItem;
                 SwRect aOrigBackRect;
+
+                //UUUU
+                FillAttributesPtr aFillAttributes;
 
                 /// OD 21.08.2002
                 ///     consider, that [GetBackgroundBrush(...)] can set <pCol>
@@ -2583,7 +2584,7 @@ sal_Bool SwDrawTextInfo::ApplyAutoColor( Font* pFont )
                 /// OD 21.08.2002 #99657#
                 ///     There is a user defined setting for the background, if there
                 ///     is a background brush and its color is *not* "no fill"/"auto fill".
-                if( GetFrm()->GetBackgroundBrush( pItem, pFillStyleItem, pFillGradientItem, pCol, aOrigBackRect, sal_False ) )
+                if( GetFrm()->GetBackgroundBrush( aFillAttributes, pItem, pCol, aOrigBackRect, sal_False ) )
                 {
                     if ( !pCol )
                     {

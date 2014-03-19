@@ -42,6 +42,7 @@
 #include <fmtfsize.hxx>
 #include <fchrfmt.hxx>
 #include <svtools/htmlcfg.hxx>
+#include <svx/xdef.hxx>
 #include <SwStyleNameMapper.hxx>
 #include <SwRewriter.hxx>
 #include <numrule.hxx>
@@ -564,6 +565,14 @@ IMPL_LINK_NOARG(ApplyStyle, ApplyHdl)
         {
             ::ConvertAttrGenToChar(aTmpSet, CONV_ATTR_STD);
         }
+
+        //UUUU
+        if(m_bNew && SFX_STYLE_FAMILY_FRAME == m_nFamily)
+        {
+            // clear FillStyle so that it works as a derived attribute
+            aTmpSet.ClearItem(XATTR_FILLSTYLE);
+        }
+
         m_xTmp->SetItemSet( aTmpSet );
 
         if( SFX_STYLE_FAMILY_PAGE == m_nFamily && SvtLanguageOptions().IsCTLFontEnabled() )
@@ -589,6 +598,10 @@ IMPL_LINK_NOARG(ApplyStyle, ApplyHdl)
 
     return m_nRet;
 }
+
+//UUUU
+//#include <svx/svdmodel.hxx>
+//#include <svx/drawitem.hxx>
 
 sal_uInt16 SwDocShell::Edit(
     const OUString &rName,
@@ -721,6 +734,20 @@ sal_uInt16 SwDocShell::Edit(
     }
     if (!bBasic)
     {
+        //UUUU
+        //if(SFX_STYLE_FAMILY_FRAME == nFamily)
+        //{
+        //    //UUUU create needed items for XPropertyList entries from the DrawModel so that
+        //    // the Area TabPage can access them
+        //    SfxItemSet& rSet = xTmp->GetItemSet();
+        //    const SdrModel* pDrawModel = GetDoc()->GetDrawModel();
+        //
+        //    rSet.Put(SvxColorTableItem(pDrawModel->GetColorTableFromSdrModel(), SID_COLOR_TABLE));
+        //    rSet.Put(SvxGradientListItem(pDrawModel->GetGradientListFromSdrModel(), SID_GRADIENT_LIST));
+        //    rSet.Put(SvxHatchListItem(pDrawModel->GetHatchListFromSdrModel(), SID_HATCH_LIST));
+        //    rSet.Put(SvxBitmapListItem(pDrawModel->GetBitmapListFromSdrModel(), SID_BITMAP_LIST));
+        //}
+
         // prior to the dialog the HtmlMode at the DocShell is being sunk
         sal_uInt16 nHtmlMode = ::GetHtmlMode(this);
 

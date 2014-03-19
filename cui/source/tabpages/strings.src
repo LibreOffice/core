@@ -191,5 +191,9 @@ String RID_SVXSTR_DIMENSION_LINE
 {
     Text [en-US ] = "Dimension line";
 };
+String RID_SVXSTR_READ_DATA_ERROR
+{
+    Text [ en-US ] = "The file could not be loaded!" ;
+};
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

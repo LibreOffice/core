@@ -16,37 +16,16 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_SW_SOURCE_UI_INC_FRMSH_HXX
-#define INCLUDED_SW_SOURCE_UI_INC_FRMSH_HXX
 
-#include "basesh.hxx"
+#ifndef _UNOBRUSHITEMHELPER_HXX
+#define _UNOBRUSHITEMHELPER_HXX
 
-class SwFrameShell: public SwBaseShell
-{
+#include <editeng/brushitem.hxx>
 
-public:
-    SFX_DECL_INTERFACE(SW_FRAMESHELL)
+//UUUU helper function definintions for UNO API fallbacks to replace SvxBrushItem
+void setSvxBrushItemAsFillAttributesToTargetSet(const SvxBrushItem& rBrush, SfxItemSet& rToSet);
+SvxBrushItem getSvxBrushItemFromSourceSet(const SfxItemSet& rSourceSet, sal_Bool bSearchInParents = sal_True);
 
-            SwFrameShell(SwView &rView);
-    virtual ~SwFrameShell();
-
-    void    Execute(SfxRequest &);
-    void    GetState(SfxItemSet &);
-    void    ExecFrameStyle(SfxRequest& rReq);
-    void    GetLineStyleState(SfxItemSet &rSet);
-    void    StateInsert(SfxItemSet &rSet);
-
-    void    StateStatusline(SfxItemSet &rSet);
-
-    //UUUU
-    void GetDrawAttrStateTextFrame(SfxItemSet &rSet);
-    void ExecDrawAttrArgsTextFrame(SfxRequest& rReq);
-
-    //UUUU
-    void ExecDrawDlgTextFrame(SfxRequest& rReq);
-    void DisableStateTextFrame(SfxItemSet &rSet);
-};
-
-#endif
+#endif // _UNOBRUSHITEMHELPER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

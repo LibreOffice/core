@@ -21,6 +21,89 @@ interface BaseTextFrame
     Automation = FALSE;
 ]
 {
+    SID_ATTR_FILL_STYLE
+    [
+        Export = FALSE;
+        ExecMethod = ExecDrawAttrArgsTextFrame;
+        StateMethod = GetDrawAttrStateTextFrame;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+
+    SID_ATTR_FILL_COLOR
+    [
+        Export = FALSE;
+        ExecMethod = ExecDrawAttrArgsTextFrame;
+        StateMethod = GetDrawAttrStateTextFrame;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+
+    SID_ATTR_FILL_GRADIENT
+    [
+        Export = FALSE;
+        ExecMethod = ExecDrawAttrArgsTextFrame;
+        StateMethod = GetDrawAttrStateTextFrame;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+
+    SID_ATTR_FILL_HATCH
+    [
+        Export = FALSE;
+        ExecMethod = ExecDrawAttrArgsTextFrame;
+        StateMethod = GetDrawAttrStateTextFrame;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+
+    SID_ATTR_FILL_BITMAP
+    [
+        Export = FALSE;
+        ExecMethod = ExecDrawAttrArgsTextFrame;
+        StateMethod = GetDrawAttrStateTextFrame;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+
+    SID_ATTR_FILL_TRANSPARENCE
+    [
+        Export = FALSE;
+        ExecMethod = ExecDrawAttrArgsTextFrame;
+        StateMethod = GetDrawAttrStateTextFrame;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+
+    SID_ATTR_FILL_FLOATTRANSPARENCE
+    [
+        Export = FALSE;
+        ExecMethod = ExecDrawAttrArgsTextFrame;
+        StateMethod = GetDrawAttrStateTextFrame;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+
+    SID_COLOR_TABLE
+    [
+        StateMethod = GetDrawAttrStateTextFrame;
+    ]
+
+    SID_GRADIENT_LIST
+    [
+        StateMethod = GetDrawAttrStateTextFrame;
+    ]
+
+    SID_HATCH_LIST
+    [
+        StateMethod = GetDrawAttrStateTextFrame;
+    ]
+
+    SID_BITMAP_LIST
+    [
+        StateMethod = GetDrawAttrStateTextFrame;
+    ]
+
+    SID_ATTRIBUTES_AREA
+    [
+        ExecMethod = ExecDrawDlgTextFrame;
+        StateMethod = DisableStateTextFrame;
+    ]
+
+
     FN_FRAME_TO_ANCHOR  // status()
     [
         /*OS: Datentypen unvertraeglich ?? */

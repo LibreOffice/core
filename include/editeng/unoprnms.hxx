@@ -34,8 +34,13 @@
 #define UNO_NAME_FILLSTYLE                      "FillStyle"
 #define UNO_NAME_FILLCOLOR                      "FillColor"
 #define UNO_NAME_FILLGRADIENT                   "FillGradient"
+#define UNO_NAME_FILLGRADIENTNAME               "FillGradientName"
 #define UNO_NAME_FILLHATCH                      "FillHatch"
+#define UNO_NAME_FILLHATCHNAME                  "FillHatchName"
 #define UNO_NAME_FILLBITMAP                     "FillBitmap"
+#define UNO_NAME_FILLBITMAPNAME                 "FillBitmapName"
+#define UNO_NAME_FILLBITMAPURL                  "FillBitmapURL"
+#define UNO_NAME_FILLGRADIENTSTEPCOUNT          "FillGradientStepCount"
 #define UNO_NAME_FILLBACKGROUND                 "FillBackground"
 #define UNO_NAME_FILLCOLOR_2                    "FillColor2"
 
@@ -59,6 +64,8 @@
 #define UNO_NAME_FILLBMP_SIZE_X                 "FillBitmapSizeX"
 #define UNO_NAME_FILLBMP_SIZE_Y                 "FillBitmapSizeY"
 #define UNO_NAME_FILL_TRANSPARENCE              "FillTransparence"
+#define UNO_NAME_FILLTRANSPARENCEGRADIENT       "FillTransparenceGradient"
+#define UNO_NAME_FILLTRANSPARENCEGRADIENTNAME   "FillTransparenceGradientName"
 #define UNO_NAME_FILLBMP_MODE                   "FillBitmapMode"
 
 #define UNO_NAME_FILL_GRADIENT_STYLE            "FillGradientStyle"

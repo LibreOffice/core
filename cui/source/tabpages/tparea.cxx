@@ -41,6 +41,10 @@
 #include <sfx2/request.hxx>
 #include "paragrph.hrc"
 
+//UUUU
+#include "sfx2/opengrf.hxx"
+#include <vcl/msgbox.hxx>
+
 // static ----------------------------------------------------------------
 
 static sal_uInt16 pAreaRanges[] =
@@ -587,20 +591,35 @@ SvxAreaTabPage::SvxAreaTabPage( Window* pParent, const SfxItemSet& rInAttrs ) :
     pHatchingList( NULL ),
     pBitmapList( NULL ),
 
-    pnColorListState( 0 ),
-    pnBitmapListState( 0 ),
-    pnGradientListState( 0 ),
-    pnHatchingListState( 0 ),
+    // local fixed not o be changed values for local pointers
+    maFixed_ChangeType(CT_NONE),
+    maFixed_sal_Bool(false),
 
-    nPageType( 0 ),
-    nDlgType( 0 ),
-    nPos( LISTBOX_ENTRY_NOTFOUND ),
+    // init with pointers to fixed ChangeType
+    pnColorListState(&maFixed_ChangeType),
+    pnBitmapListState(&maFixed_ChangeType),
+    pnGradientListState(&maFixed_ChangeType),
+    pnHatchingListState(&maFixed_ChangeType),
 
-    pbAreaTP( 0 ),
+    nPageType(0),
+    nDlgType(0),
+    nPos(0),
+
+    // init with pointer to fixed bool
+    pbAreaTP(&maFixed_sal_Bool),
 
     pXPool              ( (XOutdevItemPool*) rInAttrs.GetPool() ),
     aXFillAttr          ( pXPool ),
-    rXFSet              ( aXFillAttr.GetItemSet() )
+    rXFSet              ( aXFillAttr.GetItemSet() ),
+
+    ePoolUnit(SFX_MAPUNIT_100TH_MM),
+    eFUnit(FUNIT_NONE),
+
+    //UUUU
+    mbOfferImportButton(false),
+    mbPositionsAdapted(false),
+    mbDirectGraphicSet(false),
+    maDirectGraphic()
 {
     get(m_pTypeLB,"LB_AREA_TYPE");
     get(m_pFillLB,"boxLB_FILL");
@@ -641,6 +660,7 @@ SvxAreaTabPage::SvxAreaTabPage( Window* pParent, const SfxItemSet& rInAttrs ) :
     get(m_pFlOffset,"FL_OFFSET");
     get(m_pRbtRow,"RBT_ROW");
     get(m_pRbtColumn,"RBT_COLUMN");
+    get(m_pBtnImport, "btnimport");
     get(m_pMtrFldOffset,"MTR_FLD_OFFSET");
 
     get(m_pCtlXRectPreview,"CTL_COLOR_PREVIEW");
@@ -704,6 +724,8 @@ SvxAreaTabPage::SvxAreaTabPage( Window* pParent, const SfxItemSet& rInAttrs ) :
     m_pLbColor->SetSelectHdl( LINK( this, SvxAreaTabPage, ModifyColorHdl_Impl ) );
     m_pLbHatchBckgrdColor->SetSelectHdl( LINK( this, SvxAreaTabPage, ModifyHatchBckgrdColorHdl_Impl ) );
     m_pCbxHatchBckgrd->SetToggleHdl( LINK( this, SvxAreaTabPage, ToggleHatchBckgrdColorHdl_Impl ) );
+    //UUUU
+    m_pBtnImport->SetClickHdl(LINK(this, SvxAreaTabPage, ClickImportHdl_Impl));
 
     m_pLbGradient->SetSelectHdl( LINK( this, SvxAreaTabPage, ModifyGradientHdl_Impl ) );
     m_pLbHatching->SetSelectHdl( LINK( this, SvxAreaTabPage, ModifyHatchingHdl_Impl ) );
@@ -1101,33 +1123,44 @@ bool SvxAreaTabPage::FillItemSet( SfxItemSet& rAttrs )
             break;
             case XFILL_BITMAP:
             {
-                nPos = m_pLbBitmap->GetSelectEntryPos();
-                if( nPos != LISTBOX_ENTRY_NOTFOUND &&
-                    nPos != m_pLbBitmap->GetSavedValue() )
+                //UUUU
+                if(mbDirectGraphicSet && GRAPHIC_NONE != maDirectGraphic.GetType())
                 {
-                    const XBitmapEntry* pXBitmapEntry = pBitmapList->GetBitmap(nPos);
-                    const OUString aString(m_pLbBitmap->GetSelectEntry());
-                    const XFillBitmapItem aFillBitmapItem(aString, pXBitmapEntry->GetGraphicObject());
-                    pOld = GetOldItem( rAttrs, XATTR_FILLBITMAP );
-                    if ( !pOld || !( *(const XFillBitmapItem*)pOld == aFillBitmapItem ) )
+                    const XFillBitmapItem aXBmpItem(maDirectName, maDirectGraphic);
+                    rAttrs.Put(XFillStyleItem(XFILL_BITMAP));
+                    rAttrs.Put(aXBmpItem);
+                    bModified = sal_True;
+                }
+                else
+                {
+                    nPos = m_pLbBitmap->GetSelectEntryPos();
+                    if( nPos != LISTBOX_ENTRY_NOTFOUND &&
+                        nPos != m_pLbBitmap->GetSavedValue() )
                     {
-                        rAttrs.Put( aFillBitmapItem );
-                        bModified = sal_True;
+                        const XBitmapEntry* pXBitmapEntry = pBitmapList->GetBitmap(nPos);
+                        const OUString aString(m_pLbBitmap->GetSelectEntry());
+                        const XFillBitmapItem aFillBitmapItem(aString, pXBitmapEntry->GetGraphicObject());
+                        pOld = GetOldItem( rAttrs, XATTR_FILLBITMAP );
+                        if ( !pOld || !( *(const XFillBitmapItem*)pOld == aFillBitmapItem ) )
+                        {
+                            rAttrs.Put( aFillBitmapItem );
+                            bModified = sal_True;
+                        }
+                    }
+                    // NEW
+                    if( (eSavedStyle != eStyle) &&
+                        ( bModified ||
+                          SFX_ITEM_SET == rOutAttrs.GetItemState( GetWhich( XATTR_FILLBITMAP ), true ) ) )
+                    {
+                            XFillStyleItem aStyleItem( XFILL_BITMAP );
+                            pOld = GetOldItem( rAttrs, XATTR_FILLSTYLE );
+                            if ( !pOld || !( *(const XFillStyleItem*)pOld == aStyleItem ) )
+                            {
+                                rAttrs.Put( aStyleItem );
+                                bModified = sal_True;
+                            }
                     }
                 }
-                // NEW
-                if( (eSavedStyle != eStyle) &&
-                    ( bModified ||
-                      SFX_ITEM_SET == rOutAttrs.GetItemState( GetWhich( XATTR_FILLBITMAP ), true ) ) )
-                {
-                    XFillStyleItem aStyleItem( XFILL_BITMAP );
-                    pOld = GetOldItem( rAttrs, XATTR_FILLSTYLE );
-                    if ( !pOld || !( *(const XFillStyleItem*)pOld == aStyleItem ) )
-                    {
-                        rAttrs.Put( aStyleItem );
-                        bModified = sal_True;
-                    }
-               }
            }
            break;
        }
@@ -2039,6 +2072,19 @@ void SvxAreaTabPage::ClickBitmapHdl_Impl()
     m_pLbColor->Hide();
     m_pLbGradient->Hide();
     m_pLbHatching->Hide();
+
+    //UUUU
+    if(mbOfferImportButton)
+    {
+        m_pBtnImport->Show();
+        m_pBtnImport->Enable();
+    }
+    else
+    {
+        m_pBtnImport->Hide();
+        m_pBtnImport->Disable();
+    }
+
     m_pLbBitmap->Enable();
     m_pLbBitmap->Show();
     m_pCtlBitmapPreview->Enable();
@@ -2084,6 +2130,11 @@ void SvxAreaTabPage::ClickBitmapHdl_Impl()
 
 IMPL_LINK_NOARG(SvxAreaTabPage, ModifyBitmapHdl_Impl)
 {
+    //UUUU
+    mbDirectGraphicSet = false;
+    maDirectGraphic.Clear();
+    maDirectName = "";
+
     const SfxPoolItem* pPoolItem = NULL;
     sal_Int32 _nPos = m_pLbBitmap->GetSelectEntryPos();
     if( _nPos != LISTBOX_ENTRY_NOTFOUND )
@@ -2139,41 +2190,99 @@ IMPL_LINK( SvxAreaTabPage, ModifyStepCountHdl_Impl, void *, p )
     return( 0L );
 }
 
+IMPL_LINK_NOARG( SvxAreaTabPage, ClickImportHdl_Impl )
+{
+    ResMgr& rMgr = CUI_MGR();
+    SvxOpenGraphicDialog aDlg("Import");
+    aDlg.EnableLink(sal_False);
 
+    if(!aDlg.Execute())
+    {
+        EnterWait();
+        const int nError(aDlg.GetGraphic(maDirectGraphic));
+        LeaveWait();
+
+        if(!nError && GRAPHIC_NONE != maDirectGraphic.GetType())
+        {
+            // extract name from filename
+            const INetURLObject aURL(aDlg.GetPath());
+            maDirectName = aURL.GetName().getToken( 0, '.' );
+
+            // use loaded graphic
+            const XFillBitmapItem aXBmpItem(maDirectName, maDirectGraphic);
+            rXFSet.Put(XFillStyleItem(XFILL_BITMAP));
+            rXFSet.Put(aXBmpItem);
+
+            // trigger state flag for directly loaded graphic
+            mbDirectGraphicSet = true;
+
+            // preview
+            m_pCtlBitmapPreview->SetAttributes(aXFillAttr.GetItemSet());
+            m_pCtlBitmapPreview->Invalidate();
+        }
+        else
+        {
+            // graphic could not be loaded
+            ErrorBox(this, WB_OK, OUString(ResId(RID_SVXSTR_READ_DATA_ERROR, rMgr))).Execute();
+        }
+    }
+
+    return 0L;
+}
+
+//------------------------------------------------------------------------
 
 IMPL_LINK_NOARG(SvxAreaTabPage, ModifyTileHdl_Impl)
 {
     TriState eState = m_pTsbTile->GetState();
     if( eState == TRISTATE_TRUE )
     {
+        // tiled
+        // disable stretched for tiled graphic
         m_pTsbStretch->Disable();
         m_pFlOffset->Enable();
 
+        // allow positioning
         m_pCtlPosition->Invalidate();
+        // allow 'Position" title
         m_pFlPosition->Enable();
 
+        // allow size definitions
         m_pFlSize->Enable();
     }
     else if( eState == TRISTATE_FALSE )
     {
+        // non-tiled
+        // enable stretch selection
         m_pTsbStretch->Enable();
+        // no need for offsets, only position is supported in non-tiled
         m_pFlOffset->Disable();
-
-        m_pCtlPosition->Invalidate();
-        m_pFlPosition->Disable();
 
         if( m_pTsbStretch->GetState() != TRISTATE_FALSE )
         {
+            // non-tiled, stretched
+            // no need for positioning
+            m_pCtlPosition->Invalidate();
+            // no need for 'Position" title, all deactivated
+            m_pFlPosition->Disable();
 
+            // no need for size definitions
             m_pFlSize->Disable();
         }
         else
         {
+            // non-tiled, non-stretched
+            // allow positioning
+            m_pCtlPosition->Enable();
+            m_pCtlPosition->Invalidate();
+            // allow 'Position" title, positioning is active
+            m_pFlPosition->Enable();
             m_pFlSize->Enable();
         }
     }
     else
     {
+        // disable all when tiling is undefined
         m_pTsbStretch->Disable();
         m_pFlOffset->Disable();
 
@@ -2335,6 +2444,8 @@ void SvxAreaTabPage::PageCreated (SfxAllItemSet aSet)
     SFX_ITEMSET_ARG (&aSet,pPageTypeItem,SfxUInt16Item,SID_PAGE_TYPE,false);
     SFX_ITEMSET_ARG (&aSet,pDlgTypeItem,SfxUInt16Item,SID_DLG_TYPE,false);
     SFX_ITEMSET_ARG (&aSet,pPosItem,SfxUInt16Item,SID_TABPAGE_POS,false);
+    //UUUU
+    SFX_ITEMSET_ARG (&aSet, pOfferImportItem, SfxBoolItem, SID_OFFER_IMPORT, sal_False);
 
     if (pColorListItem)
         SetColorList(pColorListItem->GetColorList());
@@ -2350,6 +2461,18 @@ void SvxAreaTabPage::PageCreated (SfxAllItemSet aSet)
         SetDlgType(pDlgTypeItem->GetValue());
     if (pPosItem)
         SetPos(pPosItem->GetValue());
+
+    //UUUU
+    if(pOfferImportItem)
+    {
+        const bool bNew(pOfferImportItem->GetValue());
+
+        if(mbOfferImportButton != bNew)
+        {
+            mbOfferImportButton = bNew;
+        }
+    }
+
     Construct();
 }
 

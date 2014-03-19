@@ -931,7 +931,6 @@ drawinglayer::primitive2d::Primitive2DSequence SdrDragMethod::AddConnectorOverla
                             drawinglayer::primitive2d::appendPrimitive2DReferenceToPrimitive2DSequence(
                                 aRetval, drawinglayer::primitive2d::createPolygonLinePrimitive(
                                     aEdgePolygon,
-                                    basegfx::B2DHomMatrix(),
                                     aLine,
                                     aLineStartEnd));
                         }

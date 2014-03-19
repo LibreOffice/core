@@ -30,10 +30,13 @@
 #include <com/sun/star/beans/PropertyValues.hpp>
 #include <com/sun/star/container/XIndexContainer.hpp>
 #include <com/sun/star/container/XIndexReplace.hpp>
+#include <com/sun/star/drawing/BitmapMode.hpp>
 #include <com/sun/star/drawing/ColorMode.hpp>
 #include <com/sun/star/drawing/FillStyle.hpp>
+#include <com/sun/star/drawing/Hatch.hpp>
 #include <com/sun/star/drawing/LineStyle.hpp>
 #include <com/sun/star/drawing/PointSequenceSequence.hpp>
+#include <com/sun/star/drawing/RectanglePoint.hpp>
 #include <com/sun/star/drawing/TextVerticalAdjust.hpp>
 #include <com/sun/star/embed/XEmbeddedObject.hpp>
 #include <com/sun/star/frame/XModel.hpp>
@@ -82,6 +85,9 @@
 #include <cmdid.h>
 #include <unofldmid.h>
 #include <editeng/memberids.hrc>
+#include <editeng/unoipset.hxx>
+#include <editeng/unoprnms.hxx>
+#include <svx/xdef.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::lang;
@@ -344,9 +350,6 @@ SwUnoPropertyMapProvider::~SwUnoPropertyMapProvider()
     { OUString(UNO_NAME_BACK_COLOR), RES_BACKGROUND,            cppu::UnoType<sal_Int32>::get(),           PROPERTY_NONE ,MID_BACK_COLOR        },                      \
     { OUString(UNO_NAME_BACK_COLOR_R_G_B), RES_BACKGROUND,      cppu::UnoType<sal_Int32>::get(), PROPERTY_NONE ,MID_BACK_COLOR_R_G_B},    \
     { OUString(UNO_NAME_BACK_COLOR_TRANSPARENCY), RES_BACKGROUND,      cppu::UnoType<sal_Int8>::get(), PROPERTY_NONE ,MID_BACK_COLOR_TRANSPARENCY},    \
-    { OUString(UNO_NAME_FILL_STYLE), RES_FILL_STYLE,      cppu::UnoType<css::drawing::FillStyle>::get(), PROPERTY_NONE ,0}, \
-    { OUString(UNO_NAME_FILL_GRADIENT), RES_FILL_GRADIENT,      cppu::UnoType<css::awt::Gradient>::get(), PROPERTY_NONE ,MID_FILLGRADIENT}, \
-    { OUString(UNO_NAME_FILL_GRADIENT_NAME), RES_FILL_GRADIENT, cppu::UnoType<OUString>::get(), PROPERTY_NONE ,MID_NAME}, \
     { OUString(UNO_NAME_FRAME_INTEROP_GRAB_BAG), RES_FRMATR_GRABBAG, cppu::UnoType< cppu::UnoSequenceType<css::beans::PropertyValue> >::get(), PROPERTY_NONE, 0}, \
     { OUString(UNO_NAME_CONTENT_PROTECTED), RES_PROTECT,            cppu::UnoType<bool>::get(),             PROPERTY_NONE, MID_PROTECT_CONTENT  },                          \
     { OUString(UNO_NAME_FRAME_STYLE_NAME), FN_UNO_FRAME_STYLE_NAME,cppu::UnoType<OUString>::get(),         PROPERTY_NONE, 0},                                   \
@@ -563,6 +566,43 @@ SwUnoPropertyMapProvider::~SwUnoPropertyMapProvider()
                     { OUString(UNO_NAME_PARA_LINE_SPACING), RES_PARATR_LINESPACING, cppu::UnoType<css::style::LineSpacing>::get(),       PropertyAttribute::MAYBEVOID,     CONVERT_TWIPS},   \
                     { OUString(UNO_NAME_PARA_RIGHT_MARGIN), RES_LR_SPACE,           cppu::UnoType<sal_Int32>::get(),           PropertyAttribute::MAYBEVOID, MID_R_MARGIN|CONVERT_TWIPS},  \
                     { OUString(UNO_NAME_TABSTOPS), RES_PARATR_TABSTOP,   cppu::UnoType< cppu::UnoSequenceType<css::style::TabStop> >::get(),   PropertyAttribute::MAYBEVOID, CONVERT_TWIPS}, \
+
+//UUUU
+#define FILL_PROPERTIES_SW_BMP \
+    { OUString(UNO_NAME_SW_FILLBMP_LOGICAL_SIZE),               XATTR_FILLBMP_SIZELOG,      cppu::UnoType<float>::get(),       0,  0}, \
+    { OUString(UNO_NAME_SW_FILLBMP_OFFSET_X),                   XATTR_FILLBMP_TILEOFFSETX,  cppu::UnoType<sal_Int32>::get(),   0,  0}, \
+    { OUString(UNO_NAME_SW_FILLBMP_OFFSET_Y),                   XATTR_FILLBMP_TILEOFFSETY,  cppu::UnoType<sal_Int32>::get(),   0,  0}, \
+    { OUString(UNO_NAME_SW_FILLBMP_POSITION_OFFSET_X),          XATTR_FILLBMP_POSOFFSETX,   cppu::UnoType<sal_Int32>::get(),   0,  0}, \
+    { OUString(UNO_NAME_SW_FILLBMP_POSITION_OFFSET_Y),          XATTR_FILLBMP_POSOFFSETY,   cppu::UnoType<sal_Int32>::get(),   0,  0}, \
+    { OUString(UNO_NAME_SW_FILLBMP_RECTANGLE_POINT),            XATTR_FILLBMP_POS,          cppu::UnoType<css::drawing::RectanglePoint>::get(), 0,  0}, \
+    { OUString(UNO_NAME_SW_FILLBMP_SIZE_X),                     XATTR_FILLBMP_SIZEX,        cppu::UnoType<sal_Int32>::get(),   0,  SFX_METRIC_ITEM}, \
+    { OUString(UNO_NAME_SW_FILLBMP_SIZE_Y),                     XATTR_FILLBMP_SIZEY,        cppu::UnoType<sal_Int32>::get(),   0,  SFX_METRIC_ITEM},    \
+    { OUString(UNO_NAME_SW_FILLBMP_STRETCH),                    XATTR_FILLBMP_STRETCH,      cppu::UnoType<float>::get(),       0,  0}, \
+    { OUString(UNO_NAME_SW_FILLBMP_TILE),                       XATTR_FILLBMP_TILE,         cppu::UnoType<float>::get(),       0,  0},\
+    { OUString(UNO_NAME_SW_FILLBMP_MODE),                       OWN_ATTR_FILLBMP_MODE,      cppu::UnoType<drawing::BitmapMode>::get(), 0,  0}, \
+
+//UUUU
+#define FILL_PROPERTIES_SW_DEFAULTS \
+    { OUString(UNO_NAME_SW_FILLCOLOR),                          XATTR_FILLCOLOR,            cppu::UnoType<sal_Int32>::get(),   0,  0}, \
+
+//UUUU
+#define FILL_PROPERTIES_SW \
+    FILL_PROPERTIES_SW_BMP \
+    FILL_PROPERTIES_SW_DEFAULTS \
+    { OUString(UNO_NAME_SW_FILLBACKGROUND),                 XATTR_FILLBACKGROUND,           cppu::UnoType<bool>::get(),        0, 0}, \
+    { OUString(UNO_NAME_SW_FILLBITMAP),                     XATTR_FILLBITMAP,               cppu::UnoType<css::awt::XBitmap>::get(), 0, MID_BITMAP}, \
+    { OUString(UNO_NAME_SW_FILLBITMAPNAME),                 XATTR_FILLBITMAP,               cppu::UnoType<OUString>::get(),    0,  MID_NAME }, \
+    { OUString(UNO_NAME_SW_FILLBITMAPURL),                  XATTR_FILLBITMAP,               cppu::UnoType<OUString>::get(),    0,  MID_GRAFURL }, \
+    { OUString(UNO_NAME_SW_FILLGRADIENTSTEPCOUNT),          XATTR_GRADIENTSTEPCOUNT,        cppu::UnoType<sal_Int16>::get(),   0,  0}, \
+    { OUString(UNO_NAME_SW_FILLGRADIENT),                   XATTR_FILLGRADIENT,             cppu::UnoType<css::awt::Gradient>::get(), 0, MID_FILLGRADIENT}, \
+    { OUString(UNO_NAME_SW_FILLGRADIENTNAME),               XATTR_FILLGRADIENT,             cppu::UnoType<OUString>::get(),    0, MID_NAME }, \
+    { OUString(UNO_NAME_SW_FILLHATCH),                      XATTR_FILLHATCH,                cppu::UnoType<css::drawing::Hatch>::get(), 0, MID_FILLHATCH}, \
+    { OUString(UNO_NAME_SW_FILLHATCHNAME),                  XATTR_FILLHATCH,                cppu::UnoType<OUString>::get(),  0,  MID_NAME }, \
+    { OUString(UNO_NAME_SW_FILLSTYLE),                      XATTR_FILLSTYLE,                cppu::UnoType<css::drawing::FillStyle>::get(), 0, 0}, \
+    { OUString(UNO_NAME_SW_FILL_TRANSPARENCE),              XATTR_FILLTRANSPARENCE,         cppu::UnoType<sal_Int32>::get(), 0, 0}, \
+    { OUString(UNO_NAME_SW_FILLTRANSPARENCEGRADIENT),       XATTR_FILLFLOATTRANSPARENCE,    cppu::UnoType<css::awt::Gradient>::get(), 0,  MID_FILLGRADIENT}, \
+    { OUString(UNO_NAME_SW_FILLTRANSPARENCEGRADIENTNAME),   XATTR_FILLFLOATTRANSPARENCE,    cppu::UnoType<OUString>::get(),  0,  MID_NAME }, \
+    { OUString(UNO_NAME_SW_FILLCOLOR_2),                    XATTR_SECONDARYFILLCOLOR,       cppu::UnoType<sal_Int32>::get(), 0,  0}, \
 
 const SfxItemPropertyMapEntry* SwUnoPropertyMapProvider::GetPropertyMapEntries(sal_uInt16 nPropertyId)
 {
@@ -792,9 +832,6 @@ const SfxItemPropertyMapEntry* SwUnoPropertyMapProvider::GetPropertyMapEntries(s
                     { OUString(UNO_NAME_BACK_COLOR), RES_BACKGROUND,            cppu::UnoType<sal_Int32>::get(),           PROPERTY_NONE ,MID_BACK_COLOR        },
                     { OUString(UNO_NAME_BACK_COLOR_R_G_B), RES_BACKGROUND,      cppu::UnoType<sal_Int32>::get(), PROPERTY_NONE ,MID_BACK_COLOR_R_G_B},
                     { OUString(UNO_NAME_BACK_COLOR_TRANSPARENCY), RES_BACKGROUND,      cppu::UnoType<sal_Int8>::get(), PROPERTY_NONE ,MID_BACK_COLOR_TRANSPARENCY},
-                    { OUString(UNO_NAME_FILL_STYLE), RES_FILL_STYLE,      cppu::UnoType<css::drawing::FillStyle>::get(), PROPERTY_NONE ,0},
-                    { OUString(UNO_NAME_FILL_GRADIENT), RES_FILL_GRADIENT,      cppu::UnoType<css::awt::Gradient>::get(), PROPERTY_NONE ,MID_FILLGRADIENT},
-                    { OUString(UNO_NAME_FILL_GRADIENT_NAME), RES_FILL_GRADIENT, cppu::UnoType<OUString>::get(), PROPERTY_NONE ,MID_NAME},
                     { OUString(UNO_NAME_FRAME_INTEROP_GRAB_BAG), RES_FRMATR_GRABBAG, cppu::UnoType< cppu::UnoSequenceType<css::beans::PropertyValue> >::get(), PROPERTY_NONE, 0},
                 //  { OUString(UNO_NAME_CHAIN_NEXT_NAME), RES_CHAIN,                cppu::UnoType<OUString>::get(),            PROPERTY_NONE ,MID_CHAIN_NEXTNAME},
                 //  { OUString(UNO_NAME_CHAIN_PREV_NAME), RES_CHAIN,                cppu::UnoType<OUString>::get(),            PROPERTY_NONE ,MID_CHAIN_PREVNAME},
@@ -868,6 +905,12 @@ const SfxItemPropertyMapEntry* SwUnoPropertyMapProvider::GetPropertyMapEntries(s
                     { OUString(UNO_NAME_WRITING_MODE), RES_FRAMEDIR, cppu::UnoType<sal_Int16>::get(), PROPERTY_NONE, 0 },
                     { OUString(UNO_NAME_HIDDEN), FN_UNO_HIDDEN,     cppu::UnoType<bool>::get(), PROPERTY_NONE, 0},
                     { OUString(UNO_NAME_TEXT_VERT_ADJUST), RES_TEXT_VERT_ADJUST, cppu::UnoType<css::drawing::TextVerticalAdjust>::get(), PROPERTY_NONE ,0},
+
+                    //UUUU adf FillProperties for SW, same as FILL_PROPERTIES in svx
+                    // but need own defines in Writer due to later association of strings
+                    // and uno types (see loop at end of this metjhod and definition of SW_PROP_NMID)
+                    FILL_PROPERTIES_SW
+
                     { OUString(), 0, css::uno::Type(), 0, 0 }
                 };
                 aMapEntriesArr[nPropertyId] = aFrameStyleMap;
@@ -1189,7 +1232,10 @@ const SfxItemPropertyMapEntry* SwUnoPropertyMapProvider::GetPropertyMapEntries(s
             case PROPERTY_MAP_TEXT_FRAME:
             {
                 static SfxItemPropertyMapEntry const aFramePropertyMap_Impl[] =
-                {
+                {   //UUUU
+                    // evtl. completely remove SvxBrushItem stuff ()
+                    // add support for XATTR_FILL_FIRST, XATTR_FILL_LAST
+                    // COMMON_FRAME_PROPERTIES currently hosts the RES_BACKGROUND entries from SvxBrushItem
                     COMMON_FRAME_PROPERTIES
                     _REDLINE_NODE_PROPERTIES
                     { OUString(UNO_NAME_CHAIN_NEXT_NAME), RES_CHAIN,                cppu::UnoType<OUString>::get(),            PropertyAttribute::MAYBEVOID ,MID_CHAIN_NEXTNAME},
@@ -1206,6 +1252,12 @@ const SfxItemPropertyMapEntry* SwUnoPropertyMapProvider::GetPropertyMapEntries(s
                     { OUString(UNO_NAME_SIZE_TYPE), RES_FRM_SIZE,           cppu::UnoType<sal_Int16>::get()  ,         PROPERTY_NONE,   MID_FRMSIZE_SIZE_TYPE  },
                     { OUString(UNO_NAME_WIDTH_TYPE), RES_FRM_SIZE,          cppu::UnoType<sal_Int16>::get()  ,         PROPERTY_NONE,   MID_FRMSIZE_WIDTH_TYPE },
                     { OUString(UNO_NAME_WRITING_MODE), RES_FRAMEDIR, cppu::UnoType<sal_Int16>::get(), PROPERTY_NONE, 0 },
+
+                    //UUUU adf FillProperties for SW, same as FILL_PROPERTIES in svx
+                    // but need own defines in Writer due to later association of strings
+                    // and uno types (see loop at end of this metjhod and definition of SW_PROP_NMID)
+                    FILL_PROPERTIES_SW
+
                     { OUString(), 0, css::uno::Type(), 0, 0 }
                 };
                 aMapEntriesArr[nPropertyId] = aFramePropertyMap_Impl;

@@ -521,31 +521,32 @@ void SwDoc::InitDrawModel()
     if ( mpDrawModel )
         ReleaseDrawModel();
 
-    // Setup DrawPool and EditEnginePool. Ownership is ours and only gets passed
-    // to the Drawing.
-    // The pools are destroyed in the ReleaseDrawModel.
-    // for loading the drawing items. This must be loaded without RefCounts!
-    SfxItemPool *pSdrPool = new SdrItemPool( &GetAttrPool() );
-    // change DefaultItems for the SdrEdgeObj distance items to TWIPS.
-    if(pSdrPool)
-    {
-        const long nDefEdgeDist = ((500 * 72) / 127); // 1/100th mm in twips
-        pSdrPool->SetPoolDefaultItem(SdrEdgeNode1HorzDistItem(nDefEdgeDist));
-        pSdrPool->SetPoolDefaultItem(SdrEdgeNode1VertDistItem(nDefEdgeDist));
-        pSdrPool->SetPoolDefaultItem(SdrEdgeNode2HorzDistItem(nDefEdgeDist));
-        pSdrPool->SetPoolDefaultItem(SdrEdgeNode2VertDistItem(nDefEdgeDist));
-
-        // #i33700#
-        // Set shadow distance defaults as PoolDefaultItems. Details see bug.
-        pSdrPool->SetPoolDefaultItem(SdrShadowXDistItem((300 * 72) / 127));
-        pSdrPool->SetPoolDefaultItem(SdrShadowYDistItem((300 * 72) / 127));
-    }
-    SfxItemPool *pEEgPool = EditEngine::CreatePool( false );
-    pSdrPool->SetSecondaryPool( pEEgPool );
-     if ( !GetAttrPool().GetFrozenIdRanges () )
-        GetAttrPool().FreezeIdRanges();
-    else
-        pSdrPool->FreezeIdRanges();
+//UUUU
+//  // Setup DrawPool and EditEnginePool. Ownership is ours and only gets passed
+//  // to the Drawing.
+//  // The pools are destroyed in the ReleaseDrawModel.
+//  // for loading the drawing items. This must be loaded without RefCounts!
+//  SfxItemPool *pSdrPool = new SdrItemPool( &GetAttrPool() );
+//  // change DefaultItems for the SdrEdgeObj distance items to TWIPS.
+//  if(pSdrPool)
+//  {
+//      const long nDefEdgeDist = ((500 * 72) / 127); // 1/100th mm in twips
+//      pSdrPool->SetPoolDefaultItem(SdrEdgeNode1HorzDistItem(nDefEdgeDist));
+//      pSdrPool->SetPoolDefaultItem(SdrEdgeNode1VertDistItem(nDefEdgeDist));
+//      pSdrPool->SetPoolDefaultItem(SdrEdgeNode2HorzDistItem(nDefEdgeDist));
+//      pSdrPool->SetPoolDefaultItem(SdrEdgeNode2VertDistItem(nDefEdgeDist));
+//
+//      // #i33700#
+//      // Set shadow distance defaults as PoolDefaultItems. Details see bug.
+//      pSdrPool->SetPoolDefaultItem(SdrShadowXDistItem((300 * 72) / 127));
+//      pSdrPool->SetPoolDefaultItem(SdrShadowYDistItem((300 * 72) / 127));
+//  }
+//  SfxItemPool *pEEgPool = EditEngine::CreatePool( false );
+//  pSdrPool->SetSecondaryPool( pEEgPool );
+//   if ( !GetAttrPool().GetFrozenIdRanges () )
+//      GetAttrPool().FreezeIdRanges();
+//  else
+//      pSdrPool->FreezeIdRanges();
 
     // set FontHeight pool defaults without changing static SdrEngineDefaults
      GetAttrPool().SetPoolDefaultItem(SvxFontHeightItem( 240, 100, EE_CHAR_FONTHEIGHT ));
@@ -746,17 +747,18 @@ void SwDoc::ReleaseDrawModel()
         // !! Also maintain the code in the sw3io for inserting documents!!
 
         delete mpDrawModel; mpDrawModel = 0;
-        SfxItemPool *pSdrPool = GetAttrPool().GetSecondaryPool();
-
-        OSL_ENSURE( pSdrPool, "missing pool" );
-        SfxItemPool *pEEgPool = pSdrPool->GetSecondaryPool();
-        OSL_ENSURE( !pEEgPool->GetSecondaryPool(), "I don't accept additional pools");
-        pSdrPool->Delete();                 // First have the items destroyed,
-                                            // then destroy the chain!
-        GetAttrPool().SetSecondaryPool( 0 );    // This one's a must!
-        pSdrPool->SetSecondaryPool( 0 );    // That one's safer
-        SfxItemPool::Free(pSdrPool);
-        SfxItemPool::Free(pEEgPool);
+//UUUU
+//      SfxItemPool *pSdrPool = GetAttrPool().GetSecondaryPool();
+//
+//      OSL_ENSURE( pSdrPool, "missing pool" );
+//      SfxItemPool *pEEgPool = pSdrPool->GetSecondaryPool();
+//      OSL_ENSURE( !pEEgPool->GetSecondaryPool(), "I don't accept additional pools");
+//      pSdrPool->Delete();                 // First have the items destroyed,
+//                                          // then destroy the chain!
+//      GetAttrPool().SetSecondaryPool( 0 );    // This one's a must!
+//      pSdrPool->SetSecondaryPool( 0 );    // That one's safer
+//      SfxItemPool::Free(pSdrPool);
+//      SfxItemPool::Free(pEEgPool);
     }
 }
 

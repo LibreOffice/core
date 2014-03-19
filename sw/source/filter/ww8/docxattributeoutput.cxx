@@ -6496,6 +6496,8 @@ void DocxAttributeOutput::FormatBackground( const SvxBrushItem& rBrush )
     else if (m_rExport.SdrExporter().getDMLTextFrameSyntax())
     {
         bool bImageBackground = false;
+#if 0
+        // FIXME port to FillAttributes
         const SfxPoolItem* pItem = GetExport().HasItem(RES_FILL_STYLE);
         if (pItem)
         {
@@ -6505,6 +6507,7 @@ void DocxAttributeOutput::FormatBackground( const SvxBrushItem& rBrush )
                 bImageBackground = true;
             }
         }
+#endif
         if (!bImageBackground)
         {
             m_pSerializer->startElementNS(XML_a, XML_solidFill, FSEND);
@@ -6610,6 +6613,8 @@ void DocxAttributeOutput::FormatBox( const SvxBoxItem& rBox )
     if (m_rExport.SdrExporter().getDMLTextFrameSyntax())
     {
         // <a:gradFill> should be before <a:ln>.
+#if 0
+        // FIXME port to FillAttributes
         const SfxPoolItem* pItem = GetExport().HasItem(RES_FILL_STYLE);
         if (pItem)
         {
@@ -6634,6 +6639,7 @@ void DocxAttributeOutput::FormatBox( const SvxBoxItem& rBox )
             const XFillGradientItem* pFillGradient = static_cast<const XFillGradientItem*>(pItem);
             FormatFillGradient(*pFillGradient);
         }
+#endif
         m_bIgnoreNextFill = true;
     }
     if (m_rExport.SdrExporter().getTextFrameSyntax() || m_rExport.SdrExporter().getDMLTextFrameSyntax())

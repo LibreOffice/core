@@ -988,8 +988,10 @@ void SwGrfNumPortion::Paint( const SwTxtPaintInfo &rInf ) const
     }
 
     if( bDraw && aTmp.HasArea() )
-        DrawGraphic( pBrush, 0, 0, (OutputDevice*)rInf.GetOut(),
+    {
+        DrawGraphic( pBrush, (OutputDevice*)rInf.GetOut(),
             aTmp, aRepaint, bReplace ? GRFNUM_REPLACE : GRFNUM_YES );
+    }
 }
 
 void SwGrfNumPortion::SetBase( long nLnAscent, long nLnDescent,

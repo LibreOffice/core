@@ -1453,6 +1453,15 @@ namespace drawinglayer
                     const attribute::FillHatchAttribute& rFillHatchAttribute = rHatchCandidate.getFillHatch();
                     basegfx::B2DPolyPolygon aLocalPolyPolygon(rHatchCandidate.getB2DPolyPolygon());
 
+                    if(aLocalPolyPolygon.getB2DRange() != rHatchCandidate.getDefinitionRange())
+                    {
+                        // the range which defines the hatch is different from the range of the
+                        // geometry (used for writer frames). This cannot be done calling vcl, thus use
+                        // decomposition here
+                        process(rCandidate.get2DDecomposition(getViewInformation2D()));
+                        break;
+                    }
+
                     // #i112245# Metafiles use tools Polygon and are not able to have more than 65535 points
                     // per polygon. Split polygon until there are less than that
                     while(fillPolyPolygonNeededToBeSplit(aLocalPolyPolygon))
@@ -1575,11 +1584,20 @@ namespace drawinglayer
                         // BTW: One more example how useful the principles of primitives are; the decomposition
                         // is by definition a simpler, maybe more expensive representation of the same content.
                         process(rCandidate.get2DDecomposition(getViewInformation2D()));
+                        break;
                     }
-                    else
+
+                    const primitive2d::PolyPolygonGradientPrimitive2D& rGradientCandidate = static_cast< const primitive2d::PolyPolygonGradientPrimitive2D& >(rCandidate);
+                    basegfx::B2DPolyPolygon aLocalPolyPolygon(rGradientCandidate.getB2DPolyPolygon());
+
+                    if(aLocalPolyPolygon.getB2DRange() != rGradientCandidate.getDefinitionRange())
                     {
-                        const primitive2d::PolyPolygonGradientPrimitive2D& rGradientCandidate = static_cast< const primitive2d::PolyPolygonGradientPrimitive2D& >(rCandidate);
-                        basegfx::B2DPolyPolygon aLocalPolyPolygon(rGradientCandidate.getB2DPolyPolygon());
+                        // the range which defines the gradient is different from the range of the
+                        // geometry (used for writer frames). This cannot be done calling vcl, thus use
+                        // decomposition here
+                        process(rCandidate.get2DDecomposition(getViewInformation2D()));
+                        break;
+                    }
 
                         // #i112245# Metafiles use tools Polygon and are not able to have more than 65535 points
                         // per polygon. Split polygon until there are less than that
@@ -1627,28 +1645,27 @@ namespace drawinglayer
                                     break;
                             }
 
-                            pSvtGraphicFill = new SvtGraphicFill(
-                                aToolsPolyPolygon,
-                                Color(),
-                                0.0,
-                                SvtGraphicFill::fillEvenOdd,
-                                SvtGraphicFill::fillGradient,
-                                SvtGraphicFill::Transform(),
-                                false,
-                                SvtGraphicFill::hatchSingle,
-                                Color(),
-                                eGrad,
-                                aVCLGradient.GetStartColor(),
-                                aVCLGradient.GetEndColor(),
-                                aVCLGradient.GetSteps(),
-                                Graphic());
-                        }
-
-                        // call VCL directly; encapsulate with SvtGraphicFill
-                        impStartSvtGraphicFill(pSvtGraphicFill);
-                        mpOutputDevice->DrawGradient(aToolsPolyPolygon, aVCLGradient);
-                        impEndSvtGraphicFill(pSvtGraphicFill);
+                        pSvtGraphicFill = new SvtGraphicFill(
+                            aToolsPolyPolygon,
+                            Color(),
+                            0.0,
+                            SvtGraphicFill::fillEvenOdd,
+                            SvtGraphicFill::fillGradient,
+                            SvtGraphicFill::Transform(),
+                            false,
+                            SvtGraphicFill::hatchSingle,
+                            Color(),
+                            eGrad,
+                            aVCLGradient.GetStartColor(),
+                            aVCLGradient.GetEndColor(),
+                            aVCLGradient.GetSteps(),
+                            Graphic());
                     }
+
+                    // call VCL directly; encapsulate with SvtGraphicFill
+                    impStartSvtGraphicFill(pSvtGraphicFill);
+                    mpOutputDevice->DrawGradient(aToolsPolyPolygon, aVCLGradient);
+                    impEndSvtGraphicFill(pSvtGraphicFill);
 
                     break;
                 }

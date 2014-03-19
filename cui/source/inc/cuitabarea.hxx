@@ -75,10 +75,7 @@ protected:
     void                SavePalettes();
 
 public:
-    SvxAreaTabDialog( Window* pParent,
-                      const SfxItemSet* pAttr,
-                      SdrModel* pModel,
-                      const SdrView* pSdrView = NULL );
+    SvxAreaTabDialog( Window* pParent, const SfxItemSet* pAttr, SdrModel* pModel, bool bShadow );
     ~SvxAreaTabDialog();
 
     void                SetNewColorList( XColorListRef pColTab )
@@ -114,8 +111,8 @@ class SvxTransparenceTabPage : public SvxTabPage
     const SfxItemSet&   rOutAttrs;
     RECT_POINT          eRP;
 
-    sal_uInt16          nPageType;
-    sal_uInt16          nDlgType;
+    sal_uInt16             nPageType;
+    sal_uInt16             nDlgType;
 
     // main selection
     RadioButton*        m_pRbtTransOff;
@@ -238,6 +235,13 @@ private:
     XHatchListRef         pHatchingList;
     XBitmapListRef        pBitmapList;
 
+    // Placeholders for pointer-based entries; these will be inited
+    // to point to these so that the page is usable without that
+    // SvxAreaTabDialog has to call the setter methods (e.g. SetColorChgd).
+    // Without that the pages used in SvxAreaTabDialog are not usable
+    ChangeType          maFixed_ChangeType;
+    sal_Bool            maFixed_sal_Bool;
+
     ChangeType*         pnColorListState;
     ChangeType*         pnBitmapListState;
     ChangeType*         pnGradientListState;
@@ -247,7 +251,7 @@ private:
     sal_uInt16 nDlgType;
     sal_Int32  nPos;
 
-    sal_Bool*               pbAreaTP;
+    sal_Bool*           pbAreaTP;
 
     XOutdevItemPool*    pXPool;
     XFillAttrSetItem    aXFillAttr;
@@ -255,6 +259,14 @@ private:
 
     SfxMapUnit          ePoolUnit;
     FieldUnit           eFUnit;
+
+    //UUUU
+    bool                mbOfferImportButton;
+    bool                mbPositionsAdapted;
+    bool                mbDirectGraphicSet;
+    Graphic             maDirectGraphic;
+    OUString            maDirectName;
+    PushButton*         m_pBtnImport;
 
     DECL_LINK(SelectDialogTypeHdl_Impl, void *);
     DECL_LINK( ModifyColorHdl_Impl, void * );
@@ -264,6 +276,10 @@ private:
     DECL_LINK( ToggleHatchBckgrdColorHdl_Impl, void * );
     DECL_LINK( ModifyBitmapHdl_Impl, void * );
     DECL_LINK( ModifyStepCountHdl_Impl, void * );
+
+    //UUUU
+    DECL_LINK( ClickImportHdl_Impl, void * );
+
     DECL_LINK( ModifyTileHdl_Impl, void * );
     DECL_LINK( ClickScaleHdl_Impl, void * );
     void ClickInvisibleHdl_Impl();
@@ -273,7 +289,7 @@ private:
     void ClickBitmapHdl_Impl();
 
 public:
-    SvxAreaTabPage( Window* pParent, const SfxItemSet& rInAttrs  );
+    SvxAreaTabPage( Window* pParent, const SfxItemSet& rInAttrs );
 
     void    Construct();
 

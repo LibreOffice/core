@@ -1082,6 +1082,13 @@ public:
                             sal_Bool bDelRedlines = sal_True,
                             sal_Bool bCopyFlyAtFly = sal_False ) const;
 
+    //UUUU Helper that checks for unique items for DrawingLayer items of type NameOrIndex
+    // and evtl. corrects that items to ensure unique names for that type. This call may
+    // modify/correct entries inside of the given SfxItemSet, and it will apply a name to
+    // the items in question (what is essential to make the named slots associated with
+    // these items work for the UNO API and thus e.g. for ODF im/export)
+    void CheckForUniqueItemForLineFillNameOrIndex(SfxItemSet& rSet);
+
     bool SetFlyFrmAttr( SwFrmFmt& rFlyFmt, SfxItemSet& rSet );
 
     bool SetFrmFmtToFly( SwFrmFmt& rFlyFmt, SwFrmFmt& rNewFmt,

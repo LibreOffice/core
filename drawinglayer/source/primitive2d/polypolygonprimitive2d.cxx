@@ -201,7 +201,7 @@ namespace drawinglayer
 
         PolyPolygonStrokePrimitive2D::PolyPolygonStrokePrimitive2D(
             const basegfx::B2DPolyPolygon& rPolyPolygon,
-              const attribute::LineAttribute& rLineAttribute,
+            const attribute::LineAttribute& rLineAttribute,
             const attribute::StrokeAttribute& rStrokeAttribute)
         :   BufferedDecompositionPrimitive2D(),
             maPolyPolygon(rPolyPolygon),
@@ -212,7 +212,7 @@ namespace drawinglayer
 
         PolyPolygonStrokePrimitive2D::PolyPolygonStrokePrimitive2D(
             const basegfx::B2DPolyPolygon& rPolyPolygon,
-              const attribute::LineAttribute& rLineAttribute)
+            const attribute::LineAttribute& rLineAttribute)
         :   BufferedDecompositionPrimitive2D(),
             maPolyPolygon(rPolyPolygon),
             maLineAttribute(rLineAttribute),
@@ -306,7 +306,10 @@ namespace drawinglayer
             {
                 // create SubSequence with FillGradientPrimitive2D
                 const basegfx::B2DRange aPolyPolygonRange(getB2DPolyPolygon().getB2DRange());
-                FillGradientPrimitive2D* pNewGradient = new FillGradientPrimitive2D(aPolyPolygonRange, getFillGradient());
+                FillGradientPrimitive2D* pNewGradient = new FillGradientPrimitive2D(
+                    aPolyPolygonRange,
+                    getDefinitionRange(),
+                    getFillGradient());
                 const Primitive2DReference xSubRef(pNewGradient);
                 const Primitive2DSequence aSubSequence(&xSubRef, 1L);
 
@@ -327,6 +330,18 @@ namespace drawinglayer
             const attribute::FillGradientAttribute& rFillGradient)
         :   BufferedDecompositionPrimitive2D(),
             maPolyPolygon(rPolyPolygon),
+            maDefinitionRange(rPolyPolygon.getB2DRange()),
+            maFillGradient(rFillGradient)
+        {
+        }
+
+        PolyPolygonGradientPrimitive2D::PolyPolygonGradientPrimitive2D(
+            const basegfx::B2DPolyPolygon& rPolyPolygon,
+            const basegfx::B2DRange& rDefinitionRange,
+            const attribute::FillGradientAttribute& rFillGradient)
+        :   BufferedDecompositionPrimitive2D(),
+            maPolyPolygon(rPolyPolygon),
+            maDefinitionRange(rDefinitionRange),
             maFillGradient(rFillGradient)
         {
         }
@@ -337,7 +352,9 @@ namespace drawinglayer
             {
                 const PolyPolygonGradientPrimitive2D& rCompare = (PolyPolygonGradientPrimitive2D&)rPrimitive;
 
-                return (getFillGradient() == rCompare.getFillGradient());
+                return (getB2DPolyPolygon() == rCompare.getB2DPolyPolygon()
+                    && getDefinitionRange() == rCompare.getDefinitionRange()
+                    && getFillGradient() == rCompare.getFillGradient());
             }
 
             return false;
@@ -361,7 +378,11 @@ namespace drawinglayer
             {
                 // create SubSequence with FillHatchPrimitive2D
                 const basegfx::B2DRange aPolyPolygonRange(getB2DPolyPolygon().getB2DRange());
-                FillHatchPrimitive2D* pNewHatch = new FillHatchPrimitive2D(aPolyPolygonRange, getBackgroundColor(), getFillHatch());
+                FillHatchPrimitive2D* pNewHatch = new FillHatchPrimitive2D(
+                    aPolyPolygonRange,
+                    getDefinitionRange(),
+                    getBackgroundColor(),
+                    getFillHatch());
                 const Primitive2DReference xSubRef(pNewHatch);
                 const Primitive2DSequence aSubSequence(&xSubRef, 1L);
 
@@ -383,6 +404,20 @@ namespace drawinglayer
             const attribute::FillHatchAttribute& rFillHatch)
         :   BufferedDecompositionPrimitive2D(),
             maPolyPolygon(rPolyPolygon),
+            maDefinitionRange(rPolyPolygon.getB2DRange()),
+            maBackgroundColor(rBackgroundColor),
+            maFillHatch(rFillHatch)
+        {
+        }
+
+        PolyPolygonHatchPrimitive2D::PolyPolygonHatchPrimitive2D(
+            const basegfx::B2DPolyPolygon& rPolyPolygon,
+            const basegfx::B2DRange& rDefinitionRange,
+            const basegfx::BColor& rBackgroundColor,
+            const attribute::FillHatchAttribute& rFillHatch)
+        :   BufferedDecompositionPrimitive2D(),
+            maPolyPolygon(rPolyPolygon),
+            maDefinitionRange(rDefinitionRange),
             maBackgroundColor(rBackgroundColor),
             maFillHatch(rFillHatch)
         {
@@ -394,7 +429,9 @@ namespace drawinglayer
             {
                 const PolyPolygonHatchPrimitive2D& rCompare = (PolyPolygonHatchPrimitive2D&)rPrimitive;
 
-                return (getBackgroundColor() == rCompare.getBackgroundColor()
+                return (getB2DPolyPolygon() == rCompare.getB2DPolyPolygon()
+                    && getDefinitionRange() == rCompare.getDefinitionRange()
+                    && getBackgroundColor() == rCompare.getBackgroundColor()
                     && getFillHatch() == rCompare.getFillHatch());
             }
 
@@ -429,15 +466,56 @@ namespace drawinglayer
                     if(aPrefSize.Width() && aPrefSize.Height())
                     {
                         // create SubSequence with FillGraphicPrimitive2D based on polygon range
-                        const basegfx::B2DRange aPolyPolygonRange(getB2DPolyPolygon().getB2DRange());
+                        const basegfx::B2DRange aOutRange(getB2DPolyPolygon().getB2DRange());
                         const basegfx::B2DHomMatrix aNewObjectTransform(
                             basegfx::tools::createScaleTranslateB2DHomMatrix(
-                                aPolyPolygonRange.getRange(),
-                                aPolyPolygonRange.getMinimum()));
-                        const Primitive2DReference xSubRef(
-                            new FillGraphicPrimitive2D(
+                                aOutRange.getRange(),
+                                aOutRange.getMinimum()));
+                        Primitive2DReference xSubRef;
+
+                        if(aOutRange != getDefinitionRange())
+                        {
+                            // we want to paint (tiled) content which is defined relative to DefinitionRange
+                            // with the same tiling and offset(s) in the traget range of the geometry (the
+                            // polygon). The range given in the local FillGraphicAttribute defines the position
+                            // of the graphic in unit coordinates relative to the DefinitionRange. Transform
+                            // this using DefinitionRange to get to the global definition and then with the
+                            // inverse transformation from the target range to go to unit coordinates relative
+                            // to that traget coordinate system.
+                            basegfx::B2DRange aAdaptedRange(getFillGraphic().getGraphicRange());
+
+                            const basegfx::B2DHomMatrix aFromDefinitionRangeToGlobal(
+                                basegfx::tools::createScaleTranslateB2DHomMatrix(
+                                    getDefinitionRange().getRange(),
+                                    getDefinitionRange().getMinimum()));
+
+                            aAdaptedRange.transform(aFromDefinitionRangeToGlobal);
+
+                            basegfx::B2DHomMatrix aFromGlobalToOutRange(
+                                basegfx::tools::createScaleTranslateB2DHomMatrix(
+                                    aOutRange.getRange(),
+                                    aOutRange.getMinimum()));
+                            aFromGlobalToOutRange.invert();
+
+                            aAdaptedRange.transform(aFromGlobalToOutRange);
+
+                            const drawinglayer::attribute::FillGraphicAttribute aAdaptedFillGraphicAttribute(
+                                getFillGraphic().getGraphic(),
+                                aAdaptedRange,
+                                getFillGraphic().getTiling(),
+                                getFillGraphic().getOffsetX(),
+                                getFillGraphic().getOffsetY());
+
+                            xSubRef = new FillGraphicPrimitive2D(
                                 aNewObjectTransform,
-                                getFillGraphic()));
+                                aAdaptedFillGraphicAttribute);
+                        }
+                        else
+                        {
+                            xSubRef = new FillGraphicPrimitive2D(
+                                aNewObjectTransform,
+                                getFillGraphic());
+                        }
 
                         // embed to mask primitive
                         const Primitive2DReference xRef(
@@ -458,6 +536,18 @@ namespace drawinglayer
             const attribute::FillGraphicAttribute& rFillGraphic)
         :   BufferedDecompositionPrimitive2D(),
             maPolyPolygon(rPolyPolygon),
+            maDefinitionRange(rPolyPolygon.getB2DRange()),
+            maFillGraphic(rFillGraphic)
+        {
+        }
+
+        PolyPolygonGraphicPrimitive2D::PolyPolygonGraphicPrimitive2D(
+            const basegfx::B2DPolyPolygon& rPolyPolygon,
+            const basegfx::B2DRange& rDefinitionRange,
+            const attribute::FillGraphicAttribute& rFillGraphic)
+        :   BufferedDecompositionPrimitive2D(),
+            maPolyPolygon(rPolyPolygon),
+            maDefinitionRange(rDefinitionRange),
             maFillGraphic(rFillGraphic)
         {
         }
@@ -468,7 +558,9 @@ namespace drawinglayer
             {
                 const PolyPolygonGraphicPrimitive2D& rCompare = (PolyPolygonGraphicPrimitive2D&)rPrimitive;
 
-                return (getFillGraphic() == rCompare.getFillGraphic());
+                return (getB2DPolyPolygon() == rCompare.getB2DPolyPolygon()
+                    && getDefinitionRange() == rCompare.getDefinitionRange()
+                    && getFillGraphic() == rCompare.getFillGraphic());
             }
 
             return false;

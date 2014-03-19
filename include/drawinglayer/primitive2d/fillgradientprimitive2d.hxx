@@ -55,8 +55,12 @@ namespace drawinglayer
         class DRAWINGLAYER_DLLPUBLIC FillGradientPrimitive2D : public BufferedDecompositionPrimitive2D
         {
         private:
-            /// the geometric definition
-            basegfx::B2DRange                       maObjectRange;
+            /// the geometrically visible area
+            basegfx::B2DRange                       maOutputRange;
+
+            /// the area the gradient definition is based on
+            /// in the simplest case identical to OutputRange
+            basegfx::B2DRange                       maDefinitionRange;
 
             /// the gradient definition
             attribute::FillGradientAttribute        maFillGradient;
@@ -64,14 +68,14 @@ namespace drawinglayer
             /// local helpers
             void generateMatricesAndColors(
                 std::vector< drawinglayer::texture::B2DHomMatrixAndBColor >& rEntries,
-                basegfx::BColor& rOutmostColor) const;
+                basegfx::BColor& rOuterColor) const;
             Primitive2DSequence createOverlappingFill(
                 const std::vector< drawinglayer::texture::B2DHomMatrixAndBColor >& rEntries,
-                const basegfx::BColor& rOutmostColor,
+                const basegfx::BColor& rOuterColor,
                 const basegfx::B2DPolygon& rUnitPolygon) const;
             Primitive2DSequence createNonOverlappingFill(
                 const std::vector< drawinglayer::texture::B2DHomMatrixAndBColor >& rEntries,
-                const basegfx::BColor& rOutmostColor,
+                const basegfx::BColor& rOuterColor,
                 const basegfx::B2DPolygon& rUnitPolygon) const;
 
         protected:
@@ -82,13 +86,18 @@ namespace drawinglayer
             virtual Primitive2DSequence create2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const SAL_OVERRIDE;
 
         public:
-            /// constructor
+            /// constructors. The one without definition range will use output range as definition range
             FillGradientPrimitive2D(
-                const basegfx::B2DRange& rObjectRange,
+                const basegfx::B2DRange& rOutputRange,
+                const attribute::FillGradientAttribute& rFillGradient);
+            FillGradientPrimitive2D(
+                const basegfx::B2DRange& rOutputRange,
+                const basegfx::B2DRange& rDefinitionRange,
                 const attribute::FillGradientAttribute& rFillGradient);
 
             /// data read access
-            const basegfx::B2DRange& getObjectRange() const { return maObjectRange; }
+            const basegfx::B2DRange& getOutputRange() const { return maOutputRange; }
+            const basegfx::B2DRange& getDefinitionRange() const { return maDefinitionRange; }
             const attribute::FillGradientAttribute& getFillGradient() const { return maFillGradient; }
 
             /// compare operator

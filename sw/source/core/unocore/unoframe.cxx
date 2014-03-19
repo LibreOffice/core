@@ -19,6 +19,7 @@
 
 #include <com/sun/star/embed/NoVisualAreaSizeException.hpp>
 #include <com/sun/star/container/XChild.hpp>
+#include <com/sun/star/drawing/BitmapMode.hpp>
 #include <com/sun/star/drawing/FillStyle.hpp>
 #include <com/sun/star/awt/Gradient.hpp>
 #include <com/sun/star/embed/XClassifiedObject.hpp>
@@ -32,6 +33,7 @@
 #include <svx/xfillit0.hxx>
 #include <svx/xflgrit.hxx>
 #include <svx/sdtaitm.hxx>
+#include <svx/xflclit.hxx>
 #include <editeng/memberids.hrc>
 
 #include <swtypes.hxx>
@@ -114,6 +116,26 @@
 #include <comphelper/servicehelper.hxx>
 #include <cppuhelper/supportsservice.hxx>
 
+//UUUU
+#include <unobrushitemhelper.hxx>
+#include <svx/xfillit0.hxx>
+#include <svx/xbtmpit.hxx>
+#include <svx/xgrscit.hxx>
+#include <svx/xflbmtit.hxx>
+#include <svx/xflbmpit.hxx>
+#include <svx/xflbmsxy.hxx>
+#include <svx/xflbmsxy.hxx>
+#include <svx/xflftrit.hxx>
+#include <svx/xsflclit.hxx>
+#include <svx/xflbmsli.hxx>
+#include <svx/xflbtoxy.hxx>
+#include <svx/xflbstit.hxx>
+#include <svx/xflboxy.hxx>
+#include <svx/xflbckit.hxx>
+#include <svx/unoshape.hxx>
+#include <svx/xflhtit.hxx>
+#include <svx/xfltrit.hxx>
+
 // from fefly1.cxx
 extern sal_Bool sw_ChkAndSetNewAnchor( SwEditShell& rEditShell, const SwFlyFrm& rFly, SfxItemSet& rSet );
 
@@ -125,6 +147,9 @@ using ::com::sun::star::style::XStyleFamiliesSupplier;
 
 const sal_Char sPackageProtocol[] = "vnd.sun.star.Package:";
 const sal_Char sGraphicObjectProtocol[] = "vnd.sun.star.GraphicObject:";
+
+//UUUU
+#define OWN_ATTR_FILLBMP_MODE   (OWN_ATTR_VALUE_START+45)
 
 /****************************************************************************
     Rahmenbeschreibung
@@ -138,10 +163,9 @@ public:
 
     void            SetProperty(sal_uInt16 nWID, sal_uInt8 nMemberId, const uno::Any& rVal);
     bool            GetProperty(sal_uInt16 nWID, sal_uInt8 nMemberId, const uno::Any*& pAny );
-    bool FillBaseProperties(SwDoc* pDoc, SfxItemSet& rToSet, const SfxItemSet &rFromSet, bool& rSizeFound);
+    bool FillBaseProperties(SfxItemSet& rToSet, const SfxItemSet &rFromSet, bool& rSizeFound);
 
     virtual bool AnyToItemSet( SwDoc* pDoc, SfxItemSet& rFrmSet, SfxItemSet& rSet, bool& rSizeFound) = 0;
-
 };
 
 BaseFrameProperties_Impl::~BaseFrameProperties_Impl()
@@ -158,7 +182,7 @@ bool BaseFrameProperties_Impl::GetProperty(sal_uInt16 nWID, sal_uInt8 nMemberId,
     return aAnyMap.FillValue( nWID, nMemberId, rpAny );
 }
 
-bool BaseFrameProperties_Impl::FillBaseProperties(SwDoc* pDoc, SfxItemSet& rToSet, const SfxItemSet& rFromSet, bool& rSizeFound)
+bool BaseFrameProperties_Impl::FillBaseProperties(SfxItemSet& rToSet, const SfxItemSet& rFromSet, bool& rSizeFound)
 {
     bool bRet = true;
     //Anker kommt auf jeden Fall in den Set
@@ -171,113 +195,382 @@ bool BaseFrameProperties_Impl::FillBaseProperties(SwDoc* pDoc, SfxItemSet& rToSe
         if(GetProperty(RES_ANCHOR, MID_ANCHOR_ANCHORTYPE, pAnchorType))
             bRet &= ((SfxPoolItem&)aAnchor).PutValue(*pAnchorType, MID_ANCHOR_ANCHORTYPE);
     }
+
     rToSet.Put(aAnchor);
+
+    //UUUU check for SvxBrushItem (RES_BACKGROUND) properties
+    const ::uno::Any* pCol = 0; GetProperty(RES_BACKGROUND, MID_BACK_COLOR, pCol );
+    const ::uno::Any* pRGBCol = 0; GetProperty(RES_BACKGROUND, MID_BACK_COLOR_R_G_B, pRGBCol );
+    const ::uno::Any* pColTrans = 0; GetProperty(RES_BACKGROUND, MID_BACK_COLOR_TRANSPARENCY, pColTrans);
+    const ::uno::Any* pTrans = 0; GetProperty(RES_BACKGROUND, MID_GRAPHIC_TRANSPARENT, pTrans );
+    const ::uno::Any* pGrLoc = 0; GetProperty(RES_BACKGROUND, MID_GRAPHIC_POSITION, pGrLoc );
+    const ::uno::Any* pGrURL = 0; GetProperty(RES_BACKGROUND, MID_GRAPHIC_URL, pGrURL     );
+    const ::uno::Any* pGrFilter = 0; GetProperty(RES_BACKGROUND, MID_GRAPHIC_FILTER, pGrFilter     );
+    const ::uno::Any* pGrTranparency = 0; GetProperty(RES_BACKGROUND, MID_GRAPHIC_TRANSPARENCY, pGrTranparency     );
+    const bool bSvxBrushItemPropertiesUsed(
+        pCol ||
+        pTrans ||
+        pGrURL ||
+        pGrFilter ||
+        pGrLoc ||
+        pGrTranparency ||
+        pColTrans ||
+        pRGBCol);
+
+    //UUUU check for FillStyle properties in the range XATTR_FILL_FIRST, XATTR_FILL_LAST
+    const uno::Any* pXFillStyleItem = 0; GetProperty(XATTR_FILLSTYLE, 0, pXFillStyleItem);
+    const uno::Any* pXFillColorItem = 0; GetProperty(XATTR_FILLCOLOR, 0, pXFillColorItem);
+
+    // XFillGradientItem: two possible slots supported in UNO API
+    const uno::Any* pXFillGradientItem = 0; GetProperty(XATTR_FILLGRADIENT, MID_FILLGRADIENT, pXFillGradientItem);
+    const uno::Any* pXFillGradientNameItem = 0; GetProperty(XATTR_FILLGRADIENT, MID_NAME, pXFillGradientNameItem);
+
+    // XFillHatchItem: two possible slots supported in UNO API
+    const uno::Any* pXFillHatchItem = 0; GetProperty(XATTR_FILLHATCH, MID_FILLHATCH, pXFillHatchItem);
+    const uno::Any* pXFillHatchNameItem = 0; GetProperty(XATTR_FILLHATCH, MID_NAME, pXFillHatchNameItem);
+
+    // XFillBitmapItem: three possible slots supported in UNO API
+    const uno::Any* pXFillBitmapItem = 0; GetProperty(XATTR_FILLBITMAP, MID_BITMAP, pXFillBitmapItem);
+    const uno::Any* pXFillBitmapNameItem = 0; GetProperty(XATTR_FILLBITMAP, MID_NAME, pXFillBitmapNameItem);
+    const uno::Any* pXFillBitmapURLItem = 0; GetProperty(XATTR_FILLBITMAP, MID_GRAFURL, pXFillBitmapURLItem);
+
+    const uno::Any* pXFillTransparenceItem = 0; GetProperty(XATTR_FILLTRANSPARENCE, 0, pXFillTransparenceItem);
+    const uno::Any* pXGradientStepCountItem = 0; GetProperty(XATTR_GRADIENTSTEPCOUNT, 0, pXGradientStepCountItem);
+    const uno::Any* pXFillBmpPosItem = 0; GetProperty(XATTR_FILLBMP_POS, 0, pXFillBmpPosItem);
+    const uno::Any* pXFillBmpSizeXItem = 0; GetProperty(XATTR_FILLBMP_SIZEX, 0, pXFillBmpSizeXItem);
+    const uno::Any* pXFillBmpSizeYItem = 0; GetProperty(XATTR_FILLBMP_SIZEY, 0, pXFillBmpSizeYItem);
+
+    // XFillFloatTransparenceItem: two possible slots supported in UNO API
+    const uno::Any* pXFillFloatTransparenceItem = 0; GetProperty(XATTR_FILLFLOATTRANSPARENCE, MID_FILLGRADIENT, pXFillFloatTransparenceItem);
+    const uno::Any* pXFillFloatTransparenceNameItem = 0; GetProperty(XATTR_FILLFLOATTRANSPARENCE, MID_NAME, pXFillFloatTransparenceNameItem);
+
+    const uno::Any* pXSecondaryFillColorItem = 0; GetProperty(XATTR_SECONDARYFILLCOLOR, 0, pXSecondaryFillColorItem);
+    const uno::Any* pXFillBmpSizeLogItem = 0; GetProperty(XATTR_FILLBMP_SIZELOG, 0, pXFillBmpSizeLogItem);
+    const uno::Any* pXFillBmpTileOffsetXItem = 0; GetProperty(XATTR_FILLBMP_TILEOFFSETX, 0, pXFillBmpTileOffsetXItem);
+    const uno::Any* pXFillBmpTileOffsetYItem = 0; GetProperty(XATTR_FILLBMP_TILEOFFSETY, 0, pXFillBmpTileOffsetYItem);
+    const uno::Any* pXFillBmpPosOffsetXItem = 0; GetProperty(XATTR_FILLBMP_POSOFFSETX, 0, pXFillBmpPosOffsetXItem);
+    const uno::Any* pXFillBmpPosOffsetYItem = 0; GetProperty(XATTR_FILLBMP_POSOFFSETY, 0, pXFillBmpPosOffsetYItem);
+    const uno::Any* pXFillBackgroundItem = 0; GetProperty(XATTR_FILLBACKGROUND, 0, pXFillBackgroundItem);
+    const uno::Any* pOwnAttrFillBmpItem = 0; GetProperty(OWN_ATTR_FILLBMP_MODE, 0, pOwnAttrFillBmpItem);
+
+    const bool bXFillStyleItemUsed(
+        pXFillStyleItem ||
+        pXFillColorItem ||
+        pXFillGradientItem || pXFillGradientNameItem ||
+        pXFillHatchItem || pXFillHatchNameItem ||
+        pXFillBitmapItem || pXFillBitmapNameItem || pXFillBitmapURLItem ||
+        pXFillTransparenceItem ||
+        pXGradientStepCountItem ||
+        pXFillBmpPosItem ||
+        pXFillBmpSizeXItem ||
+        pXFillBmpSizeYItem ||
+        pXFillFloatTransparenceItem || pXFillFloatTransparenceNameItem ||
+        pXSecondaryFillColorItem ||
+        pXFillBmpSizeLogItem ||
+        pXFillBmpTileOffsetXItem ||
+        pXFillBmpTileOffsetYItem ||
+        pXFillBmpPosOffsetXItem ||
+        pXFillBmpPosOffsetYItem ||
+        pXFillBackgroundItem ||
+        pOwnAttrFillBmpItem);
+
+    // use brush items, but *only* if no FillStyle properties are used; if both are used and when applying both
+    // in the obvious order some attributes may be wrong since they are set by the 1st set, but not
+    // redefined as needed by the 2nd set when they are default (and thus no tset) in the 2nd set. If
+    // it is necessary for any reason to set both (it should not) a in-between step will be needed
+    // that resets the items for FillAttributes in rToSet to default
+    if(bSvxBrushItemPropertiesUsed && !bXFillStyleItemUsed)
     {
-        const ::uno::Any* pCol = 0;
-        GetProperty(RES_BACKGROUND, MID_BACK_COLOR, pCol );
-        const ::uno::Any* pRGBCol = 0;
-        GetProperty(RES_BACKGROUND, MID_BACK_COLOR_R_G_B, pRGBCol );
-        const ::uno::Any* pColTrans = 0;
-        GetProperty(RES_BACKGROUND, MID_BACK_COLOR_TRANSPARENCY, pColTrans);
-        const ::uno::Any* pTrans = 0;
-        GetProperty(RES_BACKGROUND, MID_GRAPHIC_TRANSPARENT, pTrans );
-        const ::uno::Any* pGrLoc = 0;
-        GetProperty(RES_BACKGROUND, MID_GRAPHIC_POSITION, pGrLoc );
-        const ::uno::Any* pGrURL = 0;
-        GetProperty(RES_BACKGROUND, MID_GRAPHIC_URL, pGrURL     );
-        const ::uno::Any* pGrFilter = 0;
-        GetProperty(RES_BACKGROUND, MID_GRAPHIC_FILTER, pGrFilter     );
-        const ::uno::Any* pGrTranparency = 0;
-        GetProperty(RES_BACKGROUND, MID_GRAPHIC_TRANSPARENCY, pGrTranparency     );
+        //UUUU create a temporary SvxBrushItem, fill the attributes to it and use it to set
+        // the corresponding FillAttributes
+        SvxBrushItem aBrush(RES_BACKGROUND);
 
-        if(pCol || pTrans || pGrURL || pGrFilter || pGrLoc ||
-                            pGrTranparency || pColTrans || pRGBCol)
+        if(pCol)
         {
-            SvxBrushItem aBrush ( static_cast < const :: SvxBrushItem & > ( rFromSet.Get ( RES_BACKGROUND ) ) );
-            if(pCol )
-                bRet &= ((SfxPoolItem&)aBrush).PutValue(*pCol,MID_BACK_COLOR    );
-            if(pColTrans)
-                bRet &= ((SfxPoolItem&)aBrush).PutValue(*pColTrans, MID_BACK_COLOR_TRANSPARENCY);
-            if(pRGBCol)
-                bRet &= ((SfxPoolItem&)aBrush).PutValue(*pRGBCol, MID_BACK_COLOR_R_G_B);
-            if(pTrans)
-            {
-                // don't overwrite transparency with a non-transparence flag
-                if(!pColTrans || Any2Bool( *pTrans ))
-                    bRet &= ((SfxPoolItem&)aBrush).PutValue(*pTrans, MID_GRAPHIC_TRANSPARENT);
-            }
-            if(pGrURL)
-                bRet &= ((SfxPoolItem&)aBrush).PutValue(*pGrURL, MID_GRAPHIC_URL);
-            if(pGrFilter)
-                bRet &= ((SfxPoolItem&)aBrush).PutValue(*pGrFilter, MID_GRAPHIC_FILTER);
-            if(pGrLoc)
-                bRet &= ((SfxPoolItem&)aBrush).PutValue(*pGrLoc, MID_GRAPHIC_POSITION);
-            if(pGrTranparency)
-                bRet &= ((SfxPoolItem&)aBrush).PutValue(*pGrTranparency, MID_GRAPHIC_TRANSPARENCY);
-
-            rToSet.Put(aBrush);
+            bRet &= ((SfxPoolItem&)aBrush).PutValue(*pCol,MID_BACK_COLOR    );
         }
-    }
-    {
-        const ::uno::Any* pFillStyle = 0;
-        GetProperty(RES_FILL_STYLE, 0, pFillStyle);
-        if (pFillStyle)
-        {
-            XFillStyleItem aFillStyle( static_cast <const :: XFillStyleItem & > ( rFromSet.Get ( RES_FILL_STYLE ) ) );
-            bRet &= ((SfxPoolItem&)aFillStyle).PutValue(*pFillStyle);
-            rToSet.Put(aFillStyle);
-        }
-    }
-    {
-        const ::uno::Any* pFillGradient = 0;
-        GetProperty(RES_FILL_GRADIENT, MID_FILLGRADIENT, pFillGradient);
-        const ::uno::Any* pName = 0;
-        GetProperty(RES_FILL_GRADIENT, MID_NAME, pName);
-        if (pFillGradient || pName)
-        {
-            XFillGradientItem aFillGradient( static_cast <const :: XFillGradientItem & > ( rFromSet.Get ( RES_FILL_GRADIENT ) ) );
-            XFillGradientItem* pItem = &aFillGradient;
-            if (pFillGradient)
-            {
-                bRet &= ((SfxPoolItem*)pItem)->PutValue(*pFillGradient, MID_FILLGRADIENT);
-                // If gradient is set directly, we always generate an associated style name for it.
-                SdrModel* pModel = pDoc->GetDrawModel();
-                pItem = pItem->checkForUniqueItem( pModel );
-            }
-            if (pName)
-            {
-                bRet &= ((SfxPoolItem*)pItem)->PutValue(*pName, MID_NAME);
-                // Look up the associated style name.
-                SfxItemPool& rPool = pDoc->GetDrawModel()->GetItemPool();
-                const sal_uInt32 nCount = rPool.GetItemCount2(XATTR_FILLGRADIENT);
-                const XFillGradientItem* pStyleItem;
-                for (sal_uInt32 i = 0; i < nCount; ++i)
-                {
-                    pStyleItem = (XFillGradientItem*)rPool.GetItem2(XATTR_FILLGRADIENT, i);
-                    if (pStyleItem && pStyleItem->GetName() == pItem->GetName())
-                    {
-                        pItem->SetGradientValue(pStyleItem->GetGradientValue());
-                        break;
-                    }
-                }
-            }
-            if (pItem)
-            {
-                rToSet.Put(*pItem);
-                if(pItem != &aFillGradient)
-                {
-                    // New name was generated? Then insert it to the drawinglayer style table.
-                    uno::Reference<frame::XModel> xModel(pDoc->GetDocShell()->GetModel());
-                    uno::Reference<lang::XMultiServiceFactory> xServiceFact(xModel, uno::UNO_QUERY);
-                    uno::Reference< container::XNameContainer > xGradients(xServiceFact->createInstance("com.sun.star.drawing.GradientTable"), uno::UNO_QUERY);
-                    if (!xGradients->hasByName(pItem->GetName()))
-                    {
-                        xGradients->insertByName(pItem->GetName(), *pFillGradient);
-                    }
 
-                    delete pItem;
-                }
+        if(pColTrans)
+        {
+            bRet &= ((SfxPoolItem&)aBrush).PutValue(*pColTrans, MID_BACK_COLOR_TRANSPARENCY);
+        }
+
+        if(pRGBCol)
+        {
+            bRet &= ((SfxPoolItem&)aBrush).PutValue(*pRGBCol, MID_BACK_COLOR_R_G_B);
+        }
+
+        if(pTrans)
+        {
+            // don't overwrite transparency with a non-transparence flag
+            if(!pColTrans || Any2Bool( *pTrans ))
+                bRet &= ((SfxPoolItem&)aBrush).PutValue(*pTrans, MID_GRAPHIC_TRANSPARENT);
+        }
+
+        if(pGrURL)
+        {
+            bRet &= ((SfxPoolItem&)aBrush).PutValue(*pGrURL, MID_GRAPHIC_URL);
+        }
+
+        if(pGrFilter)
+        {
+            bRet &= ((SfxPoolItem&)aBrush).PutValue(*pGrFilter, MID_GRAPHIC_FILTER);
+        }
+
+        if(pGrLoc)
+        {
+            bRet &= ((SfxPoolItem&)aBrush).PutValue(*pGrLoc, MID_GRAPHIC_POSITION);
+        }
+
+        if(pGrTranparency)
+        {
+            bRet &= ((SfxPoolItem&)aBrush).PutValue(*pGrTranparency, MID_GRAPHIC_TRANSPARENCY);
+        }
+
+        setSvxBrushItemAsFillAttributesToTargetSet(aBrush, rToSet);
+    }
+
+    if(bXFillStyleItemUsed)
+    {
+        if(pXFillStyleItem)
+        {
+            XFillStyleItem aXFillStyleItem;
+
+            aXFillStyleItem.PutValue(*pXFillStyleItem);
+            rToSet.Put(aXFillStyleItem);
+        }
+
+        if(pXFillColorItem)
+        {
+            const Color aNullCol(COL_DEFAULT_SHAPE_FILLING);
+            XFillColorItem aXFillColorItem(OUString(), aNullCol);
+
+            aXFillColorItem.PutValue(*pXFillColorItem);
+            rToSet.Put(aXFillColorItem);
+        }
+
+        if(pXFillGradientItem || pXFillGradientNameItem)
+        {
+            if(pXFillGradientItem)
+            {
+                const XGradient aNullGrad(RGB_Color(COL_BLACK), RGB_Color(COL_WHITE));
+                XFillGradientItem aXFillGradientItem(aNullGrad);
+
+                aXFillGradientItem.PutValue(*pXFillGradientItem, MID_FILLGRADIENT);
+                rToSet.Put(aXFillGradientItem);
             }
+
+            if(pXFillGradientNameItem)
+            {
+                OUString aTempName;
+
+                if(!(*pXFillGradientNameItem >>= aTempName ))
+                {
+                    throw lang::IllegalArgumentException();
+                }
+
+                bRet &= SvxShape::SetFillAttribute(XATTR_FILLGRADIENT, aTempName, rToSet);
+            }
+        }
+
+        if(pXFillHatchItem || pXFillHatchNameItem)
+        {
+            if(pXFillHatchItem)
+            {
+                const Color aNullCol(COL_DEFAULT_SHAPE_STROKE);
+                const XHatch aNullHatch(aNullCol);
+                XFillHatchItem aXFillHatchItem(rToSet.GetPool(), aNullHatch);
+
+                aXFillHatchItem.PutValue(*pXFillHatchItem, MID_FILLHATCH);
+                rToSet.Put(aXFillHatchItem);
+            }
+
+            if(pXFillHatchNameItem)
+            {
+                OUString aTempName;
+
+                if(!(*pXFillHatchNameItem >>= aTempName ))
+                {
+                    throw lang::IllegalArgumentException();
+                }
+
+                bRet &= SvxShape::SetFillAttribute(XATTR_FILLHATCH, aTempName, rToSet);
+            }
+        }
+
+        if(pXFillBitmapItem || pXFillBitmapNameItem || pXFillBitmapURLItem)
+        {
+            if(pXFillBitmapItem)
+            {
+                const Graphic aNullGraphic;
+                XFillBitmapItem aXFillBitmapItem(rToSet.GetPool(), aNullGraphic);
+
+                aXFillBitmapItem.PutValue(*pXFillBitmapItem, MID_BITMAP);
+                rToSet.Put(aXFillBitmapItem);
+            }
+
+            if(pXFillBitmapNameItem)
+            {
+                OUString aTempName;
+
+                if(!(*pXFillBitmapNameItem >>= aTempName ))
+                {
+                    throw lang::IllegalArgumentException();
+                }
+
+                bRet &= SvxShape::SetFillAttribute(XATTR_FILLBITMAP, aTempName, rToSet);
+            }
+
+            if(pXFillBitmapURLItem)
+            {
+                const Graphic aNullGraphic;
+                XFillBitmapItem aXFillBitmapItem(rToSet.GetPool(), aNullGraphic);
+
+                aXFillBitmapItem.PutValue(*pXFillBitmapURLItem, MID_GRAFURL);
+                rToSet.Put(aXFillBitmapItem);
+            }
+        }
+
+        if(pXFillTransparenceItem)
+        {
+            const XGradient aNullGrad(RGB_Color(COL_BLACK), RGB_Color(COL_WHITE));
+            XFillTransparenceItem aXFillTransparenceItem;
+
+            aXFillTransparenceItem.PutValue(*pXFillTransparenceItem);
+            rToSet.Put(aXFillTransparenceItem);
+        }
+
+        if(pXGradientStepCountItem)
+        {
+            XGradientStepCountItem aXGradientStepCountItem;
+
+            aXGradientStepCountItem.PutValue(*pXGradientStepCountItem);
+            rToSet.Put(aXGradientStepCountItem);
+        }
+
+        if(pXFillBmpPosItem)
+        {
+            XFillBmpPosItem aXFillBmpPosItem;
+
+            aXFillBmpPosItem.PutValue(*pXFillBmpPosItem);
+            rToSet.Put(aXFillBmpPosItem);
+        }
+
+        if(pXFillBmpSizeXItem)
+        {
+            XFillBmpSizeXItem aXFillBmpSizeXItem;
+
+            aXFillBmpSizeXItem.PutValue(*pXFillBmpSizeXItem);
+            rToSet.Put(aXFillBmpSizeXItem);
+        }
+
+        if(pXFillBmpSizeYItem)
+        {
+            XFillBmpSizeYItem aXFillBmpSizeYItem;
+
+            aXFillBmpSizeYItem.PutValue(*pXFillBmpSizeYItem);
+            rToSet.Put(aXFillBmpSizeYItem);
+        }
+
+        if(pXFillFloatTransparenceItem || pXFillFloatTransparenceNameItem)
+        {
+            if(pXFillFloatTransparenceItem)
+            {
+                const XGradient aNullGrad(RGB_Color(COL_BLACK), RGB_Color(COL_WHITE));
+                XFillFloatTransparenceItem aXFillFloatTransparenceItem(rToSet.GetPool(), aNullGrad, false);
+
+                aXFillFloatTransparenceItem.PutValue(*pXFillFloatTransparenceItem, MID_FILLGRADIENT);
+                rToSet.Put(aXFillFloatTransparenceItem);
+            }
+
+            if(pXFillFloatTransparenceNameItem)
+            {
+                OUString aTempName;
+
+                if(!(*pXFillFloatTransparenceNameItem >>= aTempName ))
+                {
+                    throw lang::IllegalArgumentException();
+                }
+
+                bRet &= SvxShape::SetFillAttribute(XATTR_FILLFLOATTRANSPARENCE, aTempName, rToSet);
+            }
+        }
+
+        if(pXSecondaryFillColorItem)
+        {
+            const Color aNullCol(COL_DEFAULT_SHAPE_FILLING);
+            XSecondaryFillColorItem aXSecondaryFillColorItem(OUString(), aNullCol);
+
+            aXSecondaryFillColorItem.PutValue(*pXSecondaryFillColorItem);
+            rToSet.Put(aXSecondaryFillColorItem);
+        }
+
+        if(pXFillBmpSizeLogItem)
+        {
+            XFillBmpSizeLogItem aXFillBmpSizeLogItem;
+
+            aXFillBmpSizeLogItem.PutValue(*pXFillBmpSizeLogItem);
+            rToSet.Put(aXFillBmpSizeLogItem);
+        }
+
+        if(pXFillBmpTileOffsetXItem)
+        {
+            XFillBmpTileOffsetXItem aXFillBmpTileOffsetXItem;
+
+            aXFillBmpTileOffsetXItem.PutValue(*pXFillBmpTileOffsetXItem);
+            rToSet.Put(aXFillBmpTileOffsetXItem);
+        }
+
+        if(pXFillBmpTileOffsetYItem)
+        {
+            XFillBmpTileOffsetYItem aXFillBmpTileOffsetYItem;
+
+            aXFillBmpTileOffsetYItem.PutValue(*pXFillBmpTileOffsetYItem);
+            rToSet.Put(aXFillBmpTileOffsetYItem);
+        }
+
+        if(pXFillBmpPosOffsetXItem)
+        {
+            XFillBmpPosOffsetXItem aXFillBmpPosOffsetXItem;
+
+            aXFillBmpPosOffsetXItem.PutValue(*pXFillBmpPosOffsetXItem);
+            rToSet.Put(aXFillBmpPosOffsetXItem);
+        }
+
+        if(pXFillBmpPosOffsetYItem)
+        {
+            XFillBmpPosOffsetYItem aXFillBmpPosOffsetYItem;
+
+            aXFillBmpPosOffsetYItem.PutValue(*pXFillBmpPosOffsetYItem);
+            rToSet.Put(aXFillBmpPosOffsetYItem);
+        }
+
+        if(pXFillBackgroundItem)
+        {
+            XFillBackgroundItem aXFillBackgroundItem;
+
+            aXFillBackgroundItem.PutValue(*pXFillBackgroundItem);
+            rToSet.Put(aXFillBackgroundItem);
+        }
+
+        if(pOwnAttrFillBmpItem)
+        {
+            drawing::BitmapMode eMode;
+
+            if(!(*pOwnAttrFillBmpItem >>= eMode))
+            {
+                sal_Int32 nMode = 0;
+
+                if(!(*pOwnAttrFillBmpItem >>= nMode))
+                {
+                    throw lang::IllegalArgumentException();
+                }
+
+                eMode = (drawing::BitmapMode)nMode;
+            }
+
+            rToSet.Put(XFillBmpStretchItem(drawing::BitmapMode_STRETCH == eMode));
+            rToSet.Put(XFillBmpTileItem(drawing::BitmapMode_REPEAT == eMode));
         }
     }
     {
@@ -648,13 +941,13 @@ bool SwFrameProperties_Impl::AnyToItemSet(SwDoc *pDoc, SfxItemSet& rSet, SfxItem
     {
         rtl::Reference< SwDocStyleSheet > xStyle( new SwDocStyleSheet( *pStyle ) );
         const :: SfxItemSet *pItemSet = &xStyle->GetItemSet();
-           bRet = FillBaseProperties( pDoc, rSet, *pItemSet, rSizeFound );
+           bRet = FillBaseProperties( rSet, *pItemSet, rSizeFound );
         lcl_FillCol ( rSet, *pItemSet, pColumns );
     }
     else
     {
         const :: SfxItemSet *pItemSet = &pDoc->GetFrmFmtFromPool( RES_POOLFRM_FRAME )->GetAttrSet();
-           bRet = FillBaseProperties( pDoc, rSet, *pItemSet, rSizeFound );
+           bRet = FillBaseProperties( rSet, *pItemSet, rSizeFound );
         lcl_FillCol ( rSet, *pItemSet, pColumns );
     }
     const ::uno::Any* pEdit;
@@ -729,13 +1022,13 @@ bool SwGraphicProperties_Impl::AnyToItemSet(
     {
         rtl::Reference< SwDocStyleSheet > xStyle( new SwDocStyleSheet(*pStyle) );
         const :: SfxItemSet *pItemSet = &xStyle->GetItemSet();
-        bRet = FillBaseProperties(pDoc, rFrmSet, *pItemSet, rSizeFound);
+        bRet = FillBaseProperties(rFrmSet, *pItemSet, rSizeFound);
         lcl_FillMirror ( rGrSet, *pItemSet, pHEvenMirror, pHOddMirror, pVMirror, bRet );
     }
     else
     {
         const :: SfxItemSet *pItemSet = &pDoc->GetFrmFmtFromPool( RES_POOLFRM_GRAPHIC )->GetAttrSet();
-        bRet = FillBaseProperties(pDoc, rFrmSet, *pItemSet, rSizeFound);
+        bRet = FillBaseProperties(rFrmSet, *pItemSet, rSizeFound);
         lcl_FillMirror ( rGrSet, *pItemSet, pHEvenMirror, pHOddMirror, pVMirror, bRet );
     }
 
@@ -1029,7 +1322,7 @@ static SwFrmFmt *lcl_GetFrmFmt( const :: uno::Any& rValue, SwDoc *pDoc )
     return pRet;
 }
 
-void SwXFrame::setPropertyValue(const :: OUString& rPropertyName, const :: uno::Any& aValue)
+void SwXFrame::setPropertyValue(const :: OUString& rPropertyName, const :: uno::Any& _rValue)
     throw( beans::UnknownPropertyException, beans::PropertyVetoException, lang::IllegalArgumentException, lang::WrappedTargetException, uno::RuntimeException, std::exception )
 {
     SolarMutexGuard aGuard;
@@ -1038,6 +1331,40 @@ void SwXFrame::setPropertyValue(const :: OUString& rPropertyName, const :: uno::
 
     if (!pEntry)
         throw beans::UnknownPropertyException(OUString( "Unknown property: " ) + rPropertyName, static_cast < cppu::OWeakObject * > ( this ) );
+
+    //UUUU
+    const sal_uInt8 nMemberId(pEntry->nMemberId & (~SFX_METRIC_ITEM));
+    uno::Any aValue(_rValue);
+
+    //UUUU check for needed metric translation
+    if(pEntry->nMemberId & SFX_METRIC_ITEM)
+    {
+        bool bDoIt(true);
+
+        if(XATTR_FILLBMP_SIZEX == pEntry->nWID || XATTR_FILLBMP_SIZEY == pEntry->nWID)
+        {
+            // exception: If these ItemTypes are used, do not convert when these are negative
+            // since this means they are intended as percent values
+            sal_Int32 nValue = 0;
+
+            if(aValue >>= nValue)
+            {
+                bDoIt = nValue > 0;
+            }
+        }
+
+        if(bDoIt)
+        {
+            const SwDoc* pDoc = (IsDescriptor() ? m_pDoc : GetFrmFmt()->GetDoc());
+            const SfxItemPool& rPool = pDoc->GetAttrPool();
+            const SfxMapUnit eMapUnit(rPool.GetMetric(pEntry->nWID));
+
+            if(eMapUnit != SFX_MAPUNIT_100TH_MM)
+            {
+                SvxUnoConvertFromMM(eMapUnit, aValue);
+            }
+        }
+    }
 
     if(pFmt)
     {
@@ -1351,7 +1678,7 @@ void SwXFrame::setPropertyValue(const :: OUString& rPropertyName, const :: uno::
                             SetObjectOrdNum(pObject->GetOrdNum(), nZOrder);
             }
         }
-        else if(RES_ANCHOR == pEntry->nWID && MID_ANCHOR_ANCHORFRAME == pEntry->nMemberId)
+        else if(RES_ANCHOR == pEntry->nWID && MID_ANCHOR_ANCHORFRAME == nMemberId)
         {
             bool bDone = false;
             uno::Reference<text::XTextFrame> xFrame;
@@ -1380,15 +1707,66 @@ void SwXFrame::setPropertyValue(const :: OUString& rPropertyName, const :: uno::
                 throw lang::IllegalArgumentException();
         }
         else
-        {
+        {   //UUUU
+            // standard UNO API write attributes
+            // adapt former attr from SvxBrushItem::PutValue to new items XATTR_FILL_FIRST, XATTR_FILL_LAST
             SfxItemSet aSet( pDoc->GetAttrPool(),
                 RES_FRMATR_BEGIN, RES_FRMATR_END - 1,
                 RES_UNKNOWNATR_CONTAINER, RES_UNKNOWNATR_CONTAINER,
+
+                //UUUU FillAttribute support
+                XATTR_FILL_FIRST, XATTR_FILL_LAST,
+
                 0L);
+            bool bDone(false);
 
             aSet.SetParent(&pFmt->GetAttrSet());
-            m_pPropSet->setPropertyValue(*pEntry, aValue, aSet);
-            if(RES_ANCHOR == pEntry->nWID && MID_ANCHOR_ANCHORTYPE == pEntry->nMemberId)
+
+            if(RES_BACKGROUND == pEntry->nWID)
+            {
+                const SwAttrSet& rSet = pFmt->GetAttrSet();
+                const SvxBrushItem aOriginalBrushItem(getSvxBrushItemFromSourceSet(rSet));
+                SvxBrushItem aChangedBrushItem(aOriginalBrushItem);
+
+                aChangedBrushItem.PutValue(aValue, nMemberId);
+
+                if(!(aChangedBrushItem == aOriginalBrushItem))
+                {
+                    setSvxBrushItemAsFillAttributesToTargetSet(aChangedBrushItem, aSet);
+                    pFmt->GetDoc()->SetFlyFrmAttr( *pFmt, aSet );
+                }
+
+                bDone = true;
+            }
+            else if(OWN_ATTR_FILLBMP_MODE == pEntry->nWID)
+            {
+                //UUUU
+                drawing::BitmapMode eMode;
+
+                if(!(aValue >>= eMode))
+                {
+                    sal_Int32 nMode = 0;
+
+                    if(!(aValue >>= nMode))
+                    {
+                        throw lang::IllegalArgumentException();
+                    }
+
+                    eMode = (drawing::BitmapMode)nMode;
+                }
+
+                aSet.Put(XFillBmpStretchItem(drawing::BitmapMode_STRETCH == eMode));
+                aSet.Put(XFillBmpTileItem(drawing::BitmapMode_REPEAT == eMode));
+                pFmt->GetDoc()->SetFlyFrmAttr( *pFmt, aSet );
+                bDone = true;
+            }
+
+            if(!bDone)
+            {
+                m_pPropSet->setPropertyValue(*pEntry, aValue, aSet);
+            }
+
+            if(RES_ANCHOR == pEntry->nWID && MID_ANCHOR_ANCHORTYPE == nMemberId)
             {
                 SwFmtAnchor aAnchor = (const :: SwFmtAnchor&)aSet.Get(pEntry->nWID);
                 if(aAnchor.GetAnchorId() == FLY_AT_FLY)
@@ -1454,7 +1832,7 @@ void SwXFrame::setPropertyValue(const :: OUString& rPropertyName, const :: uno::
     }
     else if(IsDescriptor())
     {
-        pProps->SetProperty(pEntry->nWID, pEntry->nMemberId, aValue);
+        pProps->SetProperty(pEntry->nWID, nMemberId, aValue);
         if( FN_UNO_FRAME_STYLE_NAME == pEntry->nWID )
         {
             OUString sStyleName;
@@ -1488,6 +1866,9 @@ uno::Any SwXFrame::getPropertyValue(const OUString& rPropertyName)
     const SfxItemPropertySimpleEntry* pEntry = m_pPropSet->getPropertyMap().getByName(rPropertyName);
     if (!pEntry)
         throw beans::UnknownPropertyException(OUString( "Unknown property: " ) + rPropertyName, static_cast < cppu::OWeakObject * > ( this ) );
+
+    //UUUU
+    const sal_uInt8 nMemberId(pEntry->nMemberId & (~SFX_METRIC_ITEM));
 
     if(FN_UNO_ANCHOR_TYPES == pEntry->nWID)
     {
@@ -1768,9 +2149,50 @@ uno::Any SwXFrame::getPropertyValue(const OUString& rPropertyName)
             }
         }
         else
-        {
+        {   //UUUU
+            // standard UNO API read attributes
+            // adapt former attr from SvxBrushItem::PutValue to new items XATTR_FILL_FIRST, XATTR_FILL_LAST
             const SwAttrSet& rSet = pFmt->GetAttrSet();
-            m_pPropSet->getPropertyValue(*pEntry, rSet, aAny);
+            bool bDone(false);
+
+            if(RES_BACKGROUND == pEntry->nWID)
+            {
+                //UUUU
+                const SvxBrushItem aOriginalBrushItem(getSvxBrushItemFromSourceSet(rSet));
+
+                if(!aOriginalBrushItem.QueryValue(aAny, nMemberId))
+                {
+                    OSL_ENSURE(false, "Error getting attribute from RES_BACKGROUND (!)");
+                }
+
+                bDone = true;
+            }
+            else if(OWN_ATTR_FILLBMP_MODE == pEntry->nWID)
+            {
+                //UUUU
+                const XFillBmpStretchItem* pStretchItem = dynamic_cast< const XFillBmpStretchItem* >(&rSet.Get(XATTR_FILLBMP_STRETCH));
+                const XFillBmpTileItem* pTileItem = dynamic_cast< const XFillBmpTileItem* >(&rSet.Get(XATTR_FILLBMP_TILE));
+
+                if( pTileItem && pTileItem->GetValue() )
+                {
+                    aAny <<= drawing::BitmapMode_REPEAT;
+                }
+                else if( pStretchItem && pStretchItem->GetValue() )
+                {
+                    aAny <<= drawing::BitmapMode_STRETCH;
+                }
+                else
+                {
+                    aAny <<= drawing::BitmapMode_NO_REPEAT;
+                }
+
+                bDone = true;
+            }
+
+            if(!bDone)
+            {
+                m_pPropSet->getPropertyValue(*pEntry, rSet, aAny);
+            }
         }
     }
     else if(IsDescriptor())
@@ -1780,7 +2202,7 @@ uno::Any SwXFrame::getPropertyValue(const OUString& rPropertyName)
         if(WID_LAYOUT_SIZE != pEntry->nWID)  // there is no LayoutSize in a descriptor
         {
             const uno::Any* pAny = 0;
-            if( !pProps->GetProperty( pEntry->nWID, pEntry->nMemberId, pAny ) )
+            if( !pProps->GetProperty( pEntry->nWID, nMemberId, pAny ) )
                 aAny = mxStyleData->getPropertyValue( rPropertyName );
             else if ( pAny )
                 aAny = *pAny;
@@ -1788,6 +2210,46 @@ uno::Any SwXFrame::getPropertyValue(const OUString& rPropertyName)
     }
     else
         throw uno::RuntimeException();
+
+    //UUUU
+    if(pEntry && pEntry->aType == ::getCppuType((const sal_Int16*)0) && pEntry->aType != aAny.getValueType())
+    {
+        // since the sfx uint16 item now exports a sal_Int32, we may have to fix this here
+        sal_Int32 nValue = 0;
+        aAny >>= nValue;
+        aAny <<= (sal_Int16)nValue;
+    }
+
+    //UUUU check for needed metric translation
+    if(pEntry->nMemberId & SFX_METRIC_ITEM)
+    {
+        bool bDoIt(true);
+
+        if(XATTR_FILLBMP_SIZEX == pEntry->nWID || XATTR_FILLBMP_SIZEY == pEntry->nWID)
+        {
+            // exception: If these ItemTypes are used, do not convert when these are negative
+            // since this means they are intended as percent values
+            sal_Int32 nValue = 0;
+
+            if(aAny >>= nValue)
+            {
+                bDoIt = nValue > 0;
+            }
+        }
+
+        if(bDoIt)
+        {
+            const SwDoc* pDoc = (IsDescriptor() ? m_pDoc : GetFrmFmt()->GetDoc());
+            const SfxItemPool& rPool = pDoc->GetAttrPool();
+            const SfxMapUnit eMapUnit(rPool.GetMetric(pEntry->nWID));
+
+            if(eMapUnit != SFX_MAPUNIT_100TH_MM)
+            {
+                SvxUnoConvertToMM(eMapUnit, aAny);
+            }
+        }
+    }
+
     return aAny;
 }
 
@@ -1830,6 +2292,42 @@ beans::PropertyState SwXFrame::getPropertyState( const OUString& rPropertyName )
     return aStates.getConstArray()[0];
 }
 
+//UUUU
+bool SwXFrame::needToMapFillItemsToSvxBrushItemTypes() const
+{
+    SwFrmFmt* pFmt = GetFrmFmt();
+
+    if(!pFmt)
+    {
+        return false;
+    }
+
+    const SwAttrSet& rFmtSet = pFmt->GetAttrSet();
+    const XFillStyleItem* pXFillStyleItem(static_cast< const XFillStyleItem*  >(rFmtSet.GetItem(XATTR_FILLSTYLE, false)));
+
+    if(!pXFillStyleItem)
+    {
+        return false;
+    }
+
+    //UUUU here different FillStyles can be excluded for export; it will depend on the
+    // quality these fallbacks can reach. That again is done in getSvxBrushItemFromSourceSet,
+    // take a look there how the superset of DrawObject FillStyles is mapped to SvxBrushItem.
+    // For now, take them all - except XFILL_NONE
+
+    if(XFILL_NONE != pXFillStyleItem->GetValue())
+    {
+        return true;
+    }
+
+    //if(XFILL_SOLID == pXFillStyleItem->GetValue() || XFILL_BITMAP == pXFillStyleItem->GetValue())
+    //{
+    //    return true;
+    //}
+
+    return false;
+}
+
 uno::Sequence< beans::PropertyState > SwXFrame::getPropertyStates(
     const uno::Sequence< OUString >& aPropertyNames )
         throw(beans::UnknownPropertyException, uno::RuntimeException, std::exception)
@@ -1855,6 +2353,27 @@ uno::Sequence< beans::PropertyState > SwXFrame::getPropertyStates(
                 FN_UNO_GRAPHIC_FILTER     == pEntry->nWID||
                 FN_UNO_ACTUAL_SIZE == pEntry->nWID||
                 FN_UNO_ALTERNATIVE_TEXT == pEntry->nWID)
+            {
+                pStates[i] = beans::PropertyState_DIRECT_VALUE;
+            }
+            else if(OWN_ATTR_FILLBMP_MODE == pEntry->nWID)
+            {
+                //UUUU
+                if(SFX_ITEM_SET == rFmtSet.GetItemState(XATTR_FILLBMP_STRETCH, false)
+                    || SFX_ITEM_SET == rFmtSet.GetItemState(XATTR_FILLBMP_TILE, false))
+                {
+                    pStates[i] = beans::PropertyState_DIRECT_VALUE;
+                }
+                else
+                {
+                    pStates[i] = beans::PropertyState_AMBIGUOUS_VALUE;
+                }
+            }
+            //UUUU for FlyFrames we need to mark all properties from type RES_BACKGROUND
+            // as beans::PropertyState_DIRECT_VALUE to let users of this property call
+            // getPropertyValue where the member properties will be mapped from the
+            // fill attributes to the according SvxBrushItem entries
+            else if(RES_BACKGROUND == pEntry->nWID && needToMapFillItemsToSvxBrushItemTypes())
             {
                 pStates[i] = beans::PropertyState_DIRECT_VALUE;
             }
@@ -1908,7 +2427,19 @@ void SwXFrame::setPropertyToDefault( const OUString& rPropertyName )
             throw uno::RuntimeException("setPropertyToDefault: property is read-only: " + rPropertyName, static_cast < cppu::OWeakObject * > ( this ) );
 
         bool bNextFrame;
-        if( pEntry->nWID &&
+        if(OWN_ATTR_FILLBMP_MODE == pEntry->nWID)
+        {
+            //UUUU
+            SwDoc* pDoc = pFmt->GetDoc();
+            SfxItemSet aSet(pDoc->GetAttrPool(), XATTR_FILL_FIRST, XATTR_FILL_LAST);
+            aSet.SetParent(&pFmt->GetAttrSet());
+
+            aSet.ClearItem(XATTR_FILLBMP_STRETCH);
+            aSet.ClearItem(XATTR_FILLBMP_TILE);
+
+            pFmt->SetFmtAttr(aSet);
+        }
+        else if( pEntry->nWID &&
             pEntry->nWID != FN_UNO_ANCHOR_TYPES &&
             pEntry->nWID != FN_PARAM_LINK_DISPLAY_NAME)
         {
@@ -2005,7 +2536,10 @@ uno::Any SwXFrame::getPropertyDefault( const OUString& rPropertyName )
             {
                 const SfxPoolItem& rDefItem =
                     pFmt->GetDoc()->GetAttrPool().GetDefaultItem(pEntry->nWID);
-                rDefItem.QueryValue(aRet, pEntry->nMemberId);
+                //UUUU
+                const sal_uInt8 nMemberId(pEntry->nMemberId & (~SFX_METRIC_ITEM));
+
+                rDefItem.QueryValue(aRet, nMemberId);
             }
         }
         else
@@ -2134,8 +2668,12 @@ void SwXFrame::attachToRange(const uno::Reference< text::XTextRange > & xTextRan
         static sal_uInt16 const aFrmAttrRange[] =
         {
             RES_FRMATR_BEGIN,       RES_FRMATR_END-1,
-            SID_ATTR_BORDER_INNER,  SID_ATTR_BORDER_INNER,
             RES_UNKNOWNATR_CONTAINER, RES_UNKNOWNATR_CONTAINER,
+
+            //UUUU FillAttribute support
+            XATTR_FILL_FIRST, XATTR_FILL_LAST,
+
+            SID_ATTR_BORDER_INNER,  SID_ATTR_BORDER_INNER,
             0
         };
         static sal_uInt16 const aGrAttrRange[] =

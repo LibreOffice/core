@@ -71,7 +71,9 @@ SwFrmDlg::SwFrmDlg( SfxViewFrame*       pViewFrame,
     , m_nPictureId(0)
     , m_nCropId(0)
     , m_nColumnId(0)
-    , m_nBackgroundId(0)
+    //, m_nBackgroundId(0)
+    , m_nAreaId(0)
+    , m_nTransparenceId(0)
     , m_nMacroId(0)
     , m_nBorderId(0)
 {
@@ -100,7 +102,14 @@ SwFrmDlg::SwFrmDlg( SfxViewFrame*       pViewFrame,
     }
     SfxAbstractDialogFactory* pFact = SfxAbstractDialogFactory::Create();
     OSL_ENSURE(pFact, "Dialogdiet fail!");
-    m_nBackgroundId = AddTabPage("background", pFact->GetTabPageCreatorFunc( RID_SVXPAGE_BACKGROUND ), 0);
+
+    //UUUU remove?
+    // m_nBackgroundId = AddTabPage("background", pFact->GetTabPageCreatorFunc( RID_SVXPAGE_BACKGROUND ), 0);
+
+    //UUUU add Area and Transparence TabPages
+    m_nAreaId = AddTabPage("area", pFact->GetTabPageCreatorFunc( RID_SVXPAGE_AREA ), pFact->GetTabPageRangesFunc( RID_SVXPAGE_AREA ));
+    m_nTransparenceId = AddTabPage("transparence", pFact->GetTabPageCreatorFunc( RID_SVXPAGE_TRANSPARENCE ), pFact->GetTabPageRangesFunc( RID_SVXPAGE_TRANSPARENCE ) );
+
     m_nMacroId = AddTabPage("macro", pFact->GetTabPageCreatorFunc(RID_SVXPAGE_MACROASSIGN), 0);
     m_nBorderId = AddTabPage("borders", pFact->GetTabPageCreatorFunc( RID_SVXPAGE_BORDER ), 0);
 
@@ -116,7 +125,11 @@ SwFrmDlg::SwFrmDlg( SfxViewFrame*       pViewFrame,
         else if (m_sDlgType == "PictureDialog")
             RemoveTabPage("crop");
         if( m_sDlgType != "FrameDialog" )
-            RemoveTabPage("background");
+        {
+            //UUUU RemoveTabPage("background");
+            RemoveTabPage("area");
+            RemoveTabPage("transparence");
+        }
     }
 
     if (m_bNew)
@@ -170,29 +183,43 @@ void SwFrmDlg::PageCreated( sal_uInt16 nId, SfxTabPage &rPage )
             rPage.SetFrame( m_pWrtShell->GetView().GetViewFrame()->GetFrame().GetFrameInterface() );
         rPage.PageCreated(aNewSet);
     }
-    else if (nId == m_nBackgroundId && m_sDlgType == "FrameDialog")
-    {
-        sal_Int32 nFlagType = SVX_SHOW_SELECTOR;
-        if (!m_bHTMLMode)
-            nFlagType |= SVX_ENABLE_TRANSPARENCY;
-        aSet.Put (SfxUInt32Item(SID_FLAG_TYPE, nFlagType));
-
-        SvxGradientListItem aGradientListItem(m_pWrtShell->GetDoc()->GetOrCreateDrawModel()->GetGradientList(), SID_GRADIENT_LIST);
-        aSet.Put(aGradientListItem);
-
-        XFillStyleItem aFillStyleItem(((const XFillStyleItem&)m_rSet.Get(RES_FILL_STYLE)).GetValue(), SID_SW_ATTR_FILL_STYLE);
-        aSet.Put(aFillStyleItem);
-
-        const XFillGradientItem& rFillGradientItem = (const XFillGradientItem&)m_rSet.Get(RES_FILL_GRADIENT);
-        XFillGradientItem aFillGradientItem(rFillGradientItem.GetName(), rFillGradientItem.GetGradientValue(), SID_SW_ATTR_FILL_GRADIENT);
-        aSet.Put(aFillGradientItem);
-
-        rPage.PageCreated(aSet);
-    }
+    //UUUU
+    //else if (nId == m_nBackgroundId && m_sDlgType == "FrameDialog")
+    //{
+    //    sal_Int32 nFlagType = SVX_SHOW_SELECTOR;
+    //    if (!m_bHTMLMode)
+    //        nFlagType |= SVX_ENABLE_TRANSPARENCY;
+    //    aSet.Put (SfxUInt32Item(SID_FLAG_TYPE, nFlagType));
+    //
+    //    rPage.PageCreated(aSet);
+    //}
     else if (nId == m_nBorderId)
     {
         aSet.Put (SfxUInt16Item(SID_SWMODE_TYPE,SW_BORDER_MODE_FRAME));
         rPage.PageCreated(aSet);
+    }
+    //UUUU inits for Area and Transparency TabPages
+    // The selection attribute lists (XPropertyList derivates, e.g. XColorList for
+    // the color table) need to be added as items (e.g. SvxColorListItem) to make
+    // these pages find the needed attributes for fill style suggestions.
+    // These are set in preparation to trigger this dialog (FN_FORMAT_FRAME_DLG and
+    // FN_DRAW_WRAP_DLG), but could also be directly added from the DrawModel.
+    else if (nId == m_nAreaId)
+    {
+        SfxItemSet aNew(*GetInputSetImpl()->GetPool(),
+                        SID_COLOR_TABLE, SID_BITMAP_LIST,
+                        SID_OFFER_IMPORT, SID_OFFER_IMPORT, 0, 0);
+
+        aNew.Put(m_rSet);
+
+        // add flag for direct graphic content selection
+        aNew.Put(SfxBoolItem(SID_OFFER_IMPORT, true));
+
+        rPage.PageCreated(aNew);
+    }
+    else if (nId == m_nTransparenceId)
+    {
+        rPage.PageCreated(m_rSet);
     }
 }
 

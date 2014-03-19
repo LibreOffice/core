@@ -51,6 +51,7 @@
 #include <numrule.hxx>
 #include <fmthdft.hxx>
 #include <svx/svxids.hrc>
+#include <svx/xdef.hxx>
 #include <SwRewriter.hxx>
 
 using namespace com::sun::star;
@@ -372,25 +373,34 @@ SwDocStyleSheet::SwDocStyleSheet(   SwDoc&          rDocument,
     pNumRule(0),
 
     rDoc(rDocument),
-    aCoreSet(GetPool().GetPool(),
-            RES_CHRATR_BEGIN,       RES_CHRATR_END - 1,
-            RES_PARATR_BEGIN,       RES_PARATR_END - 1,
-            RES_PARATR_LIST_BEGIN,  RES_PARATR_LIST_END - 1,
-            RES_FRMATR_BEGIN,       RES_FRMATR_END - 1,
-            RES_UNKNOWNATR_BEGIN,   RES_UNKNOWNATR_END-1,
-            SID_ATTR_PAGE,          SID_ATTR_PAGE_EXT1,
-            SID_ATTR_PAGE_HEADERSET,SID_ATTR_PAGE_FOOTERSET,
-            SID_ATTR_BORDER_INNER,  SID_ATTR_BORDER_INNER,
-            FN_PARAM_FTN_INFO,      FN_PARAM_FTN_INFO,
-            SID_ATTR_PARA_MODEL,    SID_ATTR_PARA_MODEL,
-            SID_ATTR_PARA_PAGENUM, SID_ATTR_PARA_PAGENUM,
-            SID_SWREGISTER_MODE,    SID_SWREGISTER_MODE,
-            SID_SWREGISTER_COLLECTION, SID_SWREGISTER_COLLECTION,
-            FN_COND_COLL,           FN_COND_COLL,
-            SID_ATTR_AUTO_STYLE_UPDATE, SID_ATTR_AUTO_STYLE_UPDATE,
-            SID_ATTR_NUMBERING_RULE,    SID_ATTR_NUMBERING_RULE,
-            SID_PARA_BACKGRND_DESTINATION,  SID_ATTR_BRUSH_CHAR,
-            SID_ATTR_NUMBERING_RULE,    SID_ATTR_NUMBERING_RULE,
+    aCoreSet(GetPool().GetPool(),   //UUUU sorted by indices, one double removed
+            RES_CHRATR_BEGIN,       RES_CHRATR_END - 1,             // [1
+            RES_PARATR_BEGIN,       RES_PARATR_END - 1,             // [60
+            RES_PARATR_LIST_BEGIN,  RES_PARATR_LIST_END - 1,        // [77
+            RES_FRMATR_BEGIN,       RES_FRMATR_END - 1,             // [82
+            RES_UNKNOWNATR_BEGIN,   RES_UNKNOWNATR_END-1,           // [143
+
+            //UUUU FillAttribute support
+            XATTR_FILL_FIRST, XATTR_FILL_LAST,                      // [1014
+
+            SID_ATTR_BORDER_INNER,  SID_ATTR_BORDER_INNER,          // [10023
+            SID_ATTR_PAGE,          SID_ATTR_PAGE_EXT1,             // [10050
+            SID_ATTR_PAGE_HEADERSET,SID_ATTR_PAGE_FOOTERSET,        // [10058
+            SID_ATTR_PARA_MODEL,    SID_ATTR_PARA_MODEL,            // [10065
+
+            //UUUU items to hand over XPropertyList things like
+            // XColorList, XHatchList, XGradientList and XBitmapList
+            // to the Area TabPage
+            SID_COLOR_TABLE,        SID_BITMAP_LIST,                // [10179
+
+            SID_SWREGISTER_COLLECTION, SID_SWREGISTER_COLLECTION,   // [10451
+            SID_ATTR_PARA_PAGENUM, SID_ATTR_PARA_PAGENUM,           // [10457
+            SID_SWREGISTER_MODE,    SID_SWREGISTER_MODE,            // [10467
+            SID_PARA_BACKGRND_DESTINATION,  SID_ATTR_BRUSH_CHAR,    // [10590
+            SID_ATTR_NUMBERING_RULE,    SID_ATTR_NUMBERING_RULE,    // [10855
+            SID_ATTR_AUTO_STYLE_UPDATE, SID_ATTR_AUTO_STYLE_UPDATE, // [12065
+            FN_PARAM_FTN_INFO,      FN_PARAM_FTN_INFO,              // [21123
+            FN_COND_COLL,           FN_COND_COLL,                   // [22401
             0),
     bPhysical(sal_False)
 {
@@ -1106,6 +1116,11 @@ bool   SwDocStyleSheet::SetFollow( const OUString& rStr)
 }
 
 // extract ItemSet to Name and Family, Mask
+
+//UUUU
+#include <svx/svdmodel.hxx>
+#include <svx/drawitem.hxx>
+
 SfxItemSet&   SwDocStyleSheet::GetItemSet()
 {
     if(!bPhysical)
@@ -1153,6 +1168,15 @@ SfxItemSet&   SwDocStyleSheet::GetItemSet()
 
                     if(pFrmFmt->DerivedFrom())
                         aCoreSet.SetParent(&pFrmFmt->DerivedFrom()->GetAttrSet());
+
+                    //UUUU create needed items for XPropertyList entries from the DrawModel so that
+                    // the Area TabPage can access them
+                    const SdrModel* pDrawModel = rDoc.GetDrawModel();
+
+                    aCoreSet.Put(SvxColorListItem(pDrawModel->GetColorList(), SID_COLOR_TABLE));
+                    aCoreSet.Put(SvxGradientListItem(pDrawModel->GetGradientList(), SID_GRADIENT_LIST));
+                    aCoreSet.Put(SvxHatchListItem(pDrawModel->GetHatchList(), SID_HATCH_LIST));
+                    aCoreSet.Put(SvxBitmapListItem(pDrawModel->GetBitmapList(), SID_BITMAP_LIST));
                 }
             }
             break;
@@ -1455,6 +1479,14 @@ void SwDocStyleSheet::SetItemSet( const SfxItemSet& rSet,
         }
         SfxItemSet aSet(rSet);
         aSet.ClearInvalidItems();
+
+        if(SFX_STYLE_FAMILY_FRAME == nFamily)
+        {
+            //UUUU Need to check for unique item for DrawingLayer items of type NameOrIndex
+            // and evtl. correct that item to ensure unique names for that type. This call may
+            // modify/correct entries inside of the given SfxItemSet
+            rDoc.CheckForUniqueItemForLineFillNameOrIndex(aSet);
+        }
 
         aCoreSet.ClearItem();
 

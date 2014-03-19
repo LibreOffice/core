@@ -392,7 +392,7 @@ static SvXMLEnumMapEntry const aXML_LineCap_EnumMap[] =
     { XML_TOKEN_INVALID, 0 }
 };
 
-static SvXMLEnumMapEntry const aXML_FillStyle_EnumMap[] =
+SvXMLEnumMapEntry aXML_FillStyle_EnumMap[] =
 {
     { XML_NONE,     drawing::FillStyle_NONE },
     { XML_SOLID,    drawing::FillStyle_SOLID },
@@ -489,7 +489,7 @@ SvXMLEnumMapEntry const   aXML_ConnectionKind_EnumMap[] =
     { XML_TOKEN_INVALID, 0 }
 };
 
-static SvXMLEnumMapEntry const   aXML_BitmapMode_EnumMap[] =
+SvXMLEnumMapEntry aXML_BitmapMode_EnumMap[] =
 {
     { XML_REPEAT,                   drawing::BitmapMode_REPEAT },
     { XML_STRETCH,                  drawing::BitmapMode_STRETCH },
@@ -538,7 +538,7 @@ static SvXMLEnumMapEntry const  aXML_TexMode_EnumMap[] =
     { XML_TOKEN_INVALID, 0 }
 };
 
-static SvXMLEnumMapEntry const aXML_RefPoint_EnumMap[] =
+SvXMLEnumMapEntry aXML_RefPoint_EnumMap[] =
 {
     { XML_TOP_LEFT,     drawing::RectanglePoint_LEFT_TOP },
     { XML_TOP,          drawing::RectanglePoint_MIDDLE_TOP },

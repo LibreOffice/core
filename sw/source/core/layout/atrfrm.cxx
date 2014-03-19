@@ -76,6 +76,11 @@
 #include <ndtxt.hxx>
 #endif
 
+//UUUU
+#include <fillattributes.hxx>
+#include <svx/xfillit0.hxx>
+#include <svl/itemiter.hxx>
+
 using namespace ::com::sun::star;
 
 TYPEINIT1(SwFmtVertOrient, SfxPoolItem);
@@ -2406,6 +2411,64 @@ SfxPoolItem* SwHeaderAndFooterEatSpacingItem::Clone( SfxItemPool* ) const
 TYPEINIT1( SwFrmFmt, SwFmt );
 IMPL_FIXEDMEMPOOL_NEWDEL_DLL( SwFrmFmt )
 
+SwFrmFmt::SwFrmFmt(
+    SwAttrPool& rPool,
+    const sal_Char* pFmtNm,
+    SwFrmFmt *pDrvdFrm,
+    sal_uInt16 nFmtWhich,
+    const sal_uInt16* pWhichRange)
+:   SwFmt(rPool, pFmtNm, (pWhichRange ? pWhichRange : aFrmFmtSetRange), pDrvdFrm, nFmtWhich),
+    m_wXObject(),
+    maFillAttributes()
+{
+    //UUUU
+    if(RES_FLYFRMFMT == nFmtWhich)
+    {
+        // when its a SwFlyFrmFmt do not do this, this setting
+        // will be derived from the parent style. In the future this
+        // may be needed for more formats; all which use the
+        // XATTR_FILL_FIRST, XATTR_FILL_LAST range as fill attributes
+#ifdef DBG_UTIL
+        bool bBla = true; // allow setting a breakpoint here in debug mode
+#endif
+    }
+    else
+    {
+        // set FillStyle to none; this is necessary since the pool default is
+        // to fill objects by color (blue8)
+        SetFmtAttr(XFillStyleItem(XFILL_NONE));
+    }
+}
+
+SwFrmFmt::SwFrmFmt(
+    SwAttrPool& rPool,
+    const OUString &rFmtNm,
+    SwFrmFmt *pDrvdFrm,
+    sal_uInt16 nFmtWhich,
+    const sal_uInt16* pWhichRange)
+:   SwFmt(rPool, rFmtNm, (pWhichRange ? pWhichRange : aFrmFmtSetRange), pDrvdFrm, nFmtWhich),
+    m_wXObject(),
+    maFillAttributes()
+{
+    //UUUU
+    if(RES_FLYFRMFMT == nFmtWhich)
+    {
+        // when its a SwFlyFrmFmt do not do this, this setting
+        // will be derived from the parent style. In the future this
+        // may be needed for more formats; all which use the
+        // XATTR_FILL_FIRST, XATTR_FILL_LAST range as fill attributes
+#ifdef DBG_UTIL
+        bool bBla = true; // allow setting a breakpoint here in debug mode
+#endif
+    }
+    else
+    {
+        // set FillStyle to none; this is necessary since the pool default is
+        // to fill objects by color (blue8)
+        SetFmtAttr(XFillStyleItem(XFILL_NONE));
+    }
+}
+
 void SwFrmFmt::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
 {
     SwFmtHeader *pH = 0;
@@ -2419,6 +2482,31 @@ void SwFrmFmt::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
             RES_HEADER, false, (const SfxPoolItem**)&pH );
         ((SwAttrSetChg*)pNew)->GetChgSet()->GetItemState(
             RES_FOOTER, false, (const SfxPoolItem**)&pF );
+
+        //UUUU reset fill information
+        if(RES_FLYFRMFMT == Which() && maFillAttributes.get())
+        {
+            SfxItemIter aIter(*((SwAttrSetChg*)pNew)->GetChgSet());
+            bool bReset(false);
+
+            for(const SfxPoolItem* pItem = aIter.FirstItem(); pItem && !bReset; pItem = aIter.NextItem())
+            {
+                bReset = !IsInvalidItem(pItem) && pItem->Which() >= XATTR_FILL_FIRST && pItem->Which() <= XATTR_FILL_LAST;
+            }
+
+            if(bReset)
+            {
+                maFillAttributes.reset();
+            }
+        }
+    }
+    else if(RES_FMT_CHG == nWhich) //UUUU
+    {
+        //UUUU reset fill information on format change (e.g. style changed)
+        if(RES_FLYFRMFMT == Which() && maFillAttributes.get())
+        {
+            maFillAttributes.reset();
+        }
     }
     else if( RES_HEADER == nWhich )
         pH = (SwFmtHeader*)pNew;
@@ -2935,7 +3023,11 @@ OUString SwFlyFrmFmt::GetObjDescription() const
 */
 bool SwFlyFrmFmt::IsBackgroundTransparent() const
 {
-    bool bReturn = false;
+    //UUUU
+    if(RES_FLYFRMFMT == Which() && getFillAttributes())
+    {
+        return getFillAttributes()->isTransparent();
+    }
 
     // NOTE: If background color is "no fill"/"auto fill" (COL_TRANSPARENT)
     //     and there is no background graphic, it "inherites" the background
@@ -2944,7 +3036,7 @@ bool SwFlyFrmFmt::IsBackgroundTransparent() const
          (GetBackground().GetColor() != COL_TRANSPARENT)
        )
     {
-        bReturn = true;
+        return true;
     }
     else
     {
@@ -2954,11 +3046,11 @@ bool SwFlyFrmFmt::IsBackgroundTransparent() const
              (pTmpGrf->GetAttr().GetTransparency() != 0)
            )
         {
-            bReturn = true;
+            return true;
         }
     }
 
-    return bReturn;
+    return false;
 }
 
 /** SwFlyFrmFmt::IsBackgroundBrushInherited - for #103898#
@@ -2973,15 +3065,18 @@ bool SwFlyFrmFmt::IsBackgroundTransparent() const
 */
 bool SwFlyFrmFmt::IsBackgroundBrushInherited() const
 {
-    bool bReturn = false;
-
-    if ( (GetBackground().GetColor() == COL_TRANSPARENT) &&
+    //UUUU
+    if(RES_FLYFRMFMT == Which() && getFillAttributes())
+    {
+        return !getFillAttributes()->isUsed();
+    }
+    else if ( (GetBackground().GetColor() == COL_TRANSPARENT) &&
          !(GetBackground().GetGraphicObject()) )
     {
-        bReturn = true;
+        return true;
     }
 
-    return bReturn;
+    return false;
 }
 
 // #125892#
@@ -3193,6 +3288,26 @@ IMapObject* SwFrmFmt::GetIMapObject( const Point& rPoint,
     }
 
     return 0;
+}
+
+//UUUU
+FillAttributesPtr SwFrmFmt::getFillAttributes() const
+{
+    if(RES_FLYFRMFMT == Which())
+    {
+        // create FillAttributes on demand
+        if(!maFillAttributes.get())
+        {
+            const_cast< SwFrmFmt* >(this)->maFillAttributes.reset(new FillAttributes(GetAttrSet()));
+        }
+    }
+    else
+    {
+        // FALLBACKBREAKHERE assert wrong usage
+        OSL_ENSURE(false, "getFillAttributes() call only valid for RES_FLYFRMFMT currently (!)");
+    }
+
+    return maFillAttributes;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

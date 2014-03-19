@@ -25,6 +25,8 @@
 #include <calbck.hxx>
 #include <hintids.hxx>
 #include <boost/shared_ptr.hpp>
+//UUUU
+#include <fillattributes.hxx>
 
 class IDocumentSettingAccess;
 class IDocumentDrawModelAccess;
@@ -87,9 +89,11 @@ public:
     sal_Bool SetDerivedFrom(SwFmt *pDerivedFrom = 0);
 
     /// If bInParents is FALSE, search only in this format for attribute.
-    inline const SfxPoolItem& GetFmtAttr( sal_uInt16 nWhich,
+    //UUUUinline
+    const SfxPoolItem& GetFmtAttr( sal_uInt16 nWhich,
                                           sal_Bool bInParents = sal_True ) const;
-    inline SfxItemState GetItemState( sal_uInt16 nWhich, sal_Bool bSrchInParent = sal_True,
+    //UUUUinline
+    SfxItemState GetItemState( sal_uInt16 nWhich, sal_Bool bSrchInParent = sal_True,
                                     const SfxPoolItem **ppItem = 0 ) const;
     virtual bool SetFmtAttr( const SfxPoolItem& rAttr );
     virtual bool SetFmtAttr( const SfxItemSet& rSet );
@@ -236,7 +240,10 @@ public:
     inline const SwFmtVertOrient      &GetVertOrient( sal_Bool = sal_True ) const;
     inline const SvxBoxItem               &GetBox( sal_Bool = sal_True ) const;
     inline const SvxFmtKeepItem         &GetKeep( sal_Bool = sal_True ) const;
-    inline const SvxBrushItem           &GetBackground( sal_Bool = sal_True ) const;
+
+    //UUUU
+    const SvxBrushItem& GetBackground( sal_Bool = sal_True ) const;
+
     inline const SvxShadowItem            &GetShadow( sal_Bool = sal_True ) const;
     inline const SwFmtPageDesc            &GetPageDesc( sal_Bool = sal_True ) const;
     inline const SvxFmtBreakItem      &GetBreak( sal_Bool = sal_True ) const;
@@ -319,15 +326,18 @@ public:
         @return false, default implementation
     */
     virtual bool IsShadowTransparent() const;
+
+    //UUUU
+    virtual FillAttributesPtr getFillAttributes() const;
 };
 
 // --------------- inline Implementations ------------------------
 
-inline const SfxPoolItem& SwFmt::GetFmtAttr( sal_uInt16 nWhich,
-                                             sal_Bool bInParents ) const
-{
-    return aSet.Get( nWhich, bInParents );
-}
+//UUUUinline const SfxPoolItem& SwFmt::GetFmtAttr( sal_uInt16 nWhich,
+//UUUU                                             sal_Bool bInParents ) const
+//UUUU{
+//UUUU  return aSet.Get( nWhich, bInParents );
+//UUUU}
 
 inline void SwFmt::SetName( const sal_Char* pNewName,
                              sal_Bool bBroadcast )
@@ -335,11 +345,11 @@ inline void SwFmt::SetName( const sal_Char* pNewName,
     SetName(OUString::createFromAscii(pNewName), bBroadcast);
 }
 
-inline SfxItemState SwFmt::GetItemState( sal_uInt16 nWhich, sal_Bool bSrchInParent,
-                                        const SfxPoolItem **ppItem ) const
-{
-    return aSet.GetItemState( nWhich, bSrchInParent, ppItem );
-}
+//UUUUinline SfxItemState SwFmt::GetItemState( sal_uInt16 nWhich, sal_Bool bSrchInParent,
+//UUUU                                      const SfxPoolItem **ppItem ) const
+//UUUU{
+//UUUU  return aSet.GetItemState( nWhich, bSrchInParent, ppItem );
+//UUUU}
 
 #endif // INCLUDED_SW_INC_FORMAT_HXX
 
