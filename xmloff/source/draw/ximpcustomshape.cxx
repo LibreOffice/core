@@ -44,7 +44,9 @@
 #include <com/sun/star/drawing/EnhancedCustomShapeSegmentCommand.hpp>
 #include <com/sun/star/drawing/EnhancedCustomShapeTextPathMode.hpp>
 #include <com/sun/star/drawing/ProjectionMode.hpp>
+#include <com/sun/star/drawing/HomogenMatrix3.hpp>
 #include <boost/unordered_map.hpp>
+#include <basegfx/vector/b2dvector.hxx>
 #include <sax/tools/converter.hxx>
 
 using namespace ::com::sun::star;
@@ -933,7 +935,46 @@ void XMLEnhancedCustomShapeContext::StartElement( const uno::Reference< xml::sax
                 case EAS_viewBox :
                 {
                     SdXMLImExViewBox aViewBox( rValue, GetImport().GetMM100UnitConverter() );
-                    awt::Rectangle aRect( aViewBox.GetX(), aViewBox.GetY(), aViewBox.GetWidth(), aViewBox.GetHeight() );
+                    awt::Rectangle aRect(
+                        basegfx::fround(aViewBox.GetX()),
+                        basegfx::fround(aViewBox.GetY()),
+                        basegfx::fround(aViewBox.GetWidth()),
+                        basegfx::fround(aViewBox.GetHeight()));
+
+                    if(0 == aRect.Width && 0 == aRect.Height)
+                    {
+                        // #i124452# If in svg:viewBox no width and height is given the objects should normally
+                        // not be visible at all, but in this case it is a bug in LO to write empty svg:viewBox
+                        // entries for CustomShapes. To allow for a better ODF user experience, just correct this
+                        // here by getting the real object scale from the already set transformation from the xShape.
+                        // Hopefully LO will fix that bug (but this will still leave the files with the error), but
+                        // even when not this will do no harm as long noone uses this state explicitely for some
+                        // purpose (e.g. to really have CustomShapes without content, but unlikely).
+                        uno::Reference< beans::XPropertySet > xProps(mrxShape, uno::UNO_QUERY_THROW);
+                        uno::Any aObjectTransform = xProps->getPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Transformation")));
+                        drawing::HomogenMatrix3 aTransformMatrix;
+                        aObjectTransform >>= aTransformMatrix;
+                        basegfx::B2DHomMatrix aMatrix;
+
+                        aMatrix.set(0, 0, aTransformMatrix.Line1.Column1);
+                        aMatrix.set(0, 1, aTransformMatrix.Line1.Column2);
+                        aMatrix.set(0, 2, aTransformMatrix.Line1.Column3);
+                        aMatrix.set(1, 0, aTransformMatrix.Line2.Column1);
+                        aMatrix.set(1, 1, aTransformMatrix.Line2.Column2);
+                        aMatrix.set(1, 2, aTransformMatrix.Line2.Column3);
+                        aMatrix.set(2, 0, aTransformMatrix.Line3.Column1);
+                        aMatrix.set(2, 1, aTransformMatrix.Line3.Column2);
+                        aMatrix.set(2, 2, aTransformMatrix.Line3.Column3);
+
+                        basegfx::B2DVector aScale, aTranslate;
+                        double fRotate, fShearX;
+
+                        aMatrix.decompose(aScale, aTranslate, fRotate, fShearX);
+
+                        aRect.Width = basegfx::fround(fabs(aScale.getX()));
+                        aRect.Height = basegfx::fround(fabs(aScale.getY()));
+                    }
+
                     beans::PropertyValue aProp;
                     aProp.Name = EASGet( EAS_ViewBox );
                     aProp.Value <<= aRect;
