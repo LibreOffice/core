@@ -124,10 +124,16 @@ class ICEConnectionObserver
 public:
     osl::Mutex m_ICEMutex;
 
-    ICEConnectionObserver():
-        m_pFilehandles(NULL), m_nConnections(0), m_pConnections(NULL),
-        m_ICEThread(NULL)
-    { m_nWakeupFiles[0] = m_nWakeupFiles[1] = 0; }
+    ICEConnectionObserver()
+        : m_pFilehandles(NULL)
+        , m_nConnections(0)
+        , m_pConnections(NULL)
+        , m_ICEThread(NULL)
+        , m_origIOErrorHandler(NULL)
+        , m_origErrorHandler(NULL)
+    {
+        m_nWakeupFiles[0] = m_nWakeupFiles[1] = 0;
+    }
 
     void activate();
     void deactivate();
