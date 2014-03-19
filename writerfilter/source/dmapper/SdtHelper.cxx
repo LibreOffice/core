@@ -223,6 +223,11 @@ bool SdtHelper::isInteropGrabBagEnabled()
     return !m_sGrabBagName.isEmpty();
 }
 
+OUString SdtHelper::getInteropGrabBagName()
+{
+    return m_sGrabBagName;
+}
+
 } // namespace dmapper
 } // namespace writerfilter
 

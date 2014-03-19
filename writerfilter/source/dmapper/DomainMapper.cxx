@@ -2654,8 +2654,12 @@ void DomainMapper::lcl_utext(const sal_uInt8 * data_, size_t len)
     {
         // there are unsupported SDT properties in the document
         // save them in the paragraph interop grab bag
+        OUString sName = m_pImpl->m_pSdtHelper->getInteropGrabBagName();
         uno::Any aPropValue = uno::makeAny(m_pImpl->m_pSdtHelper->getInteropGrabBagAndClear());
-        m_pImpl->GetTopContextOfType(CONTEXT_PARAGRAPH)->Insert(PROP_PARA_SDTPR, aPropValue, true, PARA_GRAB_BAG);
+        if(sName == "ooxml:CT_SdtPr_checkbox")
+            m_pImpl->GetTopContextOfType(CONTEXT_CHARACTER)->Insert(PROP_SDTPR, aPropValue, true, CHAR_GRAB_BAG);
+        else
+            m_pImpl->GetTopContextOfType(CONTEXT_PARAGRAPH)->Insert(PROP_SDTPR, aPropValue, true, PARA_GRAB_BAG);
     }
     else if (len == 1 && sText[0] == 0x03)
     {

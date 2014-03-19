@@ -88,6 +88,7 @@ public:
     com::sun::star::beans::PropertyValue getInteropGrabBagAndClear();
     void enableInteropGrabBag(const OUString& rName);
     bool isInteropGrabBagEnabled();
+    OUString getInteropGrabBagName();
 };
 
 } // namespace dmapper

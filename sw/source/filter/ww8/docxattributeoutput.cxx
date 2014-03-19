@@ -371,7 +371,7 @@ void DocxAttributeOutput::EndParagraph( ww8::WW8TableNodeInfoInner::Pointer_t pT
 
     m_pSerializer->endElementNS( XML_w, XML_p );
 
-    WriteParagraphSdt();
+    WriteSdtBlock( m_nParagraphSdtPrToken, m_pParagraphSdtPrTokenChildren );
     m_pSerializer->mergeTopMarks();
 
     // Check for end of cell, rows, tables here
@@ -381,9 +381,9 @@ void DocxAttributeOutput::EndParagraph( ww8::WW8TableNodeInfoInner::Pointer_t pT
 
 }
 
-void DocxAttributeOutput::WriteParagraphSdt()
+void DocxAttributeOutput::WriteSdtBlock( sal_Int32& nSdtPrToken, ::sax_fastparser::FastAttributeList* &pSdtPrTokenChildren )
 {
-    if( m_nSdtPrToken > 0 )
+    if( nSdtPrToken > 0 )
     {
         // sdt start mark
         m_pSerializer->mark();
@@ -393,21 +393,21 @@ void DocxAttributeOutput::WriteParagraphSdt()
         // output sdt properties
         m_pSerializer->startElementNS( XML_w, XML_sdtPr, FSEND );
 
-        if( m_pSdtPrTokenChildren )
+        if( pSdtPrTokenChildren )
         {
-            m_pSerializer->startElement( m_nSdtPrToken, FSEND );
+            m_pSerializer->startElement( nSdtPrToken, FSEND );
 
-            uno::Sequence<xml::FastAttribute> aChildren = m_pSdtPrTokenChildren->getFastAttributes();
+            uno::Sequence<xml::FastAttribute> aChildren = pSdtPrTokenChildren->getFastAttributes();
             for( sal_Int32 i=0; i < aChildren.getLength(); ++i )
                 m_pSerializer->singleElement( aChildren[i].Token,
                                               FSNS(XML_w, XML_val),
                                               rtl::OUStringToOString( aChildren[i].Value, RTL_TEXTENCODING_UTF8 ).getStr(),
                                               FSEND );
 
-            m_pSerializer->endElement( m_nSdtPrToken );
+            m_pSerializer->endElement( nSdtPrToken );
         }
         else
-            m_pSerializer->singleElement( m_nSdtPrToken, FSEND );
+            m_pSerializer->singleElement( nSdtPrToken, FSEND );
 
         m_pSerializer->endElementNS( XML_w, XML_sdtPr );
 
@@ -422,8 +422,8 @@ void DocxAttributeOutput::WriteParagraphSdt()
         m_pSerializer->endElementNS( XML_w, XML_sdt );
 
         // clear sdt status
-        m_nSdtPrToken = 0;
-        delete m_pSdtPrTokenChildren; m_pSdtPrTokenChildren = NULL;
+        nSdtPrToken = 0;
+        delete pSdtPrTokenChildren; pSdtPrTokenChildren = NULL;
     }
 }
 
@@ -676,6 +676,9 @@ void DocxAttributeOutput::StartRun( const SwRedlineData* pRedlineData, bool /*bS
     // that has to be started first.
     m_pRedlineData = pRedlineData;
 
+    // this mark is used to be able to enclose the run inside a sdr tag.
+    m_pSerializer->mark();
+
     // postpone the output of the start of a run (there are elements that need
     // to be written before the start of the run, but we learn which they are
     // _inside_ of the run)
@@ -807,6 +810,10 @@ void DocxAttributeOutput::EndRun()
     m_pSerializer->mergeTopMarks(); // merges the "actual run start"
     // append the actual run end
     m_pSerializer->endElementNS( XML_w, XML_r );
+
+    // enclose in a sdt block, if necessary
+    WriteSdtBlock( m_nRunSdtPrToken, m_pRunSdtPrTokenChildren );
+    m_pSerializer->mergeTopMarks();
 
     WritePostponedMath();
 
@@ -6886,16 +6893,16 @@ void DocxAttributeOutput::ParaGrabBag(const SfxGrabBagItem& rItem)
                     FSNS(XML_w, XML_themeFill), OUStringToOString(sThemeFill, RTL_TEXTENCODING_UTF8).getStr(),
                     FSNS(XML_w, XML_fill), OUStringToOString(sOriginalFill, RTL_TEXTENCODING_UTF8).getStr());
         }
-        else if (i->first == "ParaSdtPr")
+        else if (i->first == "SdtPr")
         {
             beans::PropertyValue aPropertyValue = i->second.get<beans::PropertyValue>();
             if (aPropertyValue.Name == "ooxml:CT_SdtPr_docPartObj" ||
                     aPropertyValue.Name == "ooxml:CT_SdtPr_docPartList")
             {
                 if (aPropertyValue.Name == "ooxml:CT_SdtPr_docPartObj")
-                    m_nSdtPrToken = FSNS( XML_w, XML_docPartObj );
+                    m_nParagraphSdtPrToken = FSNS( XML_w, XML_docPartObj );
                 else if (aPropertyValue.Name == "ooxml:CT_SdtPr_docPartList")
-                    m_nSdtPrToken = FSNS( XML_w, XML_docPartList );
+                    m_nParagraphSdtPrToken = FSNS( XML_w, XML_docPartList );
 
                 uno::Sequence<beans::PropertyValue> aGrabBag;
                 aPropertyValue.Value >>= aGrabBag;
@@ -6903,47 +6910,25 @@ void DocxAttributeOutput::ParaGrabBag(const SfxGrabBagItem& rItem)
                 {
                     OUString sValue = aGrabBag[j].Value.get<OUString>();
                     if (aGrabBag[j].Name == "ooxml:CT_SdtDocPart_docPartGallery")
-                        AddToAttrList( m_pSdtPrTokenChildren,
+                        AddToAttrList( m_pParagraphSdtPrTokenChildren,
                                        FSNS( XML_w, XML_docPartGallery ),
                                        rtl::OUStringToOString( sValue, RTL_TEXTENCODING_UTF8 ).getStr() );
                     else if (aGrabBag[j].Name == "ooxml:CT_SdtDocPart_docPartCategory")
-                        AddToAttrList( m_pSdtPrTokenChildren,
+                        AddToAttrList( m_pParagraphSdtPrTokenChildren,
                                        FSNS( XML_w, XML_docPartCategory ),
                                        rtl::OUStringToOString( sValue, RTL_TEXTENCODING_UTF8 ).getStr() );
                     else if (aGrabBag[j].Name == "ooxml:CT_SdtDocPart_docPartUnique")
-                        AddToAttrList( m_pSdtPrTokenChildren, FSNS( XML_w, XML_docPartUnique ), "" );
-                }
-            }
-            else if (aPropertyValue.Name == "ooxml:CT_SdtPr_checkbox")
-            {
-                m_nSdtPrToken = FSNS( XML_w14, XML_checkbox );
-                uno::Sequence<beans::PropertyValue> aGrabBag;
-                aPropertyValue.Value >>= aGrabBag;
-                for (sal_Int32 j=0; j < aGrabBag.getLength(); ++j)
-                {
-                    OUString sValue = aGrabBag[j].Value.get<OUString>();
-                    if (aGrabBag[j].Name == "ooxml:CT_SdtCheckbox_checked")
-                        AddToAttrList( m_pSdtPrTokenChildren,
-                                       FSNS( XML_w14, XML_checked ),
-                                       rtl::OUStringToOString( sValue, RTL_TEXTENCODING_UTF8 ).getStr() );
-                    else if (aGrabBag[j].Name == "ooxml:CT_SdtCheckbox_checkedState")
-                        AddToAttrList( m_pSdtPrTokenChildren,
-                                       FSNS( XML_w14, XML_checkedState ),
-                                       rtl::OUStringToOString( sValue, RTL_TEXTENCODING_UTF8 ).getStr() );
-                    else if (aGrabBag[j].Name == "ooxml:CT_SdtCheckbox_uncheckedState")
-                        AddToAttrList( m_pSdtPrTokenChildren,
-                                       FSNS( XML_w14, XML_uncheckedState ),
-                                       rtl::OUStringToOString( sValue, RTL_TEXTENCODING_UTF8 ).getStr() );
+                        AddToAttrList( m_pParagraphSdtPrTokenChildren, FSNS( XML_w, XML_docPartUnique ), "" );
                 }
             }
             else if (aPropertyValue.Name == "ooxml:CT_SdtPr_equation")
-                m_nSdtPrToken = FSNS( XML_w, XML_equation );
+                m_nParagraphSdtPrToken = FSNS( XML_w, XML_equation );
             else if (aPropertyValue.Name == "ooxml:CT_SdtPr_picture")
-                m_nSdtPrToken = FSNS( XML_w, XML_picture );
+                m_nParagraphSdtPrToken = FSNS( XML_w, XML_picture );
             else if (aPropertyValue.Name == "ooxml:CT_SdtPr_citation")
-                m_nSdtPrToken = FSNS( XML_w, XML_citation );
+                m_nParagraphSdtPrToken = FSNS( XML_w, XML_citation );
             else if (aPropertyValue.Name == "ooxml:CT_SdtPr_group")
-                m_nSdtPrToken = FSNS( XML_w, XML_group );
+                m_nParagraphSdtPrToken = FSNS( XML_w, XML_group );
         }
         else
             SAL_INFO("sw.ww8", "DocxAttributeOutput::ParaGrabBag: unhandled grab bag property " << i->first );
@@ -7062,6 +7047,32 @@ void DocxAttributeOutput::CharGrabBag( const SfxGrabBagItem& rItem )
             m_aTextEffectsGrabBag.realloc(m_aTextEffectsGrabBag.getLength() + 1);
             m_aTextEffectsGrabBag[aLength] = aPropertyValue;
         }
+        else if (i->first == "SdtPr")
+        {
+            beans::PropertyValue aPropertyValue = i->second.get<beans::PropertyValue>();
+            if (aPropertyValue.Name == "ooxml:CT_SdtPr_checkbox")
+            {
+                m_nRunSdtPrToken = FSNS( XML_w14, XML_checkbox );
+                uno::Sequence<beans::PropertyValue> aGrabBag;
+                aPropertyValue.Value >>= aGrabBag;
+                for (sal_Int32 j=0; j < aGrabBag.getLength(); ++j)
+                {
+                    OUString sValue = aGrabBag[j].Value.get<OUString>();
+                    if (aGrabBag[j].Name == "ooxml:CT_SdtCheckbox_checked")
+                        AddToAttrList( m_pRunSdtPrTokenChildren,
+                                       FSNS( XML_w14, XML_checked ),
+                                       rtl::OUStringToOString( sValue, RTL_TEXTENCODING_UTF8 ).getStr() );
+                    else if (aGrabBag[j].Name == "ooxml:CT_SdtCheckbox_checkedState")
+                        AddToAttrList( m_pRunSdtPrTokenChildren,
+                                       FSNS( XML_w14, XML_checkedState ),
+                                       rtl::OUStringToOString( sValue, RTL_TEXTENCODING_UTF8 ).getStr() );
+                    else if (aGrabBag[j].Name == "ooxml:CT_SdtCheckbox_uncheckedState")
+                        AddToAttrList( m_pRunSdtPrTokenChildren,
+                                       FSNS( XML_w14, XML_uncheckedState ),
+                                       rtl::OUStringToOString( sValue, RTL_TEXTENCODING_UTF8 ).getStr() );
+                }
+            }
+        }
         else
             SAL_INFO("sw.ww8", "DocxAttributeOutput::CharGrabBag: unhandled grab bag property " << i->first);
     }
@@ -7122,8 +7133,10 @@ DocxAttributeOutput::DocxAttributeOutput( DocxExport &rExport, FSHelperPtr pSeri
       m_nParaBeforeSpacing(0),
       m_nParaAfterSpacing(0),
       m_setFootnote(false)
-    , m_nSdtPrToken(0)
-    , m_pSdtPrTokenChildren(NULL)
+    , m_nParagraphSdtPrToken(0)
+    , m_pParagraphSdtPrTokenChildren(NULL)
+    , m_nRunSdtPrToken(0)
+    , m_pRunSdtPrTokenChildren(NULL)
 {
 }
 
@@ -7142,7 +7155,8 @@ DocxAttributeOutput::~DocxAttributeOutput()
     delete m_pEndnotesList, m_pEndnotesList = NULL;
 
     delete m_pTableWrt, m_pTableWrt = NULL;
-    delete m_pSdtPrTokenChildren; m_pSdtPrTokenChildren = NULL;
+    delete m_pParagraphSdtPrTokenChildren; m_pParagraphSdtPrTokenChildren = NULL;
+    delete m_pRunSdtPrTokenChildren; m_pRunSdtPrTokenChildren = NULL;
 }
 
 DocxExport& DocxAttributeOutput::GetExport()

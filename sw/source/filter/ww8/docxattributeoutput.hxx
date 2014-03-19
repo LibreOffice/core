@@ -682,7 +682,7 @@ private:
     void WritePostponedVMLDrawing();
     void WritePostponedDMLDrawing();
 
-    void WriteParagraphSdt();
+    void WriteSdtBlock(sal_Int32& nSdtPrToken, ::sax_fastparser::FastAttributeList* &pSdtPrTokenChildren);
 
     void StartField_Impl( FieldInfos& rInfos, bool bWriteRun = false );
     void DoWriteCmd( const OUString& rCmd );
@@ -859,8 +859,11 @@ private:
     std::map<const Graphic*, OString> m_aRelIdCache;
 
     /// members to control the existence of grabbagged SDT properties in the paragraph
-    sal_Int32 m_nSdtPrToken;
-    ::sax_fastparser::FastAttributeList *m_pSdtPrTokenChildren;
+    sal_Int32 m_nParagraphSdtPrToken;
+    ::sax_fastparser::FastAttributeList *m_pParagraphSdtPrTokenChildren;
+    /// members to control the existence of grabbagged SDT properties in the text run
+    sal_Int32 m_nRunSdtPrToken;
+    ::sax_fastparser::FastAttributeList *m_pRunSdtPrTokenChildren;
 
 public:
     DocxAttributeOutput( DocxExport &rExport, ::sax_fastparser::FSHelperPtr pSerializer, oox::drawingml::DrawingML* pDrawingML );
