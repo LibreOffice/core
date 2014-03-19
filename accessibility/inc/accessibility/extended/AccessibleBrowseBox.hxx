@@ -242,7 +242,7 @@ protected:
         return this;
     }
     void dispose();
-    virtual sal_Bool isAlive() const
+    virtual bool isAlive() const
     {
         return isContextAlive();
     }
@@ -265,7 +265,7 @@ protected:
         return xAccessible;
     }
     virtual void commitHeaderBarEvent( sal_Int16 nEventId, const ::com::sun::star::uno::Any& rNewValue,
-        const ::com::sun::star::uno::Any& rOldValue, sal_Bool _bColumnHeaderBar )
+        const ::com::sun::star::uno::Any& rOldValue, bool _bColumnHeaderBar )
     {
         AccessibleBrowseBox* pContext( getContext() );
         if ( pContext )

@@ -1329,7 +1329,7 @@ void FmGridControl::DeleteSelectedRows()
                 {
                     SelectAll();
                     if (IsInsertionRow(GetRowCount() - 1))  // einfuegeZeile nicht
-                        SelectRow(GetRowCount() - 1, sal_False);
+                        SelectRow(GetRowCount() - 1, false);
                 }
                 else
                 {
@@ -1825,7 +1825,7 @@ Sequence< Any> FmGridControl::getSelectionBookmarks()
             {
                 // leerzeile nicht loeschen
                 aBookmarks.realloc(--nSelectedRows);
-                SelectRow(nIdx,sal_False);          // selection aufheben fuer leerzeile
+                SelectRow(nIdx, false);          // selection aufheben fuer leerzeile
                 break;
             }
 

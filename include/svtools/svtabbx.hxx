@@ -184,32 +184,32 @@ public:
     virtual OUString         GetColumnDescription( sal_uInt16 _nColumn ) const;
 
     /** @return  <TRUE/>, if the object has a row header. */
-    virtual sal_Bool                HasRowHeader() const; //GetColumnId
+    virtual bool                    HasRowHeader() const; //GetColumnId
     /** @return  <TRUE/>, if the object can focus a cell. */
-    virtual sal_Bool                IsCellFocusable() const;
-    virtual sal_Bool                    GoToCell( sal_Int32 _nRow, sal_uInt16 _nColumn );
+    virtual bool                    IsCellFocusable() const;
+    virtual bool                    GoToCell( sal_Int32 _nRow, sal_uInt16 _nColumn );
 
     virtual void                    SetNoSelection();
     using SvListView::SelectAll;
     virtual void                    SelectAll();
     virtual void                    SelectAll( sal_Bool bSelect, sal_Bool bPaint = sal_True );
-    virtual void                    SelectRow( long _nRow, sal_Bool _bSelect = sal_True, sal_Bool bExpand = sal_True );
-    virtual void                    SelectColumn( sal_uInt16 _nColumn, sal_Bool _bSelect = sal_True );
+    virtual void                    SelectRow( long _nRow, bool _bSelect = true, bool bExpand = true );
+    virtual void                    SelectColumn( sal_uInt16 _nColumn, bool _bSelect = true );
     virtual sal_Int32               GetSelectedRowCount() const;
     virtual sal_Int32               GetSelectedColumnCount() const;
     /** @return  <TRUE/>, if the row is selected. */
     virtual bool                    IsRowSelected( long _nRow ) const;
-    virtual sal_Bool                IsColumnSelected( long _nColumn ) const;
+    virtual bool                    IsColumnSelected( long _nColumn ) const;
     virtual void                    GetAllSelectedRows( css::uno::Sequence< sal_Int32 >& _rRows ) const;
     virtual void                    GetAllSelectedColumns( css::uno::Sequence< sal_Int32 >& _rColumns ) const;
 
     /** @return  <TRUE/>, if the cell is visible. */
-    virtual sal_Bool                IsCellVisible( sal_Int32 _nRow, sal_uInt16 _nColumn ) const;
+    virtual bool                    IsCellVisible( sal_Int32 _nRow, sal_uInt16 _nColumn ) const;
     virtual OUString                GetAccessibleCellText( long _nRow, sal_uInt16 _nColumnPos ) const;
 
-    virtual Rectangle               calcHeaderRect( sal_Bool _bIsColumnBar, sal_Bool _bOnScreen = sal_True );
-    virtual Rectangle               calcTableRect( sal_Bool _bOnScreen = sal_True );
-    virtual Rectangle               GetFieldRectPixelAbs( sal_Int32 _nRow, sal_uInt16 _nColumn, sal_Bool _bIsHeader, sal_Bool _bOnScreen = sal_True );
+    virtual Rectangle               calcHeaderRect( bool _bIsColumnBar, bool _bOnScreen = true );
+    virtual Rectangle               calcTableRect( bool _bOnScreen = true );
+    virtual Rectangle               GetFieldRectPixelAbs( sal_Int32 _nRow, sal_uInt16 _nColumn, bool _bIsHeader, bool _bOnScreen = true );
 
     virtual css::uno::Reference< css::accessibility::XAccessible > CreateAccessibleCell( sal_Int32 _nRow, sal_uInt16 _nColumn );
     virtual css::uno::Reference< css::accessibility::XAccessible > CreateAccessibleRowHeader( sal_Int32 _nRow );
@@ -217,14 +217,14 @@ public:
 
     virtual sal_Int32               GetAccessibleControlCount() const;
     virtual css::uno::Reference< css::accessibility::XAccessible > CreateAccessibleControl( sal_Int32 _nIndex );
-    virtual sal_Bool                ConvertPointToControlIndex( sal_Int32& _rnIndex, const Point& _rPoint );
+    virtual bool                    ConvertPointToControlIndex( sal_Int32& _rnIndex, const Point& _rPoint );
 
-    virtual sal_Bool                ConvertPointToCellAddress( sal_Int32& _rnRow, sal_uInt16& _rnColPos, const Point& _rPoint );
-    virtual sal_Bool                ConvertPointToRowHeader( sal_Int32& _rnRow, const Point& _rPoint );
-    virtual sal_Bool                ConvertPointToColumnHeader( sal_uInt16& _rnColPos, const Point& _rPoint );
+    virtual bool                    ConvertPointToCellAddress( sal_Int32& _rnRow, sal_uInt16& _rnColPos, const Point& _rPoint );
+    virtual bool                    ConvertPointToRowHeader( sal_Int32& _rnRow, const Point& _rPoint );
+    virtual bool                    ConvertPointToColumnHeader( sal_uInt16& _rnColPos, const Point& _rPoint );
 
-    virtual OUString         GetAccessibleObjectName( ::svt::AccessibleBrowseBoxObjType _eType, sal_Int32 _nPos = -1 ) const;
-    virtual OUString         GetAccessibleObjectDescription( ::svt::AccessibleBrowseBoxObjType _eType, sal_Int32 _nPos = -1 ) const;
+    virtual OUString                GetAccessibleObjectName( ::svt::AccessibleBrowseBoxObjType _eType, sal_Int32 _nPos = -1 ) const;
+    virtual OUString                GetAccessibleObjectDescription( ::svt::AccessibleBrowseBoxObjType _eType, sal_Int32 _nPos = -1 ) const;
     virtual Window*                 GetWindowInstance();
 
     using SvTreeListBox::FillAccessibleStateSet;
@@ -233,12 +233,12 @@ public:
     virtual void                    GrabTableFocus();
 
     // OutputDevice
-    virtual sal_Bool                GetGlyphBoundRects( const Point& rOrigin, const OUString& rStr, int nIndex, int nLen, int nBase, MetricVector& rVector );
+    virtual bool                    GetGlyphBoundRects( const Point& rOrigin, const OUString& rStr, int nIndex, int nLen, int nBase, MetricVector& rVector );
 
     // Window
     virtual Rectangle               GetWindowExtentsRelative( Window *pRelativeWindow ) const;
     virtual void                    GrabFocus();
-    virtual css::uno::Reference< css::accessibility::XAccessible > GetAccessible( sal_Bool bCreate = sal_True );
+    virtual css::uno::Reference< css::accessibility::XAccessible > GetAccessible( bool bCreate = true );
     virtual Window*                 GetAccessibleParentWindow() const;
 
     /** Creates and returns the accessible object of the whole BrowseBox. */

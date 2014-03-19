@@ -187,7 +187,7 @@ namespace svt { namespace table
     }
 
 
-    sal_Bool TableControl::GoToCell(sal_Int32 _nColPos, sal_Int32 _nRowPos)
+    bool TableControl::GoToCell(sal_Int32 _nColPos, sal_Int32 _nRowPos)
     {
         return m_pImpl->goTo( _nColPos, _nRowPos );
     }
@@ -512,7 +512,7 @@ namespace svt { namespace table
     }
 
 
-    Reference< XAccessible > TableControl::GetAccessible( sal_Bool bCreate )
+    Reference< XAccessible > TableControl::GetAccessible( bool bCreate )
     {
         return Control::GetAccessible( bCreate );
     }
@@ -530,13 +530,13 @@ namespace svt { namespace table
     }
 
 
-    sal_Bool TableControl::HasRowHeader()
+    bool TableControl::HasRowHeader()
     {
         return GetModel()->hasRowHeaders();
     }
 
 
-    sal_Bool TableControl::HasColHeader()
+    bool TableControl::HasColHeader()
     {
         return GetModel()->hasColumnHeaders();
     }
@@ -554,12 +554,12 @@ namespace svt { namespace table
     }
 
 
-    sal_Bool TableControl::ConvertPointToControlIndex( sal_Int32& _rnIndex, const Point& _rPoint )
+    bool TableControl::ConvertPointToControlIndex( sal_Int32& _rnIndex, const Point& _rPoint )
     {
         sal_Int32 nRow = m_pImpl->getRowAtPoint( _rPoint );
         sal_Int32 nCol = m_pImpl->getColAtPoint( _rPoint );
         _rnIndex = nRow * GetColumnCount() + nCol;
-        return nRow >= 0 ? sal_True : sal_False;
+        return nRow >= 0;
     }
 
 
@@ -575,17 +575,17 @@ namespace svt { namespace table
     }
 
 
-    sal_Bool TableControl::HasRowHeader() const
+    bool TableControl::HasRowHeader() const
     {
         return GetModel()->hasRowHeaders();
     }
 
 
-    sal_Bool TableControl::ConvertPointToCellAddress( sal_Int32& _rnRow, sal_Int32& _rnColPos, const Point& _rPoint )
+    bool TableControl::ConvertPointToCellAddress( sal_Int32& _rnRow, sal_Int32& _rnColPos, const Point& _rPoint )
     {
         _rnRow = m_pImpl->getRowAtPoint( _rPoint );
         _rnColPos = m_pImpl->getColAtPoint( _rPoint );
-        return _rnRow >= 0 ? sal_True : sal_False;
+        return _rnRow >= 0;
     }
 
 
@@ -624,20 +624,20 @@ namespace svt { namespace table
     }
 
 
-    Rectangle TableControl::calcHeaderRect(sal_Bool _bIsColumnBar,sal_Bool _bOnScreen)
+    Rectangle TableControl::calcHeaderRect(bool _bIsColumnBar, bool _bOnScreen)
     {
         (void)_bOnScreen;
         return m_pImpl->calcHeaderRect( _bIsColumnBar ? false : true );
     }
 
 
-    Rectangle TableControl::calcHeaderCellRect( sal_Bool _bIsColumnBar, sal_Int32 nPos )
+    Rectangle TableControl::calcHeaderCellRect( bool _bIsColumnBar, sal_Int32 nPos )
     {
         return m_pImpl->calcHeaderCellRect( _bIsColumnBar, nPos );
     }
 
 
-    Rectangle TableControl::calcTableRect(sal_Bool _bOnScreen)
+    Rectangle TableControl::calcTableRect(bool _bOnScreen)
     {
         (void)_bOnScreen;
         return m_pImpl->calcTableRect();

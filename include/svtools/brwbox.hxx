@@ -506,7 +506,7 @@ public:
     // selections
     virtual void    SetNoSelection();
     virtual void    SelectAll();
-    virtual void    SelectRow( long nRow, sal_Bool _bSelect = sal_True, sal_Bool bExpand = sal_True );
+    virtual void    SelectRow( long nRow, bool _bSelect = true, bool bExpand = true );
     void            SelectColumnPos( sal_uInt16 nCol, sal_Bool _bSelect = sal_True )
                         { SelectColumnPos( nCol, _bSelect, sal_True); }
     void            SelectColumnId( sal_uInt16 nColId, sal_Bool _bSelect = sal_True )
@@ -641,7 +641,7 @@ public:
         @return
             the Rectangle
     */
-    virtual Rectangle calcHeaderRect(sal_Bool _bIsColumnBar,sal_Bool _bOnScreen = sal_True);
+    virtual Rectangle calcHeaderRect(bool _bIsColumnBar, bool _bOnScreen = true);
 
     /** calculates the Rectangle of the table
         @param  _bOnScreen
@@ -649,7 +649,7 @@ public:
         @return
             the Rectangle
     */
-    virtual Rectangle calcTableRect(sal_Bool _bOnScreen = sal_True);
+    virtual Rectangle calcTableRect(bool _bOnScreen = true);
 
     /**
         @param  _nRowId
@@ -661,7 +661,7 @@ public:
         @return
             the Rectangle
     */
-    virtual Rectangle GetFieldRectPixelAbs(sal_Int32 _nRowId,sal_uInt16 _nColId, sal_Bool _bIsHeader, sal_Bool _bOnScreen = sal_True);
+    virtual Rectangle GetFieldRectPixelAbs(sal_Int32 _nRowId, sal_uInt16 _nColId, bool _bIsHeader, bool _bOnScreen = true);
 
     /// return <TRUE/> if and only if the accessible object for this instance has been created and is alive
     sal_Bool isAccessibleAlive( ) const;
@@ -713,7 +713,7 @@ public:
         @param rnColumnId  Out-parameter that takes the column ID.
         @param rPoint  The position in pixels relative to the data window.
         @return <TRUE/>, if the point could be converted to a valid address. */
-    virtual sal_Bool ConvertPointToCellAddress(
+    virtual bool ConvertPointToCellAddress(
         sal_Int32& rnRow, sal_uInt16& rnColumnId, const Point& rPoint );
 
     /** Converts a point relative to the row header bar origin to a row header
@@ -721,21 +721,21 @@ public:
         @param rnRow  Out-parameter that takes the row index.
         @param rPoint  The position in pixels relative to the header bar.
         @return <TRUE/>, if the point could be converted to a valid index. */
-    virtual sal_Bool ConvertPointToRowHeader( sal_Int32& rnRow, const Point& rPoint );
+    virtual bool ConvertPointToRowHeader( sal_Int32& rnRow, const Point& rPoint );
 
     /** Converts a point relative to the column header bar origin to a column
         header index.
         @param rnColumnId  Out-parameter that takes the column ID.
         @param rPoint  The position in pixels relative to the header bar.
         @return <TRUE/>, if the point could be converted to a valid index. */
-    virtual sal_Bool ConvertPointToColumnHeader( sal_uInt16& rnColumnPos, const Point& rPoint );
+    virtual bool ConvertPointToColumnHeader( sal_uInt16& rnColumnPos, const Point& rPoint );
 
     /** Converts a point relative to the BrowseBox origin to the index of an
         existing control.
         @param rnRow  Out-parameter that takes the 0-based control index.
         @param rPoint  The position in pixels relative to the BrowseBox.
         @return <TRUE/>, if the point could be converted to a valid index. */
-    virtual sal_Bool ConvertPointToControlIndex( sal_Int32& rnIndex, const Point& rPoint );
+    virtual bool ConvertPointToControlIndex( sal_Int32& rnIndex, const Point& rPoint );
 
     // Object data and state --------------------------------------------------
 
@@ -783,21 +783,21 @@ public:
     // IAccessibleTableProvider
     virtual sal_Int32               GetCurrRow() const;
     virtual sal_uInt16              GetCurrColumn() const;
-    virtual sal_Bool                HasRowHeader() const;
-    virtual sal_Bool                IsCellFocusable() const;
-    virtual sal_Bool                    GoToCell( sal_Int32 _nRow, sal_uInt16 _nColumn );
-    virtual void                    SelectColumn( sal_uInt16 _nColumn, sal_Bool _bSelect = sal_True );
-    virtual sal_Bool                IsColumnSelected( long _nColumn ) const;
+    virtual bool                    HasRowHeader() const;
+    virtual bool                    IsCellFocusable() const;
+    virtual bool                    GoToCell( sal_Int32 _nRow, sal_uInt16 _nColumn );
+    virtual void                    SelectColumn( sal_uInt16 _nColumn, bool _bSelect = true );
+    virtual bool                    IsColumnSelected( long _nColumn ) const;
     virtual sal_Int32               GetSelectedRowCount() const;
     virtual sal_Int32               GetSelectedColumnCount() const;
     virtual void                    GetAllSelectedRows( css::uno::Sequence< sal_Int32 >& _rRows ) const;
     virtual void                    GetAllSelectedColumns( css::uno::Sequence< sal_Int32 >& _rColumns ) const;
-    virtual sal_Bool                IsCellVisible( sal_Int32 _nRow, sal_uInt16 _nColumn ) const;
+    virtual bool                    IsCellVisible( sal_Int32 _nRow, sal_uInt16 _nColumn ) const;
     virtual OUString                GetAccessibleCellText(long _nRow, sal_uInt16 _nColPos) const;
-    virtual sal_Bool                GetGlyphBoundRects( const Point& rOrigin, const OUString& rStr, int nIndex, int nLen, int nBase, MetricVector& rVector );
+    virtual bool                    GetGlyphBoundRects( const Point& rOrigin, const OUString& rStr, int nIndex, int nLen, int nBase, MetricVector& rVector );
     virtual Rectangle               GetWindowExtentsRelative( Window *pRelativeWindow ) const;
     virtual void                    GrabFocus();
-    virtual css::uno::Reference< css::accessibility::XAccessible > GetAccessible( sal_Bool bCreate = sal_True );
+    virtual css::uno::Reference< css::accessibility::XAccessible > GetAccessible( bool bCreate = true );
     virtual Window*                 GetAccessibleParentWindow() const;
     virtual Window*                 GetWindowInstance();
 

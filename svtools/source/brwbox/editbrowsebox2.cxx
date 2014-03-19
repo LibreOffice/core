@@ -49,7 +49,7 @@ Reference< XAccessible > EditBrowseBox::CreateAccessibleCheckBoxCell(long _nRow,
             _nRow,
             _nColumnPos,
             eState,
-            sal_True
+            true
         );
     }
     return xReturn;

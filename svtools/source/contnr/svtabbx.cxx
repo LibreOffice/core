@@ -756,19 +756,19 @@ OUString SvHeaderTabListBox::GetColumnDescription( sal_uInt16 _nColumn ) const
     return OUString( m_pImpl->m_pHeaderBar->GetItemText( m_pImpl->m_pHeaderBar->GetItemId( _nColumn ) ) );
 }
 
-sal_Bool SvHeaderTabListBox::HasRowHeader() const
+bool SvHeaderTabListBox::HasRowHeader() const
 {
-    return sal_False;
+    return false;
 }
 
-sal_Bool SvHeaderTabListBox::IsCellFocusable() const
+bool SvHeaderTabListBox::IsCellFocusable() const
 {
     return IsCellFocusEnabled();
 }
 
-sal_Bool SvHeaderTabListBox::GoToCell( sal_Int32 _nRow, sal_uInt16 _nColumn )
+bool SvHeaderTabListBox::GoToCell( sal_Int32 _nRow, sal_uInt16 _nColumn )
 {
-    sal_Bool bRet = ( IsCellFocusEnabled() == sal_True );
+    bool bRet = ( IsCellFocusEnabled() == sal_True );
     if ( bRet )
     {
         // first set cursor to _nRow
@@ -796,12 +796,12 @@ void SvHeaderTabListBox::SelectAll( sal_Bool bSelect, sal_Bool bPaint )
 }
 
 
-void SvHeaderTabListBox::SelectRow( long _nRow, sal_Bool _bSelect, sal_Bool )
+void SvHeaderTabListBox::SelectRow( long _nRow, bool _bSelect, bool )
 {
     Select( GetEntry( _nRow ), _bSelect );
 }
 
-void SvHeaderTabListBox::SelectColumn( sal_uInt16, sal_Bool )
+void SvHeaderTabListBox::SelectColumn( sal_uInt16, bool )
 {
 }
 
@@ -821,9 +821,9 @@ bool SvHeaderTabListBox::IsRowSelected( long _nRow ) const
     return ( pEntry && IsSelected( pEntry ) );
 }
 
-sal_Bool SvHeaderTabListBox::IsColumnSelected( long ) const
+bool SvHeaderTabListBox::IsColumnSelected( long ) const
 {
-    return sal_False;
+    return false;
 }
 
 void SvHeaderTabListBox::GetAllSelectedRows( ::com::sun::star::uno::Sequence< sal_Int32 >& ) const
@@ -834,9 +834,9 @@ void SvHeaderTabListBox::GetAllSelectedColumns( ::com::sun::star::uno::Sequence<
 {
 }
 
-sal_Bool SvHeaderTabListBox::IsCellVisible( sal_Int32, sal_uInt16 ) const
+bool SvHeaderTabListBox::IsCellVisible( sal_Int32, sal_uInt16 ) const
 {
-    return sal_True;
+    return true;
 }
 
 OUString SvHeaderTabListBox::GetAccessibleCellText( long _nRow, sal_uInt16 _nColumnPos ) const
@@ -844,7 +844,7 @@ OUString SvHeaderTabListBox::GetAccessibleCellText( long _nRow, sal_uInt16 _nCol
     return GetTabEntryText(_nRow, _nColumnPos);
 }
 
-Rectangle SvHeaderTabListBox::calcHeaderRect( sal_Bool _bIsColumnBar, sal_Bool _bOnScreen )
+Rectangle SvHeaderTabListBox::calcHeaderRect( bool _bIsColumnBar, bool _bOnScreen )
 {
     Rectangle aRect;
     if ( _bIsColumnBar )
@@ -858,7 +858,7 @@ Rectangle SvHeaderTabListBox::calcHeaderRect( sal_Bool _bIsColumnBar, sal_Bool _
     return aRect;
 }
 
-Rectangle SvHeaderTabListBox::calcTableRect( sal_Bool _bOnScreen )
+Rectangle SvHeaderTabListBox::calcTableRect( bool _bOnScreen )
 {
     Window* pParent = NULL;
     if ( !_bOnScreen )
@@ -868,14 +868,14 @@ Rectangle SvHeaderTabListBox::calcTableRect( sal_Bool _bOnScreen )
     return aRect;
 }
 
-Rectangle SvHeaderTabListBox::GetFieldRectPixelAbs( sal_Int32 _nRow, sal_uInt16 _nColumn, sal_Bool _bIsHeader, sal_Bool _bOnScreen )
+Rectangle SvHeaderTabListBox::GetFieldRectPixelAbs( sal_Int32 _nRow, sal_uInt16 _nColumn, bool _bIsHeader, bool _bOnScreen )
 {
     DBG_ASSERT( !_bIsHeader || 0 == _nRow, "invalid parameters" );
     Rectangle aRect;
     SvTreeListEntry* pEntry = GetEntry( _nRow );
     if ( pEntry )
     {
-        aRect = _bIsHeader ? calcHeaderRect( sal_True, sal_False ) : GetBoundingRect( pEntry );
+        aRect = _bIsHeader ? calcHeaderRect( true, false ) : GetBoundingRect( pEntry );
         Point aTopLeft = aRect.TopLeft();
         DBG_ASSERT( m_pImpl->m_pHeaderBar->GetItemCount() > _nColumn, "invalid column" );
         Rectangle aItemRect = m_pImpl->m_pHeaderBar->GetItemRect( m_pImpl->m_pHeaderBar->GetItemId( _nColumn ) );
@@ -921,7 +921,7 @@ Reference< XAccessible > SvHeaderTabListBox::CreateAccessibleCell( sal_Int32 _nR
         sal_Bool bIsCheckBox = IsCellCheckBox( _nRow, _nColumnPos, eState );
         if ( bIsCheckBox )
             xChild = m_pImpl->m_aFactoryAccess.getFactory().createAccessibleCheckBoxCell(
-                m_pAccessible->getAccessibleChild( 0 ), *this, NULL, _nRow, _nColumnPos, eState, sal_False );
+                m_pAccessible->getAccessibleChild( 0 ), *this, NULL, _nRow, _nColumnPos, eState, false );
         else
             xChild = m_pImpl->m_aFactoryAccess.getFactory().createAccessibleBrowseBoxTableCell(
                 m_pAccessible->getAccessibleChild( 0 ), *this, NULL, _nRow, _nColumnPos, OFFSET_NONE );
@@ -980,24 +980,24 @@ Reference< XAccessible > SvHeaderTabListBox::CreateAccessibleControl( sal_Int32 
     return xControl;
 }
 
-sal_Bool SvHeaderTabListBox::ConvertPointToControlIndex( sal_Int32&, const Point& )
+bool SvHeaderTabListBox::ConvertPointToControlIndex( sal_Int32&, const Point& )
 {
-    return sal_False;
+    return false;
 }
 
-sal_Bool SvHeaderTabListBox::ConvertPointToCellAddress( sal_Int32&, sal_uInt16&, const Point& )
+bool SvHeaderTabListBox::ConvertPointToCellAddress( sal_Int32&, sal_uInt16&, const Point& )
 {
-    return sal_False;
+    return false;
 }
 
-sal_Bool SvHeaderTabListBox::ConvertPointToRowHeader( sal_Int32&, const Point& )
+bool SvHeaderTabListBox::ConvertPointToRowHeader( sal_Int32&, const Point& )
 {
-    return sal_False;
+    return false;
 }
 
-sal_Bool SvHeaderTabListBox::ConvertPointToColumnHeader( sal_uInt16&, const Point& )
+bool SvHeaderTabListBox::ConvertPointToColumnHeader( sal_uInt16&, const Point& )
 {
-    return sal_False;
+    return false;
 }
 
 OUString SvHeaderTabListBox::GetAccessibleObjectName( ::svt::AccessibleBrowseBoxObjType _eType, sal_Int32 _nPos ) const
@@ -1158,7 +1158,7 @@ void SvHeaderTabListBox::GrabTableFocus()
     GrabFocus();
 }
 
-sal_Bool SvHeaderTabListBox::GetGlyphBoundRects( const Point& rOrigin, const OUString& rStr, int nIndex, int nLen, int nBase, MetricVector& rVector )
+bool SvHeaderTabListBox::GetGlyphBoundRects( const Point& rOrigin, const OUString& rStr, int nIndex, int nLen, int nBase, MetricVector& rVector )
 {
     return Control::GetGlyphBoundRects( rOrigin, rStr, nIndex, nLen, nBase, rVector );
 }
@@ -1173,7 +1173,7 @@ void SvHeaderTabListBox::GrabFocus()
     Control::GrabFocus();
 }
 
-Reference< XAccessible > SvHeaderTabListBox::GetAccessible( sal_Bool bCreate )
+Reference< XAccessible > SvHeaderTabListBox::GetAccessible( bool bCreate )
 {
     return Control::GetAccessible( bCreate );
 }

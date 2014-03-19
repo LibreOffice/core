@@ -494,12 +494,12 @@ void BrowseBox::ExpandRowSelection( const BrowserMouseEvent& rEvt )
             // down and up
             while ( rEvt.GetRow() < aSelRange.Max() )
             {   // ZTC/Mac bug - don't put these statements together!
-                SelectRow( aSelRange.Max(), bSelectThis, sal_True );
+                SelectRow( aSelRange.Max(), bSelectThis, true );
                 --aSelRange.Max();
             }
             while ( rEvt.GetRow() > aSelRange.Max() )
             {   // ZTC/Mac bug - don't put these statements together!
-                SelectRow( aSelRange.Max(), bSelectThis, sal_True );
+                SelectRow( aSelRange.Max(), bSelectThis, true );
                 ++aSelRange.Max();
             }
         }
@@ -513,7 +513,7 @@ void BrowseBox::ExpandRowSelection( const BrowserMouseEvent& rEvt )
                 --aSelRange.Max();
                 if ( !IsRowSelected( aSelRange.Max() ) )
                 {
-                    SelectRow( aSelRange.Max(), bSelectThis, sal_True );
+                    SelectRow( aSelRange.Max(), bSelectThis, true );
                     bSelect = true;
                 }
             }
@@ -522,7 +522,7 @@ void BrowseBox::ExpandRowSelection( const BrowserMouseEvent& rEvt )
                 ++aSelRange.Max();
                 if ( !IsRowSelected( aSelRange.Max() ) )
                 {
-                    SelectRow( aSelRange.Max(), bSelectThis, sal_True );
+                    SelectRow( aSelRange.Max(), bSelectThis, true );
                     bSelect = true;
                 }
             }
@@ -533,7 +533,7 @@ void BrowseBox::ExpandRowSelection( const BrowserMouseEvent& rEvt )
     }
     else
         if ( !bMultiSelection || !IsRowSelected( rEvt.GetRow() ) )
-            SelectRow( rEvt.GetRow(), sal_True );
+            SelectRow( rEvt.GetRow(), true );
 
     GoToRow( rEvt.GetRow(), sal_False );
     DoShowCursor( "ExpandRowSelection" );
@@ -1577,7 +1577,7 @@ void BrowseBox::MouseButtonDown( const BrowserMouseEvent& rEvt )
         if ( rEvt.GetRow() >= 0 )
         {
             GoToRow( rEvt.GetRow() );
-            SelectRow( rEvt.GetRow(), sal_True, sal_False );
+            SelectRow( rEvt.GetRow(), true, false );
         }
         else
         {
@@ -1668,7 +1668,7 @@ void BrowseBox::MouseButtonDown( const BrowserMouseEvent& rEvt )
                     // select directly
                     SetNoSelection();
                     GoToRow( rEvt.GetRow() );
-                    SelectRow( rEvt.GetRow(), sal_True );
+                    SelectRow( rEvt.GetRow(), true );
                     aSelRange = Range( rEvt.GetRow(), rEvt.GetRow() );
                     bSelect = true;
                 }
@@ -1727,7 +1727,7 @@ void BrowseBox::MouseButtonUp( const BrowserMouseEvent &rEvt )
     {
         aSelRange = Range( rEvt.GetRow(), rEvt.GetRow() );
         if ( bExtendedMode )
-            SelectRow( rEvt.GetRow(), sal_False );
+            SelectRow( rEvt.GetRow(), false );
         else
         {
             SetNoSelection();
@@ -1736,7 +1736,7 @@ void BrowseBox::MouseButtonUp( const BrowserMouseEvent &rEvt )
             else
             {
                 GoToRow( rEvt.GetRow() );
-                SelectRow( rEvt.GetRow(), sal_True );
+                SelectRow( rEvt.GetRow(), true );
             }
         }
         bSelect = true;
@@ -1886,10 +1886,10 @@ void BrowseBox::Dispatch( sal_uInt16 nId )
                 long nRow = GetCurRow();
                 sal_Bool bLocalSelect = ( !IsRowSelected( nRow ) ||
                                  GetSelectRowCount() == 1 || IsRowSelected( nRow - 1 ) );
-                SelectRow( nRow, bLocalSelect, sal_True );
+                SelectRow( nRow, bLocalSelect, true );
                 bDone = GoToRow( GetCurRow() + 1 , sal_False );
                 if ( bDone )
-                    SelectRow( GetCurRow(), sal_True, sal_True );
+                    SelectRow( GetCurRow(), true, true );
             }
             else
                 bDone = ScrollRows( 1 ) != 0;
@@ -1903,10 +1903,10 @@ void BrowseBox::Dispatch( sal_uInt16 nId )
                 long nRow = GetCurRow();
                 sal_Bool bLocalSelect = ( !IsRowSelected( nRow ) ||
                                  GetSelectRowCount() == 1 || IsRowSelected( nRow + 1 ) );
-                SelectRow( nCurRow, bLocalSelect, sal_True );
+                SelectRow( nCurRow, bLocalSelect, true );
                 bDone = GoToRow( nRow - 1 , sal_False );
                 if ( bDone )
-                    SelectRow( GetCurRow(), sal_True, sal_True );
+                    SelectRow( GetCurRow(), true, true );
             }
             break;
         case BROWSER_CURSORPAGEDOWN:
@@ -1976,12 +1976,12 @@ void BrowseBox::Dispatch( sal_uInt16 nId )
             break;
         case BROWSER_ENHANCESELECTION:
             if ( GetRowCount() )
-                SelectRow( GetCurRow(), !IsRowSelected( GetCurRow() ), sal_True );
+                SelectRow( GetCurRow(), !IsRowSelected( GetCurRow() ), true );
             bDone = sal_True;
             break;
         case BROWSER_SELECT:
             if ( GetRowCount() )
-                SelectRow( GetCurRow(), !IsRowSelected( GetCurRow() ), sal_False );
+                SelectRow( GetCurRow(), !IsRowSelected( GetCurRow() ), false );
             bDone = sal_True;
             break;
         case BROWSER_MOVECOLUMNLEFT:
@@ -2034,7 +2034,7 @@ void BrowseBox::SetCursorColor(const Color& _rCol)
     DoShowCursor("SetCursorColor");
 }
 
-Rectangle BrowseBox::calcHeaderRect(sal_Bool _bIsColumnBar,sal_Bool _bOnScreen)
+Rectangle BrowseBox::calcHeaderRect(bool _bIsColumnBar, bool _bOnScreen)
 {
     Window* pParent = NULL;
     if ( !_bOnScreen )
@@ -2058,14 +2058,14 @@ Rectangle BrowseBox::calcHeaderRect(sal_Bool _bIsColumnBar,sal_Bool _bOnScreen)
     return Rectangle(aTopLeft,Size(nWidth,nHeight));
 }
 
-Rectangle BrowseBox::calcTableRect(sal_Bool _bOnScreen)
+Rectangle BrowseBox::calcTableRect(bool _bOnScreen)
 {
     Window* pParent = NULL;
     if ( !_bOnScreen )
         pParent = GetAccessibleParentWindow();
 
     Rectangle aRect( GetWindowExtentsRelative( pParent ) );
-    Rectangle aRowBar = calcHeaderRect(sal_False,pParent == NULL);
+    Rectangle aRowBar = calcHeaderRect(false, pParent == NULL);
 
     long nX = aRowBar.Right() - aRect.Left();
     long nY = aRowBar.Top() - aRect.Top();
@@ -2074,7 +2074,7 @@ Rectangle BrowseBox::calcTableRect(sal_Bool _bOnScreen)
     return Rectangle(aRowBar.TopRight(), Size(aSize.A() - nX, aSize.B() - nY - aHScroll.GetSizePixel().Height()) );
 }
 
-Rectangle BrowseBox::GetFieldRectPixelAbs( sal_Int32 _nRowId,sal_uInt16 _nColId, sal_Bool /*_bIsHeader*/, sal_Bool _bOnScreen )
+Rectangle BrowseBox::GetFieldRectPixelAbs( sal_Int32 _nRowId, sal_uInt16 _nColId, bool /*_bIsHeader*/, bool _bOnScreen )
 {
     Window* pParent = NULL;
     if ( !_bOnScreen )

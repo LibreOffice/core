@@ -68,38 +68,38 @@ class SvtAccessibilityOptions_Impl
 {
 private:
     css::uno::Reference< css::container::XNameAccess > m_xCfg;
-    sal_Bool                                           bIsModified;
+    bool                                               bIsModified;
 
 public:
     SvtAccessibilityOptions_Impl();
     ~SvtAccessibilityOptions_Impl();
 
     void        SetVCLSettings();
-    sal_Bool    GetAutoDetectSystemHC();
-    sal_Bool    GetIsForPagePreviews() const;
-    sal_Bool    GetIsHelpTipsDisappear() const;
-    sal_Bool    GetIsAllowAnimatedGraphics() const;
-    sal_Bool    GetIsAllowAnimatedText() const;
-    sal_Bool    GetIsAutomaticFontColor() const;
-    bool    GetIsSystemFont() const;
+    bool        GetAutoDetectSystemHC();
+    bool        GetIsForPagePreviews() const;
+    bool        GetIsHelpTipsDisappear() const;
+    bool        GetIsAllowAnimatedGraphics() const;
+    bool        GetIsAllowAnimatedText() const;
+    bool        GetIsAutomaticFontColor() const;
+    bool        GetIsSystemFont() const;
     sal_Int16   GetHelpTipSeconds() const;
-    sal_Bool    IsSelectionInReadonly() const;
+    bool        IsSelectionInReadonly() const;
     sal_Int16   GetEdgeBlending() const;
     sal_Int16   GetListBoxMaximumLineCount() const;
     sal_Int16   GetColorValueSetColumnCount() const;
-    sal_Bool    GetPreviewUsesCheckeredBackground() const;
+    bool        GetPreviewUsesCheckeredBackground() const;
 
-    void        SetAutoDetectSystemHC(sal_Bool bSet);
-    void        SetIsForPagePreviews(sal_Bool bSet);
-    void        SetIsHelpTipsDisappear(sal_Bool bSet);
-    void        SetIsAllowAnimatedGraphics(sal_Bool bSet);
-    void        SetIsAllowAnimatedText(sal_Bool bSet);
-    void        SetIsAutomaticFontColor(sal_Bool bSet);
-    void        SetIsSystemFont(sal_Bool bSet);
+    void        SetAutoDetectSystemHC(bool bSet);
+    void        SetIsForPagePreviews(bool bSet);
+    void        SetIsHelpTipsDisappear(bool bSet);
+    void        SetIsAllowAnimatedGraphics(bool bSet);
+    void        SetIsAllowAnimatedText(bool bSet);
+    void        SetIsAutomaticFontColor(bool bSet);
+    void        SetIsSystemFont(bool bSet);
     void        SetHelpTipSeconds(sal_Int16 nSet);
-    void        SetSelectionInReadonly(sal_Bool bSet);
+    void        SetSelectionInReadonly(bool bSet);
 
-    sal_Bool    IsModified() const { return bIsModified; };
+    bool        IsModified() const { return bIsModified; };
 };
 
 // initialization of static members --------------------------------------
@@ -127,7 +127,7 @@ SvtAccessibilityOptions_Impl::SvtAccessibilityOptions_Impl()
             ::comphelper::ConfigurationHelper::E_STANDARD),
             css::uno::UNO_QUERY);
 
-        bIsModified = sal_False;
+        bIsModified = false;
     }
     catch(const css::uno::Exception& ex)
     {
@@ -141,7 +141,7 @@ SvtAccessibilityOptions_Impl::~SvtAccessibilityOptions_Impl()
 }
 
 
-sal_Bool SvtAccessibilityOptions_Impl::GetAutoDetectSystemHC()
+bool SvtAccessibilityOptions_Impl::GetAutoDetectSystemHC()
 {
     css::uno::Reference< css::beans::XPropertySet > xNode(m_xCfg, css::uno::UNO_QUERY);
     sal_Bool                                        bRet = sal_True;
@@ -159,7 +159,7 @@ sal_Bool SvtAccessibilityOptions_Impl::GetAutoDetectSystemHC()
     return bRet;
 }
 
-sal_Bool SvtAccessibilityOptions_Impl::GetIsForPagePreviews() const
+bool SvtAccessibilityOptions_Impl::GetIsForPagePreviews() const
 {
     css::uno::Reference< css::beans::XPropertySet > xNode(m_xCfg, css::uno::UNO_QUERY);
     sal_Bool                                        bRet = sal_True;
@@ -176,7 +176,7 @@ sal_Bool SvtAccessibilityOptions_Impl::GetIsForPagePreviews() const
     return bRet;
 }
 
-sal_Bool SvtAccessibilityOptions_Impl::GetIsHelpTipsDisappear() const
+bool SvtAccessibilityOptions_Impl::GetIsHelpTipsDisappear() const
 {
     css::uno::Reference< css::beans::XPropertySet > xNode(m_xCfg, css::uno::UNO_QUERY);
     sal_Bool                                        bRet = sal_True;
@@ -194,7 +194,7 @@ sal_Bool SvtAccessibilityOptions_Impl::GetIsHelpTipsDisappear() const
     return bRet;
 }
 
-sal_Bool SvtAccessibilityOptions_Impl::GetIsAllowAnimatedGraphics() const
+bool SvtAccessibilityOptions_Impl::GetIsAllowAnimatedGraphics() const
 {
     css::uno::Reference< css::beans::XPropertySet > xNode(m_xCfg, css::uno::UNO_QUERY);
     sal_Bool                                        bRet = sal_True;
@@ -212,7 +212,7 @@ sal_Bool SvtAccessibilityOptions_Impl::GetIsAllowAnimatedGraphics() const
     return bRet;
 }
 
-sal_Bool SvtAccessibilityOptions_Impl::GetIsAllowAnimatedText() const
+bool SvtAccessibilityOptions_Impl::GetIsAllowAnimatedText() const
 {
     css::uno::Reference< css::beans::XPropertySet > xNode(m_xCfg, css::uno::UNO_QUERY);
     sal_Bool                                        bRet = sal_True;
@@ -230,7 +230,7 @@ sal_Bool SvtAccessibilityOptions_Impl::GetIsAllowAnimatedText() const
     return bRet;
 }
 
-sal_Bool SvtAccessibilityOptions_Impl::GetIsAutomaticFontColor() const
+bool SvtAccessibilityOptions_Impl::GetIsAutomaticFontColor() const
 {
     css::uno::Reference< css::beans::XPropertySet > xNode(m_xCfg, css::uno::UNO_QUERY);
     sal_Bool                                        bRet = sal_False;
@@ -284,7 +284,7 @@ sal_Int16 SvtAccessibilityOptions_Impl::GetHelpTipSeconds() const
     return nRet;
 }
 
-sal_Bool SvtAccessibilityOptions_Impl::IsSelectionInReadonly() const
+bool SvtAccessibilityOptions_Impl::IsSelectionInReadonly() const
 {
     css::uno::Reference< css::beans::XPropertySet > xNode(m_xCfg, css::uno::UNO_QUERY);
     sal_Bool                                        bRet = sal_False;
@@ -356,7 +356,7 @@ sal_Int16 SvtAccessibilityOptions_Impl::GetColorValueSetColumnCount() const
     return nRet;
 }
 
-sal_Bool SvtAccessibilityOptions_Impl::GetPreviewUsesCheckeredBackground() const
+bool SvtAccessibilityOptions_Impl::GetPreviewUsesCheckeredBackground() const
 {
     css::uno::Reference< css::beans::XPropertySet > xNode(m_xCfg, css::uno::UNO_QUERY);
     sal_Bool bRet = sal_False;
@@ -374,7 +374,7 @@ sal_Bool SvtAccessibilityOptions_Impl::GetPreviewUsesCheckeredBackground() const
     return bRet;
 }
 
-void SvtAccessibilityOptions_Impl::SetAutoDetectSystemHC(sal_Bool bSet)
+void SvtAccessibilityOptions_Impl::SetAutoDetectSystemHC(bool bSet)
 {
     css::uno::Reference< css::beans::XPropertySet > xNode(m_xCfg, css::uno::UNO_QUERY);
 
@@ -385,7 +385,7 @@ void SvtAccessibilityOptions_Impl::SetAutoDetectSystemHC(sal_Bool bSet)
             xNode->setPropertyValue(s_sAutoDetectSystemHC, css::uno::makeAny(bSet));
             ::comphelper::ConfigurationHelper::flush(m_xCfg);
             svtools::ColorConfig().Reload();
-            bIsModified = sal_True;
+            bIsModified = true;
         }
     }
     catch(const css::uno::Exception& ex)
@@ -394,7 +394,7 @@ void SvtAccessibilityOptions_Impl::SetAutoDetectSystemHC(sal_Bool bSet)
     }
 }
 
-void SvtAccessibilityOptions_Impl::SetIsForPagePreviews(sal_Bool bSet)
+void SvtAccessibilityOptions_Impl::SetIsForPagePreviews(bool bSet)
 {
     css::uno::Reference< css::beans::XPropertySet > xNode(m_xCfg, css::uno::UNO_QUERY);
 
@@ -405,7 +405,7 @@ void SvtAccessibilityOptions_Impl::SetIsForPagePreviews(sal_Bool bSet)
             xNode->setPropertyValue(s_sIsForPagePreviews, css::uno::makeAny(bSet));
             ::comphelper::ConfigurationHelper::flush(m_xCfg);
 
-            bIsModified = sal_True;
+            bIsModified = true;
         }
     }
     catch(const css::uno::Exception& ex)
@@ -414,7 +414,7 @@ void SvtAccessibilityOptions_Impl::SetIsForPagePreviews(sal_Bool bSet)
     }
 }
 
-void SvtAccessibilityOptions_Impl::SetIsHelpTipsDisappear(sal_Bool bSet)
+void SvtAccessibilityOptions_Impl::SetIsHelpTipsDisappear(bool bSet)
 {
     css::uno::Reference< css::beans::XPropertySet > xNode(m_xCfg, css::uno::UNO_QUERY);
 
@@ -425,7 +425,7 @@ void SvtAccessibilityOptions_Impl::SetIsHelpTipsDisappear(sal_Bool bSet)
             xNode->setPropertyValue(s_sIsHelpTipsDisappear, css::uno::makeAny(bSet));
             ::comphelper::ConfigurationHelper::flush(m_xCfg);
 
-            bIsModified = sal_True;
+            bIsModified = true;
         }
     }
     catch(const css::uno::Exception& ex)
@@ -434,7 +434,7 @@ void SvtAccessibilityOptions_Impl::SetIsHelpTipsDisappear(sal_Bool bSet)
     }
 }
 
-void SvtAccessibilityOptions_Impl::SetIsAllowAnimatedGraphics(sal_Bool bSet)
+void SvtAccessibilityOptions_Impl::SetIsAllowAnimatedGraphics(bool bSet)
 {
     css::uno::Reference< css::beans::XPropertySet > xNode(m_xCfg, css::uno::UNO_QUERY);
 
@@ -445,7 +445,7 @@ void SvtAccessibilityOptions_Impl::SetIsAllowAnimatedGraphics(sal_Bool bSet)
             xNode->setPropertyValue(s_sIsAllowAnimatedGraphics, css::uno::makeAny(bSet));
             ::comphelper::ConfigurationHelper::flush(m_xCfg);
 
-            bIsModified = sal_True;
+            bIsModified = true;
         }
     }
     catch(const css::uno::Exception& ex)
@@ -454,7 +454,7 @@ void SvtAccessibilityOptions_Impl::SetIsAllowAnimatedGraphics(sal_Bool bSet)
     }
 }
 
-void SvtAccessibilityOptions_Impl::SetIsAllowAnimatedText(sal_Bool bSet)
+void SvtAccessibilityOptions_Impl::SetIsAllowAnimatedText(bool bSet)
 {
     css::uno::Reference< css::beans::XPropertySet > xNode(m_xCfg, css::uno::UNO_QUERY);
 
@@ -465,7 +465,7 @@ void SvtAccessibilityOptions_Impl::SetIsAllowAnimatedText(sal_Bool bSet)
             xNode->setPropertyValue(s_sIsAllowAnimatedText, css::uno::makeAny(bSet));
             ::comphelper::ConfigurationHelper::flush(m_xCfg);
 
-            bIsModified = sal_True;
+            bIsModified = true;
         }
     }
     catch(const css::uno::Exception& ex)
@@ -474,7 +474,7 @@ void SvtAccessibilityOptions_Impl::SetIsAllowAnimatedText(sal_Bool bSet)
     }
 }
 
-void SvtAccessibilityOptions_Impl::SetIsAutomaticFontColor(sal_Bool bSet)
+void SvtAccessibilityOptions_Impl::SetIsAutomaticFontColor(bool bSet)
 {
     css::uno::Reference< css::beans::XPropertySet > xNode(m_xCfg, css::uno::UNO_QUERY);
 
@@ -485,7 +485,7 @@ void SvtAccessibilityOptions_Impl::SetIsAutomaticFontColor(sal_Bool bSet)
             xNode->setPropertyValue(s_sIsAutomaticFontColor, css::uno::makeAny(bSet));
             ::comphelper::ConfigurationHelper::flush(m_xCfg);
 
-            bIsModified = sal_True;
+            bIsModified = true;
         }
     }
     catch(const css::uno::Exception& ex)
@@ -494,7 +494,7 @@ void SvtAccessibilityOptions_Impl::SetIsAutomaticFontColor(sal_Bool bSet)
     }
 }
 
-void SvtAccessibilityOptions_Impl::SetIsSystemFont(sal_Bool bSet)
+void SvtAccessibilityOptions_Impl::SetIsSystemFont(bool bSet)
 {
     css::uno::Reference< css::beans::XPropertySet > xNode(m_xCfg, css::uno::UNO_QUERY);
 
@@ -505,7 +505,7 @@ void SvtAccessibilityOptions_Impl::SetIsSystemFont(sal_Bool bSet)
             xNode->setPropertyValue(s_sIsSystemFont, css::uno::makeAny(bSet));
             ::comphelper::ConfigurationHelper::flush(m_xCfg);
 
-            bIsModified = sal_True;
+            bIsModified = true;
         }
     }
     catch(const css::uno::Exception& ex)
@@ -525,7 +525,7 @@ void SvtAccessibilityOptions_Impl::SetHelpTipSeconds(sal_Int16 nSet)
             xNode->setPropertyValue(s_sHelpTipSeconds, css::uno::makeAny(nSet));
             ::comphelper::ConfigurationHelper::flush(m_xCfg);
 
-            bIsModified = sal_True;
+            bIsModified = true;
         }
     }
     catch(const css::uno::Exception& ex)
@@ -534,7 +534,7 @@ void SvtAccessibilityOptions_Impl::SetHelpTipSeconds(sal_Int16 nSet)
     }
 }
 
-void SvtAccessibilityOptions_Impl::SetSelectionInReadonly(sal_Bool bSet)
+void SvtAccessibilityOptions_Impl::SetSelectionInReadonly(bool bSet)
 {
     css::uno::Reference< css::beans::XPropertySet > xNode(m_xCfg, css::uno::UNO_QUERY);
 
@@ -545,7 +545,7 @@ void SvtAccessibilityOptions_Impl::SetSelectionInReadonly(sal_Bool bSet)
             xNode->setPropertyValue(s_sIsSelectionInReadonly, css::uno::makeAny(bSet));
             ::comphelper::ConfigurationHelper::flush(m_xCfg);
 
-            bIsModified = sal_True;
+            bIsModified = true;
         }
     }
     catch(const css::uno::Exception& ex)
@@ -661,7 +661,7 @@ void SvtAccessibilityOptions::Notify( SfxBroadcaster&, const SfxHint& rHint )
 
 
 
-sal_Bool SvtAccessibilityOptions::IsModified() const
+bool SvtAccessibilityOptions::IsModified() const
 {
     return sm_pSingleImplConfig->IsModified();
 }
@@ -672,27 +672,27 @@ void SvtAccessibilityOptions::Commit()
 
 
 
-sal_Bool SvtAccessibilityOptions::GetAutoDetectSystemHC() const
+bool SvtAccessibilityOptions::GetAutoDetectSystemHC() const
 {
     return sm_pSingleImplConfig->GetAutoDetectSystemHC();
 }
-sal_Bool SvtAccessibilityOptions::GetIsForPagePreviews() const
+bool SvtAccessibilityOptions::GetIsForPagePreviews() const
 {
     return sm_pSingleImplConfig->GetIsForPagePreviews();
 }
-sal_Bool SvtAccessibilityOptions::GetIsHelpTipsDisappear() const
+bool SvtAccessibilityOptions::GetIsHelpTipsDisappear() const
 {
     return sm_pSingleImplConfig->GetIsHelpTipsDisappear();
 }
-sal_Bool SvtAccessibilityOptions::GetIsAllowAnimatedGraphics() const
+bool SvtAccessibilityOptions::GetIsAllowAnimatedGraphics() const
 {
     return sm_pSingleImplConfig->GetIsAllowAnimatedGraphics();
 }
-sal_Bool SvtAccessibilityOptions::GetIsAllowAnimatedText() const
+bool SvtAccessibilityOptions::GetIsAllowAnimatedText() const
 {
     return sm_pSingleImplConfig->GetIsAllowAnimatedText();
 }
-sal_Bool SvtAccessibilityOptions::GetIsAutomaticFontColor() const
+bool SvtAccessibilityOptions::GetIsAutomaticFontColor() const
 {
     return sm_pSingleImplConfig->GetIsAutomaticFontColor();
 }
@@ -704,37 +704,37 @@ sal_Int16 SvtAccessibilityOptions::GetHelpTipSeconds() const
 {
     return sm_pSingleImplConfig->GetHelpTipSeconds();
 }
-sal_Bool SvtAccessibilityOptions::IsSelectionInReadonly() const
+bool SvtAccessibilityOptions::IsSelectionInReadonly() const
 {
     return sm_pSingleImplConfig->IsSelectionInReadonly();
 }
 
 
-void SvtAccessibilityOptions::SetAutoDetectSystemHC(sal_Bool bSet)
+void SvtAccessibilityOptions::SetAutoDetectSystemHC(bool bSet)
 {
     sm_pSingleImplConfig->SetAutoDetectSystemHC(bSet);
 }
-void SvtAccessibilityOptions::SetIsForPagePreviews(sal_Bool bSet)
+void SvtAccessibilityOptions::SetIsForPagePreviews(bool bSet)
 {
     sm_pSingleImplConfig->SetIsForPagePreviews(bSet);
 }
-void SvtAccessibilityOptions::SetIsHelpTipsDisappear(sal_Bool bSet)
+void SvtAccessibilityOptions::SetIsHelpTipsDisappear(bool bSet)
 {
     sm_pSingleImplConfig->SetIsHelpTipsDisappear(bSet);
 }
-void SvtAccessibilityOptions::SetIsAllowAnimatedGraphics(sal_Bool bSet)
+void SvtAccessibilityOptions::SetIsAllowAnimatedGraphics(bool bSet)
 {
     sm_pSingleImplConfig->SetIsAllowAnimatedGraphics(bSet);
 }
-void SvtAccessibilityOptions::SetIsAllowAnimatedText(sal_Bool bSet)
+void SvtAccessibilityOptions::SetIsAllowAnimatedText(bool bSet)
 {
     sm_pSingleImplConfig->SetIsAllowAnimatedText(bSet);
 }
-void SvtAccessibilityOptions::SetIsAutomaticFontColor(sal_Bool bSet)
+void SvtAccessibilityOptions::SetIsAutomaticFontColor(bool bSet)
 {
     sm_pSingleImplConfig->SetIsAutomaticFontColor(bSet);
 }
-void SvtAccessibilityOptions::SetIsSystemFont(sal_Bool bSet)
+void SvtAccessibilityOptions::SetIsSystemFont(bool bSet)
 {
     sm_pSingleImplConfig->SetIsSystemFont(bSet);
 }
@@ -742,7 +742,7 @@ void SvtAccessibilityOptions::SetHelpTipSeconds(sal_Int16 nSet)
 {
     sm_pSingleImplConfig->SetHelpTipSeconds(nSet);
 }
-void SvtAccessibilityOptions::SetSelectionInReadonly(sal_Bool bSet)
+void SvtAccessibilityOptions::SetSelectionInReadonly(bool bSet)
 {
     sm_pSingleImplConfig->SetSelectionInReadonly(bSet);
 }

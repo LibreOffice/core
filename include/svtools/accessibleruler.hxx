@@ -191,10 +191,10 @@ protected:
     virtual void SAL_CALL disposing();
 
     /// @returns true if it's disposed or in disposing
-    inline sal_Bool IsAlive( void ) const;
+    inline bool IsAlive( void ) const;
 
     /// @returns true if it's not disposed and no in disposing
-    inline sal_Bool IsNotAlive( void ) const;
+    inline bool IsNotAlive( void ) const;
 
     /// throws the exception DisposedException if it's not alive
     void ThrowExceptionIfNotAlive( void ) throw( ::com::sun::star::lang::DisposedException );
@@ -222,12 +222,12 @@ private:
 
 };
 
-inline sal_Bool SvtRulerAccessible::IsAlive( void ) const
+inline bool SvtRulerAccessible::IsAlive( void ) const
 {
     return !rBHelper.bDisposed && !rBHelper.bInDispose;
 }
 
-inline sal_Bool SvtRulerAccessible::IsNotAlive( void ) const
+inline bool SvtRulerAccessible::IsNotAlive( void ) const
 {
     return rBHelper.bDisposed || rBHelper.bInDispose;
 }

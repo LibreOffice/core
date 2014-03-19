@@ -131,7 +131,7 @@ namespace
             nCol = 0;
         }
 
-        Rectangle aRet(_pBrowseBox->GetFieldRectPixelAbs( nRow , nCol, sal_True, _bOnScreen));
+        Rectangle aRet(_pBrowseBox->GetFieldRectPixelAbs( nRow , nCol, true, _bOnScreen));
         return Rectangle(aRet.TopLeft() - Point(0,aRet.GetHeight()),aRet.GetSize());
     }
 }

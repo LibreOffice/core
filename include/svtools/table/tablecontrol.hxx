@@ -153,7 +153,7 @@ namespace svt { namespace table
         SVT_DLLPRIVATE virtual css::uno::Reference< css::accessibility::XAccessible > CreateAccessible();
         SVT_DLLPRIVATE virtual css::uno::Reference< css::accessibility::XAccessible > CreateAccessibleControl( sal_Int32 _nIndex );
         SVT_DLLPRIVATE virtual OUString GetAccessibleObjectName(AccessibleTableControlObjType eObjType, sal_Int32 _nRow, sal_Int32 _nCol) const;
-        SVT_DLLPRIVATE virtual sal_Bool GoToCell( sal_Int32 _nColumnPos, sal_Int32 _nRow );
+        SVT_DLLPRIVATE virtual bool GoToCell( sal_Int32 _nColumnPos, sal_Int32 _nRow );
         SVT_DLLPRIVATE virtual OUString GetAccessibleObjectDescription(AccessibleTableControlObjType eObjType, sal_Int32 _nPosition = -1) const;
         SVT_DLLPRIVATE virtual void FillAccessibleStateSet( ::utl::AccessibleStateSetHelper& rStateSet, AccessibleTableControlObjType eObjType ) const;
 
@@ -168,18 +168,18 @@ namespace svt { namespace table
         // IAccessibleTable
         virtual Rectangle GetWindowExtentsRelative( Window *pRelativeWindow ) const;
         virtual void GrabFocus();
-        virtual css::uno::Reference< css::accessibility::XAccessible > GetAccessible( sal_Bool bCreate = sal_True );
+        virtual css::uno::Reference< css::accessibility::XAccessible > GetAccessible( bool bCreate = true );
         virtual Window* GetAccessibleParentWindow() const;
         virtual Window* GetWindowInstance();
         virtual sal_Int32 GetAccessibleControlCount() const;
-        virtual sal_Bool ConvertPointToControlIndex( sal_Int32& _rnIndex, const Point& _rPoint );
+        virtual bool ConvertPointToControlIndex( sal_Int32& _rnIndex, const Point& _rPoint );
         virtual long GetRowCount() const;
         virtual long GetColumnCount() const;
-        virtual sal_Bool HasRowHeader() const;
-        virtual sal_Bool ConvertPointToCellAddress( sal_Int32& _rnRow, sal_Int32& _rnColPos, const Point& _rPoint );
-        virtual Rectangle calcHeaderRect( sal_Bool _bIsColumnBar, sal_Bool _bOnScreen = sal_True );
-        virtual Rectangle calcHeaderCellRect( sal_Bool _bIsColumnBar, sal_Int32 nPos);
-        virtual Rectangle calcTableRect( sal_Bool _bOnScreen = sal_True );
+        virtual bool HasRowHeader() const;
+        virtual bool ConvertPointToCellAddress( sal_Int32& _rnRow, sal_Int32& _rnColPos, const Point& _rPoint );
+        virtual Rectangle calcHeaderRect( bool _bIsColumnBar, bool _bOnScreen = true );
+        virtual Rectangle calcHeaderCellRect( bool _bIsColumnBar, sal_Int32 nPos);
+        virtual Rectangle calcTableRect( bool _bOnScreen = true );
         virtual Rectangle calcCellRect( sal_Int32 _nRowPos, sal_Int32 _nColPos );
         virtual Rectangle GetFieldCharacterBounds(sal_Int32 _nRow,sal_Int32 _nColumnPos,sal_Int32 nIndex);
         virtual sal_Int32 GetFieldIndexAtPoint(sal_Int32 _nRow,sal_Int32 _nColumnPos,const Point& _rPoint);
@@ -189,8 +189,8 @@ namespace svt { namespace table
         virtual OUString GetColumnDescription( sal_uInt16 _nColumnPos ) const;
         virtual OUString GetColumnName( sal_Int32 _nIndex ) const;
         virtual css::uno::Any GetCellContent( sal_Int32 _nRowPos, sal_Int32 _nColPos) const;
-        virtual sal_Bool HasRowHeader();
-        virtual sal_Bool HasColHeader();
+        virtual bool HasRowHeader();
+        virtual bool HasColHeader();
         virtual OUString GetAccessibleCellText(sal_Int32 _nRowPos, sal_Int32 _nColPos) const;
 
         virtual sal_Int32 GetSelectedRowCount() const;

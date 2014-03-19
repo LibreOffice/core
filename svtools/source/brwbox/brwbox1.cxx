@@ -1742,7 +1742,7 @@ void BrowseBox::SelectAll()
 
 
 
-void BrowseBox::SelectRow( long nRow, sal_Bool _bSelect, sal_Bool bExpand )
+void BrowseBox::SelectRow( long nRow, bool _bSelect, bool bExpand )
 {
 
     if ( !bMultiSelection )

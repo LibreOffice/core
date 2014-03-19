@@ -267,7 +267,7 @@ sal_Bool AccessibleBrowseBoxTableBase::implIsColumnSelected( sal_Int32 nColumn )
 
 void AccessibleBrowseBoxTableBase::implSelectRow( sal_Int32 nRow, sal_Bool bSelect )
 {
-    mpBrowseBox->SelectRow( nRow, bSelect, sal_True );
+    mpBrowseBox->SelectRow( nRow, bSelect, true );
 }
 
 void AccessibleBrowseBoxTableBase::implSelectColumn( sal_Int32 nColumnPos, sal_Bool bSelect )

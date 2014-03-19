@@ -168,7 +168,7 @@ Reference< XAccessible > BrowseBox::CreateAccessibleControl( sal_Int32 )
 
 // Conversions ----------------------------------------------------------------
 
-sal_Bool BrowseBox::ConvertPointToCellAddress(
+bool BrowseBox::ConvertPointToCellAddress(
         sal_Int32& rnRow, sal_uInt16& rnColumnPos, const Point& rPoint )
 {
     //! TODO has to be checked
@@ -178,7 +178,7 @@ sal_Bool BrowseBox::ConvertPointToCellAddress(
 }
 
 
-sal_Bool BrowseBox::ConvertPointToRowHeader( sal_Int32& rnRow, const Point& rPoint )
+bool BrowseBox::ConvertPointToRowHeader( sal_Int32& rnRow, const Point& rPoint )
 {
     rnRow = GetRowAtYPosPixel(rPoint.Y());
     //  sal_uInt16 nColumnId = GetColumnAtXPosPixel(rPoint.X());
@@ -186,19 +186,19 @@ sal_Bool BrowseBox::ConvertPointToRowHeader( sal_Int32& rnRow, const Point& rPoi
 }
 
 
-sal_Bool BrowseBox::ConvertPointToColumnHeader( sal_uInt16& _rnColumnPos, const Point& _rPoint )
+bool BrowseBox::ConvertPointToColumnHeader( sal_uInt16& _rnColumnPos, const Point& _rPoint )
 {
     _rnColumnPos = GetColumnAtXPosPixel(_rPoint.X());
     return _rnColumnPos != BROWSER_INVALIDID;
 }
 
 
-sal_Bool BrowseBox::ConvertPointToControlIndex( sal_Int32& _rnIndex, const Point& _rPoint )
+bool BrowseBox::ConvertPointToControlIndex( sal_Int32& _rnIndex, const Point& _rPoint )
 {
     //! TODO has to be checked
     sal_Int32 nRow = 0;
     sal_uInt16 nColumn = 0;
-    sal_Bool bRet = ConvertPointToCellAddress(nRow,nColumn,_rPoint);
+    bool bRet = ConvertPointToCellAddress(nRow,nColumn,_rPoint);
     if ( bRet )
         _rnIndex = nRow * ColCount() + nColumn;
 
@@ -450,31 +450,30 @@ sal_uInt16 BrowseBox::GetCurrColumn() const
     return GetColumnPos( GetCurColumnId() );
 }
 
-sal_Bool BrowseBox::HasRowHeader() const
+bool BrowseBox::HasRowHeader() const
 {
     return ( GetColumnId( 0 ) == HandleColumnId ); // HandleColumn == RowHeader
 }
 
-sal_Bool BrowseBox::IsCellFocusable() const
+bool BrowseBox::IsCellFocusable() const
 {
-    return sal_True;
+    return true;
 }
 
-sal_Bool BrowseBox::GoToCell( sal_Int32 _nRow, sal_uInt16 _nColumn )
+bool BrowseBox::GoToCell( sal_Int32 _nRow, sal_uInt16 _nColumn )
 {
     return GoToRowColumnId( _nRow, GetColumnId( _nColumn ) );
 }
 
-void BrowseBox::SelectColumn( sal_uInt16 _nColumn, sal_Bool _bSelect )
+void BrowseBox::SelectColumn( sal_uInt16 _nColumn, bool _bSelect )
 {
     SelectColumnPos( _nColumn, _bSelect );
 }
 
-sal_Bool BrowseBox::IsColumnSelected( long _nColumn ) const
+bool BrowseBox::IsColumnSelected( long _nColumn ) const
 {
-    return ( pColSel && (0 <= _nColumn) && (_nColumn <= 0xFFF) ) ?
-        pColSel->IsSelected( static_cast< sal_uInt16 >( _nColumn ) ) :
-        sal_False;
+    return ( pColSel && (0 <= _nColumn) && (_nColumn <= 0xFFF) ) &&
+        pColSel->IsSelected( static_cast< sal_uInt16 >( _nColumn ) );
 }
 
 sal_Int32 BrowseBox::GetSelectedRowCount() const
@@ -527,7 +526,7 @@ void BrowseBox::GetAllSelectedColumns( ::com::sun::star::uno::Sequence< sal_Int3
     }
 }
 
-sal_Bool BrowseBox::IsCellVisible( sal_Int32 _nRow, sal_uInt16 _nColumnPos ) const
+bool BrowseBox::IsCellVisible( sal_Int32 _nRow, sal_uInt16 _nColumnPos ) const
 {
     return IsFieldVisible( _nRow, GetColumnId( _nColumnPos ) );
 }
@@ -538,7 +537,7 @@ OUString BrowseBox::GetAccessibleCellText(long _nRow, sal_uInt16 _nColPos) const
 }
 
 
-sal_Bool BrowseBox::GetGlyphBoundRects( const Point& rOrigin, const OUString& rStr, int nIndex, int nLen, int nBase, MetricVector& rVector )
+bool BrowseBox::GetGlyphBoundRects( const Point& rOrigin, const OUString& rStr, int nIndex, int nLen, int nBase, MetricVector& rVector )
 {
     return Control::GetGlyphBoundRects( rOrigin, rStr, nIndex, nLen, nBase, rVector );
 }
@@ -553,7 +552,7 @@ void BrowseBox::GrabFocus()
     Control::GrabFocus();
 }
 
-Reference< XAccessible > BrowseBox::GetAccessible( sal_Bool bCreate )
+Reference< XAccessible > BrowseBox::GetAccessible( bool bCreate )
 {
     return Control::GetAccessible( bCreate );
 }

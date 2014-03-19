@@ -55,12 +55,12 @@ namespace accessibility
 
     ::Rectangle AccessibleBrowseBoxCell::implGetBoundingBox()
     {
-        return mpBrowseBox->GetFieldRectPixelAbs( m_nRowPos, m_nColPos, sal_False, sal_False );
+        return mpBrowseBox->GetFieldRectPixelAbs( m_nRowPos, m_nColPos, false, false );
     }
 
     ::Rectangle AccessibleBrowseBoxCell::implGetBoundingBoxOnScreen()
     {
-        return mpBrowseBox->GetFieldRectPixelAbs( m_nRowPos, m_nColPos, sal_False );
+        return mpBrowseBox->GetFieldRectPixelAbs( m_nRowPos, m_nColPos, false );
     }
 }   // namespace accessibility
 

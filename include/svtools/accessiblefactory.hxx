@@ -146,7 +146,7 @@ namespace svt
                 sal_Int32 _nRowPos,
                 sal_uInt16 _nColPos,
                 const TriState& _eState,
-                sal_Bool _bIsTriState
+                bool _bIsTriState
             ) const = 0;
 
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >
