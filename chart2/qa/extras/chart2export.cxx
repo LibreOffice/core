@@ -52,6 +52,7 @@ public:
     void testErrorBarDataRangeODS();
     void testChartCrash();
     void testPieChartRotation();
+    void testEmbeddingsOleObjectGrabBag();
 
     CPPUNIT_TEST_SUITE(Chart2ExportTest);
     CPPUNIT_TEST(test);
@@ -76,6 +77,7 @@ public:
     CPPUNIT_TEST(testErrorBarDataRangeODS);
     CPPUNIT_TEST(testChartCrash);
     CPPUNIT_TEST(testPieChartRotation);
+    CPPUNIT_TEST(testEmbeddingsOleObjectGrabBag);
     CPPUNIT_TEST_SUITE_END();
 
 protected:
@@ -671,6 +673,43 @@ void Chart2ExportTest::testPieChartRotation()
     CPPUNIT_ASSERT(pXmlDoc);
     assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:view3D/c:rotX", "val", "40");
     assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:view3D/c:rotY", "val", "30");
+}
+
+void Chart2ExportTest::testEmbeddingsOleObjectGrabBag()
+{
+   // The problem was that .bin files were missing from docx file from embeddings folder
+   // after saving file.
+   // This test case tests whether embeddings files grabbagged properly in correct object.
+
+   load("/chart2/qa/extras/data/docx/", "testchartoleobjectembeddings.docx" );
+   uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
+   uno::Reference<beans::XPropertySet> xTextDocumentPropertySet(xTextDocument, uno::UNO_QUERY);
+   uno::Sequence<beans::PropertyValue> aGrabBag(0);
+   xTextDocumentPropertySet->getPropertyValue(OUString("InteropGrabBag")) >>= aGrabBag;
+   CPPUNIT_ASSERT(aGrabBag.hasElements()); // Grab Bag not empty
+   bool bEmbeddings = false;
+   const char* testEmbeddedFileNames[1] = {"word/embeddings/oleObject1.bin"};
+   for(int i = 0; i < aGrabBag.getLength(); ++i)
+   {
+       if (aGrabBag[i].Name == "OOXEmbeddings")
+       {
+           bEmbeddings = true;
+           uno::Sequence<beans::PropertyValue> aEmbeddingsList(0);
+           uno::Reference<io::XInputStream> aEmbeddingXlsxStream;
+           OUString aEmbeddedfileName;
+           CPPUNIT_ASSERT(aGrabBag[i].Value >>= aEmbeddingsList); // PropertyValue of proper type
+           sal_Int32 length = aEmbeddingsList.getLength();
+           CPPUNIT_ASSERT_EQUAL(sal_Int32(1), length);
+           for(int j = 0; j < length; ++j)
+           {
+               aEmbeddingsList[j].Value >>= aEmbeddingXlsxStream;
+               aEmbeddedfileName = aEmbeddingsList[j].Name;
+               CPPUNIT_ASSERT(aEmbeddingXlsxStream.get()); // Reference not empty
+               CPPUNIT_ASSERT_EQUAL(OUString::createFromAscii(testEmbeddedFileNames[j]),aEmbeddedfileName);
+           }
+       }
+   }
+   CPPUNIT_ASSERT(bEmbeddings); // Grab Bag has all the expected elements
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Chart2ExportTest);

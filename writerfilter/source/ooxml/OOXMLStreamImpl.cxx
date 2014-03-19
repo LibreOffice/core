@@ -119,6 +119,9 @@ bool OOXMLStreamImpl::lcl_getTarget(uno::Reference<embed::XRelationshipAccess>
     static OUString sSettingsType("http://schemas.openxmlformats.org/officeDocument/2006/relationships/settings");
     static OUString sChartType("http://schemas.openxmlformats.org/officeDocument/2006/relationships/chart");
     static OUString sEmbeddingsType("http://schemas.openxmlformats.org/officeDocument/2006/relationships/package");
+    static OUString sFooterType("http://schemas.openxmlformats.org/officeDocument/2006/relationships/footer");
+    static OUString sHeaderType("http://schemas.openxmlformats.org/officeDocument/2006/relationships/header");
+    static OUString sOleObjectType("http://schemas.openxmlformats.org/officeDocument/2006/relationships/oleObject");
     // OOXML strict
     static OUString sDocumentTypeStrict("http://purl.oclc.org/ooxml/officeDocument/relationships/officeDocument");
     static OUString sStylesTypeStrict("http://purl.oclc.org/ooxml/officeDocument/relationships/styles");
@@ -136,6 +139,9 @@ bool OOXMLStreamImpl::lcl_getTarget(uno::Reference<embed::XRelationshipAccess>
     static OUString sSettingsTypeStrict("http://purl.oclc.org/ooxml/officeDocument/relationships/settings");
     static OUString sChartTypeStrict("http://purl.oclc.org/ooxml/officeDocument/relationships/chart");
     static OUString sEmbeddingsTypeStrict("http://purl.oclc.org/ooxml/officeDocument/relationships/package");
+    static OUString sFootersTypeStrict("http://purl.oclc.org/ooxml/officeDocument/relationships/footer");
+    static OUString sHeaderTypeStrict("http://purl.oclc.org/ooxml/officeDocument/relationships/header");
+    static OUString sOleObjectTypeStrict("http://purl.oclc.org/ooxml/officeDocument/relationships/oleObject");
     static OUString sTarget("Target");
     static OUString sTargetMode("TargetMode");
     static OUString sExternal("External");
@@ -218,6 +224,14 @@ bool OOXMLStreamImpl::lcl_getTarget(uno::Reference<embed::XRelationshipAccess>
             sStreamType = sEmbeddingsType;
             sStreamTypeStrict = sEmbeddingsTypeStrict;
           break;
+        case FOOTER:
+            sStreamType = sFooterType;
+            sStreamTypeStrict = sFootersTypeStrict;
+          break;
+        case HEADER:
+            sStreamType = sHeaderType;
+            sStreamTypeStrict = sHeaderTypeStrict;
+          break;
         default:
             break;
     }
@@ -241,13 +255,20 @@ bool OOXMLStreamImpl::lcl_getTarget(uno::Reference<embed::XRelationshipAccess>
                     ( aPair.Second.compareTo(sStreamType) == 0 ||
                       aPair.Second.compareTo(sStreamTypeStrict) == 0))
                     bFound = true;
+                else if(aPair.First.compareTo(sType) == 0 &&
+                        ((aPair.Second.compareTo(sOleObjectType) == 0 ||
+                          aPair.Second.compareTo(sOleObjectTypeStrict) == 0) &&
+                          nStreamType == EMBEDDINGS))
+                {
+                    bFound = true;
+                }
                 else if (aPair.First.compareTo(sId) == 0 &&
                          aPair.Second.compareTo(rId) == 0)
                     bFound = true;
                 else if (aPair.First.compareTo(sTarget) == 0)
                 {
                     // checking item[n].xml or activex[n].xml is not visited already.
-                    if(customTarget != aPair.Second && (sStreamType == sCustomType || sStreamType == sActiveXType || sStreamType == sChartType))
+                    if(customTarget != aPair.Second && (sStreamType == sCustomType || sStreamType == sActiveXType || sStreamType == sChartType || sStreamType == sFooterType || sStreamType == sHeaderType))
                     {
                         bFound = false;
                     }

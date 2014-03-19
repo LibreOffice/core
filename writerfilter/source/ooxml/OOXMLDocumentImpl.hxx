@@ -52,6 +52,7 @@ class OOXMLDocumentImpl : public OOXMLDocument
     uno::Reference<io::XInputStream> mxActiveXBin;
     uno::Reference<io::XInputStream> mxEmbeddings;
     uno::Sequence < beans::PropertyValue > mxEmbeddingsList;
+    std::vector<beans::PropertyValue> mxEmbeddingsListTemp;
     bool mbIsSubstream;
 
 protected:
@@ -78,7 +79,7 @@ protected:
     void resolveCustomXmlStream(Stream & rStream);
     void resolveActiveXStream(Stream & rStream);
     void resolveGlossaryStream(Stream & rStream);
-    void resolveEmbeddingsStream(Stream & rStream);
+    void resolveEmbeddingsStream(OOXMLStream::Pointer_t pStream);
 public:
     OOXMLDocumentImpl(OOXMLStream::Pointer_t pStream);
     virtual ~OOXMLDocumentImpl();
