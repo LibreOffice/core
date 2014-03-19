@@ -80,6 +80,7 @@ private:
     bool            bFooterRulerChange:1;
     bool            bPageMargin:1;
     bool            bColRulerMove:1;
+    bool            mbHasEmptyRangeTable:1; /// we have at least one sheet with empty print range (print range set to '- none -').
 
     ScRange         aPageArea;
     long            nRight[ MAXCOL+1 ];

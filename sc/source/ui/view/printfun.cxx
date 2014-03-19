@@ -230,6 +230,7 @@ ScPrintFunc::ScPrintFunc( ScDocShell* pShell, SfxPrinter* pNewPrinter, SCTAB nTa
         bSourceRangeValid   ( false ),
         bPrintCurrentTable  ( false ),
         bMultiArea          ( false ),
+        mbHasPrintRange(true),
         nTabPages           ( 0 ),
         nTotalPages         ( 0 ),
         nPagesX(0),
@@ -256,6 +257,7 @@ ScPrintFunc::ScPrintFunc( OutputDevice* pOutDev, ScDocShell* pShell, SCTAB nTab,
         bSourceRangeValid   ( false ),
         bPrintCurrentTable  ( false ),
         bMultiArea          ( false ),
+        mbHasPrintRange(true),
         nTabPages           ( 0 ),
         nTotalPages         ( 0 ),
         nPagesX(0),
@@ -276,6 +278,7 @@ ScPrintFunc::ScPrintFunc( OutputDevice* pOutDev, ScDocShell* pShell,
         bSourceRangeValid   ( false ),
         bPrintCurrentTable  ( false ),
         bMultiArea          ( false ),
+        mbHasPrintRange(true),
         nPagesX(0),
         nPagesY(0),
         nTotalY(0),
@@ -314,6 +317,11 @@ void ScPrintFunc::GetPrintState( ScPrintState& rState )
     rState.nTotalPages  = nTotalPages;
     rState.nPageStart   = nPageStart;
     rState.nDocPages    = nDocPages;
+}
+
+bool ScPrintFunc::HasPrintRange() const
+{
+    return mbHasPrintRange;
 }
 
 sal_Bool ScPrintFunc::GetLastSourceRange( ScRange& rRange ) const
@@ -935,6 +943,13 @@ void ScPrintFunc::InitParam( const ScPrintOptions* pOptions )
 
     //  ignoring ATTR_PAGE_PRINTTABLES
 
+    bool bHasPrintRange = pDoc->HasPrintRange();
+    sal_uInt16 nPrintRangeCount = pDoc->GetPrintRangeCount(nPrintTab);
+    bool bPrintEntireSheet = pDoc->IsPrintEntireSheet(nPrintTab);
+
+    if (!bPrintEntireSheet && !nPrintRangeCount)
+        mbHasPrintRange = false;
+
     if ( pUserArea )                // UserArea (selection) has prority
     {
         bPrintCurrentTable    =
@@ -945,7 +960,7 @@ void ScPrintFunc::InitParam( const ScPrintOptions* pOptions )
         aAreaParam.aPrintArea.aStart.SetTab(nPrintTab);
         aAreaParam.aPrintArea.aEnd.SetTab(nPrintTab);
     }
-    else if ( pDoc->HasPrintRange() )
+    else if (bHasPrintRange)
     {
         if ( pPrintArea )                               // at least one set?
         {
@@ -953,7 +968,7 @@ void ScPrintFunc::InitParam( const ScPrintOptions* pOptions )
             aAreaParam.bPrintArea = sal_True;
             aAreaParam.aPrintArea = *pPrintArea;
 
-            bMultiArea = ( pDoc->GetPrintRangeCount(nPrintTab) > 1 );
+            bMultiArea = nPrintRangeCount > 1;
         }
         else
         {

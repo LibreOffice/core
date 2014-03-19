@@ -2065,6 +2065,16 @@ Resource RID_GLOBSTR
     {
         Text [ en-US ] = "Invalid condition." ;
     };
+
+    String STR_PRINT_PREVIEW_NODATA
+    {
+        Text [ en-US ] = "Empty Content";
+    };
+
+    String STR_PRINT_PREVIEW_EMPTY_RANGE
+    {
+        Text [ en-US ] = "Empty Print Range";
+    };
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

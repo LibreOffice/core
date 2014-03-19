@@ -167,6 +167,7 @@ private:
     sal_uInt16              nZoom;
     sal_Bool                bPrintCurrentTable;
     sal_Bool                bMultiArea;
+    bool                mbHasPrintRange;
     long                nTabPages;
     long                nTotalPages;
 
@@ -274,6 +275,8 @@ public:
     void            SetBottomMargin(sal_uInt16 nRulerBottomDistance){ nBottomMargin = nRulerBottomDistance; }
     ScPrintHFParam  GetHeader(){return aHdr;}
     ScPrintHFParam  GetFooter(){return aFtr;}
+
+    bool HasPrintRange() const;
 
 private:
     void            Construct( const ScPrintOptions* pOptions );
