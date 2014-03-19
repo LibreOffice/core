@@ -26,7 +26,7 @@
 #include <svl/zformat.hxx>
 #include <tools/color.hxx>
 #include <i18nlangtag/mslangid.hxx>
-#include <com/sun/star/util/DateTime.hpp>
+#include <com/sun/star/util/Date.hpp>
 
 namespace chart
 {
@@ -79,7 +79,7 @@ Date NumberFormatterWrapper::getNullDate() const
     sal_uInt16 nYear = 1899,nDay = 30,nMonth = 12;
     Date aRet(nDay,nMonth,nYear);
 
-    util::DateTime aUtilDate;
+    util::Date aUtilDate;
     if( m_aNullDate.hasValue() && (m_aNullDate >>= aUtilDate) )
     {
         aRet = Date(aUtilDate.Day,aUtilDate.Month,aUtilDate.Year);
@@ -114,7 +114,7 @@ OUString NumberFormatterWrapper::getFormattedString( sal_Int32 nNumberFormatKey,
             nMonth = pDate->GetMonth();
             nDay = pDate->GetDay();
         } // if ( pDate )
-        util::DateTime aNewNullDate;
+        util::Date aNewNullDate;
         m_aNullDate >>= aNewNullDate;
         m_pNumberFormatter->ChangeNullDate(aNewNullDate.Day,aNewNullDate.Month,aNewNullDate.Year);
     }
