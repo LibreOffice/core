@@ -1370,7 +1370,7 @@ void SdrTextObj::NbcSetOutlinerParaObjectForText( OutlinerParaObject* pTextObjec
     if( pText )
         pText->SetOutlinerParaObject( pTextObject );
 
-    if( pText->GetOutlinerParaObject() )
+    if (pText && pText->GetOutlinerParaObject())
     {
         SvxWritingModeItem aWritingMode(pText->GetOutlinerParaObject()->IsVertical()
             ? com::sun::star::text::WritingMode_TB_RL
