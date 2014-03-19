@@ -3794,6 +3794,7 @@ void WW8AttributeOutput::FormatTextGrid( const SwTextGridItem& rGrid )
         {
             default:
                 OSL_FAIL("Unknown grid type");
+                //fall-through
             case GRID_NONE:
                 nGridType = 0;
                 break;
