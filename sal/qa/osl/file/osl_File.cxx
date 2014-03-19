@@ -2460,6 +2460,11 @@ namespace osl_FileStatus
         ::osl::DirectoryItem    rItem_file, rItem_link;
 
         public:
+        isValid()
+            : pDir(NULL)
+        {
+        }
+
         // initialization
         void setUp()
         {
@@ -2477,8 +2482,8 @@ namespace osl_FileStatus
 
         void tearDown()
         {
-                    ::osl::FileBase::RC nError1 = pDir->close();
-                    delete pDir;
+            ::osl::FileBase::RC nError1 = pDir->close();
+            delete pDir;
             CPPUNIT_ASSERT_MESSAGE( errorToStr(nError1).getStr(), ::osl::FileBase::E_None == nError1 );
 
             // remove the tempfile in $TEMP/tmpdir/tmpname.
