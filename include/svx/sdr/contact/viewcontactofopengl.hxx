@@ -14,21 +14,21 @@
 
 class SdrOpenGLObj;
 
-namespace sdr
-{
-    namespace contact
-    {
-        class ViewContactOfOpenGL : public ViewContactOfSdrObj
-        {
-        public:
-            explicit ViewContactOfOpenGL(SdrOpenGLObj& rOpenGLObj);
-            virtual ~ViewContactOfOpenGL();
+namespace sdr {
+namespace contact {
 
-        protected:
-            virtual drawinglayer::primitive2d::Primitive2DSequence createViewIndependentPrimitive2DSequence() const;
-        };
-    }
-}
+class ViewContactOfOpenGL : public ViewContactOfSdrObj
+{
+public:
+    explicit ViewContactOfOpenGL(SdrOpenGLObj& rOpenGLObj);
+    virtual ~ViewContactOfOpenGL();
+
+protected:
+    virtual drawinglayer::primitive2d::Primitive2DSequence createViewIndependentPrimitive2DSequence() const;
+};
+
+} // namespace contact
+} // namespace sdr
 
 #endif
 

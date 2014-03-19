@@ -13,29 +13,28 @@
 #include <tools/gen.hxx>
 #include <drawinglayer/primitive2d/baseprimitive2d.hxx>
 
-namespace drawinglayer
+namespace drawinglayer {
+namespace primitive2d {
+
+/// Primitive to hold data necessary for openGL objects
+class DRAWINGLAYER_DLLPUBLIC OpenGLPrimitive2D : public BasePrimitive2D
 {
-    namespace primitive2d
-    {
+public:
+    explicit OpenGLPrimitive2D(const Point& rPos);
 
-        class DRAWINGLAYER_DLLPUBLIC OpenGLPrimitive2D : public BasePrimitive2D
-        {
-        public:
-            explicit OpenGLPrimitive2D(const Point& rPos);
+    const Point& getPos() const { return m_aPos; }
 
-            const Point& getPos() const { return m_aPos; }
+    virtual bool operator==( const BasePrimitive2D& rPrimitive ) const;
 
-            virtual bool operator==( const BasePrimitive2D& rPrimitive ) const;
+    /// provide unique ID
+    DeclPrimitive2DIDBlock()
 
-            /// provide unique ID
-            DeclPrimitive2DIDBlock()
+private:
+    Point m_aPos;
+};
 
-        private:
-            Point m_aPos;
-        };
-
-    }
-}
+} // namespace primitive2d
+} // namespace drawinglayer
 
 #endif
 

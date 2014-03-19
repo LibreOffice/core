@@ -13,32 +13,26 @@
 #include <svx/svdoopengl.hxx>
 #include <tools/gen.hxx>
 
+using namespace sdr::contact;
 
-namespace sdr
+ViewContactOfOpenGL::ViewContactOfOpenGL(SdrOpenGLObj& rOpenGLObj)
+    : ViewContactOfSdrObj(rOpenGLObj)
 {
-    namespace contact
-    {
+}
 
-        ViewContactOfOpenGL::ViewContactOfOpenGL(SdrOpenGLObj& rOpenGLObj)
-            : ViewContactOfSdrObj(rOpenGLObj)
-        {
-        }
+ViewContactOfOpenGL::~ViewContactOfOpenGL()
+{
+}
 
-        ViewContactOfOpenGL::~ViewContactOfOpenGL()
-        {
-        }
+drawinglayer::primitive2d::Primitive2DSequence ViewContactOfOpenGL::createViewIndependentPrimitive2DSequence() const
+{
+    com::sun::star::uno::Reference< com::sun::star::drawing::XShape > xShape(GetSdrObject().getUnoShape(), com::sun::star::uno::UNO_QUERY);
+    const Point aPos(xShape->getPosition().X,xShape->getPosition().Y);
 
-        drawinglayer::primitive2d::Primitive2DSequence ViewContactOfOpenGL::createViewIndependentPrimitive2DSequence() const
-        {
-            com::sun::star::uno::Reference< com::sun::star::drawing::XShape > xShape(GetSdrObject().getUnoShape(), com::sun::star::uno::UNO_QUERY);
-            const Point aPos(xShape->getPosition().X,xShape->getPosition().Y);
+    const drawinglayer::primitive2d::Primitive2DReference xReference(
+        new drawinglayer::primitive2d::OpenGLPrimitive2D(aPos));
 
-            const drawinglayer::primitive2d::Primitive2DReference xReference(
-                new drawinglayer::primitive2d::OpenGLPrimitive2D(aPos));
-
-            return drawinglayer::primitive2d::Primitive2DSequence(&xReference, 1);
-        }
-    }
+    return drawinglayer::primitive2d::Primitive2DSequence(&xReference, 1);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
