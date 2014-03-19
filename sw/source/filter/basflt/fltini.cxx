@@ -137,7 +137,7 @@ Filters::Filters()
 
 Filters::~Filters()
 {
-    // die Reader vernichten
+    // kill Readers
     for( sal_uInt16 n = 0; n < MAXFILTER; ++n )
     {
         SwReaderWriterEntry& rEntry = aReaderWriter[n];
@@ -188,7 +188,7 @@ SwRead GetReader( const OUString& rFltName )
         if ( aFilterDetect[n].IsFilter( rFltName ) )
         {
             pRead = aReaderWriter[n].GetReader();
-            // fuer einige Reader noch eine Sonderbehandlung:
+            // add special treatment for some readers
             if ( pRead )
                     pRead->SetFltName( rFltName );
             break;
@@ -214,7 +214,7 @@ sal_Bool SwReader::CheckPasswd( const OUString& /*rPasswd*/, const Reader& /*rOp
     return sal_True;
 }
 
-// Filter Flags lesen, wird von WW8 / W4W / EXCEL / LOTUS benutzt.
+// Read Filter Flags; used by WW8 / W4W / EXCEL / LOTUS
 
 /*
 <FilterFlags>
@@ -323,9 +323,8 @@ void CalculateFlySize(SfxItemSet& rFlySet, const SwNodeIndex& rAnchor,
                         aSz = (SwFmtFrmSize&)(*pItem);
 
                 SwTwips nWidth;
-                // dann die Breite des Flys selbst bestimmen. Ist eine Tabelle
-                // defininiert, dann benutze deren Breite, sonst die Breite der
-                // Seite
+                // determine the width; if there is a table use the width of the table;
+                // otherwise use the width of the page
                 const SwTableNode* pTblNd = rAnchor.GetNode().FindTableNode();
                 if( pTblNd )
                         nWidth = pTblNd->GetTable().GetFrmFmt()->GetFrmSize().GetWidth();
@@ -378,7 +377,7 @@ void CalculateFlySize(SfxItemSet& rFlySet, const SwNodeIndex& rAnchor,
                     pFirstTxtNd->EraseText( aNdIdx, 2 );
                 }
 
-                                // Umrandung und Abstand zum Inhalt beachten
+                                // consider border and distance to content
                                 const SvxBoxItem& rBoxItem = (SvxBoxItem&)rFlySet.Get( RES_BOX );
                                 sal_uInt16 nLine = BOX_LINE_LEFT;
                                 for( int i = 0; i < 2; ++i )
@@ -394,7 +393,7 @@ void CalculateFlySize(SfxItemSet& rFlySet, const SwNodeIndex& rAnchor,
                                         nLine = BOX_LINE_RIGHT;
                                 }
 
-                                // Mindestbreite fuer Inhalt einhalten
+                                // enforce minimum width for contents
                                 if( nMinFrm < MINLAY )
                                         nMinFrm = MINLAY;
                                 if( nMaxFrm < MINLAY )
