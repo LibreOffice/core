@@ -2719,6 +2719,15 @@ DECLARE_OOXMLEXPORT_TEST(test_OpeningBrace, "2120112713_OpenBrace.docx")
     assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/m:oMath[1]/m:d[1]/m:dPr[1]/m:begChr[1]","val","");
 }
 
+DECLARE_OOXMLEXPORT_TEST(testFDO76312, "FDO76312.docx")
+{
+    xmlDocPtr pXmlDoc = parseExport("word/document.xml");
+    if (!pXmlDoc)
+        return;
+
+    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl[1]/w:tr[1]/w:tc[1]");
+}
+
 DECLARE_OOXMLEXPORT_TEST(test_FieldType, "99_Fields.docx")
 {
     xmlDocPtr pXmlDoc = parseExport("word/document.xml");

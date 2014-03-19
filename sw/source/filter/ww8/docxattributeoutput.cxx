@@ -2490,6 +2490,9 @@ void DocxAttributeOutput::switchHeaderFooter(bool isHeaderFooter, sal_Int32 inde
     else if( index == -1)
     {
         *m_tableReference = *m_oldTableReference;
+        //Reset the oldReference, after copying it back to the original.
+        m_oldTableReference->m_bTableCellOpen = false ;
+        m_oldTableReference->m_nTableDepth = 0;
     }
     else
     {
@@ -2519,7 +2522,9 @@ void DocxAttributeOutput::EndTable()
 
     // We closed the table; if it is a nested table, the cell that contains it
     // still continues
-    m_tableReference->m_bTableCellOpen = true;
+    // set to true only if we were in a nested table, not otherwise.
+    if( 0 != tableFirstCells.size() )
+        m_tableReference->m_bTableCellOpen = true;
 
     // Cleans the table helper
     delete m_pTableWrt, m_pTableWrt = NULL;
