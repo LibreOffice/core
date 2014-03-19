@@ -238,6 +238,7 @@ RTFDocumentImpl::RTFDocumentImpl(uno::Reference<uno::XComponentContext> const& x
     m_xDstDoc(xDstDoc),
     m_xFrame(xFrame),
     m_xStatusIndicator(xStatusIndicator),
+    m_pMapperStream(NULL),
     m_aDefaultState(this),
     m_bSkipUnknown(false),
     m_aFontIndexes(),
