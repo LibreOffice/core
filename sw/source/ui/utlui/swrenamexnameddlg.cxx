@@ -93,11 +93,11 @@ IMPL_LINK(SwRenameXNamedDlg, ModifyHdl, NoSpaceEdit*, pEdit)
     OUString sTmp(pEdit->GetText());
 
     // prevent from pasting illegal characters
-    sal_uInt16 nLen = sTmp.getLength();
+    const sal_Int32 nLen = sTmp.getLength();
     OUString sMsg;
-    for(sal_uInt16 i = 0; i < pEdit->GetForbiddenChars().getLength(); i++)
+    for(sal_Int32 i = 0; i < pEdit->GetForbiddenChars().getLength(); ++i)
     {
-        sal_uInt16 nTmpLen = sTmp.getLength();
+        const sal_Int32 nTmpLen = sTmp.getLength();
         sTmp = comphelper::string::remove(sTmp, pEdit->GetForbiddenChars()[i]);
         if(sTmp.getLength() != nTmpLen)
             sMsg += OUString(pEdit->GetForbiddenChars()[i]);
@@ -105,9 +105,7 @@ IMPL_LINK(SwRenameXNamedDlg, ModifyHdl, NoSpaceEdit*, pEdit)
     if(sTmp.getLength() != nLen)
     {
         pEdit->SetText(sTmp);
-        OUString sWarning(m_sRemoveWarning);
-        sWarning += sMsg;
-        InfoBox(this, sWarning).Execute();
+        InfoBox(this, m_sRemoveWarning + sMsg).Execute();
     }
 
     m_pOk->Enable(!sTmp.isEmpty()
