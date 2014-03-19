@@ -169,20 +169,20 @@ void AcceleratorExecute::init(const css::uno::Reference< css::uno::XComponentCon
 }
 
 
-sal_Bool AcceleratorExecute::execute(const KeyCode& aVCLKey)
+bool AcceleratorExecute::execute(const KeyCode& aVCLKey)
 {
     css::awt::KeyEvent aAWTKey = AcceleratorExecute::st_VCLKey2AWTKey(aVCLKey);
     return execute(aAWTKey);
 }
 
 
-sal_Bool AcceleratorExecute::execute(const css::awt::KeyEvent& aAWTKey)
+bool AcceleratorExecute::execute(const css::awt::KeyEvent& aAWTKey)
 {
     OUString sCommand = impl_ts_findCommand(aAWTKey);
 
     // No Command found? Do nothing! User isnt interested on any error handling .-)
     if (sCommand.isEmpty())
-        return sal_False;
+        return false;
 
     // SAFE -> ----------------------------------
     ::osl::ResettableMutexGuard aLock(m_aLock);
@@ -200,7 +200,7 @@ sal_Bool AcceleratorExecute::execute(const css::awt::KeyEvent& aAWTKey)
 
     // ask for dispatch object
     css::uno::Reference< css::frame::XDispatch > xDispatch = xProvider->queryDispatch(aURL, OUString(), 0);
-    sal_Bool bRet = xDispatch.is();
+    bool bRet = xDispatch.is();
     if ( bRet )
     {
         // Note: Such instance can be used one times only and destroy itself afterwards .-)

@@ -180,13 +180,13 @@ class SVT_DLLPUBLIC AcceleratorExecute : private TMutexInit
             @param  aKey
                     specify the accelerator for execute.
 
-            @return [sal_Bool]
-                    sal_True if this key is configured and match to a command.
+            @return [bool]
+                    true if this key is configured and match to a command.
                     Attention: This state does not mean the success state
                     of the corresponding execute. Because its done asynchronous!
          */
-        virtual sal_Bool execute(const KeyCode&            aKey);
-        virtual sal_Bool execute(const css::awt::KeyEvent& aKey);
+        bool execute(const KeyCode&            aKey);
+        bool execute(const css::awt::KeyEvent& aKey);
 
         /** search the command for the given key event.
         *
