@@ -23,7 +23,6 @@
 #include <accelerators/acceleratorcache.hxx>
 #include <accelerators/keymapping.hxx>
 #include <macros/xinterface.hxx>
-#include <threadhelp/threadhelpbase.hxx>
 #include <general.h>
 
 #include <com/sun/star/xml/sax/XDocumentHandler.hpp>
@@ -36,8 +35,7 @@
 
 namespace framework{
 
-class AcceleratorConfigurationReader : private ThreadHelpBase
-                                     , public ::cppu::WeakImplHelper1< css::xml::sax::XDocumentHandler >
+class AcceleratorConfigurationReader : public ::cppu::WeakImplHelper1< css::xml::sax::XDocumentHandler >
 {
 
     // const, types

@@ -58,8 +58,7 @@ namespace framework{
 
 
 AcceleratorConfigurationReader::AcceleratorConfigurationReader(AcceleratorCache& rContainer)
-    : ThreadHelpBase          (&Application::GetSolarMutex())
-    , m_rContainer            (rContainer                   )
+    : m_rContainer            (rContainer                   )
     , m_bInsideAcceleratorList(sal_False                    )
     , m_bInsideAcceleratorItem(sal_False                    )
 {
