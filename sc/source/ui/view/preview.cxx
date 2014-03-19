@@ -53,6 +53,8 @@
 #include <svx/algitem.hxx>
 #include <editeng/lrspitem.hxx>
 #include <editeng/ulspitem.hxx>
+#include <editeng/colritem.hxx>
+#include <editeng/fhgtitem.hxx>
 #include "attrib.hxx"
 #include "pagepar.hxx"
 #include <com/sun/star/accessibility/XAccessible.hpp>
@@ -60,6 +62,10 @@
 #include <vcl/svapp.hxx>
 #include "viewutil.hxx"
 #include <columnspanset.hxx>
+#include <docpool.hxx>
+#include <patattr.hxx>
+
+#include <boost/scoped_ptr.hpp>
 
 // STATIC DATA -----------------------------------------------------------
 
@@ -118,6 +124,7 @@ ScPreview::ScPreview( Window* pParent, ScDocShell* pDocSh, ScPreviewShell* pView
     bFooterRulerChange( false ),
     bPageMargin ( false ),
     bColRulerMove( false ),
+    mbHasEmptyRangeTable(false),
     mnScale( 0 ),
     nColNumberButttonDown( 0 ),
     nHeaderHeight ( 0 ),
@@ -258,6 +265,9 @@ void ScPreview::CalcPages()
         long nThisStart = nTotalPages;
         ScPrintFunc aPrintFunc( this, pDocShell, i, nAttrPage, 0, NULL, &aOptions );
         long nThisTab = aPrintFunc.GetTotalPages();
+        if (!aPrintFunc.HasPrintRange())
+            mbHasEmptyRangeTable = true;
+
         nPages[i] = nThisTab;
         nTotalPages += nThisTab;
         nFirstAttr[i] = aPrintFunc.GetFirstPageNo();    // to keep or from template
@@ -480,6 +490,59 @@ void ScPreview::DoPrint( ScPreviewLocationData* pFillLocation )
         Point aWinEnd( aWinSize.Width(), aWinSize.Height() );
         bool bRight  = nPageEndX <= aWinEnd.X();
         bool bBottom = nPageEndY <= aWinEnd.Y();
+
+        if (!nTotalPages)
+        {
+            // There is no data to print. Print a friendly warning message and
+            // bail out.
+
+            SetMapMode(aMMMode);
+
+            // Draw background first.
+            SetLineColor();
+            SetFillColor(aBackColor);
+            DrawRect(Rectangle(0, 0, aWinEnd.X(), aWinEnd.Y()));
+
+            const ScPatternAttr& rDefPattern =
+                static_cast<const ScPatternAttr&>(
+                    pDoc->GetPool()->GetDefaultItem(ATTR_PATTERN));
+
+            boost::scoped_ptr<ScEditEngineDefaulter> pEditEng(
+                new ScEditEngineDefaulter(EditEngine::CreatePool(), true));
+
+            pEditEng->SetRefMapMode(aMMMode);
+            SfxItemSet* pEditDefaults = new SfxItemSet( pEditEng->GetEmptyItemSet() );
+            rDefPattern.FillEditItemSet(pEditDefaults);
+            pEditEng->SetDefaults(pEditDefaults, true);
+
+            Color aTextColor(COL_LIGHTGRAY);
+            pEditDefaults->Put(SvxColorItem(aTextColor, EE_CHAR_COLOR));
+
+            OUString aEmptyMsg;
+            if (mbHasEmptyRangeTable)
+                aEmptyMsg = ScGlobal::GetRscString(STR_PRINT_PREVIEW_EMPTY_RANGE);
+            else
+                aEmptyMsg = ScGlobal::GetRscString(STR_PRINT_PREVIEW_NODATA);
+
+            long nHeight = 3000;
+            pEditEng->SetDefaultItem(SvxFontHeightItem(nHeight, 100, EE_CHAR_FONTHEIGHT));
+            pEditEng->SetDefaultItem(SvxFontHeightItem(nHeight, 100, EE_CHAR_FONTHEIGHT_CJK));
+            pEditEng->SetDefaultItem(SvxFontHeightItem(nHeight, 100, EE_CHAR_FONTHEIGHT_CTL));
+
+            pEditEng->SetText(aEmptyMsg);
+
+            // Calculate text position so that the text appears at the center
+            // of the screen center-aligned.
+            Size aTextSize(pEditEng->CalcTextWidth(), pEditEng->GetTextHeight());
+
+            Point aCenter(
+                (aWinEnd.X() - pEditEng->CalcTextWidth())/2,
+                (aWinEnd.Y() - pEditEng->GetTextHeight())/2);
+
+            pEditEng->Draw(this, aCenter);
+
+            return;
+        }
 
         if( bPageMargin && bValidPage )
         {
