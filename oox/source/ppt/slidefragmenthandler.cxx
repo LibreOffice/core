@@ -141,10 +141,15 @@ Reference< XFastContextHandler > SlideFragmentHandler::createFastChildContext( s
 
     case PPT_TOKEN( bgRef ):            // a:CT_StyleMatrixReference
         {
-            FillPropertiesPtr pFillPropertiesPtr( new FillProperties(
-                *mpSlidePersistPtr->getTheme()->getFillStyle( xAttribs->getOptionalValue( XML_idx ).toInt32() ) ) );
+            oox::drawingml::ThemePtr pTheme = mpSlidePersistPtr->getTheme();
+            if (pTheme)
+            {
+                FillPropertiesPtr pFillPropertiesPtr( new FillProperties(
+                    *pTheme->getFillStyle( xAttribs->getOptionalValue( XML_idx ).toInt32() ) ) );
+                mpSlidePersistPtr->setBackgroundProperties( pFillPropertiesPtr );
+            }
             xRet.set( new ColorContext( *this, mpSlidePersistPtr->getBackgroundColor() ) );
-            mpSlidePersistPtr->setBackgroundProperties( pFillPropertiesPtr );
+
         }
         break;
 
