@@ -950,10 +950,11 @@ AC_ARG_ENABLE(crashdump,
         [Enable the crashdump feature.]))
 
 AC_ARG_ENABLE(python,
-    AS_HELP_STRING([--enable-python=<no/auto/system/internal>],
+    AS_HELP_STRING([--enable-python=<no/auto/system/internal/fully-internal>],
         [Enables or disables Python support at run-time and build-time.
-         Also specifies what Python to use. 'auto' is the
-         default.]))
+         Also specifies what Python to use. 'auto' is the default.
+         'fully-internal' even forces the internal version for uses of Python
+         during the build (for testing purposes, mainly).]))
 
 AC_ARG_ENABLE(gtk,
     AS_HELP_STRING([--disable-gtk],
@@ -7819,7 +7820,7 @@ AC_SUBST(XMLLINT)
 # Optionally user can pass an option to configure, i. e.
 # ./configure PYTHON=/usr/bin/python
 # =====================================================================
-if test "$build_os" != "cygwin"; then
+if test "$build_os" != "cygwin" -a "$enable_python" != fully-internal; then
     # This allows a lack of system python with no error, we use internal one in that case.
     AM_PATH_PYTHON([2.5],, [:])
     # Clean PYTHON_VERSION checked below if cross-compiling
@@ -7854,7 +7855,7 @@ no|disable)
         dnl (When cross-compiling to Windows from Linux using the mingw32-cross
         dnl compiler from OBS, use mingw32-python from OBS, and ditto for other
         dnl MinGW cross-compilation setups.)
-        AC_MSG_RESULT([internal])
+        AC_MSG_RESULT([fully internal])
         enable_python=internal
     elif test "$cross_compiling" = yes; then
         AC_MSG_RESULT([system])
@@ -7875,6 +7876,10 @@ no|disable)
     ;;
 internal)
     AC_MSG_RESULT([internal])
+    ;;
+fully-internal)
+    AC_MSG_RESULT([fully internal])
+    enable_python=internal
     ;;
 system)
     AC_MSG_RESULT([system])
