@@ -41,7 +41,7 @@ $(call gb_JunitTest_get_target,%) :
         (DBGSV_ERROR_OUT=shell DISABLE_SAL_DBGBOX=t \
 		    $(gb_JunitTest_JAVACOMMAND) \
             -classpath "$(T_CP)" \
-            $(DEFS) \
+            $(value DEFS) \
             org.junit.runner.JUnitCore \
             $(CLASSES) > $@.log 2>&1 || \
 		(cat $@.log \
