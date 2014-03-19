@@ -2973,6 +2973,7 @@ void DocxAttributeOutput::StartStyles()
 
     DocDefaults();
     LatentStyles();
+    m_nStylesCount = m_pTableStyleExport->TableStyles();
 }
 
 sal_Int32 DocxStringGetToken(DocxStringTokenMap const * pMap, const OUString& rName)
@@ -3285,7 +3286,6 @@ void DocxAttributeOutput::DocDefaults( )
 
 void DocxAttributeOutput::EndStyles( sal_uInt16 /*nNumberOfStyles*/ )
 {
-    m_pTableStyleExport->TableStyles();
     m_pSerializer->endElementNS( XML_w, XML_styles );
 }
 
@@ -4162,109 +4162,124 @@ oox::drawingml::DrawingML& DocxAttributeOutput::GetDrawingML()
 void DocxAttributeOutput::StartStyle( const OUString& rName, StyleType eType,
         sal_uInt16 nBase, sal_uInt16 nNext, sal_uInt16 /*nWwId*/, sal_uInt16 nId, bool bAutoUpdate )
 {
-    bool bQFormat = false, bUnhideWhenUsed = false, bSemiHidden = false, bLocked = false, bDefault = false, bCustomStyle = false;
-    OUString aLink, aRsid, aUiPriority;
-    FastAttributeList* pStyleAttributeList = m_pSerializer->createAttrList();
-    uno::Any aAny;
-    if (eType == STYLE_TYPE_PARA || eType == STYLE_TYPE_CHAR)
+    // HACK
+    // msoffice seems to have an internal limitation of 4091 styles
+    // and refuses to load .docx with more, even though the spec seems to allow that;
+    // so simply if there are more styles, don't export those
+    bool limitWorkaround = (++m_nStylesCount <= 4091);
+    if (limitWorkaround)
     {
-        const SwFmt* pFmt = m_rExport.pStyles->GetSwFmt(nId);
-        pFmt->GetGrabBagItem(aAny);
-    }
-    else
-    {
-        const SwNumRule* pRule = m_rExport.pStyles->GetSwNumRule(nId);
-        pRule->GetGrabBagItem(aAny);
-    }
-    const uno::Sequence<beans::PropertyValue>& rGrabBag = aAny.get< uno::Sequence<beans::PropertyValue> >();
-
-    for (sal_Int32 i = 0; i < rGrabBag.getLength(); ++i)
-    {
-        if (rGrabBag[i].Name == "uiPriority")
-            aUiPriority = rGrabBag[i].Value.get<OUString>();
-        else if (rGrabBag[i].Name == "qFormat")
-            bQFormat = true;
-        else if (rGrabBag[i].Name == "link")
-            aLink = rGrabBag[i].Value.get<OUString>();
-        else if (rGrabBag[i].Name == "rsid")
-            aRsid = rGrabBag[i].Value.get<OUString>();
-        else if (rGrabBag[i].Name == "unhideWhenUsed")
-            bUnhideWhenUsed = true;
-        else if (rGrabBag[i].Name == "semiHidden")
-            bSemiHidden = true;
-        else if (rGrabBag[i].Name == "locked")
-            bLocked = true;
-        else if (rGrabBag[i].Name == "default")
-            bDefault = rGrabBag[i].Value.get<sal_Bool>();
-        else if (rGrabBag[i].Name == "customStyle")
-            bCustomStyle = rGrabBag[i].Value.get<sal_Bool>();
+        bool bQFormat = false, bUnhideWhenUsed = false, bSemiHidden = false, bLocked = false, bDefault = false, bCustomStyle = false;
+        OUString aLink, aRsid, aUiPriority;
+        FastAttributeList* pStyleAttributeList = m_pSerializer->createAttrList();
+        uno::Any aAny;
+        if (eType == STYLE_TYPE_PARA || eType == STYLE_TYPE_CHAR)
+        {
+            const SwFmt* pFmt = m_rExport.pStyles->GetSwFmt(nId);
+            pFmt->GetGrabBagItem(aAny);
+        }
         else
-            SAL_WARN("sw.ww8", "Unhandled style property: " << rGrabBag[i].Name);
-    }
+        {
+            const SwNumRule* pRule = m_rExport.pStyles->GetSwNumRule(nId);
+            pRule->GetGrabBagItem(aAny);
+        }
+        const uno::Sequence<beans::PropertyValue>& rGrabBag = aAny.get< uno::Sequence<beans::PropertyValue> >();
 
-    const char* pType = 0;
-    switch (eType)
-    {
-        case STYLE_TYPE_PARA: pType = "paragraph"; break;
-        case STYLE_TYPE_CHAR: pType = "character"; break;
-        case STYLE_TYPE_LIST: pType = "numbering"; break;
-    }
-    pStyleAttributeList->add(FSNS( XML_w, XML_type ), pType);
-    pStyleAttributeList->add(FSNS( XML_w, XML_styleId ), m_rExport.pStyles->GetStyleId(nId).getStr());
-    if (bDefault)
-        pStyleAttributeList->add(FSNS(XML_w, XML_default), "1");
-    if (bCustomStyle)
-        pStyleAttributeList->add(FSNS(XML_w, XML_customStyle), "1");
-    XFastAttributeListRef xStyleAttributeList(pStyleAttributeList);
-    m_pSerializer->startElementNS( XML_w, XML_style, xStyleAttributeList);
+        for (sal_Int32 i = 0; i < rGrabBag.getLength(); ++i)
+        {
+            if (rGrabBag[i].Name == "uiPriority")
+                aUiPriority = rGrabBag[i].Value.get<OUString>();
+            else if (rGrabBag[i].Name == "qFormat")
+                bQFormat = true;
+            else if (rGrabBag[i].Name == "link")
+                aLink = rGrabBag[i].Value.get<OUString>();
+            else if (rGrabBag[i].Name == "rsid")
+                aRsid = rGrabBag[i].Value.get<OUString>();
+            else if (rGrabBag[i].Name == "unhideWhenUsed")
+                bUnhideWhenUsed = true;
+            else if (rGrabBag[i].Name == "semiHidden")
+                bSemiHidden = true;
+            else if (rGrabBag[i].Name == "locked")
+                bLocked = true;
+            else if (rGrabBag[i].Name == "default")
+                bDefault = rGrabBag[i].Value.get<sal_Bool>();
+            else if (rGrabBag[i].Name == "customStyle")
+                bCustomStyle = rGrabBag[i].Value.get<sal_Bool>();
+            else
+                SAL_WARN("sw.ww8", "Unhandled style property: " << rGrabBag[i].Name);
+        }
 
-    m_pSerializer->singleElementNS( XML_w, XML_name,
-            FSNS( XML_w, XML_val ), OUStringToOString( OUString( rName ), RTL_TEXTENCODING_UTF8 ).getStr(),
-            FSEND );
+        const char* pType = 0;
+        switch (eType)
+        {
+            case STYLE_TYPE_PARA: pType = "paragraph"; break;
+            case STYLE_TYPE_CHAR: pType = "character"; break;
+            case STYLE_TYPE_LIST: pType = "numbering"; break;
+        }
+        pStyleAttributeList->add(FSNS( XML_w, XML_type ), pType);
+        pStyleAttributeList->add(FSNS( XML_w, XML_styleId ), m_rExport.pStyles->GetStyleId(nId).getStr());
+        if (bDefault)
+            pStyleAttributeList->add(FSNS(XML_w, XML_default), "1");
+        if (bCustomStyle)
+            pStyleAttributeList->add(FSNS(XML_w, XML_customStyle), "1");
+        XFastAttributeListRef xStyleAttributeList(pStyleAttributeList);
+        m_pSerializer->startElementNS( XML_w, XML_style, xStyleAttributeList);
 
-    if ( nBase != 0x0FFF && eType != STYLE_TYPE_LIST)
-    {
-        m_pSerializer->singleElementNS( XML_w, XML_basedOn,
-                FSNS( XML_w, XML_val ), m_rExport.pStyles->GetStyleId(nBase).getStr(),
+        m_pSerializer->singleElementNS( XML_w, XML_name,
+                FSNS( XML_w, XML_val ), OUStringToOString( OUString( rName ), RTL_TEXTENCODING_UTF8 ).getStr(),
                 FSEND );
+
+        if ( nBase != 0x0FFF && eType != STYLE_TYPE_LIST)
+        {
+            m_pSerializer->singleElementNS( XML_w, XML_basedOn,
+                    FSNS( XML_w, XML_val ), m_rExport.pStyles->GetStyleId(nBase).getStr(),
+                    FSEND );
+        }
+
+        if ( nNext != nId && eType != STYLE_TYPE_LIST)
+        {
+            m_pSerializer->singleElementNS( XML_w, XML_next,
+                    FSNS( XML_w, XML_val ), m_rExport.pStyles->GetStyleId(nNext).getStr(),
+                    FSEND );
+        }
+
+        if (!aLink.isEmpty())
+            m_pSerializer->singleElementNS(XML_w, XML_link,
+                    FSNS(XML_w, XML_val), OUStringToOString(aLink, RTL_TEXTENCODING_UTF8).getStr(),
+                    FSEND);
+
+        if ( bAutoUpdate )
+            m_pSerializer->singleElementNS( XML_w, XML_autoRedefine, FSEND );
+
+        if (!aUiPriority.isEmpty())
+            m_pSerializer->singleElementNS(XML_w, XML_uiPriority,
+                    FSNS(XML_w, XML_val), OUStringToOString(aUiPriority, RTL_TEXTENCODING_UTF8).getStr(),
+                    FSEND);
+        if (bSemiHidden)
+            m_pSerializer->singleElementNS(XML_w, XML_semiHidden, FSEND);
+        if (bUnhideWhenUsed)
+            m_pSerializer->singleElementNS(XML_w, XML_unhideWhenUsed, FSEND);
+        if (bQFormat)
+            m_pSerializer->singleElementNS(XML_w, XML_qFormat, FSEND);
+        if (bLocked)
+            m_pSerializer->singleElementNS(XML_w, XML_locked, FSEND);
+        if (!aRsid.isEmpty())
+            m_pSerializer->singleElementNS(XML_w, XML_rsid,
+                    FSNS(XML_w, XML_val), OUStringToOString(aRsid, RTL_TEXTENCODING_UTF8).getStr(),
+                    FSEND);
     }
-
-    if ( nNext != nId && eType != STYLE_TYPE_LIST)
-    {
-        m_pSerializer->singleElementNS( XML_w, XML_next,
-                FSNS( XML_w, XML_val ), m_rExport.pStyles->GetStyleId(nNext).getStr(),
-                FSEND );
-    }
-
-    if (!aLink.isEmpty())
-        m_pSerializer->singleElementNS(XML_w, XML_link,
-                FSNS(XML_w, XML_val), OUStringToOString(aLink, RTL_TEXTENCODING_UTF8).getStr(),
-                FSEND);
-
-    if ( bAutoUpdate )
-        m_pSerializer->singleElementNS( XML_w, XML_autoRedefine, FSEND );
-
-    if (!aUiPriority.isEmpty())
-        m_pSerializer->singleElementNS(XML_w, XML_uiPriority,
-                FSNS(XML_w, XML_val), OUStringToOString(aUiPriority, RTL_TEXTENCODING_UTF8).getStr(),
-                FSEND);
-    if (bSemiHidden)
-        m_pSerializer->singleElementNS(XML_w, XML_semiHidden, FSEND);
-    if (bUnhideWhenUsed)
-        m_pSerializer->singleElementNS(XML_w, XML_unhideWhenUsed, FSEND);
-    if (bQFormat)
-        m_pSerializer->singleElementNS(XML_w, XML_qFormat, FSEND);
-    if (bLocked)
-        m_pSerializer->singleElementNS(XML_w, XML_locked, FSEND);
-    if (!aRsid.isEmpty())
-        m_pSerializer->singleElementNS(XML_w, XML_rsid,
-                FSNS(XML_w, XML_val), OUStringToOString(aRsid, RTL_TEXTENCODING_UTF8).getStr(),
-                FSEND);
 }
 
 void DocxAttributeOutput::EndStyle()
 {
-    m_pSerializer->endElementNS( XML_w, XML_style );
+    // HACK
+    // msoffice seems to have an internal limitation of 4091 styles
+    // so simply if there are more styles, don't export those
+    bool limitWorkaround = (m_nStylesCount <= 4091);
+    if (limitWorkaround)
+    {
+        m_pSerializer->endElementNS( XML_w, XML_style );
+    }
 }
 
 void DocxAttributeOutput::StartStyleProperties( bool bParProp, sal_uInt16 /*nStyle*/ )
@@ -7057,6 +7072,7 @@ DocxAttributeOutput::DocxAttributeOutput( DocxExport &rExport, FSHelperPtr pSeri
       m_bAlternateContentChoiceOpen( false ),
       m_nColBreakStatus( COLBRK_NONE ),
       m_nTextFrameLevel( 0 ),
+      m_nStylesCount( 0 ),
       m_closeHyperlinkInThisRun( false ),
       m_closeHyperlinkInPreviousRun( false ),
       m_startedHyperlink( false ),

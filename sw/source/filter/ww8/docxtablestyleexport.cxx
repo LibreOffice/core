@@ -67,7 +67,7 @@ struct DocxTableStyleExport::Impl
     void tableStyleRColor(uno::Sequence<beans::PropertyValue>& rColor);
 };
 
-void DocxTableStyleExport::TableStyles()
+sal_uInt16 DocxTableStyleExport::TableStyles()
 {
     // Do we have table styles from InteropGrabBag available?
     uno::Reference<beans::XPropertySet> xPropertySet(m_pImpl->m_pDoc->GetDocShell()->GetBaseModel(), uno::UNO_QUERY_THROW);
@@ -82,15 +82,20 @@ void DocxTableStyleExport::TableStyles()
             break;
         }
     }
-    if (!aTableStyles.getLength())
-        return;
+    sal_Int16 nTableStylesLength = 0;
 
-    for (sal_Int32 i = 0; i < aTableStyles.getLength(); ++i)
+    if (!aTableStyles.getLength())
+        return nTableStylesLength;
+
+    nTableStylesLength = aTableStyles.getLength();
+    for (sal_Int16 i = 0; i < nTableStylesLength; ++i)
     {
         uno::Sequence<beans::PropertyValue> aTableStyle;
         aTableStyles[i].Value >>= aTableStyle;
         m_pImpl->TableStyle(aTableStyle);
     }
+
+    return nTableStylesLength;
 }
 
 void DocxTableStyleExport::Impl::tableStyleTblCellMar(uno::Sequence<beans::PropertyValue>& rTblCellMar, sal_Int32 nType)

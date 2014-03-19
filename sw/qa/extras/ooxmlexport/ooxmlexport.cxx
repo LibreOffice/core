@@ -103,8 +103,8 @@ DECLARE_OOXMLEXPORT_TEST(testZoom, "zoom.docx")
     if (!pXmlDoc)
         return;
     // Order was: rsid, next.
-    int nNext = getXPathPosition(pXmlDoc, "/w:styles/w:style[3]", "next");
-    int nRsid = getXPathPosition(pXmlDoc, "/w:styles/w:style[3]", "rsid");
+    int nNext = getXPathPosition(pXmlDoc, "/w:styles/w:style[4]", "next");
+    int nRsid = getXPathPosition(pXmlDoc, "/w:styles/w:style[4]", "rsid");
     CPPUNIT_ASSERT(nNext < nRsid);
 }
 
@@ -1195,15 +1195,15 @@ DECLARE_OOXMLEXPORT_TEST(testStyleInheritance, "style-inheritance.docx")
     if (!pXmlStyles)
         return;
     // the 1st style always must be Normal
-    assertXPath(pXmlStyles, "/w:styles/w:style[1]", "styleId", "Normal");
+    assertXPath(pXmlStyles, "/w:styles/w:style[2]", "styleId", "Normal");
     // some random style later
-    assertXPath(pXmlStyles, "/w:styles/w:style[4]", "styleId", "Heading3");
+    assertXPath(pXmlStyles, "/w:styles/w:style[5]", "styleId", "Heading3");
 
     // Check that we do _not_ export w:next for styles that point to themselves.
-    assertXPath(pXmlStyles, "/w:styles/w:style[1]/w:next", 0);
+    assertXPath(pXmlStyles, "/w:styles/w:style[2]/w:next", 0);
 
     // Check that we roundtrip <w:next> correctly - on XML level
-    assertXPath(pXmlStyles, "/w:styles/w:style[2]/w:next", "val", "Normal");
+    assertXPath(pXmlStyles, "/w:styles/w:style[3]/w:next", "val", "Normal");
     // And to be REALLY sure, check it on the API level too ;-)
     uno::Reference< container::XNameAccess > paragraphStyles = getStyles("ParagraphStyles");
     uno::Reference< beans::XPropertySet > properties(paragraphStyles->getByName("Heading 1"), uno::UNO_QUERY);
@@ -1216,9 +1216,9 @@ DECLARE_OOXMLEXPORT_TEST(testStyleInheritance, "style-inheritance.docx")
     CPPUNIT_ASSERT_EQUAL(OUString("Heading 1"), getProperty<OUString>(properties, "FollowStyle"));
 
     // Make sure style #2 is Heading 1.
-    assertXPath(pXmlStyles, "/w:styles/w:style[2]", "styleId", "Heading1");
+    assertXPath(pXmlStyles, "/w:styles/w:style[3]", "styleId", "Heading1");
     // w:ind was copied from the parent (Normal) style without a good reason.
-    assertXPath(pXmlStyles, "/w:styles/w:style[2]/w:pPr/w:ind", 0);
+    assertXPath(pXmlStyles, "/w:styles/w:style[3]/w:pPr/w:ind", 0);
 
     // We output exactly 2 properties in rPrDefault, nothing else was
     // introduced as an additional default
@@ -1887,7 +1887,7 @@ DECLARE_OOXMLEXPORT_TEST(testThemePreservation, "theme-preservation.docx")
     assertXPath(pXmlStyles, "/w:styles/w:docDefaults/w:rPrDefault/w:rPr/w:rFonts", "cstheme", "minorBidi");
 
     // check the font theme values in style definitions
-    assertXPath(pXmlStyles, "/w:styles/w:style[1]/w:rPr/w:rFonts", "eastAsiaTheme", "minorEastAsia");
+    assertXPath(pXmlStyles, "/w:styles/w:style[2]/w:rPr/w:rFonts", "eastAsiaTheme", "minorEastAsia");
 
     // check the color theme values in style definitions
     assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='Custom1']/w:rPr/w:color", "themeColor", "accent1");
@@ -2493,10 +2493,10 @@ DECLARE_OOXMLEXPORT_TEST(testAbi11739, "abi11739.docx")
     if (!pXmlDoc)
         return;
     // Order was: uiPriority, link, basedOn.
-    CPPUNIT_ASSERT(getXPathPosition(pXmlDoc, "/w:styles/w:style[3]", "basedOn") < getXPathPosition(pXmlDoc, "/w:styles/w:style[3]", "link"));
-    CPPUNIT_ASSERT(getXPathPosition(pXmlDoc, "/w:styles/w:style[3]", "link") < getXPathPosition(pXmlDoc, "/w:styles/w:style[3]", "uiPriority"));
+    CPPUNIT_ASSERT(getXPathPosition(pXmlDoc, "/w:styles/w:style[4]", "basedOn") < getXPathPosition(pXmlDoc, "/w:styles/w:style[4]", "link"));
+    CPPUNIT_ASSERT(getXPathPosition(pXmlDoc, "/w:styles/w:style[4]", "link") < getXPathPosition(pXmlDoc, "/w:styles/w:style[4]", "uiPriority"));
     // Order was: qFormat, unhideWhenUsed.
-    CPPUNIT_ASSERT(getXPathPosition(pXmlDoc, "/w:styles/w:style[11]", "unhideWhenUsed") < getXPathPosition(pXmlDoc, "/w:styles/w:style[11]", "qFormat"));
+    CPPUNIT_ASSERT(getXPathPosition(pXmlDoc, "/w:styles/w:style[1]", "unhideWhenUsed") < getXPathPosition(pXmlDoc, "/w:styles/w:style[1]", "qFormat"));
 }
 
 DECLARE_OOXMLEXPORT_TEST(testEmbeddedXlsx, "embedded-xlsx.docx")
@@ -2863,6 +2863,15 @@ DECLARE_OOXMLEXPORT_TEST(test76108, "test76108.docx")
     if (!pXmlDoc) return;
     //docx file after RT is getting corrupted.
     assertXPath(pXmlDoc, "/w:document[1]/w:body[1]/w:p[1]/w:r[1]/w:fldChar[1]", "fldCharType", "begin");
+}
+
+DECLARE_OOXMLEXPORT_TEST(testFdo76101, "fdo76101.docx")
+{
+    xmlDocPtr pXmlDoc = parseExport("word/styles.xml");
+
+    if (!pXmlDoc)
+       return;
+    assertXPath(pXmlDoc, "/w:styles/w:style", 4091);
 }
 
 DECLARE_OOXMLEXPORT_TEST(testSimpleSdts, "simple-sdts.docx")

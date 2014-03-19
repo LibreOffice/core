@@ -766,6 +766,7 @@ private:
 
     std::vector<sw::Frame> m_aFramesOfParagraph;
     sal_Int32 m_nTextFrameLevel;
+    sal_uInt16 m_nStylesCount;
 
     // close of hyperlink needed
     bool m_closeHyperlinkInThisRun;

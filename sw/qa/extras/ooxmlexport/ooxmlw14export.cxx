@@ -436,7 +436,7 @@ DECLARE_OOXMLEXPORT_TEST(Test_TextEffects_InStyleXml, "TextEffects_InStyle.docx"
     if (!pXmlDoc)
         return;
 
-    std::string sPathToCharacterStyle = "/w:styles/w:style[3]";
+    std::string sPathToCharacterStyle = "/w:styles/w:style[4]";
 
     assertXPath(pXmlDoc, (sPathToCharacterStyle).c_str(), "type", "character");
     assertXPath(pXmlDoc, (sPathToCharacterStyle).c_str(), "styleId", "TextEffectsStyleChar");
@@ -547,7 +547,7 @@ DECLARE_OOXMLEXPORT_TEST(Test_TextEffects_InStyleXml, "TextEffects_InStyle.docx"
         assertXPath(pXmlDoc, (sPathStylisticSets+"/w14:styleSet").c_str(), "id", "1");
     }
 
-    std::string sPathToParagraphStyle = "/w:styles/w:style[9]";
+    std::string sPathToParagraphStyle = "/w:styles/w:style[10]";
 
     assertXPath(pXmlDoc, (sPathToParagraphStyle).c_str(), "type", "paragraph");
     assertXPath(pXmlDoc, (sPathToParagraphStyle).c_str(), "styleId", "TextEffectsStyle");
