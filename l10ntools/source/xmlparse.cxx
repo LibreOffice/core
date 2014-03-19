@@ -825,7 +825,9 @@ static OUString lcl_pathnameToAbsoluteUrl(const OString& rPathname)
 
 
 SimpleXMLParser::SimpleXMLParser()
-    : m_pXMLFile( NULL )
+    : m_pXMLFile(NULL)
+    , m_pCurNode(NULL)
+    , m_pCurData(NULL)
 {
     m_aParser = XML_ParserCreate( NULL );
     XML_SetUserData( m_aParser, this );
