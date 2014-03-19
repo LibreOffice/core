@@ -213,8 +213,8 @@ uno::Sequence< beans::PropertyValue > ListLevel::GetCharStyleProperties( )
     PropertyValueVector_t rProperties;
     PropertyNameSupplier& aPropNameSupplier = PropertyNameSupplier::GetPropertyNameSupplier();
 
-    _PropertyMap::const_iterator aMapIter = begin();
-    _PropertyMap::const_iterator aEndIter = end();
+    PropertyMap::const_iterator aMapIter = begin();
+    PropertyMap::const_iterator aEndIter = end();
     for( ; aMapIter != aEndIter; ++aMapIter )
     {
         switch( aMapIter->first )
@@ -319,8 +319,8 @@ uno::Sequence< beans::PropertyValue > ListLevel::GetLevelProperties( )
     aNumberingProperties.push_back( MAKE_PROPVAL( PROP_LEVEL_FOLLOW, m_nXChFollow ));
 
 
-    _PropertyMap::const_iterator aMapIter = begin();
-    _PropertyMap::const_iterator aEndIter = end();
+    PropertyMap::const_iterator aMapIter = begin();
+    PropertyMap::const_iterator aEndIter = end();
     for( ; aMapIter != aEndIter; ++aMapIter )
     {
         switch( aMapIter->first )

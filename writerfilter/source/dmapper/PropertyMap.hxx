@@ -88,10 +88,11 @@ public:
     bool hasGrabBag() const { return m_rGrabBagType != NO_GRAB_BAG; }
     GrabBagType getGrabBagType() const { return m_rGrabBagType; }
 };
-typedef std::map< PropertyIds, PropValue > _PropertyMap;
 
-class PropertyMap : public _PropertyMap
+class PropertyMap
 {
+    typedef std::map< PropertyIds, PropValue >                                  _PropertyMap;
+    _PropertyMap                                                                m_aPropMap;
     /// Cache the property values for the GetPropertyValues() call(s).
     ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >   m_aValues;
     //marks context as footnote context - ::text( ) events contain either the footnote character or can be ignored
@@ -109,6 +110,36 @@ protected:
     }
 
 public:
+    // delegate typedefs and member functions for _PropertyMap (std::map< PropertyIds, PropValue >)
+    typedef _PropertyMap::iterator          iterator;
+    typedef _PropertyMap::const_iterator    const_iterator;
+    typedef _PropertyMap::key_type          key_type;
+    typedef _PropertyMap::mapped_type       mapped_type;
+    typedef _PropertyMap::value_type        value_type;
+
+    mapped_type&    operator[]( const key_type& key ) { return m_aPropMap[key]; }
+
+    iterator        find( const _PropertyMap::key_type& key )       { return m_aPropMap.find( key ); }
+    const_iterator  find( const _PropertyMap::key_type& key ) const { return m_aPropMap.find( key ); }
+
+    iterator        begin()         { return m_aPropMap.begin(); }
+    const_iterator  begin() const   { return m_aPropMap.begin(); }
+
+    iterator        end()           { return m_aPropMap.end(); }
+    const_iterator  end() const     { return m_aPropMap.end(); }
+
+    void            erase( iterator pos )       { m_aPropMap.erase( pos ); }
+    void            erase( PropertyIds key )    { m_aPropMap.erase( key ); }
+
+    _PropertyMap::size_type         size() const{ return m_aPropMap.size(); }
+
+    void                            swap( PropertyMap& other ){ m_aPropMap.swap( other.m_aPropMap ); }
+
+    std::pair<iterator,bool>        insert( const value_type& value )       { return m_aPropMap.insert( value ); }
+    template< class InputIt > void  insert( InputIt first, InputIt last )   { return m_aPropMap.insert( first, last ); }
+    // end of delegates
+
+
     PropertyMap();
     virtual ~PropertyMap();
 

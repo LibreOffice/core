@@ -204,7 +204,7 @@ void PropertyMap::Insert( PropertyIds eId, const uno::Any& rAny, bool bOverwrite
 
         return;
     }
-    _PropertyMap::insert(_PropertyMap::value_type(eId, PropValue(rAny, rGrabBagType)));
+    PropertyMap::insert(PropertyMap::value_type(eId, PropValue(rAny, rGrabBagType)));
 
     Invalidate();
 }
@@ -283,7 +283,7 @@ void PropertyMap::InsertProps(const PropertyMapPtr pMap)
     {
         ::std::for_each( pMap->begin(), pMap->end(),
                 removeExistingElements<PropertyMap::value_type>(*this) );
-        _PropertyMap::insert(pMap->begin(), pMap->end());
+        PropertyMap::insert(pMap->begin(), pMap->end());
         insertTableProperties(pMap.get());
 
         Invalidate();
