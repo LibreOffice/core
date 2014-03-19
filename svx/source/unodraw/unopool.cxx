@@ -118,7 +118,7 @@ void SvxUnoDrawPool::getAny( SfxItemPool* pPool, const comphelper::PropertyMapEn
         }
     default:
         {
-            const SfxMapUnit eMapUnit = pPool ? pPool->GetMetric((sal_uInt16)pEntry->mnHandle) : SFX_MAPUNIT_100TH_MM;
+            const SfxMapUnit eMapUnit = pPool->GetMetric((sal_uInt16)pEntry->mnHandle);
 
             sal_uInt8 nMemberId = pEntry->mnMemberId & (~SFX_METRIC_ITEM);
             if( eMapUnit == SFX_MAPUNIT_100TH_MM )
