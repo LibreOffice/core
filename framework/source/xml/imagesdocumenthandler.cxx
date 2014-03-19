@@ -20,7 +20,6 @@
 
 #include <stdio.h>
 
-#include <threadhelp/guard.hxx>
 #include <xml/imagesdocumenthandler.hxx>
 
 #include <com/sun/star/xml/sax/XExtendedDocumentHandler.hpp>
@@ -102,7 +101,6 @@ ImageXMLEntryProperty ImagesEntries[OReadImagesDocumentHandler::IMG_XML_ENTRY_CO
 
 
 OReadImagesDocumentHandler::OReadImagesDocumentHandler( ImageListsDescriptor& aItems ) :
-    ThreadHelpBase( &Application::GetSolarMutex() ),
     m_aImageList( aItems ),
     m_pImages( 0 ),
     m_pExternalImages( 0 )
@@ -152,7 +150,7 @@ throw ( SAXException, RuntimeException, std::exception )
 void SAL_CALL OReadImagesDocumentHandler::endDocument(void)
 throw(  SAXException, RuntimeException, std::exception )
 {
-    Guard aGuard( m_aLock );
+    SolarMutexGuard g;
 
     if (( m_bImageContainerStartFound && !m_bImageContainerEndFound ) ||
         ( !m_bImageContainerStartFound && m_bImageContainerEndFound )    )
@@ -169,7 +167,7 @@ void SAL_CALL OReadImagesDocumentHandler::startElement(
               RuntimeException,
               std::exception)
 {
-    Guard aGuard( m_aLock );
+    SolarMutexGuard g;
 
     ImageHashMap::const_iterator pImageEntry = m_aImageMap.find( aName ) ;
     if ( pImageEntry != m_aImageMap.end() )
@@ -503,7 +501,7 @@ void SAL_CALL OReadImagesDocumentHandler::endElement(const OUString& aName)
           RuntimeException,
           std::exception)
 {
-    Guard aGuard( m_aLock );
+    SolarMutexGuard g;
 
     ImageHashMap::const_iterator pImageEntry = m_aImageMap.find( aName ) ;
     if ( pImageEntry != m_aImageMap.end() )
@@ -579,16 +577,13 @@ void SAL_CALL OReadImagesDocumentHandler::setDocumentLocator(
     const Reference< XLocator > &xLocator)
 throw(  SAXException, RuntimeException, std::exception )
 {
-    Guard aGuard( m_aLock );
-
+    SolarMutexGuard g;
     m_xLocator = xLocator;
 }
 
 OUString OReadImagesDocumentHandler::getErrorLineString()
 {
-    Guard aGuard( m_aLock );
-
-
+    SolarMutexGuard g;
     if ( m_xLocator.is() )
     {
         OUStringBuffer buffer("Line: ");
@@ -608,7 +603,6 @@ OUString OReadImagesDocumentHandler::getErrorLineString()
 OWriteImagesDocumentHandler::OWriteImagesDocumentHandler(
     const ImageListsDescriptor& aItems,
     Reference< XDocumentHandler > rWriteDocumentHandler ) :
-    ThreadHelpBase( &Application::GetSolarMutex() ),
     m_aImageListsItems( aItems ),
     m_xWriteDocumentHandler( rWriteDocumentHandler )
 {
@@ -628,7 +622,7 @@ OWriteImagesDocumentHandler::~OWriteImagesDocumentHandler()
 void OWriteImagesDocumentHandler::WriteImagesDocument() throw
 ( SAXException, RuntimeException )
 {
-    Guard aGuard( m_aLock );
+    SolarMutexGuard g;
 
     m_xWriteDocumentHandler->startDocument();
 
