@@ -112,11 +112,7 @@ private:
     OUString m_aCurrentFilter;
     NSStringList *m_pFilterNames;
 
-    int implAddFilter( const OUString rFilter, const OUStringList rSuffixList);
-    int implAddFilterGroup( const OUString rFilter,
-                            const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::StringPair>& _rFilters );
-
-    sal_Bool FilterNameExists( const OUString rTitle );
+    sal_Bool FilterNameExists( const OUString& rTitle );
     sal_Bool FilterNameExists( const UnoFilterList& _rGroupedFilters );
 
     void ensureFilterList( const OUString& _rInitialCurrentFilter );

@@ -92,7 +92,7 @@ isFilterString( const rtl::OUString& rFilterString, const char *pMatch )
 
 
 static rtl::OUString
-shrinkFilterName( const rtl::OUString aFilterName, bool bAllowNoStar = false )
+shrinkFilterName( const rtl::OUString& aFilterName, bool bAllowNoStar = false )
 {
     // DBG_PRINT_ENTRY(CLASS_NAME, "shrinkFilterName", "filterName", aFilterName);
 
@@ -130,7 +130,7 @@ protected:
         const rtl::OUString rTitle;
 
 public:
-        FilterTitleMatch( const rtl::OUString _rTitle ) : rTitle( _rTitle ) { }
+        FilterTitleMatch( const rtl::OUString& _rTitle ) : rTitle( _rTitle ) { }
 
 
         bool operator () ( const FilterEntry& _rEntry )
@@ -203,7 +203,7 @@ FilterHelper::~FilterHelper()
 }
 
 
-sal_Bool FilterHelper::FilterNameExists( const rtl::OUString rTitle )
+sal_Bool FilterHelper::FilterNameExists( const rtl::OUString& rTitle )
 {
     sal_Bool bRet = sal_False;
 
