@@ -957,7 +957,7 @@ static void addList( NSView* pCurParent, long& rCurX, long& rCurY, long /*nAttac
 }
 
 static void addEdit( NSView* pCurParent, long& rCurX, long& rCurY, long nAttachOffset,
-                    const rtl::OUString rCtrlType,
+                    const rtl::OUString& rCtrlType,
                     const rtl::OUString& rText,
                     const rtl::OUString& rProperty, const PropertyValue* pValue,
                     sal_Int64 nMinValue, sal_Int64 nMaxValue,
