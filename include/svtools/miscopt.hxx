@@ -70,16 +70,16 @@ class SVT_DLLPUBLIC SvtMiscOptions: public utl::detail::Options
          SvtMiscOptions();
         virtual ~SvtMiscOptions();
 
-        void AddListenerLink( const Link& rLink );
-        void RemoveListenerLink( const Link& rLink );
+        void        AddListenerLink( const Link& rLink );
+        void        RemoveListenerLink( const Link& rLink );
 
-        sal_Bool    UseSystemFileDialog() const;
-        void        SetUseSystemFileDialog( sal_Bool bSet );
-        sal_Bool    IsUseSystemFileDialogReadOnly() const;
+        bool        UseSystemFileDialog() const;
+        void        SetUseSystemFileDialog( bool bSet );
+        bool        IsUseSystemFileDialogReadOnly() const;
 
-        sal_Bool    DisableUICustomization() const;
+        bool        DisableUICustomization() const;
 
-        sal_Bool    IsPluginsEnabled() const;
+        bool        IsPluginsEnabled() const;
 
         sal_Int16   GetSymbolsSize() const;
         void        SetSymbolsSize( sal_Int16 eSet );
@@ -94,24 +94,24 @@ class SVT_DLLPUBLIC SvtMiscOptions: public utl::detail::Options
         sal_Int16   GetToolboxStyle() const;
         void        SetToolboxStyle( sal_Int16 nStyle );
 
-        sal_Bool    IsModifyByPrinting() const;
-        void        SetModifyByPrinting(sal_Bool bSet );
+        bool        IsModifyByPrinting() const;
+        void        SetModifyByPrinting(bool bSet );
 
-        sal_Bool    UseSystemPrintDialog() const;
-        void        SetUseSystemPrintDialog( sal_Bool bSet );
+        bool        UseSystemPrintDialog() const;
+        void        SetUseSystemPrintDialog( bool bSet );
 
-        sal_Bool    ShowLinkWarningDialog() const;
-        void        SetShowLinkWarningDialog( sal_Bool bSet );
-        sal_Bool    IsShowLinkWarningDialogReadOnly() const;
+        bool        ShowLinkWarningDialog() const;
+        void        SetShowLinkWarningDialog( bool bSet );
+        bool        IsShowLinkWarningDialogReadOnly() const;
 
-        void        SetSaveAlwaysAllowed( sal_Bool bSet );
-        sal_Bool    IsSaveAlwaysAllowed() const;
+        void        SetSaveAlwaysAllowed( bool bSet );
+        bool        IsSaveAlwaysAllowed() const;
 
-        void        SetExperimentalMode( sal_Bool bSet );
-        sal_Bool    IsExperimentalMode() const;
+        void        SetExperimentalMode( bool bSet );
+        bool        IsExperimentalMode() const;
 
-        void        SetMacroRecorderMode( sal_Bool bSet );
-        sal_Bool    IsMacroRecorderMode() const;
+        void        SetMacroRecorderMode( bool bSet );
+        bool        IsMacroRecorderMode() const;
 
     private:
 

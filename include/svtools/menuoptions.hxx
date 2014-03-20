@@ -87,7 +87,7 @@ class SVT_DLLPUBLIC SAL_WARN_UNUSED SvtMenuOptions: public utl::detail::Options
             @seealso    configuration package "org.openoffice.Office.Common/View/Menu"
         *//*-*****************************************************************************************************/
 
-        sal_Bool IsEntryHidingEnabled() const;
+        bool IsEntryHidingEnabled() const;
         TriState GetMenuIconsState() const;
         void SetMenuIconsState(TriState eState);
 

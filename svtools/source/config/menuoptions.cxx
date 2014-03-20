@@ -41,8 +41,8 @@ using namespace ::osl                   ;
 using namespace ::com::sun::star::uno   ;
 
 #define ROOTNODE_MENU                           OUString("Office.Common/View/Menu"  )
-#define DEFAULT_DONTHIDEDISABLEDENTRIES         sal_False
-#define DEFAULT_FOLLOWMOUSE                     sal_True
+#define DEFAULT_DONTHIDEDISABLEDENTRIES         false
+#define DEFAULT_FOLLOWMOUSE                     true
 #define DEFAULT_MENUICONS                       TRISTATE_INDET
 
 #define PROPERTYNAME_DONTHIDEDISABLEDENTRIES    OUString("DontHideDisabledEntry"    )
@@ -71,8 +71,8 @@ class SvtMenuOptions_Impl : public ConfigItem
 
     private:
         ::std::list<Link> aList;
-        sal_Bool    m_bDontHideDisabledEntries          ;   /// cache "DontHideDisabledEntries" of Menu section
-        sal_Bool    m_bFollowMouse                      ;   /// cache "FollowMouse" of Menu section
+        bool        m_bDontHideDisabledEntries          ;   /// cache "DontHideDisabledEntries" of Menu section
+        bool        m_bFollowMouse                      ;   /// cache "FollowMouse" of Menu section
         TriState    m_eMenuIcons                        ;   /// cache "MenuIcons" of Menu section
 
 
@@ -143,16 +143,16 @@ class SvtMenuOptions_Impl : public ConfigItem
             @onerror    -
         *//*-*****************************************************************************************************/
 
-        sal_Bool    IsEntryHidingEnabled() const
+        bool        IsEntryHidingEnabled() const
                     { return m_bDontHideDisabledEntries; }
 
-        sal_Bool    IsFollowMouseEnabled() const
+        bool        IsFollowMouseEnabled() const
                     { return m_bFollowMouse; }
 
         TriState    GetMenuIconsState() const
                     { return m_eMenuIcons; }
 
-        void        SetEntryHidingState ( sal_Bool bState )
+        void        SetEntryHidingState ( bool bState )
                     {
                         m_bDontHideDisabledEntries = bState;
                         SetModified();
@@ -161,7 +161,7 @@ class SvtMenuOptions_Impl : public ConfigItem
                         Commit();
                     }
 
-        void        SetFollowMouseState ( sal_Bool bState )
+        void        SetFollowMouseState ( bool bState )
                     {
                         m_bFollowMouse = bState;
                         SetModified();
@@ -221,13 +221,13 @@ SvtMenuOptions_Impl::SvtMenuOptions_Impl()
     // Follow assignment use order of values in relation to our list of key names!
     DBG_ASSERT( !(seqNames.getLength()!=seqValues.getLength()), "SvtMenuOptions_Impl::SvtMenuOptions_Impl()\nI miss some values of configuration keys!\n" );
 
-    sal_Bool bMenuIcons = sal_True;
-    sal_Bool bSystemMenuIcons = sal_True;
+    bool bMenuIcons = true;
+    bool bSystemMenuIcons = true;
     if (m_eMenuIcons == TRISTATE_INDET)
-        bMenuIcons = (sal_Bool)(Application::GetSettings().GetStyleSettings().GetPreferredUseImagesInMenus());
+        bMenuIcons = Application::GetSettings().GetStyleSettings().GetPreferredUseImagesInMenus();
     else
     {
-        bSystemMenuIcons = sal_False;
+        bSystemMenuIcons = false;
         bMenuIcons = m_eMenuIcons ? sal_True : sal_False;
     }
 
@@ -299,13 +299,13 @@ void SvtMenuOptions_Impl::Notify( const Sequence< OUString >& seqPropertyNames )
     DBG_ASSERT( !(seqPropertyNames.getLength()!=seqValues.getLength()), "SvtMenuOptions_Impl::Notify()\nI miss some values of configuration keys!\n" );
 
     bool bMenuSettingsChanged = false;
-    sal_Bool bMenuIcons = sal_True;
-    sal_Bool bSystemMenuIcons = sal_True;
+    bool bMenuIcons = true;
+    bool bSystemMenuIcons = true;
     if (m_eMenuIcons == TRISTATE_INDET)
-        bMenuIcons = (sal_Bool)(Application::GetSettings().GetStyleSettings().GetUseImagesInMenus());
+        bMenuIcons = Application::GetSettings().GetStyleSettings().GetUseImagesInMenus();
     else
     {
-        bSystemMenuIcons = sal_False;
+        bSystemMenuIcons = false;
         bMenuIcons = m_eMenuIcons ? sal_True : sal_False;
     }
 
@@ -468,7 +468,7 @@ SvtMenuOptions::~SvtMenuOptions()
 
 //  public method
 
-sal_Bool SvtMenuOptions::IsEntryHidingEnabled() const
+bool SvtMenuOptions::IsEntryHidingEnabled() const
 {
     MutexGuard aGuard( GetOwnStaticMutex() );
     return m_pDataContainer->IsEntryHidingEnabled();

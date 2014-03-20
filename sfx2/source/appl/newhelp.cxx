@@ -2466,7 +2466,7 @@ bool SfxHelpTextWindow_Impl::PreNotify( NotifyEvent& rNEvt )
                 aMenu.InsertItem( TBI_SOURCEVIEW, SfxResId(STR_HELP_BUTTON_SOURCEVIEW).toString() );
             }
 
-            if( SvtMenuOptions().IsEntryHidingEnabled() == sal_False )
+            if( ! SvtMenuOptions().IsEntryHidingEnabled() )
                 aMenu.SetMenuFlags( aMenu.GetMenuFlags() | MENU_FLAG_HIDEDISABLEDENTRIES );
 
             sal_uInt16 nId = aMenu.Execute( this, aPos );

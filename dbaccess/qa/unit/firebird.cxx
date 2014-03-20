@@ -41,7 +41,7 @@ void FirebirdTest::setUp()
 {
     DBTestBase::setUp();
     SvtMiscOptions aMiscOptions;
-    aMiscOptions.SetExperimentalMode(sal_True);
+    aMiscOptions.SetExperimentalMode(true);
 }
 
 /**

@@ -72,24 +72,24 @@ class SvtMiscOptions_Impl : public ConfigItem
 {
     private:
     ::std::list<Link> aList;
-    sal_Bool    m_bUseSystemFileDialog;
-    sal_Bool    m_bIsUseSystemFileDialogRO;
-    sal_Bool    m_bPluginsEnabled;
-    sal_Bool    m_bIsPluginsEnabledRO;
+    bool        m_bUseSystemFileDialog;
+    bool        m_bIsUseSystemFileDialogRO;
+    bool        m_bPluginsEnabled;
+    bool        m_bIsPluginsEnabledRO;
     sal_Int16   m_nSymbolsSize;
-    sal_Bool    m_bIsSymbolsSizeRO;
-    sal_Bool    m_bIsSymbolsStyleRO;
+    bool        m_bIsSymbolsSizeRO;
+    bool        m_bIsSymbolsStyleRO;
     sal_Int16   m_nToolboxStyle;
-    sal_Bool    m_bIsToolboxStyleRO;
-    sal_Bool    m_bUseSystemPrintDialog;
-    sal_Bool    m_bIsUseSystemPrintDialogRO;
-    sal_Bool    m_bShowLinkWarningDialog;
-    sal_Bool    m_bIsShowLinkWarningDialogRO;
-    sal_Bool    m_bDisableUICustomization;
-    sal_Bool    m_bAlwaysAllowSave;
-    sal_Bool    m_bExperimentalMode;
-    sal_Bool    m_bMacroRecorderMode;
-    sal_Bool    m_bIconThemeWasSetAutomatically;
+    bool        m_bIsToolboxStyleRO;
+    bool        m_bUseSystemPrintDialog;
+    bool        m_bIsUseSystemPrintDialogRO;
+    bool        m_bShowLinkWarningDialog;
+    bool        m_bIsShowLinkWarningDialogRO;
+    bool        m_bDisableUICustomization;
+    bool        m_bAlwaysAllowSave;
+    bool        m_bExperimentalMode;
+    bool        m_bMacroRecorderMode;
+    bool        m_bIconThemeWasSetAutomatically;
 
     public:
 
@@ -137,40 +137,40 @@ class SvtMiscOptions_Impl : public ConfigItem
         //  public interface
 
 
-        inline sal_Bool UseSystemFileDialog() const
+        inline bool UseSystemFileDialog() const
         { return m_bUseSystemFileDialog; }
 
-        inline void SetUseSystemFileDialog( sal_Bool bSet )
+        inline void SetUseSystemFileDialog( bool bSet )
         {  m_bUseSystemFileDialog = bSet; SetModified(); }
 
-        inline sal_Bool IsUseSystemFileDialogReadOnly() const
+        inline bool IsUseSystemFileDialogReadOnly() const
         { return m_bIsUseSystemFileDialogRO; }
 
-        inline sal_Bool DisableUICustomization() const
+        inline bool DisableUICustomization() const
         { return m_bDisableUICustomization; }
 
-        inline void SetSaveAlwaysAllowed( sal_Bool bSet )
+        inline void SetSaveAlwaysAllowed( bool bSet )
         { m_bAlwaysAllowSave = bSet; SetModified(); }
 
-        inline sal_Bool IsSaveAlwaysAllowed() const
+        inline bool IsSaveAlwaysAllowed() const
         { return m_bAlwaysAllowSave; }
 
-        inline void SetExperimentalMode( sal_Bool bSet )
+        inline void SetExperimentalMode( bool bSet )
         { m_bExperimentalMode = bSet; SetModified(); }
 
-        inline sal_Bool IsExperimentalMode() const
+        inline bool IsExperimentalMode() const
         { return m_bExperimentalMode; }
 
-        inline void SetMacroRecorderMode( sal_Bool bSet )
+        inline void SetMacroRecorderMode( bool bSet )
         { m_bMacroRecorderMode = bSet; SetModified(); }
 
-        inline sal_Bool IsMacroRecorderMode() const
+        inline bool IsMacroRecorderMode() const
         { return m_bMacroRecorderMode; }
 
-        inline sal_Bool IsPluginsEnabled() const
+        inline bool IsPluginsEnabled() const
         { return m_bPluginsEnabled; }
 
-        inline sal_Bool IsPluginsEnabledReadOnly() const
+        inline bool IsPluginsEnabledReadOnly() const
         { return m_bIsPluginsEnabledRO; }
 
         inline sal_Int16 GetSymbolsSize()
@@ -178,7 +178,7 @@ class SvtMiscOptions_Impl : public ConfigItem
 
         void SetSymbolsSize( sal_Int16 nSet );
 
-        inline sal_Bool IsGetSymbolsSizeReadOnly()
+        inline bool IsGetSymbolsSizeReadOnly()
         { return m_bIsSymbolsSizeRO; }
 
         OUString GetIconTheme() const;
@@ -208,7 +208,7 @@ class SvtMiscOptions_Impl : public ConfigItem
          */
         void SetIconThemeAutomatically(SetModifiedFlag = SET_MODIFIED);
 
-        inline sal_Bool IsGetSymbolsStyleReadOnly()
+        inline bool IsGetSymbolsStyleReadOnly()
         { return m_bIsSymbolsStyleRO; }
 
         // translate to VCL settings ( "0" = 3D, "1" = FLAT )
@@ -218,25 +218,25 @@ class SvtMiscOptions_Impl : public ConfigItem
         // translate from VCL settings
         void SetToolboxStyle( sal_Int16 nStyle, bool _bSetModified );
 
-        inline sal_Bool IsGetToolboxStyleReadOnly()
+        inline bool IsGetToolboxStyleReadOnly()
         { return m_bIsToolboxStyleRO; }
 
-        inline sal_Bool UseSystemPrintDialog() const
+        inline bool UseSystemPrintDialog() const
         { return m_bUseSystemPrintDialog; }
 
-        inline void SetUseSystemPrintDialog( sal_Bool bSet )
+        inline void SetUseSystemPrintDialog( bool bSet )
         {  m_bUseSystemPrintDialog = bSet; SetModified(); }
 
-        inline sal_Bool IsUseSystemPrintDialogReadOnly() const
+        inline bool IsUseSystemPrintDialogReadOnly() const
         { return m_bIsUseSystemPrintDialogRO; }
 
-        inline sal_Bool ShowLinkWarningDialog() const
+        inline bool ShowLinkWarningDialog() const
         { return m_bShowLinkWarningDialog; }
 
-        void SetShowLinkWarningDialog( sal_Bool bSet )
+        void SetShowLinkWarningDialog( bool bSet )
         {  m_bShowLinkWarningDialog = bSet; SetModified(); }
 
-        sal_Bool IsShowLinkWarningDialogReadOnly() const
+        bool IsShowLinkWarningDialogReadOnly() const
         { return m_bIsShowLinkWarningDialogRO; }
 
         void AddListenerLink( const Link& rLink );
@@ -276,23 +276,23 @@ SvtMiscOptions_Impl::SvtMiscOptions_Impl()
     // Init baseclasses first
     : ConfigItem( ROOTNODE_MISC )
 
-    , m_bUseSystemFileDialog( sal_False )
-    , m_bIsUseSystemFileDialogRO( sal_False )
-    , m_bPluginsEnabled( sal_False )
-    , m_bIsPluginsEnabledRO( sal_False )
+    , m_bUseSystemFileDialog( false )
+    , m_bIsUseSystemFileDialogRO( false )
+    , m_bPluginsEnabled( false )
+    , m_bIsPluginsEnabledRO( false )
     , m_nSymbolsSize( 0 )
-    , m_bIsSymbolsSizeRO( sal_False )
-    , m_bIsSymbolsStyleRO( sal_False )
+    , m_bIsSymbolsSizeRO( false )
+    , m_bIsSymbolsStyleRO( false )
     , m_nToolboxStyle( 1 )
-    , m_bIsToolboxStyleRO( sal_False )
-    , m_bUseSystemPrintDialog( sal_False )
-    , m_bIsUseSystemPrintDialogRO( sal_False )
-    , m_bShowLinkWarningDialog( sal_True )
-    , m_bIsShowLinkWarningDialogRO( sal_False )
-    , m_bAlwaysAllowSave( sal_False )
-    , m_bExperimentalMode( sal_False )
-    , m_bMacroRecorderMode( sal_False )
-    , m_bIconThemeWasSetAutomatically( sal_False )
+    , m_bIsToolboxStyleRO( false )
+    , m_bUseSystemPrintDialog( false )
+    , m_bIsUseSystemPrintDialogRO( false )
+    , m_bShowLinkWarningDialog( true )
+    , m_bIsShowLinkWarningDialogRO( false )
+    , m_bAlwaysAllowSave( false )
+    , m_bExperimentalMode( false )
+    , m_bMacroRecorderMode( false )
+    , m_bIconThemeWasSetAutomatically( false )
 {
     // Use our static list of configuration keys to get his values.
     Sequence< OUString >    seqNames    = GetPropertyNames  (           );
@@ -776,22 +776,22 @@ SvtMiscOptions::~SvtMiscOptions()
     }
 }
 
-sal_Bool SvtMiscOptions::UseSystemFileDialog() const
+bool SvtMiscOptions::UseSystemFileDialog() const
 {
     return m_pDataContainer->UseSystemFileDialog();
 }
 
-void SvtMiscOptions::SetUseSystemFileDialog( sal_Bool bEnable )
+void SvtMiscOptions::SetUseSystemFileDialog( bool bEnable )
 {
     m_pDataContainer->SetUseSystemFileDialog( bEnable );
 }
 
-sal_Bool SvtMiscOptions::IsUseSystemFileDialogReadOnly() const
+bool SvtMiscOptions::IsUseSystemFileDialogReadOnly() const
 {
     return m_pDataContainer->IsUseSystemFileDialogReadOnly();
 }
 
-sal_Bool SvtMiscOptions::IsPluginsEnabled() const
+bool SvtMiscOptions::IsPluginsEnabled() const
 {
     return m_pDataContainer->IsPluginsEnabled();
 }
@@ -839,7 +839,7 @@ void SvtMiscOptions::SetIconTheme(const OUString& iconTheme)
     m_pDataContainer->SetIconTheme(iconTheme);
 }
 
-sal_Bool SvtMiscOptions::DisableUICustomization() const
+bool SvtMiscOptions::DisableUICustomization() const
 {
     return m_pDataContainer->DisableUICustomization();
 }
@@ -854,57 +854,57 @@ void SvtMiscOptions::SetToolboxStyle( sal_Int16 nStyle )
     m_pDataContainer->SetToolboxStyle( nStyle, true );
 }
 
-sal_Bool SvtMiscOptions::UseSystemPrintDialog() const
+bool SvtMiscOptions::UseSystemPrintDialog() const
 {
     return m_pDataContainer->UseSystemPrintDialog();
 }
 
-void SvtMiscOptions::SetUseSystemPrintDialog( sal_Bool bEnable )
+void SvtMiscOptions::SetUseSystemPrintDialog( bool bEnable )
 {
     m_pDataContainer->SetUseSystemPrintDialog( bEnable );
 }
 
-sal_Bool SvtMiscOptions::ShowLinkWarningDialog() const
+bool SvtMiscOptions::ShowLinkWarningDialog() const
 {
     return m_pDataContainer->ShowLinkWarningDialog();
 }
 
-void SvtMiscOptions::SetShowLinkWarningDialog( sal_Bool bSet )
+void SvtMiscOptions::SetShowLinkWarningDialog( bool bSet )
 {
     m_pDataContainer->SetShowLinkWarningDialog( bSet );
 }
 
-sal_Bool SvtMiscOptions::IsShowLinkWarningDialogReadOnly() const
+bool SvtMiscOptions::IsShowLinkWarningDialogReadOnly() const
 {
     return m_pDataContainer->IsShowLinkWarningDialogReadOnly();
 }
 
-void SvtMiscOptions::SetSaveAlwaysAllowed( sal_Bool bSet )
+void SvtMiscOptions::SetSaveAlwaysAllowed( bool bSet )
 {
     m_pDataContainer->SetSaveAlwaysAllowed( bSet );
 }
 
-sal_Bool SvtMiscOptions::IsSaveAlwaysAllowed() const
+bool SvtMiscOptions::IsSaveAlwaysAllowed() const
 {
     return m_pDataContainer->IsSaveAlwaysAllowed();
 }
 
-void SvtMiscOptions::SetExperimentalMode( sal_Bool bSet )
+void SvtMiscOptions::SetExperimentalMode( bool bSet )
 {
     m_pDataContainer->SetExperimentalMode( bSet );
 }
 
-sal_Bool SvtMiscOptions::IsExperimentalMode() const
+bool SvtMiscOptions::IsExperimentalMode() const
 {
     return m_pDataContainer->IsExperimentalMode();
 }
 
-void SvtMiscOptions::SetMacroRecorderMode( sal_Bool bSet )
+void SvtMiscOptions::SetMacroRecorderMode( bool bSet )
 {
     m_pDataContainer->SetMacroRecorderMode( bSet );
 }
 
-sal_Bool SvtMiscOptions::IsMacroRecorderMode() const
+bool SvtMiscOptions::IsMacroRecorderMode() const
 {
     return m_pDataContainer->IsMacroRecorderMode();
 }

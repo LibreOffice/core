@@ -1565,7 +1565,7 @@ int Desktop::Main()
             // which does only work for VCL dialogs!!
             SvtMiscOptions aMiscOptions;
             pExecGlobals->bUseSystemFileDialog = aMiscOptions.UseSystemFileDialog();
-            aMiscOptions.SetUseSystemFileDialog( sal_False );
+            aMiscOptions.SetUseSystemFileDialog( false );
         }
 
         pExecGlobals->bRestartRequested = xRestartManager->isRestartRequested(

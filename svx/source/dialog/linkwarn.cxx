@@ -32,7 +32,7 @@ SvxLinkWarningDialog::SvxLinkWarningDialog( Window* pParent, const OUString& _rF
 
     // load state of "warning on" checkbox from misc options
     SvtMiscOptions aMiscOpt;
-    m_pWarningOnBox->Check( aMiscOpt.ShowLinkWarningDialog() == sal_True );
+    m_pWarningOnBox->Check( aMiscOpt.ShowLinkWarningDialog() );
     if( aMiscOpt.IsShowLinkWarningDialogReadOnly() )
         m_pWarningOnBox->Disable();
 }
@@ -41,7 +41,7 @@ SvxLinkWarningDialog::~SvxLinkWarningDialog()
 {
     // save value of "warning off" checkbox, if necessary
     SvtMiscOptions aMiscOpt;
-    sal_Bool bChecked = m_pWarningOnBox->IsChecked();
+    bool bChecked = m_pWarningOnBox->IsChecked();
     if ( aMiscOpt.ShowLinkWarningDialog() != bChecked )
         aMiscOpt.SetShowLinkWarningDialog( bChecked );
 }

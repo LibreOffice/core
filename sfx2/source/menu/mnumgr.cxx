@@ -72,7 +72,7 @@ using namespace com::sun::star;
 void TryToHideDisabledEntries_Impl( Menu* pMenu )
 {
     DBG_ASSERT( pMenu, "invalid menu" );
-    if( SvtMenuOptions().IsEntryHidingEnabled() == sal_False )
+    if( ! SvtMenuOptions().IsEntryHidingEnabled() )
     {
         pMenu->SetMenuFlags( pMenu->GetMenuFlags() | MENU_FLAG_HIDEDISABLEDENTRIES );
     }
