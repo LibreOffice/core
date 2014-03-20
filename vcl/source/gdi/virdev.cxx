@@ -30,6 +30,7 @@
 #include <salframe.hxx>
 #include <salvd.hxx>
 #include <outdev.h>
+#include "PhysicalFontCollection.hxx"
 #include <svdata.hxx>
 
 using namespace ::com::sun::star::uno;

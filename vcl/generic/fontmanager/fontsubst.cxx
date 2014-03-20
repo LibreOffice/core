@@ -28,6 +28,7 @@
 #include "salbmp.hxx"
 #include "impfont.hxx"
 #include "outdev.h"
+#include "PhysicalFontCollection.hxx"
 #include "fontsubset.hxx"
 #include "salprn.hxx"
 

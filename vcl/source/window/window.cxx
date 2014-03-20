@@ -68,6 +68,7 @@
 #include "window.h"
 #include "toolbox.h"
 #include "outdev.h"
+#include "PhysicalFontCollection.hxx"
 #include "brdwin.hxx"
 #include "helpwin.hxx"
 #include "sallayout.hxx"

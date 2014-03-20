@@ -24,6 +24,8 @@
 #include <set>
 #include <vector>
 
+#include <tools/gen.hxx>
+
 #include "outfont.hxx"
 #include "PhysicalFontFace.hxx"
 
@@ -32,56 +34,7 @@ class Font;
 class VirtualDevice;
 class ImplGetDevFontList;
 class GetDevSizeList;
-
-// flags for mnMatchType member
-#define IMPL_DEVFONT_SCALABLE       ((sal_uIntPtr)0x00000001)
-#define IMPL_DEVFONT_SYMBOL         ((sal_uIntPtr)0x00000002)
-#define IMPL_DEVFONT_NONESYMBOL     ((sal_uIntPtr)0x00000004)
-#define IMPL_DEVFONT_LIGHT          ((sal_uIntPtr)0x00000010)
-#define IMPL_DEVFONT_BOLD           ((sal_uIntPtr)0x00000020)
-#define IMPL_DEVFONT_NORMAL         ((sal_uIntPtr)0x00000040)
-#define IMPL_DEVFONT_NONEITALIC     ((sal_uIntPtr)0x00000100)
-#define IMPL_DEVFONT_ITALIC         ((sal_uIntPtr)0x00000200)
-
-
-class PhysicalFontFamily
-{
-public:
-                        PhysicalFontFamily( const OUString& rSearchName );
-                        ~PhysicalFontFamily();
-
-    const OUString&     GetFamilyName() const    { return maName; }
-    const OUString&       GetSearchName() const    { return maSearchName; }
-    const OUString&     GetAliasNames() const    { return maMapNames; }
-    bool                IsScalable() const       { return mpFirst->IsScalable(); }
-    int                 GetMinQuality() const    { return mnMinQuality; }
-
-    bool                AddFontFace( PhysicalFontFace* );
-    void                InitMatchData( const utl::FontSubstConfiguration&,
-                            const OUString& rSearchName );
-    PhysicalFontFace*   FindBestFontFace( const FontSelectPattern& rFSD ) const;
-
-    void                GetFontHeights( std::set<int>& rHeights ) const;
-    void                UpdateDevFontList( ImplGetDevFontList& ) const;
-    void                UpdateCloneFontList( PhysicalFontCollection&,
-                                             bool bScalable, bool bEmbeddable ) const;
-
-private:
-friend class PhysicalFontCollection; // TODO: remove soon
-    PhysicalFontFace*   mpFirst;            // linked list of physical font faces
-    OUString            maName;             // Fontname (original font family name)
-    OUString            maSearchName;       // normalized font family name
-    OUString            maMapNames;         // fontname aliases
-    sal_uIntPtr         mnTypeFaces;        // Typeface Flags
-    sal_uIntPtr         mnMatchType;        // MATCH - Type
-    OUString            maMatchFamilyName;  // MATCH - FamilyName
-    FontWeight          meMatchWeight;      // MATCH - Weight
-    FontWidth           meMatchWidth;       // MATCH - Width
-    FontFamily          meFamily;
-    FontPitch           mePitch;
-    int                 mnMinQuality;       // quality of the worst font face
-};
-
+class PhysicalFontCollection;
 // an ImplGetDevFontList is created by an PhysicalFontCollection
 // it becomes invalid when original PhysicalFontCollection is modified
 class ImplGetDevFontList
@@ -217,6 +170,9 @@ struct ImplOutDevData
     basegfx::B2DHomMatrix*      mpViewTransform;
     basegfx::B2DHomMatrix*      mpInverseViewTransform;
 };
+
+void ImplFontSubstitute( OUString& rFontName );
+
 
 #endif // INCLUDED_VCL_INC_OUTDEV_H
 

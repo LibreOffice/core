@@ -50,6 +50,7 @@
 #include "generic/printergfx.hxx"
 #include "impfont.hxx"
 #include "outdev.h"
+#include "PhysicalFontCollection.hxx"
 #include "PhysicalFontFace.hxx"
 #include "salframe.hxx"
 #include "unx/saldata.hxx"

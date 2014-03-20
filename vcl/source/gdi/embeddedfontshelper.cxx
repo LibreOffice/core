@@ -8,23 +8,23 @@
  */
 
 #include <config_folders.h>
-
-#include <vcl/embeddedfontshelper.hxx>
-
-#include <osl/file.hxx>
-#include <rtl/bootstrap.hxx>
-#include <sft.hxx>
-#include <vcl/outdev.hxx>
-#include <vcl/svapp.hxx>
+#include <config_eot.h>
 
 #include <boost/scoped_ptr.hpp>
 #include <boost/shared_ptr.hpp>
-#include <fontsubset.hxx>
-#include <outdev.h>
-#include <outfont.hxx>
-#include <salgdi.hxx>
+#include <osl/file.hxx>
+#include <rtl/bootstrap.hxx>
+#include <vcl/outdev.hxx>
+#include <vcl/svapp.hxx>
 
-#include <config_eot.h>
+#include "fontsubset.hxx"
+#include "outdev.h"
+#include "outfont.hxx"
+#include "PhysicalFontCollection.hxx"
+#include "salgdi.hxx"
+#include "sft.hxx"
+
+#include <vcl/embeddedfontshelper.hxx>
 
 #if ENABLE_EOT
 extern "C"
