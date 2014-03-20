@@ -395,6 +395,8 @@ static sal_Bool SAL_CALL osl_psz_getConfigDir(oslSecurity Security, sal_Char* ps
     if (pStr == NULL || strlen(pStr) == 0 || access(pStr, 0) != 0)
     {
         size_t n = 0;
+        sal_Bool dirOK = sal_True;
+
         // a default equal to $HOME/.config should be used.
         if (!osl_psz_getHomeDir(Security, pszDirectory, nMax))
             return sal_False;
@@ -402,11 +404,37 @@ static sal_Bool SAL_CALL osl_psz_getConfigDir(oslSecurity Security, sal_Char* ps
         if (n + sizeof(DOT_CONFIG) < nMax)
         {
             strncpy(pszDirectory+n, DOT_CONFIG, sizeof(DOT_CONFIG));
-            if (access(pszDirectory, 0) != 0)
+
+            // try to create dir if not present
+            if (access(pszDirectory, F_OK) != 0 && mkdir(pszDirectory, S_IRWXU) != 0)
+                dirOK = sal_False;
+            else
             {
-                // resort to HOME
-                pszDirectory[n] = '\0';
+                // check file type and permissions
+                struct stat st;
+                if (stat(pszDirectory, &st) != 0)
+                {
+                    OSL_TRACE("Could not stat $HOME/.config");
+                    dirOK = sal_False;
+                }
+                else
+                {
+                    if (!S_ISDIR(st.st_mode))
+                    {
+                        OSL_TRACE("$HOME/.config is not a directory");
+                        dirOK = sal_False;
+                    }
+                    if (!(st.st_mode & S_IRUSR && st.st_mode & S_IWUSR && st.st_mode & S_IXUSR))
+                    {
+                        OSL_TRACE("$HOME/.config has bad permissions");
+                        dirOK = sal_False;
+                    }
+                }
             }
+
+            // resort to HOME
+            if (dirOK == sal_False)
+                pszDirectory[n] = '\0';
         }
     }
     else
