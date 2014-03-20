@@ -31,7 +31,7 @@
 #include <boost/ptr_container/ptr_vector.hpp>
 #include <boost/noncopyable.hpp>
 
-class ScEnhancedProtection;
+struct ScEnhancedProtection;
 
 /* ============================================================================
 Classes to import the big Excel document contents (related to several cells or
