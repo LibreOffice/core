@@ -3150,6 +3150,16 @@ void Window::ImplScroll( const Rectangle& rRect,
             if ( mpWindowImpl->mbTrackVisible && (mpWindowImpl->mpWinData->mnTrackFlags & SHOWTRACK_WINDOW) )
                 InvertTracking( *(mpWindowImpl->mpWinData->mpTrackRect), mpWindowImpl->mpWinData->mnTrackFlags );
         }
+#ifndef IOS
+        // This seems completely unnecessary with tiled rendering, and
+        // causes the "AquaSalGraphics::copyArea() for non-layered
+        // graphics" message. Presumably we should bypass this on all
+        // platforms when dealing with a "window" that uses tiled
+        // rendering at the moment. Unclear how to figure that out,
+        // though. Also unclear whether we actually could just not
+        // create a "frame window", whatever that exactly is, in the
+        // tiled rendering case, or at least for platforms where tiles
+        // rendering is all there is.
 
         SalGraphics* pGraphics = ImplGetFrameGraphics();
         if ( pGraphics )
@@ -3166,7 +3176,7 @@ void Window::ImplScroll( const Rectangle& rRect,
                                  rRect.GetWidth(), rRect.GetHeight(),
                                  SAL_COPYAREA_WINDOWINVALIDATE, this );
         }
-
+#endif
         if ( mpWindowImpl->mpWinData )
         {
             if ( mpWindowImpl->mbFocusVisible )
