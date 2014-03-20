@@ -380,8 +380,7 @@ const sal_Char* SwXDispatch::GetDBChangeURL()
 }
 
 SwXDispatchProviderInterceptor::DispatchMutexLock_Impl::DispatchMutexLock_Impl(
-                                                 SwXDispatchProviderInterceptor& ) :
-    aGuard(Application::GetSolarMutex())
+                                                 SwXDispatchProviderInterceptor& )
 {
 }
 
