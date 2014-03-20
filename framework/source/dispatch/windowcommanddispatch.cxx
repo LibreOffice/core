@@ -18,7 +18,6 @@
  */
 
 #include <dispatch/windowcommanddispatch.hxx>
-#include <threadhelp/guard.hxx>
 #include <targets.h>
 #include <services.h>
 
@@ -40,8 +39,7 @@ namespace framework{
 
 WindowCommandDispatch::WindowCommandDispatch(const css::uno::Reference< css::uno::XComponentContext >& xContext ,
                          const css::uno::Reference< css::frame::XFrame >&              xFrame)
-    : ThreadHelpBase(                            )
-    , m_xContext    (xContext                    )
+    : m_xContext    (xContext                    )
     , m_xFrame      (xFrame                      )
     , m_xWindow     (xFrame->getContainerWindow())
 {
@@ -58,9 +56,9 @@ WindowCommandDispatch::~WindowCommandDispatch()
 
 void WindowCommandDispatch::impl_startListening()
 {
-    Guard aReadLock(m_aLock);
+    osl::ClearableMutexGuard aReadLock(m_mutex);
     css::uno::Reference< css::awt::XWindow > xWindow( m_xWindow.get(), css::uno::UNO_QUERY );
-    aReadLock.unlock();
+    aReadLock.clear();
 
     if ( ! xWindow.is())
         return;
@@ -78,9 +76,9 @@ void WindowCommandDispatch::impl_startListening()
 
 void WindowCommandDispatch::impl_stopListening()
 {
-    Guard aReadLock(m_aLock);
+    osl::ClearableMutexGuard aReadLock(m_mutex);
     css::uno::Reference< css::awt::XWindow > xWindow( m_xWindow.get(), css::uno::UNO_QUERY );
-    aReadLock.unlock();
+    aReadLock.clear();
 
     if (!xWindow.is())
         return;
@@ -152,10 +150,10 @@ void WindowCommandDispatch::impl_dispatchCommand(const OUString& sCommand)
     try
     {
         // SYNCHRONIZED ->
-        Guard aReadLock(m_aLock);
+        osl::ClearableMutexGuard aReadLock(m_mutex);
         css::uno::Reference< css::frame::XDispatchProvider >   xProvider(m_xFrame.get(), css::uno::UNO_QUERY_THROW);
         css::uno::Reference< css::uno::XComponentContext >     xContext    = m_xContext;
-        aReadLock.unlock();
+        aReadLock.clear();
         // <- SYNCHRONIZED
 
         // check provider ... we know it's weak reference only

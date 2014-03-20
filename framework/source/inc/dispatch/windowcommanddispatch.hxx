@@ -20,8 +20,6 @@
 #ifndef INCLUDED_FRAMEWORK_SOURCE_INC_DISPATCH_WINDOWCOMMANDDISPATCH_HXX
 #define INCLUDED_FRAMEWORK_SOURCE_INC_DISPATCH_WINDOWCOMMANDDISPATCH_HXX
 
-#include <threadhelp/threadhelpbase.hxx>
-
 #include <com/sun/star/awt/XWindow.hpp>
 #include <com/sun/star/frame/XFrame.hpp>
 #include <com/sun/star/lang/XEventListener.hpp>
@@ -47,9 +45,10 @@ namespace framework{
             scenarios. On the other side VCL does not hold us alive (because it doesn't know our UNO reference).
             So we register at the VCL level as an event listener and
  */
-class WindowCommandDispatch : private ThreadHelpBase
+class WindowCommandDispatch
 {
     private:
+        osl::Mutex m_mutex;
 
         /// can be used to create own needed services on demand.
         css::uno::Reference< css::uno::XComponentContext > m_xContext;
