@@ -20,7 +20,6 @@
 #ifndef INCLUDED_FRAMEWORK_INC_DISPATCH_OXT_HANDLER_HXX
 #define INCLUDED_FRAMEWORK_INC_DISPATCH_OXT_HANDLER_HXX
 
-#include <threadhelp/threadhelpbase.hxx>
 #include <macros/xinterface.hxx>
 #include <macros/xtypeprovider.hxx>
 #include <macros/xserviceinfo.hxx>
@@ -53,11 +52,7 @@ namespace framework{
     @devstatus      ready
     @threadsafe     yes
 *//*-*************************************************************************************************************/
-class Oxt_Handler  :    // baseclasses
-                        // Order is necessary for right initialization!
-                        private ThreadHelpBase
-                        // interfaces
-                    ,   public  ::cppu::WeakImplHelper3<
+class Oxt_Handler  :    public  ::cppu::WeakImplHelper3<
                                     css::lang::XServiceInfo,
                                     css::frame::XNotifyingDispatch, // => XDispatch
                                     css::document::XExtendedFilterDetection >
@@ -114,6 +109,7 @@ class Oxt_Handler  :    // baseclasses
     //  (should be private everyway!)
 
     private:
+        osl::Mutex m_mutex;
 
         css::uno::Reference< css::lang::XMultiServiceFactory >     m_xFactory          ;   /// global uno service factory to create new services
         css::uno::Reference< css::uno::XInterface >                m_xSelfHold         ;   /// we must protect us against dieing during async(!) dispatch() call!

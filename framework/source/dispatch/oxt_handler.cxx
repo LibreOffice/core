@@ -18,7 +18,6 @@
  */
 
 #include <dispatch/oxt_handler.hxx>
-#include <threadhelp/guard.hxx>
 #include <threadhelp/transactionguard.hxx>
 #include <services.h>
 #include <unotools/mediadescriptor.hxx>
@@ -60,10 +59,7 @@ DEFINE_INIT_SERVICE                 (   Oxt_Handler,
     @threadsafe yes
 *//*-*************************************************************************************************************/
 Oxt_Handler::Oxt_Handler( const css::uno::Reference< css::lang::XMultiServiceFactory >& xFactory )
-        //  Init baseclasses first
-        :   ThreadHelpBase      (          )
-        // Init member
-        ,   m_xFactory          ( xFactory )
+        :   m_xFactory          ( xFactory )
 {
 }
 
@@ -117,8 +113,7 @@ void SAL_CALL Oxt_Handler::dispatchWithNotification( const css::util::URL& aURL,
                                                      const css::uno::Reference< css::frame::XDispatchResultListener >& xListener )
     throw( css::uno::RuntimeException, std::exception )
 {
-    // SAFE {
-    Guard aLock( m_aLock );
+    osl::MutexGuard g(m_mutex);
 
     OUString sServiceName = "com.sun.star.deployment.ui.PackageManagerDialog";
     css::uno::Sequence< css::uno::Any > lParams(1);
@@ -137,9 +132,6 @@ void SAL_CALL Oxt_Handler::dispatchWithNotification( const css::util::URL& aURL,
         aEvent.State = css::frame::DispatchResultState::SUCCESS;
         xListener->dispatchFinished( aEvent );
     }
-
-    // } SAFE
-    aLock.unlock();
 }
 
 void SAL_CALL Oxt_Handler::dispatch( const css::util::URL&                                  aURL       ,
