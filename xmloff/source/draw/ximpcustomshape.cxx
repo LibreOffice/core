@@ -52,6 +52,7 @@
 #include <com/sun/star/drawing/EnhancedCustomShapeSegmentCommand.hpp>
 #include <com/sun/star/drawing/EnhancedCustomShapeTextPathMode.hpp>
 #include <com/sun/star/drawing/ProjectionMode.hpp>
+#include <com/sun/star/drawing/HomogenMatrix3.hpp>
 #include <basegfx/vector/b2dvector.hxx>
 #include <hash_map>
 
