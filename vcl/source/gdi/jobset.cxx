@@ -162,14 +162,6 @@ OUString JobSetup::GetDriverName() const
         return OUString();
 }
 
-void JobSetup::SetValue( const OUString& rKey, const OUString& rValue )
-{
-    if( ! mpData )
-        mpData = new ImplJobSetup();
-
-    mpData->maValueMap[ rKey ] = rValue;
-}
-
 JobSetup& JobSetup::operator=( const JobSetup& rJobSetup )
 {
     DBG_ASSERT( !rJobSetup.mpData || (rJobSetup.mpData->mnRefCount) < 0xFFFE, "JobSetup: RefCount overflow" );

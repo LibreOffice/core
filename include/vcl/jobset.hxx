@@ -46,13 +46,6 @@ public:
     OUString              GetPrinterName() const;
     OUString              GetDriverName() const;
 
-    /*  Get/SetValue are used to read/store additional
-     *  Parameters in the job setup that may be used
-     *  by the printer driver. One possible use are phone
-     *  numbers for faxes (which disguise as printers)
-     */
-    void                SetValue( const OUString& rKey, const OUString& rValue );
-
     JobSetup&           operator=( const JobSetup& rJob );
 
     bool                operator==( const JobSetup& rJobSetup ) const;

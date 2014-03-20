@@ -305,7 +305,6 @@ public:
 
     bool                        SetJobSetup( const JobSetup& rSetup );
     const JobSetup&             GetJobSetup() const { return maJobSetup; }
-    void                        SetJobValue( const OUString& rKey, const OUString& rValue ) { maJobSetup.SetValue( rKey, rValue ); }
 
     bool                        Setup( Window* pWindow = NULL );
     bool                        SetPrinterProps( const Printer* pPrinter );

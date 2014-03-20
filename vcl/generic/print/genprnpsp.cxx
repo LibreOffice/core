@@ -921,11 +921,6 @@ bool PspSalPrinter::StartJob(
             m_aTmpFile = getTmpName();
             nMode = S_IRUSR | S_IWUSR;
 
-            ::boost::unordered_map< OUString, OUString, OUStringHash >::const_iterator it;
-            it = pJobSetup->maValueMap.find( OUString("FAX#") );
-            if( it != pJobSetup->maValueMap.end() )
-                m_aFaxNr = it->second;
-
             sal_Int32 nPos = 0;
             m_bSwallowFaxNo = aToken.getToken( 1, '=', nPos ).startsWith( "swallow" ) ? true : false;
 

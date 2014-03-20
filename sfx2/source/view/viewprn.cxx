@@ -618,10 +618,6 @@ void SfxViewShell::ExecPrint( const uno::Sequence < beans::PropertyValue >& rPro
     // FIXME: job setup
     SfxPrinter* pDocPrt = GetPrinter(false);
     JobSetup aJobSetup = pDocPrt ? pDocPrt->GetJobSetup() : GetJobSetup();
-    if( bIsDirect )
-        aJobSetup.SetValue( OUString( "IsQuickJob"  ),
-                            OUString( "true"  ) );
-
     Printer::PrintJob( pController, aJobSetup );
 }
 

@@ -579,7 +579,6 @@ void PADialog::PrintTestPage()
 
     boost::shared_ptr<vcl::PrinterController> pController( new SpaPrinterController( pPrinter ) );
     JobSetup aJobSetup( pPrinter->GetJobSetup() );
-    aJobSetup.SetValue( "IsQuickJob", "true" );
     Printer::PrintJob( pController, aJobSetup );
 }
 
