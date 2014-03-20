@@ -3372,24 +3372,23 @@ DynamicKernel* DynamicKernel::create(ScDocument& /* rDoc */,
             sal_uInt8 nParamCount =  pCur->GetParamCount();
             for (sal_uInt8 i = 0; i < nParamCount; i++)
             {
-                FormulaToken* m_TempFormula = aTokenList.back();
+                FormulaToken* pTempFormula = aTokenList.back();
                 aTokenList.pop_back();
-                if(m_TempFormula->GetOpCode()!=ocPush)
+                if (pTempFormula->GetOpCode() != ocPush)
                 {
-                    if (aHashMap.find(m_TempFormula)==aHashMap.end())
+                    if (aHashMap.find(pTempFormula)==aHashMap.end())
                         return NULL;
-                    pCurNode->Children.push_back(aHashMap[m_TempFormula]);
+                    pCurNode->Children.push_back(aHashMap[pTempFormula]);
                 }
                 else
                 {
-                    FormulaTreeNodeRef m_ChildTreeNode =
+                    FormulaTreeNodeRef pChildTreeNode =
                       FormulaTreeNodeRef(
-                               new FormulaTreeNode(m_TempFormula));
-                    pCurNode->Children.push_back(m_ChildTreeNode);
+                               new FormulaTreeNode(pTempFormula));
+                    pCurNode->Children.push_back(pChildTreeNode);
                 }
             }
-            std::reverse(pCurNode->Children.begin(),
-                                pCurNode->Children.end());
+            std::reverse(pCurNode->Children.begin(), pCurNode->Children.end());
             aHashMap[pCur] = pCurNode;
         }
         aTokenList.push_back(pCur);
@@ -3404,11 +3403,13 @@ DynamicKernel* DynamicKernel::create(ScDocument& /* rDoc */,
         return NULL;
 
     // OpenCL source code generation and kernel compilation
-    try {
+    try
+    {
         pDynamicKernel->CodeGen();
         pDynamicKernel->CreateKernel();
     }
-    catch (const UnhandledToken &ut) {
+    catch (const UnhandledToken &ut)
+    {
         std::cerr << "\nDynamic formual compiler: unhandled token: ";
         std::cerr << ut.mMessage << " at ";
         std::cerr << ut.mFile << ":" << ut.mLineNumber << "\n";
@@ -3419,7 +3420,8 @@ DynamicKernel* DynamicKernel::create(ScDocument& /* rDoc */,
         return NULL;
 #endif
     }
-    catch (...) {
+    catch (...)
+    {
         std::cerr << "Dynamic formula compiler: unhandled compiler error\n";
         return NULL;
     }

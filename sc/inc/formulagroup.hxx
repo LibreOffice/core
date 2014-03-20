@@ -74,6 +74,9 @@ struct FormulaGroupContext : boost::noncopyable
 
     void ensureStrArray( ColArray& rColArray, size_t nArrayLen );
     void ensureNumArray( ColArray& rColArray, size_t nArrayLen );
+
+    FormulaGroupContext();
+    ~FormulaGroupContext();
 };
 
 /**

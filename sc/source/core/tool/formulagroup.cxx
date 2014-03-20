@@ -129,6 +129,14 @@ void FormulaGroupContext::ensureNumArray( ColArray& rColArray, size_t nArrayLen 
     rColArray.mpNumArray = &maNumArrays.back();
 }
 
+FormulaGroupContext::FormulaGroupContext()
+{
+}
+
+FormulaGroupContext::~FormulaGroupContext()
+{
+}
+
 namespace {
 
 /**
