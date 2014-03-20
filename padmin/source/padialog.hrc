@@ -87,7 +87,6 @@
 #define RID_TXT_TESTPAGE_NAME                    1077
 
 #define RID_BMP_SMALL_PRINTER                    1096
-#define RID_BMP_SMALL_FAX                        1098
 #define RID_BMP_SMALL_PDF                        1100
 #define RID_BMP_PRINTER                          1102
 
@@ -110,8 +109,7 @@
 #define RID_ADDP_PAGE_CHOOSEDEV                 2001
 #define RID_ADDP_CHDEV_TXT_OVER                 1
 #define RID_ADDP_CHDEV_BTN_PRINTER              2
-#define RID_ADDP_CHDEV_BTN_FAX                  3
-#define RID_ADDP_CHDEV_BTN_PDF                  4
+#define RID_ADDP_CHDEV_BTN_PDF                  3
 
 #define RID_ADDP_PAGE_CHOOSEDRIVER              2002
 #define RID_ADDP_CHDRV_TXT_DRIVER               1
@@ -122,29 +120,20 @@
 
 #define RID_ADDP_PAGE_NAME                      2003
 #define RID_ADDP_NAME_TXT_NAME                  1
-#define RID_ADDP_NAME_TXT_FAXNAME               2
 #define RID_ADDP_NAME_TXT_PDFNAME               3
 #define RID_ADDP_NAME_EDT_NAME                  4
-#define RID_ADDP_NAME_EDT_FAXNAME               5
 #define RID_ADDP_NAME_EDT_PDFNAME               6
 #define RID_ADDP_NAME_BOX_DEFAULT               7
-#define RID_ADDP_NAME_BOX_FAXSWALLOW            8
 
 #define RID_ADDP_PAGE_COMMAND                   2004
 #define RID_ADDP_CMD_TXT_COMMAND                1
 #define RID_ADDP_CMD_BOX_COMMAND                2
 #define RID_ADDP_CMD_BTN_HELP                   3
-#define RID_ADDP_CMD_STR_FAXHELP                4
 #define RID_ADDP_CMD_STR_PDFHELP                5
 #define RID_ADDP_CMD_TXT_PDFDIR                 6
 #define RID_ADDP_CMD_EDT_PDFDIR                 7
 #define RID_ADDP_CMD_BTN_PDFDIR                 8
 #define RID_ADDP_CMD_BOX_PDFCOMMAND             9
-
-#define RID_ADDP_PAGE_FAXDRIVER                 2006
-#define RID_ADDP_FAXDRV_TXT_DRIVER              1
-#define RID_ADDP_FAXDRV_BTN_DEFAULT             2
-#define RID_ADDP_FAXDRV_BTN_SELECT              3
 
 #define RID_ADDP_PAGE_PDFDRIVER                 2007
 #define RID_ADDP_PDFDRV_TXT_DRIVER              1

@@ -72,10 +72,6 @@ TabPage RID_RTS_COMMANDPAGE
     {
         Text [ en-US ] = "Printer";
     };
-    String RID_RTS_CMD_STR_CONFIGURE_FAX
-    {
-        Text [ en-US ] = "Fax";
-    };
     String RID_RTS_CMD_STR_CONFIGURE_PDF
     {
         Text [ en-US ] = "PDF converter";
@@ -96,13 +92,6 @@ TabPage RID_RTS_COMMANDPAGE
         Text [ en-US ] = "~Configure as";
     };
 
-    CheckBox RID_RTS_CMD_BOX_SWALLOWFAXNO
-    {
-        HelpID = "padmin:CheckBox:RID_RTS_COMMANDPAGE:RID_RTS_CMD_BOX_SWALLOWFAXNO";
-        Pos = MAP_APPFONT( 11, 146 );
-        Size = MAP_APPFONT( 130, 8 );
-        Text [ en-US ] = "~Fax number will be removed from output";
-    };
     FixedText RID_RTS_CMD_TXT_PDFDIR
     {
         Pos = MAP_APPFONT( 11, 146 );
@@ -161,10 +150,6 @@ TabPage RID_RTS_COMMANDPAGE
     String RID_RTS_CMD_STR_PRINTERHELP
     {
         Text [ en-US ] = "The command line for printer devices is executed as follows: the generated PostScript code is supplied as standard input (i.e. as a pipe) to the command line.";
-    };
-    String RID_RTS_CMD_STR_FAXHELP
-    {
-        Text [ en-US ] = "The command line for fax devices is executed as follows: for each fax sent, \"(TMP)\" in the command line is replaced by a temporary file and \"(PHONE)\" in the command line is replaced by the fax number. If \"(TMP)\" appears in the command line, the PostScript code will be supplied via a file, otherwise it is passed as standard input (i.e. as a pipe).";
     };
 };
 

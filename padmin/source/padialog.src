@@ -244,11 +244,6 @@ Bitmap RID_BMP_SMALL_PRINTER
     File = "source/print.png";
 };
 
-Bitmap RID_BMP_SMALL_FAX
-{
-    File = "source/fax.png";
-};
-
 Bitmap RID_BMP_SMALL_PDF
 {
     File = "source/pdf.png";
@@ -516,7 +511,7 @@ TabPage RID_ADDP_PAGE_CHOOSEDEV
     HelpID = "padmin:TabPage:RID_ADDP_PAGE_CHOOSEDEV";
     Hide = TRUE;
     Pos = MAP_APPFONT( 0, 30 );
-    Size = MAP_APPFONT( 240, 120 );
+    Size = MAP_APPFONT( 240, 110 );
     String RID_ADDP_STR_TITLE
     {
         Text [ en-US ] = "Choose a device type";
@@ -534,17 +529,10 @@ TabPage RID_ADDP_PAGE_CHOOSEDEV
         Size = MAP_APPFONT( 180, 10 );
         Text [ en-US ] = "Add a ~printer";
     };
-    RadioButton RID_ADDP_CHDEV_BTN_FAX
-    {
-        HelpID = "padmin:RadioButton:RID_ADDP_PAGE_CHOOSEDEV:RID_ADDP_CHDEV_BTN_FAX";
-        Pos = MAP_APPFONT ( 40, 50 );
-        Size = MAP_APPFONT( 180, 10 );
-        Text [ en-US ] = "Connect a fa~x device";
-    };
     RadioButton RID_ADDP_CHDEV_BTN_PDF
     {
         HelpID = "padmin:RadioButton:RID_ADDP_PAGE_CHOOSEDEV:RID_ADDP_CHDEV_BTN_PDF";
-        Pos = MAP_APPFONT ( 40, 60 );
+        Pos = MAP_APPFONT ( 40, 50 );
         Size = MAP_APPFONT( 180, 10 );
         Text [ en-US ] = "Connect a P~DF converter";
     };
@@ -566,12 +554,6 @@ TabPage RID_ADDP_PAGE_NAME
         Size = MAP_APPFONT( 220, 8 );
         Text [ en-US ] = "Please enter a name for the printer.";
     };
-    FixedText RID_ADDP_NAME_TXT_FAXNAME
-    {
-        Pos = MAP_APPFONT( 40, 25 );
-        Size = MAP_APPFONT( 220, 8 );
-        Text [ en-US ] = "Please enter a name for the fax connection.";
-    };
     FixedText RID_ADDP_NAME_TXT_PDFNAME
     {
         Pos = MAP_APPFONT( 40, 25 );
@@ -584,14 +566,6 @@ TabPage RID_ADDP_PAGE_NAME
         Pos = MAP_APPFONT( 40, 35 );
         Size = MAP_APPFONT( 160, 12 );
         Border = TRUE;
-    };
-    Edit RID_ADDP_NAME_EDT_FAXNAME
-    {
-        HelpID = "padmin:Edit:RID_ADDP_PAGE_NAME:RID_ADDP_NAME_EDT_FAXNAME";
-        Pos = MAP_APPFONT( 40, 35 );
-        Size = MAP_APPFONT( 160, 12 );
-        Border = TRUE;
-        Text [ en-US ] = "Fax printer";
     };
     Edit RID_ADDP_NAME_EDT_PDFNAME
     {
@@ -607,13 +581,6 @@ TabPage RID_ADDP_PAGE_NAME
         Pos = MAP_APPFONT( 40, 50 );
         Size = MAP_APPFONT( 160, 12 );
         Text [ en-US ] = "~Use as default printer";
-    };
-    CheckBox RID_ADDP_NAME_BOX_FAXSWALLOW
-    {
-        HelpID = "padmin:CheckBox:RID_ADDP_PAGE_NAME:RID_ADDP_NAME_BOX_FAXSWALLOW";
-        Pos = MAP_APPFONT( 40, 50 );
-        Size = MAP_APPFONT( 160, 12 );
-        Text [ en-US ] = "Remo~ve fax number from output";
     };
 };
 
@@ -678,43 +645,6 @@ TabPage RID_ADDP_PAGE_COMMAND
     String RID_ADDP_CMD_STR_PDFHELP
     {
         Text [ en-US ] = "The command line for PDF converters is executed as follows: for each document printed, \"(TMP)\" in the command line is replaced by a temporary file and \"(OUTFILE)\" in the command line is replaced by the target PDF file name. If \"(TMP)\" is in the command line, the PostScript code will be supplied via a file, otherwise via standard input (i.e. as a pipe).";
-    };
-    String RID_ADDP_CMD_STR_FAXHELP
-    {
-        Text [ en-US ] = "The command line for fax connections is executed as follows: for each fax sent, \"(TMP)\" in the command line is replaced by a temporary file and \"(PHONE)\" in the command line is replaced by the fax number. If \"(TMP)\" appears in the command line, the PostScript code will be supplied via a file, otherwise it is passed as standard input (i.e. as a pipe).";
-    };
-};
-
-TabPage RID_ADDP_PAGE_FAXDRIVER
-{
-    HelpID = "padmin:TabPage:RID_ADDP_PAGE_FAXDRIVER";
-    Hide = TRUE;
-    Pos = MAP_APPFONT( 0, 30 );
-    Size = MAP_APPFONT( 240, 120 );
-    String RID_ADDP_STR_TITLE
-    {
-        Text [ en-US ] = "Choose a driver";
-    };
-    FixedText RID_ADDP_FAXDRV_TXT_DRIVER
-    {
-        Pos = MAP_APPFONT( 40, 20 );
-        Size = MAP_APPFONT( 160, 19 );
-        WordBreak = TRUE;
-        Text [ en-US ] = "Use the following driver for this fax connection";
-    };
-    RadioButton RID_ADDP_FAXDRV_BTN_DEFAULT
-    {
-        HelpID = "padmin:RadioButton:RID_ADDP_PAGE_FAXDRIVER:RID_ADDP_FAXDRV_BTN_DEFAULT";
-        Pos = MAP_APPFONT( 40,40 );
-        Size = MAP_APPFONT( 160, 10 );
-        Text [ en-US ] = "T~he default driver";
-    };
-    RadioButton RID_ADDP_FAXDRV_BTN_SELECT
-    {
-        HelpID = "padmin:RadioButton:RID_ADDP_PAGE_FAXDRIVER:RID_ADDP_FAXDRV_BTN_SELECT";
-        Pos = MAP_APPFONT( 40, 50 );
-        Size = MAP_APPFONT( 160,24 );
-        Text [ en-US ] = "A speci~fic driver, to adapt the format to another printer";
     };
 };
 

@@ -44,11 +44,9 @@ class CommandStore
 
 public:
     static void getPrintCommands( ::std::list< OUString >& rCommands );
-    static void getFaxCommands( ::std::list< OUString >& rCommands );
     static void getPdfCommands( ::std::list< OUString >& rCommands );
 
     static void setPrintCommands( const ::std::list< OUString >& rCommands );
-    static void setFaxCommands( const ::std::list< OUString >& rCommands );
     static void setPdfCommands( const ::std::list< OUString >& rCommands );
 };
 
@@ -69,25 +67,20 @@ private:
     FixedText                       m_aConfigureText;
     ListBox                         m_aConfigureBox;
     sal_uInt16                          m_nPrinterEntry;
-    sal_uInt16                          m_nFaxEntry;
     sal_uInt16                          m_nPdfEntry;
     FixedText                       m_aPdfDirectoryText;
     PushButton                      m_aPdfDirectoryButton;
     Edit                            m_aPdfDirectoryEdit;
-    CheckBox                        m_aFaxSwallowBox;
 
     PushButton                      m_aHelpButton;
     PushButton                      m_aRemovePB;
 
     ::std::list< OUString >         m_aPrinterCommands;
-    ::std::list< OUString >         m_aFaxCommands;
     ::std::list< OUString >         m_aPdfCommands;
 
-    OUString                        m_aFaxHelp;
     OUString                        m_aPrinterHelp;
     OUString                        m_aPdfHelp;
 
-    bool                            m_bWasFax;
     bool                            m_bWasPdf;
     bool                            m_bWasExternalDialog;
 

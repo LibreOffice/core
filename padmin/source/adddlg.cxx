@@ -49,18 +49,15 @@ APTabPage::APTabPage( AddPrinterDialog* pParent, const ResId& rResId )
 APChooseDevicePage::APChooseDevicePage( AddPrinterDialog* pParent ) :
         APTabPage( pParent, PaResId( RID_ADDP_PAGE_CHOOSEDEV ) ),
         m_aPrinterBtn( this, PaResId( RID_ADDP_CHDEV_BTN_PRINTER ) ),
-        m_aFaxBtn( this, PaResId( RID_ADDP_CHDEV_BTN_FAX ) ),
         m_aPDFBtn( this, PaResId( RID_ADDP_CHDEV_BTN_PDF ) ),
         m_aOverTxt( this, PaResId( RID_ADDP_CHDEV_TXT_OVER ) )
 {
     FreeResource();
     m_aPrinterBtn.Check( true );
-    m_aFaxBtn.Check( false );
     m_aPDFBtn.Check( false );
     if( ! PrinterInfoManager::get().addOrRemovePossible() )
     {
         m_aPrinterBtn.Check( false );
-        m_aFaxBtn.Check( true );
         m_aPrinterBtn.Enable( false );
     }
 }
@@ -80,15 +77,9 @@ void APChooseDevicePage::fill( PrinterInfo& rInfo )
     {
         rInfo.m_aFeatures = "pdf=";
     }
-    else if( m_aFaxBtn.IsChecked() )
-    {
-        rInfo.m_aFeatures = "fax";
-    }
     else
         rInfo.m_aFeatures = "";
 }
-
-
 
 APChooseDriverPage::APChooseDriverPage( AddPrinterDialog* pParent )
         : APTabPage( pParent, PaResId( RID_ADDP_PAGE_CHOOSEDRIVER ) ),
@@ -306,31 +297,25 @@ APNamePage::APNamePage( AddPrinterDialog* pParent, const OUString& rInitName, De
           m_aNameTxt(
                      this,
                      PaResId(
-                             eKind == DeviceKind::Printer ? RID_ADDP_NAME_TXT_NAME :
-                             eKind == DeviceKind::Fax ? RID_ADDP_NAME_TXT_FAXNAME : RID_ADDP_NAME_TXT_PDFNAME
+                             eKind == DeviceKind::Printer ? RID_ADDP_NAME_TXT_NAME : RID_ADDP_NAME_TXT_PDFNAME
                              )
                      ),
           m_aNameEdt(
                      this,
                      PaResId(
-                             eKind == DeviceKind::Printer ? RID_ADDP_NAME_EDT_NAME :
-                             eKind == DeviceKind::Fax ? RID_ADDP_NAME_EDT_FAXNAME : RID_ADDP_NAME_EDT_PDFNAME
+                             eKind == DeviceKind::Printer ? RID_ADDP_NAME_EDT_NAME : RID_ADDP_NAME_EDT_PDFNAME
                              )
                      ),
-          m_aDefaultBox( this, PaResId( RID_ADDP_NAME_BOX_DEFAULT ) ),
-          m_aFaxSwallowBox( this, PaResId( RID_ADDP_NAME_BOX_FAXSWALLOW ) )
+          m_aDefaultBox( this, PaResId( RID_ADDP_NAME_BOX_DEFAULT ) )
 {
     FreeResource();
     if( eKind != DeviceKind::Printer )
         m_aDefaultBox.Show( false );
     else
         m_aNameEdt.SetText( rInitName );
-    if( eKind != DeviceKind::Fax )
-        m_aFaxSwallowBox.Show( false );
 
     m_aNameEdt.SetText( AddPrinterDialog::uniquePrinterName( m_aNameEdt.GetText() ) );
     m_aDefaultBox.Check( false );
-    m_aFaxSwallowBox.Check( false );
 }
 
 APNamePage::~APNamePage()
@@ -354,7 +339,7 @@ APCommandPage::APCommandPage( AddPrinterDialog* pParent, DeviceKind::type eKind 
           m_aCommandTxt( this, PaResId( RID_ADDP_CMD_TXT_COMMAND ) ),
           m_aCommandBox( this, PaResId( eKind == DeviceKind::Pdf ? RID_ADDP_CMD_BOX_PDFCOMMAND : RID_ADDP_CMD_BOX_COMMAND ) ),
           m_aHelpBtn( this, PaResId( RID_ADDP_CMD_BTN_HELP ) ),
-          m_aHelpTxt( PaResId( eKind == DeviceKind::Fax ? RID_ADDP_CMD_STR_FAXHELP : RID_ADDP_CMD_STR_PDFHELP ) ),
+          m_aHelpTxt( PaResId( RID_ADDP_CMD_STR_PDFHELP ) ),
           m_aPdfDirTxt( this, PaResId( RID_ADDP_CMD_TXT_PDFDIR ) ),
           m_aPdfDirEdt( this, PaResId( RID_ADDP_CMD_EDT_PDFDIR ) ),
           m_aPdfDirBtn( this, PaResId( RID_ADDP_CMD_BTN_PDFDIR ) ),
@@ -378,7 +363,6 @@ APCommandPage::APCommandPage( AddPrinterDialog* pParent, DeviceKind::type eKind 
     switch( m_eKind )
     {
         case DeviceKind::Printer:   CommandStore::getPrintCommands( aCommands );break;
-        case DeviceKind::Fax:       CommandStore::getFaxCommands( aCommands );break;
         case DeviceKind::Pdf:       CommandStore::getPdfCommands( aCommands );break;
     }
     // adjust height of command text and help button
@@ -423,7 +407,6 @@ APCommandPage::~APCommandPage()
     switch( m_eKind )
     {
         case DeviceKind::Printer:   CommandStore::setPrintCommands( aCommands );break;
-        case DeviceKind::Fax:       CommandStore::setFaxCommands( aCommands );break;
         case DeviceKind::Pdf:       CommandStore::setPdfCommands( aCommands );break;
     }
 }
@@ -462,38 +445,6 @@ void APCommandPage::fill( PrinterInfo& rInfo )
 {
     rInfo.m_aCommand = m_aCommandBox.GetText();
 }
-
-APFaxDriverPage::APFaxDriverPage( AddPrinterDialog* pParent )
-        : APTabPage( pParent, PaResId( RID_ADDP_PAGE_FAXDRIVER ) ),
-          m_aFaxTxt( this, PaResId( RID_ADDP_FAXDRV_TXT_DRIVER ) ),
-          m_aDefBtn( this, PaResId( RID_ADDP_FAXDRV_BTN_DEFAULT ) ),
-          m_aSelectBtn( this, PaResId( RID_ADDP_FAXDRV_BTN_SELECT ) )
-{
-    FreeResource();
-
-    m_aDefBtn.Check( true );
-    m_aSelectBtn.Check( false );
-    m_aSelectBtn.SetStyle( m_aSelectBtn.GetStyle() | WB_WORDBREAK );
-}
-
-APFaxDriverPage::~APFaxDriverPage()
-{
-}
-
-bool APFaxDriverPage::check()
-{
-    return true;
-}
-
-void APFaxDriverPage::fill( PrinterInfo& rInfo )
-{
-    if( isDefault() )
-    {
-        rInfo.m_aDriverName = "SGENPRT";
-    }
-}
-
-
 
 APPdfDriverPage::APPdfDriverPage( AddPrinterDialog* pParent )
         : APTabPage( pParent, PaResId( RID_ADDP_PAGE_PDFDRIVER ) ),
@@ -542,10 +493,6 @@ AddPrinterDialog::AddPrinterDialog( Window* pParent )
           m_pCommandPage( NULL ),
           m_pChooseDriverPage( NULL ),
           m_pNamePage( NULL ),
-          m_pFaxDriverPage( NULL ),
-          m_pFaxSelectDriverPage( NULL ),
-          m_pFaxNamePage( NULL ),
-          m_pFaxCommandPage( NULL ),
           m_pPdfDriverPage( NULL ),
           m_pPdfSelectDriverPage( NULL ),
           m_pPdfNamePage( NULL ),
@@ -573,10 +520,6 @@ AddPrinterDialog::~AddPrinterDialog()
     delete m_pChooseDriverPage;
     delete m_pNamePage;
     delete m_pCommandPage;
-    delete m_pFaxDriverPage;
-    delete m_pFaxSelectDriverPage;
-    delete m_pFaxCommandPage;
-    delete m_pFaxNamePage;
     delete m_pPdfDriverPage;
     delete m_pPdfSelectDriverPage;
     delete m_pPdfNamePage;
@@ -610,13 +553,6 @@ void AddPrinterDialog::advance()
             m_pCurrentPage = m_pChooseDriverPage;
             m_aPrevPB.Enable( true );
         }
-        else if( m_pChooseDevicePage->isFax() )
-        {
-            if( ! m_pFaxDriverPage )
-                m_pFaxDriverPage = new APFaxDriverPage( this );
-            m_pCurrentPage = m_pFaxDriverPage;
-            m_aPrevPB.Enable( true );
-        }
         else if( m_pChooseDevicePage->isPDF() )
         {
             if( ! m_pPdfDriverPage )
@@ -640,35 +576,6 @@ void AddPrinterDialog::advance()
         m_pCurrentPage = m_pNamePage;
         m_aFinishPB.Enable( true );
         m_aNextPB.Enable( false );
-    }
-    else if( m_pCurrentPage == m_pFaxDriverPage )
-    {
-        if( ! m_pFaxDriverPage->isDefault() )
-        {
-            if( ! m_pFaxSelectDriverPage )
-                m_pFaxSelectDriverPage = new APChooseDriverPage( this );
-            m_pCurrentPage = m_pFaxSelectDriverPage;
-        }
-        else
-        {
-            if( ! m_pFaxCommandPage )
-                m_pFaxCommandPage = new APCommandPage( this, DeviceKind::Fax );
-            m_pCurrentPage = m_pFaxCommandPage;
-        }
-    }
-    else if( m_pCurrentPage == m_pFaxSelectDriverPage )
-    {
-        if( ! m_pFaxCommandPage )
-            m_pFaxCommandPage = new APCommandPage( this, DeviceKind::Fax );
-        m_pCurrentPage = m_pFaxCommandPage;
-    }
-    else if( m_pCurrentPage == m_pFaxCommandPage )
-    {
-        if( ! m_pFaxNamePage )
-            m_pFaxNamePage = new APNamePage( this, OUString(), DeviceKind::Fax );
-        m_pCurrentPage = m_pFaxNamePage;
-        m_aNextPB.Enable( false );
-        m_aFinishPB.Enable( true );
     }
     else if( m_pCurrentPage == m_pPdfDriverPage )
     {
@@ -721,25 +628,6 @@ void AddPrinterDialog::back()
     {
         m_pCurrentPage = m_pChooseDriverPage;
     }
-    else if( m_pCurrentPage == m_pFaxDriverPage )
-    {
-        m_pCurrentPage = m_pChooseDevicePage;
-        m_aPrevPB.Enable( false );
-    }
-    else if( m_pCurrentPage == m_pFaxSelectDriverPage )
-    {
-        m_pCurrentPage = m_pFaxDriverPage;
-    }
-    else if( m_pCurrentPage == m_pFaxNamePage )
-    {
-        m_pCurrentPage = m_pFaxCommandPage;
-        m_aNextPB.Enable( true );
-    }
-    else if( m_pCurrentPage == m_pFaxCommandPage )
-    {
-        m_pCurrentPage = m_pFaxDriverPage->isDefault() ? (APTabPage*)m_pFaxDriverPage : (APTabPage*)m_pFaxSelectDriverPage;
-        m_aNextPB.Enable( true );
-    }
     else if( m_pCurrentPage == m_pPdfDriverPage )
     {
         m_pCurrentPage = m_pChooseDevicePage;
@@ -775,12 +663,6 @@ void AddPrinterDialog::addPrinter()
         {
             if( m_pNamePage->isDefault() )
                 rManager.setDefaultPrinter( m_aPrinter.m_aPrinterName );
-        }
-        else if( m_pChooseDevicePage->isFax() )
-        {
-            aInfo.m_aFeatures = "fax=";
-            if( m_pFaxNamePage->isFaxSwallow() )
-                aInfo.m_aFeatures += "swallow";
         }
         else if( m_pChooseDevicePage->isPDF() )
         {

@@ -67,7 +67,6 @@ namespace padmin {
         ::std::list< OUString >      m_aPrinters;
 
         Image                               m_aPrinterImg;
-        Image                               m_aFaxImg;
         Image                               m_aPdfImg;
 
         DECL_LINK( ClickBtnHdl, PushButton* );

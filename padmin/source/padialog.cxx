@@ -101,7 +101,6 @@ PADialog::PADialog( Window* pParent, sal_Bool /*bAdmin*/ ) :
 void PADialog::updateSettings()
 {
     m_aPrinterImg = Image( BitmapEx( PaResId( RID_BMP_SMALL_PRINTER ) ) );
-    m_aFaxImg     = Image( BitmapEx( PaResId( RID_BMP_SMALL_FAX     ) ) );
     m_aPdfImg     = Image( BitmapEx( PaResId( RID_BMP_SMALL_PDF     ) ) );
 }
 
@@ -688,7 +687,6 @@ void PADialog::UpdateDevice()
         const PrinterInfo& rInfo( m_rPIManager.getPrinterInfo( *it ) );
         sal_Int32 nIndex = 0;
         bool bAutoQueue = false;
-        bool bFax = false;
         bool bPdf = false;
         while( nIndex != -1 && ! bAutoQueue )
         {
@@ -699,8 +697,6 @@ void PADialog::UpdateDevice()
                     bAutoQueue = true;
                 else if( aToken.startsWith("pdf=") )
                     bPdf = true;
-                else if( aToken.startsWith("fax") )
-                    bFax = true;
             }
         }
         if( bAutoQueue )
@@ -713,9 +709,7 @@ void PADialog::UpdateDevice()
         }
         int nPos =
             m_aDevicesLB.InsertEntry( aEntry,
-                                      bFax ? m_aFaxImg :
-                                      bPdf ? m_aPdfImg : m_aPrinterImg
-                                      );
+                                      bPdf ? m_aPdfImg : m_aPrinterImg );
         m_aDevicesLB.SetEntryData( nPos, (void*)(sal_IntPtr)it->getLength() );
         if( *it == m_rPIManager.getDefaultPrinter() )
         {

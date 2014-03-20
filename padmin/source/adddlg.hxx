@@ -35,7 +35,7 @@ namespace padmin
 
 class AddPrinterDialog;
 
-namespace DeviceKind { enum type { Printer, Fax, Pdf }; }
+namespace DeviceKind { enum type { Printer, Pdf }; }
 
 class APTabPage : public TabPage
 {
@@ -54,7 +54,6 @@ public:
 class APChooseDevicePage : public APTabPage
 {
     RadioButton             m_aPrinterBtn;
-    RadioButton             m_aFaxBtn;
     RadioButton             m_aPDFBtn;
     FixedText               m_aOverTxt;
 public:
@@ -62,7 +61,6 @@ public:
     ~APChooseDevicePage();
 
     bool isPrinter() { return m_aPrinterBtn.IsChecked(); }
-    bool isFax() { return m_aFaxBtn.IsChecked(); }
     bool isPDF() { return m_aPDFBtn.IsChecked(); }
 
     virtual bool check();
@@ -96,13 +94,11 @@ class APNamePage : public APTabPage
     FixedText               m_aNameTxt;
     Edit                    m_aNameEdt;
     CheckBox                m_aDefaultBox;
-    CheckBox                m_aFaxSwallowBox;
 public:
     APNamePage( AddPrinterDialog* pParent, const OUString& rInitName, DeviceKind::type eKind );
     ~APNamePage();
 
     bool isDefault() { return m_aDefaultBox.IsChecked(); }
-    bool isFaxSwallow() { return m_aFaxSwallowBox.IsChecked(); }
 
     void setText( const OUString& rText ) { m_aNameEdt.SetText( rText ); }
 
@@ -154,21 +150,6 @@ public:
     void addOldPrinters();
 };
 
-class APFaxDriverPage : public APTabPage
-{
-    FixedText               m_aFaxTxt;
-    RadioButton             m_aDefBtn;
-    RadioButton             m_aSelectBtn;
-public:
-    APFaxDriverPage( AddPrinterDialog* pParent );
-    ~APFaxDriverPage();
-
-    virtual bool check();
-    virtual void fill( ::psp::PrinterInfo& rInfo );
-
-    bool isDefault() { return m_aDefBtn.IsChecked(); }
-};
-
 class APPdfDriverPage : public APTabPage
 {
     FixedText               m_aPdfTxt;
@@ -203,10 +184,6 @@ class AddPrinterDialog : public ModalDialog
     APCommandPage*          m_pCommandPage;
     APChooseDriverPage*     m_pChooseDriverPage;
     APNamePage*             m_pNamePage;
-    APFaxDriverPage*        m_pFaxDriverPage;
-    APChooseDriverPage*     m_pFaxSelectDriverPage;
-    APNamePage*             m_pFaxNamePage;
-    APCommandPage*          m_pFaxCommandPage;
     APPdfDriverPage*        m_pPdfDriverPage;
     APChooseDriverPage*     m_pPdfSelectDriverPage;
     APNamePage*             m_pPdfNamePage;

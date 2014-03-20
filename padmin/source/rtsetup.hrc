@@ -45,16 +45,13 @@
 #define RID_RTS_CMD_TXT_CONFIGURE           7
 #define RID_RTS_CMD_LB_CONFIGURE            8
 #define RID_RTS_CMD_STR_CONFIGURE_PRINTER   9
-#define RID_RTS_CMD_STR_CONFIGURE_FAX       10
 #define RID_RTS_CMD_STR_CONFIGURE_PDF       11
 #define RID_RTS_CMD_STR_PRINTERHELP     12
-#define RID_RTS_CMD_STR_FAXHELP         13
 #define RID_RTS_CMD_STR_PDFHELP         14
 #define RID_RTS_CMD_BTN_REMOVE              15
 #define RID_RTS_CMD_EDT_PDFDIR              16
 #define RID_RTS_CMD_BTN_PDFDIR              17
 #define RID_RTS_CMD_TXT_PDFDIR              18
-#define RID_RTS_CMD_BOX_SWALLOWFAXNO        19
 #define RID_RTS_CMD_CB_EXTERNAL             20
 #define RID_RTS_CMD_FT_QUICKCMD             21
 #define RIT_RTS_CMD_CB_QUICKCMD             22

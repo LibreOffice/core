@@ -31,7 +31,6 @@ using namespace psp;
 using namespace padmin;
 
 #define PRINTER_PERSISTENCE_GROUP "KnownPrinterCommands"
-#define FAX_PERSISTENCE_GROUP "KnownFaxCommands"
 #define PDF_PERSISTENCE_GROUP "KnowPdfCommands"
 #define MAX_COMMANDS 50
 
@@ -184,12 +183,6 @@ void CommandStore::getPdfCommands( ::std::list< OUString >& rCommands )
     getStoredCommands( PDF_PERSISTENCE_GROUP, rCommands );
 }
 
-void CommandStore::getFaxCommands( ::std::list< OUString >& rCommands )
-{
-    rCommands.clear();
-    getStoredCommands( FAX_PERSISTENCE_GROUP, rCommands );
-}
-
 void CommandStore::setPrintCommands( const ::std::list< OUString >& rCommands )
 {
     ::std::list< OUString > aSysCmds;
@@ -203,13 +196,6 @@ void CommandStore::setPdfCommands( const ::std::list< OUString >& rCommands )
     getSystemPdfCommands( aSysCmds );
     setCommands( PDF_PERSISTENCE_GROUP, rCommands, aSysCmds );
 }
-
-void CommandStore::setFaxCommands( const ::std::list< OUString >& rCommands )
-{
-    ::std::list< OUString > aSysCmds;
-    setCommands( FAX_PERSISTENCE_GROUP, rCommands, aSysCmds );
-}
-
 
 RTSCommandPage::RTSCommandPage( RTSDialog* pParent ) :
         TabPage( pParent->m_pTabControl, PaResId( RID_RTS_COMMANDPAGE ) ),
@@ -227,10 +213,8 @@ RTSCommandPage::RTSCommandPage( RTSDialog* pParent ) :
         m_aPdfDirectoryText( this, PaResId( RID_RTS_CMD_TXT_PDFDIR ) ),
         m_aPdfDirectoryButton( this, PaResId( RID_RTS_CMD_BTN_PDFDIR ) ),
         m_aPdfDirectoryEdit( this, PaResId( RID_RTS_CMD_EDT_PDFDIR ) ),
-        m_aFaxSwallowBox( this, PaResId( RID_RTS_CMD_BOX_SWALLOWFAXNO ) ),
         m_aHelpButton( this, PaResId( RID_RTS_CMD_BTN_HELP ) ),
         m_aRemovePB( this, PaResId( RID_RTS_CMD_BTN_REMOVE ) ),
-        m_aFaxHelp( PaResId( RID_RTS_CMD_STR_FAXHELP ) ),
         m_aPrinterHelp( PaResId( RID_RTS_CMD_STR_PRINTERHELP ) ),
         m_aPdfHelp( PaResId( RID_RTS_CMD_STR_PDFHELP ) ),
         m_bWasExternalDialog(false)
@@ -241,13 +225,11 @@ RTSCommandPage::RTSCommandPage( RTSDialog* pParent ) :
         m_nPrinterEntry = m_aConfigureBox.InsertEntry( OUString( PaResId( RID_RTS_CMD_STR_CONFIGURE_PRINTER ) ) );
     else
         m_nPrinterEntry = ~0;
-    m_nFaxEntry = m_aConfigureBox.InsertEntry( OUString( PaResId( RID_RTS_CMD_STR_CONFIGURE_FAX ) ) );
     m_nPdfEntry = m_aConfigureBox.InsertEntry( OUString( PaResId( RID_RTS_CMD_STR_CONFIGURE_PDF ) ) );
 
     FreeResource();
 
     CommandStore::getPrintCommands( m_aPrinterCommands );
-    CommandStore::getFaxCommands( m_aFaxCommands );
     CommandStore::getPdfCommands( m_aPdfCommands );
 
     m_aPrinterName.SetText( m_pParent->m_aPrinter );
@@ -264,26 +246,16 @@ RTSCommandPage::RTSCommandPage( RTSDialog* pParent ) :
     m_aPdfDirectoryButton.Show( false );
     m_aPdfDirectoryEdit.Show( false );
     m_aPdfDirectoryText.Show( false );
-    m_aFaxSwallowBox.Show( false );
     m_aCommandsCB.SetText( m_pParent->m_aJobData.m_aCommand );
     m_aQuickCB.SetText( m_pParent->m_aJobData.m_aQuickCommand );
 
-    m_bWasFax = false;
     m_bWasPdf = false;
     m_aConfigureBox.SelectEntryPos( m_nPrinterEntry );
     sal_Int32 nIndex = 0;
     while( nIndex != -1 )
     {
         OUString aToken( m_pParent->m_aJobData.m_aFeatures.getToken( 0, ',', nIndex ) );
-        if( aToken.startsWith( "fax" ) )
-        {
-            m_bWasFax = true;
-            m_aFaxSwallowBox.Show( true );
-            sal_Int32 nPos = 0;
-            m_aFaxSwallowBox.Check( aToken.getToken( 1, '=', nPos ).startsWith( "swallow" ) ? sal_True : sal_False );
-            m_aConfigureBox.SelectEntryPos( m_nFaxEntry );
-        }
-        else if( aToken.startsWith( "pdf=" ) )
+        if( aToken.startsWith( "pdf=" ) )
         {
             m_bWasPdf = true;
             sal_Int32 nPos = 0;
@@ -316,22 +288,18 @@ RTSCommandPage::~RTSCommandPage()
 void RTSCommandPage::save()
 {
     OUString aCommand,aQuickCommand;
-    bool bHaveFax = m_aConfigureBox.GetSelectEntryPos() == m_nFaxEntry ? true : false;
     bool bHavePdf = m_aConfigureBox.GetSelectEntryPos() == m_nPdfEntry ? true : false;
     ::std::list< OUString >::iterator it;
 
     OUString aFeatures;
     sal_Int32 nIndex = 0;
     OUString aOldPdfPath;
-    bool bOldFaxSwallow = false;
-    bool bFaxSwallow = m_aFaxSwallowBox.IsChecked() ? true : false;
     bool bExternalDialog = m_aExternalCB.IsChecked() ? true : false;
 
     while( nIndex != -1 )
     {
         OUString aToken( m_pParent->m_aJobData.m_aFeatures.getToken( 0, ',', nIndex ) );
-        if( !aToken.startsWith( "fax" ) &&
-            !aToken.startsWith( "pdf" ) &&
+        if( !aToken.startsWith( "pdf" ) &&
             aToken.compareToAscii( "external_dialog" )
           )
         {
@@ -347,11 +315,6 @@ void RTSCommandPage::save()
             sal_Int32 nPos = 0;
             aOldPdfPath = aToken.getToken( 1, '=', nPos );
         }
-        else if( aToken.startsWith( "fax=" ) )
-        {
-            sal_Int32 nPos = 0;
-            bOldFaxSwallow = aToken.getToken( 1, '=', nPos ).startsWith( "swallow" );
-        }
     }
     ::std::list< OUString >* pList = &m_aPrinterCommands;
     if( bExternalDialog )
@@ -359,15 +322,6 @@ void RTSCommandPage::save()
         if( !aFeatures.isEmpty() )
             aFeatures += ",";
         aFeatures += "external_dialog" ;
-    }
-    if( bHaveFax )
-    {
-        if( !aFeatures.isEmpty() )
-            aFeatures += ",";
-        aFeatures += "fax=" ;
-        if( bFaxSwallow )
-            aFeatures +=  "swallow" ;
-        pList = &m_aFaxCommands;
     }
     if( bHavePdf )
     {
@@ -386,12 +340,9 @@ void RTSCommandPage::save()
 
     if( aCommand != m_pParent->m_aJobData.m_aCommand                        ||
         aQuickCommand != m_pParent->m_aJobData.m_aQuickCommand              ||
-        ( m_bWasFax && ! bHaveFax )                                         ||
-        ( ! m_bWasFax && bHaveFax )                                         ||
         ( m_bWasPdf && ! bHavePdf )                                         ||
         ( ! m_bWasPdf && bHavePdf )                                         ||
         ( bHavePdf && aOldPdfPath != m_aPdfDirectoryEdit.GetText() )        ||
-        ( bHaveFax && bFaxSwallow != bOldFaxSwallow )                       ||
         ( m_bWasExternalDialog && ! bExternalDialog )                       ||
         ( ! m_bWasExternalDialog && bExternalDialog )
         )
@@ -403,7 +354,6 @@ void RTSCommandPage::save()
         PrinterInfoManager::get().changePrinterInfo( m_pParent->m_aPrinter, m_pParent->m_aJobData );
     }
     CommandStore::setPrintCommands( m_aPrinterCommands );
-    CommandStore::setFaxCommands( m_aFaxCommands );
     CommandStore::setPdfCommands( m_aPdfCommands );
 }
 
@@ -416,8 +366,6 @@ IMPL_LINK( RTSCommandPage, SelectHdl, Control*, pBox )
         m_aPdfDirectoryButton.Show( bEnable );
         m_aPdfDirectoryEdit.Show( bEnable );
         m_aPdfDirectoryText.Show( bEnable );
-        bEnable = m_aConfigureBox.GetSelectEntryPos() == m_nFaxEntry ? sal_True : sal_False;
-        m_aFaxSwallowBox.Show( bEnable );
         UpdateCommands();
     }
     else if( pBox == &m_aCommandsCB )
@@ -442,8 +390,6 @@ IMPL_LINK( RTSCommandPage, ClickBtnHdl, Button*, pButton )
         ::std::list< OUString >* pList;
         if( m_aConfigureBox.GetSelectEntryPos() == m_nPrinterEntry )
             pList = &m_aPrinterCommands;
-        else if( m_aConfigureBox.GetSelectEntryPos() == m_nFaxEntry )
-            pList = &m_aFaxCommands;
         else
             pList = &m_aPdfCommands;
 
@@ -456,8 +402,6 @@ IMPL_LINK( RTSCommandPage, ClickBtnHdl, Button*, pButton )
         OUString aHelpText;
         if( m_aConfigureBox.GetSelectEntryPos() == m_nPrinterEntry )
             aHelpText = m_aPrinterHelp;
-        else if( m_aConfigureBox.GetSelectEntryPos() == m_nFaxEntry )
-            aHelpText = m_aFaxHelp;
         else if( m_aConfigureBox.GetSelectEntryPos() == m_nPdfEntry )
             aHelpText = m_aPdfHelp;
 
@@ -497,22 +441,7 @@ void RTSCommandPage::UpdateCommands()
             m_aCommandsCB.InsertEntry( *it );
             m_aQuickCB.InsertEntry( *it );
         }
-        if( ! m_bWasFax )
-            m_aCommandsCB.SetText( m_pParent->m_aJobData.m_aCommand );
-        else
-            m_aCommandsCB.SetText( OUString() );
-    }
-    else if( m_aConfigureBox.GetSelectEntryPos() == m_nFaxEntry )
-    {
-        for( it = m_aFaxCommands.begin(); it != m_aFaxCommands.end(); ++it )
-        {
-            m_aCommandsCB.InsertEntry( *it );
-            m_aQuickCB.InsertEntry( *it );
-        }
-        if( m_bWasFax )
-            m_aCommandsCB.SetText( m_pParent->m_aJobData.m_aCommand );
-        else
-            m_aCommandsCB.SetText( OUString() );
+        m_aCommandsCB.SetText( m_pParent->m_aJobData.m_aCommand );
     }
     else if( m_aConfigureBox.GetSelectEntryPos() == m_nPdfEntry )
     {
