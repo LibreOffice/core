@@ -933,6 +933,7 @@ void SfxToolBoxControl::StateChanged
     switch ( eState )
     {
         case SFX_ITEM_AVAILABLE:
+        if ( pState )
         {
             if ( pState->ISA(SfxBoolItem) )
             {
@@ -951,14 +952,15 @@ void SfxToolBoxControl::StateChanged
             }
             else if ( pImpl->bShowString && pState->ISA(SfxStringItem) )
                 pImpl->pBox->SetItemText(nId, ((const SfxStringItem*)pState)->GetValue() );
-            break;
         }
+        break;
 
         case SFX_ITEM_DONTCARE:
         {
             eTri = TRISTATE_INDET;
             nItemBits |= TIB_CHECKABLE;
         }
+        break;
     }
 
     pImpl->pBox->SetItemState( GetId(), eTri );
