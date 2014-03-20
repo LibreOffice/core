@@ -43,8 +43,6 @@
 
 #define RID_PA_STR_RENAME                   21
 #define RID_PA_FL_SEPBUTTON                 22
-#define RID_PA_FL_CUPSUSAGE                 23
-#define RID_PA_CB_CUPSUSAGE                 23
 
 #define RID_PPDIMPORT_DLG          1004
 #define RID_PPDIMP_BTN_OK             1
@@ -105,11 +103,6 @@
 #define RID_ADDP_LINE                           5
 #define RID_ADDP_CTRL_TITLE                     6
 #define RID_ADDP_STR_TITLE                       127
-
-#define RID_ADDP_PAGE_CHOOSEDEV                 2001
-#define RID_ADDP_CHDEV_TXT_OVER                 1
-#define RID_ADDP_CHDEV_BTN_PRINTER              2
-#define RID_ADDP_CHDEV_BTN_PDF                  3
 
 #define RID_ADDP_PAGE_CHOOSEDRIVER              2002
 #define RID_ADDP_CHDRV_TXT_DRIVER               1

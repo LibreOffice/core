@@ -84,8 +84,6 @@ PADialog::PADialog( Window* pParent, sal_Bool /*bAdmin*/ ) :
         m_aCommand( this, PaResId( RID_PA_TXT_COMMAND_STRING ) ),
         m_aCommentTxt( this, PaResId( RID_PA_TXT_COMMENT ) ),
         m_aComment( this, PaResId( RID_PA_TXT_COMMENT_STRING ) ),
-        m_aCUPSFL( this, PaResId( RID_PA_FL_CUPSUSAGE ) ),
-        m_aCUPSCB( this, PaResId( RID_PA_CB_CUPSUSAGE ) ),
         m_aSepButtonFL( this, PaResId( RID_PA_FL_SEPBUTTON ) ),
         m_aAddPB( this, PaResId( RID_PA_BTN_ADD ) ),
         m_aCancelButton( this, PaResId( RID_PA_BTN_CANCEL ) ),
@@ -108,7 +106,6 @@ void PADialog::Init()
 {
     // #i79787# initially ensure printer discovery has ended
     m_rPIManager.checkPrintersChanged( true );
-    m_aCUPSCB.Check( m_rPIManager.isCUPSDisabled() );
 
     UpdateDevice();
     UpdateText();
@@ -124,7 +121,6 @@ void PADialog::Init()
     m_aTestPagePB.SetClickHdl( LINK( this, PADialog, ClickBtnHdl ) );
     m_aAddPB.SetClickHdl( LINK( this, PADialog, ClickBtnHdl ) );
     m_aDevicesLB.setDelPressedLink( LINK( this, PADialog, DelPressedHdl ) );
-    m_aCUPSCB.SetClickHdl( LINK( this, PADialog, ClickBtnHdl ) );
 
     // at this point no actual changes will be  written
     // but the write will have checked whether any writeable config exists
@@ -135,7 +131,6 @@ void PADialog::Init()
         m_aConfPB.Enable( false );
         m_aRenamePB.Enable( false );
         m_aStdPB.Enable( false );
-        m_aCUPSCB.Enable( false );
         ErrorBox aBox( GetParent(), WB_OK | WB_DEF_OK, OUString( PaResId( RID_ERR_NOWRITE ) ) );
         aBox.Execute();
     }
@@ -204,12 +199,6 @@ IMPL_LINK( PADialog, ClickBtnHdl, PushButton*, pButton )
         PrintTestPage();
     else if( pButton == &m_aAddPB )
         AddDevice();
-    else if( static_cast<Button*>(pButton) == &m_aCUPSCB )
-    {
-        m_rPIManager.setCUPSDisabled( m_aCUPSCB.IsChecked() );
-            UpdateDevice();
-            UpdateText();
-    }
 
     return 0;
 }

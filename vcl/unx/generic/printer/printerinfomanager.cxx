@@ -117,15 +117,12 @@ PrinterInfoManager::PrinterInfoManager( Type eType ) :
     m_eType( eType ),
     m_bUseIncludeFeature( false ),
     m_bUseJobPatch( true ),
-    m_aSystemDefaultPaper( "A4" ),
-    m_bDisableCUPS( false )
+    m_aSystemDefaultPaper( "A4" )
 {
     if( eType == Default )
         m_pQueueInfo = new SystemQueueInfo();
     initSystemDefaultPaper();
 }
-
-
 
 PrinterInfoManager::~PrinterInfoManager()
 {
@@ -134,26 +131,6 @@ PrinterInfoManager::~PrinterInfoManager()
     fprintf( stderr, "PrinterInfoManager: destroyed Manager of type %d\n", getType() );
     #endif
 }
-
-
-
-bool PrinterInfoManager::isCUPSDisabled() const
-{
-    return m_bDisableCUPS;
-}
-
-
-
-void PrinterInfoManager::setCUPSDisabled( bool bDisable )
-{
-    m_bDisableCUPS = bDisable;
-    writePrinterConfig();
-    // actually we know the printers changed
-    // however this triggers reinitialization the right way
-    checkPrintersChanged( true );
-}
-
-
 
 void PrinterInfoManager::initSystemDefaultPaper()
 {
@@ -231,7 +208,6 @@ void PrinterInfoManager::initialize()
     // need a parser for the PPDContext. generic printer should do.
     m_aGlobalDefaults.m_pParser = PPDParser::getParser( OUString( "SGENPRT" ) );
     m_aGlobalDefaults.m_aContext.setParser( m_aGlobalDefaults.m_pParser );
-    m_bDisableCUPS = false;
 
     if( ! m_aGlobalDefaults.m_pParser )
     {
@@ -290,15 +266,6 @@ void PrinterInfoManager::initialize()
             aValue = aConfig.ReadKey( "PDFDevice" );
             if (!aValue.isEmpty())
                 m_aGlobalDefaults.m_nPDFDevice = aValue.toInt32();
-
-            aValue = aConfig.ReadKey( "DisableCUPS" );
-            if (!aValue.isEmpty())
-            {
-                if (aValue.equals("1") || aValue.equalsIgnoreAsciiCase("true"))
-                    m_bDisableCUPS = true;
-                else
-                    m_bDisableCUPS = false;
-            }
 
             // get the PPDContext of global JobData
             for( int nKey = 0; nKey < aConfig.GetKeyCount(); ++nKey )
@@ -656,7 +623,6 @@ bool PrinterInfoManager::writePrinterConfig()
 
     Config* pGlobal = files.begin()->second;
     pGlobal->SetGroup( GLOBAL_DEFAULTS_GROUP );
-    pGlobal->WriteKey( "DisableCUPS", m_bDisableCUPS ? "true" : "false" );
 
     ::boost::unordered_map< OUString, Printer, OUStringHash >::iterator it;
     for( it = m_aPrinters.begin(); it != m_aPrinters.end(); ++it )
@@ -899,14 +865,6 @@ bool PrinterInfoManager::setDefaultPrinter( const OUString& rPrinterName )
     }
     return bSuccess;
 }
-
-
-bool PrinterInfoManager::addOrRemovePossible() const
-{
-    return true;
-}
-
-
 
 void PrinterInfoManager::getSystemPrintCommands( std::list< OUString >& rCommands )
 {

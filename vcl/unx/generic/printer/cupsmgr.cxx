@@ -256,9 +256,6 @@ void CUPSManager::initialize()
     if( ! (m_nDests && m_pDests ) )
         return;
 
-    if( isCUPSDisabled() )
-        return;
-
     // check for CUPS server(?) > 1.2
     // since there is no API to query, check for options that were
     // introduced in dests with 1.2
@@ -424,7 +421,7 @@ const PPDParser* CUPSManager::createCUPSParser( const OUString& rPrinter )
 
     if( m_aCUPSMutex.tryToAcquire() )
     {
-        if( m_nDests && m_pDests && ! isCUPSDisabled() )
+        if (m_nDests && m_pDests)
         {
             boost::unordered_map< OUString, int, OUStringHash >::iterator dest_it =
             m_aCUPSDestMap.find( aPrinter );
@@ -828,11 +825,6 @@ bool CUPSManager::writePrinterConfig()
     }
 
     return PrinterInfoManager::writePrinterConfig();
-}
-
-bool CUPSManager::addOrRemovePossible() const
-{
-    return (m_nDests && m_pDests && ! isCUPSDisabled())? false : PrinterInfoManager::addOrRemovePossible();
 }
 
 const char* CUPSManager::authenticateUser( const char* /*pIn*/ )

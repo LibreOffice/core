@@ -28,20 +28,6 @@ ModalDialog RID_PADIALOG
     Moveable = TRUE ;
     Closeable = TRUE ;
 
-    FixedLine RID_PA_FL_CUPSUSAGE
-    {
-        Pos = MAP_APPFONT( 6, 145 );
-        Size = MAP_APPFONT( 248, 8 );
-        Text [ en-US ] = "CUPS support";
-    };
-    CheckBox RID_PA_CB_CUPSUSAGE
-    {
-        HelpID = "padmin:CheckBox:RID_PADIALOG:RID_PA_CB_CUPSUSAGE";
-        Pos = MAP_APPFONT( 12, 158 );
-        Size = MAP_APPFONT( 168, 8 );
-        Text [ en-US ] = "Disable CUPS Support";
-    };
-
     FixedLine RID_PA_FL_SEPBUTTON
     {
         Pos = MAP_APPFONT( 0, 176 );
@@ -154,7 +140,7 @@ ModalDialog RID_PADIALOG
         HelpID = "padmin:PushButton:RID_PADIALOG:RID_PA_BTN_ADD";
         Pos = MAP_APPFONT( 5, 181 );
         Size = MAP_APPFONT( 70, 12 );
-        Text [ en-US ] = "New Printer...";
+        Text [ en-US ] = "New PDF Converter...";
     };
 
     String RID_PA_STR_DEFPRT
@@ -503,38 +489,6 @@ TabPage RID_ADDP_PAGE_CHOOSEDRIVER
     String RID_ADDP_CHDRV_STR_REMOVE
     {
         Text [ en-US ] = "Delete driver";
-    };
-};
-
-TabPage RID_ADDP_PAGE_CHOOSEDEV
-{
-    HelpID = "padmin:TabPage:RID_ADDP_PAGE_CHOOSEDEV";
-    Hide = TRUE;
-    Pos = MAP_APPFONT( 0, 30 );
-    Size = MAP_APPFONT( 240, 110 );
-    String RID_ADDP_STR_TITLE
-    {
-        Text [ en-US ] = "Choose a device type";
-    };
-    FixedText RID_ADDP_CHDEV_TXT_OVER
-    {
-        Pos = MAP_APPFONT( 40, 25 );
-        Size = MAP_APPFONT( 180, 8 );
-        Text [ en-US ] = "Do you want to";
-    };
-    RadioButton RID_ADDP_CHDEV_BTN_PRINTER
-    {
-        HelpID = "padmin:RadioButton:RID_ADDP_PAGE_CHOOSEDEV:RID_ADDP_CHDEV_BTN_PRINTER";
-        Pos = MAP_APPFONT ( 40, 40 );
-        Size = MAP_APPFONT( 180, 10 );
-        Text [ en-US ] = "Add a ~printer";
-    };
-    RadioButton RID_ADDP_CHDEV_BTN_PDF
-    {
-        HelpID = "padmin:RadioButton:RID_ADDP_PAGE_CHOOSEDEV:RID_ADDP_CHDEV_BTN_PDF";
-        Pos = MAP_APPFONT ( 40, 50 );
-        Size = MAP_APPFONT( 180, 10 );
-        Text [ en-US ] = "Connect a P~DF converter";
     };
 };
 

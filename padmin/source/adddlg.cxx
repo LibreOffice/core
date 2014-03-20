@@ -46,41 +46,6 @@ APTabPage::APTabPage( AddPrinterDialog* pParent, const ResId& rResId )
 {
 }
 
-APChooseDevicePage::APChooseDevicePage( AddPrinterDialog* pParent ) :
-        APTabPage( pParent, PaResId( RID_ADDP_PAGE_CHOOSEDEV ) ),
-        m_aPrinterBtn( this, PaResId( RID_ADDP_CHDEV_BTN_PRINTER ) ),
-        m_aPDFBtn( this, PaResId( RID_ADDP_CHDEV_BTN_PDF ) ),
-        m_aOverTxt( this, PaResId( RID_ADDP_CHDEV_TXT_OVER ) )
-{
-    FreeResource();
-    m_aPrinterBtn.Check( true );
-    m_aPDFBtn.Check( false );
-    if( ! PrinterInfoManager::get().addOrRemovePossible() )
-    {
-        m_aPrinterBtn.Check( false );
-        m_aPrinterBtn.Enable( false );
-    }
-}
-
-APChooseDevicePage::~APChooseDevicePage()
-{
-}
-
-bool APChooseDevicePage::check()
-{
-    return true;
-}
-
-void APChooseDevicePage::fill( PrinterInfo& rInfo )
-{
-    if( m_aPDFBtn.IsChecked() )
-    {
-        rInfo.m_aFeatures = "pdf=";
-    }
-    else
-        rInfo.m_aFeatures = "";
-}
-
 APChooseDriverPage::APChooseDriverPage( AddPrinterDialog* pParent )
         : APTabPage( pParent, PaResId( RID_ADDP_PAGE_CHOOSEDRIVER ) ),
           m_aDriverTxt( this, PaResId( RID_ADDP_CHDRV_TXT_DRIVER ) ),
@@ -489,7 +454,6 @@ AddPrinterDialog::AddPrinterDialog( Window* pParent )
           m_aLine( this, PaResId( RID_ADDP_LINE ) ),
           m_aTitleImage( this, PaResId( RID_ADDP_CTRL_TITLE ) ),
           m_pCurrentPage( NULL ),
-          m_pChooseDevicePage( NULL ),
           m_pCommandPage( NULL ),
           m_pChooseDriverPage( NULL ),
           m_pNamePage( NULL ),
@@ -499,7 +463,8 @@ AddPrinterDialog::AddPrinterDialog( Window* pParent )
           m_pPdfCommandPage( NULL )
 {
     FreeResource();
-    m_pCurrentPage = m_pChooseDevicePage = new APChooseDevicePage( this );
+    m_pCurrentPage = m_pPdfDriverPage = new APPdfDriverPage( this );
+
     m_pCurrentPage->Show( true );
     m_aFinishPB.Enable( false );
     m_aPrevPB.Enable( false );
@@ -516,7 +481,6 @@ AddPrinterDialog::AddPrinterDialog( Window* pParent )
 
 AddPrinterDialog::~AddPrinterDialog()
 {
-    delete m_pChooseDevicePage;
     delete m_pChooseDriverPage;
     delete m_pNamePage;
     delete m_pCommandPage;
@@ -544,24 +508,7 @@ void AddPrinterDialog::DataChanged( const DataChangedEvent& rEv )
 void AddPrinterDialog::advance()
 {
     m_pCurrentPage->Show( false );
-    if( m_pCurrentPage == m_pChooseDevicePage )
-    {
-        if( m_pChooseDevicePage->isPrinter() )
-        {
-            if( ! m_pChooseDriverPage )
-                m_pChooseDriverPage = new APChooseDriverPage( this );
-            m_pCurrentPage = m_pChooseDriverPage;
-            m_aPrevPB.Enable( true );
-        }
-        else if( m_pChooseDevicePage->isPDF() )
-        {
-            if( ! m_pPdfDriverPage )
-                m_pPdfDriverPage = new APPdfDriverPage( this );
-            m_pCurrentPage = m_pPdfDriverPage;
-            m_aPrevPB.Enable( true );
-        }
-    }
-    else if( m_pCurrentPage == m_pChooseDriverPage )
+    if( m_pCurrentPage == m_pChooseDriverPage )
     {
         if( ! m_pCommandPage )
             m_pCommandPage = new APCommandPage( this, DeviceKind::Printer );
@@ -591,6 +538,7 @@ void AddPrinterDialog::advance()
                 m_pPdfCommandPage = new APCommandPage( this, DeviceKind::Pdf );
             m_pCurrentPage = m_pPdfCommandPage;
         }
+        m_aPrevPB.Enable( true );
     }
     else if( m_pCurrentPage == m_pPdfSelectDriverPage )
     {
@@ -614,12 +562,7 @@ void AddPrinterDialog::advance()
 void AddPrinterDialog::back()
 {
     m_pCurrentPage->Show( false );
-    if( m_pCurrentPage == m_pChooseDriverPage )
-    {
-        m_pCurrentPage = m_pChooseDevicePage;
-        m_aPrevPB.Enable( false );
-    }
-    else if( m_pCurrentPage == m_pNamePage )
+    if( m_pCurrentPage == m_pNamePage )
     {
         m_pCurrentPage = m_pCommandPage;
         m_aNextPB.Enable( true );
@@ -627,11 +570,6 @@ void AddPrinterDialog::back()
     else if( m_pCurrentPage == m_pCommandPage )
     {
         m_pCurrentPage = m_pChooseDriverPage;
-    }
-    else if( m_pCurrentPage == m_pPdfDriverPage )
-    {
-        m_pCurrentPage = m_pChooseDevicePage;
-        m_aPrevPB.Enable( false );
     }
     else if( m_pCurrentPage == m_pPdfSelectDriverPage )
     {
@@ -659,17 +597,9 @@ void AddPrinterDialog::addPrinter()
     {
         PrinterInfo aInfo( rManager.getPrinterInfo( m_aPrinter.m_aPrinterName ) );
         aInfo.m_aCommand = m_aPrinter.m_aCommand;
-        if( m_pChooseDevicePage->isPrinter() )
-        {
-            if( m_pNamePage->isDefault() )
-                rManager.setDefaultPrinter( m_aPrinter.m_aPrinterName );
-        }
-        else if( m_pChooseDevicePage->isPDF() )
-        {
-            OUString aPdf( "pdf=" );
-            aPdf += m_pPdfCommandPage->getPdfDir();
-            aInfo.m_aFeatures = aPdf;
-        }
+        OUString aPdf( "pdf=" );
+        aPdf += m_pPdfCommandPage->getPdfDir();
+        aInfo.m_aFeatures = aPdf;
         rManager.changePrinterInfo( m_aPrinter.m_aPrinterName, aInfo );
     }
 }

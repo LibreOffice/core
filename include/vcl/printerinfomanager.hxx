@@ -112,8 +112,6 @@ protected:
     bool                              m_bUseJobPatch;
     OUString                     m_aSystemDefaultPaper;
 
-    bool                              m_bDisableCUPS;
-
     PrinterInfoManager( Type eType = Default );
 
     virtual void initialize();
@@ -195,20 +193,11 @@ public:
     // returns true on success
     virtual bool endSpool( const OUString& rPrinterName, const OUString& rJobTitle, FILE* pFile, const JobData& rDocumentJobData, bool bBanner, const OUString &rFaxNumber );
 
-    // for spadmin: whether adding or removing a printer is possible
-    virtual bool addOrRemovePossible() const;
-
     bool getUseIncludeFeature() const { return m_bUseIncludeFeature; }
     bool getUseJobPatch() const { return m_bUseJobPatch; }
 
     // check whether a printer's feature string contains a subfeature
     bool checkFeatureToken( const OUString& rPrinterName, const char* pToken ) const;
-
-    // set m_bDisableCUPS and update printer config
-    void setCUPSDisabled( bool );
-
-    // gets m_bDisableCUPS, initialized from printer config
-    bool isCUPSDisabled() const;
 
     virtual ~PrinterInfoManager();
 };

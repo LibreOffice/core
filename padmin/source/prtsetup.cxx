@@ -96,7 +96,7 @@ RTSDialog::RTSDialog( const PrinterInfo& rJobData, const OUString& rPrinter, boo
         m_pTabControl->RemovePage(m_pTabControl->GetPageId("other"));
         m_pTabControl->RemovePage(m_pTabControl->GetPageId("command"));
     }
-    else if( m_aJobData.m_aDriverName.startsWith("CUPS:") && ! PrinterInfoManager::get().isCUPSDisabled() )
+    else if (m_aJobData.m_aDriverName.startsWith("CUPS:"))
     {
         // command page makes no sense for CUPS printers
         m_pTabControl->RemovePage(m_pTabControl->GetPageId("command"));

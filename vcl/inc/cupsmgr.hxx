@@ -92,8 +92,6 @@ public:
     virtual bool removePrinter( const OUString& rPrinterName, bool bCheckOnly = false );
     virtual bool writePrinterConfig();
     virtual bool setDefaultPrinter( const OUString& rPrinterName );
-
-    virtual bool addOrRemovePossible() const;
 };
 
 } // namespace psp

@@ -46,11 +46,6 @@ PrinterInfoManager::PrinterInfoManager( Type eType ) :
     m_bUseIncludeFeature( false ),
     m_bUseJobPatch( true ),
     m_aSystemDefaultPaper( "A4" ),
-#ifdef LIBO_HEADLESS
-    m_bDisableCUPS( true )
-#else
-    m_bDisableCUPS( false )
-#endif
 {
     // initSystemDefaultPaper();
 }
@@ -68,16 +63,6 @@ bool PrinterInfoManager::checkPrintersChanged( bool /* bWait */ )
 void PrinterInfoManager::initialize()
 {
     // ???
-}
-
-bool PrinterInfoManager::isCUPSDisabled() const
-{
-    return m_bDisableCUPS;
-}
-
-void PrinterInfoManager::setCUPSDisabled( bool /* bDisable */ )
-{
-    // cups is already disabled in config so do nothing
 }
 
 void PrinterInfoManager::listPrinters( ::std::list< OUString >& rList ) const
@@ -113,11 +98,6 @@ bool PrinterInfoManager::removePrinter( const OUString& /* rPrinterName */, bool
 }
 
 bool PrinterInfoManager::setDefaultPrinter( const OUString& /* rPrinterName */ )
-{
-    return false;
-}
-
-bool PrinterInfoManager::addOrRemovePossible() const
 {
     return false;
 }

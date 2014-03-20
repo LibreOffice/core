@@ -53,9 +53,6 @@ namespace padmin {
         FixedText                           m_aCommentTxt;
         FixedText                           m_aComment;
 
-        FixedLine                           m_aCUPSFL;
-        CheckBox                            m_aCUPSCB;
-
         FixedLine                           m_aSepButtonFL;
         PushButton                          m_aAddPB;
         CancelButton                        m_aCancelButton;

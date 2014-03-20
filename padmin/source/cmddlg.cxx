@@ -221,7 +221,7 @@ RTSCommandPage::RTSCommandPage( RTSDialog* pParent ) :
 {
     // configuring as printer is only sensible in default print system
     PrinterInfoManager& rMgr( PrinterInfoManager::get() );
-    if( rMgr.getType() == PrinterInfoManager::Default || rMgr.isCUPSDisabled() )
+    if( rMgr.getType() == PrinterInfoManager::Default )
         m_nPrinterEntry = m_aConfigureBox.InsertEntry( OUString( PaResId( RID_RTS_CMD_STR_CONFIGURE_PRINTER ) ) );
     else
         m_nPrinterEntry = ~0;

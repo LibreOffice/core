@@ -53,15 +53,11 @@ public:
 
 class APChooseDevicePage : public APTabPage
 {
-    RadioButton             m_aPrinterBtn;
     RadioButton             m_aPDFBtn;
     FixedText               m_aOverTxt;
 public:
     APChooseDevicePage( AddPrinterDialog* pParent );
     ~APChooseDevicePage();
-
-    bool isPrinter() { return m_aPrinterBtn.IsChecked(); }
-    bool isPDF() { return m_aPDFBtn.IsChecked(); }
 
     virtual bool check();
     virtual void fill( ::psp::PrinterInfo& rInfo );
@@ -180,7 +176,6 @@ class AddPrinterDialog : public ModalDialog
 
     APTabPage*              m_pCurrentPage;
 
-    APChooseDevicePage*     m_pChooseDevicePage;
     APCommandPage*          m_pCommandPage;
     APChooseDriverPage*     m_pChooseDriverPage;
     APNamePage*             m_pNamePage;
