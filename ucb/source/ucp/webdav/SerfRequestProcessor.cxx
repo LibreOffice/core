@@ -314,6 +314,7 @@ bool SerfRequestProcessor::processLock( const css::ucb::Lock & rLock )
 {
     mpProcImpl = new SerfLockReqProcImpl( mPathStr,
                                           mrSerfSession.getRequestEnvironment().m_aRequestHeaders,
+                                          mrSerfSession,
                                           rLock );
 
     return runProcessor() == APR_SUCCESS;

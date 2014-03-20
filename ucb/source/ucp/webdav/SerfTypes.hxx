@@ -26,9 +26,6 @@
 
 typedef serf_connection_t SerfConnection;
 
-// TODO, figure out type of <SerfLock>
-typedef int SerfLock;
-
 // TODO, check if we need it later on
 typedef struct { const char *nspace, *name; } SerfPropName;
 
