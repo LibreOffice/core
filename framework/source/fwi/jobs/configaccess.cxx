@@ -18,7 +18,6 @@
  */
 
 #include <jobs/configaccess.hxx>
-#include <threadhelp/guard.hxx>
 #include <general.h>
 #include <services.h>
 
@@ -47,8 +46,7 @@ namespace framework{
  */
 ConfigAccess::ConfigAccess( /*IN*/ const css::uno::Reference< css::uno::XComponentContext >& rxContext,
                             /*IN*/ const OUString&                                    sRoot )
-    : ThreadHelpBase(          )
-    , m_xContext    ( rxContext)
+    : m_xContext    ( rxContext)
     , m_sRoot       ( sRoot    )
     , m_eMode       ( E_CLOSED )
 {
@@ -76,10 +74,8 @@ ConfigAccess::~ConfigAccess()
  */
 ConfigAccess::EOpenMode ConfigAccess::getMode() const
 {
-    /* SAFE { */
-    Guard aReadLock(m_aLock);
+    osl::MutexGuard g(m_mutex);
     return m_eMode;
-    /* } SAFE */
 }
 
 
@@ -99,10 +95,7 @@ ConfigAccess::EOpenMode ConfigAccess::getMode() const
  */
 void ConfigAccess::open( /*IN*/ EOpenMode eMode )
 {
-    /* SAFE { */
-    // We must lock the whole method to be shure, that nobody
-    // outside uses our internal member m_xAccess!
-    Guard aWriteLock(m_aLock);
+    osl::MutexGuard g(m_mutex);
 
     // check if configuration is already open in the right mode.
     // By the way: Don't allow closing by using this method!
@@ -146,9 +139,6 @@ void ConfigAccess::open( /*IN*/ EOpenMode eMode )
         if (m_xConfig.is())
             m_eMode = eMode;
     }
-
-    aWriteLock.unlock();
-    /* } SAFE */
 }
 
 
@@ -159,11 +149,7 @@ void ConfigAccess::open( /*IN*/ EOpenMode eMode )
  */
 void ConfigAccess::close()
 {
-    /* SAFE { */
-    // Lock the whole method, to be shure that nobody else uses our internal members
-    // during this time.
-    Guard aWriteLock(m_aLock);
-
+    osl::MutexGuard g(m_mutex);
     // check already closed configuration
     if (m_xConfig.is())
     {
@@ -173,9 +159,6 @@ void ConfigAccess::close()
         m_xConfig = css::uno::Reference< css::uno::XInterface >();
         m_eMode   = E_CLOSED;
     }
-
-    aWriteLock.unlock();
-    /* } SAFE */
 }
 
 

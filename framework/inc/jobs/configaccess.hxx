@@ -20,7 +20,6 @@
 #ifndef INCLUDED_FRAMEWORK_INC_JOBS_CONFIGACCESS_HXX
 #define INCLUDED_FRAMEWORK_INC_JOBS_CONFIGACCESS_HXX
 
-#include <threadhelp/threadhelpbase.hxx>
 #include <general.h>
 
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
@@ -39,7 +38,7 @@ namespace framework{
             instead of using soecialize config items of the svtools
             project. This class can wrapp such configuration access.
  */
-class FWI_DLLPUBLIC ConfigAccess : public ThreadHelpBase
+class FWI_DLLPUBLIC ConfigAccess
 {
 
 
@@ -60,6 +59,7 @@ class FWI_DLLPUBLIC ConfigAccess : public ThreadHelpBase
     // member
 
     private:
+        mutable osl::Mutex m_mutex;
 
         /**
             reference to the uno service manager
