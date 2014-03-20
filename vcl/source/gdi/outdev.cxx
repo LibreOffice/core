@@ -43,6 +43,7 @@
 #include <window.h>
 #include <outdev.h>
 #include <outdata.hxx>
+#include "PhysicalFontCollection.hxx"
 
 #include <basegfx/point/b2dpoint.hxx>
 #include <basegfx/vector/b2dvector.hxx>

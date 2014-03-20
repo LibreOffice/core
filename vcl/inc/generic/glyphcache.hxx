@@ -30,6 +30,7 @@ class GlyphCachePeer;
 class ServerFontLayoutEngine;
 class ServerFontLayout;
 class ImplFontOptions;
+class PhysicalFontCollection;
 
 #include <tools/gen.hxx>
 #include <basebmp/bitmapdevice.hxx>

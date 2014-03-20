@@ -21,6 +21,7 @@
 
 #include "impfont.hxx"
 #include "outfont.hxx"
+#include "PhysicalFontCollection.hxx"
 #include "sallayout.hxx"
 
 #ifdef MACOSX
