@@ -235,100 +235,100 @@
       <DaysOfWeek>
         <Day>
           <DayID>sun</DayID>
-          <DefaultAbbrvName>Sun</DefaultAbbrvName>
-          <DefaultFullName>Sunday</DefaultFullName>
+          <DefaultAbbrvName>日</DefaultAbbrvName>
+          <DefaultFullName>日曜日</DefaultFullName>
         </Day>
         <Day>
           <DayID>mon</DayID>
-          <DefaultAbbrvName>Mon</DefaultAbbrvName>
-          <DefaultFullName>Monday</DefaultFullName>
+          <DefaultAbbrvName>月</DefaultAbbrvName>
+          <DefaultFullName>月曜日</DefaultFullName>
         </Day>
         <Day>
           <DayID>tue</DayID>
-          <DefaultAbbrvName>Tue</DefaultAbbrvName>
-          <DefaultFullName>Tuesday</DefaultFullName>
+          <DefaultAbbrvName>火</DefaultAbbrvName>
+          <DefaultFullName>火曜日</DefaultFullName>
         </Day>
         <Day>
           <DayID>wed</DayID>
-          <DefaultAbbrvName>Wed</DefaultAbbrvName>
-          <DefaultFullName>Wednesday</DefaultFullName>
+          <DefaultAbbrvName>水</DefaultAbbrvName>
+          <DefaultFullName>水曜日</DefaultFullName>
         </Day>
         <Day>
           <DayID>thu</DayID>
-          <DefaultAbbrvName>Thu</DefaultAbbrvName>
-          <DefaultFullName>Thursday</DefaultFullName>
+          <DefaultAbbrvName>木</DefaultAbbrvName>
+          <DefaultFullName>木曜日</DefaultFullName>
         </Day>
         <Day>
           <DayID>fri</DayID>
-          <DefaultAbbrvName>Fri</DefaultAbbrvName>
-          <DefaultFullName>Friday</DefaultFullName>
+          <DefaultAbbrvName>金</DefaultAbbrvName>
+          <DefaultFullName>金曜日</DefaultFullName>
         </Day>
         <Day>
           <DayID>sat</DayID>
-          <DefaultAbbrvName>Sat</DefaultAbbrvName>
-          <DefaultFullName>Saturday</DefaultFullName>
+          <DefaultAbbrvName>土</DefaultAbbrvName>
+          <DefaultFullName>土曜日</DefaultFullName>
         </Day>
       </DaysOfWeek>
       <MonthsOfYear>
         <Month>
           <MonthID>jan</MonthID>
-          <DefaultAbbrvName>Jan</DefaultAbbrvName>
-          <DefaultFullName>January</DefaultFullName>
+          <DefaultAbbrvName>1月</DefaultAbbrvName>
+          <DefaultFullName>一月</DefaultFullName>
         </Month>
         <Month>
           <MonthID>feb</MonthID>
-          <DefaultAbbrvName>Feb</DefaultAbbrvName>
-          <DefaultFullName>February</DefaultFullName>
+          <DefaultAbbrvName>2月</DefaultAbbrvName>
+          <DefaultFullName>二月</DefaultFullName>
         </Month>
         <Month>
           <MonthID>mar</MonthID>
-          <DefaultAbbrvName>Mar</DefaultAbbrvName>
-          <DefaultFullName>March</DefaultFullName>
+          <DefaultAbbrvName>3月</DefaultAbbrvName>
+          <DefaultFullName>三月</DefaultFullName>
         </Month>
         <Month>
           <MonthID>apr</MonthID>
-          <DefaultAbbrvName>Apr</DefaultAbbrvName>
-          <DefaultFullName>April</DefaultFullName>
+          <DefaultAbbrvName>4月</DefaultAbbrvName>
+          <DefaultFullName>四月</DefaultFullName>
         </Month>
         <Month>
           <MonthID>may</MonthID>
-          <DefaultAbbrvName>May</DefaultAbbrvName>
-          <DefaultFullName>May</DefaultFullName>
+          <DefaultAbbrvName>5月</DefaultAbbrvName>
+          <DefaultFullName>五月</DefaultFullName>
         </Month>
         <Month>
           <MonthID>jun</MonthID>
-          <DefaultAbbrvName>Jun</DefaultAbbrvName>
-          <DefaultFullName>June</DefaultFullName>
+          <DefaultAbbrvName>6月</DefaultAbbrvName>
+          <DefaultFullName>六月</DefaultFullName>
         </Month>
         <Month>
           <MonthID>jul</MonthID>
-          <DefaultAbbrvName>Jul</DefaultAbbrvName>
-          <DefaultFullName>July</DefaultFullName>
+          <DefaultAbbrvName>7月</DefaultAbbrvName>
+          <DefaultFullName>七月</DefaultFullName>
         </Month>
         <Month>
           <MonthID>aug</MonthID>
-          <DefaultAbbrvName>Aug</DefaultAbbrvName>
-          <DefaultFullName>August</DefaultFullName>
+          <DefaultAbbrvName>8月</DefaultAbbrvName>
+          <DefaultFullName>八月</DefaultFullName>
         </Month>
         <Month>
           <MonthID>sep</MonthID>
-          <DefaultAbbrvName>Sep</DefaultAbbrvName>
-          <DefaultFullName>September</DefaultFullName>
+          <DefaultAbbrvName>9月</DefaultAbbrvName>
+          <DefaultFullName>九月</DefaultFullName>
         </Month>
         <Month>
           <MonthID>oct</MonthID>
-          <DefaultAbbrvName>Oct</DefaultAbbrvName>
-          <DefaultFullName>October</DefaultFullName>
+          <DefaultAbbrvName>10月</DefaultAbbrvName>
+          <DefaultFullName>十月</DefaultFullName>
         </Month>
         <Month>
           <MonthID>nov</MonthID>
-          <DefaultAbbrvName>Nov</DefaultAbbrvName>
-          <DefaultFullName>November</DefaultFullName>
+          <DefaultAbbrvName>11月</DefaultAbbrvName>
+          <DefaultFullName>十一月</DefaultFullName>
         </Month>
         <Month>
           <MonthID>dec</MonthID>
-          <DefaultAbbrvName>Dec</DefaultAbbrvName>
-          <DefaultFullName>December</DefaultFullName>
+          <DefaultAbbrvName>12月</DefaultAbbrvName>
+          <DefaultFullName>十二月</DefaultFullName>
         </Month>
       </MonthsOfYear>
       <Eras>
@@ -389,63 +389,63 @@
       <MonthsOfYear>
         <Month>
           <MonthID>jan</MonthID>
-          <DefaultAbbrvName>Jan</DefaultAbbrvName>
-          <DefaultFullName>January</DefaultFullName>
+          <DefaultAbbrvName>1月</DefaultAbbrvName>
+          <DefaultFullName>一月</DefaultFullName>
         </Month>
         <Month>
           <MonthID>feb</MonthID>
-          <DefaultAbbrvName>Feb</DefaultAbbrvName>
-          <DefaultFullName>February</DefaultFullName>
+          <DefaultAbbrvName>2月</DefaultAbbrvName>
+          <DefaultFullName>二月</DefaultFullName>
         </Month>
         <Month>
           <MonthID>mar</MonthID>
-          <DefaultAbbrvName>Mar</DefaultAbbrvName>
-          <DefaultFullName>March</DefaultFullName>
+          <DefaultAbbrvName>3月</DefaultAbbrvName>
+          <DefaultFullName>三月</DefaultFullName>
         </Month>
         <Month>
           <MonthID>apr</MonthID>
-          <DefaultAbbrvName>Apr</DefaultAbbrvName>
-          <DefaultFullName>April</DefaultFullName>
+          <DefaultAbbrvName>4月</DefaultAbbrvName>
+          <DefaultFullName>四月</DefaultFullName>
         </Month>
         <Month>
           <MonthID>may</MonthID>
-          <DefaultAbbrvName>May</DefaultAbbrvName>
-          <DefaultFullName>May</DefaultFullName>
+          <DefaultAbbrvName>5月</DefaultAbbrvName>
+          <DefaultFullName>五月</DefaultFullName>
         </Month>
         <Month>
           <MonthID>jun</MonthID>
-          <DefaultAbbrvName>Jun</DefaultAbbrvName>
-          <DefaultFullName>June</DefaultFullName>
+          <DefaultAbbrvName>6月</DefaultAbbrvName>
+          <DefaultFullName>六月</DefaultFullName>
         </Month>
         <Month>
           <MonthID>jul</MonthID>
-          <DefaultAbbrvName>Jul</DefaultAbbrvName>
-          <DefaultFullName>July</DefaultFullName>
+          <DefaultAbbrvName>7月</DefaultAbbrvName>
+          <DefaultFullName>七月</DefaultFullName>
         </Month>
         <Month>
           <MonthID>aug</MonthID>
-          <DefaultAbbrvName>Aug</DefaultAbbrvName>
-          <DefaultFullName>August</DefaultFullName>
+          <DefaultAbbrvName>8月</DefaultAbbrvName>
+          <DefaultFullName>八月</DefaultFullName>
         </Month>
         <Month>
           <MonthID>sep</MonthID>
-          <DefaultAbbrvName>Sep</DefaultAbbrvName>
-          <DefaultFullName>September</DefaultFullName>
+          <DefaultAbbrvName>9月</DefaultAbbrvName>
+          <DefaultFullName>九月</DefaultFullName>
         </Month>
         <Month>
           <MonthID>oct</MonthID>
-          <DefaultAbbrvName>Oct</DefaultAbbrvName>
-          <DefaultFullName>October</DefaultFullName>
+          <DefaultAbbrvName>10月</DefaultAbbrvName>
+          <DefaultFullName>十月</DefaultFullName>
         </Month>
         <Month>
           <MonthID>nov</MonthID>
-          <DefaultAbbrvName>Nov</DefaultAbbrvName>
-          <DefaultFullName>November</DefaultFullName>
+          <DefaultAbbrvName>11月</DefaultAbbrvName>
+          <DefaultFullName>十一月</DefaultFullName>
         </Month>
         <Month>
           <MonthID>dec</MonthID>
-          <DefaultAbbrvName>Dec</DefaultAbbrvName>
-          <DefaultFullName>December</DefaultFullName>
+          <DefaultAbbrvName>12月</DefaultAbbrvName>
+          <DefaultFullName>十二月</DefaultFullName>
         </Month>
       </MonthsOfYear>
       <Eras>
