@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da86d52c_ec544323",
+        "filename": "svx/source/sdr/contact/objectcontactofpageview.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 244,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2014-03-20T10:22:10Z",
+      "side": 1,
+      "message": "If rRedrawArea is empty, then this won\u0027t detect anything, however in sdr::contact::ViewObjectContactOfSdrPage::getPrimitive2DSequenceHierarchy() (in the \"expensive\" case) an empty rRedrawArea clearly means \"render everything\".\n\nAlso GetSnapRect() may return an empty rectangle, GetCurrentBoundRect() avoids that problem.",
+      "revId": "9ebed52961d6f9ea4732e939b43a212e3102b626",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
