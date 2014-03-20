@@ -21,7 +21,6 @@
 
 // include own header
 #include <jobs/helponstartup.hxx>
-#include <threadhelp/guard.hxx>
 #include <loadenv/targethelper.hxx>
 #include <services.h>
 
@@ -101,8 +100,7 @@ DEFINE_INIT_SERVICE(HelpOnStartup,
 
 
 HelpOnStartup::HelpOnStartup(const css::uno::Reference< css::uno::XComponentContext >& xContext)
-    : ThreadHelpBase(     )
-    , m_xContext    (xContext)
+    : m_xContext    (xContext)
 {
 }
 
@@ -163,18 +161,13 @@ css::uno::Any SAL_CALL HelpOnStartup::execute(const css::uno::Sequence< css::bea
 void SAL_CALL HelpOnStartup::disposing(const css::lang::EventObject& aEvent)
     throw(css::uno::RuntimeException, std::exception)
 {
-    // SAFE ->
-    Guard aLock(m_aLock);
-
+    osl::MutexGuard g(m_mutex);
     if (aEvent.Source == m_xModuleManager)
         m_xModuleManager.clear();
     else if (aEvent.Source == m_xDesktop)
         m_xDesktop.clear();
     else if (aEvent.Source == m_xConfig)
         m_xConfig.clear();
-
-    aLock.unlock();
-    // <- SAFE
 }
 
 
@@ -211,9 +204,9 @@ OUString HelpOnStartup::its_getModuleIdFromEnv(const css::uno::Sequence< css::be
     // OK - now we are sure this document is a top level document.
     // Classify it.
     // SAFE ->
-    Guard aLock(m_aLock);
+    osl::ClearableMutexGuard aLock(m_mutex);
     css::uno::Reference< css::frame::XModuleManager2 > xModuleManager = m_xModuleManager;
-    aLock.unlock();
+    aLock.clear();
     // <- SAFE
 
     OUString sModuleId;
@@ -233,9 +226,9 @@ OUString HelpOnStartup::its_getModuleIdFromEnv(const css::uno::Sequence< css::be
 OUString HelpOnStartup::its_getCurrentHelpURL()
 {
     // SAFE ->
-    Guard aLock(m_aLock);
+    osl::ClearableMutexGuard aLock(m_mutex);
     css::uno::Reference< css::frame::XDesktop2 > xDesktop = m_xDesktop;
-    aLock.unlock();
+    aLock.clear();
     // <- SAFE
 
     if (!xDesktop.is())
@@ -278,11 +271,11 @@ OUString HelpOnStartup::its_getCurrentHelpURL()
         return sal_False;
 
     // SAFE ->
-    Guard aLock(m_aLock);
+    osl::ClearableMutexGuard aLock(m_mutex);
     css::uno::Reference< css::container::XNameAccess >     xConfig = m_xConfig;
     OUString                                        sLocale = m_sLocale;
     OUString                                        sSystem = m_sSystem;
-    aLock.unlock();
+    aLock.clear();
     // <- SAFE
 
     if (!xConfig.is())
@@ -322,11 +315,11 @@ OUString HelpOnStartup::its_getCurrentHelpURL()
 OUString HelpOnStartup::its_checkIfHelpEnabledAndGetURL(const OUString& sModule)
 {
     // SAFE ->
-    Guard aLock(m_aLock);
+    osl::ClearableMutexGuard aLock(m_mutex);
     css::uno::Reference< css::container::XNameAccess > xConfig = m_xConfig;
     OUString                                    sLocale = m_sLocale;
     OUString                                    sSystem = m_sSystem;
-    aLock.unlock();
+    aLock.clear();
     // <- SAFE
 
     OUString sHelpURL;

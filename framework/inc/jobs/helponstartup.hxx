@@ -20,7 +20,6 @@
 #ifndef INCLUDED_FRAMEWORK_INC_JOBS_HELPONSTARTUP_HXX
 #define INCLUDED_FRAMEWORK_INC_JOBS_HELPONSTARTUP_HXX
 
-#include <threadhelp/threadhelpbase.hxx>
 #include <macros/xinterface.hxx>
 #include <macros/xtypeprovider.hxx>
 #include <macros/xserviceinfo.hxx>
@@ -45,13 +44,12 @@ namespace framework{
 
     @author as96863
  */
-class HelpOnStartup : private ThreadHelpBase
-                      ,public ::cppu::WeakImplHelper3< ::com::sun::star::lang::XServiceInfo,::com::sun::star::lang::XEventListener,::com::sun::star::task::XJob >
+class HelpOnStartup : public ::cppu::WeakImplHelper3< ::com::sun::star::lang::XServiceInfo,::com::sun::star::lang::XEventListener,::com::sun::star::task::XJob >
 {
 
     // member
     private:
-
+        osl::Mutex m_mutex;
 
         /** @short  reference to an uno service manager. */
         css::uno::Reference< css::uno::XComponentContext > m_xContext;
