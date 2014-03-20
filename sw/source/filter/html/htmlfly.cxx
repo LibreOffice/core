@@ -510,11 +510,11 @@ void SwHTMLWriter::OutFrmFmt( sal_uInt8 nMode, const SwFrmFmt& rFrmFmt,
         DecIndentLevel();
         if( bLFPossible )
             OutNewLine();
-        HTMLOutFuncs::Out_AsciiTag( Strm(), OOO_STRING_SVTOOLS_HTML_division, sal_False );
+        HTMLOutFuncs::Out_AsciiTag( Strm(), OOO_STRING_SVTOOLS_HTML_division, false );
         bLFPossible = sal_True;
     }
     else if( HTML_CNTNR_SPAN == nCntnrMode )
-        HTMLOutFuncs::Out_AsciiTag( Strm(), OOO_STRING_SVTOOLS_HTML_span, sal_False );
+        HTMLOutFuncs::Out_AsciiTag( Strm(), OOO_STRING_SVTOOLS_HTML_span, false );
 }
 
 OString SwHTMLWriter::OutFrmFmtOptions( const SwFrmFmt &rFrmFmt,
@@ -1337,7 +1337,7 @@ static Writer & OutHTML_FrmFmtAsMulticol( Writer& rWrt,
     rHTMLWrt.DecIndentLevel();  // den Inhalt von Multicol einruecken;
     if( rHTMLWrt.bLFPossible )
         rHTMLWrt.OutNewLine();
-    HTMLOutFuncs::Out_AsciiTag( rWrt.Strm(), OOO_STRING_SVTOOLS_HTML_multicol, sal_False );
+    HTMLOutFuncs::Out_AsciiTag( rWrt.Strm(), OOO_STRING_SVTOOLS_HTML_multicol, false );
     rHTMLWrt.bLFPossible = sal_True;
 
     return rWrt;
@@ -1424,7 +1424,7 @@ static Writer& OutHTML_FrmFmtAsDivOrSpan( Writer& rWrt,
     rHTMLWrt.DecIndentLevel();  // den Inhalt von Multicol einruecken;
     if( rHTMLWrt.bLFPossible )
         rHTMLWrt.OutNewLine();
-    HTMLOutFuncs::Out_AsciiTag( rWrt.Strm(), pStr, sal_False );
+    HTMLOutFuncs::Out_AsciiTag( rWrt.Strm(), pStr, false );
 
     if( !aEndTags.isEmpty() )
         rWrt.Strm().WriteCharPtr( aEndTags.getStr() );
@@ -1570,7 +1570,7 @@ Writer& OutHTML_HeaderFooter( Writer& rWrt, const SwFrmFmt& rFrmFmt,
 
     rHTMLWrt.DecIndentLevel();  // den Inhalt von Multicol einruecken;
     rHTMLWrt.OutNewLine();
-    HTMLOutFuncs::Out_AsciiTag( rWrt.Strm(), OOO_STRING_SVTOOLS_HTML_division, sal_False );
+    HTMLOutFuncs::Out_AsciiTag( rWrt.Strm(), OOO_STRING_SVTOOLS_HTML_division, false );
 
     rHTMLWrt.nHeaderFooterSpace = 0;
 

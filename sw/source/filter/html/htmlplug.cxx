@@ -1201,7 +1201,7 @@ Writer& OutHTML_FrmFmtOLENode( Writer& rWrt, const SwFrmFmt& rFrmFmt,
         rHTMLWrt.DecIndentLevel(); // Inhalt von Applet einruecken
         if( aCommands.size() )
             rHTMLWrt.OutNewLine();
-        HTMLOutFuncs::Out_AsciiTag( rWrt.Strm(), OOO_STRING_SVTOOLS_HTML_applet, sal_False );
+        HTMLOutFuncs::Out_AsciiTag( rWrt.Strm(), OOO_STRING_SVTOOLS_HTML_applet, false );
     }
     else if( aGlobName == SvGlobalName( SO3_PLUGIN_CLASSID ) )
     {
@@ -1235,7 +1235,7 @@ Writer& OutHTML_FrmFmtOLENode( Writer& rWrt, const SwFrmFmt& rFrmFmt,
         // ausgeben
 
         rHTMLWrt.Strm().WriteChar( '>' );
-        HTMLOutFuncs::Out_AsciiTag( rWrt.Strm(), OOO_STRING_SVTOOLS_HTML_iframe, sal_False );
+        HTMLOutFuncs::Out_AsciiTag( rWrt.Strm(), OOO_STRING_SVTOOLS_HTML_iframe, false );
     }
 
     if( !aEndTags.isEmpty() )

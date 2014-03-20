@@ -246,14 +246,14 @@ private:
     long                mnStartPos;
     long                mnDragPos;
     long                mnMouseOff;
-    sal_uInt16              mnCurItemId;
-    sal_uInt16              mnItemDragPos;
-    sal_Bool                mbDragable;
-    sal_Bool                mbDrag;
-    sal_Bool                mbItemDrag;
-    sal_Bool                mbOutDrag;
-    sal_Bool                mbButtonStyle;
-    sal_Bool                mbItemMode;
+    sal_uInt16          mnCurItemId;
+    sal_uInt16          mnItemDragPos;
+    bool                mbDragable;
+    bool                mbDrag;
+    bool                mbItemDrag;
+    bool                mbOutDrag;
+    bool                mbButtonStyle;
+    bool                mbItemMode;
     Link                maStartDragHdl;
     Link                maDragHdl;
     Link                maEndDragHdl;
@@ -270,25 +270,25 @@ private:
 
     using Window::ImplInit;
     SVT_DLLPRIVATE void             ImplInit( WinBits nWinStyle );
-    SVT_DLLPRIVATE void             ImplInitSettings( sal_Bool bFont, sal_Bool bForeground, sal_Bool bBackground );
+    SVT_DLLPRIVATE void             ImplInitSettings( bool bFont, bool bForeground, bool bBackground );
     SVT_DLLPRIVATE long             ImplGetItemPos( sal_uInt16 nPos ) const;
     SVT_DLLPRIVATE Rectangle            ImplGetItemRect( sal_uInt16 nPos ) const;
     using Window::ImplHitTest;
     SVT_DLLPRIVATE sal_uInt16               ImplHitTest( const Point& rPos, long& nMouseOff, sal_uInt16& nPos ) const;
     SVT_DLLPRIVATE void             ImplInvertDrag( sal_uInt16 nStartPos, sal_uInt16 nEndPos );
     SVT_DLLPRIVATE void             ImplDrawItem( OutputDevice* pDev,
-                                      sal_uInt16 nPos, sal_Bool bHigh, sal_Bool bDrag,
+                                      sal_uInt16 nPos, bool bHigh, bool bDrag,
                                       const Rectangle& rItemRect,
                                       const Rectangle* pRect,
                                       sal_uLong nFlags );
-    SVT_DLLPRIVATE void             ImplDrawItem( sal_uInt16 nPos, sal_Bool bHigh = sal_False,
-                                      sal_Bool bDrag = sal_False,
+    SVT_DLLPRIVATE void             ImplDrawItem( sal_uInt16 nPos, bool bHigh = false,
+                                      bool bDrag = false,
                                       const Rectangle* pRect = NULL );
     SVT_DLLPRIVATE void             ImplUpdate( sal_uInt16 nPos,
-                                    sal_Bool bEnd = sal_False, sal_Bool bDirect = sal_False );
-    SVT_DLLPRIVATE void             ImplStartDrag( const Point& rPos, sal_Bool bCommand );
+                                       bool bEnd = false, bool bDirect = false );
+    SVT_DLLPRIVATE void             ImplStartDrag( const Point& rPos, bool bCommand );
     SVT_DLLPRIVATE void             ImplDrag( const Point& rPos );
-    SVT_DLLPRIVATE void             ImplEndDrag( sal_Bool bCancel );
+    SVT_DLLPRIVATE void             ImplEndDrag( bool bCancel );
 
 public:
     HeaderBar( Window* pParent, WinBits nWinBits = WB_STDHEADERBAR );
@@ -324,16 +324,16 @@ public:
     inline void         SetDragSize( long nNewSize = 0 ) { mnDragSize = nNewSize; }
     long                GetDragSize() const { return mnDragSize; }
 
-    sal_uInt16              GetItemCount() const;
-    sal_uInt16              GetItemPos( sal_uInt16 nItemId ) const;
-    sal_uInt16              GetItemId( sal_uInt16 nPos ) const;
-    sal_uInt16              GetItemId( const Point& rPos ) const;
+    sal_uInt16          GetItemCount() const;
+    sal_uInt16          GetItemPos( sal_uInt16 nItemId ) const;
+    sal_uInt16          GetItemId( sal_uInt16 nPos ) const;
+    sal_uInt16          GetItemId( const Point& rPos ) const;
     Rectangle           GetItemRect( sal_uInt16 nItemId ) const;
-    sal_uInt16              GetCurItemId() const { return mnCurItemId; }
+    sal_uInt16          GetCurItemId() const { return mnCurItemId; }
     long                GetDragPos() const { return mnDragPos; }
-    sal_uInt16              GetItemDragPos() const { return mnItemDragPos; }
-    sal_Bool                IsItemMode() const { return mbItemMode; }
-    sal_Bool                IsItemDrag() const { return mbItemDrag; }
+    sal_uInt16          GetItemDragPos() const { return mnItemDragPos; }
+    bool                IsItemMode() const { return mbItemMode; }
+    bool                IsItemDrag() const { return mbItemDrag; }
 
     void                SetItemSize( sal_uInt16 nItemId, long nNewSize );
     long                GetItemSize( sal_uInt16 nItemId ) const;
@@ -366,7 +366,7 @@ public:
     inline void         SetCreateAccessibleHdl( const Link& rLink ) { maCreateAccessibleHdl = rLink; }
     inline const Link&  GetCreateAccessibleHdl() const              { return maCreateAccessibleHdl; }
 
-    inline sal_Bool         IsDragable() const                          { return mbDragable; }
+    inline bool         IsDragable() const                          { return mbDragable; }
 
     /** Creates and returns the accessible object of the header bar. */
     virtual ::com::sun::star::uno::Reference<

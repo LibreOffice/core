@@ -373,9 +373,9 @@ sal_uLong SwHTMLWriter::WriteStream()
 
     if( bLFPossible )
         OutNewLine();
-    HTMLOutFuncs::Out_AsciiTag( Strm(), OOO_STRING_SVTOOLS_HTML_body, sal_False );
+    HTMLOutFuncs::Out_AsciiTag( Strm(), OOO_STRING_SVTOOLS_HTML_body, false );
     OutNewLine();
-    HTMLOutFuncs::Out_AsciiTag( Strm(), OOO_STRING_SVTOOLS_HTML_html, sal_False );
+    HTMLOutFuncs::Out_AsciiTag( Strm(), OOO_STRING_SVTOOLS_HTML_html, false );
 
     // loesche die Tabelle mit den freifliegenden Rahmen
     sal_uInt16 i;
@@ -612,7 +612,7 @@ static void lcl_html_OutSectionEndTag( SwHTMLWriter& rHTMLWrt )
     rHTMLWrt.DecIndentLevel();
     if( rHTMLWrt.bLFPossible )
         rHTMLWrt.OutNewLine();
-    HTMLOutFuncs::Out_AsciiTag( rHTMLWrt.Strm(), OOO_STRING_SVTOOLS_HTML_division, sal_False );
+    HTMLOutFuncs::Out_AsciiTag( rHTMLWrt.Strm(), OOO_STRING_SVTOOLS_HTML_division, false );
     rHTMLWrt.bLFPossible = sal_True;
 }
 
@@ -964,7 +964,7 @@ const SwPageDesc *SwHTMLWriter::MakeHeader( sal_uInt16 &rHeaderAttrs )
 
     DecIndentLevel();   // Inhalt von <HEAD> einruecken
     OutNewLine();
-    HTMLOutFuncs::Out_AsciiTag( Strm(), OOO_STRING_SVTOOLS_HTML_head, sal_False );
+    HTMLOutFuncs::Out_AsciiTag( Strm(), OOO_STRING_SVTOOLS_HTML_head, false );
 
     // der Body wird nicht eingerueckt, weil sonst alles eingerueckt waere!
     OutNewLine();
@@ -1014,7 +1014,7 @@ void SwHTMLWriter::OutAnchor( const OUString& rName )
         .append(OOO_STRING_SVTOOLS_HTML_O_name).append("=\"");
     Strm().WriteCharPtr( sOut.makeStringAndClear().getStr() );
     HTMLOutFuncs::Out_String( Strm(), rName, eDestEnc, &aNonConvertableCharacters ).WriteCharPtr( "\">" );
-    HTMLOutFuncs::Out_AsciiTag( Strm(), OOO_STRING_SVTOOLS_HTML_anchor, sal_False );
+    HTMLOutFuncs::Out_AsciiTag( Strm(), OOO_STRING_SVTOOLS_HTML_anchor, false );
 }
 
 void SwHTMLWriter::OutBookmarks()

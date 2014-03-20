@@ -66,7 +66,7 @@ namespace svt
         void                SetLabel( const OUString& _rText );
 
         void                ToggleBackgroundColor( const Color& _rGBColor );
-        void                SetInteractive( sal_Bool _bInteractive );
+        void                SetInteractive( bool _bInteractive );
 
         void                SetClickHdl( const Link& rLink ) { maClickHdl = rLink; }
         const Link&         GetClickHdl() const { return maClickHdl; }

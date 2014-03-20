@@ -308,12 +308,12 @@ Writer& OutHTML_SwFmtFtn( Writer& rWrt, const SfxPoolItem& rHt )
         sOut.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_sdfixed);
     sOut.append('>');
     rWrt.Strm().WriteCharPtr( sOut.makeStringAndClear().getStr() );
-    HTMLOutFuncs::Out_AsciiTag( rWrt.Strm(), OOO_STRING_SVTOOLS_HTML_superscript, sal_True );
+    HTMLOutFuncs::Out_AsciiTag( rWrt.Strm(), OOO_STRING_SVTOOLS_HTML_superscript, true );
 
     HTMLOutFuncs::Out_String( rWrt.Strm(), rFmtFtn.GetViewNumStr(*rWrt.pDoc),
                                  rHTMLWrt.eDestEnc, &rHTMLWrt.aNonConvertableCharacters );
-    HTMLOutFuncs::Out_AsciiTag( rWrt.Strm(), OOO_STRING_SVTOOLS_HTML_superscript, sal_False );
-    HTMLOutFuncs::Out_AsciiTag( rWrt.Strm(), OOO_STRING_SVTOOLS_HTML_anchor, sal_False );
+    HTMLOutFuncs::Out_AsciiTag( rWrt.Strm(), OOO_STRING_SVTOOLS_HTML_superscript, false );
+    HTMLOutFuncs::Out_AsciiTag( rWrt.Strm(), OOO_STRING_SVTOOLS_HTML_anchor, false );
 
     return rWrt;
 }
@@ -375,7 +375,7 @@ void SwHTMLWriter::OutFootEndNotes()
         DecIndentLevel();   // Inhalt von <DIV> einruecken
         if( bLFPossible )
             OutNewLine();
-        HTMLOutFuncs::Out_AsciiTag( Strm(), OOO_STRING_SVTOOLS_HTML_division, sal_False );
+        HTMLOutFuncs::Out_AsciiTag( Strm(), OOO_STRING_SVTOOLS_HTML_division, false );
         bLFPossible = sal_True;
 
         OSL_ENSURE( !pFmtFtn,
@@ -475,7 +475,7 @@ void SwHTMLWriter::OutFootEndNoteSym( const SwFmtFtn& rFmtFtn,
     Strm().WriteCharPtr( sOut.makeStringAndClear().getStr() );
 
     HTMLOutFuncs::Out_String( Strm(), rNum, eDestEnc, &aNonConvertableCharacters );
-    HTMLOutFuncs::Out_AsciiTag( Strm(), OOO_STRING_SVTOOLS_HTML_anchor, sal_False );
+    HTMLOutFuncs::Out_AsciiTag( Strm(), OOO_STRING_SVTOOLS_HTML_anchor, false );
 }
 
 static sal_uInt16 lcl_html_fillEndNoteInfo( const SwEndNoteInfo& rInfo,

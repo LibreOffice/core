@@ -497,7 +497,7 @@ void SwHTMLWrtTable::OutTableCell( SwHTMLWriter& rWrt,
         rWrt.OutNewLine();
     HTMLOutFuncs::Out_AsciiTag( rWrt.Strm(), bHead ? OOO_STRING_SVTOOLS_HTML_tableheader
                                                      : OOO_STRING_SVTOOLS_HTML_tabledata,
-                                sal_False );
+                                false );
     rWrt.bLFPossible = sal_True;
 }
 
@@ -558,7 +558,7 @@ void SwHTMLWrtTable::OutTableCells( SwHTMLWriter& rWrt,
     rWrt.DecIndentLevel(); // Inhalt von <TR>...</TR> einruecken
 
     rWrt.OutNewLine();  // </TR> in neuer Zeile
-    HTMLOutFuncs::Out_AsciiTag( rWrt.Strm(), OOO_STRING_SVTOOLS_HTML_tablerow, sal_False );
+    HTMLOutFuncs::Out_AsciiTag( rWrt.Strm(), OOO_STRING_SVTOOLS_HTML_tablerow, false );
 }
 
 void SwHTMLWrtTable::Write( SwHTMLWriter& rWrt, sal_Int16 eAlign,
@@ -731,9 +731,9 @@ void SwHTMLWrtTable::Write( SwHTMLWriter& rWrt, sal_Int16 eAlign,
         sOutStr.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_align).append("=\"")
                .append(bTopCaption ? OOO_STRING_SVTOOLS_HTML_VA_top : OOO_STRING_SVTOOLS_HTML_VA_bottom)
                .append("\"");
-        HTMLOutFuncs::Out_AsciiTag( rWrt.Strm(), sOutStr.getStr(), sal_True );
-        HTMLOutFuncs::Out_String( rWrt.Strm(), *pCaption, rWrt.eDestEnc, &rWrt.aNonConvertableCharacters    );
-        HTMLOutFuncs::Out_AsciiTag( rWrt.Strm(), OOO_STRING_SVTOOLS_HTML_caption, sal_False );
+        HTMLOutFuncs::Out_AsciiTag( rWrt.Strm(), sOutStr.getStr(), true );
+        HTMLOutFuncs::Out_String( rWrt.Strm(), *pCaption, rWrt.eDestEnc, &rWrt.aNonConvertableCharacters );
+        HTMLOutFuncs::Out_AsciiTag( rWrt.Strm(), OOO_STRING_SVTOOLS_HTML_caption, false );
     }
 
     sal_uInt16 nCols = aCols.size();
@@ -746,7 +746,7 @@ void SwHTMLWrtTable::Write( SwHTMLWriter& rWrt, sal_Int16 eAlign,
         if( bColGroups )
         {
             rWrt.OutNewLine(); // <COLGRP> in neue Zeile
-            HTMLOutFuncs::Out_AsciiTag( rWrt.Strm(), OOO_STRING_SVTOOLS_HTML_colgroup, sal_True );
+            HTMLOutFuncs::Out_AsciiTag( rWrt.Strm(), OOO_STRING_SVTOOLS_HTML_colgroup, true );
 
             rWrt.IncIndentLevel(); // Inhalt von <COLGRP> einruecken
         }
@@ -787,10 +787,10 @@ void SwHTMLWrtTable::Write( SwHTMLWriter& rWrt, sal_Int16 eAlign,
                 rWrt.DecIndentLevel(); // Inhalt von <COLGRP> einruecken
                 rWrt.OutNewLine(); // </COLGRP> in neue Zeile
                 HTMLOutFuncs::Out_AsciiTag( rWrt.Strm(), OOO_STRING_SVTOOLS_HTML_colgroup,
-                                            sal_False );
+                                            false );
                 rWrt.OutNewLine(); // <COLGRP> in neue Zeile
                 HTMLOutFuncs::Out_AsciiTag( rWrt.Strm(), OOO_STRING_SVTOOLS_HTML_colgroup,
-                                            sal_True );
+                                            true );
                 rWrt.IncIndentLevel(); // Inhalt von <COLGRP> einruecken
             }
         }
@@ -800,7 +800,7 @@ void SwHTMLWrtTable::Write( SwHTMLWriter& rWrt, sal_Int16 eAlign,
 
             rWrt.OutNewLine(); // </COLGRP> in neue Zeile
             HTMLOutFuncs::Out_AsciiTag( rWrt.Strm(), OOO_STRING_SVTOOLS_HTML_colgroup,
-                                        sal_False );
+                                        false );
         }
     }
 
@@ -824,7 +824,7 @@ void SwHTMLWrtTable::Write( SwHTMLWriter& rWrt, sal_Int16 eAlign,
     {
         rWrt.OutNewLine(); // <THEAD>/<TDATA> in neue Zeile
         HTMLOutFuncs::Out_AsciiTag( rWrt.Strm(),
-                            bTHead ? OOO_STRING_SVTOOLS_HTML_thead : OOO_STRING_SVTOOLS_HTML_tbody, sal_True );
+                            bTHead ? OOO_STRING_SVTOOLS_HTML_thead : OOO_STRING_SVTOOLS_HTML_tbody, true );
 
         rWrt.IncIndentLevel(); // Inhalt von <THEAD>/<TDATA> einr.
     }
@@ -842,9 +842,9 @@ void SwHTMLWrtTable::Write( SwHTMLWriter& rWrt, sal_Int16 eAlign,
             {
                 rWrt.OutNewLine();
                 HTMLOutFuncs::Out_AsciiTag( rWrt.Strm(), OOO_STRING_SVTOOLS_HTML_tablerow,
-                                            sal_True );
+                                            true );
                 HTMLOutFuncs::Out_AsciiTag( rWrt.Strm(), OOO_STRING_SVTOOLS_HTML_tablerow,
-                                            sal_False );
+                                            false );
             }
         }
         if( ( (bTHead && nRow==nHeadEndRow) ||
@@ -854,14 +854,14 @@ void SwHTMLWrtTable::Write( SwHTMLWriter& rWrt, sal_Int16 eAlign,
             rWrt.DecIndentLevel(); // Inhalt von <THEAD>/<TDATA> einr.
             rWrt.OutNewLine(); // </THEAD>/</TDATA> in neue Zeile
             HTMLOutFuncs::Out_AsciiTag( rWrt.Strm(),
-                            bTHead ? OOO_STRING_SVTOOLS_HTML_thead : OOO_STRING_SVTOOLS_HTML_tbody, sal_False );
+                            bTHead ? OOO_STRING_SVTOOLS_HTML_thead : OOO_STRING_SVTOOLS_HTML_tbody, false );
             rWrt.OutNewLine(); // <THEAD>/<TDATA> in neue Zeile
 
             if( bTHead && nRow==nHeadEndRow )
                 bTHead = sal_False;
 
             HTMLOutFuncs::Out_AsciiTag( rWrt.Strm(),
-                            bTHead ? OOO_STRING_SVTOOLS_HTML_thead : OOO_STRING_SVTOOLS_HTML_tbody, sal_True );
+                            bTHead ? OOO_STRING_SVTOOLS_HTML_thead : OOO_STRING_SVTOOLS_HTML_tbody, true );
             rWrt.IncIndentLevel(); // Inhalt von <THEAD>/<TDATA> einr.
         }
     }
@@ -872,13 +872,13 @@ void SwHTMLWrtTable::Write( SwHTMLWriter& rWrt, sal_Int16 eAlign,
 
         rWrt.OutNewLine(); // </THEAD>/</TDATA> in neue Zeile
         HTMLOutFuncs::Out_AsciiTag( rWrt.Strm(),
-                            bTHead ? OOO_STRING_SVTOOLS_HTML_thead : OOO_STRING_SVTOOLS_HTML_tbody, sal_False );
+                            bTHead ? OOO_STRING_SVTOOLS_HTML_thead : OOO_STRING_SVTOOLS_HTML_tbody, false );
     }
 
     rWrt.DecIndentLevel(); // Inhalt von <TABLE> einr.
 
     rWrt.OutNewLine(); // </TABLE> in neue Zeile
-    HTMLOutFuncs::Out_AsciiTag( rWrt.Strm(), OOO_STRING_SVTOOLS_HTML_table, sal_False );
+    HTMLOutFuncs::Out_AsciiTag( rWrt.Strm(), OOO_STRING_SVTOOLS_HTML_table, false );
 
     rWrt.nDirection = nOldDirection;
 }
@@ -1091,14 +1091,13 @@ Writer& OutHTML_SwTblNode( Writer& rWrt, SwTableNode & rNode,
         if( rHTMLWrt.bLFPossible )
             rHTMLWrt.OutNewLine();  // <CENTER> in neuer Zeile
         if( text::HoriOrientation::CENTER==eDivHoriOri )
-            HTMLOutFuncs::Out_AsciiTag( rWrt.Strm(), OOO_STRING_SVTOOLS_HTML_center, sal_True );
+            HTMLOutFuncs::Out_AsciiTag( rWrt.Strm(), OOO_STRING_SVTOOLS_HTML_center, true );
         else
         {
             OStringBuffer sOut(OOO_STRING_SVTOOLS_HTML_division);
             sOut.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_align).append("=\"")
                 .append(OOO_STRING_SVTOOLS_HTML_AL_right).append("\"");
-            HTMLOutFuncs::Out_AsciiTag( rWrt.Strm(), sOut.getStr(),
-                                        sal_True );
+            HTMLOutFuncs::Out_AsciiTag( rWrt.Strm(), sOut.getStr(), true );
         }
         rHTMLWrt.IncIndentLevel();  // Inhalt von <CENTER> einruecken
         rHTMLWrt.bLFPossible = sal_True;
@@ -1145,7 +1144,7 @@ Writer& OutHTML_SwTblNode( Writer& rWrt, SwTableNode & rNode,
         rHTMLWrt.OutNewLine();      // </CENTER> in neue Teile
         HTMLOutFuncs::Out_AsciiTag( rWrt.Strm(),
                                text::HoriOrientation::CENTER==eDivHoriOri ? OOO_STRING_SVTOOLS_HTML_center
-                                                        : OOO_STRING_SVTOOLS_HTML_division, sal_False );
+                                                        : OOO_STRING_SVTOOLS_HTML_division, false );
         rHTMLWrt.bLFPossible = sal_True;
     }
 

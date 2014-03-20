@@ -907,7 +907,7 @@ Writer& OutHTML_NumBulListEnd( SwHTMLWriter& rWrt,
             pStr = OOO_STRING_SVTOOLS_HTML_unorderlist;
         else
             pStr = OOO_STRING_SVTOOLS_HTML_orderlist;
-        HTMLOutFuncs::Out_AsciiTag( rWrt.Strm(), pStr, sal_False );
+        HTMLOutFuncs::Out_AsciiTag( rWrt.Strm(), pStr, false );
         rWrt.bLFPossible = sal_True;
     }
 

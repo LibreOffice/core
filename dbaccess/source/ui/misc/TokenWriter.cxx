@@ -642,7 +642,7 @@ const char OHTMLImportExport::sIndentSource[nIndentMax+1] = "\t\t\t\t\t\t\t\t\t\
 
 // Macros for HTML-Export
 #define TAG_ON( tag )       HTMLOutFuncs::Out_AsciiTag( (*m_pStream), tag )
-#define TAG_OFF( tag )      HTMLOutFuncs::Out_AsciiTag( (*m_pStream), tag, sal_False )
+#define TAG_OFF( tag )      HTMLOutFuncs::Out_AsciiTag( (*m_pStream), tag, false )
 #define OUT_LF()            m_pStream->WriteCharPtr( SAL_NEWLINE_STRING ).WriteCharPtr( GetIndentStr() )
 #define TAG_ON_LF( tag )    (TAG_ON( tag ).WriteCharPtr( SAL_NEWLINE_STRING ).WriteCharPtr( GetIndentStr() ))
 #define TAG_OFF_LF( tag )   (TAG_OFF( tag ).WriteCharPtr( SAL_NEWLINE_STRING ).WriteCharPtr( GetIndentStr() ))
@@ -967,11 +967,11 @@ void OHTMLImportExport::WriteCell( sal_Int32 nFormat, sal_Int32 nWidthPixel, sal
         try
         {
             fVal = m_xFormatter->convertStringToNumber(nFormat,rValue);
-            HTMLOutFuncs::CreateTableDataOptionsValNum(sal_False, fVal,nFormat, *pFormatter);
+            HTMLOutFuncs::CreateTableDataOptionsValNum(false, fVal,nFormat, *pFormatter);
         }
         catch(const Exception&)
         {
-            HTMLOutFuncs::CreateTableDataOptionsValNum(sal_False, fVal,nFormat, *pFormatter);
+            HTMLOutFuncs::CreateTableDataOptionsValNum(false, fVal,nFormat, *pFormatter);
         }
     }
 

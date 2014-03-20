@@ -458,7 +458,7 @@ void SwHTMLWriter::OutForm( sal_Bool bOn,
         DecIndentLevel(); // Inhalt der Form einruecken
         if( bLFPossible )
             OutNewLine();
-        HTMLOutFuncs::Out_AsciiTag( Strm(), OOO_STRING_SVTOOLS_HTML_form, sal_False );
+        HTMLOutFuncs::Out_AsciiTag( Strm(), OOO_STRING_SVTOOLS_HTML_form, false );
         bLFPossible = sal_True;
 
         return;
@@ -1274,12 +1274,12 @@ Writer& OutHTML_DrawFrmFmtAsControl( Writer& rWrt,
                 HTMLOutFuncs::Out_String( rWrt.Strm(), pStrings[i],
                                           rHTMLWrt.eDestEnc, &rHTMLWrt.aNonConvertableCharacters );
             }
-            HTMLOutFuncs::Out_AsciiTag( rWrt.Strm(), OOO_STRING_SVTOOLS_HTML_option, sal_False );
+            HTMLOutFuncs::Out_AsciiTag( rWrt.Strm(), OOO_STRING_SVTOOLS_HTML_option, false );
 
             rHTMLWrt.DecIndentLevel();
             rHTMLWrt.OutNewLine();// das </SELECT> bekommt eine eigene Zeile
         }
-        HTMLOutFuncs::Out_AsciiTag( rWrt.Strm(), OOO_STRING_SVTOOLS_HTML_select, sal_False );
+        HTMLOutFuncs::Out_AsciiTag( rWrt.Strm(), OOO_STRING_SVTOOLS_HTML_select, false );
     }
     else if( TAG_TEXTAREA == eTag )
     {
@@ -1306,7 +1306,7 @@ Writer& OutHTML_DrawFrmFmtAsControl( Writer& rWrt,
                                         rHTMLWrt.eDestEnc, &rHTMLWrt.aNonConvertableCharacters );
             }
         }
-        HTMLOutFuncs::Out_AsciiTag( rWrt.Strm(), OOO_STRING_SVTOOLS_HTML_textarea, sal_False );
+        HTMLOutFuncs::Out_AsciiTag( rWrt.Strm(), OOO_STRING_SVTOOLS_HTML_textarea, false );
     }
     else if( TYPE_CHECKBOX == eType || TYPE_RADIO == eType )
     {

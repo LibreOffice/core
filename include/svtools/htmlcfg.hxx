@@ -52,34 +52,34 @@ public:
     sal_uInt16      GetFontSize(sal_uInt16 nPos) const;
     void        SetFontSize(sal_uInt16 nPos, sal_uInt16 nSize);
 
-    sal_Bool        IsImportUnknown() const;
-    void        SetImportUnknown(sal_Bool bSet);
+    bool        IsImportUnknown() const;
+    void        SetImportUnknown(bool bSet);
 
     sal_uInt16      GetExportMode() const;
     void        SetExportMode(sal_uInt16 nSet);
 
-    sal_Bool        IsStarBasic() const;
-    void        SetStarBasic(sal_Bool bSet);
+    bool        IsStarBasic() const;
+    void        SetStarBasic(bool bSet);
 
-    sal_Bool        IsStarBasicWarning() const;
-    void        SetStarBasicWarning(sal_Bool bSet);
+    bool        IsStarBasicWarning() const;
+    void        SetStarBasicWarning(bool bSet);
 
-    sal_Bool        IsSaveGraphicsLocal() const;
-    void        SetSaveGraphicsLocal(sal_Bool bSet);
+    bool        IsSaveGraphicsLocal() const;
+    void        SetSaveGraphicsLocal(bool bSet);
 
-    sal_Bool        IsPrintLayoutExtension() const;
-    void        SetPrintLayoutExtension(sal_Bool bSet);
+    bool        IsPrintLayoutExtension() const;
+    void        SetPrintLayoutExtension(bool bSet);
 
-    sal_Bool        IsIgnoreFontFamily() const;
-    void        SetIgnoreFontFamily(sal_Bool bSet);
+    bool        IsIgnoreFontFamily() const;
+    void        SetIgnoreFontFamily(bool bSet);
 
-    sal_Bool    IsDefaultTextEncoding() const;
+    bool        IsDefaultTextEncoding() const;
     rtl_TextEncoding GetTextEncoding() const;
     void        SetTextEncoding( rtl_TextEncoding );
     static SvxHtmlOptions& Get();
 
-    sal_Bool        IsNumbersEnglishUS() const;
-    void        SetNumbersEnglishUS(sal_Bool bSet);
+    bool        IsNumbersEnglishUS() const;
+    void        SetNumbersEnglishUS(bool bSet);
 };
 
 #endif

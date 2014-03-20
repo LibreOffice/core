@@ -231,7 +231,7 @@ void SwHTMLWriter::OutCSS1_Property( const sal_Char *pProp,
             }
             else
             {
-                HTMLOutFuncs::Out_AsciiTag( Strm(), OOO_STRING_SVTOOLS_HTML_span, sal_False );
+                HTMLOutFuncs::Out_AsciiTag( Strm(), OOO_STRING_SVTOOLS_HTML_span, false );
                 return;
             }
             break;
@@ -620,7 +620,7 @@ void SwHTMLWriter::OutStyleSheet( const SwPageDesc& rPageDesc, sal_Bool bUsed )
         DecIndentLevel();
 
         OutNewLine();
-        HTMLOutFuncs::Out_AsciiTag( Strm(), OOO_STRING_SVTOOLS_HTML_style, sal_False );
+        HTMLOutFuncs::Out_AsciiTag( Strm(), OOO_STRING_SVTOOLS_HTML_style, false );
     }
     else
     {
@@ -2890,7 +2890,7 @@ static Writer& OutCSS1_SwFmtDrop( Writer& rWrt, const SfxPoolItem& rHt )
     }
     else
     {
-        HTMLOutFuncs::Out_AsciiTag( rWrt.Strm(), OOO_STRING_SVTOOLS_HTML_span, sal_False );
+        HTMLOutFuncs::Out_AsciiTag( rWrt.Strm(), OOO_STRING_SVTOOLS_HTML_span, false );
     }
 
     return rWrt;
@@ -3421,7 +3421,7 @@ Writer& OutCSS1_SvxBox( Writer& rWrt, const SfxPoolItem& rHt )
         }
         else
         {
-            HTMLOutFuncs::Out_AsciiTag( rWrt.Strm(), OOO_STRING_SVTOOLS_HTML_span, sal_False );
+            HTMLOutFuncs::Out_AsciiTag( rWrt.Strm(), OOO_STRING_SVTOOLS_HTML_span, false );
             return rWrt;
         }
     }

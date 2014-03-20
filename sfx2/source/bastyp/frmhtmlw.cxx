@@ -107,7 +107,7 @@ void SfxFrameHTMLWriter::Out_DocInfo( SvStream& rStrm, const OUString& rBaseURL,
         if( !rTitle.isEmpty() )
             HTMLOutFuncs::Out_String( rStrm, rTitle, eDestEnc, pNonConvertableChars );
     }
-    HTMLOutFuncs::Out_AsciiTag( rStrm, OOO_STRING_SVTOOLS_HTML_title, sal_False );
+    HTMLOutFuncs::Out_AsciiTag( rStrm, OOO_STRING_SVTOOLS_HTML_title, false );
 
     // Target-Frame
     if( i_xDocProps.is() )

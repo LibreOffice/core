@@ -48,9 +48,9 @@ static sal_Int32           nRefCount = 0;
 
 class SvtHelpOptions_Impl : public utl::ConfigItem
 {
-    sal_Bool        bExtendedHelp;
-    sal_Bool        bHelpTips;
-    sal_Bool        bWelcomeScreen;
+    bool            bExtendedHelp;
+    bool            bHelpTips;
+    bool            bWelcomeScreen;
     OUString        aLocale;
     OUString        aSystem;
     OUString        sHelpStyleSheet;
@@ -68,13 +68,13 @@ public:
     void            Load( const ::com::sun::star::uno::Sequence< OUString>& aPropertyNames);
     virtual void    Commit();
 
-    void            SetExtendedHelp( sal_Bool b )           { bExtendedHelp= b; SetModified(); }
-    bool        IsExtendedHelp() const                  { return bExtendedHelp; }
-    void            SetHelpTips( sal_Bool b )               { bHelpTips = b; SetModified(); }
-    bool        IsHelpTips() const                      { return bHelpTips; }
+    void            SetExtendedHelp( bool b )           { bExtendedHelp= b; SetModified(); }
+    bool            IsExtendedHelp() const                  { return bExtendedHelp; }
+    void            SetHelpTips( bool b )               { bHelpTips = b; SetModified(); }
+    bool            IsHelpTips() const                      { return bHelpTips; }
 
-    void            SetWelcomeScreen( sal_Bool b )          { bWelcomeScreen = b; SetModified(); }
-    sal_Bool        IsWelcomeScreen() const                 { return bWelcomeScreen; }
+    void            SetWelcomeScreen( bool b )          { bWelcomeScreen = b; SetModified(); }
+    bool            IsWelcomeScreen() const                 { return bWelcomeScreen; }
     OUString        GetLocale() const                       { return aLocale; }
     OUString        GetSystem() const                       { return aSystem; }
 
@@ -125,9 +125,9 @@ Sequence< OUString > SvtHelpOptions_Impl::GetPropertyNames()
 
 SvtHelpOptions_Impl::SvtHelpOptions_Impl()
     : ConfigItem( OUString( "Office.Common/Help" ) )
-    , bExtendedHelp( sal_False )
-    , bHelpTips( sal_True )
-    , bWelcomeScreen( sal_False )
+    , bExtendedHelp( false )
+    , bHelpTips( true )
+    , bWelcomeScreen( false )
 {
     Sequence< OUString > aNames = GetPropertyNames();
     Load( aNames );
@@ -286,7 +286,7 @@ SvtHelpOptions::~SvtHelpOptions()
     }
 }
 
-void SvtHelpOptions::SetExtendedHelp( sal_Bool b )
+void SvtHelpOptions::SetExtendedHelp( bool b )
 {
     pImp->SetExtendedHelp( b );
 }
@@ -296,7 +296,7 @@ bool SvtHelpOptions::IsExtendedHelp() const
     return pImp->IsExtendedHelp();
 }
 
-void SvtHelpOptions::SetHelpTips( sal_Bool b )
+void SvtHelpOptions::SetHelpTips( bool b )
 {
     pImp->SetHelpTips( b );
 }
@@ -308,12 +308,12 @@ bool SvtHelpOptions::IsHelpTips() const
 
 
 
-void SvtHelpOptions::SetWelcomeScreen( sal_Bool b )
+void SvtHelpOptions::SetWelcomeScreen( bool b )
 {
     pImp->SetWelcomeScreen( b );
 }
 
-sal_Bool SvtHelpOptions::IsWelcomeScreen() const
+bool SvtHelpOptions::IsWelcomeScreen() const
 {
     return pImp->IsWelcomeScreen();
 }

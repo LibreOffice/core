@@ -56,7 +56,7 @@ struct HTMLOutFuncs
                         OUString *pNonConvertableChars = 0 );
 
     SVT_DLLPUBLIC static SvStream& Out_AsciiTag( SvStream&, const sal_Char* pStr,
-                                   sal_Bool bOn = sal_True,
+                                   bool bOn = true,
                         rtl_TextEncoding eDestEnc = RTL_TEXTENCODING_MS_1252);
     SVT_DLLPUBLIC static SvStream& Out_Char( SvStream&, sal_Unicode cChar,
                         HTMLOutContext& rContext,
@@ -70,7 +70,7 @@ struct HTMLOutFuncs
                         rtl_TextEncoding eDestEnc = RTL_TEXTENCODING_MS_1252 );
     SVT_DLLPUBLIC static SvStream& Out_ImageMap( SvStream&, const OUString&, const ImageMap&, const OUString&,
                                    const HTMLOutEvent *pEventTable,
-                                   sal_Bool bOutStarBasic,
+                                   bool bOutStarBasic,
                                    const sal_Char *pDelim = 0,
                                    const sal_Char *pIndentArea = 0,
                                    const sal_Char *pIndentMap = 0,
@@ -92,13 +92,13 @@ struct HTMLOutFuncs
     // der 3. Parameter ist ein Array von HTMLOutEvents, das mit einem
     // nur aus 0 bestehen Eintrag terminiert ist.
     SVT_DLLPUBLIC static SvStream& Out_Events( SvStream&, const SvxMacroTableDtor&,
-                                 const HTMLOutEvent*, sal_Bool bOutStarBasic,
+                                 const HTMLOutEvent*, bool bOutStarBasic,
                         rtl_TextEncoding eDestEnc = RTL_TEXTENCODING_MS_1252,
                         OUString *pNonConvertableChars = 0 );
 
     // <TD SDVAL="..." SDNUM="...">
     SVT_DLLPUBLIC static OString CreateTableDataOptionsValNum(
-                sal_Bool bValue, double fVal, sal_uLong nFormat,
+                bool bValue, double fVal, sal_uLong nFormat,
                 SvNumberFormatter& rFormatter,
                 rtl_TextEncoding eDestEnc = RTL_TEXTENCODING_MS_1252,
                 OUString *pNonConvertableChars = 0);

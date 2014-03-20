@@ -56,9 +56,9 @@ namespace svt
     public:
         sal_Int16           ID;
         sal_Int32           Index;
-        sal_Bool            bInteractive;
+        bool                bInteractive;
         Size                m_aMinSize;
-        sal_Bool            m_bHyperMode;
+        bool                m_bHyperMode;
 
         HyperLabelImpl();
     };
@@ -138,7 +138,7 @@ namespace svt
     void HyperLabel::ActivateHyperMode(Font aFont, const Color aColor)
     {
         aFont.SetUnderline(UNDERLINE_SINGLE);
-        m_pImpl->m_bHyperMode = sal_True;
+        m_pImpl->m_bHyperMode = true;
         SetPointer( POINTER_REFHAND );
         SetControlFont( aFont);
         SetTextColor( aColor);
@@ -147,7 +147,7 @@ namespace svt
 
     void HyperLabel::DeactivateHyperMode(Font aFont, const Color aColor)
     {
-        m_pImpl->m_bHyperMode = sal_False;
+        m_pImpl->m_bHyperMode = false;
         aFont.SetUnderline(UNDERLINE_NONE);
         SetPointer( POINTER_ARROW );
         SetControlFont( aFont);
@@ -182,7 +182,7 @@ namespace svt
         delete m_pImpl;
     }
 
-    void HyperLabel::SetInteractive( sal_Bool _bInteractive )
+    void HyperLabel::SetInteractive( bool _bInteractive )
     {
         m_pImpl->bInteractive = ( _bInteractive && IsEnabled() );
     }

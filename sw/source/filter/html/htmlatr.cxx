@@ -129,7 +129,7 @@ void SwHTMLWriter::OutAndSetDefList( sal_uInt16 nNewLvl )
         {
             if( bLFPossible )
                 OutNewLine();
-            HTMLOutFuncs::Out_AsciiTag( Strm(), OOO_STRING_SVTOOLS_HTML_deflist, sal_True );
+            HTMLOutFuncs::Out_AsciiTag( Strm(), OOO_STRING_SVTOOLS_HTML_deflist, true );
             IncIndentLevel();
             bLFPossible = sal_True;
         }
@@ -141,7 +141,7 @@ void SwHTMLWriter::OutAndSetDefList( sal_uInt16 nNewLvl )
             DecIndentLevel();
             if( bLFPossible )
                 OutNewLine();
-            HTMLOutFuncs::Out_AsciiTag( Strm(), OOO_STRING_SVTOOLS_HTML_deflist, sal_False );
+            HTMLOutFuncs::Out_AsciiTag( Strm(), OOO_STRING_SVTOOLS_HTML_deflist, false );
             bLFPossible = sal_True;
         }
     }
@@ -153,7 +153,7 @@ void SwHTMLWriter::ChangeParaToken( sal_uInt16 nNew )
 {
     if( nNew != nLastParaToken && HTML_PREFORMTXT_ON == nLastParaToken )
     {
-        HTMLOutFuncs::Out_AsciiTag( Strm(), OOO_STRING_SVTOOLS_HTML_preformtxt, sal_False );
+        HTMLOutFuncs::Out_AsciiTag( Strm(), OOO_STRING_SVTOOLS_HTML_preformtxt, false );
         bLFPossible = sal_True;
     }
     nLastParaToken = nNew;
@@ -1010,10 +1010,9 @@ void OutHTML_SwFmtOff( Writer& rWrt, const SwHTMLTxtCollOutputInfo& rInfo )
         // - keine Styles geschrieben werden, und
         // - ein untere Abstand existiert
         if( rInfo.bParaPossible && rInfo.bOutPara )
-            HTMLOutFuncs::Out_AsciiTag( rWrt.Strm(), OOO_STRING_SVTOOLS_HTML_parabreak, sal_False );
+            HTMLOutFuncs::Out_AsciiTag( rWrt.Strm(), OOO_STRING_SVTOOLS_HTML_parabreak, false );
 
-        HTMLOutFuncs::Out_AsciiTag( rWrt.Strm(), rInfo.aToken.getStr(),
-                                    sal_False );
+        HTMLOutFuncs::Out_AsciiTag( rWrt.Strm(), rInfo.aToken.getStr(), false );
         rHWrt.bLFPossible =
             rInfo.aToken != OOO_STRING_SVTOOLS_HTML_dt &&
             rInfo.aToken != OOO_STRING_SVTOOLS_HTML_dd &&
@@ -1024,7 +1023,7 @@ void OutHTML_SwFmtOff( Writer& rWrt, const SwHTMLTxtCollOutputInfo& rInfo )
         rHWrt.DecIndentLevel();
         if( rHWrt.bLFPossible )
             rHWrt.OutNewLine();
-        HTMLOutFuncs::Out_AsciiTag( rWrt.Strm(), OOO_STRING_SVTOOLS_HTML_division, sal_False );
+        HTMLOutFuncs::Out_AsciiTag( rWrt.Strm(), OOO_STRING_SVTOOLS_HTML_division, false );
         rHWrt.bLFPossible = sal_True;
     }
 
@@ -2684,7 +2683,7 @@ static Writer& OutHTML_SvxColor( Writer& rWrt, const SfxPoolItem& rHt )
         HTMLOutFuncs::Out_Color( rWrt.Strm(), aColor, rHTMLWrt.eDestEnc ).WriteChar( '>' );
     }
     else
-        HTMLOutFuncs::Out_AsciiTag( rWrt.Strm(), OOO_STRING_SVTOOLS_HTML_font, sal_False );
+        HTMLOutFuncs::Out_AsciiTag( rWrt.Strm(), OOO_STRING_SVTOOLS_HTML_font, false );
 
     return rWrt;
 }
@@ -2728,7 +2727,7 @@ static Writer& OutHTML_SvxFont( Writer& rWrt, const SfxPoolItem& rHt )
            .WriteCharPtr( "\">" );
     }
     else
-        HTMLOutFuncs::Out_AsciiTag( rWrt.Strm(), OOO_STRING_SVTOOLS_HTML_font , sal_False );
+        HTMLOutFuncs::Out_AsciiTag( rWrt.Strm(), OOO_STRING_SVTOOLS_HTML_font, false );
 
     return rWrt;
 }
@@ -2759,7 +2758,7 @@ static Writer& OutHTML_SvxFontHeight( Writer& rWrt, const SfxPoolItem& rHt )
     }
     else
     {
-        HTMLOutFuncs::Out_AsciiTag( rWrt.Strm(), OOO_STRING_SVTOOLS_HTML_font, sal_False );
+        HTMLOutFuncs::Out_AsciiTag( rWrt.Strm(), OOO_STRING_SVTOOLS_HTML_font, false );
     }
 
     return rWrt;
@@ -2785,7 +2784,7 @@ static Writer& OutHTML_SvxLanguage( Writer& rWrt, const SfxPoolItem& rHt )
     }
     else
     {
-        HTMLOutFuncs::Out_AsciiTag( rWrt.Strm(), OOO_STRING_SVTOOLS_HTML_span, sal_False );
+        HTMLOutFuncs::Out_AsciiTag( rWrt.Strm(), OOO_STRING_SVTOOLS_HTML_span, false );
     }
 
     return rWrt;
@@ -2932,7 +2931,7 @@ Writer& OutHTML_INetFmt( Writer& rWrt, const SwFmtINetFmt& rINetFmt, sal_Bool bO
     // Tag aus? Dann nur ein </A> ausgeben.
     if( !bOn )
     {
-        HTMLOutFuncs::Out_AsciiTag( rWrt.Strm(), OOO_STRING_SVTOOLS_HTML_anchor, sal_False );
+        HTMLOutFuncs::Out_AsciiTag( rWrt.Strm(), OOO_STRING_SVTOOLS_HTML_anchor, false );
         return rWrt;
     }
 
@@ -3152,7 +3151,7 @@ static Writer& OutHTML_SwTxtCharFmt( Writer& rWrt, const SfxPoolItem& rHt )
         HTMLOutFuncs::Out_AsciiTag( rWrt.Strm(),
                 !pFmtInfo->aToken.isEmpty() ? pFmtInfo->aToken.getStr()
                                        : OOO_STRING_SVTOOLS_HTML_span,
-                sal_False );
+                false );
     }
 
     return rWrt;

@@ -35,16 +35,16 @@ public:
                     SvtHelpOptions();
                     virtual ~SvtHelpOptions();
 
-    void            SetExtendedHelp( sal_Bool b );
-    bool        IsExtendedHelp() const;
-    void            SetHelpTips( sal_Bool b );
-    bool        IsHelpTips() const;
+    void            SetExtendedHelp( bool b );
+    bool            IsExtendedHelp() const;
+    void            SetHelpTips( bool b );
+    bool            IsHelpTips() const;
 
     const OUString& GetHelpStyleSheet()const;
     void            SetHelpStyleSheet(const OUString& rStyleSheet);
 
-    void            SetWelcomeScreen( sal_Bool b );
-    sal_Bool        IsWelcomeScreen() const;
+    void            SetWelcomeScreen( bool b );
+    bool            IsWelcomeScreen() const;
 
     OUString        GetSystem() const;
 };

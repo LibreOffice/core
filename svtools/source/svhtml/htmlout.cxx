@@ -510,7 +510,7 @@ OString HTMLOutFuncs::ConvertStringToHTML( const OUString& rSrc,
 }
 
 SvStream& HTMLOutFuncs::Out_AsciiTag( SvStream& rStream, const sal_Char *pStr,
-                                      sal_Bool bOn, rtl_TextEncoding )
+                                      bool bOn, rtl_TextEncoding )
 {
     sal_Char sStt[3] = "</";
     if( bOn )
@@ -597,7 +597,7 @@ SvStream& HTMLOutFuncs::Out_ImageMap( SvStream& rStream,
                                       const ImageMap& rIMap,
                                       const OUString& rName,
                                       const HTMLOutEvent *pEventTable,
-                                      sal_Bool bOutStarBasic,
+                                      bool bOutStarBasic,
                                       const sal_Char *pDelim,
                                       const sal_Char *pIndentArea,
                                       const sal_Char *pIndentMap,
@@ -770,7 +770,7 @@ SvStream& HTMLOutFuncs::Out_ImageMap( SvStream& rStream,
         rStream.WriteCharPtr( pDelim );
     if( pIndentMap )
         rStream.WriteCharPtr( pIndentMap );
-    Out_AsciiTag( rStream, OOO_STRING_SVTOOLS_HTML_map, sal_False );
+    Out_AsciiTag( rStream, OOO_STRING_SVTOOLS_HTML_map, false );
 
     return rStream;
 }
@@ -883,7 +883,7 @@ SvStream& HTMLOutFuncs::OutScript( SvStream& rStrm,
         }
     }
 
-    HTMLOutFuncs::Out_AsciiTag( rStrm, OOO_STRING_SVTOOLS_HTML_script, sal_False );
+    HTMLOutFuncs::Out_AsciiTag( rStrm, OOO_STRING_SVTOOLS_HTML_script, false );
 
     return rStrm;
 }
@@ -892,7 +892,7 @@ SvStream& HTMLOutFuncs::OutScript( SvStream& rStrm,
 SvStream& HTMLOutFuncs::Out_Events( SvStream& rStrm,
                                     const SvxMacroTableDtor& rMacroTable,
                                     const HTMLOutEvent *pEventTable,
-                                    sal_Bool bOutStarBasic,
+                                    bool bOutStarBasic,
                                     rtl_TextEncoding eDestEnc,
                                     OUString *pNonConvertableChars )
 {
@@ -925,7 +925,7 @@ SvStream& HTMLOutFuncs::Out_Events( SvStream& rStrm,
 }
 
 OString HTMLOutFuncs::CreateTableDataOptionsValNum(
-            sal_Bool bValue,
+            bool bValue,
             double fVal, sal_uLong nFormat, SvNumberFormatter& rFormatter,
             rtl_TextEncoding eDestEnc, OUString* pNonConvertableChars)
 {
