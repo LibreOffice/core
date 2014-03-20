@@ -53,7 +53,6 @@ public:
     bool HasGroup(const OString& rGroup) const;
 
     OString ReadKey(const OString& rKey) const;
-    OUString ReadKey(const OString& rKey, rtl_TextEncoding eEncoding) const;
     OString ReadKey(const OString& rKey, const OString& rDefault) const;
     void                WriteKey(const OString& rKey, const OString& rValue);
     void DeleteKey(const OString& rKey);

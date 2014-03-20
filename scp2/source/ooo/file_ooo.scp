@@ -227,17 +227,6 @@ File gid_File_Bin_Senddoc
 End
 #endif
 
-#if defined(UNX) && !defined(MACOSX) && !defined(LIBO_HEADLESS)
-
-File gid_File_Bin_Spadmin_Bin
-    BIN_FILE_BODY;
-    Dir = gid_Brand_Dir_Program;
-    Styles = (PACKED);
-    Name = "spadmin.bin";
-End
-
-#endif
-
 File gid_File_framework_dtd
     TXT_FILE_BODY;
     Styles = (FILELIST, PACKED);

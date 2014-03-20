@@ -22,40 +22,6 @@
 
 #define RID_RTS_RTSDIALOG_INVALID_TXT       4001
 
-#define RID_RTS_OTHERPAGE                   4002
-#define RID_RTS_OTHER_LEFTMARGIN_TXT        1
-#define RID_RTS_OTHER_LEFTMARGIN_BOX        2
-#define RID_RTS_OTHER_TOPMARGIN_TXT     3
-#define RID_RTS_OTHER_TOPMARGIN_BOX     4
-#define RID_RTS_OTHER_RIGHTMARGIN_TXT       5
-#define RID_RTS_OTHER_RIGHTMARGIN_BOX       6
-#define RID_RTS_OTHER_BOTTOMMARGIN_TXT      7
-#define RID_RTS_OTHER_BOTTOMMARGIN_BOX      8
-#define RID_RTS_OTHER_COMMENT_TXT           9
-#define RID_RTS_OTHER_COMMENT_EDT           10
-#define RID_RTS_OTHER_DEFAULT_BTN           11
-
-#define RID_RTS_COMMANDPAGE                4006
-#define RID_RTS_CMD_TXT_PRTNAME         1
-#define RID_RTS_CMD_TXT_CONNECT         2
-#define RID_RTS_CMD_FL_DEFAULT              3
-#define RID_RTS_CMD_BTN_HELP                4
-#define RID_RTS_CMD_CB_COMMANDS         5
-#define RID_RTS_CMD_FL_INSTALL              6
-#define RID_RTS_CMD_TXT_CONFIGURE           7
-#define RID_RTS_CMD_LB_CONFIGURE            8
-#define RID_RTS_CMD_STR_CONFIGURE_PRINTER   9
-#define RID_RTS_CMD_STR_CONFIGURE_PDF       11
-#define RID_RTS_CMD_STR_PRINTERHELP     12
-#define RID_RTS_CMD_STR_PDFHELP         14
-#define RID_RTS_CMD_BTN_REMOVE              15
-#define RID_RTS_CMD_EDT_PDFDIR              16
-#define RID_RTS_CMD_BTN_PDFDIR              17
-#define RID_RTS_CMD_TXT_PDFDIR              18
-#define RID_RTS_CMD_CB_EXTERNAL             20
-#define RID_RTS_CMD_FT_QUICKCMD             21
-#define RIT_RTS_CMD_CB_QUICKCMD             22
-
 #define RID_TXT_QUERYFAXNUMBER              4007
 
 #define RID_RTS_PWDIALOG                    4008

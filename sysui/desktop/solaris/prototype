@@ -8,7 +8,6 @@ d none usr 0755 root sys
 d none usr/bin 0755 root bin
 s none usr/bin/soffice=../../opt/%PREFIX/program/soffice
 f none usr/bin/%PREFIX=%SOURCE/openoffice.sh 0755 root bin
-f none usr/bin/%PREFIX-printeradmin=%SOURCE/printeradmin.sh 0755 root bin
 d none usr/share 0755 root sys
 d none usr/share/applications 0755 root other
 d none usr/share/mime 0755 root root
@@ -37,7 +36,6 @@ f none usr/share/pixmaps/%ICONPREFIX-draw.png=../icons/hicolor/48x48/apps/draw.p
 f none usr/share/pixmaps/%ICONPREFIX-impress.png=../icons/hicolor/48x48/apps/impress.png
 f none usr/share/pixmaps/%ICONPREFIX-math.png=../icons/hicolor/48x48/apps/math.png
 f none usr/share/pixmaps/%ICONPREFIX-base.png=../icons/hicolor/48x48/apps/base.png
-f none usr/share/pixmaps/%ICONPREFIX-printeradmin.png=../icons/hicolor/48x48/apps/printeradmin.png
 f none usr/share/pixmaps/%ICONPREFIX-text.png=../icons/hicolor/48x48/mimetypes/text.png
 f none usr/share/pixmaps/%ICONPREFIX-text-template.png=../icons/hicolor/48x48/mimetypes/text-template.png
 f none usr/share/pixmaps/%ICONPREFIX-spreadsheet.png=../icons/hicolor/48x48/mimetypes/spreadsheet.png

@@ -39,15 +39,11 @@ namespace padmin {
 
 class RTSPaperPage;
 class RTSDevicePage;
-class RTSOtherPage;
-class RTSCommandPage;
 
 class RTSDialog : public TabDialog
 {
     friend class RTSPaperPage;
     friend class RTSDevicePage;
-    friend class RTSOtherPage;
-    friend class RTSCommandPage;
 
     ::psp::PrinterInfo      m_aJobData;
     OUString                m_aPrinter;
@@ -60,8 +56,6 @@ class RTSDialog : public TabDialog
     // pages
     RTSPaperPage*           m_pPaperPage;
     RTSDevicePage*          m_pDevicePage;
-    RTSOtherPage*           m_pOtherPage;
-    RTSCommandPage*         m_pCommandPage;
 
     // some resources
     OUString                m_aInvalidString;
@@ -72,7 +66,7 @@ class RTSDialog : public TabDialog
     // helper functions
     void insertAllPPDValues( ListBox&, const psp::PPDParser*, const psp::PPDKey* );
 public:
-    RTSDialog( const ::psp::PrinterInfo& rJobData, const OUString& rPrinter, bool bAllPages, Window* pParent = NULL );
+    RTSDialog(const ::psp::PrinterInfo& rJobData, const OUString& rPrinter, Window* pParent = NULL);
     ~RTSDialog();
 
     const ::psp::PrinterInfo& getSetup() const { return m_aJobData; }
@@ -130,33 +124,6 @@ public:
     sal_uLong getPDFDevice();
     sal_uLong getDepth();
     sal_uLong getColorDevice();
-};
-
-class RTSOtherPage : public TabPage
-{
-    RTSDialog*          m_pParent;
-
-    FixedText           m_aLeftTxt;
-    MetricField         m_aLeftLB;
-    FixedText           m_aTopTxt;
-    MetricField         m_aTopLB;
-    FixedText           m_aRightTxt;
-    MetricField         m_aRightLB;
-    FixedText           m_aBottomTxt;
-    MetricField         m_aBottomLB;
-    FixedText           m_aCommentTxt;
-    Edit                m_aCommentEdt;
-    PushButton          m_aDefaultBtn;
-
-    void initValues();
-
-    DECL_LINK( ClickBtnHdl, Button *);
-
-public:
-    RTSOtherPage( RTSDialog* );
-    ~RTSOtherPage();
-
-    void save();
 };
 
 } // namespace

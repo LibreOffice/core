@@ -23,9 +23,7 @@ $(eval $(call gb_Module_Module,padmin))
 ifeq ($(GUIBASE),unx)
 
 $(eval $(call gb_Module_add_targets,padmin,\
-    Executable_spadmin.bin \
     Library_spa \
-    Package_padmin \
 ))
 
 $(eval $(call gb_Module_add_l10n_targets,padmin,\

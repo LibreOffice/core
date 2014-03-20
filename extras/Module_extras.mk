@@ -14,7 +14,6 @@ $(eval $(call gb_Module_add_targets,extras,\
 	CustomTarget_glade \
 	Package_autocorr \
 	Package_autotextuser \
-	Package_cfgsrvbitmapunx \
 	Package_cfgsrvnolang \
 	Package_cfgusr \
 	Package_database \

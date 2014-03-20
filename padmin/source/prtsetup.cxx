@@ -20,7 +20,6 @@
 #include "prtsetup.hxx"
 #include "helper.hxx"
 #include "rtsetup.hrc"
-#include "cmddlg.hxx"
 
 #include "osl/thread.h"
 
@@ -74,14 +73,12 @@ void RTSDialog::insertAllPPDValues( ListBox& rBox, const PPDParser* pParser, con
  * RTSDialog
  */
 
-RTSDialog::RTSDialog( const PrinterInfo& rJobData, const OUString& rPrinter, bool bAllPages, Window* pParent )
-    : TabDialog(pParent, "PrinterPropertiesDialog", "spa/ui/printerpropertiesdialog.ui" )
+RTSDialog::RTSDialog(const PrinterInfo& rJobData, const OUString& rPrinter, Window* pParent)
+    : TabDialog(pParent, "PrinterPropertiesDialog", "spa/ui/printerpropertiesdialog.ui")
     , m_aJobData(rJobData)
     , m_aPrinter(rPrinter)
     , m_pPaperPage(NULL)
     , m_pDevicePage(NULL)
-    , m_pOtherPage(NULL)
-    , m_pCommandPage(NULL)
     , m_aInvalidString(PaResId(RID_RTS_RTSDIALOG_INVALID_TXT).toString())
 {
     get(m_pOKButton, "ok");
@@ -91,34 +88,17 @@ RTSDialog::RTSDialog( const PrinterInfo& rJobData, const OUString& rPrinter, boo
     OUString aTitle(GetText());
     SetText(aTitle.replaceAll("%s", m_aJobData.m_aPrinterName));
 
-    if( ! bAllPages )
-    {
-        m_pTabControl->RemovePage(m_pTabControl->GetPageId("other"));
-        m_pTabControl->RemovePage(m_pTabControl->GetPageId("command"));
-    }
-    else if (m_aJobData.m_aDriverName.startsWith("CUPS:"))
-    {
-        // command page makes no sense for CUPS printers
-        m_pTabControl->RemovePage(m_pTabControl->GetPageId("command"));
-    }
-
     m_pTabControl->SetActivatePageHdl( LINK( this, RTSDialog, ActivatePage ) );
     m_pOKButton->SetClickHdl( LINK( this, RTSDialog, ClickButton ) );
     m_pCancelButton->SetClickHdl( LINK( this, RTSDialog, ClickButton ) );
     ActivatePage(m_pTabControl);
 }
 
-
-
 RTSDialog::~RTSDialog()
 {
     delete m_pPaperPage;
     delete m_pDevicePage;
-    delete m_pOtherPage;
-    delete m_pCommandPage;
 }
-
-
 
 IMPL_LINK( RTSDialog, ActivatePage, TabControl*, pTabCtrl )
 {
@@ -134,10 +114,6 @@ IMPL_LINK( RTSDialog, ActivatePage, TabControl*, pTabCtrl )
             pPage = m_pPaperPage = new RTSPaperPage( this );
         else if (sPage == "device")
             pPage = m_pDevicePage = new RTSDevicePage( this );
-        else if (sPage == "other")
-            pPage = m_pOtherPage = new RTSOtherPage( this );
-        else if (sPage == "command")
-            pPage = m_pCommandPage = new RTSCommandPage( this );
         if( pPage )
             m_pTabControl->SetTabPage( nId, pPage );
     }
@@ -172,13 +148,6 @@ IMPL_LINK( RTSDialog, ClickButton, Button*, pButton )
             m_aJobData.m_nPSLevel       = m_pDevicePage->getLevel();
             m_aJobData.m_nPDFDevice     = m_pDevicePage->getPDFDevice();
         }
-        if( m_pOtherPage )
-            // write other settings
-            m_pOtherPage->save();
-        if( m_pCommandPage )
-            // write command settings
-            m_pCommandPage->save();
-
         EndDialog( 1 );
     }
     else if( pButton == m_pCancelButton )
@@ -194,7 +163,7 @@ IMPL_LINK( RTSDialog, ClickButton, Button*, pButton )
  */
 
 RTSPaperPage::RTSPaperPage(RTSDialog* pParent)
-    : TabPage(pParent->m_pTabControl, "PrinterPaperPage", "spa/ui/printerpaperpage.ui" )
+    : TabPage(pParent->m_pTabControl, "PrinterPaperPage", "spa/ui/printerpaperpage.ui")
     , m_pParent( pParent )
 {
     get(m_pPaperText, "paperft");
@@ -502,119 +471,6 @@ void RTSDevicePage::FillValueBox( const PPDKey* pKey )
     pValue = m_pParent->m_aJobData.m_aContext.getValue( pKey );
     m_pPPDValueBox->SelectEntryPos( m_pPPDValueBox->GetEntryPos( (void*)pValue ) );
 }
-
-
-
-/*
- * RTSOtherPage
- */
-
-RTSOtherPage::RTSOtherPage( RTSDialog* pParent ) :
-        TabPage( pParent->m_pTabControl, PaResId( RID_RTS_OTHERPAGE ) ),
-        m_pParent( pParent ),
-        m_aLeftTxt( this, PaResId( RID_RTS_OTHER_LEFTMARGIN_TXT ) ),
-        m_aLeftLB( this, PaResId( RID_RTS_OTHER_LEFTMARGIN_BOX ) ),
-        m_aTopTxt( this, PaResId( RID_RTS_OTHER_TOPMARGIN_TXT ) ),
-        m_aTopLB( this, PaResId( RID_RTS_OTHER_TOPMARGIN_BOX ) ),
-        m_aRightTxt( this, PaResId( RID_RTS_OTHER_RIGHTMARGIN_TXT ) ),
-        m_aRightLB( this, PaResId( RID_RTS_OTHER_RIGHTMARGIN_BOX ) ),
-        m_aBottomTxt( this, PaResId( RID_RTS_OTHER_BOTTOMMARGIN_TXT ) ),
-        m_aBottomLB( this, PaResId( RID_RTS_OTHER_BOTTOMMARGIN_BOX ) ),
-        m_aCommentTxt( this, PaResId( RID_RTS_OTHER_COMMENT_TXT ) ),
-        m_aCommentEdt( this, PaResId( RID_RTS_OTHER_COMMENT_EDT ) ),
-        m_aDefaultBtn( this, PaResId( RID_RTS_OTHER_DEFAULT_BTN ) )
-{
-    FreeResource();
-
-    m_aTopLB.EnableEmptyFieldValue( true );
-    m_aBottomLB.EnableEmptyFieldValue( true );
-    m_aLeftLB.EnableEmptyFieldValue( true );
-    m_aRightLB.EnableEmptyFieldValue( true );
-
-    m_aDefaultBtn.SetClickHdl( LINK( this, RTSOtherPage, ClickBtnHdl ) );
-
-    initValues();
-}
-
-
-
-RTSOtherPage::~RTSOtherPage()
-{
-}
-
-
-
-void RTSOtherPage::initValues()
-{
-    int nMarginLeft = 0;
-    int nMarginTop = 0;
-    int nMarginRight = 0;
-    int nMarginBottom = 0;
-
-    if( m_pParent->m_aJobData.m_pParser )
-    {
-        m_pParent->m_aJobData.m_pParser->
-            getMargins( m_pParent->m_aJobData.m_pParser->getDefaultPaperDimension(),
-                        nMarginLeft,
-                        nMarginRight,
-                        nMarginTop,
-                        nMarginBottom );
-    }
-
-    nMarginLeft     += m_pParent->m_aJobData.m_nLeftMarginAdjust;
-    nMarginRight    += m_pParent->m_aJobData.m_nRightMarginAdjust;
-    nMarginTop      += m_pParent->m_aJobData.m_nTopMarginAdjust;
-    nMarginBottom   += m_pParent->m_aJobData.m_nBottomMarginAdjust;
-
-    m_aLeftLB.SetValue( nMarginLeft, FUNIT_POINT );
-    m_aRightLB.SetValue( nMarginRight, FUNIT_POINT );
-    m_aTopLB.SetValue( nMarginTop, FUNIT_POINT );
-    m_aBottomLB.SetValue( nMarginBottom, FUNIT_POINT );
-    m_aCommentEdt.SetText( m_pParent->m_aJobData.m_aComment );
-}
-
-
-
-void RTSOtherPage::save()
-{
-    int nMarginLeft = 0;
-    int nMarginTop = 0;
-    int nMarginRight = 0;
-    int nMarginBottom = 0;
-
-    if( m_pParent->m_aJobData.m_pParser )
-    {
-        m_pParent->m_aJobData.m_pParser->
-            getMargins( m_pParent->m_aJobData.m_pParser->getDefaultPaperDimension(),
-                        nMarginLeft,
-                        nMarginRight,
-                        nMarginTop,
-                        nMarginBottom );
-    }
-
-    m_pParent->m_aJobData.m_nLeftMarginAdjust   = m_aLeftLB.GetValue( FUNIT_POINT ) - nMarginLeft;
-    m_pParent->m_aJobData.m_nRightMarginAdjust  = m_aRightLB.GetValue( FUNIT_POINT ) - nMarginRight;
-    m_pParent->m_aJobData.m_nTopMarginAdjust    = m_aTopLB.GetValue( FUNIT_POINT ) - nMarginTop;
-    m_pParent->m_aJobData.m_nBottomMarginAdjust = m_aBottomLB.GetValue( FUNIT_POINT ) - nMarginBottom;
-    m_pParent->m_aJobData.m_aComment = m_aCommentEdt.GetText();
-}
-
-
-
-IMPL_LINK( RTSOtherPage, ClickBtnHdl, Button*, pButton )
-{
-    if( pButton == &m_aDefaultBtn )
-    {
-        m_pParent->m_aJobData.m_nLeftMarginAdjust =
-            m_pParent->m_aJobData.m_nRightMarginAdjust =
-            m_pParent->m_aJobData.m_nTopMarginAdjust =
-            m_pParent->m_aJobData.m_nBottomMarginAdjust = 0;
-
-        initValues();
-    }
-    return 0;
-}
-
 
 class RTSPWDialog : public ModalDialog
 {

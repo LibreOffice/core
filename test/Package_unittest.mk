@@ -19,8 +19,6 @@ $(eval $(call gb_Package_add_file,test_unittest,unittest/user/wordbook/en-GB.dic
 $(eval $(call gb_Package_add_file,test_unittest,unittest/user/autotext/en-US/template.bau,user/autotext/en-US/template.bau))
 $(eval $(call gb_Package_add_file,test_unittest,unittest/user/autotext/en-US/standard.bau,user/autotext/en-US/standard.bau))
 $(eval $(call gb_Package_add_file,test_unittest,unittest/user/autotext/en-US/crdbus50.bau,user/autotext/en-US/crdbus50.bau))
-$(eval $(call gb_Package_add_file,test_unittest,unittest/user/config/psetup.xpm,user/config/psetup.xpm))
 $(eval $(call gb_Package_add_file,test_unittest,unittest/user/config/soffice.cfg/.dummy,empty-directory-dummy))
-$(eval $(call gb_Package_add_file,test_unittest,unittest/user/config/psetupl.xpm,user/config/psetupl.xpm))
 
 # vim: set noet sw=4 ts=4:

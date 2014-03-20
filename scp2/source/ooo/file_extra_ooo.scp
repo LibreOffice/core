@@ -39,17 +39,6 @@ File gid_File_Extra_Autotextuser
     Name = "extras_autotextuser.filelist";
 End
 
-#ifdef UNX
-
-File gid_File_Extra_Cfgsrv_Bitmap_Unx
-    Dir = FILELIST_DIR;
-    TXT_FILE_BODY;
-    Styles = (FILELIST);
-    Name = "extras_cfgsrvbitmapunx.filelist";
-End
-
-#endif
-
 File gid_File_Extra_Cfgusr
     Dir = FILELIST_DIR;
     USER_FILE_BODY;

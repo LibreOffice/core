@@ -36,49 +36,8 @@
 #define SPA_DLLPUBLIC SAL_DLLPUBLIC_IMPORT
 #endif
 
-
-class Config;
-
 namespace padmin
 {
-class DelMultiListBox : public MultiListBox
-{
-    Link            m_aDelPressedLink;
-public:
-    DelMultiListBox( Window* pParent, const ResId& rResId ) :
-            MultiListBox( pParent, rResId ) {}
-    ~DelMultiListBox() {}
-
-    virtual bool Notify( NotifyEvent& rEvent );
-
-    Link setDelPressedLink( const Link& rLink )
-    {
-        Link aOldLink( m_aDelPressedLink );
-                m_aDelPressedLink = rLink;
-                return aOldLink;
-    }
-    const Link& getDelPressedLink() const { return m_aDelPressedLink; }
-};
-
-class DelListBox : public ListBox
-{
-    Link            m_aDelPressedLink;
-public:
-    DelListBox( Window* pParent, const ResId& rResId ) :
-                ListBox( pParent, rResId ) {}
-    ~DelListBox() {}
-
-    virtual bool Notify( NotifyEvent& rEvent );
-
-    Link setDelPressedLink( const Link& rLink )
-    {
-        Link aOldLink( m_aDelPressedLink );
-        m_aDelPressedLink = rLink;
-        return aOldLink;
-    }
-    const Link& getDelPressedLink() const { return m_aDelPressedLink; }
-};
-
 class QueryString : public ModalDialog
 {
 private:
@@ -95,15 +54,7 @@ public:
     ~QueryString();
 };
 
-sal_Bool AreYouSure( Window*, int nRid = -1 );
-
 ResId PaResId( sal_uInt32 nId );
-
-void FindFiles( const OUString& rDirectory, ::std::list< OUString >& rResult, const OUString& rSuffixes, bool bRecursive = false );
-Config& getPadminRC();
-void freePadminRC();
-
-bool chooseDirectory( OUString& rInOutPath );
 
 } // namespace padmin
 

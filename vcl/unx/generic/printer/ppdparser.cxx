@@ -488,24 +488,6 @@ void PPDParser::initPPDFiles(PPDCache &rPPDCache)
     }
 }
 
-void PPDParser::getKnownPPDDrivers( std::list< OUString >& o_rDrivers, bool bRefresh )
-{
-    PPDCache &rPPDCache = thePPDCache::get();
-
-    if( bRefresh )
-    {
-        delete rPPDCache.pAllPPDFiles;
-        rPPDCache.pAllPPDFiles = NULL;
-    }
-
-    initPPDFiles(rPPDCache);
-    o_rDrivers.clear();
-
-    boost::unordered_map< OUString, OUString, OUStringHash >::const_iterator it;
-    for( it = rPPDCache.pAllPPDFiles->begin(); it != rPPDCache.pAllPPDFiles->end(); ++it )
-        o_rDrivers.push_back( it->first );
-}
-
 OUString PPDParser::getPPDFile( const OUString& rFile )
 {
     INetURLObject aPPD( rFile, INET_PROT_FILE, INetURLObject::ENCODE_ALL );
@@ -567,47 +549,6 @@ OUString PPDParser::getPPDFile( const OUString& rFile )
     }
 
     return aRet;
-}
-
-OUString PPDParser::getPPDPrinterName( const OUString& rFile )
-{
-    OUString aPath = getPPDFile( rFile );
-    OUString aName;
-
-    // read in the file
-    PPDDecompressStream aStream( aPath );
-    if( aStream.IsOpen() )
-    {
-        OUString aCurLine;
-        while( ! aStream.IsEof() && aStream.IsOpen() )
-        {
-            OString aByteLine = aStream.ReadLine();
-            aCurLine = OStringToOUString(aByteLine, RTL_TEXTENCODING_MS_1252);
-            if( aCurLine.startsWithIgnoreAsciiCase( "*include:" ) )
-            {
-                aCurLine = aCurLine.replaceAt( 0, 9, "" );
-                aCurLine = comphelper::string::stripStart(aCurLine, ' ');
-                aCurLine = comphelper::string::stripEnd(aCurLine, ' ');
-                aCurLine = comphelper::string::stripStart(aCurLine, '\t');
-                aCurLine = comphelper::string::stripEnd(aCurLine, '\t');
-                aCurLine = comphelper::string::stripEnd(aCurLine, '\r');
-                aCurLine = comphelper::string::stripEnd(aCurLine, '\n');
-                aCurLine = comphelper::string::stripStart(aCurLine, '"');
-                aCurLine = comphelper::string::stripEnd(aCurLine, '"');
-                aStream.Close();
-                aStream.Open( getPPDFile( aCurLine ) );
-                continue;
-            }
-            if( aCurLine.startsWith( "*ModelName:" ) )
-            {
-                aName = aCurLine.getToken( 1, '"' );
-                break;
-            }
-            else if( aCurLine.startsWith( "*NickName:" ) )
-                aName = aCurLine.getToken( 1, '"' );
-        }
-    }
-    return aName;
 }
 
 const PPDParser* PPDParser::getParser( const OUString& rFile )

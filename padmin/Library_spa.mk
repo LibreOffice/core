@@ -45,14 +45,8 @@ $(eval $(call gb_Library_use_libraries,spa,\
 ))
 
 $(eval $(call gb_Library_add_exception_objects,spa,\
-    padmin/source/adddlg \
-    padmin/source/cmddlg \
     padmin/source/helper \
-    padmin/source/newppdlg \
-    padmin/source/padialog \
-    padmin/source/progress \
     padmin/source/prtsetup \
-    padmin/source/titlectrl \
 ))
 
 ifneq (,$(filter LINUX DRAGONFLY OPENBSD FREEBSD NETBSD, $(OS)))

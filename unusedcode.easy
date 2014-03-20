@@ -29,6 +29,9 @@ OutputDevice::PixelToLogic(Region const&, MapMode const&) const
 SalGraphics::drawTransformedBitmap(basegfx::B2DPoint const&, basegfx::B2DPoint const&, basegfx::B2DPoint const&, SalBitmap const&, SalBitmap const*)
 ScDocument::CreateFormatTable() const
 ScExtIButton::GetSelected() const
+ScFormulaCellGroup::scheduleCompilation()
+ScTableProtection::getEnhancedProtection() const
+ScTableProtection::updateReference(UpdateRefMode, ScDocument*, ScRange const&, short, int, short)
 ScVbaFormat<ooo::vba::excel::XStyle>::getAddIndent()
 ScVbaFormat<ooo::vba::excel::XStyle>::setAddIndent(com::sun::star::uno::Any const&)
 SdrItemBrowser::ForceParent()
@@ -61,7 +64,6 @@ VCLXGraphics::getLineColor()
 VCLXGraphics::getRasterOp()
 VCLXGraphics::getTextColor()
 VCLXGraphics::getTextFillColor()
-XclRef8U::convertToScRange(short)
 apitest::CellProperties::testRotateReference()
 apitest::CellProperties::testVertJustify()
 apitest::DataPilotField::testAutoShowInfo()
@@ -188,7 +190,9 @@ oglcanvas::CanvasHelper::flush() const
 oglcanvas::TextLayout::draw(com::sun::star::rendering::ViewState const&, com::sun::star::rendering::RenderState const&, com::sun::star::uno::Reference<com::sun::star::rendering::XGraphicDevice> const&) const
 oox::xls::BiffDrawingObjectBase::BiffDrawingObjectBase(oox::xls::WorksheetHelper const&)
 rtl_OUString::convertFromString::test()
+sc::CLBuildKernelThread::CLBuildKernelThread()
 sc::CLBuildKernelThread::consume()
+sc::CLBuildKernelThread::finish()
 sc::CLBuildKernelThread::produce()
 sd::LeftDrawPaneShell::RegisterInterface(SfxModule*)
 sd::LeftImpressPaneShell::RegisterInterface(SfxModule*)

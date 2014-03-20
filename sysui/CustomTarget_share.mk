@@ -130,7 +130,6 @@ $(eval $(call gb_CustomTarget_register_targets,sysui/share,\
 		$(product)/openoffice.applications \
 		$(product)/openoffice.keys \
 		$(product)/openoffice.sh \
-		$(product)/printeradmin.sh \
 		$(product)/create_tree.sh \
 		$(product)/mimelnklist \
 		$(product)/launcherlist) \
@@ -172,12 +171,7 @@ $(share_WORKDIR)/%/openoffice.sh: $(share_SRCDIR)/share/openoffice.sh
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),CAT,1)
 	cat $< | tr -d "\015" | sed -e "s/%PREFIX/$(UNIXFILENAME.$*)/g" > $@
 
-$(share_WORKDIR)/%/printeradmin.sh: $(share_SRCDIR)/share/printeradmin.sh
-	mkdir -p $(dir $@)
-	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),CAT,1)
-	cat $< | tr -d "\015" | sed -e "s/%PREFIX/$(UNIXFILENAME.$*)/g" > $@
-
-$(share_WORKDIR)/%/create_tree.sh: $(share_SRCDIR)/share/create_tree.sh $(share_WORKDIR)/%/mimelnklist $(share_WORKDIR)/%/printeradmin.sh \
+$(share_WORKDIR)/%/create_tree.sh: $(share_SRCDIR)/share/create_tree.sh $(share_WORKDIR)/%/mimelnklist \
 	$(share_WORKDIR)/%/openoffice.org.xml $(share_WORKDIR)/%/openoffice.applications $(share_WORKDIR)/%/openoffice.mime \
 	$(share_WORKDIR)/%/openoffice.keys $(share_WORKDIR)/%/launcherlist
 	mkdir -p $(dir $@)

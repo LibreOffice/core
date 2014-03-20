@@ -190,9 +190,7 @@ private:
     static OUString getPPDFile( const OUString& rFile );
 public:
     static const PPDParser* getParser( const OUString& rFile );
-    static OUString getPPDPrinterName( const OUString& rFile );
     static void freeAll();
-    static void getKnownPPDDrivers( std::list< OUString >& o_rDrivers, bool bRefresh = false );
 
     const OUString& getFilename() const { return m_aFile; }
 

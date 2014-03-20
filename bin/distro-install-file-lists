@@ -343,7 +343,6 @@ if test "z$OOO_VENDOR" != "zDebian" ; then
             program/pluginapp.bin \
             program/setofficelang.bin \
             program/soffice.bin \
-            program/spadmin.bin \
             program/uno.bin \
             program/unopkg.bin \
             program/uri-encode

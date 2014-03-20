@@ -815,13 +815,6 @@ OString Config::ReadKey(const OString& rKey) const
     return ReadKey(rKey, OString());
 }
 
-OUString Config::ReadKey(const OString& rKey, rtl_TextEncoding eEncoding) const
-{
-    if ( mpData->mbIsUTF8BOM )
-        eEncoding = RTL_TEXTENCODING_UTF8;
-    return OStringToOUString(ReadKey(rKey), eEncoding);
-}
-
 OString Config::ReadKey(const OString& rKey, const OString& rDefault) const
 {
 #ifdef DBG_UTIL

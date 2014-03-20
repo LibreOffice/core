@@ -121,8 +121,6 @@ cd -
 rm -rf $sysui_temp
 
 # we do not want some stuff from the plain packages
-rm -f $DESTDIR/$PREFIXDIR/bin/$INSTALLDIRNAME-printeradmin
-rm -f $DESTDIR$PREFIXDIR/share/applications/libreoffice-printeradmin.desktop
 if test -d $DESTDIR/opt ; then
     rm -f $DESTDIR/opt/$INSTALLDIRNAME
     rmdir --ignore-fail-on-non-empty $DESTDIR/opt
