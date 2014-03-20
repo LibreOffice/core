@@ -26,7 +26,6 @@
 #include <cppuhelper/typeprovider.hxx>
 #include <framework/actiontriggerhelper.hxx>
 #include <osl/mutex.hxx>
-#include <threadhelp/guard.hxx>
 #include <vcl/svapp.hxx>
 
 using namespace cppu;

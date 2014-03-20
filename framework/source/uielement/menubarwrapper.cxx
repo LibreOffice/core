@@ -18,7 +18,6 @@
  */
 
 #include <uielement/menubarwrapper.hxx>
-#include <threadhelp/guard.hxx>
 #include <framework/actiontriggerhelper.hxx>
 #include <services.h>
 

@@ -18,7 +18,6 @@
  */
 
 #include <uielement/addonstoolbarwrapper.hxx>
-#include <threadhelp/guard.hxx>
 #include <framework/actiontriggerhelper.hxx>
 #include <uielement/constitemcontainer.hxx>
 #include <uielement/rootitemcontainer.hxx>

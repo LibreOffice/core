@@ -23,7 +23,6 @@
 
 #include <classes/propertysethelper.hxx>
 #include <threadhelp/transactionguard.hxx>
-#include <threadhelp/guard.hxx>
 
 namespace framework{
 

@@ -21,7 +21,6 @@
 
 
 #include <helper/statusindicator.hxx>
-#include <threadhelp/guard.hxx>
 
 namespace framework{
 

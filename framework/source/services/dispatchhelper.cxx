@@ -18,7 +18,6 @@
  */
 
 #include <services/dispatchhelper.hxx>
-#include <threadhelp/guard.hxx>
 #include <services.h>
 
 #include <com/sun/star/util/URLTransformer.hpp>

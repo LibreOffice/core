@@ -21,7 +21,6 @@
 #include <uielement/toolbarmerger.hxx>
 
 #include <uielement/generictoolbarcontroller.hxx>
-#include <threadhelp/guard.hxx>
 #include "services.h"
 #include <framework/imageproducer.hxx>
 #include <framework/sfxhelperfunctions.hxx>
