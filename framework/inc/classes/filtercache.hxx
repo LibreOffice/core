@@ -28,7 +28,6 @@
 #define INCLUDED_FRAMEWORK_INC_CLASSES_FILTERCACHE_HXX
 
 #include <classes/filtercachedata.hxx>
-#include <threadhelp/threadhelpbase.hxx>
 
 #include <threadhelp/transactionbase.hxx>
 #include <general.h>
@@ -56,15 +55,13 @@ namespace framework{
                     For better performance its necessary to cache all needed values.
 
     @implements     -
-    @base           ThreadHelpBase
-                    TransactionBase
+    @base           TransactionBase
 
     @devstatus      ready to use
     @threadsafe     yes
 *//*-*************************************************************************************************************/
 
-class FilterCache   :   private ThreadHelpBase
-                    ,   private TransactionBase
+class FilterCache   :   private TransactionBase
 {
     public:
 
