@@ -485,7 +485,7 @@ DataBrowser::DataBrowser( Window* pParent, WinBits nStyle, bool bLiveUpdate ) :
     double fNan;
     ::rtl::math::setNan( & fNan );
     m_aNumberEditField.SetDefaultValue( fNan );
-    m_aNumberEditField.TreatAsNumber( sal_True );
+    m_aNumberEditField.TreatAsNumber( true );
     RenewTable();
     SetClean();
 }

@@ -46,7 +46,7 @@ private:
     PushButton      maButton;
 
     OUString        maButtonText;
-    sal_Bool        mbOpenDlg;
+    bool            mbOpenDlg;
 
     Link            maDialogCreatedHdl;
 
@@ -72,8 +72,8 @@ public:
 
     void            Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, sal_uLong nFlags );
 
-    void            SetOpenDialog( sal_Bool bOpen )     { mbOpenDlg = bOpen; }
-    sal_Bool            IsOpenDialog() const            { return mbOpenDlg; }
+    void            SetOpenDialog( bool bOpen )     { mbOpenDlg = bOpen; }
+    bool            IsOpenDialog() const            { return mbOpenDlg; }
 
     void            SetText( const OUString& rStr );
     OUString        GetText() const;
@@ -82,8 +82,8 @@ public:
     void            SetSelection( const Selection& rSelection ) { maEdit.SetSelection( rSelection ); }
     Selection       GetSelection() const                        { return maEdit.GetSelection(); }
 
-    void            SetReadOnly( sal_Bool bReadOnly = sal_True )    { maEdit.SetReadOnly( bReadOnly ); }
-    sal_Bool            IsReadOnly() const                      { return maEdit.IsReadOnly(); }
+    void            SetReadOnly( bool bReadOnly = true )    { maEdit.SetReadOnly( bReadOnly ); }
+    bool            IsReadOnly() const                      { return maEdit.IsReadOnly(); }
 
 
     //use this to manipulate the dialog bevore executing it:

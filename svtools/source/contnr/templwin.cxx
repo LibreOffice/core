@@ -419,8 +419,8 @@ SvtFileViewWindow_Impl::SvtFileViewWindow_Impl( SvtTemplateWindow* pParent ) :
     aFileView.SetHelpId( HID_TEMPLATEDLG_FILEVIEW );
     aFileView.Show();
     aFileView.EnableAutoResize();
-    aFileView.EnableContextMenu( sal_False );
-    aFileView.EnableDelete( sal_False );
+    aFileView.EnableContextMenu( false );
+    aFileView.EnableDelete( false );
 }
 
 SvtFileViewWindow_Impl::~SvtFileViewWindow_Impl()
@@ -530,7 +530,7 @@ void SvtFileViewWindow_Impl::OpenFolder( const OUString& rURL )
 
     if ( INetURLObject( rURL ).GetProtocol() == INET_PROT_PRIVATE )
     {
-        aFileView.EnableNameReplacing( sal_False );
+        aFileView.EnableNameReplacing( false );
         aFileView.Initialize( GetNewDocContents() );
     }
     else

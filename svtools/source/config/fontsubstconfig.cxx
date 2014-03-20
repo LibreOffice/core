@@ -49,7 +49,7 @@ struct SvtFontSubstConfig_Impl
 
 SvtFontSubstConfig::SvtFontSubstConfig() :
     ConfigItem(OUString("Office.Common/Font/Substitution")),
-    bIsEnabled(sal_False),
+    bIsEnabled(false),
     pImpl(new SvtFontSubstConfig_Impl)
 {
     Sequence<OUString> aNames(1);

@@ -827,7 +827,7 @@ void SVTXFormattedField::SetWindow( Window* _pWindow )
 {
     VCLXSpinField::SetWindow(_pWindow);
     if (GetFormattedField())
-        GetFormattedField()->SetAutoColor(sal_True);
+        GetFormattedField()->SetAutoColor(true);
 }
 
 
@@ -1191,7 +1191,7 @@ void SVTXFormattedField::SetDefaultValue(const ::com::sun::star::uno::Any& rValu
         }
         break;
         default:
-            pField->EnableEmptyField(sal_True);
+            pField->EnableEmptyField(true);
                 // nur noch void erlaubt
             break;
     }
@@ -1323,7 +1323,7 @@ void SVTXFormattedField::setFormatsSupplier(const ::com::sun::star::uno::Referen
     {
         // save the actual value
         ::com::sun::star::uno::Any aCurrent = GetValue();
-        pField->SetFormatter(m_pCurrentSupplier->GetNumberFormatter(), sal_False);
+        pField->SetFormatter(m_pCurrentSupplier->GetNumberFormatter(), false);
         if (nKeyToSetDelayed != -1)
         {
             pField->SetFormatKey(nKeyToSetDelayed);

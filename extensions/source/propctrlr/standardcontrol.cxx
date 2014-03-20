@@ -256,7 +256,7 @@ namespace pcr
     ODateTimeControl::ODateTimeControl( Window* _pParent, WinBits _nWinStyle)
         :ODateTimeControl_Base( PropertyControlType::DateTimeField, _pParent, _nWinStyle )
     {
-        getTypedControlWindow()->EnableEmptyField( sal_True );
+        getTypedControlWindow()->EnableEmptyField( true );
 
         // determine a default format
         LanguageType eSysLanguage = SvtSysLocale().GetLanguageTag().getLanguageType( false);

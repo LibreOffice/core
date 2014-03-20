@@ -69,16 +69,16 @@ namespace pcr
     {
         if ( pSupplier )
         {
-            TreatAsNumber( sal_True );
+            TreatAsNumber( true );
 
             SvNumberFormatter* pFormatter = pSupplier->GetNumberFormatter();
-            SetFormatter( pFormatter, sal_True );
+            SetFormatter( pFormatter, true );
             SetValue( 1234.56789 );
         }
         else
         {
-            TreatAsNumber( sal_False );
-            SetFormatter( NULL, sal_True );
+            TreatAsNumber( false );
+            SetFormatter( NULL, true );
             SetText( "" );
         }
     }
@@ -172,7 +172,7 @@ namespace pcr
     OFormattedNumericControl::OFormattedNumericControl( Window* pParent, WinBits nWinStyle )
         :OFormattedNumericControl_Base( PropertyControlType::Unknown, pParent, nWinStyle )
     {
-        getTypedControlWindow()->TreatAsNumber(sal_True);
+        getTypedControlWindow()->TreatAsNumber(true);
 
         m_nLastDecimalDigits = getTypedControlWindow()->GetDecimalDigits();
     }
@@ -214,11 +214,11 @@ namespace pcr
 
         if (rDesc.pSupplier)
         {
-            getTypedControlWindow()->TreatAsNumber(sal_True);
+            getTypedControlWindow()->TreatAsNumber(true);
 
             SvNumberFormatter* pFormatter = rDesc.pSupplier->GetNumberFormatter();
             if (pFormatter != getTypedControlWindow()->GetFormatter())
-                getTypedControlWindow()->SetFormatter(pFormatter, sal_True);
+                getTypedControlWindow()->SetFormatter(pFormatter, true);
             getTypedControlWindow()->SetFormatKey(rDesc.nKey);
 
             const SvNumberformat* pEntry = getTypedControlWindow()->GetFormatter()->GetEntry(getTypedControlWindow()->GetFormatKey());
@@ -250,8 +250,8 @@ namespace pcr
 
         if ( bFallback )
         {
-            getTypedControlWindow()->TreatAsNumber(sal_False);
-            getTypedControlWindow()->SetFormatter(NULL, sal_True);
+            getTypedControlWindow()->TreatAsNumber(false);
+            getTypedControlWindow()->SetFormatter(NULL, true);
             getTypedControlWindow()->SetText("");
             m_nLastDecimalDigits = 0;
         }

@@ -29,23 +29,23 @@ struct SubstitutionStruct
 {
     OUString   sFont;
     OUString   sReplaceBy;
-    sal_Bool        bReplaceAlways;
-    sal_Bool        bReplaceOnScreenOnly;
+    bool        bReplaceAlways;
+    bool        bReplaceOnScreenOnly;
 };
 
 class SVT_DLLPUBLIC SvtFontSubstConfig : public utl::ConfigItem
 {
-    sal_Bool                    bIsEnabled;
+    bool                        bIsEnabled;
     SvtFontSubstConfig_Impl*    pImpl;
 public:
     SvtFontSubstConfig();
     virtual ~SvtFontSubstConfig();
 
-    virtual void            Commit();
-    virtual void Notify( const com::sun::star::uno::Sequence< OUString >& _rPropertyNames);
+    virtual void                Commit();
+    virtual void                Notify( const com::sun::star::uno::Sequence< OUString >& _rPropertyNames);
 
-    sal_Bool                IsEnabled() const {return bIsEnabled;}
-    void                    Enable(sal_Bool bSet)  {bIsEnabled = bSet; SetModified();}
+    bool                        IsEnabled() const {return bIsEnabled;}
+    void                        Enable(bool bSet)  {bIsEnabled = bSet; SetModified();}
 
     sal_Int32                   SubstitutionCount() const;
     void                        ClearSubstitutions();

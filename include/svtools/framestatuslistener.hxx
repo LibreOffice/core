@@ -51,7 +51,7 @@ class SVT_DLLPUBLIC FrameStatusListener : public ::com::sun::star::frame::XStatu
         void addStatusListener( const OUString& aCommandURL );
         void bindListener();
         void unbindListener();
-        sal_Bool isBound() const;
+        bool isBound() const;
 
         // XInterface
         virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type& aType ) throw (::com::sun::star::uno::RuntimeException, std::exception);
@@ -87,7 +87,7 @@ class SVT_DLLPUBLIC FrameStatusListener : public ::com::sun::star::frame::XStatu
                                  OUStringHash,
                                  ::std::equal_to< OUString > > URLToDispatchMap;
 
-        sal_Bool                                                                            m_bInitialized : 1,
+        bool                                                                                m_bInitialized : 1,
                                                                                             m_bDisposed : 1;
         ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >                 m_xFrame;
         ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >        m_xContext;

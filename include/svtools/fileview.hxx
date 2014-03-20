@@ -69,7 +69,7 @@ class SVT_DLLPUBLIC SvtFileView : public Control
 {
 private:
     SvtFileView_Impl*       mpImp;
-    sal_Bool                bSortColumn;
+    bool                    bSortColumn;
 
     ::com::sun::star::uno::Sequence< OUString > mpBlackList;
 
@@ -80,7 +80,7 @@ protected:
     virtual void GetFocus();
 
 public:
-    SvtFileView( Window* pParent, const ResId& rResId, sal_Bool bOnlyFolder, sal_Bool bMultiSelection );
+    SvtFileView( Window* pParent, const ResId& rResId, bool bOnlyFolder, bool bMultiSelection );
     SvtFileView( Window* pParent, const ResId& rResId, sal_uInt8 nFlags );
     ~SvtFileView();
 
@@ -88,15 +88,15 @@ public:
     OUString                GetURL( SvTreeListEntry* pEntry ) const;
     OUString                GetCurrentURL() const;
 
-    sal_Bool                GetParentURL( OUString& _rParentURL ) const;
+    bool                    GetParentURL( OUString& _rParentURL ) const;
     void                    CreatedFolder( const OUString& rUrl, const OUString& rNewFolder );
 
     void                    SetHelpId( const OString& rHelpId );
-    const OString&     GetHelpId( ) const;
+    const OString&          GetHelpId( ) const;
     void                    SetSizePixel( const Size& rNewSize );
     virtual void            SetPosSizePixel( const Point& rNewPos, const Size& rNewSize );
-    void                    SetSortColumn( sal_Bool bValue ) { bSortColumn = bValue; }
-    sal_Bool                GetSortColumn() { return bSortColumn; }
+    void                    SetSortColumn( bool bValue ) { bSortColumn = bValue; }
+    bool                    GetSortColumn() { return bSortColumn; }
 
     /** initialize the view with the content of a folder given by URL, and aply an immediate filter
 
@@ -124,11 +124,11 @@ public:
         This method will never return <member>eStillRunning</member>, since it will fill the
         view synchronously
     */
-    sal_Bool                Initialize( const ::com::sun::star::uno::Sequence< OUString >& aContents );
+    bool                    Initialize( const ::com::sun::star::uno::Sequence< OUString >& aContents );
 
     /** initializes the view with the content of a folder given by an UCB content
     */
-    sal_Bool                Initialize( const ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XContent>& _xContent,
+    bool                    Initialize( const ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XContent>& _xContent,
                                         const OUString& rFilter );
 
     /** reads the current content of the current folder again, and applies the given filter to it
@@ -182,9 +182,9 @@ public:
     void                    EnableAutoResize();
     void                    SetFocus();
 
-    void                    EnableContextMenu( sal_Bool bEnable );
-    void                    EnableDelete( sal_Bool bEnable );
-    void                    EnableNameReplacing( sal_Bool bEnable = sal_True );
+    void                    EnableContextMenu( bool bEnable );
+    void                    EnableDelete( bool bEnable );
+    void                    EnableNameReplacing( bool bEnable = true );
                                 // translate folder names or display doc-title instead of file name
                                 // EnableContextMenu( sal_True )/EnableDelete(sal_True) disable name replacing!
 
@@ -202,10 +202,10 @@ protected:
 
 struct SvtContentEntry
 {
-    sal_Bool    mbIsFolder;
+    bool     mbIsFolder;
     OUString maURL;
 
-    SvtContentEntry( const OUString& rURL, sal_Bool bIsFolder ) :
+    SvtContentEntry( const OUString& rURL, bool bIsFolder ) :
         mbIsFolder( bIsFolder ), maURL( rURL ) {}
 };
 

@@ -1303,8 +1303,8 @@ void DbFormattedField::Init( Window& rParent, const Reference< XRowSet >& xCurso
 
     implAdjustGenericFieldSetting( xUnoModel );
 
-    static_cast< FormattedField* >( m_pWindow )->SetStrictFormat( sal_False );
-    static_cast< FormattedField* >( m_pPainter )->SetStrictFormat( sal_False );
+    static_cast< FormattedField* >( m_pWindow )->SetStrictFormat( false );
+    static_cast< FormattedField* >( m_pPainter )->SetStrictFormat( false );
         // wenn man _irgendeine_ Formatierung zulaesst, kann man da sowieso keine Eingabe-Ueberpruefung
         // machen (das FormattedField unterstuetzt das sowieso nicht, nur abgeleitete Klassen)
 

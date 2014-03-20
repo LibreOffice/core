@@ -40,8 +40,8 @@ FrameStatusListener::FrameStatusListener(
     const Reference< XComponentContext >& rxContext,
     const Reference< XFrame >& xFrame ) :
     OWeakObject()
-    ,   m_bInitialized( sal_True )
-    ,   m_bDisposed( sal_False )
+    ,   m_bInitialized( true )
+    ,   m_bDisposed( false )
     ,   m_xFrame( xFrame )
     ,   m_xContext( rxContext )
 {
@@ -111,7 +111,7 @@ throw (::com::sun::star::uno::RuntimeException, std::exception)
         ++pIter;
     }
 
-    m_bDisposed = sal_True;
+    m_bDisposed = true;
 }
 
 void SAL_CALL FrameStatusListener::addEventListener( const Reference< XEventListener >& )

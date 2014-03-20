@@ -43,7 +43,7 @@ FileControl::FileControl( Window* pParent, WinBits nStyle, FileControlMode nFlag
     mnInternalFlags( FILECTRL_ORIGINALBUTTONTEXT )
 {
     maButton.SetClickHdl( LINK( this, FileControl, ButtonHdl ) );
-    mbOpenDlg = sal_True;
+    mbOpenDlg = true;
 
     maButton.Show();
     maEdit.Show();
