@@ -18,10 +18,18 @@
  */
 
 #include "SerfRequestProcessor.hxx"
-#include "SerfRequestProcessorImpl.hxx"
-#include "SerfRequestProcessorImplFac.hxx"
 #include "SerfCallbacks.hxx"
 #include "SerfSession.hxx"
+#include "SerfPropFindReqProcImpl.hxx"
+#include "SerfPropPatchReqProcImpl.hxx"
+#include "SerfGetReqProcImpl.hxx"
+#include "SerfHeadReqProcImpl.hxx"
+#include "SerfPutReqProcImpl.hxx"
+#include "SerfPostReqProcImpl.hxx"
+#include "SerfDeleteReqProcImpl.hxx"
+#include "SerfMkColReqProcImpl.hxx"
+#include "SerfCopyReqProcImpl.hxx"
+#include "SerfMoveReqProcImpl.hxx"
 
 #include <apr_strings.h>
 
@@ -80,7 +88,7 @@ bool SerfRequestProcessor::processPropFind( const Depth inDepth,
                                             std::vector< DAVResource > & ioResources,
                                             apr_status_t& outSerfStatus )
 {
-    mpProcImpl = createPropFindReqProcImpl( mPathStr,
+    mpProcImpl = new SerfPropFindReqProcImpl( mPathStr,
                                             mrSerfSession.getRequestEnvironment().m_aRequestHeaders,
                                             inDepth,
                                             inPropNames,
@@ -95,7 +103,7 @@ bool SerfRequestProcessor::processPropFind( const Depth inDepth,
                                             std::vector< DAVResourceInfo > & ioResInfo,
                                             apr_status_t& outSerfStatus )
 {
-    mpProcImpl = createPropFindReqProcImpl( mPathStr,
+    mpProcImpl = new SerfPropFindReqProcImpl( mPathStr,
                                             mrSerfSession.getRequestEnvironment().m_aRequestHeaders,
                                             inDepth,
                                             ioResInfo );
@@ -108,7 +116,7 @@ bool SerfRequestProcessor::processPropFind( const Depth inDepth,
 bool SerfRequestProcessor::processPropPatch( const std::vector< ProppatchValue > & inProperties,
                                              apr_status_t& outSerfStatus )
 {
-    mpProcImpl = createPropPatchReqProcImpl( mPathStr,
+    mpProcImpl = new SerfPropPatchReqProcImpl( mPathStr,
                                              mrSerfSession.getRequestEnvironment().m_aRequestHeaders,
                                              inProperties );
     outSerfStatus = runProcessor();
@@ -120,7 +128,7 @@ bool SerfRequestProcessor::processPropPatch( const std::vector< ProppatchValue >
 bool SerfRequestProcessor::processGet( const com::sun::star::uno::Reference< SerfInputStream >& xioInStrm,
                                        apr_status_t& outSerfStatus )
 {
-    mpProcImpl = createGetReqProcImpl( mPathStr,
+    mpProcImpl = new SerfGetReqProcImpl( mPathStr,
                                        mrSerfSession.getRequestEnvironment().m_aRequestHeaders,
                                        xioInStrm );
     outSerfStatus = runProcessor();
@@ -134,7 +142,7 @@ bool SerfRequestProcessor::processGet( const com::sun::star::uno::Reference< Ser
                                        DAVResource & ioResource,
                                        apr_status_t& outSerfStatus )
 {
-    mpProcImpl = createGetReqProcImpl( mPathStr,
+    mpProcImpl = new SerfGetReqProcImpl( mPathStr,
                                        mrSerfSession.getRequestEnvironment().m_aRequestHeaders,
                                        xioInStrm,
                                        inHeaderNames,
@@ -148,7 +156,7 @@ bool SerfRequestProcessor::processGet( const com::sun::star::uno::Reference< Ser
 bool SerfRequestProcessor::processGet( const com::sun::star::uno::Reference< com::sun::star::io::XOutputStream >& xioOutStrm,
                                        apr_status_t& outSerfStatus )
 {
-    mpProcImpl = createGetReqProcImpl( mPathStr,
+    mpProcImpl = new SerfGetReqProcImpl( mPathStr,
                                        mrSerfSession.getRequestEnvironment().m_aRequestHeaders,
                                        xioOutStrm );
     outSerfStatus = runProcessor();
@@ -162,7 +170,7 @@ bool SerfRequestProcessor::processGet( const com::sun::star::uno::Reference< com
                                        DAVResource & ioResource,
                                        apr_status_t& outSerfStatus )
 {
-    mpProcImpl = createGetReqProcImpl( mPathStr,
+    mpProcImpl = new SerfGetReqProcImpl( mPathStr,
                                        mrSerfSession.getRequestEnvironment().m_aRequestHeaders,
                                        xioOutStrm,
                                        inHeaderNames,
@@ -177,7 +185,7 @@ bool SerfRequestProcessor::processHead( const std::vector< OUString > & inHeader
                                         DAVResource & ioResource,
                                         apr_status_t& outSerfStatus )
 {
-    mpProcImpl = createHeadReqProcImpl( mPathStr,
+    mpProcImpl = new SerfHeadReqProcImpl( mPathStr,
                                         mrSerfSession.getRequestEnvironment().m_aRequestHeaders,
                                         inHeaderNames,
                                         ioResource );
@@ -191,7 +199,7 @@ bool SerfRequestProcessor::processPut( const char* inData,
                                        apr_size_t inDataLen,
                                        apr_status_t& outSerfStatus )
 {
-    mpProcImpl = createPutReqProcImpl( mPathStr,
+    mpProcImpl = new SerfPutReqProcImpl( mPathStr,
                                        mrSerfSession.getRequestEnvironment().m_aRequestHeaders,
                                        inData,
                                        inDataLen );
@@ -212,7 +220,7 @@ bool SerfRequestProcessor::processPost( const char* inData,
                                 OUStringToOString( inContentType, RTL_TEXTENCODING_UTF8 ).getStr() );
     mReferer = apr_pstrdup( mrSerfSession.getAprPool(),
                                 OUStringToOString( inReferer, RTL_TEXTENCODING_UTF8 ).getStr() );
-    mpProcImpl = createPostReqProcImpl( mPathStr,
+    mpProcImpl = new SerfPostReqProcImpl( mPathStr,
                                         mrSerfSession.getRequestEnvironment().m_aRequestHeaders,
                                         inData,
                                         inDataLen,
@@ -236,7 +244,7 @@ bool SerfRequestProcessor::processPost( const char* inData,
                                 OUStringToOString( inContentType, RTL_TEXTENCODING_UTF8 ).getStr() );
     mReferer = apr_pstrdup( mrSerfSession.getAprPool(),
                             OUStringToOString( inReferer, RTL_TEXTENCODING_UTF8 ).getStr() );
-    mpProcImpl = createPostReqProcImpl( mPathStr,
+    mpProcImpl = new SerfPostReqProcImpl( mPathStr,
                                         mrSerfSession.getRequestEnvironment().m_aRequestHeaders,
                                         inData,
                                         inDataLen,
@@ -251,7 +259,7 @@ bool SerfRequestProcessor::processPost( const char* inData,
 // DELETE
 bool SerfRequestProcessor::processDelete( apr_status_t& outSerfStatus )
 {
-    mpProcImpl = createDeleteReqProcImpl( mPathStr,
+    mpProcImpl = new SerfDeleteReqProcImpl( mPathStr,
                                           mrSerfSession.getRequestEnvironment().m_aRequestHeaders );
     outSerfStatus = runProcessor();
 
@@ -261,7 +269,7 @@ bool SerfRequestProcessor::processDelete( apr_status_t& outSerfStatus )
 // MKCOL
 bool SerfRequestProcessor::processMkCol( apr_status_t& outSerfStatus )
 {
-    mpProcImpl = createMkColReqProcImpl( mPathStr,
+    mpProcImpl = new SerfMkColReqProcImpl( mPathStr,
                                          mrSerfSession.getRequestEnvironment().m_aRequestHeaders );
     outSerfStatus = runProcessor();
 
@@ -275,7 +283,7 @@ bool SerfRequestProcessor::processCopy( const OUString & inDestinationPath,
 {
     mDestPathStr = apr_pstrdup( mrSerfSession.getAprPool(),
                                 OUStringToOString( inDestinationPath, RTL_TEXTENCODING_UTF8 ).getStr() );
-    mpProcImpl = createCopyReqProcImpl( mPathStr,
+    mpProcImpl = new SerfCopyReqProcImpl( mPathStr,
                                         mrSerfSession.getRequestEnvironment().m_aRequestHeaders,
                                         mDestPathStr,
                                         inOverwrite );
@@ -291,7 +299,7 @@ bool SerfRequestProcessor::processMove( const OUString & inDestinationPath,
 {
     mDestPathStr = apr_pstrdup( mrSerfSession.getAprPool(),
                                 OUStringToOString( inDestinationPath, RTL_TEXTENCODING_UTF8 ).getStr() );
-    mpProcImpl = createMoveReqProcImpl( mPathStr,
+    mpProcImpl = new SerfMoveReqProcImpl( mPathStr,
                                         mrSerfSession.getRequestEnvironment().m_aRequestHeaders,
                                         mDestPathStr,
                                         inOverwrite );
