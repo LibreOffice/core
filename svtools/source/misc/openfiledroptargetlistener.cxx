@@ -170,19 +170,19 @@ void OpenFileDropTargetListener::implts_EndDrag()
     /* } SAFE */
 }
 
-sal_Bool OpenFileDropTargetListener::implts_IsDropFormatSupported( SotFormatStringId nFormat )
+bool OpenFileDropTargetListener::implts_IsDropFormatSupported( SotFormatStringId nFormat )
 {
     /* SAFE { */
     SolarMutexGuard aGuard;
 
     DataFlavorExVector::iterator aIter( m_pFormats->begin() ), aEnd( m_pFormats->end() );
-    sal_Bool bRet = sal_False;
+    bool bRet = false;
 
     while ( aIter != aEnd )
     {
         if ( nFormat == (*aIter++).mnSotId )
         {
-            bRet = sal_True;
+            bRet = true;
             aIter = aEnd;
         }
     }

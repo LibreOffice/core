@@ -42,22 +42,22 @@ using namespace ::osl                   ;
 using namespace ::com::sun::star::uno   ;
 
 #define ROOTNODE_START                  OUString("Office.Common/Drawinglayer"   )
-#define DEFAULT_OVERLAYBUFFER           sal_True
-#define DEFAULT_PAINTBUFFER             sal_True
+#define DEFAULT_OVERLAYBUFFER           true
+#define DEFAULT_PAINTBUFFER             true
 #define DEFAULT_STRIPE_COLOR_A          0
 #define DEFAULT_STRIPE_COLOR_B          16581375
 #define DEFAULT_STRIPE_LENGTH           4
 
 // #i73602#
 // #i74769#, #i75172# : Change default for Calc and Writer to True
-#define DEFAULT_OVERLAYBUFFER_CALC          sal_True
-#define DEFAULT_OVERLAYBUFFER_WRITER        sal_True
-#define DEFAULT_OVERLAYBUFFER_DRAWIMPRESS   sal_True
+#define DEFAULT_OVERLAYBUFFER_CALC          true
+#define DEFAULT_OVERLAYBUFFER_WRITER        true
+#define DEFAULT_OVERLAYBUFFER_DRAWIMPRESS   true
 
 // #i74769#, #i75172#
-#define DEFAULT_PAINTBUFFER_CALC            sal_True
-#define DEFAULT_PAINTBUFFER_WRITER          sal_True
-#define DEFAULT_PAINTBUFFER_DRAWIMPRESS     sal_True
+#define DEFAULT_PAINTBUFFER_CALC            true
+#define DEFAULT_PAINTBUFFER_WRITER          true
+#define DEFAULT_PAINTBUFFER_DRAWIMPRESS     true
 
 // #i4219#
 #define DEFAULT_MAXIMUMPAPERWIDTH           300
@@ -68,16 +68,16 @@ using namespace ::com::sun::star::uno   ;
 #define DEFAULT_MAXIMUMPAPERBOTTOMMARGIN    9999
 
 // primitives
-#define DEFAULT_ANTIALIASING                        sal_True
-#define DEFAULT_SNAPHORVERLINESTODISCRETE           sal_True
-#define DEFAULT_SOLIDDRAGCREATE                     sal_True
-#define DEFAULT_RENDERDECORATEDTEXTDIRECT           sal_True
-#define DEFAULT_RENDERSIMPLETEXTDIRECT              sal_True
+#define DEFAULT_ANTIALIASING                        true
+#define DEFAULT_SNAPHORVERLINESTODISCRETE           true
+#define DEFAULT_SOLIDDRAGCREATE                     true
+#define DEFAULT_RENDERDECORATEDTEXTDIRECT           true
+#define DEFAULT_RENDERSIMPLETEXTDIRECT              true
 #define DEFAULT_QUADRATIC3DRENDERLIMIT              1000000
 #define DEFAULT_QUADRATICFORMCONTROLRENDERLIMIT     45000
 
 // #i97672# selection settings
-#define DEFAULT_TRANSPARENTSELECTION                sal_True
+#define DEFAULT_TRANSPARENTSELECTION                true
 #define DEFAULT_TRANSPARENTSELECTIONPERCENT         75
 #define DEFAULT_SELECTIONMAXIMUMLUMINANCEPERCENT    70
 
@@ -181,50 +181,50 @@ public:
 //  public interface
 
 
-    sal_Bool    IsOverlayBuffer() const;
-    sal_Bool    IsPaintBuffer() const;
+    bool        IsOverlayBuffer() const;
+    bool        IsPaintBuffer() const;
     Color       GetStripeColorA() const;
     Color       GetStripeColorB() const;
     sal_uInt16  GetStripeLength() const;
 
     // #i73602#
-    sal_Bool    IsOverlayBuffer_Calc() const;
-    sal_Bool    IsOverlayBuffer_Writer() const;
-    sal_Bool    IsOverlayBuffer_DrawImpress() const;
+    bool        IsOverlayBuffer_Calc() const;
+    bool        IsOverlayBuffer_Writer() const;
+    bool        IsOverlayBuffer_DrawImpress() const;
 
     // #i74769#, #i75172#
-    sal_Bool    IsPaintBuffer_Calc() const;
-    sal_Bool    IsPaintBuffer_Writer() const;
-    sal_Bool    IsPaintBuffer_DrawImpress() const;
+    bool        IsPaintBuffer_Calc() const;
+    bool        IsPaintBuffer_Writer() const;
+    bool        IsPaintBuffer_DrawImpress() const;
 
     // #i4219#
-    sal_uInt32 GetMaximumPaperWidth() const;
-    sal_uInt32 GetMaximumPaperHeight() const;
-    sal_uInt32 GetMaximumPaperLeftMargin() const;
-    sal_uInt32 GetMaximumPaperRightMargin() const;
-    sal_uInt32 GetMaximumPaperTopMargin() const;
-    sal_uInt32 GetMaximumPaperBottomMargin() const;
+    sal_uInt32  GetMaximumPaperWidth() const;
+    sal_uInt32  GetMaximumPaperHeight() const;
+    sal_uInt32  GetMaximumPaperLeftMargin() const;
+    sal_uInt32  GetMaximumPaperRightMargin() const;
+    sal_uInt32  GetMaximumPaperTopMargin() const;
+    sal_uInt32  GetMaximumPaperBottomMargin() const;
 
     // helper
-    sal_Bool IsAAPossibleOnThisSystem() const;
+    bool        IsAAPossibleOnThisSystem() const;
 
     // primitives
-    sal_Bool    IsAntiAliasing() const;
-    sal_Bool    IsSnapHorVerLinesToDiscrete() const;
-    sal_Bool    IsSolidDragCreate() const;
-    sal_Bool    IsRenderDecoratedTextDirect() const;
-    sal_Bool    IsRenderSimpleTextDirect() const;
+    bool        IsAntiAliasing() const;
+    bool        IsSnapHorVerLinesToDiscrete() const;
+    bool        IsSolidDragCreate() const;
+    bool        IsRenderDecoratedTextDirect() const;
+    bool        IsRenderSimpleTextDirect() const;
     sal_uInt32  GetQuadratic3DRenderLimit() const;
     sal_uInt32  GetQuadraticFormControlRenderLimit() const;
 
-    void        SetAntiAliasing( sal_Bool bState );
+    void        SetAntiAliasing( bool bState );
 
     // #i97672# selection settings
-    sal_Bool    IsTransparentSelection() const;
+    bool        IsTransparentSelection() const;
     sal_uInt16  GetTransparentSelectionPercent() const;
     sal_uInt16  GetSelectionMaximumLuminancePercent() const;
 
-    void        SetTransparentSelection( sal_Bool bState );
+    void        SetTransparentSelection( bool bState );
     void        SetTransparentSelectionPercent( sal_uInt16 nPercent );
 
 
@@ -241,21 +241,21 @@ private:
 
 private:
 
-        sal_Bool    m_bOverlayBuffer;
-        sal_Bool    m_bPaintBuffer;
+        bool        m_bOverlayBuffer;
+        bool        m_bPaintBuffer;
         Color       m_bStripeColorA;
         Color       m_bStripeColorB;
         sal_uInt16  m_nStripeLength;
 
         // #i73602#
-        sal_Bool    m_bOverlayBuffer_Calc;
-        sal_Bool    m_bOverlayBuffer_Writer;
-        sal_Bool    m_bOverlayBuffer_DrawImpress;
+        bool        m_bOverlayBuffer_Calc;
+        bool        m_bOverlayBuffer_Writer;
+        bool        m_bOverlayBuffer_DrawImpress;
 
         // #i74769#, #i75172#
-        sal_Bool    m_bPaintBuffer_Calc;
-        sal_Bool    m_bPaintBuffer_Writer;
-        sal_Bool    m_bPaintBuffer_DrawImpress;
+        bool        m_bPaintBuffer_Calc;
+        bool        m_bPaintBuffer_Writer;
+        bool        m_bPaintBuffer_DrawImpress;
 
         // #i4219#
         sal_uInt32  m_nMaximumPaperWidth;
@@ -266,18 +266,18 @@ private:
         sal_uInt32  m_nMaximumPaperBottomMargin;
 
         // primitives
-        sal_Bool    m_bAntiAliasing;
-        sal_Bool    m_bSnapHorVerLinesToDiscrete;
-        sal_Bool    m_bSolidDragCreate;
-        sal_Bool    m_bRenderDecoratedTextDirect;
-        sal_Bool    m_bRenderSimpleTextDirect;
+        bool        m_bAntiAliasing;
+        bool        m_bSnapHorVerLinesToDiscrete;
+        bool        m_bSolidDragCreate;
+        bool        m_bRenderDecoratedTextDirect;
+        bool        m_bRenderSimpleTextDirect;
         sal_uInt32  m_nQuadratic3DRenderLimit;
         sal_uInt32  m_nQuadraticFormControlRenderLimit;
 
         // #i97672# selection settings
         sal_uInt16  m_nTransparentSelectionPercent;
         sal_uInt16  m_nSelectionMaximumLuminancePercent;
-        sal_Bool    m_bTransparentSelection;
+        bool        m_bTransparentSelection;
 
         // local values
         bool        m_bAllowAA : 1;
@@ -693,7 +693,7 @@ void SvtOptionsDrawinglayer_Impl::Notify( const com::sun::star::uno::Sequence<OU
 
 //  public method
 
-sal_Bool SvtOptionsDrawinglayer_Impl::IsOverlayBuffer() const
+bool SvtOptionsDrawinglayer_Impl::IsOverlayBuffer() const
 {
     return m_bOverlayBuffer;
 }
@@ -701,7 +701,7 @@ sal_Bool SvtOptionsDrawinglayer_Impl::IsOverlayBuffer() const
 
 //  public method
 
-sal_Bool SvtOptionsDrawinglayer_Impl::IsPaintBuffer() const
+bool SvtOptionsDrawinglayer_Impl::IsPaintBuffer() const
 {
     return m_bPaintBuffer;
 }
@@ -731,33 +731,33 @@ sal_uInt16 SvtOptionsDrawinglayer_Impl::GetStripeLength() const
 }
 
 // #i73602#
-sal_Bool SvtOptionsDrawinglayer_Impl::IsOverlayBuffer_Calc() const
+bool SvtOptionsDrawinglayer_Impl::IsOverlayBuffer_Calc() const
 {
     return m_bOverlayBuffer_Calc;
 }
 
-sal_Bool SvtOptionsDrawinglayer_Impl::IsOverlayBuffer_Writer() const
+bool SvtOptionsDrawinglayer_Impl::IsOverlayBuffer_Writer() const
 {
     return m_bOverlayBuffer_Writer;
 }
 
-sal_Bool SvtOptionsDrawinglayer_Impl::IsOverlayBuffer_DrawImpress() const
+bool SvtOptionsDrawinglayer_Impl::IsOverlayBuffer_DrawImpress() const
 {
     return m_bOverlayBuffer_DrawImpress;
 }
 
 // #i74769#, #i75172#
-sal_Bool SvtOptionsDrawinglayer_Impl::IsPaintBuffer_Calc() const
+bool SvtOptionsDrawinglayer_Impl::IsPaintBuffer_Calc() const
 {
     return m_bPaintBuffer_Calc;
 }
 
-sal_Bool SvtOptionsDrawinglayer_Impl::IsPaintBuffer_Writer() const
+bool SvtOptionsDrawinglayer_Impl::IsPaintBuffer_Writer() const
 {
     return m_bPaintBuffer_Writer;
 }
 
-sal_Bool SvtOptionsDrawinglayer_Impl::IsPaintBuffer_DrawImpress() const
+bool SvtOptionsDrawinglayer_Impl::IsPaintBuffer_DrawImpress() const
 {
     return m_bPaintBuffer_DrawImpress;
 }
@@ -794,7 +794,7 @@ sal_uInt32 SvtOptionsDrawinglayer_Impl::GetMaximumPaperBottomMargin() const
 }
 
 // helper
-sal_Bool SvtOptionsDrawinglayer_Impl::IsAAPossibleOnThisSystem() const
+bool SvtOptionsDrawinglayer_Impl::IsAAPossibleOnThisSystem() const
 {
     if(!m_bAllowAAChecked)
     {
@@ -819,27 +819,27 @@ sal_Bool SvtOptionsDrawinglayer_Impl::IsAAPossibleOnThisSystem() const
 }
 
 // primitives
-sal_Bool SvtOptionsDrawinglayer_Impl::IsAntiAliasing() const
+bool SvtOptionsDrawinglayer_Impl::IsAntiAliasing() const
 {
     return m_bAntiAliasing;
 }
 
-sal_Bool SvtOptionsDrawinglayer_Impl::IsSnapHorVerLinesToDiscrete() const
+bool SvtOptionsDrawinglayer_Impl::IsSnapHorVerLinesToDiscrete() const
 {
     return m_bSnapHorVerLinesToDiscrete;
 }
 
-sal_Bool SvtOptionsDrawinglayer_Impl::IsSolidDragCreate() const
+bool SvtOptionsDrawinglayer_Impl::IsSolidDragCreate() const
 {
     return m_bSolidDragCreate;
 }
 
-sal_Bool SvtOptionsDrawinglayer_Impl::IsRenderDecoratedTextDirect() const
+bool SvtOptionsDrawinglayer_Impl::IsRenderDecoratedTextDirect() const
 {
     return m_bRenderDecoratedTextDirect;
 }
 
-sal_Bool SvtOptionsDrawinglayer_Impl::IsRenderSimpleTextDirect() const
+bool SvtOptionsDrawinglayer_Impl::IsRenderSimpleTextDirect() const
 {
     return m_bRenderSimpleTextDirect;
 }
@@ -854,7 +854,7 @@ sal_uInt32 SvtOptionsDrawinglayer_Impl::GetQuadraticFormControlRenderLimit() con
     return m_nQuadraticFormControlRenderLimit;
 }
 
-void SvtOptionsDrawinglayer_Impl::SetAntiAliasing( sal_Bool bState )
+void SvtOptionsDrawinglayer_Impl::SetAntiAliasing( bool bState )
 {
     if(m_bAntiAliasing != bState)
     {
@@ -864,12 +864,12 @@ void SvtOptionsDrawinglayer_Impl::SetAntiAliasing( sal_Bool bState )
 }
 
 // #i97672# selection settings
-sal_Bool SvtOptionsDrawinglayer_Impl::IsTransparentSelection() const
+bool SvtOptionsDrawinglayer_Impl::IsTransparentSelection() const
 {
     return m_bTransparentSelection;
 }
 
-void SvtOptionsDrawinglayer_Impl::SetTransparentSelection( sal_Bool bState )
+void SvtOptionsDrawinglayer_Impl::SetTransparentSelection( bool bState )
 {
     if(m_bTransparentSelection != bState)
     {
@@ -995,7 +995,7 @@ SvtOptionsDrawinglayer::~SvtOptionsDrawinglayer()
 
 //  public method
 
-sal_Bool SvtOptionsDrawinglayer::IsOverlayBuffer() const
+bool SvtOptionsDrawinglayer::IsOverlayBuffer() const
 {
     MutexGuard aGuard( GetOwnStaticMutex() );
     return m_pDataContainer->IsOverlayBuffer();
@@ -1004,7 +1004,7 @@ sal_Bool SvtOptionsDrawinglayer::IsOverlayBuffer() const
 
 //  public method
 
-sal_Bool SvtOptionsDrawinglayer::IsPaintBuffer() const
+bool SvtOptionsDrawinglayer::IsPaintBuffer() const
 {
     MutexGuard aGuard( GetOwnStaticMutex() );
     return m_pDataContainer->IsPaintBuffer();
@@ -1038,38 +1038,38 @@ sal_uInt16 SvtOptionsDrawinglayer::GetStripeLength() const
 }
 
 // #i73602#
-sal_Bool SvtOptionsDrawinglayer::IsOverlayBuffer_Calc() const
+bool SvtOptionsDrawinglayer::IsOverlayBuffer_Calc() const
 {
     MutexGuard aGuard( GetOwnStaticMutex() );
     return m_pDataContainer->IsOverlayBuffer_Calc();
 }
 
-sal_Bool SvtOptionsDrawinglayer::IsOverlayBuffer_Writer() const
+bool SvtOptionsDrawinglayer::IsOverlayBuffer_Writer() const
 {
     MutexGuard aGuard( GetOwnStaticMutex() );
     return m_pDataContainer->IsOverlayBuffer_Writer();
 }
 
-sal_Bool SvtOptionsDrawinglayer::IsOverlayBuffer_DrawImpress() const
+bool SvtOptionsDrawinglayer::IsOverlayBuffer_DrawImpress() const
 {
     MutexGuard aGuard( GetOwnStaticMutex() );
     return m_pDataContainer->IsOverlayBuffer_DrawImpress();
 }
 
 // #i74769#, #i75172#
-sal_Bool SvtOptionsDrawinglayer::IsPaintBuffer_Calc() const
+bool SvtOptionsDrawinglayer::IsPaintBuffer_Calc() const
 {
     MutexGuard aGuard( GetOwnStaticMutex() );
     return m_pDataContainer->IsPaintBuffer_Calc();
 }
 
-sal_Bool SvtOptionsDrawinglayer::IsPaintBuffer_Writer() const
+bool SvtOptionsDrawinglayer::IsPaintBuffer_Writer() const
 {
     MutexGuard aGuard( GetOwnStaticMutex() );
     return m_pDataContainer->IsPaintBuffer_Writer();
 }
 
-sal_Bool SvtOptionsDrawinglayer::IsPaintBuffer_DrawImpress() const
+bool SvtOptionsDrawinglayer::IsPaintBuffer_DrawImpress() const
 {
     MutexGuard aGuard( GetOwnStaticMutex() );
     return m_pDataContainer->IsPaintBuffer_DrawImpress();
@@ -1113,7 +1113,7 @@ sal_uInt32 SvtOptionsDrawinglayer::GetMaximumPaperBottomMargin() const
 }
 
 // helper
-sal_Bool SvtOptionsDrawinglayer::IsAAPossibleOnThisSystem() const
+bool SvtOptionsDrawinglayer::IsAAPossibleOnThisSystem() const
 {
     return m_pDataContainer->IsAAPossibleOnThisSystem();
 }
@@ -1125,25 +1125,25 @@ bool SvtOptionsDrawinglayer::IsAntiAliasing() const
     return m_pDataContainer->IsAntiAliasing() && IsAAPossibleOnThisSystem();
 }
 
-sal_Bool SvtOptionsDrawinglayer::IsSnapHorVerLinesToDiscrete() const
+bool SvtOptionsDrawinglayer::IsSnapHorVerLinesToDiscrete() const
 {
     MutexGuard aGuard( GetOwnStaticMutex() );
     return m_pDataContainer->IsAntiAliasing() && m_pDataContainer->IsSnapHorVerLinesToDiscrete();
 }
 
-sal_Bool SvtOptionsDrawinglayer::IsSolidDragCreate() const
+bool SvtOptionsDrawinglayer::IsSolidDragCreate() const
 {
     MutexGuard aGuard( GetOwnStaticMutex() );
     return m_pDataContainer->IsSolidDragCreate();
 }
 
-sal_Bool SvtOptionsDrawinglayer::IsRenderDecoratedTextDirect() const
+bool SvtOptionsDrawinglayer::IsRenderDecoratedTextDirect() const
 {
     MutexGuard aGuard( GetOwnStaticMutex() );
     return m_pDataContainer->IsRenderDecoratedTextDirect();
 }
 
-sal_Bool SvtOptionsDrawinglayer::IsRenderSimpleTextDirect() const
+bool SvtOptionsDrawinglayer::IsRenderSimpleTextDirect() const
 {
     MutexGuard aGuard( GetOwnStaticMutex() );
     return m_pDataContainer->IsRenderSimpleTextDirect();
@@ -1161,20 +1161,20 @@ sal_uInt32 SvtOptionsDrawinglayer::GetQuadraticFormControlRenderLimit() const
     return m_pDataContainer->GetQuadraticFormControlRenderLimit();
 }
 
-void SvtOptionsDrawinglayer::SetAntiAliasing( sal_Bool bState )
+void SvtOptionsDrawinglayer::SetAntiAliasing( bool bState )
 {
     MutexGuard aGuard( GetOwnStaticMutex() );
     m_pDataContainer->SetAntiAliasing( bState );
 }
 
 // #i97672# selection settings
-sal_Bool SvtOptionsDrawinglayer::IsTransparentSelection() const
+bool SvtOptionsDrawinglayer::IsTransparentSelection() const
 {
     MutexGuard aGuard( GetOwnStaticMutex() );
     return m_pDataContainer->IsTransparentSelection();
 }
 
-void SvtOptionsDrawinglayer::SetTransparentSelection( sal_Bool bState )
+void SvtOptionsDrawinglayer::SetTransparentSelection( bool bState )
 {
     MutexGuard aGuard( GetOwnStaticMutex() );
     m_pDataContainer->SetTransparentSelection( bState );

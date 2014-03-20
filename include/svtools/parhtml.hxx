@@ -256,7 +256,7 @@ public:
     // Einen Kommentar um den Inhalt von <SCRIPT> oder <STYLE> entfernen
     // Bei 'bFull' wird ggf. die gesammte Zeile hinter einem "<!--"
     // entfernt (fuer JavaSript)
-    static void RemoveSGMLComment( OUString &rString, sal_Bool bFull );
+    static void RemoveSGMLComment( OUString &rString, bool bFull );
 
     static bool InternalImgToPrivateURL( OUString& rURL );
     static rtl_TextEncoding GetEncodingByHttpHeader( SvKeyValueIterator *pHTTPHeader );

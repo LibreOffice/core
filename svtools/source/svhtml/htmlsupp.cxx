@@ -82,7 +82,7 @@ bool HTMLParser::ParseScriptOptions( OUString& rLangString, const OUString& rBas
     return true;
 }
 
-void HTMLParser::RemoveSGMLComment( OUString &rString, sal_Bool bFull )
+void HTMLParser::RemoveSGMLComment( OUString &rString, bool bFull )
 {
     sal_Unicode c = 0;
     while( !rString.isEmpty() &&

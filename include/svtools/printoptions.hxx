@@ -51,29 +51,29 @@ public:
                 SvtBasePrintOptions();
                 virtual ~SvtBasePrintOptions();
 
-    sal_Bool    IsReduceTransparency() const;
+    bool        IsReduceTransparency() const;
     sal_Int16   GetReducedTransparencyMode() const;
-    sal_Bool    IsReduceGradients() const;
+    bool        IsReduceGradients() const;
     sal_Int16   GetReducedGradientMode() const;
     sal_Int16   GetReducedGradientStepCount() const;
-    sal_Bool    IsReduceBitmaps() const;
+    bool        IsReduceBitmaps() const;
     sal_Int16   GetReducedBitmapMode() const;
     sal_Int16   GetReducedBitmapResolution() const;
-    sal_Bool    IsReducedBitmapIncludesTransparency() const;
-    sal_Bool    IsConvertToGreyscales() const;
-    sal_Bool    IsPDFAsStandardPrintJobFormat() const;
+    bool        IsReducedBitmapIncludesTransparency() const;
+    bool        IsConvertToGreyscales() const;
+    bool        IsPDFAsStandardPrintJobFormat() const;
 
-    void        SetReduceTransparency( sal_Bool bState );
+    void        SetReduceTransparency( bool bState );
     void        SetReducedTransparencyMode( sal_Int16 nMode );
-    void        SetReduceGradients( sal_Bool bState );
+    void        SetReduceGradients( bool bState );
     void        SetReducedGradientMode( sal_Int16 nMode );
     void        SetReducedGradientStepCount( sal_Int16 nStepCount );
-    void        SetReduceBitmaps( sal_Bool bState );
+    void        SetReduceBitmaps( bool bState );
     void        SetReducedBitmapMode( sal_Int16   bState );
     void        SetReducedBitmapResolution( sal_Int16 nResolution );
-    void        SetReducedBitmapIncludesTransparency( sal_Bool bState );
-    void        SetConvertToGreyscales( sal_Bool bState );
-    void        SetPDFAsStandardPrintJobFormat( sal_Bool bState );
+    void        SetReducedBitmapIncludesTransparency( bool bState );
+    void        SetConvertToGreyscales( bool bState );
+    void        SetPDFAsStandardPrintJobFormat( bool bState );
 
 public:
 

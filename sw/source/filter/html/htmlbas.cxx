@@ -104,7 +104,7 @@ void SwHTMLParser::EndScript()
     {
     // Fuer JavaScript und StarBasic noch ein Basic-Modul anlegen
         // Das Basic entfernt natuerlich weiterhin keine SGML-Kommentare
-        RemoveSGMLComment( aScriptSource, sal_True );
+        RemoveSGMLComment( aScriptSource, true );
 
         // get library name
         OUString aLibName;

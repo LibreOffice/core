@@ -76,39 +76,37 @@ public:
      SvtPrintOptions_Impl( const OUString& rConfigRoot );
     ~SvtPrintOptions_Impl();
 
-    sal_Bool    IsReduceTransparency() const ;
+    bool        IsReduceTransparency() const ;
     sal_Int16   GetReducedTransparencyMode() const ;
-    sal_Bool    IsReduceGradients() const ;
+    bool        IsReduceGradients() const ;
     sal_Int16   GetReducedGradientMode() const ;
     sal_Int16   GetReducedGradientStepCount() const ;
-    sal_Bool    IsReduceBitmaps() const ;
+    bool        IsReduceBitmaps() const ;
     sal_Int16   GetReducedBitmapMode() const ;
     sal_Int16   GetReducedBitmapResolution() const ;
-    sal_Bool    IsReducedBitmapIncludesTransparency() const ;
-    sal_Bool    IsConvertToGreyscales() const;
-    sal_Bool    IsPDFAsStandardPrintJobFormat() const;
+    bool        IsReducedBitmapIncludesTransparency() const ;
+    bool        IsConvertToGreyscales() const;
+    bool        IsPDFAsStandardPrintJobFormat() const;
 
-    void        SetReduceTransparency( sal_Bool bState ) ;
+    void        SetReduceTransparency( bool bState ) ;
     void        SetReducedTransparencyMode( sal_Int16 nMode ) ;
-    void        SetReduceGradients( sal_Bool bState ) ;
+    void        SetReduceGradients( bool bState ) ;
     void        SetReducedGradientMode( sal_Int16 nMode ) ;
     void        SetReducedGradientStepCount( sal_Int16 nStepCount ) ;
-    void        SetReduceBitmaps( sal_Bool bState ) ;
+    void        SetReduceBitmaps( bool bState ) ;
     void        SetReducedBitmapMode( sal_Int16 nMode ) ;
     void        SetReducedBitmapResolution( sal_Int16 nResolution ) ;
-    void        SetReducedBitmapIncludesTransparency( sal_Bool bState ) ;
-    void        SetConvertToGreyscales( sal_Bool bState ) ;
-    void        SetPDFAsStandardPrintJobFormat( sal_Bool bState ) ;
+    void        SetReducedBitmapIncludesTransparency( bool bState ) ;
+    void        SetConvertToGreyscales( bool bState ) ;
+    void        SetPDFAsStandardPrintJobFormat( bool bState ) ;
 
 
 //  private API
 
 
 private:
-    void impl_setValue (const OUString& sProp,
-                              ::sal_Bool       bNew );
-    void impl_setValue (const OUString& sProp,
-                              ::sal_Int16      nNew );
+    void impl_setValue (const OUString& sProp, bool bNew );
+    void impl_setValue (const OUString& sProp, sal_Int16 nNew );
 
 
 //  private member
@@ -147,9 +145,9 @@ SvtPrintOptions_Impl::SvtPrintOptions_Impl(const OUString& rConfigRoot)
     }
 }
 
-sal_Bool SvtPrintOptions_Impl::IsReduceTransparency() const
+bool SvtPrintOptions_Impl::IsReduceTransparency() const
 {
-    sal_Bool bRet = sal_False;
+    bool bRet = false;
     try
     {
         if (m_xNode.is())
@@ -187,9 +185,9 @@ sal_Int16 SvtPrintOptions_Impl::GetReducedTransparencyMode() const
     return  nRet;
 }
 
-sal_Bool SvtPrintOptions_Impl::IsReduceGradients() const
+bool SvtPrintOptions_Impl::IsReduceGradients() const
 {
-    sal_Bool bRet = sal_False;
+    bool bRet = false;
     try
     {
         if (m_xNode.is())
@@ -253,9 +251,9 @@ sal_Int16 SvtPrintOptions_Impl::GetReducedGradientStepCount() const
     return nRet;
 }
 
-sal_Bool SvtPrintOptions_Impl::IsReduceBitmaps() const
+bool SvtPrintOptions_Impl::IsReduceBitmaps() const
 {
-    sal_Bool bRet = sal_False;
+    bool bRet = false;
     try
     {
         if (m_xNode.is())
@@ -319,9 +317,9 @@ sal_Int16 SvtPrintOptions_Impl::GetReducedBitmapResolution() const
     return  nRet;
 }
 
-sal_Bool SvtPrintOptions_Impl::IsReducedBitmapIncludesTransparency() const
+bool SvtPrintOptions_Impl::IsReducedBitmapIncludesTransparency() const
 {
-    sal_Bool bRet = sal_True;
+    bool bRet = true;
     try
     {
         if (m_xNode.is())
@@ -341,9 +339,9 @@ sal_Bool SvtPrintOptions_Impl::IsReducedBitmapIncludesTransparency() const
     return  bRet;
 }
 
-sal_Bool SvtPrintOptions_Impl::IsConvertToGreyscales() const
+bool SvtPrintOptions_Impl::IsConvertToGreyscales() const
 {
-    sal_Bool bRet = sal_False;
+    bool bRet = false;
     try
     {
         if (m_xNode.is())
@@ -364,9 +362,9 @@ sal_Bool SvtPrintOptions_Impl::IsConvertToGreyscales() const
 
 }
 
-sal_Bool SvtPrintOptions_Impl::IsPDFAsStandardPrintJobFormat() const
+bool SvtPrintOptions_Impl::IsPDFAsStandardPrintJobFormat() const
 {
-    sal_Bool bRet = sal_True;
+    bool bRet = true;
     try
     {
         if (m_xNode.is())
@@ -386,7 +384,7 @@ sal_Bool SvtPrintOptions_Impl::IsPDFAsStandardPrintJobFormat() const
     return  bRet;
 }
 
-void SvtPrintOptions_Impl::SetReduceTransparency(sal_Bool bState)
+void SvtPrintOptions_Impl::SetReduceTransparency(bool bState)
 {
     impl_setValue(PROPERTYNAME_REDUCETRANSPARENCY, bState);
 }
@@ -396,7 +394,7 @@ void SvtPrintOptions_Impl::SetReducedTransparencyMode(sal_Int16 nMode)
     impl_setValue(PROPERTYNAME_REDUCEDTRANSPARENCYMODE, nMode);
 }
 
-void SvtPrintOptions_Impl::SetReduceGradients(sal_Bool bState)
+void SvtPrintOptions_Impl::SetReduceGradients(bool bState)
 {
     impl_setValue(PROPERTYNAME_REDUCEGRADIENTS, bState);
 }
@@ -411,7 +409,7 @@ void SvtPrintOptions_Impl::SetReducedGradientStepCount(sal_Int16 nStepCount )
     impl_setValue(PROPERTYNAME_REDUCEDGRADIENTSTEPCOUNT, nStepCount);
 }
 
-void SvtPrintOptions_Impl::SetReduceBitmaps(sal_Bool bState )
+void SvtPrintOptions_Impl::SetReduceBitmaps(bool bState )
 {
     impl_setValue(PROPERTYNAME_REDUCEBITMAPS, bState);
 }
@@ -426,17 +424,17 @@ void SvtPrintOptions_Impl::SetReducedBitmapResolution(sal_Int16 nResolution )
     impl_setValue(PROPERTYNAME_REDUCEDBITMAPRESOLUTION, nResolution);
 }
 
-void SvtPrintOptions_Impl::SetReducedBitmapIncludesTransparency(sal_Bool bState )
+void SvtPrintOptions_Impl::SetReducedBitmapIncludesTransparency(bool bState )
 {
     impl_setValue(PROPERTYNAME_REDUCEDBITMAPINCLUDESTRANSPARENCY, bState);
 }
 
-void SvtPrintOptions_Impl::SetConvertToGreyscales(sal_Bool bState)
+void SvtPrintOptions_Impl::SetConvertToGreyscales(bool bState)
 {
     impl_setValue(PROPERTYNAME_CONVERTTOGREYSCALES, bState);
 }
 
-void SvtPrintOptions_Impl::SetPDFAsStandardPrintJobFormat(sal_Bool bState)
+void SvtPrintOptions_Impl::SetPDFAsStandardPrintJobFormat(bool bState)
 {
     impl_setValue(PROPERTYNAME_PDFASSTANDARDPRINTJOBFORMAT, bState);
 }
@@ -447,8 +445,7 @@ SvtPrintOptions_Impl::~SvtPrintOptions_Impl()
     m_xCfg.clear();
 }
 
-void SvtPrintOptions_Impl::impl_setValue (const OUString& sProp,
-                                                ::sal_Bool       bNew )
+void SvtPrintOptions_Impl::impl_setValue (const OUString& sProp, bool bNew )
 {
     try
     {
@@ -459,7 +456,7 @@ void SvtPrintOptions_Impl::impl_setValue (const OUString& sProp,
         if ( ! xSet.is())
             return;
 
-        ::sal_Bool bOld = ! bNew;
+        bool bOld = ! bNew;
         if ( ! (xSet->getPropertyValue(sProp) >>= bOld))
             return;
 
@@ -534,7 +531,7 @@ Mutex& SvtBasePrintOptions::GetOwnStaticMutex()
     return *pMutex;
 }
 
-sal_Bool SvtBasePrintOptions::IsReduceTransparency() const
+bool SvtBasePrintOptions::IsReduceTransparency() const
 {
     MutexGuard aGuard( GetOwnStaticMutex() );
     return m_pDataContainer->IsReduceTransparency();
@@ -546,7 +543,7 @@ sal_Int16 SvtBasePrintOptions::GetReducedTransparencyMode() const
     return m_pDataContainer->GetReducedTransparencyMode();
 }
 
-sal_Bool SvtBasePrintOptions::IsReduceGradients() const
+bool SvtBasePrintOptions::IsReduceGradients() const
 {
     MutexGuard aGuard( GetOwnStaticMutex() );
     return m_pDataContainer->IsReduceGradients();
@@ -564,7 +561,7 @@ sal_Int16 SvtBasePrintOptions::GetReducedGradientStepCount() const
     return m_pDataContainer->GetReducedGradientStepCount();
 }
 
-sal_Bool SvtBasePrintOptions::IsReduceBitmaps() const
+bool SvtBasePrintOptions::IsReduceBitmaps() const
 {
     MutexGuard aGuard( GetOwnStaticMutex() );
     return m_pDataContainer->IsReduceBitmaps();
@@ -582,25 +579,25 @@ sal_Int16 SvtBasePrintOptions::GetReducedBitmapResolution() const
     return m_pDataContainer->GetReducedBitmapResolution();
 }
 
-sal_Bool SvtBasePrintOptions::IsReducedBitmapIncludesTransparency() const
+bool SvtBasePrintOptions::IsReducedBitmapIncludesTransparency() const
 {
     MutexGuard aGuard( GetOwnStaticMutex() );
     return m_pDataContainer->IsReducedBitmapIncludesTransparency();
 }
 
-sal_Bool SvtBasePrintOptions::IsConvertToGreyscales() const
+bool SvtBasePrintOptions::IsConvertToGreyscales() const
 {
     MutexGuard aGuard( GetOwnStaticMutex() );
     return m_pDataContainer->IsConvertToGreyscales();
 }
 
-sal_Bool SvtBasePrintOptions::IsPDFAsStandardPrintJobFormat() const
+bool SvtBasePrintOptions::IsPDFAsStandardPrintJobFormat() const
 {
     MutexGuard aGuard( GetOwnStaticMutex() );
     return m_pDataContainer->IsPDFAsStandardPrintJobFormat();
 }
 
-void SvtBasePrintOptions::SetReduceTransparency( sal_Bool bState )
+void SvtBasePrintOptions::SetReduceTransparency( bool bState )
 {
     MutexGuard aGuard( GetOwnStaticMutex() );
     m_pDataContainer->SetReduceTransparency( bState ) ;
@@ -612,7 +609,7 @@ void SvtBasePrintOptions::SetReducedTransparencyMode( sal_Int16 nMode )
     m_pDataContainer->SetReducedTransparencyMode( nMode );
 }
 
-void SvtBasePrintOptions::SetReduceGradients( sal_Bool bState )
+void SvtBasePrintOptions::SetReduceGradients( bool bState )
 {
     MutexGuard aGuard( GetOwnStaticMutex() );
     m_pDataContainer->SetReduceGradients( bState );
@@ -630,7 +627,7 @@ void SvtBasePrintOptions::SetReducedGradientStepCount( sal_Int16 nStepCount )
     m_pDataContainer->SetReducedGradientStepCount( nStepCount );
 }
 
-void SvtBasePrintOptions::SetReduceBitmaps( sal_Bool bState )
+void SvtBasePrintOptions::SetReduceBitmaps( bool bState )
 {
     MutexGuard aGuard( GetOwnStaticMutex() );
     m_pDataContainer->SetReduceBitmaps( bState );
@@ -648,19 +645,19 @@ void SvtBasePrintOptions::SetReducedBitmapResolution( sal_Int16 nResolution )
     m_pDataContainer->SetReducedBitmapResolution( nResolution );
 }
 
-void SvtBasePrintOptions::SetReducedBitmapIncludesTransparency( sal_Bool bState )
+void SvtBasePrintOptions::SetReducedBitmapIncludesTransparency( bool bState )
 {
     MutexGuard aGuard( GetOwnStaticMutex() );
     m_pDataContainer->SetReducedBitmapIncludesTransparency( bState );
 }
 
-void SvtBasePrintOptions::SetConvertToGreyscales( sal_Bool bState )
+void SvtBasePrintOptions::SetConvertToGreyscales( bool bState )
 {
     MutexGuard aGuard( GetOwnStaticMutex() );
     m_pDataContainer->SetConvertToGreyscales( bState );
 }
 
-void SvtBasePrintOptions::SetPDFAsStandardPrintJobFormat( sal_Bool bState )
+void SvtBasePrintOptions::SetPDFAsStandardPrintJobFormat( bool bState )
 {
     MutexGuard aGuard( GetOwnStaticMutex() );
     m_pDataContainer->SetPDFAsStandardPrintJobFormat( bState );

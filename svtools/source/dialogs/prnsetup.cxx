@@ -44,7 +44,7 @@ void ImplFillPrnDlgListBox( const Printer* pPrinter,
 
 
 
-void ImplFreePrnDlgListBox( ListBox* pBox, sal_Bool bClear )
+void ImplFreePrnDlgListBox( ListBox* pBox, bool bClear )
 {
     if ( bClear )
         pBox->Clear();
@@ -245,7 +245,7 @@ PrinterSetupDialog::PrinterSetupDialog(Window* pParent)
 
 PrinterSetupDialog::~PrinterSetupDialog()
 {
-    ImplFreePrnDlgListBox(m_pLbName, sal_False);
+    ImplFreePrnDlgListBox(m_pLbName, false);
     delete mpTempPrinter;
 }
 

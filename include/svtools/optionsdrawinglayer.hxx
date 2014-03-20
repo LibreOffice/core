@@ -106,48 +106,48 @@ class SVT_DLLPUBLIC SvtOptionsDrawinglayer
             @seealso    configuration package "org.openoffice.Office.Common/Drawinglayer"
         *//*-*****************************************************************************************************/
 
-        sal_Bool    IsOverlayBuffer() const;
-        sal_Bool    IsPaintBuffer() const;
+        bool        IsOverlayBuffer() const;
+        bool        IsPaintBuffer() const;
         Color       GetStripeColorA() const;
         Color       GetStripeColorB() const;
         sal_uInt16  GetStripeLength() const;
 
         // #i73602#
-        sal_Bool    IsOverlayBuffer_Calc() const;
-        sal_Bool    IsOverlayBuffer_Writer() const;
-        sal_Bool    IsOverlayBuffer_DrawImpress() const;
+        bool        IsOverlayBuffer_Calc() const;
+        bool        IsOverlayBuffer_Writer() const;
+        bool        IsOverlayBuffer_DrawImpress() const;
 
         // #i74769#, #i75172#
-        sal_Bool    IsPaintBuffer_Calc() const;
-        sal_Bool    IsPaintBuffer_Writer() const;
-        sal_Bool    IsPaintBuffer_DrawImpress() const;
+        bool        IsPaintBuffer_Calc() const;
+        bool        IsPaintBuffer_Writer() const;
+        bool        IsPaintBuffer_DrawImpress() const;
 
         // #i4219#
-        sal_uInt32 GetMaximumPaperWidth() const;
-        sal_uInt32 GetMaximumPaperHeight() const;
-        sal_uInt32 GetMaximumPaperLeftMargin() const;
-        sal_uInt32 GetMaximumPaperRightMargin() const;
-        sal_uInt32 GetMaximumPaperTopMargin() const;
-        sal_uInt32 GetMaximumPaperBottomMargin() const;
+        sal_uInt32  GetMaximumPaperWidth() const;
+        sal_uInt32  GetMaximumPaperHeight() const;
+        sal_uInt32  GetMaximumPaperLeftMargin() const;
+        sal_uInt32  GetMaximumPaperRightMargin() const;
+        sal_uInt32  GetMaximumPaperTopMargin() const;
+        sal_uInt32  GetMaximumPaperBottomMargin() const;
 
         // #i95644# helper to check if AA is allowed on this system. Currently, for WIN its disabled
         // and OutDevSupport_TransparentRect is checked (this  hits XRenderExtension, e.g.
         // currently for SunRay as long as not supported there)
-        sal_Bool IsAAPossibleOnThisSystem() const;
+        bool       IsAAPossibleOnThisSystem() const;
 
         // primitives
-        bool    IsAntiAliasing() const;
-        sal_Bool    IsSnapHorVerLinesToDiscrete() const;
-        sal_Bool    IsSolidDragCreate() const;
-        sal_Bool    IsRenderDecoratedTextDirect() const;
-        sal_Bool    IsRenderSimpleTextDirect() const;
+        bool        IsAntiAliasing() const;
+        bool        IsSnapHorVerLinesToDiscrete() const;
+        bool        IsSolidDragCreate() const;
+        bool        IsRenderDecoratedTextDirect() const;
+        bool        IsRenderSimpleTextDirect() const;
         sal_uInt32  GetQuadratic3DRenderLimit() const;
         sal_uInt32  GetQuadraticFormControlRenderLimit() const;
 
-        void        SetAntiAliasing( sal_Bool bState );
+        void        SetAntiAliasing( bool bState );
 
         // #i97672# selection settings
-        sal_Bool    IsTransparentSelection() const;
+        bool        IsTransparentSelection() const;
         sal_uInt16  GetTransparentSelectionPercent() const;
         sal_uInt16  GetSelectionMaximumLuminancePercent() const;
 
@@ -156,7 +156,7 @@ class SVT_DLLPUBLIC SvtOptionsDrawinglayer
         // combined with Application::GetSettings().GetStyleSettings().GetHighlightColor())
         Color getHilightColor() const;
 
-        void        SetTransparentSelection( sal_Bool bState );
+        void        SetTransparentSelection( bool bState );
         void        SetTransparentSelectionPercent( sal_uInt16 nPercent );
 
 
