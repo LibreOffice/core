@@ -93,12 +93,11 @@ namespace framework {
 using namespace com::sun::star;
 
 
-class LoadEnvListener : private ThreadHelpBase
-                      , public ::cppu::WeakImplHelper2< css::frame::XLoadEventListener      ,
+class LoadEnvListener : public ::cppu::WeakImplHelper2< css::frame::XLoadEventListener      ,
                                                         css::frame::XDispatchResultListener >
 {
     private:
-
+        osl::Mutex m_mutex;
         bool m_bWaitingResult;
         LoadEnv* m_pLoadEnv;
 
@@ -469,38 +468,27 @@ css::uno::Reference< css::lang::XComponent > LoadEnv::getTargetComponent() const
 void SAL_CALL LoadEnvListener::loadFinished(const css::uno::Reference< css::frame::XFrameLoader >&)
     throw(css::uno::RuntimeException, std::exception)
 {
-    // SAFE -> ----------------------------------
-    Guard aWriteLock(m_aLock);
-
+    osl::MutexGuard g(m_mutex);
     if (m_bWaitingResult)
         m_pLoadEnv->impl_setResult(sal_True);
     m_bWaitingResult = false;
-
-    aWriteLock.unlock();
-    // <- SAFE ----------------------------------
 }
 
 
 void SAL_CALL LoadEnvListener::loadCancelled(const css::uno::Reference< css::frame::XFrameLoader >&)
     throw(css::uno::RuntimeException, std::exception)
 {
-    // SAFE -> ----------------------------------
-    Guard aWriteLock(m_aLock);
-
+    osl::MutexGuard g(m_mutex);
     if (m_bWaitingResult)
         m_pLoadEnv->impl_setResult(sal_False);
     m_bWaitingResult = false;
-
-    aWriteLock.unlock();
-    // <- SAFE ----------------------------------
 }
 
 
 void SAL_CALL LoadEnvListener::dispatchFinished(const css::frame::DispatchResultEvent& aEvent)
     throw(css::uno::RuntimeException, std::exception)
 {
-    // SAFE -> ----------------------------------
-    Guard aWriteLock(m_aLock);
+    osl::MutexGuard g(m_mutex);
 
     if (!m_bWaitingResult)
         return;
@@ -520,24 +508,16 @@ void SAL_CALL LoadEnvListener::dispatchFinished(const css::frame::DispatchResult
             break;
     }
     m_bWaitingResult = false;
-
-    aWriteLock.unlock();
-    // <- SAFE ----------------------------------
 }
 
 
 void SAL_CALL LoadEnvListener::disposing(const css::lang::EventObject&)
     throw(css::uno::RuntimeException, std::exception)
 {
-    // SAFE -> ----------------------------------
-    Guard aWriteLock(m_aLock);
-
+    osl::MutexGuard g(m_mutex);
     if (m_bWaitingResult)
         m_pLoadEnv->impl_setResult(sal_False);
     m_bWaitingResult = false;
-
-    aWriteLock.unlock();
-    // <- SAFE ----------------------------------
 }
 
 
