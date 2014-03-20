@@ -719,7 +719,7 @@ IMPL_LINK_NOARG(ChineseDictionaryDialog, ModifyHdl)
     DictionaryList& rReverse = getReverseDictionary();
 
     DictionaryEntry* pE = rActive.getFirstSelectedEntry();
-    if( pE->m_aTerm != aTerm )
+    if( pE && pE->m_aTerm != aTerm )
         return 0;
 
     if( pE )
