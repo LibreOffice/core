@@ -19,7 +19,6 @@
 
 
 #include <uiconfiguration/imagemanager.hxx>
-#include <threadhelp/guard.hxx>
 #include <xml/imagesconfiguration.hxx>
 #include <uiconfiguration/graphicnameaccess.hxx>
 #include "imagemanagerimpl.hxx"
@@ -60,8 +59,7 @@ namespace framework
 {
 
 ImageManager::ImageManager( const uno::Reference< uno::XComponentContext >& rxContext ) :
-    ThreadHelpBase( &Application::GetSolarMutex() )
-    , m_pImpl( new ImageManagerImpl(rxContext, this, false) )
+    m_pImpl( new ImageManagerImpl(rxContext, this, false) )
 {
 }
 
