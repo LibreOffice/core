@@ -29,6 +29,7 @@
 #include "vclpluginapi.h"
 
 class PhysicalFontFace;
+class PhysicalFontCollection;
 
 namespace psp { struct JobData; class PrinterGfx; }
 

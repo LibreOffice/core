@@ -58,6 +58,7 @@
 #include "idlemgr.hxx"
 #include "outdev.h"
 #include "outfont.hxx"
+#include "PhysicalFontCollection.hxx"
 #include "print.h"
 #include "salsys.hxx"
 #include "saltimer.hxx"
