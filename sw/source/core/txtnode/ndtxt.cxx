@@ -2996,7 +2996,15 @@ long SwTxtNode::GetLeftMarginForTabCalculation() const
     const SwNumRule* pRule = GetNum() ? GetNum()->GetNumRule() : 0;
     if( pRule )
     {
-        const SwNumFmt& rFmt = pRule->Get(static_cast<sal_uInt16>(GetActualListLevel()));
+        int nLevel = GetActualListLevel();
+
+        if (nLevel < 0)
+            nLevel = 0;
+
+        if (nLevel >= MAXLEVEL)
+            nLevel = MAXLEVEL - 1;
+
+        const SwNumFmt& rFmt = pRule->Get(static_cast<sal_uInt16>(nLevel));
         if ( rFmt.GetPositionAndSpaceMode() == SvxNumberFormat::LABEL_ALIGNMENT )
         {
             if ( AreListLevelIndentsApplicable() )
