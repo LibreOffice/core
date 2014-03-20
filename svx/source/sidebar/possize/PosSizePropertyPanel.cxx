@@ -91,7 +91,10 @@ PosSizePropertyPanel::PosSizePropertyPanel(
     mlRotY(0),
     maUIScale(),
     mePoolUnit(),
-    meDlgUnit(),
+
+    // #124409# init with fallback default
+    meDlgUnit(FUNIT_INCH),
+
     maTransfPosXControl(SID_ATTR_TRANSFORM_POS_X, *pBindings, *this),
     maTransfPosYControl(SID_ATTR_TRANSFORM_POS_Y, *pBindings, *this),
     maTransfWidthControl(SID_ATTR_TRANSFORM_WIDTH, *pBindings, *this),
@@ -313,11 +316,15 @@ void PosSizePropertyPanel::Initialize()
     }
 
     mePoolUnit = maTransfWidthControl.GetCoreMetric();
-    meDlgUnit = GetModuleFieldUnit();
-    SetFieldUnit( *mpMtrPosX, meDlgUnit, true );
-    SetFieldUnit( *mpMtrPosY, meDlgUnit, true );
-    SetFieldUnit( *mpMtrWidth, meDlgUnit, true );
-    SetFieldUnit( *mpMtrHeight, meDlgUnit, true );
+
+    // #124409# no need to do this, the mpBindings->Update( SID_ATTR_METRIC )
+    // call in the constructor will trigger MetricState and will get the correct unit
+    //
+    // meDlgUnit = GetModuleFieldUnit();
+    // SetFieldUnit( *mpMtrPosX, meDlgUnit, true );
+    // SetFieldUnit( *mpMtrPosY, meDlgUnit, true );
+    // SetFieldUnit( *mpMtrWidth, meDlgUnit, true );
+    // SetFieldUnit( *mpMtrHeight, meDlgUnit, true );
 }
 
 
@@ -784,7 +791,13 @@ void PosSizePropertyPanel::NotifyItemUpdate(
     // Pool unit and dialog unit may have changed, make sure that we
     // have the current values.
     mePoolUnit = maTransfWidthControl.GetCoreMetric();
-    meDlgUnit = GetModuleFieldUnit();
+
+    // #124409# do not change; GetModuleFieldUnit uses SfxModule::GetCurrentFieldUnit()
+    // which uses GetActiveModule() and if no items are set there (which is the case e.g.
+    // for writer), will just return the system fallback of FUNIT_INCH which is wrong.
+    // Anyways, with multiple open views the static call GetActiveModule is ambigious
+    //
+    // meDlgUnit = GetModuleFieldUnit();
 
     switch (nSID)
     {
@@ -1202,6 +1215,9 @@ void PosSizePropertyPanel::MetricState( SfxItemState eState, const SfxPoolItem* 
     bool bWidthBlank = false;
     bool bHeightBlank = false;
     String sNull = String::CreateFromAscii("");
+
+    // #124409# use the given Item to get the correct UI unit and initialize it
+    // and the Fields using it
     meDlgUnit = GetCurrentUnit(eState,pState);
 
     if( mpMtrPosX->GetText() == sNull )
