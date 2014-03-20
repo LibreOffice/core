@@ -41,44 +41,6 @@ TVFactory::~TVFactory()
 {
 }
 
-// XInterface
-
-void SAL_CALL
-TVFactory::acquire(
-    void )
-    throw()
-{
-  OWeakObject::acquire();
-}
-
-void SAL_CALL
-TVFactory::release(
-              void )
-  throw()
-{
-  OWeakObject::release();
-}
-
-Any SAL_CALL
-TVFactory::queryInterface(
-    const Type& rType )
-    throw( RuntimeException, std::exception )
-{
-    Any aRet = cppu::queryInterface( rType,
-                                     (static_cast< XServiceInfo* >(this)),
-                                     (static_cast< XTypeProvider* >(this)),
-                                     (static_cast< XMultiServiceFactory* >(this)) );
-
-    return aRet.hasValue() ? aRet : OWeakObject::queryInterface( rType );
-}
-
-// XTypeProvider methods.
-
-XTYPEPROVIDER_IMPL_3( TVFactory,
-                         XServiceInfo,
-                         XTypeProvider,
-                         XMultiServiceFactory );
-
 // XServiceInfo methods.
 
 OUString SAL_CALL

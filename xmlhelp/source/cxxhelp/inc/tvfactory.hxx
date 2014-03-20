@@ -28,44 +28,20 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XTypeProvider.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
-
+#include <cppuhelper/implbase2.hxx>
 
 
 namespace treeview {
 
-    class TVFactory:
-        public cppu::OWeakObject,
-        public com::sun::star::lang::XServiceInfo,
-        public com::sun::star::lang::XTypeProvider,
-        public com::sun::star::lang::XMultiServiceFactory
+class TVFactory: public cppu::WeakImplHelper2 <
+    css::lang::XServiceInfo,
+    css::lang::XMultiServiceFactory >
     {
     public:
 
         TVFactory( const com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >& xContext );
 
         ~TVFactory();
-
-        // XInterface
-        virtual com::sun::star::uno::Any SAL_CALL
-        queryInterface(
-            const com::sun::star::uno::Type& aType )
-            throw( com::sun::star::uno::RuntimeException, std::exception);
-
-        virtual void SAL_CALL
-        acquire(
-            void )
-            throw();
-
-        virtual void SAL_CALL
-        release(
-            void )
-            throw();
-
-
-        // XTypeProvider
-
-        XTYPEPROVIDER_DECL()
-
 
         // XServiceInfo
         virtual OUString SAL_CALL
