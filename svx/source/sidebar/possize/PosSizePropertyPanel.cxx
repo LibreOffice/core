@@ -66,7 +66,7 @@ PosSizePropertyPanel::PosSizePropertyPanel(
     mlRotY(0),
     maUIScale(),
     mePoolUnit(),
-    meDlgUnit(),
+    meDlgUnit(FUNIT_INCH), // #i124409# init with fallback default
     maTransfPosXControl(SID_ATTR_TRANSFORM_POS_X, *pBindings, *this),
     maTransfPosYControl(SID_ATTR_TRANSFORM_POS_Y, *pBindings, *this),
     maTransfWidthControl(SID_ATTR_TRANSFORM_WIDTH, *pBindings, *this),
@@ -208,11 +208,6 @@ void PosSizePropertyPanel::Initialize()
     }
 
     mePoolUnit = maTransfWidthControl.GetCoreMetric();
-    meDlgUnit = GetModuleFieldUnit();
-    SetFieldUnit( *mpMtrPosX, meDlgUnit, true );
-    SetFieldUnit( *mpMtrPosY, meDlgUnit, true );
-    SetFieldUnit( *mpMtrWidth, meDlgUnit, true );
-    SetFieldUnit( *mpMtrHeight, meDlgUnit, true );
 }
 
 
@@ -599,7 +594,6 @@ void PosSizePropertyPanel::NotifyItemUpdate(
     // Pool unit and dialog unit may have changed, make sure that we
     // have the current values.
     mePoolUnit = maTransfWidthControl.GetCoreMetric();
-    meDlgUnit = GetModuleFieldUnit();
 
     switch (nSID)
     {
@@ -1014,6 +1008,9 @@ void PosSizePropertyPanel::MetricState( SfxItemState eState, const SfxPoolItem* 
     bool bPosYBlank = false;
     bool bWidthBlank = false;
     bool bHeightBlank = false;
+
+    // #i124409# use the given Item to get the correct UI unit and initialize it
+    // and the Fields using it
     meDlgUnit = GetCurrentUnit(eState,pState);
 
     if (mpMtrPosX->GetText().isEmpty())
