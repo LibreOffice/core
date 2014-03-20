@@ -21,7 +21,6 @@
 #define INCLUDED_FRAMEWORK_SOURCE_INC_ACCELERATORS_STORAGEHOLDER_HXX
 
 #include <accelerators/istoragelistener.hxx>
-#include <threadhelp/threadhelpbase.hxx>
 #include <general.h>
 #include <stdtypes.h>
 
@@ -36,7 +35,7 @@ namespace framework
 /**
     TODO document me
  */
-class StorageHolder : private ThreadHelpBase // attention! Must be the first base class to guarentee right initialize lock ...
+class StorageHolder
 {
 
     // types
@@ -68,6 +67,7 @@ class StorageHolder : private ThreadHelpBase // attention! Must be the first bas
 
     // member
     private:
+        mutable osl::Mutex m_mutex;
 
         /** @short  TODO */
         css::uno::Reference< css::embed::XStorage > m_xRoot;
