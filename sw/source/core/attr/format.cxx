@@ -33,6 +33,7 @@
 //UUUU
 #include <unobrushitemhelper.hxx>
 #include <svx/xdef.hxx>
+#include <frmatr.hxx>
 
 TYPEINIT1( SwFmt, SwClient );   //rtti fuer SwFmt
 
