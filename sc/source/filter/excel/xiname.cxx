@@ -301,7 +301,7 @@ const XclImpName* XclImpNameManager::FindName( const OUString& rXclName, SCTAB n
 const XclImpName* XclImpNameManager::GetName( sal_uInt16 nXclNameIdx ) const
 {
     OSL_ENSURE( nXclNameIdx > 0, "XclImpNameManager::GetName - index must be >0" );
-    return ( nXclNameIdx > maNameList.size() ) ? NULL : &(maNameList.at( nXclNameIdx - 1 ));
+    return ( nXclNameIdx <= 0 ||  nXclNameIdx > maNameList.size() ) ? NULL : &(maNameList.at( nXclNameIdx - 1 ));
 }
 
 void XclImpNameManager::ConvertAllTokens()
