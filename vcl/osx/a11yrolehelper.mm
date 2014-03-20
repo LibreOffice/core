@@ -59,14 +59,14 @@ using namespace ::com::sun::star::uno;
         MAP( AccessibleRole::FILE_CHOOSER, NSAccessibilityUnknownRole ); // FIXME
         MAP( AccessibleRole::FILLER, NSAccessibilityUnknownRole ); // FIXME
         MAP( AccessibleRole::FONT_CHOOSER, NSAccessibilityUnknownRole ); // FIXME
-        MAP( AccessibleRole::FOOTER, NSAccessibilityUnknownRole ); // FIXME
+        MAP( AccessibleRole::FOOTER, NSAccessibilityGroupRole ); // FIXME
         MAP( AccessibleRole::FOOTNOTE, NSAccessibilityUnknownRole ); // FIXME
         MAP( AccessibleRole::FRAME, NSAccessibilityWindowRole );
         MAP( AccessibleRole::GLASS_PANE, NSAccessibilityUnknownRole ); // FIXME
         MAP( AccessibleRole::GRAPHIC, NSAccessibilityImageRole );
         MAP( AccessibleRole::GROUP_BOX, NSAccessibilityGroupRole );
-        MAP( AccessibleRole::HEADER, NSAccessibilityUnknownRole ); // FIXME
-        MAP( AccessibleRole::HEADING, NSAccessibilityUnknownRole ); // FIXME
+        MAP( AccessibleRole::HEADER, NSAccessibilityGroupRole ); // FIXME
+        MAP( AccessibleRole::HEADING, NSAccessibilityTextAreaRole ); // FIXME
         MAP( AccessibleRole::HYPER_LINK, NSAccessibilityLinkRole );
         MAP( AccessibleRole::ICON, NSAccessibilityImageRole );
         MAP( AccessibleRole::INTERNAL_FRAME, NSAccessibilityUnknownRole ); // FIXME
