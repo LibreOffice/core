@@ -99,7 +99,7 @@ namespace dbaui
         virtual void InitController(::svt::CellControllerRef& rController, long nRow, sal_uInt16 nCol);
 
         virtual void CellModified();
-        virtual sal_Bool SaveModified(); // is called before changing a cell (false prevents change)
+        virtual bool SaveModified(); // is called before changing a cell (false prevents change)
 
         virtual void Undo();
         virtual void Redo();
@@ -125,7 +125,7 @@ namespace dbaui
     public:
         OTableEditorCtrl(Window* pParentWin);
         virtual ~OTableEditorCtrl();
-        virtual sal_Bool CursorMoving(long nNewRow, sal_uInt16 nNewCol);
+        virtual bool CursorMoving(long nNewRow, sal_uInt16 nNewCol);
         virtual void UpdateAll();
         SfxUndoManager& GetUndoManager() const;
 
@@ -156,7 +156,7 @@ namespace dbaui
         void SetReadOnly( sal_Bool bRead=sal_True );
 
         virtual void Init();
-        virtual void DeactivateCell(sal_Bool bUpdate = sal_True);
+        virtual void DeactivateCell(bool bUpdate = true);
 
         sal_Bool IsCutAllowed( long nRow = -1 );
         sal_Bool IsCopyAllowed( long nRow = -1 );

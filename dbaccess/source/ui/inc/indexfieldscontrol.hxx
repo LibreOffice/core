@@ -58,8 +58,8 @@ namespace dbaui
         void initializeFrom(const IndexFields& _rFields);
         void commitTo(IndexFields& _rFields);
 
-        sal_Bool SaveModified();
-        sal_Bool IsModified() const;
+        bool SaveModified();
+        bool IsModified() const;
 
         const IndexFields&  GetSavedValue() const { return m_aSavedValue; }
         void                SaveValue() { m_aSavedValue = m_aFields; }
@@ -73,7 +73,7 @@ namespace dbaui
         virtual void PaintCell( OutputDevice& _rDev, const Rectangle& _rRect, sal_uInt16 _nColumnId ) const;
         virtual bool SeekRow(long nRow);
         virtual sal_uInt32 GetTotalCellWidth(long nRow, sal_uInt16 nColId);
-        virtual sal_Bool IsTabAllowed(sal_Bool bForward) const;
+        virtual bool IsTabAllowed(bool bForward) const;
 
         ::svt::CellController*  GetController(long _nRow, sal_uInt16 _nColumnId);
         void                InitController(::svt::CellControllerRef&, long _nRow, sal_uInt16 _nColumnId);

@@ -107,7 +107,7 @@ namespace dbaui
         virtual Size GetOptimalSize() const;
         virtual bool PreNotify(NotifyEvent& rNEvt );
 
-        virtual sal_Bool IsTabAllowed(sal_Bool bForward) const;
+        virtual bool IsTabAllowed(bool bForward) const;
 
         virtual void Init(const TTableConnectionData::value_type& _pConnData);
         virtual void Init() { ORelationControl_Base::Init(); }
@@ -115,7 +115,7 @@ namespace dbaui
         virtual ::svt::CellController* GetController( long nRow, sal_uInt16 nCol );
         virtual void PaintCell( OutputDevice& rDev, const Rectangle& rRect, sal_uInt16 nColId ) const;
         virtual bool SeekRow( long nRow );
-        virtual sal_Bool SaveModified();
+        virtual bool SaveModified();
         virtual OUString GetCellText( long nRow, sal_uInt16 nColId ) const;
 
         virtual void CellModified();
@@ -218,18 +218,18 @@ namespace dbaui
         return 0L;
     }
 
-    sal_Bool ORelationControl::IsTabAllowed(sal_Bool bForward) const
+    bool ORelationControl::IsTabAllowed(bool bForward) const
     {
         long nRow = GetCurRow();
         sal_uInt16 nCol = GetCurColumnId();
 
-        sal_Bool bRet = !((     ( bForward && (nCol == DEST_COLUMN)     && (nRow == GetRowCount() - 1)))
+        bool bRet = !((     ( bForward && (nCol == DEST_COLUMN)     && (nRow == GetRowCount() - 1)))
                         ||  (!bForward && (nCol == SOURCE_COLUMN)   && (nRow == 0)));
 
         return bRet && EditBrowseBox::IsTabAllowed(bForward);
     }
 
-    sal_Bool ORelationControl::SaveModified()
+    bool ORelationControl::SaveModified()
     {
         long nRow = GetCurRow();
         if ( nRow != BROWSER_ENDOFSELECTION )
@@ -267,8 +267,9 @@ namespace dbaui
         m_ops.push_back(make_pair(MODIFY, make_pair(line, newSize)));
         m_ops.push_back(make_pair(DELETE, make_pair(newSize, oldSize)));
 
-        return sal_True;
+        return true;
     }
+
     sal_uInt16 ORelationControl::getColumnIdent( sal_uInt16 _nColId ) const
     {
         sal_uInt16 nId = _nColId;

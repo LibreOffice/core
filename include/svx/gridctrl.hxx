@@ -304,7 +304,7 @@ protected:
     virtual void PaintStatusCell(OutputDevice& rDev, const Rectangle& rRect) const;
     virtual void PaintCell(OutputDevice& rDev, const Rectangle& rRect, sal_uInt16 nColId) const;
     virtual RowStatus GetRowStatus(long nRow) const;
-    virtual sal_Bool CursorMoving(long nNewRow, sal_uInt16 nNewCol);
+    virtual bool CursorMoving(long nNewRow, sal_uInt16 nNewCol);
     virtual void CursorMoved();
     virtual void ArrangeControls(sal_uInt16& nX, sal_uInt16 nY);
     virtual sal_uInt32 GetTotalCellWidth(long nRow, sal_uInt16 nColId);
@@ -318,15 +318,15 @@ protected:
     virtual ::svt::CellController* GetController(long nRow, sal_uInt16 nCol);
 
     virtual void CellModified();
-    virtual sal_Bool SaveModified();
-    virtual sal_Bool IsModified() const;
+    virtual bool SaveModified();
+    virtual bool IsModified() const;
 
     virtual sal_uInt16 AppendColumn(const OUString& rName, sal_uInt16 nWidth = 0, sal_uInt16 nPos = HEADERBAR_APPEND, sal_uInt16 nId = (sal_uInt16)-1);
     virtual void RemoveColumn(sal_uInt16 nId);
     virtual DbGridColumn* CreateColumn(sal_uInt16 nId) const;
     virtual void ColumnMoved(sal_uInt16 nId);
-    virtual sal_Bool SaveRow();
-    virtual sal_Bool IsTabAllowed(sal_Bool bForward) const;
+    virtual bool SaveRow();
+    virtual bool IsTabAllowed(bool bForward) const;
 
     /// hide a column
     virtual void    HideColumn(sal_uInt16 nId);

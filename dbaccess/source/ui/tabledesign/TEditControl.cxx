@@ -596,7 +596,7 @@ sal_Bool OTableEditorCtrl::SaveData(long nRow, sal_uInt16 nColId)
     return sal_True;
 }
 
-sal_Bool OTableEditorCtrl::SaveModified()
+bool OTableEditorCtrl::SaveModified()
 {
     sal_uInt16 nColId = GetCurColumnId();
 
@@ -610,14 +610,14 @@ sal_Bool OTableEditorCtrl::SaveModified()
         } break;
     }
 
-    return sal_True;
+    return true;
 }
 
-sal_Bool OTableEditorCtrl::CursorMoving(long nNewRow, sal_uInt16 nNewCol)
+bool OTableEditorCtrl::CursorMoving(long nNewRow, sal_uInt16 nNewCol)
 {
 
     if (!EditBrowseBox::CursorMoving(nNewRow, nNewCol))
-        return sal_False;
+        return false;
 
     // Called after SaveModified(), current row is still the old one
     m_nDataPos = nNewRow;
@@ -635,7 +635,7 @@ sal_Bool OTableEditorCtrl::CursorMoving(long nNewRow, sal_uInt16 nNewCol)
     if( SetDataPtr(m_nDataPos) && pDescrWin)
         pDescrWin->DisplayData( pActRow->GetActFieldDescr() );
 
-    return sal_True;
+    return true;
 }
 
 IMPL_LINK( OTableEditorCtrl, InvalidateFieldType, void*, /*EMPTYTAG*/ )
@@ -1683,7 +1683,7 @@ OTableDesignView* OTableEditorCtrl::GetView() const
     return static_cast<OTableDesignView*>(GetParent()->GetParent());
 }
 
-void OTableEditorCtrl::DeactivateCell(sal_Bool bUpdate)
+void OTableEditorCtrl::DeactivateCell(bool bUpdate)
 {
     OTableRowView::DeactivateCell(bUpdate);
     // now we have to deactivate the field description

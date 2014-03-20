@@ -54,19 +54,19 @@ public:
     ~SfxErrorHandler();
 
 protected:
-    virtual sal_Bool     GetErrorString(sal_uLong lErrId, OUString &, sal_uInt16&) const;
-    virtual sal_Bool     GetMessageString(sal_uLong lErrId, OUString &, sal_uInt16&) const;
+    virtual bool     GetErrorString(sal_uLong lErrId, OUString &, sal_uInt16&) const;
+    virtual bool     GetMessageString(sal_uLong lErrId, OUString &, sal_uInt16&) const;
 
 private:
 
     sal_uLong            lStart;
     sal_uLong            lEnd;
     sal_uInt16           nId;
-    ResMgr          *pMgr;
-    ResMgr          *pFreeMgr;
+    ResMgr              *pMgr;
+    ResMgr              *pFreeMgr;
 
-    SVT_DLLPRIVATE sal_Bool             GetClassString(sal_uLong lErrId, OUString &) const;
-    virtual bool     CreateString( const ErrorInfo *, OUString &, sal_uInt16 &) const;
+    SVT_DLLPRIVATE bool   GetClassString(sal_uLong lErrId, OUString &) const;
+    virtual bool          CreateString( const ErrorInfo *, OUString &, sal_uInt16 &) const;
 };
 
 #endif

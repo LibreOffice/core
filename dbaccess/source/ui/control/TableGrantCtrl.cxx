@@ -175,16 +175,16 @@ IMPL_LINK_NOARG(OTableGrantControl, AsynchDeactivate)
     return 0L;
 }
 
-sal_Bool OTableGrantControl::IsTabAllowed(sal_Bool bForward) const
+bool OTableGrantControl::IsTabAllowed(bool bForward) const
 {
     long nRow = GetCurRow();
     sal_uInt16 nCol = GetCurColumnId();
 
     if (bForward && (nCol == 2) && (nRow == GetRowCount() - 1))
-        return sal_False;
+        return false;
 
     if (!bForward && (nCol == 1) && (nRow == 0))
-        return sal_False;
+        return false;
 
     return EditBrowseBox::IsTabAllowed(bForward);
 }
@@ -195,15 +195,15 @@ sal_Bool OTableGrantControl::IsTabAllowed(sal_Bool bForward) const
     else                                        \
         xAuth->revokePrivileges(sTableName,PrivilegeObject::TABLE,what)
 
-sal_Bool OTableGrantControl::SaveModified()
+bool OTableGrantControl::SaveModified()
 {
 
     sal_Int32 nRow = GetCurRow();
     if(nRow == -1 || nRow >= m_aTableNames.getLength())
-        return sal_False;
+        return false;
 
     OUString sTableName = m_aTableNames[nRow];
-    sal_Bool bErg = sal_True;
+    bool bErg = true;
     try
     {
 
@@ -242,7 +242,7 @@ sal_Bool OTableGrantControl::SaveModified()
     }
     catch(SQLException& e)
     {
-        bErg = sal_False;
+        bErg = false;
         ::dbaui::showError(::dbtools::SQLExceptionInfo(e),GetParent(),m_xContext);
     }
     if(bErg && Controller().Is())
@@ -396,7 +396,7 @@ void OTableGrantControl::PaintCell( OutputDevice& rDev, const Rectangle& rRect, 
         if(aFind != m_aPrivMap.end())
             PaintTristate(rDev, rRect, isAllowed(nColumnId,aFind->second.nRights) ? TRISTATE_TRUE : TRISTATE_FALSE,isAllowed(nColumnId,aFind->second.nWithGrant));
         else
-            PaintTristate(rDev, rRect, TRISTATE_FALSE,sal_False);
+            PaintTristate(rDev, rRect, TRISTATE_FALSE, false);
     }
     else
     {

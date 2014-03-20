@@ -66,14 +66,14 @@ void GenericEditImplementation< EDIT >::SetSelection( const Selection& _rSelecti
 
 
 template <class EDIT>
-void GenericEditImplementation< EDIT >::SetReadOnly( sal_Bool bReadOnly )
+void GenericEditImplementation< EDIT >::SetReadOnly( bool bReadOnly )
 {
     m_rEdit.SetReadOnly( bReadOnly );
 }
 
 
 template <class EDIT>
-sal_Bool GenericEditImplementation< EDIT >::IsReadOnly() const
+bool GenericEditImplementation< EDIT >::IsReadOnly() const
 {
     return m_rEdit.IsReadOnly();
 }
@@ -122,7 +122,7 @@ void GenericEditImplementation< EDIT >::SetModified()
 
 
 template <class EDIT>
-sal_Bool GenericEditImplementation< EDIT >::IsModified() const
+bool GenericEditImplementation< EDIT >::IsModified() const
 {
     return m_rEdit.IsModified();
 }

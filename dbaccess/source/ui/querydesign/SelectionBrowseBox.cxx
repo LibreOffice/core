@@ -888,7 +888,7 @@ sal_Bool OSelectionBrowseBox::saveField(OUString& _sFieldName ,OTableFieldDescRe
     return bError;
 }
 
-sal_Bool OSelectionBrowseBox::SaveModified()
+bool OSelectionBrowseBox::SaveModified()
 {
     OQueryController& rController = static_cast<OQueryController&>(getDesignView()->getController());
     OTableFieldDescRef pEntry = NULL;
@@ -956,7 +956,7 @@ sal_Bool OSelectionBrowseBox::SaveModified()
                             OUString sColumnName = aFieldName.copy(sTableAlias.getLength()+1,aFieldName.getLength() - sTableAlias.getLength() -1);
                             Reference<XConnection> xConnection = rController.getConnection();
                             if ( !xConnection.is() )
-                                return sal_False;
+                                return false;
                             bError = fillColumnRef( sColumnName, sTableAlias, xConnection->getMetaData(), pEntry, bListAction );
                         }
                         else
@@ -2583,7 +2583,7 @@ void OSelectionBrowseBox::GetFocus()
     EditBrowseBox::GetFocus();
 }
 
-void OSelectionBrowseBox::DeactivateCell(sal_Bool _bUpdate)
+void OSelectionBrowseBox::DeactivateCell(bool _bUpdate)
 {
     m_bWasEditing = sal_True;
     EditBrowseBox::DeactivateCell(_bUpdate);

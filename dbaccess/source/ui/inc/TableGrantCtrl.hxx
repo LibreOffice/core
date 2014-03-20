@@ -84,12 +84,12 @@ protected:
 
     virtual bool PreNotify(NotifyEvent& rNEvt );
 
-    virtual sal_Bool IsTabAllowed(sal_Bool bForward) const;
+    virtual bool IsTabAllowed(bool bForward) const;
     virtual void InitController( ::svt::CellControllerRef& rController, long nRow, sal_uInt16 nCol );
     virtual ::svt::CellController* GetController( long nRow, sal_uInt16 nCol );
     virtual void PaintCell( OutputDevice& rDev, const Rectangle& rRect, sal_uInt16 nColId ) const;
     virtual bool SeekRow( long nRow );
-    virtual sal_Bool SaveModified();
+    virtual bool SaveModified();
     virtual OUString GetCellText( long nRow, sal_uInt16 nColId ) const;
 
     virtual void CellModified();

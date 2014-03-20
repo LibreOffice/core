@@ -130,7 +130,7 @@ namespace dbaui
         void                        copy();
 
         virtual void                GetFocus();
-        virtual void                DeactivateCell(sal_Bool bUpdate = sal_True);
+        virtual void                DeactivateCell(bool bUpdate = true);
         virtual void                ColumnMoved( sal_uInt16 nColId ) { ColumnMoved(nColId,sal_True); }
         void                        ColumnMoved( sal_uInt16 nColId,sal_Bool _bCreateUndo);
 
@@ -197,7 +197,7 @@ namespace dbaui
         virtual ::svt::CellController*  GetController(long nRow, sal_uInt16 nCol);
         virtual void                InitController(::svt::CellControllerRef& rController, long nRow, sal_uInt16 nCol);
         virtual void                CellModified();
-        virtual sal_Bool            SaveModified();
+        virtual bool                SaveModified();
         virtual void                Init();
         virtual sal_uInt32          GetTotalCellWidth(long nRow, sal_uInt16 nColId) const;
         virtual void                ColumnResized( sal_uInt16 nColId );

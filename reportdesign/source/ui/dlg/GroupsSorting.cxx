@@ -130,16 +130,16 @@ public:
     */
     void moveGroups(const uno::Sequence<uno::Any>& _aGroups,sal_Int32 _nRow,sal_Bool _bSelect = sal_True);
 
-    virtual sal_Bool CursorMoving(long nNewRow, sal_uInt16 nNewCol);
+    virtual bool CursorMoving(long nNewRow, sal_uInt16 nNewCol);
     using OFieldExpressionControl_Base::GetRowCount;
 protected:
-    virtual sal_Bool IsTabAllowed(sal_Bool bForward) const;
+    virtual bool IsTabAllowed(bool bForward) const;
 
     virtual void InitController( ::svt::CellControllerRef& rController, long nRow, sal_uInt16 nCol );
     virtual ::svt::CellController* GetController( long nRow, sal_uInt16 nCol );
     virtual void PaintCell( OutputDevice& rDev, const Rectangle& rRect, sal_uInt16 nColId ) const;
     virtual bool SeekRow( long nRow );
-    virtual sal_Bool SaveModified();
+    virtual bool SaveModified();
     virtual OUString GetCellText( long nRow, sal_uInt16 nColId ) const;
     virtual RowStatus GetRowStatus(long nRow) const;
 
@@ -392,13 +392,13 @@ IMPL_LINK( OFieldExpressionControl, CBChangeHdl, ComboBox*, /*pComboBox*/ )
 }
 
 
-sal_Bool OFieldExpressionControl::IsTabAllowed(sal_Bool /*bForward*/) const
+bool OFieldExpressionControl::IsTabAllowed(bool /*bForward*/) const
 {
-    return sal_False;
+    return false;
 }
 
 
-sal_Bool OFieldExpressionControl::SaveModified()
+bool OFieldExpressionControl::SaveModified()
 {
     return SaveModified(true);
 }
@@ -519,11 +519,11 @@ void OFieldExpressionControl::InitController( CellControllerRef& /*rController*/
     m_pComboCell->SetText( GetCellText( nRow, nColumnId ) );
 }
 
-sal_Bool OFieldExpressionControl::CursorMoving(long nNewRow, sal_uInt16 nNewCol)
+bool OFieldExpressionControl::CursorMoving(long nNewRow, sal_uInt16 nNewCol)
 {
 
     if (!EditBrowseBox::CursorMoving(nNewRow, nNewCol))
-        return sal_False;
+        return false;
     m_nDataPos = nNewRow;
     long nOldDataPos = GetCurRow();
     InvalidateStatusCell( m_nDataPos );
@@ -531,7 +531,7 @@ sal_Bool OFieldExpressionControl::CursorMoving(long nNewRow, sal_uInt16 nNewCol)
 
     m_pParent->SaveData( nOldDataPos );
     m_pParent->DisplayData( m_nDataPos );
-    return sal_True;
+    return true;
 }
 
 CellController* OFieldExpressionControl::GetController( long /*nRow*/, sal_uInt16 /*nColumnId*/ )

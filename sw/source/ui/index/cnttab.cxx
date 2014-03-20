@@ -170,7 +170,7 @@ protected:
     virtual void                    PaintCell(OutputDevice& rDev, const Rectangle& rRect, sal_uInt16 nColId) const;
     virtual void                    InitController(::svt::CellControllerRef& rController, long nRow, sal_uInt16 nCol);
     virtual ::svt::CellController*  GetController(long nRow, sal_uInt16 nCol);
-    virtual sal_Bool                SaveModified();
+    virtual bool                    SaveModified();
 
     std::vector<long>               GetOptimalColWidths() const;
 
@@ -179,7 +179,7 @@ public:
     void                            ReadEntries(SvStream& rInStr);
     void                            WriteEntries(SvStream& rOutStr);
 
-    sal_Bool                        IsModified()const;
+    bool                            IsModified()const;
 
     virtual OUString GetCellText( long nRow, sal_uInt16 nColumn ) const;
     virtual void                    Resize();
@@ -3940,7 +3940,7 @@ void SwEntryBrowseBox::PaintCell(OutputDevice& rDev,
     return nCol < ITEM_CASE ? xController : xCheckController;
 }
 
-sal_Bool SwEntryBrowseBox::SaveModified()
+bool SwEntryBrowseBox::SaveModified()
 {
     SetModified();
     sal_uInt16 nRow = static_cast< sal_uInt16 >(GetCurRow());
@@ -3981,7 +3981,7 @@ sal_Bool SwEntryBrowseBox::SaveModified()
             GoToRow( nRow );
         }
     }
-    return sal_True;
+    return true;
 }
 
 void SwEntryBrowseBox::InitController(
@@ -4094,10 +4094,10 @@ void SwEntryBrowseBox::WriteEntries(SvStream& rOutStr)
     }
 }
 
-sal_Bool SwEntryBrowseBox::IsModified()const
+bool SwEntryBrowseBox::IsModified()const
 {
     if(bModified)
-        return sal_True;
+        return true;
 
     //check if the current controller is modified
     sal_uInt16 nCol = GetCurColumnId();
@@ -4106,7 +4106,7 @@ sal_Bool SwEntryBrowseBox::IsModified()const
         pController = xController;
     else
         pController = xCheckController;
-    return pController ->IsModified();
+    return pController->IsModified();
 }
 
 SwAutoMarkDlg_Impl::SwAutoMarkDlg_Impl(Window* pParent, const OUString& rAutoMarkURL,

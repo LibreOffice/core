@@ -89,7 +89,7 @@ namespace svt
     }
 
 
-    sal_Bool ComboBoxCellController::MoveAllowed(const KeyEvent& rEvt) const
+    bool ComboBoxCellController::MoveAllowed(const KeyEvent& rEvt) const
     {
         ComboBoxControl& rBox = GetComboBox();
         switch (rEvt.GetKeyCode().GetCode())
@@ -109,25 +109,25 @@ namespace svt
             case KEY_UP:
             case KEY_DOWN:
                 if (rBox.IsInDropDown())
-                    return sal_False;
+                    return false;
                 if (!rEvt.GetKeyCode().IsShift() &&
                      rEvt.GetKeyCode().IsMod1())
-                    return sal_False;
+                    return false;
                 // drop down the list box
                 else if (rEvt.GetKeyCode().IsMod2() && rEvt.GetKeyCode().GetCode() == KEY_DOWN)
-                    return sal_False;
+                    return false;
             case KEY_PAGEUP:
             case KEY_PAGEDOWN:
             case KEY_RETURN:
                 if (rBox.IsInDropDown())
-                    return sal_False;
+                    return false;
             default:
-                return sal_True;
+                return true;
         }
     }
 
 
-    sal_Bool ComboBoxCellController::IsModified() const
+    bool ComboBoxCellController::IsModified() const
     {
         return GetComboBox().GetSavedValue() != GetComboBox().GetText();
     }
@@ -199,7 +199,7 @@ namespace svt
     }
 
 
-    sal_Bool ListBoxCellController::MoveAllowed(const KeyEvent& rEvt) const
+    bool ListBoxCellController::MoveAllowed(const KeyEvent& rEvt) const
     {
         ListBoxControl& rBox = GetListBox();
         switch (rEvt.GetKeyCode().GetCode())
@@ -208,22 +208,22 @@ namespace svt
             case KEY_DOWN:
                 if (!rEvt.GetKeyCode().IsShift() &&
                      rEvt.GetKeyCode().IsMod1())
-                    return sal_False;
+                    return false;
                 // drop down the list box
                 else
                     if (rEvt.GetKeyCode().IsMod2() && rEvt.GetKeyCode().GetCode() == KEY_DOWN)
-                        return sal_False;
+                        return false;
             case KEY_PAGEUP:
             case KEY_PAGEDOWN:
                 if (rBox.IsTravelSelect())
-                    return sal_False;
+                    return false;
             default:
-                return sal_True;
+                return true;
         }
     }
 
 
-    sal_Bool ListBoxCellController::IsModified() const
+    bool ListBoxCellController::IsModified() const
     {
         return GetListBox().GetSelectEntryPos() != GetListBox().GetSavedValue();
     }
@@ -339,9 +339,9 @@ namespace svt
     //= CheckBoxCellController
 
 
-    sal_Bool CheckBoxCellController::WantMouseEvent() const
+    bool CheckBoxCellController::WantMouseEvent() const
     {
-        return sal_True;
+        return true;
     }
 
 
@@ -351,7 +351,7 @@ namespace svt
     }
 
 
-    sal_Bool CheckBoxCellController::IsModified() const
+    bool CheckBoxCellController::IsModified() const
     {
         return GetCheckBox().GetSavedValue() != GetCheckBox().GetState();
     }
@@ -390,7 +390,7 @@ namespace svt
     EditCellController::EditCellController( Edit* _pEdit )
         :CellController( _pEdit )
         ,m_pEditImplementation( new EditImplementation( *_pEdit ) )
-        ,m_bOwnImplementation( sal_True )
+        ,m_bOwnImplementation( true )
     {
     }
 
@@ -398,7 +398,7 @@ namespace svt
     EditCellController::EditCellController( IEditImplementation* _pImplementation )
         :CellController( &_pImplementation->GetControl() )
         ,m_pEditImplementation( _pImplementation )
-        ,m_bOwnImplementation( sal_False )
+        ,m_bOwnImplementation( false )
     {
     }
 
@@ -422,9 +422,9 @@ namespace svt
     }
 
 
-    sal_Bool EditCellController::MoveAllowed(const KeyEvent& rEvt) const
+    bool EditCellController::MoveAllowed(const KeyEvent& rEvt) const
     {
-        sal_Bool bResult;
+        bool bResult;
         switch (rEvt.GetKeyCode().GetCode())
         {
             case KEY_END:
@@ -440,13 +440,13 @@ namespace svt
                 bResult = !aSel && aSel.Min() == 0;
             }   break;
             default:
-                bResult = sal_True;
+                bResult = true;
         }
         return bResult;
     }
 
 
-    sal_Bool EditCellController::IsModified() const
+    bool EditCellController::IsModified() const
     {
         return m_pEditImplementation->IsModified();
     }
@@ -479,9 +479,9 @@ namespace svt
     }
 
 
-    sal_Bool SpinCellController::MoveAllowed(const KeyEvent& rEvt) const
+    bool SpinCellController::MoveAllowed(const KeyEvent& rEvt) const
     {
-        sal_Bool bResult;
+        bool bResult;
         switch (rEvt.GetKeyCode().GetCode())
         {
             case KEY_END:
@@ -497,13 +497,13 @@ namespace svt
                 bResult = !aSel && aSel.Min() == 0;
             }   break;
             default:
-                bResult = sal_True;
+                bResult = true;
         }
         return bResult;
     }
 
 
-    sal_Bool SpinCellController::IsModified() const
+    bool SpinCellController::IsModified() const
     {
         return GetSpinWindow().IsModified();
     }
@@ -540,16 +540,16 @@ namespace svt
     }
 
 
-    sal_Bool MultiLineTextCell::dispatchKeyEvent( const KeyEvent& _rEvent )
+    bool MultiLineTextCell::dispatchKeyEvent( const KeyEvent& _rEvent )
     {
         Selection aOldSelection( GetSelection() );
 
-        sal_Bool bWasModified = IsModified();
+        bool bWasModified = IsModified();
         ClearModifyFlag( );
 
-        sal_Bool bHandled = GetTextView()->KeyInput( _rEvent );
+        bool bHandled = GetTextView()->KeyInput( _rEvent );
 
-        sal_Bool bIsModified = IsModified();
+        bool bIsModified = IsModified();
         if ( bWasModified && !bIsModified )
             // not sure whether this can really happen
             SetModifyFlag();
@@ -562,9 +562,9 @@ namespace svt
             if  (  aNewSelection != aOldSelection   // selection changed
                 || bIsModified                      // or some other modification
                 )
-                return sal_True;
+                return true;
         }
-        return sal_False;
+        return false;
     }
 
 

@@ -135,7 +135,7 @@ void EditBrowseBox::GrabTableFocus()
 
 void EditBrowseBox::DetermineFocus( const sal_uInt16 _nGetFocusFlags )
 {
-    sal_Bool bFocus = sal_False;
+    bool bFocus = false;
     for (Window* pWindow = Application::GetFocusWindow();
          pWindow && !bFocus;
          pWindow = pWindow->GetParent())

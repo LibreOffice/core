@@ -36,7 +36,7 @@ private:
 protected:
 
     virtual void        AddSupportedFormats();
-    virtual sal_Bool    GetData( const ::com::sun::star::datatransfer::DataFlavor& rFlavor );
+    virtual sal_Bool        GetData( const ::com::sun::star::datatransfer::DataFlavor& rFlavor );
     virtual void        ObjectReleased();
 
 public:

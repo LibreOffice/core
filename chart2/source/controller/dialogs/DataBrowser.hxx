@@ -53,10 +53,10 @@ protected:
     // EditBrowseBox overridables
     virtual void PaintCell( OutputDevice& rDev, const Rectangle& rRect, sal_uInt16 nColumnId ) const;
     virtual bool SeekRow( long nRow );
-    virtual sal_Bool IsTabAllowed( sal_Bool bForward ) const;
+    virtual bool IsTabAllowed( bool bForward ) const;
     virtual ::svt::CellController* GetController( long nRow, sal_uInt16 nCol );
     virtual void InitController( ::svt::CellControllerRef& rController, long nRow, sal_uInt16 nCol );
-    virtual sal_Bool SaveModified();
+    virtual bool SaveModified();
     virtual void CursorMoved();
     // called whenever the control of the current cell has been modified
     virtual void CellModified();

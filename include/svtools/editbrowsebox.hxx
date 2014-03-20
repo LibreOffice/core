@@ -99,7 +99,7 @@ namespace svt
 
         virtual void SetModified();
         virtual void ClearModified() = 0;
-        virtual sal_Bool IsModified() const = 0;
+        virtual bool IsModified() const = 0;
 
         // commit any current changes. Especially, do any reformatting you need (from input formatting
         // to output formatting) here
@@ -111,9 +111,9 @@ namespace svt
         inline  bool        isSuspended( ) const { return bSuspended; }
 
     protected:
-        virtual sal_Bool MoveAllowed(const KeyEvent& rEvt) const;
+        virtual bool MoveAllowed(const KeyEvent& rEvt) const;
         virtual void SetModifyHdl(const Link& rLink) = 0;
-        virtual sal_Bool WantMouseEvent() const;
+        virtual bool WantMouseEvent() const;
     };
 
     SV_DECL_IMPL_REF(CellController);
@@ -131,8 +131,8 @@ namespace svt
         virtual OUString            GetText( LineEnd aSeparator ) const = 0;
         virtual void                SetText( const OUString& _rStr ) = 0;
 
-        virtual sal_Bool            IsReadOnly() const = 0;
-        virtual void                SetReadOnly( sal_Bool bReadOnly ) = 0;
+        virtual bool                IsReadOnly() const = 0;
+        virtual void                SetReadOnly( bool bReadOnly ) = 0;
 
         virtual sal_Int32           GetMaxTextLen() const = 0;
         virtual void                SetMaxTextLen( sal_Int32 _nMaxLen ) = 0;
@@ -145,7 +145,7 @@ namespace svt
         virtual OUString            GetSelected( LineEnd aSeparator ) const = 0;
 
         virtual void                SetModified() = 0;
-        virtual sal_Bool            IsModified() const = 0;
+        virtual bool                IsModified() const = 0;
         virtual void                ClearModified() = 0;
         virtual void                SetModifyHdl( const Link& _rLink ) = 0;
     };
@@ -167,8 +167,8 @@ namespace svt
         virtual OUString            GetText( LineEnd aSeparator ) const;
         virtual void                SetText( const OUString& _rStr );
 
-        virtual sal_Bool            IsReadOnly() const;
-        virtual void                SetReadOnly( sal_Bool bReadOnly );
+        virtual bool                IsReadOnly() const;
+        virtual void                SetReadOnly( bool bReadOnly );
 
         virtual sal_Int32           GetMaxTextLen() const;
         virtual void                SetMaxTextLen( sal_Int32 _nMaxLen );
@@ -181,7 +181,7 @@ namespace svt
         virtual OUString            GetSelected( LineEnd aSeparator ) const;
 
         virtual void                SetModified();
-        virtual sal_Bool            IsModified() const;
+        virtual bool                IsModified() const;
         virtual void                ClearModified();
         virtual void                SetModifyHdl( const Link& _rLink );
     };
@@ -209,7 +209,7 @@ namespace svt
         virtual void Modify();
 
     private:
-        sal_Bool    dispatchKeyEvent( const KeyEvent& _rEvent );
+        bool         dispatchKeyEvent( const KeyEvent& _rEvent );
     };
 
 
@@ -235,7 +235,7 @@ namespace svt
     class SVT_DLLPUBLIC EditCellController : public CellController
     {
         IEditImplementation*    m_pEditImplementation;
-        sal_Bool                    m_bOwnImplementation;   // did we create m_pEditImplementation?
+        bool                    m_bOwnImplementation;   // did we create m_pEditImplementation?
 
     public:
         TYPEINFO();
@@ -247,11 +247,11 @@ namespace svt
               IEditImplementation* GetEditImplementation( )       { return m_pEditImplementation; }
 
         virtual void SetModified();
-        virtual sal_Bool IsModified() const;
+        virtual bool IsModified() const;
         virtual void ClearModified();
 
     protected:
-        virtual sal_Bool MoveAllowed(const KeyEvent& rEvt) const;
+        virtual bool MoveAllowed(const KeyEvent& rEvt) const;
         virtual void SetModifyHdl(const Link& rLink);
     };
 
@@ -266,11 +266,11 @@ namespace svt
         SpinField& GetSpinWindow() const {return (SpinField &)GetWindow();}
 
         virtual void SetModified();
-        virtual sal_Bool IsModified() const;
+        virtual bool IsModified() const;
         virtual void ClearModified();
 
     protected:
-        virtual sal_Bool MoveAllowed(const KeyEvent& rEvt) const;
+        virtual bool MoveAllowed(const KeyEvent& rEvt) const;
         virtual void SetModifyHdl(const Link& rLink);
     };
 
@@ -318,12 +318,12 @@ namespace svt
         CheckBoxCellController(CheckBoxControl* pWin):CellController(pWin){}
         CheckBox& GetCheckBox() const;
 
-        virtual sal_Bool IsModified() const;
+        virtual bool IsModified() const;
         virtual void ClearModified();
 
     protected:
         virtual void SetModifyHdl(const Link& rLink);
-        virtual sal_Bool WantMouseEvent() const;
+        virtual bool WantMouseEvent() const;
     };
 
 
@@ -351,11 +351,11 @@ namespace svt
         ComboBoxCellController(ComboBoxControl* pParent);
         ComboBoxControl& GetComboBox() const {return (ComboBoxControl &)GetWindow();}
 
-        virtual sal_Bool IsModified() const;
+        virtual bool IsModified() const;
         virtual void ClearModified();
 
     protected:
-        virtual sal_Bool MoveAllowed(const KeyEvent& rEvt) const;
+        virtual bool MoveAllowed(const KeyEvent& rEvt) const;
         virtual void SetModifyHdl(const Link& rLink);
     };
 
@@ -384,11 +384,11 @@ namespace svt
         ListBoxCellController(ListBoxControl* pParent);
         ListBoxControl& GetListBox() const {return (ListBoxControl &)GetWindow();}
 
-        virtual sal_Bool IsModified() const;
+        virtual bool IsModified() const;
         virtual void ClearModified();
 
     protected:
-        virtual sal_Bool MoveAllowed(const KeyEvent& rEvt) const;
+        virtual bool MoveAllowed(const KeyEvent& rEvt) const;
         virtual void SetModifyHdl(const Link& rLink);
     };
 
@@ -456,19 +456,19 @@ namespace svt
         class BrowserMouseEventPtr
         {
             BrowserMouseEvent* pEvent;
-            sal_Bool bDown;
+            bool               bDown;
 
         public:
             BrowserMouseEventPtr():pEvent(NULL){}
             ~BrowserMouseEventPtr(){Clear();}
 
-            sal_Bool Is() const {return pEvent != NULL;}
-            sal_Bool IsDown() const {return bDown;}
+            bool Is() const {return pEvent != NULL;}
+            bool IsDown() const {return bDown;}
             const BrowserMouseEvent* operator->() const {return pEvent;}
             const BrowserMouseEvent& operator*() const {return *pEvent;}
 
             SVT_DLLPUBLIC void Clear();
-            void Set(const BrowserMouseEvent* pEvt, sal_Bool bIsDown);
+            void Set(const BrowserMouseEvent* pEvt, bool bIsDown);
         } aMouseEvent;
 
         CellControllerRef        aController,
@@ -483,9 +483,9 @@ namespace svt
         long    nEditRow, nOldEditRow;
         sal_uInt16  nEditCol, nOldEditCol;
 
-        sal_Bool            bHasFocus : 1;
-        mutable sal_Bool    bPaintStatus : 1;   // paint a status (image) in the handle column
-        sal_Bool            bActiveBeforeTracking;
+        bool            bHasFocus : 1;
+        mutable bool    bPaintStatus : 1;   // paint a status (image) in the handle column
+        bool            bActiveBeforeTracking;
 
         CheckBoxControl* pCheckBoxPaint;
 
@@ -496,7 +496,7 @@ namespace svt
     protected:
         BrowserHeader*  pHeader;
 
-        sal_Bool isGetCellFocusPending() const { return nStartEvent != 0; }
+        bool isGetCellFocusPending() const { return nStartEvent != 0; }
         void cancelGetCellFocus() { if (nStartEvent) Application::RemoveUserEvent(nStartEvent); nStartEvent = 0; }
         void forceGetCellFocus() { cancelGetCellFocus(); LINK(this, EditBrowseBox, StartEditHdl).Call((void*)NULL); }
 
@@ -533,7 +533,7 @@ namespace svt
         virtual void EndScroll();
 
         // should be used instead of GetFieldRectPixel, 'cause this method here takes into account the borders
-        Rectangle GetCellRect(long nRow, sal_uInt16 nColId, sal_Bool bRelToBrowser = sal_True) const;
+        Rectangle GetCellRect(long nRow, sal_uInt16 nColId, bool bRelToBrowser = true) const;
         virtual sal_uInt32 GetTotalCellWidth(long nRow, sal_uInt16 nColId);
         virtual sal_uInt32 GetAutoColumnWidth(sal_uInt16 nColId);
 
@@ -551,17 +551,17 @@ namespace svt
 
         // when changing a row:
         // CursorMoving:    cursor is beeing moved, but GetCurRow() still provides the old row
-        virtual sal_Bool CursorMoving(long nNewRow, sal_uInt16 nNewCol);
+        virtual bool CursorMoving(long nNewRow, sal_uInt16 nNewCol);
 
         // cursor has been moved
         virtual void CursorMoved();
 
         virtual void CellModified();        // called whenever a cell has been modified
-        virtual sal_Bool SaveModified();    // called whenever a cell should be left, and it's content should be saved
+        virtual bool SaveModified();    // called whenever a cell should be left, and it's content should be saved
                                             // return sal_False prevents leaving the cell
-        virtual sal_Bool SaveRow();         // commit the current row
+        virtual bool SaveRow();         // commit the current row
 
-        virtual sal_Bool IsModified() const {return aController.Is() && aController->IsModified();}
+        virtual bool IsModified() const {return aController.Is() && aController->IsModified();}
 
         virtual CellController* GetController(long nRow, sal_uInt16 nCol);
         virtual void InitController(CellControllerRef& rController, long nRow, sal_uInt16 nCol);
@@ -581,11 +581,11 @@ namespace svt
 
         // called whenever (Shift)Tab or Enter is pressed. If true is returned, these keys
         // result in traveling to the next or to th previous cell
-        virtual sal_Bool IsTabAllowed(sal_Bool bForward) const;
+        virtual bool IsTabAllowed(bool bForward) const;
 
         virtual bool IsCursorMoveAllowed(long nNewRow, sal_uInt16 nNewColId) const;
 
-        void    PaintTristate(OutputDevice& rDev, const Rectangle& rRect,const TriState& eState,sal_Bool _bEnabled=sal_True) const;
+        void    PaintTristate(OutputDevice& rDev, const Rectangle& rRect, const TriState& eState, bool _bEnabled=true) const;
 
         void AsynchGetFocus();
             // secure starting of StartEditHdl
@@ -595,7 +595,7 @@ namespace svt
         EditBrowseBox(Window* pParent, const ResId& rId, sal_Int32 nBrowserFlags = EBBF_NONE, BrowserMode nMode = 0 );
         ~EditBrowseBox();
 
-        sal_Bool IsEditing() const {return aController.Is();}
+        bool IsEditing() const {return aController.Is();}
         void InvalidateStatusCell(long nRow) {RowModified(nRow, 0);}
         void InvalidateHandleColumn();
 
@@ -608,8 +608,8 @@ namespace svt
         sal_Int32   GetBrowserFlags() const { return m_nBrowserFlags; }
         void    SetBrowserFlags(sal_Int32 nFlags);
 
-        virtual void ActivateCell(long nRow, sal_uInt16 nCol, sal_Bool bSetCellFocus = sal_True);
-        virtual void DeactivateCell(sal_Bool bUpdate = sal_True);
+        virtual void ActivateCell(long nRow, sal_uInt16 nCol, bool bSetCellFocus = true);
+        virtual void DeactivateCell(bool bUpdate = true);
         // Children ---------------------------------------------------------------
 
         /** Creates the accessible object of a data table cell.
@@ -660,12 +660,12 @@ namespace svt
         virtual void PaintField(OutputDevice& rDev, const Rectangle& rRect,
                                 sal_uInt16 nColumnId ) const;
         using Control::ImplInitSettings;
-        SVT_DLLPRIVATE void ImplInitSettings( sal_Bool bFont, sal_Bool bForeground, sal_Bool bBackground );
+        SVT_DLLPRIVATE void ImplInitSettings( bool bFont, bool bForeground, bool bBackground );
         SVT_DLLPRIVATE void DetermineFocus( const sal_uInt16 _nGetFocusFlags = 0);
         inline void HideAndDisable(CellControllerRef& rController);
         inline void EnableAndShow() const;
 
-        SVT_DLLPRIVATE void implActivateCellOnMouseEvent(const BrowserMouseEvent& _rEvt, sal_Bool _bUp);
+        SVT_DLLPRIVATE void implActivateCellOnMouseEvent(const BrowserMouseEvent& _rEvt, bool _bUp);
         SVT_DLLPRIVATE void impl_construct();
 
         DECL_DLLPRIVATE_LINK(ModifyHdl, void* );

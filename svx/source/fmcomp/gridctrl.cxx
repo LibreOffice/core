@@ -1976,10 +1976,10 @@ void DbGridControl::PaintCell(OutputDevice& rDev, const Rectangle& rRect, sal_uI
     }
 }
 
-sal_Bool DbGridControl::CursorMoving(long nNewRow, sal_uInt16 nNewCol)
+bool DbGridControl::CursorMoving(long nNewRow, sal_uInt16 nNewCol)
 {
 
-    DeactivateCell( sal_False );
+    DeactivateCell( false );
 
     if  (   m_pDataCursor
         &&  ( m_nCurrentPos != nNewRow )
@@ -1987,13 +1987,13 @@ sal_Bool DbGridControl::CursorMoving(long nNewRow, sal_uInt16 nNewCol)
         )
     {
         ActivateCell();
-        return sal_False;
+        return false;
     }
 
     if ( !DbGridControl_Base::CursorMoving( nNewRow, nNewCol ) )
-        return sal_False;
+        return false;
 
-    return sal_True;
+    return true;
 }
 
 bool DbGridControl::SetCurrent(long nNewRow)
@@ -2087,7 +2087,7 @@ void DbGridControl::CursorMoved()
     // cursor movement due to deletion or insertion of rows
     if (m_pDataCursor && m_nCurrentPos != GetCurRow())
     {
-        DeactivateCell(sal_True);
+        DeactivateCell(true);
         SetCurrent(GetCurRow());
     }
 
@@ -3047,7 +3047,7 @@ void DbGridControl::RowModified( long nRow, sal_uInt16 /*nColId*/ )
     DbGridControl_Base::RowModified(nRow);
 }
 
-sal_Bool DbGridControl::IsModified() const
+bool DbGridControl::IsModified() const
 {
     return !IsFilterMode() && IsValid(m_xCurrentRow) && (m_xCurrentRow->IsModified() || DbGridControl_Base::IsModified());
 }
@@ -3062,21 +3062,21 @@ bool DbGridControl::IsInsertionRow(long nRow) const
     return (m_nOptions & OPT_INSERT) && m_nTotalCount >= 0 && (nRow == GetRowCount() - 1);
 }
 
-sal_Bool DbGridControl::SaveModified()
+bool DbGridControl::SaveModified()
 {
     SAL_INFO("svx.fmcomp", "DbGridControl::SaveModified");
     DBG_ASSERT(IsValid(m_xCurrentRow), "GridControl:: Invalid row");
     if (!IsValid(m_xCurrentRow))
-        return sal_True;
+        return true;
 
     // accept input for this field
     // Where there changes at the current input field?
     if (!DbGridControl_Base::IsModified())
-        return sal_True;
+        return true;
 
     size_t Location = GetModelColumnPos( GetCurColumnId() );
     DbGridColumn* pColumn = ( Location < m_aColumns.size() ) ? m_aColumns[ Location ] : NULL;
-    sal_Bool bOK = pColumn ? pColumn->Commit() : sal_False;
+    bool bOK = pColumn && pColumn->Commit();
     DBG_ASSERT( Controller().Is(), "DbGridControl::SaveModified: was modified, by have no controller?!" );
     if ( !Controller().Is() )
         // this might happen if the callbacks implicitly triggered by Commit
@@ -3111,17 +3111,17 @@ sal_Bool DbGridControl::SaveModified()
     return bOK;
 }
 
-sal_Bool DbGridControl::SaveRow()
+bool DbGridControl::SaveRow()
 {
     SAL_INFO("svx.fmcomp", "DbGridControl::SaveRow");
     // valid row
     if (!IsValid(m_xCurrentRow) || !IsModified())
-        return sal_True;
+        return true;
     // value of the controller was not saved, yet
     else if (Controller().Is() && Controller()->IsModified())
     {
         if (!SaveModified())
-            return sal_False;
+            return false;
     }
     m_bUpdating = true;
 
@@ -3141,7 +3141,7 @@ sal_Bool DbGridControl::SaveRow()
     {
         EndCursorAction();
         m_bUpdating = false;
-        return sal_False;
+        return false;
     }
 
     try
@@ -3181,7 +3181,7 @@ sal_Bool DbGridControl::SaveRow()
     // which results in a "return sal_False" (see above). If no exception is thrown, everything is fine. If nRecords
     // is zero, this simply means all fields had their original values.
     // FS - 06.12.99 - 70502
-    return sal_True;
+    return true;
 }
 
 bool DbGridControl::PreNotify(NotifyEvent& rEvt)
@@ -3239,7 +3239,7 @@ bool DbGridControl::PreNotify(NotifyEvent& rEvt)
     }
 }
 
-sal_Bool DbGridControl::IsTabAllowed(sal_Bool bRight) const
+bool DbGridControl::IsTabAllowed(bool bRight) const
 {
     if (bRight)
         // Tab only if not on the _last_ row

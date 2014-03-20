@@ -1039,7 +1039,7 @@ bool DataBrowser::SeekRow( long nRow )
     return true;
 }
 
-sal_Bool DataBrowser::IsTabAllowed( sal_Bool bForward ) const
+bool DataBrowser::IsTabAllowed( bool bForward ) const
 {
     long nRow = GetCurRow();
     long nCol = GetCurColumnId();
@@ -1055,7 +1055,7 @@ sal_Bool DataBrowser::IsTabAllowed( sal_Bool bForward ) const
     if( !m_bDataValid )
     {
         const_cast< DataBrowser* >( this )->ShowWarningBox();
-        return sal_False;
+        return false;
     }
 
     return ( nRow != nBadRow ||
@@ -1134,12 +1134,12 @@ bool DataBrowser::isDateString( const OUString& aInputString, double& fOutDateVa
     return false;
 }
 
-sal_Bool DataBrowser::SaveModified()
+bool DataBrowser::SaveModified()
 {
     if( ! IsModified() )
-        return sal_True;
+        return true;
 
-    sal_Bool bChangeValid = sal_True;
+    bool bChangeValid = true;
 
     const sal_Int32 nRow = lcl_getRowInData( GetCurRow());
     const sal_Int32 nCol = lcl_getColumnInData( GetCurColumnId());
@@ -1159,7 +1159,7 @@ sal_Bool DataBrowser::SaveModified()
             if( !aText.isEmpty() && pSvNumberFormatter &&
                 ! pSvNumberFormatter->IsNumberFormat( aText, nDummy, fDummy ) )
             {
-                bChangeValid = sal_False;
+                bChangeValid = false;
             }
             else
             {
@@ -1171,8 +1171,8 @@ sal_Bool DataBrowser::SaveModified()
         case DataBrowserModel::TEXTORDATE:
         {
             OUString aText( m_aTextEditField.GetText() );
-            double fDateValue=0.0;
-            bChangeValid = sal_False;
+            double fDateValue = 0.0;
+            bChangeValid = false;
             if( isDateString( aText, fDateValue ) )
                 bChangeValid = m_apDataBrowserModel->setCellAny( nCol, nRow, uno::makeAny( fDateValue ) );
             if(!bChangeValid)

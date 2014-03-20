@@ -97,7 +97,7 @@ namespace svt
     }
 
 
-    void EditBrowseBox::BrowserMouseEventPtr::Set(const BrowserMouseEvent* pEvt, sal_Bool bIsDown)
+    void EditBrowseBox::BrowserMouseEventPtr::Set(const BrowserMouseEvent* pEvt, bool bIsDown)
     {
         if (pEvt == pEvent)
         {
@@ -125,7 +125,7 @@ namespace svt
         SetCompoundControl(true);
         SetGridLineColor( Color( COL_LIGHTGRAY ) );
 
-        ImplInitSettings(sal_True, sal_True, sal_True);
+        ImplInitSettings(true, true, true);
 
         pCheckBoxPaint = new CheckBoxControl(&GetDataWindow());
         pCheckBoxPaint->SetPaintTransparent( true );
@@ -144,9 +144,9 @@ namespace svt
                   ,nOldEditRow(-1)
                   ,nEditCol(0)
                   ,nOldEditCol(0)
-                  ,bHasFocus(sal_False)
-                  ,bPaintStatus(sal_True)
-                  ,bActiveBeforeTracking( sal_False )
+                  ,bHasFocus(false)
+                  ,bPaintStatus(true)
+                  ,bActiveBeforeTracking( false )
                   ,m_nBrowserFlags(nBrowserFlags)
                   ,pHeader(NULL)
     {
@@ -165,9 +165,9 @@ namespace svt
                   ,nOldEditRow(-1)
                   ,nEditCol(0)
                   ,nOldEditCol(0)
-                  ,bHasFocus(sal_False)
-                  ,bPaintStatus(sal_True)
-                  ,bActiveBeforeTracking( sal_False )
+                  ,bHasFocus(false)
+                  ,bPaintStatus(true)
+                  ,bActiveBeforeTracking( false )
                   ,m_nBrowserFlags(nBrowserFlags)
                   ,pHeader(NULL)
     {
@@ -403,7 +403,7 @@ namespace svt
     {
         if ( bActiveBeforeTracking )
             ActivateCell();
-        bActiveBeforeTracking = sal_False;
+        bActiveBeforeTracking = false;
 
         BrowseBox::ImplEndTracking();
     }
@@ -413,7 +413,7 @@ namespace svt
     {
         if ( IsEditing() )
         {
-            Rectangle aRect( GetCellRect( nEditRow, nEditCol, sal_False ) );
+            Rectangle aRect( GetCellRect( nEditRow, nEditCol, false ) );
             CellControllerRef aCellController( Controller() );
             ResizeController( aCellController, aRect );
             aCellController->GetWindow().GrabFocus();
@@ -432,13 +432,13 @@ namespace svt
     void EditBrowseBox::KeyInput( const KeyEvent& rEvt )
     {
         sal_uInt16 nCode = rEvt.GetKeyCode().GetCode();
-        sal_Bool   bShift = rEvt.GetKeyCode().IsShift();
-        sal_Bool   bCtrl = rEvt.GetKeyCode().IsMod1();
+        bool   bShift = rEvt.GetKeyCode().IsShift();
+        bool   bCtrl = rEvt.GetKeyCode().IsMod1();
 
         switch (nCode)
         {
             case KEY_RETURN:
-                if (!bCtrl && !bShift && IsTabAllowed(sal_True))
+                if (!bCtrl && !bShift && IsTabAllowed(true))
                 {
                     Dispatch(BROWSER_CURSORRIGHT);
                 }
@@ -448,7 +448,7 @@ namespace svt
             case KEY_TAB:
                 if (!bCtrl && !bShift)
                 {
-                    if (IsTabAllowed(sal_True))
+                    if (IsTabAllowed(true))
                         Dispatch(BROWSER_CURSORRIGHT);
                     else
                         // do NOT call BrowseBox::KeyInput : this would handle the tab, but we already now
@@ -458,7 +458,7 @@ namespace svt
                 }
                 else if (!bCtrl && bShift)
                 {
-                    if (IsTabAllowed(sal_False))
+                    if (IsTabAllowed(false))
                         Dispatch(BROWSER_CURSORLEFT);
                     else
                         // do NOT call BrowseBox::KeyInput : this would handle the tab, but we already now
@@ -504,7 +504,7 @@ namespace svt
                 SaveModified();
         }
 
-        aMouseEvent.Set(&rEvt,sal_True);
+        aMouseEvent.Set(&rEvt,true);
         BrowseBox::MouseButtonDown(rEvt);
         aMouseEvent.Clear();
 
@@ -513,7 +513,7 @@ namespace svt
             // the base class does not travel upon MouseButtonDown, but implActivateCellOnMouseEvent assumes we traveled ...
             GoToRowColumnId( rEvt.GetRow(), rEvt.GetColumnId() );
             if (rEvt.GetRow() >= 0)
-                implActivateCellOnMouseEvent(rEvt, sal_False);
+                implActivateCellOnMouseEvent(rEvt, false);
         }
     }
 
@@ -524,17 +524,17 @@ namespace svt
         if (rEvt.GetClicks() > 1 && rEvt.GetRow() >= 0)
             return;
 
-        aMouseEvent.Set(&rEvt,sal_False);
+        aMouseEvent.Set(&rEvt,false);
         BrowseBox::MouseButtonUp(rEvt);
         aMouseEvent.Clear();
 
         if (0 == (m_nBrowserFlags & EBBF_ACTIVATE_ON_BUTTONDOWN))
             if (rEvt.GetRow() >= 0)
-                implActivateCellOnMouseEvent(rEvt, sal_True);
+                implActivateCellOnMouseEvent(rEvt, true);
     }
 
 
-    void EditBrowseBox::implActivateCellOnMouseEvent(const BrowserMouseEvent& _rEvt, sal_Bool _bUp)
+    void EditBrowseBox::implActivateCellOnMouseEvent(const BrowserMouseEvent& _rEvt, bool _bUp)
     {
         if (!IsEditing())
             ActivateCell();
@@ -620,11 +620,11 @@ namespace svt
                 {
                     const KeyEvent* pKeyEvent = rEvt.GetKeyEvent();
                     sal_uInt16 nCode  = pKeyEvent->GetKeyCode().GetCode();
-                    sal_Bool   bShift = pKeyEvent->GetKeyCode().IsShift();
-                    sal_Bool   bCtrl  = pKeyEvent->GetKeyCode().IsMod1();
-                    sal_Bool   bAlt =   pKeyEvent->GetKeyCode().IsMod2();
-                    sal_Bool   bLocalSelect=    sal_False;
-                    sal_Bool   bNonEditOnly =   sal_False;
+                    bool       bShift = pKeyEvent->GetKeyCode().IsShift();
+                    bool       bCtrl  = pKeyEvent->GetKeyCode().IsMod1();
+                    bool       bAlt =   pKeyEvent->GetKeyCode().IsMod2();
+                    bool       bLocalSelect = false;
+                    bool       bNonEditOnly = false;
                     sal_uInt16 nId = BROWSER_NONE;
 
                     if (!bAlt && !bCtrl && !bShift )
@@ -639,7 +639,7 @@ namespace svt
 
                             case KEY_TAB:
                                 // ask if traveling to the next cell is allowed
-                                if (IsTabAllowed(sal_True))
+                                if (IsTabAllowed(true))
                                     nId = BROWSER_CURSORRIGHT;
                                 break;
 
@@ -653,24 +653,24 @@ namespace svt
                                     return true;
                                 }
                                 // ask if traveling to the next cell is allowed
-                                if (IsTabAllowed(sal_True))
+                                if (IsTabAllowed(true))
                                     nId = BROWSER_CURSORRIGHT;
 
                                 break;
                             case KEY_RIGHT:         nId = BROWSER_CURSORRIGHT; break;
                             case KEY_LEFT:          nId = BROWSER_CURSORLEFT; break;
-                            case KEY_SPACE:         nId = BROWSER_SELECT; bNonEditOnly = bLocalSelect = sal_True;break;
+                            case KEY_SPACE:         nId = BROWSER_SELECT; bNonEditOnly = bLocalSelect = true; break;
                         }
 
                     if ( !bAlt && !bCtrl && bShift )
                         switch ( nCode )
                         {
-                            case KEY_DOWN:          nId = BROWSER_SELECTDOWN; bLocalSelect = sal_True;break;
-                            case KEY_UP:            nId = BROWSER_SELECTUP; bLocalSelect = sal_True;break;
-                            case KEY_HOME:          nId = BROWSER_SELECTHOME; bLocalSelect = sal_True;break;
-                            case KEY_END:           nId = BROWSER_SELECTEND; bLocalSelect = sal_True;break;
+                            case KEY_DOWN:          nId = BROWSER_SELECTDOWN; bLocalSelect = true; break;
+                            case KEY_UP:            nId = BROWSER_SELECTUP; bLocalSelect = true; break;
+                            case KEY_HOME:          nId = BROWSER_SELECTHOME; bLocalSelect = true; break;
+                            case KEY_END:           nId = BROWSER_SELECTEND; bLocalSelect = true; break;
                             case KEY_TAB:
-                                if (IsTabAllowed(sal_False))
+                                if (IsTabAllowed(false))
                                     nId = BROWSER_CURSORLEFT;
                                 break;
                         }
@@ -678,7 +678,7 @@ namespace svt
                     if ( !bAlt && bCtrl && bShift )
                         switch ( nCode )
                         {
-                            case KEY_SPACE:         nId = BROWSER_SELECTCOLUMN; bLocalSelect = sal_True; break;
+                            case KEY_SPACE:         nId = BROWSER_SELECTCOLUMN; bLocalSelect = true; break;
                         }
 
 
@@ -691,7 +691,7 @@ namespace svt
                             case KEY_PAGEUP:        nId = BROWSER_CURSORTOPOFFILE; break;
                             case KEY_HOME:          nId = BROWSER_CURSORTOPOFSCREEN; break;
                             case KEY_END:           nId = BROWSER_CURSORENDOFSCREEN; break;
-                            case KEY_SPACE:         nId = BROWSER_ENHANCESELECTION; bLocalSelect = sal_True;break;
+                            case KEY_SPACE:         nId = BROWSER_ENHANCESELECTION; bLocalSelect = true; break;
                         }
 
 
@@ -727,9 +727,9 @@ namespace svt
     }
 
 
-    sal_Bool EditBrowseBox::IsTabAllowed(sal_Bool) const
+    bool EditBrowseBox::IsTabAllowed(bool) const
     {
-        return sal_True;
+        return true;
     }
 
 
@@ -760,22 +760,22 @@ namespace svt
         }
         else if ( nType == STATE_CHANGE_ZOOM )
         {
-            ImplInitSettings( sal_True, sal_False, sal_False );
+            ImplInitSettings( true, false, false );
             bNeedCellReActivation = true;
         }
         else if ( nType == STATE_CHANGE_CONTROLFONT )
         {
-            ImplInitSettings( sal_True, sal_False, sal_False );
+            ImplInitSettings( true, false, false );
             Invalidate();
         }
         else if ( nType == STATE_CHANGE_CONTROLFOREGROUND )
         {
-            ImplInitSettings( sal_False, sal_True, sal_False );
+            ImplInitSettings( false, true, false );
             Invalidate();
         }
         else if ( nType == STATE_CHANGE_CONTROLBACKGROUND )
         {
-            ImplInitSettings( sal_False, sal_False, sal_True );
+            ImplInitSettings( false, false, true );
             Invalidate();
         }
         else if (nType == STATE_CHANGE_STYLE)
@@ -805,13 +805,13 @@ namespace svt
             ( rDCEvt.GetType() == DATACHANGED_DISPLAY   ))  &&
             ( rDCEvt.GetFlags() & SETTINGS_STYLE        ))
         {
-            ImplInitSettings( sal_True, sal_True, sal_True );
+            ImplInitSettings( true, true, true );
             Invalidate();
         }
     }
 
 
-    void EditBrowseBox::ImplInitSettings( sal_Bool bFont, sal_Bool bForeground, sal_Bool bBackground )
+    void EditBrowseBox::ImplInitSettings( bool bFont, bool bForeground, bool bBackground )
     {
         const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
 
@@ -922,10 +922,9 @@ namespace svt
                 // status cell should be painted if and only if text is displayed
                 // note: bPaintStatus is mutable, but Solaris has problems with assigning
                 // probably because it is part of a bitfield
-                pTHIS->bPaintStatus = static_cast< sal_Bool >
-                    (( GetBrowserFlags() & EBBF_HANDLE_COLUMN_TEXT ) == EBBF_HANDLE_COLUMN_TEXT );
+                pTHIS->bPaintStatus = ( GetBrowserFlags() & EBBF_HANDLE_COLUMN_TEXT ) == EBBF_HANDLE_COLUMN_TEXT;
                 rWindow.Invalidate(aRect);
-                pTHIS->bPaintStatus = sal_True;
+                pTHIS->bPaintStatus = true;
             }
 
             // don't paint during row change
@@ -954,7 +953,7 @@ namespace svt
         BrowseBox::ColumnMoved(nId);
         if (IsEditing())
         {
-            Rectangle aRect( GetCellRect(nEditRow, nEditCol, sal_False));
+            Rectangle aRect( GetCellRect(nEditRow, nEditCol, false));
             CellControllerRef aControllerRef = Controller();
             ResizeController(aControllerRef, aRect);
             Controller()->GetWindow().GrabFocus();
@@ -962,16 +961,16 @@ namespace svt
     }
 
 
-    sal_Bool EditBrowseBox::SaveRow()
+    bool EditBrowseBox::SaveRow()
     {
-        return sal_True;
+        return true;
     }
 
 
-    sal_Bool EditBrowseBox::CursorMoving(long, sal_uInt16)
+    bool EditBrowseBox::CursorMoving(long, sal_uInt16)
     {
-        ((EditBrowseBox *) this)->DeactivateCell(sal_False);
-        return sal_True;
+        ((EditBrowseBox *) this)->DeactivateCell(false);
+        return true;
     }
 
 
@@ -995,7 +994,7 @@ namespace svt
     {
         if (IsEditing())
         {
-            Rectangle aRect = GetCellRect(nEditRow, nEditCol, sal_False);
+            Rectangle aRect = GetCellRect(nEditRow, nEditCol, false);
             ResizeController(aController,aRect);
             AsynchGetFocus();
         }
@@ -1003,7 +1002,7 @@ namespace svt
     }
 
 
-    void EditBrowseBox::ActivateCell(long nRow, sal_uInt16 nCol, sal_Bool bCellFocus)
+    void EditBrowseBox::ActivateCell(long nRow, sal_uInt16 nCol, bool bCellFocus)
     {
         if (IsEditing())
             return;
@@ -1021,7 +1020,7 @@ namespace svt
             aController = GetController(nRow, nCol);
             if (aController.Is())
             {
-                Rectangle aRect( GetCellRect(nEditRow, nEditCol, sal_False));
+                Rectangle aRect( GetCellRect(nEditRow, nEditCol, false));
                 ResizeController(aController, aRect);
 
                 InitController(aController, nEditRow, nEditCol);
@@ -1053,7 +1052,7 @@ namespace svt
     }
 
 
-    void EditBrowseBox::DeactivateCell(sal_Bool bUpdate)
+    void EditBrowseBox::DeactivateCell(bool bUpdate)
     {
         if (IsEditing())
         {
@@ -1089,7 +1088,7 @@ namespace svt
     }
 
 
-    Rectangle EditBrowseBox::GetCellRect(long nRow, sal_uInt16 nColId, sal_Bool bRel) const
+    Rectangle EditBrowseBox::GetCellRect(long nRow, sal_uInt16 nColId, bool bRel) const
     {
         Rectangle aRect( GetFieldRectPixel(nRow, nColId, bRel));
         if ((GetMode()  & BROWSER_CURSOR_WO_FOCUS) == BROWSER_CURSOR_WO_FOCUS)
@@ -1135,7 +1134,7 @@ namespace svt
     {
         if (IsEditing())
         {
-            Rectangle aRect( GetCellRect(nEditRow, nEditCol, sal_False));
+            Rectangle aRect( GetCellRect(nEditRow, nEditCol, false));
             CellControllerRef aControllerRef = Controller();
             ResizeController(aControllerRef, aRect);
             Controller()->GetWindow().GrabFocus();
@@ -1226,9 +1225,9 @@ namespace svt
 
 
 
-    sal_Bool EditBrowseBox::SaveModified()
+    bool EditBrowseBox::SaveModified()
     {
-        return sal_True;
+        return true;
     }
 
 
@@ -1278,7 +1277,7 @@ namespace svt
     }
 
 
-    void EditBrowseBox::PaintTristate(OutputDevice&, const Rectangle& rRect,const TriState& eState,sal_Bool _bEnabled) const
+    void EditBrowseBox::PaintTristate(OutputDevice&, const Rectangle& rRect, const TriState& eState, bool _bEnabled) const
     {
         pCheckBoxPaint->GetBox().SetState(eState);
         pCheckBoxPaint->SetPosSizePixel(rRect.TopLeft(), rRect.GetSize());
@@ -1314,7 +1313,7 @@ namespace svt
         if (m_nBrowserFlags == nFlags)
             return;
 
-        sal_Bool RowPicturesChanges = ((m_nBrowserFlags & EBBF_NO_HANDLE_COLUMN_CONTENT) !=
+        bool RowPicturesChanges = ((m_nBrowserFlags & EBBF_NO_HANDLE_COLUMN_CONTENT) !=
                                        (nFlags & EBBF_NO_HANDLE_COLUMN_CONTENT));
         m_nBrowserFlags = nFlags;
 
@@ -1381,9 +1380,9 @@ namespace svt
     }
 
 
-    sal_Bool CellController::WantMouseEvent() const
+    bool CellController::WantMouseEvent() const
     {
-        return sal_False;
+        return false;
     }
 
 
@@ -1392,9 +1391,9 @@ namespace svt
     }
 
 
-    sal_Bool CellController::MoveAllowed(const KeyEvent&) const
+    bool CellController::MoveAllowed(const KeyEvent&) const
     {
-        return sal_True;
+        return true;
     }
 
 }   // namespace svt

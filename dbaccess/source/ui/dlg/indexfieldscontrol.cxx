@@ -51,7 +51,7 @@ namespace dbaui
         void SetAdditionalModifyHdl(const Link& _rHdl);
 
     protected:
-        virtual sal_Bool WantMouseEvent() const { return sal_True; }
+        virtual bool WantMouseEvent() const { return true; }
         virtual void SetModifyHdl(const Link& _rHdl);
 
     private:
@@ -295,15 +295,15 @@ namespace dbaui
         return sal_True;
     }
 
-    sal_Bool IndexFieldsControl::IsModified() const
+    bool IndexFieldsControl::IsModified() const
     {
         return EditBrowseBox::IsModified();
     }
 
-    sal_Bool IndexFieldsControl::SaveModified()
+    bool IndexFieldsControl::SaveModified()
     {
         if (!IsModified())
-            return sal_True;
+            return true;
 
         switch (GetCurColumnId())
         {
@@ -337,12 +337,12 @@ namespace dbaui
 
                             // invalidate the row to force repaint
                             Invalidate(GetRowRectPixel(nRow));
-                            return sal_True;
+                            return true;
                         }
 
                         if (sFieldSelected == aPos->sFieldName)
                             // nothing changed
-                            return sal_True;
+                            return true;
 
                         aPos->sFieldName = sFieldSelected;
                     }
@@ -366,7 +366,7 @@ namespace dbaui
             default:
                 OSL_FAIL("IndexFieldsControl::SaveModified: invalid column id!");
         }
-        return sal_True;
+        return true;
     }
 
     void IndexFieldsControl::InitController(CellControllerRef& /*_rController*/, long _nRow, sal_uInt16 _nColumnId)
@@ -455,9 +455,9 @@ namespace dbaui
         }
         return OUString();
     }
-    sal_Bool IndexFieldsControl::IsTabAllowed(sal_Bool /*bForward*/) const
+    bool IndexFieldsControl::IsTabAllowed(bool /*bForward*/) const
     {
-        return sal_False;
+        return false;
     }
 
 }   // namespace dbaui

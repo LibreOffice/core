@@ -621,7 +621,7 @@ void ExtendedColorConfig::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint 
 
 EditableExtendedColorConfig::EditableExtendedColorConfig() :
     m_pImpl(new ExtendedColorConfig_Impl),
-    m_bModified(sal_False)
+    m_bModified(false)
 {
     m_pImpl->LockBroadcast();
 }
@@ -646,17 +646,17 @@ void EditableExtendedColorConfig::AddScheme(const OUString& rScheme )
     m_pImpl->AddScheme(rScheme);
 }
 
-sal_Bool EditableExtendedColorConfig::LoadScheme(const OUString& rScheme )
+bool EditableExtendedColorConfig::LoadScheme(const OUString& rScheme )
 {
     if(m_bModified)
         m_pImpl->SetModified();
     if(m_pImpl->IsModified())
         m_pImpl->Commit();
-    m_bModified = sal_False;
+    m_bModified = false;
     m_pImpl->Load(rScheme);
     //the name of the loaded scheme has to be committed separately
     m_pImpl->CommitCurrentSchemeName();
-    return sal_True;
+    return true;
 }
 
 // Changes the name of the current scheme but doesn't load it!
@@ -671,12 +671,12 @@ void EditableExtendedColorConfig::SetColorValue(
 {
     m_pImpl->SetColorConfigValue(_sName, rValue);
     m_pImpl->ClearModified();
-    m_bModified = sal_True;
+    m_bModified = true;
 }
 
 void EditableExtendedColorConfig::SetModified()
 {
-    m_bModified = sal_True;
+    m_bModified = true;
 }
 
 void EditableExtendedColorConfig::Commit()
@@ -685,7 +685,7 @@ void EditableExtendedColorConfig::Commit()
         m_pImpl->SetModified();
     if(m_pImpl->IsModified())
         m_pImpl->Commit();
-    m_bModified = sal_False;
+    m_bModified = false;
 }
 
 void EditableExtendedColorConfig::DisableBroadcast()

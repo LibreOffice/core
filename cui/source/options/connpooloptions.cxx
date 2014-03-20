@@ -72,9 +72,9 @@ namespace offapp
         virtual void PaintCell( OutputDevice& rDev, const Rectangle& rRect, sal_uInt16 nColId ) const;
 
         virtual bool SeekRow( long nRow );
-        virtual sal_Bool SaveModified();
+        virtual bool SaveModified();
 
-        virtual sal_Bool IsTabAllowed(sal_Bool _bForward) const;
+        virtual bool IsTabAllowed(bool _bForward) const;
 
         virtual void StateChanged( StateChangedType nStateChange );
 
@@ -106,10 +106,10 @@ namespace offapp
     }
 
 
-    sal_Bool DriverListControl::IsTabAllowed(sal_Bool /*_bForward*/) const
+    bool DriverListControl::IsTabAllowed(bool /*_bForward*/) const
     {
-        // no travinling within the fields via RETURN and TAB
-        return sal_False;
+        // no travelling within the fields via RETURN and TAB
+        return false;
     }
 
 
@@ -268,9 +268,9 @@ namespace offapp
     }
 
 
-    sal_Bool DriverListControl::SaveModified()
+    bool DriverListControl::SaveModified()
     {
-        return sal_True;
+        return true;
     }
 
 

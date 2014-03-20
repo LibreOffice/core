@@ -267,7 +267,7 @@ struct ErrorResource_Impl : private Resource
 };
 
 
-sal_Bool SfxErrorHandler::GetClassString(sal_uLong lClassId, OUString &rStr) const
+bool SfxErrorHandler::GetClassString(sal_uLong lClassId, OUString &rStr) const
 
 /*  [Description]
 
@@ -277,7 +277,7 @@ sal_Bool SfxErrorHandler::GetClassString(sal_uLong lClassId, OUString &rStr) con
     */
 
 {
-    sal_Bool bRet = sal_False;
+    bool bRet = false;
     ResMgr* pResMgr = ResMgr::CreateResMgr("ofa", Application::GetSettings().GetUILanguageTag() );
     if( pResMgr )
     {
@@ -286,7 +286,7 @@ sal_Bool SfxErrorHandler::GetClassString(sal_uLong lClassId, OUString &rStr) con
         if(aEr)
         {
             rStr=((ResString)aEr).GetString();
-            bRet = sal_True;
+            bRet = true;
         }
     }
     delete pResMgr;
@@ -295,7 +295,7 @@ sal_Bool SfxErrorHandler::GetClassString(sal_uLong lClassId, OUString &rStr) con
 
 
 
-sal_Bool SfxErrorHandler::GetMessageString(
+bool SfxErrorHandler::GetMessageString(
     sal_uLong lErrId, OUString &rStr, sal_uInt16 &nFlags) const
 
 /*  [Description]
@@ -305,7 +305,7 @@ sal_Bool SfxErrorHandler::GetMessageString(
     */
 
 {
-    sal_Bool bRet = sal_False;
+    bool bRet = false;
     ResId *pResId= new ResId(nId, *pMgr);
 
     ErrorResource_Impl aEr(*pResId, (sal_uInt16)lErrId);
@@ -316,7 +316,7 @@ sal_Bool SfxErrorHandler::GetMessageString(
         if( nResFlags )
             nFlags=aErrorString.GetFlags();
         rStr = aErrorString.GetString();
-        bRet = sal_True;
+        bRet = true;
     }
 
     delete pResId;
@@ -325,7 +325,7 @@ sal_Bool SfxErrorHandler::GetMessageString(
 
 
 
-sal_Bool SfxErrorHandler::GetErrorString(
+bool SfxErrorHandler::GetErrorString(
     sal_uLong lErrId, OUString &rStr, sal_uInt16 &nFlags) const
 
 /*  [Description]
@@ -338,8 +338,8 @@ sal_Bool SfxErrorHandler::GetErrorString(
 {
     SolarMutexGuard aGuard;
 
-    sal_Bool bRet = sal_False;
-    rStr=SvtResId(RID_ERRHDL_CLASS).toString();
+    bool bRet = false;
+    rStr = SvtResId(RID_ERRHDL_CLASS).toString();
     ResId aResId(nId, *pMgr);
 
     {
@@ -352,10 +352,10 @@ sal_Bool SfxErrorHandler::GetErrorString(
             if ( nResFlags )
                 nFlags = nResFlags;
             rStr = rStr.replaceAll(OUString("$(ERROR)"), aErrorString.GetString());
-            bRet = sal_True;
+            bRet = true;
         }
         else
-            bRet = sal_False;
+            bRet = false;
     }
 
     if( bRet )

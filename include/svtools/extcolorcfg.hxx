@@ -27,9 +27,10 @@
 #include <svl/lstner.hxx>
 
 
-namespace svtools{
+namespace svtools {
 
 class ExtendedColorConfig_Impl;
+
 class ExtendedColorConfigValue
 {
     OUString m_sName;
@@ -48,14 +49,14 @@ public:
     ,m_nDefaultColor(_nDefaultColor)
     {}
 
-    inline OUString getName()         const { return m_sName; }
-    inline OUString getDisplayName()  const { return m_sDisplayName; }
+    inline OUString        getName()         const { return m_sName; }
+    inline OUString        getDisplayName()  const { return m_sDisplayName; }
     inline sal_Int32       getColor()        const { return m_nColor; }
     inline sal_Int32       getDefaultColor() const { return m_nDefaultColor; }
 
-    inline void setColor(sal_Int32 _nColor) { m_nColor = _nColor; }
+    inline void            setColor(sal_Int32 _nColor) { m_nColor = _nColor; }
 
-    sal_Bool operator !=(const ExtendedColorConfigValue& rCmp) const
+    bool operator !=(const ExtendedColorConfigValue& rCmp) const
         { return m_nColor != rCmp.m_nColor;}
 };
 
@@ -68,13 +69,13 @@ public:
     ExtendedColorConfig();
     ~ExtendedColorConfig();
 
-    virtual void        Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
+    virtual void                    Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
 
     // get the configured value
     ExtendedColorConfigValue        GetColorValue(const OUString& _sComponentName,const OUString& _sName)const;
     sal_Int32                       GetComponentCount() const;
-    OUString                 GetComponentName(sal_uInt32 _nPos) const;
-    OUString                 GetComponentDisplayName(const OUString& _sComponentName) const;
+    OUString                        GetComponentName(sal_uInt32 _nPos) const;
+    OUString                        GetComponentDisplayName(const OUString& _sComponentName) const;
     sal_Int32                       GetComponentColorCount(const OUString& _sName) const;
     ExtendedColorConfigValue        GetComponentColorConfigValue(const OUString& _sComponentName,sal_uInt32 _nPos) const;
 };
@@ -82,24 +83,24 @@ public:
 class SVT_DLLPUBLIC EditableExtendedColorConfig
 {
     ExtendedColorConfig_Impl*   m_pImpl;
-    sal_Bool            m_bModified;
+    bool                        m_bModified;
 public:
     EditableExtendedColorConfig();
     ~EditableExtendedColorConfig();
 
-    void                                                DeleteScheme(const OUString& rScheme );
-    void                                                AddScheme(const OUString& rScheme );
-    sal_Bool                                            LoadScheme(const OUString& rScheme );
+    void                        DeleteScheme(const OUString& rScheme );
+    void                        AddScheme(const OUString& rScheme );
+    bool                        LoadScheme(const OUString& rScheme );
     void                        SetCurrentSchemeName(const OUString& rScheme);
 
     sal_Int32                   GetComponentCount() const;
-    OUString             GetComponentName(sal_uInt32 _nPos) const;
+    OUString                    GetComponentName(sal_uInt32 _nPos) const;
     sal_Int32                   GetComponentColorCount(const OUString& _sName) const;
     ExtendedColorConfigValue    GetComponentColorConfigValue(const OUString& _sName,sal_uInt32 _nPos) const;
     void                        SetColorValue(const OUString& _sComponentName, const ExtendedColorConfigValue& rValue);
     void                        SetModified();
-    void                        ClearModified(){m_bModified = sal_False;}
-    sal_Bool                    IsModified()const{return m_bModified;}
+    void                        ClearModified() {m_bModified = false;}
+    bool                        IsModified() const {return m_bModified;}
     void                        Commit();
 
     void                        DisableBroadcast();

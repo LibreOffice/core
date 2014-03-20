@@ -916,14 +916,14 @@ void SbaGridControl::CursorMoved()
     FmGridControl::CursorMoved();
 }
 
-void SbaGridControl::ActivateCell(long nRow, sal_uInt16 nCol, sal_Bool bSetCellFocus /*= sal_True*/ )
+void SbaGridControl::ActivateCell(long nRow, sal_uInt16 nCol, bool bSetCellFocus /*= sal_True*/ )
 {
     FmGridControl::ActivateCell(nRow, nCol, bSetCellFocus);
     if (m_pMasterListener)
         m_pMasterListener->CellActivated();
 }
 
-void SbaGridControl::DeactivateCell(sal_Bool bUpdate /*= sal_True*/)
+void SbaGridControl::DeactivateCell(bool bUpdate /*= sal_True*/)
 {
     FmGridControl::DeactivateCell(bUpdate);
     if (m_pMasterListener)
@@ -1277,7 +1277,7 @@ sal_Int8 SbaGridControl::AcceptDrop( const BrowserAcceptDropEvent& rEvt )
             // no valid cell under the mouse cursor
             break;
 
-        Rectangle aRect = GetCellRect(nRow, nCol, sal_False);
+        Rectangle aRect = GetCellRect(nRow, nCol, false);
         if (!aRect.IsInside(rEvt.maPosPixel))
             // not dropped within a cell (a cell isn't as wide as the column - the are small spaces)
             break;

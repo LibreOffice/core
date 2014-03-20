@@ -242,8 +242,8 @@ namespace dbaui
 
         void SetMasterListener(SbaGridListener* pListener)  { m_pMasterListener = pListener; }
 
-        virtual void ActivateCell(long nRow, sal_uInt16 nCol, sal_Bool bSetCellFocus = sal_True);
-        virtual void DeactivateCell(sal_Bool bUpdate = sal_True);
+        virtual void ActivateCell(long nRow, sal_uInt16 nCol, bool bSetCellFocus = true);
+        virtual void DeactivateCell(bool bUpdate = true);
         void ActivateCell() { FmGridControl::ActivateCell(); }
 
         sal_Bool IsAllSelected() const { return (GetSelectRowCount() == GetRowCount()) && (GetRowCount() > 0); }
