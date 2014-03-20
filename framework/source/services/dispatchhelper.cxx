@@ -46,9 +46,7 @@ DEFINE_INIT_SERVICE( DispatchHelper, {} )
     @param xSMGR    the global uno service manager, which can be used to create own needed services.
 */
 DispatchHelper::DispatchHelper( const css::uno::Reference< css::uno::XComponentContext >& xContext )
-        :   ThreadHelpBase(     )
-        // Init member
-        ,   m_xContext    (xContext)
+        :   m_xContext    (xContext)
 {
 }
 
@@ -102,9 +100,9 @@ css::uno::Any SAL_CALL DispatchHelper::executeDispatch(
 
     // parse given URL
     /* SAFE { */
-    Guard aReadLock(m_aLock);
+    osl::ClearableMutexGuard aReadLock(m_mutex);
     css::uno::Reference< css::util::XURLTransformer > xParser = css::util::URLTransformer::create(m_xContext);
-    aReadLock.unlock();
+    aReadLock.clear();
     /* } SAFE */
 
     css::util::URL aURL;
@@ -129,11 +127,11 @@ css::uno::Any SAL_CALL DispatchHelper::executeDispatch(
         // Here we can hope for a result ... instead of the normal dispatch.
         css::uno::Reference< css::frame::XDispatchResultListener > xListener(xTHIS, css::uno::UNO_QUERY);
         /* SAFE { */
-        Guard aWriteLock(m_aLock);
+        osl::ClearableMutexGuard aWriteLock(m_mutex);
         m_xBroadcaster = css::uno::Reference< css::uno::XInterface >(xNotifyDispatch, css::uno::UNO_QUERY);
         m_aResult      = css::uno::Any();
         m_aBlock.reset();
-        aWriteLock.unlock();
+        aWriteLock.clear();
         /* } SAFE */
 
         // dispatch it and wait for a notification
@@ -164,14 +162,10 @@ css::uno::Any SAL_CALL DispatchHelper::executeDispatch(
 void SAL_CALL DispatchHelper::dispatchFinished( const css::frame::DispatchResultEvent& aResult )
     throw(css::uno::RuntimeException, std::exception)
 {
-    /* SAFE { */
-    Guard aWriteLock(m_aLock);
-
+    osl::MutexGuard g(m_mutex);
     m_aResult <<= aResult;
     m_aBlock.set();
     m_xBroadcaster.clear();
-
-    /* } SAFE */
 }
 
 
@@ -184,14 +178,10 @@ void SAL_CALL DispatchHelper::dispatchFinished( const css::frame::DispatchResult
 void SAL_CALL DispatchHelper::disposing( const css::lang::EventObject& )
     throw(css::uno::RuntimeException, std::exception)
 {
-    /* SAFE { */
-    Guard aWriteLock(m_aLock);
-
+    osl::MutexGuard g(m_mutex);
     m_aResult.clear();
     m_aBlock.set();
     m_xBroadcaster.clear();
-
-    /* } SAFE */
 }
 
 }

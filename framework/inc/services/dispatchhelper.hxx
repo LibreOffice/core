@@ -20,7 +20,6 @@
 #ifndef INCLUDED_FRAMEWORK_INC_SERVICES_DISPATCHHELPER_HXX
 #define INCLUDED_FRAMEWORK_INC_SERVICES_DISPATCHHELPER_HXX
 
-#include <threadhelp/threadhelpbase.hxx>
 #include <macros/generic.hxx>
 #include <macros/xinterface.hxx>
 #include <macros/xtypeprovider.hxx>
@@ -46,14 +45,15 @@ namespace framework{
                 All these steps are done inside one method call here.
 */
 
-class DispatchHelper : public ThreadHelpBase                      // must be the first base class!
-                      ,public ::cppu::WeakImplHelper3< ::com::sun::star::lang::XServiceInfo,::com::sun::star::frame::XDispatchHelper,::com::sun::star::frame::XDispatchResultListener >
+class DispatchHelper : public ::cppu::WeakImplHelper3< ::com::sun::star::lang::XServiceInfo,::com::sun::star::frame::XDispatchHelper,::com::sun::star::frame::XDispatchResultListener >
 {
 
 
     // member
 
     private:
+
+        osl::Mutex m_mutex;
 
         /** global uno service manager.
             Can be used to create own needed services. */
