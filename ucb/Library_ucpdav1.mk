@@ -84,6 +84,7 @@ $(eval $(call gb_Library_add_exception_objects,ucpdav1,\
 	ucb/source/ucp/webdav/SerfGetReqProcImpl \
 	ucb/source/ucp/webdav/SerfHeadReqProcImpl \
 	ucb/source/ucp/webdav/SerfInputStream \
+	ucb/source/ucp/webdav/SerfLockReqProcImpl \
 	ucb/source/ucp/webdav/SerfMkColReqProcImpl \
 	ucb/source/ucp/webdav/SerfMoveReqProcImpl \
 	ucb/source/ucp/webdav/SerfPostReqProcImpl \
