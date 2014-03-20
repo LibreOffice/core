@@ -62,7 +62,6 @@ QuartzSalBitmap::QuartzSalBitmap()
 , mnWidth(0)
 , mnHeight(0)
 , mnBytesPerRow(0)
-, maExternalData(NULL)
 {
 }
 
@@ -107,77 +106,6 @@ bool QuartzSalBitmap::Create( CGLayerRef xLayer, int nBitmapBits,
         CGContextDrawLayerAtPoint( mxGraphicContext, aSrcPoint, xLayer );
     return true;
 }
-
-
-
-bool QuartzSalBitmap::Create( CGImageRef xImage, int nBitmapBits,
-                             int nX, int nY, int nWidth, int nHeight )
-{
-    DBG_ASSERT( xImage, "QuartzSalBitmap::Create() from null image" );
-
-    // sanitize input parameters
-    if( nX < 0 )
-        nWidth += nX, nX = 0;
-    if( nY < 0 )
-        nHeight += nY, nY = 0;
-    const CGSize aLayerSize = CGSizeMake(CGImageGetWidth(xImage), CGImageGetHeight(xImage));
-    if( nWidth >= (int)aLayerSize.width - nX )
-        nWidth = (int)aLayerSize.width - nX;
-    if( nHeight >= (int)aLayerSize.height - nY )
-        nHeight = (int)aLayerSize.height - nY;
-    if( (nWidth < 0) || (nHeight < 0) )
-        nWidth = nHeight = 0;
-
-    // initialize properties
-    mnWidth  = nWidth;
-    mnHeight = nHeight;
-    mnBits   = nBitmapBits ? nBitmapBits : 32;
-
-    // initialize drawing context
-    CreateContext();
-
-    // copy layer content into the bitmap buffer
-    if(mxGraphicContext) // remove warning
-    {
-        // Flip the image right side up & draw
-        CGContextSaveGState(mxGraphicContext);
-
-        CGContextScaleCTM(mxGraphicContext, 1.0, -1.0);
-        CGContextTranslateCTM(mxGraphicContext, 0.0, -aLayerSize.height);
-
-        CGContextDrawImage( mxGraphicContext,
-                           CGRectMake(static_cast<CGFloat>(-nX),
-                                      static_cast<CGFloat>(nY),
-                                      aLayerSize.width,
-                                      aLayerSize.height),
-                           xImage );
-
-        // Restore the context so that the coordinate system is restored
-        CGContextRestoreGState(mxGraphicContext);
-
-    }
-
-
-    return true;
-}
-
-bool QuartzSalBitmap::Create( BitmapBuffer& buffer)
-{
-    // initialize properties
-    mnWidth  = buffer.mnWidth;
-    mnHeight = buffer.mnHeight;
-    mnBits   = buffer.mnBitCount;
-    mnBytesPerRow = buffer.mnScanlineSize;
-    maExternalData = buffer.mpBits;
-    maPalette = buffer.maPalette;
-
-    // initialize drawing context
-    CreateContext();
-
-    return true;
-}
-
-
 
 bool QuartzSalBitmap::Create( const Size& rSize, sal_uInt16 nBits, const BitmapPalette& rBitmapPalette )
 {
@@ -239,7 +167,6 @@ void QuartzSalBitmap::Destroy()
 {
     DestroyContext();
     maUserBuffer.reset();
-    maExternalData = NULL;
 }
 
 
@@ -265,7 +192,7 @@ bool QuartzSalBitmap::CreateContext()
 
     // prepare graphics context
     // convert image from user input if available
-    const bool bSkipConversion = !maUserBuffer && !maExternalData;
+    const bool bSkipConversion = !maUserBuffer;
     if( bSkipConversion )
         AllocateUserData();
 
@@ -282,11 +209,8 @@ bool QuartzSalBitmap::CreateContext()
     sal_uInt32 nContextBytesPerRow = mnBytesPerRow;
     if( (mnBits == 16) || (mnBits == 32) )
     {
-        if (!maExternalData)
-        {
-            // no conversion needed for truecolor
-            maContextBuffer = maUserBuffer;
-        }
+        // no conversion needed for truecolor
+        maContextBuffer = maUserBuffer;
     }
     else if( mnBits == 8
 #ifndef IOS
@@ -295,10 +219,7 @@ bool QuartzSalBitmap::CreateContext()
             )
     {
         // no conversion needed for grayscale
-        if (!maExternalData)
-        {
-            maContextBuffer = maUserBuffer;
-        }
+        maContextBuffer = maUserBuffer;
 #ifdef IOS
         aCGColorSpace = CGColorSpaceCreateDeviceGray();
 #else
@@ -327,12 +248,7 @@ bool QuartzSalBitmap::CreateContext()
         }
     }
 
-    if(maExternalData)
-    {
-        mxGraphicContext = ::CGBitmapContextCreate( maExternalData, mnWidth, mnHeight,
-                                                   bitsPerComponent, nContextBytesPerRow, aCGColorSpace, aCGBmpInfo );
-    }
-    else if( maContextBuffer.get() )
+    if( maContextBuffer.get() )
     {
         mxGraphicContext = ::CGBitmapContextCreate( maContextBuffer.get(), mnWidth, mnHeight,
             bitsPerComponent, nContextBytesPerRow, aCGColorSpace, aCGBmpInfo );

@@ -55,7 +55,6 @@ public:
     int                             mnWidth;
     int                             mnHeight;
     sal_uInt32                      mnBytesPerRow;
-    void*                           maExternalData;
 
 public:
     QuartzSalBitmap();
@@ -71,8 +70,6 @@ public:
     virtual bool    Create( const ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XBitmapCanvas > xBitmapCanvas,
                             Size& rSize,
                             bool bMask = false );
-    // creating quartz wrapper from existing buffer
-    bool            Create( BitmapBuffer& buffer);
 
     void            Destroy();
 
@@ -96,7 +93,6 @@ private:
 
 public:
     bool            Create( CGLayerRef xLayer, int nBitCount, int nX, int nY, int nWidth, int nHeight );
-    bool            Create( CGImageRef xImage, int nBitCount, int nX, int nY, int nWidth, int nHeight );
 
 public:
     CGImageRef      CreateWithMask( const QuartzSalBitmap& rMask, int nX, int nY, int nWidth, int nHeight ) const;
