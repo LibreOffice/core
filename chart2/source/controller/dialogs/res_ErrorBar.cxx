@@ -97,7 +97,7 @@ ErrorBarResources::ErrorBarResources( VclBuilderContainer* pParent, Dialog * pPa
         m_pParentDialog( pParentDialog ),
         m_pCurrentRangeChoosingField( 0 ),
         m_bHasInternalDataProvider( true ),
-        m_bDisableDataTableDialog( false )
+        m_bEnableDataTableDialog( true )
 {
         pParent->get(m_pRbNone,"RB_NONE");
         pParent->get(m_pRbConst, "RB_CONST");
@@ -181,7 +181,7 @@ void ErrorBarResources::SetChartDocumentForRangeChoosing(
         {
             try
             {
-                xProps->getPropertyValue( "DisableDataTableDialog" ) >>= m_bDisableDataTableDialog;
+                xProps->getPropertyValue("EnableDataTableDialog") >>= m_bEnableDataTableDialog;
             }
             catch( const uno::Exception& e )
             {
@@ -231,7 +231,7 @@ void ErrorBarResources::UpdateControlStates()
     m_pLbFunction->Enable( bIsFunction );
 
     // range buttons
-    m_pRbRange->Enable( !m_bHasInternalDataProvider || !m_bDisableDataTableDialog );
+    m_pRbRange->Enable( !m_bHasInternalDataProvider || m_bEnableDataTableDialog );
     bool bShowRange = ( m_pRbRange->IsChecked());
     bool bCanChooseRange =
         ( bShowRange &&

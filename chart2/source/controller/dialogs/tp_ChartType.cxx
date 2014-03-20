@@ -696,13 +696,13 @@ ChartTypeTabPage::ChartTypeTabPage(Window* pParent
     m_pSubTypeList->SetColCount(4);
     m_pSubTypeList->SetLineCount(1);
 
-    bool bDisableComplexChartTypes = false;
+    bool bEnableComplexChartTypes = true;
     uno::Reference< beans::XPropertySet > xProps( m_xChartModel, uno::UNO_QUERY );
     if ( xProps.is() )
     {
         try
         {
-            xProps->getPropertyValue( "DisableComplexChartTypes" ) >>= bDisableComplexChartTypes;
+            xProps->getPropertyValue("EnableComplexChartTypes") >>= bEnableComplexChartTypes;
         }
         catch( const uno::Exception& e )
         {
@@ -715,13 +715,13 @@ ChartTypeTabPage::ChartTypeTabPage(Window* pParent
     m_aChartTypeDialogControllerList.push_back(new PieChartDialogController() );
     m_aChartTypeDialogControllerList.push_back(new AreaChartDialogController() );
     m_aChartTypeDialogControllerList.push_back(new LineChartDialogController() );
-    if ( !bDisableComplexChartTypes )
+    if (bEnableComplexChartTypes)
     {
         m_aChartTypeDialogControllerList.push_back(new XYChartDialogController() );
         m_aChartTypeDialogControllerList.push_back(new BubbleChartDialogController() );
     }
     m_aChartTypeDialogControllerList.push_back(new NetChartDialogController() );
-    if ( !bDisableComplexChartTypes )
+    if (bEnableComplexChartTypes)
     {
         m_aChartTypeDialogControllerList.push_back(new StockChartDialogController() );
     }

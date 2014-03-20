@@ -149,8 +149,8 @@ enum
     PROP_DOCUMENT_ADDITIONAL_SHAPES,
     PROP_DOCUMENT_UPDATE_ADDIN,
     PROP_DOCUMENT_NULL_DATE,
-    PROP_DOCUMENT_DISABLE_COMPLEX_CHARTTYPES,
-    PROP_DOCUMENT_DISABLE_DATATABLE_DIALOG
+    PROP_DOCUMENT_ENABLE_COMPLEX_CHARTTYPES,
+    PROP_DOCUMENT_ENABLE_DATATABLE_DIALOG
 };
 
 void lcl_AddPropertiesToVector(
@@ -224,14 +224,14 @@ void lcl_AddPropertiesToVector(
                   beans::PropertyAttribute::MAYBEVOID ));
 
     rOutProperties.push_back(
-        Property( "DisableComplexChartTypes",
-                  PROP_DOCUMENT_DISABLE_COMPLEX_CHARTTYPES,
+        Property( "EnableComplexChartTypes",
+                  PROP_DOCUMENT_ENABLE_COMPLEX_CHARTTYPES,
                   ::getBooleanCppuType(),
                   //#i112666# no PropertyChangeEvent is fired on change so far
                   beans::PropertyAttribute::MAYBEDEFAULT ) );
     rOutProperties.push_back(
-        Property( "DisableDataTableDialog",
-                  PROP_DOCUMENT_DISABLE_DATATABLE_DIALOG,
+        Property( "EnableDataTableDialog",
+                  PROP_DOCUMENT_ENABLE_DATATABLE_DIALOG,
                   ::getBooleanCppuType(),
                   //#i112666# no PropertyChangeEvent is fired on change so far
                   beans::PropertyAttribute::MAYBEDEFAULT ) );
@@ -1531,8 +1531,8 @@ const std::vector< WrappedProperty* > ChartDocumentWrapper::createWrappedPropert
     aWrappedProperties.push_back( new WrappedAdditionalShapesProperty( *this ) );
     aWrappedProperties.push_back( new WrappedRefreshAddInAllowedProperty( *this ) );
     aWrappedProperties.push_back( new WrappedIgnoreProperty("NullDate",Any() ) ); // i99104
-    aWrappedProperties.push_back( new WrappedIgnoreProperty("DisableComplexChartTypes", uno::makeAny( sal_False ) ) );
-    aWrappedProperties.push_back( new WrappedIgnoreProperty("DisableDataTableDialog", uno::makeAny( sal_False ) ) );
+    aWrappedProperties.push_back( new WrappedIgnoreProperty("EnableComplexChartTypes", uno::makeAny(sal_True) ) );
+    aWrappedProperties.push_back( new WrappedIgnoreProperty("EnableDataTableDialog", uno::makeAny(sal_True) ) );
 
     return aWrappedProperties;
 }

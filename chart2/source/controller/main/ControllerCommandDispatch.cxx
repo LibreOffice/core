@@ -538,7 +538,7 @@ void ControllerCommandDispatch::updateCommandAvailability()
         {
             try
             {
-                xProps->getPropertyValue(  "DisableDataTableDialog" ) >>= bDisableDataTableDialog;
+                xProps->getPropertyValue(  "EnableDataTableDialog" ) >>= bDisableDataTableDialog;
             }
             catch( const uno::Exception& e )
             {
