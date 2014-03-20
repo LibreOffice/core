@@ -229,48 +229,6 @@ void SAL_CALL ConfigData::replaceName( OUString& oustring ) const
     }
 }
 
-// XInterface
-
-void SAL_CALL
-TVBase::acquire(
-    void )
-    throw()
-{
-  OWeakObject::acquire();
-}
-
-void SAL_CALL
-TVBase::release(
-              void )
-  throw()
-{
-  OWeakObject::release();
-}
-
-Any SAL_CALL
-TVBase::queryInterface(
-    const Type& rType )
-    throw( RuntimeException, std::exception )
-{
-    Any aRet = cppu::queryInterface( rType,
-                                     (static_cast< XTypeProvider* >(this)),
-                                     (static_cast< XNameAccess* >(this)),
-                                     (static_cast< XHierarchicalNameAccess* >(this)),
-                                     (static_cast< XChangesNotifier* >(this)),
-                                     (static_cast< XComponent* >(this)) );
-
-    return aRet.hasValue() ? aRet : OWeakObject::queryInterface( rType );
-}
-
-// XTypeProvider methods.
-
-XTYPEPROVIDER_IMPL_5( TVBase,
-                         XTypeProvider,
-                      XNameAccess,
-                      XHierarchicalNameAccess,
-                      XChangesNotifier,
-                      XComponent );
-
 // TVRead
 
 TVRead::TVRead( const ConfigData& configData,TVDom* tvDom )

@@ -35,6 +35,7 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/deployment/XPackage.hpp>
 #include <com/sun/star/ucb/XSimpleFileAccess3.hpp>
+#include <cppuhelper/implbase4.hxx>
 
 namespace treeview {
 
@@ -60,39 +61,17 @@ namespace treeview {
     class TVDom;
     class TVChildTarget;
 
-    class TVBase
-        : public cppu::OWeakObject,
-          public com::sun::star::lang::XTypeProvider,
-          public com::sun::star::container::XNameAccess,
-          public com::sun::star::container::XHierarchicalNameAccess,
-          public com::sun::star::util::XChangesNotifier,
-          public com::sun::star::lang::XComponent
+    class TVBase : public cppu::WeakImplHelper4 <
+        css::container::XNameAccess,
+        css::container::XHierarchicalNameAccess,
+        css::util::XChangesNotifier,
+        css::lang::XComponent >
     {
         friend class TVChildTarget;
 
     public:
 
         virtual ~TVBase() { }
-
-        // XInterface
-        virtual com::sun::star::uno::Any SAL_CALL
-        queryInterface(
-            const com::sun::star::uno::Type& aType )
-            throw( com::sun::star::uno::RuntimeException, std::exception);
-
-        virtual void SAL_CALL
-        acquire(
-            void )
-            throw();
-
-        virtual void SAL_CALL
-        release(
-            void )
-            throw();
-
-        // XTypeProvider
-
-        XTYPEPROVIDER_DECL()
 
         // XNameAccess
 
