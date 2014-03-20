@@ -537,97 +537,97 @@ void DocxSdrExport::writeVMLDrawing(const SdrObject* sdrObj, const SwFrmFmt& rFr
 void DocxSdrExport::writeDMLDrawing(const SdrObject* pSdrObject, const SwFrmFmt* pFrmFmt, int nAnchorId)
 {
     uno::Reference<drawing::XShape> xShape(const_cast<SdrObject*>(pSdrObject)->getUnoShape(), uno::UNO_QUERY_THROW);
-    if (m_pImpl->isSupportedDMLShape(xShape))
+    if (!m_pImpl->isSupportedDMLShape(xShape))
+        return;
+
+    sax_fastparser::FSHelperPtr pFS = m_pImpl->m_pSerializer;
+    Size aSize(pSdrObject->GetLogicRect().GetWidth(), pSdrObject->GetLogicRect().GetHeight());
+    startDMLAnchorInline(pFrmFmt, aSize);
+
+    sax_fastparser::FastAttributeList* pDocPrAttrList = pFS->createAttrList();
+    pDocPrAttrList->add(XML_id, OString::number(nAnchorId).getStr());
+    pDocPrAttrList->add(XML_name, OUStringToOString(pSdrObject->GetName(), RTL_TEXTENCODING_UTF8));
+    if (!pSdrObject->GetTitle().isEmpty())
+        pDocPrAttrList->add(XML_title, OUStringToOString(pSdrObject->GetTitle(), RTL_TEXTENCODING_UTF8));
+    if (!pSdrObject->GetDescription().isEmpty())
+        pDocPrAttrList->add(XML_descr, OUStringToOString(pSdrObject->GetDescription(), RTL_TEXTENCODING_UTF8));
+    sax_fastparser::XFastAttributeListRef xDocPrAttrListRef(pDocPrAttrList);
+    pFS->singleElementNS(XML_wp, XML_docPr, xDocPrAttrListRef);
+
+    uno::Reference<lang::XServiceInfo> xServiceInfo(xShape, uno::UNO_QUERY_THROW);
+    uno::Reference< beans::XPropertySet > xPropertySet(xShape, uno::UNO_QUERY);
+    uno::Reference< beans::XPropertySetInfo > xPropSetInfo;
+    if (xPropertySet.is())
+        xPropSetInfo = xPropertySet->getPropertySetInfo();
+
+    bool bLockedCanvas = false;
+    if (xPropSetInfo.is() && xPropSetInfo->hasPropertyByName("InteropGrabBag"))
     {
-        sax_fastparser::FSHelperPtr pFS = m_pImpl->m_pSerializer;
-        Size aSize(pSdrObject->GetLogicRect().GetWidth(), pSdrObject->GetLogicRect().GetHeight());
-        startDMLAnchorInline(pFrmFmt, aSize);
-
-        sax_fastparser::FastAttributeList* pDocPrAttrList = pFS->createAttrList();
-        pDocPrAttrList->add(XML_id, OString::number(nAnchorId).getStr());
-        pDocPrAttrList->add(XML_name, OUStringToOString(pSdrObject->GetName(), RTL_TEXTENCODING_UTF8));
-        if (!pSdrObject->GetTitle().isEmpty())
-            pDocPrAttrList->add(XML_title, OUStringToOString(pSdrObject->GetTitle(), RTL_TEXTENCODING_UTF8));
-        if (!pSdrObject->GetDescription().isEmpty())
-            pDocPrAttrList->add(XML_descr, OUStringToOString(pSdrObject->GetDescription(), RTL_TEXTENCODING_UTF8));
-        sax_fastparser::XFastAttributeListRef xDocPrAttrListRef(pDocPrAttrList);
-        pFS->singleElementNS(XML_wp, XML_docPr, xDocPrAttrListRef);
-
-        uno::Reference<lang::XServiceInfo> xServiceInfo(xShape, uno::UNO_QUERY_THROW);
-        uno::Reference< beans::XPropertySet > xPropertySet(xShape, uno::UNO_QUERY);
-        uno::Reference< beans::XPropertySetInfo > xPropSetInfo;
-        if (xPropertySet.is())
-            xPropSetInfo = xPropertySet->getPropertySetInfo();
-
-        bool bLockedCanvas = false;
-        if (xPropSetInfo.is() && xPropSetInfo->hasPropertyByName("InteropGrabBag"))
+        uno::Sequence< beans::PropertyValue > propList;
+        xPropertySet->getPropertyValue("InteropGrabBag") >>= propList;
+        for (sal_Int32 nProp=0; nProp < propList.getLength(); ++nProp)
         {
-            uno::Sequence< beans::PropertyValue > propList;
-            xPropertySet->getPropertyValue("InteropGrabBag") >>= propList;
-            for (sal_Int32 nProp=0; nProp < propList.getLength(); ++nProp)
+            OUString propName = propList[nProp].Name;
+            if (propName == "LockedCanvas")
             {
-                OUString propName = propList[nProp].Name;
-                if (propName == "LockedCanvas")
-                {
-                    /*
-                     * Export as Locked Canvas only if the drawing
-                     * was originally a Locked Canvas and is now inside a Text Frame.
-                     */
+                /*
+                 * Export as Locked Canvas only if the drawing
+                 * was originally a Locked Canvas and is now inside a Text Frame.
+                 */
 
-                    bLockedCanvas = m_pImpl->m_bIsInDMLTextFrame;
-                    break;
-                }
+                bLockedCanvas = m_pImpl->m_bIsInDMLTextFrame;
+                break;
             }
         }
-        const char* pNamespace = "http://schemas.microsoft.com/office/word/2010/wordprocessingShape";
-        if (xServiceInfo->supportsService("com.sun.star.drawing.GroupShape"))
-            pNamespace = "http://schemas.microsoft.com/office/word/2010/wordprocessingGroup";
-        else if (xServiceInfo->supportsService("com.sun.star.drawing.GraphicObjectShape"))
-            pNamespace = "http://schemas.openxmlformats.org/drawingml/2006/picture";
-        pFS->startElementNS(XML_a, XML_graphic,
-                            FSNS(XML_xmlns, XML_a), "http://schemas.openxmlformats.org/drawingml/2006/main",
-                            FSEND);
-        pFS->startElementNS(XML_a, XML_graphicData,
-                            XML_uri, pNamespace,
-                            FSEND);
-
-        if (bLockedCanvas)
-            pFS->startElementNS(XML_lc, XML_lockedCanvas,
-                                FSNS(XML_xmlns, XML_lc), "http://schemas.openxmlformats.org/drawingml/2006/lockedCanvas",
-                                FSEND);
-
-        m_pImpl->m_rExport.OutputDML(xShape);
-
-        if (bLockedCanvas)
-            pFS->endElementNS(XML_lc, XML_lockedCanvas);
-        pFS->endElementNS(XML_a, XML_graphicData);
-        pFS->endElementNS(XML_a, XML_graphic);
-
-        // Relative size of the drawing.
-        if (pSdrObject->GetRelativeWidth())
-        {
-            // At the moment drawinglayer objects are always relative from page.
-            pFS->startElementNS(XML_wp14, XML_sizeRelH,
-                                XML_relativeFrom, (pSdrObject->GetRelativeWidthRelation() == text::RelOrientation::FRAME ? "margin" : "page"),
-                                FSEND);
-            pFS->startElementNS(XML_wp14, XML_pctWidth, FSEND);
-            pFS->writeEscaped(OUString::number(*pSdrObject->GetRelativeWidth() * 100 * oox::drawingml::PER_PERCENT));
-            pFS->endElementNS(XML_wp14, XML_pctWidth);
-            pFS->endElementNS(XML_wp14, XML_sizeRelH);
-        }
-        if (pSdrObject->GetRelativeHeight())
-        {
-            pFS->startElementNS(XML_wp14, XML_sizeRelV,
-                                XML_relativeFrom, (pSdrObject->GetRelativeHeightRelation() == text::RelOrientation::FRAME ? "margin" : "page"),
-                                FSEND);
-            pFS->startElementNS(XML_wp14, XML_pctHeight, FSEND);
-            pFS->writeEscaped(OUString::number(*pSdrObject->GetRelativeHeight() * 100 * oox::drawingml::PER_PERCENT));
-            pFS->endElementNS(XML_wp14, XML_pctHeight);
-            pFS->endElementNS(XML_wp14, XML_sizeRelV);
-        }
-
-        endDMLAnchorInline(pFrmFmt);
     }
+    const char* pNamespace = "http://schemas.microsoft.com/office/word/2010/wordprocessingShape";
+    if (xServiceInfo->supportsService("com.sun.star.drawing.GroupShape"))
+        pNamespace = "http://schemas.microsoft.com/office/word/2010/wordprocessingGroup";
+    else if (xServiceInfo->supportsService("com.sun.star.drawing.GraphicObjectShape"))
+        pNamespace = "http://schemas.openxmlformats.org/drawingml/2006/picture";
+    pFS->startElementNS(XML_a, XML_graphic,
+                        FSNS(XML_xmlns, XML_a), "http://schemas.openxmlformats.org/drawingml/2006/main",
+                        FSEND);
+    pFS->startElementNS(XML_a, XML_graphicData,
+                        XML_uri, pNamespace,
+                        FSEND);
+
+    if (bLockedCanvas)
+        pFS->startElementNS(XML_lc, XML_lockedCanvas,
+                            FSNS(XML_xmlns, XML_lc), "http://schemas.openxmlformats.org/drawingml/2006/lockedCanvas",
+                            FSEND);
+
+    m_pImpl->m_rExport.OutputDML(xShape);
+
+    if (bLockedCanvas)
+        pFS->endElementNS(XML_lc, XML_lockedCanvas);
+    pFS->endElementNS(XML_a, XML_graphicData);
+    pFS->endElementNS(XML_a, XML_graphic);
+
+    // Relative size of the drawing.
+    if (pSdrObject->GetRelativeWidth())
+    {
+        // At the moment drawinglayer objects are always relative from page.
+        pFS->startElementNS(XML_wp14, XML_sizeRelH,
+                            XML_relativeFrom, (pSdrObject->GetRelativeWidthRelation() == text::RelOrientation::FRAME ? "margin" : "page"),
+                            FSEND);
+        pFS->startElementNS(XML_wp14, XML_pctWidth, FSEND);
+        pFS->writeEscaped(OUString::number(*pSdrObject->GetRelativeWidth() * 100 * oox::drawingml::PER_PERCENT));
+        pFS->endElementNS(XML_wp14, XML_pctWidth);
+        pFS->endElementNS(XML_wp14, XML_sizeRelH);
+    }
+    if (pSdrObject->GetRelativeHeight())
+    {
+        pFS->startElementNS(XML_wp14, XML_sizeRelV,
+                            XML_relativeFrom, (pSdrObject->GetRelativeHeightRelation() == text::RelOrientation::FRAME ? "margin" : "page"),
+                            FSEND);
+        pFS->startElementNS(XML_wp14, XML_pctHeight, FSEND);
+        pFS->writeEscaped(OUString::number(*pSdrObject->GetRelativeHeight() * 100 * oox::drawingml::PER_PERCENT));
+        pFS->endElementNS(XML_wp14, XML_pctHeight);
+        pFS->endElementNS(XML_wp14, XML_sizeRelV);
+    }
+
+    endDMLAnchorInline(pFrmFmt);
 }
 
 void DocxSdrExport::Impl::textFrameShadow(const SwFrmFmt& rFrmFmt)
