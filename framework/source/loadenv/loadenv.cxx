@@ -23,7 +23,6 @@
 #include <framework/framelistanalyzer.hxx>
 
 #include <interaction/quietinteraction.hxx>
-#include <threadhelp/guard.hxx>
 #include <properties.h>
 #include <protocols.h>
 #include <services.h>
@@ -132,8 +131,7 @@ class LoadEnvListener : public ::cppu::WeakImplHelper2< css::frame::XLoadEventLi
 
 LoadEnv::LoadEnv(const css::uno::Reference< css::uno::XComponentContext >& xContext)
     throw(LoadEnvException, css::uno::RuntimeException)
-    : ThreadHelpBase(     )
-    , m_xContext    (xContext)
+    : m_xContext    (xContext)
     , m_pQuietInteraction( 0 )
 {
 }
@@ -232,8 +230,7 @@ void LoadEnv::initializeLoading(const OUString&                                 
                                       EFeature                                                   eFeature        , // => use default ...
                                       EContentType                                               eContentType    ) // => use default ...
 {
-    // SAFE -> ----------------------------------
-    Guard aWriteLock(m_aLock);
+    osl::MutexGuard g(m_mutex);
 
     // Handle still running processes!
     if (m_xAsynchronousJob.is())
@@ -300,9 +297,6 @@ void LoadEnv::initializeLoading(const OUString&                                 
         bUIMode,
         &m_pQuietInteraction
     );
-
-    aWriteLock.unlock();
-    // <- SAFE ----------------------------------
 }
 
 
@@ -358,7 +352,7 @@ void LoadEnv::initializeUIDefaults( const css::uno::Reference< css::uno::XCompon
 void LoadEnv::startLoading()
 {
     // SAFE ->
-    Guard aReadLock(m_aLock);
+    osl::ClearableMutexGuard aReadLock(m_mutex);
 
     // Handle still running processes!
     if (m_xAsynchronousJob.is())
@@ -370,7 +364,7 @@ void LoadEnv::startLoading()
         throw LoadEnvException(LoadEnvException::ID_UNSUPPORTED_CONTENT, "from LoadEnv::startLoading");
 
     // <- SAFE
-    aReadLock.unlock();
+    aReadLock.clear();
 
     // detect its type/filter etc.
     // These information will be available by the
@@ -420,10 +414,10 @@ sal_Bool LoadEnv::waitWhileLoading(sal_uInt32 nTimeout)
     while(true)
     {
         // SAFE -> ------------------------------
-        Guard aReadLock1(m_aLock);
+        osl::ClearableMutexGuard aReadLock1(m_mutex);
         if (!m_xAsynchronousJob.is())
             break;
-        aReadLock1.unlock();
+        aReadLock1.clear();
         // <- SAFE ------------------------------
 
         Application::Yield();
@@ -438,16 +432,13 @@ sal_Bool LoadEnv::waitWhileLoading(sal_uInt32 nTimeout)
             break;
     }
 
-    // SAFE -> ----------------------------------
-    Guard aReadLock2(m_aLock);
+    osl::MutexGuard g(m_mutex);
     return !m_xAsynchronousJob.is();
-    // <- SAFE ----------------------------------
 }
 
 css::uno::Reference< css::lang::XComponent > LoadEnv::getTargetComponent() const
 {
-    // SAFE ->
-    Guard aReadLock(m_aLock);
+    osl::MutexGuard g(m_mutex);
 
     if (!m_xTargetFrame.is())
         return css::uno::Reference< css::lang::XComponent >();
@@ -461,7 +452,6 @@ css::uno::Reference< css::lang::XComponent > LoadEnv::getTargetComponent() const
         return css::uno::Reference< css::lang::XComponent >(xController, css::uno::UNO_QUERY);
 
     return css::uno::Reference< css::lang::XComponent >(xModel, css::uno::UNO_QUERY);
-    // <- SAFE
 }
 
 
@@ -523,8 +513,7 @@ void SAL_CALL LoadEnvListener::disposing(const css::lang::EventObject&)
 
 void LoadEnv::impl_setResult(sal_Bool bResult)
 {
-    // SAFE -> ----------------------------------
-    Guard aWriteLock(m_aLock);
+    osl::MutexGuard g(m_mutex);
 
     m_bLoaded = bResult;
 
@@ -534,9 +523,6 @@ void LoadEnv::impl_setResult(sal_Bool bResult)
     // So we must be sure, that loading process was really finished.
     // => do it as last operation of this method ...
     m_xAsynchronousJob.clear();
-
-    aWriteLock.unlock();
-    // <- SAFE ----------------------------------
 }
 
 /*-----------------------------------------------
@@ -776,7 +762,7 @@ void LoadEnv::impl_detectTypeAndFilter()
     static sal_Int32       FILTERFLAG_TEMPLATEPATH  = 16;
 
     // SAFE ->
-    Guard aReadLock(m_aLock);
+    osl::ClearableMutexGuard aReadLock(m_mutex);
 
     // Attention: Because our stl media descriptor is a copy of an uno sequence
     // we can't use as an in/out parameter here. Copy it before and don't forget to
@@ -784,7 +770,7 @@ void LoadEnv::impl_detectTypeAndFilter()
     css::uno::Sequence< css::beans::PropertyValue >        lDescriptor = m_lMediaDescriptor.getAsConstPropertyValueList();
     css::uno::Reference< css::uno::XComponentContext >     xContext = m_xContext;
 
-    aReadLock.unlock();
+    aReadLock.clear();
     // <- SAFE
 
     OUString sType, sFilter;
@@ -811,7 +797,7 @@ void LoadEnv::impl_detectTypeAndFilter()
             LoadEnvException::ID_UNSUPPORTED_CONTENT, "type detection failed");
 
     // SAFE ->
-    Guard aWriteLock(m_aLock);
+    osl::ResettableMutexGuard aWriteLock(m_mutex);
 
     // detection was successfully => update the descriptor member of this class
     m_lMediaDescriptor << lDescriptor;
@@ -820,7 +806,7 @@ void LoadEnv::impl_detectTypeAndFilter()
     // see below ...
     sFilter = m_lMediaDescriptor.getUnpackedValueOrDefault(utl::MediaDescriptor::PROP_FILTERNAME(), OUString());
 
-    aWriteLock.unlock();
+    aWriteLock.clear();
     // <- SAFE
 
     // But the type isn't enough. For loading sometimes we need more information.
@@ -842,9 +828,9 @@ void LoadEnv::impl_detectTypeAndFilter()
             if (!sFilter.isEmpty())
             {
                 // SAFE ->
-                aWriteLock.lock();
+                aWriteLock.reset();
                 m_lMediaDescriptor[utl::MediaDescriptor::PROP_FILTERNAME()] <<= sFilter;
-                aWriteLock.unlock();
+                aWriteLock.clear();
                 // <- SAFE
             }
         }
@@ -876,12 +862,12 @@ void LoadEnv::impl_detectTypeAndFilter()
     if (bIsOwnTemplate)
     {
         // SAFE ->
-        aWriteLock.lock();
+        aWriteLock.reset();
         // Don't overwrite external decisions! See comments before ...
         utl::MediaDescriptor::const_iterator pAsTemplateItem = m_lMediaDescriptor.find(utl::MediaDescriptor::PROP_ASTEMPLATE());
         if (pAsTemplateItem == m_lMediaDescriptor.end())
             m_lMediaDescriptor[utl::MediaDescriptor::PROP_ASTEMPLATE()] <<= sal_True;
-        aWriteLock.unlock();
+        aWriteLock.clear();
         // <- SAFE
     }
 }
@@ -891,7 +877,7 @@ sal_Bool LoadEnv::impl_handleContent()
     throw(LoadEnvException, css::uno::RuntimeException)
 {
     // SAFE -> -----------------------------------
-    Guard aReadLock(m_aLock);
+    osl::ClearableMutexGuard aReadLock(m_mutex);
 
     // the type must exist inside the descriptor ... otherwise this class is implemented wrong :-)
     OUString sType = m_lMediaDescriptor.getUnpackedValueOrDefault(utl::MediaDescriptor::PROP_TYPENAME(), OUString());
@@ -906,7 +892,7 @@ sal_Bool LoadEnv::impl_handleContent()
     // get necessary container to query for a handler object
     css::uno::Reference< css::frame::XLoaderFactory > xLoaderFactory = css::frame::ContentHandlerFactory::create(m_xContext);
 
-    aReadLock.unlock();
+    aReadLock.clear();
     // <- SAFE -----------------------------------
 
     // query
@@ -938,10 +924,10 @@ sal_Bool LoadEnv::impl_handleContent()
             { continue; }
 
         // SAFE -> -----------------------------------
-        Guard aWriteLock(m_aLock);
+        osl::ClearableMutexGuard aWriteLock(m_mutex);
         m_xAsynchronousJob = xHandler;
         LoadEnvListener* pListener = new LoadEnvListener(this);
-        aWriteLock.unlock();
+        aWriteLock.clear();
         // <- SAFE -----------------------------------
 
         css::uno::Reference< css::frame::XDispatchResultListener > xListener(static_cast< css::frame::XDispatchResultListener* >(pListener), css::uno::UNO_QUERY);
@@ -957,9 +943,9 @@ sal_Bool LoadEnv::impl_handleContent()
 sal_Bool LoadEnv::impl_furtherDocsAllowed()
 {
     // SAFE ->
-    Guard aReadLock(m_aLock);
+    osl::ResettableMutexGuard aReadLock(m_mutex);
     css::uno::Reference< css::uno::XComponentContext > xContext = m_xContext;
-    aReadLock.unlock();
+    aReadLock.clear();
     // <- SAFE
 
     sal_Bool bAllowed = sal_True;
@@ -1002,11 +988,11 @@ sal_Bool LoadEnv::impl_furtherDocsAllowed()
     if ( ! bAllowed )
     {
         // SAFE ->
-        aReadLock.lock();
+        aReadLock.reset();
         css::uno::Reference< css::task::XInteractionHandler > xInteraction = m_lMediaDescriptor.getUnpackedValueOrDefault(
                                                                                 utl::MediaDescriptor::PROP_INTERACTIONHANDLER(),
                                                                                 css::uno::Reference< css::task::XInteractionHandler >());
-        aReadLock.unlock();
+        aReadLock.clear();
         // <- SAFE
 
         if (xInteraction.is())
@@ -1039,7 +1025,7 @@ sal_Bool LoadEnv::impl_loadContent()
     throw(LoadEnvException, css::uno::RuntimeException)
 {
     // SAFE -> -----------------------------------
-    Guard aWriteLock(m_aLock);
+    osl::ClearableMutexGuard aWriteLock(m_mutex);
 
     // search or create right target frame
     OUString sTarget = m_sTarget;
@@ -1144,11 +1130,9 @@ sal_Bool LoadEnv::impl_loadContent()
 
     if (xAsyncLoader.is())
     {
-        // SAFE -> -----------------------------------
-        aWriteLock.lock();
         m_xAsynchronousJob = xAsyncLoader;
         LoadEnvListener* pListener = new LoadEnvListener(this);
-        aWriteLock.unlock();
+        aWriteLock.clear();
         // <- SAFE -----------------------------------
 
         css::uno::Reference< css::frame::XLoadEventListener > xListener(static_cast< css::frame::XLoadEventListener* >(pListener), css::uno::UNO_QUERY);
@@ -1167,7 +1151,7 @@ sal_Bool LoadEnv::impl_loadContent()
         return sal_True;
     }
 
-    aWriteLock.unlock();
+    aWriteLock.clear();
     // <- SAFE
 
     return sal_False;
@@ -1177,7 +1161,7 @@ sal_Bool LoadEnv::impl_loadContent()
 css::uno::Reference< css::uno::XInterface > LoadEnv::impl_searchLoader()
 {
     // SAFE -> -----------------------------------
-    Guard aReadLock(m_aLock);
+    osl::ClearableMutexGuard aReadLock(m_mutex);
 
     // special mode to set an existing component on this frame
     // In such case the loader is fix. It must be the SFX based implementation,
@@ -1205,7 +1189,7 @@ css::uno::Reference< css::uno::XInterface > LoadEnv::impl_searchLoader()
     // try to locate any interested frame loader
     css::uno::Reference< css::frame::XLoaderFactory > xLoaderFactory = css::frame::FrameLoaderFactory::create(m_xContext);
 
-    aReadLock.unlock();
+    aReadLock.clear();
     // <- SAFE -----------------------------------
 
     css::uno::Sequence< OUString > lTypesReg(1);
@@ -1252,9 +1236,9 @@ void LoadEnv::impl_jumpToMark(const css::uno::Reference< css::frame::XFrame >& x
         return;
 
     // SAFE ->
-    Guard aReadLock(m_aLock);
+    osl::ClearableMutexGuard aReadLock(m_mutex);
     css::uno::Reference< css::uno::XComponentContext > xContext = m_xContext;
-    aReadLock.unlock();
+    aReadLock.clear();
     // <- SAFE
 
     css::util::URL aCmd;
@@ -1276,8 +1260,7 @@ void LoadEnv::impl_jumpToMark(const css::uno::Reference< css::frame::XFrame >& x
 css::uno::Reference< css::frame::XFrame > LoadEnv::impl_searchAlreadyLoaded()
     throw(LoadEnvException, css::uno::RuntimeException)
 {
-    // SAFE ->
-    Guard aReadLock(m_aLock);
+    osl::MutexGuard g(m_mutex);
 
     // such search is allowed for special requests only ...
     // or better its not allowed for some requests in general :-)
@@ -1411,9 +1394,6 @@ css::uno::Reference< css::frame::XFrame > LoadEnv::impl_searchAlreadyLoaded()
         impl_makeFrameWindowVisible(xResult->getContainerWindow(), sal_True);
     }
 
-    aReadLock.unlock();
-    // <- SAFE
-
     return xResult;
 }
 
@@ -1437,7 +1417,7 @@ css::uno::Reference< css::frame::XFrame > LoadEnv::impl_searchRecycleTarget()
     throw(LoadEnvException, css::uno::RuntimeException)
 {
     // SAFE -> ..................................
-    Guard aReadLock(m_aLock);
+    osl::ClearableMutexGuard aReadLock(m_mutex);
 
     // The special backing mode frame will be recycled by definition!
     // It doesn't matter if somewhere wants to create a new view
@@ -1520,7 +1500,7 @@ css::uno::Reference< css::frame::XFrame > LoadEnv::impl_searchRecycleTarget()
     SvtModuleOptions::EFactory eOldApp = SvtModuleOptions::ClassifyFactoryByModel(xModel);
     SvtModuleOptions::EFactory eNewApp = SvtModuleOptions::ClassifyFactoryByURL  (m_aURL.Complete, m_lMediaDescriptor.getAsConstPropertyValueList());
 
-    aReadLock.unlock();
+    aReadLock.clear();
     // <- SAFE ..................................
 
     if (eOldApp != eNewApp)
@@ -1548,14 +1528,14 @@ css::uno::Reference< css::frame::XFrame > LoadEnv::impl_searchRecycleTarget()
     }
 
     // SAFE -> ..................................
-    Guard aWriteLock(m_aLock);
+    osl::ClearableMutexGuard aWriteLock(m_mutex);
 
     css::uno::Reference< css::document::XActionLockable > xLock(xTask, css::uno::UNO_QUERY);
     if (!m_aTargetLock.setResource(xLock))
         return css::uno::Reference< css::frame::XFrame >();
 
     m_bReactivateControllerOnError = bReactivateOldControllerOnError;
-    aWriteLock.unlock();
+    aWriteLock.clear();
     // <- SAFE ..................................
 
     // bring it to front ...
@@ -1571,7 +1551,7 @@ void LoadEnv::impl_reactForLoadingState()
     /*TODO reset action locks */
 
     // SAFE -> ----------------------------------
-    Guard aReadLock(m_aLock);
+    osl::ClearableMutexGuard aReadLock(m_mutex);
 
     if (m_bLoaded)
     {
@@ -1671,7 +1651,7 @@ void LoadEnv::impl_reactForLoadingState()
         bThrow = true;
     }
 
-    aReadLock.unlock();
+    aReadLock.clear();
 
     if (bThrow)
     {
@@ -1689,9 +1669,9 @@ void LoadEnv::impl_makeFrameWindowVisible(const css::uno::Reference< css::awt::X
                                                 sal_Bool bForceToFront)
 {
     // SAFE -> ----------------------------------
-    Guard aReadLock(m_aLock);
+    osl::ClearableMutexGuard aReadLock(m_mutex);
     css::uno::Reference< css::uno::XComponentContext > xContext = m_xContext;
-    aReadLock.unlock();
+    aReadLock.clear();
     // <- SAFE ----------------------------------
 
     SolarMutexGuard aSolarGuard;
@@ -1761,7 +1741,7 @@ void LoadEnv::impl_applyPersistentWindowState(const css::uno::Reference< css::aw
     // <- SOLAR SAFE
 
     // SAFE ->
-    Guard aReadLock(m_aLock);
+    osl::ClearableMutexGuard aReadLock(m_mutex);
 
     // no filter -> no module -> no persistent window state
     OUString sFilter = m_lMediaDescriptor.getUnpackedValueOrDefault(
@@ -1772,7 +1752,7 @@ void LoadEnv::impl_applyPersistentWindowState(const css::uno::Reference< css::aw
 
     css::uno::Reference< css::uno::XComponentContext > xContext = m_xContext;
 
-    aReadLock.unlock();
+    aReadLock.clear();
     // <- SAFE
 
     try

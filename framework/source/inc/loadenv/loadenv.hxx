@@ -22,7 +22,6 @@
 
 #include <loadenv/loadenvexception.hxx>
 #include <loadenv/actionlockguard.hxx>
-#include <threadhelp/threadhelpbase.hxx>
 
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
@@ -52,7 +51,7 @@ class QuietInteraction;
 
     @author as96863
  */
-class LoadEnv : private ThreadHelpBase
+class LoadEnv
 {
 public:
 
@@ -106,6 +105,7 @@ public:
     };
 
 private:
+    mutable osl::Mutex m_mutex;
 
     /** @short  reference to an uno service manager, which must be used
                 to created on needed services on demand.
