@@ -20,7 +20,6 @@
 #ifndef INCLUDED_FRAMEWORK_INC_UIELEMENT_ROOTITEMCONTAINER_HXX
 #define INCLUDED_FRAMEWORK_INC_UIELEMENT_ROOTITEMCONTAINER_HXX
 
-#include <threadhelp/threadhelpbase.hxx>
 #include <macros/generic.hxx>
 #include <macros/xinterface.hxx>
 #include <macros/xtypeprovider.hxx>
@@ -34,6 +33,7 @@
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 
 #include <rtl/ustring.hxx>
+#include <cppuhelper/basemutex.hxx>
 #include <cppuhelper/implbase3.hxx>
 #include <cppuhelper/propshlp.hxx>
 
@@ -49,7 +49,7 @@ typedef ::cppu::WeakImplHelper3<
             css::lang::XSingleComponentFactory,
             css::lang::XUnoTunnel > RootItemContainer_BASE;
 
-class RootItemContainer :   protected ThreadHelpBase                                ,
+class RootItemContainer :   private cppu::BaseMutex,
                             public ::cppu::OBroadcastHelper                         ,
                             public ::cppu::OPropertySetHelper                       ,
                             public RootItemContainer_BASE
