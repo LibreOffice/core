@@ -21,6 +21,7 @@
 #define INCLUDED_FRAMEWORK_SOURCE_INC_DISPATCH_LOADDISPATCHER_HXX
 
 #include <loadenv/loadenv.hxx>
+#include <threadhelp/threadhelpbase.hxx>
 
 #include <com/sun/star/frame/XNotifyingDispatch.hpp>
 #include <com/sun/star/frame/XSynchronousDispatch.hpp>

@@ -21,9 +21,6 @@
 #define INCLUDED_FRAMEWORK_SOURCE_INC_LOADENV_ACTIONLOCKGUARD_HXX
 
 
-#include <threadhelp/threadhelpbase.hxx>
-#include <threadhelp/guard.hxx>
-
 #include <com/sun/star/document/XActionLockable.hpp>
 
 
@@ -35,12 +32,13 @@ namespace framework{
     @descr  This guard should be used to be shure, that any lock will be
             released. Otherwise the locaked document can hinder the office on shutdown!
 */
-class ActionLockGuard : private ThreadHelpBase
+class ActionLockGuard
 {
 
     // member
 
     private:
+        osl::Mutex m_mutex;
 
         /** @short  points to the object, which can be locked from outside. */
         css::uno::Reference< css::document::XActionLockable > m_xActionLock;
@@ -62,8 +60,7 @@ class ActionLockGuard : private ThreadHelpBase
                     in a mode "use guard for more then one resources".
          */
         ActionLockGuard()
-            : ThreadHelpBase (         )
-            , m_bActionLocked(sal_False)
+            : m_bActionLocked(sal_False)
         {
         }
 
@@ -74,8 +71,7 @@ class ActionLockGuard : private ThreadHelpBase
                     points to the outside resource, which should be locked.
          */
         ActionLockGuard(const css::uno::Reference< css::document::XActionLockable >& xLock)
-            : ThreadHelpBase (         )
-            , m_bActionLocked(sal_False)
+            : m_bActionLocked(sal_False)
         {
             setResource(xLock);
         }
@@ -103,8 +99,7 @@ class ActionLockGuard : private ThreadHelpBase
          */
         virtual sal_Bool setResource(const css::uno::Reference< css::document::XActionLockable >& xLock)
         {
-            // SAFE -> ..........................
-            Guard aMutexLock(m_aLock);
+            osl::MutexGuard g(m_mutex);
 
             if (m_bActionLocked || !xLock.is())
                 return sal_False;
@@ -112,7 +107,6 @@ class ActionLockGuard : private ThreadHelpBase
             m_xActionLock = xLock;
             m_xActionLock->addActionLock();
             m_bActionLocked = m_xActionLock->isActionLocked();
-            // <- SAFE ..........................
 
             return sal_True;
         }
@@ -132,7 +126,7 @@ class ActionLockGuard : private ThreadHelpBase
         virtual void freeResource()
         {
             // SAFE -> ..........................
-            Guard aMutexLock(m_aLock);
+            osl::ClearableMutexGuard aMutexLock(m_mutex);
 
             css::uno::Reference< css::document::XActionLockable > xLock   = m_xActionLock  ;
             sal_Bool                                              bLocked = m_bActionLocked;
@@ -140,7 +134,7 @@ class ActionLockGuard : private ThreadHelpBase
             m_xActionLock.clear();
             m_bActionLocked = sal_False;
 
-            aMutexLock.unlock();
+            aMutexLock.clear();
             // <- SAFE ..........................
 
             if (bLocked && xLock.is())
@@ -151,24 +145,19 @@ class ActionLockGuard : private ThreadHelpBase
         /** @short  lock the internal wrapped resource, if its not already done. */
         virtual void lock()
         {
-            // SAFE -> ..........................
-            Guard aMutexLock(m_aLock);
-
+            osl::MutexGuard g(m_mutex);
             if (!m_bActionLocked && m_xActionLock.is())
             {
                 m_xActionLock->addActionLock();
                 m_bActionLocked = m_xActionLock->isActionLocked();
             }
-            // <- SAFE ..........................
         }
 
 
         /** @short  unlock the internal wrapped resource, if its not already done. */
         virtual void unlock()
         {
-            // SAFE -> ..........................
-            Guard aMutexLock(m_aLock);
-
+            osl::MutexGuard g(m_mutex);
             if (m_bActionLocked && m_xActionLock.is())
             {
                 m_xActionLock->removeActionLock();
@@ -176,7 +165,6 @@ class ActionLockGuard : private ThreadHelpBase
                 // May another guard use the same lock object :-(
                 m_bActionLocked = sal_False;
             }
-            // <- SAFE ..........................
         }
 };
 

@@ -32,6 +32,7 @@
 #include <dispatch/dispatchinformationprovider.hxx>
 #include <classes/framecontainer.hxx>
 #include <classes/propertysethelper.hxx>
+#include <threadhelp/guard.hxx>
 #include <threadhelp/transactionguard.hxx>
 #include <threadhelp/transactionbase.hxx>
 #include <general.h>
