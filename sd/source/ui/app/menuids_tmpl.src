@@ -491,6 +491,22 @@
                     HelpId = CMD_SID_ATTR_CHAR_CONTOUR ; \
                     Text [ en-US ] = "~Contour" ; \
                 };\
+                MenuItem\
+                {\
+                    Separator = TRUE ; \
+                };\
+                MenuItem\
+                {\
+                    Identifier = SID_SET_SUPER_SCRIPT; \
+                    HelpId = CMD_SID_SET_SUPER_SCRIPT; \
+                    Text [ en-US ] = "Superscript" ; \
+                };\
+                MenuItem\
+                {\
+                    Identifier = SID_SET_SUB_SCRIPT; \
+                    HelpId = CMD_SID_SET_SUB_SCRIPT; \
+                    Text [ en-US ] = "Subscript" ; \
+                };\
             };\
         };\
     };
