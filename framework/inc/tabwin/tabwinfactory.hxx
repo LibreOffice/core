@@ -21,7 +21,6 @@
 #define INCLUDED_FRAMEWORK_INC_TABWIN_TABWINFACTORY_HXX
 
 #include <stdtypes.h>
-#include <threadhelp/threadhelpbase.hxx>
 #include <macros/generic.hxx>
 #include <macros/xinterface.hxx>
 #include <macros/xtypeprovider.hxx>
@@ -41,8 +40,7 @@
 namespace framework
 {
 
-class TabWinFactory :  protected ThreadHelpBase                                 ,   // Struct for right initalization of mutex member! Must be first of baseclasses.
-                       public ::cppu::WeakImplHelper2< ::com::sun::star::lang::XSingleComponentFactory, com::sun::star::lang::XServiceInfo>
+class TabWinFactory :  public ::cppu::WeakImplHelper2< ::com::sun::star::lang::XSingleComponentFactory, com::sun::star::lang::XServiceInfo>
 {
     public:
         TabWinFactory( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& xContext );

@@ -20,8 +20,6 @@
 #include <tabwin/tabwinfactory.hxx>
 #include <tabwin/tabwindow.hxx>
 
-#include <threadhelp/guard.hxx>
-
 #include <com/sun/star/util/XURLTransformer.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/awt/Toolkit.hpp>
@@ -55,8 +53,7 @@ DEFINE_XSERVICEINFO_ONEINSTANCESERVICE_2(   TabWinFactory                       
 DEFINE_INIT_SERVICE                     (   TabWinFactory, {} )
 
 TabWinFactory::TabWinFactory( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& xContext ) :
-    ThreadHelpBase( &Application::GetSolarMutex() )
-    , m_xContext( xContext )
+    m_xContext( xContext )
 {
 }
 
@@ -80,10 +77,10 @@ throw ( css::uno::Exception, css::uno::RuntimeException, std::exception )
     const OUString aTopWindowArgName( "TopWindow");
 
     /* SAFE AREA ----------------------------------------------------------------------------------------------- */
-    Guard aLock( m_aLock );
+    SolarMutexResettableGuard aLock;
     css::uno::Reference< css::awt::XToolkit2 > xToolkit = m_xToolkit;
     css::uno::Reference< css::uno::XComponentContext > xContext( m_xContext );
-    aLock.unlock();
+    aLock.clear();
     /* SAFE AREA ----------------------------------------------------------------------------------------------- */
 
     css::uno::Reference< css::uno::XInterface > xReturn;
@@ -103,9 +100,9 @@ throw ( css::uno::Exception, css::uno::RuntimeException, std::exception )
     {
         xToolkit = css::awt::Toolkit::create( xContext );
         /* SAFE AREA ----------------------------------------------------------------------------------------------- */
-        aLock.lock();
+        aLock.reset();
         m_xToolkit = xToolkit;
-        aLock.unlock();
+        aLock.clear();
         /* SAFE AREA ----------------------------------------------------------------------------------------------- */
     }
 
