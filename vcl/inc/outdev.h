@@ -21,9 +21,11 @@
 #define INCLUDED_VCL_INC_OUTDEV_H
 
 #include <list>
-#include <outfont.hxx>
 #include <set>
 #include <vector>
+
+#include "outfont.hxx"
+#include "PhysicalFontFace.hxx"
 
 class Size;
 class Font;

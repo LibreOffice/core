@@ -47,6 +47,7 @@ extern "C" {
 #include <vcl/fontcapabilities.hxx>
 
 #include "outfont.hxx"
+#include "PhysicalFontFace.hxx"
 #include "salgdi.hxx"
 
 #include "quartz/salgdicommon.hxx"

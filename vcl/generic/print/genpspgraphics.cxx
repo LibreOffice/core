@@ -17,43 +17,43 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/types.h>
+
 // for mmap etc.
 #if defined( UNX )
-#  include <stdlib.h>
-#  include <unistd.h>
-#  include <fcntl.h>
-#  include <sys/mman.h>
-#  include <sys/stat.h>
-#  include <sys/types.h>
+#include <unistd.h>
+#include <fcntl.h>
+#include <sys/mman.h>
+#include <sys/stat.h>
+#include <sys/types.h>
 #endif
 
+#include <comphelper/string.hxx>
+#include <i18nlangtag/mslangid.hxx>
+#include <vcl/bmpacc.hxx>
+#include <vcl/jobdata.hxx>
+#include <vcl/printerinfomanager.hxx>
+#include <vcl/settings.hxx>
+#include <vcl/svapp.hxx>
+#include <vcl/sysdata.hxx>
+
+#include "fontsubset.hxx"
 #include "generic/geninst.h"
 #include "generic/genpspgraphics.h"
 #include "generic/glyphcache.hxx"
-
-#include "vcl/jobdata.hxx"
-#include "vcl/printerinfomanager.hxx"
-#include "vcl/bmpacc.hxx"
-#include "vcl/svapp.hxx"
-#include "vcl/sysdata.hxx"
-#include "vcl/settings.hxx"
-
 #include "generic/printergfx.hxx"
-#include "salbmp.hxx"
 #include "impfont.hxx"
-#include "outfont.hxx"
-#include "fontsubset.hxx"
-#include "salprn.hxx"
 #include "langboost.hxx"
+#include "outfont.hxx"
+#include "PhysicalFontFace.hxx"
+#include "salbmp.hxx"
+#include "salprn.hxx"
 
 #include <config_graphite.h>
 #if ENABLE_GRAPHITE
 #include <graphite_layout.hxx>
 #include <graphite_serverfont.hxx>
 #endif
-
-#include <comphelper/string.hxx>
-#include <i18nlangtag/mslangid.hxx>
 
 using namespace psp;
 
