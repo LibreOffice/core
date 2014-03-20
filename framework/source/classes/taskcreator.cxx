@@ -18,7 +18,6 @@
  */
 
 #include <classes/taskcreator.hxx>
-#include <threadhelp/guard.hxx>
 #include <loadenv/targethelper.hxx>
 #include <services.h>
 #include <taskcreatordefs.hxx>
@@ -43,8 +42,7 @@ namespace framework{
                     points to the valid uno service manager
 *//*-*****************************************************************************************************/
 TaskCreator::TaskCreator( const css::uno::Reference< css::uno::XComponentContext >& xContext )
-    : ThreadHelpBase(       )
-    , m_xContext    ( xContext )
+    : m_xContext    ( xContext )
 {
 }
 
@@ -54,7 +52,6 @@ TaskCreator::TaskCreator( const css::uno::Reference< css::uno::XComponentContext
 *//*-*****************************************************************************************************/
 TaskCreator::~TaskCreator()
 {
-    m_xContext.clear();
 }
 
 /*-****************************************************************************************************
@@ -63,12 +60,6 @@ TaskCreator::~TaskCreator()
 css::uno::Reference< css::frame::XFrame > TaskCreator::createTask( const OUString& sName    ,
                                                                          sal_Bool         bVisible )
 {
-    /* SAFE { */
-    Guard aReadLock( m_aLock );
-    css::uno::Reference< css::uno::XComponentContext > xContext = m_xContext;
-    aReadLock.unlock();
-    /* } SAFE */
-
     css::uno::Reference< css::lang::XSingleServiceFactory > xCreator;
     OUString sCreator = IMPLEMENTATIONNAME_FWK_TASKCREATOR;
 
@@ -80,12 +71,12 @@ css::uno::Reference< css::frame::XFrame > TaskCreator::createTask( const OUStrin
            )
         {
 
-            boost::optional<OUString> x(officecfg::Office::TabBrowse::TaskCreatorService::ImplementationName::get(xContext));
+            boost::optional<OUString> x(officecfg::Office::TabBrowse::TaskCreatorService::ImplementationName::get(m_xContext));
             if (x) sCreator = x.get();
         }
 
         xCreator = css::uno::Reference< css::lang::XSingleServiceFactory >(
-                    xContext->getServiceManager()->createInstanceWithContext(sCreator, xContext), css::uno::UNO_QUERY_THROW);
+                    m_xContext->getServiceManager()->createInstanceWithContext(sCreator, m_xContext), css::uno::UNO_QUERY_THROW);
     }
     catch(const css::uno::Exception&)
     {}
@@ -95,13 +86,13 @@ css::uno::Reference< css::frame::XFrame > TaskCreator::createTask( const OUStrin
     // BTW: The used fallback creator service (IMPLEMENTATIONNAME_FWK_TASKCREATOR) is implemented in the same
     // library then these class here ... Why we should not be able to create it ?
     if ( ! xCreator.is())
-        xCreator = css::frame::TaskCreator::create(xContext);
+        xCreator = css::frame::TaskCreator::create(m_xContext);
 
     css::uno::Sequence< css::uno::Any > lArgs(5);
     css::beans::NamedValue              aArg    ;
 
     aArg.Name    = OUString(ARGUMENT_PARENTFRAME);
-    aArg.Value <<= css::uno::Reference< css::frame::XFrame >( css::frame::Desktop::create( xContext ), css::uno::UNO_QUERY_THROW);
+    aArg.Value <<= css::uno::Reference< css::frame::XFrame >( css::frame::Desktop::create( m_xContext ), css::uno::UNO_QUERY_THROW);
     lArgs[0]   <<= aArg;
 
     aArg.Name    = OUString(ARGUMENT_CREATETOPWINDOW);

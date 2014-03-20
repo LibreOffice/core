@@ -28,6 +28,7 @@
 
 #include <dispatch/interceptionhelper.hxx>
 #include <classes/taskcreator.hxx>
+#include <threadhelp/lockhelper.hxx>
 #include <threadhelp/transactionguard.hxx>
 #include <general.h>
 #include <properties.h>

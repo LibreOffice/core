@@ -20,7 +20,6 @@
 #ifndef INCLUDED_FRAMEWORK_INC_CLASSES_TASKCREATOR_HXX
 #define INCLUDED_FRAMEWORK_INC_CLASSES_TASKCREATOR_HXX
 
-#include <threadhelp/threadhelpbase.hxx>
 #include <macros/generic.hxx>
 #include <general.h>
 
@@ -41,7 +40,7 @@ namespace framework{
     @devstatus      ready to use
     @threadsafe     yes
 *//*-*************************************************************************************************************/
-class TaskCreator : private ThreadHelpBase
+class TaskCreator
 {
 
     // member
