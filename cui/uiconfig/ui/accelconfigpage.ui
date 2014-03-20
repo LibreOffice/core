@@ -156,7 +156,7 @@
                 </child>
                 <child>
                   <object class="GtkButton" id="load">
-                    <property name="label">_Load...</property>
+                    <property name="label" translatable="yes">_Load...</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
@@ -171,7 +171,7 @@
                 </child>
                 <child>
                   <object class="GtkButton" id="save">
-                    <property name="label">_Save...</property>
+                    <property name="label" translatable="yes">_Save...</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">True</property>

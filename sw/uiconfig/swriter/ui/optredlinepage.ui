@@ -108,7 +108,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="hexpand">True</property>
-                    <property name="text">Insert</property>
+                    <property name="text" translatable="yes">Insert</property>
                   </object>
                   <packing>
                     <property name="left_attach">2</property>
@@ -225,7 +225,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="hexpand">True</property>
-                    <property name="text">Delete</property>
+                    <property name="text" translatable="yes">Delete</property>
                   </object>
                   <packing>
                     <property name="left_attach">2</property>
@@ -342,7 +342,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="hexpand">True</property>
-                    <property name="text">Attributes</property>
+                    <property name="text" translatable="yes">Attributes</property>
                   </object>
                   <packing>
                     <property name="left_attach">2</property>

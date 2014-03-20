@@ -232,12 +232,12 @@
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <items>
-                          <item>=</item>
-                          <item>&lt;</item>
-                          <item>&gt;</item>
-                          <item>&lt;=</item>
-                          <item>&gt;=</item>
-                          <item>&lt;&gt;</item>
+                          <item translatable="no">=</item>
+                          <item translatable="no">&lt;</item>
+                          <item translatable="no">&gt;</item>
+                          <item translatable="no">&lt;=</item>
+                          <item translatable="no">&gt;=</item>
+                          <item translatable="no">&lt;&gt;</item>
                         </items>
                         <accessibility>
                           <relation type="labelled-by" target="label4"/>
@@ -255,12 +255,12 @@
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <items>
-                          <item>=</item>
-                          <item>&lt;</item>
-                          <item>&gt;</item>
-                          <item>&lt;=</item>
-                          <item>&gt;=</item>
-                          <item>&lt;&gt;</item>
+                          <item translatable="no">=</item>
+                          <item translatable="no">&lt;</item>
+                          <item translatable="no">&gt;</item>
+                          <item translatable="no">&lt;=</item>
+                          <item translatable="no">&gt;=</item>
+                          <item translatable="no">&lt;&gt;</item>
                         </items>
                         <accessibility>
                           <relation type="labelled-by" target="label4"/>
@@ -278,12 +278,12 @@
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <items>
-                          <item>=</item>
-                          <item>&lt;</item>
-                          <item>&gt;</item>
-                          <item>&lt;=</item>
-                          <item>&gt;=</item>
-                          <item>&lt;&gt;</item>
+                          <item translatable="no">=</item>
+                          <item translatable="no">&lt;</item>
+                          <item translatable="no">&gt;</item>
+                          <item translatable="no">&lt;=</item>
+                          <item translatable="no">&gt;=</item>
+                          <item translatable="no">&lt;&gt;</item>
                         </items>
                         <accessibility>
                           <relation type="labelled-by" target="label4"/>

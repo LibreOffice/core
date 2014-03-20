@@ -46,7 +46,7 @@
                     <property name="layout_style">start</property>
                     <child>
                       <object class="GtkButton" id="toplevelbutton">
-                        <property name="label">New...</property>
+                        <property name="label" translatable="yes">New...</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
@@ -175,7 +175,7 @@
                     <property name="layout_style">start</property>
                     <child>
                       <object class="GtkButton" id="add">
-                        <property name="label">Add...</property>
+                        <property name="label" translatable="yes">Add...</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
