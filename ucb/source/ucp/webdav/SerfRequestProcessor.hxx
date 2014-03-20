@@ -32,6 +32,7 @@
 
 #include "SerfInputStream.hxx"
 #include <com/sun/star/io/XOutputStream.hpp>
+#include <com/sun/star/ucb/Lock.hpp>
 
 namespace http_dav_ucp
 {
@@ -123,6 +124,9 @@ public:
     bool processMove( const OUString & inDestinationPath,
                       const bool inOverwrite,
                       apr_status_t& outSerfStatus );
+
+    //LOCK
+    bool processLock( const css::ucb::Lock & rLock );
 
     apr_status_t provideSerfCredentials( char ** outUsername,
                                          char ** outPassword,

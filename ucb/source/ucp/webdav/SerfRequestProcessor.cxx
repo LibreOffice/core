@@ -30,6 +30,7 @@
 #include "SerfMkColReqProcImpl.hxx"
 #include "SerfCopyReqProcImpl.hxx"
 #include "SerfMoveReqProcImpl.hxx"
+#include "SerfLockReqProcImpl.hxx"
 
 #include <apr_strings.h>
 
@@ -306,6 +307,16 @@ bool SerfRequestProcessor::processMove( const OUString & inDestinationPath,
     outSerfStatus = runProcessor();
 
     return outSerfStatus == APR_SUCCESS;
+}
+
+
+bool SerfRequestProcessor::processLock( const css::ucb::Lock & rLock )
+{
+    mpProcImpl = new SerfLockReqProcImpl( mPathStr,
+                                          mrSerfSession.getRequestEnvironment().m_aRequestHeaders,
+                                          rLock );
+
+    return runProcessor() == APR_SUCCESS;
 }
 
 apr_status_t SerfRequestProcessor::runProcessor()

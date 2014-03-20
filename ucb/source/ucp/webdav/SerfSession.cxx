@@ -1008,7 +1008,7 @@ namespace
 // LOCK (set new lock)
 
 void SerfSession::LOCK( const OUString & inPath,
-                        ucb::Lock & /*rLock*/,
+                        ucb::Lock & rLock,
                         const DAVRequestEnvironment & rEnv )
     throw ( DAVException )
 {
@@ -1017,87 +1017,9 @@ void SerfSession::LOCK( const OUString & inPath,
     Init( rEnv );
 
     boost::shared_ptr<SerfRequestProcessor> aReqProc( createReqProc( inPath ) );
+    aReqProc->processLock( rLock );
+
     HandleError( aReqProc );
-    /* Create a depth zero, exclusive write lock, with default timeout
-     * (allowing a server to pick a default).  token, owner and uri are
-     * unset. */
-    /*
-    SerfLock * theLock = ne_lock_create();
-
-    // Set the lock uri
-    ne_uri aUri;
-    ne_uri_parse( OUStringToOString( makeAbsoluteURL( inPath ),
-                                          RTL_TEXTENCODING_UTF8 ).getStr(),
-                  &aUri );
-    theLock->uri = aUri;
-
-    // Set the lock depth
-    switch( rLock.Depth )
-    {
-    case ucb::LockDepth_ZERO:
-        theLock->depth = NE_DEPTH_ZERO;
-        break;
-    case ucb::LockDepth_ONE:
-        theLock->depth = NE_DEPTH_ONE;
-        break;
-    case ucb::LockDepth_INFINITY:
-        theLock->depth = NE_DEPTH_INFINITE;
-        break;
-    default:
-        throw DAVException( DAVException::DAV_INVALID_ARG );
-    }
-
-    // Set the lock scope
-    switch ( rLock.Scope )
-    {
-    case ucb::LockScope_EXCLUSIVE:
-        theLock->scope = ne_lockscope_exclusive;
-        break;
-    case ucb::LockScope_SHARED:
-        theLock->scope = ne_lockscope_shared;
-        break;
-    default:
-        throw DAVException( DAVException::DAV_INVALID_ARG );
-    }
-
-    // Set the lock timeout
-    theLock->timeout = (long)rLock.Timeout;
-
-    // Set the lock owner
-    OUString aValue;
-    rLock.Owner >>= aValue;
-    theLock->owner =
-        ne_strdup( OUStringToOString( aValue,
-                                           RTL_TEXTENCODING_UTF8 ).getStr() );
-    TimeValue startCall;
-    osl_getSystemTime( &startCall );
-
-    int theRetVal = ne_lock( m_pHttpSession, theLock );
-
-    if ( theRetVal == NE_OK )
-    {
-        m_aSerfLockStore.addLock( theLock,
-                                  this,
-                                  lastChanceToSendRefreshRequest(
-                                      startCall, theLock->timeout ) );
-
-        uno::Sequence< OUString > aTokens( 1 );
-        aTokens[ 0 ] = OUString::createFromAscii( theLock->token );
-        rLock.LockTokens = aTokens;
-
-        SAL_INFO("ucb.ucp.webdav",  "SerfSession::LOCK: created lock for "
-                    << makeAbsoluteURL( inPath ) << ". token: " << theLock->token );
-    }
-    else
-    {
-        ne_lock_destroy( theLock );
-
-        SAL_INFO("ucb.ucp.webdav",  "SerfSession::LOCK: obtaining lock for "
-                    << makeAbsoluteURL( inPath ) << " failed!");
-    }
-
-    HandleError( theRetVal, inPath, rEnv );
-    */
 }
 
 
