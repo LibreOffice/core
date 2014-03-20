@@ -20,7 +20,6 @@
 #ifndef INCLUDED_FRAMEWORK_INC_CLASSES_PROPERTYSETHELPER_HXX
 #define INCLUDED_FRAMEWORK_INC_CLASSES_PROPERTYSETHELPER_HXX
 
-#include <threadhelp/threadhelpbase.hxx>
 #include <threadhelp/transactionbase.hxx>
 #include <general.h>
 #include <stdtypes.h>
