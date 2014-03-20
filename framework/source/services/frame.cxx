@@ -32,8 +32,6 @@
 #include <dispatch/dispatchinformationprovider.hxx>
 #include <classes/framecontainer.hxx>
 #include <classes/propertysethelper.hxx>
-#include <threadhelp/guard.hxx>
-#include <threadhelp/threadhelpbase.hxx>
 #include <threadhelp/transactionguard.hxx>
 #include <threadhelp/transactionbase.hxx>
 #include <general.h>
@@ -115,8 +113,6 @@ enum EActiveState
                     iv)     dispose object by calling XComponent::dispose()
                 After iv) all further requests are rejected by exceptions! (DisposedException)
 
-    @base       ThreadHelpBase
-                    help to guarantee correct initialized lock member at startup
     @base       TransactionBase
                     help to implement unbreakable interface calls
     @base       OBroadcastHelper
@@ -141,11 +137,9 @@ class Frame :   // interfaces
                 public  css::frame::XTitle                          ,
                 public  css::frame::XTitleChangeBroadcaster         ,
                 // base classes
-                // Order is necessary for right initialization of this class!
-                public  ThreadHelpBase                              ,
                 public  TransactionBase                             ,
                 private cppu::BaseMutex,
-                public  PropertySetHelper                           ,   // helper implements ThreadHelpbase, TransactionBase, XPropertySet, XPropertySetInfo
+                public  PropertySetHelper                           ,   // helper implements TransactionBase, XPropertySet, XPropertySetInfo
                 public  ::cppu::OWeakObject                             // helper implements XInterface, XWeak
 {
 public:
@@ -416,7 +410,7 @@ private:
 
 
 //  variables
-//  -threadsafe by own read/write lock "m_aLock"
+//  -threadsafe by SolarMutex
 
 private:
 
@@ -453,31 +447,31 @@ protected:
 
     inline css::uno::Reference< css::uno::XComponentContext > impl_getComponentContext()
     {
-        Guard aReadLock( m_aLock );
+        SolarMutexGuard g;
         return m_xContext;
     }
 
     inline OUString impl_getName()
     {
-        Guard aReadLock( m_aLock );
+        SolarMutexGuard g;
         return m_sName;
     }
 
     inline css::uno::Reference< css::awt::XWindow > impl_getContainerWindow()
     {
-        Guard aReadLock( m_aLock );
+        SolarMutexGuard g;
         return m_xContainerWindow;
     }
 
     inline css::uno::Reference< css::frame::XDispatchProvider > impl_getDispatchHelper()
     {
-        Guard aReadLock( m_aLock );
+        SolarMutexGuard g;
         return m_xDispatchHelper;
     }
 
     inline css::uno::Reference< css::frame::XFramesSupplier > impl_getParent()
     {
-        Guard aReadLock( m_aLock );
+        SolarMutexGuard g;
         return m_xParent;
     }
 };
@@ -559,14 +553,13 @@ DEFINE_XTYPEPROVIDER_21             (   Frame                                   
     @onerror    ASSERT in debug version or nothing in relaese version.
 *//*-*****************************************************************************************************/
 Frame::Frame( const css::uno::Reference< css::uno::XComponentContext >& xContext )
-        :   ThreadHelpBase              ( &Application::GetSolarMutex()                     )
-        ,   TransactionBase             (                                                   )
+        :   TransactionBase             (                                                   )
         ,   PropertySetHelper           ( m_aMutex,
                                           &m_aTransactionManager,
                                           sal_False) // sal_False => dont release shared mutex on calling us!
         //  init member
         ,   m_xContext                  ( xContext                                          )
-        ,   m_aListenerContainer        ( m_aLock.getShareableOslMutex()                    )
+        ,   m_aListenerContainer        ( m_aMutex )
         ,   m_xParent                   (                                                   )
         ,   m_xContainerWindow          (                                                   )
         ,   m_xComponentWindow          (                                                   )
@@ -693,10 +686,10 @@ css::uno::Reference< css::lang::XComponent > SAL_CALL Frame::loadComponentFromUR
         TransactionGuard aTransaction( m_aTransactionManager, E_HARDEXCEPTIONS );
     }
 
-    Guard aReadLock(m_aLock);
+    SolarMutexClearableGuard aReadLock;
     css::uno::Reference< css::frame::XComponentLoader > xThis(static_cast< css::frame::XComponentLoader* >(this), css::uno::UNO_QUERY);
     css::uno::Reference< css::uno::XComponentContext > xContext = m_xContext;
-    aReadLock.unlock();
+    aReadLock.clear();
 
     return LoadEnv::loadComponentFromURL(xThis, xContext, sURL, sTargetFrameName, nSearchFlags, lArguments);
 }
@@ -728,9 +721,7 @@ css::uno::Reference< css::frame::XFrames > SAL_CALL Frame::getFrames() throw( cs
 
     TransactionGuard aTransaction( m_aTransactionManager, E_SOFTEXCEPTIONS );
 
-    /* SAFE AREA ----------------------------------------------------------------------------------------------- */
-    Guard aReadLock( m_aLock );
-
+    SolarMutexGuard g;
     // Return access to all child frames to caller.
     // Ouer childframe container is implemented in helper class OFrames and used as a reference m_xFramesHelper!
     return m_xFramesHelper;
@@ -757,9 +748,7 @@ css::uno::Reference< css::frame::XFrame > SAL_CALL Frame::getActiveFrame() throw
     // Register transaction and reject wrong calls.
     TransactionGuard aTransaction( m_aTransactionManager, E_HARDEXCEPTIONS );
 
-    /* SAFE AREA ----------------------------------------------------------------------------------------------- */
-    Guard aReadLock( m_aLock );
-
+    SolarMutexGuard g;
     // Return current active frame.
     // This information is available on the container.
     return m_aChildFrameContainer.getActive();
@@ -788,7 +777,7 @@ void SAL_CALL Frame::setActiveFrame( const css::uno::Reference< css::frame::XFra
     TransactionGuard aTransaction( m_aTransactionManager, E_HARDEXCEPTIONS );
 
     /* SAFE AREA ----------------------------------------------------------------------------------------------- */
-    Guard aWriteLock( m_aLock );
+    SolarMutexResettableGuard aWriteLock;
 
     // Copy necessary member for threadsafe access!
     // m_aChildFrameContainer is threadsafe himself and he live if we live!!!
@@ -796,7 +785,7 @@ void SAL_CALL Frame::setActiveFrame( const css::uno::Reference< css::frame::XFra
     css::uno::Reference< css::frame::XFrame > xActiveChild = m_aChildFrameContainer.getActive();
     EActiveState                              eActiveState = m_eActiveState             ;
 
-    aWriteLock.unlock();
+    aWriteLock.clear();
     /* UNSAFE AREA --------------------------------------------------------------------------------------------- */
 
     // Don't work, if "new" active frame is'nt different from current one!
@@ -820,10 +809,10 @@ void SAL_CALL Frame::setActiveFrame( const css::uno::Reference< css::frame::XFra
         // ... reset state to ACTIVE and send right FrameActionEvent for focus lost.
         if( eActiveState == E_FOCUS )
         {
-            aWriteLock.lock();
+            aWriteLock.reset();
             eActiveState   = E_ACTIVE    ;
             m_eActiveState = eActiveState;
-            aWriteLock.unlock();
+            aWriteLock.clear();
             implts_sendFrameActionEvent( css::frame::FrameAction_FRAME_UI_DEACTIVATING );
         }
 
@@ -842,10 +831,10 @@ void SAL_CALL Frame::setActiveFrame( const css::uno::Reference< css::frame::XFra
     // If this frame is active and has no active subframe anymore it is UI active too
     if( eActiveState == E_ACTIVE )
     {
-        aWriteLock.lock();
+        aWriteLock.reset();
         eActiveState   = E_FOCUS     ;
         m_eActiveState = eActiveState;
-        aWriteLock.unlock();
+        aWriteLock.clear();
         implts_sendFrameActionEvent( css::frame::FrameAction_FRAME_UI_ACTIVATED );
     }
 }
@@ -901,7 +890,7 @@ void SAL_CALL Frame::initialize( const css::uno::Reference< css::awt::XWindow >&
                     static_cast< css::frame::XFrame* >(this));
 
     /* SAFE AREA ----------------------------------------------------------------------------------------------- */
-    Guard aWriteLock( m_aLock );
+    SolarMutexResettableGuard aWriteLock;
 
     if ( m_xContainerWindow.is() )
         throw css::uno::RuntimeException(
@@ -930,7 +919,7 @@ void SAL_CALL Frame::initialize( const css::uno::Reference< css::awt::XWindow >&
 
     // Release lock ... because we call some impl methods, which are threadsafe by himself.
     // If we hold this lock - we will produce our own deadlock!
-    aWriteLock.unlock();
+    aWriteLock.clear();
     /* UNSAFE AREA --------------------------------------------------------------------------------------------- */
 
     if (xLayoutManager.is())
@@ -942,9 +931,9 @@ void SAL_CALL Frame::initialize( const css::uno::Reference< css::awt::XWindow >&
         css::task::StatusIndicatorFactory::createWithFrame(xContext, xThis, sal_False/*DisableReschedule*/, sal_True/*AllowParentShow*/ );
 
     // SAFE -> ----------------------------------
-    aWriteLock.lock();
+    aWriteLock.reset();
     m_xIndicatorFactoryHelper = xIndicatorFactory;
-    aWriteLock.unlock();
+    aWriteLock.clear();
     // <- SAFE ----------------------------------
 
     // Start listening for events after setting it on helper class ...
@@ -981,9 +970,7 @@ css::uno::Reference< css::awt::XWindow > SAL_CALL Frame::getContainerWindow() th
     // Register transaction and reject wrong calls.
     TransactionGuard aTransaction( m_aTransactionManager, E_SOFTEXCEPTIONS );
 
-    /* SAFE AREA ----------------------------------------------------------------------------------------------- */
-    Guard aReadLock( m_aLock );
-
+    SolarMutexGuard g;
     return m_xContainerWindow;
 }
 
@@ -1009,9 +996,9 @@ void SAL_CALL Frame::setCreator( const css::uno::Reference< css::frame::XFramesS
     TransactionGuard aTransaction( m_aTransactionManager, E_HARDEXCEPTIONS );
 
     /* SAFE { */
-        Guard aWriteLock( m_aLock );
+        SolarMutexClearableGuard aWriteLock;
             m_xParent = xCreator;
-        aWriteLock.unlock();
+        aWriteLock.clear();
     /* } SAFE */
 
     css::uno::Reference< css::frame::XDesktop > xIsDesktop( xCreator, css::uno::UNO_QUERY );
@@ -1035,9 +1022,7 @@ css::uno::Reference< css::frame::XFramesSupplier > SAL_CALL Frame::getCreator() 
     // Register transaction and reject wrong calls.
     TransactionGuard aTransaction( m_aTransactionManager, E_HARDEXCEPTIONS );
 
-    /* SAFE AREA ----------------------------------------------------------------------------------------------- */
-    Guard aReadLock( m_aLock );
-
+    SolarMutexGuard g;
     return m_xParent;
 }
 
@@ -1054,10 +1039,8 @@ css::uno::Reference< css::frame::XFramesSupplier > SAL_CALL Frame::getCreator() 
 *//*-*****************************************************************************************************/
 OUString SAL_CALL Frame::getName() throw( css::uno::RuntimeException, std::exception )
 {
-    /* SAFE { */
-    Guard aReadLock( m_aLock );
+    SolarMutexGuard g;
     return m_sName;
-    /* } SAFE */
 }
 
 /*-****************************************************************************************************
@@ -1076,14 +1059,11 @@ OUString SAL_CALL Frame::getName() throw( css::uno::RuntimeException, std::excep
 *//*-*****************************************************************************************************/
 void SAL_CALL Frame::setName( const OUString& sName ) throw( css::uno::RuntimeException, std::exception )
 {
-    /* SAFE { */
-    Guard aWriteLock( m_aLock );
+    SolarMutexGuard g;
     // Set new name ... but look for invalid special target names!
     // They are not allowed to set.
     if (TargetHelper::isValidNameForFrame(sName))
         m_sName = sName;
-    aWriteLock.unlock();
-    /* } SAFE */
 }
 
 /*-****************************************************************************************************
@@ -1138,12 +1118,12 @@ css::uno::Reference< css::frame::XFrame > SAL_CALL Frame::findFrame( const OUStr
 
     // get threadsafe some necessary member which are necessary for following functionality
     /* SAFE { */
-    Guard aReadLock( m_aLock );
+    SolarMutexResettableGuard aReadLock;
     css::uno::Reference< css::frame::XFrame >              xParent      ( m_xParent, css::uno::UNO_QUERY );
     css::uno::Reference< css::uno::XComponentContext >     xContext = m_xContext;
     sal_Bool                                               bIsTopFrame  = m_bIsFrameTop;
     sal_Bool                                               bIsTopWindow = WindowHelper::isTopWindow(m_xContainerWindow);
-    aReadLock.unlock();
+    aReadLock.clear();
     /* } SAFE */
 
 
@@ -1230,9 +1210,9 @@ css::uno::Reference< css::frame::XFrame > SAL_CALL Frame::findFrame( const OUStr
 
         // get threadsafe some necessary member which are necessary for following functionality
         /* SAFE { */
-        aReadLock.lock();
+        aReadLock.reset();
         OUString sOwnName = m_sName;
-        aReadLock.unlock();
+        aReadLock.clear();
         /* } SAFE */
 
 
@@ -1391,9 +1371,7 @@ sal_Bool SAL_CALL Frame::isTop() throw( css::uno::RuntimeException, std::excepti
     // Register transaction and reject wrong calls.
     TransactionGuard aTransaction( m_aTransactionManager, E_HARDEXCEPTIONS );
 
-    /* SAFE AREA ----------------------------------------------------------------------------------------------- */
-    Guard aReadLock( m_aLock );
-
+    SolarMutexGuard g;
     // This information is set in setCreator().
     // We are top, if ouer parent is a task or the desktop or if no parent exist!
     return m_bIsFrameTop;
@@ -1421,7 +1399,7 @@ void SAL_CALL Frame::activate() throw( css::uno::RuntimeException, std::exceptio
     TransactionGuard aTransaction( m_aTransactionManager, E_HARDEXCEPTIONS );
 
     /* SAFE AREA ----------------------------------------------------------------------------------------------- */
-    Guard aWriteLock( m_aLock );
+    SolarMutexResettableGuard aWriteLock;
 
     // Copy necessary member and free the lock.
     // It's not necessary for m_aChildFrameContainer ... because
@@ -1434,7 +1412,7 @@ void SAL_CALL Frame::activate() throw( css::uno::RuntimeException, std::exceptio
     css::uno::Reference< css::awt::XWindow >            xComponentWindow( m_xComponentWindow, css::uno::UNO_QUERY )                       ;
     EActiveState                                        eState          = m_eActiveState                                                  ;
 
-    aWriteLock.unlock();
+    aWriteLock.clear();
     /* UNSAFE AREA --------------------------------------------------------------------------------------------- */
 
 
@@ -1442,10 +1420,10 @@ void SAL_CALL Frame::activate() throw( css::uno::RuntimeException, std::exceptio
     if( eState == E_INACTIVE )
     {
         // ... do it then.
-        aWriteLock.lock();
+        aWriteLock.reset();
         eState         = E_ACTIVE;
         m_eActiveState = eState;
-        aWriteLock.unlock();
+        aWriteLock.clear();
         // Deactivate sibling path and forward activation to parent ... if any parent exist!
         if( xParent.is() )
         {
@@ -1484,10 +1462,10 @@ void SAL_CALL Frame::activate() throw( css::uno::RuntimeException, std::exceptio
     //  3)  I was active before or current activated. But if I have no active child => I will get the focus!
     if ( eState == E_ACTIVE && !xActiveChild.is() )
     {
-        aWriteLock.lock();
+        aWriteLock.reset();
         eState         = E_FOCUS;
         m_eActiveState = eState;
-        aWriteLock.unlock();
+        aWriteLock.clear();
         implts_sendFrameActionEvent( css::frame::FrameAction_FRAME_UI_ACTIVATED );
     }
 }
@@ -1514,7 +1492,7 @@ void SAL_CALL Frame::deactivate() throw( css::uno::RuntimeException, std::except
     TransactionGuard aTransaction( m_aTransactionManager, E_HARDEXCEPTIONS );
 
     /* SAFE AREA ----------------------------------------------------------------------------------------------- */
-    Guard aWriteLock( m_aLock );
+    SolarMutexResettableGuard aWriteLock;
 
     // Copy necessary member and free the lock.
     css::uno::Reference< css::frame::XFrame >           xActiveChild    = m_aChildFrameContainer.getActive()                                     ;
@@ -1522,7 +1500,7 @@ void SAL_CALL Frame::deactivate() throw( css::uno::RuntimeException, std::except
     css::uno::Reference< css::frame::XFrame >           xThis           ( static_cast< ::cppu::OWeakObject* >(this), css::uno::UNO_QUERY );
     EActiveState                                        eState          = m_eActiveState                                                  ;
 
-    aWriteLock.unlock();
+    aWriteLock.clear();
     /* UNSAFE AREA --------------------------------------------------------------------------------------------- */
 
     // Work only, if there something to do!
@@ -1541,10 +1519,10 @@ void SAL_CALL Frame::deactivate() throw( css::uno::RuntimeException, std::except
         {
             // Set new state INACTIVE(!) and send message to all listener.
             // Don't set ACTIVE as new state. This frame is deactivated for next time - due to activate().
-            aWriteLock.lock();
+            aWriteLock.reset();
             eState          = E_ACTIVE;
             m_eActiveState  = eState  ;
-            aWriteLock.unlock();
+            aWriteLock.clear();
             implts_sendFrameActionEvent( css::frame::FrameAction_FRAME_UI_DEACTIVATING );
         }
 
@@ -1553,10 +1531,10 @@ void SAL_CALL Frame::deactivate() throw( css::uno::RuntimeException, std::except
         if( eState == E_ACTIVE )
         {
             // Set new state and send message to all listener.
-            aWriteLock.lock();
+            aWriteLock.reset();
             eState          = E_INACTIVE;
             m_eActiveState  = eState    ;
-            aWriteLock.unlock();
+            aWriteLock.clear();
             implts_sendFrameActionEvent( css::frame::FrameAction_FRAME_DEACTIVATING );
         }
 
@@ -1594,9 +1572,7 @@ sal_Bool SAL_CALL Frame::isActive() throw( css::uno::RuntimeException, std::exce
     // Register transaction and reject wrong calls.
     TransactionGuard aTransaction( m_aTransactionManager, E_HARDEXCEPTIONS );
 
-    /* SAFE AREA ----------------------------------------------------------------------------------------------- */
-    Guard aReadLock( m_aLock );
-
+    SolarMutexGuard g;
     return  (
                 ( m_eActiveState    ==  E_ACTIVE    )   ||
                 ( m_eActiveState    ==  E_FOCUS     )
@@ -1666,14 +1642,14 @@ sal_Bool SAL_CALL Frame::setComponent(  const   css::uno::Reference< css::awt::X
 
     // Get threadsafe some copies of used members.
     /* SAFE { */
-    Guard aReadLock( m_aLock );
+    SolarMutexClearableGuard aReadLock;
     css::uno::Reference< css::awt::XWindow >       xContainerWindow    = m_xContainerWindow;
     css::uno::Reference< css::awt::XWindow >       xOldComponentWindow = m_xComponentWindow;
     css::uno::Reference< css::frame::XController > xOldController      = m_xController;
     Window*                                        pOwnWindow = VCLUnoHelper::GetWindow( xContainerWindow );
     sal_Bool                                       bHadFocus           = pOwnWindow->HasChildPathFocus();
     sal_Bool                                       bWasConnected       = m_bConnected;
-    aReadLock.unlock();
+    aReadLock.clear();
     /* } SAFE */
 
 
@@ -1705,9 +1681,9 @@ sal_Bool SAL_CALL Frame::setComponent(  const   css::uno::Reference< css::awt::X
         // Before we dispose this controller we should hide it inside this frame instance.
         // We hold it alive for next calls by using xOldController!
         /* SAFE {*/
-        Guard aWriteLock( m_aLock );
+        SolarMutexClearableGuard aWriteLock;
         m_xController = NULL;
-        aWriteLock.unlock();
+        aWriteLock.clear();
         /* } SAFE */
 
         css::uno::Reference< css::lang::XComponent > xDisposable( xOldController, css::uno::UNO_QUERY );
@@ -1735,9 +1711,9 @@ sal_Bool SAL_CALL Frame::setComponent(  const   css::uno::Reference< css::awt::X
        )
     {
         /* SAFE { */
-        Guard aWriteLock( m_aLock );
+        SolarMutexClearableGuard aWriteLock;
         m_xComponentWindow = NULL;
-        aWriteLock.unlock();
+        aWriteLock.clear();
         /* } SAFE */
 
         css::uno::Reference< css::lang::XComponent > xDisposable( xOldComponentWindow, css::uno::UNO_QUERY );
@@ -1758,12 +1734,12 @@ sal_Bool SAL_CALL Frame::setComponent(  const   css::uno::Reference< css::awt::X
     // Now it's time to set the new component ...
     // By the way - find out our new "load state" - means if we have a valid component inside.
     /* SAFE { */
-    Guard aWriteLock( m_aLock );
+    SolarMutexResettableGuard aWriteLock;
     m_xComponentWindow = xComponentWindow;
     m_xController      = xController     ;
     m_bConnected       = (m_xComponentWindow.is() || m_xController.is());
     sal_Bool bIsConnected       = m_bConnected;
-    aWriteLock.unlock();
+    aWriteLock.clear();
     /* } SAFE */
 
 
@@ -1793,9 +1769,9 @@ sal_Bool SAL_CALL Frame::setComponent(  const   css::uno::Reference< css::awt::X
     implts_startWindowListening();
 
     /* SAFE { */
-    aWriteLock.lock();
+    aWriteLock.reset();
     impl_checkMenuCloser();
-    aWriteLock.unlock();
+    aWriteLock.clear();
     /* } SAFE */
 
     return sal_True;
@@ -1825,9 +1801,7 @@ css::uno::Reference< css::awt::XWindow > SAL_CALL Frame::getComponentWindow() th
     // Register transaction and reject wrong calls.
     TransactionGuard aTransaction( m_aTransactionManager, E_HARDEXCEPTIONS );
 
-    /* SAFE AREA ----------------------------------------------------------------------------------------------- */
-    Guard aReadLock( m_aLock );
-
+    SolarMutexGuard g;
     return m_xComponentWindow;
 }
 
@@ -1851,11 +1825,7 @@ css::uno::Reference< css::awt::XWindow > SAL_CALL Frame::getComponentWindow() th
 *//*-*****************************************************************************************************/
 css::uno::Reference< css::frame::XController > SAL_CALL Frame::getController() throw( css::uno::RuntimeException, std::exception )
 {
-    /* UNSAFE AREA --------------------------------------------------------------------------------------------- */
-
-    /* SAFE AREA ----------------------------------------------------------------------------------------------- */
-    Guard aReadLock( m_aLock );
-
+    SolarMutexGuard g;
     return m_xController;
 }
 
@@ -1957,11 +1927,8 @@ void SAL_CALL Frame::close( sal_Bool bDeliverOwnership ) throw( css::util::Close
     {
         if (bDeliverOwnership)
         {
-            /* SAFE */
-            Guard aWriteLock( m_aLock );
+            SolarMutexGuard g;
             m_bSelfClose = sal_True;
-            aWriteLock.unlock();
-            /* SAFE */
         }
 
         throw css::util::CloseVetoException("Frame in use for loading document ...",static_cast< ::cppu::OWeakObject*>(this));
@@ -1989,9 +1956,9 @@ void SAL_CALL Frame::close( sal_Bool bDeliverOwnership ) throw( css::util::Close
     }
 
     /* SAFE { */
-    Guard aWriteLock( m_aLock );
+    SolarMutexClearableGuard aWriteLock;
     m_bIsHidden = sal_True;
-    aWriteLock.unlock();
+    aWriteLock.clear();
     /* } SAFE */
     impl_checkMenuCloser();
 
@@ -2040,9 +2007,9 @@ OUString SAL_CALL Frame::getTitle()
     TransactionGuard aTransaction( m_aTransactionManager, E_HARDEXCEPTIONS );
 
     // SAFE ->
-    Guard aReadLock(m_aLock);
+    SolarMutexClearableGuard aReadLock;
     css::uno::Reference< css::frame::XTitle > xTitle(m_xTitleHelper, css::uno::UNO_QUERY_THROW);
-    aReadLock.unlock();
+    aReadLock.clear();
     // <- SAFE
 
     return xTitle->getTitle();
@@ -2055,9 +2022,9 @@ void SAL_CALL Frame::setTitle( const OUString& sTitle )
     TransactionGuard aTransaction( m_aTransactionManager, E_HARDEXCEPTIONS );
 
     // SAFE ->
-    Guard aReadLock(m_aLock);
+    SolarMutexClearableGuard aReadLock;
     css::uno::Reference< css::frame::XTitle > xTitle(m_xTitleHelper, css::uno::UNO_QUERY_THROW);
-    aReadLock.unlock();
+    aReadLock.clear();
     // <- SAFE
 
     xTitle->setTitle(sTitle);
@@ -2070,9 +2037,9 @@ void SAL_CALL Frame::addTitleChangeListener( const css::uno::Reference< css::fra
     TransactionGuard aTransaction( m_aTransactionManager, E_HARDEXCEPTIONS );
 
     // SAFE ->
-    Guard aReadLock(m_aLock);
+    SolarMutexClearableGuard aReadLock;
     css::uno::Reference< css::frame::XTitleChangeBroadcaster > xTitle(m_xTitleHelper, css::uno::UNO_QUERY_THROW);
-    aReadLock.unlock();
+    aReadLock.clear();
     // <- SAFE
 
     xTitle->addTitleChangeListener(xListener);
@@ -2085,9 +2052,9 @@ void SAL_CALL Frame::removeTitleChangeListener( const css::uno::Reference< css::
     TransactionGuard aTransaction( m_aTransactionManager, E_HARDEXCEPTIONS );
 
     // SAFE ->
-    Guard aReadLock(m_aLock);
+    SolarMutexClearableGuard aReadLock;
     css::uno::Reference< css::frame::XTitleChangeBroadcaster > xTitle(m_xTitleHelper, css::uno::UNO_QUERY_THROW);
-    aReadLock.unlock();
+    aReadLock.clear();
     // <- SAFE
 
     xTitle->removeTitleChangeListener(xListener);
@@ -2101,7 +2068,7 @@ css::uno::Reference<css::container::XNameContainer> SAL_CALL Frame::getUserDefin
 
 css::uno::Reference<css::frame::XDispatchRecorderSupplier> SAL_CALL Frame::getDispatchRecorderSupplier() throw (css::uno::RuntimeException, std::exception)
 {
-    Guard aReadLock( m_aLock );
+    SolarMutexGuard g;
     return m_xDispatchRecorderSupplier;
 }
 
@@ -2109,16 +2076,13 @@ void SAL_CALL Frame::setDispatchRecorderSupplier(const css::uno::Reference<css::
 {
     TransactionGuard aTransaction( m_aTransactionManager, E_HARDEXCEPTIONS );
 
-    /* SAFE { */
-        Guard aWriteLock( m_aLock );
-            m_xDispatchRecorderSupplier.set(p);
-        aWriteLock.unlock();
-    /* } SAFE */
+    SolarMutexGuard g;
+    m_xDispatchRecorderSupplier.set(p);
 }
 
 css::uno::Reference<css::uno::XInterface> SAL_CALL Frame::getLayoutManager() throw (css::uno::RuntimeException, std::exception)
 {
-    Guard aReadLock( m_aLock );
+    SolarMutexGuard g;
     return m_xLayoutManager;
 }
 
@@ -2126,11 +2090,8 @@ void SAL_CALL Frame::setLayoutManager(const css::uno::Reference<css::uno::XInter
 {
     TransactionGuard aTransaction( m_aTransactionManager, E_HARDEXCEPTIONS );
 
-    /* SAFE { */
-        Guard aWriteLock( m_aLock );
-            m_xLayoutManager.set(p1, css::uno::UNO_QUERY);
-        aWriteLock.unlock();
-    /* } SAFE */
+    SolarMutexGuard g;
+    m_xLayoutManager.set(p1, css::uno::UNO_QUERY);
 }
 
 
@@ -2138,9 +2099,9 @@ void SAL_CALL Frame::setLayoutManager(const css::uno::Reference<css::uno::XInter
 void Frame::implts_forgetSubFrames()
 {
     // SAFE ->
-    Guard aReadLock(m_aLock);
+    SolarMutexClearableGuard aReadLock;
     css::uno::Reference< css::container::XIndexAccess > xContainer(m_xFramesHelper, css::uno::UNO_QUERY_THROW);
-    aReadLock.unlock();
+    aReadLock.clear();
     // <- SAFE
 
     sal_Int32 c = xContainer->getCount();
@@ -2162,12 +2123,9 @@ void Frame::implts_forgetSubFrames()
         }
     }
 
-    // SAFE ->
-    Guard aWriteLock(m_aLock);
+    SolarMutexGuard g;
     m_xFramesHelper.clear(); // clear uno reference
     m_aChildFrameContainer.clear(); // clear container content
-    aWriteLock.unlock();
-    // <- SAFE
 }
 
 /*-****************************************************************************************************
@@ -2376,13 +2334,13 @@ css::uno::Reference< css::task::XStatusIndicator > SAL_CALL Frame::createStatusI
     TransactionGuard aTransaction( m_aTransactionManager, E_HARDEXCEPTIONS );
 
     /* SAFE AREA ----------------------------------------------------------------------------------------------- */
-    Guard aReadLock( m_aLock );
+    SolarMutexClearableGuard aReadLock;
 
     // Make snapshot of necessary member and define default return value.
     css::uno::Reference< css::task::XStatusIndicator >        xExternal(m_xIndicatorInterception.get(), css::uno::UNO_QUERY);
     css::uno::Reference< css::task::XStatusIndicatorFactory > xFactory = m_xIndicatorFactoryHelper;
 
-    aReadLock.unlock();
+    aReadLock.clear();
     /* UNSAFE AREA ----------------------------------------------------------------------------------------- */
 
     // Was set from outside to intercept any progress activities!
@@ -2558,10 +2516,10 @@ void SAL_CALL Frame::focusGained( const css::awt::FocusEvent& aEvent ) throw( cs
     TransactionGuard aTransaction( m_aTransactionManager, E_SOFTEXCEPTIONS );
 
     /* SAFE AREA ----------------------------------------------------------------------------------------------- */
-    Guard aReadLock( m_aLock );
+    SolarMutexClearableGuard aReadLock;
     // Make snapshot of member!
     css::uno::Reference< css::awt::XWindow > xComponentWindow = m_xComponentWindow;
-    aReadLock.unlock();
+    aReadLock.clear();
     /* UNSAFE AREA --------------------------------------------------------------------------------------------- */
 
     if( xComponentWindow.is() )
@@ -2594,10 +2552,10 @@ void SAL_CALL Frame::windowActivated( const css::lang::EventObject& aEvent ) thr
     TransactionGuard aTransaction( m_aTransactionManager, E_HARDEXCEPTIONS );
 
     /* SAFE AREA ----------------------------------------------------------------------------------------------- */
-    Guard aReadLock( m_aLock );
+    SolarMutexClearableGuard aReadLock;
     // Make snapshot of member!
     EActiveState eState = m_eActiveState;
-    aReadLock.unlock();
+    aReadLock.clear();
     /* UNSAFE AREA --------------------------------------------------------------------------------------------- */
     // Activate the new active path from here to top.
     if( eState == E_INACTIVE )
@@ -2618,13 +2576,13 @@ void SAL_CALL Frame::windowDeactivated( const css::lang::EventObject& aEvent ) t
     TransactionGuard aTransaction( m_aTransactionManager, E_SOFTEXCEPTIONS );
 
     /* SAFE AREA ----------------------------------------------------------------------------------------------- */
-    Guard aReadLock( m_aLock );
+    SolarMutexClearableGuard aReadLock;
 
     css::uno::Reference< css::frame::XFrame > xParent          ( m_xParent, css::uno::UNO_QUERY );
     css::uno::Reference< css::awt::XWindow >  xContainerWindow = m_xContainerWindow;
     EActiveState                              eActiveState     = m_eActiveState    ;
 
-    aReadLock.unlock();
+    aReadLock.clear();
 
     if( eActiveState != E_INACTIVE )
     {
@@ -2683,9 +2641,9 @@ void SAL_CALL Frame::windowClosing( const css::lang::EventObject& ) throw( css::
      */
 
     /* SAFE */
-    Guard aReadLock( m_aLock );
+    SolarMutexClearableGuard aReadLock;
     css::uno::Reference< css::uno::XComponentContext > xContext = m_xContext;
-    aReadLock.unlock();
+    aReadLock.clear();
     /* SAFE */
 
     css::util::URL aURL;
@@ -2729,11 +2687,11 @@ void SAL_CALL Frame::windowShown( const css::lang::EventObject& ) throw(css::uno
     static sal_Bool bFirstVisibleTask = sal_True;
 
     /* SAFE { */
-    Guard aReadLock(m_aLock);
+    SolarMutexClearableGuard aReadLock;
     css::uno::Reference< css::frame::XDesktop >             xDesktopCheck( m_xParent, css::uno::UNO_QUERY );
     css::uno::Reference< css::uno::XComponentContext > xContext = m_xContext;
     m_bIsHidden = sal_False;
-    aReadLock.unlock();
+    aReadLock.clear();
     /* } SAFE */
 
     impl_checkMenuCloser();
@@ -2759,9 +2717,9 @@ void SAL_CALL Frame::windowShown( const css::lang::EventObject& ) throw(css::uno
 void SAL_CALL Frame::windowHidden( const css::lang::EventObject& ) throw(css::uno::RuntimeException, std::exception)
 {
     /* SAFE { */
-    Guard aReadLock(m_aLock);
+    SolarMutexClearableGuard aReadLock;
     m_bIsHidden = sal_True;
-    aReadLock.unlock();
+    aReadLock.clear();
     /* } SAFE */
 
     impl_checkMenuCloser();
@@ -2792,14 +2750,14 @@ void SAL_CALL Frame::disposing( const css::lang::EventObject& aEvent ) throw( cs
     TransactionGuard aTransaction( m_aTransactionManager, E_SOFTEXCEPTIONS );
 
     /* SAFE AREA ----------------------------------------------------------------------------------------------- */
-    Guard aWriteLock( m_aLock );
+    SolarMutexResettableGuard aWriteLock;
 
     if( aEvent.Source == m_xContainerWindow )
     {
         // NECESSARY: Impl-method is threadsafe by himself!
-        aWriteLock.unlock();
+        aWriteLock.clear();
         implts_stopWindowListening();
-        aWriteLock.lock();
+        aWriteLock.reset();
         m_xContainerWindow = css::uno::Reference< css::awt::XWindow >();
     }
 }
@@ -2825,15 +2783,13 @@ void SAL_CALL Frame::disposing( const css::lang::EventObject& aEvent ) throw( cs
 *//*-*************************************************************************************************************/
 sal_Bool SAL_CALL Frame::isActionLocked() throw( css::uno::RuntimeException, std::exception )
 {
-    /* SAFE AREA ----------------------------------------------------------------------------------------------- */
-    Guard aReadLock( m_aLock );
+    SolarMutexGuard g;
     return( m_nExternalLockCount!=0);
 }
 
 void SAL_CALL Frame::addActionLock() throw( css::uno::RuntimeException, std::exception )
 {
-    /* SAFE AREA ----------------------------------------------------------------------------------------------- */
-    Guard aWriteLock( m_aLock );
+    SolarMutexGuard g;
     ++m_nExternalLockCount;
 }
 
@@ -2842,19 +2798,18 @@ void SAL_CALL Frame::removeActionLock() throw( css::uno::RuntimeException, std::
     // Register no transaction here! Otherwhise we wait for ever inside possible
     // implts_checkSuicide()/dispose() request ...
 
-    /* SAFE AREA */{
-        Guard aWriteLock( m_aLock );
+    {
+        SolarMutexGuard g;
         SAL_WARN_IF( m_nExternalLockCount<=0, "fwk", "Frame::removeActionLock(): Frame isn't locked! Possible multithreading problem detected." );
         --m_nExternalLockCount;
-    }/* SAFE */
+    }
 
     implts_checkSuicide();
 }
 
 void SAL_CALL Frame::setActionLocks( sal_Int16 nLock ) throw( css::uno::RuntimeException, std::exception )
 {
-    /* SAFE AREA ----------------------------------------------------------------------------------------------- */
-    Guard aWriteLock( m_aLock );
+    SolarMutexGuard g;
     // Attention: If somewhere called resetActionLocks() before and get e.g. 5 locks ...
     //            and tried to set these 5 ones here after his operations ...
     //            we can't ignore setted requests during these two calls!
@@ -2868,11 +2823,11 @@ sal_Int16 SAL_CALL Frame::resetActionLocks() throw( css::uno::RuntimeException, 
     // implts_checkSuicide()/dispose() request ...
 
     sal_Int16 nCurrentLocks = 0;
-    /* SAFE */{
-        Guard aWriteLock( m_aLock );
+    {
+        SolarMutexGuard g;
         nCurrentLocks = m_nExternalLockCount;
         m_nExternalLockCount = 0;
-    }/* SAFE */
+    }
 
     // Attention:
     // external lock count is 0 here every time ... but if
@@ -3173,10 +3128,10 @@ void Frame::implts_setIconOnWindow()
 
     /* SAFE AREA ----------------------------------------------------------------------------------------------- */
     // Make snapshot of necessary members and release lock.
-    Guard aReadLock( m_aLock );
+    SolarMutexClearableGuard aReadLock;
     css::uno::Reference< css::awt::XWindow >       xContainerWindow( m_xContainerWindow, css::uno::UNO_QUERY );
     css::uno::Reference< css::frame::XController > xController     ( m_xController     , css::uno::UNO_QUERY );
-    aReadLock.unlock();
+    aReadLock.clear();
     /* UNSAFE AREA --------------------------------------------------------------------------------------------- */
 
     if( xContainerWindow.is() && xController.is() )
@@ -3270,14 +3225,14 @@ void Frame::implts_startWindowListening()
 
     /* SAFE AREA ----------------------------------------------------------------------------------------------- */
     // Make snapshot of necessary member!
-    Guard aReadLock( m_aLock );
+    SolarMutexClearableGuard aReadLock;
     css::uno::Reference< css::awt::XWindow >                            xContainerWindow    = m_xContainerWindow   ;
     css::uno::Reference< css::uno::XComponentContext >                  xContext = m_xContext;
     css::uno::Reference< css::datatransfer::dnd::XDropTargetListener >  xDragDropListener   = m_xDropTargetListener;
     css::uno::Reference< css::awt::XWindowListener >                    xWindowListener     ( static_cast< ::cppu::OWeakObject* >(this), css::uno::UNO_QUERY );
     css::uno::Reference< css::awt::XFocusListener >                     xFocusListener      ( static_cast< ::cppu::OWeakObject* >(this), css::uno::UNO_QUERY );
     css::uno::Reference< css::awt::XTopWindowListener >                 xTopWindowListener  ( static_cast< ::cppu::OWeakObject* >(this), css::uno::UNO_QUERY );
-    aReadLock.unlock();
+    aReadLock.clear();
     /* UNSAFE AREA --------------------------------------------------------------------------------------------- */
 
     if( xContainerWindow.is() )
@@ -3310,14 +3265,14 @@ void Frame::implts_stopWindowListening()
 
     /* SAFE AREA ----------------------------------------------------------------------------------------------- */
     // Make snapshot of necessary member!
-    Guard aReadLock( m_aLock );
+    SolarMutexClearableGuard aReadLock;
     css::uno::Reference< css::awt::XWindow >                            xContainerWindow    = m_xContainerWindow   ;
     css::uno::Reference< css::uno::XComponentContext >                  xContext            = m_xContext           ;
     css::uno::Reference< css::datatransfer::dnd::XDropTargetListener >  xDragDropListener   = m_xDropTargetListener;
     css::uno::Reference< css::awt::XWindowListener >                    xWindowListener     ( static_cast< ::cppu::OWeakObject* >(this), css::uno::UNO_QUERY );
     css::uno::Reference< css::awt::XFocusListener >                     xFocusListener      ( static_cast< ::cppu::OWeakObject* >(this), css::uno::UNO_QUERY );
     css::uno::Reference< css::awt::XTopWindowListener >                 xTopWindowListener  ( static_cast< ::cppu::OWeakObject* >(this), css::uno::UNO_QUERY );
-    aReadLock.unlock();
+    aReadLock.clear();
     /* UNSAFE AREA --------------------------------------------------------------------------------------------- */
 
     if( xContainerWindow.is() )
@@ -3358,12 +3313,12 @@ void Frame::implts_stopWindowListening()
 void Frame::implts_checkSuicide()
 {
     /* SAFE */
-    Guard aReadLock(m_aLock);
+    SolarMutexClearableGuard aReadLock;
     // in case of lock==0 and safed state of previous close() request m_bSelfClose
     // we must force close() again. Because we had disagreed with that before.
     sal_Bool bSuicide = (m_nExternalLockCount==0 && m_bSelfClose);
     m_bSelfClose = sal_False;
-    aReadLock.unlock();
+    aReadLock.clear();
     /* } SAFE */
     // force close and deliver owner ship to source of possible throwed veto exception
     // Attention: Because this method isn't designed to throw such exception we must supress
@@ -3426,7 +3381,7 @@ void Frame::impl_setCloser( /*IN*/ const css::uno::Reference< css::frame::XFrame
 void Frame::impl_checkMenuCloser()
 {
     /* SAFE { */
-    Guard aReadLock(m_aLock);
+    SolarMutexClearableGuard aReadLock;
 
     // only top frames, which are part of our desktop hierarchy, can
     // do so! By the way - we need the desktop instance to have access
@@ -3436,7 +3391,7 @@ void Frame::impl_checkMenuCloser()
     if ( !xDesktop.is() || !xTaskSupplier.is() )
         return;
 
-    aReadLock.unlock();
+    aReadLock.clear();
     /* } SAFE */
 
     // analyze the list of current open tasks
