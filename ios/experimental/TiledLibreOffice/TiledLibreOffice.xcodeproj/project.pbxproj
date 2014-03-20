@@ -315,6 +315,8 @@
 		BE55B10218D9AB5400950228 /* shutdowniconaqua.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; name = shutdowniconaqua.mm; path = ../../../sfx2/source/appl/shutdowniconaqua.mm; sourceTree = "<group>"; };
 		BE55B10318D9AB5400950228 /* workwin.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = workwin.cxx; path = ../../../sfx2/source/appl/workwin.cxx; sourceTree = "<group>"; };
 		BE55B10418D9AB5400950228 /* xpackcreator.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = xpackcreator.cxx; path = ../../../sfx2/source/appl/xpackcreator.cxx; sourceTree = "<group>"; };
+		BE55B10618DAD89800950228 /* compat.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = compat.cxx; path = ../../../cppu/source/cppu/compat.cxx; sourceTree = "<group>"; };
+		BE55B10718DAD89800950228 /* cppu_opt.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = cppu_opt.cxx; path = ../../../cppu/source/cppu/cppu_opt.cxx; sourceTree = "<group>"; };
 		BE7C277218D1DDF600C4908C /* acmplwrd.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = acmplwrd.cxx; path = ../../../sw/source/core/doc/acmplwrd.cxx; sourceTree = "<group>"; };
 		BE7C277318D1DDF600C4908C /* dbgoutsw.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = dbgoutsw.cxx; path = ../../../sw/source/core/doc/dbgoutsw.cxx; sourceTree = "<group>"; };
 		BE7C277418D1DDF600C4908C /* doc.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = doc.cxx; path = ../../../sw/source/core/doc/doc.cxx; sourceTree = "<group>"; };
@@ -656,8 +658,9 @@
 			isa = PBXGroup;
 			children = (
 				BE82C47118CA18D70050EB79 /* drawinglayer */,
-				BE35B58A188FFA43001B7439 /* cppuhelper */,
 				BE9F45F81868393D00B8BE69 /* bridges */,
+				BE55B10518DAD85E00950228 /* cppu */,
+				BE35B58A188FFA43001B7439 /* cppuhelper */,
 				BE82C38818C752760050EB79 /* sal */,
 				BE35B5A6189051F7001B7439 /* sfx2 */,
 				BE82C42718CA17A60050EB79 /* svx */,
@@ -1035,6 +1038,15 @@
 				BE55B10418D9AB5400950228 /* xpackcreator.cxx */,
 			);
 			name = appl;
+			sourceTree = "<group>";
+		};
+		BE55B10518DAD85E00950228 /* cppu */ = {
+			isa = PBXGroup;
+			children = (
+				BE55B10618DAD89800950228 /* compat.cxx */,
+				BE55B10718DAD89800950228 /* cppu_opt.cxx */,
+			);
+			name = cppu;
 			sourceTree = "<group>";
 		};
 		BE7C277118D1DDC500C4908C /* doc */ = {
