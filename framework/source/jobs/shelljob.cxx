@@ -23,7 +23,6 @@
 
 #include <jobs/shelljob.hxx>
 #include <jobs/jobconst.hxx>
-#include <threadhelp/guard.hxx>
 #include <services.h>
 
 
@@ -80,8 +79,7 @@ DEFINE_INIT_SERVICE(ShellJob,
 
 
 ShellJob::ShellJob(const css::uno::Reference< css::uno::XComponentContext >& xContext)
-    : ThreadHelpBase(     )
-    , m_xContext    (xContext)
+    : m_xContext    (xContext)
 {
 }
 
@@ -141,15 +139,9 @@ css::uno::Any ShellJob::impl_generateAnswer4Deactivation()
 
 OUString ShellJob::impl_substituteCommandVariables(const OUString& sCommand)
 {
-    // SYNCHRONIZED ->
-    Guard aReadLock(m_aLock);
-    css::uno::Reference< css::uno::XComponentContext > xContext = m_xContext;
-    aReadLock.unlock();
-    // <- SYNCHRONIZED
-
     try
     {
-        css::uno::Reference< css::util::XStringSubstitution > xSubst(  css::util::PathSubstitution::create(xContext) );
+        css::uno::Reference< css::util::XStringSubstitution > xSubst(  css::util::PathSubstitution::create(m_xContext) );
         const ::sal_Bool                                      bSubstRequired   = sal_True;
         const OUString                                 sCompleteCommand = xSubst->substituteVariables(sCommand, bSubstRequired);
 

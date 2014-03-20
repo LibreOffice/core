@@ -20,7 +20,6 @@
 #ifndef INCLUDED_FRAMEWORK_INC_JOBS_SHELLJOB_HXX
 #define INCLUDED_FRAMEWORK_INC_JOBS_SHELLJOB_HXX
 
-#include <threadhelp/threadhelpbase.hxx>
 #include <macros/xinterface.hxx>
 #include <macros/xtypeprovider.hxx>
 #include <macros/xserviceinfo.hxx>
@@ -49,8 +48,7 @@ namespace framework{
 
     @author as96863
  */
-class ShellJob : private ThreadHelpBase
-               ,public ::cppu::WeakImplHelper2< ::com::sun::star::lang::XServiceInfo,::com::sun::star::task::XJob >
+class ShellJob : public ::cppu::WeakImplHelper2< ::com::sun::star::lang::XServiceInfo,::com::sun::star::task::XJob >
 {
 
     // member
