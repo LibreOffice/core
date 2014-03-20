@@ -531,10 +531,6 @@ void ScPreview::DoPrint( ScPreviewLocationData* pFillLocation )
 
             pEditEng->SetText(aEmptyMsg);
 
-            // Calculate text position so that the text appears at the center
-            // of the screen center-aligned.
-            Size aTextSize(pEditEng->CalcTextWidth(), pEditEng->GetTextHeight());
-
             Point aCenter(
                 (aWinEnd.X() - pEditEng->CalcTextWidth())/2,
                 (aWinEnd.Y() - pEditEng->GetTextHeight())/2);
