@@ -19,7 +19,6 @@
 
 #ifndef INCLUDED_FRAMEWORK_INC_UIFACTORY_FACTORYCONFIGURATION_HXX
 #define INCLUDED_FRAMEWORK_INC_UIFACTORY_FACTORYCONFIGURATION_HXX
-#include <threadhelp/threadhelpbase.hxx>
 #include <macros/generic.hxx>
 #include <macros/xinterface.hxx>
 #include <macros/xtypeprovider.hxx>
@@ -46,7 +45,6 @@ namespace framework
 //  Configuration access class for PopupMenuControllerFactory implementation
 
 class ConfigurationAccess_ControllerFactory : // interfaces
-                                                    private ThreadHelpBase,
                                                     public  ::cppu::WeakImplHelper1< ::com::sun::star::container::XContainerListener>
 {
 public:
@@ -91,6 +89,7 @@ private:
 
     sal_Bool impl_getElementProps( const ::com::sun::star::uno::Any& aElement, OUString& aCommand, OUString& aModule, OUString& aServiceSpecifier,OUString& aValue ) const;
 
+    mutable osl::Mutex m_mutex;
     OUString                     m_aPropCommand;
     OUString                     m_aPropModule;
     OUString                     m_aPropController;

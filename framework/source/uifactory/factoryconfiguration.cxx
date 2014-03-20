@@ -18,7 +18,6 @@
  */
 
 #include "uifactory/factoryconfiguration.hxx"
-#include <threadhelp/guard.hxx>
 #include "services.h"
 
 #include "helper/mischelper.hxx"
@@ -60,7 +59,6 @@ OUString getHashKeyFromStrings( const OUString& aCommandURL, const OUString& aMo
 //  XInterface, XTypeProvider
 
 ConfigurationAccess_ControllerFactory::ConfigurationAccess_ControllerFactory( const Reference< XComponentContext >& rxContext, const OUString& _sRoot,bool _bAskValue ) :
-    ThreadHelpBase(),
     m_aPropCommand( "Command" ),
     m_aPropModule( "Module" ),
     m_aPropController( "Controller" ),
@@ -74,8 +72,7 @@ ConfigurationAccess_ControllerFactory::ConfigurationAccess_ControllerFactory( co
 
 ConfigurationAccess_ControllerFactory::~ConfigurationAccess_ControllerFactory()
 {
-    // SAFE
-    Guard aLock( m_aLock );
+    osl::MutexGuard g(m_mutex);
 
     Reference< XContainer > xContainer( m_xConfigAccess, UNO_QUERY );
     if ( xContainer.is() )
@@ -84,8 +81,7 @@ ConfigurationAccess_ControllerFactory::~ConfigurationAccess_ControllerFactory()
 
 OUString ConfigurationAccess_ControllerFactory::getServiceFromCommandModule( const OUString& rCommandURL, const OUString& rModule ) const
 {
-    // SAFE
-    Guard aLock( m_aLock );
+    osl::MutexGuard g(m_mutex);
     MenuControllerMap::const_iterator pIter = m_aMenuControllerMap.find( getHashKeyFromStrings( rCommandURL, rModule ));
 
     if ( pIter != m_aMenuControllerMap.end() )
@@ -103,8 +99,7 @@ OUString ConfigurationAccess_ControllerFactory::getServiceFromCommandModule( con
 }
 OUString ConfigurationAccess_ControllerFactory::getValueFromCommandModule( const OUString& rCommandURL, const OUString& rModule ) const
 {
-    // SAFE
-    Guard aLock( m_aLock );
+    osl::MutexGuard g(m_mutex);
 
     MenuControllerMap::const_iterator pIter = m_aMenuControllerMap.find( getHashKeyFromStrings( rCommandURL, rModule ));
 
@@ -128,8 +123,7 @@ void ConfigurationAccess_ControllerFactory::addServiceToCommandModule(
     const OUString& rModule,
     const OUString& rServiceSpecifier )
 {
-    // SAFE
-    Guard aLock( m_aLock );
+    osl::MutexGuard g(m_mutex);
 
     OUString aHashKey = getHashKeyFromStrings( rCommandURL, rModule );
     m_aMenuControllerMap.insert( MenuControllerMap::value_type( aHashKey,ControllerInfo(rServiceSpecifier,OUString()) ));
@@ -139,8 +133,7 @@ void ConfigurationAccess_ControllerFactory::removeServiceFromCommandModule(
     const OUString& rCommandURL,
     const OUString& rModule )
 {
-    // SAFE
-    Guard aLock( m_aLock );
+    osl::MutexGuard g(m_mutex);
 
     OUString aHashKey = getHashKeyFromStrings( rCommandURL, rModule );
     m_aMenuControllerMap.erase( aHashKey );
@@ -154,8 +147,7 @@ void SAL_CALL ConfigurationAccess_ControllerFactory::elementInserted( const Cont
     OUString   aService;
     OUString   aValue;
 
-    // SAFE
-    Guard aLock( m_aLock );
+    osl::MutexGuard g(m_mutex);
 
     if ( impl_getElementProps( aEvent.Element, aCommand, aModule, aService, aValue ))
     {
@@ -175,8 +167,7 @@ void SAL_CALL ConfigurationAccess_ControllerFactory::elementRemoved ( const Cont
     OUString   aService;
     OUString   aValue;
 
-    // SAFE
-    Guard aLock( m_aLock );
+    osl::MutexGuard g(m_mutex);
 
     if ( impl_getElementProps( aEvent.Element, aCommand, aModule, aService, aValue ))
     {
@@ -195,16 +186,15 @@ void SAL_CALL ConfigurationAccess_ControllerFactory::elementReplaced( const Cont
 // lang.XEventListener
 void SAL_CALL ConfigurationAccess_ControllerFactory::disposing( const EventObject& ) throw(RuntimeException, std::exception)
 {
-    // SAFE
     // remove our reference to the config access
-    Guard aLock( m_aLock );
+    osl::MutexGuard g(m_mutex);
     m_xConfigAccess.clear();
 }
 
 void ConfigurationAccess_ControllerFactory::readConfigurationData()
 {
     // SAFE
-    Guard aLock( m_aLock );
+    osl::ClearableMutexGuard aLock( m_mutex );
 
     if ( !m_bConfigAccessInitialized )
     {
@@ -233,7 +223,7 @@ void ConfigurationAccess_ControllerFactory::readConfigurationData()
 
         uno::Reference< container::XContainer > xContainer( m_xConfigAccess, uno::UNO_QUERY );
         // UNSAFE
-        aLock.unlock();
+        aLock.clear();
 
         if ( xContainer.is() )
         {
@@ -245,8 +235,7 @@ void ConfigurationAccess_ControllerFactory::readConfigurationData()
 
 void ConfigurationAccess_ControllerFactory::updateConfigurationData()
 {
-    // SAFE
-    Guard aLock( m_aLock );
+    osl::MutexGuard g(m_mutex);
     if ( m_xConfigAccess.is() )
     {
         Sequence< OUString >   aPopupMenuControllers = m_xConfigAccess->getElementNames();
