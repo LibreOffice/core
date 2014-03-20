@@ -80,7 +80,7 @@ HandlerCFGAccess* HandlerCache::m_pConfig = NULL;
  */
 HandlerCache::HandlerCache()
 {
-    osl::MutexGuard g(GlobalLock::get());
+    osl::MutexGuard g(LockHelper::getGlobalLock());
 
     if (m_nRefCount==0)
     {
@@ -101,7 +101,7 @@ HandlerCache::HandlerCache()
  */
 HandlerCache::~HandlerCache()
 {
-    osl::MutexGuard g(GlobalLock::get());
+    osl::MutexGuard g(LockHelper::getGlobalLock());
 
     if( m_nRefCount==1)
     {
@@ -129,7 +129,7 @@ sal_Bool HandlerCache::search( const OUString& sURL, ProtocolHandler* pReturn ) 
 {
     sal_Bool bFound = sal_False;
     /* SAFE */{
-        osl::MutexGuard g(GlobalLock::get());
+        osl::MutexGuard g(LockHelper::getGlobalLock());
         PatternHash::const_iterator pItem = m_pPattern->findPatternKey(sURL);
         if (pItem!=m_pPattern->end())
         {
@@ -153,7 +153,7 @@ sal_Bool HandlerCache::search( const css::util::URL& aURL, ProtocolHandler* pRet
 
 void HandlerCache::takeOver(HandlerHash* pHandler, PatternHash* pPattern)
 {
-    osl::MutexGuard g(GlobalLock::get());
+    osl::MutexGuard g(LockHelper::getGlobalLock());
 
     HandlerHash* pOldHandler = m_pHandler;
     PatternHash* pOldPattern = m_pPattern;

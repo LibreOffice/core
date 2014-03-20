@@ -201,7 +201,7 @@ void SAL_CALL ActionTriggerPropertySet::setFastPropertyValue_NoBroadcast(
     sal_Int32 nHandle, const Any& aValue )
 throw( Exception, std::exception )
 {
-    ::osl::MutexGuard aGuard( GlobalLock::get() );
+    ::osl::MutexGuard aGuard( LockHelper::getGlobalLock() );
 
     // Search for right handle ... and try to set property value.
     switch( nHandle )
@@ -231,7 +231,7 @@ throw( Exception, std::exception )
 void SAL_CALL ActionTriggerPropertySet::getFastPropertyValue(
     Any& aValue, sal_Int32 nHandle ) const
 {
-    ::osl::MutexGuard aGuard( GlobalLock::get() );
+    ::osl::MutexGuard aGuard( LockHelper::getGlobalLock() );
 
     // Search for right handle ... and try to get property value.
     switch( nHandle )
@@ -268,7 +268,7 @@ void SAL_CALL ActionTriggerPropertySet::getFastPropertyValue(
     if( pInfoHelper == NULL )
     {
         // Ready for multithreading
-        ::osl::MutexGuard aGuard( GlobalLock::get() );
+        ::osl::MutexGuard aGuard( LockHelper::getGlobalLock() );
         // Control this pointer again, another instance can be faster then these!
         if( pInfoHelper == NULL )
         {
@@ -294,7 +294,7 @@ throw ( RuntimeException, std::exception )
     if( pInfo == NULL )
     {
         // Ready for multithreading
-        ::osl::MutexGuard aGuard( GlobalLock::get() );
+        ::osl::MutexGuard aGuard( LockHelper::getGlobalLock() );
         // Control this pointer again, another instance can be faster then these!
         if( pInfo == NULL )
         {

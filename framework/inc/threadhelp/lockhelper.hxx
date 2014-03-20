@@ -20,68 +20,20 @@
 #ifndef INCLUDED_FRAMEWORK_INC_THREADHELP_LOCKHELPER_HXX
 #define INCLUDED_FRAMEWORK_INC_THREADHELP_LOCKHELPER_HXX
 
-#include <boost/noncopyable.hpp>
-#include <osl/mutex.hxx>
-#include <rtl/instance.hxx>
+#include <sal/config.h>
 
-#include <comphelper/solarmutex.hxx>
 #include <fwidllapi.h>
 
-namespace framework{
+namespace osl { class Mutex; }
+
+namespace framework { namespace LockHelper {
 
 //TODO: This presumable should return the SolarMutex, though it actually returns
 // some independent mutex:
-struct GlobalLock: public rtl::Static<osl::Mutex, GlobalLock> {};
+FWI_DLLPUBLIC osl::Mutex & getGlobalLock();
 
-/*-************************************************************************************************************
-    @short          helper to set right lock in right situation
-    @descr          This helper support different types of locking:
-                        a)  no locks - transparent for user!
-                            This could be useful for simluation or single threaded environments!
-                        b)  own mutex
-                            An object use his own osl-mutex to be threadsafe. Useful for easy and exclusiv locking.
-                        c)  solar mutex
-                            An object use our solar mutex and will be a part of a greater safed "threadsafe code block".
-                            Could be useful for simulation and testing of higher modules!
-                        d)  fair rw-lock
-                            An object use an implementation of a fair rw-lock. This increase granularity of t hreadsafe mechanism
-                            and should be used for high performance threadsafe code!
+} }
 
-    @devstatus      draft
-*//*-*************************************************************************************************************/
-class FWI_DLLPUBLIC LockHelper : private boost::noncopyable
-{
-
-    //  public methods
-
-    public:
-
-
-        //  ctor/dtor
-
-                 LockHelper( comphelper::SolarMutex* pSolarMutex = NULL );
-                ~LockHelper(                                   );
-
-        void acquire();
-        void release();
-
-        //  something else
-
-        ::osl::Mutex&       getShareableOslMutex(                                   );
-
-
-    //  private member
-    //  Make some member mutable for using in const functions!
-
-    private:
-
-        mutable comphelper::SolarMutex* m_pSolarMutex   ;
-        mutable ::osl::Mutex*   m_pShareableOslMutex    ;
-        mutable sal_Bool        m_bDummySolarMutex      ;
-};
-
-}       //  namespace framework
-
-#endif // INCLUDED_FRAMEWORK_INC_THREADHELP_LOCKHELPER_HXX
+#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

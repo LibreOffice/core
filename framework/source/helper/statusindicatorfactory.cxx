@@ -531,7 +531,7 @@ void StatusIndicatorFactory::impl_reschedule(sal_Bool bForce)
         return;
 
     // SAFE ->
-    osl::ResettableMutexGuard aGlobalLock(GlobalLock::get());
+    osl::ResettableMutexGuard aGlobalLock(LockHelper::getGlobalLock());
 
     if (m_nInReschedule == 0)
     {

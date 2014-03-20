@@ -2700,7 +2700,7 @@ void SAL_CALL Frame::windowShown( const css::lang::EventObject& ) throw(css::uno
     if (xDesktopCheck.is())
     {
         /* STATIC SAFE { */
-        osl::ClearableMutexGuard aStaticWriteLock( GlobalLock::get() );
+        osl::ClearableMutexGuard aStaticWriteLock( LockHelper::getGlobalLock() );
         sal_Bool bMustBeTriggered  = bFirstVisibleTask;
                  bFirstVisibleTask = sal_False;
         aStaticWriteLock.clear();
@@ -3443,7 +3443,7 @@ void Frame::impl_checkMenuCloser()
     // Look for necessary actions ...
     // Only if the closer state must be moved from one frame to another one
     // or must be enabled/disabled at all.
-    osl::MutexGuard g(GlobalLock::get());
+    osl::MutexGuard g(LockHelper::getGlobalLock());
     css::uno::Reference< css::frame::XFrame2 > xCloserFrame (m_xCloserFrame.get(), css::uno::UNO_QUERY);
     if (xCloserFrame!=xNewCloserFrame)
     {
