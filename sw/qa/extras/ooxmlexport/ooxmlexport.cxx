@@ -2951,6 +2951,15 @@ DECLARE_OOXMLEXPORT_TEST(testFdo76101, "fdo76101.docx")
     CPPUNIT_ASSERT(4091 >= xmlXPathNodeSetGetLength(pXmlNodes));
 }
 
+DECLARE_OOXMLEXPORT_TEST(testFDO76163 , "fdo76163.docx")
+{
+    xmlDocPtr pXmlDoc = parseExport("word/document.xml");
+    if (!pXmlDoc)
+        return;
+    //docx file after RT is getting corrupted.
+    assertXPath ( pXmlDoc, "/w:document/w:body/w:p[2]/w:hyperlink/w:r[11]/w:fldChar", "fldCharType", "end" );
+}
+
 DECLARE_OOXMLEXPORT_TEST(test76317_2K10, "test76317_2K10.docx")
 {
     xmlDocPtr pXmlDoc = parseExport("word/document.xml");

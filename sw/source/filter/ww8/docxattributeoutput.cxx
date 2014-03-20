@@ -734,6 +734,14 @@ void DocxAttributeOutput::EndRun()
     {
         if ( m_startedHyperlink )
         {
+            for ( int i = 0; i < m_nFieldsInHyperlink; i++ )
+            {
+                // If fields begin before hyperlink then
+                // it should end before hyperlink close
+                EndField_Impl( m_Fields.back( ) );
+                if (m_Fields.back().pField)
+                    delete m_Fields.back().pField;
+            }
             m_pSerializer->endElementNS( XML_w, XML_hyperlink );
             m_startedHyperlink = false;
             m_nHyperLinkCount--;
@@ -769,6 +777,7 @@ void DocxAttributeOutput::EndRun()
         m_pHyperlinkAttrList = NULL;
         m_startedHyperlink = true;
         m_nHyperLinkCount++;
+        m_nFieldsInHyperlink = 0;
     }
 
     // if there is some redlining in the document, output it
@@ -1012,6 +1021,8 @@ void DocxAttributeOutput::WriteFFData(  const FieldInfos& rInfos )
 
 void DocxAttributeOutput::StartField_Impl( FieldInfos& rInfos, bool bWriteRun )
 {
+    if ( m_startedHyperlink )
+        ++m_nFieldsInHyperlink;
     if ( rInfos.pField && rInfos.eType == ww::eUNKNOWN )
     {
         // Expand unsupported fields
@@ -7159,6 +7170,7 @@ DocxAttributeOutput::DocxAttributeOutput( DocxExport &rExport, FSHelperPtr pSeri
       m_closeHyperlinkInPreviousRun( false ),
       m_startedHyperlink( false ),
       m_nHyperLinkCount(0),
+      m_nFieldsInHyperlink( 0 ),
       m_postponedGraphic( NULL ),
       m_postponedDiagram( NULL ),
       m_postponedVMLDrawing(NULL),
