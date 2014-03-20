@@ -87,8 +87,8 @@ class AgendaDocument(TextDocument):
         self.allItems = []
 
     def load(self, templateURL):
-        #Each template is duplicated. aw-XXX.ott is the template itself
-        #and XXX.ott is a section link.
+        # Each template is duplicated. aw-XXX.ott is the template itself
+        # and XXX.ott is a section link.
         self.template = self.calcTemplateName(templateURL)
         self.loadAsPreview(templateURL, False)
         self.xFrame.ComponentWindow.Enable = False
@@ -432,7 +432,7 @@ class AgendaDocument(TextDocument):
         else:
             try:
                 topicStartTime = int(self.agenda.cp_Time)
-                #first I replace the minutes titles...
+                # first I replace the minutes titles...
                 self.items = self.searchFillInItems()
                 itemIndex = 0
                 for item in self.items:
@@ -823,7 +823,7 @@ class Topics(object):
     topics table to the given number of topics.
     Note this method does only reducing - if
     the number of topics given is greater than the
-    number of actuall topics it does *not* add
+    number of actual topics it does *not* add
     rows !
     Note also that the first topic will never be removed.
     If the table contains no topics, the whole section will
@@ -917,7 +917,7 @@ class AgendaItem(object):
         cell = ItemsTable.table.getCellByName(cellname)
         cell.String = self.textElement
         tableCursor.goRight(1, False)
-        #second field is actually always null...
+        # second field is actually always null...
         # this is a preparation for adding placeholders.
         if self.field is not None:
             self.field.write(ItemsTable.table.getCellByName(

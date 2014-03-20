@@ -47,7 +47,7 @@ then the other three rows, which do not exist in the data model, are disabled.
 <br/>
 The following other functionality is implemented:
 <br/>
-0. synchroniting data between controls, data model and live preview.
+0. synchronizing data between controls, data model and live preview.
 1. Tab scrolling.<br/>
 2. Keyboard scrolling.<br/>
 3. Removing rows and adding new rows.<br/>
@@ -55,7 +55,7 @@ The following other functionality is implemented:
 <br/>
 This control relays on the ControlScroller control which uses the following
 Data model:<br/>
-1. It uses a vector, whos members are arrays of PropertyValue.<br/>
+1. It uses a vector, whose members are arrays of PropertyValue.<br/>
 2. Each array represents a row.<br/>
 (Note: the Name and Value memebrs of the PropertyValue object are being used)
 3. Each property Value represents a value
@@ -157,7 +157,7 @@ class TopicsControl(ControlScroller):
                 setEnabled(True)
 
     def saveTopics(self, agenda):
-        #last row is always empty
+        # last row is always empty
         agenda.cp_Topics.childrenList = self.scrollfields[:-1]
 
     '''

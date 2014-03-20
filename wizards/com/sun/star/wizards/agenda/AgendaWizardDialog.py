@@ -25,10 +25,10 @@ class AgendaWizardDialog(WizardDialog):
 
     def __init__(self, xmsf):
         super(AgendaWizardDialog,self).__init__(xmsf, HID )
-        
+
         #Load Resources
         self.resources = AgendaWizardDialogResources(self.oWizardResource)
-        
+
         #set dialog properties...
         self.setDialogProperties(True, 210, True, 200, 52, 1, 1,
             self.resources.resAgendaWizardDialog_title, 310)
@@ -98,7 +98,7 @@ class AgendaWizardDialog(WizardDialog):
                 "ScaleImage", PropertyNames.PROPERTY_STEP,
                 PropertyNames.PROPERTY_TABINDEX,
                 PropertyNames.PROPERTY_WIDTH)
-                
+
         self.fontDescriptor4 = \
             uno.createUnoStruct('com.sun.star.awt.FontDescriptor')
         self.fontDescriptor4.Weight = 150
@@ -108,7 +108,7 @@ class AgendaWizardDialog(WizardDialog):
             (self.fontDescriptor4, 16, self.resources.reslblTitle1_value,
                 True, 91, 8, 1, 100,212))
         self.insertLabel("lblPageDesign", self.PROPS_TEXT,
-            (8, self.resources.reslblPageDesign_value, 97, 32, 1, 101, 66))  
+            (8, self.resources.reslblPageDesign_value, 97, 32, 1, 101, 66))
         self.listPageDesign = self.insertListBox("listPageDesign",
             None, AgendaWizardDialogConst.LISTPAGEDESIGN_ACTION_PERFORMED,
             self.PROPS_LIST,
