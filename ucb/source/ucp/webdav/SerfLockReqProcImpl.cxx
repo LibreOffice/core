@@ -20,7 +20,7 @@
 #include "SerfLockReqProcImpl.hxx"
 #include "DAVException.hxx"
 
-//#include "webdavresponseparser.hxx"
+#include "webdavresponseparser.hxx"
 #include <rtl/strbuf.hxx>
 
 namespace http_dav_ucp
@@ -131,33 +131,23 @@ void SerfLockReqProcImpl::processChunkOfResponseData( const char* data,
     }
 }
 
-void SerfLockReqProcImpl::handleEndOfResponseData( serf_bucket_t * /*inSerfResponseBucket*/ )
+void SerfLockReqProcImpl::handleEndOfResponseData( serf_bucket_t * )
 {
-    //const std::vector< DAVResourceInfo > rResInfo( parseWebDAVPropNameResponse( m_xInputStream.get() ) );
+    const std::vector< css::ucb::Lock > aLocks( parseWebDAVLockResponse( m_xInputStream.get() ) );
 
-    /*
-    if ( theRetVal == NE_OK )
+    if (!aLocks.empty())
     {
-        m_aSerfLockStore.addLock( theLock,
-                                  this,
-                                  lastChanceToSendRefreshRequest(
-                                      startCall, theLock->timeout ) );
-
-        uno::Sequence< OUString > aTokens( 1 );
-        aTokens[ 0 ] = OUString::createFromAscii( theLock->token );
-        m_xLock.LockTokens = aTokens;
-
-        SAL_INFO("ucb.ucp.webdav",  "SerfSession::LOCK: created lock for "
-                    << makeAbsoluteURL( inPath ) << ". token: " << theLock->token );
+        for (size_t i = 0; i < aLocks.size(); ++i)
+        {
+           // m_pSerfLockStore->addLock( aLocks[i], m_pSerfSession, m_aStartCall );
+            SAL_INFO("ucb.ucp.webdav",  "SerfSession::LOCK: created lock for "
+                    << getPathStr() << ". token: " << aLocks[i].LockTokens[0]);
+        }
     }
     else
     {
-        ne_lock_destroy( theLock );
-
-        SAL_INFO("ucb.ucp.webdav",  "SerfSession::LOCK: obtaining lock for "
-                    << makeAbsoluteURL( inPath ) << " failed!");
+        SAL_INFO("ucb.ucp.webdav",  "SerfSession::LOCK: obtaining lock failed!");
     }
-    */
 }
 
 } // namespace http_dav_ucp
