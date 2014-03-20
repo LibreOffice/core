@@ -374,7 +374,8 @@ bool ScTableProtectionImpl::updateReference( UpdateRefMode eMode, ScDocument* pD
     for (::std::vector<ScEnhancedProtection>::iterator it(maEnhancedProtection.begin());
             it != maEnhancedProtection.end(); ++it)
     {
-        bChanged |= (*it).maRangeList->UpdateReference( eMode, pDoc, rWhere, nDx, nDy, nDz);
+        if ((*it).maRangeList.Is())
+            bChanged |= (*it).maRangeList->UpdateReference( eMode, pDoc, rWhere, nDx, nDy, nDz);
     }
     return bChanged;
 }
