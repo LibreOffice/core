@@ -35,6 +35,7 @@
 #include <editeng/ulspitem.hxx>
 #include <editeng/shaditem.hxx>
 #include <svx/swframevalidation.hxx>
+#include <svx/xdef.hxx>
 #include <fmtclds.hxx>
 #include "wrtsh.hxx"
 #include "view.hxx"

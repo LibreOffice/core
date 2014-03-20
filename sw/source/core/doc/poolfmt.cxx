@@ -27,6 +27,7 @@
 #include <hintids.hxx>
 #include <i18npool/mslangid.hxx>
 #include <unotools/localedatawrapper.hxx>
+#include <svx/xdef.hxx>
 #include <editeng/paperinf.hxx>
 #include <editeng/wghtitem.hxx>
 #include <editeng/fontitem.hxx>

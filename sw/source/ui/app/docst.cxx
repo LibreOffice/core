@@ -43,6 +43,7 @@
 #include <svl/languageoptions.hxx>
 #include <editeng/eeitem.hxx>
 #include <svx/htmlmode.hxx>
+#include <svx/xdef.hxx>
 #include <swmodule.hxx>
 #include <wdocsh.hxx>
 #include <fmtfsize.hxx>

@@ -31,6 +31,10 @@
 #include <svx/svdmodel.hxx>
 #include <svx/svdocapt.hxx>
 #include <svx/svdmark.hxx>
+#include <svx/xlndsit.hxx>
+#include <svx/xlnstit.hxx>
+#include <svx/xlnedit.hxx>
+#include <svx/xflhtit.hxx>
 #include <fmtfsize.hxx>
 #include <fmtornt.hxx>
 #include <fmtsrnd.hxx>

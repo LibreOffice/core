@@ -23,6 +23,7 @@
 #ifndef SW_FRAME_HXX
 #define SW_FRAME_HXX
 
+#include "boost/shared_ptr.hpp"
 #include <svl/svarray.hxx>
 #include "swtypes.hxx"  // fuer SwTwips
 #include "swrect.hxx"

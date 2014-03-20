@@ -26,6 +26,8 @@
 #include <drawinglayer/attribute/sdrfillattribute.hxx>
 #include <drawinglayer/primitive2d/baseprimitive2d.hxx>
 #include <boost/shared_ptr.hpp>
+#include <tools/color.hxx>
+#include <svl/itemset.hxx>
 
 //////////////////////////////////////////////////////////////////////////////
 

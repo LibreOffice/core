@@ -45,6 +45,7 @@
 #include <svx/svdpool.hxx>
 #include <svx/sxenditm.hxx>
 #include <svx/sdsxyitm.hxx>
+#include <editeng/editeng.hxx>
 
 SwAttrPool::SwAttrPool( SwDoc* pD )
     : SfxItemPool( String::CreateFromAscii(

@@ -69,6 +69,7 @@
 #include <com/sun/star/style/XStyleFamiliesSupplier.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/beans/NamedValue.hpp>
+#include <com/sun/star/drawing/BitmapMode.hpp>
 #include <istyleaccess.hxx>
 #include <GetMetricVal.hxx>
 #include <fmtfsize.hxx>

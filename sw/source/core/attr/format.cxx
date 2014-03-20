@@ -32,6 +32,7 @@
 #include <fmtcolfunc.hxx>
 //UUUU
 #include <unobrushitemhelper.hxx>
+#include <svx/xdef.hxx>
 
 TYPEINIT1( SwFmt, SwClient );   //rtti fuer SwFmt
 

@@ -30,12 +30,11 @@
 #include <hintids.hxx>
 #include <svl/itemiter.hxx>
 #include <svl/eitem.hxx>
+#include <svx/xdef.hxx>
 #include <unotools/syslocale.hxx>
 #include <editeng/boxitem.hxx>
 #include <editeng/numitem.hxx>
-// --> OD 2008-02-13 #newlistlevelattrs#
 #include <editeng/lrspitem.hxx>
-// <--
 #include <fmtcol.hxx>
 #include <uitool.hxx>
 #include <swmodule.hxx>
@@ -63,9 +62,7 @@
 #include <numrule.hxx>
 #include <fmthdft.hxx>
 #include <svx/svxids.hrc>
-// --> OD 2008-02-12 #newlistlevelattrs#
 #include <SwRewriter.hxx>
-// <--
 
 // MD 06.02.95: Die Formatnamen in der Liste aller Namen haben als
 // erstes Zeichen die Familie:

@@ -70,8 +70,8 @@
 #include <cellfrm.hxx>
 #include <dbg_lay.hxx>
 #include <editeng/frmdiritem.hxx>
-// OD 2004-05-24 #i28701#
 #include <sortedobjs.hxx>
+#include <svx/xdef.hxx>
 
 
 using namespace ::com::sun::star;
