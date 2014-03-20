@@ -1803,7 +1803,7 @@ void Writer::Impl_writeActions( const GDIMetaFile& rMtf )
                 const MetaISectRectClipRegionAction* pA = (const MetaISectRectClipRegionAction*) pAction;
                 clipRect = pA->GetRect();
             }
-            //fall-through
+            // fall-through
             case( META_CLIPREGION_ACTION ):
             case( META_ISECTREGIONCLIPREGION_ACTION ):
             case( META_MOVECLIPREGION_ACTION ):
@@ -1816,6 +1816,7 @@ void Writer::Impl_writeActions( const GDIMetaFile& rMtf )
             {
                 bMap++;
             }
+            // fall-through
             case( META_REFPOINT_ACTION ):
             case( META_LINECOLOR_ACTION ):
             case( META_FILLCOLOR_ACTION ):
