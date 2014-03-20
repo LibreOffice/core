@@ -24,7 +24,6 @@
 // include files of own module
 
 #include <helper/statusindicatorfactory.hxx>
-#include <threadhelp/threadhelpbase.hxx>
 #include <macros/xinterface.hxx>
 #include <macros/xtypeprovider.hxx>
 #include <macros/generic.hxx>
@@ -59,8 +58,7 @@ namespace framework{
     @devstatus      ready to use
     @threadsafe     yes
 */
-class StatusIndicator : private ThreadHelpBase                  // Order of baseclasses is necessary for right initializaton!
-                      , public  ::cppu::WeakImplHelper1< css::task::XStatusIndicator >
+class StatusIndicator : public  ::cppu::WeakImplHelper1< css::task::XStatusIndicator >
 {
 
     // member

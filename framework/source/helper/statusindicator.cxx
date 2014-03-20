@@ -28,8 +28,7 @@ namespace framework{
 
 
 StatusIndicator::StatusIndicator(StatusIndicatorFactory* pFactory)
-    : ThreadHelpBase     (        )
-    , m_xFactory         (pFactory)
+    : m_xFactory         (pFactory)
 {
 }
 
@@ -47,11 +46,7 @@ void SAL_CALL StatusIndicator::start(const OUString& sText ,
     (void) sText;
     (void) nRange;
 #else
-    // SAFE ->
-    Guard aReadLock(m_aLock);
-    css::uno::Reference< css::task::XStatusIndicatorFactory > xFactory(m_xFactory.get(), css::uno::UNO_QUERY);
-    aReadLock.unlock();
-    // <- SAFE
+    css::uno::Reference< css::task::XStatusIndicatorFactory > xFactory(m_xFactory);
     if (xFactory.is())
     {
         StatusIndicatorFactory* pFactory = (StatusIndicatorFactory*)xFactory.get();
@@ -65,11 +60,7 @@ void SAL_CALL StatusIndicator::end()
     throw(css::uno::RuntimeException, std::exception)
 {
 #if HAVE_FEATURE_DESKTOP
-    // SAFE ->
-    Guard aReadLock(m_aLock);
-    css::uno::Reference< css::task::XStatusIndicatorFactory > xFactory(m_xFactory.get(), css::uno::UNO_QUERY);
-    aReadLock.unlock();
-    // <- SAFE
+    css::uno::Reference< css::task::XStatusIndicatorFactory > xFactory(m_xFactory);
     if (xFactory.is())
     {
         StatusIndicatorFactory* pFactory = (StatusIndicatorFactory*)xFactory.get();
@@ -83,11 +74,7 @@ void SAL_CALL StatusIndicator::reset()
     throw(css::uno::RuntimeException, std::exception)
 {
 #if HAVE_FEATURE_DESKTOP
-    // SAFE ->
-    Guard aReadLock(m_aLock);
-    css::uno::Reference< css::task::XStatusIndicatorFactory > xFactory(m_xFactory.get(), css::uno::UNO_QUERY);
-    aReadLock.unlock();
-    // <- SAFE
+    css::uno::Reference< css::task::XStatusIndicatorFactory > xFactory(m_xFactory);
     if (xFactory.is())
     {
         StatusIndicatorFactory* pFactory = (StatusIndicatorFactory*)xFactory.get();
@@ -103,11 +90,7 @@ void SAL_CALL StatusIndicator::setText(const OUString& sText)
 #if !HAVE_FEATURE_DESKTOP
     (void) sText;
 #else
-    // SAFE ->
-    Guard aReadLock(m_aLock);
-    css::uno::Reference< css::task::XStatusIndicatorFactory > xFactory(m_xFactory.get(), css::uno::UNO_QUERY);
-    aReadLock.unlock();
-    // <- SAFE
+    css::uno::Reference< css::task::XStatusIndicatorFactory > xFactory(m_xFactory);
     if (xFactory.is())
     {
         StatusIndicatorFactory* pFactory = (StatusIndicatorFactory*)xFactory.get();
@@ -123,11 +106,7 @@ void SAL_CALL StatusIndicator::setValue(sal_Int32 nValue)
 #if !HAVE_FEATURE_DESKTOP
     (void) nValue;
 #else
-    // SAFE ->
-    Guard aReadLock(m_aLock);
-    css::uno::Reference< css::task::XStatusIndicatorFactory > xFactory(m_xFactory.get(), css::uno::UNO_QUERY);
-    aReadLock.unlock();
-    // <- SAFE
+    css::uno::Reference< css::task::XStatusIndicatorFactory > xFactory(m_xFactory);
     if (xFactory.is())
     {
         StatusIndicatorFactory* pFactory = (StatusIndicatorFactory*)xFactory.get();
