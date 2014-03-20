@@ -22,6 +22,7 @@
 #define INCLUDED_APRENV_HXX
 
 #include <apr_pools.h>
+#include <SerfLockStore.hxx>
 
 namespace apr_environment
 {
@@ -36,8 +37,13 @@ class AprEnv
 
         apr_pool_t* getAprPool();
 
+        http_dav_ucp::SerfLockStore* getSerfLockStore();
+
     private:
         apr_pool_t* mpAprPool;
+        // SerfLockStore is a static object and has to be destroyed
+        // before AprEnv, so store it here.
+        http_dav_ucp::SerfLockStore* mpSerfLockStore;
 
         AprEnv();
 

@@ -52,12 +52,6 @@
 using namespace com::sun::star;
 using namespace http_dav_ucp;
 
-
-
-// static members!
-//SerfLockStore SerfSession::m_aSerfLockStore;
-
-
 // Constructor
 
 SerfSession::SerfSession(
@@ -1066,7 +1060,7 @@ sal_Int64 SerfSession::LOCK( const OUString & /*inPath*/,
 
 // LOCK (refresh existing lock)
 
-bool SerfSession::LOCK( SerfLock * /*pLock*/,
+bool SerfSession::LOCK( const OUString& /*rLock*/,
                         sal_Int32 & /*rlastChanceToSendRefreshRequest*/ )
 {
     osl::Guard< osl::Mutex > theGuard( m_aMutex );
@@ -1132,7 +1126,7 @@ void SerfSession::UNLOCK( const OUString & /*inPath*/,
 
 // UNLOCK
 
-bool SerfSession::UNLOCK( SerfLock * /*pLock*/ )
+bool SerfSession::UNLOCK( const OUString& /*rLock*/ )
 {
     osl::Guard< osl::Mutex > theGuard( m_aMutex );
 

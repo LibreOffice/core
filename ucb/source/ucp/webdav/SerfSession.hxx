@@ -27,7 +27,6 @@
 #include <osl/mutex.hxx>
 #include "DAVSession.hxx"
 #include "SerfTypes.hxx"
-//#include "SerfLockStore.hxx"
 #include "SerfUri.hxx"
 
 namespace ucbhelper { class ProxyDecider; }
@@ -62,8 +61,6 @@ private:
     const ucbhelper::InternetProxyDecider & m_rProxyDecider;
 
     DAVRequestEnvironment m_aEnv;
-
-//    static SerfLockStore m_aSerfLockStore;
 
     char* getHostinfo();
     bool isSSLNeeded();
@@ -270,11 +267,11 @@ private:
                                  const DAVRequestEnvironment & rEnv );
 
     // refresh lock, called by SerfLockStore::refreshLocks
-    bool LOCK( SerfLock * pLock,
+    bool LOCK( const OUString& rLock,
                sal_Int32 & rlastChanceToSendRefreshRequest );
 
     // unlock, called by SerfLockStore::~SerfLockStore
-    bool UNLOCK( SerfLock * pLock );
+    bool UNLOCK( const OUString& rLock );
 
     /*
     // low level GET implementation, used by public GET implementations

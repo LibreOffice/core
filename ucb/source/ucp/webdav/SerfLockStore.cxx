@@ -17,8 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <ne_locks.h>
-#include <ne_uri.h>
 #include <rtl/ustring.hxx>
 #include <osl/time.h>
 #include <osl/thread.hxx>
@@ -76,10 +74,8 @@ void TickerThread::run()
 
 
 SerfLockStore::SerfLockStore()
-    : m_pSerfLockStore( ne_lockstore_create() ),
-      m_pTickerThread( 0 )
+    : m_pTickerThread( 0 )
 {
-    SAL_WARN_IF( !m_pSerfLockStore, "ucb.ucp.webdav", "Unable to create neon lock store!" );
 }
 
 
@@ -95,16 +91,10 @@ SerfLockStore::~SerfLockStore()
     const LockInfoMap::const_iterator end( m_aLockInfoMap.end() );
     while ( it != end )
     {
-        SerfLock * pLock = (*it).first;
-        (*it).second.xSession->UNLOCK( pLock );
-
-        ne_lockstore_remove( m_pSerfLockStore, pLock );
-        ne_lock_destroy( pLock );
-
+        const OUString& rLock = (*it).first;
+        (*it).second.m_xSession->UNLOCK( rLock );
         ++it;
     }
-
-    ne_lockstore_destroy( m_pSerfLockStore );
 }
 
 
@@ -134,62 +124,42 @@ void SerfLockStore::stopTicker()
 }
 
 
-void SerfLockStore::registerSession( HttpSession * pHttpSession )
-{
-    osl::MutexGuard aGuard( m_aMutex );
-
-    ne_lockstore_register( m_pSerfLockStore, pHttpSession );
-}
-
-
-SerfLock * SerfLockStore::findByUri( OUString const & rUri )
-{
-    osl::MutexGuard aGuard( m_aMutex );
-
-    ne_uri aUri;
-    ne_uri_parse( OUStringToOString(
-        rUri, RTL_TEXTENCODING_UTF8 ).getStr(), &aUri );
-    return ne_lockstore_findbyuri( m_pSerfLockStore, &aUri );
-}
-
-
-void SerfLockStore::addLock( SerfLock * pLock,
+void SerfLockStore::addLock( const OUString& rLock,
+                             const OUString& sToken,
                              rtl::Reference< SerfSession > const & xSession,
                              sal_Int32 nLastChanceToSendRefreshRequest )
 {
     osl::MutexGuard aGuard( m_aMutex );
 
-    ne_lockstore_add( m_pSerfLockStore, pLock );
-    m_aLockInfoMap[ pLock ]
-        = LockInfo( xSession, nLastChanceToSendRefreshRequest );
+    m_aLockInfoMap[ rLock ]
+        = LockInfo( sToken, xSession, nLastChanceToSendRefreshRequest );
 
     startTicker();
 }
 
 
-void SerfLockStore::updateLock( SerfLock * pLock,
+void SerfLockStore::updateLock( const OUString& rLock,
                                 sal_Int32 nLastChanceToSendRefreshRequest )
 {
     osl::MutexGuard aGuard( m_aMutex );
 
-    LockInfoMap::iterator it( m_aLockInfoMap.find( pLock ) );
+    LockInfoMap::iterator it( m_aLockInfoMap.find( rLock ) );
     SAL_WARN_IF( it == m_aLockInfoMap.end(), "ucb.ucp.webdav",
                 "SerfLockStore::updateLock: lock not found!" );
 
     if ( it != m_aLockInfoMap.end() )
     {
-        (*it).second.nLastChanceToSendRefreshRequest
+        (*it).second.m_nLastChanceToSendRefreshRequest
             = nLastChanceToSendRefreshRequest;
     }
 }
 
 
-void SerfLockStore::removeLock( SerfLock * pLock )
+void SerfLockStore::removeLock( const OUString& rLock )
 {
     osl::MutexGuard aGuard( m_aMutex );
 
-    m_aLockInfoMap.erase( pLock );
-    ne_lockstore_remove( m_pSerfLockStore, pLock );
+    m_aLockInfoMap.erase( rLock );
 
     if ( m_aLockInfoMap.empty() )
         stopTicker();
@@ -205,27 +175,27 @@ void SerfLockStore::refreshLocks()
     while ( it != end )
     {
         LockInfo & rInfo = (*it).second;
-        if ( rInfo.nLastChanceToSendRefreshRequest != -1 )
+        if ( rInfo.m_nLastChanceToSendRefreshRequest != -1 )
         {
             // 30 seconds or less remaining until lock expires?
             TimeValue t1;
             osl_getSystemTime( &t1 );
-            if ( rInfo.nLastChanceToSendRefreshRequest - 30
+            if ( rInfo.m_nLastChanceToSendRefreshRequest - 30
                      <= sal_Int32( t1.Seconds ) )
             {
                 // refresh the lock.
                 sal_Int32 nlastChanceToSendRefreshRequest = -1;
-                if ( rInfo.xSession->LOCK(
+                if ( rInfo.m_xSession->LOCK(
                          (*it).first,
                          /* out param */ nlastChanceToSendRefreshRequest ) )
                 {
-                    rInfo.nLastChanceToSendRefreshRequest
+                    rInfo.m_nLastChanceToSendRefreshRequest
                         = nlastChanceToSendRefreshRequest;
                 }
                 else
                 {
                     // refresh failed. stop auto-refresh.
-                    rInfo.nLastChanceToSendRefreshRequest = -1;
+                    rInfo.m_nLastChanceToSendRefreshRequest = -1;
                 }
             }
         }

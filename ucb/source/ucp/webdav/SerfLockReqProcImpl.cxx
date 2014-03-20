@@ -18,6 +18,9 @@
  */
 
 #include "SerfLockReqProcImpl.hxx"
+
+#include "AprEnv.hxx"
+#include "SerfSession.hxx"
 #include "DAVException.hxx"
 
 #include "webdavresponseparser.hxx"
@@ -28,8 +31,10 @@ namespace http_dav_ucp
 
 SerfLockReqProcImpl::SerfLockReqProcImpl( const char* inPath,
                                           const DAVRequestHeaders& inRequestHeaders,
+                                          SerfSession& rSession,
                                           const css::ucb::Lock & rLock )
     : SerfRequestProcessorImpl( inPath, inRequestHeaders )
+    , m_rSession( rSession )
     , m_aLock( rLock )
     , m_xInputStream( new SerfInputStream() )
 {
@@ -139,7 +144,24 @@ void SerfLockReqProcImpl::handleEndOfResponseData( serf_bucket_t * )
     {
         for (size_t i = 0; i < aLocks.size(); ++i)
         {
-           // m_pSerfLockStore->addLock( aLocks[i], m_pSerfSession, m_aStartCall );
+            sal_Int64 timeout = aLocks[i].Timeout;
+            TimeValue aEnd;
+            osl_getSystemTime( &aEnd );
+            // Try to estimate a safe absolute time for sending the
+            // lock refresh request.
+            sal_Int32 lastChanceToSendRefreshRequest = -1;
+            if ( timeout != -1 )
+            {
+                sal_Int32 calltime = aEnd.Seconds - m_aStartCall.Seconds;
+                if ( calltime <= timeout )
+                    lastChanceToSendRefreshRequest = aEnd.Seconds + timeout - calltime;
+                else
+                    SAL_WARN("ucb.ucp.webdav", "No chance to refresh lock before timeout!" );
+            }
+            apr_environment::AprEnv::getAprEnv()->getSerfLockStore()->addLock(
+                    OUString::createFromAscii(getPathStr()),
+                    aLocks[i].LockTokens[0],
+                    &m_rSession, lastChanceToSendRefreshRequest );
             SAL_INFO("ucb.ucp.webdav",  "SerfSession::LOCK: created lock for "
                     << getPathStr() << ". token: " << aLocks[i].LockTokens[0]);
         }

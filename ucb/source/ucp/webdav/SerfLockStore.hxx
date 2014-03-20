@@ -24,43 +24,37 @@
 #include <map>
 #include <osl/mutex.hxx>
 #include <rtl/ref.hxx>
-#include "SerfTypes.hxx"
+#include <rtl/ustring.hxx>
+#include <SerfTypes.hxx>
+#include <SerfSession.hxx>
 
 namespace http_dav_ucp
 {
 
 class TickerThread;
-class SerfSession;
 
-struct ltptr
+struct LockInfo
 {
-    bool operator()( const SerfLock * p1, const SerfLock * p2 ) const
-    {
-        return p1 < p2;
-    }
+    OUString m_sToken;
+    rtl::Reference< SerfSession > m_xSession;
+    sal_Int32 m_nLastChanceToSendRefreshRequest;
+
+    LockInfo()
+        : m_nLastChanceToSendRefreshRequest( -1 ) {}
+
+    LockInfo( const OUString& sToken,
+              rtl::Reference< SerfSession > const & xSession,
+              sal_Int32 nLastChanceToSendRefreshRequest )
+    : m_sToken( sToken ),
+      m_xSession( xSession ),
+      m_nLastChanceToSendRefreshRequest( nLastChanceToSendRefreshRequest ) {}
 };
 
-typedef struct _LockInfo
-{
-    rtl::Reference< SerfSession > xSession;
-    sal_Int32 nLastChanceToSendRefreshRequest;
-
-    _LockInfo()
-        : nLastChanceToSendRefreshRequest( -1 ) {}
-
-    _LockInfo( rtl::Reference< SerfSession > const & _xSession,
-              sal_Int32 _nLastChanceToSendRefreshRequest )
-    : xSession( _xSession ),
-      nLastChanceToSendRefreshRequest( _nLastChanceToSendRefreshRequest ) {}
-
-} LockInfo;
-
-typedef std::map< SerfLock *, LockInfo, ltptr > LockInfoMap;
+typedef std::map< OUString, LockInfo > LockInfoMap;
 
 class SerfLockStore
 {
     osl::Mutex         m_aMutex;
-//    ne_lock_store    * m_pSerfLockStore;
     TickerThread     * m_pTickerThread;
     LockInfoMap        m_aLockInfoMap;
 
@@ -68,20 +62,17 @@ public:
     SerfLockStore();
     ~SerfLockStore();
 
-    void registerSession( HttpSession * pHttpSession );
-
-    SerfLock * findByUri( OUString const & rUri );
-
-    void addLock( SerfLock * pLock,
+    void addLock( const OUString& rLock,
+                  const OUString& sToken,
                   rtl::Reference< SerfSession > const & xSession,
                   // time in seconds since Jan 1 1970
                   // -1: infinite lock, no refresh
                   sal_Int32 nLastChanceToSendRefreshRequest );
 
-    void updateLock( SerfLock * pLock,
+    void updateLock( const OUString& rLock,
                      sal_Int32 nLastChanceToSendRefreshRequest );
 
-    void removeLock( SerfLock * pLock );
+    void removeLock( const OUString& rLock );
 
     void refreshLocks();
 
