@@ -1803,6 +1803,7 @@ void Writer::Impl_writeActions( const GDIMetaFile& rMtf )
                 const MetaISectRectClipRegionAction* pA = (const MetaISectRectClipRegionAction*) pAction;
                 clipRect = pA->GetRect();
             }
+            //fall-through
             case( META_CLIPREGION_ACTION ):
             case( META_ISECTREGIONCLIPREGION_ACTION ):
             case( META_MOVECLIPREGION_ACTION ):
