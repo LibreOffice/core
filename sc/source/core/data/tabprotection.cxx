@@ -117,6 +117,10 @@ public:
     bool isOptionEnabled(SCSIZE nOptId) const;
     void setOption(SCSIZE nOptId, bool bEnabled);
 
+    void setEnhancedProtection( const ::std::vector< ScEnhancedProtection > & rProt );
+    const ::std::vector< ScEnhancedProtection > & getEnhancedProtection() const;
+    bool updateReference( UpdateRefMode, ScDocument*, const ScRange& rWhere, SCsCOL nDx, SCsROW nDy, SCsTAB nDz );
+
 private:
     OUString maPassText;
     ::com::sun::star::uno::Sequence<sal_Int8>   maPassHash;
@@ -125,6 +129,7 @@ private:
     bool mbProtected;
     ScPasswordHash meHash1;
     ScPasswordHash meHash2;
+    ::std::vector< ScEnhancedProtection > maEnhancedProtection;
 };
 
 Sequence<sal_Int8> ScTableProtectionImpl::hashPassword(const OUString& aPassText, ScPasswordHash eHash)
@@ -352,6 +357,27 @@ void ScTableProtectionImpl::setOption(SCSIZE nOptId, bool bEnabled)
     maOptions[nOptId] = bEnabled;
 }
 
+void ScTableProtectionImpl::setEnhancedProtection( const ::std::vector< ScEnhancedProtection > & rProt )
+{
+    maEnhancedProtection = rProt;
+}
+
+const ::std::vector< ScEnhancedProtection > & ScTableProtectionImpl::getEnhancedProtection() const
+{
+    return maEnhancedProtection;
+}
+
+bool ScTableProtectionImpl::updateReference( UpdateRefMode eMode, ScDocument* pDoc,
+        const ScRange& rWhere, SCsCOL nDx, SCsROW nDy, SCsTAB nDz )
+{
+    bool bChanged = false;
+    for (::std::vector<ScEnhancedProtection>::iterator it(maEnhancedProtection.begin());
+            it != maEnhancedProtection.end(); ++it)
+    {
+        bChanged |= (*it).maRangeList->UpdateReference( eMode, pDoc, rWhere, nDx, nDy, nDz);
+    }
+    return bChanged;
+}
 
 
 ScDocProtection::ScDocProtection() :
@@ -505,4 +531,21 @@ void ScTableProtection::setOption(Option eOption, bool bEnabled)
 {
     mpImpl->setOption(eOption, bEnabled);
 }
+
+void ScTableProtection::setEnhancedProtection( const ::std::vector< ScEnhancedProtection > & rProt )
+{
+    mpImpl->setEnhancedProtection(rProt);
+}
+
+const ::std::vector< ScEnhancedProtection > & ScTableProtection::getEnhancedProtection() const
+{
+    return mpImpl->getEnhancedProtection();
+}
+
+bool ScTableProtection::updateReference( UpdateRefMode eMode, ScDocument* pDoc, const ScRange& rWhere,
+        SCsCOL nDx, SCsROW nDy, SCsTAB nDz )
+{
+    return mpImpl->updateReference( eMode, pDoc, rWhere, nDx, nDy, nDz);
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

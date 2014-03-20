@@ -24,6 +24,7 @@
 #include <com/sun/star/uno/Sequence.hxx>
 
 #include "global.hxx"
+#include "rangelst.hxx"
 #include <boost/shared_ptr.hpp>
 
 class ScDocument;
@@ -110,6 +111,19 @@ private:
     ::boost::shared_ptr<ScTableProtectionImpl> mpImpl;
 };
 
+/** Container for the Excel EnhancedProtection feature.
+ */
+struct ScEnhancedProtection
+{
+    ScRangeListRef              maRangeList;
+    sal_uInt32                  mnAreserved;
+    sal_uInt32                  mnPasswordVerifier;
+    OUString                    maTitle;
+    ::std::vector< sal_uInt8 >  maSecurityDescriptor;   // raw data
+
+    ScEnhancedProtection() : mnAreserved(0), mnPasswordVerifier(0) {}
+};
+
 /** sheet protection state container
  *
  * This class stores sheet's protection state: 1) whether the protection
@@ -162,6 +176,11 @@ public:
 
     bool isOptionEnabled(Option eOption) const;
     void setOption(Option eOption, bool bEnabled);
+
+    void setEnhancedProtection( const ::std::vector< ScEnhancedProtection > & rProt );
+    const ::std::vector< ScEnhancedProtection > & getEnhancedProtection() const;
+    bool updateReference( UpdateRefMode, ScDocument*, const ScRange& rWhere, SCsCOL nDx, SCsROW nDy, SCsTAB nDz );
+
 
 private:
     ::boost::shared_ptr<ScTableProtectionImpl> mpImpl;
