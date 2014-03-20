@@ -526,33 +526,20 @@ void SvxMetricField::ReleaseFocus_Impl()
     }
 }
 
-
-
 void SvxMetricField::Down()
 {
-    sal_Int64 nValue = GetValue();
-    nValue -= GetSpinSize();
-
-    // To prevent OS/2 to jump on Max
-    if ( nValue >= GetMin() )
-        MetricField::Down();
+    MetricField::Down();
 }
-
-
 
 void SvxMetricField::Up()
 {
     MetricField::Up();
 }
 
-
-
 void SvxMetricField::SetCoreUnit( SfxMapUnit eUnit )
 {
     ePoolUnit = eUnit;
 }
-
-
 
 void SvxMetricField::RefreshDlgUnit()
 {
@@ -563,8 +550,6 @@ void SvxMetricField::RefreshDlgUnit()
         SetFieldUnit( *this, eDlgUnit, sal_False );
     }
 }
-
-
 
 bool SvxMetricField::PreNotify( NotifyEvent& rNEvt )
 {
