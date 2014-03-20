@@ -34,6 +34,8 @@
 
 #include "formularesult.hxx"
 
+#define ENABLE_THREADED_OPENCL_KERNEL_COMPILATION 0
+
 namespace sc {
 
 class CLBuildKernelThread;
@@ -78,8 +80,10 @@ struct SC_DLLPUBLIC ScFormulaCellGroup : boost::noncopyable
         ScDocument& rDoc, const ScAddress& rPos, formula::FormulaGrammar::Grammar eGram );
     void compileOpenCLKernel();
 
+#if ENABLE_THREADED_OPENCL_KERNEL_COMPILATION
     static int snCount;
     static rtl::Reference<sc::CLBuildKernelThread> sxCompilationThread;
+#endif
 };
 
 inline void intrusive_ptr_add_ref(const ScFormulaCellGroup *p)

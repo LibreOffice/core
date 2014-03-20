@@ -3450,6 +3450,7 @@ bool FormulaGroupInterpreterOpenCL::interpret( ScDocument& rDoc,
     DynamicKernel *pKernel = NULL;
     boost::scoped_ptr<DynamicKernel> pLocalKernel;
 
+#if ENABLE_THREADED_OPENCL_KERNEL_COMPILATION
     if (xGroup->meKernelState == sc::OpenCLKernelCompilationScheduled ||
         xGroup->meKernelState == sc::OpenCLKernelBinaryCreated)
     {
@@ -3467,6 +3468,10 @@ bool FormulaGroupInterpreterOpenCL::interpret( ScDocument& rDoc,
         pKernel = static_cast<DynamicKernel*>(createCompiledFormula(rDoc, rTopPos, *xGroup, rCode));
         pLocalKernel.reset(pKernel); // to be deleted when done.
     }
+#else
+    pKernel = static_cast<DynamicKernel*>(createCompiledFormula(rDoc, rTopPos, *xGroup, rCode));
+    pLocalKernel.reset(pKernel); // to be deleted when done.
+#endif
 
     if (!pKernel)
         return false;

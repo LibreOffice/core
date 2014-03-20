@@ -59,8 +59,6 @@
 
 #include <boost/scoped_ptr.hpp>
 
-#define ENABLE_THREADED_OPENCL_KERNEL_COMPILATION 0
-
 using namespace formula;
 
 #ifdef USE_MEMPOOL
@@ -392,6 +390,7 @@ void adjustDBRange(ScToken* pToken, ScDocument& rNewDoc, const ScDocument* pOldD
 
 }
 
+#if ENABLE_THREADED_OPENCL_KERNEL_COMPILATION
 //  The mutex to synchronize access to the OpenCL compilation thread.
 static osl::Mutex& getOpenCLCompilationThreadMutex()
 {
@@ -411,6 +410,7 @@ static osl::Mutex& getOpenCLCompilationThreadMutex()
 
 int ScFormulaCellGroup::snCount = 0;
 rtl::Reference<sc::CLBuildKernelThread> ScFormulaCellGroup::sxCompilationThread;
+#endif
 
 ScFormulaCellGroup::ScFormulaCellGroup() :
     mnRefCount(0),
@@ -424,6 +424,7 @@ ScFormulaCellGroup::ScFormulaCellGroup() :
     meCalcState(sc::GroupCalcEnabled),
     meKernelState(sc::OpenCLKernelNone)
 {
+#if ENABLE_THREADED_OPENCL_KERNEL_COMPILATION
     if (ScInterpreter::GetGlobalConfig().mbOpenCLEnabled)
     {
         osl::MutexGuard aGuard(getOpenCLCompilationThreadMutex());
@@ -434,10 +435,12 @@ ScFormulaCellGroup::ScFormulaCellGroup() :
             sxCompilationThread->launch();
         }
     }
+#endif
 }
 
 ScFormulaCellGroup::~ScFormulaCellGroup()
 {
+#if ENABLE_THREADED_OPENCL_KERNEL_COMPILATION
     if (ScInterpreter::GetGlobalConfig().mbOpenCLEnabled)
     {
         osl::MutexGuard aGuard(getOpenCLCompilationThreadMutex());
@@ -450,17 +453,20 @@ ScFormulaCellGroup::~ScFormulaCellGroup()
                 sxCompilationThread.clear();
             }
     }
+#endif
     delete mpCode;
     delete mpCompiledFormula;
 }
 
 void ScFormulaCellGroup::scheduleCompilation()
 {
+#if ENABLE_THREADED_OPENCL_KERNEL_COMPILATION
     meKernelState = sc::OpenCLKernelCompilationScheduled;
     sc::CLBuildKernelWorkItem aWorkItem;
     aWorkItem.meWhatToDo = sc::CLBuildKernelWorkItem::COMPILE;
     aWorkItem.mxGroup = this;
     sxCompilationThread->push(aWorkItem);
+#endif
 }
 
 void ScFormulaCellGroup::setCode( const ScTokenArray& rCode )
