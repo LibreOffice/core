@@ -850,7 +850,7 @@ long SwWW8ImplReader::Read_Field(WW8PLCFManResult* pRes)
     }
 
     //Only one type of field (hyperlink) in drawing textboxes exists
-    if (aF.nId != 88 && pPlcxMan && pPlcxMan->GetDoingDrawTextBox())
+    if (aF.nId != 88 && pPlcxMan->GetDoingDrawTextBox())
         return aF.nLen;
 
     // keine Routine vorhanden
