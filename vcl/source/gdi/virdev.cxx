@@ -173,8 +173,8 @@ VirtualDevice::VirtualDevice( sal_uInt16 nBitCount )
 :   mpVirDev( NULL ),
     meRefDevMode( REFDEV_NONE )
 {
-    SAL_WARN_IF( (nBitCount > 1 && nBitCount != 8), "vcl.gdi",
-                "VirtualDevice::VirtualDevice(): Only 0, 1 or 8 allowed for BitCount" );
+    SAL_WARN_IF( nBitCount > 1 && nBitCount != 8, "vcl.gdi",
+                 "VirtualDevice::VirtualDevice(): Only 0, 1 or 8 allowed for BitCount, not " << nBitCount );
     SAL_INFO( "vcl.gdi", "VirtualDevice::VirtualDevice( " << nBitCount << " )" );
 
     ImplInitVirDev( Application::GetDefaultDevice(), 1, 1, nBitCount );
@@ -186,8 +186,8 @@ VirtualDevice::VirtualDevice( const OutputDevice& rCompDev, sal_uInt16 nBitCount
     : mpVirDev( NULL ),
     meRefDevMode( REFDEV_NONE )
 {
-    SAL_WARN_IF( nBitCount > 1, "vcl.gdi",
-                "VirtualDevice::VirtualDevice(): Only 0 or 1 is for BitCount allowed" );
+    SAL_WARN_IF( nBitCount > 1 && nBitCount != 8, "vcl.gdi",
+                 "VirtualDevice::VirtualDevice(): Only 0, 1 or 8 allowed for BitCount, not " << nBitCount );
     SAL_INFO( "vcl.gdi", "VirtualDevice::VirtualDevice( " << nBitCount << " )" );
 
     ImplInitVirDev( &rCompDev, 1, 1, nBitCount );
@@ -199,8 +199,8 @@ VirtualDevice::VirtualDevice( const OutputDevice& rCompDev, sal_uInt16 nBitCount
     : mpVirDev( NULL ),
     meRefDevMode( REFDEV_NONE )
 {
-    SAL_WARN_IF( nBitCount > 1, "vcl.gdi",
-                "VirtualDevice::VirtualDevice(): Only 0 or 1 is for BitCount allowed" );
+    SAL_WARN_IF( nBitCount > 1 && nBitCount != 8, "vcl.gdi",
+                 "VirtualDevice::VirtualDevice(): Only 0, 1 or 8 allowed for BitCount, not " << nBitCount );
     SAL_INFO( "vcl.gdi",
             "VirtualDevice::VirtualDevice( " << nBitCount << ", " << nAlphaBitCount << " )" );
 
