@@ -544,12 +544,26 @@ void SvxMetricField::ReleaseFocus_Impl()
 
 void SvxMetricField::Down()
 {
-    sal_Int64 nValue = GetValue();
-    nValue -= GetSpinSize();
+    // #124425# make the OS2 case OS2-only (if still needed); under
+    // non-OS2 it prevents the value to go to zero on down presses,
+    // s do not use there. Also added a fix for OS2, but could not test
+#ifdef OS2
+    const sal_Int64 nValue(GetValue() - GetSpinSize());
 
-    // Um unter OS/2 einen Sprung auf Max zu verhindern
+    // prevent a jump to spin max on OS2
     if ( nValue >= GetMin() )
+    {
         MetricField::Down();
+    }
+    else if ( nValue < GetMin() )
+    {
+        // still set to GetMin() when spin min is reached
+        SetMetricValue( *this, GetMin(), ePoolUnit );
+    }
+
+#else
+    MetricField::Down();
+#endif
 }
 
 // -----------------------------------------------------------------------
