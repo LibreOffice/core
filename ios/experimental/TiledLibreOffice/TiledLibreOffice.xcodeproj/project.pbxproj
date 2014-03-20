@@ -378,6 +378,15 @@
 		BE55B14518DB67A900950228 /* themeelementscontext.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = themeelementscontext.cxx; path = ../../../oox/source/drawingml/themeelementscontext.cxx; sourceTree = "<group>"; };
 		BE55B14618DB67A900950228 /* themefragmenthandler.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = themefragmenthandler.cxx; path = ../../../oox/source/drawingml/themefragmenthandler.cxx; sourceTree = "<group>"; };
 		BE55B14718DB67A900950228 /* transform2dcontext.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = transform2dcontext.cxx; path = ../../../oox/source/drawingml/transform2dcontext.cxx; sourceTree = "<group>"; };
+		BE55B14918DB6DE700950228 /* EnhancedCustomShape2d.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = EnhancedCustomShape2d.cxx; path = ../../../svx/source/customshapes/EnhancedCustomShape2d.cxx; sourceTree = "<group>"; };
+		BE55B14A18DB6DE700950228 /* EnhancedCustomShape3d.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = EnhancedCustomShape3d.cxx; path = ../../../svx/source/customshapes/EnhancedCustomShape3d.cxx; sourceTree = "<group>"; };
+		BE55B14B18DB6DE700950228 /* EnhancedCustomShapeEngine.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = EnhancedCustomShapeEngine.cxx; path = ../../../svx/source/customshapes/EnhancedCustomShapeEngine.cxx; sourceTree = "<group>"; };
+		BE55B14C18DB6DE700950228 /* EnhancedCustomShapeFontWork.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = EnhancedCustomShapeFontWork.cxx; path = ../../../svx/source/customshapes/EnhancedCustomShapeFontWork.cxx; sourceTree = "<group>"; };
+		BE55B14D18DB6DE700950228 /* EnhancedCustomShapeFunctionParser.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = EnhancedCustomShapeFunctionParser.cxx; path = ../../../svx/source/customshapes/EnhancedCustomShapeFunctionParser.cxx; sourceTree = "<group>"; };
+		BE55B14E18DB6DE700950228 /* EnhancedCustomShapeGeometry.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = EnhancedCustomShapeGeometry.cxx; path = ../../../svx/source/customshapes/EnhancedCustomShapeGeometry.cxx; sourceTree = "<group>"; };
+		BE55B14F18DB6DE700950228 /* EnhancedCustomShapeHandle.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = EnhancedCustomShapeHandle.cxx; path = ../../../svx/source/customshapes/EnhancedCustomShapeHandle.cxx; sourceTree = "<group>"; };
+		BE55B15018DB6DE700950228 /* EnhancedCustomShapeTypeNames.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = EnhancedCustomShapeTypeNames.cxx; path = ../../../svx/source/customshapes/EnhancedCustomShapeTypeNames.cxx; sourceTree = "<group>"; };
+		BE55B15118DB6DE700950228 /* tbxcustomshapes.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = tbxcustomshapes.cxx; path = ../../../svx/source/customshapes/tbxcustomshapes.cxx; sourceTree = "<group>"; };
 		BE7C277218D1DDF600C4908C /* acmplwrd.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = acmplwrd.cxx; path = ../../../sw/source/core/doc/acmplwrd.cxx; sourceTree = "<group>"; };
 		BE7C277318D1DDF600C4908C /* dbgoutsw.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = dbgoutsw.cxx; path = ../../../sw/source/core/doc/dbgoutsw.cxx; sourceTree = "<group>"; };
 		BE7C277418D1DDF600C4908C /* doc.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = doc.cxx; path = ../../../sw/source/core/doc/doc.cxx; sourceTree = "<group>"; };
@@ -1187,6 +1196,22 @@
 			name = drawingml;
 			sourceTree = "<group>";
 		};
+		BE55B14818DB6DC200950228 /* customshapes */ = {
+			isa = PBXGroup;
+			children = (
+				BE55B14918DB6DE700950228 /* EnhancedCustomShape2d.cxx */,
+				BE55B14A18DB6DE700950228 /* EnhancedCustomShape3d.cxx */,
+				BE55B14B18DB6DE700950228 /* EnhancedCustomShapeEngine.cxx */,
+				BE55B14C18DB6DE700950228 /* EnhancedCustomShapeFontWork.cxx */,
+				BE55B14D18DB6DE700950228 /* EnhancedCustomShapeFunctionParser.cxx */,
+				BE55B14E18DB6DE700950228 /* EnhancedCustomShapeGeometry.cxx */,
+				BE55B14F18DB6DE700950228 /* EnhancedCustomShapeHandle.cxx */,
+				BE55B15018DB6DE700950228 /* EnhancedCustomShapeTypeNames.cxx */,
+				BE55B15118DB6DE700950228 /* tbxcustomshapes.cxx */,
+			);
+			name = customshapes;
+			sourceTree = "<group>";
+		};
 		BE7C277118D1DDC500C4908C /* doc */ = {
 			isa = PBXGroup;
 			children = (
@@ -1344,6 +1369,7 @@
 		BE82C42718CA17A60050EB79 /* svx */ = {
 			isa = PBXGroup;
 			children = (
+				BE55B14818DB6DC200950228 /* customshapes */,
 				BE55B06E18D96F5B00950228 /* sdr */,
 				BE82C42818CA184E0050EB79 /* svdraw */,
 			);
