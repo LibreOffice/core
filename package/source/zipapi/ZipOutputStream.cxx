@@ -48,6 +48,8 @@ ZipOutputStream::ZipOutputStream( const uno::Reference< uno::XComponentContext >
 , aChucker(xOStream)
 , pCurrentEntry(NULL)
 , nMethod(DEFLATED)
+, nLevel(0)
+, mnDigested(0)
 , bFinished(sal_False)
 , bEncryptCurrentEntry(sal_False)
 , m_pCurrentStream(NULL)
