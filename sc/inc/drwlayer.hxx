@@ -102,6 +102,7 @@ public:
     virtual SdrPage*  AllocPage(bool bMasterPage);
     virtual SdrModel* AllocModel() const;
     virtual void    SetChanged( sal_Bool bFlg = sal_True );
+    virtual Window* GetCurDocViewWin();
 
     virtual SdrLayerID GetControlExportLayerId( const SdrObject & ) const;
 
@@ -169,9 +170,9 @@ public:
     static void             SetCellAnchored( SdrObject&, const ScDrawObjData &rAnchor );
     static void             SetVisualCellAnchored( SdrObject&, const ScDrawObjData &rAnchor );
     // Updates rAnchor based on position of rObj
-    static void             GetCellAnchorFromPosition( SdrObject &rObj, ScDrawObjData &rAnchor, const ScDocument &rDoc, SCTAB nTab, bool bUseLogicRect = true, bool bHiddenAsZero = true );
+    static void             GetCellAnchorFromPosition( SdrObject &rObj, ScDrawObjData &rAnchor ,const ScDocument &rDoc, SCTAB nTab);
     static void             SetCellAnchoredFromPosition( SdrObject &rObj, const ScDocument &rDoc, SCTAB nTab );
-    static void             UpdateCellAnchorFromPositionEnd( SdrObject &rObj, ScDrawObjData &rAnchor, const ScDocument &rDoc, SCTAB nTab, bool bUseLogicRect = true );
+    static void             UpdateCellAnchorFromPositionEnd( SdrObject &rObj, const ScDocument &rDoc, SCTAB nTab);
     static ScAnchorType     GetAnchorType( const SdrObject& );
 
     // positions for detektive lines

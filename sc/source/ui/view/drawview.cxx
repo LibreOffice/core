@@ -831,7 +831,7 @@ void ScDrawView::SyncForGrid( SdrObject* pObj )
             // synthesise an anchor ( but don't attach it to
             // the object as we want to maintain page anchoring )
             ScDrawObjData aAnchor;
-            ScDrawLayer::GetCellAnchorFromPosition( *pObj, aAnchor, *pDoc, GetTab() );
+            ScDrawLayer::GetCellAnchorFromPosition( *pObj, aAnchor,*pDoc, GetTab() );
             aOldStt = aAnchor.maStart;
         }
         MapMode aDrawMode = pGridWin->GetDrawMapMode();

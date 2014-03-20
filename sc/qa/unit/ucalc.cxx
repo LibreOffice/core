@@ -6823,8 +6823,8 @@ void Test::testAnchoredRotatedShape()
         // increase col 6 by 1000 hmm
         m_pDoc->SetColWidth( 6, 0, sc::HMMToTwips( 2000 ) );
 
-        aRotRect.setWidth( aRotRect.GetWidth() + 1000 );
-        aRotRect.setHeight( aRotRect.GetHeight() + 2000 );
+        aRotRect.setWidth( aRotRect.GetWidth() );
+        aRotRect.setHeight( aRotRect.GetHeight() + 1000 );
 
         m_pDoc->SetDrawPageSize(0);
 

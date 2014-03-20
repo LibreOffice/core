@@ -683,14 +683,11 @@ void ScXMLExport::CollectSharedData(sal_Int32& nTableCount, sal_Int32& nShapesCo
             if (!pSdrObj)
                 continue;
 
-            if (ScDrawObjData *pAnchor = ScDrawLayer::GetNonRotatedObjData(pSdrObj))
+            if (ScDrawObjData *pAnchor = ScDrawLayer::GetObjData(pSdrObj))
             {
                 ScMyShape aMyShape;
                 aMyShape.aAddress = pAnchor->maStart;
-                SAL_WARN_IF(aMyShape.aAddress.Tab() != nTable, "sc", "not anchored to current sheet!");
-                aMyShape.aAddress.SetTab(nTable);
                 aMyShape.aEndAddress = pAnchor->maEnd;
-                aMyShape.aEndAddress.SetTab( nTable );
                 aMyShape.nEndX = pAnchor->maEndOffset.X();
                 aMyShape.nEndY = pAnchor->maEndOffset.Y();
                 aMyShape.xShape = xShape;
@@ -2443,10 +2440,13 @@ void ScXMLExport::_ExportAutoStyles()
             if (xCellRangesQuery.is())
             {
                 Reference<sheet::XSheetCellRanges> xSheetCellRanges(xCellRangesQuery->queryContentCells(sheet::CellFlags::FORMATTED));
-                if (xSheetCellRanges.is())
+
+                Reference<sheet::XSheetOperation> xSheetOperation(xSheetCellRanges, uno::UNO_QUERY);
+                if (xSheetCellRanges.is() && xSheetOperation.is())
                 {
-                    uno::Sequence< table::CellRangeAddress > aCellRangeAddresses (xSheetCellRanges->getRangeAddresses());
-                    sal_uInt32 nCount(aCellRangeAddresses.getLength());
+                    sal_uInt32 nCount(sal_uInt32(xSheetOperation->computeFunction(sheet::GeneralFunction_COUNT)));
+
+
                     Reference<container::XEnumerationAccess> xCellsAccess(xSheetCellRanges->getCells());
                     if (xCellsAccess.is())
                     {
