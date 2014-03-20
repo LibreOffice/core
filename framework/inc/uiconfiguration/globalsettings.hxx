@@ -27,7 +27,6 @@
 #include <list>
 #include <boost/unordered_map.hpp>
 
-#include <threadhelp/threadhelpbase.hxx>
 #include <macros/generic.hxx>
 #include <macros/xinterface.hxx>
 #include <macros/xtypeprovider.hxx>

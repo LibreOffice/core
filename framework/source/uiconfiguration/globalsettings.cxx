@@ -18,7 +18,6 @@
  */
 
 #include "uiconfiguration/globalsettings.hxx"
-#include <threadhelp/guard.hxx>
 #include "services.h"
 
 #include <com/sun/star/beans/PropertyValue.hpp>
@@ -59,8 +58,7 @@ namespace framework
 //  Configuration access class for WindowState supplier implementation
 
 
-class GlobalSettings_Access : private ThreadHelpBase                         ,  // Struct for right initalization of mutex member! Must be first of baseclasses.
-                              public ::cppu::WeakImplHelper2<
+class GlobalSettings_Access : public ::cppu::WeakImplHelper2<
                                   ::com::sun::star::lang::XComponent,
                                   ::com::sun::star::lang::XEventListener>
 {
@@ -83,6 +81,7 @@ class GlobalSettings_Access : private ThreadHelpBase                         ,  
     private:
         sal_Bool impl_initConfigAccess();
 
+        osl::Mutex m_mutex;
         sal_Bool                                                                            m_bDisposed   : 1,
                                                                                             m_bConfigRead : 1;
         OUString                                                                       m_aConfigSettingsAccess;
@@ -98,7 +97,6 @@ class GlobalSettings_Access : private ThreadHelpBase                         ,  
 
 
 GlobalSettings_Access::GlobalSettings_Access( const css::uno::Reference< css::uno::XComponentContext >& rxContext ) :
-    ThreadHelpBase(),
     m_bDisposed( sal_False ),
     m_bConfigRead( sal_False ),
     m_aConfigSettingsAccess( GLOBALSETTINGS_ROOT_ACCESS ),
@@ -118,9 +116,7 @@ GlobalSettings_Access::~GlobalSettings_Access()
 void SAL_CALL GlobalSettings_Access::dispose()
 throw ( css::uno::RuntimeException, std::exception )
 {
-    // SAFE
-    Guard aLock( m_aLock );
-
+    osl::MutexGuard g(m_mutex);
     m_xConfigAccess.clear();
     m_bDisposed = sal_True;
 }
@@ -139,15 +135,14 @@ throw (css::uno::RuntimeException, std::exception)
 void SAL_CALL GlobalSettings_Access::disposing( const css::lang::EventObject& )
 throw (css::uno::RuntimeException, std::exception)
 {
-    // SAFE
-    Guard aLock( m_aLock );
+    osl::MutexGuard g(m_mutex);
     m_xConfigAccess.clear();
 }
 
 // settings access
 sal_Bool GlobalSettings_Access::HasStatesInfo( GlobalSettings::UIElementType eElementType )
 {
-    Guard aLock( m_aLock );
+    osl::MutexGuard g(m_mutex);
     if ( eElementType == GlobalSettings::UIELEMENT_TYPE_DOCKWINDOW )
         return sal_False;
     else if ( eElementType == GlobalSettings::UIELEMENT_TYPE_STATUSBAR )
@@ -185,7 +180,7 @@ sal_Bool GlobalSettings_Access::HasStatesInfo( GlobalSettings::UIElementType eEl
 
 sal_Bool GlobalSettings_Access::GetStateInfo( GlobalSettings::UIElementType eElementType, GlobalSettings::StateInfo eStateInfo, ::com::sun::star::uno::Any& aValue )
 {
-    Guard aLock( m_aLock );
+    osl::MutexGuard g(m_mutex);
     if ( eElementType == GlobalSettings::UIELEMENT_TYPE_DOCKWINDOW )
         return sal_False;
     else if ( eElementType == GlobalSettings::UIELEMENT_TYPE_STATUSBAR )
