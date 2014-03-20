@@ -17,11 +17,14 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/types.h>
+
+#include "outfont.hxx"
+#include "PhysicalFontFace.hxx"
+#include "salgdi.hxx"
+#include "sallayout.hxx"
 
 #include "pdffontcache.hxx"
-#include <salgdi.hxx>
-#include <outfont.hxx>
-#include <sallayout.hxx>
 
 using namespace vcl;
 

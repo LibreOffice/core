@@ -17,10 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/types.h>
 
 #include <string.h>
 #include <stdio.h>
-#include <stdlib.h>
 #include <math.h>
 #include <unistd.h>
 #include <fcntl.h>
@@ -29,44 +29,35 @@
 #include <sys/stat.h>
 #include <sys/types.h>
 
-#include "sal/alloca.h"
-#include "sal/types.h"
-
-#include "rtl/tencinfo.h"
-
-#include "osl/file.hxx"
-#include "osl/module.hxx"
-
-#include "tools/debug.hxx"
-#include "tools/stream.hxx"
-
-#include "basegfx/polygon/b2dpolypolygon.hxx"
-
-#include "i18nlangtag/mslangid.hxx"
-
+#include <basegfx/polygon/b2dpolypolygon.hxx>
 #include <boost/unordered_set.hpp>
-
-#include <vcl/sysdata.hxx>
+#include <i18nlangtag/mslangid.hxx>
+#include <osl/file.hxx>
+#include <osl/module.hxx>
+#include <rtl/tencinfo.h>
+#include <sal/alloca.h>
+#include <tools/debug.hxx>
+#include <tools/stream.hxx>
 #include <vcl/settings.hxx>
+#include <vcl/sysdata.hxx>
+#include <vcl/jobdata.hxx>
+#include <vcl/printerinfomanager.hxx>
+#include <vcl/svapp.hxx>
 
-#include "generic/printergfx.hxx"
 #include "fontmanager.hxx"
-#include "vcl/jobdata.hxx"
-#include "vcl/printerinfomanager.hxx"
-#include "vcl/svapp.hxx"
-
-#include "unx/salunx.h"
+#include "gcach_xpeer.hxx"
+#include "generic/genpspgraphics.h"
+#include "generic/printergfx.hxx"
+#include "impfont.hxx"
+#include "outdev.h"
+#include "PhysicalFontFace.hxx"
+#include "salframe.hxx"
 #include "unx/saldata.hxx"
 #include "unx/saldisp.hxx"
 #include "unx/salgdi.h"
-#include "generic/genpspgraphics.h"
+#include "unx/salunx.h"
 #include "unx/salvd.h"
-
-#include "gcach_xpeer.hxx"
 #include "xrender_peer.hxx"
-#include "impfont.hxx"
-#include "salframe.hxx"
-#include "outdev.h"
 
 #include <config_graphite.h>
 #if ENABLE_GRAPHITE

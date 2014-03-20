@@ -26,6 +26,8 @@
 #ifndef _MSC_VER
 #include <graphite_layout.hxx>
 
+class PhysicalFontFace;
+
 // Modules
 
 class VCL_PLUGIN_PUBLIC GraphiteLayoutImpl : public GraphiteLayout

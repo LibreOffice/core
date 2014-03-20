@@ -19,33 +19,31 @@
 #ifndef INCLUDED_VCL_SOURCE_GDI_PDFWRITER_IMPL_HXX
 #define INCLUDED_VCL_SOURCE_GDI_PDFWRITER_IMPL_HXX
 
-#include "vcl/pdfwriter.hxx"
-#include "rtl/ustring.hxx"
-#include "osl/file.h"
-#include "tools/gen.hxx"
-#include "tools/stream.hxx"
-#include "vcl/outdev.hxx"
-#include "vcl/bitmapex.hxx"
-#include "vcl/gradient.hxx"
-#include "vcl/hatch.hxx"
-#include "vcl/wall.hxx"
-#include "outdata.hxx"
-#include "rtl/strbuf.hxx"
-#include "rtl/cipher.h"
-#include "rtl/digest.h"
-#include "com/sun/star/util/XURLTransformer.hpp"
-#include "com/sun/star/lang/Locale.hpp"
-#include <sal/macros.h>
-
-#include <sallayout.hxx>
-#include "pdffontcache.hxx"
-
 #include <vector>
 #include <map>
 #include <boost/unordered_map.hpp>
 #include <list>
 
 #include <boost/shared_array.hpp>
+#include <com/sun/star/lang/Locale.hpp>
+#include <com/sun/star/util/XURLTransformer.hpp>
+#include <osl/file.h>
+#include <rtl/cipher.h>
+#include <rtl/digest.h>
+#include <rtl/strbuf.hxx>
+#include <rtl/ustring.hxx>
+#include <tools/gen.hxx>
+#include <tools/stream.hxx>
+#include <vcl/bitmapex.hxx>
+#include <vcl/gradient.hxx>
+#include <vcl/hatch.hxx>
+#include <vcl/outdev.hxx>
+#include <vcl/pdfwriter.hxx>
+#include <vcl/wall.hxx>
+
+#include "sallayout.hxx"
+#include "outdata.hxx"
+#include "pdffontcache.hxx"
 
 class StyleSettings;
 class FontSelectPattern;
@@ -54,6 +52,7 @@ class FontSubsetInfo;
 class ZCodec;
 class EncHashTransporter;
 struct BitStreamState;
+class PhysicalFontFace;
 
 // the maximum password length
 #define ENCRYPTED_PWD_SIZE     32

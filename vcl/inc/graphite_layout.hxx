@@ -35,13 +35,16 @@
 #include <graphite2/Font.h>
 #include <graphite2/Segment.h>
 // Platform
-#include <sallayout.hxx>
 #include <vcl/dllapi.h>
+
+#include "sallayout.hxx"
+
 // Module
 
 // Module type definitions and forward declarations.
 // SAL/VCL types
 class ServerFont;
+class PhysicalFontFace;
 
 // Graphite types
 namespace grutils { class GrFeatureParser; }
