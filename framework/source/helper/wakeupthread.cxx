@@ -23,15 +23,13 @@
 
 // include files of own module
 #include <helper/wakeupthread.hxx>
-#include <threadhelp/guard.hxx>
 
 namespace framework{
 
 
 
 WakeUpThread::WakeUpThread(const css::uno::Reference< css::util::XUpdatable >& xListener)
-    : ThreadHelpBase(         )
-    , m_xListener   (xListener)
+    : m_xListener   (xListener)
 {
 }
 
@@ -49,12 +47,7 @@ void SAL_CALL WakeUpThread::run()
         aSleeper.reset();
         aSleeper.wait(&aTime);
 
-        // SAFE ->
-        Guard aReadLock(m_aLock);
-        css::uno::Reference< css::util::XUpdatable > xListener(m_xListener.get(), css::uno::UNO_QUERY);
-        aReadLock.unlock();
-        // <- SAFE
-
+        css::uno::Reference< css::util::XUpdatable > xListener(m_xListener);
         if (xListener.is())
             xListener->update();
     }

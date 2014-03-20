@@ -23,7 +23,6 @@
 
 // include files of own module
 
-#include <threadhelp/threadhelpbase.hxx>
 #include <macros/generic.hxx>
 
 #include <general.h>
@@ -45,8 +44,7 @@ namespace framework{
 
 /** @short  implements a "sleeping" thread, which try to sleep
             without a using cpu consumption :-) */
-class WakeUpThread : public ThreadHelpBase
-                   , public ::osl::Thread
+class WakeUpThread : public ::osl::Thread
 {
 
     // member
