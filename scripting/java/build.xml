@@ -82,7 +82,21 @@
       <os family="unix"/>
     </and>
   </condition>
-  <path id="macPath" location="${java.home}/../Classes/classes.jar"/>
+
+  <path id="mac.apple.java.path" location="${java.home}/../Classes/classes.jar"/>
+  <path id="mac.oracle.java.path" location="${java.home}/lib/rt.jar"/>
+
+  <condition property="mac.java.path" value="mac.oracle.java.path" else ="mac.apple.java.path">
+    <and>
+      <os family="mac"/>
+      <os family="unix"/>
+      <contains string="${java.version}" substring="1.7" casesensitive="false" />
+      <contains string="${java.vendor}" substring="Oracle" casesensitive="false" />
+    </and>
+  </condition>
+
+  <path id="macPath" refID="${mac.java.path}"/>
+
   <!-- rhino.jar from OpenJDK breaks build -->
   <path id="nonMacPath">
     <fileset dir="${java.home}/">
