@@ -31,6 +31,8 @@
 #include <boost/ptr_container/ptr_vector.hpp>
 #include <boost/noncopyable.hpp>
 
+class ScEnhancedProtection;
+
 /* ============================================================================
 Classes to import the big Excel document contents (related to several cells or
 globals for the document).
@@ -52,7 +54,7 @@ struct XclRef8U
     sal_uInt16 mnCol2;
 
     const XclRef8U & read( XclImpStream & rStrm );
-    ScRange convertToScRange( SCTAB nTab );
+    ScRange convertToScRange( SCTAB nTab ) const;
 };
 
 /** Feat ISFPROTECTION refs plus FeatProtection */
@@ -63,6 +65,8 @@ struct XclEnhancedProtection
     sal_uInt32                  mnPasswordVerifier;
     OUString                    maTitle;
     ::std::vector< sal_uInt8 >  maSecurityDescriptor;   // raw data
+
+    ScEnhancedProtection convertToScEnhancedProtection( SCTAB nTab ) const;
 };
 
 // Shared string table ========================================================
