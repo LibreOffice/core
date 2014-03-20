@@ -32,6 +32,8 @@
 #include <rtl/strbuf.hxx>
 #endif
 
+#include <boost/scoped_array.hpp>
+
 namespace vcl
 {
 
@@ -222,10 +224,10 @@ namespace vcl
             return;
         }
 
-        sal_Int32* pCharWidths = new sal_Int32[ _nLength ];
-        long nTextWidth = GetTextArray( _rText, pCharWidths, _nStartIndex, _nLength );
-        m_rTargetDevice.DrawTextArray( _rStartPoint, _rText, pCharWidths, _nStartIndex, _nLength );
-        delete[] pCharWidths;
+        boost::scoped_array<sal_Int32> pCharWidths(new sal_Int32[ _nLength ]);
+        long nTextWidth = GetTextArray( _rText, pCharWidths.get(), _nStartIndex, _nLength );
+        m_rTargetDevice.DrawTextArray( _rStartPoint, _rText, pCharWidths.get(), _nStartIndex, _nLength );
+        pCharWidths.reset();
 
         m_aCompleteTextRect.Union( Rectangle( _rStartPoint, Size( nTextWidth, m_rTargetDevice.GetTextHeight() ) ) );
     }

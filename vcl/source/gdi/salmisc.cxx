@@ -20,6 +20,7 @@
 #include <vcl/bmpacc.hxx>
 #include <vcl/salbtype.hxx>
 #include <bmpfast.hxx>
+#include <boost/scoped_array.hpp>
 
 #define IMPL_CASE_GET_FORMAT( Format )                          \
 case( BMP_FORMAT##Format ):                                 \
@@ -217,7 +218,7 @@ static void ImplTCToPAL( const BitmapBuffer& rSrcBuffer, BitmapBuffer& rDstBuffe
     const ColorMask&    rSrcMask = rSrcBuffer.maColorMask;
     const ColorMask&    rDstMask = rDstBuffer.maColorMask;
     BitmapPalette       aColMap( rSrcBuffer.maPalette.GetEntryCount() );
-    sal_uInt8*              pColToPalMap = new sal_uInt8[ TC_TO_PAL_COLORS ];
+    boost::scoped_array<sal_uInt8> pColToPalMap(new sal_uInt8[ TC_TO_PAL_COLORS ]);
     BitmapColor         aIndex( 0 );
 
     for( long nR = 0; nR < 16; nR++ )
@@ -246,8 +247,6 @@ static void ImplTCToPAL( const BitmapBuffer& rSrcBuffer, BitmapBuffer& rDstBuffe
 
         DOUBLE_SCANLINES();
     }
-
-    delete[] pColToPalMap;
 }
 
 BitmapBuffer* StretchAndConvert(

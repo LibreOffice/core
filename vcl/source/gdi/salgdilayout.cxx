@@ -40,7 +40,7 @@
 #include <salprn.hxx>
 #include <svdata.hxx>
 #include <outdata.hxx>
-
+#include <boost/scoped_array.hpp>
 #include <boost/scoped_ptr.hpp>
 
 #include "basegfx/polygon/b2dpolygon.hxx"
@@ -414,10 +414,9 @@ void SalGraphics::DrawPolyLine( sal_uInt32 nPoints, const SalPoint* pPtAry, cons
 {
     if( (m_nLayout & SAL_LAYOUT_BIDI_RTL) || (pOutDev && pOutDev->IsRTLEnabled()) )
     {
-        SalPoint* pPtAry2 = new SalPoint[nPoints];
-        bool bCopied = mirror( nPoints, pPtAry, pPtAry2, pOutDev );
-        drawPolyLine( nPoints, bCopied ? pPtAry2 : pPtAry );
-        delete [] pPtAry2;
+        boost::scoped_array<SalPoint> pPtAry2(new SalPoint[nPoints]);
+        bool bCopied = mirror( nPoints, pPtAry, pPtAry2.get(), pOutDev );
+        drawPolyLine( nPoints, bCopied ? pPtAry2.get() : pPtAry );
     }
     else
         drawPolyLine( nPoints, pPtAry );
@@ -427,10 +426,9 @@ void SalGraphics::DrawPolygon( sal_uInt32 nPoints, const SalPoint* pPtAry, const
 {
     if( (m_nLayout & SAL_LAYOUT_BIDI_RTL) || (pOutDev && pOutDev->IsRTLEnabled()) )
     {
-        SalPoint* pPtAry2 = new SalPoint[nPoints];
-        bool bCopied = mirror( nPoints, pPtAry, pPtAry2, pOutDev );
-        drawPolygon( nPoints, bCopied ? pPtAry2 : pPtAry );
-        delete [] pPtAry2;
+        boost::scoped_array<SalPoint> pPtAry2(new SalPoint[nPoints]);
+        bool bCopied = mirror( nPoints, pPtAry, pPtAry2.get(), pOutDev );
+        drawPolygon( nPoints, bCopied ? pPtAry2.get() : pPtAry );
     }
     else
         drawPolygon( nPoints, pPtAry );
@@ -478,10 +476,9 @@ bool SalGraphics::DrawPolyLineBezier( sal_uInt32 nPoints, const SalPoint* pPtAry
     bool bResult = false;
     if( (m_nLayout & SAL_LAYOUT_BIDI_RTL) || (pOutDev && pOutDev->IsRTLEnabled()) )
     {
-        SalPoint* pPtAry2 = new SalPoint[nPoints];
-        bool bCopied = mirror( nPoints, pPtAry, pPtAry2, pOutDev );
-        bResult = drawPolyLineBezier( nPoints, bCopied ? pPtAry2 : pPtAry, pFlgAry );
-        delete [] pPtAry2;
+        boost::scoped_array<SalPoint> pPtAry2(new SalPoint[nPoints]);
+        bool bCopied = mirror( nPoints, pPtAry, pPtAry2.get(), pOutDev );
+        bResult = drawPolyLineBezier( nPoints, bCopied ? pPtAry2.get() : pPtAry, pFlgAry );
     }
     else
         bResult = drawPolyLineBezier( nPoints, pPtAry, pFlgAry );
@@ -493,10 +490,9 @@ bool SalGraphics::DrawPolygonBezier( sal_uInt32 nPoints, const SalPoint* pPtAry,
     bool bResult = false;
     if( (m_nLayout & SAL_LAYOUT_BIDI_RTL) || (pOutDev && pOutDev->IsRTLEnabled()) )
     {
-        SalPoint* pPtAry2 = new SalPoint[nPoints];
-        bool bCopied = mirror( nPoints, pPtAry, pPtAry2, pOutDev );
-        bResult = drawPolygonBezier( nPoints, bCopied ? pPtAry2 : pPtAry, pFlgAry );
-        delete [] pPtAry2;
+        boost::scoped_array<SalPoint> pPtAry2(new SalPoint[nPoints]);
+        bool bCopied = mirror( nPoints, pPtAry, pPtAry2.get(), pOutDev );
+        bResult = drawPolygonBezier( nPoints, bCopied ? pPtAry2.get() : pPtAry, pFlgAry );
     }
     else
         bResult = drawPolygonBezier( nPoints, pPtAry, pFlgAry );
@@ -644,10 +640,9 @@ void SalGraphics::Invert( sal_uInt32 nPoints, const SalPoint* pPtAry, SalInvert 
 {
     if( (m_nLayout & SAL_LAYOUT_BIDI_RTL) || (pOutDev && pOutDev->IsRTLEnabled()) )
     {
-        SalPoint* pPtAry2 = new SalPoint[nPoints];
-        bool bCopied = mirror( nPoints, pPtAry, pPtAry2, pOutDev );
-        invert( nPoints, bCopied ? pPtAry2 : pPtAry, nFlags );
-        delete [] pPtAry2;
+        boost::scoped_array<SalPoint> pPtAry2(new SalPoint[nPoints]);
+        bool bCopied = mirror( nPoints, pPtAry, pPtAry2.get(), pOutDev );
+        invert( nPoints, bCopied ? pPtAry2.get() : pPtAry, nFlags );
     }
     else
         invert( nPoints, pPtAry, nFlags );
