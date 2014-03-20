@@ -27,7 +27,6 @@
 
 // include files of own module
 #include <helper/wakeupthread.hxx>
-#include <threadhelp/threadhelpbase.hxx>
 #include <macros/xinterface.hxx>
 #include <macros/xtypeprovider.hxx>
 #include <macros/xserviceinfo.hxx>
@@ -151,8 +150,7 @@ typedef ::std::vector< IndicatorInfo > IndicatorStack;
     @devstatus      ready to use
     @threadsafe     yes
  */
-class StatusIndicatorFactory : private ThreadHelpBase
-                             , public  ::cppu::WeakImplHelper4<
+class StatusIndicatorFactory : public  ::cppu::WeakImplHelper4<
                                              css::lang::XServiceInfo
                                            , css::lang::XInitialization
                                            , css::task::XStatusIndicatorFactory
@@ -161,6 +159,7 @@ class StatusIndicatorFactory : private ThreadHelpBase
 
     // member
     private:
+        osl::Mutex m_mutex;
 
         /** stack with all current indicator children. */
         IndicatorStack m_aStack;
