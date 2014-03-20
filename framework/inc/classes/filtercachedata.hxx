@@ -47,8 +47,6 @@
 
 namespace framework{
 
-class LockHelper;
-
 #define DEFAULT_FILTERCACHE_VERSION                 6                                                                   /// these implmentation of FilterCache support different version of TypeDetection.xml! This define the current set default one.
 
 #define DEFAULT_FILTERCACHE_MODE                    CONFIG_MODE_DELAYED_UPDATE | CONFIG_MODE_ALL_LOCALES                                          /// ConfigItems could run in different modes: supported values are ... { CONFIG_MODE_IMMEDIATE_UPDATE, CONFIG_MODE_DELAYED_UPDATE, CONFIG_MODE_ALL_LOCALES }
@@ -490,7 +488,6 @@ class DataContainer
 
         sal_Bool    isModified();
 
-        LockHelper& getSyncronizer();
         void        free();
 
         sal_Bool isValidOrRepairable       () const;
