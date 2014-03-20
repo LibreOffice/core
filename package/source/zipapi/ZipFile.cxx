@@ -1072,16 +1072,15 @@ sal_Int32 ZipFile::getCRC( sal_Int64 nOffset, sal_Int64 nSize )
 
     Sequence < sal_Int8 > aBuffer;
     CRC32 aCRC;
-    sal_Int32 nBlockSize = static_cast< sal_Int32 > (::std::min( nSize, static_cast< sal_Int64 >( 32000 ) ) );
+    sal_Int64 nBlockSize = ::std::min(nSize, static_cast< sal_Int64 >(32000));
 
     aGrabber.seek( nOffset );
-    for ( int ind = 0;
-          aGrabber.readBytes( aBuffer, nBlockSize ) && ind * nBlockSize < nSize;
-          ind++ )
+    for (sal_Int64 ind = 0;
+         aGrabber.readBytes( aBuffer, nBlockSize ) && ind * nBlockSize < nSize;
+         ++ind)
     {
-        sal_Int64 nLen = ::std::min( static_cast< sal_Int64 >( nBlockSize ),
-                                     nSize - ind * nBlockSize );
-        aCRC.updateSegment( aBuffer, 0, static_cast< sal_Int32 >( nLen ) );
+        sal_Int64 nLen = ::std::min(nBlockSize, nSize - ind * nBlockSize);
+        aCRC.updateSegment(aBuffer, 0, static_cast<sal_Int32>(nLen));
     }
 
     return aCRC.getValue();
