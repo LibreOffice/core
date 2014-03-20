@@ -17,40 +17,37 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "sal/config.h"
+#include <sal/types.h>
 
 #include <cassert>
 
+#include <basebmp/scanlineformats.hxx>
+#include <basegfx/polygon/b2dpolypolygon.hxx>
 #include <basegfx/range/b2drange.hxx>
 #include <basegfx/range/b2ibox.hxx>
-#include <basegfx/polygon/b2dpolypolygon.hxx>
-
-#include <basebmp/scanlineformats.hxx>
-
-#include <tools/debug.hxx>
-
-#include <outfont.hxx>
-#include <impfont.hxx>
 #include <rtl/instance.hxx>
+#include <tools/debug.hxx>
+#include <vcl/sysdata.hxx>
 
-#include "vcl/sysdata.hxx"
 #include "generic/geninst.h"
 #include "generic/genpspgraphics.h"
 #include "generic/glyphcache.hxx"
-#include "headless/svpgdi.hxx"
 #include "headless/svpbmp.hxx"
+#include "headless/svpgdi.hxx"
+#include "impfont.hxx"
+#include "outfont.hxx"
+#include "PhysicalFontFace.hxx"
 
 using namespace basegfx;
 using namespace basebmp;
 
-class SvpGlyphPeer
-:   public GlyphCachePeer
+class SvpGlyphPeer : public GlyphCachePeer
 {
 public:
     SvpGlyphPeer() {}
 
     BitmapDeviceSharedPtr GetGlyphBmp( ServerFont&, sal_GlyphId,
-                            basebmp::Format nBmpFormat, B2IPoint& rTargetPos );
+                                       basebmp::Format nBmpFormat, B2IPoint& rTargetPos );
 
 protected:
     virtual void    RemovingFont( ServerFont& );

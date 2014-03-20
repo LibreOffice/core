@@ -21,6 +21,7 @@
 #define INCLUDED_VCL_GENERIC_GLYPHS_GCACH_FTYP_HXX
 
 #include "generic/glyphcache.hxx"
+#include "PhysicalFontFace.hxx"
 
 #include <config_graphite.h>
 #if ENABLE_GRAPHITE

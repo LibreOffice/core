@@ -20,13 +20,14 @@
 #ifndef INCLUDED_VCL_INC_WIN_SALGDI_H
 #define INCLUDED_VCL_INC_WIN_SALGDI_H
 
-#include <sallayout.hxx>
-#include <salgdi.hxx>
-#include <outfont.hxx>
-#include <impfont.hxx>
+#include "sallayout.hxx"
+#include "salgdi.hxx"
+#include "outfont.hxx"
+#include "PhysicalFontFace.hxx"
+#include "impfont.hxx"
 #include <vcl/fontcapabilities.hxx>
 
-#include "boost/scoped_ptr.hpp"
+#include <boost/scoped_ptr.hpp>
 #include <boost/unordered_set.hpp>
 
 #include <config_graphite.h>

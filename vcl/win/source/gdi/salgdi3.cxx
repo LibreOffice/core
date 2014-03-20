@@ -17,43 +17,37 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/types.h>
 #include <config_folders.h>
 
-#include <string.h>
+#include <algorithm>
 #include <malloc.h>
-
+#include <map>
+#include <set>
+#include <string.h>
 #include <svsys.h>
-#include "rtl/logfile.hxx"
-#include "rtl/bootstrap.hxx"
+#include <vector>
 
-#include "i18nlangtag/mslangid.hxx"
-
-#include "osl/file.hxx"
-#include "osl/process.h"
-
-#include "basegfx/polygon/b2dpolygon.hxx"
-#include "basegfx/matrix/b2dhommatrixtools.hxx"
-
-#include "unotools/fontcfg.hxx"
-
-#include "tools/stream.hxx"
-#include "tools/helpers.hxx"
-
-#include <vcl/sysdata.hxx>
+#include <basegfx/matrix/b2dhommatrixtools.hxx>
+#include <basegfx/polygon/b2dpolygon.hxx>
+#include <i18nlangtag/mslangid.hxx>
+#include <osl/file.hxx>
+#include <osl/process.h>
+#include <rtl/bootstrap.hxx>
+#include <rtl/logfile.hxx>
+#include <tools/helpers.hxx>
+#include <tools/stream.hxx>
+#include <unotools/fontcfg.hxx>
 #include <vcl/settings.hxx>
-
-#include "win/saldata.hxx"
-#include "win/salgdi.h"
+#include <vcl/sysdata.hxx>
 
 #include "fontsubset.hxx"
 #include "outdev.h"
+#include "PhysicalFontFace.hxx"
 #include "sft.hxx"
+#include "win/saldata.hxx"
+#include "win/salgdi.h"
 
-#include <algorithm>
-
-#include <vector>
-#include <set>
-#include <map>
 
 using namespace vcl;
 
