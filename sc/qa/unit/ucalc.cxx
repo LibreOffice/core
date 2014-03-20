@@ -697,9 +697,8 @@ void Test::testMarkData()
 
 void Test::testInput()
 {
-    OUString aTabName("foo");
     CPPUNIT_ASSERT_MESSAGE ("failed to insert sheet",
-                            m_pDoc->InsertTab (0, aTabName));
+                            m_pDoc->InsertTab (0, "foo"));
 
     OUString numstr("'10.5");
     OUString str("'apple'");
@@ -965,10 +964,8 @@ void Test::testCopyToDocument()
 
 void Test::testSheetsFunc()
 {
-    OUString aTabName1("test1");
-    OUString aTabName2("test2");
     CPPUNIT_ASSERT_MESSAGE ("failed to insert sheet",
-                            m_pDoc->InsertTab (SC_TAB_APPEND, aTabName1));
+                            m_pDoc->InsertTab (SC_TAB_APPEND, "test1"));
 
     m_pDoc->SetString(0, 0, 0, OUString("=SHEETS()"));
     m_pDoc->CalcFormulaTree(false, false);
@@ -979,7 +976,7 @@ void Test::testSheetsFunc()
                            static_cast<SCTAB>(original) == m_pDoc->GetTableCount());
 
     CPPUNIT_ASSERT_MESSAGE ("failed to insert sheet",
-                            m_pDoc->InsertTab (SC_TAB_APPEND, aTabName2));
+                            m_pDoc->InsertTab (SC_TAB_APPEND, "test2"));
 
     double modified;
     m_pDoc->GetValue(0, 0, 0, modified);
@@ -998,9 +995,8 @@ void Test::testSheetsFunc()
 
 void Test::testVolatileFunc()
 {
-    OUString aTabName("foo");
     CPPUNIT_ASSERT_MESSAGE ("failed to insert sheet",
-                            m_pDoc->InsertTab (0, aTabName));
+                            m_pDoc->InsertTab (0, "foo"));
 
     double val = 1;
     m_pDoc->SetValue(0, 0, 0, val);
@@ -1702,9 +1698,8 @@ void Test::testCellBroadcaster()
 
 void Test::testFuncParam()
 {
-    OUString aTabName("foo");
     CPPUNIT_ASSERT_MESSAGE ("failed to insert sheet",
-                            m_pDoc->InsertTab (0, aTabName));
+                            m_pDoc->InsertTab (0, "foo"));
 
     // First, the normal case, with no missing parameters.
     m_pDoc->SetString(0, 0, 0, OUString("=AVERAGE(1;2;3)"));
@@ -2194,15 +2189,14 @@ void Test::testSheetCopy()
 
 void Test::testSheetMove()
 {
-    OUString aTabName("TestTab1");
-    m_pDoc->InsertTab(0, aTabName);
+    m_pDoc->InsertTab(0, "TestTab1");
     CPPUNIT_ASSERT_EQUAL_MESSAGE("document should have one sheet to begin with.", m_pDoc->GetTableCount(), static_cast<SCTAB>(1));
     SCROW nRow1, nRow2;
     bool bHidden = m_pDoc->RowHidden(0, 0, &nRow1, &nRow2);
     CPPUNIT_ASSERT_MESSAGE("new sheet should have all rows visible", !bHidden && nRow1 == 0 && nRow2 == MAXROW);
 
     //test if inserting before another sheet works
-    m_pDoc->InsertTab(0, OUString("TestTab2"));
+    m_pDoc->InsertTab(0, "TestTab2");
     CPPUNIT_ASSERT_EQUAL_MESSAGE("document should have two sheets", m_pDoc->GetTableCount(), static_cast<SCTAB>(2));
     bHidden = m_pDoc->RowHidden(0, 0, &nRow1, &nRow2);
     CPPUNIT_ASSERT_MESSAGE("new sheet should have all rows visible", !bHidden && nRow1 == 0 && nRow2 == MAXROW);
@@ -2241,7 +2235,7 @@ void Test::testSheetMove()
 
 void Test::testDataArea()
 {
-    m_pDoc->InsertTab(0, OUString("Data"));
+    m_pDoc->InsertTab(0, "Data");
 
     // Totally empty sheet should be rightfully considered empty in all accounts.
     CPPUNIT_ASSERT_MESSAGE("Sheet is expected to be empty.", m_pDoc->IsPrintEmpty(0, 0, 0, 100, 100));
@@ -2275,10 +2269,10 @@ void Test::testDataArea()
 
 void Test::testStreamValid()
 {
-    m_pDoc->InsertTab(0, OUString("Sheet1"));
-    m_pDoc->InsertTab(1, OUString("Sheet2"));
-    m_pDoc->InsertTab(2, OUString("Sheet3"));
-    m_pDoc->InsertTab(3, OUString("Sheet4"));
+    m_pDoc->InsertTab(0, "Sheet1");
+    m_pDoc->InsertTab(1, "Sheet2");
+    m_pDoc->InsertTab(2, "Sheet3");
+    m_pDoc->InsertTab(3, "Sheet4");
     CPPUNIT_ASSERT_EQUAL_MESSAGE("We should have 4 sheet instances.", m_pDoc->GetTableCount(), static_cast<SCTAB>(4));
 
     OUString a1("A1");
@@ -2772,8 +2766,7 @@ void Test::testFunctionLists()
 
 void Test::testGraphicsInGroup()
 {
-    OUString aTabName("TestTab");
-    m_pDoc->InsertTab(0, aTabName);
+    m_pDoc->InsertTab(0, "TestTab");
     CPPUNIT_ASSERT_MESSAGE("document should have one sheet to begin with.", m_pDoc->GetTableCount() == 1);
     SCROW nRow1, nRow2;
     bool bHidden = m_pDoc->RowHidden(0, 0, &nRow1, &nRow2);
@@ -2879,8 +2872,8 @@ void Test::testGraphicsInGroup()
 
 void Test::testGraphicsOnSheetMove()
 {
-    m_pDoc->InsertTab(0, OUString("Tab1"));
-    m_pDoc->InsertTab(1, OUString("Tab2"));
+    m_pDoc->InsertTab(0, "Tab1");
+    m_pDoc->InsertTab(1, "Tab2");
     CPPUNIT_ASSERT_MESSAGE("There should be only 2 sheets to begin with", m_pDoc->GetTableCount() == 2);
 
     m_pDoc->InitDrawLayer();
@@ -2907,7 +2900,7 @@ void Test::testGraphicsOnSheetMove()
 
     // Insert a new sheet at left-end, and make sure the object has moved to
     // the 2nd page.
-    m_pDoc->InsertTab(0, OUString("NewTab"));
+    m_pDoc->InsertTab(0, "NewTab");
     CPPUNIT_ASSERT_EQUAL_MESSAGE("There should be 3 sheets.", m_pDoc->GetTableCount(), static_cast<SCTAB>(3));
     pPage = pDrawLayer->GetPage(0);
     CPPUNIT_ASSERT_MESSAGE("1st sheet should have no object.", pPage && pPage->GetObjCount() == 0);
@@ -2957,8 +2950,7 @@ void Test::testToggleRefFlag()
     // the document, as ScRefFinder does not depend on the content of the
     // document except for the sheet names.
 
-    OUString aTabName("Test");
-    m_pDoc->InsertTab(0, aTabName);
+    m_pDoc->InsertTab(0, "Test");
 
     {
         // Calc A1: basic 2D reference
@@ -3092,10 +3084,9 @@ void Test::testToggleRefFlag()
 
 void Test::testAutofilter()
 {
-    OUString aTabName("Test");
     OUString aDBName("NONAME");
 
-    m_pDoc->InsertTab( 0, aTabName );
+    m_pDoc->InsertTab( 0, "Test" );
 
     // cell contents (0 = empty cell)
     const char* aData[][3] = {
@@ -3185,8 +3176,8 @@ void Test::testAutofilter()
 
 void Test::testCopyPaste()
 {
-    m_pDoc->InsertTab(0, OUString("Sheet1"));
-    m_pDoc->InsertTab(1, OUString("Sheet2"));
+    m_pDoc->InsertTab(0, "Sheet1");
+    m_pDoc->InsertTab(1, "Sheet2");
     //test copy&paste + ScUndoPaste
     //copy local and global range names in formulas
     //string cells and value cells
@@ -3347,8 +3338,8 @@ void Test::testCopyPasteAsLink()
 
 void Test::testCopyPasteTranspose()
 {
-    m_pDoc->InsertTab(0, OUString("Sheet1"));
-    m_pDoc->InsertTab(1, OUString("Sheet2"));
+    m_pDoc->InsertTab(0, "Sheet1");
+    m_pDoc->InsertTab(1, "Sheet2");
 
     m_pDoc->SetValue(0, 0, 0, 1);
     m_pDoc->SetString(1, 0, 0, OUString("=A1+1"));
@@ -3369,7 +3360,7 @@ void Test::testCopyPasteTranspose()
     pNoteC1->SetText(aAdrC1, aHelloC1);
 
     // transpose clipboard, paste and check on Sheet2
-    m_pDoc->InsertTab(1, OUString("Sheet2"));
+    m_pDoc->InsertTab(1, "Sheet2");
 
     ScRange aSrcRange = ScRange(0,0,0,2,0,0);
     ScDocument aNewClipDoc(SCDOCMODE_CLIP);
@@ -3828,7 +3819,7 @@ void Test::testMergedCells()
 {
     //test merge and unmerge
     //TODO: an undo/redo test for this would be a good idea
-    m_pDoc->InsertTab(0, OUString("Sheet1"));
+    m_pDoc->InsertTab(0, "Sheet1");
     m_pDoc->DoMerge(0, 1, 1, 3, 3, false);
     SCCOL nEndCol = 1;
     SCROW nEndRow = 1;
@@ -4108,7 +4099,7 @@ void Test::testJumpToPrecedentsDependents()
 {
     // Precedent is another cell that the cell references, while dependent is
     // another cell that references it.
-    m_pDoc->InsertTab(0, OUString("Test"));
+    m_pDoc->InsertTab(0, "Test");
 
     m_pDoc->SetString(2, 0, 0, OUString("=A1+A2+B3")); // C1
     m_pDoc->SetString(2, 1, 0, OUString("=A1"));       // C2
@@ -4262,16 +4253,14 @@ void Test::testCopyPasteFormulasExternalDoc()
 
     ScDocShellRef xExtDocSh = new ScDocShell;
     OUString aExtDocName("file:///extdata.fake");
-    OUString aExtSh1Name("ExtSheet1");
-    OUString aExtSh2Name("ExtSheet2");
     SfxMedium* pMed = new SfxMedium(aExtDocName, STREAM_STD_READWRITE);
     xExtDocSh->DoInitNew(pMed);
     CPPUNIT_ASSERT_MESSAGE("external document instance not loaded.",
                            findLoadedDocShellByName(aExtDocName) != NULL);
 
     ScDocument* pExtDoc = xExtDocSh->GetDocument();
-    pExtDoc->InsertTab(0, aExtSh1Name);
-    pExtDoc->InsertTab(1, aExtSh2Name);
+    pExtDoc->InsertTab(0, "ExtSheet1");
+    pExtDoc->InsertTab(1, "ExtSheet2");
 
     m_pDoc->InsertTab(0, "Sheet1");
     m_pDoc->InsertTab(1, "Sheet2");
@@ -4392,8 +4381,7 @@ void Test::testFindAreaPosColRight()
         { "", "1", "1", "", "1", "1", "1" },
         { "", "", "1", "1", "1", "", "1" }, };
 
-    OUString aTabName1("test1");
-    m_pDoc->InsertTab(0, aTabName1);
+    m_pDoc->InsertTab(0, "test1");
     clearRange( m_pDoc, ScRange(0, 0, 0, 7, SAL_N_ELEMENTS(aData), 0));
     ScAddress aPos(0,0,0);
     ScRange aDataRange = insertRangeData( m_pDoc, aPos, aData, SAL_N_ELEMENTS(aData));
@@ -4451,10 +4439,8 @@ void Test::testFindAreaPosColRight()
 void Test::testSortWithFormulaRefs()
 {
     ScDocument* pDoc = getDocShell().GetDocument();
-    OUString aTabName1("List1");
-    OUString aTabName2("List2");
-    pDoc->InsertTab(0, aTabName1);
-    pDoc->InsertTab(1, aTabName2);
+    pDoc->InsertTab(0, "List1");
+    pDoc->InsertTab(1, "List2");
 
     const char* aFormulaData[6] = {
         "=IF($List1.A2<>\"\",$List1.A2,\"\")",
@@ -4553,8 +4539,7 @@ void Test::testSortWithStrings()
 
 void Test::testSort()
 {
-    OUString aTabName1("test1");
-    m_pDoc->InsertTab(0, aTabName1);
+    m_pDoc->InsertTab(0, "test1");
 
     ScRange aDataRange;
     ScAddress aPos(0,0,0);
@@ -4685,9 +4670,7 @@ void Test::testNoteBasic()
 {
     OUString aHello("Hello world");
     OUString aJimBob("Jim Bob");
-    OUString aTabName("PostIts");
-    OUString aTabName2("Table2");
-    m_pDoc->InsertTab(0, aTabName);
+    m_pDoc->InsertTab(0, "PostIts");
 
     ScAddress aAddr(2, 2, 0); // cell C3
     ScPostIt *pNote = m_pDoc->GetOrCreateNote(aAddr);
@@ -4715,7 +4698,7 @@ void Test::testNoteBasic()
     CPPUNIT_ASSERT_MESSAGE("note not there", m_pDoc->GetNote(aAddr) == pNote);
 
     // Insert a new sheet to shift the current sheet to the right.
-    m_pDoc->InsertTab(0, aTabName2);
+    m_pDoc->InsertTab(0, "Table2");
     CPPUNIT_ASSERT_MESSAGE("note hasn't moved", m_pDoc->GetNote(aAddr) == NULL);
     aAddr.IncTab(); // Move to the next sheet.
     CPPUNIT_ASSERT_MESSAGE("note not there", m_pDoc->GetNote(aAddr) == pNote);
@@ -4756,8 +4739,7 @@ void Test::testNoteBasic()
 
 void Test::testNoteDeleteRow()
 {
-    OUString aSheet1("Sheet1");
-    m_pDoc->InsertTab(0, aSheet1);
+    m_pDoc->InsertTab(0, "Sheet1");
 
     // We need a drawing layer in order to create caption objects.
     m_pDoc->InitDrawLayer(&getDocShell());
@@ -4846,8 +4828,7 @@ void Test::testNoteDeleteRow()
 void Test::testNoteDeleteCol()
 {
     ScDocument* pDoc = getDocShell().GetDocument();
-    OUString aSheet1("Sheet1");
-    pDoc->InsertTab(0, aSheet1);
+    pDoc->InsertTab(0, "Sheet1");
 
     OUString aHello("Hello");
     OUString aJimBob("Jim Bob");
@@ -4911,8 +4892,7 @@ void Test::testNoteLifeCycle()
 void Test::testAreasWithNotes()
 {
     ScDocument* pDoc = getDocShell().GetDocument();
-    OUString aSheet1("Sheet1");
-    pDoc->InsertTab(0, aSheet1);
+    pDoc->InsertTab(0, "Sheet1");
 
     OUString aHello("Hello");
     OUString aJimBob("Jim Bob");
@@ -5016,8 +4996,7 @@ void Test::testAreasWithNotes()
 
 void Test::testAnchoredRotatedShape()
 {
-    OUString aTabName("TestTab");
-    m_pDoc->InsertTab(0, aTabName);
+    m_pDoc->InsertTab(0, "TestTab");
     SCROW nRow1, nRow2;
     bool bHidden = m_pDoc->RowHidden(0, 0, &nRow1, &nRow2);
     CPPUNIT_ASSERT_MESSAGE("new sheet should have all rows visible", !bHidden && nRow1 == 0 && nRow2 == MAXROW);
