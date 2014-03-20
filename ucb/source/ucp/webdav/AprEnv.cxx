@@ -28,10 +28,14 @@ AprEnv::AprEnv()
     apr_initialize();
 
     apr_pool_create(&mpAprPool, NULL);
+
+    mpSerfLockStore = new http_dav_ucp::SerfLockStore();
 }
 
 AprEnv::~AprEnv()
 {
+    delete mpSerfLockStore;
+
     apr_pool_destroy(mpAprPool);
 
     apr_terminate();
@@ -48,6 +52,11 @@ AprEnv* AprEnv::getAprEnv()
 apr_pool_t* AprEnv::getAprPool()
 {
     return mpAprPool;
+}
+
+http_dav_ucp::SerfLockStore* AprEnv::getSerfLockStore()
+{
+    return mpSerfLockStore;
 }
 
 } // namespace apr_environment

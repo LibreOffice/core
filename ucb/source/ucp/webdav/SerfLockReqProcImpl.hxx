@@ -29,11 +29,14 @@
 namespace http_dav_ucp
 {
 
+class SerfSession;
+
 class SerfLockReqProcImpl : public SerfRequestProcessorImpl
 {
 public:
     SerfLockReqProcImpl( const char* inPath,
                          const DAVRequestHeaders& inRequestHeaders,
+                         SerfSession& rSession,
                          const css::ucb::Lock & rLock );
 
     virtual ~SerfLockReqProcImpl() SAL_OVERRIDE;
@@ -48,6 +51,7 @@ private:
     virtual
     void handleEndOfResponseData( serf_bucket_t * inSerfResponseBucket ) SAL_OVERRIDE;
 
+    SerfSession& m_rSession;
     css::ucb::Lock m_aLock;
     TimeValue m_aStartCall;
     css::uno::Reference< SerfInputStream > m_xInputStream;
