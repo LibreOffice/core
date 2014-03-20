@@ -17,6 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <vcl/svapp.hxx>
+
 #include <classes/propertysethelper.hxx>
 #include <threadhelp/transactionguard.hxx>
 #include <threadhelp/guard.hxx>
@@ -25,13 +29,12 @@ namespace framework{
 
 
 
-PropertySetHelper::PropertySetHelper(      LockHelper*                                             pExternalLock               ,
+PropertySetHelper::PropertySetHelper(      osl::Mutex & mutex,
                                            TransactionManager*                                     pExternalTransactionManager ,
                                            sal_Bool                                                bReleaseLockOnCall          )
-    : m_lSimpleChangeListener(pExternalLock->getShareableOslMutex())
-    , m_lVetoChangeListener  (pExternalLock->getShareableOslMutex())
+    : m_lSimpleChangeListener(mutex)
+    , m_lVetoChangeListener  (mutex)
     , m_bReleaseLockOnCall   (bReleaseLockOnCall                   )
-    , m_rLock                (*pExternalLock                       )
     , m_rTransactionManager  (*pExternalTransactionManager         )
 {
 }
@@ -46,11 +49,8 @@ void PropertySetHelper::impl_setPropertyChangeBroadcaster(const css::uno::Refere
 {
     TransactionGuard aTransaction(m_rTransactionManager, E_SOFTEXCEPTIONS);
 
-    // SAFE ->
-    Guard aWriteLock(m_rLock);
+    SolarMutexGuard g;
     m_xBroadcaster = xBroadcaster;
-    aWriteLock.unlock();
-    // <- SAFE
 }
 
 
@@ -60,15 +60,13 @@ void SAL_CALL PropertySetHelper::impl_addPropertyInfo(const css::beans::Property
 {
     TransactionGuard aTransaction(m_rTransactionManager, E_SOFTEXCEPTIONS);
 
-    // SAFE ->
-    Guard aWriteLock(m_rLock);
+    SolarMutexGuard g;
 
     PropertySetHelper::TPropInfoHash::const_iterator pIt = m_lProps.find(aProperty.Name);
     if (pIt != m_lProps.end())
         throw css::beans::PropertyExistException();
 
     m_lProps[aProperty.Name] = aProperty;
-    // <- SAFE
 }
 
 
@@ -78,15 +76,13 @@ void SAL_CALL PropertySetHelper::impl_removePropertyInfo(const OUString& sProper
 {
     TransactionGuard aTransaction(m_rTransactionManager, E_SOFTEXCEPTIONS);
 
-    // SAFE ->
-    Guard aWriteLock(m_rLock);
+    SolarMutexGuard g;
 
     PropertySetHelper::TPropInfoHash::iterator pIt = m_lProps.find(sProperty);
     if (pIt == m_lProps.end())
         throw css::beans::UnknownPropertyException();
 
     m_lProps.erase(pIt);
-    // <- SAFE
 }
 
 
@@ -99,8 +95,7 @@ void SAL_CALL PropertySetHelper::impl_disablePropertySet()
 {
     TransactionGuard aTransaction(m_rTransactionManager, E_SOFTEXCEPTIONS);
 
-    // SAFE ->
-    Guard aWriteLock(m_rLock);
+    SolarMutexGuard g;
 
     css::uno::Reference< css::uno::XInterface > xThis(static_cast< css::beans::XPropertySet* >(this), css::uno::UNO_QUERY);
     css::lang::EventObject aEvent(xThis);
@@ -108,9 +103,6 @@ void SAL_CALL PropertySetHelper::impl_disablePropertySet()
     m_lSimpleChangeListener.disposeAndClear(aEvent);
     m_lVetoChangeListener.disposeAndClear(aEvent);
     m_lProps.free();
-
-    aWriteLock.unlock();
-    // <- SAFE
 }
 
 
@@ -193,7 +185,7 @@ void SAL_CALL PropertySetHelper::setPropertyValue(const OUString& sProperty,
     TransactionGuard aTransaction(m_rTransactionManager, E_HARDEXCEPTIONS);
 
     // SAFE ->
-    Guard aWriteLock(m_rLock);
+    SolarMutexResettableGuard aWriteLock;
 
     PropertySetHelper::TPropInfoHash::const_iterator pIt = m_lProps.find(sProperty);
     if (pIt == m_lProps.end())
@@ -204,7 +196,7 @@ void SAL_CALL PropertySetHelper::setPropertyValue(const OUString& sProperty,
     sal_Bool bLocked = sal_True;
     if (m_bReleaseLockOnCall)
     {
-        aWriteLock.unlock();
+        aWriteLock.clear();
         bLocked = sal_False;
         // <- SAFE
     }
@@ -214,7 +206,7 @@ void SAL_CALL PropertySetHelper::setPropertyValue(const OUString& sProperty,
     if (! bLocked)
     {
         // SAFE ->
-        aWriteLock.lock();
+        aWriteLock.reset();
         bLocked = sal_True;
     }
 
@@ -232,7 +224,7 @@ void SAL_CALL PropertySetHelper::setPropertyValue(const OUString& sProperty,
 
     if (m_bReleaseLockOnCall)
     {
-        aWriteLock.unlock();
+        aWriteLock.clear();
         bLocked = sal_False;
         // <- SAFE
     }
@@ -254,7 +246,7 @@ css::uno::Any SAL_CALL PropertySetHelper::getPropertyValue(const OUString& sProp
     TransactionGuard aTransaction(m_rTransactionManager, E_HARDEXCEPTIONS);
 
     // SAFE ->
-    Guard aReadLock(m_rLock);
+    SolarMutexClearableGuard aReadLock;
 
     PropertySetHelper::TPropInfoHash::const_iterator pIt = m_lProps.find(sProperty);
     if (pIt == m_lProps.end())
@@ -263,7 +255,7 @@ css::uno::Any SAL_CALL PropertySetHelper::getPropertyValue(const OUString& sProp
     css::beans::Property aPropInfo = pIt->second;
 
     if (m_bReleaseLockOnCall)
-        aReadLock.unlock();
+        aReadLock.clear();
 
     return impl_getPropertyValue(aPropInfo.Name, aPropInfo.Handle);
 }
@@ -278,13 +270,13 @@ void SAL_CALL PropertySetHelper::addPropertyChangeListener(const OUString&      
     TransactionGuard aTransaction(m_rTransactionManager, E_HARDEXCEPTIONS);
 
     // SAFE ->
-    Guard aReadLock(m_rLock);
+    SolarMutexClearableGuard aReadLock;
 
     PropertySetHelper::TPropInfoHash::const_iterator pIt = m_lProps.find(sProperty);
     if (pIt == m_lProps.end())
         throw css::beans::UnknownPropertyException();
 
-    aReadLock.unlock();
+    aReadLock.clear();
     // <- SAFE
 
     m_lSimpleChangeListener.addInterface(sProperty, xListener);
@@ -300,13 +292,13 @@ void SAL_CALL PropertySetHelper::removePropertyChangeListener(const OUString&   
     TransactionGuard aTransaction(m_rTransactionManager, E_SOFTEXCEPTIONS);
 
     // SAFE ->
-    Guard aReadLock(m_rLock);
+    SolarMutexClearableGuard aReadLock;
 
     PropertySetHelper::TPropInfoHash::const_iterator pIt = m_lProps.find(sProperty);
     if (pIt == m_lProps.end())
         throw css::beans::UnknownPropertyException();
 
-    aReadLock.unlock();
+    aReadLock.clear();
     // <- SAFE
 
     m_lSimpleChangeListener.removeInterface(sProperty, xListener);
@@ -322,13 +314,13 @@ void SAL_CALL PropertySetHelper::addVetoableChangeListener(const OUString&      
     TransactionGuard aTransaction(m_rTransactionManager, E_HARDEXCEPTIONS);
 
     // SAFE ->
-    Guard aReadLock(m_rLock);
+    SolarMutexClearableGuard aReadLock;
 
     PropertySetHelper::TPropInfoHash::const_iterator pIt = m_lProps.find(sProperty);
     if (pIt == m_lProps.end())
         throw css::beans::UnknownPropertyException();
 
-    aReadLock.unlock();
+    aReadLock.clear();
     // <- SAFE
 
     m_lVetoChangeListener.addInterface(sProperty, xListener);
@@ -344,13 +336,13 @@ void SAL_CALL PropertySetHelper::removeVetoableChangeListener(const OUString&   
     TransactionGuard aTransaction(m_rTransactionManager, E_SOFTEXCEPTIONS);
 
     // SAFE ->
-    Guard aReadLock(m_rLock);
+    SolarMutexClearableGuard aReadLock;
 
     PropertySetHelper::TPropInfoHash::const_iterator pIt = m_lProps.find(sProperty);
     if (pIt == m_lProps.end())
         throw css::beans::UnknownPropertyException();
 
-    aReadLock.unlock();
+    aReadLock.clear();
     // <- SAFE
 
     m_lVetoChangeListener.removeInterface(sProperty, xListener);
@@ -362,8 +354,7 @@ css::uno::Sequence< css::beans::Property > SAL_CALL PropertySetHelper::getProper
 {
     TransactionGuard aTransaction(m_rTransactionManager, E_HARDEXCEPTIONS);
 
-    // SAFE ->
-    Guard aReadLock(m_rLock);
+    SolarMutexGuard g;
 
     sal_Int32                                        c     = (sal_Int32)m_lProps.size();
     css::uno::Sequence< css::beans::Property >       lProps(c);
@@ -377,7 +368,6 @@ css::uno::Sequence< css::beans::Property > SAL_CALL PropertySetHelper::getProper
     }
 
     return lProps;
-    // <- SAFE
 }
 
 
@@ -387,15 +377,13 @@ css::beans::Property SAL_CALL PropertySetHelper::getPropertyByName(const OUStrin
 {
     TransactionGuard aTransaction(m_rTransactionManager, E_HARDEXCEPTIONS);
 
-    // SAFE ->
-    Guard aReadLock(m_rLock);
+    SolarMutexGuard g;
 
     PropertySetHelper::TPropInfoHash::const_iterator pIt = m_lProps.find(sName);
     if (pIt == m_lProps.end())
         throw css::beans::UnknownPropertyException();
 
     return pIt->second;
-    // <- SAFE
 }
 
 
@@ -404,14 +392,12 @@ sal_Bool SAL_CALL PropertySetHelper::hasPropertyByName(const OUString& sName)
 {
     TransactionGuard aTransaction(m_rTransactionManager, E_HARDEXCEPTIONS);
 
-    // SAFE ->
-    Guard aReadLock(m_rLock);
+    SolarMutexGuard g;
 
     PropertySetHelper::TPropInfoHash::iterator pIt    = m_lProps.find(sName);
     sal_Bool                                   bExist = (pIt != m_lProps.end());
 
     return bExist;
-    // <- SAFE
 }
 
 } // namespace framework

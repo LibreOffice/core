@@ -66,6 +66,7 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 
 #include <comphelper/sequenceashashmap.hxx>
+#include <cppuhelper/basemutex.hxx>
 #include <cppuhelper/queryinterface.hxx>
 #include <cppuhelper/typeprovider.hxx>
 #include <cppuhelper/factory.hxx>
@@ -143,6 +144,7 @@ class Frame :   // interfaces
                 // Order is necessary for right initialization of this class!
                 public  ThreadHelpBase                              ,
                 public  TransactionBase                             ,
+                private cppu::BaseMutex,
                 public  PropertySetHelper                           ,   // helper implements ThreadHelpbase, TransactionBase, XPropertySet, XPropertySetInfo
                 public  ::cppu::OWeakObject                             // helper implements XInterface, XWeak
 {
@@ -559,7 +561,7 @@ DEFINE_XTYPEPROVIDER_21             (   Frame                                   
 Frame::Frame( const css::uno::Reference< css::uno::XComponentContext >& xContext )
         :   ThreadHelpBase              ( &Application::GetSolarMutex()                     )
         ,   TransactionBase             (                                                   )
-        ,   PropertySetHelper           ( &m_aLock,
+        ,   PropertySetHelper           ( m_aMutex,
                                           &m_aTransactionManager,
                                           sal_False) // sal_False => dont release shared mutex on calling us!
         //  init member

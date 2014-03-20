@@ -28,6 +28,7 @@
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 
+#include <cppuhelper/basemutex.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <cppuhelper/weak.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
@@ -89,6 +90,7 @@ class TabWindowService :  public css::lang::XTypeProvider
                          ,  public css::lang::XComponent
                          ,  public ThreadHelpBase
                          ,  public TransactionBase
+                         , private cppu::BaseMutex
                          ,  public PropertySetHelper
                          ,  public ::cppu::OWeakObject
 {
@@ -214,7 +216,7 @@ TabWindowService::TabWindowService()
         //      baseclasses and then members. And we need the mutex for other baseclasses !!!
         :   ThreadHelpBase          ( &Application::GetSolarMutex() )
         ,   TransactionBase         (                               )
-        ,   PropertySetHelper       ( &m_aLock                      ,
+        ,   PropertySetHelper       ( m_aMutex,
                                       &m_aTransactionManager        ,
                                       sal_False                     ) // sal_False => dont release shared mutex on calling us!
         ,   OWeakObject             (                               )
