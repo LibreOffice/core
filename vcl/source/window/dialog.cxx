@@ -53,8 +53,6 @@
 #include <touch/touch.h>
 #endif
 
-
-
 static OString ImplGetDialogText( Dialog* pDialog )
 {
     OStringBuffer aErrorStr(OUStringToOString(
@@ -71,8 +69,6 @@ static OString ImplGetDialogText( Dialog* pDialog )
     }
     return aErrorStr.makeStringAndClear();
 }
-
-
 
 static bool ImplIsMnemonicCtrl( Window* pWindow )
 {
@@ -112,8 +108,6 @@ static bool ImplIsMnemonicCtrl( Window* pWindow )
 
     return false;
 }
-
-
 
 // Called by native error dialog popup implementations
 void ImplHideSplash()
@@ -186,8 +180,6 @@ Window * firstLogicalChildOfParent(Window *pTopLevel)
         pChild = nextLogicalChildOfParent(pTopLevel, pChild);
     return pChild;
 }
-
-
 
 void ImplWindowAutoMnemonic( Window* pWindow )
 {
@@ -266,8 +258,6 @@ static Window* getActionAreaButtonList(Dialog *pDialog)
     return pDialog->GetWindow(WINDOW_FIRSTCHILD);
 }
 
-
-
 static PushButton* ImplGetDefaultButton( Dialog* pDialog )
 {
     Window* pChild = getActionAreaButtonList(pDialog);
@@ -286,8 +276,6 @@ static PushButton* ImplGetDefaultButton( Dialog* pDialog )
     return NULL;
 }
 
-
-
 static PushButton* ImplGetOKButton( Dialog* pDialog )
 {
     Window* pChild = getActionAreaButtonList(pDialog);
@@ -301,8 +289,6 @@ static PushButton* ImplGetOKButton( Dialog* pDialog )
 
     return NULL;
 }
-
-
 
 static PushButton* ImplGetCancelButton( Dialog* pDialog )
 {
@@ -318,8 +304,6 @@ static PushButton* ImplGetCancelButton( Dialog* pDialog )
 
     return NULL;
 }
-
-
 
 static void ImplMouseAutoPos( Dialog* pDialog )
 {
@@ -343,8 +327,6 @@ static void ImplMouseAutoPos( Dialog* pDialog )
     }
 }
 
-
-
 struct DialogImpl
 {
     long    mnResult;
@@ -353,8 +335,6 @@ struct DialogImpl
 
     DialogImpl() : mnResult( -1 ), mbStartedModal( false ) {}
 };
-
-
 
 void Dialog::ImplInitDialogData()
 {
@@ -375,8 +355,6 @@ void Dialog::ImplInitDialogData()
     maLayoutTimer.SetTimeout(50);
     maLayoutTimer.SetTimeoutHdl( LINK( this, Dialog, ImplHandleLayoutTimerHdl ) );
 }
-
-
 
 void Dialog::ImplInit( Window* pParent, WinBits nStyle )
 {
@@ -461,8 +439,6 @@ void Dialog::ImplInit( Window* pParent, WinBits nStyle )
     ImplInitSettings();
 }
 
-
-
 void Dialog::ImplInitSettings()
 {
     // user override
@@ -478,8 +454,6 @@ void Dialog::ImplInitSettings()
     else
         SetBackground( GetSettings().GetStyleSettings().GetDialogColor() );
 }
-
-
 
 Dialog::Dialog( WindowType nType )
     : SystemWindow( nType )
@@ -541,9 +515,6 @@ Dialog::Dialog(Window* pParent, const OString& rID, const OUString& rUIXMLDescri
     m_pUIBuilder = new VclBuilder(this, getUIRootDir(), rUIXMLDescription, rID);
 }
 
-
-
-
 Dialog::Dialog( Window* pParent, WinBits nStyle )
     : SystemWindow( WINDOW_DIALOG )
     , mbIsDefferedInit(false)
@@ -582,8 +553,6 @@ void Dialog::set_content_area(VclBox* pContentArea)
     mpContentArea = pContentArea;
 }
 
-
-
 Dialog::~Dialog()
 {
     maLayoutTimer.Stop();
@@ -591,15 +560,11 @@ Dialog::~Dialog()
     mpDialogImpl = NULL;
 }
 
-
-
 IMPL_LINK_NOARG(Dialog, ImplAsyncCloseHdl)
 {
     Close();
     return 0;
 }
-
-
 
 bool Dialog::Notify( NotifyEvent& rNEvt )
 {
@@ -703,8 +668,6 @@ void Dialog::setOptimalLayoutSize()
     setPosSizeOnContainee(aSize, *pBox);
 }
 
-
-
 void Dialog::StateChanged( StateChangedType nType )
 {
     SystemWindow::StateChanged( nType );
@@ -742,8 +705,6 @@ void Dialog::StateChanged( StateChangedType nType )
     }
 }
 
-
-
 void Dialog::DataChanged( const DataChangedEvent& rDCEvt )
 {
     SystemWindow::DataChanged( rDCEvt );
@@ -755,8 +716,6 @@ void Dialog::DataChanged( const DataChangedEvent& rDCEvt )
         Invalidate();
     }
 }
-
-
 
 bool Dialog::Close()
 {
@@ -805,8 +764,6 @@ bool Dialog::Close()
         return SystemWindow::Close();
     }
 }
-
-
 
 bool Dialog::ImplStartExecuteModal()
 {
@@ -885,15 +842,11 @@ bool Dialog::ImplStartExecuteModal()
     return true;
 }
 
-
-
 void Dialog::ImplEndExecuteModal()
 {
     ImplSVData* pSVData = ImplGetSVData();
     pSVData->maAppData.mnModalMode--;
 }
-
-
 
 short Dialog::Execute()
 {
@@ -994,8 +947,6 @@ short Dialog::Execute()
 #endif
 }
 
-
-
 // virtual
 void Dialog::StartExecuteModal( const Link& rEndDialogHdl )
 {
@@ -1005,8 +956,6 @@ void Dialog::StartExecuteModal( const Link& rEndDialogHdl )
     mpDialogImpl->maEndDialogHdl = rEndDialogHdl;
     mpDialogImpl->mbStartedModal = true;
 }
-
-
 
 void Dialog::EndDialog( long nResult )
 {
@@ -1064,14 +1013,10 @@ void Dialog::EndDialog( long nResult )
     }
 }
 
-
-
 long Dialog::GetResult() const
 {
     return mpDialogImpl->mnResult;
 }
-
-
 
 void Dialog::EndAllDialogs( Window* pParent )
 {
@@ -1089,8 +1034,6 @@ void Dialog::EndAllDialogs( Window* pParent )
      pModDialog = pTempModDialog;
    }
 }
-
-
 
 void Dialog::SetModalInputMode( bool bModal )
 {
@@ -1158,8 +1101,6 @@ void Dialog::SetModalInputMode( bool bModal )
     }
 }
 
-
-
 void Dialog::SetModalInputMode( bool bModal, bool bSubModalDialogs )
 {
     if ( bSubModalDialogs )
@@ -1176,8 +1117,6 @@ void Dialog::SetModalInputMode( bool bModal, bool bSubModalDialogs )
 
     SetModalInputMode( bModal );
 }
-
-
 
 void Dialog::GrabFocusToFirstControl()
 {
@@ -1214,7 +1153,6 @@ void Dialog::GetDrawWindowBorder( sal_Int32& rLeftBorder, sal_Int32& rTopBorder,
     ImplBorderWindow aImplWin( (Window*)this, WB_BORDER|WB_STDWORK, BORDERWINDOW_STYLE_OVERLAP );
     aImplWin.GetBorder( rLeftBorder, rTopBorder, rRightBorder, rBottomBorder );
 }
-
 
 void Dialog::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, sal_uLong )
 {
@@ -1350,8 +1288,6 @@ VclBuilderContainer::~VclBuilderContainer()
     delete m_pUIBuilder;
 }
 
-
-
 ModelessDialog::ModelessDialog( Window* pParent, const ResId& rResId ) :
     Dialog( WINDOW_MODELESSDIALOG )
 {
@@ -1368,15 +1304,11 @@ ModelessDialog::ModelessDialog( Window* pParent, const OString& rID, const OUStr
 {
 }
 
-
-
 ModalDialog::ModalDialog( Window* pParent, WinBits nStyle ) :
     Dialog( WINDOW_MODALDIALOG )
 {
     ImplInit( pParent, nStyle );
 }
-
-
 
 ModalDialog::ModalDialog( Window* pParent, const ResId& rResId ) :
     Dialog( WINDOW_MODALDIALOG )
