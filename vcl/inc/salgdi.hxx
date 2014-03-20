@@ -310,40 +310,6 @@ public:
     virtual SalLayout*      GetTextLayout( ImplLayoutArgs&, int nFallbackLevel ) = 0;
     virtual void            DrawServerFontLayout( const ServerFontLayout& ) = 0;
 
-    /** Filter text from DrawText commands in a device specific manner
-        <p>
-        This function allows a device (or rather the corresponding SalGraphics
-        implementation) to prevent text portions from being drawn. This currently
-        is used only for filtering out the fax number in a document that is printed
-        to one of psprint's specialized "fax" printers.
-        </p>
-
-        @param rOrigText
-        The original text
-
-        @param rNewText
-        A String that will be filled with the adjusted version
-
-        @param nIndex
-        The index inside <code>rOrigText</code> that marks the first draw character
-
-        @param rLen
-        in: length of text beginning at <code>nIndex</code> to be drawn
-        out: length of <code>rNewText</code> containing the substituted text
-
-        @param rCutStart
-        out: index at which the cutout portion of <code>rOrigText</code> begins
-
-        @param rCutStop
-        out: index at which the cutout portion of <code>rOrigText</code> ends
-
-        @returns
-        true: a substitution has taken place and rNewText rLen, rCutStart and rCutStop have been filled accordingly
-        false: no substitution has taken place, rNewText, rLen, rCutStart, rCutStop remain unchanged
-     */
-    virtual bool            filterText( const OUString& rOrigText, OUString& rNewText,
-                                        sal_Int32 nIndex, sal_Int32& rLen, sal_Int32& rCutStart, sal_Int32& rCutStop );
-
     virtual bool            supportsOperation( OutDevSupportType ) const = 0;
 
     // mirroring specifica

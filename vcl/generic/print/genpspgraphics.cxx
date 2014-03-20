@@ -1194,11 +1194,6 @@ void GenPspGraphics::AnnounceFonts( ImplDevFontList* pFontList, const psp::FastP
     pFontList->Add( pFD );
 }
 
-bool GenPspGraphics::filterText( const OUString& /*rOrig*/, OUString& /*rNewText*/, sal_Int32 /*nIndex*/, sal_Int32& /*rLen*/, sal_Int32& /*rCutStart*/, sal_Int32& /*rCutStop*/ )
-{
-    return false;
-}
-
 bool GenPspGraphics::drawAlphaBitmap( const SalTwoRect&,
                                    const SalBitmap&,
                                    const SalBitmap& )

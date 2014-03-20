@@ -5468,7 +5468,7 @@ void OutputDevice::DrawText( const Point& rStartPt, const OUString& rStr,
     if ( !IsDeviceOutputNecessary() || pVector )
         return;
 
-    SalLayout* pSalLayout = ImplLayout( rStr, nIndex, nLen, rStartPt, 0, NULL, true );
+    SalLayout* pSalLayout = ImplLayout(rStr, nIndex, nLen, rStartPt, 0, NULL);
     if( pSalLayout )
     {
         ImplDrawText( *pSalLayout );
@@ -5535,7 +5535,7 @@ void OutputDevice::DrawTextArray( const Point& rStartPt, const OUString& rStr,
     if( mbOutputClipped )
         return;
 
-    SalLayout* pSalLayout = ImplLayout( rStr, nIndex, nLen, rStartPt, 0, pDXAry, true );
+    SalLayout* pSalLayout = ImplLayout(rStr, nIndex, nLen, rStartPt, 0, pDXAry);
     if( pSalLayout )
     {
         ImplDrawText( *pSalLayout );
@@ -5681,7 +5681,7 @@ void OutputDevice::DrawStretchText( const Point& rStartPt, sal_uLong nWidth,
     if ( !IsDeviceOutputNecessary() )
         return;
 
-    SalLayout* pSalLayout = ImplLayout( rStr, nIndex, nLen, rStartPt, nWidth, NULL, true );
+    SalLayout* pSalLayout = ImplLayout(rStr, nIndex, nLen, rStartPt, nWidth, NULL);
     if( pSalLayout )
     {
         ImplDrawText( *pSalLayout );
@@ -5805,9 +5805,10 @@ ImplLayoutArgs OutputDevice::ImplPrepareLayoutArgs( OUString& rStr,
     return aLayoutArgs;
 }
 
-SalLayout* OutputDevice::ImplLayout( const OUString& rOrigStr, sal_Int32 nMinIndex, sal_Int32 nLen,
-                                     const Point& rLogicalPos, long nLogicalWidth, const sal_Int32* pDXArray,
-                                     bool bFilter ) const
+SalLayout* OutputDevice::ImplLayout(const OUString& rOrigStr,
+    sal_Int32 nMinIndex, sal_Int32 nLen,
+    const Point& rLogicalPos, long nLogicalWidth,
+    const sal_Int32* pDXArray) const
 {
     // we need a graphics
     if( !mpGraphics )
@@ -5831,27 +5832,6 @@ SalLayout* OutputDevice::ImplLayout( const OUString& rOrigStr, sal_Int32 nMinInd
     }
 
     OUString aStr = rOrigStr;
-
-    // filter out special markers
-    if( bFilter )
-    {
-        sal_Int32 nCutStart, nCutStop, nOrgLen = nLen;
-        bool bFiltered = mpGraphics->filterText( rOrigStr, aStr, nMinIndex, nLen, nCutStart, nCutStop );
-        if( !nLen )
-            return NULL;
-
-        if( bFiltered && nCutStop != nCutStart && pDXArray )
-        {
-            sal_Int32* pAry = (sal_Int32*)alloca(sizeof(sal_Int32)*nLen);
-            if( nCutStart > nMinIndex )
-                memcpy( pAry, pDXArray, sizeof(sal_Int32)*(nCutStart-nMinIndex) );
-            // note: nCutStart will never be smaller than nMinIndex
-            memcpy( pAry+nCutStart-nMinIndex,
-                    pDXArray + nOrgLen - (nCutStop-nMinIndex),
-                    sizeof(sal_Int32)*(nLen - (nCutStart-nMinIndex)) );
-            pDXArray = pAry;
-        }
-    }
 
     // convert from logical units to physical units
     // recode string if needed
@@ -7161,7 +7141,7 @@ SystemTextLayoutData OutputDevice::GetSysTextLayoutData(const Point& rStartPt, c
 
     if ( !IsDeviceOutputNecessary() ) return aSysLayoutData;
 
-    SalLayout* pLayout = ImplLayout( rStr, nIndex, nLen, rStartPt, 0, pDXAry, true );
+    SalLayout* pLayout = ImplLayout(rStr, nIndex, nLen, rStartPt, 0, pDXAry);
 
     if ( !pLayout ) return aSysLayoutData;
 
