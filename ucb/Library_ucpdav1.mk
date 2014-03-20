@@ -92,7 +92,6 @@ $(eval $(call gb_Library_add_exception_objects,ucpdav1,\
 	ucb/source/ucp/webdav/SerfPutReqProcImpl \
 	ucb/source/ucp/webdav/SerfRequestProcessor \
 	ucb/source/ucp/webdav/SerfRequestProcessorImpl \
-	ucb/source/ucp/webdav/SerfRequestProcessorImplFac \
 	ucb/source/ucp/webdav/SerfSession \
 	ucb/source/ucp/webdav/SerfUri \
 	ucb/source/ucp/webdav/UCBDeadPropertyValue \
