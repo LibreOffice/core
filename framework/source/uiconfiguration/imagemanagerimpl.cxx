@@ -19,7 +19,6 @@
 
 
 #include <imagemanagerimpl.hxx>
-#include <threadhelp/guard.hxx>
 #include <xml/imagesconfiguration.hxx>
 #include <uiconfiguration/graphicnameaccess.hxx>
 #include <services.h>
@@ -421,7 +420,7 @@ static sal_Int16 implts_convertImageTypeToIndex( sal_Int16 nImageType )
 
 ImageList* ImageManagerImpl::implts_getUserImageList( ImageType nImageType )
 {
-    Guard aGuard( m_aLock );
+    SolarMutexGuard g;
     if ( !m_pUserImageList[nImageType] )
         implts_loadUserImages( nImageType, m_xUserImageStorage, m_xUserBitmapsStorage );
 
@@ -468,7 +467,7 @@ sal_Bool ImageManagerImpl::implts_loadUserImages(
     const uno::Reference< XStorage >& xUserImageStorage,
     const uno::Reference< XStorage >& xUserBitmapsStorage )
 {
-    Guard aGuard( m_aLock );
+    SolarMutexGuard g;
 
     if ( xUserImageStorage.is() && xUserBitmapsStorage.is() )
     {
@@ -548,7 +547,7 @@ sal_Bool ImageManagerImpl::implts_storeUserImages(
     const uno::Reference< XStorage >& xUserImageStorage,
     const uno::Reference< XStorage >& xUserBitmapsStorage )
 {
-    Guard aGuard( m_aLock );
+    SolarMutexGuard g;
 
     if ( m_bModified )
     {
@@ -650,7 +649,7 @@ sal_Bool ImageManagerImpl::implts_storeUserImages(
 
 const rtl::Reference< GlobalImageList >& ImageManagerImpl::implts_getGlobalImageList()
 {
-    Guard aGuard( m_aLock );
+    SolarMutexGuard g;
 
     if ( !m_pGlobalImageList.is() )
         m_pGlobalImageList = getGlobalImageList( m_xContext );
@@ -659,7 +658,7 @@ const rtl::Reference< GlobalImageList >& ImageManagerImpl::implts_getGlobalImage
 
 CmdImageList* ImageManagerImpl::implts_getDefaultImageList()
 {
-    Guard aGuard( m_aLock );
+    SolarMutexGuard g;
 
     if ( !m_pDefaultImageList )
         m_pDefaultImageList = new CmdImageList( m_xContext, m_aModuleIdentifier );
@@ -668,13 +667,12 @@ CmdImageList* ImageManagerImpl::implts_getDefaultImageList()
 }
 
 ImageManagerImpl::ImageManagerImpl( const uno::Reference< uno::XComponentContext >& rxContext,::cppu::OWeakObject* pOwner,bool _bUseGlobal ) :
-    ThreadHelpBase( &Application::GetSolarMutex() )
-    , m_xContext( rxContext )
+    m_xContext( rxContext )
     , m_pOwner(pOwner)
     , m_pDefaultImageList( 0 )
     , m_aXMLPostfix( ".xml" )
     , m_aResourceString( ModuleImageList )
-    , m_aListenerContainer( m_aLock.getShareableOslMutex() )
+    , m_aListenerContainer( m_mutex )
     , m_bUseGlobal(_bUseGlobal)
     , m_bReadOnly( true )
     , m_bInitialized( false )
@@ -701,7 +699,7 @@ void ImageManagerImpl::dispose()
     m_aListenerContainer.disposeAndClear( aEvent );
 
     {
-        Guard aGuard( m_aLock );
+        SolarMutexGuard g;
         m_xUserConfigStorage.clear();
         m_xUserImageStorage.clear();
         m_xUserRootCommit.clear();
@@ -723,7 +721,7 @@ void ImageManagerImpl::dispose()
 void ImageManagerImpl::addEventListener( const uno::Reference< XEventListener >& xListener ) throw (::com::sun::star::uno::RuntimeException)
 {
     {
-        Guard aGuard( m_aLock );
+        SolarMutexGuard g;
 
         /* SAFE AREA ----------------------------------------------------------------------------------------------- */
         if ( m_bDisposed )
@@ -742,7 +740,7 @@ void ImageManagerImpl::removeEventListener( const uno::Reference< XEventListener
 // XInitialization
 void ImageManagerImpl::initialize( const Sequence< Any >& aArguments )
 {
-    Guard aLock( m_aLock );
+    SolarMutexGuard g;
 
     if ( !m_bInitialized )
     {
@@ -787,7 +785,7 @@ void ImageManagerImpl::initialize( const Sequence< Any >& aArguments )
 void ImageManagerImpl::reset()
 throw (::com::sun::star::uno::RuntimeException)
 {
-    Guard aLock( m_aLock );
+    SolarMutexGuard g;
 
     /* SAFE AREA ----------------------------------------------------------------------------------------------- */
     if ( m_bDisposed )
@@ -817,7 +815,7 @@ throw (::com::sun::star::uno::RuntimeException)
 Sequence< OUString > ImageManagerImpl::getAllImageNames( ::sal_Int16 nImageType )
 throw (::com::sun::star::uno::RuntimeException)
 {
-    Guard aLock( m_aLock );
+    SolarMutexGuard g;
 
     /* SAFE AREA ----------------------------------------------------------------------------------------------- */
     if ( m_bDisposed )
@@ -862,7 +860,7 @@ throw (::com::sun::star::uno::RuntimeException)
 ::sal_Bool ImageManagerImpl::hasImage( ::sal_Int16 nImageType, const OUString& aCommandURL )
 throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException)
 {
-    Guard aLock( m_aLock );
+    SolarMutexGuard g;
 
     /* SAFE AREA ----------------------------------------------------------------------------------------------- */
     if ( m_bDisposed )
@@ -895,7 +893,7 @@ Sequence< uno::Reference< XGraphic > > ImageManagerImpl::getImages(
     const Sequence< OUString >& aCommandURLSequence )
 throw ( ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException )
 {
-    Guard aLock( m_aLock );
+    SolarMutexGuard g;
 
     /* SAFE AREA ----------------------------------------------------------------------------------------------- */
     if ( m_bDisposed )
@@ -950,7 +948,7 @@ throw ( ::com::sun::star::lang::IllegalArgumentException,
     CmdToXGraphicNameAccess* pReplacedImages( 0 );
 
     {
-        Guard aLock( m_aLock );
+        SolarMutexGuard g;
 
         /* SAFE AREA ----------------------------------------------------------------------------------------------- */
         if ( m_bDisposed )
@@ -1033,7 +1031,7 @@ throw ( ::com::sun::star::lang::IllegalArgumentException,
     CmdToXGraphicNameAccess* pReplacedImages( 0 );
 
     {
-        Guard aLock( m_aLock );
+        SolarMutexGuard g;
 
         /* SAFE AREA ----------------------------------------------------------------------------------------------- */
         if ( m_bDisposed )
@@ -1143,7 +1141,7 @@ void ImageManagerImpl::reload()
 throw ( ::com::sun::star::uno::Exception,
         ::com::sun::star::uno::RuntimeException )
 {
-    Guard aGuard( m_aLock );
+    SolarMutexClearableGuard aGuard;
 
     if ( m_bDisposed )
         throw DisposedException();
@@ -1245,7 +1243,7 @@ throw ( ::com::sun::star::uno::Exception,
                     ++pIter;
                 }
 
-                aGuard.unlock();
+                aGuard.clear();
 
                 // Now notify our listeners. Unlock mutex to prevent deadlocks
                 uno::Reference< uno::XInterface > xOwner(static_cast< OWeakObject* >(m_pOwner));
@@ -1284,7 +1282,7 @@ throw ( ::com::sun::star::uno::Exception,
                     implts_notifyContainerListener( aRemoveEvent, NotifyOp_Remove );
                 }
 
-                aGuard.lock();
+                aGuard.clear();
             }
         }
     }
@@ -1295,7 +1293,7 @@ void ImageManagerImpl::store()
            ::com::sun::star::uno::RuntimeException,
            std::exception)
 {
-    Guard aGuard( m_aLock );
+    SolarMutexGuard g;
 
     if ( m_bDisposed )
         throw DisposedException();
@@ -1330,7 +1328,7 @@ void ImageManagerImpl::storeToStorage( const uno::Reference< XStorage >& Storage
            ::com::sun::star::uno::RuntimeException,
            std::exception)
 {
-    Guard aGuard( m_aLock );
+    SolarMutexGuard g;
 
     if ( m_bDisposed )
         throw DisposedException();
@@ -1361,13 +1359,13 @@ void ImageManagerImpl::storeToStorage( const uno::Reference< XStorage >& Storage
 sal_Bool ImageManagerImpl::isModified()
 throw (::com::sun::star::uno::RuntimeException)
 {
-    Guard aGuard( m_aLock );
+    SolarMutexGuard g;
     return m_bModified;
 }
 
 sal_Bool ImageManagerImpl::isReadOnly() throw (::com::sun::star::uno::RuntimeException)
 {
-    Guard aGuard( m_aLock );
+    SolarMutexGuard g;
     return m_bReadOnly;
 }
 // XUIConfiguration
@@ -1375,7 +1373,7 @@ void ImageManagerImpl::addConfigurationListener( const uno::Reference< ::com::su
 throw (::com::sun::star::uno::RuntimeException)
 {
     {
-        Guard aGuard( m_aLock );
+        SolarMutexGuard g;
 
         /* SAFE AREA ----------------------------------------------------------------------------------------------- */
         if ( m_bDisposed )
@@ -1426,7 +1424,7 @@ void ImageManagerImpl::implts_notifyContainerListener( const ConfigurationEvent&
 }
 void ImageManagerImpl::clear()
 {
-    Guard aGuard( m_aLock );
+    SolarMutexGuard g;
 
     for ( sal_Int32 n = 0; n < ImageType_COUNT; n++ )
     {

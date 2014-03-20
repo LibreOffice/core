@@ -91,7 +91,7 @@ void SAL_CALL ImageManager::removeEventListener( const uno::Reference< XEventLis
 void ImageManager::setStorage( const uno::Reference< XStorage >& Storage )
 throw (::com::sun::star::uno::RuntimeException)
 {
-    Guard aLock( m_pImpl->m_aLock );
+    SolarMutexGuard g;
 
     m_pImpl->m_xUserConfigStorage = Storage;
     m_pImpl->implts_initialize();

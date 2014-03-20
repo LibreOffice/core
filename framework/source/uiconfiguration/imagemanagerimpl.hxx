@@ -27,7 +27,6 @@
 #include <list>
 #include <boost/unordered_map.hpp>
 
-#include <threadhelp/threadhelpbase.hxx>
 #include <macros/generic.hxx>
 #include <macros/xinterface.hxx>
 #include <macros/xtypeprovider.hxx>
@@ -103,7 +102,7 @@ namespace framework
             oslInterlockedCount                                                              m_nRefCount;
     };
 
-    class ImageManagerImpl : public ThreadHelpBase  // Struct for right initalization of mutex member! Must be first of baseclasses.
+    class ImageManagerImpl
     {
         public:
             ImageManagerImpl(const com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >& rxContext
@@ -189,6 +188,7 @@ namespace framework
             OUString                                                                   m_aXMLPostfix;
             OUString                                                                   m_aModuleIdentifier;
             OUString                                                                   m_aResourceString;
+            osl::Mutex m_mutex;
             ::cppu::OMultiTypeInterfaceContainerHelper                                      m_aListenerContainer;   /// container for ALL Listener
             ImageList*                                                                      m_pUserImageList[ImageType_COUNT];
             bool                                                                            m_bUserImageListModified[ImageType_COUNT];
