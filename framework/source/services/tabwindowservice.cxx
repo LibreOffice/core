@@ -18,7 +18,6 @@
  */
 
 #include <classes/fwktabwindow.hxx>
-#include <threadhelp/guard.hxx>
 #include <services.h>
 #include <properties.h>
 
@@ -37,7 +36,6 @@
 #include <vcl/svapp.hxx>
 #include <vcl/window.hxx>
 #include <classes/propertysethelper.hxx>
-#include <threadhelp/threadhelpbase.hxx>
 #include <macros/generic.hxx>
 #include <macros/xinterface.hxx>
 #include <macros/xtypeprovider.hxx>
@@ -88,7 +86,6 @@ class TabWindowService :  public css::lang::XTypeProvider
                          ,  public css::lang::XServiceInfo
                          ,  public css::awt::XSimpleTabController
                          ,  public css::lang::XComponent
-                         ,  public ThreadHelpBase
                          ,  public TransactionBase
                          , private cppu::BaseMutex
                          ,  public PropertySetHelper
@@ -208,14 +205,7 @@ DEFINE_XTYPEPROVIDER_6              (   TabWindowService               ,
 //  constructor
 
 TabWindowService::TabWindowService()
-        //  Init baseclasses first
-        //  Attention:
-        //      Don't change order of initialization!
-        //      ThreadHelpBase is a struct with a mutex as member. We can't use a mutex as member, while
-        //      we must garant right initialization and a valid value of this! First initialize
-        //      baseclasses and then members. And we need the mutex for other baseclasses !!!
-        :   ThreadHelpBase          ( &Application::GetSolarMutex() )
-        ,   TransactionBase         (                               )
+        :   TransactionBase         (                               )
         ,   PropertySetHelper       ( m_aMutex,
                                       &m_aTransactionManager        ,
                                       sal_False                     ) // sal_False => dont release shared mutex on calling us!
@@ -225,7 +215,7 @@ TabWindowService::TabWindowService()
         ,   m_xTabWin               (                               )
         ,   m_pTabWin               ( NULL                          )
         ,   m_lTabPageInfos         (                               )
-        ,   m_lListener             ( m_aLock.getShareableOslMutex())
+        ,   m_lListener             ( m_aMutex )
         ,   m_nPageIndexCounter     ( 1                             )
         ,   m_nCurrentPageIndex     ( 0                             )
 {
@@ -242,9 +232,7 @@ void TabWindowService::initProperties()
 
 TabWindowService::~TabWindowService()
 {
-    // SAFE->
-    Guard aGuard(m_aLock);
-
+    SolarMutexGuard g;
     if (m_pTabWin)
         m_pTabWin->RemoveEventListener( LINK( this, TabWindowService, EventListener ) );
 }
@@ -255,8 +243,7 @@ TabWindowService::~TabWindowService()
 ::sal_Int32 SAL_CALL TabWindowService::insertTab()
     throw ( css::uno::RuntimeException, std::exception )
 {
-    // SAFE ->
-    Guard aGuard( m_aLock );
+    SolarMutexGuard g;
 
     ::sal_Int32  nID  = m_nPageIndexCounter++;
     TTabPageInfo aInfo(nID);
@@ -273,8 +260,7 @@ void SAL_CALL TabWindowService::removeTab(::sal_Int32 nID)
     throw (css::lang::IndexOutOfBoundsException,
            css::uno::RuntimeException, std::exception          )
 {
-    // SAFE ->
-    Guard aGuard(m_aLock);
+    SolarMutexGuard g;
 
     // throws suitable IndexOutOfBoundsException .-)
     TTabPageInfoHash::iterator pIt = impl_getTabPageInfo (nID);
@@ -293,8 +279,7 @@ void SAL_CALL TabWindowService::setTabProps(      ::sal_Int32                   
     throw (css::lang::IndexOutOfBoundsException,
            css::uno::RuntimeException, std::exception          )
 {
-    // SAFE ->
-    Guard aGuard(m_aLock);
+    SolarMutexGuard g;
 
     // throws suitable IndexOutOfBoundsException .-)
     TTabPageInfoHash::iterator pIt   = impl_getTabPageInfo (nID);
@@ -319,8 +304,7 @@ css::uno::Sequence< css::beans::NamedValue > SAL_CALL TabWindowService::getTabPr
     throw (css::lang::IndexOutOfBoundsException,
            css::uno::RuntimeException, std::exception          )
 {
-    // SAFE ->
-    Guard aGuard(m_aLock);
+    SolarMutexGuard g;
 
     // throws suitable IndexOutOfBoundsException .-)
     TTabPageInfoHash::const_iterator pIt   = impl_getTabPageInfo (nID);
@@ -336,8 +320,7 @@ void SAL_CALL TabWindowService::activateTab(::sal_Int32 nID)
     throw (css::lang::IndexOutOfBoundsException,
            css::uno::RuntimeException, std::exception          )
 {
-    // SAFE ->
-    Guard aGuard(m_aLock);
+    SolarMutexGuard g;
 
     // throws suitable IndexOutOfBoundsException .-)
     impl_checkTabIndex (nID);
@@ -354,8 +337,7 @@ void SAL_CALL TabWindowService::activateTab(::sal_Int32 nID)
 ::sal_Int32 SAL_CALL TabWindowService::getActiveTabID()
     throw (css::uno::RuntimeException, std::exception)
 {
-    // SAFE->
-    Guard aGuard( m_aLock );
+    SolarMutexGuard g;
     return m_nCurrentPageIndex;
 }
 
@@ -383,8 +365,7 @@ void SAL_CALL TabWindowService::removeTabListener(const css::uno::Reference< css
 void SAL_CALL TabWindowService::dispose()
     throw (css::uno::RuntimeException, std::exception)
 {
-    // SAFE->
-    Guard aGuard(m_aLock);
+    SolarMutexGuard g;
 
     css::uno::Reference< css::uno::XInterface > xThis(static_cast< ::cppu::OWeakObject* >(this), css::uno::UNO_QUERY);
     css::lang::EventObject aEvent(xThis);
