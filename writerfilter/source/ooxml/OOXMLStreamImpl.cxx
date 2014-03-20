@@ -229,13 +229,13 @@ bool OOXMLStreamImpl::lcl_getTarget(uno::Reference<embed::XRelationshipAccess>
 
         for (sal_Int32 j = 0; j < aSeqs.getLength(); j++)
         {
-            uno::Sequence< beans::StringPair > aSeq = aSeqs[j];
+            const uno::Sequence< beans::StringPair > &aSeq = aSeqs[j];
 
             bool bExternalTarget = false;
             OUString sMyTarget;
             for (sal_Int32 i = 0; i < aSeq.getLength(); i++)
             {
-                beans::StringPair aPair = aSeq[i];
+                const beans::StringPair &aPair = aSeq[i];
 
                 if (aPair.First.compareTo(sType) == 0 &&
                     ( aPair.Second.compareTo(sStreamType) == 0 ||
