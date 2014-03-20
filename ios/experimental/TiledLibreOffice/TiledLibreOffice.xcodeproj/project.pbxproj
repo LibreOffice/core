@@ -317,6 +317,67 @@
 		BE55B10418D9AB5400950228 /* xpackcreator.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = xpackcreator.cxx; path = ../../../sfx2/source/appl/xpackcreator.cxx; sourceTree = "<group>"; };
 		BE55B10618DAD89800950228 /* compat.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = compat.cxx; path = ../../../cppu/source/cppu/compat.cxx; sourceTree = "<group>"; };
 		BE55B10718DAD89800950228 /* cppu_opt.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = cppu_opt.cxx; path = ../../../cppu/source/cppu/cppu_opt.cxx; sourceTree = "<group>"; };
+		BE55B10A18DB67A900950228 /* chart */ = {isa = PBXFileReference; lastKnownFileType = folder; name = chart; path = ../../../oox/source/drawingml/chart; sourceTree = "<group>"; };
+		BE55B10B18DB67A900950228 /* clrscheme.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = clrscheme.cxx; path = ../../../oox/source/drawingml/clrscheme.cxx; sourceTree = "<group>"; };
+		BE55B10C18DB67A900950228 /* clrschemecontext.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = clrschemecontext.cxx; path = ../../../oox/source/drawingml/clrschemecontext.cxx; sourceTree = "<group>"; };
+		BE55B10D18DB67A900950228 /* color.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = color.cxx; path = ../../../oox/source/drawingml/color.cxx; sourceTree = "<group>"; };
+		BE55B10E18DB67A900950228 /* colorchoicecontext.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = colorchoicecontext.cxx; path = ../../../oox/source/drawingml/colorchoicecontext.cxx; sourceTree = "<group>"; };
+		BE55B10F18DB67A900950228 /* connectorshapecontext.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = connectorshapecontext.cxx; path = ../../../oox/source/drawingml/connectorshapecontext.cxx; sourceTree = "<group>"; };
+		BE55B11018DB67A900950228 /* customshapegeometry.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = customshapegeometry.cxx; path = ../../../oox/source/drawingml/customshapegeometry.cxx; sourceTree = "<group>"; };
+		BE55B11118DB67A900950228 /* customshapepresets1.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = customshapepresets1.cxx; path = ../../../oox/source/drawingml/customshapepresets1.cxx; sourceTree = "<group>"; };
+		BE55B11218DB67A900950228 /* customshapepresets2.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = customshapepresets2.cxx; path = ../../../oox/source/drawingml/customshapepresets2.cxx; sourceTree = "<group>"; };
+		BE55B11318DB67A900950228 /* customshapepresets3.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = customshapepresets3.cxx; path = ../../../oox/source/drawingml/customshapepresets3.cxx; sourceTree = "<group>"; };
+		BE55B11418DB67A900950228 /* customshapepresets4.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = customshapepresets4.cxx; path = ../../../oox/source/drawingml/customshapepresets4.cxx; sourceTree = "<group>"; };
+		BE55B11518DB67A900950228 /* customshapepresets5.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = customshapepresets5.cxx; path = ../../../oox/source/drawingml/customshapepresets5.cxx; sourceTree = "<group>"; };
+		BE55B11618DB67A900950228 /* customshapepresets6.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = customshapepresets6.cxx; path = ../../../oox/source/drawingml/customshapepresets6.cxx; sourceTree = "<group>"; };
+		BE55B11718DB67A900950228 /* customshapeproperties.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = customshapeproperties.cxx; path = ../../../oox/source/drawingml/customshapeproperties.cxx; sourceTree = "<group>"; };
+		BE55B11918DB67A900950228 /* diagram */ = {isa = PBXFileReference; lastKnownFileType = folder; name = diagram; path = ../../../oox/source/drawingml/diagram; sourceTree = "<group>"; };
+		BE55B11A18DB67A900950228 /* drawingmltypes.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = drawingmltypes.cxx; path = ../../../oox/source/drawingml/drawingmltypes.cxx; sourceTree = "<group>"; };
+		BE55B11B18DB67A900950228 /* effectproperties.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = effectproperties.cxx; path = ../../../oox/source/drawingml/effectproperties.cxx; sourceTree = "<group>"; };
+		BE55B11C18DB67A900950228 /* effectpropertiescontext.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = effectpropertiescontext.cxx; path = ../../../oox/source/drawingml/effectpropertiescontext.cxx; sourceTree = "<group>"; };
+		BE55B11D18DB67A900950228 /* embeddedwavaudiofile.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = embeddedwavaudiofile.cxx; path = ../../../oox/source/drawingml/embeddedwavaudiofile.cxx; sourceTree = "<group>"; };
+		BE55B11E18DB67A900950228 /* fillproperties.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = fillproperties.cxx; path = ../../../oox/source/drawingml/fillproperties.cxx; sourceTree = "<group>"; };
+		BE55B11F18DB67A900950228 /* fillpropertiesgroupcontext.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = fillpropertiesgroupcontext.cxx; path = ../../../oox/source/drawingml/fillpropertiesgroupcontext.cxx; sourceTree = "<group>"; };
+		BE55B12018DB67A900950228 /* graphicshapecontext.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = graphicshapecontext.cxx; path = ../../../oox/source/drawingml/graphicshapecontext.cxx; sourceTree = "<group>"; };
+		BE55B12118DB67A900950228 /* guidcontext.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = guidcontext.cxx; path = ../../../oox/source/drawingml/guidcontext.cxx; sourceTree = "<group>"; };
+		BE55B12218DB67A900950228 /* hyperlinkcontext.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = hyperlinkcontext.cxx; path = ../../../oox/source/drawingml/hyperlinkcontext.cxx; sourceTree = "<group>"; };
+		BE55B12318DB67A900950228 /* lineproperties.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = lineproperties.cxx; path = ../../../oox/source/drawingml/lineproperties.cxx; sourceTree = "<group>"; };
+		BE55B12418DB67A900950228 /* linepropertiescontext.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = linepropertiescontext.cxx; path = ../../../oox/source/drawingml/linepropertiescontext.cxx; sourceTree = "<group>"; };
+		BE55B12518DB67A900950228 /* objectdefaultcontext.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = objectdefaultcontext.cxx; path = ../../../oox/source/drawingml/objectdefaultcontext.cxx; sourceTree = "<group>"; };
+		BE55B12618DB67A900950228 /* scene3dcontext.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = scene3dcontext.cxx; path = ../../../oox/source/drawingml/scene3dcontext.cxx; sourceTree = "<group>"; };
+		BE55B12718DB67A900950228 /* shape.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = shape.cxx; path = ../../../oox/source/drawingml/shape.cxx; sourceTree = "<group>"; };
+		BE55B12818DB67A900950228 /* shape3dproperties.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = shape3dproperties.cxx; path = ../../../oox/source/drawingml/shape3dproperties.cxx; sourceTree = "<group>"; };
+		BE55B12918DB67A900950228 /* shapecontext.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = shapecontext.cxx; path = ../../../oox/source/drawingml/shapecontext.cxx; sourceTree = "<group>"; };
+		BE55B12A18DB67A900950228 /* shapegroupcontext.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = shapegroupcontext.cxx; path = ../../../oox/source/drawingml/shapegroupcontext.cxx; sourceTree = "<group>"; };
+		BE55B12B18DB67A900950228 /* shapepropertiescontext.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = shapepropertiescontext.cxx; path = ../../../oox/source/drawingml/shapepropertiescontext.cxx; sourceTree = "<group>"; };
+		BE55B12C18DB67A900950228 /* shapepropertymap.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = shapepropertymap.cxx; path = ../../../oox/source/drawingml/shapepropertymap.cxx; sourceTree = "<group>"; };
+		BE55B12D18DB67A900950228 /* shapestylecontext.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = shapestylecontext.cxx; path = ../../../oox/source/drawingml/shapestylecontext.cxx; sourceTree = "<group>"; };
+		BE55B12E18DB67A900950228 /* spdefcontext.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = spdefcontext.cxx; path = ../../../oox/source/drawingml/spdefcontext.cxx; sourceTree = "<group>"; };
+		BE55B12F18DB67A900950228 /* table */ = {isa = PBXFileReference; lastKnownFileType = folder; name = table; path = ../../../oox/source/drawingml/table; sourceTree = "<group>"; };
+		BE55B13018DB67A900950228 /* textbody.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = textbody.cxx; path = ../../../oox/source/drawingml/textbody.cxx; sourceTree = "<group>"; };
+		BE55B13118DB67A900950228 /* textbodycontext.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = textbodycontext.cxx; path = ../../../oox/source/drawingml/textbodycontext.cxx; sourceTree = "<group>"; };
+		BE55B13218DB67A900950228 /* textbodyproperties.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = textbodyproperties.cxx; path = ../../../oox/source/drawingml/textbodyproperties.cxx; sourceTree = "<group>"; };
+		BE55B13318DB67A900950228 /* textbodypropertiescontext.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = textbodypropertiescontext.cxx; path = ../../../oox/source/drawingml/textbodypropertiescontext.cxx; sourceTree = "<group>"; };
+		BE55B13418DB67A900950228 /* textcharacterproperties.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = textcharacterproperties.cxx; path = ../../../oox/source/drawingml/textcharacterproperties.cxx; sourceTree = "<group>"; };
+		BE55B13518DB67A900950228 /* textcharacterpropertiescontext.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = textcharacterpropertiescontext.cxx; path = ../../../oox/source/drawingml/textcharacterpropertiescontext.cxx; sourceTree = "<group>"; };
+		BE55B13618DB67A900950228 /* texteffectscontext.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = texteffectscontext.cxx; path = ../../../oox/source/drawingml/texteffectscontext.cxx; sourceTree = "<group>"; };
+		BE55B13718DB67A900950228 /* textfield.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = textfield.cxx; path = ../../../oox/source/drawingml/textfield.cxx; sourceTree = "<group>"; };
+		BE55B13818DB67A900950228 /* textfieldcontext.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = textfieldcontext.cxx; path = ../../../oox/source/drawingml/textfieldcontext.cxx; sourceTree = "<group>"; };
+		BE55B13918DB67A900950228 /* textfont.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = textfont.cxx; path = ../../../oox/source/drawingml/textfont.cxx; sourceTree = "<group>"; };
+		BE55B13A18DB67A900950228 /* textliststyle.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = textliststyle.cxx; path = ../../../oox/source/drawingml/textliststyle.cxx; sourceTree = "<group>"; };
+		BE55B13B18DB67A900950228 /* textliststylecontext.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = textliststylecontext.cxx; path = ../../../oox/source/drawingml/textliststylecontext.cxx; sourceTree = "<group>"; };
+		BE55B13C18DB67A900950228 /* textparagraph.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = textparagraph.cxx; path = ../../../oox/source/drawingml/textparagraph.cxx; sourceTree = "<group>"; };
+		BE55B13D18DB67A900950228 /* textparagraphproperties.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = textparagraphproperties.cxx; path = ../../../oox/source/drawingml/textparagraphproperties.cxx; sourceTree = "<group>"; };
+		BE55B13E18DB67A900950228 /* textparagraphpropertiescontext.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = textparagraphpropertiescontext.cxx; path = ../../../oox/source/drawingml/textparagraphpropertiescontext.cxx; sourceTree = "<group>"; };
+		BE55B13F18DB67A900950228 /* textrun.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = textrun.cxx; path = ../../../oox/source/drawingml/textrun.cxx; sourceTree = "<group>"; };
+		BE55B14018DB67A900950228 /* textspacingcontext.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = textspacingcontext.cxx; path = ../../../oox/source/drawingml/textspacingcontext.cxx; sourceTree = "<group>"; };
+		BE55B14118DB67A900950228 /* textspacingcontext.hxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = textspacingcontext.hxx; path = ../../../oox/source/drawingml/textspacingcontext.hxx; sourceTree = "<group>"; };
+		BE55B14218DB67A900950228 /* texttabstoplistcontext.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = texttabstoplistcontext.cxx; path = ../../../oox/source/drawingml/texttabstoplistcontext.cxx; sourceTree = "<group>"; };
+		BE55B14318DB67A900950228 /* texttabstoplistcontext.hxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = texttabstoplistcontext.hxx; path = ../../../oox/source/drawingml/texttabstoplistcontext.hxx; sourceTree = "<group>"; };
+		BE55B14418DB67A900950228 /* theme.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = theme.cxx; path = ../../../oox/source/drawingml/theme.cxx; sourceTree = "<group>"; };
+		BE55B14518DB67A900950228 /* themeelementscontext.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = themeelementscontext.cxx; path = ../../../oox/source/drawingml/themeelementscontext.cxx; sourceTree = "<group>"; };
+		BE55B14618DB67A900950228 /* themefragmenthandler.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = themefragmenthandler.cxx; path = ../../../oox/source/drawingml/themefragmenthandler.cxx; sourceTree = "<group>"; };
+		BE55B14718DB67A900950228 /* transform2dcontext.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = transform2dcontext.cxx; path = ../../../oox/source/drawingml/transform2dcontext.cxx; sourceTree = "<group>"; };
 		BE7C277218D1DDF600C4908C /* acmplwrd.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = acmplwrd.cxx; path = ../../../sw/source/core/doc/acmplwrd.cxx; sourceTree = "<group>"; };
 		BE7C277318D1DDF600C4908C /* dbgoutsw.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = dbgoutsw.cxx; path = ../../../sw/source/core/doc/dbgoutsw.cxx; sourceTree = "<group>"; };
 		BE7C277418D1DDF600C4908C /* doc.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = doc.cxx; path = ../../../sw/source/core/doc/doc.cxx; sourceTree = "<group>"; };
@@ -661,6 +722,7 @@
 				BE9F45F81868393D00B8BE69 /* bridges */,
 				BE55B10518DAD85E00950228 /* cppu */,
 				BE35B58A188FFA43001B7439 /* cppuhelper */,
+				BE55B10818DB673300950228 /* oox */,
 				BE82C38818C752760050EB79 /* sal */,
 				BE35B5A6189051F7001B7439 /* sfx2 */,
 				BE82C42718CA17A60050EB79 /* svx */,
@@ -1047,6 +1109,82 @@
 				BE55B10718DAD89800950228 /* cppu_opt.cxx */,
 			);
 			name = cppu;
+			sourceTree = "<group>";
+		};
+		BE55B10818DB673300950228 /* oox */ = {
+			isa = PBXGroup;
+			children = (
+				BE55B10918DB674E00950228 /* drawingml */,
+			);
+			name = oox;
+			sourceTree = "<group>";
+		};
+		BE55B10918DB674E00950228 /* drawingml */ = {
+			isa = PBXGroup;
+			children = (
+				BE55B10A18DB67A900950228 /* chart */,
+				BE55B10B18DB67A900950228 /* clrscheme.cxx */,
+				BE55B10C18DB67A900950228 /* clrschemecontext.cxx */,
+				BE55B10D18DB67A900950228 /* color.cxx */,
+				BE55B10E18DB67A900950228 /* colorchoicecontext.cxx */,
+				BE55B10F18DB67A900950228 /* connectorshapecontext.cxx */,
+				BE55B11018DB67A900950228 /* customshapegeometry.cxx */,
+				BE55B11118DB67A900950228 /* customshapepresets1.cxx */,
+				BE55B11218DB67A900950228 /* customshapepresets2.cxx */,
+				BE55B11318DB67A900950228 /* customshapepresets3.cxx */,
+				BE55B11418DB67A900950228 /* customshapepresets4.cxx */,
+				BE55B11518DB67A900950228 /* customshapepresets5.cxx */,
+				BE55B11618DB67A900950228 /* customshapepresets6.cxx */,
+				BE55B11718DB67A900950228 /* customshapeproperties.cxx */,
+				BE55B11918DB67A900950228 /* diagram */,
+				BE55B11A18DB67A900950228 /* drawingmltypes.cxx */,
+				BE55B11B18DB67A900950228 /* effectproperties.cxx */,
+				BE55B11C18DB67A900950228 /* effectpropertiescontext.cxx */,
+				BE55B11D18DB67A900950228 /* embeddedwavaudiofile.cxx */,
+				BE55B11E18DB67A900950228 /* fillproperties.cxx */,
+				BE55B11F18DB67A900950228 /* fillpropertiesgroupcontext.cxx */,
+				BE55B12018DB67A900950228 /* graphicshapecontext.cxx */,
+				BE55B12118DB67A900950228 /* guidcontext.cxx */,
+				BE55B12218DB67A900950228 /* hyperlinkcontext.cxx */,
+				BE55B12318DB67A900950228 /* lineproperties.cxx */,
+				BE55B12418DB67A900950228 /* linepropertiescontext.cxx */,
+				BE55B12518DB67A900950228 /* objectdefaultcontext.cxx */,
+				BE55B12618DB67A900950228 /* scene3dcontext.cxx */,
+				BE55B12718DB67A900950228 /* shape.cxx */,
+				BE55B12818DB67A900950228 /* shape3dproperties.cxx */,
+				BE55B12918DB67A900950228 /* shapecontext.cxx */,
+				BE55B12A18DB67A900950228 /* shapegroupcontext.cxx */,
+				BE55B12B18DB67A900950228 /* shapepropertiescontext.cxx */,
+				BE55B12C18DB67A900950228 /* shapepropertymap.cxx */,
+				BE55B12D18DB67A900950228 /* shapestylecontext.cxx */,
+				BE55B12E18DB67A900950228 /* spdefcontext.cxx */,
+				BE55B12F18DB67A900950228 /* table */,
+				BE55B13018DB67A900950228 /* textbody.cxx */,
+				BE55B13118DB67A900950228 /* textbodycontext.cxx */,
+				BE55B13218DB67A900950228 /* textbodyproperties.cxx */,
+				BE55B13318DB67A900950228 /* textbodypropertiescontext.cxx */,
+				BE55B13418DB67A900950228 /* textcharacterproperties.cxx */,
+				BE55B13518DB67A900950228 /* textcharacterpropertiescontext.cxx */,
+				BE55B13618DB67A900950228 /* texteffectscontext.cxx */,
+				BE55B13718DB67A900950228 /* textfield.cxx */,
+				BE55B13818DB67A900950228 /* textfieldcontext.cxx */,
+				BE55B13918DB67A900950228 /* textfont.cxx */,
+				BE55B13A18DB67A900950228 /* textliststyle.cxx */,
+				BE55B13B18DB67A900950228 /* textliststylecontext.cxx */,
+				BE55B13C18DB67A900950228 /* textparagraph.cxx */,
+				BE55B13D18DB67A900950228 /* textparagraphproperties.cxx */,
+				BE55B13E18DB67A900950228 /* textparagraphpropertiescontext.cxx */,
+				BE55B13F18DB67A900950228 /* textrun.cxx */,
+				BE55B14018DB67A900950228 /* textspacingcontext.cxx */,
+				BE55B14118DB67A900950228 /* textspacingcontext.hxx */,
+				BE55B14218DB67A900950228 /* texttabstoplistcontext.cxx */,
+				BE55B14318DB67A900950228 /* texttabstoplistcontext.hxx */,
+				BE55B14418DB67A900950228 /* theme.cxx */,
+				BE55B14518DB67A900950228 /* themeelementscontext.cxx */,
+				BE55B14618DB67A900950228 /* themefragmenthandler.cxx */,
+				BE55B14718DB67A900950228 /* transform2dcontext.cxx */,
+			);
+			name = drawingml;
 			sourceTree = "<group>";
 		};
 		BE7C277118D1DDC500C4908C /* doc */ = {
