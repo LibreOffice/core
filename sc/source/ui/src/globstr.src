@@ -2064,12 +2064,12 @@ Resource RID_GLOBSTR
 
     String STR_PRINT_PREVIEW_NODATA
     {
-        Text [ en-US ] = "Empty Content";
+        Text [ en-US ] = "No Data";
     };
 
     String STR_PRINT_PREVIEW_EMPTY_RANGE
     {
-        Text [ en-US ] = "Empty Print Range";
+        Text [ en-US ] = "Print Range Empty";
     };
 };
 
