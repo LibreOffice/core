@@ -1772,8 +1772,7 @@ IMPL_LINK( SwFrmPage, RelSizeClickHdl, CheckBox *, pBtn )
             m_aHeightED.get()->SetMax(MAX_PERCENT_HEIGHT);
     }
 
-    if (pBtn)   // only when Handler was called by change of the controller
-        RangeModifyHdl(m_aWidthED.get());  // correct the values again
+    RangeModifyHdl(m_aWidthED.get());  // correct the values again
 
     if (pBtn == m_pRelWidthCB)
         ModifyHdl(m_aWidthED.get());
