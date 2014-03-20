@@ -18,7 +18,6 @@
  */
 
 #include <dispatch/loaddispatcher.hxx>
-#include <threadhelp/guard.hxx>
 
 #include <com/sun/star/frame/DispatchResultState.hpp>
 
@@ -28,8 +27,7 @@ LoadDispatcher::LoadDispatcher(const css::uno::Reference< css::uno::XComponentCo
                                const css::uno::Reference< css::frame::XFrame >&          xOwnerFrame ,
                                const OUString&                                           sTargetName ,
                                      sal_Int32                                           nSearchFlags)
-    : ThreadHelpBase(            )
-    , m_xContext    (xContext    )
+    : m_xContext    (xContext    )
     , m_xOwnerFrame (xOwnerFrame )
     , m_sTarget     (sTargetName )
     , m_nSearchFlags(nSearchFlags)
@@ -85,8 +83,7 @@ css::uno::Any LoadDispatcher::impl_dispatch( const css::util::URL& rURL,
     // and clear our reference ...) we should hold us self alive!
     css::uno::Reference< css::uno::XInterface > xThis(static_cast< css::frame::XNotifyingDispatch* >(this), css::uno::UNO_QUERY);
 
-    // SAFE -> ----------------------------------
-    Guard aReadLock(m_aLock);
+    osl::MutexGuard g(m_mutex);
 
     // We are the only client of this load env object ... but
     // may a dispatch request before is still in progress (?!).
@@ -151,8 +148,6 @@ css::uno::Any LoadDispatcher::impl_dispatch( const css::util::URL& rURL,
     if ( xComponent.is () )
         aRet = css::uno::makeAny( xComponent );
 
-    aReadLock.unlock();
-    // <- SAFE ----------------------------------
     return aRet;
 }
 

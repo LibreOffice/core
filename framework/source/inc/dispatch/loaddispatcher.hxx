@@ -21,7 +21,6 @@
 #define INCLUDED_FRAMEWORK_SOURCE_INC_DISPATCH_LOADDISPATCHER_HXX
 
 #include <loadenv/loadenv.hxx>
-#include <threadhelp/threadhelpbase.hxx>
 
 #include <com/sun/star/frame/XNotifyingDispatch.hpp>
 #include <com/sun/star/frame/XSynchronousDispatch.hpp>
@@ -36,14 +35,14 @@ namespace framework{
 
     @author     as96863
  */
-class LoadDispatcher : private ThreadHelpBase
-                     , public  ::cppu::WeakImplHelper2< css::frame::XNotifyingDispatch,          // => XDispatch => XInterface
+class LoadDispatcher : public  ::cppu::WeakImplHelper2< css::frame::XNotifyingDispatch,          // => XDispatch => XInterface
                                                         css::frame::XSynchronousDispatch >
 {
 
     // member
 
     private:
+        osl::Mutex m_mutex;
 
         /** @short  can be used to create own needed services on demand. */
         css::uno::Reference< css::uno::XComponentContext > m_xContext;
