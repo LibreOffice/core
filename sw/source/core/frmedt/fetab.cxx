@@ -1848,7 +1848,7 @@ bool SwFEShell::SelTblRowCol( const Point& rPt, const Point* pEnd, bool bRowDrag
 
         if( pFrm )
         {
-            while( pFrm->Lower() && pFrm->Lower()->IsRowFrm() )
+            while( pFrm && pFrm->Lower() && pFrm->Lower()->IsRowFrm() )
                 pFrm = static_cast<const SwCellFrm*>( static_cast<const SwLayoutFrm*>( pFrm->Lower() )->Lower() );
             if( pFrm && pFrm->GetTabBox()->GetSttNd() &&
                 pFrm->GetTabBox()->GetSttNd()->IsInProtectSect() )
