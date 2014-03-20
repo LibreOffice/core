@@ -2070,6 +2070,8 @@ OUString lcl_ExctractAskVariableAndHint( const OUString& rCommand, OUString& rHi
     // if no hint is set the variable is used as hint
     // the quotes of the hint have to be removed
     sal_Int32 nIndex = rCommand.indexOf( ' ', 2); //find last space after 'ASK'
+    if (nIndex == -1)
+        return OUString();
     while(rCommand[nIndex] == ' ')
         ++nIndex;
     OUString sShortCommand( rCommand.copy( nIndex ) ); //cut off the " ASK "
