@@ -38,7 +38,7 @@ GraphicAttr::GraphicAttr() :
     mnRPercent      ( 0 ),
     mnGPercent      ( 0 ),
     mnBPercent      ( 0 ),
-    mbInvert        ( sal_False ),
+    mbInvert        ( false ),
     mcTransparency  ( 0 ),
     meDrawMode      ( GRAPHICDRAWMODE_STANDARD )
 {
@@ -52,7 +52,7 @@ GraphicAttr::~GraphicAttr()
 
 
 
-sal_Bool GraphicAttr::operator==( const GraphicAttr& rAttr ) const
+bool GraphicAttr::operator==( const GraphicAttr& rAttr ) const
 {
     return( ( mfGamma == rAttr.mfGamma ) &&
             ( mnMirrFlags == rAttr.mnMirrFlags ) &&
@@ -81,7 +81,7 @@ SvStream& ReadGraphicAttr( SvStream& rIStm, GraphicAttr& rAttr )
 
     rIStm.ReadUInt32( nTmp32 ).ReadUInt32( nTmp32 ).ReadDouble( rAttr.mfGamma ).ReadUInt32( rAttr.mnMirrFlags ).ReadUInt16( rAttr.mnRotate10 );
     rIStm.ReadInt16( rAttr.mnContPercent ).ReadInt16( rAttr.mnLumPercent ).ReadInt16( rAttr.mnRPercent ).ReadInt16( rAttr.mnGPercent ).ReadInt16( rAttr.mnBPercent );
-    rIStm.ReadUChar( rAttr.mbInvert ).ReadUChar( rAttr.mcTransparency ).ReadUInt16( nTmp16 );
+    rIStm.ReadCharAsBool( rAttr.mbInvert ).ReadUChar( rAttr.mcTransparency ).ReadUInt16( nTmp16 );
     rAttr.meDrawMode = (GraphicDrawMode) nTmp16;
 
     if( aCompat.GetVersion() >= 2 )

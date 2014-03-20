@@ -64,7 +64,7 @@ void GraphicManager::SetMaxCacheSize( sal_uLong nNewCacheSize )
     mpCache->SetMaxDisplayCacheSize( nNewCacheSize );
 }
 
-void GraphicManager::SetMaxObjCacheSize( sal_uLong nNewMaxObjSize, sal_Bool bDestroyGreaterCached )
+void GraphicManager::SetMaxObjCacheSize( sal_uLong nNewMaxObjSize, bool bDestroyGreaterCached )
 {
     mpCache->SetMaxObjDisplayCacheSize( nNewMaxObjSize, bDestroyGreaterCached );
 }
@@ -79,22 +79,22 @@ void GraphicManager::ReleaseFromCache( const GraphicObject& /*rObj*/ )
     // !!!
 }
 
-sal_Bool GraphicManager::IsInCache( OutputDevice* pOut, const Point& rPt,
+bool GraphicManager::IsInCache( OutputDevice* pOut, const Point& rPt,
                                     const Size& rSz, const GraphicObject& rObj,
                                     const GraphicAttr& rAttr ) const
 {
     return mpCache->IsInDisplayCache( pOut, rPt, rSz, rObj, rAttr );
 }
 
-sal_Bool GraphicManager::DrawObj( OutputDevice* pOut, const Point& rPt, const Size& rSz,
+bool GraphicManager::DrawObj( OutputDevice* pOut, const Point& rPt, const Size& rSz,
                               GraphicObject& rObj, const GraphicAttr& rAttr,
-                              const sal_uLong nFlags, sal_Bool& rCached )
+                              const sal_uLong nFlags, bool& rCached )
 {
     Point   aPt( rPt );
     Size    aSz( rSz );
-    sal_Bool    bRet = sal_False;
+    bool    bRet = false;
 
-    rCached = sal_False;
+    rCached = false;
 
     if( ( rObj.GetType() == GRAPHIC_BITMAP ) || ( rObj.GetType() == GRAPHIC_GDIMETAFILE ) )
     {
@@ -126,7 +126,7 @@ sal_Bool GraphicManager::DrawObj( OutputDevice* pOut, const Point& rPt, const Si
                 aGraphic.Draw( pOut, aPt, aSz );
             }
 
-            bRet = sal_True;
+            bRet = true;
         }
 
         if( !bRet )
@@ -135,7 +135,7 @@ sal_Bool GraphicManager::DrawObj( OutputDevice* pOut, const Point& rPt, const Si
             if( !mpCache->DrawDisplayCacheObj( pOut, aPt, aSz, rObj, rAttr ) )
                 bRet = ImplDraw( pOut, aPt, aSz, rObj, rAttr, nFlags, rCached );
             else
-                bRet = rCached = sal_True;
+                bRet = rCached = true;
         }
     }
 
@@ -171,7 +171,7 @@ OString GraphicManager::ImplGetUniqueID( const GraphicObject& rObj ) const
     return mpCache->GetUniqueID( rObj );
 }
 
-sal_Bool GraphicManager::ImplFillSwappedGraphicObject( const GraphicObject& rObj, Graphic& rSubstitute )
+bool GraphicManager::ImplFillSwappedGraphicObject( const GraphicObject& rObj, Graphic& rSubstitute )
 {
     return( mpCache->FillSwappedGraphicObject( rObj, rSubstitute ) );
 }
@@ -181,13 +181,13 @@ void GraphicManager::ImplGraphicObjectWasSwappedIn( const GraphicObject& rObj )
     mpCache->GraphicObjectWasSwappedIn( rObj );
 }
 
-sal_Bool GraphicManager::ImplDraw( OutputDevice* pOut, const Point& rPt,
+bool GraphicManager::ImplDraw( OutputDevice* pOut, const Point& rPt,
                                const Size& rSz, GraphicObject& rObj,
                                const GraphicAttr& rAttr,
-                               const sal_uLong nFlags, sal_Bool& rCached )
+                               const sal_uLong nFlags, bool& rCached )
 {
     const Graphic&  rGraphic = rObj.GetGraphic();
-    sal_Bool            bRet = sal_False;
+    bool            bRet = false;
 
     if( rGraphic.IsSupportedGraphic() && !rGraphic.IsSwapOut() )
     {
@@ -205,7 +205,7 @@ sal_Bool GraphicManager::ImplDraw( OutputDevice* pOut, const Point& rPt,
                 if( ImplCreateOutput( pOut, rPt, rSz, aSrcBmpEx, rAttr, nFlags, &aDstBmpEx ) )
                 {
                     rCached = mpCache->CreateDisplayCacheObj( pOut, rPt, rSz, rObj, rAttr, aDstBmpEx );
-                    bRet = sal_True;
+                    bRet = true;
                 }
             }
 
@@ -232,13 +232,13 @@ sal_Bool GraphicManager::ImplDraw( OutputDevice* pOut, const Point& rPt,
                         if( ImplCreateOutput( pOut, rPt, rSz, aContainedBmpEx, rAttr, nFlags, &aDstBmpEx ) )
                         {
                             rCached = mpCache->CreateDisplayCacheObj( pOut, rPt, rSz, rObj, rAttr, aDstBmpEx );
-                            bRet = sal_True;
+                            bRet = true;
                         }
                     }
                     else
                     {
                         rCached = mpCache->CreateDisplayCacheObj( pOut, rPt, rSz, rObj, rAttr, aDstMtf );
-                        bRet = sal_True;
+                        bRet = true;
                     }
                 }
             }
@@ -250,7 +250,7 @@ sal_Bool GraphicManager::ImplDraw( OutputDevice* pOut, const Point& rPt,
                 if( aGraphic.IsSupportedGraphic() )
                 {
                     aGraphic.Draw( pOut, rPt, rSz );
-                    bRet = sal_True;
+                    bRet = true;
                 }
             }
         }
@@ -259,7 +259,7 @@ sal_Bool GraphicManager::ImplDraw( OutputDevice* pOut, const Point& rPt,
     return bRet;
 }
 
-sal_Bool ImplCreateRotatedScaled( const BitmapEx& rBmpEx, const GraphicAttr& rAttributes,
+bool ImplCreateRotatedScaled( const BitmapEx& rBmpEx, const GraphicAttr& rAttributes,
                                 sal_uInt16 nRot10, const Size& rUnrotatedSzPix,
                                 long nStartX, long nEndX, long nStartY, long nEndY,
                                 BitmapEx& rOutBmpEx )
@@ -818,7 +818,7 @@ sal_Bool ImplCreateRotatedScaled( const BitmapEx& rBmpEx, const GraphicAttr& rAt
     return bRet;
 }
 
-sal_Bool GraphicManager::ImplCreateOutput( OutputDevice* pOutputDevice,
+bool GraphicManager::ImplCreateOutput( OutputDevice* pOutputDevice,
                                        const Point& rPoint, const Size& rSize,
                                        const BitmapEx& rBitmapEx, const GraphicAttr& rAttributes,
                                        const sal_uLong /*nFlags*/, BitmapEx* pBmpEx )
@@ -1036,7 +1036,7 @@ static BitmapEx checkMetadataBitmap( const BitmapEx& rBmpEx,
     return aBmpEx;
 }
 
-sal_Bool GraphicManager::ImplCreateOutput( OutputDevice* pOut,
+bool GraphicManager::ImplCreateOutput( OutputDevice* pOut,
                                        const Point& rPt, const Size& rSz,
                                        const GDIMetaFile& rMtf, const GraphicAttr& rAttr,
                                        const sal_uLong /*nFlags*/, GDIMetaFile& rOutMtf, BitmapEx& rOutBmpEx )
@@ -1345,7 +1345,7 @@ sal_Bool GraphicManager::ImplCreateOutput( OutputDevice* pOut,
         rOutBmpEx = BitmapEx();
     }
 
-    return sal_True;
+    return true;
 }
 
 void GraphicManager::ImplAdjust( BitmapEx& rBmpEx, const GraphicAttr& rAttr, sal_uLong nAdjustmentFlags )
@@ -1632,7 +1632,7 @@ bool GraphicObject::ImplRenderTempTile( VirtualDevice& rVDev, int nExponent,
 
     // #105229# Switch off mapping (converting to logic and back to
     // pixel might cause roundoff errors)
-    sal_Bool bOldMap( rVDev.IsMapModeEnabled() );
+    bool bOldMap( rVDev.IsMapModeEnabled() );
     rVDev.EnableMapMode( false );
 
     bool bRet( ImplRenderTileRecursive( rVDev, nExponent, nMSBFactor, nNumTilesX, nNumTilesY,
@@ -1988,7 +1988,7 @@ void GraphicObject::ImplTransformBitmap( BitmapEx&          rBmpEx,
                                          const Size&        rCropRightBottom,
                                          const Rectangle&   rCropRect,
                                          const Size&        rDstSize,
-                                         sal_Bool               bEnlarge ) const
+                                         bool               bEnlarge ) const
 {
     // #107947# Extracted from svdograf.cxx
 

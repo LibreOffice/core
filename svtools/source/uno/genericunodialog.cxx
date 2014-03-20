@@ -48,9 +48,9 @@ namespace svt
 OGenericUnoDialog::OGenericUnoDialog(const Reference< XComponentContext >& _rxContext)
         :OPropertyContainer(GetBroadcastHelper())
         ,m_pDialog(NULL)
-        ,m_bExecuting(sal_False)
-        ,m_bCanceled(sal_False)
-        ,m_bTitleAmbiguous(sal_True)
+        ,m_bExecuting(false)
+        ,m_bCanceled(false)
+        ,m_bTitleAmbiguous(true)
         ,m_bInitialized( false )
         ,m_bNeedInitialization( false )
         ,m_aContext(_rxContext)
@@ -112,7 +112,7 @@ void OGenericUnoDialog::setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, con
     if (UNODIALOG_PROPERTY_ID_TITLE == nHandle)
     {
         // from now on m_sTitle is valid
-        m_bTitleAmbiguous = sal_False;
+        m_bTitleAmbiguous = false;
 
         if (m_pDialog)
             m_pDialog->SetText(m_sTitle);
@@ -212,8 +212,8 @@ sal_Int16 SAL_CALL OGenericUnoDialog::execute(  ) throw(RuntimeException, std::e
                     *this
                   );
 
-        m_bCanceled = sal_False;
-        m_bExecuting = sal_True;
+        m_bCanceled = false;
+        m_bExecuting = true;
 
         if ( !impl_ensureDialog_lck() )
             return 0;
@@ -238,7 +238,7 @@ sal_Int16 SAL_CALL OGenericUnoDialog::execute(  ) throw(RuntimeException, std::e
         // get the settings of the dialog
         executedDialog( nReturn );
 
-        m_bExecuting = sal_False;
+        m_bExecuting = false;
     }
 
     // outta here

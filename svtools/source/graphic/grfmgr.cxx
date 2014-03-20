@@ -126,9 +126,9 @@ void GraphicObject::ImplConstruct()
     mpSwapOutTimer = NULL;
     mpSimpleCache = NULL;
     mnAnimationLoopCount = 0;
-    mbAutoSwapped = sal_False;
-    mbIsInSwapIn = sal_False;
-    mbIsInSwapOut = sal_False;
+    mbAutoSwapped = false;
+    mbIsInSwapIn = false;
+    mbIsInSwapOut = false;
 }
 
 void GraphicObject::ImplAssignGraphicData()
@@ -189,13 +189,13 @@ void GraphicObject::ImplAutoSwapIn()
     if( IsSwappedOut() )
     {
         if( mpMgr && mpMgr->ImplFillSwappedGraphicObject( *this, maGraphic ) )
-            mbAutoSwapped = sal_False;
+            mbAutoSwapped = false;
         else
         {
-            mbIsInSwapIn = sal_True;
+            mbIsInSwapIn = true;
 
             if( maGraphic.SwapIn() )
-                mbAutoSwapped = sal_False;
+                mbAutoSwapped = false;
             else
             {
                 SvStream* pStream = GetSwapStream();
@@ -238,7 +238,7 @@ void GraphicObject::ImplAutoSwapIn()
                 }
             }
 
-            mbIsInSwapIn = sal_False;
+            mbIsInSwapIn = false;
 
             if( !mbAutoSwapped && mpMgr )
                 mpMgr->ImplGraphicObjectWasSwappedIn( *this );
@@ -246,10 +246,10 @@ void GraphicObject::ImplAutoSwapIn()
     }
 }
 
-sal_Bool GraphicObject::ImplGetCropParams( OutputDevice* pOut, Point& rPt, Size& rSz, const GraphicAttr* pAttr,
-                                       PolyPolygon& rClipPolyPoly, sal_Bool& bRectClipRegion ) const
+bool GraphicObject::ImplGetCropParams( OutputDevice* pOut, Point& rPt, Size& rSz, const GraphicAttr* pAttr,
+                                       PolyPolygon& rClipPolyPoly, bool& bRectClipRegion ) const
 {
-    sal_Bool bRet = sal_False;
+    bool bRet = false;
 
     if( GetType() != GRAPHIC_NONE )
     {
@@ -263,10 +263,10 @@ sal_Bool GraphicObject::ImplGetCropParams( OutputDevice* pOut, Point& rPt, Size&
         if( nRot10 )
         {
             aClipPoly.Rotate( rPt, nRot10 );
-            bRectClipRegion = sal_False;
+            bRectClipRegion = false;
         }
         else
-            bRectClipRegion = sal_True;
+            bRectClipRegion = true;
 
         rClipPolyPoly = aClipPoly;
 
@@ -308,7 +308,7 @@ sal_Bool GraphicObject::ImplGetCropParams( OutputDevice* pOut, Point& rPt, Size&
                 rPt = aOriginPoly[ 0 ];
             }
 
-            bRet = sal_True;
+            bRet = true;
         }
     }
 
@@ -329,7 +329,7 @@ GraphicObject& GraphicObject::operator=( const GraphicObject& rGraphicObj )
         maLink = rGraphicObj.maLink;
         maUserData = rGraphicObj.maUserData;
         ImplAssignGraphicData();
-        mbAutoSwapped = sal_False;
+        mbAutoSwapped = false;
         mpMgr = rGraphicObj.mpMgr;
 
         mpMgr->ImplRegisterObj( *this, maGraphic, NULL, &rGraphicObj );
@@ -338,7 +338,7 @@ GraphicObject& GraphicObject::operator=( const GraphicObject& rGraphicObj )
     return *this;
 }
 
-sal_Bool GraphicObject::operator==( const GraphicObject& rGraphicObj ) const
+bool GraphicObject::operator==( const GraphicObject& rGraphicObj ) const
 {
     return( ( rGraphicObj.maGraphic == maGraphic ) &&
             ( rGraphicObj.maAttr == maAttr ) &&
@@ -491,10 +491,10 @@ void GraphicObject::GraphicManagerDestroyed()
     ImplSetGraphicManager( NULL );
 }
 
-sal_Bool GraphicObject::IsCached( OutputDevice* pOut, const Point& rPt, const Size& rSz,
+bool GraphicObject::IsCached( OutputDevice* pOut, const Point& rPt, const Size& rSz,
                               const GraphicAttr* pAttr, sal_uLong nFlags ) const
 {
-    sal_Bool bRet;
+    bool bRet;
 
     if( nFlags & GRFMGR_DRAW_CACHED )
     {
@@ -503,13 +503,13 @@ sal_Bool GraphicObject::IsCached( OutputDevice* pOut, const Point& rPt, const Si
         if ( pAttr && pAttr->IsCropped() )
         {
             PolyPolygon aClipPolyPoly;
-            sal_Bool        bRectClip;
+            bool        bRectClip;
             ImplGetCropParams( pOut, aPt, aSz, pAttr, aClipPolyPoly, bRectClip );
         }
         bRet = mpMgr->IsInCache( pOut, aPt, aSz, *this, ( pAttr ? *pAttr : GetAttr() ) );
     }
     else
-        bRet = sal_False;
+        bRet = false;
 
     return bRet;
 }
@@ -527,8 +527,8 @@ bool GraphicObject::Draw( OutputDevice* pOut, const Point& rPt, const Size& rSz,
     Point               aPt( rPt );
     Size                aSz( rSz );
     const sal_uInt32    nOldDrawMode = pOut->GetDrawMode();
-    sal_Bool                bCropped = aAttr.IsCropped();
-    sal_Bool                bCached = sal_False;
+    bool                bCropped = aAttr.IsCropped();
+    bool                bCached = false;
     bool bRet;
 
     // #i29534# Provide output rects for PDF writer
@@ -556,8 +556,8 @@ bool GraphicObject::Draw( OutputDevice* pOut, const Point& rPt, const Size& rSz,
     if( bCropped )
     {
         PolyPolygon aClipPolyPoly;
-        sal_Bool        bRectClip;
-        const sal_Bool  bCrop = ImplGetCropParams( pOut, aPt, aSz, &aAttr, aClipPolyPoly, bRectClip );
+        bool        bRectClip;
+        const bool  bCrop = ImplGetCropParams( pOut, aPt, aSz, &aAttr, aClipPolyPoly, bRectClip );
 
         pOut->Push( PUSH_CLIPREGION );
 
@@ -598,7 +598,7 @@ bool GraphicObject::Draw( OutputDevice* pOut, const Point& rPt, const Size& rSz,
 }
 
 // #i105243#
-sal_Bool GraphicObject::DrawWithPDFHandling( OutputDevice& rOutDev,
+bool GraphicObject::DrawWithPDFHandling( OutputDevice& rOutDev,
                                          const Point& rPt, const Size& rSz,
                                          const GraphicAttr* pGrfAttr,
                                          const sal_uLong nFlags )
@@ -606,7 +606,7 @@ sal_Bool GraphicObject::DrawWithPDFHandling( OutputDevice& rOutDev,
     const GraphicAttr aGrfAttr( pGrfAttr ? *pGrfAttr : GetAttr() );
 
     // Notify PDF writer about linked graphic (if any)
-    sal_Bool bWritingPdfLinkedGraphic( sal_False );
+    bool bWritingPdfLinkedGraphic( false );
     Point aPt( rPt );
     Size aSz( rSz );
     Rectangle aCropRect;
@@ -628,8 +628,8 @@ sal_Bool GraphicObject::DrawWithPDFHandling( OutputDevice& rOutDev,
             if( aGrfAttr.IsCropped() )
             {
                 PolyPolygon aClipPolyPoly;
-                sal_Bool bRectClip;
-                const sal_Bool bCrop = ImplGetCropParams( &rOutDev,
+                bool bRectClip;
+                const bool bCrop = ImplGetCropParams( &rOutDev,
                                                       aPt, aSz,
                                                       &aGrfAttr,
                                                       aClipPolyPoly,
@@ -644,7 +644,7 @@ sal_Bool GraphicObject::DrawWithPDFHandling( OutputDevice& rOutDev,
         }
     }
 
-    sal_Bool bRet = Draw( &rOutDev, rPt, rSz, &aGrfAttr, nFlags );
+    bool bRet = Draw( &rOutDev, rPt, rSz, &aGrfAttr, nFlags );
 
     // Notify PDF writer about linked graphic (if any)
     if( bWritingPdfLinkedGraphic )
@@ -658,11 +658,11 @@ sal_Bool GraphicObject::DrawWithPDFHandling( OutputDevice& rOutDev,
     return bRet;
 }
 
-sal_Bool GraphicObject::DrawTiled( OutputDevice* pOut, const Rectangle& rArea, const Size& rSize,
+bool GraphicObject::DrawTiled( OutputDevice* pOut, const Rectangle& rArea, const Size& rSize,
                                const Size& rOffset, const GraphicAttr* pAttr, sal_uLong nFlags, int nTileCacheSize1D )
 {
     if( pOut == NULL || rSize.Width() == 0 || rSize.Height() == 0 )
-        return sal_False;
+        return false;
 
     const MapMode   aOutMapMode( pOut->GetMapMode() );
     const MapMode   aMapMode( aOutMapMode.GetMapUnit(), Point(), aOutMapMode.GetScaleX(), aOutMapMode.GetScaleY() );
@@ -680,11 +680,11 @@ sal_Bool GraphicObject::DrawTiled( OutputDevice* pOut, const Rectangle& rArea, c
     return ImplDrawTiled( pOut, rArea, aOutTileSize, rOffset, pAttr, nFlags, nTileCacheSize1D );
 }
 
-sal_Bool GraphicObject::StartAnimation( OutputDevice* pOut, const Point& rPt, const Size& rSz,
+bool GraphicObject::StartAnimation( OutputDevice* pOut, const Point& rPt, const Size& rSz,
                                     long nExtraData, const GraphicAttr* pAttr, sal_uLong /*nFlags*/,
                                     OutputDevice* pFirstFrameOutDev )
 {
-    sal_Bool bRet = sal_False;
+    bool bRet = false;
 
     GetGraphic();
 
@@ -696,13 +696,13 @@ sal_Bool GraphicObject::StartAnimation( OutputDevice* pOut, const Point& rPt, co
         {
             Point   aPt( rPt );
             Size    aSz( rSz );
-            sal_Bool    bCropped = aAttr.IsCropped();
+            bool    bCropped = aAttr.IsCropped();
 
             if( bCropped )
             {
                 PolyPolygon aClipPolyPoly;
-                sal_Bool        bRectClip;
-                const sal_Bool  bCrop = ImplGetCropParams( pOut, aPt, aSz, &aAttr, aClipPolyPoly, bRectClip );
+                bool        bRectClip;
+                const bool  bCrop = ImplGetCropParams( pOut, aPt, aSz, &aAttr, aClipPolyPoly, bRectClip );
 
                 pOut->Push( PUSH_CLIPREGION );
 
@@ -729,7 +729,7 @@ sal_Bool GraphicObject::StartAnimation( OutputDevice* pOut, const Point& rPt, co
             if( bCropped )
                 pOut->Pop();
 
-            bRet = sal_True;
+            bRet = true;
         }
         else
             bRet = Draw( pOut, rPt, rSz, &aAttr, GRFMGR_DRAW_STANDARD );
@@ -760,7 +760,7 @@ void GraphicObject::SetGraphic( const Graphic& rGraphic, const GraphicObject* pC
         mpSwapOutTimer->Stop();
 
     maGraphic = rGraphic;
-    mbAutoSwapped = sal_False;
+    mbAutoSwapped = false;
     ImplAssignGraphicData();
     maLink = "";
     delete mpSimpleCache, mpSimpleCache = NULL;
@@ -945,7 +945,7 @@ Graphic GraphicObject::GetTransformedGraphic( const Size& rDestSize, const MapMo
                     // cropping affects this frame, apply it then
                     // do _not_ apply enlargement, this is done below
                     ImplTransformBitmap( aAnimBmp.aBmpEx, rAttr, Size(), Size(),
-                                         aCropRectRel, rDestSize, sal_False );
+                                         aCropRectRel, rDestSize, false );
 
                     aAnim.Replace( aAnimBmp, nFrame );
                 }
@@ -990,7 +990,7 @@ Graphic GraphicObject::GetTransformedGraphic( const Size& rDestSize, const MapMo
         else
         {
             ImplTransformBitmap( aBitmapEx, rAttr, aCropLeftTop, aCropRightBottom,
-                                 aCropRect, rDestSize, sal_True );
+                                 aCropRect, rDestSize, true );
 
             aTransGraphic = aBitmapEx;
         }
@@ -1104,7 +1104,7 @@ void GraphicObject::SetSwapState()
 {
     if( !IsSwappedOut() )
     {
-        mbAutoSwapped = sal_True;
+        mbAutoSwapped = true;
 
         if( mpMgr )
             mpMgr->ImplGraphicObjectWasSwappedOut( *this );
@@ -1115,7 +1115,7 @@ IMPL_LINK_NOARG(GraphicObject, ImplAutoSwapOutHdl)
 {
     if( !IsSwappedOut() )
     {
-        mbIsInSwapOut = sal_True;
+        mbIsInSwapOut = true;
 
         SvStream* pStream = GetSwapStream();
 
@@ -1135,7 +1135,7 @@ IMPL_LINK_NOARG(GraphicObject, ImplAutoSwapOutHdl)
             }
         }
 
-        mbIsInSwapOut = sal_False;
+        mbIsInSwapOut = false;
     }
 
     if( mpSwapOutTimer )
@@ -1149,11 +1149,11 @@ SvStream& ReadGraphicObject( SvStream& rIStm, GraphicObject& rGraphicObj )
     VersionCompat   aCompat( rIStm, STREAM_READ );
     Graphic         aGraphic;
     GraphicAttr     aAttr;
-    sal_Bool            bLink;
+    bool            bLink;
 
     ReadGraphic( rIStm, aGraphic );
     ReadGraphicAttr( rIStm, aAttr );
-    rIStm.ReadUChar( bLink );
+    rIStm.ReadCharAsBool( bLink );
 
     rGraphicObj.SetGraphic( aGraphic );
     rGraphicObj.SetAttr( aAttr );
@@ -1174,7 +1174,7 @@ SvStream& ReadGraphicObject( SvStream& rIStm, GraphicObject& rGraphicObj )
 SvStream& WriteGraphicObject( SvStream& rOStm, const GraphicObject& rGraphicObj )
 {
     VersionCompat   aCompat( rOStm, STREAM_WRITE, 1 );
-    const sal_Bool      bLink =  rGraphicObj.HasLink();
+    const bool      bLink =  rGraphicObj.HasLink();
 
     WriteGraphic( rOStm, rGraphicObj.GetGraphic() );
     WriteGraphicAttr( rOStm, rGraphicObj.GetAttr() );

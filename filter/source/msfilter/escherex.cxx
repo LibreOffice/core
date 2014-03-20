@@ -4124,7 +4124,7 @@ EscherBlibEntry::EscherBlibEntry( sal_uInt32 nPictureOffset, const GraphicObject
                    .WriteInt16( pGraphicAttr->GetChannelG() )
                    .WriteInt16( pGraphicAttr->GetChannelB() )
                    .WriteDouble( pGraphicAttr->GetGamma() );
-                aSt.WriteUChar( (sal_Bool)( pGraphicAttr->IsInvert() == sal_True ) )
+                aSt.WriteUChar( pGraphicAttr->IsInvert() )
                    .WriteUChar( pGraphicAttr->GetTransparency() );
                 mnIdentifier[ 1 ] = rtl_crc32( 0, aSt.GetData(), aSt.Tell() );
             }
