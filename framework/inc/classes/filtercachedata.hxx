@@ -30,7 +30,6 @@
 #include <classes/checkediterator.hxx>
 #include <classes/wildcard.hxx>
 #include <classes/converter.hxx>
-#include <threadhelp/threadhelpbase.hxx>
 #include <macros/xinterface.hxx>
 #include <general.h>
 
@@ -47,6 +46,8 @@
 #include <rtl/ustring.hxx>
 
 namespace framework{
+
+class LockHelper;
 
 #define DEFAULT_FILTERCACHE_VERSION                 6                                                                   /// these implmentation of FilterCache support different version of TypeDetection.xml! This define the current set default one.
 
@@ -455,7 +456,7 @@ typedef ::std::vector< FilterHash::const_iterator >                 FilterQuery 
 
 // Use private static data container to hold all values of configuration!
 
-class DataContainer : private ThreadHelpBase
+class DataContainer
 {
     public:
 
