@@ -2471,7 +2471,8 @@ void DocxAttributeOutput::switchHeaderFooter(bool isHeaderFooter, sal_Int32 inde
     }
     else if( index == -1)
     {
-        *m_tableReference = *m_oldTableReference;
+        if (m_oldTableReference->m_pOldTablepInner)
+           *m_tableReference = *m_oldTableReference;
     }
     else
     {
