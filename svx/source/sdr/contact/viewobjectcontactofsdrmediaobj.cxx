@@ -18,18 +18,16 @@
  */
 
 
-#include <svx/sdr/contact/objectcontactofpageview.hxx>
 #include <svx/sdr/contact/viewobjectcontactofsdrmediaobj.hxx>
 #include <svx/sdr/contact/viewcontactofsdrmediaobj.hxx>
 #include <svx/sdr/contact/displayinfo.hxx>
+#include <svx/sdr/contact/objectcontact.hxx>
 #include <svx/svdomedia.hxx>
 #include <svx/svdpagv.hxx>
 #include <vcl/outdev.hxx>
 #include <vcl/window.hxx>
 #include <avmedia/mediaitem.hxx>
 #include "sdrmediawindow.hxx"
-#include <svx/sdrpagewindow.hxx>
-#include <svx/sdrpaintwindow.hxx>
 
 
 
@@ -69,26 +67,12 @@ Window* ViewObjectContactOfSdrMediaObj::getWindow() const
 {
     Window* pRetval = 0;
 
-    const ObjectContactOfPageView* pObjectContactOfPageView = dynamic_cast< const ObjectContactOfPageView* >(&GetObjectContact());
-
-    if(pObjectContactOfPageView)
+    boost::optional<const OutputDevice&> oPageOutputDev = getPageViewOutputDevice();
+    if( oPageOutputDev )
     {
-        const SdrPageWindow& rPageWindow = pObjectContactOfPageView->GetPageWindow();
-        const SdrPaintWindow* pPaintWindow = &rPageWindow.GetPaintWindow();
-
-        if(rPageWindow.GetOriginalPaintWindow())
+        if(OUTDEV_WINDOW == oPageOutputDev->GetOutDevType())
         {
-            // #i83183# prefer OriginalPaintWindow if set; this is
-            // the real target device. GetPaintWindow() may return
-            // the current buffer device instead
-            pPaintWindow = rPageWindow.GetOriginalPaintWindow();
-        }
-
-        OutputDevice& rOutDev = pPaintWindow->GetOutputDevice();
-
-        if(OUTDEV_WINDOW == rOutDev.GetOutDevType())
-        {
-            pRetval = static_cast< Window* >(&rOutDev);
+            pRetval = static_cast< Window* >(&const_cast<OutputDevice&>(oPageOutputDev.get()));
         }
     }
 

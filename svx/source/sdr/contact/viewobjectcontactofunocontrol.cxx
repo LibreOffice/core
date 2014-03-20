@@ -846,16 +846,6 @@ namespace sdr { namespace contact {
                 const basegfx::B2DHomMatrix& _rInitialViewTransformation
              );
 
-        /** retrieves the device which a PageView belongs to, starting from its ObjectContactOfPageView
-
-            Since #i72752#, the PaintWindow (and thus the OutputDevice) associated with a PageView is not
-            constant over its lifetime. Instead, during some paint operations, the PaintWindow/OutputDevice
-            might be temporarily patched.
-
-            This method cares for this, by retrieving the very original OutputDevice.
-        */
-        static const OutputDevice& impl_getPageViewOutputDevice_nothrow( const ObjectContactOfPageView& _rObjectContact );
-
         const OutputDevice& impl_getOutputDevice_throw() const;
 
     private:
@@ -1051,7 +1041,7 @@ namespace sdr { namespace contact {
         if ( pPageViewContact )
         {
             SdrPageViewAccess aPVAccess( pPageViewContact->GetPageWindow().GetPageView() );
-            const OutputDevice& rDevice( impl_getPageViewOutputDevice_nothrow( *pPageViewContact ) );
+            const OutputDevice& rDevice( m_pAntiImpl->getPageViewOutputDevice().get() );
             return impl_ensureControl_nothrow(
                 aPVAccess,
                 rDevice,
@@ -1071,32 +1061,17 @@ namespace sdr { namespace contact {
 
     const OutputDevice& ViewObjectContactOfUnoControl_Impl::impl_getOutputDevice_throw() const
     {
-        ObjectContactOfPageView* pPageViewContact = dynamic_cast< ObjectContactOfPageView* >( &m_pAntiImpl->GetObjectContact() );
-        if ( pPageViewContact )
-        {
-            // do not use ObjectContact::TryToGetOutputDevice here, it would not care for the PageWindow's
-            // OriginalPaintWindow
-            return impl_getPageViewOutputDevice_nothrow( *pPageViewContact );
-        }
+        // do not use ObjectContact::TryToGetOutputDevice, it would not care for the PageWindow's
+        // OriginalPaintWindow
+        boost::optional<const OutputDevice&> oPageOutputDev = m_pAntiImpl->getPageViewOutputDevice();
+        if( oPageOutputDev )
+            return oPageOutputDev.get();
 
         const OutputDevice* pDevice = m_pAntiImpl->GetObjectContact().TryToGetOutputDevice();
         ENSURE_OR_THROW( pDevice, "no output device -> no control" );
         return *pDevice;
     }
 
-
-    const OutputDevice& ViewObjectContactOfUnoControl_Impl::impl_getPageViewOutputDevice_nothrow( const ObjectContactOfPageView& _rObjectContact )
-    {
-        // if the PageWindow has a patched PaintWindow, use the original PaintWindow
-        // this ensures that our control is _not_ re-created just because somebody
-        // (temporarily) changed the window to paint onto.
-        // #i72429# / 2007-02-20 / frank.schoenheit@sun.com
-        SdrPageWindow& rPageWindow( _rObjectContact.GetPageWindow() );
-        if ( rPageWindow.GetOriginalPaintWindow() )
-            return rPageWindow.GetOriginalPaintWindow()->GetOutputDevice();
-
-        return rPageWindow.GetPaintWindow().GetOutputDevice();
-    }
 
     namespace
     {

@@ -21,12 +21,12 @@
 #define INCLUDED_SVX_SDR_CONTACT_VIEWOBJECTCONTACTOFSDROBJ_HXX
 
 #include <svx/sdr/contact/viewobjectcontact.hxx>
-
+#include <boost/optional.hpp>
 
 // predeclarations
 class SdrObject;
 class SetOfByte;
-
+class OutputDevice;
 
 
 namespace sdr
@@ -51,6 +51,16 @@ namespace sdr
             virtual ~ViewObjectContactOfSdrObj();
 
             virtual bool isPrimitiveVisible(const DisplayInfo& rDisplayInfo) const;
+
+            /** retrieves the device which a PageView belongs to, starting from its ObjectContactOfPageView
+
+                Since #i72752#, the PaintWindow (and thus the OutputDevice) associated with a PageView is not
+                constant over its lifetime. Instead, during some paint operations, the PaintWindow/OutputDevice
+                might be temporarily patched.
+
+                This method cares for this, by retrieving the very original OutputDevice.
+            */
+            boost::optional<const OutputDevice&> getPageViewOutputDevice() const;
         };
     } // end of namespace contact
 } // end of namespace sdr
