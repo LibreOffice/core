@@ -27,7 +27,6 @@
 #include <com/sun/star/uno/Sequence.h>
 #include <com/sun/star/uno/XComponentContext.hpp>
 
-#include <threadhelp/threadhelpbase.hxx>
 #include <rtl/ustring.hxx>
 #include <cppuhelper/implbase1.hxx>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
@@ -35,7 +34,7 @@
 
 namespace framework{
 
-class FWE_DLLPUBLIC ReadMenuDocumentHandlerBase : public ThreadHelpBase,    // Struct for right initalization of mutex member! Must be first of baseclasses.
+class FWE_DLLPUBLIC ReadMenuDocumentHandlerBase :
                                     public ::cppu::WeakImplHelper1< ::com::sun::star::xml::sax::XDocumentHandler >
 {
     public:
