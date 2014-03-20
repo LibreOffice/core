@@ -43,6 +43,7 @@
 #include <svids.hrc>
 #include <jobset.h>
 #include <outdev.h>
+#include "PhysicalFontCollection.hxx"
 #include <print.h>
 
 #include <comphelper/processfactory.hxx>

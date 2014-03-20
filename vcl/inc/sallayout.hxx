@@ -21,27 +21,24 @@
 #define INCLUDED_VCL_INC_SALLAYOUT_HXX
 
 #include <iostream>
+#include <list>
+#include <vector>
 
-#include <tools/gen.hxx>
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 #include <i18nlangtag/languagetag.hxx>
+#include <tools/gen.hxx>
+#include <vcl/dllapi.h>
+#include <vcl/vclenum.hxx> // for typedef sal_UCS4
 
 #ifndef _TOOLS_LANG_HXX
 typedef unsigned short LanguageType;
 #endif
 
-#include <vector>
-#include <list>
-#include <vcl/dllapi.h>
-
-// for typedef sal_UCS4
-#include <vcl/vclenum.hxx>
+#include "magic.h"
 #include "salglyphid.hxx"
 
 class SalGraphics;
 class PhysicalFontFace;
-
-#define MAX_FALLBACK 16
 
 // Layout options
 #define SAL_LAYOUT_BIDI_RTL                 0x0001

@@ -41,6 +41,7 @@
 #include "osl/thread.hxx"
 
 #include "langboost.hxx"
+#include "PhysicalFontCollection.hxx"
 #include "sft.hxx"
 
 #include <ft2build.h>
