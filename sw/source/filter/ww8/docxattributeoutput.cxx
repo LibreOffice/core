@@ -2489,10 +2489,15 @@ void DocxAttributeOutput::switchHeaderFooter(bool isHeaderFooter, sal_Int32 inde
     }
     else if( index == -1)
     {
-        *m_tableReference = *m_oldTableReference;
-        //Reset the oldReference, after copying it back to the original.
-        m_oldTableReference->m_bTableCellOpen = false ;
-        m_oldTableReference->m_nTableDepth = 0;
+       if (m_oldTableReference->m_pOldTablepInner)
+       {
+           *m_tableReference = *m_oldTableReference;
+
+            //Reset the oldReference, after copying it back to the original.
+            m_oldTableReference->m_bTableCellOpen = false ;
+            m_oldTableReference->m_nTableDepth = 0;
+       }
+
     }
     else
     {
