@@ -26,6 +26,7 @@ core_factory_list = [
     ("libconfigmgrlo.a", "configmgr_component_getFactory"),
     ("libdrawinglayerlo.a", "drawinglayer_component_getFactory"),
     ("libfilterconfiglo.a", "filterconfig1_component_getFactory"),
+    ("libfrmlo.a", "frm_component_getFactory"),
     ("libfsstoragelo.a", "fsstorage_component_getFactory"),
     ("libhyphenlo.a", "hyphen_component_getFactory"),
     ("libi18npoollo.a", "i18npool_component_getFactory"),
@@ -103,6 +104,8 @@ core_constructor_list = [
 # stoc/source/inspect/introspection.component
     "com_sun_star_comp_stoc_Introspection_get_implementation",
 # toolkit/util/tk.component
+    "stardiv_Toolkit_UnoControlContainer_get_implementation",
+    "stardiv_Toolkit_UnoControlContainerModel_get_implementation",
     "stardiv_Toolkit_VCLXToolkit_get_implementation",
 # uui/util/uui.component
     "com_sun_star_comp_uui_UUIInteractionHandler_get_implementation",
