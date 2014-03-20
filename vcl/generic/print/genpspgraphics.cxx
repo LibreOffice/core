@@ -266,9 +266,6 @@ SalPrinterBmp::GetPixelIdx (sal_uInt32 nRow, sal_uInt32 nColumn) const
 GenPspGraphics::GenPspGraphics()
     : m_pJobData( NULL ),
       m_pPrinterGfx( NULL ),
-      m_pPhoneNr( NULL ),
-      m_bSwallowFaxNo( false ),
-      m_bPhoneCollectionActive( false ),
       m_bFontVertical( false ),
       m_pInfoPrinter( NULL )
 {
@@ -276,14 +273,11 @@ GenPspGraphics::GenPspGraphics()
         m_pServerFont[i] = NULL;
 }
 
-void GenPspGraphics::Init( psp::JobData* pJob, psp::PrinterGfx* pGfx,
-                           OUString* pPhone, bool bSwallow,
-                           SalInfoPrinter* pInfoPrinter )
+void GenPspGraphics::Init(psp::JobData* pJob, psp::PrinterGfx* pGfx,
+                           SalInfoPrinter* pInfoPrinter)
 {
     m_pJobData = pJob;
     m_pPrinterGfx = pGfx;
-    m_pPhoneNr = pPhone;
-    m_bSwallowFaxNo = bSwallow;
     m_pInfoPrinter = pInfoPrinter;
     SetLayout( 0 );
 }
@@ -1200,78 +1194,9 @@ void GenPspGraphics::AnnounceFonts( ImplDevFontList* pFontList, const psp::FastP
     pFontList->Add( pFD );
 }
 
-bool GenPspGraphics::filterText( const OUString& rOrig, OUString& rNewText, sal_Int32 nIndex, sal_Int32& rLen, sal_Int32& rCutStart, sal_Int32& rCutStop )
+bool GenPspGraphics::filterText( const OUString& /*rOrig*/, OUString& /*rNewText*/, sal_Int32 /*nIndex*/, sal_Int32& /*rLen*/, sal_Int32& /*rCutStart*/, sal_Int32& /*rCutStop*/ )
 {
-    if( ! m_pPhoneNr )
-        return false;
-
-    rNewText = rOrig;
-    rCutStop = rCutStart = -1;
-
-#define FAX_PHONE_TOKEN          "@@#"
-#define FAX_PHONE_TOKEN_LENGTH   3
-#define FAX_END_TOKEN            "@@"
-#define FAX_END_TOKEN_LENGTH     2
-
-    bool bRet = false;
-    bool bStarted = false;
-    sal_Int32 nPos;
-    sal_Int32 nStart = 0;
-    sal_Int32 nStop = rLen;
-    OUString aPhone = rOrig.copy( nIndex, rLen );
-
-    if( ! m_bPhoneCollectionActive )
-    {
-        if( ( nPos = aPhone.indexOfAsciiL( FAX_PHONE_TOKEN, FAX_PHONE_TOKEN_LENGTH ) ) != -1 )
-        {
-            nStart = nPos;
-            m_bPhoneCollectionActive = true;
-            m_aPhoneCollection = "";
-            bRet = true;
-            bStarted = true;
-        }
-    }
-    if( m_bPhoneCollectionActive )
-    {
-        bool bStopped = false;
-        bRet = true;
-        nPos = bStarted ? nStart + FAX_PHONE_TOKEN_LENGTH : 0;
-        if( ( nPos = aPhone.indexOfAsciiL( FAX_END_TOKEN, FAX_END_TOKEN_LENGTH, nPos ) ) != -1 )
-        {
-            m_bPhoneCollectionActive = false;
-            nStop = nPos + FAX_END_TOKEN_LENGTH;
-            bStopped = true;
-        }
-        int nTokenStart = nStart + (bStarted ? FAX_PHONE_TOKEN_LENGTH : 0);
-        int nTokenStop = nStop - (bStopped ? FAX_END_TOKEN_LENGTH : 0);
-        m_aPhoneCollection += aPhone.copy( nTokenStart, nTokenStop - nTokenStart );
-        if( ! m_bPhoneCollectionActive )
-        {
-            OUStringBuffer aPhoneNr;
-            aPhoneNr.append( "<Fax#>" );
-            aPhoneNr.append( m_aPhoneCollection );
-            aPhoneNr.append( "</Fax#>" );
-            *m_pPhoneNr = aPhoneNr.makeStringAndClear();
-            m_aPhoneCollection = "";
-        }
-    }
-    if( m_aPhoneCollection.getLength() > 1024 )
-    {
-        m_bPhoneCollectionActive = false;
-        m_aPhoneCollection = "";
-        bRet = false;
-    }
-
-    if( bRet && m_bSwallowFaxNo )
-    {
-        rLen -= nStop - nStart;
-        rCutStart = nStart+nIndex;
-        rCutStop = nStop+nIndex;
-        if (rCutStart != rCutStop)
-            rNewText = ( rCutStart ? rOrig.copy( 0, rCutStart ) : OUString() ) + rOrig.copy( rCutStop );
-    }
-
-    return bRet && m_bSwallowFaxNo;
+    return false;
 }
 
 bool GenPspGraphics::drawAlphaBitmap( const SalTwoRect&,

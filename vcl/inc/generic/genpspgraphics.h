@@ -39,10 +39,6 @@ class VCL_DLLPUBLIC GenPspGraphics : public SalGraphics
  protected:
     psp::JobData*               m_pJobData;
     psp::PrinterGfx*            m_pPrinterGfx;
-    OUString*                     m_pPhoneNr;
-    bool                        m_bSwallowFaxNo;
-    OUString                      m_aPhoneCollection;
-    bool                        m_bPhoneCollectionActive;
 
     ServerFont*                 m_pServerFont[ MAX_FALLBACK ];
     bool                        m_bFontVertical;
@@ -52,7 +48,6 @@ public:
     virtual ~GenPspGraphics();
 
     void  Init( psp::JobData* pJob, psp::PrinterGfx* pGfx,
-                OUString* pPhone, bool bSwallow,
                 SalInfoPrinter* pInfoPrinter );
 
     // helper methods

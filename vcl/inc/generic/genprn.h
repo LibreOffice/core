@@ -59,10 +59,7 @@ class VCL_DLLPUBLIC PspSalPrinter : public SalPrinter
 public:
     OUString                  m_aFileName;
     OUString                  m_aTmpFile;
-    OUString                  m_aFaxNr;
-    bool                    m_bFax:1;
     bool                    m_bPdf:1;
-    bool                    m_bSwallowFaxNo:1;
     bool                    m_bIsPDFWriterJob:1;
     GenPspGraphics*         m_pGraphics;
     psp::PrinterJob         m_aPrintJob;

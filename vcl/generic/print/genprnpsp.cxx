@@ -304,69 +304,29 @@ static bool passFileToCommandLine( const OUString& rFilename, const OUString& rC
 }
 #endif
 
-static bool sendAFax( const OUString& rFaxNumber, const OUString& rFileName, const OUString& rCommand )
+static std::vector<OUString> getFaxNumbers()
 {
+    std::vector<OUString> aFaxNumbers;
+
 #if defined( UNX )
-    std::list< OUString > aFaxNumbers;
-
-    if( rFaxNumber.isEmpty() )
+    getPaLib();
+    if (pFaxNrFunction)
     {
-        getPaLib();
-        if( pFaxNrFunction )
+        OUString aNewNr;
+        if( pFaxNrFunction( aNewNr ) )
         {
-            OUString aNewNr;
-            if( pFaxNrFunction( aNewNr ) )
-                aFaxNumbers.push_back( aNewNr );
-        }
-    }
-    else
-    {
-        sal_Int32 nIndex = 0;
-        OUString aFaxes( rFaxNumber );
-        OUString aBeginToken( "<Fax#>" );
-        OUString aEndToken( "</Fax#>" );
-        while( nIndex != -1 )
-        {
-            nIndex = aFaxes.indexOf( aBeginToken, nIndex );
-            if( nIndex != -1 )
+            sal_Int32 nIndex = 0;
+            do
             {
-                sal_Int32 nBegin = nIndex + aBeginToken.getLength();
-                nIndex = aFaxes.indexOf( aEndToken, nIndex );
-                if( nIndex != -1 )
-                {
-                    aFaxNumbers.push_back( aFaxes.copy( nBegin, nIndex-nBegin ) );
-                    nIndex += aEndToken.getLength();
-                }
+                OUString sToken = aNewNr.getToken( 0, ';', nIndex );
+                aFaxNumbers.push_back(sToken);
             }
+            while (nIndex >= 0);
         }
     }
-
-    bool bSuccess = true;
-    if( aFaxNumbers.begin() != aFaxNumbers.end() )
-    {
-        while( aFaxNumbers.begin() != aFaxNumbers.end() && bSuccess )
-        {
-            OUString aFaxNumber( aFaxNumbers.front() );
-            aFaxNumbers.pop_front();
-            OUString aCmdLine(
-                rCommand.replaceAll("(PHONE)", aFaxNumber));
-#if OSL_DEBUG_LEVEL > 1
-            fprintf( stderr, "sending fax to \"%s\"\n", OUStringToOString( aFaxNumber, osl_getThreadTextEncoding() ).getStr() );
 #endif
-            bSuccess = passFileToCommandLine( rFileName, aCmdLine, false );
-        }
-    }
-    else
-        bSuccess = false;
 
-    // clean up temp file
-    unlink(OUStringToOString(rFileName, osl_getThreadTextEncoding()).getStr());
-
-    return bSuccess;
-#else
-    (void)rFaxNumber; (void)rFileName; (void)rCommand;
-    return false;
-#endif
+    return aFaxNumbers;
 }
 
 static bool createPdf( const OUString& rToFile, const OUString& rFromFile, const OUString& rCommandLine )
@@ -544,7 +504,7 @@ SalGraphics* PspSalInfoPrinter::AcquireGraphics()
     if( ! m_pGraphics )
     {
         m_pGraphics = GetGenericInstance()->CreatePrintGraphics();
-        m_pGraphics->Init( &m_aJobData, &m_aPrinterGfx, NULL, false, this );
+        m_pGraphics->Init(&m_aJobData, &m_aPrinterGfx, this);
         pRet = m_pGraphics;
     }
     return pRet;
@@ -824,7 +784,19 @@ sal_uLong PspSalInfoPrinter::GetCapabilities( const ImplJobSetup* pJobSetup, sal
         case PRINTER_CAPABILITIES_SETPAPER:
             return 0;
         case PRINTER_CAPABILITIES_FAX:
-            return PrinterInfoManager::get().checkFeatureToken( pJobSetup->maPrinterName, "fax" ) ? 1 : 0;
+            {
+                // see if the PPD contains the fax4CUPS "Dial" option and that it's not set
+                // to "manually"
+                JobData aData = PrinterInfoManager::get().getPrinterInfo(pJobSetup->maPrinterName);
+                if( pJobSetup->mpDriverData )
+                    JobData::constructFromStreamBuffer( pJobSetup->mpDriverData, pJobSetup->mnDriverDataLen, aData );
+                const PPDKey* pKey = aData.m_pParser ? aData.m_pParser->getKey(OUString("Dial")) : NULL;
+                const PPDValue* pValue = pKey ? aData.m_aContext.getValue(pKey) : NULL;
+                if (pValue && !pValue->m_aOption.equalsIgnoreAsciiCase("Manually"))
+                    return 1;
+                return 0;
+            }
+
         case PRINTER_CAPABILITIES_PDF:
             if( PrinterInfoManager::get().checkFeatureToken( pJobSetup->maPrinterName, "pdf" ) )
                 return 1;
@@ -855,9 +827,7 @@ sal_uLong PspSalInfoPrinter::GetCapabilities( const ImplJobSetup* pJobSetup, sal
  *  SalPrinter
  */
 PspSalPrinter::PspSalPrinter( SalInfoPrinter* pInfoPrinter )
- : m_bFax( false ),
-   m_bPdf( false ),
-   m_bSwallowFaxNo( false ),
+ : m_bPdf( false ),
    m_bIsPDFWriterJob( false ),
    m_pGraphics( NULL ),
    m_nCopies( 1 ),
@@ -890,8 +860,6 @@ bool PspSalPrinter::StartJob(
 {
     OSL_TRACE("PspSalPrinter::StartJob");
     GetSalData()->m_pInstance->jobStartedPrinterUpdate();
-
-    m_bFax      = false;
     m_bPdf      = false;
     m_aFileName = pFileName ? *pFileName : OUString();
     m_aTmpFile  = OUString();
@@ -915,17 +883,6 @@ bool PspSalPrinter::StartJob(
     while( nIndex != -1 )
     {
         OUString aToken( rInfo.m_aFeatures.getToken( 0, ',', nIndex ) );
-        if( aToken.startsWith( "fax" ) )
-        {
-            m_bFax = true;
-            m_aTmpFile = getTmpName();
-            nMode = S_IRUSR | S_IWUSR;
-
-            sal_Int32 nPos = 0;
-            m_bSwallowFaxNo = aToken.getToken( 1, '=', nPos ).startsWith( "swallow" ) ? true : false;
-
-            break;
-        }
         if( aToken.startsWith( "pdf=" ) )
         {
             m_bPdf = true;
@@ -957,22 +914,12 @@ bool PspSalPrinter::EndJob()
     else
     {
         bSuccess = m_aPrintJob.EndJob();
-       OSL_TRACE("PspSalPrinter::EndJob %d", bSuccess);
+        OSL_TRACE("PspSalPrinter::EndJob %d", bSuccess);
 
-        if( bSuccess )
+        if( bSuccess && m_bPdf )
         {
-            // check for fax
-            if( m_bFax )
-            {
-                const PrinterInfo& rInfo( PrinterInfoManager::get().getPrinterInfo( m_aJobData.m_aPrinterName ) );
-                // sendAFax removes the file after use
-                bSuccess = sendAFax( m_aFaxNr, m_aTmpFile, rInfo.m_aCommand );
-            }
-            else if( m_bPdf )
-            {
-                const PrinterInfo& rInfo( PrinterInfoManager::get().getPrinterInfo( m_aJobData.m_aPrinterName ) );
-                bSuccess = createPdf( m_aFileName, m_aTmpFile, rInfo.m_aCommand );
-            }
+            const PrinterInfo& rInfo( PrinterInfoManager::get().getPrinterInfo( m_aJobData.m_aPrinterName ) );
+            bSuccess = createPdf( m_aFileName, m_aTmpFile, rInfo.m_aCommand );
         }
     }
     GetSalData()->m_pInstance->jobEndedPrinterUpdate();
@@ -992,8 +939,8 @@ SalGraphics* PspSalPrinter::StartPage( ImplJobSetup* pJobSetup, bool )
 
     JobData::constructFromStreamBuffer( pJobSetup->mpDriverData, pJobSetup->mnDriverDataLen, m_aJobData );
     m_pGraphics = GetGenericInstance()->CreatePrintGraphics();
-    m_pGraphics->Init( &m_aJobData, &m_aPrinterGfx, m_bFax ? &m_aFaxNr : NULL,
-                       m_bSwallowFaxNo, m_pInfoPrinter );
+    m_pGraphics->Init(&m_aJobData, &m_aPrinterGfx, m_pInfoPrinter);
+
     if( m_nCopies > 1 )
     {
         // in case user did not do anything (m_nCopies=1)
@@ -1063,6 +1010,8 @@ bool PspSalPrinter::StartJob( const OUString* i_pFileName, const OUString& i_rJo
     m_bIsPDFWriterJob = true;
     // reset IsLastPage
     i_rController.setLastPage( false );
+    // is this a fax device
+    bool bFax = m_pInfoPrinter->GetCapabilities(i_pSetupData, PRINTER_CAPABILITIES_FAX) == 1;
 
     // update job data
     if( i_pSetupData )
@@ -1214,58 +1163,77 @@ bool PspSalPrinter::StartJob( const OUString* i_pFileName, const OUString& i_rJo
         }
     }
 
-    bool bSuccess(true);
+    std::vector<OUString> aFaxNumbers;
 
+    // check for fax numbers
+    if (!bAborted && bFax)
+    {
+        aFaxNumbers = getFaxNumbers();
+        bAborted = aFaxNumbers.empty();
+    }
+
+    bool bSuccess(true);
     // spool files
     if( ! i_pFileName && ! bAborted )
     {
-        bool bFirstJob = true;
-        for( int nCurJob = 0; nCurJob < nOuterJobs; nCurJob++ )
+        do
         {
-            for( size_t i = 0; i < aPDFFiles.size(); i++ )
+            OUString sFaxNumber;
+            if (!aFaxNumbers.empty())
             {
-                oslFileHandle pFile = NULL;
-                osl_openFile( aPDFFiles[i].maTmpURL.pData, &pFile, osl_File_OpenFlag_Read );
-                if (pFile && (osl_setFilePos(pFile, osl_Pos_Absolut, 0) == osl_File_E_None))
-                {
-                    std::vector< char > buffer( 0x10000, 0 );
-                    // update job data with current page size
-                    Size aPageSize( aPDFFiles[i].maParameters.maPageSize );
-                    m_aJobData.setPaper( TenMuToPt( aPageSize.Width() ), TenMuToPt( aPageSize.Height() ) );
-                    // update job data with current paperbin
-                    m_aJobData.setPaperBin( aPDFFiles[i].maParameters.mnPaperBin );
+                sFaxNumber = aFaxNumbers.back();
+                aFaxNumbers.pop_back();
+            }
 
-                    // spool current file
-                    FILE* fp = PrinterInfoManager::get().startSpool( pPrinter->GetName(), i_rController.isDirectPrint() );
-                    if( fp )
+            bool bFirstJob = true;
+            for( int nCurJob = 0; nCurJob < nOuterJobs; nCurJob++ )
+            {
+                for( size_t i = 0; i < aPDFFiles.size(); i++ )
+                {
+                    oslFileHandle pFile = NULL;
+                    osl_openFile( aPDFFiles[i].maTmpURL.pData, &pFile, osl_File_OpenFlag_Read );
+                    if (pFile && (osl_setFilePos(pFile, osl_Pos_Absolut, 0) == osl_File_E_None))
                     {
-                        sal_uInt64 nBytesRead = 0;
-                        do
+                        std::vector< char > buffer( 0x10000, 0 );
+                        // update job data with current page size
+                        Size aPageSize( aPDFFiles[i].maParameters.maPageSize );
+                        m_aJobData.setPaper( TenMuToPt( aPageSize.Width() ), TenMuToPt( aPageSize.Height() ) );
+                        // update job data with current paperbin
+                        m_aJobData.setPaperBin( aPDFFiles[i].maParameters.mnPaperBin );
+
+                        // spool current file
+                        FILE* fp = PrinterInfoManager::get().startSpool( pPrinter->GetName(), i_rController.isDirectPrint() );
+                        if( fp )
                         {
-                            osl_readFile( pFile, &buffer[0], buffer.size(), &nBytesRead );
-                            if( nBytesRead > 0 )
+                            sal_uInt64 nBytesRead = 0;
+                            do
                             {
-                                size_t nBytesWritten = fwrite(&buffer[0], 1, nBytesRead, fp);
-                                OSL_ENSURE(nBytesRead == nBytesWritten, "short write");
-                                if (nBytesRead != nBytesWritten)
-                                    break;
+                                osl_readFile( pFile, &buffer[0], buffer.size(), &nBytesRead );
+                                if( nBytesRead > 0 )
+                                {
+                                    size_t nBytesWritten = fwrite(&buffer[0], 1, nBytesRead, fp);
+                                    OSL_ENSURE(nBytesRead == nBytesWritten, "short write");
+                                    if (nBytesRead != nBytesWritten)
+                                        break;
+                                }
+                            } while( nBytesRead == buffer.size() );
+                            OUStringBuffer aBuf( i_rJobName.getLength() + 8 );
+                            aBuf.append( i_rJobName );
+                            if( i > 0 || nCurJob > 0 )
+                            {
+                                aBuf.append( ' ' );
+                                aBuf.append( sal_Int32( i + nCurJob * aPDFFiles.size() ) );
                             }
-                        } while( nBytesRead == buffer.size() );
-                        OUStringBuffer aBuf( i_rJobName.getLength() + 8 );
-                        aBuf.append( i_rJobName );
-                        if( i > 0 || nCurJob > 0 )
-                        {
-                            aBuf.append( ' ' );
-                            aBuf.append( sal_Int32( i + nCurJob * aPDFFiles.size() ) );
+                            bSuccess &=
+                            PrinterInfoManager::get().endSpool( pPrinter->GetName(), aBuf.makeStringAndClear(), fp, m_aJobData, bFirstJob, sFaxNumber );
+                            bFirstJob = false;
                         }
-                        bSuccess &=
-                        PrinterInfoManager::get().endSpool( pPrinter->GetName(), aBuf.makeStringAndClear(), fp, m_aJobData, bFirstJob );
-                        bFirstJob = false;
                     }
+                    osl_closeFile( pFile );
                 }
-                osl_closeFile( pFile );
             }
         }
+        while (!aFaxNumbers.empty());
     }
 
     // job has been spooled

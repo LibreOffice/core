@@ -77,7 +77,7 @@ public:
     const char* authenticateUser( const char* );
 
     virtual FILE* startSpool( const OUString& rPrinterName, bool bQuickCommand );
-    virtual bool endSpool( const OUString& rPrinterName, const OUString& rJobTitle, FILE* pFile, const JobData& rDocumentJobData, bool bBanner );
+    virtual bool endSpool( const OUString& rPrinterName, const OUString& rJobTitle, FILE* pFile, const JobData& rDocumentJobData, bool bBanner, const OUString& rFaxNumber );
     virtual void setupJobContextData( JobData& rData );
 
     /// changes the info about a named printer

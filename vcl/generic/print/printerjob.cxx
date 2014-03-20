@@ -410,7 +410,7 @@ PrinterJob::StartJob (
 }
 
 bool
-PrinterJob::EndJob ()
+PrinterJob::EndJob()
 {
     // no pages ? that really means no print job
     if( maPageList.empty() )
@@ -531,7 +531,7 @@ PrinterJob::EndJob ()
     {
         PrinterInfoManager& rPrinterInfoManager = PrinterInfoManager::get();
         if (!rPrinterInfoManager.endSpool( m_aLastJobData.m_aPrinterName,
-            maJobTitle, pDestFILE, m_aDocumentJobData, true ))
+            maJobTitle, pDestFILE, m_aDocumentJobData, true, OUString()))
         {
             bSuccess = false;
         }

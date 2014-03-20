@@ -541,7 +541,7 @@ void CUPSManager::setupJobContextData( JobData& rData )
 
 FILE* CUPSManager::startSpool( const OUString& rPrintername, bool bQuickCommand )
 {
-    OSL_TRACE( "endSpool: %s, %s",
+    OSL_TRACE( "startSpool: %s, %s",
                OUStringToOString( rPrintername, RTL_TEXTENCODING_UTF8 ).getStr(),
               bQuickCommand ? "true" : "false" );
 
@@ -612,7 +612,7 @@ void CUPSManager::getOptionsFromDocumentSetup( const JobData& rJob, bool bBanner
     }
 }
 
-bool CUPSManager::endSpool( const OUString& rPrintername, const OUString& rJobTitle, FILE* pFile, const JobData& rDocumentJobData, bool bBanner )
+bool CUPSManager::endSpool( const OUString& rPrintername, const OUString& rJobTitle, FILE* pFile, const JobData& rDocumentJobData, bool bBanner, const OUString& rFaxNumber )
 {
     OSL_TRACE( "endSpool: %s, %s, copy count = %d",
                OUStringToOString( rPrintername, RTL_TEXTENCODING_UTF8 ).getStr(),
@@ -629,7 +629,7 @@ bool CUPSManager::endSpool( const OUString& rPrintername, const OUString& rJobTi
     if( dest_it == m_aCUPSDestMap.end() )
     {
         OSL_TRACE( "defer to PrinterInfoManager::endSpool" );
-        return PrinterInfoManager::endSpool( rPrintername, rJobTitle, pFile, rDocumentJobData, bBanner );
+        return PrinterInfoManager::endSpool( rPrintername, rJobTitle, pFile, rDocumentJobData, bBanner, rFaxNumber );
     }
 
     boost::unordered_map< FILE*, OString, FPtrHash >::const_iterator it = m_aSpoolFiles.find( pFile );
@@ -643,11 +643,20 @@ bool CUPSManager::endSpool( const OUString& rPrintername, const OUString& rJobTi
         cups_option_t* pOptions = NULL;
         getOptionsFromDocumentSetup( rDocumentJobData, bBanner, nNumOptions, (void**)&pOptions );
 
+        OString sJobName(OUStringToOString(rJobTitle, aEnc));
+
+        //fax4CUPS, "the job name will be dialled for you"
+        //so override the jobname with the desired number
+        if (!rFaxNumber.isEmpty())
+        {
+            sJobName = OUStringToOString(rFaxNumber, aEnc);
+        }
+
         cups_dest_t* pDest = ((cups_dest_t*)m_pDests) + dest_it->second;
-        nJobID = cupsPrintFile( pDest->name,
-        it->second.getStr(),
-        OUStringToOString( rJobTitle, aEnc ).getStr(),
-        nNumOptions, pOptions );
+        nJobID = cupsPrintFile(pDest->name,
+            it->second.getStr(),
+            sJobName.getStr(),
+            nNumOptions, pOptions);
         SAL_INFO("vcl.unx.print", "cupsPrintFile( " << pDest->name << ", "
                 << it->second << ", " << rJobTitle << ", " << nNumOptions
                 << ", " << pOptions << " ) returns " << nJobID);
