@@ -17,64 +17,55 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "sal/config.h"
+#include <sal/types.h>
 
 #include <math.h>
 #include <algorithm>
+#include <lcms2.h>
 
-#include <tools/urlobj.hxx>
-
-#include <pdfwriter_impl.hxx>
-
-#include <basegfx/polygon/b2dpolygon.hxx>
-#include <basegfx/polygon/b2dpolypolygon.hxx>
-#include <basegfx/polygon/b2dpolygontools.hxx>
-#include <basegfx/polygon/b2dpolypolygontools.hxx>
-#include <basegfx/polygon/b2dpolypolygoncutter.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
-
-#include <osl/thread.h>
+#include <basegfx/polygon/b2dpolygon.hxx>
+#include <basegfx/polygon/b2dpolygontools.hxx>
+#include <basegfx/polygon/b2dpolypolygon.hxx>
+#include <basegfx/polygon/b2dpolypolygoncutter.hxx>
+#include <basegfx/polygon/b2dpolypolygontools.hxx>
+#include <boost/scoped_array.hpp>
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#include <com/sun/star/util/URL.hpp>
+#include <com/sun/star/util/URLTransformer.hpp>
+#include <comphelper/processfactory.hxx>
+#include <comphelper/string.hxx>
+#include <cppuhelper/implbase1.hxx>
+#include <i18nlangtag/languagetag.hxx>
 #include <osl/file.h>
-
+#include <osl/thread.h>
 #include <rtl/crc.h>
 #include <rtl/digest.h>
 #include <rtl/ustrbuf.hxx>
-
 #include <tools/debug.hxx>
-#include <tools/zcodec.hxx>
 #include <tools/stream.hxx>
-
-#include <i18nlangtag/languagetag.hxx>
-
-#include <vcl/virdev.hxx>
-#include <vcl/bmpacc.hxx>
+#include <tools/urlobj.hxx>
+#include <tools/zcodec.hxx>
 #include <vcl/bitmapex.hxx>
+#include <vcl/bmpacc.hxx>
+#include <vcl/cvtgrf.hxx>
 #include <vcl/image.hxx>
-#include <vcl/metric.hxx>
-#include <vcl/svapp.hxx>
 #include <vcl/lineinfo.hxx>
-#include "vcl/cvtgrf.hxx"
-#include "vcl/strhelper.hxx"
-#include "vcl/settings.hxx"
+#include <vcl/metric.hxx>
+#include <vcl/settings.hxx>
+#include <vcl/strhelper.hxx>
+#include <vcl/svapp.hxx>
+#include <vcl/virdev.hxx>
 
-#include <fontsubset.hxx>
-#include <outdev.h>
-#include <sallayout.hxx>
-#include <textlayout.hxx>
-#include <salgdi.hxx>
+#include "fontsubset.hxx"
+#include "outdev.h"
+#include "PhysicalFontFace.hxx"
+#include "salgdi.hxx"
+#include "sallayout.hxx"
+#include "textlayout.hxx"
 
-#include <lcms2.h>
+#include "pdfwriter_impl.hxx"
 
-#include <comphelper/processfactory.hxx>
-#include <comphelper/string.hxx>
-
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#include <com/sun/star/util/URLTransformer.hpp>
-#include <com/sun/star/util/URL.hpp>
-
-#include "cppuhelper/implbase1.hxx"
-
-#include <boost/scoped_array.hpp>
 
 #if !defined(ANDROID) && !defined(IOS)
 // NSS header files for PDF signing support

@@ -46,6 +46,7 @@ class PspSalInfoPrinter;
 class ServerFont;
 class ImplLayoutArgs;
 class ServerFontLayout;
+class PhysicalFontFace;
 
 namespace basegfx {
     class B2DTrapezoid;
