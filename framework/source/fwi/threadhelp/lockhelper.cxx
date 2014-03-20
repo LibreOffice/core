@@ -123,46 +123,6 @@ void LockHelper::release()
 }
 
 /*-************************************************************************************************************
-    @short      return a reference to a static lock helper
-    @descr      Sometimes we need the global mutex or rw-lock! (e.g. in our own static methods)
-                But it's not a good idea to use these global one very often ...
-                Thats why we use this little helper method.
-                We create our own "class global static" lock.
-                It will be created at first call only!
-                All other requests use these created one then directly.
-
-    @seealso    -
-
-    @param      -
-    @return     A reference to a static mutex/lock member.
-
-    @onerror    No error should occur.
-*//*-*************************************************************************************************************/
-LockHelper& LockHelper::getGlobalLock()
-{
-    // Initialize static "member" only for one time!
-    // Algorithm:
-    // a) Start with an invalid lock (NULL pointer)
-    // b) If these method first called (lock not already exist!) ...
-    // c) ... we must create a new one. Protect follow code with the global mutex -
-    //    (It must be - we create a static variable!)
-    // d) Check pointer again - because ... another instance of our class could be faster then these one!
-    // e) Create the new lock and set it for return on static variable.
-    // f) Return new created or already existing lock object.
-    static LockHelper* pLock = NULL;
-    if( pLock == NULL )
-    {
-        ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
-        if( pLock == NULL )
-        {
-            static LockHelper aLock;
-            pLock = &aLock;
-        }
-    }
-    return *pLock;
-}
-
-/*-************************************************************************************************************
     @short      return a reference to shared mutex member
     @descr      Sometimes we need a osl-mutex for sharing with our uno helper ...
                 What can we do?

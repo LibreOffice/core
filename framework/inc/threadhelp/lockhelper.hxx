@@ -21,13 +21,17 @@
 #define INCLUDED_FRAMEWORK_INC_THREADHELP_LOCKHELPER_HXX
 
 #include <boost/noncopyable.hpp>
+#include <osl/mutex.hxx>
+#include <rtl/instance.hxx>
 
 #include <comphelper/solarmutex.hxx>
 #include <fwidllapi.h>
 
-namespace osl { class Mutex; }
-
 namespace framework{
+
+//TODO: This presumable should return the SolarMutex, though it actually returns
+// some independent mutex:
+struct GlobalLock: public rtl::Static<osl::Mutex, GlobalLock> {};
 
 /*-************************************************************************************************************
     @short          helper to set right lock in right situation
@@ -62,10 +66,6 @@ class FWI_DLLPUBLIC LockHelper : private boost::noncopyable
         void release();
 
         //  something else
-
-        static LockHelper&  getGlobalLock();
-            //TODO: this presumable should return the SolarMutex, though it
-            // actually returns some independent mutex
 
         ::osl::Mutex&       getShareableOslMutex(                                   );
 

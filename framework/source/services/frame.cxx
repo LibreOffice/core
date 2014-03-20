@@ -32,7 +32,7 @@
 #include <dispatch/dispatchinformationprovider.hxx>
 #include <classes/framecontainer.hxx>
 #include <classes/propertysethelper.hxx>
-#include <threadhelp/guard.hxx>
+#include <threadhelp/lockhelper.hxx>
 #include <threadhelp/transactionguard.hxx>
 #include <threadhelp/transactionbase.hxx>
 #include <general.h>
@@ -2700,10 +2700,10 @@ void SAL_CALL Frame::windowShown( const css::lang::EventObject& ) throw(css::uno
     if (xDesktopCheck.is())
     {
         /* STATIC SAFE { */
-        Guard aStaticWriteLock( LockHelper::getGlobalLock() );
+        osl::ClearableMutexGuard aStaticWriteLock( GlobalLock::get() );
         sal_Bool bMustBeTriggered  = bFirstVisibleTask;
                  bFirstVisibleTask = sal_False;
-        aStaticWriteLock.unlock();
+        aStaticWriteLock.clear();
         /* } STATIC SAFE */
 
         if (bMustBeTriggered)
@@ -3443,8 +3443,7 @@ void Frame::impl_checkMenuCloser()
     // Look for necessary actions ...
     // Only if the closer state must be moved from one frame to another one
     // or must be enabled/disabled at all.
-    /* STATIC SAFE { */
-    Guard aStaticWriteLock(LockHelper::getGlobalLock());
+    osl::MutexGuard g(GlobalLock::get());
     css::uno::Reference< css::frame::XFrame2 > xCloserFrame (m_xCloserFrame.get(), css::uno::UNO_QUERY);
     if (xCloserFrame!=xNewCloserFrame)
     {
@@ -3454,8 +3453,6 @@ void Frame::impl_checkMenuCloser()
             impl_setCloser(xNewCloserFrame, sal_True);
         m_xCloserFrame = xNewCloserFrame;
     }
-    aStaticWriteLock.unlock();
-    /* } STATIC SAFE */
 }
 
 

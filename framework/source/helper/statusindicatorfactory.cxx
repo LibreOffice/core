@@ -21,7 +21,7 @@
 #include <helper/statusindicatorfactory.hxx>
 #include <helper/statusindicator.hxx>
 #include <helper/vclstatusindicator.hxx>
-#include <threadhelp/guard.hxx>
+#include <threadhelp/lockhelper.hxx>
 #include <services.h>
 #include <properties.h>
 
@@ -531,12 +531,12 @@ void StatusIndicatorFactory::impl_reschedule(sal_Bool bForce)
         return;
 
     // SAFE ->
-    Guard aGlobalLock(LockHelper::getGlobalLock());
+    osl::ResettableMutexGuard aGlobalLock(GlobalLock::get());
 
     if (m_nInReschedule == 0)
     {
         ++m_nInReschedule;
-        aGlobalLock.unlock();
+        aGlobalLock.clear();
         // <- SAFE
 
         {
@@ -545,7 +545,7 @@ void StatusIndicatorFactory::impl_reschedule(sal_Bool bForce)
         }
 
         // SAFE ->
-        aGlobalLock.lock();
+        aGlobalLock.reset();
         --m_nInReschedule;
     }
 }

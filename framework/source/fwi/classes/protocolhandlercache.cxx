@@ -25,7 +25,6 @@
 
 #include <classes/protocolhandlercache.hxx>
 #include <classes/converter.hxx>
-#include <threadhelp/guard.hxx>
 #include <threadhelp/lockhelper.hxx>
 
 #include <tools/wldcrd.hxx>
@@ -81,20 +80,18 @@ HandlerCFGAccess* HandlerCache::m_pConfig = NULL;
  */
 HandlerCache::HandlerCache()
 {
-    /* SAFE */{
-        Guard aGlobalLock( LockHelper::getGlobalLock() );
+    osl::MutexGuard g(GlobalLock::get());
 
-        if (m_nRefCount==0)
-        {
-            m_pHandler = new HandlerHash();
-            m_pPattern = new PatternHash();
-            m_pConfig  = new HandlerCFGAccess(PACKAGENAME_PROTOCOLHANDLER);
-            m_pConfig->read(&m_pHandler,&m_pPattern);
-            m_pConfig->setCache(this);
-        }
+    if (m_nRefCount==0)
+    {
+        m_pHandler = new HandlerHash();
+        m_pPattern = new PatternHash();
+        m_pConfig  = new HandlerCFGAccess(PACKAGENAME_PROTOCOLHANDLER);
+        m_pConfig->read(&m_pHandler,&m_pPattern);
+        m_pConfig->setCache(this);
+    }
 
-        ++m_nRefCount;
-    /* SAFE */}
+    ++m_nRefCount;
 }
 
 /**
@@ -104,25 +101,23 @@ HandlerCache::HandlerCache()
  */
 HandlerCache::~HandlerCache()
 {
-    /* SAFE */{
-        Guard aGlobalLock( LockHelper::getGlobalLock() );
+    osl::MutexGuard g(GlobalLock::get());
 
-        if( m_nRefCount==1)
-        {
-            m_pConfig->setCache(NULL);
-            m_pHandler->free();
-            m_pPattern->free();
+    if( m_nRefCount==1)
+    {
+        m_pConfig->setCache(NULL);
+        m_pHandler->free();
+        m_pPattern->free();
 
-            delete m_pConfig;
-            delete m_pHandler;
-            delete m_pPattern;
-            m_pConfig = NULL;
-            m_pHandler= NULL;
-            m_pPattern= NULL;
-        }
+        delete m_pConfig;
+        delete m_pHandler;
+        delete m_pPattern;
+        m_pConfig = NULL;
+        m_pHandler= NULL;
+        m_pPattern= NULL;
+    }
 
-        --m_nRefCount;
-    /* SAFE */}
+    --m_nRefCount;
 }
 
 /**
@@ -134,7 +129,7 @@ sal_Bool HandlerCache::search( const OUString& sURL, ProtocolHandler* pReturn ) 
 {
     sal_Bool bFound = sal_False;
     /* SAFE */{
-        Guard aReadLock( LockHelper::getGlobalLock() );
+        osl::MutexGuard g(GlobalLock::get());
         PatternHash::const_iterator pItem = m_pPattern->findPatternKey(sURL);
         if (pItem!=m_pPattern->end())
         {
@@ -158,8 +153,7 @@ sal_Bool HandlerCache::search( const css::util::URL& aURL, ProtocolHandler* pRet
 
 void HandlerCache::takeOver(HandlerHash* pHandler, PatternHash* pPattern)
 {
-    // SAFE ->
-    Guard aWriteLock( LockHelper::getGlobalLock() );
+    osl::MutexGuard g(GlobalLock::get());
 
     HandlerHash* pOldHandler = m_pHandler;
     PatternHash* pOldPattern = m_pPattern;
@@ -171,9 +165,6 @@ void HandlerCache::takeOver(HandlerHash* pHandler, PatternHash* pPattern)
     pOldPattern->free();
     delete pOldHandler;
     delete pOldPattern;
-
-    aWriteLock.unlock();
-    // <- SAFE
 }
 
 /**
