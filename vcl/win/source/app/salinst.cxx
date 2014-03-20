@@ -30,7 +30,6 @@
 #include <vcl/timer.hxx>
 #include <vcl/apptypes.hxx>
 
-#include <vcl/solarmutex.hxx>
 #include <win/wincomp.hxx>
 #include <win/salids.hrc>
 #include <win/saldata.hxx>
@@ -110,8 +109,10 @@ LRESULT CALLBACK SalComWndProcW( HWND hWnd, UINT nMsg, WPARAM wParam, LPARAM lPa
 
 
 
-class SalYieldMutex : public vcl::SolarMutexObject
+class SalYieldMutex : public comphelper::SolarMutex
 {
+    osl::Mutex m_mutex;
+
 public: // for ImplSalYield()
     WinSalInstance*             mpInstData;
     sal_uLong                       mnCount;
@@ -140,7 +141,7 @@ SalYieldMutex::SalYieldMutex( WinSalInstance* pInstData )
 
 void SalYieldMutex::acquire()
 {
-    SolarMutexObject::acquire();
+    m_mutex.acquire();
     mnCount++;
     mnThreadId = GetCurrentThreadId();
 }
@@ -151,7 +152,7 @@ void SalYieldMutex::release()
 {
     DWORD nThreadId = GetCurrentThreadId();
     if ( mnThreadId != nThreadId )
-        SolarMutexObject::release();
+        m_mutex.release();
     else
     {
         SalData* pSalData = GetSalData();
@@ -168,13 +169,13 @@ void SalYieldMutex::release()
                     ImplPostMessage( mpInstData->mhComWnd, SAL_MSG_RELEASEWAITYIELD, 0, 0 );
                 mnThreadId = 0;
                 mnCount--;
-                SolarMutexObject::release();
+                m_mutex.release();
                 mpInstData->mpSalWaitMutex->release();
             }
             else
             {
                 mnCount--;
-                SolarMutexObject::release();
+                m_mutex.release();
             }
         }
         else
@@ -182,7 +183,7 @@ void SalYieldMutex::release()
             if ( mnCount == 1 )
                 mnThreadId = 0;
             mnCount--;
-            SolarMutexObject::release();
+            m_mutex.release();
         }
     }
 }
@@ -191,7 +192,7 @@ void SalYieldMutex::release()
 
 bool SalYieldMutex::tryToAcquire()
 {
-    if( SolarMutexObject::tryToAcquire() )
+    if( m_mutex.tryToAcquire() )
     {
         mnCount++;
         mnThreadId = GetCurrentThreadId();

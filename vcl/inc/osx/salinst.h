@@ -23,7 +23,6 @@
 #include "comphelper/solarmutex.hxx"
 #include "osl/thread.hxx"
 #include "osl/conditn.h"
-#include <vcl/solarmutex.hxx>
 
 #ifdef MACOSX
 #include "osx/osxvcltypes.h"
@@ -37,8 +36,9 @@ class AquaSalFrame;
 class ApplicationEvent;
 class Image;
 
-class SalYieldMutex : public vcl::SolarMutexObject
+class SalYieldMutex : public comphelper::SolarMutex
 {
+    osl::Mutex m_mutex;
     sal_uLong                                       mnCount;
     oslThreadIdentifier                         mnThreadId;
 

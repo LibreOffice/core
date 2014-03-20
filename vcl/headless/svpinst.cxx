@@ -42,7 +42,6 @@
 #include <svdata.hxx>
 #include <generic/gendata.hxx>
 #include <basebmp/scanlineformats.hxx>
-#include <vcl/solarmutex.hxx>
 // FIXME: remove when we re-work the svp mainloop
 #include <unx/salunxtime.h>
 

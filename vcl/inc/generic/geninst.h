@@ -20,10 +20,10 @@
 #ifndef INCLUDED_VCL_INC_GENERIC_GENINST_H
 #define INCLUDED_VCL_INC_GENERIC_GENINST_H
 
+#include <comphelper/solarmutex.hxx>
 #include <tools/solar.h>
 #include <osl/thread.hxx>
 #include <vclpluginapi.h>
-#include <vcl/solarmutex.hxx>
 #include <salinst.hxx>
 #include <saldatabasic.hxx>
 #include <generic/genprn.h>
@@ -46,8 +46,10 @@ inline SalYieldMutexReleaser::~SalYieldMutexReleaser()
     GetSalData()->m_pInstance->AcquireYieldMutex( m_nYieldCount );
 }
 
-class VCL_DLLPUBLIC SalYieldMutex : public vcl::SolarMutexObject
+class VCL_DLLPUBLIC SalYieldMutex : public comphelper::SolarMutex
 {
+    osl::Mutex m_mutex;
+
 protected:
     sal_uIntPtr         mnCount;
     oslThreadIdentifier mnThreadId;
@@ -60,7 +62,7 @@ public:
     virtual void        release();
     virtual bool        tryToAcquire();
 
-    virtual sal_uIntPtr GetAcquireCount() const { return mnCount; }
+    sal_uIntPtr GetAcquireCount() const { return mnCount; }
     oslThreadIdentifier GetThreadId() const { return mnThreadId; }
 };
 

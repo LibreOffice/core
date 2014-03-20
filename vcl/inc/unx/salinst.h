@@ -23,7 +23,6 @@
 #include <osl/thread.hxx>
 #include <vclpluginapi.h>
 #include <salinst.hxx>
-#include <vcl/solarmutex.hxx>
 #include "generic/geninst.h"
 
 #include <prex.h>

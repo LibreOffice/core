@@ -20,8 +20,6 @@
 #ifndef INCLUDED_VCL_INC_HEADLESS_SVPINST_HXX
 #define INCLUDED_VCL_INC_HEADLESS_SVPINST_HXX
 
-#include <vcl/solarmutex.hxx>
-
 #include <osl/mutex.hxx>
 #include <osl/thread.hxx>
 #include <salinst.hxx>

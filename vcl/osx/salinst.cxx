@@ -30,7 +30,6 @@
 #include "vcl/svapp.hxx"
 #include "vcl/window.hxx"
 #include "vcl/timer.hxx"
-#include "vcl/solarmutex.hxx"
 
 #include "osx/saldata.hxx"
 #include "osx/salinst.h"
@@ -278,7 +277,7 @@ SalYieldMutex::SalYieldMutex()
 
 void SalYieldMutex::acquire()
 {
-    SolarMutexObject::acquire();
+    m_mutex.acquire();
     mnThreadId = osl::Thread::getCurrentIdentifier();
     mnCount++;
 }
@@ -291,12 +290,12 @@ void SalYieldMutex::release()
             mnThreadId = 0;
         mnCount--;
     }
-    SolarMutexObject::release();
+    m_mutex.release();
 }
 
 bool SalYieldMutex::tryToAcquire()
 {
-    if ( SolarMutexObject::tryToAcquire() )
+    if ( m_mutex.tryToAcquire() )
     {
         mnThreadId = osl::Thread::getCurrentIdentifier();
         mnCount++;
