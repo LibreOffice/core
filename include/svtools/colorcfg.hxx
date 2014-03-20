@@ -84,10 +84,10 @@ class ColorConfig_Impl;
 struct ColorConfigValue
 {
 
-    sal_Bool    bIsVisible; //validity depends on the element type
+    bool        bIsVisible; //validity depends on the element type
     sal_Int32   nColor;
-    ColorConfigValue() : bIsVisible(sal_False), nColor(0) {}
-    sal_Bool operator !=(const ColorConfigValue& rCmp) const
+    ColorConfigValue() : bIsVisible(false), nColor(0) {}
+    bool operator !=(const ColorConfigValue& rCmp) const
         { return nColor != rCmp.nColor || bIsVisible != rCmp.bIsVisible;}
 };
 
@@ -103,7 +103,7 @@ public:
 
     // get the configured value - if bSmart is set the default color setting is provided
     // instead of the automatic color
-    ColorConfigValue        GetColorValue(ColorConfigEntry eEntry, sal_Bool bSmart = sal_True)const;
+    ColorConfigValue        GetColorValue(ColorConfigEntry eEntry, bool bSmart = true) const;
     static Color            GetDefaultColor(ColorConfigEntry eEntry);
     void Reload();
 };
@@ -111,23 +111,23 @@ public:
 class SVT_DLLPUBLIC EditableColorConfig
 {
     ColorConfig_Impl*   m_pImpl;
-    sal_Bool            m_bModified;
+    bool                m_bModified;
 public:
     EditableColorConfig();
     ~EditableColorConfig();
 
-    ::com::sun::star::uno::Sequence< OUString >  GetSchemeNames() const;
-    void                                                DeleteScheme(const OUString& rScheme );
-    void                                                AddScheme(const OUString& rScheme );
-    sal_Bool                                            LoadScheme(const OUString& rScheme );
-    const OUString&                              GetCurrentSchemeName()const;
+    ::css::uno::Sequence< OUString >  GetSchemeNames() const;
+    void                        DeleteScheme(const OUString& rScheme );
+    void                        AddScheme(const OUString& rScheme );
+    bool                        LoadScheme(const OUString& rScheme );
+    const OUString&             GetCurrentSchemeName() const;
     void                        SetCurrentSchemeName(const OUString& rScheme);
 
-    const ColorConfigValue&     GetColorValue(ColorConfigEntry eEntry)const;
+    const ColorConfigValue&     GetColorValue(ColorConfigEntry eEntry) const;
     void                        SetColorValue(ColorConfigEntry eEntry, const ColorConfigValue& rValue);
     void                        SetModified();
-    void                        ClearModified(){m_bModified = sal_False;}
-    sal_Bool                    IsModified()const{return m_bModified;}
+    void                        ClearModified() {m_bModified = false;}
+    bool                        IsModified() const {return m_bModified;}
     void                        Commit();
 
     void                        DisableBroadcast();

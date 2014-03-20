@@ -143,7 +143,7 @@ namespace frm
     {
         m_pClipListener = new TransferableClipboardListener( LINK( this, OPasteClipboardDispatcher, OnClipboardChanged ) );
         m_pClipListener->acquire();
-        m_pClipListener->AddRemoveListener( _rView.GetWindow(), sal_True );
+        m_pClipListener->AddRemoveListener( _rView.GetWindow(), true );
 
         // initial state
         TransferableDataHelper aDataHelper( TransferableDataHelper::CreateFromSystemClipboard( _rView.GetWindow() ) );
@@ -179,7 +179,7 @@ namespace frm
         if (m_pClipListener)
         {
             if (getEditView() && getEditView()->GetWindow())
-                m_pClipListener->AddRemoveListener( getEditView()->GetWindow(), sal_False );
+                m_pClipListener->AddRemoveListener( getEditView()->GetWindow(), false );
 
             m_pClipListener->release();
             m_pClipListener = NULL;

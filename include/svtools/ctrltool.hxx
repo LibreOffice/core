@@ -53,7 +53,7 @@ class FontNameMenu, class FontSizeMenu
 --------------------------------------------------------------------------
 
 FontList::FontList( OutputDevice* pDevice, OutputDevice* pDevice2 = NULL,
-                    sal_Bool bAll = sal_True );
+                    bool bAll = true );
 
 Konstruktor der Klasse FontList. Vom uebergebenen OutputDevice werden die
 entsprechenden Fonts abgefragt. Das OutputDevice muss solange existieren,
@@ -163,13 +163,13 @@ private:
 
     SVT_DLLPRIVATE ImplFontListNameInfo*    ImplFind( const OUString& rSearchName, sal_uLong* pIndex ) const;
     SVT_DLLPRIVATE ImplFontListNameInfo*    ImplFindByName( const OUString& rStr ) const;
-    SVT_DLLPRIVATE void                 ImplInsertFonts( OutputDevice* pDev, sal_Bool bAll,
-                                             sal_Bool bInsertData );
+    SVT_DLLPRIVATE void                 ImplInsertFonts( OutputDevice* pDev, bool bAll,
+                                             bool bInsertData );
 
 public:
                             FontList( OutputDevice* pDevice,
                                       OutputDevice* pDevice2 = NULL,
-                                      sal_Bool bAll = sal_True );
+                                      bool bAll = true );
                             ~FontList();
 
     FontList*               Clone() const;
@@ -191,7 +191,7 @@ public:
                                  FontWeight eWeight,
                                  FontItalic eItalic ) const;
 
-    sal_Bool                IsAvailable( const OUString& rName ) const;
+    bool                    IsAvailable( const OUString& rName ) const;
     sal_uInt16              GetFontNameCount() const
     {
         return (sal_uInt16)maEntries.size();
@@ -223,8 +223,8 @@ private:
 public:
                             FontSizeNames( LanguageType eLanguage /* = LANGUAGE_DONTKNOW */ );
 
-    sal_uLong                   Count() const { return mnElem; }
-    sal_Bool                    IsEmpty() const { return !mnElem; }
+    sal_uLong               Count() const { return mnElem; }
+    bool                    IsEmpty() const { return !mnElem; }
 
     long                    Name2Size( const OUString& ) const;
     OUString                Size2Name( long ) const;

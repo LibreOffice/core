@@ -189,7 +189,7 @@ DrawViewShell::~DrawViewShell()
 
     if ( mpClipEvtLstnr )
     {
-        mpClipEvtLstnr->AddRemoveListener( GetActiveWindow(), sal_False );
+        mpClipEvtLstnr->AddRemoveListener( GetActiveWindow(), false );
         mpClipEvtLstnr->ClearCallbackLink();        // prevent callback if another thread is waiting
         mpClipEvtLstnr->release();
     }

@@ -165,7 +165,7 @@ void DrawDocShell::UpdateFontList()
         pRefDevice = GetPrinter(sal_True);
     else
         pRefDevice = SD_MOD()->GetVirtualRefDevice();
-    mpFontList = new FontList( pRefDevice, NULL, sal_False );
+    mpFontList = new FontList( pRefDevice, NULL, false );
     SvxFontListItem aFontListItem( mpFontList, SID_ATTR_CHAR_FONTLIST );
     PutItem( aFontListItem );
 }

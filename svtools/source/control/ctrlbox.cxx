@@ -74,10 +74,10 @@ class ImplColorListData
 {
 public:
     Color       aColor;
-    sal_Bool        bColor;
+    bool        bColor;
 
-                ImplColorListData() : aColor( COL_BLACK ) { bColor = sal_False; }
-                ImplColorListData( const Color& rColor ) : aColor( rColor ) { bColor = sal_True; }
+                ImplColorListData() : aColor( COL_BLACK ) { bColor = false; }
+                ImplColorListData( const Color& rColor ) : aColor( rColor ) { bColor = true; }
 };
 
 
@@ -828,7 +828,7 @@ sal_Int32 LineListBox::GetStylePos( sal_Int32 nListPos, long nWidth )
 }
 
 
-void LineListBox::SelectEntry( sal_uInt16 nStyle, sal_Bool bSelect )
+void LineListBox::SelectEntry( sal_uInt16 nStyle, bool bSelect )
 {
     sal_Int32 nPos = GetEntryPos( nStyle );
     if ( nPos != LISTBOX_ENTRY_NOTFOUND )
@@ -921,12 +921,12 @@ sal_uInt16 LineListBox::GetEntryStyle( sal_Int32 nPos ) const
 
 
 
-sal_Bool LineListBox::UpdatePaintLineColor( void )
+bool LineListBox::UpdatePaintLineColor( void )
 {
     const StyleSettings&    rSettings = GetSettings().GetStyleSettings();
     Color                   aNewCol( rSettings.GetWindowColor().IsDark()? rSettings.GetLabelTextColor() : aColor );
 
-    sal_Bool bRet = aNewCol != maPaintCol;
+    bool bRet = aNewCol != maPaintCol;
 
     if( bRet )
         maPaintCol = aNewCol;
@@ -1036,7 +1036,7 @@ FontNameBox::FontNameBox( Window* pParent, WinBits nWinStyle ) :
     ComboBox( pParent, nWinStyle )
 {
     mpFontList = NULL;
-    mbWYSIWYG = sal_False;
+    mbWYSIWYG = false;
     InitFontMRUEntriesFile();
 }
 
@@ -1176,7 +1176,7 @@ void FontNameBox::Fill( const FontList* pList )
 
 
 
-void FontNameBox::EnableWYSIWYG( sal_Bool bEnable )
+void FontNameBox::EnableWYSIWYG( bool bEnable )
 {
     if ( bEnable != mbWYSIWYG )
     {
@@ -1530,11 +1530,11 @@ void FontStyleBox::Fill( const OUString& rName, const FontList* pList )
         FontWeight  eLastWeight = WEIGHT_DONTKNOW;
         FontItalic  eLastItalic = ITALIC_NONE;
         FontWidth   eLastWidth = WIDTH_DONTKNOW;
-        sal_Bool        bNormal = sal_False;
-        sal_Bool        bItalic = sal_False;
-        sal_Bool        bBold = sal_False;
-        sal_Bool        bBoldItalic = sal_False;
-        sal_Bool        bInsert = sal_False;
+        bool        bNormal = false;
+        bool        bItalic = false;
+        bool        bBold = false;
+        bool        bBoldItalic = false;
+        bool        bInsert = false;
         FontInfo    aInfo;
         while ( hFontInfo )
         {
@@ -1554,16 +1554,16 @@ void FontStyleBox::Fill( const OUString& rName, const FontList* pList )
                 if ( eWeight <= WEIGHT_NORMAL )
                 {
                     if ( eItalic != ITALIC_NONE )
-                        bItalic = sal_True;
+                        bItalic = true;
                     else
-                        bNormal = sal_True;
+                        bNormal = true;
                 }
                 else
                 {
                     if ( eItalic != ITALIC_NONE )
-                        bBoldItalic = sal_True;
+                        bBoldItalic = true;
                     else
-                        bBold = sal_True;
+                        bBold = true;
                 }
 
                 // For wrong StyleNames we replace this with the correct once
@@ -1597,11 +1597,11 @@ void FontStyleBox::Fill( const OUString& rName, const FontList* pList )
             }
 
             if ( !bItalic && (aStyleText == pList->GetItalicStr()) )
-                bItalic = sal_True;
+                bItalic = true;
             else if ( !bBold && (aStyleText == pList->GetBoldStr()) )
-                bBold = sal_True;
+                bBold = true;
             else if ( !bBoldItalic && (aStyleText == pList->GetBoldItalicStr()) )
-                bBoldItalic = sal_True;
+                bBoldItalic = true;
 
             hFontInfo = pList->GetNextFontInfo( hFontInfo );
         }
@@ -1686,10 +1686,10 @@ void FontSizeBox::ImplInit()
 {
     EnableAutocomplete( false );
 
-    bRelativeMode   = sal_False;
-    bPtRelative     = sal_False;
-    bRelative       = sal_False;
-    bStdSize        = sal_False;
+    bRelativeMode   = false;
+    bPtRelative     = false;
+    bRelative       = false;
+    bStdSize        = false;
     pFontList       = NULL;
 
     SetShowTrailingZeros( false );
@@ -1727,24 +1727,24 @@ void FontSizeBox::Modify()
     {
         OUString aStr = comphelper::string::stripStart(GetText(), ' ');
 
-        sal_Bool bNewMode = bRelative;
-        sal_Bool bOldPtRelMode = bPtRelative;
+        bool bNewMode = bRelative;
+        bool bOldPtRelMode = bPtRelative;
 
         if ( bRelative )
         {
-            bPtRelative = sal_False;
+            bPtRelative = false;
             const sal_Unicode* pStr = aStr.getStr();
             while ( *pStr )
             {
                 if ( ((*pStr < '0') || (*pStr > '9')) && (*pStr != '%') )
                 {
                     if ( ('-' == *pStr || '+' == *pStr) && !bPtRelative )
-                        bPtRelative = sal_True;
+                        bPtRelative = true;
                     else if ( bPtRelative && 'p' == *pStr && 't' == *++pStr )
                         ;
                     else
                     {
-                        bNewMode = sal_False;
+                        bNewMode = false;
                         break;
                     }
                 }
@@ -1755,14 +1755,14 @@ void FontSizeBox::Modify()
         {
             if ( -1 != aStr.indexOf('%') )
             {
-                bNewMode = sal_True;
-                bPtRelative = sal_False;
+                bNewMode = true;
+                bPtRelative = false;
             }
 
             if ( '-' == aStr[0] || '+' == aStr[0] )
             {
-                bNewMode = sal_True;
-                bPtRelative = sal_True;
+                bNewMode = true;
+                bPtRelative = true;
             }
         }
 
@@ -1803,10 +1803,10 @@ void FontSizeBox::Fill( const FontInfo* pInfo, const FontList* pList )
         // for standard sizes we don't need to bother
         if ( bStdSize && GetEntryCount() && aFontSizeNames.IsEmpty() )
             return;
-        bStdSize = sal_True;
+        bStdSize = true;
     }
     else
-        bStdSize = sal_False;
+        bStdSize = false;
 
     Selection aSelection = GetSelection();
     OUString aStr = GetText();
@@ -1865,7 +1865,7 @@ void FontSizeBox::Fill( const FontInfo* pInfo, const FontList* pList )
 
 void FontSizeBox::EnableRelativeMode( sal_uInt16 nMin, sal_uInt16 nMax, sal_uInt16 nStep )
 {
-    bRelativeMode = sal_True;
+    bRelativeMode = true;
     nRelMin       = nMin;
     nRelMax       = nMax;
     nRelStep      = nStep;
@@ -1876,7 +1876,7 @@ void FontSizeBox::EnableRelativeMode( sal_uInt16 nMin, sal_uInt16 nMax, sal_uInt
 
 void FontSizeBox::EnablePtRelativeMode( short nMin, short nMax, short nStep )
 {
-    bRelativeMode = sal_True;
+    bRelativeMode = true;
     nPtRelMin     = nMin;
     nPtRelMax     = nMax;
     nPtRelStep    = nStep;
@@ -1885,7 +1885,7 @@ void FontSizeBox::EnablePtRelativeMode( short nMin, short nMax, short nStep )
 
 
 
-void FontSizeBox::SetRelative( sal_Bool bNewRelative )
+void FontSizeBox::SetRelative( bool bNewRelative )
 {
     if ( bRelativeMode )
     {
@@ -1894,8 +1894,8 @@ void FontSizeBox::SetRelative( sal_Bool bNewRelative )
 
         if ( bNewRelative )
         {
-            bRelative = sal_True;
-            bStdSize = sal_False;
+            bRelative = true;
+            bStdSize = false;
 
             if ( bPtRelative )
             {
@@ -1932,7 +1932,7 @@ void FontSizeBox::SetRelative( sal_Bool bNewRelative )
         }
         else
         {
-            bRelative = bPtRelative = sal_False;
+            bRelative = bPtRelative = false;
             SetDecimalDigits( 1 );
             SetMin( 20 );
             SetMax( 9999 );

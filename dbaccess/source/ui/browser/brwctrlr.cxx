@@ -788,7 +788,7 @@ sal_Bool SbaXDataBrowserController::Construct(Window* pParent)
 
     m_pClipbordNotifier = new TransferableClipboardListener( LINK( this, SbaXDataBrowserController, OnClipboardChanged ) );
     m_pClipbordNotifier->acquire();
-    m_pClipbordNotifier->AddRemoveListener( getView(), sal_True );
+    m_pClipbordNotifier->AddRemoveListener( getView(), true );
 
     // this call create the toolbox
     SbaXDataBrowserController_Base::Construct(pParent);
@@ -1224,7 +1224,7 @@ void SbaXDataBrowserController::disposing()
     if ( getView() && m_pClipbordNotifier  )
     {
         m_pClipbordNotifier->ClearCallbackLink();
-        m_pClipbordNotifier->AddRemoveListener( getView(), sal_False );
+        m_pClipbordNotifier->AddRemoveListener( getView(), false );
         m_pClipbordNotifier->release();
         m_pClipbordNotifier = NULL;
     }

@@ -308,7 +308,7 @@ FontPropertyBox::FontPropertyBox( sal_Int32 nControlType, Window* pParent, const
 
     if(!pFontList)
     {
-        pFontList = new FontList( Application::GetDefaultDevice(), NULL, sal_False );
+        pFontList = new FontList( Application::GetDefaultDevice(), NULL, false );
         bMustDelete = true;
     }
 

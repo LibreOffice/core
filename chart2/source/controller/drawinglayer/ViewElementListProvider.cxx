@@ -202,7 +202,7 @@ FontList* ViewElementListProvider::getFontList() const
         OutputDevice* pDefaultOut = Application::GetDefaultDevice();
         m_pFontList = new FontList( pRefDev ? pRefDev    : pDefaultOut
                                 , pRefDev ? pDefaultOut : NULL
-                                , sal_False );
+                                , false );
     }
     return m_pFontList;
 }

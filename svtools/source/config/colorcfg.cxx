@@ -63,15 +63,15 @@ ColorConfig_Impl*    ColorConfig::m_pImpl = NULL;
 
 class ColorConfig_Impl : public utl::ConfigItem
 {
-    ColorConfigValue    m_aConfigValues[ColorConfigEntryCount];
-    sal_Bool            m_bEditMode;
-    OUString       m_sIsVisible;
-    OUString       m_sLoadedScheme;
-    bool m_bAutoDetectSystemHC;
+    ColorConfigValue m_aConfigValues[ColorConfigEntryCount];
+    bool             m_bEditMode;
+    OUString         m_sIsVisible;
+    OUString         m_sLoadedScheme;
+    bool             m_bAutoDetectSystemHC;
 
     uno::Sequence< OUString> GetPropertyNames(const OUString& rScheme);
 public:
-    ColorConfig_Impl(sal_Bool bEditMode = sal_False);
+    ColorConfig_Impl(bool bEditMode = false);
     virtual ~ColorConfig_Impl();
 
     void                            Load(const OUString& rScheme);
@@ -90,8 +90,8 @@ public:
 
     uno::Sequence< OUString> GetSchemeNames();
 
-    sal_Bool                        AddScheme(const OUString& rNode);
-    sal_Bool                        RemoveScheme(const OUString& rNode);
+    bool                            AddScheme(const OUString& rNode);
+    bool                            RemoveScheme(const OUString& rNode);
     void                            SetModified(){ConfigItem::SetModified();}
     void                            ClearModified(){ConfigItem::ClearModified();}
     void                            SettingsChanged();
@@ -112,56 +112,56 @@ uno::Sequence< OUString> ColorConfig_Impl::GetPropertyNames(const OUString& rSch
         const sal_Char* cName;
         sal_Int32       nLength;
         rtl_TextEncoding eEncoding;
-        sal_Bool bCanBeVisible;
+        bool            bCanBeVisible;
     };
     static const ColorConfigEntryData_Impl cNames[] =
     {
-        { RTL_CONSTASCII_USTRINGPARAM("/DocColor")        ,sal_False },
-        { RTL_CONSTASCII_USTRINGPARAM("/DocBoundaries")   ,sal_True },
-        { RTL_CONSTASCII_USTRINGPARAM("/AppBackground")   ,sal_False },
-        { RTL_CONSTASCII_USTRINGPARAM("/ObjectBoundaries"),sal_True },
-        { RTL_CONSTASCII_USTRINGPARAM("/TableBoundaries") ,sal_True },
-        { RTL_CONSTASCII_USTRINGPARAM("/FontColor")     ,sal_False },
-        { RTL_CONSTASCII_USTRINGPARAM("/Links")           ,sal_True },
-        { RTL_CONSTASCII_USTRINGPARAM("/LinksVisited")    ,sal_True },
-        { RTL_CONSTASCII_USTRINGPARAM("/Spell")     ,sal_False },
-        { RTL_CONSTASCII_USTRINGPARAM("/SmartTags")     ,sal_False },
-        { RTL_CONSTASCII_USTRINGPARAM("/Shadow")        , sal_True },
-        { RTL_CONSTASCII_USTRINGPARAM("/WriterTextGrid")  ,sal_False },
-        { RTL_CONSTASCII_USTRINGPARAM("/WriterFieldShadings"),sal_True },
-        { RTL_CONSTASCII_USTRINGPARAM("/WriterIdxShadings")     ,sal_True },
-        { RTL_CONSTASCII_USTRINGPARAM("/WriterDirectCursor")    ,sal_True },
-        { RTL_CONSTASCII_USTRINGPARAM("/WriterScriptIndicator")    ,sal_False },
-        { RTL_CONSTASCII_USTRINGPARAM("/WriterSectionBoundaries")    ,sal_True },
-        { RTL_CONSTASCII_USTRINGPARAM("/WriterHeaderFooterMark")    ,sal_False },
-        { RTL_CONSTASCII_USTRINGPARAM("/WriterPageBreaks")    ,sal_False },
-        { RTL_CONSTASCII_USTRINGPARAM("/HTMLSGML")        ,sal_False },
-        { RTL_CONSTASCII_USTRINGPARAM("/HTMLComment")     ,sal_False },
-        { RTL_CONSTASCII_USTRINGPARAM("/HTMLKeyword")     ,sal_False },
-        { RTL_CONSTASCII_USTRINGPARAM("/HTMLUnknown")     ,sal_False },
-        { RTL_CONSTASCII_USTRINGPARAM("/CalcGrid")        ,sal_False },
-        { RTL_CONSTASCII_USTRINGPARAM("/CalcPageBreak"), sal_False },
-        { RTL_CONSTASCII_USTRINGPARAM("/CalcPageBreakManual"), sal_False },
-        { RTL_CONSTASCII_USTRINGPARAM("/CalcPageBreakAutomatic"), sal_False },
-        { RTL_CONSTASCII_USTRINGPARAM("/CalcDetective")   ,sal_False },
-        { RTL_CONSTASCII_USTRINGPARAM("/CalcDetectiveError")   ,sal_False },
-        { RTL_CONSTASCII_USTRINGPARAM("/CalcReference")   ,sal_False },
-        { RTL_CONSTASCII_USTRINGPARAM("/CalcNotesBackground") ,sal_False },
-        { RTL_CONSTASCII_USTRINGPARAM("/DrawGrid")        ,sal_True },
-        { RTL_CONSTASCII_USTRINGPARAM("/BASICIdentifier"),  sal_False },
-        { RTL_CONSTASCII_USTRINGPARAM("/BASICComment")   ,  sal_False },
-        { RTL_CONSTASCII_USTRINGPARAM("/BASICNumber")    ,  sal_False },
-        { RTL_CONSTASCII_USTRINGPARAM("/BASICString")    ,  sal_False },
-        { RTL_CONSTASCII_USTRINGPARAM("/BASICOperator")  ,  sal_False },
-        { RTL_CONSTASCII_USTRINGPARAM("/BASICKeyword")   ,  sal_False },
-        { RTL_CONSTASCII_USTRINGPARAM("/BASICError"),  sal_False },
-        { RTL_CONSTASCII_USTRINGPARAM("/SQLIdentifier"),  sal_False },
-        { RTL_CONSTASCII_USTRINGPARAM("/SQLNumber"),  sal_False },
-        { RTL_CONSTASCII_USTRINGPARAM("/SQLString"),  sal_False },
-        { RTL_CONSTASCII_USTRINGPARAM("/SQLOperator"),  sal_False },
-        { RTL_CONSTASCII_USTRINGPARAM("/SQLKeyword"),  sal_False },
-        { RTL_CONSTASCII_USTRINGPARAM("/SQLParameter"),  sal_False },
-        { RTL_CONSTASCII_USTRINGPARAM("/SQLComment"),  sal_False }
+        { RTL_CONSTASCII_USTRINGPARAM("/DocColor")        ,false },
+        { RTL_CONSTASCII_USTRINGPARAM("/DocBoundaries")   ,true },
+        { RTL_CONSTASCII_USTRINGPARAM("/AppBackground")   ,false },
+        { RTL_CONSTASCII_USTRINGPARAM("/ObjectBoundaries"),true },
+        { RTL_CONSTASCII_USTRINGPARAM("/TableBoundaries") ,true },
+        { RTL_CONSTASCII_USTRINGPARAM("/FontColor")     ,false },
+        { RTL_CONSTASCII_USTRINGPARAM("/Links")           ,true },
+        { RTL_CONSTASCII_USTRINGPARAM("/LinksVisited")    ,true },
+        { RTL_CONSTASCII_USTRINGPARAM("/Spell")     ,false },
+        { RTL_CONSTASCII_USTRINGPARAM("/SmartTags")     ,false },
+        { RTL_CONSTASCII_USTRINGPARAM("/Shadow")        , true },
+        { RTL_CONSTASCII_USTRINGPARAM("/WriterTextGrid")  ,false },
+        { RTL_CONSTASCII_USTRINGPARAM("/WriterFieldShadings"),true },
+        { RTL_CONSTASCII_USTRINGPARAM("/WriterIdxShadings")     ,true },
+        { RTL_CONSTASCII_USTRINGPARAM("/WriterDirectCursor")    ,true },
+        { RTL_CONSTASCII_USTRINGPARAM("/WriterScriptIndicator")    ,false },
+        { RTL_CONSTASCII_USTRINGPARAM("/WriterSectionBoundaries")    ,true },
+        { RTL_CONSTASCII_USTRINGPARAM("/WriterHeaderFooterMark")    ,false },
+        { RTL_CONSTASCII_USTRINGPARAM("/WriterPageBreaks")    ,false },
+        { RTL_CONSTASCII_USTRINGPARAM("/HTMLSGML")        ,false },
+        { RTL_CONSTASCII_USTRINGPARAM("/HTMLComment")     ,false },
+        { RTL_CONSTASCII_USTRINGPARAM("/HTMLKeyword")     ,false },
+        { RTL_CONSTASCII_USTRINGPARAM("/HTMLUnknown")     ,false },
+        { RTL_CONSTASCII_USTRINGPARAM("/CalcGrid")        ,false },
+        { RTL_CONSTASCII_USTRINGPARAM("/CalcPageBreak"), false },
+        { RTL_CONSTASCII_USTRINGPARAM("/CalcPageBreakManual"), false },
+        { RTL_CONSTASCII_USTRINGPARAM("/CalcPageBreakAutomatic"), false },
+        { RTL_CONSTASCII_USTRINGPARAM("/CalcDetective")   ,false },
+        { RTL_CONSTASCII_USTRINGPARAM("/CalcDetectiveError")   ,false },
+        { RTL_CONSTASCII_USTRINGPARAM("/CalcReference")   ,false },
+        { RTL_CONSTASCII_USTRINGPARAM("/CalcNotesBackground") ,false },
+        { RTL_CONSTASCII_USTRINGPARAM("/DrawGrid")        ,true },
+        { RTL_CONSTASCII_USTRINGPARAM("/BASICIdentifier"),  false },
+        { RTL_CONSTASCII_USTRINGPARAM("/BASICComment")   ,  false },
+        { RTL_CONSTASCII_USTRINGPARAM("/BASICNumber")    ,  false },
+        { RTL_CONSTASCII_USTRINGPARAM("/BASICString")    ,  false },
+        { RTL_CONSTASCII_USTRINGPARAM("/BASICOperator")  ,  false },
+        { RTL_CONSTASCII_USTRINGPARAM("/BASICKeyword")   ,  false },
+        { RTL_CONSTASCII_USTRINGPARAM("/BASICError"),  false },
+        { RTL_CONSTASCII_USTRINGPARAM("/SQLIdentifier"),  false },
+        { RTL_CONSTASCII_USTRINGPARAM("/SQLNumber"),  false },
+        { RTL_CONSTASCII_USTRINGPARAM("/SQLString"),  false },
+        { RTL_CONSTASCII_USTRINGPARAM("/SQLOperator"),  false },
+        { RTL_CONSTASCII_USTRINGPARAM("/SQLKeyword"),  false },
+        { RTL_CONSTASCII_USTRINGPARAM("/SQLParameter"),  false },
+        { RTL_CONSTASCII_USTRINGPARAM("/SQLComment"),  false }
     };
     int nIndex = 0;
     OUString sColor = cColor;
@@ -185,7 +185,7 @@ uno::Sequence< OUString> ColorConfig_Impl::GetPropertyNames(const OUString& rSch
     return aNames;
 }
 
-ColorConfig_Impl::ColorConfig_Impl(sal_Bool bEditMode) :
+ColorConfig_Impl::ColorConfig_Impl(bool bEditMode) :
     ConfigItem("Office.UI/ColorScheme"),
     m_bEditMode(bEditMode),
     m_sIsVisible("/IsVisible"),
@@ -317,18 +317,18 @@ uno::Sequence< OUString> ColorConfig_Impl::GetSchemeNames()
     return GetNodeNames("ColorSchemes");
 }
 
-sal_Bool ColorConfig_Impl::AddScheme(const OUString& rScheme)
+bool ColorConfig_Impl::AddScheme(const OUString& rScheme)
 {
     if(ConfigItem::AddNode("ColorSchemes", rScheme))
     {
         m_sLoadedScheme = rScheme;
         Commit();
-        return sal_True;
+        return true;
     }
-    return sal_False;
+    return false;
 }
 
-sal_Bool ColorConfig_Impl::RemoveScheme(const OUString& rScheme)
+bool ColorConfig_Impl::RemoveScheme(const OUString& rScheme)
 {
     uno::Sequence< OUString > aElements(1);
     aElements.getArray()[0] = rScheme;
@@ -499,7 +499,7 @@ Color ColorConfig::GetDefaultColor(ColorConfigEntry eEntry)
     return aRet;
 }
 
-ColorConfigValue ColorConfig::GetColorValue(ColorConfigEntry eEntry, sal_Bool bSmart)const
+ColorConfigValue ColorConfig::GetColorValue(ColorConfigEntry eEntry, bool bSmart) const
 {
     ColorConfigValue aRet = m_pImpl->GetColorConfigValue(eEntry);
     if(bSmart)
@@ -518,7 +518,7 @@ void ColorConfig::Reload()
 
 EditableColorConfig::EditableColorConfig() :
     m_pImpl(new ColorConfig_Impl),
-    m_bModified(sal_False)
+    m_bModified(false)
 {
     m_pImpl->BlockBroadcasts(true);
 }
@@ -548,17 +548,17 @@ void EditableColorConfig::AddScheme(const OUString& rScheme )
     m_pImpl->AddScheme(rScheme);
 }
 
-sal_Bool EditableColorConfig::LoadScheme(const OUString& rScheme )
+bool EditableColorConfig::LoadScheme(const OUString& rScheme )
 {
     if(m_bModified)
         m_pImpl->SetModified();
     if(m_pImpl->IsModified())
         m_pImpl->Commit();
-    m_bModified = sal_False;
+    m_bModified = false;
     m_pImpl->Load(rScheme);
     //the name of the loaded scheme has to be committed separately
     m_pImpl->CommitCurrentSchemeName();
-    return sal_True;
+    return true;
 }
 
 const OUString& EditableColorConfig::GetCurrentSchemeName()const
@@ -584,12 +584,12 @@ void EditableColorConfig::SetColorValue(
 {
     m_pImpl->SetColorConfigValue(eEntry, rValue);
     m_pImpl->ClearModified();
-    m_bModified = sal_True;
+    m_bModified = true;
 }
 
 void EditableColorConfig::SetModified()
 {
-    m_bModified = sal_True;
+    m_bModified = true;
 }
 
 void EditableColorConfig::Commit()
@@ -598,7 +598,7 @@ void EditableColorConfig::Commit()
         m_pImpl->SetModified();
     if(m_pImpl->IsModified())
         m_pImpl->Commit();
-    m_bModified = sal_False;
+    m_bModified = false;
 }
 
 void EditableColorConfig::DisableBroadcast()

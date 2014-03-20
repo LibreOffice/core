@@ -242,8 +242,8 @@ ImplFontListNameInfo* FontList::ImplFindByName(const OUString& rStr) const
     return ImplFind( aSearchName, NULL );
 }
 
-void FontList::ImplInsertFonts( OutputDevice* pDevice, sal_Bool bAll,
-                                sal_Bool bInsertData )
+void FontList::ImplInsertFonts( OutputDevice* pDevice, bool bAll,
+                                bool bInsertData )
 {
     rtl_TextEncoding eSystemEncoding = osl_getThreadTextEncoding();
 
@@ -289,7 +289,7 @@ void FontList::ImplInsertFonts( OutputDevice* pDevice, sal_Bool bAll,
         {
             if ( bInsertData )
             {
-                sal_Bool                    bInsert = sal_True;
+                bool                    bInsert = true;
                 ImplFontListFontInfo*   pPrev = NULL;
                 ImplFontListFontInfo*   pTemp = pData->mpFirst;
                 ImplFontListFontInfo*   pNewInfo = new ImplFontListFontInfo( aFontInfo, pDevice );
@@ -310,7 +310,7 @@ void FontList::ImplInsertFonts( OutputDevice* pDevice, sal_Bool bAll,
                                 pTemp->mpNext = pTemp2;
                             }
                             delete pNewInfo;
-                            bInsert = sal_False;
+                            bInsert = false;
                         }
 
                         break;
@@ -338,7 +338,7 @@ void FontList::ImplInsertFonts( OutputDevice* pDevice, sal_Bool bAll,
 
 
 
-FontList::FontList( OutputDevice* pDevice, OutputDevice* pDevice2, sal_Bool bAll )
+FontList::FontList( OutputDevice* pDevice, OutputDevice* pDevice2, bool bAll )
 {
     // initialise variables
     mpDev = pDevice;
@@ -355,14 +355,14 @@ FontList::FontList( OutputDevice* pDevice, OutputDevice* pDevice2, sal_Bool bAll
     maBlack         = SVT_RESSTR(STR_SVT_STYLE_BLACK);
     maBlackItalic   = SVT_RESSTR(STR_SVT_STYLE_BLACK_ITALIC);
 
-    ImplInsertFonts( pDevice, bAll, sal_True );
+    ImplInsertFonts( pDevice, bAll, true );
 
     // if required compare to the screen fonts
     // in order to map the duplicates to Equal
-    sal_Bool bCompareWindow = sal_False;
+    bool bCompareWindow = false;
     if ( !pDevice2 && (pDevice->GetOutDevType() == OUTDEV_PRINTER) )
     {
-        bCompareWindow = sal_True;
+        bCompareWindow = true;
         pDevice2 = Application::GetDefaultDevice();
     }
 
@@ -517,8 +517,8 @@ OUString FontList::GetFontMapText( const FontInfo& rInfo ) const
     const OUString& rStyleName  = rInfo.GetStyleName();
     if (!rStyleName.isEmpty())
     {
-        sal_Bool                    bNotSynthetic = sal_False;
-        sal_Bool                    bNoneAvailable = sal_False;
+        bool                    bNotSynthetic = false;
+        bool                    bNoneAvailable = false;
         FontWeight              eWeight = rInfo.GetWeight();
         FontItalic              eItalic = rInfo.GetItalic();
         ImplFontListFontInfo*   pFontInfo = pData->mpFirst;
@@ -527,7 +527,7 @@ OUString FontList::GetFontMapText( const FontInfo& rInfo ) const
             if ( (eWeight == pFontInfo->GetWeight()) &&
                  (eItalic == pFontInfo->GetItalic()) )
             {
-                bNotSynthetic = sal_True;
+                bNotSynthetic = true;
                 break;
             }
 
@@ -715,7 +715,7 @@ FontInfo FontList::Get(const OUString& rName,
 
 
 
-sal_Bool FontList::IsAvailable(const OUString& rName) const
+bool FontList::IsAvailable(const OUString& rName) const
 {
     return (ImplFindByName( rName ) != 0);
 }

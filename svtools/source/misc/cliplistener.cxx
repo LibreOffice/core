@@ -58,7 +58,7 @@ void SAL_CALL TransferableClipboardListener::changedContents(
     }
 }
 
-void TransferableClipboardListener::AddRemoveListener( Window* pWin, sal_Bool bAdd )
+void TransferableClipboardListener::AddRemoveListener( Window* pWin, bool bAdd )
 {
     try
     {

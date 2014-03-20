@@ -38,7 +38,7 @@ public:
             TransferableClipboardListener( const Link& rCallback );
             ~TransferableClipboardListener();
 
-    void    AddRemoveListener( Window* pWin, sal_Bool bAdd );
+    void    AddRemoveListener( Window* pWin, bool bAdd );
     void    ClearCallbackLink();
 
             // XEventListener

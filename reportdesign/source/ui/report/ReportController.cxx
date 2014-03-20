@@ -321,7 +321,7 @@ void OReportController::disposing()
     if ( m_pClipbordNotifier )
     {
         m_pClipbordNotifier->ClearCallbackLink();
-        m_pClipbordNotifier->AddRemoveListener( getView(), sal_False );
+        m_pClipbordNotifier->AddRemoveListener( getView(), false );
         m_pClipbordNotifier->release();
         m_pClipbordNotifier = NULL;
     }
@@ -1799,7 +1799,7 @@ sal_Bool OReportController::Construct(Window* pParent)
     m_aSystemClipboard.StartClipboardListening( );
     m_pClipbordNotifier = new TransferableClipboardListener( LINK( this, OReportController, OnClipboardChanged ) );
     m_pClipbordNotifier->acquire();
-    m_pClipbordNotifier->AddRemoveListener( getView(), sal_True );
+    m_pClipbordNotifier->AddRemoveListener( getView(), true );
 
     OReportController_BASE::Construct(pParent);
     return sal_True;

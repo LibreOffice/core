@@ -506,7 +506,7 @@ void ScCellShell::GetClipState( SfxItemSet& rSet )
         pImpl->m_pClipEvtLstnr = new TransferableClipboardListener( LINK( this, ScCellShell, ClipboardChanged ) );
         pImpl->m_pClipEvtLstnr->acquire();
         Window* pWin = GetViewData()->GetActiveWin();
-        pImpl->m_pClipEvtLstnr->AddRemoveListener( pWin, sal_True );
+        pImpl->m_pClipEvtLstnr->AddRemoveListener( pWin, true );
 
         // get initial state
         TransferableDataHelper aDataHelper( TransferableDataHelper::CreateFromSystemClipboard( pWin ) );

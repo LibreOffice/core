@@ -615,7 +615,7 @@ void DrawViewShell::GetMenuState( SfxItemSet &rSet )
                 // create listener
                 mpClipEvtLstnr = new TransferableClipboardListener( LINK( this, DrawViewShell, ClipboardChanged ) );
                 mpClipEvtLstnr->acquire();
-                mpClipEvtLstnr->AddRemoveListener( GetActiveWindow(), sal_True );
+                mpClipEvtLstnr->AddRemoveListener( GetActiveWindow(), true );
 
                 // get initial state
                 TransferableDataHelper aDataHelper( TransferableDataHelper::CreateFromSystemClipboard( GetActiveWindow() ) );

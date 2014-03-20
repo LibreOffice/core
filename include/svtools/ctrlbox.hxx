@@ -185,9 +185,9 @@ public:
     virtual Color   GetEntryColor( sal_Int32  nPos ) const;
     Size            GetImageSize() const { return aImageSize; }
 
-    void            SelectEntry( const OUString& rStr, sal_Bool bSelect = sal_True )
+    void            SelectEntry( const OUString& rStr, bool bSelect = true )
                         { ListBox::SelectEntry( rStr, bSelect ); }
-    void            SelectEntry( const Color& rColor, sal_Bool bSelect = sal_True );
+    void            SelectEntry( const Color& rColor, bool bSelect = true );
     Color           GetSelectEntryColor( sal_Int32  nSelIndex = 0 ) const;
     bool            IsEntrySelected(const OUString& rStr ) const
     {
@@ -212,7 +212,7 @@ private:
     void*           GetEntryData( sal_Int32  nPos ) const;
 };
 
-inline void ColorListBox::SelectEntry( const Color& rColor, sal_Bool bSelect )
+inline void ColorListBox::SelectEntry( const Color& rColor, bool bSelect )
 {
     sal_Int32  nPos = GetEntryPos( rColor );
     if ( nPos != LISTBOX_ENTRY_NOTFOUND )
@@ -303,7 +303,7 @@ class SVT_DLLPUBLIC LineListBox : public ListBox
                                     sal_uInt16 nStyle, Bitmap& rBmp );
     using Window::ImplInit;
     SVT_DLLPRIVATE void         ImplInit();
-    sal_Bool        UpdatePaintLineColor( void );       // returns sal_True if maPaintCol has changed
+    bool            UpdatePaintLineColor( void );       // returns sal_True if maPaintCol has changed
     virtual void    DataChanged( const DataChangedEvent& rDCEvt );
 
     void            UpdateEntries( long nOldWidth );
@@ -338,8 +338,8 @@ public:
     virtual sal_Int32  GetEntryPos( sal_uInt16 nStyle = com::sun::star::table::BorderLineStyle::SOLID ) const;
     sal_uInt16          GetEntryStyle( sal_Int32  nPos ) const;
 
-    void            SelectEntry( const OUString& rStr, sal_Bool bSelect = sal_True ) { ListBox::SelectEntry( rStr, bSelect ); }
-    void SelectEntry( sal_uInt16 nStyle = com::sun::star::table::BorderLineStyle::SOLID, sal_Bool bSelect = sal_True );
+    void            SelectEntry( const OUString& rStr, bool bSelect = true ) { ListBox::SelectEntry( rStr, bSelect ); }
+    void SelectEntry( sal_uInt16 nStyle = com::sun::star::table::BorderLineStyle::SOLID, bool bSelect = true );
     sal_uInt16          GetSelectEntryStyle( sal_Int32  nSelIndex = 0 ) const;
     bool            IsEntrySelected(const OUString& rStr) const
     {
@@ -409,7 +409,7 @@ class SVT_DLLPUBLIC FontNameBox : public ComboBox
 {
 private:
     ImplFontList*   mpFontList;
-    sal_Bool        mbWYSIWYG;
+    bool            mbWYSIWYG;
     OUString        maFontMRUEntriesFile;
 
     SVT_DLLPRIVATE void         ImplCalcUserItemSize();
@@ -427,8 +427,8 @@ public:
 
     void            Fill( const FontList* pList );
 
-    void            EnableWYSIWYG( sal_Bool bEnable = sal_True );
-    sal_Bool            IsWYSIWYGEnabled() const { return mbWYSIWYG; }
+    void            EnableWYSIWYG( bool bEnable = true );
+    bool            IsWYSIWYGEnabled() const { return mbWYSIWYG; }
 
 private:
     void            InitFontMRUEntriesFile();
@@ -489,7 +489,7 @@ class SVT_DLLPUBLIC FontSizeBox : public MetricBox
     short           nPtRelMin;
     short           nPtRelMax;
     short           nPtRelStep;
-    sal_Bool            bRelativeMode:1,
+    bool            bRelativeMode:1,
                     bRelative:1,
                     bPtRelative:1,
                     bStdSize:1;
@@ -513,12 +513,12 @@ public:
                                         sal_uInt16 nStep = 5 );
     void            EnablePtRelativeMode( short nMin = -200, short nMax = 200,
                                           short nStep = 10 );
-    sal_Bool            IsRelativeMode() const { return bRelativeMode; }
-    void            SetRelative( sal_Bool bRelative = sal_False );
-    sal_Bool            IsRelative() const { return bRelative; }
-    void            SetPtRelative( sal_Bool bPtRel = sal_True )
-                        { bPtRelative = bPtRel; SetRelative( sal_True ); }
-    sal_Bool            IsPtRelative() const { return bPtRelative; }
+    bool            IsRelativeMode() const { return bRelativeMode; }
+    void            SetRelative( bool bRelative = false );
+    bool            IsRelative() const { return bRelative; }
+    void            SetPtRelative( bool bPtRel = true )
+                        { bPtRelative = bPtRel; SetRelative( true ); }
+    bool            IsPtRelative() const { return bPtRelative; }
 
     virtual void    SetValue( sal_Int64 nNewValue, FieldUnit eInUnit );
     virtual void    SetValue( sal_Int64 nNewValue  );
