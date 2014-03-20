@@ -1969,7 +1969,7 @@ sal_uInt8 SwFEShell::WhichMouseTabCol( const Point &rPt ) const
 
     if( pFrm )
     {
-        while( pFrm->Lower() && pFrm->Lower()->IsRowFrm() )
+        while( pFrm && pFrm->Lower() && pFrm->Lower()->IsRowFrm() )
             pFrm = (SwCellFrm*)((SwLayoutFrm*)pFrm->Lower())->Lower();
         if( pFrm && pFrm->GetTabBox()->GetSttNd() &&
             pFrm->GetTabBox()->GetSttNd()->IsInProtectSect() )
