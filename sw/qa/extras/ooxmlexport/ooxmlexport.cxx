@@ -2872,11 +2872,7 @@ DECLARE_OOXMLEXPORT_TEST(testContentTypeXLSM, "fdo76098.docx")
     if (!pXmlDoc)
        return;
 
-    // FIXME why does this fail on Mac?
-#if !defined(MACOSX)
     assertXPath(pXmlDoc, "/ContentType:Types/ContentType:Override[@PartName='/word/embeddings/Microsoft_Excel_Macro-Enabled_Worksheet1.xlsm']", "ContentType", "application/vnd.ms-excel.sheet.macroEnabled.12");
-#endif
-
 }
 
 DECLARE_OOXMLEXPORT_TEST(test76108, "test76108.docx")
