@@ -283,9 +283,9 @@ OUString SvPasteObjectHelper::GetSotFormatUIName( SotFormatStringId nId )
     return aUIName;
 }
 
-sal_Bool SvPasteObjectHelper::GetEmbeddedName(const TransferableDataHelper& rData, OUString& _rName, OUString& _rSource, SotFormatStringId& _nFormat)
+bool SvPasteObjectHelper::GetEmbeddedName(const TransferableDataHelper& rData, OUString& _rName, OUString& _rSource, SotFormatStringId& _nFormat)
 {
-    sal_Bool bRet = sal_False;
+    bool bRet = false;
     if( _nFormat == SOT_FORMATSTR_ID_EMBED_SOURCE_OLE || _nFormat == SOT_FORMATSTR_ID_EMBEDDED_OBJ_OLE )
     {
         datatransfer::DataFlavor aFlavor;
@@ -335,7 +335,7 @@ sal_Bool SvPasteObjectHelper::GetEmbeddedName(const TransferableDataHelper& rDat
             else
                 _rSource = SVT_RESSTR(STR_UNKNOWN_SOURCE);
         }
-        bRet = sal_True;
+        bRet = true;
     }
     return bRet;
 }

@@ -79,8 +79,8 @@ public:
     ImageMap&           operator=( const ImageMap& rImageMap );
 
     // Vergleichsoperator (es wird alles auf Gleichheit geprueft)
-    sal_Bool                operator==( const ImageMap& rImageMap );
-    sal_Bool                operator!=( const ImageMap& rImageMap );
+    bool                operator==( const ImageMap& rImageMap );
+    bool                operator!=( const ImageMap& rImageMap );
 
     // In die Map wird ein neues IMap-Obkekt ans Ende eingefuegt
     void                InsertIMapObject( const IMapObject& rIMapObject );
@@ -137,7 +137,7 @@ class IMapCompat
                     IMapCompat() {}
                     IMapCompat( const IMapCompat& ) {}
     IMapCompat&     operator=( const IMapCompat& ) { return *this; }
-    sal_Bool            operator==( const IMapCompat& ) { return sal_False; }
+    bool            operator==( const IMapCompat& ) { return false; }
 
 public:
 

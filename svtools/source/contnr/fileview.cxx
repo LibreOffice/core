@@ -2151,10 +2151,10 @@ void SvtFileView_Impl::CreateDisplayText_Impl()
             ::svtools::VolumeInfo aVolInfo( (*aIt)->mbIsVolume, (*aIt)->mbIsRemote,
                                             (*aIt)->mbIsRemoveable, (*aIt)->mbIsFloppy,
                                             (*aIt)->mbIsCompactDisc );
-            (*aIt)->maImage = SvFileInformationManager::GetFolderImage( aVolInfo, sal_False );
+            (*aIt)->maImage = SvFileInformationManager::GetFolderImage( aVolInfo, false );
         }
         else
-            (*aIt)->maImage = SvFileInformationManager::GetFileImage( INetURLObject( (*aIt)->maTargetURL ), sal_False );
+            (*aIt)->maImage = SvFileInformationManager::GetFileImage( INetURLObject( (*aIt)->maTargetURL ), false );
     }
 }
 
@@ -2240,7 +2240,7 @@ void SvtFileView_Impl::CreateVector_Impl( const Sequence < OUString > &rList )
         if( aValue != SEPARATOR_STR )
         {
             INetURLObject aObj( !pEntry->maImageURL.isEmpty() ? pEntry->maImageURL : pEntry->maTargetURL );
-            pEntry->maImage = SvFileInformationManager::GetImage( aObj, sal_False );
+            pEntry->maImage = SvFileInformationManager::GetImage( aObj, false );
         }
         maContent.push_back( pEntry );
     }
@@ -2448,7 +2448,7 @@ OUString SvtFileView_Impl::FolderInserted( const OUString& rURL, const OUString&
 
     ::svtools::VolumeInfo aVolInfo;
     pData->maType = SvFileInformationManager::GetFolderDescription( aVolInfo );
-    pData->maImage = SvFileInformationManager::GetFolderImage( aVolInfo, sal_False );
+    pData->maImage = SvFileInformationManager::GetFolderImage( aVolInfo, false );
 
     OUString aValue;
     OUString aTab( "\t" );

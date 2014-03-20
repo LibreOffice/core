@@ -50,126 +50,126 @@
 struct SvtExtensionResIdMapping_Impl
 {
     const char*   _pExt;
-    sal_Bool    _bExt;
+    bool    _bExt;
     sal_uInt16  _nStrId;
     sal_uInt16  _nImgId;
 };
 
 static SvtExtensionResIdMapping_Impl const ExtensionMap_Impl[] =
 {
-    { "awk",   sal_True,  STR_DESCRIPTION_SOURCEFILE,            0 },
-    { "bas",   sal_True,  STR_DESCRIPTION_SOURCEFILE,            0 },
-    { "bat",   sal_True,  STR_DESCRIPTION_BATCHFILE,             0 },
-    { "bmk",   sal_False, STR_DESCRIPTION_BOOKMARKFILE,          0 },
-    { "bmp",   sal_True,  STR_DESCRIPTION_GRAPHIC_DOC,           IMG_BITMAP },
-    { "c",     sal_True,  STR_DESCRIPTION_SOURCEFILE,            0 },
-    { "cfg",   sal_False, STR_DESCRIPTION_CFGFILE,               0 },
-    { "cmd",   sal_True,  STR_DESCRIPTION_BATCHFILE,             0 },
-    { "cob",   sal_True,  STR_DESCRIPTION_SOURCEFILE,            0 },
-    { "com",   sal_True,  STR_DESCRIPTION_APPLICATION,           0 },
-    { "cxx",   sal_True,  STR_DESCRIPTION_SOURCEFILE,            0 },
-    { "dbf",   sal_True,  STR_DESCRIPTION_DATABASE_TABLE,        IMG_TABLE },
-    { "def",   sal_True,  STR_DESCRIPTION_SOURCEFILE,            0 },
-    { "dll",   sal_True,  STR_DESCRIPTION_SYSFILE,               0 },
-    { "doc",   sal_False, STR_DESCRIPTION_WORD_DOC,              IMG_WRITER },
-    { "dot",   sal_False, STR_DESCRIPTION_WORD_DOC,              IMG_WRITERTEMPLATE },
-    { "docx",  sal_False, STR_DESCRIPTION_WORD_DOC,              IMG_WRITER },
-    { "dxf",   sal_True,  STR_DESCRIPTION_GRAPHIC_DOC,           IMG_DXF },
-    { "exe",   sal_True,  STR_DESCRIPTION_APPLICATION,           0 },
-    { "gif",   sal_True,  STR_DESCRIPTION_GRAPHIC_DOC,           IMG_GIF },
-    { "h",     sal_True,  STR_DESCRIPTION_SOURCEFILE,            0 },
-    { "hlp",   sal_False, STR_DESCRIPTION_HELP_DOC,              0 },
-    { "hrc",   sal_True,  STR_DESCRIPTION_SOURCEFILE,            0 },
-    { "htm",   sal_False, STR_DESCRIPTION_HTMLFILE,              IMG_HTML },
-    { "html",  sal_False, STR_DESCRIPTION_HTMLFILE,              IMG_HTML },
-    { "asp",   sal_False, STR_DESCRIPTION_HTMLFILE,              IMG_HTML },
-    { "hxx",   sal_True,  STR_DESCRIPTION_SOURCEFILE,            0 },
-    { "ini",   sal_False, STR_DESCRIPTION_CFGFILE,               0 },
-    { "java",  sal_True,  STR_DESCRIPTION_SOURCEFILE,            0 },
-    { "jpeg",  sal_True,  STR_DESCRIPTION_GRAPHIC_DOC,           IMG_JPG },
-    { "jpg",   sal_True,  STR_DESCRIPTION_GRAPHIC_DOC,           IMG_JPG },
-    { "lha",   sal_True,  STR_DESCRIPTION_ARCHIVFILE,            0 },
+    { "awk",   true,  STR_DESCRIPTION_SOURCEFILE,            0 },
+    { "bas",   true,  STR_DESCRIPTION_SOURCEFILE,            0 },
+    { "bat",   true,  STR_DESCRIPTION_BATCHFILE,             0 },
+    { "bmk",   false, STR_DESCRIPTION_BOOKMARKFILE,          0 },
+    { "bmp",   true,  STR_DESCRIPTION_GRAPHIC_DOC,           IMG_BITMAP },
+    { "c",     true,  STR_DESCRIPTION_SOURCEFILE,            0 },
+    { "cfg",   false, STR_DESCRIPTION_CFGFILE,               0 },
+    { "cmd",   true,  STR_DESCRIPTION_BATCHFILE,             0 },
+    { "cob",   true,  STR_DESCRIPTION_SOURCEFILE,            0 },
+    { "com",   true,  STR_DESCRIPTION_APPLICATION,           0 },
+    { "cxx",   true,  STR_DESCRIPTION_SOURCEFILE,            0 },
+    { "dbf",   true,  STR_DESCRIPTION_DATABASE_TABLE,        IMG_TABLE },
+    { "def",   true,  STR_DESCRIPTION_SOURCEFILE,            0 },
+    { "dll",   true,  STR_DESCRIPTION_SYSFILE,               0 },
+    { "doc",   false, STR_DESCRIPTION_WORD_DOC,              IMG_WRITER },
+    { "dot",   false, STR_DESCRIPTION_WORD_DOC,              IMG_WRITERTEMPLATE },
+    { "docx",  false, STR_DESCRIPTION_WORD_DOC,              IMG_WRITER },
+    { "dxf",   true,  STR_DESCRIPTION_GRAPHIC_DOC,           IMG_DXF },
+    { "exe",   true,  STR_DESCRIPTION_APPLICATION,           0 },
+    { "gif",   true,  STR_DESCRIPTION_GRAPHIC_DOC,           IMG_GIF },
+    { "h",     true,  STR_DESCRIPTION_SOURCEFILE,            0 },
+    { "hlp",   false, STR_DESCRIPTION_HELP_DOC,              0 },
+    { "hrc",   true,  STR_DESCRIPTION_SOURCEFILE,            0 },
+    { "htm",   false, STR_DESCRIPTION_HTMLFILE,              IMG_HTML },
+    { "html",  false, STR_DESCRIPTION_HTMLFILE,              IMG_HTML },
+    { "asp",   false, STR_DESCRIPTION_HTMLFILE,              IMG_HTML },
+    { "hxx",   true,  STR_DESCRIPTION_SOURCEFILE,            0 },
+    { "ini",   false, STR_DESCRIPTION_CFGFILE,               0 },
+    { "java",  true,  STR_DESCRIPTION_SOURCEFILE,            0 },
+    { "jpeg",  true,  STR_DESCRIPTION_GRAPHIC_DOC,           IMG_JPG },
+    { "jpg",   true,  STR_DESCRIPTION_GRAPHIC_DOC,           IMG_JPG },
+    { "lha",   true,  STR_DESCRIPTION_ARCHIVFILE,            0 },
 #ifdef WNT
-    { "lnk",   sal_False, 0,                                     0 },
+    { "lnk",   false, 0,                                     0 },
 #endif
-    { "log",   sal_True,  STR_DESCRIPTION_LOGFILE,               0 },
-    { "lst",   sal_True,  STR_DESCRIPTION_LOGFILE,               0 },
-    { "met",   sal_True,  STR_DESCRIPTION_GRAPHIC_DOC,           IMG_MET },
-    { "mml",   sal_False, STR_DESCRIPTION_MATHML_DOC,            IMG_MATH },
-    { "mod",   sal_True,  STR_DESCRIPTION_SOURCEFILE,            0 },
-    { "odb",   sal_False, STR_DESCRIPTION_OO_DATABASE_DOC,       IMG_OO_DATABASE_DOC },
-    { "odg",   sal_False, STR_DESCRIPTION_OO_DRAW_DOC,           IMG_OO_DRAW_DOC },
-    { "odf",   sal_False, STR_DESCRIPTION_OO_MATH_DOC,           IMG_OO_MATH_DOC },
-    { "odm",   sal_False, STR_DESCRIPTION_OO_GLOBAL_DOC,         IMG_OO_GLOBAL_DOC },
-    { "odp",   sal_False, STR_DESCRIPTION_OO_IMPRESS_DOC,        IMG_OO_IMPRESS_DOC },
-    { "ods",   sal_False, STR_DESCRIPTION_OO_CALC_DOC,           IMG_OO_CALC_DOC },
-    { "odt",   sal_False, STR_DESCRIPTION_OO_WRITER_DOC,         IMG_OO_WRITER_DOC },
-    { "otg",   sal_False, STR_DESCRIPTION_OO_DRAW_TEMPLATE,      IMG_OO_DRAW_TEMPLATE },
-    { "otp",   sal_False, STR_DESCRIPTION_OO_IMPRESS_TEMPLATE,   IMG_OO_IMPRESS_TEMPLATE },
-    { "ots",   sal_False, STR_DESCRIPTION_OO_CALC_TEMPLATE,      IMG_OO_CALC_TEMPLATE },
-    { "ott",   sal_False, STR_DESCRIPTION_OO_WRITER_TEMPLATE,    IMG_OO_WRITER_TEMPLATE },
-    { "pas",   sal_True,  STR_DESCRIPTION_SOURCEFILE,            0 },
-    { "pcd",   sal_True,  STR_DESCRIPTION_GRAPHIC_DOC,           IMG_PCD },
-    { "pct",   sal_True,  STR_DESCRIPTION_GRAPHIC_DOC,           IMG_PCT },
-    { "pict",   sal_True,  STR_DESCRIPTION_GRAPHIC_DOC,          IMG_PCT },
-    { "pcx",   sal_True,  STR_DESCRIPTION_GRAPHIC_DOC,           IMG_PCX },
-    { "pl",    sal_True,  STR_DESCRIPTION_SOURCEFILE,            0 },
-    { "png",   sal_True,  STR_DESCRIPTION_GRAPHIC_DOC,           IMG_PNG },
-    { "rar",   sal_True,  STR_DESCRIPTION_ARCHIVFILE,            0 },
-    { "rtf",   sal_False, STR_DESCRIPTION_WORD_DOC,              IMG_WRITER },
-    { "sbl",   sal_False, 0,                                     0 },
-    { "sch",   sal_False, 0,                                     0 },
-    { "sda",   sal_False, STR_DESCRIPTION_SDRAW_DOC,             IMG_DRAW },
-    { "sdb",   sal_False, STR_DESCRIPTION_SDATABASE_DOC,         IMG_DATABASE },
-    { "sdc",   sal_False, STR_DESCRIPTION_SCALC_DOC,             IMG_CALC },
-    { "sdd",   sal_False, STR_DESCRIPTION_SIMPRESS_DOC,          IMG_IMPRESS },
-    { "sdp",   sal_False, STR_DESCRIPTION_SIMPRESS_DOC,          0 },
-    { "sds",   sal_False, STR_DESCRIPTION_SCHART_DOC,            0 },
-    { "sdw",   sal_False, STR_DESCRIPTION_SWRITER_DOC,           IMG_WRITER },
-    { "sga",   sal_False, 0,                                     0 },
-    { "sgf",   sal_True,  STR_DESCRIPTION_GRAPHIC_DOC,           IMG_SGF },
-    { "sgl",   sal_False, STR_DESCRIPTION_GLOBALDOC,             IMG_GLOBAL_DOC },
-    { "sgv",   sal_True,  STR_DESCRIPTION_GRAPHIC_DOC,           IMG_SGV },
-    { "shtml", sal_False, STR_DESCRIPTION_HTMLFILE,              IMG_HTML },
-    { "sim",   sal_False, STR_DESCRIPTION_SIMAGE_DOC,            IMG_SIM },
-    { "smf",   sal_False, STR_DESCRIPTION_SMATH_DOC,             IMG_MATH },
-    { "src",   sal_True,  STR_DESCRIPTION_SOURCEFILE,            0 },
-    { "svh",   sal_False, STR_DESCRIPTION_HELP_DOC,              0 },
-    { "svm",   sal_True,  STR_DESCRIPTION_GRAPHIC_DOC,           IMG_SVM },
-    { "stc",   sal_False, STR_DESCRIPTION_CALC_TEMPLATE,         IMG_CALCTEMPLATE },
-    { "std",   sal_False, STR_DESCRIPTION_DRAW_TEMPLATE,         IMG_DRAWTEMPLATE },
-    { "sti",   sal_False, STR_DESCRIPTION_IMPRESS_TEMPLATE,      IMG_IMPRESSTEMPLATE },
-    { "stw",   sal_False, STR_DESCRIPTION_WRITER_TEMPLATE,       IMG_WRITERTEMPLATE },
-    { "sxc",   sal_False, STR_DESCRIPTION_SXCALC_DOC,            IMG_CALC },
-    { "sxd",   sal_False, STR_DESCRIPTION_SXDRAW_DOC,            IMG_DRAW },
-    { "sxg",   sal_False, STR_DESCRIPTION_SXGLOBAL_DOC,          IMG_GLOBAL_DOC },
-    { "sxi",   sal_False, STR_DESCRIPTION_SXIMPRESS_DOC,         IMG_IMPRESS },
-    { "sxm",   sal_False, STR_DESCRIPTION_SXMATH_DOC,            IMG_MATH },
-    { "sxs",   sal_False, STR_DESCRIPTION_SXCHART_DOC,           0 },
-    { "sxw",   sal_False, STR_DESCRIPTION_SXWRITER_DOC,          IMG_WRITER },
-    { "sys",   sal_True,  STR_DESCRIPTION_SYSFILE,               0 },
-    { "tif",   sal_True,  STR_DESCRIPTION_GRAPHIC_DOC,           IMG_TIFF },
-    { "tiff",  sal_True,  STR_DESCRIPTION_GRAPHIC_DOC,           IMG_TIFF },
-    { "txt",   sal_False, STR_DESCRIPTION_TEXTFILE,              IMG_TEXTFILE },
-    { "url",   sal_False, STR_DESCRIPTION_LINK,                  0 },
-    { "vor",   sal_False, STR_DESCRIPTION_SOFFICE_TEMPLATE_DOC,  IMG_WRITERTEMPLATE },
-    { "vxd",   sal_True,  STR_DESCRIPTION_SYSFILE,               0 },
-    { "wmf",   sal_True,  STR_DESCRIPTION_GRAPHIC_DOC,           IMG_WMF },
-    { "xls",   sal_False, STR_DESCRIPTION_EXCEL_DOC,             IMG_CALC },
-    { "xlt",   sal_False, STR_DESCRIPTION_EXCEL_TEMPLATE_DOC,    IMG_CALCTEMPLATE },
-    { "xlsx",  sal_False, STR_DESCRIPTION_EXCEL_DOC,             IMG_CALC },
-    { "uu",    sal_True,  STR_DESCRIPTION_ARCHIVFILE,            0 },
-    { "uue",   sal_True,  STR_DESCRIPTION_ARCHIVFILE,            0 },
-    { "z",     sal_True,  STR_DESCRIPTION_ARCHIVFILE,            0 },
-    { "zip",   sal_True,  STR_DESCRIPTION_ARCHIVFILE,            0 },
-    { "zoo",   sal_True,  STR_DESCRIPTION_ARCHIVFILE,            0 },
-    { "gz",    sal_True,  STR_DESCRIPTION_ARCHIVFILE,            0 },
-    { "ppt",   sal_False, STR_DESCRIPTION_POWERPOINT,            IMG_IMPRESS },
-    { "pot",   sal_False, STR_DESCRIPTION_POWERPOINT_TEMPLATE,   IMG_IMPRESSTEMPLATE },
-    { "pps",   sal_False, STR_DESCRIPTION_POWERPOINT_SHOW,       IMG_IMPRESS },
-    { "pptx",  sal_False, STR_DESCRIPTION_POWERPOINT,            IMG_IMPRESS },
-    { "oxt",   sal_False, STR_DESCRIPTION_EXTENSION,             IMG_EXTENSION },
-    { 0, sal_False, 0, 0 }
+    { "log",   true,  STR_DESCRIPTION_LOGFILE,               0 },
+    { "lst",   true,  STR_DESCRIPTION_LOGFILE,               0 },
+    { "met",   true,  STR_DESCRIPTION_GRAPHIC_DOC,           IMG_MET },
+    { "mml",   false, STR_DESCRIPTION_MATHML_DOC,            IMG_MATH },
+    { "mod",   true,  STR_DESCRIPTION_SOURCEFILE,            0 },
+    { "odb",   false, STR_DESCRIPTION_OO_DATABASE_DOC,       IMG_OO_DATABASE_DOC },
+    { "odg",   false, STR_DESCRIPTION_OO_DRAW_DOC,           IMG_OO_DRAW_DOC },
+    { "odf",   false, STR_DESCRIPTION_OO_MATH_DOC,           IMG_OO_MATH_DOC },
+    { "odm",   false, STR_DESCRIPTION_OO_GLOBAL_DOC,         IMG_OO_GLOBAL_DOC },
+    { "odp",   false, STR_DESCRIPTION_OO_IMPRESS_DOC,        IMG_OO_IMPRESS_DOC },
+    { "ods",   false, STR_DESCRIPTION_OO_CALC_DOC,           IMG_OO_CALC_DOC },
+    { "odt",   false, STR_DESCRIPTION_OO_WRITER_DOC,         IMG_OO_WRITER_DOC },
+    { "otg",   false, STR_DESCRIPTION_OO_DRAW_TEMPLATE,      IMG_OO_DRAW_TEMPLATE },
+    { "otp",   false, STR_DESCRIPTION_OO_IMPRESS_TEMPLATE,   IMG_OO_IMPRESS_TEMPLATE },
+    { "ots",   false, STR_DESCRIPTION_OO_CALC_TEMPLATE,      IMG_OO_CALC_TEMPLATE },
+    { "ott",   false, STR_DESCRIPTION_OO_WRITER_TEMPLATE,    IMG_OO_WRITER_TEMPLATE },
+    { "pas",   true,  STR_DESCRIPTION_SOURCEFILE,            0 },
+    { "pcd",   true,  STR_DESCRIPTION_GRAPHIC_DOC,           IMG_PCD },
+    { "pct",   true,  STR_DESCRIPTION_GRAPHIC_DOC,           IMG_PCT },
+    { "pict",   true,  STR_DESCRIPTION_GRAPHIC_DOC,          IMG_PCT },
+    { "pcx",   true,  STR_DESCRIPTION_GRAPHIC_DOC,           IMG_PCX },
+    { "pl",    true,  STR_DESCRIPTION_SOURCEFILE,            0 },
+    { "png",   true,  STR_DESCRIPTION_GRAPHIC_DOC,           IMG_PNG },
+    { "rar",   true,  STR_DESCRIPTION_ARCHIVFILE,            0 },
+    { "rtf",   false, STR_DESCRIPTION_WORD_DOC,              IMG_WRITER },
+    { "sbl",   false, 0,                                     0 },
+    { "sch",   false, 0,                                     0 },
+    { "sda",   false, STR_DESCRIPTION_SDRAW_DOC,             IMG_DRAW },
+    { "sdb",   false, STR_DESCRIPTION_SDATABASE_DOC,         IMG_DATABASE },
+    { "sdc",   false, STR_DESCRIPTION_SCALC_DOC,             IMG_CALC },
+    { "sdd",   false, STR_DESCRIPTION_SIMPRESS_DOC,          IMG_IMPRESS },
+    { "sdp",   false, STR_DESCRIPTION_SIMPRESS_DOC,          0 },
+    { "sds",   false, STR_DESCRIPTION_SCHART_DOC,            0 },
+    { "sdw",   false, STR_DESCRIPTION_SWRITER_DOC,           IMG_WRITER },
+    { "sga",   false, 0,                                     0 },
+    { "sgf",   true,  STR_DESCRIPTION_GRAPHIC_DOC,           IMG_SGF },
+    { "sgl",   false, STR_DESCRIPTION_GLOBALDOC,             IMG_GLOBAL_DOC },
+    { "sgv",   true,  STR_DESCRIPTION_GRAPHIC_DOC,           IMG_SGV },
+    { "shtml", false, STR_DESCRIPTION_HTMLFILE,              IMG_HTML },
+    { "sim",   false, STR_DESCRIPTION_SIMAGE_DOC,            IMG_SIM },
+    { "smf",   false, STR_DESCRIPTION_SMATH_DOC,             IMG_MATH },
+    { "src",   true,  STR_DESCRIPTION_SOURCEFILE,            0 },
+    { "svh",   false, STR_DESCRIPTION_HELP_DOC,              0 },
+    { "svm",   true,  STR_DESCRIPTION_GRAPHIC_DOC,           IMG_SVM },
+    { "stc",   false, STR_DESCRIPTION_CALC_TEMPLATE,         IMG_CALCTEMPLATE },
+    { "std",   false, STR_DESCRIPTION_DRAW_TEMPLATE,         IMG_DRAWTEMPLATE },
+    { "sti",   false, STR_DESCRIPTION_IMPRESS_TEMPLATE,      IMG_IMPRESSTEMPLATE },
+    { "stw",   false, STR_DESCRIPTION_WRITER_TEMPLATE,       IMG_WRITERTEMPLATE },
+    { "sxc",   false, STR_DESCRIPTION_SXCALC_DOC,            IMG_CALC },
+    { "sxd",   false, STR_DESCRIPTION_SXDRAW_DOC,            IMG_DRAW },
+    { "sxg",   false, STR_DESCRIPTION_SXGLOBAL_DOC,          IMG_GLOBAL_DOC },
+    { "sxi",   false, STR_DESCRIPTION_SXIMPRESS_DOC,         IMG_IMPRESS },
+    { "sxm",   false, STR_DESCRIPTION_SXMATH_DOC,            IMG_MATH },
+    { "sxs",   false, STR_DESCRIPTION_SXCHART_DOC,           0 },
+    { "sxw",   false, STR_DESCRIPTION_SXWRITER_DOC,          IMG_WRITER },
+    { "sys",   true,  STR_DESCRIPTION_SYSFILE,               0 },
+    { "tif",   true,  STR_DESCRIPTION_GRAPHIC_DOC,           IMG_TIFF },
+    { "tiff",  true,  STR_DESCRIPTION_GRAPHIC_DOC,           IMG_TIFF },
+    { "txt",   false, STR_DESCRIPTION_TEXTFILE,              IMG_TEXTFILE },
+    { "url",   false, STR_DESCRIPTION_LINK,                  0 },
+    { "vor",   false, STR_DESCRIPTION_SOFFICE_TEMPLATE_DOC,  IMG_WRITERTEMPLATE },
+    { "vxd",   true,  STR_DESCRIPTION_SYSFILE,               0 },
+    { "wmf",   true,  STR_DESCRIPTION_GRAPHIC_DOC,           IMG_WMF },
+    { "xls",   false, STR_DESCRIPTION_EXCEL_DOC,             IMG_CALC },
+    { "xlt",   false, STR_DESCRIPTION_EXCEL_TEMPLATE_DOC,    IMG_CALCTEMPLATE },
+    { "xlsx",  false, STR_DESCRIPTION_EXCEL_DOC,             IMG_CALC },
+    { "uu",    true,  STR_DESCRIPTION_ARCHIVFILE,            0 },
+    { "uue",   true,  STR_DESCRIPTION_ARCHIVFILE,            0 },
+    { "z",     true,  STR_DESCRIPTION_ARCHIVFILE,            0 },
+    { "zip",   true,  STR_DESCRIPTION_ARCHIVFILE,            0 },
+    { "zoo",   true,  STR_DESCRIPTION_ARCHIVFILE,            0 },
+    { "gz",    true,  STR_DESCRIPTION_ARCHIVFILE,            0 },
+    { "ppt",   false, STR_DESCRIPTION_POWERPOINT,            IMG_IMPRESS },
+    { "pot",   false, STR_DESCRIPTION_POWERPOINT_TEMPLATE,   IMG_IMPRESSTEMPLATE },
+    { "pps",   false, STR_DESCRIPTION_POWERPOINT_SHOW,       IMG_IMPRESS },
+    { "pptx",  false, STR_DESCRIPTION_POWERPOINT,            IMG_IMPRESS },
+    { "oxt",   false, STR_DESCRIPTION_EXTENSION,             IMG_EXTENSION },
+    { 0, false, 0, 0 }
 };
 
 struct SvtFactory2ExtensionMapping_Impl
@@ -297,9 +297,9 @@ static sal_uInt16 GetImageId_Impl( const OUString& rExtension )
     return nImage;
 }
 
-static sal_Bool GetVolumeProperties_Impl( ::ucbhelper::Content& rContent, svtools::VolumeInfo& rVolumeInfo )
+static bool GetVolumeProperties_Impl( ::ucbhelper::Content& rContent, svtools::VolumeInfo& rVolumeInfo )
 {
-    sal_Bool bRet = sal_False;
+    bool bRet = false;
 
     try
     {
@@ -351,7 +351,7 @@ static sal_uInt16 GetFolderImageId_Impl( const OUString& rURL )
     return nRet;
 }
 
-static sal_uInt16 GetImageId_Impl( const INetURLObject& rObject, sal_Bool bDetectFolder )
+static sal_uInt16 GetImageId_Impl( const INetURLObject& rObject, bool bDetectFolder )
 {
     OUString aExt, sURL = rObject.GetMainURL( INetURLObject::NO_DECODE );
     sal_uInt16 nImage = IMG_FILE;
@@ -406,7 +406,7 @@ static sal_uInt16 GetImageId_Impl( const INetURLObject& rObject, sal_Bool bDetec
     return nImage;
 }
 
-static sal_uInt16 GetDescriptionId_Impl( const OUString& rExtension, sal_Bool& rbShowExt )
+static sal_uInt16 GetDescriptionId_Impl( const OUString& rExtension, bool& rbShowExt )
 {
     sal_uInt16 nId = 0;
     sal_Int32  nIndex = GetIndexOfExtension_Impl( rExtension );
@@ -477,7 +477,7 @@ static sal_uInt16 GetFolderDescriptionId_Impl( const OUString& rURL )
     return nRet;
 }
 
-static Image GetImageFromList_Impl( sal_uInt16 nImageId, sal_Bool bBig )
+static Image GetImageFromList_Impl( sal_uInt16 nImageId, bool bBig )
 {
     if ( !bBig && IMG_FOLDER == nImageId )
         // return our new small folder image (256 colors)
@@ -516,13 +516,13 @@ static Image GetImageFromList_Impl( sal_uInt16 nImageId, sal_Bool bBig )
     return Image();
 }
 
-OUString SvFileInformationManager::GetDescription_Impl( const INetURLObject& rObject, sal_Bool bDetectFolder )
+OUString SvFileInformationManager::GetDescription_Impl( const INetURLObject& rObject, bool bDetectFolder )
 {
     OUString sExtension(rObject.getExtension());
     OUString sDescription, sURL( rObject.GetMainURL( INetURLObject::NO_DECODE ) );
     sal_uInt16 nResId = 0;
-    sal_Bool bShowExt = sal_False, bDetected = sal_False, bOnlyFile = sal_False;
-    sal_Bool bFolder = bDetectFolder ? CONTENT_HELPER::IsFolder( sURL ) : sal_False;
+    bool bShowExt = false, bDetected = false, bOnlyFile = false;
+    bool bFolder = bDetectFolder && CONTENT_HELPER::IsFolder( sURL );
     if ( !bFolder )
     {
         if ( !bDetected )
@@ -534,7 +534,7 @@ OUString SvFileInformationManager::GetDescription_Impl( const INetURLObject& rOb
                 if ( aType == "factory" )
                 {
                     sDescription = GetDescriptionByFactory_Impl( aURLPath.copy( aURLPath.indexOf( INET_PATH_TOKEN ) + 1 ) );
-                    bDetected = sal_True;
+                    bDetected = true;
                 }
             }
 
@@ -562,7 +562,7 @@ OUString SvFileInformationManager::GetDescription_Impl( const INetURLObject& rOb
     {
         if ( bOnlyFile )
         {
-            bShowExt = sal_False;
+            bShowExt = false;
             sExtension = sExtension.toAsciiUpperCase();
             sDescription = sExtension;
             sDescription += "-";
@@ -583,23 +583,23 @@ OUString SvFileInformationManager::GetDescription_Impl( const INetURLObject& rOb
     return sDescription;
 }
 
-Image SvFileInformationManager::GetImage( const INetURLObject& rObject, sal_Bool bBig )
+Image SvFileInformationManager::GetImage( const INetURLObject& rObject, bool bBig )
 {
-    sal_uInt16 nImage = GetImageId_Impl( rObject, sal_True );
+    sal_uInt16 nImage = GetImageId_Impl( rObject, true );
     DBG_ASSERT( nImage, "invalid ImageId" );
     return GetImageFromList_Impl( nImage, bBig );
 }
 
-Image SvFileInformationManager::GetFileImage( const INetURLObject& rObject, sal_Bool bBig )
+Image SvFileInformationManager::GetFileImage( const INetURLObject& rObject, bool bBig )
 {
-    sal_Int16 nImage = GetImageId_Impl( rObject, sal_False );
+    sal_Int16 nImage = GetImageId_Impl( rObject, false );
     DBG_ASSERT( nImage, "invalid ImageId" );
     return GetImageFromList_Impl( nImage, bBig );
 }
 
-Image SvFileInformationManager::GetImageNoDefault( const INetURLObject& rObject, sal_Bool bBig )
+Image SvFileInformationManager::GetImageNoDefault( const INetURLObject& rObject, bool bBig )
 {
-    sal_uInt16 nImage = GetImageId_Impl( rObject, sal_True );
+    sal_uInt16 nImage = GetImageId_Impl( rObject, true );
     DBG_ASSERT( nImage, "invalid ImageId" );
 
     if ( nImage == IMG_FILE )
@@ -608,7 +608,7 @@ Image SvFileInformationManager::GetImageNoDefault( const INetURLObject& rObject,
     return GetImageFromList_Impl( nImage, bBig );
 }
 
-Image SvFileInformationManager::GetFolderImage( const svtools::VolumeInfo& rInfo, sal_Bool bBig )
+Image SvFileInformationManager::GetFolderImage( const svtools::VolumeInfo& rInfo, bool bBig )
 {
     sal_uInt16 nImage = IMG_FOLDER;
     DBG_ASSERT( nImage, "invalid ImageId" );
@@ -627,12 +627,12 @@ Image SvFileInformationManager::GetFolderImage( const svtools::VolumeInfo& rInfo
 
 OUString SvFileInformationManager::GetDescription( const INetURLObject& rObject )
 {
-    return SvFileInformationManager::GetDescription_Impl( rObject, sal_True );
+    return SvFileInformationManager::GetDescription_Impl( rObject, true );
 }
 
 OUString SvFileInformationManager::GetFileDescription( const INetURLObject& rObject )
 {
-    return SvFileInformationManager::GetDescription_Impl( rObject, sal_False );
+    return SvFileInformationManager::GetDescription_Impl( rObject, false );
 }
 
 OUString SvFileInformationManager::GetFolderDescription( const svtools::VolumeInfo& rInfo )

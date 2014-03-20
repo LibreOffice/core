@@ -1056,7 +1056,7 @@ void SfxDocumentPage::Reset( const SfxItemSet& rSet )
     aURL.SetSmartProtocol( INET_PROT_FILE );
     aURL.SetSmartURL( aFactory);
     const OUString& rMainURL = aURL.GetMainURL( INetURLObject::NO_DECODE );
-    Image aImage = SvFileInformationManager::GetImage( aURL, sal_True );
+    Image aImage = SvFileInformationManager::GetImage( aURL, true );
 
     if ( GetDPIScaleFactor() > 1)
     {

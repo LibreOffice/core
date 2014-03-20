@@ -207,7 +207,7 @@ SvUnoImageMapObject::SvUnoImageMapObject( const IMapObject& rMapObject, const Sv
     {
     case IMAP_OBJ_RECTANGLE:
         {
-            const Rectangle aRect( ((IMapRectangleObject*)&rMapObject)->GetRectangle(sal_False) );
+            const Rectangle aRect( ((IMapRectangleObject*)&rMapObject)->GetRectangle(false) );
             maBoundary.X = aRect.Left();
             maBoundary.Y = aRect.Top();
             maBoundary.Width = aRect.GetWidth();
@@ -216,8 +216,8 @@ SvUnoImageMapObject::SvUnoImageMapObject( const IMapObject& rMapObject, const Sv
         break;
     case IMAP_OBJ_CIRCLE:
         {
-            mnRadius = (sal_Int32)((IMapCircleObject*)&rMapObject)->GetRadius(sal_False);
-            const Point aPoint( ((IMapCircleObject*)&rMapObject)->GetCenter(sal_False) );
+            mnRadius = (sal_Int32)((IMapCircleObject*)&rMapObject)->GetRadius(false);
+            const Point aPoint( ((IMapCircleObject*)&rMapObject)->GetCenter(false) );
 
             maCenter.X = aPoint.X();
             maCenter.Y = aPoint.Y();
@@ -226,7 +226,7 @@ SvUnoImageMapObject::SvUnoImageMapObject( const IMapObject& rMapObject, const Sv
     case IMAP_OBJ_POLYGON:
     default:
         {
-            const Polygon aPoly( ((IMapPolygonObject*)&rMapObject)->GetPolygon(sal_False) );
+            const Polygon aPoly( ((IMapPolygonObject*)&rMapObject)->GetPolygon(false) );
 
             const sal_uInt16 nCount = aPoly.GetSize();
             maPolygon.realloc( nCount );
@@ -267,14 +267,14 @@ IMapObject* SvUnoImageMapObject::createIMapObject() const
     case IMAP_OBJ_RECTANGLE:
         {
             const Rectangle aRect( maBoundary.X, maBoundary.Y, maBoundary.X + maBoundary.Width - 1, maBoundary.Y + maBoundary.Height - 1 );
-            pNewIMapObject = new IMapRectangleObject( aRect, aURL, aAltText, aDesc, aTarget, aName, mbIsActive, sal_False );
+            pNewIMapObject = new IMapRectangleObject( aRect, aURL, aAltText, aDesc, aTarget, aName, mbIsActive, false );
         }
         break;
 
     case IMAP_OBJ_CIRCLE:
         {
             const Point aCenter( maCenter.X, maCenter.Y );
-            pNewIMapObject = new IMapCircleObject( aCenter, mnRadius, aURL, aAltText, aDesc, aTarget, aName, mbIsActive, sal_False );
+            pNewIMapObject = new IMapCircleObject( aCenter, mnRadius, aURL, aAltText, aDesc, aTarget, aName, mbIsActive, false );
         }
         break;
 
@@ -291,7 +291,7 @@ IMapObject* SvUnoImageMapObject::createIMapObject() const
             }
 
             aPoly.Optimize( POLY_OPTIMIZE_CLOSE );
-            pNewIMapObject = new IMapPolygonObject( aPoly, aURL, aAltText, aDesc, aTarget, aName, mbIsActive, sal_False );
+            pNewIMapObject = new IMapPolygonObject( aPoly, aURL, aAltText, aDesc, aTarget, aName, mbIsActive, false );
         }
         break;
     }

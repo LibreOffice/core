@@ -386,7 +386,7 @@ void SvxIconChoiceCtrl_Impl::SelectEntry( SvxIconChoiceCtrlEntry* pEntry, sal_Bo
             nFlags &= ~F_CLEARING_SELECTION;
         }
     }
-    if( pEntry->IsSelected() != bSelect )
+    if( (pEntry->IsSelected() ? 1 : 0) != bSelect )
     {
         pHdlEntry = pEntry;
         sal_uInt16 nEntryFlags = pEntry->GetFlags();
@@ -1672,7 +1672,7 @@ void SvxIconChoiceCtrl_Impl::PaintItem( const Rectangle& rRect,
     {
         OUString aText;
         if( !pStr )
-            aText = pView->GetEntryText( pEntry, sal_False );
+            aText = pView->GetEntryText( pEntry, false );
         else
             aText = *pStr;
 
@@ -1788,7 +1788,7 @@ void SvxIconChoiceCtrl_Impl::PaintEntry( SvxIconChoiceCtrlEntry* pEntry, const P
     }
     */
 
-    OUString aEntryText( pView->GetEntryText( pEntry, sal_False ) );
+    OUString aEntryText( pView->GetEntryText( pEntry, false ) );
     Rectangle aTextRect( CalcTextRect(pEntry,&rPos,sal_False,&aEntryText));
     Rectangle aBmpRect( CalcBmpRect(pEntry, &rPos ) );
 
@@ -3197,7 +3197,7 @@ void SvxIconChoiceCtrl_Impl::EditEntry( SvxIconChoiceCtrlEntry* pEntry )
     SetNoSelection();
 
     pCurEditedEntry = pEntry;
-    OUString aEntryText( pView->GetEntryText( pEntry, sal_True ) );
+    OUString aEntryText( pView->GetEntryText( pEntry, true ) );
     Rectangle aRect( CalcTextRect( pEntry, 0, sal_True, &aEntryText ) );
     MakeVisible( aRect );
     Point aPos( aRect.TopLeft() );
@@ -3672,7 +3672,7 @@ sal_Bool SvxIconChoiceCtrl_Impl::RequestHelp( const HelpEvent& rHEvt )
         return sal_False;
 
     OUString sQuickHelpText = pEntry->GetQuickHelpText();
-    OUString aEntryText( pView->GetEntryText( pEntry, sal_False ) );
+    OUString aEntryText( pView->GetEntryText( pEntry, false ) );
     Rectangle aTextRect( CalcTextRect( pEntry, 0, sal_False, &aEntryText ) );
     if ( ( !aTextRect.IsInside( aPos ) || aEntryText.isEmpty() ) && sQuickHelpText.isEmpty() )
         return sal_False;

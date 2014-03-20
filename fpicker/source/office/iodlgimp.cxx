@@ -154,9 +154,9 @@ void SvtUpButton_Impl::FillURLMenu( PopupMenu* _pMenu )
     INetURLObject aObject( pBox->GetViewURL() );
     sal_Int32 nCount = aObject.getSegmentCount();
 
-    ::svtools::VolumeInfo aVolInfo( sal_True /* volume */, sal_False /* remote */,
-                                    sal_False /* removable */, sal_False /* floppy */,
-                                    sal_False /* compact disk */ );
+    ::svtools::VolumeInfo aVolInfo( true /* volume */, false /* remote */,
+                                    false /* removable */, false /* floppy */,
+                                    false /* compact disk */ );
     Image aVolumeImage( SvFileInformationManager::GetFolderImage( aVolInfo ) );
 
     while ( nCount >= 1 )

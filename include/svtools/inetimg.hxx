@@ -67,8 +67,8 @@ public:
     const Size&     GetSizePixel() const { return aSizePixel; }
 
     // Im-/Export
-    sal_Bool Write( SvStream& rOStm, sal_uLong nFormat ) const;
-    sal_Bool Read( SvStream& rIStm, sal_uLong nFormat );
+    bool Write( SvStream& rOStm, sal_uLong nFormat ) const;
+    bool Read( SvStream& rIStm, sal_uLong nFormat );
 };
 
 #endif // INCLUDED_SVTOOLS_INETIMG_HXX

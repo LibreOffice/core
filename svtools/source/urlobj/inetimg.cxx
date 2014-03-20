@@ -25,9 +25,9 @@
 
 static const sal_Unicode TOKEN_SEPARATOR = '\001';
 
-sal_Bool INetImage::Write( SvStream& rOStm, sal_uLong nFormat ) const
+bool INetImage::Write( SvStream& rOStm, sal_uLong nFormat ) const
 {
-    sal_Bool bRet = sal_False;
+    bool bRet = false;
     switch( nFormat )
     {
     case SOT_FORMATSTR_ID_INET_IMAGE:
@@ -57,9 +57,9 @@ sal_Bool INetImage::Write( SvStream& rOStm, sal_uLong nFormat ) const
     return bRet;
 }
 
-sal_Bool INetImage::Read( SvStream& rIStm, sal_uLong nFormat )
+bool INetImage::Read( SvStream& rIStm, sal_uLong nFormat )
 {
-    sal_Bool bRet = sal_False;
+    bool bRet = false;
     switch( nFormat )
     {
     case SOT_FORMATSTR_ID_INET_IMAGE:

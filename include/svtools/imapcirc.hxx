@@ -30,7 +30,7 @@ class SVT_DLLPUBLIC IMapCircleObject : public IMapObject
     Point               aCenter;
     sal_Int32               nRadius;
 
-    void                ImpConstruct( const Point& rCenter, sal_uLong nRad, sal_Bool bPixel );
+    void                ImpConstruct( const Point& rCenter, sal_uLong nRad, bool bPixel );
 
 protected:
 
@@ -47,15 +47,15 @@ public:
                                           const OUString& rDesc,
                                           const OUString& rTarget,
                                           const OUString& rName,
-                                          sal_Bool bActive = sal_True,
-                                          sal_Bool bPixelCoords = sal_True );
+                                          bool bActive = true,
+                                          bool bPixelCoords = true );
     virtual             ~IMapCircleObject() {};
 
-    virtual sal_uInt16      GetType() const;
-    virtual sal_Bool        IsHit( const Point& rPoint ) const;
+    virtual sal_uInt16  GetType() const;
+    virtual bool        IsHit( const Point& rPoint ) const;
 
-    Point               GetCenter( sal_Bool bPixelCoords = sal_True ) const;
-    sal_uLong               GetRadius( sal_Bool bPixelCoords = sal_True ) const;
+    Point               GetCenter( bool bPixelCoords = true ) const;
+    sal_uLong           GetRadius( bool bPixelCoords = true ) const;
 
     // liefert das BoundRect des Kreis-Objektes in 1/100mm
     virtual Rectangle   GetBoundRect() const;
@@ -63,7 +63,7 @@ public:
     void                Scale( const Fraction& rFractX, const Fraction& rFracY );
 
     using IMapObject::IsEqual;
-    sal_Bool                IsEqual( const IMapCircleObject& rEqObj );
+    bool                IsEqual( const IMapCircleObject& rEqObj );
 
     // Im-/Export
     void                WriteCERN( SvStream& rOStm, const OUString& rBaseURL  ) const;

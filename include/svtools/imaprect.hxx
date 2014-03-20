@@ -29,7 +29,7 @@ class SVT_DLLPUBLIC IMapRectangleObject : public IMapObject
 {
     Rectangle           aRect;
 
-    SVT_DLLPRIVATE void             ImpConstruct( const Rectangle& rRect, sal_Bool bPixel );
+    SVT_DLLPRIVATE void             ImpConstruct( const Rectangle& rRect, bool bPixel );
 
 protected:
 
@@ -46,14 +46,14 @@ public:
                                              const OUString& rDesc,
                                              const OUString& rTarget,
                                              const OUString& rName,
-                                             sal_Bool bActive = sal_True,
-                                             sal_Bool bPixelCoords = sal_True );
+                                             bool bActive = true,
+                                             bool bPixelCoords = true );
     virtual             ~IMapRectangleObject() {};
 
-    virtual sal_uInt16      GetType() const;
-    virtual sal_Bool        IsHit( const Point& rPoint ) const;
+    virtual sal_uInt16  GetType() const;
+    virtual bool        IsHit( const Point& rPoint ) const;
 
-    Rectangle           GetRectangle( sal_Bool bPixelCoords = sal_True ) const;
+    Rectangle           GetRectangle( bool bPixelCoords = true ) const;
 
     // liefert das BoundRect des Rechteck-Objektes in 1/100mm
     virtual Rectangle   GetBoundRect() const { return aRect; }
@@ -61,7 +61,7 @@ public:
     void                Scale( const Fraction& rFractX, const Fraction& rFracY );
 
     using IMapObject::IsEqual;
-    sal_Bool                IsEqual( const IMapRectangleObject& rEqObj );
+    bool                IsEqual( const IMapRectangleObject& rEqObj );
 
     // Im-/Export
     void                WriteCERN( SvStream& rOStm, const OUString& rBaseURL  ) const;

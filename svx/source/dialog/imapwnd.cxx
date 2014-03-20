@@ -182,7 +182,7 @@ SdrObject* IMapWindow::CreateObj( const IMapObject* pIMapObj )
         case( IMAP_OBJ_RECTANGLE ):
         {
             IMapRectangleObject*    pIMapRectObj = (IMapRectangleObject*) pIMapObj;
-            Rectangle               aDrawRect( pIMapRectObj->GetRectangle( sal_False ) );
+            Rectangle               aDrawRect( pIMapRectObj->GetRectangle( false ) );
 
             // clipped on CanvasPane
             aDrawRect.Intersection( aClipRect );
@@ -195,8 +195,8 @@ SdrObject* IMapWindow::CreateObj( const IMapObject* pIMapObj )
         case( IMAP_OBJ_CIRCLE ):
         {
             IMapCircleObject*   pIMapCircleObj = (IMapCircleObject*) pIMapObj;
-            const Point         aCenter( pIMapCircleObj->GetCenter( sal_False ) );
-            const long          nRadius = pIMapCircleObj->GetRadius( sal_False );
+            const Point         aCenter( pIMapCircleObj->GetCenter( false ) );
+            const long          nRadius = pIMapCircleObj->GetRadius( false );
             const Point         aOffset( nRadius, nRadius );
             Rectangle           aCircle( aCenter - aOffset, aCenter + aOffset );
 
@@ -224,7 +224,7 @@ SdrObject* IMapWindow::CreateObj( const IMapObject* pIMapObj )
             }
             else
             {
-                const Polygon&  rPoly = pIMapPolyObj->GetPolygon( sal_False );
+                const Polygon&  rPoly = pIMapPolyObj->GetPolygon( false );
                 Polygon         aDrawPoly( rPoly );
 
                 // clipped on CanvasPane
@@ -289,7 +289,7 @@ void IMapWindow::SdrObjCreated( const SdrObject& rObj )
         case( OBJ_RECT ):
         {
             SdrRectObj*          pRectObj = (SdrRectObj*) &rObj;
-            IMapRectangleObject* pObj = new IMapRectangleObject( pRectObj->GetLogicRect(), "", "", "", "", "", sal_True, sal_False );
+            IMapRectangleObject* pObj = new IMapRectangleObject( pRectObj->GetLogicRect(), "", "", "", "", "", true, false );
 
             pRectObj->AppendUserData( new IMapUserData( IMapObjectPtr(pObj) ) );
         }
@@ -302,7 +302,7 @@ void IMapWindow::SdrObjCreated( const SdrObject& rObj )
             Polygon aPoly(pPathObj->GetPathPoly().getB2DPolygon(0L));
             delete pPathObj;
 
-            IMapPolygonObject* pObj = new IMapPolygonObject( Polygon(aPoly), "", "", "", "", "", sal_True, sal_False );
+            IMapPolygonObject* pObj = new IMapPolygonObject( Polygon(aPoly), "", "", "", "", "", true, false );
             pObj->SetExtraEllipse( aPoly.GetBoundRect() );
             pCircObj->AppendUserData( new IMapUserData( IMapObjectPtr(pObj) ) );
         }
@@ -319,7 +319,7 @@ void IMapWindow::SdrObjCreated( const SdrObject& rObj )
             if ( rXPolyPoly.count() )
             {
                 Polygon aPoly(rXPolyPoly.getB2DPolygon(0L));
-                IMapPolygonObject* pObj = new IMapPolygonObject( aPoly, "", "", "", "", "", sal_True, sal_False );
+                IMapPolygonObject* pObj = new IMapPolygonObject( aPoly, "", "", "", "", "", true, false );
                 pPathObj->AppendUserData( new IMapUserData( IMapObjectPtr(pObj) ) );
             }
         }
@@ -357,7 +357,7 @@ void IMapWindow::SdrObjChanged( const SdrObject& rObj )
             case( OBJ_RECT ):
             {
                 pUserData->ReplaceObject( IMapObjectPtr(new IMapRectangleObject( ( (const SdrRectObj&) rObj ).GetLogicRect(),
-                          aURL, aAltText, aDesc, aTarget, "", bActive, sal_False ) ) );
+                          aURL, aAltText, aDesc, aTarget, "", bActive, false ) ) );
             }
             break;
 
@@ -367,7 +367,7 @@ void IMapWindow::SdrObjChanged( const SdrObject& rObj )
                 SdrPathObj* pPathObj = (SdrPathObj*) rCircObj.ConvertToPolyObj( false, false );
                 Polygon aPoly(pPathObj->GetPathPoly().getB2DPolygon(0L));
 
-                IMapPolygonObject* pObj = new IMapPolygonObject( aPoly, aURL, aAltText, aDesc, aTarget, "", bActive, sal_False );
+                IMapPolygonObject* pObj = new IMapPolygonObject( aPoly, aURL, aAltText, aDesc, aTarget, "", bActive, false );
                 pObj->SetExtraEllipse( aPoly.GetBoundRect() );
 
                 // was only created by us temporarily
@@ -387,7 +387,7 @@ void IMapWindow::SdrObjChanged( const SdrObject& rObj )
                 if ( rXPolyPoly.count() )
                 {
                     Polygon aPoly(rPathObj.GetPathPoly().getB2DPolygon(0L));
-                    IMapPolygonObject*  pObj = new IMapPolygonObject( aPoly, aURL, aAltText, aDesc, aTarget, "", bActive, sal_False );
+                    IMapPolygonObject*  pObj = new IMapPolygonObject( aPoly, aURL, aAltText, aDesc, aTarget, "", bActive, false );
                     pUserData->ReplaceObject( IMapObjectPtr(pObj) );
                 }
             }

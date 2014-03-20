@@ -372,7 +372,7 @@ IMPL_LINK( SfxAppMenuControl_Impl, Activate, Menu *, pActMenu )
                         if ( !bImageSet && !aCmd.isEmpty() )
                         {
                             Image aImage = SvFileInformationManager::GetImage(
-                                INetURLObject(aCmd), sal_False );
+                                INetURLObject(aCmd), false );
                             if ( !!aImage )
                                 pActMenu->SetItemImage( nItemId, aImage );
                         }

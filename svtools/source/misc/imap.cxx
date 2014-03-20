@@ -53,7 +53,7 @@ IMapObject::IMapObject()
 }
 
 IMapObject::IMapObject( const OUString& rURL, const OUString& rAltText, const OUString& rDesc,
-                        const OUString& rTarget, const OUString& rName, sal_Bool bURLActive )
+                        const OUString& rTarget, const OUString& rName, bool bURLActive )
 : aURL( rURL )
 , aAltText( rAltText )
 , aDesc( rDesc )
@@ -119,7 +119,7 @@ void IMapObject::Read( SvStream& rIStm, const OUString& rBaseURL )
     rIStm.ReadUInt16( nTextEncoding );
     aURL = read_uInt16_lenPrefixed_uInt8s_ToOUString(rIStm, nTextEncoding);
     aAltText = read_uInt16_lenPrefixed_uInt8s_ToOUString(rIStm, nTextEncoding);
-    rIStm.ReadUChar( bActive );
+    rIStm.ReadCharAsBool( bActive );
     aTarget = read_uInt16_lenPrefixed_uInt8s_ToOUString(rIStm, nTextEncoding);
 
     // make URL absolute
@@ -141,7 +141,7 @@ void IMapObject::Read( SvStream& rIStm, const OUString& rBaseURL )
     delete pCompat;
 }
 
-sal_Bool IMapObject::IsEqual( const IMapObject& rEqObj )
+bool IMapObject::IsEqual( const IMapObject& rEqObj )
 {
     return ( ( aURL == rEqObj.aURL ) &&
              ( aAltText == rEqObj.aAltText ) &&
@@ -157,14 +157,14 @@ IMapRectangleObject::IMapRectangleObject( const Rectangle& rRect,
                                           const OUString& rDesc,
                                           const OUString& rTarget,
                                           const OUString& rName,
-                                          sal_Bool bURLActive,
-                                          sal_Bool bPixelCoords ) :
+                                          bool bURLActive,
+                                          bool bPixelCoords ) :
             IMapObject  ( rURL, rAltText, rDesc, rTarget, rName, bURLActive )
 {
     ImpConstruct( rRect, bPixelCoords );
 }
 
-void IMapRectangleObject::ImpConstruct( const Rectangle& rRect, sal_Bool bPixel )
+void IMapRectangleObject::ImpConstruct( const Rectangle& rRect, bool bPixel )
 {
     if ( bPixel )
         aRect = Application::GetDefaultDevice()->PixelToLogic( rRect, MapMode( MAP_100TH_MM ) );
@@ -215,12 +215,12 @@ sal_uInt16 IMapRectangleObject::GetType() const
 |*
 \******************************************************************************/
 
-sal_Bool IMapRectangleObject::IsHit( const Point& rPoint ) const
+bool IMapRectangleObject::IsHit( const Point& rPoint ) const
 {
     return aRect.IsInside( rPoint );
 }
 
-Rectangle IMapRectangleObject::GetRectangle( sal_Bool bPixelCoords ) const
+Rectangle IMapRectangleObject::GetRectangle( bool bPixelCoords ) const
 {
     Rectangle   aNewRect;
 
@@ -246,7 +246,7 @@ void IMapRectangleObject::Scale( const Fraction& rFracX, const Fraction& rFracY 
     aRect = Rectangle( aTL, aBR );
 }
 
-sal_Bool IMapRectangleObject::IsEqual( const IMapRectangleObject& rEqObj )
+bool IMapRectangleObject::IsEqual( const IMapRectangleObject& rEqObj )
 {
     return ( IMapObject::IsEqual( rEqObj ) && ( aRect == rEqObj.aRect ) );
 }
@@ -257,14 +257,14 @@ IMapCircleObject::IMapCircleObject( const Point& rCenter, sal_uLong nCircleRadiu
                                     const OUString& rDesc,
                                     const OUString& rTarget,
                                     const OUString& rName,
-                                    sal_Bool bURLActive,
-                                    sal_Bool bPixelCoords ) :
+                                    bool bURLActive,
+                                    bool bPixelCoords ) :
             IMapObject  ( rURL, rAltText, rDesc, rTarget, rName, bURLActive )
 {
     ImpConstruct( rCenter, nCircleRadius, bPixelCoords );
 }
 
-void IMapCircleObject::ImpConstruct( const Point& rCenter, sal_uLong nRad, sal_Bool bPixel )
+void IMapCircleObject::ImpConstruct( const Point& rCenter, sal_uLong nRad, bool bPixel )
 {
     if ( bPixel )
     {
@@ -331,21 +331,21 @@ sal_uInt16 IMapCircleObject::GetType() const
 |*
 \******************************************************************************/
 
-sal_Bool IMapCircleObject::IsHit( const Point& rPoint ) const
+bool IMapCircleObject::IsHit( const Point& rPoint ) const
 {
     const Point aPoint( aCenter - rPoint );
-    sal_Bool        bRet = sal_False;
+    bool        bRet = false;
 
     if ( (sal_Int32) sqrt( (double) aPoint.X() * aPoint.X() +
                        aPoint.Y() * aPoint.Y() ) <= nRadius )
     {
-        bRet = sal_True;
+        bRet = true;
     }
 
     return bRet;
 }
 
-Point IMapCircleObject::GetCenter( sal_Bool bPixelCoords ) const
+Point IMapCircleObject::GetCenter( bool bPixelCoords ) const
 {
     Point aNewPoint;
 
@@ -357,7 +357,7 @@ Point IMapCircleObject::GetCenter( sal_Bool bPixelCoords ) const
     return aNewPoint;
 }
 
-sal_uLong IMapCircleObject::GetRadius( sal_Bool bPixelCoords ) const
+sal_uLong IMapCircleObject::GetRadius( bool bPixelCoords ) const
 {
     sal_uLong nNewRadius;
 
@@ -392,7 +392,7 @@ void IMapCircleObject::Scale( const Fraction& rFracX, const Fraction& rFracY )
     nRadius = ( nRadius * aAverage.GetNumerator() ) / aAverage.GetDenominator();
 }
 
-sal_Bool IMapCircleObject::IsEqual( const IMapCircleObject& rEqObj )
+bool IMapCircleObject::IsEqual( const IMapCircleObject& rEqObj )
 {
     return ( IMapObject::IsEqual( rEqObj ) &&
              ( aCenter == rEqObj.aCenter ) &&
@@ -405,15 +405,15 @@ IMapPolygonObject::IMapPolygonObject( const Polygon& rPoly,
                                       const OUString& rDesc,
                                       const OUString& rTarget,
                                       const OUString& rName,
-                                      sal_Bool bURLActive,
-                                      sal_Bool bPixelCoords ) :
+                                      bool bURLActive,
+                                      bool bPixelCoords ) :
             IMapObject  ( rURL, rAltText, rDesc, rTarget, rName, bURLActive ),
-            bEllipse    ( sal_False )
+            bEllipse    ( false )
 {
     ImpConstruct( rPoly, bPixelCoords );
 }
 
-void IMapPolygonObject::ImpConstruct( const Polygon& rPoly, sal_Bool bPixel )
+void IMapPolygonObject::ImpConstruct( const Polygon& rPoly, bool bPixel )
 {
     if ( bPixel )
         aPoly = Application::GetDefaultDevice()->PixelToLogic( rPoly, MapMode( MAP_100TH_MM ) );
@@ -449,7 +449,7 @@ void IMapPolygonObject::ReadIMapObject( SvStream& rIStm )
     // Version >= 2 has additional ellipses information
     if ( nReadVersion >= 2 )
     {
-        rIStm.ReadUChar( bEllipse );
+        rIStm.ReadCharAsBool( bEllipse );
         ReadRectangle( rIStm, aEllipse );
     }
 }
@@ -473,12 +473,12 @@ sal_uInt16 IMapPolygonObject::GetType() const
 |*
 \******************************************************************************/
 
-sal_Bool IMapPolygonObject::IsHit( const Point& rPoint ) const
+bool IMapPolygonObject::IsHit( const Point& rPoint ) const
 {
     return aPoly.IsInside( rPoint );
 }
 
-Polygon IMapPolygonObject::GetPolygon( sal_Bool bPixelCoords ) const
+Polygon IMapPolygonObject::GetPolygon( bool bPixelCoords ) const
 {
     Polygon aNewPoly;
 
@@ -494,7 +494,7 @@ void IMapPolygonObject::SetExtraEllipse( const Rectangle& rEllipse )
 {
     if ( aPoly.GetSize() )
     {
-        bEllipse = sal_True;
+        bEllipse = true;
         aEllipse = rEllipse;
     }
 }
@@ -530,16 +530,16 @@ void IMapPolygonObject::Scale( const Fraction& rFracX, const Fraction& rFracY )
     }
 }
 
-sal_Bool IMapPolygonObject::IsEqual( const IMapPolygonObject& rEqObj )
+bool IMapPolygonObject::IsEqual( const IMapPolygonObject& rEqObj )
 {
-    sal_Bool bRet = sal_False;
+    bool bRet = false;
 
     if ( IMapObject::IsEqual( rEqObj ) )
     {
-        const Polygon&  rEqPoly = rEqObj.aPoly;
-        const sal_uInt16    nCount = aPoly.GetSize();
-        const sal_uInt16    nEqCount = rEqPoly.GetSize();
-        sal_Bool            bDifferent = sal_False;
+        const Polygon&   rEqPoly = rEqObj.aPoly;
+        const sal_uInt16 nCount = aPoly.GetSize();
+        const sal_uInt16 nEqCount = rEqPoly.GetSize();
+        bool             bDifferent = false;
 
         if ( nCount == nEqCount )
         {
@@ -547,13 +547,13 @@ sal_Bool IMapPolygonObject::IsEqual( const IMapPolygonObject& rEqObj )
             {
                 if ( aPoly[ i ] != rEqPoly[ i ] )
                 {
-                    bDifferent = sal_True;
+                    bDifferent = true;
                     break;
                 }
             }
 
             if ( !bDifferent )
-                bRet = sal_True;
+                bRet = true;
         }
     }
 
@@ -686,15 +686,15 @@ ImageMap& ImageMap::operator=( const ImageMap& rImageMap )
 |*
 \******************************************************************************/
 
-sal_Bool ImageMap::operator==( const ImageMap& rImageMap )
+bool ImageMap::operator==( const ImageMap& rImageMap )
 {
     const size_t    nCount = maList.size();
     const size_t    nEqCount = rImageMap.GetIMapObjectCount();
-    sal_Bool        bRet = sal_False;
+    bool            bRet = false;
 
     if ( nCount == nEqCount )
     {
-        sal_Bool bDifferent = ( aName != rImageMap.aName );
+        bool bDifferent = ( aName != rImageMap.aName );
 
         for ( size_t i = 0; ( i < nCount ) && !bDifferent; i++ )
         {
@@ -708,21 +708,21 @@ sal_Bool ImageMap::operator==( const ImageMap& rImageMap )
                     case( IMAP_OBJ_RECTANGLE ):
                     {
                         if ( !( (IMapRectangleObject*) pObj )->IsEqual( *(IMapRectangleObject*) pEqObj ) )
-                            bDifferent = sal_True;
+                            bDifferent = true;
                     }
                     break;
 
                     case( IMAP_OBJ_CIRCLE ):
                     {
                         if ( !( (IMapCircleObject*) pObj )->IsEqual( *(IMapCircleObject*) pEqObj ) )
-                            bDifferent = sal_True;
+                            bDifferent = true;
                     }
                     break;
 
                     case( IMAP_OBJ_POLYGON ):
                     {
                         if ( !( (IMapPolygonObject*) pObj )->IsEqual( *(IMapPolygonObject*) pEqObj ) )
-                            bDifferent = sal_True;
+                            bDifferent = true;
                     }
                     break;
 
@@ -731,11 +731,11 @@ sal_Bool ImageMap::operator==( const ImageMap& rImageMap )
                 }
             }
             else
-                bDifferent = sal_True;
+                bDifferent = true;
         }
 
         if ( !bDifferent )
-            bRet = sal_True;
+            bRet = true;
     }
 
     return bRet;
@@ -748,7 +748,7 @@ sal_Bool ImageMap::operator==( const ImageMap& rImageMap )
 |*
 \******************************************************************************/
 
-sal_Bool ImageMap::operator!=( const ImageMap& rImageMap )
+bool ImageMap::operator!=( const ImageMap& rImageMap )
 {
     return !( *this == rImageMap );
 }

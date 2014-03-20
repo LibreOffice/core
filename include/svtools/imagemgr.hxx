@@ -33,24 +33,24 @@ namespace svtools {
 
 struct VolumeInfo
 {
-    sal_Bool    m_bIsVolume;
-    sal_Bool    m_bIsRemote;
-    sal_Bool    m_bIsRemoveable;
-    sal_Bool    m_bIsFloppy;
-    sal_Bool    m_bIsCompactDisc;
+    bool    m_bIsVolume;
+    bool    m_bIsRemote;
+    bool    m_bIsRemoveable;
+    bool    m_bIsFloppy;
+    bool    m_bIsCompactDisc;
 
     VolumeInfo() :
-        m_bIsVolume     ( sal_False ),
-        m_bIsRemote     ( sal_False ),
-        m_bIsRemoveable ( sal_False ),
-        m_bIsFloppy     ( sal_False ),
-        m_bIsCompactDisc( sal_False ) {}
+        m_bIsVolume     ( false ),
+        m_bIsRemote     ( false ),
+        m_bIsRemoveable ( false ),
+        m_bIsFloppy     ( false ),
+        m_bIsCompactDisc( false ) {}
 
-    VolumeInfo( sal_Bool _bIsVolume,
-                sal_Bool _bIsRemote,
-                sal_Bool _bIsRemoveable,
-                sal_Bool _bIsFloppy,
-                sal_Bool _bIsCompactDisc ) :
+    VolumeInfo( bool _bIsVolume,
+                bool _bIsRemote,
+                bool _bIsRemoveable,
+                bool _bIsFloppy,
+                bool _bIsCompactDisc ) :
         m_bIsVolume     ( _bIsVolume ),
         m_bIsRemote     ( _bIsRemote ),
         m_bIsRemoveable ( _bIsRemoveable ),
@@ -63,13 +63,13 @@ struct VolumeInfo
 class SvFileInformationManager
 {
 private:
-    SVT_DLLPRIVATE static rtl::OUString    GetDescription_Impl( const INetURLObject& rObject, sal_Bool bDetectFolder );
+    SVT_DLLPRIVATE static rtl::OUString    GetDescription_Impl( const INetURLObject& rObject, bool bDetectFolder );
 
 public:
-    SVT_DLLPUBLIC static Image  GetImage( const INetURLObject& rURL, sal_Bool bBig = sal_False );
-    SVT_DLLPUBLIC static Image  GetFileImage( const INetURLObject& rURL, sal_Bool bBig = sal_False );
-    SVT_DLLPUBLIC static Image  GetImageNoDefault( const INetURLObject& rURL, sal_Bool bBig = sal_False );
-    SVT_DLLPUBLIC static Image  GetFolderImage( const svtools::VolumeInfo& rInfo, sal_Bool bBig = sal_False );
+    SVT_DLLPUBLIC static Image  GetImage( const INetURLObject& rURL, bool bBig = false );
+    SVT_DLLPUBLIC static Image  GetFileImage( const INetURLObject& rURL, bool bBig = false );
+    SVT_DLLPUBLIC static Image  GetImageNoDefault( const INetURLObject& rURL, bool bBig = false );
+    SVT_DLLPUBLIC static Image  GetFolderImage( const svtools::VolumeInfo& rInfo, bool bBig = false );
 
     SVT_DLLPUBLIC static rtl::OUString GetDescription( const INetURLObject& rObject );
     SVT_DLLPUBLIC static rtl::OUString GetFileDescription( const INetURLObject& rObject );

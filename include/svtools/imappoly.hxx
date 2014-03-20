@@ -30,9 +30,9 @@ class SVT_DLLPUBLIC IMapPolygonObject : public IMapObject
 {
     Polygon             aPoly;
     Rectangle           aEllipse;
-    sal_Bool                bEllipse;
+    bool                bEllipse;
 
-    SVT_DLLPRIVATE void             ImpConstruct( const Polygon& rPoly, sal_Bool bPixel );
+    SVT_DLLPRIVATE void             ImpConstruct( const Polygon& rPoly, bool bPixel );
 
 protected:
 
@@ -40,7 +40,7 @@ protected:
     virtual void        WriteIMapObject( SvStream& rOStm ) const;
     virtual void        ReadIMapObject(  SvStream& rIStm );
 
-    sal_Bool            ReadPreProLine( SvStream& rIStm, OUString& rStr );
+    bool                ReadPreProLine( SvStream& rIStm, OUString& rStr );
 
 public:
                         IMapPolygonObject() {};
@@ -50,26 +50,26 @@ public:
                                            const OUString& rDesc,
                                            const OUString& rTarget,
                                            const OUString& rName,
-                                           sal_Bool bActive = sal_True,
-                                           sal_Bool bPixelCoords = sal_True );
+                                           bool bActive = true,
+                                           bool bPixelCoords = true );
     virtual             ~IMapPolygonObject() {};
 
     virtual sal_uInt16      GetType() const;
-    virtual sal_Bool        IsHit( const Point& rPoint ) const;
+    virtual bool        IsHit( const Point& rPoint ) const;
 
-    Polygon             GetPolygon( sal_Bool bPixelCoords = sal_True ) const;
+    Polygon             GetPolygon( bool bPixelCoords = true ) const;
 
     // liefert das BoundRect des Polygon-Objektes in 1/100mm
     virtual Rectangle   GetBoundRect() const {  return aPoly.GetBoundRect(); }
 
-    sal_Bool                HasExtraEllipse() const { return bEllipse; }
+    bool                HasExtraEllipse() const { return bEllipse; }
     const Rectangle&    GetExtraEllipse() const { return aEllipse; }
     void                SetExtraEllipse( const Rectangle& rEllipse );
 
     void                Scale( const Fraction& rFractX, const Fraction& rFracY );
 
     using IMapObject::IsEqual;
-    sal_Bool                IsEqual( const IMapPolygonObject& rEqObj );
+    bool                IsEqual( const IMapPolygonObject& rEqObj );
 
     // Im-/Export
     void                WriteCERN( SvStream& rOStm, const OUString& rBaseURL  ) const;

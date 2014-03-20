@@ -167,7 +167,7 @@ SvtIconWindow_Impl::SvtIconWindow_Impl( Window* pParent ) :
 
     aIconCtrl.SetAccessibleName( OUString( "Groups" ) );
     aIconCtrl.SetHelpId( HID_TEMPLATEDLG_ICONCTRL );
-    aIconCtrl.SetChoiceWithCursor( sal_True );
+    aIconCtrl.SetChoiceWithCursor( true );
     aIconCtrl.SetSelectionMode( SINGLE_SELECTION );
     aIconCtrl.Show();
 

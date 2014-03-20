@@ -125,18 +125,18 @@ public:
 
     const Rectangle &       GetBoundRect() const { return aRect; }
 
-    void                    SetFocus ( sal_Bool bSet )
+    void                    SetFocus ( bool bSet )
                                      { nFlags = ( bSet ? nFlags | ICNVIEW_FLAG_FOCUSED : nFlags & ~ICNVIEW_FLAG_FOCUSED ); }
 
-    SvxIconChoiceCtrlTextMode       GetTextMode() const { return eTextMode; }
-    sal_uInt16                  GetFlags() const { return nFlags; }
-    sal_Bool                    IsSelected() const { return (sal_Bool)((nFlags & ICNVIEW_FLAG_SELECTED) !=0); }
-    sal_Bool                    IsFocused() const { return (sal_Bool)((nFlags & ICNVIEW_FLAG_FOCUSED) !=0); }
-    sal_Bool                    IsInUse() const { return (sal_Bool)((nFlags & ICNVIEW_FLAG_IN_USE) !=0); }
-    sal_Bool                    IsCursored() const { return (sal_Bool)((nFlags & ICNVIEW_FLAG_CURSORED) !=0); }
-    sal_Bool                    IsDropTarget() const { return (sal_Bool)((nFlags & ICNVIEW_FLAG_DROP_TARGET) !=0); }
-    sal_Bool                    IsBlockingEmphasis() const { return (sal_Bool)((nFlags & ICNVIEW_FLAG_BLOCK_EMPHASIS) !=0); }
-    sal_Bool                    IsPosLocked() const { return (sal_Bool)((nFlags & ICNVIEW_FLAG_POS_LOCKED) !=0); }
+    SvxIconChoiceCtrlTextMode   GetTextMode() const { return eTextMode; }
+    sal_uInt16              GetFlags() const { return nFlags; }
+    bool                    IsSelected() const { return ((nFlags & ICNVIEW_FLAG_SELECTED) !=0); }
+    bool                    IsFocused() const { return ((nFlags & ICNVIEW_FLAG_FOCUSED) !=0); }
+    bool                    IsInUse() const { return ((nFlags & ICNVIEW_FLAG_IN_USE) !=0); }
+    bool                    IsCursored() const { return ((nFlags & ICNVIEW_FLAG_CURSORED) !=0); }
+    bool                    IsDropTarget() const { return ((nFlags & ICNVIEW_FLAG_DROP_TARGET) !=0); }
+    bool                    IsBlockingEmphasis() const { return ((nFlags & ICNVIEW_FLAG_BLOCK_EMPHASIS) !=0); }
+    bool                    IsPosLocked() const { return ((nFlags & ICNVIEW_FLAG_POS_LOCKED) !=0); }
 
     // Nur bei AutoArrange gesetzt. Den Kopf der Liste gibts per SvxIconChoiceCtrl::GetPredecessorHead
     SvxIconChoiceCtrlEntry*         GetSuccessor() const { return pflink; }
@@ -225,15 +225,15 @@ class SVT_DLLPUBLIC SvtIconChoiceCtrl : public Control
     Link                    _aVisRectChangedHdl;
     KeyEvent*               _pCurKeyEvent;
     SvxIconChoiceCtrl_Impl* _pImp;
-    sal_Bool                    _bAutoFontColor;
+    bool                    _bAutoFontColor;
 
 protected:
 
     virtual void        KeyInput( const KeyEvent& rKEvt );
-    virtual sal_Bool    EditedEntry( SvxIconChoiceCtrlEntry*, const OUString& rNewText, sal_Bool bCancelled );
+    virtual bool        EditedEntry( SvxIconChoiceCtrlEntry*, const OUString& rNewText, bool bCancelled );
     virtual void        DocumentRectChanged();
     virtual void        VisibleRectChanged();
-    virtual sal_Bool        EditingEntry( SvxIconChoiceCtrlEntry* pEntry );
+    virtual bool        EditingEntry( SvxIconChoiceCtrlEntry* pEntry );
     virtual void        Command( const CommandEvent& rCEvt );
     virtual void        Paint( const Rectangle& rRect );
     virtual void        MouseButtonDown( const MouseEvent& rMEvt );
@@ -253,7 +253,7 @@ protected:
 
     OUString            GetEntryText(
                             SvxIconChoiceCtrlEntry* pEntry,
-                            sal_Bool bInplaceEdit );
+                            bool bInplaceEdit );
 
     virtual void        FillLayoutData() const;
 
@@ -267,7 +267,7 @@ public:
     void                SetStyle( WinBits nWinStyle );
     WinBits             GetStyle() const;
 
-    sal_Bool                SetChoiceWithCursor ( sal_Bool bDo = sal_True );
+    bool                SetChoiceWithCursor ( bool bDo = true );
 
     void                SetFont( const Font& rFont );
     void                SetPointFont( const Font& rFont );
@@ -301,9 +301,9 @@ public:
     */
     void                CreateAutoMnemonics( MnemonicGenerator& _rUsedMnemonics );
 
-    sal_Bool                DoKeyInput( const KeyEvent& rKEvt );
+    bool                DoKeyInput( const KeyEvent& rKEvt );
 
-    sal_Bool                IsEntryEditing() const;
+    bool                IsEntryEditing() const;
 
     sal_uLong                   GetEntryCount() const;
     SvxIconChoiceCtrlEntry* GetEntry( sal_uLong nPos ) const;
@@ -317,7 +317,7 @@ public:
 
     // bHit==sal_False: Eintrag gilt als getroffen, wenn Position im BoundRect liegt
     //     ==sal_True : Bitmap oder Text muss getroffen sein
-    SvxIconChoiceCtrlEntry* GetEntry( const Point& rPosPixel, sal_Bool bHit = sal_False ) const;
+    SvxIconChoiceCtrlEntry* GetEntry( const Point& rPosPixel, bool bHit = false ) const;
 
     // in dem sal_uLong wird die Position in der Liste des gefunden Eintrags zurueckgegeben
     SvxIconChoiceCtrlEntry* GetSelectedEntry( sal_uLong& rPos ) const;
@@ -326,13 +326,13 @@ public:
     void                        SetEntryTextMode( SvxIconChoiceCtrlTextMode eMode, SvxIconChoiceCtrlEntry* pEntry = 0 );
 #endif
 
-    virtual sal_Bool        HasBackground() const;
-    virtual sal_Bool        HasFont() const;
-    virtual sal_Bool        HasFontTextColor() const;
-    virtual sal_Bool        HasFontFillColor() const;
+    virtual bool        HasBackground() const;
+    virtual bool        HasFont() const;
+    virtual bool        HasFontTextColor() const;
+    virtual bool        HasFontFillColor() const;
 
-    void                SetFontColorToBackground ( sal_Bool bDo = sal_True ) { _bAutoFontColor = bDo; }
-    sal_Bool                AutoFontColor () { return _bAutoFontColor; }
+    void                SetFontColorToBackground ( bool bDo = true ) { _bAutoFontColor = bDo; }
+    bool                AutoFontColor () { return _bAutoFontColor; }
 
     Point               GetPixelPos( const Point& rPosLogic ) const;
     void                SetSelectionMode( SelectionMode eMode );

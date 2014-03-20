@@ -38,17 +38,17 @@ friend class SvtURLBox_Impl;
     rtl::Reference< SvtMatchContext_Impl > pCtx;
     SvtURLBox_Impl*                 pImp;
     INetProtocol                    eSmartProtocol;
-    sal_Bool                            bAutoCompleteMode   : 1;
-    sal_Bool                            bOnlyDirectories    : 1;
-    sal_Bool                            bCtrlClick          : 1;
-    sal_Bool                            bHistoryDisabled    : 1;
-    sal_Bool                            bNoSelection        : 1;
-    sal_Bool                            bIsAutoCompleteEnabled : 1;
+    bool                            bAutoCompleteMode   : 1;
+    bool                            bOnlyDirectories    : 1;
+    bool                            bCtrlClick          : 1;
+    bool                            bHistoryDisabled    : 1;
+    bool                            bNoSelection        : 1;
+    bool                            bIsAutoCompleteEnabled : 1;
 
-    SVT_DLLPRIVATE sal_Bool                         ProcessKey( const KeyCode& rCode );
-    SVT_DLLPRIVATE void                         TryAutoComplete();
-    SVT_DLLPRIVATE void                            UpdatePicklistForSmartProtocol_Impl();
-    DECL_DLLPRIVATE_LINK(                      AutoCompleteHdl_Impl, void* );
+    SVT_DLLPRIVATE bool             ProcessKey( const KeyCode& rCode );
+    SVT_DLLPRIVATE void             TryAutoComplete();
+    SVT_DLLPRIVATE void             UpdatePicklistForSmartProtocol_Impl();
+    DECL_DLLPRIVATE_LINK(           AutoCompleteHdl_Impl, void* );
     SVT_DLLPRIVATE void             Init(bool bSetDefaultHelpID);
 
 protected:
@@ -67,11 +67,11 @@ public:
     const OUString&                 GetBaseURL() const { return aBaseURL; }
     void                            SetOpenHdl( const Link& rLink ) { aOpenHdl = rLink; }
     const Link&                     GetOpenHdl() const { return aOpenHdl; }
-    void                            SetOnlyDirectories( sal_Bool bDir = sal_True );
-    void                            SetNoURLSelection( sal_Bool bSet = sal_True );
+    void                            SetOnlyDirectories( bool bDir = true );
+    void                            SetNoURLSelection( bool bSet = true );
     INetProtocol                    GetSmartProtocol() const { return eSmartProtocol; }
     void                            SetSmartProtocol( INetProtocol eProt );
-    sal_Bool                            IsCtrlOpen()
+    bool                            IsCtrlOpen()
                                         { return bCtrlClick; }
     OUString                        GetURL();
     void                            DisableHistory();
@@ -82,7 +82,7 @@ public:
 
     void                            SetFilter(const OUString& _sFilter);
 
-    inline void                     EnableAutocompletion( sal_Bool _bEnable = sal_True )
+    inline void                     EnableAutocompletion( bool _bEnable = true )
                                         { bIsAutoCompleteEnabled = _bEnable; }
     void                            SetPlaceHolder( const OUString& sPlaceHolder )
                                         { aPlaceHolder = sPlaceHolder; }

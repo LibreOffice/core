@@ -59,7 +59,7 @@ class SVT_DLLPUBLIC IMapObject
     OUString            aTarget;
     OUString            aName;
     SvxMacroTableDtor   aEventList;
-    sal_Bool            bActive;
+    bool                bActive;
 
 protected:
     sal_uInt16              nReadVersion;
@@ -84,12 +84,12 @@ public:
                                     const OUString& rDesc,
                                     const OUString& rTarget,
                                     const OUString& rName,
-                                    sal_Bool bActive );
+                                    bool bActive );
     virtual             ~IMapObject() {};
 
     virtual sal_uInt16      GetVersion() const;
     virtual sal_uInt16      GetType() const = 0;
-    virtual sal_Bool        IsHit( const Point& rPoint ) const = 0;
+    virtual bool            IsHit( const Point& rPoint ) const = 0;
 
     void                Write ( SvStream& rOStm, const OUString& rBaseURL ) const;
     void                Read( SvStream& rIStm, const OUString& rBaseURL );
@@ -111,22 +111,22 @@ public:
     const OUString&     GetName() const { return aName; }
     void                SetName( const OUString& rName ) { aName = rName; }
 
-    sal_Bool                IsActive() const { return bActive; }
-    void                SetActive( sal_Bool bSetActive = sal_True ) { bActive = bSetActive; }
+    bool                IsActive() const { return bActive; }
+    void                SetActive( bool bSetActive = true ) { bActive = bSetActive; }
 
-    sal_Bool                IsEqual( const IMapObject& rEqObj );
+    bool                IsEqual( const IMapObject& rEqObj );
 
     // IMap-Events
     inline const SvxMacroTableDtor& GetMacroTable() const { return aEventList;}
     inline void SetMacroTable( const SvxMacroTableDtor& rTbl ) { aEventList = rTbl; }
 
     inline const SvxMacro&  GetEvent( sal_uInt16 nEvent ) const;
-    inline sal_Bool             HasEvent( sal_uInt16 nEvent ) const;
+    inline bool             HasEvent( sal_uInt16 nEvent ) const;
            void             SetEvent( sal_uInt16 nEvent, const SvxMacro& );
-    inline sal_Bool             DelEvent( sal_uInt16 nEvent );
+    inline bool             DelEvent( sal_uInt16 nEvent );
 };
 
-inline sal_Bool IMapObject::HasEvent( sal_uInt16 nEvent ) const
+inline bool IMapObject::HasEvent( sal_uInt16 nEvent ) const
 {
     return aEventList.IsKeyValid( nEvent );
 }
@@ -134,7 +134,7 @@ inline const SvxMacro& IMapObject::GetEvent( sal_uInt16 nEvent ) const
 {
     return *(aEventList.Get( nEvent ));
 }
-inline sal_Bool IMapObject::DelEvent( sal_uInt16 nEvent )
+inline bool IMapObject::DelEvent( sal_uInt16 nEvent )
 {
     return aEventList.Erase( nEvent );
 }
