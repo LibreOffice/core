@@ -1601,6 +1601,8 @@ public:
     const SwNumRule* GetSwNumRule(sal_uInt16 nId) const;
 };
 
+#define MSWORD_MAX_STYLES_LIMIT 4091
+
 sal_Int16 GetWordFirstLineOffset(const SwNumFmt &rFmt);
 // A bit of a bag on the side for now
 OUString FieldString(ww::eField eIndex);

@@ -692,8 +692,6 @@ void WW8AttributeOutput::EndStyles( sal_uInt16 nNumberOfStyles )
     SwWW8Writer::WriteShort( *m_rWW8Export.pTableStrm, m_nStyAnzPos, nNumberOfStyles );
 }
 
-#define MSWORD_MAX_STYLES_LIMIT 4091;
-
 void MSWordStyles::OutputStylesTable()
 {
     m_rExport.bStyDef = true;
