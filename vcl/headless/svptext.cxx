@@ -38,6 +38,8 @@
 #include "outfont.hxx"
 #include "PhysicalFontFace.hxx"
 
+class PhysicalFontCollection;
+
 using namespace basegfx;
 using namespace basebmp;
 

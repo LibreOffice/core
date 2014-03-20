@@ -39,6 +39,7 @@
 class FontSelectPattern;
 class ImplWinFontEntry;
 class ImplFontAttrCache;
+class PhysicalFontCollection;
 
 #define RGB_TO_PALRGB(nRGB)         ((nRGB)|0x02000000)
 #define PALRGB_TO_RGB(nPalRGB)      ((nPalRGB)&0x00ffffff)

@@ -45,6 +45,7 @@
 #include "impfont.hxx"
 #include "langboost.hxx"
 #include "outfont.hxx"
+#include "PhysicalFontCollection.hxx"
 #include "PhysicalFontFace.hxx"
 #include "salbmp.hxx"
 #include "salprn.hxx"
