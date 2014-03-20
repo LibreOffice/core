@@ -24,7 +24,6 @@
 
 #include <vcl/svapp.hxx>
 #include <vcl/outdev.hxx>
-#include <vcl/solarmutex.hxx>
 
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 
