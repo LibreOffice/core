@@ -153,6 +153,7 @@ $(eval $(call gb_Library_add_exception_objects,chartcore,\
     chart2/source/model/template/ColumnLineDataInterpreter \
     chart2/source/model/template/DataInterpreter \
     chart2/source/model/template/FilledNetChartType \
+    chart2/source/model/template/GL3DBarChartType \
     chart2/source/model/template/LineChartType \
     chart2/source/model/template/LineChartTypeTemplate \
     chart2/source/model/template/NetChartType \
