@@ -1130,9 +1130,10 @@ void checkValiditationEntries( const ValDataTestParams& rVDTParams )
     sal_Int32 nCol( static_cast<sal_Int32>(rVDTParams.aPosition.Col()) );
     sal_Int32 nRow( static_cast<sal_Int32>(rVDTParams.aPosition.Row()) );
     sal_Int32 nTab( static_cast<sal_Int32>(rVDTParams.aPosition.Tab()) );
-    OStringBuffer sMsg("Data Validation Entry with base-cell-address: (");
-    sMsg.append(nCol).append(",").append(nRow).append(",").append(nTab).append(") ");
-    OString aMsgPrefix = sMsg.makeStringAndClear();
+    OString aMsgPrefix = "Data Validation Entry with base-cell-address: ("+
+                OUString::valueOf(nCol)+","+
+                OUString::valueOf(nRow)+","+
+                OUString::valueOf(nTab)+") ";
 
     OString aMsg = aMsgPrefix + "did not get imported at all.";
     CPPUNIT_ASSERT_MESSAGE(aMsg.getStr(), pValDataTest);
@@ -1167,11 +1168,13 @@ void checkCellValidity( const ScAddress& rValBaseAddr, const ScRange& rRange, co
                 sal_Int32 nCol = static_cast<const sal_Int32>(i);
                 sal_Int32 nRow = static_cast<const sal_Int32>(j);
                 sal_Int32 nTab32 = static_cast<const sal_Int32>(nTab);
-                OStringBuffer sMsg("\nData validation entry base-cell-address: (");
-                sMsg.append( static_cast<const sal_Int32>(nBCol) ).append(",");
-                sMsg.append( static_cast<const sal_Int32>(nBRow) ).append(",");
-                sMsg.append( nTab32 ).append(")\n");
-                sMsg.append("Cell: (").append(nCol).append(",").append(nRow).append(",").append(nTab32).append(")");
+                OString sMsg = "\nData validation entry base-cell-address: ("+
+                        OString::valueOf(static_cast<const sal_Int32>(nBCol) )+","+
+                        OString::valueOf(static_cast<const sal_Int32>(nBRow) )+","+
+                        OString::valueOf(nTab32)+")\n"+"Cell: ("+
+                        OString::valueOf(nCol)+","+
+                        OString::valueOf(nRow)+","+
+                        OString::valueOf(nTab32)+")";
                 sal_uInt32 expectedKey(pValData->GetKey());
                 sal_uInt32 actualKey(-1);
                 if(pValDataTest)

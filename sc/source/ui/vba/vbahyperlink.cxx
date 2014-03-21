@@ -76,7 +76,7 @@ ScVbaHyperlink::ScVbaHyperlink( const uno::Reference< XHelperInterface >& rxAnch
             {
                 OUStringBuffer aBuffer( aUrlComp.first );
                 if( !aUrlComp.second.isEmpty() )
-                    aBuffer.append( " - " ).append( aUrlComp.second );
+                    aBuffer.append( " - "+aUrlComp.second );
                 aTextToDisplay = aBuffer.makeStringAndClear();
             }
         }
@@ -219,7 +219,7 @@ void ScVbaHyperlink::setUrlComponents( const UrlComponents& rUrlComp ) throw (un
     ensureTextField();
     OUStringBuffer aUrl( rUrlComp.first );
     if( !rUrlComp.second.isEmpty() )
-        aUrl.append( '#' ).append( rUrlComp.second );
+        aUrl.append( "#"+rUrlComp.second );
     mxTextField->setPropertyValue("URL", uno::Any( aUrl.makeStringAndClear() ) );
 }
 
