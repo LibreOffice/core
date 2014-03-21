@@ -293,9 +293,11 @@ void SwXDocumentSettings::_preSetValues ()
         throw(beans::UnknownPropertyException, beans::PropertyVetoException, lang::IllegalArgumentException, lang::WrappedTargetException )
 {
     mpDocSh = mpModel->GetDocShell();
-    mpDoc = mpDocSh->GetDoc();
+    if (NULL == mpDocSh)
+        throw UnknownPropertyException();
 
-    if( NULL == mpDoc || NULL == mpDocSh )
+    mpDoc = mpDocSh->GetDoc();
+    if (NULL == mpDoc)
         throw UnknownPropertyException();
 }
 
