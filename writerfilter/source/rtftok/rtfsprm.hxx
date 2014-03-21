@@ -10,6 +10,12 @@
 #ifndef _RTFSPRM_HXX_
 #define _RTFSPRM_HXX_
 
+#include <sal/config.h>
+
+#include <string>
+#include <utility>
+#include <vector>
+
 #include <boost/intrusive_ptr.hpp>
 #include <rtfcontrolwords.hxx>
 #include <rtfvalue.hxx>
