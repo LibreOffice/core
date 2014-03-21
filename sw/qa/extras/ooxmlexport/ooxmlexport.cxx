@@ -106,6 +106,10 @@ DECLARE_OOXMLEXPORT_TEST(testZoom, "zoom.docx")
     int nNext = getXPathPosition(pXmlDoc, "/w:styles/w:style[3]", "next");
     int nRsid = getXPathPosition(pXmlDoc, "/w:styles/w:style[3]", "rsid");
     CPPUNIT_ASSERT(nNext < nRsid);
+
+    pXmlDoc = parseExport("docProps/app.xml");
+    // One paragraph in the document.
+    assertXPathContent(pXmlDoc, "/extended-properties:Properties/extended-properties:Paragraphs", "1");
 }
 
 DECLARE_OOXMLEXPORT_TEST(defaultTabStopNotInStyles, "empty.odt")

@@ -639,7 +639,6 @@ writeAppProperties( XmlFilterBase& rSelf, Reference< XDocumentProperties > xProp
     writeElement( pAppProps, XML_Characters,            "characters" );
     writeElement( pAppProps, XML_PresentationFormat,    "presentation format" );
     writeElement( pAppProps, XML_Lines,                 "lines" );
-    writeElement( pAppProps, XML_Paragraphs,            "paragraphs" );
     writeElement( pAppProps, XML_Slides,                "slides" );
     writeElement( pAppProps, XML_Notes,                 "notes" );
 #endif  /* def OOXTODO */
@@ -663,6 +662,22 @@ writeAppProperties( XmlFilterBase& rSelf, Reference< XDocumentProperties > xProp
     writeElement( pAppProps, XML_AppVersion,            "app version" );
     writeElement( pAppProps, XML_DocSecurity,           "doc security" );
 #endif  /* def OOXTODO */
+
+    uno::Sequence<beans::NamedValue> aStats = xProperties->getDocumentStatistics();
+    for (sal_Int32 i = 0; i < aStats.getLength(); ++i)
+    {
+        sal_Int32 nValue = 0;
+        if (aStats[i].Value >>= nValue)
+        {
+            OUString aValue = OUString::number(nValue);
+            if (aStats[i].Name == "ParagraphCount")
+            {
+                writeElement(pAppProps, XML_Paragraphs, aValue);
+                break;
+            }
+        }
+    }
+
     pAppProps->endElement( XML_Properties );
 }
 
