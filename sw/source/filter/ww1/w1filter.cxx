@@ -1125,6 +1125,7 @@ void W1_CHP::Out(Ww1Shell& rOut, Ww1Manager& rMan)
     if (fsIcoGet())
         switch(icoGet()) {
         default: OSL_ENSURE(false, "Chpx");
+        //fall-through
         case 0: { rOut.EndItem(RES_CHRATR_COLOR); } break;
         case 1: { rOut << SvxColorItem(Color(COL_BLACK), RES_CHRATR_COLOR); } break;
         case 2: { rOut << SvxColorItem(Color(COL_LIGHTBLUE), RES_CHRATR_COLOR); } break;
