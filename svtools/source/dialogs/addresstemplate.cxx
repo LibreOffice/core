@@ -587,7 +587,6 @@ void AssignmentPersistentData::Commit()
                 m_pImpl->pFields[row * 2 + column] = get<ListBox>(OString("box") + OString::number(row * 2 + column));
                 m_pImpl->pFields[row * 2 + column]->SetSelectHdl(LINK(this, AddressBookSourceDialog, OnFieldSelect));
 
-                m_pImpl->pFields[row * 2 + column]->SetHelpId("svt/ui/addresstemplatedialog/assign");
             }
         }
 
