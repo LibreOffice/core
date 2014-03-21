@@ -77,18 +77,13 @@ public:
 
 class SVX_DLLPUBLIC FontWorkGalleryDialog : public ModalDialog
 {
-    FixedLine           maFLFavorites;
-    ValueSet            maCtlFavorites;
-    OKButton            maOKButton;
-    CancelButton        maCancelButton;
-    HelpButton          maHelpButton;
+    ValueSet*           mpCtlFavorites;
+    OKButton*           mpOKButton;
 
     sal_uInt16          mnThemeId;
 
     SdrView*            mpSdrView;
     FmFormModel*        mpModel;
-
-    OUString            maStrClickToAddText;
 
     DECL_LINK( DoubleClickFavoriteHdl, void * );
     DECL_LINK( ClickOKHdl, void * );
