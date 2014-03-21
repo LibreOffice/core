@@ -889,10 +889,11 @@ bool XMLNumberWithAutoInsteadZeroPropHdl::exportXML( OUString& rStrExpValue, con
 {
 
     sal_Int32 nValue = 0;
-    lcl_xmloff_getAny( rValue, nValue, 2 );
+    bool bRet = lcl_xmloff_getAny( rValue, nValue, 2 );
+    bRet &= nValue != 0;
 
     // FIXME: 0 is not a valid value - write "auto" instead
-    if (0 == nValue || !rValue.hasValue())
+    if (!bRet)
         rStrExpValue = GetXMLToken( XML_AUTO );
     else
     {
