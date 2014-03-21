@@ -271,7 +271,7 @@ private:
                sal_Int32 & rlastChanceToSendRefreshRequest );
 
     // unlock, called by SerfLockStore::~SerfLockStore
-    bool UNLOCK( const OUString& rLock );
+    void UNLOCK( const OUString& rLock );
 
     /*
     // low level GET implementation, used by public GET implementations
