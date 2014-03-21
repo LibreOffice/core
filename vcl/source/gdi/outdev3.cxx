@@ -4212,9 +4212,8 @@ SalLayout* OutputDevice::ImplLayout(const OUString& rOrigStr,
 
     // do glyph fallback if needed
     // #105768# avoid fallback for very small font sizes
-    if( aLayoutArgs.NeedFallback() )
-        if( mpFontEntry && (mpFontEntry->maFontSelData.mnHeight >= 3) )
-            pSalLayout = ImplGlyphFallbackLayout( pSalLayout, aLayoutArgs );
+    if (aLayoutArgs.NeedFallback() && mpFontEntry->maFontSelData.mnHeight >= 3)
+        pSalLayout = ImplGlyphFallbackLayout(pSalLayout, aLayoutArgs);
 
     // position, justify, etc. the layout
     pSalLayout->AdjustLayout( aLayoutArgs );
