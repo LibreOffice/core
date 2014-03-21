@@ -81,19 +81,15 @@ File gid_File_Extra_Fontunxppds
     Dir = FILELIST_DIR;
     TXT_FILE_BODY;
     Styles = (FILELIST);
-    Name = "psprint_config_fontunxppds.filelist";
+    Name = "vcl_fontunxppds.filelist";
 End
 #endif
-
-#endif
-
-#ifdef UNX
 
 File gid_File_Extra_Fontunxpsprint
     Dir = FILELIST_DIR;
     TXT_FILE_BODY;
     Styles = (FILELIST, CONFIGFILE);
-    Name = "psprint_config_fontunxpsprint.filelist";
+    Name = "vcl_fontunxpsprint.filelist";
 End
 
 #endif
