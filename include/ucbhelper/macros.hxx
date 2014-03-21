@@ -219,16 +219,6 @@ GETTYPES_IMPL_END
     static com::sun::star::uno::Sequence< OUString >                   \
     getSupportedServiceNames_Static();
 
-#define XSERVICEINFO_DECL()                                                 \
-    XSERVICEINFO_NOFACTORY_DECL()                                           \
-                                                                            \
-    static com::sun::star::uno::Reference<                                  \
-            com::sun::star::lang::XSingleServiceFactory >                   \
-    createServiceFactory( const com::sun::star::uno::Reference<             \
-            com::sun::star::lang::XMultiServiceFactory >& rxServiceMgr );
-
-
-
 // XServiceInfo impl. internals
 
 

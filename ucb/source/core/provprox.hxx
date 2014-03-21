@@ -59,7 +59,19 @@ public:
     virtual ~UcbContentProviderProxyFactory();
 
     // XServiceInfo
-    XSERVICEINFO_DECL()
+    virtual OUString SAL_CALL getImplementationName()
+        throw( css::uno::RuntimeException, std::exception );
+    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName )
+        throw( css::uno::RuntimeException, std::exception );
+    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames()
+        throw( css::uno::RuntimeException, std::exception );
+
+    static OUString getImplementationName_Static();
+    static css::uno::Sequence< OUString > getSupportedServiceNames_Static();
+
+    static css::uno::Reference< css::lang::XSingleServiceFactory >
+    createServiceFactory( const css::uno::Reference<
+                          css::lang::XMultiServiceFactory >& rxServiceMgr );
 
     // XContentProviderFactory
     virtual ::com::sun::star::uno::Reference<
