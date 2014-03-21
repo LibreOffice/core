@@ -135,8 +135,6 @@ bool X11SalGraphics::setFont( const FontSelectPattern *pEntry, int nFallbackLeve
     if( !pEntry )
         return false;
 
-    bFontVertical_ = pEntry->mbVertical;
-
     // return early if this is not a valid font for this graphics
     if( !pEntry->mpFontData )
         return false;

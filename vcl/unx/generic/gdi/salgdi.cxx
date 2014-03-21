@@ -92,6 +92,7 @@ X11SalGraphics::X11SalGraphics()
 {
     m_pFrame            = NULL;
     m_pVDev             = NULL;
+    m_pColormap         = NULL;
     m_pDeleteColormap   = NULL;
     hDrawable_          = None;
     m_aXRenderPicture    = 0;

@@ -110,7 +110,6 @@ protected:
 
     SalColor        nTextColor_;
     Pixel           nTextPixel_;
-    bool            bFontVertical_;
 
     bool            bDisableGraphite_;
 
