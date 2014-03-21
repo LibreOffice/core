@@ -1061,15 +1061,20 @@ void XMLTextParagraphExport::exportListChange(
         }
     }
 
+    bool bEndElement = false;
+
     if ( rNextInfo.GetLevel() > 0 &&
          rNextInfo.IsNumbered() &&
          rPrevInfo.BelongsToSameList( rNextInfo ) &&
          rPrevInfo.GetLevel() >= rNextInfo.GetLevel() )
     {
-        // close previous list-item
-        DBG_ASSERT( pListElements && pListElements->size() >= 2,
-                "SwXMLExport::ExportListChange: list elements missing" );
+        assert(pListElements && pListElements->size() >= 2); //list elements missing
+        bEndElement = pListElements && pListElements->size() >= 2;
+    }
 
+    if (bEndElement)
+    {
+        // close previous list-item
         GetExport().EndElement(pListElements->back(), sal_True );
         pListElements->pop_back();
 
