@@ -22,15 +22,6 @@
 
 #define RID_RTS_RTSDIALOG_INVALID_TXT       4001
 
-#define RID_RTS_PWDIALOG                    4008
-#define RID_RTS_PWDIALOG_TXT                1
-#define RID_RTS_PWDIALOG_USER_TXT           2
-#define RID_RTS_PWDIALOG_USER_EDT           3
-#define RID_RTS_PWDIALOG_PASS_TXT           4
-#define RID_RTS_PWDIALOG_PASS_EDT           5
-#define RID_RTS_PWDIALOG_OK_BTN         6
-#define RID_RTS_PWDIALOG_CANCEL_BTN     7
-
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

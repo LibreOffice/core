@@ -474,52 +474,39 @@ void RTSDevicePage::FillValueBox( const PPDKey* pKey )
 
 class RTSPWDialog : public ModalDialog
 {
-    FixedText       m_aText;
-    FixedText       m_aUserText;
-    Edit            m_aUserEdit;
-    FixedText       m_aPassText;
-    Edit            m_aPassEdit;
+    FixedText* m_pText;
+    Edit*      m_pUserEdit;
+    Edit*      m_pPassEdit;
 
-    OKButton        m_aOKButton;
-    CancelButton    m_aCancelButton;
 public:
-    RTSPWDialog( const OString& rServer, const OString& rUserName, Window* pParent );
-    ~RTSPWDialog();
+    RTSPWDialog(const OString& rServer, const OString& rUserName, Window* pParent);
 
     OString getUserName() const;
     OString getPassword() const;
 };
 
 RTSPWDialog::RTSPWDialog( const OString& rServer, const OString& rUserName, Window* pParent )
-        :
-        ModalDialog( pParent, PaResId( RID_RTS_PWDIALOG ) ),
-        m_aText( this, PaResId( RID_RTS_PWDIALOG_TXT ) ),
-        m_aUserText( this, PaResId( RID_RTS_PWDIALOG_USER_TXT ) ),
-        m_aUserEdit( this, PaResId( RID_RTS_PWDIALOG_USER_EDT ) ),
-        m_aPassText( this, PaResId( RID_RTS_PWDIALOG_PASS_TXT ) ),
-        m_aPassEdit( this, PaResId( RID_RTS_PWDIALOG_PASS_EDT ) ),
-        m_aOKButton( this, PaResId( RID_RTS_PWDIALOG_OK_BTN ) ),
-        m_aCancelButton( this, PaResId( RID_RTS_PWDIALOG_CANCEL_BTN ) )
+    : ModalDialog(pParent, "CUPSPasswordDialog",
+        "spa/ui/cupspassworddialog.ui")
 {
-    FreeResource();
-    OUString aText( m_aText.GetText() );
-    aText = aText.replaceFirst( "%s", OStringToOUString( rServer, osl_getThreadTextEncoding() ) );
-    m_aText.SetText( aText );
-    m_aUserEdit.SetText( OStringToOUString( rUserName, osl_getThreadTextEncoding() ) );
-}
+    get(m_pText, "text");
+    get(m_pUserEdit, "user");
+    get(m_pPassEdit, "pass");
 
-RTSPWDialog::~RTSPWDialog()
-{
+    OUString aText(m_pText->GetText());
+    aText = aText.replaceFirst("%s", OStringToOUString(rServer, osl_getThreadTextEncoding()));
+    m_pText->SetText(aText);
+    m_pUserEdit->SetText( OStringToOUString(rUserName, osl_getThreadTextEncoding()));
 }
 
 OString RTSPWDialog::getUserName() const
 {
-    return OUStringToOString( m_aUserEdit.GetText(), osl_getThreadTextEncoding() );
+    return OUStringToOString( m_pUserEdit->GetText(), osl_getThreadTextEncoding() );
 }
 
 OString RTSPWDialog::getPassword() const
 {
-    return OUStringToOString( m_aPassEdit.GetText(), osl_getThreadTextEncoding() );
+    return OUStringToOString( m_pPassEdit->GetText(), osl_getThreadTextEncoding() );
 }
 
 extern "C" {
