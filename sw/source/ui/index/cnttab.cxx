@@ -3201,14 +3201,11 @@ void SwTokenWindow::AdjustScrolling()
         }
         else
         {
-            if(pFirstCtrl)
-            {
-                //if the control fits into the space then the first control must be at postion 0
-                long nFirstPos = pFirstCtrl->GetPosPixel().X();
+            //if the control fits into the space then the first control must be at postion 0
+            long nFirstPos = pFirstCtrl->GetPosPixel().X();
 
-                if(nFirstPos != 0)
-                    MoveControls(-nFirstPos);
-            }
+            if(nFirstPos != 0)
+                MoveControls(-nFirstPos);
 
             m_pRightScrollWin->Enable(false);
             m_pLeftScrollWin->Enable(false);
