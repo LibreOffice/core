@@ -163,6 +163,8 @@ void TextCharacterProperties::pushToPropMap( PropertyMap& rPropMap, const XmlFil
 
 void pushToGrabBag( PropertySet& rPropSet, const std::vector<PropertyValue>& aVectorOfProperyValues )
 {
+    if (!rPropSet.hasProperty(PROP_CharInteropGrabBag) || aVectorOfProperyValues.empty())
+        return;
     Sequence<PropertyValue> aGrabBag;
     Any aAnyGrabBag = rPropSet.getAnyProperty(PROP_CharInteropGrabBag);
     aAnyGrabBag >>= aGrabBag;
