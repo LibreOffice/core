@@ -16,9 +16,9 @@
 #   the License at http://www.apache.org/licenses/LICENSE-2.0 .
 #
 
-$(eval $(call gb_Package_Package,psprint_config_fontunxppds,$(SRCDIR)/psprint_config/configuration/ppds))
+$(eval $(call gb_Package_Package,vcl_fontunxppds,$(SRCDIR)/vcl/unx/generic/printer/configuration/ppds))
 
-$(eval $(call gb_Package_add_files,psprint_config_fontunxppds,$(LIBO_SHARE_FOLDER)/psprint/driver,\
+$(eval $(call gb_Package_add_files,vcl_fontunxppds,$(LIBO_SHARE_FOLDER)/psprint/driver,\
 	SGENPRT.PS \
 	SGENT42.PS \
 ))
