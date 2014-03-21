@@ -1614,13 +1614,13 @@ Size PushButton::CalcMinimumSize( long nMaxWidth ) const
                                      PushButton::GetText(), ImplGetTextStyle( nDrawFlags ) ).GetSize();
         aSize.Width() += textSize.Width();
         aSize.Height() = std::max( aSize.Height(), long( textSize.Height() * 1.15 ) );
+    }
 
-        // cf. ImplDrawPushButton ...
-        if( (GetStyle() & WB_SMALLSTYLE) == 0 )
-        {
-            aSize.Width() += 24;
-            aSize.Height() += 12;
-        }
+    // cf. ImplDrawPushButton ...
+    if( (GetStyle() & WB_SMALLSTYLE) == 0 )
+    {
+        aSize.Width() += 24;
+        aSize.Height() += 12;
     }
 
     return CalcWindowSize( aSize );

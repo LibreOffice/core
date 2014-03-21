@@ -384,7 +384,15 @@ VclBuilder::VclBuilder(Window *pParent, const OUString& sUIDir, const OUString& 
             if (eType == SYMBOL_NOSYMBOL)
                 continue;
             if (!aI->m_bRadio)
+            {
                 pTargetButton->SetSymbol(eType);
+                //fdo#76457 keep symbol images small e.g. tools->customize->menu
+                //but images the right size. Really the PushButton::CalcMinimumSize
+                //and PushButton::ImplDrawPushButton are the better place to handle
+                //this, but its such a train-wreck
+                if (eType != SYMBOL_IMAGE)
+                    pTargetButton->SetStyle(pTargetButton->GetStyle() | WB_SMALLSTYLE);
+            }
             else
                 SAL_WARN_IF(eType != SYMBOL_IMAGE, "vcl.layout", "inimplemented symbol type for radiobuttons");
             if (eType == SYMBOL_IMAGE)
