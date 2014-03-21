@@ -160,7 +160,6 @@ void ScTabViewShell::GetState( SfxItemSet& rSet )
     SfxViewFrame* pThisFrame = GetViewFrame();
     bool bOle = GetViewFrame()->GetFrame().IsInPlace();
 
-    SCTAB nTabCount = pDoc->GetTableCount();
     SCTAB nTabSelCount = rMark.GetSelectCount();
 
     SfxWhichIter    aIter(rSet);
