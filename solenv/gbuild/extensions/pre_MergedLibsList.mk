@@ -82,7 +82,6 @@ gb_EXTRAMERGEDLIBS := \
 	$(if $(filter-out ANDROID IOS,$(OS)),scn) \
 	sd \
 	$(call gb_Helper_optional,DBCONNECTIVITY,sdbc2) \
-	$(if $(filter unx,$(GUIBASE)),spa) \
 	spell \
 	svgfilter \
 	swd \
