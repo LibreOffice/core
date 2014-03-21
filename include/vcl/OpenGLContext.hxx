@@ -99,7 +99,7 @@ public:
     OpenGLContext();
     ~OpenGLContext();
 
-    bool init();
+    bool init(Window* pParent = 0);
     void setWinSize(const Size& rSize);
     GLWindow& getOpenGLWindow();
 

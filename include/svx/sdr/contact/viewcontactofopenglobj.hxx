@@ -24,6 +24,8 @@ public:
     virtual ~ViewContactOfOpenGLObj();
 
 protected:
+    virtual ViewObjectContact& CreateObjectSpecificViewObjectContact(ObjectContact& rObjectContact);
+
     virtual drawinglayer::primitive2d::Primitive2DSequence createViewIndependentPrimitive2DSequence() const;
 };
 

@@ -75,6 +75,7 @@ $(eval $(call gb_Library_use_libraries,svxcore,\
     utl \
     vcl \
     xo \
+    vclopengl \
 	$(gb_UWINAPI) \
 ))
 
@@ -82,6 +83,7 @@ $(eval $(call gb_Library_use_externals,svxcore,\
 	boost_headers \
 	icuuc \
 	icu_headers \
+	glew \
 ))
 
 $(eval $(call gb_Library_add_exception_objects,svxcore,\
@@ -194,6 +196,7 @@ $(eval $(call gb_Library_add_exception_objects,svxcore,\
     svx/source/sdr/contact/viewcontactofsdrmeasureobj \
     svx/source/sdr/contact/objectcontactofobjlistpainter \
     svx/source/sdr/contact/viewobjectcontactofe3d \
+    svx/source/sdr/contact/viewobjectcontactofopenglobj \
     svx/source/sdr/event/eventhandler \
     svx/source/sdr/overlay/overlayline \
     svx/source/sdr/overlay/overlaycrosshair \

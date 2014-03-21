@@ -9,6 +9,7 @@
 
 #include <com/sun/star/drawing/XShape.hpp>
 #include <svx/sdr/contact/viewcontactofopenglobj.hxx>
+#include <svx/sdr/contact/viewobjectcontactofopenglobj.hxx>
 #include <drawinglayer/primitive2d/openglprimitive2d.hxx>
 #include <svx/svdoopengl.hxx>
 #include <tools/gen.hxx>
@@ -22,6 +23,11 @@ ViewContactOfOpenGLObj::ViewContactOfOpenGLObj(SdrOpenGLObj& rOpenGLObj)
 
 ViewContactOfOpenGLObj::~ViewContactOfOpenGLObj()
 {
+}
+
+ViewObjectContact& ViewContactOfOpenGLObj::CreateObjectSpecificViewObjectContact(ObjectContact& rObjectContact)
+{
+    return *( new ViewObjectContactOfOpenGLObj( rObjectContact, *this ) );
 }
 
 drawinglayer::primitive2d::Primitive2DSequence ViewContactOfOpenGLObj::createViewIndependentPrimitive2DSequence() const

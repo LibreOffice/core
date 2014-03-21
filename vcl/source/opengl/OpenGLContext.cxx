@@ -316,9 +316,9 @@ int oglErrorHandler( Display* /*dpy*/, XErrorEvent* /*evnt*/ )
 
 #endif
 
-bool OpenGLContext::init()
+bool OpenGLContext::init( Window* pParent )
 {
-    m_pWindow.reset(new Window(0, WB_NOBORDER|WB_NODIALOGCONTROL));
+    m_pWindow.reset(pParent ? pParent : new Window(0, WB_NOBORDER|WB_NODIALOGCONTROL));
     SAL_INFO("vcl.opengl", "OpenGLContext::OpenGLContext----start");
     initWindow();
     m_pWindow->setPosSizePixel(0,0,0,0);
