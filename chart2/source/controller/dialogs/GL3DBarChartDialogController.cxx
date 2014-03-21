@@ -12,6 +12,8 @@
 #include <Bitmaps.hrc>
 #include <ResId.hxx>
 
+#include <svtools/valueset.hxx>
+
 namespace chart {
 
 GL3DBarChartDialogController::GL3DBarChartDialogController() {}
@@ -34,6 +36,15 @@ GL3DBarChartDialogController::getTemplateMap() const
     static tTemplateServiceChartTypeParameterMap aMap(
         "com.sun.star.chart2.template.GL3DBarRoundedRectangle", ChartTypeParameter(1));
     return aMap;
+}
+
+void GL3DBarChartDialogController::fillSubTypeList(
+    ValueSet& rSubTypeList, const ChartTypeParameter& /*rParameter*/ )
+{
+    rSubTypeList.Clear();
+    rSubTypeList.InsertItem(1, Image(Bitmap(SchResId(BMP_GL3D_BAR_ROUNDRECT))));
+
+    rSubTypeList.SetItemText(1, SchResId(STR_GL3D_BAR).toString());
 }
 
 }

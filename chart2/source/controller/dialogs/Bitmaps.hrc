@@ -199,6 +199,8 @@
 // Bubble Chart Subtypes
 #define BMP_BUBBLE_1            (RID_APP_START + 88)
 
+// GL3D Bar Chart subtypes.
+#define BMP_GL3D_BAR_ROUNDRECT  (RID_APP_START + 106)
 
 //further Images:
 

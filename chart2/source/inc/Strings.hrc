@@ -65,6 +65,7 @@
 #define STR_BUBBLE_1                        (RID_APP_START + 283)
 
 #define STR_TYPE_GL3D_BAR                   (RID_APP_START + 127)
+#define STR_GL3D_BAR                        (RID_APP_START + 128)
 
 //additional strings
 #define STR_TEXT_SEPARATOR                  (RID_APP_START + 20)

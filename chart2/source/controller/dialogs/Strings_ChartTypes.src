@@ -144,7 +144,12 @@ String STR_BUBBLE_1
 
 String STR_TYPE_GL3D_BAR
 {
-    Text [ en-US ] = "GL 3D Bar";
+    Text [ en-US ] = "GL3D Bar";
+};
+
+String STR_GL3D_BAR
+{
+    Text [ en-US ] = "GL3D Bar Chart";
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

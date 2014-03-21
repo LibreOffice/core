@@ -92,8 +92,8 @@ protected:
         const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& aArguments )
         throw (::com::sun::star::uno::RuntimeException, std::exception);
     /// denotes if the chart needs categories at the first scale
-    virtual sal_Bool SAL_CALL supportsCategories()
-        throw (::com::sun::star::uno::RuntimeException, std::exception);
+    virtual sal_Bool SAL_CALL supportsCategories();
+
     virtual void SAL_CALL changeDiagram(
         const ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XDiagram >& xDiagram )
         throw (::com::sun::star::uno::RuntimeException, std::exception);

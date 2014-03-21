@@ -8,6 +8,8 @@
  */
 
 #include "GL3DBarChartTypeTemplate.hxx"
+#include <servicenames_charttypes.hxx>
+#include <macros.hxx>
 
 using namespace com::sun::star;
 
@@ -21,14 +23,49 @@ GL3DBarChartTypeTemplate::~GL3DBarChartTypeTemplate() {}
 
 uno::Reference<chart2::XChartType> GL3DBarChartTypeTemplate::getChartTypeForIndex( sal_Int32 /*nChartTypeIndex*/ )
 {
-    return uno::Reference<chart2::XChartType>();
+    uno::Reference<chart2::XChartType> xResult;
+
+    try
+    {
+        uno::Reference<lang::XMultiServiceFactory> xFact(
+            GetComponentContext()->getServiceManager(), uno::UNO_QUERY_THROW);
+
+        xResult.set(xFact->createInstance(CHART2_SERVICE_NAME_CHARTTYPE_GL3DBAR), uno::UNO_QUERY_THROW);
+    }
+    catch (const uno::Exception & ex)
+    {
+        ASSERT_EXCEPTION( ex );
+    }
+
+    return xResult;
 }
 
 uno::Reference<chart2::XChartType>
 GL3DBarChartTypeTemplate::getChartTypeForNewSeries(
-    const uno::Sequence<uno::Reference<chart2::XChartType> >& /*xOldChartTypes*/ )
+    const uno::Sequence<uno::Reference<chart2::XChartType> >& xOldChartTypes )
 {
-    return uno::Reference<chart2::XChartType>();
+    uno::Reference<chart2::XChartType> xResult;
+
+    try
+    {
+        uno::Reference<lang::XMultiServiceFactory> xFact(
+            GetComponentContext()->getServiceManager(), uno::UNO_QUERY_THROW);
+
+        xResult.set(xFact->createInstance(CHART2_SERVICE_NAME_CHARTTYPE_GL3DBAR), uno::UNO_QUERY_THROW);
+
+        ChartTypeTemplate::copyPropertiesFromOldToNewCoordianteSystem(xOldChartTypes, xResult);
+    }
+    catch (const uno::Exception & ex)
+    {
+        ASSERT_EXCEPTION( ex );
+    }
+
+    return xResult;
+}
+
+sal_Bool GL3DBarChartTypeTemplate::supportsCategories()
+{
+    return false;
 }
 
 }

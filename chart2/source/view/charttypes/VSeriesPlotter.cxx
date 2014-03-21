@@ -2416,6 +2416,9 @@ VSeriesPlotter* VSeriesPlotter::createSeriesPlotter(
     , sal_Int32 nDimensionCount
     , bool bExcludingPositioning )
 {
+    if (!xChartTypeModel.is())
+        return NULL;
+
     OUString aChartType = xChartTypeModel->getChartType();
 
     VSeriesPlotter* pRet=NULL;

@@ -179,7 +179,6 @@ uno::Reference< XDiagram > SAL_CALL ChartTypeTemplate::createDiagramByDataSource
 }
 
 sal_Bool SAL_CALL ChartTypeTemplate::supportsCategories()
-    throw (uno::RuntimeException, std::exception)
 {
     return sal_True;
 }

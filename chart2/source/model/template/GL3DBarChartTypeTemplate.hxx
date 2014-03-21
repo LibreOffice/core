@@ -34,6 +34,8 @@ public:
     virtual css::uno::Reference<css::chart2::XChartType> SAL_CALL
         getChartTypeForNewSeries(
             const css::uno::Sequence<css::uno::Reference<css::chart2::XChartType> >& xOldChartTypes );
+
+    virtual sal_Bool SAL_CALL supportsCategories();
 };
 
 }

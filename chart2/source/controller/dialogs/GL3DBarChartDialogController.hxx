@@ -23,6 +23,8 @@ public:
     virtual OUString getName();
     virtual Image getImage();
     virtual const tTemplateServiceChartTypeParameterMap& getTemplateMap() const;
+
+    virtual void fillSubTypeList( ValueSet& rSubTypeList, const ChartTypeParameter& rParameter );
 };
 
 }

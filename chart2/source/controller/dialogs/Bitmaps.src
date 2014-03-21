@@ -97,6 +97,12 @@ Bitmap BMP_BUBBLE_1
 {
     File = "bubble_52x60.png" ;
 };
+
+Bitmap BMP_GL3D_BAR_ROUNDRECT
+{
+    File = "gl3dbar_roundrect.png";
+};
+
 Bitmap BMP_AREAS_2D
 {
     File = "areas_52x60.png" ;
