@@ -550,10 +550,10 @@
       </node>
       <node oor:name=".uno:DeletePrintArea" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">~Remove Print Area</value>
+          <value xml:lang="en-US">~Clear Print Area</value>
         </prop>
         <prop oor:name="ContextLabel" oor:type="xs:string">
-          <value xml:lang="en-US">~Remove</value>
+          <value xml:lang="en-US">~Clear</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>1</value>
