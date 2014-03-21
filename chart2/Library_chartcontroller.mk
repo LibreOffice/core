@@ -87,6 +87,7 @@ $(eval $(call gb_Library_add_exception_objects,chartcontroller,\
     chart2/source/controller/chartapiwrapper/WrappedTextRotationProperty \
     chart2/source/controller/dialogs/ChangingResource \
     chart2/source/controller/dialogs/ChartTypeDialogController \
+    chart2/source/controller/dialogs/GL3DBarChartDialogController \
     chart2/source/controller/dialogs/DataBrowser \
     chart2/source/controller/dialogs/DataBrowserModel \
     chart2/source/controller/dialogs/DialogModel \

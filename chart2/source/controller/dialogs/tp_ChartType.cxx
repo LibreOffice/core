@@ -25,6 +25,7 @@
 #include "res_BarGeometry.hxx"
 #include "ControllerLockGuard.hxx"
 #include "macros.hxx"
+#include "GL3DBarChartDialogController.hxx"
 
 #include <svtools/controldims.hrc>
 
@@ -726,6 +727,7 @@ ChartTypeTabPage::ChartTypeTabPage(Window* pParent
         m_aChartTypeDialogControllerList.push_back(new StockChartDialogController() );
     }
     m_aChartTypeDialogControllerList.push_back(new CombiColumnLineChartDialogController() );
+    m_aChartTypeDialogControllerList.push_back(new GL3DBarChartDialogController());
 
     ::std::vector< ChartTypeDialogController* >::const_iterator       aIter = m_aChartTypeDialogControllerList.begin();
     const ::std::vector< ChartTypeDialogController* >::const_iterator aEnd  = m_aChartTypeDialogControllerList.end();

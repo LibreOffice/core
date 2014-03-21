@@ -68,6 +68,11 @@ Image IMG_TYPE_BUBBLE
     ImageBitmap = Bitmap { File = "typebubble_16.png" ; };
     MaskColor = STD_MASKCOLOR;
 };
+Image IMG_TYPE_GL3D_BAR
+{
+    ImageBitmap = Bitmap { File = "typegl3dbar_16.png" ; };
+    MaskColor = STD_MASKCOLOR;
+};
 Image IMG_STEP_START
 {
     ImageBitmap = Bitmap { File = "step_start_30.png" ; };

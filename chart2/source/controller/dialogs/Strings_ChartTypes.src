@@ -142,6 +142,9 @@ String STR_BUBBLE_1
     Text [ en-US ] = "Bubble Chart" ;
 };
 
-
+String STR_TYPE_GL3D_BAR
+{
+    Text [ en-US ] = "GL 3D Bar";
+};
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

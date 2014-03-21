@@ -64,8 +64,10 @@
 #define STR_TYPE_BUBBLE                     (RID_APP_START + 282)
 #define STR_BUBBLE_1                        (RID_APP_START + 283)
 
+#define STR_TYPE_GL3D_BAR                   (RID_APP_START + 127)
+
 //additional strings
-#define STR_TEXT_SEPARATOR                   (RID_APP_START + 20)
+#define STR_TEXT_SEPARATOR                  (RID_APP_START + 20)
 
 //SchStatisticTabPage and SchDataStatisticsDlg
 //see Strings_Statistic.src
@@ -94,7 +96,7 @@
 #define STR_INVALID_TIME_UNIT               (RID_APP_START + 292)
 
 
-//for range didalog
+//for range dialog
 #define STR_DATA_ROLE_LABEL                 (RID_APP_START + 241)
 #define STR_DATA_ROLE_X                     (RID_APP_START + 242)
 #define STR_DATA_ROLE_Y                     (RID_APP_START + 243)
@@ -271,7 +273,6 @@
 
 #define STR_BUTTON_UP                       (RID_APP_START + 500)
 #define STR_BUTTON_DOWN                     (RID_APP_START + 501)
-
 
 // ids must not exceed RID_APP_START + 499
 // ids >= RID_APP_START + 500 are defined in glob.hrc
