@@ -2595,7 +2595,8 @@ bool X11SalFrame::SetPluginParent( SystemParentData* pNewParent )
 {
     if( pNewParent->nSize >= sizeof(SystemParentData) )
         m_bXEmbed = pNewParent->aWindow != None && pNewParent->bXEmbedSupport;
-    createNewWindow( pNewParent ? pNewParent->aWindow : None );
+
+    createNewWindow(pNewParent->aWindow);
 
     return true;
 }
