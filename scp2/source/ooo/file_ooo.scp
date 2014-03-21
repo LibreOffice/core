@@ -564,9 +564,6 @@ UI_FILELIST(sfx, "UIConfig/sfx.filelist")
 UI_FILELIST(sglobal, "UIConfig/modules/sglobal.filelist")
 UI_FILELIST(simpress, "UIConfig/modules/simpress.filelist")
 UI_FILELIST(smath, "UIConfig/modules/smath.filelist")
-#ifdef GUIBASE_UNX
-UI_FILELIST(spa, "UIConfig/spa.filelist")
-#endif
 UI_FILELIST(startmodule, "UIConfig/modules/StartModule.filelist")
 UI_FILELIST(svt, "UIConfig/svt.filelist")
 UI_FILELIST(svx, "UIConfig/svx.filelist")
@@ -595,9 +592,6 @@ UI_FILELIST_ALL_LANG(sdraw, modules/sdraw)
 UI_FILELIST_ALL_LANG(sfx, sfx)
 UI_FILELIST_ALL_LANG(simpress, modules/simpress)
 UI_FILELIST_ALL_LANG(smath, modules/smath)
-#ifdef GUIBASE_UNX
-UI_FILELIST_ALL_LANG(spa, spa)
-#endif
 UI_FILELIST_ALL_LANG(svt, svt)
 UI_FILELIST_ALL_LANG(svx, svx)
 UI_FILELIST_ALL_LANG(swriter, modules/swriter)

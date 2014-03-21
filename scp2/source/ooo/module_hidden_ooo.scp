@@ -262,9 +262,6 @@ Module gid_Module_Root_Files_6
         gid_File_Share_Config_Sofficecfg_uiconfig_sglobal,
         gid_File_Share_Config_Sofficecfg_uiconfig_simpress,
         gid_File_Share_Config_Sofficecfg_uiconfig_smath,
-#ifdef GUIBASE_UNX
-        gid_File_Share_Config_Sofficecfg_uiconfig_spa,
-#endif
         gid_File_Share_Config_Sofficecfg_uiconfig_startmodule,
         gid_File_Share_Config_Sofficecfg_uiconfig_svt,
         gid_File_Share_Config_Sofficecfg_uiconfig_svx,

@@ -86,7 +86,7 @@ public:
     /// check if the printer configuration has changed
     virtual bool checkPrintersChanged( bool bWait );
 
-    // members for administration (->padmin)
+    // members for administration
     // disable for CUPS
     virtual bool addPrinter( const OUString& rPrinterName, const OUString& rDriverName );
     virtual bool removePrinter( const OUString& rPrinterName, bool bCheckOnly = false );

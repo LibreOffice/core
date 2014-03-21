@@ -18,16 +18,14 @@
  */
 
 #include "prtsetup.hxx"
-#include "helper.hxx"
-#include "rtsetup.hrc"
+#include "svdata.hxx"
+#include "svids.hrc"
 
 #include "osl/thread.h"
 
 #include <officecfg/Office/Common.hxx>
 
 using namespace psp;
-using namespace padmin;
-
 
 void RTSDialog::insertAllPPDValues( ListBox& rBox, const PPDParser* pParser, const PPDKey* pKey )
 {
@@ -74,12 +72,12 @@ void RTSDialog::insertAllPPDValues( ListBox& rBox, const PPDParser* pParser, con
  */
 
 RTSDialog::RTSDialog(const PrinterInfo& rJobData, const OUString& rPrinter, Window* pParent)
-    : TabDialog(pParent, "PrinterPropertiesDialog", "spa/ui/printerpropertiesdialog.ui")
+    : TabDialog(pParent, "PrinterPropertiesDialog", "vcl/ui/printerpropertiesdialog.ui")
     , m_aJobData(rJobData)
     , m_aPrinter(rPrinter)
     , m_pPaperPage(NULL)
     , m_pDevicePage(NULL)
-    , m_aInvalidString(PaResId(RID_RTS_RTSDIALOG_INVALID_TXT).toString())
+    , m_aInvalidString(VclResId(SV_PRINT_INVALID_TXT))
 {
     get(m_pOKButton, "ok");
     get(m_pCancelButton, "cancel");
@@ -163,7 +161,7 @@ IMPL_LINK( RTSDialog, ClickButton, Button*, pButton )
  */
 
 RTSPaperPage::RTSPaperPage(RTSDialog* pParent)
-    : TabPage(pParent->m_pTabControl, "PrinterPaperPage", "spa/ui/printerpaperpage.ui")
+    : TabPage(pParent->m_pTabControl, "PrinterPaperPage", "vcl/ui/printerpaperpage.ui")
     , m_pParent( pParent )
 {
     get(m_pPaperText, "paperft");
@@ -288,7 +286,7 @@ IMPL_LINK( RTSPaperPage, SelectHdl, ListBox*, pBox )
  */
 
 RTSDevicePage::RTSDevicePage( RTSDialog* pParent )
-    : TabPage(pParent->m_pTabControl, "PrinterDevicePage", "spa/ui/printerdevicepage.ui" )
+    : TabPage(pParent->m_pTabControl, "PrinterDevicePage", "vcl/ui/printerdevicepage.ui" )
     , m_pParent( pParent )
 {
     get(m_pPPDKeyBox, "options");
@@ -472,21 +470,18 @@ void RTSDevicePage::FillValueBox( const PPDKey* pKey )
     m_pPPDValueBox->SelectEntryPos( m_pPPDValueBox->GetEntryPos( (void*)pValue ) );
 }
 
-extern "C" {
+int SetupPrinterDriver(::psp::PrinterInfo& rJobData)
+{
+    int nRet = 0;
+    RTSDialog aDialog( rJobData, rJobData.m_aPrinterName, false );
 
-    int SPA_DLLPUBLIC Sal_SetupPrinterDriver( ::psp::PrinterInfo& rJobData )
+    if( aDialog.Execute() )
     {
-        int nRet = 0;
-        RTSDialog aDialog( rJobData, rJobData.m_aPrinterName, false );
-
-        if( aDialog.Execute() )
-        {
-            rJobData = aDialog.getSetup();
-            nRet = 1;
-        }
-
-        return nRet;
+        rJobData = aDialog.getSetup();
+        nRet = 1;
     }
-} // extern "C"
+
+    return nRet;
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

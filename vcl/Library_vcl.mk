@@ -463,6 +463,7 @@ vcl_generic_code= \
     vcl/generic/print/psputil \
     vcl/generic/print/genpspgraphics \
     vcl/generic/print/genprnpsp \
+    vcl/generic/print/prtsetup \
     vcl/generic/print/text_gfx \
     vcl/generic/fontmanager/fontsubst \
     vcl/generic/glyphs/gcach_ftyp \
@@ -490,9 +491,6 @@ vcl_headless_freetype_code=\
     vcl/headless/svptext \
 
 ifeq ($(GUIBASE),unx)
-$(eval $(call gb_Library_add_defs,vcl,\
-    -D_XSALSET_LIBNAME=\"$(call gb_Library_get_runtime_filename,spa)\" \
-))
 $(eval $(call gb_Library_add_exception_objects,vcl,\
 	$(vcl_generic_code) \
     vcl/unx/generic/plugadapt/salplug \
@@ -515,9 +513,6 @@ $(eval $(call gb_Library_use_externals,vcl,\
 endif
 
 ifeq ($(ENABLE_HEADLESS),TRUE)
-$(eval $(call gb_Library_add_defs,vcl,\
-    -D_XSALSET_LIBNAME=\"$(call gb_Library_get_runtime_filename,spa)\" \
-))
 $(eval $(call gb_Library_add_exception_objects,vcl,\
 	$(vcl_generic_code) \
     vcl/unx/generic/printer/jobdata \
@@ -543,9 +538,6 @@ $(eval $(call gb_Library_add_libs,vcl,\
 	-llog \
 	-landroid \
 	-llo-bootstrap \
-))
-$(eval $(call gb_Library_add_defs,vcl,\
-    -D_XSALSET_LIBNAME=\"$(call gb_Library_get_runtime_filename,spa)\" \
 ))
 $(eval $(call gb_Library_add_exception_objects,vcl,\
 	$(vcl_generic_code) \

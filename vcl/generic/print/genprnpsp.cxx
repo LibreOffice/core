@@ -39,8 +39,6 @@
 
 #include "rtl/ustring.hxx"
 
-#include "osl/module.h"
-
 #include "vcl/button.hxx"
 #include "vcl/dialog.hxx"
 #include "vcl/edit.hxx"
@@ -58,6 +56,7 @@
 
 #include "jobset.h"
 #include "print.h"
+#include "prtsetup.hxx"
 #include "salptype.hxx"
 
 #include <com/sun/star/beans/PropertyValue.hpp>
@@ -69,16 +68,6 @@ using namespace com::sun::star;
 /*
  *  static helpers
  */
-
-#if defined( UNX ) && !( defined( MACOSX ) || defined( IOS )  || defined( ANDROID ) )
-static oslModule driverLib                  = NULL;
-#endif
-extern "C"
-{
-typedef int(*setupFunction)(PrinterInfo&);
-static setupFunction pSetupFunction         = NULL;
-}
-
 static OUString getPdfDir( const PrinterInfo& rInfo )
 {
     OUString aDir;
@@ -151,24 +140,6 @@ namespace
         QueryString aQuery(NULL, aTmpString, rNumber);
         return aQuery.Execute();
     }
-}
-
-static void getPaLib()
-{
-#if defined( UNX ) && !( defined( MACOSX ) || defined( IOS )  || defined( ANDROID ) )
-    if( ! driverLib )
-    {
-        driverLib = osl_loadModuleRelativeAscii( (oslGenericFunction)getPaLib,
-                                                 _XSALSET_LIBNAME,
-                                                 SAL_LOADMODULE_DEFAULT );
-        if ( !driverLib )
-            return;
-
-        pSetupFunction  = (setupFunction)osl_getAsciiFunctionSymbol( driverLib, "Sal_SetupPrinterDriver" );
-        if ( !pSetupFunction )
-            fprintf( stderr, "could not resolve Sal_SetupPrinterDriver\n" );
-    }
-#endif
 }
 
 inline int PtTo10Mu( int nPoints ) { return (int)((((double)nPoints)*35.27777778)+0.5); }
@@ -572,11 +543,6 @@ bool PspSalInfoPrinter::Setup( SalFrame* pFrame, ImplJobSetup* pJobSetup )
     if( ! pFrame || ! pJobSetup )
         return false;
 
-    getPaLib();
-
-    if( ! pSetupFunction )
-        return false;
-
     PrinterInfoManager& rManager = PrinterInfoManager::get();
 
     PrinterInfo aInfo( rManager.getPrinterInfo( pJobSetup->maPrinterName ) );
@@ -586,7 +552,7 @@ bool PspSalInfoPrinter::Setup( SalFrame* pFrame, ImplJobSetup* pJobSetup )
         JobData::constructFromStreamBuffer( pJobSetup->mpDriverData, pJobSetup->mnDriverDataLen, aInfo );
     }
 
-    if( pSetupFunction( aInfo ) )
+    if (SetupPrinterDriver(aInfo))
     {
         aInfo.resolveDefaultBackend();
         rtl_freeMemory( pJobSetup->mpDriverData );

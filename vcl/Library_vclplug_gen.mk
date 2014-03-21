@@ -101,7 +101,6 @@ $(eval $(call gb_Library_add_exception_objects,vclplug_gen,\
 # into their own library I think.
 
 $(eval $(call gb_Library_add_defs,vclplug_gen,\
-    -D_XSALSET_LIBNAME=\"$(call gb_Library_get_runtime_filename,spa)\" \
     -DVCLPLUG_GEN_IMPLEMENTATION \
 ))
 

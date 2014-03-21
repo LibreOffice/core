@@ -529,7 +529,7 @@ void PrinterInfoManager::initialize()
         aPrinterName += ">";
 
         if( m_aPrinters.find( aPrinterName ) != m_aPrinters.end() )
-            // probably user made this one permanent in padmin
+            // probably user made this one permanent
             continue;
 
         OUString aCmd( m_aSystemPrintCommand );
@@ -544,7 +544,7 @@ void PrinterInfoManager::initialize()
         aPrinter.m_aInfo.m_aComment         = it->m_aComment;
         aPrinter.m_aInfo.m_aLocation        = it->m_aLocation;
         aPrinter.m_bModified                = false;
-        aPrinter.m_aGroup                   = OUStringToOString(aPrinterName, aEncoding); //provide group name in case user makes this one permanent in padmin
+        aPrinter.m_aGroup                   = OUStringToOString(aPrinterName, aEncoding); //provide group name in case user makes this one permanent
 
         m_aPrinters[ aPrinterName ] = aPrinter;
     }
@@ -787,8 +787,8 @@ bool PrinterInfoManager::addPrinter( const OUString& rPrinterName, const OUStrin
         #endif
         // comment: logically one should writePrinterConfig() here
         // but immediately after addPrinter() a changePrinterInfo()
-        // will follow (see padmin code), which writes it again,
-        // so we can currently save some performance here
+        // will follow which writes it again, so we can currently save some
+        // performance here
     }
     return bSuccess;
 }

@@ -289,7 +289,6 @@ bool includeProject(const OString& rProject) {
         "mysqlc",
         "nlpsolver",
         "officecfg",
-        "padmin",
         "readlicense_oo",
         "reportbuilder",
         "reportdesign",

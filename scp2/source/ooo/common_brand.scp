@@ -56,7 +56,6 @@ Module gid_Module_Root_Brand
              gid_Brand_File_Bin_Soffice,
              gid_Brand_File_Bin_Soffice_Bin,
              gid_Brand_File_Bin_Soffice_Bin_Manifest,
-             gid_Brand_File_Bin_Spadmin,
              gid_Brand_File_Bin_Unoinfo,
              gid_Brand_File_Bin_Unopkgcom,
              gid_Brand_File_Bin_Unopkgexe,
@@ -523,15 +522,6 @@ File gid_Brand_File_Bin_Soffice
     Styles = (PACKED);
 End
 
-#endif
-
-#if defined(UNX) && !defined(MACOSX) && !defined(LIBO_HEADLESS)
-File gid_Brand_File_Bin_Spadmin
-    BIN_FILE_BODY;
-    Dir = FILELIST_DIR;
-    Name = "padmin.filelist";
-    Styles = (PACKED, FILELIST);
-End
 #endif
 
 #ifndef MACOSX

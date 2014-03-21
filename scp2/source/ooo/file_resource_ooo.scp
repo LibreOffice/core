@@ -69,12 +69,6 @@ STD_RES_FILE( gid_File_Res_Sd, sd )
 
 STD_RES_FILE( gid_File_Res_Sfx, sfx )
 
-#if defined(UNX) && !defined(MACOSX) && !defined(LIBO_HEADLESS)
-
-STD_RES_FILE( gid_File_Res_Spa, spa )
-
-#endif
-
 STD_RES_FILE( gid_File_Res_Sb, sb )
 
 STD_RES_FILE( gid_File_Res_Svl, svl )

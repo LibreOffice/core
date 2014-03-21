@@ -20,8 +20,6 @@
 #ifndef _PAD_PRTSETUP_HXX_
 #define _PAD_PRTSETUP_HXX_
 
-#include "helper.hxx"
-
 #include "tools/link.hxx"
 
 #include "vcl/tabdlg.hxx"
@@ -34,8 +32,6 @@
 #include "vcl/combobox.hxx"
 #include "vcl/ppdparser.hxx"
 #include "vcl/printerinfomanager.hxx"
-
-namespace padmin {
 
 class RTSPaperPage;
 class RTSDevicePage;
@@ -126,7 +122,7 @@ public:
     sal_uLong getColorDevice();
 };
 
-} // namespace
+int SetupPrinterDriver(::psp::PrinterInfo& rJobData);
 
 #endif // _PAD_PRTSETUP_HXX
 

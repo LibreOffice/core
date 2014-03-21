@@ -82,7 +82,6 @@ $(eval $(call gb_Module_add_moduledirs,libreoffice,\
 	oovbaapi \
 	oox \
 	package \
-	padmin \
 	postprocess \
 	psprint_config \
 	$(call gb_Helper_optional,PYUNO,pyuno) \

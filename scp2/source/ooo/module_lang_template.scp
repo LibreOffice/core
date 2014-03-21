@@ -35,9 +35,6 @@ Module gid_Module_Langpack_Basis_Template
              gid_File_Share_Config_Sofficecfg_uiconfig_sfx_Lang,
              gid_File_Share_Config_Sofficecfg_uiconfig_simpress_Lang,
              gid_File_Share_Config_Sofficecfg_uiconfig_smath_Lang,
-#ifdef GUIBASE_UNX
-             gid_File_Share_Config_Sofficecfg_uiconfig_spa_Lang,
-#endif
              gid_File_Share_Config_Sofficecfg_uiconfig_svt_Lang,
              gid_File_Share_Config_Sofficecfg_uiconfig_svx_Lang,
              gid_File_Share_Config_Sofficecfg_uiconfig_swriter_Lang,

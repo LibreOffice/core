@@ -14,6 +14,9 @@ $(eval $(call gb_UIConfig_add_uifiles,vcl,\
 	vcl/uiconfig/ui/errornocontentdialog \
 	vcl/uiconfig/ui/errornoprinterdialog \
 	vcl/uiconfig/ui/printdialog \
+	vcl/uiconfig/ui/printerdevicepage \
+	vcl/uiconfig/ui/printerpaperpage \
+	vcl/uiconfig/ui/printerpropertiesdialog \
 	vcl/uiconfig/ui/printprogressdialog \
 	vcl/uiconfig/ui/querydialog \
 ))

@@ -154,7 +154,7 @@ public:
     // printer discovery to finish
     virtual bool checkPrintersChanged( bool bWait );
 
-    // members for administration (->padmin)
+    // members for administration
 
     // add a named printer
     // addPrinter fails if a printer with the same name already exists
@@ -176,7 +176,7 @@ public:
     // fails if the specified printer does not exist
     virtual bool setDefaultPrinter( const OUString& rPrinterName );
 
-    // primarily used internally but also by padmin
+    // primarily used internally
     // returns the printer queue names
     virtual const std::list< SystemPrintQueue >& getSystemPrintQueues();
 
