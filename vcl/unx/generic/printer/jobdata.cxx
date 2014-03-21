@@ -25,6 +25,7 @@
 
 #include <sal/alloca.h>
 #include <rtl/strbuf.hxx>
+#include <boost/scoped_array.hpp>
 
 using namespace psp;
 
@@ -175,10 +176,10 @@ bool JobData::getStreamBuffer( void*& pData, int& bytes )
     // now append the PPDContext stream buffer
     aStream.WriteLine( "PPDContexData" );
     sal_uLong nBytes;
-    char* pContextBuffer = m_aContext.getStreamableBuffer( nBytes );
+    boost::scoped_array<char> pContextBuffer(m_aContext.getStreamableBuffer( nBytes ));
     if( nBytes )
-        aStream.Write( pContextBuffer, nBytes );
-    delete [] pContextBuffer;
+        aStream.Write( pContextBuffer.get(), nBytes );
+    pContextBuffer.reset();
 
     // success
     pData = rtl_allocateMemory( bytes = aStream.Tell() );

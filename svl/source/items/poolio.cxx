@@ -28,6 +28,7 @@
 #include <svl/brdcst.hxx>
 #include <svl/filerec.hxx>
 #include "poolio.hxx"
+#include <boost/scoped_array.hpp>
 
 // STATIC DATA -----------------------------------------------------------
 
@@ -762,10 +763,10 @@ SvStream &SfxItemPool::Load1_Impl(SvStream &rStream)
     CHECK_FILEFORMAT( rStream, SFX_ITEMPOOL_TAG_SIZES );
     sal_uInt32 nSizeTableLen(0);
     rStream.ReadUInt32( nSizeTableLen );
-    sal_Char *pBuf = new sal_Char[nSizeTableLen];
-    rStream.Read( pBuf, nSizeTableLen );
+    boost::scoped_array<sal_Char> pBuf(new sal_Char[nSizeTableLen]);
+    rStream.Read( pBuf.get(), nSizeTableLen );
     sal_uLong nEndOfSizes = rStream.Tell();
-    SvMemoryStream aSizeTable( pBuf, nSizeTableLen, STREAM_READ );
+    SvMemoryStream aSizeTable( pBuf.get(), nSizeTableLen, STREAM_READ );
 
     // ab Version 1.3 steht in der Size-Table eine Versions-Map
     if ( pImp->nMajorVer > 1 || pImp->nMinorVer >= 3 )
@@ -968,7 +969,7 @@ SvStream &SfxItemPool::Load1_Impl(SvStream &rStream)
             rStream.Seek( nPos + nSize );
     }
 
-    delete[] pBuf;
+    pBuf.reset();
     rStream.Seek(nEndOfSizes);
     CHECK_FILEFORMAT( rStream, SFX_ITEMPOOL_TAG_ENDPOOL );
     CHECK_FILEFORMAT( rStream, SFX_ITEMPOOL_TAG_ENDPOOL );

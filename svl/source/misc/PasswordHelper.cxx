@@ -20,6 +20,7 @@
 
 #include <svl/PasswordHelper.hxx>
 #include <rtl/digest.h>
+#include <boost/scoped_array.hpp>
 
 using namespace com::sun::star;
 
@@ -37,7 +38,7 @@ void SvPasswordHelper::GetHashPassword(uno::Sequence<sal_Int8>& rPassHash, const
 void SvPasswordHelper::GetHashPasswordLittleEndian(uno::Sequence<sal_Int8>& rPassHash, const OUString& sPass)
 {
     sal_Int32 nSize(sPass.getLength());
-    sal_Char* pCharBuffer = new sal_Char[nSize * sizeof(sal_Unicode)];
+    boost::scoped_array<sal_Char> pCharBuffer(new sal_Char[nSize * sizeof(sal_Unicode)]);
 
     for (sal_Int32 i = 0; i < nSize; ++i)
     {
@@ -46,15 +47,13 @@ void SvPasswordHelper::GetHashPasswordLittleEndian(uno::Sequence<sal_Int8>& rPas
         pCharBuffer[2 * i + 1] = static_cast< sal_Char >(ch >> 8);
     }
 
-    GetHashPassword(rPassHash, pCharBuffer, nSize * sizeof(sal_Unicode));
-
-    delete[] pCharBuffer;
+    GetHashPassword(rPassHash, pCharBuffer.get(), nSize * sizeof(sal_Unicode));
 }
 
 void SvPasswordHelper::GetHashPasswordBigEndian(uno::Sequence<sal_Int8>& rPassHash, const OUString& sPass)
 {
     sal_Int32 nSize(sPass.getLength());
-    sal_Char* pCharBuffer = new sal_Char[nSize * sizeof(sal_Unicode)];
+    boost::scoped_array<sal_Char> pCharBuffer(new sal_Char[nSize * sizeof(sal_Unicode)]);
 
     for (sal_Int32 i = 0; i < nSize; ++i)
     {
@@ -63,9 +62,7 @@ void SvPasswordHelper::GetHashPasswordBigEndian(uno::Sequence<sal_Int8>& rPassHa
         pCharBuffer[2 * i + 1] = static_cast< sal_Char >(ch & 0xFF);
     }
 
-    GetHashPassword(rPassHash, pCharBuffer, nSize * sizeof(sal_Unicode));
-
-    delete[] pCharBuffer;
+    GetHashPassword(rPassHash, pCharBuffer.get(), nSize * sizeof(sal_Unicode));
 }
 
 void SvPasswordHelper::GetHashPassword(uno::Sequence<sal_Int8>& rPassHash, const OUString& sPass)

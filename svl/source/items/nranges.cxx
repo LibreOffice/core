@@ -20,7 +20,7 @@
 #include <cassert>
 #include <vector>
 // compiled via include from itemset.cxx only!
-
+#include <boost/scoped_array.hpp>
 
 #ifdef DBG_UTIL
 
@@ -436,9 +436,9 @@ SfxUShortRanges& SfxUShortRanges::operator -=
     // (size is computed for maximal possibly split-count plus terminating 0)
     sal_uInt16 nThisSize = Count_Impl(_pRanges);
     sal_uInt16 nTargetSize = 1 + (  nThisSize + Count_Impl(rRanges._pRanges) );
-    sal_uInt16 *pTarget = new sal_uInt16[ nTargetSize ];
-    memset( pTarget, 0, sizeof(sal_uInt16)*nTargetSize );
-    memcpy( pTarget, _pRanges, sizeof(sal_uInt16)*nThisSize );
+    boost::scoped_array<sal_uInt16> pTarget(new sal_uInt16[ nTargetSize ]);
+    memset( pTarget.get(), 0, sizeof(sal_uInt16)*nTargetSize );
+    memcpy( pTarget.get(), _pRanges, sizeof(sal_uInt16)*nThisSize );
 
     sal_uInt16 nPos1 = 0, nPos2 = 0, nTargetPos = 0;
     while( _pRanges[ nPos1 ] )
@@ -540,16 +540,15 @@ SfxUShortRanges& SfxUShortRanges::operator -=
     // assign the differentiated ranges
     delete[] _pRanges;
 
-    sal_uInt16 nUShorts = Count_Impl(pTarget) + 1;
+    sal_uInt16 nUShorts = Count_Impl(pTarget.get()) + 1;
     if ( 1 != nUShorts )
     {
         _pRanges = new sal_uInt16[ nUShorts ];
-        memcpy( _pRanges, pTarget, nUShorts * sizeof(sal_uInt16) );
+        memcpy( _pRanges, pTarget.get(), nUShorts * sizeof(sal_uInt16) );
     }
     else
         _pRanges = 0;
 
-    delete [] pTarget;
     return *this;
 }
 
@@ -587,9 +586,9 @@ SfxUShortRanges& SfxUShortRanges::operator /=
     // (size is computed for maximal possibly split-count plus terminating 0)
     sal_uInt16 nThisSize = Count_Impl(_pRanges);
     sal_uInt16 nTargetSize = 1 + (  nThisSize + Count_Impl(rRanges._pRanges) );
-    sal_uInt16 *pTarget = new sal_uInt16[ nTargetSize ];
-    memset( pTarget, 0, sizeof(sal_uInt16)*nTargetSize );
-    memcpy( pTarget, _pRanges, sizeof(sal_uInt16)*nThisSize );
+    boost::scoped_array<sal_uInt16> pTarget(new sal_uInt16[ nTargetSize ]);
+    memset( pTarget.get(), 0, sizeof(sal_uInt16)*nTargetSize );
+    memcpy( pTarget.get(), _pRanges, sizeof(sal_uInt16)*nThisSize );
 
     sal_uInt16 nPos1 = 0, nPos2 = 0, nTargetPos = 0;
     while( _pRanges[ nPos1 ] != 0 && rRanges._pRanges[ nPos2 ] != 0 )
@@ -659,16 +658,15 @@ SfxUShortRanges& SfxUShortRanges::operator /=
     // assign the intersected ranges
     delete[] _pRanges;
 
-    sal_uInt16 nUShorts = Count_Impl(pTarget) + 1;
+    sal_uInt16 nUShorts = Count_Impl(pTarget.get()) + 1;
     if ( 1 != nUShorts )
     {
         _pRanges = new sal_uInt16[ nUShorts ];
-        memcpy( _pRanges, pTarget, nUShorts * sizeof(sal_uInt16) );
+        memcpy( _pRanges, pTarget.get(), nUShorts * sizeof(sal_uInt16) );
     }
     else
         _pRanges = 0;
 
-    delete [] pTarget;
     return *this;
 }
 

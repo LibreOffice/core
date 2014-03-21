@@ -77,6 +77,7 @@ Status XineramaGetInfo(Display*, int, XRectangle*, unsigned char*, int*);
 
 #include <osl/socket.h>
 #include <poll.h>
+#include <boost/scoped_array.hpp>
 
 using namespace vcl_sal;
 
@@ -2647,7 +2648,7 @@ void SalColormap::GetPalette()
     Pixel i;
     m_aPalette = std::vector<SalColor>(m_nUsed);
 
-    XColor *aColor = new XColor[m_nUsed];
+    boost::scoped_array<XColor> aColor(new XColor[m_nUsed]);
 
     for( i = 0; i < m_nUsed; i++ )
     {
@@ -2655,7 +2656,7 @@ void SalColormap::GetPalette()
         aColor[i].pixel = i;
     }
 
-    XQueryColors( m_pDisplay->GetDisplay(), m_hColormap, aColor, m_nUsed );
+    XQueryColors( m_pDisplay->GetDisplay(), m_hColormap, aColor.get(), m_nUsed );
 
     for( i = 0; i < m_nUsed; i++ )
     {
@@ -2663,8 +2664,6 @@ void SalColormap::GetPalette()
                                        aColor[i].green >> 8,
                                        aColor[i].blue  >> 8 );
     }
-
-    delete [] aColor;
 }
 
 static sal_uInt16 sal_Lookup( const std::vector<SalColor>& rPalette,
