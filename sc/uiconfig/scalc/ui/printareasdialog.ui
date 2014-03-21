@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!-- Generated with glade 3.16.1 -->
 <interface>
-  <!-- interface-requires gtk+ 3.0 -->
+  <requires lib="gtk+" version="3.0"/>
   <!-- interface-requires LibreOffice 1.0 -->
   <object class="GtkDialog" id="PrintAreasDialog">
     <property name="can_focus">False</property>
@@ -72,24 +73,28 @@
           <object class="GtkBox" id="box1">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
+            <property name="hexpand">True</property>
             <property name="orientation">vertical</property>
             <property name="spacing">12</property>
             <child>
               <object class="GtkFrame" id="printframe">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
+                <property name="hexpand">True</property>
                 <property name="label_xalign">0</property>
                 <property name="shadow_type">none</property>
                 <child>
                   <object class="GtkAlignment" id="alignment1">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
+                    <property name="hexpand">True</property>
                     <property name="top_padding">6</property>
                     <property name="left_padding">12</property>
                     <child>
                       <object class="GtkGrid" id="grid1">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="hexpand">True</property>
                         <property name="row_spacing">6</property>
                         <property name="column_spacing">12</property>
                         <child>
@@ -112,6 +117,7 @@
                           <object class="foruilo-RefEdit" id="edprintarea">
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
+                            <property name="hexpand">True</property>
                             <property name="invisible_char">●</property>
                             <property name="width_chars">50</property>
                           </object>
@@ -126,8 +132,6 @@
                           <object class="GtkComboBoxText" id="lbprintarea">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="entry_text_column">0</property>
-                            <property name="id_column">1</property>
                             <items>
                               <item translatable="yes">- none -</item>
                               <item translatable="yes">- entire sheet -</item>
@@ -167,24 +171,28 @@
               <object class="GtkFrame" id="rowframe">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
+                <property name="hexpand">True</property>
                 <property name="label_xalign">0</property>
                 <property name="shadow_type">none</property>
                 <child>
                   <object class="GtkAlignment" id="alignment2">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
+                    <property name="hexpand">True</property>
                     <property name="top_padding">6</property>
                     <property name="left_padding">12</property>
                     <child>
                       <object class="GtkGrid" id="grid2">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="hexpand">True</property>
                         <property name="row_spacing">6</property>
                         <property name="column_spacing">12</property>
                         <child>
                           <object class="foruilo-RefEdit" id="edrepeatrow">
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
+                            <property name="hexpand">True</property>
                             <property name="invisible_char">●</property>
                             <property name="width_chars">50</property>
                           </object>
@@ -215,8 +223,6 @@
                           <object class="GtkComboBoxText" id="lbrepeatrow">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="entry_text_column">0</property>
-                            <property name="id_column">1</property>
                             <items>
                               <item translatable="yes">- none -</item>
                               <item translatable="yes">- user defined -</item>
@@ -254,24 +260,28 @@
               <object class="GtkFrame" id="colframe">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
+                <property name="hexpand">True</property>
                 <property name="label_xalign">0</property>
                 <property name="shadow_type">none</property>
                 <child>
                   <object class="GtkAlignment" id="alignment3">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
+                    <property name="hexpand">True</property>
                     <property name="top_padding">6</property>
                     <property name="left_padding">12</property>
                     <child>
                       <object class="GtkGrid" id="grid3">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="hexpand">True</property>
                         <property name="row_spacing">6</property>
                         <property name="column_spacing">12</property>
                         <child>
                           <object class="foruilo-RefEdit" id="edrepeatcol">
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
+                            <property name="hexpand">True</property>
                             <property name="invisible_char">●</property>
                             <property name="width_chars">50</property>
                           </object>
@@ -302,8 +312,6 @@
                           <object class="GtkComboBoxText" id="lbrepeatcol">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="entry_text_column">0</property>
-                            <property name="id_column">1</property>
                             <items>
                               <item translatable="yes">- none -</item>
                               <item translatable="yes">- user defined -</item>
