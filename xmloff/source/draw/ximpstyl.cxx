@@ -1608,7 +1608,7 @@ sal_Bool SdXMLHeaderFooterDeclContext::IsTransient() const
 
 void SdXMLHeaderFooterDeclContext::EndElement()
 {
-    SdXMLImport& rImport = *dynamic_cast< SdXMLImport* >( &GetImport() );
+    SdXMLImport& rImport = dynamic_cast<SdXMLImport&>(GetImport());
     if( IsXMLToken( GetLocalName(), XML_HEADER_DECL ) )
     {
         rImport.AddHeaderDecl( maStrName, maStrText );
