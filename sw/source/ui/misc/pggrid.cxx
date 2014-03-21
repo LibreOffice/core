@@ -109,7 +109,8 @@ SwTextGridPage::SwTextGridPage(Window *pParent, const SfxItemSet &rSet) :
 
     XColorListRef pColorLst = XColorList::GetStdColorList();
     m_pColorLB->InsertAutomaticEntryColor( Color( COL_AUTO ) );
-    for( sal_uInt16 i = 0; i < pColorLst->Count(); ++i )
+    const long nCount = pColorLst->Count();
+    for( long i = 0; i < nCount; ++i )
     {
         XColorEntry* pEntry = pColorLst->GetColor( i );
         Color aColor = pEntry->GetColor();
