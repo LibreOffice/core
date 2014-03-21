@@ -14,6 +14,7 @@ $(eval $(call gb_UIConfig_add_uifiles,vcl,\
 	vcl/uiconfig/ui/errornoprinterdialog \
 	vcl/uiconfig/ui/printdialog \
 	vcl/uiconfig/ui/printprogressdialog \
+	vcl/uiconfig/ui/querydialog \
 ))
 
 # vim: set noet sw=4 ts=4:

@@ -538,13 +538,6 @@ extern "C" {
         return nRet;
     }
 
-    int SPA_DLLPUBLIC Sal_queryFaxNumber( OUString& rNumber )
-    {
-        OUString aTmpString( PaResId( RID_TXT_QUERYFAXNUMBER ) );
-        QueryString aQuery( NULL, aTmpString, rNumber );
-        return aQuery.Execute();
-    }
-
     bool SPA_DLLPUBLIC Sal_authenticateQuery( const OString& rServer, OString& rUserName, OString& rPassword )
     {
         bool bRet = false;

@@ -75,38 +75,4 @@ ResId padmin::PaResId( sal_uInt32 nId )
     return ResId( nId, *pPaResMgr );
 }
 
-/*
- *  QueryString
- */
-QueryString::QueryString(Window* pParent, OUString& rQuery, OUString& rRet)
-    : ModalDialog(pParent, "QueryDialog",
-        "spa/ui/querydialog.ui" )
-    , m_rReturnValue( rRet )
-{
-    get(m_pOKButton, "ok");
-    get(m_pFixedText, "label");
-    get(m_pEdit, "entry");
-
-    m_pOKButton->SetClickHdl( LINK( this, QueryString, ClickBtnHdl ) );
-    m_pFixedText->SetText( rQuery );
-    m_pEdit->SetText( m_rReturnValue );
-    SetText( Application::GetDisplayName() );
-}
-
-QueryString::~QueryString()
-{
-}
-
-IMPL_LINK( QueryString, ClickBtnHdl, Button*, pButton )
-{
-    if (pButton == m_pOKButton)
-    {
-        m_rReturnValue = m_pEdit->GetText();
-        EndDialog( 1 );
-    }
-    else
-        EndDialog(0);
-    return 0;
-}
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

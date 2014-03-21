@@ -41,12 +41,16 @@
 
 #include "osl/module.h"
 
+#include "vcl/button.hxx"
+#include "vcl/dialog.hxx"
+#include "vcl/edit.hxx"
+#include "vcl/fixed.hxx"
 #include "vcl/svapp.hxx"
 #include "vcl/print.hxx"
 #include "vcl/pdfwriter.hxx"
 #include "vcl/printerinfomanager.hxx"
 #include "vcl/settings.hxx"
-
+#include "svids.hrc"
 #include "saldatabasic.hxx"
 #include "generic/genprn.h"
 #include "generic/geninst.h"
@@ -73,8 +77,6 @@ extern "C"
 {
 typedef int(*setupFunction)(PrinterInfo&);
 static setupFunction pSetupFunction         = NULL;
-typedef int(*faxFunction)(OUString&);
-static faxFunction pFaxNrFunction           = NULL;
 }
 
 static OUString getPdfDir( const PrinterInfo& rInfo )
@@ -96,6 +98,61 @@ static OUString getPdfDir( const PrinterInfo& rInfo )
     return aDir;
 }
 
+namespace
+{
+    class QueryString : public ModalDialog
+    {
+    private:
+        OKButton*    m_pOKButton;
+        FixedText*   m_pFixedText;
+        Edit*        m_pEdit;
+        OUString&    m_rReturnValue;
+
+        DECL_LINK( ClickBtnHdl, Button* );
+
+    public:
+        // parent window, Query text, initial value
+        QueryString(Window*, OUString &, OUString &);
+    };
+
+    /*
+     *  QueryString
+     */
+    QueryString::QueryString(Window* pParent, OUString& rQuery, OUString& rRet)
+        : ModalDialog(pParent, "QueryDialog",
+            "vcl/ui/querydialog.ui" )
+        , m_rReturnValue( rRet )
+    {
+        get(m_pOKButton, "ok");
+        get(m_pFixedText, "label");
+        get(m_pEdit, "entry");
+
+        m_pOKButton->SetClickHdl(LINK(this, QueryString, ClickBtnHdl));
+        m_pFixedText->SetText(rQuery);
+        m_pEdit->SetText(m_rReturnValue);
+        SetText(Application::GetDisplayName());
+    }
+
+    IMPL_LINK( QueryString, ClickBtnHdl, Button*, pButton )
+    {
+        if (pButton == m_pOKButton)
+        {
+            m_rReturnValue = m_pEdit->GetText();
+            EndDialog( 1 );
+        }
+        else
+            EndDialog(0);
+        return 0;
+    }
+
+    int QueryFaxNumber(OUString& rNumber)
+    {
+        OUString aTmpString(VclResId(SV_PRINT_QUERYFAXNUMBER_TXT));
+        QueryString aQuery(NULL, aTmpString, rNumber);
+        return aQuery.Execute();
+    }
+}
+
 static void getPaLib()
 {
 #if defined( UNX ) && !( defined( MACOSX ) || defined( IOS )  || defined( ANDROID ) )
@@ -110,10 +167,6 @@ static void getPaLib()
         pSetupFunction  = (setupFunction)osl_getAsciiFunctionSymbol( driverLib, "Sal_SetupPrinterDriver" );
         if ( !pSetupFunction )
             fprintf( stderr, "could not resolve Sal_SetupPrinterDriver\n" );
-
-        pFaxNrFunction = (faxFunction)osl_getAsciiFunctionSymbol( driverLib, "Sal_queryFaxNumber" );
-        if ( !pFaxNrFunction )
-            fprintf( stderr, "could not resolve Sal_queryFaxNumber\n" );
     }
 #endif
 }
@@ -308,23 +361,17 @@ static std::vector<OUString> getFaxNumbers()
 {
     std::vector<OUString> aFaxNumbers;
 
-#if defined( UNX )
-    getPaLib();
-    if (pFaxNrFunction)
+    OUString aNewNr;
+    if (QueryFaxNumber(aNewNr))
     {
-        OUString aNewNr;
-        if( pFaxNrFunction( aNewNr ) )
+        sal_Int32 nIndex = 0;
+        do
         {
-            sal_Int32 nIndex = 0;
-            do
-            {
-                OUString sToken = aNewNr.getToken( 0, ';', nIndex );
-                aFaxNumbers.push_back(sToken);
-            }
-            while (nIndex >= 0);
+            OUString sToken = aNewNr.getToken( 0, ';', nIndex );
+            aFaxNumbers.push_back(sToken);
         }
+        while (nIndex >= 0);
     }
-#endif
 
     return aFaxNumbers;
 }

@@ -105,4 +105,9 @@ Image SV_PRINT_NOCOLLATE_IMG
     ImageBitmap = Bitmap { File = "ncollate.png" ; };
 };
 
+String SV_PRINT_QUERYFAXNUMBER_TXT
+{
+    Text [ en-US ] = "Please enter the fax number.";
+};
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

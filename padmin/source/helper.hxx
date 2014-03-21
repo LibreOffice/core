@@ -38,24 +38,7 @@
 
 namespace padmin
 {
-class QueryString : public ModalDialog
-{
-private:
-    OKButton*    m_pOKButton;
-    FixedText*   m_pFixedText;
-    Edit*        m_pEdit;
-    OUString&    m_rReturnValue;
-
-    DECL_LINK( ClickBtnHdl, Button* );
-
-public:
-    QueryString(Window*, OUString &, OUString &);
-    // parent window, Query text, initial value
-    ~QueryString();
-};
-
 ResId PaResId( sal_uInt32 nId );
-
 } // namespace padmin
 
 #endif

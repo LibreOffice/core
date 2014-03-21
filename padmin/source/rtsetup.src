@@ -24,11 +24,6 @@ String RID_RTS_RTSDIALOG_INVALID_TXT
     Text [ en-US ] = "<ignore>";
 };
 
-String RID_TXT_QUERYFAXNUMBER
-{
-    Text [ en-US ] = "Please enter the fax number.";
-};
-
 ModalDialog RID_RTS_PWDIALOG
 {
     HelpID = "padmin:ModalDialog:RID_RTS_PWDIALOG";
