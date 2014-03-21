@@ -323,9 +323,6 @@ $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,ooo, \
 	simplecanvas \
 	slideshow \
 	sot \
-	$(if $(and $(filter unx,$(GUIBASE)),$(filter-out MACOSX,$(OS))), \
-		$(if $(ENABLE_HEADLESS),,spa) \
-	) \
 	spell \
 	$(if $(ENABLE_HEADLESS),,spl) \
 	$(if $(DISABLE_SCRIPTING),,stringresource) \
