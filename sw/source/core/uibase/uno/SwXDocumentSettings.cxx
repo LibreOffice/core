@@ -822,8 +822,10 @@ void SwXDocumentSettings::_preGetValues ()
         throw(beans::UnknownPropertyException, beans::PropertyVetoException, lang::IllegalArgumentException, lang::WrappedTargetException )
 {
     mpDocSh = mpModel->GetDocShell();
+    if (NULL == mpDocSh)
+        throw UnknownPropertyException();
     mpDoc = mpDocSh->GetDoc();
-    if( NULL == mpDoc || NULL == mpDocSh )
+    if (NULL == mpDoc)
         throw UnknownPropertyException();
 }
 
