@@ -27,12 +27,17 @@
 namespace cssu = com::sun::star::uno;
 namespace cssxs = com::sun::star::xml::sax;
 
-XSecParser::XSecParser(
-    XSecController* pXSecController,
-    const cssu::Reference< cssxs::XDocumentHandler >& xNextHandler )
-    : m_pXSecController(pXSecController),
-      m_xNextHandler(xNextHandler),
-      m_bReferenceUnresolved(false)
+XSecParser::XSecParser(XSecController* pXSecController,
+    const cssu::Reference< cssxs::XDocumentHandler >& xNextHandler)
+    : m_bInX509IssuerName(false)
+    , m_bInX509SerialNumber(false)
+    , m_bInX509Certificate(false)
+    , m_bInDigestValue(false)
+    , m_bInSignatureValue(false)
+    , m_bInDate(false)
+    , m_pXSecController(pXSecController)
+    , m_xNextHandler(xNextHandler)
+    , m_bReferenceUnresolved(false)
 {
 }
 
