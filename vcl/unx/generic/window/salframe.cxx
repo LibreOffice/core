@@ -3981,7 +3981,7 @@ long X11SalFrame::Dispatch( XEvent *pEvent )
                      XSetInputFocus( GetXDisplay(), GetShellWindow(),
                              RevertToNone, CurrentTime );
                  }
-
+                //fall-through
             case ButtonRelease:
             case MotionNotify:
             case EnterNotify:
