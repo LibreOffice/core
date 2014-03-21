@@ -1021,7 +1021,7 @@ void LngSvcMgr::GetGrammarCheckerDsp_Impl( sal_Bool bSetSvcList  )
             pGrammarDsp    = dynamic_cast< GrammarCheckingIterator * >(xGCI.get());
             xGrammarDsp    = xGCI;
             SAL_WARN_IF( pGrammarDsp == NULL, "linguistic", "failed to get implementation" );
-            if (bSetSvcList)
+            if (bSetSvcList && pGrammarDsp)
                 SetCfgServiceLists( *pGrammarDsp );
         }
     }
