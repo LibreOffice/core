@@ -147,8 +147,8 @@ OOXMLFastContextHandler::OOXMLFastContextHandler
   mId(0),
   mnDefine(0),
   mnToken(OOXML_FAST_TOKENS_END),
-  mpStream(NULL),
-  mnTableDepth(0),
+  mpStream(pContext->mpStream),
+  mnTableDepth(pContext->mnTableDepth),
   mnInstanceNumber(mnInstanceCount),
   mnRefCount(0),
   inPositionV(pContext->inPositionV),
@@ -157,13 +157,7 @@ OOXMLFastContextHandler::OOXMLFastContextHandler
   m_bTookChoice(pContext->m_bTookChoice),
   m_aSavedAlternateStates(pContext->m_aSavedAlternateStates)
 {
-    if (pContext != NULL)
-    {
-        mpStream = pContext->mpStream;
-        mpParserState = pContext->mpParserState;
-        mnTableDepth = pContext->mnTableDepth;
-        m_xContext = pContext->m_xContext;
-    }
+    mpParserState = pContext->mpParserState;
 
     if (mpParserState.get() == NULL)
         mpParserState.reset(new OOXMLParserState());
