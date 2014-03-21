@@ -45,7 +45,7 @@ PrinterInfoManager::PrinterInfoManager( Type eType ) :
     m_eType( eType ),
     m_bUseIncludeFeature( false ),
     m_bUseJobPatch( true ),
-    m_aSystemDefaultPaper( "A4" ),
+    m_aSystemDefaultPaper( "A4" )
 {
     // initSystemDefaultPaper();
 }
