@@ -71,6 +71,8 @@ public:
                                    ~SdFileDialog_Imp();
 
     ErrCode                     Execute();
+    ErrCode                     Execute(sal_Bool& bLink);
+
 
     // overwritten from FileDialogHelper, to receive user feedback
     virtual void SAL_CALL       ControlStateChanged( const css::ui::dialogs::FilePickerEvent& aEvent );
@@ -226,7 +228,7 @@ void SdFileDialog_Imp::CheckSelectionState()
 
 
 SdFileDialog_Imp::SdFileDialog_Imp( const short     nDialogType,
-                                    sal_Bool        bUsableSelection    ) :
+                                    sal_Bool        bUsableSelection) :
     FileDialogHelper( nDialogType, 0 ),
     mnPlaySoundEvent( 0 ),
     mbUsableSelection( bUsableSelection ),
@@ -248,6 +250,20 @@ SdFileDialog_Imp::SdFileDialog_Imp( const short     nDialogType,
             {
                 mxControlAccess->setLabel( css::ui::dialogs::ExtendedFilePickerElementIds::PUSHBUTTON_PLAY,
                                            SD_RESSTR( STR_PLAY ) );
+            }
+            catch (const css::lang::IllegalArgumentException&)
+            {
+#ifdef DBG_UTIL
+                OSL_FAIL( "Cannot set play button label" );
+#endif
+            }
+        }
+        if( nDialogType ==
+            css::ui::dialogs::TemplateDescription::FILEOPEN_LINK_PREVIEW_IMAGE_TEMPLATE ) //SdOpenSoundFileDialog is also being used in other places, so adding new option.
+        {
+            try
+            {
+                 mxControlAccess->enableControl( css::ui::dialogs::ExtendedFilePickerElementIds::CHECKBOX_PREVIEW, sal_False );
             }
             catch (const css::lang::IllegalArgumentException&)
             {
@@ -280,13 +296,20 @@ SdFileDialog_Imp::~SdFileDialog_Imp()
         Application::RemoveUserEvent( mnPlaySoundEvent );
 }
 
-
 ErrCode SdFileDialog_Imp::Execute()
 {
     // make sure selection checkbox is disabled if
     // HTML is current filter!
     CheckSelectionState();
     return FileDialogHelper::Execute();
+}
+
+ErrCode SdFileDialog_Imp::Execute(sal_Bool& bLink)
+{
+    // make sure selection checkbox is disabled if
+    // HTML is current filter!
+    CheckSelectionState();
+    return FileDialogHelper::Execute(bLink);
 }
 
 
@@ -297,7 +320,7 @@ ErrCode SdFileDialog_Imp::Execute()
 SdOpenSoundFileDialog::SdOpenSoundFileDialog() :
     mpImpl(
         new SdFileDialog_Imp(
-            css::ui::dialogs::TemplateDescription::FILEOPEN_PLAY, sal_False ) )
+            css::ui::dialogs::TemplateDescription::FILEOPEN_LINK_PREVIEW_IMAGE_TEMPLATE, sal_True ) )
 {
     OUString aDescr;
     aDescr = SD_RESSTR(STR_ALL_FILES);
@@ -334,6 +357,10 @@ ErrCode SdOpenSoundFileDialog::Execute()
     return mpImpl->Execute();
 }
 
+ErrCode SdOpenSoundFileDialog::Execute(sal_Bool& bLink)
+{
+    return mpImpl->Execute(bLink);
+}
 
 OUString SdOpenSoundFileDialog::GetPath() const
 {
@@ -345,5 +372,6 @@ void SdOpenSoundFileDialog::SetPath( const OUString& rPath )
 {
     mpImpl->SetDisplayDirectory( rPath );
 }
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

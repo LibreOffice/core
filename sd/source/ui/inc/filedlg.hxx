@@ -51,6 +51,7 @@ public:
                             ~SdOpenSoundFileDialog();
 
     ErrCode                  Execute();
+    ErrCode                  Execute(sal_Bool& bLink);
     OUString                 GetPath() const;
     void                     SetPath( const OUString& rPath );
 };

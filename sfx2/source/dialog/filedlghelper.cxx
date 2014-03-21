@@ -1555,6 +1555,26 @@ ErrCode FileDialogHelper_Impl::execute()
     }
 }
 
+ErrCode FileDialogHelper_Impl::execute(sal_Bool& bLink)
+{
+    if ( ! mxFileDlg.is() )
+        return ERRCODE_ABORT;
+
+    sal_Int16 nRet = implDoExecute();
+
+    maPath = mxFileDlg->getDisplayDirectory();
+    uno::Reference< XFilePickerControlAccess > xCtrlAccess( mxFileDlg, UNO_QUERY );
+    css::uno::Any const any = xCtrlAccess->getValue( css::ui::dialogs::ExtendedFilePickerElementIds::CHECKBOX_LINK, 0);
+    any >>= bLink;
+
+    if ( ExecutableDialogResults::CANCEL == nRet )
+        return ERRCODE_ABORT;
+    else
+    {
+        return ERRCODE_NONE;
+    }
+}
+
 OUString FileDialogHelper_Impl::getPath() const
 {
     OUString aPath;
@@ -2363,6 +2383,11 @@ ErrCode FileDialogHelper::Execute( std::vector<OUString>& rpURLList,
 ErrCode FileDialogHelper::Execute()
 {
     return mpImp->execute();
+}
+
+ErrCode FileDialogHelper::Execute(sal_Bool& bLink)
+{
+    return mpImp->execute(bLink);
 }
 
 ErrCode FileDialogHelper::Execute( SfxItemSet *&   rpSet,

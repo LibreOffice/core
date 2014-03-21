@@ -190,6 +190,7 @@ namespace sfx2
                                          SfxItemSet *&   rpSet,
                                          OUString&       rFilter );
         ErrCode                 execute();
+        ErrCode                 execute(sal_Bool& bLink);
 
         void                    setFilter( const OUString& rFilter );
 

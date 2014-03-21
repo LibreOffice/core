@@ -132,6 +132,7 @@ public:
     virtual                 ~FileDialogHelper();
 
     ErrCode                 Execute();
+    ErrCode                 Execute(sal_Bool& bLink);
     void                    StartExecuteModal( const Link& rEndDialogHdl );
     inline ErrCode          GetError() const { return m_nError; }
     sal_Int16               GetDialogType() const;
