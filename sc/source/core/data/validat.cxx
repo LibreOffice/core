@@ -296,7 +296,7 @@ bool ScValidationData::DoMacro( const ScAddress& rPos, const OUString& rInput,
         SbModule* pModule = pMethod->GetModule();
         SbxObject* pObject = pModule->GetParent();
         OUStringBuffer aMacroStr = pObject->GetName();
-        aMacroStr.append('.').append(pModule->GetName()).append('.').append(pMethod->GetName());
+        aMacroStr.append("."+pModule->GetName()+"."+pMethod->GetName());
         OUString aBasicStr;
 
         //  the distinction between document- and app-basic has to be done
