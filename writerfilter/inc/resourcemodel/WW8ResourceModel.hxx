@@ -27,7 +27,6 @@
 #include <com/sun/star/drawing/XShape.hpp>
 #include <com/sun/star/uno/Any.hxx>
 #include <WriterFilterDllApi.hxx>
-#include <resourcemodel/OutputWithDepth.hxx>
 /**
    @file WW8ResourceModel.hxx
 

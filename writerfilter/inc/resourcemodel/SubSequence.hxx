@@ -28,17 +28,12 @@
 #include <ctype.h>
 #include "exceptions.hxx"
 #include <WriterFilterDllApi.hxx>
-#include <resourcemodel/OutputWithDepth.hxx>
 
 namespace writerfilter {
 using namespace ::std;
 
 template <class T>
 class SubSequence;
-
-template <typename T>
-void dumpLine(OutputWithDepth<string> & o, SubSequence<T> & rSeq,
-              sal_uInt32 nOffset, sal_uInt32 nStep);
 
 template <class T>
 class SubSequence
@@ -185,44 +180,6 @@ public:
         o << "</sequence>" << endl;
     }
 
-    void dump(OutputWithDepth<string> & o)
-    {
-        {
-            char sBuffer[256];
-
-            snprintf(sBuffer, sizeof(sBuffer),
-                     "<sequence id='%p' offset='%" SAL_PRIxUINT32 "' count='%" SAL_PRIxUINT32 "'>",
-                     mpSequence.get(), mnOffset, mnCount);
-            o.addItem(sBuffer);
-        }
-
-        sal_uInt32 n = 0;
-        sal_uInt32 nStep = 16;
-
-        try
-        {
-            sal_uInt32 nCount = getCount();
-            while (n < nCount)
-            {
-                sal_uInt32 nBytes = nCount - n;
-
-                if (nBytes > nStep)
-                    nBytes = nStep;
-
-                SubSequence<T> aSeq(*this, n, nBytes);
-                dumpLine(o, aSeq, n, nStep);
-
-                n += nBytes;
-            }
-        }
-        catch (...)
-        {
-            o.addItem("<exception/>");
-        }
-
-        o.addItem("</sequence>");
-    }
-
     string toString() const
     {
         sal_uInt32 n = 0;
@@ -282,61 +239,6 @@ public:
         return sResult;
     }
 };
-
-template <typename T>
-void dumpLine(OutputWithDepth<string> & o, SubSequence<T> & rSeq,
-              sal_uInt32 nOffset, sal_uInt32 nStep)
-{
-    sal_uInt32 nCount = rSeq.getCount();
-    char sBuffer[256];
-
-    string tmpStr = "<line>";
-
-    snprintf(sBuffer, 255, "%08" SAL_PRIxUINT32 ": ", nOffset);
-
-    tmpStr += sBuffer;
-
-    for (sal_uInt32 i = 0; i < nStep; i++)
-    {
-        if (i < nCount)
-        {
-            snprintf(sBuffer, 255, "%02x ", rSeq[i]);
-            tmpStr += sBuffer;
-        }
-        else
-            tmpStr += "   ";
-
-        if (i % 8 == 7)
-            tmpStr += " ";
-    }
-
-    {
-        for (sal_uInt32 i = 0; i < nStep; i++)
-        {
-            if (i < nCount)
-            {
-                unsigned char c =
-                    static_cast<unsigned char>(rSeq[i]);
-
-                if (c=='&')
-                    tmpStr += "&amp;";
-                else if (c=='<')
-                    tmpStr += "&lt;";
-                else if (c=='>')
-                    tmpStr += "&gt;";
-                else if (c < 128 && isprint(c))
-                    tmpStr += c;
-                else
-                    tmpStr += ".";
-            }
-
-        }
-    }
-
-    tmpStr += "</line>";
-
-    o.addItem(tmpStr);
-}
 
 }
 
