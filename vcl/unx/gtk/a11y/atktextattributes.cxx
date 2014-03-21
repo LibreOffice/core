@@ -638,7 +638,7 @@ String2Scale( uno::Any& rAny, const gchar * value )
 static gchar *
 CaseMap2String( const uno::Any& rAny )
 {
-    const gchar * value = NULL;
+    const gchar * value;
 
     switch( rAny.get<short>() )
     {
@@ -651,10 +651,7 @@ CaseMap2String( const uno::Any& rAny )
             break;
     }
 
-    if( value )
-        return g_strdup( value );
-
-    return NULL;
+    return g_strdup(value);
 }
 
 static bool
