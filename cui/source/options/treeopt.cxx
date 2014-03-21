@@ -877,6 +877,9 @@ void OfaTreeOptionsDialog::ActivateLastSelection()
         pEntry = aTreeLB.Next(pEntry);
     }
 
+    if ( !pEntry )
+        return;
+
     SvTreeListEntry* pParent = aTreeLB.GetParent(pEntry);
     aTreeLB.Expand(pParent);
     aTreeLB.MakeVisible(pParent);
