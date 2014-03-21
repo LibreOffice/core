@@ -16,11 +16,10 @@
 #   the License at http://www.apache.org/licenses/LICENSE-2.0 .
 #
 
-$(eval $(call gb_Module_Module,psprint_config))
+$(eval $(call gb_Package_Package,vcl_fontunxpsprint,$(SRCDIR)/vcl/unx/generic/printer/configuration))
 
-$(eval $(call gb_Module_add_targets,psprint_config,\
-	Package_fontunxppds \
-	Package_fontunxpsprint \
+$(eval $(call gb_Package_add_files,vcl_fontunxpsprint,$(LIBO_SHARE_FOLDER)/psprint,\
+	psprint.conf \
 ))
 
-# vim: set noet sw=4:
+# vim: set noet sw=4 ts=4:

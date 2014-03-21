@@ -41,6 +41,8 @@ $(eval $(call gb_Module_add_targets,vcl,\
     Library_vclplug_gen \
     Library_desktop_detector \
     StaticLibrary_headless \
+    Package_fontunxppds \
+    Package_fontunxpsprint \
 ))
 
 ifneq ($(ENABLE_GTK),)
