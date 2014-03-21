@@ -112,7 +112,7 @@ DiagramHelper::tTemplateWithServiceName
                 Reference< XChartTypeTemplate > xTempl(
                     xChartTypeManager->createInstance( aServiceNames[ i ] ), uno::UNO_QUERY_THROW );
 
-                if( xTempl->matchesTemplate( xDiagram, sal_True ))
+                if (xTempl.is() && xTempl->matchesTemplate(xDiagram, true))
                 {
                     aResult.first = xTempl;
                     aResult.second = aServiceNames[ i ];
