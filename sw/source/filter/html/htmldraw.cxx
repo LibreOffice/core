@@ -677,8 +677,7 @@ Writer& OutHTML_DrawFrmFmtAsMarquee( Writer& rWrt,
     if( !pOutlinerParaObj )
         return rWrt;
 
-    OStringBuffer sOut;
-    sOut.append('<').append(OOO_STRING_SVTOOLS_HTML_marquee);
+    OString sOut = "<" + OString(OOO_STRING_SVTOOLS_HTML_marquee);
 
     // Die Attribute des Objektd holen
     const SfxItemSet& rItemSet = pTextObj->GetMergedItemSet();
@@ -702,8 +701,8 @@ Writer& OutHTML_DrawFrmFmtAsMarquee( Writer& rWrt,
 
     if( pStr )
     {
-        sOut.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_behavior).
-            append("=\"").append(pStr).append("\"");
+        sOut += " " + OString(OOO_STRING_SVTOOLS_HTML_O_behavior) +
+            "=\"" + OString(pStr) + "\"";
     }
 
     // DIRECTION
@@ -719,8 +718,7 @@ Writer& OutHTML_DrawFrmFmtAsMarquee( Writer& rWrt,
 
     if( pStr )
     {
-        sOut.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_direction).
-            append("=\"").append(pStr).append("\"");
+        sOut += " " + OString(OOO_STRING_SVTOOLS_HTML_O_direction) + "=\"" + OString(pStr) + "\"";
     }
 
     // LOOP
@@ -729,15 +727,15 @@ Writer& OutHTML_DrawFrmFmtAsMarquee( Writer& rWrt,
                                              .GetValue();
     if( 0==nCount )
         nCount = SDRTEXTANI_SLIDE==eAniKind ? 1 : -1;
-    sOut.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_loop).append("=\"").
-        append(nCount).append("\"");
+    sOut += " " + OString(OOO_STRING_SVTOOLS_HTML_O_loop) + "=\"" +
+        OString::number(nCount) + "\"";
 
     // SCROLLDELAY
     sal_uInt16 nDelay =
         ((const SdrTextAniDelayItem&)rItemSet.Get( SDRATTR_TEXT_ANIDELAY ))
                                             .GetValue();
-    sOut.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_scrolldelay).
-        append("=\"").append(static_cast<sal_Int32>(nDelay)).append("\"");
+    sOut += " " + OString(OOO_STRING_SVTOOLS_HTML_O_scrolldelay) + "=\"" +
+        OString::number(static_cast<sal_Int32>(nDelay)) + "\"";
 
     // SCROLLAMOUNT
     sal_Int16 nAmount =
@@ -755,8 +753,8 @@ Writer& OutHTML_DrawFrmFmtAsMarquee( Writer& rWrt,
     }
     if( nAmount )
     {
-        sOut.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_scrollamount).
-            append("=\"").append(static_cast<sal_Int32>(nAmount)).append("\"");
+        sOut += " " + OString(OOO_STRING_SVTOOLS_HTML_O_scrollamount) + "=\"" +
+            OString::number(static_cast<sal_Int32>(nAmount)) + "\"";
     }
 
     Size aTwipSz( pTextObj->GetLogicRect().GetSize() );
@@ -787,14 +785,14 @@ Writer& OutHTML_DrawFrmFmtAsMarquee( Writer& rWrt,
 
         if( aPixelSz.Width() )
         {
-            sOut.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_width).
-                append("=\"").append(static_cast<sal_Int32>(aPixelSz.Width())).append("\"");
+            sOut += " " + OString(OOO_STRING_SVTOOLS_HTML_O_width) +
+                "=\"" + OString::number(static_cast<sal_Int32>(aPixelSz.Width())) + "\"";
         }
 
         if( aPixelSz.Height() )
         {
-            sOut.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_height).
-                append("=\"").append(static_cast<sal_Int32>(aPixelSz.Height())).append("\"");
+            sOut += " " + OString(OOO_STRING_SVTOOLS_HTML_O_height) +
+                "=\"" + OString::number(static_cast<sal_Int32>(aPixelSz.Width())) + "\"";
         }
     }
 
@@ -806,13 +804,14 @@ Writer& OutHTML_DrawFrmFmtAsMarquee( Writer& rWrt,
         const Color& rFillColor =
             ((const XFillColorItem&)rItemSet.Get(XATTR_FILLCOLOR)).GetColorValue();
 
-        sOut.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_bgcolor).append("=");
-        rWrt.Strm().WriteCharPtr( sOut.makeStringAndClear().getStr() );
+        sOut += " " + OString(OOO_STRING_SVTOOLS_HTML_O_bgcolor) + "=";
+        rWrt.Strm().WriteOString( sOut );
+        sOut = "";
         HTMLOutFuncs::Out_Color( rWrt.Strm(), rFillColor, rHTMLWrt.eDestEnc );
     }
 
     if (!sOut.isEmpty())
-        rWrt.Strm().WriteCharPtr( sOut.makeStringAndClear().getStr() );
+        rWrt.Strm().WriteOString( sOut );
 
     // und nun noch ALIGN, HSPACE und VSPACE
     sal_uInt32 nFrmFlags = HTML_FRMOPTS_MARQUEE;
