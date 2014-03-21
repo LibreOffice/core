@@ -83,6 +83,7 @@ $(eval $(call gb_Library_use_externals,svxcore,\
 	boost_headers \
 	icuuc \
 	icu_headers \
+	mesa_headers \
 	glew \
 ))
 
