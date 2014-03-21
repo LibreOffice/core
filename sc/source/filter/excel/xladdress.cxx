@@ -93,11 +93,11 @@ XclRange XclRangeList::GetEnclosingRange() const
     return aXclRange;
 }
 
-void XclRangeList::Read( XclImpStream& rStrm, bool bCol16Bit, sal_uInt16 nRefs )
+void XclRangeList::Read( XclImpStream& rStrm, bool bCol16Bit, sal_uInt16 nCountInStream )
 {
     sal_uInt16 nCount;
-    if (nRefs)
-        nCount = nRefs;
+    if (nCountInStream)
+        nCount = nCountInStream;
     else
         rStrm >> nCount;
     size_t nOldSize = size();
@@ -106,17 +106,21 @@ void XclRangeList::Read( XclImpStream& rStrm, bool bCol16Bit, sal_uInt16 nRefs )
         aIt->Read( rStrm, bCol16Bit );
 }
 
-void XclRangeList::Write( XclExpStream& rStrm, bool bCol16Bit ) const
+void XclRangeList::Write( XclExpStream& rStrm, bool bCol16Bit, sal_uInt16 nCountInStream ) const
 {
-    WriteSubList( rStrm, 0, size(), bCol16Bit );
+    WriteSubList( rStrm, 0, size(), bCol16Bit, nCountInStream );
 }
 
-void XclRangeList::WriteSubList( XclExpStream& rStrm, size_t nBegin, size_t nCount, bool bCol16Bit ) const
+void XclRangeList::WriteSubList( XclExpStream& rStrm, size_t nBegin, size_t nCount, bool bCol16Bit,
+        sal_uInt16 nCountInStream ) const
 {
     OSL_ENSURE( nBegin <= size(), "XclRangeList::WriteSubList - invalid start position" );
     size_t nEnd = ::std::min< size_t >( nBegin + nCount, size() );
-    sal_uInt16 nXclCount = ulimit_cast< sal_uInt16 >( nEnd - nBegin );
-    rStrm << nXclCount;
+    if (!nCountInStream)
+    {
+        sal_uInt16 nXclCount = ulimit_cast< sal_uInt16 >( nEnd - nBegin );
+        rStrm << nXclCount;
+    }
     rStrm.SetSliceSize( bCol16Bit ? 8 : 6 );
     for( const_iterator aIt = begin() + nBegin, aEnd = begin() + nEnd; aIt != aEnd; ++aIt )
         aIt->Write( rStrm, bCol16Bit );

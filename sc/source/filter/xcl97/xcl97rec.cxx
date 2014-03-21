@@ -1480,6 +1480,46 @@ void XclExpSheetProtectOptions::WriteBody( XclExpStream& rStrm )
 
 
 
+XclExpSheetEnhancedProtection::XclExpSheetEnhancedProtection( const XclExpRoot& rRoot,
+        const ScEnhancedProtection & rProt ) :
+    XclExpRecord( 0x0868 ),
+    mrRoot( rRoot ),
+    maEnhancedProtection( rProt )
+{
+}
+
+void XclExpSheetEnhancedProtection::WriteBody( XclExpStream& rStrm )
+{
+    sal_uInt16 nRecordType = 0x0868;
+    rStrm << nRecordType;                   // frtHeader rt
+    rStrm.WriteZeroBytesToRecord(10);       // frtHeader unused
+    rStrm << EXC_ISFPROTECTION;             // isf
+    rStrm.WriteZeroBytesToRecord(5);        // reserved1 (1 bytes) and reserved2 (4 bytes)
+
+    XclRangeList aRefs;
+    if (maEnhancedProtection.maRangeList.Is())
+        mrRoot.GetAddressConverter().ConvertRangeList( aRefs, *maEnhancedProtection.maRangeList, false);
+    sal_uInt16 nCref = ulimit_cast<sal_uInt16>(aRefs.size());
+    rStrm << nCref;                         // cref
+    rStrm.WriteZeroBytesToRecord(6);        // cbFeatData if EXC_ISFFEC2 (4 bytes) and reserved3 (2 bytes)
+    aRefs.Write( rStrm, true, nCref);       // refs
+
+    // FeatProtection structure
+    rStrm << maEnhancedProtection.mnAreserved;              // 1 bit A and 31 bits reserved
+    rStrm << maEnhancedProtection.mnPasswordVerifier;       // wPassword
+    rStrm << XclExpString( maEnhancedProtection.maTitle);   // stTitle
+    bool bSDContainer = ((maEnhancedProtection.mnAreserved & 0x80000000) == 0x80000000);
+    sal_uInt32 nCbSD = maEnhancedProtection.maSecurityDescriptor.size();
+    SAL_WARN_IF( bSDContainer && nCbSD < 20, "sc.filter",
+            "XclExpSheetEnhancedProtection A flag indicates container but cbSD < 20");
+    SAL_WARN_IF( !bSDContainer && nCbSD > 0, "sc.filter",
+            "XclExpSheetEnhancedProtection A flag indicates no container but cbSD > 0");
+    if (bSDContainer)
+    {
+        rStrm << nCbSD;
+        rStrm.Write( &maEnhancedProtection.maSecurityDescriptor.front(), nCbSD);
+    }
+}
 
 
 

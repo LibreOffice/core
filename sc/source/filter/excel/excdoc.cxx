@@ -419,8 +419,7 @@ void ExcTable::FillAsTable( SCTAB nCodeNameIdx )
     //export cell notes
     std::vector<sc::NoteEntry> aNotes;
     rDoc.GetAllNoteEntries(aNotes);
-    std::vector<sc::NoteEntry>::const_iterator it = aNotes.begin(), itEnd = aNotes.end();
-    for (; it != itEnd; ++it)
+    for (std::vector<sc::NoteEntry>::const_iterator it = aNotes.begin(), itEnd = aNotes.end(); it != itEnd; ++it)
     {
         if (it->maPos.Tab() != mnScTab)
             continue;
@@ -509,6 +508,17 @@ void ExcTable::FillAsTable( SCTAB nCodeNameIdx )
     {
         // sheet protection options
         Add( new XclExpSheetProtectOptions( GetRoot(), mnScTab ) );
+
+        // enhanced protections if there are
+        if (pTabProtect)
+        {
+            const ::std::vector<ScEnhancedProtection>& rProts( pTabProtect->getEnhancedProtection());
+            for (::std::vector<ScEnhancedProtection>::const_iterator it( rProts.begin()), itEnd( rProts.end());
+                    it != itEnd; ++it)
+            {
+                Add( new XclExpSheetEnhancedProtection( GetRoot(), *it));
+            }
+        }
 
         // web queries
         Add( new XclExpWebQueryBuffer( GetRoot() ) );

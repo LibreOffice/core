@@ -23,6 +23,7 @@
 #include "excrecds.hxx"
 #include "xcl97esc.hxx"
 #include "xlstyle.hxx"
+#include "tabprotection.hxx"
 
 
 
@@ -435,7 +436,7 @@ public:
 
 
 
-/** Represents a SHEETPROTECTION record that stores sheet protection
+/** Represents a FEATHDR (SHEETPROTECTION) record that stores sheet protection
     options.  Note that a sheet still needs to save its sheet protection
     options even when it's not protected. */
 class XclExpSheetProtectOptions : public XclExpRecord
@@ -448,6 +449,22 @@ private:
 
 private:
     sal_uInt16      mnOptions;      /// Encoded sheet protection options.
+};
+
+
+/** Represents one EnhancedProtection feature in a FEAT record.
+    To be written only if such feature exists. */
+class XclExpSheetEnhancedProtection : public XclExpRecord
+{
+public:
+    explicit            XclExpSheetEnhancedProtection( const XclExpRoot& rRoot, const ScEnhancedProtection& rProt );
+
+private:
+    virtual void        WriteBody( XclExpStream& rStrm );
+
+private:
+    const XclExpRoot&       mrRoot;
+    ScEnhancedProtection    maEnhancedProtection;
 };
 
 

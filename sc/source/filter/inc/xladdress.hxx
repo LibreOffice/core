@@ -126,10 +126,10 @@ public:
 
     XclRange            GetEnclosingRange() const;
 
-    void                Read( XclImpStream& rStrm, bool bCol16Bit = true, sal_uInt16 nRefs = 0 );
-    void                Write( XclExpStream& rStrm, bool bCol16Bit = true ) const;
+    void                Read( XclImpStream& rStrm, bool bCol16Bit = true, sal_uInt16 nCountInStream = 0 );
+    void                Write( XclExpStream& rStrm, bool bCol16Bit = true, sal_uInt16 nCountInStream = 0 ) const;
     void                WriteSubList( XclExpStream& rStrm,
-                            size_t nBegin, size_t nCount, bool bCol16Bit = true ) const;
+                            size_t nBegin, size_t nCount, bool bCol16Bit = true, sal_uInt16 nCountInStream = 0 ) const;
 };
 
 inline XclImpStream& operator>>( XclImpStream& rStrm, XclRangeList& rXclRanges )
