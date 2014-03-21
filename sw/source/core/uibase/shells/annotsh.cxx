@@ -665,20 +665,15 @@ void SwAnnotationShell::GetState(SfxItemSet& rSet)
             case SID_ATTR_CHAR_WEIGHT:
             case SID_ATTR_CHAR_POSTURE:
                 {
-                    if ( pOLV )
-                    {
-                        sal_uInt16 nScriptType = pOLV->GetSelectedScriptType();
-                        SfxItemPool* pSecondPool = aEditAttr.GetPool()->GetSecondaryPool();
-                        if( !pSecondPool )
-                            pSecondPool = aEditAttr.GetPool();
-                        SvxScriptSetItem aSetItem( nSlotId, *pSecondPool );
-                        aSetItem.GetItemSet().Put( aEditAttr, false );
-                        const SfxPoolItem* pI = aSetItem.GetItemOfScript( nScriptType );
-                        if( pI )
-                            rSet.Put( *pI, nWhich );
-                        else
-                            rSet.InvalidateItem( nWhich );
-                    }
+                    sal_uInt16 nScriptType = pOLV->GetSelectedScriptType();
+                    SfxItemPool* pSecondPool = aEditAttr.GetPool()->GetSecondaryPool();
+                    if( !pSecondPool )
+                        pSecondPool = aEditAttr.GetPool();
+                    SvxScriptSetItem aSetItem( nSlotId, *pSecondPool );
+                    aSetItem.GetItemSet().Put( aEditAttr, false );
+                    const SfxPoolItem* pI = aSetItem.GetItemOfScript( nScriptType );
+                    if( pI )
+                        rSet.Put( *pI, nWhich );
                     else
                         rSet.InvalidateItem( nWhich );
                 }
