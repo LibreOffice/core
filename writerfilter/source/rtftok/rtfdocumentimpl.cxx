@@ -2678,11 +2678,13 @@ int RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
                 RTFValue::Pointer_t pValue(new RTFValue(1));
                 m_aStates.top().aTableRowSprms.set(NS_ooxml::LN_CT_TrPrBase_cantSplit, pValue);
             }
+            break;
         case RTF_SECTUNLOCKED:
             {
                 RTFValue::Pointer_t pValue(new RTFValue(int(!nParam)));
                 m_aStates.top().aSectionSprms.set(NS_ooxml::LN_EG_SectPrContents_formProt, pValue);
             }
+            break;
         case RTF_PGNDEC:
         case RTF_PGNUCRM:
         case RTF_PGNLCRM:
