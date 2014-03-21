@@ -105,7 +105,8 @@ sal_Bool WriterFilter::filter( const uno::Sequence< beans::PropertyValue >& aDes
     if( eType == writerfilter::dmapper::DOCUMENT_OOXML )
     {
         writerfilter::ooxml::OOXMLStream::Pointer_t pDocStream = writerfilter::ooxml::OOXMLDocumentFactory::createStream(m_xContext, xInputStream, bRepairStorage);
-        writerfilter::ooxml::OOXMLDocument::Pointer_t pDocument(writerfilter::ooxml::OOXMLDocumentFactory::createDocument(pDocStream));
+        uno::Reference<task::XStatusIndicator> xStatusIndicator = aMediaDesc.getUnpackedValueOrDefault(MediaDescriptor::PROP_STATUSINDICATOR(), uno::Reference<task::XStatusIndicator>());
+        writerfilter::ooxml::OOXMLDocument::Pointer_t pDocument(writerfilter::ooxml::OOXMLDocumentFactory::createDocument(pDocStream, xStatusIndicator));
 
         uno::Reference<frame::XModel> xModel(m_xDstDoc, uno::UNO_QUERY_THROW);
         pDocument->setModel(xModel);

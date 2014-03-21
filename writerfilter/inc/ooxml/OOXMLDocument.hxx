@@ -24,6 +24,7 @@
 #include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <resourcemodel/WW8ResourceModel.hxx>
+#include <com/sun/star/task/XStatusIndicator.hpp>
 #include <com/sun/star/xml/sax/XParser.hpp>
 #include <com/sun/star/xml/sax/XFastParser.hpp>
 #include <com/sun/star/xml/sax/XFastTokenHandler.hpp>
@@ -269,7 +270,7 @@ public:
     createStream(OOXMLStream::Pointer_t pStream, const OUString & rId);
 
     static OOXMLDocument *
-    createDocument(OOXMLStream::Pointer_t pStream);
+    createDocument(OOXMLStream::Pointer_t pStream, const uno::Reference<task::XStatusIndicator>& xStatusIndicator);
 
 };
 

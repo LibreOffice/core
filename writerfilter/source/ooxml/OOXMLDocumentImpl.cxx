@@ -17,8 +17,11 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <comphelper/sequenceashashmap.hxx>
+
 #include <com/sun/star/xml/sax/XParser.hpp>
 
+#include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
 #include <com/sun/star/xml/sax/SAXException.hpp>
 #include <com/sun/star/xml/dom/DocumentBuilder.hpp>
 #include <com/sun/star/embed/XHierarchicalStorageAccess.hpp>
@@ -29,6 +32,11 @@
 #include "OOXMLFastDocumentHandler.hxx"
 #include "OOXMLPropertySetImpl.hxx"
 #include "ooxmlLoggers.hxx"
+
+#include <tools/resmgr.hxx>
+#include <vcl/svapp.hxx>
+#include <vcl/settings.hxx>
+#include <svx/dialogs.hrc>
 
 #include <iostream>
 
@@ -46,12 +54,17 @@ TagLogger::Pointer_t debug_logger(TagLogger::getInstance("DEBUG"));
 
 using namespace ::std;
 
-OOXMLDocumentImpl::OOXMLDocumentImpl(OOXMLStream::Pointer_t pStream)
+OOXMLDocumentImpl::OOXMLDocumentImpl(OOXMLStream::Pointer_t pStream, const uno::Reference<task::XStatusIndicator>& xStatusIndicator)
     : mpStream(pStream)
+    , mxStatusIndicator(xStatusIndicator)
     , mnXNoteId(0)
     , mXNoteType(0)
     , mxThemeDom(0)
     , mbIsSubstream(false)
+    , mnPercentSize(0)
+    , mnProgressLastPos(0)
+    , mnProgressCurrentPos(0)
+    , mnProgressEndPos(0)
 {
 }
 
@@ -257,7 +270,8 @@ OOXMLDocumentImpl::getSubStream(const OUString & rId)
         (OOXMLDocumentFactory::createStream(mpStream, rId));
 
     OOXMLDocumentImpl * pTemp;
-    writerfilter::Reference<Stream>::Pointer_t pRet( pTemp = new OOXMLDocumentImpl(pStream) );
+    // Do not pass status indicator to sub-streams: they are typically marginal in size, so we just track the main document for now.
+    writerfilter::Reference<Stream>::Pointer_t pRet( pTemp = new OOXMLDocumentImpl(pStream, uno::Reference<task::XStatusIndicator>()) );
     pTemp->setModel(mxModel);
     pTemp->setDrawPage(mxDrawPage);
     pTemp->setIsSubstream( true );
@@ -276,7 +290,8 @@ OOXMLDocumentImpl::getXNoteStream(OOXMLStream::StreamType_t nType, const Id & rT
 
     OOXMLStream::Pointer_t pStream =
         (OOXMLDocumentFactory::createStream(mpStream, nType));
-    OOXMLDocumentImpl * pDocument = new OOXMLDocumentImpl(pStream);
+    // See above, no status indicator for the note stream, either.
+    OOXMLDocumentImpl * pDocument = new OOXMLDocumentImpl(pStream, uno::Reference<task::XStatusIndicator>());
     pDocument->setXNoteId(nId);
     pDocument->setXNoteType(rType);
 
@@ -435,6 +450,30 @@ void OOXMLDocumentImpl::resolve(Stream & rStream)
     uno::Reference< xml::sax::XFastParser > xParser
         (mpStream->getFastParser());
 
+    if (mxModel.is())
+    {
+        uno::Reference<document::XDocumentPropertiesSupplier> xDocumentPropertiesSupplier(mxModel, uno::UNO_QUERY);
+        uno::Reference<document::XDocumentProperties> xDocumentProperties = xDocumentPropertiesSupplier->getDocumentProperties();
+        comphelper::SequenceAsHashMap aMap(xDocumentProperties->getDocumentStatistics());
+        if (aMap.find("ParagraphCount") != aMap.end())
+        {
+            sal_Int32 nValue;
+            if (aMap["ParagraphCount"] >>= nValue)
+            {
+                if (mxStatusIndicator.is())
+                {
+                    // We want to care about the progress if we know the estimated paragraph count and we have given a status indicator as well.
+                    // Set the end position only here, so later it's enough to check if that is non-zero in incrementProgress().
+                    mnProgressEndPos = nValue;
+                    static ResMgr* pResMgr = ResMgr::CreateResMgr("svx", Application::GetSettings().GetUILanguageTag());
+                    OUString aDocLoad(ResId(RID_SVXSTR_DOC_LOAD, *pResMgr).toString());
+                    mxStatusIndicator->start(aDocLoad, mnProgressEndPos);
+                    mnPercentSize = mnProgressEndPos / 100;
+                }
+            }
+        }
+    }
+
     if (xParser.is())
     {
         uno::Reference<uno::XComponentContext> xContext(mpStream->getContext());
@@ -485,6 +524,19 @@ void OOXMLDocumentImpl::resolve(Stream & rStream)
 #ifdef DEBUG_RESOLVE
     debug_logger->endElement();
 #endif
+}
+
+void OOXMLDocumentImpl::incrementProgress()
+{
+    mnProgressCurrentPos++;
+    // 1) If we know the end
+    // 2) We progressed enough that updating makes sense
+    // 3) We did not reach the end yet (possible in case the doc stat is is misleading)
+    if (mnProgressEndPos && mnProgressCurrentPos > (mnProgressLastPos + mnPercentSize) && mnProgressLastPos < mnProgressEndPos)
+    {
+        mnProgressLastPos = mnProgressCurrentPos;
+        mxStatusIndicator->setValue(mnProgressLastPos);
+    }
 }
 
 void OOXMLDocumentImpl::resolveCustomXmlStream(Stream & rStream)
@@ -863,9 +915,9 @@ uno::Sequence<beans::PropertyValue > OOXMLDocumentImpl::getEmbeddingsList( )
 
 OOXMLDocument *
 OOXMLDocumentFactory::createDocument
-(OOXMLStream::Pointer_t pStream)
+(OOXMLStream::Pointer_t pStream, const uno::Reference<task::XStatusIndicator>& xStatusIndicator)
 {
-    return new OOXMLDocumentImpl(pStream);
+    return new OOXMLDocumentImpl(pStream, xStatusIndicator);
 }
 
 }}

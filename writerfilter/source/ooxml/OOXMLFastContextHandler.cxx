@@ -888,6 +888,8 @@ void OOXMLFastContextHandler::endOfParagraph()
         startCharacterGroup();
     if (isForwardEvents())
         mpStream->utext((const sal_uInt8*)&uCR, 1);
+
+    mpParserState->getDocument()->incrementProgress();
 }
 
 void OOXMLFastContextHandler::startTxbxContent()

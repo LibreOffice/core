@@ -35,6 +35,7 @@ using namespace ::com::sun::star;
 class OOXMLDocumentImpl : public OOXMLDocument
 {
     OOXMLStream::Pointer_t mpStream;
+    uno::Reference<task::XStatusIndicator> mxStatusIndicator;
     sal_Int32 mnXNoteId;
     Id mXNoteType;
 
@@ -53,6 +54,14 @@ class OOXMLDocumentImpl : public OOXMLDocument
     uno::Reference<io::XInputStream> mxEmbeddings;
     uno::Sequence < beans::PropertyValue > mxEmbeddingsList;
     bool mbIsSubstream;
+    /// How many paragraphs equal to 1 percent?
+    sal_Int32 mnPercentSize;
+    /// Position progress when it was last updated, possibly not after every paragraph in case of large documents.
+    sal_Int32 mnProgressLastPos;
+    /// Current position progress, updated after every paragraph.
+    sal_Int32 mnProgressCurrentPos;
+    /// End position, i.e. the estimated number of paragraphs.
+    sal_Int32 mnProgressEndPos;
 
 protected:
     virtual void resolveFastSubStream(Stream & rStream,
@@ -80,7 +89,7 @@ protected:
     void resolveGlossaryStream(Stream & rStream);
     void resolveEmbeddingsStream(Stream & rStream);
 public:
-    OOXMLDocumentImpl(OOXMLStream::Pointer_t pStream);
+    OOXMLDocumentImpl(OOXMLStream::Pointer_t pStream, const uno::Reference<task::XStatusIndicator>& xStatusIndicator);
     virtual ~OOXMLDocumentImpl();
 
     virtual void resolve(Stream & rStream);
@@ -131,6 +140,8 @@ public:
     virtual uno::Reference<xml::dom::XDocument> getGlossaryDocDom();
     virtual uno::Sequence<uno::Sequence< uno::Any> >  getGlossaryDomList();
     virtual uno::Sequence<beans::PropertyValue >  getEmbeddingsList();
+
+    void incrementProgress();
 };
 }}
 #endif // OOXML_DOCUMENT_IMPL_HXX
