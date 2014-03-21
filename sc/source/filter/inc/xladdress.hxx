@@ -126,7 +126,7 @@ public:
 
     XclRange            GetEnclosingRange() const;
 
-    void                Read( XclImpStream& rStrm, bool bCol16Bit = true );
+    void                Read( XclImpStream& rStrm, bool bCol16Bit = true, sal_uInt16 nRefs = 0 );
     void                Write( XclExpStream& rStrm, bool bCol16Bit = true ) const;
     void                WriteSubList( XclExpStream& rStrm,
                             size_t nBegin, size_t nCount, bool bCol16Bit = true ) const;

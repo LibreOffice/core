@@ -93,10 +93,13 @@ XclRange XclRangeList::GetEnclosingRange() const
     return aXclRange;
 }
 
-void XclRangeList::Read( XclImpStream& rStrm, bool bCol16Bit )
+void XclRangeList::Read( XclImpStream& rStrm, bool bCol16Bit, sal_uInt16 nRefs )
 {
     sal_uInt16 nCount;
-    rStrm >> nCount;
+    if (nRefs)
+        nCount = nRefs;
+    else
+        rStrm >> nCount;
     size_t nOldSize = size();
     resize( nOldSize + nCount );
     for( iterator aIt = begin() + nOldSize; rStrm.IsValid() && (nCount > 0); --nCount, ++aIt )

@@ -65,39 +65,6 @@ using ::com::sun::star::uno::Sequence;
 using ::std::auto_ptr;
 
 
-const XclRef8U & XclRef8U::read( XclImpStream & rStrm )
-{
-    mnRow1 = rStrm.ReaduInt16();
-    mnRow2 = rStrm.ReaduInt16();
-    mnCol1 = rStrm.ReaduInt16();
-    mnCol2 = rStrm.ReaduInt16();
-    return *this;
-}
-
-ScRange XclRef8U::convertToScRange( SCTAB nTab ) const
-{
-    return ScRange( mnCol1, mnRow1, nTab, mnCol2, mnRow2, nTab);
-}
-
-ScEnhancedProtection XclEnhancedProtection::convertToScEnhancedProtection( SCTAB nTab ) const
-{
-    ScEnhancedProtection aProt;
-    if (!maRefs.empty())
-    {
-        aProt.maRangeList = new ScRangeList;
-        for (::std::vector<XclRef8U>::const_iterator it(maRefs.begin()), itEnd(maRefs.end()); it != itEnd; ++it)
-        {
-            aProt.maRangeList->Append( it->convertToScRange( nTab));
-        }
-    }
-    aProt.mnAreserved          = mnAreserved;
-    aProt.mnPasswordVerifier   = mnPasswordVerifier;
-    aProt.maTitle              = maTitle;
-    aProt.maSecurityDescriptor = maSecurityDescriptor;
-    return aProt;
-}
-
-
 // Shared string table ========================================================
 
 XclImpSst::XclImpSst( const XclImpRoot& rRoot ) :
@@ -1280,7 +1247,7 @@ void XclImpSheetProtectBuffer::ReadOptions( XclImpStream& rStrm, SCTAB nTab )
         pSheet->mnOptions = nOptions;
 }
 
-void XclImpSheetProtectBuffer::AppendEnhancedProtection( const XclEnhancedProtection & rProt, SCTAB nTab )
+void XclImpSheetProtectBuffer::AppendEnhancedProtection( const ScEnhancedProtection & rProt, SCTAB nTab )
 {
     Sheet* pSheet = GetSheetItem(nTab);
     if (pSheet)
@@ -1338,23 +1305,11 @@ void XclImpSheetProtectBuffer::Apply() const
         pProtect->setOption( ScTableProtection::PIVOT_TABLES,          (nOptions & 0x2000) );
         pProtect->setOption( ScTableProtection::SELECT_UNLOCKED_CELLS, (nOptions & 0x4000) );
 
-        SCTAB nTab = itr->first;
-
         // Enhanced protection containing editable ranges and permissions.
-        if (!itr->second.maEnhancedProtections.empty())
-        {
-            ::std::vector<ScEnhancedProtection> aProtections;
-            for (::std::vector<XclEnhancedProtection>::const_iterator
-                    it(itr->second.maEnhancedProtections.begin()), itEnd(itr->second.maEnhancedProtections.end());
-                    it != itEnd; ++it)
-            {
-                aProtections.push_back( it->convertToScEnhancedProtection( nTab));
-            }
-            pProtect->setEnhancedProtection( aProtections);
-        }
+        pProtect->setEnhancedProtection( itr->second.maEnhancedProtections);
 
         // all done.  now commit.
-        GetDoc().SetTabProtection(nTab, pProtect.get());
+        GetDoc().SetTabProtection(itr->first, pProtect.get());
     }
 }
 

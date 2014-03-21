@@ -354,12 +354,16 @@ void ImportExcel8::Feat( void )
     aIn.Ignore(4);                          // size if EXC_ISFFEC2, else 0 and to be ignored
     aIn.Ignore(2);                          // reserved3 (2 bytes)
 
-    XclEnhancedProtection aProt;
-    aProt.maRefs.reserve( nCref);
-    XclRef8U aRef;
-    for (sal_uInt16 i=0; i < nCref && aIn.IsValid(); ++i)
+    ScEnhancedProtection aProt;
+    if (nCref)
     {
-        aProt.maRefs.push_back( aRef.read( aIn));
+        XclRangeList aRefs;
+        aRefs.Read( aIn, true, nCref);
+        if (!aRefs.empty())
+        {
+            aProt.maRangeList = new ScRangeList;
+            GetAddressConverter().ConvertRangeList( *aProt.maRangeList, aRefs, GetCurrScTab(), false);
+        }
     }
 
     // FeatProtection structure follows in record.

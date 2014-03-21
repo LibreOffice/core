@@ -26,12 +26,11 @@
 #include "xistring.hxx"
 #include "xiroot.hxx"
 #include "validat.hxx"
+#include "tabprotection.hxx"
 
 #include <map>
 #include <boost/ptr_container/ptr_vector.hpp>
 #include <boost/noncopyable.hpp>
-
-struct ScEnhancedProtection;
 
 /* ============================================================================
 Classes to import the big Excel document contents (related to several cells or
@@ -45,29 +44,6 @@ globals for the document).
 - Web queries
 - Stream decryption
 ============================================================================ */
-
-struct XclRef8U
-{
-    sal_uInt16 mnRow1;
-    sal_uInt16 mnRow2;
-    sal_uInt16 mnCol1;
-    sal_uInt16 mnCol2;
-
-    const XclRef8U & read( XclImpStream & rStrm );
-    ScRange convertToScRange( SCTAB nTab ) const;
-};
-
-/** Feat ISFPROTECTION refs plus FeatProtection */
-struct XclEnhancedProtection
-{
-    ::std::vector< XclRef8U >   maRefs;
-    sal_uInt32                  mnAreserved;
-    sal_uInt32                  mnPasswordVerifier;
-    OUString                    maTitle;
-    ::std::vector< sal_uInt8 >  maSecurityDescriptor;   // raw data
-
-    ScEnhancedProtection convertToScEnhancedProtection( SCTAB nTab ) const;
-};
 
 // Shared string table ========================================================
 
@@ -330,7 +306,7 @@ public:
 
     void                ReadOptions( XclImpStream& rStrm, SCTAB nTab );
 
-    void                AppendEnhancedProtection( const XclEnhancedProtection & rProt, SCTAB nTab );
+    void                AppendEnhancedProtection( const ScEnhancedProtection & rProt, SCTAB nTab );
 
     void                ReadPasswordHash( XclImpStream& rStrm, SCTAB nTab );
 
@@ -342,7 +318,7 @@ private:
         bool        mbProtected;
         sal_uInt16  mnPasswordHash;
         sal_uInt16  mnOptions;
-        ::std::vector< XclEnhancedProtection >  maEnhancedProtections;
+        ::std::vector< ScEnhancedProtection >  maEnhancedProtections;
 
         Sheet();
         Sheet(const Sheet& r);
