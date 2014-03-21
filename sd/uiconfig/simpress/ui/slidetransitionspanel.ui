@@ -255,7 +255,6 @@
                         <property name="can_focus">True</property>
                         <property name="invisible_char">●</property>
                         <property name="invisible_char_set">True</property>
-                        <property name="format">sec</property>
                         <property name="digits">2</property>
                         <property name="spin_size">25</property>
                       </object>

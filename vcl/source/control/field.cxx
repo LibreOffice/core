@@ -1592,12 +1592,7 @@ Size MetricField::CalcMinimumSize() const
 
 bool MetricField::set_property(const OString &rKey, const OString &rValue)
 {
-    if (rKey == "format")
-    {
-        maCustomUnitText = OStringToOUString(rValue, RTL_TEXTENCODING_UTF8);
-        meUnit = FUNIT_CUSTOM;
-    }
-    else if (rKey == "digits")
+    if (rKey == "digits")
         SetDecimalDigits(rValue.toInt32());
     else if (rKey == "spin-size")
         SetSpinSize(rValue.toInt32());
