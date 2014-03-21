@@ -13,6 +13,10 @@ $(eval $(call gb_Library_set_include,vclopengl,\
     $$(INCLUDE) \
 ))
 
+$(eval $(call gb_Library_add_defs,vclopengl,\
+    -DVCLOPENGL_DLLIMPLEMENTATION \
+))
+
 $(eval $(call gb_Library_use_externals,vclopengl,\
 	boost_headers \
 	mdds_headers \
