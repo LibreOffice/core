@@ -35,6 +35,10 @@
 
 #include <officecfg/Office/Common.hxx>
 
+#include <vcl/button.hxx>
+#include <vcl/dialog.hxx>
+#include <vcl/fixed.hxx>
+
 #include <algorithm>
 
 using namespace psp;
@@ -827,36 +831,76 @@ bool CUPSManager::writePrinterConfig()
     return PrinterInfoManager::writePrinterConfig();
 }
 
+namespace
+{
+    class RTSPWDialog : public ModalDialog
+    {
+        FixedText* m_pText;
+        Edit*      m_pUserEdit;
+        Edit*      m_pPassEdit;
+
+    public:
+        RTSPWDialog(const OString& rServer, const OString& rUserName, Window* pParent);
+
+        OString getUserName() const;
+        OString getPassword() const;
+    };
+
+    RTSPWDialog::RTSPWDialog( const OString& rServer, const OString& rUserName, Window* pParent )
+        : ModalDialog(pParent, "CUPSPasswordDialog",
+            "vcl/ui/cupspassworddialog.ui")
+    {
+        get(m_pText, "text");
+        get(m_pUserEdit, "user");
+        get(m_pPassEdit, "pass");
+
+        OUString aText(m_pText->GetText());
+        aText = aText.replaceFirst("%s", OStringToOUString(rServer, osl_getThreadTextEncoding()));
+        m_pText->SetText(aText);
+        m_pUserEdit->SetText( OStringToOUString(rUserName, osl_getThreadTextEncoding()));
+    }
+
+    OString RTSPWDialog::getUserName() const
+    {
+        return OUStringToOString( m_pUserEdit->GetText(), osl_getThreadTextEncoding() );
+    }
+
+    OString RTSPWDialog::getPassword() const
+    {
+        return OUStringToOString( m_pPassEdit->GetText(), osl_getThreadTextEncoding() );
+    }
+
+    bool AuthenticateQuery(const OString& rServer, OString& rUserName, OString& rPassword)
+    {
+        bool bRet = false;
+
+        RTSPWDialog aDialog(rServer, rUserName, NULL);
+        if (aDialog.Execute())
+        {
+            rUserName = aDialog.getUserName();
+            rPassword = aDialog.getPassword();
+            bRet = true;
+        }
+
+        return bRet;
+    }
+}
+
 const char* CUPSManager::authenticateUser( const char* /*pIn*/ )
 {
     const char* pRet = NULL;
-    oslModule pLib = osl_loadModuleAscii( _XSALSET_LIBNAME, SAL_LOADMODULE_LAZY );
-    if( pLib )
-    {
-        OUString aSym( "Sal_authenticateQuery"  );
-        bool (*getpw)( const OString& rServer, OString& rUser, OString& rPw) =
-            (bool(*)(const OString&,OString&,OString&))osl_getFunctionSymbol( pLib, aSym.pData );
-        if( getpw )
-        {
-            osl::MutexGuard aGuard( m_aCUPSMutex );
 
-            OString aUser = cupsUser();
-            OString aServer = cupsServer();
-            OString aPassword;
-            if( getpw( aServer, aUser, aPassword ) )
-            {
-                m_aPassword = aPassword;
-                m_aUser = aUser;
-                cupsSetUser( m_aUser.getStr() );
-                pRet = m_aPassword.getStr();
-            }
-        }
-        osl_unloadModule( pLib );
-    }
-    else
+    osl::MutexGuard aGuard( m_aCUPSMutex );
+
+    OString aUser = cupsUser();
+    OString aServer = cupsServer();
+    OString aPassword;
+    if (AuthenticateQuery(aServer, aUser, aPassword))
     {
-        SAL_WARN("vcl.unx.print",
-            "loading of module " << _XSALSET_LIBNAME << " failed\n");
+        m_aPassword = aPassword;
+        m_aUser = aUser;
+        cupsSetUser( m_aUser.getStr() );
+        pRet = m_aPassword.getStr();
     }
 
     return pRet;

@@ -10,7 +10,6 @@
 $(eval $(call gb_UIConfig_UIConfig,spa))
 
 $(eval $(call gb_UIConfig_add_uifiles,spa,\
-	padmin/uiconfig/ui/cupspassworddialog \
 	padmin/uiconfig/ui/printerdevicepage \
 	padmin/uiconfig/ui/printerpaperpage \
 	padmin/uiconfig/ui/printerpropertiesdialog \

@@ -472,43 +472,6 @@ void RTSDevicePage::FillValueBox( const PPDKey* pKey )
     m_pPPDValueBox->SelectEntryPos( m_pPPDValueBox->GetEntryPos( (void*)pValue ) );
 }
 
-class RTSPWDialog : public ModalDialog
-{
-    FixedText* m_pText;
-    Edit*      m_pUserEdit;
-    Edit*      m_pPassEdit;
-
-public:
-    RTSPWDialog(const OString& rServer, const OString& rUserName, Window* pParent);
-
-    OString getUserName() const;
-    OString getPassword() const;
-};
-
-RTSPWDialog::RTSPWDialog( const OString& rServer, const OString& rUserName, Window* pParent )
-    : ModalDialog(pParent, "CUPSPasswordDialog",
-        "spa/ui/cupspassworddialog.ui")
-{
-    get(m_pText, "text");
-    get(m_pUserEdit, "user");
-    get(m_pPassEdit, "pass");
-
-    OUString aText(m_pText->GetText());
-    aText = aText.replaceFirst("%s", OStringToOUString(rServer, osl_getThreadTextEncoding()));
-    m_pText->SetText(aText);
-    m_pUserEdit->SetText( OStringToOUString(rUserName, osl_getThreadTextEncoding()));
-}
-
-OString RTSPWDialog::getUserName() const
-{
-    return OUStringToOString( m_pUserEdit->GetText(), osl_getThreadTextEncoding() );
-}
-
-OString RTSPWDialog::getPassword() const
-{
-    return OUStringToOString( m_pPassEdit->GetText(), osl_getThreadTextEncoding() );
-}
-
 extern "C" {
 
     int SPA_DLLPUBLIC Sal_SetupPrinterDriver( ::psp::PrinterInfo& rJobData )
@@ -524,21 +487,6 @@ extern "C" {
 
         return nRet;
     }
-
-    bool SPA_DLLPUBLIC Sal_authenticateQuery( const OString& rServer, OString& rUserName, OString& rPassword )
-    {
-        bool bRet = false;
-
-        RTSPWDialog aDialog( rServer, rUserName, NULL );
-        if( aDialog.Execute() )
-        {
-            rUserName = aDialog.getUserName();
-            rPassword = aDialog.getPassword();
-            bRet = true;
-        }
-        return bRet;
-    }
-
 } // extern "C"
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
