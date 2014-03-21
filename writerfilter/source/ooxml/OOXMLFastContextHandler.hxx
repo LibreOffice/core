@@ -168,8 +168,8 @@ public:
     (Token_t Element,
      const uno::Reference< xml::sax::XFastAttributeList > & Attribs);
 
-    void setDocument(OOXMLDocument * pDocument);
-    OOXMLDocument * getDocument();
+    void setDocument(OOXMLDocumentImpl* pDocument);
+    OOXMLDocumentImpl* getDocument();
     void setXNoteId(OOXMLValue::Pointer_t pValue);
     void setXNoteId(const sal_Int32 nId);
     sal_Int32 getXNoteId() const;

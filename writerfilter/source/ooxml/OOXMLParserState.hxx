@@ -20,7 +20,7 @@
 #define INCLUDE_OOXML_PARSER_STATE_HXX
 
 #include <stack>
-#include <ooxml/OOXMLDocument.hxx>
+#include "OOXMLDocumentImpl.hxx"
 #include "OOXMLPropertySetImpl.hxx"
 
 #if OSL_DEBUG_LEVEL > 1
@@ -43,7 +43,7 @@ class OOXMLParserState
     bool mbForwardEvents;
     unsigned int mnContexts;
     unsigned int mnHandle;
-    OOXMLDocument * mpDocument;
+    OOXMLDocumentImpl* mpDocument;
     OUString msTarget;
     OOXMLPropertySet::Pointer_t mpCharacterProps;
     stack<OOXMLPropertySet::Pointer_t> mCellProps;
@@ -82,8 +82,8 @@ public:
     const string getHandle() const;
     void setHandle();
 
-    void setDocument(OOXMLDocument * pDocument);
-    OOXMLDocument * getDocument() const;
+    void setDocument(OOXMLDocumentImpl* pDocument);
+    OOXMLDocumentImpl* getDocument() const;
 
     void setXNoteId(const sal_Int32 rId);
     sal_Int32 getXNoteId() const;

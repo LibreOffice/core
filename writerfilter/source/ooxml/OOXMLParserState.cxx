@@ -113,12 +113,12 @@ void OOXMLParserState::setHandle()
     mnHandle = mnContexts;
 }
 
-void OOXMLParserState::setDocument(OOXMLDocument * pDocument)
+void OOXMLParserState::setDocument(OOXMLDocumentImpl* pDocument)
 {
     mpDocument = pDocument;
 }
 
-OOXMLDocument * OOXMLParserState::getDocument() const
+OOXMLDocumentImpl* OOXMLParserState::getDocument() const
 {
     return mpDocument;
 }

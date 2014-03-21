@@ -43,7 +43,7 @@ public:
     OOXMLFastDocumentHandler(
         uno::Reference< uno::XComponentContext > const & context,
         Stream* pStream,
-        OOXMLDocument* pDocument,
+        OOXMLDocumentImpl* pDocument,
         sal_Int32 nXNoteId );
     virtual ~OOXMLFastDocumentHandler() {}
 
@@ -98,7 +98,7 @@ private:
 #ifdef DEBUG_ELEMENT
     Stream::Pointer_t mpTmpStream;
 #endif
-    OOXMLDocument * mpDocument;
+    OOXMLDocumentImpl* mpDocument;
     sal_Int32 mnXNoteId;
     mutable boost::shared_ptr<OOXMLFastContextHandler> mpContextHandler;
     boost::shared_ptr<OOXMLFastContextHandler> getContextHandler() const;

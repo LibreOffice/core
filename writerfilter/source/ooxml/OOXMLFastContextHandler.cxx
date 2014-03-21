@@ -558,8 +558,7 @@ void OOXMLFastContextHandler::setParent
 OOXMLPropertySet * OOXMLFastContextHandler::getPicturePropSet
 (const OUString & rId)
 {
-    return dynamic_cast<OOXMLDocumentImpl *>(mpParserState->getDocument())->
-        getPicturePropSet(rId);
+    return mpParserState->getDocument()->getPicturePropSet(rId);
 }
 
 void OOXMLFastContextHandler::sendTableDepth() const
@@ -1148,12 +1147,12 @@ void OOXMLFastContextHandler::setDefaultStringValue()
 {
 }
 
-void OOXMLFastContextHandler::setDocument(OOXMLDocument * pDocument)
+void OOXMLFastContextHandler::setDocument(OOXMLDocumentImpl* pDocument)
 {
     mpParserState->setDocument(pDocument);
 }
 
-OOXMLDocument * OOXMLFastContextHandler::getDocument()
+OOXMLDocumentImpl* OOXMLFastContextHandler::getDocument()
 {
     return mpParserState->getDocument();
 }

@@ -38,7 +38,7 @@ using namespace ::std;
 OOXMLFastDocumentHandler::OOXMLFastDocumentHandler(
     uno::Reference< uno::XComponentContext > const & context,
     Stream* pStream,
-    OOXMLDocument* pDocument,
+    OOXMLDocumentImpl* pDocument,
     sal_Int32 nXNoteId )
     : m_xContext(context)
     , mpStream( pStream )
