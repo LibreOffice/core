@@ -1008,8 +1008,6 @@
 
 // "ModalDialog" resource ids
 
-#define RID_SVX_MDLG_FONTWORK_GALLERY       ( RID_SVX_START +  2 )
-
 
 // "Menu" resource ids
 #define RID_SVX_MDLG_FONTWORK_CHARSPACING   ( RID_SVX_START + 19 )

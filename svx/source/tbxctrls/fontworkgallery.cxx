@@ -72,27 +72,25 @@ const int nLineCount = 4;
 |*  Svx3DWin - FloatingWindow
 \************************************************************************/
 FontWorkGalleryDialog::FontWorkGalleryDialog( SdrView* pSdrView, Window* pParent, sal_uInt16 /*nSID*/ ) :
-        ModalDialog( pParent, SVX_RES( RID_SVX_MDLG_FONTWORK_GALLERY ) ),
-        maFLFavorites       ( this, SVX_RES( FL_FAVORITES ) ),
-        maCtlFavorites      ( this, SVX_RES( CTL_FAVORITES ) ),
-        maOKButton          ( this, SVX_RES( BTN_OK ) ),
-        maCancelButton      ( this, SVX_RES( BTN_CANCEL ) ),
-        maHelpButton        ( this, SVX_RES( BTN_HELP ) ),
+        ModalDialog(pParent, "FontworkGalleryDialog", "svx/ui/fontworkgallerydialog.ui" ),
         mnThemeId           ( 0xffff ),
         mpSdrView           ( pSdrView ),
         mpModel             ( (FmFormModel*)pSdrView->GetModel() ),
-        maStrClickToAddText ( SVX_RESSTR( STR_CLICK_TO_ADD_TEXT ) ),
         mppSdrObject        ( NULL ),
         mpDestModel         ( NULL )
 {
-    FreeResource();
+    get(mpOKButton, "ok");
+    get(mpCtlFavorites, "ctlFavorites");
+    Size aSize(LogicToPixel(Size(200, 200), MAP_APPFONT));
+    mpCtlFavorites->set_width_request(aSize.Width());
+    mpCtlFavorites->set_height_request(aSize.Height());
 
-    maCtlFavorites.SetDoubleClickHdl( LINK( this, FontWorkGalleryDialog, DoubleClickFavoriteHdl ) );
-    maOKButton.SetClickHdl( LINK( this, FontWorkGalleryDialog, ClickOKHdl ) );
+    mpCtlFavorites->SetDoubleClickHdl( LINK( this, FontWorkGalleryDialog, DoubleClickFavoriteHdl ) );
+    mpOKButton->SetClickHdl( LINK( this, FontWorkGalleryDialog, ClickOKHdl ) );
 
-    maCtlFavorites.SetColCount( nColCount );
-    maCtlFavorites.SetLineCount( nLineCount );
-    maCtlFavorites.SetExtraSpacing( 3 );
+    mpCtlFavorites->SetColCount( nColCount );
+    mpCtlFavorites->SetLineCount( nLineCount );
+    mpCtlFavorites->SetExtraSpacing( 3 );
 
     initFavorites( GALLERY_THEME_FONTWORK );
     fillFavorites( GALLERY_THEME_FONTWORK );
@@ -162,7 +160,7 @@ void FontWorkGalleryDialog::fillFavorites(sal_uInt16 nThemeId)
 {
     mnThemeId = nThemeId;
 
-    Size aThumbSize( maCtlFavorites.GetSizePixel() );
+    Size aThumbSize( mpCtlFavorites->GetSizePixel() );
     aThumbSize.Width() /= nColCount;
     aThumbSize.Height() /= nLineCount;
     aThumbSize.Width() -= 12;
@@ -173,12 +171,12 @@ void FontWorkGalleryDialog::fillFavorites(sal_uInt16 nThemeId)
     // ValueSet Favoriten
     if( nFavCount > (nColCount * nLineCount) )
     {
-        WinBits nWinBits = maCtlFavorites.GetStyle();
+        WinBits nWinBits = mpCtlFavorites->GetStyle();
         nWinBits |= WB_VSCROLL;
-        maCtlFavorites.SetStyle( nWinBits );
+        mpCtlFavorites->SetStyle( nWinBits );
     }
 
-    maCtlFavorites.Clear();
+    mpCtlFavorites->Clear();
 
     sal_uInt32 nFavorite;
     for( nFavorite = 1; nFavorite <= nFavCount; nFavorite++ )
@@ -187,7 +185,7 @@ void FontWorkGalleryDialog::fillFavorites(sal_uInt16 nThemeId)
         aStr += " ";
         aStr += OUString::number((sal_Int32)nFavorite);
         Image aThumbImage( maFavoritesHorizontal[nFavorite-1] );
-        maCtlFavorites.InsertItem( (sal_uInt16)nFavorite, aThumbImage, aStr );
+        mpCtlFavorites->InsertItem( (sal_uInt16)nFavorite, aThumbImage, aStr );
     }
 }
 
@@ -199,7 +197,7 @@ void FontWorkGalleryDialog::SetSdrObjectRef( SdrObject** ppSdrObject, SdrModel* 
 
 void FontWorkGalleryDialog::insertSelectedFontwork()
 {
-    sal_uInt16 nItemId = maCtlFavorites.GetSelectItemId();
+    sal_uInt16 nItemId = mpCtlFavorites->GetSelectItemId();
 
     if( nItemId > 0 )
     {

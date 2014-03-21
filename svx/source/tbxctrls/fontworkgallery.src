@@ -22,68 +22,7 @@
 #include "fontworkgallery.hrc"
 #include "svtools/controldims.hrc"
 
-#define WIDTH                       256
-#define HEIGHT                      256
-
 #define MASKCOLOR   MaskColor = Color { Red=0xFFFF; Green=0x0000; Blue=0xFFFF; };
-
-ModalDialog RID_SVX_MDLG_FONTWORK_GALLERY
-{
-    HelpID = "svx:ModalDialog:RID_SVX_MDLG_FONTWORK_GALLERY";
-    OutputSize = TRUE;
-    SVLook = TRUE ;
-    Moveable = TRUE;
-    Closeable = TRUE;
-
-    Size = MAP_APPFONT( WIDTH, HEIGHT );
-
-    Text [ en-US ] = "Fontwork Gallery" ;
-
-    FixedLine FL_FAVORITES
-    {
-        Pos = MAP_APPFONT ( 3 , 3 ) ;
-        Size = MAP_APPFONT ( WIDTH - 6 , 8 ) ;
-        Text [ en-US ] = "Select a Fontwork style:" ;
-    };
-    Control CTL_FAVORITES
-    {
-        HelpId = HID_CTL_FONTWORK_FAVORITES ;
-        Border = FALSE ;
-        Pos = MAP_APPFONT ( 3 , 14 ) ;
-        Size = MAP_APPFONT ( WIDTH - 6,
-                             HEIGHT - RSC_CD_PUSHBUTTON_HEIGHT -
-                             6 - RSC_CD_PUSHBUTTON_HEIGHT ) ;
-        TabStop = TRUE ;
-    };
-    OkButton BTN_OK
-    {
-        Pos = MAP_APPFONT ( WIDTH - 3 * RSC_CD_PUSHBUTTON_WIDTH - 9 ,
-                            HEIGHT - 3 - RSC_CD_PUSHBUTTON_HEIGHT ) ;
-        Size = MAP_APPFONT ( RSC_CD_PUSHBUTTON_WIDTH,
-                             RSC_CD_PUSHBUTTON_HEIGHT ) ;
-        TabStop = TRUE ;
-    };
-    CancelButton BTN_CANCEL
-    {
-        Pos = MAP_APPFONT ( WIDTH - 2 * RSC_CD_PUSHBUTTON_WIDTH - 6 ,
-                            HEIGHT - 3 - RSC_CD_PUSHBUTTON_HEIGHT ) ;
-        Size = MAP_APPFONT ( RSC_CD_PUSHBUTTON_WIDTH,
-                             RSC_CD_PUSHBUTTON_HEIGHT ) ;
-        TabStop = TRUE ;
-    };
-    HelpButton BTN_HELP
-    {
-        Pos = MAP_APPFONT ( WIDTH - 1 * RSC_CD_PUSHBUTTON_WIDTH - 3 ,
-                            HEIGHT - 3 - RSC_CD_PUSHBUTTON_HEIGHT ) ;
-        Size = MAP_APPFONT ( RSC_CD_PUSHBUTTON_WIDTH,
-                             RSC_CD_PUSHBUTTON_HEIGHT ) ;
-        TabStop = TRUE ;
-    };
-    String STR_CLICK_TO_ADD_TEXT
-    {
-        Text [ en-US ] = "Click to edit text" ;
-    };
-};
 
 DockingWindow RID_SVXFLOAT_FONTWORK_ALIGNMENT
 {

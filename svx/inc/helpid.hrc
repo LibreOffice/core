@@ -44,7 +44,6 @@
 #define HID_CONTDLG_TOOLBOX                                   "SVX_HID_CONTDLG_TOOLBOX"
 #define HID_CONTDLG_UNDO                                      "SVX_HID_CONTDLG_UNDO"
 #define HID_CONTDLG_WORKPLACE                                 "SVX_HID_CONTDLG_WORKPLACE"
-#define HID_CTL_FONTWORK_FAVORITES                            "SVX_HID_CTL_FONTWORK_FAVORITES"
 #define HID_CTRL3D_HSCROLL                                    "SVX_HID_CTRL3D_HSCROLL"
 #define HID_CTRL3D_SWITCHER                                   "SVX_HID_CTRL3D_SWITCHER"
 #define HID_CTRL3D_VSCROLL                                    "SVX_HID_CTRL3D_VSCROLL"
