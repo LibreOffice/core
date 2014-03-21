@@ -103,37 +103,37 @@ interface XResource;
     configuration change request is executed, not when the
     requestResourceActivation() call is made.</p>
     <p>The ConfigurationChangeEvent::ResourceId member is set to the requested
-    resource.  The #ResourceObject member is not
+    resource.  The ResourceObject member is not
     set.</p></li>
     <li>ResourceDeactivationRequested is sent when the
     deactivation of a resource has been requested and the resource is active
     in the requested configuration.  The event is sent when the
     configuration change request is executed that is created when for
     example requestResourceDeactivation() is called.</p>
-    <p>The #ResourceId member is set to the requested
-    resource.  The #ResourceObject member is not
+    <p>The ResourceId member is set to the requested
+    resource.  The ResourceObject member is not
     set.</p></li>
     <li>ConfigurationUpdateStart is sent before the update of
     the current configuration starts.</p>
     <p>The requested configuration is available in the
     ConfigurationChangeEvent::Configuration member.  The
-    #ResourceId and #ResourceObject members
+    ResourceId and ResourceObject members
     are not set.</p></li>
     <li>ConfigurationUpdateEnd is sent after the update of
     the current configuration ends.</p>
     <p>The requested configuration is
     available in the ConfigurationChangeEvent::Configuration member.
-    The #ResourceId and #ResourceObject members are not set.</p></li>
+    The ResourceId and ResourceObject members are not set.</p></li>
     <li>ResourceActivation is sent when a resource is
     activated, i.e. when a new object of a resource is created (or taken
     from a cash).</p>
-    <p>The #ResourceId and #ResourceObject
+    <p>The ResourceId and ResourceObject
     members are set to the XResourceId and object reference of
     the activated resource.</p></li>
     <li>ResourceDeactivation is sent when a resource is
     deactivated, i.e. when an object that previously was part of the
     configuration is removed from the configuration.</p>
-    <p>The #ResourceId and #ResourceObject
+    <p>The ResourceId and ResourceObject
     members are set to XResourceId and object reference of the
     deactivated resource.</p></li>
     </ul></p>

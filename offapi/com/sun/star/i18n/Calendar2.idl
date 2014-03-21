@@ -22,19 +22,19 @@ module com { module sun { module star { module i18n {
 
     <p> Similar to
     ::com::sun::star::i18n::Calendar this provides
-    additional members with a sequence of possessive (genitive case) and 
-    partitive case month names for locales that use them, for example 
-    Slavic locales. If a locale does not provide the possessive form in 
+    additional members with a sequence of possessive (genitive case) and
+    partitive case month names for locales that use them, for example
+    Slavic locales. If a locale does not provide the possessive form in
     #GenitiveMonths, the names are identical to the
     nominative case nouns in Calendar::Months. If a
-    locale does not provide the partitive case in 
+    locale does not provide the partitive case in
     #PartitiveMonths, the names are identical to
     #GenitiveMonths. </p>
 
     <p> The sequences are of type
     com::sun::star::i18n::CalendarItem2 instead of
     com::sun::star::i18n::CalendarItem, with the
-    additional #NarrowName member.
+    additional NarrowName member.
 
     @see XLocaleData
         for links to DTD of XML locale data files.
