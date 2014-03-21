@@ -2332,7 +2332,7 @@ bool GetSfntTable( TrueTypeFont* ttf, int nSubtableIndex,
         return false;
     *pRawLength = ttf->tlens[ nSubtableIndex ];
     *ppRawBytes = ttf->tables[ nSubtableIndex ];
-    bool bOk = (*pRawLength > 0) && (ppRawBytes != NULL);
+    bool bOk = (*pRawLength > 0) && (*ppRawBytes != NULL);
     return bOk;
 }
 
