@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da86d52c_cfda1117",
+        "filename": "sc/qa/unit/helper/qahelper.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 576,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2014-03-21T22:18:34Z",
+      "side": 1,
+      "message": "I know this is nitpicking, but ... code without blanks is harder to read than with blanks, could you please use blanks between operators and operands, so this would be\n\n rFilePath \u003d getSrcRootURL() + m_aBaseString + aSep + aFileExtension + aSep + aFileBase + aFileExtension;\n\nAlso in other places. Thanks.",
+      "revId": "65ec9a03289afd7ba287d26f2da861df0ea7e5e0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da86d52c_efd7d5eb",
+        "filename": "sc/qa/unit/subsequent_filters-test.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 1134,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2014-03-21T22:18:34Z",
+      "side": 1,
+      "message": "OUString::valueOf() and OString::valueOf() are deprecated methods and generate a warning in environments that support the SAL_DEPRECATED attribute or would even break the build if --enable-werror is configured (which I recommend anyway). Please substitute with OUString::number() and OString::number() instead.",
+      "revId": "65ec9a03289afd7ba287d26f2da861df0ea7e5e0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
