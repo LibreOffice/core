@@ -46,13 +46,18 @@ namespace cssxw = com::sun::star::xml::wrapper;
 #define SAXEVENTKEEPER_COMPONENT "com.sun.star.xml.crypto.sax.SAXEventKeeper"
 
 XSecController::XSecController( const cssu::Reference<cssu::XComponentContext>& rxCtx )
-    :mxCtx(rxCtx),
-     m_nNextSecurityId(1),
-      m_bIsSAXEventKeeperConnected(false),
-     m_nStatusOfSecurityComponents(UNINITIALIZED),
-      m_bIsSAXEventKeeperSticky(false),
-     m_pErrorMessage(NULL),
-     m_pXSecParser(NULL)
+    : mxCtx(rxCtx)
+    , m_nNextSecurityId(1)
+    , m_bIsPreviousNodeInitializable(false)
+    , m_bIsSAXEventKeeperConnected(false)
+    , m_bIsCollectingElement(false)
+    , m_bIsBlocking(false)
+    , m_nStatusOfSecurityComponents(UNINITIALIZED)
+    , m_bIsSAXEventKeeperSticky(false)
+    , m_pErrorMessage(NULL)
+    , m_pXSecParser(NULL)
+    , m_nReservedSignatureId(0)
+    , m_bVerifyCurrentSignature(false)
 {
 }
 
