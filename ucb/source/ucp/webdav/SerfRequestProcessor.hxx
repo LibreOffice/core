@@ -128,6 +128,9 @@ public:
     //LOCK
     bool processLock( const css::ucb::Lock & rLock );
 
+    //UNLOCK
+    bool processUnlock();
+
     apr_status_t provideSerfCredentials( char ** outUsername,
                                          char ** outPassword,
                                          serf_request_t * inRequest,
