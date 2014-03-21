@@ -209,6 +209,7 @@ bool XMLUnderlineStylePropHdl::importXML( const OUString& rStrImpValue, uno::Any
             case awt::FontUnderline::SINGLE:
                 // keep double or bold line style
                 eNewUnderline = eUnderline;
+                //fall-through
             case awt::FontUnderline::DOTTED:
                 // The line style has priority over a double type.
                 if( awt::FontUnderline::BOLD == eUnderline )
