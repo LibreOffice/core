@@ -68,10 +68,11 @@ using namespace ::com::sun::star;
 
 static void lcl_ClearLstBoxAndDelUserData( ListBox& rLstBox )
 {
-    void* pDel;
-    for( sal_uInt16 n = 0, nEnd = rLstBox.GetEntryCount(); n < nEnd; ++n )
-        if( 0 != ( pDel = rLstBox.GetEntryData( n )) )
-            delete (OUString*)pDel;
+    const sal_Int32 nEnd = rLstBox.GetEntryCount();
+    for( sal_Int32 n = 0; n < nEnd; ++n )
+    {
+        delete reinterpret_cast<OUString *>(rLstBox.GetEntryData( n ));
+    }
     rLstBox.Clear();
 }
 
@@ -426,41 +427,40 @@ IMPL_LINK( SwSortDlg, LanguageHdl, ListBox*, pLBox )
     if( !pColRes )
         pColRes = new CollatorResource();
 
-    const sal_uInt16 nLstBoxCnt = 3;
+    const int nLstBoxCnt = 3;
     ListBox* aLstArr[ nLstBoxCnt ] = { m_pTypDLB1, m_pTypDLB2, m_pTypDLB3 };
     sal_uInt16* aTypeArr[ nLstBoxCnt ] = { &nType1, &nType2, &nType3 };
     OUString aOldStrArr[ nLstBoxCnt ];
-    sal_uInt16 n;
 
-    void* pUserData;
-    for( n = 0; n < nLstBoxCnt; ++n )
+    for( int n = 0; n < nLstBoxCnt; ++n )
     {
         ListBox* pL = aLstArr[ n ];
-        if( 0 != (pUserData = pL->GetEntryData( pL->GetSelectEntryPos())) )
+        void* pUserData = pL->GetEntryData( pL->GetSelectEntryPos() );
+        if (pUserData)
             aOldStrArr[ n ] = *(OUString*)pUserData;
         ::lcl_ClearLstBoxAndDelUserData( *pL );
     }
 
-    sal_uInt16 nInsPos;
     OUString sAlg, sUINm;
-    for( long nCnt = 0, nEnd = aSeq.getLength(); nCnt <= nEnd; ++nCnt )
+    const sal_Int32 nEnd = aSeq.getLength();
+    for( sal_Int32 nCnt = 0; nCnt <= nEnd; ++nCnt )
     {
         if( nCnt < nEnd )
             sUINm = pColRes->GetTranslation( sAlg = aSeq[ nCnt ] );
         else
             sUINm = sAlg = aNumericTxt;
 
-        for( n = 0; n < nLstBoxCnt; ++n )
+        for( int n = 0; n < nLstBoxCnt; ++n )
         {
             ListBox* pL = aLstArr[ n ];
-            nInsPos = pL->InsertEntry( sUINm );
+            const sal_Int32 nInsPos = pL->InsertEntry( sUINm );
             pL->SetEntryData( nInsPos, new OUString( sAlg ));
             if( pLBox && sAlg == aOldStrArr[ n ] )
                 pL->SelectEntryPos( nInsPos );
         }
     }
 
-    for( n = 0; n < nLstBoxCnt; ++n )
+    for( int n = 0; n < nLstBoxCnt; ++n )
     {
         ListBox* pL = aLstArr[ n ];
         if( !pLBox )
