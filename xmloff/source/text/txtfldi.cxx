@@ -3654,24 +3654,28 @@ SvXMLImportContext* XMLAnnotationImportContext::CreateChildContext(
     {
         try
         {
+            bool bOK = true;
             if ( !mxField.is() )
-                CreateField( mxField, sServicePrefix + GetServiceName() );
-            Any aAny = mxField->getPropertyValue( sPropertyTextRange );
-            Reference< XText > xText;
-            aAny >>= xText;
-            if( xText.is() )
+                bOK = CreateField( mxField, sServicePrefix + GetServiceName() );
+            if (bOK)
             {
-                UniReference < XMLTextImportHelper > xTxtImport = GetImport().GetTextImport();
-                if( !mxCursor.is() )
+                Any aAny = mxField->getPropertyValue( sPropertyTextRange );
+                Reference< XText > xText;
+                aAny >>= xText;
+                if( xText.is() )
                 {
-                    mxOldCursor = xTxtImport->GetCursor();
-                    mxCursor = xText->createTextCursor();
-                }
+                    UniReference < XMLTextImportHelper > xTxtImport = GetImport().GetTextImport();
+                    if( !mxCursor.is() )
+                    {
+                        mxOldCursor = xTxtImport->GetCursor();
+                        mxCursor = xText->createTextCursor();
+                    }
 
-                if( mxCursor.is() )
-                {
-                    xTxtImport->SetCursor( mxCursor );
-                    pContext = xTxtImport->CreateTextChildContext( GetImport(), nPrefix, rLocalName, xAttrList );
+                    if( mxCursor.is() )
+                    {
+                        xTxtImport->SetCursor( mxCursor );
+                        pContext = xTxtImport->CreateTextChildContext( GetImport(), nPrefix, rLocalName, xAttrList );
+                    }
                 }
             }
         }
