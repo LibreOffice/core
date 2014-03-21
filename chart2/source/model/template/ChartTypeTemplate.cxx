@@ -337,7 +337,11 @@ sal_Bool SAL_CALL ChartTypeTemplate::matchesTemplate(
         if( bResult )
         {
             Sequence< Reference< XChartType > > aFormerlyUsedChartTypes;
-            const OUString aChartTypeToMatch( getChartTypeForNewSeries(aFormerlyUsedChartTypes)->getChartType());
+            Reference<XChartType> xOldCT = getChartTypeForNewSeries(aFormerlyUsedChartTypes);
+            if (!xOldCT.is())
+                return false;
+
+            const OUString aChartTypeToMatch = xOldCT->getChartType();
             const sal_Int32 nDimensionToMatch = getDimension();
             for( sal_Int32 nCooSysIdx=0; bResult && (nCooSysIdx < aCooSysSeq.getLength()); ++nCooSysIdx )
             {
@@ -348,6 +352,9 @@ sal_Bool SAL_CALL ChartTypeTemplate::matchesTemplate(
                 Sequence< Reference< XChartType > > aChartTypeSeq( xCTCnt->getChartTypes());
                 for( sal_Int32 nCTIdx=0; bResult && (nCTIdx < aChartTypeSeq.getLength()); ++nCTIdx )
                 {
+                    if (!aChartTypeSeq[nCTIdx].is())
+                        return false;
+
                     // match chart type
                     bResult = bResult && aChartTypeSeq[nCTIdx]->getChartType().equals( aChartTypeToMatch );
                     bool bFound=false;
