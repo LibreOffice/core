@@ -76,7 +76,7 @@
         <value>Id2</value>
       </prop>
     </node>
-    <node oor:name="ALPHA" oor:op="replace">
+    <node oor:name="Alpha" oor:op="replace">
       <prop oor:name="Char">
         <value>913</value>
       </prop>
@@ -104,7 +104,7 @@
         <value>Id2</value>
       </prop>
     </node>
-    <node oor:name="BETA" oor:op="replace">
+    <node oor:name="Beta" oor:op="replace">
       <prop oor:name="Char">
         <value>914</value>
       </prop>
@@ -132,7 +132,7 @@
         <value>Id2</value>
       </prop>
     </node>
-    <node oor:name="GAMMA" oor:op="replace">
+    <node oor:name="Gamma" oor:op="replace">
       <prop oor:name="Char">
         <value>915</value>
       </prop>
@@ -160,7 +160,7 @@
         <value>Id2</value>
       </prop>
     </node>
-    <node oor:name="DELTA" oor:op="replace">
+    <node oor:name="Delta" oor:op="replace">
       <prop oor:name="Char">
         <value>916</value>
       </prop>
@@ -188,7 +188,7 @@
         <value>Id2</value>
       </prop>
     </node>
-    <node oor:name="EPSILON" oor:op="replace">
+    <node oor:name="Epsilon" oor:op="replace">
       <prop oor:name="Char">
         <value>917</value>
       </prop>
@@ -216,7 +216,7 @@
         <value>Id2</value>
       </prop>
     </node>
-    <node oor:name="ZETA" oor:op="replace">
+    <node oor:name="Zeta" oor:op="replace">
       <prop oor:name="Char">
         <value>918</value>
       </prop>
@@ -244,7 +244,7 @@
         <value>Id2</value>
       </prop>
     </node>
-    <node oor:name="ETA" oor:op="replace">
+    <node oor:name="Eta" oor:op="replace">
       <prop oor:name="Char">
         <value>919</value>
       </prop>
@@ -272,7 +272,7 @@
         <value>Id2</value>
       </prop>
     </node>
-    <node oor:name="THETA" oor:op="replace">
+    <node oor:name="Theta" oor:op="replace">
       <prop oor:name="Char">
         <value>920</value>
       </prop>
@@ -300,7 +300,7 @@
         <value>Id2</value>
       </prop>
     </node>
-    <node oor:name="IOTA" oor:op="replace">
+    <node oor:name="Iota" oor:op="replace">
       <prop oor:name="Char">
         <value>921</value>
       </prop>
@@ -328,7 +328,7 @@
         <value>Id2</value>
       </prop>
     </node>
-    <node oor:name="KAPPA" oor:op="replace">
+    <node oor:name="Kappa" oor:op="replace">
       <prop oor:name="Char">
         <value>922</value>
       </prop>
@@ -356,7 +356,7 @@
         <value>Id2</value>
       </prop>
     </node>
-    <node oor:name="LAMBDA" oor:op="replace">
+    <node oor:name="Lambda" oor:op="replace">
       <prop oor:name="Char">
         <value>923</value>
       </prop>
@@ -384,7 +384,7 @@
         <value>Id2</value>
       </prop>
     </node>
-    <node oor:name="MU" oor:op="replace">
+    <node oor:name="Mu" oor:op="replace">
       <prop oor:name="Char">
         <value>924</value>
       </prop>
@@ -412,7 +412,7 @@
         <value>Id2</value>
       </prop>
     </node>
-    <node oor:name="NU" oor:op="replace">
+    <node oor:name="Nu" oor:op="replace">
       <prop oor:name="Char">
         <value>925</value>
       </prop>
@@ -440,7 +440,7 @@
         <value>Id2</value>
       </prop>
     </node>
-    <node oor:name="XI" oor:op="replace">
+    <node oor:name="Xi" oor:op="replace">
       <prop oor:name="Char">
         <value>926</value>
       </prop>
@@ -468,7 +468,7 @@
         <value>Id2</value>
       </prop>
     </node>
-    <node oor:name="OMICRON" oor:op="replace">
+    <node oor:name="Omicron" oor:op="replace">
       <prop oor:name="Char">
         <value>927</value>
       </prop>
@@ -496,7 +496,7 @@
         <value>Id2</value>
       </prop>
     </node>
-    <node oor:name="PI" oor:op="replace">
+    <node oor:name="Pi" oor:op="replace">
       <prop oor:name="Char">
         <value>928</value>
       </prop>
@@ -524,7 +524,7 @@
         <value>Id2</value>
       </prop>
     </node>
-    <node oor:name="RHO" oor:op="replace">
+    <node oor:name="Rho" oor:op="replace">
       <prop oor:name="Char">
         <value>929</value>
       </prop>
@@ -552,7 +552,7 @@
         <value>Id2</value>
       </prop>
     </node>
-    <node oor:name="SIGMA" oor:op="replace">
+    <node oor:name="Sigma" oor:op="replace">
       <prop oor:name="Char">
         <value>931</value>
       </prop>
@@ -580,7 +580,7 @@
         <value>Id2</value>
       </prop>
     </node>
-    <node oor:name="TAU" oor:op="replace">
+    <node oor:name="Tau" oor:op="replace">
       <prop oor:name="Char">
         <value>932</value>
       </prop>
@@ -608,7 +608,7 @@
         <value>Id2</value>
       </prop>
     </node>
-    <node oor:name="UPSILON" oor:op="replace">
+    <node oor:name="Upsilon" oor:op="replace">
       <prop oor:name="Char">
         <value>933</value>
       </prop>
@@ -636,7 +636,7 @@
         <value>Id2</value>
       </prop>
     </node>
-    <node oor:name="PHI" oor:op="replace">
+    <node oor:name="Phi" oor:op="replace">
       <prop oor:name="Char">
         <value>934</value>
       </prop>
@@ -664,7 +664,7 @@
         <value>Id2</value>
       </prop>
     </node>
-    <node oor:name="CHI" oor:op="replace">
+    <node oor:name="Chi" oor:op="replace">
       <prop oor:name="Char">
         <value>935</value>
       </prop>
@@ -692,7 +692,7 @@
         <value>Id2</value>
       </prop>
     </node>
-    <node oor:name="PSI" oor:op="replace">
+    <node oor:name="Psi" oor:op="replace">
       <prop oor:name="Char">
         <value>936</value>
       </prop>
@@ -720,7 +720,7 @@
         <value>Id2</value>
       </prop>
     </node>
-    <node oor:name="OMEGA" oor:op="replace">
+    <node oor:name="Omega" oor:op="replace">
       <prop oor:name="Char">
         <value>937</value>
       </prop>
