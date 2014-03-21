@@ -18,6 +18,8 @@
  */
 
 #include "SerfRequestProcessor.hxx"
+
+#include "AprEnv.hxx"
 #include "SerfCallbacks.hxx"
 #include "SerfSession.hxx"
 #include "SerfPropFindReqProcImpl.hxx"
@@ -31,6 +33,7 @@
 #include "SerfCopyReqProcImpl.hxx"
 #include "SerfMoveReqProcImpl.hxx"
 #include "SerfLockReqProcImpl.hxx"
+#include "SerfUnlockReqProcImpl.hxx"
 
 #include <apr_strings.h>
 
@@ -316,6 +319,22 @@ bool SerfRequestProcessor::processLock( const css::ucb::Lock & rLock )
                                           mrSerfSession.getRequestEnvironment().m_aRequestHeaders,
                                           mrSerfSession,
                                           rLock );
+
+    return runProcessor() == APR_SUCCESS;
+}
+
+bool SerfRequestProcessor::processUnlock()
+{
+    // get the lock from lock store
+    const OUString sToken(
+            apr_environment::AprEnv::getAprEnv()->getSerfLockStore()->getLockToken(
+                OUString::createFromAscii(mPathStr)) );
+    if ( sToken.isEmpty() )
+        throw DAVException( DAVException::DAV_NOT_LOCKED );
+
+    mpProcImpl = new SerfUnlockReqProcImpl( mPathStr,
+                                            mrSerfSession.getRequestEnvironment().m_aRequestHeaders,
+                                            sToken );
 
     return runProcessor() == APR_SUCCESS;
 }

@@ -62,6 +62,8 @@ public:
     SerfLockStore();
     ~SerfLockStore();
 
+    OUString getLockToken( const OUString& rLock );
+
     void addLock( const OUString& rLock,
                   const OUString& sToken,
                   rtl::Reference< SerfSession > const & xSession,

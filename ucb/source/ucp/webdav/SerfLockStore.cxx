@@ -123,6 +123,17 @@ void SerfLockStore::stopTicker()
     }
 }
 
+OUString SerfLockStore::getLockToken( const OUString& rLock )
+{
+    osl::MutexGuard aGuard( m_aMutex );
+
+    LockInfoMap::const_iterator it( m_aLockInfoMap.find( rLock ) );
+    if ( it != m_aLockInfoMap.end() )
+        return (*it).second.m_sToken;
+
+    SAL_WARN("ucb.ucp.webdav", "SerfLockStore::getLockToken: lock not found!" );
+    return OUString();
+}
 
 void SerfLockStore::addLock( const OUString& rLock,
                              const OUString& sToken,

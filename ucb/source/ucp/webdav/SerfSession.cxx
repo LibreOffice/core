@@ -1091,58 +1091,47 @@ bool SerfSession::LOCK( const OUString& /*rLock*/,
 
 // UNLOCK
 
-void SerfSession::UNLOCK( const OUString & /*inPath*/,
-                          const DAVRequestEnvironment & /*rEnv*/ )
+void SerfSession::UNLOCK( const OUString & inPath,
+                          const DAVRequestEnvironment & rEnv )
     throw ( DAVException )
 {
     osl::Guard< osl::Mutex > theGuard( m_aMutex );
 
-    /*
-    // get the neon lock from lock store
-    SerfLock * theLock
-        = m_aSerfLockStore.findByUri( makeAbsoluteURL( inPath ) );
-    if ( !theLock )
-        throw DAVException( DAVException::DAV_NOT_LOCKED );
-
     Init( rEnv );
 
-    int theRetVal = ne_unlock( m_pHttpSession, theLock );
+    boost::shared_ptr<SerfRequestProcessor> aReqProc( createReqProc( inPath ) );
+    aReqProc->processUnlock();
 
-    if ( theRetVal == NE_OK )
+    try
     {
-        m_aSerfLockStore.removeLock( theLock );
-        ne_lock_destroy( theLock );
+        HandleError( aReqProc );
+        SAL_INFO("ucb.ucp.webdav",  "UNLOCK of " << inPath << " succeeded." );
     }
-    else
+    catch(...)
     {
-        SAL_INFO("ucb.ucp.webdav",  "SerfSession::UNLOCK: unlocking of "
-                    << makeAbsoluteURL( inPath ) << " failed.");
+        SAL_INFO("ucb.ucp.webdav",  "UNLOCK of " << inPath << " failed!" );
     }
-
-    HandleError( theRetVal, inPath, rEnv );
-    */
 }
 
 
 // UNLOCK
 
-bool SerfSession::UNLOCK( const OUString& /*rLock*/ )
+void SerfSession::UNLOCK( const OUString& rLock )
 {
     osl::Guard< osl::Mutex > theGuard( m_aMutex );
 
-    return true;
-    /*
-    if ( ne_unlock( m_pHttpSession, pLock ) == NE_OK )
+    boost::shared_ptr<SerfRequestProcessor> aReqProc( createReqProc( rLock ) );
+    aReqProc->processUnlock();
+
+    try
     {
-        SAL_INFO("ucb.ucp.webdav",  "UNLOCK succeeded." );
-        return true;
+        HandleError( aReqProc );
+        SAL_INFO("ucb.ucp.webdav",  "UNLOCK of " << rLock << " succeeded." );
     }
-    else
+    catch(...)
     {
-        SAL_INFO("ucb.ucp.webdav",  "UNLOCK failed!" );
-        return false;
+        SAL_INFO("ucb.ucp.webdav",  "UNLOCK of " << rLock << " failed!" );
     }
-    */
 }
 
 
