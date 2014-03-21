@@ -307,18 +307,26 @@ public:
     bool importVisualEffectStyle(
         css::uno::Reference< css::beans::XPropertySet > const & xProps );
 
-    inline StyleElement(
+    StyleElement(
         OUString const & rLocalName,
         css::uno::Reference< css::xml::input::XAttributes > const & xAttributes,
         ElementBase * pParent, DialogImport * pImport )
         SAL_THROW(())
         : ElementBase( pImport->XMLNS_DIALOGS_UID,
                        rLocalName, xAttributes, pParent, pImport )
+        , _backgroundColor(0)
+        , _textColor(0)
+        , _textLineColor(0)
+        , _border(0)
+        , _borderColor(0)
         , _fontRelief( css::awt::FontRelief::NONE )
         , _fontEmphasisMark( css::awt::FontEmphasisMark::NONE )
+        , _fillColor(0)
+        , _visualEffect(0)
         , _inited( 0 )
         , _hasValue( 0 )
-        {}
+    {
+    }
 };
 
 class MenuPopupElement
