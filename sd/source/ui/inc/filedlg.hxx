@@ -41,7 +41,7 @@ class SdFileDialog_Imp;
 class SD_DLLPUBLIC SdOpenSoundFileDialog
 {
     const std::auto_ptr< SdFileDialog_Imp > mpImpl;
-
+    sal_Bool mbCheck;
     // forbidden and not implemented
     SdOpenSoundFileDialog (const SdOpenSoundFileDialog &);
     SdOpenSoundFileDialog & operator= (const SdOpenSoundFileDialog &);
@@ -53,6 +53,7 @@ public:
     ErrCode                  Execute();
     OUString                 GetPath() const;
     void                     SetPath( const OUString& rPath );
+    sal_Bool                 getBool();
 };
 
 #endif // INCLUDED_SD_SOURCE_UI_INC_FILEDLG_HXX
