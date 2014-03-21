@@ -1907,6 +1907,7 @@ void Ww1Picture::Out(Ww1Shell& rOut, Ww1Manager& /*rMan*/)
         ReadDIB(aBmp, aOut, true);
         pGraphic = new Graphic(aBmp);
     }
+    //fall-through
     default:
         OSL_ENSURE(pPic->mfp.mmGet() == 97, "Ww1Picture");
     }
