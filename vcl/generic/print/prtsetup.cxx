@@ -473,7 +473,7 @@ void RTSDevicePage::FillValueBox( const PPDKey* pKey )
 int SetupPrinterDriver(::psp::PrinterInfo& rJobData)
 {
     int nRet = 0;
-    RTSDialog aDialog( rJobData, rJobData.m_aPrinterName, false );
+    RTSDialog aDialog( rJobData, rJobData.m_aPrinterName, NULL );
 
     if( aDialog.Execute() )
     {
