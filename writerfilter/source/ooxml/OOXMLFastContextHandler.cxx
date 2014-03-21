@@ -2232,12 +2232,9 @@ OOXMLFastContextHandlerWrapper::OOXMLFastContextHandlerWrapper
  uno::Reference<XFastContextHandler> xContext)
 : OOXMLFastContextHandler(pParent), mxContext(xContext)
 {
-    if (pParent != NULL)
-    {
-        setId(pParent->getId());
-        setToken(pParent->getToken());
-        setPropertySet(pParent->getPropertySet());
-    }
+    setId(pParent->getId());
+    setToken(pParent->getToken());
+    setPropertySet(pParent->getPropertySet());
 }
 
 OOXMLFastContextHandlerWrapper::~OOXMLFastContextHandlerWrapper()
