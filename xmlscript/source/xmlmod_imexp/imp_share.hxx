@@ -55,11 +55,15 @@ struct ModuleImport
     sal_Int32 XMLNS_XLINK_UID;
 
 public:
-    inline ModuleImport( ModuleDescriptor& rModuleDesc )
-        SAL_THROW(())
-        : mrModuleDesc( rModuleDesc ) {}
-    virtual ~ModuleImport()
-        SAL_THROW(());
+    ModuleImport(ModuleDescriptor& rModuleDesc) SAL_THROW(())
+        : mrModuleDesc(rModuleDesc)
+        , XMLNS_SCRIPT_UID(0)
+        , XMLNS_LIBRARY_UID(0)
+        , XMLNS_XLINK_UID(0)
+    {
+    }
+
+    virtual ~ModuleImport() SAL_THROW(());
 
     // XRoot
     virtual void SAL_CALL startDocument(
