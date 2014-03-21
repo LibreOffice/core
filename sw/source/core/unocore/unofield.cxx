@@ -577,18 +577,29 @@ throw (beans::UnknownPropertyException, beans::PropertyVetoException,
                 }
             }
         }
-        if( bSetValue )
+        if ( bSetValue )
         {
             // nothing special to be done here for the properties
             // UNO_NAME_DATA_BASE_NAME and UNO_NAME_DATA_BASE_URL.
             // We just call PutValue (empty string is allowed).
             // Thus the last property set will be used as Data Source.
 
-            sal_uInt16 nMId = GetFieldTypeMId( rPropertyName, *pType  );
-            if( USHRT_MAX != nMId )
-                pType->PutValue( rValue, nMId );
+            const sal_uInt16 nMemberValueId = GetFieldTypeMId( rPropertyName, *pType );
+            if ( USHRT_MAX != nMemberValueId )
+            {
+                pType->PutValue( rValue, nMemberValueId );
+                if ( pType->Which() == RES_USERFLD )
+                {
+                    // trigger update of User field in order to get depending Input Fields updated.
+                    pType->UpdateFlds();
+                }
+            }
             else
-                throw beans::UnknownPropertyException(OUString( "Unknown property: " ) + rPropertyName, static_cast < cppu::OWeakObject * > ( this ) );
+            {
+                throw beans::UnknownPropertyException(
+                    OUString( "Unknown property: " ) + rPropertyName,
+                    static_cast< cppu::OWeakObject * >( this ) );
+            }
         }
     }
     else if (!pType && m_pImpl->m_pDoc && rPropertyName == UNO_NAME_NAME)
