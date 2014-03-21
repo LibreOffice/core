@@ -35,6 +35,7 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/ucb/XFileIdentifierConverter.hpp>
 #include <com/sun/star/container/XHierarchicalNameAccess.hpp>
+#include <cppuhelper/implbase6.hxx>
 
 // FileProvider
 
@@ -47,37 +48,19 @@ namespace fileaccess {
     class BaseContent;
     class shell;
 
-    class FileProvider:
-        public cppu::OWeakObject,
-        public com::sun::star::lang::XServiceInfo,
-        public com::sun::star::lang::XInitialization,
-        public com::sun::star::lang::XTypeProvider,
-        public com::sun::star::ucb::XContentProvider,
-        public com::sun::star::ucb::XContentIdentifierFactory,
-        public com::sun::star::beans::XPropertySet,
-        public com::sun::star::ucb::XFileIdentifierConverter
+    class FileProvider: public cppu::WeakImplHelper6 <
+        css::lang::XServiceInfo,
+        css::lang::XInitialization,
+        css::ucb::XContentProvider,
+        css::ucb::XContentIdentifierFactory,
+        css::beans::XPropertySet,
+        css::ucb::XFileIdentifierConverter >
     {
         friend class BaseContent;
     public:
 
         FileProvider( const com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >& rxContext );
         ~FileProvider();
-
-        // XInterface
-        virtual com::sun::star::uno::Any SAL_CALL
-        queryInterface(
-            const com::sun::star::uno::Type& aType )
-            throw( com::sun::star::uno::RuntimeException, std::exception);
-
-        virtual void SAL_CALL
-        acquire(
-            void )
-            throw();
-
-        virtual void SAL_CALL
-        release(
-            void )
-            throw();
 
         // XServiceInfo
         virtual OUString SAL_CALL
@@ -103,13 +86,6 @@ namespace fileaccess {
         static com::sun::star::uno::Reference< com::sun::star::uno::XInterface > SAL_CALL
         CreateInstance(
             const com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory >& xMultiServiceFactory );
-
-        // XTypeProvider
-
-        virtual css::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId()
-            throw( css::uno::RuntimeException, std::exception );
-        virtual css::uno::Sequence< com::sun::star::uno::Type > SAL_CALL getTypes()
-            throw( css::uno::RuntimeException, std::exception );
 
         // XInitialization
         virtual void SAL_CALL

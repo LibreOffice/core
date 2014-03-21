@@ -102,45 +102,6 @@ FileProvider::~FileProvider()
 
 
 
-// XInterface
-
-
-void SAL_CALL
-FileProvider::acquire(
-    void )
-    throw()
-{
-  OWeakObject::acquire();
-}
-
-
-void SAL_CALL
-FileProvider::release(
-    void )
-  throw()
-{
-  OWeakObject::release();
-}
-
-
-Any SAL_CALL
-FileProvider::queryInterface(
-    const Type& rType )
-    throw( RuntimeException, std::exception )
-{
-    Any aRet = cppu::queryInterface(
-        rType,
-        (static_cast< XContentProvider* >(this)),
-        (static_cast< XInitialization* >(this)),
-        (static_cast< XContentIdentifierFactory* >(this)),
-        (static_cast< XServiceInfo* >(this)),
-        (static_cast< XTypeProvider* >(this)),
-        (static_cast< XFileIdentifierConverter* >(this)),
-        (static_cast< XPropertySet* >(this)) );
-    return aRet.hasValue() ? aRet : OWeakObject::queryInterface( rType );
-}
-
-
 // XInitialization
 
 void SAL_CALL FileProvider::init()
@@ -165,23 +126,6 @@ FileProvider::initialize(
             m_pMyShell = new shell( m_xContext, this, sal_True );
     }
 }
-
-
-
-
-// XTypeProvider methods.
-
-
-XTYPEPROVIDER_IMPL_7( FileProvider,
-                         XTypeProvider,
-                         XServiceInfo,
-                      XInitialization,
-                      XContentIdentifierFactory,
-                      XPropertySet,
-                        XFileIdentifierConverter,
-                           XContentProvider )
-
-
 
 // XServiceInfo methods.
 OUString SAL_CALL
