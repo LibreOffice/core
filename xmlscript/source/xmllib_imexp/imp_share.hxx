@@ -125,10 +125,14 @@ public:
     }
 
     // Single library mode
-    inline LibraryImport( LibDescriptor* pLibDesc )
-        SAL_THROW(())
-        : mpLibArray( NULL )
-        , mpLibDesc( pLibDesc ) {}
+    LibraryImport(LibDescriptor* pLibDesc) SAL_THROW(())
+        : mpLibArray(NULL)
+        , mpLibDesc(pLibDesc)
+        , XMLNS_LIBRARY_UID(0)
+        , XMLNS_XLINK_UID(0)
+    {
+    }
+
     virtual ~LibraryImport()
         SAL_THROW(());
 
