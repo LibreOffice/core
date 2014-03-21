@@ -31,8 +31,10 @@ $(eval $(call gb_Library_use_libraries,merged,\
 ))
 
 $(eval $(call gb_Library_use_externals,merged,\
+	icu_headers \
 	icui18n \
 	icuuc \
+	boost_headers \
 	boostdatetime \
 	$(call gb_Helper_optional,DESKTOP,clucene) \
 	cups \
@@ -41,6 +43,7 @@ $(eval $(call gb_Library_use_externals,merged,\
 	expat \
 	gconf \
 	gio \
+	glew \
 	graphite \
 	$(if $(ENABLE_GTK),gtk) \
 	harfbuzz \
@@ -52,6 +55,7 @@ $(eval $(call gb_Library_use_externals,merged,\
 	liblangtag \
 	libxml2 \
 	libxslt \
+	mesa_headers \
 	mythes \
 	nss3 \
 	telepathy \
@@ -89,8 +93,11 @@ ifeq ($(OS),LINUX)
 $(eval $(call gb_Library_add_libs,merged,\
 	-lm \
 	-ldl \
+	-lGL \
+	-lGLU \
 	-lpthread \
 	-lrt \
+	-lX11 \
 ))
 endif
 
@@ -99,12 +106,14 @@ $(eval $(call gb_Library_use_system_win32_libs,merged,\
 	advapi32 \
 	gdi32 \
 	gdiplus \
+	glu32 \
 	imm32 \
 	mpr \
 	msimg32 \
 	oldnames \
 	ole32 \
 	oleaut32 \
+	opengl32 \
 	shell32 \
 	shlwapi \
 	user32 \
@@ -133,6 +142,7 @@ $(eval $(call gb_Library_use_system_darwin_frameworks,merged,\
 	Cocoa \
 	CoreFoundation \
 	CoreServices \
+	OpenGL \
 	QuickTime \
 ))
 endif
