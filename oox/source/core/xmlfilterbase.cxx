@@ -666,13 +666,12 @@ writeAppProperties( XmlFilterBase& rSelf, Reference< XDocumentProperties > xProp
     uno::Sequence<beans::NamedValue> aStats = xProperties->getDocumentStatistics();
     for (sal_Int32 i = 0; i < aStats.getLength(); ++i)
     {
-        sal_Int32 nValue = 0;
-        if (aStats[i].Value >>= nValue)
+        if (aStats[i].Name == "ParagraphCount")
         {
-            OUString aValue = OUString::number(nValue);
-            if (aStats[i].Name == "ParagraphCount")
+            sal_Int32 nValue = 0;
+            if (aStats[i].Value >>= nValue)
             {
-                writeElement(pAppProps, XML_Paragraphs, aValue);
+                writeElement(pAppProps, XML_Paragraphs, OUString::number(nValue));
                 break;
             }
         }
