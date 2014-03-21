@@ -152,7 +152,6 @@ void ScTabViewShell::GetState( SfxItemSet& rSet )
     SfxViewFrame* pThisFrame = GetViewFrame();
     sal_Bool bOle = GetViewFrame()->GetFrame().IsInPlace();
 
-    SCTAB nTabCount = pDoc->GetTableCount();
     SCTAB nTabSelCount = rMark.GetSelectCount();
 
     SfxWhichIter    aIter(rSet);
@@ -183,21 +182,12 @@ void ScTabViewShell::GetState( SfxItemSet& rSet )
                 break;
 
             case SID_DELETE_PRINTAREA:
-                if ( nTabSelCount > 1 )
-                {
-                    // #i22589# also take "Print Entire Sheet" into account here
-                    sal_Bool bHas = false;
-                    for (SCTAB i=0; !bHas && i<nTabCount; i++)
-                        bHas = rMark.GetTableSelect(i) && (pDoc->GetPrintRangeCount(i) || pDoc->IsPrintEntireSheet(i));
-                    if (!bHas)
-                        rSet.DisableItem( nWhich );
-                }
-                else if ( !pDoc->GetPrintRangeCount( nTab ) && !pDoc->IsPrintEntireSheet( nTab ) )
-                    rSet.DisableItem( nWhich );
                 if ( pDocShell && pDocShell->IsDocShared() )
                 {
                     rSet.DisableItem( nWhich );
                 }
+                else if (pDoc->IsPrintEntireSheet(nTab))
+                    rSet.DisableItem(nWhich);
                 break;
 
             case SID_STATUS_PAGESTYLE:

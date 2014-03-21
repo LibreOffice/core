@@ -192,8 +192,10 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
 
         case SID_DELETE_PRINTAREA:
             {
+                // Clear currently defined print range if any, and reset it to
+                // print entire sheet which is the default.
                 String aEmpty;
-                SetPrintRanges( false, &aEmpty, NULL, NULL, false );        // Druckbereich loeschen
+                SetPrintRanges(true, &aEmpty, NULL, NULL, false);        // Druckbereich loeschen
                 rReq.Done();
             }
             break;
