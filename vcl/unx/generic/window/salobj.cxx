@@ -229,12 +229,13 @@ SalClipRegion::UnionClipRegion( long nX, long nY, long nWidth, long nHeight )
     }
 }
 
-
-
 // SalObject Implementation
-
-
 X11SalObject::X11SalObject()
+    : mpParent(NULL)
+    , maPrimary(0)
+    , maSecondary(0)
+    , maColormap(0)
+    , mbVisible(false)
 {
     maSystemChildData.nSize     = sizeof( SystemEnvData );
     maSystemChildData.pDisplay  = GetGenericData()->GetSalDisplay()->GetDisplay();
@@ -247,14 +248,10 @@ X11SalObject::X11SalObject()
     maSystemChildData.pAppContext   = NULL;
     maSystemChildData.aShellWindow  = 0;
     maSystemChildData.pShellWidget  = NULL;
-    maPrimary                       = 0;
-    maSecondary                     = 0;
-    maColormap                      = 0;
 
     std::list< SalObject* >& rObjects = GetGenericData()->GetSalDisplay()->getSalObjects();
     rObjects.push_back( this );
 }
-
 
 X11SalObject::~X11SalObject()
 {
