@@ -11,7 +11,6 @@
 #define INCLUDED_SVX_SDR_CONTACT_VIEWOBJECTCONTACTOFOPENGL_HXX
 
 #include <svx/sdr/contact/viewobjectcontactofsdrobj.hxx>
-#include <vcl/OpenGLContext.hxx>
 
 class Window;
 
@@ -26,9 +25,6 @@ public:
 
 protected:
     Window* getWindow() const;
-
-private:
-    OpenGLContext m_aOpenGLContext;
 };
 
 } // namespace sdr
