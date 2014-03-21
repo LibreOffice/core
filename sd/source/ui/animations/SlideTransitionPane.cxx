@@ -32,6 +32,10 @@
 #include "strings.hrc"
 #include "DrawController.hxx"
 #include <com/sun/star/beans/XPropertySet.hpp>
+#include <avmedia/mediaitem.hxx>
+#include <com/sun/star/ui/dialogs/XFilePicker.hpp>
+#include <com/sun/star/ui/dialogs/ExtendedFilePickerElementIds.hpp>
+#include <com/sun/star/ui/dialogs/XFilePickerControlAccess.hpp>
 
 #include <svtools/controldims.hrc>
 #include <svx/gallery.hxx>
@@ -714,10 +718,25 @@ void SlideTransitionPane::openSoundFileDialog()
     bool bValidSoundFile( false );
     bool bQuitLoop( false );
 
+    OUString realURL;
+    sal_Bool bLink;
+
     while( ! bQuitLoop &&
-           aFileDialog.Execute() == ERRCODE_NONE )
+           aFileDialog.Execute(bLink) == ERRCODE_NONE )
     {
         aFile = aFileDialog.GetPath();
+
+        if(bLink)
+        {
+            realURL = aFile;
+        }
+        else
+        {
+            uno::Reference<frame::XModel> const xModel(
+                mpDrawDoc->GetObjectShell()->GetModel());
+            bool const bRet = ::avmedia::EmbedMedia(xModel, aFile, realURL);
+        }
+
         tSoundListType::size_type nPos = 0;
         bValidSoundFile = lcl_findSoundInList( maSoundList, aFile, nPos );
 
