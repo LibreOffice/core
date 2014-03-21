@@ -35,20 +35,6 @@
 #define CPPU_TYPE( T )      getCppuType( static_cast< T * >( 0 ) )
 #define CPPU_TYPE_REF( T )  CPPU_TYPE( com::sun::star::uno::Reference< T > )
 
-// XTypeProvider decl.
-
-
-
-#define XTYPEPROVIDER_DECL()                                                \
-    virtual com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL              \
-    getImplementationId()                                                   \
-        throw( com::sun::star::uno::RuntimeException, std::exception );     \
-    virtual com::sun::star::uno::Sequence< com::sun::star::uno::Type > SAL_CALL \
-    getTypes()                                                              \
-        throw( com::sun::star::uno::RuntimeException, std::exception );
-
-
-
 // XTypeProvider impl. internals
 
 

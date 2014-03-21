@@ -111,7 +111,10 @@ public:
     XSERVICEINFO_DECL()
 
     // XTypeProvider
-    XTYPEPROVIDER_DECL()
+    virtual css::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId()
+        throw( css::uno::RuntimeException, std::exception );
+    virtual css::uno::Sequence< com::sun::star::uno::Type > SAL_CALL getTypes()
+        throw( css::uno::RuntimeException, std::exception );
 
     // XComponent
     virtual void SAL_CALL

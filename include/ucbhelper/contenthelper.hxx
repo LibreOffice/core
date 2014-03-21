@@ -332,7 +332,12 @@ public:
         throw();
 
     // XTypeProvider
-    XTYPEPROVIDER_DECL()
+    virtual com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL
+    getImplementationId()
+        throw( com::sun::star::uno::RuntimeException, std::exception );
+    virtual com::sun::star::uno::Sequence< com::sun::star::uno::Type > SAL_CALL
+    getTypes()
+        throw( com::sun::star::uno::RuntimeException, std::exception );
 
     // XServiceInfo
     virtual OUString SAL_CALL
