@@ -199,26 +199,6 @@ GETTYPES_IMPL_START( Class )                                                \
     CPPU_TYPE_REF( I11 )                                                    \
 GETTYPES_IMPL_END
 
-// XServiceInfo decl.
-
-
-
-#define XSERVICEINFO_NOFACTORY_DECL()                                       \
-    virtual OUString SAL_CALL                                          \
-    getImplementationName()                                                 \
-        throw( com::sun::star::uno::RuntimeException, std::exception );     \
-    virtual sal_Bool SAL_CALL                                               \
-    supportsService( const OUString& ServiceName )                     \
-        throw( com::sun::star::uno::RuntimeException, std::exception );     \
-    virtual com::sun::star::uno::Sequence< OUString > SAL_CALL         \
-    getSupportedServiceNames()                                              \
-        throw( com::sun::star::uno::RuntimeException, std::exception );     \
-                                                                            \
-    static OUString                                                    \
-    getImplementationName_Static();                                         \
-    static com::sun::star::uno::Sequence< OUString >                   \
-    getSupportedServiceNames_Static();
-
 // XServiceInfo impl. internals
 
 

@@ -151,7 +151,15 @@ public:
         throw( com::sun::star::uno::RuntimeException, std::exception );
 
     // XServiceInfo
-    XSERVICEINFO_NOFACTORY_DECL()
+    virtual OUString SAL_CALL getImplementationName()
+        throw( css::uno::RuntimeException, std::exception );
+    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName )
+        throw( css::uno::RuntimeException, std::exception );
+    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames()
+        throw( css::uno::RuntimeException, std::exception );
+
+    static OUString getImplementationName_Static();
+    static css::uno::Sequence< OUString > getSupportedServiceNames_Static();
 
     // XComponent ( base class of XDynamicResultSet )
     virtual void SAL_CALL
