@@ -188,7 +188,8 @@ ScTableProtectionImpl::ScTableProtectionImpl(const ScTableProtectionImpl& r) :
     mbEmptyPass(r.mbEmptyPass),
     mbProtected(r.mbProtected),
     meHash1(r.meHash1),
-    meHash2(r.meHash2)
+    meHash2(r.meHash2),
+    maEnhancedProtection(r.maEnhancedProtection)
 {
 }
 
