@@ -74,16 +74,27 @@ namespace chelp {
         virtual css::uno::Sequence< css::uno::Type > SAL_CALL getTypes()
             throw( css::uno::RuntimeException, std::exception );
 
-            // XServiceInfo
-            XSERVICEINFO_DECL()
+        // XServiceInfo
+        virtual OUString SAL_CALL getImplementationName()
+            throw( css::uno::RuntimeException, std::exception );
+        virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName )
+            throw( css::uno::RuntimeException, std::exception );
+        virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames()
+            throw( css::uno::RuntimeException,
+                   std::exception );
 
-            // XContentProvider
-            virtual ::com::sun::star::uno::Reference<
-        ::com::sun::star::ucb::XContent > SAL_CALL
-        queryContent( const ::com::sun::star::uno::Reference<
-                      ::com::sun::star::ucb::XContentIdentifier >& Identifier )
-            throw( ::com::sun::star::ucb::IllegalIdentifierException,
-                   ::com::sun::star::uno::RuntimeException, std::exception );
+        static OUString getImplementationName_Static();
+
+        static css::uno::Sequence< OUString > getSupportedServiceNames_Static();
+
+        static css::uno::Reference< css::lang::XSingleServiceFactory > createServiceFactory(
+                const css::uno::Reference< css::lang::XMultiServiceFactory >& rxServiceMgr );
+
+        // XContentProvider
+        virtual css::uno::Reference< css::ucb::XContent > SAL_CALL queryContent(
+                const css::uno::Reference< css::ucb::XContentIdentifier >& Identifier )
+            throw( css::ucb::IllegalIdentifierException,
+                   css::uno::RuntimeException, std::exception );
 
         // Additional interfaces
 

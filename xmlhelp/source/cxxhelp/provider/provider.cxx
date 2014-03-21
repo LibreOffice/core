@@ -46,12 +46,11 @@ using namespace chelp;
 
 // ContentProvider Implementation.
 
-ContentProvider::ContentProvider(
-    const uno::Reference< uno::XComponentContext >& rxContext )
-    : ::ucbhelper::ContentProviderImplHelper( rxContext ),
-        isInitialized( false ),
-        m_aScheme(MYUCP_URL_SCHEME),
-        m_pDatabases( 0 )
+ContentProvider::ContentProvider( const uno::Reference< uno::XComponentContext >& rxContext )
+    : ::ucbhelper::ContentProviderImplHelper( rxContext )
+    , isInitialized( false )
+    , m_aScheme(MYUCP_URL_SCHEME)
+    , m_pDatabases( 0 )
 {
 }
 
@@ -90,12 +89,34 @@ css::uno::Any SAL_CALL ContentProvider::queryInterface( const css::uno::Type & r
 
 // XTypeProvider methods.
 
-XTYPEPROVIDER_IMPL_5( ContentProvider,
-                         lang::XTypeProvider,
-                         lang::XServiceInfo,
-                         ucb::XContentProvider,
-                      lang::XComponent,
-                      container::XContainerListener);
+css::uno::Sequence< sal_Int8 > SAL_CALL ContentProvider::getImplementationId()
+    throw( css::uno::RuntimeException, std::exception )
+{
+      return css::uno::Sequence<sal_Int8>();
+}
+
+css::uno::Sequence< css::uno::Type > SAL_CALL ContentProvider::getTypes()
+    throw( css::uno::RuntimeException, std::exception )
+{
+    static cppu::OTypeCollection* pCollection = NULL;
+      if ( !pCollection )
+      {
+        osl::Guard< osl::Mutex > aGuard( osl::Mutex::getGlobalMutex() );
+        if ( !pCollection )
+        {
+            static cppu::OTypeCollection collection(
+                    getCppuType( static_cast< css::uno::Reference< lang::XTypeProvider > *>(0)),
+                    getCppuType( static_cast< css::uno::Reference< lang::XServiceInfo > *>(0)),
+                    getCppuType( static_cast< css::uno::Reference< ucb::XContentProvider > *>(0)),
+                    getCppuType( static_cast< css::uno::Reference< lang::XComponent > *>(0)),
+                    getCppuType( static_cast< css::uno::Reference< container::XContainerListener > *>(0))
+                );
+            pCollection = &collection;
+        }
+    }
+    return (*pCollection).getTypes();
+}
+
 
 // XServiceInfo methods.
 
@@ -150,7 +171,18 @@ ContentProvider::getSupportedServiceNames_Static()
 
 // Service factory implementation.
 
-ONE_INSTANCE_SERVICE_FACTORY_IMPL( ContentProvider );
+css::uno::Reference< css::lang::XSingleServiceFactory >
+ContentProvider::createServiceFactory( const css::uno::Reference<
+            css::lang::XMultiServiceFactory >& rxServiceMgr )
+{
+    return css::uno::Reference<
+        css::lang::XSingleServiceFactory >(
+            cppu::createOneInstanceFactory(
+                rxServiceMgr,
+                ContentProvider::getImplementationName_Static(),
+                ContentProvider_CreateInstance,
+                ContentProvider::getSupportedServiceNames_Static() ) );
+}
 
 // XContentProvider methods.
 
