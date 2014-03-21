@@ -17,11 +17,11 @@ class SdrOpenGLObj;
 namespace sdr {
 namespace contact {
 
-class ViewContactOfOpenGL : public ViewContactOfSdrObj
+class ViewContactOfOpenGLObj : public ViewContactOfSdrObj
 {
 public:
-    explicit ViewContactOfOpenGL(SdrOpenGLObj& rOpenGLObj);
-    virtual ~ViewContactOfOpenGL();
+    explicit ViewContactOfOpenGLObj(SdrOpenGLObj& rOpenGLObj);
+    virtual ~ViewContactOfOpenGLObj();
 
 protected:
     virtual drawinglayer::primitive2d::Primitive2DSequence createViewIndependentPrimitive2DSequence() const;

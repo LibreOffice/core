@@ -8,23 +8,23 @@
  */
 
 #include <com/sun/star/drawing/XShape.hpp>
-#include <svx/sdr/contact/viewcontactofopengl.hxx>
+#include <svx/sdr/contact/viewcontactofopenglobj.hxx>
 #include <drawinglayer/primitive2d/openglprimitive2d.hxx>
 #include <svx/svdoopengl.hxx>
 #include <tools/gen.hxx>
 
 using namespace sdr::contact;
 
-ViewContactOfOpenGL::ViewContactOfOpenGL(SdrOpenGLObj& rOpenGLObj)
+ViewContactOfOpenGLObj::ViewContactOfOpenGLObj(SdrOpenGLObj& rOpenGLObj)
     : ViewContactOfSdrObj(rOpenGLObj)
 {
 }
 
-ViewContactOfOpenGL::~ViewContactOfOpenGL()
+ViewContactOfOpenGLObj::~ViewContactOfOpenGLObj()
 {
 }
 
-drawinglayer::primitive2d::Primitive2DSequence ViewContactOfOpenGL::createViewIndependentPrimitive2DSequence() const
+drawinglayer::primitive2d::Primitive2DSequence ViewContactOfOpenGLObj::createViewIndependentPrimitive2DSequence() const
 {
     com::sun::star::uno::Reference< com::sun::star::drawing::XShape > xShape(GetSdrObject().getUnoShape(), com::sun::star::uno::UNO_QUERY);
     const Point aPos(xShape->getPosition().X,xShape->getPosition().Y);

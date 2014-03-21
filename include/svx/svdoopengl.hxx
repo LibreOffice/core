@@ -11,14 +11,14 @@
 #define INCLUDED_SVX_SVDO_OPENGL_HXX
 
 #include <svx/svdobj.hxx>
-#include <svx/sdr/contact/viewcontactofopengl.hxx>
+#include <svx/sdr/contact/viewcontactofopenglobj.hxx>
 
 class SVX_DLLPUBLIC SdrOpenGLObj : public SdrObject
 {
 public:
     virtual sdr::contact::ViewContact* CreateObjectSpecificViewContact()
     {
-        return new sdr::contact::ViewContactOfOpenGL(*this);
+        return new sdr::contact::ViewContactOfOpenGLObj(*this);
     }
 };
 
