@@ -53,12 +53,20 @@ struct Style
 
     OUString _id;
 
-    inline Style( short all_ ) SAL_THROW(())
-        : _fontRelief( css::awt::FontRelief::NONE )
-        , _fontEmphasisMark( css::awt::FontEmphasisMark::NONE )
-        , _all( all_ )
-        , _set( 0 )
-        {}
+    Style( short all_ ) SAL_THROW(())
+        : _backgroundColor(0)
+        , _textColor(0)
+        , _textLineColor(0)
+        , _border(0)
+        , _borderColor(0)
+        , _fontRelief(css::awt::FontRelief::NONE)
+        , _fontEmphasisMark(css::awt::FontEmphasisMark::NONE)
+        , _fillColor(0)
+        , _visualEffect(0)
+        , _all(all_)
+        , _set(0)
+    {
+    }
 
     css::uno::Reference< css::xml::sax::XAttributeList > createElement();
 };
