@@ -573,18 +573,12 @@ void ScBootstrapFixture::createFileURL(
     const OUString& aFileBase, const OUString& aFileExtension, OUString& rFilePath)
 {
     OUString aSep("/");
-    OUStringBuffer aBuffer( getSrcRootURL() );
-    aBuffer.append(m_aBaseString).append(aSep).append(aFileExtension);
-    aBuffer.append(aSep).append(aFileBase).append(aFileExtension);
-    rFilePath = aBuffer.makeStringAndClear();
+    rFilePath = getSrcRootURL()+m_aBaseString+aSep+aFileExtension+aSep+aFileBase+aFileExtension;
 }
 
 void ScBootstrapFixture::createCSVPath(const OUString& aFileBase, OUString& rCSVPath)
 {
-    OUStringBuffer aBuffer( getSrcRootPath());
-    aBuffer.append(m_aBaseString).append("/contentCSV/");
-    aBuffer.append(aFileBase).append("csv");
-    rCSVPath = aBuffer.makeStringAndClear();
+    rCSVPath = getSrcRootPath()+m_aBaseString+"/contentCSV/"+aFileBase+"csv";
 }
 
 namespace validation {
