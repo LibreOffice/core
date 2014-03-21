@@ -50,7 +50,7 @@ interface XImageControl
 
     /** defines how to scale the image
 
-        <p>If this property is present, it supersedes the #ScaleImage property.</p>
+        <p>If this property is present, it supersedes the ScaleImage property.</p>
 
         <p>The value of this property is one of the com::sun::star::awt::ImageScaleMode constants.</p>
 

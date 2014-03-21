@@ -63,7 +63,7 @@ published service ODMAContentProvider
         URL of the OCP Root Folder )</span></p>
         <p STYLE="font-weight: medium"><b>vnd.sun.star.odma:/</b> a document
         id given by the DMS</p>
-        <p><b>vnd.sun.star.odma:/</b>`::ODMA\DMS_ID\DM_SPECIFIC_INFO`</p>
+        <p><b>vnd.sun.star.odma:/</b>`ODMA\DMS_ID\DM_SPECIFIC_INFO`</p>
 
         </p>
      */

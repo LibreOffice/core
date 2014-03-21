@@ -100,7 +100,7 @@ interface XReportComponent
 
     /** specifies the color of the border, if present
 
-        <p>Not every border style (see #Border) may support coloring.
+        <p>Not every border style (see Border) may support coloring.
         For instance, usually a border with 3D effect will ignore the BorderColor setting.</p>
      */
     [attribute,bound] long ControlBorderColor

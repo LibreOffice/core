@@ -71,7 +71,7 @@ interface XUIElementSettings : com::sun::star::uno::XInterface
         User interface elements cannot be changed directly. The changed structure
         data has to be set again. This speeds up the configuration process if many
         changes have to be made on the structure. The persistence of changes are
-        controlled by the boolean property #Persistent.
+        controlled by the boolean property Persistent.
 
         </p>
 

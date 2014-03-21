@@ -162,7 +162,7 @@ interface XSlideShowController
 
 
     /** pauses the slide show and blanks the screen in the given color.
-        <p>Change attribute #Pause to false to unpause
+        <p>Change attribute Pause to false to unpause
         the slide show.
     */
     void blankScreen( [in] long Color );

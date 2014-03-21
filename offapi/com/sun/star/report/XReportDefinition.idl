@@ -199,7 +199,7 @@ interface XReportDefinition
         are specified, a RowSet can be created with this information. If the results provided by the
         row set are to be additionally filtered, the Filter property can be used.</p>
 
-        <p>Note that the Filter property does not make sense if a #ResultSet has been specified
+        <p>Note that the Filter property does not make sense if a ResultSet has been specified
         in the DataAccessDescriptor.</p>
 
         @see com::sun::star::sdb::RowSet
