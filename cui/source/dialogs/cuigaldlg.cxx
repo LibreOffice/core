@@ -695,10 +695,12 @@ SfxTabPage* TPGalleryThemeGeneral::Create( Window* pParent, const SfxItemSet& rS
 // - TPGalleryThemeProperties -
 TPGalleryThemeProperties::TPGalleryThemeProperties( Window* pWindow, const SfxItemSet& rSet )
     : SfxTabPage(pWindow, "GalleryFilesPage", "cui/ui/galleryfilespage.ui", rSet)
+    , pData(NULL)
     , nCurFilterPos(0)
     , nFirstExtFilterPos(0)
     , bEntriesFound(false)
     , bInputAllowed(true)
+    , bTakeAll(false)
     , bSearchRecursive(false)
     , xDialogListener(new ::svt::DialogClosedListener())
 {
