@@ -476,7 +476,7 @@ ShapeContextHandler::getShape() throw (uno::RuntimeException, std::exception)
         }
         else if (mxWpsContext.is())
         {
-            ShapePtr pShape = dynamic_cast<WpsContext*>(mxWpsContext.get())->getShape();
+            ShapePtr pShape = dynamic_cast<WpsContext&>(*mxWpsContext.get()).getShape();
             if (pShape)
             {
                 basegfx::B2DHomMatrix aMatrix;
