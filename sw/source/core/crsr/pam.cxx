@@ -683,19 +683,14 @@ bool SwPaM::HasReadonlySel( bool bFormView, bool bAnnotationMode ) const
     //FIXME FieldBk
     // TODO: Form Protection when Enhanced Fields are enabled
     const SwDoc *pDoc = GetDoc();
-    sw::mark::IMark* pA = NULL;
-    sw::mark::IMark* pB = NULL;
-    bool bUnhandledMark = false;
     const IDocumentMarkAccess* pMarksAccess = pDoc->getIDocumentMarkAccess();
-    if ( pDoc )
-    {
-        pA = GetPoint() ? pMarksAccess->getFieldmarkFor( *GetPoint( ) ) : NULL;
-        pB = GetMark( ) ? pMarksAccess->getFieldmarkFor( *GetMark( ) ) : pA;
+    sw::mark::IMark* pA = GetPoint() ? pMarksAccess->getFieldmarkFor( *GetPoint( ) ) : NULL;
+    sw::mark::IMark* pB = GetMark( ) ? pMarksAccess->getFieldmarkFor( *GetMark( ) ) : pA;
 
-        sw::mark::IFieldmark* pFieldmark = pMarksAccess->getFieldmarkFor( *GetPoint() );
-        if ( pFieldmark )
-            bUnhandledMark = pFieldmark->GetFieldname( ) == ODF_UNHANDLED;
-    }
+    bool bUnhandledMark = false;
+    sw::mark::IFieldmark* pFieldmark = pMarksAccess->getFieldmarkFor( *GetPoint() );
+    if ( pFieldmark )
+        bUnhandledMark = pFieldmark->GetFieldname( ) == ODF_UNHANDLED;
 
     if (!bRet)
     {
@@ -708,7 +703,7 @@ bool SwPaM::HasReadonlySel( bool bFormView, bool bAnnotationMode ) const
             bool bAtStartA = pA != NULL && pA->GetMarkStart() == *GetPoint();
             bool bAtStartB = pB != NULL && pB->GetMarkStart() == *GetMark();
             bRet = ( pA != pB ) || bAtStartA || bAtStartB;
-            bool bProtectForm = pDoc ? pDoc->get( IDocumentSettingAccess::PROTECT_FORM ) : false;
+            bool bProtectForm = pDoc->get( IDocumentSettingAccess::PROTECT_FORM );
             if ( bProtectForm )
                 bRet |= ( pA == NULL || pB == NULL );
         }
