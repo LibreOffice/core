@@ -2828,8 +2828,16 @@ void WinSalFrame::UpdateSettings( AllSettings& rSettings )
     aStyleSettings.SetUseFlatBorders( FALSE );
     aStyleSettings.SetUseFlatMenus( FALSE );
     aStyleSettings.SetMenuTextColor( ImplWinColorToSal( GetSysColor( COLOR_MENUTEXT ) ) );
-    aStyleSettings.SetMenuBarTextColor( ImplWinColorToSal( GetSysColor( COLOR_MENUTEXT ) ) );
-    aStyleSettings.SetMenuBarRolloverTextColor( ImplWinColorToSal( GetSysColor( COLOR_HIGHLIGHTTEXT ) ) );
+    if ( boost::optional<Color> aColor = aStyleSettings.GetPersonaMenuBarTextColor() )
+    {
+        aStyleSettings.SetMenuBarTextColor( *aColor );
+        aStyleSettings.SetMenuBarRolloverTextColor( *aColor );
+    }
+    else
+    {
+        aStyleSettings.SetMenuBarTextColor( ImplWinColorToSal( GetSysColor( COLOR_MENUTEXT ) ) );
+        aStyleSettings.SetMenuBarRolloverTextColor( ImplWinColorToSal( GetSysColor( COLOR_HIGHLIGHTTEXT ) ) );
+    }
     aStyleSettings.SetActiveColor( ImplWinColorToSal( GetSysColor( COLOR_ACTIVECAPTION ) ) );
     aStyleSettings.SetActiveTextColor( ImplWinColorToSal( GetSysColor( COLOR_CAPTIONTEXT ) ) );
     aStyleSettings.SetDeactiveColor( ImplWinColorToSal( GetSysColor( COLOR_INACTIVECAPTION ) ) );
