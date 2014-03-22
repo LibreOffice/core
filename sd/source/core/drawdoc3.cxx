@@ -1392,14 +1392,17 @@ void SdDrawDocument::SetMasterPage(sal_uInt16 nSdPageNum,
                                    sal_Bool bMaster,
                                    sal_Bool bCheckMasters)
 {
+    ::svl::IUndoManager* pUndoMgr = NULL;
+
     if( mpDocSh )
+    {
         mpDocSh->SetWaitCursor( true );
+        pUndoMgr = mpDocSh->GetUndoManager();
+    }
 
-    ::svl::IUndoManager* pUndoMgr = mpDocSh->GetUndoManager();
+    const bool bUndo = pUndoMgr && IsUndoEnabled();
 
-    const bool bUndo = IsUndoEnabled();
-
-    if( bUndo )
+    if (bUndo)
     {
         pUndoMgr->EnterListAction(SD_RESSTR(STR_UNDO_SET_PRESLAYOUT), OUString());
     }
@@ -1464,7 +1467,8 @@ void SdDrawDocument::SetMasterPage(sal_uInt16 nSdPageNum,
         // we should never reach this, but one never knows...
         if( (pMaster == NULL) || (pNotesMaster == NULL) )
         {
-            pUndoMgr->LeaveListAction();
+            if (bUndo)
+                pUndoMgr->LeaveListAction();
 
             if( mpDocSh )
                 mpDocSh->SetWaitCursor( false );
@@ -1568,7 +1572,8 @@ void SdDrawDocument::SetMasterPage(sal_uInt16 nSdPageNum,
 
                         StyleSheetUndoAction* pUndoChStyle = new StyleSheetUndoAction(this,
                                                                  pMySheet, &pHisSheet->GetItemSet());
-                        pUndoMgr->AddUndoAction(pUndoChStyle);
+                        if (bUndo)
+                            pUndoMgr->AddUndoAction(pUndoChStyle);
                         pMySheet->GetItemSet().Put(pHisSheet->GetItemSet());
                         pMySheet->Broadcast(SfxSimpleHint(SFX_HINT_DATACHANGED));
                     }
@@ -1642,7 +1647,8 @@ void SdDrawDocument::SetMasterPage(sal_uInt16 nSdPageNum,
                 // Add UndoAction for creating and inserting the stylesheets to
                 // the top of the UndoManager
                 SdMoveStyleSheetsUndoAction* pMovStyles = new SdMoveStyleSheetsUndoAction( this, aCreatedStyles, true);
-                pUndoMgr->AddUndoAction(pMovStyles);
+                if (bUndo)
+                    pUndoMgr->AddUndoAction(pMovStyles);
             }
         }
 
