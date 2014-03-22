@@ -686,20 +686,6 @@ XmlFilterBase& XmlFilterBase::exportDocumentProperties( Reference< XDocumentProp
     {
         writeCoreProperties( *this, xProperties );
         writeAppProperties( *this, xProperties );
-        Sequence< ::com::sun::star::beans::NamedValue > aStats = xProperties->getDocumentStatistics();
-        OSL_TRACE( "# Document Statistics:" );
-        for( sal_Int32 i = 0, end = aStats.getLength(); i < end; ++i )
-        {
-            ::com::sun::star::uno::Any aValue = aStats[ i ].Value;
-            OUString sValue;
-            bool bHaveString = aValue >>= sValue;
-            OSL_TRACE ("#\t%s=%s [%s]\n",
-                    OUStringToOString( aStats[ i ].Name, RTL_TEXTENCODING_UTF8 ).getStr(),
-                    bHaveString
-                        ? OUStringToOString( sValue, RTL_TEXTENCODING_UTF8 ).getStr()
-                        : "<unconvertable>",
-                    OUStringToOString( aValue.getValueTypeName(), RTL_TEXTENCODING_UTF8 ).getStr());
-        }
     }
     return *this;
 }
