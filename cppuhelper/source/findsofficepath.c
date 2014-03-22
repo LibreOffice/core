@@ -131,6 +131,8 @@ static char* platformSpecific()
 
     /* get the value of the PATH environment variable */
     env = getenv( PATHVARNAME );
+    if (env == NULL)
+        return NULL;
     str = (char*) malloc( strlen( env ) + 1 );
     strcpy( str, env );
 
