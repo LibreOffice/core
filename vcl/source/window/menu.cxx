@@ -6025,8 +6025,8 @@ void MenuBarWindow::DataChanged( const DataChangedEvent& rDCEvt )
          ((rDCEvt.GetType() == DATACHANGED_SETTINGS) &&
           (rDCEvt.GetFlags() & SETTINGS_STYLE)) )
     {
-        ImplLayoutChanged();
         ImplInitStyleSettings();
+        ImplLayoutChanged();
     }
 }
 
