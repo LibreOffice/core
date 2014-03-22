@@ -594,9 +594,9 @@ IMPL_LINK_NOARG(SwGlossaryDlg, BibHdl)
         //check if at least one glossary path is write enabled
         SvtPathOptions aPathOpt;
         const OUString sGlosPath( aPathOpt.GetAutoTextPath() );
-        sal_uInt16 nPaths = comphelper::string::getTokenCount(sGlosPath, ';');
+        const sal_Int32 nPaths = comphelper::string::getTokenCount(sGlosPath, ';');
         bool bIsWritable = false;
-        for(sal_uInt16 nPath = 0; nPath < nPaths; nPath++)
+        for(sal_Int32 nPath = 0; nPath < nPaths; nPath++)
         {
             const OUString sPath = URIHelper::SmartRel2Abs(
                 INetURLObject(), sGlosPath.getToken(nPath, ';'),
@@ -670,7 +670,7 @@ void SwGlossaryDlg::Init()
     const sal_uInt16 nCnt = pGlossaryHdl->GetGroupCnt();
     SvTreeListEntry* pSelEntry = 0;
     const OUString sSelStr(::GetCurrGlosGroup().getToken(0, GLOS_DELIM));
-    const sal_uInt16 nSelPath = static_cast< sal_uInt16 >(::GetCurrGlosGroup().getToken(1, GLOS_DELIM).toInt32());
+    const sal_Int32 nSelPath = ::GetCurrGlosGroup().getToken(1, GLOS_DELIM).toInt32();
     // #i66304# - "My AutoText" comes from mytexts.bau, but should be translated
     const OUString sMyAutoTextEnglish("My AutoText");
     const OUString sMyAutoTextTranslated(SW_RES(STR_MY_AUTOTEXT));
@@ -685,11 +685,11 @@ void SwGlossaryDlg::Init()
         if(sTitle == sMyAutoTextEnglish)
             sTitle = sMyAutoTextTranslated;
         SvTreeListEntry* pEntry = m_pCategoryBox->InsertEntry( sTitle );
-        sal_uInt16 nPath = static_cast< sal_uInt16 >(sGroupName.getToken( 1, GLOS_DELIM ).toInt32());
+        const sal_Int32 nPath = sGroupName.getToken( 1, GLOS_DELIM ).toInt32();
 
         GroupUserData* pData = new GroupUserData;
         pData->sGroupName = sGroupName.getToken(0, GLOS_DELIM);
-        pData->nPathIdx = nPath;
+        pData->nPathIdx = static_cast< sal_uInt16 >(nPath);
         pData->bReadonly = pGlossaryHdl->IsReadOnly(&sGroupName);
 
         pEntry->SetUserData(pData);
