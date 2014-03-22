@@ -3512,9 +3512,10 @@ static OString ExportPICT( const SwFlyFrmFmt* pFlyFrmFmt, const Size &rOrig, con
     unsigned long nSize, const RtfExport& rExport, SvStream *pStream = 0 )
 {
     OStringBuffer aRet;
-    bool bIsWMF = std::strcmp(pBLIPType, OOO_STRING_SVTOOLS_RTF_WMETAFILE) == 0;
     if (pBLIPType && nSize && pGraphicAry)
     {
+        bool bIsWMF = std::strcmp(pBLIPType, OOO_STRING_SVTOOLS_RTF_WMETAFILE) == 0;
+
         aRet.append("{" OOO_STRING_SVTOOLS_RTF_PICT);
 
         if( pFlyFrmFmt )
