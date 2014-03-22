@@ -40,11 +40,11 @@ IMPL_LINK( SwInsertBookmarkDlg, ModifyHdl, BookmarkCombo *, pBox )
     if(!bSelEntries)
     {
         OUString sTmp = pBox->GetText();
-        sal_uInt16 nLen = sTmp.getLength();
+        const sal_Int32 nLen = sTmp.getLength();
         OUString sMsg;
-        for(sal_uInt16 i = 0; i < BookmarkCombo::aForbiddenChars.getLength(); i++)
+        for(sal_Int32 i = 0; i < BookmarkCombo::aForbiddenChars.getLength(); i++)
         {
-            sal_uInt16 nTmpLen = sTmp.getLength();
+            const sal_Int32 nTmpLen = sTmp.getLength();
             sTmp = comphelper::string::remove(sTmp, BookmarkCombo::aForbiddenChars[i]);
             if(sTmp.getLength() != nTmpLen)
                 sMsg += OUString(BookmarkCombo::aForbiddenChars[i]);
@@ -52,9 +52,7 @@ IMPL_LINK( SwInsertBookmarkDlg, ModifyHdl, BookmarkCombo *, pBox )
         if(sTmp.getLength() != nLen)
         {
             pBox->SetText(sTmp);
-            OUString sWarning(sRemoveWarning);
-            sWarning += sMsg;
-            InfoBox(this, sWarning).Execute();
+            InfoBox(this, sRemoveWarning+sMsg).Execute();
         }
 
     }
@@ -136,7 +134,7 @@ SwInsertBookmarkDlg::SwInsertBookmarkDlg( Window *pParent, SwWrtShell &rS, SfxRe
 
     // fill Combobox with existing bookmarks
     IDocumentMarkAccess* const pMarkAccess = rSh.getIDocumentMarkAccess();
-    sal_uInt16 nId = 0;
+    sal_Int32 nId = 0;
     for( IDocumentMarkAccess::const_iterator_t ppBookmark = pMarkAccess->getBookmarksBegin();
         ppBookmark != pMarkAccess->getBookmarksEnd();
         ++ppBookmark)
