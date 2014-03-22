@@ -845,9 +845,9 @@ void SwOutlineSettingsTabPage::CheckForStartValue_Impl(sal_uInt16 nNumberingType
         m_pStartEdit->GetModifyHdl().Call(m_pStartEdit);
 }
 
-static sal_uInt16 lcl_DrawBullet(VirtualDevice* pVDev,
-            const SwNumFmt& rFmt, sal_uInt16 nXStart,
-            sal_uInt16 nYStart, const Size& rSize)
+static long lcl_DrawBullet(VirtualDevice* pVDev,
+            const SwNumFmt& rFmt, long nXStart,
+            long nYStart, const Size& rSize)
 {
     Font aTmpFont(pVDev->GetFont());
 
@@ -857,17 +857,17 @@ static sal_uInt16 lcl_DrawBullet(VirtualDevice* pVDev,
     pVDev->SetFont( aFont );
     OUString aText(rFmt.GetBulletChar());
     pVDev->DrawText( Point(nXStart, nYStart), aText );
-    sal_uInt16 nRet = (sal_uInt16)pVDev->GetTextWidth(aText);
+    const long nRet = pVDev->GetTextWidth(aText);
 
     pVDev->SetFont(aTmpFont);
     return nRet;
 }
 
-static sal_uInt16 lcl_DrawGraphic(VirtualDevice* pVDev, const SwNumFmt &rFmt, sal_uInt16 nXStart,
-                        sal_uInt16 nYStart, sal_uInt16 nDivision)
+static long lcl_DrawGraphic(VirtualDevice* pVDev, const SwNumFmt &rFmt, long nXStart,
+                        long nYStart, long nDivision)
 {
     const SvxBrushItem* pBrushItem = rFmt.GetBrush();
-    sal_uInt16 nRet = 0;
+    long nRet = 0;
     if(pBrushItem)
     {
         const Graphic* pGrf = pBrushItem->GetGraphic();
@@ -875,7 +875,7 @@ static sal_uInt16 lcl_DrawGraphic(VirtualDevice* pVDev, const SwNumFmt &rFmt, sa
         {
             Size aGSize( rFmt.GetGraphicSize());
             aGSize.Width() /= nDivision;
-            nRet = (sal_uInt16)aGSize.Width();
+            nRet = aGSize.Width();
             aGSize.Height() /= nDivision;
             pGrf->Draw( pVDev, Point(nXStart,nYStart),
                     pVDev->PixelToLogic( aGSize ) );
@@ -892,8 +892,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeNumberingPreview(Window *pP
 // paint numbering's preview
 void NumberingPreview::Paint( const Rectangle& /*rRect*/ )
 {
-    Size aSize(PixelToLogic(GetOutputSizePixel()));
-    Rectangle aRect(Point(0,0), aSize);
+    const Size aSize(PixelToLogic(GetOutputSizePixel()));
 
     VirtualDevice* pVDev = new VirtualDevice(*this);
     pVDev->SetMapMode(GetMapMode());
@@ -902,44 +901,38 @@ void NumberingPreview::Paint( const Rectangle& /*rRect*/ )
     // #101524# OJ
     pVDev->SetFillColor( GetSettings().GetStyleSettings().GetWindowColor() );
     pVDev->SetLineColor( GetSettings().GetStyleSettings().GetButtonTextColor() );
-    pVDev->DrawRect(aRect);
+    pVDev->DrawRect(Rectangle(Point(0,0), aSize));
 
     if(pActNum)
     {
-        sal_uInt16 nWidthRelation;
+        long nWidthRelation = 30; // chapter dialog
         if(nPageWidth)
         {
-            nWidthRelation = sal_uInt16 (nPageWidth / aSize.Width());
+            nWidthRelation = nPageWidth / aSize.Width();
             if(bPosition)
                 nWidthRelation = nWidthRelation * 2 / 3;
             else
                 nWidthRelation = nWidthRelation / 4;
         }
-        else
-            nWidthRelation = 30; // chapter dialog
 
         // height per level
-        sal_uInt16 nXStep = sal_uInt16(aSize.Width() / (3 * MAXLEVEL));
-        if(MAXLEVEL < 10)
-            nXStep /= 2;
-        sal_uInt16 nYStart = 4;
-        sal_uInt16 nYStep = sal_uInt16((aSize.Height() - 6)/ MAXLEVEL);
+        const long nXStep = aSize.Width() / (3 * MAXLEVEL * ((MAXLEVEL < 10) ? 2 : 1));
+        const long nYStep = (aSize.Height() - 6)/ MAXLEVEL;
+        long nYStart = 4;
         aStdFont = OutputDevice::GetDefaultFont(
                                     DEFAULTFONT_UI_SANS, GetAppLanguage(),
                                     DEFAULTFONT_FLAGS_ONLYONE, this );
         // #101524# OJ
         aStdFont.SetColor( SwViewOption::GetFontColor() );
 
-        sal_uInt16 nFontHeight = nYStep * 6 / 10;
-        if(bPosition)
-            nFontHeight = nYStep * 15 / 10;
+        const long nFontHeight = nYStep * ( bPosition ? 15 : 6 ) / 10;
         aStdFont.SetSize(Size( 0, nFontHeight ));
 
-        sal_uInt16 nPreNum = pActNum->Get(0).GetStart();
+        long nPreNum = pActNum->Get(0).GetStart();
 
         if(bPosition)
         {
-            sal_uInt16 nLineHeight = nFontHeight * 8 / 7;
+            const long nLineHeight = nFontHeight * 8 / 7;
             sal_uInt8 nStart = 0;
             while( !(nActLevel & (1<<nStart)) )
             {
@@ -955,18 +948,18 @@ void NumberingPreview::Paint( const Rectangle& /*rRect*/ )
                 const SwNumFmt &rFmt = pActNum->Get(nLevel);
                 aNumVector.push_back(rFmt.GetStart());
 
-                sal_uInt16 nXStart( 0 );
-                short nTextOffset( 0 );
-                sal_uInt16 nNumberXPos( 0 );
+                long nXStart( 0 );
+                long nTextOffset( 0 );
+                long nNumberXPos( 0 );
                 if ( rFmt.GetPositionAndSpaceMode() == SvxNumberFormat::LABEL_WIDTH_AND_POSITION )
                 {
                     nXStart = rFmt.GetAbsLSpace() / nWidthRelation;
                     nTextOffset = rFmt.GetCharTextDistance() / nWidthRelation;
                     nNumberXPos = nXStart;
-                    sal_uInt16 nFirstLineOffset = (-rFmt.GetFirstLineOffset()) / nWidthRelation;
+                    const long nFirstLineOffset = (-rFmt.GetFirstLineOffset()) / nWidthRelation;
 
                     if(nFirstLineOffset <= nNumberXPos)
-                        nNumberXPos = nNumberXPos - nFirstLineOffset;
+                        nNumberXPos -= nFirstLineOffset;
                     else
                         nNumberXPos = 0;
                 }
@@ -975,26 +968,19 @@ void NumberingPreview::Paint( const Rectangle& /*rRect*/ )
                     const long nTmpNumberXPos( ( rFmt.GetIndentAt() +
                                                  rFmt.GetFirstLineIndent() ) /
                                                nWidthRelation );
-                    if ( nTmpNumberXPos < 0 )
-                    {
-                        nNumberXPos = 0;
-                    }
-                    else
-                    {
-                        nNumberXPos = static_cast<sal_uInt16>(nTmpNumberXPos);
-                    }
+                    nNumberXPos = ( nTmpNumberXPos < 0 ) ? 0 : nTmpNumberXPos;
                 }
 
-                sal_uInt16 nBulletWidth = 0;
+                long nBulletWidth = 0;
                 if( SVX_NUM_BITMAP == rFmt.GetNumberingType() )
                 {
-                    nBulletWidth = lcl_DrawGraphic(pVDev, rFmt,
-                                        nNumberXPos,
-                                            nYStart, nWidthRelation);
+                    nBulletWidth = lcl_DrawGraphic(pVDev, rFmt, nNumberXPos,
+                                                   nYStart, nWidthRelation);
                 }
                 else if( SVX_NUM_CHAR_SPECIAL == rFmt.GetNumberingType() )
                 {
-                    nBulletWidth =  lcl_DrawBullet(pVDev, rFmt, nNumberXPos, nYStart, aStdFont.GetSize());
+                    nBulletWidth = lcl_DrawBullet(pVDev, rFmt, nNumberXPos,
+                                                  nYStart, aStdFont.GetSize());
                 }
                 else
                 {
@@ -1004,7 +990,7 @@ void NumberingPreview::Paint( const Rectangle& /*rRect*/ )
                     // #128041#
                     OUString aText(pActNum->MakeNumString( aNumVector ));
                     pVDev->DrawText( Point(nNumberXPos, nYStart), aText );
-                    nBulletWidth = (sal_uInt16)pVDev->GetTextWidth(aText);
+                    nBulletWidth = pVDev->GetTextWidth(aText);
                     nPreNum++;
                 }
                 if ( rFmt.GetPositionAndSpaceMode() == SvxNumberFormat::LABEL_ALIGNMENT &&
@@ -1013,10 +999,10 @@ void NumberingPreview::Paint( const Rectangle& /*rRect*/ )
                     pVDev->SetFont(aStdFont);
                     OUString aText(' ');
                     pVDev->DrawText( Point(nNumberXPos, nYStart), aText );
-                    nBulletWidth = nBulletWidth + (sal_uInt16)pVDev->GetTextWidth(aText);
+                    nBulletWidth += pVDev->GetTextWidth(aText);
                 }
 
-                sal_uInt16 nTextXPos( 0 );
+                long nTextXPos( 0 );
                 if ( rFmt.GetPositionAndSpaceMode() == SvxNumberFormat::LABEL_WIDTH_AND_POSITION )
                 {
                     nTextXPos = nXStart;
@@ -1031,8 +1017,7 @@ void NumberingPreview::Paint( const Rectangle& /*rRect*/ )
                     {
                         case SvxNumberFormat::LISTTAB:
                         {
-                            nTextXPos = static_cast<sal_uInt16>(
-                                            rFmt.GetListtabPos() / nWidthRelation );
+                            nTextXPos = rFmt.GetListtabPos() / nWidthRelation;
                             if ( nTextXPos < nNumberXPos + nBulletWidth )
                             {
                                 nTextXPos = nNumberXPos + nBulletWidth;
@@ -1047,7 +1032,7 @@ void NumberingPreview::Paint( const Rectangle& /*rRect*/ )
                         break;
                     }
 
-                    nXStart = static_cast<sal_uInt16>( rFmt.GetIndentAt() / nWidthRelation );
+                    nXStart = rFmt.GetIndentAt() / nWidthRelation;
                 }
 
                 Rectangle aRect1(Point(nTextXPos, nYStart + nFontHeight / 2), Size(aSize.Width() / 2, 2));
@@ -1062,13 +1047,13 @@ void NumberingPreview::Paint( const Rectangle& /*rRect*/ )
         else
         {
             SwNumberTree::tNumberVector aNumVector;
-            sal_uInt16 nLineHeight = nFontHeight * 3 / 2;
+            const long nLineHeight = nFontHeight * 3 / 2;
             for( sal_uInt8 nLevel = 0; nLevel < MAXLEVEL;
                             ++nLevel, nYStart = nYStart + nYStep )
             {
                 const SwNumFmt &rFmt = pActNum->Get(nLevel);
                 aNumVector.push_back(rFmt.GetStart());
-                sal_uInt16 nXStart( 0 );
+                long nXStart( 0 );
                 if ( rFmt.GetPositionAndSpaceMode() == SvxNumberFormat::LABEL_WIDTH_AND_POSITION )
                 {
                     nXStart = rFmt.GetAbsLSpace() / nWidthRelation;
@@ -1078,18 +1063,11 @@ void NumberingPreview::Paint( const Rectangle& /*rRect*/ )
                     const long nTmpXStart( ( rFmt.GetIndentAt() +
                                              rFmt.GetFirstLineIndent() ) /
                                            nWidthRelation );
-                    if ( nTmpXStart < 0 )
-                    {
-                        nXStart = 0;
-                    }
-                    else
-                    {
-                        nXStart = static_cast<sal_uInt16>(nTmpXStart);
-                    }
+                    nXStart = ( nTmpXStart < 0 ) ? 0 : nTmpXStart;
                 }
                 nXStart /= 2;
                 nXStart += 2;
-                sal_uInt16 nTextOffset = 2 * nXStep;
+                long nTextOffset = 2 * nXStep;
                 if( SVX_NUM_BITMAP == rFmt.GetNumberingType() )
                 {
                     lcl_DrawGraphic(pVDev, rFmt, nXStart, nYStart, nWidthRelation);
@@ -1098,7 +1076,7 @@ void NumberingPreview::Paint( const Rectangle& /*rRect*/ )
                 else if( SVX_NUM_CHAR_SPECIAL == rFmt.GetNumberingType() )
                 {
                     nTextOffset =  lcl_DrawBullet(pVDev, rFmt, nXStart, nYStart, aStdFont.GetSize());
-                    nTextOffset = nTextOffset + nXStep;
+                    nTextOffset += nXStep;
                 }
                 else
                 {
@@ -1108,8 +1086,7 @@ void NumberingPreview::Paint( const Rectangle& /*rRect*/ )
                     // #128041#
                     OUString aText(pActNum->MakeNumString( aNumVector ));
                     pVDev->DrawText( Point(nXStart, nYStart), aText );
-                    nTextOffset = (sal_uInt16)pVDev->GetTextWidth(aText);
-                    nTextOffset = nTextOffset + nXStep;
+                    nTextOffset = pVDev->GetTextWidth(aText) + nXStep;
                     nPreNum++;
                 }
                 pVDev->SetFont(aStdFont);
