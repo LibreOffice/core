@@ -77,6 +77,8 @@ struct SfxRequest_Impl: public SfxListener
                         , pShell(0)
                         , pSlot(0)
                         , nModifier(0)
+                        , bDone(false)
+                        , bIgnored(false)
                         , bCancelled(false)
                         , nCallMode( SFX_CALLMODE_SYNCHRON )
                         , bAllowRecording( false )
