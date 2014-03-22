@@ -237,7 +237,7 @@ void SwViewImp::MakeDrawView()
 
         // #i68597# If document is read-only, we will not profit from overlay,
         // so switch it off.
-        if(pDrawView && pDrawView->IsBufferedOverlayAllowed())
+        if (pDrawView->IsBufferedOverlayAllowed())
         {
             if(pSwViewOption->IsReadonly())
             {
