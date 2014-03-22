@@ -104,7 +104,7 @@ SwGlossaryGroupDlg::SwGlossaryGroupDlg(Window * pParent,
         pData->sGroupTitle = sTitle;
         OUString sTemp(sTitle);
         sTemp += "\t";
-        pData->sPath = m_pPathLB->GetEntry((sal_uInt16)sGroup.getToken(1, GLOS_DELIM).toInt32());
+        pData->sPath = m_pPathLB->GetEntry(sGroup.getToken(1, GLOS_DELIM).toInt32());
         sTemp += pData->sPath;
         SvTreeListEntry* pEntry = m_pGroupTLB->InsertEntry(sTemp);
         pEntry->SetUserData(pData);
@@ -346,7 +346,7 @@ IMPL_LINK_NOARG(SwGlossaryGroupDlg, ModifyHdl)
         if( 0xffffffff == nPos)
         {
             const ::utl::TransliterationWrapper& rSCmp = GetAppCmpStrIgnore();
-            for(sal_uInt16 i = 0; i < m_pGroupTLB->GetEntryCount(); i++)
+            for(sal_uLong i = 0; i < m_pGroupTLB->GetEntryCount(); i++)
             {
                 OUString sTemp = m_pGroupTLB->GetEntryText( i, 0 );
                 nCaseReadonly = (sal_uLong)m_pPathLB->GetEntryData(
