@@ -1517,12 +1517,13 @@ void WinSalGraphics::updateSettingsNative( AllSettings& rSettings )
     // FIXME get the color directly from the theme, not from the settings
     if( aSalShlData.maVersionInfo.dwMajorVersion >= 6 )
     {
+        Color aMenuBarTextColor = aStyleSettings.GetPersonaMenuBarTextColor().get_value_or( aStyleSettings.GetMenuTextColor() );
         // in aero menuitem highlight text is drawn in the same color as normal
         aStyleSettings.SetMenuHighlightTextColor( aStyleSettings.GetMenuTextColor() );
-        aStyleSettings.SetMenuBarRolloverTextColor( aStyleSettings.GetMenuTextColor() );
+        aStyleSettings.SetMenuBarRolloverTextColor( aMenuBarTextColor );
         pSVData->maNWFData.mnMenuFormatBorderX = 2;
         pSVData->maNWFData.mnMenuFormatBorderY = 2;
-        pSVData->maNWFData.maMenuBarHighlightTextColor = aStyleSettings.GetMenuTextColor();
+        pSVData->maNWFData.maMenuBarHighlightTextColor = aMenuBarTextColor;
         GetSalData()->mbThemeMenuSupport = TRUE;
     }
 
