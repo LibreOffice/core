@@ -180,6 +180,8 @@ public:
     void setEnhancedProtection( const ::std::vector< ScEnhancedProtection > & rProt );
     const ::std::vector< ScEnhancedProtection > & getEnhancedProtection() const;
     bool updateReference( UpdateRefMode, ScDocument*, const ScRange& rWhere, SCsCOL nDx, SCsROW nDy, SCsTAB nDz );
+    bool isBlockEditable( const ScRange& rRange ) const;
+    bool isSelectionEditable( const ScRangeList& rRangeList ) const;
 
 
 private:

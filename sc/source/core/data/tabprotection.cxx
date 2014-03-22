@@ -120,6 +120,8 @@ public:
     void setEnhancedProtection( const ::std::vector< ScEnhancedProtection > & rProt );
     const ::std::vector< ScEnhancedProtection > & getEnhancedProtection() const;
     bool updateReference( UpdateRefMode, ScDocument*, const ScRange& rWhere, SCsCOL nDx, SCsROW nDy, SCsTAB nDz );
+    bool isBlockEditable( const ScRange& rRange ) const;
+    bool isSelectionEditable( const ScRangeList& rRangeList ) const;
 
 private:
     OUString maPassText;
@@ -381,6 +383,60 @@ bool ScTableProtectionImpl::updateReference( UpdateRefMode eMode, ScDocument* pD
     return bChanged;
 }
 
+bool ScTableProtectionImpl::isBlockEditable( const ScRange& rRange ) const
+{
+    // No protection exception or overriding permission to edit if empty.
+    if (maEnhancedProtection.empty())
+        return false;
+
+    // No security descriptor in an enhanced protection means the ranges of
+    // that protection are editable. If there is any security descriptor
+    // present we assume the permission to edit is not granted. Until we
+    // actually can evaluate the descriptors..
+
+    for (::std::vector<ScEnhancedProtection>::const_iterator it(maEnhancedProtection.begin()),
+            itEnd(maEnhancedProtection.end()); it != itEnd; ++it)
+    {
+        if ((*it).maSecurityDescriptor.empty() && (*it).maRangeList.Is())
+        {
+            if ((*it).maRangeList->In( rRange))
+                return true;
+        }
+    }
+
+    // For a single address, a simple check with single ranges was sufficient.
+    if (rRange.aStart == rRange.aEnd)
+        return false;
+
+    // Test also for cases where rRange is encompassed by a union of two or
+    // more ranges of the list. The original ranges are not necessarily joined.
+    for (::std::vector<ScEnhancedProtection>::const_iterator it(maEnhancedProtection.begin()),
+            itEnd(maEnhancedProtection.end()); it != itEnd; ++it)
+    {
+        if ((*it).maSecurityDescriptor.empty() && (*it).maRangeList.Is())
+        {
+            ScRangeList aList( (*it).maRangeList->GetIntersectedRange( rRange));
+            if (aList.size() == 1 && *aList[0] == rRange)
+                return true;
+        }
+    }
+
+    return false;
+}
+
+bool ScTableProtectionImpl::isSelectionEditable( const ScRangeList& rRangeList ) const
+{
+    if (rRangeList.empty())
+        return false;
+
+    for (size_t i=0, nRanges = rRangeList.size(); i < nRanges; ++i)
+    {
+        if (!isBlockEditable( *rRangeList[i]))
+            return false;
+    }
+    return true;
+}
+
 
 ScDocProtection::ScDocProtection() :
     mpImpl(new ScTableProtectionImpl(static_cast<SCSIZE>(ScDocProtection::NONE)))
@@ -548,6 +604,16 @@ bool ScTableProtection::updateReference( UpdateRefMode eMode, ScDocument* pDoc, 
         SCsCOL nDx, SCsROW nDy, SCsTAB nDz )
 {
     return mpImpl->updateReference( eMode, pDoc, rWhere, nDx, nDy, nDz);
+}
+
+bool ScTableProtection::isBlockEditable( const ScRange& rRange ) const
+{
+    return mpImpl->isBlockEditable( rRange);
+}
+
+bool ScTableProtection::isSelectionEditable( const ScRangeList& rRangeList ) const
+{
+    return mpImpl->isSelectionEditable( rRangeList);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
