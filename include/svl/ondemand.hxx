@@ -249,6 +249,7 @@ class OnDemandTransliterationWrapper
 public:
                                 OnDemandTransliterationWrapper()
                                     : eLanguage( LANGUAGE_SYSTEM )
+                                    , nType(::com::sun::star::i18n::TransliterationModules_END_OF_MODULE)
                                     , pPtr(0)
                                     , bValid(false)
                                     , bInitialized(false)
