@@ -22,6 +22,7 @@
 #include <vector>
 
 #include <i18nlangtag/mslangid.hxx>
+#include <tools/debug.hxx>
 
 #include <config_graphite.h>
 #if ENABLE_GRAPHITE
