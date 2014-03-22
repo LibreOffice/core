@@ -6937,39 +6937,39 @@ void DocxAttributeOutput::ParaGrabBag(const SfxGrabBagItem& rItem)
             for (sal_Int32 k=0; k < aGrabBagSdt.getLength(); ++k)
             {
                 beans::PropertyValue aPropertyValue = aGrabBagSdt[k];
-            if (aPropertyValue.Name == "ooxml:CT_SdtPr_docPartObj" ||
-                    aPropertyValue.Name == "ooxml:CT_SdtPr_docPartList")
-            {
-                if (aPropertyValue.Name == "ooxml:CT_SdtPr_docPartObj")
-                    m_nParagraphSdtPrToken = FSNS( XML_w, XML_docPartObj );
-                else if (aPropertyValue.Name == "ooxml:CT_SdtPr_docPartList")
-                    m_nParagraphSdtPrToken = FSNS( XML_w, XML_docPartList );
-
-                uno::Sequence<beans::PropertyValue> aGrabBag;
-                aPropertyValue.Value >>= aGrabBag;
-                for (sal_Int32 j=0; j < aGrabBag.getLength(); ++j)
+                if (aPropertyValue.Name == "ooxml:CT_SdtPr_docPartObj" ||
+                        aPropertyValue.Name == "ooxml:CT_SdtPr_docPartList")
                 {
-                    OUString sValue = aGrabBag[j].Value.get<OUString>();
-                    if (aGrabBag[j].Name == "ooxml:CT_SdtDocPart_docPartGallery")
-                        AddToAttrList( m_pParagraphSdtPrTokenChildren,
-                                       FSNS( XML_w, XML_docPartGallery ),
-                                       rtl::OUStringToOString( sValue, RTL_TEXTENCODING_UTF8 ).getStr() );
-                    else if (aGrabBag[j].Name == "ooxml:CT_SdtDocPart_docPartCategory")
-                        AddToAttrList( m_pParagraphSdtPrTokenChildren,
-                                       FSNS( XML_w, XML_docPartCategory ),
-                                       rtl::OUStringToOString( sValue, RTL_TEXTENCODING_UTF8 ).getStr() );
-                    else if (aGrabBag[j].Name == "ooxml:CT_SdtDocPart_docPartUnique")
-                        AddToAttrList( m_pParagraphSdtPrTokenChildren, FSNS( XML_w, XML_docPartUnique ), "" );
+                    if (aPropertyValue.Name == "ooxml:CT_SdtPr_docPartObj")
+                        m_nParagraphSdtPrToken = FSNS( XML_w, XML_docPartObj );
+                    else if (aPropertyValue.Name == "ooxml:CT_SdtPr_docPartList")
+                        m_nParagraphSdtPrToken = FSNS( XML_w, XML_docPartList );
+
+                    uno::Sequence<beans::PropertyValue> aGrabBag;
+                    aPropertyValue.Value >>= aGrabBag;
+                    for (sal_Int32 j=0; j < aGrabBag.getLength(); ++j)
+                    {
+                        OUString sValue = aGrabBag[j].Value.get<OUString>();
+                        if (aGrabBag[j].Name == "ooxml:CT_SdtDocPart_docPartGallery")
+                            AddToAttrList( m_pParagraphSdtPrTokenChildren,
+                                           FSNS( XML_w, XML_docPartGallery ),
+                                           rtl::OUStringToOString( sValue, RTL_TEXTENCODING_UTF8 ).getStr() );
+                        else if (aGrabBag[j].Name == "ooxml:CT_SdtDocPart_docPartCategory")
+                            AddToAttrList( m_pParagraphSdtPrTokenChildren,
+                                           FSNS( XML_w, XML_docPartCategory ),
+                                           rtl::OUStringToOString( sValue, RTL_TEXTENCODING_UTF8 ).getStr() );
+                        else if (aGrabBag[j].Name == "ooxml:CT_SdtDocPart_docPartUnique")
+                            AddToAttrList( m_pParagraphSdtPrTokenChildren, FSNS( XML_w, XML_docPartUnique ), "" );
+                    }
                 }
-            }
-            else if (aPropertyValue.Name == "ooxml:CT_SdtPr_equation")
-                m_nParagraphSdtPrToken = FSNS( XML_w, XML_equation );
-            else if (aPropertyValue.Name == "ooxml:CT_SdtPr_picture")
-                m_nParagraphSdtPrToken = FSNS( XML_w, XML_picture );
-            else if (aPropertyValue.Name == "ooxml:CT_SdtPr_citation")
-                m_nParagraphSdtPrToken = FSNS( XML_w, XML_citation );
-            else if (aPropertyValue.Name == "ooxml:CT_SdtPr_group")
-                m_nParagraphSdtPrToken = FSNS( XML_w, XML_group );
+                else if (aPropertyValue.Name == "ooxml:CT_SdtPr_equation")
+                    m_nParagraphSdtPrToken = FSNS( XML_w, XML_equation );
+                else if (aPropertyValue.Name == "ooxml:CT_SdtPr_picture")
+                    m_nParagraphSdtPrToken = FSNS( XML_w, XML_picture );
+                else if (aPropertyValue.Name == "ooxml:CT_SdtPr_citation")
+                    m_nParagraphSdtPrToken = FSNS( XML_w, XML_citation );
+                else if (aPropertyValue.Name == "ooxml:CT_SdtPr_group")
+                    m_nParagraphSdtPrToken = FSNS( XML_w, XML_group );
             }
         }
         else
@@ -7096,49 +7096,49 @@ void DocxAttributeOutput::CharGrabBag( const SfxGrabBagItem& rItem )
             for (sal_Int32 k=0; k < aGrabBagSdt.getLength(); ++k)
             {
                 beans::PropertyValue aPropertyValue = aGrabBagSdt[k];
-            if (aPropertyValue.Name == "ooxml:CT_SdtPr_checkbox")
-            {
-                m_nRunSdtPrToken = FSNS( XML_w14, XML_checkbox );
-                uno::Sequence<beans::PropertyValue> aGrabBag;
-                aPropertyValue.Value >>= aGrabBag;
-                for (sal_Int32 j=0; j < aGrabBag.getLength(); ++j)
+                if (aPropertyValue.Name == "ooxml:CT_SdtPr_checkbox")
                 {
-                    OUString sValue = aGrabBag[j].Value.get<OUString>();
-                    if (aGrabBag[j].Name == "ooxml:CT_SdtCheckbox_checked")
-                        AddToAttrList( m_pRunSdtPrTokenChildren,
-                                       FSNS( XML_w14, XML_checked ),
-                                       rtl::OUStringToOString( sValue, RTL_TEXTENCODING_UTF8 ).getStr() );
-                    else if (aGrabBag[j].Name == "ooxml:CT_SdtCheckbox_checkedState")
-                        AddToAttrList( m_pRunSdtPrTokenChildren,
-                                       FSNS( XML_w14, XML_checkedState ),
-                                       rtl::OUStringToOString( sValue, RTL_TEXTENCODING_UTF8 ).getStr() );
-                    else if (aGrabBag[j].Name == "ooxml:CT_SdtCheckbox_uncheckedState")
-                        AddToAttrList( m_pRunSdtPrTokenChildren,
-                                       FSNS( XML_w14, XML_uncheckedState ),
-                                       rtl::OUStringToOString( sValue, RTL_TEXTENCODING_UTF8 ).getStr() );
+                    m_nRunSdtPrToken = FSNS( XML_w14, XML_checkbox );
+                    uno::Sequence<beans::PropertyValue> aGrabBag;
+                    aPropertyValue.Value >>= aGrabBag;
+                    for (sal_Int32 j=0; j < aGrabBag.getLength(); ++j)
+                    {
+                        OUString sValue = aGrabBag[j].Value.get<OUString>();
+                        if (aGrabBag[j].Name == "ooxml:CT_SdtCheckbox_checked")
+                            AddToAttrList( m_pRunSdtPrTokenChildren,
+                                           FSNS( XML_w14, XML_checked ),
+                                           rtl::OUStringToOString( sValue, RTL_TEXTENCODING_UTF8 ).getStr() );
+                        else if (aGrabBag[j].Name == "ooxml:CT_SdtCheckbox_checkedState")
+                            AddToAttrList( m_pRunSdtPrTokenChildren,
+                                           FSNS( XML_w14, XML_checkedState ),
+                                           rtl::OUStringToOString( sValue, RTL_TEXTENCODING_UTF8 ).getStr() );
+                        else if (aGrabBag[j].Name == "ooxml:CT_SdtCheckbox_uncheckedState")
+                            AddToAttrList( m_pRunSdtPrTokenChildren,
+                                           FSNS( XML_w14, XML_uncheckedState ),
+                                           rtl::OUStringToOString( sValue, RTL_TEXTENCODING_UTF8 ).getStr() );
+                    }
                 }
-            }
-            else if (aPropertyValue.Name == "ooxml:CT_SdtPr_dataBinding")
-            {
-                uno::Sequence<beans::PropertyValue> aGrabBag;
-                aPropertyValue.Value >>= aGrabBag;
-                for (sal_Int32 j=0; j < aGrabBag.getLength(); ++j)
+                else if (aPropertyValue.Name == "ooxml:CT_SdtPr_dataBinding")
                 {
-                    OUString sValue = aGrabBag[j].Value.get<OUString>();
-                    if (aGrabBag[j].Name == "ooxml:CT_DataBinding_prefixMappings")
-                        AddToAttrList( m_pRunSdtPrDataBindingAttrs,
-                                       FSNS( XML_w, XML_prefixMappings ),
-                                       rtl::OUStringToOString( sValue, RTL_TEXTENCODING_UTF8 ).getStr() );
-                    else if (aGrabBag[j].Name == "ooxml:CT_DataBinding_xpath")
-                        AddToAttrList( m_pRunSdtPrDataBindingAttrs,
-                                       FSNS( XML_w, XML_xpath ),
-                                       rtl::OUStringToOString( sValue, RTL_TEXTENCODING_UTF8 ).getStr() );
-                    else if (aGrabBag[j].Name == "ooxml:CT_DataBinding_storeItemID")
-                        AddToAttrList( m_pRunSdtPrDataBindingAttrs,
-                                       FSNS( XML_w, XML_storeItemID ),
-                                       rtl::OUStringToOString( sValue, RTL_TEXTENCODING_UTF8 ).getStr() );
+                    uno::Sequence<beans::PropertyValue> aGrabBag;
+                    aPropertyValue.Value >>= aGrabBag;
+                    for (sal_Int32 j=0; j < aGrabBag.getLength(); ++j)
+                    {
+                        OUString sValue = aGrabBag[j].Value.get<OUString>();
+                        if (aGrabBag[j].Name == "ooxml:CT_DataBinding_prefixMappings")
+                            AddToAttrList( m_pRunSdtPrDataBindingAttrs,
+                                           FSNS( XML_w, XML_prefixMappings ),
+                                           rtl::OUStringToOString( sValue, RTL_TEXTENCODING_UTF8 ).getStr() );
+                        else if (aGrabBag[j].Name == "ooxml:CT_DataBinding_xpath")
+                            AddToAttrList( m_pRunSdtPrDataBindingAttrs,
+                                           FSNS( XML_w, XML_xpath ),
+                                           rtl::OUStringToOString( sValue, RTL_TEXTENCODING_UTF8 ).getStr() );
+                        else if (aGrabBag[j].Name == "ooxml:CT_DataBinding_storeItemID")
+                            AddToAttrList( m_pRunSdtPrDataBindingAttrs,
+                                           FSNS( XML_w, XML_storeItemID ),
+                                           rtl::OUStringToOString( sValue, RTL_TEXTENCODING_UTF8 ).getStr() );
+                    }
                 }
-            }
             }
         }
         else
