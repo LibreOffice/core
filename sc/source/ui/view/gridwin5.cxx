@@ -213,24 +213,21 @@ bool ScGridWindow::ShowNoteMarker( SCsCOL nPosX, SCsROW nPosY, bool bKeyboard )
             if ( pViewData->GetScDrawView() )
             {
                 // get position for aCellPos
-                if ( pDoc )
-                {
-                    // get draw position in hmm for aCellPos
-                    Point aOldPos( pDoc->GetColOffset( aCellPos.Col(), aCellPos.Tab() ), pDoc->GetRowOffset( aCellPos.Row(), aCellPos.Tab() ) );
-                    aOldPos.X() = sc::TwipsToHMM( aOldPos.X() );
-                    aOldPos.Y() = sc::TwipsToHMM( aOldPos.Y() );
-                    // get screen pos in hmm for aCellPos
-                    // and equiv screen pos
-                    Point aScreenPos = pViewData->GetScrPos( aCellPos.Col(), aCellPos.Row(), eWhich, true );
-                    MapMode aDrawMode = GetDrawMapMode();
-                    Point aCurPosHmm = PixelToLogic(aScreenPos, aDrawMode );
-                    Point aGridOff = aCurPosHmm -aOldPos;
-                    // fdo#63323 fix the X Position for the showing comment when
-                    // the mouse over the cell when the sheet are RTL
-                    if ( pDoc->IsNegativePage(nTab))
-                        aGridOff.setX(aCurPosHmm.getX() + aOldPos.getX());
-                    pNoteMarker->SetGridOff( aGridOff );
-                }
+                // get draw position in hmm for aCellPos
+                Point aOldPos( pDoc->GetColOffset( aCellPos.Col(), aCellPos.Tab() ), pDoc->GetRowOffset( aCellPos.Row(), aCellPos.Tab() ) );
+                aOldPos.X() = sc::TwipsToHMM( aOldPos.X() );
+                aOldPos.Y() = sc::TwipsToHMM( aOldPos.Y() );
+                // get screen pos in hmm for aCellPos
+                // and equiv screen pos
+                Point aScreenPos = pViewData->GetScrPos( aCellPos.Col(), aCellPos.Row(), eWhich, true );
+                MapMode aDrawMode = GetDrawMapMode();
+                Point aCurPosHmm = PixelToLogic(aScreenPos, aDrawMode );
+                Point aGridOff = aCurPosHmm -aOldPos;
+                // fdo#63323 fix the X Position for the showing comment when
+                // the mouse over the cell when the sheet are RTL
+                if ( pDoc->IsNegativePage(nTab))
+                    aGridOff.setX(aCurPosHmm.getX() + aOldPos.getX());
+                pNoteMarker->SetGridOff( aGridOff );
             }
         }
 
