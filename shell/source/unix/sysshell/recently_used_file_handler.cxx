@@ -61,8 +61,9 @@ namespace /* private */ {
 
     struct recently_used_item
     {
-        recently_used_item() :
-            is_private_(false)
+        recently_used_item()
+            : timestamp_(-1)
+            , is_private_(false)
         {}
 
         recently_used_item(
