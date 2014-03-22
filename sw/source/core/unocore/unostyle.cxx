@@ -863,38 +863,34 @@ void SwXStyleFamily::insertByName(const OUString& rName, const uno::Any& rElemen
                     pNewStyle = reinterpret_cast< SwXStyle * >(
                             sal::static_int_cast< sal_IntPtr >( xStyleTunnel->getSomething( SwXStyle::getUnoTunnelId()) ));
                 }
-                if(!pNewStyle || !pNewStyle->IsDescriptor() ||
-                    pNewStyle->GetFamily() != eFamily)
-                        throw lang::IllegalArgumentException();
-                if(pNewStyle)
-                {
-                    sal_uInt16 nMask = SFXSTYLEBIT_ALL;
-                    if(eFamily == SFX_STYLE_FAMILY_PARA && !pNewStyle->IsConditional())
-                        nMask &= ~SWSTYLEBIT_CONDCOLL;
-#if OSL_DEBUG_LEVEL > 1
-                    SfxStyleSheetBase& rNewBase =
-#endif
-                    pBasePool->Make(sStyleName, eFamily, nMask);
-                    pNewStyle->SetDoc(pDocShell->GetDoc(), pBasePool);
-                    pNewStyle->SetStyleName(sStyleName);
-                    const OUString sParentStyleName(pNewStyle->GetParentStyleName());
-                    if (!sParentStyleName.isEmpty())
-                    {
-                        pBasePool->SetSearchMask(eFamily, SFXSTYLEBIT_ALL );
-                        SfxStyleSheetBase* pParentBase = pBasePool->Find(sParentStyleName);
-                        if(pParentBase && pParentBase->GetFamily() == eFamily &&
-                            &pParentBase->GetPool() == pBasePool)
-                            pBasePool->SetParent( eFamily, sStyleName, sParentStyleName );
 
-                    }
-#if OSL_DEBUG_LEVEL > 1
-                    (void)rNewBase;
-#endif
-                    //so, jetzt sollten noch die Properties des Descriptors angewandt werden
-                    pNewStyle->ApplyDescriptorProperties();
-                }
-                else
+                if (!pNewStyle || !pNewStyle->IsDescriptor() || pNewStyle->GetFamily() != eFamily)
                     throw lang::IllegalArgumentException();
+
+                sal_uInt16 nMask = SFXSTYLEBIT_ALL;
+                if(eFamily == SFX_STYLE_FAMILY_PARA && !pNewStyle->IsConditional())
+                    nMask &= ~SWSTYLEBIT_CONDCOLL;
+#if OSL_DEBUG_LEVEL > 1
+                SfxStyleSheetBase& rNewBase =
+#endif
+                pBasePool->Make(sStyleName, eFamily, nMask);
+                pNewStyle->SetDoc(pDocShell->GetDoc(), pBasePool);
+                pNewStyle->SetStyleName(sStyleName);
+                const OUString sParentStyleName(pNewStyle->GetParentStyleName());
+                if (!sParentStyleName.isEmpty())
+                {
+                    pBasePool->SetSearchMask(eFamily, SFXSTYLEBIT_ALL );
+                    SfxStyleSheetBase* pParentBase = pBasePool->Find(sParentStyleName);
+                    if(pParentBase && pParentBase->GetFamily() == eFamily &&
+                        &pParentBase->GetPool() == pBasePool)
+                        pBasePool->SetParent( eFamily, sStyleName, sParentStyleName );
+
+                }
+#if OSL_DEBUG_LEVEL > 1
+                (void)rNewBase;
+#endif
+                //so, jetzt sollten noch die Properties des Descriptors angewandt werden
+                pNewStyle->ApplyDescriptorProperties();
             }
             else
                 throw lang::IllegalArgumentException();
