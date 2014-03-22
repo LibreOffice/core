@@ -50,29 +50,37 @@ using namespace oox;
 namespace
 {
 
-OUString lclGetAnchorIdFromGrabBag(const SdrObject* pObj)
+template<class T>
+T lclGetProperty(uno::Reference<drawing::XShape> rShape, OUString rPropName)
 {
-    OUString aResult;
-    uno::Reference<drawing::XShape> xShape(const_cast<SdrObject*>(pObj)->getUnoShape(), uno::UNO_QUERY);
-    uno::Reference<beans::XPropertySet> xPropertySet(xShape, uno::UNO_QUERY);
+    T aResult;
+    uno::Reference<beans::XPropertySet> xPropertySet(rShape, uno::UNO_QUERY);
     uno::Reference<beans::XPropertySetInfo> xPropSetInfo;
 
     if (!xPropertySet.is())
         return aResult;
 
     xPropSetInfo = xPropertySet->getPropertySetInfo();
-    if (xPropSetInfo.is() && xPropSetInfo->hasPropertyByName("FrameInteropGrabBag"))
+    if (xPropSetInfo.is() && xPropSetInfo->hasPropertyByName(rPropName))
     {
-        uno::Sequence< beans::PropertyValue > propList;
-        xPropertySet->getPropertyValue("FrameInteropGrabBag") >>= propList;
-        for (sal_Int32 nProp = 0; nProp < propList.getLength(); ++nProp)
+        xPropertySet->getPropertyValue(rPropName) >>= aResult;
+    }
+    return aResult;
+}
+
+OUString lclGetAnchorIdFromGrabBag(const SdrObject* pObj)
+{
+    OUString aResult;
+    uno::Reference<drawing::XShape> xShape(const_cast<SdrObject*>(pObj)->getUnoShape(), uno::UNO_QUERY);
+    uno::Sequence< beans::PropertyValue > propList =
+            lclGetProperty< uno::Sequence<beans::PropertyValue> >(xShape, "FrameInteropGrabBag");
+    for (sal_Int32 nProp = 0; nProp < propList.getLength(); ++nProp)
+    {
+        OUString aPropName = propList[nProp].Name;
+        if (aPropName == "AnchorId")
         {
-            OUString aPropName = propList[nProp].Name;
-            if (aPropName == "AnchorId")
-            {
-                propList[nProp].Value >>= aResult;
-                break;
-            }
+            propList[nProp].Value >>= aResult;
+            break;
         }
     }
     return aResult;
@@ -555,31 +563,6 @@ void DocxSdrExport::writeDMLDrawing(const SdrObject* pSdrObject, const SwFrmFmt*
     pFS->singleElementNS(XML_wp, XML_docPr, xDocPrAttrListRef);
 
     uno::Reference<lang::XServiceInfo> xServiceInfo(xShape, uno::UNO_QUERY_THROW);
-    uno::Reference< beans::XPropertySet > xPropertySet(xShape, uno::UNO_QUERY);
-    uno::Reference< beans::XPropertySetInfo > xPropSetInfo;
-    if (xPropertySet.is())
-        xPropSetInfo = xPropertySet->getPropertySetInfo();
-
-    bool bLockedCanvas = false;
-    if (xPropSetInfo.is() && xPropSetInfo->hasPropertyByName("InteropGrabBag"))
-    {
-        uno::Sequence< beans::PropertyValue > propList;
-        xPropertySet->getPropertyValue("InteropGrabBag") >>= propList;
-        for (sal_Int32 nProp=0; nProp < propList.getLength(); ++nProp)
-        {
-            OUString propName = propList[nProp].Name;
-            if (propName == "LockedCanvas")
-            {
-                /*
-                 * Export as Locked Canvas only if the drawing
-                 * was originally a Locked Canvas and is now inside a Text Frame.
-                 */
-
-                bLockedCanvas = m_pImpl->m_bIsInDMLTextFrame;
-                break;
-            }
-        }
-    }
     const char* pNamespace = "http://schemas.microsoft.com/office/word/2010/wordprocessingShape";
     if (xServiceInfo->supportsService("com.sun.star.drawing.GroupShape"))
         pNamespace = "http://schemas.microsoft.com/office/word/2010/wordprocessingGroup";
@@ -592,6 +575,22 @@ void DocxSdrExport::writeDMLDrawing(const SdrObject* pSdrObject, const SwFrmFmt*
                         XML_uri, pNamespace,
                         FSEND);
 
+    bool bLockedCanvas = false;
+    uno::Sequence< beans::PropertyValue > propList =
+            lclGetProperty< uno::Sequence<beans::PropertyValue> >(xShape, "InteropGrabBag");
+    for (sal_Int32 nProp=0; nProp < propList.getLength(); ++nProp)
+    {
+        OUString propName = propList[nProp].Name;
+        if (propName == "LockedCanvas")
+        {
+            /*
+             * Export as Locked Canvas only if the drawing
+             * was originally a Locked Canvas and is now inside a Text Frame.
+             */
+            bLockedCanvas = m_pImpl->m_bIsInDMLTextFrame;
+            break;
+        }
+    }
     if (bLockedCanvas)
         pFS->startElementNS(XML_lc, XML_lockedCanvas,
                             FSNS(XML_xmlns, XML_lc), "http://schemas.openxmlformats.org/drawingml/2006/lockedCanvas",
