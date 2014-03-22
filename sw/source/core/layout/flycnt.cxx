@@ -865,7 +865,7 @@ static sal_uInt64 lcl_FindCntDiff( const Point &rPt, const SwLayoutFrm *pLay,
     rpCnt = 0;
     sal_uInt64 nDistance = SAL_MAX_UINT64;
     sal_uInt64 nNearest  = SAL_MAX_UINT64;
-    const SwCntntFrm *pCnt = pLay->ContainsCntnt();
+    const SwCntntFrm *pCnt = pLay ? pLay->ContainsCntnt() : NULL;
 
     while ( pCnt && (bBody != pCnt->IsInDocBody() || bFtn != pCnt->IsInFtn()))
     {
