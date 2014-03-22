@@ -21,7 +21,6 @@
 
 #include "svl/solar.hrc"
 
-#define RID_SVXDLG_SEARCHFORM                       (RID_FORMS_START + 7)
 #define RID_STR_SEARCH_ANYWHERE                     (RID_FORMS_START +  85)
 #define RID_STR_SEARCH_BEGINNING                    (RID_FORMS_START +  86)
 #define RID_STR_SEARCH_END                          (RID_FORMS_START +  87)
@@ -33,44 +32,6 @@
 #define RID_STR_OVERFLOW_FORWARD                    (RID_FORMS_START +  34)
 #define RID_STR_OVERFLOW_BACKWARD                   (RID_FORMS_START +  35)
 #define RID_STR_SEARCH_COUNTING                     (RID_FORMS_START +  76)
-
-#define FT_FORM             2
-#define FT_POSITION         3
-#define FT_RECORDLABEL      4
-#define FT_RECORD           5
-#define FT_HINT             6
-
-
-#define CMB_SEARCHTEXT      1
-
-#define RB_ALLFIELDS        1
-#define RB_SINGLEFIELD      2
-#define RB_SEARCHFORTEXT    3
-#define RB_SEARCHFORNULL    4
-#define RB_SEARCHFORNOTNULL 5
-
-#define LB_FORM             1
-#define LB_FIELD            2
-#define LB_POSITION         3
-
-#define PB_APPROXSETTINGS       1
-#define PB_SEARCH               2
-#define PB_SOUNDSLIKESETTINGS   3
-
-#define FL_SEARCHFOR            1
-#define FL_WHERE                        2
-#define FL_OPTIONS                      3
-#define FL_STATE                        4
-
-#define CB_USEFORMATTER     1
-#define CB_BACKWARD         2
-#define CB_STARTOVER        3
-#define CB_CASE             4
-#define CB_WILDCARD         5
-#define CB_REGULAR          6
-#define CB_APPROX           7
-#define CB_HALFFULLFORMS    8
-#define CB_SOUNDSLIKECJK    9
 
 #endif // _FMSEARCH_HRC
 

@@ -47,6 +47,7 @@ $(eval $(call gb_UIConfig_add_uifiles,cui,\
 	cui/uiconfig/ui/eventassigndialog \
 	cui/uiconfig/ui/eventassignpage \
 	cui/uiconfig/ui/formatnumberdialog \
+	cui/uiconfig/ui/fmsearchdialog \
 	cui/uiconfig/ui/gradientpage \
 	cui/uiconfig/ui/colorconfigwin \
 	cui/uiconfig/ui/connpooloptions \

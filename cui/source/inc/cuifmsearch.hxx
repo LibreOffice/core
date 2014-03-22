@@ -47,38 +47,37 @@ class FmSearchDialog : public ModalDialog
     friend class FmSearchEngine;
 
     // my all Controls
-    FixedLine       m_flSearchFor;
-    RadioButton     m_rbSearchForText;
-    RadioButton     m_rbSearchForNull;
-    RadioButton     m_rbSearchForNotNull;
-    ComboBox        m_cmbSearchText;
-    FixedLine       m_flWhere;
-    FixedText       m_ftForm;
-    ListBox         m_lbForm;
-    RadioButton     m_rbAllFields;
-    RadioButton     m_rbSingleField;
-    ListBox         m_lbField;
-    FixedLine       m_flOptions;
-    FixedText       m_ftPosition;
-    ListBox         m_lbPosition;
-    CheckBox        m_cbUseFormat;
-    CheckBox        m_cbCase;
-    CheckBox        m_cbBackwards;
-    CheckBox        m_cbStartOver;
-    CheckBox        m_cbWildCard;
-    CheckBox        m_cbRegular;
-    CheckBox        m_cbApprox;
-    PushButton      m_pbApproxSettings;
-    CheckBox        m_aHalfFullFormsCJK;
-    CheckBox        m_aSoundsLikeCJK;
-    PushButton      m_aSoundsLikeCJKSettings;
-    FixedLine       m_flState;
-    FixedText       m_ftRecordLabel;
-    FixedText       m_ftRecord;
-    FixedText       m_ftHint;
-    PushButton      m_pbSearchAgain;
-    CancelButton    m_pbClose;
-    HelpButton      m_pbHelp;
+    FixedLine       *m_pflSearchFor;
+    RadioButton     *m_prbSearchForText;
+    RadioButton     *m_prbSearchForNull;
+    RadioButton     *m_prbSearchForNotNull;
+    ComboBox        *m_pcmbSearchText;
+    FixedLine       *m_pflWhere;
+    FixedText       *m_pftForm;
+    ListBox         *m_plbForm;
+    RadioButton     *m_prbAllFields;
+    RadioButton     *m_prbSingleField;
+    ListBox         *m_plbField;
+    FixedLine       *m_pflOptions;
+    FixedText       *m_pftPosition;
+    ListBox         *m_plbPosition;
+    CheckBox        *m_pcbUseFormat;
+    CheckBox        *m_pcbCase;
+    CheckBox        *m_pcbBackwards;
+    CheckBox        *m_pcbStartOver;
+    CheckBox        *m_pcbWildCard;
+    CheckBox        *m_pcbRegular;
+    CheckBox        *m_pcbApprox;
+    PushButton      *m_ppbApproxSettings;
+    CheckBox        *m_pHalfFullFormsCJK;
+    CheckBox        *m_pSoundsLikeCJK;
+    PushButton      *m_pSoundsLikeCJKSettings;
+    FixedLine       *m_pflState;
+    FixedText       *m_pftRecordLabel;
+    FixedText       *m_pftRecord;
+    FixedText       *m_pftHint;
+    PushButton      *m_ppbSearchAgain;
+    CancelButton    *m_ppbClose;
     OUString        m_sSearch;
     OUString        m_sCancel;
 
@@ -187,11 +186,11 @@ private:
 
 inline void FmSearchDialog::SetActiveField(const OUString& strField)
 {
-    sal_Int32 nInitialField = m_lbField.GetEntryPos(strField);
+    sal_Int32 nInitialField = m_plbField->GetEntryPos(strField);
     if (nInitialField == LISTBOX_ENTRY_NOTFOUND)
         nInitialField = 0;
-    m_lbField.SelectEntryPos(nInitialField);
-    LINK(this, FmSearchDialog, OnFieldSelected).Call(&m_lbField);
+    m_plbField->SelectEntryPos(nInitialField);
+    LINK(this, FmSearchDialog, OnFieldSelected).Call(m_plbField);
 }
 
 #endif // INCLUDED_CUI_SOURCE_INC_CUIFMSEARCH_HXX
