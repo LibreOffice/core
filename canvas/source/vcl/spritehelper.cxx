@@ -253,31 +253,6 @@ namespace vclcanvas
                         // the final sprite output position.
                         aClipPoly.transform( aTransform );
 
-#if ! defined WNT && ! defined MACOSX
-                        // non-Windows only - bAtLeastOnePolygon is
-                        // only used in non-WNT code below
-
-                        // check whether maybe the clip consists
-                        // solely out of rectangular polygons. If this
-                        // is the case, enforce using the triangle
-                        // clip region setup - non-optimized X11
-                        // drivers tend to perform abyssmally on
-                        // XPolygonRegion, which is used internally,
-                        // when filling complex polypolygons.
-                        bool bAtLeastOnePolygon( false );
-                        const sal_Int32 nPolygons( aClipPoly.count() );
-
-                        for( sal_Int32 i=0; i<nPolygons; ++i )
-                        {
-                            if( !::basegfx::tools::isRectangle(
-                                    aClipPoly.getB2DPolygon(i)) )
-                            {
-                                bAtLeastOnePolygon = true;
-                                break;
-                            }
-                        }
-#endif
-
                         if( mbShowSpriteBounds )
                         {
                             // Paint green sprite clip area
@@ -287,52 +262,8 @@ namespace vclcanvas
                             rTargetSurface.DrawPolyPolygon(PolyPolygon(aClipPoly)); // #i76339#
                         }
 
-#if ! defined WNT && ! defined MACOSX
-                        // as a matter of fact, this fast path only
-                        // performs well for X11 - under Windows, the
-                        // clip via SetTriangleClipRegion is faster.
-                        if( bAtLeastOnePolygon &&
-                            bBufferedUpdate &&
-                            ::rtl::math::approxEqual(fAlpha, 1.0) &&
-                            !maContent->IsTransparent() )
-                        {
-                            // fast path for slide transitions
-                            // (buffered, no alpha, no mask (because
-                            // full slide is contained in the sprite))
-
-                            // XOR bitmap onto backbuffer, clear area
-                            // that should be _visible_ with black,
-                            // XOR bitmap again on top of that -
-                            // result: XOR cancels out where no black
-                            // has been rendered, and yields the
-                            // original bitmap, where black is
-                            // underneath.
-                            rTargetSurface.Push( PUSH_RASTEROP );
-                            rTargetSurface.SetRasterOp( ROP_XOR );
-                            rTargetSurface.DrawBitmap( aOutPos,
-                                                       aOutputSize,
-                                                       maContent->GetBitmap() );
-
-                            rTargetSurface.SetLineColor();
-                            rTargetSurface.SetFillColor( COL_BLACK );
-                            rTargetSurface.SetRasterOp( ROP_0 );
-                            rTargetSurface.DrawPolyPolygon(PolyPolygon(aClipPoly)); // #i76339#
-
-                            rTargetSurface.SetRasterOp( ROP_XOR );
-                            rTargetSurface.DrawBitmap( aOutPos,
-                                                       aOutputSize,
-                                                       maContent->GetBitmap() );
-
-                            rTargetSurface.Pop();
-
-                            bSpriteRedrawn = true;
-                        }
-                        else
-#endif
-                        {
-                            Region aClipRegion( aClipPoly );
-                            rTargetSurface.SetClipRegion( aClipRegion );
-                        }
+                        Region aClipRegion( aClipPoly );
+                        rTargetSurface.SetClipRegion( aClipRegion );
                     }
                 }
 
