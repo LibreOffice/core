@@ -115,7 +115,6 @@ void SwEndNoteOptionPage::Reset( const SfxItemSet& )
     SwEndNoteInfo *pInf = bEndNote ? new SwEndNoteInfo( pSh->GetEndNoteInfo() )
                                    : new SwFtnInfo( pSh->GetFtnInfo() );
     SfxObjectShell * pDocSh = SfxObjectShell::Current();
-    sal_uInt16 i;
 
     if (PTR_CAST(SwWebDocShell, pDocSh))
         m_pStylesContainer->Hide();
@@ -198,12 +197,12 @@ void SwEndNoteOptionPage::Reset( const SfxItemSet& )
         }
     }
 
-        // page
-    for( i = RES_POOLPAGE_BEGIN; i < RES_POOLPAGE_END; ++i )
+    // page
+    for( sal_uInt16 i = RES_POOLPAGE_BEGIN; i < RES_POOLPAGE_END; ++i )
         m_pPageTemplBox->InsertEntry(SwStyleNameMapper::GetUIName( i, OUString() ));
 
-    sal_uInt16 nCount = pSh->GetPageDescCnt();
-    for(i = 0; i < nCount; ++i)
+    const sal_uInt16 nCount = pSh->GetPageDescCnt();
+    for(sal_uInt16 i = 0; i < nCount; ++i)
     {
         const SwPageDesc &rPageDesc = pSh->GetPageDesc(i);
         if(LISTBOX_ENTRY_NOTFOUND == m_pPageTemplBox->GetEntryPos(rPageDesc.GetName()))
@@ -327,7 +326,7 @@ IMPL_LINK_NOARG_INLINE_END(SwEndNoteOptionPage, PosChapterHdl)
 static SwCharFmt* lcl_GetCharFormat( SwWrtShell* pSh, const OUString& rCharFmtName )
 {
     SwCharFmt* pFmt = 0;
-    sal_uInt16 nChCount = pSh->GetCharFmtCount();
+    const sal_uInt16 nChCount = pSh->GetCharFmtCount();
     for(sal_uInt16 i = 0; i< nChCount; i++)
     {
         SwCharFmt& rChFmt = pSh->GetCharFmt(i);
