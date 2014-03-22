@@ -49,6 +49,7 @@
 #include "mtvcellfunc.hxx"
 #include "refupdatecontext.hxx"
 #include "scopetools.hxx"
+#include "tabprotection.hxx"
 #include <rowheightcontext.hxx>
 #include <refhint.hxx>
 
@@ -2172,7 +2173,13 @@ bool ScTable::IsBlockEditable( SCCOL nCol1, SCROW nRow1, SCCOL nCol2,
     else if ( IsProtected() && !pDocument->IsScenario(nTab) )
     {
         bIsEditable = !HasAttrib( nCol1, nRow1, nCol2, nRow2, HASATTR_PROTECTED );
-        if(bIsEditable)
+        if (!bIsEditable)
+        {
+            // An enhanced protection permission may override the attribute.
+            if (pTabProtection)
+                bIsEditable = pTabProtection->isBlockEditable( ScRange( nCol1, nRow1, nTab, nCol2, nRow2, nTab));
+        }
+        if (bIsEditable)
         {
             // If Sheet is protected and cells are not protected then
             // check the active scenario protect flag if this range is
@@ -2239,13 +2246,20 @@ bool ScTable::IsSelectionEditable( const ScMarkData& rMark,
         bIsEditable = false;
     else if ( IsProtected() && !pDocument->IsScenario(nTab) )
     {
-        if((bIsEditable = !HasAttribSelection( rMark, HASATTR_PROTECTED )) != false)
+        ScRangeList aRanges;
+        rMark.FillRangeListWithMarks( &aRanges, false );
+        bIsEditable = !HasAttribSelection( rMark, HASATTR_PROTECTED );
+        if (!bIsEditable)
+        {
+            // An enhanced protection permission may override the attribute.
+            if (pTabProtection)
+                bIsEditable = pTabProtection->isSelectionEditable( aRanges);
+        }
+        if (bIsEditable)
         {
             // If Sheet is protected and cells are not protected then
             // check the active scenario protect flag if this area is
             // in the active scenario range.
-            ScRangeList aRanges;
-            rMark.FillRangeListWithMarks( &aRanges, false );
             SCTAB nScenTab = nTab+1;
             while(pDocument->IsScenario(nScenTab) && bIsEditable)
             {
