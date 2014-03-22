@@ -1020,8 +1020,7 @@ void ServerFont::InitGlyphData( sal_GlyphId aGlyphId, GlyphData& rGD ) const
 //  if( mbArtItalic )
 //      nLoadFlags |= FT_LOAD_NO_BITMAP;
 
-    FT_Error rc = -1;
-    rc = FT_Load_Glyph( maFaceFT, aGlyphId, nLoadFlags );
+    FT_Error rc = FT_Load_Glyph( maFaceFT, aGlyphId, nLoadFlags );
 
     if( rc != FT_Err_Ok )
     {
@@ -1095,8 +1094,7 @@ bool ServerFont::GetGlyphBitmap1( sal_GlyphId aGlyphId, RawBitmap& rRawBitmap ) 
     if( mnPrioEmbedded <= mnPrioAutoHint )
         nLoadFlags |= FT_LOAD_NO_BITMAP;
 
-    FT_Error rc = -1;
-    rc = FT_Load_Glyph( maFaceFT, aGlyphId, nLoadFlags );
+    FT_Error rc = FT_Load_Glyph( maFaceFT, aGlyphId, nLoadFlags );
 
     if( rc != FT_Err_Ok )
         return false;
@@ -1232,8 +1230,7 @@ bool ServerFont::GetGlyphBitmap8( sal_GlyphId aGlyphId, RawBitmap& rRawBitmap ) 
     if( mnPrioEmbedded <= mnPrioAntiAlias )
         nLoadFlags |= FT_LOAD_NO_BITMAP;
 
-    FT_Error rc = -1;
-    rc = FT_Load_Glyph( maFaceFT, aGlyphId, nLoadFlags );
+    FT_Error rc = FT_Load_Glyph( maFaceFT, aGlyphId, nLoadFlags );
 
     if( rc != FT_Err_Ok )
         return false;
