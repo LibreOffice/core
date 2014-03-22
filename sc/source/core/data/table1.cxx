@@ -1578,9 +1578,8 @@ void ScTable::UpdateReference(
     if(mpCondFormatList)
         mpCondFormatList->UpdateReference(rCxt);
 
-    ScTableProtection* pProtection = GetProtection();
-    if (pProtection)
-        pProtection->updateReference( eUpdateRefMode, pDocument, rCxt.maRange, nDx, nDy, nDz);
+    if (pTabProtection)
+        pTabProtection->updateReference( eUpdateRefMode, pDocument, rCxt.maRange, nDx, nDy, nDz);
 }
 
 void ScTable::UpdateTranspose( const ScRange& rSource, const ScAddress& rDest,
@@ -1611,9 +1610,8 @@ void ScTable::UpdateInsertTab( sc::RefUpdateInsertTabContext& rCxt )
     if (mpCondFormatList)
         mpCondFormatList->UpdateInsertTab(rCxt);
 
-    ScTableProtection* pProtection = GetProtection();
-    if (pProtection)
-        pProtection->updateReference( URM_INSDEL, pDocument,
+    if (pTabProtection)
+        pTabProtection->updateReference( URM_INSDEL, pDocument,
                 ScRange( 0, 0, rCxt.mnInsertPos, MAXCOL, MAXROW, MAXTAB),
                 0, 0, rCxt.mnSheets);
 
@@ -1639,9 +1637,8 @@ void ScTable::UpdateDeleteTab( sc::RefUpdateDeleteTabContext& rCxt )
     if (mpCondFormatList)
         mpCondFormatList->UpdateDeleteTab(rCxt);
 
-    ScTableProtection* pProtection = GetProtection();
-    if (pProtection)
-        pProtection->updateReference( URM_INSDEL, pDocument,
+    if (pTabProtection)
+        pTabProtection->updateReference( URM_INSDEL, pDocument,
                 ScRange( 0, 0, rCxt.mnDeletePos, MAXCOL, MAXROW, MAXTAB),
                 0, 0, -rCxt.mnSheets);
 
@@ -1665,9 +1662,8 @@ void ScTable::UpdateMoveTab(
     if(mpCondFormatList)
         mpCondFormatList->UpdateMoveTab(rCxt);
 
-    ScTableProtection* pProtection = GetProtection();
-    if (pProtection)
-        pProtection->updateReference( URM_REORDER, pDocument,
+    if (pTabProtection)
+        pTabProtection->updateReference( URM_REORDER, pDocument,
                 ScRange( 0, 0, rCxt.mnOldPos, MAXCOL, MAXROW, MAXTAB),
                 0, 0, rCxt.mnNewPos - rCxt.mnOldPos);
 
