@@ -1487,13 +1487,7 @@ sal_Bool SdPageObjsTLB::NotifyMoving(
         }
 
         // Update the tree list.
-        if (pTarget == NULL)
-        {
-            rpNewParent = 0;
-            rNewChildPos = 0;
-            return sal_True;
-        }
-        else if (GetParent(pDestination) == NULL)
+        if (GetParent(pDestination) == NULL)
         {
             rpNewParent = pDestination;
             rNewChildPos = 0;
