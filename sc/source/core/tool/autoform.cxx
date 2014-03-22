@@ -663,7 +663,7 @@ void ScAutoFormatData::FillToItemSet( sal_uInt16 nIndex, SfxItemSet& rItemSet, S
         }
         // do not insert empty CTL font
         const SvxFontItem& rCTLFont = rField.GetCTLFont();
-        if (rCTLFont.GetStyleName().isEmpty())
+        if (!rCTLFont.GetStyleName().isEmpty())
         {
             rItemSet.Put( rCTLFont );
             rItemSet.Put( rField.GetCTLHeight() );
