@@ -1296,11 +1296,14 @@ void SAL_CALL ScDataPilotTableObj::insertDrillDownSheet(const CellAddress& aAddr
     ScDPObject* pDPObj = GetDPObject();
     if (!pDPObj)
         throw RuntimeException();
+    ScTabViewShell* pViewSh = GetDocShell()->GetBestViewShell();
+    if (!pViewSh)
+        throw RuntimeException();
 
     Sequence<DataPilotFieldFilter> aFilters;
     pDPObj->GetDataFieldPositionData(
         ScAddress(static_cast<SCCOL>(aAddr.Column), static_cast<SCROW>(aAddr.Row), aAddr.Sheet), aFilters);
-    GetDocShell()->GetBestViewShell()->ShowDataPilotSourceData(*pDPObj, aFilters);
+    pViewSh->ShowDataPilotSourceData(*pDPObj, aFilters);
 }
 
 CellRangeAddress SAL_CALL ScDataPilotTableObj::getOutputRangeByType( sal_Int32 nType )
