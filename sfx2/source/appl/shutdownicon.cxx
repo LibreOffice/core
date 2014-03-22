@@ -707,8 +707,7 @@ void SAL_CALL ShutdownIcon::initialize( const ::com::sun::star::uno::Sequence< :
     // third argument only sets veto, everything else will be ignored!
     if (aArguments.getLength() > 2)
     {
-        sal_Bool bVeto = sal_True;
-        bVeto = ::cppu::any2bool(aArguments[2]);
+        sal_Bool bVeto = ::cppu::any2bool(aArguments[2]);
         m_bVeto = bVeto;
         return;
     }
@@ -719,8 +718,7 @@ void SAL_CALL ShutdownIcon::initialize( const ::com::sun::star::uno::Sequence< :
         {
             try
             {
-                sal_Bool bQuickstart = sal_False;
-                bQuickstart = ::cppu::any2bool( aArguments[0] );
+                sal_Bool bQuickstart = ::cppu::any2bool( aArguments[0] );
                 if( !bQuickstart && !GetAutostart() )
                     return;
                 aGuard.clear();
@@ -740,8 +738,7 @@ void SAL_CALL ShutdownIcon::initialize( const ::com::sun::star::uno::Sequence< :
     }
     if ( aArguments.getLength() > 1 )
     {
-            sal_Bool bAutostart = sal_False;
-            bAutostart = ::cppu::any2bool( aArguments[1] );
+            sal_Bool bAutostart = ::cppu::any2bool( aArguments[1] );
             if (bAutostart && !GetAutostart())
                 SetAutostart( true );
             if (!bAutostart && GetAutostart())
