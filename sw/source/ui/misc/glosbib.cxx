@@ -102,11 +102,8 @@ SwGlossaryGroupDlg::SwGlossaryGroupDlg(Window * pParent,
         GlosBibUserData* pData = new GlosBibUserData;
         pData->sGroupName = sGroup;
         pData->sGroupTitle = sTitle;
-        OUString sTemp(sTitle);
-        sTemp += "\t";
         pData->sPath = m_pPathLB->GetEntry(sGroup.getToken(1, GLOS_DELIM).toInt32());
-        sTemp += pData->sPath;
-        SvTreeListEntry* pEntry = m_pGroupTLB->InsertEntry(sTemp);
+        SvTreeListEntry* pEntry = m_pGroupTLB->InsertEntry(sTitle + "\t" + pData->sPath);
         pEntry->SetUserData(pData);
 
     }
@@ -138,11 +135,10 @@ void SwGlossaryGroupDlg::Apply()
                 pGlosHdl->SetCurGroup(pUserData->sGroupName);
             }
         }
-        OUString sMsg(SW_RES(STR_QUERY_DELETE_GROUP1));
         OUString sTitle( it->getToken(1, '\t') );
-        if(!sTitle.isEmpty())
-            sMsg += sTitle;
-        sMsg += SW_RESSTR(STR_QUERY_DELETE_GROUP2);
+        const OUString sMsg(SW_RESSTR(STR_QUERY_DELETE_GROUP1)
+                            + sTitle
+                            + SW_RESSTR(STR_QUERY_DELETE_GROUP2));
         QueryBox aQuery(this->GetParent(), WB_YES_NO|WB_DEF_NO, sMsg );
         if(RET_YES == aQuery.Execute())
             pGlosHdl->DelGroup( sDelGroup );
@@ -190,8 +186,7 @@ IMPL_LINK( SwGlossaryGroupDlg, SelectHdl, SvTabListBox*, EMPTYARG  )
         {
             SvTreeListEntry* pEntry = m_pGroupTLB->GetEntry(nPos);
             GlosBibUserData* pFoundData = (GlosBibUserData*)pEntry->GetUserData();
-            OUString sGroup = pFoundData->sGroupName;
-            bExists = sGroup == sEntry;
+            bExists = pFoundData->sGroupName == sEntry;
         }
 
         m_pRenamePB->Enable(!bExists && !sName.isEmpty());
@@ -207,9 +202,7 @@ IMPL_LINK_NOARG(SwGlossaryGroupDlg, NewHdl)
         + OUString::number(m_pPathLB->GetSelectEntryPos());
     OSL_ENSURE(!pGlosHdl->FindGroupName(sGroup), "group already available!");
     m_InsertedArr.push_back(sGroup);
-    OUString sTemp(m_pNameED->GetText());
-    sTemp += "\t";
-    sTemp += m_pPathLB->GetSelectEntry();
+    const OUString sTemp(m_pNameED->GetText() + "\t" + m_pPathLB->GetSelectEntry());
     SvTreeListEntry* pEntry = m_pGroupTLB->InsertEntry(sTemp);
     GlosBibUserData* pData = new GlosBibUserData;
     pData->sPath = m_pPathLB->GetSelectEntry();
@@ -262,10 +255,7 @@ IMPL_LINK( SwGlossaryGroupDlg, DeleteHdl, Button*, pButton  )
     }
     if(bDelete)
     {
-        OUString sGroupEntry(pUserData->sGroupName);
-        sGroupEntry += "\t";
-        sGroupEntry += pUserData->sGroupTitle;
-        m_RemovedArr.push_back(sGroupEntry);
+        m_RemovedArr.push_back(pUserData->sGroupName + "\t" + pUserData->sGroupTitle);
     }
     delete pUserData;
     m_pGroupTLB->GetModel()->Remove(pEntry);
@@ -303,18 +293,14 @@ IMPL_LINK_NOARG(SwGlossaryGroupDlg, RenameHdl)
     }
     if(!bDone)
     {
-        sEntry += OUString(RENAME_TOKEN_DELIM);
-        sEntry += sNewName;
-        sEntry += OUString(RENAME_TOKEN_DELIM);
-        sEntry += sNewTitle;
+        sEntry += OUString(RENAME_TOKEN_DELIM) + sNewName
+                + OUString(RENAME_TOKEN_DELIM) + sNewTitle;
         m_RenamedArr.push_back(sEntry);
     }
     delete (GlosBibUserData*)pEntry->GetUserData();
     m_pGroupTLB->GetModel()->Remove(pEntry);
-    OUString sTemp(m_pNameED->GetText());
-    sTemp += "\t";
-    sTemp += m_pPathLB->GetSelectEntry();
-    pEntry = m_pGroupTLB->InsertEntry(sTemp);
+    pEntry = m_pGroupTLB->InsertEntry(m_pNameED->GetText() + "\t"
+                                      + m_pPathLB->GetSelectEntry());
     GlosBibUserData* pData = new GlosBibUserData;
     pData->sPath = m_pPathLB->GetSelectEntry();
     pData->sGroupName = sNewName;
@@ -432,12 +418,10 @@ void    SwGlossaryGroupTLB::RequestHelp( const HelpEvent& rHEvt )
                 aSize.Width() = GetSizePixel().Width() - aPos.X();
             aPos = OutputToScreenPixel(aPos);
             Rectangle aItemRect( aPos, aSize );
-            OUString sMsg;
             GlosBibUserData* pData = (GlosBibUserData*)pEntry->GetUserData();
-            sMsg = pData->sPath;
-            sMsg += OUString(INET_PATH_TOKEN);
-            sMsg += pData->sGroupName.getToken(0, GLOS_DELIM);
-            sMsg += SwGlossaries::GetExtension();
+            const OUString sMsg = pData->sPath + OUString(INET_PATH_TOKEN)
+                                + pData->sGroupName.getToken(0, GLOS_DELIM)
+                                + SwGlossaries::GetExtension();
 
             Help::ShowQuickHelp( this, aItemRect, sMsg,
                         QUICKHELP_LEFT|QUICKHELP_VCENTER );
