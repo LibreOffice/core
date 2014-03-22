@@ -691,12 +691,12 @@ void SwShellTableCrsr::FillRects()
         const SwTableNode* pSelTblNd = pSttNd->FindTableNode();
 
         SwNodeIndex aIdx( *pSttNd );
-           SwCntntNode* pCNd = rNds.GoNextSection( &aIdx, true, false );
+        SwCntntNode* pCNd = rNds.GoNextSection( &aIdx, true, false );
 
         // table in table
         // (see also lcl_FindTopLevelTable in unoobj2.cxx for a different
         // version to do this)
-        const SwTableNode* pCurTblNd = pCNd->FindTableNode();
+        const SwTableNode* pCurTblNd = pCNd ? pCNd->FindTableNode() : NULL;
         while ( pSelTblNd != pCurTblNd && pCurTblNd )
         {
             aIdx = pCurTblNd->EndOfSectionIndex();
