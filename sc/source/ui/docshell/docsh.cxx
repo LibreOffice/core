@@ -1695,7 +1695,8 @@ bool ScDocShell::SaveAs( SfxMedium& rMedium )
     if(!bChartExport)
     {
         bRet = SfxObjectShell::SaveAs( rMedium );
-        bRet = SaveXML( &rMedium, NULL );
+        if (bRet)
+            bRet = SaveXML( &rMedium, NULL );
     }
     else
     {
