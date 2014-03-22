@@ -1074,7 +1074,7 @@ void SwXShape::setPropertyValue(const OUString& rPropertyName, const uno::Any& a
                 SwDoc* pDoc = pFmt->GetDoc();
                 if(RES_ANCHOR == pEntry->nWID && MID_ANCHOR_ANCHORFRAME == pEntry->nMemberId)
                 {
-                    bool bDone = true;
+                    bool bDone = false;
                     uno::Reference<text::XTextFrame> xFrame;
                     if(aValue >>= xFrame)
                     {
