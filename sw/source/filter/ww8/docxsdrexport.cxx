@@ -86,6 +86,35 @@ OUString lclGetAnchorIdFromGrabBag(const SdrObject* pObj)
     return aResult;
 }
 
+void lclMovePositionWithRotation(awt::Point& aPos, sal_Int64 nRotation)
+{
+    // code from ImplEESdrWriter::ImplFlipBoundingBox (filter/source/msfilter/eschesdo.cxx)
+    // TODO: refactor
+
+    if ( nRotation == 0 )
+        return;
+
+    if ( nRotation < 0 )
+        nRotation = ( 36000 + nRotation ) % 36000;
+    if ( nRotation % 18000 == 0 )
+        nRotation = 0;
+    while ( nRotation > 9000 )
+        nRotation = ( 18000 - ( nRotation % 18000 ) );
+
+    double fVal = (double) nRotation * F_PI18000;
+    double  fCos = cos( fVal );
+    double  fSin = sin( fVal );
+
+    double  nWidthHalf = (double) aPos.X / 2;
+    double  nHeightHalf = (double) aPos.Y / 2;
+
+    double nXDiff = fSin * nHeightHalf + fCos * nWidthHalf  - nWidthHalf;
+    double nYDiff = fSin * nWidthHalf  + fCos * nHeightHalf - nHeightHalf;
+
+    aPos.X += nXDiff;
+    aPos.Y += nYDiff;
+}
+
 }
 
 ExportDataSaveRestore::ExportDataSaveRestore(DocxExport& rExport, sal_uLong nStt, sal_uLong nEnd, sw::Frame* pParentFrame)
@@ -268,11 +297,14 @@ void DocxSdrExport::startDMLAnchorInline(const SwFrmFmt* pFrmFmt, const Size& rS
     {
         sax_fastparser::FastAttributeList* attrList = m_pImpl->m_pSerializer->createAttrList();
         bool bOpaque = pFrmFmt->GetOpaque().GetValue();
+        awt::Point aPos(pFrmFmt->GetHoriOrient().GetPos(), pFrmFmt->GetVertOrient().GetPos());
         const SdrObject* pObj = pFrmFmt->FindRealSdrObject();
         if (pObj != NULL)
         {
             // SdrObjects know their layer, consider that instead of the frame format.
             bOpaque = pObj->GetLayer() != pFrmFmt->GetDoc()->GetHellId() && pObj->GetLayer() != pFrmFmt->GetDoc()->GetInvisibleHellId();
+
+            lclMovePositionWithRotation(aPos, pObj->GetRotateAngle());
         }
         attrList->add(XML_behindDoc, bOpaque ? "0" : "1");
         attrList->add(XML_distT, OString::number(TwipsToEMU(pULSpaceItem.GetUpper())).getStr());
@@ -394,7 +426,7 @@ void DocxSdrExport::startDMLAnchorInline(const SwFrmFmt* pFrmFmt, const Size& rS
         else
         {
             m_pImpl->m_pSerializer->startElementNS(XML_wp, XML_posOffset, FSEND);
-            m_pImpl->m_pSerializer->write(TwipsToEMU(pFrmFmt->GetHoriOrient().GetPos()));
+            m_pImpl->m_pSerializer->write(TwipsToEMU(aPos.X));
             m_pImpl->m_pSerializer->endElementNS(XML_wp, XML_posOffset);
         }
         m_pImpl->m_pSerializer->endElementNS(XML_wp, XML_positionH);
@@ -408,7 +440,7 @@ void DocxSdrExport::startDMLAnchorInline(const SwFrmFmt* pFrmFmt, const Size& rS
         else
         {
             m_pImpl->m_pSerializer->startElementNS(XML_wp, XML_posOffset, FSEND);
-            m_pImpl->m_pSerializer->write(TwipsToEMU(pFrmFmt->GetVertOrient().GetPos()));
+            m_pImpl->m_pSerializer->write(TwipsToEMU(aPos.Y));
             m_pImpl->m_pSerializer->endElementNS(XML_wp, XML_posOffset);
         }
         m_pImpl->m_pSerializer->endElementNS(XML_wp, XML_positionV);

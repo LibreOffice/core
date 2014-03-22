@@ -490,6 +490,54 @@ DECLARE_OOXMLEXPORT_TEST(testFdo70838, "fdo70838.docx")
     if (!pXmlDocument)
         return;
 
+    // Check DML document
+
+    sal_Int32 aXPos[4], aYPos[4];
+    aXPos[0] = getXPathContent(pXmlDocument, "/w:document/w:body/w:p/w:r/mc:AlternateContent[1]/mc:Choice/w:drawing/wp:anchor/wp:positionH/wp:posOffset").toInt32();
+    aXPos[1] = getXPathContent(pXmlDocument, "/w:document/w:body/w:p/w:r/mc:AlternateContent[2]/mc:Choice/w:drawing/wp:anchor/wp:positionH/wp:posOffset").toInt32();
+    aXPos[2] = getXPathContent(pXmlDocument, "/w:document/w:body/w:p/w:r/mc:AlternateContent[3]/mc:Choice/w:drawing/wp:anchor/wp:positionH/wp:posOffset").toInt32();
+    aXPos[3] = getXPathContent(pXmlDocument, "/w:document/w:body/w:p/w:r/mc:AlternateContent[4]/mc:Choice/w:drawing/wp:anchor/wp:positionH/wp:posOffset").toInt32();
+
+    aYPos[0] = getXPathContent(pXmlDocument, "/w:document/w:body/w:p/w:r/mc:AlternateContent[1]/mc:Choice/w:drawing/wp:anchor/wp:positionV/wp:posOffset").toInt32();
+    aYPos[1] = getXPathContent(pXmlDocument, "/w:document/w:body/w:p/w:r/mc:AlternateContent[2]/mc:Choice/w:drawing/wp:anchor/wp:positionV/wp:posOffset").toInt32();
+    aYPos[2] = getXPathContent(pXmlDocument, "/w:document/w:body/w:p/w:r/mc:AlternateContent[3]/mc:Choice/w:drawing/wp:anchor/wp:positionV/wp:posOffset").toInt32();
+    aYPos[3] = getXPathContent(pXmlDocument, "/w:document/w:body/w:p/w:r/mc:AlternateContent[4]/mc:Choice/w:drawing/wp:anchor/wp:positionV/wp:posOffset").toInt32();
+
+    // TODO: compare values with a reference value extracted from the original document
+    //       depends on fdo#75722
+    // certain degree of error is tolerated due to rounding in unit conversions
+    CPPUNIT_ASSERT(abs(aXPos[0] - aXPos[1]) < 1000);
+    CPPUNIT_ASSERT(abs(aXPos[1] - aXPos[2]) < 1000);
+    CPPUNIT_ASSERT(abs(aXPos[2] - aXPos[3]) < 1000);
+
+    CPPUNIT_ASSERT(abs(aYPos[0] - aYPos[1]) < 1000);
+    CPPUNIT_ASSERT(abs(aYPos[1] - aYPos[2]) < 1000);
+    CPPUNIT_ASSERT(abs(aYPos[2] - aYPos[3]) < 1000);
+
+    sal_Int32 aHSize[4], aVSize[4];
+    aHSize[0] = getXPath(pXmlDocument, "/w:document/w:body/w:p/w:r/mc:AlternateContent[1]/mc:Choice/w:drawing/wp:anchor/wp:extent", "cx").toInt32();
+    aHSize[1] = getXPath(pXmlDocument, "/w:document/w:body/w:p/w:r/mc:AlternateContent[2]/mc:Choice/w:drawing/wp:anchor/wp:extent", "cx").toInt32();
+    aHSize[2] = getXPath(pXmlDocument, "/w:document/w:body/w:p/w:r/mc:AlternateContent[3]/mc:Choice/w:drawing/wp:anchor/wp:extent", "cx").toInt32();
+    aHSize[3] = getXPath(pXmlDocument, "/w:document/w:body/w:p/w:r/mc:AlternateContent[4]/mc:Choice/w:drawing/wp:anchor/wp:extent", "cx").toInt32();
+
+    aVSize[0] = getXPath(pXmlDocument, "/w:document/w:body/w:p/w:r/mc:AlternateContent[1]/mc:Choice/w:drawing/wp:anchor/wp:extent", "cy").toInt32();
+    aVSize[1] = getXPath(pXmlDocument, "/w:document/w:body/w:p/w:r/mc:AlternateContent[2]/mc:Choice/w:drawing/wp:anchor/wp:extent", "cy").toInt32();
+    aVSize[2] = getXPath(pXmlDocument, "/w:document/w:body/w:p/w:r/mc:AlternateContent[3]/mc:Choice/w:drawing/wp:anchor/wp:extent", "cy").toInt32();
+    aVSize[3] = getXPath(pXmlDocument, "/w:document/w:body/w:p/w:r/mc:AlternateContent[4]/mc:Choice/w:drawing/wp:anchor/wp:extent", "cy").toInt32();
+
+    // certain degree of error is tolerated due to rounding in unit conversions
+    CPPUNIT_ASSERT(abs(3599280 - aHSize[0]) < 1000);
+    CPPUNIT_ASSERT(abs(3599280 - aHSize[1]) < 1000);
+    CPPUNIT_ASSERT(abs(3599280 - aHSize[2]) < 1000);
+    CPPUNIT_ASSERT(abs(3599280 - aHSize[3]) < 1000);
+
+    CPPUNIT_ASSERT(abs(1799640 - aVSize[0]) < 1000);
+    CPPUNIT_ASSERT(abs(1799640 - aVSize[1]) < 1000);
+    CPPUNIT_ASSERT(abs(1799640 - aVSize[2]) < 1000);
+    CPPUNIT_ASSERT(abs(1799640 - aVSize[3]) < 1000);
+
+    // Check VML document
+
     // get styles of the four shapes
     OUString aStyles[4];
     aStyles[0] = getXPath( pXmlDocument, "/w:document/w:body/w:p/w:r/mc:AlternateContent[1]/mc:Fallback/w:pict/v:rect", "style");
