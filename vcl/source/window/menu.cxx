@@ -6004,15 +6004,16 @@ void MenuBarWindow::ImplInitStyleSettings()
     if( IsNativeControlSupported( CTRL_MENUBAR, PART_MENU_ITEM ) &&
         IsNativeControlSupported( CTRL_MENUBAR, PART_ENTIRE_CONTROL ) )
     {
+        AllSettings aSettings( GetSettings() );
+        ImplGetFrame()->UpdateSettings( aSettings ); // to update persona
+        StyleSettings aStyle( aSettings.GetStyleSettings() );
         Color aHighlightTextColor = ImplGetSVData()->maNWFData.maMenuBarHighlightTextColor;
         if( aHighlightTextColor != Color( COL_TRANSPARENT ) )
         {
-            AllSettings aSettings( GetSettings() );
-            StyleSettings aStyle( aSettings.GetStyleSettings() );
             aStyle.SetMenuHighlightTextColor( aHighlightTextColor );
-            aSettings.SetStyleSettings( aStyle );
-            OutputDevice::SetSettings( aSettings );
         }
+        aSettings.SetStyleSettings( aStyle );
+        OutputDevice::SetSettings( aSettings );
     }
 }
 
