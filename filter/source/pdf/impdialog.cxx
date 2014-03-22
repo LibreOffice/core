@@ -1397,7 +1397,7 @@ void ImpPDFTabLinksPage::SetFilterConfigItem( const  ImpPDFTabDialog* paParent )
     // and set the link action accordingly
     // PDF/A-1 doesn't allow launch action on links
 
-    ImpPDFTabGeneralPage* pGeneralPage = paParent ? paParent->getGeneralPage() : NULL;
+    ImpPDFTabGeneralPage* pGeneralPage = paParent->getGeneralPage();
     if (pGeneralPage)
         ImplPDFALinkControl(!pGeneralPage->mpCbPDFA1b->IsChecked());
 }
