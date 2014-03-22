@@ -46,6 +46,7 @@
 #include "scopetools.hxx"
 #include "editutil.hxx"
 #include "sharedformula.hxx"
+#include <listenercontext.hxx>
 
 #include <com/sun/star/i18n/LocaleDataItem.hpp>
 
@@ -410,6 +411,40 @@ void ScColumn::ActivateNewFormulaCell(
         rCell.StartListeningTo(pDocument);
         if (!pDocument->IsCalcingAfterLoad())
             rCell.SetDirty();
+    }
+}
+
+void ScColumn::AttachNewFormulaCells( const sc::CellStoreType::position_type& aPos, size_t nLength )
+{
+    // Make sure the whole length consists of formula cells.
+    if (aPos.first->type != sc::element_type_formula)
+        return;
+
+    if (aPos.first->size < aPos.second + nLength)
+        // Block is shorter than specified length.
+        return;
+
+    // Join the top and bottom cells only.
+    ScFormulaCell* pCell = sc::formula_block::at(*aPos.first->data, aPos.second);
+    JoinNewFormulaCell(aPos, *pCell);
+
+    sc::CellStoreType::position_type aPosLast = aPos;
+    aPosLast.second += nLength - 1;
+    pCell = sc::formula_block::at(*aPosLast.first->data, aPosLast.second);
+    JoinNewFormulaCell(aPosLast, *pCell);
+
+    if (!pDocument->IsClipOrUndo() && !pDocument->IsInsertingFromOtherDoc())
+    {
+        sc::StartListeningContext aCxt(*pDocument);
+        ScFormulaCell** pp = &sc::formula_block::at(*aPos.first->data, aPos.second);
+        ScFormulaCell** ppEnd = pp + nLength;
+        for (; pp != ppEnd; ++pp)
+        {
+            pCell = *pp;
+            pCell->StartListeningTo(aCxt);
+            if (!pDocument->IsCalcingAfterLoad())
+                pCell->SetDirty();
+        }
     }
 }
 
@@ -1795,6 +1830,40 @@ ScFormulaCell* ScColumn::SetFormulaCell( sc::ColumnBlockPosition& rBlockPos, SCR
 
     ActivateNewFormulaCell(rBlockPos.miCellPos, nRow, *pCell);
     return pCell;
+}
+
+bool ScColumn::SetFormulaCells( SCROW nRow, std::vector<ScFormulaCell*>& rCells )
+{
+    if (!ValidRow(nRow))
+        return false;
+
+    SCROW nEndRow = nRow + rCells.size() - 1;
+    if (!ValidRow(nEndRow))
+        return false;
+
+    sc::CellStoreType::position_type aPos = maCells.position(nRow);
+
+    // Detach all formula cells that will be overwritten.
+    DetachFormulaCells(aPos, rCells.size());
+
+    for (size_t i = 0, n = rCells.size(); i < n; ++i)
+    {
+        SCROW nThisRow = nRow + i;
+        sal_uInt32 nFmt = GetNumberFormat(nThisRow);
+        if ((nFmt % SV_COUNTRY_LANGUAGE_OFFSET) == 0)
+            rCells[i]->SetNeedNumberFormat(true);
+    }
+
+    std::vector<sc::CellTextAttr> aDefaults(rCells.size(), sc::CellTextAttr());
+    maCellTextAttrs.set(nRow, aDefaults.begin(), aDefaults.end());
+
+    sc::CellStoreType::iterator it = maCells.set(aPos.first, nRow, rCells.begin(), rCells.end());
+
+    CellStorageModified();
+
+    AttachNewFormulaCells(aPos, rCells.size());
+
+    return true;
 }
 
 svl::SharedString ScColumn::GetSharedString( SCROW nRow ) const

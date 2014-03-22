@@ -1412,6 +1412,14 @@ ScFormulaCell* ScTable::SetFormulaCell( SCCOL nCol, SCROW nRow, ScFormulaCell* p
     return aCol[nCol].SetFormulaCell(nRow, pCell);
 }
 
+bool ScTable::SetFormulaCells( SCCOL nCol, SCROW nRow, std::vector<ScFormulaCell*>& rCells )
+{
+    if (!ValidCol(nCol))
+        return false;
+
+    return aCol[nCol].SetFormulaCells(nRow, rCells);
+}
+
 svl::SharedString ScTable::GetSharedString( SCCOL nCol, SCROW nRow ) const
 {
     if (!ValidColRow(nCol, nRow))

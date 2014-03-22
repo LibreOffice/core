@@ -1104,6 +1104,18 @@ ScFormulaCell* ScDocument::SetFormulaCell( const ScAddress& rPos, ScFormulaCell*
     return maTabs[rPos.Tab()]->SetFormulaCell(rPos.Col(), rPos.Row(), pCell);
 }
 
+bool ScDocument::SetFormulaCells( const ScAddress& rPos, std::vector<ScFormulaCell*>& rCells )
+{
+    if (rCells.empty())
+        return false;
+
+    ScTable* pTab = FetchTable(rPos.Tab());
+    if (!pTab)
+        return false;
+
+    return pTab->SetFormulaCells(rPos.Col(), rPos.Row(), rCells);
+}
+
 void ScDocument::SetConsolidateDlgData( const ScConsolidateParam* pData )
 {
     delete pConsolidateDlgData;

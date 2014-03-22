@@ -43,6 +43,7 @@
 #include "refupdatecontext.hxx"
 #include <listenercontext.hxx>
 #include <refhint.hxx>
+#include <stlalgorithm.hxx>
 
 #include <svl/poolcach.hxx>
 #include <svl/zforlist.hxx>
@@ -2561,21 +2562,33 @@ class UpdateRefOnNonCopy : std::unary_function<FormulaGroup, void>
 
     void fillUndoDoc( const ScAddress& rOldPos, SCROW nLength, const ScTokenArray& rOldCode )
     {
-        if (!mpUndoDoc)
+        if (!mpUndoDoc || nLength <= 0)
             return;
 
         // Insert the old formula group into the undo document.
         ScAddress aUndoPos = rOldPos;
         ScFormulaCell* pFC = new ScFormulaCell(mpUndoDoc, aUndoPos, rOldCode.Clone());
-        ScFormulaCellGroupRef xGroup = pFC->CreateCellGroup(nLength, false);
 
-        mpUndoDoc->SetFormulaCell(aUndoPos, pFC);
+        if (nLength == 1)
+        {
+            mpUndoDoc->SetFormulaCell(aUndoPos, pFC);
+            return;
+        }
+
+        std::vector<ScFormulaCell*> aCells;
+        aCells.reserve(nLength);
+        ScFormulaCellGroupRef xGroup = pFC->CreateCellGroup(nLength, false);
+        aCells.push_back(pFC);
         aUndoPos.IncRow();
         for (SCROW i = 1; i < nLength; ++i, aUndoPos.IncRow())
         {
             pFC = new ScFormulaCell(mpUndoDoc, aUndoPos, xGroup);
-            mpUndoDoc->SetFormulaCell(aUndoPos, pFC);
+            aCells.push_back(pFC);
         }
+
+        if (!mpUndoDoc->SetFormulaCells(rOldPos, aCells))
+            // Insertion failed.  Delete all formula cells.
+            std::for_each(aCells.begin(), aCells.end(), ScDeleteObjectByPtr<ScFormulaCell>());
     }
 
 public:
