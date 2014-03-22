@@ -903,7 +903,7 @@ void DomainMapper::lcl_attribute(Id nName, Value & val)
         case NS_ooxml::LN_CT_DataBinding_storeItemID:
         {
             OUString sName = OUString::createFromAscii((*QNameToString::Instance())(nName).c_str());
-            m_pImpl->m_pSdtHelper->appendToInteropGrabBag(sName, uno::Any(sStringValue));
+            m_pImpl->appendGrabBag(m_pImpl->m_aInteropGrabBag, sName, sStringValue);
         }
         break;
         default:
@@ -2253,12 +2253,15 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, PropertyMapPtr rContext )
     {
         // this is an unsupported SDT property, create a grab bag for it
         OUString sName = OUString::createFromAscii((*QNameToString::Instance())(nSprmId).c_str());
-        m_pImpl->m_pSdtHelper->enableInteropGrabBag(sName);
+        enableInteropGrabBag(sName);
 
         // process subitems
         writerfilter::Reference<Properties>::Pointer_t pProperties = rSprm.getProps();
         if (pProperties.get() != NULL)
             pProperties->resolve(*this);
+
+        m_pImpl->m_pSdtHelper->appendToInteropGrabBag(getInteropGrabBag());
+        m_pImpl->disableInteropGrabBag();
     }
     break;
     case NS_ooxml::LN_CT_SdtCheckbox_checked:
@@ -2270,7 +2273,7 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, PropertyMapPtr rContext )
     {
         // this is a child of an unsupported SDT property, store in the grab bag
         OUString sName = OUString::createFromAscii((*QNameToString::Instance())(nSprmId).c_str());
-        m_pImpl->m_pSdtHelper->appendToInteropGrabBag(sName, uno::Any(sStringValue));
+        m_pImpl->appendGrabBag(m_pImpl->m_aInteropGrabBag, sName, sStringValue);
     }
     break;
     case NS_ooxml::LN_EG_SectPrContents_pgNumType:
@@ -2659,16 +2662,17 @@ void DomainMapper::lcl_utext(const sal_uInt8 * data_, size_t len)
         m_pImpl->m_pSdtHelper->createDateControl(sText);
         return;
     }
-    else if (m_pImpl->m_pSdtHelper->isInteropGrabBagEnabled())
+    else if (!m_pImpl->m_pSdtHelper->isInteropGrabBagEmpty())
     {
         // there are unsupported SDT properties in the document
         // save them in the paragraph interop grab bag
-        OUString sName = m_pImpl->m_pSdtHelper->getInteropGrabBagName();
-        uno::Any aPropValue = uno::makeAny(m_pImpl->m_pSdtHelper->getInteropGrabBagAndClear());
-        if(sName == "ooxml:CT_SdtPr_checkbox" || sName == "ooxml:CT_SdtPr_dataBinding")
-            m_pImpl->GetTopContextOfType(CONTEXT_CHARACTER)->Insert(PROP_SDTPR, aPropValue, true, CHAR_GRAB_BAG);
+        if(m_pImpl->m_pSdtHelper->containedInInteropGrabBag("ooxml:CT_SdtPr_checkbox") ||
+                m_pImpl->m_pSdtHelper->containedInInteropGrabBag("ooxml:CT_SdtPr_dataBinding"))
+            m_pImpl->GetTopContextOfType(CONTEXT_CHARACTER)->Insert(PROP_SDTPR,
+                    uno::makeAny(m_pImpl->m_pSdtHelper->getInteropGrabBagAndClear()), true, CHAR_GRAB_BAG);
         else
-            m_pImpl->GetTopContextOfType(CONTEXT_PARAGRAPH)->Insert(PROP_SDTPR, aPropValue, true, PARA_GRAB_BAG);
+            m_pImpl->GetTopContextOfType(CONTEXT_PARAGRAPH)->Insert(PROP_SDTPR,
+                    uno::makeAny(m_pImpl->m_pSdtHelper->getInteropGrabBagAndClear()), true, PARA_GRAB_BAG);
     }
     else if (len == 1 && sText[0] == 0x03)
     {

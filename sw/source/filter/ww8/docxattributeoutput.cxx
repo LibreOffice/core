@@ -6932,7 +6932,11 @@ void DocxAttributeOutput::ParaGrabBag(const SfxGrabBagItem& rItem)
         }
         else if (i->first == "SdtPr")
         {
-            beans::PropertyValue aPropertyValue = i->second.get<beans::PropertyValue>();
+            uno::Sequence<beans::PropertyValue> aGrabBagSdt =
+                    i->second.get< uno::Sequence<beans::PropertyValue> >();
+            for (sal_Int32 k=0; k < aGrabBagSdt.getLength(); ++k)
+            {
+                beans::PropertyValue aPropertyValue = aGrabBagSdt[k];
             if (aPropertyValue.Name == "ooxml:CT_SdtPr_docPartObj" ||
                     aPropertyValue.Name == "ooxml:CT_SdtPr_docPartList")
             {
@@ -6966,6 +6970,7 @@ void DocxAttributeOutput::ParaGrabBag(const SfxGrabBagItem& rItem)
                 m_nParagraphSdtPrToken = FSNS( XML_w, XML_citation );
             else if (aPropertyValue.Name == "ooxml:CT_SdtPr_group")
                 m_nParagraphSdtPrToken = FSNS( XML_w, XML_group );
+            }
         }
         else
             SAL_INFO("sw.ww8", "DocxAttributeOutput::ParaGrabBag: unhandled grab bag property " << i->first );
@@ -7086,7 +7091,11 @@ void DocxAttributeOutput::CharGrabBag( const SfxGrabBagItem& rItem )
         }
         else if (i->first == "SdtPr")
         {
-            beans::PropertyValue aPropertyValue = i->second.get<beans::PropertyValue>();
+            uno::Sequence<beans::PropertyValue> aGrabBagSdt =
+                    i->second.get< uno::Sequence<beans::PropertyValue> >();
+            for (sal_Int32 k=0; k < aGrabBagSdt.getLength(); ++k)
+            {
+                beans::PropertyValue aPropertyValue = aGrabBagSdt[k];
             if (aPropertyValue.Name == "ooxml:CT_SdtPr_checkbox")
             {
                 m_nRunSdtPrToken = FSNS( XML_w14, XML_checkbox );
@@ -7129,6 +7138,7 @@ void DocxAttributeOutput::CharGrabBag( const SfxGrabBagItem& rItem )
                                        FSNS( XML_w, XML_storeItemID ),
                                        rtl::OUStringToOString( sValue, RTL_TEXTENCODING_UTF8 ).getStr() );
                 }
+            }
             }
         }
         else

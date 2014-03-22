@@ -190,42 +190,38 @@ bool SdtHelper::hasElements()
 
 void SdtHelper::appendToInteropGrabBag(const OUString& rName, const css::uno::Any& rValue)
 {
-    if (isInteropGrabBagEnabled())
-    {
-        sal_Int32 nLength = m_aGrabBag.getLength();
-        m_aGrabBag.realloc(nLength + 1);
-        m_aGrabBag[nLength].Name = rName;
-        m_aGrabBag[nLength].Value = rValue;
-    }
+    sal_Int32 nLength = m_aGrabBag.getLength();
+    m_aGrabBag.realloc(nLength + 1);
+    m_aGrabBag[nLength].Name = rName;
+    m_aGrabBag[nLength].Value = rValue;
 }
 
-beans::PropertyValue SdtHelper::getInteropGrabBagAndClear()
+void SdtHelper::appendToInteropGrabBag(com::sun::star::beans::PropertyValue rValue)
 {
-    beans::PropertyValue aProp;
-    if (isInteropGrabBagEnabled())
-    {
-        aProp.Name = m_sGrabBagName;
-        aProp.Value = uno::Any(m_aGrabBag);
-
-        m_aGrabBag.realloc(0);
-        m_sGrabBagName = "";
-    }
-    return aProp;
+    sal_Int32 nLength = m_aGrabBag.getLength();
+    m_aGrabBag.realloc(nLength + 1);
+    m_aGrabBag[nLength] = rValue;
 }
 
-void SdtHelper::enableInteropGrabBag(const OUString& rName)
+com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue> SdtHelper::getInteropGrabBagAndClear()
 {
-    m_sGrabBagName = rName;
+    com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue> aRet = m_aGrabBag;
+    m_aGrabBag.realloc(0);
+    return aRet;
 }
 
-bool SdtHelper::isInteropGrabBagEnabled()
+bool SdtHelper::isInteropGrabBagEmpty()
 {
-    return !m_sGrabBagName.isEmpty();
+    return m_aGrabBag.getLength() == 0;
 }
 
-OUString SdtHelper::getInteropGrabBagName()
+bool SdtHelper::containedInInteropGrabBag(OUString rValueName)
 {
-    return m_sGrabBagName;
+    for (sal_Int32 i=0; i < m_aGrabBag.getLength(); ++i)
+        if (m_aGrabBag[i].Name == rValueName)
+            return true;
+
+    return false;
 }
 
 } // namespace dmapper
