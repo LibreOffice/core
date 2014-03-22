@@ -176,7 +176,8 @@ void HandlerCache::takeOver(HandlerHash* pHandler, PatternHash* pPattern)
                 specifies the package name of the configuration data which should be used
  */
 HandlerCFGAccess::HandlerCFGAccess( const OUString& sPackage )
-    : ConfigItem( sPackage )
+    : ConfigItem(sPackage)
+    , m_pCache(0)
 {
     css::uno::Sequence< OUString > lListenPaths(1);
     lListenPaths[0] = SETNAME_HANDLER;
