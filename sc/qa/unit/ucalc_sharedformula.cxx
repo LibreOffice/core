@@ -536,6 +536,112 @@ void Test::testSharedFormulasRefUpdateExternal()
     m_pDoc->DeleteTab(0);
 }
 
+void Test::testSharedFormulasInsertRow()
+{
+    struct
+    {
+        bool checkContent( ScDocument* pDoc )
+        {
+            // B1:B2 and B4:B5 should point to $A$5.
+            SCROW pRows[] = { 0, 1, 3, 4 };
+            for (size_t i = 0, n = SAL_N_ELEMENTS(pRows); i < n; ++i)
+            {
+                ScAddress aPos(1, pRows[i], 0);
+                if (!checkFormula(*pDoc, aPos, "$A$5"))
+                {
+                    cerr << "Wrong formula!" << endl;
+                    return false;
+                }
+            }
+
+            // B1:B2 should be grouped.
+            ScFormulaCell* pFC = pDoc->GetFormulaCell(ScAddress(1,0,0));
+            if (!pFC || pFC->GetSharedTopRow() != 0 || pFC->GetSharedLength() != 2)
+            {
+                cerr << "B1:B2 should be grouped." << endl;
+                return false;
+            }
+
+            // B4:B5 should be grouped.
+            pFC = pDoc->GetFormulaCell(ScAddress(1,3,0));
+            if (!pFC || pFC->GetSharedTopRow() != 3 || pFC->GetSharedLength() != 2)
+            {
+                cerr << "B4:B5 should be grouped." << endl;
+                return false;
+            }
+
+            return true;
+        }
+
+        bool checkContentUndo( ScDocument* pDoc )
+        {
+            for (SCROW i = 0; i <= 3; ++i)
+            {
+                ScAddress aPos(1,i,0);
+                if (!checkFormula(*pDoc, aPos, "$A$4"))
+                {
+                    cerr << "Wrong formula!" << endl;
+                    return false;
+                }
+            }
+
+            // Ensure that B5 is empty.
+            if (pDoc->GetCellType(ScAddress(1,4,0)) != CELLTYPE_NONE)
+            {
+                cerr << "B5 should be empty." << endl;
+                return false;
+            }
+
+            // B1:B4 should be grouped.
+            ScFormulaCell* pFC = pDoc->GetFormulaCell(ScAddress(1,0,0));
+            if (!pFC || pFC->GetSharedTopRow() != 0 || pFC->GetSharedLength() != 4)
+            {
+                cerr << "B1:B4 should be grouped." << endl;
+                return false;
+            }
+
+            return true;
+        }
+
+    } aCheck;
+
+    sc::AutoCalcSwitch aACSwitch(*m_pDoc, true); // turn on auto calc.
+    m_pDoc->InsertTab(0, "Test");
+
+    // Scenario inspired by fdo#76470.
+
+    // Set value to A4.
+    m_pDoc->SetValue(ScAddress(0,3,0), 4.0);
+
+    // Set formula cells in B1:B4 all referencing A4 as absolute reference.
+    for (SCROW i = 0; i <= 3; ++i)
+        m_pDoc->SetString(ScAddress(1,i,0), "=$A$4");
+
+    // Insert a new row at row 3.
+    ScDocFunc& rFunc = getDocShell().GetDocFunc();
+    ScMarkData aMark;
+    aMark.SelectOneTable(0);
+    rFunc.InsertCells(ScRange(0,2,0,MAXCOL,2,0), &aMark, INS_INSROWS, true, true, false);
+
+    bool bResult = aCheck.checkContent(m_pDoc);
+    CPPUNIT_ASSERT_MESSAGE("Failed on the initial content check.", bResult);
+
+    // Undo and check its result.
+    SfxUndoManager* pUndoMgr = m_pDoc->GetUndoManager();
+    CPPUNIT_ASSERT(pUndoMgr);
+    pUndoMgr->Undo();
+
+    bResult = aCheck.checkContentUndo(m_pDoc);
+    CPPUNIT_ASSERT_MESSAGE("Failed on the content check after undo.", bResult);
+
+    // Redo and check its result.
+    pUndoMgr->Redo();
+    bResult = aCheck.checkContent(m_pDoc);
+    CPPUNIT_ASSERT_MESSAGE("Failed on the content check after redo.", bResult);
+
+    m_pDoc->DeleteTab(0);
+}
+
 void Test::testSharedFormulasDeleteRows()
 {
     m_pDoc->InsertTab(0, "Test");
