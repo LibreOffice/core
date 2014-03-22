@@ -107,7 +107,7 @@ SwNumPositionTabPage::SwNumPositionTabPage(Window* pParent,
     m_pRelativeCB->Check();
     m_pAlignLB->SetSelectHdl(LINK(this, SwNumPositionTabPage, EditModifyHdl));
     m_pAlign2LB->SetSelectHdl(LINK(this, SwNumPositionTabPage, EditModifyHdl));
-    for ( sal_uInt16 i = 0; i < m_pAlignLB->GetEntryCount(); ++i )
+    for ( sal_Int32 i = 0; i < m_pAlignLB->GetEntryCount(); ++i )
     {
         m_pAlign2LB->InsertEntry( m_pAlignLB->GetEntry( i ) );
     }
@@ -280,7 +280,7 @@ void SwNumPositionTabPage::InitControls()
 
     if(bSameAdjust)
     {
-        sal_uInt16 nPos = 1; // centered
+        sal_Int32 nPos = 1; // centered
         if(aNumFmtArr[nLvl]->GetNumAdjust() == SVX_ADJUST_LEFT)
             nPos = 0;
         else if(aNumFmtArr[nLvl]->GetNumAdjust() == SVX_ADJUST_RIGHT)
@@ -296,7 +296,7 @@ void SwNumPositionTabPage::InitControls()
 
     if ( bSameLabelFollowedBy )
     {
-        sal_uInt16 nPos = 0; // LISTTAB
+        sal_Int32 nPos = 0; // LISTTAB
         if ( aNumFmtArr[nLvl]->GetLabelFollowedBy() == SvxNumberFormat::SPACE )
         {
             nPos = 1;
@@ -567,7 +567,7 @@ IMPL_LINK_NOARG(SwNumPositionTabPage, EditModifyHdl)
         {
             SwNumFmt aNumFmt(pActNum->Get(i));
 
-            const sal_uInt16 nPos = m_pAlignLB->IsVisible()
+            const sal_Int32 nPos = m_pAlignLB->IsVisible()
                                 ? m_pAlignLB->GetSelectEntryPos()
                                 : m_pAlign2LB->GetSelectEntryPos();
             SvxAdjust eAdjust = SVX_ADJUST_CENTER;
@@ -649,7 +649,7 @@ IMPL_LINK( SwNumPositionTabPage, DistanceHdl, MetricField *, pFld )
                     if(0 == i)
                     {
                         long nTmp = aNumFmt.GetFirstLineOffset();
-                        aNumFmt.SetAbsLSpace( sal_uInt16(nValue - nTmp));
+                        aNumFmt.SetAbsLSpace( nValue - nTmp );
                     }
                     else
                     {
@@ -657,7 +657,7 @@ IMPL_LINK( SwNumPositionTabPage, DistanceHdl, MetricField *, pFld )
                                     pActNum->Get( i - 1 ).GetFirstLineOffset() -
                                     pActNum->Get( i ).GetFirstLineOffset();
 
-                        aNumFmt.SetAbsLSpace( sal_uInt16(nValue + nTmp));
+                        aNumFmt.SetAbsLSpace( nValue + nTmp );
                     }
                 }
                 else
@@ -667,15 +667,15 @@ IMPL_LINK( SwNumPositionTabPage, DistanceHdl, MetricField *, pFld )
             }
             else if (pFld == m_pDistNumMF)
             {
-                aNumFmt.SetCharTextDistance( (short)nValue );
+                aNumFmt.SetCharTextDistance( nValue );
             }
             else if (pFld == m_pIndentMF)
             {
                 // now AbsLSpace also has to be modified by FirstLineOffset
                 long nDiff = nValue + aNumFmt.GetFirstLineOffset();
                 long nAbsLSpace = aNumFmt.GetAbsLSpace();
-                aNumFmt.SetAbsLSpace(sal_uInt16(nAbsLSpace + nDiff));
-                aNumFmt.SetFirstLineOffset( -(short)nValue );
+                aNumFmt.SetAbsLSpace( nAbsLSpace + nDiff );
+                aNumFmt.SetFirstLineOffset( -nValue );
             }
 
             pActNum->Set( i, aNumFmt );
@@ -734,7 +734,7 @@ IMPL_LINK_NOARG(SwNumPositionTabPage, LabelFollowedByHdl_Impl)
     // determine value to be set at the chosen list levels
     SvxNumberFormat::LabelFollowedBy eLabelFollowedBy = SvxNumberFormat::LISTTAB;
     {
-        const sal_uInt16 nPos = m_pLabelFollowedByLB->GetSelectEntryPos();
+        const sal_Int32 nPos = m_pLabelFollowedByLB->GetSelectEntryPos();
         if ( nPos == 1 )
         {
             eLabelFollowedBy = SvxNumberFormat::SPACE;
@@ -967,7 +967,7 @@ void SwSvxNumBulletTabDialog::PageCreated(sal_uInt16 nPageId, SfxTabPage& rPage)
         ::FillCharStyleListBox(rCharFmtLB,  pDocShell);
 
         std::vector<OUString> aList;
-        for(sal_uInt16 j = 0; j < rCharFmtLB.GetEntryCount(); j++)
+        for(sal_Int32 j = 0; j < rCharFmtLB.GetEntryCount(); j++)
              aList.push_back( rCharFmtLB.GetEntry(j) );
 
         aSet.Put( SfxStringListItem( SID_CHAR_FMT_LIST_BOX,&aList ) ) ;
