@@ -55,8 +55,11 @@ namespace oox { namespace ppt {
     struct ShapeTargetElement
     {
         ShapeTargetElement()
-            : mnType( 0 )
-            {}
+            : mnType(0)
+            , mnRangeType(0)
+        {
+            maRange.start = maRange.end = 0;
+        }
         void convert( ::com::sun::star::uno::Any & aAny, sal_Int16 & rSubType ) const;
 
         sal_Int32               mnType;
