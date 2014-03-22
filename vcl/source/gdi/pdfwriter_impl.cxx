@@ -10607,7 +10607,7 @@ void PDFWriterImpl::setFont( const Font& rFont )
 
 void PDFWriterImpl::push( sal_uInt16 nFlags )
 {
-    OSL_ENSURE( m_aGraphicsStack.size() > 0, "invalid graphics stack" );
+    OSL_ENSURE( !m_aGraphicsStack.empty(), "invalid graphics stack" );
     m_aGraphicsStack.push_front( m_aGraphicsStack.front() );
     m_aGraphicsStack.front().m_nFlags = nFlags;
 }
