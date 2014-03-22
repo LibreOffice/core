@@ -336,7 +336,7 @@ void OutputDevice::DrawOutDev( const Point& rDestPt, const Size& rDestSize,
     (void) rDestSize;
     (void) rSrcPt;
     (void) rSrcSize;
-
+    (void) rOutDev;
     // This should never occur! You can't call this function on a Printer instance
     DBG_ASSERT( false, "Don't use OutputDevice::DrawOutDev(...) with printer devices!" );
 }
