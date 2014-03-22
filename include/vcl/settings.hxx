@@ -30,6 +30,7 @@
 #include <i18nlangtag/languagetag.hxx>
 #include <unotools/syslocale.hxx>
 
+#include <boost/optional.hpp>
 #include <boost/shared_ptr.hpp>
 
 class CollatorWrapper;
@@ -520,6 +521,8 @@ public:
     void                            SetFrameStyle( const FrameStyle& rStyle );
 
     const BitmapEx                  GetPersonaHeader() const;
+
+    const boost::optional<Color>&   GetPersonaMenuBarTextColor() const;
 
     // global switch to allow EdgeBlenging; currently possible for ValueSet and ListBox
     // when activated there using Get/SetEdgeBlending; default is true

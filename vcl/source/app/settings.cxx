@@ -204,6 +204,7 @@ struct ImplStyleData
 
     BitmapEx                        maPersonaHeaderBitmap; ///< Cache the header bitmap.
     BitmapEx                        maPersonaFooterBitmap; ///< Cache the footer bitmap.
+    boost::optional<Color>          maPersonaMenuBarTextColor; ///< Cache the menubar color.
 };
 
 
@@ -527,7 +528,8 @@ ImplStyleData::ImplStyleData() :
     mIconThemeSelector(new vcl::IconThemeSelector()),
     maPersonaHeaderFooter(),
     maPersonaHeaderBitmap(),
-    maPersonaFooterBitmap()
+    maPersonaFooterBitmap(),
+    maPersonaMenuBarTextColor()
 {
     mnScrollBarSize             = 16;
     mnMinThumbSize              = 16;
@@ -628,7 +630,8 @@ ImplStyleData::ImplStyleData( const ImplStyleData& rData ) :
     maFrameStyle( rData.maFrameStyle ),
     maPersonaHeaderFooter( rData.maPersonaHeaderFooter ),
     maPersonaHeaderBitmap( rData.maPersonaHeaderBitmap ),
-    maPersonaFooterBitmap( rData.maPersonaFooterBitmap )
+    maPersonaFooterBitmap( rData.maPersonaFooterBitmap ),
+    maPersonaMenuBarTextColor( rData.maPersonaMenuBarTextColor )
 {
     mnBorderSize                = rData.mnBorderSize;
     mnTitleHeight               = rData.mnTitleHeight;
@@ -2115,7 +2118,7 @@ static BitmapEx readBitmapEx( const OUString& rPath )
 enum WhichPersona { PERSONA_HEADER, PERSONA_FOOTER };
 
 /** Update the setting of the Persona header / footer in ImplStyleData */
-static void setupPersonaHeaderFooter( WhichPersona eWhich, OUString& rHeaderFooter, BitmapEx& rHeaderFooterBitmap, Color& maMenuBarTextColor )
+static void setupPersonaHeaderFooter( WhichPersona eWhich, OUString& rHeaderFooter, BitmapEx& rHeaderFooterBitmap, boost::optional<Color>& rMenuBarTextColor )
 {
     uno::Reference< uno::XComponentContext > xContext( comphelper::getProcessComponentContext() );
     if ( !xContext.is() )
@@ -2132,6 +2135,7 @@ static void setupPersonaHeaderFooter( WhichPersona eWhich, OUString& rHeaderFoot
 
     rHeaderFooter = aOldValue;
     rHeaderFooterBitmap = BitmapEx();
+    rMenuBarTextColor = boost::none;
 
     // now read the new values and setup bitmaps
     OUString aHeader, aFooter;
@@ -2146,7 +2150,7 @@ static void setupPersonaHeaderFooter( WhichPersona eWhich, OUString& rHeaderFoot
         if ( nIndex > 0 )
         {
             OUString aColor = aPersonaSettings.getToken( 0, ';', ++nIndex );
-            maMenuBarTextColor = Color( aColor.toUInt64( 16 ) );
+            rMenuBarTextColor = Color( aColor.toUInt64( 16 ) );
         }
     }
     else if ( aPersona == "default" )
@@ -2185,8 +2189,14 @@ static void setupPersonaHeaderFooter( WhichPersona eWhich, OUString& rHeaderFoot
 
 const BitmapEx StyleSettings::GetPersonaHeader() const
 {
-    setupPersonaHeaderFooter( PERSONA_HEADER, mpData->maPersonaHeaderFooter, mpData->maPersonaHeaderBitmap, mpData->maMenuBarTextColor );
+    setupPersonaHeaderFooter( PERSONA_HEADER, mpData->maPersonaHeaderFooter, mpData->maPersonaHeaderBitmap, mpData->maPersonaMenuBarTextColor );
     return mpData->maPersonaHeaderBitmap;
+}
+
+const boost::optional<Color>& StyleSettings::GetPersonaMenuBarTextColor() const
+{
+    GetPersonaHeader();
+    return mpData->maPersonaMenuBarTextColor;
 }
 
 void StyleSettings::SetStandardStyles()
