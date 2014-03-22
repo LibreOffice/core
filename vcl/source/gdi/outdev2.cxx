@@ -328,14 +328,10 @@ void OutputDevice::DrawOutDev( const Point& rDestPt, const Size& rDestSize,
     }
 }
 
-void OutputDevice::DrawOutDev( const Point& rDestPt, const Size& rDestSize,
-                               const Point& rSrcPt,  const Size& rSrcSize,
-                               const Printer& /* rOutDev */ )
+void OutputDevice::DrawOutDev( const Point& /*rDestPt*/, const Size& /*rDestSize*/,
+                               const Point& /*rSrcPt*/,  const Size& /*rSrcSize*/,
+                               const Printer& /*rOutDev*/ )
 {
-    (void) rDestPt;
-    (void) rDestSize;
-    (void) rSrcPt;
-    (void) rSrcSize;
     // This should never occur! You can't call this function on a Printer instance
     DBG_ASSERT( false, "Don't use OutputDevice::DrawOutDev(...) with printer devices!" );
 }
@@ -379,10 +375,8 @@ void OutputDevice::CopyArea( const Point& rDestPt,
         mpAlphaVDev->CopyArea( rDestPt, rSrcPt, rSrcSize, nFlags );
 }
 
-void OutputDevice::CopyAreaFinal( SalTwoRect& aPosAry, sal_uInt32 nFlags )
+void OutputDevice::CopyAreaFinal( SalTwoRect& aPosAry, sal_uInt32 /*nFlags*/)
 {
-    (void) nFlags;
-
     if ( aPosAry.mnSrcWidth && aPosAry.mnSrcHeight && aPosAry.mnDestWidth && aPosAry.mnDestHeight )
     {
         aPosAry.mnDestWidth  = aPosAry.mnSrcWidth;
@@ -2276,18 +2270,11 @@ void OutputDevice::ImplPrintTransparent( const Bitmap& rBmp, const Bitmap& rMask
     }
 }
 
-void OutputDevice::ImplPrintMask( const Bitmap& rMask, const Color& rMaskColor,
-                                  const Point& rDestPt, const Size& rDestSize,
-                                  const Point& rSrcPtPixel, const Size& rSrcSizePixel )
+void OutputDevice::ImplPrintMask( const Bitmap& /*rMask*/, const Color& /*rMaskColor*/,
+                                  const Point& /*rDestPt*/, const Size& /*rDestSize*/,
+                                  const Point& /*rSrcPtPixel*/, const Size& /*rSrcSizePixel*/ )
 {
     // let's leave this for Printer
-    (void) rMask;
-    (void) rMaskColor;
-    (void) rDestPt;
-    (void) rDestSize;
-    (void) rSrcPtPixel;
-    (void) rSrcSizePixel;
-
     return;
 }
 

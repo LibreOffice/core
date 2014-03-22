@@ -212,61 +212,40 @@ bool PrinterOptions::ReadFromConfig( bool i_bFile )
 }
 
 bool Printer::DrawTransformBitmapExDirect(
-    const basegfx::B2DHomMatrix& aFullTransform,
-    const BitmapEx& rBitmapEx)
+    const basegfx::B2DHomMatrix& /*aFullTransform*/,
+    const BitmapEx& /*rBitmapEx*/)
 {
     // printers can't draw bitmaps directly
-    (void) aFullTransform;
-    (void) rBitmapEx;
     return false;
 }
 
 bool Printer::TransformReduceBitmapExTargetRange(
-    const basegfx::B2DHomMatrix& aFullTransform,
-    basegfx::B2DRange &aVisibleRange,
-    double &fMaximumArea)
+    const basegfx::B2DHomMatrix& /*aFullTransform*/,
+    basegfx::B2DRange& /*aVisibleRange*/,
+    double& /*fMaximumArea*/)
 {
     // deliberately do nothing - you can't reduce the
     // target range for a printer at all
-    (void) aFullTransform;
-    (void) aVisibleRange;
-    (void) fMaximumArea;
     return true;
 }
 
-void Printer::DrawOutDev( const Point& rDestPt, const Size& rDestSize,
-                               const Point& rSrcPt,  const Size& rSrcSize )
+void Printer::DrawOutDev( const Point& /*rDestPt*/, const Size& /*rDestSize*/,
+                               const Point& /*rSrcPt*/,  const Size& /*rSrcSize*/ )
 {
-    (void) rDestPt;
-    (void) rDestSize;
-    (void) rSrcPt;
-    (void) rSrcSize;
-
     DBG_ASSERT( false, "Don't use OutputDevice::DrawOutDev(...) with printer devices!" );
 }
 
-void Printer::DrawOutDev( const Point& rDestPt, const Size& rDestSize,
-                               const Point& rSrcPt,  const Size& rSrcSize,
-                               const OutputDevice& rOutDev )
+void Printer::DrawOutDev( const Point& /*rDestPt*/, const Size& /*rDestSize*/,
+                               const Point& /*rSrcPt*/,  const Size& /*rSrcSize*/,
+                               const OutputDevice& /*rOutDev*/ )
 {
-    (void) rDestPt;
-    (void) rDestSize;
-    (void) rSrcPt;
-    (void) rSrcSize;
-    (void) rOutDev;
-
     DBG_ASSERT( false, "Don't use OutputDevice::DrawOutDev(...) with printer devices!" );
 }
 
-void Printer::CopyArea( const Point& rDestPt,
-                        const Point& rSrcPt,  const Size& rSrcSize,
-                        sal_uInt16 nFlags )
+void Printer::CopyArea( const Point& /*rDestPt*/,
+                        const Point& /*rSrcPt*/,  const Size& /*rSrcSize*/,
+                        sal_uInt16 /*nFlags*/ )
 {
-    (void) rDestPt;
-    (void) rSrcPt;
-    (void) rSrcSize;
-    (void) nFlags;
-
     DBG_ASSERT( false, "Don't use OutputDevice::CopyArea(...) with printer devices!" );
 }
 
