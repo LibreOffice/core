@@ -63,7 +63,6 @@ struct SfxRequest_Impl: public SfxListener
     bool            bDone;       // at all executed
     bool            bIgnored;    // Cancelled by the User
     bool            bCancelled;  // no longer notify
-    bool            bUseTarget;  // aTarget was set by Application
     sal_uInt16      nCallMode;   // Synch/Asynch/API/Record
     bool            bAllowRecording;
     SfxAllItemSet*  pInternalArgs;
@@ -150,7 +149,6 @@ SfxRequest::SfxRequest
     pImp->pShell = 0;
     pImp->pSlot = 0;
     pImp->nCallMode = rOrig.pImp->nCallMode;
-    pImp->bUseTarget = rOrig.pImp->bUseTarget;
     pImp->aTarget = rOrig.pImp->aTarget;
     pImp->nModifier = rOrig.pImp->nModifier;
 
@@ -192,7 +190,6 @@ SfxRequest::SfxRequest
     pImp->pShell = 0;
     pImp->pSlot = 0;
     pImp->nCallMode = SFX_CALLMODE_SYNCHRON;
-    pImp->bUseTarget = false;
     pImp->pViewFrame = pViewFrame;
     if( pImp->pViewFrame->GetDispatcher()->GetShellAndSlot_Impl( nSlotId, &pImp->pShell, &pImp->pSlot, true, true ) )
     {
@@ -233,7 +230,6 @@ SfxRequest::SfxRequest
     pImp->pShell = 0;
     pImp->pSlot = 0;
     pImp->nCallMode = nMode;
-    pImp->bUseTarget = false;
 }
 
 SfxRequest::SfxRequest
@@ -254,7 +250,6 @@ SfxRequest::SfxRequest
     pImp->pShell = 0;
     pImp->pSlot = 0;
     pImp->nCallMode = nMode;
-    pImp->bUseTarget = false;
     TransformParameters( nSlot, rArgs, *pArgs, pSlot );
 }
 
@@ -280,7 +275,6 @@ SfxRequest::SfxRequest
     pImp->pShell = 0;
     pImp->pSlot = 0;
     pImp->nCallMode = nMode;
-    pImp->bUseTarget = false;
 }
 
 
