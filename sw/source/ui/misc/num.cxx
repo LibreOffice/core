@@ -209,15 +209,13 @@ void SwNumPositionTabPage::InitControls()
                 {
                     if(bRelative)
                     {
-                        if(nFirstBorderTextRelative == -1)
-                            nFirstBorderTextRelative =
-                            (aNumFmtArr[i]->GetAbsLSpace() + aNumFmtArr[i]->GetFirstLineOffset() -
-                            aNumFmtArr[i - 1]->GetAbsLSpace() + aNumFmtArr[i - 1]->GetFirstLineOffset());
+                        const long nBorderTextRelative =
+                            aNumFmtArr[i]->GetAbsLSpace() + aNumFmtArr[i]->GetFirstLineOffset() -
+                            aNumFmtArr[i - 1]->GetAbsLSpace() + aNumFmtArr[i - 1]->GetFirstLineOffset();
+                        if (nFirstBorderTextRelative == -1)
+                            nFirstBorderTextRelative = nBorderTextRelative;
                         else
-                            bSameDistBorderNum &= nFirstBorderTextRelative ==
-                            (aNumFmtArr[i]->GetAbsLSpace() + aNumFmtArr[i]->GetFirstLineOffset() -
-                            aNumFmtArr[i - 1]->GetAbsLSpace() + aNumFmtArr[i - 1]->GetFirstLineOffset());
-
+                            bSameDistBorderNum &= nFirstBorderTextRelative == nBorderTextRelative;
                     }
                     else
                     {
