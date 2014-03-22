@@ -427,9 +427,7 @@ NPMIMEType
 dupMimeType(NPMIMEType type)
 {
     NPMIMEType mimetype = (NPMIMEType) NPN_MemAlloc(strlen(type)+1);
-    mimetype[strlen(type)] = 0;
-    if (mimetype)
-        strcpy(mimetype, type);
+    strcpy(mimetype, type);
     return(mimetype);
 }
 #endif // end of UNIX
