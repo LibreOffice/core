@@ -423,8 +423,6 @@ bool Window::ImplInitGraphics() const
 void Window::CopyAreaFinal( SalTwoRect& aPosAry, sal_uInt32 nFlags )
 {
 
-    const Rectangle aSrcOutRect( Point( mnOutOffX, mnOutOffY ),
-                                 Size( mnOutWidth, mnOutHeight ) );
     const Rectangle aSrcRect   ( Point( aPosAry.mnSrcX, aPosAry.mnSrcY ),
                                  Size( aPosAry.mnSrcWidth, aPosAry.mnSrcHeight ) );
 
