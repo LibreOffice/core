@@ -221,11 +221,13 @@ void RegexpMapIterImpl< Val >::next()
         case Regexp::KIND_DOMAIN:
             if (m_aIndex == m_pMap->m_aList[m_nList].end())
                 return;
+            //fall-through
         default:
             ++m_aIndex;
             if (m_nList == Regexp::KIND_DOMAIN
                 || m_aIndex != m_pMap->m_aList[m_nList].end())
                 break;
+            //fall-through
         case -1:
             do
             {
