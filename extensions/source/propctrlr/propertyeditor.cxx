@@ -44,6 +44,8 @@ namespace pcr
     OPropertyEditor::OPropertyEditor( Window* pParent, WinBits nWinStyle)
             :Control(pParent, nWinStyle)
             ,m_aTabControl( this )
+            ,m_pListener(NULL)
+            ,m_pObserver(NULL)
             ,m_nNextId(1)
             ,m_bHasHelpSection( false )
             ,m_nMinHelpLines( 0 )
