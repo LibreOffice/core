@@ -2919,6 +2919,7 @@ DECLARE_OOXMLEXPORT_TEST(testSimpleSdts, "simple-sdts.docx")
     if (!pXmlDoc)
        return;
 
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:sdt/w:sdtPr/w:text", 1);
     assertXPath(pXmlDoc, "/w:document/w:body/w:sdt/w:sdtPr/w:picture", 1);
     assertXPath(pXmlDoc, "/w:document/w:body/w:sdt/w:sdtPr/w:group", 1);
     assertXPath(pXmlDoc, "/w:document/w:body/w:sdt/w:sdtPr/w:citation", 1);

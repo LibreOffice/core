@@ -7139,6 +7139,8 @@ void DocxAttributeOutput::CharGrabBag( const SfxGrabBagItem& rItem )
                                            rtl::OUStringToOString( sValue, RTL_TEXTENCODING_UTF8 ).getStr() );
                     }
                 }
+                else if (aPropertyValue.Name == "ooxml:CT_SdtPr_text")
+                    m_nRunSdtPrToken = FSNS( XML_w, XML_text );
             }
         }
         else

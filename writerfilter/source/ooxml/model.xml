@@ -18907,7 +18907,7 @@
                   <ref name="CT_Empty"/>
                 </element>
                 <element name="text">
-                  <ref name="CT_SdtText"/>
+                  <ref name="CT_OnOff"/>
                 </element>
                 <element name="citation">
                   <ref name="CT_OnOff"/>
