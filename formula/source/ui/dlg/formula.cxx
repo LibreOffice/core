@@ -236,6 +236,7 @@ namespace formula
         ~FormulaDlg_Impl();
 
     };
+
 FormulaDlg_Impl::FormulaDlg_Impl(Dialog* pParent
                                         , bool _bSupportFunctionResult
                                         , bool _bSupportResult
@@ -244,6 +245,10 @@ FormulaDlg_Impl::FormulaDlg_Impl(Dialog* pParent
                                         ,const IFunctionManager* _pFunctionMgr
                                         ,IControlReferenceHandler* _pDlg)
     :
+    m_pSpecialOpCodesEnd(NULL),
+    m_pFunctionOpCodesEnd(NULL),
+    m_pUnaryOpCodesEnd(NULL),
+    m_pBinaryOpCodesEnd(NULL),
     m_pHelper       (_pHelper),
     m_pParent       (pParent),
     m_pDlg          (_pDlg),
@@ -269,6 +274,7 @@ FormulaDlg_Impl::FormulaDlg_Impl(Dialog* pParent
     aFtFormResult   ( pParent, ModuleRes( FT_FORMULA_RESULT)),
     aWndFormResult  ( pParent, ModuleRes( WND_FORMULA_RESULT)),
     pTheRefEdit     (NULL),
+    pTheRefButton   (NULL),
     pMEdit          (NULL),
     bUserMatrixFlag (sal_False),
     aTitle1         ( ModuleRes( STR_TITLE1 ) ),        // local resource
@@ -348,6 +354,7 @@ FormulaDlg_Impl::FormulaDlg_Impl(Dialog* pParent
     aFtFuncName.SetFont(aFntLight);
     aFtFuncDesc.SetFont(aFntLight);
 }
+
 FormulaDlg_Impl::~FormulaDlg_Impl()
 {
     if(aTimer.IsActive())
