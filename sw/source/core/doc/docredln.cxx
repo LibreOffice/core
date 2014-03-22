@@ -217,6 +217,11 @@ const SwExtraRedlineTbl& SwDoc::GetExtraRedlineTbl() const
     return *mpExtraRedlineTbl;
 }
 
+SwExtraRedlineTbl::~SwExtraRedlineTbl()
+{
+    DeleteAndDestroyAll();
+}
+
 bool SwDoc::IsRedlineMove() const
 {
     return mbIsRedlineMove;

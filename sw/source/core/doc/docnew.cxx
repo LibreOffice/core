@@ -531,7 +531,7 @@ SwDoc::~SwDoc()
     mbDtor = true;
 
     delete mpRedlineTbl;
-    delete mpExtraRedlineTbl;
+    delete mpExtraRedlineTbl, mpExtraRedlineTbl = 0;
     delete mpUnoCrsrTbl;
     delete mpAutoFmtRedlnComment;
     delete mpUpdtFlds;

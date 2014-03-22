@@ -190,6 +190,7 @@ private:
     std::vector<SwExtraRedline*>    m_aExtraRedlines;
 
 public:
+    ~SwExtraRedlineTbl();
     sal_uInt16 GetPos(const SwExtraRedline* p) const;
 
     bool Insert( SwExtraRedline* p );
