@@ -716,7 +716,7 @@ bool SdrObjEditView::SdrBeginTextEdit(
 #endif
             pTextEditOutliner->ClearModifyFlag();
 
-            if(pWin && pTextObj->IsFitToSize())
+            if (pTextObj->IsFitToSize())
             {
                 pWin->Invalidate(aTextEditArea);
             }
