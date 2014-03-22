@@ -215,6 +215,11 @@ bool SdtHelper::isInteropGrabBagEmpty()
     return m_aGrabBag.getLength() == 0;
 }
 
+sal_Int32 SdtHelper::getInteropGrabBagSize()
+{
+    return m_aGrabBag.getLength();
+}
+
 bool SdtHelper::containedInInteropGrabBag(OUString rValueName)
 {
     for (sal_Int32 i=0; i < m_aGrabBag.getLength(); ++i)

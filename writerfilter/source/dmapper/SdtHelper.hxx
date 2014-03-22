@@ -88,6 +88,7 @@ public:
     com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue> getInteropGrabBagAndClear();
     bool isInteropGrabBagEmpty();
     bool containedInInteropGrabBag(OUString rValueName);
+    sal_Int32 getInteropGrabBagSize();
 };
 
 } // namespace dmapper

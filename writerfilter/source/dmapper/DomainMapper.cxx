@@ -2251,6 +2251,7 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, PropertyMapPtr rContext )
     case NS_ooxml::LN_CT_SdtPr_citation:
     case NS_ooxml::LN_CT_SdtPr_group:
     case NS_ooxml::LN_CT_SdtPr_text:
+    case NS_ooxml::LN_CT_SdtPr_id:
     {
         // this is an unsupported SDT property, create a grab bag for it
         OUString sName = OUString::createFromAscii((*QNameToString::Instance())(nSprmId).c_str());
@@ -2669,7 +2670,9 @@ void DomainMapper::lcl_utext(const sal_uInt8 * data_, size_t len)
         // save them in the paragraph interop grab bag
         if(m_pImpl->m_pSdtHelper->containedInInteropGrabBag("ooxml:CT_SdtPr_checkbox") ||
                 m_pImpl->m_pSdtHelper->containedInInteropGrabBag("ooxml:CT_SdtPr_text") ||
-                m_pImpl->m_pSdtHelper->containedInInteropGrabBag("ooxml:CT_SdtPr_dataBinding"))
+                m_pImpl->m_pSdtHelper->containedInInteropGrabBag("ooxml:CT_SdtPr_dataBinding") ||
+                (m_pImpl->m_pSdtHelper->containedInInteropGrabBag("ooxml:CT_SdtPr_id") &&
+                        m_pImpl->m_pSdtHelper->getInteropGrabBagSize() == 1))
             m_pImpl->GetTopContextOfType(CONTEXT_CHARACTER)->Insert(PROP_SDTPR,
                     uno::makeAny(m_pImpl->m_pSdtHelper->getInteropGrabBagAndClear()), true, CHAR_GRAB_BAG);
         else

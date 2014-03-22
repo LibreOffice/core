@@ -406,6 +406,11 @@ void DocxAttributeOutput::WriteSdtBlock( sal_Int32& nSdtPrToken, ::sax_fastparse
 
             m_pSerializer->endElement( nSdtPrToken );
         }
+        else if( nSdtPrToken == FSNS( XML_w, XML_id ) )
+            //Word won't open a document with an empty id tag, we fill it with a random number
+            m_pSerializer->singleElement( nSdtPrToken,
+                                          FSNS(XML_w, XML_val), OString::number( rand() ),
+                                          FSEND );
         else if( nSdtPrToken > 0 )
             m_pSerializer->singleElement( nSdtPrToken, FSEND );
 
@@ -7141,6 +7146,9 @@ void DocxAttributeOutput::CharGrabBag( const SfxGrabBagItem& rItem )
                 }
                 else if (aPropertyValue.Name == "ooxml:CT_SdtPr_text")
                     m_nRunSdtPrToken = FSNS( XML_w, XML_text );
+                else if (aPropertyValue.Name == "ooxml:CT_SdtPr_id" && m_nRunSdtPrToken == 0)
+                    // only write id token as a marker if no other exist
+                    m_nRunSdtPrToken = FSNS( XML_w, XML_id );
             }
         }
         else
