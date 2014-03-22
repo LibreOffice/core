@@ -390,7 +390,7 @@ void TextObjectBar::GetAttrState( SfxItemSet& rSet )
 
             case SID_THES:
             {
-                if( mpView && mpView->GetTextEditOutlinerView() )
+                if (mpView->GetTextEditOutlinerView())
                 {
                     EditView & rEditView = mpView->GetTextEditOutlinerView()->GetEditView();
                     OUString        aStatusVal;
