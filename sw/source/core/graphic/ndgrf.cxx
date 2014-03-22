@@ -772,10 +772,9 @@ void SwGrfNode::ReleaseLink()
             // when inserting a linked graphic and save, reload document. Try to access
             // that data from the original file; if this works, use it. Else use the
             // data we have (but without knowing the original format)
-            int nRes = GRFILTER_OK;
             GraphicFilter& rFlt = GraphicFilter::GetGraphicFilter();
             Graphic aNew;
-            nRes = GraphicFilter::LoadGraphic( aFileName, OUString(), aNew, &rFlt);
+            int nRes = GraphicFilter::LoadGraphic( aFileName, OUString(), aNew, &rFlt);
 
             if(GRFILTER_OK == nRes)
             {
