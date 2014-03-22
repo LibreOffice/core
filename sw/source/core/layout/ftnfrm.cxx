@@ -1768,7 +1768,7 @@ void SwFtnBossFrm::_CollectFtns( const SwCntntFrm*   _pRef,
 
     bool bFound = false;
 
-    while ( _pFtn )
+    do
     {
         // Search for the next footnote in this column/page so that
         // we do not start from zero again after cutting one footnote.
@@ -1876,6 +1876,7 @@ void SwFtnBossFrm::_CollectFtns( const SwCntntFrm*   _pRef,
         else
             break;
     }
+    while ( _pFtn );
 }
 
 void SwFtnBossFrm::_MoveFtns( SwFtnFrms &rFtnArr, sal_Bool bCalc )
