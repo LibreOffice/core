@@ -2212,9 +2212,6 @@ void  SwDocStyleSheetPool::Replace( SfxStyleSheetBase& rSource,
             pTargetFmt = ((SwDocStyleSheet&)rTarget).GetFrmFmt();
             break;
         case SFX_STYLE_FAMILY_PAGE:
-            if( bSwSrcPool )
-                pSourceFmt = &((SwDocStyleSheet&)rSource).GetPageDesc()
-                                ->GetMaster();
             {
                 SwPageDesc *pDesc = rDoc.FindPageDescByName(
                     ((SwDocStyleSheet&)rTarget).GetPageDesc()->GetName(),
