@@ -142,8 +142,6 @@ void SwGlossaryGroupDlg::Apply()
         OUString sTitle( it->getToken(1, '\t') );
         if(!sTitle.isEmpty())
             sMsg += sTitle;
-        else
-            sDelGroup.getToken(1, GLOS_DELIM);
         sMsg += SW_RESSTR(STR_QUERY_DELETE_GROUP2);
         QueryBox aQuery(this->GetParent(), WB_YES_NO|WB_DEF_NO, sMsg );
         if(RET_YES == aQuery.Execute())
