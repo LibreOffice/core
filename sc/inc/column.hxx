@@ -291,6 +291,8 @@ public:
     ScFormulaCell* SetFormulaCell( SCROW nRow, ScFormulaCell* pCell );
     ScFormulaCell* SetFormulaCell( sc::ColumnBlockPosition& rBlockPos, SCROW nRow, ScFormulaCell* pCell );
 
+    bool SetFormulaCells( SCROW nRow, std::vector<ScFormulaCell*>& rCells );
+
     svl::SharedString GetSharedString( SCROW nRow ) const;
 
     void SetRawString( SCROW nRow, const OUString& rStr, bool bBroadcast = true );
@@ -555,6 +557,7 @@ private:
     sc::CellStoreType::iterator GetPositionToInsert( const sc::CellStoreType::iterator& it, SCROW nRow );
     void ActivateNewFormulaCell( const sc::CellStoreType::iterator& itPos, SCROW nRow, ScFormulaCell& rCell, bool bJoin = true );
     void ActivateNewFormulaCell( const sc::CellStoreType::position_type& aPos, ScFormulaCell& rCell, bool bJoin = true );
+    void AttachNewFormulaCells( const sc::CellStoreType::position_type& aPos, size_t nLength );
     void BroadcastNewCell( SCROW nRow );
     bool UpdateScriptType( sc::CellTextAttr& rAttr, SCROW nRow, sc::CellStoreType::iterator& itr );
 
