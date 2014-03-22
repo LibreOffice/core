@@ -574,6 +574,20 @@ protected:
     }
 
     /**
+     * Same as the assertXPathContent(), but don't assert: return the string instead.
+     */
+    OUString getXPathContent(xmlDocPtr pXmlDoc, const OString& rXPath)
+    {
+        xmlNodeSetPtr pXmlNodes = getXPathNode(pXmlDoc, rXPath);
+
+        CPPUNIT_ASSERT_MESSAGE(OString("XPath '" + rXPath + "' not found").getStr(),
+                xmlXPathNodeSetGetLength(pXmlNodes) > 0);
+
+        xmlNodePtr pXmlNode = pXmlNodes->nodeTab[0];
+        return OUString::createFromAscii((const char*)((pXmlNode->children[0]).content));
+    }
+
+    /**
      * Assert that rXPath exists, and returns exactly one node.
      * In case rAttribute is provided, the rXPath's attribute's value must
      * equal to the rExpected value.
