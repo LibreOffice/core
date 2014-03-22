@@ -280,7 +280,8 @@ SceneObject::~SceneObject()
 }
 
 Iris::Iris()
-    : SceneObject ()
+    : SceneObject()
+    , maTexture(0)
 {
 }
 
