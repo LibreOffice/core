@@ -85,10 +85,11 @@ OUString PresetHandler::RESOURCETYPE_STATUSBAR()
 
 
 PresetHandler::PresetHandler(const css::uno::Reference< css::uno::XComponentContext >& xContext)
-    : m_xContext         (xContext                                )
-    , m_aSharedStorages  (                                     )
+    : m_xContext(xContext)
+    , m_eConfigType(E_GLOBAL)
+    , m_aSharedStorages()
     , m_lDocumentStorages()
-    , m_aLanguageTag     (LANGUAGE_USER_PRIV_NOTRANSLATE)
+    , m_aLanguageTag(LANGUAGE_USER_PRIV_NOTRANSLATE)
 {
 }
 
