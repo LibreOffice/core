@@ -851,8 +851,8 @@ sal_Bool DrawViewShell::SwitchPage(sal_uInt16 nSelectedPage)
                 {
                     SdrPageView* pPV = mpDrawView->GetSdrPageView();
 
-                    SdPage* pCurrentPage = dynamic_cast< SdPage* >( pPV->GetPage());
-                    if (pPV
+                    SdPage* pCurrentPage = pPV ? dynamic_cast<SdPage*>(pPV->GetPage()) : NULL;
+                    if (pCurrentPage
                         && pNewPage == pCurrentPage
                         && maTabControl.GetPageText(nSelectedPage+1).equals(pNewPage->GetName()))
                     {
