@@ -489,8 +489,7 @@ void SwUndoCompDoc::RedoImpl(::sw::UndoRedoContext & rContext)
 
         SwRangeRedline* pTmp = new SwRangeRedline( *pRedlData, *pPam );
         ((SwRedlineTbl&)pDoc->GetRedlineTbl()).Insert( pTmp );
-        if (pTmp) // #i19649#
-            pTmp->InvalidateRange();
+        pTmp->InvalidateRange();
     }
 
     SetPaM(*pPam, true);
