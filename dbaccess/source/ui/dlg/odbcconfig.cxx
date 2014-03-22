@@ -160,12 +160,12 @@ struct OdbcTypesImpl
 OOdbcEnumeration::OOdbcEnumeration()
 #ifdef HAVE_ODBC_SUPPORT
     :m_pAllocHandle(NULL)
+    ,m_pFreeHandle(NULL)
     ,m_pSetEnvAttr(NULL)
     ,m_pDataSources(NULL)
     ,m_pImpl(new OdbcTypesImpl)
 #endif
 {
-
     sal_Bool bLoaded = load(ODBC_LIBRARY);
 #ifdef ODBC_LIBRARY_1
     if ( !bLoaded )
