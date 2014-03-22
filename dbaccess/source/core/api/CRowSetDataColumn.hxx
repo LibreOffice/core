@@ -42,7 +42,6 @@ namespace dbaccess
 
         OUString             m_sLabel;
         OUString             m_aDescription;     // description
-        ORowSetBase*                m_pRowSet;
 
         virtual ~ORowSetDataColumn();
     public:
