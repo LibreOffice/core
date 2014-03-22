@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da86d52c_4f5aa184",
+        "filename": "sw/source/filter/ww8/docxattributeoutput.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 776,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2014-03-22T13:46:56Z",
+      "side": 1,
+      "message": "I think naming that variable as m_nFieldsInHyperlink would improve readability of the patch.",
+      "revId": "fb5c5a04f467669615fd0833b9d5ee9278965ee6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
