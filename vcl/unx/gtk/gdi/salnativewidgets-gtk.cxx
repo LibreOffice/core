@@ -3888,7 +3888,7 @@ void GtkSalGraphics::updateSettings( AllSettings& rSettings )
     aStyleSet.SetMenuColor( aBackColor );
     aStyleSet.SetMenuTextColor( aTextColor );
 
-    aTextColor = getColor( pMenubarStyle->fg[GTK_STATE_NORMAL] );
+    aTextColor = aStyleSet.GetPersonaMenuBarTextColor().get_value_or( getColor( pMenubarStyle->fg[GTK_STATE_NORMAL] ) );
     aStyleSet.SetMenuBarTextColor( aTextColor );
     aStyleSet.SetMenuBarRolloverTextColor( aTextColor );
 

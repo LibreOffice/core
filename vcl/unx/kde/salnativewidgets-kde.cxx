@@ -1982,7 +1982,7 @@ void KDESalFrame::UpdateSettings( AllSettings& rSettings )
         }
 
         aStyleSettings.SetMenuTextColor( aMenuFore );
-        aStyleSettings.SetMenuBarTextColor( aMenuFore );
+        aStyleSettings.SetMenuBarTextColor( aStyleSettings.GetPersonaMenuBarTextColor().get_value_or( aMenuFore ) );
         aStyleSettings.SetMenuColor( aMenuBack );
         aStyleSettings.SetMenuBarColor( aMenuBack );
         aStyleSettings.SetMenuHighlightColor( toColor ( qMenuCG.highlight() ) );
