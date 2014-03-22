@@ -619,8 +619,7 @@ void SfxDockingWindow::ToggleFloatingMode()
     pImp->SetDockAlignment(GetAlignment());
 
     // Dock or undock SfxChildWindow correctly.
-    if ( pMgr )
-        pWorkWin->ConfigChild_Impl( eIdent, SFX_TOGGLEFLOATMODE, pMgr->GetType() );
+    pWorkWin->ConfigChild_Impl( eIdent, SFX_TOGGLEFLOATMODE, pMgr->GetType() );
 }
 
 
