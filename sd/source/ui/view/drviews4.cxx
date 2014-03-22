@@ -340,7 +340,7 @@ void DrawViewShell::MouseMove(const MouseEvent& rMEvt, ::sd::Window* pWin)
         // Since the next MouseMove may execute a IsSolidDraggingNow() in
         // SdrCreateView::MovCreateObj and there the ApplicationBackgroundColor
         // is needed it is necessary to set it here.
-        if(mpDrawView!=NULL && GetDoc()!=NULL)
+        if (GetDoc())
         {
             svtools::ColorConfig aColorConfig;
             Color aFillColor;
