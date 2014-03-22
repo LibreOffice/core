@@ -2483,6 +2483,8 @@ void X11SalFrame::UpdateSettings( AllSettings& rSettings )
 {
     StyleSettings aStyleSettings = rSettings.GetStyleSettings();
     aStyleSettings.SetCursorBlinkTime( 500 );
+    aStyleSettings.SetMenuBarTextColor(
+        aStyleSet.GetPersonaMenuBarTextColor().get_value_or( aStyleSettings.GetMenuBarTextColor() ) );
     rSettings.SetStyleSettings( aStyleSettings );
 }
 
