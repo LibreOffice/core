@@ -2166,6 +2166,12 @@ void ScDocument::CopyTabToClip(SCCOL nCol1, SCROW nRow1,
 {
     if (!bIsClip)
     {
+        if (!pClipDoc)
+        {
+            OSL_TRACE("CopyTabToClip: no ClipDoc");
+            pClipDoc = SC_MOD()->GetClipDoc();
+        }
+
         if (pShell->GetMedium())
         {
             pClipDoc->maFileURL = pShell->GetMedium()->GetURLObject().GetMainURL(INetURLObject::DECODE_TO_IURI);
@@ -2193,11 +2199,6 @@ void ScDocument::CopyTabToClip(SCCOL nCol1, SCROW nRow1,
 
         PutInOrder( nCol1, nCol2 );
         PutInOrder( nRow1, nRow2 );
-        if (!pClipDoc)
-        {
-            OSL_TRACE("CopyTabToClip: no ClipDoc");
-            pClipDoc = SC_MOD()->GetClipDoc();
-        }
 
         ScClipParam& rClipParam = pClipDoc->GetClipParam();
         pClipDoc->aDocName = aDocName;
