@@ -1563,7 +1563,7 @@ void ImpEditView::dragGestureRecognized(const ::com::sun::star::datatransfer::dn
             GetEditSelection() = aCopySel;
             DrawSelection();
             sal_Bool bGotoCursor = DoAutoScroll();
-            sal_Bool bForceCursor = ( pDragAndDropInfo ? sal_False : sal_True ) && !pEditEngine->pImpEditEngine->IsInSelectionMode();
+            sal_Bool bForceCursor = sal_False;
             ShowCursor( bGotoCursor, bForceCursor );
         }
         else if ( IsBulletArea( aMousePos, &nPara ) )
