@@ -716,7 +716,7 @@ bool Printer::StartJob( const OUString& i_rJobName, boost::shared_ptr<vcl::Print
 
             if( bError )
             {
-                mnError = ImplSalPrinterErrorCodeToVCL( mpPrinter->GetErrorCode() );
+                mnError = mpPrinter ? ImplSalPrinterErrorCodeToVCL(mpPrinter->GetErrorCode()) : 0;
                 if ( !mnError )
                     mnError = PRINTER_GENERALERROR;
                 i_pController->setJobState( mnError == PRINTER_ABORT
