@@ -1970,7 +1970,7 @@ void KDESalFrame::UpdateSettings( AllSettings& rSettings )
         QColorGroup qMenuCG = pMenuBar->colorGroup();
 
         // Menu text and background color, theme specific
-        Color aMenuFore = toColor( qMenuCG.foreground() );
+        Color aMenuFore = aStyleSettings.GetPersonaMenuBarTextColor().get_value_or( toColor( qMenuCG.foreground() ) );
         Color aMenuBack = toColor( qMenuCG.background() );
         if ( kapp->style().inherits( "LightStyleV2" ) ||
              kapp->style().inherits( "LightStyleV3" ) ||

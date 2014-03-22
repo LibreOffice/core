@@ -295,7 +295,7 @@ void KDESalFrame::UpdateSettings( AllSettings& rSettings )
         QPalette qMenuCG = pMenuBar->palette();
 
         // Menu text and background color, theme specific
-        Color aMenuFore = toColor( qMenuCG.color( QPalette::ButtonText ) );
+        Color aMenuFore = style.GetPersonaMenuBarTextColor().get_value_or( toColor( qMenuCG.color( QPalette::ButtonText ) ) );
         Color aMenuBack = toColor( qMenuCG.color( QPalette::Button ) );
 
         style.SetMenuTextColor( aMenuFore );
