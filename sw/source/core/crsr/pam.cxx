@@ -724,7 +724,7 @@ bool SwPaM::HasReadonlySel( bool bFormView, bool bAnnotationMode ) const
             // exactly at the end.
             SwPosition aPrevChar(*GetPoint());
             aPrevChar.nContent--;
-            sw::mark::IFieldmark* pFieldmark = pMarksAccess->getFieldmarkFor(aPrevChar);
+            pFieldmark = pMarksAccess->getFieldmarkFor(aPrevChar);
             if (pFieldmark && pFieldmark->GetMarkEnd() == *GetPoint())
                 bRet = true;
         }
