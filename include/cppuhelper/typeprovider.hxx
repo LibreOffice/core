@@ -214,9 +214,11 @@ public:
     */
     inline OImplementationId( const ::com::sun::star::uno::Sequence< sal_Int8 > & rSeq ) SAL_THROW(())
         : _pSeq( new ::com::sun::star::uno::Sequence< sal_Int8 >( rSeq ) )
+        , _bUseEthernetAddress( false )
         {}
     inline OImplementationId( const OImplementationId & rId ) SAL_THROW(())
         : _pSeq( new ::com::sun::star::uno::Sequence< sal_Int8 >( rId.getImplementationId() ) )
+        , _bUseEthernetAddress( false )
         {}
 
     /** Get implementation id.
