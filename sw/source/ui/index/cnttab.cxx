@@ -207,12 +207,8 @@ public:
 
 sal_uInt16 CurTOXType::GetFlatIndex() const
 {
-    sal_uInt16 nRet = static_cast< sal_uInt16 >(eType);
-    if(eType == TOX_USER && nIndex)
-    {
-        nRet = static_cast< sal_uInt16 >(TOX_AUTHORITIES + nIndex);
-    }
-    return nRet;
+    return static_cast< sal_uInt16 >( (eType == TOX_USER && nIndex)
+        ? eType : TOX_AUTHORITIES + nIndex );
 }
 
 #define EDIT_MINWIDTH 15
@@ -243,7 +239,7 @@ SwMultiTOXTabDialog::SwMultiTOXTabDialog(Window* pParent, const SfxItemSet& rSet
     eCurrentTOXType.eType = TOX_CONTENT;
     eCurrentTOXType.nIndex = 0;
 
-    sal_uInt16 nUserTypeCount = rSh.GetTOXTypeCount(TOX_USER);
+    const sal_uInt16 nUserTypeCount = rSh.GetTOXTypeCount(TOX_USER);
     nTypeCount = nUserTypeCount + 6;
     pFormArr = new SwForm*[nTypeCount];
     pDescArr = new SwTOXDescription*[nTypeCount];
@@ -375,11 +371,10 @@ short SwMultiTOXTabDialog::Ok()
     SwTOXDescription& rDesc = GetTOXDescription(eCurrentTOXType);
     SwTOXBase aNewDef(*rSh.GetDefaultTOXBase( eCurrentTOXType.eType, true ));
 
-    sal_uInt16 nIndex = static_cast< sal_uInt16 >(eCurrentTOXType.eType);
-    if(eCurrentTOXType.eType == TOX_USER && eCurrentTOXType.nIndex)
-    {
-        nIndex =  static_cast< sal_uInt16 >(TOX_AUTHORITIES + eCurrentTOXType.nIndex);
-    }
+    const sal_uInt16 nIndex = static_cast< sal_uInt16 >(
+        eCurrentTOXType.eType == TOX_USER && eCurrentTOXType.nIndex
+        ? eCurrentTOXType.eType
+        : TOX_AUTHORITIES + eCurrentTOXType.nIndex );
 
     if(pFormArr[nIndex])
     {
@@ -402,7 +397,7 @@ short SwMultiTOXTabDialog::Ok()
 
 SwForm* SwMultiTOXTabDialog::GetForm(CurTOXType eType)
 {
-    sal_uInt16 nIndex = eType.GetFlatIndex();
+    const sal_uInt16 nIndex = eType.GetFlatIndex();
     if(!pFormArr[nIndex])
         pFormArr[nIndex] = new SwForm(eType.eType);
     return pFormArr[nIndex];
@@ -410,7 +405,7 @@ SwForm* SwMultiTOXTabDialog::GetForm(CurTOXType eType)
 
 SwTOXDescription& SwMultiTOXTabDialog::GetTOXDescription(CurTOXType eType)
 {
-    sal_uInt16 nIndex = eType.GetFlatIndex();
+    const sal_uInt16 nIndex = eType.GetFlatIndex();
     if(!pDescArr[nIndex])
     {
         const SwTOXBase* pDef = rSh.GetDefaultTOXBase( eType.eType );
@@ -547,7 +542,8 @@ sal_Bool SwMultiTOXTabDialog::IsNoNum(SwWrtShell& rSh, const OUString& rName)
     if(pColl && ! pColl->IsAssignedToListLevelOfOutlineStyle())
         return sal_True;
 
-    sal_uInt16 nId = SwStyleNameMapper::GetPoolIdFromUIName(rName, nsSwGetPoolIdFromName::GET_POOLID_TXTCOLL);
+    const sal_uInt16 nId = SwStyleNameMapper::GetPoolIdFromUIName(
+        rName, nsSwGetPoolIdFromName::GET_POOLID_TXTCOLL);
     if(nId != USHRT_MAX &&
         ! rSh.GetTxtCollFromPool(nId)->IsAssignedToListLevelOfOutlineStyle())
         return sal_True;
@@ -701,7 +697,9 @@ SwAddStylesDlg_Impl::SwAddStylesDlg_Impl(Window* pParent,
     for (sal_uInt16 i = 0; i < MAXLEVEL; ++i)
     {
         OUString sStyles(rStringArr[i]);
-        for(sal_uInt16 nToken = 0; nToken < comphelper::string::getTokenCount(sStyles, TOX_STYLE_DELIMITER); nToken++)
+        for(sal_Int32 nToken = 0;
+            nToken < comphelper::string::getTokenCount(sStyles, TOX_STYLE_DELIMITER);
+            ++nToken)
         {
             OUString sTmp(sStyles.getToken(nToken, TOX_STYLE_DELIMITER));
             SvTreeListEntry* pEntry = m_pHeaderTree->InsertEntry(sTmp);
@@ -870,7 +868,7 @@ SwTOXSelectTabPage::SwTOXSelectTabPage(Window* pParent, const SfxItemSet& rAttrS
     sAddStyleContent = m_pAddStylesCB->GetText();
 
     ResStringArray& rNames = aFromNames.GetNames();
-    for(sal_uInt16 i = 0; i < rNames.Count(); i++)
+    for(sal_uInt32 i = 0; i < rNames.Count(); i++)
     {
         m_pFromObjCLB->InsertEntry(rNames.GetString(i));
         m_pFromObjCLB->SetEntryData( i, (void*)rNames.GetValue(i) );
@@ -919,12 +917,11 @@ SwTOXSelectTabPage::~SwTOXSelectTabPage()
 
 void SwTOXSelectTabPage::SetWrtShell(SwWrtShell& rSh)
 {
-    sal_uInt16 nUserTypeCount = rSh.GetTOXTypeCount(TOX_USER);
+    const sal_uInt16 nUserTypeCount = rSh.GetTOXTypeCount(TOX_USER);
     if(nUserTypeCount > 1)
     {
         //insert all new user indexes names after the standard user index
-        sal_Int32 nPos = m_pTypeLB->GetEntryPos((void*)(sal_uInt32)TO_USER);
-        nPos++;
+        sal_Int32 nPos = m_pTypeLB->GetEntryPos((void*)(sal_uInt32)TO_USER) + 1;
         for(sal_uInt16 nUser = 1; nUser < nUserTypeCount; nUser++)
         {
             nPos = m_pTypeLB->InsertEntry(rSh.GetTOXType(TOX_USER, nUser)->GetTypeName(), nPos);
@@ -1022,9 +1019,8 @@ void SwTOXSelectTabPage::ApplyTOXDescription()
 
     //user + content
     sal_Bool bHasStyleNames = sal_False;
-    sal_uInt16 i;
 
-    for( i = 0; i < MAXLEVEL; i++)
+    for( sal_uInt16 i = 0; i < MAXLEVEL; i++)
         if(!rDesc.GetStyleNames(i).isEmpty())
         {
             bHasStyleNames = sal_True;
@@ -1052,7 +1048,7 @@ void SwTOXSelectTabPage::ApplyTOXDescription()
     //index only
     else if(TOX_INDEX == aCurType.eType)
     {
-        sal_uInt16 nIndexOptions = rDesc.GetIndexOptions();
+        const sal_uInt16 nIndexOptions = rDesc.GetIndexOptions();
         m_pCollectSameCB->     Check( 0 != (nIndexOptions & nsSwTOIOptions::TOI_SAME_ENTRY) );
         m_pUseFFCB->           Check( 0 != (nIndexOptions & nsSwTOIOptions::TOI_FF) );
         m_pUseDashCB->         Check( 0 != (nIndexOptions & nsSwTOIOptions::TOI_DASH) );
@@ -1095,7 +1091,7 @@ void SwTOXSelectTabPage::ApplyTOXDescription()
     }
     m_pAutoMarkPB->Enable(m_pFromFileCB->IsChecked());
 
-    for(i = 0; i < MAXLEVEL; i++)
+    for(sal_uInt16 i = 0; i < MAXLEVEL; i++)
         aStyleArr[i] = rDesc.GetStyleNames(i);
 
     m_pLanguageLB->SelectLanguage(rDesc.GetLanguage());
@@ -1241,8 +1237,8 @@ void SwTOXSelectTabPage::Reset( const SfxItemSet& )
     m_pFromFileCB->Check( !sAutoMarkURL.isEmpty() );
 
     m_pCaptionSequenceLB->Clear();
-    sal_uInt16 i, nCount = rSh.GetFldTypeCount(RES_SETEXPFLD);
-    for (i = 0; i < nCount; i++)
+    const sal_uInt16 nCount = rSh.GetFldTypeCount(RES_SETEXPFLD);
+    for (sal_uInt16 i = 0; i < nCount; i++)
     {
         SwFieldType *pType = rSh.GetFldType( i, RES_SETEXPFLD );
         if( pType->Which() == RES_SETEXPFLD &&
@@ -1536,9 +1532,9 @@ void SwTOXEdit::RequestHelp( const HelpEvent& rHEvt )
 void SwTOXEdit::KeyInput( const KeyEvent& rKEvt )
 {
     const Selection& rSel = GetSelection();
-    sal_Int32 nTextLen = GetText().getLength();
+    const sal_Int32 nTextLen = GetText().getLength();
     if((rSel.A() == rSel.B() &&
-        !rSel.A()) || rSel.A() == (sal_uInt16)nTextLen )
+        !rSel.A()) || rSel.A() == nTextLen )
     {
         bool bCall = false;
         KeyCode aCode = rKEvt.GetKeyCode();
@@ -2004,7 +2000,7 @@ void SwTOXEntryTabPage::ActivatePage( const SfxItemSet& /*rSet*/)
                 else
                 {
                     m_pSortContentRB->Check();
-                    sal_uInt16 nKeyCount = pFType->GetSortKeyCount();
+                    const sal_uInt16 nKeyCount = pFType->GetSortKeyCount();
                     if(0 < nKeyCount)
                     {
                         const SwTOXSortKey* pKey = pFType->GetSortKey(0);
@@ -2276,9 +2272,9 @@ void SwTOXEntryTabPage::WriteBackLevel()
     if(m_pTokenWIN->IsValid())
     {
         OUString sNewToken = m_pTokenWIN->GetPattern();
-        sal_uInt16 nLastLevel = m_pTokenWIN->GetLastLevel();
+        const sal_uInt16 nLastLevel = m_pTokenWIN->GetLastLevel();
         if(nLastLevel != USHRT_MAX)
-            m_pCurrentForm->SetPattern(nLastLevel + 1, sNewToken );
+            m_pCurrentForm->SetPattern(nLastLevel + 1, sNewToken);
     }
 }
 
@@ -2289,7 +2285,8 @@ IMPL_LINK(SwTOXEntryTabPage, LevelHdl, SvTreeListBox*, pBox)
     bInLevelHdl = true;
     WriteBackLevel();
 
-    sal_uInt16 nLevel = static_cast< sal_uInt16 >(pBox->GetModel()->GetAbsPos(pBox->FirstSelected()));
+    const sal_uInt16 nLevel = static_cast< sal_uInt16 >(
+        pBox->GetModel()->GetAbsPos(pBox->FirstSelected()));
     m_pTokenWIN->SetForm(*m_pCurrentForm, nLevel);
     if(TOX_AUTHORITIES == m_pCurrentForm->GetTOXType())
     {
@@ -2370,9 +2367,8 @@ IMPL_LINK(SwTOXEntryTabPage, TokenSelectedHdl, SwFormToken*, pToken)
     if(pToken->eTokenType == TOKEN_ENTRY_NO)
     {
         m_pEntryOutlineLevelNF->SetValue(pToken->nOutlineLevel);
-        sal_uInt16 nFormat = 0;
-        if( pToken->nChapterFormat == CF_NUM_NOPREPST_TITLE )
-            nFormat = 1;
+        const sal_uInt16 nFormat =
+            pToken->nChapterFormat == CF_NUM_NOPREPST_TITLE ? 1 : 0;
         m_pNumberFormatLB->SelectEntryPos(nFormat);
     }
 
@@ -2452,7 +2448,7 @@ IMPL_LINK(SwTOXEntryTabPage, TokenSelectedHdl, SwFormToken*, pToken)
 IMPL_LINK(SwTOXEntryTabPage, StyleSelectHdl, ListBox*, pBox)
 {
     OUString sEntry = pBox->GetSelectEntry();
-    sal_uInt16 nId = (sal_uInt16)(sal_IntPtr)pBox->GetEntryData(pBox->GetSelectEntryPos());
+    const sal_uInt16 nId = (sal_uInt16)(sal_IntPtr)pBox->GetEntryData(pBox->GetSelectEntryPos());
     m_pEditStylePB->Enable(sEntry != sNoCharStyle);
     if(sEntry == sNoCharStyle)
         sEntry = "";
@@ -2619,14 +2615,14 @@ SwTokenWindow::SwTokenWindow(Window* pParent)
     m_pCtrlParentWin->set_height_request(Edit::GetMinimumEditSize().Height());
     get(m_pRightScrollWin, "right");
 
-    for (sal_uInt16 i = 0; i < TOKEN_END; ++i)
+    for (sal_uInt32 i = 0; i < TOKEN_END; ++i)
     {
-        sal_uInt16 nTextId = STR_BUTTON_TEXT_START + i;
+        sal_uInt32 nTextId = STR_BUTTON_TEXT_START + i;
         if( STR_TOKEN_ENTRY_TEXT == nTextId )
             nTextId = STR_TOKEN_ENTRY;
         aButtonTexts[i] = SW_RESSTR(nTextId);
 
-        sal_uInt16 nHelpId = STR_BUTTON_HELP_TEXT_START + i;
+        sal_uInt32 nHelpId = STR_BUTTON_HELP_TEXT_START + i;
         if(STR_TOKEN_HELP_ENTRY_TEXT == nHelpId)
             nHelpId = STR_TOKEN_HELP_ENTRY;
         aButtonHelpTexts[i] = SW_RESSTR(nHelpId);
@@ -3009,9 +3005,8 @@ void SwTokenWindow::InsertAtSelection(const OUString& rText, const SwFormToken& 
         aSel.Justify();
 
         OUString sEditText = ((SwTOXEdit*)pActiveCtrl)->GetText();
-        OUString sLeft = sEditText.copy( 0, static_cast< sal_uInt16 >(aSel.A()) );
-        OUString sRight = sEditText.copy( static_cast< sal_uInt16 >(aSel.B()),
-                                        static_cast< sal_uInt16 >(sEditText.getLength() - aSel.B()));
+        OUString sLeft = sEditText.copy( 0, aSel.A() );
+        OUString sRight = sEditText.copy( aSel.B(), sEditText.getLength() - aSel.B());
 
         ((SwTOXEdit*)pActiveCtrl)->SetText(sLeft);
         ((SwTOXEdit*)pActiveCtrl)->AdjustSize();
@@ -3477,10 +3472,10 @@ IMPL_LINK(SwTokenWindow, NextItemBtnHdl, SwTOXButton*, pBtn )
 
         if (!isNext)
         {
-            sal_Int32 nLen = static_cast<SwTOXEdit*>(pCtrlFocus)->GetText().getLength();
+            const sal_Int32 nLen = static_cast<SwTOXEdit*>(pCtrlFocus)->GetText().getLength();
 
-            aSel.A() = (sal_uInt16)nLen;
-            aSel.B() = (sal_uInt16)nLen;
+            aSel.A() = nLen;
+            aSel.B() = nLen;
         }
 
         static_cast<SwTOXEdit*>(pCtrlFocus)->SetSelection(aSel);
@@ -3608,7 +3603,7 @@ void SwTOXStylesTabPage::ActivatePage( const SfxItemSet& )
 
     // not hyperlink for user directories
 
-    sal_uInt16 i, nSize = m_pCurrentForm->GetFormMax();
+    const sal_uInt16 nSize = m_pCurrentForm->GetFormMax();
 
     // display form pattern without title
 
@@ -3623,7 +3618,7 @@ void SwTOXStylesTabPage::ActivatePage( const SfxItemSet& )
     }
     m_pLevelLB->InsertEntry(aStr);
 
-    for( i=1; i < nSize; ++i )
+    for( sal_uInt16 i=1; i < nSize; ++i )
     {
         if( TOX_INDEX == m_pCurrentForm->GetTOXType() &&
             FORM_ALPHA_DELIMITTER == i )
@@ -3651,12 +3646,12 @@ void SwTOXStylesTabPage::ActivatePage( const SfxItemSet& )
     SwWrtShell& rSh = ((SwMultiTOXTabDialog*)GetTabDialog())->GetWrtShell();
     const sal_uInt16 nSz = rSh.GetTxtFmtCollCount();
 
-    for( i = 0; i < nSz; ++i )
+    for( sal_uInt16 i = 0; i < nSz; ++i )
         if( !(pColl = &rSh.GetTxtFmtColl( i ))->IsDefault() )
             m_pParaLayLB->InsertEntry( pColl->GetName() );
 
     // query pool collections and set them for the directory
-    for( i = 0; i < m_pCurrentForm->GetFormMax(); ++i )
+    for( sal_uInt16 i = 0; i < m_pCurrentForm->GetFormMax(); ++i )
     {
         aStr = m_pCurrentForm->GetTemplate( i );
         if( !aStr.isEmpty() &&
@@ -3910,7 +3905,7 @@ bool SwEntryBrowseBox::SeekRow( long nRow )
 OUString SwEntryBrowseBox::GetCellText(long nRow, sal_uInt16 nColumn) const
 {
     const OUString* pRet = &aEmptyOUStr;
-    if(static_cast<sal_uInt16>( aEntryArr.size() ) > nRow)
+    if (aEntryArr.size() > static_cast<size_t>(nRow))
     {
         const AutoMarkEntry* pEntry = &aEntryArr[ nRow ];
         switch(nColumn)
@@ -3943,8 +3938,8 @@ void SwEntryBrowseBox::PaintCell(OutputDevice& rDev,
 bool SwEntryBrowseBox::SaveModified()
 {
     SetModified();
-    sal_uInt16 nRow = static_cast< sal_uInt16 >(GetCurRow());
-    sal_uInt16 nCol = GetCurColumnId();
+    const size_t nRow = GetCurRow();
+    const sal_uInt16 nCol = GetCurColumnId();
 
     OUString sNew;
     sal_Bool bVal = sal_False;
@@ -4057,17 +4052,17 @@ void SwEntryBrowseBox::ReadEntries(SvStream& rInStr)
 void SwEntryBrowseBox::WriteEntries(SvStream& rOutStr)
 {
     //check if the current controller is modified
-    sal_uInt16 nCol = GetCurColumnId();
+    const sal_uInt16 nCol = GetCurColumnId();
     ::svt::CellController* pController;
     if(nCol < ITEM_CASE)
         pController = xController;
     else
         pController = xCheckController;
     if(pController ->IsModified())
-        GoToColumnId(nCol < ITEM_CASE ? ++nCol : --nCol );
+        GoToColumnId(nCol + (nCol < ITEM_CASE ? 1 : -1 ));
 
     rtl_TextEncoding  eTEnc = osl_getThreadTextEncoding();
-    for(sal_uInt16 i = 0; i < aEntryArr.size(); i++)
+    for(size_t i = 0; i < aEntryArr.size(); i++)
     {
         AutoMarkEntry* pEntry = &aEntryArr[i];
         if(!pEntry->sComment.isEmpty())
@@ -4100,7 +4095,7 @@ bool SwEntryBrowseBox::IsModified()const
         return true;
 
     //check if the current controller is modified
-    sal_uInt16 nCol = GetCurColumnId();
+    const sal_uInt16 nCol = GetCurColumnId();
     ::svt::CellController* pController;
     if(nCol < ITEM_CASE)
         pController = xController;
