@@ -243,42 +243,42 @@ bool OOXMLStreamImpl::lcl_getTarget(uno::Reference<embed::XRelationshipAccess>
 
         for (sal_Int32 j = 0; j < aSeqs.getLength(); j++)
         {
-            const uno::Sequence< beans::StringPair > &aSeq = aSeqs[j];
+            const uno::Sequence< beans::StringPair > &rSeq = aSeqs[j];
 
             bool bExternalTarget = false;
             OUString sMyTarget;
-            for (sal_Int32 i = 0; i < aSeq.getLength(); i++)
+            for (sal_Int32 i = 0; i < rSeq.getLength(); i++)
             {
-                const beans::StringPair &aPair = aSeq[i];
+                const beans::StringPair &rPair = rSeq[i];
 
-                if (aPair.First.compareTo(sType) == 0 &&
-                    ( aPair.Second.compareTo(sStreamType) == 0 ||
-                      aPair.Second.compareTo(sStreamTypeStrict) == 0))
+                if (rPair.First.compareTo(sType) == 0 &&
+                    ( rPair.Second.compareTo(sStreamType) == 0 ||
+                      rPair.Second.compareTo(sStreamTypeStrict) == 0))
                     bFound = true;
-                else if(aPair.First.compareTo(sType) == 0 &&
-                        ((aPair.Second.compareTo(sOleObjectType) == 0 ||
-                          aPair.Second.compareTo(sOleObjectTypeStrict) == 0) &&
+                else if(rPair.First.compareTo(sType) == 0 &&
+                        ((rPair.Second.compareTo(sOleObjectType) == 0 ||
+                          rPair.Second.compareTo(sOleObjectTypeStrict) == 0) &&
                           nStreamType == EMBEDDINGS))
                 {
                     bFound = true;
                 }
-                else if (aPair.First.compareTo(sId) == 0 &&
-                         aPair.Second.compareTo(rId) == 0)
+                else if (rPair.First.compareTo(sId) == 0 &&
+                         rPair.Second.compareTo(rId) == 0)
                     bFound = true;
-                else if (aPair.First.compareTo(sTarget) == 0)
+                else if (rPair.First.compareTo(sTarget) == 0)
                 {
                     // checking item[n].xml or activex[n].xml is not visited already.
-                    if(customTarget != aPair.Second && (sStreamType == sCustomType || sStreamType == sActiveXType || sStreamType == sChartType || sStreamType == sFooterType || sStreamType == sHeaderType))
+                    if(customTarget != rPair.Second && (sStreamType == sCustomType || sStreamType == sActiveXType || sStreamType == sChartType || sStreamType == sFooterType || sStreamType == sHeaderType))
                     {
                         bFound = false;
                     }
                     else
                     {
-                        sMyTarget = aPair.Second;
+                        sMyTarget = rPair.Second;
                     }
                 }
-                else if (aPair.First.compareTo(sTargetMode) == 0 &&
-                         aPair.Second.compareTo(sExternal) == 0)
+                else if (rPair.First.compareTo(sTargetMode) == 0 &&
+                         rPair.Second.compareTo(sExternal) == 0)
                     bExternalTarget = true;
 
             }
