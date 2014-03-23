@@ -274,6 +274,7 @@ public:
 
 protected:
     long                        ImplGetGradientStepCount( long nMinRect );
+    void                        ScaleBitmap ( Bitmap&, SalTwoRect& ) { };
 
 public:
     void                        DrawGradientEx( OutputDevice* pOut, const Rectangle& rRect, const Gradient& rGradient );
