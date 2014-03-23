@@ -736,6 +736,7 @@ public:
     SAL_DLLPRIVATE void         ImplDrawAlpha        ( const Bitmap& rBmp, const AlphaMask& rAlpha,
                                                        const Point& rDestPt, const Size& rDestSize,
                                                        const Point& rSrcPtPixel, const Size& rSrcSizePixel );
+    virtual Rectangle&          GetPaintArea         ( Rectangle& rDstRect );
     SAL_DLLPRIVATE Bitmap       ImplBlend            ( Bitmap              aBmp,
                                                        BitmapReadAccess*   pP,
                                                        BitmapReadAccess*   pA,
