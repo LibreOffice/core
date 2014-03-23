@@ -51,7 +51,7 @@ namespace
 {
 
 template<class T>
-T lclGetProperty(uno::Reference<drawing::XShape> rShape, OUString rPropName)
+T lclGetProperty(uno::Reference<drawing::XShape> rShape, const OUString& rPropName)
 {
     T aResult;
     uno::Reference<beans::XPropertySet> xPropertySet(rShape, uno::UNO_QUERY);
