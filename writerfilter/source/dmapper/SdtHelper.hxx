@@ -87,7 +87,7 @@ public:
     void appendToInteropGrabBag(com::sun::star::beans::PropertyValue rValue);
     com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue> getInteropGrabBagAndClear();
     bool isInteropGrabBagEmpty();
-    bool containedInInteropGrabBag(OUString rValueName);
+    bool containedInInteropGrabBag(const OUString& rValueName);
     sal_Int32 getInteropGrabBagSize();
 };
 

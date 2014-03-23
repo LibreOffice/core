@@ -220,7 +220,7 @@ sal_Int32 SdtHelper::getInteropGrabBagSize()
     return m_aGrabBag.getLength();
 }
 
-bool SdtHelper::containedInInteropGrabBag(OUString rValueName)
+bool SdtHelper::containedInInteropGrabBag(const OUString& rValueName)
 {
     for (sal_Int32 i=0; i < m_aGrabBag.getLength(); ++i)
         if (m_aGrabBag[i].Name == rValueName)
