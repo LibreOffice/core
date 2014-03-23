@@ -78,16 +78,16 @@ define gbuild_module_rules
 .PHONY: $(1) $(1).all $(1).build $(1).check $(1).clean $(1).showdeliverables $(1).subsequentcheck
 
 $(1): bootstrap fetch
-	cd $(SRCDIR)/$(1) && $(GNUMAKE) $(PARALLELISM_OPTION) $(GMAKE_OPTIONS)
+	cd $(SRCDIR)/$(1) && $(MAKE) $(PARALLELISM_OPTION) $(GMAKE_OPTIONS)
 
 $(1).build $(1).check $(1).clean $(1).showdeliverables:
-	cd $(SRCDIR)/$(1) && $(GNUMAKE) $(PARALLELISM_OPTION) $(GMAKE_OPTIONS) $$(patsubst $(1).%,%,$$@)
+	cd $(SRCDIR)/$(1) && $(MAKE) $(PARALLELISM_OPTION) $(GMAKE_OPTIONS) $$(patsubst $(1).%,%,$$@)
 
 $(1).subsequentcheck:
-	cd $(SRCDIR)/$(1) && $(GNUMAKE) -j $(CHECK_PARALLELISM) $(GMAKE_OPTIONS) subsequentcheck
+	cd $(SRCDIR)/$(1) && $(MAKE) -j $(CHECK_PARALLELISM) $(GMAKE_OPTIONS) subsequentcheck
 
 $(1).all: bootstrap fetch
-	$(GNUMAKE) $(PARALLELISM_OPTION) $(GMAKE_OPTIONS) -f $(SRCDIR)/Makefile.gbuild $(WORKDIR)/Module/$(1) $(if $(CROSS_COMPILING),,$(WORKDIR)/Module/check/$(1) $(WORKDIR)/Module/slowcheck/$(1))
+	$(MAKE) $(PARALLELISM_OPTION) $(GMAKE_OPTIONS) -f $(SRCDIR)/Makefile.gbuild $(WORKDIR)/Module/$(1) $(if $(CROSS_COMPILING),,$(WORKDIR)/Module/check/$(1) $(WORKDIR)/Module/slowcheck/$(1))
 
 endef
 
@@ -137,7 +137,7 @@ gbuild_TARGETS := AllLangHelp \
 
 # build a generic gbuild target
 $(foreach target,$(gbuild_TARGETS),$(target)_% $(foreach module,$(gbuild_modules),$(target)_$(module)/%)):
-	$(GNUMAKE) $(PARALLELISM_OPTION) $(GMAKE_OPTIONS) -f $(SRCDIR)/Makefile.gbuild $@
+	$(MAKE) $(PARALLELISM_OPTION) $(GMAKE_OPTIONS) -f $(SRCDIR)/Makefile.gbuild $@
 
 #
 # Clean
@@ -229,16 +229,16 @@ bootstrap: compilerplugins
 # Build
 #
 build: bootstrap fetch $(if $(filter $(INPATH),$(INPATH_FOR_BUILD)),,cross-toolset)
-	$(GNUMAKE) $(PARALLELISM_OPTION) $(GMAKE_OPTIONS) -f $(SRCDIR)/Makefile.gbuild
+	$(MAKE) $(PARALLELISM_OPTION) $(GMAKE_OPTIONS) -f $(SRCDIR)/Makefile.gbuild
 ifeq ($(OS),IOS)
-	$(GNUMAKE) $(PARALLELISM_OPTION) $(GMAKE_OPTIONS) ios
+	$(MAKE) $(PARALLELISM_OPTION) $(GMAKE_OPTIONS) ios
 endif
 
 build-nocheck: bootstrap fetch $(if $(filter $(INPATH),$(INPATH_FOR_BUILD)),,cross-toolset)
-	$(GNUMAKE) $(PARALLELISM_OPTION) $(GMAKE_OPTIONS) -f $(SRCDIR)/Makefile.gbuild build
+	$(MAKE) $(PARALLELISM_OPTION) $(GMAKE_OPTIONS) -f $(SRCDIR)/Makefile.gbuild build
 
 cross-toolset: bootstrap fetch
-	$(GNUMAKE) gb_Side=build $(PARALLELISM_OPTION) $(GMAKE_OPTIONS) -f $(SRCDIR)/Makefile.gbuild build-tools
+	$(MAKE) gb_Side=build $(PARALLELISM_OPTION) $(GMAKE_OPTIONS) -f $(SRCDIR)/Makefile.gbuild build-tools
 
 #
 # Install
@@ -266,7 +266,7 @@ dev-install: build
 	@rm -rf $(DEVINSTALLDIR)
 	@mkdir $(DEVINSTALLDIR)
 ifeq ($(OS_FOR_BUILD),WNT)
-	cd $(SRCDIR)/instsetoo_native && $(GNUMAKE) LIBO_DEV_INSTALL=TRUE $(GMAKE_OPTIONS)
+	cd $(SRCDIR)/instsetoo_native && $(MAKE) LIBO_DEV_INSTALL=TRUE $(GMAKE_OPTIONS)
 else
 ifeq ($(DISABLE_LINKOO),TRUE)
 	@ooinstall $(DEVINSTALLDIR)/opt
@@ -314,7 +314,7 @@ install-tb:
 	@rm -rf $(DEVINSTALLDIR)
 	@mkdir $(DEVINSTALLDIR)
 ifeq ($(OS_FOR_BUILD),WNT)
-	cd $(SRCDIR)/instsetoo_native && $(GNUMAKE) LIBO_DEV_INSTALL=TRUE $(GMAKE_OPTIONS)
+	cd $(SRCDIR)/instsetoo_native && $(MAKE) LIBO_DEV_INSTALL=TRUE $(GMAKE_OPTIONS)
 else
 	@ooinstall $(DEVINSTALLDIR)/opt
 	@install-gdb-printers
@@ -344,7 +344,7 @@ findunusedcode:
 	@echo unexport CFLAGS >> $(SRCDIR)/config_host_callcatcher.mk
 	@echo unexport CXXFLAGS >> $(SRCDIR)/config_host_callcatcher.mk
 	@mkdir -p $(SRCDIR)/solenv/callcatcher/bin && \
-	$(GNUMAKE) -f $(SOLARENV)/bin/callcatcher.Makefile findunusedcode
+	$(MAKE) -f $(SOLARENV)/bin/callcatcher.Makefile findunusedcode
 	@grep ::.*\( unusedcode.all \
               | grep -v ^Atom \
               | grep -v ^atom:: \
@@ -380,17 +380,17 @@ findunusedcode:
 check: dev-install subsequentcheck
 
 dump-deps:
-	@$(SRCDIR)/bin/module-deps.pl $(GNUMAKE) $(SRCDIR)/Makefile.gbuild
+	@$(SRCDIR)/bin/module-deps.pl $(MAKE) $(SRCDIR)/Makefile.gbuild
 
 dump-deps-png:
-	@$(SRCDIR)/bin/module-deps.pl $(GNUMAKE) $(SRCDIR)/Makefile.gbuild | dot -Tpng -o lo.png
+	@$(SRCDIR)/bin/module-deps.pl $(MAKE) $(SRCDIR)/Makefile.gbuild | dot -Tpng -o lo.png
 
 subsequentcheck :| $(if $(filter-out subsequentcheck,$(MAKECMDGOALS)),dev-install)
-	$(GNUMAKE) -j $(CHECK_PARALLELISM) $(GMAKE_OPTIONS) -f $(SRCDIR)/Makefile.gbuild $@
+	$(MAKE) -j $(CHECK_PARALLELISM) $(GMAKE_OPTIONS) -f $(SRCDIR)/Makefile.gbuild $@
 
 .PHONY : debugrun help slowcheck translations unitcheck
 debugrun help slowcheck translations unitcheck :
-	$(GNUMAKE) $(PARALLELISM_OPTION) $(GMAKE_OPTIONS) -f $(SRCDIR)/Makefile.gbuild $@
+	$(MAKE) $(PARALLELISM_OPTION) $(GMAKE_OPTIONS) -f $(SRCDIR)/Makefile.gbuild $@
 
 endif # MAKE_RESTARTS
 
