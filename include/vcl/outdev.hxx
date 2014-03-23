@@ -831,6 +831,12 @@ protected:
                                     basegfx::B2DRange &aVisibleRange,
                                     double &fMaximumArea);
 
+    virtual void                DrawDeviceBitmap(
+                                    const Point& rDestPt, const Size& rDestSize,
+                                    const Point& rSrcPtPixel, const Size& rSrcSizePixel,
+                                    BitmapEx& rBitmapEx );
+
+
 private:
     typedef void ( OutputDevice::* FontUpdateHandler_t )( bool );
 
