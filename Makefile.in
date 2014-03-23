@@ -64,13 +64,13 @@ define gb_Top_GbuildModuleRules
 .PHONY: $(1) $(1).all $(1).build $(1).check $(1).clean $(1).showdeliverables $(1).subsequentcheck
 
 $(1): bootstrap fetch
-	cd $(SRCDIR)/$(2) && $(GNUMAKE) $(PARALLELISM_OPTION) $(GMAKE_OPTIONS)
+	cd $(SRCDIR)/$(2) && $(MAKE) $(PARALLELISM_OPTION) $(GMAKE_OPTIONS)
 
 $(1).build $(1).check $(1).clean $(1).showdeliverables $(1).subsequentcheck:
-	cd $(SRCDIR)/$(2) && $(GNUMAKE) $(PARALLELISM_OPTION) $(GMAKE_OPTIONS) $$(patsubst $(1).%,%,$$@)
+	cd $(SRCDIR)/$(2) && $(MAKE) $(PARALLELISM_OPTION) $(GMAKE_OPTIONS) $$(patsubst $(1).%,%,$$@)
 
 $(1).all: bootstrap fetch
-	$(GNUMAKE) $(PARALLELISM_OPTION) $(GMAKE_OPTIONS) -f $(SRCDIR)/Makefile.gbuild $(WORKDIR)/Module/$(1) $(if $(CROSS_COMPILING),,$(WORKDIR)/Module/check/$(1) $(WORKDIR)/Module/slowcheck/$(1))
+	$(MAKE) $(PARALLELISM_OPTION) $(GMAKE_OPTIONS) -f $(SRCDIR)/Makefile.gbuild $(WORKDIR)/Module/$(1) $(if $(CROSS_COMPILING),,$(WORKDIR)/Module/check/$(1) $(WORKDIR)/Module/slowcheck/$(1))
 
 endef
 
@@ -123,7 +123,7 @@ gbuild_TARGETS := AllLangHelp \
 
 # build a generic gbuild target
 $(foreach target,$(gbuild_TARGETS),$(target)_% $(foreach module,$(gbuild_modules),$(target)_$(module)/%)):
-	$(GNUMAKE) $(PARALLELISM_OPTION) $(GMAKE_OPTIONS) -f $(SRCDIR)/Makefile.gbuild $@
+	$(MAKE) $(PARALLELISM_OPTION) $(GMAKE_OPTIONS) -f $(SRCDIR)/Makefile.gbuild $@
 
 #
 # Clean
@@ -223,15 +223,15 @@ build: bootstrap fetch $(if $(CROSS_COMPILING),cross-toolset)
 ifneq ($(filter-out WNT MACOSX IOS ANDROID,$(OS)),)
 	mkdir -p $(INSTDIR) && install-gdb-printers -a $(INSTDIR) -c
 endif
-	$(GNUMAKE) $(PARALLELISM_OPTION) $(GMAKE_OPTIONS) -f $(SRCDIR)/Makefile.gbuild $(build_goal)
+	$(MAKE) $(PARALLELISM_OPTION) $(GMAKE_OPTIONS) -f $(SRCDIR)/Makefile.gbuild $(build_goal)
 ifeq ($(OS),IOS)
-	$(GNUMAKE) $(PARALLELISM_OPTION) $(GMAKE_OPTIONS) ios
+	$(MAKE) $(PARALLELISM_OPTION) $(GMAKE_OPTIONS) ios
 endif
 
 build-non-l10n-only build-l10n-only build-nocheck check debugrun help slowcheck translations unitcheck subsequentcheck packageinfo: build
 
 cross-toolset: bootstrap fetch
-	$(GNUMAKE) gb_Side=build $(PARALLELISM_OPTION) $(GMAKE_OPTIONS) -f $(SRCDIR)/Makefile.gbuild build-tools
+	$(MAKE) gb_Side=build $(PARALLELISM_OPTION) $(GMAKE_OPTIONS) -f $(SRCDIR)/Makefile.gbuild build-tools
 
 
 #
@@ -290,7 +290,7 @@ test-install: build
 	@rm -rf $(TESTINSTALLDIR)
 	@mkdir -p $(TESTINSTALLDIR)
 ifeq ($(OS_FOR_BUILD),WNT)
-	cd $(SRCDIR)/instsetoo_native && $(GNUMAKE) LIBO_TEST_INSTALL=TRUE $(GMAKE_OPTIONS)
+	cd $(SRCDIR)/instsetoo_native && $(MAKE) LIBO_TEST_INSTALL=TRUE $(GMAKE_OPTIONS)
 else
 	@ooinstall $(TESTINSTALLDIR)
 ifneq ($(MACOSX_CODESIGNING_IDENTITY),)
@@ -306,7 +306,7 @@ distro-pack-install: install
 	$(SRCDIR)/bin/distro-install-file-lists
 
 install-package-%:
-	$(GNUMAKE) $(GMAKE_OPTIONS) -f $(SRCDIR)/Makefile.gbuild $@
+	$(MAKE) $(GMAKE_OPTIONS) -f $(SRCDIR)/Makefile.gbuild $@
 
 id:
 	@create-ids
@@ -318,24 +318,24 @@ docs:
 	@mkdocs.sh $(SRCDIR)/docs $(SRCDIR)/solenv/inc/doxygen.cfg
 
 findunusedcode:
-	@$(SRCDIR)/bin/findunusedcode $(SRCDIR) $(GNUMAKE)
+	@$(SRCDIR)/bin/findunusedcode $(SRCDIR) $(MAKE)
 
 findunusedheaders:
 	$(SRCDIR)/bin/find-unusedheaders.pl
 
 
 dump-deps:
-	@$(SRCDIR)/bin/module-deps.pl $(GNUMAKE) $(SRCDIR)/Makefile.gbuild
+	@$(SRCDIR)/bin/module-deps.pl $(MAKE) $(SRCDIR)/Makefile.gbuild
 
 dump-deps-png:
-	@$(SRCDIR)/bin/module-deps.pl $(GNUMAKE) $(SRCDIR)/Makefile.gbuild | dot -Tpng -o lo.png
+	@$(SRCDIR)/bin/module-deps.pl $(MAKE) $(SRCDIR)/Makefile.gbuild | dot -Tpng -o lo.png
 
 dump-deps-sort:
-	@$(SRCDIR)/bin/module-deps.pl -t $(GNUMAKE) $(SRCDIR)/Makefile.gbuild
+	@$(SRCDIR)/bin/module-deps.pl -t $(MAKE) $(SRCDIR)/Makefile.gbuild
 
 define gb_Top_GbuildToIdeIntegration
 $(1)-ide-integration:
-	cd $(SRCDIR) && (LC_MESSAGES=C $(GNUMAKE) cmd="$(GNUMAKE) -npf Makefile.gbuild all" cmd || true) | $(SRCDIR)/bin/gbuild-to-ide --ide $(1)
+	cd $(SRCDIR) && (LC_MESSAGES=C $(MAKE) cmd="$(MAKE) -npf Makefile.gbuild all" cmd || true) | $(SRCDIR)/bin/gbuild-to-ide --ide $(1)
 
 endef
 
