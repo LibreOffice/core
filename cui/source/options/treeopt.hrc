@@ -51,7 +51,7 @@
 
 #define ROW_1                   (RSC_SP_DLG_INNERBORDER_TOP)
 #define ROW_2                   (ROW_1+HEIGHT_PAGEFRAME)
-#define ROW_3                   (ROW_2+RSC_SP_CTRL_GROUP_Y)
+#define ROW_3                   (ROW_2+RSC_SP_CTRL_GROUP_Y+RSC_CD_PUSHBUTTON_HEIGHT+RSC_CD_FIXEDLINE_HEIGHT)
 #define ROW_4                   (ROW_3+RSC_CD_FIXEDLINE_HEIGHT)
 #define ROW_5                   (ROW_4+RSC_CD_PUSHBUTTON_HEIGHT)
 #define ROW_6                   (ROW_5+RSC_SP_DLG_INNERBORDER_BOTTOM)
