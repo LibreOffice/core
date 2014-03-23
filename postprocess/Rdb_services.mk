@@ -113,9 +113,9 @@ $(eval $(call gb_Rdb_add_components,services,\
 		sccomp/source/solver/solver \
 	) \
 	writerfilter/util/writerfilter \
-	writerperfect/util/wpftwriter \
-	writerperfect/util/wpftdraw \
+	writerperfect/source/draw/wpftdraw \
 	writerperfect/source/impress/wpftimpress \
+	writerperfect/source/writer/wpftwriter \
 	$(if $(filter MACOSX,$(OS)), \
 		$(if $(filter-out X86_64,$(CPUNAME)), \
 			$(if $(filter TRUE,$(ENABLE_MACOSX_SANDBOX)),, \

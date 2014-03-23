@@ -19,7 +19,7 @@
 
 $(eval $(call gb_Library_Library,wpftwriter))
 
-$(eval $(call gb_Library_set_componentfile,wpftwriter,writerperfect/util/wpftwriter))
+$(eval $(call gb_Library_set_componentfile,wpftwriter,writerperfect/source/writer/wpftwriter))
 
 $(eval $(call gb_Library_set_include,wpftwriter,\
 	$$(INCLUDE) \
