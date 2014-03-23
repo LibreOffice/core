@@ -307,7 +307,7 @@
                                       </object>
                                       <packing>
                                         <property name="left_attach">0</property>
-                                        <property name="top_attach">1</property>
+                                        <property name="top_attach">2</property>
                                         <property name="width">1</property>
                                         <property name="height">1</property>
                                       </packing>
@@ -324,6 +324,48 @@
                                         <property name="active">True</property>
                                         <property name="draw_indicator">True</property>
                                         <property name="group">rbSingleField</property>
+                                      </object>
+                                      <packing>
+                                        <property name="left_attach">0</property>
+                                        <property name="top_attach">1</property>
+                                        <property name="width">1</property>
+                                        <property name="height">1</property>
+                                      </packing>
+                                    </child>
+                                    <child>
+                                      <object class="GtkGrid" id="grid7">
+                                        <property name="visible">True</property>
+                                        <property name="can_focus">False</property>
+                                        <property name="column_spacing">12</property>
+                                        <child>
+                                          <object class="GtkLabel" id="ftForm">
+                                            <property name="visible">True</property>
+                                            <property name="can_focus">False</property>
+                                            <property name="xalign">0</property>
+                                            <property name="label" translatable="yes">Form</property>
+                                            <property name="use_underline">True</property>
+                                            <property name="mnemonic_widget">lbForm</property>
+                                          </object>
+                                          <packing>
+                                            <property name="left_attach">0</property>
+                                            <property name="top_attach">0</property>
+                                            <property name="width">1</property>
+                                            <property name="height">1</property>
+                                          </packing>
+                                        </child>
+                                        <child>
+                                          <object class="GtkComboBox" id="lbForm">
+                                            <property name="visible">True</property>
+                                            <property name="can_focus">False</property>
+                                            <property name="halign">start</property>
+                                          </object>
+                                          <packing>
+                                            <property name="left_attach">1</property>
+                                            <property name="top_attach">0</property>
+                                            <property name="width">1</property>
+                                            <property name="height">1</property>
+                                          </packing>
+                                        </child>
                                       </object>
                                       <packing>
                                         <property name="left_attach">0</property>
@@ -438,6 +480,7 @@
                                 <property name="xalign">0</property>
                                 <property name="label" translatable="yes">_Position</property>
                                 <property name="use_underline">True</property>
+                                <property name="mnemonic_widget">lbPosition</property>
                               </object>
                               <packing>
                                 <property name="left_attach">0</property>
@@ -802,29 +845,6 @@
                 <property name="position">2</property>
               </packing>
             </child>
-            <child>
-              <object class="GtkComboBox" id="lbForm">
-                <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="halign">start</property>
-              </object>
-              <packing>
-                <property name="expand">False</property>
-                <property name="fill">True</property>
-                <property name="position">3</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkLabel" id="ftForm">
-                <property name="visible">True</property>
-                <property name="can_focus">False</property>
-              </object>
-              <packing>
-                <property name="expand">False</property>
-                <property name="fill">True</property>
-                <property name="position">4</property>
-              </packing>
-            </child>
           </object>
           <packing>
             <property name="expand">False</property>
@@ -840,12 +860,14 @@
       <widget name="rbSearchForText"/>
       <widget name="rbSingleField"/>
       <widget name="rbAllFields"/>
+      <widget name="ftForm"/>
       <widget name="ftPosition"/>
     </widgets>
   </object>
   <object class="GtkSizeGroup" id="sizegroup2">
     <widgets>
       <widget name="lbField"/>
+      <widget name="lbForm"/>
       <widget name="lbPosition"/>
     </widgets>
   </object>
