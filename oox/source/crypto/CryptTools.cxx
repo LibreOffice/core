@@ -290,15 +290,16 @@ bool Digest::update(std::vector<sal_uInt8>& input)
 bool Digest::finalize(std::vector<sal_uInt8>& digest)
 {
     digest.clear();
-    sal_uInt32 digestWrittenLength;
 
     #if USE_TLS_OPENSSL
+    unsigned int digestWrittenLength;
     digest.resize(getLength(), 0);
     EVP_DigestFinal_ex(mpContext, &digest[0], &digestWrittenLength);
     #endif
 
     #if USE_TLS_NSS
-    sal_uInt32 digestLength = getLength();
+    unsigned int digestWrittenLength;
+    unsigned int digestLength = static_cast<unsigned int>(getLength());
     digest.resize(digestLength, 0);
     HASH_End(mpContext, &digest[0], &digestWrittenLength, digestLength);
     #endif
