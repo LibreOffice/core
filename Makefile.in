@@ -69,6 +69,8 @@ export GMAKE_OPTIONS:=-r$(MAKEFLAGS)
 endif
 endif
 
+PARALLELISM_OPTION := $(if $(filter-out 0,$(PARALLELISM)),-j $(PARALLELISM),)
+
 #
 # Partial Build
 #
@@ -76,16 +78,16 @@ define gbuild_module_rules
 .PHONY: $(1) $(1).all $(1).build $(1).check $(1).clean $(1).showdeliverables $(1).subsequentcheck
 
 $(1): bootstrap fetch
-	cd $(SRCDIR)/$(1) && $(GNUMAKE) -j $(PARALLELISM) $(GMAKE_OPTIONS)
+	cd $(SRCDIR)/$(1) && $(GNUMAKE) $(PARALLELISM_OPTION) $(GMAKE_OPTIONS)
 
 $(1).build $(1).check $(1).clean $(1).showdeliverables:
-	cd $(SRCDIR)/$(1) && $(GNUMAKE) -j $(PARALLELISM) $(GMAKE_OPTIONS) $$(patsubst $(1).%,%,$$@)
+	cd $(SRCDIR)/$(1) && $(GNUMAKE) $(PARALLELISM_OPTION) $(GMAKE_OPTIONS) $$(patsubst $(1).%,%,$$@)
 
 $(1).subsequentcheck:
 	cd $(SRCDIR)/$(1) && $(GNUMAKE) -j $(CHECK_PARALLELISM) $(GMAKE_OPTIONS) subsequentcheck
 
 $(1).all: bootstrap fetch
-	$(GNUMAKE) -j $(PARALLELISM) $(GMAKE_OPTIONS) -f $(SRCDIR)/Makefile.gbuild $(WORKDIR)/Module/$(1) $(if $(CROSS_COMPILING),,$(WORKDIR)/Module/check/$(1) $(WORKDIR)/Module/slowcheck/$(1))
+	$(GNUMAKE) $(PARALLELISM_OPTION) $(GMAKE_OPTIONS) -f $(SRCDIR)/Makefile.gbuild $(WORKDIR)/Module/$(1) $(if $(CROSS_COMPILING),,$(WORKDIR)/Module/check/$(1) $(WORKDIR)/Module/slowcheck/$(1))
 
 endef
 
@@ -135,7 +137,7 @@ gbuild_TARGETS := AllLangHelp \
 
 # build a generic gbuild target
 $(foreach target,$(gbuild_TARGETS),$(target)_% $(foreach module,$(gbuild_modules),$(target)_$(module)/%)):
-	$(GNUMAKE) -j $(PARALLELISM) $(GMAKE_OPTIONS) -f $(SRCDIR)/Makefile.gbuild $@
+	$(GNUMAKE) $(PARALLELISM_OPTION) $(GMAKE_OPTIONS) -f $(SRCDIR)/Makefile.gbuild $@
 
 #
 # Clean
@@ -227,16 +229,16 @@ bootstrap: compilerplugins
 # Build
 #
 build: bootstrap fetch $(if $(filter $(INPATH),$(INPATH_FOR_BUILD)),,cross-toolset)
-	$(GNUMAKE) -j $(PARALLELISM) $(GMAKE_OPTIONS) -f $(SRCDIR)/Makefile.gbuild
+	$(GNUMAKE) $(PARALLELISM_OPTION) $(GMAKE_OPTIONS) -f $(SRCDIR)/Makefile.gbuild
 ifeq ($(OS),IOS)
-	$(GNUMAKE) -j $(PARALLELISM) $(GMAKE_OPTIONS) ios
+	$(GNUMAKE) $(PARALLELISM_OPTION) $(GMAKE_OPTIONS) ios
 endif
 
 build-nocheck: bootstrap fetch $(if $(filter $(INPATH),$(INPATH_FOR_BUILD)),,cross-toolset)
-	$(GNUMAKE) -j $(PARALLELISM) $(GMAKE_OPTIONS) -f $(SRCDIR)/Makefile.gbuild build
+	$(GNUMAKE) $(PARALLELISM_OPTION) $(GMAKE_OPTIONS) -f $(SRCDIR)/Makefile.gbuild build
 
 cross-toolset: bootstrap fetch
-	$(GNUMAKE) gb_Side=build -j $(PARALLELISM) $(GMAKE_OPTIONS) -f $(SRCDIR)/Makefile.gbuild build-tools
+	$(GNUMAKE) gb_Side=build $(PARALLELISM_OPTION) $(GMAKE_OPTIONS) -f $(SRCDIR)/Makefile.gbuild build-tools
 
 #
 # Install
@@ -388,7 +390,7 @@ subsequentcheck :| $(if $(filter-out subsequentcheck,$(MAKECMDGOALS)),dev-instal
 
 .PHONY : debugrun help slowcheck translations unitcheck
 debugrun help slowcheck translations unitcheck :
-	$(GNUMAKE) -j $(PARALLELISM) $(GMAKE_OPTIONS) -f $(SRCDIR)/Makefile.gbuild $@
+	$(GNUMAKE) $(PARALLELISM_OPTION) $(GMAKE_OPTIONS) -f $(SRCDIR)/Makefile.gbuild $@
 
 endif # MAKE_RESTARTS
 
