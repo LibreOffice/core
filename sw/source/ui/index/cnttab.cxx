@@ -513,9 +513,8 @@ IMPL_LINK_NOARG( SwMultiTOXTabDialog, ShowPreviewHdl )
             else
             {
                 Link aLink(LINK(this, SwMultiTOXTabDialog, CreateExample_Hdl));
-                OUString sTemp(sTemplate);
                 pExampleFrame = new SwOneExampleFrame(
-                        *m_pExampleContainerWIN, EX_SHOW_ONLINE_LAYOUT, &aLink, &sTemp);
+                        *m_pExampleContainerWIN, EX_SHOW_ONLINE_LAYOUT, &aLink, &sTemplate);
 
                 if(!pExampleFrame->IsServiceAvailable())
                 {

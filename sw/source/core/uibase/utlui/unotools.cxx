@@ -65,7 +65,7 @@ bool SwOneExampleFrame::bShowServiceNotAvailableMessage = true;
 SwOneExampleFrame::SwOneExampleFrame( Window& rWin,
                                         sal_uInt32 nFlags,
                                         const Link* pInitializedLink,
-                                        OUString* pURL ) :
+                                        const OUString* pURL ) :
     aTopWindow(&rWin, this),
     aMenuRes(SW_RES(RES_FRMEX_MENU)),
     pModuleView(SW_MOD()->GetView()),
