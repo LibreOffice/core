@@ -196,9 +196,6 @@ namespace pdfi
 
         typedef std::vector<GraphicsContext> GraphicsContextStack;
 
-        ::basegfx::B2DRange& calcTransformedRectBounds( ::basegfx::B2DRange&            outRect,
-                                                        const ::basegfx::B2DRange&      inRect,
-                                                        const ::basegfx::B2DHomMatrix&  transformation );
         std::vector<CharGlyph>             m_GlyphsList;
 
         boost::shared_ptr<ElementFactory>  m_pElFactory;

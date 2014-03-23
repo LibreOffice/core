@@ -317,7 +317,7 @@ GraphicsContext& PDFIProcessor::getTransformGlyphContext( CharGlyph& rGlyph )
     rGlyph.getGC().Transformation = rGlyph.getGC().Transformation * aFontTransform;
     getGCId(rGlyph.getGC());
 
-  return rGlyph.getGC();
+    return rGlyph.getGC();
 }
 
 void PDFIProcessor::drawCharGlyphs( OUString&             rGlyphs,
@@ -327,17 +327,9 @@ void PDFIProcessor::drawCharGlyphs( OUString&             rGlyphs,
                                     FrameElement* pFrame,
                                     bool bSpaceFlag )
 {
-
-
     OUString tempStr( 32 );
-    geometry::RealRectangle2D aRect(rRect);
 
-    ::basegfx::B2DRange aRect2;
-    calcTransformedRectBounds( aRect2,
-                                              ::basegfx::unotools::b2DRectangleFromRealRectangle2D(aRect),
-                                              aGC.Transformation );
-   // check whether there was a previous draw frame
-
+    // check whether there was a previous draw frame
     TextElement* pText = m_pElFactory->createTextElement( pPara,
                                                           getGCId(aGC),
                                                           aGC.FontId );
@@ -346,16 +338,18 @@ void PDFIProcessor::drawCharGlyphs( OUString&             rGlyphs,
 
     pText->Text.append( rGlyphs );
 
-    pText->x = aRect2.getMinX() ;
-    pText->y = aRect2.getMinY() ;
-    pText->w = 0.0;  // ToDO P2: 1.1 is a hack for solving of size auto-grow problem
-    pText->h = aRect2.getHeight(); // ToDO P2: 1.1 is a hack for solving of size auto-grow problem
+    ::basegfx::B2DPoint point(rRect.X1, rRect.Y1);
+    point *= aGC.Transformation;
+
+    pText->x = point.getX();
+    pText->y = point.getY();
+    pText->w = 0.0001; // hack for solving of size auto-grow problem
+    pText->h = 0.0001;
 
     pPara->updateGeometryWith( pText );
 
     if( pFrame )
       pFrame->updateGeometryWith( pPara );
-
 }
 
 void PDFIProcessor::drawGlyphs( const OUString&             rGlyphs,
@@ -803,45 +797,6 @@ void PDFIProcessor::sortElements( Element* pEle, bool bDeep )
     for( int i = 0; i < nChildren; i++ )
         pEle->Children.push_back( aChildren[i] );
 }
-
-
-::basegfx::B2DRange& PDFIProcessor::calcTransformedRectBounds( ::basegfx::B2DRange&         outRect,
-                                                        const ::basegfx::B2DRange&      inRect,
-                                                        const ::basegfx::B2DHomMatrix&  transformation )
-        {
-            outRect.reset();
-
-            if( inRect.isEmpty() )
-                return outRect;
-
-            // transform all four extremal points of the rectangle,
-            // take bounding rect of those.
-
-            // transform left-top point
-            outRect.expand( transformation * inRect.getMinimum() );
-
-            // transform bottom-right point
-            outRect.expand( transformation * inRect.getMaximum() );
-
-            ::basegfx::B2DPoint aPoint;
-
-            // transform top-right point
-            aPoint.setX( inRect.getMaxX() );
-            aPoint.setY( inRect.getMinY() );
-
-            aPoint *= transformation;
-            outRect.expand( aPoint );
-
-            // transform bottom-left point
-            aPoint.setX( inRect.getMinX() );
-            aPoint.setY( inRect.getMaxY() );
-
-            aPoint *= transformation;
-            outRect.expand( aPoint );
-
-            // over and out.
-            return outRect;
-        }
 
 // helper method: get a mirrored string
 OUString PDFIProcessor::mirrorString( const OUString& i_rString ) const
