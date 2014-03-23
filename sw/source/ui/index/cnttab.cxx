@@ -2448,8 +2448,9 @@ IMPL_LINK(SwTOXEntryTabPage, StyleSelectHdl, ListBox*, pBox)
 {
     OUString sEntry = pBox->GetSelectEntry();
     const sal_uInt16 nId = (sal_uInt16)(sal_IntPtr)pBox->GetEntryData(pBox->GetSelectEntryPos());
-    m_pEditStylePB->Enable(sEntry != sNoCharStyle);
-    if(sEntry == sNoCharStyle)
+    const bool bEqualsNoCharStyle = sEntry == sNoCharStyle;
+    m_pEditStylePB->Enable(!bEqualsNoCharStyle);
+    if (bEqualsNoCharStyle)
         sEntry = "";
     Control* pCtrl = m_pTokenWIN->GetActiveControl();
     OSL_ENSURE(pCtrl, "no active control?");
