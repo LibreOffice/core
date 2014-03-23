@@ -461,23 +461,6 @@ bool OutputDevice::supportsOperation( OutDevSupportType eType ) const
 void OutputDevice::EnableRTL( bool bEnable )
 {
     mbEnableRTL = bEnable;
-    if( meOutDevType == OUTDEV_VIRDEV )
-    {
-        // virdevs default to not mirroring, they will only be set to mirroring
-        // under rare circumstances in the UI, eg the valueset control
-        // because each virdev has its own SalGraphics we can safely switch the SalGraphics here
-        // ...hopefully
-        if( ImplGetGraphics() )
-            mpGraphics->SetLayout( mbEnableRTL ? SAL_LAYOUT_BIDI_RTL : 0 );
-    }
-
-    // convenience: for controls also switch layout mode
-    if( dynamic_cast<Control*>(this) != 0 )
-        SetLayoutMode( bEnable ? TEXT_LAYOUT_BIDI_RTL | TEXT_LAYOUT_TEXTORIGIN_LEFT : TEXT_LAYOUT_BIDI_LTR | TEXT_LAYOUT_TEXTORIGIN_LEFT);
-
-    Window* pWin = dynamic_cast<Window*>(this);
-    if( pWin )
-        pWin->StateChanged( STATE_CHANGE_MIRRORING );
 
     if( mpAlphaVDev )
         mpAlphaVDev->EnableRTL( bEnable );

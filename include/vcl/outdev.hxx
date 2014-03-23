@@ -1141,25 +1141,25 @@ public:
     BitmapEx                    GetBitmapEx( const Point& rSrcPt, const Size& rSize ) const;
 
     void                        EnableMapMode( bool bEnable = true );
-    bool                    IsMapModeEnabled() const { return mbMap; }
+    bool                        IsMapModeEnabled() const { return mbMap; }
 
     // Enabling/disabling RTL only makes sense for OutputDevices that use a mirroring SalGraphisLayout
-    void                        EnableRTL( bool bEnable = true);
-    bool                    IsRTLEnabled() const { return mbEnableRTL; }
+    virtual void                EnableRTL( bool bEnable = true);
+    bool                        IsRTLEnabled() const { return mbEnableRTL; }
 
     void                        SetConnectMetaFile( GDIMetaFile* pMtf );
     GDIMetaFile*                GetConnectMetaFile() const { return mpMetaFile; }
 
     void                        EnableOutput( bool bEnable = true );
-    bool                    IsOutputEnabled() const { return mbOutput; }
-    bool                    IsDeviceOutput() const { return mbDevOutput; }
-    bool                    IsDeviceOutputNecessary() const { return (mbOutput && mbDevOutput); }
-    bool                    IsOutputNecessary() const { return ((mbOutput && mbDevOutput) || (mpMetaFile != NULL)); }
+    bool                        IsOutputEnabled() const { return mbOutput; }
+    bool                        IsDeviceOutput() const { return mbDevOutput; }
+    bool                        IsDeviceOutputNecessary() const { return (mbOutput && mbDevOutput); }
+    bool                        IsOutputNecessary() const { return ((mbOutput && mbDevOutput) || (mpMetaFile != NULL)); }
 
     void                        SetClipRegion();
     void                        SetClipRegion( const Region& rRegion );
     Region                      GetClipRegion() const;
-    bool                    IsClipRegion() const { return mbClipRegion; }
+    bool                        IsClipRegion() const { return mbClipRegion; }
     Region                      GetActiveClipRegion() const;
 
     void                        MoveClipRegion( long nHorzMove, long nVertMove );
