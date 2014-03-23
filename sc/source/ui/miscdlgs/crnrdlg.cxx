@@ -27,7 +27,7 @@
 #include "crnrdlg.hxx"
 #undef _CRNRDLG_CXX
 #include <vcl/msgbox.hxx>
-
+#include <boost/scoped_array.hpp>
 
 
 
@@ -505,8 +505,8 @@ void ScColRowNameRangesDlg::UpdateNames()
     pLbRange->SetEntryData( nPos, (void*)nEntryDataDelim );
     if ( (nCount = xColNameRanges->size()) > 0 )
     {
-        ScRangePair** ppSortArray = xColNameRanges->CreateNameSortedArray(
-            nCount, pDoc );
+        boost::scoped_array<ScRangePair*> ppSortArray(xColNameRanges->CreateNameSortedArray(
+               nCount, pDoc ));
         for ( j=0; j < nCount; j++ )
         {
             const ScRange aRange(ppSortArray[j]->GetRange(0));
@@ -543,7 +543,6 @@ void ScColRowNameRangesDlg::UpdateNames()
             aRangeMap.insert( NameRangeMap::value_type(aInsStr, aRange) );
             pLbRange->SetEntryData( nPos, (void*)nEntryDataCol );
         }
-        delete [] ppSortArray;
     }
     aString = strDelim;
     aString += ScGlobal::GetRscString( STR_ROW );
@@ -552,8 +551,8 @@ void ScColRowNameRangesDlg::UpdateNames()
     pLbRange->SetEntryData( nPos, (void*)nEntryDataDelim );
     if ( (nCount = xRowNameRanges->size()) > 0 )
     {
-        ScRangePair** ppSortArray = xRowNameRanges->CreateNameSortedArray(
-            nCount, pDoc );
+        boost::scoped_array<ScRangePair*> ppSortArray(xRowNameRanges->CreateNameSortedArray(
+               nCount, pDoc ));
         for ( j=0; j < nCount; j++ )
         {
             const ScRange aRange(ppSortArray[j]->GetRange(0));
@@ -588,7 +587,6 @@ void ScColRowNameRangesDlg::UpdateNames()
             aRangeMap.insert( NameRangeMap::value_type(aInsStr, aRange) );
             pLbRange->SetEntryData( nPos, (void*)nEntryDataRow );
         }
-        delete [] ppSortArray;
     }
 
     pLbRange->SetUpdateMode( true );

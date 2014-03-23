@@ -87,6 +87,7 @@
 
 #include <memory>
 #include <basic/basmgr.hxx>
+#include <boost/scoped_array.hpp>
 #include <boost/scoped_ptr.hpp>
 #include <set>
 #include <vector>
@@ -5131,7 +5132,7 @@ bool ScDocFunc::InsertNameList( const ScAddress& rStartPos, bool bApi )
                 pDoc->BeginDrawUndo();      // wegen Hoehenanpassung
             }
 
-            ScRangeData** ppSortArray = new ScRangeData* [ nValidCount ];
+            boost::scoped_array<ScRangeData*> ppSortArray(new ScRangeData* [ nValidCount ]);
             sal_uInt16 j = 0;
             for (ScRangeName::iterator itr = itrLocalBeg; itr != itrLocalEnd; ++itr)
             {
@@ -5145,7 +5146,7 @@ bool ScDocFunc::InsertNameList( const ScAddress& rStartPos, bool bApi )
                 if (!r.HasType(RT_DATABASE) && !pLocalList->findByUpperName(itr->first))
                     ppSortArray[j++] = &r;
             }
-            qsort( (void*)ppSortArray, nValidCount, sizeof(ScRangeData*),
+            qsort( (void*)ppSortArray.get(), nValidCount, sizeof(ScRangeData*),
                 &ScRangeData_QsortNameCompare );
             OUString aName;
             OUStringBuffer aContent;
@@ -5165,7 +5166,7 @@ bool ScDocFunc::InsertNameList( const ScAddress& rStartPos, bool bApi )
                 ++nOutRow;
             }
 
-            delete [] ppSortArray;
+            ppSortArray.reset();
 
             if (bRecord)
             {

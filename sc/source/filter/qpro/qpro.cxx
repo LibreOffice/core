@@ -35,6 +35,7 @@
 #include "formulacell.hxx"
 #include "biff.hxx"
 #include <tools/stream.hxx>
+#include <boost/scoped_array.hpp>
 
 FltError ScQProReader::readSheet( SCTAB nTab, ScDocument* pDoc, ScQProStyle *pStyle )
 {
@@ -223,11 +224,10 @@ bool ScQProReader::nextRecord()
 
 void ScQProReader::readString( OUString &rString, sal_uInt16 nLength )
 {
-    sal_Char* pText = new sal_Char[ nLength + 1 ];
-    nLength = mpStream->Read(pText, nLength);
+    boost::scoped_array<sal_Char> pText(new sal_Char[ nLength + 1 ]);
+    nLength = mpStream->Read(pText.get(), nLength);
     pText[ nLength ] = 0;
-    rString = OUString( pText, strlen(pText), mpStream->GetStreamCharSet() );
-    delete [] pText;
+    rString = OUString( pText.get(), strlen(pText.get()), mpStream->GetStreamCharSet() );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

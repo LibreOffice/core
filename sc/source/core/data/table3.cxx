@@ -60,6 +60,7 @@
 #include "svl/sharedstringpool.hxx"
 
 #include <vector>
+#include <boost/scoped_array.hpp>
 #include <boost/unordered_set.hpp>
 
 using namespace ::com::sun::star;
@@ -1971,7 +1972,7 @@ SCSIZE ScTable::Query(ScQueryParam& rParamOrg, bool bKeepSub)
 bool ScTable::CreateExcelQuery(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2, ScQueryParam& rQueryParam)
 {
     bool    bValid = true;
-    SCCOL* pFields = new SCCOL[nCol2-nCol1+1];
+    boost::scoped_array<SCCOL> pFields(new SCCOL[nCol2-nCol1+1]);
     OUString  aCellStr;
     SCCOL   nCol = nCol1;
     OSL_ENSURE( rQueryParam.nTab != SCTAB_MAX, "rQueryParam.nTab no value, not bad but no good" );
@@ -2044,7 +2045,6 @@ bool ScTable::CreateExcelQuery(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow
                 rQueryParam.GetEntry(nIndex).eConnect = SC_OR;
         }
     }
-    delete [] pFields;
     return bValid;
 }
 

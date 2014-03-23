@@ -30,7 +30,7 @@
 
 #include "subtdlg.hxx"
 #include "tpsubt.hxx"
-
+#include <boost/scoped_array.hpp>
 
 // Subtotals group tabpage:
 
@@ -203,8 +203,8 @@ bool ScTpSubTotalGroup::DoFillItemSet( sal_uInt16       nGroupNo,
             theSubTotalData = ((const ScSubTotalItem*)pItem)->GetSubTotalData();
     }
 
-    ScSubTotalFunc* pFunctions  = NULL;
-    SCCOL*          pSubTotals  = NULL;
+    boost::scoped_array<ScSubTotalFunc> pFunctions;
+    boost::scoped_array<SCCOL>          pSubTotals;
     sal_uInt16          nGroup      = mpLbGroup->GetSelectEntryPos();
     sal_uInt16          nEntryCount = (sal_uInt16)mpLbColumns->GetEntryCount();
     sal_uInt16          nCheckCount = mpLbColumns->GetCheckedEntryCount();
@@ -222,8 +222,8 @@ bool ScTpSubTotalGroup::DoFillItemSet( sal_uInt16       nGroupNo,
     {
         sal_uInt16 nFunction    = 0;
 
-        pSubTotals = new SCCOL          [nCheckCount];
-        pFunctions = new ScSubTotalFunc [nCheckCount];
+        pSubTotals.reset(new SCCOL          [nCheckCount]);
+        pFunctions.reset(new ScSubTotalFunc [nCheckCount]);
 
         for ( sal_uInt16 i=0, nCheck=0; i<nEntryCount; i++ )
         {
@@ -238,16 +238,13 @@ bool ScTpSubTotalGroup::DoFillItemSet( sal_uInt16       nGroupNo,
             }
         }
         theSubTotalData.SetSubTotals( nGroupNo,      // Gruppen-Nr.
-                                      pSubTotals,
-                                      pFunctions,
+                                      pSubTotals.get(),
+                                      pFunctions.get(),
                                       nCheckCount ); // Anzahl der Array-Elemente
 
     }
 
     rArgSet.Put( ScSubTotalItem( SCITEM_SUBTDATA, &theSubTotalData ) );
-
-    if ( pSubTotals ) delete [] pSubTotals;
-    if ( pFunctions ) delete [] pFunctions;
 
     return true;
 }

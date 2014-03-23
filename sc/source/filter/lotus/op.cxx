@@ -52,6 +52,7 @@
 
 #include <vector>
 #include <map>
+#include <boost/scoped_array.hpp>
 
 extern WKTYP eTyp;           // -> filter.cxx, aktueller Dateityp
 extern sal_Bool bEOF;           // -> filter.cxx, zeigt Dateiende an
@@ -126,8 +127,8 @@ void OP_Label( SvStream& r, sal_uInt16 n )
 
     n -= (n > 5) ? 5 : n;
 
-    sal_Char* pText = new sal_Char[n + 1];
-    r.Read( pText, n );
+    boost::scoped_array<sal_Char> pText(new sal_Char[n + 1]);
+    r.Read( pText.get(), n );
     pText[n] = 0;
 
     if (ValidColRow( static_cast<SCCOL>(nCol), nRow))
@@ -135,12 +136,10 @@ void OP_Label( SvStream& r, sal_uInt16 n )
         nFormat &= 0x80;    // Bit 7 belassen
         nFormat |= 0x75;    // protected egal, special-text gesetzt
 
-        PutFormString( static_cast<SCCOL> (nCol), static_cast<SCROW> (nRow), nTab, pText );
+        PutFormString( static_cast<SCCOL> (nCol), static_cast<SCROW> (nRow), nTab, pText.get() );
 
         SetFormat( static_cast<SCCOL> (nCol), static_cast<SCROW> (nRow), nTab, nFormat, nDezStd );
     }
-
-    delete [] pText;
 }
 
 void OP_Formula( SvStream& r, sal_uInt16 /*n*/ )
@@ -354,13 +353,11 @@ void OP_Label123( SvStream& r, sal_uInt16 n )
     r.ReadUInt16( nRow ).ReadUChar( nTab ).ReadUChar( nCol );
     n -= (n > 4) ? 4 : n;
 
-    sal_Char* pText = new sal_Char[n + 1];
-    r.Read( pText, n );
+    boost::scoped_array<sal_Char> pText(new sal_Char[n + 1]);
+    r.Read( pText.get(), n );
     pText[ n ] = 0;
 
-    PutFormString( static_cast<SCCOL>(nCol), static_cast<SCROW>(nRow), static_cast<SCTAB>(nTab), pText );
-
-    delete []pText;
+    PutFormString( static_cast<SCCOL>(nCol), static_cast<SCROW>(nRow), static_cast<SCTAB>(nTab), pText.get() );
 }
 
 void OP_Number123( SvStream& r, sal_uInt16 /*n*/ )
@@ -426,12 +423,12 @@ void OP_Note123( SvStream& r, sal_uInt16 n)
     r.ReadUInt16( nRow ).ReadUChar( nTab ).ReadUChar( nCol );
     n -= (n > 4) ? 4 : n;
 
-    sal_Char* pText = new sal_Char[n + 1];
-    r.Read( pText, n );
+    boost::scoped_array<sal_Char> pText(new sal_Char[n + 1]);
+    r.Read( pText.get(), n );
     pText[ n ] = 0;
 
-    OUString aNoteText(pText, strlen(pText), pLotusRoot->eCharsetQ);
-    delete [] pText;
+    OUString aNoteText(pText.get(), strlen(pText.get()), pLotusRoot->eCharsetQ);
+    pText.reset();
 
     ScAddress aPos( static_cast<SCCOL>(nCol), static_cast<SCROW>(nRow), static_cast<SCTAB>(nTab) );
     ScNoteUtil::CreateNoteFromString( *pDoc, aPos, aNoteText, false, false );

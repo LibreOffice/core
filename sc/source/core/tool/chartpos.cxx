@@ -20,6 +20,7 @@
 #include "chartpos.hxx"
 #include "document.hxx"
 #include "rechead.hxx"
+#include <boost/scoped_array.hpp>
 
 namespace
 {
@@ -177,8 +178,8 @@ void ScChartPositioner::GlueState()
     const sal_uInt8 nFree = 2;
     const sal_uInt8 nGlue = 3;
     sal_uInt8* p;
-    sal_uInt8* pA = new sal_uInt8[ nCR ];
-    memset( pA, 0, nCR * sizeof(sal_uInt8) );
+    boost::scoped_array<sal_uInt8> pA(new sal_uInt8[ nCR ]);
+    memset( pA.get(), 0, nCR * sizeof(sal_uInt8) );
 
     SCCOL nCol, nCol1, nCol2;
     SCROW nRow, nRow1, nRow2;
@@ -191,7 +192,7 @@ void ScChartPositioner::GlueState()
         nRow2 = pR->aEnd.Row() - nStartRow;
         for ( nCol = nCol1; nCol <= nCol2; nCol++ )
         {
-            p = pA + (sal_uLong)nCol * nR + nRow1;
+            p = pA.get() + (sal_uLong)nCol * nR + nRow1;
             for ( nRow = nRow1; nRow <= nRow2; nRow++, p++ )
                 *p = nOccu;
         }
@@ -201,7 +202,7 @@ void ScChartPositioner::GlueState()
     sal_Bool bGlueCols = false;
     for ( nCol = 0; bGlue && nCol < nC; nCol++ )
     {   // iterate columns and try to mark as unused
-        p = pA + (sal_uLong)nCol * nR;
+        p = pA.get() + (sal_uLong)nCol * nR;
         for ( nRow = 0; bGlue && nRow < nR; nRow++, p++ )
         {
             if ( *p == nOccu )
@@ -216,7 +217,7 @@ void ScChartPositioner::GlueState()
             else
                 *p = nFree;
         }
-        if ( bGlue && *(p = (pA + ((((sal_uLong)nCol+1) * nR) - 1))) == nFree )
+        if ( bGlue && *(p = (pA.get() + ((((sal_uLong)nCol+1) * nR) - 1))) == nFree )
         {   // mark column as totally unused
             *p = nGlue;
             bGlueCols = sal_True; // one unused column at least
@@ -226,7 +227,7 @@ void ScChartPositioner::GlueState()
     sal_Bool bGlueRows = false;
     for ( nRow = 0; bGlue && nRow < nR; nRow++ )
     {   // iterate rows and try to mark as unused
-        p = pA + nRow;
+        p = pA.get() + nRow;
         for ( nCol = 0; bGlue && nCol < nC; nCol++, p+=nR )
         {
             if ( *p == nOccu )
@@ -239,7 +240,7 @@ void ScChartPositioner::GlueState()
             else
                 *p = nFree;
         }
-        if ( bGlue && *(p = (pA + ((((sal_uLong)nC-1) * nR) + nRow))) == nFree )
+        if ( bGlue && *(p = (pA.get() + ((((sal_uLong)nC-1) * nR) + nRow))) == nFree )
         {   // mark row as totally unused
             *p = nGlue;
             bGlueRows = sal_True; // one unused row at least
@@ -247,7 +248,7 @@ void ScChartPositioner::GlueState()
     }
 
     // If n=1: The upper left corner could be automagically pulled in for labeling
-    p = pA + 1;
+    p = pA.get() + 1;
     for ( sal_uLong n = 1; bGlue && n < nCR; n++, p++ )
     {   // An untouched field means we could neither reach it through rows nor columns,
         // thus we can't combine anything
@@ -262,15 +263,13 @@ void ScChartPositioner::GlueState()
             eGlue = SC_CHARTGLUE_ROWS;
         else
             eGlue = SC_CHARTGLUE_COLS;
-        if ( *pA != nOccu )
+        if ( pA[0] != nOccu )
             bDummyUpperLeft = true;
     }
     else
     {
         eGlue = SC_CHARTGLUE_NONE;
     }
-
-    delete [] pA;
 }
 
 void ScChartPositioner::CheckColRowHeaders()

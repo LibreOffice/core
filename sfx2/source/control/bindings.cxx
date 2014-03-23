@@ -64,7 +64,7 @@
 #include <sfx2/msgpool.hxx>
 
 #include <com/sun/star/frame/XModuleManager.hpp>
-
+#include <boost/scoped_array.hpp>
 #include <boost/scoped_ptr.hpp>
 
 using namespace ::com::sun::star;
@@ -1451,7 +1451,7 @@ SfxItemSet* SfxBindings::CreateSet_Impl
     }
 
     // Create a Set from the ranges
-    sal_uInt16 *pRanges = new sal_uInt16[rFound.size() * 2 + 1];
+    boost::scoped_array<sal_uInt16> pRanges(new sal_uInt16[rFound.size() * 2 + 1]);
     int j = 0;
     sal_uInt16 i = 0;
     while ( i < rFound.size() )
@@ -1464,8 +1464,8 @@ SfxItemSet* SfxBindings::CreateSet_Impl
         pRanges[j++] = rFound[i++]->nWhichId;
     }
     pRanges[j] = 0; // terminating NULL
-    SfxItemSet *pSet = new SfxItemSet(rPool, pRanges);
-    delete [] pRanges;
+    SfxItemSet *pSet = new SfxItemSet(rPool, pRanges.get());
+    pRanges.reset();
     DBG_PROFSTOP(SfxBindingsCreateSet);
     return pSet;
 }

@@ -68,6 +68,7 @@
 #include "tabprotection.hxx"
 
 #include "fprogressbar.hxx"
+#include <boost/scoped_array.hpp>
 
 using namespace com::sun::star;
 
@@ -1689,11 +1690,11 @@ void Sc10Import::LoadCol(SCCOL Col, SCTAB Tab)
             rStream.ReadUInt16( NoteLen );
             if (NoteLen != 0)
             {
-                sal_Char* pNote = new sal_Char[NoteLen+1];
-                rStream.Read(pNote, NoteLen);
+                boost::scoped_array<sal_Char> pNote(new sal_Char[NoteLen+1]);
+                rStream.Read(pNote.get(), NoteLen);
                 pNote[NoteLen] = 0;
-                OUString aNoteText( SC10TOSTRING(pNote));
-                delete [] pNote;
+                OUString aNoteText( SC10TOSTRING(pNote.get()));
+                pNote.reset();
                 ScAddress aPos( Col, static_cast<SCROW>(Row), Tab );
                 ScNoteUtil::CreateNoteFromString( *pDoc, aPos, aNoteText, false, false );
             }

@@ -22,6 +22,7 @@
 #include "rtl/bootstrap.hxx"
 
 #include <vector>
+#include <boost/scoped_array.hpp>
 #include <boost/unordered_map.hpp>
 
 #define USE_DUMMY_INTERPRETER 0
@@ -490,11 +491,10 @@ public:
         // Write simple data back into the sheet
         if (meMode == WRITE_OUTPUT)
         {
-            double *pDoubles = new double[xGroup->mnLength];
+            boost::scoped_array<double> pDoubles(new double[xGroup->mnLength]);
             for (sal_Int32 i = 0; i < xGroup->mnLength; i++)
                 pDoubles[i] = 42.0 + i;
-            rDoc.SetFormulaResults(rTopPos, pDoubles, xGroup->mnLength);
-            delete [] pDoubles;
+            rDoc.SetFormulaResults(rTopPos, pDoubles.get(), xGroup->mnLength);
         }
         return true;
     }
