@@ -260,7 +260,7 @@ struct WW8_BRCVer6  // BoRder Code (WW6 version)
         aBits1[1] = (_ico >> 2) | (_dxpSpace << 3);
     }
     // Convert BRC from WW8 to WW6 format
-    WW8_BRCVer6(const class WW8_BRC& brcVer8);
+    WW8_BRCVer6(const struct WW8_BRC& brcVer8);
 };
 
 struct WW8_BRC  // BoRder Code (WW8 version)
