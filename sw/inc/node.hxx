@@ -515,6 +515,9 @@ public:
     SwTableNode* MakeCopy( SwDoc*, const SwNodeIndex& ) const;
     void SetNewTable( SwTable* , sal_Bool bNewFrames=sal_True );
 
+    // Removes redline objects that relate to this table from the 'Extra Redlines' table
+    void RemoveRedlines();
+
 private:
     /// Private constructor because copying is never allowed!!
     SwTableNode( const SwTableNode & rNode );

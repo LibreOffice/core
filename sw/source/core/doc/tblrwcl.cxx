@@ -53,6 +53,7 @@
 #include <boost/scoped_ptr.hpp>
 #include <boost/foreach.hpp>
 #include <switerator.hxx>
+#include <docary.hxx>
 
 using namespace com::sun::star;
 using namespace com::sun::star::uno;
@@ -773,6 +774,10 @@ void _DeleteBox( SwTable& rTbl, SwTableBox* pBox, SwUndo* pUndo,
         SwStartNode* pSttNd = (SwStartNode*)pBox->GetSttNd();
         if( pShareFmts )
             pShareFmts->RemoveFormat( *rTblBoxes[ nDelPos ]->GetFrmFmt() );
+
+        // Before deleting the 'Table Box' from memory - delete any redlines attached to it
+        if ( rTbl.GetFrmFmt()->GetDoc()->HasExtraRedlineTbl() )
+            rTbl.GetFrmFmt()->GetDoc()->GetExtraRedlineTbl().DeleteTableCellRedline( rTbl.GetFrmFmt()->GetDoc(), *(rTblBoxes[nDelPos]), true, USHRT_MAX );
         delete rTblBoxes[nDelPos];
         rTblBoxes.erase( rTblBoxes.begin() + nDelPos );
 
@@ -821,7 +826,12 @@ void _DeleteBox( SwTable& rTbl, SwTableBox* pBox, SwUndo* pUndo,
             nDelPos = rTbl.GetTabLines().GetPos( pLine );
             if( pShareFmts )
                 pShareFmts->RemoveFormat( *rTbl.GetTabLines()[ nDelPos ]->GetFrmFmt() );
-            delete rTbl.GetTabLines()[ nDelPos ];
+
+            SwTableLine* pTabLineToDelete = rTbl.GetTabLines()[ nDelPos ];
+            // Before deleting the 'Table Line' from memory - delete any redlines attached to it
+            if ( rTbl.GetFrmFmt()->GetDoc()->HasExtraRedlineTbl() )
+                rTbl.GetFrmFmt()->GetDoc()->GetExtraRedlineTbl().DeleteTableRowRedline( rTbl.GetFrmFmt()->GetDoc(), *pTabLineToDelete, true, USHRT_MAX );
+            delete pTabLineToDelete;
             rTbl.GetTabLines().erase( rTbl.GetTabLines().begin() + nDelPos );
             break;      // we cannot delete more
         }
@@ -831,7 +841,12 @@ void _DeleteBox( SwTable& rTbl, SwTableBox* pBox, SwUndo* pUndo,
         nDelPos = pBox->GetTabLines().GetPos( pLine );
         if( pShareFmts )
             pShareFmts->RemoveFormat( *pBox->GetTabLines()[ nDelPos ]->GetFrmFmt() );
-        delete pBox->GetTabLines()[ nDelPos ];
+
+        SwTableLine* pTabLineToDelete = pBox->GetTabLines()[ nDelPos ];
+        // Before deleting the 'Table Line' from memory - delete any redlines attached to it
+        if ( rTbl.GetFrmFmt()->GetDoc()->HasExtraRedlineTbl() )
+            rTbl.GetFrmFmt()->GetDoc()->GetExtraRedlineTbl().DeleteTableRowRedline( rTbl.GetFrmFmt()->GetDoc(), *pTabLineToDelete, true, USHRT_MAX );
+        delete pTabLineToDelete;
         pBox->GetTabLines().erase( pBox->GetTabLines().begin() + nDelPos );
     } while( pBox->GetTabLines().empty() );
 }

@@ -222,6 +222,16 @@ SwExtraRedlineTbl::~SwExtraRedlineTbl()
     DeleteAndDestroyAll();
 }
 
+SwExtraRedlineTbl& SwDoc::GetExtraRedlineTbl()
+{
+    return *mpExtraRedlineTbl;
+}
+
+bool SwDoc::HasExtraRedlineTbl() const
+{
+    return mpExtraRedlineTbl ? true : false;
+}
+
 bool SwDoc::IsRedlineMove() const
 {
     return mbIsRedlineMove;
@@ -1496,6 +1506,174 @@ sal_uInt16 SwDoc::GetRedlinePos( const SwNode& rNd, sal_uInt16 nType ) const
     return USHRT_MAX;
 
     // To-Do - add 'SwExtraRedlineTbl' also ?
+}
+
+bool SwExtraRedlineTbl::DeleteAllTableRedlines( SwDoc* pDoc, const SwTable& rTable, bool bSaveInUndo, sal_uInt16 nRedlineTypeToDelete )
+{
+    if( nsRedlineMode_t::REDLINE_IGNOREDELETE_REDLINES & pDoc->GetRedlineMode() )
+        return false;
+
+    bool bChg = false;
+
+    if (bSaveInUndo && pDoc->GetIDocumentUndoRedo().DoesUndo())
+    {
+        // To-Do - Add 'Undo' support for deleting 'Table Cell' redlines
+        /*
+        SwUndoRedline* pUndo = new SwUndoRedline( UNDO_REDLINE, rRange );
+        if( pUndo->GetRedlSaveCount() )
+        {
+            GetIDocumentUndoRedo().AppendUndo(pUndo);
+        }
+        else
+            delete pUndo;
+        */
+    }
+
+    for(sal_uInt16 nCurRedlinePos = 0; nCurRedlinePos < GetSize(); ++nCurRedlinePos )
+    {
+        SwExtraRedline* pExtraRedline = GetRedline(nCurRedlinePos);
+        const SwTableCellRedline* pTableCellRedline = dynamic_cast<const SwTableCellRedline*>(pExtraRedline);
+        if (pTableCellRedline)
+        {
+            const SwTableBox *pRedTabBox = &pTableCellRedline->GetTableBox();
+            const SwTable& pRedTable = pRedTabBox->GetSttNd()->FindTableNode()->GetTable();
+            if ( &pRedTable == &rTable )
+            {
+                // Redline for this table
+                const SwRedlineData& aRedlineData = pTableCellRedline->GetRedlineData();
+                sal_uInt16 nRedlineType = aRedlineData.GetType();
+
+                // Check if this redline object type should be deleted
+                if( USHRT_MAX != nRedlineTypeToDelete && nRedlineTypeToDelete != nRedlineType )
+                    continue;
+
+                DeleteAndDestroy( nCurRedlinePos );
+                bChg = true;
+            }
+        }
+        else
+        {
+            const SwTableRowRedline* pTableRowRedline = dynamic_cast<const SwTableRowRedline*>(pExtraRedline);
+            if (pTableRowRedline)
+            {
+                const SwTableLine *pRedTabLine = &pTableRowRedline->GetTableLine();
+                const SwTableBoxes &pRedTabBoxes = pRedTabLine->GetTabBoxes();
+                const SwTable& pRedTable = pRedTabBoxes[0]->GetSttNd()->FindTableNode()->GetTable();
+                if ( &pRedTable == &rTable )
+                {
+                    // Redline for this table
+                    const SwRedlineData& aRedlineData = pTableRowRedline->GetRedlineData();
+                    sal_uInt16 nRedlineType = aRedlineData.GetType();
+
+                    // Check if this redline object type should be deleted
+                    if( USHRT_MAX != nRedlineTypeToDelete && nRedlineTypeToDelete != nRedlineType )
+                        continue;
+
+                    DeleteAndDestroy( nCurRedlinePos );
+                    bChg = true;
+                }
+            }
+        }
+    }
+
+    if( bChg )
+        pDoc->SetModified();
+
+    return bChg;
+}
+
+bool SwExtraRedlineTbl::DeleteTableRowRedline( SwDoc* pDoc, const SwTableLine& rTableLine, bool bSaveInUndo, sal_uInt16 nRedlineTypeToDelete )
+{
+    if( nsRedlineMode_t::REDLINE_IGNOREDELETE_REDLINES & pDoc->GetRedlineMode() )
+        return false;
+
+    bool bChg = false;
+
+    if (bSaveInUndo && pDoc->GetIDocumentUndoRedo().DoesUndo())
+    {
+        // To-Do - Add 'Undo' support for deleting 'Table Cell' redlines
+        /*
+        SwUndoRedline* pUndo = new SwUndoRedline( UNDO_REDLINE, rRange );
+        if( pUndo->GetRedlSaveCount() )
+        {
+            GetIDocumentUndoRedo().AppendUndo(pUndo);
+        }
+        else
+            delete pUndo;
+        */
+    }
+
+    for(sal_uInt16 nCurRedlinePos = 0; nCurRedlinePos < GetSize(); ++nCurRedlinePos )
+    {
+        SwExtraRedline* pExtraRedline = GetRedline(nCurRedlinePos);
+        const SwTableRowRedline* pTableRowRedline = dynamic_cast<const SwTableRowRedline*>(pExtraRedline);
+        const SwTableLine *pRedTabLine = pTableRowRedline ? &pTableRowRedline->GetTableLine() : NULL;
+        if ( pRedTabLine == &rTableLine )
+        {
+            // Redline for this table row
+            const SwRedlineData& aRedlineData = pTableRowRedline->GetRedlineData();
+            sal_uInt16 nRedlineType = aRedlineData.GetType();
+
+            // Check if this redline object type should be deleted
+            if( USHRT_MAX != nRedlineTypeToDelete && nRedlineTypeToDelete != nRedlineType )
+                continue;
+
+            DeleteAndDestroy( nCurRedlinePos );
+            bChg = true;
+        }
+    }
+
+    if( bChg )
+        pDoc->SetModified();
+
+    return bChg;
+}
+
+bool SwExtraRedlineTbl::DeleteTableCellRedline( SwDoc* pDoc, const SwTableBox& rTableBox, bool bSaveInUndo, sal_uInt16 nRedlineTypeToDelete )
+{
+    if( nsRedlineMode_t::REDLINE_IGNOREDELETE_REDLINES & pDoc->GetRedlineMode() )
+        return false;
+
+    bool bChg = false;
+
+    if (bSaveInUndo && pDoc->GetIDocumentUndoRedo().DoesUndo())
+    {
+        // To-Do - Add 'Undo' support for deleting 'Table Cell' redlines
+        /*
+        SwUndoRedline* pUndo = new SwUndoRedline( UNDO_REDLINE, rRange );
+        if( pUndo->GetRedlSaveCount() )
+        {
+            GetIDocumentUndoRedo().AppendUndo(pUndo);
+        }
+        else
+            delete pUndo;
+        */
+    }
+
+    for(sal_uInt16 nCurRedlinePos = 0; nCurRedlinePos < GetSize(); ++nCurRedlinePos )
+    {
+        SwExtraRedline* pExtraRedline = GetRedline(nCurRedlinePos);
+        const SwTableCellRedline* pTableCellRedline = dynamic_cast<const SwTableCellRedline*>(pExtraRedline);
+        const SwTableBox *pRedTabBox = pTableCellRedline ? &pTableCellRedline->GetTableBox() : NULL;
+        if ( pRedTabBox == &rTableBox )
+        {
+            // Redline for this table cell
+            const SwRedlineData& aRedlineData = pTableCellRedline->GetRedlineData();
+            sal_uInt16 nRedlineType = aRedlineData.GetType();
+
+            // Check if this redline object type should be deleted
+            if( USHRT_MAX != nRedlineTypeToDelete && nRedlineTypeToDelete != nRedlineType )
+                continue;
+
+            DeleteAndDestroy( nCurRedlinePos );
+            bChg = true;
+        }
+    }
+
+    if( bChg )
+        pDoc->SetModified();
+
+    return bChg;
 }
 
 const SwRangeRedline* SwDoc::GetRedline( const SwPosition& rPos,

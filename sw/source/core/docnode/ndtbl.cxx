@@ -2453,6 +2453,17 @@ void SwTableNode::SetNewTable( SwTable* pNewTable, sal_Bool bNewFrames )
     }
 }
 
+void SwTableNode::RemoveRedlines()
+{
+    SwDoc* pDoc = GetDoc();
+    if (pDoc)
+    {
+        SwTable& rTbl = GetTable();
+        if ( pDoc->HasExtraRedlineTbl() )
+            pDoc->GetExtraRedlineTbl().DeleteAllTableRedlines( pDoc, rTbl, true, USHRT_MAX );
+    }
+}
+
 void SwDoc::GetTabCols( SwTabCols &rFill, const SwCursor* pCrsr,
                         const SwCellFrm* pBoxFrm ) const
 {

@@ -760,6 +760,8 @@ public:
     virtual bool IsInRedlines(const SwNode& rNode) const;
     virtual const SwRedlineTbl& GetRedlineTbl() const;
     virtual const SwExtraRedlineTbl& GetExtraRedlineTbl() const;
+    virtual SwExtraRedlineTbl& GetExtraRedlineTbl();
+    virtual bool HasExtraRedlineTbl() const;
     virtual bool AppendRedline(/*[in]*/SwRangeRedline* pPtr, /*[in]*/bool bCallDelete);
     virtual bool AppendTableRowRedline(/*[in]*/SwTableRowRedline* pPtr, /*[in]*/bool bCallDelete);
     virtual bool AppendTableCellRedline(/*[in]*/SwTableCellRedline* pPtr, /*[in]*/bool bCallDelete);

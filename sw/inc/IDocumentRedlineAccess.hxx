@@ -134,6 +134,8 @@ public:
 
     virtual const SwRedlineTbl& GetRedlineTbl() const = 0;
     virtual const SwExtraRedlineTbl& GetExtraRedlineTbl() const = 0;
+    virtual SwExtraRedlineTbl& GetExtraRedlineTbl() = 0;
+    virtual bool HasExtraRedlineTbl() const = 0;
 
     virtual bool IsInRedlines(const SwNode& rNode) const = 0;
 
