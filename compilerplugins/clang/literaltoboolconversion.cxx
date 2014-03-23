@@ -160,8 +160,8 @@ bool LiteralToBoolConversion::isFromCIncludeFile(
         return false;
     }
 #endif
-    return compiler.getSourceManager().getFilename(spellingLocation).endswith(
-        ".h");
+    return StringRef(compiler.getSourceManager().getPresumedLoc(spellingLocation)
+        .getFilename()).endswith(".h");
 }
 
 bool LiteralToBoolConversion::isMacroBodyExpansion(SourceLocation location)

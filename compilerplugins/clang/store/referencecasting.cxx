@@ -97,7 +97,7 @@ static const Type* extractTemplateType(Expr* cce);
 bool ReferenceCasting::VisitCXXConstructExpr( CXXConstructExpr* cce )
 {
     // don't bother processing anything in the Reference.h file. Makes my life easier when debugging this.
-    if( compiler.getSourceManager().getFilename( cce->getSourceRange().getBegin() ).find( "Reference.h" ) != StringRef::npos )
+    if( StringRef(compiler.getSourceManager().getPresumedLoc( cce->getSourceRange().getBegin() )).find( "Reference.h" ) != StringRef::npos )
         return true;
 
     // look for calls to the Reference<T>(x,UNO_something) constructor
