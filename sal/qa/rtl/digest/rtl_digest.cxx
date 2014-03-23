@@ -372,6 +372,55 @@ public:
         rtl_digest_destroyMD5(aHandle);
     }
 
+    void testSHA1SumForBiggerInputData()
+    {
+        // The test data was extracted from oox encrypted document (salt + password).
+        // First  case: 16 bytes salt + 34 bytes password (12345678901234567)
+        // Second case: 16 bytes salt + 36 bytes password (123456789012345678)
+        {
+            const unsigned char aData[] = {
+                    0x37, 0x5f, 0x47, 0x7a, 0xd2, 0x13, 0xbe, 0xd2, 0x3c, 0x23, 0x33, 0x39,
+                    0x68, 0x21, 0x03, 0x6d, 0x31, 0x00, 0x32, 0x00, 0x33, 0x00, 0x34, 0x00,
+                    0x35, 0x00, 0x36, 0x00, 0x37, 0x00, 0x38, 0x00, 0x39, 0x00, 0x30, 0x00,
+                    0x31, 0x00, 0x32, 0x00, 0x33, 0x00, 0x34, 0x00, 0x35, 0x00, 0x36, 0x00,
+                    0x37, 0x00
+            };
+
+            boost::scoped_array<sal_uInt8> pResult(new sal_uInt8[RTL_DIGEST_LENGTH_SHA1]);
+
+            OString sExpected = "06f460d693aecdd3b5cbe8365408eccfc570f32a";
+
+            rtl_digest_SHA1(aData, sizeof(aData), pResult.get(), RTL_DIGEST_LENGTH_SHA1);
+
+            OString sKey = createHex(pResult.get(), RTL_DIGEST_LENGTH_SHA1);
+
+            CPPUNIT_ASSERT_EQUAL(sExpected, sKey);
+        }
+
+        {
+            const unsigned char aData[] = {
+                    0x37, 0x5f, 0x47, 0x7a, 0xd2, 0x13, 0xbe, 0xd2, 0x3c, 0x23, 0x33, 0x39,
+                    0x68, 0x21, 0x03, 0x6d, 0x31, 0x00, 0x32, 0x00, 0x33, 0x00, 0x34, 0x00,
+                    0x35, 0x00, 0x36, 0x00, 0x37, 0x00, 0x38, 0x00, 0x39, 0x00, 0x30, 0x00,
+                    0x31, 0x00, 0x32, 0x00, 0x33, 0x00, 0x34, 0x00, 0x35, 0x00, 0x36, 0x00,
+                    0x37, 0x00, 0x38, 0x00
+            };
+
+            boost::scoped_array<sal_uInt8> pResult(new sal_uInt8[RTL_DIGEST_LENGTH_SHA1]);
+
+            OString sExpected = "0bfe41eb7fb3edf5f5a6de57192de4ba1b925758";
+
+            rtl_digest_SHA1(aData, sizeof(aData), pResult.get(), RTL_DIGEST_LENGTH_SHA1);
+
+            OString sKey = createHex(pResult.get(), RTL_DIGEST_LENGTH_SHA1);
+
+            // With this test case rtl_digest_SHA1 computes the wrong sum. This was confirmed
+            // by decrytion of a MSO encrypted document. Replacing the rtl_digest_SHA1 calculation
+            // with sha1 calculation from NSS was able to decrypt the document.
+
+            //CPPUNIT_ASSERT_EQUAL(sExpected, sKey);
+        }
+    }
 
     CPPUNIT_TEST_SUITE(DigestTest);
     CPPUNIT_TEST(testCreate);
@@ -383,6 +432,7 @@ public:
     CPPUNIT_TEST(testPBKDF2);
     CPPUNIT_TEST(testUpdate);
     CPPUNIT_TEST(testGet);
+    CPPUNIT_TEST(testSHA1SumForBiggerInputData);
 
     CPPUNIT_TEST_SUITE_END();
 };
