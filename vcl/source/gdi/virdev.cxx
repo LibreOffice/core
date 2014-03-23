@@ -148,7 +148,7 @@ void VirtualDevice::ImplInitVirDev( const OutputDevice* pOutDev,
             ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >() );
     }
 
-    mnBitCount      = ( nBitCount ? nBitCount : pOutDev->GetBitCount() );
+    mnBitCount      = ( nBitCount ? nBitCount : GetBitCount() );
     mnOutWidth      = nDX;
     mnOutHeight     = nDY;
     mbScreenComp    = true;
@@ -533,7 +533,18 @@ void VirtualDevice::ImplSetReferenceDevice( RefDevMode i_eRefDevMode, sal_Int32 
     mpFontCache = new ImplFontCache();
 }
 
+sal_uInt16 VirtualDevice::GetBitCount() const
+{
+    return mnBitCount;
+}
 
+sal_uInt16 VirtualDevice::GetAlphaBitCount() const
+{
+    if (mpAlphaVDev)
+        return mpAlphaVDev->GetBitCount();
+
+    return 0;
+}
 
 void VirtualDevice::Compat_ZeroExtleadBug()
 {
