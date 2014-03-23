@@ -158,7 +158,7 @@ static OString ConvToHex(sal_uInt16 nHex)
 {
     sal_Char aNToABuf[] = "00";
 
-    // Pointer an das Bufferende setzen
+    // set pointer to end of buffer
     sal_Char *pStr = aNToABuf + (sizeof(aNToABuf)-1);
     for( sal_uInt8 n = 0; n < 2; ++n )
     {
@@ -257,7 +257,7 @@ void SwHTMLWriter::OutCSS1_Property( const sal_Char *pProp,
     sOut.append(OString(pProp) + ": ");
     if( nCSS1OutMode & CSS1_OUTMODE_ENCODE )
     {
-        // In STYLE-Optionen den String codieren
+        // for STYLE-Option encode string
         Strm().WriteCharPtr( sOut.makeStringAndClear().getStr() );
         if( pVal )
             HTMLOutFuncs::Out_String( Strm(), OUString::createFromAscii(pVal),
@@ -267,7 +267,7 @@ void SwHTMLWriter::OutCSS1_Property( const sal_Char *pProp,
     }
     else
     {
-        // Im STYLE-Tag des String direct ausgeben
+        // for STYLE-Tag print string directly
         if( pVal )
             sOut.append(pVal);
         else if( pSVal )
@@ -283,12 +283,12 @@ static void AddUnitPropertyValue(OStringBuffer &rOut, long nVal,
 {
     if( nVal < 0 )
     {
-        // Vorzeichen extra behandeln
+        // special-case sign symbol
         nVal = -nVal;
         rOut.append('-');
     }
 
-    // Die umgerechnete Einheit ergibt sich aus (x * nMul)/(nDiv*nFac*10)
+    // the recalculated unit results from (x * nMul)/(nDiv*nFac*10)
     long nMul = 1000;
     long nDiv = 1;
     long nFac = 100;
@@ -296,7 +296,7 @@ static void AddUnitPropertyValue(OStringBuffer &rOut, long nVal,
     switch( eUnit )
     {
     case FUNIT_100TH_MM:
-        OSL_ENSURE( FUNIT_MM == eUnit, "Masseinheit wird nicht unterstuetzt" );
+        OSL_ENSURE( FUNIT_MM == eUnit, "Measuring unit not supported" );
     case FUNIT_MM:
         // 0.01mm = 0.57twip
         nMul = 25400;   // 25.4 * 1000
@@ -307,9 +307,9 @@ static void AddUnitPropertyValue(OStringBuffer &rOut, long nVal,
 
     case FUNIT_M:
     case FUNIT_KM:
-        OSL_ENSURE( FUNIT_CM == eUnit, "Masseinheit wird nicht unterstuetzt" );
+        OSL_ENSURE( FUNIT_CM == eUnit, "Measuring unit not supported" );
     case FUNIT_CM:
-        // 0.01cm = 5.7twip (ist zwar ungenau, aber die UI ist auch ungenau)
+        // 0.01cm = 5.7twip (not exact, but the UI is also not exact)
         nMul = 2540;    // 2.54 * 1000
         nDiv = 1440;    // 72 * 20;
         nFac = 100;
@@ -317,9 +317,9 @@ static void AddUnitPropertyValue(OStringBuffer &rOut, long nVal,
         break;
 
     case FUNIT_TWIP:
-        OSL_ENSURE( FUNIT_POINT == eUnit, "Masseinheit wird nicht unterstuetzt" );
+        OSL_ENSURE( FUNIT_POINT == eUnit, "Measuring unit not supported" );
     case FUNIT_POINT:
-        // 0.1pt = 2.0twip (ist zwar ungenau, aber die UI ist auch ungenau)
+        // 0.1pt = 2.0twip (not exact, but the UI is also not exact)
         nMul = 100;
         nDiv = 20;
         nFac = 10;
@@ -327,7 +327,7 @@ static void AddUnitPropertyValue(OStringBuffer &rOut, long nVal,
         break;
 
     case FUNIT_PICA:
-        // 0.01pc = 2.40twip (ist zwar ungenau, aber die UI ist auch ungenau)
+        // 0.01pc = 2.40twip (not exact, but the UI is also not exact)
         nMul = 1000;
         nDiv = 240;     // 12 * 20;
         nFac = 100;
@@ -341,8 +341,8 @@ static void AddUnitPropertyValue(OStringBuffer &rOut, long nVal,
     case FUNIT_PERCENT:
     case FUNIT_INCH:
     default:
-        OSL_ENSURE( FUNIT_INCH == eUnit, "Masseinheit wird nicht unterstuetzt" );
-        // 0.01in = 14.4twip (ist zwar ungenau, aber die UI ist auch ungenau)
+        OSL_ENSURE( FUNIT_INCH == eUnit, "Measuring unit not supported" );
+        // 0.01in = 14.4twip (not exact, but the UI is also not exact)
         nMul = 1000;
         nDiv = 1440;    // 72 * 20;
         nFac = 100;
@@ -354,7 +354,7 @@ static void AddUnitPropertyValue(OStringBuffer &rOut, long nVal,
     bool bOutLongVal = true;
     if( nVal > LONG_MAX / nMul )
     {
-        // Zum Unrechnen der Einheit wird ein BigInt benoetigt
+        // needs a BigInt to translate this unit
 #ifdef SAL_INT64_IS_STRUCT
         BigInt nBigVal( nVal );
         nBigVal *= nMul;
@@ -364,7 +364,7 @@ static void AddUnitPropertyValue(OStringBuffer &rOut, long nVal,
 
         if( nBigVal.IsLong() )
         {
-            // Zum Ausgeben des Wertes reicht ein long.
+            // a long is sufficient
             nLongVal = (long)nBigVal;
         }
         else
@@ -393,7 +393,7 @@ static void AddUnitPropertyValue(OStringBuffer &rOut, long nVal,
 
         if( nBigVal <= LONG_MAX )
         {
-            // Zum Ausgeben des Wertes reicht ein long.
+            // a long is sufficient
             nLongVal = (long)nBigVal;
         }
         else
@@ -454,14 +454,14 @@ void SwHTMLWriter::OutCSS1_PixelProperty( const sal_Char *pProp, long nVal,
 void SwHTMLWriter::OutCSS1_SfxItemSet( const SfxItemSet& rItemSet,
                                        sal_Bool bDeep )
 {
-    // den ItemSet ausgeben, und zwar inklusive aller Attribute
+    // print ItemSet, including all attributes
     Out_SfxItemSet( aCSS1AttrFnTab, *this, rItemSet, bDeep );
 
-    // ein par Attribute benoetigen eine Spezial-Behandlung
+    // some Attributes require special treatment
     const SfxPoolItem *pItem = 0;
 
-    // Underline, Overline, CrossedOut und Blink bilden zusammen eine CSS1-Property
-    // (geht natuerlich nicht bei Hints)
+    // Underline, Overline, CrossedOut and Blink form together a CSS1-Property
+    // (doesn't work of course for Hints)
     if( !IsCSS1Source(CSS1_OUTMODE_HINT) )
     {
         const SvxUnderlineItem *pUnderlineItem = 0;
@@ -491,8 +491,8 @@ void SwHTMLWriter::OutCSS1_SfxItemSet( const SfxItemSet& rItemSet,
 
     if( !bFirstCSS1Property )
     {
-        // wenn eine Property als Bestandteil einer Style-Option
-        // ausgegeben wurde, muss die Optiomn noch beendet werden
+        // if a Property was exported as part of a Style-Option,
+        // the Option still needs to be finished
         OStringBuffer sOut;
         switch( nCSS1OutMode & CSS1_OUTMODE_ANY_OFF )
         {
@@ -524,22 +524,18 @@ void SwHTMLWriter::OutStyleSheet( const SwPageDesc& rPageDesc, sal_Bool bUsed )
         sal_uInt16 nFirstRefPoolId = RES_POOLPAGE_HTML;
         bCSS1IgnoreFirstPageDesc = sal_True;
 
-        // Erstmal versuchen wir zu erraten, wie das Dokument so augebaut ist.
-        // Erlaubt sind nur die Vorlagen HTML, erste Seite, linke Seite und
-        // rechte Seite.
-        // Eine erste Seite wird nur exportiert, wenn die erste Seite auch
-        // wirklich die Vorlage "erste Seite" ist.
-        // Linke und rechte Seiten werden nur exportiert, wenn diese beiden
-        // Vorlagen untereinander verkettet werden.
-        // Wenn andere Vorlagen verwendet werden, wird nur in sehr einfachen
-        // Faellen etwas exportiert.
+        // First we try to guess how the document is constructed.
+        // Allowed are only the templates: HTML, 1st page, left page, and right page.
+        // A first page is only exported, if it matches the template "1st page".
+        // Left and right pages are only exported, if their templates are linked.
+        // If other templates are used, only very simple cases are exported.
         const SwPageDesc *pPageDesc = &rPageDesc;
         const SwPageDesc *pFollow = rPageDesc.GetFollow();
         if( RES_POOLPAGE_FIRST == pPageDesc->GetPoolFmtId() &&
             pFollow != pPageDesc &&
             !IsPoolUserFmt( pFollow->GetPoolFmtId() ) )
         {
-            // Das Dokument hat eine erste Seite
+            // the document has a first page
             pFirstPageDesc = pPageDesc;
             pPageDesc = pFollow;
             pFollow = pPageDesc->GetFollow();
@@ -548,10 +544,8 @@ void SwHTMLWriter::OutStyleSheet( const SwPageDesc& rPageDesc, sal_Bool bUsed )
         IDocumentStylePoolAccess* pStylePoolAccess = getIDocumentStylePoolAccess();
         if( pPageDesc == pFollow )
         {
-            // Das Dokument ist einseitig. Egal welche Seite verwendet wird,
-            // es wird kein zweiseitiges Dokument daraus gemacht.
-            // Die Attributierung wird relativ zur HTML-Seitenvorlage
-            // aus der HTML-Vorlage exportiert.
+            // The document is one-sided; no matter what page, we do not create a 2-sided doc.
+            // The attribute is exported relative to the HTML page template.
           OutCSS1_SwPageDesc( *this, *pPageDesc, pStylePoolAccess, pTemplate,
                                 RES_POOLPAGE_HTML, true, false );
             nFirstRefPoolId = pFollow->GetPoolFmtId();
@@ -561,7 +555,7 @@ void SwHTMLWriter::OutStyleSheet( const SwPageDesc& rPageDesc, sal_Bool bUsed )
                  (RES_POOLPAGE_RIGHT == pPageDesc->GetPoolFmtId() &&
                   RES_POOLPAGE_LEFT == pFollow->GetPoolFmtId()) )
         {
-            // Das Dokument ist zweiseitig
+            // the document is double-sided
           OutCSS1_SwPageDesc( *this, *pPageDesc, pStylePoolAccess, pTemplate,
                                 RES_POOLPAGE_HTML, true );
           OutCSS1_SwPageDesc( *this, *pFollow, pStylePoolAccess, pTemplate,
@@ -569,7 +563,7 @@ void SwHTMLWriter::OutStyleSheet( const SwPageDesc& rPageDesc, sal_Bool bUsed )
             nFirstRefPoolId = RES_POOLPAGE_RIGHT;
             bCSS1IgnoreFirstPageDesc = sal_False;
         }
-        // Alles andere bekommen wir nicht hin.
+        // other cases we miss
 
         if( pFirstPageDesc )
           OutCSS1_SwPageDesc( *this, *pFirstPageDesc, pStylePoolAccess, pTemplate,
@@ -582,8 +576,8 @@ void SwHTMLWriter::OutStyleSheet( const SwPageDesc& rPageDesc, sal_Bool bUsed )
     // that maps to <P>, and that's especially the standard style
     getIDocumentStylePoolAccess()->GetTxtCollFromPool( RES_POOLCOLL_TEXT, false );
 
-    // das Default-TextStyle wir nicht mit ausgegeben !!
-    // das 0-Style ist das Default, wird nie ausgegeben !!
+    // the Default-TextStyle is not also exported !!
+    // 0-Style is the Default; is never exported !!
     sal_uInt16 nArrLen = pDoc->GetTxtFmtColls()->size();
     sal_uInt16 i;
 
@@ -596,7 +590,7 @@ void SwHTMLWriter::OutStyleSheet( const SwPageDesc& rPageDesc, sal_Bool bUsed )
             OutCSS1_SwFmt( *this, *pColl, pDoc, pTemplate );
     }
 
-    // das Default-TextStyle wir nicht mit ausgegeben !!
+    // the Default-TextStyle is not also exported !!
     nArrLen = pDoc->GetCharFmts()->size();
     for( i=1; i<nArrLen; i++ )
     {
@@ -637,8 +631,8 @@ void SwHTMLWriter::OutStyleSheet( const SwPageDesc& rPageDesc, sal_Bool bUsed )
     nDfltBottomMargin = 0;
 }
 
-// wenn pPseudo gesetzt ist werden Styles-Sheets ausgegeben,
-// sonst wird nur nach Token und Class fuer ein Format gesucht
+// if pPseudo is set, Styles-Sheets will be exported;
+// otherwise we only search for Token and Class for a Format
 sal_uInt16 SwHTMLWriter::GetCSS1Selector( const SwFmt *pFmt, OString& rToken,
                                       OUString& rClass, sal_uInt16& rRefPoolId,
                                       OUString *pPseudo )
@@ -652,8 +646,7 @@ sal_uInt16 SwHTMLWriter::GetCSS1Selector( const SwFmt *pFmt, OString& rToken,
 
     sal_Bool bChrFmt = RES_CHRFMT==pFmt->Which();
 
-    // Nach oben die Formate abklappern, bis man auf eine Standard-
-    // oder eine HTML-Tag-Vorlage trifft
+    // search formats above for the nearest standard or HTML-Tag template
     const SwFmt *pPFmt = pFmt;
     while( pPFmt && !pPFmt->IsDefault() )
     {
@@ -661,7 +654,7 @@ sal_uInt16 SwHTMLWriter::GetCSS1Selector( const SwFmt *pFmt, OString& rToken,
         sal_uInt16 nPoolId = pPFmt->GetPoolFmtId();
         if( USER_FMT & nPoolId )
         {
-            // Benutzer-Vorlagen
+            // user templates
             const OUString aNm(pPFmt->GetName());
 
             if (!bChrFmt && aNm == OOO_STRING_SVTOOLS_HTML_blockquote)
@@ -688,9 +681,9 @@ sal_uInt16 SwHTMLWriter::GetCSS1Selector( const SwFmt *pFmt, OString& rToken,
                                   aNm == OOO_STRING_SVTOOLS_HTML_dt))
             {
                 sal_uInt16 nDefListLvl = GetDefListLvl(aNm, nPoolId);
-                // Die Vorlagen DD 1/DT 1 werden ausgegeben,
-                // aber keine von ihnen abgeleiteten Vorlagen,
-                // auch nicht DD 2/DT 2 etc.
+                // Export the templates DD 1/DT 1,
+                // but none of their derived templates,
+                // also not DD 2/DT 2 etc.
                 if (nDefListLvl)
                 {
                     if (pPseudo && (nDeep || (nDefListLvl & 0x0fff) > 1))
@@ -716,7 +709,7 @@ sal_uInt16 SwHTMLWriter::GetCSS1Selector( const SwFmt *pFmt, OString& rToken,
             }
             else if (!bChrFmt && aNm == OOO_STRING_SVTOOLS_HTML_horzrule)
             {
-                // HR nicht ausgeben!
+                // do not export HR !
                 bStop = (nDeep==0);
             }
             else if (bChrFmt && aNm == OOO_STRING_SVTOOLS_HTML_keyboard)
@@ -726,8 +719,7 @@ sal_uInt16 SwHTMLWriter::GetCSS1Selector( const SwFmt *pFmt, OString& rToken,
             }
             else if (!bChrFmt && aNm == OOO_STRING_SVTOOLS_HTML_listing)
             {
-                // Listing als PRE exportieren bzw. von
-                // PRE abgeleitete Vorlage exportieren
+                // Export Listings as PRE or PRE-derived template
                 rToken = OString(OOO_STRING_SVTOOLS_HTML_preformtxt);
                 rRefPoolId = RES_POOLCOLL_HTML_PRE;
                 nDeep = CSS1_FMT_CMPREF;
@@ -759,27 +751,25 @@ sal_uInt16 SwHTMLWriter::GetCSS1Selector( const SwFmt *pFmt, OString& rToken,
             }
             else if (!bChrFmt && aNm == OOO_STRING_SVTOOLS_HTML_xmp)
             {
-                // XMP als PRE exportieren (aber nicht die
-                // Vorlage als Style)
+                // export XMP as PRE (but not the template as Style)
                 rToken = OString(OOO_STRING_SVTOOLS_HTML_preformtxt);
                 rRefPoolId = RES_POOLCOLL_HTML_PRE;
                 nDeep = CSS1_FMT_CMPREF;
             }
 
-            // Wenn eine PoolId gesetzt ist, entspricht der Name der
-            // Vorlage dem szugehoerigen Token
+            // if a PoolId is set, the Name of the template is that of the related Token
             OSL_ENSURE( (rRefPoolId != 0) == (!rToken.isEmpty()),
                     "Token missing" );
         }
         else
         {
-            // Pool-Vorlagen
+            // Pool templates
             switch( nPoolId )
             {
-            // Absatz-Vorlagen
+            // paragraph templates
             case RES_POOLCOLL_HEADLINE_BASE:
             case RES_POOLCOLL_STANDARD:
-                // diese Vorlagen nicht ausgeben
+                // do not export this template
                 bStop = (nDeep==0);
                 break;
             case RES_POOLCOLL_TEXT:
@@ -839,7 +829,7 @@ sal_uInt16 SwHTMLWriter::GetCSS1Selector( const SwFmt *pFmt, OString& rToken,
                     rToken = OString(OOO_STRING_SVTOOLS_HTML_parabreak);
                 break;
             case RES_POOLCOLL_HTML_HR:
-                // HR nicht ausgeben!
+                // do not exort HR !
                 bStop = (nDeep==0);
                 break;
             case RES_POOLCOLL_FOOTNOTE:
@@ -861,7 +851,7 @@ sal_uInt16 SwHTMLWriter::GetCSS1Selector( const SwFmt *pFmt, OString& rToken,
                 }
                 break;
 
-            // Zeichen-Vorlagen
+            // character templates
             case RES_POOLCHR_HTML_EMPHASIS:
                 rToken = OString(OOO_STRING_SVTOOLS_HTML_emphasis);
                 break;
@@ -906,20 +896,19 @@ sal_uInt16 SwHTMLWriter::GetCSS1Selector( const SwFmt *pFmt, OString& rToken,
                 break;
             }
 
-            // Wenn ein Token gesetzt ist, enthaelt nPoolId die dazugehoerige
-            // Vorlage
+            // if a token is set, PoolId contains the related template
             if( !rToken.isEmpty() && !rRefPoolId )
                 rRefPoolId = nPoolId;
         }
 
         if( !rToken.isEmpty() || bStop )
         {
-            // Anhalten wenn eine HTML-Tag-Vorlage gefunden wurde
+            // stop if a HTML-Tag template was found
             break;
         }
         else
         {
-            // sonst weitersuchen
+            // continue otherwise
             nDeep++;
             pPFmt = pPFmt->DerivedFrom();
         }
@@ -927,21 +916,21 @@ sal_uInt16 SwHTMLWriter::GetCSS1Selector( const SwFmt *pFmt, OString& rToken,
 
     if( !rToken.isEmpty() )
     {
-        // Es ist eine HTML-Tag-Vorlage
+        // this is a HTML-Tag template
         if( !nDeep )
             nDeep = CSS1_FMT_ISTAG;
     }
     else
     {
-        // Es ist keine HTML-Tag-Vorlage und auch keine davon abgeleitete
+        // this is not a HTML-Tag template nor derived from one
         nDeep = 0;
     }
     if( nDeep > 0 && nDeep < CSS1_FMT_SPECIAL )
     {
-        // Wenn die Vorlage von einer HTML-Vorlage abgeleitet ist,
-        // wird sie als <TOKEN>.<CLASS> exportiert, sonst als .<CLASS>.
-        // <CLASS> ergibt sich aus dem Namen der Vorlage durch entfernen
-        // aller Zeichen vor und inklusive dem ersten '.'
+        // If the template is derived from a HTML template,
+        // we export it as <TOKEN>.<CLASS>, otherwise as .<CLASS>.
+        // <CLASS> is the name of the template after removing all characters
+        // before and including the first '.'
         rClass = pFmt->GetName();
         sal_Int32 nPos = rClass.indexOf( '.' );
         if( nPos >= 0 && rClass.getLength() > nPos+1 )
@@ -991,7 +980,7 @@ const SwFmt *SwHTMLWriter::GetTemplateFmt( sal_uInt16 nPoolFmtId,
     if( pTemplate )
     {
         OSL_ENSURE( !(USER_FMT & nPoolFmtId),
-                "In der Dok-Vorlage gibt es keine Benutzer-Vorlagen" );
+                "No user templates found" );
         if( POOLGRP_NOCOLLID & nPoolFmtId )
             pRefFmt = pTemplate->GetCharFmtFromPool( nPoolFmtId );
         else
@@ -1003,13 +992,12 @@ const SwFmt *SwHTMLWriter::GetTemplateFmt( sal_uInt16 nPoolFmtId,
 
 const SwFmt *SwHTMLWriter::GetParentFmt( const SwFmt& rFmt, sal_uInt16 nDeep )
 {
-    OSL_ENSURE( nDeep != USHRT_MAX, "GetParent fuer HTML-Vorlage aufgerufen!" );
+    OSL_ENSURE( nDeep != USHRT_MAX, "Called GetParent for HTML-template!" );
     const SwFmt *pRefFmt = 0;
 
     if( nDeep > 0 )
     {
-        // hier wird die HTML-Tag-Vorlage, von der die Vorlage abgeleitet
-        // ist als Referenz geholt
+        // get the pointer for the HTML-Tag template, from which the template is derived
         pRefFmt = &rFmt;
         for( sal_uInt16 i=nDeep; i>0; i-- )
             pRefFmt = pRefFmt->DerivedFrom();
@@ -1036,11 +1024,11 @@ void SwHTMLWriter::SubtractItemSet( SfxItemSet& rItemSet,
                                      const SfxItemSet *pRefScriptItemSet )
 {
     OSL_ENSURE( bSetDefaults || bClearSame,
-            "SwHTMLWriter::SubtractItemSet: Bei diesen Flags passiert nix" );
+            "SwHTMLWriter::SubtractItemSet: No action for this Flag" );
     SfxItemSet aRefItemSet( *rRefItemSet.GetPool(), rRefItemSet.GetRanges() );
     aRefItemSet.Set( rRefItemSet );
 
-    // und mit dem Attr-Set der Vorlage vergleichen
+    // compare with the Attr-Set of the template
     SfxWhichIter aIter( rItemSet );
     sal_uInt16 nWhich = aIter.FirstWhich();
     while( nWhich )
@@ -1093,8 +1081,8 @@ void SwHTMLWriter::SubtractItemSet( SfxItemSet& rItemSet,
                     RES_CHRATR_CTL_FONT == nWhich)  &&
                    swhtml_css1atr_equalFontItems( *pItem, *pRefItem )) ) )
             {
-                // das Attribut ist mit dem gleichen Wert in beiden
-                // Vorlagen vorhanden und muss nicht ausgegeben werden
+                // the Attribute is in both templates wit the same value
+                // and does not need to be exported
                 rItemSet.ClearItem( nWhich );
             }
         }
@@ -1102,8 +1090,8 @@ void SwHTMLWriter::SubtractItemSet( SfxItemSet& rItemSet,
         {
             if( (bSetDefaults || pRefScriptItemSet) && bRefItemSet )
             {
-                // das Attribut ist nur in der Referenz vorhanden. Das
-                // Default muss ggf. ausgegeben werden
+                // the Attribute exists only in the reference; the default
+                // might have to be exported
                 rItemSet.Put( rItemSet.GetPool()->GetDefaultItem(nWhich) );
             }
         }
@@ -1504,46 +1492,42 @@ static Writer& OutCSS1_SwFmt( Writer& rWrt, const SwFmt& rFmt,
 
     case RES_TXTFMTCOLL:
     case RES_CONDTXTFMTCOLL:
-        // diese Vorlagen-Typen koennen exportiert werden
+        // these template-types can be exported
         break;
 
     default:
-        // und diese nicht
+        // but not these
         return rWrt;
     }
 
-    // den Selector und die auszugebende Attr-Set-Tiefe ermitteln
+    // determine Selector and the to-be-exported Attr-Set-depth
     OUString aSelector;
     sal_uInt16 nRefPoolId = 0;
     sal_uInt16 nDeep = GetCSS1Selector( &rFmt, aSelector, nRefPoolId );
     if( !nDeep )
-        return rWrt;    // von keiner HTML-Vorlage abgeleitet
+        return rWrt;    // not derived from a HTML-template
 
     sal_uInt16 nPoolFmtId = rFmt.GetPoolFmtId();
 
-    // Den auszugebenden Attr-Set bestimmen. Hier muessen 3 Faelle
-    // unterschieden werden:
-    // - HTML-Tag-Vorlagen (nDeep==USHRT_MAX):
-    //   Es werden die Attrs ausgegeben
-    //     - die in der Vorlage gesetzt sind, aber nicht im Original aus
-    //       der HTML-Vorlage
-    //     - die Default-Attrs fuer die Attrs, die im Original aus der
-    //       HTML-Vorlage gesetzt sind, aber nicht in der vorliegeden Vorlage.
-    // - direkt von HTML-Vorlagen abgeleitete Vorlagen (nDeep==1):
-    //   Es weren nur die Attribute des Vorlagen-Item-Set ohne seine
-    //   Parents ausgegeben.
-    // - indirekt von HTML-Tag-Vorlagen abgeleitete Vorlagen (nDeep>1)
-    //   Es werden die Attribute des Vorlagen-Item-Sets inkl. seiner Parents,
-    //   aber ohne die Attribute, die in der HTML-Tag-Vorlage gesetzt sind,
-    //   ausgegeben.
+    // Determine the to-be-exported Attr-Set. We have to distinguish 3 cases:
+    // - HTML-Tag templates (nDeep==USHRT_MAX):
+    //   Export Attrs...
+    //     - that are set in the template, but not in the original of the HTML template
+    //     - the Default-Attrs for the Attrs, that are set in the Original of the
+    //       HTML template, but not in the current template.
+    // - templates directly derived from HTML templates (nDeep==1):
+    //   Export only Attributes of the template Item-Set w/o its parents.
+    // - templates in-directly derived from HTML templates (nDeep>1):
+    //   Export Attributes of the template Item-Set incl. its Parents,
+    //   but w/o Attributes that are set in the HTML-Tag template.
 
-    // einen Item-Set mit allen Attributen aus der Vorlage anlegen
-    // (ausser fuer nDeep==1)
+    // create Item-Set with all Attributes from the template
+    // (all but for nDeep==1)
     const SfxItemSet& rFmtItemSet = rFmt.GetAttrSet();
     SfxItemSet aItemSet( *rFmtItemSet.GetPool(), rFmtItemSet.GetRanges() );
     aItemSet.Set( rFmtItemSet, sal_True ); // Was nDeep!=1 that is not working
                                        // for script dependent items buts should
-                                       // not make a deifference for any other
+                                       // not make a difference for any other
 
     sal_Bool bSetDefaults = sal_True, bClearSame = sal_True;
     const SwFmt *pRefFmt = 0;
@@ -1567,8 +1551,7 @@ static Writer& OutCSS1_SwFmt( Writer& rWrt, const SwFmt& rFmt,
 
     if( pRefFmt )
     {
-        // Den Item-Set der Referenz-Vorlage (inkl. seiner Parents) vom
-        // ItemSet abziehen
+        // subtract Item-Set of the Reference template (incl. its Parents)
         SwHTMLWriter::SubtractItemSet( aItemSet, pRefFmt->GetAttrSet(),
                                        bSetDefaults, bClearSame,
                                        pRefFmtScript
@@ -1584,13 +1567,13 @@ static Writer& OutCSS1_SwFmt( Writer& rWrt, const SwFmt& rFmt,
     }
     else if( CSS1_FMT_ISTAG==nDeep && !bCharFmt )
     {
-        // die Default-Abstaende nach oben und unten setzen (fuer den
-        // Fall, dass es keine Vorlage als Referenz gibt)
+        // set Default-distance above and below (for the
+        // case that there is no reference template)
         rHTMLWrt.nDfltTopMargin = 0;
         rHTMLWrt.nDfltBottomMargin = HTML_PARSPACE;
         if( USER_FMT & nPoolFmtId )
         {
-            // Benutzer-Vorlagen
+            // user templates
             const OUString aNm(rFmt.GetName());
 
             if (aNm == "DD 1" || aNm == "DT 1")
@@ -1604,7 +1587,7 @@ static Writer& OutCSS1_SwFmt( Writer& rWrt, const SwFmt& rFmt,
         }
         else
         {
-            // Pool-Vorlagen
+            // Pool templates
             switch( nPoolFmtId )
             {
             case RES_POOLCOLL_HEADLINE1:
@@ -1625,7 +1608,7 @@ static Writer& OutCSS1_SwFmt( Writer& rWrt, const SwFmt& rFmt,
         }
     }
 
-    // wo nicht auszugeben ist ...
+    // if nothing is to be exported ...
     if( !aItemSet.Count() )
         return rWrt;
 
@@ -1636,7 +1619,7 @@ static Writer& OutCSS1_SwFmt( Writer& rWrt, const SwFmt& rFmt,
          RES_POOLCHR_INET_VISIT==nRefPoolId) )
         bCheckForPseudo = true;
 
-    // jetzt die Attribute (inkl. Selektor) ausgeben
+    // export now the Attributes (incl. Selektor)
     bool bHasScriptDependencies = false;
     if( OutCSS1Rule( rHTMLWrt, aSelector, aItemSet, CSS1_FMT_ISTAG != nDeep,
                       bCheckForPseudo ) )
@@ -1655,7 +1638,7 @@ static Writer& OutCSS1_SwFmt( Writer& rWrt, const SwFmt& rFmt,
     if( nPoolFmtId==RES_POOLCOLL_TEXT && !rHTMLWrt.bFirstCSS1Property )
         rHTMLWrt.bPoolCollTextModified = sal_True;
 
-    // Drop-Caps ausgeben
+    // export Drop-Caps
     const SfxPoolItem *pItem;
     if( SFX_ITEM_SET==aItemSet.GetItemState( RES_PARATR_DROP, false, &pItem ))
     {
@@ -1699,9 +1682,8 @@ static Writer& OutCSS1_SwPageDesc( Writer& rWrt, const SwPageDesc& rPageDesc,
     SwCSS1OutMode aMode( rHTMLWrt, CSS1_OUTMODE_RULE_ON|CSS1_OUTMODE_TEMPLATE,
                          true, &aSelector );
 
-    // Die Groesse: Wenn sie sich nur durch das Landscape-Flag unterscheidet,
-    // wird nur Portrait oder Landscape exportiert. Sonst wird die Groesse
-    // exportiert.
+    // Size: If the only difference is the Landscape-Flag,
+    // only export Portrait oder Landscape. Otherwise export size.
     sal_Bool bRefLandscape = pRefPageDesc ? pRefPageDesc->GetLandscape() : sal_False;
     Size aRefSz;
     const Size& rSz = rPageDesc.GetMaster().GetFrmSize().GetSize();
@@ -1716,13 +1698,12 @@ static Writer& OutCSS1_SwPageDesc( Writer& rWrt, const SwPageDesc& rPageDesc,
         }
     }
 
-    // Boeser uebler Hack: Auf der Seiten-Tabpage gibt es leichte
-    // Rundungsfehler bei der Seitengroesse. Unter anderem wegen bug
-    // 25535 wird dummerweise auch noch immer Size-Item vom Dialog geputtet,
-    // auch wenn man gar nichts geaendert hat. Folge: Sobald man einmal im
-    // Seiten-Dialog war und ihn mit OK verlassen hat, bekommt man eine
-    // neue Seitengroesse, die dann hier exportiert wuerde. Um das
-    // vermeiden erlauben wir hier kleine Abweichungen.
+    // TODO: Bad Hack: On the Page-Tabpage there are small rounding errors
+    // for the page size. Partially because of bug 25535, we stupidly still
+    // use the Size-Item from Dialog, even if nothing changed.
+    // Thus: once one visited the Page-Dialog and left it with OK, we get a
+    // new page size that then gets exported here. To avoid that, we allow
+    // here small deviations.
     if( std::abs( rSz.Width() - aRefSz.Width() ) <= 2 &&
         std::abs( rSz.Height() - aRefSz.Height() ) <= 2 )
     {
@@ -1742,7 +1723,7 @@ static Writer& OutCSS1_SwPageDesc( Writer& rWrt, const SwPageDesc& rPageDesc,
         rHTMLWrt.OutCSS1_PropertyAscii(sCSS1_P_size, sVal.makeStringAndClear());
     }
 
-    // Die Abstand-Attribute koennen auf gwohnte Weise exportiert werden
+    // Export the distance-Attributes as normally
     const SwFrmFmt &rMaster = rPageDesc.GetMaster();
     SfxItemSet aItemSet( *rMaster.GetAttrSet().GetPool(),
                          RES_LR_SPACE, RES_UL_SPACE );
@@ -1757,9 +1738,9 @@ static Writer& OutCSS1_SwPageDesc( Writer& rWrt, const SwPageDesc& rPageDesc,
 
     OutCSS1_SvxULSpace_SvxLRSpace( rWrt, aItemSet, sal_False );
 
-    // Wenn fuer einen Pseudo-Selektor keine Property ausgegeben wurde, muessen
-    // wir trotzdem etwas ausgeben, damit beim Import die entsprechende
-    // Vorlage angelegt wird.
+    // If for a Pseudo-Selector no Property had been set, we still
+    // have to export something, so that the corresponding template is
+    // created on the next import.
     if( rHTMLWrt.bFirstCSS1Property && bPseudo )
     {
         rHTMLWrt.OutNewLine();
@@ -1800,10 +1781,10 @@ static Writer& OutCSS1_SwFtnInfo( Writer& rWrt, const SwEndNoteInfo& rInfo,
         SfxItemSet aItemSet( *rFmtItemSet.GetPool(), rFmtItemSet.GetRanges() );
         aItemSet.Set( rFmtItemSet, sal_True );
 
-        // Wenn es Fuss- bzw. Endnoten gibt, dann muessen alles Attribute
-        // ausgegeben werden, damit Netscape das Dokument richtig anzeigt.
-        // Anderenfalls genuegt es, die Unterschiede zur Fuss-/Endnoten
-        // Vorlage rauszuschreiben.
+        // If there are footnotes or endnotes, then all Attributes have to be
+        // exported, so that Netscape displays the document correctly.
+        // Otherwise it is sufficient, to export the differences to the
+        // footnote and endnote template.
         if( nNotes == 0 && rHTMLWrt.pTemplate )
         {
             SwFmt *pRefFmt = rHTMLWrt.pTemplate->GetCharFmtFromPool(
@@ -1832,9 +1813,9 @@ Writer& OutCSS1_BodyTagStyleOpt( Writer& rWrt, const SfxItemSet& rItemSet )
     SwCSS1OutMode aMode( rHTMLWrt, CSS1_OUTMODE_STYLE_OPT_ON |
                                    CSS1_OUTMODE_ENCODE|CSS1_OUTMODE_BODY );
 
-    // Es werden nur die Attribute der Seiten-Vorlage ausgegeben.
-    // Die Attribute der Standard-Absatz-Vorlage werden schon beim
-    // Export der Absatz-Vorlagen beruecksichtigt.
+    // Only export the attributes of the page template.
+    // The attributes of the default paragraph template were
+    // considered already when exporting the paragraph template.
 
     const SfxPoolItem *pItem;
     if( SFX_ITEM_SET == rItemSet.GetItemState( RES_BACKGROUND, false,
@@ -1851,8 +1832,8 @@ Writer& OutCSS1_BodyTagStyleOpt( Writer& rWrt, const SfxItemSet& rItemSet )
 
     if( !rHTMLWrt.bFirstCSS1Property )
     {
-        // wenn eine Property als Bestandteil einer Style-Option
-        // ausgegeben wurde, muss die Optiomn noch beendet werden
+        // if a Property was exported as part of a Style-Option,
+        // the Option still needs to be finished
         rWrt.Strm().WriteChar( '\"' );
     }
 
@@ -1901,7 +1882,7 @@ Writer& OutCSS1_HintStyleOpt( Writer& rWrt, const SfxPoolItem& rHt )
     return rWrt;
 }
 
-// Wrapper fuer die Ausgabe von Tabellen-Hintergruenden
+// Wrapper for Table background
 Writer& OutCSS1_TableBGStyleOpt( Writer& rWrt, const SfxPoolItem& rHt )
 {
     SwHTMLWriter& rHTMLWrt = (SwHTMLWriter&)rWrt;
@@ -1990,23 +1971,21 @@ void SwHTMLWriter::OutCSS1_FrmFmtOptions( const SwFrmFmt& rFrmFmt,
                 // position
                 OutCSS1_PropertyAscii( sCSS1_P_position, sCSS1_PV_absolute );
 
-                // Fuer top/left muessen die Abstaende des Rahmens von
-                // der Position abgezogen werden, da sie in CSS1 noch
-                // zur Position addiert werden.
-                // Das funktioniert auch fuer automatisch ausgerichtete
-                // Rahmen, obwohl der Abstand da ja auch im Writer noch
-                // addiert wird. Denn auch in diesem Fall enthalten
-                // die Orient-Attribute die korrekte Position
+                // For top/left we need to subtract the distance to the frame
+                // from the position, as in CSS1 it is added to the position.
+                // This works also for automatically aligned frames, even that
+                // in this case Writer also adds the distance; because in this
+                // case the Orient-Attribute contains the correct position.
 
                 // top
                 long nXPos=0, nYPos=0;
                 bool bOutXPos = false, bOutYPos = false;
                 if( RES_DRAWFRMFMT == rFrmFmt.Which() )
                 {
-                    OSL_ENSURE( pSdrObj, "Kein SdrObject uebergeben. Ineffizient" );
+                    OSL_ENSURE( pSdrObj, "Do not pass a SdrObject. Inefficient" );
                     if( !pSdrObj )
                         pSdrObj = rFrmFmt.FindSdrObject();
-                    OSL_ENSURE( pSdrObj, "Wo ist das SdrObject" );
+                    OSL_ENSURE( pSdrObj, "Where is the SdrObject" );
                     if( pSdrObj )
                     {
                         Point aPos( pSdrObj->GetRelativePos() );
@@ -2070,10 +2049,10 @@ void SwHTMLWriter::OutCSS1_FrmFmtOptions( const SwFrmFmt& rFrmFmt,
     {
         if( RES_DRAWFRMFMT == rFrmFmt.Which() )
         {
-            OSL_ENSURE( pSdrObj, "Kein SdrObject uebergeben. Ineffizient" );
+            OSL_ENSURE( pSdrObj, "Do not pass a SdrObject. Inefficient" );
             if( !pSdrObj )
                 pSdrObj = rFrmFmt.FindSdrObject();
-            OSL_ENSURE( pSdrObj, "Wo ist das SdrObject" );
+            OSL_ENSURE( pSdrObj, "Where is the SdrObject" );
             if( pSdrObj )
             {
                 Size aTwipSz( pSdrObj->GetLogicRect().GetSize() );
@@ -2098,9 +2077,9 @@ void SwHTMLWriter::OutCSS1_FrmFmtOptions( const SwFrmFmt& rFrmFmt,
         else
         {
             OSL_ENSURE( HTML_FRMOPT_ABSSIZE & nFrmOpts,
-                    "Absolute Groesse wird exportiert" );
+                    "Export absolute size" );
             OSL_ENSURE( HTML_FRMOPT_ANYSIZE & nFrmOpts,
-                    "Jede Groesse wird exportiert" );
+                    "Export every size" );
             sal_uInt16 nMode = 0;
             if( nFrmOpts & HTML_FRMOPT_S_WIDTH )
                 nMode |= CSS1_FRMSIZE_WIDTH;
@@ -2138,7 +2117,7 @@ void SwHTMLWriter::OutCSS1_FrmFmtOptions( const SwFrmFmt& rFrmFmt,
             OutCSS1_SvxBox( *this, *pItem );
     }
 
-    // background (wenn, dann muss auch eine Farbe ausgegeben werden)
+    // background (if, then the color must be set also)
     if( nFrmOpts & HTML_FRMOPT_S_BACKGROUND )
         OutCSS1_FrmFmtBackground( rFrmFmt );
 
@@ -2220,12 +2199,11 @@ static bool OutCSS1_FrmFmtBrush( SwHTMLWriter& rWrt,
 
 void SwHTMLWriter::OutCSS1_FrmFmtBackground( const SwFrmFmt& rFrmFmt )
 {
-    // Wenn der Rahmen selbst einen Hintergrund hat, wird der ausgegeben.
+    // If the frame itself has a background, then export.
     if( OutCSS1_FrmFmtBrush( *this, rFrmFmt.GetBackground() ) )
         return;
 
-    // Wenn der Rahmen nicht seitengebunden ist, wird sonst muss der
-    // Hintergrund vom Anker betrachtet
+    // If the frame is not linked to a page, we use the background of the anchor.
     const SwFmtAnchor& rAnchor = rFrmFmt.GetAnchor();
     RndStdIds eAnchorId = rAnchor.GetAnchorId();
     const SwPosition *pAnchorPos = rAnchor.GetCntntAnchor();
@@ -2234,14 +2212,13 @@ void SwHTMLWriter::OutCSS1_FrmFmtBackground( const SwFrmFmt& rFrmFmt )
         const SwNode& rNode = pAnchorPos->nNode.GetNode();
         if( rNode.IsCntntNode() )
         {
-            // Wenn der Rahmen in einem Content-Node verankert ist,
-            // wird der Hintergrund von Content-Node ausgegeben, wenn
-            // der einen hat.
+            // If the frame is linked to a content-node,
+            // we take the background of the content-node, if it has one.
             if( OutCSS1_FrmFmtBrush( *this,
                     rNode.GetCntntNode()->GetSwAttrSet().GetBackground()) )
                 return;
 
-            // Sonst koennen wir evtl. auch in einer Tabelle stehen
+            // Otherwise we also could be in a table
             const SwTableNode *pTableNd = rNode.FindTableNode();
             if( pTableNd )
             {
@@ -2249,12 +2226,12 @@ void SwHTMLWriter::OutCSS1_FrmFmtBackground( const SwFrmFmt& rFrmFmt )
                 const SwTableBox *pBox =
                     pTableNd->GetTable().GetTblBox( pBoxSttNd->GetIndex() );
 
-                // Wenn die Box einen Hintergrund hat, nehmen wir den.
+                // If the box has a background, we take it.
                 if( OutCSS1_FrmFmtBrush( *this,
                         pBox->GetFrmFmt()->GetBackground() ) )
                     return;
 
-                // Sonst betrachten wir den der Lines
+                // Otherwise we use that of the lines
                 const SwTableLine *pLine = pBox->GetUpper();
                 while( pLine )
                 {
@@ -2265,7 +2242,7 @@ void SwHTMLWriter::OutCSS1_FrmFmtBackground( const SwFrmFmt& rFrmFmt )
                     pLine = pBox ? pBox->GetUpper() : 0;
                 }
 
-                // Wenn da auch nichts war den der Tabelle.
+                // If there was none either, we use the background of the table.
                 if( OutCSS1_FrmFmtBrush( *this,
                         pTableNd->GetTable().GetFrmFmt()->GetBackground() ) )
                     return;
@@ -2273,8 +2250,7 @@ void SwHTMLWriter::OutCSS1_FrmFmtBackground( const SwFrmFmt& rFrmFmt )
 
         }
 
-        // Wenn der Anker wieder in einem Fly-Frame steht, dann
-        // wird der Hintergrund des Fly-Frames ausgegeben.
+        // If the anchor is again in a Fly-Frame, use the background of the Fly-Frame.
         const SwFrmFmt *pFrmFmt = rNode.GetFlyFmt();
         if( pFrmFmt )
         {
@@ -2283,18 +2259,17 @@ void SwHTMLWriter::OutCSS1_FrmFmtBackground( const SwFrmFmt& rFrmFmt )
         }
     }
 
-    // Schliesslich bleibt noch der Hintergrund der Seite uebrig und als
-    // letzte Rettung das Item der Config.
-    OSL_ENSURE( pCurrPageDesc, "Keine Seiten-Vorlage gemerkt" );
+    // At last there is the background of the page, and as the final rescue
+    // the value of the Config.
+    OSL_ENSURE( pCurrPageDesc, "no page template found" );
     if( !OutCSS1_FrmFmtBrush( *this,
                               pCurrPageDesc->GetMaster().GetBackground() ) )
     {
         Color aColor( COL_WHITE );
 
-        // Die Hintergrund-Farbe wird normalerweise nur in Browse-Mode
-        // benutzt. Wir benutzen si bei einem HTML-Dokument immer und
-        // bei einem Text-Dokument nur, wenn es im Browse-Mode angezeigt
-        // wird.
+        // The background color is normally only used in Browse-Mode.
+        // We always use it for a HTML document, but for a text document
+        // only if viewed in Browse-Mode.
         if( pDoc->get(IDocumentSettingAccess::HTML_MODE) ||
             pDoc->get(IDocumentSettingAccess::BROWSE_MODE))
         {
@@ -2331,10 +2306,10 @@ static Writer& OutCSS1_SvxTxtLn_SvxCrOut_SvxBlink( Writer& rWrt,
         default:
             if( !rHTMLWrt.IsCSS1Source( CSS1_OUTMODE_PARA ) )
             {
-                // das geht auch in HTML und muss nicht als STYLE-Option
-                // und darf nicht als Hint geschrieben werden
+                // this also works in HTML does not need to be written as
+                // a STYLE-Options, and must not be written as Hint
                 OSL_ENSURE( !rHTMLWrt.IsCSS1Source(CSS1_OUTMODE_HINT),
-                        "Underline als Hint schreiben?" );
+                        "write underline as Hint?" );
                 pUStr = sCSS1_PV_underline;
             }
             break;
@@ -2354,10 +2329,10 @@ static Writer& OutCSS1_SvxTxtLn_SvxCrOut_SvxBlink( Writer& rWrt,
         default:
             if( !rHTMLWrt.IsCSS1Source( CSS1_OUTMODE_PARA ) )
             {
-                // das geht auch in HTML und muss nicht als STYLE-Option
-                // und darf nicht als Hint geschrieben werden
+                // this also works in HTML does not need to be written as
+                // a STYLE-Options, and must not be written as Hint
                 OSL_ENSURE( !rHTMLWrt.IsCSS1Source(CSS1_OUTMODE_HINT),
-                        "Overline als Hint schreiben?" );
+                        "write overline as Hint?" );
                 pOStr = sCSS1_PV_overline;
             }
             break;
@@ -2377,10 +2352,10 @@ static Writer& OutCSS1_SvxTxtLn_SvxCrOut_SvxBlink( Writer& rWrt,
         default:
             if( !rHTMLWrt.IsCSS1Source( CSS1_OUTMODE_PARA ) )
             {
-                // das geht auch in HTML und muss nicht als STYLE-Option
-                // und darf nicht als Hint geschrieben werden
+                // this also works in HTML does not need to be written as
+                // a STYLE-Options, and must not be written as Hint
                 OSL_ENSURE( !rHTMLWrt.IsCSS1Source(CSS1_OUTMODE_HINT),
-                        "CrossedOut als Hint schreiben?" );
+                        "write crossedOut as Hint?" );
                 pCOStr = sCSS1_PV_line_through;
             }
             break;
@@ -2396,10 +2371,10 @@ static Writer& OutCSS1_SvxTxtLn_SvxCrOut_SvxBlink( Writer& rWrt,
         }
         else if( !rHTMLWrt.IsCSS1Source( CSS1_OUTMODE_PARA ) )
         {
-            // das geht auch in HTML und muss nicht als STYLE-Option
-            // und darf nicht als Hint geschrieben werden
+            // this also works in HTML does not need to be written as
+            // a STYLE-Options, and must not be written as Hint
             OSL_ENSURE( !rHTMLWrt.IsCSS1Source(CSS1_OUTMODE_HINT),
-                    "Blink als Hint schreiben?" );
+                    "write blink as Hint?" );
             pBStr = sCSS1_PV_blink;
         }
     }
@@ -2469,12 +2444,12 @@ static Writer& OutCSS1_SvxColor( Writer& rWrt, const SfxPoolItem& rHt )
 {
     SwHTMLWriter& rHTMLWrt = (SwHTMLWriter&)rWrt;
 
-    // Farben muessen nicht in der Style-Option ausgegeben werden.
+    // Colors do not need to be exported for Style-Option.
     if( rHTMLWrt.IsCSS1Source( CSS1_OUTMODE_PARA ) &&
         !rHTMLWrt.bCfgPreferStyles )
         return rWrt;
     OSL_ENSURE( !rHTMLWrt.IsCSS1Source(CSS1_OUTMODE_HINT),
-            "Farbe wirklich als Hint ausgeben?" );
+            "write color as Hint?" );
 
     Color aColor( ((const SvxColorItem&)rHt).GetValue() );
     if( COL_AUTO == aColor.GetColor() )
@@ -2487,8 +2462,8 @@ static Writer& OutCSS1_SvxColor( Writer& rWrt, const SfxPoolItem& rHt )
 
 static Writer& OutCSS1_SvxCrossedOut( Writer& rWrt, const SfxPoolItem& rHt )
 {
-    // Mit dieser Methode werden nur Hints ausgegeben!
-    // Sonst wird OutCSS1_SvxTxtLn_SvxCrOut_SvxBlink() direkt aufgerufen.
+    // This function only exports Hints!
+    // Otherwise OutCSS1_SvxTxtLn_SvxCrOut_SvxBlink() is called directly.
 
     if( ((SwHTMLWriter&)rWrt).IsCSS1Source(CSS1_OUTMODE_HINT) )
         OutCSS1_SvxTxtLn_SvxCrOut_SvxBlink( rWrt,
@@ -2501,7 +2476,7 @@ static Writer& OutCSS1_SvxFont( Writer& rWrt, const SfxPoolItem& rHt )
 {
     SwHTMLWriter& rHTMLWrt = (SwHTMLWriter&)rWrt;
 
-    // Fonts muessen nicht in der Style-Option ausgegeben werden.
+    // No need to export Fonts for the Style-Option.
     if( rHTMLWrt.IsCSS1Source( CSS1_OUTMODE_PARA ) )
         return rWrt;
 
@@ -2515,10 +2490,10 @@ static Writer& OutCSS1_SvxFont( Writer& rWrt, const SfxPoolItem& rHt )
         return rWrt;
 
     OSL_ENSURE( !rHTMLWrt.IsCSS1Source(CSS1_OUTMODE_HINT),
-            "Font wirklich als Hint ausgeben?" );
+            "write Font as Hint?" );
 
     OUString sOut;
-    // MS IE3b1 hat mit einfachen Haekchen Probleme
+    // MS IE3b1 has problems with single quotes
     sal_uInt16 nMode = rHTMLWrt.nCSS1OutMode & CSS1_OUTMODE_ANY_ON;
     sal_Unicode cQuote = nMode == CSS1_OUTMODE_RULE_ON ? '\"' : '\'';
     SwHTMLWriter::PrepareFontList( ((const SvxFontItem&)rHt), sOut, cQuote,
@@ -2533,8 +2508,8 @@ static Writer& OutCSS1_SvxFontHeight( Writer& rWrt, const SfxPoolItem& rHt )
 {
     SwHTMLWriter& rHTMLWrt = (SwHTMLWriter&)rWrt;
 
-    // Font-Hoehen muessen nicht in der Style-Option ausgegeben werden.
-    // Fuer Drop-Caps wird ein andewres font-size ausgegeben
+    // Font-Height need not be exported in the Style-Option.
+    // For Drop-Caps another Font-Size is exported.
     if( rHTMLWrt.IsCSS1Source( CSS1_OUTMODE_PARA ) ||
         rHTMLWrt.IsCSS1Source( CSS1_OUTMODE_DROPCAP ) )
         return rWrt;
@@ -2576,10 +2551,10 @@ static Writer& OutCSS1_SvxPosture( Writer& rWrt, const SfxPoolItem& rHt )
     case ITALIC_NORMAL:
         if( !rHTMLWrt.IsCSS1Source( CSS1_OUTMODE_PARA ) )
         {
-            // das geht auch in HTML und muss nicht als STYLE-Option
-            // und darf nicht als Hint geschrieben werden
+            // this also works in HTML does not need to be written as
+            // a STYLE-Options, and must not be written as Hint
             OSL_ENSURE( !rHTMLWrt.IsCSS1Source(CSS1_OUTMODE_HINT),
-                    "Italic als Hint schreiben?" );
+                    "write italic as Hint?" );
             pStr = sCSS1_PV_italic;
         }
         break;
@@ -2597,7 +2572,7 @@ static Writer& OutCSS1_SvxKerning( Writer& rWrt, const SfxPoolItem& rHt )
 {
     SwHTMLWriter& rHTMLWrt = (SwHTMLWriter&)rWrt;
 
-    // Kerning-Item nur ausgeben, wenn volle Style-Unterst?tzung da ist
+    // Only export Kerning-Item, if the Style supports it fully
     if( !rHTMLWrt.IsHTMLMode(HTMLMODE_FULL_STYLES) )
         return rWrt;
 
@@ -2611,7 +2586,7 @@ static Writer& OutCSS1_SvxKerning( Writer& rWrt, const SfxPoolItem& rHt )
             nValue = -nValue;
         }
 
-        // Breite als n.n pt
+        // Width as n.n pt
         nValue = (nValue + 1) / 2;  // 1/10pt
         sOut.append(OString::number(nValue  / 10) + "." + OString::number(nValue % 10) +
                     OString(sCSS1_UNIT_pt));
@@ -2632,7 +2607,7 @@ static Writer& OutCSS1_SvxLanguage( Writer& rWrt, const SfxPoolItem& rHt )
 {
     SwHTMLWriter& rHTMLWrt = (SwHTMLWriter&)rWrt;
 
-    // Language will be exported rules only
+    // Only export Language rules
     if( rHTMLWrt.IsCSS1Source( CSS1_OUTMODE_PARA ) )
         return rWrt;
 
@@ -2646,7 +2621,7 @@ static Writer& OutCSS1_SvxLanguage( Writer& rWrt, const SfxPoolItem& rHt )
         return rWrt;
 
     OSL_ENSURE( !rHTMLWrt.IsCSS1Source(CSS1_OUTMODE_HINT),
-            "Language wirklich als Hint ausgeben?" );
+            "write Language as Hint?" );
 
     LanguageType eLang = ((const SvxLanguageItem &)rHt).GetLanguage();
     if( LANGUAGE_DONTKNOW == eLang )
@@ -2661,8 +2636,8 @@ static Writer& OutCSS1_SvxLanguage( Writer& rWrt, const SfxPoolItem& rHt )
 
 static Writer& OutCSS1_SvxUnderline( Writer& rWrt, const SfxPoolItem& rHt )
 {
-    // Mit dieser Methode werden nur Hints ausgegeben!
-    // Sonst wird OutCSS1_SvxTxtLn_SvxCrOut_SvxBlink() direkt aufgerufen.
+    // This function only exports Hints!
+    // Otherwise OutCSS1_SvxTxtLn_SvxCrOut_SvxBlink() is called directly.
 
     if( ((SwHTMLWriter&)rWrt).IsCSS1Source(CSS1_OUTMODE_HINT) )
         OutCSS1_SvxTxtLn_SvxCrOut_SvxBlink( rWrt,
@@ -2673,8 +2648,8 @@ static Writer& OutCSS1_SvxUnderline( Writer& rWrt, const SfxPoolItem& rHt )
 
 static Writer& OutCSS1_SvxOverline( Writer& rWrt, const SfxPoolItem& rHt )
 {
-    // Mit dieser Methode werden nur Hints ausgegeben!
-    // Sonst wird OutCSS1_SvxTxtLn_SvxCrOut_SvxBlink() direkt aufgerufen.
+    // This function only exports Hints!
+    // Otherwise OutCSS1_SvxTxtLn_SvxCrOut_SvxBlink() is called directly.
 
     if( ((SwHTMLWriter&)rWrt).IsCSS1Source(CSS1_OUTMODE_HINT) )
         OutCSS1_SvxTxtLn_SvxCrOut_SvxBlink( rWrt,
@@ -2717,10 +2692,10 @@ static Writer& OutCSS1_SvxFontWeight( Writer& rWrt, const SfxPoolItem& rHt )
     case WEIGHT_BOLD:
         if( !rHTMLWrt.IsCSS1Source( CSS1_OUTMODE_PARA ) )
         {
-            // das geht auch in HTML und muss nicht als STYLE-Option
-            // und darf nicht als Hint geschrieben werden
+            // this also works in HTML does not need to be written as
+            // a STYLE-Options, and must not be written as Hint
             OSL_ENSURE( !rHTMLWrt.IsCSS1Source(CSS1_OUTMODE_HINT),
-                    "Fett als Hint schreiben?" );
+                    "write bold as Hint?" );
             pStr = sCSS1_PV_bold;
         }
         break;
@@ -2737,8 +2712,8 @@ static Writer& OutCSS1_SvxFontWeight( Writer& rWrt, const SfxPoolItem& rHt )
 
 static Writer& OutCSS1_SvxBlink( Writer& rWrt, const SfxPoolItem& rHt )
 {
-    // Mit dieser Methode werden nur Hints ausgegeben!
-    // Sonst wird OutCSS1_SvxTxtLn_SvxCrOut_SvxBlink() direkt aufgerufen.
+    // This function only exports Hints!
+    // Otherwise OutCSS1_SvxTxtLn_SvxCrOut_SvxBlink() is called directly.
 
     if( ((SwHTMLWriter&)rWrt).IsCSS1Source(CSS1_OUTMODE_HINT) )
         OutCSS1_SvxTxtLn_SvxCrOut_SvxBlink( rWrt,
@@ -2751,10 +2726,9 @@ static Writer& OutCSS1_SvxLineSpacing( Writer& rWrt, const SfxPoolItem& rHt )
 {
     SwHTMLWriter& rHTMLWrt = (SwHTMLWriter&)rWrt;
 
-    // Netscape4 hat massive Probleme mit den Zellenhoehen
-    // wenn der Zeilenabstand innerhalb einer Tabelle geaendert wird
-    // und die Breite der Tabelle nicht automatisch berechnet wird
-    // (also wenn eine WIDTH-Option vorhanden ist).
+    // Netscape4 has big problems with cell heights if the line spacing is
+    // changed within a table and the width of the table is not calculated
+    // automatically (== if there is a WIDTH-Option)
     if( rHTMLWrt.bOutTable && rHTMLWrt.bCfgNetscape4 )
         return rWrt;
 
@@ -2805,8 +2779,7 @@ static Writer& OutCSS1_SvxAdjust( Writer& rWrt, const SfxPoolItem& rHt )
 {
     SwHTMLWriter & rHTMLWrt = (SwHTMLWriter&)rWrt;
 
-    // Alignment in Style-Option nur ausgeben, wenn das Tag kein
-    // ALIGN=xxx zulaesst
+    // Export Alignment in Style-Option only if the Tag does not allow ALIGN=xxx
     if( rHTMLWrt.IsCSS1Source( CSS1_OUTMODE_PARA ) &&
         !rHTMLWrt.bNoAlign)
         return rWrt;
@@ -2876,14 +2849,14 @@ static void OutCSS1_SwFmtDropAttrs( SwHTMLWriter& rHWrt,
                                     const SwFmtDrop& rDrop,
                                      const SfxItemSet *pCharFmtItemSet )
 {
-    // Text fliesst rechts drumrum
+    // Text flows around on right side
     rHWrt.OutCSS1_PropertyAscii( sCSS1_P_float, sCSS1_PV_left );
 
-    // Anzahl der Zeilen -> %-Angabe fuer Font-Hoehe!
+    // number of lines -> use % for Font-Height!
     OString sOut(OString::number(rDrop.GetLines()*100) + "%");
     rHWrt.OutCSS1_PropertyAscii(sCSS1_P_font_size, sOut);
 
-    // Abstand zum Text = rechter Rand
+    // distance to Text = right margin
     sal_uInt16 nDistance = rDrop.GetDistance();
     if( nDistance > 0 )
         rHWrt.OutCSS1_UnitProperty( sCSS1_P_margin_right, nDistance );
@@ -2902,7 +2875,7 @@ static Writer& OutCSS1_SwFmtDrop( Writer& rWrt, const SfxPoolItem& rHt )
 {
     SwHTMLWriter & rHTMLWrt = (SwHTMLWriter&)rWrt;
 
-    // nie als Option eines Absatzes ausgeben, sondern nur als Hints
+    // never export as an Option of a paragraph, but only as Hints
     if( !rHTMLWrt.IsCSS1Source(CSS1_OUTMODE_HINT) )
         return rWrt;
 
@@ -2913,7 +2886,7 @@ static Writer& OutCSS1_SwFmtDrop( Writer& rWrt, const SfxPoolItem& rHt )
                              CSS1_OUTMODE_DROPCAP );
 
         OutCSS1_SwFmtDropAttrs( rHTMLWrt, (const SwFmtDrop&)rHt );
-        // Ein "> wird schon vom aufrufenden OutCSS1_HintAsSpanTag geschrieben.
+        // A "> is already printed by the calling OutCSS1_HintAsSpanTag.
     }
     else
     {
@@ -3000,11 +2973,10 @@ static Writer& OutCSS1_SvxLRSpace( Writer& rWrt, const SfxPoolItem& rHt )
 
     const SvxLRSpaceItem& rLRItem = (const SvxLRSpaceItem&)rHt;
 
-    // Der Export der harten Attributierung ist unnoetig, wenn die
-    // neuen Werte denen der aktuellen Vorlage entsprechen
+    // No Export of a firm attribute is needed if the new values
+    // match that of the current template
 
-    // Einen linken Rand kann es durch eine Liste bereits in der
-    // Umgebung geben
+    // A left margin can exist because of a list nearby
     long nLeftMargin = (long)rLRItem.GetTxtLeft() - rHTMLWrt.nLeftMargin;
     if( rHTMLWrt.nDfltLeftMargin != nLeftMargin )
     {
@@ -3017,8 +2989,7 @@ static Writer& OutCSS1_SvxLRSpace( Writer& rWrt, const SfxPoolItem& rHt )
                                  (long)rLRItem.GetRight() );
     }
 
-    // Der Erstzeilen-Einzug kann den Platz fuer eine Numerierung
-    // enthalten
+    // The LineIndent of the first line might contain the room for numbering
     long nFirstLineIndent = (long)rLRItem.GetTxtFirstLineOfst() -
         rHTMLWrt.nFirstLineIndent;
     if( rHTMLWrt.nDfltFirstLineIndent != nFirstLineIndent )
@@ -3194,7 +3165,7 @@ static Writer& OutCSS1_SvxFmtBreak_SwFmtPDesc_SvxFmtKeep( Writer& rWrt,
     return rWrt;
 }
 
-// Wrapper fuer OutCSS1_SfxItemSet etc.
+// Wrapper for OutCSS1_SfxItemSet etc.
 static Writer& OutCSS1_SvxBrush( Writer& rWrt, const SfxPoolItem& rHt )
 {
     OutCSS1_SvxBrush( rWrt, rHt, CSS1_BACKGROUND_ATTR );
@@ -3206,18 +3177,18 @@ static Writer& OutCSS1_SvxBrush( Writer& rWrt, const SfxPoolItem& rHt,
 {
     SwHTMLWriter& rHTMLWrt = (SwHTMLWriter&)rWrt;
 
-    // Das Zeichen-Attribut wird nicht ausgegeben, wenn gerade
-    // Optionen ausgegeben werden
+    // The Character-Attribute is skipped, if we are about to
+    // exporting options
     if( rHt.Which() < RES_CHRATR_END &&
         rHTMLWrt.IsCSS1Source( CSS1_OUTMODE_PARA ) )
         return rWrt;
 
-    // Erstmal ein par Werte holen
+    // start getting a few values
 //  const Brush &rBrush = ((const SvxBrushItem &)rHt).GetBrush();
     const Color & rColor = ((const SvxBrushItem &)rHt).GetColor();
     SvxGraphicPosition ePos = ((const SvxBrushItem &)rHt).GetGraphicPos();
 
-    // Erstmal die Farbe holen
+    // get the color
     bool bColor = false;
     /// set <bTransparent> to sal_True, if color is "no fill"/"auto fill"
     bool bTransparent = (rColor.GetColor() == COL_TRANSPARENT);
@@ -3228,10 +3199,10 @@ static Writer& OutCSS1_SvxBrush( Writer& rWrt, const SfxPoolItem& rHt,
         bColor = true;
     }
 
-    // und jetzt eine Grafik
+    // and now the Graphic
     OUString aGraphicInBase64;
 
-    // embeddete Grafik -> WriteEmbedded schreiben
+    // Embedded Grafic -> export WriteEmbedded
     const Graphic* pGrf = ((const SvxBrushItem &)rHt).GetGraphic();
     if( pGrf )
     {
@@ -3242,12 +3213,11 @@ static Writer& OutCSS1_SvxBrush( Writer& rWrt, const SfxPoolItem& rHt,
         }
     }
 
-    // In Tabellen wird nur dann etwas exportiert, wenn eine Grafik
-    // existiert.
+    // In tables we only export something if there is a Graphic
     if( CSS1_BACKGROUND_TABLE==nMode && !pGrf )
         return rWrt;
 
-    // ggf. noch die Ausrichtung der Grafik
+    // if necessary, add the orientation of the Graphic
     const sal_Char *pRepeat = 0, *pHori = 0, *pVert = 0;
     if( pGrf )
     {
@@ -3310,11 +3280,11 @@ static Writer& OutCSS1_SvxBrush( Writer& rWrt, const SfxPoolItem& rHt,
         }
     }
 
-    // jetzt den String zusammen bauen
+    // now build the string
     OUString sOut;
     if( !pGrf && !bColor )
     {
-        // keine Farbe und kein Link, aber ein transparenter Brush
+        // no color and no Link, but a transparent Brush
         if( bTransparent && CSS1_BACKGROUND_FLY != nMode )
             sOut += OStringToOUString(sCSS1_PV_transparent, RTL_TEXTENCODING_ASCII_US);
     }
@@ -3375,20 +3345,20 @@ static void OutCSS1_SvxBorderLine( SwHTMLWriter& rHTMLWrt,
         nWidth <= Application::GetDefaultDevice()->PixelToLogic(
                     Size( 1, 1 ), MapMode( MAP_TWIP) ).Width() )
     {
-        // Wenn die Breite kleiner ist als ein Pixel, dann als 1px
-        // ausgeben, damit Netscape und IE die Linie auch darstellen.
+        // If the width is smaller than one pixel, then export as 1px
+        // so that Netscape and IE show the line.
         sOut.append("1px");
     }
     else
     {
         nWidth *= 5;    // 1/100pt
 
-        // Breite als n.nn pt
+        // width in n.nn pt
         sOut.append(OString::number(nWidth / 100) + "." + OString::number((nWidth/10) % 10) +
                     OString::number(nWidth % 10) + OString(sCSS1_UNIT_pt));
     }
 
-    // Linien-Stil: solid oder double
+    // Line-Style: solid or double
     sOut.append(' ');
     switch (pLine->GetBorderLineStyle())
     {
@@ -3427,7 +3397,7 @@ static void OutCSS1_SvxBorderLine( SwHTMLWriter& rHTMLWrt,
     }
     sOut.append(' ');
 
-    // und noch die Farbe
+    // and also the color
     sOut.append(GetCSS1Color(pLine->GetColor()));
 
     rHTMLWrt.OutCSS1_PropertyAscii(pProperty, sOut.makeStringAndClear());
@@ -3466,13 +3436,13 @@ Writer& OutCSS1_SvxBox( Writer& rWrt, const SfxPoolItem& rHt )
          *pTop == *pBottom && *pTop == *pLeft && *pTop == *pRight) ||
          (!pTop && !pBottom && !pLeft && !pRight) )
     {
-        // alle Linien gesetzt und gleich oder alle Linien nicht gesetzt
+        // all Lines are set and equal, or all Lines are not set
         // => border : ...
         OutCSS1_SvxBorderLine( rHTMLWrt, sCSS1_P_border, pTop );
     }
     else
     {
-        // sonst alle Linien individuell ausgeben
+        // otherwise export all Lines separately
         OutCSS1_SvxBorderLine( rHTMLWrt, sCSS1_P_border_top, pTop );
         OutCSS1_SvxBorderLine( rHTMLWrt, sCSS1_P_border_bottom, pBottom );
         OutCSS1_SvxBorderLine( rHTMLWrt, sCSS1_P_border_left, pLeft );
@@ -3539,10 +3509,9 @@ static Writer& OutCSS1_SvxFrameDirection( Writer& rWrt, const SfxPoolItem& rHt )
 }
 
 /*
- * lege hier die Tabellen fuer die HTML-Funktions-Pointer auf
- * die Ausgabe-Funktionen an.
- * Es sind lokale Strukturen, die nur innerhalb der HTML-DLL
- * bekannt sein muessen.
+ * Place here the table for the HTML-Function-Pointer to the
+ * Export-Functions.
+ * They are local structures, only needed within the HTML-DLL.
  */
 
 SwAttrFnTab aCSS1AttrFnTab = {
