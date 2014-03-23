@@ -129,6 +129,8 @@ public:
     explicit        Control( Window* pParent, const ResId& );
     virtual         ~Control();
 
+    virtual void    EnableRTL ( bool bEnable = true );
+
     virtual void    GetFocus();
     virtual void    LoseFocus();
     virtual bool    Notify( NotifyEvent& rNEvt );
