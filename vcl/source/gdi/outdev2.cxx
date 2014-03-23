@@ -966,32 +966,18 @@ void OutputDevice::ImplDrawBitmapEx( const Point& rDestPt, const Size& rDestSize
 
     OUTDEV_INIT();
 
-    if( OUTDEV_PRINTER == meOutDevType )
-    {
-        if( aBmpEx.IsAlpha() )
-        {
-            // #107169# For true alpha bitmaps, no longer masking the
-            // bitmap, but perform a full alpha blend against a white
-            // background here.
-            Bitmap aBmp( aBmpEx.GetBitmap() );
-            aBmp.Blend( aBmpEx.GetAlpha(), Color( COL_WHITE) );
-            DrawBitmap( rDestPt, rDestSize, rSrcPtPixel, rSrcSizePixel, aBmp );
-        }
-        else
-        {
-            Bitmap aBmp( aBmpEx.GetBitmap() ), aMask( aBmpEx.GetMask() );
-            aBmp.Replace( aMask, Color( COL_WHITE ) );
-            ImplPrintTransparent( aBmp, aMask, rDestPt, rDestSize, rSrcPtPixel, rSrcSizePixel );
-        }
+    DrawDeviceBitmap( rDestPt, rDestSize, rSrcPtPixel, rSrcSizePixel, aBmpEx );
+}
 
-        return;
-    }
-
-    if(aBmpEx.IsAlpha())
+void OutputDevice::DrawDeviceBitmap( const Point& rDestPt, const Size& rDestSize,
+                                     const Point& rSrcPtPixel, const Size& rSrcSizePixel,
+                                     BitmapEx& rBmpEx )
+{
+    if(rBmpEx.IsAlpha())
     {
         Size aDestSizePixel(LogicToPixel(rDestSize));
 
-        BitmapEx aScaledBitmapEx(aBmpEx);
+        BitmapEx aScaledBitmapEx(rBmpEx);
         Point aSrcPtPixel(rSrcPtPixel);
         Size aSrcSizePixel(rSrcSizePixel);
 
@@ -1011,7 +997,7 @@ void OutputDevice::ImplDrawBitmapEx( const Point& rDestPt, const Size& rDestSize
         return;
     }
 
-    if( !( !aBmpEx ) )
+    if( !( !rBmpEx ) )
     {
         SalTwoRect aPosAry;
 
@@ -1024,16 +1010,16 @@ void OutputDevice::ImplDrawBitmapEx( const Point& rDestPt, const Size& rDestSize
         aPosAry.mnDestWidth = ImplLogicWidthToDevicePixel( rDestSize.Width() );
         aPosAry.mnDestHeight = ImplLogicHeightToDevicePixel( rDestSize.Height() );
 
-        const sal_uLong nMirrFlags = ImplAdjustTwoRect( aPosAry, aBmpEx.GetSizePixel() );
+        const sal_uLong nMirrFlags = ImplAdjustTwoRect( aPosAry, rBmpEx.GetSizePixel() );
 
         if( aPosAry.mnSrcWidth && aPosAry.mnSrcHeight && aPosAry.mnDestWidth && aPosAry.mnDestHeight )
         {
 
             if( nMirrFlags )
-                aBmpEx.Mirror( nMirrFlags );
+                rBmpEx.Mirror( nMirrFlags );
 
-            const SalBitmap* pSalSrcBmp = aBmpEx.ImplGetBitmapImpBitmap()->ImplGetSalBitmap();
-            const ImpBitmap* pMaskBmp = aBmpEx.ImplGetMaskImpBitmap();
+            const SalBitmap* pSalSrcBmp = rBmpEx.ImplGetBitmapImpBitmap()->ImplGetSalBitmap();
+            const ImpBitmap* pMaskBmp = rBmpEx.ImplGetMaskImpBitmap();
 
             if ( pMaskBmp )
             {
@@ -1131,8 +1117,8 @@ void OutputDevice::ImplDrawBitmapEx( const Point& rDestPt, const Size& rDestSize
                 if( mpAlphaVDev )
                     mpAlphaVDev->DrawBitmapEx( rDestPt,
                                                rDestSize,
-                                               BitmapEx( aBmpEx.GetMask(),
-                                                         aBmpEx.GetMask() ) );
+                                               BitmapEx( rBmpEx.GetMask(),
+                                                         rBmpEx.GetMask() ) );
             }
             else
             {
