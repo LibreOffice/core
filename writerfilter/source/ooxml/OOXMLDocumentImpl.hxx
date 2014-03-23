@@ -26,6 +26,8 @@
 
 #include "OOXMLPropertySet.hxx"
 
+#include <vector>
+
 namespace writerfilter {
 namespace ooxml
 {
