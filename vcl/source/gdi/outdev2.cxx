@@ -798,7 +798,6 @@ void OutputDevice::DrawTransformedBitmapEx(
     const bool bInvert(ROP_INVERT == meRasterOp);
     const bool bBitmapChangedColor(mnDrawMode & (DRAWMODE_BLACKBITMAP | DRAWMODE_WHITEBITMAP | DRAWMODE_GRAYBITMAP | DRAWMODE_GHOSTEDBITMAP));
     const bool bMetafile(mpMetaFile);
-    const bool bPrinter(OUTDEV_PRINTER == meOutDevType);
     bool bDone(false);
     const basegfx::B2DHomMatrix aFullTransform(GetViewTransformation() * rTransformation);
     const bool bTryDirectPaint(!bInvert && !bBitmapChangedColor && !bMetafile );
@@ -835,7 +834,7 @@ void OutputDevice::DrawTransformedBitmapEx(
         const double fOrigAreaScaled(bSheared || bRotated ? fOrigArea * 1.44 : fOrigArea);
         double fMaximumArea(std::min(4500000.0, std::max(1000000.0, fOrigAreaScaled)));
 
-        if(!bMetafile && !bPrinter)
+        if(!bMetafile)
         {
             if ( !TransformReduceBitmapExTargetRange( aFullTransform, aVisibleRange, fMaximumArea ) )
                 return;
