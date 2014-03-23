@@ -832,7 +832,13 @@ protected:
                                     basegfx::B2DRange &aVisibleRange,
                                     double &fMaximumArea);
 
-    virtual void                ScaleBitmap ( Bitmap &rBmp, SalTwoRect &rPosAry );
+	virtual void               ScaleBitmap ( Bitmap &rBmp, SalTwoRect &rPosAry );
+
+    virtual void                DrawDeviceBitmap(
+                                    const Point& rDestPt, const Size& rDestSize,
+                                    const Point& rSrcPtPixel, const Size& rSrcSizePixel,
+                                    BitmapEx& rBitmapEx );
+
 
 private:
     typedef void ( OutputDevice::* FontUpdateHandler_t )( bool );
@@ -845,7 +851,7 @@ private:
     SAL_DLLPRIVATE static void  ImplUpdateFontDataForAllFrames( FontUpdateHandler_t pHdl, bool bNewFontLists );
     SAL_DLLPRIVATE long         ImplGetGradientSteps( const Gradient& rGradient, const Rectangle& rRect, bool bMtf );
 
-    //not implemented; to detect misuses of DrawOutDev(...OutputDevice&);
+    // not implemented; to detect misuses of DrawOutDev(...OutputDevice&);
     void DrawOutDev( const Point&, const Size&, const Point&,  const Size&, const Printer&);
 
 public:
@@ -1039,6 +1045,9 @@ public:
     virtual void                DrawOutDev( const Point& rDestPt, const Size& rDestSize,
                                             const Point& rSrcPt,  const Size& rSrcSize,
                                             const OutputDevice& rOutDev );
+    void                        DrawOutDev( const Point& rDestPt, const Size& rDestSize,
+                                            const Point& rSrcPt,  const Size& rSrcSize,
+                                            const Printer& rOutDev );
     virtual void                CopyArea( const Point& rDestPt,
                                           const Point& rSrcPt,  const Size& rSrcSize,
                                           sal_uInt16 nFlags = 0 );
@@ -1141,25 +1150,25 @@ public:
     BitmapEx                    GetBitmapEx( const Point& rSrcPt, const Size& rSize ) const;
 
     void                        EnableMapMode( bool bEnable = true );
-    bool                        IsMapModeEnabled() const { return mbMap; }
+    bool                    IsMapModeEnabled() const { return mbMap; }
 
     // Enabling/disabling RTL only makes sense for OutputDevices that use a mirroring SalGraphisLayout
-    virtual void                EnableRTL( bool bEnable = true);
-    bool                        IsRTLEnabled() const { return mbEnableRTL; }
+    void                        EnableRTL( bool bEnable = true);
+    bool                    IsRTLEnabled() const { return mbEnableRTL; }
 
     void                        SetConnectMetaFile( GDIMetaFile* pMtf );
     GDIMetaFile*                GetConnectMetaFile() const { return mpMetaFile; }
 
     void                        EnableOutput( bool bEnable = true );
-    bool                        IsOutputEnabled() const { return mbOutput; }
-    bool                        IsDeviceOutput() const { return mbDevOutput; }
-    bool                        IsDeviceOutputNecessary() const { return (mbOutput && mbDevOutput); }
-    bool                        IsOutputNecessary() const { return ((mbOutput && mbDevOutput) || (mpMetaFile != NULL)); }
+    bool                    IsOutputEnabled() const { return mbOutput; }
+    bool                    IsDeviceOutput() const { return mbDevOutput; }
+    bool                    IsDeviceOutputNecessary() const { return (mbOutput && mbDevOutput); }
+    bool                    IsOutputNecessary() const { return ((mbOutput && mbDevOutput) || (mpMetaFile != NULL)); }
 
     void                        SetClipRegion();
     void                        SetClipRegion( const Region& rRegion );
     Region                      GetClipRegion() const;
-    bool                        IsClipRegion() const { return mbClipRegion; }
+    bool                    IsClipRegion() const { return mbClipRegion; }
     Region                      GetActiveClipRegion() const;
 
     void                        MoveClipRegion( long nHorzMove, long nVertMove );
@@ -1409,16 +1418,16 @@ public:
                                                   sal_Int32* pKashidaPosDropped // invalid kashida positions (out)
                                                 ) const;
 
-    virtual sal_uInt16          GetBitCount() const;
+    sal_uInt16                  GetBitCount() const;
 
-    bool                        GetTextIsRTL( const OUString&, sal_Int32 nIndex, sal_Int32 nLen ) const;
+    bool                    GetTextIsRTL( const OUString&, sal_Int32 nIndex, sal_Int32 nLen ) const;
 
     /** Query the existence and depth of the alpha channel
 
         @return 0, if no alpha channel available, and the bit depth of
         the alpha channel otherwise.
      */
-    virtual sal_uInt16          GetAlphaBitCount() const;
+    sal_uInt16                  GetAlphaBitCount() const;
     sal_uLong                   GetColorCount() const;
 
     void                        Push( sal_uInt16 nFlags = PUSH_ALL );
@@ -1482,7 +1491,7 @@ public:
         @attention This method ignores negative rDstSz values, thus
         mirroring must happen outside this method (e.g. in DrawBitmap)
      */
-    Bitmap                      GetDownsampledBitmap( const Size& rDstSz,
+    Bitmap                  GetDownsampledBitmap( const Size& rDstSz,
                                                       const Point& rSrcPt, const Size& rSrcSz,
                                                       const Bitmap& rBmp, long nMaxBmpDPIX, long nMaxBmpDPIY );
 
