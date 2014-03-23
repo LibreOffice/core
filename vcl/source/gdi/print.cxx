@@ -229,6 +229,27 @@ bool Printer::TransformReduceBitmapExTargetRange(
     return true;
 }
 
+void Printer::DrawDeviceBitmap( const Point& rDestPt, const Size& rDestSize,
+                                const Point& rSrcPtPixel, const Size& rSrcSizePixel,
+                                BitmapEx& rBmpEx )
+{
+    if( rBmpEx.IsAlpha() )
+    {
+        // #107169# For true alpha bitmaps, no longer masking the
+        // bitmap, but perform a full alpha blend against a white
+        // background here.
+        Bitmap aBmp( rBmpEx.GetBitmap() );
+        aBmp.Blend( rBmpEx.GetAlpha(), Color( COL_WHITE) );
+        DrawBitmap( rDestPt, rDestSize, rSrcPtPixel, rSrcSizePixel, aBmp );
+    }
+    else
+    {
+        Bitmap aBmp( rBmpEx.GetBitmap() ), aMask( rBmpEx.GetMask() );
+        aBmp.Replace( aMask, Color( COL_WHITE ) );
+        ImplPrintTransparent( aBmp, aMask, rDestPt, rDestSize, rSrcPtPixel, rSrcSizePixel );
+    }
+}
+
 void Printer::DrawOutDev( const Point& /*rDestPt*/, const Size& /*rDestSize*/,
                                const Point& /*rSrcPt*/,  const Size& /*rSrcSize*/ )
 {
