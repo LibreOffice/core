@@ -2249,11 +2249,7 @@ void OutputDevice::SetSettings( const AllSettings& rSettings )
 
 sal_uInt16 OutputDevice::GetBitCount() const
 {
-
-    if ( meOutDevType == OUTDEV_VIRDEV )
-        return ((VirtualDevice*)this)->mnBitCount;
-
-    // we need a graphics
+    // we need a graphics instance
     if ( !mpGraphics )
     {
         if ( !((OutputDevice*)this)->ImplGetGraphics() )
@@ -2265,13 +2261,6 @@ sal_uInt16 OutputDevice::GetBitCount() const
 
 sal_uInt16 OutputDevice::GetAlphaBitCount() const
 {
-
-    if ( meOutDevType == OUTDEV_VIRDEV &&
-        mpAlphaVDev != NULL )
-    {
-        return mpAlphaVDev->GetBitCount();
-    }
-
     return 0;
 }
 

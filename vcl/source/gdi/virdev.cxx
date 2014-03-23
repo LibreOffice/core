@@ -369,6 +369,8 @@ bool VirtualDevice::InnerImplSetOutputSizePixel( const Size& rNewSize, bool bEra
     return bRet;
 }
 
+
+
 // #i32109#: Fill opaque areas correctly (without relying on
 // fill/linecolor state)
 void VirtualDevice::ImplFillOpaqueRectangle( const Rectangle& rRect )
@@ -382,6 +384,8 @@ void VirtualDevice::ImplFillOpaqueRectangle( const Rectangle& rRect )
     DrawRect( rRect );
     Pop();
 }
+
+
 
 bool VirtualDevice::ImplSetOutputSizePixel( const Size& rNewSize, bool bErase, const basebmp::RawMemorySharedArray &pBuffer )
 {
@@ -416,18 +420,6 @@ bool VirtualDevice::ImplSetOutputSizePixel( const Size& rNewSize, bool bErase, c
     }
 
     return false;
-}
-
-void VirtualDevice::EnableRTL( bool bEnable )
-{
-    // virdevs default to not mirroring, they will only be set to mirroring
-    // under rare circumstances in the UI, eg the valueset control
-    // because each virdev has its own SalGraphics we can safely switch the SalGraphics here
-    // ...hopefully
-    if( ImplGetGraphics() )
-        mpGraphics->SetLayout( bEnable ? SAL_LAYOUT_BIDI_RTL : 0 );
-
-    OutputDevice::EnableRTL(bEnable);
 }
 
 bool VirtualDevice::SetOutputSizePixel( const Size& rNewSize, bool bErase )
@@ -525,6 +517,19 @@ void VirtualDevice::ImplSetReferenceDevice( RefDevMode i_eRefDevMode, sal_Int32 
 
     // prepare to use new font lists
     mpFontCache = new ImplFontCache();
+}
+
+sal_uInt16 VirtualDevice::GetBitCount() const
+{
+    return mnBitCount;
+}
+
+sal_uInt16 VirtualDevice::GetAlphaBitCount() const
+{
+    if (mpAlphaVDev)
+        return mpAlphaVDev->GetBitCount();
+
+    return 0;
 }
 
 void VirtualDevice::Compat_ZeroExtleadBug()
