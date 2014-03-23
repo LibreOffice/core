@@ -12373,7 +12373,7 @@ AC_MSG_CHECKING([for number of processors to use])
 # plain --with-parallelism is just the default
 if test -n "$with_parallelism" -a "$with_parallelism" != "yes"; then
     if test "$with_parallelism" = "no"; then
-        PARALLELISM=1
+        PARALLELISM=0
     else
         PARALLELISM=$with_parallelism
     fi
@@ -12397,10 +12397,7 @@ else
         esac
 
         # If we hit the catch-all case, but /proc/cpuinfo doesn't exist or has an
-        # unexpected format, 'wc -l' will have returned 0.
-        if test "$PARALLELISM" -eq 0; then
-            PARALLELISM=1
-        fi
+        # unexpected format, 'wc -l' will have returned 0 (and we won't use -j at all).
     fi
 fi
 
@@ -12414,7 +12411,11 @@ if test "$no_parallelism_make" = "YES" && test $PARALLELISM -gt 1; then
     fi
 fi
 
-AC_MSG_RESULT([$PARALLELISM])
+if test $PARALLELISM -eq 0; then
+    AC_MSG_RESULT([explicit make -j option needed])
+else
+    AC_MSG_RESULT([$PARALLELISM])
+fi
 AC_SUBST(PARALLELISM)
 
 #
