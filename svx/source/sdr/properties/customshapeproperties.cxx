@@ -39,7 +39,7 @@ namespace sdr
 
             // change TextFrame flag when bResizeShapeToFitText changes (which is mapped
             // on the item SDRATTR_TEXT_AUTOGROWHEIGHT for custom shapes, argh)
-            rObj.bTextFrame = 0 != static_cast< const SdrTextAutoGrowHeightItem& >(GetObjectItemSet().Get(SDRATTR_TEXT_AUTOGROWHEIGHT)).GetValue();
+            rObj.bTextFrame = static_cast< const SdrTextAutoGrowHeightItem& >(GetObjectItemSet().Get(SDRATTR_TEXT_AUTOGROWHEIGHT)).GetValue();
 
             // check if it did change
             if(rObj.bTextFrame != bOld)
