@@ -832,6 +832,8 @@ protected:
                                     basegfx::B2DRange &aVisibleRange,
                                     double &fMaximumArea);
 
+    virtual void                ScaleBitmap ( Bitmap &rBmp, SalTwoRect &rPosAry );
+
 private:
     typedef void ( OutputDevice::* FontUpdateHandler_t )( bool );
 

@@ -575,20 +575,26 @@ void OutputDevice::ImplDrawBitmap( const Point& rDestPt, const Size& rDestSize,
 
             if ( aPosAry.mnSrcWidth && aPosAry.mnSrcHeight && aPosAry.mnDestWidth && aPosAry.mnDestHeight )
             {
-                const double nScaleX = aPosAry.mnDestWidth  / static_cast<double>( aPosAry.mnSrcWidth );
-                const double nScaleY = aPosAry.mnDestHeight / static_cast<double>( aPosAry.mnSrcHeight );
-                // If subsampling, use Bitmap::Scale for subsampling for better quality.
-                if ( meOutDevType != OUTDEV_PRINTER &&
-                    nAction == META_BMPSCALE_ACTION &&
-                    (nScaleX < 1.0 || nScaleY < 1.0) )
-                {
-                    aBmp.Scale ( nScaleX, nScaleY );
-                    aPosAry.mnSrcWidth = aPosAry.mnDestWidth;
-                    aPosAry.mnSrcHeight = aPosAry.mnDestHeight;
-                }
+                if ( nAction == META_BMPSCALE_ACTION )
+                    ScaleBitmap (aBmp, aPosAry);
+
                 mpGraphics->DrawBitmap( aPosAry, *aBmp.ImplGetImpBitmap()->ImplGetSalBitmap(), this );
             }
         }
+    }
+}
+
+void OutputDevice::ScaleBitmap (Bitmap &rBmp, SalTwoRect &rPosAry)
+{
+    const double nScaleX = rPosAry.mnDestWidth  / static_cast<double>( rPosAry.mnSrcWidth );
+    const double nScaleY = rPosAry.mnDestHeight / static_cast<double>( rPosAry.mnSrcHeight );
+
+    // If subsampling, use Bitmap::Scale for subsampling for better quality.
+    if ( nScaleX < 1.0 || nScaleY < 1.0 )
+    {
+        rBmp.Scale ( nScaleX, nScaleY );
+        rPosAry.mnSrcWidth = rPosAry.mnDestWidth;
+        rPosAry.mnSrcHeight = rPosAry.mnDestHeight;
     }
 }
 
