@@ -1409,16 +1409,16 @@ public:
                                                   sal_Int32* pKashidaPosDropped // invalid kashida positions (out)
                                                 ) const;
 
-    sal_uInt16                  GetBitCount() const;
+    virtual sal_uInt16          GetBitCount() const;
 
-    bool                    GetTextIsRTL( const OUString&, sal_Int32 nIndex, sal_Int32 nLen ) const;
+    bool                        GetTextIsRTL( const OUString&, sal_Int32 nIndex, sal_Int32 nLen ) const;
 
     /** Query the existence and depth of the alpha channel
 
         @return 0, if no alpha channel available, and the bit depth of
         the alpha channel otherwise.
      */
-    sal_uInt16                  GetAlphaBitCount() const;
+    virtual sal_uInt16          GetAlphaBitCount() const;
     sal_uLong                   GetColorCount() const;
 
     void                        Push( sal_uInt16 nFlags = PUSH_ALL );

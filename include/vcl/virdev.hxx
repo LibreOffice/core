@@ -134,6 +134,9 @@ public:
 
     void                SetReferenceDevice( sal_Int32 i_nDPIX, sal_Int32 i_nDPIY );
 
+    sal_uInt16          GetBitCount() const;
+    sal_uInt16          GetAlphaBitCount() const;
+
 private:
     SAL_DLLPRIVATE void ImplSetReferenceDevice( RefDevMode, sal_Int32 i_nDPIX, sal_Int32 i_nDPIY );
 
