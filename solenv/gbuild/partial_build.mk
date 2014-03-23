@@ -22,7 +22,10 @@ gb_Side:=host
 endif
 
 ifeq (,$(BUILDDIR))
-BUILDDIR := $(dir $(realpath $(lastword $(MAKEFILE_LIST))))../..
+gb_partial_build__makefile_dir=$(dir $(abspath $(firstword $(MAKEFILE_LIST))))
+BUILDDIR := $(if $(wildcard $(gb_partial_build__makefile_dir)../Module_external.mk), \
+  $(gb_partial_build__makefile_dir)../.., \
+  $(gb_partial_build__makefile_dir)..)
 endif
 
 ifeq ($(BUILD_TYPE),)
