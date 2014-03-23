@@ -20,18 +20,9 @@
 $(eval $(call gb_Module_Module,writerperfect))
 
 $(eval $(call gb_Module_add_targets,writerperfect,\
-	Library_wpftwriter \
-))
-
-$(eval $(call gb_Module_add_targets,writerperfect,\
 	Library_wpftdraw \
-))
-
-$(eval $(call gb_Module_add_targets,writerperfect,\
 	Library_wpftimpress \
-))
-
-$(eval $(call gb_Module_add_targets,writerperfect,\
+	Library_wpftwriter \
 	StaticLibrary_writerperfect \
 ))
 
