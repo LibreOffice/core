@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da86d52c_ef2b5592",
+        "filename": "sw/inc/IDocumentRedlineAccess.hxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 138,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2014-03-23T14:40:16Z",
+      "side": 1,
+      "message": "Is -\u003e Has would make more sense, I think. Just like in SwTxtNode the GetSwpHints() returns a reference, and there is a Has* method to check if the underlying pointer is null or not.",
+      "revId": "1f716d98ab4f22dd0d005a384658b7327b951c4b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
