@@ -188,15 +188,47 @@ sal_uInt32 Encrypt::update(vector<sal_uInt8>& output, vector<sal_uInt8>& input, 
 
 bool sha1(vector<sal_uInt8>& output, vector<sal_uInt8>& input)
 {
+    bool aResult = false;
+
+#if USE_TLS_OPENSSL
     output.clear();
-    output.resize(RTL_DIGEST_LENGTH_SHA1, 0);
+    output.resize(SHA_DIGEST_LENGTH, 0);
 
-    rtlDigest aDigest = rtl_digest_create( rtl_Digest_AlgorithmSHA1 );
-    rtl_digest_update( aDigest, &input[0], input.size() );
-    rtl_digest_get( aDigest, &output[0], RTL_DIGEST_LENGTH_SHA1 );
-    rtl_digest_destroy( aDigest );
+    SHA_CTX context;
+    SHA1_Init(&context);
+    SHA1_Update(&context, &input[0], input.size());
+    SHA1_Final(&output[0], &context);
+    aResult = true;
+#endif
 
-    return true;
+#if USE_TLS_NSS
+    output.clear();
+    output.resize(SHA1_LENGTH, 0);
+
+    // Initialize NSS, database functions are not needed
+    NSS_NoDB_Init(NULL);
+    SECStatus status;
+
+    PK11Context* mContext = PK11_CreateDigestContext(SEC_OID_SHA1);
+    status = PK11_DigestBegin(mContext);
+    if (status != SECSuccess)
+        return false;
+
+    status = PK11_DigestOp(mContext, &input[0], input.size());
+    if (status != SECSuccess)
+        return false;
+
+    unsigned int outputLength = 0;
+
+    status = PK11_DigestFinal(mContext, &output[0], &outputLength, SHA1_LENGTH);
+    if (status != SECSuccess || outputLength != SHA1_LENGTH)
+        return false;
+
+    PK11_DestroyContext(mContext, PR_TRUE);
+
+    aResult = true;
+#endif
+    return aResult;
 }
 
 bool sha512(vector<sal_uInt8>& output, vector<sal_uInt8>& input)
