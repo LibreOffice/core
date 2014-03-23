@@ -73,7 +73,7 @@ OUString lclGetAnchorIdFromGrabBag(const SdrObject* pObj)
     OUString aResult;
     uno::Reference<drawing::XShape> xShape(const_cast<SdrObject*>(pObj)->getUnoShape(), uno::UNO_QUERY);
     uno::Sequence< beans::PropertyValue > propList =
-            lclGetProperty< uno::Sequence<beans::PropertyValue> >(xShape, "FrameInteropGrabBag");
+        lclGetProperty< uno::Sequence<beans::PropertyValue> >(xShape, "FrameInteropGrabBag");
     for (sal_Int32 nProp = 0; nProp < propList.getLength(); ++nProp)
     {
         OUString aPropName = propList[nProp].Name;
@@ -91,19 +91,19 @@ void lclMovePositionWithRotation(awt::Point& aPos, sal_Int64 nRotation)
     // code from ImplEESdrWriter::ImplFlipBoundingBox (filter/source/msfilter/eschesdo.cxx)
     // TODO: refactor
 
-    if ( nRotation == 0 )
+    if (nRotation == 0)
         return;
 
-    if ( nRotation < 0 )
-        nRotation = ( 36000 + nRotation ) % 36000;
-    if ( nRotation % 18000 == 0 )
+    if (nRotation < 0)
+        nRotation = (36000 + nRotation) % 36000;
+    if (nRotation % 18000 == 0)
         nRotation = 0;
-    while ( nRotation > 9000 )
-        nRotation = ( 18000 - ( nRotation % 18000 ) );
+    while (nRotation > 9000)
+        nRotation = (18000 - (nRotation % 18000));
 
     double fVal = (double) nRotation * F_PI18000;
-    double  fCos = cos( fVal );
-    double  fSin = sin( fVal );
+    double  fCos = cos(fVal);
+    double  fSin = sin(fVal);
 
     double  nWidthHalf = (double) aPos.X / 2;
     double  nHeightHalf = (double) aPos.Y / 2;
@@ -609,7 +609,7 @@ void DocxSdrExport::writeDMLDrawing(const SdrObject* pSdrObject, const SwFrmFmt*
 
     bool bLockedCanvas = false;
     uno::Sequence< beans::PropertyValue > propList =
-            lclGetProperty< uno::Sequence<beans::PropertyValue> >(xShape, "InteropGrabBag");
+        lclGetProperty< uno::Sequence<beans::PropertyValue> >(xShape, "InteropGrabBag");
     for (sal_Int32 nProp=0; nProp < propList.getLength(); ++nProp)
     {
         OUString propName = propList[nProp].Name;
