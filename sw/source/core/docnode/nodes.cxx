@@ -2228,11 +2228,21 @@ void SwNodes::RemoveNode( sal_uLong nDelPos, sal_uLong nSz, sal_Bool bDel )
     {
         for (sal_uLong nCnt = 0; nCnt < nSz; nCnt++)
         {
-            SwTxtNode * pTxtNd = ((*this)[ nDelPos + nCnt ])->GetTxtNode();
+            SwNode* pNode = ((*this)[ nDelPos + nCnt ]);
+            SwTxtNode * pTxtNd = pNode->GetTxtNode();
 
             if (pTxtNd)
             {
                 pTxtNd->RemoveFromList();
+            }
+            SwTableNode* pTableNode = pNode->GetTableNode();
+            if (pTableNode)
+            {
+                // The node that is deleted is a table node.
+                // Need to make sure that all the redlines that are
+                // related to this table are removed from the
+                // 'Extra Redlines' array
+                pTableNode->RemoveRedlines();
             }
         }
     }
