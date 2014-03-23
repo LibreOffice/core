@@ -135,6 +135,13 @@ if ($src_path ne $build_path)
 {
     system ("ln -sf $src_path/configure.ac configure.ac");
     system ("ln -sf $src_path/g g");
+    my @modules = <$src_path/*/Makefile>;
+    foreach my $module (@modules)
+    {
+        my $dir = basename (dirname ($module));
+        mkdir ($dir);
+        system ("ln -sf $src_path/$dir/Makefile $dir/Makefile");
+    }
 }
 system ("$aclocal $aclocal_flags") && die "Failed to run aclocal";
 unlink ("configure");

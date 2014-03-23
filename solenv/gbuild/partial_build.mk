@@ -22,7 +22,7 @@ gb_Side:=host
 endif
 
 ifeq (,$(BUILDDIR))
-BUILDDIR := $(dir $(realpath $(lastword $(MAKEFILE_LIST))))../..
+BUILDDIR := $(dir $(abspath $(firstword $(MAKEFILE_LIST))))..
 endif
 
 ifeq ($(BUILD_TYPE),)
