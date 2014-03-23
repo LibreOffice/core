@@ -725,7 +725,7 @@ void OOXMLDocumentImpl::resolveEmbeddingsStream(OOXMLStream::Pointer_t pStream)
         OUString sTarget("Target");
         bool bFound = false;
         bool bHeaderFooterFound = false;
-        OOXMLStream::StreamType_t streamType;
+        OOXMLStream::StreamType_t streamType = OOXMLStream::UNKNOWN;
         uno::Sequence< uno::Sequence< beans::StringPair > >aSeqs =
                 mxRelationshipAccess->getAllRelationships();
         for (sal_Int32 j = 0; j < aSeqs.getLength(); j++)
