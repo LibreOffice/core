@@ -137,12 +137,10 @@ void  TabControl::MouseButtonDown(const MouseEvent& rMEvt)
         Point aPos = PixelToLogic( rMEvt.GetPosPixel() );
         sal_uInt16 aPageId = GetPageId(aPos);
 
-//IAccessibility2 Implementation 2009-----
         //Solution: initialize
         if(RrePageID!=aPageId)
             pDrViewSh->FreshNavigatrEntry();
         RrePageID=aPageId;
-//-----IAccessibility2 Implementation 2009
         if (aPageId == 0)
         {
             SfxDispatcher* pDispatcher = pDrViewSh->GetViewFrame()->GetDispatcher();

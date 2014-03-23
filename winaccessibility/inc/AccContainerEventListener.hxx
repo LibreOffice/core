@@ -89,10 +89,8 @@ public:
 
     virtual void handleSectionChangedEvent (const Any &oldValue, const Any &newValue);
     virtual void handleColumnChangedEvent (const Any &oldValue, const Any &newValue);
-    //IAccessibility2 Implementation 2009-----
     //for name changed event
     virtual void SAL_CALL handleNameChangedEvent(Any name);
-    //-----IAccessibility2 Implementation 2009
 };
 
 #endif

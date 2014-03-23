@@ -318,7 +318,6 @@ Reference< XAccessibleStateSet > SAL_CALL VCLXAccessibleListItem::getAccessibleS
     {
         pStateSetHelper->AddState( AccessibleStateType::TRANSIENT );
 
-        // IAccessible2 implementation, 2009
         if(m_pListBoxHelper->IsEnabled())
         {
             pStateSetHelper->AddState( AccessibleStateType::SELECTABLE );

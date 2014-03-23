@@ -318,6 +318,17 @@ void DrawViewShell::ReadFrameViewData(FrameView* pView)
 
     EditMode eNewEditMode = pView->GetViewShEditMode(mePageKind);
     bool bNewLayerMode = pView->IsLayerMode();
+
+    if(IsLayerModeActive() && bNewLayerMode)
+    {
+        // #57936# Force mbIsLayerModeActive to false so that ChangeEditMode
+        // below does something regarding LayerTabBar content refresh. That refresh
+        // is only done when IsLayerModeActive changes. It needs to be done
+        // since e.g. Layer vsisibility was changed above and this may need
+        // a refresh to show the correct graphical representation
+        mbIsLayerModeActive = false;
+    }
+
     ChangeEditMode(eNewEditMode, bNewLayerMode);
     SwitchPage(nSelectedPage);
 
@@ -705,7 +716,6 @@ void DrawViewShell::SetActiveTabLayerIndex (int nIndex)
             // Tell the draw view and the tab control of the new active layer.
             mpDrawView->SetActiveLayer (pBar->GetPageText (pBar->GetPageId ((sal_uInt16)nIndex)));
             pBar->SetCurPageId(static_cast< sal_uInt16 >(pBar->GetPageId(nIndex)));
-        //IAccessibility2 Implementation 2009-----
         SdUnoDrawView* pUnoDrawView = new SdUnoDrawView (
             GetViewShellBase().GetDrawController(),
             *this,
@@ -713,7 +723,6 @@ void DrawViewShell::SetActiveTabLayerIndex (int nIndex)
         ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XLayer> rLayer = pUnoDrawView->getActiveLayer();
         GetViewShellBase().GetDrawController().fireChangeLayer( &rLayer );
         delete pUnoDrawView;
-        //-----IAccessibility2 Implementation 2009
         }
     }
 }

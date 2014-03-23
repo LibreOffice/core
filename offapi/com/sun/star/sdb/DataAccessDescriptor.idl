@@ -55,7 +55,7 @@ module com {  module sun {  module star {  module sdb {
     is urged to specify which properties are mandatory, and which ones optional. Additionally,
     it's free to specify any additional requirements about the relations of properties.</p>
 
-    @since OOo 1.1.2
+    @since OpenOffice 1.1.2
 */
 published service DataAccessDescriptor
 {

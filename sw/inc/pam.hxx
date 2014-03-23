@@ -253,7 +253,7 @@ public:
 
     // steht in etwas geschuetztem oder in die Selektion umspannt
     // etwas geschuetztes.
-    sal_Bool HasReadonlySel( bool bFormView ) const;
+    sal_Bool HasReadonlySel( const bool bFormView ) const;
 
     sal_Bool ContainsPosition(const SwPosition & rPos)
     { return *Start() <= rPos && rPos <= *End(); }

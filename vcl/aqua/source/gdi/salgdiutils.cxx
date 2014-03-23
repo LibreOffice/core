@@ -175,7 +175,7 @@ void AquaSalGraphics::SetState()
 
 bool AquaSalGraphics::CheckContext()
 {
-    if( mbWindow && mpFrame != NULL )
+    if( mbWindow && mpFrame && mpFrame->getNSWindow() )
     {
         const unsigned int nWidth = mpFrame->maGeometry.nWidth;
         const unsigned int nHeight = mpFrame->maGeometry.nHeight;
@@ -198,7 +198,7 @@ bool AquaSalGraphics::CheckContext()
         if( !mrContext )
         {
             const CGSize aLayerSize = CGSizeMake( nWidth, nHeight);
-            NSGraphicsContext* pNSGContext = [NSGraphicsContext graphicsContextWithWindow: mpFrame->getWindow()];
+            NSGraphicsContext* pNSGContext = [NSGraphicsContext graphicsContextWithWindow: mpFrame->getNSWindow()];
             CGContextRef xCGContext = reinterpret_cast<CGContextRef>([pNSGContext graphicsPort]);
             mxLayer = CGLayerCreateWithContext( xCGContext, aLayerSize, NULL );
             if( mxLayer )

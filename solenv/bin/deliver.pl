@@ -136,6 +136,7 @@ use sigtrap 'handler' => \&cleanup_and_die, 'normal-signals';
 #### main ####
 
 parse_options();
+init_globals();
 
 print "$script_name -- version: $script_rev\n" if !$opt_silent;
 
@@ -149,7 +150,6 @@ if ( ! $opt_delete ) {
     }
 }
 
-init_globals();
 push_default_actions();
 parse_dlst();
 check_dlst() if $opt_checkdlst;
@@ -464,6 +464,8 @@ sub init_globals
     my $updminorext   = $ENV{'UPDMINOREXT'};
     my $work_stamp    = $ENV{'WORK_STAMP'};
 
+    $::CC_PATH=(fileparse( $ENV{"CC"}))[1];
+
     # special security check for release engineers
     if ( defined($updater) && !defined($build_sosl) && !$opt_force) {
         my $path = getcwd();
@@ -735,6 +737,7 @@ sub is_unstripped {
 sub initialize_strip {
     if ((!defined $ENV{DISABLE_STRIP}) || ($ENV{DISABLE_STRIP} eq "")) {
         $strip .= 'guw ' if ($^O eq 'cygwin');
+        $strip .= $::CC_PATH if (-e $::CC_PATH.'/strip');
         $strip .= 'strip';
         $strip .= " -x" if ($ENV{OS} eq 'MACOSX');
         $strip .= " -R '.comment' -s" if ($ENV{OS} eq 'LINUX');

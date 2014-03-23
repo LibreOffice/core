@@ -39,7 +39,7 @@ module com { module sun { module star { module auth {
        on a security token sent by the intiator and to generate a token to be
        sent back to the initiator so that it can authenticate the acceptor.
 
-    @since OOo 1.1.2
+    @since OpenOffice 1.1.2
 */
 
 published interface XSSOAcceptorContext : ::com::sun::star::auth::XSSOContext

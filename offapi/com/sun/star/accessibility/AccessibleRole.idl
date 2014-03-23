@@ -47,7 +47,7 @@ module com { module sun { module star { module accessibility {
 
     @see XAccessibleContext
 
-    @since OOo 1.1.2
+    @since OpenOffice 1.1.2
 */
 published constants AccessibleRole
 {
@@ -572,7 +572,7 @@ published constants AccessibleRole
 
         <p>See also <const>PUSH_BUTTON</const> and <const>BUTTON_MENU</const>.</p>
 
-        @since OOo 3.0
+        @since OpenOffice 3.0
     */
     const short BUTTON_DROPDOWN = 68;
 
@@ -582,7 +582,7 @@ published constants AccessibleRole
 
         <p>See also <const>PUSH_BUTTON</const> and <const>BUTTON_DROPDOWN</const>.</p>
 
-        @since OOo 3.0
+        @since OpenOffice 3.0
     */
     const short BUTTON_MENU = 69;
 
@@ -591,7 +591,7 @@ published constants AccessibleRole
         <p>The object contains descriptive information, usually textual, about
         another user interface element such as a table, chart, or image.</p>.
 
-        @since OOo 3.0
+        @since OpenOffice 3.0
     */
     const short CAPTION = 70;
 
@@ -601,7 +601,7 @@ published constants AccessibleRole
         subelements whose attributes and/or description may be queried to obtain both
         the quantitative data and information about how the data is being presented.</p>
 
-        @since OOo 3.0
+        @since OpenOffice 3.0
     */
     const short CHART = 71;
 
@@ -609,7 +609,7 @@ published constants AccessibleRole
 
         <p>A role indicating the object acts as a formula for calculating a value.</p>
 
-         @since OOo 3.0
+         @since OpenOffice 3.0
     */
     const short EDIT_BAR = 72;
 
@@ -618,7 +618,7 @@ published constants AccessibleRole
         <p>The object is a container for form controls, for instance as part of a web form
         or user-input form within a document.</p>
 
-        @since OOo 3.0
+        @since OpenOffice 3.0
     */
     const short FORM = 73;
 
@@ -627,7 +627,7 @@ published constants AccessibleRole
     <p>Usually a graphic with multiple hotspots, where each hotspot can be activated
         resulting in the loading of another document or section of a document.</p>
 
-        @since OOo 3.0
+        @since OpenOffice 3.0
     */
     const short IMAGE_MAP = 74;
 
@@ -635,7 +635,7 @@ published constants AccessibleRole
 
         <p>An embedded note which is not visible until activated.</p>
 
-        @since OOo 3.0
+        @since OpenOffice 3.0
     */
     const short NOTE = 75;
 
@@ -644,7 +644,7 @@ published constants AccessibleRole
         <p>An object representing a page of document content. It is used in documents
         which are accessed by the user on a page by page basis.</p>
 
-        @since OOo 3.0
+        @since OpenOffice 3.0
     */
     const short PAGE = 76;
 
@@ -652,7 +652,7 @@ published constants AccessibleRole
 
         <p>An object which describes margins and tab stops, etc. for text objects which it controls.</p>
 
-        @since OOo 3.0
+        @since OpenOffice 3.0
     */
     const short RULER = 77;
 
@@ -661,7 +661,7 @@ published constants AccessibleRole
         <p>The object is a containing instance of document content which constitutes a particular
         'logical' section of the document.</p>
 
-        @since OOo 3.0
+        @since OpenOffice 3.0
     */
     const short SECTION = 78;
 
@@ -671,7 +671,7 @@ published constants AccessibleRole
 
         </p>See also <const>TREE</const> and <const>TREE_TABLE</const>.</p>
 
-        @since OOo 3.0
+        @since OpenOffice 3.0
     */
     const short TREE_ITEM = 79;
 
@@ -679,7 +679,7 @@ published constants AccessibleRole
 
         <p>An object which represents both hierarchical and tabular information.</p>
 
-        @since OOo 3.0
+        @since OpenOffice 3.0
     */
     const short TREE_TABLE = 80;
 
@@ -693,7 +693,7 @@ published constants AccessibleRole
 
         <p>See also <const>COMMENT_END</const>.</p>
 
-        @since OOo 3.2
+        @since OpenOffice 3.2
     */
     const short COMMENT = 81;
 
@@ -705,7 +705,7 @@ published constants AccessibleRole
         <p>This object and the corresponding object representing the comment shall be
         in relation of type <const>MEMBER_OF</const>.</p>
 
-        @since OOo 3.2
+        @since OpenOffice 3.2
     */
     const short COMMENT_END = 82;
 

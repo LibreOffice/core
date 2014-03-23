@@ -33,7 +33,7 @@
 
 /** Defines depths for searching through type description collections.
 
-    @since OOo 1.1.2
+    @since OpenOffice 1.1.2
   */
 published enum TypeDescriptionSearchDepth
 {

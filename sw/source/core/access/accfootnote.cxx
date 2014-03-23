@@ -64,7 +64,6 @@ SwAccessibleFootnote::SwAccessibleFootnote(
 
     sal_uInt16 nResId = bIsEndnote ? STR_ACCESS_ENDNOTE_NAME
                                    : STR_ACCESS_FOOTNOTE_NAME;
-    //IAccessibility2 Implementation 2009-----
     //OUString sArg( OUString::valueOf( nFootEndNote ) );
     //old codes end
     OUString sArg;
@@ -75,7 +74,6 @@ SwAccessibleFootnote::SwAccessibleFootnote(
         const SwDoc *pDoc = GetShell()->GetDoc();
         sArg = pTxtFtn->GetFtn().GetViewNumStr( *pDoc );
     }
-    //-----IAccessibility2 Implementation 2009
 
     SetName( GetResource( nResId, &sArg ) );
 }

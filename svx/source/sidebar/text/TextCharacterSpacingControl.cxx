@@ -185,6 +185,7 @@ void TextCharacterSpacingControl::Rearrange(bool bLBAvailable,bool bAvailable, l
         {
             String aStrTip( maStrCusE);   //LAST CUSTOM no tip defect //add
             aStrTip.Append( String::CreateFromDouble( (double)mnCustomKern / 10));
+            aStrTip.Append( xub_Unicode(' ') );
             aStrTip.Append(maStrUnit);      // modify
             maVSSpacing.SetItemText(6,aStrTip);
         }
@@ -192,6 +193,7 @@ void TextCharacterSpacingControl::Rearrange(bool bLBAvailable,bool bAvailable, l
         {
             String aStrTip(maStrCusC) ;     //LAST CUSTOM no tip defect //add
             aStrTip.Append( String::CreateFromDouble( (double)-mnCustomKern / 10));
+            aStrTip.Append( xub_Unicode( ' ' ) );
             aStrTip.Append(maStrUnit);      // modify
             maVSSpacing.SetItemText( 6, aStrTip );
         }

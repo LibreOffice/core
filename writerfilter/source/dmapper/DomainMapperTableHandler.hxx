@@ -54,6 +54,38 @@ class TableStyleSheetEntry;
 struct TableInfo;
 class DomainMapperTableHandler : public TableDataHandler<Handle_t , TablePropertyMapPtr >
 {
+public:
+    typedef boost::shared_ptr<DomainMapperTableHandler> Pointer_t;
+
+    DomainMapperTableHandler(TextReference_t xText, DomainMapper_Impl& rDMapper_Impl);
+    virtual ~DomainMapperTableHandler();
+
+    virtual void startTable(
+        unsigned int nRows,
+        unsigned int nDepth,
+        TablePropertyMapPtr pProps );
+
+    virtual void endTable(
+        const unsigned int nDepth );
+
+    virtual void startRow(
+        unsigned int nCells,
+        TablePropertyMapPtr pProps );
+
+    virtual void endRow();
+
+    virtual void startCell(
+        const Handle_t & start,
+        TablePropertyMapPtr pProps );
+
+    virtual void endCell( const Handle_t & end );
+
+    virtual Handle_t* getTable( )
+    {
+        return &m_xTableRange;
+    };
+
+private:
     TextReference_t         m_xText;
     DomainMapper_Impl&      m_rDMapper_Impl;
     CellSequencePointer_t   m_pCellSeq;
@@ -70,28 +102,13 @@ class DomainMapperTableHandler : public TableDataHandler<Handle_t , TablePropert
     sal_Int32 m_nCellIndex;
     sal_Int32 m_nRowIndex;
 
-    TableStyleSheetEntry * endTableGetTableStyle(TableInfo & rInfo);
+    TableStyleSheetEntry * endTableGetTableStyle(
+        TableInfo & rInfo,
+        const bool bAdjustLeftMarginByDefaultValue );
+
     CellPropertyValuesSeq_t endTableGetCellProperties(TableInfo & rInfo);
+
     RowPropertyValuesSeq_t endTableGetRowProperties();
-
-public:
-    typedef boost::shared_ptr<DomainMapperTableHandler> Pointer_t;
-
-    DomainMapperTableHandler(TextReference_t xText, DomainMapper_Impl& rDMapper_Impl);
-    virtual ~DomainMapperTableHandler();
-
-    virtual void startTable(unsigned int nRows, unsigned int nDepth,
-                            TablePropertyMapPtr pProps);
-    virtual void endTable();
-    virtual void startRow(unsigned int nCells, TablePropertyMapPtr pProps);
-    virtual void endRow();
-    virtual void startCell(const Handle_t & start, TablePropertyMapPtr pProps);
-    virtual void endCell(const Handle_t & end);
-
-    virtual Handle_t* getTable( )
-    {
-        return &m_xTableRange;
-    };
 };
 
 }}

@@ -162,9 +162,9 @@ protected:
     virtual void        drawPixel( long nX, long nY, SalColor nSalColor );
     virtual void        drawLine( long nX1, long nY1, long nX2, long nY2 );
     virtual void        drawRect( long nX, long nY, long nWidth, long nHeight );
-    virtual void        drawPolyLine( ULONG nPoints, const SalPoint* pPtAry );
-    virtual void        drawPolygon( ULONG nPoints, const SalPoint* pPtAry );
-    virtual void        drawPolyPolygon( ULONG nPoly, const ULONG* pPoints, PCONSTSALPOINT* pPtAry );
+    virtual void        drawPolyLine( sal_uInt32 nPoints, const SalPoint* pPtAry );
+    virtual void        drawPolygon( sal_uInt32 nPoints, const SalPoint* pPtAry );
+    virtual void        drawPolyPolygon( sal_uInt32 nPoly, const sal_uInt32* pPoints, PCONSTSALPOINT* pPtAry );
     virtual bool        drawPolyPolygon( const ::basegfx::B2DPolyPolygon&, double fTransparency );
     virtual bool        drawPolyLine(
         const ::basegfx::B2DPolygon&,
@@ -172,8 +172,8 @@ protected:
         const ::basegfx::B2DVector& rLineWidth,
         basegfx::B2DLineJoin,
         com::sun::star::drawing::LineCap);
-    virtual sal_Bool    drawPolyLineBezier( sal_uIntPtr nPoints, const SalPoint* pPtAry, const sal_uInt8* pFlgAry );
-    virtual sal_Bool    drawPolygonBezier( sal_uIntPtr nPoints, const SalPoint* pPtAry, const sal_uInt8* pFlgAry );
+    virtual sal_Bool    drawPolyLineBezier( sal_uInt32 nPoints, const SalPoint* pPtAry, const sal_uInt8* pFlgAry );
+    virtual sal_Bool    drawPolygonBezier( sal_uInt32 nPoints, const SalPoint* pPtAry, const sal_uInt8* pFlgAry );
     virtual sal_Bool    drawPolyPolygonBezier( sal_uInt32 nPoly, const sal_uInt32* pPoints, const SalPoint* const* pPtAry, const sal_uInt8* const* pFlgAry );
 
     // CopyArea --> No RasterOp, but ClipRegion
@@ -199,7 +199,7 @@ protected:
 
     // invert --> ClipRegion (only Windows or VirDevs)
     virtual void        invert( long nX, long nY, long nWidth, long nHeight, SalInvert nFlags);
-    virtual void        invert( ULONG nPoints, const SalPoint* pPtAry, SalInvert nFlags );
+    virtual void        invert( sal_uInt32 nPoints, const SalPoint* pPtAry, SalInvert nFlags );
 
     virtual sal_Bool        drawEPS( long nX, long nY, long nWidth, long nHeight, void* pPtr, ULONG nSize );
 
@@ -233,7 +233,7 @@ public:
     // public SalGraphics methods, the interface to teh independent vcl part
 
     // get device resolution
-    virtual void            GetResolution( long& rDPIX, long& rDPIY );
+    virtual void            GetResolution( sal_Int32& rDPIX, sal_Int32& rDPIY );
     // get the depth of the device
     virtual USHORT          GetBitCount();
     // get the width of the device
@@ -288,7 +288,7 @@ public:
     // as "undefined character"
     virtual sal_Bool            CreateFontSubset( const rtl::OUString& rToFile,
                                               const ImplFontData* pFont,
-                                              long* pGlyphIDs,
+                                              sal_GlyphId* pGlyphIds,
                                               sal_uInt8* pEncoding,
                                               sal_Int32* pWidths,
                                               int nGlyphs,
@@ -324,8 +324,8 @@ public:
                                             Int32Vector& rWidths,
                                             Ucs2UIntMap& rUnicodeEnc );
 
-    virtual sal_Bool                    GetGlyphBoundRect( long nIndex, Rectangle& );
-    virtual sal_Bool                    GetGlyphOutline( long nIndex, ::basegfx::B2DPolyPolygon& );
+    virtual bool                    GetGlyphBoundRect( sal_GlyphId, Rectangle& );
+    virtual bool                    GetGlyphOutline( sal_GlyphId, ::basegfx::B2DPolyPolygon& );
 
     virtual SalLayout*              GetTextLayout( ImplLayoutArgs&, int nFallbackLevel );
     virtual void                     DrawServerFontLayout( const ServerFontLayout& );

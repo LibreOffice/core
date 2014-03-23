@@ -25,7 +25,11 @@ PRJ=..$/..
 PRJNAME=avmedia
 TARGET=avmediaQuickTime
 
-.IF "$(GUIBASE)"=="aqua"
+# the QuickTime API has been deprecated since OSX 10.5 and has been removed in the OSX SDK 10.7
+.IF ("$(GUIBASE)" != "aqua") || ("${MACOSX_DEPLOYMENT_TARGET:s/.//}" >= "106")
+dummy:
+    @echo " Nothing to build for GUIBASE=$(GUIBASE) and OSX$(MACOSX_DEPLOYMENT_TARGET)"
+.ELSE
 
 # --- Settings ----------------------------------
 
@@ -41,12 +45,13 @@ CFLAGSCXX+=$(OBJCXXFLAGS)
 
 SLOFILES= \
         $(SLO)$/quicktimeuno.obj  \
+        $(SLO)$/framegrabber.obj        \
         $(SLO)$/manager.obj       \
         $(SLO)$/window.obj        \
-        $(SLO)$/framegrabber.obj        \
         $(SLO)$/player.obj
 
 EXCEPTIONSFILES= \
+        $(SLO)$/framegrabber.obj        \
         $(SLO)$/quicktimeuno.obj
 
 SHL1TARGET= $(TARGET)$(DLLPOSTFIX)
@@ -75,9 +80,6 @@ SHL1VERSIONMAP=$(SOLARENV)/src/component.map
 
 .INCLUDE : target.mk
 
-.ELSE
-dummy:
-    @echo " Nothing to build for GUIBASE=$(GUIBASE)"
 .ENDIF
 
 ALLTAR : $(MISC)/avmediaQuickTime.component
@@ -87,3 +89,4 @@ $(MISC)/avmediaQuickTime.component .ERRREMOVE : \
     $(XSLTPROC) --nonet --stringparam uri \
         '$(COMPONENTPREFIX_BASIS_NATIVE)$(SHL1TARGETN:f)' -o $@ \
         $(SOLARENV)/bin/createcomponent.xslt avmediaQuickTime.component
+

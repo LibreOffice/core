@@ -76,6 +76,11 @@ class SwXFrame : public cppu::WeakImplHelper6
 
     SwPaM*                          m_pCopySource;
 
+    ///UUUU helper to check if fill style is set to color or bitmap
+    /// and thus formally used SvxBrushItem parts need to be mapped
+    /// for backwards compatibility
+    bool needToMapFillItemsToSvxBrushItemTypes() const;
+
 protected:
     com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > mxStyleData;
     com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >  mxStyleFamily;

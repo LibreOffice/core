@@ -286,11 +286,11 @@ SalGtkFilePicker::SalGtkFilePicker( const uno::Reference<lang::XMultiServiceFact
         case 0:
             break;
         case 1:
-            gtk_expander_set_expanded(GTK_EXPANDER(m_pFilterExpander), sal_True);
+            gtk_expander_set_expanded( GTK_EXPANDER(m_pFilterExpander), sal_True);
             break;
         case 2:
             expandexpanders(GTK_CONTAINER(m_pDialog));
-            gtk_expander_set_expanded(GTK_EXPANDER(m_pFilterExpander), sal_True);
+            gtk_expander_set_expanded( GTK_EXPANDER(m_pFilterExpander), sal_True);
             break;
     }
 
@@ -530,7 +530,7 @@ shrinkFilterName( const rtl::OUString &rFilterName, bool bAllowNoStar = false )
     int i;
     int nBracketLen = -1;
     int nBracketEnd = -1;
-    const sal_Unicode *pStr = rFilterName;
+    const sal_Unicode* pStr = rFilterName.getStr();
     OUString aRealName = rFilterName;
 
     for( i = aRealName.getLength() - 1; i > 0; i-- )
@@ -1905,7 +1905,7 @@ GtkFileFilter* SalGtkFilePicker::implAddFilter( const OUString& rFilter, const O
 
     OUString aShrunkName = shrinkFilterName( rFilter );
     OString aFilterName = rtl::OUStringToOString( aShrunkName, RTL_TEXTENCODING_UTF8 );
-    gtk_file_filter_set_name( filter, aFilterName );
+    gtk_file_filter_set_name( filter, aFilterName.getStr() );
 
     static const OUString aStarDot = OUString::createFromAscii( "*." );
     OUString aTokens;
@@ -1929,7 +1929,7 @@ GtkFileFilter* SalGtkFilePicker::implAddFilter( const OUString& rFilter, const O
                 aTokens = aTokens += aToken;
                 gtk_file_filter_add_custom (filter, GTK_FILE_FILTER_URI,
                     case_insensitive_filter,
-                    g_strdup( rtl::OUStringToOString( aToken, RTL_TEXTENCODING_UTF8 ) ),
+                    g_strdup( rtl::OUStringToOString( aToken, RTL_TEXTENCODING_UTF8).getStr() ),
                     (GDestroyNotify) g_free );
 
                 OSL_TRACE( "fustering with %s\n", rtl::OUStringToOString( aToken, RTL_TEXTENCODING_UTF8 ).getStr());
@@ -1938,8 +1938,7 @@ GtkFileFilter* SalGtkFilePicker::implAddFilter( const OUString& rFilter, const O
             else
             {
                 g_warning( "Duff filter token '%s'\n",
-                    (const sal_Char *) rtl::OUStringToOString(
-                        rType.getToken( 0, ';', nIndex ), RTL_TEXTENCODING_UTF8 ) );
+                    rtl::OUStringToOString( rType.getToken( 0, ';', nIndex ), RTL_TEXTENCODING_UTF8 ).getStr());
             }
 #endif
         }

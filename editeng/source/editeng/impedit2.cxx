@@ -136,7 +136,7 @@ ImpEditEngine::ImpEditEngine( EditEngine* pEE, SfxItemPool* pItemPool ) :
     bIsFormatting       = sal_False;
     bFormatted          = sal_False;
     bUpdate             = sal_True;
-    bUpdateForAcc       = TRUE;     //IAccessible2 implementation 2009
+    bUpdateForAcc       = TRUE;
     bUseAutoColor       = sal_True;
     bForceAutoColor     = sal_False;
     bAddExtLeading      = sal_False;
@@ -2721,7 +2721,7 @@ EditPaM ImpEditEngine::InsertText( const EditSelection& rCurSel,
                         ++nChgPos;
 
                     xub_StrLen nChgLen = static_cast< xub_StrLen >( nNewLen - nChgPos );
-                    String aChgText( aNewText.copy( nChgPos ), nChgLen );
+                    String aChgText( aNewText.copy( nChgPos ).getStr(), nChgLen );
 
                     // select text from first pos to be changed to current pos
                     EditSelection aSel( EditPaM( aPaM.GetNode(), (sal_uInt16) nChgPos ), aPaM );

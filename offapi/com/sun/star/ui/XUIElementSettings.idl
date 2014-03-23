@@ -41,7 +41,7 @@ module com { module sun { module star { module ui {
 /** provides functions to retrieve and change user interface element structure
     data and to update its visible representation.
 
-    @since OOo 2.0
+    @since OpenOffice 2.0
 */
 
 published interface XUIElementSettings : com::sun::star::uno::XInterface

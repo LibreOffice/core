@@ -675,11 +675,13 @@ void SwHistoryBookmark::SetInDoc( SwDoc* pDoc, bool )
 
     if(pPam.get())
     {
-        if(pMark)
-            pMarkAccess->deleteMark(pMark);
-        ::sw::mark::IBookmark* const pBookmark = dynamic_cast< ::sw::mark::IBookmark* >(
-            pMarkAccess->makeMark(*pPam, m_aName, m_eBkmkType));
-        if(pBookmark)
+        if ( pMark != NULL )
+        {
+            pMarkAccess->deleteMark( pMark );
+        }
+        ::sw::mark::IBookmark* const pBookmark =
+            dynamic_cast< ::sw::mark::IBookmark* >( pMarkAccess->makeMark(*pPam, m_aName, m_eBkmkType) );
+        if ( pBookmark != NULL )
         {
             pBookmark->SetKeyCode(m_aKeycode);
             pBookmark->SetShortName(m_aShortName);
@@ -835,6 +837,7 @@ SwHistoryResetAttrSet::SwHistoryResetAttrSet( const SfxItemSet& rSet,
             case RES_TXTATR_TOXMARK:
                 if (m_nStart != m_nEnd) break; // else: fall through!
             case RES_TXTATR_FIELD:
+            case RES_TXTATR_ANNOTATION:
             case RES_TXTATR_FLYCNT:
             case RES_TXTATR_FTN:
             case RES_TXTATR_META:
@@ -1042,7 +1045,9 @@ void SwHistory::Add( const SfxPoolItem* pOldValue, const SfxPoolItem* pNewValue,
     ASSERT( !m_nEndDiff, "History was not deleted after REDO" );
 
     sal_uInt16 nWhich = pNewValue->Which();
-    if( (nWhich >= POOLATTR_END) || (nWhich == RES_TXTATR_FIELD) )
+    if( (nWhich >= POOLATTR_END)
+        || (nWhich == RES_TXTATR_FIELD)
+        || (nWhich == RES_TXTATR_ANNOTATION) )
         return;
 
     // no default Attribute?
@@ -1079,6 +1084,7 @@ void SwHistory::Add( SwTxtAttr* pHint, sal_uLong nNodeIdx, bool bNewAttr )
                             ->GetFlyCnt().GetFrmFmt() );
                 break;
             case RES_TXTATR_FIELD:
+            case RES_TXTATR_ANNOTATION:
                 pHt = new SwHistorySetTxtFld(
                             static_cast<SwTxtFld*>(pHint), nNodeIdx );
                 break;
@@ -1313,6 +1319,7 @@ void SwHistory::CopyAttr(
         switch( pHt->Which() )
         {
         case RES_TXTATR_FIELD:
+        case RES_TXTATR_ANNOTATION:
         case RES_TXTATR_INPUTFIELD:
             if( !bCopyFields )
                 bNextAttr = sal_True;

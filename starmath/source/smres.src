@@ -153,8 +153,7 @@ ModalDialog RID_FONTSIZEDIALOG
         Spin = TRUE ;
         Minimum = 5 ;
         Maximum = 200 ;
-        Unit = FUNIT_CUSTOM ;
-        CustomUnitText = "%" ;
+        Unit = FUNIT_PERCENT ;
     };
     FixedText 5
     {
@@ -175,8 +174,7 @@ ModalDialog RID_FONTSIZEDIALOG
         Spin = TRUE ;
         Minimum = 5 ;
         Maximum = 200 ;
-        Unit = FUNIT_CUSTOM ;
-        CustomUnitText = "%" ;
+        Unit = FUNIT_PERCENT ;
     };
     FixedText 6
     {
@@ -197,8 +195,7 @@ ModalDialog RID_FONTSIZEDIALOG
         Spin = TRUE ;
         Minimum = 5 ;
         Maximum = 200 ;
-        Unit = FUNIT_CUSTOM ;
-        CustomUnitText = "%" ;
+        Unit = FUNIT_PERCENT ;
     };
     FixedText 7
     {
@@ -219,8 +216,7 @@ ModalDialog RID_FONTSIZEDIALOG
         Spin = TRUE ;
         Minimum = 5 ;
         Maximum = 200 ;
-        Unit = FUNIT_CUSTOM ;
-        CustomUnitText = "%" ;
+        Unit = FUNIT_PERCENT ;
     };
     FixedText 8
     {
@@ -241,8 +237,7 @@ ModalDialog RID_FONTSIZEDIALOG
         Spin = TRUE ;
         Minimum = 5 ;
         Maximum = 200 ;
-        Unit = FUNIT_CUSTOM ;
-        CustomUnitText = "%" ;
+        Unit = FUNIT_PERCENT ;
     };
     FixedLine 1
     {
@@ -462,7 +457,6 @@ ModalDialog RID_DISTANCEDIALOG
         Repeat = TRUE;
         Pos = MAP_APPFONT ( 78 , 18 ) ;
         Size = MAP_APPFONT ( 38 , 12 ) ;
-        CustomUnitText [ en-US ] = "%" ;
     };
     FixedText 2
     {
@@ -483,7 +477,6 @@ ModalDialog RID_DISTANCEDIALOG
         Repeat = TRUE;
         Pos = MAP_APPFONT ( 78 , 34 ) ;
         Size = MAP_APPFONT ( 38 , 12 ) ;
-        CustomUnitText [ en-US ] = "%" ;
     };
     CheckBox 1
     {
@@ -512,7 +505,6 @@ ModalDialog RID_DISTANCEDIALOG
         Repeat = TRUE;
         Pos = MAP_APPFONT ( 78 , 50 ) ;
         Size = MAP_APPFONT ( 38 , 12 ) ;
-        CustomUnitText [ en-US ] = "%" ;
     };
     FixedText 4
     {
@@ -1078,8 +1070,7 @@ TabPage RID_PRINTOPTIONPAGE
         Spin = TRUE ;
         Minimum = 10 ;
         Maximum = 400 ;
-        Unit = FUNIT_CUSTOM ;
-        CustomUnitText = "%" ;
+        Unit = FUNIT_PERCENT ;
     };
     FixedLine FL_MISC_OPTIONS
     {
@@ -1459,19 +1450,19 @@ Menu RID_VIEWMENU
         {
             Identifier = SID_VIEW050 ;
             HelpId = CMD_SID_VIEW050 ;
-            Text [ en-US ] = "~View 50%" ;
+            Text [ en-US ] = "~View 50 %" ;
         };
         MenuItem
         {
             Identifier = SID_VIEW100 ;
             HelpId = CMD_SID_VIEW100 ;
-            Text [ en-US ] = "View ~100%" ;
+            Text [ en-US ] = "View ~100 %" ;
         };
         MenuItem
         {
             Identifier = SID_VIEW200 ;
             HelpId = CMD_SID_VIEW200 ;
-            Text [ en-US ] = "View ~200%" ;
+            Text [ en-US ] = "View ~200 %" ;
         };
         MenuItem
         {

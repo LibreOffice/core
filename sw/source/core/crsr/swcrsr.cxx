@@ -343,7 +343,8 @@ sal_Bool SwCursor::IsSelOvr( int eFlags )
     if( pNd->IsCntntNode() && !dynamic_cast<SwUnoCrsr*>(this) )
     {
         const SwCntntFrm* pFrm = ((SwCntntNode*)pNd)->getLayoutFrm( pDoc->GetCurrentLayout() );
-        if( pFrm && pFrm->IsValid()
+        if( pFrm != NULL
+            && pFrm->IsValid()
             && 0 == pFrm->Frm().Height()
             && 0 != ( nsSwCursorSelOverFlags::SELOVER_CHANGEPOS & eFlags ) )
         {
@@ -356,40 +357,51 @@ sal_Bool SwCursor::IsSelOvr( int eFlags )
 
             // --> LIJIAN/FME 2007-11-27 #i72394# skip to prev /next valid paragraph
             // with a layout in case the first search did not succeed:
-            if( !pFrm )
+            if ( pFrm == NULL )
             {
                 bGoNxt = !bGoNxt;
                 pFrm = ((SwCntntNode*)pNd)->getLayoutFrm( pDoc->GetCurrentLayout() );
-                while ( pFrm && 0 == pFrm->Frm().Height() )
+                while ( pFrm != NULL
+                        && 0 == pFrm->Frm().Height() )
                 {
-                    pFrm = bGoNxt ? pFrm->GetNextCntntFrm()
-                        :   pFrm->GetPrevCntntFrm();
+                    pFrm = bGoNxt ? pFrm->GetNextCntntFrm() : pFrm->GetPrevCntntFrm();
                 }
             }
             // <--
 
-            SwCntntNode* pCNd;
-            if( pFrm && 0 != (pCNd = (SwCntntNode*)pFrm->GetNode()) )
+            SwCntntNode* pCNd = (pFrm != NULL) ? (SwCntntNode*)pFrm->GetNode() : NULL;
+            if ( pCNd != NULL )
             {
                 // set this cntntNode as new position
                 rPtIdx = *pCNd;
                 pNd = pCNd;
 
-                // ContentIndex noch anmelden:
-                xub_StrLen nTmpPos = bGoNxt ? 0 : pCNd->Len();
+                // assign corresponding ContentIndex
+                const xub_StrLen nTmpPos = bGoNxt ? 0 : pCNd->Len();
                 GetPoint()->nContent.Assign( pCNd, nTmpPos );
 
-                // sollten wir in einer Tabelle gelandet sein?
-                if( IsInProtectTable( sal_True ) )
-                    pFrm = 0;
+                if ( rPtIdx.GetIndex() == pSavePos->nNode
+                     && nTmpPos == pSavePos->nCntnt )
+                {
+                    // new position equals saved one
+                    // --> trigger restore of saved pos by setting <pFrm> to NULL - see below
+                    pFrm = NULL;
+                }
+
+                if ( IsInProtectTable( sal_True ) )
+                {
+                    // new position in protected table
+                    // --> trigger restore of saved pos by setting <pFrm> to NULL - see below
+                    pFrm = NULL;
+                }
             }
         }
 
-        if( !pFrm )
+        if( pFrm == NULL )
         {
             DeleteMark();
             RestoreSavePos();
-            return sal_True;        // ohne Frames geht gar nichts!
+            return sal_True;
         }
     }
 
@@ -471,8 +483,8 @@ sal_Bool SwCursor::IsSelOvr( int eFlags )
         }
     }
 
-    const SwTableNode* pPtNd = pNd->FindTableNode();
-    const SwTableNode* pMrkNd = pNd->FindTableNode();
+    const SwTableNode* pPtNd = GetPoint()->nNode.GetNode().FindTableNode();
+    const SwTableNode* pMrkNd = GetMark()->nNode.GetNode().FindTableNode();
     // beide in keinem oder beide im gleichen TableNode
     if( ( !pMrkNd && !pPtNd ) || pPtNd == pMrkNd )
         return sal_False;

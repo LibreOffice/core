@@ -42,7 +42,7 @@ interface XConsoleHandler;
 /** specifies a component implementing a log handler whose output
     channel is the processes console.
 
-    @since OOo 2.3
+    @since OpenOffice 2.3
  */
 service ConsoleHandler : XConsoleHandler
 {

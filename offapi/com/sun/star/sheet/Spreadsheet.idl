@@ -208,7 +208,7 @@ service Spreadsheet
 
     /** provides a method to set an external name at the sheet.
 
-        @since OOo 3.0
+        @since OpenOffice 3.0
      */
     [optional] interface com::sun::star::sheet::XExternalSheetName;
 

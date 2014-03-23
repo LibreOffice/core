@@ -404,12 +404,17 @@ public:
     void addGluePointMapping( com::sun::star::uno::Reference< com::sun::star::drawing::XShape >& xShape,
                               sal_Int32 nSourceId, sal_Int32 nDestinnationId );
 
+    /** find mapping for given DestinationID. This allows to extract the original draw:id imported with a draw:glue-point */
+    sal_Int32 findGluePointMapping(
+        const com::sun::star::uno::Reference< com::sun::star::drawing::XShape >& xShape,
+        sal_Int32 nDestinnationId ) const;
+
     /** moves all current DestinationId's for rXShape by n */
     void moveGluePointMapping( const com::sun::star::uno::Reference< com::sun::star::drawing::XShape >& xShape, const sal_Int32 n );
 
     /** retrieves a mapping for a glue point identifier from the current xml file to the identifier created after
         inserting the new glue point into the core. The mapping must be initialized first with addGluePointMapping() */
-    sal_Int32 getGluePointId( com::sun::star::uno::Reference< com::sun::star::drawing::XShape >& xShape, sal_Int32 nSourceId );
+    sal_Int32 getGluePointId( const com::sun::star::uno::Reference< com::sun::star::drawing::XShape >& xShape, sal_Int32 nSourceId );
 
     /** this method must be calling before the first shape is imported for the given page.
         Calls to this method can be nested */

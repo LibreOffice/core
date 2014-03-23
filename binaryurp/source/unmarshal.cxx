@@ -244,8 +244,8 @@ rtl::OUString Unmarshal::readOid() {
         }
     }
     sal_uInt16 idx = readCacheIndex();
-    if (oid.getLength() == 0 && idx != cache::ignore) {
-        if (state_.oidCache[idx].getLength() == 0) {
+    if (oid.isEmpty() && idx != cache::ignore) {
+        if ( state_.oidCache[idx].isEmpty() ) {
             throw css::io::IOException(
                 rtl::OUString(
                     RTL_CONSTASCII_USTRINGPARAM(

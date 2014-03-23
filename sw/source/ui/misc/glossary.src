@@ -286,12 +286,10 @@ String STR_GLOSSARY
 {
     Text [ en-US ] = "AutoText :" ;
 };
-/*IAccessibility2 Implementation 2009-----*/
 String STR_ACCESS_SW_CATEGORY
 {
     Text [ en-US ] = "Category" ;
 };
-/*-----IAccessibility2 Implementation 2009*/
 ModalDialog DLG_RENAME_GLOS
 {
     OutputSize = TRUE ;

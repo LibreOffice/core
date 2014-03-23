@@ -278,7 +278,7 @@ void SAL_CALL CWinClipboard::disposing()
     m_pImpl->dispose( );
 
     // force destruction of the impl class
-    m_pImpl.reset( NULL );
+    m_pImpl.reset();
 }
 
 // -------------------------------------------------

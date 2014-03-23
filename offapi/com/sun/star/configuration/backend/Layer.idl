@@ -56,7 +56,7 @@ module com { module sun { module star { module configuration { module backend {
   @see com::sun::star::configuration::backend::UpdatableLayer
         Service providing write access to a configuration data layer.
 
-  @since OOo 1.1.2
+  @since OpenOffice 1.1.2
   */
 published service Layer
 {
@@ -98,7 +98,7 @@ published service Layer
     /**
       The URL of the layer data.
 
-      @since OOo 2.0
+      @since OpenOffice 2.0
       */
     [property,optional,readonly] string URL ;
 

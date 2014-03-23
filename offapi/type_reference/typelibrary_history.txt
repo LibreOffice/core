@@ -208,3 +208,9 @@
 
 23/03/2013 (arielch): TaskID=121946
   css::ucb::XWebDAVCommandEnvironment: use enums to identify WebDAV/HTTP methods
+
+09/03/2014 (arielch): TaskID=124385
+  Unpublish the Undo API
+
+10/03/2014 (arielch): TaskID=124398
+  Unpublish the Wizard API

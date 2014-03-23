@@ -209,7 +209,7 @@ Player* Player::create( const ::rtl::OUString& rURL )
 {
     Player* pPlayer = NULL;
 
-    if( rURL.getLength() )
+    if( !rURL.isEmpty() )
     {
         // safely initialize GLib threading framework
         try

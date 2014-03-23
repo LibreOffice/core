@@ -58,7 +58,7 @@ getAsConst( rtl::OUString rString )
     static int nIdx = 0;
     nIdx = (nIdx + 1) % nMax;
     aUgly[nIdx] = rtl::OUStringToOString( rString, RTL_TEXTENCODING_UTF8 );
-    return aUgly[ nIdx ];
+    return aUgly[ nIdx ].getStr();
 }
 
 /*****************************************************************************/

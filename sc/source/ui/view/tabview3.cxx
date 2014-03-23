@@ -910,6 +910,10 @@ void ScTabView::MoveCursorAbs( SCsCOL nCurX, SCsROW nCurY, ScFollowMode eMode,
     if (!bKeepOld)
         aViewData.ResetOldCursor();
 
+    // i123629
+    if( aViewData.GetViewShell()->GetForceFocusOnCurCell() )
+        aViewData.GetViewShell()->SetForceFocusOnCurCell( !ValidColRow(nCurX, nCurY) );
+
     if (nCurX < 0) nCurX = 0;
     if (nCurY < 0) nCurY = 0;
     if (nCurX > MAXCOL) nCurX = MAXCOL;

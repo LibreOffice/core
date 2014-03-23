@@ -275,7 +275,7 @@ published service DataSourceBrowser
         in the event structure passed to the context menu interceptors, actually is a value from the
         <type scope="com::sun::star::sdb::application">NamedDatabaseObject</type> group.</p>
 
-        @since OOo 3.0
+        @since OpenOffice 3.0
     */
     [optional] interface ::com::sun::star::ui::XContextMenuInterception;
 };

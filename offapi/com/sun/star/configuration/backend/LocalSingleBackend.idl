@@ -37,7 +37,7 @@ module com { module sun { module star { module configuration { module backend {
     implements <type>SingleBackend</type> that stores data in the
     local filesystem using the OOR XML formats.
 
-    @since OOo 1.1.2
+    @since OpenOffice 1.1.2
 */
 published service LocalSingleBackend
 {

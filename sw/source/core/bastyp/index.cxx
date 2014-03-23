@@ -354,15 +354,17 @@ SwIndexReg::~SwIndexReg()
 }
 
 
-
-void SwIndexReg::Update( SwIndex const & rIdx, const xub_StrLen nDiff,
-    const bool bNeg, const bool /* argument is only used in derived class*/ )
+void SwIndexReg::Update(
+    SwIndex const & rIdx,
+    const xub_StrLen nDiff,
+    const bool bNeg,
+    const bool /* argument is only used in derived class*/ )
 {
     SwIndex* pStt = const_cast<SwIndex*>(&rIdx);
-    xub_StrLen nNewVal = rIdx.nIndex;
+    const xub_StrLen nNewVal = rIdx.nIndex;
     if( bNeg )
     {
-        xub_StrLen nLast = rIdx.GetIndex() + nDiff;
+        const xub_StrLen nLast = rIdx.GetIndex() + nDiff;
         while( pStt && pStt->nIndex == nNewVal )
         {
             pStt->nIndex = nNewVal;

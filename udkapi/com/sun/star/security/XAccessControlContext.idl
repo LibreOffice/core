@@ -48,7 +48,7 @@ module com {  module sun {  module star {  module security {
     that of the current execution thread.
     </p>
 
-    @since OOo 1.1.2
+    @since OpenOffice 1.1.2
 */
 published interface XAccessControlContext : com::sun::star::uno::XInterface
 {

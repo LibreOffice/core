@@ -223,11 +223,9 @@ String SwComboBox::GetText() const
     return aTxt;
 }
 
-//IAccessibility2 Impplementaton 2009-----
 void SwComboBox::SetText( const XubString& rStr )
 {
     ComboBox::SetText(rStr);
     // MT: CallEventListeners stay protected for now. Probably not needed at all, as the implementation of VCLXAccessibelEdit/ComboBox should do it on text changed nowadays anyway. Verify.
     // CallEventListeners( VCLEVENT_EDIT_MODIFY );
 }
-//-----IAccessibility2 Impplementaton 2009

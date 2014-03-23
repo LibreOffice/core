@@ -38,7 +38,7 @@ module com {  module sun {  module star {   module packages {  module zip {
     <p>This interface is an IDL version of the Java interface
     <em>java.util.zip.ZipException</em> with some minor adaptations.</p>
 
-    @since OOo 1.1.2
+    @since OpenOffice 1.1.2
  */
 published exception ZipIOException: com::sun::star::io::IOException
 {

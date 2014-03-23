@@ -127,8 +127,8 @@ class SwXTextField : public cppu::WeakImplHelper5
 >,
             public SwClient
 {
-    SwEventListenerContainer    aLstnrCntnr;
-    const SwFmtFld*             pFmtFld;
+    SwEventListenerContainer    m_aLstnrCntnr;
+    const SwFmtFld*             m_pFmtFld;
     SwDoc*                      m_pDoc;
     SwTextAPIObject*            m_pTextObject;
 
@@ -193,12 +193,13 @@ public:
     void attachToRange(const ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextRange > & xTextRange)throw( ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException );
 
     const SwField*      GetField() const;
-    const SwFmtFld*     GetFldFmt(){return GetField() ? pFmtFld : 0; };
+    const SwFmtFld*     GetFldFmt(){return GetField() ? m_pFmtFld : 0; };
 
     void Invalidate();
 
     /// @return an SwXTextField, either an already existing one or a new one
     static SwXTextField* CreateSwXTextField(SwDoc & rDoc, SwFmtFld const& rFmt);
+    sal_uInt16 GetServiceId();
 };
 
 

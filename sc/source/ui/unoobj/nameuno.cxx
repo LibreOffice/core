@@ -161,7 +161,6 @@ void ScNamedRangeObj::Modify_Impl( const String* pNewRangeName, const ScTokenArr
                                 newNameScope = nameScope;
                             //end of add
 
-                            ScRangeName* pNewRanges = new ScRangeName( *pNames );
                             ScRangeData* pOld = (*pNames)[nPos];
 
                             String aInsName(pOld->GetName());
@@ -186,18 +185,38 @@ void ScNamedRangeObj::Modify_Impl( const String* pNewRangeName, const ScTokenArr
                             pNew->SetIndex( pOld->GetIndex() );
                             pNew->SetRangeScope(newNameScope);
 
-                            pNewRanges->AtFree( nPos );
-                            if ( pNewRanges->Insert(pNew) )
+                            const bool bSupportUndo(!pDoc->IsImportingXML());
+                            if ( bSupportUndo )
                             {
-                                 ScDocFunc aFunc(*pDocShell);
-                                 aFunc.SetNewRangeNames( pNewRanges, sal_True );
-                                 aName = aInsName;  //! broadcast?
-                                 aScopeName = pNewScopeName ? *pNewScopeName : aScopeName;
+                                ScRangeName* pNewRanges = new ScRangeName( *pNames );
+                                pNewRanges->AtFree( nPos );
+                                if ( pNewRanges->Insert(pNew) )
+                                {
+                                     ScDocFunc aFunc(*pDocShell);
+                                     aFunc.SetNewRangeNames( pNewRanges, sal_True );
+                                     aName = aInsName;  //! broadcast?
+                                     aScopeName = pNewScopeName ? *pNewScopeName : aScopeName;
+                                }
+                                else
+                                {
+                                     delete pNew;       //! uno::Exception/Fehler oder so
+                                     delete pNewRanges;
+                                }
                             }
                             else
                             {
-                                 delete pNew;       //! uno::Exception/Fehler oder so
-                                 delete pNewRanges;
+                                pNames->AtFree( nPos );
+                                if ( pNames->Insert(pNew) )
+                                {
+                                     ScDocFunc aFunc(*pDocShell);
+                                     aFunc.SetNewRangeNames( pNames, sal_True );
+                                     aName = aInsName;  //! broadcast?
+                                     aScopeName = pNewScopeName ? *pNewScopeName : aScopeName;
+                                }
+                                else
+                                {
+                                     delete pNew;       //! uno::Exception/Fehler oder so
+                                }
                             }
                        }
               }
@@ -597,23 +616,41 @@ void ScNamedRangesObj::ImplAddNewByScopeAndName(SCTAB aScope, const ::rtl::OUStr
            String aContStr(aContent);
         if (pNames && !pNames->SearchName(aNameStr, nIndex,aScope))
         {
-                   ScRangeName* pNewRanges = new ScRangeName( *pNames );
+
             // GRAM_PODF_A1 for API compatibility.
                    ScRangeData* pNew = new ScRangeData( pDoc, aNameStr, aContStr,
                                                 aPos, nNewType,formula::FormulaGrammar::GRAM_PODF_A1 );//GRAM_ODFF,//
 
                    pNew->SetRangeScope(aScope);
 
-                   if ( pNewRanges->Insert(pNew) )
+                   const bool bSupportUndo(!pDoc->IsImportingXML());
+                   if ( bSupportUndo )
                    {
-                ScDocFunc aFunc(*pDocShell);
+                       ScRangeName* pNewRanges = new ScRangeName( *pNames );
+                       if ( pNewRanges->Insert(pNew) )
+                       {
+                            ScDocFunc aFunc(*pDocShell);
                             aFunc.SetNewRangeNames( pNewRanges, sal_True );
-                bDone = true;
+                            bDone = true;
+                       }
+                       else
+                       {
+                            delete pNew;
+                            delete pNewRanges;
+                       }
                    }
                    else
                    {
-                delete pNew;
-                            delete pNewRanges;
+                       if ( pNames->Insert(pNew) )
+                       {
+                            ScDocFunc aFunc(*pDocShell);
+                            aFunc.SetNewRangeNames( pNames, sal_True );
+                            bDone = true;
+                       }
+                       else
+                       {
+                            delete pNew;
+                       }
                    }
         }
     }

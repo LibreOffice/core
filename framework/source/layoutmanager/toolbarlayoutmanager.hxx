@@ -219,6 +219,7 @@ class ToolbarLayoutManager : public ::cppu::WeakImplHelper3< ::com::sun::star::a
         rtl::OUString    implts_generateGenericAddonToolbarTitle( sal_Int32 nNumber ) const;
         void             implts_setElementData( UIElement& rUIElement, const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XDockableWindow >& rDockWindow );
         void             implts_destroyDockingAreaWindows();
+        bool             implts_setToolbarVisibility( bool bVisible, UIElement aUIElement );
 
         //---------------------------------------------------------------------------------------------------------
         // layout methods

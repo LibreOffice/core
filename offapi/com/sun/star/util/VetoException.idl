@@ -36,7 +36,7 @@ module com {  module sun {  module star {  module util {
 
 /** thrown to indicate a general veto.
 
-    @since OOo 1.1.2
+    @since OpenOffice 1.1.2
 */
 published exception VetoException : com::sun::star::uno::Exception
 {

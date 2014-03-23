@@ -1091,7 +1091,7 @@ sal_Bool  SwGlTreeListBox::NotifyMoving(   SvLBoxEntry*  pTarget,
     if(pDestParent != pSrcParent)
     {
         SwGlossaryDlg* pDlg = (SwGlossaryDlg*)Window::GetParent();
-        SwWait aWait( *pDlg->pSh->GetView().GetDocShell(), sal_True );
+        SwWait aWait( *pDlg->pSh->GetView().GetDocShell(), true );
 
         GroupUserData* pGroupData = (GroupUserData*)pSrcParent->GetUserData();
         String sSourceGroup(pGroupData->sGroupName);
@@ -1139,7 +1139,7 @@ sal_Bool  SwGlTreeListBox::NotifyCopying(   SvLBoxEntry*  pTarget,
     if(pDestParent != pSrcParent)
     {
         SwGlossaryDlg* pDlg = (SwGlossaryDlg*)Window::GetParent();
-        SwWait aWait( *pDlg->pSh->GetView().GetDocShell(), sal_True );
+        SwWait aWait( *pDlg->pSh->GetView().GetDocShell(), true );
 
         GroupUserData* pGroupData = (GroupUserData*)pSrcParent->GetUserData();
         String sSourceGroup(pGroupData->sGroupName);

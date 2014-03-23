@@ -45,20 +45,20 @@ AquaSalObject::AquaSalObject( AquaSalFrame* pFrame ) :
     mnHeight( 20 )
 {
     maSysData.nSize = sizeof( maSysData );
-    maSysData.pView = NULL;
+    maSysData.mpNSView = NULL;
 
-    NSRect aInitFrame = { { 0, 0 }, { 20, 20 } };
+    NSRect aInitFrame = { NSZeroPoint, { 20, 20 } };
     mpClipView = [[NSClipView alloc] initWithFrame: aInitFrame ];
     if( mpClipView )
     {
-        [mpFrame->getView() addSubview: mpClipView];
+        [mpFrame->getNSView() addSubview: mpClipView];
         [mpClipView setHidden: YES];
     }
-    maSysData.pView = [[NSView alloc] initWithFrame: aInitFrame];
-    if( maSysData.pView )
+    maSysData.mpNSView = [[NSView alloc] initWithFrame: aInitFrame];
+    if( maSysData.mpNSView )
     {
         if( mpClipView )
-            [mpClipView setDocumentView: maSysData.pView];
+            [mpClipView setDocumentView: maSysData.mpNSView];
     }
 }
 
@@ -66,9 +66,9 @@ AquaSalObject::AquaSalObject( AquaSalFrame* pFrame ) :
 
 AquaSalObject::~AquaSalObject()
 {
-    if( maSysData.pView )
+    if( maSysData.mpNSView )
     {
-        NSView *pView = maSysData.pView;
+        NSView *pView = maSysData.mpNSView;
         [pView removeFromSuperview];
         [pView release];
     }
@@ -168,15 +168,15 @@ void AquaSalObject::SetPosSize( long nX, long nY, long nWidth, long nHeight )
 
 void AquaSalObject::setClippedPosSize()
 {
-    NSRect aViewRect = NSMakeRect( 0, 0, mnWidth, mnHeight);
-    if( maSysData.pView )
+    NSRect aViewRect = { NSZeroPoint, NSMakeSize( mnWidth, mnHeight) };
+    if( maSysData.mpNSView )
     {
-        NSView *pView = maSysData.pView;
-        [pView setFrame: aViewRect];
+        NSView* pNSView = maSysData.mpNSView;
+        [pNSView setFrame: aViewRect];
     }
 
     NSRect aClipViewRect = NSMakeRect( mnX, mnY, mnWidth, mnHeight);
-    NSPoint aClipPt = NSMakePoint( 0, 0);
+    NSPoint aClipPt = NSZeroPoint;
     if( mbClip )
     {
         aClipViewRect.origin.x += mnClipX;

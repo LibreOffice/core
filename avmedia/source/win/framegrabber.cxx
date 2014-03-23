@@ -112,7 +112,7 @@ bool FrameGrabber::create( const ::rtl::OUString& rURL )
     else
         maURL = ::rtl::OUString();
 
-    return( maURL.getLength() > 0 );
+    return !maURL.isEmpty();
 }
 
 // ------------------------------------------------------------------------------

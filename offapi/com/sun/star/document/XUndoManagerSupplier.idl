@@ -19,34 +19,26 @@
  *
  *************************************************************/
 
-
-
 #ifndef __com_sun_star_document_XUndoManagerSupplier_idl__
 #define __com_sun_star_document_XUndoManagerSupplier_idl__
 
 #include <com/sun/star/uno/XInterface.idl>
 
-//==================================================================================================================
-
 module com { module sun { module star { module document {
 
-published interface XUndoManager;
-
-//==================================================================================================================
+interface XUndoManager;
 
 /** provides access to an XUndoManager.
+
+    @since OpenOffice 3.4
  */
-published interface XUndoManagerSupplier
+interface XUndoManagerSupplier
 {
     /** returns the Undo manager associated with the component.
     */
     XUndoManager    getUndoManager();
 };
 
-//==================================================================================================================
-
 }; }; }; };
-
-//==================================================================================================================
 
 #endif

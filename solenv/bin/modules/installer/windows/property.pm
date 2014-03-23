@@ -208,16 +208,14 @@ sub get_productversion_for_property_table
 # required for the Windows patch process.
 #######################################################
 
-sub set_featurename_properties_for_patch
+sub set_featurename_properties_for_patch ($)
 {
-    ($propertyfile) = @_;
+    my ($propertyfile) = @_;
 
-    for ( my $i = 0; $i <= $#installer::globals::featurecollector; $i++ )
+    foreach my $feature_gid (keys %installer::globals::featurecollector)
     {
-        my $onepropertyline =  $installer::globals::featurecollector[$i] . "\t" . "1" . "\n";
-        push(@{$propertyfile}, $onepropertyline);
+        push @$propertyfile, $feature_gid . "\t" . "1" . "\n";
     }
-
 }
 
 #######################################################

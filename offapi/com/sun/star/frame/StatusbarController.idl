@@ -45,7 +45,7 @@ interface XStatusbarController;
     @see com::sun::star::frame::XDispatchProvider
     @see com::sun::star::frame::XStatusbarController
 
-    @since OOo 2.0
+    @since OpenOffice 2.0
  */
 service StatusbarController : XStatusbarController
 {

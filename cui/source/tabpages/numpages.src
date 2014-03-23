@@ -296,8 +296,7 @@ TabPage RID_SVXPAGE_NUM_OPTIONS
         Left = TRUE ;
         Repeat = TRUE ;
         Spin = TRUE ;
-        Unit = FUNIT_CUSTOM ;
-        CustomUnitText  = "%" ;
+        Unit = FUNIT_PERCENT ;
         SpinSize = 1 ;
         Minimum = 1;
         Maximum = 250;

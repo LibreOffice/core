@@ -51,7 +51,7 @@ module com { module sun { module star { module linguistic2 {
     @see com::sun::star::linguistic2::HangulHanjaConversionDictionary
     @see com::sun::star::i18n::TextConversion
 
-     @since OOo 1.1.2
+     @since OpenOffice 1.1.2
 */
 published service ConversionDictionaryList
 {

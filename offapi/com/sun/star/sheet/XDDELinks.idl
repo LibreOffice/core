@@ -46,7 +46,7 @@ module com {  module sun {  module star {  module sheet {
 
     @see com::sun::star::sheet::DDELinks
 
-    @since OOo 3.0
+    @since OpenOffice 3.0
  */
 published interface XDDELinks: com::sun::star::container::XNameAccess
 {

@@ -307,7 +307,7 @@ void MediaControl::execute( const MediaItem& )
 
 void MediaControl::implUpdateToolboxes()
 {
-    const bool bValidURL = ( maItem.getURL().getLength() > 0 );
+    const bool bValidURL = !maItem.getURL().isEmpty();
 
     maPlayToolBox.EnableItem( AVMEDIA_TOOLBOXITEM_INSERT, bValidURL );
     maPlayToolBox.EnableItem( AVMEDIA_TOOLBOXITEM_PLAY, bValidURL );
@@ -386,7 +386,7 @@ void MediaControl::implUpdateToolboxes()
 
 void MediaControl::implUpdateTimeSlider()
 {
-    if( !maItem.getURL().getLength() || !IsEnabled() )
+    if( maItem.getURL().isEmpty() || !IsEnabled() )
         maTimeSlider.Disable();
     else
     {
@@ -413,7 +413,7 @@ void MediaControl::implUpdateTimeSlider()
 
 void MediaControl::implUpdateVolumeSlider()
 {
-    if( !maItem.getURL().getLength() || !IsEnabled() )
+    if( maItem.getURL().isEmpty() || !IsEnabled() )
         maVolumeSlider.Disable();
     else
     {
@@ -430,7 +430,7 @@ void MediaControl::implUpdateVolumeSlider()
 
 void MediaControl::implUpdateTimeField( double fCurTime )
 {
-    if( maItem.getURL().getLength() > 0 )
+    if( !maItem.getURL().isEmpty() )
     {
         String              aTimeString;
 

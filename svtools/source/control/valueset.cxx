@@ -1220,7 +1220,6 @@ sal_uInt16 ValueSet::ImplGetVisibleItemCount() const
         ValueSetItem* pItem = mpImpl->mpItemList->GetObject( n );
 
         //IAccessible2 implementation - also count empty rectangles as visible...
-        // if( pItem->meType != VALUESETITEM_SPACE && !pItem->maRect.IsEmpty() )
         if( pItem->meType != VALUESETITEM_SPACE )
             nRet++;
     }
@@ -1907,7 +1906,6 @@ void ValueSet::InsertItem( sal_uInt16 nItemId, const Color& rColor,
         Invalidate();
 }
 
-//IAccessibility2 Implementation 2009-----
 //method to set accessible when the style is user draw.
 void ValueSet::InsertItem( sal_uInt16 nItemId, const XubString& rText, sal_uInt16 nPos  )
 {
@@ -1923,7 +1921,6 @@ void ValueSet::InsertItem( sal_uInt16 nItemId, const XubString& rText, sal_uInt1
     if ( IsReallyVisible() && IsUpdateMode() )
         Invalidate();
 }
-//-----IAccessibility2 Implementation 2009
 
 // -----------------------------------------------------------------------
 
@@ -2799,7 +2796,6 @@ void ValueSet::SetEdgeBlending(bool bNew)
         }
     }
 }
-//IAccessibility2 Implementation 2009-----
 //For sending out the focused event on the first focused item when this valueset is first focused.
 // MT: Focus notifications changed in DEV300 meanwhile, so this is not used for now.
 // Just keeping it here for reference, in case something in out implementation doesn't work as expected...
@@ -2851,7 +2847,6 @@ void ValueSet::SetFocusedItem(sal_Bool bFocused)
 }
 */
 //end
-//-----IAccessibility2 Implementation 2009
 
 
 // -----------------------------------------------------------------------

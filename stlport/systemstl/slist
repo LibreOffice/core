@@ -25,6 +25,8 @@
 #ifdef HAVE_STL_INCLUDE_PATH
 	// TODO: use computed include file name
 	#include_next <forward_list>
+#elif defined(__cplusplus) && (__cplusplus >= 201103L)
+	#include <forward_list>
 #elif defined(_MSC_VER)
 	#include <../../VC/include/list>
 	#define STLP4_SLIST_WITH_LIST

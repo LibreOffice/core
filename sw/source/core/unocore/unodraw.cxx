@@ -760,7 +760,7 @@ void SwXDrawPage::add(const uno::Reference< drawing::XShape > & xShape)
     if ( !pTemp )
         pTemp = pPam;
     UnoActionContext aAction(pDoc);
-    pDoc->Insert( *pTemp, *pObj, &aSet, NULL );
+    pDoc->InsertDrawObj( *pTemp, *pObj, aSet );
     SwFrmFmt* pFmt = ::FindFrmFmt( pObj );
     if(pFmt)
         pFmt->Add(pShape);
@@ -2112,7 +2112,7 @@ void SwXShape::attach(const uno::Reference< text::XTextRange > & xTextRange)
             {
                 uno::Any aPos;
                 aPos <<= xTextRange;
-                setPropertyValue(S2U("TextRange"), aPos);
+                setPropertyValue( C2U("TextRange"), aPos);
                 uno::Reference< drawing::XShape > xTemp( (cppu::OWeakObject*) this, uno::UNO_QUERY );
                 xDP->add( xTemp );
             }

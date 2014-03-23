@@ -182,6 +182,14 @@
 #define CTF_MARGINTOP                       (XML_TEXT_CTF_START + 151)
 #define CTF_MARGINBOTTOM                    (XML_TEXT_CTF_START + 152)
 
+//UUUU
+#define CTF_SW_REPEAT_OFFSET_X              (XML_TEXT_CTF_START + 153)
+#define CTF_SW_REPEAT_OFFSET_Y              (XML_TEXT_CTF_START + 154)
+#define CTF_SW_FILLGRADIENTNAME             (XML_TEXT_CTF_START + 155)
+#define CTF_SW_FILLHATCHNAME                (XML_TEXT_CTF_START + 156)
+#define CTF_SW_FILLBITMAPNAME               (XML_TEXT_CTF_START + 157)
+#define CTF_SW_FILLTRANSNAME                (XML_TEXT_CTF_START + 158)
+
 #define TEXT_PROP_MAP_TEXT 0
 #define TEXT_PROP_MAP_PARA 1
 #define TEXT_PROP_MAP_FRAME 2

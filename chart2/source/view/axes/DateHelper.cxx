@@ -78,9 +78,20 @@ Date DateHelper::GetDateSomeMonthsAway( const Date& rD, long nMonthDistance )
 Date DateHelper::GetDateSomeYearsAway( const Date& rD, long nYearDistance )
 {
     Date aRet(rD);
-    aRet.SetYear( static_cast<sal_uInt16>(rD.GetYear()+nYearDistance) );
-    while(!aRet.IsValid())
-        aRet--;
+    const long nFutureYear (rD.GetYear()+nYearDistance);
+    aRet.SetYear(static_cast<sal_uInt16>(nFutureYear));
+    if ( ! aRet.IsValid())
+    {
+        // The Date class has the nasty property to store years modulo
+        // 10000.  In order to handle (probably invalid) very large
+        // year values more gracefully than with an infinite loop we
+        // check that condition and return an invalid date.
+        if (nFutureYear < 10000)
+        {
+            while ( ! aRet.IsValid())
+                --aRet;
+        }
+    }
     return aRet;
 }
 

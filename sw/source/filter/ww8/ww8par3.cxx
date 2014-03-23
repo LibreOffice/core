@@ -1140,10 +1140,18 @@ SwNumRule* WW8ListManager::GetNumRule(sal_uInt16 i)
 
 // oeffentliche Methoden /////////////////////////////////////////////////////
 //
-WW8ListManager::WW8ListManager(SvStream& rSt_, SwWW8ImplReader& rReader_)
-    : maSprmParser(rReader_.GetFib().GetFIBVersion()), rReader(rReader_),
-    rDoc(rReader.GetDoc()), rFib(rReader.GetFib()), rSt(rSt_), pLFOInfos(0),
-    nUniqueList(1)
+WW8ListManager::WW8ListManager(
+    SvStream& rSt_,
+    SwWW8ImplReader& rReader_ )
+    : maSprmParser( rReader_.GetFib().GetFIBVersion() )
+    , rReader(rReader_)
+    , rDoc(rReader.GetDoc())
+    , rFib(rReader.GetFib())
+    , rSt(rSt_)
+    , maLSTInfos()
+    , pLFOInfos( NULL )
+    , nUniqueList( 1 )
+    , maStyleInList()
 {
     // LST und LFO gibts erst ab WW8
     if(    ( 8 > rFib.nVersion )
@@ -1323,16 +1331,24 @@ WW8ListManager::WW8ListManager(SvStream& rSt_, SwWW8ImplReader& rReader_)
             }
             // und rein ins Merk-Array mit dem Teil
             WW8LFOInfo* pLFOInfo = new WW8LFOInfo(aLFO);
-            if (pParentListInfo)
+            if ( pParentListInfo != NULL )
             {
                 //Copy the basic paragraph properties for each level from the
                 //original list into the list format override levels.
                 int nMaxSize = pParentListInfo->maParaSprms.size();
                 pLFOInfo->maParaSprms.resize(nMaxSize);
                 for (int i = 0; i < nMaxSize; ++i)
+                {
                     pLFOInfo->maParaSprms[i] = pParentListInfo->maParaSprms[i];
+                }
+
+                const sal_uInt16 nLFOInfoArrayPos = pLFOInfos->Count();
+                for ( sal_uInt8 j = 0 ; j < nMaxLevel; ++j )
+                {
+                    maStyleInList[pParentListInfo->aIdSty[j]] = nLFOInfoArrayPos;
+                }
             }
-            pLFOInfos->Insert(pLFOInfo, pLFOInfos->Count());
+            pLFOInfos->Insert( pLFOInfo, pLFOInfos->Count() );
             bOk = true;
         }
     }
@@ -1536,6 +1552,29 @@ WW8ListManager::~WW8ListManager()
     }
 }
 
+sal_uInt16 WW8ListManager::GetPossibleLFOPosition(
+    const sal_uInt16 nStyleID,
+    const sal_uInt8 nGivenListLevel )
+{
+    sal_uInt16 nPossibleLFOPosition = USHRT_MAX;
+
+    StyleInList::iterator aItr = maStyleInList.find( nStyleID );
+    if ( aItr != maStyleInList.end()
+         && aItr->second < pLFOInfos->Count() )
+    {
+        WW8LFOInfo* pLFOInfo = pLFOInfos->GetObject( aItr->second );
+        WW8LSTInfo* pParentListInfo = GetLSTByListId( pLFOInfo->nIdLst );
+        if ( pParentListInfo != NULL
+             && pParentListInfo->aIdSty[nGivenListLevel] == nStyleID )
+        {
+            nPossibleLFOPosition = aItr->second;
+        }
+    }
+
+    return nPossibleLFOPosition;
+}
+
+
 bool IsEqualFormatting(const SwNumRule &rOne, const SwNumRule &rTwo)
 {
     bool bRet =
@@ -1688,10 +1727,12 @@ SwNumRule* WW8ListManager::GetNumRuleForActivation(sal_uInt16 nLFOPosition,
     return pRet;
 }
 
+
 //----------------------------------------------------------------------------
 //          SwWW8ImplReader:  anhaengen einer Liste an einen Style oder Absatz
 //----------------------------------------------------------------------------
-bool SwWW8ImplReader::SetTxtFmtCollAndListLevel(const SwPaM& rRg,
+bool SwWW8ImplReader::SetTxtFmtCollAndListLevel(
+    const SwPaM& rRg,
     SwWW8StyInf& rStyleInfo)
 {
     bool bRes = true;
@@ -1744,7 +1785,6 @@ bool SwWW8ImplReader::SetTxtFmtCollAndListLevel(const SwPaM& rRg,
 
 void UseListIndent(SwWW8StyInf &rStyle, const SwNumFmt &rFmt)
 {
-    // --> OD 2008-06-03 #i86652#
     if ( rFmt.GetPositionAndSpaceMode() == SvxNumberFormat::LABEL_WIDTH_AND_POSITION )
     {
         const long nAbsLSpace = rFmt.GetAbsLSpace();
@@ -1755,22 +1795,16 @@ void UseListIndent(SwWW8StyInf &rStyle, const SwNumFmt &rFmt)
         rStyle.pFmt->SetFmtAttr(aLR);
         rStyle.bListReleventIndentSet = true;
     }
-    // <--
 }
 
 void SetStyleIndent(SwWW8StyInf &rStyle, const SwNumFmt &rFmt)
 {
-    // --> OD 2008-06-03 #i86652#
     if ( rFmt.GetPositionAndSpaceMode() == SvxNumberFormat::LABEL_WIDTH_AND_POSITION )
-    // <--
     {
         SvxLRSpaceItem aLR(ItemGet<SvxLRSpaceItem>(*rStyle.pFmt, RES_LR_SPACE));
         if (rStyle.bListReleventIndentSet)
         {
-            // --> OD 2010-05-06 #i103711#
-            // --> OD 2010-05-11 #i105414#
             SyncIndentWithList( aLR, rFmt, false, false );
-            // <--
         }
         else
         {
@@ -1781,7 +1815,9 @@ void SetStyleIndent(SwWW8StyInf &rStyle, const SwNumFmt &rFmt)
     }
 }
 
-void SwWW8ImplReader::SetStylesList(sal_uInt16 nStyle, sal_uInt16 nActLFO,
+void SwWW8ImplReader::SetStylesList(
+    sal_uInt16 nStyle,
+    sal_uInt16 nActLFO,
     sal_uInt8 nActLevel)
 {
     SwWW8StyInf &rStyleInf = pCollA[nStyle];
@@ -1818,7 +1854,7 @@ void SwWW8ImplReader::SetStylesList(sal_uInt16 nStyle, sal_uInt16 nActLFO,
     }
 }
 
-void SwWW8ImplReader::RegisterNumFmtOnStyle(sal_uInt16 nStyle)
+void SwWW8ImplReader::RegisterNumFmtOnStyle( sal_uInt16 nStyle )
 {
     SwWW8StyInf &rStyleInf = pCollA[nStyle];
     if (rStyleInf.bValid && rStyleInf.pFmt)
@@ -1858,8 +1894,10 @@ void SwWW8ImplReader::RegisterNumFmtOnStyle(sal_uInt16 nStyle)
     }
 }
 
-void SwWW8ImplReader::RegisterNumFmtOnTxtNode(sal_uInt16 nActLFO,
-    sal_uInt8 nActLevel, bool bSetAttr)
+void SwWW8ImplReader::RegisterNumFmtOnTxtNode(
+    sal_uInt16 nActLFO,
+    sal_uInt8 nActLevel,
+    bool bSetAttr)
 {
     // beachte: die Methode haengt die NumRule an den Text Node, falls
     // bSetAttr (dann muessen natuerlich vorher die Listen gelesen sein)
@@ -1911,23 +1949,14 @@ void SwWW8ImplReader::RegisterNumFmtOnTxtNode(sal_uInt16 nActLFO,
                     }
                 }
             }
-            // --> OD 2005-10-17 #126238#
-            // - re-introduce fix for issue #i49037#, which got lost by
-            // accident on a re-synchronisation on the master.
-//            if (pTxtNd->IsOutline() && pTxtNd->Len() == 0)
-//                pTxtNd->SetCounted(false);
-            // <--
 
             pTxtNd->SetAttrListLevel(nActLevel);
-            // --> OD 2005-11-01 #126924#
             // - <IsCounted()> state of text node has to be adjusted accordingly.
             if ( /*nActLevel >= 0 &&*/ nActLevel < MAXLEVEL )
             {
                 pTxtNd->SetCountedInList( true );
             }
-            // <--
 
-            // --> OD 2009-03-04 #i99822#
             // Direct application of the list level formatting no longer
             // needed for list levels of mode LABEL_ALIGNMENT
             bool bApplyListLevelIndentDirectlyAtPara( true );
@@ -1981,7 +2010,6 @@ void SwWW8ImplReader::RegisterNumFmtOnTxtNode(sal_uInt16 nActLFO,
                     pCtrlStck->SetAttr(*pPaM->GetPoint(), RES_LR_SPACE);
                 }
             }
-            // <--
         }
     }
 }
@@ -2028,21 +2056,35 @@ void SwWW8ImplReader::Read_ListLevel(sal_uInt16, const sal_uInt8* pData,
         }
 
         if (WW8ListManager::nMaxLevel <= nListLevel )
-            nListLevel = WW8ListManager::nMaxLevel;
-        else if
-           (
-             (USHRT_MAX > nLFOPosition) &&
-             (WW8ListManager::nMaxLevel > nListLevel)
-           )
         {
-            RegisterNumFmt(nLFOPosition, nListLevel);
+            // handle invalid list level value by reseting it
+            nListLevel = WW8ListManager::nMaxLevel;
+        }
+        else if ( nLFOPosition < USHRT_MAX
+                  && nListLevel < WW8ListManager::nMaxLevel )
+        {
+            RegisterNumFmt( nLFOPosition, nListLevel );
+            // reset kept list attributes
             nLFOPosition = USHRT_MAX;
             nListLevel  = WW8ListManager::nMaxLevel;
+        }
+        else if ( pLstManager != NULL
+                  && pAktColl != NULL )
+        {
+            const sal_uInt16 nPossibleLFOPosition =
+                pLstManager->GetPossibleLFOPosition( nAktColl, nListLevel );
+            if ( nPossibleLFOPosition < USHRT_MAX )
+            {
+                // temporary register Style without reseting kept list attributes
+                RegisterNumFmt( nPossibleLFOPosition, nListLevel );
+            }
         }
     }
 }
 
-void SwWW8ImplReader::Read_LFOPosition(sal_uInt16, const sal_uInt8* pData,
+void SwWW8ImplReader::Read_LFOPosition(
+    sal_uInt16,
+    const sal_uInt8* pData,
     short nLen)
 {
     if (pPlcxMan && pPlcxMan->GetDoingDrawTextBox())
@@ -2080,13 +2122,7 @@ void SwWW8ImplReader::Read_LFOPosition(sal_uInt16, const sal_uInt8* pData,
             }
             else if (SwTxtNode* pTxtNode = pPaM->GetNode()->GetTxtNode())
             {
-                // --> OD 2005-10-21 #i54393#
-                // - Reset hard set numbering rule at paragraph instead of
-                //   setting hard no numbering.
-//                pTxtNode->SwCntntNode::SetAttr
-//                    (*GetDfltAttr(RES_PARATR_NUMRULE));
                 pTxtNode->ResetAttr( RES_PARATR_NUMRULE );
-                // <--
                 pTxtNode->SetCountedInList(false);
 
                 /*
@@ -2101,9 +2137,6 @@ void SwWW8ImplReader::Read_LFOPosition(sal_uInt16, const sal_uInt8* pData,
                 */
                 if (pTxtNode->IsOutline())
                 {
-                    // OD 2005-10-21 #i54393#
-                    // It's not needed to call <SetCounted( false )> again - see above.
-                    // --> OD 2005-10-21 #i54393#
                     // Assure that the numbering rule, which is retrieved at
                     // the paragraph is the outline numbering rule, instead of
                     // incorrectly setting the chosen outline rule.
@@ -2114,7 +2147,6 @@ void SwWW8ImplReader::Read_LFOPosition(sal_uInt16, const sal_uInt8* pData,
                         pTxtNode->SetAttr(
                             SwNumRuleItem( rDoc.GetOutlineNumRule()->GetName() ) );
                     }
-                    // <--
                 }
 
                 //#94672#
@@ -2134,19 +2166,30 @@ void SwWW8ImplReader::Read_LFOPosition(sal_uInt16, const sal_uInt8* pData,
             indentation.  Setting this flag will allow us to recover from this
             braindeadness
             */
-            if (pAktColl && (nLFOPosition == 2047-1))
+            if ( pAktColl
+                 && (nLFOPosition == 2047-1) )
+            {
                 pCollA[nAktColl].bHasBrokenWW6List = true;
+            }
 
             // die Streamdaten sind hier 1 basiert, wir ziehen EINS ab
             if (USHRT_MAX > nLFOPosition)
             {
                 if (nLFOPosition != 2047-1) //Normal ww8+ list behaviour
                 {
-                    if (WW8ListManager::nMaxLevel == nListLevel)
+                    if ( nListLevel == WW8ListManager::nMaxLevel )
+                    {
                         nListLevel = 0;
+                        if ( pAktColl != NULL )
+                        {
+                            // temporary register Style without reseting kept list attributes
+                            RegisterNumFmt( nLFOPosition, nListLevel );
+                        }
+                    }
                     else if (WW8ListManager::nMaxLevel > nListLevel)
                     {
                         RegisterNumFmt(nLFOPosition, nListLevel);
+                        // reset kept list attributes
                         nLFOPosition = USHRT_MAX;
                         nListLevel = WW8ListManager::nMaxLevel;
                     }
@@ -2154,8 +2197,7 @@ void SwWW8ImplReader::Read_LFOPosition(sal_uInt16, const sal_uInt8* pData,
                 else if (pPlcxMan && pPlcxMan->HasParaSprm(0xC63E))
                 {
                     /*
-                     #i8114# Horrific backwards compatible ww7- lists in ww8+
-                     docs
+                     #i8114# Horrific backwards compatible ww7- lists in ww8+ docs
                     */
                     Read_ANLevelNo(13 /*equiv ww7- sprm no*/, &nListLevel, 1);
                 }

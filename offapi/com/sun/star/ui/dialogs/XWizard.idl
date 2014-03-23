@@ -19,8 +19,6 @@
  *
  *************************************************************/
 
-
-
 #ifndef __com_sun_star_ui_dialogs_XWizard_idl__
 #define __com_sun_star_ui_dialogs_XWizard_idl__
 
@@ -29,12 +27,9 @@
 #include <com/sun/star/container/NoSuchElementException.idl>
 #include <com/sun/star/awt/XWindow.idl>
 
-//==================================================================================================================
 module com { module sun { module star { module ui { module dialogs {
 
-//==================================================================================================================
-
-published interface XWizardPage;
+interface XWizardPage;
 
 /** is the main interface implemented by the <type>Wizard</type> services.
 
@@ -75,8 +70,10 @@ published interface XWizardPage;
 
     @see XWizardController
     @see XWizardPage
+
+    @since OpenOffice 3.3
  */
-published interface XWizard
+interface XWizard
 {
     interface   XExecutableDialog;
 
@@ -216,10 +213,6 @@ published interface XWizard
                 ,   ::com::sun::star::util::InvalidStateException );
 };
 
-//==================================================================================================================
-
 }; }; }; }; };
-
-//==================================================================================================================
 
 #endif

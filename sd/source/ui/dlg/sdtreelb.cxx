@@ -300,7 +300,6 @@ SdPageObjsTLB::~SdPageObjsTLB()
         delete mpMedium;
 }
 
-//IAccessibility2 Implementation 2009-----
 // helper function for  GetEntryAltText and GetEntryLongDescription
 String SdPageObjsTLB::getAltLongDescText( SvLBoxEntry* pEntry , sal_Bool isAltText) const
 {
@@ -477,7 +476,6 @@ void SdPageObjsTLB::Clear()
     }
     return SvTreeListBox::Clear();
 }
-//-----IAccessibility2 Implementation 2009
 /*************************************************************************
 |*
 |* return name of object
@@ -719,7 +717,6 @@ void SdPageObjsTLB::AddShapeList (
         IM_FLAT,
         false /*not reverse*/);
 
-    //IAccessibility2 Implementation 2009-----
     sal_Bool  bMarked=sal_False;
     if(bisInSdNavigatorWin)
     {
@@ -742,7 +739,6 @@ void SdPageObjsTLB::AddShapeList (
                 pEntry->SetMarked( sal_False );
         }
     }
-    //-----IAccessibility2 Implementation 2009
     while( aIter.IsMore() )
     {
         SdrObject* pObj = aIter.Next();
@@ -757,7 +753,6 @@ void SdPageObjsTLB::AddShapeList (
             {
                 SvLBoxEntry* pNewEntry = InsertEntry( aStr, maImgOle, maImgOle, pEntry,
                     false, LIST_APPEND, pObj);
-                //IAccessibility2 Implementation 2009-----
                 if(bisInSdNavigatorWin)
                 {
                     Window* pWindow=NULL;
@@ -779,7 +774,6 @@ void SdPageObjsTLB::AddShapeList (
                             pNewEntry->SetMarked( sal_False );
                     }
                 }
-                //-----IAccessibility2 Implementation 2009
                 SetExpandedEntryBmp( pNewEntry, maImgOleH, BMP_COLOR_HIGHCONTRAST );
                 SetCollapsedEntryBmp( pNewEntry, maImgOleH, BMP_COLOR_HIGHCONTRAST );
             }
@@ -787,7 +781,6 @@ void SdPageObjsTLB::AddShapeList (
             {
                 SvLBoxEntry* pNewEntry = InsertEntry( aStr, maImgGraphic, maImgGraphic, pEntry,
                     false, LIST_APPEND, pObj );
-                //IAccessibility2 Implementation 2009-----
                 if(bisInSdNavigatorWin)
                 {
                     Window* pWindow=NULL;
@@ -813,7 +806,6 @@ void SdPageObjsTLB::AddShapeList (
                         }
                     }
                 }
-                //-----IAccessibility2 Implementation 2009
                 SetExpandedEntryBmp( pNewEntry, maImgGraphicH, BMP_COLOR_HIGHCONTRAST );
                 SetCollapsedEntryBmp( pNewEntry, maImgGraphicH, BMP_COLOR_HIGHCONTRAST );
             }
@@ -831,7 +823,6 @@ void SdPageObjsTLB::AddShapeList (
             {
                 SvLBoxEntry* pNewEntry = InsertEntry( aStr, rIconProvider.maImgObjects, rIconProvider.maImgObjects, pEntry,
                     false, LIST_APPEND, pObj );
-                //IAccessibility2 Implementation 2009-----
                 if(bisInSdNavigatorWin)
                 {
                     Window* pWindow=NULL;
@@ -857,7 +848,6 @@ void SdPageObjsTLB::AddShapeList (
                         }
                     }
                 }
-                //-----IAccessibility2 Implementation 2009
                 SetExpandedEntryBmp( pNewEntry, rIconProvider.maImgObjectsH, BMP_COLOR_HIGHCONTRAST );
                 SetCollapsedEntryBmp( pNewEntry, rIconProvider.maImgObjectsH, BMP_COLOR_HIGHCONTRAST );
             }
@@ -880,7 +870,6 @@ void SdPageObjsTLB::AddShapeList (
             pEntry,
             bIsExcluded ? rIconProvider.maImgPageObjsExclH : rIconProvider.maImgPageObjsH,
             BMP_COLOR_HIGHCONTRAST);
-        //IAccessibility2 Implementation 2009-----
         if (mbSaveTreeItemState)
         {
             vector<String>:: iterator iteStart = maTreeItem.begin();
@@ -897,7 +886,6 @@ void SdPageObjsTLB::AddShapeList (
         }
         else
             Expand( pEntry );
-        //-----IAccessibility2 Implementation 2009
     }
 }
 
@@ -1274,7 +1262,6 @@ void SdPageObjsTLB::KeyInput( const KeyEvent& rKEvt )
 
         DoubleClickHdl();
     }
-//IAccessibility2 Implementation 2009-----
     else if (rKEvt.GetKeyCode().GetCode() == KEY_SPACE)
     {
        if(bisInSdNavigatorWin)
@@ -1329,7 +1316,6 @@ void SdPageObjsTLB::KeyInput( const KeyEvent& rKEvt )
            Invalidate();
        }
     }
-//-----IAccessibility2 Implementation 2009
     else
         SvTreeListBox::KeyInput( rKEvt );
 }

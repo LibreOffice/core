@@ -50,6 +50,10 @@ namespace drawinglayer
             sal_uInt16                              mnCenterX;
             sal_uInt16                              mnCenterY;
 
+            // evtl. rotation and shear around center
+            double                                  mfShearX;
+            double                                  mfRotation;
+
         protected:
             virtual Primitive2DSequence create2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const;
 
@@ -58,13 +62,17 @@ namespace drawinglayer
                 const BitmapEx& rBitmapEx,
                 const basegfx::B2DPoint& rBasePosition,
                 sal_uInt16 nCenterX,
-                sal_uInt16 nCenterY);
+                sal_uInt16 nCenterY,
+                double fShearX = 0.0,
+                double fRotation = 0.0);
 
             // data access
             const BitmapEx& getBitmapEx() const { return maBitmapEx; }
             const basegfx::B2DPoint& getBasePosition() const { return maBasePosition; }
             sal_uInt16 getCenterX() const { return mnCenterX; }
             sal_uInt16 getCenterY() const { return mnCenterY; }
+            double getShearX() const { return mfShearX; }
+            double getRotation() const { return mfRotation; }
 
             DeclPrimitrive2DIDBlock()
         };

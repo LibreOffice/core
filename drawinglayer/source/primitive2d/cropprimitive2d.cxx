@@ -63,112 +63,78 @@ namespace drawinglayer
 
             if(getChildren().hasElements())
             {
-                // decompose to have current translate and scale
-                basegfx::B2DVector aScale, aTranslate;
-                double fRotate, fShearX;
+                // get original object scale in unit coordinates (no mirroring)
+                const basegfx::B2DVector aObjectScale(basegfx::absolute(getTransformation() * basegfx::B2DVector(1.0, 1.0)));
 
-                getTransformation().decompose(aScale, aTranslate, fRotate, fShearX);
-
-                // detect 180 degree rotation, this is the same as mirrored in X and Y,
-                // thus change to mirroring. Prefer mirroring here. Use the equal call
-                // with getSmallValue here, the original which uses rtl::math::approxEqual
-                // is too correct here. Maybe this changes with enhanced precision in aw080
-                // to the better so that this can be reduced to the more precise call again
-                if(basegfx::fTools::equal(fabs(fRotate), F_PI, 0.000000001))
+                // we handle cropping, so when no width or no height, content will be empty,
+                // so only do something when we have a width and a height
+                if(!aObjectScale.equalZero())
                 {
-                    aScale.setX(aScale.getX() * -1.0);
-                    aScale.setY(aScale.getY() * -1.0);
-                    fRotate = 0.0;
-                }
+                    // calculate crop distances in unit coordinates. They are already combined with CropScaleFactor, thus
+                    // are relative only to object scale
+                    const double fBackScaleX(basegfx::fTools::equalZero(aObjectScale.getX()) ? 1.0 : 1.0 / fabs(aObjectScale.getX()));
+                    const double fBackScaleY(basegfx::fTools::equalZero(aObjectScale.getY()) ? 1.0 : 1.0 / fabs(aObjectScale.getY()));
+                    const double fLeft(getCropLeft() * fBackScaleX);
+                    const double fTop(getCropTop() * fBackScaleY);
+                    const double fRight(getCropRight() * fBackScaleX);
+                    const double fBottom(getCropBottom() * fBackScaleY);
 
-                // create target translate and scale
-                const bool bMirroredX(aScale.getX() < 0.0);
-                const bool bMirroredY(aScale.getY() < 0.0);
-                basegfx::B2DVector aTargetScale(aScale);
-                basegfx::B2DVector aTargetTranslate(aTranslate);
+                    // calc new unit range for comparisons; the original range is the unit range
+                    const basegfx::B2DRange aUnitRange(0.0, 0.0, 1.0, 1.0);
+                    const basegfx::B2DRange aNewRange(
+                        -fLeft,
+                        -fTop,
+                        1.0 + fRight,
+                        1.0 + fBottom);
 
-                if(bMirroredX)
-                {
-                    aTargetTranslate.setX(aTargetTranslate.getX() + getCropRight());
-                    aTargetScale.setX(aTargetScale.getX() - getCropLeft() - getCropRight());
-                }
-                else
-                {
-                    aTargetTranslate.setX(aTargetTranslate.getX() - getCropLeft());
-                    aTargetScale.setX(aTargetScale.getX() + getCropRight() + getCropLeft());
-                }
-
-                if(bMirroredY)
-                {
-                    aTargetTranslate.setY(aTargetTranslate.getY() + getCropBottom());
-                    aTargetScale.setY(aTargetScale.getY() - getCropTop() - getCropBottom());
-                }
-                else
-                {
-                    aTargetTranslate.setY(aTargetTranslate.getY() - getCropTop());
-                    aTargetScale.setY(aTargetScale.getY() + getCropBottom() + getCropTop());
-                }
-
-                // create ranges to make comparisons
-                const basegfx::B2DRange aCurrent(
-                    aTranslate.getX(), aTranslate.getY(),
-                    aTranslate.getX() + aScale.getX(), aTranslate.getY() + aScale.getY());
-                const basegfx::B2DRange aCropped(
-                    aTargetTranslate.getX(), aTargetTranslate.getY(),
-                    aTargetTranslate.getX() + aTargetScale.getX(), aTargetTranslate.getY() + aTargetScale.getY());
-
-                if(aCropped.isEmpty())
-                {
-                    // nothing to return since cropped content is completely empty
-                }
-                else if(aCurrent.equal(aCropped))
-                {
-                    // no crop, just use content
-                    xRetval = getChildren();
-                }
-                else
-                {
-                    // build new combined content transformation
-                    basegfx::B2DHomMatrix aNewObjectTransform(getTransformation());
-
-                    // remove content transform by inverting
-                    aNewObjectTransform.invert();
-
-                    // add target values and original shear/rotate
-                    aNewObjectTransform = basegfx::tools::createScaleShearXRotateTranslateB2DHomMatrix(
-                        aTargetScale.getX(),
-                        aTargetScale.getY(),
-                        fShearX,
-                        fRotate,
-                        aTargetTranslate.getX(),
-                        aTargetTranslate.getY())
-                            * aNewObjectTransform;
-
-                    // prepare TransformPrimitive2D with xPrimitive
-                    const Primitive2DReference xTransformPrimitive(
-                        new TransformPrimitive2D(
-                            aNewObjectTransform,
-                            getChildren()));
-
-                    if(aCurrent.isInside(aCropped))
+                    // if we have no overlap the crop has removed everything, so we do only
+                    // have to create content if this is not the case
+                    if(aNewRange.overlaps(aUnitRange))
                     {
-                        // crop just shrunk so that its inside content,
-                        // no need to use a mask since not really cropped.
-                        xRetval = Primitive2DSequence(&xTransformPrimitive, 1);
-                    }
-                    else
-                    {
-                        // mask with original object's bounds
-                        basegfx::B2DPolyPolygon aMaskPolyPolygon(basegfx::tools::createUnitPolygon());
-                        aMaskPolyPolygon.transform(getTransformation());
+                        // create new transform; first take out old transform to get
+                        // to unit coordinates by inverting. Inverting should be flawless
+                        // since we already cheched that object size is not zero in X or Y
+                        basegfx::B2DHomMatrix aNewTransform(getTransformation());
 
-                        // create maskPrimitive with aMaskPolyPolygon and aMaskContentVector
-                        const Primitive2DReference xMask(
-                            new MaskPrimitive2D(
-                                aMaskPolyPolygon,
-                                Primitive2DSequence(&xTransformPrimitive, 1)));
+                        aNewTransform.invert();
 
-                        xRetval = Primitive2DSequence(&xMask, 1);
+                        // apply crop enlargement in unit coordinates
+                        aNewTransform = basegfx::tools::createScaleTranslateB2DHomMatrix(
+                            aNewRange.getRange(),
+                            aNewRange.getMinimum()) * aNewTransform;
+
+                        // apply original transformation. Since we have manipulated the crop
+                        // in unit coordinates we do not need to care about mirroring or
+                        // a corrected point for eventual shear or rotation, this all comes for
+                        // free
+                        aNewTransform = getTransformation() * aNewTransform;
+
+                        // prepare TransformPrimitive2D with xPrimitive
+                        const Primitive2DReference xTransformPrimitive(
+                            new TransformPrimitive2D(
+                                aNewTransform,
+                                getChildren()));
+
+                        if(aUnitRange.isInside(aNewRange))
+                        {
+                            // the new range is completely inside the old range (unit range),
+                            // so no masking is needed
+                            xRetval = Primitive2DSequence(&xTransformPrimitive, 1);
+                        }
+                        else
+                        {
+                            // mask with original object's bounds
+                            basegfx::B2DPolyPolygon aMaskPolyPolygon(basegfx::tools::createUnitPolygon());
+                            aMaskPolyPolygon.transform(getTransformation());
+
+                            // create maskPrimitive with aMaskPolyPolygon and aMaskContentVector
+                            const Primitive2DReference xMask(
+                                new MaskPrimitive2D(
+                                    aMaskPolyPolygon,
+                                    Primitive2DSequence(&xTransformPrimitive, 1)));
+
+                            xRetval = Primitive2DSequence(&xMask, 1);
+                        }
                     }
                 }
             }

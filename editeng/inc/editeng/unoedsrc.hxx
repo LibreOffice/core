@@ -219,12 +219,10 @@ public:
         Index of paragraph to query bullet info on
      */
     virtual EBulletInfo     GetBulletInfo( sal_uInt16 nPara ) const = 0;
-//IAccessibility2 Implementation 2009-----
      virtual String       GetNumStr(sal_uInt16) const { return XubString();};
     //IAccessible2 migration fix
     virtual void                    SetUpdateModeForAcc( sal_Bool ) {};
     virtual sal_Bool                    GetUpdateModeForAcc() const { return sal_True; };
-//-----IAccessibility2 Implementation 2009
     /** Query the bounding rectangle of the given character
 
         @param nPara[0 .. n]
@@ -336,10 +334,8 @@ public:
 
         @return sal_True, if the range has been successfully determined
      */
-    //IAccessibility2 Implementation 2009-----
 //    virtual sal_Bool      GetAttributeRun( sal_uInt16& nStartIndex, sal_uInt16& nEndIndex, sal_uInt16 nPara, sal_uInt16 nIndex ) const = 0;
     virtual sal_Bool        GetAttributeRun( sal_uInt16& nStartIndex, sal_uInt16& nEndIndex, sal_uInt16 nPara, sal_uInt16 nIndex, sal_Bool bInCell = sal_False ) const = 0;
-    //-----IAccessibility2 Implementation 2009
 
     /** Query number of lines in the formatted paragraph
 
@@ -550,11 +546,9 @@ public:
      */
     virtual sal_Bool Paste() = 0;
 
-//IAccessibility2 Implementation 2009-----
     virtual sal_Bool IsWrongSpelledWordAtPos( sal_Int32, sal_Int32 ) { return sal_False; };
     virtual sal_Bool IsShapeParaFocusable( ) { return sal_True; };
     virtual sal_Bool BreakParaWrongList(sal_Int32, sal_uInt16&, sal_uInt16&, sal_Int32){ return sal_False; };
-//-----IAccessibility2 Implementation 2009
 };
 
 #endif

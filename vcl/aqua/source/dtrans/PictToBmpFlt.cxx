@@ -39,6 +39,9 @@
 bool PICTtoPNG( com::sun::star::uno::Sequence<sal_Int8>& rPictData,
             com::sun::star::uno::Sequence<sal_Int8>& rPngData)
 {
+#ifdef MAC_OS_X_VERSION_10_6
+    return false;
+#else // MAC_OS_X_VERSION_10_6
     ComponentInstance pngExporter = NULL;
     if( OpenADefaultComponent( GraphicsExporterComponentType, kQTFileTypePNG, &pngExporter) != noErr)
         return false;
@@ -72,12 +75,16 @@ bool PICTtoPNG( com::sun::star::uno::Sequence<sal_Int8>& rPictData,
         CloseComponent( pngExporter);
 
     return (nPngSize > 0);
+#endif // MAC_OS_X_VERSION_10_6
 }
 
 
 bool PNGtoPICT( com::sun::star::uno::Sequence<sal_Int8>& rPngData,
                com::sun::star::uno::Sequence<sal_Int8>& rPictData)
 {
+#ifdef MAC_OS_X_VERSION_10_6
+    return false;
+#else // MAC_OS_X_VERSION_10_6
     ComponentInstance pictExporter;
     if( OpenADefaultComponent( GraphicsImporterComponentType, kQTFileTypePNG, &pictExporter) != noErr)
         return false;
@@ -99,9 +106,11 @@ bool PNGtoPICT( com::sun::star::uno::Sequence<sal_Int8>& rPngData,
         rtl_copyMemory( rPictData.getArray(), ((sal_Int8*)*hPict), nPictSize);
         HUnlock( (Handle)hPict);
 
+#if __MAC_OS_X_VERSION_MAX_ALLOWED <= 1060
         // Release the data associated with the picture
-        // Note: This function is deprecated in Mac OSX 10.4
+        // Note: This function has been deprecated in OSX 10.4 and removed in OSX 10.7
         KillPicture( hPict);
+#endif
     }
 
     if( hPng)
@@ -110,15 +119,24 @@ bool PNGtoPICT( com::sun::star::uno::Sequence<sal_Int8>& rPngData,
         CloseComponent( pictExporter);
 
     return (nPictSize > 512);
+#endif // MAC_OS_X_VERSION_10_6
 }
 
 bool ImageToPNG( com::sun::star::uno::Sequence<sal_Int8>& rImgData,
                  com::sun::star::uno::Sequence<sal_Int8>& rPngData,
                  NSBitmapImageFileType eInFormat)
 {
+    // short circuit for PNG->PNG request
+    if( eInFormat == NSPNGFileType) {
+        rPngData = rImgData;
+        return true;
+    }
+
+    // special handling for old PICT images that are not supported by NSBitmapImage
     if( eInFormat == PICTImageFileType)
         return PICTtoPNG( rImgData, rPngData);
 
+    // let Cocoa's NSBitmapImageRep do the conversion
     NSData* pData = [NSData dataWithBytesNoCopy: (void*)rImgData.getConstArray() length: rImgData.getLength() freeWhenDone: 0];
     if( !pData)
         return false;
@@ -131,6 +149,7 @@ bool ImageToPNG( com::sun::star::uno::Sequence<sal_Int8>& rImgData,
     if( !pOut)
         return false;
 
+    // get the conversion result
     const size_t nPngSize = [pOut length];
     rPngData.realloc( nPngSize);
     [pOut getBytes: rPngData.getArray() length: nPngSize];
@@ -142,9 +161,17 @@ bool PNGToImage( com::sun::star::uno::Sequence<sal_Int8>& rPngData,
                  NSBitmapImageFileType eOutFormat
                 )
 {
+    // short circuit for PNG->PNG request
+    if( eOutFormat == NSPNGFileType) {
+        rImgData = rPngData;
+        return true;
+    }
+
+    // special handling for old PICT images that are not supported by NSBitmapImage
     if( eOutFormat == PICTImageFileType)
         return PNGtoPICT( rPngData, rImgData);
 
+    // let Cocoa's NSBitmapImageRep do the conversion
     NSData* pData = [NSData dataWithBytesNoCopy: const_cast<sal_Int8*>(rPngData.getConstArray()) length: rPngData.getLength() freeWhenDone: 0];
     if( !pData)
         return false;
@@ -157,6 +184,7 @@ bool PNGToImage( com::sun::star::uno::Sequence<sal_Int8>& rPngData,
     if( !pOut)
         return false;
 
+    // get the conversion result
     const size_t nImgSize = [pOut length];
     rImgData.realloc( nImgSize);
     [pOut getBytes: rImgData.getArray() length: nImgSize];

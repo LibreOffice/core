@@ -27,10 +27,8 @@
 
 #include "AccessibleContextBase.hxx"
 
-//IAccessibility2 Implementation 2009-----
 #include <com/sun/star/accessibility/XAccessibleSelection.hpp>
 #include "global.hxx"
-//-----IAccessibility2 Implementation 2009
 namespace accessibility
 {
     class AccessibleTextHelper;
@@ -51,9 +49,7 @@ enum EditObjectType
 */
 class ScAccessibleEditObject
     :   public  ScAccessibleContextBase,
-//IAccessibility2 Implementation 2009-----
         public ::com::sun::star::accessibility::XAccessibleSelection
-//-----IAccessibility2 Implementation 2009
 {
 public:
     //=====  internal  ========================================================
@@ -78,7 +74,6 @@ public:
     virtual void LostFocus();
 
     virtual void GotFocus();
-//IAccessibility2 Implementation 2009-----
 ///=====  XInterface  =====================================================
 
     virtual ::com::sun::star::uno::Any SAL_CALL queryInterface(
@@ -88,7 +83,6 @@ public:
     virtual void SAL_CALL acquire() throw ();
 
     virtual void SAL_CALL release() throw ();
-//-----IAccessibility2 Implementation 2009
     ///=====  XAccessibleComponent  ============================================
 
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >
@@ -152,7 +146,6 @@ public:
             throw ( ::com::sun::star::lang::IndexOutOfBoundsException,
             ::com::sun::star::uno::RuntimeException );
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessibleRelationSet > SAL_CALL getAccessibleRelationSet(  ) throw (::com::sun::star::uno::RuntimeException);
-//-----IAccessibility2 Implementation 2009
 protected:
     /// Return this object's description.
     virtual ::rtl::OUString SAL_CALL
@@ -211,7 +204,6 @@ private:
         ::com::sun::star::accessibility::XAccessibleStateSet>& rxParentStates);
 
     void CreateTextHelper();
-//IAccessibility2 Implementation 2009-----
     ScDocument *m_pScDoc;
     ScAddress m_curCellAddress;
 
@@ -224,7 +216,6 @@ private:
         throw (::com::sun::star::uno::RuntimeException);
 
     sal_Int32 GetFgBgColor(  const rtl::OUString &strPropColor) ;
-//-----IAccessibility2 Implementation 2009
 };
 
 

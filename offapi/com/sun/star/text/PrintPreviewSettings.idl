@@ -36,7 +36,7 @@
 
 /** These properties describe the printing of the content of a text document.
  *
- *  @deprecated since OOo 3.3
+ *  @deprecated since OpenOffice 3.3
  */
 published service PrintPreviewSettings
 {

@@ -269,7 +269,10 @@ ScDrawLayer::ScDrawLayer( ScDocument* pDocument, const String& rName ) :
     // #95129# SJ: set FontHeight pool defaults without changing static SdrEngineDefaults
     SfxItemPool* pOutlinerPool = rOutliner.GetEditTextObjectPool();
     if ( pOutlinerPool )
-         mpItemPool->SetPoolDefaultItem(SvxFontHeightItem( 423, 100, EE_CHAR_FONTHEIGHT ));           // 12Pt
+    {
+        mpItemPool->SetPoolDefaultItem(SvxFontHeightItem( 423, 100, EE_CHAR_FONTHEIGHT ));           // 12Pt
+        mpItemPool->SetPoolDefaultItem(SvxFontHeightItem( 423, 100, EE_CHAR_FONTHEIGHT_CJK ));           // 12Pt
+    }
 
     // initial undo mode as in Calc document
     if( pDoc )
@@ -2059,7 +2062,6 @@ ScMacroInfo* ScDrawLayer::GetMacroInfo( SdrObject* pObj, sal_Bool bCreate )     
     }
     return 0;
 }
-//IAccessibility2 Implementation 2009-----
 ImageMap* ScDrawLayer::GetImageMapForObject(SdrObject* pObj)
 {
     ScIMapInfo* pIMapInfo = const_cast<ScIMapInfo*>( GetIMapInfo( pObj ) );
@@ -2079,7 +2081,6 @@ sal_Int32 ScDrawLayer::GetHyperlinkCount(SdrObject* pObj)
         nHLCount = 0; // pMacroInfo->GetHlink().getLength() > 0 ? 1 : 0;
     return nHLCount;
 }
-//-----IAccessibility2 Implementation 2009
 void ScDrawLayer::SetGlobalDrawPersist(SfxObjectShell* pPersist)            // static
 {
     DBG_ASSERT(!pGlobalDrawPersist,"SetGlobalDrawPersist mehrfach");

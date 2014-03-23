@@ -136,9 +136,9 @@ static const struct ExceptionalKey
 
 static AquaSalFrame* getMouseContainerFrame()
 {
-    int nWindows = 0;
+    NSInteger nWindows = 0;
     NSCountWindows( &nWindows );
-    int* pWindows = (int*)alloca( nWindows * sizeof(int) );
+    NSInteger* pWindows = (NSInteger*)alloca( nWindows * sizeof(NSInteger) );
     // note: NSWindowList is supposed to be in z-order front to back
     NSWindowList( nWindows, pWindows );
     AquaSalFrame* pDispatchFrame = NULL;
@@ -436,7 +436,7 @@ static AquaSalFrame* getMouseContainerFrame()
 
 -(id)initWithSalFrame: (AquaSalFrame*)pFrame
 {
-    if ((self = [super initWithFrame: [NSWindow contentRectForFrameRect: [pFrame->getWindow() frame] styleMask: pFrame->mnStyleMask]]) != nil)
+    if ((self = [super initWithFrame: [NSWindow contentRectForFrameRect: [pFrame->getNSWindow() frame] styleMask: pFrame->mnStyleMask]]) != nil)
     {
         mDraggingDestinationHandler = nil;
         mpFrame = pFrame;
@@ -461,7 +461,7 @@ static AquaSalFrame* getMouseContainerFrame()
     if( mpFrame && AquaSalFrame::isAlive( mpFrame ) )
     {
         // FIXME: does this leak the returned NSCursor of getCurrentCursor ?
-        const NSRect aRect = NSMakeRect( 0, 0, mpFrame->maGeometry.nWidth, mpFrame->maGeometry.nHeight);
+        const NSRect aRect = { NSZeroPoint, NSMakeSize( mpFrame->maGeometry.nWidth, mpFrame->maGeometry.nHeight) };
         [self addCursorRect: aRect cursor: mpFrame->getCurrentCursor()];
     }
 }
@@ -526,7 +526,7 @@ private:
         {
             mpFrame->mpGraphics->UpdateWindow( aRect );
             if( mpFrame->getClipPath() )
-                [mpFrame->getWindow() invalidateShadow];
+                [mpFrame->getNSWindow() invalidateShadow];
         }
     }
 }
@@ -559,7 +559,7 @@ private:
     {
         // is this event actually inside that NSWindow ?
         NSPoint aPt = [NSEvent mouseLocation];
-        NSRect aFrameRect = [pDispatchFrame->getWindow() frame];
+        NSRect aFrameRect = [pDispatchFrame->getNSWindow() frame];
         
 	if ( ! NSPointInRect( aPt, aFrameRect ) )
         {
@@ -1636,7 +1636,7 @@ private:
     return nil;
 }
 
-- (unsigned int)characterIndexForPoint:(NSPoint)thePoint
+- (NSUInteger)characterIndexForPoint:(NSPoint)thePoint
 {
     (void)thePoint;
     // FIXME
@@ -1698,7 +1698,7 @@ private:
 }
 
 -(id)parentAttribute {
-    return (NSView *) mpFrame -> mpWindow;
+    return mpFrame->getNSWindow();
 }
 
 -(::com::sun::star::accessibility::XAccessibleContext *)accessibleContext
@@ -1716,9 +1716,9 @@ private:
     return [ super accessibleContext ];
 }
 
--(NSView *)viewElementForParent
+-(NSWindow*)windowForParent
 {
-    return (NSView *) mpFrame -> mpWindow;
+    return mpFrame->getNSWindow();
 }
 
 -(void)registerMouseEventListener: (id)theListener

@@ -476,10 +476,8 @@ public:
     sal_uInt32 GetNumberOfSelectedObjects() const;  //Liefert gleich die Anzahl der Objekte, zaehlt aber nicht die Objekte in Gruppen.
     sal_Bool IsObjSelected() const;
     sal_Bool IsObjSelected( const SdrObject& rObj ) const;
-    //IAccessibility2 Implementation 2009-----
     bool IsObjSameLevelWithMarked(const SdrObject& rObj) const;
     SdrObject* getSingleSelected() const;
-    //-----IAccessibility2 Implementation 2009
 
     void EndTextEdit();             //Loescht ggf. das Objekt.
 
@@ -531,7 +529,7 @@ public:
     sal_Bool GetDrawObjGraphic( sal_uLong nFmt, Graphic& rGrf ) const;
 
     void Paste( SvStream& rStm, sal_uInt16 nAction, const Point* pPt = 0 );
-    sal_Bool Paste( const Graphic &rGrf );
+    bool Paste( const Graphic &rGrf, const String& rURL );
     sal_Bool Paste( SotDataObject& rObj, const Point& rPt );
 
     sal_Bool IsAlignPossible() const;

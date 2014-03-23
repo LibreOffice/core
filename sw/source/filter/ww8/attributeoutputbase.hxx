@@ -165,6 +165,12 @@ public:
     /// Called after we end outputting the attributes.
     virtual void EndRunProperties( const SwRedlineData* pRedlineData ) = 0;
 
+    /// for docx w:commentRangeStart
+    virtual void WritePostitFieldStart() {};
+
+    /// for docx w:commentRangeEnd
+    virtual void WritePostitFieldEnd() {};
+
     /// Output text (inside a run).
     virtual void RunText( const String& rText, rtl_TextEncoding eCharSet ) = 0;
 
@@ -437,7 +443,7 @@ protected:
     /// Sfx item RES_TXTATR_CHARFMT
     virtual void TextCharFormat( const SwFmtCharFmt& ) = 0;
 
-    /// Sfx item RES_TXTATR_FIELD and RES_TXTATR_INPUTFIELD
+    /// Sfx item RES_TXTATR_FIELD, RES_TXTATR_ANNOTATION and RES_TXTATR_INPUTFIELD
     void TextField( const SwFmtFld& );
 
     /// Sfx item RES_TXTATR_FLYCNT

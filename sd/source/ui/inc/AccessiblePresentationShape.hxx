@@ -59,9 +59,7 @@ public:
     virtual ::rtl::OUString
         CreateAccessibleDescription ()
         throw (::com::sun::star::uno::RuntimeException);
-//IAccessibility2 Implementation 2009-----
     ::rtl::OUString GetStyle();
-//-----IAccessibility2 Implementation 2009
 
 private:
     /** Don't use the default constructor.  Use the public constructor that

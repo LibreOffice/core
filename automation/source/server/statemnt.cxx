@@ -868,7 +868,7 @@ void StatementCommand::WriteControlData( Window *pBase, sal_uLong nConf, sal_Boo
                 break;
 
             default:
-                if ( ( pBase->GetUniqueOrHelpId().getLength() == 0 ) && !( nConf & DH_MODE_ALLWIN ) )
+                if ( pBase->GetUniqueOrHelpId().isEmpty() && !( nConf & DH_MODE_ALLWIN ) )
                     bSkip = sal_True;
                 break;
         }
@@ -2087,7 +2087,7 @@ void StatementCommand::Translate()
             {
                 Window* pNew = pTranslationWindow->GetWindow( WINDOW_CLIENT );
                 // Bei Dockingwindoes das kanze Geraffel von Docking Floating überspringen
-                while ( IsDialog( pNew ) && !pNew->GetUniqueOrHelpId().getLength() && pNew->GetChildCount() == 1 )
+                while ( IsDialog( pNew ) && pNew->GetUniqueOrHelpId().isEmpty() && pNew->GetChildCount() == 1 )
                     pNew = pNew->GetChild( 0 );
                 pTranslationWindow = pNew;
             }

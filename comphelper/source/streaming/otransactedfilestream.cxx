@@ -219,7 +219,7 @@ void OTruncatedTransactedFileStream::CloseAll_Impl()
         delete m_pStreamData;
         m_pStreamData = NULL;
 
-        if ( bDelete && xFileAccess.is() && aURL.getLength() )
+        if ( bDelete && xFileAccess.is() && !aURL.isEmpty() )
         {
             // delete the file
             try

@@ -40,7 +40,7 @@ module com {  module sun {  module star {  module inspection {
     The string list defined by <type>XStringListControl</type> would in the control be
     represented as drop-down list containing all the strings.</p>
 
-    @since OOo 2.0.3
+    @since OpenOffice 2.0.3
 */
 published interface XStringListControl : XPropertyControl
 {

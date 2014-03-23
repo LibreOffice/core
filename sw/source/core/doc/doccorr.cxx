@@ -205,7 +205,9 @@ void SwDoc::CorrAbs(const SwNodeIndex& rOldNode,
     aNewPos.nContent += nOffset;
 
     getIDocumentMarkAccess()->correctMarksAbsolute(rOldNode, rNewPos, nOffset);
-    {   // fix redlines
+
+    // fix redlines
+    {
         SwRedlineTbl& rTbl = *pRedlineTbl;
         for (sal_uInt16 n = 0; n < rTbl.Count(); )
         {
@@ -232,26 +234,28 @@ void SwDoc::CorrAbs(const SwNodeIndex& rOldNode,
     }
 }
 
-void SwDoc::CorrAbs(const SwPaM& rRange,
+void SwDoc::CorrAbs(
+    const SwPaM& rRange,
     const SwPosition& rNewPos,
-    sal_Bool bMoveCrsr)
+    sal_Bool bMoveCrsr )
 {
     SwPosition aStart(*rRange.Start());
     SwPosition aEnd(*rRange.End());
     SwPosition aNewPos(rNewPos);
 
-    _DelBookmarks(aStart.nNode, aEnd.nNode, NULL,
-        &aStart.nContent, &aEnd.nContent);
+    _DelBookmarks( aStart.nNode, aEnd.nNode, NULL, &aStart.nContent, &aEnd.nContent );
+
     if(bMoveCrsr)
         ::PaMCorrAbs(rRange, rNewPos);
 }
 
-void SwDoc::CorrAbs(const SwNodeIndex& rStartNode,
-     const SwNodeIndex& rEndNode,
-     const SwPosition& rNewPos,
-     sal_Bool bMoveCrsr)
+void SwDoc::CorrAbs(
+    const SwNodeIndex& rStartNode,
+    const SwNodeIndex& rEndNode,
+    const SwPosition& rNewPos,
+    sal_Bool bMoveCrsr )
 {
-    _DelBookmarks(rStartNode, rEndNode);
+    _DelBookmarks( rStartNode, rEndNode );
 
     if(bMoveCrsr)
     {

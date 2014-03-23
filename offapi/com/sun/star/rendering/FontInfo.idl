@@ -36,7 +36,7 @@ module com { module sun { module star { module rendering {
 
 /** This structure provides information about a specific font.<p>
 
-    @since OOo 2.0
+    @since OpenOffice 2.0
  */
 published struct FontInfo
 {

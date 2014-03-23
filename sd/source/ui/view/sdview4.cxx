@@ -111,70 +111,78 @@ SdrGrafObj* View::InsertGraphic( const Graphic& rGraphic, sal_Int8& rAction,
         PickObj(rPos, getHitTolLog(), pPickObj );
     }
 
-    if( mnAction == DND_ACTION_LINK && pPickObj && pPV )
+    const bool bIsGraphic(0 != dynamic_cast< SdrGrafObj* >(pPickObj));
+
+    if(pPickObj && !bIsGraphic && pPickObj->IsClosedObj() && !dynamic_cast< SdrOle2Obj* >(pPickObj))
     {
-        SdrGrafObj* pSdrGrafObj = dynamic_cast< SdrGrafObj* >(pPickObj);
-
-        if( pSdrGrafObj || (pPickObj->IsEmptyPresObj() && !bOnMaster)) // #121603# Do not use pObj, it may be NULL
+        // fill style change (fill object with graphic), independent of mnAction
+        // and thus of DND_ACTION_LINK or DND_ACTION_MOVE
+        if( IsUndoEnabled() )
         {
-            if( IsUndoEnabled() )
-                BegUndo(String(SdResId(STR_INSERTGRAPHIC)));
-
-            SdPage* pPage = (SdPage*) pPickObj->getSdrPageFromSdrObject();
-
-            if( pSdrGrafObj )
-            {
-                // Das Objekt wird mit der Bitmap gefuellt
-                pNewGrafObj = static_cast< SdrGrafObj* >(pSdrGrafObj->CloneSdrObject());
-                pNewGrafObj->SetGraphic(rGraphic);
-            }
-            else
-            {
-                pNewGrafObj = new SdrGrafObj(
-                    getSdrModelFromSdrView(),
-                    Graphic(),
-                    pPickObj->getSdrObjectTransformation());
-                pNewGrafObj->SetEmptyPresObj(true);
-            }
-
-            if ( pNewGrafObj->IsEmptyPresObj() )
-            {
-                const basegfx::B2DRange aRange( sdr::legacy::GetLogicRange(*pNewGrafObj) );
-                pNewGrafObj->AdjustToMaxRange( aRange, false );
-                pNewGrafObj->SetOutlinerParaObject(NULL);
-                pNewGrafObj->SetEmptyPresObj(false);
-            }
-
-            if (pPage && pPage->IsPresObj(pPickObj))
-            {
-                // Neues PresObj in die Liste eintragen
-                pPage->InsertPresObj( pNewGrafObj, PRESOBJ_GRAPHIC );
-                establishConnectionToSdrObject(pNewGrafObj, findConnectionToSdrObject(pPickObj));
-            }
-
-            if (pImageMap)
-                pNewGrafObj->InsertUserData(new SdIMapInfo(*pImageMap));
-
-            ReplaceObjectAtView(*pPickObj, *pNewGrafObj); // maybe ReplaceObjectAtView
-
-            if( IsUndoEnabled() )
-                EndUndo();
+            BegUndo(String(SdResId(STR_UNDO_DRAGDROP)));
+            AddUndo(getSdrModelFromSdrView().GetSdrUndoFactory().CreateUndoAttrObject(*pPickObj));
+            EndUndo();
         }
-        else if (pPickObj->IsClosedObj() && !dynamic_cast< SdrOle2Obj* >(pPickObj))
+
+        SfxItemSet aSet(mpDocSh->GetPool(), XATTR_FILLSTYLE, XATTR_FILLBITMAP);
+
+        aSet.Put(XFillStyleItem(XFILL_BITMAP));
+        aSet.Put(XFillBitmapItem(&mpDocSh->GetPool(), rGraphic));
+        pPickObj->SetMergedItemSetAndBroadcast(aSet);
+    }
+    else if(DND_ACTION_LINK == mnAction
+        && pPickObj
+        && pPV
+        && (bIsGraphic || (pPickObj->IsEmptyPresObj() && !bOnMaster))) // #121603# Do not use pObj, it may be NULL
+    {
+        // hit on SdrGrafObj with wanted new linked graphic (or PresObj placeholder hit)
+        if( IsUndoEnabled() )
+            BegUndo(String(SdResId(STR_INSERTGRAPHIC)));
+
+        SdPage* pPage = (SdPage*) pPickObj->getSdrPageFromSdrObject();
+
+        if( bIsGraphic )
         {
-            // fill object with graphic
-            if( IsUndoEnabled() )
-            {
-                BegUndo(String(SdResId(STR_UNDO_DRAGDROP)));
-                AddUndo(getSdrModelFromSdrView().GetSdrUndoFactory().CreateUndoAttrObject(*pPickObj));
-                EndUndo();
-            }
-
-            SfxItemSet aSet(mpDocSh->GetPool(), XATTR_FILLSTYLE, XATTR_FILLBITMAP);
-            aSet.Put(XFillStyleItem(XFILL_BITMAP));
-            aSet.Put(XFillBitmapItem(&mpDocSh->GetPool(), rGraphic));
-            pPickObj->SetMergedItemSetAndBroadcast(aSet);
+            // Das Objekt wird mit der Bitmap gefuellt
+            pNewGrafObj = (SdrGrafObj*) pPickObj->CloneSdrObject();
+            pNewGrafObj->SetGraphic(rGraphic);
         }
+        else
+        {
+            pNewGrafObj = new SdrGrafObj(
+                pPickObj->getSdrModelFromSdrObject(),
+                rGraphic,
+                pPickObj->getSdrObjectTransformation());
+            pNewGrafObj->SetEmptyPresObj(sal_True);
+        }
+
+        if ( pNewGrafObj->IsEmptyPresObj() )
+        {
+            const basegfx::B2DRange aRange(sdr::legacy::GetLogicRange(*pNewGrafObj));
+            pNewGrafObj->AdjustToMaxRange(aRange, false);
+            pNewGrafObj->SetOutlinerParaObject(NULL);
+            pNewGrafObj->SetEmptyPresObj(false);
+        }
+
+        if (pPage && pPage->IsPresObj(pPickObj))
+        {
+            // Add new PresObj to the list
+            pPage->InsertPresObj(pNewGrafObj, PRESOBJ_GRAPHIC);
+
+            // replace formally used 'pNewGrafObj->SetUserCall(pPickObj->GetUserCall());' by
+            // new notify/listener mechanism
+            SdPage* pCurrentlyConnectedSdPage = findConnectionToSdrObject(pPickObj);
+            establishConnectionToSdrObject(pNewGrafObj, pCurrentlyConnectedSdPage);
+        }
+
+        if (pImageMap)
+            pNewGrafObj->InsertUserData(new SdIMapInfo(*pImageMap));
+
+        // replace in view and mark
+        ReplaceObjectAtView(*pPickObj, *pNewGrafObj); // maybe ReplaceObjectAtView
+
+        if( IsUndoEnabled() )
+            EndUndo();
     }
     else if ( pPV )
     {

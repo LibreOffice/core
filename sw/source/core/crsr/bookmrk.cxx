@@ -74,24 +74,62 @@ namespace
         const sal_Unicode aStartMark,
         const sal_Unicode aEndMark)
     {
-        SwPosition& rStart = pField->GetMarkStart();
-        SwPosition& rEnd = pField->GetMarkEnd();
-        SwTxtNode const*const pStartTxtNode =
-            rStart.nNode.GetNode().GetTxtNode();
-        SwTxtNode const*const pEndTxtNode = rEnd.nNode.GetNode().GetTxtNode();
-        const sal_Unicode ch_start=pStartTxtNode->GetTxt().GetChar(rStart.nContent.GetIndex());
-        const sal_Unicode ch_end=pEndTxtNode->GetTxt().GetChar(rEnd.nContent.GetIndex()-1);
-        SwPaM aStartPaM(rStart);
-        SwPaM aEndPaM(rEnd);
         io_pDoc->GetIDocumentUndoRedo().StartUndo(UNDO_UI_REPLACE, NULL);
+
+        SwPosition rStart = pField->GetMarkStart();
+        SwTxtNode const*const pStartTxtNode = rStart.nNode.GetNode().GetTxtNode();
+        const sal_Unicode ch_start=pStartTxtNode->GetTxt().GetChar(rStart.nContent.GetIndex());
         if(ch_start != aStartMark)
         {
+            SwPaM aStartPaM(rStart);
             io_pDoc->InsertString(aStartPaM, aStartMark);
+            rStart.nContent--;
+            pField->SetMarkStartPos( rStart );
         }
+
+        const SwPosition& rEnd = pField->GetMarkEnd();
+        SwTxtNode const*const pEndTxtNode = rEnd.nNode.GetNode().GetTxtNode();
+        const sal_Unicode ch_end=pEndTxtNode->GetTxt().GetChar(rEnd.nContent.GetIndex()-1);
         if ( aEndMark && ( ch_end != aEndMark ) && ( rStart != rEnd ) )
         {
+            SwPaM aEndPaM(rEnd);
             io_pDoc->InsertString(aEndPaM, aEndMark);
         }
+
+
+        io_pDoc->GetIDocumentUndoRedo().EndUndo(UNDO_UI_REPLACE, NULL);
+    };
+
+    static void lcl_RemoveFieldMarks(Fieldmark* const pField,
+        SwDoc* const io_pDoc,
+        const sal_Unicode aStartMark,
+        const sal_Unicode aEndMark)
+    {
+        io_pDoc->GetIDocumentUndoRedo().StartUndo(UNDO_UI_REPLACE, NULL);
+
+        const SwPosition& rStart = pField->GetMarkStart();
+        SwTxtNode const*const pStartTxtNode = rStart.nNode.GetNode().GetTxtNode();
+        const sal_Unicode ch_start=pStartTxtNode->GetTxt().GetChar(rStart.nContent.GetIndex());
+        if( ch_start == aStartMark )
+        {
+            SwPaM aStart(rStart, rStart);
+            aStart.End()->nContent++;
+            io_pDoc->DeleteRange(aStart);
+        }
+
+        const SwPosition& rEnd = pField->GetMarkEnd();
+        SwTxtNode const*const pEndTxtNode = rEnd.nNode.GetNode().GetTxtNode();
+        const xub_StrLen nEndPos = ( rEnd == rStart ||  rEnd.nContent.GetIndex() == 0 )
+                                   ? rEnd.nContent.GetIndex()
+                                   : rEnd.nContent.GetIndex() - 1;
+        const sal_Unicode ch_end=pEndTxtNode->GetTxt().GetChar( nEndPos );
+        if ( ch_end == aEndMark )
+        {
+            SwPaM aEnd(rEnd, rEnd);
+            aEnd.Start()->nContent--;
+            io_pDoc->DeleteRange(aEnd);
+        }
+
         io_pDoc->GetIDocumentUndoRedo().EndUndo(UNDO_UI_REPLACE, NULL);
     };
 }
@@ -152,7 +190,6 @@ namespace sw { namespace mark
         if(nCount == SAL_MAX_INT32)
         {
             sal_Int32 nRandom;
-            ::rtl::OUStringBuffer sUniquePostfixBuffer;
             rtl_random_getBytes(aPool, &nRandom, sizeof(nRandom));
             sUniquePostfix = ::rtl::OUStringBuffer(13).appendAscii("_").append(static_cast<sal_Int32>(abs(nRandom))).makeStringAndClear();
             nCount = 0;
@@ -284,6 +321,22 @@ namespace sw { namespace mark
             SetOtherMarkPos(GetMarkPos());
     }
 
+    void Fieldmark::SetMarkStartPos( const SwPosition& rNewStartPos )
+    {
+        if ( GetMarkPos( ) <= GetOtherMarkPos( ) )
+            return SetMarkPos( rNewStartPos );
+        else
+            return SetOtherMarkPos( rNewStartPos );
+    }
+
+    void Fieldmark::SetMarkEndPos( const SwPosition& rNewEndPos )
+    {
+        if ( GetMarkPos( ) <= GetOtherMarkPos( ) )
+            return SetOtherMarkPos( rNewEndPos );
+        else
+            return SetMarkPos( rNewEndPos );
+    }
+
     rtl::OUString Fieldmark::ToString( ) const
     {
         rtl::OUStringBuffer buf;
@@ -317,6 +370,11 @@ namespace sw { namespace mark
         lcl_AssureFieldMarksSet(this, io_pDoc, CH_TXT_ATR_FIELDSTART, CH_TXT_ATR_FIELDEND);
     }
 
+    void TextFieldmark::ReleaseDoc(SwDoc* const pDoc)
+    {
+        lcl_RemoveFieldMarks(this, pDoc, CH_TXT_ATR_FIELDSTART, CH_TXT_ATR_FIELDEND);
+    }
+
     CheckboxFieldmark::CheckboxFieldmark(const SwPaM& rPaM)
         : Fieldmark(rPaM)
     { }
@@ -327,7 +385,9 @@ namespace sw { namespace mark
 
         // For some reason the end mark is moved from 1 by the Insert: we don't
         // want this for checkboxes
-        this->GetMarkEnd( ).nContent--;
+        SwPosition aNewEndPos = this->GetMarkEnd();
+        aNewEndPos.nContent--;
+        SetMarkEndPos( aNewEndPos );
     }
     void CheckboxFieldmark::SetChecked(bool checked)
     {

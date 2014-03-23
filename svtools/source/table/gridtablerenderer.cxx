@@ -277,7 +277,9 @@ namespace svt { namespace table
         _rDevice.SetTextColor( textColor );
 
         Rectangle const aTextRect( lcl_getTextRenderingArea( lcl_getContentArea( *m_pImpl, _rArea ) ) );
-        sal_uLong const nDrawTextFlags = lcl_getAlignmentTextDrawFlags( *m_pImpl, _nCol ) | TEXT_DRAW_CLIP;
+        sal_uLong nDrawTextFlags = lcl_getAlignmentTextDrawFlags( *m_pImpl, _nCol ) | TEXT_DRAW_CLIP;
+        if ( !m_pImpl->rModel.isEnabled() )
+            nDrawTextFlags |= TEXT_DRAW_DISABLE;
         _rDevice.DrawText( aTextRect, sHeaderText, nDrawTextFlags );
 
         ::boost::optional< ::Color > const aLineColor( m_pImpl->rModel.getLineColor() );
@@ -413,7 +415,9 @@ namespace svt { namespace table
             _rDevice.SetTextColor( textColor );
 
             Rectangle const aTextRect( lcl_getTextRenderingArea( lcl_getContentArea( *m_pImpl, _rArea ) ) );
-            sal_uLong const nDrawTextFlags = lcl_getAlignmentTextDrawFlags( *m_pImpl, 0 ) | TEXT_DRAW_CLIP;
+            sal_uLong nDrawTextFlags = lcl_getAlignmentTextDrawFlags( *m_pImpl, 0 ) | TEXT_DRAW_CLIP;
+            if ( !m_pImpl->rModel.isEnabled() )
+                nDrawTextFlags |= TEXT_DRAW_DISABLE;
                 // TODO: is using the horizontal alignment of the 0'th column a good idea here? This is pretty ... arbitray ..
             _rDevice.DrawText( aTextRect, rowTitle, nDrawTextFlags );
         }
@@ -517,8 +521,8 @@ namespace svt { namespace table
         }
         else
             imageSize.Height() = i_context.aContentArea.GetHeight() - 1;
-
-        i_context.rDevice.DrawImage( imagePos, imageSize, i_image, 0 );
+        sal_uInt16 const nStyle = m_pImpl->rModel.isEnabled() ? 0 : IMAGE_DRAW_DISABLE;
+        i_context.rDevice.DrawImage( imagePos, imageSize, i_image, nStyle );
     }
 
     //------------------------------------------------------------------------------------------------------------------
@@ -563,7 +567,9 @@ namespace svt { namespace table
         }
 
         Rectangle const textRect( lcl_getTextRenderingArea( i_context.aContentArea ) );
-        sal_uLong const nDrawTextFlags = lcl_getAlignmentTextDrawFlags( *m_pImpl, i_context.nColumn ) | TEXT_DRAW_CLIP;
+        sal_uLong nDrawTextFlags = lcl_getAlignmentTextDrawFlags( *m_pImpl, i_context.nColumn ) | TEXT_DRAW_CLIP;
+        if ( !m_pImpl->rModel.isEnabled() )
+            nDrawTextFlags |= TEXT_DRAW_DISABLE;
         i_context.rDevice.DrawText( textRect, i_text, nDrawTextFlags );
     }
 

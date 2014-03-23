@@ -130,6 +130,7 @@ $(eval $(call gb_Library_add_exception_objects,sw,\
     sw/source/core/bastyp/swregion \
     sw/source/core/bastyp/swtypes \
     sw/source/core/bastyp/tabcol \
+    sw/source/core/crsr/annotationmark \
     sw/source/core/crsr/BlockCursor \
     sw/source/core/crsr/bookmrk \
     sw/source/core/crsr/callnk \
@@ -280,6 +281,7 @@ $(eval $(call gb_Library_add_exception_objects,sw,\
     sw/source/core/layout/anchoreddrawobject \
     sw/source/core/layout/anchoredobject \
     sw/source/core/layout/atrfrm \
+    sw/source/core/layout/fillattributes \
     sw/source/core/layout/calcmove \
     sw/source/core/layout/colfrm \
     sw/source/core/layout/dbg_lay \
@@ -448,6 +450,7 @@ $(eval $(call gb_Library_add_exception_objects,sw,\
     sw/source/core/unocore/unoport \
     sw/source/core/unocore/unoportenum \
     sw/source/core/unocore/unoprnms \
+    sw/source/core/unocore/unobrushitemhelper \
     sw/source/core/unocore/unoredline \
     sw/source/core/unocore/unoredlines \
     sw/source/core/unocore/unorefmk \
@@ -576,6 +579,7 @@ $(eval $(call gb_Library_add_exception_objects,sw,\
     sw/source/ui/docvw/AnchorOverlayObject \
     sw/source/ui/docvw/AnnotationMenuButton \
     sw/source/ui/docvw/AnnotationWin \
+    sw/source/ui/docvw/OverlayRanges \
     sw/source/ui/docvw/PostItMgr \
     sw/source/ui/docvw/ShadowOverlayObject \
     sw/source/ui/docvw/SidebarTxtControl \

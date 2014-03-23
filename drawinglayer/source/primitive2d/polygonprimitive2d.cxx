@@ -481,6 +481,8 @@ namespace drawinglayer
                 const double fPolyLength(basegfx::tools::getLength(aLocalPolygon));
                 double fStart(0.0);
                 double fEnd(0.0);
+                double fStartOverlap(0.0);
+                double fEndOverlap(0.0);
 
                 if(!getStart().isDefault() && getStart().isActive())
                 {
@@ -489,8 +491,9 @@ namespace drawinglayer
                         aLocalPolygon, getStart().getB2DPolyPolygon(), true, getStart().getWidth(),
                         fPolyLength, getStart().isCentered() ? 0.5 : 0.0, &fStart);
 
-                    // create some overlapping
-                    fStart *= 0.8;
+                    // create some overlapping, compromise between straight and peaked markers
+                    // best for marker width 0.3cm and marker line width 0.02cm
+                    fStartOverlap = getStart().getWidth() / 15.0;
                 }
 
                 if(!getEnd().isDefault() && getEnd().isActive())
@@ -501,13 +504,13 @@ namespace drawinglayer
                         fPolyLength, getEnd().isCentered() ? 0.5 : 0.0, &fEnd);
 
                     // create some overlapping
-                    fEnd *= 0.8;
+                    fEndOverlap = getEnd().getWidth() / 15.0;
                 }
 
                 if(0.0 != fStart || 0.0 != fEnd)
                 {
                     // build new poly, consume something from old poly
-                    aLocalPolygon = basegfx::tools::getSnippetAbsolute(aLocalPolygon, fStart, fPolyLength - fEnd, fPolyLength);
+                    aLocalPolygon = basegfx::tools::getSnippetAbsolute(aLocalPolygon, fStart-fStartOverlap, fPolyLength - fEnd + fEndOverlap, fPolyLength);
                 }
             }
 

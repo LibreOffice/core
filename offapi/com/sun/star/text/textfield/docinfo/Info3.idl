@@ -34,7 +34,7 @@ module com { module sun { module star {
 //=============================================================================
 /** specifies service of a text field that provides the Info3 field that is contained
     in the document information.
-    @deprecated this service is no longer implemented as of OOo 3.0;
+    @deprecated this service is no longer implemented as of OpenOffice 3.0;
         use com::sun::star::text::textfield::docinfo::Custom instead.
     @see com::sun::star::text::TextField
 */

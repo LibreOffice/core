@@ -392,7 +392,7 @@ void SwSortDlg::Apply()
 
     sal_Bool bRet;
     {
-        SwWait aWait( *rSh.GetView().GetDocShell(), sal_True );
+        SwWait aWait( *rSh.GetView().GetDocShell(), true );
         rSh.StartAllAction();
         if( 0 != (bRet = rSh.Sort( aOptions )))
             rSh.SetModified();

@@ -241,20 +241,31 @@ namespace svgio
                     else if(maUrl.getLength())
                     {
                         const rtl::OUString& rPath = getDocument().getAbsolutePath();
-                        const rtl::OUString aAbsUrl(rtl::Uri::convertRelToAbs(rPath, maUrl));
 
-                        if(aAbsUrl.getLength())
+                        if(rPath.getLength())
                         {
-                            SvFileStream aStream(aAbsUrl, STREAM_STD_READ);
-                            Graphic aGraphic;
+                            const rtl::OUString aAbsUrl(rtl::Uri::convertRelToAbs(rPath, maUrl));
 
-                            if(GRFILTER_OK == GraphicFilter::GetGraphicFilter()->ImportGraphic(
-                                aGraphic,
-                                aAbsUrl,
-                                aStream))
+                            if(aAbsUrl.getLength())
                             {
-                                extractFromGraphic(aGraphic, aNewTarget, aViewBox, aBitmapEx);
+                                SvFileStream aStream(aAbsUrl, STREAM_STD_READ);
+                                Graphic aGraphic;
+
+                                if(GRFILTER_OK == GraphicFilter::GetGraphicFilter()->ImportGraphic(
+                                    aGraphic,
+                                    aAbsUrl,
+                                    aStream))
+                                {
+                                    extractFromGraphic(aGraphic, aNewTarget, aViewBox, aBitmapEx);
+                                }
                             }
+                        }
+                        else
+                        {
+                            // #123042# detect missing path and assert - content will be missing. The
+                            // absolute path to itself needs to be set to correctly import linked
+                            // content in a SVG file
+                            OSL_ENSURE(false, "SVG graphic with internal links is interpreted, but local AbsolutePath is not set: linked content will be missing (!)");
                         }
                     }
                     else if(maXLink.getLength())

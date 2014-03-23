@@ -80,7 +80,7 @@ private:
     friend class ServerFont;
     // used by ServerFont class only
     void                        AddedGlyph( ServerFont&, GlyphData& );
-    void                        RemovingGlyph( ServerFont&, GlyphData&, int nGlyphIndex );
+    void                        RemovingGlyph( ServerFont&, GlyphData&, sal_GlyphId );
     void                        UsingGlyph( ServerFont&, GlyphData& );
     void                        GrowNotify();
 
@@ -188,16 +188,16 @@ public:
     virtual const ImplFontCharMap* GetImplFontCharMap() const = 0;
     Point                       TransformPoint( const Point& ) const;
 
-    GlyphData&                  GetGlyphData( int nGlyphIndex );
-    const GlyphMetric&          GetGlyphMetric( int nGlyphIndex )
-                                { return GetGlyphData( nGlyphIndex ).GetMetric(); }
+    GlyphData&                  GetGlyphData( sal_GlyphId );
+    const GlyphMetric&          GetGlyphMetric( sal_GlyphId aGlyphId )
+                                { return GetGlyphData( aGlyphId ).GetMetric(); }
 
-    virtual int                 GetGlyphIndex( sal_UCS4 ) const = 0;
-    virtual bool                GetGlyphOutline( int nGlyphIndex, ::basegfx::B2DPolyPolygon& ) const = 0;
+    virtual sal_GlyphId         GetGlyphIndex( sal_UCS4 ) const = 0;
+    virtual bool                GetGlyphOutline( sal_GlyphId, ::basegfx::B2DPolyPolygon& ) const = 0;
     virtual bool                GetAntialiasAdvice( void ) const = 0;
-    bool                        IsGlyphInvisible( int nGlyphIndex );
-    virtual bool                GetGlyphBitmap1( int nGlyphIndex, RawBitmap& ) const = 0;
-    virtual bool                GetGlyphBitmap8( int nGlyphIndex, RawBitmap& ) const = 0;
+    bool                        IsGlyphInvisible( sal_GlyphId );
+    virtual bool                GetGlyphBitmap1( sal_GlyphId, RawBitmap& ) const = 0;
+    virtual bool                GetGlyphBitmap8( sal_GlyphId, RawBitmap& ) const = 0;
 
     void                        SetExtended( int nInfo, void* ppVoid );
     int                         GetExtInfo() { return mnExtInfo; }
@@ -214,7 +214,7 @@ protected:
     long                        Release() const;
     sal_uLong                       GetByteCount() const { return mnBytesUsed; }
 
-    virtual void                InitGlyphData( int nGlyphIndex, GlyphData& ) const = 0;
+    virtual void                InitGlyphData( sal_GlyphId, GlyphData& ) const = 0;
     virtual void                GarbageCollect( long );
     void                        ReleaseFromGarbageCollect();
 

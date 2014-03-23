@@ -184,7 +184,7 @@ namespace slideshow
                 }
             }
 
-            return io_rCacheEntry.mpRenderer;
+            return (io_rCacheEntry.mpRenderer.get() != NULL);
         }
 
         bool ViewShape::draw( const ::cppcanvas::CanvasSharedPtr&   rDestinationCanvas,

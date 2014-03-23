@@ -75,10 +75,10 @@ void SAL_CALL AccessibleTextHelper::initialize( const Sequence< uno::Any >& aArg
         aArguments[1] >>= xEventSource;
         aArguments[2] >>= xWindow;
     }
-    OSL_ENSURE( aCID.getLength() > 0, "Empty CID" );
+    OSL_ENSURE( !aCID.isEmpty(), "Empty CID" );
     OSL_ENSURE( xEventSource.is(), "Empty Event Source" );
     OSL_ENSURE( xWindow.is(), "Empty Window" );
-    if( !xEventSource.is() || aCID.getLength() == 0 )
+    if( !xEventSource.is() || aCID.isEmpty() )
         return;
 
     // /-- solar

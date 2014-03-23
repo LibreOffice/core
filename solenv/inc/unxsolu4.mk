@@ -107,8 +107,7 @@ CFLAGSWERRCXX=-xwe
 # Once all modules on this platform compile without warnings, set
 # COMPILER_WARN_ERRORS=TRUE here instead of setting MODULES_WITH_WARNINGS (see
 # settings.mk):
-MODULES_WITH_WARNINGS := \
-    soldep
+MODULES_WITH_WARNINGS := 
 
 STDOBJVCL=$(L)/salmain.o
 

@@ -178,20 +178,19 @@ static void initNSApp()
                                           object: nil ];
 
     // get System Version and store the value in GetSalData()->mnSystemVersion
-    OSErr err = noErr;
-    SInt32 systemVersion = VER_TIGER; // Initialize with minimal requirement
-    if( (err = Gestalt(gestaltSystemVersion, &systemVersion)) == noErr )
+    SInt32 systemVersion = OSX_VER_LION; // initialize with the minimal requirement
+    const OSErr err = Gestalt( gestaltSystemVersion, &systemVersion);
+    if( err == noErr )
     {
         GetSalData()->mnSystemVersion = systemVersion;
 #if OSL_DEBUG_LEVEL > 1
-        fprintf( stderr, "System Version %x\n", (unsigned int)systemVersion);
+        fprintf( stderr, "OSX System Version 0x%04x\n", (unsigned int)systemVersion);
 #endif
     }
     else
         NSLog(@"Unable to obtain system version: %ld", (long)err);
 
-     // Initialize Apple Remote
-    GetSalData()->mpMainController = [[MainController alloc] init];
+    GetSalData()->mpAppleRemoteMainController = [[AppleRemoteMainController alloc] init];
 
     [[NSDistributedNotificationCenter defaultCenter] addObserver: NSApp
                                            selector: @selector(applicationWillBecomeActive:)
@@ -214,20 +213,6 @@ sal_Bool ImplSVMainHook( sal_Bool * pbInit )
     bNoSVMain = false;
     initNSApp();
 
-    NSPoint aPt = { 0, 0 };
-    NSEvent* pEvent = [NSEvent otherEventWithType: NSApplicationDefined
-                               location: aPt
-                               modifierFlags: 0
-                               timestamp: 0
-                               windowNumber: 0
-                               context: nil
-                               subtype: AquaSalInstance::AppExecuteSVMain
-                               data1: 0
-                               data2: 0 ];
-    if( pEvent )
-    {
-        [NSApp postEvent: pEvent atStart: NO];
-
         rtl::OUString aExeURL, aExe;
         osl_getExecutableFile( &aExeURL.pData );
         osl_getSystemPathFromFileURL( aExeURL.pData, &aExe.pData );
@@ -241,11 +226,6 @@ sal_Bool ImplSVMainHook( sal_Bool * pbInit )
         const char* pArgv[] = { aByteExe.getStr(), NULL };
         NSApplicationMain( 1, pArgv );
 #endif
-    }
-    else
-    {
-        DBG_ERROR( "NSApplication initialization could not be done" );
-    }
 
     return TRUE;   // indicate that ImplSVMainHook is implemented
 }
@@ -496,9 +476,8 @@ void AquaSalInstance::wakeupYield()
     if( mbWaitingYield )
     {
         SalData::ensureThreadAutoreleasePool();
-        NSPoint aPt = { 0, 0 };
         NSEvent* pEvent = [NSEvent otherEventWithType: NSApplicationDefined
-                                   location: aPt
+                                   location: NSZeroPoint
                                    modifierFlags: 0
                                    timestamp: 0
                                    windowNumber: 0
@@ -620,11 +599,10 @@ void AquaSalInstance::handleAppDefinedEvent( NSEvent* pEvent )
         bool bIsFullScreenMode = false;
 
         std::list<AquaSalFrame*>::iterator it = pSalData->maFrames.begin();
-        while( (*it) &&  ( (it != pSalData->maFrames.end() ) || ( (*it)->mbFullScreen == false ) ) )
+        for(; it != pSalData->maFrames.end(); ++it )
         {
-            if ( ((*it)->mbFullScreen == true) )
+            if( (*it)->mbFullScreen )
                 bIsFullScreenMode = true;
-            it++;
         }
 
         switch ([pEvent data1])
@@ -661,7 +639,7 @@ void AquaSalInstance::handleAppDefinedEvent( NSEvent* pEvent )
                 break;
         }
         AquaSalFrame* pFrame = pSalData->maFrames.front();
-        Window * pWindow = pFrame->GetWindow() ? pSalData->maFrames.front()->GetWindow() : NULL;
+        Window* pWindow = pFrame ? pFrame->GetWindow() : NULL;
 
         if( pWindow )
         {

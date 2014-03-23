@@ -643,26 +643,31 @@ namespace drawinglayer
 
             // convert size and MapMode to destination logical size and MapMode
             const MapUnit aDestinationMapUnit((MapUnit)rSet.GetPool()->GetMetric(0));
+            basegfx::B2DVector aGraphicLogicSize(aGraphic.GetPrefSize().Width(), aGraphic.GetPrefSize().Height());
 
             if(aGraphic.GetPrefMapMode() != aDestinationMapUnit)
             {
                 // #i100360# for MAP_PIXEL, LogicToLogic will not work properly,
                 // so fallback to Application::GetDefaultDevice()
+                Size aNewSize(0, 0);
+
                 if(MAP_PIXEL == aGraphic.GetPrefMapMode().GetMapUnit())
                 {
-                    aGraphic.SetPrefSize(
-                        Application::GetDefaultDevice()->PixelToLogic(
-                            aGraphic.GetPrefSize(),
-                            aDestinationMapUnit));
+                    aNewSize = Application::GetDefaultDevice()->PixelToLogic(
+                        aGraphic.GetPrefSize(),
+                        aDestinationMapUnit);
                 }
                 else
                 {
-                    aGraphic.SetPrefSize(
-                        OutputDevice::LogicToLogic(
-                            aGraphic.GetPrefSize(),
-                            aGraphic.GetPrefMapMode(),
-                            aDestinationMapUnit));
+                    aNewSize = OutputDevice::LogicToLogic(
+                        aGraphic.GetPrefSize(),
+                        aGraphic.GetPrefMapMode(),
+                        aDestinationMapUnit);
                 }
+
+                // #124002# do not set new size using SetPrefSize at the graphic, this will lead to problems.
+                // Instead, adapt the GraphicLogicSize which will be used for further decompositions
+                aGraphicLogicSize = basegfx::B2DVector(aNewSize.Width(), aNewSize.Height());
             }
 
             // get size
@@ -678,6 +683,7 @@ namespace drawinglayer
 
             return attribute::SdrFillGraphicAttribute(
                 aGraphic,
+                aGraphicLogicSize,
                 aSize,
                 aOffset,
                 aOffsetPosition,

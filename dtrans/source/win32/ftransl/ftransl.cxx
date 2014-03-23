@@ -276,7 +276,13 @@ void SAL_CALL CDataFormatTranslator::initTranslationTable()
     //SOT_FORMATSTR_ID_DIF
     m_TranslTable.push_back(FormatEntry("application/x-openoffice-dif;windows_formatname=\"DIF\"", "DIF", "DIF", CF_DIF, CPPUTYPE_DEFAULT));
     // SOT_FORMAT_BITMAP
-    m_TranslTable.push_back(FormatEntry("application/x-openoffice-bitmap;windows_formatname=\"Bitmap\"", "Bitmap", "Bitmap", CF_DIBV5, CPPUTYPE_DEFAULT));
+
+    // #124085# CF_DIBV5 disabled, leads to problems at export. To fully support, using
+    // an own mime-type may be necessary. I have tried that, but saw no real advantages
+    // with different apps when exchanging bitmap-based data. So, disabled for now. At
+    // the same time increased png format exchange for better interoperability
+    //m_TranslTable.push_back(FormatEntry("application/x-openoffice-bitmap;windows_formatname=\"Bitmap\"", "Bitmap", "Bitmap", CF_DIBV5, CPPUTYPE_DEFAULT));
+
     m_TranslTable.push_back(FormatEntry("application/x-openoffice-bitmap;windows_formatname=\"Bitmap\"", "Bitmap", "Bitmap", CF_DIB, CPPUTYPE_DEFAULT));
     m_TranslTable.push_back(FormatEntry("application/x-openoffice-bitmap;windows_formatname=\"Bitmap\"", "Bitmap", "Bitmap", CF_BITMAP, CPPUTYPE_DEFAULT));
     // SOT_FORMAT_STRING

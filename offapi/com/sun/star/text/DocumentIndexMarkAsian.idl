@@ -37,7 +37,7 @@
     which is used for sorting. If the user does not provide these
     strings, they are not considered for sorting.
 
-    @since OOo 1.1.2
+    @since OpenOffice 1.1.2
  */
 published service DocumentIndexMarkAsian
 {

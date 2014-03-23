@@ -116,10 +116,12 @@ mkdir: %_DEST%\bin%_EXT%\odf4ms
 mkdir: %COMMON_DEST%\pck%_EXT%\openoffice_dev
 mkdir: %COMMON_DEST%\pck%_EXT%\openoffice_dev_nologo
 mkdir: %COMMON_DEST%\pck%_EXT%\openoffice_nologo
+mkdir: %COMMON_DEST%\pck%_EXT%\openoffice_beta
 ..\%__SRC%\bin\intro\intro.zip %COMMON_DEST%\pck%_EXT%\intro.zip
 ..\%__SRC%\bin\dev\intro.zip %COMMON_DEST%\pck%_EXT%\openoffice_dev\intro.zip
 ..\%__SRC%\bin\dev_nologo\intro.zip %COMMON_DEST%\pck%_EXT%\openoffice_dev_nologo\intro.zip
 ..\%__SRC%\bin\nologo\intro.zip %COMMON_DEST%\pck%_EXT%\openoffice_nologo\intro.zip
+..\%__SRC%\bin\beta\intro.zip %COMMON_DEST%\pck%_EXT%\openoffice_beta\intro.zip
 
 ..\%__SRC%\bin\guiloader.exe %_DEST%\bin%_EXT%\testtool.exe
 

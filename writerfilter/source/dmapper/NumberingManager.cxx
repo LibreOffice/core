@@ -1029,7 +1029,7 @@ AbstractListDef::Pointer ListsManager::GetAbstractList( sal_Int32 nId )
                 if( pStyleSheetProperties && pStyleSheetProperties->GetNumId() >= 0 )
                 {
                     ListDef::Pointer pList = GetList( pStyleSheetProperties->GetNumId() );
-                    if ( pList!=NULL )
+                    if( bool(pList) )
                         return pList->GetAbstractDefinition();
                     else
                         pAbstractList = m_aAbstractLists[i];

@@ -44,15 +44,65 @@ sub new ($$$)
 
     my $self = {
         'name' => $table_name,
-        'is_valid' => 1
+        'filename' => $filename,
+        'columns' => undef,
+        'column_specs' => undef,
+        'codepage' => undef,
+        'is_valid' => 1,
+        'is_modified' => 0
     };
     bless($self, $class);
 
-    if ( -f $filename)
+    if (defined $filename &&  -f $filename)
     {
         $self->ReadFile($filename);
     }
     return $self;
+}
+
+
+
+
+sub SetColumnData ($@)
+{
+    my ($self, @data) = @_;
+
+    if (((scalar @data) % 2) != 0)
+    {
+        installer::logger::PrintError("column data has to have an even number of elements: (<column-name> <data-spec>)+)\n");
+        $self->{'is_valid'} = 0;
+        return;
+    }
+
+    $self->{'columns'} = [];
+    $self->{'column_specs'} = [];
+    while (scalar @data > 0)
+    {
+        my $name = shift @data;
+        my $spec = shift @data;
+        push @{$self->{'columns'}}, $name;
+        push @{$self->{'column_specs'}}, $spec;
+    }
+}
+
+
+
+
+sub SetIndexColumns ($@)
+{
+    my ($self, @index_columns) = @_;
+
+    $self->{'index_columns'} = [@index_columns];
+}
+
+
+
+
+sub SetCodepage ($$)
+{
+    my ($self, $codepage) = @_;
+
+    $self->{'codepage'} = $codepage;
 }
 
 
@@ -106,17 +156,22 @@ sub ReadFile ($$)
     # Table name, index columns.
     my $line = Trim(<$in>);
     my @items = split(/\t/, $line);
-    if (scalar @items == 3)
+    my $item_count = scalar @items;
+    if ($item_count>=1 && $items[0] eq $self->{'name'})
+    {
+        # No codepage.
+    }
+    elsif ($item_count>=2 && $items[1] eq $self->{'name'})
     {
         $self->{'codepage'} = shift @items;
     }
-    my $table_name = shift @items;
-    if ($table_name ne $self->{'name'})
+    else
     {
-        printf STDERR ("reading wrong table data for table '%s' (got %s)\n", $self->{'name'}, $table_name);
+        printf STDERR ("reading wrong table data for table '%s' (got %s)\n", $self->{'name'}, $items[0]);
         $self->{'is_valid'} = 0;
         return;
     }
+    shift @items;
     $self->{'index_columns'} = [@items];
     $self->{'index_column_index'} = $self->GetColumnIndex($items[0]);
 
@@ -133,6 +188,58 @@ sub ReadFile ($$)
 
     return $self;
 }
+
+
+
+
+=head WriteFile($self, $filename)
+
+    Write a text file containing the current table content.
+
+=cut
+sub WriteFile ($$)
+{
+    my ($self, $filename) = @_;
+
+    open my $out, ">".$self->{'filename'};
+
+    print $out join("\t", @{$self->{'columns'}})."\r\n";
+    print $out join("\t", @{$self->{'column_specs'}})."\r\n";
+    if (defined $self->{'codepage'})
+    {
+        print $out $self->{'codepage'} . "\t";
+    }
+    print $out $self->{'name'} . "\t";
+    print $out join("\t",@{$self->{'index_columns'}})."\r\n";
+
+    foreach my $row (@{$self->{'rows'}})
+    {
+        print $out $row->Format("\t")."\r\n";
+    }
+
+    close $out;
+}
+
+
+
+
+sub UpdateTimestamp ($)
+{
+    my $self = shift;
+
+    utime(undef,undef, $self->{'filename'});
+}
+
+
+
+
+sub GetName ($)
+{
+    my $self = shift;
+
+    return $self->{'name'};
+}
+
 
 
 
@@ -188,6 +295,33 @@ sub GetColumnIndex ($$)
     }
 
     printf STDERR ("did not find column %s in %s\n", $column_name, join(" and ", @{$self->{'columns'}}));
+    return -1;
+}
+
+
+
+=head2 GetRowIndex($self, $index_column_index, $index_column_value)
+
+    Return the index, starting at 0, of the (first) row that has value $index_column_value
+    in column with index $index_column_index.
+
+    Return -1 if now such row is found.
+
+=cut
+sub GetRowIndex ($$$)
+{
+    my ($self, $index_column_index, $index_column_value) = @_;
+
+    my $rows = $self->{'rows'};
+    for (my ($row_index,$row_count)=(0,scalar @$rows); $row_index<$row_count; ++$row_index)
+    {
+        my $row = $rows->[$row_index];
+        if ($row->GetValue($index_column_index) eq $index_column_value)
+        {
+            return $row_index;
+        }
+    }
+
     return -1;
 }
 
@@ -269,6 +403,90 @@ sub GetAllRows ($)
 
 
 
+
+=head2 SetRow($self, {$key, $value}*)
+
+    Replace an existing row.  If no matching row is found then add the row.
+
+    The row is defined by a set of key/value pairs.  Their order is defined by the keys (column names)
+    and their indices as defined in $self->{'columns'}.
+
+    Rows are compared by their values of the index column.  By default this is the first element of
+    $self->{'index_columns'} but is overruled by the last key that starts with a '*'.
+
+=cut
+sub SetRow ($@)
+{
+    my $self = shift;
+    my @data = @_;
+
+    my @items = ();
+    my $index_column = $self->{'index_columns'}->[0];
+
+    # Key/Value has to have an even number of entries.
+    MsiTools::Die("invalid arguments given to MsiTable::SetRow()\n") if (scalar @data%2) != 0;
+
+    # Find column indices for column names.
+    while (scalar @data > 0)
+    {
+        my $column_name = shift @data;
+        if ($column_name =~ /^\*(.*)$/)
+        {
+            # Column name starts with a '*'.  Use it as index column.
+            $column_name = $1;
+            $index_column = $1;
+        }
+        my $value = shift @data;
+        my $column_index = $self->GetColumnIndex($column_name);
+        $items[$column_index] = $value;
+    }
+
+    my $index_column_index = $self->GetColumnIndex($index_column);
+    my $row_index = $self->GetRowIndex($index_column_index, $items[$index_column_index]);
+
+    if ($row_index < 0)
+    {
+        # Row does not yet exist.  Add it.
+        push @{$self->{'rows'}}, installer::patch::MsiRow->new($self, @items);
+    }
+    else
+    {
+        # Row does already exist.  Replace it.
+        $self->{'rows'}->[$row_index] = installer::patch::MsiRow->new($self, @items);
+    }
+
+    $self->MarkAsModified();
+}
+
+
+
+
+sub MarkAsModified ($)
+{
+    my $self = shift;
+
+    $self->{'is_modified'} = 1;
+}
+
+
+
+
+sub MarkAsUnmodified ($)
+{
+    my $self = shift;
+
+    $self->{'is_modified'} = 0;
+}
+
+
+
+
+sub IsModified ($)
+{
+    my $self = shift;
+
+    return $self->{'is_modified'};
+}
 
 
 1;

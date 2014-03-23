@@ -34,7 +34,7 @@ interface XRestartManager;
 
 /** This singleton is intended to allow to restart the office asynchronously.
 
-    @since OOo 3.3
+    @since OpenOffice 3.3
  */
 singleton OfficeRestartManager : XRestartManager;
 

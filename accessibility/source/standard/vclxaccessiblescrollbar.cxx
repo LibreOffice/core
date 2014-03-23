@@ -276,7 +276,6 @@ Any VCLXAccessibleScrollBar::getMinimumValue(  ) throw (RuntimeException)
 
 // -----------------------------------------------------------------------------
 
-// IAccessible2 implementation, 2009
 ::rtl::OUString VCLXAccessibleScrollBar::getAccessibleName(  ) throw (uno::RuntimeException)
 {
     OExternalLockGuard aGuard( this );

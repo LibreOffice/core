@@ -37,7 +37,6 @@
 #include <vcl/region.hxx>
 #include <vcl/gradient.hxx>
 #include <vcl/hatch.hxx>
-// IAccessibility2 implementation 2009. ------
 #ifndef _COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLEEVENTOBJECT_HPP_
 #include <com/sun/star/accessibility/AccessibleEventObject.hpp>
 #endif
@@ -48,7 +47,6 @@
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
 #endif
 #include "svxpixelctlaccessiblecontext.hxx"
-// ------ IAccessibility2 implementation 2009.
 #include <svtools/colorcfg.hxx>
 #include <svxrectctaccessiblecontext.hxx>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
@@ -576,7 +574,6 @@ Point SvxRectCtl::SetActualRPWithoutInvalidate( RECT_POINT eNewRP )
 void SvxRectCtl::GetFocus()
 {
     SetFocusRect();
-    // IAccessibility2 implementation 2009. ------
     //Solution: Send the accessible focused event
     Control::GetFocus();
     // Send accessibility event.
@@ -584,7 +581,6 @@ void SvxRectCtl::GetFocus()
     {
         pAccContext->FireChildFocus(GetActualRP());
     }
-    // ------ IAccessibility2 implementation 2009.
 }
 
 
@@ -678,7 +674,6 @@ RECT_POINT SvxRectCtl::GetActualRP() const
 |*  Gibt den aktuell ausgewaehlten RECT_POINT zur�ck
 |*
 \************************************************************************/
-// IAccessibility2 implementation 2009. ------
 void SvxRectCtl::SetActualRP( RECT_POINT eNewRP /* MT: , sal_Bool bFireFocus */ )
 {
     // MT: bFireFox as API parameter is ugly...
@@ -691,7 +686,6 @@ void SvxRectCtl::SetActualRP( RECT_POINT eNewRP /* MT: , sal_Bool bFireFocus */ 
     if( pAccContext )
         pAccContext->selectChild( eNewRP /* MT, bFireFocus */ );
 }
-// ------ IAccessibility2 implementation 2009.
 void SvxRectCtl::SetState( CTL_STATE nState )
 {
     m_nState = nState;
@@ -886,7 +880,6 @@ void SvxAngleCtl::Paint( const Rectangle& )
 |*  Control zum Editieren von Bitmaps
 |*
 \************************************************************************/
-// IAccessibility2 implementation 2009. ------
 
 ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > SvxPixelCtl::CreateAccessible()
 {
@@ -946,12 +939,10 @@ long SvxPixelCtl::ShowPosition( const Point &pt)
     return GetFoucsPosIndex();
 
 }
-// ------ IAccessibility2 implementation 2009.
 SvxPixelCtl::SvxPixelCtl( Window* pParent, const ResId& rResId, sal_uInt16 nNumber ) :
                         Control     ( pParent, rResId ),
                         nLines      ( nNumber ),
                         bPaintable  ( sal_True )
-                        // IAccessibility2 implementation 2009. ------
                         //Solution:Initialize it's value to Point(0,0)
                         ,aFocusPosition(0,0)
 {
@@ -965,7 +956,6 @@ SvxPixelCtl::SvxPixelCtl( Window* pParent, const ResId& rResId, sal_uInt16 nNumb
     nSquares = nLines * nLines;
     pPixel = new sal_uInt16[ nSquares ];
     rtl_zeroMemory(pPixel, nSquares * sizeof(sal_uInt16));
-    // IAccessibility2 implementation 2009. ------
     m_pAccess=NULL;
 }
 
@@ -1002,7 +992,6 @@ void SvxPixelCtl::ChangePixel( sal_uInt16 nPixel )
 
 void SvxPixelCtl::MouseButtonDown( const MouseEvent& rMEvt )
 {
-    // IAccessibility2 implementation 2009. ------
     //Point aPt = PixelToLogic( rMEvt.GetPosPixel() );
     //Point aPtTl, aPtBr;
     //sal_uInt16    nX, nY;
@@ -1032,7 +1021,6 @@ void SvxPixelCtl::MouseButtonDown( const MouseEvent& rMEvt )
     {
         m_pAccess->NotifyChild(nIndex,sal_True,sal_True);
     }
-    // ------ IAccessibility2 implementation 2009.
 }
 
 /*************************************************************************
@@ -1083,13 +1071,11 @@ void SvxPixelCtl::Paint( const Rectangle& )
                 DrawRect( Rectangle( aPtTl, aPtBr ) );
             }
         }
-        // IAccessibility2 implementation 2009. ------
         //Solution:Draw visual focus when has focus
         if( HasFocus() )
         {
             ShowFocus(implCalFocusRect(aFocusPosition));
         }
-        // ------ IAccessibility2 implementation 2009.
     } // bPaintable
     else
     {
@@ -1099,7 +1085,6 @@ void SvxPixelCtl::Paint( const Rectangle& )
         DrawLine( Point( 0, aRectSize.Height() ), Point( aRectSize.Width(), 0 ) );
     }
 }
-// IAccessibility2 implementation 2009. ------
 //Solution:Caculate visual focus rectangle via focus position
 Rectangle SvxPixelCtl::implCalFocusRect( const Point& aPosition )
 {
@@ -1222,7 +1207,6 @@ void SvxPixelCtl::LoseFocus()
     }
     Control::LoseFocus();
 }
-// ------ IAccessibility2 implementation 2009.
 
 /*************************************************************************
 |*

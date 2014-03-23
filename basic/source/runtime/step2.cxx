@@ -424,7 +424,7 @@ void SbiRuntime::SetupArgs( SbxVariable* p, sal_uInt32 nOp1 )
                             rtl::OUString sDefaultMethod;
                             if ( xDfltMethod.is() )
                                 sDefaultMethod = xDfltMethod->getDefaultMethodName();
-                            if ( sDefaultMethod.getLength() )
+                            if ( !sDefaultMethod.isEmpty() )
                             {
                                 SbxVariable* meth = pUnoObj->Find( sDefaultMethod, SbxCLASS_METHOD );
                                 if( meth != NULL )
@@ -593,7 +593,7 @@ SbxVariable* SbiRuntime::CheckArray( SbxVariable* pElem )
                             else if( xIndexAccess.is() )
                                 sDefaultMethod = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "getByIndex" ) );
 
-                            if ( sDefaultMethod.getLength() )
+                            if ( !sDefaultMethod.isEmpty() )
                             {
                                 SbxVariable* meth = pUnoObj->Find( sDefaultMethod, SbxCLASS_METHOD );
                                 SbxVariableRef refTemp = meth;

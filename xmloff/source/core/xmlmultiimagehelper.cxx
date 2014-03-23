@@ -96,7 +96,7 @@ multiImageImportHelper::~multiImageImportHelper()
 
 const SvXMLImportContext* multiImageImportHelper::solveMultipleImages()
 {
-    const SvXMLImportContext* pRetval = 0;
+    SvXMLImportContext* pRetval = 0;
 
     if(maImplContextVector.size())
     {
@@ -133,7 +133,16 @@ const SvXMLImportContext* multiImageImportHelper::solveMultipleImages()
             {
                 if(a != nIndexOfPreferred)
                 {
-                    removeGraphicFromImportContext(**maImplContextVector[a]);
+                    SvXMLImportContext& rCandidate = **maImplContextVector[a];
+
+                    if(pRetval)
+                    {
+                        // #124143# evtl. copy imported GluePoints before deprecating
+                        // this graphic and context
+                        pRetval->onDemandRescueUsefulDataFromTemporary(rCandidate);
+                    }
+
+                    removeGraphicFromImportContext(rCandidate);
                 }
             }
         }

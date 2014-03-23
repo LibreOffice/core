@@ -590,7 +590,7 @@ void dbg_traceStep( SbModule* pModule, sal_uInt32 nPC, sal_Int32 nCallLvl )
     const TraceTextData& rTraceTextData = itInner->second;
     const rtl::OString& rStr_STMNT = rTraceTextData.m_aTraceStr_STMNT;
     bool bSTMT = false;
-    if( rStr_STMNT.getLength() )
+    if( !rStr_STMNT.isEmpty() )
         bSTMT = true;
 
     char TimeBuffer[200];
@@ -620,7 +620,7 @@ void dbg_traceStep( SbModule* pModule, sal_uInt32 nPC, sal_Int32 nCallLvl )
 
     nIndent += GnIndentForPCode;
     const rtl::OString& rStr_PCode = rTraceTextData.m_aTraceStr_PCode;
-    if( rStr_PCode.getLength() )
+    if( !rStr_PCode.isEmpty() )
     {
         lcl_lineOut( rStr_PCode.getStr(), lcl_getSpaces( nIndent ),
             bPrintTimeStamp ? TimeBuffer : NULL );

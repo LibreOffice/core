@@ -41,7 +41,7 @@ module com { module sun { module star { module i18n {
     a new conversion function containing position map (offset) between original
     and conveted string. </p>
 
-     @since OOo 2.0
+     @since OpenOffice 2.0
  */
 published interface XExtendedTextConversion : ::com::sun::star::i18n::XTextConversion
 {

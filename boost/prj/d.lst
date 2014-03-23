@@ -314,6 +314,7 @@ mkdir: %_DEST%\inc%_EXT%\boost\math\special_functions\detail
 mkdir: %_DEST%\inc%_EXT%\boost\math\tools
 mkdir: %_DEST%\inc%_EXT%\boost\math\tools\detail
 mkdir: %_DEST%\inc%_EXT%\boost\move
+mkdir: %_DEST%\inc%_EXT%\boost\move\detail
 mkdir: %_DEST%\inc%_EXT%\boost\mpi
 mkdir: %_DEST%\inc%_EXT%\boost\mpi\collectives
 mkdir: %_DEST%\inc%_EXT%\boost\mpi\detail
@@ -430,6 +431,15 @@ mkdir: %_DEST%\inc%_EXT%\boost\polygon
 mkdir: %_DEST%\inc%_EXT%\boost\polygon\detail
 mkdir: %_DEST%\inc%_EXT%\boost\pool
 mkdir: %_DEST%\inc%_EXT%\boost\pool\detail
+mkdir: %_DEST%\inc%_EXT%\boost\predef
+mkdir: %_DEST%\inc%_EXT%\boost\predef\architecture
+mkdir: %_DEST%\inc%_EXT%\boost\predef\architecture\x86
+mkdir: %_DEST%\inc%_EXT%\boost\predef\detail
+mkdir: %_DEST%\inc%_EXT%\boost\predef\library
+mkdir: %_DEST%\inc%_EXT%\boost\predef\library\c
+mkdir: %_DEST%\inc%_EXT%\boost\predef\os
+mkdir: %_DEST%\inc%_EXT%\boost\predef\os\bsd
+mkdir: %_DEST%\inc%_EXT%\boost\predef\other
 mkdir: %_DEST%\inc%_EXT%\boost\preprocessor
 mkdir: %_DEST%\inc%_EXT%\boost\preprocessor\arithmetic
 mkdir: %_DEST%\inc%_EXT%\boost\preprocessor\arithmetic\detail
@@ -466,6 +476,7 @@ mkdir: %_DEST%\inc%_EXT%\boost\preprocessor\seq\detail
 mkdir: %_DEST%\inc%_EXT%\boost\preprocessor\slot
 mkdir: %_DEST%\inc%_EXT%\boost\preprocessor\slot\detail
 mkdir: %_DEST%\inc%_EXT%\boost\preprocessor\tuple
+mkdir: %_DEST%\inc%_EXT%\boost\preprocessor\variadic
 mkdir: %_DEST%\inc%_EXT%\boost\program_options
 mkdir: %_DEST%\inc%_EXT%\boost\program_options\detail
 mkdir: %_DEST%\inc%_EXT%\boost\property_map
@@ -1038,6 +1049,7 @@ mkdir: %_DEST%\inc%_EXT%\boost\xpressive\traits\detail
 ..\%__SRC%\inc\boost\math\tools\* %_DEST%\inc%_EXT%\boost\math\tools
 ..\%__SRC%\inc\boost\math\tools\detail\* %_DEST%\inc%_EXT%\boost\math\tools\detail
 ..\%__SRC%\inc\boost\move\* %_DEST%\inc%_EXT%\boost\move
+..\%__SRC%\inc\boost\move\detail\* %_DEST%\inc%_EXT%\boost\move\detail
 ..\%__SRC%\inc\boost\mpi\* %_DEST%\inc%_EXT%\boost\mpi
 ..\%__SRC%\inc\boost\mpi\collectives\* %_DEST%\inc%_EXT%\boost\mpi\collectives
 ..\%__SRC%\inc\boost\mpi\detail\* %_DEST%\inc%_EXT%\boost\mpi\detail
@@ -1149,6 +1161,15 @@ mkdir: %_DEST%\inc%_EXT%\boost\xpressive\traits\detail
 ..\%__SRC%\inc\boost\polygon\detail\* %_DEST%\inc%_EXT%\boost\polygon\detail
 ..\%__SRC%\inc\boost\pool\* %_DEST%\inc%_EXT%\boost\pool
 ..\%__SRC%\inc\boost\pool\detail\* %_DEST%\inc%_EXT%\boost\pool\detail
+..\%__SRC%\inc\boost\predef\* %_DEST%\inc%_EXT%\boost\predef
+..\%__SRC%\inc\boost\predef\architecture\* %_DEST%\inc%_EXT%\boost\predef\architecture
+..\%__SRC%\inc\boost\predef\architecture\x86\* %_DEST%\inc%_EXT%\boost\predef\architecture\x86
+..\%__SRC%\inc\boost\predef\detail\* %_DEST%\inc%_EXT%\boost\predef\detail
+..\%__SRC%\inc\boost\predef\library\* %_DEST%\inc%_EXT%\boost\predef\library
+..\%__SRC%\inc\boost\predef\library\c\* %_DEST%\inc%_EXT%\boost\predef\library\c
+..\%__SRC%\inc\boost\predef\os\* %_DEST%\inc%_EXT%\boost\predef\os
+..\%__SRC%\inc\boost\predef\os\bsd\* %_DEST%\inc%_EXT%\boost\predef\os\bsd
+..\%__SRC%\inc\boost\predef\other\* %_DEST%\inc%_EXT%\boost\predef\other
 ..\%__SRC%\inc\boost\preprocessor\arithmetic\* %_DEST%\inc%_EXT%\boost\preprocessor\arithmetic
 ..\%__SRC%\inc\boost\preprocessor\arithmetic\detail\* %_DEST%\inc%_EXT%\boost\preprocessor\arithmetic\detail
 ..\%__SRC%\inc\boost\preprocessor\array\* %_DEST%\inc%_EXT%\boost\preprocessor\array
@@ -1185,6 +1206,7 @@ mkdir: %_DEST%\inc%_EXT%\boost\xpressive\traits\detail
 ..\%__SRC%\inc\boost\preprocessor\slot\* %_DEST%\inc%_EXT%\boost\preprocessor\slot
 ..\%__SRC%\inc\boost\preprocessor\slot\detail\* %_DEST%\inc%_EXT%\boost\preprocessor\slot\detail
 ..\%__SRC%\inc\boost\preprocessor\tuple\* %_DEST%\inc%_EXT%\boost\preprocessor\tuple
+..\%__SRC%\inc\boost\preprocessor\variadic\* %_DEST%\inc%_EXT%\boost\preprocessor\variadic
 ..\%__SRC%\inc\boost\program_options\* %_DEST%\inc%_EXT%\boost\program_options
 ..\%__SRC%\inc\boost\program_options\detail\* %_DEST%\inc%_EXT%\boost\program_options\detail
 ..\%__SRC%\inc\boost\property_map\* %_DEST%\inc%_EXT%\boost\property_map

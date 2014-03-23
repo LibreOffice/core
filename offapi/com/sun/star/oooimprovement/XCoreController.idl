@@ -33,10 +33,10 @@ module com { module sun { module star { module oooimprovement {
 
 //=============================================================================
 
-/** specifies the interface used to control the OOo Improvement core
+/** specifies the interface used to control the OpenOffice Improvement core
     components
 
-    @since OOo 3.0
+    @since OpenOffice 3.0
 */
 interface XCoreController
 {

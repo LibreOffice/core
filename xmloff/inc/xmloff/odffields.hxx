@@ -46,4 +46,6 @@
 
 #define ODF_PAGEREF "vnd.oasis.opendocument.field.PAGEREF"
 
+#define ODF_COMMENTRANGE "vnd.oasis.opendocument.field.COMMENTRANGE"
+
 #endif /*  _ODFFIELDS_HXX */

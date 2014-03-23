@@ -1259,53 +1259,73 @@ BitmapEx VCL_DLLPUBLIC createBlendFrame(
             long x(0);
             long y(0);
 
-            // x == 0, y == 0
-            pContent->SetPixel(y, x, aColorTopLeft);
-            pAlpha->SetPixelIndex(y, x, nAlpha);
+            // x == 0, y == 0, top-left corner
+            pContent->SetPixel(0, 0, aColorTopLeft);
+            pAlpha->SetPixelIndex(0, 0, nAlpha);
 
-            for(x = 1; x < nW - 1; x++) // y == 0
+            // y == 0, top line left to right
+            for(x = 1; x < nW - 1; x++)
             {
                 Color aMix(aColorTopLeft);
 
                 aMix.Merge(aColorTopRight, 255 - sal_uInt8((x * 255) / nW));
-                pContent->SetPixel(y, x, aMix);
-                pAlpha->SetPixelIndex(y, x, nAlpha);
+                pContent->SetPixel(0, x, aMix);
+                pAlpha->SetPixelIndex(0, x, nAlpha);
             }
 
-            // x == nW - 1, y == 0
-            pContent->SetPixel(y, x, aColorTopRight);
-            pAlpha->SetPixelIndex(y, x, nAlpha);
+            // x == nW - 1, y == 0, top-right corner
+            // #123690# Caution! When nW is 1, x == nW is possible (!)
+            if(x < nW)
+            {
+                pContent->SetPixel(0, x, aColorTopRight);
+                pAlpha->SetPixelIndex(0, x, nAlpha);
+            }
 
-            for(y = 1; y < nH - 1; y++) // x == 0 and nW - 1
+            // x == 0 and nW - 1, left and right line top-down
+            for(y = 1; y < nH - 1; y++)
             {
                 Color aMixA(aColorTopLeft);
-                Color aMixB(aColorTopRight);
 
                 aMixA.Merge(aColorBottomLeft, 255 - sal_uInt8((y * 255) / nH));
                 pContent->SetPixel(y, 0, aMixA);
                 pAlpha->SetPixelIndex(y, 0, nAlpha);
 
-                aMixB.Merge(aColorBottomRight, 255 - sal_uInt8((y * 255) / nH));
-                pContent->SetPixel(y, nW - 1, aMixB);
-                pAlpha->SetPixelIndex(y, nW - 1, nAlpha);
+                // #123690# Caution! When nW is 1, x == nW is possible (!)
+                if(x < nW)
+                {
+                    Color aMixB(aColorTopRight);
+
+                    aMixB.Merge(aColorBottomRight, 255 - sal_uInt8((y * 255) / nH));
+                    pContent->SetPixel(y, x, aMixB);
+                    pAlpha->SetPixelIndex(y, x, nAlpha);
+                }
             }
 
-            x = 0; // x == 0, y == nH - 1
-            pContent->SetPixel(y, x, aColorBottomLeft);
-            pAlpha->SetPixelIndex(y, x, nAlpha);
-
-            for(x = 1; x < nW - 1; x++) // y == nH - 1
+            // #123690# Caution! When nH is 1, y == nH is possible (!)
+            if(y < nH)
             {
-                Color aMix(aColorBottomLeft);
+                // x == 0, y == nH - 1, bottom-left corner
+                pContent->SetPixel(y, 0, aColorBottomLeft);
+                pAlpha->SetPixelIndex(y, 0, nAlpha);
 
-                aMix.Merge(aColorBottomRight, 255 - sal_uInt8(((x - 0)* 255) / nW));
-                pContent->SetPixel(y, x, aMix);
-                pAlpha->SetPixelIndex(y, x, nAlpha);
+                // y == nH - 1, bottom line left to right
+                for(x = 1; x < nW - 1; x++)
+                {
+                    Color aMix(aColorBottomLeft);
+
+                    aMix.Merge(aColorBottomRight, 255 - sal_uInt8(((x - 0)* 255) / nW));
+                    pContent->SetPixel(y, x, aMix);
+                    pAlpha->SetPixelIndex(y, x, nAlpha);
+                }
+
+                // x == nW - 1, y == nH - 1, bottom-right corner
+                // #123690# Caution! When nW is 1, x == nW is possible (!)
+                if(x < nW)
+                {
+                    pContent->SetPixel(y, x, aColorBottomRight);
+                    pAlpha->SetPixelIndex(y, x, nAlpha);
+                }
             }
-
-            // x == nW - 1, y == nH - 1
-            pContent->SetPixel(y, x, aColorBottomRight);
-            pAlpha->SetPixelIndex(y, x, nAlpha);
 
             aContent.ReleaseAccess(pContent);
             aAlpha.ReleaseAccess(pAlpha);

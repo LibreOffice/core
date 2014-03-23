@@ -326,10 +326,10 @@ public:
 
 class XMLImpHyperlinkContext_Impl : public SvXMLImportContext
 {
-    XMLHints_Impl&  rHints;
-    XMLHyperlinkHint_Impl   *pHint;
+    XMLHints_Impl&  mrHints;
+    XMLHyperlinkHint_Impl   *mpHint;
 
-    sal_Bool&       rIgnoreLeadingSpace;
+    sal_Bool&       mrbIgnoreLeadingSpace;
 
 public:
 
@@ -351,71 +351,77 @@ public:
 };
 
 XMLImpHyperlinkContext_Impl::XMLImpHyperlinkContext_Impl(
-        SvXMLImport& rImport,
-        sal_uInt16 nPrfx,
-        const OUString& rLName,
-        const Reference< xml::sax::XAttributeList > & xAttrList,
-        XMLHints_Impl& rHnts,
-        sal_Bool& rIgnLeadSpace ) :
-    SvXMLImportContext( rImport, nPrfx, rLName ),
-    rHints( rHnts ),
-    pHint( new XMLHyperlinkHint_Impl(
-              GetImport().GetTextImport()->GetCursorAsRange()->getStart() ) ),
-    rIgnoreLeadingSpace( rIgnLeadSpace )
+    SvXMLImport& rImport,
+    sal_uInt16 nPrfx,
+    const OUString& rLName,
+    const Reference< xml::sax::XAttributeList > & xAttrList,
+    XMLHints_Impl& rHnts,
+    sal_Bool& rIgnLeadSpace )
+    : SvXMLImportContext( rImport, nPrfx, rLName )
+    , mrHints( rHnts )
+    , mpHint( new XMLHyperlinkHint_Impl( GetImport().GetTextImport()->GetCursorAsRange()->getStart() ) )
+    , mrbIgnoreLeadingSpace( rIgnLeadSpace )
 {
     OUString sShow;
-    const SvXMLTokenMap& rTokenMap =
-        GetImport().GetTextImport()->GetTextHyperlinkAttrTokenMap();
+    const SvXMLTokenMap& rTokenMap = GetImport().GetTextImport()->GetTextHyperlinkAttrTokenMap();
 
     sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
-    for( sal_Int16 i=0; i < nAttrCount; i++ )
+    for ( sal_Int16 i = 0; i < nAttrCount; i++ )
     {
         const OUString& rAttrName = xAttrList->getNameByIndex( i );
         const OUString& rValue = xAttrList->getValueByIndex( i );
 
         OUString aLocalName;
-        sal_uInt16 nPrefix =
-            GetImport().GetNamespaceMap().GetKeyByAttrName( rAttrName,
-                                                            &aLocalName );
-        switch( rTokenMap.Get( nPrefix, aLocalName ) )
+        const sal_uInt16 nPrefix = GetImport().GetNamespaceMap().GetKeyByAttrName( rAttrName, &aLocalName );
+        switch (rTokenMap.Get( nPrefix, aLocalName ))
         {
         case XML_TOK_TEXT_HYPERLINK_HREF:
-            pHint->SetHRef( GetImport().GetAbsoluteReference( rValue ) );
+            mpHint->SetHRef( GetImport().GetAbsoluteReference( rValue ) );
             break;
         case XML_TOK_TEXT_HYPERLINK_NAME:
-            pHint->SetName( rValue );
+            mpHint->SetName( rValue );
             break;
         case XML_TOK_TEXT_HYPERLINK_TARGET_FRAME:
-            pHint->SetTargetFrameName( rValue );
+            mpHint->SetTargetFrameName( rValue );
             break;
         case XML_TOK_TEXT_HYPERLINK_SHOW:
             sShow = rValue;
             break;
         case XML_TOK_TEXT_HYPERLINK_STYLE_NAME:
-            pHint->SetStyleName( rValue );
+            mpHint->SetStyleName( rValue );
             break;
         case XML_TOK_TEXT_HYPERLINK_VIS_STYLE_NAME:
-            pHint->SetVisitedStyleName( rValue );
+            mpHint->SetVisitedStyleName( rValue );
             break;
         }
     }
 
-    if( sShow.getLength() && !pHint->GetTargetFrameName().getLength() )
+    if( sShow.getLength() && !mpHint->GetTargetFrameName().getLength() )
     {
         if( IsXMLToken( sShow, XML_NEW ) )
-            pHint->SetTargetFrameName(
+            mpHint->SetTargetFrameName(
                     OUString( RTL_CONSTASCII_USTRINGPARAM("_blank" ) ) );
         else if( IsXMLToken( sShow, XML_REPLACE ) )
-            pHint->SetTargetFrameName(
+            mpHint->SetTargetFrameName(
                     OUString( RTL_CONSTASCII_USTRINGPARAM("_self" ) ) );
     }
-    rHints.Insert( pHint, rHints.Count() );
+
+    if ( mpHint->GetHRef().isEmpty() )
+    {
+        // hyperlink without an URL is not imported.
+        delete mpHint;
+        mpHint = NULL;
+    }
+    else
+    {
+        mrHints.Insert( mpHint, mrHints.Count() );
+    }
 }
 
 XMLImpHyperlinkContext_Impl::~XMLImpHyperlinkContext_Impl()
 {
-    if( pHint )
-        pHint->SetEnd( GetImport().GetTextImport()
+    if( mpHint != NULL )
+        mpHint->SetEnd( GetImport().GetTextImport()
                             ->GetCursorAsRange()->getStart() );
 }
 
@@ -428,7 +434,7 @@ SvXMLImportContext *XMLImpHyperlinkContext_Impl::CreateChildContext(
     {
         XMLEventsImportContext* pCtxt = new XMLEventsImportContext(
             GetImport(), nPrefix, rLocalName);
-        pHint->SetEventsContext(pCtxt);
+        mpHint->SetEventsContext(pCtxt);
         return pCtxt;
     }
     else
@@ -439,13 +445,13 @@ SvXMLImportContext *XMLImpHyperlinkContext_Impl::CreateChildContext(
 
         return XMLImpSpanContext_Impl::CreateChildContext(
             GetImport(), nPrefix, rLocalName, xAttrList,
-            nToken, rHints, rIgnoreLeadingSpace );
+            nToken, mrHints, mrbIgnoreLeadingSpace );
     }
 }
 
 void XMLImpHyperlinkContext_Impl::Characters( const OUString& rChars )
 {
-    GetImport().GetTextImport()->InsertString( rChars, rIgnoreLeadingSpace );
+    GetImport().GetTextImport()->InsertString( rChars, mrbIgnoreLeadingSpace );
 }
 
 // ---------------------------------------------------------------------
@@ -1596,25 +1602,23 @@ SvXMLImportContext *XMLImpSpanContext_Impl::CreateChildContext(
         // test for HyperLinkURL property. If present, insert link as
         // text property (StarWriter), else try to insert as text
         // field (StarCalc, StarDraw, ...)
-        Reference<beans::XPropertySet> xPropSet(
-            rImport.GetTextImport()->GetCursor(),
-            UNO_QUERY );
+        Reference< beans::XPropertySet > xPropSet( rImport.GetTextImport()->GetCursor(), UNO_QUERY );
 
-        const OUString sHyperLinkURL(
-            RTL_CONSTASCII_USTRINGPARAM("HyperLinkURL"));
+        static const OUString sHyperLinkURL( RTL_CONSTASCII_USTRINGPARAM( "HyperLinkURL" ) );
 
-        if (xPropSet->getPropertySetInfo()->hasPropertyByName(sHyperLinkURL))
+        if ( xPropSet->getPropertySetInfo()->hasPropertyByName( sHyperLinkURL ) )
         {
-            pContext = new XMLImpHyperlinkContext_Impl( rImport, nPrefix,
-                                                        rLocalName, xAttrList,
-                                                        rHints,
-                                                        rIgnoreLeadingSpace );
+            pContext = new XMLImpHyperlinkContext_Impl(
+                    rImport,
+                    nPrefix,
+                    rLocalName,
+                    xAttrList,
+                    rHints,
+                    rIgnoreLeadingSpace );
         }
         else
         {
-            pContext = new XMLUrlFieldImportContext( rImport,
-                                              *rImport.GetTextImport().get(),
-                                                     nPrefix, rLocalName);
+            pContext = new XMLUrlFieldImportContext( rImport, *rImport.GetTextImport().get(), nPrefix, rLocalName );
             //whitespace handling like other fields
             rIgnoreLeadingSpace = sal_False;
 

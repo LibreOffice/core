@@ -32,7 +32,7 @@
 
     @see com::sun::star::frame::ToolbarController
 
-    @since OOo 2.0
+    @since OpenOffice 2.0
  */
 interface XToolbarControllerListener : com::sun::star::uno::XInterface
 {

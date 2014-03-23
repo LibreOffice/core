@@ -44,7 +44,7 @@ module com { module sun { module star { module frame {
     @see PopupMenuControllerFactory
     </p>
 
-    @since OOo 2.0
+    @since OpenOffice 2.0
  */
 
 published interface XUIControllerRegistration : com::sun::star::uno::XInterface

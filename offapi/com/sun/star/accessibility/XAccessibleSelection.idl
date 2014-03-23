@@ -48,7 +48,7 @@ module com { module sun { module star { module accessibility {
     <p>It depends on the class implementing this interface, whether it
     supports single or multi selection.</p>
 
-    @since OOo 1.1.2
+    @since OpenOffice 1.1.2
 */
 published interface XAccessibleSelection : ::com::sun::star::uno::XInterface
 {

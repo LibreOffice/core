@@ -29,7 +29,7 @@ module com {  module sun {  module star {  module geometry {
 
     The data is stored real-valued.<p>
 
-    @since OOo 2.0
+    @since OpenOffice 2.0
  */
 published struct RealSize2D
 {

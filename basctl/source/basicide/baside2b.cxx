@@ -431,9 +431,7 @@ void __EXPORT EditorWindow::KeyInput( const KeyEvent& rKEvt )
     sal_Bool bWasModified = pEditEngine->IsModified();
     if ( !TextEngine::DoesKeyChangeText( rKEvt ) || ImpCanModify() )
     {
-        if ( ( rKEvt.GetKeyCode().GetCode() == KEY_A) && rKEvt.GetKeyCode().IsMod1() )
-            pEditView->SetSelection( TextSelection( TextPaM( 0, 0 ), TextPaM( 0xFFFFFFFF, 0xFFFF ) ) );
-        else if ( ( rKEvt.GetKeyCode().GetCode() == KEY_Y ) && rKEvt.GetKeyCode().IsMod1() )
+        if ( ( rKEvt.GetKeyCode().GetCode() == KEY_Y ) && rKEvt.GetKeyCode().IsMod1() )
             bDone = sal_True; // CTRL-Y schlucken, damit kein Vorlagenkatalog
         else
         {

@@ -44,6 +44,9 @@ SLOFILES =  $(SLO)$/ipict.obj $(SLO)$/shape.obj
 SHL1TARGET=     ipt$(DLLPOSTFIX)
 SHL1IMPLIB=     ipict
 SHL1STDLIBS=    $(VCLLIB) $(TOOLSLIB) $(SALLIB) $(BASEGFXLIB)
+.IF "$(GUI)" == "OS2"
+SHL1STDLIBS+=   $(CPPULIB)
+.ENDIF
 SHL1LIBS=       $(SLB)$/ipict.lib
 
 .IF "$(GUI)" != "UNX"

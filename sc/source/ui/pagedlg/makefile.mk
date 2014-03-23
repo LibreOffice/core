@@ -26,6 +26,7 @@ PRJ=..$/..$/..
 PRJNAME=sc
 TARGET=pagedlg
 LIBTARGET=no
+ENABLE_EXCEPTIONS=TRUE
 
 # --- Settings -----------------------------------------------------
 
@@ -43,7 +44,6 @@ CXXFILES = \
         tphf.cxx 	\
         tphfedit.cxx
 
-            
 
 SLOFILES = \
         $(SLO)$/areasdlg.obj	\

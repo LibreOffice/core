@@ -181,7 +181,7 @@ WritePS (osl::File* pFile, const rtl::OString &rString)
     sal_uInt64 nOutLength = 0;
 
     if (nInLength > 0 && pFile)
-        pFile->write (rString, nInLength, nOutLength);
+        pFile->write( rString.getStr(), nInLength, nOutLength);
 
     return nInLength == nOutLength;
 }

@@ -127,7 +127,7 @@ sal_Bool IdlType::dumpDependedTypes(IdlOptions* pOptions)
         if ((index = typeName.lastIndexOf(']')) > 0)
             typeName = typeName.copy(index + 1);
 
-        if (getBaseType(typeName).getLength() == 0)
+        if ( getBaseType(typeName).isEmpty() )
         {
             if (!produceType(typeName,
                                 m_typeMgr,
@@ -234,7 +234,7 @@ void IdlType::dumpDepIncludes(FileStream& o, const OString& typeName, sal_Char* 
 
         OString defPrefix("IDL");
 
-        if (getBaseType(relType).getLength() == 0 &&
+        if ( getBaseType(relType).isEmpty() &&
             m_typeName != relType)
         {
             if (m_typeMgr.getTypeClass(relType) == RT_TYPE_INTERFACE)
@@ -285,7 +285,7 @@ void IdlType::dumpNameSpace(FileStream& o, sal_Bool bOpen, sal_Bool bFull, const
 {
     OString typeName(type);
     sal_Bool bOneLine = sal_True;
-    if (typeName.getLength() == 0)
+    if ( typeName.isEmpty() )
     {
         typeName = m_typeName;
         bOneLine = sal_False;
@@ -356,7 +356,7 @@ sal_uInt32 IdlType::checkInheritedMemberCount(const TypeReader* pReader)
 
     sal_uInt32 count = 0;
     OString superType(pReader->getSuperTypeName());
-    if (superType.getLength() > 0)
+    if ( !superType.isEmpty() )
     {
         TypeReader aSuperReader(m_typeMgr.getTypeReader(superType));
         if ( aSuperReader.isValid() )
@@ -418,7 +418,7 @@ void IdlType::dumpType(FileStream& o, const OString& type )
         case RT_TYPE_INVALID:
             {
                 OString tmp(getBaseType(relType));
-                if (tmp.getLength() > 0)
+                if ( !tmp.isEmpty() )
                 {
                     tmp = tmp.replace( ' ', '_' );
                     o << tmp;
@@ -776,12 +776,12 @@ sal_Bool InterfaceType::dumpHFile(FileStream& o)
 
     // write documentation
     OString aDoc = m_reader.getDoku();
-    if( aDoc.getLength() )
+    if( !aDoc.isEmpty() )
         o << "/**\n" << aDoc << "\n*/";
     o << "\ninterface " << m_name;
 
     OString superType(m_reader.getSuperTypeName());
-    if (superType.getLength() > 0)
+    if ( !superType.isEmpty() )
         o << " : " << scopedName(m_typeName, superType);
 
     o << "\n{\n";
@@ -828,7 +828,7 @@ void InterfaceType::dumpAttributes(FileStream& o)
 
         // write documentation
         OString aDoc = m_reader.getFieldDoku(i);
-        if( aDoc.getLength() )
+        if( !aDoc.isEmpty() )
             o << "/**\n" << aDoc << "\n*/\n";
 
         if (access == RT_ACCESS_READONLY)
@@ -869,7 +869,7 @@ void InterfaceType::dumpMethods(FileStream& o)
 
         // write documentation
         OString aDoc = m_reader.getMethodDoku(i);
-        if( aDoc.getLength() )
+        if( !aDoc.isEmpty() )
             o << "/**\n" << aDoc << "\n*/\n";
 
         o << indent();
@@ -979,7 +979,7 @@ sal_uInt32 InterfaceType::checkInheritedMemberCount(const TypeReader* pReader)
 
     sal_uInt32 count = 0;
     OString superType(pReader->getSuperTypeName());
-    if (superType.getLength() > 0)
+    if ( !superType.isEmpty() )
     {
         TypeReader aSuperReader(m_typeMgr.getTypeReader(superType));
         if (aSuperReader.isValid())
@@ -1258,7 +1258,7 @@ sal_Bool StructureType::dumpHFile(FileStream& o)
 
     // write documentation
     OString aDoc = m_reader.getDoku();
-    if( aDoc.getLength() )
+    if( !aDoc.isEmpty() )
         o << "/**\n" << aDoc << "\n*/";
 
     o << "\nstruct " << m_name;
@@ -1266,7 +1266,7 @@ sal_Bool StructureType::dumpHFile(FileStream& o)
     inc();
 
     OString superType(m_reader.getSuperTypeName());
-    if (superType.getLength() > 0)
+    if ( !superType.isEmpty() )
         dumpSuperMember(o, superType);
 
     sal_uInt32      fieldCount = m_reader.getFieldCount();
@@ -1287,7 +1287,7 @@ sal_Bool StructureType::dumpHFile(FileStream& o)
 
         // write documentation
         OString aDoc = m_reader.getFieldDoku(i);
-        if( aDoc.getLength() )
+        if( !aDoc.isEmpty() )
             o << "/**\n" << aDoc << "\n*/";
 
         o << indent();
@@ -1307,7 +1307,7 @@ sal_Bool StructureType::dumpHFile(FileStream& o)
 
 void StructureType::dumpSuperMember(FileStream& o, const OString& superType)
 {
-    if (superType.getLength() > 0)
+    if ( !superType.isEmpty() )
     {
         TypeReader aSuperReader(m_typeMgr.getTypeReader(superType));
 
@@ -1331,7 +1331,7 @@ void StructureType::dumpSuperMember(FileStream& o, const OString& superType)
 
                 // write documentation
                 OString aDoc = aSuperReader.getFieldDoku(i);
-                if( aDoc.getLength() )
+                if( !aDoc.isEmpty() )
                     o << "/**\n" << aDoc << "\n*/";
 
                 o << indent();
@@ -1374,7 +1374,7 @@ sal_Bool ExceptionType::dumpHFile(FileStream& o)
 
     // write documentation
     OString aDoc = m_reader.getDoku();
-    if( aDoc.getLength() )
+    if( !aDoc.isEmpty() )
         o << "/**\n" << aDoc << "\n*/";
 
     o << "\nexception " << m_name;
@@ -1385,7 +1385,7 @@ sal_Bool ExceptionType::dumpHFile(FileStream& o)
     o << indent() << "/*extra member to hold a derived exception */\n";
     o << indent() << "any _derivedException;\n";
     OString superType(m_reader.getSuperTypeName());
-    if (superType.getLength() > 0)
+    if ( !superType.isEmpty() )
         dumpSuperMember(o, superType);
 
     sal_uInt32      fieldCount = m_reader.getFieldCount();
@@ -1406,7 +1406,7 @@ sal_Bool ExceptionType::dumpHFile(FileStream& o)
 
         // write documentation
         OString aDoc = m_reader.getFieldDoku(i);
-        if( aDoc.getLength() )
+        if( !aDoc.isEmpty() )
             o << "/**\n" << aDoc << "\n*/";
 
         o << indent();
@@ -1427,7 +1427,7 @@ sal_Bool ExceptionType::dumpHFile(FileStream& o)
 
 void ExceptionType::dumpSuperMember(FileStream& o, const OString& superType)
 {
-    if (superType.getLength() > 0)
+    if ( !superType.isEmpty() )
     {
         TypeReader aSuperReader(m_typeMgr.getTypeReader(superType));
 
@@ -1451,7 +1451,7 @@ void ExceptionType::dumpSuperMember(FileStream& o, const OString& superType)
 
                 // write documentation
                 OString aDoc = aSuperReader.getFieldDoku(i);
-                if( aDoc.getLength() )
+                if( !aDoc.isEmpty() )
                     o << "/**\n" << aDoc << "\n*/";
 
                 o << indent();
@@ -1492,7 +1492,7 @@ sal_Bool EnumType::dumpHFile(FileStream& o)
 
     // write documentation
     OString aDoc = m_reader.getDoku();
-    if( aDoc.getLength() )
+    if( !aDoc.isEmpty() )
         o << "/**\n" << aDoc << "\n*/";
 
     o << "\nenum " << m_name << "\n{\n";

@@ -50,7 +50,7 @@ module com { module sun { module star { module document {
     associated with the controller. This must not necessarily be the model returned by
     <member scope="com::sun::star::frame">XController::getModel</member>.</p>
 
-    @since OOo 2.4
+    @since OpenOffice 2.4
  */
 interface XScriptInvocationContext
 {

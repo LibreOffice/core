@@ -32,11 +32,9 @@
 #endif
 #include <accpreview.hxx>
 
-//IAccessibility2 Implementation 2009-----
 #ifndef _COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLESTATETYPE_HPP_
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
 #endif
-//-----IAccessibility2 Implementation 2009
 
 const sal_Char sServiceName[] = "com.sun.star.text.AccessibleTextDocumentPageView";
 const sal_Char sImplementationName[] = "com.sun.star.comp.Writer.SwAccessibleDocumentPageView";
@@ -59,9 +57,7 @@ using ::rtl::OUString;
 SwAccessiblePreview::SwAccessiblePreview( SwAccessibleMap *pMp ) :
     SwAccessibleDocumentBase( pMp )
 {
-    //IAccessibility2 Implementation 2009-----
     SetName( GetResource( STR_ACCESS_PREVIEW_DOC_NAME ) );
-    //-----IAccessibility2 Implementation 2009
 }
 
 SwAccessiblePreview::~SwAccessiblePreview()
@@ -105,7 +101,6 @@ Sequence< sal_Int8 > SAL_CALL SwAccessiblePreview::getImplementationId()
     }
     return aId;
 }
-//IAccessibility2 Implementation 2009-----
 OUString SAL_CALL SwAccessiblePreview::getAccessibleDescription (void) throw (com::sun::star::uno::RuntimeException)
 {
     return GetResource( STR_ACCESS_PREVIEW_DOC_NAME );
@@ -122,4 +117,3 @@ void SwAccessiblePreview::_InvalidateFocus()
 {
     FireStateChangedEvent( ::com::sun::star::accessibility::AccessibleStateType::FOCUSED, sal_True );
 }
-//-----IAccessibility2 Implementation 2009

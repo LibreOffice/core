@@ -36,7 +36,7 @@ module com { module sun { module star { module i18n {
 /** Methods to convert between strings of ASCII Arabic digits and native
     numeral strings.
 
-     @since OOo 1.1.2
+     @since OpenOffice 1.1.2
  */
 
 published interface XNativeNumberSupplier : ::com::sun::star::uno::XInterface

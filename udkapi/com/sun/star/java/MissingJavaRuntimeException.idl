@@ -35,7 +35,7 @@ module com { module sun { module star { module java {
     This happens when a user moves or deletes a Java installation after
     the office has been configured to use that Java installation.
 
-    @since OOo 1.1.2
+    @since OpenOffice 1.1.2
  */
 published exception MissingJavaRuntimeException: JavaInitializationException
 {

@@ -453,7 +453,7 @@ void SwAnnotationShell::Exec( SfxRequest &rReq )
             SwDocStat aCurr;
             SwDocStat aDocStat( rSh.getIDocumentStatistics()->GetDocStat() );
             {
-                SwWait aWait( *rView.GetDocShell(), sal_True );
+                SwWait aWait( *rView.GetDocShell(), true );
                 rSh.StartAction();
                 rSh.CountWords( aCurr );
                 rSh.UpdateDocStat( aDocStat );

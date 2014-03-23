@@ -297,8 +297,10 @@ typedef sal_Bool (SwWrtShell:: *FNSimpleMove)();
     int     IntelligentCut(int nSelectionType, sal_Bool bCut = sal_True);
 
     // Editieren
-    void    Insert(SwField &);
+    void Insert( SwField& rFld );
+
     void    Insert(const String &);
+
     // Graphic
     void    Insert( const String &rPath, const String &rFilter,
                     const Graphic &, SwFlyFrmAttrMgr * = 0,
@@ -310,7 +312,7 @@ typedef sal_Bool (SwWrtShell:: *FNSimpleMove)();
     void    InsertColumnBreak();
     void    InsertFootnote(const String &, sal_Bool bEndNote = sal_False, sal_Bool bEdit = sal_True );
     void    SplitNode( sal_Bool bAutoFormat = sal_False, sal_Bool bCheckTableStart = sal_True );
-    sal_Bool    CanInsert();
+    bool    CanInsert();
 
     // Verzeichnisse
     void    InsertTableOf(const SwTOXBase& rTOX, const SfxItemSet* pSet = 0);
@@ -596,7 +598,7 @@ private:
     SW_DLLPRIVATE long  Ignore(const Point *, sal_Bool bProp=sal_False );
 
     SW_DLLPRIVATE void  LeaveExtSel() { bSelWrd = bSelLn = sal_False;}
-    SW_DLLPRIVATE sal_Bool  _CanInsert();
+    SW_DLLPRIVATE bool _CanInsert();
 
     SW_DLLPRIVATE sal_Bool  GoStart(sal_Bool KeepArea = sal_False, sal_Bool * = 0,
             sal_Bool bSelect = sal_False, sal_Bool bDontMoveRegion = sal_False);

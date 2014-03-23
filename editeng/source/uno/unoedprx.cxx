@@ -508,24 +508,6 @@ String SvxAccessibleTextAdapter::GetText( const ESelection& rSel ) const
     EBulletInfo aBulletInfo1 = GetBulletInfo( static_cast< sal_uInt16 >(aStartIndex.GetParagraph()) );
     EBulletInfo aBulletInfo2 = GetBulletInfo( static_cast< sal_uInt16 >(aEndIndex.GetParagraph()) );
 
-    //IAccessibility2 Implementation 2009-----
-    // MT: This was done in OOo, commented out in IA2 CWS...
-    /*
-    if( aStartIndex.InBullet() )
-    {
-        // prepend leading bullet
-        String sBullet = aBulletInfo1.aText;
-
-        DBG_ASSERT(aStartIndex.GetBulletOffset() >= 0 &&
-                   aStartIndex.GetBulletOffset() <= USHRT_MAX,
-                   "SvxAccessibleTextIndex::GetText: index value overflow");
-
-        sBullet.Erase(0, static_cast< sal_uInt16 > (aStartIndex.GetBulletOffset()) );
-
-        sBullet += sStr;
-        sStr = sBullet;
-    }*/
-    //-----IAccessibility2 Implementation 2009
     if( aEndIndex.InBullet() )
     {
         // append trailing bullet
@@ -754,7 +736,6 @@ EBulletInfo SvxAccessibleTextAdapter::GetBulletInfo( sal_uInt16 nPara ) const
 
     return mrTextForwarder->GetBulletInfo( nPara );
 }
-//IAccessible2 Implementation 2009----
 void    SvxAccessibleTextAdapter::SetUpdateModeForAcc( sal_Bool bUp)
 {
     return mrTextForwarder->SetUpdateModeForAcc( bUp );
@@ -763,7 +744,6 @@ sal_Bool    SvxAccessibleTextAdapter::GetUpdateModeForAcc( ) const
 {
     return mrTextForwarder->GetUpdateModeForAcc( );
 }
-//-----IAccessible2 Implementation 2009
 Rectangle SvxAccessibleTextAdapter::GetCharBounds( sal_uInt16 nPara, sal_uInt16 nIndex ) const
 {
     DBG_ASSERT(mrTextForwarder, "SvxAccessibleTextAdapter: no forwarder");

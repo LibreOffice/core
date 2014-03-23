@@ -843,13 +843,13 @@ void X11SalGraphics::drawRect( long nX, long nY, long nDX, long nDY )
 }
 
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-void X11SalGraphics::drawPolyLine( sal_uLong nPoints, const SalPoint *pPtAry )
+void X11SalGraphics::drawPolyLine( sal_uInt32 nPoints, const SalPoint *pPtAry )
 {
     drawPolyLine( nPoints, pPtAry, false );
 }
 
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-void X11SalGraphics::drawPolyLine( sal_uLong nPoints, const SalPoint *pPtAry, bool bClose )
+void X11SalGraphics::drawPolyLine( sal_uInt32 nPoints, const SalPoint *pPtAry, bool bClose )
 {
     if( nPenColor_ != SALCOLOR_NONE)
     {
@@ -860,7 +860,7 @@ void X11SalGraphics::drawPolyLine( sal_uLong nPoints, const SalPoint *pPtAry, bo
 }
 
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-void X11SalGraphics::drawPolygon( sal_uLong nPoints, const SalPoint* pPtAry )
+void X11SalGraphics::drawPolygon( sal_uInt32 nPoints, const SalPoint* pPtAry )
 {
     if( nPoints == 0 )
         return;
@@ -927,7 +927,7 @@ void X11SalGraphics::drawPolygon( sal_uLong nPoints, const SalPoint* pPtAry )
 }
 
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-void X11SalGraphics::drawPolyPolygon( sal_uInt32        nPoly,
+void X11SalGraphics::drawPolyPolygon( sal_uInt32 nPoly,
                                    const sal_uInt32    *pPoints,
                                    PCONSTSALPOINT  *pPtAry )
 {
@@ -976,14 +976,14 @@ void X11SalGraphics::drawPolyPolygon( sal_uInt32        nPoly,
 
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 
-sal_Bool X11SalGraphics::drawPolyLineBezier( sal_uLong, const SalPoint*, const BYTE* )
+sal_Bool X11SalGraphics::drawPolyLineBezier( sal_uInt32, const SalPoint*, const BYTE* )
 {
     return sal_False;
 }
 
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 
-sal_Bool X11SalGraphics::drawPolygonBezier( sal_uLong, const SalPoint*, const BYTE* )
+sal_Bool X11SalGraphics::drawPolygonBezier( sal_uInt32, const SalPoint*, const BYTE* )
 {
     return sal_False;
 }
@@ -998,7 +998,7 @@ sal_Bool X11SalGraphics::drawPolyPolygonBezier( sal_uInt32, const sal_uInt32*,
 
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 
-void X11SalGraphics::invert( sal_uLong nPoints,
+void X11SalGraphics::invert( sal_uInt32 nPoints,
                              const SalPoint* pPtAry,
                              SalInvert nFlags )
 {

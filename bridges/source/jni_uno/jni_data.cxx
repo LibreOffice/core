@@ -1800,7 +1800,7 @@ void Bridge::map_to_java(
                 // polymorphic struct types:
                 rtl::OUString const & name = rtl::OUString::unacquired(
                     &pAny->pType->pTypeName);
-                OSL_ASSERT(name.getLength() > 0);
+                OSL_ASSERT(!name.isEmpty());
                 if (name[name.getLength() - 1] == '>')
                 {
                     // Box up in com.sun.star.uno.Any:

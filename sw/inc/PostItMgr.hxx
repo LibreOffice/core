@@ -268,9 +268,9 @@ class SwPostItMgr: public SfxListener
 
             void SetSpellChecking();
 
-            Color           GetColorDark(sal_uInt16 aAuthorIndex);
-            Color           GetColorLight(sal_uInt16 aAuthorIndex);
-            Color           GetColorAnchor(sal_uInt16 aAuthorIndex);
+            static Color GetColorDark(sal_uInt16 aAuthorIndex);
+            static Color GetColorLight(sal_uInt16 aAuthorIndex);
+            static Color GetColorAnchor(sal_uInt16 aAuthorIndex);
 
 
             void                RegisterAnswer(OutlinerParaObject* pAnswer) { mpAnswer = pAnswer;}
@@ -282,10 +282,8 @@ class SwPostItMgr: public SfxListener
             sal_uInt16 SearchReplace(const SwFmtFld &pFld, const ::com::sun::star::util::SearchOptions& rSearchOptions,bool bSrchForward);
             sal_uInt16 FinishSearchReplace(const ::com::sun::star::util::SearchOptions& rSearchOptions,bool bSrchForward);
 
-            //IAccessibility2 Implementation 2009-----
             // get the PostIt window by index
             sal_Int32 GetPostItCount() {return mvPostItFlds.size();};
-            //-----IAccessibility2 Implementation 2009
             void AssureStdModeAtShell();
 
             void ConnectSidebarWinToFrm( const SwFrm& rFrm,

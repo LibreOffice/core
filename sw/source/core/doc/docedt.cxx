@@ -72,6 +72,9 @@
 #include <vcl/msgbox.hxx>
 #include "comcore.hrc"
 #include "editsh.hxx"
+#include <fldbas.hxx>
+#include <fmtfld.hxx>
+#include <docufld.hxx>
 #include <unoflatpara.hxx>
 #include <SwGrammarMarkUp.hxx>
 
@@ -1564,50 +1567,48 @@ bool SwDoc::DeleteAndJoinWithRedlineImpl( SwPaM & rPam, const bool )
     {
         SwUndoRedlineDelete* pUndo = 0;
         RedlineMode_t eOld = GetRedlineMode();
-        checkRedlining(eOld);
+        checkRedlining( eOld );
         if (GetIDocumentUndoRedo().DoesUndo())
         {
 
-    //JP 06.01.98: MUSS noch optimiert werden!!!
-    SetRedlineMode(
-           (RedlineMode_t)(nsRedlineMode_t::REDLINE_ON | nsRedlineMode_t::REDLINE_SHOW_INSERT | nsRedlineMode_t::REDLINE_SHOW_DELETE ));
+            //JP 06.01.98: MUSS noch optimiert werden!!!
+            SetRedlineMode(
+                (RedlineMode_t) ( nsRedlineMode_t::REDLINE_ON | nsRedlineMode_t::REDLINE_SHOW_INSERT | nsRedlineMode_t::REDLINE_SHOW_DELETE ) );
 
-            GetIDocumentUndoRedo().StartUndo(UNDO_EMPTY, NULL);
+            GetIDocumentUndoRedo().StartUndo( UNDO_DELETE, NULL );
             pUndo = new SwUndoRedlineDelete( rPam, UNDO_DELETE );
-            GetIDocumentUndoRedo().AppendUndo(pUndo);
+            GetIDocumentUndoRedo().AppendUndo( pUndo );
         }
-        if( *rPam.GetPoint() != *rPam.GetMark() )
-            AppendRedline( new SwRedline( nsRedlineType_t::REDLINE_DELETE, rPam ), true);
+
+        if ( *rPam.GetPoint() != *rPam.GetMark() )
+            AppendRedline( new SwRedline( nsRedlineType_t::REDLINE_DELETE, rPam ), true );
         SetModified();
 
-        if( pUndo )
+        if ( pUndo )
         {
-            GetIDocumentUndoRedo().EndUndo(UNDO_EMPTY, NULL);
+            GetIDocumentUndoRedo().EndUndo( UNDO_EMPTY, NULL );
             // ??? why the hell is the AppendUndo not below the
             // CanGrouping, so this hideous cleanup wouldn't be necessary?
             // bah, this is redlining, probably changing this would break it...
-            if (GetIDocumentUndoRedo().DoesGroupUndo())
+            if ( GetIDocumentUndoRedo().DoesGroupUndo() )
             {
-                SwUndo *const pLastUndo( GetUndoManager().GetLastUndo() );
-                SwUndoRedlineDelete *const pUndoRedlineDel(
-                        dynamic_cast<SwUndoRedlineDelete*>(pLastUndo) );
-                if (pUndoRedlineDel)
+                SwUndo * const pLastUndo( GetUndoManager().GetLastUndo() );
+                SwUndoRedlineDelete * const pUndoRedlineDel( dynamic_cast< SwUndoRedlineDelete* >( pLastUndo ) );
+                if ( pUndoRedlineDel )
                 {
-                    bool const bMerged = pUndoRedlineDel->CanGrouping(*pUndo);
-                    if (bMerged)
+                    bool const bMerged = pUndoRedlineDel->CanGrouping( *pUndo );
+                    if ( bMerged )
                     {
-                        ::sw::UndoGuard const undoGuard(GetIDocumentUndoRedo());
-                        SwUndo const*const pDeleted =
-                            GetUndoManager().RemoveLastUndo();
-                        OSL_ENSURE(pDeleted == pUndo,
-                            "DeleteAndJoinWithRedlineImpl: "
-                            "undo removed is not undo inserted?");
+                        ::sw::UndoGuard const undoGuard( GetIDocumentUndoRedo() );
+                        SwUndo const* const pDeleted = GetUndoManager().RemoveLastUndo();
+                        OSL_ENSURE( pDeleted == pUndo, "DeleteAndJoinWithRedlineImpl: "
+                            "undo removed is not undo inserted?" );
                         delete pDeleted;
                     }
                 }
             }
-//JP 06.01.98: MUSS noch optimiert werden!!!
-SetRedlineMode( eOld );
+            //JP 06.01.98: MUSS noch optimiert werden!!!
+            SetRedlineMode( eOld );
         }
         return true;
     }

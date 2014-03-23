@@ -195,6 +195,9 @@ public:
     virtual SdrObject* getFullDragClone() const;
 
     virtual void setSdrObjectTransformation(const basegfx::B2DHomMatrix& rTransformation);
+
+    // add handles for crop mode when selected
+    void addCropHandles(SdrHdlList& rTarget) const;
 };
 
 #endif //_SVDOGRAF_HXX

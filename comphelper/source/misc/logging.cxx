@@ -91,7 +91,7 @@ namespace comphelper
         try
         {
             Reference< XLoggerPool > xPool( LoggerPool::get( m_aContext.getUNOContext() ), UNO_QUERY_THROW );
-            if ( m_sLoggerName.getLength() )
+            if ( !m_sLoggerName.isEmpty() )
                 m_xLogger = xPool->getNamedLogger( m_sLoggerName );
             else
                 m_xLogger = xPool->getDefaultLogger();
@@ -383,7 +383,7 @@ namespace comphelper
         ::rtl::OUString sMessage;
         if ( lcl_loadBundle_nothrow( m_pImpl->getContext(), *m_pData ) )
             sMessage = lcl_loadString_nothrow( m_pData->xBundle, _nMessageResID );
-        if ( sMessage.getLength() == 0 )
+        if ( sMessage.isEmpty() )
         {
             ::rtl::OUStringBuffer aBuffer;
             aBuffer.appendAscii( "<invalid event resource: '" );

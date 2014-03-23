@@ -47,29 +47,25 @@ class SW_DLLPUBLIC SwFrmFmt: public SwFmt
     ::com::sun::star::uno::WeakReference<
         ::com::sun::star::uno::XInterface> m_wXObject;
 
-protected:
-    //IAccessibility2 Implementation 2009-----
-    SwFrmFmt* pCaptionFmt;
-    //-----IAccessibility2 Implementation 2009
-    SwFrmFmt( SwAttrPool& rPool, const sal_Char* pFmtNm,
-                SwFrmFmt *pDrvdFrm, sal_uInt16 nFmtWhich = RES_FRMFMT,
-                const sal_uInt16* pWhichRange = 0 )
-          : SwFmt( rPool, pFmtNm, (pWhichRange ? pWhichRange : aFrmFmtSetRange),
-                pDrvdFrm, nFmtWhich )
-                //IAccessibility2 Implementation 2009-----
-                ,pCaptionFmt( NULL )
-                //-----IAccessibility2 Implementation 2009
-    {}
+    //UUUU
+    FillAttributesPtr           maFillAttributes;
 
-    SwFrmFmt( SwAttrPool& rPool, const String &rFmtNm,
-                SwFrmFmt *pDrvdFrm, sal_uInt16 nFmtWhich = RES_FRMFMT,
-                const sal_uInt16* pWhichRange = 0 )
-          : SwFmt( rPool, rFmtNm, (pWhichRange ? pWhichRange : aFrmFmtSetRange),
-                pDrvdFrm, nFmtWhich )
-                //IAccessibility2 Implementation 2009-----
-                ,pCaptionFmt( NULL )
-                //-----IAccessibility2 Implementation 2009
-    {}
+protected:
+    SwFrmFmt* pCaptionFmt;
+
+    SwFrmFmt(
+        SwAttrPool& rPool,
+        const sal_Char* pFmtNm,
+        SwFrmFmt *pDrvdFrm,
+        sal_uInt16 nFmtWhich = RES_FRMFMT,
+        const sal_uInt16* pWhichRange = 0);
+
+    SwFrmFmt(
+        SwAttrPool& rPool,
+        const String &rFmtNm,
+        SwFrmFmt *pDrvdFrm,
+        sal_uInt16 nFmtWhich = RES_FRMFMT,
+        const sal_uInt16* pWhichRange = 0);
 
    virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNewValue );
 
@@ -135,11 +131,9 @@ public:
     // <--
 
     virtual String GetDescription() const;
-    //IAccessibility2 Implementation 2009-----
     sal_Bool HasCaption() const;
     void SetCaptionFmt(SwFrmFmt* pFmt);
     SwFrmFmt* GetCaptionFmt() const;
-    //-----IAccessibility2 Implementation 2009
 
     SW_DLLPRIVATE ::com::sun::star::uno::WeakReference<
         ::com::sun::star::uno::XInterface> const& GetXObject() const
@@ -150,6 +144,9 @@ public:
 
     DECL_FIXEDMEMPOOL_NEWDEL_DLL(SwFrmFmt)
     void RegisterToFormat( SwFmt& rFmt );
+
+    //UUUU
+    virtual FillAttributesPtr getFillAttributes() const;
 };
 
 //Das FlyFrame-Format ------------------------------
@@ -157,10 +154,8 @@ public:
 class SW_DLLPUBLIC SwFlyFrmFmt: public SwFrmFmt
 {
     friend class SwDoc;
-    //IAccessibility2 Implementation 2009-----
     String msTitle;
     String msDesc;
-    //-----IAccessibility2 Implementation 2009
 
     // #i972:
     // it stores the previous position of Prt rectangle from RequestObjectResize

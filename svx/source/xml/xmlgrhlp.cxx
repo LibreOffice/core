@@ -719,6 +719,10 @@ void SvXMLGraphicHelper::ImplInsertGraphicURL( const ::rtl::OUString& rURLStr, s
                     {
                         case( GFX_LINK_TYPE_EPS_BUFFER ): aExtension = String( RTL_CONSTASCII_USTRINGPARAM( ".eps" ) ); break;
                         case( GFX_LINK_TYPE_NATIVE_GIF ): aExtension = String( RTL_CONSTASCII_USTRINGPARAM( ".gif" ) ); break;
+
+                        // #15508# added BMP type for better exports (checked, works)
+                        case( GFX_LINK_TYPE_NATIVE_BMP ): aExtension = String( RTL_CONSTASCII_USTRINGPARAM( ".bmp" ) ); break;
+
                         case( GFX_LINK_TYPE_NATIVE_JPG ): aExtension = String( RTL_CONSTASCII_USTRINGPARAM( ".jpg" ) ); break;
                         case( GFX_LINK_TYPE_NATIVE_PNG ): aExtension = String( RTL_CONSTASCII_USTRINGPARAM( ".png" ) ); break;
                         case( GFX_LINK_TYPE_NATIVE_TIF ): aExtension = String( RTL_CONSTASCII_USTRINGPARAM( ".tif" ) ); break;

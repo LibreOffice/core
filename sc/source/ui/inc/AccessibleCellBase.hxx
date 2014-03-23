@@ -142,7 +142,6 @@ private:
     virtual sal_Bool IsEditable(
         const com::sun::star::uno::Reference<
         ::com::sun::star::accessibility::XAccessibleStateSet>& rxParentStates);
-//IAccessibility2 Implementation 2009-----
 protected:
     virtual ::rtl::OUString SAL_CALL GetNote(void)
         throw (::com::sun::star::uno::RuntimeException);
@@ -156,7 +155,6 @@ protected:
 public:
     const ScAddress& GetCellAddress() const { return maCellAddress; }
     sal_Bool IsCellInChangeTrack(const ScAddress &cell,Color *pColCellBoder);
-//-----IAccessibility2 Implementation 2009
 };
 
 

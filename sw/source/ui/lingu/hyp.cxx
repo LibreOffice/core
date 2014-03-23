@@ -96,7 +96,7 @@ sal_Bool SwHyphWrapper::SpellContinue()
     if( bAutomatic )
     {
         PSH->StartAllAction();
-        pWait = new SwWait( *pView->GetDocShell(), sal_True );
+        pWait = new SwWait( *pView->GetDocShell(), true );
     }
 
         uno::Reference< uno::XInterface >  xHyphWord = bInSelection ?

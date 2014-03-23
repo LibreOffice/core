@@ -44,7 +44,7 @@ module com {  module sun {  module star {  module text {
 
 /** provides functionality to apply multiple text markups in one call.
 
-    @since OOo 3.0.1
+    @since OpenOffice 3.0.1
  */
 
 interface XMultiTextMarkup

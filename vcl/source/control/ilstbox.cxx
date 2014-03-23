@@ -917,11 +917,9 @@ void ImplListBoxWindow::MouseButtonDown( const MouseEvent& rMEvt )
 
                 mnCurrentPos = nSelect;
                 mbTrackingSelect = true;
-                //IAccessibility2 Impplementaton 2009-----
                 sal_Bool bCurPosChange = (mnCurrentPos != nSelect);
                 //SelectEntries( nSelect, LET_MBDOWN, rMEvt.IsShift(), rMEvt.IsMod1() );
                 SelectEntries( nSelect, LET_MBDOWN, rMEvt.IsShift(), rMEvt.IsMod1() ,bCurPosChange);
-                //-----IAccessibility2 Impplementaton 2009
                 mbTrackingSelect = false;
                 if ( mbGrabFocus )
                     GrabFocus();
@@ -992,14 +990,12 @@ void ImplListBoxWindow::MouseMove( const MouseEvent& rMEvt )
                             ImplCallSelect();
                             mbTravelSelect = false;
                         }
-//IAccessibility2 Implementation 2009----
                         // When list box selection change by mouse move, notity
                         // VCLEVENT_LISTBOX_SELECT vcl event.
                         else
                         {
                             maListItemSelectHdl.Call(NULL);
                         }
-//----IAccessibility2 Implementation 2009
                     }
                     mbTrackingSelect = false;
                 }
@@ -1232,12 +1228,10 @@ sal_Bool ImplListBoxWindow::SelectEntries( sal_uInt16 nSelect, LB_EVENT_TYPE eLE
             maFocusRect.SetSize( aSz );
             if( HasFocus() )
                 ImplShowFocusRect();
-//IAccessibility2 Implementation 2009----
             if (bSelectPosChange)
             {
                 maFocusHdl.Call(reinterpret_cast<void*>(nSelect));
             }
-//----IAccessibility2 Implementation 2009
         }
         ImplClearLayoutData();
     }
@@ -1700,12 +1694,10 @@ sal_Bool ImplListBoxWindow::ProcessKeyInput( const KeyEvent& rKEvt )
         DBG_ASSERT( !mpEntryList->IsEntryPosSelected( nSelect ) || mbMulti, "ImplListBox: Selecting same Entry" );
         if( nSelect >= mpEntryList->GetEntryCount() )
             nSelect = mpEntryList->GetEntryCount()-1;
-//IAccessibility2 Implementation 2009-----
         sal_Bool bCurPosChange = (mnCurrentPos != nSelect);
         mnCurrentPos = nSelect;
         //if ( SelectEntries( nSelect, eLET, bShift, bCtrl ) )
         if(SelectEntries( nSelect, eLET, bShift, bCtrl ,bCurPosChange))
-//-----IAccessibility2 Implementation 2009
         {
             mbTravelSelect = true;
             mnSelectModifier = rKEvt.GetKeyCode().GetModifier();
@@ -2181,9 +2173,7 @@ Rectangle ImplListBoxWindow::GetBoundingRectangle( sal_uInt16 nItem ) const
     const ImplEntryType* pEntry = mpEntryList->GetEntryPtr( nItem );
     Size aSz( GetSizePixel().Width(), pEntry ? pEntry->mnHeight : GetEntryHeight() );
     //long nY = mpEntryList->GetAddedHeight( nItem, GetTopEntry() ) - mpEntryList->GetAddedHeight( GetTopEntry() );
-    //IAccessibility2 Impplementaton 2009-----
     long nY = mpEntryList->GetAddedHeight( nItem, GetTopEntry() ) + GetEntryList()->GetMRUCount()*GetEntryHeight();
-    //-----IAccessibility2 Impplementaton 2009
     Rectangle aRect( Point( 0, nY ), aSz );
     return aRect;
 }

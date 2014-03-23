@@ -80,7 +80,7 @@ namespace slideshow
 
             SHOW_NODE_TREE( mpRootNode );
 
-            return mpRootNode;
+            return (mpRootNode.get() != NULL);
         }
 
         bool SlideAnimations::isAnimated() const

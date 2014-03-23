@@ -70,7 +70,7 @@ module com { module sun { module star { module configuration { module backend {
   @see com::sun::star::configuration::backend::XBackendEntities
   @see com::sun::star::configuration::backend::XSchemaSupplier
 
-  @since OOo 1.1.2
+  @since OpenOffice 1.1.2
 */
 published interface XBackend : ::com::sun::star::uno::XInterface
 {

@@ -28,7 +28,7 @@ module com { module sun { module star { module deployment {
 /** Implementations of this service provide access to the root element
     of one or more update information files for a given sets of URLs.
 
-    @since OOo 2.2
+    @since OpenOffice 2.2
 */
 service UpdateInformationProvider : XUpdateInformationProvider;
 

@@ -123,6 +123,10 @@ public:
 
     /// access to ShapeId for evtl. late adding
     const rtl::OUString& getShapeId() const { return maShapeId; }
+
+    // allow to copy evtl. useful data from another temporary import context, e.g. used to
+    // support multiple images
+    virtual void onDemandRescueUsefulDataFromTemporary( const SvXMLImportContext& rCandidate );
 };
 
 //////////////////////////////////////////////////////////////////////////////

@@ -385,7 +385,13 @@ void DrawViewShell::ChangeEditMode(EditMode eEMode, bool bIsLayerModeActive)
         GetViewShellBase().GetDrawController().BroadcastContextChange();
 
         meEditMode = eEMode;
-        mbIsLayerModeActive = bIsLayerModeActive;
+
+        if(pLayerBar)
+        {
+            // #87182# only switch activation mode of LayerTabBar when there is one,
+            // else it will not get initialized with the current set of Layers as needed
+            mbIsLayerModeActive = bIsLayerModeActive;
+        }
 
         // Determine whether to show the master view toolbar.  The master
         // page mode has to be active and the shell must not be a handout
@@ -670,7 +676,11 @@ IMPL_LINK( DrawViewShell, TabSplitHdl, TabBar *, pTab )
     aTabSize.Width() = Min(pTab->GetSplitSize(), (long)(nMax-1));
 
     maTabControl.SetSizePixel(aTabSize);
-    GetLayerTabControl()->SetSizePixel(aTabSize);
+
+    if(GetLayerTabControl()) // #87182#
+    {
+        GetLayerTabControl()->SetSizePixel(aTabSize);
+    }
 
     Point aPos = maTabControl.GetPosPixel();
     aPos.X() += aTabSize.Width();

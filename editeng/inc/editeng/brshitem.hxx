@@ -118,6 +118,10 @@ public:
     const String*           GetGraphicLink() const      { return pStrLink; }
     const String*           GetGraphicFilter() const    { return pStrFilter; }
 
+    //UUUU get graphic transparency in percent
+    sal_Int8 getGraphicTransparency() const;
+    void setGraphicTransparency(sal_Int8 nNew);
+
     void                SetGraphicPos( SvxGraphicPosition eNew );
     void                SetGraphic( const Graphic& rNew );
     void                SetGraphicObject( const GraphicObject& rNewObj );

@@ -265,7 +265,7 @@ void Includes::dumpInclude(
 {
     static char const * extension[2] = { "hdl", "hpp" };
     out << "#include \"" << registryType;
-    if (suffix.getLength() > 0) {
+    if ( !suffix.isEmpty() ) {
         out << "/" << suffix;
     }
     out << "." << extension[hpp] << "\"\n";

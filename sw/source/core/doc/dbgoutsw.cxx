@@ -178,7 +178,7 @@ map<sal_uInt16,String,CompareUShort> & GetItemWhichMap()
         aItemWhichMap[RES_TXTATR_FIELD] = String("TXTATR_FIELD", RTL_TEXTENCODING_ASCII_US);
         aItemWhichMap[RES_TXTATR_FLYCNT] = String("TXTATR_FLYCNT", RTL_TEXTENCODING_ASCII_US);
         aItemWhichMap[RES_TXTATR_FTN] = String("TXTATR_FTN", RTL_TEXTENCODING_ASCII_US);
-        aItemWhichMap[RES_TXTATR_DUMMY4] = String("TXTATR_DUMMY4", RTL_TEXTENCODING_ASCII_US);
+        aItemWhichMap[RES_TXTATR_ANNOTATION] = String("TXTATR_ANNOTATION", RTL_TEXTENCODING_ASCII_US);
         aItemWhichMap[RES_TXTATR_DUMMY3] = String("TXTATR_DUMMY3", RTL_TEXTENCODING_ASCII_US);
         aItemWhichMap[RES_TXTATR_DUMMY1] = String("TXTATR_DUMMY1", RTL_TEXTENCODING_ASCII_US);
         aItemWhichMap[RES_TXTATR_DUMMY2] = String("TXTATR_DUMMY2", RTL_TEXTENCODING_ASCII_US);
@@ -635,7 +635,9 @@ String lcl_dbg_out(const SwNode & rNode)
             aTmpStr += String("(", RTL_TEXTENCODING_ASCII_US);
             aTmpStr += String::CreateFromInt32
                 //(static_cast<SwTxtFmtColl *>(pColl)->GetOutlineLevel());//#outline level,zhaojianwei
-                (static_cast<SwTxtFmtColl *>(pColl)->GetAssignedOutlineStyleLevel());//<-end,zhaojianwei
+                (static_cast<SwTxtFmtColl *>(pColl)->IsAssignedToListLevelOfOutlineStyle()
+                 ? static_cast<SwTxtFmtColl *>(pColl)->GetAssignedOutlineStyleLevel()
+                 : 0);//<-end,zhaojianwei
 
             const SwNumRuleItem & rItem =
                 static_cast<const SwNumRuleItem &>

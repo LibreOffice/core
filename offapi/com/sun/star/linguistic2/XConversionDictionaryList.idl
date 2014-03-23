@@ -61,7 +61,7 @@ module com { module sun { module star { module linguistic2 {
     If they do those dictionaries have to be flushed upon termination
     of the dictionary list.</p>
 
-     @since OOo 1.1.2
+     @since OpenOffice 1.1.2
 */
 published interface XConversionDictionaryList : com::sun::star::uno::XInterface
 {

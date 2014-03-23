@@ -175,7 +175,7 @@ namespace pcr
         if ( EFormsHelper::isEForm( xDocument ) )
             m_pHelper.reset( new XSDValidationHelper( m_aMutex, m_xComponent, xDocument ) );
         else
-            m_pHelper.reset( NULL );
+            m_pHelper.reset();
     }
 
     //--------------------------------------------------------------------

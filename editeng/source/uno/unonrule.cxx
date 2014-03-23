@@ -221,9 +221,7 @@ Sequence<beans::PropertyValue> SvxUnoNumberingRules::getNumberingRuleByIndex( sa
     }
 
     {
-    //IAccessibility2 Implementation 2009-----
         if(SVX_NUM_CHAR_SPECIAL == rFmt.GetNumberingType())
-    //-----IAccessibility2 Implementation 2009
         {
         sal_Unicode nCode = rFmt.GetBulletChar();
         OUString aStr( &nCode, 1 );

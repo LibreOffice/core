@@ -55,7 +55,7 @@ module com { module sun { module star { module ui { module dialogs {
 
     <p>Otherwise, the filter operation is canceled.</p>
 
-    @since OOo 1.1.2
+    @since OpenOffice 1.1.2
  */
 published service FilterOptionsDialog
 {

@@ -293,7 +293,6 @@ DockingWindow RID_SVXDLG_FONTWORK
         Last = 5000000 ;
         SpinSize = 50 ;
         QuickHelpText [ en-US ] = "Distance Y" ;
-        CustomUnitText [ en-US ] = "%" ;
     };
     ListBox CLB_SHADOW_COLOR
     {

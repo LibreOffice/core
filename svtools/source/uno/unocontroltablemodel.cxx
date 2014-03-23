@@ -102,6 +102,7 @@ namespace svt { namespace table
         ::boost::optional< ::Color >                    m_aTextLineColor;
         ::boost::optional< ::std::vector< ::Color > >   m_aRowColors;
         VerticalAlignment                               m_eVerticalAlign;
+        bool                                            bEnabled;
         ModellListeners                                 m_aListeners;
         WeakReference< XGridDataModel >                 m_aDataModel;
         WeakReference< XGridColumnModel >               m_aColumnModel;
@@ -128,6 +129,7 @@ namespace svt { namespace table
             ,m_aTextLineColor               ( )
             ,m_aRowColors                   ( )
             ,m_eVerticalAlign               ( VerticalAlignment_TOP )
+            ,bEnabled                       ( true )
         {
         }
     };
@@ -166,6 +168,7 @@ namespace svt { namespace table
         DBG_CTOR( UnoControlTableModel, UnoControlTableModel_checkInvariants );
         m_pImpl->bHasColumnHeaders = true;
         m_pImpl->bHasRowHeaders = false;
+        m_pImpl->bEnabled = true;
         m_pImpl->pRenderer.reset( new GridTableRenderer( *this ) );
         m_pImpl->pInputHandler.reset( new DefaultInputHandler );
     }
@@ -812,6 +815,20 @@ namespace svt { namespace table
         if ( xSortAccess.is() )
             return this;
         return NULL;
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+    bool UnoControlTableModel::isEnabled() const
+    {
+        DBG_CHECK_ME();
+        return m_pImpl->bEnabled;
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+    void UnoControlTableModel::setEnabled( bool _bEnabled )
+    {
+        DBG_CHECK_ME();
+        m_pImpl->bEnabled = _bEnabled;
     }
 
     //------------------------------------------------------------------------------------------------------------------

@@ -130,7 +130,6 @@ namespace accessibility
         SolarMethodGuard aGuard( *this );
 
         // TODO: localize this!
-// IAccessible2 implementation, 2009
         //String sName = mpBrowseBox->GetColumnDescription( getColumnPos( ) );
 
         //if ( 0 == sName.Len() )

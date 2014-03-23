@@ -283,7 +283,7 @@ namespace toolkitform
     void TOOLKIT_DLLPUBLIC describePDFControl( const Reference< XControl >& _rxControl,
         ::std::auto_ptr< ::vcl::PDFWriter::AnyWidget >& _rpDescriptor, ::vcl::PDFExtOutDevData& i_pdfExportData ) SAL_THROW(())
     {
-        _rpDescriptor.reset( NULL );
+        _rpDescriptor.reset();
         OSL_ENSURE( _rxControl.is(), "describePDFControl: invalid (NULL) control!" );
         if ( !_rxControl.is() )
             return;

@@ -51,6 +51,9 @@
 #include "res_bmp.hrc"
 #include "ViewShell.hxx"
 #include <vcl/svapp.hxx>
+// #42894#
+#include <EffectMigration.hxx>
+
 #include <string>
 #include <algorithm>
 #include <svx/svdlegacy.hxx>
@@ -1229,34 +1232,41 @@ void AnimationWindow::CreateAnimObj (::sd::View& rView )
             sdr::legacy::MoveSdrObject(*pClone, aMoveSize );
         }
 
-        // Animationsgruppe erzeugen
-        SdrObjGroup* pGroup   = new SdrObjGroup(rView.getSdrModelFromSdrView());
+        // #42894# Caution(!) variable pPage looks right, but it is a page from the local
+        // document the dialog is using (!), so get the target page from the target view
+        SdPage* pTargetSdPage = dynamic_cast< SdPage* >(rView.GetSdrPageView() ? &rView.GetSdrPageView()->getSdrPageFromSdrPageView() : 0);
 
-        for (i = 0; i < nCount; i++)
+        if(pTargetSdPage)
         {
-            // der Clone verbleibt im Animator; in die Gruppe kommt ein Clone
-            // des Clones
-            pClone = pPage->GetObj(i);
-            SdrObject* pCloneOfClone = pClone->CloneSdrObject();
-            pGroup->InsertObjectToSdrObjList(*pCloneOfClone);
+            // Animationsgruppe erzeugen
+            SdrObjGroup* pGroup   = new SdrObjGroup(rView.getSdrModelFromSdrView());
+
+            for (i = 0; i < nCount; i++)
+            {
+                // der Clone verbleibt im Animator; in die Gruppe kommt ein Clone
+                // des Clones
+                pClone = pPage->GetObj(i);
+                SdrObject* pCloneOfClone = pClone->CloneSdrObject();
+                pGroup->InsertObjectToSdrObjList(*pCloneOfClone);
+            }
+
+            // bis jetzt liegt die linke obere Ecke der Gruppe in der Fenstermitte;
+            // jetzt noch um die Haelfte der Groesse nach oben und links korrigieren
+            aTemp = aMaxSizeLog;
+            aTemp.Height() = - aTemp.Height() / 2;
+            aTemp.Width()  = - aTemp.Width() / 2;
+            sdr::legacy::MoveSdrObject(*pGroup, aTemp);
+
+            // #42894# create needed SMIL stuff and move child objects to page directly (see
+            // comments at EffectMigration::CreateAnimatedGroup why this has to be done).
+            EffectMigration::CreateAnimatedGroup(*pGroup, *pTargetSdPage);
+
+            // #42894# if that worked, delete the group again
+            if(!pGroup->getChildrenOfSdrObject()->GetObjCount())
+            {
+                deleteSdrObjectSafeAndClearPointer(pGroup);
+            }
         }
-
-        // bis jetzt liegt die linke obere Ecke der Gruppe in der Fenstermitte;
-        // jetzt noch um die Haelfte der Groesse nach oben und links korrigieren
-        aTemp = aMaxSizeLog;
-        aTemp.Height() = - aTemp.Height() / 2;
-        aTemp.Width()  = - aTemp.Width() / 2;
-        sdr::legacy::MoveSdrObject(*pGroup, aTemp);
-
-        // Animationsinformation erzeugen
-        SdAnimationInfo* pInfo = SdDrawDocument::GetShapeUserData(*pGroup,true);
-        pInfo->meEffect = presentation::AnimationEffect_NONE;
-        pInfo->meSpeed = presentation::AnimationSpeed_MEDIUM;
-        pInfo->mbActive = true;
-        pInfo->mbIsMovie = true;
-        pInfo->maBlueScreen = COL_WHITE;
-
-        rView.InsertObjectAtView( *pGroup, SDRINSERT_SETDEFLAYER);
     }
 
     ClickFirstHdl( this );

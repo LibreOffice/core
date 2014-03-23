@@ -128,7 +128,7 @@ void SwBookmarkControl::Command( const CommandEvent& rCEvt )
         CaptureMouse();
         BookmarkPopup_Impl aPop;
         SwWrtShell* pWrtShell = ::GetActiveWrtShell();
-        if( pWrtShell && pWrtShell->getIDocumentMarkAccess()->getMarksCount() > 0 )
+        if( pWrtShell && pWrtShell->getIDocumentMarkAccess()->getAllMarksCount() > 0 )
         {
             IDocumentMarkAccess* const pMarkAccess = pWrtShell->getIDocumentMarkAccess();
             IDocumentMarkAccess::const_iterator_t ppBookmarkStart = pMarkAccess->getBookmarksBegin();

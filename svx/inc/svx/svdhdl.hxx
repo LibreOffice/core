@@ -598,12 +598,20 @@ public:
 
 class SVX_DLLPUBLIC SdrCropHdl : public SdrHdl
 {
+private:
+    // evtl. shear and rotation, equal to the object's one to allow adaption of
+    // the visualization handles
+    double          mfShearX;
+    double          mfRotation;
+
 public:
     SdrCropHdl(
         SdrHdlList& rHdlList,
         const SdrObject& rSdrHdlObject,
         SdrHdlKind eNewKind,
-        const basegfx::B2DPoint& rPnt);
+        const basegfx::B2DPoint& rPnt,
+        double fShearX,
+        double fRotation);
 
 protected:
     virtual ~SdrCropHdl();

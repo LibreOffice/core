@@ -653,7 +653,7 @@ void SwDoc::PrtDataChanged()
             pSh->GetViewOptions()->IsPrtFormat() )
         {
             if ( GetDocShell() )
-                pWait = new SwWait( *GetDocShell(), sal_True );
+                pWait = new SwWait( *GetDocShell(), true );
 
             pTmpRoot->StartAllAction();
             bEndAction = sal_True;

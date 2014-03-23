@@ -157,7 +157,7 @@ bool ChartController::EndTextEdit()
                             pOutliner->GetParagraphCount() );
 
         ::rtl::OUString aObjectCID = m_aSelection.getSelectedCID();
-        if ( aObjectCID.getLength() > 0 )
+        if ( !aObjectCID.isEmpty() )
         {
             uno::Reference< beans::XPropertySet > xPropSet =
                 ObjectIdentifier::getObjectPropertySet( aObjectCID, getModel() );

@@ -38,7 +38,7 @@ module com { module sun { module star { module document {
 //=============================================================================
 /** A continuation to return filter options from interaction helper.
 
-    @since OOo 1.1.2
+    @since OpenOffice 1.1.2
 */
 published interface XInteractionFilterOptions : ::com::sun::star::task::XInteractionContinuation
 {

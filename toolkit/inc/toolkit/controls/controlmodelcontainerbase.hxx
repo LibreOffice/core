@@ -85,8 +85,7 @@ protected:
     AllGroups                           maGroups;
     sal_Bool                            mbGroupsUpToDate;
 
-    bool                                    m_bEnabled;
-    ::rtl::OUString                         m_sTitle;
+    sal_Bool                                m_bEnabled;
     ::rtl::OUString                         m_sImageURL;
     ::rtl::OUString                         m_sTooltip;
     sal_Int16                               m_nTabPageId;

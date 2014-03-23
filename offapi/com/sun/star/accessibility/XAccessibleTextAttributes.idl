@@ -35,7 +35,7 @@ module com { module sun { module star { module accessibility {
 
 /** Implement this interface to give access to the attributes of a text.
 
-    @since OOo 2.0.4
+    @since OpenOffice 2.0.4
 */
 published interface XAccessibleTextAttributes
 {

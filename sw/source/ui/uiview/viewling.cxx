@@ -626,7 +626,7 @@ void SwView::StartThesaurus()
     {
         // create dialog
         {   //Scope for SwWait-Object
-            SwWait aWait( *GetDocShell(), sal_True );
+            SwWait aWait( *GetDocShell(), true );
             // load library with dialog only on demand ...
             SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
             pDlg = pFact->CreateThesaurusDialog( &GetEditWin(), xThes, aTmp, eLang );

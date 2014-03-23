@@ -58,11 +58,11 @@ struct DocumentSignatureInformation
         a macro signature validation.
         As of OpenOffice.org 3.2 and ODF 1.2 the document signature comprises
         all files except the signature file itself.
-        Signatures in OOo 2.x were only
+        Signatures in OpenOffice 2.x were only
         applied to the files in the root of the document, except mimetype, the
         Pictures and ObjectReplacements/Objects folder. That is, macros
         were not part of the document signature.
-        OOo 3.0 signed everthing, execept mimetype and the META-INF folder.
+        OpenOffice 3.0 signed everthing, execept mimetype and the META-INF folder.
         <p>
         If PartialDocumentSignature is true, then the signature was created by OOo
         with a version less then 3.2. In this case, not all files are signed. The

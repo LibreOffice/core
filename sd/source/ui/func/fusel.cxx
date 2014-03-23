@@ -105,13 +105,11 @@ FuSelection::FuSelection (
     bMirrorSide0(false),
     nEditMode(SID_BEZIER_MOVE),
     pWaterCanCandidate(NULL),
-//IAccessibility2 Implementation 2009-----
   //Solution: Add Shift+UP/DOWN/LEFT/RIGHT key to move the position of insert point,
   //and SHIFT+ENTER key to decide the postion and draw the new insert point
     maOldPoint(0, 0),
     mbBeginInsertPoint(false),
     mbMovedToCenterPoint(false)
-//-----IAccessibility2 Implementation 2009
 {
 }
 
@@ -972,7 +970,6 @@ bool FuSelection::KeyInput(const KeyEvent& rKEvt)
             bReturn = FuSelection::cancel();
         }
         break;
-//IAccessibility2 Implementation 2009-----
   //Solution: add keyboard operation for insert points in drawing curve
         case KEY_UP:
         case KEY_DOWN:
@@ -1050,7 +1047,6 @@ bool FuSelection::KeyInput(const KeyEvent& rKEvt)
             }
             break;
     }
-//-----IAccessibility2 Implementation 2009
     if (!bReturn)
     {
         bReturn = FuDraw::KeyInput(rKEvt);
@@ -1068,7 +1064,6 @@ bool FuSelection::KeyInput(const KeyEvent& rKEvt)
 }
 
 
-//IAccessibility2 Implementation 2009-----
 void FuSelection::ForcePointer(const MouseEvent* pMEvt)
 {
     if(mbMovedToCenterPoint && !mbBeginInsertPoint && pMEvt)
@@ -1082,7 +1077,6 @@ void FuSelection::ForcePointer(const MouseEvent* pMEvt)
         FuDraw::ForcePointer(pMEvt);
     }
 }
-//-----IAccessibility2 Implementation 2009
 /*************************************************************************
 |*
 |* Function aktivieren

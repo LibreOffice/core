@@ -415,7 +415,7 @@ void SAL_CALL SoundHandler::dispatch( const css::util::URL&                     
     ::rtl::OUString               sURL       = aDescriptor.getUnpackedValueOrDefault(::comphelper::MediaDescriptor::PROP_URL(), ::rtl::OUString());
 
     if (
-        (sURL.getLength()           ) &&
+        !sURL.isEmpty() &&
         (avmedia::MediaWindow::isMediaURL(sURL))
        )
     {

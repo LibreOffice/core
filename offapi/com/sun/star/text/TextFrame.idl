@@ -119,7 +119,7 @@ published service TextFrame
         width properties.
 
         @see    SizeType
-        @since  OOo 2.4
+        @since OpenOffice 2.4
      */
     [optional, property] short WidthType;
 

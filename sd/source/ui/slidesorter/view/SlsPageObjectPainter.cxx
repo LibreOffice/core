@@ -254,7 +254,7 @@ void PageObjectPainter::PaintPreview (
         PageObjectLayouter::Preview,
         PageObjectLayouter::ModelCoordinateSystem));
 
-    if (mpCache != NULL)
+    if( bool(mpCache))
     {
         const SdrPage* pPage = rpDescriptor->GetPage();
         mpCache->SetPreciousFlag(pPage, true);

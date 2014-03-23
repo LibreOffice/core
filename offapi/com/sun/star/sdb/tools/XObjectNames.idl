@@ -64,7 +64,7 @@ module com {  module sun {  module star {  module sdb { module tools {
 
     @see XConnectionTools
 
-    @since OOo 2.0.4
+    @since OpenOffice 2.0.4
 */
 published interface XObjectNames
 {

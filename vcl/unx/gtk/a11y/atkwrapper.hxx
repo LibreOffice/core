@@ -113,7 +113,7 @@ static inline gchar *
 OUStringToGChar(const rtl::OUString& rString )
 {
     rtl::OString aUtf8 = rtl::OUStringToOString( rString, RTL_TEXTENCODING_UTF8 );
-    return g_strdup( aUtf8 );
+    return g_strdup( aUtf8.getStr() );
 }
 
 #define OUStringToConstGChar( string ) rtl::OUStringToOString( string, RTL_TEXTENCODING_UTF8 ).getStr()

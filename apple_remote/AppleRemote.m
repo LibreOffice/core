@@ -59,7 +59,7 @@ const char* AppleRemoteDeviceName = "AppleIRController";
 	if (floor(NSAppKitVersionNumber) <= NSAppKitVersionNumber10_4) 
     {
         #ifdef DEBUG
-            NSLog( @"setting 10.4 cookies" );
+            NSLog( @"Apple Remote: setting 10.4 cookies" );
         #endif
 
 		// 10.4.x Tiger
@@ -78,7 +78,7 @@ const char* AppleRemoteDeviceName = "AppleIRController";
     else if( floor(NSAppKitVersionNumber) <= NSAppKitVersionNumber10_5 )
     {
         #ifdef DEBUG
-            NSLog( @"setting 10.5 cookies" );
+            NSLog( @"Apple Remote: setting 10.5 cookies" );
         #endif
 		// 10.5.x Leopard
 		[_cookieToButtonMapping setObject:[NSNumber numberWithInt:kRemoteButtonPlus]		forKey:@"31_29_28_19_18_"];
@@ -96,7 +96,7 @@ const char* AppleRemoteDeviceName = "AppleIRController";
     else
     {
         #ifdef DEBUG
-            NSLog( @"setting 10.6 cookies" );
+            NSLog( @"Apple Remote: setting OSX>=10.6 cookies" );
         #endif
         // 10.6.x Snow Leopard
         [_cookieToButtonMapping setObject:[NSNumber numberWithInt:kRemoteButtonPlus]		forKey:@"33_31_30_21_20_2_"];

@@ -53,7 +53,7 @@ codemaker::UnoType::Sort codemaker::UnoType::getSort(rtl::OString const & type)
 }
 
 bool codemaker::UnoType::isSequenceType(rtl::OString const & type) {
-    return type.getLength() > 0 && type[0] == '[';
+    return ( !type.isEmpty() && type[0] == '[' );
 }
 
 rtl::OString codemaker::UnoType::decompose(

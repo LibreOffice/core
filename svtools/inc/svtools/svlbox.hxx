@@ -189,7 +189,6 @@ class SVT_DLLPUBLIC SvLBoxEntry : public SvListEntry
     friend class SvLBox;
 
     SvPtrarr    aItems;
-    // IAccessible2 implementation in 2009
     sal_Bool      bIsMarked;
     void*       pUserData;
     sal_uInt16      nEntryFlags;
@@ -219,7 +218,6 @@ public:
 
     sal_uInt16      GetFlags() const { return nEntryFlags; }
     void        SetFlags( sal_uInt16 nFlags ) { nEntryFlags = nFlags; }
-    // IAccessible2 implementation in 2009
     sal_Bool        GetIsMarked() const { return bIsMarked ; }
     void               SetMarked( sal_Bool IsMarked ) { bIsMarked =IsMarked ; }
 };

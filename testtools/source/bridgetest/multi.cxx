@@ -34,6 +34,8 @@
 
 #include <sstream>
 
+inline std::ostream& operator<<( std::ostream& s, const rtl::OUString r) { return (s << r.getStr()); }
+
 namespace css = com::sun::star;
 
 namespace {

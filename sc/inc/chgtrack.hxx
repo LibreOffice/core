@@ -44,7 +44,6 @@
 #endif
 
 #define DEBUG_CHANGETRACK 0
-//IAccessibility2 Implementation 2009-----
 class ScChangeAction;
 class ScAppOptions;
 class ScActionColorChanger
@@ -62,7 +61,6 @@ public:
                 void        Update( const ScChangeAction& rAction );
                 ColorData   GetColor() const    { return nColor; }
 };
-//-----IAccessibility2 Implementation 2009
 class ScBaseCell;
 class ScDocument;
 

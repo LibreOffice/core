@@ -20,7 +20,6 @@
  **************************************************************/
 
  // MARKER(update_precomp.py): autogen include statement, do not remove
-//This file is about the conversion of the UOF v2.0 and ODF document format
 #include "precompiled_filter.hxx"
 
 #include <stdio.h>
@@ -66,16 +65,9 @@
 #include <com/sun/star/beans/NamedValue.hpp>
 
 
-#include <unotools/streamwrap.hxx>
-#include <comphelper/processfactory.hxx>
-#include <tools/stream.hxx>
 #include "uof2splitter.hxx"
-
-#include <xmloff/attrlist.hxx>
 #include "uof2storage.hxx"
 #include "uof2merge.hxx"
-#include <tools/stream.hxx>
-#include <string>
 
 using namespace ::rtl;
 using namespace ::cppu;
@@ -94,32 +86,6 @@ namespace XSLT {
 
 class XSLTFilter : public WeakImplHelper4< XImportFilter, XExportFilter, XDocumentHandler, XStreamListener>
 {
-private:
-    // the UNO ServiceFactory
-    Reference< XMultiServiceFactory > m_rServiceFactory;
-
-    // DocumentHandler interface of the css::xml::sax::Writer service
-    Reference < XExtendedDocumentHandler > m_rDocumentHandler;
-    Reference < XOutputStream > m_rOutputStream;
-
-    // controls pretty-printing
-    sal_Bool m_bPrettyPrint;
-
-    Reference< XActiveDataControl > m_tcontrol;
-    oslCondition  m_cTransformed;
-
-    //UOF v2.0 export
-    Reference< XActiveDataControl > m_splitControl;
-
-    sal_Bool m_bTerminated;
-    sal_Bool m_bError;
-
-    OUString m_aExportBaseUrl;
-    OUString m_aOldBaseUrl;
-
-    OUString rel2abs(const OUString&);
-    OUString expandUrl(const OUString&);
-
 public:
 
     // ctor...
@@ -163,18 +129,51 @@ public:
         throw (com::sun::star::xml::sax::SAXException,RuntimeException);
     virtual void SAL_CALL setDocumentLocator(const Reference<XLocator>& doclocator)
         throw (SAXException,RuntimeException);
-    // UOF v2.0 export
+
 private:
+    // the UNO ServiceFactory
+    Reference< XMultiServiceFactory > m_rServiceFactory;
+
+    // DocumentHandler interface of the css::xml::sax::Writer service
+    Reference < XExtendedDocumentHandler > m_rDocumentHandler;
+    Reference < XOutputStream > m_rOutputStream;
+
+    // controls pretty-printing
+    sal_Bool m_bPrettyPrint;
+
+    Reference< XActiveDataControl > m_tcontrol;
+    oslCondition m_cTransformed;
+
+    sal_Bool m_bTerminated;
+    sal_Bool m_bError;
+
+    OUString m_aExportBaseUrl;
+    OUString m_aOldBaseUrl;
+
+    OUString rel2abs(const OUString&);
+    OUString expandUrl(const OUString&);
+
+    // for support of UOF v2.0
+    Reference< XActiveDataControl > m_splitControl;
     Reference< XStream > m_rStream;
-    UOF2Splitter * pSplitter;
+
+    bool isUOF2ExportStyleSheet( const OUString& rExportStyleSheet );
 
 };
 
 XSLTFilter::XSLTFilter( const Reference< XMultiServiceFactory > &r )
-    : m_rServiceFactory(r)
-    , m_bPrettyPrint(sal_True)
-    , m_bTerminated(sal_False)
-    , m_bError(sal_False)
+    : m_rServiceFactory( r )
+    , m_rDocumentHandler()
+    , m_rOutputStream()
+    , m_bPrettyPrint( sal_True )
+    , m_tcontrol()
+    , m_cTransformed()
+    , m_bTerminated( sal_False )
+    , m_bError( sal_False )
+    , m_aExportBaseUrl()
+    , m_aOldBaseUrl()
+    , m_splitControl()
+    , m_rStream()
 {
     m_cTransformed = osl_createCondition();
 }
@@ -252,35 +251,37 @@ sal_Bool XSLTFilter::importer(
     if ( msUserData.getLength() < 5 )
         return sal_False;
 
-    OUString udImport = msUserData[2];
-    OUString udStyleSheet = rel2abs(msUserData[4]);
+    const OUString udStyleSheet = rel2abs( msUserData[4] );
 
     // get information from media descriptor
     // the imput stream that represents the imported file
     // is most important here since we need to supply it to
     // the sax parser that drives the supplied document handler
-    sal_Int32 nLength = aSourceData.getLength();
-    OUString aName, aFileName, aURL;
+    const sal_Int32 nLength = aSourceData.getLength();
+    OUString aFileName;
+    OUString aURL;
     Reference< XInputStream > xInputStream;
     for ( sal_Int32 i = 0 ; i < nLength; i++)
     {
-        aName = aSourceData[i].Name;
-        if (aName.equalsAscii("InputStream"))
+        const OUString aName = aSourceData[i].Name;
+        if ( aName.equalsAscii( "InputStream" ) )
             aSourceData[i].Value >>= xInputStream;
-        else if ( aName.equalsAscii("FileName"))
+        else if ( aName.equalsAscii( "FileName" ) )
             aSourceData[i].Value >>= aFileName;
-        else if ( aName.equalsAscii("URL"))
+        else if ( aName.equalsAscii( "URL" ) )
             aSourceData[i].Value >>= aURL;
     }
     OSL_ASSERT(xInputStream.is());
-    if (!xInputStream.is()) return sal_False;
+    if ( !xInputStream.is() )
+        return sal_False;
 
     // create SAX parser that will read the document file
     // and provide events to xHandler passed to this call
     Reference < XParser > xSaxParser( m_rServiceFactory->createInstance(
         OUString::createFromAscii("com.sun.star.xml.sax.Parser")), UNO_QUERY );
     OSL_ASSERT(xSaxParser.is());
-    if(!xSaxParser.is())return sal_False;
+    if( !xSaxParser.is() )
+        return sal_False;
 
     // create transformer
     Sequence< Any > args(3);
@@ -310,15 +311,17 @@ sal_Bool XSLTFilter::importer(
             // connect input to transformer
             Reference< XActiveDataSink > tsink(m_tcontrol, UNO_QUERY);
             //UOF v2 import
-            UOF2Storage aUOF2Storage(m_rServiceFactory, xInputStream);
-            if(aUOF2Storage.isValidUOF2Doc())
+            UOF2Storage aUOF2Storage( m_rServiceFactory, xInputStream );
+            if ( aUOF2Storage.isValidUOF2Doc() )
             {
-                UOF2Merge aUOF2Merge(aUOF2Storage, m_rServiceFactory);
+                UOF2Merge aUOF2Merge( aUOF2Storage, m_rServiceFactory );
                 aUOF2Merge.merge();
-                tsink->setInputStream(aUOF2Merge.getMergedInStream());
+                tsink->setInputStream( aUOF2Merge.getMergedInStream() );
             }
             else
-            tsink->setInputStream(xInputStream);
+            {
+                tsink->setInputStream( xInputStream );
+            }
 
             // create pipe
             Reference< XOutputStream > pipeout(m_rServiceFactory->createInstance(
@@ -367,6 +370,18 @@ sal_Bool XSLTFilter::importer(
     }
 }
 
+bool XSLTFilter::isUOF2ExportStyleSheet( const OUString& rExportStyleSheet )
+{
+    bool bIsUOFDocumentType = false;
+
+    if ( rExportStyleSheet.endsWithAsciiL( "uof.xsl", 7 ) )
+    {
+        bIsUOFDocumentType = true;
+    }
+
+    return bIsUOFDocumentType;
+}
+
 sal_Bool XSLTFilter::exporter(
         const Sequence<PropertyValue>& aSourceData,
         const Sequence<OUString>& msUserData)
@@ -376,43 +391,44 @@ sal_Bool XSLTFilter::exporter(
         return sal_False;
 
     // get interesting values from user data
-    OUString udImport = msUserData[2];
-    OUString udStyleSheet = rel2abs(msUserData[5]);
+    const OUString udStyleSheet = rel2abs( msUserData[5] );
 
     // read source data
     // we are especially interested in the output stream
     // since that is where our xml-writer will push the data
     // from it's data-source interface
-    OUString aName, sURL;
+    OUString sURL;
     sal_Bool bIndent = sal_False;
     OUString aDoctypePublic;
     OUString aDoctypeSystem;
-    // Reference<XOutputStream> rOutputStream;
-    sal_Int32 nLength = aSourceData.getLength();
-    for ( sal_Int32 i = 0 ; i < nLength; i++)
     {
-        aName = aSourceData[i].Name;
-        if ( aName.equalsAscii("Indent"))
-            aSourceData[i].Value >>= bIndent;
-        if ( aName.equalsAscii("DocType_Public"))
-            aSourceData[i].Value >>= aDoctypePublic;
-        if ( aName.equalsAscii("DocType_System"))
-            aSourceData[i].Value >>= aDoctypeSystem;
-        if ( aName.equalsAscii("OutputStream"))
-            aSourceData[i].Value >>= m_rOutputStream;
-        else if ( aName.equalsAscii("URL" ))
-            aSourceData[i].Value >>= sURL;
-        //UOF v2.0 export, get Stream for constructing UOF2Storage
-        if ( aName.equalsAscii("StreamForOutput"))
-            aSourceData[i].Value >>= m_rStream;
+        const sal_Int32 nLength = aSourceData.getLength();
+        for ( sal_Int32 i = 0; i < nLength; i++ )
+        {
+            const OUString aName = aSourceData[i].Name;
+            if ( aName.equalsAscii( "Indent" ) )
+                aSourceData[i].Value >>= bIndent;
+            if ( aName.equalsAscii( "DocType_Public" ) )
+                aSourceData[i].Value >>= aDoctypePublic;
+            if ( aName.equalsAscii( "DocType_System" ) )
+                aSourceData[i].Value >>= aDoctypeSystem;
+            if ( aName.equalsAscii( "OutputStream" ) )
+                aSourceData[i].Value >>= m_rOutputStream;
+            else if ( aName.equalsAscii( "URL" ) )
+                aSourceData[i].Value >>= sURL;
+            //UOF v2.0 export, get Stream for constructing UOF2Storage
+            if ( aName.equalsAscii( "StreamForOutput" ) )
+                aSourceData[i].Value >>= m_rStream;
+        }
     }
 
-    if (!m_rDocumentHandler.is()) {
+    if (!m_rDocumentHandler.is())
+    {
         // get the document writer
         m_rDocumentHandler = Reference<XExtendedDocumentHandler>(
             m_rServiceFactory->createInstance(
-            OUString::createFromAscii("com.sun.star.xml.sax.Writer")),
-                UNO_QUERY);
+                OUString::createFromAscii("com.sun.star.xml.sax.Writer") ),
+            UNO_QUERY);
     }
 
     // create transformer
@@ -457,30 +473,45 @@ sal_Bool XSLTFilter::exporter(
         Reference< XActiveDataSink > tsink(m_tcontrol, UNO_QUERY);
         tsink->setInputStream(pipein);
 
+        // connect transformer to output
+        Reference< XActiveDataSource > tsource( m_tcontrol, UNO_QUERY );
+        if ( isUOF2ExportStyleSheet( udStyleSheet ) )
+        {
+            // special handling for UOF 2
 
-        //creating pipe2
-        Reference< XOutputStream > x_Pipeout( m_rServiceFactory->createInstance(
-            OUString::createFromAscii("com.sun.star.io.Pipe")), UNO_QUERY );
-        Reference< XInputStream > x_Pipein( x_Pipeout, UNO_QUERY );
+            if ( !m_rStream.is() )
+            {
+                return sal_False;
+            }
 
-        // connect transformer to pipe2
-        Reference< XActiveDataSource > tsource(m_tcontrol, UNO_QUERY);
-        tsource->setOutputStream( x_Pipeout );
+            //creating pipe2
+            Reference< XOutputStream > x_Pipeout(
+                m_rServiceFactory->createInstance(
+                    OUString::createFromAscii( "com.sun.star.io.Pipe" ) ), UNO_QUERY );
+            Reference< XInputStream > x_Pipein( x_Pipeout, UNO_QUERY );
 
-        pSplitter = new UOF2Splitter( m_rServiceFactory, sURL );
-        m_splitControl = Reference< XActiveDataControl >( static_cast< cppu::OWeakObject* >( pSplitter), UNO_QUERY );
-        //m_splitControl->addListener( Reference< XStreamListener >(this));
-        // connect pipe2 to splitter
-        Reference< XActiveDataSink > splitsink( m_splitControl, UNO_QUERY );
-        splitsink->setInputStream( x_Pipein );
-        // connect splitter to output
-        Reference< XActiveDataStreamer > splitout( m_splitControl, UNO_QUERY );
-        splitout->setStream( m_rStream );
-        m_rOutputStream = m_rStream->getOutputStream();
+            // connect transformer to pipe2
+            tsource->setOutputStream( x_Pipeout );
+
+            UOF2Splitter* pSplitter = new UOF2Splitter( m_rServiceFactory, sURL );
+            m_splitControl =
+                Reference< XActiveDataControl >(
+                    static_cast< cppu::OWeakObject* >( pSplitter ), UNO_QUERY );
+            // connect pipe2 to splitter
+            Reference< XActiveDataSink > splitsink( m_splitControl, UNO_QUERY );
+            splitsink->setInputStream( x_Pipein );
+            // connect splitter to output
+            Reference< XActiveDataStreamer > splitout( m_splitControl, UNO_QUERY );
+            splitout->setStream( m_rStream );
+            m_rOutputStream = m_rStream->getOutputStream();
+        }
+        else
+        {
+            tsource->setOutputStream( m_rOutputStream );
+        }
 
         // we will start receiving events after returning 'true'.
-        // we will start the transformation as soon as we receive the startDocument
-        // event.
+        // we will start the transformation as soon as we receive the startDocument event.
         return sal_True;
     }
     else
@@ -502,8 +533,12 @@ void XSLTFilter::endDocument() throw (SAXException, RuntimeException){
     OSL_ASSERT(m_rDocumentHandler.is());
     m_rDocumentHandler->endDocument();
 
-    //when the inputStream(outputStream of filter) was closed, start to parse it.
-    m_splitControl->start();
+    // m_splitControl only set for UOF 2
+    if ( m_splitControl.is() )
+    {
+        //when the inputStream(outputStream of filter) was closed, start to parse it.
+        m_splitControl->start();
+    }
 
     // wait for the transformer to finish
     osl_waitCondition(m_cTransformed, 0);

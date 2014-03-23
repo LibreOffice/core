@@ -42,6 +42,7 @@ namespace drawinglayer
 
             // data definitions
             Graphic                                 maFillGraphic;
+            basegfx::B2DVector                      maGraphicLogicSize;
             basegfx::B2DVector                      maSize;
             basegfx::B2DVector                      maOffset;
             basegfx::B2DVector                      maOffsetPosition;
@@ -54,6 +55,7 @@ namespace drawinglayer
 
             ImpSdrFillGraphicAttribute(
                 const Graphic& rFillGraphic,
+                const basegfx::B2DVector& rGraphicLogicSize,
                 const basegfx::B2DVector& rSize,
                 const basegfx::B2DVector& rOffset,
                 const basegfx::B2DVector& rOffsetPosition,
@@ -63,6 +65,7 @@ namespace drawinglayer
                 bool bLogSize)
             :   mnRefCount(0),
                 maFillGraphic(rFillGraphic),
+                maGraphicLogicSize(rGraphicLogicSize),
                 maSize(rSize),
                 maOffset(rOffset),
                 maOffsetPosition(rOffsetPosition),
@@ -75,6 +78,7 @@ namespace drawinglayer
 
             // data read access
             const Graphic& getFillGraphic() const { return maFillGraphic; }
+            const basegfx::B2DVector& getGraphicLogicSize() const { return maGraphicLogicSize; }
             const basegfx::B2DVector& getSize() const { return maSize; }
             const basegfx::B2DVector& getOffset() const { return maOffset; }
             const basegfx::B2DVector& getOffsetPosition() const { return maOffsetPosition; }
@@ -86,6 +90,7 @@ namespace drawinglayer
             bool operator==(const ImpSdrFillGraphicAttribute& rCandidate) const
             {
                 return (getFillGraphic() == rCandidate.getFillGraphic()
+                    && getGraphicLogicSize() == rCandidate.getGraphicLogicSize()
                     && getSize() == rCandidate.getSize()
                     && getOffset() == rCandidate.getOffset()
                     && getOffsetPosition() == rCandidate.getOffsetPosition()
@@ -107,6 +112,7 @@ namespace drawinglayer
                         basegfx::B2DVector(),
                         basegfx::B2DVector(),
                         basegfx::B2DVector(),
+                        basegfx::B2DVector(),
                         false,
                         false,
                         false);
@@ -121,6 +127,7 @@ namespace drawinglayer
 
         SdrFillGraphicAttribute::SdrFillGraphicAttribute(
             const Graphic& rFillGraphic,
+            const basegfx::B2DVector& rGraphicLogicSize,
             const basegfx::B2DVector& rSize,
             const basegfx::B2DVector& rOffset,
             const basegfx::B2DVector& rOffsetPosition,
@@ -131,6 +138,7 @@ namespace drawinglayer
         :   mpSdrFillGraphicAttribute(
                 new ImpSdrFillGraphicAttribute(
                     rFillGraphic,
+                    rGraphicLogicSize,
                     rSize,
                     rOffset,
                     rOffsetPosition,
@@ -210,6 +218,11 @@ namespace drawinglayer
             return mpSdrFillGraphicAttribute->getFillGraphic();
         }
 
+        const basegfx::B2DVector& SdrFillGraphicAttribute::getGraphicLogicSize() const
+        {
+            return mpSdrFillGraphicAttribute->getGraphicLogicSize();
+        }
+
         const basegfx::B2DVector& SdrFillGraphicAttribute::getSize() const
         {
             return mpSdrFillGraphicAttribute->getSize();
@@ -249,13 +262,12 @@ namespace drawinglayer
         {
             // get logical size of bitmap (before expanding eventually)
             Graphic aGraphic(getFillGraphic());
-            const basegfx::B2DVector aLogicalSize(aGraphic.GetPrefSize().getWidth(), aGraphic.GetPrefSize().getHeight());
 
-            // init values with defaults
+            // init values with defaults for stretched
             basegfx::B2DPoint aBitmapSize(1.0, 1.0);
             basegfx::B2DVector aBitmapTopLeft(0.0, 0.0);
 
-            // are changes needed?
+            //UUUU are changes needed? When streched we are already done, all other values will have no influence
             if(getTiling() || !getStretch())
             {
                 // init values with range sizes
@@ -277,7 +289,9 @@ namespace drawinglayer
                 }
                 else
                 {
-                    aBitmapSize.setX(aLogicalSize.getX());
+                    // #124002# use GraphicLogicSize directly, do not try to use GetPrefSize
+                    // of the graphic, that may not be adapted to the MapMode of the target
+                    aBitmapSize.setX(getGraphicLogicSize().getX());
                 }
 
                 if(0.0 != getSize().getY())
@@ -293,37 +307,38 @@ namespace drawinglayer
                 }
                 else
                 {
-                    aBitmapSize.setY(aLogicalSize.getY());
+                    // #124002# use GraphicLogicSize directly, do not try to use GetPrefSize
+                    // of the graphic, that may not be adapted to the MapMode of the target
+                    aBitmapSize.setY(getGraphicLogicSize().getY());
                 }
 
-                // get values, force to centered if necessary
-                const basegfx::B2DVector aRectPoint(getTiling() ? getRectPoint() : basegfx::B2DVector(0.0, 0.0));
-
                 // position changes X
-                if(0.0 == aRectPoint.getX())
+                if(0.0 == getRectPoint().getX())
                 {
                     aBitmapTopLeft.setX((fRangeWidth - aBitmapSize.getX()) * 0.5);
                 }
-                else if(1.0 == aRectPoint.getX())
+                else if(1.0 == getRectPoint().getX())
                 {
                     aBitmapTopLeft.setX(fRangeWidth - aBitmapSize.getX());
                 }
 
+                // offset positions are only meaningful when tiled
                 if(getTiling() && 0.0 != getOffsetPosition().getX())
                 {
                     aBitmapTopLeft.setX(aBitmapTopLeft.getX() + (aBitmapSize.getX() * (getOffsetPosition().getX() * 0.01)));
                 }
 
                 // position changes Y
-                if(0.0 == aRectPoint.getY())
+                if(0.0 == getRectPoint().getY())
                 {
                     aBitmapTopLeft.setY((fRangeHeight - aBitmapSize.getY()) * 0.5);
                 }
-                else if(1.0 == aRectPoint.getY())
+                else if(1.0 == getRectPoint().getY())
                 {
                     aBitmapTopLeft.setY(fRangeHeight - aBitmapSize.getY());
                 }
 
+                // offset positions are only meaningful when tiled
                 if(getTiling() && 0.0 != getOffsetPosition().getY())
                 {
                     aBitmapTopLeft.setY(aBitmapTopLeft.getY() + (aBitmapSize.getY() * (getOffsetPosition().getY() * 0.01)));

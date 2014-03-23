@@ -61,7 +61,7 @@ module com {  module sun {  module star {  module io {
     The <code>"&lt;&lt;ALL FILES&gt;&gt;"</code> permission with write action is
     especially dangerous.  This grants permission to write to the entire file system.
 
-    @since OOo 1.1.2
+    @since OpenOffice 1.1.2
 */
 published struct FilePermission
 {

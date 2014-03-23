@@ -107,12 +107,20 @@ class XMLOFF_DLLPUBLIC XMLTextParagraphExport : public XMLStyleExport
     ::rtl::OUString             sOpenRubyCharStyle;
     sal_Bool                    bOpenRuby;
 
-    // --> OD 2008-05-07 #refactorlists#
     XMLTextListsHelper* mpTextListsHelper;
     ::std::vector< XMLTextListsHelper* > maTextListsHelperStack;
-    // <--
 
     enum FrameType { FT_TEXT, FT_GRAPHIC, FT_EMBEDDED, FT_SHAPE };
+
+
+    void exportTextRangeSpan(
+            const ::com::sun::star::uno::Reference< com::sun::star::text::XTextRange > & rTextRange,
+            ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > & xPropSet,
+            ::com::sun::star::uno::Reference < ::com::sun::star::beans::XPropertySetInfo > & xPropSetInfo,
+            const sal_Bool bIsUICharStyle,
+            const sal_Bool bHasAutoStyle,
+            const ::rtl::OUString& sStyle,
+            sal_Bool& rPrevCharIsSpace );
 
 protected:
 

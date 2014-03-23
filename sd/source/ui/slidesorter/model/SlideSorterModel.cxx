@@ -173,7 +173,6 @@ bool SlideSorterModel::SetEditMode (EditMode eEditMode)
     {
         meEditMode = eEditMode;
         UpdatePageList();
-        ClearDescriptorList();
         bEditModeChanged = true;
     }
     return bEditModeChanged;
@@ -217,7 +216,7 @@ SharedPageDescriptor SlideSorterModel::GetPageDescriptor (
     if (SDRPAGE_NOTFOUND != nPageIndex && nPageIndex < GetPageCount())
     {
         pDescriptor = maPageDescriptors[nPageIndex];
-        if (pDescriptor == NULL && bCreate && mxSlides.is())
+        if( !bool(pDescriptor) && bCreate && mxSlides.is())
         {
             SdPage* pPage = GetPage(nPageIndex);
             pDescriptor.reset(new PageDescriptor (
@@ -424,7 +423,8 @@ void SlideSorterModel::SynchronizeDocumentSelection (void)
     while (aAllPages.HasMoreElements())
     {
         SharedPageDescriptor pDescriptor (aAllPages.GetNextElement());
-        pDescriptor->GetPage()->SetSelected(pDescriptor->HasState(PageDescriptor::ST_Selected));
+        const bool bIsSelected (pDescriptor->HasState(PageDescriptor::ST_Selected));
+        pDescriptor->GetPage()->SetSelected(bIsSelected);
     }
 }
 
@@ -439,7 +439,8 @@ void SlideSorterModel::SynchronizeModelSelection (void)
     while (aAllPages.HasMoreElements())
     {
         SharedPageDescriptor pDescriptor (aAllPages.GetNextElement());
-        pDescriptor->SetState(PageDescriptor::ST_Selected, pDescriptor->GetPage()->IsSelected());
+        const bool bIsSelected (pDescriptor->GetPage()->IsSelected());
+        pDescriptor->SetState(PageDescriptor::ST_Selected, bIsSelected);
     }
 }
 
@@ -459,11 +460,29 @@ void SlideSorterModel::SetDocumentSlides (
 {
     ::osl::MutexGuard aGuard (maMutex);
 
-    // Reset the current page so to cause everbody to release references to it.
+    // Make the current selection persistent and then release the
+    // current set of pages.
+    SynchronizeDocumentSelection();
+    mxSlides = NULL;
+    ClearDescriptorList ();
+
+    // Reset the current page to cause everbody to release references to it.
     mrSlideSorter.GetController().GetCurrentSlideManager()->NotifyCurrentSlideChange(-1);
 
+    // Set the new set of pages.
     mxSlides = rxSlides;
-    Resync();
+    AdaptSize();
+    SynchronizeModelSelection();
+    mrSlideSorter.GetController().GetPageSelector().CountSelectedPages();
+
+    model::PageEnumeration aSelectedPages (
+        model::PageEnumerationProvider::CreateSelectedPagesEnumeration(*this));
+    if (aSelectedPages.HasMoreElements())
+    {
+        SharedPageDescriptor pDescriptor (aSelectedPages.GetNextElement());
+        mrSlideSorter.GetController().GetCurrentSlideManager()->NotifyCurrentSlideChange(
+            pDescriptor->GetPage());
+    }
 
     ViewShell* pViewShell = mrSlideSorter.GetViewShell();
     if (pViewShell != NULL)
@@ -667,7 +686,6 @@ void SlideSorterModel::InsertSlide (SdPage* pPage)
 
     // Update page indices.
     UpdateIndices(nIndex+1);
-    OSL_TRACE("page inserted");
 }
 
 
@@ -705,7 +723,6 @@ void SlideSorterModel::DeleteSlide (const SdPage* pPage)
         maPageDescriptors.erase(maPageDescriptors.begin()+nIndex);
         UpdateIndices(nIndex);
     }
-    OSL_TRACE("page removed");
 }
 
 

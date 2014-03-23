@@ -1210,7 +1210,6 @@ IMapObject* SdDrawDocument::GetHitIMapObject( SdrObject* pObj,
     return pIMapObj;
 }
 
-//IAccessibility2 Implementation 2009-----
 ImageMap* SdDrawDocument::GetImageMapForObject(SdrObject* pObj)
 {
     SdIMapInfo* pIMapInfo = GetIMapInfo( pObj );
@@ -1220,7 +1219,6 @@ ImageMap* SdDrawDocument::GetImageMapForObject(SdrObject* pObj)
     }
     return NULL;
 }
-//-----IAccessibility2 Implementation 2009
 /** this method enforces that the masterpages are in the currect order,
     that is at position 1 is a PK_STANDARD masterpage followed by a
     PK_NOTES masterpage and so on. #

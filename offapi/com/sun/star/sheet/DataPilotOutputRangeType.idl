@@ -36,7 +36,7 @@ module com { module sun { module star { module sheet {
 
     @see com::sun::star::sheet::XDataPilotTable2
 
-    @since OOo 3.0
+    @since OpenOffice 3.0
  */
 constants DataPilotOutputRangeType
 {

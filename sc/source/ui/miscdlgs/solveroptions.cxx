@@ -84,15 +84,12 @@ public:
 
     void      SetDoubleValue( double fNew ) { mbIsDouble = true; mfDoubleValue = fNew; }
     void      SetIntValue( sal_Int32 nNew ) { mbIsDouble = false; mnIntValue = nNew; }
-    //IAccessibility2 Implementation 2009-----
 // MT: Commented out SV_ITEM_ID_EXTENDRLBOXSTRING and GetExtendText() in svlbitem.hxx - needed?
 //  virtual USHORT IsA() {return SV_ITEM_ID_EXTENDRLBOXSTRING;}
 //  virtual XubString GetExtendText() const;
-    //-----IAccessibility2 Implementation 2009
     virtual void Paint( const Point& rPos, SvLBox& rDev, sal_uInt16 nFlags, SvLBoxEntry* pEntry );
 };
 
-//IAccessibility2 Implementation 2009-----
 // MT: Commented out SV_ITEM_ID_EXTENDRLBOXSTRING and GetExtendText() in svlbitem.hxx - needed?
 /*
 XubString ScSolverOptionsString::GetExtendText() const
@@ -110,7 +107,6 @@ XubString ScSolverOptionsString::GetExtendText() const
     return aNormalStr;
 }
 */
-//-----IAccessibility2 Implementation 2009
 
 void ScSolverOptionsString::Paint( const Point& rPos, SvLBox& rDev, sal_uInt16, SvLBoxEntry* /* pEntry */ )
 {

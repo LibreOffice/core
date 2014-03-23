@@ -38,7 +38,7 @@ module com { module sun { module star { module accessibility {
     type.  The range of the affected rows, columns, and/or cells can be
     obtained by accessing the other four data members.</p>
 
-    @since OOo 1.1.2
+    @since OpenOffice 1.1.2
 */
 published struct AccessibleTableModelChange
 {

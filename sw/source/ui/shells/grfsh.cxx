@@ -113,6 +113,13 @@ void SwGrfShell::Execute(SfxRequest &rReq)
         }
         break;
         case SID_INSERT_GRAPHIC:
+        {
+            // #123922# implement slot independent from the two below to
+            // bring up the insert graphic dialog and associated actions
+            SwView& rView = GetView();
+            rReq.SetReturnValue(SfxBoolItem(nSlot, rView.InsertGraphicDlg( rReq )));
+            break;
+        }
         case FN_FORMAT_GRAFIC_DLG:
         case FN_DRAW_WRAP_DLG:
         {
@@ -314,7 +321,7 @@ void SwGrfShell::Execute(SfxRequest &rReq)
                     if( sGrfNm.Len() )
                     {
                         SwDocShell* pDocSh = GetView().GetDocShell();
-                        SwWait aWait( *pDocSh, sal_True );
+                        SwWait aWait( *pDocSh, true );
                         SfxMedium* pMedium = pDocSh->GetMedium();
                         INetURLObject aAbs;
                         if( pMedium )

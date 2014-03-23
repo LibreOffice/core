@@ -31,7 +31,7 @@ module com {  module sun {  module star {  module ui {
 
     @see <type scope="com::sun::star::frame">XStatusbarController</type>
 
-    @since Apache OpenOffice 4.0
+    @since OpenOffice 4.0
 */
 interface XStatusbarItem
 {

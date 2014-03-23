@@ -503,7 +503,6 @@ SwScrollNaviPopup::SwScrollNaviPopup( sal_uInt16 nId, const Reference< XFrame >&
             sText = String(SW_RES(nResStr));
             nTbxBits = TIB_CHECKABLE;
         }
-        //IAccessibility2 Impplementaton 2009-----
         else
         {
             if (nNaviId == NID_PREV)
@@ -511,7 +510,6 @@ SwScrollNaviPopup::SwScrollNaviPopup( sal_uInt16 nId, const Reference< XFrame >&
             else if (nNaviId == NID_NEXT)
                 sText = String(SW_RES(STR_IMGBTN_PGE_DOWN));
         }
-        //-----IAccessibility2 Impplementaton 2009
         aToolBox.InsertItem(nNaviId, sText, nTbxBits);
         aToolBox.SetHelpId( nNaviId, aNavigationHelpIds[i] );
     }
@@ -801,7 +799,7 @@ SwZoomBox_Impl::SwZoomBox_Impl(
     for(sal_uInt16 i = 0; i < sizeof(aZoomValues)/sizeof(sal_uInt16); i++)
     {
         String sEntry = String::CreateFromInt32(aZoomValues[i]);
-        sEntry += '%';
+        sEntry.AppendAscii( " %" );
         InsertEntry(sEntry);
     }
 }
@@ -933,7 +931,7 @@ void SwPreviewZoomControl::StateChanged( sal_uInt16 /*nSID*/,
     if(SFX_ITEM_AVAILABLE <= eState)
     {
         String sZoom(String::CreateFromInt32(((const SfxUInt16Item*)pState)->GetValue()));
-        sZoom += '%';
+        sZoom.AppendAscii( " %" );
         pBox->SetText(sZoom);
         pBox->SaveValue();
     }

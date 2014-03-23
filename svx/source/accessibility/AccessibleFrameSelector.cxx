@@ -191,9 +191,7 @@ sal_Int32 AccFrameSelector::getAccessibleIndexInParent(  )
 sal_Int16 AccFrameSelector::getAccessibleRole(  ) throw (RuntimeException)
 {
     // return AccessibleRole::OPTION_PANE;
-    //IAccessibility2 Implementation 2009-----
     return meBorder == FRAMEBORDER_NONE ? AccessibleRole::OPTION_PANE : AccessibleRole::CHECK_BOX;
-    //-----IAccessibility2 Implementation 2009
 }
 
 // ----------------------------------------------------------------------------
@@ -238,7 +236,6 @@ Reference< XAccessibleRelationSet > AccFrameSelector::getAccessibleRelationSet( 
     //        pHelper->AddRelation(aLabelRelation);
     //    }
     //}
-    //IAccessibility2 Implementation 2009-----
     if(meBorder == FRAMEBORDER_NONE)
     {
         //add the label relation
@@ -261,7 +258,6 @@ Reference< XAccessibleRelationSet > AccFrameSelector::getAccessibleRelationSet( 
             pHelper->AddRelation(aMemberOfRelation);
         }
     }
-    //-----IAccessibility2 Implementation 2009
     return xRet;
 }
 

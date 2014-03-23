@@ -162,7 +162,7 @@ void Marshal::writeOid(
 {
     bool found;
     sal_uInt16 idx;
-    if (oid.getLength() == 0) {
+    if ( oid.isEmpty() ) {
         found = true;
         idx = cache::ignore;
     } else {

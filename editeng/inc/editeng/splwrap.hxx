@@ -39,7 +39,6 @@ namespace com { namespace sun { namespace star { namespace linguistic2 {
 }}}}
 
 class Window;
-//IAccessibility2 Impplementaton 2009-----
 class SdrObject;
 // misc functions ---------------------------------------------------------------
 
@@ -62,7 +61,6 @@ private:
         ::com::sun::star::linguistic2::XSpellChecker1 > xSpell;
     ::com::sun::star::uno::Reference<
         ::com::sun::star::linguistic2::XHyphenator >    xHyph;
-//IAccessibility2 Impplementaton 2009-----
     SdrObject* mpTextObj;
     sal_uInt16  nOldLang;       // Sprache merken, nur bei Aenderung SetLanguage rufen
     sal_Bool    bOtherCntnt : 1; // gesetzt => Sonderbereiche zunaechst pruefen
@@ -154,10 +152,8 @@ protected:
     virtual void AutoCorrect( const String& rAktStr, const String& rNewStr );
     virtual void InsertHyphen( const sal_uInt16 nPos ); // Hyphen einfuegen
 
-//IAccessibility2 Impplementaton 2009-----
     void SetCurTextObj( SdrObject* pObj ) { mpTextObj = pObj; }
     SdrObject* GetCurTextObj() { return mpTextObj; }
-//-----IAccessibility2 Impplementaton 2009
 };
 
 #endif

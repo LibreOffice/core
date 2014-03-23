@@ -129,7 +129,7 @@ class ScFormatFilterPlugin {
 
 // scfilt plugin symbol
 extern "C" {
-  ScFormatFilterPlugin * SAL_CALL ScFilterCreate(void);
+  SAL_DLLPUBLIC_EXPORT ScFormatFilterPlugin * SAL_CALL ScFilterCreate(void);
 }
 
 class ScFormatFilter {

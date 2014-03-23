@@ -158,6 +158,7 @@ void DataValidationsContext::importDataValidation( const AttributeList& rAttribs
 {
     mxValModel.reset( new ValidationModel );
     getAddressConverter().convertToCellRangeList( mxValModel->maRanges, rAttribs.getString( XML_sqref, OUString() ), getSheetIndex(), true );
+    mxValModel->msRef          = rAttribs.getString( XML_sqref, OUString() );
     mxValModel->maInputTitle   = rAttribs.getXString( XML_promptTitle, OUString() );
     mxValModel->maInputMessage = rAttribs.getXString( XML_prompt, OUString() );
     mxValModel->maErrorTitle   = rAttribs.getXString( XML_errorTitle, OUString() );

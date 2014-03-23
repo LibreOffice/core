@@ -219,10 +219,8 @@ public:
 
     sal_Bool            IsCursorAtWrongSpelledWord( sal_Bool bMarkIfWrong = sal_False );
     sal_Bool            IsWrongSpelledWordAtPos( const Point& rPosPixel, sal_Bool bMarkIfWrong = sal_False );
-    //IAccessibility2 Implementation 2009-----
         sal_Bool IsShapeParaFocusable( ) ;
     sal_Bool WrongSpelledBreakPara(sal_Int32 nPara,sal_uInt16& nStartIndex, sal_uInt16& nEndIndex,sal_Int32 nIndex);
-    //-----IAccessibility2 Implementation 2009
     void            SpellIgnoreWord();
     void            ExecuteSpellPopup( const Point& rPosPixel, Link* pCallBack = 0 );
 

@@ -1070,7 +1070,7 @@ SwSvxNumBulletTabDialog::SwSvxNumBulletTabDialog(Window* pParent,
     GetUserButton()->SetText(sRemoveText);
     GetUserButton()->SetHelpId(HID_NUM_RESET);
     GetUserButton()->SetClickHdl(LINK(this, SwSvxNumBulletTabDialog, RemoveNumberingHdl));
-    if(!rWrtSh.GetCurNumRule())
+    if(!rWrtSh.GetNumRuleAtCurrCrsrPos())
         GetUserButton()->Enable(sal_False);
     AddTabPage( RID_SVXPAGE_PICK_SINGLE_NUM );
     AddTabPage( RID_SVXPAGE_PICK_BULLET );

@@ -27,11 +27,9 @@
 
 #include "SdShapeTypes.hxx"
 
-//IAccessibility2 Implementation 2009-----
 #include "accessibility.hrc"
 #include "sdresid.hxx"
 #include <tools/string.hxx>
-//-----IAccessibility2 Implementation 2009
 #include <svx/DescriptionGenerator.hxx>
 #include <rtl/ustring.h>
 
@@ -82,51 +80,38 @@ AccessiblePresentationShape::~AccessiblePresentationShape (void)
     ShapeTypeId nShapeType = ShapeTypeHandler::Instance().GetTypeId (mxShape);
     switch (nShapeType)
     {
-    //IAccessibility2 Implementation 2009-----
         case PRESENTATION_TITLE:
-            //sName = ::rtl::OUString (RTL_CONSTASCII_USTRINGPARAM("ImpressTitle"));
             sName = ::rtl::OUString (String(SdResId(SID_SD_A11Y_P_TITLE_N)));
             break;
         case PRESENTATION_OUTLINER:
-            //sName = ::rtl::OUString (RTL_CONSTASCII_USTRINGPARAM("ImpressOutliner"));
             sName = ::rtl::OUString (String(SdResId(SID_SD_A11Y_P_OUTLINER_N)));
             break;
         case PRESENTATION_SUBTITLE:
-            //sName = ::rtl::OUString (RTL_CONSTASCII_USTRINGPARAM("ImpressSubtitle"));
             sName = ::rtl::OUString (String(SdResId(SID_SD_A11Y_P_SUBTITLE_N)));
             break;
         case PRESENTATION_PAGE:
-            //sName = ::rtl::OUString (RTL_CONSTASCII_USTRINGPARAM("ImpressPage"));
             sName = ::rtl::OUString (String(SdResId(SID_SD_A11Y_P_PAGE_N)));
             break;
         case PRESENTATION_NOTES:
-            //sName = ::rtl::OUString (RTL_CONSTASCII_USTRINGPARAM("ImpressNotes"));
             sName = ::rtl::OUString (String(SdResId(SID_SD_A11Y_P_NOTES_N)));
             break;
         case PRESENTATION_HANDOUT:
-            //sName = ::rtl::OUString (RTL_CONSTASCII_USTRINGPARAM("ImpressHandout"));
             sName = ::rtl::OUString (String(SdResId(SID_SD_A11Y_P_HANDOUT_N)));
             break;
         case PRESENTATION_HEADER:
-            //sName = ::rtl::OUString (RTL_CONSTASCII_USTRINGPARAM("ImpressHeader"));
         sName = ::rtl::OUString ( String(SdResId(SID_SD_A11Y_P_HEADER_N)) );
             break;
         case PRESENTATION_FOOTER:
-            //sName = ::rtl::OUString (RTL_CONSTASCII_USTRINGPARAM("ImpressFooter"));
         sName = ::rtl::OUString ( String(SdResId(SID_SD_A11Y_P_FOOTER_N)) );
             break;
         case PRESENTATION_DATETIME:
-            //sName = ::rtl::OUString (RTL_CONSTASCII_USTRINGPARAM("ImpressDateAndTime"));
         sName = ::rtl::OUString ( String(SdResId(SID_SD_A11Y_P_DATE_N)) );
             break;
         case PRESENTATION_PAGENUMBER:
-            //sName = ::rtl::OUString (RTL_CONSTASCII_USTRINGPARAM("ImpressPageNumber"));
         sName = ::rtl::OUString ( String(SdResId(SID_SD_A11Y_P_NUMBER_N)) );
             break;
         default:
-            //sName = ::rtl::OUString (RTL_CONSTASCII_USTRINGPARAM("UnknownAccessibleImpressShape"));
             sName = ::rtl::OUString (String(SdResId(SID_SD_A11Y_P_UNKNOWN_N)));
-    //-----IAccessibility2 Implementation 2009
             uno::Reference<drawing::XShapeDescriptor> xDescriptor (mxShape, uno::UNO_QUERY);
             if (xDescriptor.is())
                 sName += ::rtl::OUString (RTL_CONSTASCII_USTRINGPARAM(": "))
@@ -149,14 +134,11 @@ AccessiblePresentationShape::~AccessiblePresentationShape (void)
     ShapeTypeId nShapeType = ShapeTypeHandler::Instance().GetTypeId (mxShape);
     switch (nShapeType)
     {
-    //IAccessibility2 Implementation 2009-----
         case PRESENTATION_TITLE:
-            //aDG.Initialize (::rtl::OUString::createFromAscii ("PresentationTitleShape"));
         sDescription = ::rtl::OUString ( String(SdResId(SID_SD_A11Y_P_TITLE_D)) );
         aDG.Initialize (sDescription);
             break;
         case PRESENTATION_OUTLINER:
-            //aDG.Initialize (::rtl::OUString::createFromAscii ("PresentationOutlinerShape"));
         sDescription = ::rtl::OUString ( String(SdResId(SID_SD_A11Y_P_OUTLINER_D)) );
         aDG.Initialize (sDescription);              //PresentationOutlinerShape
             break;
@@ -181,30 +163,24 @@ AccessiblePresentationShape::~AccessiblePresentationShape (void)
         aDG.Initialize (sDescription);              //PresentationHandoutShape
             break;
         case PRESENTATION_HEADER:
-            //aDG.Initialize (::rtl::OUString::createFromAscii ("PresentationHeaderShape"));
         sDescription = ::rtl::OUString ( String(SdResId(SID_SD_A11Y_P_HEADER_D)) );
         aDG.Initialize (sDescription);              //PresentationHeaderShape
             break;
         case PRESENTATION_FOOTER:
-            //aDG.Initialize (::rtl::OUString::createFromAscii ("PresentationFooterShape"));
         sDescription = ::rtl::OUString ( String(SdResId(SID_SD_A11Y_P_FOOTER_D)) );
         aDG.Initialize (sDescription);              //PresentationFooterShape
             break;
         case PRESENTATION_DATETIME:
-            //aDG.Initialize (::rtl::OUString::createFromAscii ("PresentationDateAndTimeShape"));
         sDescription = ::rtl::OUString ( String(SdResId(SID_SD_A11Y_P_DATE_D)) );
         aDG.Initialize (sDescription);              //PresentationDateShape
             break;
         case PRESENTATION_PAGENUMBER:
-            //aDG.Initialize (::rtl::OUString::createFromAscii ("PresentationPageNumberShape"));
         sDescription = ::rtl::OUString ( String(SdResId(SID_SD_A11Y_P_NUMBER_D)) );
         aDG.Initialize (sDescription);              //PresentationNumberShape
             break;
         default:
-            //aDG.Initialize (::rtl::OUString::createFromAscii ("Unknown accessible presentation shape"));
         sDescription = ::rtl::OUString ( String(SdResId(SID_SD_A11Y_P_UNKNOWN_D)) );
         aDG.Initialize (sDescription);              //Unknown accessible presentation shape
-        //-----IAccessibility2 Implementation 2009
             uno::Reference<drawing::XShapeDescriptor> xDescriptor (mxShape, uno::UNO_QUERY);
             if (xDescriptor.is())
             {
@@ -215,7 +191,6 @@ AccessiblePresentationShape::~AccessiblePresentationShape (void)
 
     return aDG();
 }
-//IAccessibility2 Implementation 2009-----
 ::rtl::OUString AccessiblePresentationShape::GetStyle()
 {
     ::rtl::OUString sName;
@@ -264,5 +239,4 @@ AccessiblePresentationShape::~AccessiblePresentationShape (void)
     return sName;
 
 }
-//-----IAccessibility2 Implementation 2009
 } // end of namespace accessibility

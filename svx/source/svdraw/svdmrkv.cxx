@@ -618,6 +618,12 @@ bool SdrMarkView::ImpIsFrameHandles() const
         }
     }
 
+    // no FrameHdl for crop
+    if(bFrmHdl && SDRDRAG_CROP == GetDragMode())
+    {
+        bFrmHdl = false;
+    }
+
     return bFrmHdl;
 }
 
@@ -912,66 +918,6 @@ void SdrMarkView::CreateMarkHandles(SdrHdlList& rTarget)
                     pHdl->SetObjHdlNum(i - nSiz0);
                 }
             }
-            else if(SDRDRAG_CROP == GetDragMode())
-            {
-                const SdrGrafObj* pSdrGrafObj = dynamic_cast< const SdrGrafObj* >(pSingleSelected);
-
-                if(pSdrGrafObj)
-                {
-                    const SdrGrafCropItem& rCrop = static_cast< const SdrGrafCropItem& >(pSdrGrafObj->GetMergedItem(SDRATTR_GRAFCROP));
-
-                    if(rCrop.GetLeft() || rCrop.GetTop() || rCrop.GetRight() ||rCrop.GetBottom())
-                    {
-                        // get and decompose object transfoemation to have current translate and scale
-                        const basegfx::B2DHomMatrix aMatrix(pSdrGrafObj->getSdrObjectTransformation());
-                        basegfx::B2DVector aScale, aTranslate;
-                        double fRotate, fShearX;
-
-                        aMatrix.decompose(aScale, aTranslate, fRotate, fShearX);
-
-                        if(!aScale.equalZero())
-                        {
-                            // get crop scale
-                            const basegfx::B2DVector aCropScaleFactor(
-                                pSdrGrafObj->GetGraphicObject().calculateCropScaling(
-                                    aScale.getX(),
-                                    aScale.getY(),
-                                    rCrop.GetLeft(),
-                                    rCrop.GetTop(),
-                                    rCrop.GetRight(),
-                                    rCrop.GetBottom()));
-
-                            // apply crop scale
-                            const double fCropLeft(rCrop.GetLeft() * aCropScaleFactor.getX());
-                            const double fCropTop(rCrop.GetTop() * aCropScaleFactor.getY());
-                            const double fCropRight(rCrop.GetRight() * aCropScaleFactor.getX());
-                            const double fCropBottom(rCrop.GetBottom() * aCropScaleFactor.getY());
-
-                            new SdrCropViewHdl(
-                                rTarget,
-                                *pSingleSelected,
-                                aMatrix,
-                                pSdrGrafObj->GetGraphicObject().GetGraphic(),
-                                fCropLeft,
-                                fCropTop,
-                                fCropRight,
-                                fCropBottom);
-                        }
-                    }
-                }
-
-                const basegfx::B2DPoint aCenter(rSnapRange.getCenter());
-
-                new SdrCropHdl(rTarget, *pSingleSelected, HDL_UPLFT, rSnapRange.getMinimum());
-                new SdrCropHdl(rTarget, *pSingleSelected, HDL_UPPER, basegfx::B2DTuple(aCenter.getX(), rSnapRange.getMinY()));
-                new SdrCropHdl(rTarget, *pSingleSelected, HDL_UPRGT, basegfx::B2DTuple(rSnapRange.getMaxX(), rSnapRange.getMinY()));
-                new SdrCropHdl(rTarget, *pSingleSelected, HDL_LEFT, basegfx::B2DTuple(rSnapRange.getMinX(), aCenter.getY()));
-                new SdrCropHdl(rTarget, *pSingleSelected, HDL_RIGHT, basegfx::B2DTuple(rSnapRange.getMaxX(), aCenter.getY()));
-                new SdrCropHdl(rTarget, *pSingleSelected, HDL_LWLFT, basegfx::B2DTuple(rSnapRange.getMinX(), rSnapRange.getMaxY()));
-                new SdrCropHdl(rTarget, *pSingleSelected, HDL_LOWER, basegfx::B2DTuple(aCenter.getX(), rSnapRange.getMaxY()));
-                new SdrCropHdl(rTarget, *pSingleSelected, HDL_LWRGT, rSnapRange.getMaximum());
-
-            }
             else
             {
                 // TTTT: See below, not needed
@@ -1050,33 +996,50 @@ void SdrMarkView::CreateMarkHandles(SdrHdlList& rTarget)
     }
     else
     {
-        for (sal_uInt32 nMarkNum(0); nMarkNum < aSelection.size(); nMarkNum++)
+        bool bDone(false);
+
+        // moved crop handling to non-frame part and the handle creation to SdrGrafObj
+        if(pSingleSelected && SDRDRAG_CROP == GetDragMode())
         {
-            SdrObject* pObj = aSelection[nMarkNum];
-            const sal_uInt32 nSiz0(rTarget.GetHdlCount());
-            pObj->AddToHdlList(rTarget);
-            const sal_uInt32 nSiz1(rTarget.GetHdlCount());
-            const bool bPoly(pObj->IsPolygonObject());
-            const sdr::selection::Indices aMarkedPoints(bPoly ? getSelectedPointsForSelectedSdrObject(*pObj) : sdr::selection::Indices());
+            const SdrGrafObj* pSdrGrafObj = dynamic_cast< const SdrGrafObj* >(pSingleSelected);
 
-            for(sal_uInt32 i(nSiz0); i < nSiz1; i++)
+            if(pSdrGrafObj)
             {
-                SdrHdl* pHdl = rTarget.GetHdlByIndex(i);
-                pHdl->SetObjHdlNum(i - nSiz0);
+                pSdrGrafObj->addCropHandles(rTarget);
+                bDone = true;
+            }
+        }
 
-                if (bPoly)
+        if(!bDone)
+        {
+            for (sal_uInt32 nMarkNum(0); nMarkNum < aSelection.size(); nMarkNum++)
+            {
+                SdrObject* pObj = aSelection[nMarkNum];
+                const sal_uInt32 nSiz0(rTarget.GetHdlCount());
+                pObj->AddToHdlList(rTarget);
+                const sal_uInt32 nSiz1(rTarget.GetHdlCount());
+                const bool bPoly(pObj->IsPolygonObject());
+                const sdr::selection::Indices aMarkedPoints(bPoly ? getSelectedPointsForSelectedSdrObject(*pObj) : sdr::selection::Indices());
+
+                for(sal_uInt32 i(nSiz0); i < nSiz1; i++)
                 {
-                    const bool bSelected(0 != aMarkedPoints.count(i - nSiz0));
+                    SdrHdl* pHdl = rTarget.GetHdlByIndex(i);
+                    pHdl->SetObjHdlNum(i - nSiz0);
 
-                    pHdl->SetSelected(bSelected);
-
-                    if(IsPlusHandlesAlwaysVisible() || bSelected)
+                    if (bPoly)
                     {
-                        const sal_uInt32 nPlusAnz(pObj->GetPlusHdlCount(*pHdl));
+                        const bool bSelected(0 != aMarkedPoints.count(i - nSiz0));
 
-                        for(sal_uInt32 nPlusNum(0); nPlusNum < nPlusAnz; nPlusNum++)
+                        pHdl->SetSelected(bSelected);
+
+                        if(IsPlusHandlesAlwaysVisible() || bSelected)
                         {
-                            pObj->GetPlusHdl(rTarget, *pObj, *pHdl, nPlusNum);
+                            const sal_uInt32 nPlusAnz(pObj->GetPlusHdlCount(*pHdl));
+
+                            for(sal_uInt32 nPlusNum(0); nPlusNum < nPlusAnz; nPlusNum++)
+                            {
+                                pObj->GetPlusHdl(rTarget, *pObj, *pHdl, nPlusNum);
+                            }
                         }
                     }
                 }

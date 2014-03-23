@@ -76,7 +76,7 @@ published service DataPilotDescriptor
     /** specifies parameters to create the data pilot table from a database.
 
     @see DatabaseImportDescriptor
-    @since OOo 3.3
+    @since OpenOffice 3.3
 
      */
     [optional, property] sequence< com::sun::star::beans::PropertyValue > ImportDescriptor;
@@ -86,7 +86,7 @@ published service DataPilotDescriptor
     /** specifies the name of a <type>DataPilotSource</type> implementation
         for the data pilot table.
 
-    @since OOo 3.3
+    @since OpenOffice 3.3
 
      */
     [optional, property] string SourceServiceName;
@@ -96,7 +96,7 @@ published service DataPilotDescriptor
     /** specifies arguments that are passed to the implementation named by
         <member>SourceServiceName</member>.
 
-    @since OOo 3.3
+    @since OpenOffice 3.3
 
      */
     [optional, property] sequence< com::sun::star::beans::PropertyValue > ServiceArguments;
@@ -142,7 +142,7 @@ published service DataPilotDescriptor
 
     /** specifies a label for grand total results.
 
-    @since OOo 3.4
+    @since OpenOffice 3.4
      */
     [optional, property] string GrandTotalName;
 

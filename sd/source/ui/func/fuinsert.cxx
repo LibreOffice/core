@@ -132,20 +132,27 @@ void FuInsertGraphic::DoExecute( SfxRequest&  )
         {
             if(mpViewShell && dynamic_cast< DrawViewShell* >(mpViewShell))
             {
-                sal_Int8 nAction(DND_ACTION_COPY);
-                SdrObject* pPickObj = mpView->GetEmptyPresentationObject(PRESOBJ_GRAPHIC);
+                sal_Int8 nAction = DND_ACTION_COPY;
+                SdrObject* pPickObj = mpView->GetEmptyPresentationObject( PRESOBJ_GRAPHIC );
+                SdrObject* pSingleSelected = mpView->getSelectedIfSingle();
+                bool bSelectionReplaced(false);
 
-                if(pPickObj)
+                if( pPickObj )
                 {
                     nAction = DND_ACTION_LINK;
                 }
+                else if(pSingleSelected)
+                {
+                    pPickObj = pSingleSelected;
+                    nAction = DND_ACTION_MOVE;
+                    bSelectionReplaced = true;
+                }
 
-                SdrGrafObj* pGrafObj = mpView->InsertGraphic(
-                    aGraphic,
-                    nAction,
-                    mpWindow->GetLogicRange().getCenter(),
-                    pPickObj,
-                    0);
+                Point aPos;
+                Rectangle aRect(aPos, mpWindow->GetOutputSizePixel() );
+                aPos = aRect.Center();
+                aPos = mpWindow->PixelToLogic(aPos);
+                SdrGrafObj* pGrafObj = mpView->InsertGraphic(aGraphic, nAction, basegfx::B2DPoint(aPos.X(), aPos.Y()), pPickObj, NULL);
 
                 if(pGrafObj && aDlg.IsAsLink())
                 {
@@ -154,6 +161,11 @@ void FuInsertGraphic::DoExecute( SfxRequest&  )
                     String aPath(aDlg.GetPath());
 
                     pGrafObj->SetGraphicLink(aPath, aFltName);
+                }
+
+                if(bSelectionReplaced && pGrafObj)
+                {
+                    mpView->MarkObj(*pGrafObj);
                 }
             }
         }
@@ -360,6 +372,14 @@ void FuInsertOLE::DoExecute( SfxRequest& rReq )
                     // new notify/listener mechanism
                     SdPage* pCurrentlyConnectedSdPage = findConnectionToSdrObject(pPickObj);
                     establishConnectionToSdrObject(pOleObj, pCurrentlyConnectedSdPage);
+                }
+
+                // #123468# we need to end text edit before replacing the object. There cannot yet
+                // being text typed (else it would not be an EmptyPresObj anymore), but it may be
+                // in text edit mode
+                if(mpView->IsTextEdit())
+                {
+                    mpView->SdrEndTextEdit();
                 }
             }
 

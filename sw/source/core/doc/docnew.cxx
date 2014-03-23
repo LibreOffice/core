@@ -1202,7 +1202,25 @@ SfxObjectShell* SwDoc::CreateCopy(bool bCallInitNew ) const
     pRet->Paste( *this );
 
     // remove the temporary shell if it is there as it was done before
-    pRet->SetTmpDocShell( (SfxObjectShell*)NULL );
+    if(pRet->GetTmpDocShell())
+    {
+        // #123914# If we get here, SwOLENode::MakeCopy had to create a temporary
+        // SwDocShell to have a SvPersist as a target for the OLE data to be copied.
+        // It is reset by a call to SetTmpDocShell(NULL), but in this case here
+        // there is no other ref holder to the just cloned SwDoc. Thus - to prevent
+        // it's immediate deletion - it is required to hold a fercunt to it during
+        // the SetTmpDocShell call. This can be done with an instance of a class
+        // holding a SwDoc, but most simple using acquire/release on the SwDoc
+        // (as long as these are public, I was surprised. Also probably not
+        // guaranteed for the future is that the release call does not delete the
+        // SwDoc it gets called at, but currently works like this).
+        pRet->acquire();
+        pRet->SetTmpDocShell((SfxObjectShell*)NULL);
+        pRet->release();
+    }
+
+    // remove the temporary shell if it is there as it was done before
+    // pRet->SetTmpDocShell( (SfxObjectShell*)NULL );
 
     return pRetShell;
 }

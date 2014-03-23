@@ -586,7 +586,6 @@ End
 #endif
 
 #ifdef MACOSX
-#ifdef QUARTZ
 File gid_File_Lib_Fps_Aqua
     TXT_FILE_BODY;
     Styles = (PACKED);
@@ -601,14 +600,15 @@ File gid_File_Lib_MacOSXSpell
 	Dir = SCP2_OOO_BIN_DIR;
 End
 
+#if (MACOSX_DEPLOYMENT_TARGET_NUM < 106)
 File gid_File_Lib_avmediaQuickTime
 	TXT_FILE_BODY;
 	Styles = (PACKED);
 	Name = LIBNAME(avmediaQuickTime);
 	Dir = SCP2_OOO_BIN_DIR;
 End
-#endif
-#endif
+#endif // MACOSX_DEPLOYMENT_TARGET_NUM
+#endif // MACOSX
 
 #ifdef OS2
 SPECIAL_COMPONENT_LIB_FILE( gid_File_Lib_Fps_Office, fps_offi )

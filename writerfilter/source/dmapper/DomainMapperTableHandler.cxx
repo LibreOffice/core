@@ -285,7 +285,9 @@ struct WRITERFILTER_DLLPRIVATE TableInfo
 
 };
 
-TableStyleSheetEntry * DomainMapperTableHandler::endTableGetTableStyle(TableInfo & rInfo)
+TableStyleSheetEntry * DomainMapperTableHandler::endTableGetTableStyle(
+    TableInfo & rInfo,
+    const bool bAdjustLeftMarginByDefaultValue )
 {
     // will receive the table style if any
     TableStyleSheetEntry* pTableStyle = NULL;
@@ -463,7 +465,14 @@ TableStyleSheetEntry * DomainMapperTableHandler::endTableGetTableStyle(TableInfo
         lcl_debug_TableBorder(aTableBorder);
 #endif
 
-        m_aTableProperties->Insert( PROP_LEFT_MARGIN, false, uno::makeAny( nLeftMargin - nGapHalf - rInfo.nLeftBorderDistance));
+        m_aTableProperties->Insert(
+            PROP_LEFT_MARGIN,
+            false,
+            uno::makeAny( nLeftMargin - nGapHalf - ( bAdjustLeftMarginByDefaultValue ? rInfo.nLeftBorderDistance : 0 ) ) );
+
+        // no bottom margin - set it explicitly to avoid inheritance from a set dynamic pool default
+        // which might be provided via document default paragraph properties.
+        m_aTableProperties->Insert( PROP_BOTTOM_MARGIN, false, uno::makeAny( (sal_Int32)0 ) );
 
         m_aTableProperties->getValue( TablePropertyMap::TABLE_WIDTH, nTableWidth );
         if( nTableWidth > 0 )
@@ -702,14 +711,18 @@ RowPropertyValuesSeq_t DomainMapperTableHandler::endTableGetRowProperties()
     return aRowProperties;
 }
 
-void DomainMapperTableHandler::endTable()
+void DomainMapperTableHandler::endTable(
+    const unsigned int nDepth )
 {
 #ifdef DEBUG_DMAPPER_TABLE_HANDLER
     dmapper_logger->startElement("tablehandler.endTable");
 #endif
 
     TableInfo aTableInfo;
-    aTableInfo.pTableStyle = endTableGetTableStyle(aTableInfo);
+    // adjust left margin only for tables in the body text, not for sub tables.
+    const bool bAdjustLeftMarginByDefaultValue = (nDepth == 0);
+    aTableInfo.pTableStyle =
+            endTableGetTableStyle( aTableInfo, bAdjustLeftMarginByDefaultValue );
     //  expands to uno::Sequence< Sequence< beans::PropertyValues > >
 
     CellPropertyValuesSeq_t aCellProperties = endTableGetCellProperties(aTableInfo);
@@ -724,10 +737,12 @@ void DomainMapperTableHandler::endTable()
     {
         try
         {
-            uno::Reference<text::XTextTable> xTable = m_xText->convertToTable(*m_pTableSeq,
-                                    aCellProperties,
-                                    aRowProperties,
-                                    aTableInfo.aTableProperties);
+            uno::Reference< text::XTextTable > xTable =
+                    m_xText->convertToTable(
+                        *m_pTableSeq,
+                        aCellProperties,
+                        aRowProperties,
+                        aTableInfo.aTableProperties );
 
             m_xTableRange = xTable->getAnchor( );
         }

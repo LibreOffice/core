@@ -178,8 +178,7 @@ ModalDialog RID_SVX_GRFFILTER_DLG_SOLARIZE
         Spin = TRUE ;
         Maximum = 100 ;
         StrictFormat = TRUE ;
-        Unit = FUNIT_CUSTOM ;
-        CustomUnitText = " %" ;
+        Unit = FUNIT_PERCENT ;
         Last = 100 ;
         SpinSize = 1 ;
     };
@@ -259,8 +258,7 @@ ModalDialog RID_SVX_GRFFILTER_DLG_SEPIA
         Minimum = 1 ;
         Maximum = 100 ;
         StrictFormat = TRUE ;
-        Unit = FUNIT_CUSTOM ;
-        CustomUnitText = " %" ;
+        Unit = FUNIT_PERCENT ;
         First = 1 ;
         Last = 100 ;
         SpinSize = 1 ;

@@ -46,7 +46,7 @@ module com { module sun { module star { module text {
     @see    com::sun::star::text::MailMerge
     @see    com::sun::star::text::MailMergeEvent
 
-    @since OOo 1.1.2
+    @since OpenOffice 1.1.2
 */
 published interface XMailMergeListener : com::sun::star::uno::XInterface
 {

@@ -31,7 +31,7 @@ module com {  module sun {  module star {  module frame { module status {
 
 /** describes a state of a property.
 
-    @since OOo 2.0
+    @since OpenOffice 2.0
  */
 struct ItemStatus
 {

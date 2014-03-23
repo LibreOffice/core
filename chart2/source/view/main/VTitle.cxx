@@ -169,7 +169,7 @@ void VTitle::createShapes(
             ////aValueMap.insert( tPropertyNameValueMap::value_type( C2U("TextMaximumFrameHeight"), uno::makeAny(rSize.Height) ) ); //sal_Int32
 
             //set name/classified ObjectID (CID)
-            if( m_aCID.getLength() )
+            if( !m_aCID.isEmpty() )
                 aValueMap.insert( tPropertyNameValueMap::value_type( C2U("Name"), uno::makeAny( m_aCID ) ) ); //CID rtl::OUString
         }
 

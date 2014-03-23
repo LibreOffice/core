@@ -368,7 +368,7 @@ sal_Bool ModulWindow::BasicExecute()
             if ( !pMethod )
             {
                 if ( aDocument.isInVBAMode() )
-                    return ( BasicIDE::ChooseMacro( uno::Reference< frame::XModel >(), sal_False, rtl::OUString() ).getLength() > 0 ) ? sal_True : sal_False;
+                    return ( BasicIDE::ChooseMacro( uno::Reference< frame::XModel >(), sal_False, rtl::OUString() ).isEmpty() == false ) ? sal_True : sal_False;
                 else
                     pMethod = (SbMethod*)xModule->Find( String( RTL_CONSTASCII_USTRINGPARAM( "Main" ) ), SbxCLASS_METHOD );
             }
@@ -1130,6 +1130,14 @@ void __EXPORT ModulWindow::ExecuteCommand( SfxRequest& rReq )
             GetBreakPointWindow().Invalidate();
         }
         break;
+        case SID_SELECTALL:
+        {
+            TextSelection aSel( TextPaM( 0, 0 ), TextPaM( TEXT_PARA_ALL, 0xFFFF ) );
+            TextView * pView = GetEditView();
+            pView->SetSelection( aSel );
+            pView->GetWindow()->GrabFocus();
+        }
+        break;
     }
 }
 
@@ -1194,6 +1202,12 @@ void __EXPORT ModulWindow::GetState( SfxItemSet &rSet )
                     SfxBoolItem aItem( SID_ATTR_INSERT, pView->IsInsertMode() );
                     rSet.Put( aItem );
                 }
+            }
+            break;
+            case SID_SELECTALL:
+            {
+                if ( !GetEditView() )
+                    rSet.DisableItem( nWh );
             }
             break;
         }

@@ -47,7 +47,7 @@ namespace drawinglayer
 
             This primitive defines a multi-PolygonHairlinePrimitive2D and is
             just for convenience. The definition is not different from the single
-            defined PolygonHairlinePrimitive2Ds.
+                defined PolygonHairlinePrimitive2Ds.
          */
         class DRAWINGLAYER_DLLPUBLIC PolyPolygonHairlinePrimitive2D : public BufferedDecompositionPrimitive2D
         {
@@ -300,6 +300,9 @@ namespace drawinglayer
             /// the PolyPolygon geometry
             basegfx::B2DPolyPolygon                     maPolyPolygon;
 
+            /// the definition range
+            basegfx::B2DRange                           maDefinitionRange;
+
             /// the gradient definition
             attribute::FillGradientAttribute            maFillGradient;
 
@@ -308,13 +311,18 @@ namespace drawinglayer
             virtual Primitive2DSequence create2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const;
 
         public:
-            /// constructor
+            /// constructors. The one without definition range will use output range as definition range
             PolyPolygonGradientPrimitive2D(
                 const basegfx::B2DPolyPolygon& rPolyPolygon,
+                const attribute::FillGradientAttribute& rFillGradient);
+            PolyPolygonGradientPrimitive2D(
+                const basegfx::B2DPolyPolygon& rPolyPolygon,
+                const basegfx::B2DRange& rDefinitionRange,
                 const attribute::FillGradientAttribute& rFillGradient);
 
             /// data read access
             const basegfx::B2DPolyPolygon& getB2DPolyPolygon() const { return maPolyPolygon; }
+            const basegfx::B2DRange& getDefinitionRange() const { return maDefinitionRange; }
             const attribute::FillGradientAttribute& getFillGradient() const { return maFillGradient; }
 
             /// provide unique ID
@@ -342,6 +350,9 @@ namespace drawinglayer
             /// the PolyPolygon geometry
             basegfx::B2DPolyPolygon                     maPolyPolygon;
 
+            /// the definition range
+            basegfx::B2DRange                           maDefinitionRange;
+
             /// the hatch background color (if used)
             basegfx::BColor                             maBackgroundColor;
 
@@ -353,14 +364,20 @@ namespace drawinglayer
             virtual Primitive2DSequence create2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const;
 
         public:
-            /// constructor
+            /// constructors. The one without definition range will use output range as definition range
             PolyPolygonHatchPrimitive2D(
                 const basegfx::B2DPolyPolygon& rPolyPolygon,
+                const basegfx::BColor& rBackgroundColor,
+                const attribute::FillHatchAttribute& rFillHatch);
+            PolyPolygonHatchPrimitive2D(
+                const basegfx::B2DPolyPolygon& rPolyPolygon,
+                const basegfx::B2DRange& rDefinitionRange,
                 const basegfx::BColor& rBackgroundColor,
                 const attribute::FillHatchAttribute& rFillHatch);
 
             /// data read access
             const basegfx::B2DPolyPolygon& getB2DPolyPolygon() const { return maPolyPolygon; }
+            const basegfx::B2DRange& getDefinitionRange() const { return maDefinitionRange; }
             const basegfx::BColor& getBackgroundColor() const { return maBackgroundColor; }
             const attribute::FillHatchAttribute& getFillHatch() const { return maFillHatch; }
 
@@ -389,6 +406,9 @@ namespace drawinglayer
             /// the PolyPolygon geometry
             basegfx::B2DPolyPolygon                     maPolyPolygon;
 
+            /// the definition range
+            basegfx::B2DRange                           maDefinitionRange;
+
             /// the bitmap fill definition (may include tiling)
             attribute::FillGraphicAttribute             maFillGraphic;
 
@@ -397,13 +417,18 @@ namespace drawinglayer
             virtual Primitive2DSequence create2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const;
 
         public:
-            /// constructor
+            /// constructors. The one without definition range will use output range as definition range
             PolyPolygonGraphicPrimitive2D(
                 const basegfx::B2DPolyPolygon& rPolyPolygon,
+                const attribute::FillGraphicAttribute& rFillGraphic);
+            PolyPolygonGraphicPrimitive2D(
+                const basegfx::B2DPolyPolygon& rPolyPolygon,
+                const basegfx::B2DRange& rDefinitionRange,
                 const attribute::FillGraphicAttribute& rFillGraphic);
 
             /// data read access
             const basegfx::B2DPolyPolygon& getB2DPolyPolygon() const { return maPolyPolygon; }
+            const basegfx::B2DRange& getDefinitionRange() const { return maDefinitionRange; }
             const attribute::FillGraphicAttribute& getFillGraphic() const { return maFillGraphic; }
 
             /// provide unique ID

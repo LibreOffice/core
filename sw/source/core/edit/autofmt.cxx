@@ -1663,24 +1663,23 @@ void SwAutoFormat::BuildEnum( sal_uInt16 nLvl, sal_uInt16 nDigitLevel )
             bChgEnum = sal_False;
     }
 
-    if( bChgEnum || bChgBullet )
+    if ( bChgEnum || bChgBullet )
     {
         aDelPam.DeleteMark();
         aDelPam.GetPoint()->nNode = aNdIdx;
 
-        if( aFlags.bSetNumRule )
+        if ( aFlags.bSetNumRule )
         {
-            if( aFlags.bAFmtByInput )
+            if ( aFlags.bAFmtByInput )
             {
                 aDelPam.SetMark();
                 aDelPam.GetMark()->nNode++;
-                aDelPam.GetNode(sal_False)->GetTxtNode()->SetAttrListLevel( nLvl );
+                aDelPam.GetNode( sal_False )->GetTxtNode()->SetAttrListLevel( nLvl );
             }
 
-            pAktTxtNd->SetAttrListLevel(nLvl);
+            pAktTxtNd->SetAttrListLevel( nLvl );
             pAktTxtNd->SetNumLSpace( sal_True );
 
-            // --> OD 2008-03-17 #refactorlists#
             // start new list
             pDoc->SetNumRule( aDelPam, aRule, true );
             // <--
@@ -1689,45 +1688,47 @@ void SwAutoFormat::BuildEnum( sal_uInt16 nLvl, sal_uInt16 nDigitLevel )
             aDelPam.GetPoint()->nContent.Assign( pAktTxtNd, 0 );
         }
         else
-            aDelPam.GetPoint()->nContent.Assign( pAktTxtNd,
-                        bChgEnum ? (nTxtStt - nOrigTxtStt) : 0 );
+        {
+            aDelPam.GetPoint()->nContent.Assign( pAktTxtNd, bChgEnum ? ( nTxtStt - nOrigTxtStt ) : 0 );
+        }
         aDelPam.SetMark();
 
-        if( bChgBullet )
+        if ( bChgBullet )
             nTxtStt += 2;
 
-        while( nTxtStt < rStr.Len() && IsSpace( rStr.GetChar( nTxtStt ) ))
+        while (nTxtStt < rStr.Len() && IsSpace( rStr.GetChar( nTxtStt ) ))
             nTxtStt++;
 
         aDelPam.GetPoint()->nContent = nTxtStt - nOrigTxtStt;
         DeleteSel( aDelPam );
 
-        if( !aFlags.bSetNumRule )
+        if ( !aFlags.bSetNumRule )
         {
             String sChgStr( '\t' );
-            if( bChgBullet )
+            if ( bChgBullet )
                 sChgStr.Insert( aFlags.cBullet, 0 );
             pDoc->InsertString( aDelPam, sChgStr );
 
             SfxItemSet aSet( pDoc->GetAttrPool(), aTxtNodeSetRange );
-            if( bChgBullet )
+            if ( bChgBullet )
             {
                 aDelPam.GetPoint()->nContent = 0;
                 aDelPam.SetMark();
                 aDelPam.GetMark()->nContent = 1;
                 SetAllScriptItem( aSet,
-                     SvxFontItem( aFlags.aBulletFont.GetFamily(),
-                                  aFlags.aBulletFont.GetName(),
-                                  aFlags.aBulletFont.GetStyleName(),
-                                  aFlags.aBulletFont.GetPitch(),
-                                  aFlags.aBulletFont.GetCharSet(),
-                                  RES_CHRATR_FONT ) );
+                                  SvxFontItem( aFlags.aBulletFont.GetFamily(),
+                                               aFlags.aBulletFont.GetName(),
+                                               aFlags.aBulletFont.GetStyleName(),
+                                               aFlags.aBulletFont.GetPitch(),
+                                               aFlags.aBulletFont.GetCharSet(),
+                                               RES_CHRATR_FONT ) );
                 pDoc->SetFmtItemByAutoFmt( aDelPam, aSet );
                 aDelPam.DeleteMark();
                 nAutoCorrPos = 2;
                 aSet.ClearItem();
             }
-            SvxTabStopItem aTStops( RES_PARATR_TABSTOP );    aTStops.Insert( SvxTabStop( 0 ));
+            SvxTabStopItem aTStops( RES_PARATR_TABSTOP );
+            aTStops.Insert( SvxTabStop( 0 ) );
             aSet.Put( aTStops );
             pDoc->SetFmtItemByAutoFmt( aDelPam, aSet );
         }
@@ -2683,7 +2684,7 @@ void SwEditShell::AutoFormat( const SvxSwAutoFmtFlags* pAFlags )
     {
         aAFFlags = *pAFlags;
         if( !aAFFlags.bAFmtByInput )
-            pWait = new SwWait( *GetDoc()->GetDocShell(), sal_True );
+            pWait = new SwWait( *GetDoc()->GetDocShell(), true );
     }
 
     SwPaM* pCrsr = GetCrsr();

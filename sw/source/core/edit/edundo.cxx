@@ -124,7 +124,7 @@ bool SwEditShell::Undo(sal_uInt16 const nCount)
         //          Erkennung darf nur noch fuer die neue "Box" erfolgen!
         ClearTblBoxCntnt();
 
-        RedlineMode_t eOld = GetDoc()->GetRedlineMode();
+        const RedlineMode_t eOld = GetDoc()->GetRedlineMode();
 
         try {
             for (sal_uInt16 i = 0; i < nCount; ++i)

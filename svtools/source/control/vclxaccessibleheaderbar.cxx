@@ -19,7 +19,6 @@
  *
  *************************************************************/
 
-//IAccessibility2 Implementation 2009-----
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svtools.hxx"
@@ -190,4 +189,3 @@ void SAL_CALL VCLXAccessibleHeaderBar::disposing (void)
     }
     return xChild;
 }
-//-----IAccessibility2 Implementation 2009

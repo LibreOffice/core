@@ -154,7 +154,7 @@
                         _sAssertBuffer.append( "\n\t\""         );                                              \
                         _sAssertBuffer.append( STEXT            );                                              \
                         _sAssertBuffer.append( "\"\n"           );                                              \
-                        OSL_ENSURE( !( BCONDITION ), _sAssertBuffer.makeStringAndClear() );                     \
+                        OSL_ENSURE( !( BCONDITION ), _sAssertBuffer.getStr() );                     \
                     }
 
     #endif

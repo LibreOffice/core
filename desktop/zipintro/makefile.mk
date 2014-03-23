@@ -29,7 +29,7 @@ TARGET=zipintro
 
 .INCLUDE :  settings.mk
 
-DEFAULT_FLAVOURS=dev dev_nologo nologo intro
+DEFAULT_FLAVOURS=dev dev_nologo nologo intro beta
 
 ZIP1LIST= \
     $(null,$(INTRO_BITMAPS) $(MISC)$/ooo_custom_images$/dev$/introabout$/intro.png $(INTRO_BITMAPS)) \
@@ -47,6 +47,10 @@ ZIP4LIST= \
     $(null,$(INTRO_BITMAPS) $(MISC)$/$(RSCDEFIMG)$/introabout$/intro.png $(INTRO_BITMAPS)) \
     $(null,$(ABOUT_BITMAPS) $(MISC)$/$(RSCDEFIMG)$/introabout$/about.png $(ABOUT_BITMAPS)) \
     $(MISC)$/$(RSCDEFIMG)$/introabout$/logo.png
+ZIP5LIST= \
+    $(null,$(INTRO_BITMAPS) $(MISC)$/$(RSCDEFIMG)$/introabout$/beta$/intro.png $(INTRO_BITMAPS)) \
+    $(null,$(ABOUT_BITMAPS) $(MISC)$/$(RSCDEFIMG)$/introabout$/beta$/about.png $(ABOUT_BITMAPS)) \
+    $(MISC)$/$(RSCDEFIMG)$/introabout$/logo.png
 
 ZIP1TARGET=dev_intro
 ZIP1DEPS=$(ZIP1LIST)
@@ -59,6 +63,9 @@ ZIP3DEPS=$(ZIP3LIST)
 
 ZIP4TARGET=intro_intro
 ZIP4DEPS=$(ZIP4LIST)
+
+ZIP5TARGET=beta_intro
+ZIP5DEPS=$(ZIP5LIST)
 
 .INCLUDE :  target.mk
 
@@ -82,6 +89,10 @@ $(COMMONBIN)$/nologo$/intro.zip : $(COMMONBIN)$/nologo_intro.zip
     @$(COPY) $< $@
 
 $(COMMONBIN)$/intro$/intro.zip : $(COMMONBIN)$/intro_intro.zip
+    @@-$(MKDIR) $(@:d)
+    @$(COPY) $< $@
+
+$(COMMONBIN)$/beta$/intro.zip : $(COMMONBIN)$/beta_intro.zip
     @@-$(MKDIR) $(@:d)
     @$(COPY) $< $@
 

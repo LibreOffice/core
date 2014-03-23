@@ -75,7 +75,7 @@ void BridgeFactory::removeBridge(
     OSL_ASSERT(bridge.is());
     rtl::OUString n(bridge->getName());
     osl::MutexGuard g(*this);
-    if (n.getLength() == 0) {
+    if ( n.isEmpty() ) {
         BridgeList::iterator i(
             std::find(unnamed_.begin(), unnamed_.end(), bridge));
         if (i != unnamed_.end()) {
@@ -149,7 +149,7 @@ css::uno::Reference< css::bridge::XBridge > BridgeFactory::createBridge(
                 static_cast< cppu::OWeakObject * >(this), -1);
         }
         b.set(new Bridge(this, sName, aConnection, anInstanceProvider));
-        if (sName.getLength() == 0) {
+        if ( sName.isEmpty() ) {
             unnamed_.push_back(
                 css::uno::Reference< css::bridge::XBridge >(b.get()));
         } else {

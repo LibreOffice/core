@@ -35,7 +35,7 @@ module com { module sun { module star { module i18n {
 
 /** Supplier for transliteration of numerals (native number strings).
 
-     @since OOo 1.1.2
+     @since OpenOffice 1.1.2
 */
 published service NativeNumberSupplier
 {

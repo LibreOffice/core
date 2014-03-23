@@ -34,7 +34,7 @@ module com {  module sun {  module star {  module awt { module grid {
 //=============================================================================
 /** An event used by a <type>XGridColumn</type> to notify changes in the column.
 
-    @since OOo 3.3
+    @since OpenOffice 3.3
  */
 published struct GridColumnEvent : ::com::sun::star::lang::EventObject
 {

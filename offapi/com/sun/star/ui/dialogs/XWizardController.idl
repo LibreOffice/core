@@ -19,22 +19,18 @@
  *
  *************************************************************/
 
-
-
 #ifndef __com_sun_star_ui_dialogs_XWizardController_idl__
 #define __com_sun_star_ui_dialogs_XWizardController_idl__
 
 #include <com/sun/star/ui/dialogs/XWizardPage.idl>
 
-//==================================================================================================================
-
 module com { module sun { module star { module ui { module dialogs {
 
-//==================================================================================================================
-
 /** is the interface of a client-provided controller of a custom <type>Wizard</type>.
+
+    @since OpenOffice 3.3
  */
-published interface XWizardController
+interface XWizardController
 {
     /** creates a page
 
@@ -73,10 +69,6 @@ published interface XWizardController
     boolean confirmFinish();
 };
 
-//==================================================================================================================
-
 }; }; }; }; };
-
-//==================================================================================================================
 
 #endif

@@ -44,7 +44,7 @@ published interface XUriSchemeParser;
    Rather, it should be used indirectly through the
    <type scope="com::sun::star::uri">UriReferenceFactory</type> service.</p>
 
-   @since OOo 2.3
+   @since OpenOffice 2.3
  */
 published service UriSchemeParser_vndDOTsunDOTstarDOTexpand: XUriSchemeParser
 {};

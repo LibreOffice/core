@@ -42,7 +42,7 @@ module com {  module sun {  module star {  module sheet {
     <p>This service extends the <type scope="com::sun::star::table">TableSortDescriptor2</type>
     service with spreadsheet specific properties.</p>
 
-    @since OOo 1.1.2
+    @since OpenOffice 1.1.2
  */
 published service SheetSortDescriptor2
 {

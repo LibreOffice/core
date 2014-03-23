@@ -189,7 +189,6 @@ protected:
     virtual void ProcessWindowChildEvent (const VclWindowEvent& rVclWindowEvent);
     virtual void ProcessWindowEvent (const VclWindowEvent& rVclWindowEvent);
 
-// IAccessible2 implementation, 2009
     virtual void    FillAccessibleStateSet( utl::AccessibleStateSetHelper& rStateSet );
 
 private:

@@ -40,6 +40,7 @@
 #include <cmdid.h>
 #include <unofldmid.h>
 #include <editeng/memberids.hrc>
+#include <editeng/unoipset.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::lang;
@@ -482,7 +483,6 @@ SwUnoPropertyMapProvider::~SwUnoPropertyMapProvider()
                     { SW_PROP_NMID(UNO_NAME_IS_FIELD_USED),      FIELD_PROP_IS_FIELD_USED,      CPPU_E2T(CPPUTYPE_FLOAT), PropertyAttribute::READONLY, 0},\
                     { SW_PROP_NMID(UNO_NAME_IS_FIELD_DISPLAYED), FIELD_PROP_IS_FIELD_DISPLAYED, CPPU_E2T(CPPUTYPE_INT16), PropertyAttribute::READONLY, 0},\
 
-//IAccessibility2 Implementation 2009-----
 #define COMMON_ACCESSIBILITY_TEXT_ATTRIBUTE \
                     { SW_PROP_NMID(UNO_NAME_CHAR_BACK_COLOR), RES_CHRATR_BACKGROUND,    CPPU_E2T(CPPUTYPE_INT32),           PROPERTY_NONE ,MID_BACK_COLOR        }, \
                     { SW_PROP_NMID(UNO_NAME_CHAR_COLOR), RES_CHRATR_COLOR,      CPPU_E2T(CPPUTYPE_INT32),           PROPERTY_NONE, 0},  \
@@ -507,7 +507,43 @@ SwUnoPropertyMapProvider::~SwUnoPropertyMapProvider()
                     { SW_PROP_NMID(UNO_NAME_PARA_RIGHT_MARGIN), RES_LR_SPACE,           CPPU_E2T(CPPUTYPE_INT32),           PropertyAttribute::MAYBEVOID, MID_R_MARGIN|CONVERT_TWIPS},  \
                     { SW_PROP_NMID(UNO_NAME_TABSTOPS), RES_PARATR_TABSTOP,   CPPU_E2T(CPPUTYPE_SEQTABSTOP),   PropertyAttribute::MAYBEVOID, CONVERT_TWIPS}, \
 
-//-----IAccessibility2 Implementation 2009
+
+//UUUU
+#define FILL_PROPERTIES_SW_BMP \
+    { SW_PROP_NMID(UNO_NAME_SW_FILLBMP_LOGICAL_SIZE),           XATTR_FILLBMP_SIZELOG,      CPPU_E2T(CPPUTYPE_BOOLEAN) ,        0,  0}, \
+    { SW_PROP_NMID(UNO_NAME_SW_FILLBMP_OFFSET_X),               XATTR_FILLBMP_TILEOFFSETX,  CPPU_E2T(CPPUTYPE_INT32) ,          0,  0}, \
+    { SW_PROP_NMID(UNO_NAME_SW_FILLBMP_OFFSET_Y),               XATTR_FILLBMP_TILEOFFSETY,  CPPU_E2T(CPPUTYPE_INT32) ,          0,  0}, \
+    { SW_PROP_NMID(UNO_NAME_SW_FILLBMP_POSITION_OFFSET_X),      XATTR_FILLBMP_POSOFFSETX,   CPPU_E2T(CPPUTYPE_INT32) ,          0,  0}, \
+    { SW_PROP_NMID(UNO_NAME_SW_FILLBMP_POSITION_OFFSET_Y),      XATTR_FILLBMP_POSOFFSETY,   CPPU_E2T(CPPUTYPE_INT32) ,          0,  0}, \
+    { SW_PROP_NMID(UNO_NAME_SW_FILLBMP_RECTANGLE_POINT),        XATTR_FILLBMP_POS,          CPPU_E2T(CPPUTYPE_RECTANGLEPOINT) , 0,  0}, \
+    { SW_PROP_NMID(UNO_NAME_SW_FILLBMP_SIZE_X),                 XATTR_FILLBMP_SIZEX,        CPPU_E2T(CPPUTYPE_INT32) ,          0,  SFX_METRIC_ITEM}, \
+    { SW_PROP_NMID(UNO_NAME_SW_FILLBMP_SIZE_Y),                 XATTR_FILLBMP_SIZEY,        CPPU_E2T(CPPUTYPE_INT32) ,          0,  SFX_METRIC_ITEM},    \
+    { SW_PROP_NMID(UNO_NAME_SW_FILLBMP_STRETCH),                XATTR_FILLBMP_STRETCH,      CPPU_E2T(CPPUTYPE_BOOLEAN) ,        0,  0}, \
+    { SW_PROP_NMID(UNO_NAME_SW_FILLBMP_TILE),                   XATTR_FILLBMP_TILE,         CPPU_E2T(CPPUTYPE_BOOLEAN) ,        0,  0},\
+    { SW_PROP_NMID(UNO_NAME_SW_FILLBMP_MODE),                   OWN_ATTR_FILLBMP_MODE,      CPPU_E2T(CPPUTYPE_BITMAPMODE),      0,  0}, \
+
+//UUUU
+#define FILL_PROPERTIES_SW_DEFAULTS \
+    { SW_PROP_NMID(UNO_NAME_SW_FILLCOLOR),                      XATTR_FILLCOLOR,            CPPU_E2T(CPPUTYPE_INT32),           0,  0}, \
+
+//UUUU
+#define FILL_PROPERTIES_SW \
+    FILL_PROPERTIES_SW_BMP \
+    FILL_PROPERTIES_SW_DEFAULTS \
+    { SW_PROP_NMID(UNO_NAME_SW_FILLBACKGROUND),                 XATTR_FILLBACKGROUND,           CPPU_E2T(CPPUTYPE_BOOLEAN),     0,  0}, \
+    { SW_PROP_NMID(UNO_NAME_SW_FILLBITMAP),                     XATTR_FILLBITMAP,               CPPU_E2T(CPPUTYPE_REFBITMAP),   0,  MID_BITMAP}, \
+    { SW_PROP_NMID(UNO_NAME_SW_FILLBITMAPNAME),                 XATTR_FILLBITMAP,               CPPU_E2T(CPPUTYPE_OUSTRING),    0,  MID_NAME }, \
+    { SW_PROP_NMID(UNO_NAME_SW_FILLBITMAPURL),                  XATTR_FILLBITMAP,               CPPU_E2T(CPPUTYPE_OUSTRING),    0,  MID_GRAFURL }, \
+    { SW_PROP_NMID(UNO_NAME_SW_FILLGRADIENTSTEPCOUNT),          XATTR_GRADIENTSTEPCOUNT,        CPPU_E2T(CPPUTYPE_INT16),       0,  0}, \
+    { SW_PROP_NMID(UNO_NAME_SW_FILLGRADIENT),                   XATTR_FILLGRADIENT,             CPPU_E2T(CPPUTYPE_GRADIENT),    0,  MID_FILLGRADIENT}, \
+    { SW_PROP_NMID(UNO_NAME_SW_FILLGRADIENTNAME),               XATTR_FILLGRADIENT,             CPPU_E2T(CPPUTYPE_OUSTRING),    0,  MID_NAME }, \
+    { SW_PROP_NMID(UNO_NAME_SW_FILLHATCH),                      XATTR_FILLHATCH,                CPPU_E2T(CPPUTYPE_HATCH),       0,  MID_FILLHATCH}, \
+    { SW_PROP_NMID(UNO_NAME_SW_FILLHATCHNAME),                  XATTR_FILLHATCH,                CPPU_E2T(CPPUTYPE_OUSTRING),    0,  MID_NAME }, \
+    { SW_PROP_NMID(UNO_NAME_SW_FILLSTYLE),                      XATTR_FILLSTYLE,                CPPU_E2T(CPPUTYPE_FILLSTYLE),   0,  0}, \
+    { SW_PROP_NMID(UNO_NAME_SW_FILL_TRANSPARENCE),              XATTR_FILLTRANSPARENCE,         CPPU_E2T(CPPUTYPE_INT16),       0,  0}, \
+    { SW_PROP_NMID(UNO_NAME_SW_FILLTRANSPARENCEGRADIENT),       XATTR_FILLFLOATTRANSPARENCE,    CPPU_E2T(CPPUTYPE_GRADIENT),    0,  MID_FILLGRADIENT}, \
+    { SW_PROP_NMID(UNO_NAME_SW_FILLTRANSPARENCEGRADIENTNAME),   XATTR_FILLFLOATTRANSPARENCE,    CPPU_E2T(CPPUTYPE_OUSTRING),    0,  MID_NAME }, \
+    { SW_PROP_NMID(UNO_NAME_SW_FILLCOLOR_2),                    XATTR_SECONDARYFILLCOLOR,       CPPU_E2T(CPPUTYPE_INT32),       0,  0}, \
 
 const SfxItemPropertyMapEntry* SwUnoPropertyMapProvider::GetPropertyMapEntries(sal_uInt16 nPropertyId)
 {
@@ -526,7 +562,6 @@ const SfxItemPropertyMapEntry* SwUnoPropertyMapProvider::GetPropertyMapEntries(s
                 aMapEntriesArr[nPropertyId] = aCharAndParaMap_Impl;
             }
             break;
-            //IAccessibility2 Implementation 2009-----
             case PROPERTY_MAP_ACCESSIBILITY_TEXT_ATTRIBUTE:
             {
                 static SfxItemPropertyMapEntry aAccessibilityTextAttrMap_Impl[] =
@@ -537,7 +572,6 @@ const SfxItemPropertyMapEntry* SwUnoPropertyMapProvider::GetPropertyMapEntries(s
                 aMapEntriesArr[nPropertyId] = aAccessibilityTextAttrMap_Impl;
             }
             break;
-            //-----IAccessibility2 Implementation 2009
             case PROPERTY_MAP_PARAGRAPH:
             {
                 static SfxItemPropertyMapEntry aParagraphMap_Impl[] =
@@ -782,6 +816,12 @@ const SfxItemPropertyMapEntry* SwUnoPropertyMapProvider::GetPropertyMapEntries(s
                     // OD 2004-05-05 #i28701#
                     { SW_PROP_NMID(UNO_NAME_WRAP_INFLUENCE_ON_POSITION), RES_WRAP_INFLUENCE_ON_OBJPOS, CPPU_E2T(CPPUTYPE_INT8), PROPERTY_NONE, MID_WRAP_INFLUENCE},
                     { SW_PROP_NMID(UNO_NAME_WRITING_MODE), RES_FRAMEDIR, CPPU_E2T(CPPUTYPE_INT16), PROPERTY_NONE, 0 },
+
+                    //UUUU adf FillProperties for SW, same as FILL_PROPERTIES in svx
+                    // but need own defines in Writer due to later association of strings
+                    // and uno types (see loop at end of this metjhod and definition of SW_PROP_NMID)
+                    FILL_PROPERTIES_SW
+
                     {0,0,0,0,0,0}
                 };
                 aMapEntriesArr[nPropertyId] = aFrameStyleMap;
@@ -1111,7 +1151,10 @@ const SfxItemPropertyMapEntry* SwUnoPropertyMapProvider::GetPropertyMapEntries(s
             case PROPERTY_MAP_TEXT_FRAME:
             {
                 static SfxItemPropertyMapEntry aFramePropertyMap_Impl[] =
-                {
+                {   //UUUU
+                    // evtl. completely remove SvxBrushItem stuff ()
+                    // add support for XATTR_FILL_FIRST, XATTR_FILL_LAST
+                    // COMMON_FRAME_PROPERTIES currently hosts the RES_BACKGROUND entries from SvxBrushItem
                     COMMON_FRAME_PROPERTIES
                     _REDLINE_NODE_PROPERTIES
                     { SW_PROP_NMID(UNO_NAME_CHAIN_NEXT_NAME), RES_CHAIN,                CPPU_E2T(CPPUTYPE_OUSTRING),            PropertyAttribute::MAYBEVOID ,MID_CHAIN_NEXTNAME},
@@ -1129,6 +1172,12 @@ const SfxItemPropertyMapEntry* SwUnoPropertyMapProvider::GetPropertyMapEntries(s
                     { SW_PROP_NMID(UNO_NAME_SIZE_TYPE), RES_FRM_SIZE,           CPPU_E2T(CPPUTYPE_INT16)  ,         PROPERTY_NONE,   MID_FRMSIZE_SIZE_TYPE  },
                     { SW_PROP_NMID(UNO_NAME_WIDTH_TYPE), RES_FRM_SIZE,          CPPU_E2T(CPPUTYPE_INT16)  ,         PROPERTY_NONE,   MID_FRMSIZE_WIDTH_TYPE },
                     { SW_PROP_NMID(UNO_NAME_WRITING_MODE), RES_FRAMEDIR, CPPU_E2T(CPPUTYPE_INT16), PROPERTY_NONE, 0 },
+
+                    //UUUU adf FillProperties for SW, same as FILL_PROPERTIES in svx
+                    // but need own defines in Writer due to later association of strings
+                    // and uno types (see loop at end of this metjhod and definition of SW_PROP_NMID)
+                    FILL_PROPERTIES_SW
+
                     {0,0,0,0,0,0}
                 };
                 aMapEntriesArr[nPropertyId] = aFramePropertyMap_Impl;
@@ -1938,21 +1987,25 @@ const SfxItemPropertyMapEntry* SwUnoPropertyMapProvider::GetPropertyMapEntries(s
                 aMapEntriesArr[nPropertyId] = aHiddenTxtFieldPropMap;
             }
             break;
+
             case PROPERTY_MAP_FLDTYP_ANNOTATION            :
-            {
-                static SfxItemPropertyMapEntry aAnnotationFieldPropMap [] =
                 {
-                    {SW_PROP_NMID(UNO_NAME_AUTHOR), FIELD_PROP_PAR1,    CPPU_E2T(CPPUTYPE_OUSTRING),   PROPERTY_NONE, 0},
-                    {SW_PROP_NMID(UNO_NAME_CONTENT),    FIELD_PROP_PAR2,    CPPU_E2T(CPPUTYPE_OUSTRING),   PROPERTY_NONE, 0},
-                    {SW_PROP_NMID(UNO_NAME_DATE_TIME_VALUE),    FIELD_PROP_DATE_TIME,   CPPU_E2T(CPPUTYPE_DATETIME),    PROPERTY_NONE, 0},
-                    {SW_PROP_NMID(UNO_NAME_DATE),    FIELD_PROP_DATE,   CPPU_E2T(CPPUTYPE_DATE),    PROPERTY_NONE, 0},
-                    {SW_PROP_NMID(UNO_NAME_TEXT_RANGE), FIELD_PROP_TEXT, CPPU_E2T(CPPUTYPE_REFINTERFACE),  PropertyAttribute::READONLY,    0},
-                    COMMON_FLDTYP_PROPERTIES
-                    {0,0,0,0,0,0}
-                };
-                aMapEntriesArr[nPropertyId] = aAnnotationFieldPropMap;
-            }
-            break;
+                    static SfxItemPropertyMapEntry aAnnotationFieldPropMap [] =
+                    {
+                        {SW_PROP_NMID(UNO_NAME_AUTHOR), FIELD_PROP_PAR1,    CPPU_E2T(CPPUTYPE_OUSTRING),   PROPERTY_NONE, 0},
+                        {SW_PROP_NMID(UNO_NAME_CONTENT),    FIELD_PROP_PAR2,    CPPU_E2T(CPPUTYPE_OUSTRING),   PROPERTY_NONE, 0},
+                        {SW_PROP_NMID(UNO_NAME_INITIALS),   FIELD_PROP_PAR3,    CPPU_E2T(CPPUTYPE_OUSTRING),   PROPERTY_NONE, 0},
+                        {SW_PROP_NMID(UNO_NAME_NAME),       FIELD_PROP_PAR4,    CPPU_E2T(CPPUTYPE_OUSTRING),   PROPERTY_NONE, 0},
+                        {SW_PROP_NMID(UNO_NAME_DATE_TIME_VALUE),    FIELD_PROP_DATE_TIME,   CPPU_E2T(CPPUTYPE_DATETIME),    PROPERTY_NONE, 0},
+                        {SW_PROP_NMID(UNO_NAME_DATE),    FIELD_PROP_DATE,   CPPU_E2T(CPPUTYPE_DATE),    PROPERTY_NONE, 0},
+                        {SW_PROP_NMID(UNO_NAME_TEXT_RANGE), FIELD_PROP_TEXT, CPPU_E2T(CPPUTYPE_REFINTERFACE),  PropertyAttribute::READONLY,    0},
+                        COMMON_FLDTYP_PROPERTIES
+                        {0,0,0,0,0,0}
+                    };
+                    aMapEntriesArr[nPropertyId] = aAnnotationFieldPropMap;
+                }
+                break;
+
             case PROPERTY_MAP_FLDTYP_INPUT:
             {
                 static SfxItemPropertyMapEntry aInputFieldPropMap      [] =
@@ -2536,6 +2589,7 @@ const SfxItemPropertyMapEntry* SwUnoPropertyMapProvider::GetPropertyMapEntries(s
         for( ; p->pName; ++p, ++i )
         {
             // set the name
+            OSL_ENSURE((long)p->pName < SW_PROPNAME_END, "Error in SW SfxItemPropertyMapEntry defines: ID for string out of range (!)");
             const SwPropNameLen& rPropNm = GetPropName( (sal_uInt16)(long)p->pName );
             p->pName = rPropNm.pName;
             p->nNameLen = rPropNm.nNameLen;

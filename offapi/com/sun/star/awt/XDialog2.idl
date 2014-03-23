@@ -35,7 +35,7 @@ module com {  module sun {  module star {  module awt {
 
 /** Makes it possible to end a dialog and set a help id.
 
-    @since OOo 3.0
+    @since OpenOffice 3.0
  */
 published interface XDialog2: com::sun::star::awt::XDialog
 {

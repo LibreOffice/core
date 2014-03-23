@@ -35,7 +35,7 @@ module com {  module sun {  module star {  module text {
     <p>These constants are used with
     <method>XTextMarkup::commitTextMarkup()</method></p>
 
-    @since OOo 2.3
+    @since OpenOffice 2.3
  */
 
 constants TextMarkupType
@@ -45,7 +45,7 @@ constants TextMarkupType
     const long SPELLCHECK = 1;
 
     /** Markup originates from proofreading
-        @since OOo 3.0.1
+        @since OpenOffice 3.0.1
      */
     const long PROOFREADING = 2;
 
@@ -55,12 +55,12 @@ constants TextMarkupType
 
     /** Markup originates from proofreading
         An inivisible markup type used in proofreading API calls.
-        @since OOo 3.0.1
+        @since OpenOffice 3.0.1
      */
     const long SENTENCE = 4;
 
     /** Markups originates from change tracking.
-        @since OOo 3.3
+        @since OpenOffice 3.3
      */
     const long TRACK_CHANGE_INSERTION = 5;
     const long TRACK_CHANGE_DELETION = 6;

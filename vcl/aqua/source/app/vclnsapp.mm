@@ -54,6 +54,22 @@
 @end
 
 @implementation VCL_NSApplication
+
+-(void)applicationDidFinishLaunching:(NSNotification*)aNotification
+{
+    NSEvent* pEvent = [NSEvent otherEventWithType: NSApplicationDefined
+                               location: NSZeroPoint
+                               modifierFlags: 0
+                               timestamp: 0
+                               windowNumber: 0
+                               context: nil
+                               subtype: AquaSalInstance::AppExecuteSVMain
+                               data1: 0
+                               data2: 0 ];
+    if( pEvent )
+        [NSApp postEvent: pEvent atStart: NO];
+}
+
 -(void)sendEvent:(NSEvent*)pEvent
 {
     NSEventType eType = [pEvent type];
@@ -79,7 +95,7 @@
                 if( nModMask == NSCommandKeyMask
                     && [[pEvent charactersIgnoringModifiers] isEqualToString: @"w"] )
                 {
-                    [pFrame->getWindow() windowShouldClose: nil];
+                    [(SalFrameWindow*)pFrame->getNSWindow() windowShouldClose: nil];
                     return;
                 }
             }
@@ -89,9 +105,9 @@
              */ 
             if( [[pEvent charactersIgnoringModifiers] isEqualToString: @"m"] )
             {
-                if ( nModMask == NSCommandKeyMask && ([pFrame->getWindow() styleMask] & NSMiniaturizableWindowMask) )
+                if ( nModMask == NSCommandKeyMask && ([pFrame->getNSWindow() styleMask] & NSMiniaturizableWindowMask) )
                 {
-                    [pFrame->getWindow() performMiniaturize: nil];
+                    [pFrame->getNSWindow() performMiniaturize: nil];
                     return;
                 }
 
@@ -182,7 +198,7 @@
             }
         }
     }
-    else if( eType == NSScrollWheel && ( GetSalData()->mnSystemVersion < VER_LEOPARD /* fixed in Leopard and above */ ) )
+    else if( eType == NSScrollWheel && ( GetSalData()->mnSystemVersion < OSX_VER_LEOPARD /* fixed in Leopard and above */ ) )
     {
 
         NSWindow* pWin = [pEvent window];
@@ -220,7 +236,7 @@
                 if( (*it)->mpDockMenuEntry != NULL &&
                     (*it)->mbShown )
                 {
-                    [(*it)->getWindow() makeKeyAndOrderFront: NSApp];
+                    [(*it)->getNSWindow() makeKeyAndOrderFront: NSApp];
                     return;
                 }
             }
@@ -232,7 +248,7 @@
             if( (*it)->mpDockMenuEntry != NULL &&
                 (*it)->mbShown )
             {
-                [(*it)->getWindow() makeKeyAndOrderFront: NSApp];
+                [(*it)->getNSWindow() makeKeyAndOrderFront: NSApp];
                 return;
             }
             ++it;
@@ -260,7 +276,7 @@
                 if( (*it)->mpDockMenuEntry != NULL &&
                     (*it)->mbShown )
                 {
-                    [(*it)->getWindow() makeKeyAndOrderFront: NSApp];
+                    [(*it)->getNSWindow() makeKeyAndOrderFront: NSApp];
                     return;
                 }
             }
@@ -272,7 +288,7 @@
             if( (*it)->mpDockMenuEntry != NULL &&
                 (*it)->mbShown )
             {
-                [(*it)->getWindow() makeKeyAndOrderFront: NSApp];
+                [(*it)->getNSWindow() makeKeyAndOrderFront: NSApp];
                 return;
             }
             ++it;
@@ -450,15 +466,16 @@
 {
     (void)pNotification;
     SalData* pSalData = GetSalData();
-    if( pSalData->mpMainController && pSalData->mpMainController->remoteControl)
+    AppleRemoteMainController* pAppleRemoteCtrl = pSalData->mpAppleRemoteMainController;
+    if( pAppleRemoteCtrl && pAppleRemoteCtrl->remoteControl)
     {
         // [remoteControl startListening: self];
         // does crash because the right thing to do is 
-        // [GetSalData()->mpMainController->remoteControl startListening: self];
+        // [pAppleRemoteCtrl->remoteControl startListening: self];
         // but the instance variable 'remoteControl' is declared protected
         // workaround : declare remoteControl instance variable as public in RemoteMainController.m
 
-        [pSalData->mpMainController->remoteControl startListening: self];
+        [pAppleRemoteCtrl->remoteControl startListening: self];
 #ifdef DEBUG
         NSLog(@"Apple Remote will become active - Using remote controls");
 #endif
@@ -466,9 +483,10 @@
     for( std::list< AquaSalFrame* >::const_iterator it = pSalData->maPresentationFrames.begin();
          it != pSalData->maPresentationFrames.end(); ++it )
     {
-        [(*it)->mpWindow setLevel: NSPopUpMenuWindowLevel];
-        if( [(*it)->mpWindow isVisible] )
-            [(*it)->mpWindow orderFront: NSApp];
+        NSWindow* pNSWindow = (*it)->getNSWindow();
+        [pNSWindow setLevel: NSPopUpMenuWindowLevel];
+        if( [pNSWindow isVisible] )
+            [pNSWindow orderFront: NSApp];
     }
 }
 
@@ -476,15 +494,16 @@
 {
     (void)pNotification;
     SalData* pSalData = GetSalData();
-    if( pSalData->mpMainController && pSalData->mpMainController->remoteControl)
+    AppleRemoteMainController* pAppleRemoteCtrl = pSalData->mpAppleRemoteMainController;
+    if( pAppleRemoteCtrl && pAppleRemoteCtrl->remoteControl)
     {
         // [remoteControl stopListening: self];
         // does crash because the right thing to do is 
-        // [GetSalData()->mpMainController->remoteControl stopListening: self];
+        // [pAppleRemoteCtrl->remoteControl stopListening: self];
         // but the instance variable 'remoteControl' is declared protected
         // workaround : declare remoteControl instance variable as public in RemoteMainController.m
 
-        [pSalData->mpMainController->remoteControl stopListening: self]; 
+        [pAppleRemoteCtrl->remoteControl stopListening: self]; 
 #ifdef DEBUG
         NSLog(@"Apple Remote will resign active - Releasing remote controls");
 #endif
@@ -492,7 +511,7 @@
     for( std::list< AquaSalFrame* >::const_iterator it = pSalData->maPresentationFrames.begin();
          it != pSalData->maPresentationFrames.end(); ++it )
     {
-        [(*it)->mpWindow setLevel: NSNormalWindowLevel];
+        [(*it)->getNSWindow() setLevel: NSNormalWindowLevel];
     }
 }
 

@@ -156,7 +156,7 @@ String ConstructTempDir_Impl( const String* pParent )
                 if ( aRet[i-1] == '/' )
                     i--;
 
-                if ( DirectoryItem::get( ::rtl::OUString( aRet, i ), aItem ) == FileBase::E_None )
+                if ( DirectoryItem::get( ::rtl::OUString( aRet.getStr(), i ), aItem ) == FileBase::E_None )
                     aName = aRet;
             }
         }

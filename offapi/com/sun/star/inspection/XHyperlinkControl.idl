@@ -40,7 +40,7 @@ module com {  module sun {  module star {  module inspection {
 
     <p>Hyperlink controls exchange their value (<member>XPropertyControl::Value</member>) as strings.</p>
 
-    @since OOo 2.0.3
+    @since OpenOffice 2.0.3
 */
 published interface XHyperlinkControl : XPropertyControl
 {

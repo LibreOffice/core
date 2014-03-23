@@ -151,13 +151,16 @@ static SalColor ImplGetROPSalColor( SalROPColor nROPColor )
 
 // -----------------------------------------------------------------------
 
-void Os2SalGraphics::GetResolution( long& rDPIX, long& rDPIY )
+void Os2SalGraphics::GetResolution( sal_Int32& rDPIX, sal_Int32& rDPIY )
 {
     // since OOo asks for DPI, I will query FONT_RES, which seems to be
     // more correct than _RESOLUTION fields (on my wide screen lcd)
     // and does not require conversion
-    DevQueryCaps( mhDC, CAPS_HORIZONTAL_FONT_RES, 1, &rDPIX );
-    DevQueryCaps( mhDC, CAPS_VERTICAL_FONT_RES, 1, &rDPIY );
+    long nDPIX = 72, nDPIY = 72;
+    DevQueryCaps( mhDC, CAPS_HORIZONTAL_FONT_RES, 1, &nDPIX );
+    DevQueryCaps( mhDC, CAPS_VERTICAL_FONT_RES, 1, &nDPIY );
+    rDPIX = nDPIX;
+    rDPIY = nDPIY;
 }
 
 // -----------------------------------------------------------------------
@@ -501,13 +504,13 @@ void Os2SalGraphics::drawRect( long nX, long nY, long nWidth, long nHeight )
 
 // -----------------------------------------------------------------------
 
-void Os2SalGraphics::drawPolyLine( ULONG nPoints, const SalPoint* pPtAry )
+void Os2SalGraphics::drawPolyLine( sal_uInt32 nPoints, const SalPoint* pPtAry )
 {
     // convert all points to sys orientation
     POINTL*             pOS2PtAry = new POINTL[ nPoints ];
     POINTL*             pTempOS2PtAry = pOS2PtAry;
     const SalPoint*     pTempPtAry = pPtAry;
-    ULONG               nTempPoints = nPoints;
+    sal_uInt32          nTempPoints = nPoints;
     long                nHeight = mnHeight - 1;
 
     while( nTempPoints-- )
@@ -525,7 +528,7 @@ void Os2SalGraphics::drawPolyLine( ULONG nPoints, const SalPoint* pPtAry )
 
 // -----------------------------------------------------------------------
 
-void Os2SalGraphics::drawPolygon( ULONG nPoints, const SalPoint* pPtAry )
+void Os2SalGraphics::drawPolygon( sal_uInt32 nPoints, const SalPoint* pPtAry )
 {
     PM_POLYGON aPolygon;
 
@@ -536,7 +539,7 @@ void Os2SalGraphics::drawPolygon( ULONG nPoints, const SalPoint* pPtAry )
     // convert all points to sys orientation
     POINTL*             pTempOS2PtAry = aPolygon.aPointl;
     const SalPoint*     pTempPtAry = pPtAry;
-    ULONG               nTempPoints = nPoints;
+    sal_uInt32          nTempPoints = nPoints;
     long                nHeight = mnHeight - 1;
 
     while( nTempPoints-- )
@@ -593,7 +596,7 @@ void Os2SalGraphics::drawPolygon( ULONG nPoints, const SalPoint* pPtAry )
 
 // -----------------------------------------------------------------------
 
-void Os2SalGraphics::drawPolyPolygon( ULONG nPoly, const ULONG* pPoints,
+void Os2SalGraphics::drawPolyPolygon( sal_uInt32 nPoly, const sal_uInt32* pPoints,
                                    PCONSTSALPOINT* pPtAry )
 {
     ULONG       i;
@@ -691,21 +694,21 @@ bool Os2SalGraphics::drawPolyLine(
 
 // -----------------------------------------------------------------------
 
-sal_Bool Os2SalGraphics::drawPolyLineBezier( ULONG nPoints, const SalPoint* pPtAry, const sal_uInt8* pFlgAry )
+sal_Bool Os2SalGraphics::drawPolyLineBezier( sal_uInt32 /*nPoints*/, const SalPoint* pPtAry, const sal_uInt8* pFlgAry )
 {
     return sal_False;
 }
 
 // -----------------------------------------------------------------------
 
-sal_Bool Os2SalGraphics::drawPolygonBezier( ULONG nPoints, const SalPoint* pPtAry, const sal_uInt8* pFlgAry )
+sal_Bool Os2SalGraphics::drawPolygonBezier( sal_uInt32 /*nPoints*/, const SalPoint* pPtAry, const sal_uInt8* pFlgAry )
 {
     return sal_False;
 }
 
 // -----------------------------------------------------------------------
 
-sal_Bool Os2SalGraphics::drawPolyPolygonBezier( ULONG nPoly, const ULONG* pPoints,
+sal_Bool Os2SalGraphics::drawPolyPolygonBezier( sal_uInt32 /*nPoly*/, const sal_uInt32* /*pPoints*/,
                                              const SalPoint* const* pPtAry, const sal_uInt8* const* pFlgAry )
 {
     return sal_False;

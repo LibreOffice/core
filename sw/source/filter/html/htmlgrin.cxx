@@ -1297,15 +1297,15 @@ sal_Bool SwHTMLParser::HasCurrentParaBookmarks( sal_Bool bIgnoreStack ) const
 
     if( !bHasMarks )
     {
-        // second step: when we didnt find a bookmark, check if there is one
-        // set already
+        // second step: when we didnt find a bookmark, check if there is one set already
         IDocumentMarkAccess* const pMarkAccess = pDoc->getIDocumentMarkAccess();
-        for(IDocumentMarkAccess::const_iterator_t ppMark = pMarkAccess->getMarksBegin();
-            ppMark != pMarkAccess->getMarksEnd();
+        for(IDocumentMarkAccess::const_iterator_t ppMark = pMarkAccess->getAllMarksBegin();
+            ppMark != pMarkAccess->getAllMarksEnd();
             ppMark++)
         {
             const ::sw::mark::IMark* pBookmark = ppMark->get();
-            sal_uLong nBookNdIdx = pBookmark->GetMarkPos().nNode.GetIndex();
+
+            const sal_uLong nBookNdIdx = pBookmark->GetMarkPos().nNode.GetIndex();
             if( nBookNdIdx==nNodeIdx )
             {
                 bHasMarks = sal_True;
@@ -1365,14 +1365,14 @@ void SwHTMLParser::StripTrailingPara()
                 }
             }
 
-            // jetz muessen wir noch eventuell vorhandene Bookmarks
-            // verschieben
+            // jetz muessen wir noch eventuell vorhandene Bookmarks verschieben
             IDocumentMarkAccess* const pMarkAccess = pDoc->getIDocumentMarkAccess();
-            for(IDocumentMarkAccess::const_iterator_t ppMark = pMarkAccess->getMarksBegin();
-                ppMark != pMarkAccess->getMarksEnd();
+            for(IDocumentMarkAccess::const_iterator_t ppMark = pMarkAccess->getAllMarksBegin();
+                ppMark != pMarkAccess->getAllMarksEnd();
                 ppMark++)
             {
                 ::sw::mark::IMark* pMark = ppMark->get();
+
                 sal_uLong nBookNdIdx = pMark->GetMarkPos().nNode.GetIndex();
                 if(nBookNdIdx==nNodeIdx)
                 {
@@ -1383,15 +1383,12 @@ void SwHTMLParser::StripTrailingPara()
                         ASSERT(!this, "Hoppla, wo ist mein Vorgaenger-Node");
                         return;
                     }
-                    // --> OD 2007-09-27 #i81002# - refactoring
-                    // Do not directly manipulate member of <SwBookmark>
                     {
                         SwPosition aNewPos(*pNd);
                         aNewPos.nContent.Assign(pNd, pNd->Len());
                         const SwPaM aPaM(aNewPos);
                         pMarkAccess->repositionMark(ppMark->get(), aPaM);
                     }
-                    // <--
                 }
                 else if( nBookNdIdx > nNodeIdx )
                     break;

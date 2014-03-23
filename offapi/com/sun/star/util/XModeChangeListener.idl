@@ -42,7 +42,7 @@ module com {  module sun {  module star {  module util {
 
     @see XModeChangeBroadcaster
 
-    @since OOo 1.1.2
+    @since OpenOffice 1.1.2
 */
 published interface XModeChangeListener : com::sun::star::lang::XEventListener
 {

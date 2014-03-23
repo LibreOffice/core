@@ -252,7 +252,7 @@ static sal_uInt16 nTitleNo = 0;
 
     if (nMode == ENV_NEWDOC || nMode == ENV_INSERT)
     {
-        SwWait aWait( (SwDocShell&)*xDocSh, sal_True );
+        SwWait aWait( (SwDocShell&)*xDocSh, true );
 
         // Dialog auslesen, Item in Config speichern
         const SwEnvItem& rItem = pItem ? *pItem : (const SwEnvItem&) pDlg->GetOutputItemSet()->Get(FN_ENVELOP);

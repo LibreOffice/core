@@ -344,7 +344,7 @@ sal_Bool SAL_CALL ChartModel::attachResource( const ::rtl::OUString& rURL
         return sal_False; //behave passive if already disposed or closed or throw exception @todo?
     //mutex is acquired
 
-    if(m_aResource.getLength()!=0)//we have a resource already //@todo? or is setting a new resource allowed?
+    if(!m_aResource.isEmpty())//we have a resource already //@todo? or is setting a new resource allowed?
         return sal_False;
     m_aResource = rURL;
     m_aMediaDescriptor = rMediaDescriptor;

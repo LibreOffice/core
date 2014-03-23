@@ -150,8 +150,8 @@ void  LdapConnection::connectSimple()
 
         // Do the bind
         LdapErrCode retCode = (*s_p_simple_bind_s)(mConnection,
-                                               mLdapDefinition.mAnonUser ,
-                                               mLdapDefinition.mAnonCredentials) ;
+                                               mLdapDefinition.mAnonUser.getStr(),
+                                               mLdapDefinition.mAnonCredentials.getStr()) ;
 
         checkLdapReturnCode("SimpleBind", retCode, mConnection) ;
     }
@@ -170,14 +170,14 @@ void LdapConnection::initConnection()
 
     if (mLdapDefinition.mPort == 0) mLdapDefinition.mPort = LDAP_PORT;
 
-    mConnection = (*s_p_init)(mLdapDefinition.mServer,
+    mConnection = (*s_p_init)( mLdapDefinition.mServer.getStr(),
                             mLdapDefinition.mPort) ;
     if (mConnection == NULL)
     {
         rtl::OUStringBuffer message ;
 
         message.appendAscii("Cannot initialise connection to LDAP server ") ;
-        message.appendAscii(mLdapDefinition.mServer) ;
+        message.appendAscii( mLdapDefinition.mServer.getStr());
         message.appendAscii(":") ;
         message.append(mLdapDefinition.mPort) ;
         throw ldap::LdapConnectionException(message.makeStringAndClear(),
@@ -197,7 +197,7 @@ void LdapConnection::initConnection()
 
     LdapMessageHolder result;
     LdapErrCode retCode = (*s_p_search_s)(mConnection,
-                                      aUserDn,
+                                      aUserDn.getStr(),
                                       LDAP_SCOPE_BASE,
                                       "(objectclass=*)",
                                       0,
@@ -231,7 +231,7 @@ void LdapConnection::initConnection()
     {
         throw lang::IllegalArgumentException(
             rtl::OUString(RTL_CONSTASCII_USTRINGPARAM
-            ("LdapConnection::findUserDn -User id is empty")),
+            ("LdapConnection::findUserDn -User id is empty")).getStr(),
                 NULL, 0) ;
     }
 
@@ -247,9 +247,9 @@ void LdapConnection::initConnection()
     attributes[0]= const_cast<sal_Char *>(LDAP_NO_ATTRS);
     attributes[1]= NULL;
     LdapErrCode retCode = (*s_p_search_s)(mConnection,
-                                      mLdapDefinition.mBaseDN,
+                                      mLdapDefinition.mBaseDN.getStr(),
                                       LDAP_SCOPE_SUBTREE,
-                                      filter.makeStringAndClear(), attributes, 0, &result.msg) ;
+                                      filter.getStr(), attributes, 0, &result.msg) ;
 
     checkLdapReturnCode("FindUserDn", retCode,mConnection) ;
     rtl::OString userDn ;

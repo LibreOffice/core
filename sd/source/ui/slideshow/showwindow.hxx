@@ -102,7 +102,6 @@ public:
     virtual void    MouseButtonDown(const MouseEvent& rMEvt);
     virtual void    Paint(const Rectangle& rRect);
     virtual long    Notify(NotifyEvent& rNEvt);
-    //IAccessibility2 Implementation 2009-----
     //Overload the sd::Window's CreateAccessible to create a different accessible object
     virtual ::com::sun::star::uno::Reference<
         ::com::sun::star::accessibility::XAccessible>

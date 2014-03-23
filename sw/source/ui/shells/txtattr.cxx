@@ -204,37 +204,42 @@ void SwTextShell::ExecCharAttrArgs(SfxRequest &rReq)
     SwTxtFmtColl* pColl = 0;
 
     // nur gesetzt, wenn gesamter Absatz selektiert ist und AutoUpdateFmt gesetzt ist
-    if( rWrtSh.HasSelection() && rWrtSh.IsSelFullPara() )
+    if ( rWrtSh.HasSelection() && rWrtSh.IsSelFullPara() )
     {
         pColl = rWrtSh.GetCurTxtFmtColl();
-        if(pColl && !pColl->IsAutoUpdateFmt())
+        if ( pColl && !pColl->IsAutoUpdateFmt() )
             pColl = 0;
     }
     SfxItemPool& rPool = GetPool();
-    sal_uInt16 nWhich = rPool.GetWhich(nSlot);
-    switch ( nSlot )
+    sal_uInt16 nWhich = rPool.GetWhich( nSlot );
+    switch (nSlot)
     {
-        case FN_TXTATR_INET:
+    case FN_TXTATR_INET:
         // Sonderbehandlung der PoolId des SwFmtInetFmt
-        if(bArgs)
+        if ( bArgs )
         {
-            const SfxPoolItem& rItem = pArgs->Get(nWhich );
+            const SfxPoolItem& rItem = pArgs->Get( nWhich );
 
-            SwFmtINetFmt aINetFmt((const SwFmtINetFmt&)rItem);
-            if( USHRT_MAX == aINetFmt.GetVisitedFmtId() )
+            SwFmtINetFmt aINetFmt( (const SwFmtINetFmt&) rItem );
+            if ( USHRT_MAX == aINetFmt.GetVisitedFmtId() )
             {
-                aINetFmt.SetVisitedFmtId(
-                        SwStyleNameMapper::GetPoolIdFromUIName( aINetFmt.GetVisitedFmt(), nsSwGetPoolIdFromName::GET_POOLID_CHRFMT));
+                ASSERT( false, "<SwTextShell::ExecCharAttrArgs(..)> - unexpected visited character format ID at hyperlink attribute" );
+                aINetFmt.SetVisitedFmtAndId(
+                        aINetFmt.GetVisitedFmt(),
+                        SwStyleNameMapper::GetPoolIdFromUIName( aINetFmt.GetVisitedFmt(), nsSwGetPoolIdFromName::GET_POOLID_CHRFMT ) );
             }
-            if( USHRT_MAX == aINetFmt.GetINetFmtId() )
+            if ( USHRT_MAX == aINetFmt.GetINetFmtId() )
             {
-                aINetFmt.SetINetFmtId(
-                        SwStyleNameMapper::GetPoolIdFromUIName( aINetFmt.GetINetFmt(), nsSwGetPoolIdFromName::GET_POOLID_CHRFMT));
+                ASSERT( false, "<SwTextShell::ExecCharAttrArgs(..)> - unexpected unvisited character format ID at hyperlink attribute" );
+                aINetFmt.SetINetFmtAndId(
+                        aINetFmt.GetINetFmt(),
+                        SwStyleNameMapper::GetPoolIdFromUIName( aINetFmt.GetINetFmt(), nsSwGetPoolIdFromName::GET_POOLID_CHRFMT ) );
             }
 
             if ( pColl )
                 pColl->SetFmtAttr( aINetFmt );
-            else rWrtSh.SetAttrItem( aINetFmt );
+            else
+                rWrtSh.SetAttrItem( aINetFmt );
             rReq.Done();
         }
         break;
@@ -466,7 +471,7 @@ SET_LINESPACE:
                 aAdjust.SetWhich(SID_ATTR_PARA_ADJUST);
                 GetView().GetViewFrame()->GetBindings().SetState( aAdjust );
                 // Toggle numbering alignment
-                const SwNumRule* pCurRule = GetShell().GetCurNumRule();
+                const SwNumRule* pCurRule = GetShell().GetNumRuleAtCurrCrsrPos();
                 if( pCurRule )
                 {
                     SvxNumRule aRule = pCurRule->MakeSvxNumRule();

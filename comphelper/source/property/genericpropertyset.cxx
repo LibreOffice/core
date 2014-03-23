@@ -114,7 +114,7 @@ void SAL_CALL GenericPropertySet::addPropertyChangeListener( const ::rtl::OUStri
     Reference < XPropertySetInfo > xInfo = getPropertySetInfo(  );
     if ( xInfo.is() )
     {
-        if ( !aPropertyName.getLength() )
+        if ( aPropertyName.isEmpty() )
         {
             Sequence< Property> aSeq = xInfo->getProperties();
             const Property* pIter = aSeq.getConstArray();
@@ -138,7 +138,7 @@ void SAL_CALL GenericPropertySet::removePropertyChangeListener( const ::rtl::OUS
     aGuard.clear();
     if ( xInfo.is() )
     {
-        if ( !aPropertyName.getLength() )
+        if ( aPropertyName.isEmpty() )
         {
             Sequence< Property> aSeq = xInfo->getProperties();
             const Property* pIter = aSeq.getConstArray();

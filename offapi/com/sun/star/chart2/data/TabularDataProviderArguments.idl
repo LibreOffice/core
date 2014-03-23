@@ -48,8 +48,8 @@ service TabularDataProviderArguments
         <member>XDataProvider::detectArguments</member>.</p>
 
         <p>The representation string is of a form that may be used in the
-        user interface.  Example for OOo Calc: "$Sheet1.$A$1:$D$7",
-        example for OOo Writer: "&lt;Table1.A1:D7&gt;".</p>
+        user interface.  Example for OpenOffice Calc: "$Sheet1.$A$1:$D$7",
+        example for OpenOffice Writer: "&lt;Table1.A1:D7&gt;".</p>
 
         <p>When used as input, this range will be split in columns or
         rows depending on the property

@@ -255,9 +255,9 @@ bool VtableFactory::createBlock(Block &block, sal_Int32 slotCount) const
     if (aSecurity.getHomeDir(strURLDirectory))
         osl::File::getSystemPathFromFileURL(strURLDirectory, strDirectory);
 
-    for (int i = strDirectory.getLength() == 0 ? 1 : 0; i < 2; ++i)
+    for (int i = strDirectory.isEmpty() ? 1 : 0; i < 2; ++i)
     {
-        if (!strDirectory.getLength())
+        if (strDirectory.isEmpty())
             strDirectory = rtl::OUString::createFromAscii("/tmp");
 
         strDirectory += rtl::OUString::createFromAscii("/.execoooXXXXXX");

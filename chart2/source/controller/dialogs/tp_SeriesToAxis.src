@@ -77,8 +77,7 @@ TabPage TP_OPTIONS
         Minimum = -100 ;
         Maximum = 100 ;
         StrictFormat = TRUE ;
-        Unit = FUNIT_CUSTOM ;
-        CustomUnitText  = " %" ;
+        Unit = FUNIT_PERCENT ;
         First = 1 ;
         Last = 100 ;
         SpinSize = 1 ;
@@ -104,8 +103,7 @@ TabPage TP_OPTIONS
         Minimum = 0 ;
         Maximum = 600 ;
         StrictFormat = TRUE ;
-        Unit = FUNIT_CUSTOM ;
-        CustomUnitText  = " %" ;
+        Unit = FUNIT_PERCENT ;
         First = 1 ;
         Last = 100 ;
         SpinSize = 1 ;

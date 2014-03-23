@@ -131,14 +131,16 @@ String& lcl_CleanStr(
                 case RES_TXTATR_FLYCNT:
                 case RES_TXTATR_FTN:
                 case RES_TXTATR_FIELD:
+                case RES_TXTATR_ANNOTATION:
                 case RES_TXTATR_REFMARK:
                 case RES_TXTATR_TOXMARK:
                 case RES_TXTATR_META:
                 case RES_TXTATR_METAFIELD:
                     {
-                        sal_Bool bEmpty = RES_TXTATR_FIELD != pHt->Which() ||
-                            !(static_cast<SwTxtFld const*>(pHt)
-                                ->GetFmtFld().GetField()->ExpandField(true).Len());
+                        const bool bEmpty =
+                            ( pHt->Which() != RES_TXTATR_FIELD
+                              && pHt->Which() != RES_TXTATR_ANNOTATION )
+                            || !(static_cast<SwTxtFld const*>(pHt)->GetFmtFld().GetField()->ExpandField(true).Len());
                         if ( bEmpty && nStart == nAkt )
                         {
                             rArr.Insert( nAkt, rArr.Count() );
@@ -195,8 +197,7 @@ xub_StrLen GetPostIt(xub_StrLen aCount,const SwpHints *pHts)
         {
             aIndex++;
             const SwTxtAttr* pTxtAttr = (*pHts)[i];
-            if ( (pTxtAttr->Which()==RES_TXTATR_FIELD)
-                 && (pTxtAttr->GetFmtFld().GetField()->Which()==RES_POSTITFLD))
+            if ( pTxtAttr->Which() == RES_TXTATR_ANNOTATION )
             {
                 aCount--;
                 if (!aCount)
@@ -208,8 +209,7 @@ xub_StrLen GetPostIt(xub_StrLen aCount,const SwpHints *pHts)
     for (xub_StrLen i = aIndex; i <pHts->Count();i++)
     {
         const SwTxtAttr* pTxtAttr = (*pHts)[i];
-        if ( (pTxtAttr->Which()==RES_TXTATR_FIELD)
-             && (pTxtAttr->GetFmtFld().GetField()->Which()==RES_POSTITFLD))
+        if ( pTxtAttr->Which() == RES_TXTATR_ANNOTATION )
             break;
         else
             aIndex++;
@@ -303,8 +303,7 @@ sal_uInt8 SwPaM::Find( const SearchOptions& rSearchOpt, sal_Bool bSearchInNotes 
                 {
                     const xub_StrLen aPos = *(*pHts)[i]->GetStart();
                     const SwTxtAttr* pTxtAttr = (*pHts)[i];
-                    if ( (pTxtAttr->Which()==RES_TXTATR_FIELD)
-                         && (pTxtAttr->GetFmtFld().GetField()->Which()==RES_POSTITFLD))
+                    if ( pTxtAttr->Which()==RES_TXTATR_ANNOTATION )
                     {
                         if ( (aPos >= nStart) && (aPos <= nEnde) )
                             aNumberPostits++;

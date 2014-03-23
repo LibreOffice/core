@@ -85,7 +85,5 @@
 #define ST_POSTIT_HIDE              (ST_GLOBAL_CONTEXT_FIRST +36)
 #define ST_POSTIT_DELETE            (ST_GLOBAL_CONTEXT_FIRST +37)
 
-//IAccessibility2 Implementation 2009-----
 #define ST_TL_GLOBAL            ST_GLOBAL_CONTEXT_FIRST +38
 #define ST_TL_CONTENT           ST_GLOBAL_CONTEXT_FIRST +39
-//-----IAccessibility2 Implementation 2009

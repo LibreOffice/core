@@ -733,8 +733,10 @@ sub remove_all_items_with_special_flag
         if ( $oneitem->{'Styles'} ) { $styles = $oneitem->{'Styles'} };
         if ( $styles =~ /\b$flag\b/ )
         {
-            my $infoline = "Attention: Removing from collector: $oneitem->{'Name'} !\n";
-            $installer::logger::Lang->print($infoline);
+            $installer::logger::Lang->printf(
+                "Attention: Removing from collector '%s' because it has flag %s\n",
+                $oneitem->{'Name'},
+                $flag);
             if ( $flag eq "BINARYTABLE_ONLY" ) { push(@installer::globals::binarytableonlyfiles, $oneitem); }
             next;
         }
@@ -2270,9 +2272,13 @@ sub get_platform_name
     {
         $platformname = "Win32Intel";
     }
-    elsif ( $installer::globals::compiler =~ /^unxmacxi/ )
+    elsif(( $installer::globals::compiler =~ /^unxmac.i/ ))
     {
         $platformname = "MacOSXIntel";
+    }
+    elsif ( $installer::globals::compiler =~ /^unxmaccx/ )
+    {
+        $platformname = "MacOSXX86-64";
     }
     elsif ( $installer::globals::compiler =~ /^unxmacxp/ )
     {
@@ -2377,7 +2383,6 @@ sub collect_all_files_from_includepathes
 
         my @sourcefiles = ();
         my $pathstring = "";
-        # installer::systemactions::read_complete_directory($includepath, $pathstring, \@sourcefiles);
         installer::systemactions::read_full_directory($includepath, $pathstring, \@sourcefiles);
 
         if ( ! ( $#sourcefiles > -1 ))
@@ -2711,8 +2716,8 @@ sub generate_cygwin_pathes
 
     for ( my $i = 0; $i <= $#{$filesref}; $i++ )
     {
-        my $line = ${$filesref}[$i]->{'sourcepath'} . "\n";
-        push(@pathcollector, $line);
+        my $filename = ${$filesref}[$i]->{'sourcepath'};
+        push(@pathcollector, $filename . "\n");
         $counter++;
 
         if (( $i == $#{$filesref} ) || ((( $counter % $max ) == 0 ) && ( $i > 0 )))
@@ -2728,6 +2733,9 @@ sub generate_cygwin_pathes
             installer::files::save_file($tmpfilename, \@pathcollector);
 
             my $success = 0;
+            $installer::logger::Lang->printf(
+                "Converting %d filenames to cygwin notation\n",
+                $counter);
             my @cyg_sourcepathlist = qx{cygpath -w -f "$tmpfilename"};
             chomp @cyg_sourcepathlist;
 
@@ -2737,14 +2745,16 @@ sub generate_cygwin_pathes
 
             if ($success)
             {
-                $infoline = "Success: Successfully converted to cygwin pathes!\n";
-                $installer::logger::Lang->print($infoline);
+                $installer::logger::Lang->printf(
+                    "Successfully converted %d paths to cygwin notation\n",
+                    $counter);
             }
             else
             {
-                $infoline = "ERROR: Failed to convert to cygwin pathes!\n";
-                $installer::logger::Lang->print($infoline);
-                installer::exiter::exit_program("ERROR: Failed to convert to cygwin pathes!", "generate_cygwin_pathes");
+                $installer::logger::Lang->print("ERROR: Failed to convert to cygwin pathes!\n");
+                installer::exiter::exit_program(
+                    "ERROR: Failed to convert to cygwin pathes!",
+                    "generate_cygwin_pathes");
             }
 
             for ( my $j = 0; $j <= $#cyg_sourcepathlist; $j++ )

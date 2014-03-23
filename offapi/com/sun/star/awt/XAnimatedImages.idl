@@ -41,7 +41,7 @@ module com { module sun { module star { module awt {
     those images will choose the best-fitting image set depending on the available space, and possibly other
     restrictions.</p>
 
-    @since OOo 3.4
+    @since OpenOffice 3.4
  */
 published interface XAnimatedImages
 {

@@ -32,7 +32,7 @@
 
 /** These enumeration values specify the position and space mode for a numbering level
 
-        @since OOo 3.0
+        @since OpenOffice 3.0
  */
 published constants PositionAndSpaceMode
 {

@@ -352,101 +352,63 @@ sal_Bool SwEditShell::NumUpDown( sal_Bool bDown )
     EndAllAction();
     return bRet;
 }
-// -> #i23726#
-sal_Bool SwEditShell::IsFirstOfNumRule() const
+
+
+bool SwEditShell::IsFirstOfNumRuleAtCrsrPos() const
 {
-    sal_Bool bResult = sal_False;
-
-    SwPaM * pCrsr = GetCrsr();
-    if (pCrsr->GetNext() == pCrsr)
-    {
-        bResult = IsFirstOfNumRule(*pCrsr);
-    }
-
-    return bResult;
+    return GetDoc()->IsFirstOfNumRuleAtPos( *GetCrsr()->GetPoint() );
 }
 
-sal_Bool SwEditShell::IsFirstOfNumRule(const SwPaM & rPaM) const
-{
-    sal_Bool bResult = sal_False;
 
-    SwPosition aPos(*rPaM.GetPoint());
-    bResult = GetDoc()->IsFirstOfNumRule(aPos);
-
-    return bResult;
-}
-// <- #i23726#
-
-// -> #i23725#
-// --> OD 2008-06-09 #i90078#
-// Remove unused default parameter <nLevel> and <bRelative>.
-// Adjust method name and parameter name
-void SwEditShell::ChangeIndentOfAllListLevels( short nDiff )
+void SwEditShell::ChangeIndentOfAllListLevels( const short nDiff )
 {
     StartAllAction();
 
-    const SwNumRule *pCurNumRule = GetCurNumRule();
-    //#120911# check if numbering rule really exists
-    if (pCurNumRule)
+    const SwNumRule *pCurNumRule = GetNumRuleAtCurrCrsrPos();
+    if ( pCurNumRule != NULL )
     {
         SwNumRule aRule(*pCurNumRule);
-        // --> OD 2008-06-09 #i90078#
         aRule.ChangeIndent( nDiff );
-        // <--
 
-        // --> OD 2008-03-17 #refactorlists#
-        // no start of new list
         SetCurNumRule( aRule, false );
-        // <--
     }
 
     EndAllAction();
 }
 
-// --> OD 2008-06-09 #i90078#
-// Adjust method name
-void SwEditShell::SetIndent(short nIndent, const SwPosition & rPos)
-// <--
+
+void SwEditShell::SetIndent(
+    short nIndent,
+    const SwPosition & rPos )
 {
     StartAllAction();
 
-    SwNumRule *pCurNumRule = GetDoc()->GetCurrNumRule(rPos);
+    SwNumRule *pCurNumRule = GetDoc()->GetNumRuleAtPos(rPos);
 
     if (pCurNumRule)
     {
-        SwPaM aPaM(rPos);
-        SwTxtNode * pTxtNode = aPaM.GetNode()->GetTxtNode();
-
-        // --> OD 2008-06-09 #i90078#
-//        int nLevel = -1;
-//        int nReferenceLevel = pTxtNode->GetActualListLevel();
-//        if (! IsFirstOfNumRule(aPaM))
-//            nLevel = nReferenceLevel;
-
         SwNumRule aRule(*pCurNumRule);
-//        aRule.ChangeIndent(nIndent, nLevel, nReferenceLevel, sal_False);
-        if ( IsFirstOfNumRule() )
+        if ( !IsMultiSelection() && IsFirstOfNumRuleAtCrsrPos() )
         {
             aRule.SetIndentOfFirstListLevelAndChangeOthers( nIndent );
         }
-        else if ( pTxtNode->GetActualListLevel() >= 0  )
+        else
         {
-            aRule.SetIndent( nIndent,
-                             static_cast<sal_uInt16>(pTxtNode->GetActualListLevel()) );
+            const SwTxtNode* pTxtNode = rPos.nNode.GetNode().GetTxtNode();
+            if ( pTxtNode != NULL
+                 && pTxtNode->GetActualListLevel() >= 0 )
+            {
+                aRule.SetIndent( nIndent, static_cast< sal_uInt16 >( pTxtNode->GetActualListLevel() ) );
+            }
         }
-        // <--
 
-        // --> OD 2005-02-18 #i42921# - 3rd parameter = false in order to
-        // suppress setting of num rule at <aPaM>.
-        // --> OD 2008-03-17 #refactorlists#
-        // do not apply any list
-        GetDoc()->SetNumRule( aPaM, aRule, false, String(), sal_False );
-        // <--
+        // change numbering rule - changed numbering rule is not applied at <aPaM>
+        SwPaM aPaM(rPos);
+        GetDoc()->SetNumRule( aPaM, aRule, false, String(), false );
     }
 
     EndAllAction();
 }
-// <- #i23725#
 
 sal_Bool SwEditShell::MoveParagraph( long nOffset )
 {
@@ -696,35 +658,36 @@ sal_Bool SwEditShell::IsOutlineCopyable( sal_uInt16 nIdx ) const
 }
 
 
-sal_Bool SwEditShell::NumOrNoNum( sal_Bool bNumOn, sal_Bool bChkStart ) // #115901#
+sal_Bool SwEditShell::NumOrNoNum(
+    sal_Bool bNumOn,
+    sal_Bool bChkStart )
 {
     sal_Bool bRet = sal_False;
-    SwPaM* pCrsr = GetCrsr();
-    if( pCrsr->GetNext() == pCrsr && !pCrsr->HasMark() &&
-        ( !bChkStart || !pCrsr->GetPoint()->nContent.GetIndex()) )
+
+    if ( !IsMultiSelection()
+         && !HasSelection()
+         && ( !bChkStart || IsSttPara() ) )
     {
-        StartAllAction();       // Klammern fuers Updaten !!
-        // #115901#
-        bRet = GetDoc()->NumOrNoNum( pCrsr->GetPoint()->nNode, !bNumOn ); // #i29560#
+        StartAllAction();
+        bRet = GetDoc()->NumOrNoNum( GetCrsr()->GetPoint()->nNode, !bNumOn );
         EndAllAction();
     }
     return bRet;
 }
 
+
 sal_Bool SwEditShell::IsNoNum( sal_Bool bChkStart ) const
 {
-    // ein Backspace im Absatz ohne Nummer wird zum Delete
     sal_Bool bResult = sal_False;
-    SwPaM* pCrsr = GetCrsr();
 
-    if (pCrsr->GetNext() == pCrsr && !pCrsr->HasMark() &&
-        (!bChkStart || !pCrsr->GetPoint()->nContent.GetIndex()))
+    if ( !IsMultiSelection()
+         && !HasSelection()
+         && ( !bChkStart || IsSttPara() ) )
     {
-        const SwTxtNode* pTxtNd = pCrsr->GetNode()->GetTxtNode();
-
-        if (pTxtNd)
+        const SwTxtNode* pTxtNd = GetCrsr()->GetNode()->GetTxtNode();
+        if ( pTxtNd != NULL )
         {
-            bResult =  ! pTxtNd->IsCountedInList();
+            bResult =  !pTxtNd->IsCountedInList();
         }
     }
 
@@ -740,12 +703,12 @@ sal_uInt8 SwEditShell::GetNumLevel() const
     SwPaM* pCrsr = GetCrsr();
     const SwTxtNode* pTxtNd = pCrsr->GetNode()->GetTxtNode();
 
-    ASSERT( pTxtNd, "GetNumLevel() without text node" )
-    if ( !pTxtNd )
+    ASSERT( pTxtNd != NULL, "GetNumLevel() without text node" )
+    if ( pTxtNd == NULL )
         return nLevel;
 
     const SwNumRule* pRule = pTxtNd->GetNumRule();
-    if(pRule)
+    if ( pRule != NULL )
     {
         const int nListLevelOfTxtNode( pTxtNd->GetActualListLevel() );
         if ( nListLevelOfTxtNode >= 0 )
@@ -757,13 +720,51 @@ sal_uInt8 SwEditShell::GetNumLevel() const
     return nLevel;
 }
 
-const SwNumRule* SwEditShell::GetCurNumRule() const
+const SwNumRule* SwEditShell::GetNumRuleAtCurrCrsrPos() const
 {
-    return GetDoc()->GetCurrNumRule( *GetCrsr()->GetPoint() );
+    return GetDoc()->GetNumRuleAtPos( *GetCrsr()->GetPoint() );
 }
 
-// OD 2008-02-08 #newlistlevelattrs# - add handling of parameter <bResetIndentAttrs>
-// --> OD 2008-03-17 #refactorlists#
+const SwNumRule* SwEditShell::GetNumRuleAtCurrentSelection() const
+{
+    const SwNumRule* pNumRuleAtCurrentSelection = NULL;
+
+    const SwPaM* pCurrentCrsr = GetCrsr();
+    bool bDifferentNumRuleFound = false;
+    const SwPaM* pCrsr = pCurrentCrsr;
+    do
+    {
+        const SwNodeIndex aEndNode = pCrsr->End()->nNode;
+
+        for ( SwNodeIndex aNode = pCrsr->Start()->nNode; aNode <= aEndNode; aNode++ )
+        {
+            const SwNumRule* pNumRule = GetDoc()->GetNumRuleAtPos( SwPosition( aNode ) );
+            if ( pNumRule == NULL )
+            {
+                continue;
+            }
+            else if ( pNumRule != pNumRuleAtCurrentSelection )
+            {
+                if ( pNumRuleAtCurrentSelection == NULL )
+                {
+                    pNumRuleAtCurrentSelection = pNumRule;
+                }
+                else
+                {
+                    pNumRuleAtCurrentSelection = NULL;
+                    bDifferentNumRuleFound = true;
+                    break;
+                }
+            }
+        }
+
+        pCrsr = static_cast< const SwPaM* >(pCrsr->GetNext());
+    } while ( !bDifferentNumRuleFound && pCrsr != pCurrentCrsr );
+
+    return pNumRuleAtCurrentSelection;
+}
+
+
 void SwEditShell::SetCurNumRule( const SwNumRule& rRule,
                                  const bool bCreateNewList,
                                  const String sContinuedListId,
@@ -774,7 +775,7 @@ void SwEditShell::SetCurNumRule( const SwNumRule& rRule,
     GetDoc()->GetIDocumentUndoRedo().StartUndo( UNDO_START, NULL );
 
     SwPaM* pCrsr = GetCrsr();
-    if( pCrsr->GetNext() != pCrsr )         // Mehrfachselektion ?
+    if( IsMultiSelection() )
     {
         SwPamRanges aRangeArr( *pCrsr );
         SwPaM aPam( *pCrsr->GetPoint() );
@@ -783,7 +784,7 @@ void SwEditShell::SetCurNumRule( const SwNumRule& rRule,
             aRangeArr.SetPam( n, aPam );
             GetDoc()->SetNumRule( aPam, rRule,
                                   bCreateNewList, sContinuedListId,
-                                  sal_True, bResetIndentAttrs );
+                                  true, bResetIndentAttrs );
             GetDoc()->SetCounted( aPam, true );
         }
     }
@@ -791,13 +792,14 @@ void SwEditShell::SetCurNumRule( const SwNumRule& rRule,
     {
         GetDoc()->SetNumRule( *pCrsr, rRule,
                               bCreateNewList, sContinuedListId,
-                              sal_True, bResetIndentAttrs );
+                              true, bResetIndentAttrs );
         GetDoc()->SetCounted( *pCrsr, true );
     }
     GetDoc()->GetIDocumentUndoRedo().EndUndo( UNDO_END, NULL );
 
     EndAllAction();
 }
+
 
 String SwEditShell::GetUniqueNumRuleName( const String* pChkStr, sal_Bool bAutoNum ) const
 {

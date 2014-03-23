@@ -791,7 +791,7 @@ WinSalGraphics::~WinSalGraphics()
 
 // -----------------------------------------------------------------------
 
-void WinSalGraphics::GetResolution( long& rDPIX, long& rDPIY )
+void WinSalGraphics::GetResolution( sal_Int32& rDPIX, sal_Int32& rDPIY )
 {
     rDPIX = GetDeviceCaps( getHDC(), LOGPIXELSX );
     rDPIY = GetDeviceCaps( getHDC(), LOGPIXELSY );
@@ -1017,13 +1017,19 @@ bool WinSalGraphics::setClipRegion( const Region& i_rClip )
         }
 
         // create clip region from ClipRgnData
-        if ( mpClipRgnData->rdh.nCount == 1 )
+        if(0 == mpClipRgnData->rdh.nCount)
+        {
+            // #123585# region is empty; this may happen when e.g. a PolyPolygon is given
+            // that contains no polygons or only empty ones (no width/height). This is
+            // perfectly fine and we are done, except setting it (see end of method)
+        }
+        else if(1 == mpClipRgnData->rdh.nCount)
         {
             RECT* pRect = &(mpClipRgnData->rdh.rcBound);
             mhRegion = CreateRectRgn( pRect->left, pRect->top,
                                                      pRect->right, pRect->bottom );
         }
-        else if( mpClipRgnData->rdh.nCount > 1 )
+        else if(mpClipRgnData->rdh.nCount > 1)
         {
             ULONG nSize = mpClipRgnData->rdh.nRgnSize+sizeof(RGNDATAHEADER);
             mhRegion = ExtCreateRegion( NULL, nSize, mpClipRgnData );
@@ -1063,8 +1069,14 @@ bool WinSalGraphics::setClipRegion( const Region& i_rClip )
         //
         //bool bBla = true;
     }
+    else
+    {
+        // #123585# See above, this is a valid case, execute it
+        SelectClipRgn( getHDC(), 0 );
+    }
 
-    return mhRegion != 0;
+    // #123585# retval no longer dependent of mhRegion, see TaskId comments above
+    return true;
 }
 
 // -----------------------------------------------------------------------
@@ -1409,7 +1421,7 @@ void WinSalGraphics::drawRect( long nX, long nY, long nWidth, long nHeight )
 
 // -----------------------------------------------------------------------
 
-void WinSalGraphics::drawPolyLine( sal_uLong nPoints, const SalPoint* pPtAry )
+void WinSalGraphics::drawPolyLine( sal_uInt32 nPoints, const SalPoint* pPtAry )
 {
     // Unter NT koennen wir das Array direkt weiterreichen
     DBG_ASSERT( sizeof( POINT ) == sizeof( SalPoint ),
@@ -1424,7 +1436,7 @@ void WinSalGraphics::drawPolyLine( sal_uLong nPoints, const SalPoint* pPtAry )
 
 // -----------------------------------------------------------------------
 
-void WinSalGraphics::drawPolygon( sal_uLong nPoints, const SalPoint* pPtAry )
+void WinSalGraphics::drawPolygon( sal_uInt32 nPoints, const SalPoint* pPtAry )
 {
     // Unter NT koennen wir das Array direkt weiterreichen
     DBG_ASSERT( sizeof( POINT ) == sizeof( SalPoint ),
@@ -1512,7 +1524,7 @@ void WinSalGraphics::drawPolyPolygon( sal_uInt32 nPoly, const sal_uInt32* pPoint
 
 // -----------------------------------------------------------------------
 
-sal_Bool WinSalGraphics::drawPolyLineBezier( sal_uLong nPoints, const SalPoint* pPtAry, const BYTE* pFlgAry )
+sal_Bool WinSalGraphics::drawPolyLineBezier( sal_uInt32 nPoints, const SalPoint* pPtAry, const BYTE* pFlgAry )
 {
 #ifdef USE_GDI_BEZIERS
     // Unter NT koennen wir das Array direkt weiterreichen
@@ -1529,7 +1541,7 @@ sal_Bool WinSalGraphics::drawPolyLineBezier( sal_uLong nPoints, const SalPoint* 
 
 // -----------------------------------------------------------------------
 
-sal_Bool WinSalGraphics::drawPolygonBezier( sal_uLong nPoints, const SalPoint* pPtAry, const BYTE* pFlgAry )
+sal_Bool WinSalGraphics::drawPolygonBezier( sal_uInt32 nPoints, const SalPoint* pPtAry, const BYTE* pFlgAry )
 {
 #ifdef USE_GDI_BEZIERS
     // Unter NT koennen wir das Array direkt weiterreichen

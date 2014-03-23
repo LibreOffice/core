@@ -63,7 +63,7 @@ SvStream* MSE40HTMLClipFormatObj::IsValid( SvStream& rStream )
             else if( sTmp == "EndHTML" )
                 nEnd = (sal_uIntPtr)(sLine.Erase( 0, nIndex ).ToInt32());
             else if( sTmp == "SourceURL" )
-                sBaseURL = String(S2U(sLine.Erase( 0, nIndex )));
+                sBaseURL = String( sLine.Erase( 0, nIndex ), RTL_TEXTENCODING_UTF8);
 
             if( nEnd && nStt &&
                 ( sBaseURL.Len() || rStream.Tell() >= nStt ))

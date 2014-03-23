@@ -552,7 +552,7 @@ uno::Reference< media::XFrameGrabber > SAL_CALL Player::createFrameGrabber(  )
 
     uno::Reference< media::XFrameGrabber > xRet;
 
-    if( maURL.getLength() > 0 )
+    if( !maURL.isEmpty() )
     {
         FrameGrabber* pGrabber = new FrameGrabber( mxMgr );
 

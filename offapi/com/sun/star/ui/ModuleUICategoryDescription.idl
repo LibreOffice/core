@@ -44,7 +44,7 @@ module com { module sun { module star { module ui {
     or Calc.
     </p>
 
-    @since OOo 2.0
+    @since OpenOffice 2.0
 */
 
 service ModuleUICategoryDescription

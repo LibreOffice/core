@@ -42,7 +42,7 @@ module com { module sun { module star { module deployment {
 /** Objects implementing this interface provide access to the xml root of
     one or more update information files for a given set of URLs.
 
-    @since OOo 2.2
+    @since OpenOffice 2.2
 */
 interface XUpdateInformationProvider
 {

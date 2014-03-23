@@ -66,19 +66,19 @@ published service Database
 
     //------------------------------------------------------------------------
     /** indicates the URL of a database file.
-        @since OOo 2.0
+        @since OpenOffice 2.0
      */
     [optional, property] string DataBaseURL;
 
     //------------------------------------------------------------------------
     /** indicates a connection URL, which locates a database driver.
-        @since OOo 2.0
+        @since OpenOffice 2.0
      */
     [optional, property] string DataBaseResource;
     //------------------------------------------------------------------------
     /** contains the DataColumnName but it enables the fieldmaster and its
         depending fields to work without setting DataSourceName, DataTableName and CommandType
-        @since OOo 2.3
+        @since OpenOffice 2.3
      */
     [optional, property] string Name;
 

@@ -822,8 +822,11 @@ protected:
     void GetSortedBookmarks( const SwTxtNode& rNd, xub_StrLen nAktPos,
                 xub_StrLen nLen );
 
-    bool GetBookmarks( const SwTxtNode& rNd, xub_StrLen nStt, xub_StrLen nEnd,
-            IMarkVector& rArr );
+    bool GetBookmarks(
+        const SwTxtNode& rNd,
+        const xub_StrLen nStt,
+        const xub_StrLen nEnd,
+        IMarkVector& rArr );
 
     const NfKeywordTable & GetNfKeywordTable();
 

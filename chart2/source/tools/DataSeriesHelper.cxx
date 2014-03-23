@@ -330,7 +330,7 @@ OUString getLabelForLabeledDataSequence(
         Reference< chart2::data::XDataSequence > xSeq( xLabeledSeq->getLabel());
         if( xSeq.is() )
             aResult = lcl_getDataSequenceLabel( xSeq );
-        if( !xSeq.is() || !aResult.getLength() )
+        if( !xSeq.is() || aResult.isEmpty() )
         {
             // no label set or label content is empty -> use auto-generated one
             Reference< chart2::data::XDataSequence > xValueSeq( xLabeledSeq->getValues() );

@@ -35,6 +35,10 @@ namespace com { namespace sun { namespace star { namespace uno {
 
 bool operator <(TypeDescription const & left, TypeDescription const & right);
 
+struct TypeDescHash { sal_Int32 operator()( const TypeDescription&) const; };
+
+struct TypeDescEqual { bool operator()( const TypeDescription&, const TypeDescription&) const; };
+
 } } } }
 
 namespace rtl {

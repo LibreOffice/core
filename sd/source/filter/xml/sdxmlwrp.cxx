@@ -791,7 +791,7 @@ sal_Bool SdXMLFilter::Import( ErrCode& nError )
 
             bool bTransform = false;
 
-            if( (nRet == 0) )
+            if( nRet == 0 )
             {
                 if( sBuildId.getLength() )
                 {

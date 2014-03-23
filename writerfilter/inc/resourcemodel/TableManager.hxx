@@ -24,17 +24,9 @@
 #ifndef INCLUDED_TABLE_MANAGER_HXX
 #define INCLUDED_TABLE_MANAGER_HXX
 
-#ifndef INCLUDED_TABLE_DATA_HXX
 #include <resourcemodel/TableData.hxx>
-#endif
-
-#ifndef INCLUDED_WW8_RESOURCE_MODEL_HXX
 #include <resourcemodel/WW8ResourceModel.hxx>
-#endif
-
-#ifndef INCLUDED_SPRMIDS_HXX
 #include <doctok/sprmids.hxx>
-#endif
 
 #include <boost/shared_ptr.hpp>
 #include <stack>
@@ -62,13 +54,16 @@ public:
        @param nDepth  depth of the table in surrounding table hierarchy
        @param pProps  properties of the table
      */
-    virtual void startTable(unsigned int nRows, unsigned int nDepth,
-                            PropertiesPointer pProps) = 0;
+    virtual void startTable(
+        unsigned int nRows,
+        unsigned int nDepth,
+        PropertiesPointer pProps ) = 0;
 
     /**
        Handle end of table.
      */
-    virtual void endTable() = 0;
+    virtual void endTable(
+        const unsigned int nDepth ) = 0;
 
     /**
        Handle start of row.
@@ -76,8 +71,9 @@ public:
        @param nCols    number of columns in the table
        @param pProps   properties of the row
      */
-    virtual void startRow(unsigned int nCols,
-                          PropertiesPointer pProps) = 0;
+    virtual void startRow(
+        unsigned int nCols,
+        PropertiesPointer pProps ) = 0;
 
     /**
        Handle end of row.
@@ -90,14 +86,17 @@ public:
        @param rT     start handle of the cell
        @param pProps properties of the cell
     */
-    virtual void startCell(const T & rT, PropertiesPointer pProps) = 0;
+    virtual void startCell(
+        const T & rT,
+        PropertiesPointer pProps ) = 0;
 
     /**
         Handle end of cell.
 
         @param rT    end handle of cell
     */
-    virtual void endCell(const T & rT) = 0;
+    virtual void endCell(
+        const T & rT ) = 0;
 };
 
 template <typename T, typename PropertiesPointer>
@@ -297,9 +296,10 @@ protected:
         return mState.getProps();
     }
 
-    void setProps(PropertiesPointer pProps)
+    void setProps(
+        PropertiesPointer pProps )
     {
-        mState.setProps(pProps);
+        mState.setProps( pProps );
     }
 
     void resetProps()
@@ -312,9 +312,10 @@ protected:
         return mState.getCellProps();
     }
 
-    void setCellProps(PropertiesPointer pProps)
+    void setCellProps(
+        PropertiesPointer pProps )
     {
-        mState.setCellProps(pProps);
+        mState.setCellProps( pProps );
     }
 
     void resetCellProps()
@@ -327,9 +328,10 @@ protected:
         return mState.getRowProps();
     }
 
-    void setRowProps(PropertiesPointer pProps)
+    void setRowProps(
+        PropertiesPointer pProps )
     {
-        mState.setRowProps(pProps);
+        mState.setRowProps( pProps );
     }
 
     void resetRowProps()
@@ -337,9 +339,10 @@ protected:
         mState.resetRowProps();
     }
 
-    void setInCell(bool bInCell)
+    void setInCell(
+        bool bInCell )
     {
-        mState.setInCell(bInCell);
+        mState.setInCell( bInCell );
     }
 
     bool isInCell() const
@@ -347,9 +350,10 @@ protected:
         return mState.isInCell();
     }
 
-    void setCellEnd(bool bCellEnd)
+    void setCellEnd(
+        bool bCellEnd )
     {
-        mState.setCellEnd(bCellEnd);
+        mState.setCellEnd( bCellEnd );
     }
 
     bool isCellEnd() const
@@ -357,9 +361,10 @@ protected:
         return mState.isCellEnd();
     }
 
-    void setRowEnd(bool bRowEnd)
+    void setRowEnd(
+        bool bRowEnd )
     {
-        mState.setRowEnd(bRowEnd);
+        mState.setRowEnd( bRowEnd );
     }
 
     bool isRowEnd() const
@@ -372,9 +377,10 @@ protected:
         return mState.getTableProps();
     }
 
-    void setTableProps(PropertiesPointer pProps)
+    void setTableProps(
+        PropertiesPointer pProps )
     {
-        mState.setTableProps(pProps);
+        mState.setTableProps( pProps );
     }
 
     void resetTableProps()
@@ -387,7 +393,8 @@ protected:
         return mCurHandle;
     }
 
-    void setHandle(const T & rHandle)
+    void setHandle(
+        const T & rHandle )
     {
         mCurHandle = rHandle;
     }
@@ -480,9 +487,6 @@ protected:
        paragraph.
      */
     virtual void endOfRowAction();
-    /** let the derived class clear their table related data
-     */
-    virtual void clearData();
 
 
 public:
@@ -778,26 +782,25 @@ void TableManager<T, PropertiesPointer>::endParagraphGroup()
 
     mnTableDepth = mnTableDepthNew;
 
-    if (mnTableDepth > 0)
+    if ( mnTableDepth > 0 )
     {
-        typename TableData<T, PropertiesPointer>::Pointer_t pTableData =
-        mTableDataStack.top();
+        typename TableData< T, PropertiesPointer >::Pointer_t pTableData = mTableDataStack.top();
 
-        if (isRowEnd())
+        if ( isRowEnd() )
         {
             endOfRowAction();
-            pTableData->endRow(getRowProps());
+            pTableData->endRow( getRowProps() );
             resetRowProps();
         }
 
-        else if (isInCell())
+        else if ( isInCell() )
         {
-            ensureOpenCell(getCellProps());
+            ensureOpenCell( getCellProps() );
 
-            if (isCellEnd())
+            if ( isCellEnd() )
             {
                 endOfCellAction();
-                closeCell(getHandle());
+                closeCell( getHandle() );
             }
         }
         resetCellProps();
@@ -971,7 +974,7 @@ void TableManager<T, PropertiesPointer>::resolveCurrentTable()
         typename TableData<T, PropertiesPointer>::Pointer_t
             pTableData = mTableDataStack.top();
 
-        unsigned int nRows = pTableData->getRowCount();
+        const unsigned int nRows = pTableData->getRowCount();
 
         mpTableDataHandler->startTable(nRows, pTableData->getDepth(), getTableProps());
 
@@ -995,10 +998,9 @@ void TableManager<T, PropertiesPointer>::resolveCurrentTable()
             mpTableDataHandler->endRow();
         }
 
-        mpTableDataHandler->endTable();
+        mpTableDataHandler->endTable( pTableData->getDepth() );
     }
     resetTableProps();
-    clearData();
 
 #ifdef DEBUG_TABLE
     if (mpTableLogger.get() != NULL)
@@ -1020,11 +1022,6 @@ template <typename T, typename PropertiesPointer>
 bool TableManager<T, PropertiesPointer>::isIgnore() const
 {
     return isRowEnd();
-}
-
-template <typename T, typename PropertiesPointer>
-void  TableManager<T, PropertiesPointer>::clearData()
-{
 }
 
 template <typename T, typename PropertiesPointer>

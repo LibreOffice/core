@@ -54,6 +54,7 @@
 #include <svx/e3dsceneupdater.hxx>
 #include <svx/svdlegacy.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
+#include <svx/svdmodel.hxx>
 
 #define ITEMVALUE(ItemSet,Id,Cast)  ((const Cast&)(ItemSet).Get(Id)).GetValue()
 
@@ -467,7 +468,16 @@ void E3dScene::NewObjectInserted(const E3dObject& r3DObj)
 void E3dScene::StructureChanged()
 {
     E3dObject::StructureChanged();
-    ActionChanged();
+
+    if(getSdrModelFromSdrObject().isLocked())
+    {
+        // #123539# optimization for 3D chart object generation: do not reset
+        // already calculated scene projection data every time an object gets
+        // initialized
+        // TTTT: Check this if it works, the idea was to buffer chart 3D object
+        // creation... (see task)
+        maSdrObjectTransformation.setB2DHomMatrix(basegfx::B2DHomMatrix());
+    }
 
     // #110988#
     ImpCleanup3DDepthMapper();

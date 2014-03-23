@@ -92,7 +92,6 @@
 using ::std::max;
 #endif
 
-//IAccessibility2 Implementation 2009-----
 #ifdef WNT
 #include <oleacc.h>
 #include <com/sun/star/accessibility/XMSAAService.hpp>
@@ -101,7 +100,6 @@ using ::std::max;
 #endif
 #include <win/g_msaasvc.h>
 #endif
-//-----IAccessibility2 Implementation 2009
 #include <com/sun/star/uno/Exception.hdl>
 
 #include <time.h>
@@ -163,12 +161,10 @@ sal_Bool WinSalFrame::mbInReparent = FALSE;
 #define Uni_SupplementaryPlanesStart    0x10000
 
 // =======================================================================
-//IAccessibility2 Implementation 2009-----
 #ifdef WNT
 using namespace ::com::sun::star::accessibility;
 XMSAAService* g_acc_manager1 = NULL;
 #endif
-//-----IAccessibility2 Implementation 2009
 static void UpdateFrameGeometry( HWND hWnd, WinSalFrame* pFrame );
 static void SetMaximizedFrameGeometry( HWND hWnd, WinSalFrame* pFrame, RECT* pParentRect = NULL );
 
@@ -6194,7 +6190,6 @@ LRESULT CALLBACK SalFrameWndProc( HWND hWnd, UINT nMsg, WPARAM wParam, LPARAM lP
             ImplHandleIMENotify( hWnd, wParam );
             break;
 
-//IAccessibility2 implementation 2009-----
 #ifdef WNT
         case WM_GETOBJECT:
             {
@@ -6247,7 +6242,6 @@ LRESULT CALLBACK SalFrameWndProc( HWND hWnd, UINT nMsg, WPARAM wParam, LPARAM lP
                 break;
             }
 #endif
-//-----IAccessibility2 implementation 2009
 
         case WM_APPCOMMAND:
             if( ImplHandleAppCommand( hWnd, lParam ) )
@@ -6469,7 +6463,6 @@ sal_Bool ImplWriteLastError( DWORD lastError, const char *szApiCall )
 
 // -----------------------------------------------------------------------
 
-//IAccessibility2 implementation 2009-----
 #ifdef WNT
 bool IsWNTInitAccessBridge()
 {
@@ -6490,4 +6483,3 @@ bool WNTEnableAccessInterface(bool bEnable)
     return bPreVal;
 }
 #endif
-//-----IAccessibility2 implementation 2009

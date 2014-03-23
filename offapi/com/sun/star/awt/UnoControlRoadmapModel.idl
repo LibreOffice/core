@@ -105,7 +105,7 @@ service UnoControlRoadmapModel
             to an empty string.</li>
         </ul></p>
 
-        @since OOo 2.1
+        @since OpenOffice 2.1
      */
     [optional, property, transient] com::sun::star::graphic::XGraphic Graphic;
 

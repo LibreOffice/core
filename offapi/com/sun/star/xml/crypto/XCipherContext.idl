@@ -46,7 +46,7 @@
     </p>
 
     @see <type>XCipherContextSupplier</type>
-    @since OOo 3.4
+    @since OpenOffice 3.4
  */
 interface XCipherContext : com::sun::star::uno::XInterface
 {

@@ -993,6 +993,7 @@ SfxItemPresentation __EXPORT SdrMetricItem::GetPresentation(SfxItemPresentation 
     aFmt.TakeStr(nValue,rText);
     String aStr;
     aFmt.TakeUnitStr((MapUnit)ePresMetric,aStr);
+    rText += sal_Unicode(' ');
     rText+=aStr;
 
     if (ePres==SFX_ITEM_PRESENTATION_COMPLETE)

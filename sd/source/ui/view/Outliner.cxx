@@ -553,7 +553,6 @@ bool Outliner::StartSearchAndReplace (const SvxSearchItem* pSearchItem)
             else
                 mnStartPageIndex = (sal_uInt16)-1;
         }
-//IAccessibility2 Implementation 2009-----
     if ( Application::IsAccessibilityEnabled() )
     {
         SvxSearchDialog* pSearchDlg =
@@ -562,7 +561,6 @@ bool Outliner::StartSearchAndReplace (const SvxSearchItem* pSearchItem)
         pSearchDlg->SetDocWin( pViewShell->GetActiveWindow() );
         pSearchDlg->SetSrchFlag();
     }
-//-----IAccessibility2 Implementation 2009
         }
     else
         mpDrawDocument->GetDocSh()->SetWaitCursor( sal_False );
@@ -705,9 +703,9 @@ bool Outliner::SearchAndReplaceOnce (void)
     if( NULL == pOutlinerView || !GetEditEngine().HasView( &pOutlinerView->GetEditView() ) )
         return true;
 
-    ::boost::shared_ptr<ViewShell> pViewShell(mpWeakViewShell.lock());
+    ::boost::shared_ptr<ViewShell> pViewShell (mpWeakViewShell.lock());
 
-    if (pViewShell)
+    if( bool(pViewShell))
     {
         mpView = pViewShell->GetView();
         mpWindow = pViewShell->GetActiveWindow();
@@ -955,7 +953,7 @@ void Outliner::RestoreStartPosition (void)
     // Dont't restore when the view shell is not valid.
     ::boost::shared_ptr<ViewShell> pViewShell(mpWeakViewShell.lock());
 
-    if (pViewShell == NULL)
+    if( !bool(pViewShell))
         bRestore = false;
 
     if (bRestore)
@@ -1053,7 +1051,7 @@ void Outliner::ProvideNextTextObject (void)
                 PutTextIntoOutliner ();
 
                 ::boost::shared_ptr<ViewShell> pViewShell (mpWeakViewShell.lock());
-                if (pViewShell != NULL)
+                if( bool(pViewShell))
                     switch (meMode)
                     {
                         case SEARCH:

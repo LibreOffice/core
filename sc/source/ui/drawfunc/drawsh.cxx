@@ -454,7 +454,7 @@ void ScDrawShell::ExecuteAreaDlg( SfxRequest& rReq, sal_uInt16 nTabPage )
     AbstractSvxAreaTabDialog * pDlg = pFact->CreateSvxAreaTabDialog( pViewData->GetDialogParent(),
                                                                     &aNewAttr,
                                                             pViewData->GetDocument()->GetDrawLayer(),
-                                                            pView);
+                                                            true);
     DBG_ASSERT(pDlg, "Dialogdiet fail!");//CHINA001
 
     // #i74099# by default, the dialog deletes the current color table if a different one is loaded

@@ -66,10 +66,8 @@ public:
     */
     virtual bool cancel();
 
-//IAccessibility2 Implementation 2009-----
     //Solution: let mouse cursor move
     virtual void ForcePointer(const MouseEvent* pMEvt = NULL);
-//-----IAccessibility2 Implementation 2009
 protected:
     FuSelection (ViewShell* pViewSh,
         ::sd::Window* pWin,
@@ -102,7 +100,6 @@ private:
             position then NULL is returned.
     */
     SdrObject* pickObject (const basegfx::B2DPoint& rTestPoint);
-//IAccessibility2 Implementation 2009-----
   //Solution: Add Shift+UP/DOWN/LEFT/RIGHT key to move the position of insert point,
   //and SHIFT+ENTER key to decide the postion and draw the new insert point
     Point           maOldPoint;
@@ -110,7 +107,6 @@ private:
     /// bitfield
     bool            mbBeginInsertPoint : 1;
     bool            mbMovedToCenterPoint : 1;
-//-----IAccessibility2 Implementation 2009
 };
 
 } // end of namespace sd

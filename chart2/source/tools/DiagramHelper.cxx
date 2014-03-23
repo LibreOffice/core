@@ -92,7 +92,7 @@ DiagramHelper::tTemplateWithServiceName
     Sequence< OUString > aServiceNames( xChartTypeManager->getAvailableServiceNames());
     const sal_Int32 nLength = aServiceNames.getLength();
 
-    bool bHasPreferredTemplate = (rPreferredTemplateName.getLength() > 0);
+    bool bHasPreferredTemplate = !rPreferredTemplateName.isEmpty();
     bool bTemplateFound = false;
 
     if( bHasPreferredTemplate )

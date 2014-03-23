@@ -32,7 +32,7 @@ module com { module sun { module star { module auth {
 
 /** indicates an attempt was made to use an invalid source or target context.
 
-    @since OOo 1.1.2
+    @since OpenOffice 1.1.2
  */
 published exception InvalidContextException : ::com::sun::star::uno::Exception
 {

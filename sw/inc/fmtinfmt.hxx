@@ -38,15 +38,15 @@ class SW_DLLPUBLIC SwFmtINetFmt: public SfxPoolItem
 {
     friend class SwTxtINetFmt;
 
-    String aURL;                    // die URL
-    String aTargetFrame;            // in diesen Frame soll die URL
-    String aINetFmt;
-    String aVisitedFmt;
-    String aName;                   // Name des Links
-    SvxMacroTableDtor* pMacroTbl;
-    SwTxtINetFmt* pTxtAttr;         // mein TextAttribut
-    sal_uInt16 nINetId;
-    sal_uInt16 nVisitedId;
+    String msURL;                   // die URL
+    String msTargetFrame;           // in diesen Frame soll die URL
+    String msINetFmtName;
+    String msVisitedFmtName;
+    String msHyperlinkName;                 // Name des Links
+    SvxMacroTableDtor* mpMacroTbl;
+    SwTxtINetFmt* mpTxtAttr;            // mein TextAttribut
+    sal_uInt16 mnINetFmtId;
+    sal_uInt16 mnVisitedFmtId;
 public:
     POOLITEM_FACTORY()
     SwFmtINetFmt( const String& rURL, const String& rTarget );
@@ -69,34 +69,81 @@ public:
                                         sal_uInt8 nMemberId = 0 );
 
 
-    const SwTxtINetFmt* GetTxtINetFmt() const   { return pTxtAttr; }
-    SwTxtINetFmt* GetTxtINetFmt()               { return pTxtAttr; }
+    const SwTxtINetFmt* GetTxtINetFmt() const
+    {
+        return mpTxtAttr;
+    }
+    SwTxtINetFmt* GetTxtINetFmt()
+    {
+        return mpTxtAttr;
+    }
 
-    const String& GetValue() const          { return aURL; }
+    const String& GetValue() const
+    {
+        return msURL;
+    }
 
-    const String& GetName() const           { return aName; }
-    void SetName( const String& rNm )       { aName = rNm; }
+    const String& GetName() const
+    {
+        return msHyperlinkName;
+    }
+    void SetName( const String& rNm )
+    {
+        msHyperlinkName = rNm;
+    }
 
-    const String& GetTargetFrame() const    { return aTargetFrame; }
+    const String& GetTargetFrame() const
+    {
+        return msTargetFrame;
+    }
 
-    const String& GetINetFmt() const        { return aINetFmt; }
-    void SetINetFmt( const String& rNm )    { aINetFmt = rNm; }
+    void SetINetFmtAndId(
+            const String& rNm,
+            const sal_uInt16 nId )
+    {
+        msINetFmtName = rNm;
+        mnINetFmtId = nId;
+    }
 
-    const String& GetVisitedFmt() const     { return aVisitedFmt; }
-    void SetVisitedFmt( const String& rNm ) { aVisitedFmt = rNm; }
+    const String& GetINetFmt() const
+    {
+        return msINetFmtName;
+    }
 
-    sal_uInt16 GetINetFmtId() const             { return nINetId; }
-    void SetINetFmtId( sal_uInt16 nNew )        { nINetId = nNew; }
+    sal_uInt16 GetINetFmtId() const
+    {
+        return mnINetFmtId;
+    }
 
-    sal_uInt16 GetVisitedFmtId() const          { return nVisitedId; }
-    void SetVisitedFmtId( sal_uInt16 nNew )     { nVisitedId = nNew; }
+    void SetVisitedFmtAndId(
+            const String& rNm,
+            const sal_uInt16 nId )
+    {
+        msVisitedFmtName = rNm;
+        mnVisitedFmtId = nId;
+    }
+
+    const String& GetVisitedFmt() const
+    {
+        return msVisitedFmtName;
+    }
+
+    sal_uInt16 GetVisitedFmtId() const
+    {
+        return mnVisitedFmtId;
+    }
 
     // setze eine neue oder loesche die akt. MakroTabelle
     void SetMacroTbl( const SvxMacroTableDtor* pTbl = 0 );
-    const SvxMacroTableDtor* GetMacroTbl() const    { return pMacroTbl; }
+    const SvxMacroTableDtor* GetMacroTbl() const
+    {
+        return mpMacroTbl;
+    }
 
     // setze / erfrage ein Makro
-    void SetMacro( sal_uInt16 nEvent, const SvxMacro& rMacro );
+    void SetMacro(
+            sal_uInt16 nEvent,
+            const SvxMacro& rMacro );
     const SvxMacro* GetMacro( sal_uInt16 nEvent ) const;
 };
 

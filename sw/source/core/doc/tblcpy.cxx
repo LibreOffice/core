@@ -561,7 +561,7 @@ void lcl_CpyBox( const SwTable& rCpyTbl, const SwTableBox* pCpyBox,
 
     SwNodeIndex aSavePos( aInsIdx, -1 );
     if( pRg.get() )
-        pCpyDoc->CopyWithFlyInFly( *pRg, 0, aInsIdx, sal_False );
+        pCpyDoc->CopyWithFlyInFly( *pRg, 0, aInsIdx, NULL, sal_False );
     else
         pDoc->GetNodes().MakeTxtNode( aInsIdx, (SwTxtFmtColl*)pDoc->GetDfltTxtFmtColl() );
     aSavePos++;
@@ -1029,11 +1029,9 @@ sal_Bool SwTable::InsTable( const SwTable& rCpyTbl, const SwSelBoxes& rSelBoxes,
 
     // loesche die Frames
     aFndBox.SetTableLines( *this );
-    //IAccessibility2 Implementation 2009-----
     //Solution:Not dispose accessible table
     //aFndBox.DelFrms( *this );
     aFndBox.DelFrms( *this,sal_False );
-    //-----IAccessibility2 Implementation 2009
 
     if( 1 == rCpyTbl.GetTabSortBoxes().Count() )
     {

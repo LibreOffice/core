@@ -1553,7 +1553,7 @@ void CurrentPageSetter::operator() (bool)
 {
     FrameView* pFrameView = NULL;
 
-    if (mrBase.GetMainViewShell() != NULL)
+    if( bool(mrBase.GetMainViewShell()))
     {
         pFrameView = mrBase.GetMainViewShell()->GetFrameView();
     }

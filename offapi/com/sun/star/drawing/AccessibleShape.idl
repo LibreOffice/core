@@ -64,7 +64,7 @@ module com {  module sun {  module star {  module drawing {
     parent.  That is either the containing draw page or a group shape or a
     3D scene object.</p>
 
-     @since OOo 1.1.2
+     @since OpenOffice 1.1.2
 */
 published service AccessibleShape
 {

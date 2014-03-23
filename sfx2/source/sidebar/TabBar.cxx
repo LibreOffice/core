@@ -198,7 +198,7 @@ void TabBar::Layout (void)
         Theme::GetInteger(Theme::Int_TabItemHeight));
 
     // Place the menu button and the separator.
-    if (mpMenuButton != NULL)
+    if( bool(mpMenuButton))
     {
         mpMenuButton->SetPosSizePixel(
             Point(nX,nY),

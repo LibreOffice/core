@@ -504,7 +504,7 @@ void SwNewDBMgr::ImportFromConnection(  SwWrtShell* pSh )
 
                     ImportDBEntry(pSh);
                     if( 10 == ++i )
-                        pWait = new SwWait( *pSh->GetView().GetDocShell(), sal_True);
+                        pWait = new SwWait( *pSh->GetView().GetDocShell(), true );
 
                 } while(ToNextMergeRecord());
             }

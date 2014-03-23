@@ -217,7 +217,7 @@ namespace svt { namespace uno
     static ::rtl::OUString lcl_getHelpURL( const rtl::OString& sHelpId )
     {
         ::rtl::OUStringBuffer aBuffer;
-        ::rtl::OUString aTmp( sHelpId, sHelpId.getLength(), RTL_TEXTENCODING_UTF8 );
+        ::rtl::OUString aTmp( OStringToOUString( sHelpId, RTL_TEXTENCODING_UTF8 ));
         INetURLObject aHID( aTmp );
         if ( aHID.GetProtocol() == INET_PROT_NOT_VALID )
             aBuffer.appendAscii( INET_HID_SCHEME );

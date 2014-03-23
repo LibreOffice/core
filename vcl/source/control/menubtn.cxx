@@ -161,7 +161,9 @@ void MenuButton::MouseButtonDown( const MouseEvent& rMEvt )
     {
         // if the separated dropdown symbol is hit,
         // execute the popup immediately
-        if( ! ImplGetSymbolRect().IsInside( rMEvt.GetPosPixel() ) )
+        if ( ImplGetSymbolRect().IsEmpty() ||
+            ( PushButton::ImplHitTestPushButton( this, rMEvt.GetPosPixel() ) &&
+            rMEvt.GetPosPixel().X() < ImplGetSymbolRect().Left() ) )
         {
             if ( !mpMenuTimer )
             {

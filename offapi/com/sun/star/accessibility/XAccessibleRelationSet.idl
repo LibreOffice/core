@@ -49,7 +49,7 @@ module com { module sun { module star { module accessibility {
     <member>remove</member>.  The other methods have been renamed to achieve
     a geater conformance with the other accessibility interfaces.</p>
 
-    @since OOo 1.1.2
+    @since OpenOffice 1.1.2
 */
 published interface XAccessibleRelationSet : ::com::sun::star::uno::XInterface
 {

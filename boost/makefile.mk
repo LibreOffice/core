@@ -34,21 +34,19 @@ TARGET=ooo_boost
 
 .INCLUDE :	settings.mk
 
-# force patched boost for sunpro CC
-# to workaround opt bug when compiling with -xO3
-.IF "$(SYSTEM_BOOST)" == "YES" && ("$(OS)"!="SOLARIS" || "$(COM)"=="GCC")
+.IF "$(SYSTEM_BOOST)" == "YES"
+
 all:
     @echo "An already available installation of boost should exist on your system."        
     @echo "Therefore the version provided here does not need to be built in addition."
-.ELSE			# "$(SYSTEM_BOOST)" == "YES" && ("$(OS)"!="SOLARIS" || "$(COM)"=="GCC")
+
+.ELSE # "$(SYSTEM_BOOST)" == "YES"
 
 # --- Files --------------------------------------------------------
 
-TARFILE_NAME=boost_1_48_0
-TARFILE_MD5=d1e9a7a7f532bb031a3c175d86688d95
-PATCH_FILES=\
-    $(TARFILE_NAME).patch \
-    boost_freebsd.patch
+TARFILE_NAME=boost_1_55_0
+TARFILE_MD5=d6eef4b4cacb2183f2bf265a5a03a354
+PATCH_FILES= $(TARFILE_NAME).patch
 .IF "$(GUI)"=="OS2"
 PATCH_FILES+=boost-os2.patch
 .ENDIF
@@ -93,6 +91,7 @@ $(PACKAGE_DIR)$/$(NORMALIZE_FLAG_FILE) : $(PACKAGE_DIR)$/$(BUILD_FLAG_FILE)
     @$(GNUCOPY) -R $(PACKAGE_DIR)$/$(TARFILE_NAME)$/boost$/concept $(INCCOM)$/$(PRJNAME)
     @$(GNUCOPY) -R $(PACKAGE_DIR)$/$(TARFILE_NAME)$/boost$/concept_check $(INCCOM)$/$(PRJNAME)
     @$(GNUCOPY) -R $(PACKAGE_DIR)$/$(TARFILE_NAME)$/boost$/config $(INCCOM)$/$(PRJNAME)
+    @$(GNUCOPY) -R $(PACKAGE_DIR)$/$(TARFILE_NAME)$/boost$/container $(INCCOM)$/$(PRJNAME)
     @$(GNUCOPY) -R $(PACKAGE_DIR)$/$(TARFILE_NAME)$/boost$/date_time $(INCCOM)$/$(PRJNAME)
     @$(GNUCOPY) -R $(PACKAGE_DIR)$/$(TARFILE_NAME)$/boost$/detail $(INCCOM)$/$(PRJNAME)
     @$(GNUCOPY) -R $(PACKAGE_DIR)$/$(TARFILE_NAME)$/boost$/dynamic_bitset $(INCCOM)$/$(PRJNAME)
@@ -128,6 +127,7 @@ $(PACKAGE_DIR)$/$(NORMALIZE_FLAG_FILE) : $(PACKAGE_DIR)$/$(BUILD_FLAG_FILE)
     @$(GNUCOPY) -R $(PACKAGE_DIR)$/$(TARFILE_NAME)$/boost$/optional $(INCCOM)$/$(PRJNAME)
     @$(GNUCOPY) -R $(PACKAGE_DIR)$/$(TARFILE_NAME)$/boost$/parameter $(INCCOM)$/$(PRJNAME)
     @$(GNUCOPY) -R $(PACKAGE_DIR)$/$(TARFILE_NAME)$/boost$/pending $(INCCOM)$/$(PRJNAME)
+    @$(GNUCOPY) -R $(PACKAGE_DIR)$/$(TARFILE_NAME)$/boost$/predef $(INCCOM)$/$(PRJNAME)
     @$(GNUCOPY) -R $(PACKAGE_DIR)$/$(TARFILE_NAME)$/boost$/phoenix $(INCCOM)$/$(PRJNAME)
     @$(GNUCOPY) -R $(PACKAGE_DIR)$/$(TARFILE_NAME)$/boost$/polygon $(INCCOM)$/$(PRJNAME)
     @$(GNUCOPY) -R $(PACKAGE_DIR)$/$(TARFILE_NAME)$/boost$/pool $(INCCOM)$/$(PRJNAME)
@@ -167,4 +167,6 @@ $(PACKAGE_DIR)$/$(NORMALIZE_FLAG_FILE) : $(PACKAGE_DIR)$/$(BUILD_FLAG_FILE)
 normalize: $(PACKAGE_DIR)$/$(NORMALIZE_FLAG_FILE)
 
 $(PACKAGE_DIR)$/$(PREDELIVER_FLAG_FILE) : normalize
-.ENDIF			# "$(SYSTEM_BOOST)" == "YES" && ("$(OS)"!="SOLARIS" || "$(COM)"=="GCC")
+
+.ENDIF # "$(SYSTEM_BOOST)" == "YES"
+

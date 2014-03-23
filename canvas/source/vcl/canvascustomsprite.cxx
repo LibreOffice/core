@@ -81,7 +81,14 @@ namespace vclcanvas
         pBackBuffer->setSize( aSize );
 
         // create mask backbuffer, with one bit color depth #122485# use full depth to avoid problem with 1bit depth, get AAed masks
-        BackBufferSharedPtr pBackBufferMask( new BackBuffer( rOutDevProvider->getOutDev() ) ); // , true ) ); // #122485#
+        BackBufferSharedPtr pBackBufferMask(
+#if defined LINUX || defined FREEBSD || defined NETBSD
+            // #122485# no 1bit buffers on Linuxes, 1bit Vdev seems to work no longer
+            new BackBuffer( rOutDevProvider->getOutDev() ) );
+#else
+            // 1bit mask buffer for all others
+            new BackBuffer( rOutDevProvider->getOutDev(), true ) );
+#endif
         pBackBufferMask->setSize( aSize );
 
         // TODO(F1): Implement alpha vdev (could prolly enable

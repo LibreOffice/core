@@ -103,9 +103,7 @@
 #include <unotools/fltrcfg.hxx>
 #include <svtools/htmlcfg.hxx>
 #include <sfx2/fcontnr.hxx>
-//IAccessibility2 Implementation 2009-----
 #include <sfx2/viewfrm.hxx>
-//-----IAccessibility2 Implementation 2009
 #include <sfx2/objface.hxx>
 #include <comphelper/storagehelper.hxx>
 
@@ -244,7 +242,7 @@ sal_Bool SwDocShell::ConvertFrom( SfxMedium& rMedium )
       return sal_False; // #129881# return if no reader is found
     SotStorageRef pStg=pRead->getSotStorageRef(); // #i45333# save sot storage ref in case of recursive calls
 
-    SwWait aWait( *this, sal_True );
+    SwWait aWait( *this, true );
 
         // SfxProgress unterdruecken, wenn man Embedded ist
     SW_MOD()->SetEmbeddedLoadSave(
@@ -307,7 +305,7 @@ sal_Bool SwDocShell::Save()
     //#i3370# remove quick help to prevent saving of autocorrection suggestions
     if(pView)
         pView->GetEditWin().StopQuickHelp();
-    SwWait aWait( *this, sal_True );
+    SwWait aWait( *this, true );
 
     CalcLayoutForOLEObjects();  // format for OLE objets
     // --> OD 2006-03-17 #i62875#
@@ -402,7 +400,6 @@ sal_Bool SwDocShell::SaveAs( SfxMedium& rMedium )
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLog, "SW", "JP93722",  "SwDocShell::SaveAs" );
 
-    //IAccessibility2 Implementation 2009-----
     pDoc->setDocAccTitle(String());
     SfxViewFrame* pFrame1 = SfxViewFrame::GetFirst( this );
     if (pFrame1)
@@ -417,8 +414,7 @@ sal_Bool SwDocShell::SaveAs( SfxMedium& rMedium )
             }
         }
     }
-    //-----IAccessibility2 Implementation 2009
-    SwWait aWait( *this, sal_True );
+    SwWait aWait( *this, true );
     //#i3370# remove quick help to prevent saving of autocorrection suggestions
     if(pView)
         pView->GetEditWin().StopQuickHelp();
@@ -748,7 +744,7 @@ sal_Bool SwDocShell::ConvertTo( SfxMedium& rMedium )
     //Keine View also das ganze Dokument!
     if ( pWrtShell )
     {
-        SwWait aWait( *this, sal_True );
+        SwWait aWait( *this, true );
         // --> OD 2009-12-31 #i106906#
         const sal_Bool bFormerLockView = pWrtShell->IsViewLocked();
         pWrtShell->LockView( sal_True );
@@ -1283,7 +1279,6 @@ uno::Reference< frame::XController >
 /* -----------------------------12.02.01 12:08--------------------------------
 
  ---------------------------------------------------------------------------*/
-//IAccessibility2 Implementation 2009-----
 void SwDocShell::setDocAccTitle( const String& rTitle )
 {
     if (pDoc )
@@ -1318,7 +1313,6 @@ sal_Bool SwDocShell::getDocReadOnly() const
 
     return sal_False;
 }
-//-----IAccessibility2 Implementation 2009
 
 static const char* s_EventNames[] =
 {

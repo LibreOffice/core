@@ -40,9 +40,7 @@
 #include "editsrc.hxx"
 #include "dociter.hxx"
 #include "cell.hxx"
-//IAccessibility2 Implementation 2009-----
 #include "validat.hxx"
-//-----IAccessibility2 Implementation 2009
 #ifndef _UTL_ACCESSIBLESTATESETHELPER_HXX
 #include <unotools/accessiblestatesethelper.hxx>
 #endif
@@ -60,9 +58,7 @@
 #include <comphelper/sequence.hxx>
 #include <float.h>
 
-//IAccessibility2 Implementation 2009-----
 #include "AccessibleSpreadsheet.hxx"
-//-----IAccessibility2 Implementation 2009
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::accessibility;
 
@@ -245,7 +241,6 @@ uno::Reference<XAccessibleStateSet> SAL_CALL
         pStateSet->AddState(AccessibleStateType::DEFUNC);
     else
     {
-//IAccessibility2 Implementation 2009-----
         if (IsFormulaMode())
         {
             pStateSet->AddState(AccessibleStateType::ENABLED);
@@ -263,7 +258,6 @@ uno::Reference<XAccessibleStateSet> SAL_CALL
                 pStateSet->AddState(AccessibleStateType::VISIBLE);
             return pStateSet;
         }
-//-----IAccessibility2 Implementation 2009
         if (IsEditable(xParentStates))
         {
             pStateSet->AddState(AccessibleStateType::EDITABLE);
@@ -272,9 +266,7 @@ uno::Reference<XAccessibleStateSet> SAL_CALL
         pStateSet->AddState(AccessibleStateType::ENABLED);
         pStateSet->AddState(AccessibleStateType::MULTI_LINE);
         pStateSet->AddState(AccessibleStateType::MULTI_SELECTABLE);
-//IAccessibility2 Implementation 2009-----
         pStateSet->AddState(AccessibleStateType::FOCUSABLE);
-//-----IAccessibility2 Implementation 2009
         if (IsOpaque(xParentStates))
             pStateSet->AddState(AccessibleStateType::OPAQUE);
         pStateSet->AddState(AccessibleStateType::SELECTABLE);
@@ -371,7 +363,6 @@ sal_Bool ScAccessibleCell::IsOpaque(
 
 sal_Bool ScAccessibleCell::IsSelected()
 {
-//IAccessibility2 Implementation 2009-----
     if (IsFormulaMode())
     {
         const ScAccessibleSpreadsheet *pSheet =static_cast<const ScAccessibleSpreadsheet*>(mxParent.get());
@@ -381,7 +372,6 @@ sal_Bool ScAccessibleCell::IsSelected()
         }
         return sal_False;
     }
-//-----IAccessibility2 Implementation 2009
     sal_Bool bResult(sal_False);
     if (mpViewShell && mpViewShell->GetViewData())
     {
@@ -401,12 +391,10 @@ ScDocument* ScAccessibleCell::GetDocument(ScTabViewShell* pViewShell)
 
 ::std::auto_ptr< SvxEditSource > ScAccessibleCell::CreateEditSource(ScTabViewShell* pViewShell, ScAddress aCell, ScSplitPos eSplitPos)
 {
-//IAccessibility2 Implementation 2009-----
     if (IsFormulaMode())
     {
         return ::std::auto_ptr< SvxEditSource >();
     }
-//-----IAccessibility2 Implementation 2009
     ::std::auto_ptr < ScAccessibleTextData > pAccessibleCellTextData
         ( new ScAccessibleCellTextData( pViewShell, aCell, eSplitPos, this ) );
     ::std::auto_ptr< SvxEditSource > pEditSource (new ScAccessibilityEditSource(pAccessibleCellTextData));
@@ -497,7 +485,6 @@ void ScAccessibleCell::AddRelation(const ScRange& rRange,
         pRelationSet->AddRelation(aRelation);
     }
 }
-//IAccessibility2 Implementation 2009-----
 ::rtl::OUString ReplaceOneChar(::rtl::OUString oldOUString, ::rtl::OUString replacedChar, ::rtl::OUString replaceStr)
 {
     int iReplace = -1;
@@ -591,7 +578,6 @@ sal_Bool ScAccessibleCell::IsDropdown()
     sal_uInt16 nPosX = maCellAddress.Col();
     sal_uInt16 nPosY = sal_uInt16(maCellAddress.Row());
     sal_uInt16 nTab = maCellAddress.Tab();
-    //IAccessibility2 Implementation 2009-----
     sal_uInt32 nValidation = static_cast< const SfxUInt32Item* >( mpDoc->GetAttr( nPosX, nPosY, nTab, ATTR_VALIDDATA ) )->GetValue();
     if( nValidation )
     {
@@ -599,7 +585,6 @@ sal_Bool ScAccessibleCell::IsDropdown()
         if( pData && pData->HasSelectionList() )
             return sal_True;
     }
-    //-----IAccessibility2 Implementation 2009
     ScMergeFlagAttr* pAttr;
     pAttr = (ScMergeFlagAttr*)mpDoc->GetAttr( nPosX, nPosY, nTab, ATTR_MERGE_FLAG );
     if( pAttr->HasAutoFilter() )
@@ -639,4 +624,3 @@ sal_Bool ScAccessibleCell::IsDropdown()
     }
     return sal_False;
 }
-//-----IAccessibility2 Implementation 2009

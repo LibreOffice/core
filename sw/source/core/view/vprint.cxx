@@ -667,10 +667,7 @@ sal_Bool ViewShell::IsAnyFieldInDoc() const
         {
             const SwFmtFld* pFmtFld = (SwFmtFld*)pItem;
             const SwTxtFld* pTxtFld = pFmtFld->GetTxtFld();
-            // do not include postits in field check
-            const SwField* pFld = pFmtFld->GetField();
-            if( pTxtFld && pTxtFld->GetTxtNode().GetNodes().IsDocNodes()
-                && (pFld->Which() != RES_POSTITFLD))
+            if( pTxtFld && pTxtFld->GetTxtNode().GetNodes().IsDocNodes() )
             {
                 return sal_True;
             }

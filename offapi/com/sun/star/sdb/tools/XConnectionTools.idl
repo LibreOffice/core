@@ -62,7 +62,7 @@ published interface XDataSourceMetaData;
     <p>Note that nearly all functionality provided by this interface is also
     available by other means, it's only provided here for convenience purposes.</p>
 
-    @since OOo 2.0.4
+    @since OpenOffice 2.0.4
 */
 published interface XConnectionTools
 {

@@ -712,7 +712,7 @@ Reference< chart2::data::XDataSequence > SAL_CALL InternalDataProvider::createDa
                             : m_aInternalData.getRowCount()) - 1;
         return lcl_createDataSequenceAndAddToMap( OUString::valueOf( nIndex ));
     }
-    else if( aRangeRepresentation.getLength())
+    else if( !aRangeRepresentation.isEmpty() )
     {
         // data
         sal_Int32 nIndex = aRangeRepresentation.toInt32();

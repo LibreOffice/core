@@ -49,7 +49,7 @@ module com { module sun { module star { module document {
     from which the data should be exported. After that, the export is started
     by calling the <method>XFilter::filter</method> method.</p>
 
-    @since OOo 2.0
+    @since OpenOffice 2.0
  */
 published service XMLBasicExporter
 {

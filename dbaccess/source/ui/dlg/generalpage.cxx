@@ -147,8 +147,8 @@ namespace dbaui
     //-------------------------------------------------------------------------
     OGeneralPage::~OGeneralPage()
     {
-        m_pDatasourceType.reset( NULL );
-        m_pLB_DocumentList.reset( NULL );
+        m_pDatasourceType.reset();
+        m_pLB_DocumentList.reset();
     }
 
     //-------------------------------------------------------------------------

@@ -36,6 +36,10 @@ CDEFS+=-Zm300
 
 # --- Files --------------------------------------------------------
 
+.IF "$(GUI)" == "OS2"
+SHL1STDLIBS+= $(SALLIB) $(CPPULIB)
+.ENDIF
+
 # collator data library
 SHL1TARGET=$(TARGET)
 SHL1IMPLIB=i$(SHL1TARGET)

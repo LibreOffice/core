@@ -35,7 +35,7 @@ module com { module sun { module star { module ldap {
   The actual LDAP error code is provided for more refined
   error management.
 
-     @since OOo 1.1.2
+     @since OpenOffice 1.1.2
   */
 published exception LdapGenericException : ::com::sun::star::uno::Exception
 {

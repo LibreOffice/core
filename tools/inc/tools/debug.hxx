@@ -345,23 +345,11 @@ TOOLS_DLLPUBLIC void DbgOutTypef( sal_uInt16 nOutType, const sal_Char* pFStr, ..
 TOOLS_DLLPUBLIC void DbgOutf( const sal_Char* pFStr, ... );
 TOOLS_DLLPUBLIC void ImpDbgOutfBuf( sal_Char* pBuf, const sal_Char* pFStr, ... );
 
-inline void DbgTrace( const sal_Char* pMsg,
-                      const sal_Char* pFile = NULL, sal_uInt16 nLine = 0 )
-{
-    DbgOut( pMsg, DBG_OUT_TRACE, pFile, nLine );
-}
+#define DbgTrace( msg) do{ DbgOut( msg, DBG_OUT_TRACE, __FILE__, __LINE__ ); } while(0)
 
-inline void DbgWarning( const sal_Char* pMsg,
-                        const sal_Char* pFile = NULL, sal_uInt16 nLine = 0 )
-{
-    DbgOut( pMsg, DBG_OUT_WARNING, pFile, nLine );
-}
+#define DbgWarning( msg) do{ DbgOut( msg, DBG_OUT_WARNING, __FILE__, __LINE__ ); } while(0)
 
-inline void DbgError( const sal_Char* pMsg,
-                      const sal_Char* pFile = NULL, sal_uInt16 nLine = 0 )
-{
-    DbgOut( pMsg, DBG_OUT_ERROR, pFile, nLine );
-}
+#define DbgError( msg) do{ DbgOut( msg, DBG_OUT_ERROR, __FILE__, __LINE__ ); } while(0)
 
 // --- Dbg-Test-Functions ---
 
@@ -473,8 +461,7 @@ do                                                  \
     {                                               \
         if ( !( sCon ) )                            \
         {                                           \
-            DbgWarning( aWarning, __FILE__,         \
-                        __LINE__ );                 \
+            DbgWarning( aWarning);                  \
         }                                           \
     }                                               \
 } while(0)
@@ -486,8 +473,7 @@ do                                                  \
     {                                               \
         if ( !( sCon ) )                            \
         {                                           \
-            DbgError( aError,                       \
-                      __FILE__, __LINE__ );         \
+            DbgError( aError);                      \
         }                                           \
     }                                               \
 } while(0)
@@ -498,8 +484,7 @@ do                                              \
 {                                               \
     if ( !( sCon ) )                            \
     {                                           \
-        DbgError( aError,                       \
-                  __FILE__, __LINE__ );         \
+        DbgError( aError);                      \
     }                                           \
 } while(0)
 #else
@@ -561,7 +546,7 @@ do                                                  \
 do                                                  \
 {                                                   \
     if ( DbgIsTraceOut() )                          \
-        DbgTrace( aTrace, __FILE__, __LINE__ );     \
+        DbgTrace( aTrace );                         \
 } while(0)
 
 #define DBG_WARNING( aWarning )                     \
@@ -619,7 +604,7 @@ do                                                  \
 do                                                  \
 {                                                   \
     if ( DbgIsWarningOut() )                        \
-        DbgWarning( aWarning, __FILE__, __LINE__ ); \
+        DbgWarning( aWarning );                     \
 } while(0)
 
 #define DBG_ERROR( aError )                         \
@@ -677,7 +662,7 @@ do                                                  \
 do                                                  \
 {                                                   \
     if ( DbgIsErrorOut() )                          \
-        DbgError( aError, __FILE__, __LINE__ );     \
+        DbgError( aError );                         \
 } while(0)
 
 #define DBG_TESTSOLARMUTEX()                \

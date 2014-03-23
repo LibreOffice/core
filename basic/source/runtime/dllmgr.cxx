@@ -577,7 +577,7 @@ SbError call(
 SbError getProcData(HMODULE handle, rtl::OUString const & name, ProcData * proc)
 {
     OSL_ASSERT(proc != 0);
-    if (name.getLength() != 0 && name[0] == '@') { //TODO: "@" vs. "#"???
+    if ( !name.isEmpty() && name[0] == '@' ) { //TODO: "@" vs. "#"???
         sal_Int32 n = name.copy(1).toInt32(); //TODO: handle bad input
         if (n <= 0 || n > 0xFFFF) {
             return ERRCODE_BASIC_BAD_ARGUMENT; //TODO: more specific errcode?

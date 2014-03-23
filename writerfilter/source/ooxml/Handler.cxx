@@ -46,7 +46,7 @@ void OOXMLFootnoteHandler::attribute(Id name, Value & val)
     switch (name)
     {
     case NS_ooxml::LN_CT_FtnEdnRef_id:
-        mpFastContext->resolveFootnote(val.getString());
+        mpFastContext->resolveFootnote(val.getInt());
         break;
     default:
         break;
@@ -74,7 +74,7 @@ void OOXMLEndnoteHandler::attribute(Id name, Value & val)
     switch (name)
     {
     case NS_ooxml::LN_CT_FtnEdnRef_id:
-        mpFastContext->resolveEndnote(val.getString());
+        mpFastContext->resolveEndnote(val.getInt());
         break;
     default:
         break;
@@ -102,7 +102,7 @@ void OOXMLCommentHandler::attribute(Id name, Value & val)
     switch (name)
     {
     case NS_ooxml::LN_CT_Markup_id:
-        mpFastContext->resolveComment(val.getString());
+        mpFastContext->resolveComment(val.getInt());
         break;
     default:
         ;

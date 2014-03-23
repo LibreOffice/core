@@ -699,7 +699,7 @@ void MasterPageContainer::Implementation::UpdatePreviewSizePixel (void)
     MasterPageContainerType::const_iterator iDescriptor;
     MasterPageContainerType::const_iterator iContainerEnd(maContainer.end());
     for (iDescriptor=maContainer.begin(); iDescriptor!=iContainerEnd; ++iDescriptor)
-        if (*iDescriptor!=NULL && (*iDescriptor)->mpMasterPage != NULL)
+        if( bool(*iDescriptor) && (*iDescriptor)->mpMasterPage != NULL)
         {
             const basegfx::B2DVector& rPageScale = (*iDescriptor)->mpMasterPage->GetPageScale();
             nWidth = basegfx::fround(rPageScale.getX());

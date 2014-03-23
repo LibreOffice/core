@@ -792,9 +792,7 @@ public:
     bool IsNotifiable() const;
 
     void SetListRestart( bool bRestart );
-    // --> OD 2005-11-02 #i51089 - TUNING#
     bool IsListRestart() const;
-    // <--
 
     void SetAttrListRestartValue( SwNumberTree::tSwNumTreeNumber nNum );
     bool HasAttrListRestartValue() const;

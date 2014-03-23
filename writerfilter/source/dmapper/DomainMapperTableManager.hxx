@@ -30,6 +30,7 @@
 #include <StyleSheetTable.hxx>
 #include <com/sun/star/text/XTextRange.hpp>
 #include <vector>
+#include <stack>
 
 namespace writerfilter {
 namespace dmapper {
@@ -38,23 +39,24 @@ class DomainMapperTableManager : public DomainMapperTableManager_Base_t
 {
     typedef boost::shared_ptr< std::vector<sal_Int32> > IntVectorPtr;
 
-    sal_uInt32      m_nRow;
-    sal_uInt32      m_nCell;
-    sal_uInt32      m_nGridSpan;
-    sal_uInt32      m_nCellBorderIndex; //borders are provided for all cells and need counting
-    sal_Int32       m_nHeaderRepeat; //counter of repeated headers - if == -1 then the repeating stops
-    sal_Int32       m_nTableWidth; //might be set directly or has to be calculated from the column positions
+    ::std::stack< sal_uInt32 > m_nCellCounterForCurrentRow;
+    sal_uInt32 m_nGridSpanOfCurrentCell;
+    ::std::stack< sal_uInt32 > m_nCurrentCellBorderIndex; //borders are provided for all cells and need counting
+    ::std::stack< sal_Int32 > m_nCurrentHeaderRepeatCount; //counter of repeated headers - if == -1 then the repeating stops
+    ::std::stack< sal_Int32 > m_nTableWidthOfCurrentTable; //might be set directly or has to be calculated from the column positions
     bool            m_bOOXML;
-    ::rtl::OUString m_sTableStyleName;
-    PropertyMapPtr  m_pTableStyleTextProperies;
 
-    ::std::vector< IntVectorPtr >  m_aTableGrid;
-    ::std::vector< IntVectorPtr >  m_aGridSpans;
+    ::std::stack< IntVectorPtr >  m_aTableGrid;
+    ::std::stack< IntVectorPtr >  m_aGridSpans;
 
     TablePropertiesHandler   *m_pTablePropsHandler;
     PropertyMapPtr            m_pStyleProps;
 
-    virtual void clearData();
+    void pushStackOfMembers();
+    void popStackOfMembers();
+
+    IntVectorPtr getCurrentGrid();
+    IntVectorPtr getCurrentSpans( );
 
 public:
 
@@ -63,22 +65,15 @@ public:
 
     // use this method to avoid adding the properties for the table
     // but in the provided properties map.
-    inline void SetStyleProperties( PropertyMapPtr pProperties ) { m_pStyleProps = pProperties; };
+    void SetStyleProperties( PropertyMapPtr pProperties );
 
     virtual bool sprm(Sprm & rSprm);
 
-    virtual void startLevel( );
-    virtual void endLevel( );
+    virtual void startLevel();
+    virtual void endLevel();
 
     virtual void endOfCellAction();
     virtual void endOfRowAction();
-
-    IntVectorPtr getCurrentGrid( );
-    IntVectorPtr getCurrentSpans( );
-
-    const ::rtl::OUString& getTableStyleName() const { return m_sTableStyleName; }
-    /// copy the text properties of the table style and its parent into pContext
-    void    CopyTextProperties(PropertyMapPtr pContext, StyleSheetTablePtr pStyleSheetTable);
 
     inline virtual void cellProps(TablePropertyMapPtr pProps)
     {

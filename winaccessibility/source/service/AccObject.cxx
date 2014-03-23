@@ -182,13 +182,11 @@ void  AccObject::UpdateName( )
 
     if( ( TEXT_FRAME == m_accRole   ) && ( m_pParentObj !=NULL )&& ( SCROLL_PANE == m_pParentObj -> m_accRole ) )
         m_pIMAcc->Put_XAccName( m_pParentObj->m_xAccContextRef->getAccessibleName().getStr() );
-    //IAccessibility2 Implementation 2009-----
     if ( PARAGRAPH == m_accRole)
     {
         ::rtl::OUString emptyStr = ::rtl::OUString::createFromAscii("");
         m_pIMAcc->Put_XAccName(emptyStr.getStr());
     }
-    //-----IAccessibility2 Implementation 2009
     else
         m_pIMAcc->Put_XAccName(m_xAccContextRef->getAccessibleName().getStr());
 
@@ -314,7 +312,6 @@ void  AccObject::SetValue( Any pAny )
         m_pIMAcc->Put_XAccValue( val.getStr() );
         break;
     case TREE_ITEM:
-    //IAccessibility2 Implementation 2009-----
     //case CHECK_BOX:   //Commented by Li Xing to disable the value for general checkbox
     case COMBO_BOX:
     case TABLE_CELL:
@@ -326,7 +323,6 @@ void  AccObject::SetValue( Any pAny )
     case CHECK_BOX:
         if( ( m_pParentObj !=NULL ) && (TREE == m_pParentObj->m_accRole || TREE_ITEM == m_pParentObj->m_accRole ))
             m_pIMAcc->Put_XAccValue( GetMAccessibleValueFromAny(pAny).getStr() );
-    //-----IAccessibility2 Implementation 2009
         break;
     default:
         break;

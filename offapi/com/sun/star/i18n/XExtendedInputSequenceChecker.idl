@@ -40,7 +40,7 @@ module com { module sun { module star { module i18n {
     <type scope="::com::sun::star::i18n">XInputSequenceChecker</type> and
     provides additional functionality to correct input sequence.</p>
 
-     @since OOo 2.0.1
+     @since OpenOffice 2.0.1
  */
 published interface XExtendedInputSequenceChecker : ::com::sun::star::i18n::XInputSequenceChecker
 {

@@ -199,7 +199,7 @@ published service SpreadsheetDocumentSettings
 
     /** specifies whether the document data are already loaded.
 
-        @since OOo 3.0
+        @since OpenOffice 3.0
      */
     [optional, property] boolean IsLoaded;
 
@@ -207,7 +207,7 @@ published service SpreadsheetDocumentSettings
 
     /** specifies whether the undo command is enabled.
 
-        @since OOo 3.0
+        @since OpenOffice 3.0
      */
     [optional, property] boolean IsUndoEnabled;
 
@@ -216,7 +216,7 @@ published service SpreadsheetDocumentSettings
     /** specifies whether the automatic adjustment of the row height is
         enabled.
 
-        @since OOo 3.0
+        @since OpenOffice 3.0
      */
     [optional, property] boolean IsAdjustHeightEnabled;
 
@@ -224,7 +224,7 @@ published service SpreadsheetDocumentSettings
 
     /** specifies whether the automatic execution of links is enabled.
 
-        @since OOo 3.0
+        @since OpenOffice 3.0
      */
     [optional, property] boolean IsExecuteLinkEnabled;
 
@@ -232,7 +232,7 @@ published service SpreadsheetDocumentSettings
 
     /** contains the reference device used for formatting the document.
 
-        @since OOo 3.0
+        @since OpenOffice 3.0
      */
     [readonly, optional, property] com::sun::star::awt::XDevice ReferenceDevice;
 

@@ -76,6 +76,10 @@ struct SC_DLLPUBLIC ScSingleRefData        // Single reference (one address) int
 
     // No default ctor, because used in ScRawToken union, set InitFlags!
     inline  void InitFlags() { bFlags = 0; }    // all FALSE
+
+    // #123870# Make it possible to init members to some defined values
+    inline void InitMembers() { nRow = nRelRow = 0; nCol = nRelCol = 0; nTab = nRelTab = 0; }
+
     // InitAddress: InitFlags and set address
     inline  void InitAddress( const ScAddress& rAdr );
     inline  void InitAddress( SCCOL nCol, SCROW nRow, SCTAB nTab );
@@ -157,6 +161,14 @@ struct ScComplexRefData         // Complex reference (a range) into the sheet
 
     inline  void InitFlags()
         { Ref1.InitFlags(); Ref2.InitFlags(); }
+
+    // #123870# Make it possible to init members to some defined values
+    inline void InitMembers()
+    {
+        Ref1.InitMembers();
+        Ref2.InitMembers();
+    }
+
     inline  void InitRange( const ScRange& rRange )
         {
             Ref1.InitAddress( rRange.aStart );

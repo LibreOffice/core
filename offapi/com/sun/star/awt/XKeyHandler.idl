@@ -42,7 +42,7 @@ module com {  module sun {  module star {  module awt {
     handlers of the broadcaster, and a following handling by the
     broadcaster will not take place.
 
-    @since OOo 1.1.2
+    @since OpenOffice 1.1.2
 */
 published interface XKeyHandler : ::com::sun::star::lang::XEventListener
 {

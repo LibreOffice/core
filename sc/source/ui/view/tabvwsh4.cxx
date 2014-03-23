@@ -93,9 +93,7 @@
 #include "sc.hrc" //CHINA001
 #include "scabstdlg.hxx" //CHINA001
 #include "externalrefmgr.hxx"
-//IAccessibility2 Implementation 2009-----
 #include <svx/fmpage.hxx>
-//-----IAccessibility2 Implementation 2009
 
 void ActivateOlk( ScViewData* pViewData );
 void DeActivateOlk( ScViewData* pViewData );
@@ -115,9 +113,7 @@ sal_uInt16 ScTabViewShell::nInsObjCtrlState = SID_INSERT_DIAGRAM;
 void __EXPORT ScTabViewShell::Activate(sal_Bool bMDI)
 {
     SfxViewShell::Activate(bMDI);
-//IAccessibility2 Implementation 2009-----
     bIsActive = sal_True;
-//-----IAccessibility2 Implementation 2009
     //  hier kein GrabFocus, sonst gibt's Probleme wenn etwas inplace editiert wird!
 
     if ( bMDI )
@@ -245,9 +241,7 @@ void __EXPORT ScTabViewShell::Deactivate(sal_Bool bMDI)
     }
 
     SfxViewShell::Deactivate(bMDI);
-//IAccessibility2 Implementation 2009-----
     bIsActive = sal_False;
-//-----IAccessibility2 Implementation 2009
     ScInputHandler* pHdl = SC_MOD()->GetInputHdl(this);
 
     if( bMDI )
@@ -1486,7 +1480,6 @@ sal_Bool ScTabViewShell::TabKeyInput(const KeyEvent& rKEvt)
         }
     }
 
-//IAccessibility2 Implementation 2009-----
     // use Ctrl+Alt+Shift+arrow keys to move the cursor in cells
     // while keeping the last selection
     if ( !bUsed && bAlt && bControl && bShift)
@@ -1531,7 +1524,6 @@ sal_Bool ScTabViewShell::TabKeyInput(const KeyEvent& rKEvt)
             bUsed = sal_True;
         }
     }
-//-----IAccessibility2 Implementation 2009
     if (bHideCursor)
         ShowAllCursors();
 
@@ -1595,7 +1587,8 @@ bool __EXPORT ScTabViewShell::KeyInput( const KeyEvent &rKeyEvent )
     /*bChartDlgIsEdit(sal_False),*/     \
     bChartAreaValid(sal_False),     \
     nCurRefDlgId(0),            \
-    pAccessibilityBroadcaster(NULL)
+    pAccessibilityBroadcaster(NULL),    \
+    bForceFocusOnCurCell(sal_False)
 
 
 //------------------------------------------------------------------
@@ -1607,9 +1600,7 @@ void ScTabViewShell::Construct( sal_uInt8 nForceDesignMode )
     ScDocument* pDoc = pDocSh->GetDocument();
 
     bReadOnly = pDocSh->IsReadOnly();
-//IAccessibility2 Implementation 2009-----
     bIsActive = sal_False;
-//-----IAccessibility2 Implementation 2009
 
     SetName( String::CreateFromAscii(RTL_CONSTASCII_STRINGPARAM("View")) ); // fuer SBX
     Color aColBlack( COL_BLACK );
@@ -2035,7 +2026,6 @@ void ScTabViewShell::GetTbxState( SfxItemSet& rSet )
 
 
 
-//IAccessibility2 Implementation 2009-----
 const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > & ScTabViewShell::GetForms() const
 {
     if( !pFormShell || !pFormShell->GetCurPage() ){
@@ -2044,4 +2034,3 @@ const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > & Sc
     }
     return pFormShell->GetCurPage()->GetForms();
 }
-//-----IAccessibility2 Implementation 2009

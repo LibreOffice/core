@@ -449,7 +449,7 @@ void PreviewRenderer::ProvideView (DrawDocShell* pDocShell)
     if (pDocShell != mpDocShellOfView)
     {
         // Destroy the view that is connected to the current doc shell.
-        mpView.reset (NULL);
+        mpView.reset();
 
         // Switch our attention, i.e. listening for DYING events, to
         // the new doc shell.
@@ -546,7 +546,7 @@ void PreviewRenderer::Notify(SfxBroadcaster&, const SfxHint& rHint)
             // has to be destroyed as well.  The next call to
             // ProvideView will create a new one (for another
             // doc shell, of course.)
-            mpView.reset (NULL);
+            mpView.reset();
             mpDocShellOfView = NULL;
         }
     }

@@ -655,8 +655,12 @@ void SwHTMLParser::InsertComment( const String& rComment, const sal_Char *pTag )
     }
 
     SwPostItField aPostItFld(
-                    (SwPostItFieldType*)pDoc->GetSysFldType( RES_POSTITFLD ),
-                    aEmptyStr, aComment, DateTime() );
+        (SwPostItFieldType*)pDoc->GetSysFldType( RES_POSTITFLD ),
+        aComment,
+        aEmptyStr,
+        aEmptyStr,
+        aEmptyStr,
+        DateTime() );
     InsertAttr( SwFmtFld( aPostItFld ) );
 
     if( bMoveFwd )

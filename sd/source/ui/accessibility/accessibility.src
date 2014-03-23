@@ -87,7 +87,6 @@ String SID_SD_A11Y_I_HANDOUTVIEW_D
     Text [ en-US ] = "This is where you decide on the layout for handouts.";
 };
 
-//IAccessibility2 Implementation 2009-----
 String SID_SD_A11Y_P_TITLE_N
 {
     Text [ en-US ] = "PresentationTitle";
@@ -257,4 +256,3 @@ String SID_SD_A11Y_D_PRESENTATION_READONLY
 {
     Text [ en-US ] = "(read-only)";
 };
-//-----IAccessibility2 Implementation 2009

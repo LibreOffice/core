@@ -831,7 +831,7 @@ int SwTransferable::PrepareForCopy( sal_Bool bIsCut )
     {
         SwWait *pWait = 0;
         if( pWrtShell->ShouldWait() )
-            pWait = new SwWait( *pWrtShell->GetView().GetDocShell(), sal_True );
+            pWait = new SwWait( *pWrtShell->GetView().GetDocShell(), true );
 
         pClpDocFac = new SwDocFac;
 
@@ -851,8 +851,8 @@ int SwTransferable::PrepareForCopy( sal_Bool bIsCut )
             IDocumentMarkAccess* const pMarkAccess = pTmpDoc->getIDocumentMarkAccess();
             ::std::vector< ::sw::mark::IMark* > vDdeMarks;
             // find all DDE-Bookmarks
-            for(IDocumentMarkAccess::const_iterator_t ppMark = pMarkAccess->getMarksBegin();
-                ppMark != pMarkAccess->getMarksEnd();
+            for(IDocumentMarkAccess::const_iterator_t ppMark = pMarkAccess->getAllMarksBegin();
+                ppMark != pMarkAccess->getAllMarksEnd();
                 ppMark++)
             {
                 if(IDocumentMarkAccess::DDE_BOOKMARK == IDocumentMarkAccess::GetType(**ppMark))
@@ -996,7 +996,7 @@ int SwTransferable::CalculateAndCopy()
 {
     if(!pWrtShell)
         return 0;
-    SwWait aWait( *pWrtShell->GetView().GetDocShell(), sal_True );
+    SwWait aWait( *pWrtShell->GetView().GetDocShell(), true );
 
     String aStr( pWrtShell->Calculate() );
 
@@ -1018,7 +1018,7 @@ int SwTransferable::CopyGlossary( SwTextBlocks& rGlossary,
 {
     if(!pWrtShell)
         return 0;
-    SwWait aWait( *pWrtShell->GetView().GetDocShell(), sal_True );
+    SwWait aWait( *pWrtShell->GetView().GetDocShell(), true );
 
     pClpDocFac = new SwDocFac;
     SwDoc *const pCDoc = lcl_GetDoc(*pClpDocFac);
@@ -1163,8 +1163,7 @@ int SwTransferable::PasteData( TransferableDataHelper& rData,
                             const Point* pPt, sal_Int8 nDropAction,
                             sal_Bool bPasteSelection )
 {
-    SwWait aWait( *rSh.GetView().
-        GetDocShell(), sal_False );
+    SwWait aWait( *rSh.GetView().GetDocShell(), false );
     SwTrnsfrActionAndUndo* pAction = 0;
     SwModule* pMod = SW_MOD();
 
@@ -1347,6 +1346,7 @@ ASSERT( pPt, "EXCHG_OUT_ACTION_MOVE_PRIVATE: was soll hier passieren?" );
 
             case SOT_FORMATSTR_ID_SVXB:
             case SOT_FORMAT_BITMAP:
+            case SOT_FORMATSTR_ID_PNG:
             case SOT_FORMAT_GDIMETAFILE:
                 nRet = SwTransferable::_PasteGrf( rData, rSh, nFormat,
                                                 SW_PASTESDR_INSERT,pPt,
@@ -1475,6 +1475,7 @@ ASSERT( pPt, "EXCHG_OUT_ACTION_MOVE_PRIVATE: was soll hier passieren?" );
             case SOT_FORMATSTR_ID_SVXB:
             case SOT_FORMAT_GDIMETAFILE:
             case SOT_FORMAT_BITMAP:
+            case SOT_FORMATSTR_ID_PNG:
             case SOT_FORMATSTR_ID_NETSCAPE_BOOKMARK:
             case SOT_FORMAT_FILE:
             case SOT_FORMATSTR_ID_FILEGRPDESCRIPTOR:
@@ -1997,7 +1998,7 @@ int SwTransferable::_PasteTargetURL( TransferableDataHelper& rData,
 
                 case SW_PASTESDR_SETATTR:
                     if( rSh.IsObjSelected() )
-                        rSh.Paste( aGrf );
+                        rSh.Paste( aGrf, String() );
                     else if( OBJCNT_GRF == rSh.GetObjCntTypeOfSelection() )
                         rSh.ReRead( sURL, aEmptyStr, &aGrf );
                     else
@@ -2270,7 +2271,7 @@ int SwTransferable::_PasteSdrFormat(  TransferableDataHelper& rData,
 
 int SwTransferable::_PasteGrf( TransferableDataHelper& rData, SwWrtShell& rSh,
                                 sal_uLong nFmt, sal_uInt16 nAction, const Point* pPt,
-                                sal_uInt8 nActionFlags, sal_Int8 /* nDropAction */, bool bNeedToSelectBeforePaste)
+                                sal_uInt8 nActionFlags, sal_Int8 nDropAction, bool bNeedToSelectBeforePaste)
 {
     int nRet = 0;
 
@@ -2281,6 +2282,7 @@ int SwTransferable::_PasteGrf( TransferableDataHelper& rData, SwWrtShell& rSh,
     switch( nFmt )
     {
     case SOT_FORMAT_BITMAP:
+    case SOT_FORMATSTR_ID_PNG:
     case SOT_FORMAT_GDIMETAFILE:
         nRet = rData.GetGraphic( nFmt, aGrf );
         break;
@@ -2369,52 +2371,82 @@ int SwTransferable::_PasteGrf( TransferableDataHelper& rData, SwWrtShell& rSh,
     if( nRet )
     {
         String sURL;
-        if( dynamic_cast< SwWebDocShell* >(rSh.GetView().GetDocShell()) )
+
+        if( dynamic_cast< SwWebDocShell* >(rSh.GetView().GetDocShell())
+            // #123922# if link action is noted, also take URL
+            || DND_ACTION_LINK == nDropAction)
+        {
             sURL = aBkmk.GetURL();
+        }
 
         switch( nAction )
         {
-        case SW_PASTESDR_INSERT:
-            SwTransferable::SetSelInShell( rSh, sal_False, pPt );
-            rSh.Insert( sURL, aEmptyStr, aGrf );
-        break;
-
-        case SW_PASTESDR_REPLACE:
-            if( rSh.IsObjSelected() )
-            {
-                rSh.ReplaceSdrObj( sURL, aEmptyStr, &aGrf );
-                Point aPt( pPt ? *pPt : rSh.GetCrsrDocPos() );
-                SwTransferable::SetSelInShell( rSh, sal_True, &aPt );
-            }
-            else
-                rSh.ReRead( sURL, aEmptyStr, &aGrf );
-            break;
-
-        case SW_PASTESDR_SETATTR:
-            if( SOT_FORMATSTR_ID_NETSCAPE_BOOKMARK == nFmt )
-            {
-                if( rSh.IsFrmSelected() )
-                {
-                    SfxItemSet aSet( rSh.GetAttrPool(), RES_URL, RES_URL );
-                    rSh.GetFlyFrmAttr( aSet );
-                    SwFmtURL aURL( (SwFmtURL&)aSet.Get( RES_URL ) );
-                    aURL.SetURL( aBkmk.GetURL(), sal_False );
-                    aSet.Put( aURL );
-                    rSh.SetFlyFrmAttr( aSet );
-                }
-            }
-            else if( rSh.IsObjSelected() )
-                rSh.Paste( aGrf );
-            else if( OBJCNT_GRF == rSh.GetObjCntTypeOfSelection() )
-                rSh.ReRead( sURL, aEmptyStr, &aGrf );
-            else
+            case SW_PASTESDR_INSERT:
             {
                 SwTransferable::SetSelInShell( rSh, sal_False, pPt );
-                rSh.Insert( aBkmk.GetURL(), aEmptyStr, aGrf );
+                rSh.Insert( sURL, aEmptyStr, aGrf );
+                break;
             }
-            break;
-        default:
-            nRet = 0;
+
+            case SW_PASTESDR_REPLACE:
+            {
+                if( rSh.IsObjSelected() )
+                {
+                    // #123922# for D&D on draw objects, do for now the same for
+                    // SW_PASTESDR_REPLACE (D&D) as for SW_PASTESDR_SETATTR (D&D and
+                    // CTRL+SHIFT). The code below replaces the draw object with
+                    // a writer graphic; maybe this is an option later again if wanted
+                    rSh.Paste( aGrf, sURL );
+
+                    // rSh.ReplaceSdrObj( sURL, aEmptyStr, &aGrf );
+                    // Point aPt( pPt ? *pPt : rSh.GetCrsrDocPos() );
+                    // SwTransferable::SetSelInShell( rSh, sal_True, &aPt );
+                }
+                else
+                {
+                    // set graphic at writer graphic without link
+                    rSh.ReRead( sURL, aEmptyStr, &aGrf );
+                }
+
+                break;
+            }
+
+            case SW_PASTESDR_SETATTR:
+            {
+                if( SOT_FORMATSTR_ID_NETSCAPE_BOOKMARK == nFmt )
+                {
+                    if( rSh.IsFrmSelected() )
+                    {
+                        SfxItemSet aSet( rSh.GetAttrPool(), RES_URL, RES_URL );
+                        rSh.GetFlyFrmAttr( aSet );
+                        SwFmtURL aURL( (SwFmtURL&)aSet.Get( RES_URL ) );
+                        aURL.SetURL( aBkmk.GetURL(), sal_False );
+                        aSet.Put( aURL );
+                        rSh.SetFlyFrmAttr( aSet );
+                    }
+                }
+                else if( rSh.IsObjSelected() )
+                {
+                    // set as attribute at DrawObject
+                    rSh.Paste( aGrf, sURL );
+                }
+                else if( OBJCNT_GRF == rSh.GetObjCntTypeOfSelection() )
+                {
+                    // set as linked graphic at writer graphic frame
+                    rSh.ReRead( sURL, aEmptyStr, &aGrf );
+                }
+                else
+                {
+                    SwTransferable::SetSelInShell( rSh, sal_False, pPt );
+                    rSh.Insert( aBkmk.GetURL(), aEmptyStr, aGrf );
+                }
+                break;
+            }
+            default:
+            {
+                nRet = 0;
+                break;
+            }
         }
     }
 
@@ -2821,7 +2853,7 @@ int SwTransferable::PasteFormat( SwWrtShell& rSh,
                                     TransferableDataHelper& rData,
                                     sal_uLong nFormat )
 {
-    SwWait aWait( *rSh.GetView().GetDocShell(), sal_False );
+    SwWait aWait( *rSh.GetView().GetDocShell(), false );
     int nRet = 0;
 
     sal_uLong nPrivateFmt = FORMAT_PRIVATE;
@@ -3774,7 +3806,7 @@ sal_Bool SwTrnsfrDdeLink::WriteData( SvStream& rStrm )
 
     IDocumentMarkAccess* const pMarkAccess = pDocShell->GetDoc()->getIDocumentMarkAccess();
     IDocumentMarkAccess::const_iterator_t ppMark = pMarkAccess->findMark(sName);
-    if(ppMark != pMarkAccess->getMarksEnd()
+    if(ppMark != pMarkAccess->getAllMarksEnd()
         && IDocumentMarkAccess::GetType(**ppMark) != IDocumentMarkAccess::BOOKMARK)
     {
         // the mark is still a DdeBookmark
@@ -3835,7 +3867,7 @@ void SwTrnsfrDdeLink::Disconnect( sal_Bool bRemoveDataAdvise )
         IDocumentMarkAccess* const pMarkAccess = pDoc->getIDocumentMarkAccess();
         // check, if DdeBookmark is already in its desctruction
         IDocumentMarkAccess::const_iterator_t ppMark = pMarkAccess->findMark(sName);
-        if ( ppMark != pMarkAccess->getMarksEnd() )
+        if ( ppMark != pMarkAccess->getAllMarksEnd() )
         {
             ::sw::mark::DdeBookmark* const pDdeBookmark = dynamic_cast< ::sw::mark::DdeBookmark* >(ppMark->get());
             if ( pDdeBookmark && !pDdeBookmark->IsInDestruction() )

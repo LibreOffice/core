@@ -106,7 +106,7 @@ void PanelBase::Resize (void)
 void PanelBase::SetSidebar (const cssu::Reference<css::ui::XSidebar>& rxSidebar)
 {
     mxSidebar = rxSidebar;
-    if (mxSidebar.is() && mpWrappedControl!=NULL)
+    if (mxSidebar.is() && bool(mpWrappedControl))
         mxSidebar->requestLayout();
 }
 

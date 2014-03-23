@@ -36,7 +36,6 @@
 
 #include "unotools/fontcfg.hxx"
 
-//IAccessible2 Implementation 2009-----
 #ifdef WNT
 #ifndef _COM_SUN_STAR_ACCESSIBILITY_XACCESSIBLE_HPP_
 #include <com/sun/star/accessibility/XAccessible.hpp>
@@ -45,7 +44,6 @@
 #include <com/sun/star/accessibility/AccessibleRole.hpp>
 #endif
 #endif
-//-----IAccessible2 Implementation 2009
 #include "vos/mutex.hxx"
 
 #include "cppuhelper/implbase1.hxx"
@@ -77,13 +75,11 @@
 #include "com/sun/star/java/JavaDisabledException.hpp"
 
 #include <stdio.h>
-//IAccessible2 Implementation 2009-----
 #ifdef WNT
 #include <unotools/processfactory.hxx>
 #include <com/sun/star/accessibility/XMSAAService.hpp>
 #include <win/g_msaasvc.h>
 #endif
-//-----IAccessible2 Implementation 2009
 
 namespace {
 
@@ -149,12 +145,10 @@ void ImplInitSVData()
             break;
         }
     }
-//IAccessible2 Implementation 2009-----
 #ifdef WNT
     //Default enable the acc bridge interface
     pImplSVData->maAppData.m_bEnableAccessInterface =true;
 #endif
-//-----IAccessible2 Implementation 2009
 
     // mark default layout border as unitialized
     pImplSVData->maAppData.mnDefaultLayoutBorder = -1;
@@ -362,7 +356,6 @@ com::sun::star::uno::Any AccessBridgeCurrentContext::getValueByName( const rtl::
     }
     return ret;
 }
-//IAccessible2 Implementation 2009-----
 #ifdef WNT
 void AccessBridgehandleExistingWindow(Window * pWindow, bool bShow)
 {
@@ -444,7 +437,6 @@ void AccessBridgeupdateOldTopWindows()
     }
 }
 #endif
-//-----IAccessible2 Implementation 2009
 
 bool ImplInitAccessBridge(sal_Bool bAllowCancel, sal_Bool &rCancelled)
 {
@@ -476,7 +468,6 @@ bool ImplInitAccessBridge(sal_Bool bAllowCancel, sal_Bool &rCancelled)
 
             if( xFactory.is() )
             {
-//IAccessible2 Implementation 2009-----
 #ifdef WNT
                 pSVData->mxAccessBridge = xFactory->createInstance(
                            OUString::createFromAscii( "com.sun.star.accessibility.MSAAService" ) );
@@ -491,7 +482,6 @@ bool ImplInitAccessBridge(sal_Bool bAllowCancel, sal_Bool &rCancelled)
                     bSuccess = false;
                 return bSuccess;
 #endif
-//-----IAccessible2 Implementation 2009
                 css::uno::Reference< XExtendedToolkit > xToolkit =
                     css::uno::Reference< XExtendedToolkit >(Application::GetVCLToolkit(), UNO_QUERY);
 

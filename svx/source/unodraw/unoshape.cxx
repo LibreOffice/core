@@ -1416,7 +1416,15 @@ void SAL_CALL SvxShape::setSize( const awt::Size& rSize )
 
     if( mpObj.is() && mpModel)
     {
-        basegfx::B2DRange aRange( svx_getLogicRangeHack(mpObj.get()) );
+        // #123539# optimization for 3D chart object generation: do not use UNO
+        // API commmands to get the range, this is too expensive since for 3D
+        // scenes it may recalculate the whole scene since in AOO this depends
+        // on the contained geometry (layouted to show all content)
+        const bool b3DConstruction(dynamic_cast< E3dObject* >(mpObj.get()) && mpModel->isLocked());
+        basegfx::B2DRange aRange(
+            b3DConstruction ?
+                basegfx::B2DRange(maPosition.X, maPosition.Y, maPosition.X + maSize.Width, maPosition.Y + maSize.Height) :
+                svx_getLogicRangeHack(mpObj.get()));
         basegfx::B2DPoint aLocalSize( rSize.Width, rSize.Height );
         ForceMetricToItemPoolMetric(aLocalSize);
 
@@ -2328,7 +2336,7 @@ beans::PropertyState SAL_CALL SvxShape::_getPropertyState( const OUString& Prope
                 case XATTR_FILLFLOATTRANSPARENCE:
                 {
                     NameOrIndex* pItem = (NameOrIndex*)rSet.GetItem((sal_uInt16)pMap->nWID);
-                    if( ( pItem == NULL ) )
+                    if( pItem == NULL )
                         eState = beans::PropertyState_DEFAULT_VALUE;
                 }
                 break;

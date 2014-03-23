@@ -36,7 +36,7 @@ module com { module sun { module star { module deployment {
     are related to a <type>XPackageManager</type> instance.
     </p>
 
-    @since OOo 2.0
+    @since OpenOffice 2.0
 */
 service PackageRegistryBackend : XPackageRegistry
 {

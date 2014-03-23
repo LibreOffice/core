@@ -26,6 +26,9 @@ require Exporter;
 our @ISA = Exporter;
 our @EXPORT = otoolD;
 
+use File::Basename;
+$::CC_PATH=(fileparse( $ENV{"CC"}))[1];
+
 sub otoolD($) {
     my ($file) = @_;
     my $call = "otool -D $file";
@@ -39,3 +42,4 @@ sub otoolD($) {
     close(IN);
     return $line;
 }
+

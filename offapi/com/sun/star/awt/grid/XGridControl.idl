@@ -37,7 +37,7 @@ module com {  module sun {  module star {  module awt { module grid {
 
     @see UnoControlGrid
 
-    @since OOo 3.3
+    @since OpenOffice 3.3
  */
 published interface XGridControl
 {

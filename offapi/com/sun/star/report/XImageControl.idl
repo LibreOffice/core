@@ -64,7 +64,7 @@ published interface XImageControl
 
         <p>The value of this property is one of the <type scope="com::sun::star::awt">ImageScaleMode</type> constants.</p>
 
-        @since OOo 3.2
+        @since OpenOffice 3.2
     */
     [attribute,bound] short ScaleMode
     {

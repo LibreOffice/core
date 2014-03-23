@@ -65,7 +65,7 @@ module com { module sun { module star { module ui {
               configuration manager uses.</br>
     </p>
 
-    @since OOo 2.0
+    @since OpenOffice 2.0
 */
 
 interface XModuleUIConfigurationManager : ::com::sun::star::uno::XInterface

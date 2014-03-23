@@ -60,12 +60,10 @@ FuEditGluePoints::FuEditGluePoints (
     SfxRequest& rReq)
 :   FuDraw(pViewSh, pWin, pView, pDoc, rReq),
     meLastSdrViewEditMode(SDREDITMODE_EDIT),
-//IAccessibility2 Implementation 2009-----
     //Solution: Add Shift+UP/DOWN/LEFT/RIGHT key to move the position of insert point,
     //and SHIFT+ENTER key to decide the postion and draw the new insert point
     maOldPoint(0, 0),
     mbBeginInsertPoint(false)
-//-----IAccessibility2 Implementation 2009
 {
 }
 
@@ -321,10 +319,8 @@ bool FuEditGluePoints::KeyInput(const KeyEvent& rKEvt)
 {
     mpView->SetActualOutDev( mpWindow );
 
-//IAccessibility2 Implementation 2009-----
     //Solution: Add Shift+UP/DOWN/LEFT/RIGHT key to move the position of insert point,
     //and SHIFT+ENTER key to decide the postion and draw the new insert point
-    //sal_Bool bReturn = FuDraw::KeyInput(rKEvt);
 
     bool bReturn = FuDraw::KeyInput(rKEvt);
 
@@ -407,11 +403,9 @@ bool FuEditGluePoints::KeyInput(const KeyEvent& rKEvt)
     }
     if(!bReturn)
         bReturn = FuDraw::KeyInput(rKEvt);
-//-----IAccessibility2 Implementation 2009
     return bReturn;
 }
 
-//IAccessibility2 Implementation 2009-----
  //Solution: Add Shift+UP/DOWN/LEFT/RIGHT key to move the position of insert point,
  //and SHIFT+ENTER key to decide the postion and draw the new insert point
 void FuEditGluePoints::ForcePointer(const MouseEvent* pMEvt)
@@ -427,7 +421,6 @@ void FuEditGluePoints::ForcePointer(const MouseEvent* pMEvt)
         FuDraw::ForcePointer(pMEvt);
     }
 }
-//-----IAccessibility2 Implementation 2009
 /*************************************************************************
 |*
 |* Command-event

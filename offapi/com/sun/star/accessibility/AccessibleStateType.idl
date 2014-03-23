@@ -39,7 +39,7 @@ module com { module sun { module star { module accessibility {
     include future extensions to the set of roles we have to use constants
     here.</p>
 
-    @since OOo 1.1.2
+    @since OpenOffice 1.1.2
 */
 published constants AccessibleStateType
 {

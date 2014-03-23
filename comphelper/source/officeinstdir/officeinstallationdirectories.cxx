@@ -69,7 +69,7 @@ static bool makeCanonicalFileURL( rtl::OUString & rURL )
             {
                 aNormalizedURL = aFileStatus.getFileURL();
 
-                if ( aNormalizedURL.getLength() > 0 )
+                if ( !aNormalizedURL.isEmpty() )
                 {
                     if ( aNormalizedURL
                             .getStr()[ aNormalizedURL.getLength() - 1 ]
@@ -146,7 +146,7 @@ rtl::OUString SAL_CALL
 OfficeInstallationDirectories::makeRelocatableURL( const rtl::OUString& URL )
     throw ( uno::RuntimeException )
 {
-    if ( URL.getLength() > 0 )
+    if ( !URL.isEmpty() )
     {
         initDirs();
 
@@ -193,7 +193,7 @@ rtl::OUString SAL_CALL
 OfficeInstallationDirectories::makeAbsoluteURL( const rtl::OUString& URL )
     throw ( uno::RuntimeException )
 {
-    if ( URL.getLength() > 0 )
+    if ( !URL.isEmpty() )
     {
         sal_Int32 nIndex = URL.indexOf( m_aOfficeBrandDirMacro );
         if ( nIndex != -1 )
@@ -345,7 +345,7 @@ void OfficeInstallationDirectories::initDirs()
                     xExpander->expandMacros(
                          rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "$OOO_BASE_DIR" ) ) );
 
-                OSL_ENSURE( m_pOfficeBrandDir->getLength() > 0,
+                OSL_ENSURE( !m_pOfficeBrandDir->isEmpty(),
                             "Unable to obtain office brand installation directory!" );
 
                 makeCanonicalFileURL( *m_pOfficeBrandDir );
@@ -365,7 +365,7 @@ void OfficeInstallationDirectories::initDirs()
                         rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(
                             "${$OOO_BASE_DIR/program/" SAL_CONFIGFILE( "bootstrap" ) ":UserInstallation}" ) ) );
 
-                OSL_ENSURE( m_pUserDir->getLength() > 0,
+                OSL_ENSURE( !m_pUserDir->isEmpty(),
                             "Unable to obtain office user data directory!" );
 
                 makeCanonicalFileURL( *m_pUserDir );

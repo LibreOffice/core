@@ -38,7 +38,7 @@ module com {  module sun {  module star {  module configuration {
     (including menubars/toolbars and accelerators)
     does not exists or contains corrupted data.
 
-    @since OOo 2.3
+    @since OpenOffice 2.3
  */
 published exception CorruptedUIConfigurationException : ::com::sun::star::configuration::CorruptedConfigurationException
 {

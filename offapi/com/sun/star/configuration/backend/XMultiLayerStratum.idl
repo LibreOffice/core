@@ -66,7 +66,7 @@ module com { module sun { module star { module configuration { module backend {
   @see com::sun::star::configuration::backend::XSchemaSupplier
   @see com::sun::star::configuration::backend::XSingleLayerStratum
 
-  @since OOo 1.1.2
+  @since OpenOffice 1.1.2
 */
 published interface XMultiLayerStratum : ::com::sun::star::uno::XInterface
 {

@@ -416,7 +416,7 @@ published service CharacterProperties
         <p> It is not guaranteed that the order in the sequence reflects
         the order of the evaluation of the character style attributes.</p>
 
-        @since OOo 1.1.2
+        @since OpenOffice 1.1.2
      */
     [optional, property] sequence<string> CharStyleNames;
 
@@ -424,7 +424,7 @@ published service CharacterProperties
 
     /** If this optional property is <TRUE/>, then the characters are invisible.
 
-        @since OOo 2.0
+        @since OpenOffice 2.0
      */
     [optional, property] boolean CharHidden;
 

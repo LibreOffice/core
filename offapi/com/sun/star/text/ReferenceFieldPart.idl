@@ -94,7 +94,7 @@ published constants ReferenceFieldPart
             equal than X are added.
             If the referenced item isn't numbered, nothing is displayed.</p>
 
-            @since OOo 3.0
+            @since OpenOffice 3.0
         */
         const short NUMBER = 8;
         //-------------------------------------------------------------------------
@@ -104,7 +104,7 @@ published constants ReferenceFieldPart
             <p>The contents of the list label of the paragraph, at which the bookmark respectively the
             set reference starts, is displayed. If this paragraph isn't numbered, nothing is displayed.</p>
 
-            @since OOo 3.0
+            @since OpenOffice 3.0
         */
         const short NUMBER_NO_CONTEXT = 9;
         //-------------------------------------------------------------------------
@@ -120,7 +120,7 @@ published constants ReferenceFieldPart
             equal than X are added.
             If the referenced item is numbered nothing is displayed.</p>
 
-            @since OOo 3.0
+            @since OpenOffice 3.0
         */
         const short NUMBER_FULL_CONTEXT = 10;
 };

@@ -19,23 +19,18 @@
  *
  *************************************************************/
 
-
-
 #ifndef __com_sun_star_document_XUndoAction_idl__
 #define __com_sun_star_document_XUndoAction_idl__
 
 #include <com/sun/star/uno/XInterface.idl>
 #include <com/sun/star/document/UndoFailedException.idl>
 
-//==================================================================================================================
-
 module com { module sun { module star { module document {
 
-//==================================================================================================================
-
 /** represents a single (undoable) action on a document
+    @since OpenOffice 3.4
  */
-published interface XUndoAction
+interface XUndoAction
 {
     /** reverts the action represented by the instance
 
@@ -64,10 +59,6 @@ published interface XUndoAction
     [attribute, readonly]   string  Title;
 };
 
-//==================================================================================================================
-
 }; }; }; };
-
-//==================================================================================================================
 
 #endif

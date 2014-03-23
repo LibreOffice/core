@@ -904,10 +904,10 @@ void ShutdownIcon::SetAutostart( bool bActivate )
                                                      osl_getThreadTextEncoding() );
         OString aShortcutUnx = OUStringToOString( aShortcut,
                                                   osl_getThreadTextEncoding() );
-        if ((0 != symlink(aDesktopFileUnx, aShortcutUnx)) && (errno == EEXIST))
+        if ((0 != symlink( aDesktopFileUnx.getStr(), aShortcutUnx.getStr())) && (errno == EEXIST))
         {
-        unlink(aShortcutUnx);
-        symlink(aDesktopFileUnx, aShortcutUnx);
+        unlink( aShortcutUnx.getStr());
+        symlink( aDesktopFileUnx.getStr(), aShortcutUnx.getStr());
         }
 
         ShutdownIcon *pIcon = ShutdownIcon::createInstance();

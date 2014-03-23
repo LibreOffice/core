@@ -45,7 +45,7 @@ module backend {
         </ul>
     </p>
 
-    @since OOo 1.1.2
+    @since OpenOffice 1.1.2
   */
 published exception InsufficientAccessRightsException : BackendAccessException {
 } ;

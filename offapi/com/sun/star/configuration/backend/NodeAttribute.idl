@@ -40,7 +40,7 @@ module com { module sun { module star { module configuration { module backend {
         During merging the values may be combined with static attributes
         from the schema.
 
-    @since OOo 1.1.2
+    @since OpenOffice 1.1.2
  */
 published constants NodeAttribute
 {
@@ -74,7 +74,7 @@ published constants NodeAttribute
         <member>XUpdateHandler::addOrReplaceNode</member>, and
         <member>XUpdateHandler::addOrReplaceNodeFromTemplate</member>.</p>
 
-        @since OOo 2.0.3
+        @since OpenOffice 2.0.3
      */
     const short FUSE = 2048;
 

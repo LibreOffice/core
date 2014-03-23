@@ -45,7 +45,7 @@
 
 //=============================================================================
 
-/** a service for bubble diagrams. @since OOo 3.2
+/** a service for bubble diagrams. @since OpenOffice 3.2
  */
 published service BubbleDiagram
 {

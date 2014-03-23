@@ -38,12 +38,10 @@
 #include <flyfrm.hxx>
 
 
-//IAccessibility2 Implementation 2009-----
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
 #include <com/sun/star/accessibility/XAccessibleStateSet.hpp>
 #include <fmtanchr.hxx>
-//-----IAccessibility2 Implementation 2009
 
 using namespace ::com::sun::star::accessibility;
 using namespace ::com::sun::star;
@@ -119,7 +117,6 @@ void SwAccessibleSelectionHelper::selectAccessibleChild(
     // return bRet;
 }
 
-//IAccessibility2 Implementation 2009-----
 //When the selected state of the SwFrmOrObj is setted, return true.
 static sal_Bool lcl_getSelectedState(const SwAccessibleChild& aChild,
                                      SwAccessibleContext* pContext,
@@ -154,7 +151,6 @@ static sal_Bool lcl_getSelectedState(const SwAccessibleChild& aChild,
     }
     return sal_False;
 }
-//-----IAccessibility2 Implementation 2009
 
 sal_Bool SwAccessibleSelectionHelper::isAccessibleChildSelected(
     sal_Int32 nChildIndex )
@@ -182,14 +178,12 @@ sal_Bool SwAccessibleSelectionHelper::isAccessibleChildSelected(
         {
             bRet = pFEShell->IsObjSelected( *aChild.GetDrawObject() );
         }
-        //IAccessibility2 Implementation 2009-----
         //If the SwFrmOrObj is not selected directly in the UI, we should check whether it is selected in the selection cursor.
         if( !bRet )
         {
             if( lcl_getSelectedState( aChild, &rContext, rContext.GetMap() ) == sal_True)
                 bRet = sal_True;
         }
-        //-----IAccessibility2 Implementation 2009
     }
 
     return bRet;
@@ -247,11 +241,9 @@ sal_Int32 SwAccessibleSelectionHelper::getSelectedAccessibleChildCount(  )
         const SwFlyFrm* pFlyFrm = pFEShell->GetCurrFlyFrm();
         if( pFlyFrm )
         {
-            //IAccessibility2 Implementation 2009-----
             //if( rContext.GetParent( SwAccessibleChild(pFlyFrm), rContext.IsInPagePreview()) ==
             //        rContext.GetFrm() )
                 nCount = 1;
-            //-----IAccessibility2 Implementation 2009
         }
         else
         {
@@ -279,7 +271,6 @@ sal_Int32 SwAccessibleSelectionHelper::getSelectedAccessibleChildCount(  )
                 }
             }
         }
-        //IAccessibility2 Implementation 2009-----
         //If the SwFrmOrObj is not selected directly in the UI,
         //we should check whether it is selected in the selection cursor.
         if( nCount == 0 )
@@ -298,7 +289,6 @@ sal_Int32 SwAccessibleSelectionHelper::getSelectedAccessibleChildCount(  )
                 ++aIter;
             }
         }
-        //-----IAccessibility2 Implementation 2009
     }
     return nCount;
 }
@@ -322,7 +312,6 @@ Reference<XAccessible> SwAccessibleSelectionHelper::getSelectedAccessibleChild(
     const SwFlyFrm *pFlyFrm = pFEShell->GetCurrFlyFrm();
     if( pFlyFrm )
     {
-        //IAccessibility2 Implementation 2009-----
         if( 0 == nSelectedChildIndex )
         {
             if(rContext.GetParent( SwAccessibleChild(pFlyFrm), rContext.IsInPagePreview()) == rContext.GetFrm() )
@@ -343,7 +332,6 @@ Reference<XAccessible> SwAccessibleSelectionHelper::getSelectedAccessibleChild(
                 }
             }
         }
-        //-----IAccessibility2 Implementation 2009
     }
     else
     {

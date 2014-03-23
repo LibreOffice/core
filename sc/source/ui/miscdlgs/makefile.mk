@@ -26,6 +26,7 @@ PRJ=..$/..$/..
 PRJNAME=sc
 TARGET=miscdlgs
 LIBTARGET=no
+ENABLE_EXCEPTIONS=TRUE
 
 # --- Settings -----------------------------------------------------
 

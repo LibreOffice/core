@@ -1573,7 +1573,6 @@ sal_uInt16 Menu::GetCurItemId() const
 {
     return nSelectedId;
 }
-//IAccessibility2 Implementation 2009
 void Menu::SetHightlightItem( sal_uInt16 nHighlightedItem )
 {
     this->nHighlightedItem = nHighlightedItem;
@@ -3758,12 +3757,10 @@ sal_uInt16 PopupMenu::ImplExecute( Window* pW, const Rectangle& rRect, sal_uLong
             String aTmpEntryText( ResId( SV_RESID_STRING_NOSELECTIONPOSSIBLE, *pResMgr ) );
             MenuItemData* pData = pItemList->Insert(
                 0xFFFF, MENUITEM_STRING, 0, aTmpEntryText, Image(), NULL, 0xFFFF );
-//IAccessibility2 Implementation 2009-----
         sal_uInt16          nmPos;
         pData = pItemList->GetData( pData->nId, nmPos );
                 pData->bIsTemporary = sal_True;
         ImplCallEventListeners(VCLEVENT_MENU_SUBMENUCHANGED,nmPos);
-//-----IAccessibility2 Implementation 2009
         }
     }
     else if ( Application::GetSettings().GetStyleSettings().GetAutoMnemonic() && !( nMenuFlags & MENU_FLAG_NOAUTOMNEMONICS ) )
@@ -4040,9 +4037,7 @@ void MenuFloatingWindow::doShutdown()
         // otherwise the entry will not be read when the menu is opened again
         if( nHighlightedItem != ITEMPOS_INVALID )
             pMenu->ImplCallEventListeners( VCLEVENT_MENU_DEHIGHLIGHT, nHighlightedItem );
-//IAccessibility2 Implementation 2009-----
     pMenu->SetHightlightItem(ITEMPOS_INVALID);
-//-----IAccessibility2 Implementation 2009
         if( !bKeyInput && pMenu && pMenu->pStartedFrom && !pMenu->pStartedFrom->bIsMenuBar )
         {
             // #102461# remove highlight in parent
@@ -4713,9 +4708,7 @@ void MenuFloatingWindow::ChangeHighlightItem( sal_uInt16 n, sal_Bool bStartPopup
             }
         }
         HighlightItem( nHighlightedItem, sal_True );
-//IAccessibility2 Implementation 2009-----
     pMenu->SetHightlightItem(nHighlightedItem);
-//-----IAccessibility2 Implementation 2009
         pMenu->ImplCallHighlight( nHighlightedItem );
     }
     else
@@ -5017,10 +5010,8 @@ void MenuFloatingWindow::KeyInput( const KeyEvent& rKEvent )
                     MenuFloatingWindow* pFloat = ((PopupMenu*)pMenu->pStartedFrom)->ImplGetFloatingWindow();
                     pFloat->GrabFocus();
                     pFloat->KillActivePopup();
-//IAccessibility2 Implementation 2009-----
               sal_uInt16 highlightItem = pFloat->GetHighlightedItem();
             pFloat->ChangeHighlightItem(highlightItem, sal_False);
-//-----IAccessibility2 Implementation 2009
                 }
             }
         }
@@ -5610,9 +5601,7 @@ void MenuBarWindow::ChangeHighlightItem( sal_uInt16 n, sal_Bool bSelectEntry, sa
     nHighlightedItem = (sal_uInt16)n;
     DBG_ASSERT( ( nHighlightedItem == ITEMPOS_INVALID ) || pMenu->ImplIsVisible( nHighlightedItem ), "ChangeHighlightItem: Not visible!" );
     HighlightItem( nHighlightedItem, sal_True );
-//IAccessibility2 Implementation 2009-----
     pMenu->SetHightlightItem(nHighlightedItem);
-//-----IAccessibility2 Implementation 2009
     pMenu->ImplCallHighlight( nHighlightedItem );
 
     if( mbAutoPopup )

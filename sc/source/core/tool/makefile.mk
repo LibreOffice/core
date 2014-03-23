@@ -29,7 +29,7 @@ TARGET=tool
 PROJECTPCH4DLL=TRUE
 PROJECTPCH=core_pch
 PROJECTPCHSOURCE=..\pch\core_pch
-
+ENABLE_EXCEPTIONS=TRUE
 AUTOSEG=true
 
 # --- Settings -----------------------------------------------------

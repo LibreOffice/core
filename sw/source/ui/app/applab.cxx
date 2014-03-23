@@ -239,7 +239,7 @@ static sal_uInt16 nBCTitleNo = 0;
 
         {   // block for locks the dispatcher!!
 
-            SwWait aWait( (SwDocShell&)*xDocSh, sal_True );
+            SwWait aWait( (SwDocShell&)*xDocSh, true );
 
             SET_CURR_SHELL(pSh);
             pSh->SetLabelDoc(rItem.bSynchron);

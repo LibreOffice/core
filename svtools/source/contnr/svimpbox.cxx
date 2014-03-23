@@ -300,9 +300,7 @@ void SvImpLBox::Clear()
     // #97680# ---------
     aContextBmpWidthVector.clear();
 
-//IAccessibility2 Implementation 2009-----
     CallEventListeners( VCLEVENT_LISTBOX_ITEMREMOVED, NULL );
-//-----IAccessibility2 Implementation 2009
 }
 
 // *********************************************************************
@@ -650,9 +648,7 @@ void SvImpLBox::SetCursor( SvLBoxEntry* pEntry, sal_Bool bForceNoSelect )
         if(!bForceNoSelect && bSimpleTravel && !(nFlags & F_DESEL_ALL) && GetUpdateMode())
         {
             pView->Select( pCursor, sal_True );
-            //IAccessibility2 Implementation 2009-----
             CallEventListeners( VCLEVENT_LISTBOX_TREEFOCUS, pCursor );
-            //-----IAccessibility2 Implementation 2009
         }
         // Mehrfachselektion: Im Cursor-Move selektieren, wenn
         // nicht im Add-Mode (Ctrl-F8)
@@ -662,19 +658,15 @@ void SvImpLBox::SetCursor( SvLBoxEntry* pEntry, sal_Bool bForceNoSelect )
                  !bForceNoSelect )
         {
             pView->Select( pCursor, sal_True );
-            //IAccessibility2 Implementation 2009-----
             CallEventListeners( VCLEVENT_LISTBOX_TREEFOCUS, pCursor );
-            //-----IAccessibility2 Implementation 2009
         }
         else
         {
             ShowCursor( sal_True );
-            //IAccessibility2 Implementation 2009-----
             if (bForceNoSelect && GetUpdateMode())
             {
                 CallEventListeners( VCLEVENT_LISTBOX_TREEFOCUS, pCursor);
             }
-            //-----IAccessibility2 Implementation 2009
         }
 
         if( pAnchor )
@@ -1716,9 +1708,7 @@ void SvImpLBox::EntrySelected( SvLBoxEntry* pEntry, sal_Bool bSelect )
 
 void SvImpLBox::RemovingEntry( SvLBoxEntry* pEntry )
 {
-    //IAccessibility2 Implementation 2009-----
     CallEventListeners( VCLEVENT_LISTBOX_ITEMREMOVED , pEntry );
-    //-----IAccessibility2 Implementation 2009
 
     DestroyAnchor();
 
@@ -2379,10 +2369,8 @@ sal_Bool SvImpLBox::KeyInput( const KeyEvent& rKEvt)
 
         case KEY_LEFT:
         {
-            //IAccessibility2 Implementation 2009-----
             // if ( bIsCellFocusEnabled )
             if ( bIsCellFocusEnabled && pCursor )
-            //-----IAccessibility2 Implementation 2009
             {
                 if ( nCurTabPos > FIRST_ENTRY_TAB )
                 {

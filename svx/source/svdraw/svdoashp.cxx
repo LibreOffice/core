@@ -2103,10 +2103,10 @@ void SdrObjCustomShape::SetVerticalWriting( bool bVertical )
                 case SDRTEXTHORZADJUST_BLOCK: aNewSet.Put(SdrTextVertAdjustItem(SDRTEXTVERTADJUST_BLOCK)); break;
             }
 
-            SetObjectItemSet( aNewSet );
             pOutlinerParaObject = GetOutlinerParaObject();
             if ( pOutlinerParaObject )
                 pOutlinerParaObject->SetVertical(bVertical);
+            SetObjectItemSet( aNewSet );
 
             // restore object size
             sdr::legacy::SetSnapRect(*this, aObjectRect);
@@ -3047,7 +3047,6 @@ void SdrObjCustomShape::InvalidateRenderGeometry()
     mpLastShadowGeometry = 0L;
 }
 
-//IAccessibility2 Implementation 2009-----
 ::rtl::OUString SdrObjCustomShape::GetCustomShapeName()
 {
     rtl::OUString sShapeName;
@@ -3063,5 +3062,4 @@ void SdrObjCustomShape::InvalidateRenderGeometry()
     }
     return sShapeName;
 }
-//-----IAccessibility2 Implementation 2009
 // eof

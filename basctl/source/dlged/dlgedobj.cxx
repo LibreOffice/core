@@ -549,7 +549,7 @@ void SAL_CALL DlgEdObj::NameChange( const  ::com::sun::star::beans::PropertyChan
         Reference< container::XNameAccess > xNameAcc((GetDlgEdForm()->GetUnoControlModel()), UNO_QUERY);
         if ( xNameAcc.is() && xNameAcc->hasByName(aOldName) )
         {
-            if ( !xNameAcc->hasByName(aNewName) && aNewName.getLength() != 0 )
+            if ( !xNameAcc->hasByName(aNewName) && !aNewName.isEmpty() )
             {
                 // remove the control by the old name and insert the control by the new name in the container
                 Reference< container::XNameContainer > xCont(xNameAcc, UNO_QUERY );

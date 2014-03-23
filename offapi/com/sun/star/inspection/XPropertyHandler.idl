@@ -66,7 +66,7 @@ published interface XPropertyControlFactory;
     @see ObjectInspector
     @see LineDescriptor
 
-    @since OOo 2.0.3
+    @since OpenOffice 2.0.3
 */
 published interface XPropertyHandler
 {

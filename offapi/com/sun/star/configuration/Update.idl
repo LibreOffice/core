@@ -32,7 +32,7 @@ module com { module sun { module star { module configuration {
 
    <p>This singleton is unpublished and unstable.</p>
 
-   @since OOo 3.3
+   @since OpenOffice 3.3
 */
 singleton Update: XUpdate;
 

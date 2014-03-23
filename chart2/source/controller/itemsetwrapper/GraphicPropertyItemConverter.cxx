@@ -304,7 +304,7 @@ void GraphicPropertyItemConverter::FillSpecialItem(
                         // this is important to enable the item
                         ::rtl::OUString aName;
                         if( (aValue >>= aName) &&
-                            aName.getLength())
+                            !aName.isEmpty())
                         {
                             aItem.SetEnabled( sal_True );
                             rOutItemSet.Put( aItem );
@@ -547,7 +547,7 @@ bool GraphicPropertyItemConverter::ApplySpecialItem(
                     {
                         ::rtl::OUString aName;
                         if( ( GetPropertySet()->getPropertyValue( aPropName ) >>= aName )
-                            && aName.getLength() > 0 )
+                            && !aName.isEmpty() )
                         {
                             uno::Reference< beans::XPropertyState > xState( GetPropertySet(), uno::UNO_QUERY );
                             if( xState.is())

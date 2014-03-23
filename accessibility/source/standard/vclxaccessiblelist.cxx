@@ -363,6 +363,7 @@ void VCLXAccessibleList::ProcessWindowEvent (const VclWindowEvent& rVclWindowEve
 {
     switch ( rVclWindowEvent.GetId() )
       {
+        case VCLEVENT_DROPDOWN_SELECT:
         case VCLEVENT_LISTBOX_SELECT:
             if ( !m_bDisableProcessEvent )
                 UpdateSelection_Impl_Acc(b_IsDropDownList);
@@ -426,13 +427,7 @@ void VCLXAccessibleList::ProcessWindowEvent (const VclWindowEvent& rVclWindowEve
         case VCLEVENT_COMBOBOX_SCROLLED:
             UpdateEntryRange_Impl();
             break;
-        // IAccessible2 implementation, 2009
-        /*
-        case VCLEVENT_LISTBOX_SELECT:
-            if ( !m_bDisableProcessEvent )
-                UpdateSelection_Impl();
-            break;
-        */
+
         // The selection events VCLEVENT_COMBOBOX_SELECT and
         // VCLEVENT_COMBOBOX_DESELECT are not handled here because here we
         // have no access to the edit field.  Its text is necessary to
@@ -562,16 +557,7 @@ Reference<XAccessible> VCLXAccessibleList::CreateChild (sal_Int32 i)
     {
         xChild = m_aAccessibleChildren[nPos];
         // check if position is empty and can be used else we have to adjust all entries behind this
-        if ( xChild.is() )
-        {
-            // IAccessible2 implementation, 2009
-            /*
-            ListItems::iterator aIter = m_aAccessibleChildren.begin() + nPos;
-            ::std::mem_fun_t<bool, VCLXAccessibleListItem> aTemp(&VCLXAccessibleListItem::IncrementIndexInParent);
-            adjustEntriesIndexInParent( aIter, aTemp);
-            */
-        }
-        else
+        if ( !xChild.is() )
         {
             xChild = new VCLXAccessibleListItem(m_pListBoxHelper, i, this);
             m_aAccessibleChildren[nPos] = xChild;
@@ -584,7 +570,6 @@ Reference<XAccessible> VCLXAccessibleList::CreateChild (sal_Int32 i)
         sal_Bool bNowSelected = sal_False;
         if ( m_pListBoxHelper )
             bNowSelected = m_pListBoxHelper->IsEntryPosSelected ((sal_uInt16)i);
-        // IAccessible2 implementation 2009
         if (bNowSelected)
             m_nCurSelectedPos = sal_uInt16(i);
         VCLXAccessibleListItem* pItem = static_cast< VCLXAccessibleListItem* >(xChild.get());
@@ -605,27 +590,6 @@ Reference<XAccessible> VCLXAccessibleList::CreateChild (sal_Int32 i)
 
 void VCLXAccessibleList::HandleChangedItemList (bool bItemInserted, sal_Int32 nIndex)
 {
-    // IAccessible2 implementation 2009
-    /*
-    if ( !bItemInserted )
-    {
-        if ( nIndex == -1 ) // special handling here
-        {
-            clearItems();
-        }
-        else
-        {
-            if ( nIndex >= 0 && static_cast<sal_uInt16>(nIndex) < m_aAccessibleChildren.size() )
-            {
-                ListItems::iterator aIter = m_aAccessibleChildren.erase(m_aAccessibleChildren.begin()+nIndex);
-            ::std::mem_fun_t<bool, VCLXAccessibleListItem> aTemp(&VCLXAccessibleListItem::DecrementIndexInParent);
-                adjustEntriesIndexInParent( aIter, aTemp );
-            }
-        }
-    }
-    else
-        getAccessibleChild(nIndex);
-    */
     clearItems();
     NotifyAccessibleEvent (
         AccessibleEventId::INVALIDATE_ALL_CHILDREN,
@@ -1074,12 +1038,8 @@ awt::Rectangle VCLXAccessibleList::implGetBounds() throw (uno::RuntimeException)
             if ( pBox )
             {
                 Size aSize = pBox->GetSubEdit()->GetSizePixel();
-                // IAccessible2 implementation, 2009
-                //aBounds.X += aSize.Height();
-                //aBounds.Y += aSize.Width();
                 aBounds.Y += aSize.Height();
                 aBounds.Height -= aSize.Height();
-                //aBounds.Width  -= aSize.Width();
             }
         }
     }
@@ -1107,8 +1067,6 @@ awt::Point VCLXAccessibleList::getLocationOnScreen(  ) throw (uno::RuntimeExcept
             ComboBox* pBox = static_cast<ComboBox*>(GetWindow());
             if ( pBox )
             {
-                //aPos.X += pBox->GetSubEdit()->GetSizePixel().Height();
-                //aPos.Y += pBox->GetSubEdit()->GetSizePixel().Width();
                 aPos.Y += pBox->GetSubEdit()->GetSizePixel().Height();
             }
         }

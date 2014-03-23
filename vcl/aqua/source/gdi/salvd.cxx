@@ -203,10 +203,10 @@ sal_Bool AquaSalVirtualDevice::SetSize( long nDX, long nDY )
         if( pSalFrame )
         {
             // #i91990#
-            NSWindow* pWindow = pSalFrame->getWindow();
-            if ( pWindow )
+            NSWindow* pNSWindow = pSalFrame->getNSWindow();
+            if ( pNSWindow )
             {
-                NSGraphicsContext* pNSContext = [NSGraphicsContext graphicsContextWithWindow: pWindow];
+                NSGraphicsContext* pNSContext = [NSGraphicsContext graphicsContextWithWindow: pNSWindow];
                 if( pNSContext )
                     xCGContext = reinterpret_cast<CGContextRef>([pNSContext graphicsPort]);
             }

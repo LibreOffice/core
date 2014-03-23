@@ -481,9 +481,7 @@ private:
     bool mbClipBoard             : 1;    // true: this document represents the clipboard
     bool mbColumnSelection       : 1;    // true: this content has bee created by a column selection
                                          //       (clipboard docs only)
-    //IAccessibility2 Implementation 2009-----
     sal_Bool    bIsPrepareSelAll        :1;
-    //-----IAccessibility2 Implementation 2009
 
 #ifdef DBG_UTIL
     bool mbXMLExport : 1;                // sal_True: during XML export
@@ -704,7 +702,6 @@ private:
      SwFmt *_MakeFrmFmt(const String &, SwFmt *, sal_Bool, sal_Bool );
      SwFmt *_MakeTxtFmtColl(const String &, SwFmt *, sal_Bool, sal_Bool );
 
-//IAccessibility2 Implementation 2009-----
 private:
     sal_Bool bReadOnly;
     String msDocAccTitle;
@@ -722,7 +719,6 @@ public:
     virtual sal_Bool getDocReadOnly() const { return bReadOnly; }
     virtual void setDocAccTitle( const String& rTitle ) { msDocAccTitle = rTitle; }
     virtual const String getDocAccTitle() const { return msDocAccTitle; }
-    //-----IAccessibility2 Implementation 2009
 
     enum DocumentType {
         DOCTYPE_NATIVE,
@@ -895,7 +891,10 @@ public:
                         const SfxItemSet* pFlyAttrSet, const SfxItemSet* pGrfAttrSet, SwFrmFmt*);
     virtual SwFlyFrmFmt* Insert(const SwPaM& rRg, const GraphicObject& rGrfObj, const SfxItemSet* pFlyAttrSet,
                         const SfxItemSet* pGrfAttrSet, SwFrmFmt*);
-    virtual SwDrawFrmFmt* Insert(const SwPaM &rRg, SdrObject& rDrawObj, const SfxItemSet* pFlyAttrSet, SwFrmFmt*);
+    virtual SwDrawFrmFmt* InsertDrawObj(
+        const SwPaM &rRg,
+        SdrObject& rDrawObj,
+        const SfxItemSet& rFlyAttrSet );
     virtual SwFlyFrmFmt* Insert(const SwPaM &rRg, const svt::EmbeddedObjectRef& xObj, const SfxItemSet* pFlyAttrSet,
                         const SfxItemSet* pGrfAttrSet, SwFrmFmt*);
 
@@ -1063,14 +1062,12 @@ public:
     bool InXMLExport() const            { return mbXMLExport; }
     void SetXMLExport( bool bFlag )     { mbXMLExport = bFlag; }
 #endif
-    //-----IAccessibility2 Implementation 2009
     void SetSelAll( sal_Bool bSel )
     {
         bIsPrepareSelAll = bSel;
     }
     sal_Bool IsPrepareSelAll()  { return bIsPrepareSelAll; }
     void SetPrepareSelAll() { bIsPrepareSelAll = sal_True; }
-    //IAccessibility2 Implementation 2009-----
 
     void SetContainsAtPageObjWithContentAnchor( const bool bFlag )
     {
@@ -1114,12 +1111,21 @@ public:
                                 const SwSelBoxes* pSelBoxes = 0,
                                 SwFrmFmt *pParent = 0 );
 
-    void CopyWithFlyInFly( const SwNodeRange& rRg,
-                            const xub_StrLen nEndContentIndex,
-                            const SwNodeIndex& rInsPos,
-                            sal_Bool bMakeNewFrms = sal_True,
-                            sal_Bool bDelRedlines = sal_True,
-                            sal_Bool bCopyFlyAtFly = sal_False ) const;
+    void CopyWithFlyInFly(
+        const SwNodeRange& rRg,
+        const xub_StrLen nEndContentIndex,
+        const SwNodeIndex& rInsPos,
+        const SwPaM* pCopiedPaM = NULL,
+        const sal_Bool bMakeNewFrms = sal_True,
+        const sal_Bool bDelRedlines = sal_True,
+        const sal_Bool bCopyFlyAtFly = sal_False ) const;
+
+    //UUUU Helper that checks for unique items for DrawingLayer items of type NameOrIndex
+    // and evtl. corrects that items to ensure unique names for that type. This call may
+    // modify/correct entries inside of the given SfxItemSet, and it will apply a name to
+    // the items in question (what is essential to make the named slots associated with
+    // these items work for the UNO API and thus e.g. for ODF im/export)
+    void CheckForUniqueItemForLineFillNameOrIndex(SfxItemSet& rSet);
 
     sal_Bool SetFlyFrmAttr( SwFrmFmt& rFlyFmt, SfxItemSet& rSet );
 
@@ -1495,18 +1501,32 @@ public:
         // wie z.B. die ::com::sun::star::text::Bookmarks oder die Verzeichnisse.
         // JP 22.06.95: ist bMoveCrsr gesetzt, verschiebe auch die Crsr
 
-        // Setzt alles in rOldNode auf rNewPos + Offset
-    void CorrAbs( const SwNodeIndex& rOldNode, const SwPosition& rNewPos,
-                    const xub_StrLen nOffset = 0, sal_Bool bMoveCrsr = sal_False );
-        // Setzt alles im Bereich von [rStartNode, rEndNode] nach rNewPos
-    void CorrAbs( const SwNodeIndex& rStartNode, const SwNodeIndex& rEndNode,
-                    const SwPosition& rNewPos, sal_Bool bMoveCrsr = sal_False );
-        // Setzt alles im Bereich von rRange nach rNewPos
-    void CorrAbs( const SwPaM& rRange, const SwPosition& rNewPos,
-                    sal_Bool bMoveCrsr = sal_False );
-        // Setzt alles in rOldNode auf relative Pos
-    void CorrRel( const SwNodeIndex& rOldNode, const SwPosition& rNewPos,
-                    const xub_StrLen nOffset = 0, sal_Bool bMoveCrsr = sal_False );
+    // Setzt alles in rOldNode auf rNewPos + Offset
+    void CorrAbs(
+        const SwNodeIndex& rOldNode,
+        const SwPosition& rNewPos,
+        const xub_StrLen nOffset = 0,
+        sal_Bool bMoveCrsr = sal_False );
+
+    // Setzt alles im Bereich von [rStartNode, rEndNode] nach rNewPos
+    void CorrAbs(
+        const SwNodeIndex& rStartNode,
+        const SwNodeIndex& rEndNode,
+        const SwPosition& rNewPos,
+        sal_Bool bMoveCrsr = sal_False );
+
+    // Setzt alles im Bereich von rRange nach rNewPos
+    void CorrAbs(
+        const SwPaM& rRange,
+        const SwPosition& rNewPos,
+        sal_Bool bMoveCrsr = sal_False );
+
+    // Setzt alles in rOldNode auf relative Pos
+    void CorrRel(
+        const SwNodeIndex& rOldNode,
+        const SwPosition& rNewPos,
+        const xub_StrLen nOffset = 0,
+        sal_Bool bMoveCrsr = sal_False );
 
         // GliederungsRegeln erfragen / setzen
     // --> OD 2005-11-02 #i51089 - TUNING#
@@ -1526,44 +1546,29 @@ public:
     sal_Bool GotoOutline( SwPosition& rPos, const String& rName ) const;
     // die Aenderungen an den Gliederungsvorlagen in die OutlineRule uebernehmen
 
-        // setzt, wenn noch keine Numerierung, sonst wird geaendert
-        // arbeitet mit alten und neuen Regeln, nur Differenzen aktualisieren
-    // --> OD 2005-02-18 #i42921# - re-use unused 3rd parameter
-    // --> OD 2008-02-08 #newlistlevelattrs#
-    // Add optional parameter <bResetIndentAttrs> - default value sal_False.
-    // If <bResetIndentAttrs> equals true, the indent attributes "before text"
-    // and "first line indent" are additionally reset at the provided PaM, if
-    // the list style makes use of the new list level attributes.
-    // --> OD 2008-03-17 #refactorlists#
-    // introduce parameters <bCreateNewList> and <sContinuedListId>
-    // <bCreateNewList> indicates, if a new list is created by applying the
-    // given list style.
+    // Optional parameter <bResetIndentAttrs> - default value false:
+    //  If <bResetIndentAttrs> equals true, the indent attributes "before text"
+    //  and "first line indent" are additionally reset at the provided PaM, if
+    //  the list style makes use of the new list level attributes.
+    // Parameters <bCreateNewList> and <sContinuedListId>:
+    //  <bCreateNewList> indicates, if a new list is created by applying the given list style.
+    //  If <bCreateNewList> equals false, <sContinuedListId> may contain the
+    //  list Id of a list, which has to be continued by applying the given list style
     void SetNumRule( const SwPaM&,
                      const SwNumRule&,
                      const bool bCreateNewList,
                      const String sContinuedListId = String(),
-                     sal_Bool bSetItem = sal_True,
+                     bool bSetItem = true,
                      const bool bResetIndentAttrs = false );
-    // <--
+
     void SetCounted( const SwPaM&, bool bCounted);
-
-    // --> OD 2009-08-25 #i86492#
-    // no longer needed.
-    // SwDoc::SetNumRule( rPaM, rNumRule, false, <ListId>, sal_True, true ) have to be used instead.
-//    /**
-//       Replace numbering rules in a PaM by another numbering rule.
-
-//       \param rPaM         PaM to replace the numbering rules in
-//       \param rNumRule     numbering rule to replace the present numbering rules
-//     */
-//    void ReplaceNumRule(const SwPaM & rPaM, const SwNumRule & rNumRule);
 
     void MakeUniqueNumRules(const SwPaM & rPaM);
 
     void SetNumRuleStart( const SwPosition& rPos, sal_Bool bFlag = sal_True );
     void SetNodeNumStart( const SwPosition& rPos, sal_uInt16 nStt );
 
-    SwNumRule* GetCurrNumRule( const SwPosition& rPos ) const;
+    SwNumRule* GetNumRuleAtPos( const SwPosition& rPos ) const;
 
     const SwNumRuleTbl& GetNumRuleTbl() const { return *pNumRuleTbl; }
 
@@ -2083,11 +2088,10 @@ public:
      */
     String GetPaMDescr(const SwPaM & rPaM) const;
 
-    // -> #i23726#
-    sal_Bool IsFirstOfNumRule(SwPosition & rPos);
-    // <- #i23726#
+    bool IsFirstOfNumRuleAtPos( const SwPosition & rPos );
 
-    // --> #i31958# access methods for XForms model(s)
+
+    // access methods for XForms model(s)
 
     /// access container for XForms model; will be NULL if !isXForms()
     com::sun::star::uno::Reference<com::sun::star::container::XNameContainer>
@@ -2104,32 +2108,32 @@ public:
 
     void disposeXForms( );  // #i113606#, for disposing XForms
 
-    // --> OD 2006-03-21 #b6375613#
+
     inline bool ApplyWorkaroundForB6375613() const
     {
         return mbApplyWorkaroundForB6375613;
     }
     void SetApplyWorkaroundForB6375613( bool p_bApplyWorkaroundForB6375613 );
-    // <--
+
 
     //Update all the page masters
     void SetDefaultPageMode(bool bSquaredPageMode);
     sal_Bool IsSquaredPageMode() const;
 
-    // i#78591#
-    void Setn32DummyCompatabilityOptions1( sal_uInt32 CompatabilityOptions1 )
+
+    void Setn32DummyCompatabilityOptions1( const sal_uInt32 CompatabilityOptions1 )
     {
         n32DummyCompatabilityOptions1 = CompatabilityOptions1;
     }
-    sal_uInt32 Getn32DummyCompatabilityOptions1( )
+    sal_uInt32 Getn32DummyCompatabilityOptions1()
     {
         return n32DummyCompatabilityOptions1;
     }
-    void Setn32DummyCompatabilityOptions2( sal_uInt32 CompatabilityOptions2 )
+    void Setn32DummyCompatabilityOptions2( const sal_uInt32 CompatabilityOptions2 )
     {
         n32DummyCompatabilityOptions2 = CompatabilityOptions2;
     }
-    sal_uInt32 Getn32DummyCompatabilityOptions2( )
+    sal_uInt32 Getn32DummyCompatabilityOptions2()
     {
         return n32DummyCompatabilityOptions2;
     }

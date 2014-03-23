@@ -2751,7 +2751,7 @@ void FormController::unload() throw( RuntimeException )
     m_bCanInsert = m_bCanUpdate = m_bCycle = sal_False;
     m_bCurrentRecordModified = m_bCurrentRecordNew = m_bLocked = sal_False;
 
-    m_pColumnInfoCache.reset( NULL );
+    m_pColumnInfoCache.reset();
 }
 
 // -----------------------------------------------------------------------------

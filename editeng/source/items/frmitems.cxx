@@ -320,10 +320,12 @@ SfxItemPresentation SvxSizeItem::GetPresentation
         case SFX_ITEM_PRESENTATION_COMPLETE:
             rText = EE_RESSTR(RID_SVXITEMS_SIZE_WIDTH);
             rText += GetMetricText( aSize.Width(), eCoreUnit, ePresUnit, pIntl );
+            rText += sal_Unicode(' ');
             rText += EE_RESSTR(GetMetricId(ePresUnit));
             rText += cpDelim;
             rText += EE_RESSTR(RID_SVXITEMS_SIZE_HEIGHT);
             rText += GetMetricText( aSize.Height(), eCoreUnit, ePresUnit, pIntl );
+            rText += sal_Unicode(' ');
             rText += EE_RESSTR(GetMetricId(ePresUnit));
             return SFX_ITEM_PRESENTATION_COMPLETE;
         //no break necessary
@@ -594,6 +596,7 @@ SfxItemPresentation SvxLRSpaceItem::GetPresentation
             {
                 rText += GetMetricText( (long)nLeftMargin,
                                        eCoreUnit, ePresUnit, pIntl );
+                rText += sal_Unicode(' ');
                 rText += EE_RESSTR(GetMetricId(ePresUnit));
             }
             rText += cpDelim;
@@ -607,6 +610,7 @@ SfxItemPresentation SvxLRSpaceItem::GetPresentation
                 {
                     rText += GetMetricText( (long)nFirstLineOfst,
                                             eCoreUnit, ePresUnit, pIntl );
+                    rText += sal_Unicode(' ');
                     rText += EE_RESSTR(GetMetricId(ePresUnit));
                 }
                 rText += cpDelim;
@@ -618,6 +622,7 @@ SfxItemPresentation SvxLRSpaceItem::GetPresentation
             {
                 rText += GetMetricText( (long)nRightMargin,
                                         eCoreUnit, ePresUnit, pIntl );
+                rText += sal_Unicode(' ');
                 rText += EE_RESSTR(GetMetricId(ePresUnit));
             }
             return SFX_ITEM_PRESENTATION_COMPLETE;
@@ -944,6 +949,7 @@ SfxItemPresentation SvxULSpaceItem::GetPresentation
             else
             {
                 rText += GetMetricText( (long)nUpper, eCoreUnit, ePresUnit, pIntl );
+                rText += sal_Unicode(' ');
                 rText += EE_RESSTR(GetMetricId(ePresUnit));
             }
             rText += cpDelim;
@@ -953,6 +959,7 @@ SfxItemPresentation SvxULSpaceItem::GetPresentation
             else
             {
                 rText += GetMetricText( (long)nLower, eCoreUnit, ePresUnit, pIntl );
+                rText += sal_Unicode(' ');
                 rText += EE_RESSTR(GetMetricId(ePresUnit));
             }
             return SFX_ITEM_PRESENTATION_COMPLETE;
@@ -1463,6 +1470,7 @@ SfxItemPresentation SvxShadowItem::GetPresentation
             rText += EE_RESSTR(nId);
             rText += cpDelim;
             rText += GetMetricText( (long)nWidth, eCoreUnit, ePresUnit, pIntl );
+            rText += sal_Unicode(' ');
             rText += EE_RESSTR(GetMetricId(ePresUnit));
             rText += cpDelim;
             rText += EE_RESSTR(RID_SVXITEMS_SHADOW_BEGIN + eLocation);
@@ -1667,6 +1675,7 @@ XubString SvxBorderLine::GetValueString( SfxMapUnit eSrcUnit,
     else
     {
         String sMetric = EE_RESSTR(GetMetricId( eDestUnit ));
+        sMetric.Insert( sal_Unicode(' '), 0 );
         aStr += GetMetricText( (long)nInWidth, eSrcUnit, eDestUnit, pIntl );
         if ( bMetricStr )
             aStr += sMetric;
@@ -2206,28 +2215,33 @@ SfxItemPresentation SvxBoxItem::GetPresentation
             {
                 rText += GetMetricText( (long)nTopDist, eCoreUnit,
                                             ePresUnit, pIntl );
+                rText += sal_Unicode(' ');
                 rText += EE_RESSTR(GetMetricId(ePresUnit));
             }
             else
             {
-                (((rText += EE_RESSTR(RID_SVXITEMS_BORDER_TOP))
+                ((((rText += EE_RESSTR(RID_SVXITEMS_BORDER_TOP))
                       += GetMetricText( (long)nTopDist, eCoreUnit,
                                         ePresUnit, pIntl ))
+                      += sal_Unicode(' '))
                       += EE_RESSTR(GetMetricId(ePresUnit)))
                       += cpDelim;
-                (((rText += EE_RESSTR(RID_SVXITEMS_BORDER_BOTTOM))
+                ((((rText += EE_RESSTR(RID_SVXITEMS_BORDER_BOTTOM))
                       += GetMetricText( (long)nBottomDist, eCoreUnit,
                                         ePresUnit, pIntl ))
+                      += sal_Unicode(' '))
                       += EE_RESSTR(GetMetricId(ePresUnit)))
                       += cpDelim;
-                (((rText += EE_RESSTR(RID_SVXITEMS_BORDER_LEFT))
+                ((((rText += EE_RESSTR(RID_SVXITEMS_BORDER_LEFT))
                       += GetMetricText( (long)nLeftDist, eCoreUnit,
                                         ePresUnit, pIntl ))
+                      += sal_Unicode(' '))
                       += EE_RESSTR(GetMetricId(ePresUnit)))
                       += cpDelim;
-                ((rText += EE_RESSTR(RID_SVXITEMS_BORDER_RIGHT))
+                (((rText += EE_RESSTR(RID_SVXITEMS_BORDER_RIGHT))
                       += GetMetricText( (long)nRightDist, eCoreUnit,
                                         ePresUnit, pIntl ))
+                      += sal_Unicode(' '))
                       += EE_RESSTR(GetMetricId(ePresUnit));
             }
             return SFX_ITEM_PRESENTATION_COMPLETE;
@@ -4102,6 +4116,24 @@ const GraphicObject* SvxBrushItem::GetGraphicObject() const
     }
 
     return pImpl->pGraphicObject;
+}
+
+// -----------------------------------------------------------------------
+//UUUU
+sal_Int8 SvxBrushItem::getGraphicTransparency() const
+{
+    return pImpl->nGraphicTransparency;
+}
+
+// -----------------------------------------------------------------------
+//UUUU
+void SvxBrushItem::setGraphicTransparency(sal_Int8 nNew)
+{
+    if(nNew != pImpl->nGraphicTransparency)
+    {
+        pImpl->nGraphicTransparency = nNew;
+        ApplyGraphicTransparency_Impl();
+    }
 }
 
 // -----------------------------------------------------------------------

@@ -164,6 +164,10 @@ sub getparameter
             $path =~ s/^\Q$installer::globals::destdir\E//;
             $installer::globals::rootpath = $path;
         }
+        elsif ($param eq "-release")
+        {
+            $installer::globals::is_release = 1;
+        }
         else
         {
             installer::logger::print_error( "unknown parameter: $param" );
@@ -281,7 +285,7 @@ sub setglobalvariables
         }
     }
 
-    if (( $installer::globals::compiler =~ /unxmacxi/ ) || ( $installer::globals::compiler =~ /unxmacxp/ ))
+    if( $installer::globals::compiler =~ /unxmac/ )
     {
         $installer::globals::ismacbuild = 1;
 
@@ -634,7 +638,6 @@ sub outputparameter ()
     foreach my $line (@output)
     {
         $installer::logger::Info->print($line);
-        $installer::logger::Global->print($line);
     }
 }
 

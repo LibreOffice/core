@@ -95,6 +95,9 @@ ScRangeName* ScDocument::GetRangeName()
 
 void ScDocument::SetRangeName( ScRangeName* pNewRangeName )
 {
+    if (pRangeName == pNewRangeName)
+        return;
+
     if (pRangeName)
         delete pRangeName;
     pRangeName = pNewRangeName;
@@ -1816,7 +1819,7 @@ void ScDocument::SetDocProtection(const ScDocProtection* pProtect)
     if (pProtect)
         pDocProtection.reset(new ScDocProtection(*pProtect));
     else
-        pDocProtection.reset(NULL);
+        pDocProtection.reset();
 }
 
 sal_Bool ScDocument::IsDocProtected() const
@@ -2152,3 +2155,27 @@ void ScDocument::GetUsedDPObjectCache( std::list<ScDPTableDataCache*>& usedlist 
     }
 }
 // End Comments
+
+SCSIZE ScDocument::GetPatternCount( SCTAB nTab, SCCOL nCol )
+{
+    if( ValidTab(nTab) && pTab[nTab] )
+        return pTab[nTab]->GetPatternCount( nCol );
+    else
+        return 0;
+}
+
+SCSIZE ScDocument::GetPatternCount( SCTAB nTab, SCCOL nCol, SCROW nRw1, SCROW nRw2 )
+{
+    if( ValidTab(nTab) && pTab[nTab] )
+        return pTab[nTab]->GetPatternCount( nCol, nRw1, nRw2 );
+    else
+        return 0;
+}
+
+bool ScDocument::ReservedPatternCount( SCTAB nTab, SCCOL nCol, SCSIZE nReserved )
+{
+    if( ValidTab(nTab) && pTab[nTab] )
+        return pTab[nTab]->ReservedPatternCount( nCol, nReserved );
+    else
+        return false;
+}

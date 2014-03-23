@@ -446,9 +446,7 @@ public:
     // Endpunkt der Spiegelachse
     const basegfx::B2DPoint& GetRef2() const { return maRef2; }
     void SetRef2(const basegfx::B2DPoint& rPt);
-//IAccessibility2 Implementation 2009-----
     void UnmarkObj(SdrObject* pObj);
-//-----IAccessibility2 Implementation 2009
 };
 
 #endif //_SVDMRKV_HXX

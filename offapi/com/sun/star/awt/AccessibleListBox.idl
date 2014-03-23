@@ -44,7 +44,7 @@ module com { module sun { module star { module awt {
     @see com::sun::star::accessibility::XAccessibleComponent
     @see com::sun::star::accessibility::XAccessibleExtendedComponent
 
-    @since OOo 1.1.2
+    @since OpenOffice 1.1.2
 */
 published service AccessibleListBox
 {

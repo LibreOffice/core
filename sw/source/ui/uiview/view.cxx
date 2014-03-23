@@ -727,6 +727,7 @@ SwView::SwView( SfxViewFrame *_pFrame, SfxViewShell* pOldSh )
     : SfxViewShell( _pFrame, SWVIEWFLAGS ),
     aPageStr( SW_RES( STR_PAGE )),
     nNewPage(USHRT_MAX),
+    nOldPageNum(0),
     pNumRuleNodeFromDoc(0), // #i23726#
     pEditWin( new SwEditWin( &_pFrame->GetWindow(), *this ) ),
     pWrtShell(0),
@@ -763,9 +764,6 @@ SwView::SwView( SfxViewFrame *_pFrame, SfxViewShell* pOldSh )
     nFormSfxId( USHRT_MAX ),
     nLastPasteDestination( 0xFFFF ),
     nLeftBorderDistance( 0 ),
-    //IAccessibility2 Implementation 2009-----
-    nOldPageNum(0),
-    //-----IAccessibility2 Implementation 2009
     nRightBorderDistance( 0 ),
     bInMailMerge(sal_False),
     bInDtor(sal_False),

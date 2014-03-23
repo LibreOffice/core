@@ -47,12 +47,16 @@ namespace drawinglayer
             const BitmapEx& rBitmapEx,
             const basegfx::B2DPoint& rBasePosition,
             sal_uInt16 nCenterX,
-            sal_uInt16 nCenterY)
+            sal_uInt16 nCenterY,
+            double fShearX,
+            double fRotation)
         :   DiscreteMetricDependentPrimitive2D(),
             maBitmapEx(rBitmapEx),
             maBasePosition(rBasePosition),
             mnCenterX(nCenterX),
-            mnCenterY(nCenterY)
+            mnCenterY(nCenterY),
+            mfShearX(fShearX),
+            mfRotation(fRotation)
         {}
 
         Primitive2DSequence OverlayBitmapExPrimitive::create2DDecomposition(const geometry::ViewInformation2D& /*rViewInformation*/) const
@@ -67,10 +71,10 @@ namespace drawinglayer
                 // the prepared one which expresses how many logic units form a discrete unit)
                 // for this step. This primitive is to be displayed always unscaled (in it's pixel size)
                 // and unrotated, more like a marker
-                const double fLeft(((0.0 - getCenterX()) * getDiscreteUnit()) + getBasePosition().getX());
-                const double fTop(((0.0 - getCenterY()) * getDiscreteUnit()) + getBasePosition().getY());
-                const double fRight(((aBitmapSize.getWidth() - getCenterX()) * getDiscreteUnit()) + getBasePosition().getX());
-                const double fBottom(((aBitmapSize.getHeight() - getCenterY()) * getDiscreteUnit()) + getBasePosition().getY());
+                const double fLeft((0.0 - getCenterX()) * getDiscreteUnit());
+                const double fTop((0.0 - getCenterY()) * getDiscreteUnit());
+                const double fRight((aBitmapSize.getWidth() - getCenterX()) * getDiscreteUnit());
+                const double fBottom((aBitmapSize.getHeight() - getCenterY()) * getDiscreteUnit());
 
                 // create a BitmapPrimitive2D using those positions
                 basegfx::B2DHomMatrix aTransform;
@@ -79,6 +83,21 @@ namespace drawinglayer
                 aTransform.set(1, 1, fBottom - fTop);
                 aTransform.set(0, 2, fLeft);
                 aTransform.set(1, 2, fTop);
+
+                // if shearX is used, apply it, too
+                if(!basegfx::fTools::equalZero(getShearX()))
+                {
+                    aTransform.shearX(getShearX());
+                }
+
+                // if rotation is used, apply it, too
+                if(!basegfx::fTools::equalZero(getRotation()))
+                {
+                    aTransform.rotate(getRotation());
+                }
+
+                // add BasePosition
+                aTransform.translate(getBasePosition().getX(), getBasePosition().getY());
 
                 const Primitive2DReference aPrimitive(new BitmapPrimitive2D(getBitmapEx(), aTransform));
                 aRetval = Primitive2DSequence(&aPrimitive, 1);

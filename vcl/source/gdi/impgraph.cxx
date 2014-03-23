@@ -710,22 +710,21 @@ const GDIMetaFile& ImpGraphic::ImplGetGDIMetaFile() const
             pThat->maEx = maSvgData->getReplacement();
         }
 
-        VirtualDevice aVirDev;
-        const Size aSizePixel(maEx.GetSizePixel());
-
-        pThat->maMetaFile.Record(&aVirDev);
-
+        // #123983# directly create a metafile with the same PrefSize and PrefMapMode
+        // the bitmap has, this will be an always correct metafile
         if(maEx.IsTransparent())
         {
-            aVirDev.DrawBitmapEx(Point(), maEx);
+            pThat->maMetaFile.AddAction(new MetaBmpExScaleAction(Point(), maEx.GetPrefSize(), maEx));
         }
         else
         {
-            aVirDev.DrawBitmap(Point(), maEx.GetBitmap());
+            pThat->maMetaFile.AddAction(new MetaBmpScaleAction(Point(), maEx.GetPrefSize(), maEx.GetBitmap()));
         }
 
         pThat->maMetaFile.Stop();
-        pThat->maMetaFile.SetPrefSize(aSizePixel);
+        pThat->maMetaFile.WindStart();
+        pThat->maMetaFile.SetPrefSize(maEx.GetPrefSize());
+        pThat->maMetaFile.SetPrefMapMode(maEx.GetPrefMapMode());
     }
 
     return maMetaFile;
@@ -792,22 +791,22 @@ void ImpGraphic::ImplSetPrefSize( const Size& rPrefSize )
 
         case( GRAPHIC_BITMAP ):
         {
+            //UUUU used when importing a writer FlyFrame with SVG as graphic, added conversion
+            // to allow setting the PrefSize at the BitmapEx to hold it
+            if(maSvgData.get() && maEx.IsEmpty())
+            {
+                // use maEx as local buffer for rendered svg
+                const_cast< ImpGraphic* >(this)->maEx = maSvgData->getReplacement();
+            }
+
             // #108077# Push through pref size to animation object,
             // will be lost on copy otherwise
-            if(maSvgData.get())
+            if( ImplIsAnimated() )
             {
-                // ignore for Svg. If this is really used (except the grfcache)
-                // it can be extended by using maEx as buffer for maSvgData->getReplacement()
+                const_cast< BitmapEx& >(mpAnimation->GetBitmapEx()).SetPrefSize( rPrefSize );
             }
-            else
-            {
-                if( ImplIsAnimated() )
-                {
-                    const_cast< BitmapEx& >(mpAnimation->GetBitmapEx()).SetPrefSize( rPrefSize );
-                }
 
-                maEx.SetPrefSize( rPrefSize );
-            }
+            maEx.SetPrefSize( rPrefSize );
         }
         break;
 

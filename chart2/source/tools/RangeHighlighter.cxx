@@ -111,7 +111,7 @@ void RangeHighlighter::determineRanges()
 
                 OUString aCID;
                 aSelection >>= aCID;
-                if ( aCID.getLength() > 0 )
+                if ( !aCID.isEmpty() )
                 {
                     ObjectType eObjectType = ObjectIdentifier::getObjectType( aCID );
                     sal_Int32 nIndex = ObjectIdentifier::getIndexFromParticleOrCID( aCID );

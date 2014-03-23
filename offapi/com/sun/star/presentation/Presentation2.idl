@@ -39,7 +39,7 @@
 
 /** enhances the Presentation service to give access to a <type>XPresentation2</type> interface.
 
-    @since OOo 3.0
+    @since OpenOffice 3.0
 */
 service Presentation2
 {

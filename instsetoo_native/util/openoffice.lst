@@ -70,7 +70,7 @@ Apache_OpenOffice
             ABOUTBOXPRODUCTVERSION 4.1.0
             BASEPRODUCTVERSION 4.1
             PCPFILENAME openoffice.pcp
-            UPDATEURL https://ooo-updates.apache.org/aoo410/check.Update
+            UPDATEURL https://ooo-updates.apache.org/aoonext/check.Update
             ADD_INCLUDE_FILES cliureversion.mk,clioootypesversion.mk,userland.txt,version.lst
             REMOVE_UPGRADE_CODE_FILE upgradecode_remove_ooo.txt
             ADDSYSTEMINTEGRATION 1
@@ -111,65 +111,6 @@ Apache_OpenOffice
     }
 }
 
-Apache_OpenOffice_wJRE
-{
-    Settings
-    {
-        variables
-        {
-            FULLPRODUCTNAME Apache OpenOffice
-            PRODUCTNAME OpenOffice
-            PRODUCTVERSION 4.1.0
-            PRODUCTEXTENSION 
-            LONG_PRODUCTEXTENSION 
-            SHORT_PRODUCTEXTENSION 
-            POSTVERSIONEXTENSION
-            POSTVERSIONEXTENSIONUNIX
-            BRANDPACKAGEVERSION 4
-            USERDIRPRODUCTVERSION 4
-            ABOUTBOXPRODUCTVERSION 4.1.0
-            BASEPRODUCTVERSION 4.1
-            UPDATEURL https://ooo-updates.apache.org/aoo410/check.Update
-            ADD_INCLUDE_FILES cliureversion.mk,clioootypesversion.mk,javaversion2.dat,userland.txt,version.lst
-            REMOVE_UPGRADE_CODE_FILE upgradecode_remove_ooo.txt
-            ADDSYSTEMINTEGRATION 1
-            EVAL
-            PACKAGEVERSION 4.1.0
-            PACKAGEREVISION {milestone}
-            LICENSENAME ALv2
-            WITHJREPRODUCT 1
-            GLOBALFILEGID gid_File_Lib_Vcl
-            GLOBALPATCHFILEGID gid_File_Txt_Patchfiles
-            SPELLCHECKERFILE spellchecker_selection.txt
-            OPENSOURCE 1
-            SETSTATICPATH 1
-            AOODOWNLOADNAME 1
-            AOODOWNLOADNAMEPREFIX Apache_OpenOffice_wJRE
-            XPDINSTALLER 1
-            BETAUPGRADECODE
-            STUBUPGRADECODE {0E7B27B8-D658-4BF9-98D6-EC361582EB4A}
-            CHANGETARGETDIR 1
-            USE_FILEVERSION 1
-            LIBRARYVERSION 10.0.0
-            PATCHCODEFILE ooo_patchcodes.txt
-            JAVAPRODUCT 1
-            DOWNLOADBANNER	ooobanner.bmp
-            DOWNLOADBITMAP	ooobitmap.bmp
-            DOWNLOADSETUPICO	ooosetup.ico
-            RELATIVE_PATHES_IN_DDF 1
-            STARTCENTER_ADDFEATURE_URL http://extensions.openoffice.org/
-            STARTCENTER_INFO_URL http://www.openoffice.org
-            STARTCENTER_TEMPLREP_URL http://templates.openoffice.org
-            STARTCENTER_LAYOUT_STYLE 0
-            DICT_REPO_URL http://extensions.openoffice.org/dictionaries
-        }
-        active			1
-        compression		5
-        script			setup_osljre
-        downloadname	Apache_OpenOffice_{productversion}_{os}_installwjre_{languages}
-        include			{solarenvpath}/{os}/loader2,.,{localpath}/bin,{solarpath}/bin.{minor}/osl,{solarpath}/bin.{minor}/desktop-integration/{pkgtype},{solarpath}/bin.{minor},{solarpath}/lib.{minor},{solarpath}/pck.{minor}/openoffice,{solarpath}/pck.{minor},{solarpath}/xml.{minor}/office/instance,{solarpath}/xml.{minor},../../external/common,{solarenvpath}/{os}/OOo_external
-    }
-}
 
 Apache_OpenOffice_Dev
 {
@@ -196,7 +137,7 @@ Apache_OpenOffice_Dev
             UREPACKAGEPREFIX aoodev
             SOLSUREPACKAGEPREFIX aoodev
             REGISTRYLAYERNAME LayerDev
-            UPDATEURL https://ooo-updates.apache.org/aoo410/check.Update
+            UPDATEURL https://ooo-updates.apache.org/aoonextdev/check.Update
             ADD_INCLUDE_FILES cliureversion.mk,clioootypesversion.mk,javaversion2.dat,userland.txt,version.lst
             EVAL
             PACKAGEVERSION 4.1.0
@@ -249,6 +190,7 @@ Apache_OpenOffice_SDK
         {
             FULLPRODUCTNAME Apache OpenOffice
             PRODUCTNAME OpenOffice
+			PRODUCTDIRNAME OpenOffice_SDK
             PRODUCTVERSION 4.1.0
             PRODUCTEXTENSION
             LONG_PRODUCTEXTENSION
@@ -274,6 +216,53 @@ Apache_OpenOffice_SDK
             DONTUSESTARTMENUFOLDER 1
             RELATIVE_PATHES_IN_DDF 1
             AOODOWNLOADNAMEPREFIX Apache_OpenOffice-SDK
+            STARTCENTER_ADDFEATURE_URL http://extensions.openoffice.org/
+            STARTCENTER_INFO_URL http://www.openoffice.org
+            STARTCENTER_TEMPLREP_URL http://templates.openoffice.org
+            STARTCENTER_LAYOUT_STYLE 0
+            DICT_REPO_URL http://extensions.openoffice.org/dictionaries
+        }
+        active 1
+        compression 5
+        script sdkoo
+        include {solarenvpath}/{os}/loader2,{solarpath}/bin.{minor}/sdkoo,{solarpath}/bin.{minor}/osl,{solarpath}/bin.{minor},{solarpath}/lib.{minor},{solarenvpath}/{os}/MS
+    }
+}
+
+Apache_OpenOffice_Beta_SDK
+{
+    Settings
+    {
+        downloadname Apache_OpenOffice-Beta-SDK_{packageversion}_{os}_install_{languages}
+        variables
+        {
+            FULLPRODUCTNAME Apache OpenOffice Beta
+            PRODUCTNAME OpenOffice Beta
+            PRODUCTDIRNAME OpenOffice_SDK_Beta
+            PRODUCTVERSION 4.1.0
+            PRODUCTEXTENSION
+            SHORT_PRODUCTEXTENSION
+            POSTVERSIONEXTENSION SDK
+            POSTVERSIONEXTENSIONUNIX sdk
+            BRANDPACKAGEVERSION 4
+            PACKAGEVERSION 4.1.0
+            PACKAGEREVISION {milestone}
+            PACK_INSTALLED 1
+            POOLPRODUCT 0
+            DMG_VOLUMEEXTENSION SDK
+            DATABASENAME openofficeorg410betasdk
+            NO_README_IN_ROOTDIR 1
+            LICENSENAME ALv2
+            IGNOREDIRECTORYLAYER 1
+            NOSPACEINDIRECTORYNAME 1
+            NOLANGUAGESELECTIONPRODUCT 1
+            CHANGETARGETDIR 1
+            DOWNLOADBANNER ooosdkbanner.bmp
+            DOWNLOADBITMAP ooosdkbitmap.bmp
+            DOWNLOADSETUPICO ooosetup.ico
+            DONTUSESTARTMENUFOLDER 1
+            RELATIVE_PATHES_IN_DDF 1
+            AOODOWNLOADNAMEPREFIX Apache_OpenOffice_Beta-SDK
             STARTCENTER_ADDFEATURE_URL http://extensions.openoffice.org/
             STARTCENTER_INFO_URL http://www.openoffice.org
             STARTCENTER_TEMPLREP_URL http://templates.openoffice.org
@@ -338,5 +327,65 @@ Apache_OpenOffice_Dev_SDK
         compression 5
         script sdkoo
         include {solarenvpath}/{os}/loader2,{solarpath}/bin.{minor}/sdkoo,{solarpath}/bin.{minor}/osl,{solarpath}/bin.{minor},{solarpath}/lib.{minor},{solarenvpath}/{os}/MS
+    }
+}
+
+Apache_OpenOffice_Beta
+{
+    Settings
+    {
+        variables
+        {
+            FULLPRODUCTNAME Apache OpenOffice Beta
+            PRODUCTNAME OpenOffice Beta
+            PRODUCTVERSION 4.1.0
+            PRODUCTEXTENSION
+            SHORT_PRODUCTEXTENSION
+            BASISROOTNAME AOOBeta
+            BASISPACKAGEPREFIX aoobeta
+            UREPACKAGEPREFIX aoobeta
+            SOLSUREPACKAGEPREFIX aoobeta
+            POSTVERSIONEXTENSION
+            BRANDPACKAGEVERSION 4
+            USERDIRPRODUCTVERSION 4
+            ABOUTBOXPRODUCTVERSION 4.1.0
+            BASEPRODUCTVERSION 4.1
+            UPDATEURL https://ooo-updates.apache.org/aoonextbeta/check.Update
+            ADD_INCLUDE_FILES cliureversion.mk,clioootypesversion.mk,userland.txt,version.lst
+            REMOVE_UPGRADE_CODE_FILE upgradecode_remove_ooo.txt
+            ADDSYSTEMINTEGRATION 0
+            EVAL
+            PACKAGEVERSION 4.1.0
+            PACKAGEREVISION {milestone}
+            LICENSENAME ALv2
+            GLOBALFILEGID gid_File_Lib_Vcl
+            GLOBALPATCHFILEGID gid_File_Txt_Patchfiles
+            SPELLCHECKERFILE spellchecker_selection.txt
+            SETSTATICPATH 1
+            AOODOWNLOADNAME 1
+            AOODOWNLOADNAMEPREFIX Apache_OpenOffice_Beta
+            XPDINSTALLER 0
+            BETAUPGRADECODE
+            STUBUPGRADECODE {0E7B27B8-D658-4BF9-98D6-EC361582EB4A}
+            CHANGETARGETDIR 1
+            USE_FILEVERSION 1
+            LIBRARYVERSION 10.0.0
+            PATCHCODEFILE ooo_patchcodes.txt
+            DOWNLOADBANNER	ooobanner.bmp
+            DOWNLOADBITMAP	ooobitmap.bmp
+            DOWNLOADSETUPICO	ooosetup.ico
+            RELATIVE_PATHES_IN_DDF 1
+            STARTCENTER_ADDFEATURE_URL http://extensions.openoffice.org/
+            STARTCENTER_INFO_URL http://www.openoffice.org
+            STARTCENTER_TEMPLREP_URL http://templates.openoffice.org
+            STARTCENTER_LAYOUT_STYLE 0
+            DICT_REPO_URL http://extensions.openoffice.org/dictionaries
+        }
+        active			1
+        compression		5
+        script			setup_osl
+        downloadname	Apache_OpenOffice_Beta_{productversion}_{os}_install_{languages}
+        langpackdownloadname	Apache_OpenOffice_Beta_{productversion}_languagepack_{os}_install_{languages}
+        include			{solarenvpath}/{os}/loader2,.,{localpath}/bin/beta,{localpath}/bin,{solarpath}/bin.{minor}/ooowoure,{solarpath}/bin.{minor}/osl,{solarpath}/bin.{minor}/desktop-integration/{pkgtype},{solarpath}/bin.{minor},{solarpath}/lib.{minor},{solarpath}/pck.{minor}/openoffice,{solarpath}/pck.{minor},{solarpath}/xml.{minor}/office/instance,{solarpath}/xml.{minor},../../external/common,{solarenvpath}/{os}/OOo_external
     }
 }

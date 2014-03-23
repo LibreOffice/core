@@ -39,7 +39,7 @@ published interface XPropertyControlContext;
 //-----------------------------------------------------------------------------
 /** defines the interface for a single control in an <type>ObjectInspector</type>
 
-    @since OOo 2.0.3
+    @since OpenOffice 2.0.3
 */
 published interface XPropertyControl
 {

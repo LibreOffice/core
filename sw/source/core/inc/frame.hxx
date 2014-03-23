@@ -29,11 +29,9 @@
 #include "calbck.hxx"   // fuer SwClient
 #include <svl/brdcst.hxx>
 
-//IAccessibility2 Implementation 2009-----
 #include <com/sun/star/style/TabStop.hpp>
 #include <comphelper/stlunosequence.hxx>
 using namespace ::com::sun::star;
-//-----IAccessibility2 Implementation 2009
 class SwLayoutFrm;
 class SwRootFrm;
 class SwPageFrm;
@@ -60,6 +58,8 @@ class SwFmt;
 class SwPrintData;
 class SwSortedObjs;
 class SwAnchoredObject;
+//UUUU
+class FillAttributes;
 
 //Jeder FrmTyp findet sich hier in einem Bit wieder.
 //Die Bits muessen so gesetzt werden, dass mit einer Maskierung festgestellt
@@ -297,10 +297,8 @@ class SwFrm: public SwClient, public SfxBroadcaster
 
     //Cache fuer (Umrandungs-)Attribute.
     static SwCache *pCache;
-    //IAccessibility2 Implementation 2009-----
     //Solution:Member to identify if acc table should be disposed
     sal_Bool bIfAccTableShouldDisposing;
-    //-----IAccessibility2 Implementation 2009
 
     // --> OD 2006-05-10 #i65250#
     // frame ID is now in general available - used for layout loop control
@@ -424,12 +422,10 @@ protected:
     sal_Bool bRetouche:         1;  //Der Frame ist fuer Retusche verantwortlich
                                 //wenn sal_True.
 public:
-    //IAccessibility2 Implementation 2009-----
     virtual uno::Sequence< style::TabStop >  GetTabStopInfo( SwTwips )
     {
         return uno::Sequence< style::TabStop >();
     }
-    //-----IAccessibility2 Implementation 2009
     sal_Bool bUnUsed2:          1;
 protected:
     sal_Bool bInfInvalid:       1;  //InfoFlags sind Invalid.
@@ -574,10 +570,12 @@ public:
     //Retouche, nicht im Bereich des uebergebenen Rect!
     void Retouche( const SwPageFrm *pPage, const SwRect &rRect ) const;
 
-    sal_Bool GetBackgroundBrush( const SvxBrushItem*& rpBrush,
-                             const Color*& rpColor,
-                             SwRect &rOrigRect,
-                             sal_Bool bLowerMode ) const;
+    sal_Bool GetBackgroundBrush(
+        boost::shared_ptr< FillAttributes >& rFillAttributes,
+        const SvxBrushItem*& rpBrush,
+        const Color*& rpColor,
+        SwRect &rOrigRect,
+        sal_Bool bLowerMode ) const;
 
     inline void SetCompletePaint() const;
     inline void ResetCompletePaint() const;
@@ -782,10 +780,8 @@ public:
     virtual Size ChgSize( const Size& aNewSize );
 
     virtual void Cut() = 0;
-    //IAccessibility2 Implementation 2009-----
     //Solution:Add a method to change the acc table dispose state.
     void SetAccTableDispose( sal_Bool bDispose){ bIfAccTableShouldDisposing = bDispose;}
-    //-----IAccessibility2 Implementation 2009
     virtual void Paste( SwFrm* pParent, SwFrm* pSibling = 0 ) = 0;
 
     void ValidateLineNum() { bValidLineNum = sal_True; }

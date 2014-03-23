@@ -826,41 +826,66 @@ sal_Bool ScViewFunc::PasteFromSystem( sal_uLong nFormatId, sal_Bool bApi )
 //----------------------------------------------------------------------------
 //      P A S T E
 
-sal_Bool ScViewFunc::PasteOnDrawObject( const uno::Reference<datatransfer::XTransferable>& rxTransferable,
-                                    SdrObject* pHitObj, sal_Bool bLink )
+sal_Bool ScViewFunc::PasteOnDrawObjectLinked(
+    const uno::Reference<datatransfer::XTransferable>& rxTransferable,
+    SdrObject& rHitObj)
 {
-    sal_Bool bRet = sal_False;
-    if ( bLink )
+    TransferableDataHelper aDataHelper( rxTransferable );
+
+    if ( aDataHelper.HasFormat( SOT_FORMATSTR_ID_SVXB ) )
     {
-        TransferableDataHelper aDataHelper( rxTransferable );
-        if ( aDataHelper.HasFormat( SOT_FORMATSTR_ID_SVXB ) )
+        SotStorageStreamRef xStm;
+        ScDrawView* pScDrawView = GetScDrawView();
+
+        if( pScDrawView && aDataHelper.GetSotStorageStream( SOT_FORMATSTR_ID_SVXB, xStm ) )
         {
-            SotStorageStreamRef xStm;
-            if( aDataHelper.GetSotStorageStream( SOT_FORMATSTR_ID_SVXB, xStm ) )
+            Graphic aGraphic;
+
+            *xStm >> aGraphic;
+
+            const String aEmpty;
+            const String aBeginUndo(ScGlobal::GetRscString(STR_UNDO_DRAGDROP));
+
+            if(pScDrawView->ApplyGraphicToObject( rHitObj, aGraphic, aBeginUndo, aEmpty, aEmpty ))
             {
-                Graphic aGraphic;
-                *xStm >> aGraphic;
-                bRet = ApplyGraphicToObject( pHitObj, aGraphic );
+                return sal_True;
             }
         }
-        else if ( aDataHelper.HasFormat( SOT_FORMAT_GDIMETAFILE ) )
-        {
-            GDIMetaFile aMtf;
-            if( aDataHelper.GetGDIMetaFile( FORMAT_GDIMETAFILE, aMtf ) )
-                bRet = ApplyGraphicToObject( pHitObj, Graphic(aMtf) );
-        }
-        else if ( aDataHelper.HasFormat( SOT_FORMAT_BITMAP ) )
-        {
-            BitmapEx aBmpEx;
-            if( aDataHelper.GetBitmapEx( FORMAT_BITMAP, aBmpEx ) )
-                bRet = ApplyGraphicToObject( pHitObj, Graphic(aBmpEx) );
-        }
     }
-    else
+    else if ( aDataHelper.HasFormat( SOT_FORMAT_GDIMETAFILE ) )
     {
-        //  ham' wa noch nich
+        GDIMetaFile aMtf;
+        ScDrawView* pScDrawView = GetScDrawView();
+
+        if( pScDrawView && aDataHelper.GetGDIMetaFile( FORMAT_GDIMETAFILE, aMtf ) )
+        {
+            const String aEmpty;
+            const String aBeginUndo(ScGlobal::GetRscString(STR_UNDO_DRAGDROP));
+
+            if(pScDrawView->ApplyGraphicToObject( rHitObj, Graphic(aMtf), aBeginUndo, aEmpty, aEmpty ))
+            {
+                return sal_True;
+            }
+        }
     }
-    return bRet;
+    else if ( aDataHelper.HasFormat( SOT_FORMAT_BITMAP ) || aDataHelper.HasFormat( SOT_FORMATSTR_ID_PNG ) )
+    {
+        BitmapEx aBmpEx;
+        ScDrawView* pScDrawView = GetScDrawView();
+
+        if( pScDrawView && aDataHelper.GetBitmapEx( FORMAT_BITMAP, aBmpEx ) )
+        {
+            const String aEmpty;
+            const String aBeginUndo(ScGlobal::GetRscString(STR_UNDO_DRAGDROP));
+
+            if(pScDrawView->ApplyGraphicToObject( rHitObj, Graphic(aBmpEx), aBeginUndo, aEmpty, aEmpty ))
+            {
+                return sal_True;
+            }
+        }
+    }
+
+    return sal_False;
 }
 
 sal_Bool lcl_SelHasAttrib( ScDocument* pDoc, SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,

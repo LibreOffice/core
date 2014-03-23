@@ -71,7 +71,7 @@ module com {  module sun {  module star {  module presentation {
     Note: To controll a running slideshow inside a presentation, please
     use <type>XPresentation2</type> and <type>XSlideShowController</type>.
 
-    @since OOo 3.0
+    @since OpenOffice 3.0
  */
 interface XSlideShow : ::com::sun::star::uno::XInterface
 {

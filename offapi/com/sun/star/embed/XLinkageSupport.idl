@@ -60,7 +60,7 @@ published interface XLinkageSupport: XCommonEmbedPersist
         This method can be used only for links implementations that implement
         the whole set of embedded object interfaces. Usually the sets of
         interfaces are the same for links and objects. An example of exception
-        from this are OOo links that do not implement
+        from this are OpenOffice links that do not implement
         <type>XEmbedPersist</type> interface. For such cases the method will
         throw an exception.
         </p>

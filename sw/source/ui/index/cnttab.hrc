@@ -169,12 +169,10 @@
 #define STR_TOKEN_HELP_AUTHORITY     (STR_BUTTON_HELP_TEXT_START + 9)
 
 #define STR_CHARSTYLE               (STR_TOKEN_HELP_AUTHORITY + 1)
-//IAccessibility2 Impplementaton 2009-----
 #define STR_STRUCTURE   (STR_TOKEN_HELP_AUTHORITY + 2)
 #define STR_ADDITIONAL_ACCNAME_STRING1 (STR_TOKEN_HELP_AUTHORITY + 3)
 #define STR_ADDITIONAL_ACCNAME_STRING2 (STR_TOKEN_HELP_AUTHORITY + 4)
 #define STR_ADDITIONAL_ACCNAME_STRING3 (STR_TOKEN_HELP_AUTHORITY + 5)
-//-----IAccessibility2 Impplementaton 2009
 #define TLB_STYLES              100
 #define FL_STYLES                   101
 #define PB_OK                   102

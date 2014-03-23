@@ -594,18 +594,22 @@ SfxItemPresentation SvxMarginItem::GetPresentation
         {
             rText = SVX_RESSTR(RID_SVXITEMS_MARGIN_LEFT);
             rText += GetMetricText( (long)nLeftMargin, eCoreUnit, ePresUnit, pIntl );
+            rText += sal_Unicode(' ');
             rText += SVX_RESSTR(GetMetricId(ePresUnit));
             rText += cpDelim;
             rText += SVX_RESSTR(RID_SVXITEMS_MARGIN_TOP);
             rText += GetMetricText( (long)nTopMargin, eCoreUnit, ePresUnit, pIntl );
+            rText += sal_Unicode(' ');
             rText += SVX_RESSTR(GetMetricId(ePresUnit));
             rText += cpDelim;
             rText += SVX_RESSTR(RID_SVXITEMS_MARGIN_RIGHT);
             rText += GetMetricText( (long)nRightMargin, eCoreUnit, ePresUnit, pIntl );
+            rText += sal_Unicode(' ');
             rText += SVX_RESSTR(GetMetricId(ePresUnit));
             rText += cpDelim;
             rText += SVX_RESSTR(RID_SVXITEMS_MARGIN_BOTTOM);
             rText += GetMetricText( (long)nBottomMargin, eCoreUnit, ePresUnit, pIntl );
+            rText += sal_Unicode(' ');
             rText += SVX_RESSTR(GetMetricId(ePresUnit));
             return SFX_ITEM_PRESENTATION_COMPLETE;
         }

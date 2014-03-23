@@ -37,7 +37,7 @@ published interface XPolyPolygon2D;
     i.e. the invariant setup used when painting a whole view of
     something.<p>
 
-    @since OOo 2.0
+    @since OpenOffice 2.0
  */
 published struct ViewState
 {

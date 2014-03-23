@@ -125,9 +125,7 @@
 #define PROPERTY_MAP_PARA_AUTO_STYLE                    96
 #define PROPERTY_MAP_FLDTYP_DOCINFO_CUSTOM              97
 #define PROPERTY_MAP_METAFIELD                          98
-//IAccessibility2 Implementation 2009-----
 #define PROPERTY_MAP_ACCESSIBILITY_TEXT_ATTRIBUTE       99
-//-----IAccessibility2 Implementation 2009
 #define PROPERTY_MAP_END                                100
 
 //S&E
@@ -315,6 +313,14 @@
 #define WID_TXTCOL_LINE_IS_ON           4
 #define WID_TXTCOL_IS_AUTOMATIC         5
 #define WID_TXTCOL_AUTO_DISTANCE        6
+
+//UUUU This define would need the include of <svx/unoshprp.hxx>, but this ends
+// in a mess; there *are* double used symbols which are used in a #define in
+// editengine and as an enum in sw; these will then collide and lead to severe
+// problems which will be hard to detect at all (e.g. look for UNO_NAME_CHAR_COLOR).
+// More of these are likely, so better use a local define here, but at least the same
+// as in svx/inc/unoshprp.hxx
+#define OWN_ATTR_FILLBMP_MODE   (OWN_ATTR_VALUE_START+45)
 
 /* -----------------04.07.98 11:41-------------------
  *

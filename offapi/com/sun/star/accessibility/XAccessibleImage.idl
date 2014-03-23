@@ -37,7 +37,7 @@ module com { module sun { module star { module accessibility {
     AccessibleIcon.  This interface lets you retrieve an image's size and
     description.</p>
 
-    @since OOo 1.1.2
+    @since OpenOffice 1.1.2
 */
 published interface XAccessibleImage : ::com::sun::star::uno::XInterface
 {

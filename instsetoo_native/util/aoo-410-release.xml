@@ -1,0 +1,305 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--***********************************************************
+ *
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ *
+ ***********************************************************-->
+<release
+    name="snapshot"
+    version="4.1.0">
+    <language
+        id="ast"
+        english-name="Asturian"
+        local-name="Asturianu"
+        />
+    <language
+        id="eu"
+        english-name="Basque"
+        local-name="Euskara"
+        />
+    <language
+        id="zh-CN"
+        english-name="Chinese (simplified)"
+        local-name="简体中文"
+        />
+    <language
+        id="zh-TW"
+        english-name="Chinese (traditional)"
+        local-name="正體中文"
+        />
+    <language
+        id="cs"
+        english-name="Czech"
+        local-name="Čeština"
+        />
+    <language
+        id="nl"
+        english-name="Dutch"
+        local-name="Nederlands"
+        />
+    <language
+        id="en-GB"
+        english-name="English (GB)"
+        local-name="English (British)"
+        />
+    <language
+        id="en-US"
+        english-name="English (US)"
+        local-name="English (US)"
+        />
+    <language
+        id="fi"
+        english-name="Finnish"
+        local-name="Suomi"
+        />
+    <language
+        id="fr"
+        english-name="French"
+        local-name="Français"
+        />
+    <language
+        id="gd"
+        english-name="Gaelic (Scottish)"
+        local-name="Gàidhlig"
+        />
+    <language
+        id="gl"
+        english-name="Galician"
+        local-name="Galego"
+        />
+    <language
+        id="de"
+        english-name="German"
+        local-name="Deutsch"
+        />
+    <language
+        id="el"
+        english-name="Greek"
+        local-name="Ελληνικά"
+        />
+    <language
+        id="hu"
+        english-name="Hungarian"
+        local-name="Magyar"
+        />
+    <language
+        id="it"
+        english-name="Italian"
+        local-name="Italiano"
+        />
+    <language
+        id="ja"
+        english-name="Japanese"
+        local-name="日本語"
+        />
+    <language
+        id="km"
+        english-name="Khmer"
+        local-name="ភាសាខ្មែរ"
+        />
+    <language
+        id="ko"
+        english-name="Korean"
+        local-name="한국어"
+        />
+    <language
+        id="lt"
+        english-name="Lithuanian"
+        local-name="Lietuvių"
+        />
+    <language
+        id="pl"
+        english-name="Polish"
+        local-name="Polski"
+        />
+    <language
+        id="pt-BR"
+        english-name="Portuguese (Brazilian)"
+        local-name="Português (do Brasil)"
+        />
+    <language
+        id="pt"
+        english-name="Portuguese (European)"
+        local-name="Português (Europeu)"
+        />
+    <language
+        id="ru"
+        english-name="Russian"
+        local-name="Русский"
+        />
+    <language
+        id="sr"
+        english-name="Serbian (Cyrillic)"
+        local-name="Cрпски (ћирилицом)"
+        />
+    <language
+        id="sk"
+        english-name="Slovak"
+        local-name="Slovenský jazyk (slovenčina)"
+        />
+    <language
+        id="sl"
+        english-name="Slovenian"
+        local-name="Slovenski jezik (slovenščina)"
+        />
+    <language
+        id="es"
+        english-name="Spanish"
+        local-name="Español"
+        />
+    <language
+        id="sv"
+        english-name="Swedish"
+        local-name="Svenska"
+        />
+    <language
+        id="ta"
+        english-name="Tamil"
+        local-name="தமிழ்"
+        />
+    <language
+        id="tr"
+        english-name="Turkish"
+        local-name="Türkçe"
+        />
+    <language
+        id="vi"
+        english-name="Vietnamese"
+        local-name="Tiếng Việt"
+        />
+    <language
+        id="kid"
+        english-name="English (US) with support&lt;br&gt;for resource debugging"
+        local-name="kid"
+        />
+
+    <platform
+        id="wntmsci12.pro"
+        display-name="Windows"
+        archive-platform="Win_x86"
+        word-size="32"
+        package-types="msi"
+        extension="exe"
+        />
+    <platform
+        id="unxlngi6.pro"
+        display-name="Linux"
+        archive-platform="Linux_x86"
+        word-size="32"
+        package-types="rpm;deb"
+        add-package-type-to-archive-name="true"
+        extension="tar.gz"
+        />
+    <platform
+        id="unxlngix6.pro"
+        display-name="Linux"
+        archive-platform="Linux_x86-64"
+        word-size="64"
+        package-types="rpm;deb"
+        add-package-type-to-archive-name="true"
+        extension="tar.gz"
+        />
+    <platform
+        id="unxmaccx.pro"
+        display-name="OS X"
+        archive-platform="unxmaccx_x86-64"
+        word-size="64"
+        package-types="dmg"
+        extension="dmg"
+        />
+
+    <!--
+    <download
+        platform-id="wntmsci12.pro"
+        base-url="http://server/path/developer-snapshots/snapshot/Win_x86"
+        />
+    -->
+
+    <package
+        id="openoffice"
+        target="openoffice"
+        display-name="Full Install"
+        archive-name="Apache_OpenOffice_%V_%P_install%T_%L.%E"
+        />
+    <package
+        id="langpack"
+        target="ooolanguagepack"
+        display-name="Langpack"
+        archive-name="Apache_OpenOffice_%V_%P_langpack%T_%L.%E"
+        />
+    <package
+        id="patch"
+        target="patch-create"
+        display-name="Patch"
+        archive-name="Apache_OpenOffice_%V_%P_patch%T_%L.%E"
+        download-extension="msp"
+        />
+    <package
+        id="sdk"
+        target="sdkoo"
+        display-name="SDK"
+        archive-name="Apache_OpenOffice-SDK_%V_%P_install%T_%L.%E"
+        link-tooltip="What is an SDK?"
+        link-URL="http://www.openoffice.org/download/other.html#notes"
+        />
+
+    <build
+        package-id="openoffice"
+        platform-list="all"
+        language-list="all"
+        />
+
+    <build
+        package-id="langpack"
+        platform-list="all"
+        language-list="all"
+        />
+
+    <build
+        package-id="patch"
+        platform-list="wntmsci12.pro"
+        language-list="all"
+        />
+
+    <wiki>
+      <package-ref
+          package-id="openoffice"
+          language-list="all"
+          platform-list="all"
+          table="main"
+          />
+      <package-ref
+          package-id="langpack"
+          language-list="all"
+          platform-list="all"
+          table="main"
+          />
+      <package-ref
+          package-id="patch"
+          language-list="all"
+          platform-list="wntmsci12.pro"
+          table="main"
+          />
+      <package-ref
+          package-id="sdk"
+          language-list="en-US"
+          platform-list="all"
+          table="secondary"
+          />
+    </wiki>
+</release>

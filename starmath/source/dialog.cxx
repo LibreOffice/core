@@ -865,9 +865,8 @@ void SmDistanceDialog::SetCategory(sal_uInt16 nCategory)
         sal_uInt16     nDigits;
         if (nCategory < 9)
         {
-            eUnit   = FUNIT_CUSTOM;
+            eUnit = FUNIT_PERCENT;
             nDigits = 0;
-            pMF->SetCustomUnitText( '%' );
         }
         else
         {

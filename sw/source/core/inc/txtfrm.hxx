@@ -26,9 +26,7 @@
 #include <tools/mempool.hxx>
 #include <tools/string.hxx>
 #include "cntfrm.hxx"
-//IAccessibility2 Implementation 2009-----
 #include "com/sun/star/uno/Sequence.hxx"
-//-----IAccessibility2 Implementation 2009
 #define STRSIZE(x) (sizeof(x)-1)
 
 class SwCharRange;
@@ -231,9 +229,7 @@ protected:
 
 public:
 
-    //IAccessibility2 Implementation 2009-----
     com::sun::star::uno::Sequence< ::com::sun::star::style::TabStop >  GetTabStopInfo( SwTwips CurrentPos );
-    //-----IAccessibility2 Implementation 2009
     //public, weil der eine oder andere die Methode rufen darf um das
     //Prepare zu sparen - mit Vorsicht zu geniessen!
     void Init();

@@ -513,7 +513,6 @@ void SwFldRefPage::UpdateSubType()
     const sal_uInt16 nTypeId = (sal_uInt16)(sal_uLong)aTypeLB.GetEntryData(GetTypeSel());
 
     String sOldSel;
-    // --> OD 2007-11-22 #i83479#
     if ( aSelectionLB.IsVisible() )
     {
         const sal_uInt16 nSelectionSel = aSelectionLB.GetSelectEntryPos();
@@ -522,17 +521,14 @@ void SwFldRefPage::UpdateSubType()
             sOldSel = aSelectionLB.GetEntry(nSelectionSel);
         }
     }
-    // <--
     if (IsFldEdit() && !sOldSel.Len())
         sOldSel = String::CreateFromInt32( pRefFld->GetSeqNo() + 1 );
 
     aSelectionLB.SetUpdateMode(sal_False);
     aSelectionLB.Clear();
-    // --> OD 2007-11-21 #i83479#
     aSelectionToolTipLB.SetUpdateMode(sal_False);
     aSelectionToolTipLB.Clear();
     bool bShowSelectionToolTipLB( false );
-    // <--
 
     if( REFFLDFLAG & nTypeId )
     {
@@ -578,7 +574,6 @@ void SwFldRefPage::UpdateSubType()
                     sOldSel = aArr[n]->sDlgEntry;
             }
         }
-        // --> OD 2007-11-14 #i83479#
         else if ( nTypeId == REFFLDFLAG_HEADING )
         {
             bShowSelectionToolTipLB = true;
@@ -639,7 +634,6 @@ void SwFldRefPage::UpdateSubType()
                 }
             }
         }
-        // <--
         else
         {
             aSelectionLB.SetStyle(aSelectionLB.GetStyle()|WB_SORT);

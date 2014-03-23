@@ -37,6 +37,9 @@ use installer::systemactions;
 use installer::worker;
 use installer::windows::idtglobal;
 use installer::windows::language;
+use installer::patch::ReleasesList;
+
+use strict;
 
 ###########################################################################
 # Generating the header of the ddf file.
@@ -128,25 +131,6 @@ sub make_relative_ddf_path
     return $sourcepath;
 }
 
-##########################################################################
-# Returning the order of the sequences in the files array.
-##########################################################################
-
-sub get_sequenceorder
-{
-    my ($filesref) = @_;
-
-    my %order = ();
-
-    for ( my $i = 0; $i <= $#{$filesref}; $i++ )
-    {
-        my $onefile = ${$filesref}[$i];
-        if ( ! $onefile->{'assignedsequencenumber'} ) { installer::exiter::exit_program("ERROR: No sequence number assigned to $onefile->{'gid'} ($onefile->{'uniquename'})!", "get_sequenceorder"); }
-        $order{$onefile->{'assignedsequencenumber'}} = $i;
-    }
-
-    return \%order;
-}
 
 ##########################################################################
 # Generation the list, in which the source of the files is connected
@@ -154,243 +138,87 @@ sub get_sequenceorder
 # to be included into a cab file, this has to be done via ddf files.
 ##########################################################################
 
-sub generate_cab_file_list
+sub generate_cab_file_list ($$$$)
 {
     my ($filesref, $installdir, $ddfdir, $allvariables) = @_;
 
-    my @cabfilelist = ();
-
     installer::logger::include_header_into_logfile("Generating ddf files");
 
-    $installer::logger::Lang->add_timestamp("Performance Info: ddf file generation start");
-
-    if ( $^O =~ /cygwin/i ) { installer::worker::generate_cygwin_pathes($filesref); }
-
-    if ( $installer::globals::fix_number_of_cab_files )
+    if ( $^O =~ /cygwin/i )
     {
-        for ( my $i = 0; $i <= $#{$filesref}; $i++ )
+        installer::worker::generate_cygwin_pathes($filesref);
+    }
+
+    # Make sure that all files point to the same cabinet file.
+    # Multiple cabinet files are not supported anymore.
+    my $cabinetfile = $filesref->[0]->{'cabinet'};
+    foreach my $onefile (@$filesref)
+    {
+        if ($onefile->{'cabinet'} ne $cabinetfile)
         {
-            my $onefile = ${$filesref}[$i];
-            my $cabinetfile = $onefile->{'cabinet'};
-            my $sourcepath =  $onefile->{'sourcepath'};
-            if ( $^O =~ /cygwin/i ) { $sourcepath = $onefile->{'cyg_sourcepath'}; }
-            my $uniquename =  $onefile->{'uniquename'};
-
-            my $styles = "";
-            my $doinclude = 1;
-            if ( $onefile->{'Styles'} ) { $styles = $onefile->{'Styles'}; };
-            if ( $styles =~ /\bDONT_PACK\b/ ) { $doinclude = 0; }
-
-
-            # to avoid lines with more than 256 characters, it can be useful to use relative pathes
-            if ( $allvariables->{'RELATIVE_PATHES_IN_DDF'} ) { $sourcepath = make_relative_ddf_path($sourcepath); }
-
-            # all files with the same cabinetfile are directly behind each other in the files collector
-
-            my @ddffile = ();
-
-            write_ddf_file_header(\@ddffile, $cabinetfile, $installdir);
-
-            my $ddfline = "\"" . $sourcepath . "\"" . " " . $uniquename . "\n";
-            if ( $doinclude ) { push(@ddffile, $ddfline); }
-
-            my $nextfile = ${$filesref}[$i+1];
-            my $nextcabinetfile = "";
-
-            if ( $nextfile->{'cabinet'} ) { $nextcabinetfile = $nextfile->{'cabinet'}; }
-
-            while ( $nextcabinetfile eq $cabinetfile )
-            {
-                $sourcepath =  $nextfile->{'sourcepath'};
-                if ( $^O =~ /cygwin/i ) { $sourcepath = $nextfile->{'cyg_sourcepath'}; }
-                # to avoid lines with more than 256 characters, it can be useful to use relative pathes
-                if ( $allvariables->{'RELATIVE_PATHES_IN_DDF'} ) { $sourcepath = make_relative_ddf_path($sourcepath); }
-                $uniquename =  $nextfile->{'uniquename'};
-                my $localdoinclude = 1;
-                my $nextfilestyles = "";
-                if ( $nextfile->{'Styles'} ) { $nextfilestyles = $nextfile->{'Styles'}; }
-                if ( $nextfilestyles =~ /\bDONT_PACK\b/ ) { $localdoinclude = 0; }
-                $ddfline = "\"" . $sourcepath . "\"" . " " . $uniquename . "\n";
-                if ( $localdoinclude ) { push(@ddffile, $ddfline); }
-                $i++;                                           # increasing the counter!
-                $nextfile = ${$filesref}[$i+1];
-                if ( $nextfile ) { $nextcabinetfile = $nextfile->{'cabinet'}; }
-                else { $nextcabinetfile = "_lastfile_"; }
-            }
-
-            # creating the DDF file
-
-            my $ddffilename = $cabinetfile;
-            $ddffilename =~ s/.cab/.ddf/;
-            $ddfdir =~ s/\Q$installer::globals::separator\E\s*$//;
-            $ddffilename = $ddfdir . $installer::globals::separator . $ddffilename;
-
-            installer::files::save_file($ddffilename ,\@ddffile);
-            my $infoline = "Created ddf file: $ddffilename\n";
-            $installer::logger::Lang->print($infoline);
-
-            # lines in ddf files must not be longer than 256 characters
-            check_ddf_file(\@ddffile, $ddffilename);
-
-            # Writing the makecab system call
-
-            my $oneline = "makecab.exe /V3 /F " . $ddffilename . " 2\>\&1 |" . "\n";
-
-            push(@cabfilelist, $oneline);
-
-            # collecting all ddf files
-            push(@installer::globals::allddffiles, $ddffilename);
+            installer::exiter::exit_program(
+                "ERROR: multiple cabinet files are not supported",
+                "generate_cab_file_list");
         }
     }
-    elsif ( $installer::globals::one_cab_file )
+
+    # Sort files on the sequence number.
+    my @sorted_files = sort {$a->{'sequencenumber'} <=> $b->{'sequencenumber'}} @$filesref;
+
+    my @ddffile = ();
+    write_ddf_file_header(\@ddffile, $cabinetfile, $installdir);
+    foreach my $onefile (@sorted_files)
     {
-        my @ddffile = ();
-
-        my $cabinetfile = "";
-
-        for ( my $i = 0; $i <= $#{$filesref}; $i++ )
+        my $styles = $onefile->{'Styles'};
+        $styles = "" unless defined $styles;
+        if ($styles =~ /\bDONT_PACK\b/)
         {
-            my $onefile = ${$filesref}[$i];
-            $cabinetfile = $onefile->{'cabinet'};
-            my $sourcepath =  $onefile->{'sourcepath'};
-            if ( $^O =~ /cygwin/i ) { $sourcepath = $onefile->{'cyg_sourcepath'}; }
-            my $uniquename =  $onefile->{'uniquename'};
-
-            # to avoid lines with more than 256 characters, it can be useful to use relative pathes
-            if ( $allvariables->{'RELATIVE_PATHES_IN_DDF'} ) { $sourcepath = make_relative_ddf_path($sourcepath); }
-
-            if ( $i == 0 ) { write_ddf_file_header(\@ddffile, $cabinetfile, $installdir); }
-
-            my $styles = "";
-            my $doinclude = 1;
-            if ( $onefile->{'Styles'} ) { $styles = $onefile->{'Styles'}; };
-            if ( $styles =~ /\bDONT_PACK\b/ ) { $doinclude = 0; }
-
-            my $ddfline = "\"" . $sourcepath . "\"" . " " . $uniquename . "\n";
-            if ( $doinclude ) { push(@ddffile, $ddfline); }
+            $installer::logger::Lang->printf("    excluding '%s' from ddf\n", $onefile->{'uniquename'});
         }
 
-        # creating the DDF file
-
-        my $ddffilename = $cabinetfile;
-        $ddffilename =~ s/.cab/.ddf/;
-        $ddfdir =~ s/[\/\\]\s*$//;
-        $ddffilename = $ddfdir . $installer::globals::separator . $ddffilename;
-
-        installer::files::save_file($ddffilename ,\@ddffile);
-        my $infoline = "Created ddf file: $ddffilename\n";
-        $installer::logger::Lang->print($infoline);
-
-        # lines in ddf files must not be longer than 256 characters
-        check_ddf_file(\@ddffile, $ddffilename);
-
-        # Writing the makecab system call
-
-        my $oneline = "makecab.exe /F " . $ddffilename . "\n";
-
-        push(@cabfilelist, $oneline);
-
-        # collecting all ddf files
-        push(@installer::globals::allddffiles, $ddffilename);
-    }
-    else
-    {
-        installer::exiter::exit_program("ERROR: No cab file specification in globals.pm !", "create_media_table");
-    }
-
-    $installer::logger::Lang->add_timestamp("Performance Info: ddf file generation end");
-
-    return \@cabfilelist;   # contains all system calls for packaging process
-}
-
-########################################################################
-# Returning the file sequence of a specified file.
-########################################################################
-
-sub get_file_sequence
-{
-    my ($filesref, $uniquefilename) = @_;
-
-    my $sequence = "";
-    my $found_sequence = 0;
-
-    for ( my $i = 0; $i <= $#{$filesref}; $i++ )
-    {
-        my $onefile = ${$filesref}[$i];
         my $uniquename = $onefile->{'uniquename'};
-
-        if ( $uniquename eq $uniquefilename )
+        my $sourcepath = $onefile->{'sourcepath'};
+        if ( $^O =~ /cygwin/i )
         {
-            $sequence = $onefile->{'sequencenumber'};
-            $found_sequence = 1;
-            last;
+            $sourcepath = $onefile->{'cyg_sourcepath'};
         }
+
+        # to avoid lines with more than 256 characters, it can be useful to use relative pathes
+        if ($allvariables->{'RELATIVE_PATHES_IN_DDF'})
+        {
+            $sourcepath = make_relative_ddf_path($sourcepath);
+        }
+
+        my $ddfline = "\"" . $sourcepath . "\"" . " " . $uniquename . "\n";
+        push(@ddffile, $ddfline);
+
+        $installer::logger::Lang->printf("    adding '%s' with sequence %d to ddf\n",
+            $onefile->{'uniquename'},
+            $onefile->{'sequencenumber'});
     }
+    # creating the DDF file
 
-    if ( ! $found_sequence ) { installer::exiter::exit_program("ERROR: No sequence found for $uniquefilename !", "get_file_sequence"); }
+    my $ddffilename = $cabinetfile;
+    $ddffilename =~ s/.cab/.ddf/;
+    $ddfdir =~ s/\Q$installer::globals::separator\E\s*$//;
+    $ddffilename = $ddfdir . $installer::globals::separator . $ddffilename;
 
-    return $sequence;
+    installer::files::save_file($ddffilename ,\@ddffile);
+    $installer::logger::Lang->print("Created ddf file: %s\n", $ddffilename);
+
+    # lines in ddf files must not be longer than 256 characters
+    check_ddf_file(\@ddffile, $ddffilename);
+
+    # collecting all ddf files
+    push(@installer::globals::allddffiles, $ddffilename);
+
+    # Writing the makecab system call
+    # Return a list with all system calls for packaging process.
+    my @cabfilelist = ("makecab.exe /V3 /F " . $ddffilename . " 2\>\&1 |" . "\n");
+    return \@cabfilelist;
 }
 
-########################################################################
-# For update and patch reasons the pack order needs to be saved.
-# The pack order is saved in the ddf files; the names and locations
-# of the ddf files are saved in @installer::globals::allddffiles.
-# The outputfile "packorder.txt" can be saved in
-# $installer::globals::infodirectory .
-########################################################################
 
-sub save_packorder
-{
-    installer::logger::include_header_into_logfile("Saving pack order");
-
-    $installer::logger::Lang->add_timestamp("Performance Info: saving pack order start");
-
-    my $packorderfilename = "packorder.txt";
-    $packorderfilename = $installer::globals::infodirectory . $installer::globals::separator . $packorderfilename;
-
-    my @packorder = ();
-
-    my $headerline = "\# Syntax\: Filetable_Sequence Cabinetfilename Physical_FileName Unique_FileName\n\n";
-    push(@packorder, $headerline);
-
-    for ( my $i = 0; $i <= $#installer::globals::allddffiles; $i++ )
-    {
-        my $ddffilename = $installer::globals::allddffiles[$i];
-        my $ddffile = installer::files::read_file($ddffilename);
-        my $cabinetfile = "";
-
-        for ( my $j = 0; $j <= $#{$ddffile}; $j++ )
-        {
-            my $oneline = ${$ddffile}[$j];
-
-            # Getting the Cabinet file name
-
-            if ( $oneline =~ /^\s*\.Set\s+CabinetName.*\=(.*?)\s*$/ ) { $cabinetfile = $1; }
-            if ( $oneline =~ /^\s*\.Set\s+/ ) { next; }
-
-            if ( $oneline =~ /^\s*\"(.*?)\"\s+(.*?)\s*$/ )
-            {
-                my $sourcefile = $1;
-                my $uniquefilename = $2;
-
-                installer::pathanalyzer::make_absolute_filename_to_relative_filename(\$sourcefile);
-
-                # Using the hash created in create_files_table for performance reasons to get the sequence number
-                my $filesequence = "";
-                if ( exists($installer::globals::uniquefilenamesequence{$uniquefilename}) ) { $filesequence = $installer::globals::uniquefilenamesequence{$uniquefilename}; }
-                else { installer::exiter::exit_program("ERROR: No sequence number value for $uniquefilename !", "save_packorder"); }
-
-                my $line = $filesequence . "\t" . $cabinetfile . "\t" . $sourcefile . "\t" . $uniquefilename . "\n";
-                push(@packorder, $line);
-            }
-        }
-    }
-
-    installer::files::save_file($packorderfilename ,\@packorder);
-
-    $installer::logger::Lang->add_timestamp("Performance Info: saving pack order end");
-}
 
 #################################################################
 # Returning the name of the msi database
@@ -556,11 +384,7 @@ sub get_packagecode_for_sis
 {
     # always generating a new package code for each package
 
-    my $guidref = get_guid_list(1, 1);  # only one GUID shall be generated
-
-    ${$guidref}[0] =~ s/\s*$//;     # removing ending spaces
-
-    my $guid = "\{" . ${$guidref}[0] . "\}";
+    my $guid = "\{" . create_guid() . "\}";
 
     my $infoline = "PackageCode: $guid\n";
     $installer::logger::Lang->print($infoline);
@@ -1087,8 +911,7 @@ sub create_setup_ini
 
     installer::files::save_file($setupinifilename, $setupinifile);
 
-    $infoline = "Generated file $setupinifilename !\n";
-    $installer::logger::Lang->print($infoline);
+    $installer::logger::Lang->printf("Generated file %s\n", $setupinifilename);
 }
 
 #################################################################
@@ -1133,7 +956,7 @@ sub copy_windows_installer_files_into_installset
 
     installer::logger::include_header_into_logfile("Copying Windows installer files into installation set");
 
-    @copyfile = ();
+    my @copyfile = ();
     push(@copyfile, "loader2.exe");
 
     if ( $allvariables->{'NOLOADERREQUIRED'} ) { @copyfile = (); }
@@ -1186,47 +1009,19 @@ sub copy_child_projects_into_installset
     }
 }
 
-#################################################################
-# Getting a list of GUID using uuidgen.exe.
-# This works only on Windows
-#################################################################
 
-sub get_guid_list
+
+=head2 create_guid ()
+
+    Create a single UUID aka GUID via calling the external executable 'uuidgen'.
+    There are Perl modules for that, but do they exist on the build bots?
+
+=cut
+sub create_guid ()
 {
-    my ($number, $log) = @_;
-
-    if ( $log ) { installer::logger::include_header_into_logfile("Generating $number GUID"); }
-
-    my $uuidgen = "uuidgen.exe";        # Has to be in the path
-
-    # "-c" for uppercase output
-
-    # my $systemcall = "$uuidgen -n$number -c |";
-    my $systemcall = "$uuidgen -n$number |";
-    open (UUIDGEN, "$systemcall" ) or die("uuidgen is missing.");
-    my @uuidlist = <UUIDGEN>;
-    close (UUIDGEN);
-
-    my $infoline = "Systemcall: $systemcall\n";
-    if ( $log ) { $installer::logger::Lang->print($infoline); }
-
-    my $comparenumber = $#uuidlist + 1;
-
-    if ( $comparenumber == $number )
-    {
-        $infoline = "Success: Executed $uuidgen successfully!\n";
-        if ( $log ) { $installer::logger::Lang->print($infoline); }
-    }
-    else
-    {
-        $infoline = "ERROR: Could not execute $uuidgen successfully!\n";
-        if ( $log ) { $installer::logger::Lang->print($infoline); }
-    }
-
-    # uppercase, no longer "-c", because this is only supported in uuidgen.exe v.1.01
-    for ( my $i = 0; $i <= $#uuidlist; $i++ ) { $uuidlist[$i] = uc($uuidlist[$i]); }
-
-    return \@uuidlist;
+    my $uuid = qx("uuidgen");
+    $uuid =~ s/\s*$//;
+    return uc($uuid);
 }
 
 #################################################################
@@ -1247,6 +1042,9 @@ sub calculate_guid
     # my $id = pack("A32", $digest);
     my ($first, $second, $third, $fourth, $fifth) = unpack ('A8 A4 A4 A4 A12', $digest);
     $guid = "$first-$second-$third-$fourth-$fifth";
+
+    $installer::logger::Lang->printf("guid for '%s' is %s\n",
+        $string, $guid);
 
     return $guid;
 }
@@ -1323,7 +1121,7 @@ sub create_new_component_file
 # This works only on Windows
 #################################################################
 
-sub set_uuid_into_component_table
+sub __set_uuid_into_component_table
 {
     my ($idtdirbase, $allvariables) = @_;
 
@@ -1362,19 +1160,32 @@ sub set_uuid_into_component_table
             {
                 # Calculating new GUID with the help of the component name.
                 my $useooobaseversion = 1;
-                if ( exists($installer::globals::base_independent_components{$componentname})) { $useooobaseversion = 0; }
+                if ( exists($installer::globals::base_independent_components{$componentname}))
+                {
+                    $useooobaseversion = 0;
+                }
                 my $sourcestring = $componentname;
 
                 if ( $useooobaseversion )
                 {
-                    if ( ! exists($allvariables->{'OOOBASEVERSION'}) ) { installer::exiter::exit_program("ERROR: Could not find variable \"OOOBASEVERSION\" (required value for GUID creation)!", "set_uuid_into_component_table"); }
+                    if ( ! exists($allvariables->{'OOOBASEVERSION'}) )
+                    {
+                        installer::exiter::exit_program(
+                            "ERROR: Could not find variable \"OOOBASEVERSION\" (required value for GUID creation)!",
+                            "set_uuid_into_component_table");
+                    }
                     $sourcestring = $sourcestring . "_" . $allvariables->{'OOOBASEVERSION'};
                 }
                 $uuid = calculate_guid($sourcestring);
                 $counter++;
 
                 # checking, if there is a conflict with an already created guid
-                if ( exists($installer::globals::allcalculated_guids{$uuid}) ) { installer::exiter::exit_program("ERROR: \"$uuid\" was already created before!", "set_uuid_into_component_table"); }
+                if ( exists($installer::globals::allcalculated_guids{$uuid}) )
+                {
+                    installer::exiter::exit_program(
+                        "ERROR: \"$uuid\" was already created before!",
+                        "set_uuid_into_component_table");
+                }
                 $installer::globals::allcalculated_guids{$uuid} = 1;
                 $installer::globals::calculated_component_guids{$componentname} = $uuid;
 
@@ -1489,7 +1300,7 @@ sub prepare_64bit_database
             if ( -f $fullfilename )
             {
                 my $saving_required = 0;
-                $filecontent = installer::files::read_file($fullfilename);
+                my $filecontent = installer::files::read_file($fullfilename);
 
                 for ( my $i = 3; $i <= $#{$filecontent}; $i++ )     # ignoring the first three lines
                 {
@@ -1690,107 +1501,147 @@ sub execute_packaging
     $installer::logger::Lang->print($infoline);
 }
 
-###############################################################
-# Setting the global variables ProductCode and the UpgradeCode
-###############################################################
 
-sub set_global_code_variables
+=head2 get_source_codes($languagesref)
+
+    Return product code and upgrade code from the source version.
+    When no source version is defined then return undef for both.
+
+=cut
+sub get_source_codes ($)
 {
-    my ( $languagesref, $languagestringref, $allvariableshashref, $alloldproperties ) = @_;
+    my ($languagesref) = @_;
 
-    # In the msi template directory a files "codes.txt" has to exist, in which the ProductCode
-    # and the UpgradeCode for the product are defined.
-    # The name "codes.txt" can be overwritten in Product definition with CODEFILENAME .
-    # Default $installer::globals::codefilename is defined in parameter.pm.
-
-    if ( $allvariableshashref->{'CODEFILENAME'} )
+    if ( ! $installer::globals::is_release)
     {
-        $installer::globals::codefilename = $installer::globals::idttemplatepath  . $installer::globals::separator . $allvariableshashref->{'CODEFILENAME'};
-        installer::files::check_file($installer::globals::codefilename);
+        return (undef, undef);
+    }
+    elsif ( ! defined $installer::globals::source_version)
+    {
+        $installer::logger::Lang->printf("no source version defined\n");
+        return (undef, undef);
     }
 
-    my $infoline = "Using Codes file: $installer::globals::codefilename \n";
-    $installer::logger::Lang->print($infoline);
+    my $onelanguage = installer::languages::get_key_language($languagesref);
 
-    my $codefile = installer::files::read_file($installer::globals::codefilename);
-
-    my $isopensource = 0;
-    if ( $allvariableshashref->{'OPENSOURCE'} ) { $isopensource = $allvariableshashref->{'OPENSOURCE'}; }
-
-    my $onelanguage = "";
-
-    if ( $#{$languagesref} > 0 )    # more than one language
+    my $release_data = installer::patch::ReleasesList::Instance()
+        ->{$installer::globals::source_version}
+        ->{$installer::globals::packageformat};
+    if (defined $release_data)
     {
-        if (( $installer::globals::added_english ) && ( $#{$languagesref} == 1 )) # only multilingual because of added English
+        my $normalized_language = installer::languages::get_normalized_language($languagesref);
+        my $language_data = $release_data->{$normalized_language};
+        if (defined $language_data)
         {
-            $onelanguage = ${$languagesref}[1];  # setting the first language, that is not english
+            $installer::logger::Lang->printf("source product code is %s\n", $language_data->{'product-code'});
+            $installer::logger::Lang->printf("source upgrade code is %s\n", $release_data->{'upgrade-code'});
+
+            return (
+                $language_data->{'product-code'},
+                $release_data->{'upgrade-code'}
+                );
         }
         else
         {
-            if (( ${$languagesref}[1] =~ /jp/ ) ||
-                ( ${$languagesref}[1] =~ /ko/ ) ||
-                ( ${$languagesref}[1] =~ /zh/ ))
-            {
-                $onelanguage = "multiasia";
-            }
-            else
-            {
-                $onelanguage = "multiwestern";
-            }
+            $installer::logger::Info->printf(
+                "Warning: can not access information about previous version %s and language %s/%s/%s\n",
+                $installer::globals::source_version,
+                $onelanguage,
+                join(", ",@$languagesref),
+                $normalized_language);
+            return (undef,undef);
         }
-    }
-    else    # only one language
-    {
-        $onelanguage = ${$languagesref}[0];
-    }
-
-    # ProductCode must not change, if Windows patches shall be applied
-    if ( $installer::globals::prepare_winpatch )
-    {
-        # ProductCode has to be specified in each language
-        my $searchstring = "PRODUCTCODE";
-        my $codeblock = installer::windows::idtglobal::get_language_block_from_language_file($searchstring, $codefile);
-        $installer::globals::productcode = installer::windows::idtglobal::get_code_from_code_block($codeblock, $onelanguage);
-    } else {
-        my $guidref = get_guid_list(1, 1);  # only one GUID shall be generated
-        ${$guidref}[0] =~ s/\s*$//;     # removing ending spaces
-        $installer::globals::productcode = "\{" . ${$guidref}[0] . "\}";
-    }
-
-    if ( $installer::globals::patch ) # patch upgrade codes are defined in soffice.lst
-    {
-        if ( $allvariableshashref->{'PATCHUPGRADECODE'} ) { $installer::globals::upgradecode = $allvariableshashref->{'PATCHUPGRADECODE'}; }
-        else { installer::exiter::exit_program("ERROR: PATCHUPGRADECODE not defined in list file!", "set_global_code_variables"); }
     }
     else
     {
-        # UpgradeCode can take english as default, if not defined in specified language
+        $installer::logger::Info->printf("Warning: can not access information about previous version %s\n",
+            $installer::globals::source_version);
+        return (undef,undef);
+    }
+}
 
-        $searchstring = "UPGRADECODE";  # searching in the codes.txt file
-        $codeblock = installer::windows::idtglobal::get_language_block_from_language_file($searchstring, $codefile);
-        $installer::globals::upgradecode = installer::windows::idtglobal::get_language_string_from_language_block($codeblock, $onelanguage, "");
+
+
+
+=head2 set_global_code_variables ($languagesref, $allvariableshashref)
+
+    Determine values for the product code and upgrade code of the target version.
+
+    As perparation for building a Windows patch, certain conditions have to be fullfilled.
+     - The upgrade code changes from old to new version
+     - The product code remains the same
+     In order to inforce that we have to access information about the source version.
+
+    The resulting values are stored as global variables
+        $installer::globals::productcode
+        $installer::globals::upgradecode
+    and as variables in the given hash
+        $allvariableshashref->{'PRODUCTCODE'}
+        $allvariableshashref->{'UPGRADECODE'}
+
+=cut
+sub set_global_code_variables ($$)
+{
+    my ($languagesref, $allvariableshashref) = @_;
+
+    my ($source_product_code, $source_upgrade_code) = get_source_codes($languagesref);
+    my ($target_product_code, $target_upgrade_code) = (undef, undef);
+
+    if (defined $source_product_code && defined $source_upgrade_code)
+    {
+        if ($installer::globals::is_major_release)
+        {
+            # For a major release we have to change the product code.
+            $target_product_code = "{" . create_guid() . "}";
+            $installer::logger::Lang->printf("building a major release, created new product code %s\n",
+                $target_product_code);
+
+            # Let's do a paranoia check that the new and the old guids are
+            # different.  In reality the new guid really has to be
+            # different from all other guids used for * codes, components,
+            # etc.
+            if ($target_product_code eq $source_product_code)
+            {
+                installer::logger::PrintError(
+                    "new GUID for product code is the same as the old product code but should be different.");
+            }
+        }
+        else
+        {
+            # For minor or micro releases we have to keeep the old product code.
+            $target_product_code = "{" . $source_product_code . "}";
+            $installer::logger::Lang->printf("building a minor or micro release, reusing product code %s\n",
+                $target_product_code);
+        }
+
+        $target_upgrade_code = "{" . create_guid() . "}";
+        # Again, just one test for paranoia.
+        if ($target_upgrade_code eq $source_upgrade_code)
+        {
+            installer::logger::PrintError(
+                "new GUID for upgrade code is the same as the old upgrade code but should be different.");
+        }
+    }
+    else
+    {
+        # There is no previous version with which to compare the product code.
+        # Just create two new uuids.
+        $target_product_code = "{" . create_guid() . "}";
+        $target_upgrade_code = "{" . create_guid() . "}";
+        $installer::logger::Lang->printf("there is no source version => created new guids\n");
     }
 
-    # if (( $installer::globals::productcode eq "" ) && ( ! $isopensource )) { installer::exiter::exit_program("ERROR: ProductCode for language $onelanguage not defined in $installer::globals::codefilename !", "set_global_code_variables"); }
-    if ( $installer::globals::upgradecode eq "" ) { installer::exiter::exit_program("ERROR: UpgradeCode not defined in $installer::globals::codefilename !", "set_global_code_variables"); }
+    $installer::globals::productcode = $target_product_code;
+    $installer::globals::upgradecode = $target_upgrade_code;
+    $allvariableshashref->{'PRODUCTCODE'} = $target_product_code;
+    $allvariableshashref->{'UPGRADECODE'} = $target_upgrade_code;
 
-    $infoline = "Setting ProductCode to: $installer::globals::productcode \n";
-    $installer::logger::Lang->print($infoline);
-    $infoline = "Setting UpgradeCode to: $installer::globals::upgradecode \n";
-    $installer::logger::Lang->print($infoline);
-
-    # Adding both variables into the variables array
-
-    $allvariableshashref->{'PRODUCTCODE'} = $installer::globals::productcode;
-    $allvariableshashref->{'UPGRADECODE'} = $installer::globals::upgradecode;
-
-    $infoline = "Defined variable PRODUCTCODE: $installer::globals::productcode \n";
-    $installer::logger::Lang->print($infoline);
-
-    $infoline = "Defined variable UPGRADECODE: $installer::globals::upgradecode \n";
-    $installer::logger::Lang->print($infoline);
-
+    $installer::logger::Lang->printf("target product code is %s\n", $target_product_code);
+    $installer::logger::Lang->printf("target upgrade code is %s\n", $target_upgrade_code);
 }
+
+
+
 
 ###############################################################
 # Setting the product version used in property table and
@@ -1948,167 +1799,6 @@ sub update_removere_table
     }
 }
 
-##########################################################################
-# Reading saved mappings in Files.idt and Director.idt.
-# This is required, if installation sets shall be created,
-# that can be used for creation of msp files.
-##########################################################################
-
-sub read_saved_mappings
-{
-    installer::logger::include_header_into_logfile("Reading saved mappings from older installation sets:");
-
-    $installer::logger::Lang->add_timestamp("Performance Info: Reading saved mappings start");
-
-    if ( $installer::globals::previous_idt_dir )
-    {
-        my @errorlines = ();
-        my $errorstring = "";
-        my $error_occured = 0;
-        my $file_error_occured = 0;
-        my $dir_error = 0;
-
-        my $idtdir = $installer::globals::previous_idt_dir;
-        $idtdir =~ s/\Q$installer::globals::separator\E\s*$//;
-
-        # Reading File.idt
-
-        my $idtfile = $idtdir . $installer::globals::separator . "File.idt";
-        $installer::logger::Global->print("\n");
-        $installer::logger::Global->printf("Analyzing file: %s\n", $idtfile);
-        if ( ! -f $idtfile )
-        {
-            $installer::logger::Global->printf("Warning: File %s does not exist!\n", $idtfile);
-        }
-
-        my $n = 0;
-        open (F, "<$idtfile") || installer::exiter::exit_program("ERROR: Cannot open file $idtfile for reading", "read_saved_mappings");
-        <F>; <F>; <F>;
-        while (<F>)
-        {
-            m/^([^\t]+)\t([^\t]+)\t((.*)\|)?([^\t]*)/;
-            print "OUT1: \$1: $1, \$2: $2, \$3: $3, \$4: $4, \$5: $5\n";
-            next if ("$1" eq "$5") && (!defined($3));
-            my $lc1 = lc($1);
-
-            if ( exists($installer::globals::savedmapping{"$2/$5"}))
-            {
-                if ( ! $file_error_occured )
-                {
-                    $errorstring = "\nErrors in $idtfile: \n";
-                    push(@errorlines, $errorstring);
-                }
-                $errorstring = "Duplicate savedmapping{" . "$2/$5}\n";
-                push(@errorlines, $errorstring);
-                $error_occured = 1;
-                $file_error_occured = 1;
-            }
-
-            if ( exists($installer::globals::savedrevmapping{$lc1}))
-            {
-                if ( ! $file_error_occured )
-                {
-                    $errorstring = "\nErrors in $idtfile: \n";
-                    push(@errorlines, $errorstring);
-                }
-                $errorstring = "Duplicate savedrevmapping{" . "$lc1}\n";
-                push(@errorlines, $errorstring);
-                $error_occured = 1;
-                $file_error_occured = 1;
-            }
-
-            my $shortname = $4 || '';
-
-            # Don't reuse illegal 8.3 mappings that we used to generate in 2.0.4
-            if (index($shortname, '.') > 8 ||
-                (index($shortname, '.') == -1 && length($shortname) > 8))
-            {
-                $shortname = '';
-            }
-
-            if (( $shortname ne '' ) && ( index($shortname, '~') > 0 ) && ( exists($installer::globals::savedrev83mapping{$shortname}) ))
-            {
-                if ( ! $file_error_occured )
-                {
-                    $errorstring = "\nErrors in $idtfile: \n";
-                    push(@errorlines, $errorstring);
-                }
-                $errorstring = "Duplicate savedrev83mapping{" . "$shortname}\n";
-                push(@errorlines, $errorstring);
-                $error_occured = 1;
-                $file_error_occured = 1;
-            }
-
-            $installer::globals::savedmapping{"$2/$5"} = "$1;$shortname";
-            $installer::globals::savedrevmapping{lc($1)} = "$2/$5";
-            $installer::globals::savedrev83mapping{$shortname} = "$2/$5" if $shortname ne '';
-            $n++;
-        }
-
-        close (F);
-
-        $installer::logger::Global->printf("Read %s old file table key or 8.3 name mappings from %s\n",
-            $n, $idtfile);
-
-        # Reading Director.idt
-
-        $idtfile = $idtdir . $installer::globals::separator . "Director.idt";
-        $installer::logger::Global->print("\n");
-        $installer::logger::Global->printf("Analyzing file %s\n", $idtfile);
-        if ( ! -f $idtfile )
-        {
-            $installer::logger::Global->printf("Warning: File %s does not exist!\n", $idtfile);
-        }
-
-        $n = 0;
-        open (F, "<$idtfile") || installer::exiter::exit_program("ERROR: Cannot open file $idtfile for reading", "read_saved_mappings");
-        <F>; <F>; <F>;
-        while (<F>)
-        {
-            m/^([^\t]+)\t([^\t]+)\t(([^~]+~\d.*)\|)?([^\t]*)/;
-            next if (!defined($3));
-            my $lc1 = lc($1);
-
-            print "OUT2: \$1: $1, \$2: $2, \$3: $3\n";
-
-            if ( exists($installer::globals::saved83dirmapping{$1}) )
-            {
-                if ( ! $dir_error_occured )
-                {
-                    $errorstring = "\nErrors in $idtfile: \n";
-                    push(@errorlines, $errorstring);
-                }
-                $errorstring = "Duplicate saved83dirmapping{" . "$1}\n";
-                push(@errorlines, $errorstring);
-                $error_occured = 1;
-                $dir_error_occured = 1;
-            }
-
-            $installer::globals::saved83dirmapping{$1} = $4;
-            $n++;
-        }
-        close (F);
-
-        $installer::logger::Global->printf("Read %s old directory 8.3 name mappings from %s\n",
-            $n, $idtfile);
-
-        # Analyzing errors
-
-        if ( $error_occured )
-        {
-            for my $line (@errorlines)
-            {
-                $installer::logger::Info->print($line);
-                $installer::logger::Global->print($line);
-            }
-            installer::exiter::exit_program("ERROR: Duplicate entries in saved mappings!", "read_saved_mappings");
-        }
-    } else {
-        installer::exiter::exit_program("ERROR: Windows patch shall be prepared, but environment variable PREVIOUS_IDT_DIR is not set!", "read_saved_mappings");
-    }
-
-    $installer::logger::Lang->add_timestamp("Performance Info: Reading saved mappings end");
-}
 
 1;
 

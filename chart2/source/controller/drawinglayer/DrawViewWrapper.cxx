@@ -335,7 +335,7 @@ SfxItemSet DrawViewWrapper::getPositionAndSizeItemSetFromMarkedObject() const
 
 SdrObject* DrawViewWrapper::getNamedSdrObject( const rtl::OUString& rName ) const
 {
-    if(rName.getLength()==0)
+    if( rName.isEmpty() )
         return 0;
     SdrPageView* pSdrPageView = this->GetPageView();
     if( pSdrPageView )

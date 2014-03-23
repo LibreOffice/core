@@ -42,7 +42,7 @@ module com { module sun { module star { module logging {
     <p>The one and only <code>LoggerPool</code> instance is available at a component context as value with the key
     <code>/singletons/com.sun.star.logging.LoggerPool</code>.</p>
 
-    @since OOo 2.3
+    @since OpenOffice 2.3
 */
 singleton LoggerPool : XLoggerPool;
 

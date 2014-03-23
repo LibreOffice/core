@@ -31,8 +31,11 @@ AUTOSEG=true
 PROJECTPCH4DLL=TRUE
 PROJECTPCH=filt_pch
 PROJECTPCHSOURCE=..\pch\filt_pch
+ENABLE_EXCEPTIONS=TRUE
 
 # --- Settings -----------------------------------------------------
+
+.INCLUDE :  $(PRJ)$/util$/makefile.pmk
 
 .INCLUDE :  scpre.mk
 .INCLUDE :  settings.mk

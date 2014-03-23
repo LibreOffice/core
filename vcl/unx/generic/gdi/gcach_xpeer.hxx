@@ -32,6 +32,7 @@
 
 class SalDisplay;
 struct MultiScreenGlyph;
+typedef Glyph XRenderGlyph;
 
 class X11GlyphPeer
 : public GlyphCachePeer
@@ -40,24 +41,24 @@ public:
                         X11GlyphPeer();
     virtual            ~X11GlyphPeer();
 
-    Pixmap              GetPixmap( ServerFont&, int nGlyphIndex, int nScreen );
-    const RawBitmap*    GetRawBitmap( ServerFont&, int nGlyphIndex );
+    Pixmap              GetPixmap( ServerFont&, sal_GlyphId, int nScreen );
+    const RawBitmap*    GetRawBitmap( ServerFont&, sal_GlyphId );
     bool                ForcedAntialiasing( const ServerFont&, int nScreen ) const;
 
     GlyphSet            GetGlyphSet( ServerFont&, int nScreen );
-    Glyph               GetGlyphId( ServerFont&, int nGlyphIndex );
+    XRenderGlyph        GetXRGlyph( ServerFont&, sal_GlyphId );
 
 protected:
     void                InitAntialiasing();
 
     virtual void        RemovingFont( ServerFont& );
-    virtual void        RemovingGlyph( ServerFont&, GlyphData&, int nGlyphIndex );
+    virtual void        RemovingGlyph( ServerFont&, GlyphData&, sal_GlyphId );
 
     MultiScreenGlyph*   PrepareForMultiscreen( ExtGlyphData& ) const;
     void                SetRenderGlyph( GlyphData&, Glyph ) const;
     void                SetRawBitmap( GlyphData&, const RawBitmap* ) const;
     void                SetPixmap( GlyphData&, Pixmap, int nScreen ) const;
-    Glyph               GetRenderGlyph( const GlyphData& ) const;
+    XRenderGlyph        GetRenderGlyph( const GlyphData& ) const;
     const RawBitmap*    GetRawBitmap( const GlyphData& ) const;
     Pixmap              GetPixmap( const GlyphData&, int nScreen ) const;
 

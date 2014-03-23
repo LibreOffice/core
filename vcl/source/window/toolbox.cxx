@@ -6065,11 +6065,9 @@ void ToolBox::ImplChangeHighlight( ImplToolItem* pItem, sal_Bool bNoGrabFocus )
                 mnCurPos = aPos;
             ImplShowFocus();
 
-//IAccessibility2 Implementation 2009-----
             if( pItem->mpWindow )
                 pItem->mpWindow->GrabFocus();
             if( pItem != pOldItem )
-//-----IAccessibility2 Implementation 2009
             ImplCallEventListeners( VCLEVENT_TOOLBOX_HIGHLIGHT );
         }
     }

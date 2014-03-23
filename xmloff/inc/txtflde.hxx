@@ -444,12 +444,11 @@ protected:
     static ::rtl::OUString MakeFootnoteRefName(sal_Int16 nSeqNo);
 
     /// make reference name for a sequence field
-    static ::rtl::OUString MakeSequenceRefName(sal_Int16 nSeqNo,
-                                              const ::rtl::OUString& rSeqName);
+    static ::rtl::OUString MakeSequenceRefName(
+        sal_Int16 nSeqNo,
+        const ::rtl::OUString& rSeqName );
 
 private:
-    // constants
-
     // service names
     const ::rtl::OUString sServicePrefix;
     const ::rtl::OUString sFieldMasterPrefix;
@@ -481,6 +480,7 @@ private:
     const ::rtl::OUString sPropertyFileFormat;
     const ::rtl::OUString sPropertyFullName;
     const ::rtl::OUString sPropertyHint;
+    const ::rtl::OUString sPropertyInitials;
     const ::rtl::OUString sPropertyInstanceName;
     const ::rtl::OUString sPropertyIsAutomaticUpdate;
     const ::rtl::OUString sPropertyIsConditionTrue;
@@ -533,10 +533,5 @@ private:
     XMLPropertyState* pCombinedCharactersPropertyState;
 
 };
-
-
-
-
-
 
 #endif

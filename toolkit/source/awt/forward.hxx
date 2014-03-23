@@ -59,11 +59,10 @@
         return aReturn; \
     }
 
-#if defined (_MSC_VER) && (_MSC_VER <= 1310)
-// Windows .Net2003 build fix
+// fix to remove a type ambiguity e.g.
+//    class layoutimpl::VCLXDialog -> class VCLXWindow -> VCLXWindow_Base -> class VCLXDevice -> ::cppu::OWeakObject
+//    class layoutimpl::VCLXDialog -> class layoutimpl::Bin -> class layoutimpl::Container -> Container_Base -> class cppu::OWeakObject
+//    class layoutimpl::VCLXDialog -> class layoutimpl::Bin -> class layoutimpl::Container -> class layoutimpl::PropHelper -> cppu::OWeakObjec
 #define W3K_EXPLICIT_CAST(x) static_cast <XWindow2*> (&x)
-#else // !(defined (_MSC_VER) && (_MSC_VER <= 1310))
-#define W3K_EXPLICIT_CAST(x) x
-#endif // !(defined (_MSC_VER) && (_MSC_VER <= 1310))
 
 #endif /* AWT_FORWARD_HXX */

@@ -42,7 +42,7 @@ module com { module sun { module star { module document {
 //=============================================================================
 /** Is used for interaction handle to get filter options.
 
-    @since OOo 1.1.2
+    @since OpenOffice 1.1.2
 */
 published exception FilterOptionsRequest : ::com::sun::star::uno::Exception
 {

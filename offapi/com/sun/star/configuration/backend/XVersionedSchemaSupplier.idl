@@ -44,7 +44,7 @@ module com { module sun { module star { module configuration { module backend {
 /**
   provides access to versioned configuration component schemas.
 
-  @since OOo 2.0
+  @since OpenOffice 2.0
 */
 interface XVersionedSchemaSupplier : XSchemaSupplier
 {

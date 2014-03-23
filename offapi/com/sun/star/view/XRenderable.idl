@@ -43,7 +43,7 @@ module com {  module sun {  module star {  module view {
 
 /** represents something that can be rendered.
 
-    @since OOo 1.1.2
+    @since OpenOffice 1.1.2
  */
 published interface XRenderable : com::sun::star::uno::XInterface
 {

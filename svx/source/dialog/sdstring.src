@@ -1187,7 +1187,6 @@ String RID_SVXSTR_GALLERYPROPS_GALTHEME
     Text [ en-US ] = "Gallery Theme" ;
 };
 
-//IAccessibility2 Implementation 2009-----
 String RID_SVXSTR_GALLERY_THEMEITEMS
 {
     Text [ en-US ] = "Theme Items";
@@ -1204,4 +1203,3 @@ String RID_SVXSTR_GALLERY_PREVIEW
 {
     Text [ en-US ] = "Preview";
 };
-//-----IAccessibility2 Implementation 2009

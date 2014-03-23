@@ -45,7 +45,7 @@ TARFILE_ROOTDIR=nss-3.14.4
 PATCH_FILES=nss.patch
 
 .IF "$(OS)"=="MACOSX"
-MACOS_SDK_DIR=/Developer/SDKs/MacOSX10.4u.sdk
+MACOS_SDK_DIR=$(SDK_PATH)
 .EXPORT : MACOS_SDK_DIR
 PATCH_FILES+=nss_macosx.patch
 .ENDIF # "$(OS)"=="MACOSX"
@@ -56,31 +56,11 @@ BUILD_OPT=1
 .EXPORT: BUILD_OPT
 .ENDIF
 
-.IF "$(GUI)"=="UNX"
-.IF "$(OS)$(COM)"=="LINUXGCC"
 .IF "$(BUILD64)"=="1"
-# force 64-bit buildmode
+# force the 64-bit build mode for 64bit targets
 USE_64:=1
 .EXPORT : USE_64
-.ENDIF			# "$(CPU)"=="X"
-.ENDIF                  # "$(OS)$(COM)"=="LINUXGCC"
-
-.IF "$(OS)$(COM)"=="FREEBSDGCC"
-.IF "$(CPU)"=="X"
-# force 64-bit buildmode
-USE_64:=1
-.EXPORT : USE_64
-.ENDIF			# "$(CPU)"=="X"
-.ENDIF                  # "$(OS)$(COM)"=="LINUXGCC"
-
-.IF "$(OS)"=="MACOSX"
-.IF "$(EXTRA_CFLAGS)"!=""
-CPP:=gcc -E $(EXTRA_CFLAGS)
-CXX:=g++ $(EXTRA_CFLAGS)
-CC:=gcc $(EXTRA_CFLAGS)
-.EXPORT : CPP
-.ENDIF # "$(EXTRA_CFLAGS)"!=""
-.ENDIF # "$(OS)"=="MACOSX"
+.ENDIF # "$(BUILD64)"=="1"
 
 OUT2LIB=mozilla$/dist$/out$/lib$/*$(DLLPOST)
 
@@ -91,8 +71,6 @@ BUILD_ACTION= $(GNUMAKE) nss_build_all
 BUILD_ACTION+=FREEBL_NO_DEPEND=1 FREEBL_LOWHASH=1
 PATCH_FILES+=nss_linux.patch
 .ENDIF
-
-.ENDIF			# "$(GUI)"=="UNX"
 
 
 .IF "$(GUI)"=="WNT"

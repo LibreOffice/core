@@ -48,7 +48,7 @@ module com {  module sun {  module star {  module inspection {
     @see XObjectInspectorModel::describeCategories
     @see XObjectInspectorModel::getPropertyOrderIndex
 
-    @since OOo 2.0.3
+    @since OpenOffice 2.0.3
 */
 published service ObjectInspectorModel : XObjectInspectorModel
 {
@@ -98,7 +98,7 @@ published service ObjectInspectorModel : XObjectInspectorModel
         @see XObjectInspectorModel::MinHelpTextLines
         @see XObjectInspectorModel::MaxHelpTextLines
 
-        @since OOo 2.2
+        @since OpenOffice 2.2
     */
     createWithHandlerFactoriesAndHelpSection(
         [in] sequence< any > handlerFactories,

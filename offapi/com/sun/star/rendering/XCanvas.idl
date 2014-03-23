@@ -144,7 +144,7 @@ published interface XTextLayout;
     <member>getDevice()</member> call) - they will then internally
     optimize to the underlying graphics subsystem.<p>
 
-    @since OOo 2.0
+    @since OpenOffice 2.0
  */
 published interface XCanvas : ::com::sun::star::uno::XInterface
 {

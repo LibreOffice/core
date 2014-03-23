@@ -33,13 +33,13 @@ module com { module sun { module star { module i18n {
 
 /** provides access to locale specific ordinal suffix systems.
 
-    @since OOo 2.2
+    @since OpenOffice 2.2
 
     @internal
 
     ATTENTION: This service is marked <em>internal</em> and does not
     have the <em>published</em> flag, which means it is subject to
-    change without notice and should not be used outside the OOo core.
+    change without notice and should not be used outside the OpenOffice core.
  */
 
 service OrdinalSuffix

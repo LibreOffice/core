@@ -72,7 +72,7 @@ module com { module sun { module star { module ui {
     </ul>
     </p>
 
-    @since OOo 2.0
+    @since OpenOffice 2.0
  */
 
 interface XUIElementFactoryRegistration : com::sun::star::uno::XInterface

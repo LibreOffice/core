@@ -131,8 +131,7 @@ Control RID_SIDEBAR_LINE_PANEL
         Spin = TRUE ;
         Maximum = 100 ;
         StrictFormat = TRUE ;
-        Unit = FUNIT_CUSTOM ;
-        CustomUnitText = "%" ;
+        Unit = FUNIT_PERCENT ;
         Last = 100 ;
         SpinSize = 5 ;
         QuickHelpText [ en-US ] = "Specify the transparency of the line.";

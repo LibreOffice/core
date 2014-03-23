@@ -159,7 +159,13 @@ namespace vclcanvas
 
                     // bitmasks are much faster than alphamasks on some platforms
                     // so convert to bitmask if useful
-#ifndef QUARTZ
+#if defined LINUX || defined FREEBSD || defined NETBSD || defined QUARTZ
+                    // #122485# allow more than 1bit masks for Linux and Mac,
+                    // but reduce to mono now
+                    aMask.MakeMono(255);
+#else
+                    // #122485# assert when mask uses more than 1bit and reduce
+                    // to mono
                     if( aMask.GetBitCount() != 1 )
                     {
                         OSL_ENSURE(false,

@@ -45,7 +45,7 @@ module com { module sun { module star { module i18n {
     should be used for performance reason if their full-blown
     counterparts aren't neded.  </p>
 
-     @since OOo 1.1.2
+     @since OpenOffice 1.1.2
  */
 published interface XExtendedTransliteration : ::com::sun::star::i18n::XTransliteration
 {

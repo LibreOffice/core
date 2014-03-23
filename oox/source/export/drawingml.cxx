@@ -426,6 +426,14 @@ OUString DrawingML::WriteImage( const Graphic& rGraphic )
             sMediaType = US( "image/gif" );
             sExtension = ".gif";
             break;
+
+        // #15508# added BMP type for better exports
+        // export not yet active, so adding for reference (not checked)
+        case GFX_LINK_TYPE_NATIVE_BMP:
+            sMediaType = US( "image/bmp" );
+            sExtension = ".bmp";
+            break;
+
         case GFX_LINK_TYPE_NATIVE_JPG:
             sMediaType = US( "image/jpeg" );
             sExtension = ".jpeg";

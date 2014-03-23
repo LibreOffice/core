@@ -142,6 +142,8 @@
 #define RBT_COLUMN 7
 #define MTR_FLD_OFFSET 3
 #define GRP_OFFSET 8
+//UUUU
+#define BTN_IMPORTOPTIONAL 1
 
 #define FT_TRANSPARENT 9
 #define FT_X_SIZE 10
@@ -181,7 +183,5 @@
 
 #define IMG_LOAD_H  23
 #define IMG_SAVE_H  24
-// IAccessibility2 implementation 2009 ------
 #define STR_CUI_COLORMODEL  5030
 #define STR_LB_HATCHINGSTYLE 5031
-// ------ IAccessibility2 implementation 2009.

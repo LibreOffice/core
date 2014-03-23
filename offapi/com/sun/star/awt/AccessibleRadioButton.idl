@@ -50,7 +50,7 @@ module com { module sun { module star { module awt {
 
 /** specifies accessibility support for a radio button.
 
-    @since OOo 1.1.2
+    @since OpenOffice 1.1.2
  */
 published service AccessibleRadioButton
 {

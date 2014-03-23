@@ -26,7 +26,7 @@
 
 #include "aqua/aqua11ywrapper.h"
 
-@interface SalFrameWindow : NSWindow
+@interface SalFrameWindow : NSWindow<NSWindowDelegate>
 {
     AquaSalFrame*       mpFrame;
     id mDraggingDestinationHandler;
@@ -42,6 +42,9 @@
 -(void)windowDidMiniaturize: (NSNotification*)pNotification;
 -(void)windowDidDeminiaturize: (NSNotification*)pNotification;
 -(BOOL)windowShouldClose: (NSNotification*)pNotification;
+//-(void)willEncodeRestorableState:(NSCoder*)pCoderState;
+//-(void)didDecodeRestorableState:(NSCoder*)pCoderState;
+//-(void)windowWillEnterVersionBrowser:(NSNotification*)pNotification;
 -(void)dockMenuItemTriggered: (id)sender;
 -(AquaSalFrame*)getSalFrame;
 -(BOOL)containsMouse;
@@ -175,7 +178,7 @@
 -(void)resetCursorRects;
 -(::com::sun::star::accessibility::XAccessibleContext *)accessibleContext;
 -(id)parentAttribute;
--(NSView *)viewElementForParent;
+-(NSWindow*)windowForParent;
 /*
   Event hook for D&D service.
 

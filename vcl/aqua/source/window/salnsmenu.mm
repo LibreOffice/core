@@ -138,7 +138,7 @@
         for( size_t i = 0; i < rButtons.size(); ++i )
         {
             const Size aPixSize = rButtons[i].maButton.maImage.GetSizePixel();
-            const NSRect aFromRect = NSMakeRect( 0, 0, aPixSize.Width(), aPixSize.Height());
+            const NSRect aFromRect = { NSZeroPoint, NSMakeSize( aPixSize.Width(), aPixSize.Height()) };
             aImgRect.origin.y = floor((aFrame.size.height - aFromRect.size.height)/2);
             aImgRect.size = aFromRect.size;
             if( rButtons[i].mpNSImage )
@@ -161,7 +161,7 @@
         for( size_t i = 0; i < rButtons.size(); ++i )
         {
             const Size aPixSize = rButtons[i].maButton.maImage.GetSizePixel();
-            const NSRect aFromRect = NSMakeRect( 0, 0, aPixSize.Width(), aPixSize.Height());
+            const NSRect aFromRect = { NSZeroPoint, NSMakeSize( aPixSize.Width(), aPixSize.Height()) };
             aImgRect.origin.y = (aFrame.size.height - aFromRect.size.height)/2;
             aImgRect.size = aFromRect.size;
             if( aMousePt.x >= aImgRect.origin.x && aMousePt.x <= (aImgRect.origin.x+aImgRect.size.width) &&

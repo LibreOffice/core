@@ -76,27 +76,32 @@ namespace oox { namespace ppt {
             {
             }
 
-        sal_Int32 get()
+        Any get()
             {
                 sal_Int32 nColor;
+                Sequence< double > aHSL( 3 );
+                Any aColor;
 
                 switch( colorSpace )
                 {
                 case AnimationColorSpace::HSL:
-                    nColor = ( ( ( one * 128 ) / 360 ) & 0xff ) << 16
-                        | ( ( ( two * 128 ) / 1000 ) & 0xff ) << 8
-                        | ( ( ( three * 128 ) / 1000 )  & 0xff );
+                    aHSL[ 0 ] = double(one) / 100000;
+                    aHSL[ 1 ] = double(two) / 100000;
+                    aHSL[ 2 ] = double(three) / 100000;
+                    aColor = Any(aHSL);
                     break;
                 case AnimationColorSpace::RGB:
                     nColor = ( ( ( one * 128 ) / 1000 ) & 0xff ) << 16
                         | ( ( ( two * 128 ) / 1000 ) & 0xff ) << 8
                         | ( ( ( three * 128 ) / 1000 )  & 0xff );
+                    aColor = Any(nColor);
                     break;
                 default:
                     nColor = 0;
+                    aColor = Any( nColor );
                     break;
                 }
-                return  nColor;
+                return  aColor;
             }
 
         sal_Int16 colorSpace;
@@ -504,7 +509,7 @@ namespace oox { namespace ppt {
                     if( maFromClr.isUsed() )
                         mpNode->setFrom( Any( maFromClr.getColor( rGraphicHelper ) ) );
                     if( mbHasByColor )
-                        mpNode->setBy( Any ( m_byColor.get() ) );
+                        mpNode->setBy( m_byColor.get() );
                 }
             }
 
@@ -804,7 +809,7 @@ namespace oox { namespace ppt {
                 if(attribs.hasAttribute( XML_by ) )
                 {
                     sal_Int32 nBy = attribs.getInteger( XML_by, 0 );
-                    pNode->setBy( makeAny( nBy ) );
+                    pNode->setBy( makeAny( (double)nBy ) );
                 }
                 if(attribs.hasAttribute( XML_from ) )
                 {

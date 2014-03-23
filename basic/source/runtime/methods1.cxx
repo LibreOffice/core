@@ -1597,9 +1597,9 @@ RTLFUNC(ConvertToUrl)
         String aStr = rPar.Get(1)->GetString();
         INetURLObject aURLObj( aStr, INET_PROT_FILE );
         ::rtl::OUString aFileURL = aURLObj.GetMainURL( INetURLObject::NO_DECODE );
-        if( !aFileURL.getLength() )
+        if( aFileURL.isEmpty() )
             ::osl::File::getFileURLFromSystemPath( aFileURL, aFileURL );
-        if( !aFileURL.getLength() )
+        if( aFileURL.isEmpty() )
             aFileURL = aStr;
         rPar.Get(0)->PutString( String(aFileURL) );
     }
@@ -1617,7 +1617,7 @@ RTLFUNC(ConvertFromUrl)
         String aStr = rPar.Get(1)->GetString();
         ::rtl::OUString aSysPath;
         ::osl::File::getSystemPathFromFileURL( aStr, aSysPath );
-        if( !aSysPath.getLength() )
+        if( aSysPath.isEmpty() )
             aSysPath = aStr;
         rPar.Get(0)->PutString( String(aSysPath) );
     }

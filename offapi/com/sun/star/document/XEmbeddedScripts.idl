@@ -36,7 +36,7 @@ module com { module sun { module star { module document {
 
 /** is suppoerted by <type>OfficeDocument</type>s which allow to embed scripts
 
-    @since OOo 2.4
+    @since OpenOffice 2.4
  */
 interface XEmbeddedScripts
 {

@@ -41,10 +41,8 @@
 #include <sfx2/sidebar/SidebarChildWindow.hxx>
 #include <avmedia/mediaplayer.hxx>
 
-//IAccessibility2 Implementation 2009-----
 #include "cell.hxx"
 #include "docoptio.hxx"
-//-----IAccessibility2 Implementation 2009
 
 #include "tabvwsh.hxx"
 #include "docsh.hxx"
@@ -111,7 +109,6 @@ IMPL_LINK( ScTabViewShell, HtmlOptionsHdl, void*, EMPTYARG )
     return 0;
 }
 
-//IAccessibility2 Implementation 2009-----
 rtl::OUString ScTabViewShell::GetFormula(ScAddress& rAddress)
 {
     String sFormula;
@@ -123,7 +120,6 @@ rtl::OUString ScTabViewShell::GetFormula(ScAddress& rAddress)
     }
     return sFormula;
 }
-//-----IAccessibility2 Implementation 2009
 
 
 

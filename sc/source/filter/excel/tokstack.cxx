@@ -939,7 +939,7 @@ const String* TokenPool::GetExternal( const TokenId& rId ) const
     if( n && n <= nElementAkt )
     {
         n--;
-        if( (pType[ n ] == T_Ext) )
+        if( pType[ n ] == T_Ext )
         {
             sal_uInt16 nExt = pElement[ n ];
             if ( nExt < nP_Ext && ppP_Ext[ nExt ] )

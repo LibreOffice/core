@@ -41,7 +41,7 @@ module com { module sun { module star { module i18n {
     <method>XExtendedTransliteration::transliterateChar2Char()</method>
     </p>
 
-     @since OOo 1.1.2
+     @since OpenOffice 1.1.2
  */
 published exception MultipleCharsOutputException : ::com::sun::star::uno::Exception
 {

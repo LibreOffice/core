@@ -36,7 +36,7 @@ module com { module sun { module star { module ucb {
     <type scope="com::sun::star::ucb">XProgressHandler</type>. The respective
     get methods will simply return these handlers.
 
-    @since OOo 3.3
+    @since OpenOffice 3.3
  */
  published service CommandEnvironment : ::com::sun::star::ucb::XCommandEnvironment
  {

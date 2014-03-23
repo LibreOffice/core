@@ -37,7 +37,6 @@
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <svx/AccessibleTextHelper.hxx>
 #include "svx/svxdllapi.h"
-//IAccessibility2 Implementation 2009-----
 #ifndef _COM_SUN_STAR_ACCESSIBILITY_XACCESSIBLESELECTION_HPP_
 #include <com/sun/star/accessibility/XAccessibleSelection.hpp>
 #endif
@@ -59,7 +58,6 @@
 #ifndef INCLUDED_COM_SUN_STAR_ACCESSIBILITY_XACCESSIBLEHYPERLINK_HPP
 #include <com/sun/star/accessibility/XAccessibleHyperlink.hpp>
 #endif
-//-----IAccessibility2 Implementation 2009
 
 #include "ChildrenManager.hxx"
 
@@ -98,12 +96,10 @@ class IAccessibleParent;
 class SVX_DLLPUBLIC AccessibleShape
     :   public AccessibleContextBase,
         public AccessibleComponentBase,
-        //IAccessibility2 Implementation 2009-----
         public ::com::sun::star::accessibility::XAccessibleSelection,
         public ::com::sun::star::accessibility::XAccessibleExtendedAttributes,
         public ::com::sun::star::accessibility::XAccessibleGroupPosition,
         public com::sun::star::accessibility::XAccessibleHypertext,
-        //-----IAccessibility2 Implementation 2009
         public IAccessibleViewForwarderListener,
         public ::com::sun::star::document::XEventListener,
         public ::com::sun::star::lang::XUnoTunnel
@@ -129,7 +125,6 @@ public:
     AccessibleShape (
         const AccessibleShapeInfo& rShapeInfo,
         const AccessibleShapeTreeInfo& rShapeTreeInfo);
-    //IAccessibility2 Implementation 2009-----
     AccessibleShape (
         const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape>& rxShape, const ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible>& rxParent, const AccessibleShapeTreeInfo& rShapeTreeInfo, sal_Int32 nIndex = -1);
      //Solution: Overwrite the object's current name.
@@ -178,7 +173,6 @@ public:
         throw (::com::sun::star::uno::RuntimeException);
     virtual ::rtl::OUString SAL_CALL getObjectLink( const ::com::sun::star::uno::Any& accoject )
         throw (::com::sun::star::uno::RuntimeException);
-    //-----IAccessibility2 Implementation 2009
     /** The destructor releases its children manager and text engine if
         still existent.  These are responsible to send appropriate events.
     */
@@ -483,14 +477,12 @@ protected:
     virtual ::rtl::OUString
         CreateAccessibleDescription (void)
         throw (::com::sun::star::uno::RuntimeException);
-    //IAccessibility2 Implementation 2009-----
     virtual ::rtl::OUString
        GetFullAccessibleName(AccessibleShape *shape)
        throw (::com::sun::star::uno::RuntimeException);
     virtual::rtl::OUString GetStyle();
     void UpdateDocumentAllSelState(::com::sun::star::uno::Reference<
         ::com::sun::star::accessibility::XAccessibleStateSet > &xStateSet);
-    //-----IAccessibility2 Implementation 2009
     /** Update the <const>OPAQUE</const> and <const>SELECTED</const> state.
     */
     virtual void UpdateStates (void);
@@ -504,10 +496,8 @@ private:
     SVX_DLLPRIVATE explicit AccessibleShape (const AccessibleShape&);
     /// Don't use the assignment operator.  Do we need this?
     SVX_DLLPRIVATE AccessibleShape& operator= (const AccessibleShape&);
-    //IAccessibility2 Implementation 2009-----
     //Solution:Old accessible name
     ::rtl::OUString aAccName;
-    //-----IAccessibility2 Implementation 2009
 
     /** Call this method when the title, name, or description of the mxShape
         member (may) have been changed.

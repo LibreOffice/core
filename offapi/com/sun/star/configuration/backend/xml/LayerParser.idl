@@ -57,7 +57,7 @@ module xml {
         Service that writes OOR Update XML for data described via
         <type scope="com::sun::star::configuration::backend">XLayerHandler</type>.
 
-    @since OOo 1.1.2
+    @since OpenOffice 1.1.2
 */
 published service LayerParser
 {

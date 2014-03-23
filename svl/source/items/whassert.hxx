@@ -38,7 +38,7 @@
             ByteString aMsg( sMessage );                                    \
             aMsg.Append(RTL_CONSTASCII_STRINGPARAM("\nwith Id/Pos: "));     \
             aMsg += ByteString::CreateFromInt32( nId );                     \
-            DbgError( aMsg.GetBuffer(), __FILE__, __LINE__);    \
+            DbgError( aMsg.GetBuffer() );   \
         }                                                                   \
     }                                                                       \
 }

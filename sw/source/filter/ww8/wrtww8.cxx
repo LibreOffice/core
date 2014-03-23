@@ -122,9 +122,11 @@
 #include "WW8Sttbf.hxx"
 #include <editeng/charrotateitem.hxx>
 #include "WW8FibData.hxx"
-#ifndef _NUMRULE_HXX
-#include "numrule.hxx"//For i120928
-#endif
+#include "numrule.hxx"
+
+#include <boost/scoped_ptr.hpp>
+
+
 using namespace sw::util;
 using namespace sw::types;
 
@@ -2097,8 +2099,8 @@ void WW8AttributeOutput::TableVerticalCell( ww8::WW8TableNodeInfoInner::Pointer_
     const SwTableLine * pTabLine = pTabBox->GetUpper();
     const SwTableBoxes & rTblBoxes = pTabLine->GetTabBoxes();
 
-    sal_uInt8 nBoxes = rTblBoxes.Count();
-    for ( sal_uInt8 n = 0; n < nBoxes; n++ )
+    const sal_uInt16 nBoxes = rTblBoxes.Count();
+    for ( sal_uInt16 n = 0; n < nBoxes; n++ )
     {
         const SwTableBox * pTabBox1 = rTblBoxes[n];
         const SwFrmFmt * pFrmFmt = pTabBox1->GetFrmFmt();
@@ -2289,16 +2291,16 @@ void WW8AttributeOutput::TableDefinition( ww8::WW8TableNodeInfoInner::Pointer_t 
         m_rWW8Export.pO->Insert( 1, m_rWW8Export.pO->Count() );
     }
 
-    ww8::TableBoxVectorPtr pTableBoxes =
-        pTableTextNodeInfoInner->getTableBoxesOfRow();
+    ww8::TableBoxVectorPtr pTableBoxes = pTableTextNodeInfoInner->getTableBoxesOfRow();
     // number of cell written
-    sal_uInt32 nBoxes = pTableBoxes->size();
-    if (nBoxes > ww8::MAXTABLECELLS)
-        nBoxes = ww8::MAXTABLECELLS;
+    const sal_uInt16 nBoxes =
+            pTableBoxes->size() > ww8::MAXTABLECELLS
+            ? ww8::MAXTABLECELLS
+            : static_cast< sal_uInt16 >(pTableBoxes->size());
 
     // sprm header
     m_rWW8Export.InsUInt16( NS_sprm::LN_TDefTable );
-    sal_uInt16 nSprmSize = 2 + (nBoxes + 1) * 2 + nBoxes * 20;
+    const sal_uInt16 nSprmSize = 2 + (nBoxes + 1) * 2 + nBoxes * 20;
     m_rWW8Export.InsUInt16( nSprmSize ); // length
 
     // number of boxes
@@ -2338,9 +2340,9 @@ void WW8AttributeOutput::TableDefinition( ww8::WW8TableNodeInfoInner::Pointer_t 
                 break;
 
             default:
-                nTblOffset = rHori.GetPos();
+                nTblOffset = static_cast< sal_uInt16 >(rHori.GetPos());
                 const SvxLRSpaceItem& rLRSp = pFmt->GetLRSpace();
-                nTblOffset += rLRSp.GetLeft();
+                nTblOffset += static_cast< sal_uInt16 >(rLRSp.GetLeft());
                 break;
         }
     }
@@ -2510,7 +2512,7 @@ void WW8AttributeOutput::TableBackgrounds( ww8::WW8TableNodeInfoInner::Pointer_t
     const SwTableLine * pTabLine = pTabBox->GetUpper();
     const SwTableBoxes & rTabBoxes = pTabLine->GetTabBoxes();
 
-    sal_uInt8 nBoxes = rTabBoxes.Count();
+    const sal_uInt16 nBoxes = rTabBoxes.Count();
     if ( m_rWW8Export.bWrtWW8 )
         m_rWW8Export.InsUInt16( NS_sprm::LN_TDefTableShd );
     else
@@ -2538,18 +2540,19 @@ void WW8AttributeOutput::TableBackgrounds( ww8::WW8TableNodeInfoInner::Pointer_t
 
     if ( m_rWW8Export.bWrtWW8 )
     {
-        sal_uInt32 aSprmIds[] = {NS_sprm::LN_TCellShd, NS_sprm::LN_TCellShadow};
-        sal_uInt8 nBoxes0 = rTabBoxes.Count();
+        const sal_uInt16 aSprmIds[] = { NS_sprm::LN_TCellShd, NS_sprm::LN_TCellShadow };
+        sal_uInt16 nBoxes0 = rTabBoxes.Count();
         if (nBoxes0 > 21)
             nBoxes0 = 21;
 
-        for (sal_uInt32 m = 0; m < 2; m++)
+        for ( sal_uInt32 m = 0; m < 2; m++ )
         {
             m_rWW8Export.InsUInt16( aSprmIds[m] );
-            m_rWW8Export.pO->Insert( static_cast<sal_uInt8>(nBoxes0 * 10),
-                                     m_rWW8Export.pO->Count() );
+            m_rWW8Export.pO->Insert(
+                static_cast< sal_uInt8 >( nBoxes0 * 10 ),
+                m_rWW8Export.pO->Count() );
 
-        for ( sal_uInt8 n = 0; n < nBoxes0; n++ )
+        for ( sal_uInt16 n = 0; n < nBoxes0; n++ )
         {
             const SwTableBox * pBox1 = rTabBoxes[n];
             const SwFrmFmt * pFrmFmt = pBox1->GetFrmFmt();
@@ -3107,9 +3110,6 @@ void MSWordExportBase::ExportDocument( bool bWriteAll )
     pFlyOffset = 0;
     eNewAnchorType = FLY_AT_PAGE;
     nTxtTyp = TXT_MAINTEXT;
-    // --> OD 2007-04-19 #i43447# - removed
-//    nFlyWidth = nFlyHeight = 0;
-    // <--
     nStyleBeforeFly = nLastFmtId = 0;
     pStyAttr = 0;
     pCurrentStyle = NULL;
@@ -3118,6 +3118,22 @@ void MSWordExportBase::ExportDocument( bool bWriteAll )
     pRedlAuthors = 0;
     if ( aTOXArr.Count() )
         aTOXArr.Remove( 0, aTOXArr.Count() );
+
+    // update layout as it is needed for the export - e.g. for the export of tables
+    boost::scoped_ptr< ViewShell > pTemporaryViewShell( 0 );
+    {
+        ViewShell* pViewShell = NULL;
+        pDoc->GetEditShell( &pViewShell );
+        if ( pViewShell == NULL )
+        {
+            pTemporaryViewShell.reset( new ViewShell( *pDoc, 0 ) );
+            pViewShell = pTemporaryViewShell.get();
+        }
+        if ( pViewShell != NULL )
+        {
+            pViewShell->CalcLayout();
+        }
+    }
 
     if ( !pOLEExp )
     {
@@ -3141,10 +3157,8 @@ void MSWordExportBase::ExportDocument( bool bWriteAll )
     if ( !pOCXExp )
         pOCXExp = new SwMSConvertControls( pDoc->GetDocShell(), pCurPam );
 
-    // --> OD 2007-10-08 #i81405#
     // Collect anchored objects before changing the redline mode.
     maFrames = GetFrames( *pDoc, bWriteAll? NULL : pOrigPam );
-    // <--
 
     mnRedlineMode = pDoc->GetRedlineMode();
     if ( pDoc->GetRedlineTbl().Count() )
@@ -3504,12 +3518,6 @@ void WW8Export::PrepareStorage()
 
 sal_uLong SwWW8Writer::WriteStorage()
 {
-    // #i34818# #120099# - update layout (if present), for SwWriteTable
-    ViewShell* pViewShell = NULL;
-    pDoc->GetEditShell( &pViewShell );
-    if( pViewShell != NULL )
-        pViewShell->CalcLayout();
-
     long nMaxNode = pDoc->GetNodes().Count();
     ::StartProgress( STR_STATSTR_W4WWRITE, 0, nMaxNode, pDoc->GetDocShell() );
 
@@ -3570,9 +3578,12 @@ MSWordExportBase::~MSWordExportBase()
     delete pOleMap;
 }
 
-WW8Export::WW8Export( SwWW8Writer *pWriter,
-        SwDoc *pDocument, SwPaM *pCurrentPam, SwPaM *pOriginalPam,
-        bool bIsWW8 )
+WW8Export::WW8Export(
+    SwWW8Writer *pWriter,
+    SwDoc *pDocument,
+    SwPaM *pCurrentPam,
+    SwPaM *pOriginalPam,
+    bool bIsWW8 )
     : MSWordExportBase( pDocument, pCurrentPam, pOriginalPam ),
       pO( NULL ),
       mpTableAt( NULL ),

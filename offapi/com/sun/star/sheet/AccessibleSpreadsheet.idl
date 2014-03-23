@@ -51,7 +51,7 @@ module com {  module sun {  module star {  module sheet {
 
 /** The accessible view of a spreadsheet document
 
-     @since OOo 1.1.2
+     @since OpenOffice 1.1.2
 */
 published service AccessibleSpreadsheet
 {

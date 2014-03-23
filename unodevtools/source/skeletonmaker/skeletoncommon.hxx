@@ -32,6 +32,8 @@
 #include <hash_set>
 #include <map>
 
+inline std::ostream& operator<<( std::ostream& s, const rtl::OString r) { return (s << r.getStr()); }
+
 namespace skeletonmaker {
 
 typedef ::std::map< ::rtl::OString, ::std::vector< ::rtl::OString >,

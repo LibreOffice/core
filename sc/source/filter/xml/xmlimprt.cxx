@@ -2604,7 +2604,6 @@ throw(::com::sun::star::uno::RuntimeException)
         // generic name for 'unknown' cases
         return ScXMLImport_getImplementationName();
     }
-    return SvXMLImport::getImplementationName();
 }
 
 // ::com::sun::star::xml::sax::XDocumentHandler

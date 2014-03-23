@@ -242,7 +242,7 @@ TabPage RID_TP_CUSTOMANIMATION_EFFECT
         Maximum = 9999 ;
         DecimalDigits = 1 ;
         Unit = FUNIT_CUSTOM ;
-        CustomUnitText [ en-US ] = "sec";
+        CustomUnitText [ en-US ] = " sec";
         SpinSize = 5 ;
         Hide = TRUE;
     };
@@ -447,8 +447,7 @@ TabPage RID_TP_CUSTOMANIMATION_EFFECT
         Minimum = 0 ;
         Maximum = 1024 ;
         DecimalDigits = 1 ;
-        Unit = FUNIT_CUSTOM ;
-        CustomUnitText [ en-US ] = "%";
+        Unit = FUNIT_PERCENT ;
         SpinSize = 1 ;
 
     };
@@ -510,7 +509,7 @@ TabPage RID_TP_CUSTOMANIMATION_DURATION
         Maximum = 9999 ;
         DecimalDigits = 1 ;
         Unit = FUNIT_CUSTOM ;
-        CustomUnitText [ en-US ] = "sec";
+        CustomUnitText [ en-US ] = " sec";
         SpinSize = 5 ;
     };
 
@@ -660,7 +659,7 @@ TabPage RID_TP_CUSTOMANIMATION_TEXT
         Maximum = 9999 ;
         DecimalDigits = 1 ;
         Unit = FUNIT_CUSTOM ;
-        CustomUnitText [ en-US ] = "sec";
+        CustomUnitText [ en-US ] = " sec";
         SpinSize = 5 ;
     };
 

@@ -9,3 +9,16 @@
  OS_LIBS			= $(OS_PTHREAD) -ldl -lc
  
  ifdef USE_PTHREADS
+--- misc/nss-3.14.4/mozilla/security/nss/lib/freebl/Makefile	2013-01-31 02:08:59.000000000 +0100
++++ misc/build/nss-3.14.4/mozilla/security/nss/lib/freebl/Makefile	2014-01-10 13:57:48.000000000 +0100
+@@ -186,8 +186,8 @@
+     DEFINES += -DMP_CHAR_STORE_SLOW -DMP_IS_LITTLE_ENDIAN
+ #   DEFINES += -DMPI_AMD64_ADD
+     # comment the next two lines to turn off intel HW accelleration
+-    DEFINES += -DUSE_HW_AES
+-    ASFILES += intel-aes.s intel-gcm.s
++#    DEFINES += -DUSE_HW_AES
++#    ASFILES += intel-aes.s intel-gcm.s
+     EXTRA_SRCS += intel-gcm-wrap.c
+     INTEL_GCM = 1
+     MPI_SRCS += mpi_amd64.c mp_comba.c

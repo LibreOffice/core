@@ -42,7 +42,7 @@ module com { module sun { module star { module ucb {
     @see com::sun::star::ucb::Content
     @see com::sun::star::ucb::ODMAContent
 
-    @since OOo 1.1.2
+    @since OpenOffice 1.1.2
 */
 published service ODMAContentProvider
 {

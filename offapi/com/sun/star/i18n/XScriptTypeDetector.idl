@@ -41,7 +41,7 @@ module com {  module sun {  module star {  module i18n {
     <p> The <em>nScriptDirection</em> parameters are of type
     <type>ScriptDirection</type></p>
 
-     @since OOo 1.1.2
+     @since OpenOffice 1.1.2
 */
 
 published interface XScriptTypeDetector : ::com::sun::star::uno::XInterface

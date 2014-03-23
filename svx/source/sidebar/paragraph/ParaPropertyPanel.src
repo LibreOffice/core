@@ -661,8 +661,7 @@ Control RID_POPUPPANEL_PARAPAGE_LINESPACING
         Maximum = 200;
         Value = 100;
         StrictFormat = TRUE;
-        Unit = FUNIT_CUSTOM ;
-        CustomUnitText = "%";
+        Unit = FUNIT_PERCENT ;
         First = 50;
         Last = 200;
         SpinSize = 1;

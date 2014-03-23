@@ -31,7 +31,7 @@ module com { module sun { module star { module rendering {
     animation is driven through, thus defining the possible repeat
     modes.<p>
 
-    @since OOo 2.0
+    @since OpenOffice 2.0
  */
 constants AnimationRepeat
 {

@@ -137,10 +137,10 @@ published interface XChartDocument: com::sun::star::frame::XModel
         <p>The returned object supports interface <type>XChartDataArray</type>
         which can be used to access the concrete data.</p>
 
-        <p>Since OOo 3.3 the returned object also supports interface <type>XComplexDescriptionAccess</type>
+        <p>Since OpenOffice 3.3 the returned object also supports interface <type>XComplexDescriptionAccess</type>
         which can be used to access complex hierarchical axis descriptions.</p>
 
-        <p>Since OOo 3.4 the returned object also supports interface <type>XDateCategories</type>.</p>
+        <p>Since OpenOffice 3.4 the returned object also supports interface <type>XDateCategories</type>.</p>
 
         @see XChartData
         @see XChartDataArray
@@ -155,10 +155,10 @@ published interface XChartDocument: com::sun::star::frame::XModel
 
         <p>The given object needs to support interface <type>XChartDataArray</type>.</p>
 
-        <p>Since OOo 3.3 if the given object might support interface <type>XComplexDescriptionAccess</type>
+        <p>Since OpenOffice 3.3 if the given object might support interface <type>XComplexDescriptionAccess</type>
         which allows to set complex hierarchical axis descriptions.</p>
 
-        <p>Since OOo 3.4 if the given object might support interface <type>XDateCategories</type>
+        <p>Since OpenOffice 3.4 if the given object might support interface <type>XDateCategories</type>
         which allows to set date values as x values for category charts.</p>
 
         <p>The given data is copied before it is applied to the chart.

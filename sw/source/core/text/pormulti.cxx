@@ -2265,7 +2265,9 @@ SwLinePortion* SwTxtFormatter::MakeRestPortion( const SwLineLayout* pLine,
     if( pFld )
     {
         const SwTxtAttr *pHint = GetAttr( nPosition - 1 );
-        if( pHint && pHint->Which() == RES_TXTATR_FIELD )
+        if ( pHint
+             && ( pHint->Which() == RES_TXTATR_FIELD
+                  || pHint->Which() == RES_TXTATR_ANNOTATION ) )
         {
             pRest = NewFldPortion( GetInfo(), pHint );
             if( pRest->InFldGrp() )

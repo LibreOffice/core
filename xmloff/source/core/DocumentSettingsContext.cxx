@@ -600,7 +600,7 @@ void XMLConfigItemContext::Characters( const ::rtl::OUString& rChars )
         if( sTrimmedChars.getLength() )
         {
             rtl::OUString sChars;
-            if( msValue )
+            if( !msValue.isEmpty() )
             {
                 sChars = msValue;
                 sChars += sTrimmedChars;

@@ -203,7 +203,7 @@ published service NumberingLevel
                 ListtabStopPosition, FirstLineIndent, IndentAt are used.
                 </p>
 
-                @since OOo 3.0
+                @since OpenOffice 3.0
         */
         [optional, property] short PositionAndSpaceMode;
 
@@ -215,7 +215,7 @@ published service NumberingLevel
                 Only of relevance, if PositionAndSpaceMode equals LABEL_ALIGNMENT.
                 </p>
 
-                @since OOo 3.0
+                @since OpenOffice 3.0
         */
         [optional, property] short LabelFollowedBy;
 
@@ -228,7 +228,7 @@ published service NumberingLevel
                 and LabelFollowedBy equal LABELFOLLOW_LISTTAB
                 </p>
 
-                @since OOo 3.0
+                @since OpenOffice 3.0
         */
         [optional, property] long ListtabStopPosition;
 
@@ -239,7 +239,7 @@ published service NumberingLevel
                 Only of relevance, if PositionAndSpaceMode equals LABEL_ALIGNMENT.
                 </p>
 
-                @since OOo 3.0
+                @since OpenOffice 3.0
         */
         [optional, property] long FirstLineIndent;
 
@@ -250,7 +250,7 @@ published service NumberingLevel
                 Only of relevance, if PositionAndSpaceMode equals LABEL_ALIGNMENT.
                 </p>
 
-                @since OOo 3.0
+                @since OpenOffice 3.0
         */
         [optional, property] long IndentAt;
 };

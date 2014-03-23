@@ -62,9 +62,18 @@ struct SwFindRowSpanCacheObj;
 //Painten des Hintergrunds. Mit Brush oder Graphic.
 // OD 05.08.2002 #99657# - add 6th parameter to indicate that method should
 //     consider background transparency, saved in the color of the brush item
-void MA_FASTCALL DrawGraphic( const SvxBrushItem *, OutputDevice *,
-      const SwRect &rOrg, const SwRect &rOut, const sal_uInt8 nGrfNum = GRFNUM_NO,
-      const sal_Bool bConsiderBackgroundTransparency = sal_False );
+void MA_FASTCALL DrawGraphic(
+    const SvxBrushItem *,
+    OutputDevice *,
+    const SwRect &rOrg,
+    const SwRect &rOut,
+    const sal_uInt8 nGrfNum = GRFNUM_NO,
+    const sal_Bool bConsiderBackgroundTransparency = sal_False );
+bool MA_FASTCALL DrawFillAttributes(
+    const boost::shared_ptr< FillAttributes >& rFillAttributes,
+    const SwRect& rOriginalLayoutRect,
+    const SwRect& rPaintRect,
+    OutputDevice& rOut);
 
 // OD 24.01.2003 #106593# - method to align rectangle
 // Created declaration here to avoid <extern> declarations

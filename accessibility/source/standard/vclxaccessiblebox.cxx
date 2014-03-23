@@ -116,6 +116,7 @@ void VCLXAccessibleBox::ProcessWindowEvent (const VclWindowEvent& rVclWindowEven
 {
     switch ( rVclWindowEvent.GetId() )
     {
+        case VCLEVENT_DROPDOWN_SELECT:
         case VCLEVENT_LISTBOX_SELECT:
         case VCLEVENT_LISTBOX_FOCUSITEMCHANGED:
 
@@ -187,7 +188,7 @@ void VCLXAccessibleBox::ProcessWindowEvent (const VclWindowEvent& rVclWindowEven
                         if ( xText.is() )
                 {
                     ::rtl::OUString sText = xText->getSelectedText();
-                    if ( !sText.getLength() )
+                    if ( sText.isEmpty() )
                         sText = xText->getText();
                             pList->UpdateSelection_Acc (sText, m_bIsDropDownBox);
                     //if(m_bIsDropDownBox && !pList->IsInDropDown())
@@ -240,7 +241,7 @@ void VCLXAccessibleBox::ProcessWindowEvent (const VclWindowEvent& rVclWindowEven
                 if ( xText.is() )
                 {
                     ::rtl::OUString sText = xText->getSelectedText();
-                    if ( !sText.getLength() )
+                    if ( sText.isEmpty() )
                         sText = xText->getText();
                     pList->UpdateSelection (sText);
                 }
@@ -574,7 +575,7 @@ void VCLXAccessibleBox::FillAccessibleStateSet( utl::AccessibleStateSetHelper& r
                 sText = pSubEdit->GetText();
             nEntryCount = pComboBox->GetEntryCount();
         }
-        if (sText.getLength() == 0 && nEntryCount >0)
+        if ( sText.isEmpty() && nEntryCount > 0 )
             rStateSet.AddState(AccessibleStateType::INDETERMINATE);
     }
     else if (m_aBoxType == LISTBOX && m_bIsDropDownBox == true)

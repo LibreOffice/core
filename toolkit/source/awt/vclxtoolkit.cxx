@@ -632,11 +632,9 @@ void SAL_CALL VCLXToolkit::disposing()
 
 ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer > VCLXToolkit::createWindow( const ::com::sun::star::awt::WindowDescriptor& rDescriptor ) throw(::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException)
 {
-//IAccessibility2 Implementation 2009-----
 #ifdef WNT
     CEnableAccessInterface e;
 #endif
-//-----IAccessibility2 Implementation 2009
     return ImplCreateWindow( rDescriptor, WinBits(0) );
 }
 

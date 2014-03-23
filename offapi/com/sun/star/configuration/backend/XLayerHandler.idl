@@ -48,7 +48,7 @@ module com { module sun { module star { module configuration { module backend {
 /** receives a description of a configuration layer
     as a sequence of events.
 
-    @since OOo 1.1.2
+    @since OpenOffice 1.1.2
  */
 published interface XLayerHandler: ::com::sun::star::uno::XInterface
 {

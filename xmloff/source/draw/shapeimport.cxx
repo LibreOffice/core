@@ -1346,6 +1346,35 @@ void XMLShapeImportHelper::addGluePointMapping( com::sun::star::uno::Reference< 
         mpPageContext->maShapeGluePointsMap[xShape][nSourceId] = nDestinnationId;
 }
 
+/** find mapping for given DestinationID. This allows to extract the original draw:id imported with a draw:glue-point */
+sal_Int32 XMLShapeImportHelper::findGluePointMapping(
+    const com::sun::star::uno::Reference< com::sun::star::drawing::XShape >& xShape,
+    sal_Int32 nDestinnationId ) const
+{
+    if( mpPageContext )
+    {
+        ShapeGluePointsMap::iterator aShapeIter( mpPageContext->maShapeGluePointsMap.find( xShape ) );
+
+        if( aShapeIter != mpPageContext->maShapeGluePointsMap.end() )
+        {
+            GluePointIdMap::iterator aShapeIdIter = (*aShapeIter).second.begin();
+            GluePointIdMap::iterator aShapeIdEnd  = (*aShapeIter).second.end();
+
+            while ( aShapeIdIter != aShapeIdEnd )
+            {
+                if ( (*aShapeIdIter).second == nDestinnationId )
+                {
+                    return (*aShapeIdIter).first;
+                }
+
+                aShapeIdIter++;
+            }
+        }
+    }
+
+    return -1;
+}
+
 /** moves all current DestinationId's by n */
 void XMLShapeImportHelper::moveGluePointMapping( const com::sun::star::uno::Reference< com::sun::star::drawing::XShape >& xShape, const sal_Int32 n )
 {
@@ -1368,7 +1397,7 @@ void XMLShapeImportHelper::moveGluePointMapping( const com::sun::star::uno::Refe
 
 /** retrieves a mapping for a glue point identifier from the current xml file to the identifier created after
     inserting the new glue point into the core. The mapping must be initialized first with addGluePointMapping() */
-sal_Int32 XMLShapeImportHelper::getGluePointId( com::sun::star::uno::Reference< com::sun::star::drawing::XShape >& xShape, sal_Int32 nSourceId )
+sal_Int32 XMLShapeImportHelper::getGluePointId( const com::sun::star::uno::Reference< com::sun::star::drawing::XShape >& xShape, sal_Int32 nSourceId )
 {
     if( mpPageContext )
     {

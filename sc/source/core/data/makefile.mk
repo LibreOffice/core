@@ -31,6 +31,7 @@ PROJECTPCH=core_pch
 PROJECTPCHSOURCE=..\pch\core_pch
 
 AUTOSEG=true
+ENABLE_EXCEPTIONS=TRUE
 
 # --- Settings -----------------------------------------------------
 

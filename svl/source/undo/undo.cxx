@@ -629,7 +629,15 @@ bool SfxUndoManager::ImplAddUndoAction_NoNotify( SfxUndoAction *pAction, bool bT
         {
             i_guard.markForDeletion( m_pData->pActUndoArray->aUndoActions[0].pAction );
             m_pData->pActUndoArray->aUndoActions.Remove(0);
-            --m_pData->pActUndoArray->nCurUndoAction;
+
+            if(m_pData->pActUndoArray->nCurUndoAction)
+            {
+                --m_pData->pActUndoArray->nCurUndoAction;
+            }
+            else
+            {
+                OSL_ENSURE(false, "CurrentUndoAction going negative (!)");
+            }
         }
     }
 

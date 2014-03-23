@@ -31,7 +31,7 @@ module star
 {
 module chart
 {
-/** @since OOo 3.4
+/** @since OpenOffice 3.4
 */
 published constants ChartAxisType
 {

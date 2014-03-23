@@ -233,7 +233,7 @@ sal_Bool CunoType::dumpDependedTypes(CunoOptions* pOptions)
         if ((index = typeName.lastIndexOf(']')) > 0)
             typeName = typeName.copy(index + 1);
 
-        if (getBaseType(typeName).getLength() == 0)
+        if ( getBaseType(typeName).isEmpty() )
         {
             if (!produceType(typeName,
                                 m_typeMgr,
@@ -393,7 +393,7 @@ void CunoType::dumpDepIncludes(FileStream& o, const OString& typeName, sal_Char*
                   << ">\n#endif\n";
             }
 
-            if (getBaseType(relType).getLength() == 0 &&
+            if (getBaseType(relType).isEmpty() &&
                 m_typeName != relType)
             {
                 if (m_typeMgr.getTypeClass(relType) == RT_TYPE_INTERFACE
@@ -582,7 +582,7 @@ void CunoType::dumpGetCunoType(FileStream& o)
 
         OString superType(m_reader.getSuperTypeName());
         sal_Bool bIsBaseException = sal_False;
-        if (superType.getLength() > 0)
+        if ( !superType.isEmpty() )
         {
             if ( superType.equals("com/sun/star/uno/Exception") )
             {
@@ -642,7 +642,7 @@ void CunoType::dumpGetCunoType(FileStream& o)
 
         o << indent() << "typelib_static_compound_type_init( &s_pType_" << typeName << ", "
           << getTypeClass(m_typeName, sal_True) << ", \"" << m_typeName.replace('/', '.') << "\", ";
-        if ( superType.getLength() > 0 || bIsBaseException )
+        if ( !superType.isEmpty() || bIsBaseException )
         {
             if ( bIsBaseException )
             {
@@ -703,7 +703,7 @@ void CunoType::dumpCGetCunoType(FileStream& o)
        << indent() << "typelib_TypeDescription * pTD = 0;\n";
 
     OString superType(m_reader.getSuperTypeName());
-    if (superType.getLength() > 0)
+    if ( !superType.isEmpty() )
         o << indent() << "typelib_TypeDescriptionReference * pSuperType = 0;\n";
 
     sal_uInt32      count = getMemberCount();
@@ -728,7 +728,7 @@ void CunoType::dumpCGetCunoType(FileStream& o)
 
     o << indent() << "rtl_uString_newFromAscii( &pTypeName, \"" << m_typeName.replace('/', '.') << "\" );\n";
 
-    if (superType.getLength() > 0)
+    if ( !superType.isEmpty() )
     {
         o << indent() << "typelib_typedescriptionreference_newByAsciiName(&pSuperType, typelib_TypeClass_INTERFACE, \""
           << superType.replace('/', '.') << "\" );\n";
@@ -766,7 +766,7 @@ void CunoType::dumpCGetCunoType(FileStream& o)
         o << indent() << "&pTD,\n" << indent()
           << getTypeClass(OString(), sal_True) << ", pTypeName,\n";
 
-        if (superType.getLength() > 0)
+        if ( !superType.isEmpty() )
             o << indent() << "pSuperType,\n";
         else
             o << indent() << "0,\n";
@@ -868,7 +868,7 @@ sal_uInt32 CunoType::checkInheritedMemberCount(const TypeReader* pReader)
 
     sal_uInt32 count = 0;
     OString superType(pReader->getSuperTypeName());
-    if (superType.getLength() > 0)
+    if ( !superType.isEmpty() )
     {
         TypeReader aSuperReader(m_typeMgr.getTypeReader(superType));
         if ( aSuperReader.isValid() )
@@ -911,7 +911,7 @@ void CunoType::dumpInheritedMembers(FileStream& o, rtl::OString& superType)
     TypeReader aSuperReader(m_typeMgr.getTypeReader(superType));
 
     OString baseType(aSuperReader.getSuperTypeName());
-    if (baseType.getLength() > 0)
+    if ( !baseType.isEmpty() )
     {
         dumpInheritedMembers(o, baseType);
     }
@@ -938,10 +938,10 @@ void CunoType::dumpInheritedMembers(FileStream& o, rtl::OString& superType)
 
 OString CunoType::getTypeClass(const OString& type, sal_Bool bCStyle)
 {
-    OString     typeName = (type.getLength() > 0 ? type : m_typeName);
+    OString     typeName = ( !type.isEmpty() ? type : m_typeName );
     RTTypeClass rtTypeClass = RT_TYPE_INVALID;
 
-    if (type.getLength() > 0)
+    if ( !type.isEmpty() )
     {
         typeName = type;
         rtTypeClass = m_typeMgr.getTypeClass(typeName);
@@ -1059,7 +1059,7 @@ void CunoType::dumpType(FileStream& o, const OString& type,
         case RT_TYPE_INVALID:
             {
                 OString tmp(getBaseType(relType));
-                if (tmp.getLength() > 0)
+                if ( !tmp.isEmpty() )
                 {
                     o << tmp.getStr();
                     if ( bParam && !bPointer && relType.equals("any") )
@@ -1389,7 +1389,7 @@ OString CunoType::checkRealBaseType(const OString& type, sal_Bool bResolveTypeOn
 
     if ( bResolveTypeOnly )
     {
-        if ( completePrefix.getLength() > 0 )
+        if ( !completePrefix.isEmpty() )
         {
             baseType = bSeqType ? (completePrefix + baseType) : ( baseType + completePrefix);
         }
@@ -1575,7 +1575,7 @@ void InterfaceType::dumpInheritedFunctions(FileStream& o, rtl::OString& superTyp
     TypeReader aSuperReader(m_typeMgr.getTypeReader(superType));
 
     OString baseType(aSuperReader.getSuperTypeName());
-    if (baseType.getLength() > 0)
+    if ( !baseType.isEmpty() )
     {
         dumpInheritedFunctions(o, baseType);
     }
@@ -1591,7 +1591,7 @@ sal_Bool InterfaceType::dumpDeclaration(FileStream& o)
     inc();
 
     OString superType(m_reader.getSuperTypeName());
-    if (superType.getLength() > 0)
+    if ( !superType.isEmpty() )
         dumpInheritedFunctions(o, superType);
 /*
     if (getNestedTypeNames().getLength() > 0)
@@ -1915,7 +1915,7 @@ void InterfaceType::dumpGetCunoType(FileStream& o)
         inc();
         OString superType(m_reader.getSuperTypeName());
         sal_Bool bWithBase = sal_False;
-        if (superType.getLength() > 0 && !superType.equals("com/sun/star/uno/XInterface"))
+        if ( !superType.isEmpty() && !superType.equals("com/sun/star/uno/XInterface"))
         {
             bWithBase = sal_True;
             o << indent() << "typelib_TypeDescriptionReference * pSuperType = 0;\n"
@@ -1975,7 +1975,7 @@ void InterfaceType::dumpCGetCunoType(FileStream& o)
     OString superType(m_reader.getSuperTypeName());
     sal_uInt32 count = getMemberCount();
 
-    if (superType.getLength() > 0)
+    if ( !superType.isEmpty() )
         o << indent() << "typelib_TypeDescriptionReference * pSuperType = 0;\n";
 
     if (count)
@@ -1996,7 +1996,7 @@ void InterfaceType::dumpCGetCunoType(FileStream& o)
 
     o << indent() << "rtl_uString_newFromAscii( &pTypeName, \"" << m_typeName.replace('/', '.') << "\" );\n";
 
-    if (superType.getLength() > 0)
+    if ( !superType.isEmpty() )
     {
         o << indent() << "typelib_typedescriptionreference_newByAsciiName(&pSuperType, typelib_TypeClass_INTERFACE, \""
           << superType.replace('/', '.') << "\" );\n";
@@ -2021,7 +2021,7 @@ void InterfaceType::dumpCGetCunoType(FileStream& o)
             uik.m_Data1, uik.m_Data2, uik.m_Data3, uik.m_Data4, uik.m_Data5);
     o << buffer;
 
-    if (superType.getLength() > 0)
+    if ( !superType.isEmpty() )
         o << indent() << "pSuperType,\n";
     else
         o << indent() << "0,\n";
@@ -2046,7 +2046,7 @@ void InterfaceType::dumpCGetCunoType(FileStream& o)
     }
     o << indent() << "typelib_typedescription_release( (typelib_TypeDescription*)pTD );\n";
 
-    if (superType.getLength() > 0)
+    if ( !superType.isEmpty() )
         o << indent() << "typelib_typedescription_release( pSuperType );\n\n";
     else
         o << "\n";
@@ -2207,7 +2207,7 @@ sal_uInt32 InterfaceType::checkInheritedMemberCount(const TypeReader* pReader)
 
     sal_uInt32 count = 0;
     OString superType(pReader->getSuperTypeName());
-    if (superType.getLength() > 0)
+    if ( !superType.isEmpty() )
     {
         TypeReader aSuperReader(m_typeMgr.getTypeReader(superType));
         if (aSuperReader.isValid())
@@ -2877,7 +2877,7 @@ sal_Bool StructureType::dumpDeclaration(FileStream& o)
     inc();
 
     OString superType(m_reader.getSuperTypeName());
-    if (superType.getLength() > 0)
+    if ( !superType.isEmpty() )
         o << indent() << superType.replace('/', '_').getStr() << " _Base;\n";
         //dumpInheritedMembers(o, superType);
 
@@ -2987,7 +2987,7 @@ sal_Bool ExceptionType::dumpDeclaration(FileStream& o)
     inc();
 
     OString superType(m_reader.getSuperTypeName());
-    if (superType.getLength() > 0)
+    if ( !superType.isEmpty() )
         o << indent() << superType.replace('/', '_').getStr() << " _Base;\n";
         //dumpInheritedMembers(o, superType);
 

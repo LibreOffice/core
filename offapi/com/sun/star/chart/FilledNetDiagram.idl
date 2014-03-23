@@ -46,7 +46,7 @@
 
 //=============================================================================
 
-/** specifies filled net diagrams. @since OOo 3.2
+/** specifies filled net diagrams. @since OpenOffice 3.2
 
     <p>Net diagrams are also known as radar diagrams.</p>
  */

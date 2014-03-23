@@ -32,7 +32,7 @@ module com { module sun { module star { module sdb { module application {
 
 /** denotes a named database object, or a named folder of database objects
 
-    @since OOo 3.0
+    @since OpenOffice 3.0
 */
 struct NamedDatabaseObject
 {

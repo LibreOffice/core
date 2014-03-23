@@ -2307,7 +2307,7 @@ String SIP_SA_MEASUREDECIMALPLACES
 
 String SIP_SA_MEASURERESERVE05
 {
-    Text [ en-US ] = "Dimensioning reserved 5";
+    Text [ en-US ] = "Dimensioning reserved for 5";
 };
 
 String SIP_SA_MEASURERESERVE06
@@ -2850,7 +2850,6 @@ Bitmap IMG_DIACONTROL_H
     File = "rotation_h.png";
 };
 
-//IAccessibility2 Implementation 2009-----
 String STR_ObjNameSingulFONTWORK
 {
     Text [ en-US ] = "font work" ;
@@ -2859,5 +2858,4 @@ String STR_ObjNamePluralFONTWORK
 {
     Text [ en-US ] = "font works" ;
 };
-//-----IAccessibility2 Implementation 2009
 

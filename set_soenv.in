@@ -20,13 +20,7 @@
 #  under the License.
 #  
 ###############################################################
-#
-# Program:     set_soenv.in
-# Version:     $Revision: 1.201 $
-# Date:        $Date: 2008-09-05 14:14:29 $
-# Author:      Willem van Dorp, Ross Nicholson, Oisin Boydell - Sun Microsystems, Ireland.
-#
-#---------------------------------------------------------------------------
+
 #---------------------------------------------------------------------------
 # Description:
 # set_soenv generates a file that contains all necessary 
@@ -102,7 +96,7 @@ my ( $oldPATH, $SRC_ROOT, $SO_HOME, $JAVA_HOME, $JDK, $JAVAFLAGS, $OOO_SHELL,
      $SOLARSRC, $DEVROOT, $SOLARVER, $SOLARVERSION, $WORKDIR, $OUTDIR, $SOLARENV, 
      $STAR_INIROOT, $STAR_INIROOTOLD, $STAR_STANDLST, $STAR_SSCOMMON, $STAR_SSOLARINI, 
      $DMAKEROOT, $CLASSPATH, $XCLASSPATH, $COMPATH, $CXX_X64_BINARY, $LINK_X64_BINARY, $LIBMGR_X64_BINARY,
-     $MSPDB_PATH, $MIDL_PATH, $CSC_PATH,
+     $MSPDB_PATH, $MIDL_PATH, $CSC_PATH, $MACOSX_DEPLOYMENT_TARGET, $MACOSX_SDK_PATH,
      $PATH, $SOLAREXTRAINC, $SOLAREXTRALIB, $SOLARLIB, 
      $SOLARINC, $LOCALINI, $FRAMEWORKSHOME, $COMEX, $PERL, 
      $COMP_ENV, $ILIB, $JAVAHOME, $PSDK_HOME, $DIRECTXSDK_LIB, $USE_NEW_SDK, $FRAME_HOME, 
@@ -753,29 +747,41 @@ elsif ( $platform =~ m/os2/ )
 elsif ( $platform =~ m/darwin/ ) 
 {     print "Setting Mac OS X/Darwin specific values... ";
       $BIG_SVX        = "TRUE";
-      $COM            = "GCC";
       $COMPATH        = '@COMPATH@'; 
-      if ($platform =~ m/^i[3456]86/)
+      print "Darwin platform = " . $platform ." ";
+      if( $CC =~ "gcc" )
       {
-          print "Setting values for Mac OS X/Darwin on x86... ";
+          print "Setting values for MacOSX/Darwin for Xcode<=3";
+          $COM            = "GCC";
           $outfile        = "MacOSXX86Env.Set"; 
           $CPU            = "I";
           $CPUNAME        = "INTEL";
           $OUTPATH        = "unxmacxi";
       }
-      elsif ($platform =~ m/^powerpc/)
+      elsif ($platform =~ m/^i[3456]86/)
       {
-          print "Setting values for Mac OS X/Darwin on PowerPC... ";
-          $outfile        = "MacOSXPPCEnv.Set"; 
-          $CPU            = "P";
-          $CPUNAME        = "POWERPC";
-          $OUTPATH        = "unxmacxp";
+          print "Setting values for MacOSX/Darwin on x86_32... ";
+          $COM            = "CLANG";
+          $outfile        = "MacOSXX32Env.Set"; 
+          $CPU            = "I";
+          $CPUNAME        = "INTEL";
+          $OUTPATH        = "unxmacci";
       }
-      if (@GCCVER@ >= 30401) {
-	  $CVER           = "C341";
-      } else {
-	  $CVER           = "C300";
+      elsif ($platform =~ m/^x86_64/)
+      {
+          print "Setting values for MacOSX/Darwin on x86_64... ";
+          $COM            = "CLANG";
+          $outfile        = "MacOSXX64Env.Set";
+          $CPU            = "X";
+          $CPUNAME        = "X86_64";
+          $OUTPATH        = "unxmaccx";
       }
+      else
+      {
+	  print "\nset_soenv: Unknown MacOSX/Darwin platform: $platform\n";
+	  exit 1;
+      }
+      $CVER           = "DUMMY_CVER";
       $GUI            = "UNX";
       $GVER           = "VCL";
       $INPATH         = $OUTPATH.$PROEXT;
@@ -938,16 +944,6 @@ if ( $platform =~ m/os2/ )
 {
    $PERL = 'perl';
    $PERL_PATH = '';
-}
-
-# Mac OS X/Darwin only variables.
-if ( $platform =~ m/darwin/ )
-{  $FRAMEWORKSHOME       = $ds."Developer".$ds."SDKs".$ds."MacOSX10.4u.sdk".$ds."System".$ds."Library".$ds."Frameworks";
-   if ( $XLIB eq "no_x_libraries" ) {
-      $GUIBASE  = "aqua";
-   } else {
-      $GUIBASE  = "unx";
-   }
 }
 
 # The project's workstamp.
@@ -1444,7 +1440,10 @@ elsif ($platform =~ m/cygwin/)
 }
 elsif ($platform =~ m/darwin/)
 {
-   $SOLARINC .= " " . $I.$FRAMEWORKSHOME.$ds."JavaVM.framework".$ds."Headers";
+    $FRAMEWORKSHOME = "@MACOSX_SDK_PATH@/System/Library/Frameworks";
+    my $STLINC .= $I."/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/c++/v1/";
+    $SOLARINC .= $STLINC . $I.$FRAMEWORKSHOME.$ds."JavaVM.framework".$ds."Headers";
+    $GUIBASE  = "aqua";
 }
 else
 {  AddWarning( "set_soenv", "$platform not configured for system dependant include dir" );
@@ -1646,6 +1645,7 @@ ToFile( "SOLAR_JAVA",        $SOLAR_JAVA,        "e" );
 ToFile( "BIG_SVX",           $BIG_SVX,           "e" );
 ToFile( "COM",               $COM,               "e" );
 ToFile( "COMPATH",           $COMPATH,           "e" );
+ToFile( "CC_PATH",           "@CC_PATH@",        "e" );
 ToFile( "CXX_X64_BINARY",    $CXX_X64_BINARY,    "e" );
 ToFile( "LINK_X64_BINARY",   $LINK_X64_BINARY,   "e" );
 ToFile( "LIBMGR_X64_BINARY", $LIBMGR_X64_BINARY, "e" );
@@ -1674,10 +1674,10 @@ if ( $platform =~ m/darwin/ )
 {
 # MAXOSX_DEPLOYMENT_TARGET : The minimum version required to run the build,
 # build can assume functions/libraries of that version to be available
-# unless you want to do runtime checks for 10.5 api, you also want to use the 10.7 sdk
 # (safer/easier than dealing with the MAC_OS_X_VERSION_MAX_ALLOWED macro)
 # http://developer.apple.com/technotes/tn2002/tn2064.html
-    ToFile( "MACOSX_DEPLOYMENT_TARGET",       "10.4",       "e" );
+    ToFile( "MACOSX_DEPLOYMENT_TARGET",       "@MACOSX_DEPLOYMENT_TARGET@",       "e" );
+    ToFile( "MACOSX_SDK_PATH",       "@MACOSX_SDK_PATH@",       "e" );
 }
 
 #

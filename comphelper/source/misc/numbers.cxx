@@ -115,7 +115,7 @@ Any getNumberFormatProperty( const Reference< XNumberFormatter >& _rxFormatter, 
 {
     Any aReturn;
 
-    OSL_ENSURE( _rxFormatter.is() && _rPropertyName.getLength(), "getNumberFormatProperty: invalid arguments!" );
+    OSL_ENSURE( _rxFormatter.is() && !_rPropertyName.isEmpty(), "getNumberFormatProperty: invalid arguments!" );
     try
     {
         Reference< XNumberFormatsSupplier > xSupplier;

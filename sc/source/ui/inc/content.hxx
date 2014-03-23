@@ -34,9 +34,7 @@ class ScNavigatorSettings;
 class ScDocument;
 class ScDocShell;
 class ScAreaLink;
-//IAccessibility2 Implementation 2009-----
 class SdrPage;
-//-----IAccessibility2 Implementation 2009
 
 #define SC_CONTENT_ROOT         0
 #define SC_CONTENT_TABLE        1
@@ -67,10 +65,8 @@ class ScContentTree : public SvTreeListBox
     String              aHiddenName;        // URL zum Laden
     String              aHiddenTitle;       // fuer Anzeige
     ScDocument*         pHiddenDocument;    // temporaer
-//IAccessibility2 Implementation 2009-----
     sal_Bool                           bisInNavigatoeDlg;
     String              sKeyString;
-//-----IAccessibility2 Implementation 2009
 
     sal_uInt16              pPosList[SC_CONTENT_COUNT];     // fuer die Reihenfolge
 
@@ -119,12 +115,10 @@ class ScContentTree : public SvTreeListBox
 
     DECL_LINK( ContentDoubleClickHdl, ScContentTree* );
     DECL_STATIC_LINK( ScContentTree, ExecDragHdl, void* );
-//IAccessibility2 Implementation 2009-----
 public:
     SvLBoxEntry* pTmpEntry;
 
     bool m_bFirstPaint;
-//-----IAccessibility2 Implementation 2009
 protected:
 //  virtual sal_Bool    Drop( const DropEvent& rEvt );
 //  virtual sal_Bool    QueryDrop( DropEvent& rEvt );
@@ -138,21 +132,17 @@ protected:
 
     virtual void    Command( const CommandEvent& rCEvt );
     virtual void    RequestHelp( const HelpEvent& rHEvt );
-//IAccessibility2 Implementation 2009-----
     virtual void    InitEntry(SvLBoxEntry*,const XubString&,const Image&,const Image&, SvLBoxButtonKind);
-//-----IAccessibility2 Implementation 2009
 public:
             ScContentTree( Window* pParent, const ResId& rResId );
             ~ScContentTree();
 
-//IAccessibility2 Implementation 2009-----
     String          getAltLongDescText( SvLBoxEntry* pEntry , sal_Bool isAltText) const;
     String          GetEntryAltText( SvLBoxEntry* pEntry ) const;
     String          GetEntryLongDescription( SvLBoxEntry* pEntry ) const;
 
     void     ObjectFresh( sal_uInt16 nType,SvLBoxEntry* pEntry = NULL);
     sal_Bool     SetNavigatorDlgFlag(sal_Bool isInNavigatoeDlg){ return bisInNavigatoeDlg=isInNavigatoeDlg;};
-//-----IAccessibility2 Implementation 2009
     virtual void    MouseButtonDown( const MouseEvent& rMEvt );
     virtual void    KeyInput( const KeyEvent& rKEvt );
 

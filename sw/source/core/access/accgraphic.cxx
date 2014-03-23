@@ -33,11 +33,9 @@
 #include "accgraphic.hxx"
 
 using namespace ::com::sun::star;
-//IAccessibility2 Implementation 2009-----
 #ifndef _FMTURL_HXX //autogen
 #include <fmturl.hxx>
 #endif
-//-----IAccessibility2 Implementation 2009
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::accessibility;
@@ -96,7 +94,6 @@ Sequence< sal_Int8 > SAL_CALL SwAccessibleGraphic::getImplementationId()
     }
     return aId;
 }
-//IAccessibility2 Implementation 2009-----
 //  Return this object's role.
 sal_Int16 SAL_CALL SwAccessibleGraphic::getAccessibleRole (void)
         throw (::com::sun::star::uno::RuntimeException)
@@ -107,4 +104,3 @@ sal_Int16 SAL_CALL SwAccessibleGraphic::getAccessibleRole (void)
             return AccessibleRole::IMAGE_MAP ;
         return AccessibleRole::GRAPHIC ;
 }
-//-----IAccessibility2 Implementation 2009

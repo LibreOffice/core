@@ -103,7 +103,7 @@ static OUString getDefaultLocalRegistry()
 
     if ( bIsPortalUser )
        {
-        if(  portalUserDir.getLength() )
+        if( !portalUserDir.isEmpty() )
         {
             FileBase::getFileURLFromSystemPath( portalUserDir , portalUserDir );
             userRegistryName = portalUserDir;
@@ -157,7 +157,7 @@ OUString getPathToUserRegistry()
 
     // search the environment STAR_USER_REGISTRY
     OString sBuffer( getenv(USER_REGISTRY_NAME_ENV) );
-    if ( sBuffer.getLength() > 0 )
+    if ( !sBuffer.isEmpty() )
     {
         f = fopen( sBuffer.getStr(), "r" );
 
@@ -168,7 +168,7 @@ OUString getPathToUserRegistry()
         }
     }
 
-    if ( !userRegistryName.getLength() )
+    if ( userRegistryName.isEmpty() )
     {
         userRegistryName = getDefaultLocalRegistry();
     }
@@ -206,7 +206,7 @@ OUString getPathToSystemRegistry()
     {
         // search the environment STAR_REGISTRY
         OString tmpStr( getenv(SYSTEM_REGISTRY_NAME_ENV) );
-        if ( tmpStr.getLength() > 0 )
+        if ( !tmpStr.isEmpty() )
         {
             f = fopen(tmpStr.getStr(), "r");
 

@@ -57,7 +57,7 @@ module com { module sun { module star { module uri {
    without considering case folding or normalization.  There may be multiple
    parameters with equal keys.</p>
 
-   @since OOo 2.0
+   @since OpenOffice 2.0
  */
 published interface XVndSunStarScriptUrl: com::sun::star::uno::XInterface {
     /**
@@ -77,7 +77,7 @@ published interface XVndSunStarScriptUrl: com::sun::star::uno::XInterface {
         @throws ::com::sun::star::lang::IllegalArgumentException
         if <arg>name</arg> is empty
 
-        @since OOo 3.0
+        @since OpenOffice 3.0
     */
     void   setName([in] string name)
         raises ( ::com::sun::star::lang::IllegalArgumentException );
@@ -122,7 +122,7 @@ published interface XVndSunStarScriptUrl: com::sun::star::uno::XInterface {
         @throws ::com::sun::star::lang::IllegalArgumentException
         if <arg>key</arg> is empty
 
-        @since OOo 3.0
+        @since OpenOffice 3.0
     */
     void setParameter( [in] string key, [in] string value )
         raises ( ::com::sun::star::lang::IllegalArgumentException );

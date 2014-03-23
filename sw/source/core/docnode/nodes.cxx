@@ -304,6 +304,7 @@ void SwNodes::ChgNode( SwNodeIndex& rDelPos, sal_uLong nSz,
                             switch ( pAttr->Which() )
                             {
                             case RES_TXTATR_FIELD:
+                            case RES_TXTATR_ANNOTATION:
                             case RES_TXTATR_INPUTFIELD:
                                 {
                                     SwTxtFld* pTxtFld = static_cast<SwTxtFld*>(pAttr);
@@ -320,16 +321,17 @@ void SwNodes::ChgNode( SwNodeIndex& rDelPos, sal_uLong nSz,
                                                   : SWFMTFLD_REMOVED ) ) );
                                     }
                                     else
-                                    if( RES_DDEFLD == pTyp->Which() )
-                                    {
-                                        if( bToUndo )
-                                            ((SwDDEFieldType*)pTyp)->DecRefCnt();
-                                        else
-                                            ((SwDDEFieldType*)pTyp)->IncRefCnt();
-                                    }
-                                    nDelMsg = RES_FIELD_DELETED;
+                                        if( RES_DDEFLD == pTyp->Which() )
+                                        {
+                                            if( bToUndo )
+                                                ((SwDDEFieldType*)pTyp)->DecRefCnt();
+                                            else
+                                                ((SwDDEFieldType*)pTyp)->IncRefCnt();
+                                        }
+                                        nDelMsg = RES_FIELD_DELETED;
                                 }
                                 break;
+
                             case RES_TXTATR_FTN:
                                 nDelMsg = RES_FOOTNOTE_DELETED;
                                 break;
@@ -357,19 +359,20 @@ void SwNodes::ChgNode( SwNodeIndex& rDelPos, sal_uLong nSz,
                             default:
                                 break;
                             }
+
                             if( nDelMsg && bToUndo )
                             {
                                 SwPtrMsgPoolItem aMsgHint( nDelMsg,
-                                                    (void*)&pAttr->GetAttr() );
+                                    (void*)&pAttr->GetAttr() );
                                 rNds.GetDoc()->GetUnoCallBack()->
-                                            ModifyNotification( &aMsgHint, &aMsgHint );
+                                    ModifyNotification( &aMsgHint, &aMsgHint );
                             }
                         }
                     }
-//FEATURE::CONDCOLL
+                    //FEATURE::CONDCOLL
                     if( RES_CONDTXTFMTCOLL == pTxtNd->GetTxtColl()->Which() )
                         pTxtNd->ChkCondColl();
-//FEATURE::CONDCOLL
+                    //FEATURE::CONDCOLL
                 }
                 else
                 {
@@ -897,7 +900,6 @@ sal_Bool SwNodes::_MoveNodes( const SwNodeRange& aRange, SwNodes & rNodes,
             break;
 
         case ND_TEXTNODE:
-            //IAccessibility2 Implementation 2009-----
             //Solution:Add special function to text node.
             {
                 if( bNewFrms && pAktNode->GetCntntNode() )
@@ -907,7 +909,6 @@ sal_Bool SwNodes::_MoveNodes( const SwNodeRange& aRange, SwNodes & rNodes,
                 aRg.aEnd--;
             }
             break;
-            //-----IAccessibility2 Implementation 2009
         case ND_GRFNODE:
         case ND_OLENODE:
             {

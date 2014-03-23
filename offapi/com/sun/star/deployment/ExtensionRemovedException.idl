@@ -35,7 +35,7 @@ interface XPackage;
    because the extension was removed. <member>XPackage::isRemoved</member> will
    return true on that object.
 
-   @since OOo 3.3
+   @since OpenOffice 3.3
 */
 exception ExtensionRemovedException: com::sun::star::uno::Exception {
 

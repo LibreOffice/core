@@ -33,7 +33,7 @@ module com {  module sun {  module star {  module table {
 /** enumeration used to specify the type of contents in a sort field
     (row/column) of a table.
 
-    @since OOo 1.1.2
+    @since OpenOffice 1.1.2
  */
 published enum TableSortFieldType
 {

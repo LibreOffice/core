@@ -37,7 +37,7 @@
 // DocMerge from xml: exception com::sun::star::frame::IllegalArgumentIOException
 /** This exception can be thrown in case arguments are wrong.
 
-    @since OOo 1.1.2
+    @since OpenOffice 1.1.2
  */
 published exception IllegalArgumentIOException: com::sun::star::io::IOException
 {

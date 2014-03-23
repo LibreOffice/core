@@ -42,6 +42,10 @@ public:
 
     void        ExecFormText(SfxRequest& rReq);
     void        GetFormTextState(SfxItemSet& rSet);
+
+    // #123922# added helper methods to handle applying graphic data to draw objects
+    SdrObject* IsSingleFillableNonOLESelected();
+    void InsertPictureFromFile(SdrObject& rObject);
 };
 
 #endif

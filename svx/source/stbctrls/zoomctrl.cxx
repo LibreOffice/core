@@ -132,7 +132,7 @@ void SvxZoomStatusBarControl::StateChanged( sal_uInt16, SfxItemState eState,
         const SfxUInt16Item* pItem = (const SfxUInt16Item*)pState;
         nZoom = pItem->GetValue();
         String aStr( String::CreateFromInt32(nZoom) );
-        aStr += '%';
+        aStr.AppendAscii( " %" );
         GetStatusBar().SetItemText( GetId(), aStr );
 
         if ( dynamic_cast< const SvxZoomItem* >(pState) )
@@ -168,7 +168,7 @@ void SvxZoomStatusBarControl::StateChanged( sal_uInt16, SfxItemState eState,
 void SvxZoomStatusBarControl::Paint( const UserDrawEvent& )
 {
     String aStr( String::CreateFromInt32( nZoom ));
-    aStr += '%';
+    aStr.AppendAscii( " %" );
     GetStatusBar().SetItemText( GetId(), aStr );
 }
 
@@ -212,7 +212,7 @@ void SvxZoomStatusBarControl::Command( const CommandEvent& rCEvt )
 
 sal_uIntPtr SvxZoomStatusBarControl::GetDefItemWidth(const StatusBar& rStb)
 {
-    long nWidth1 =  rStb.GetTextWidth(String::CreateFromAscii("XXXXX%"));
+    long nWidth1 =  rStb.GetTextWidth(String::CreateFromAscii("XXXXX %"));
     return nWidth1;
 }
 

@@ -152,7 +152,7 @@ TabPage RID_SVXPAGE_DOCRECOVERY_RECOVER
         Pos = MAP_APPFONT( RECOV_COL1, RECOV_ROW2 );
         Size = MAP_APPFONT( RECOV_CONTROLWIDTH, RECOV_DESCRHEIGHT );
         WordBreak = TRUE;
-        Text[ en-US ] = "Press 'Start Recovery' to start the recovery process of the documents listed below.\n\nThe 'Status' column shows whether the document could be recovered.";
+        Text[ en-US ] = "Press 'Start Recovery' to start the recovery process of the documents listed below.\n\nThe 'Status' column shows whether the document can be recovered.";
     };
     FixedText FT_RECOV_PROGR
     {

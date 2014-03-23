@@ -442,7 +442,7 @@ namespace pcr
 
         if ( m_pUIRequestComposer.get() )
             m_pUIRequestComposer->dispose();
-        m_pUIRequestComposer.reset( NULL );
+        m_pUIRequestComposer.reset();
     }
 
     //--------------------------------------------------------------------

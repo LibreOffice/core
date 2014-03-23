@@ -32,7 +32,6 @@
 #include <accpara.hxx>
 #include <acchyperlink.hxx>
 
-//IAccessibility2 Implementation 2009-----
 #include <comphelper/processfactory.hxx>
 #ifndef _COM_SUN_STAR_FRAME_XDESKTOP_HPP_
 #include <com/sun/star/frame/XDesktop.hpp>
@@ -43,7 +42,6 @@
 #ifndef _COM_SUN_STAR_DOCUMENT_XLINKTARGETSUPPLIER_HPP_
 #include <com/sun/star/document/XLinkTargetSupplier.hpp>
 #endif
-//-----IAccessibility2 Implementation 2009
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::accessibility;
@@ -92,12 +90,10 @@ sal_Bool SAL_CALL SwAccessibleHyperlink::doAccessibleAction( sal_Int32 nIndex )
 
     sal_Bool bRet = sal_False;
 
-    //IAccessibility2 Implementation 2009-----
     if(nIndex != 0)
         throw new IndexOutOfBoundsException;
     const SwTxtAttr *pTxtAttr = GetTxtAttr();
     if( pTxtAttr /*&& 0 == nIndex*/ )
-    //-----IAccessibility2 Implementation 2009
     {
         const SwFmtINetFmt& rINetFmt = pTxtAttr->GetINetFmt();
         if( rINetFmt.GetValue().Len() )
@@ -129,7 +125,6 @@ OUString SAL_CALL SwAccessibleHyperlink::getAccessibleActionDescription(
 {
     OUString sDesc;
 
-    //IAccessibility2 Implementation 2009-----
     if(nIndex != 0)
         throw new IndexOutOfBoundsException;
     const SwTxtAttr *pTxtAttr = GetTxtAttr();
@@ -138,7 +133,6 @@ OUString SAL_CALL SwAccessibleHyperlink::getAccessibleActionDescription(
         const SwFmtINetFmt& rINetFmt = pTxtAttr->GetINetFmt();
         sDesc = OUString( rINetFmt.GetValue() );
     }
-    //-----IAccessibility2 Implementation 2009
     return sDesc;
 }
 
@@ -148,9 +142,7 @@ uno::Reference< XAccessibleKeyBinding > SAL_CALL
 {
     uno::Reference< XAccessibleKeyBinding > xKeyBinding;
 
-    //IAccessibility2 Implementation 2009-----
     if( isValid() /*&& 0 == nIndex*/ )
-    //-----IAccessibility2 Implementation 2009
     {
         ::comphelper::OAccessibleKeyBindingHelper* pKeyBindingHelper =
                new ::comphelper::OAccessibleKeyBindingHelper();
@@ -173,14 +165,12 @@ uno::Any SAL_CALL SwAccessibleHyperlink::getAccessibleActionAnchor(
         throw (lang::IndexOutOfBoundsException, uno::RuntimeException)
 {
     uno::Any aRet;
-    //IAccessibility2 Implementation 2009-----
     if(nIndex != 0)
         throw new IndexOutOfBoundsException;
     //End Added.
     ::rtl::OUString text = OUString( xPara->GetString() );
     ::rtl::OUString retText =  text.copy(nStartIdx, nEndIdx - nStartIdx);
     aRet <<= retText;
-    //-----IAccessibility2 Implementation 2009
     return aRet;
 }
 
@@ -188,7 +178,6 @@ uno::Any SAL_CALL SwAccessibleHyperlink::getAccessibleActionObject(
             sal_Int32 nIndex )
     throw (lang::IndexOutOfBoundsException, uno::RuntimeException)
 {
-    //IAccessibility2 Implementation 2009-----
     if(nIndex != 0)
         throw new IndexOutOfBoundsException;
     //End Added.
@@ -202,7 +191,6 @@ uno::Any SAL_CALL SwAccessibleHyperlink::getAccessibleActionObject(
     uno::Any aRet;
     aRet <<= retText;
     return aRet;
-    //-----IAccessibility2 Implementation 2009
 }
 
 sal_Int32 SAL_CALL SwAccessibleHyperlink::getStartIndex()
@@ -221,7 +209,6 @@ sal_Bool SAL_CALL SwAccessibleHyperlink::isValid(  )
         throw (uno::RuntimeException)
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
-    //IAccessibility2 Implementation 2009-----
     //  return xPara.isValid();
     if (xPara.isValid())
     {
@@ -271,7 +258,6 @@ sal_Bool SAL_CALL SwAccessibleHyperlink::isValid(  )
         }
     }//xpara valid
     return sal_False;
-    //-----IAccessibility2 Implementation 2009
 }
 
 void SwAccessibleHyperlink::Invalidate()

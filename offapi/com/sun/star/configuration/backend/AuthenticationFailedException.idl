@@ -35,7 +35,7 @@ module backend {
     Exception thrown when authentication to the underlying backend fails
     due to an unknown user-id or invalid credentials.
 
-    @since OOo 1.1.2
+    @since OpenOffice 1.1.2
   */
 published exception AuthenticationFailedException : BackendSetupException {
 } ;

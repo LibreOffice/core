@@ -56,7 +56,7 @@
 /** This componend integrates a preview view to a slide show of a presentation
     document into the desktop.
 
-    @since OOo 1.1.2
+    @since OpenOffice 1.1.2
  */
 published service PreviewView
 {

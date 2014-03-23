@@ -494,11 +494,9 @@ Rectangle SvtRulerAccessible::GetBoundingBoxOnScreen( void ) throw( RuntimeExcep
     ::osl::MutexGuard   aGuard( m_aMutex );
 
     ThrowExceptionIfNotAlive();
-//IAccessibility2 Implementation 2009-----
     //the absolute on screen pixel is wrong
     //return Rectangle( mpRepr->GetParent()->OutputToScreenPixel( mpRepr->GetPosPixel() ), mpRepr->GetSizePixel() );
     return Rectangle( mpRepr->GetParent()->OutputToAbsoluteScreenPixel( mpRepr->GetPosPixel() ), mpRepr->GetSizePixel() );
-//-----IAccessibility2 Implementation 2009
 }
 
 Rectangle SvtRulerAccessible::GetBoundingBox( void ) throw( RuntimeException )

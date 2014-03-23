@@ -58,7 +58,7 @@ module com { module sun { module star { module accessibility {
    the Calc the current range of valid indices for retrieving data include
    the maximal table size--256 columns and 32000 rows--minus one.</p>
 
-    @since OOo 1.1.2
+    @since OpenOffice 1.1.2
 */
 published interface XAccessibleTable : ::com::sun::star::uno::XInterface
 {

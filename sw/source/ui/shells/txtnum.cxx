@@ -26,9 +26,7 @@
 
 
 #include <hintids.hxx>
-#ifndef _MSGBOX_HXX //autogen
 #include <vcl/msgbox.hxx>
-#endif
 #include <sfx2/request.hxx>
 #include <svl/eitem.hxx>
 #include <svl/stritem.hxx>
@@ -50,7 +48,6 @@
 #include <svx/nbdtmgfact.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/bindings.hxx>
-using namespace svx::sidebar;
 
 void SwTextShell::ExecEnterNum(SfxRequest &rReq)
 {
@@ -115,334 +112,202 @@ void SwTextShell::ExecEnterNum(SfxRequest &rReq)
         GetShell().EndAllAction();
     }
     break;
+
     case FN_NUMBER_BULLETS:
     case SID_OUTLINE_BULLET:
     {
-        // --> OD 2008-02-29 #refactorlists#
-//        // per default sal_True, damit die Schleife im Dialog richtig arbeitet!
-//        sal_Bool bHasChild = sal_True;
-        // <--
-        SfxItemSet aSet(GetPool(),
-                SID_HTML_MODE, SID_HTML_MODE,
-                SID_ATTR_NUMBERING_RULE, SID_PARAM_CUR_NUM_LEVEL,
-                0 );
+        SfxItemSet aSet( GetPool(),
+                         SID_HTML_MODE, SID_HTML_MODE,
+                         SID_ATTR_NUMBERING_RULE, SID_PARAM_CUR_NUM_LEVEL,
+                         0 );
         SwDocShell* pDocSh = GetView().GetDocShell();
-        sal_Bool bHtml = 0 != dynamic_cast< SwWebDocShell* >( pDocSh);
-        const SwNumRule* pCurRule = GetShell().GetCurNumRule();
-        if( pCurRule )
+        const bool bHtml = 0 != dynamic_cast< SwWebDocShell* >( pDocSh);
+        const SwNumRule* pNumRuleAtCurrentSelection = GetShell().GetNumRuleAtCurrentSelection();
+        if ( pNumRuleAtCurrentSelection != NULL )
         {
-            SvxNumRule aRule = pCurRule->MakeSvxNumRule();
+            SvxNumRule aRule = pNumRuleAtCurrentSelection->MakeSvxNumRule();
 
             //convert type of linked bitmaps from SVX_NUM_BITMAP to (SVX_NUM_BITMAP|LINK_TOKEN)
-            for(sal_uInt16 i = 0; i < aRule.GetLevelCount(); i++)
+            for ( sal_uInt16 i = 0; i < aRule.GetLevelCount(); i++ )
             {
-                SvxNumberFormat aFmt(aRule.GetLevel(i));
-                if(SVX_NUM_BITMAP == aFmt.GetNumberingType())
+                SvxNumberFormat aFmt( aRule.GetLevel( i ) );
+                if ( SVX_NUM_BITMAP == aFmt.GetNumberingType() )
                 {
                     const SvxBrushItem* pBrush = aFmt.GetBrush();
-                    const String* pLinkStr;
-                    if(pBrush &&
-                        0 != (pLinkStr = pBrush->GetGraphicLink()) &&
-                            pLinkStr->Len())
-                        aFmt.SetNumberingType(SvxExtNumType(SVX_NUM_BITMAP|LINK_TOKEN));
-                    aRule.SetLevel(i, aFmt, aRule.Get(i) != 0);
+                    const String* pLinkStr = pBrush != NULL
+                                             ? pBrush->GetGraphicLink()
+                                             : NULL;
+                    if ( pLinkStr != NULL && pLinkStr->Len() > 0 )
+                    {
+                        aFmt.SetNumberingType( SvxExtNumType( SVX_NUM_BITMAP | LINK_TOKEN ) );
+                    }
+                    aRule.SetLevel( i, aFmt, aRule.Get( i ) != 0 );
                 }
             }
-            if(bHtml)
-                aRule.SetFeatureFlag(NUM_ENABLE_EMBEDDED_BMP, sal_False);
+            if ( bHtml )
+                aRule.SetFeatureFlag( NUM_ENABLE_EMBEDDED_BMP, sal_False );
 
-            aSet.Put(SvxNumBulletItem(aRule));
-            // --> OD 2008-02-29 #refactorlists# - removed <bHasChild>
+            aSet.Put( SvxNumBulletItem( aRule ) );
             ASSERT( GetShell().GetNumLevel() < MAXLEVEL,
                     "<SwTextShell::ExecEnterNum()> - numbered node without valid list level. Serious defect -> please inform OD." );
             sal_uInt16 nLevel = GetShell().GetNumLevel();
-            // <--
-            if( nLevel < MAXLEVEL )
+            if ( nLevel < MAXLEVEL )
             {
-                nLevel = 1<<nLevel;
-                aSet.Put( SfxUInt16Item( SID_PARAM_CUR_NUM_LEVEL, nLevel ));
+                nLevel = 1 << nLevel;
+                aSet.Put( SfxUInt16Item( SID_PARAM_CUR_NUM_LEVEL, nLevel ) );
             }
         }
         else
         {
-            // --> OD 2008-02-11 #newlistlevelattrs#
             SwNumRule aRule( GetShell().GetUniqueNumRuleName(),
-                             // --> OD 2008-06-06 #i89178#
                              numfunc::GetDefaultPositionAndSpaceMode() );
-                             // <--
-            // <--
             SvxNumRule aSvxRule = aRule.MakeSvxNumRule();
             const bool bRightToLeft = GetShell().IsInRightToLeftText( 0 );
 
-            if( bHtml || bRightToLeft )
+            if ( bHtml || bRightToLeft )
             {
-                for( sal_uInt8 n = 0; n < MAXLEVEL; ++n )
+                for ( sal_uInt8 n = 0; n < MAXLEVEL; ++n )
                 {
                     SvxNumberFormat aFmt( aSvxRule.GetLevel( n ) );
                     if ( n && bHtml )
                     {
                         // 1/2" fuer HTML
-                        aFmt.SetLSpace(720);
-                        aFmt.SetAbsLSpace(n * 720);
+                        aFmt.SetLSpace( 720 );
+                        aFmt.SetAbsLSpace( n * 720 );
                     }
-                    // --> FME 2005-01-21 #i38904#  Default alignment for
-                    // numbering/bullet should be rtl in rtl paragraph:
+                    // Default alignment for numbering/bullet should be rtl in rtl paragraph:
                     if ( bRightToLeft )
                     {
                         aFmt.SetNumAdjust( SVX_ADJUST_RIGHT );
                     }
-                    // <--
                     aSvxRule.SetLevel( n, aFmt, sal_False );
                 }
-                aSvxRule.SetFeatureFlag(NUM_ENABLE_EMBEDDED_BMP, sal_False);
+                aSvxRule.SetFeatureFlag( NUM_ENABLE_EMBEDDED_BMP, sal_False );
             }
-            aSet.Put(SvxNumBulletItem(aSvxRule));
+            aSet.Put( SvxNumBulletItem( aSvxRule ) );
         }
 
-        aSet.Put( SfxBoolItem( SID_PARAM_NUM_PRESET,sal_False ));
+        aSet.Put( SfxBoolItem( SID_PARAM_NUM_PRESET, sal_False ) );
 
         // vor dem Dialog wird der HtmlMode an der DocShell versenkt
-        pDocSh->PutItem(SfxUInt16Item(SID_HTML_MODE, ::GetHtmlMode(pDocSh)));
+        pDocSh->PutItem( SfxUInt16Item( SID_HTML_MODE, ::GetHtmlMode( pDocSh ) ) );
 
         SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
-        DBG_ASSERT(pFact, "Dialogdiet fail!");
-        SfxAbstractTabDialog* pDlg = pFact->CreateSwTabDialog( DLG_SVXTEST_NUM_BULLET,
-                                                        GetView().GetWindow(), &aSet, GetShell());
+        DBG_ASSERT( pFact, "Dialogdiet fail!" );
+        SfxAbstractTabDialog* pDlg =
+            pFact->CreateSwTabDialog( DLG_SVXTEST_NUM_BULLET, GetView().GetWindow(), &aSet, GetShell() );
         DBG_ASSERT(pDlg, "Dialogdiet fail!");
-        sal_uInt16 nRet = pDlg->Execute();
+        const sal_uInt16 nRet = pDlg->Execute();
         const SfxPoolItem* pItem;
-        if( RET_OK == nRet )
+        if ( RET_OK == nRet )
         {
-            if( SFX_ITEM_SET == pDlg->GetOutputItemSet()->GetItemState( SID_ATTR_NUMBERING_RULE, sal_False, &pItem ))
+            if ( SFX_ITEM_SET == pDlg->GetOutputItemSet()->GetItemState( SID_ATTR_NUMBERING_RULE, sal_False, &pItem ) )
             {
-                rReq.AppendItem(*pItem);
+                rReq.AppendItem( *pItem );
                 rReq.Done();
-                SvxNumRule* pSetRule = ((SvxNumBulletItem*)pItem)->GetNumRule();
+                SvxNumRule* pSetRule = ( (SvxNumBulletItem*) pItem )->GetNumRule();
                 pSetRule->UnLinkGraphics();
-                // --> OD 2008-02-11 #newlistlevelattrs#
-                SwNumRule aSetRule( pCurRule
-                                        ? pCurRule->GetName()
-                                        : GetShell().GetUniqueNumRuleName(),
-                                    // --> OD 2008-06-06 #i89178#
-                                    numfunc::GetDefaultPositionAndSpaceMode() );
-                                    // <--
-                // <--
-                aSetRule.SetSvxRule( *pSetRule, GetShell().GetDoc());
+                SwNumRule aSetRule( pNumRuleAtCurrentSelection != NULL
+                                    ? pNumRuleAtCurrentSelection->GetName()
+                                    : GetShell().GetUniqueNumRuleName(),
+                    numfunc::GetDefaultPositionAndSpaceMode() );
+                aSetRule.SetSvxRule( *pSetRule, GetShell().GetDoc() );
                 aSetRule.SetAutoRule( sal_True );
-                // --> OD 2008-03-17 #refactorlists#
                 // No start of new list, if an existing list style is edited.
                 // Otherwise start a new list.
-                const bool bCreateList = (pCurRule == 0);
+                const bool bCreateList = ( pNumRuleAtCurrentSelection == NULL );
                 GetShell().SetCurNumRule( aSetRule, bCreateList );
-                // <--
             }
             // wenn der Dialog mit OK verlassen wurde, aber nichts ausgewaehlt
             // wurde dann muss die Numerierung zumindest eingeschaltet werden,
             // wenn sie das noch nicht ist
-            else if( !pCurRule && SFX_ITEM_SET == aSet.GetItemState( SID_ATTR_NUMBERING_RULE, sal_False, &pItem ))
+            else if ( pNumRuleAtCurrentSelection == NULL
+                      && SFX_ITEM_SET == aSet.GetItemState( SID_ATTR_NUMBERING_RULE, sal_False, &pItem ) )
             {
                 rReq.AppendItem( *pItem );
                 rReq.Done();
-                SvxNumRule* pSetRule = ((SvxNumBulletItem*)pItem)->GetNumRule();
-                // --> OD 2008-02-11 #newlistlevelattrs#
-                SwNumRule aSetRule( GetShell().GetUniqueNumRuleName(),
-                                    // --> OD 2008-06-06 #i89178#
-                                    numfunc::GetDefaultPositionAndSpaceMode() );
-                                    // <--
-                // <--
-                aSetRule.SetSvxRule(*pSetRule, GetShell().GetDoc());
+                SvxNumRule* pSetRule = ( (SvxNumBulletItem*) pItem )->GetNumRule();
+                SwNumRule aSetRule(
+                    GetShell().GetUniqueNumRuleName(),
+                    numfunc::GetDefaultPositionAndSpaceMode() );
+                aSetRule.SetSvxRule( *pSetRule, GetShell().GetDoc() );
                 aSetRule.SetAutoRule( sal_True );
-                // --> OD 2008-03-17 #refactorlists#
                 // start new list
                 GetShell().SetCurNumRule( aSetRule, true );
-                // <--
             }
         }
-        else if(RET_USER == nRet)
+        else if ( RET_USER == nRet )
             GetShell().DelNumRules();
 
         delete pDlg;
     }
-    break;
+        break;
+
     default:
-        ASSERT(sal_False,  falscher Dispatcher);
+        ASSERT( sal_False, "wrong Dispatcher" );
         return;
     }
 }
 
+
 void SwTextShell::ExecSetNumber(SfxRequest &rReq)
 {
-    SwNumRule aRule( GetShell().GetUniqueNumRuleName(),
-                         // --> OD 2008-06-06 #i89178#
-                         numfunc::GetDefaultPositionAndSpaceMode() );
-                         // <--
-
-    SvxNumRule aSvxRule = aRule.MakeSvxNumRule();
-    const bool bRightToLeft = GetShell().IsInRightToLeftText( 0 );
-
-    if( bRightToLeft )
-    {
-        for( sal_uInt8 n = 0; n < MAXLEVEL; ++n )
-        {
-            SvxNumberFormat aFmt( aSvxRule.GetLevel( n ) );
-           /* if ( n && bHtml )
-            {
-                // 1/2" fuer HTML
-                aFmt.SetLSpace(720);
-                aFmt.SetAbsLSpace(n * 720);
-            }*/
-            // --> FME 2005-01-21 #i38904#  Default alignment for
-            // numbering/bullet should be rtl in rtl paragraph:
-            if ( bRightToLeft )
-            {
-                aFmt.SetNumAdjust( SVX_ADJUST_RIGHT );
-            }
-            // <--
-            aSvxRule.SetLevel( n, aFmt, sal_False );
-        }
-        aSvxRule.SetFeatureFlag(NUM_ENABLE_EMBEDDED_BMP, sal_False);
-    }
-
-    const SwNumRule* pCurRule = GetShell().GetCurNumRule();
-    sal_uInt16      nActNumLvl = (sal_uInt16)0xFFFF;
-    if( pCurRule )
-    {
-        sal_uInt16 nLevel = GetShell().GetNumLevel();
-        if( nLevel < MAXLEVEL )
-        {
-            nActNumLvl = 1<<nLevel;
-        }
-
-        aSvxRule = pCurRule->MakeSvxNumRule();
-
-        //convert type of linked bitmaps from SVX_NUM_BITMAP to (SVX_NUM_BITMAP|LINK_TOKEN)
-        for(sal_uInt16 i = 0; i < aSvxRule.GetLevelCount(); i++)
-        {
-            SvxNumberFormat aFmt(aSvxRule.GetLevel(i));
-            if(SVX_NUM_BITMAP == aFmt.GetNumberingType())
-            {
-                const SvxBrushItem* pBrush = aFmt.GetBrush();
-                const String* pLinkStr;
-                if(pBrush &&
-                    0 != (pLinkStr = pBrush->GetGraphicLink()) &&
-                        pLinkStr->Len())
-                    aFmt.SetNumberingType(SvxExtNumType(SVX_NUM_BITMAP|LINK_TOKEN));
-                aSvxRule.SetLevel(i, aFmt, aSvxRule.Get(i) != 0);
-            }
-        }
-    }
-
-
-    switch(rReq.GetSlot())
+    const sal_uInt16 nSlot = rReq.GetSlot();
+    switch ( nSlot )
     {
     case FN_SVX_SET_NUMBER:
-        {
-            SFX_REQUEST_ARG( rReq, pItem, SfxUInt16Item, FN_SVX_SET_NUMBER );
-            if (pItem)
-            {
-                sal_uInt16 nIdx = pItem->GetValue();
-                if (nIdx==DEFAULT_NONE) {
-                    GetShell().DelNumRules();
-                    break;
-                }
-                --nIdx;
-
-                NBOTypeMgrBase* pNumbering = NBOutlineTypeMgrFact::CreateInstance(eNBOType::NUMBERING);
-                if ( pNumbering )
-                {
-                    SwNumRule aTmpRule( GetShell().GetUniqueNumRuleName(),
-                         numfunc::GetDefaultPositionAndSpaceMode() );
-
-                    SvxNumRule aTempRule = aTmpRule.MakeSvxNumRule();
-                    // set unit attribute to NB Manager
-                    SfxItemSet aSet(GetPool(),
-                            SID_ATTR_NUMBERING_RULE, SID_PARAM_CUR_NUM_LEVEL,
-                            0 );
-                    aSet.Put(SvxNumBulletItem(aTempRule));
-                    pNumbering->SetItems(&aSet);
-                    pNumbering->ApplyNumRule(aTempRule,nIdx,nActNumLvl);
-
-                    sal_uInt16 nMask = 1;
-                    for(sal_uInt16 i = 0; i < aSvxRule.GetLevelCount(); i++)
-                    {
-                        if(nActNumLvl & nMask)
-                        {
-                            SvxNumberFormat aFmt(aTempRule.GetLevel(i));
-                            aSvxRule.SetLevel(i, aFmt);
-                        }
-                        nMask <<= 1 ;
-                    }
-
-                    aSvxRule.UnLinkGraphics();
-                    SwNumRule aSetRule( pCurRule
-                                            ? pCurRule->GetName()
-                                            : GetShell().GetUniqueNumRuleName(),
-                                        numfunc::GetDefaultPositionAndSpaceMode() );
-                    aSetRule.SetSvxRule( aSvxRule, GetShell().GetDoc());
-
-                    aSetRule.SetAutoRule( sal_True );
-                    const bool bCreateList = (pCurRule == 0);
-                    GetShell().SetCurNumRule( aSetRule, bCreateList );
-                }
-                //End
-            }
-            break;
-        }
     case FN_SVX_SET_BULLET:
         {
-            SFX_REQUEST_ARG( rReq, pItem, SfxUInt16Item, FN_SVX_SET_BULLET );
-            if (pItem)
+            SFX_REQUEST_ARG( rReq, pItem, SfxUInt16Item, nSlot );
+            if ( pItem != NULL )
             {
-                sal_uInt16 nIdx = pItem->GetValue();
-                if (nIdx==DEFAULT_NONE) {
-                    GetShell().DelNumRules();
-                    break;
-                }
-                nIdx--;
-
-                NBOTypeMgrBase* pBullets = NBOutlineTypeMgrFact::CreateInstance(eNBOType::MIXBULLETS);
-                if ( pBullets )
+                const sal_uInt16 nChoosenItemIdx = pItem->GetValue();
+                if ( nChoosenItemIdx == DEFAULT_NONE )
                 {
-                    SwNumRule aTmpRule( GetShell().GetUniqueNumRuleName(),
-                         numfunc::GetDefaultPositionAndSpaceMode() );
-
-                    SvxNumRule aTempRule = aTmpRule.MakeSvxNumRule();
-                    // set unit attribute to NB Manager
-                    SfxItemSet aSet(GetPool(),
-                            SID_ATTR_NUMBERING_RULE, SID_PARAM_CUR_NUM_LEVEL,
-                            0 );
-                    aSet.Put(SvxNumBulletItem(aTempRule));
-                    pBullets->SetItems(&aSet);
-
-                    //SvxNumRule aTempRule( 0, 10, false );
-                    pBullets->ApplyNumRule(aTempRule,nIdx,nActNumLvl);
-                    sal_uInt16 nMask = 1;
-                    for(sal_uInt16 i = 0; i < aSvxRule.GetLevelCount(); i++)
-                    {
-                        if(nActNumLvl & nMask)
-                        {
-                            SvxNumberFormat aFmt(aTempRule.GetLevel(i));
-                            aSvxRule.SetLevel(i, aFmt);
-                        }
-                        nMask <<= 1;
-                    }
-                    aSvxRule.UnLinkGraphics();
-
-                    SwNumRule aSetRule( pCurRule
-                                            ? pCurRule->GetName()
-                                            : GetShell().GetUniqueNumRuleName(),
-                                        numfunc::GetDefaultPositionAndSpaceMode() );
-
-                    aSetRule.SetSvxRule( aSvxRule, GetShell().GetDoc());
-
-                    aSetRule.SetAutoRule( sal_True );
-                    const bool bCreateList = (pCurRule == 0);
-                    GetShell().SetCurNumRule( aSetRule, bCreateList );
+                    GetShell().DelNumRules();
                 }
-                //End
-            }
+                else
+                {
+                    svx::sidebar::NBOTypeMgrBase* pNBOTypeMgr =
+                        nSlot == FN_SVX_SET_NUMBER
+                            ? svx::sidebar::NBOutlineTypeMgrFact::CreateInstance( svx::sidebar::eNBOType::NUMBERING )
+                            : svx::sidebar::NBOutlineTypeMgrFact::CreateInstance( svx::sidebar::eNBOType::MIXBULLETS );
+                    if ( pNBOTypeMgr != NULL )
+                    {
+                        const SwNumRule* pNumRuleAtCurrentSelection = GetShell().GetNumRuleAtCurrentSelection();
+                        sal_uInt16 nActNumLvl = (sal_uInt16) 0xFFFF;
+                        if ( pNumRuleAtCurrentSelection != NULL )
+                        {
+                            sal_uInt16 nLevel = GetShell().GetNumLevel();
+                            if ( nLevel < MAXLEVEL )
+                            {
+                                nActNumLvl = 1 << nLevel;
+                            }
+                        }
+                        SwNumRule aNewNumRule(
+                            pNumRuleAtCurrentSelection != NULL ? pNumRuleAtCurrentSelection->GetName() : GetShell().GetUniqueNumRuleName(),
+                            numfunc::GetDefaultPositionAndSpaceMode() );
+                        SvxNumRule aNewSvxNumRule = pNumRuleAtCurrentSelection != NULL
+                                                        ? pNumRuleAtCurrentSelection->MakeSvxNumRule()
+                                                        : aNewNumRule.MakeSvxNumRule();
+                        // set unit attribute to NB Manager
+                        SfxItemSet aSet( GetPool(), SID_ATTR_NUMBERING_RULE, SID_PARAM_CUR_NUM_LEVEL, 0 );
+                        aSet.Put( SvxNumBulletItem( aNewSvxNumRule ) );
+                        pNBOTypeMgr->SetItems( &aSet );
+                        pNBOTypeMgr->ApplyNumRule( aNewSvxNumRule, nChoosenItemIdx - 1, nActNumLvl );
 
+                        aNewNumRule.SetSvxRule( aNewSvxNumRule, GetShell().GetDoc() );
+                        aNewNumRule.SetAutoRule( sal_True );
+                        const bool bCreateNewList = ( pNumRuleAtCurrentSelection == NULL );
+                        GetShell().SetCurNumRule( aNewNumRule, bCreateNewList );
+                    }
+                }
+            }
         }
         break;
+
+    default:
+        ASSERT( sal_False, "wrong Dispatcher" );
+        return;
     }
 }

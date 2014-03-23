@@ -1607,9 +1607,9 @@ AbstractGraphicFilterDialog * AbstractDialogFactory_Impl::CreateGraphicFilterMos
 AbstractSvxAreaTabDialog* AbstractDialogFactory_Impl::CreateSvxAreaTabDialog( Window* pParent,
                                                             const SfxItemSet* pAttr,
                                                             SdrModel* pModel,
-                                                            const SdrView* pSdrView )
+                                                            bool bShadow)
 {
-    SvxAreaTabDialog* pDlg = new SvxAreaTabDialog( pParent, pAttr, pModel,pSdrView );
+    SvxAreaTabDialog* pDlg = new SvxAreaTabDialog( pParent, pAttr, pModel, bShadow );
     return new AbstractSvxAreaTabDialog_Impl( pDlg );
 }
 
@@ -1900,7 +1900,7 @@ SfxAbstractInsertObjectDialog* AbstractDialogFactory_Impl::CreateInsertObjectDia
 
     if ( pDlg )
     {
-        pDlg->SetHelpId( rtl::OString( rCommand, rCommand.getLength(), RTL_TEXTENCODING_UTF8 ) );
+        pDlg->SetHelpId( rtl::OUStringToOString( rCommand, RTL_TEXTENCODING_UTF8 ) );
         return new AbstractInsertObjectDialog_Impl( pDlg );
     }
     return 0;
@@ -1913,7 +1913,7 @@ VclAbstractDialog* AbstractDialogFactory_Impl::CreateEditObjectDialog( Window* p
     if ( rCommand.equalsAscii(".uno:InsertObjectFloatingFrame" ) )
     {
         pDlg = new SfxInsertFloatingFrameDialog( pParent, xObj );
-        pDlg->SetHelpId( rtl::OString( rCommand, rCommand.getLength(), RTL_TEXTENCODING_UTF8 ) );
+        pDlg->SetHelpId( rtl::OUStringToOString( rCommand, RTL_TEXTENCODING_UTF8 ) );
         return new VclAbstractDialog_Impl( pDlg );
     }
     return 0;

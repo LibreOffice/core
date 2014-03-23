@@ -474,7 +474,7 @@ published service MediaDescriptor
         be opened in repair mode, so as much as possible information will be retrieved.
         </p>
 
-     @since OOo 1.1.2
+     @since OpenOffice 1.1.2
      */
     [optional,property] boolean RepairPackage;
 
@@ -593,7 +593,7 @@ published service MediaDescriptor
         the value should be one from <type scope="com::sun::star::document">MacroExecMode</type>
         constant list.
 
-        @since OOo 1.1.2
+        @since OpenOffice 1.1.2
      */
     [optional,property] short MacroExecutionMode;
 
@@ -602,7 +602,7 @@ published service MediaDescriptor
         the value should be one from <type scope="com::sun::star::document">UpdateDocMode</type>
         constant list.
 
-        @since OOo 1.1.2
+        @since OpenOffice 1.1.2
      */
     [optional,property] short UpdateDocMode;
 
@@ -619,7 +619,7 @@ published service MediaDescriptor
         @see ::com::sun::star::frame::XModel2::createViewController
         @see ::com::sun::star::frame::XController2::ViewControllerName
 
-        @since OOo 3.0
+        @since OpenOffice 3.0
      */
     [optional,property] string ViewControllerName;
     //-------------------------------------------------------------------------

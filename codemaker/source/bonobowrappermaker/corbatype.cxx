@@ -104,7 +104,7 @@ sal_Bool CorbaType::dumpDependedTypes(CorbaOptions* pOptions, FileStream& o, Typ
         if ((index = typeName.lastIndexOf(']')) > 0)
             typeName = typeName.copy(index + 1);
 
-        if (getUnoBaseType(typeName).getLength() == 0)
+        if ( getUnoBaseType(typeName).isEmpty() )
         {
             if (!produceType(typeName,
                 m_typeMgr,
@@ -302,7 +302,7 @@ void CorbaType::dumpInclude(FileStream& o, TypeSet* allreadyDumped, const OStrin
                     realTypeName = "";
                 }
             }
-            while (realTypeName.getLength() > 0);
+            while ( !realTypeName.isEmpty() );
 
             o << "}; // namespace bonobobridge\n";
         }
@@ -341,8 +341,8 @@ void CorbaType::dumpDepIncludes(FileStream& o, TypeSet* allreadyDumped, const OS
                 bSequenceDumped = sal_True;
             }
 
-            if (getUnoBaseType(relType).getLength() == 0 &&
-                m_typeName != relType)
+            if ( getUnoBaseType(relType).isEmpty() &&
+                 m_typeName != relType)
             {
                 if (m_typeMgr.getTypeClass(relType) == RT_TYPE_INTERFACE
                     && sPrefix.equals("HDL"))
@@ -377,7 +377,7 @@ void CorbaType::dumpNameSpace(FileStream& o, sal_Bool bOpen, sal_Bool bFull, con
 {
     OString typeName(type);
     sal_Bool bOneLine = sal_True;
-    if (typeName.getLength() == 0)
+    if ( typeName.isEmpty() )
     {
         typeName = m_typeName;
         bOneLine = sal_False;
@@ -448,7 +448,7 @@ sal_uInt32 CorbaType::checkInheritedMemberCount(const TypeReader* pReader)
 
     sal_uInt32 count = 0;
     OString superType(pReader->getSuperTypeName());
-    if (superType.getLength() > 0)
+    if ( !superType.isEmpty() )
     {
         TypeReader aSuperReader(m_typeMgr.getTypeReader(superType));
         if ( aSuperReader.isValid() )
@@ -486,10 +486,10 @@ sal_uInt32 CorbaType::getInheritedMemberCount()
 
 OString CorbaType::getTypeClass(const OString& type, sal_Bool bCStyle)
 {
-    OString     typeName = (type.getLength() > 0 ? type : m_typeName);
+    OString     typeName = ( !type.isEmpty() ? type : m_typeName);
     RTTypeClass rtTypeClass = RT_TYPE_INVALID;
 
-    if (type.getLength() > 0)
+    if ( !type.isEmpty() )
     {
         typeName = type;
         rtTypeClass = m_typeMgr.getTypeClass(typeName);
@@ -599,7 +599,7 @@ OString CorbaType::printUnoType(const OString& type, sal_Bool bConst, sal_Bool b
     case RT_TYPE_INVALID:
     {
         OString tmp(getUnoBaseType(relType));
-        if (tmp.getLength() > 0)
+        if ( !tmp.isEmpty() )
         {
             ret.append(getUnoBaseType(relType));
         } else
@@ -674,7 +674,7 @@ OString CorbaType::printCorbaType(const OString& type, sal_Bool bConst, sal_Bool
     case RT_TYPE_INVALID:
     {
         OString tmp(getUnoBaseType(relType));
-        if (tmp.getLength() > 0)
+        if ( !tmp.isEmpty() )
             ret.append(getCorbaBaseType(relType));
         else
             throw CannotDumpException("Unknown type '" + relType + "', incomplete type library. ("+type+")");
@@ -749,7 +749,7 @@ sal_Bool CorbaType::isPassedAsPointer(const OString& type)
 sal_Bool CorbaType::isDerivedFromUnknown(const ::rtl::OString& typeName)
 {
     sal_Bool ret = sal_True;
-    if (typeName.getLength() == 0)
+    if ( typeName.isEmpty() )
         ret = sal_False;
     else if (typeName.equals("Bonobo/NullInterface"))
         ret = sal_False;
@@ -839,7 +839,7 @@ OString CorbaType::printCorbaParameter(const OString& type, sal_Bool bOut)
     case RT_TYPE_INVALID:
     {
         OString tmp(getUnoBaseType(relType));
-        if (tmp.getLength() > 0)
+        if ( !tmp.isEmpty() )
         {
             ret.append(getCorbaBaseType(relType));
         } else
@@ -1824,7 +1824,7 @@ void InterfaceType::dumpFunctions(FileStream& o)
 
     initBuffer.insert(0, OString("&bonobobridge_") + printCorbaType(m_typeName, sal_False, sal_False) + OString("_epv"));
 
-    while(superName.getLength() != 0)
+    while( !superName.isEmpty() )
     {
         if (superName.equals("Bonobo/NullInterface"))
         {
@@ -1996,7 +1996,7 @@ sal_uInt32 InterfaceType::checkInheritedMemberCount(const TypeReader* pReader)
 
     sal_uInt32 count = 0;
     OString superType(pReader->getSuperTypeName());
-    if (superType.getLength() > 0)
+    if ( !superType.isEmpty() )
     {
         TypeReader aSuperReader(m_typeMgr.getTypeReader(superType));
         if (aSuperReader.isValid())
@@ -2162,7 +2162,7 @@ void StructureType::dumpFunctions(FileStream& o)
     }
     else
     {
-        if (superType.getLength() > 0)
+        if ( !superType.isEmpty() )
         {
             o << "  ret = bonobobridge::cpp_convert_b2u((";
             dumpUnoType(o, superType, sal_False, sal_False);
@@ -2210,7 +2210,7 @@ void StructureType::dumpFunctions(FileStream& o)
         o << "  // fix me: union !!!!\n  ret = sal_False;\n";
     else
     {
-        if (superType.getLength() > 0)
+        if ( !superType.isEmpty() )
         {
             o << "  ret = bonobobridge::cpp_convert_u2b((";
             dumpCorbaType(o, superType, sal_False, sal_False);
@@ -2268,7 +2268,7 @@ sal_Bool StructureType::dumpSuperMember(FileStream& o, const OString& superType,
 {
     sal_Bool hasMember = sal_False;
 
-    if (superType.getLength() > 0)
+    if ( !superType.isEmpty() )
     {
         TypeReader aSuperReader(m_typeMgr.getTypeReader(superType));
 
@@ -2359,7 +2359,7 @@ void ExceptionType::dumpFunctions(FileStream& o)
     sal_Int32    cIndex;
     OString      corbaFieldName;
 
-    if (superType.getLength() > 0)
+    if ( !superType.isEmpty() )
     {
         o << "  ret = bonobobridge::cpp_convert_b2u((";
         dumpUnoType(o, superType, sal_False, sal_False);
@@ -2404,7 +2404,7 @@ void ExceptionType::dumpFunctions(FileStream& o)
     dumpCorbaType(o, m_typeName, sal_False, sal_False);
     o << "*) pOut;\n\n";
 
-    if (superType.getLength() > 0)
+    if ( !superType.isEmpty() )
     {
         o << "  ret = bonobobridge::cpp_convert_u2b((";
         dumpCorbaType(o, superType, sal_False, sal_False);
@@ -2463,7 +2463,7 @@ sal_Bool ExceptionType::dumpSuperMember(FileStream& o, const OString& superType,
 {
     sal_Bool hasMember = sal_False;
 
-    if (superType.getLength() > 0)
+    if ( !superType.isEmpty() )
     {
         TypeReader aSuperReader(m_typeMgr.getTypeReader(superType));
 

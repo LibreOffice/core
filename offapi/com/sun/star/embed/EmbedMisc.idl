@@ -35,7 +35,7 @@ module com { module sun { module star { module embed {
     <p>
     The constant values can be combined with 'or' operation.
     The first 32 bits are reserved for MS values, they are added because
-    this API is going to be used to embed MS OLE objects into OOo documents,
+    this API is going to be used to embed MS OLE objects into OpenOffice documents,
     so there should be a possibility to transfer all the possible MS flags
     to container. In case own specific values should be added those bits can
     not be used.

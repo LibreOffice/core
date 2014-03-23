@@ -123,8 +123,7 @@ void SvxRelativeField::SetRelative( sal_Bool bNewRelative )
         SetDecimalDigits( 0 );
         SetMin( nRelMin );
         SetMax( nRelMax );
-        SetCustomUnitText( String( sal_Unicode( '%' ) ) );
-        SetUnit( FUNIT_CUSTOM );
+        SetUnit( FUNIT_PERCENT );
     }
     else
     {

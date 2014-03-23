@@ -66,7 +66,7 @@ module com {  module sun {  module star {  module smarttags {
 /**
     provides access to a smart tag recognizer.
 
-    @since OOo 2.3
+    @since OpenOffice 2.3
  */
 
 interface XSmartTagRecognizer: com::sun::star::lang::XInitialization

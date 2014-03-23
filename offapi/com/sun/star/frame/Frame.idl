@@ -123,7 +123,7 @@ published service Frame
     //-------------------------------------------------------------------------
     /** provides information about supported commands
 
-        @since OOo 2.0
+        @since OpenOffice 2.0
     */
     [optional] interface XDispatchInformationProvider;
 
@@ -185,7 +185,7 @@ published service Frame
         no possibility to check for enabled/disabled recording then.
         </p>
 
-    @since OOo 1.1.2
+    @since OpenOffice 1.1.2
      */
     [optional, property] XDispatchRecorderSupplier RecorderSupplier;
 

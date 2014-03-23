@@ -19,7 +19,6 @@
  *
  *************************************************************/
 
-//IAccessibility2 Implementation 2009-----
 #ifndef _SVTRULERACCESSIBLE_HXX
 #define _SVTRULERACCESSIBLE_HXX
 
@@ -299,5 +298,4 @@ inline sal_Bool SvtRulerAccessible::IsNotAlive( void ) const
 
 
 #endif
-//-----IAccessibility2 Implementation 2009
 

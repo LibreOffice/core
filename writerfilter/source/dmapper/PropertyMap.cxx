@@ -363,7 +363,7 @@ void  SectionPropertyMap::SetPageStyleName( bool bFirst, const ::rtl::OUString& 
     for( sal_Int32 nStyle = 0; nStyle < rPageStyleNames.getLength(); ++nStyle)
     {
         if( pStyleNames[nStyle].getLength() > nDefaultLength &&
-                !rtl_ustr_compare_WithLength( sDefaultStyle, nDefaultLength, pStyleNames[nStyle], nDefaultLength))
+                !rtl_ustr_compare_WithLength( sDefaultStyle.getStr(), nDefaultLength, pStyleNames[nStyle].getStr(), nDefaultLength))
         {
             sal_Int32 nIndex = pStyleNames[nStyle].copy( nDefaultLength ).toInt32();
             if( nIndex > nMaxIndex)
@@ -995,19 +995,28 @@ void SectionPropertyMap::CloseSectionGroup( DomainMapper_Impl& rDM_Impl )
                     uno::Reference< container::XEnumeration >  xEnum = xEnumAccess->createEnumeration( );
                     xRangeProperties = uno::Reference< beans::XPropertySet >( xEnum->nextElement( ), uno::UNO_QUERY_THROW );
                 }
-                else
-                    xRangeProperties = uno::Reference< beans::XPropertySet >( m_xStartingRange, uno::UNO_QUERY_THROW );
-            /* break type
-            0 - No break 1 - New Column 2 - New page 3 - Even page 4 - odd page */
-                xRangeProperties->setPropertyValue(rPropNameSupplier.GetName( PROP_PAGE_DESC_NAME ),
-                    uno::makeAny( m_bTitlePage ? m_sFirstPageStyleName : m_sFollowPageStyleName ));
-    //  todo: page breaks with odd/even page numbering are not available - find out current page number to check how to change the number
-    //  or add even/odd page break types
-                if(m_bPageNoRestart || m_nPageNumber >= 0)
+                else if( m_xStartingRange.is() )
                 {
-                    sal_Int16 nPageNumber = m_nPageNumber >= 0 ? static_cast< sal_Int16 >(m_nPageNumber) : 1;
-                    xRangeProperties->setPropertyValue(rPropNameSupplier.GetName( PROP_PAGE_NUMBER_OFFSET ),
-                        uno::makeAny( nPageNumber ));
+                    xRangeProperties = uno::Reference< beans::XPropertySet >( m_xStartingRange, uno::UNO_QUERY_THROW );
+                }
+                if ( xRangeProperties.is() )
+                {
+                    /* break type: 0 - No break 1 - New Column 2 - New page 3 - Even page 4 - odd page */
+                    uno::Reference< beans::XPropertySetInfo > xRangePropertiesInfo = xRangeProperties->getPropertySetInfo();
+                    if ( xRangePropertiesInfo->hasPropertyByName( rPropNameSupplier.GetName( PROP_PAGE_DESC_NAME ) ) )
+                    {
+                        xRangeProperties->setPropertyValue(
+                            rPropNameSupplier.GetName( PROP_PAGE_DESC_NAME ),
+                            uno::makeAny( m_bTitlePage ? m_sFirstPageStyleName : m_sFollowPageStyleName ) );
+                        //  todo: page breaks with odd/even page numbering are not available - find out current page number to check how to change the number
+                        //  or add even/odd page break types
+                        if ( m_bPageNoRestart || m_nPageNumber >= 0 )
+                        {
+                            sal_Int16 nPageNumber = m_nPageNumber >= 0 ? static_cast< sal_Int16 >(m_nPageNumber) : 1;
+                            xRangeProperties->setPropertyValue(rPropNameSupplier.GetName( PROP_PAGE_NUMBER_OFFSET ),
+                                uno::makeAny( nPageNumber ));
+                        }
+                    }
                 }
             }
         }
@@ -1084,7 +1093,7 @@ StyleSheetPropertyMap::StyleSheetPropertyMap() :
     mbCT_TblWidth_typeSet( false ),
     mnListId( -1 ),
     mnListLevel( -1 ),
-    mnOutlineLevel( -1 )
+    mnOutlineLevel( 0 )
 {
 }
 /*-- 14.06.2007 13:57:43---------------------------------------------------

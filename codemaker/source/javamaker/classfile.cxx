@@ -492,7 +492,7 @@ ClassFile::ClassFile(
 {
     m_thisClass = addClassInfo(thisClass);
     m_superClass = addClassInfo(superClass);
-    if (signature.getLength() != 0) {
+    if ( !signature.isEmpty() ) {
         ++m_attributesCount;
         appendU2(
             m_attributes,
@@ -605,7 +605,7 @@ void ClassFile::addField(
     appendU2(
         m_fields,
         ((constantValueIndex == 0 ? 0 : 1)
-         + (signature.getLength() == 0 ? 0 : 1)));
+         + (signature.isEmpty() ? 0 : 1)));
     if (constantValueIndex != 0) {
         appendU2(
             m_fields,
@@ -644,7 +644,7 @@ void ClassFile::addMethod(
     appendU2(
         m_methods,
         ((code == 0 ? 0 : 1) + (exceptions.empty() ? 0 : 1)
-         + (signature.getLength() == 0 ? 0 : 1)));
+         + (signature.isEmpty() ? 0 : 1)));
     if (code != 0) {
         std::vector< unsigned char >::size_type codeSize = code->m_code.size();
         std::vector< unsigned char >::size_type exceptionTableSize
@@ -891,7 +891,7 @@ sal_uInt16 ClassFile::addNameAndTypeInfo(
 void ClassFile::appendSignatureAttribute(
     std::vector< unsigned char > & stream, rtl::OString const & signature)
 {
-    if (signature.getLength() != 0) {
+    if ( !signature.isEmpty() ) {
         appendU2(
             stream,
             addUtf8Info(rtl::OString(RTL_CONSTASCII_STRINGPARAM("Signature"))));

@@ -444,7 +444,7 @@ published service ParagraphProperties
         //-------------------------------------------------------------------------
         /** specifies the outline level to which the paragraph belongs
 
-            @since OOo 3.1
+            @since OpenOffice 3.1
 
             <p>Value 0 indicates that the paragraph belongs to the body text.</p>
             <p>Values [1..10] indicates that the paragraph belongs to the corresponding outline level.</p>

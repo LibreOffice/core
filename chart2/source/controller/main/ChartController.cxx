@@ -1064,7 +1064,7 @@ bool lcl_isFormatObjectCommand( const rtl::OString& aCommand )
 {
     if ( !m_aLifeTimeManager.impl_isDisposed() && getModel().is() )
     {
-        if( rTargetFrameName.getLength() &&
+        if( !rTargetFrameName.isEmpty() &&
             rTargetFrameName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("_self")))
             return m_aDispatchContainer.getDispatchForURL( rURL );
     }
@@ -1451,7 +1451,7 @@ IMPL_LINK( ChartController, NotifyUndoActionHdl, SdrUndoAction*, pUndoAction )
     ENSURE_OR_RETURN( pUndoAction, "invalid Undo action", 1L );
 
     ::rtl::OUString aObjectCID = m_aSelection.getSelectedCID();
-    if ( aObjectCID.getLength() == 0 )
+    if ( aObjectCID.isEmpty() )
     {
         try
         {

@@ -699,9 +699,11 @@ IMPL_LINK( PosSizePropertyPanel, AngleModifiedHdl, void *, EMPTYARG )
     }
     sal_Int64 nTmp = dTmp*100;
 
+    // #123993# Need to take UIScale into account when executing rotations
+    const double fUIScale(mpView ? double(mpView->getSdrModelFromSdrView().GetUIScale()) : 1.0);
     SfxInt32Item aAngleItem( SID_ATTR_TRANSFORM_ANGLE,(sal_uInt32) nTmp);
-    SfxInt32Item aRotXItem( SID_ATTR_TRANSFORM_ROT_X,(sal_uInt32) mlRotX);
-    SfxInt32Item aRotYItem( SID_ATTR_TRANSFORM_ROT_Y,(sal_uInt32) mlRotY);
+    SfxInt32Item aRotXItem( SID_ATTR_TRANSFORM_ROT_X, basegfx::fround(mlRotX * fUIScale));
+    SfxInt32Item aRotYItem( SID_ATTR_TRANSFORM_ROT_Y, basegfx::fround(mlRotY * fUIScale));
 
     GetBindings()->GetDispatcher()->Execute(
         SID_ATTR_TRANSFORM, SFX_CALLMODE_RECORD, &aAngleItem, &aRotXItem, &aRotYItem, 0L );
@@ -715,9 +717,11 @@ IMPL_LINK( PosSizePropertyPanel, RotationHdl, void *, EMPTYARG )
 {
     sal_Int32 nTmp = mpDial->GetRotation();
 
+    // #123993# Need to take UIScale into account when executing rotations
+    const double fUIScale(mpView  ? double(mpView->getSdrModelFromSdrView().GetUIScale()) : 1.0);
     SfxInt32Item aAngleItem( SID_ATTR_TRANSFORM_ANGLE,(sal_uInt32) nTmp);
-    SfxInt32Item aRotXItem( SID_ATTR_TRANSFORM_ROT_X,(sal_uInt32) mlRotX);
-    SfxInt32Item aRotYItem( SID_ATTR_TRANSFORM_ROT_Y,(sal_uInt32) mlRotY);
+    SfxInt32Item aRotXItem( SID_ATTR_TRANSFORM_ROT_X, basegfx::fround(mlRotX * fUIScale));
+    SfxInt32Item aRotYItem( SID_ATTR_TRANSFORM_ROT_Y, basegfx::fround(mlRotY * fUIScale));
 
     GetBindings()->GetDispatcher()->Execute(
         SID_ATTR_TRANSFORM, SFX_CALLMODE_RECORD, &aAngleItem, &aRotXItem, &aRotYItem, 0L );
@@ -992,6 +996,7 @@ void PosSizePropertyPanel::NotifyItemUpdate(
 
         case SID_ATTR_METRIC:
             MetricState( eState, pState );
+            UpdateUIScale();
             break;
 
         default:
@@ -1325,6 +1330,28 @@ void PosSizePropertyPanel::DisableControls()
                 mpCbxScale->Enable();
             }
         }
+    }
+}
+
+
+
+
+void PosSizePropertyPanel::UpdateUIScale (void)
+{
+    const Fraction aUIScale (mpView->getSdrModelFromSdrView().GetUIScale());
+    if (maUIScale != aUIScale)
+    {
+        // UI scale has changed.
+
+        // Remember the new UI scale.
+        maUIScale = aUIScale;
+
+        // The content of the position and size boxes is only updated when item changes are notified.
+        // Request such notifications without changing the actual item values.
+        GetBindings()->Invalidate(SID_ATTR_TRANSFORM_POS_X, sal_True, sal_False);
+        GetBindings()->Invalidate(SID_ATTR_TRANSFORM_POS_Y, sal_True, sal_False);
+        GetBindings()->Invalidate(SID_ATTR_TRANSFORM_WIDTH, sal_True, sal_False);
+        GetBindings()->Invalidate(SID_ATTR_TRANSFORM_HEIGHT, sal_True, sal_False);
     }
 }
 

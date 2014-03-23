@@ -82,8 +82,19 @@ if ( $main::operatingSystem =~ m/solaris/ )
     $main::cppName = "CC";
     $main::cppVersion = "5.2";
 }
+if ( $main::operatingSystem =~ m/darwin/ )
+{
+    $main::cppName = "clang";
+    $main::cppVersion = "4.2";
+}
 $main::OO_SDK_CC_55_OR_HIGHER = "";
-$main::OO_SDK_CPP_HOME_SUGGESTION = searchprog($main::cppName);
+if ( $main::operatingSystem =~ m/darwin/ )
+{
+    $clangpath = `xcrun -f clang++`;
+    $main::OO_SDK_CPP_HOME_SUGGESTION = substr($clangpath, 0, rindex($clangpath, "/"));
+} else {
+    $main::OO_SDK_CPP_HOME_SUGGESTION = searchprog($main::cppName);
+}
 
 $main::OO_SDK_JAVA_HOME = "";
 $main::OO_SDK_JAVA_BIN_DIR = "bin";
@@ -348,18 +359,28 @@ while ( (!$main::correctVersion) &&
     print " C++ compilers where for example a language binding exist:\n";
     print "  - Solaris, Sun WorkShop 6 update 1 C++ 5.2 2000/09/11 or higher\n";
     print "  - Linux, GNU C++ compiler, gcc version 4.0.1 or higher\n";
-    print "  - MacOS, GNU C++ compiler, gcc version 4.0.1 or higher\n";
-    print " Enter the directory of the C++ compiler, the directory\n";
-    print " where the compiler is located (optional) [$main::OO_SDK_CPP_HOME_SUGGESTION]: ";
+    print "  - MacOS 64bit, Apple LLVM version 4.2 (clang-425.0.28) or higher\n";
+    print "    on MacOS auto detected using xcrun -f clang'\n";
 
-    $main::OO_SDK_CPP_HOME = readStdIn();
-    chop($main::OO_SDK_CPP_HOME);
-    if ( $main::OO_SDK_CPP_HOME eq "" )
+    if ( $main::operatingSystem =~ m/darwin/ )
     {
+        # xcrun is used to find the correct clang compiler, just print the result as information
         $main::OO_SDK_CPP_HOME = $main::OO_SDK_CPP_HOME_SUGGESTION;
+        print " Used clang compiler: $main::OO_SDK_CPP_HOME\n";
+    } else
+    {
+        print " Enter the directory of the C++ compiler, the directory\n";
+        print " where the compiler is located (optional) [$main::OO_SDK_CPP_HOME_SUGGESTION]: ";
+
+        $main::OO_SDK_CPP_HOME = readStdIn();
+        chop($main::OO_SDK_CPP_HOME);
+        if ( $main::OO_SDK_CPP_HOME eq "" )
+        {
+            $main::OO_SDK_CPP_HOME = $main::OO_SDK_CPP_HOME_SUGGESTION;
+        }
     }
 
-    if ( ! $main::OO_SDK_CPP_HOME eq "" )
+    if ( (!$main::operatingSystem =~ m/darwin/) && (! $main::OO_SDK_CPP_HOME eq "") )
     {
         if ( (! -d "$main::OO_SDK_CPP_HOME") ||
              ((-d "$main::OO_SDK_CPP_HOME") && (! -e "$main::OO_SDK_CPP_HOME/$main::cppName")) )

@@ -374,7 +374,7 @@ void RegressionCurveHelper::addRegressionCurve(
     uno::Reference< chart2::XRegressionCurve > xCurve;
     ::rtl::OUString aServiceName( lcl_getServiceNameForType( eType ));
 
-    if( aServiceName.getLength())
+    if( !aServiceName.isEmpty() )
     {
         // todo: use a valid context
         xCurve.set( createRegressionCurveByServiceName(
@@ -484,7 +484,7 @@ void RegressionCurveHelper::replaceOrAddCurveAndReduceToOne(
     else
     {
         OUString aServiceName( lcl_getServiceNameForType( eType ));
-        if( aServiceName.getLength())
+        if( !aServiceName.isEmpty() )
         {
             RegressionCurveHelper::removeAllExceptMeanValueLine( xRegCnt );
             RegressionCurveHelper::addRegressionCurve(

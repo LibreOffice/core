@@ -250,12 +250,10 @@ public:
     bool            GotoBookmark(const String& rBookmark);
     void            MakeVisibleAtView(const basegfx::B2DRange& rRange, ::Window& rWin);
 
-//IAccessibility2 Implementation 2009-----
     //Solution: realize multi-selection of objects ,If object is marked ,
     //the corresponding entry is set true ,else the corresponding entry is set false .
     void                    FreshNavigatrEntry();
     void                    FreshNavigatrTree();
-//-----IAccessibility2 Implementation 2009
 
     virtual void    ReadFrameViewData(FrameView* pView);
     virtual void    WriteFrameViewData();
@@ -375,10 +373,8 @@ public:
 
     ::rtl::OUString GetSidebarContextName (void) const;
 
-//IAccessibility2 Implementation 2009-----
     //move this method to ViewShell.
     //void  NotifyAccUpdate();
-//-----IAccessibility2 Implementation 2009
 protected:
     DrawView*       mpDrawView;
     SdPage*         mpActualPage;
@@ -505,9 +501,7 @@ private:
 
     using ViewShell::Notify;
 
-//IAccessibility2 Implementation 2009-----
     //const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > & GetForms() const;
-//-----IAccessibility2 Implementation 2009
 
     ::std::auto_ptr< AnnotationManager > mpAnnotationManager;
     ::std::auto_ptr< ViewOverlayManager > mpViewOverlayManager;

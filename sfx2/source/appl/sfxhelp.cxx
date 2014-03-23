@@ -274,7 +274,7 @@ SfxHelpOptions_Impl::SfxHelpOptions_Impl()
                         ::rtl::OUString aCodedList;
                         if ( pValues[nProp] >>= aCodedList )
                         {
-                            rtl::OString aTmp( aCodedList, aCodedList.getLength(), RTL_TEXTENCODING_UTF8 );
+                            const rtl::OString aTmp( OUStringToOString( aCodedList, RTL_TEXTENCODING_UTF8 ));
                             sal_Int32 nIndex = 0;
                             do
                             {

@@ -95,6 +95,12 @@ void ScCellShell::ExecuteCursor( SfxRequest& rReq )
     // einmal extra, damit der Cursor bei ExecuteInputDirect nicht zuoft gemalt wird:
     pTabViewShell->HideAllCursors();
 
+    // i123629
+    if( pTabViewShell->GetCurObjectSelectionType() == OST_Editing )
+        pTabViewShell->SetForceFocusOnCurCell(sal_True);
+    else
+        pTabViewShell->SetForceFocusOnCurCell(sal_False);
+
     //OS: einmal fuer alle wird doch reichen!
     pTabViewShell->ExecuteInputDirect();
     switch ( nSlotId )

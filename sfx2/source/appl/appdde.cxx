@@ -54,14 +54,14 @@
 
 String SfxDdeServiceName_Impl( const String& sIn )
 {
-    ByteString sTemp = U2S( sIn );
+    ByteString sTemp( sIn, RTL_TEXTENCODING_UTF8 );
     ByteString sReturn;
 
     for ( sal_uInt16 n = sTemp.Len(); n; --n )
         if ( sTemp.Copy( n-1, 1 ).IsAlphaNumericAscii() )
             sReturn += sTemp.GetChar(n-1);
 
-    return S2U( sReturn );
+    return String( sReturn, RTL_TEXTENCODING_UTF8 );
 }
 
 
@@ -159,7 +159,7 @@ sal_Bool SfxAppEvent_Impl( ApplicationEvent &rAppEvent,
             }
             aData.EraseAllChars( 0x0022 );
             ApplicationAddress aAddr;
-            rAppEvent = ApplicationEvent( String(), aAddr, U2S(rEvent), aData );
+            rAppEvent = ApplicationEvent( String(), aAddr, ByteString( rEvent, RTL_TEXTENCODING_UTF8), aData );
             return sal_True;
         }
     }

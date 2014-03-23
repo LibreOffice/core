@@ -43,7 +43,7 @@ module com {  module sun {  module star {  module view {
     @see XPrintJobBroadcaster
     @see XPrintJob
 
-    @since OOo 1.1.2
+    @since OpenOffice 1.1.2
  */
 published interface XPrintJobListener : com::sun::star::lang::XEventListener
 {

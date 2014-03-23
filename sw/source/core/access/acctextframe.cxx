@@ -44,11 +44,9 @@
 // <--
 #include "acctextframe.hxx"
 
-//IAccessibility2 Implementation 2009-----
 #ifndef _DOC_HXX
 #include <doc.hxx>
 #endif
-//-----IAccessibility2 Implementation 2009
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::accessibility;
 using ::rtl::OUString;
@@ -157,7 +155,6 @@ void SwAccessibleTextFrame::Modify( const SfxPoolItem* pOld, const SfxPoolItem *
     }
 }
 
-//IAccessibility2 Implementation 2009-----
 //=====  XInterface  ==========================================================
 
 com::sun::star::uno::Any SAL_CALL
@@ -274,7 +271,6 @@ void SAL_CALL SwAccessibleTextFrame::deselectAccessibleChild( sal_Int32 )
 {
     DBG_ASSERT( false, "<SwAccessibleTextFrame::selectAllAccessibleChildren( sal_Int32 )> - missing implementation" );
 }
-//-----IAccessibility2 Implementation 2009
 
 // --> OD 2009-07-14 #i73249#
 OUString SAL_CALL SwAccessibleTextFrame::getAccessibleName (void)
@@ -300,7 +296,6 @@ OUString SAL_CALL SwAccessibleTextFrame::getAccessibleDescription (void)
 
     CHECK_FOR_DEFUNC( XAccessibleContext )
     /* MT: I guess msDesc is correct noadays?
-    //IAccessibility2 Implementation 2009-----
     OUString longDesc;
     const SwFlyFrmFmt* pFlyFmt = GetShell()->GetDoc()->FindFlyByName( GetName(), 0);
     if( pFlyFmt )
@@ -311,7 +306,6 @@ OUString SAL_CALL SwAccessibleTextFrame::getAccessibleDescription (void)
         return GetName() + OUString(' ') + longDesc;
     else
         return GetName();
-    //-----IAccessibility2 Implementation 2009
     */
 
     return msDesc;

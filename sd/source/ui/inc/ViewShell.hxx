@@ -310,7 +310,6 @@ public:
     // Move these two methods from DrawViewShell to enable slide show view
     void    NotifyAccUpdate();
     void    fireSwitchCurrentPage(sal_Int32 pageIndex);
-//-----IAccessibility2 Implementation 2009
 
     /** Return the window updater of this view shell.
         @return

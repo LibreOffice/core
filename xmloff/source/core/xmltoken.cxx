@@ -155,6 +155,9 @@ namespace xmloff { namespace token {
         TOKEN( "drawooo", XML_NP_DRAW_EXT ),
         TOKEN( "http://openoffice.org/2010/draw", XML_N_DRAW_EXT ),
 
+        TOKEN( "textooo", XML_NP_TEXT_EXT ),
+        TOKEN( "http://openoffice.org/2013/office", XML_N_TEXT_EXT ),
+
         // units
         TOKEN( "mm",                              XML_UNIT_MM ),
         TOKEN( "m",                               XML_UNIT_M ),
@@ -235,6 +238,7 @@ namespace xmloff { namespace token {
         TOKEN( "animation-stop-inside",           XML_ANIMATION_STOP_INSIDE ),
         TOKEN( "animations",                      XML_ANIMATIONS ),
         TOKEN( "annotation",                      XML_ANNOTATION ),
+        TOKEN( "annotation-end",                  XML_ANNOTATION_END ),
         TOKEN( "annotations",                     XML_ANNOTATIONS ),
         TOKEN( "annote",                          XML_ANNOTE ),
         TOKEN( "appear",                          XML_APPEAR ),

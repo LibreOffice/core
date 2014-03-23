@@ -164,9 +164,7 @@ public:
     virtual ::com::sun::star::uno::Reference<
         ::com::sun::star::accessibility::XAccessible>
                     CreateAccessible();
-    //IAccessibility2 Implementation 2009-----
     virtual void SwitchView();
-    //-----IAccessibility2 Implementation 2009
 };
 
 
@@ -178,8 +176,7 @@ class SW_DLLPUBLIC SwPagePreView: public SfxViewShell
 {
     // ViewWindow und Henkel zur Core
     // aktuelle Dispatcher-Shell
-    SwPagePreViewWin*        pViewWin;//IAccessibility2 Implementation 2009
-    //viewdata of the previous SwView and the new crsrposition
+    SwPagePreViewWin*        pViewWin;  //viewdata of the previous SwView and the new crsrposition
     String                  sSwViewData,
     //and the new cursor position if the user double click in the PagePreView
                             sNewCrsrPos;

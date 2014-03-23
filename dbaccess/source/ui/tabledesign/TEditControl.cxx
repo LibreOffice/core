@@ -418,7 +418,7 @@ sal_Bool OTableEditorCtrl::SetDataPtr( long nRow )
     if(nRow >= (long)m_pRowList->size())
         return sal_False;
     pActRow = (*m_pRowList)[nRow];
-    return pActRow != NULL;
+    return bool(pActRow);
 }
 
 //------------------------------------------------------------------------------

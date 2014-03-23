@@ -108,10 +108,7 @@ ResMgr *FirstStartWizard::pResMgr = 0;
 ResMgr *FirstStartWizard::GetResManager()
 {
     if ( !FirstStartWizard::pResMgr )
-    {
-        String aMgrName = String::CreateFromAscii( "dkt" );
-        FirstStartWizard::pResMgr = ResMgr::CreateResMgr( OUStringToOString( aMgrName, RTL_TEXTENCODING_UTF8 ));
-    }
+        FirstStartWizard::pResMgr = ResMgr::CreateResMgr( "dkt");
     return FirstStartWizard::pResMgr;
 }
 

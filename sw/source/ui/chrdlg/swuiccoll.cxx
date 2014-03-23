@@ -127,7 +127,6 @@ SwCondCollPage::SwCondCollPage(Window *pParent, const SfxItemSet &rSet)
             break;
     }
 
-//IAccessibility2 Impplementaton 2009-----
     if( pFamilyItem )
     {
         const SfxStyleFilter& rFilterList = pFamilyItem->GetFilterList();
@@ -137,7 +136,6 @@ SwCondCollPage::SwCondCollPage(Window *pParent, const SfxItemSet &rSet)
             sal_uInt16* pFilter = new sal_uInt16(rFilterList.GetObject(i)->nFlags);
             aFilterLB.SetEntryData(i, pFilter);
         }
-//-----IAccessibility2 Impplementaton 2009
     }
     aFilterLB.SelectEntryPos(1);
 

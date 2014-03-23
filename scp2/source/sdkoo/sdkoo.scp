@@ -60,7 +60,8 @@ End
 Directory gid_Dir_Basis_Sdk
 #if defined MACOSX
     ParentID = PREDEFINED_PROGDIR;
-    DosName = "OpenOffice_SDK";
+#    DosName = "OpenOffice_SDK";
+    DosName = "${PRODUCTDIRNAME}";
 #else
     ParentID = gid_Dir_OpenOffice_Sdk;
     DosName = "sdk";
@@ -216,7 +217,8 @@ End
 
 #ifdef MACOSX
 ScpAction scp_Copy_Dmg_Background_Image
-    Copy = "osxdndinstall.png";
+    Copy = "osxdndinstall_sdk.png";
+    BetaCopy = "osxdndinstall_sdk_beta.png";
     Name = "background.png";
     UnixRights = 444;
     Styles = ();
@@ -225,7 +227,7 @@ End
 
 ScpAction scp_Copy_Ds_Store
     Copy = "DS_Store_SDK";
-#    PatchCopy = "DS_Store_Patch";
+    BetaCopy = "DS_Store_SDK_Beta";
     Name = ".DS_Store";
     UnixRights = 444;
     Styles = ();

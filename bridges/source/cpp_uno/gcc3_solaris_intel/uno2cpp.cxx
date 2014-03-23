@@ -45,7 +45,15 @@ namespace
 {
 
 //==================================================================================================
-static void callVirtualMethod(
+void callVirtualMethod(
+    void * pAdjustedThisPtr,
+    sal_Int32 nVtableIndex,
+    void * pRegisterReturn,
+    typelib_TypeClass eReturnType,
+    sal_Int32 * pStackLongs,
+    sal_Int32 nStackLongs ) __attribute__((noinline));
+
+void callVirtualMethod(
     void * pAdjustedThisPtr,
     sal_Int32 nVtableIndex,
     void * pRegisterReturn,
@@ -67,6 +75,13 @@ static void callVirtualMethod(
     void * stackptr;
     asm volatile (
         "mov   %%esp, %6\n\t"
+       // preserve potential 128bit stack alignment
+        "and   $0xfffffff0, %%esp\n\t"
+        "mov   %0, %%eax\n\t"
+        "lea   -4(,%%eax,4), %%eax\n\t"
+        "and   $0xf, %%eax\n\t"
+        "sub   $0xc, %%eax\n\t"
+        "add   %%eax, %%esp\n\t"
         // copy values
         "mov   %0, %%eax\n\t"
         "mov   %%eax, %%edx\n\t"

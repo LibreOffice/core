@@ -81,7 +81,7 @@ published service ChartDataPointProperties
         element, this service should be supported in order to preserve
         unparsed XML attributes.
 
-    @since OOo 1.1.2
+    @since OpenOffice 1.1.2
      */
     [optional] service com::sun::star::xml::UserDefinedAttributeSupplier;
 

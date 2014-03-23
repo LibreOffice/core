@@ -298,7 +298,7 @@ void SwModule::ApplyItemSet( sal_uInt16 nId, const SfxItemSet& rSet )
     {
         // the text dialog mustn't apply data to the web view and vice versa
         sal_Bool bWebView = 0 != dynamic_cast< SwWebView* >( pAppView);
-        if( (bWebView == bTextDialog))
+        if( bWebView == bTextDialog)
             pAppView = 0; //
     }
 

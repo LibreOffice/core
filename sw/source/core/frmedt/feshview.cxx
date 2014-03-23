@@ -1035,7 +1035,6 @@ sal_Bool SwFEShell::IsObjSelected( const SdrObject& rObj ) const
         return Imp()->GetDrawView()->isSdrObjectSelected(rObj);
 }
 
-//IAccessibility2 Implementation 2009-----
 bool SwFEShell::IsObjSameLevelWithMarked(const SdrObject& rObj) const
 {
     if(!Imp()->GetDrawView()->areSdrObjectsSelected())

@@ -51,6 +51,7 @@
 #include <FFDataHandler.hxx>
 #include <FormControlHelper.hxx>
 #include <map>
+#include <hash_map>
 
 #include <string.h>
 
@@ -173,8 +174,10 @@ struct TextAppendContext
     ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextAppend >       xTextAppend;
     ParagraphPropertiesPtr                                                        pLastParagraphProperties;
 
-    TextAppendContext( const ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextAppend >& xAppend ) :
-        xTextAppend( xAppend ){}
+    TextAppendContext( const ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextAppend >& xAppend )
+        : xTextAppend( xAppend )
+    {
+    }
 };
 
 typedef boost::shared_ptr<FieldContext>  FieldContextPtr;
@@ -211,11 +214,16 @@ class FIB
 struct DeletableTabStop : public ::com::sun::star::style::TabStop
 {
     bool bDeleted;
-    DeletableTabStop() :
-        bDeleted( false ){}
-    DeletableTabStop( const ::com::sun::star::style::TabStop& rTabStop ) :
-        TabStop( rTabStop ),
-            bDeleted( false ){}
+
+    DeletableTabStop()
+        : TabStop()
+        , bDeleted( false )
+    {}
+
+    DeletableTabStop( const ::com::sun::star::style::TabStop& rTabStop )
+        : TabStop( rTabStop )
+        , bDeleted( false )
+    {}
 };
 /*-- 12.06.2007 07:15:31---------------------------------------------------
     /// helper to remember bookmark start position
@@ -225,12 +233,24 @@ struct BookmarkInsertPosition
     bool                                                                    m_bIsStartOfText;
     ::rtl::OUString                                                         m_sBookmarkName;
     ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextRange >  m_xTextRange;
-    BookmarkInsertPosition(bool bIsStartOfText, const ::rtl::OUString& rName, ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextRange >  xTextRange):
-        m_bIsStartOfText( bIsStartOfText ),
-        m_sBookmarkName( rName ),
-        m_xTextRange( xTextRange )
+
+    BookmarkInsertPosition(
+        bool bIsStartOfText,
+        const ::rtl::OUString& rName,
+        ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextRange >  xTextRange )
+        : m_bIsStartOfText( bIsStartOfText )
+        , m_sBookmarkName( rName )
+        , m_xTextRange( xTextRange )
      {}
 };
+
+/// Stores the start/end positions of an annotation before its insertion.
+struct AnnotationPosition
+{
+    ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextRange >  m_xStart;
+    ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextRange >  m_xEnd;
+};
+typedef std::unordered_map< sal_Int32, AnnotationPosition > AnnotationPositions_t;
 
 struct RedlineParams
 {
@@ -345,7 +365,9 @@ private:
     bool                            m_bIsInComments;
 
     //annotation import
-    uno::Reference< beans::XPropertySet >                                      m_xAnnotationField;
+    uno::Reference< beans::XPropertySet > m_xAnnotationField;
+    sal_Int32 m_nAnnotationId;
+    AnnotationPositions_t m_aAnnotationPositions;
 
     void                            GetCurrentLocale(::com::sun::star::lang::Locale& rLocale);
     void                            SetNumberFormat( const ::rtl::OUString& rCommand,
@@ -534,13 +556,17 @@ public:
 
     void AddBookmark( const ::rtl::OUString& rBookmarkName, const ::rtl::OUString& rId );
 
+    void AddAnnotationPosition(
+        const bool bStart,
+        const sal_Int32 nAnnotationId );
+
     DomainMapperTableManager& getTableManager()
     {
         boost::shared_ptr< DomainMapperTableManager > pMngr = m_aTableManagers.top();
         return *pMngr.get( );
     }
 
-    void appendTableManager( )
+    void appendTableManager()
     {
         boost::shared_ptr< DomainMapperTableManager > pMngr(
                 new DomainMapperTableManager( m_eDocumentType == DOCUMENT_OOXML ) );
@@ -593,6 +619,7 @@ public:
     void SetCurrentRedlineToken( sal_Int32 nToken );
     void RemoveCurrentRedline( );
     void ResetParaRedline( );
+    void SetCurrentRedlineInitials( rtl::OUString sInitials );
 
     void ApplySettingsTable();
     SectionPropertyMap * GetSectionContext();

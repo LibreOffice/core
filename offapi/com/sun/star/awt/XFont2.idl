@@ -37,7 +37,7 @@ module com {  module sun {  module star {  module awt {
 /** extends the <type>XFont</type> interface and provides additional
     information for a font.
 
-    @since OOo 3.0
+    @since OpenOffice 3.0
  */
 interface XFont2: com::sun::star::awt::XFont
 {

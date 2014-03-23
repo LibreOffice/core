@@ -56,7 +56,7 @@ published interface XActivationEventListener: com::sun::star::lang::XEventListen
         @see ActivationEvent
         @see XSpreadsheetViewEventProvieder
 
-        @since OOo 2.0
+        @since OpenOffice 2.0
 
      */
     void activeSpreadsheetChanged( [in] com::sun::star::sheet::ActivationEvent aEvent );

@@ -123,15 +123,6 @@ OOXMLDocument * OOXMLParserState::getDocument() const
     return mpDocument;
 }
 
-void OOXMLParserState::setXNoteId(const rtl::OUString & rId)
-{
-    mpDocument->setXNoteId(rId);
-}
-
-const rtl::OUString & OOXMLParserState::getXNoteId() const
-{
-    return mpDocument->getXNoteId();
-}
 
 const ::rtl::OUString & OOXMLParserState::getTarget() const
 {
@@ -308,9 +299,7 @@ XMLTag::Pointer_t OOXMLParserState::toTag() const
         sTmp += "-";
 
     pTag->addAttr("state", sTmp);
-    pTag->addAttr("XNoteId",
-                  OUStringToOString(getXNoteId(),
-                                    RTL_TEXTENCODING_ASCII_US).getStr());
+    pTag->addAttr("XNoteId", getDocument()->getIDForXNoteStream() );
     if (mpCharacterProps != OOXMLPropertySet::Pointer_t())
         pTag->chars(mpCharacterProps->toString());
 

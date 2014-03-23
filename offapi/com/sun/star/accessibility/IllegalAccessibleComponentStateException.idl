@@ -38,7 +38,7 @@ module com {  module sun {  module star {  module accessibility {
 
     @see XAccessibleContext::getLocale()
 
-    @since OOo 1.1.2
+    @since OpenOffice 1.1.2
 */
 published exception IllegalAccessibleComponentStateException
     : ::com::sun::star::uno::Exception

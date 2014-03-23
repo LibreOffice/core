@@ -24,15 +24,10 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_dbaccess.hxx"
 
-#ifndef _CPPUHELPER_FACTORY_HXX_
 #include <cppuhelper/factory.hxx>
-#endif
-#ifndef _OSL_DIAGNOSE_H_
 #include <osl/diagnose.h>
-#endif
-#ifndef _FLT_REGHELPER_HXX_
 #include "flt_reghelper.hxx"
-#endif
+#include "dbaccessdllapi.h"
 
 /********************************************************************************************/
 
@@ -70,7 +65,7 @@ extern "C" void SAL_CALL createRegistryInfo_dbaxml()
 
 //---------------------------------------------------------------------------------------
 
-extern "C" void SAL_CALL component_getImplementationEnvironment(
+extern "C" DBACCESS_DLLPUBLIC void component_getImplementationEnvironment(
                 const sal_Char  **ppEnvTypeName,
                 uno_Environment **
             )
@@ -80,7 +75,8 @@ extern "C" void SAL_CALL component_getImplementationEnvironment(
 }
 
 //---------------------------------------------------------------------------------------
-extern "C" void* SAL_CALL component_getFactory(
+
+extern "C" DBACCESS_DLLPUBLIC void* component_getFactory(
                     const sal_Char* pImplementationName,
                     void* pServiceManager,
                     void* /*pRegistryKey*/)

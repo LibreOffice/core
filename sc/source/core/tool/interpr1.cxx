@@ -7681,7 +7681,7 @@ bool IsDBCS(sal_Unicode ch)
 }
 sal_Int32 getLengthB(String &str)
 {
-    sal_Int32 index = 0;
+    xub_StrLen index = 0;
     sal_Int32 length = 0;
     if(0 == str.Len())
         return 0;

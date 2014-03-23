@@ -100,7 +100,5 @@
 #define MD_BTN_OK (122 + CFG_OFFSET)
 #define FI_INFO (123 + CFG_OFFSET)
 
-//IAccessibility2 Implementation 2009-----
 #define BUTTON_STR_UP   (130 + CFG_OFFSET)
 #define BUTTON_STR_DOWN (131 + CFG_OFFSET)
-//-----IAccessibility2 Implementation 2009

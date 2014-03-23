@@ -460,12 +460,46 @@ void __EXPORT ScInputWindow::Select()
             if ( pScMod->IsEditMode() )         // nicht, wenn z.B. geschuetzt
             {
                 aTextWindow.GrabFocus();
-                aTextWindow.SetTextString( '=' );
+
+                xub_StrLen nStartPos = 1;
+                xub_StrLen nEndPos = 1;
+
+                ScTabViewShell* pViewSh = dynamic_cast< ScTabViewShell* >(SfxViewShell::Current());
+                if ( pViewSh )
+                {
+                    const String& aString = aTextWindow.GetTextString();
+                    const xub_StrLen nLen = aString.Len();
+
+                    ScDocument* pDoc = pViewSh->GetViewData()->GetDocument();
+                    CellType eCellType = pDoc->GetCellType( pViewSh->GetViewData()->GetCurPos() );
+                    switch ( eCellType )
+                    {
+                        case CELLTYPE_VALUE:
+                        {
+                            nEndPos = nLen +1;
+                            String aNewStr( '=' );
+                            aNewStr.Append( aString );
+                            aTextWindow.SetTextString( aNewStr );
+                            break;
+                        }
+                        case CELLTYPE_STRING:
+                        case CELLTYPE_EDIT:
+                            nStartPos = 0;
+                            nEndPos = nLen;
+                            break;
+                        case CELLTYPE_FORMULA:
+                            nEndPos = nLen;
+                            break;
+                        default:
+                            aTextWindow.SetTextString( '=' );
+                            break;
+                    }
+                }
 
                 EditView* pView = aTextWindow.GetEditView();
                 if (pView)
                 {
-                    pView->SetSelection( ESelection(0,1, 0,1) );
+                    pView->SetSelection( ESelection(0, nStartPos, 0, nEndPos) );
                     pScMod->InputChanged(pView);
                     SetOkCancelMode();
                     pView->SetEditEngineUpdateMode(sal_True);

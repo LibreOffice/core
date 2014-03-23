@@ -430,28 +430,26 @@ public:
     // Outlines and SubOutline are protected ?
     sal_Bool IsProtectedOutlinePara() const;
 
-    // Numerierung Aufzaehlunglisten
-    // liefert Regelwerk der aktuellen Aufzaehlung (sal_False sonst)
-    const SwNumRule* GetCurNumRule() const;
 
-    // setzt, wenn noch keine Numerierung, sonst wird geaendert
-    // arbeitet mit alten und neuen Regeln, nur Differenzen aktualisieren
-    // --> OD 2008-02-08 #newlistlevelattrs#
-    // Add optional parameter <bResetIndentAttrs> (default value sal_False).
-    // If <bResetIndentAttrs> equals true, the indent attributes "before text"
-    // and "first line indent" are additionally reset at the current selection,
-    // if the list style makes use of the new list level attributes.
-    // --> OD 2008-03-17 #refactorlists#
-    // introduce parameters <bCreateNewList> and <sContinuedListId>
-    // <bCreateNewList> indicates, if a new list is created by applying the
-    // given list style.
-    // If <bCreateNewList> equals sal_False, <sContinuedListId> may contain the
-    // list Id of a list, which has to be continued by applying the given list style
+    const SwNumRule* GetNumRuleAtCurrCrsrPos() const;
+
+    // Returns the numbering rule found at the paragraphs of the current selection,
+    // if all paragraphs of the current selection have the same or none numbering rule applied.
+    const SwNumRule* GetNumRuleAtCurrentSelection() const;
+
+    // Optional parameter <bResetIndentAttrs> (default value sal_False).
+    //  If <bResetIndentAttrs> equals true, the indent attributes "before text"
+    //  and "first line indent" are additionally reset at the current selection,
+    //  if the list style makes use of the new list level attributes.
+    // Parameters <bCreateNewList> and <sContinuedListId>
+    //  <bCreateNewList> indicates, if a new list is created by applying the given list style.
+    //  If <bCreateNewList> equals false, <sContinuedListId> may contain the
+    //  list Id of a list, which has to be continued by applying the given list style
     void SetCurNumRule( const SwNumRule&,
                         const bool bCreateNewList /*= false*/,
                         const String sContinuedListId = String(),
                         const bool bResetIndentAttrs = false );
-    // <--
+
     // Absaetze ohne Numerierung, aber mit Einzuegen
     sal_Bool NoNum();
     // Loeschen, Splitten der Aufzaehlungsliste
@@ -459,30 +457,22 @@ public:
     // Hoch-/Runterstufen
     sal_Bool NumUpDown( sal_Bool bDown = sal_True );
     // Hoch-/Runtermoven sowohl innerhalb als auch ausserhalb von Numerierungen
-    sal_Bool MoveParagraph( long nOffset = 1);
+    sal_Bool MoveParagraph( long nOffset = 1 );
     sal_Bool MoveNumParas( sal_Bool bUpperLower, sal_Bool bUpperLeft );
     // No-/Numerierung ueber Delete/Backspace ein/abschalten #115901#
-    sal_Bool NumOrNoNum( sal_Bool bDelete = sal_False, sal_Bool bChkStart = sal_True);
+    sal_Bool NumOrNoNum( sal_Bool bDelete = sal_False, sal_Bool bChkStart = sal_True );
     // -> #i23726#
-    // --> OD 2008-06-09 #i90078#
-    // Remove unused default parameter <nLevel> and <bRelative>.
-    // Adjust method name and parameter name
-    void ChangeIndentOfAllListLevels( short nDiff );
-    // Adjust method name
+
+    void ChangeIndentOfAllListLevels( const short nDiff );
     void SetIndent(short nIndent, const SwPosition & rPos);
-    // <--
-    sal_Bool IsFirstOfNumRule() const;
-    sal_Bool IsFirstOfNumRule(const SwPaM & rPaM) const;
-    // <- #i23726#
+    bool IsFirstOfNumRuleAtCrsrPos() const;
 
     sal_Bool IsNoNum( sal_Bool bChkStart = sal_True ) const;
     // returne den Num-Level des Nodes, in dem sich der Point vom
     // Cursor befindet. Return kann sein :
     // - NO_NUMBERING, 0..MAXLEVEL-1, NO_NUMLEVEL .. NO_NUMLEVEL|MAXLEVEL-1
-    // --> OD 2008-02-29 #refactorlists# - removed <pHasChilds>
-//    sal_uInt8 GetNumLevel( sal_Bool* pHasChilds = 0 ) const;
     sal_uInt8 GetNumLevel() const;
-    // <--
+
     // detect highest and lowest level to check moving of outline levels
     void GetCurrentOutlineLevels( sal_uInt8& rUpper, sal_uInt8& rLower );
 

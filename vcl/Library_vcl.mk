@@ -161,8 +161,8 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/aqua/source/dtrans/PictToBmpFlt \
     vcl/aqua/source/dtrans/aqua_clipboard \
     vcl/aqua/source/dtrans/service_entry \
-    vcl/aqua/source/gdi/salatslayout \
-    vcl/aqua/source/gdi/salatsuifontutils \
+    vcl/aqua/source/gdi/ctfonts \
+    vcl/aqua/source/gdi/ctlayout \
     vcl/aqua/source/gdi/salbmp \
     vcl/aqua/source/gdi/salcolorutils \
     vcl/aqua/source/gdi/salgdi \
@@ -347,6 +347,7 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/source/gdi/imagerepository \
     vcl/source/gdi/impanmvw \
     vcl/source/gdi/impbmp \
+    vcl/source/gdi/impfont \
     vcl/source/gdi/impgraph \
     vcl/source/gdi/impimage \
     vcl/source/gdi/impimagetree \
@@ -511,11 +512,13 @@ $(eval $(call gb_Library_add_linked_libs,vcl,\
 ))
 $(eval $(call gb_Library_set_ldflags,vcl,\
     $$(LDFLAGS) \
-    -framework QuickTime \
     -framework Cocoa \
     -framework Carbon \
     -framework CoreFoundation \
 ))
+ifneq ($(MACOSX_DEPLOYMENT_TARGET),10.7)
+$(eval $(call gb_Library_set_ldflags,vcl, $$(LDFLAGS) -framework QuickTime ))
+endif
 endif
 
 ifeq ($(OS),WNT)

@@ -111,7 +111,7 @@ static OSStatus hotKeyEventHandler(EventHandlerCallRef, EventRef, void*);
 			break;			
 		default: 
 #ifdef DEBUG
-			NSLog(@"Unknown global keyboard defaults key for remote button identifier %d", remoteButtonIdentifier);
+			NSLog( @"Apple Remote: Unknown global keyboard defaults key for button identifier %d", remoteButtonIdentifier);
 #endif
             break;
 	}

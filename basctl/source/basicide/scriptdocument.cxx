@@ -1002,7 +1002,7 @@ namespace basctl
                 }
             }
 
-            if ( aFileURL.getLength() )
+            if ( !aFileURL.isEmpty() )
             {
                 ::osl::DirectoryItem aFileItem;
                 ::osl::FileStatus aFileStatus( FileStatusMask_FileURL );
@@ -1164,7 +1164,7 @@ namespace basctl
     ScriptDocument ScriptDocument::getDocumentWithURLOrCaption( const ::rtl::OUString& _rUrlOrCaption )
     {
         ScriptDocument aDocument( getApplicationScriptDocument() );
-        if ( _rUrlOrCaption.getLength() == 0 )
+        if ( _rUrlOrCaption.isEmpty() )
             return aDocument;
 
         docs::Documents aDocuments;
@@ -1521,7 +1521,7 @@ namespace basctl
     LibraryLocation ScriptDocument::getLibraryLocation( const ::rtl::OUString& _rLibName ) const
     {
         LibraryLocation eLocation = LIBRARY_LOCATION_UNKNOWN;
-        if ( _rLibName.getLength() )
+        if ( !_rLibName.isEmpty() )
         {
             if ( isDocument() )
             {

@@ -39,6 +39,9 @@
 #include <svx/svdstr.hrc>   // Namen aus der Resource
 #include <svx/svdglob.hxx>  // StringCache
 #include <svx/e3dsceneupdater.hxx>
+#include <svx/svdview.hxx>
+
+// #i13033#
 #include <clonelist.hxx>
 #include <svx/svdlegacy.hxx>
 #include <svx/svdogrp.hxx>
@@ -1234,8 +1237,28 @@ bool SdrEditView::InsertObjectAtView(SdrObject& rObj, sal_uInt32 nOptions)
 
 void SdrEditView::ReplaceObjectAtView(SdrObject& rOldObj, SdrObject& rNewObj, bool bMark)
 {
-    const bool bUndo(IsUndoEnabled());
+    if(IsTextEdit())
+    {
+#ifdef DBG_UTIL
+        if(dynamic_cast< SdrTextObj* >(&rOldObj) && static_cast< SdrTextObj& >(rOldObj).IsTextEditActive())
+        {
+            OSL_ENSURE(false, "OldObject is in TextEdit mode, this has to be ended before replacing it usnig SdrEndTextEdit (!)");
+        }
+
+        if(dynamic_cast< SdrTextObj* >(&rNewObj) && static_cast< SdrTextObj& >(rNewObj).IsTextEditActive())
+        {
+            OSL_ENSURE(false, "NewObject is in TextEdit mode, this has to be ended before replacing it usnig SdrEndTextEdit (!)");
+        }
+#endif
+
+        // #123468# emergency repair situation, needs to cast up to a class derived from
+        // this one; (aw080 has a mechanism for that and the view hierarchy is secured to
+        // always be a SdrView)
+        if(dynamic_cast< SdrView* >(this)) static_cast< SdrView* >(this)->SdrEndTextEdit();
+    }
+
     SdrObjList* pOL = rOldObj.getParentOfSdrObject();
+    const bool bUndo = IsUndoEnabled();
 
     if(bUndo)
     {

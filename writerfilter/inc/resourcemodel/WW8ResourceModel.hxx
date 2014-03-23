@@ -298,7 +298,7 @@ public:
     /**
        Returns integer representation of the value.
      */
-    virtual int getInt() const = 0;
+    virtual sal_Int32 getInt() const = 0;
 
     /**
        Returns string representation of the value.

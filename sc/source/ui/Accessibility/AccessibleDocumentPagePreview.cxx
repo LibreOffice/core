@@ -1902,7 +1902,6 @@ ScShapeChilds* ScAccessibleDocumentPagePreview::GetShapeChilds()
     return mpShapeChilds;
 }
 
-//IAccessibility2 Implementation 2009-----
 ::rtl::OUString ScAccessibleDocumentPagePreview::getAccessibleName(void)
 throw (::com::sun::star::uno::RuntimeException)
 {
@@ -1929,7 +1928,6 @@ throw (::com::sun::star::uno::RuntimeException)
 
     return sName;
 }
-//-----IAccessibility2 Implementation 2009=======
 
 //UNUSED2009-05 uno::Reference < XAccessible > ScAccessibleDocumentPagePreview::GetCurrentAccessibleTable()
 //UNUSED2009-05 {

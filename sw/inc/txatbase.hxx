@@ -187,6 +187,7 @@ inline const SwFmtFld& SwTxtAttr::GetFmtFld() const
 {
     ASSERT( m_pAttr
             && ( m_pAttr->Which() == RES_TXTATR_FIELD
+                 || m_pAttr->Which() == RES_TXTATR_ANNOTATION
                  || m_pAttr->Which() == RES_TXTATR_INPUTFIELD ),
             "Wrong attribute" );
     return (const SwFmtFld&)(*m_pAttr);

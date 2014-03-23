@@ -342,7 +342,7 @@ Any SAL_CALL AttacherAllListener_Impl::approveFiring( const AllEventObject& Even
 
                 case TypeClass_STRING:
                     // none empty string -> return
-                    if( ((OUString*)aRet.getValue())->getLength() > 0 )
+                    if( ((OUString*)aRet.getValue())->isEmpty() == false )
                         return aRet;
                     break;
 

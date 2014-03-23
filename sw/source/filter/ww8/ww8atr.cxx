@@ -1680,12 +1680,12 @@ void WW8AttributeOutput::TextINetFormat( const SwFmtINetFmt& rINet )
 {
     if ( rINet.GetValue().Len() )
     {
-        sal_uInt16 nId;
+        const sal_uInt16 nId = rINet.GetINetFmtId();
         const String& rStr = rINet.GetINetFmt();
-        if ( rStr.Len() )
-            nId = rINet.GetINetFmtId();
-        else
-            nId = RES_POOLCHR_INET_NORMAL;
+        if ( rStr.Len() == 0 )
+        {
+            ASSERT( false, "WW8AttributeOutput::TextINetFormat(..) - missing unvisited character format at hyperlink attribute" );
+        }
 
         const SwCharFmt* pFmt = IsPoolUserFmt( nId )
                         ? m_rWW8Export.pDoc->FindCharFmtByName( rStr )
@@ -5165,10 +5165,13 @@ void AttributeOutputBase::OutputItem( const SfxPoolItem& rHt )
         case RES_TXTATR_CHARFMT:
             TextCharFormat( static_cast< const SwFmtCharFmt& >( rHt ) );
             break;
+
         case RES_TXTATR_FIELD:
+        case RES_TXTATR_ANNOTATION:
         case RES_TXTATR_INPUTFIELD:
             TextField( static_cast< const SwFmtFld& >( rHt ) );
             break;
+
         case RES_TXTATR_FLYCNT:
             TextFlyContent( static_cast< const SwFmtFlyCnt& >( rHt ) );
             break;

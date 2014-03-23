@@ -110,7 +110,7 @@ namespace slideshow
                     maTreeNode );
             }
 
-            return mpSubsetShape;
+            return (mpSubsetShape.get() != NULL);
         }
 
         void ShapeSubset::disableSubsetShape()

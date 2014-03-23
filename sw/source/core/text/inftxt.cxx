@@ -37,11 +37,7 @@
 #include <editeng/brshitem.hxx>
 #include <editeng/splwrap.hxx>
 #include <editeng/pgrditem.hxx>
-// --> OD 2008-01-17 #newlistlevelattrs#
-#ifndef _SVX_TSTPITEM_HXX
 #include <editeng/tstpitem.hxx>
-#endif
-// <--
 
 #include <SwSmartTagMgr.hxx>
 #include <linguistic/lngprops.hxx>
@@ -57,9 +53,7 @@
 #include <viewopt.hxx>  // SwViewOptions
 #include <frmtool.hxx>  // DrawGraphic
 #include <IDocumentSettingAccess.hxx>
-#ifndef IDOCUMENTDEVICEACCESS_HXX_INCLUDED
 #include <IDocumentDeviceAccess.hxx>
-#endif
 #include <paratr.hxx>   // SwFmtDrop
 #include <rootfrm.hxx>  // SwRootFrm
 #include <inftxt.hxx>   // SwTxtInfo
@@ -74,9 +68,10 @@
 #include <pam.hxx>
 #include <SwGrammarMarkUp.hxx>
 #include <cstdio>
-// --> FME 2004-06-08 #i12836# enhanced pdf export
 #include <EnhancedPDFExportHelper.hxx>
-// <--
+
+//UUUU
+#include <frmfmt.hxx>
 
 #include <unomid.h>
 
@@ -614,13 +609,16 @@ sal_Bool lcl_IsDarkBackground( const SwTxtPaintInfo& rInf )
         const SvxBrushItem* pItem;
         SwRect aOrigBackRect;
 
+        //UUUU
+        FillAttributesPtr aFillAttributes;
+
         /// OD 21.08.2002
         ///     consider, that [GetBackgroundBrush(...)] can set <pCol>
         ///     - see implementation in /core/layout/paintfrm.cxx
         /// OD 21.08.2002 #99657#
         ///     There is a background color, if there is a background brush and
         ///     its color is *not* "no fill"/"auto fill".
-        if( rInf.GetTxtFrm()->GetBackgroundBrush( pItem, pCol, aOrigBackRect, sal_False ) )
+        if( rInf.GetTxtFrm()->GetBackgroundBrush( aFillAttributes, pItem, pCol, aOrigBackRect, sal_False ) )
         {
             if ( !pCol )
                 pCol = &pItem->GetColor();
@@ -994,8 +992,14 @@ void SwTxtPaintInfo::DrawRect( const SwRect &rRect, sal_Bool bNoGraphic,
             pOut->DrawRect( rRect.SVRect() );
         else
         {
-            ASSERT( ((SvxBrushItem*)-1) != pBrushItem, "DrawRect: Uninitialized BrushItem!" );
-            ::DrawGraphic( pBrushItem, pOut, aItemRect, rRect );
+            if(pBrushItem != ((SvxBrushItem*)-1))
+            {
+                ::DrawGraphic( pBrushItem, pOut, aItemRect, rRect );
+            }
+            else
+            {
+                OSL_ENSURE(false, "DrawRect: Uninitialized BrushItem!" );
+            }
         }
     }
 }

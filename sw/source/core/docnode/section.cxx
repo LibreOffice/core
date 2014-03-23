@@ -1542,7 +1542,7 @@ void SwIntrnlSectRefLink::DataChanged( const String& rMimeType,
 
                     SwTblNumFmtMerge aTNFM( *pSrcDoc, *pDoc );
 
-                    pSrcDoc->CopyWithFlyInFly( *pCpyRg, 0, rInsPos, bCreateFrm );
+                    pSrcDoc->CopyWithFlyInFly( *pCpyRg, 0, rInsPos, NULL, bCreateFrm );
                     aSave++;
 
                     if( !bCreateFrm )

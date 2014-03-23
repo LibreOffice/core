@@ -471,7 +471,7 @@ namespace slideshow
             // ShapeAttributeLayer(const ShapeAttributeLayer&);
             // ShapeAttributeLayer& operator=( const ShapeAttributeLayer& );
 
-            bool haveChild() const { return mpChild; }
+            bool haveChild() const { return (mpChild.get() != NULL); }
             void updateStateIds();
 
             template< typename T > T calcValue( const T&                   rCurrValue,

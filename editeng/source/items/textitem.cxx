@@ -1073,8 +1073,9 @@ SfxItemPresentation SvxFontHeightItem::GetPresentation
         {
             if( SFX_MAPUNIT_RELATIVE != ePropUnit )
             {
-                ( rText = String::CreateFromInt32( (short)nProp ) ) +=
-                        EE_RESSTR( GetMetricId( ePropUnit ) );
+                rText = String::CreateFromInt32( (short)nProp );
+                rText += sal_Unicode(' ');
+                rText += EE_RESSTR( GetMetricId( ePropUnit ) );
                 if( 0 <= (short)nProp )
                     rText.Insert( sal_Unicode('+'), 0 );
             }
@@ -1082,6 +1083,7 @@ SfxItemPresentation SvxFontHeightItem::GetPresentation
             {
                 rText = GetMetricText( (long)nHeight,
                                         eCoreUnit, SFX_MAPUNIT_POINT, pIntl );
+                rText += sal_Unicode(' ');
                 rText += EE_RESSTR(GetMetricId(SFX_MAPUNIT_POINT));
             }
             else
@@ -1285,6 +1287,7 @@ SfxItemPresentation SvxFontWidthItem::GetPresentation
             {
                 rText = GetMetricText( (long)nWidth,
                                         eCoreUnit, SFX_MAPUNIT_POINT, pIntl );
+                rText += sal_Unicode(' ');
                 rText += EE_RESSTR(GetMetricId(SFX_MAPUNIT_POINT));
             }
             else
@@ -2238,6 +2241,7 @@ SfxItemPresentation SvxKerningItem::GetPresentation
             return ePres;
         case SFX_ITEM_PRESENTATION_NAMELESS:
             rText = GetMetricText( (long)GetValue(), eCoreUnit, SFX_MAPUNIT_POINT, pIntl );
+            rText += sal_Unicode(' ');
             rText += EE_RESSTR(GetMetricId(SFX_MAPUNIT_POINT));
             return ePres;
         case SFX_ITEM_PRESENTATION_COMPLETE:
@@ -2253,6 +2257,7 @@ SfxItemPresentation SvxKerningItem::GetPresentation
             if ( nId )
                 rText += EE_RESSTR(nId);
             rText += GetMetricText( (long)GetValue(), eCoreUnit, SFX_MAPUNIT_POINT, pIntl );
+            rText += sal_Unicode(' ');
             rText += EE_RESSTR(GetMetricId(SFX_MAPUNIT_POINT));
             return ePres;
         }

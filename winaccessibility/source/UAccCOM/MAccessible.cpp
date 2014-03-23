@@ -216,6 +216,7 @@ pUNOInterface(NULL)
     m_sLocation.m_dWidth=0;
     m_sLocation.m_dHeight=0;
     CEnumVariant::Create(&m_pEnumVar);
+    m_containedObjects.clear();
 }
 
 CMAccessible::~CMAccessible()
@@ -352,8 +353,10 @@ STDMETHODIMP CMAccessible::get_accChild(VARIANT varChild, IDispatch **ppdispChil
                 return S_OK;
             }
             *ppdispChild = GetChildInterface(varChild.lVal);
+            if((*ppdispChild) == NULL)
+                return E_FAIL;
             (*ppdispChild)->AddRef();
-            return (*ppdispChild)?S_OK:S_FALSE;
+            return S_OK;
         }
         return S_FALSE;
 
@@ -1652,6 +1655,7 @@ STDMETHODIMP CMAccessible::get_nRelations( long __RPC_FAR *nRelations)
 
     CHECK_ENABLE_INF
         ENTER_PROTECTED_BLOCK
+        ISDESTROY()
 
         // #CHECK#
         if(nRelations == NULL)
@@ -1747,6 +1751,7 @@ STDMETHODIMP CMAccessible::get_relations( long, IAccessibleRelation __RPC_FAR *_
 
     CHECK_ENABLE_INF
         ENTER_PROTECTED_BLOCK
+        ISDESTROY()
 
         // #CHECK#
         if(relation == NULL || nRelations == NULL)
@@ -3239,6 +3244,8 @@ STDMETHODIMP CMAccessible:: get_toolkitVersion(BSTR __RPC_FAR *version)
 
 STDMETHODIMP CMAccessible::get_attributes(/*[out]*/ BSTR *pAttr)
 {
+    ENTER_PROTECTED_BLOCK
+    ISDESTROY()
     CHECK_ENABLE_INF
         Reference<XAccessibleContext> pRContext = pUNOInterface->getAccessibleContext();
     if( !pRContext.is() )
@@ -3263,5 +3270,6 @@ STDMETHODIMP CMAccessible::get_attributes(/*[out]*/ BSTR *pAttr)
 
         return S_OK;
     }
+    LEAVE_PROTECTED_BLOCK
 }
 

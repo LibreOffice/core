@@ -916,7 +916,6 @@ drawinglayer::primitive2d::Primitive2DSequence SdrDragMethod::AddConnectorOverla
                         drawinglayer::primitive2d::appendPrimitive2DReferenceToPrimitive2DSequence(
                             aRetval, drawinglayer::primitive2d::createPolygonLinePrimitive(
                                 aEdgePolygon,
-                                basegfx::B2DHomMatrix(),
                                 aLine,
                                 aLineStartEnd));
                     }
@@ -3615,7 +3614,7 @@ void SdrDragDistort::applyCurrentTransformationToPolyPolygon(basegfx::B2DPolyPol
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
 SdrDragCrop::SdrDragCrop(SdrView& rNewView)
-:   SdrDragResize(rNewView)
+:   SdrDragObjOwn(rNewView)
 {
     // switch off solid dragging for crop; it just makes no sense since showing
     // a 50% transparent object above the original will not be visible
@@ -3640,7 +3639,21 @@ void SdrDragCrop::TakeSdrDragComment(XubString& rStr) const
         rStr += ImpGetResStr(STR_EditWithCopy);
 }
 
-bool SdrDragCrop::EndSdrDrag(bool bCopy)
+bool SdrDragCrop::BeginSdrDrag()
+{
+    // call parent
+    bool bRetval(SdrDragObjOwn::BeginSdrDrag());
+
+    if(!GetDragHdl())
+    {
+        // we need the DragHdl, break if not there
+        bRetval = false;
+    }
+
+    return bRetval;
+}
+
+bool SdrDragCrop::EndSdrDrag(bool /*bCopy*/)
 {
     Hide();
 
@@ -3674,36 +3687,159 @@ bool SdrDragCrop::EndSdrDrag(bool bCopy)
         TakeMarkedDescriptionString(STR_DragMethCrop, aUndoStr);
 
         getSdrView().BegUndo( aUndoStr );
-        getSdrView().AddUndo( getSdrView().getSdrModelFromSdrView().GetSdrUndoFactory().CreateUndoGeoObject( *pObj ) );
+        getSdrView().AddUndo( getSdrView().getSdrModelFromSdrView().GetSdrUndoFactory().CreateUndoGeoObject(*pObj));
+        // also need attr undo, the SdrGrafCropItem will be changed
+        getSdrView().AddUndo( getSdrView().getSdrModelFromSdrView().GetSdrUndoFactory().CreateUndoAttrObject(*pObj));
     }
 
-    Rectangle aOldRect( sdr::legacy::GetLogicRect(*pObj) );
-    getSdrView().ResizeMarkedObj(DragStat().GetRef1(), maScale, bCopy);
-    Rectangle aNewRect( sdr::legacy::GetLogicRect(*pObj) );
+    // new part to comute the user's drag activities
+    // get the original objects transformation
+    basegfx::B2DHomMatrix aOriginalMatrix(pObj->getSdrObjectTransformation());
 
+    // invert it to be able to work on unit coordinates
+    basegfx::B2DHomMatrix aInverse(aOriginalMatrix);
+
+    aInverse.invert();
+
+    // gererate start point of original drag vector in unit coordinates (the
+    // vis-a-vis of the drag point)
+    basegfx::B2DPoint aLocalStart(0.0, 0.0);
+    bool bOnAxis(false);
+
+    switch(GetDragHdlKind())
+    {
+        case HDL_UPLFT: aLocalStart.setX(1.0); aLocalStart.setY(1.0); break;
+        case HDL_UPPER: aLocalStart.setX(0.5); aLocalStart.setY(1.0); bOnAxis = true; break;
+        case HDL_UPRGT: aLocalStart.setX(0.0); aLocalStart.setY(1.0); break;
+        case HDL_LEFT : aLocalStart.setX(1.0); aLocalStart.setY(0.5); bOnAxis = true; break;
+        case HDL_RIGHT: aLocalStart.setX(0.0); aLocalStart.setY(0.5); bOnAxis = true; break;
+        case HDL_LWLFT: aLocalStart.setX(1.0); aLocalStart.setY(0.0); break;
+        case HDL_LOWER: aLocalStart.setX(0.5); aLocalStart.setY(0.0); bOnAxis = true; break;
+        case HDL_LWRGT: aLocalStart.setX(0.0); aLocalStart.setY(0.0); break;
+        default: break;
+    }
+
+    // create the current drag position in unit coordinates
+    basegfx::B2DPoint aLocalCurrent(aInverse * DragStat().GetNow());
+
+    // if one of the edge handles is used, limit to X or Y drag only
+    if(bOnAxis)
+    {
+        if(basegfx::fTools::equal(aLocalStart.getX(), 0.5))
+        {
+            aLocalCurrent.setX(aLocalStart.getX());
+        }
+        else
+        {
+            aLocalCurrent.setY(aLocalStart.getY());
+        }
+    }
+
+    // create internal change in unit coordinates
+    basegfx::B2DHomMatrix aDiscreteChangeMatrix;
+
+    if(!basegfx::fTools::equal(aLocalCurrent.getX(), aLocalStart.getX()))
+    {
+        if(aLocalStart.getX() < 0.5)
+        {
+            aDiscreteChangeMatrix.scale(aLocalCurrent.getX(), 1.0);
+        }
+        else
+        {
+            aDiscreteChangeMatrix.scale(1.0 - aLocalCurrent.getX(), 1.0);
+            aDiscreteChangeMatrix.translate(aLocalCurrent.getX(), 0.0);
+        }
+    }
+
+    if(!basegfx::fTools::equal(aLocalCurrent.getY(), aLocalStart.getY()))
+    {
+        if(aLocalStart.getY() < 0.5)
+        {
+            aDiscreteChangeMatrix.scale(1.0, aLocalCurrent.getY());
+        }
+        else
+        {
+            aDiscreteChangeMatrix.scale(1.0, 1.0 - aLocalCurrent.getY());
+            aDiscreteChangeMatrix.translate(0.0, aLocalCurrent.getY());
+        }
+    }
+
+    // preparematrix to apply to object; evtl. back-correct shear
+    basegfx::B2DHomMatrix aNewObjectMatrix(aOriginalMatrix * aDiscreteChangeMatrix);
+
+    // apply change to object by applying the unit coordinate change followed
+    // by the original change
+    pObj->setSdrObjectTransformation(aNewObjectMatrix);
+
+    // the following old code uses aOldRect/aNewRect to calculate the crop change for
+    // the crop item. It implies unrotated objects, so create the unrotated original
+    // erctangle and the unrotated modified rectangle. Latter can in case of shear and/or
+    // rotation not be fetched by using
+    //
+    //Rectangle aNewRect( pObj->GetLogicRect() );
+    //
+    // as it was done before because the top-left of that new rect *will* have an offset
+    // caused by the evtl. existing shear and/or rotation, so calculate a unrotated
+    // rectangle how it would be as a result when appling the unit coordinate change
+    // to the unrotated original transformation.
+    basegfx::B2DTuple aScale;
+    basegfx::B2DTuple aTranslate;
+    double fRotate, fShearX;
+
+    // get access to scale and translate
+    aOriginalMatrix.decompose(aScale, aTranslate, fRotate, fShearX);
+
+    // prepare unsheared/unrotated versions of the old and new transformation
+    const basegfx::B2DHomMatrix aMatrixOriginalNoShearNoRotate(
+        basegfx::tools::createScaleTranslateB2DHomMatrix(
+            basegfx::absolute(aScale),
+            aTranslate));
+
+    // create the ranges for these
+    basegfx::B2DRange aRangeOriginalNoShearNoRotate(0.0, 0.0, 1.0, 1.0);
+    basegfx::B2DRange aRangeNewNoShearNoRotate(0.0, 0.0, 1.0, 1.0);
+
+    aRangeOriginalNoShearNoRotate.transform(aMatrixOriginalNoShearNoRotate);
+    aRangeNewNoShearNoRotate.transform(aMatrixOriginalNoShearNoRotate * aDiscreteChangeMatrix);
+
+    // extract the old Rectangle structures
+    Rectangle aOldRect(
+        basegfx::fround(aRangeOriginalNoShearNoRotate.getMinX()),
+        basegfx::fround(aRangeOriginalNoShearNoRotate.getMinY()),
+        basegfx::fround(aRangeOriginalNoShearNoRotate.getMaxX()),
+        basegfx::fround(aRangeOriginalNoShearNoRotate.getMaxY()));
+    Rectangle aNewRect(
+        basegfx::fround(aRangeNewNoShearNoRotate.getMinX()),
+        basegfx::fround(aRangeNewNoShearNoRotate.getMinY()),
+        basegfx::fround(aRangeNewNoShearNoRotate.getMaxX()),
+        basegfx::fround(aRangeNewNoShearNoRotate.getMaxY()));
+
+    // continue with the old original stuff
     double fScaleX = ( aGraphicSize.Width() - rOldCrop.GetLeft() - rOldCrop.GetRight() ) / (double)aOldRect.GetWidth();
     double fScaleY = ( aGraphicSize.Height() - rOldCrop.GetTop() - rOldCrop.GetBottom() ) / (double)aOldRect.GetHeight();
 
-    // aw080: need to check here
-    // to correct the never working combination of cropped images and mirroring
-    // I have to correct the rectangles the calculation is based on here. In the current
-    // core geometry stuff a vertical mirror is expressed as 180 degree rotation. All
-    // this can be removed again when aw080 will have cleaned up the old
-    // (non-)transformation mess in the core.
-    const long nOldRotAngle(sdr::legacy::GetRotateAngle(*pObj));
+    // not needed since the modification is done in unit coordinates, free from shear/rotate and mirror
+    // // TTTT may be removed or exhanged by other stuff in aw080
+    // // to correct the never working combination of cropped images and mirroring
+    // // I have to correct the rectangles the calculation is based on here. In the current
+    // // core geometry stuff a vertical mirror is expressed as 180 degree rotation. All
+    // // this can be removed again when aw080 will have cleaned up the old
+    // // (non-)transformation mess in the core.
+    // if(18000 == pObj->GetGeoStat().nDrehWink)
+    // {
+    //     // old notation of vertical mirror, need to correct diffs since both rects
+    //     // are rotated by 180 degrees
+    //     aOldRect = Rectangle(aOldRect.TopLeft() - (aOldRect.BottomRight() - aOldRect.TopLeft()), aOldRect.TopLeft());
+    //     aNewRect = Rectangle(aNewRect.TopLeft() - (aNewRect.BottomRight() - aNewRect.TopLeft()), aNewRect.TopLeft());
+    // }
 
-    if(18000 == nOldRotAngle)
-    {
-        // old notation of vertical mirror, need to correct diffs since both rects
-        // are rotated by 180 degrees
-        aOldRect = Rectangle(aOldRect.TopLeft() - (aOldRect.BottomRight() - aOldRect.TopLeft()), aOldRect.TopLeft());
-        aNewRect = Rectangle(aNewRect.TopLeft() - (aNewRect.BottomRight() - aNewRect.TopLeft()), aNewRect.TopLeft());
-    }
+    const sal_Int32 nDiffLeft(aNewRect.nLeft - aOldRect.nLeft);
+    const sal_Int32 nDiffTop(aNewRect.nTop - aOldRect.nTop);
+    const sal_Int32 nDiffRight(aNewRect.nRight - aOldRect.nRight);
+    const sal_Int32 nDiffBottom(aNewRect.nBottom - aOldRect.nBottom);
 
-    sal_Int32 nDiffLeft = aNewRect.nLeft - aOldRect.nLeft;
-    sal_Int32 nDiffTop = aNewRect.nTop - aOldRect.nTop;
-    sal_Int32 nDiffRight = aNewRect.nRight - aOldRect.nRight;
-    sal_Int32 nDiffBottom = aNewRect.nBottom - aOldRect.nBottom;
+    // TTTT: Need to check if the whole crop preview stuff still works
+    // due to the different mirror and object transformation handling (!)
 
     sal_Int32 nLeftCrop = static_cast<sal_Int32>( rOldCrop.GetLeft() + nDiffLeft * fScaleX );
     sal_Int32 nTopCrop = static_cast<sal_Int32>( rOldCrop.GetTop() + nDiffTop * fScaleY );

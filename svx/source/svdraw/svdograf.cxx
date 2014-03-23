@@ -70,6 +70,7 @@
 #include <drawinglayer/processor2d/objectinfoextractor2d.hxx>
 #include <drawinglayer/primitive2d/objectinfoprimitive2d.hxx>
 #include <unotools/cacheoptions.hxx>
+#include <basegfx/matrix/b2dhommatrixtools.hxx>
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::io;
@@ -135,7 +136,6 @@ const Graphic ImpLoadLinkedGraphic( const String aFileName, const String aFilter
                             ? pGF->GetImportFormatNumber( aFilterName )
                             : GRFILTER_FORMAT_DONTKNOW;
 
-        String aEmptyStr;
         com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue > aFilterData( 1 );
 
         // Room for improvment:
@@ -144,7 +144,14 @@ const Graphic ImpLoadLinkedGraphic( const String aFileName, const String aFilter
         // there we should create a new service to provide this data if needed
         aFilterData[ 0 ].Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "CreateNativeLink" ) );
         aFilterData[ 0 ].Value = Any( sal_True );
-        pGF->ImportGraphic( aGraphic, aEmptyStr, *pInStrm, nFilter, NULL, 0, &aFilterData );
+
+        // #123042# for e.g SVG the path is needed, so hand it over here. I have no real idea
+        // what consequences this may have; maybe this is not handed over by purpose here. Not
+        // handing it over means that any GraphicFormat that internallv needs a path as base
+        // to interpret included links may fail.
+        // Alternatively the path may be set at the result after this call when it is known
+        // that it is a SVG graphic, but only because noone yet tried to interpret it.
+        pGF->ImportGraphic( aGraphic, aFileName, *pInStrm, nFilter, NULL, 0, &aFilterData );
     }
     return aGraphic;
 }
@@ -1513,6 +1520,60 @@ Reference< XInputStream > SdrGrafObj::getInputStream()
     }
 
     return xStream;
+}
+
+// moved crop handle creation here; this is the object type using them
+void SdrGrafObj::addCropHandles(SdrHdlList& rTarget) const
+{
+    // get object transformation and crop values
+    const basegfx::B2DHomMatrix& rObjectTransformation = getSdrObjectTransformation();
+    const SdrGrafCropItem& rCrop = static_cast< const SdrGrafCropItem& >(GetMergedItem(SDRATTR_GRAFCROP));
+
+    // decompose object transformation to have current translate and scale
+    basegfx::B2DVector aScale, aTranslate;
+    double fRotate, fShearX;
+    rObjectTransformation.decompose(aScale, aTranslate, fRotate, fShearX);
+
+    if(rCrop.GetLeft() || rCrop.GetTop() || rCrop.GetRight() ||rCrop.GetBottom())
+    {
+        if(!aScale.equalZero())
+        {
+            // get crop scale
+            const basegfx::B2DVector aCropScaleFactor(
+                GetGraphicObject().calculateCropScaling(
+                    aScale.getX(),
+                    aScale.getY(),
+                    rCrop.GetLeft(),
+                    rCrop.GetTop(),
+                    rCrop.GetRight(),
+                    rCrop.GetBottom()));
+
+            // apply crop scale
+            const double fCropLeft(rCrop.GetLeft() * aCropScaleFactor.getX());
+            const double fCropTop(rCrop.GetTop() * aCropScaleFactor.getY());
+            const double fCropRight(rCrop.GetRight() * aCropScaleFactor.getX());
+            const double fCropBottom(rCrop.GetBottom() * aCropScaleFactor.getY());
+
+            new SdrCropViewHdl(
+                rTarget,
+                *this,
+                rObjectTransformation,
+                GetGraphicObject().GetGraphic(),
+                fCropLeft,
+                fCropTop,
+                fCropRight,
+                fCropBottom);
+        }
+    }
+
+    new SdrCropHdl(rTarget, *this, HDL_UPLFT, rObjectTransformation * basegfx::B2DPoint(0.0, 0.0), fShearX, fRotate);
+    new SdrCropHdl(rTarget, *this, HDL_UPPER, rObjectTransformation * basegfx::B2DPoint(0.5, 0.0), fShearX, fRotate);
+    new SdrCropHdl(rTarget, *this, HDL_UPRGT, rObjectTransformation * basegfx::B2DPoint(1.0, 0.0), fShearX, fRotate);
+    new SdrCropHdl(rTarget, *this, HDL_LEFT , rObjectTransformation * basegfx::B2DPoint(0.0, 0.5), fShearX, fRotate);
+    new SdrCropHdl(rTarget, *this, HDL_RIGHT, rObjectTransformation * basegfx::B2DPoint(1.0, 0.5), fShearX, fRotate);
+    new SdrCropHdl(rTarget, *this, HDL_LWLFT, rObjectTransformation * basegfx::B2DPoint(0.0, 1.0), fShearX, fRotate);
+    new SdrCropHdl(rTarget, *this, HDL_LOWER, rObjectTransformation * basegfx::B2DPoint(0.5, 1.0), fShearX, fRotate);
+    new SdrCropHdl(rTarget, *this, HDL_LWRGT, rObjectTransformation * basegfx::B2DPoint(1.0, 1.0), fShearX, fRotate);
 }
 
 // eof

@@ -247,11 +247,9 @@ namespace sdr
                         // direct model data is the page size, get and use it
                         const basegfx::B2DRange aInnerRange(rPage.GetInnerPageRange());
                         const basegfx::B2DPolygon aInnerPolgon(basegfx::tools::createPolygonFromRect(aInnerRange));
-                        const basegfx::B2DHomMatrix aEmptyTransform;
                         const drawinglayer::primitive2d::Primitive2DReference xReference(
                             drawinglayer::primitive2d::createPolyPolygonFillPrimitive(
                                 basegfx::B2DPolyPolygon(aInnerPolgon),
-                                aEmptyTransform,
                                 aFill,
                                 drawinglayer::attribute::FillGradientAttribute()));
 

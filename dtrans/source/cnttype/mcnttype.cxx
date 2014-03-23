@@ -327,7 +327,7 @@ OUString SAL_CALL CMimeContentType::pValue( )
             throw IllegalArgumentException( );
 
         // remove the last quote-sign
-        OUString qpvalue( pvalue, pvalue.getLength( ) - 1 );
+        const OUString qpvalue( pvalue.getStr(), pvalue.getLength( ) - 1 );
         pvalue = qpvalue;
 
         if ( !pvalue.getLength( ) )

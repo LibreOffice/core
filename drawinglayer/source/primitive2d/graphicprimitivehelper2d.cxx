@@ -759,9 +759,23 @@ namespace drawinglayer
                             basegfx::B2DPolygon aMaskPolygon(basegfx::tools::createUnitPolygon());
                             aMaskPolygon.transform(rTransform);
 
-                            aRetval[0] = new MaskPrimitive2D(
+                            // #124073# the clde below was compiler-dependent. Normally,
+                            // a compiler will
+                            // - alloc mem
+                            // - ececute the constructor
+                            // - do the assignment
+                            // but the mac compiler does alloc-assign-constructor, thus
+                            // modifying aRetval[0] befure aRetval gets used in the
+                            // constructor. This creates an endless loop in the primitive
+                            // stack. Thus do it the safe way.
+                            //
+                            // aRetval[0] = new MaskPrimitive2D(
+                            //     basegfx::B2DPolyPolygon(aMaskPolygon),
+                            //     aRetval);
+                            MaskPrimitive2D* pMaskPrimitive2D = new MaskPrimitive2D(
                                 basegfx::B2DPolyPolygon(aMaskPolygon),
                                 aRetval);
+                            aRetval[0] = pMaskPrimitive2D;
                         }
 #ifdef USE_DEBUG_CODE_TO_TEST_METAFILE_DECOMPOSE
                     }

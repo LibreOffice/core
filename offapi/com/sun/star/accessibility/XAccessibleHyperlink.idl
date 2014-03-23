@@ -53,7 +53,7 @@ module com { module sun { module star { module accessibility {
     <member>XAccessibleHyperlink::getEndIndex</member> methods return
     indices with respect to the text exposed by that interface.</p>
 
-    @since OOo 1.1.2
+    @since OpenOffice 1.1.2
 */
 published interface XAccessibleHyperlink :
     ::com::sun::star::accessibility::XAccessibleAction

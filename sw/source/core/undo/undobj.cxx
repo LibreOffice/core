@@ -47,17 +47,24 @@
 #include <comcore.hrc>
 #include <docsh.hxx>
 
-class SwRedlineSaveData : public SwUndRng, public SwRedlineData,
-                          private SwUndoSaveSection
+class SwRedlineSaveData: public SwUndRng, public SwRedlineData, private SwUndoSaveSection
 {
 public:
-    SwRedlineSaveData( SwComparePosition eCmpPos,
-                        const SwPosition& rSttPos, const SwPosition& rEndPos,
-                        SwRedline& rRedl, sal_Bool bCopyNext );
+    SwRedlineSaveData(
+        SwComparePosition eCmpPos,
+        const SwPosition& rSttPos,
+        const SwPosition& rEndPos,
+        SwRedline& rRedl,
+        sal_Bool bCopyNext );
+
     ~SwRedlineSaveData();
+
     void RedlineToDoc( SwPaM& rPam );
+
     SwNodeIndex* GetMvSttIdx() const
-        { return SwUndoSaveSection::GetMvSttIdx(); }
+    {
+        return SwUndoSaveSection::GetMvSttIdx();
+    }
 
 #ifdef DBG_UTIL
     sal_uInt16 nRedlineCount;
@@ -246,7 +253,7 @@ void SwUndo::UndoWithContext(SfxUndoContext & rContext)
             dynamic_cast< ::sw::UndoRedoContext * >(& rContext));
     OSL_ASSERT(pContext);
     if (!pContext) { return; }
-    UndoRedoRedlineGuard(*pContext, *this);
+    const UndoRedoRedlineGuard aUndoRedoRedlineGuard(*pContext, *this);
     UndoImpl(*pContext);
 }
 
@@ -256,7 +263,7 @@ void SwUndo::RedoWithContext(SfxUndoContext & rContext)
             dynamic_cast< ::sw::UndoRedoContext * >(& rContext));
     OSL_ASSERT(pContext);
     if (!pContext) { return; }
-    UndoRedoRedlineGuard(*pContext, *this);
+    const UndoRedoRedlineGuard aUndoRedoRedlineGuard(*pContext, *this);
     RedoImpl(*pContext);
 }
 
@@ -766,102 +773,111 @@ void SwUndoSaveCntnt::DelCntntIndex( const SwPosition& rMark,
     if( nsDelCntntType::DELCNT_BKM & nDelCntntType )
     {
         IDocumentMarkAccess* const pMarkAccess = pDoc->getIDocumentMarkAccess();
-        if( pMarkAccess->getMarksCount() )
+        if( pMarkAccess->getAllMarksCount() )
         {
 
-            for( sal_uInt16 n = 0; n < pMarkAccess->getMarksCount(); ++n )
+            for( sal_uInt16 n = 0; n < pMarkAccess->getAllMarksCount(); ++n )
             {
-                // --> OD 2007-10-17 #i81002#
                 bool bSavePos = false;
                 bool bSaveOtherPos = false;
-                const ::sw::mark::IMark* pBkmk = (pMarkAccess->getMarksBegin() + n)->get();
+                const ::sw::mark::IMark* pBkmk = (pMarkAccess->getAllMarksBegin() + n)->get();
+
                 if( nsDelCntntType::DELCNT_CHKNOCNTNT & nDelCntntType )
                 {
-                    if( pStt->nNode <= pBkmk->GetMarkPos().nNode &&
-                        pBkmk->GetMarkPos().nNode < pEnd->nNode )
+                    if ( pStt->nNode <= pBkmk->GetMarkPos().nNode
+                         && pBkmk->GetMarkPos().nNode < pEnd->nNode )
+                    {
                         bSavePos = true;
-                    if( pBkmk->IsExpanded() &&
-                        pStt->nNode <= pBkmk->GetOtherMarkPos().nNode &&
-                        pBkmk->GetOtherMarkPos().nNode < pEnd->nNode )
+                    }
+                    if ( pBkmk->IsExpanded()
+                         && pStt->nNode <= pBkmk->GetOtherMarkPos().nNode
+                         && pBkmk->GetOtherMarkPos().nNode < pEnd->nNode )
+                    {
                         bSaveOtherPos = true;
+                    }
                 }
                 else
                 {
-                    // --> OD 2009-08-06 #i92125#
-                    bool bKeepCrossRefBkmk( false );
+                    // keep cross-reference bookmarks, if content inside one paragraph is deleted.
+                    if ( rMark.nNode == rPoint.nNode
+                         && ( IDocumentMarkAccess::GetType(*pBkmk) == IDocumentMarkAccess::CROSSREF_HEADING_BOOKMARK
+                              || IDocumentMarkAccess::GetType(*pBkmk) == IDocumentMarkAccess::CROSSREF_NUMITEM_BOOKMARK ) )
                     {
-                        if ( rMark.nNode == rPoint.nNode &&
-                             ( IDocumentMarkAccess::GetType(*pBkmk) ==
-                                IDocumentMarkAccess::CROSSREF_HEADING_BOOKMARK ||
-                               IDocumentMarkAccess::GetType(*pBkmk) ==
-                                IDocumentMarkAccess::CROSSREF_NUMITEM_BOOKMARK ) )
+                        continue;
+                    }
+
+                    bool bMaybe = false;
+                    if ( *pStt <= pBkmk->GetMarkPos() && pBkmk->GetMarkPos() <= *pEnd )
+                    {
+                        if ( pBkmk->GetMarkPos() == *pEnd
+                             || ( *pStt == pBkmk->GetMarkPos() && pBkmk->IsExpanded() ) )
+                            bMaybe = true;
+                        else
+                            bSavePos = true;
+                    }
+                    if( pBkmk->IsExpanded() &&
+                        *pStt <= pBkmk->GetOtherMarkPos() && pBkmk->GetOtherMarkPos() <= *pEnd )
+                    {
+                        if ( bSavePos || bSaveOtherPos
+                             || ( pBkmk->GetOtherMarkPos() < *pEnd && pBkmk->GetOtherMarkPos() > *pStt ) )
                         {
-                            bKeepCrossRefBkmk = true;
+                            if( bMaybe )
+                                bSavePos = true;
+                            bSaveOtherPos = true;
                         }
                     }
-                    if ( !bKeepCrossRefBkmk )
+
+                    if ( !bSavePos && !bSaveOtherPos
+                         && dynamic_cast< const ::sw::mark::CrossRefBookmark* >(pBkmk) )
                     {
-                        bool bMaybe = false;
-                        if ( *pStt <= pBkmk->GetMarkPos() && pBkmk->GetMarkPos() <= *pEnd )
+                        // certain special handling for cross-reference bookmarks
+                        const bool bDifferentTxtNodesAtMarkAndPoint =
+                            rMark.nNode != rPoint.nNode
+                            && rMark.nNode.GetNode().GetTxtNode()
+                            && rPoint.nNode.GetNode().GetTxtNode();
+                        if ( bDifferentTxtNodesAtMarkAndPoint )
                         {
-                            if( pBkmk->GetMarkPos() == *pEnd ||
-                                ( *pStt == pBkmk->GetMarkPos() && pBkmk->IsExpanded() ) )
-                                bMaybe = true;
-                            else
-                                bSavePos = true;
-                        }
-                        if( pBkmk->IsExpanded() &&
-                            *pStt <= pBkmk->GetOtherMarkPos() && pBkmk->GetOtherMarkPos() <= *pEnd )
-                        {
-                            if( bSavePos || bSaveOtherPos ||
-                                ( pBkmk->GetOtherMarkPos() < *pEnd && pBkmk->GetOtherMarkPos() > *pStt ) )
+                            // delete cross-reference bookmark at <pStt>, if only part of
+                            // <pEnd> text node content is deleted.
+                            if( pStt->nNode == pBkmk->GetMarkPos().nNode
+                                && pEnd->nContent.GetIndex() != pEnd->nNode.GetNode().GetTxtNode()->Len() )
                             {
-                                if( bMaybe )
-                                    bSavePos = true;
-                                bSaveOtherPos = true;
+                                bSavePos = true;
+                                bSaveOtherPos = false; // cross-reference bookmarks are not expanded
+                            }
+                            // delete cross-reference bookmark at <pEnd>, if only part of
+                            // <pStt> text node content is deleted.
+                            else if( pEnd->nNode == pBkmk->GetMarkPos().nNode &&
+                                pStt->nContent.GetIndex() != 0 )
+                            {
+                                bSavePos = true;
+                                bSaveOtherPos = false; // cross-reference bookmarks are not expanded
                             }
                         }
                     }
-                    // <--
-
-                    // --> OD 2007-10-17 #i81002#
-                    const bool bDifferentTxtNodesAtMarkAndPoint(
-                                        rMark.nNode != rPoint.nNode &&
-                                        rMark.nNode.GetNode().GetTxtNode() &&
-                                        rPoint.nNode.GetNode().GetTxtNode() );
-                    // <--
-                    if( !bSavePos && !bSaveOtherPos && bDifferentTxtNodesAtMarkAndPoint &&
-                        dynamic_cast< const ::sw::mark::CrossRefBookmark* >(pBkmk))
+                    else if ( IDocumentMarkAccess::GetType(*pBkmk) == IDocumentMarkAccess::ANNOTATIONMARK )
                     {
-                        // delete cross-reference bookmark at <pStt>, if only part of
-                        // <pEnd> text node content is deleted.
-                        if( pStt->nNode == pBkmk->GetMarkPos().nNode &&
-                            pEnd->nContent.GetIndex() !=
-                                pEnd->nNode.GetNode().GetTxtNode()->Len() )
+                        // delete annotation marks, if its end position is covered by the deletion
+                        const SwPosition& rAnnotationEndPos = pBkmk->GetMarkEnd();
+                        if ( *pStt < rAnnotationEndPos && rAnnotationEndPos <= *pEnd )
                         {
                             bSavePos = true;
-                            bSaveOtherPos = false;
-                        }
-                        // delete cross-reference bookmark at <pEnd>, if only part of
-                        // <pStt> text node content is deleted.
-                        else if( pEnd->nNode == pBkmk->GetMarkPos().nNode &&
-                            pStt->nContent.GetIndex() != 0 )
-                        {
-                            bSavePos = true;
-                            bSaveOtherPos = false;
+                            bSaveOtherPos = true;
                         }
                     }
                 }
-                if( bSavePos || bSaveOtherPos )
+
+                if ( bSavePos || bSaveOtherPos )
                 {
                     if( !pHistory )
                         pHistory = new SwHistory;
 
                     pHistory->Add( *pBkmk, bSavePos, bSaveOtherPos );
-                    if(bSavePos &&
-                        (bSaveOtherPos || !pBkmk->IsExpanded()))
+                    if ( bSavePos
+                         && ( bSaveOtherPos
+                              || !pBkmk->IsExpanded() ) )
                     {
-                        pMarkAccess->deleteMark(pMarkAccess->getMarksBegin()+n);
+                        pMarkAccess->deleteMark(pMarkAccess->getAllMarksBegin()+n);
                         n--;
                     }
                 }
@@ -898,12 +914,21 @@ void SwUndoSaveSection::SaveSection( SwDoc* pDoc, const SwNodeIndex& rSttIdx )
 }
 
 
-void SwUndoSaveSection::SaveSection( SwDoc* , const SwNodeRange& rRange )
+void SwUndoSaveSection::SaveSection(
+    SwDoc* pDoc,
+    const SwNodeRange& rRange )
 {
     SwPaM aPam( rRange.aStart, rRange.aEnd );
 
-    // loesche alle Fussnoten / FlyFrames / Bookmarks / Verzeichnisse
+    // delete all footnotes, fly frames, bookmarks and indexes
     DelCntntIndex( *aPam.GetMark(), *aPam.GetPoint() );
+    {
+        // move certain indexes out of deleted range
+        SwNodeIndex aSttIdx( aPam.Start()->nNode.GetNode() );
+        SwNodeIndex aEndIdx( aPam.End()->nNode.GetNode() );
+        SwNodeIndex aMvStt( aEndIdx, 1 );
+        pDoc->CorrAbs( aSttIdx, aEndIdx, SwPosition( aMvStt ), sal_True );
+    }
 
     pRedlSaveData = new SwRedlineSaveDatas;
     if( !SwUndo::FillSaveData( aPam, *pRedlSaveData, sal_True, sal_True ))
@@ -972,23 +997,24 @@ void SwUndoSaveSection::RestoreSection( SwDoc* pDoc, const SwNodeIndex& rInsPos 
 
         // sicher und setze die RedlineDaten
 
-SwRedlineSaveData::SwRedlineSaveData( SwComparePosition eCmpPos,
-                                        const SwPosition& rSttPos,
-                                        const SwPosition& rEndPos,
-                                        SwRedline& rRedl,
-                                        sal_Bool bCopyNext )
-    : SwUndRng( rRedl ),
-    SwRedlineData( rRedl.GetRedlineData(), bCopyNext )
+SwRedlineSaveData::SwRedlineSaveData(
+    SwComparePosition eCmpPos,
+    const SwPosition& rSttPos,
+    const SwPosition& rEndPos,
+    SwRedline& rRedl,
+    sal_Bool bCopyNext )
+    : SwUndRng( rRedl )
+    , SwRedlineData( rRedl.GetRedlineData(), bCopyNext )
 {
-    ASSERT( POS_OUTSIDE == eCmpPos ||
-            !rRedl.GetContentIdx(), "Redline mit Content" );
+    ASSERT( POS_OUTSIDE == eCmpPos || !rRedl.GetContentIdx(), "Redline mit Content" );
 
-    switch( eCmpPos )
+    switch (eCmpPos)
     {
     case POS_OVERLAP_BEFORE:        // Pos1 ueberlappt Pos2 am Anfang
         nEndNode = rEndPos.nNode.GetIndex();
         nEndCntnt = rEndPos.nContent.GetIndex();
         break;
+
     case POS_OVERLAP_BEHIND:        // Pos1 ueberlappt Pos2 am Ende
         nSttNode = rSttPos.nNode.GetIndex();
         nSttCntnt = rSttPos.nContent.GetIndex();
@@ -1002,7 +1028,7 @@ SwRedlineSaveData::SwRedlineSaveData( SwComparePosition eCmpPos,
         break;
 
     case POS_OUTSIDE:               // Pos2 liegt vollstaendig in Pos1
-        if( rRedl.GetContentIdx() )
+        if ( rRedl.GetContentIdx() )
         {
             // dann den Bereich ins UndoArray verschieben und merken
             SaveSection( rRedl.GetDoc(), *rRedl.GetContentIdx() );
@@ -1060,67 +1086,81 @@ void SwRedlineSaveData::RedlineToDoc( SwPaM& rPam )
     rDoc.SetRedlineMode_intern( eOld );
 }
 
-sal_Bool SwUndo::FillSaveData( const SwPaM& rRange, SwRedlineSaveDatas& rSData,
-                            sal_Bool bDelRange, sal_Bool bCopyNext )
+
+sal_Bool SwUndo::FillSaveData(
+    const SwPaM& rRange,
+    SwRedlineSaveDatas& rSData,
+    sal_Bool bDelRange,
+    sal_Bool bCopyNext )
 {
-    if( rSData.Count() )
+    if ( rSData.Count() )
+    {
         rSData.DeleteAndDestroy( 0, rSData.Count() );
+    }
 
     SwRedlineSaveData* pNewData;
-    const SwPosition *pStt = rRange.Start(), *pEnd = rRange.End();
+    const SwPosition* pStt = rRange.Start();
+    const SwPosition* pEnd = rRange.End();
     const SwRedlineTbl& rTbl = rRange.GetDoc()->GetRedlineTbl();
     sal_uInt16 n = 0;
     rRange.GetDoc()->GetRedline( *pStt, &n );
-    for( ; n < rTbl.Count(); ++n )
+    for ( ; n < rTbl.Count(); ++n )
     {
-        SwRedline* pRedl = rTbl[ n ];
-        const SwPosition *pRStt = pRedl->Start(), *pREnd = pRedl->End();
+        SwRedline* pRedl = rTbl[n];
 
-        SwComparePosition eCmpPos = ComparePosition( *pStt, *pEnd, *pRStt, *pREnd );
-        if( POS_BEFORE != eCmpPos && POS_BEHIND != eCmpPos &&
-            POS_COLLIDE_END != eCmpPos && POS_COLLIDE_START != eCmpPos )
+        const SwComparePosition eCmpPos =
+            ComparePosition( *pStt, *pEnd, *pRedl->Start(), *pRedl->End() );
+        if ( eCmpPos != POS_BEFORE
+             && eCmpPos != POS_BEHIND
+             && eCmpPos != POS_COLLIDE_END
+             && eCmpPos != POS_COLLIDE_START )
         {
-            pNewData = new SwRedlineSaveData( eCmpPos, *pStt, *pEnd,
-                                                *pRedl, bCopyNext );
+            pNewData = new SwRedlineSaveData( eCmpPos, *pStt, *pEnd, *pRedl, bCopyNext );
             rSData.Insert( pNewData, rSData.Count() );
         }
     }
-    if( rSData.Count() && bDelRange )
+    if ( rSData.Count() && bDelRange )
+    {
         rRange.GetDoc()->DeleteRedline( rRange, false, USHRT_MAX );
+    }
     return 0 != rSData.Count();
 }
 
-sal_Bool SwUndo::FillSaveDataForFmt( const SwPaM& rRange, SwRedlineSaveDatas& rSData )
+
+sal_Bool SwUndo::FillSaveDataForFmt(
+    const SwPaM& rRange,
+    SwRedlineSaveDatas& rSData )
 {
-    if( rSData.Count() )
+    if ( rSData.Count() )
+    {
         rSData.DeleteAndDestroy( 0, rSData.Count() );
+    }
 
     SwRedlineSaveData* pNewData;
     const SwPosition *pStt = rRange.Start(), *pEnd = rRange.End();
     const SwRedlineTbl& rTbl = rRange.GetDoc()->GetRedlineTbl();
     sal_uInt16 n = 0;
     rRange.GetDoc()->GetRedline( *pStt, &n );
-    for( ; n < rTbl.Count(); ++n )
+    for ( ; n < rTbl.Count(); ++n )
     {
-        SwRedline* pRedl = rTbl[ n ];
-        if( nsRedlineType_t::REDLINE_FORMAT == pRedl->GetType() )
+        SwRedline* pRedl = rTbl[n];
+        if ( nsRedlineType_t::REDLINE_FORMAT == pRedl->GetType() )
         {
-            const SwPosition *pRStt = pRedl->Start(), *pREnd = pRedl->End();
-
-            SwComparePosition eCmpPos = ComparePosition( *pStt, *pEnd, *pRStt, *pREnd );
-            if( POS_BEFORE != eCmpPos && POS_BEHIND != eCmpPos &&
-                POS_COLLIDE_END != eCmpPos && POS_COLLIDE_START != eCmpPos )
+            const SwComparePosition eCmpPos = ComparePosition( *pStt, *pEnd, *pRedl->Start(), *pRedl->End() );
+            if ( eCmpPos != POS_BEFORE
+                 && eCmpPos != POS_BEHIND
+                 && eCmpPos != POS_COLLIDE_END
+                 && eCmpPos != POS_COLLIDE_START )
             {
-                pNewData = new SwRedlineSaveData( eCmpPos, *pStt, *pEnd,
-                                                    *pRedl, sal_True );
+                pNewData = new SwRedlineSaveData( eCmpPos, *pStt, *pEnd, *pRedl, sal_True );
                 rSData.Insert( pNewData, rSData.Count() );
             }
-
 
         }
     }
     return 0 != rSData.Count();
 }
+
 
 void SwUndo::SetSaveData( SwDoc& rDoc, const SwRedlineSaveDatas& rSData )
 {

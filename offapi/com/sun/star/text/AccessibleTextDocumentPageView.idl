@@ -48,7 +48,7 @@ module com {  module sun {  module star {  module text {
 
 /** The accessible page preview of a text document.
 
-     @since OOo 1.1.2
+     @since OpenOffice 1.1.2
  */
 published service AccessibleTextDocumentPageView
 {

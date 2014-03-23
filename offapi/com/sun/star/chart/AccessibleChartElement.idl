@@ -55,7 +55,7 @@ module com {  module sun {  module star {  module chart {
        <type scope="::com::sun::star::accessibility">XAccessibleExtendedComponent</type>
        is suported by all chart elements.</p>
 
-    @since OOo 1.1.2
+    @since OpenOffice 1.1.2
 */
 published service AccessibleChartElement
 {

@@ -26,6 +26,7 @@ PRJ=..$/..$/..
 PRJNAME=sc
 TARGET=attrdlg
 LIBTARGET=no
+ENABLE_EXCEPTIONS=TRUE
 
 # --- Settings -----------------------------------------------------
 
@@ -50,10 +51,9 @@ SLOFILES =  $(SLO)$/attrdlg.obj	\
 LIB1TARGET = $(SLB)$/$(TARGET).lib
 
 LIB1OBJFILES =  \
-        $(SLO)$/condfrmt.obj	\
-               $(SLO)$/scabstdlg.obj
+    $(SLO)$/condfrmt.obj	\
+    $(SLO)$/scabstdlg.obj
 
-                
 # --- Tagets -------------------------------------------------------
 
 .INCLUDE :  target.mk

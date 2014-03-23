@@ -41,7 +41,7 @@ interface XPropertyHandler;
 
     @see ObjectInspector
 
-    @since OOo 2.0.3
+    @since OpenOffice 2.0.3
 */
 published interface XObjectInspectorModel
 {
@@ -132,7 +132,7 @@ published interface XObjectInspectorModel
         texts. Clients could use this section to display context-sensitive help, for
         instance short texts explaining the currently selected property.</p>
 
-        @since OOo 2.2
+        @since OpenOffice 2.2
     */
     [attribute, readonly] boolean HasHelpSection;
 
@@ -146,7 +146,7 @@ published interface XObjectInspectorModel
         <member>MinHelpTextLines</member> is larger than
         <member>MaxHelpTextLines</member>.</p>
 
-        @since OOo 2.2
+        @since OpenOffice 2.2
     */
     [attribute, readonly] long MinHelpTextLines;
 
@@ -160,7 +160,7 @@ published interface XObjectInspectorModel
         <member>MaxHelpTextLines</member> is smaller than
         <member>MinHelpTextLines</member>.</p>
 
-        @since OOo 2.2
+        @since OpenOffice 2.2
     */
     [attribute, readonly] long MaxHelpTextLines;
 

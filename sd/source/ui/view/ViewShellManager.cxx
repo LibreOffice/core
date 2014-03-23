@@ -1228,7 +1228,7 @@ ShellDescriptor ViewShellManager::Implementation::CreateSubShell (
     for (FactoryList::const_iterator iFactory=aRange.first; iFactory!=aRange.second; ++iFactory)
     {
         SharedShellFactory pFactory = iFactory->second;
-        if (pFactory != NULL)
+        if( bool(pFactory))
             aResult.mpShell = pFactory->CreateShell(nShellId, pParentWindow, pFrameView);
 
         // Exit the loop when the shell has been successfully created.

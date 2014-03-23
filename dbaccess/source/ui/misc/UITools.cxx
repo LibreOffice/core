@@ -1500,7 +1500,7 @@ namespace
     aURL.Complete = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "vnd.sun.star.help://" ) );
     aURL.Complete += _sModuleName;
     aURL.Complete += ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "/" ) );
-    aURL.Complete += ::rtl::OUString(sHelpId, sHelpId.getLength(), RTL_TEXTENCODING_UTF8);
+    aURL.Complete += ::rtl::OStringToOUString( sHelpId, RTL_TEXTENCODING_UTF8);
 
     ::rtl::OUString sAnchor;
     ::rtl::OUString sTempURL = aURL.Complete;
@@ -1577,22 +1577,22 @@ TOTypeInfoSP queryTypeInfoByType(sal_Int32 _nDataType,const OTypeInfoMap& _rType
     {
         case DataType::TINYINT:
             pTypeInfo = queryTypeInfoByType(DataType::SMALLINT,_rTypeInfo);
-            if( pTypeInfo != NULL)
+            if( bool(pTypeInfo))
                 break;
             // run through
         case DataType::SMALLINT:
             pTypeInfo = queryTypeInfoByType(DataType::INTEGER,_rTypeInfo);
-            if( pTypeInfo != NULL)
+            if( bool(pTypeInfo))
                 break;
             // run through
         case DataType::INTEGER:
             pTypeInfo = queryTypeInfoByType(DataType::FLOAT,_rTypeInfo);
-            if( pTypeInfo != NULL)
+            if( bool(pTypeInfo))
                 break;
             // run through
         case DataType::FLOAT:
             pTypeInfo = queryTypeInfoByType(DataType::REAL,_rTypeInfo);
-            if( pTypeInfo != NULL)
+            if( bool(pTypeInfo))
                 break;
             // run through
         case DataType::DATE:
@@ -1600,7 +1600,7 @@ TOTypeInfoSP queryTypeInfoByType(sal_Int32 _nDataType,const OTypeInfoMap& _rType
             if( DataType::DATE == _nDataType || DataType::TIME == _nDataType )
             {
                 pTypeInfo = queryTypeInfoByType(DataType::TIMESTAMP,_rTypeInfo);
-                if( pTypeInfo != NULL)
+                if( bool(pTypeInfo))
                     break;
             }
             // run through
@@ -1608,12 +1608,12 @@ TOTypeInfoSP queryTypeInfoByType(sal_Int32 _nDataType,const OTypeInfoMap& _rType
         case DataType::REAL:
         case DataType::BIGINT:
             pTypeInfo = queryTypeInfoByType(DataType::DOUBLE,_rTypeInfo);
-            if( pTypeInfo != NULL)
+            if( bool(pTypeInfo))
                 break;
             // run through
         case DataType::DOUBLE:
             pTypeInfo = queryTypeInfoByType(DataType::NUMERIC,_rTypeInfo);
-            if( pTypeInfo != NULL)
+            if( bool(pTypeInfo))
                 break;
             // run through
         case DataType::NUMERIC:
@@ -1621,20 +1621,20 @@ TOTypeInfoSP queryTypeInfoByType(sal_Int32 _nDataType,const OTypeInfoMap& _rType
             break;
         case DataType::DECIMAL:
             pTypeInfo = queryTypeInfoByType(DataType::NUMERIC,_rTypeInfo);
-            if( pTypeInfo != NULL)
+            if( bool(pTypeInfo))
                 break;
             pTypeInfo = queryTypeInfoByType(DataType::DOUBLE,_rTypeInfo);
-            if( pTypeInfo != NULL)
+            if( bool(pTypeInfo))
                 break;
             break;
         case DataType::VARCHAR:
             pTypeInfo = queryTypeInfoByType(DataType::LONGVARCHAR,_rTypeInfo);
-            if( pTypeInfo != NULL)
+            if( bool(pTypeInfo))
                 break;
             break;
         case DataType::LONGVARCHAR:
             pTypeInfo = queryTypeInfoByType(DataType::CLOB,_rTypeInfo);
-            if( pTypeInfo != NULL)
+            if( bool(pTypeInfo))
                 break;
             break;
         default:

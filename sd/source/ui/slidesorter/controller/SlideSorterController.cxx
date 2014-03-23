@@ -667,7 +667,7 @@ IMPL_LINK(SlideSorterController, WindowEventHandler, VclWindowEvent*, pEvent)
                     : SD_OUTPUT_DRAWMODE_COLOR);
                 if (mrSlideSorter.GetViewShell() != NULL)
                     mrSlideSorter.GetViewShell()->GetFrameView()->SetDrawMode(nDrawMode);
-                if (pActiveWindow != NULL)
+                if( bool(pActiveWindow) )
                     pActiveWindow->SetDrawMode(nDrawMode);
                 mrView.HandleDrawModeChange();
 
@@ -944,6 +944,8 @@ void SlideSorterController::FinishEditModeChange (void)
 {
     if (mrModel.GetEditMode() == EM_MASTERPAGE)
     {
+        mpPageSelector->DeselectAllPages();
+
         // Search for the master page that was determined in
         // PrepareEditModeChange() and make it the current page.
         PageEnumeration aAllPages (PageEnumerationProvider::CreateAllPagesEnumeration(mrModel));
@@ -953,16 +955,20 @@ void SlideSorterController::FinishEditModeChange (void)
             if (pDescriptor->GetPage() == mpEditModeChangeMasterPage)
             {
                 GetCurrentSlideManager()->SwitchCurrentSlide(pDescriptor);
+                mpPageSelector->SelectPage(pDescriptor);
                 break;
             }
         }
     }
     else
     {
+        PageSelector::BroadcastLock aBroadcastLock (*mpPageSelector);
+
         SharedPageDescriptor pDescriptor (mrModel.GetPageDescriptor(mnCurrentPageBeforeSwitch));
         GetCurrentSlideManager()->SwitchCurrentSlide(pDescriptor);
 
         // Restore the selection.
+        mpPageSelector->DeselectAllPages();
         ::std::vector<SdPage*>::iterator iPage;
         for (iPage=maSelectionBeforeSwitch.begin();
              iPage!=maSelectionBeforeSwitch.end();
@@ -1047,12 +1053,6 @@ void SlideSorterController::SetDocumentSlides (const Reference<container::XIndex
         PreModelChange();
 
         mrModel.SetDocumentSlides(rxSlides);
-        mrView.Layout();
-
-        // Select just the current slide.
-        PageSelector::BroadcastLock aBroadcastLock (*mpPageSelector);
-        mpPageSelector->DeselectAllPages();
-        mpPageSelector->SelectPage(mpCurrentSlideManager->GetCurrentSlide());
     }
 }
 

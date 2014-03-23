@@ -52,7 +52,7 @@
                     are handled wrong.
     _____________________________________________________________________________________________________________*/
 
-    #define WRITE_LOGFILE( SFILENAME, STEXT )                                                                   \
+    inline void writeToLogFile( const char* SFILENAME, const char* STEXT )
                 {                                                                                               \
                     ::rtl::OString  _swriteLogfileFileName  ( SFILENAME );                                      \
                     ::rtl::OString  _swriteLogfileText      ( STEXT     );                                      \
@@ -60,6 +60,10 @@
                     fprintf( pFile, "%s", _swriteLogfileText.getStr() );                                        \
                     fclose ( pFile                                    );                                        \
                 }
+
+    inline void writeToLogFile( const char* pFILENAME, const rtl::OString& rTEXT ) { writeToLogFile( pFILENAME, rTEXT.getStr()); }
+
+    #define WRITE_LOGFILE( SFILENAME, STEXT ) { writeToLogFile( (SFILENAME), (STEXT) ); }
 
     /*_____________________________________________________________________________________________________________
         LOGTYPE

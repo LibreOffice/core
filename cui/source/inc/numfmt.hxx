@@ -83,8 +83,6 @@ class SvxNumberFormatTabPage : public SfxTabPage
 public:
     ~SvxNumberFormatTabPage();
 
-#undef SfxTabPage
-#define SfxTabPage ::SfxTabPage
     static SfxTabPage*      Create( Window* pParent,
                                     const SfxItemSet& rAttrSet );
     static sal_uInt16*          GetRanges();

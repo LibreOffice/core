@@ -33,7 +33,7 @@ module com { module sun { module star { module form { module runtime {
 /** specifies the operations on a user interface form, as supported by the
     <type>XFormOperations</type> interface.
 
-    @since OOo 2.2
+    @since OpenOffice 2.2
 */
 constants FormFeature
 {
@@ -137,7 +137,7 @@ constants FormFeature
         <p>Basically, this means calling XRefreshable::refresh on the current control, if it supports
         this interface.</p>
 
-        @since OOo 3.1
+        @since OpenOffice 3.1
     */
     const short RefreshCurrentControl = 19;
 };

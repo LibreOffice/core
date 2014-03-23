@@ -59,7 +59,7 @@ published service SheetFilterDescriptor
         to the <type>TableFilterField</type> structure provided by interface
         <type>XSheetFilterDescriptor</type>.
 
-        @since OOo 3.2
+        @since OpenOffice 3.2
      */
     [optional] interface XSheetFilterDescriptor2;
 

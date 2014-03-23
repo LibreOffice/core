@@ -36,7 +36,7 @@ module com {  module sun {  module star {  module frame {
 
 /** describes a command which can be send to a generic toolbar control.
 
-    @since OOo 2.0.3
+    @since OpenOffice 2.0.3
  */
 struct ControlCommand
 {

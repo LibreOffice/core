@@ -2755,7 +2755,7 @@ void SwHTMLParser::_SetAttr( sal_Bool bChkEnd, sal_Bool bBeforeTable,
                         const String sName( ((SfxStringItem*)pAttr->pItem)->GetValue() );
                         IDocumentMarkAccess* const pMarkAccess = pDoc->getIDocumentMarkAccess();
                         IDocumentMarkAccess::const_iterator_t ppBkmk = pMarkAccess->findMark( sName );
-                        if( ppBkmk != pMarkAccess->getMarksEnd() &&
+                        if( ppBkmk != pMarkAccess->getAllMarksEnd() &&
                             ppBkmk->get()->GetMarkStart() == *pAttrPam->GetPoint() )
                             break; // do not generate duplicates on this position
                         pAttrPam->DeleteMark();
@@ -2773,6 +2773,7 @@ void SwHTMLParser::_SetAttr( sal_Bool bChkEnd, sal_Bool bBeforeTable,
                     }
                     break;
                 case RES_TXTATR_FIELD:
+                case RES_TXTATR_ANNOTATION:
                 case RES_TXTATR_INPUTFIELD:
                     {
                         sal_uInt16 nFldWhich =
@@ -5381,8 +5382,7 @@ void SwHTMLParser::ParseMoreMetaOptions()
         return;
     }
 
-    String sText(
-            String::CreateFromAscii(TOOLS_CONSTASCII_STRINGPARAM("HTML: <")) );
+    String sText( String::CreateFromAscii(TOOLS_CONSTASCII_STRINGPARAM("HTML: <")) );
     sText.AppendAscii( TOOLS_CONSTASCII_STRINGPARAM(OOO_STRING_SVTOOLS_HTML_meta) );
     sText.Append( ' ' );
     if( bHTTPEquiv  )
@@ -5399,7 +5399,11 @@ void SwHTMLParser::ParseMoreMetaOptions()
 
     SwPostItField aPostItFld(
         (SwPostItFieldType*)pDoc->GetSysFldType( RES_POSTITFLD ),
-        aEmptyStr, sText, DateTime() );
+        sText,
+        aEmptyStr,
+        aEmptyStr,
+        aEmptyStr,
+        DateTime() );
     SwFmtFld aFmtFld( aPostItFld );
     InsertAttr( aFmtFld );
 }

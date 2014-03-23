@@ -31,6 +31,8 @@ use installer::globals;
 use installer::windows::idtglobal;
 use installer::windows::language;
 
+use strict;
+
 ##############################################################
 # Returning a globally unique ID (GUID) for a component
 # If the component is new, a unique guid has to be created.
@@ -39,9 +41,9 @@ use installer::windows::language;
 # Sample for a guid: {B68FD953-3CEF-4489-8269-8726848056E8}
 ##############################################################
 
-sub get_component_guid
+sub get_component_guid ($)
 {
-    my ( $componentname, $componentidhashref ) = @_;
+    my ($componentname) = @_;
 
     # At this time only a template
     my $returnvalue = "\{COMPONENTGUID\}";
@@ -49,6 +51,9 @@ sub get_component_guid
     # Returning a ComponentID, that is assigned in scp project
     if ( exists($installer::globals::componentid{$componentname}) )
     {
+        $installer::logger::Lang->printf("reusing guid %s for component %s\n",
+            $installer::globals::componentid{$componentname},
+            $componentname);
         $returnvalue = "\{" . $installer::globals::componentid{$componentname} . "\}";
     }
 
@@ -59,55 +64,52 @@ sub get_component_guid
 # Returning the directory for a file component.
 ##############################################################
 
-sub get_file_component_directory
+sub get_file_component_directory ($$$)
 {
     my ($componentname, $filesref, $dirref) = @_;
 
-    my ($onefile, $component, $onedir, $hostname, $uniquedir);
-    my $found = 0;
+    my ($component,  $uniquedir);
 
-    for ( my $i = 0; $i <= $#{$filesref}; $i++ )
+    foreach my $onefile (@$filesref)
     {
-        $onefile =  ${$filesref}[$i];
-        $component = $onefile->{'componentname'};
-
-        if ( $component eq $componentname )
+        if ($onefile->{'componentname'} eq $componentname)
         {
-            $found = 1;
-            last;
+            return get_file_component_directory_for_file($onefile, $dirref);
         }
     }
 
-    if (!($found))
+    # This component can be ignored, if it exists in a version with
+    # extension "_pff" (this was renamed in file::get_sequence_for_file() )
+    my $ignore_this_component = 0;
+    my $origcomponentname = $componentname;
+    my $componentname_pff = $componentname . "_pff";
+
+    foreach my $onefile (@$filesref)
     {
-        # This component can be ignored, if it exists in a version with extension "_pff" (this was renamed in file::get_sequence_for_file() )
-        my $ignore_this_component = 0;
-        my $origcomponentname = $componentname;
-        my $componentname = $componentname . "_pff";
-
-        for ( my $j = 0; $j <= $#{$filesref}; $j++ )
+        if ($onefile->{'componentname'} eq $componentname_pff)
         {
-            $onefile =  ${$filesref}[$j];
-            $component = $onefile->{'componentname'};
-
-            if ( $component eq $componentname )
-            {
-                $ignore_this_component = 1;
-                last;
-            }
+            return "IGNORE_COMP";
         }
-
-        if ( $ignore_this_component ) { return "IGNORE_COMP"; }
-        else { installer::exiter::exit_program("ERROR: Did not find component \"$origcomponentname\" in file collection", "get_file_component_directory"); }
     }
 
-    my $localstyles = "";
+    installer::exiter::exit_program(
+        "ERROR: Did not find component \"$origcomponentname\" in file collection",
+        "get_file_component_directory");
+}
 
-    if ( $onefile->{'Styles'} ) { $localstyles = $onefile->{'Styles'}; }
+
+
+
+sub get_file_component_directory_for_file ($$)
+{
+    my ($onefile, $dirref) = @_;
+
+    my $localstyles = $onefile->{'Styles'};
+    $localstyles = "" unless defined $localstyles;
 
     if ( $localstyles =~ /\bFONT\b/ )   # special handling for font files
     {
-        return $installer::globals::fontsfolder;
+    return $installer::globals::fontsfolder;
     }
 
     my $destdir = "";
@@ -116,7 +118,7 @@ sub get_file_component_directory
 
     if ( $destdir =~ /\bPREDEFINED_OSSHELLNEWDIR\b/ )   # special handling for shellnew files
     {
-        return $installer::globals::templatefolder;
+    return $installer::globals::templatefolder;
     }
 
     my $destination = $onefile->{'destination'};
@@ -127,37 +129,35 @@ sub get_file_component_directory
 
     # This path has to be defined in the directory collection at "HostName"
 
+    my $uniquedir = undef;
     if ($destination eq "")     # files in the installation root
     {
-        $uniquedir = "INSTALLLOCATION";
+    $uniquedir = "INSTALLLOCATION";
     }
     else
     {
-        $found = 0;
-
-        for ( my $i = 0; $i <= $#{$dirref}; $i++ )
+    my $found = 0;
+        foreach my $directory (@$dirref)
+    {
+        if ($directory->{'HostName'} eq $destination)
         {
-            $onedir =   ${$dirref}[$i];
-            $hostname = $onedir->{'HostName'};
-
-            if ( $hostname eq $destination )
-            {
-                $found = 1;
-                last;
-            }
+        $found = 1;
+                $uniquedir = $directory->{'uniquename'};
+        last;
         }
+    }
 
-        if (!($found))
-        {
-            installer::exiter::exit_program("ERROR: Did not find destination $destination in directory collection", "get_file_component_directory");
-        }
+    if ( ! $found)
+    {
+        installer::exiter::exit_program(
+                "ERROR: Did not find destination $destination in directory collection",
+                "get_file_component_directory");
+    }
 
-        $uniquedir = $onedir->{'uniquename'};
-
-        if ( $uniquedir eq $installer::globals::officeinstalldirectory )
-        {
-            $uniquedir = "INSTALLLOCATION";
-        }
+    if ( $uniquedir eq $installer::globals::officeinstalldirectory )
+    {
+        $uniquedir = "INSTALLLOCATION";
+    }
     }
 
     $onefile->{'uniquedirname'} = $uniquedir;       # saving it in the file collection
@@ -226,7 +226,8 @@ sub get_file_component_attributes
         $attributes = 0;    # Assembly files cannot run from source
     }
 
-    if (( $onefile->{'Dir'} =~ /\bPREDEFINED_OSSHELLNEWDIR\b/ ) || ( $onefile->{'needs_user_registry_key'} ))
+    if ((defined $onefile->{'Dir'} && $onefile->{'Dir'} =~ /\bPREDEFINED_OSSHELLNEWDIR\b/)
+        || $onefile->{'needs_user_registry_key'})
     {
         $attributes = 4;    # Files in shellnew dir and in non advertised startmenu entries must have user registry key as KeyPath
     }
@@ -320,55 +321,286 @@ sub get_component_condition
 # real filename!
 ####################################################################
 
-sub get_component_keypath
+sub get_component_keypath ($$)
 {
-    my ($componentname, $itemsref, $componentidkeypathhashref) = @_;
+    my ($componentname, $itemsref) = @_;
 
-    my $oneitem;
-    my $found = 0;
-    my $infoline = "";
-
-    for ( my $i = 0; $i <= $#{$itemsref}; $i++ )
+    foreach my $oneitem (@$itemsref)
     {
-        $oneitem =  ${$itemsref}[$i];
         my $component = $oneitem->{'componentname'};
 
+        if ( ! defined $component)
+        {
+            installer::scriptitems::print_script_item($oneitem);
+            installer::logger::PrintError("item in get_component_keypath has no 'componentname'\n");
+            return "";
+        }
         if ( $component eq $componentname )
         {
-            $found = 1;
-            last;
+            my $keypath = $oneitem->{'uniquename'}; # "uniquename", not "Name"
+
+            # Special handling for components in
+            # PREDEFINED_OSSHELLNEWDIR. These components need as
+            # KeyPath a RegistryItem in HKCU
+            if ($oneitem->{'userregkeypath'})
+            {
+                $keypath = $oneitem->{'userregkeypath'};
+            }
+
+            # saving it in the file and registry collection
+            $oneitem->{'keypath'} = $keypath;
+
+            return $keypath
         }
     }
 
-    if (!($found))
-    {
-        installer::exiter::exit_program("ERROR: Did not find component in file/registry collection, function get_component_keypath", "get_component_keypath");
-    }
-
-    my $keypath = $oneitem->{'uniquename'}; # "uniquename", not "Name"
-
-    # Special handling for updates from existing databases, because KeyPath must not change
-    if (( $installer::globals::updatedatabase ) && ( exists($componentidkeypathhashref->{$componentname}) ))
-    {
-        $keypath = $componentidkeypathhashref->{$componentname};
-        # -> check, if this is a valid key path?!
-        if ( $keypath ne $oneitem->{'uniquename'} )
-        {
-            # Warning: This keypath was changed because of info from old database
-            $infoline = "WARNING: The KeyPath for component \"$componentname\" was changed from \"$oneitem->{'uniquename'}\" to \"$keypath\" because of information from update database";
-            $installer::logger::Lang->print($infoline);
-        }
-    }
-
-    # Special handling for components in PREDEFINED_OSSHELLNEWDIR. These components
-    # need as KeyPath a RegistryItem in HKCU
-    if ( $oneitem->{'userregkeypath'} ) { $keypath = $oneitem->{'userregkeypath'}; }
-
-    # saving it in the file and registry collection
-    $oneitem->{'keypath'} = $keypath;
-
-    return $keypath
+    installer::exiter::exit_program(
+        "ERROR: Did not find component in file/registry collection, function get_component_keypath",
+        "get_component_keypath");
 }
+
+
+
+
+sub remove_ooversion_from_component_name($)
+{
+    my ($component_name) = @_;
+
+    $component_name =~ s/_openoffice\d+//;
+
+    return $component_name;
+}
+
+
+
+
+sub prepare_component_table_creation ($$$)
+{
+    my ($file_components, $registry_components, $variables) = @_;
+
+    if ($installer::globals::is_release)
+    {
+        my %source_component_data = ();
+
+        # Collect the components that are used in the source release.
+        my $component_table = $installer::globals::source_msi->GetTable("Component");
+        foreach my $row (@{$component_table->GetAllRows()})
+        {
+            $source_component_data{$row->GetValue("Component")} = $row;
+        }
+
+        # Find source components that do not exist in the target components, ie have been removed.
+
+        # Process file components.
+        my @missing_source_component_names = ();
+        my %file_component_hash = map {$_ => 1} @$file_components;
+        foreach my $source_component_name (keys %source_component_data)
+        {
+            # In this loop we only process components for files and ignore those for registry entries.
+            next if $source_component_name =~ /^registry_/;
+
+            if ( ! defined $file_component_hash{$source_component_name})
+            {
+                push @missing_source_component_names, [$source_component_name, $source_component_name];
+                $installer::logger::Info->printf("missing file component %s\n", $source_component_name);
+            }
+        }
+
+        # Process registry components.
+        my %registry_component_hash = map {$_ => 1} @$registry_components;
+        my %registry_component_hash_normalized = map {remove_ooversion_from_component_name($_) => $_} @$registry_components;
+        my %target_registry_component_translation = ();
+        foreach my $source_component_name (keys %source_component_data)
+        {
+            # In this loop we only process components for registry entries and ignore those for files.
+            next if $source_component_name !~ /^registry_/;
+
+            if (defined $registry_component_hash{$source_component_name})
+            {
+                # Found the non-normalized name.
+            }
+            elsif (defined $registry_component_hash_normalized{
+                remove_ooversion_from_component_name($source_component_name)})
+            {
+                # Found the normalized name.
+                my $target_component_name = $registry_component_hash_normalized{
+                    remove_ooversion_from_component_name($source_component_name)};
+                $target_registry_component_translation{$target_component_name} = $source_component_name;
+                $installer::logger::Info->printf("found normalized component name %s\n", $source_component_name);
+                $installer::logger::Info->printf("    %s -> %s\n", $target_component_name, $source_component_name);
+            }
+            else
+            {
+                # Source component was not found.
+                push @missing_source_component_names, $source_component_name;
+                $installer::logger::Info->printf("missing component %s\n", $source_component_name);
+            }
+        }
+
+        if (scalar @missing_source_component_names > 0)
+        {
+            $installer::logger::Info->printf("Error: there are %d missing components\n",
+                scalar @missing_source_component_names);
+            return {};
+        }
+        else
+        {
+            return \%target_registry_component_translation;
+        }
+    }
+
+    return {};
+}
+
+
+
+
+sub get_component_data ($$$$)
+{
+    my ($file_component_names,
+        $registry_component_names,
+        $files,
+        $registry_entries) = @_;
+
+    # When we are building a release then prepare building a patch by looking up some data
+    # from the previous release.
+    my %source_data = ();
+    if ($installer::globals::is_release)
+    {
+        my $source_component_table = $installer::globals::source_msi->GetTable("Component");
+        my $component_column_index = $source_component_table->GetColumnIndex("Component");
+        my $component_id_column_index = $source_component_table->GetColumnIndex("ComponentId");
+        my $key_path_column_index = $source_component_table->GetColumnIndex("KeyPath");
+        foreach my $source_row (@{$source_component_table->GetAllRows()})
+        {
+            my $component_name = $source_row->GetValue($component_column_index);
+            my $component_id = $source_row->GetValue($component_id_column_index);
+            my $key_path = $source_row->GetValue($key_path_column_index);
+
+            $source_data{$component_name} = {
+                'component_id' => $component_id,
+                'key_path' => $key_path
+            };
+        }
+    }
+
+    # Set up data for the target release.
+    # Use data from the source version where possible.
+    # Create missind data where necessary.
+
+    # Set up the target data with flags that remember whether a
+    # component contains files or registry entries.
+    my %target_data = ();
+    foreach my $name (@$file_component_names)
+    {
+        $target_data{$name} = {'is_file' => 1};
+    }
+    foreach my $name (@$registry_component_names)
+    {
+        $target_data{$name} = {'is_file' => 0};
+    }
+
+    # Add values for the ComponentId column.
+    $installer::logger::Lang->printf("preparing Component->ComponentId values\n");
+    foreach my $name (@$file_component_names,@$registry_component_names)
+    {
+        # Determine the component id.
+        my $guid = $installer::globals::is_release
+            ? $source_data{$name}->{'component_id'}
+            : undef;
+        if (defined $guid)
+        {
+            $installer::logger::Lang->printf("    reusing guid %s\n", $guid);
+        }
+        else
+        {
+            $guid = "{" . installer::windows::msiglobal::create_guid() . "}";
+            $installer::logger::Lang->printf("    creating new guid %s\n", $guid);
+        }
+        $target_data{$name}->{'component_id'} = $guid;
+    }
+
+    # Add values for the KeyPath column.
+    $installer::logger::Lang->printf("preparing Component->KeyPath values\n");
+    foreach my $component_name (@$file_component_names,@$registry_component_names)
+    {
+        # Determine the key path.
+        my $key_path = $installer::globals::is_release
+            ? $source_data{$component_name}->{'key_path'}
+            : undef;
+        if (defined $key_path)
+        {
+            $installer::logger::Lang->printf("    reusing key path %s for component %s\n",
+                $key_path,
+                $component_name);
+        }
+        else
+        {
+            if ($target_data{$component_name}->{'is_file'})
+            {
+                $key_path = get_component_keypath($component_name, $files);
+            }
+            else
+            {
+                $key_path = get_component_keypath($component_name, $registry_entries);
+            }
+            $installer::logger::Lang->printf("    created key path %s for component %s\n",
+                $key_path,
+                $component_name);
+        }
+        $target_data{$component_name}->{'key_path'} = $key_path;
+    }
+
+    return \%target_data;
+}
+
+
+
+
+sub create_component_table_data ($$$$$$)
+{
+    my ($filesref, $registryref, $dirref, $allfilecomponentsref, $allregistrycomponents, $allvariables) = @_;
+
+    my $target_data = get_component_data($allfilecomponentsref, $allregistrycomponents, $filesref, $registryref);
+
+    my @table_data = ();
+
+    # File components
+    foreach my $name (@$allfilecomponentsref)
+    {
+        my %onecomponent = ();
+
+        $onecomponent{'name'} = $name;
+        $onecomponent{'guid'} = $target_data->{$name}->{'component_id'};
+        $onecomponent{'directory'} = get_file_component_directory($name, $filesref, $dirref);
+        if ( $onecomponent{'directory'} eq "IGNORE_COMP" ) { next; }
+        $onecomponent{'attributes'} = get_file_component_attributes($name, $filesref, $allvariables);
+        $onecomponent{'condition'} = get_file_component_condition($name, $filesref);
+        $onecomponent{'keypath'} = $target_data->{$name}->{'key_path'};
+
+        push @table_data, \%onecomponent;
+    }
+
+    # Registry components
+    foreach my $name (@$allregistrycomponents)
+    {
+        my %onecomponent = ();
+
+        $onecomponent{'name'} = $name;
+        $onecomponent{'guid'} = $target_data->{$name}->{'component_id'};
+        $onecomponent{'directory'} = get_registry_component_directory();
+        $onecomponent{'attributes'} = get_registry_component_attributes($name, $allvariables);
+        $onecomponent{'condition'} = get_component_condition($name);
+        $onecomponent{'keypath'} = $target_data->{$name}->{'key_path'};
+
+        push(@table_data, \%onecomponent);
+    }
+
+    return \@table_data;
+}
+
+
+
 
 ###################################################################
 # Creating the file Componen.idt dynamically
@@ -376,9 +608,10 @@ sub get_component_keypath
 # Component ComponentId Directory_ Attributes Condition KeyPath
 ###################################################################
 
-sub create_component_table
+
+sub create_component_table ($$)
 {
-    my ($filesref, $registryref, $dirref, $allfilecomponentsref, $allregistrycomponents, $basedir, $componentidhashref, $componentidkeypathhashref, $allvariables) = @_;
+    my ($table_data, $basedir) = @_;
 
     my @componenttable = ();
 
@@ -386,45 +619,15 @@ sub create_component_table
 
     installer::windows::idtglobal::write_idt_header(\@componenttable, "component");
 
-    # collect_layer_conditions();
-
-
-    # File components
-
-    for ( my $i = 0; $i <= $#{$allfilecomponentsref}; $i++ )
+    foreach my $item (@$table_data)
     {
-        my %onecomponent = ();
-
-        $onecomponent{'name'} = ${$allfilecomponentsref}[$i];
-        $onecomponent{'guid'} = get_component_guid($onecomponent{'name'}, $componentidhashref);
-        $onecomponent{'directory'} = get_file_component_directory($onecomponent{'name'}, $filesref, $dirref);
-        if ( $onecomponent{'directory'} eq "IGNORE_COMP" ) { next; }
-        $onecomponent{'attributes'} = get_file_component_attributes($onecomponent{'name'}, $filesref, $allvariables);
-        $onecomponent{'condition'} = get_file_component_condition($onecomponent{'name'}, $filesref);
-        $onecomponent{'keypath'} = get_component_keypath($onecomponent{'name'}, $filesref, $componentidkeypathhashref);
-
-        $oneline = $onecomponent{'name'} . "\t" . $onecomponent{'guid'} . "\t" . $onecomponent{'directory'} . "\t"
-                . $onecomponent{'attributes'} . "\t" . $onecomponent{'condition'} . "\t" . $onecomponent{'keypath'} . "\n";
-
-        push(@componenttable, $oneline);
-    }
-
-    # Registry components
-
-    for ( my $i = 0; $i <= $#{$allregistrycomponents}; $i++ )
-    {
-        my %onecomponent = ();
-
-        $onecomponent{'name'} = ${$allregistrycomponents}[$i];
-        $onecomponent{'guid'} = get_component_guid($onecomponent{'name'}, $componentidhashref);
-        $onecomponent{'directory'} = get_registry_component_directory();
-        $onecomponent{'attributes'} = get_registry_component_attributes($onecomponent{'name'}, $allvariables);
-        $onecomponent{'condition'} = get_component_condition($onecomponent{'name'});
-        $onecomponent{'keypath'} = get_component_keypath($onecomponent{'name'}, $registryref, $componentidkeypathhashref);
-
-        $oneline = $onecomponent{'name'} . "\t" . $onecomponent{'guid'} . "\t" . $onecomponent{'directory'} . "\t"
-                . $onecomponent{'attributes'} . "\t" . $onecomponent{'condition'} . "\t" . $onecomponent{'keypath'} . "\n";
-
+        $oneline = sprintf("%s\t%s\t%s\t%s\t%s\t%s\n",
+            $item->{'name'},
+            $item->{'guid'},
+            $item->{'directory'},
+            $item->{'attributes'},
+            $item->{'condition'},
+            $item->{'keypath'});
         push(@componenttable, $oneline);
     }
 
@@ -435,6 +638,9 @@ sub create_component_table
     $infoline = "Created idt file: $componenttablename\n";
     $installer::logger::Lang->print($infoline);
 }
+
+
+
 
 ####################################################################################
 # Returning a component for a scp module gid.
@@ -517,5 +723,30 @@ sub set_component_in_environment_table
 
     }
 }
+
+
+
+
+sub apply_component_translation ($@)
+{
+    my ($translation_map, @component_names) = @_;
+
+    my @translated_names = ();
+    foreach my $component_name (@component_names)
+    {
+        my $translated_name = $translation_map->{$component_name};
+        if (defined $translated_name)
+        {
+            push @translated_names, $translated_name;
+        }
+        else
+        {
+            push @translated_names, $component_name;
+        }
+    }
+
+    return @translated_names;
+}
+
 
 1;

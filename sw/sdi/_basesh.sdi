@@ -37,7 +37,6 @@ interface BaseTextSelection
         ExecMethod = ExecDelete ;
         StateMethod = GetState ;
         FastCall = FALSE ;
-        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
     ]
 
     FN_BACKSPACE  // status(final|play)
@@ -45,7 +44,6 @@ interface BaseTextSelection
         ExecMethod = ExecDelete ;
         StateMethod = GetState ;
         FastCall = FALSE ;
-        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
     ]
 
     FN_SHIFT_BACKSPACE // status()

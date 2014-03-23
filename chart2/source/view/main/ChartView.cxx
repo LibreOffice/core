@@ -1318,7 +1318,7 @@ void lcl_setDefaultWritingMode( ::boost::shared_ptr< DrawModelWrapper > pDrawMod
                                             }
                                         }
                                     }
-                                    if( !aPageStyle.getLength() )
+                                    if( aPageStyle.isEmpty() )
                                     {
                                         uno::Reference< text::XText > xText( xTextDocument->getText() );
                                         if( xText.is() )
@@ -1333,7 +1333,7 @@ void lcl_setDefaultWritingMode( ::boost::shared_ptr< DrawModelWrapper > pDrawMod
                                 {
                                     //Calc is parent document
                                     xParentProps->getPropertyValue( C2U("PageStyle") ) >>= aPageStyle;
-                                    if(!aPageStyle.getLength())
+                                    if( aPageStyle.isEmpty() )
                                         aPageStyle = C2U("Default");
                                 }
                                 if( nWritingMode == -1 || nWritingMode == text::WritingMode2::PAGE )
@@ -2238,7 +2238,7 @@ std::auto_ptr<VTitle> lcl_createTitle( TitleHelper::eTitleType eType
 
     uno::Reference< XTitle > xTitle( TitleHelper::getTitle( eType, xChartModel ) );
     rtl::OUString aCompleteString( TitleHelper::getCompleteString( xTitle ) );
-    if( aCompleteString.getLength() != 0 )
+    if( !aCompleteString.isEmpty() )
     {
         //create title
         apVTitle = std::auto_ptr<VTitle>(new VTitle(xTitle));
@@ -2812,7 +2812,7 @@ void ChartView::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
             ::rtl::OUString aSelObjCID;
             uno::Any aSelObj( xSelectionSupplier->getSelection() );
             aSelObj >>= aSelObjCID;
-            if ( aSelObjCID.getLength() > 0 )
+            if ( !aSelObjCID.isEmpty() )
             {
                 return;
             }

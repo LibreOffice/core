@@ -106,7 +106,7 @@ if ($type eq "extshl")
     {
         foreach $file (@ARGV)
         {
-            my $call = "install_name_tool$change -id \@loader_path/$inames{$file} $file";
+            my $call = "${::CC_PATH}install_name_tool$change -id \@loader_path/$inames{$file} $file";
             system($call) == 0 or die "cannot $call";
         }
     }
@@ -114,14 +114,14 @@ if ($type eq "extshl")
     {
         foreach $file (@ARGV)
         {
-            my $call = "install_name_tool$change -id \@__________________________________________________$loc/$inames{$file} $file";
+            my $call = "${::CC_PATH}install_name_tool$change -id \@__________________________________________________$loc/$inames{$file} $file";
             system($call) == 0 or die "cannot $call";
         }
     }
 }
 foreach $file (@ARGV)
 {
-    my $call = "otool -L $file";
+    my $call = "${::CC_PATH}otool -L $file";
     open(IN, "-|", $call) or die "cannot $call";
     my $change = "";
     while (<IN>)
@@ -132,7 +132,7 @@ foreach $file (@ARGV)
     close(IN);
     if ($change ne "")
     {
-        $call = "install_name_tool$change $file";
+        $call = "${::CC_PATH}install_name_tool$change $file";
         system($call) == 0 or die "cannot $call";
     }
 }

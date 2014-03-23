@@ -77,31 +77,6 @@ static ColorData nAuthorColor[ SC_AUTHORCOLORCOUNT ] = {
                     COL_GREEN,          COL_RED,            COL_BLUE,
                     COL_BROWN,          COL_MAGENTA,        COL_CYAN };
 
-//  Hilfsklasse, fuer die Farbzuordnung,
-//  um nicht mehrfach hintereinander denselben User aus der Liste zu suchen
-
-//IAccessibility2 Implementation 2009-----
-//Move this class declare to Chgtrack.hxx
-/*
-class ScActionColorChanger
-{
-private:
-    const ScAppOptions&     rOpt;
-    const ScStrCollection&  rUsers;
-    String                  aLastUserName;
-    sal_uInt16                  nLastUserIndex;
-    ColorData               nColor;
-
-public:
-                ScActionColorChanger( const ScChangeTrack& rTrack );
-                ~ScActionColorChanger() {}
-
-    void        Update( const ScChangeAction& rAction );
-    ColorData   GetColor() const    { return nColor; }
-};
-*/
-//-----IAccessibility2 Implementation 2009
-
 //------------------------------------------------------------------
 
 ScActionColorChanger::ScActionColorChanger( const ScChangeTrack& rTrack ) :

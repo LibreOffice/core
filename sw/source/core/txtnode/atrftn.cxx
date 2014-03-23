@@ -282,7 +282,9 @@ void SwTxtFtn::SetNumber( const sal_uInt16 nNewNum, const XubString* pStr )
 }
 
 // Die Fussnoten duplizieren
-void SwTxtFtn::CopyFtn(SwTxtFtn & rDest, SwTxtNode & rDestNode) const
+void SwTxtFtn::CopyFtn(
+    SwTxtFtn & rDest,
+    SwTxtNode & rDestNode ) const
 {
     if (m_pStartNode && !rDest.GetStartNode())
     {
@@ -306,7 +308,7 @@ void SwTxtFtn::CopyFtn(SwTxtFtn & rDest, SwTxtNode & rDestNode) const
         SwNodeIndex aEnd( *aStart.GetNode().EndOfSectionNode() );
         sal_uLong  nDestLen = aEnd.GetIndex() - aStart.GetIndex() - 1;
 
-        m_pTxtNode->GetDoc()->CopyWithFlyInFly( aRg, 0, aEnd, sal_True );
+        m_pTxtNode->GetDoc()->CopyWithFlyInFly( aRg, 0, aEnd, NULL, sal_True );
 
         // in case the destination section was not empty, delete the old nodes
         // before:   Src: SxxxE,  Dst: SnE

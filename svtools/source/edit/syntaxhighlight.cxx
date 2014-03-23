@@ -483,7 +483,7 @@ sal_Bool SimpleTokenizer_Impl::getNextToken( /*out*/TokenTypes& reType,
             }
             reType = TT_PARAMETER;
         }
-        else if ((c=='-'))
+        else if( c=='-' )
         {
             sal_Unicode cPeekNext = peekChar();
             if (cPeekNext=='-')

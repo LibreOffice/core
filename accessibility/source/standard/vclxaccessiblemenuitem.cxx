@@ -465,9 +465,7 @@ sal_Bool VCLXAccessibleMenuItem::doAccessibleAction ( sal_Int32 nIndex ) throw (
 
     if ( nIndex < 0 || nIndex >= getAccessibleActionCount() )
         throw IndexOutOfBoundsException();
-    //IAccessibility2 Impplementaton 2009-----
     return ::rtl::OUString( TK_RES_STRING( RID_STR_ACC_ACTION_SELECT ) );
-    //-----IAccessibility2 Impplementaton 2009
 }
 
 // -----------------------------------------------------------------------------

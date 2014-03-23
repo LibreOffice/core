@@ -57,11 +57,9 @@
 #include <frmfmt.hxx>       // SwFrmFmt
 // OD 2004-05-24 #i28701#
 #include <sortedobjs.hxx>
-//IAccessibility2 Implementation 2009-----
 #include <portab.hxx>
 #include <editeng/lrspitem.hxx>
 #include <editeng/tstpitem.hxx>
-//-----IAccessibility2 Implementation 2009
 
 class FormatLevel
 {
@@ -561,7 +559,6 @@ void SwTxtFrm::AdjustFrm( const SwTwips nChgHght, sal_Bool bHasToFit )
     UNDO_SWAP( this )
 }
 
-//IAccessibility2 Implementation 2009-----
 com::sun::star::uno::Sequence< ::com::sun::star::style::TabStop > SwTxtFrm::GetTabStopInfo( SwTwips CurrentPos )
 {
     com::sun::star::uno::Sequence< ::com::sun::star::style::TabStop > tabs(1);
@@ -601,7 +598,6 @@ com::sun::star::uno::Sequence< ::com::sun::star::style::TabStop > SwTxtFrm::GetT
     tabs[0] = ts;
     return tabs;
 }
-//-----IAccessibility2 Implementation 2009
 /*************************************************************************
  *                      SwTxtFrm::AdjustFollow()
  *************************************************************************/

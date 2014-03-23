@@ -77,7 +77,7 @@ published service UnoControl
 
     /** provides access to the accessible context associated with this object.
 
-        @since OOo 1.1.2
+        @since OpenOffice 1.1.2
      */
     [optional] interface com::sun::star::accessibility::XAccessible;
 

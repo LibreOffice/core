@@ -26,7 +26,6 @@
 #include "acccontext.hxx"
 #endif
 #include <com/sun/star/accessibility/XAccessibleSelection.hpp>
-//IAccessibility2 Implementation 2009-----
 #include <com/sun/star/document/XEventListener.hpp>
 #include <accselectionhelper.hxx>
 
@@ -37,7 +36,6 @@
 #ifndef _COM_SUN_STAR_ACCESSIBILITY_XACCESSIBLEGETACCFLOWTO_HPP_
 #include <com/sun/star/accessibility/XAccessibleGetAccFlowTo.hpp>
 #endif
-//-----IAccessibility2 Implementation 2009
 
 class VclSimpleEvent;
 
@@ -92,9 +90,7 @@ public:
     /// Return this object's description.
     virtual ::rtl::OUString SAL_CALL
         getAccessibleDescription (void) throw (com::sun::star::uno::RuntimeException);
-    //IAccessibility2 Implementation 2009-----
     virtual ::rtl::OUString SAL_CALL getAccessibleName (void) throw (::com::sun::star::uno::RuntimeException);
-    //-----IAccessibility2 Implementation 2009
 
     //=====  XAccessibleComponent  ==============================================
     virtual sal_Bool SAL_CALL containsPoint(
@@ -126,10 +122,8 @@ public:
  */
 class SwAccessibleDocument : public SwAccessibleDocumentBase,
                              public com::sun::star::accessibility::XAccessibleSelection,
-                             //IAccessibility2 Implementation 2009-----
                              public com::sun::star::document::XEventListener,
                              public com::sun::star::accessibility::XAccessibleExtendedAttributes,
-                             //-----IAccessibility2 Implementation 2009
                              public com::sun::star::accessibility::XAccessibleGetAccFlowTo
 {
     // Implementation for XAccessibleSelection interface
@@ -148,13 +142,11 @@ public:
     SwAccessibleDocument( SwAccessibleMap* pInitMap );
 
     DECL_LINK( WindowChildEventListener, VclSimpleEvent* );
-    //IAccessibility2 Implementation 2009-----
     //=====  XEventListener====================================================
     virtual void SAL_CALL notifyEvent( const ::com::sun::star::document::EventObject& Event )
             throw (::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& Event )
             throw (::com::sun::star::uno::RuntimeException);
-    //-----IAccessibility2 Implementation 2009
 
     //=====  XServiceInfo  ====================================================
 
@@ -225,7 +217,6 @@ public:
         throw ( ::com::sun::star::lang::IndexOutOfBoundsException,
                 ::com::sun::star::uno::RuntimeException );
 
-    //IAccessibility2 Implementation 2009-----
     virtual ::com::sun::star::uno::Any SAL_CALL getExtendedAttributes()
         throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException) ;
     //====== thread safe C++ interface ========================================
@@ -241,7 +232,6 @@ public:
     ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >
         SAL_CALL get_AccFlowTo(const ::com::sun::star::uno::Any& rAny, sal_Int32 nType)
         throw ( ::com::sun::star::uno::RuntimeException );
-    //-----IAccessibility2 Implementation 2009
 };
 
 #endif

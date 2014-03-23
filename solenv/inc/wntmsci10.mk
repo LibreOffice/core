@@ -202,8 +202,7 @@ CFLAGSWERRCC=-WX
 # COMPILER_WARN_ERRORS=TRUE here instead of setting MODULES_WITH_WARNINGS (see
 # settings.mk):
 MODULES_WITH_WARNINGS := \
-    lingucomponent \
-    soldep
+    lingucomponent
 
 CDEFS+=-DSTLPORT_VERSION=$(STLPORT_VER) -D_MT -DWINVER=0x0500 -D_WIN32_WINNT=0x0500 -D_WIN32_IE=0x0500
 

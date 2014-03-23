@@ -53,7 +53,7 @@ static uno::Sequence< sal_Int8 > GeneratePBKDF2Hash( const ::rtl::OUString& aPas
 {
     uno::Sequence< sal_Int8 > aResult;
 
-    if ( aPassword.getLength() && aSalt.getLength() && nCount && nHashLength )
+    if ( !aPassword.isEmpty() && aSalt.getLength() && nCount && nHashLength )
     {
         ::rtl::OString aBytePass = ::rtl::OUStringToOString( aPassword, RTL_TEXTENCODING_UTF8 );
         aResult.realloc( 16 );
@@ -104,7 +104,7 @@ uno::Sequence< beans::PropertyValue > DocPasswordHelper::GenerateNewModifyPasswo
 sal_Bool DocPasswordHelper::IsModifyPasswordCorrect( const ::rtl::OUString& aPassword, const uno::Sequence< beans::PropertyValue >& aInfo )
 {
     sal_Bool bResult = sal_False;
-    if ( aPassword.getLength() && aInfo.getLength() )
+    if ( !aPassword.isEmpty() && aInfo.getLength() )
     {
         ::rtl::OUString sAlgorithm;
         uno::Sequence< sal_Int8 > aSalt;
@@ -238,7 +238,7 @@ sal_uInt16 DocPasswordHelper::GetXLHashAsUINT16(
 
     ::rtl::OString aString = ::rtl::OUStringToOString( aUString, nEnc );
 
-    if ( aString.getLength() && aString.getLength() <= SAL_MAX_UINT16 )
+    if ( !aString.isEmpty() && aString.getLength() <= SAL_MAX_UINT16 )
     {
         for ( sal_Int32 nInd = aString.getLength() - 1; nInd >= 0; nInd-- )
         {
@@ -287,7 +287,7 @@ Sequence< sal_Int8 > DocPasswordHelper::GetXLHashAsSequence(
 /*static*/ uno::Sequence< sal_Int8 > DocPasswordHelper::GenerateStd97Key( const ::rtl::OUString& aPassword, const uno::Sequence< sal_Int8 >& aDocId )
 {
     uno::Sequence< sal_Int8 > aResultKey;
-    if ( aPassword.getLength() && aDocId.getLength() == 16 )
+    if ( !aPassword.isEmpty() && aDocId.getLength() == 16 )
     {
         sal_uInt16 pPassData[16];
         rtl_zeroMemory( pPassData, sizeof(pPassData) );
@@ -377,8 +377,8 @@ Sequence< sal_Int8 > DocPasswordHelper::GetXLHashAsSequence(
     {
         for( ::std::vector< OUString >::const_iterator aIt = pDefaultPasswords->begin(), aEnd = pDefaultPasswords->end(); (eResult == DocPasswordVerifierResult_WRONG_PASSWORD) && (aIt != aEnd); ++aIt )
         {
-            OSL_ENSURE( aIt->getLength() > 0, "DocPasswordHelper::requestAndVerifyDocPassword - unexpected empty default password" );
-            if( aIt->getLength() > 0 )
+            OSL_ENSURE( !aIt->isEmpty(), "DocPasswordHelper::requestAndVerifyDocPassword - unexpected empty default password" );
+            if( !aIt->isEmpty() )
             {
                 eResult = rVerifier.verifyPassword( *aIt, aEncData );
                 if( pbIsDefaultPassword )
@@ -401,7 +401,7 @@ Sequence< sal_Int8 > DocPasswordHelper::GetXLHashAsSequence(
     // try media password (skip, if result is OK or ABORT)
     if( eResult == DocPasswordVerifierResult_WRONG_PASSWORD )
     {
-        if( rMediaPassword.getLength() > 0 )
+        if( !rMediaPassword.isEmpty() )
             eResult = rVerifier.verifyPassword( rMediaPassword, aEncData );
     }
 
@@ -416,7 +416,7 @@ Sequence< sal_Int8 > DocPasswordHelper::GetXLHashAsSequence(
             rxInteractHandler->handle( xRequest );
             if( pRequest->isPassword() )
             {
-                if( pRequest->getPassword().getLength() > 0 )
+                if( !pRequest->getPassword().isEmpty() )
                     eResult = rVerifier.verifyPassword( pRequest->getPassword(), aEncData );
             }
             else

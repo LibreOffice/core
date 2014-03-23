@@ -699,6 +699,7 @@ void SmModel::_setPropertyValues(const PropertyMapEntry** ppEntries, const Any* 
                         SID_PRINTTEXT,       SID_PRINTTEXT,
                         SID_PRINTFRAME,      SID_PRINTFRAME,
                         SID_NO_RIGHT_SPACES, SID_NO_RIGHT_SPACES,
+                        SID_SAVE_ONLY_USED_SYMBOLS, SID_SAVE_ONLY_USED_SYMBOLS,
                         0
                     };
                     SfxItemSet *pItemSet = new SfxItemSet( pDocSh->GetPool(), nRange );

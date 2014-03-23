@@ -31,7 +31,7 @@ module com { module sun { module star { module linguistic2 {
 /** Conversion direction to be used with <type>XConversionDictionary</type>
     when looking for conversions.
 
-     @since OOo 1.1.2
+     @since OpenOffice 1.1.2
 */
 published enum ConversionDirection
 {

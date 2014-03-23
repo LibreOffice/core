@@ -455,12 +455,14 @@ void SdTransferable::AddSupportedFormats()
 
             if( mpGraphic->GetType() == GRAPHIC_BITMAP )
             {
+                AddFormat( SOT_FORMATSTR_ID_PNG );
                 AddFormat( SOT_FORMAT_BITMAP );
                 AddFormat( SOT_FORMAT_GDIMETAFILE );
             }
             else
             {
                 AddFormat( SOT_FORMAT_GDIMETAFILE );
+                AddFormat( SOT_FORMATSTR_ID_PNG );
                 AddFormat( SOT_FORMAT_BITMAP );
             }
         }
@@ -476,6 +478,7 @@ void SdTransferable::AddSupportedFormats()
             if( !mpSdDrawDocument || !lcl_HasOnlyControls( mpSdDrawDocument ) )
             {
                 AddFormat( SOT_FORMAT_GDIMETAFILE );
+                AddFormat( SOT_FORMATSTR_ID_PNG );
                 AddFormat( SOT_FORMAT_BITMAP );
             }
 

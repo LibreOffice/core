@@ -362,7 +362,7 @@ XBitmapListSharedPtr DrawModelWrapper::GetBitmapListFromSdrModel() const
 
 SdrObject* DrawModelWrapper::getNamedSdrObject( const rtl::OUString& rName )
 {
-    if(rName.getLength()==0)
+    if( rName.isEmpty() )
         return 0;
     return getNamedSdrObject( rName, GetPage(0) );
 }

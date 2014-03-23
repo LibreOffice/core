@@ -47,7 +47,7 @@ module com { module sun { module star { module linguistic2 {
     required to be checked. However error reports need to be limited to the
     current sentence.</p>
 
-    @since OOo 3.0.1
+    @since OpenOffice 3.0.1
  */
 
 service Proofreader : XProofreader {};

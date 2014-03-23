@@ -961,7 +961,7 @@ sax_fastparser::FSHelperPtr& XclExpXmlStream::WriteFontData( const XclFontData& 
                 // OOXTODO: XML_theme,      index into <clrScheme/>
                 // OOXTODO: XML_tint,       double
                 FSEND );
-    lcl_WriteValue( rStream, XML_sz,         OString::valueOf( (double) (rFontData.mnHeight / 20.0) ) );  // Twips->Pt
+    lcl_WriteValue( rStream, XML_sz,         OString::valueOf( (double) (rFontData.mnHeight / 20.0) ).getStr() );  // Twips->Points
     lcl_WriteValue( rStream, XML_u,          bHaveUnderline ? pUnderline : NULL );
     lcl_WriteValue( rStream, XML_vertAlign,  bHaveVertAlign ? pVertAlign : NULL );
 

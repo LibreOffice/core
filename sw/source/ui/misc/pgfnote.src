@@ -157,8 +157,7 @@ TabPage TP_FOOTNOTE_PAGE
         Spin = TRUE ;
         Maximum = 100 ;
         Value = 100 ;
-        Unit = FUNIT_CUSTOM ;
-        CustomUnitText = "%" ;
+        Unit = FUNIT_PERCENT ;
         First = 10 ;
         Last = 100 ;
     };

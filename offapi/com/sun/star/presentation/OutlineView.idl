@@ -59,7 +59,7 @@
     In an outline view, the textual contents of presentation text objects
     from all presentation pages are presentet as a continous outline text.
 
-    @since OOo 1.1.2
+    @since OpenOffice 1.1.2
  */
 published service OutlineView
 {

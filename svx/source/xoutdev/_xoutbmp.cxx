@@ -203,6 +203,10 @@ sal_uInt16 XOutBitmap::WriteGraphic( const Graphic& rGraphic, String& rFileName,
                 switch( aGfxLink.GetType() )
                 {
                     case( GFX_LINK_TYPE_NATIVE_GIF ): aExt = FORMAT_GIF; break;
+
+                    // #15508# added BMP type for better exports (no call/trigger found, prob used in HTML export)
+                    case( GFX_LINK_TYPE_NATIVE_BMP ): aExt = FORMAT_BMP; break;
+
                     case( GFX_LINK_TYPE_NATIVE_JPG ): aExt = FORMAT_JPG; break;
                     case( GFX_LINK_TYPE_NATIVE_PNG ): aExt = FORMAT_PNG; break;
 

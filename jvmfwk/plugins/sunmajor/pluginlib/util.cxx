@@ -879,7 +879,7 @@ rtl::Reference<VendorBase> getJREInfoByPath(
                            SameOrSubDirJREMap(sResolvedDir));
     if (entry2 != mapJREs.end())
     {
-        JFW_TRACE2(OUSTR("[Java framework] sunjavaplugin"SAL_DLLEXTENSION ": ")
+        JFW_TRACE2(OUSTR("[Java framework] sunjavaplugin" SAL_DLLEXTENSION ": ")
                    + OUSTR("JRE found again (detected before): ") + sResolvedDir
                    + OUSTR(".\n"));
         return entry2->second;
@@ -930,7 +930,7 @@ rtl::Reference<VendorBase> getJREInfoByPath(
             MapIt entry =  mapJREs.find(sFilePath);
             if (entry != mapJREs.end())
             {
-                JFW_TRACE2(OUSTR("[Java framework] sunjavaplugin"SAL_DLLEXTENSION ": ")
+                JFW_TRACE2(OUSTR("[Java framework] sunjavaplugin" SAL_DLLEXTENSION ": ")
                    + OUSTR("JRE found again (detected before): ") + sFilePath
                    + OUSTR(".\n"));
 
@@ -1018,7 +1018,7 @@ rtl::Reference<VendorBase> getJREInfoByPath(
         vecBadPaths.push_back(sFilePath);
     else
     {
-        JFW_TRACE2(OUSTR("[Java framework] sunjavaplugin"SAL_DLLEXTENSION ": ")
+        JFW_TRACE2(OUSTR("[Java framework] sunjavaplugin" SAL_DLLEXTENSION ": ")
                    + OUSTR("Found JRE: ") + sResolvedDir
                    + OUSTR(" \n at: ") + path + OUSTR(".\n"));
 

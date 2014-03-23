@@ -315,8 +315,7 @@ ModalDialog RID_SVX_MDLG_FONTWORK_CHARSPACING
         Spin = TRUE ;
         Maximum = 500 ;
         StrictFormat = TRUE ;
-        Unit = FUNIT_CUSTOM ;
-        CustomUnitText = "%" ;
+        Unit = FUNIT_PERCENT ;
         Last = 100 ;
         SpinSize = 5 ;
     };

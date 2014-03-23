@@ -39,7 +39,7 @@ interface XLogFormatter;
     the time of the logged event, the source class/method name (if applicable), and the
     log message.</p>
 
-    @since OOo 2.3
+    @since OpenOffice 2.3
  */
 service PlainTextFormatter : XLogFormatter
 {

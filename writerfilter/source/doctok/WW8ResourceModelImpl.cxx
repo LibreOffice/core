@@ -44,9 +44,12 @@ class WW8TableDataHandler : public TableDataHandler<string,
 {
 public:
     typedef boost::shared_ptr<WW8TableDataHandler> Pointer_t;
-    virtual void startTable(unsigned int nRows, unsigned int nDepth,
-                            TablePropsPointer_t pProps);
-    virtual void endTable();
+    virtual void startTable(
+        unsigned int nRows,
+        unsigned int nDepth,
+        TablePropsPointer_t pProps );
+    virtual void endTable(
+        const unsigned int nDepth );
     virtual void startRow(unsigned int nCols,
                           TablePropsPointer_t pProps);
     virtual void endRow();
@@ -70,7 +73,8 @@ void WW8TableDataHandler::startTable(unsigned int nRows, unsigned int nDepth,
     output.addItem(tmpStr);
 }
 
-void WW8TableDataHandler::endTable()
+void WW8TableDataHandler::endTable(
+    const unsigned int /*nTableDepth*/ )
 {
     output.addItem("</tabledata.table>");
 }
@@ -162,7 +166,7 @@ string WW8TableReference::getType() const
 
 void WW8PropertiesReference::resolve(Properties & rHandler)
 {
-    if (mpPropSet != NULL)
+    if( bool(mpPropSet))
     {
         //mpPropSet->dump(clog);
 
@@ -316,7 +320,7 @@ string WW8Sprm::getName() const
     return (*SprmIdToString::Instance())(getId());
 }
 
-int WW8Value::getInt() const
+sal_Int32 WW8Value::getInt() const
 {
     return 0;
 }
@@ -351,7 +355,7 @@ writerfilter::Reference<BinaryObj>::Pointer_t WW8Value::getBinary()
     return writerfilter::Reference<BinaryObj>::Pointer_t();
 }
 
-int WW8IntValue::getInt() const
+sal_Int32 WW8IntValue::getInt() const
 {
     return mValue;
 }
@@ -389,7 +393,7 @@ WW8Value::Pointer_t createValue(WW8Value::Pointer_t value)
     return value;
 }
 
-int WW8StringValue::getInt() const
+sal_Int32 WW8StringValue::getInt() const
 {
     return 0;
 }

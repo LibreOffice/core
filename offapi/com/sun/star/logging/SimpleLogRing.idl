@@ -41,7 +41,7 @@ interface XSimpleLogRing;
 
 /** This service allows to log the events in a ring of specified size.
 
-    @since OOo 3.2
+    @since OpenOffice 3.2
  */
 service SimpleLogRing : XSimpleLogRing
 {

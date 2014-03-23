@@ -57,7 +57,7 @@ service DefinitionContent
     service ::com::sun::star::ucb::Content;
 
     /** provides access to the complete name of the content within its hierarchy
-        @since OOo 3.3
+        @since OpenOffice 3.3
     */
     interface ::com::sun::star::container::XHierarchicalName;
 };

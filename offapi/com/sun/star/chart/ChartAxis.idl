@@ -93,12 +93,12 @@ published service ChartAxis
         service should be supported in order to preserve unparsed XML
         attributes.
 
-        @since OOo 1.1.2
+        @since OpenOffice 1.1.2
      */
     [optional] service com::sun::star::xml::UserDefinedAttributeSupplier;
 
     /** Access to the sub elements of an axis like title and grids.
-        @since OOo 3.4
+        @since OpenOffice 3.4
      */
     [optional] interface com::sun::star::chart::XAxis;
 
@@ -181,14 +181,14 @@ published service ChartAxis
     //-------------------------------------------------------------------------
 
     /** determines which type of axis this is, e.g. a date-axis or a category-axis @see ChartAxisType
-        @since OOo 3.4
+        @since OpenOffice 3.4
      */
     [optional, property] long AxisType;
 
     //-------------------------------------------------------------------------
 
     /** if the current axis is a date-axis the intervals are choosen as given with TimeIncrement
-        @since OOo 3.4
+        @since OpenOffice 3.4
      */
     [optional, maybevoid, property] TimeIncrement TimeIncrement;
 

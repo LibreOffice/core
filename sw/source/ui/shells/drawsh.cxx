@@ -51,6 +51,11 @@
 #include <svx/xtable.hxx>
 #include <sfx2/sidebar/EnumContext.hxx>
 #include <svx/svdoashp.hxx>
+#include <svx/svdoole2.hxx>
+#include <sfx2/opengrf.hxx>
+#include <svx/svdograf.hxx>
+#include <svx/svdundo.hxx>
+#include <svx/xbtmpit.hxx>
 
 #include "swundo.hxx"
 #include "wrtsh.hxx"
@@ -82,6 +87,100 @@ SFX_IMPL_INTERFACE(SwDrawShell, SwDrawBaseShell, SW_RES(STR_SHELLNAME_DRAW))
     Beschreibung:
  --------------------------------------------------------------------*/
 
+
+// #123922# check as the name implies
+SdrObject* SwDrawShell::IsSingleFillableNonOLESelected()
+{
+    SwWrtShell &rSh = GetShell();
+    SdrView* pSdrView = rSh.GetDrawView();
+
+    if(!pSdrView)
+    {
+        return 0;
+    }
+
+    SdrObject* pPickObj = pSdrView->getSelectedIfSingle();
+
+    if(!pPickObj)
+    {
+        return 0;
+    }
+
+    if(!pPickObj->IsClosedObj())
+    {
+        return 0;
+    }
+
+    if(dynamic_cast< SdrOle2Obj* >(pPickObj))
+    {
+        return 0;
+    }
+
+    return pPickObj;
+}
+
+// #123922# insert given graphic data dependent of the object type in focus
+void SwDrawShell::InsertPictureFromFile(SdrObject& rObject)
+{
+    SwWrtShell &rSh = GetShell();
+    SdrView* pSdrView = rSh.GetDrawView();
+
+    if(pSdrView)
+    {
+        SvxOpenGraphicDialog aDlg(SW_RESSTR(STR_INSERT_GRAPHIC));
+
+        if(GRFILTER_OK == aDlg.Execute())
+        {
+            Graphic aGraphic;
+            int nError(aDlg.GetGraphic(aGraphic));
+
+            if(GRFILTER_OK == nError)
+            {
+                const bool bAsLink(aDlg.IsAsLink());
+                SdrObject* pResult = &rObject;
+
+                rSh.StartUndo(UNDO_PASTE_CLIPBOARD);
+
+                if(dynamic_cast< SdrGrafObj* >(&rObject))
+                {
+                    SdrGrafObj* pNewGrafObj = (SdrGrafObj*)rObject.CloneSdrObject();
+
+                    pNewGrafObj->SetGraphic(aGraphic);
+
+                    // #123922#  for handling MasterObject and virtual ones correctly, SW
+                    // wants us to call ReplaceObject at the page, but that also
+                    // triggers the same assertion (I tried it), so stay at the view method
+                    pSdrView->ReplaceObjectAtView(rObject, *pNewGrafObj);
+
+                    // set in all cases - the Clone() will have copied an existing link (!)
+                    pNewGrafObj->SetGraphicLink(
+                        bAsLink ? aDlg.GetPath() : String(),
+                        bAsLink ? aDlg.GetCurrentFilter() : String());
+
+                    pResult = pNewGrafObj;
+                }
+                else // if(rObject.IsClosedObj() && !dynamic_cast< SdrOle2Obj* >(&rObject))
+                {
+                    pSdrView->AddUndo(new SdrUndoAttrObj(rObject));
+
+                    SfxItemSet aSet(pSdrView->getSdrModelFromSdrView().GetItemPool(), XATTR_FILLSTYLE, XATTR_FILLBITMAP);
+
+                    aSet.Put(XFillStyleItem(XFILL_BITMAP));
+                    aSet.Put(XFillBitmapItem(String(), aGraphic));
+                    rObject.SetMergedItemSetAndBroadcast(aSet);
+                }
+
+                rSh.EndUndo( UNDO_END );
+
+                if(pResult)
+                {
+                    // we are done; mark the modified/new object
+                    pSdrView->MarkObj(*pResult);
+                }
+            }
+        }
+    }
+}
 
 void SwDrawShell::Execute(SfxRequest &rReq)
 {
@@ -234,7 +333,7 @@ void SwDrawShell::Execute(SfxRequest &rReq)
             SwDocStat aCurr;
             SwDocStat aDocStat( rSh.getIDocumentStatistics()->GetDocStat() );
             {
-                SwWait aWait( *GetView().GetDocShell(), sal_True );
+                SwWait aWait( *GetView().GetDocShell(), true );
                 rSh.StartAction();
                 rSh.CountWords( aCurr );
                 rSh.UpdateDocStat( aDocStat );
@@ -283,6 +382,21 @@ void SwDrawShell::Execute(SfxRequest &rReq)
             rReq.Ignore ();
             break;
 
+        case SID_INSERT_GRAPHIC:
+        {
+            // #123922# check if we can do something
+            SdrObject* pObj = IsSingleFillableNonOLESelected();
+
+            if(pObj)
+            {
+                // ...and if yes, do something
+                InsertPictureFromFile(*pObj);
+                bool bBla = true;
+            }
+
+            break;
+        }
+
         default:
             DBG_ASSERT(!this, "falscher Dispatcher");
             return;
@@ -296,8 +410,6 @@ void SwDrawShell::Execute(SfxRequest &rReq)
 /*--------------------------------------------------------------------
     Beschreibung:
  --------------------------------------------------------------------*/
-
-
 
 void SwDrawShell::GetState(SfxItemSet& rSet)
 {
@@ -381,6 +493,19 @@ void SwDrawShell::GetState(SfxItemSet& rSet)
                 }
             }
             break;
+
+            case SID_INSERT_GRAPHIC:
+            {
+                // #123922# check if we can do something
+                SdrObject* pObj = IsSingleFillableNonOLESelected();
+
+                if(!pObj)
+                {
+                    rSet.DisableItem(nWhich);
+                }
+
+                break;
+            }
         }
         nWhich = aIter.NextWhich();
     }

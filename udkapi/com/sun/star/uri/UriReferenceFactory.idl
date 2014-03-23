@@ -64,7 +64,7 @@ published interface XUriReferenceFactory;
    service does not support
    <type scope="com::sun::star::uri">XUriSchemeParser</type>.</p>
 
-   @since OOo 2.0
+   @since OpenOffice 2.0
  */
 published service UriReferenceFactory: XUriReferenceFactory;
 

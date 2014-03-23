@@ -743,7 +743,7 @@ void Os2SalGraphics::invert( long nX, long nY, long nWidth, long nHeight, SalInv
 
 // -----------------------------------------------------------------------
 
-void Os2SalGraphics::invert( ULONG nPoints, const SalPoint* pPtAry, SalInvert nFlags )
+void Os2SalGraphics::invert( sal_uInt32 nPoints, const SalPoint* pPtAry, SalInvert nFlags )
 {
     if( nFlags & SAL_INVERT_TRACKFRAME )
     {

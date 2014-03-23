@@ -40,7 +40,7 @@ module com {  module sun {  module star {  module sheet {
     <p>The outer sequence represents the rows and the inner sequence
     the columns of the array.</p>
 
-    @since OOo 1.1.2
+    @since OpenOffice 1.1.2
  */
 
 published interface XCellRangeFormula: com::sun::star::uno::XInterface

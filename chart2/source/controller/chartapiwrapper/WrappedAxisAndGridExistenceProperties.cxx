@@ -310,7 +310,7 @@ Any WrappedAxisTitleExistenceProperty::getPropertyValue( const Reference< beans:
     sal_Bool bHasTitle = sal_False;
 
     Reference< chart2::XTitle > xTitle( TitleHelper::getTitle( m_eTitleType, m_spChart2ModelContact->getChartModel() ) );
-    if( xTitle.is() && (TitleHelper::getCompleteString( xTitle ).getLength() != 0) )
+    if( xTitle.is() && (TitleHelper::getCompleteString( xTitle ).isEmpty() == false) )
         bHasTitle = sal_True;
 
     Any aRet;

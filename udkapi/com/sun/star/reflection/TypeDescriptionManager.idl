@@ -106,7 +106,7 @@ published service TypeDescriptionManager
     /** Interface for creating enumerations for type descriptions supported
         by this <type>TypeDescriptionManager</type>
 
-    @since OOo 1.1.2
+    @since OpenOffice 1.1.2
     */
     [optional] interface XTypeDescriptionEnumerationAccess;
 };

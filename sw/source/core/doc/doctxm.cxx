@@ -1873,20 +1873,12 @@ void SwTOXBaseSection::GenerateText( sal_uInt16 nArrayIdx,
                     }
                     LinkStruct* pNewLink = new LinkStruct(sURL, nLinkStartPosition,
                                                     nEnd);
-                    pNewLink->aINetFmt.SetVisitedFmt(sLinkCharacterStyle);
-                    pNewLink->aINetFmt.SetINetFmt(sLinkCharacterStyle);
-                    if(sLinkCharacterStyle.Len())
-                    {
-                        sal_uInt16 nPoolId =
-                            SwStyleNameMapper::GetPoolIdFromUIName( sLinkCharacterStyle, nsSwGetPoolIdFromName::GET_POOLID_CHRFMT );
-                        pNewLink->aINetFmt.SetVisitedFmtId(nPoolId);
-                        pNewLink->aINetFmt.SetINetFmtId(nPoolId);
-                    }
-                    else
-                    {
-                        pNewLink->aINetFmt.SetVisitedFmtId(USHRT_MAX);
-                        pNewLink->aINetFmt.SetINetFmtId(USHRT_MAX);
-                    }
+                    const sal_uInt16 nPoolId =
+                            sLinkCharacterStyle.Len() == 0
+                            ? USHRT_MAX
+                            : SwStyleNameMapper::GetPoolIdFromUIName( sLinkCharacterStyle, nsSwGetPoolIdFromName::GET_POOLID_CHRFMT );
+                    pNewLink->aINetFmt.SetVisitedFmtAndId( sLinkCharacterStyle, nPoolId );
+                    pNewLink->aINetFmt.SetINetFmtAndId( sLinkCharacterStyle, nPoolId );
                     aLinkArr.Insert( pNewLink, aLinkArr.Count() );
                     nLinkStartPosition = STRING_NOTFOUND;
                     sLinkCharacterStyle.Erase();

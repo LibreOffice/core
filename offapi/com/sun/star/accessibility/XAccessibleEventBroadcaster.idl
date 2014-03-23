@@ -38,7 +38,7 @@ module com { module sun { module star { module accessibility {
     @see AccessibleEventObject
     @see XAccessibleEventListener
 
-    @since OOo 1.1.2
+    @since OpenOffice 1.1.2
  */
 published interface XAccessibleEventBroadcaster: ::com::sun::star::uno::XInterface
 {

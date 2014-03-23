@@ -37,7 +37,7 @@
 // Sample Code 3: Multi Click Behavior and Hold Event Simulation
 // -------------------------------------------------------------------------------------------
 
-@implementation MainController
+@implementation AppleRemoteMainController
 
 - (id) init {
     self = [super init];  // because we redefined our own init instead of use the fu..nny awakeFromNib 
@@ -73,11 +73,11 @@
         // to give the binding mechanism a chance to see the change of the attribute
         [self setValue: container forKey: @"remoteControl"];	
 #ifdef DEBUG
-            NSLog(@"MainController init done");
+            NSLog(@"AppleRemoteMainController init done");
 #endif
     }
     else 
-        NSLog(@"MainController init failed");
+        NSLog(@"AppleRemoteMainController init failed");
     return self;
 }
 
@@ -105,7 +105,7 @@
 #endif
     if (pressedDown)
     {
-        pressed = @"(pressed)";
+        pressed = @"(AppleRemoteMainController: button pressed)";
 
 #ifdef DEBUG
         switch(buttonIdentifier) 
@@ -124,14 +124,14 @@
             case kRemoteButtonMenu_Hold:    buttonName = @"Menu (long)";            break;  // MEDIA_COMMAND_MENU_HOLD
             case kRemoteControl_Switched:   buttonName = @"Remote Control Switched";break;
 
-            default:    NSLog(@"Unmapped event for button %d", buttonIdentifier);   break;
+            default:    NSLog( @"AppleRemoteMainController: Unmapped event for button %d", buttonIdentifier);   break;
         }
 #endif
         [ self postTheEvent:buttonIdentifier modifierFlags: 0 ];
     }
     else // not pressed
     {
-        pressed = @"(released)";
+        pressed = @"(AppleRemoteMainController: button released)";
     }
 
 #ifdef DEBUG

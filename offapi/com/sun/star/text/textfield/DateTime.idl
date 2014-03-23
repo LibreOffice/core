@@ -42,7 +42,7 @@ published service DateTime
     /** If this flag is set to <FALSE/> the date or time
         is always displayed as the current date or time.
 
-        @since OOo 1.1.2
+        @since OpenOffice 1.1.2
      */
     [optional, property] boolean IsFixed;
 

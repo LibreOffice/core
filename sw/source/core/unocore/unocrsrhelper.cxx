@@ -307,7 +307,7 @@ sal_Bool getCrsrPropertyValue(
                 getNumberingProperty(rPam, eNewState, pAny);
             else
             {
-                if( !rPam.GetDoc()->GetCurrNumRule( *rPam.GetPoint() ) )
+                if( !rPam.GetDoc()->GetNumRuleAtPos( *rPam.GetPoint() ) )
                     eNewState = PropertyState_DEFAULT_VALUE;
             }
             break;
@@ -686,55 +686,42 @@ void setNumberingProperty(const Any& rValue, SwPaM& rPam)
                 }
                 UnoActionContext aAction(pDoc);
 
-                if( rPam.GetNext() != &rPam )           // Mehrfachselektion ?
+                if ( rPam.GetNext() != &rPam )           // Mehrfachselektion ?
                 {
                     pDoc->GetIDocumentUndoRedo().StartUndo( UNDO_START, NULL );
                     SwPamRanges aRangeArr( rPam );
                     SwPaM aPam( *rPam.GetPoint() );
-                    for( sal_uInt16 n = 0; n < aRangeArr.Count(); ++n )
+                    for ( sal_uInt16 n = 0; n < aRangeArr.Count(); ++n )
                     {
-                        // --> OD 2008-03-17 #refactorlists#
-                        // no start of a new list
                         pDoc->SetNumRule( aRangeArr.SetPam( n, aPam ), aRule, false );
-                        // <--
                     }
                     pDoc->GetIDocumentUndoRedo().EndUndo( UNDO_END, NULL );
                 }
                 else
                 {
-                    // --> OD 2008-03-17 #refactorlists#
-                    // no start of a new list
                     pDoc->SetNumRule( rPam, aRule, false );
-                    // <--
                 }
-
-
             }
-            else if(pSwNum->GetCreatedNumRuleName().Len())
+            else if ( pSwNum->GetCreatedNumRuleName().Len() )
             {
-                UnoActionContext aAction(pDoc);
+                UnoActionContext aAction( pDoc );
                 SwNumRule* pRule = pDoc->FindNumRulePtr( pSwNum->GetCreatedNumRuleName() );
-                if(!pRule)
+                if ( !pRule )
                     throw RuntimeException();
-                // --> OD 2008-03-17 #refactorlists#
-                // no start of a new list
                 pDoc->SetNumRule( rPam, *pRule, false );
-                // <--
             }
-            // --> OD 2009-08-18 #i103817#
-            // outline numbering
             else
             {
+                // outline numbering
                 UnoActionContext aAction(pDoc);
                 SwNumRule* pRule = pDoc->GetOutlineNumRule();
                 if(!pRule)
                     throw RuntimeException();
                 pDoc->SetNumRule( rPam, *pRule, false );
             }
-            // <--
         }
     }
-    else if(rValue.getValueType() == ::getVoidCppuType())
+    else if ( rValue.getValueType() == ::getVoidCppuType() )
     {
         rPam.GetDoc()->DelNumRules(rPam);
     }
@@ -746,7 +733,7 @@ void setNumberingProperty(const Any& rValue, SwPaM& rPam)
  * --------------------------------------------------*/
 void  getNumberingProperty(SwPaM& rPam, PropertyState& eState, Any * pAny )
 {
-    const SwNumRule* pNumRule = rPam.GetDoc()->GetCurrNumRule( *rPam.GetPoint() );
+    const SwNumRule* pNumRule = rPam.GetDoc()->GetNumRuleAtPos( *rPam.GetPoint() );
     if(pNumRule)
     {
         uno::Reference< XIndexReplace >  xNum = new SwXNumberingRules(*pNumRule);

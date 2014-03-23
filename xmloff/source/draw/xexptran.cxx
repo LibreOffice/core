@@ -31,6 +31,7 @@
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/tuple/b3dtuple.hxx>
 #include <basegfx/matrix/b3dhommatrix.hxx>
+#include <basegfx/numeric/ftools.hxx>
 #include <tools/string.hxx>
 #include <basegfx/matrix/b3dhommatrixtools.hxx>
 
@@ -891,21 +892,21 @@ const OUString& SdXMLImExTransform3D::GetExportString(const SvXMLUnitConverter& 
             case IMP_SDXMLEXP_TRANSOBJ3D_ROTATE_X   :
             {
                 aNewString += OUString::createFromAscii("rotatex (");
-                Imp_PutDoubleChar(aNewString, rConv, ((ImpSdXMLExpTransObj3DRotateX*)pObj)->mfRotateX);
+                Imp_PutDoubleChar(aNewString, rConv, basegfx::rad2deg( ((ImpSdXMLExpTransObj3DRotateX*)pObj)->mfRotateX) );
                 aNewString += aClosingBrace;
                 break;
             }
             case IMP_SDXMLEXP_TRANSOBJ3D_ROTATE_Y   :
             {
                 aNewString += OUString::createFromAscii("rotatey (");
-                Imp_PutDoubleChar(aNewString, rConv, ((ImpSdXMLExpTransObj3DRotateY*)pObj)->mfRotateY);
+                Imp_PutDoubleChar(aNewString, rConv, basegfx::rad2deg( ((ImpSdXMLExpTransObj3DRotateY*)pObj)->mfRotateY) );
                 aNewString += aClosingBrace;
                 break;
             }
             case IMP_SDXMLEXP_TRANSOBJ3D_ROTATE_Z   :
             {
                 aNewString += OUString::createFromAscii("rotatez (");
-                Imp_PutDoubleChar(aNewString, rConv, ((ImpSdXMLExpTransObj3DRotateZ*)pObj)->mfRotateZ);
+                Imp_PutDoubleChar(aNewString, rConv, basegfx::rad2deg( ((ImpSdXMLExpTransObj3DRotateZ*)pObj)->mfRotateZ) );
                 aNewString += aClosingBrace;
                 break;
             }
@@ -1049,7 +1050,7 @@ void SdXMLImExTransform3D::SetString(const OUString& rNew, const SvXMLUnitConver
                     Imp_SkipSpacesAndOpeningBraces(aStr, nPos, nLen);
                     fValue = Imp_GetDoubleChar(aStr, nPos, nLen, rConv, fValue);
                     if(fValue != 0.0)
-                        maList.push_back(new ImpSdXMLExpTransObj3DRotateX(fValue));
+                        maList.push_back(new ImpSdXMLExpTransObj3DRotateX(basegfx::deg2rad(fValue)));
 
                     Imp_SkipSpacesAndClosingBraces(aStr, nPos, nLen);
                 }
@@ -1061,7 +1062,7 @@ void SdXMLImExTransform3D::SetString(const OUString& rNew, const SvXMLUnitConver
                     Imp_SkipSpacesAndOpeningBraces(aStr, nPos, nLen);
                     fValue = Imp_GetDoubleChar(aStr, nPos, nLen, rConv, fValue);
                     if(fValue != 0.0)
-                        maList.push_back(new ImpSdXMLExpTransObj3DRotateY(fValue));
+                        maList.push_back(new ImpSdXMLExpTransObj3DRotateY(basegfx::deg2rad(fValue)));
 
                     Imp_SkipSpacesAndClosingBraces(aStr, nPos, nLen);
                 }
@@ -1073,7 +1074,7 @@ void SdXMLImExTransform3D::SetString(const OUString& rNew, const SvXMLUnitConver
                     Imp_SkipSpacesAndOpeningBraces(aStr, nPos, nLen);
                     fValue = Imp_GetDoubleChar(aStr, nPos, nLen, rConv, fValue);
                     if(fValue != 0.0)
-                        maList.push_back(new ImpSdXMLExpTransObj3DRotateZ(fValue));
+                        maList.push_back(new ImpSdXMLExpTransObj3DRotateZ(basegfx::deg2rad(fValue)));
 
                     Imp_SkipSpacesAndClosingBraces(aStr, nPos, nLen);
                 }

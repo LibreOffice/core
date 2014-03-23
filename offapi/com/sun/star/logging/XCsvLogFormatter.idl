@@ -44,7 +44,7 @@ module com { module sun { module star { module logging {
 
     @see XLogFormatter, XLogHandler
 
-    @since OOo 3.0
+    @since OpenOffice 3.0
 */
 interface XCsvLogFormatter : XLogFormatter
 {

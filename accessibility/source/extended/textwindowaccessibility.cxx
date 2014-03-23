@@ -1533,21 +1533,7 @@ Document::retrieveParagraphRelationSet( ParagraphImpl const * pParagraph )
 
 void Document::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
 {
-    switch ( rVclWindowEvent.GetId() )
-    {
-        case VCLEVENT_WINDOW_GETFOCUS:
-        case VCLEVENT_WINDOW_LOSEFOCUS:
-        {
-            // #107179# if our parent is a compound control (e.g. MultiLineEdit),
-            // suppress the window focus events here
-// IAccessible2 implementation 2009
-            //if ( !m_bCompoundControlChild )
-                VCLXAccessibleComponent::ProcessWindowEvent( rVclWindowEvent );
-        }
-        break;
-        default:
-            VCLXAccessibleComponent::ProcessWindowEvent( rVclWindowEvent );
-    }
+    VCLXAccessibleComponent::ProcessWindowEvent( rVclWindowEvent );
 }
 
 // virtual
@@ -1969,7 +1955,7 @@ Document::changeParagraphText(::sal_uLong nNumber, ::sal_uInt16 nBegin, ::sal_uI
         m_rView.DeleteSelected();
     if (bPaste)
         m_rView.Paste();
-    else if (rText.getLength() != 0)
+    else if ( !rText.isEmpty() )
         m_rView.InsertText(rText);
 }
 

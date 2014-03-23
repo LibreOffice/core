@@ -32,7 +32,7 @@ module com {  module sun {  module star {  module awt {
 
 /** Describes a key stroke for hotkeys etc.
 
-    @since OOo 1.1.2
+    @since OpenOffice 1.1.2
  */
 published struct KeyStroke
 {

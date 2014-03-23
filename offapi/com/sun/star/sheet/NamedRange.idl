@@ -77,7 +77,7 @@ published service NamedRange
         @see com::sun::star::sheet::FormulaToken
         @see com::sun::star::sheet::FormulaMapGroupSpecialOffset::NAME
 
-        @since OOo 3.0
+        @since OpenOffice 3.0
      */
     [optional, readonly, property] long TokenIndex;
 
@@ -95,7 +95,7 @@ published service NamedRange
         formula referring to this defined name will show the formula
         definition contained in the name instead.</p>
 
-        @since OOo 3.0
+        @since OpenOffice 3.0
      */
     [optional, property] boolean IsSharedFormula;
 };

@@ -984,7 +984,7 @@ void GtkSalFrame::SetExtendedFrameStyle( SalExtStyle nStyle )
         }
         else
             gtk_window_set_wmclass( GTK_WINDOW(m_pWindow),
-                                    X11SalData::getFrameResName( m_nExtStyle ),
+                                    X11SalData::getFrameResName( m_nExtStyle).getStr(),
                                     X11SalData::getFrameClassName() );
     }
 }
@@ -3553,6 +3553,11 @@ void GtkSalFrame::IMHandler::signalIMCommit( GtkIMContext* CONTEXT_ARG, gchar* p
     {
         GTK_YIELD_GRAB();
 
+        bool bWasPreedit =
+            (pThis->m_aInputEvent.mpTextAttr != 0) ||
+            pThis->m_bPreeditJustChanged;
+        pThis->m_bPreeditJustChanged = false;
+
         pThis->m_aInputEvent.mnTime             = 0;
         pThis->m_aInputEvent.mpTextAttr         = 0;
         pThis->m_aInputEvent.maText             = String( pText, RTL_TEXTENCODING_UTF8 );
@@ -3576,9 +3581,7 @@ void GtkSalFrame::IMHandler::signalIMCommit( GtkIMContext* CONTEXT_ARG, gchar* p
          *  or because there never was a preedit.
          */
         bool bSingleCommit = false;
-        bool bWasPreedit =
-            (pThis->m_aInputEvent.mpTextAttr != 0) ||
-            pThis->m_bPreeditJustChanged;
+
         if( ! bWasPreedit
             && pThis->m_aInputEvent.maText.Len() == 1
             && ! pThis->m_aPrevKeyPresses.empty()
@@ -3785,7 +3788,7 @@ gboolean GtkSalFrame::IMHandler::signalIMRetrieveSurrounding( GtkIMContext* pCon
         if (!sAllText.getLength())
             return sal_False;
     rtl::OString sUTF = rtl::OUStringToOString(sAllText, RTL_TEXTENCODING_UTF8);
-    rtl::OUString sCursorText(sAllText, nPosition);
+    rtl::OUString sCursorText( sAllText.getStr(), nPosition);
     gtk_im_context_set_surrounding(pContext, sUTF.getStr(), sUTF.getLength(),
         rtl::OUStringToOString(sCursorText, RTL_TEXTENCODING_UTF8).getLength());
     return sal_True;

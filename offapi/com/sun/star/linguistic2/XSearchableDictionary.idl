@@ -53,7 +53,7 @@ interface XSearchableDictionary : com::sun::star::linguistic2::XDictionary
 
         @see    <type scope="com::sun::star::linguistic2">XDictionaryEntry</type>
         @see    <type scope="com::sun::star::linguistic2">XSearchableDictionaryList</type>
-        @since OOo 3.0.1
+        @since OpenOffice 3.0.1
     */
     sequence< com::sun::star::linguistic2::XDictionaryEntry > searchSimilarEntries( [in] string aWord );
 

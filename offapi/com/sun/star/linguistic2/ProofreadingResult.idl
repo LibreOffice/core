@@ -51,7 +51,7 @@ interface XProofreader;
 //=============================================================================
 /** holds the results from proofreading a sentence.
 
-    @since  OOo 3.0.1
+    @since OpenOffice 3.0.1
 */
 struct ProofreadingResult
 {

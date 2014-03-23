@@ -70,8 +70,7 @@ TabPage RID_SVXPAGE_TRANSPARENCE
         Spin = TRUE ;
         Maximum = 100 ;
         StrictFormat = TRUE ;
-        Unit = FUNIT_CUSTOM ;
-        CustomUnitText = "%" ;
+        Unit = FUNIT_PERCENT ;
         Last = 100 ;
         SpinSize = 5 ;
     };
@@ -123,8 +122,7 @@ TabPage RID_SVXPAGE_TRANSPARENCE
         Spin = TRUE ;
         Maximum = 100 ;
         StrictFormat = TRUE ;
-        Unit = FUNIT_CUSTOM ;
-        CustomUnitText = "%" ;
+        Unit = FUNIT_PERCENT ;
         Last = 100 ;
         SpinSize = 5 ;
     };
@@ -145,8 +143,7 @@ TabPage RID_SVXPAGE_TRANSPARENCE
         Spin = TRUE ;
         Maximum = 100 ;
         StrictFormat = TRUE ;
-        Unit = FUNIT_CUSTOM ;
-        CustomUnitText = "%" ;
+        Unit = FUNIT_PERCENT ;
         Last = 100 ;
         SpinSize = 5 ;
     };
@@ -188,8 +185,7 @@ TabPage RID_SVXPAGE_TRANSPARENCE
         Spin = TRUE ;
         Maximum = 100 ;
         StrictFormat = TRUE ;
-        Unit = FUNIT_CUSTOM ;
-        CustomUnitText = "%" ;
+        Unit = FUNIT_PERCENT ;
         Last = 100 ;
         SpinSize = 5 ;
     };
@@ -210,8 +206,7 @@ TabPage RID_SVXPAGE_TRANSPARENCE
         Spin = TRUE ;
         Maximum = 100 ;
         StrictFormat = TRUE ;
-        Unit = FUNIT_CUSTOM ;
-        CustomUnitText = "%" ;
+        Unit = FUNIT_PERCENT ;
         Last = 100 ;
         SpinSize = 5 ;
     };
@@ -232,8 +227,7 @@ TabPage RID_SVXPAGE_TRANSPARENCE
         Spin = TRUE ;
         Maximum = 100 ;
         StrictFormat = TRUE ;
-        Unit = FUNIT_CUSTOM ;
-        CustomUnitText = "%" ;
+        Unit = FUNIT_PERCENT ;
         Last = 100 ;
         SpinSize = 5 ;
     };
@@ -428,7 +422,6 @@ TabPage RID_SVXPAGE_AREA
         StrictFormat = TRUE ;
         DecimalDigits = 2 ;
         Unit = FUNIT_MM ;
-        CustomUnitText = "%" ;
         Minimum = 5 ;
         Maximum = 100 ;
         First = 5 ;
@@ -453,7 +446,6 @@ TabPage RID_SVXPAGE_AREA
         StrictFormat = TRUE ;
         DecimalDigits = 2 ;
         Unit = FUNIT_MM ;
-        CustomUnitText = "%" ;
         Minimum = 5 ;
         Maximum = 100 ;
         First = 5 ;
@@ -497,8 +489,7 @@ TabPage RID_SVXPAGE_AREA
         Repeat = TRUE ;
         Spin = TRUE ;
         StrictFormat = TRUE ;
-        Unit = FUNIT_CUSTOM ;
-        CustomUnitText = "%" ;
+        Unit = FUNIT_PERCENT ;
         Maximum = 100 ;
         Last = 100 ;
         SpinSize = 5 ;
@@ -514,8 +505,7 @@ TabPage RID_SVXPAGE_AREA
         Spin = TRUE ;
         Maximum = 100 ;
         StrictFormat = TRUE ;
-        Unit = FUNIT_CUSTOM ;
-        CustomUnitText = "%" ;
+        Unit = FUNIT_PERCENT ;
         Last = 100 ;
         SpinSize = 5 ;
     };
@@ -566,10 +556,18 @@ TabPage RID_SVXPAGE_AREA
         Spin = TRUE ;
         Maximum = 100 ;
         StrictFormat = TRUE ;
-        Unit = FUNIT_CUSTOM ;
-        CustomUnitText = "%" ;
+        Unit = FUNIT_PERCENT ;
         Last = 100 ;
         SpinSize = 5 ;
+    };
+    //UUUU
+    PushButton BTN_IMPORTOPTIONAL
+    {
+        HelpID = "cui:PushButton:MD_ICONSELECTOR:BTN_IMPORTOPTIONAL";
+        Pos = MAP_APPFONT ( 132 + 12, 157 + 6 ) ;
+        Size = MAP_APPFONT ( 100 , 14 ) ;
+        TabStop = TRUE ;
+        Text[ en-US ] = "Import Graphic...";
     };
 };
  // RID_SVXPAGE_SHADOW ------------------------------------------------------
@@ -664,8 +662,7 @@ TabPage RID_SVXPAGE_SHADOW
         Spin = TRUE ;
         Maximum = 100 ;
         StrictFormat = TRUE ;
-        Unit = FUNIT_CUSTOM ;
-        CustomUnitText = "%" ;
+        Unit = FUNIT_PERCENT ;
         Last = 100 ;
         SpinSize = 5 ;
     };
@@ -875,9 +872,7 @@ TabPage RID_SVXPAGE_BITMAP
         Pos = MAP_APPFONT ( 12 , 25  ) ;
         Size = MAP_APPFONT ( 72 , 72 ) ;
         TabStop = TRUE ;
-        //IAccessibility2 Implementation 2009-----
         Text [ en-US ] = "Pattern Editor";
-        //-----IAccessibility2 Implementation 2009
     };
     FixedText FT_COLOR
     {
@@ -1049,8 +1044,7 @@ TabPage RID_SVXPAGE_GRADIENT
         Spin = TRUE ;
         Maximum = 100 ;
         StrictFormat = TRUE ;
-        Unit = FUNIT_CUSTOM ;
-        CustomUnitText = "%" ;
+        Unit = FUNIT_PERCENT ;
         Last = 100 ;
         SpinSize = 5 ;
     };
@@ -1071,8 +1065,7 @@ TabPage RID_SVXPAGE_GRADIENT
         Spin = TRUE ;
         Maximum = 100 ;
         StrictFormat = TRUE ;
-        Unit = FUNIT_CUSTOM ;
-        CustomUnitText = "%" ;
+        Unit = FUNIT_PERCENT ;
         Last = 100 ;
         SpinSize = 5 ;
     };
@@ -1114,8 +1107,7 @@ TabPage RID_SVXPAGE_GRADIENT
         Spin = TRUE ;
         Maximum = 100 ;
         StrictFormat = TRUE ;
-        Unit = FUNIT_CUSTOM ;
-        CustomUnitText = "%" ;
+        Unit = FUNIT_PERCENT ;
         Last = 100 ;
         SpinSize = 5 ;
     };
@@ -1146,8 +1138,7 @@ TabPage RID_SVXPAGE_GRADIENT
         Spin = TRUE ;
         Maximum = 100 ;
         StrictFormat = TRUE ;
-        Unit = FUNIT_CUSTOM ;
-        CustomUnitText = "%" ;
+        Unit = FUNIT_PERCENT ;
         Last = 100 ;
         SpinSize = 5 ;
     };
@@ -1178,8 +1169,7 @@ TabPage RID_SVXPAGE_GRADIENT
         Spin = TRUE ;
         Maximum = 100 ;
         StrictFormat = TRUE ;
-        Unit = FUNIT_CUSTOM ;
-        CustomUnitText = "%" ;
+        Unit = FUNIT_PERCENT ;
         Last = 100 ;
         SpinSize = 5 ;
     };
@@ -1319,18 +1309,14 @@ TabPage RID_SVXPAGE_COLOR
         Border = TRUE;
         Pos = MAP_APPFONT ( 157 , 14  ) ;
         Size = MAP_APPFONT ( 34 , 25 ) ;
-        // IAccessibility2 implementation 2009. ------
         Text [ en-US ] = "Old Color" ;
-        // ------ IAccessibility2 implementation 2009.
     };
     Control CTL_PREVIEW_NEW
     {
         Border = TRUE;
         Pos = MAP_APPFONT ( 157, 39  ) ;
         Size = MAP_APPFONT ( 34 , 25 ) ;
-        // IAccessibility2 implementation 2009. ------
         Text [ en-US ] = "New Color" ;
-        // ------ IAccessibility2 implementation 2009.
     };
     ListBox LB_COLORMODEL
     {
@@ -1362,8 +1348,7 @@ TabPage RID_SVXPAGE_COLOR
         Repeat = TRUE ;
         Spin = TRUE ;
         Maximum = 100 ;
-        Unit = FUNIT_CUSTOM ;
-        CustomUnitText = "%" ;
+        Unit = FUNIT_PERCENT ;
         Last = 100 ;
     };
     FixedText FT_2
@@ -1382,8 +1367,7 @@ TabPage RID_SVXPAGE_COLOR
         Repeat = TRUE ;
         Spin = TRUE ;
         Maximum = 100 ;
-        Unit = FUNIT_CUSTOM ;
-        CustomUnitText = "%" ;
+        Unit = FUNIT_PERCENT ;
         Last = 100 ;
     };
     FixedText FT_3
@@ -1402,8 +1386,7 @@ TabPage RID_SVXPAGE_COLOR
         Repeat = TRUE ;
         Spin = TRUE ;
         Maximum = 100 ;
-        Unit = FUNIT_CUSTOM ;
-        CustomUnitText = "%" ;
+        Unit = FUNIT_PERCENT ;
         Last = 100 ;
     };
     FixedText FT_4
@@ -1422,8 +1405,7 @@ TabPage RID_SVXPAGE_COLOR
         Repeat = TRUE ;
         Spin = TRUE ;
         Maximum = 100 ;
-        Unit = FUNIT_CUSTOM ;
-        CustomUnitText = "%" ;
+        Unit = FUNIT_PERCENT ;
         Last = 100 ;
     };
     PushButton BTN_ADD

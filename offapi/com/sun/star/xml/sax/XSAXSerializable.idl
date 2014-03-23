@@ -40,7 +40,7 @@ module com { module sun { module star { module xml { module sax {
     <p>
     </p>
 
-    @since OOo 3.0
+    @since OpenOffice 3.0
 
 */
 interface XSAXSerializable

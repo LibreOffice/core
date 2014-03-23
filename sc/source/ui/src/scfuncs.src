@@ -5448,7 +5448,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
         };
         String 5 // Description of Parameter 2
         {
-            Text [ en-US ] = "The type of the quartile (0 = MIN, 1 = 25%, 2 = 50 %, 3 = 75 %, 4 =MAX)." ;
+            Text [ en-US ] = "The type of the quartile (0 = MIN, 1 = 25 %, 2 = 50 %, 3 = 75 %, 4 = MAX)." ;
         };
     };
      // -=*# Resource for function KGRÖSSTE #*=-
@@ -8399,7 +8399,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
         };
         String 3 // Description of Parameter 1
         {
-            Text [ en-US ] = "Text for the concatentation." ;
+            Text [ en-US ] = "Text for the concatenation." ;
         };
     };
      // -=*# Resource for function IDENTISCH #*=-

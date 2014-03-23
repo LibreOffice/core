@@ -310,7 +310,7 @@ published service TableAutoFormatField
 
     /** property containing a description of the cell border.
 
-        @since OOo 1.1.2
+        @since OpenOffice 1.1.2
      */
     [optional, property] com::sun::star::table::TableBorder TableBorder;
 };

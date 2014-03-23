@@ -629,7 +629,7 @@ void CCIDecompressor::StartDecompression( SvStream & rIStream )
 }
 
 
-sal_Bool CCIDecompressor::DecompressScanline( sal_uInt8 * pTarget, sal_uLong nTargetBits )
+sal_Bool CCIDecompressor::DecompressScanline( sal_uInt8 * pTarget, sal_uLong nTargetBits, bool bLastLine )
 {
     sal_uInt16 i;
     sal_uInt8 * pSrc,* pDst;
@@ -712,6 +712,12 @@ sal_Bool CCIDecompressor::DecompressScanline( sal_uInt8 * pTarget, sal_uLong nTa
         pSrc = pTarget;
         pDst = pLastLine;
         for ( i = 0; i < nLastLineSize; i++ ) *(pDst++)=*(pSrc++);
+    }
+
+    // #122984#
+    if( !bStatus && bLastLine )
+    {
+        bStatus = sal_True;
     }
 
     if ( pIStream->GetError() )

@@ -311,6 +311,9 @@ public:
                            SvNumberFormatter* pFormatter = NULL, bool bDetectNumberFormat = true );
     void        SetValue( SCCOL nCol, SCROW nRow, const double& rVal );
     void        SetError( SCCOL nCol, SCROW nRow, sal_uInt16 nError);
+    SCSIZE      GetPatternCount( SCCOL nCol );
+    SCSIZE      GetPatternCount( SCCOL nCol, SCROW nRw1, SCROW nRw2 );
+    bool        ReservedPatternCount( SCCOL nCol, SCSIZE nReserved );
 
     void        GetString( SCCOL nCol, SCROW nRow, String& rString );
     void    FillDPCache( ScDPTableDataCache * pCache, SCCOL nStartCol, SCCOL nEndCol, SCROW nStartRow, SCROW nEndRow );
@@ -938,10 +941,8 @@ private:
         SCROW mnUBound;
     };
 
-//IAccessibility2 Implementation 2009-----
 public :
     ScColumn* GetColumnByIndex(sal_Int32 index);
-//-----IAccessibility2 Implementation 2009
 };
 
 

@@ -19,22 +19,18 @@
  *
  *************************************************************/
 
-
-
 #ifndef __com_sun_star_ui_dialogs_XWizardPage_idl__
 #define __com_sun_star_ui_dialogs_XWizardPage_idl__
 
 #include <com/sun/star/awt/XWindow.idl>
 
-//==================================================================================================================
-
 module com { module sun { module star { module ui { module dialogs {
 
-//==================================================================================================================
-
 /** is a single page of a <type>Wizard</type>
+
+    @since OpenOffice 3.3
  */
-published interface XWizardPage : ::com::sun::star::lang::XComponent
+interface XWizardPage : ::com::sun::star::lang::XComponent
 {
     /** provides read-only access to the window of the page
     */
@@ -74,10 +70,6 @@ published interface XWizardPage : ::com::sun::star::lang::XComponent
     boolean canAdvance();
 };
 
-//==================================================================================================================
-
 }; }; }; }; };
-
-//==================================================================================================================
 
 #endif

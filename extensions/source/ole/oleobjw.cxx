@@ -2333,6 +2333,50 @@ void IUnknownWrapper_Impl::getPropDesc(const OUString & sFuncName, FUNCDESC ** p
    //else no entry for sFuncName, pFuncDesc will not be filled in
 }
 
+VARTYPE lcl_getUserDefinedElementType( ITypeInfo* pTypeInfo, const DWORD nHrefType )
+{
+    VARTYPE _type( VT_NULL );
+    if ( pTypeInfo )
+    {
+        CComPtr<ITypeInfo> spRefInfo;
+        pTypeInfo->GetRefTypeInfo( nHrefType, &spRefInfo.p );
+        if ( spRefInfo )
+        {
+            TypeAttr attr( spRefInfo );
+            spRefInfo->GetTypeAttr( &attr );
+            if ( attr->typekind == TKIND_ENUM )
+            {
+                // We use the type of the first enum value.
+                if ( attr->cVars == 0 )
+                {
+                    throw BridgeRuntimeError(OUSTR("[automation bridge] Could not obtain type description"));
+                }
+                VarDesc var( spRefInfo );
+                spRefInfo->GetVarDesc( 0, &var );
+                _type = var->lpvarValue->vt;
+            }
+            else if ( attr->typekind == TKIND_INTERFACE )
+            {
+                _type = VT_UNKNOWN;
+            }
+            else if ( attr->typekind == TKIND_DISPATCH )
+            {
+                _type = VT_DISPATCH;
+            }
+            else if ( attr->typekind == TKIND_ALIAS )
+            {
+                // TKIND_ALIAS is a type that is an alias for another type. So get that alias type.
+                _type = lcl_getUserDefinedElementType( pTypeInfo, attr->tdescAlias.hreftype );
+            }
+            else
+            {
+                throw BridgeRuntimeError( OUSTR("[automation bridge] Unhandled user defined type.") );
+            }
+        }
+    }
+    return _type;
+}
+
 VARTYPE IUnknownWrapper_Impl::getElementTypeDesc(const TYPEDESC *desc)
 {
     VARTYPE _type( VT_NULL );
@@ -2350,38 +2394,7 @@ VARTYPE IUnknownWrapper_Impl::getElementTypeDesc(const TYPEDESC *desc)
     else if (desc->vt == VT_USERDEFINED)
     {
         ITypeInfo* thisInfo = getTypeInfo(); //kept by this instance
-        CComPtr<ITypeInfo>  spRefInfo;
-        thisInfo->GetRefTypeInfo(desc->hreftype, & spRefInfo.p);
-        if (spRefInfo)
-        {
-            TypeAttr  attr(spRefInfo);
-            spRefInfo->GetTypeAttr( & attr);
-            if (attr->typekind == TKIND_ENUM)
-            {
-                //We use the type of the first enum value.
-                if (attr->cVars == 0)
-                {
-                    throw BridgeRuntimeError(OUSTR("[automation bridge] Could "
-                        "not obtain type description"));
-                }
-                VarDesc var(spRefInfo);
-                spRefInfo->GetVarDesc(0, & var);
-                _type = var->lpvarValue->vt;
-            }
-            else if (attr->typekind == TKIND_INTERFACE)
-            {
-                _type = VT_UNKNOWN;
-            }
-            else if (attr->typekind == TKIND_DISPATCH)
-            {
-                _type = VT_DISPATCH;
-            }
-            else
-            {
-                throw BridgeRuntimeError(OUSTR("[automation bridge] "
-                    "Unhandled user defined type."));
-            }
-        }
+        _type = lcl_getUserDefinedElementType( thisInfo, desc->hreftype );
     }
     else
     {

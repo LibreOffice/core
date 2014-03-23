@@ -183,7 +183,7 @@ UpdateCheckROModel::getUpdateEntry(UpdateInfo& rInfo) const
     rtl::OString aStr(RELEASE_NOTE);
     for(sal_Int32 n=1; n < 6; ++n )
     {
-        rtl::OUString aUStr = getStringValue(aStr + rtl::OString::valueOf(n));
+        rtl::OUString aUStr = getStringValue( (aStr + rtl::OString::valueOf(n)).getStr());
         if( aUStr.getLength() > 0 )
             rInfo.ReleaseNotes.push_back(ReleaseNote((sal_Int8) n, aUStr));
     }

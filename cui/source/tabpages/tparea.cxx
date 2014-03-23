@@ -54,6 +54,11 @@
 #include <svl/intitem.hxx> //add CHINA001
 #include <sfx2/request.hxx>//add CHINA001
 #include "paragrph.hrc"
+
+//UUUU
+#include "sfx2/opengrf.hxx"
+#include <vcl/msgbox.hxx>
+
 #define DLGWIN this->GetParent()->GetParent()
 
 // static ----------------------------------------------------------------
@@ -250,6 +255,8 @@ void SvxTransparenceTabPage::SetControlState_Impl(XGradientStyle eXGS)
 SvxTransparenceTabPage::SvxTransparenceTabPage(Window* pParent, const SfxItemSet& rInAttrs)
 :   SvxTabPage          ( pParent, CUI_RES( RID_SVXPAGE_TRANSPARENCE ), rInAttrs),
     rOutAttrs           ( rInAttrs ),
+    eRP                 ( RP_MM ),
+
     nPageType(0),
     nDlgType(0),
 
@@ -616,9 +623,8 @@ void SvxTransparenceTabPage::PageCreated (SfxAllItemSet aSet) //add CHINA001
 |*
 \************************************************************************/
 
-SvxAreaTabPage::SvxAreaTabPage( Window* pParent, const SfxItemSet& rInAttrs ) :
-
-    SvxTabPage          ( pParent, CUI_RES( RID_SVXPAGE_AREA ), rInAttrs ),
+SvxAreaTabPage::SvxAreaTabPage( Window* pParent, const SfxItemSet& rInAttrs )
+:   SvxTabPage          ( pParent, CUI_RES( RID_SVXPAGE_AREA ), rInAttrs ),
 
     aFlProp             ( this, CUI_RES( FL_PROP ) ),
     aTypeLB             ( this, CUI_RES( LB_AREA_TYPE ) ),
@@ -659,15 +665,43 @@ SvxAreaTabPage::SvxAreaTabPage( Window* pParent, const SfxItemSet& rInAttrs ) :
     aCtlXRectPreview    ( this, CUI_RES( CTL_COLOR_PREVIEW ) ),
 
     rOutAttrs           ( rInAttrs ),
+    eRP                 ( RP_MM ),
 
     maColorTab(),
     maGradientList(),
     maHatchingList(),
     maBitmapList(),
 
+    // local fixed not o be changed values for local pointers
+    maFixed_ChangeType(CT_NONE),
+    maFixed_sal_Bool(false),
+
+    // init with pointers to fixed ChangeType
+    pnColorTableState(&maFixed_ChangeType),
+    pnBitmapListState(&maFixed_ChangeType),
+    pnGradientListState(&maFixed_ChangeType),
+    pnHatchingListState(&maFixed_ChangeType),
+
+    nPageType(0),
+    nDlgType(0),
+    nPos(0),
+
+    // init with pointer to fixed bool
+    pbAreaTP(&maFixed_sal_Bool),
+
     pXPool              ( (XOutdevItemPool*) rInAttrs.GetPool() ),
     aXFillAttr          ( pXPool ),
-    rXFSet              ( aXFillAttr.GetItemSet() )
+    rXFSet              ( aXFillAttr.GetItemSet() ),
+
+    ePoolUnit(SFX_MAPUNIT_100TH_MM),
+    eFUnit(FUNIT_NONE),
+
+    //UUUU
+    mbOfferImportButton(false),
+    mbPositionsAdapted(false),
+    mbDirectGraphicSet(false),
+    maDirectGraphic(),
+    maBtnImport(this, CUI_RES(BTN_IMPORTOPTIONAL))
 {
     FreeResource();
 
@@ -683,6 +717,8 @@ SvxAreaTabPage::SvxAreaTabPage( Window* pParent, const SfxItemSet& rInAttrs ) :
     aTsbStepCount.Hide();
     aNumFldStepCount.Hide();
 
+    //UUUU
+    maBtnImport.Hide();
     aTsbTile.Hide();
     aTsbStretch.Hide();
     aTsbScale.Hide();
@@ -702,6 +738,7 @@ SvxAreaTabPage::SvxAreaTabPage( Window* pParent, const SfxItemSet& rInAttrs ) :
     aFtYOffset.Hide();
     aMtrFldYOffset.Hide();
     aFlPosition.Hide();
+
     // Controls for Hatch-Background
     aCbxHatchBckgrd.Hide();
     aLbHatchBckgrdColor.Hide();
@@ -753,6 +790,10 @@ SvxAreaTabPage::SvxAreaTabPage( Window* pParent, const SfxItemSet& rInAttrs ) :
         LINK( this, SvxAreaTabPage, ModifyStepCountHdl_Impl ) );
     aNumFldStepCount.SetModifyHdl(
         LINK( this, SvxAreaTabPage, ModifyStepCountHdl_Impl ) );
+
+    //UUUU
+    maBtnImport.SetClickHdl(LINK(this, SvxAreaTabPage, ClickImportHdl_Impl));
+    maBtnImport.SetAccessibleRelationMemberOf(&aFlProp);
 
     Link aLink( LINK( this, SvxAreaTabPage, ModifyTileHdl_Impl ) );
     aTsbTile.SetClickHdl( aLink );
@@ -1124,33 +1165,44 @@ sal_Bool SvxAreaTabPage::FillItemSet( SfxItemSet& rAttrs )
             break;
             case XFILL_BITMAP:
             {
-                nPos = aLbBitmap.GetSelectEntryPos();
-                if( nPos != LISTBOX_ENTRY_NOTFOUND &&
-                    nPos != aLbBitmap.GetSavedValue() )
+                //UUUU
+                if(mbDirectGraphicSet && GRAPHIC_NONE != maDirectGraphic.GetType())
                 {
-                    const XBitmapEntry* pXBitmapEntry = maBitmapList->GetBitmap(nPos);
-                    const String aString(aLbBitmap.GetSelectEntry());
-                    const XFillBitmapItem aFillBitmapItem(aString, pXBitmapEntry->GetGraphicObject());
-                    pOld = GetOldItem( rAttrs, XATTR_FILLBITMAP );
-                    if ( !pOld || !( *(const XFillBitmapItem*)pOld == aFillBitmapItem ) )
-                    {
-                        rAttrs.Put( aFillBitmapItem );
-                        bModified = sal_True;
-                    }
+                    const XFillBitmapItem aXBmpItem(maDirectName, maDirectGraphic);
+                    rAttrs.Put(XFillStyleItem(XFILL_BITMAP));
+                    rAttrs.Put(aXBmpItem);
+                    bModified = sal_True;
                 }
-                // NEU
-                if( (eSavedStyle != eStyle) &&
-                    ( bModified ||
-                      SFX_ITEM_SET == rOutAttrs.GetItemState( GetWhich( XATTR_FILLBITMAP ), sal_True ) ) )
+                else
                 {
-                    XFillStyleItem aStyleItem( XFILL_BITMAP );
-                    pOld = GetOldItem( rAttrs, XATTR_FILLSTYLE );
-                    if ( !pOld || !( *(const XFillStyleItem*)pOld == aStyleItem ) )
+                    nPos = aLbBitmap.GetSelectEntryPos();
+                    if( nPos != LISTBOX_ENTRY_NOTFOUND &&
+                        nPos != aLbBitmap.GetSavedValue() )
                     {
-                        rAttrs.Put( aStyleItem );
-                        bModified = sal_True;
+                        const XBitmapEntry* pXBitmapEntry = maBitmapList->GetBitmap(nPos);
+                        const String aString(aLbBitmap.GetSelectEntry());
+                        const XFillBitmapItem aFillBitmapItem(aString, pXBitmapEntry->GetGraphicObject());
+                        pOld = GetOldItem( rAttrs, XATTR_FILLBITMAP );
+                        if ( !pOld || !( *(const XFillBitmapItem*)pOld == aFillBitmapItem ) )
+                        {
+                            rAttrs.Put( aFillBitmapItem );
+                            bModified = sal_True;
+                        }
                     }
-               }
+                    // NEU
+                    if( (eSavedStyle != eStyle) &&
+                        ( bModified ||
+                          SFX_ITEM_SET == rOutAttrs.GetItemState( GetWhich( XATTR_FILLBITMAP ), sal_True ) ) )
+                    {
+                        XFillStyleItem aStyleItem( XFILL_BITMAP );
+                        pOld = GetOldItem( rAttrs, XATTR_FILLSTYLE );
+                        if ( !pOld || !( *(const XFillStyleItem*)pOld == aStyleItem ) )
+                        {
+                            rAttrs.Put( aStyleItem );
+                            bModified = sal_True;
+                        }
+                   }
+                }
            }
            break;
        }
@@ -1778,6 +1830,8 @@ IMPL_LINK( SvxAreaTabPage, SelectDialogTypeHdl_Impl, ListBox *, EMPTYARG )
 
 IMPL_LINK( SvxAreaTabPage, ClickInvisibleHdl_Impl, void *, EMPTYARG )
 {
+    //UUUU
+    maBtnImport.Hide();
     aTsbTile.Hide();
     aTsbStretch.Hide();
     aTsbScale.Hide();
@@ -1827,6 +1881,8 @@ IMPL_LINK( SvxAreaTabPage, ClickInvisibleHdl_Impl, void *, EMPTYARG )
 
 IMPL_LINK( SvxAreaTabPage, ClickColorHdl_Impl, void *, EMPTYARG )
 {
+    //UUUU
+    maBtnImport.Hide();
     aTsbTile.Hide();
     aTsbStretch.Hide();
     aTsbScale.Hide();
@@ -1915,6 +1971,8 @@ IMPL_LINK( SvxAreaTabPage, ModifyColorHdl_Impl, void *, EMPTYARG )
 
 IMPL_LINK( SvxAreaTabPage, ClickGradientHdl_Impl, void *, EMPTYARG )
 {
+    //UUUU
+    maBtnImport.Hide();
     aTsbTile.Hide();
     aTsbStretch.Hide();
     aTsbScale.Hide();
@@ -2023,6 +2081,8 @@ IMPL_LINK( SvxAreaTabPage, ClickHatchingHdl_Impl, void *, EMPTYARG )
     aTsbStepCount.Hide();
     aNumFldStepCount.Hide();
 
+    //UUUU
+    maBtnImport.Hide();
     aTsbTile.Hide();
     aTsbStretch.Hide();
     aTsbScale.Hide();
@@ -2197,6 +2257,50 @@ IMPL_LINK( SvxAreaTabPage, ClickBitmapHdl_Impl, void *, EMPTYARG )
     aCbxHatchBckgrd.Hide();
     aLbHatchBckgrdColor.Hide();
 
+    //UUUU
+    if(mbOfferImportButton)
+    {
+        maBtnImport.Show();
+        maBtnImport.Enable();
+    }
+    else
+    {
+        maBtnImport.Hide();
+        maBtnImport.Disable();
+    }
+
+    if(mbOfferImportButton && !mbPositionsAdapted)
+    {
+        //UUUU adapt positions only once in dialogs lifetime
+        mbPositionsAdapted = true;
+
+        // adapt in y from position of FL_SIZE MAP_APPFONT(3) to position of MTR_FLD_OFFSET MAP_APPFONT(157)
+        const sal_uInt32 nOrigStartY(aFlSize.GetPosPixel().Y());
+        const sal_uInt32 nOrigHeight(aMtrFldOffset.GetPosPixel().Y() - nOrigStartY);
+        const sal_uInt32 nBtnImportHeight(maBtnImport.GetSizePixel().Height());
+        const sal_uInt32 nNewHeight(nOrigHeight - nBtnImportHeight);
+
+        aFlSize.SetPosPixel(Point(aFlSize.GetPosPixel().X(), nOrigStartY + (((aFlSize.GetPosPixel().Y() - nOrigStartY) * nNewHeight) / nOrigHeight)));
+        aTsbOriginal.SetPosPixel(Point(aTsbOriginal.GetPosPixel().X(), nOrigStartY + (((aTsbOriginal.GetPosPixel().Y() - nOrigStartY) * nNewHeight) / nOrigHeight)));
+        aTsbScale.SetPosPixel(Point(aTsbScale.GetPosPixel().X(), nOrigStartY + (((aTsbScale.GetPosPixel().Y() - nOrigStartY) * nNewHeight) / nOrigHeight)));
+        aFtXSize.SetPosPixel(Point(aFtXSize.GetPosPixel().X(), nOrigStartY + (((aFtXSize.GetPosPixel().Y() - nOrigStartY) * nNewHeight) / nOrigHeight)));
+        aMtrFldXSize.SetPosPixel(Point(aMtrFldXSize.GetPosPixel().X(), nOrigStartY + (((aMtrFldXSize.GetPosPixel().Y() - nOrigStartY) * nNewHeight) / nOrigHeight)));
+        aFtYSize.SetPosPixel(Point(aFtYSize.GetPosPixel().X(), nOrigStartY + (((aFtYSize.GetPosPixel().Y() - nOrigStartY) * nNewHeight) / nOrigHeight)));
+        aMtrFldYSize.SetPosPixel(Point(aMtrFldYSize.GetPosPixel().X(), nOrigStartY + (((aMtrFldYSize.GetPosPixel().Y() - nOrigStartY) * nNewHeight) / nOrigHeight)));
+        aFlPosition.SetPosPixel(Point(aFlPosition.GetPosPixel().X(), nOrigStartY + (((aFlPosition.GetPosPixel().Y() - nOrigStartY) * nNewHeight) / nOrigHeight)));
+        aCtlPosition.SetPosPixel(Point(aCtlPosition.GetPosPixel().X(), nOrigStartY + (((aCtlPosition.GetPosPixel().Y() - nOrigStartY) * nNewHeight) / nOrigHeight)));
+        aFtXOffset.SetPosPixel(Point(aFtXOffset.GetPosPixel().X(), nOrigStartY + (((aFtXOffset.GetPosPixel().Y() - nOrigStartY) * nNewHeight) / nOrigHeight)));
+        aMtrFldXOffset.SetPosPixel(Point(aMtrFldXOffset.GetPosPixel().X(), nOrigStartY + (((aMtrFldXOffset.GetPosPixel().Y() - nOrigStartY) * nNewHeight) / nOrigHeight)));
+        aFtYOffset.SetPosPixel(Point(aFtYOffset.GetPosPixel().X(), nOrigStartY + (((aFtYOffset.GetPosPixel().Y() - nOrigStartY) * nNewHeight) / nOrigHeight)));
+        aMtrFldYOffset.SetPosPixel(Point(aMtrFldYOffset.GetPosPixel().X(), nOrigStartY + (((aMtrFldYOffset.GetPosPixel().Y() - nOrigStartY) * nNewHeight) / nOrigHeight)));
+        aTsbTile.SetPosPixel(Point(aTsbTile.GetPosPixel().X(), nOrigStartY + (((aTsbTile.GetPosPixel().Y() - nOrigStartY) * nNewHeight) / nOrigHeight)));
+        aTsbStretch.SetPosPixel(Point(aTsbStretch.GetPosPixel().X(), nOrigStartY + (((aTsbStretch.GetPosPixel().Y() - nOrigStartY) * nNewHeight) / nOrigHeight)));
+        aFlOffset.SetPosPixel(Point(aFlOffset.GetPosPixel().X(), nOrigStartY + (((aFlOffset.GetPosPixel().Y() - nOrigStartY) * nNewHeight) / nOrigHeight)));
+        aRbtRow.SetPosPixel(Point(aRbtRow.GetPosPixel().X(), nOrigStartY + (((aRbtRow.GetPosPixel().Y() - nOrigStartY) * nNewHeight) / nOrigHeight)));
+        aRbtColumn.SetPosPixel(Point(aRbtColumn.GetPosPixel().X(), nOrigStartY + (((aRbtColumn.GetPosPixel().Y() - nOrigStartY) * nNewHeight) / nOrigHeight)));
+        aMtrFldOffset.SetPosPixel(Point(aMtrFldOffset.GetPosPixel().X(), nOrigStartY + (((aMtrFldOffset.GetPosPixel().Y() - nOrigStartY) * nNewHeight) / nOrigHeight)));
+    }
+
     aTsbTile.Show();
     aTsbStretch.Show();
     aTsbScale.Show();
@@ -2213,11 +2317,9 @@ IMPL_LINK( SvxAreaTabPage, ClickBitmapHdl_Impl, void *, EMPTYARG )
     aMtrFldYOffset.Show();
     aFlPosition.Show();
     aRbtRow.Show();
-//IAccessible2 Implementation 2009-----
     //Solution:Check one when initializing.
     if(!aRbtRow.IsChecked()&&!aRbtColumn.IsChecked())
             aRbtRow.Check();
-//-----IAccessible2 Implementation 2009
     aRbtColumn.Show();
     aMtrFldOffset.Show();
     aFlOffset.Show();
@@ -2246,6 +2348,11 @@ IMPL_LINK( SvxAreaTabPage, ClickBitmapHdl_Impl, void *, EMPTYARG )
 
 IMPL_LINK( SvxAreaTabPage, ModifyBitmapHdl_Impl, void *, EMPTYARG )
 {
+    //UUUU
+    mbDirectGraphicSet = false;
+    maDirectGraphic.Clear();
+    maDirectName = String();
+
     const SfxPoolItem* pPoolItem = NULL;
     sal_uInt16 _nPos = aLbBitmap.GetSelectEntryPos();
     if( _nPos != LISTBOX_ENTRY_NOTFOUND )
@@ -2322,25 +2429,77 @@ IMPL_LINK( SvxAreaTabPage, ModifyStepCountHdl_Impl, void *, p )
 
 //------------------------------------------------------------------------
 
+IMPL_LINK( SvxAreaTabPage, ClickImportHdl_Impl, void *, EMPTYARG )
+{
+    ResMgr& rMgr = CUI_MGR();
+    SvxOpenGraphicDialog aDlg(UniString::CreateFromAscii(RTL_CONSTASCII_STRINGPARAM("Import")));
+    aDlg.EnableLink(sal_False);
+
+    if(!aDlg.Execute())
+    {
+        EnterWait();
+        const int nError(aDlg.GetGraphic(maDirectGraphic));
+        LeaveWait();
+
+        if(!nError && GRAPHIC_NONE != maDirectGraphic.GetType())
+        {
+            // extract name from filename
+            const INetURLObject aURL(aDlg.GetPath());
+            maDirectName = String(aURL.GetName()).GetToken( 0, '.' );
+
+            // use loaded graphic
+            const XFillBitmapItem aXBmpItem(maDirectName, maDirectGraphic);
+            rXFSet.Put(XFillStyleItem(XFILL_BITMAP));
+            rXFSet.Put(aXBmpItem);
+
+            // trigger state flag for directly loaded graphic
+            mbDirectGraphicSet = true;
+
+            // preview
+            aCtlBitmapPreview.SetAttributes(aXFillAttr.GetItemSet());
+            aCtlBitmapPreview.Invalidate();
+        }
+        else
+        {
+            // graphic could not be loaded
+            ErrorBox(DLGWIN, WinBits(WB_OK), String(ResId(RID_SVXSTR_READ_DATA_ERROR, rMgr))).Execute();
+        }
+    }
+
+    return 0L;
+}
+
+//------------------------------------------------------------------------
+
 IMPL_LINK( SvxAreaTabPage, ModifyTileHdl_Impl, void *, EMPTYARG )
 {
     TriState eState = aTsbTile.GetState();
     if( eState == STATE_CHECK )
     {
+        // tiled
+        // disable stretched for tiled graphic
         aTsbStretch.Disable();
+
+        // allow tile offset
         aRbtRow.Enable();
         aRbtColumn.Enable();
         aMtrFldOffset.Enable();
         aFlOffset.Enable();
 
+        // allow positioning
         aCtlPosition.Enable();
         aCtlPosition.Invalidate();
+
+        // allow offsets
         aFtXOffset.Enable();
         aMtrFldXOffset.Enable();
         aFtYOffset.Enable();
         aMtrFldYOffset.Enable();
+
+        // allow 'Position" title
         aFlPosition.Enable();
 
+        // allow size definitions
         aTsbScale.Enable();
         aTsbOriginal.Enable();
         aFtXSize.Enable();
@@ -2351,22 +2510,33 @@ IMPL_LINK( SvxAreaTabPage, ModifyTileHdl_Impl, void *, EMPTYARG )
     }
     else if( eState == STATE_NOCHECK )
     {
+        // non-tiled
+        // enable stretch selection
         aTsbStretch.Enable();
+
+        // no need for tile offset
         aRbtRow.Disable();
         aRbtColumn.Disable();
         aMtrFldOffset.Disable();
         aFlOffset.Disable();
 
-        aCtlPosition.Disable();
-        aCtlPosition.Invalidate();
+        // no need for offsets, only position is supported in non-tiled
         aFtXOffset.Disable();
         aMtrFldXOffset.Disable();
         aFtYOffset.Disable();
         aMtrFldYOffset.Disable();
-        aFlPosition.Disable();
 
         if( aTsbStretch.GetState() != STATE_NOCHECK )
         {
+            // non-tiled, stretched
+            // no need for positioning
+            aCtlPosition.Disable();
+            aCtlPosition.Invalidate();
+
+            // no need for 'Position" title, all deactivated
+            aFlPosition.Disable();
+
+            // no need for size definitions
             aTsbScale.Disable();
             aTsbOriginal.Disable();
             aFtXSize.Disable();
@@ -2377,6 +2547,15 @@ IMPL_LINK( SvxAreaTabPage, ModifyTileHdl_Impl, void *, EMPTYARG )
         }
         else
         {
+            // non-tiled, non-stretched
+            // allow positioning
+            aCtlPosition.Enable();
+            aCtlPosition.Invalidate();
+
+            // allow 'Position" title, positioning is active
+            aFlPosition.Enable();
+
+            // allow size definitions
             aTsbScale.Enable();
             aTsbOriginal.Enable();
             aFtXSize.Enable();
@@ -2388,6 +2567,7 @@ IMPL_LINK( SvxAreaTabPage, ModifyTileHdl_Impl, void *, EMPTYARG )
     }
     else
     {
+        // disable all when tiling is undefined
         aTsbStretch.Disable();
         aRbtRow.Disable();
         aRbtColumn.Disable();
@@ -2525,13 +2705,13 @@ IMPL_LINK( SvxAreaTabPage, ClickScaleHdl_Impl, void *, EMPTYARG )
     if( aTsbScale.GetState() == STATE_CHECK )
     {
         aMtrFldXSize.SetDecimalDigits( 0 );
-        aMtrFldXSize.SetUnit( FUNIT_CUSTOM );
+        aMtrFldXSize.SetUnit( FUNIT_PERCENT );
         aMtrFldXSize.SetValue( 100 );
         aMtrFldXSize.SetMax( 100 );
         aMtrFldXSize.SetLast( 100 );
 
         aMtrFldYSize.SetDecimalDigits( 0 );
-        aMtrFldYSize.SetUnit( FUNIT_CUSTOM );
+        aMtrFldYSize.SetUnit( FUNIT_PERCENT );
         aMtrFldYSize.SetValue( 100 );
         aMtrFldYSize.SetMax( 100 );
         aMtrFldYSize.SetLast( 100 );
@@ -2576,6 +2756,9 @@ void SvxAreaTabPage::PageCreated (SfxAllItemSet aSet) //add CHINA001
     SFX_ITEMSET_ARG (&aSet,pDlgTypeItem,SfxUInt16Item,SID_DLG_TYPE );
     SFX_ITEMSET_ARG (&aSet,pPosItem,SfxUInt16Item,SID_TABPAGE_POS );
 
+    //UUUU
+    SFX_ITEMSET_ARG (&aSet, pOfferImportItem, SfxBoolItem, SID_OFFER_IMPORT );
+
     if (pColorTabItem)
         SetColorTable(pColorTabItem->GetColorTable());
     if (pGradientListItem)
@@ -2590,6 +2773,19 @@ void SvxAreaTabPage::PageCreated (SfxAllItemSet aSet) //add CHINA001
         SetDlgType(pDlgTypeItem->GetValue());
     if (pPosItem)
         SetPos(pPosItem->GetValue());
+
+    //UUUU
+    if(pOfferImportItem)
+    {
+        const bool bNew(pOfferImportItem->GetValue());
+
+        if(mbOfferImportButton != bNew)
+        {
+            mbOfferImportButton = bNew;
+        }
+    }
+
     Construct();
 }
 
+//eof

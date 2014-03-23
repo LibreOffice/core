@@ -39,7 +39,7 @@
 /** makes it possible to register listeners, which are called whenever
     an animation event occurs.
 
-    @since OOo 3.0
+    @since OpenOffice 3.0
  */
 published interface XAnimationListener : ::com::sun::star::lang::XEventListener
 {

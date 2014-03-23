@@ -160,7 +160,7 @@ Reference< document::XFilter > ChartModel::impl_createFilter(
         lcl_getProperty< OUString >( rMediaDescriptor, OUString::createFromAscii("FilterName")));
 
     // if FilterName was found, get Filter from factory
-    if( aFilterName.getLength() > 0 )
+    if( !aFilterName.isEmpty() )
     {
         try
         {
@@ -177,7 +177,7 @@ Reference< document::XFilter > ChartModel::impl_createFilter(
                 OUString aFilterServiceName(
                     lcl_getProperty< OUString >( aProps, OUString::createFromAscii("FilterService")));
 
-                if( aFilterServiceName.getLength())
+                if( !aFilterServiceName.isEmpty() )
                 {
                     xFilter.set(
                         m_xContext->getServiceManager()->createInstanceWithContext(
@@ -229,7 +229,7 @@ sal_Bool SAL_CALL ChartModel::hasLocation()
     throw(uno::RuntimeException)
 {
     //@todo guard
-    return m_aResource.getLength()!=0;
+    return !m_aResource.isEmpty();
 }
 
 ::rtl::OUString SAL_CALL ChartModel::getLocation()
@@ -255,7 +255,7 @@ void SAL_CALL ChartModel::store()
 
     ::rtl::OUString aLocation = m_aResource;
 
-    if( aLocation.getLength() == 0 )
+    if( aLocation.isEmpty() )
         throw io::IOException( C2U( "no location specified" ), static_cast< ::cppu::OWeakObject* >(this));
     //@todo check wether aLocation is something like private:factory...
     if( m_bReadOnly )

@@ -47,7 +47,7 @@
 /** This interface allows to get an object to generate a digest of a specified
     format.
 
-    @since OOo 3.4
+    @since OpenOffice 3.4
  */
 interface XDigestContextSupplier : com::sun::star::uno::XInterface
 {

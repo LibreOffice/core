@@ -52,7 +52,7 @@ module com { module sun { module star { module configuration { module backend {
 /**
   provides read access to the data contained in a layer.
 
-    @since OOo 1.1.2
+    @since OpenOffice 1.1.2
 */
 published interface XLayer : ::com::sun::star::uno::XInterface
 {

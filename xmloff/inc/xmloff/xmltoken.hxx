@@ -147,6 +147,9 @@ namespace xmloff { namespace token {
         XML_NP_DRAW_EXT,
         XML_N_DRAW_EXT,
 
+        XML_NP_TEXT_EXT,
+        XML_N_TEXT_EXT,
+
         // units
         XML_UNIT_MM,
         XML_UNIT_M,
@@ -227,6 +230,7 @@ namespace xmloff { namespace token {
         XML_ANIMATION_STOP_INSIDE,
         XML_ANIMATIONS,
         XML_ANNOTATION,
+        XML_ANNOTATION_END,
         XML_ANNOTATIONS,
         XML_ANNOTE,
         XML_APPEAR,

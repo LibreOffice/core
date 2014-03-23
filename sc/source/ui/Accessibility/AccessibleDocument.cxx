@@ -70,7 +70,6 @@
 #include <unotools/accessiblerelationsethelper.hxx>
 #include <toolkit/helper/convert.hxx>
 
-//IAccessibility2 Implementation 2009-----
 #include <svx/AccessibleControlShape.hxx>
 #include <svx/AccessibleShape.hxx>
 #include <svx/ShapeTypeHandler.hxx>
@@ -78,15 +77,12 @@
 #include <sfx2/objsh.hxx>
 #include <editeng/editview.hxx>
 #include <editeng/editeng.hxx>
-//-----IAccessibility2 Implementation 2009
 #include <list>
 #include <algorithm>
-//IAccessibility2 Implementation 2009-----
 #include "AccessibleCell.hxx"
 
 #include "svx/unoapi.hxx"
 #include "scmod.hxx"
-//-----IAccessibility2 Implementation 2009
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::accessibility;
 using ::std::for_each;
@@ -259,7 +255,6 @@ public:
         const ::accessibility::AccessibleShapeTreeInfo& _rShapeTreeInfo
     )   throw (::com::sun::star::uno::RuntimeException);
 
-//IAccessibility2 Implementation 2009-----
     virtual ::accessibility::AccessibleControlShape* GetAccControlShapeFromModel
         (::com::sun::star::beans::XPropertySet* pSet)
         throw (::com::sun::star::uno::RuntimeException);
@@ -268,7 +263,6 @@ public:
         GetAccessibleCaption (const ::com::sun::star::uno::Reference<
             ::com::sun::star::drawing::XShape>& xShape)
             throw (::com::sun::star::uno::RuntimeException);
-//-----IAccessibility2 Implementation 2009
     ///=====  Internal  ========================================================
     void SetDrawBroadcaster();
 
@@ -490,7 +484,6 @@ sal_Bool ScChildrenShapes::ReplaceChild (::accessibility::AccessibleShape* pCurr
     return bResult;
 }
 
-//IAccessibility2 Implementation 2009-----
 ::accessibility::AccessibleControlShape * ScChildrenShapes::GetAccControlShapeFromModel(::com::sun::star::beans::XPropertySet* pSet) throw (::com::sun::star::uno::RuntimeException)
 {
     sal_Int32 count = GetCount();
@@ -528,7 +521,6 @@ ScChildrenShapes::GetAccessibleCaption (const ::com::sun::star::uno::Reference <
     }
     return NULL;
 }
-//-----IAccessibility2 Implementation 2009
 sal_Int32 ScChildrenShapes::GetCount() const
 {
     SdrPage* pDrawPage = GetDrawPage();
@@ -807,9 +799,7 @@ uno::Reference< XAccessible > ScChildrenShapes::GetSelected(sal_Int32 nSelectedC
         std::vector < uno::Reference < drawing::XShape > > aShapes;
         FillShapes(aShapes);
 
-//IAccessibility2 Implementation 2009-----
         if(aShapes.size()<=0) return xAccessible;
-//-----IAccessibility2 Implementation 2009
         SortedShapes::iterator aItr;
         if (FindShape(aShapes[nSelectedChildIndex], aItr))
             xAccessible = Get(aItr - maZOrderedShapes.begin());
@@ -954,20 +944,16 @@ sal_Bool ScChildrenShapes::FindSelectedShapesChanges(const uno::Reference<drawin
     }
     else
         mnShapesSelected = 0;
-//IAccessibility2 Implementation 2009-----
     SdrObject *pFocusedObj = NULL;
     if( mnShapesSelected == 1 && aShapesList.size() == 1)
     {
         pFocusedObj = GetSdrObjectFromXShape(aShapesList[0]->xShape);
     }
-//-----IAccessibility2 Implementation 2009
     ScShapeDataLess aLess;
     std::sort(aShapesList.begin(), aShapesList.end(), aLess);
-//IAccessibility2 Implementation 2009-----
     SortedShapes vecSelectedShapeAdd;
     SortedShapes vecSelectedShapeRemove;
     sal_Bool bHasSelect=sal_False;
-//-----IAccessibility2 Implementation 2009
     SortedShapes::iterator aXShapesItr(aShapesList.begin());
     SortedShapes::const_iterator aXShapesEndItr(aShapesList.end());
     SortedShapes::iterator aDataItr(maZOrderedShapes.begin());
@@ -992,18 +978,14 @@ sal_Bool ScChildrenShapes::FindSelectedShapesChanges(const uno::Reference<drawin
                         (*aDataItr)->pAccShape->SetState(AccessibleStateType::SELECTED);
                         (*aDataItr)->pAccShape->ResetState(AccessibleStateType::FOCUSED);
                         bResult = sal_True;
-//IAccessibility2 Implementation 2009-----
                         vecSelectedShapeAdd.push_back((*aDataItr));
-//-----IAccessibility2 Implementation 2009
                     }
                     aFocusedItr = aDataItr;
                 }
-//IAccessibility2 Implementation 2009-----
                 else
                 {
                      bHasSelect = sal_True;
                 }
-//-----IAccessibility2 Implementation 2009
                 ++aDataItr;
                 ++aXShapesItr;
             }
@@ -1017,9 +999,7 @@ sal_Bool ScChildrenShapes::FindSelectedShapesChanges(const uno::Reference<drawin
                         (*aDataItr)->pAccShape->ResetState(AccessibleStateType::SELECTED);
                         (*aDataItr)->pAccShape->ResetState(AccessibleStateType::FOCUSED);
                         bResult = sal_True;
-//IAccessibility2 Implementation 2009-----
                         vecSelectedShapeRemove.push_back(*aDataItr);
-//-----IAccessibility2 Implementation 2009
                     }
                 }
                 ++aDataItr;
@@ -1034,15 +1014,17 @@ sal_Bool ScChildrenShapes::FindSelectedShapesChanges(const uno::Reference<drawin
         else
             ++aDataItr;
     }
-//IAccessibility2 Implementation 2009-----
     bool bWinFocus=false;
-    ScGridWindow* pWin = static_cast<ScGridWindow*>(mpViewShell->GetWindowByPos(meSplitPos));
-    if (pWin)
+    if (mpViewShell)
     {
-        bWinFocus = pWin->HasFocus();
+        ScGridWindow* pWin = static_cast<ScGridWindow*>(mpViewShell->GetWindowByPos(meSplitPos));
+        if (pWin)
+        {
+            bWinFocus = pWin->HasFocus();
+        }
     }
 
-    SdrObject* pMarkedObj = NULL;
+        SdrObject* pMarkedObj = NULL;
     SdrObject* pUpObj = NULL;
     bool bIsFocuseMarked = true;
 
@@ -1061,10 +1043,13 @@ sal_Bool ScChildrenShapes::FindSelectedShapesChanges(const uno::Reference<drawin
                     (*aFocusedItr)->xShape.is() &&
                     xMarkedXShape.is() &&
                     (*aFocusedItr)->xShape != xMarkedXShape )
+                {
                     bIsFocuseMarked = false;
+                }
             }
         }
     }
+
     //if ((aFocusedItr != aDataEndItr) && (*aFocusedItr)->pAccShape && (mnShapesSelected == 1))
     if ( bIsFocuseMarked && (aFocusedItr != aDataEndItr) && (*aFocusedItr)->pAccShape && (mnShapesSelected == 1) && bWinFocus)
     {
@@ -1151,7 +1136,6 @@ sal_Bool ScChildrenShapes::FindSelectedShapesChanges(const uno::Reference<drawin
         aEvent.NewValue <<= xChild;
         mpAccessibleDocument->CommitChange(aEvent);
     }
-//-----IAccessibility2 Implementation 2009
     std::for_each(aShapesList.begin(), aShapesList.end(), Destroy());
 
     return bResult;
@@ -1567,7 +1551,6 @@ void ScAccessibleDocument::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
         {
             if (rScAccGridWinFocusGotHint->GetNewGridWin() == meSplitPos)
         {
-//IAccessibility2 Implementation 2009-----
             uno::Reference<XAccessible> xAccessible;
             if (mpChildrenShapes)
             {
@@ -1592,7 +1575,6 @@ void ScAccessibleDocument::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
             else
                 CommitFocusGained();
             }
-//-----IAccessibility2 Implementation 2009
         }
     }
         else
@@ -1614,18 +1596,14 @@ void ScAccessibleDocument::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
             {
                 mpChildrenShapes = new ScChildrenShapes( this, mpViewShell, meSplitPos );
             }
-//IAccessibility2 Implementation 2009-----
             //Invoke Init() to rebuild the mpChildrenShapes variable
             this->Init();
-//-----IAccessibility2 Implementation 2009
             AccessibleEventObject aEvent;
             aEvent.EventId = AccessibleEventId::INVALIDATE_ALL_CHILDREN;
             aEvent.Source = uno::Reference< XAccessibleContext >(this);
             CommitChange(aEvent); // all childs changed
-//IAccessibility2 Implementation 2009-----
             if (mpAccessibleSpreadsheet)
                 mpAccessibleSpreadsheet->FireFirstCellFocus();
-//-----IAccessibility2 Implementation 2009
         }
                 else if (pSfxSimpleHint->GetId() == SC_HINT_ACC_MAKEDRAWLAYER)
         {
@@ -1636,7 +1614,6 @@ void ScAccessibleDocument::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
         {
             if (mpViewShell && mpViewShell->GetViewData()->HasEditView(meSplitPos))
             {
-                //IAccessibility2 Implementation 2009------
                 EditEngine* pEditEng = mpViewShell->GetViewData()->GetEditView(meSplitPos)->GetEditEngine();
                 if (pEditEng && pEditEng->GetUpdateMode())
                 {
@@ -1654,7 +1631,6 @@ void ScAccessibleDocument::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
 
                     mpTempAccEdit->GotFocus();
                 }
-                //------IAccessibility2 Implementation 2009
             }
         }
                 else if (pSfxSimpleHint->GetId() == SC_HINT_ACC_LEAVEEDITMODE)
@@ -1666,15 +1642,9 @@ void ScAccessibleDocument::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
 
                 mpTempAccEdit = NULL;
                 RemoveChild(mxTempAcc, sal_True);
-//IAccessibility2 Implementation 2009-----
-                //if (mpAccessibleSpreadsheet)
                 if (mpAccessibleSpreadsheet && mpViewShell->IsActive())
-//-----IAccessibility2 Implementation 2009
                     mpAccessibleSpreadsheet->GotFocus();
-//IAccessibility2 Implementation 2009-----
-                //else
                 else if( mpViewShell->IsActive())
-//-----IAccessibility2 Implementation 2009
                     CommitFocusGained();
             }
         }
@@ -1695,6 +1665,8 @@ void ScAccessibleDocument::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
 
                     if (mpAccessibleSpreadsheet)
                         mpAccessibleSpreadsheet->BoundingBoxChanged();
+                    if (mpAccessibleSpreadsheet && mpViewShell->IsActive())
+                        mpAccessibleSpreadsheet->FireFirstCellFocus();
                 }
                 else if (mpAccessibleSpreadsheet)
                 {
@@ -1737,12 +1709,10 @@ void SAL_CALL ScAccessibleDocument::selectionChanged( const lang::EventObject& /
 
         CommitChange(aEvent);
     }
-//IAccessibility2 Implementation 2009-----
     if(mpChildrenShapes )
     {
         mpChildrenShapes->SelectionChanged();
     }
-//-----IAccessibility2 Implementation 2009
 }
 
     //=====  XInterface  =====================================================
@@ -1750,7 +1720,6 @@ void SAL_CALL ScAccessibleDocument::selectionChanged( const lang::EventObject& /
 uno::Any SAL_CALL ScAccessibleDocument::queryInterface( uno::Type const & rType )
     throw (uno::RuntimeException)
 {
-//IAccessibility2 Implementation 2009-----
     uno::Any aAnyTmp;
     if(rType == ::getCppuType((com::sun::star::uno::Reference<XAccessibleGetAccFlowTo> *)NULL) )
        {
@@ -1758,7 +1727,6 @@ uno::Any SAL_CALL ScAccessibleDocument::queryInterface( uno::Type const & rType 
             aAnyTmp <<= AccFromXShape;
          return aAnyTmp;
        }
-//-----IAccessibility2 Implementation 2009
     uno::Any aAny (ScAccessibleDocumentImpl::queryInterface(rType));
     return aAny.hasValue() ? aAny : ScAccessibleContextBase::queryInterface(rType);
 }
@@ -1910,7 +1878,6 @@ uno::Reference<XAccessibleStateSet> SAL_CALL
     return pStateSet;
 }
 
-//IAccessibility2 Implementation 2009-----
 ::rtl::OUString SAL_CALL
     ScAccessibleDocument::getAccessibleName(void)
     throw (::com::sun::star::uno::RuntimeException)
@@ -1940,7 +1907,6 @@ uno::Reference<XAccessibleStateSet> SAL_CALL
     }
     return sName;
 }
-//-----IAccessibility2 Implementation 2009
     ///=====  XAccessibleSelection  ===========================================
 
 void SAL_CALL
@@ -2413,7 +2379,6 @@ rtl::OUString ScAccessibleDocument::GetCurrentCellDescription() const
 {
     return rtl::OUString();
 }
-//IAccessibility2 Implementation 2009-----
 ScDocument *ScAccessibleDocument::GetDocument() const
 {
     return mpViewShell ? mpViewShell->GetViewData()->GetDocument() : NULL;
@@ -2567,7 +2532,7 @@ com::sun::star::uno::Sequence< com::sun::star::uno::Any > ScAccessibleDocument::
     }
     else if ( nType == FINDREPLACEFLOWTO )
     {
-        sal_Bool bSuccess;
+        sal_Bool bSuccess(sal_False);
         rAny >>= bSuccess;
         if ( bSuccess )
         {
@@ -2610,5 +2575,4 @@ sal_Int32 SAL_CALL ScAccessibleDocument::getBackground(  )
     IsObjectValid();
     return SC_MOD()->GetColorConfig().GetColorValue( ::svtools::DOCCOLOR ).nColor;
 }
-//-----IAccessibility2 Implementation 2009
 

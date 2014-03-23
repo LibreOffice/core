@@ -309,14 +309,13 @@ sub copy_collector
 
     my @newcollector = ();
 
-    for ( my $i = 0; $i <= $#{$oldcollector}; $i++ )
+    foreach my $oldhash (@$oldcollector)
     {
         my %newhash = ();
-        my $key;
 
-        foreach $key (keys %{${$oldcollector}[$i]})
+        while (my ($key, $value) = each %$oldhash)
         {
-            $newhash{$key} = ${$oldcollector}[$i]->{$key};
+            $newhash{$key} = $value;
         }
 
         push(@newcollector, \%newhash);

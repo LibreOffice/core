@@ -797,7 +797,19 @@ namespace drawinglayer
                             sal_Int32(floor(aCurrentRange.getMinX())), sal_Int32(floor(aCurrentRange.getMinY())),
                             sal_Int32(ceil(aCurrentRange.getMaxX())), sal_Int32(ceil(aCurrentRange.getMaxY())));
                         const GraphicAttr& rAttr = rGraphicPrimitive.getGraphicAttr();
-                        Rectangle aCropRect;
+
+                        // #123295# As described below this is the expanded, uncropped region
+                        // and needs to be given in any case, especially when no cropping it is
+                        // equal to the current rect. To make clear: normally the uncropped region
+                        // (aka the aCropRect) is bigger than the CurrentRect. Or in other words:
+                        // The current rect is the object area. This internal crop definition is
+                        // somewhat crude, but used (and defined in graphic-dependent units what
+                        // leads to even more problems, percentages would have been better). All
+                        // in all this is a place that makes clear that a pure PDF export which does
+                        // not use Metafile and the associated hacks (like this one) but is based on
+                        // Primitves and uses a Primitive Renderer would be the better choice for
+                        // the future.
+                        Rectangle aCropRect(aCurrentRect);
 
                         if(rAttr.IsCropped())
                         {
@@ -1453,6 +1465,15 @@ namespace drawinglayer
                     const attribute::FillHatchAttribute& rFillHatchAttribute = rHatchCandidate.getFillHatch();
                     basegfx::B2DPolyPolygon aLocalPolyPolygon(rHatchCandidate.getB2DPolyPolygon());
 
+                    if(aLocalPolyPolygon.getB2DRange() != rHatchCandidate.getDefinitionRange())
+                    {
+                        // the range which defines the hatch is different from the range of the
+                        // geometry (used for writer frames). This cannot be done calling vcl, thus use
+                        // decomposition here
+                        process(rCandidate.get2DDecomposition(getViewInformation2D()));
+                        break;
+                    }
+
                     // #i112245# Metafiles use tools Polygon and are not able to have more than 65535 points
                     // per polygon. Split polygon until there are less than that
                     while(fillPolyPolygonNeededToBeSplit(aLocalPolyPolygon))
@@ -1575,77 +1596,85 @@ namespace drawinglayer
                         // BTW: One more example how useful the principles of primitives are; the decomposition
                         // is by definition a simpler, maybe more expensive representation of the same content.
                         process(rCandidate.get2DDecomposition(getViewInformation2D()));
+                        break;
                     }
-                    else
+
+                    const primitive2d::PolyPolygonGradientPrimitive2D& rGradientCandidate = static_cast< const primitive2d::PolyPolygonGradientPrimitive2D& >(rCandidate);
+                    basegfx::B2DPolyPolygon aLocalPolyPolygon(rGradientCandidate.getB2DPolyPolygon());
+
+                    if(aLocalPolyPolygon.getB2DRange() != rGradientCandidate.getDefinitionRange())
                     {
-                        const primitive2d::PolyPolygonGradientPrimitive2D& rGradientCandidate = static_cast< const primitive2d::PolyPolygonGradientPrimitive2D& >(rCandidate);
-                        basegfx::B2DPolyPolygon aLocalPolyPolygon(rGradientCandidate.getB2DPolyPolygon());
+                        // the range which defines the gradient is different from the range of the
+                        // geometry (used for writer frames). This cannot be done calling vcl, thus use
+                        // decomposition here
+                        process(rCandidate.get2DDecomposition(getViewInformation2D()));
+                        break;
+                    }
 
-                        // #i112245# Metafiles use tools Polygon and are not able to have more than 65535 points
-                        // per polygon. Split polygon until there are less than that
-                        while(fillPolyPolygonNeededToBeSplit(aLocalPolyPolygon))
-                            ;
+                    // #i112245# Metafiles use tools Polygon and are not able to have more than 65535 points
+                    // per polygon. Split polygon until there are less than that
+                    while(fillPolyPolygonNeededToBeSplit(aLocalPolyPolygon))
+                        ;
 
-                        // for support of MetaCommentActions of the form XGRAD_SEQ_BEGIN, XGRAD_SEQ_END
-                        // it is safest to use the VCL OutputDevice::DrawGradient method which creates those.
-                        // re-create a VCL-gradient from FillGradientPrimitive2D and the needed tools PolyPolygon
-                        Gradient aVCLGradient;
-                        impConvertFillGradientAttributeToVCLGradient(aVCLGradient, rGradientCandidate.getFillGradient(), false);
-                        aLocalPolyPolygon.transform(maCurrentTransformation);
+                    // for support of MetaCommentActions of the form XGRAD_SEQ_BEGIN, XGRAD_SEQ_END
+                    // it is safest to use the VCL OutputDevice::DrawGradient method which creates those.
+                    // re-create a VCL-gradient from FillGradientPrimitive2D and the needed tools PolyPolygon
+                    Gradient aVCLGradient;
+                    impConvertFillGradientAttributeToVCLGradient(aVCLGradient, rGradientCandidate.getFillGradient(), false);
+                    aLocalPolyPolygon.transform(maCurrentTransformation);
 
-                        // #i82145# ATM VCL printing of gradients using curved shapes does not work,
-                        // i submitted the bug with the given ID to THB. When that task is fixed it is
-                        // necessary to again remove this subdivision since it decreases possible
-                        // printing quality (not even resolution-dependent for now). THB will tell
-                        // me when that task is fixed in the master
-                        const PolyPolygon aToolsPolyPolygon(basegfx::tools::adaptiveSubdivideByAngle(aLocalPolyPolygon));
+                    // #i82145# ATM VCL printing of gradients using curved shapes does not work,
+                    // i submitted the bug with the given ID to THB. When that task is fixed it is
+                    // necessary to again remove this subdivision since it decreases possible
+                    // printing quality (not even resolution-dependent for now). THB will tell
+                    // me when that task is fixed in the master
+                    const PolyPolygon aToolsPolyPolygon(basegfx::tools::adaptiveSubdivideByAngle(aLocalPolyPolygon));
 
-                        // XPATHFILL_SEQ_BEGIN/XPATHFILL_SEQ_END support
-                        SvtGraphicFill* pSvtGraphicFill = 0;
+                    // XPATHFILL_SEQ_BEGIN/XPATHFILL_SEQ_END support
+                    SvtGraphicFill* pSvtGraphicFill = 0;
 
-                        if(!mnSvtGraphicFillCount && aLocalPolyPolygon.count())
+                    if(!mnSvtGraphicFillCount && aLocalPolyPolygon.count())
+                    {
+                        // setup gradient stuff like in like in impgrfll
+                        SvtGraphicFill::GradientType eGrad(SvtGraphicFill::gradientLinear);
+
+                        switch(aVCLGradient.GetStyle())
                         {
-                            // setup gradient stuff like in like in impgrfll
-                            SvtGraphicFill::GradientType eGrad(SvtGraphicFill::gradientLinear);
-
-                            switch(aVCLGradient.GetStyle())
-                            {
-                                default : // GRADIENT_LINEAR:
-                                case GRADIENT_AXIAL:
-                                    eGrad = SvtGraphicFill::gradientLinear;
-                                    break;
-                                case GRADIENT_RADIAL:
-                                case GRADIENT_ELLIPTICAL:
-                                    eGrad = SvtGraphicFill::gradientRadial;
-                                    break;
-                                case GRADIENT_SQUARE:
-                                case GRADIENT_RECT:
-                                    eGrad = SvtGraphicFill::gradientRectangular;
-                                    break;
-                            }
-
-                            pSvtGraphicFill = new SvtGraphicFill(
-                                aToolsPolyPolygon,
-                                Color(),
-                                0.0,
-                                SvtGraphicFill::fillEvenOdd,
-                                SvtGraphicFill::fillGradient,
-                                SvtGraphicFill::Transform(),
-                                false,
-                                SvtGraphicFill::hatchSingle,
-                                Color(),
-                                eGrad,
-                                aVCLGradient.GetStartColor(),
-                                aVCLGradient.GetEndColor(),
-                                aVCLGradient.GetSteps(),
-                                Graphic());
+                            default : // GRADIENT_LINEAR:
+                            case GRADIENT_AXIAL:
+                                eGrad = SvtGraphicFill::gradientLinear;
+                                break;
+                            case GRADIENT_RADIAL:
+                            case GRADIENT_ELLIPTICAL:
+                                eGrad = SvtGraphicFill::gradientRadial;
+                                break;
+                            case GRADIENT_SQUARE:
+                            case GRADIENT_RECT:
+                                eGrad = SvtGraphicFill::gradientRectangular;
+                                break;
                         }
 
-                        // call VCL directly; encapsulate with SvtGraphicFill
-                        impStartSvtGraphicFill(pSvtGraphicFill);
-                        mpOutputDevice->DrawGradient(aToolsPolyPolygon, aVCLGradient);
-                        impEndSvtGraphicFill(pSvtGraphicFill);
+                        pSvtGraphicFill = new SvtGraphicFill(
+                            aToolsPolyPolygon,
+                            Color(),
+                            0.0,
+                            SvtGraphicFill::fillEvenOdd,
+                            SvtGraphicFill::fillGradient,
+                            SvtGraphicFill::Transform(),
+                            false,
+                            SvtGraphicFill::hatchSingle,
+                            Color(),
+                            eGrad,
+                            aVCLGradient.GetStartColor(),
+                            aVCLGradient.GetEndColor(),
+                            aVCLGradient.GetSteps(),
+                            Graphic());
                     }
+
+                    // call VCL directly; encapsulate with SvtGraphicFill
+                    impStartSvtGraphicFill(pSvtGraphicFill);
+                    mpOutputDevice->DrawGradient(aToolsPolyPolygon, aVCLGradient);
+                    impEndSvtGraphicFill(pSvtGraphicFill);
 
                     break;
                 }

@@ -32,14 +32,12 @@
 #include <tools/debug.hxx>
 #include <tools/fract.hxx>
 
-//IAccessibility2 Implementation 2009-----
 #include <svx/AccessibleControlShape.hxx>
 #include <svx/AccessibleShape.hxx>
 #include "fesh.hxx"
 #include <vector>
 #include <set>
 class SwAccessibleParagraph;
-//-----IAccessibility2 Implementation 2009
 
 class ViewShell;
 class Rectangle;
@@ -122,7 +120,6 @@ class SwAccessibleMap : public ::accessibility::IAccessibleViewForwarder,
     void InvalidateCursorPosition(
         const ::com::sun::star::uno::Reference<
             ::com::sun::star::accessibility::XAccessible>& rAcc );
-    //IAccessibility2 Implementation 2009-----
     void DoInvalidateShapeSelection(sal_Bool bInvalidateFocusMode = sal_False);
 
     //Replace by DoInvalidateShapeSelection
@@ -133,7 +130,6 @@ class SwAccessibleMap : public ::accessibility::IAccessibleViewForwarder,
     SwAccessibleContextMap_Impl *mpSeletedFrmMap;
     //IvalidateShapeInParaSelection() method is reponsible for the updating the selected states of the objects.
     void InvalidateShapeInParaSelection();
-    //-----IAccessibility2 Implementation 2009
 
     void _InvalidateRelationSet( const SwFrm* pFrm, sal_Bool bFrom );
 
@@ -190,7 +186,6 @@ public:
     {
         return mpVSh;
     }
-    //IAccessibility2 Implementation 2009-----
     sal_Bool IsInSameLevel(const SdrObject* pObj, const SwFEShell* pFESh);
     void AddShapeContext(const SdrObject *pObj,
                              ::com::sun::star::uno::Reference < ::com::sun::star::accessibility::XAccessible > xAccShape);
@@ -198,7 +193,6 @@ public:
     void AddGroupContext(const SdrObject *pParentObj,
                     ::com::sun::star::uno::Reference < ::com::sun::star::accessibility::XAccessible > xAccParent);
     void RemoveGroupContext(const SdrObject *pParentObj, ::com::sun::star::uno::Reference < ::com::sun::star::accessibility::XAccessible > xAccParent);
-    //-----IAccessibility2 Implementation 2009
 
     const SwRect& GetVisArea() const;
 
@@ -239,11 +233,9 @@ public:
 
     void InvalidateCursorPosition( const SwFrm *pFrm );
     void InvalidateFocus();
-    //IAccessibility2 Implementation 2009-----
     void FirePageChangeEvent(sal_uInt16 nOldPage, sal_uInt16 nNewPage);
     void FireSectionChangeEvent(sal_uInt16 nOldSection, sal_uInt16 nNewSection);
     void FireColumnChangeEvent(sal_uInt16 nOldColumn, sal_uInt16 nNewColumn);
-    //-----IAccessibility2 Implementation 2009
     void SetCursorContext(
         const ::vos::ORef < SwAccessibleContext >& rCursorContext );
 
@@ -321,14 +313,12 @@ public:
         const long _nIndex,
         const ::accessibility::AccessibleShapeTreeInfo& _rShapeTreeInfo
     )   throw (::com::sun::star::uno::RuntimeException);
-    //IAccessibility2 Implementation 2009-----
     virtual ::accessibility::AccessibleControlShape* GetAccControlShapeFromModel
         (::com::sun::star::beans::XPropertySet* pSet)
         throw (::com::sun::star::uno::RuntimeException);
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >   GetAccessibleCaption (
         const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > & xShape)
     throw (::com::sun::star::uno::RuntimeException);
-    //-----IAccessibility2 Implementation 2009
 
     // additional Core/Pixel conversions for internal use; also works
     // for preview
@@ -358,7 +348,6 @@ private:
     */
     void GetMapMode( const Point& _rPoint,
                      MapMode&     _orMapMode ) const;
-//IAccessibility2 Implementation 2009-----
 public:
     virtual sal_Bool IsDocumentSelAll();
 
@@ -369,6 +358,5 @@ public:
     typedef std::set< SwAccessibleParagraph* >  SET_PARA;
     SET_PARA m_setParaAdd;
     SET_PARA m_setParaRemove;
-    //-----IAccessibility2 Implementation 2009
 };
 #endif

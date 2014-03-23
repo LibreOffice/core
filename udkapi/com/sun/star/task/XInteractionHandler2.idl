@@ -40,7 +40,7 @@
       the way that a caller can determine whether an interaction request was
       actually handled by the interaction handler.</p>
 
-      @since OOo 3.2
+      @since OpenOffice 3.2
  */
 published interface XInteractionHandler2 : com::sun::star::task::XInteractionHandler
 {

@@ -322,8 +322,7 @@ ModalDialog RID_CUI_DIALOG_COLORPICKER
         Spin = TRUE ;
         Maximum = 100 ;
         Last = 100 ;
-        Unit = FUNIT_CUSTOM ;
-        CustomUnitText = " %" ;
+        Unit = FUNIT_PERCENT ;
     };
 
     FixedText CT_BRIGHTNESS
@@ -344,8 +343,7 @@ ModalDialog RID_CUI_DIALOG_COLORPICKER
         Spin = TRUE ;
         Maximum = 100 ;
         Last = 100 ;
-        Unit = FUNIT_CUSTOM ;
-        CustomUnitText = " %" ;
+        Unit = FUNIT_PERCENT ;
     };
 
 // -------------------------------------------------------------------------
@@ -377,8 +375,7 @@ ModalDialog RID_CUI_DIALOG_COLORPICKER
         Spin = TRUE ;
         Maximum = 100 ;
         Last = 100 ;
-        Unit = FUNIT_CUSTOM ;
-        CustomUnitText = " %" ;
+        Unit = FUNIT_PERCENT ;
     };
 
     FixedText CT_MAGENTA
@@ -399,8 +396,7 @@ ModalDialog RID_CUI_DIALOG_COLORPICKER
         Spin = TRUE ;
         Maximum = 100 ;
         Last = 100 ;
-        Unit = FUNIT_CUSTOM ;
-        CustomUnitText = " %" ;
+        Unit = FUNIT_PERCENT ;
     };
 
     FixedText CT_YELLOW
@@ -421,8 +417,7 @@ ModalDialog RID_CUI_DIALOG_COLORPICKER
         Spin = TRUE ;
         Maximum = 100 ;
         Last = 100 ;
-        Unit = FUNIT_CUSTOM ;
-        CustomUnitText = " %" ;
+        Unit = FUNIT_PERCENT ;
     };
 
     FixedText CT_KEY
@@ -443,8 +438,7 @@ ModalDialog RID_CUI_DIALOG_COLORPICKER
         Spin = TRUE ;
         Maximum = 100 ;
         Last = 100 ;
-        Unit = FUNIT_CUSTOM ;
-        CustomUnitText = " %" ;
+        Unit = FUNIT_PERCENT ;
     };
 
     // ------------------------------------------------------

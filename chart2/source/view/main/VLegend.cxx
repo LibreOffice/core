@@ -205,7 +205,7 @@ awt::Size lcl_createTextShapes(
                 Reference< text::XTextRange > xRange( xEntry, uno::UNO_QUERY );
                 OUString aLabelString( aLabelSeq[i]->getString());
                 // workaround for Issue #i67540#
-                if( !aLabelString.getLength())
+                if( aLabelString.isEmpty() )
                     aLabelString = C2U(" ");
                 if( xRange.is())
                     xRange->setString( aLabelString );

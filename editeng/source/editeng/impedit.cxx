@@ -122,7 +122,6 @@ void ImpEditView::SetEditSelection( const EditSelection& rEditSelection )
 
     if ( pEditEngine->pImpEditEngine->GetNotifyHdl().IsSet() )
     {
-    //IAccessibility2 Implementation 2009-----
         const EditDoc& rDoc = pEditEngine->pImpEditEngine->GetEditDoc();
         const EditPaM pmEnd = rDoc.GetEndPaM();
         EENotifyType eNotifyType;
@@ -138,7 +137,6 @@ void ImpEditView::SetEditSelection( const EditSelection& rEditSelection )
         }
         //EENotify aNotify( EE_NOTIFY_TEXTVIEWSELECTIONCHANGED );
         EENotify aNotify( eNotifyType );
-    //-----IAccessibility2 Implementation 2009
         aNotify.pEditEngine = pEditEngine;
         aNotify.pEditView = GetEditViewPtr();
         pEditEngine->pImpEditEngine->CallNotify( aNotify );

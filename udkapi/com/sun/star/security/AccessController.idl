@@ -46,7 +46,7 @@ module com {  module sun {  module star {  module security {
     to assure that permission checks are not corrupted via insecure inter-process
     communication.
 
-    @since OOo 1.1.2
+    @since OpenOffice 1.1.2
 */
 published service AccessController
 {

@@ -777,7 +777,7 @@ QueryBox QBX_CONFIRM_DELETE_TOOLBAR
 */
 QueryBox QBX_CONFIRM_RESET
 {
-    Message [ en-US ] = "The menu configuration for %SAVE IN SELECTION% will be reset to the factory settings. Do you want to continue?";
+    Message [ en-US ] = "The menu configuration for %SAVE IN SELECTION% will be reset to the default settings. Do you want to continue?";
     BUTTONS = WB_YES_NO ;
     DEFBUTTON = WB_DEF_NO ;
 };
@@ -788,12 +788,12 @@ QueryBox QBX_CONFIRM_RESET
 */
 String RID_SVXSTR_CONFIRM_MENU_RESET
 {
-    Text [ en-US ] = "The menu configuration for %SAVE IN SELECTION% will be reset to the factory settings. Do you want to continue?";
+    Text [ en-US ] = "The menu configuration for %SAVE IN SELECTION% will be reset to the default settings. Do you want to continue?";
 };
 
 String RID_SVXSTR_CONFIRM_TOOLBAR_RESET
 {
-    Text [ en-US ] = "The toolbar configuration for %SAVE IN SELECTION% will be reset to the factory settings. Do you want to continue?";
+    Text [ en-US ] = "The toolbar configuration for %SAVE IN SELECTION% will be reset to the default settings. Do you want to continue?";
 };
 
 QueryBox QBX_CONFIRM_RESTORE_DEFAULT
@@ -822,7 +822,6 @@ String RID_SVXSTR_RENAME_TOOLBAR
 {
     Text [ en-US ] = "Rename Toolbar";
 };
-//IAccessibility2 Implementation 2009-----
 String BUTTON_STR_UP
 {
     Text [ en-US ] = "Up";
@@ -831,5 +830,4 @@ String BUTTON_STR_DOWN
 {
     Text [ en-US ] = "Down";
 };
-//-----IAccessibility2 Implementation 2009
 

@@ -38,7 +38,7 @@ module com { module sun { module star { module sdb {
 
     @see XDatabaseRegistrations
 
-    @since OOo 3.3
+    @since OpenOffice 3.3
  */
 interface XDatabaseRegistrationsListener : ::com::sun::star::lang::XEventListener
 {

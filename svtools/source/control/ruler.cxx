@@ -32,7 +32,6 @@
 
 #define _SV_RULER_CXX
 #include <svtools/ruler.hxx>
-//IAccessibility2 Implementation 2009-----
 #include <svtools/svtdata.hxx>
 #include <svtools/svtools.hrc>
 using namespace ::rtl;
@@ -40,7 +39,6 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::accessibility;
-//-----IAccessibility2 Implementation 2009
 // =======================================================================
 
 #define RULER_OFF           3
@@ -307,10 +305,8 @@ void Ruler::ImplInit( WinBits nWinBits )
     else
         aDefSize.Width() = nDefHeight;
     SetOutputSizePixel( aDefSize );
-    //IAccessibility2 Implementation 2009-----
     SetType(WINDOW_RULER);
     pAccContext = NULL;
-    //-----IAccessibility2 Implementation 2009
 }
 
 // -----------------------------------------------------------------------
@@ -334,10 +330,8 @@ Ruler::~Ruler()
         Application::RemoveUserEvent( mnUpdateEvtId );
     delete mpSaveData;
     delete mpDragData;
-    //IAccessibility2 Implementation 2009-----
     if( pAccContext )
         pAccContext->release();
-    //-----IAccessibility2 Implementation 2009
 }
 
 // -----------------------------------------------------------------------
@@ -3194,7 +3188,6 @@ const RulerBorder*  Ruler::GetBorders() const { return mpData->pBorders; }
 sal_uInt16              Ruler::GetIndentCount() const { return mpData->nIndents; }
 const RulerIndent*  Ruler::GetIndents() const { return mpData->pIndents; }
 
-//IAccessibility2 Implementation 2009-----
 uno::Reference< XAccessible > Ruler::CreateAccessible()
 {
     Window*                     pParent = GetAccessibleParentWindow();
@@ -3221,4 +3214,3 @@ uno::Reference< XAccessible > Ruler::CreateAccessible()
     else
         return uno::Reference< XAccessible >();
 }
-//-----IAccessibility2 Implementation 2009

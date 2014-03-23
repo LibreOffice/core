@@ -442,7 +442,7 @@ sal_Bool ImplSdPPTImport::Import()
                                             for( nToken = 0; nToken < nTokenCount; nToken++ )
                                                 aStringAry[ nToken ] = ByteString( aString.GetToken( nToken, (sal_Unicode)',' ), RTL_TEXTENCODING_UTF8 );
 
-                                            sal_Bool bSucceeded = sal_False;
+                                            sal_Bool bDocInternalSubAddress = sal_False;
 
                                             // first pass, searching for a SlideId
                                             for( nToken = 0; nToken < nTokenCount; nToken++ )
@@ -459,30 +459,29 @@ sal_Bool ImplSdPPTImport::Import()
                                                             if ( nPage != PPTSLIDEPERSIST_ENTRY_NOTFOUND )
                                                             {
                                                                 nPageNumber = nPage;
-                                                                bSucceeded = sal_True;
+                                                                bDocInternalSubAddress = sal_True;
                                                                 break;
                                                             }
                                                         }
                                                     }
                                                 }
                                             }
-                                            if ( !bSucceeded )
+                                            if ( !bDocInternalSubAddress )
                                             {   // second pass, searching for a SlideName
                                                 for ( nToken = 0; nToken < nTokenCount; nToken++ )
                                                 {
-                                                    String aToken( aString.GetToken( nToken, (sal_Unicode)',' ) );
                                                     for ( void* pPtr = maSlideNameList.First(); pPtr; pPtr = maSlideNameList.Next() )
                                                     {
-                                                        if ( *(String*)pPtr == aToken )
+                                                        if ( ByteString(*(String*)pPtr, RTL_TEXTENCODING_UTF8 ) == aStringAry[ nToken ] )
                                                         {
                                                             nPageNumber = maSlideNameList.GetCurPos();
-                                                            bSucceeded = sal_True;
+                                                            bDocInternalSubAddress = sal_True;
                                                             break;
                                                         }
                                                     }
                                                 }
                                             }
-                                            if ( !bSucceeded )
+                                            if ( !bDocInternalSubAddress )
                                             {   // third pass, searching for a slide number
                                                 for ( nToken = 0; nToken < nTokenCount; nToken++ )
                                                 {
@@ -492,13 +491,14 @@ sal_Bool ImplSdPPTImport::Import()
                                                         if ( ( nNumber & ~0xff ) == 0 )
                                                         {
                                                             nPageNumber = nNumber - 1;
-                                                            bSucceeded = sal_True;
+                                                            bDocInternalSubAddress = sal_True;
                                                             break;
                                                         }
                                                     }
                                                 }
                                             }
-                                            if ( bSucceeded )
+                                            // if a document internal sub address
+                                            if ( bDocInternalSubAddress )
                                             {
                                                 if ( nPageNumber < maSlideNameList.Count() )
                                                     pHyperlink->aConvSubString = *(String*)maSlideNameList.GetObject( nPageNumber );
@@ -508,7 +508,13 @@ sal_Bool ImplSdPPTImport::Import()
                                                     pHyperlink->aConvSubString.Append( sal_Unicode( ' ' ) );
                                                     pHyperlink->aConvSubString.Append( mpDoc->CreatePageNumValue( nPageNumber + 1 ) );
                                                 }
+                                            } else {
+                                                // if sub address is given but not internal, use it as it is
+                                                if ( !pHyperlink->aConvSubString.Len() )
+                                                {
+                                                    pHyperlink->aConvSubString = aString;
                                             }
+                                        }
                                         }
                                         aHyperList.Insert( pHyperlink, LIST_APPEND );
                                     }
@@ -754,7 +760,7 @@ sal_Bool ImplSdPPTImport::Import()
                     ((SdPage*)pNotesClone)->SetLayoutName( aLayoutName );
                 }
             }
-            else if ( ( pPersist->bStarDrawFiller == false ) )
+            else if ( pPersist->bStarDrawFiller == false )
             {
                 PptSlidePersistEntry* pE = pPersist;
                 while( ( pE->aSlideAtom.nFlags & 4 ) && pE->aSlideAtom.nMasterId )
@@ -2400,7 +2406,7 @@ SdrObject* ImplSdPPTImport::ApplyTextObj( PPTTextObj* pTextObj, SdrTextObj* pObj
                 unsigned int nParaCount = pTextObj->Count();
                 PPTParagraphObj *pFirstPara = nParaCount == 0 ? NULL : pTextObj->First();
                 unsigned int nFirstParaTextcount = pFirstPara == NULL ? 0 : pFirstPara->GetTextSize();
-                if ( i < 8 || (nParaCount == 1 && nFirstParaTextcount == 0 || nParaCount == 0))
+                if ( i < 8 || ((nParaCount == 1 && nFirstParaTextcount == 0) || nParaCount == 0))
                 {
                     PresObjKind ePresObjKind = PRESOBJ_NONE;
                     sal_Bool    bEmptyPresObj = sal_True;

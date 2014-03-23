@@ -184,14 +184,14 @@ public:
     virtual void                FetchFontMetric( ImplFontMetricData&, long& rFactor ) const;
     virtual const ImplFontCharMap* GetImplFontCharMap( void ) const;
 
-    virtual int                 GetGlyphIndex( sal_UCS4 ) const;
-    int                         GetRawGlyphIndex( sal_UCS4 ) const;
-    int                         FixupGlyphIndex( int nGlyphIndex, sal_UCS4 ) const;
+    virtual sal_GlyphId         GetGlyphIndex( sal_UCS4 ) const;
+    sal_GlyphId                 GetRawGlyphIndex( sal_UCS4 ) const;
+    sal_GlyphId                 FixupGlyphIndex( sal_GlyphId, sal_UCS4 ) const;
 
     virtual bool                GetAntialiasAdvice( void ) const;
-    virtual bool                GetGlyphBitmap1( int nGlyphIndex, RawBitmap& ) const;
-    virtual bool                GetGlyphBitmap8( int nGlyphIndex, RawBitmap& ) const;
-    virtual bool                GetGlyphOutline( int nGlyphIndex, ::basegfx::B2DPolyPolygon& ) const;
+    virtual bool                GetGlyphBitmap1( sal_GlyphId, RawBitmap& ) const;
+    virtual bool                GetGlyphBitmap8( sal_GlyphId, RawBitmap& ) const;
+    virtual bool                GetGlyphOutline( sal_GlyphId, ::basegfx::B2DPolyPolygon& ) const;
     virtual int                 GetGlyphKernValue( int nLeftGlyph, int nRightGlyph ) const;
     virtual sal_uLong               GetKernPairs( ImplKernPairData** ) const;
 
@@ -204,7 +204,7 @@ protected:
     friend class GlyphCache;
 
     int                         ApplyGlyphTransform( int nGlyphFlags, FT_GlyphRec_*, bool ) const;
-    virtual void                InitGlyphData( int nGlyphIndex, GlyphData& ) const;
+    virtual void                InitGlyphData( sal_GlyphId, GlyphData& ) const;
     bool                        ApplyGSUB( const ImplFontSelectData& );
     virtual ServerFontLayoutEngine* GetLayoutEngine();
 

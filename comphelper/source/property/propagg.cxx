@@ -509,7 +509,7 @@ void SAL_CALL OPropertySetAggregationHelper::propertiesChange(const  ::com::sun:
     if (1 == nLen)
     {
         const  ::com::sun::star::beans::PropertyChangeEvent& evt = _rEvents.getConstArray()[0];
-        OSL_ENSURE(evt.PropertyName.getLength() > 0, "OPropertySetAggregationHelper::propertiesChange : invalid event !");
+        OSL_ENSURE( !evt.PropertyName.isEmpty(), "OPropertySetAggregationHelper::propertiesChange : invalid event !");
             // we had a bug where this assertion would have us saved a whole day :) (72514)
         sal_Int32 nHandle = rPH.getHandleByName( evt.PropertyName );
 

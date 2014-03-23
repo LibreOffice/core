@@ -955,7 +955,7 @@ long GraphiteLayout::FillDXArray( sal_Int32* pDXArray ) const
             assert( (mvChar2BaseGlyph[i] == -1) ||
                 ((signed)(mvChar2BaseGlyph[i] & GLYPH_INDEX_MASK) < (signed)mvGlyphs.size()));
             if (mvChar2BaseGlyph[i] != -1 &&
-                mvGlyphs[mvChar2BaseGlyph[i] & GLYPH_INDEX_MASK].mnGlyphIndex == GF_DROPPED)
+                mvGlyphs[mvChar2BaseGlyph[i] & GLYPH_INDEX_MASK].maGlyphId == GF_DROPPED)
             {
                 // when used in MultiSalLayout::GetTextBreak dropped glyphs
                 // must have zero width
@@ -1165,7 +1165,7 @@ void GraphiteLayout::ApplyDXArray(ImplLayoutArgs &args, std::vector<int> & rDelt
 #endif
             assert((nLastGlyph > -1) && (nLastGlyph < (signed)mvGlyphs.size()));
             mvGlyphs[nLastGlyph].mnNewWidth += nDWidth;
-            if (gi.mnGlyphIndex != GF_DROPPED)
+            if (gi.maGlyphId != GF_DROPPED)
                 mvGlyphs[nLastGlyph].mnNewWidth += nDWidth;
             else
                 nDGlyphOrigin += nDWidth;
@@ -1226,7 +1226,7 @@ void GraphiteLayout::kashidaJustify(std::vector<int>& rDeltaWidths, sal_GlyphId 
             continue;
         }
         // no kashida-injection for blank justified expansion either
-        if( IsSpacingGlyph( (*i).mnGlyphIndex ) )
+        if( IsSpacingGlyph( (*i).maGlyphId ) )
         {
             ++i;
             continue;
@@ -1241,7 +1241,7 @@ void GraphiteLayout::kashidaJustify(std::vector<int>& rDeltaWidths, sal_GlyphId 
         }
         nKashidaCount = 1 + (nGapWidth / nKashidaWidth);
 #ifdef GRLAYOUT_DEBUG
-        printf("inserting %d kashidas at %u\n", nKashidaCount, (*i).mnGlyphIndex);
+        printf("inserting %d kashidas at %u\n", nKashidaCount, (*i).maGlyphId);
 #endif
         GlyphItem glyphItem = *i;
         Point aPos(0, 0);
@@ -1296,7 +1296,7 @@ void GraphiteLayout::GetCaretPositions( int nArraySize, sal_Int32* pCaretXArray 
             int nChar2Base = mvChar2BaseGlyph[nCharSlot] & GLYPH_INDEX_MASK;
             assert((mvChar2BaseGlyph[nCharSlot] > -1) && (nChar2Base < (signed)mvGlyphs.size()));
             GlyphItem gi = mvGlyphs[nChar2Base];
-            if (gi.mnGlyphIndex == GF_DROPPED)
+            if (gi.maGlyphId == GF_DROPPED)
             {
                 continue;
             }
@@ -1412,7 +1412,7 @@ int GraphiteLayout::GetNextGlyphs( int length, sal_GlyphId * glyph_out,
   assert(glyph_slot >= 0);
   // Find the first glyph in the substring.
   for (; glyph_slot < signed(mvGlyphs.size()) &&
-          ((mvGlyphs.begin() + glyph_slot)->mnGlyphIndex == GF_DROPPED);
+          ((mvGlyphs.begin() + glyph_slot)->maGlyphId == GF_DROPPED);
           ++glyph_slot) {};
 
   // Update the length
@@ -1448,7 +1448,7 @@ int GraphiteLayout::GetNextGlyphs( int length, sal_GlyphId * glyph_out,
      }
      // Copy out this glyphs data.
      ++glyph_slot;
-     *glyph_out++ = glyph_itr->mnGlyphIndex;
+     *glyph_out++ = glyph_itr->maGlyphId;
 
      // Find the actual advance - this must be correct if called from
      // MultiSalLayout::AdjustLayout which requests one glyph at a time.
@@ -1477,13 +1477,13 @@ int GraphiteLayout::GetNextGlyphs( int length, sal_GlyphId * glyph_out,
        break;
 
      // Stop if glyph dropped
-     if (glyph_itr->mnGlyphIndex == GF_DROPPED)
+     if (glyph_itr->maGlyphId == GF_DROPPED)
        break;
   }
   int numGlyphs = glyph_slot - glyph_slot_begin;
   // move the next glyph_slot to a glyph that hasn't been dropped
   while (glyph_slot < static_cast<int>(mvGlyphs.size()) &&
-         (mvGlyphs.begin() + glyph_slot)->mnGlyphIndex == GF_DROPPED)
+         (mvGlyphs.begin() + glyph_slot)->maGlyphId == GF_DROPPED)
          ++glyph_slot;
   return numGlyphs;
 }
@@ -1495,7 +1495,7 @@ void GraphiteLayout::MoveGlyph( int nGlyphIndex, long nNewPos )
     // needs to be done carefully so the glyph/char maps are maintained
     // If a glyph has been dropped then it wasn't returned by GetNextGlyphs, so
     // the index here may be wrong
-    while ((mvGlyphs[nGlyphIndex].mnGlyphIndex == GF_DROPPED) &&
+    while ((mvGlyphs[nGlyphIndex].maGlyphId == GF_DROPPED) &&
            (nGlyphIndex < (signed)mvGlyphs.size()))
     {
         nGlyphIndex++;
@@ -1522,7 +1522,7 @@ void GraphiteLayout::DropGlyph( int nGlyphIndex )
         return;
 
     GlyphItem & glyph = mvGlyphs[nGlyphIndex];
-    glyph.mnGlyphIndex = GF_DROPPED;
+    glyph.maGlyphId = GF_DROPPED;
 #ifdef GRLAYOUT_DEBUG
     fprintf(grLog(),"Dropped %d\n", nGlyphIndex);
 #endif
@@ -1538,7 +1538,7 @@ void GraphiteLayout::Simplify( bool isBaseLayout )
   long deltaX = 0;
   while (gi != mvGlyphs.end())
   {
-      if (gi->mnGlyphIndex == dropMarker)
+      if (gi->maGlyphId == dropMarker)
       {
         deltaX += gi->mnNewWidth;
         gi->mnNewWidth = 0;

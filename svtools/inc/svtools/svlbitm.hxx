@@ -42,9 +42,7 @@ class SvLBoxEntry;
 #define SV_ITEM_ID_LBOXBMP          2
 #define SV_ITEM_ID_LBOXBUTTON       3
 #define SV_ITEM_ID_LBOXCONTEXTBMP   4
-//IAccessibility2 Implementation 2009-----
 #define SV_ITEM_ID_EXTENDRLBOXSTRING    5
-//-----IAccessibility2 Implementation 2009
 
 enum SvButtonState { SV_BUTTON_UNCHECKED, SV_BUTTON_CHECKED, SV_BUTTON_TRISTATE };
 
@@ -133,9 +131,7 @@ public:
     virtual sal_uInt16  IsA();
     void            InitViewData( SvLBox*,SvLBoxEntry*,SvViewDataItem* );
     XubString       GetText() const { return aStr; }
-    //IAccessibility2 Implementation 2009-----
     virtual XubString       GetExtendText() const {return XubString();}
-    //-----IAccessibility2 Implementation 2009
     void            SetText( SvLBoxEntry*, const XubString& rStr );
     void            Paint( const Point&, SvLBox& rDev, sal_uInt16 nFlags,SvLBoxEntry* );
     SvLBoxItem*     Create() const;
@@ -216,7 +212,6 @@ public:
     // Check whether this button can be modified via UI, sounding a beep if it
     // cannot be modified:
     bool            CheckModification() const;
-    //IAccessible2 implementation 2009
     SvLBoxButtonData* GetButtonData() const{ return pData;}
 };
 

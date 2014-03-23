@@ -177,51 +177,92 @@ struct WW8OleMap
     }
 };
 
+
+typedef std::map< sal_uInt16, sal_uInt16 > StyleInList;
 class SwWW8ImplReader;
 struct WW8LSTInfo;
 class WW8ListManager
 {
 public:
     WW8ListManager(SvStream& rSt_, SwWW8ImplReader& rReader_);
+
+    ~WW8ListManager();
+
     //Min and Max possible List Levels in Word
     enum ListLevel {nMinLevel=1, nMaxLevel=9};
+
     //the rParaSprms returns back the original word paragraph indent
     //sprms which were attached to the original numbering format
-    SwNumRule* GetNumRuleForActivation(sal_uInt16 nLFOPosition, const sal_uInt8 nLevel,
-        std::vector<sal_uInt8> &rParaSprms, SwTxtNode *pNode=0);
+    SwNumRule* GetNumRuleForActivation(
+        sal_uInt16 nLFOPosition,
+        const sal_uInt8 nLevel,
+        std::vector<sal_uInt8> &rParaSprms,
+        SwTxtNode *pNode=0 );
+
     SwNumRule* CreateNextRule(bool bSimple);
-    ~WW8ListManager();
+
     SwNumRule* GetNumRule(sal_uInt16 i);
-    sal_uInt16 GetWW8LSTInfoNum() const{return static_cast< sal_uInt16 >(maLSTInfos.size());}
+
+    sal_uInt16 GetWW8LSTInfoNum() const
+    {
+        return static_cast< sal_uInt16 >(maLSTInfos.size());
+    }
+
+    sal_uInt16 GetPossibleLFOPosition(
+        const sal_uInt16 aStyleID,
+        const sal_uInt8 aGivenLevel );
+
 private:
     wwSprmParser maSprmParser;
     SwWW8ImplReader& rReader;
     SwDoc&           rDoc;
     const WW8Fib&    rFib;
     SvStream&        rSt;
+
     std::vector<WW8LSTInfo* > maLSTInfos;
     WW8LFOInfos* pLFOInfos;// D. aus PLF LFO, sortiert genau wie im WW8 Stream
     sal_uInt16       nUniqueList; // current number for creating unique list names
-    sal_uInt8* GrpprlHasSprm(sal_uInt16 nId, sal_uInt8& rSprms, sal_uInt8 nLen);
-    WW8LSTInfo* GetLSTByListId(    sal_uInt32  nIdLst     ) const;
+
+    // Style-ListStyle-relationship
+    // - needed to determine default ListStyle for a certain Style in case the ListStyle information is missing at the Style
+    StyleInList maStyleInList;
+
+    sal_uInt8* GrpprlHasSprm(
+        sal_uInt16 nId,
+        sal_uInt8& rSprms,
+        sal_uInt8 nLen);
+
+    WW8LSTInfo* GetLSTByListId( sal_uInt32 nIdLst ) const;
+
     //the rParaSprms returns back the original word paragraph indent
     //sprms which are attached to this numbering level
-    bool ReadLVL(SwNumFmt& rNumFmt, SfxItemSet*& rpItemSet, sal_uInt16 nLevelStyle,
-        bool bSetStartNo, std::deque<bool> &rNotReallyThere, sal_uInt16 nLevel,
+    bool ReadLVL(
+        SwNumFmt& rNumFmt,
+        SfxItemSet*& rpItemSet,
+        sal_uInt16 nLevelStyle,
+        bool bSetStartNo,
+        std::deque<bool> &rNotReallyThere,
+        sal_uInt16 nLevel,
         std::vector<sal_uInt8> &rParaSprms);
 
     // Zeichenattribute aus GrpprlChpx
     typedef SfxItemSet* WW8aISet[nMaxLevel];
+
     // Zeichen Style Pointer
     typedef SwCharFmt* WW8aCFmt[nMaxLevel];
 
-    void AdjustLVL(sal_uInt8 nLevel, SwNumRule& rNumRule, WW8aISet& rListItemSet,
-        WW8aCFmt& aCharFmt, bool& bNewCharFmtCreated,
-        String aPrefix = aEmptyStr);
+    void AdjustLVL(
+        sal_uInt8 nLevel,
+        SwNumRule& rNumRule,
+        WW8aISet& rListItemSet,
+        WW8aCFmt& aCharFmt,
+        bool& bNewCharFmtCreated,
+        String aPrefix = aEmptyStr );
 
     //No copying
-    WW8ListManager(const WW8ListManager&);
-    WW8ListManager& operator=(const WW8ListManager&);
+    WW8ListManager( const WW8ListManager& );
+    WW8ListManager& operator=( const WW8ListManager& );
+
     sal_uInt16 nLastLFOPosition;
 };
 

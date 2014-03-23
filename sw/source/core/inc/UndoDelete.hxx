@@ -69,8 +69,10 @@ class SwUndoDelete
     sal_Bool SaveCntnt( const SwPosition* pStt, const SwPosition* pEnd,
                     SwTxtNode* pSttTxtNd, SwTxtNode* pEndTxtNd );
 public:
-    SwUndoDelete( SwPaM&,
-            sal_Bool bFullPara = sal_False, sal_Bool bCalledByTblCpy = sal_False );
+    SwUndoDelete(
+        SwPaM&,
+        sal_Bool bFullPara = sal_False,
+        sal_Bool bCalledByTblCpy = sal_False );
     virtual ~SwUndoDelete();
 
     virtual void UndoImpl( ::sw::UndoRedoContext & );

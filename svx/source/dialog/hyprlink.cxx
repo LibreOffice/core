@@ -114,7 +114,6 @@ SvxHyperlinkDlg::SvxHyperlinkDlg( SfxBindings *_pBindings, Window* pParent) :
     pTargetMenu         ( NULL ),
 
     bNoDoc              ( sal_True ),
-    bSend               ( sal_False ),
     bHasOldName         ( sal_False ),
     bHtmlMode           ( sal_False )
 
@@ -344,8 +343,7 @@ IMPL_LINK( SvxHyperlinkDlg, TBClickHdl, ToolBox *, pBox )
     {
         case BTN_LINK:
         {
-            if (!bSend) // Link ins Dokument einfuegen
-                SendToApp(HLINK_DEFAULT);
+            SendToApp(HLINK_DEFAULT);
         }
         break;
 
@@ -650,12 +648,23 @@ void SvxHyperlinkDlg::EnableLink()
 
 void SvxHyperlinkDlg::SendToApp(sal_uInt16 nType)
 {
+    static bool bAlreadyWorking(false);
+
+    if(bAlreadyWorking)
+    {
+        OSL_ENSURE(false, "SvxHyperlinkDlg::SendToApp called to potentially run recursively, please check (!)");
+        return;
+    }
+
+    bAlreadyWorking = true;
     sal_Bool bIsFile = sal_False;
-    bSend = sal_True;
     String sURL( aUrlCB.GetText() );
 
     if ( !sURL.Len() )
+    {
+        bAlreadyWorking = false;
         return;
+    }
 
     String aBase = GetBindings().GetDispatcher()->GetFrame()->GetObjectShell()->GetMedium()->GetBaseURL();
     INetURLObject aObj( URIHelper::SmartRel2Abs( INetURLObject(aBase), sURL, URIHelper::GetMaybeFileHdl(), true, false,
@@ -674,7 +683,10 @@ void SvxHyperlinkDlg::SendToApp(sal_uInt16 nType)
             LeaveWait();
             QueryBox aBox( this, SVX_RES( RID_SVXQB_DONTEXIST ) );
             if ( aBox.Execute() == RET_NO )
+            {
+                bAlreadyWorking = false;
                 return;
+            }
         }
         else
             LeaveWait();
@@ -700,6 +712,8 @@ void SvxHyperlinkDlg::SendToApp(sal_uInt16 nType)
 
     if ( sURL != aUrlCB.GetText() )
         aUrlCB.SetText( sURL );
+
+    bAlreadyWorking = false;
 }
 
 /*--------------------------------------------------------------------

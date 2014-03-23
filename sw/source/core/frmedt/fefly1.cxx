@@ -990,7 +990,7 @@ void SwFEShell::InsertDrawObj( SdrObject& rDrawObj,
         ::lcl_FindAnchorPos( *this, *GetDoc(), rInsertPosition, *pFrm, rFlyAttrSet );
     }
     // insert drawing object into the document creating a new <SwDrawFrmFmt> instance
-    SwDrawFrmFmt* pFmt = GetDoc()->Insert( aPam, rDrawObj, &rFlyAttrSet, 0 );
+    SwDrawFrmFmt* pFmt = GetDoc()->InsertDrawObj( aPam, rDrawObj, rFlyAttrSet );
 
     // move object to visible layer
     SwContact* pContact = findConnectionToSdrObjectDirect(&rDrawObj);
@@ -1519,9 +1519,8 @@ Size SwFEShell::RequestObjectResize( const SwRect &rRect, const uno::Reference <
             // search for a sequence field:
             const SfxPoolItem* pItem;
             for( sal_uInt16 n = 0, nEnd = pHts->Count(); n < nEnd; ++n )
-                if( RES_TXTATR_FIELD == ( pItem =
-                            &(*pHts)[ n ]->GetAttr())->Which() &&
-                    TYP_SEQFLD == ((SwFmtFld*)pItem)->GetField()->GetTypeId() )
+                if( RES_TXTATR_FIELD == ( pItem = &(*pHts)[ n ]->GetAttr())->Which()
+                    && TYP_SEQFLD == ((SwFmtFld*)pItem)->GetField()->GetTypeId() )
                 {
                     // sequence field found
                     SwFlyFrm* pChgFly = (SwFlyFrm*)pAnchor->GetUpper();

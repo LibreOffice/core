@@ -38,7 +38,7 @@ module com { module sun { module star { module deployment {
     </code>.
     </p>
 
-    @since OOo 2.0
+    @since OpenOffice 2.0
     @deprecated
         Use <type>XExtensionManager</type>.
 */

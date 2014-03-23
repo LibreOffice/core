@@ -381,6 +381,10 @@ static void lcl_GetPreferedExtension( String &rExt, const Graphic &rGrf )
     switch( const_cast<Graphic&>(rGrf).GetLink().GetType() )
     {
         case GFX_LINK_TYPE_NATIVE_GIF:      pExt = "gif"; break;
+
+        // #15508# added BMP type for better exports (writer export graphic - checked, works)
+        case GFX_LINK_TYPE_NATIVE_BMP:      pExt = "bmp"; break;
+
         case GFX_LINK_TYPE_NATIVE_TIF:      pExt = "tif"; break;
         case GFX_LINK_TYPE_NATIVE_WMF:      pExt = "wmf"; break;
         case GFX_LINK_TYPE_NATIVE_MET:      pExt = "met"; break;

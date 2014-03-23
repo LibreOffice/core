@@ -28,7 +28,7 @@
 #include <cstring>
 #include <assert.h>
 
-#include <fontsubset.hxx>
+#include "fontsubset.hxx"
 
 #include <vcl/strhelper.hxx>
 
@@ -358,7 +358,7 @@ class SubsetterContext
 public:
     virtual ~SubsetterContext( void);
     virtual bool emitAsType1( class Type1Emitter&,
-                const long* pGlyphIDs, const U8* pEncoding,
+                const sal_GlyphId* pGlyphIds, const U8* pEncoding,
                 GlyphWidth* pGlyphWidths, int nGlyphCount, FontSubsetInfo& ) = 0;
 };
 
@@ -383,7 +383,7 @@ public:
 
     void    initialCffRead( void);
     bool    emitAsType1( class Type1Emitter&,
-                const long* pGlyphIDs, const U8* pEncoding,
+                const sal_GlyphId* pGlyphIds, const U8* pEncoding,
                 GlyphWidth* pGlyphWidths, int nGlyphCount, FontSubsetInfo& );
 
     // used by charstring converter
@@ -2081,7 +2081,7 @@ void Type1Emitter::emitValVector( const char* pLineHead, const char* pLineTail,
 // --------------------------------------------------------------------
 
 bool CffSubsetterContext::emitAsType1( Type1Emitter& rEmitter,
-    const long* pReqGlyphIDs, const U8* pReqEncoding,
+    const sal_GlyphId* pReqGlyphIds, const U8* pReqEncoding,
     GlyphWidth* pGlyphWidths, int nGlyphCount, FontSubsetInfo& rFSInfo)
 {
     // prepare some fontdirectory details
@@ -2163,7 +2163,7 @@ bool CffSubsetterContext::emitAsType1( Type1Emitter& rEmitter,
         "/Encoding 256 array\n"
         "0 1 255 {1 index exch /.notdef put} for\n");
     for( int i = 1; (i < nGlyphCount) && (i < 256); ++i) {
-        const char* pGlyphName = getGlyphName( pReqGlyphIDs[i]);
+        const char* pGlyphName = getGlyphName( pReqGlyphIds[i]);
         pOut += sprintf( pOut, "dup %d /%s put\n", pReqEncoding[i], pGlyphName);
     }
     pOut += sprintf( pOut, "readonly def\n");
@@ -2314,20 +2314,20 @@ bool CffSubsetterContext::emitAsType1( Type1Emitter& rEmitter,
         "2 index /CharStrings %d dict dup begin\n", nGlyphCount);
     rEmitter.emitAllCrypted();
     for( int i = 0; i < nGlyphCount; ++i) {
-        const int nGlyphId = pReqGlyphIDs[i];
-        assert( (nGlyphId >= 0) && (nGlyphId < mnCharStrCount));
+        const int nCffGlyphId = pReqGlyphIds[i];
+        assert( (nCffGlyphId >= 0) && (nCffGlyphId < mnCharStrCount));
         // get privdict context matching to the glyph
-        const int nFDSelect = getFDSelect( nGlyphId);
+        const int nFDSelect = getFDSelect( nCffGlyphId);
         if( nFDSelect < 0)
             continue;
         mpCffLocal = &maCffLocal[ nFDSelect];
         // convert the Type2op charstring to its Type1op counterpart
-        const int nT2Len = seekIndexData( mnCharStrBase, nGlyphId);
+        const int nT2Len = seekIndexData( mnCharStrBase, nCffGlyphId);
         assert( nT2Len > 0);
         U8 aType1Ops[ MAX_T1OPS_SIZE]; // TODO: dynamic allocation
         const int nT1Len = convert2Type1Ops( mpCffLocal, mpReadPtr, nT2Len, aType1Ops);
         // get the glyph name
-        const char* pGlyphName = getGlyphName( nGlyphId);
+        const char* pGlyphName = getGlyphName( nCffGlyphId);
         // emit the encrypted Type1op charstring
         pOut += sprintf( pOut, "/%s %d RD ", pGlyphName, nT1Len);
         memcpy( pOut, aType1Ops, nT1Len);

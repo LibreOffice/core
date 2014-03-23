@@ -155,18 +155,24 @@ void ScTable::InsertRow( SCCOL nStartCol, SCCOL nEndCol, SCROW nStartRow, SCSIZE
 
         if (!maRowManualBreaks.empty())
         {
-            std::set<SCROW>::reverse_iterator rit = maRowManualBreaks.rbegin();
-            while (rit != maRowManualBreaks.rend())
+            std::vector<SCROW> aUpdatedBreaks;
+
+            while ( ! maRowManualBreaks.empty())
             {
-                SCROW nRow = *rit;
-                if (nRow < nStartRow)
-                    break;  // while
-                else
-                {
-                    maRowManualBreaks.erase( (++rit).base());
-                    maRowManualBreaks.insert( static_cast<SCROW>( nRow + nSize));
-                }
+                std::set<SCROW>::iterator aLast (--maRowManualBreaks.end());
+
+                // Check if there are more entries that have to be processed.
+                if (*aLast < nStartRow)
+                    break;
+
+                // Remember the updated break location and erase the entry.
+                aUpdatedBreaks.push_back(static_cast<SCROW>(*aLast + nSize));
+                maRowManualBreaks.erase(aLast);
             }
+
+            // Insert the updated break locations.
+            if ( ! aUpdatedBreaks.empty())
+                maRowManualBreaks.insert(aUpdatedBreaks.begin(), aUpdatedBreaks.end());
         }
     }
 
@@ -261,18 +267,24 @@ void ScTable::InsertCol( SCCOL nStartCol, SCROW nStartRow, SCROW nEndRow, SCSIZE
 
         if (!maColManualBreaks.empty())
         {
-            std::set<SCCOL>::reverse_iterator rit = maColManualBreaks.rbegin();
-            while (rit != maColManualBreaks.rend())
+            std::vector<SCCOL> aUpdatedBreaks;
+
+            while ( ! maColManualBreaks.empty())
             {
-                SCCOL nCol = *rit;
-                if (nCol < nStartCol)
-                    break;  // while
-                else
-                {
-                    maColManualBreaks.erase( (++rit).base());
-                    maColManualBreaks.insert( static_cast<SCCOL>( nCol + nSize));
-                }
+                std::set<SCCOL>::iterator aLast (--maColManualBreaks.end());
+
+                // Check if there are more entries that have to be processed.
+                if (*aLast < nStartRow)
+                    break;
+
+                // Remember the updated break location and erase the entry.
+                aUpdatedBreaks.push_back(static_cast<SCCOL>(*aLast + nSize));
+                maColManualBreaks.erase(aLast);
             }
+
+            // Insert the updated break locations.
+            if ( ! aUpdatedBreaks.empty())
+                maColManualBreaks.insert(aUpdatedBreaks.begin(), aUpdatedBreaks.end());
         }
     }
 
@@ -3308,7 +3320,6 @@ sal_uLong ScTable::GetColOffset( SCCOL nCol ) const
     return n;
 }
 
-//IAccessibility2 Implementation 2009-----
 ScColumn* ScTable::GetColumnByIndex(sal_Int32 index)
 {
     if( index <= MAXCOL && index >= 0 )
@@ -3317,5 +3328,4 @@ ScColumn* ScTable::GetColumnByIndex(sal_Int32 index)
     }
     return NULL;
 }
-//-----IAccessibility2 Implementation 2009
 

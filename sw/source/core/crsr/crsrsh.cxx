@@ -421,7 +421,6 @@ sal_Bool SwCrsrShell::LeftRight( sal_Bool bLeft, sal_uInt16 nCnt, sal_uInt16 nMo
     }
     return bRet;
 }
-//IAccessibility2 Implementation 2009-----
 void SwCrsrShell::FirePageChangeEvent(sal_uInt16 nOldPage, sal_uInt16 nNewPage)
 {
 #ifdef ACCESSIBLE_LAYOUT
@@ -449,7 +448,6 @@ void SwCrsrShell::FireSectionChangeEvent(sal_uInt16 nOldSection, sal_uInt16 nNew
 bool SwCrsrShell::bColumnChange()
 {
 
-    sal_uInt16 nCurrCol = 0;
     SwFrm* pCurrFrm = GetCurrFrm(sal_False);
 
     if (pCurrFrm == NULL)
@@ -480,7 +478,6 @@ bool SwCrsrShell::bColumnChange()
         return sal_True;
     }
 }
-//-----IAccessibility2 Implementation 2009
 
 // --> OD 2008-04-02 #refactorlists#
 void SwCrsrShell::MarkListLevel( const String& sListId,
@@ -2427,9 +2424,7 @@ sal_Bool SwCrsrShell::IsOverReadOnlyPos( const Point& rPt ) const
     Point aPt( rPt );
     SwPaM aPam( *pCurCrsr->GetPoint() );
     GetLayout()->GetCrsrOfst( aPam.GetPoint(), aPt );
-    // --> FME 2004-06-29 #114856# Formular view
     return aPam.HasReadonlySel( GetViewOptions()->IsFormView() );
-    // <--
 }
 
 
@@ -2661,9 +2656,7 @@ SwCrsrShell::SwCrsrShell( SwCrsrShell& rShell, Window *pInitWin )
 //  UpdateCrsr( 0 );
     // OD 11.02.2003 #100556#
     mbMacroExecAllowed = rShell.IsMacroExecAllowed();
-    //IAccessibility2 Implementation 2009-----
     oldColFrm = NULL;
-    //-----IAccessibility2 Implementation 2009
 }
 
 
@@ -3059,28 +3052,26 @@ void SwCrsrShell::SetReadOnlyAvailable( sal_Bool bFlag )
 sal_Bool SwCrsrShell::HasReadonlySel() const
 {
     sal_Bool bRet = sal_False;
-    if( IsReadOnlyAvailable() ||
-        // --> FME 2004-06-29 #114856# Formular view
-        GetViewOptions()->IsFormView() )
-        // <--
+    if ( IsReadOnlyAvailable() || GetViewOptions()->IsFormView() )
     {
-        if( pTblCrsr )
-            bRet = pTblCrsr->HasReadOnlyBoxSel() ||
-                   pTblCrsr->HasReadonlySel(
-                            // --> FME 2004-06-29 #114856# Formular view
-                            GetViewOptions()->IsFormView() );
-                            // <--
+        if ( pTblCrsr != NULL )
+        {
+            bRet = pTblCrsr->HasReadOnlyBoxSel()
+                   || pTblCrsr->HasReadonlySel( GetViewOptions()->IsFormView() );
+        }
         else
         {
             const SwPaM* pCrsr = pCurCrsr;
 
-            do {
-                if( pCrsr->HasReadonlySel(
-                        // --> FME 2004-06-29 #114856# Formular view
-                        GetViewOptions()->IsFormView() ) )
-                        // <--
+            do
+            {
+                if ( pCrsr->HasReadonlySel( GetViewOptions()->IsFormView() ) )
+                {
                     bRet = sal_True;
-            } while( !bRet && pCurCrsr != ( pCrsr = (SwPaM*)pCrsr->GetNext() ));
+                }
+
+                pCrsr = (SwPaM*)pCrsr->GetNext();
+            } while ( !bRet && pCrsr != pCurCrsr );
         }
     }
     return bRet;

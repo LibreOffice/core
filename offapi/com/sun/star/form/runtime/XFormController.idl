@@ -245,7 +245,7 @@ interface XFormControllerContext;
     @see ::com::sun::star::form::binding::BindableControlModel
     @see ::com::sun::star::sdb::DataSource::Settings
 
-    @since OOo 3.3
+    @since OpenOffice 3.3
  */
 interface XFormController
 {

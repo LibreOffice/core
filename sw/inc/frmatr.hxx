@@ -81,8 +81,8 @@ inline const SvxBoxItem &SwFmt::GetBox(sal_Bool bInP) const
     { return aSet.GetBox(bInP); }
 inline const SvxFmtKeepItem &SwFmt::GetKeep(sal_Bool bInP) const
     { return aSet.GetKeep(bInP); }
-inline const SvxBrushItem &SwFmt::GetBackground(sal_Bool bInP) const
-    { return aSet.GetBackground(bInP); }
+//UUUUinline const SvxBrushItem &SwFmt::GetBackground(sal_Bool bInP) const
+//UUUU  { return aSet.GetBackground(bInP); }
 inline const SvxShadowItem &SwFmt::GetShadow(sal_Bool bInP) const
     { return aSet.GetShadow(bInP); }
 inline const SvxFmtBreakItem &SwFmt::GetBreak(sal_Bool bInP) const

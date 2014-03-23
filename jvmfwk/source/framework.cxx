@@ -644,7 +644,9 @@ sal_Bool SAL_CALL jfw_areEqualJavaInfo(
         && sLocation.equals(pInfoB->sLocation) == sal_True
         && sVersion.equals(pInfoB->sVersion) == sal_True
         && pInfoA->nFeatures == pInfoB->nFeatures
+#ifndef MACOSX
         && pInfoA->nRequirements == pInfoB->nRequirements
+#endif
         && sData == pInfoB->arVendorData)
     {
         return sal_True;

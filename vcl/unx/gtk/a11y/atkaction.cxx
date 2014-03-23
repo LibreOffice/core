@@ -49,7 +49,7 @@ getAsConst( const rtl::OString& rString )
     static int nIdx = 0;
     nIdx = (nIdx + 1) % nMax;
     aUgly[nIdx] = rString;
-    return aUgly[ nIdx ];
+    return aUgly[ nIdx ].getStr();
 }
 
 static accessibility::XAccessibleAction*

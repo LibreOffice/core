@@ -327,7 +327,7 @@ css::uno::UnoInterfaceReference Bridge::registerIncomingInterface(
     rtl::OUString const & oid, css::uno::TypeDescription const & type)
 {
     OSL_ASSERT(type.is());
-    if (oid.getLength() == 0) {
+    if ( oid.isEmpty() ) {
         return css::uno::UnoInterfaceReference();
     }
     css::uno::UnoInterfaceReference obj(findStub(oid, type));
@@ -410,7 +410,7 @@ rtl::OUString Bridge::registerOutgoingInterface(
 css::uno::UnoInterfaceReference Bridge::findStub(
     rtl::OUString const & oid, css::uno::TypeDescription const & type)
 {
-    OSL_ASSERT(oid.getLength() != 0 && type.is());
+    OSL_ASSERT(!oid.isEmpty() && type.is());
     osl::MutexGuard g(mutex_);
     Stubs::iterator i(stubs_.find(oid));
     if (i != stubs_.end()) {
@@ -432,7 +432,7 @@ css::uno::UnoInterfaceReference Bridge::findStub(
 void Bridge::releaseStub(
     rtl::OUString const & oid, css::uno::TypeDescription const & type)
 {
-    OSL_ASSERT(oid.getLength() != 0 && type.is());
+    OSL_ASSERT(!oid.isEmpty() && type.is());
     css::uno::UnoInterfaceReference obj;
     bool unused;
     {
@@ -796,7 +796,7 @@ Bridge::~Bridge() {
 css::uno::Reference< css::uno::XInterface > Bridge::getInstance(
     rtl::OUString const & sInstanceName) throw (css::uno::RuntimeException)
 {
-    if (sInstanceName.getLength() == 0) {
+    if ( sInstanceName.isEmpty() ) {
         throw css::uno::RuntimeException(
             rtl::OUString(
                 RTL_CONSTASCII_USTRINGPARAM(

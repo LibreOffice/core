@@ -47,7 +47,7 @@ module com { module sun { module star { module configuration { module backend {
   @see com::sun::star::configuration::backend::XBackend
   @see com::sun::star::configuration::backend::XMultiLayerStratum
 
-  @since OOo 1.1.2
+  @since OpenOffice 1.1.2
 */
 published interface XBackendEntities : ::com::sun::star::uno::XInterface
 {

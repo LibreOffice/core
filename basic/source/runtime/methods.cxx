@@ -169,7 +169,7 @@ String getFullPath( const String& aRelPath )
     INetURLObject aURLObj( aRelPath );
     aFileURL = aURLObj.GetMainURL( INetURLObject::NO_DECODE );
 
-    if( !aFileURL.getLength() )
+    if( aFileURL.isEmpty() )
     {
         File::getFileURLFromSystemPath( aRelPath, aFileURL );
     }
@@ -283,7 +283,7 @@ RTLFUNC(Error)
         if ( bVBA && rPar.Count() > 1 )
         {
             com::sun::star::uno::Reference< ooo::vba::XErrObject > xErrObj( SbxErrObject::getUnoErrObject() );
-            if ( xErrObj.is() && xErrObj->getNumber() == nCode && xErrObj->getDescription().getLength() )
+            if ( xErrObj.is() && xErrObj->getNumber() == nCode && !xErrObj->getDescription().isEmpty() )
                 tmpErrMsg = xErrObj->getDescription();
         }
         rPar.Get( 0 )->PutString( tmpErrMsg );
@@ -4311,7 +4311,7 @@ RTLFUNC(MsgBox)
             pBox = new WarningBox( pParent, nWinBits, aMsg );
             break;
         case 64:
-            pBox = new InfoBox( pParent, aMsg );
+            pBox = new InfoBox( pParent, nWinBits, aMsg );
             break;
         default:
             pBox = new MessBox( pParent, nWinBits, aTitle, aMsg );

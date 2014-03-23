@@ -22,8 +22,6 @@
 
 
 
-#include "system.h"
-
 #include <osl/module.h>
 #include <osl/diagnose.h>
 #include <osl/file.h>
@@ -32,106 +30,103 @@
 #include <stdlib.h>
 #include <dlfcn.h>
 
-int UnicodeToText(char *, size_t, const sal_Unicode *, sal_Int32);
+#include "system.h"
 
-// static data for holding SAL dll module and full path
-static HMODULE hModSal;
-static char szSalDir[ _MAX_PATH];
-static char szSalDrive[ _MAX_PATH];
+/* implemented in file.cxx */
+int UnicodeToText(char *, size_t, const sal_Unicode *, sal_Int32);
 
 /*****************************************************************************/
 /* osl_loadModule */
 /*****************************************************************************/
 
-ULONG APIENTRY _DosLoadModule (PSZ pszObject, ULONG uObjectLen, PCSZ pszModule,
-    PHMODULE phmod)
-{
-    APIRET  rc;
-    rc = DosLoadModule( pszObject, uObjectLen, pszModule, phmod);
-    // YD 22/05/06 issue again if first call fails (why?)
-    if (rc == ERROR_INVALID_PARAMETER)
-        rc = DosLoadModule( pszObject, uObjectLen, pszModule, phmod);
-    return rc;
-}
-
-oslModule SAL_CALL osl_loadAsciiModule( const sal_Char* pModuleName, sal_Int32 nRtldMode )
-{
-    rtl_uString* pUniName = NULL;
-    rtl_uString_newFromAscii( &pUniName, pModuleName );
-    oslModule aModule = osl_loadModule( pUniName, nRtldMode );
-    rtl_uString_release( pUniName );
-    return aModule;
-}
-
 oslModule SAL_CALL osl_loadModule(rtl_uString *ustrModuleName, sal_Int32 nRtldMode)
 {
-    HMODULE hModule;
-    BYTE szErrorMessage[256];
-    APIRET rc;
     oslModule pModule=0;
     rtl_uString* ustrTmp = NULL;
 
     OSL_ENSURE(ustrModuleName,"osl_loadModule : string is not valid");
 
     /* ensure ustrTmp hold valid string */
-    if( osl_File_E_None != osl_getSystemPathFromFileURL( ustrModuleName, &ustrTmp ) )
-        rtl_uString_assign( &ustrTmp, ustrModuleName );
+    if (osl_File_E_None != osl_getSystemPathFromFileURL(ustrModuleName, &ustrTmp))
+        rtl_uString_assign(&ustrTmp, ustrModuleName);
 
-    if( ustrTmp )
+    if (ustrTmp)
     {
         char buffer[PATH_MAX];
 
-        if( UnicodeToText( buffer, PATH_MAX, ustrTmp->buffer, ustrTmp->length ) )
-        {
-            char drive[_MAX_DRIVE], dir[_MAX_DIR];
-            char fname[_MAX_FNAME], ext[_MAX_EXT];
-            char* dot;
-            // 21/02/2006 YD dll names must be 8.3: since .uno.dll files
-            // have hardcoded names, I'm truncating names here and also in
-            // the build system
-            _splitpath (buffer, drive, dir, fname, ext);
-            if (strlen(fname)>8)
-                fname[8] = 0;   // truncate to 8.3
-            dot = strchr( fname, '.');
-            if (dot)
-                *dot = '\0';    // truncate on dot
-            // if drive is not specified, remove starting \ from dir name
-            // so dll is loaded from LIBPATH
-            if (drive[0] == 0 && dir[0] == '\\' && dir[1] == '\\') {
-                while( dir[0] == '\\')
-                    strcpy( dir, dir+1);
-            }
-            _makepath( buffer, drive, dir, fname, ext);
-
-#if OSL_DEBUG_LEVEL>10
-            debug_printf("osl_loadModule module %s", buffer);
-#endif
-            hModule = dlopen( buffer, RTLD_LOCAL);
-            if (hModule != NULL )
-                pModule = (oslModule)hModule;
-            else
-            {
-                    sal_Char szError[ PATH_MAX*2 ];
-                    sprintf( szError, "Module: %s; errno: %d;\n"
-                            "Please contact technical support and report above informations.\n\n",
-                            buffer, errno );
-#if OSL_DEBUG_LEVEL>0
-                    fprintf( stderr, szError);
-#endif
-                    debug_printf("osl_loadModule error %s", szError);
-
-#ifndef OSL_DEBUG_LEVEL
-                    WinMessageBox(HWND_DESKTOP,HWND_DESKTOP,
-                        szError, "Critical error: DosLoadModule failed",
-                        0, MB_ERROR | MB_OK | MB_MOVEABLE);
-#endif
-            }
-        }
+        if (UnicodeToText(buffer, PATH_MAX, ustrTmp->buffer, ustrTmp->length))
+            pModule = osl_loadAsciiModule(buffer, nRtldMode);
+        rtl_uString_release(ustrTmp);
     }
 
-    rtl_uString_release( ustrTmp );
-
     return pModule;
+}
+
+/*****************************************************************************/
+/* osl_loadAsciiModule */
+/*****************************************************************************/
+
+oslModule SAL_CALL osl_loadAsciiModule(const sal_Char *pszModuleName, sal_Int32 nRtldMode)
+{
+    char drive[_MAX_DRIVE], dir[_MAX_DIR];
+    char fname[_MAX_FNAME], ext[_MAX_EXT];
+    char buffer[PATH_MAX];
+    char* dot;
+    void* hModule;
+
+    if (!pszModuleName)
+        return NULL;
+
+    // 21/02/2006 YD dll names must be 8.3: since .uno.dll files
+    // have hardcoded names, I'm truncating names here and also in
+    // the build system
+    _splitpath (pszModuleName, drive, dir, fname, ext);
+    if (strlen(fname)>8)
+        fname[8] = 0;   // truncate to 8.3
+    dot = strchr( fname, '.');
+    if (dot)
+        *dot = '\0';    // truncate on dot
+
+    // if drive is not specified, remove starting \ from dir name
+    // so dll is loaded from LIBPATH
+    if (drive[0] == 0 && dir[0] == '\\' && dir[1] == '\\') {
+        while( dir[0] == '\\')
+            strcpy( dir, dir+1);
+    }
+    _makepath( buffer, drive, dir, fname, ext);
+
+#if OSL_DEBUG_LEVEL>1
+    debug_printf("osl_loadModule module %s", buffer);
+#endif
+
+    hModule = dlopen( buffer, RTLD_LOCAL);
+    if (hModule != NULL)
+        return (oslModule)hModule;
+
+    // do not show in case rc=2 ENOENT, we must parse dlerror
+    // string to detect it
+    char* err = dlerror();
+    if (!err)
+        return NULL;
+
+    if (strstr( err, "rc=2") != NULL)
+        return NULL;
+
+    sal_Char szError[ PATH_MAX*2 ];
+    sprintf( szError, "Module: %s;\n error: %s;\n\n"
+             "Please contact technical support and report above informations.\n\n",
+             buffer, err);
+#if OSL_DEBUG_LEVEL>0
+    debug_printf("osl_loadModule error %s", szError);
+#endif
+
+#if (OSL_DEBUG_LEVEL==0) || !defined(OSL_DEBUG_LEVEL)
+    WinMessageBox(HWND_DESKTOP,HWND_DESKTOP,
+                  szError, "Critical error: DosLoadModule failed",
+                  0, MB_ERROR | MB_OK | MB_MOVEABLE);
+#endif
+
+    return NULL;
 }
 
 /*****************************************************************************/
@@ -143,11 +138,23 @@ osl_getModuleHandle(rtl_uString *pModuleName, oslModule *pResult)
 {
     HMODULE hmod;
     APIRET  rc;
-    rc = DosQueryModuleHandle(pModuleName->buffer, &hmod);
-    if( rc == NO_ERROR)
+
+    OSL_ENSURE(pModuleName,"osl_loadModule : string is not valid");
+
+    if (pModuleName)
     {
-        *pResult = (oslModule) hmod;
-        return sal_True;
+        char buffer[PATH_MAX];
+
+        if (UnicodeToText(buffer, PATH_MAX, pModuleName->buffer,
+                          pModuleName->length))
+        {
+            rc = DosQueryModuleHandle(buffer, &hmod);
+            if( rc == NO_ERROR)
+            {
+                *pResult = (oslModule) hmod;
+                return sal_True;
+            }
+        }
     }
 
     return sal_False;
@@ -156,14 +163,20 @@ osl_getModuleHandle(rtl_uString *pModuleName, oslModule *pResult)
 /*****************************************************************************/
 /* osl_unloadModule */
 /*****************************************************************************/
-void SAL_CALL osl_unloadModule(oslModule Module)
+void SAL_CALL osl_unloadModule(oslModule hModule)
 {
-#if OSL_DEBUG_LEVEL>0
-    if (!Module)
-       fprintf( stderr, "osl_unloadModule NULL HANDLE.\n");
-#endif
-
-    DosFreeModule((HMODULE)Module);
+    if (hModule)
+    {
+        int nRet = dlclose(hModule);
+#if OSL_DEBUG_LEVEL > 1
+        if (nRet != 0)
+        {
+            debug_printf( "osl_unloadModule failed with %s\n", dlerror());
+        }
+#else
+        (void) nRet;
+#endif /* if OSL_DEBUG_LEVEL */
+    }
 }
 
 /*****************************************************************************/

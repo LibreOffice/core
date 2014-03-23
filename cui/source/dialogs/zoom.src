@@ -86,8 +86,7 @@ ModalDialog RID_SVXDLG_ZOOM
         Left = TRUE ;
         Repeat = TRUE ;
         Spin = TRUE ;
-        Unit = FUNIT_CUSTOM ;
-        CustomUnitText = "%" ;
+        Unit = FUNIT_PERCENT ;
         SpinSize = 1 ;
     };
     FixedLine FL_VIEWLAYOUT

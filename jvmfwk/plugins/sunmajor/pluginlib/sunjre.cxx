@@ -105,7 +105,7 @@ int SunInfo::compareVersions(const rtl::OUString& sSecond) const
     rtl::OUString sFirst = getVersion();
 
     SunVersion version1(sFirst);
-    JFW_ENSURE(version1, OUSTR("[Java framework] sunjavaplugin"SAL_DLLEXTENSION
+    JFW_ENSURE(version1, OUSTR("[Java framework] sunjavaplugin" SAL_DLLEXTENSION
                                " does not know the version: ")
                + sFirst + OUSTR(" as valid for a SUN/Oracle JRE."));
     SunVersion version2(sSecond);

@@ -1155,7 +1155,7 @@ bool DataBrowser::isDateString( rtl::OUString aInputString, double& fOutDateValu
 {
     sal_uInt32 nNumberFormat=0;
     SvNumberFormatter* pSvNumberFormatter = m_spNumberFormatterWrapper.get() ? m_spNumberFormatterWrapper->getSvNumberFormatter() : 0;
-    if( aInputString.getLength() > 0 &&  pSvNumberFormatter && pSvNumberFormatter->IsNumberFormat( aInputString, nNumberFormat, fOutDateValue ) )
+    if( !aInputString.isEmpty() &&  pSvNumberFormatter && pSvNumberFormatter->IsNumberFormat( aInputString, nNumberFormat, fOutDateValue ) )
     {
         Reference< util::XNumberFormatsSupplier > xNumberFormatsSupplier( m_xChartDoc, uno::UNO_QUERY );
         Reference< util::XNumberFormats > xNumberFormats;

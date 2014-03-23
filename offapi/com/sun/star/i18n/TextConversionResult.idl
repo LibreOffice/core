@@ -38,7 +38,7 @@ module com {  module sun {  module star {  module i18n {
 
 /** Text conversion result to be used with <type>XTextConversion</type>.
 
-     @since OOo 1.1.2
+     @since OpenOffice 1.1.2
 */
 
 published struct TextConversionResult

@@ -41,7 +41,7 @@ published interface XPolyPolygon2D;
     state, i.e. the common setup required to render each individual
     <type>XCanvas</type> primitive.<p>
 
-    @since OOo 2.0
+    @since OpenOffice 2.0
  */
 published struct RenderState
 {

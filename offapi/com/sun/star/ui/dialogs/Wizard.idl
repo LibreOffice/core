@@ -19,25 +19,21 @@
  *
  *************************************************************/
 
-
-
 #ifndef __com_sun_star_ui_dialogs_Wizard_idl__
 #define __com_sun_star_ui_dialogs_Wizard_idl__
 
 #include <com/sun/star/ui/dialogs/XWizard.idl>
 #include <com/sun/star/lang/IllegalArgumentException.idl>
 
-//==================================================================================================================
-
 module com { module sun { module star { module ui { module dialogs {
 
-published interface XWizardController;
-
-//==================================================================================================================
+interface XWizardController;
 
 /** provides a framework for implementing a wizard dialog.
+
+    @since OpenOffice 3.3
  */
-published service Wizard : XWizard
+service Wizard : XWizard
 {
     /** creates a wizard with a single execution path
         @param PageIds
@@ -63,10 +59,6 @@ published service Wizard : XWizard
             );
 };
 
-//==================================================================================================================
-
 }; }; }; }; };
-
-//==================================================================================================================
 
 #endif

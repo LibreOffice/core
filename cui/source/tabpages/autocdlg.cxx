@@ -753,7 +753,7 @@ void OfaSwAutoFmtOptionsPage::Reset( const SfxItemSet& )
     nPercent = pOpt->nRightMargin;
     sMargin = ' ';
     sMargin += String::CreateFromInt32( nPercent );
-    sMargin += '%';
+    sMargin.AppendAscii( " %" );
     pUserData = new ImpUserData(&sMargin, 0);
     aCheckLB.SetUserData( MERGE_SINGLE_LINE_PARA, pUserData );
 
@@ -817,7 +817,7 @@ IMPL_LINK(OfaSwAutoFmtOptionsPage, EditHdl, PushButton*, EMPTYARG)
             nPercent = (sal_uInt16)aDlg.GetPrcntFld().GetValue();
             sMargin = ' ';
             sMargin += String::CreateFromInt32( nPercent );
-            sMargin += '%';
+            sMargin.AppendAscii( " %" );
         }
     }
     aCheckLB.Invalidate();
@@ -2100,7 +2100,6 @@ OfaQuoteTabPage::OfaQuoteTabPage( Window* pParent, const SfxItemSet& rSet ) :
     aDblStandardPB.SetClickHdl(LINK(this,   OfaQuoteTabPage, StdQuoteHdl));
     aSglStandardPB.SetClickHdl(LINK(this,   OfaQuoteTabPage, StdQuoteHdl));
 
-    //IAccessibility2 Implementation 2009-----
     // Move down from the position before FreeResource()
     // For lost help ID issue
     aSglStandardPB.SetAccessibleName(String(CUI_RES(STR_PB_SGL_STD) ) );

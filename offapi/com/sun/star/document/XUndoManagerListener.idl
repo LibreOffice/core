@@ -19,25 +19,20 @@
  *
  *************************************************************/
 
-
-
 #ifndef __com_sun_star_document_XUndoManagerListener_idl__
 #define __com_sun_star_document_XUndoManagerListener_idl__
 
 #include <com/sun/star/document/UndoManagerEvent.idl>
 #include <com/sun/star/lang/XEventListener.idl>
 
-//==================================================================================================================
-
 module com { module sun { module star { module document {
-
-//==================================================================================================================
 
 /** implemented by components which want to be notified of changes in the Undo/Redo stacks of an Undo manager.
 
     @see XUndoManager
+    @since OpenOffice 3.4
  */
-published interface XUndoManagerListener : ::com::sun::star::lang::XEventListener
+interface XUndoManagerListener : ::com::sun::star::lang::XEventListener
 {
     /** is called when an undo action is added to the undo stack.
 
@@ -132,10 +127,6 @@ published interface XUndoManagerListener : ::com::sun::star::lang::XEventListene
     void    cancelledContext( [in] UndoManagerEvent i_event );
 };
 
-//==================================================================================================================
-
 }; }; }; };
-
-//==================================================================================================================
 
 #endif

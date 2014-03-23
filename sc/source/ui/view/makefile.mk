@@ -24,6 +24,7 @@ PRJ=..$/..$/..
 
 PRJNAME=sc
 TARGET=view
+ENABLE_EXCEPTIONS=TRUE
 
 # --- Settings -----------------------------------------------------
 

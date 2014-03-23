@@ -397,7 +397,7 @@ void SwFormatClipboard::Copy( SwWrtShell& rWrtShell, SfxItemPool& rPool, bool bP
             rWrtShell.GetCurAttr(*pItemSet);
 
             // additional numbering properties for paragraph styles
-            if( nSelectionType & nsSelectionType::SEL_TXT && rWrtShell.GetCurNumRule() )
+            if( nSelectionType & nsSelectionType::SEL_TXT && rWrtShell.GetNumRuleAtCurrCrsrPos() )
             {
                 SfxBoolItem aStart(FN_NUMBER_NEWSTART, rWrtShell.IsNumRuleStart());
                 pItemSet->Put(aStart);
@@ -553,7 +553,7 @@ void SwFormatClipboard::Paste( SwWrtShell& rWrtShell, SfxStyleSheetBasePool* pPo
                     rWrtShell.SetAttrSet(*pTemplateItemSet);
 
                     // additional numbering properties for paragraph styles
-                    if( nSelectionType & nsSelectionType::SEL_TXT && rWrtShell.GetCurNumRule() )
+                    if( nSelectionType & nsSelectionType::SEL_TXT && rWrtShell.GetNumRuleAtCurrCrsrPos() )
                     {
                         if( SFX_ITEM_SET == pTemplateItemSet->GetItemState(FN_NUMBER_NEWSTART) )
                         {

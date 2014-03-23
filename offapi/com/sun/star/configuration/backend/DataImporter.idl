@@ -36,7 +36,7 @@ module com { module sun { module star { module configuration { module backend {
 /**
     allows importing data from one configuration repository into another. .
 
-    @since OOo 1.1.2
+    @since OpenOffice 1.1.2
 */
 published service DataImporter
 {

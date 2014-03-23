@@ -88,7 +88,7 @@ namespace comphelper
     {
         void    lcl_checkForEmptyName( const bool _allowEmpty, const ::rtl::OUString& _name )
         {
-            if ( !_allowEmpty && !_name.getLength() )
+            if ( !_allowEmpty && _name.isEmpty() )
                 throw IllegalArgumentException(
                         ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "The property name must not be empty." ) ),
                         // TODO: resource

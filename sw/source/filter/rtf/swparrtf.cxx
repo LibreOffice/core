@@ -1306,7 +1306,7 @@ void SwRTFParser::ReadDrawingObject()
 
         sdr::legacy::SetSnapRect(*pStroke, aRect);
 
-        /* SwFrmFmt* pRetFrmFmt = */pDoc->Insert(*pPam, *pStroke, &aFlySet, NULL);
+        /* SwFrmFmt* pRetFrmFmt = */pDoc->InsertDrawObj(*pPam, *pStroke, aFlySet );
     }
 }
 
@@ -1338,7 +1338,7 @@ void SwRTFParser::InsertShpObject(SdrObject* pStroke, int _nZOrder)
         SdrPage* pDrawPg = pDrawModel->GetPage(0);
         pDrawPg->InsertObjectToSdrObjList(*pStroke);
         pDrawPg->SetNavigationPosition(pStroke->GetNavigationPosition(), _nZOrder);
-        /* SwFrmFmt* pRetFrmFmt = */pDoc->Insert(*pPam, *pStroke, &aFlySet, NULL);
+        /* SwFrmFmt* pRetFrmFmt = */pDoc->InsertDrawObj(*pPam, *pStroke, aFlySet );
 }
 
 ::basegfx::B2DPoint rotate(const ::basegfx::B2DPoint& rStart, const ::basegfx::B2DPoint& rEnd)

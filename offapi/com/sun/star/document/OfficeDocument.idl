@@ -137,20 +137,20 @@ published service OfficeDocument
     //-------------------------------------------------------------------------
     /** allows for getting information about a print job
 
-        @since OOo 1.1.2
+        @since OpenOffice 1.1.2
      */
     [optional] interface com::sun::star::view::XPrintJobBroadcaster;
 
     /** is supported when the document can contain scripts and dialogs
 
-        @since OOo 2.4
+        @since OpenOffice 2.4
     */
     [optional] interface XEmbeddedScripts;
 
     //-------------------------------------------------------------------------
     /** access to the <type>DocumentProperties</type>.
 
-        @since OOo 3.0
+        @since OpenOffice 3.0
      */
     [optional] interface XDocumentPropertiesSupplier;
 

@@ -276,23 +276,30 @@ SwCharURLPage::~SwCharURLPage()
 void SwCharURLPage::Reset(const SfxItemSet& rSet)
 {
     const SfxPoolItem* pItem;
-    if(SFX_ITEM_SET == rSet.GetItemState(RES_TXTATR_INETFMT, sal_False, &pItem))
+    if ( SFX_ITEM_SET == rSet.GetItemState( RES_TXTATR_INETFMT, sal_False, &pItem ) )
     {
-        const SwFmtINetFmt* pINetFmt = (const SwFmtINetFmt*)pItem;
+        const SwFmtINetFmt* pINetFmt = (const SwFmtINetFmt*) pItem;
         aURLED.SetText( INetURLObject::decode( pINetFmt->GetValue(),
-                                        INET_HEX_ESCAPE,
-                                           INetURLObject::DECODE_UNAMBIGUOUS,
-                                        RTL_TEXTENCODING_UTF8 ));
+        INET_HEX_ESCAPE, INetURLObject::DECODE_UNAMBIGUOUS,
+        RTL_TEXTENCODING_UTF8 ) );
         aURLED.SaveValue();
-        aNameED.SetText(pINetFmt->GetName());
+        aNameED.SetText( pINetFmt->GetName() );
+
         String sEntry = pINetFmt->GetVisitedFmt();
-        if( !sEntry.Len() )
+        if ( sEntry.Len() == 0 )
+        {
+            ASSERT( false, "<SwCharURLPage::Reset(..)> - missing visited character format at hyperlink attribute" );
             SwStyleNameMapper::FillUIName( RES_POOLCHR_INET_VISIT, sEntry );
-        aVisitedLB.SelectEntry(sEntry);
+        }
+        aVisitedLB.SelectEntry( sEntry );
+
         sEntry = pINetFmt->GetINetFmt();
-        if(!sEntry.Len())
+        if ( sEntry.Len() == 0 )
+        {
+            ASSERT( false, "<SwCharURLPage::Reset(..)> - missing unvisited character format at hyperlink attribute" );
             SwStyleNameMapper::FillUIName( RES_POOLCHR_INET_NORMAL, sEntry );
-        aNotVisitedLB.SelectEntry(sEntry);
+        }
+        aNotVisitedLB.SelectEntry( sEntry );
 
         aTargetFrmLB.SetText(pINetFmt->GetTargetFrame());
         aVisitedLB.   SaveValue();
@@ -337,13 +344,11 @@ sal_Bool SwCharURLPage::FillItemSet(SfxItemSet& rSet)
     //zuerst die gueltigen Einstellungen setzen
     String sEntry = aVisitedLB.GetSelectEntry();
     sal_uInt16 nId = SwStyleNameMapper::GetPoolIdFromUIName( sEntry, nsSwGetPoolIdFromName::GET_POOLID_CHRFMT);
-    aINetFmt.SetVisitedFmtId(nId);
-    aINetFmt.SetVisitedFmt(nId == RES_POOLCHR_INET_VISIT ? aEmptyStr : sEntry);
+    aINetFmt.SetVisitedFmtAndId( sEntry, nId );
 
     sEntry = aNotVisitedLB.GetSelectEntry();
     nId = SwStyleNameMapper::GetPoolIdFromUIName( sEntry, nsSwGetPoolIdFromName::GET_POOLID_CHRFMT);
-    aINetFmt.SetINetFmtId( nId );
-    aINetFmt.SetINetFmt(nId == RES_POOLCHR_INET_NORMAL ? aEmptyStr : sEntry);
+    aINetFmt.SetINetFmtAndId( sEntry, nId );
 
     if( pINetItem && pINetItem->GetMacroTable().Count() )
         aINetFmt.SetMacroTbl( &pINetItem->GetMacroTable() );

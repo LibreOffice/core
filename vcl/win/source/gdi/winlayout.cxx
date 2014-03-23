@@ -570,7 +570,7 @@ bool SimpleWinLayout::LayoutText( ImplLayoutArgs& rArgs )
 
 // -----------------------------------------------------------------------
 
-int SimpleWinLayout::GetNextGlyphs( int nLen, sal_GlyphId* pGlyphs, Point& rPos, int& nStart,
+int SimpleWinLayout::GetNextGlyphs( int nLen, sal_GlyphId* pGlyphIds, Point& rPos, int& nStart,
     long* pGlyphAdvances, int* pCharIndexes ) const
 {
     // return zero if no more glyph found
@@ -590,27 +590,27 @@ int SimpleWinLayout::GetNextGlyphs( int nLen, sal_GlyphId* pGlyphs, Point& rPos,
     int nCount = 0;
     while( nCount < nLen )
     {
-        // update return values {nGlyphIndex,nCharPos,nGlyphAdvance}
-        sal_GlyphId nGlyphIndex = mpOutGlyphs[ nStart ];
+        // update return values {aGlyphId,nCharPos,nGlyphAdvance}
+        sal_GlyphId aGlyphId = mpOutGlyphs[ nStart ];
         if( mbDisableGlyphs )
         {
             if( mnLayoutFlags & SAL_LAYOUT_VERTICAL )
             {
-                const sal_UCS4 cChar = static_cast<sal_UCS4>(nGlyphIndex & GF_IDXMASK);
+                const sal_UCS4 cChar = static_cast<sal_UCS4>(aGlyphId & GF_IDXMASK);
                 if( mrWinFontData.HasGSUBstitutions( mhDC )
                 &&  mrWinFontData.IsGSUBstituted( cChar ) )
-                    nGlyphIndex |= GF_GSUB | GF_ROTL;
+                    aGlyphId |= GF_GSUB | GF_ROTL;
                 else
                 {
-                    nGlyphIndex |= GetVerticalFlags( cChar );
-                    if( (nGlyphIndex & GF_ROTMASK) == 0 )
-                        nGlyphIndex |= GF_VERT;
+                    aGlyphId |= GetVerticalFlags( cChar );
+                    if( (aGlyphId & GF_ROTMASK) == 0 )
+                        aGlyphId |= GF_VERT;
                 }
             }
-            nGlyphIndex |= GF_ISCHAR;
+            aGlyphId |= GF_ISCHAR;
         }
         ++nCount;
-        *(pGlyphs++) = nGlyphIndex;
+        *(pGlyphIds++) = aGlyphId;
         if( pGlyphAdvances )
             *(pGlyphAdvances++) = mpGlyphAdvances[ nStart ];
         if( pCharIndexes )

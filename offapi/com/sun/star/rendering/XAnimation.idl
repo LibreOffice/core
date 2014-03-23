@@ -54,7 +54,7 @@ module com { module sun { module star { module rendering {
     is used by the <type>XCanvas</type> interface to render generic
     animations.<p>
 
-    @since OOo 2.0
+    @since OpenOffice 2.0
  */
 published interface XAnimation : ::com::sun::star::uno::XInterface
 {

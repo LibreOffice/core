@@ -27,7 +27,7 @@ module com { module sun { module star { module awt {
 /** defines modes how an image is drawn onto a device
 
     @see <member scope="com::sun::star::awt">XGraphics2::drawImage</member>
-    @since Apache OpenOffice 4.0
+    @since OpenOffice 4.0
  */
 constants ImageDrawMode
 {

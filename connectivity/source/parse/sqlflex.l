@@ -784,7 +784,7 @@ void OSQLScanner::prepareScan(const ::rtl::OUString & rNewStatement, const IPars
 	BEGIN(m_nRule);
 
 	m_sErrorMessage = ::rtl::OUString();	
-	m_sStatement	= ::rtl::OString(rNewStatement,rNewStatement.getLength(), RTL_TEXTENCODING_UTF8);
+	m_sStatement	= ::rtl::OUStringToOString( rNewStatement, RTL_TEXTENCODING_UTF8);
 	m_nCurrentPos	= 0;
 	m_bInternational = bInternational;
 	m_pContext		= pContext;

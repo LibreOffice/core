@@ -46,7 +46,7 @@ module com {  module sun {  module star {  module inspection {
     @see scom::sun::star::beans::XIntrospectionAccess
     @see XPropertyControl
 
-    @since OOo 2.0.3
+    @since OpenOffice 2.0.3
 */
 published service GenericPropertyHandler : XPropertyHandler;
 

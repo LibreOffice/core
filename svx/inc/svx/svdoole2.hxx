@@ -92,7 +92,6 @@ public:
 
 //IAccessibility2 Implementation 2009-----
     String GetStyleString();
-//-----IAccessibility2 Implementation 2009
 
     // react on model/page change
     virtual void handlePageChange(SdrPage* pOldPage, SdrPage* pNewPage);

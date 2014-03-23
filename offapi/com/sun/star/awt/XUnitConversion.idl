@@ -47,7 +47,7 @@
 
 /** allows converting between different measurement units
 
-    @since OOo 3.0
+    @since OpenOffice 3.0
  */
 published interface XUnitConversion: com::sun::star::uno::XInterface
 {

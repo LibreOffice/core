@@ -19,11 +19,8 @@
  *
  *************************************************************/
 
-
-
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
-
 
 #include <hintids.hxx>
 #include <svl/whiter.hxx>
@@ -44,10 +41,9 @@
 #endif
 #include <istyleaccess.hxx>
 #include <numrule.hxx>
-// --> OD 2008-03-19 #refactorlists#
 #include <list.hxx>
-// <--
-
+#include <svx/svdpool.hxx>
+#include <svx/sxenditm.hxx>
 
 SwAttrPool::SwAttrPool( SwDoc* pD )
     : SfxItemPool( String::CreateFromAscii(
@@ -63,10 +59,92 @@ SwAttrPool::SwAttrPool( SwDoc* pD )
     // OD 2004-01-21 #i18732# - apply new version map
     SetVersionMap( 5, 1,130, pVersionMap5 );
     SetVersionMap( 6, 1,136, pVersionMap6 );
+
+    //UUUU create secondary pools immediately
+    createAndAddSecondaryPools();
 }
 
 SwAttrPool::~SwAttrPool()
 {
+    //UUUU cleanup secondary pools first
+    removeAndDeleteSecondaryPools();
+}
+
+//UUUU
+void SwAttrPool::createAndAddSecondaryPools()
+{
+    const SfxItemPool* pCheckAlreadySet = GetSecondaryPool();
+
+    if(pCheckAlreadySet)
+    {
+        OSL_ENSURE(false, "SwAttrPool already has a secondary pool (!)");
+        return;
+    }
+
+    // create SfxItemPool and EditEngine pool and add these in a chain. These
+    // belomg us and will be removed/destroyed in removeAndDeleteSecondaryPools() used from
+    // the destructor
+    SfxItemPool *pSdrPool = new SdrItemPool(this);
+
+    // #75371# change DefaultItems for the SdrEdgeObj distance items
+    // to TWIPS.
+    if(pSdrPool)
+    {
+        // 1/100th mm in twips
+        const long nDefEdgeDist = ((500 * 72) / 127);
+
+        pSdrPool->SetPoolDefaultItem(SdrEdgeNode1HorzDistItem(nDefEdgeDist));
+        pSdrPool->SetPoolDefaultItem(SdrEdgeNode1VertDistItem(nDefEdgeDist));
+        pSdrPool->SetPoolDefaultItem(SdrEdgeNode2HorzDistItem(nDefEdgeDist));
+        pSdrPool->SetPoolDefaultItem(SdrEdgeNode2VertDistItem(nDefEdgeDist));
+
+        // #i33700# // Set shadow distance defaults as PoolDefaultItems
+        pSdrPool->SetPoolDefaultItem(SdrMetricItem(SDRATTR_SHADOWXDIST, (300 * 72) / 127));
+        pSdrPool->SetPoolDefaultItem(SdrMetricItem(SDRATTR_SHADOWXDIST, (300 * 72) / 127));
+    }
+
+    SfxItemPool *pEEgPool = EditEngine::CreatePool(sal_False);
+
+    pSdrPool->SetSecondaryPool(pEEgPool);
+
+    if(!GetFrozenIdRanges())
+    {
+        FreezeIdRanges();
+    }
+    else
+    {
+        pSdrPool->FreezeIdRanges();
+    }
+}
+
+//UUUU
+void SwAttrPool::removeAndDeleteSecondaryPools()
+{
+    SfxItemPool *pSdrPool = GetSecondaryPool();
+
+    if(!pSdrPool)
+    {
+        OSL_ENSURE(false, "SwAttrPool has no secondary pool, it's missing (!)");
+        return;
+    }
+
+    SfxItemPool *pEEgPool = pSdrPool->GetSecondaryPool();
+
+    if(!pEEgPool)
+    {
+        OSL_ENSURE(false, "i don't accept additional pools");
+        return;
+    }
+
+    // first delete the items, then break the linking
+    pSdrPool->Delete();
+
+    SetSecondaryPool(0);
+    pSdrPool->SetSecondaryPool(0);
+
+    // final cleanup of secondary pool(s)
+    SfxItemPool::Free(pSdrPool);
+    SfxItemPool::Free(pEEgPool);
 }
 
 SwAttrSet::SwAttrSet( SwAttrPool& rPool, sal_uInt16 nWh1, sal_uInt16 nWh2 )

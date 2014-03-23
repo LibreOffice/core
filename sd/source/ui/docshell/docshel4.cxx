@@ -95,10 +95,8 @@
 #include "framework/FrameworkHelper.hxx"
 #include <tools/urlobj.hxx>
 
-//IAccessibility2 Implementation 2009-----
 #include <sfx2/viewfrm.hxx>
 #include "SdUnoDrawView.hxx"
-//-----IAccessibility2 Implementation 2009
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using ::sd::framework::FrameworkHelper;
@@ -582,7 +580,6 @@ sal_Bool DrawDocShell::Save()
 
 sal_Bool DrawDocShell::SaveAs( SfxMedium& rMedium )
 {
-//IAccessibility2 Implementation 2009-----
     mpDoc->setDocAccTitle(String());
     SfxViewFrame* pFrame1 = SfxViewFrame::GetFirst( this );
     if (pFrame1)
@@ -597,7 +594,6 @@ sal_Bool DrawDocShell::SaveAs( SfxMedium& rMedium )
             }
         }
     }
-//-----IAccessibility2 Implementation 2009
     mpDoc->StopWorkStartupDelay();
 
     //TODO/LATER: why this?!
@@ -935,7 +931,6 @@ bool DrawDocShell::GotoBookmark(const String& rBookmark)
     return (bFound);
 }
 
-//IAccessibility2 Implementation 2009-----
 //Solution: If  object  is marked , return true , else return false .
 sal_Bool DrawDocShell::IsMarked(  SdrObject* pObject  )
 {
@@ -1164,7 +1159,6 @@ sal_Bool DrawDocShell::GotoTreeBookmark(const String& rBookmark)
 
     return (bFound);
 }
-//-----IAccessibility2 Implementation 2009
 /*************************************************************************
 |*
 |* SaveAsOwnFormat: wenn es eine Dokumentvorlage werden soll,
@@ -1287,7 +1281,6 @@ void DrawDocShell::OpenBookmark( const String& rBookmarkURL )
     ( mpViewShell ? mpViewShell->GetViewFrame() : SfxViewFrame::Current() )->GetBindings().Execute( SID_OPENHYPERLINK, ppArgs );
 }
 
-//IAccessibility2 Implementation 2009-----
 void DrawDocShell::setDocAccTitle( const String& rTitle )
 {
     if (mpDoc )
@@ -1321,5 +1314,4 @@ sal_Bool DrawDocShell::getDocReadOnly() const
 
     return sal_False;
 }
-//-----IAccessibility2 Implementation 2009
 } // end of namespace sd

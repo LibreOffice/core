@@ -517,7 +517,6 @@ SwColumnPage::SwColumnPage(Window *pParent, const SfxItemSet &rSet)
                             | WB_ITEMBORDER
                             | WB_DOUBLEBORDER );
 
-//IAccessibility2 Impplementaton 2009-----
     for( i = 0; i < 5; i++)
         //Solution:Set accessible name one be one
         //aDefaultVS.InsertItem( i + 1, i );
@@ -545,7 +544,6 @@ SwColumnPage::SwColumnPage(Window *pParent, const SfxItemSet &rSet)
             }
             aDefaultVS.InsertItem( i + 1,  aItemText, i );
         }
-//-----IAccessibility2 Impplementaton 2009
 
     aDefaultVS.SetSelectHdl(LINK(this, SwColumnPage, SetDefaultsHdl));
 
@@ -995,14 +993,12 @@ IMPL_LINK( SwColumnPage, ColModify, NumericField *, pNF )
     // #i17816# changing the displayed types within the ValueSet
     //from two columns to two columns with different settings doesn't invalidate the
     // example windows in ::ColModify()
-//IAccessibility2 Impplementaton 2009-----
 // the pColMgr->GetCount()'s return is some how bugged,
 // it will return 0 when actual count is 1, so fix it.
     //if(!pNF ||(pColMgr->GetCount() != nCols))
     int nTemp = pColMgr->GetCount();
     if(nTemp == 0) nTemp = 1;
     if( nTemp != nCols )
-//-----IAccessibility2 Impplementaton 2009
     {
         if(pNF)
             aDefaultVS.SetNoSelection();

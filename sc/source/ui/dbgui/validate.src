@@ -197,7 +197,7 @@ TabPage TP_VALIDATION_VALUES
         //-->Modified by PengYunQuan for Validity Cell Range Picker
         Size = MAP_APPFONT ( 174 , 10 ) ;
         TabStop = TRUE ;
-        Text [ en-US ] = "Allow ~blank cells" ;
+        Text [ en-US ] = "Allow ~empty cells" ;
     };
     CheckBox CB_SHOWLIST
     {

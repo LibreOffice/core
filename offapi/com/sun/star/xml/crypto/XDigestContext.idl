@@ -42,7 +42,7 @@
     </p>
 
     @see <type>XDigestContextSupplier</type>
-    @since OOo 3.4
+    @since OpenOffice 3.4
  */
 interface XDigestContext : com::sun::star::uno::XInterface
 {

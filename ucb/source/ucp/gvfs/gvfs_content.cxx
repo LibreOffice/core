@@ -98,7 +98,7 @@ static char *
 OUStringToGnome( const rtl::OUString &str )
 {
     rtl::OString aTempStr = rtl::OUStringToOString( str, RTL_TEXTENCODING_UTF8 );
-    return g_strdup( (const sal_Char *) aTempStr );
+    return g_strdup( aTempStr.getStr() );
 }
 
 static rtl::OUString
@@ -403,7 +403,7 @@ uno::Any SAL_CALL Content::execute(
         aCommand.Argument >>= bDeletePhysical;
 
         ::rtl::OString aURI = getOURI();
-        GnomeVFSResult result = gnome_vfs_unlink ((const sal_Char *) aURI);
+        GnomeVFSResult result = gnome_vfs_unlink( aURI.getStr());
 
         if (result != GNOME_VFS_OK)
             cancelCommandExecution( result, xEnv, sal_True );
@@ -554,8 +554,7 @@ rtl::OUString Content::getParentURL()
 
 #ifdef DEBUG
     g_warning ("getParentURL '%s' -> '%s'",
-           getURI(), (const sal_Char *) rtl::OUStringToOString
-               ( aParentURL, RTL_TEXTENCODING_UTF8 ) );
+           getURI(), rtl::OUStringToOString( aParentURL, RTL_TEXTENCODING_UTF8).getStr() );
 #endif
 
     return aParentURL;
@@ -633,8 +632,7 @@ uno::Reference< sdbc::XRow > Content::getPropertyValues(
             GnomeVFSFileInfo* fileInfo = gnome_vfs_file_info_new ();
 
             ::rtl::OString aURI = getOURI();
-            gnome_vfs_get_file_info
-                ( (const sal_Char *)aURI, fileInfo,
+            gnome_vfs_get_file_info( aURI.getStr(), fileInfo,
                         GNOME_VFS_FILE_INFO_GET_ACCESS_RIGHTS );
 
             if (fileInfo->valid_fields & GNOME_VFS_FILE_INFO_FIELDS_ACCESS) {
@@ -735,7 +733,7 @@ Content::doSetFileInfo( const GnomeVFSFileInfo *newInfo,
     // The simple approach:
     if( setMask != GNOME_VFS_SET_FILE_INFO_NONE )
         result = gnome_vfs_set_file_info // missed a const in the API there
-            ( (const sal_Char *) aURI, (GnomeVFSFileInfo *)newInfo, setMask );
+            ( aURI.getStr(), (GnomeVFSFileInfo *)newInfo, setMask );
 
     if ( result == GNOME_VFS_ERROR_NOT_SUPPORTED &&
          ( setMask & GNOME_VFS_SET_FILE_INFO_NAME ) ) {
@@ -746,7 +744,7 @@ Content::doSetFileInfo( const GnomeVFSFileInfo *newInfo,
 
         char *newURI = OUStringToGnome( makeNewURL( newInfo->name ) );
 
-        result = gnome_vfs_move ((const sal_Char *)aURI, newURI, FALSE);
+        result = gnome_vfs_move( aURI.getStr(), newURI, FALSE);
 
         g_free (newURI);
     }
@@ -958,7 +956,7 @@ void Content::insert(
 #ifdef DEBUG
         g_warning ("Make directory");
 #endif
-        result = gnome_vfs_make_directory( (const sal_Char *) aURI, perm );
+        result = gnome_vfs_make_directory( aURI.getStr(), perm );
 
         if( result != GNOME_VFS_OK )
             cancelCommandExecution( result, xEnv, sal_True );
@@ -982,7 +980,7 @@ void Content::insert(
     result = GNOME_VFS_OK;
     if ( bReplaceExisting ) {
         Authentication aAuth( xEnv );
-        result = gnome_vfs_open( &handle, (const sal_Char *)aURI,
+        result = gnome_vfs_open( &handle, aURI.getStr(),
                      GNOME_VFS_OPEN_WRITE );
     }
 
@@ -994,7 +992,7 @@ void Content::insert(
              ( GNOME_VFS_PERM_GROUP_WRITE | GNOME_VFS_PERM_GROUP_READ ) );
 
         result = gnome_vfs_create
-            ( &handle, (const sal_Char *)aURI, GNOME_VFS_OPEN_WRITE, TRUE, perm );
+            ( &handle, aURI.getStr(), GNOME_VFS_OPEN_WRITE, TRUE, perm );
     }
 
     if( result != GNOME_VFS_OK )
@@ -1134,7 +1132,7 @@ Content::getInfo( const uno::Reference< ucb::XCommandEnvironment >& xEnv )
         ::rtl::OString aURI = getOURI();
         Authentication aAuth( xEnv );
         result = gnome_vfs_get_file_info
-            ( (const sal_Char *)aURI, &m_info, GNOME_VFS_FILE_INFO_DEFAULT );
+            ( aURI.getStr(), &m_info, GNOME_VFS_FILE_INFO_DEFAULT );
         if (result != GNOME_VFS_OK)
             gnome_vfs_file_info_clear( &m_info );
     } else
@@ -1453,8 +1451,7 @@ Content::createTempStream(
     if ( !xTempOut.is() )
         cancelCommandExecution( GNOME_VFS_ERROR_IO, xEnv );
 
-    result = gnome_vfs_open
-        ( &handle, (const sal_Char *)aURI, GNOME_VFS_OPEN_READ );
+    result = gnome_vfs_open( &handle, aURI.getStr(), GNOME_VFS_OPEN_READ );
     if (result != GNOME_VFS_OK)
         cancelCommandExecution( result, xEnv );
 
@@ -1482,8 +1479,7 @@ Content::createInputStream(
     if ( !(m_info.valid_fields & GNOME_VFS_FILE_INFO_FIELDS_SIZE) )
         return createTempStream( xEnv );
 
-    result = gnome_vfs_open
-        ( &handle, (const sal_Char *)aURI,
+    result = gnome_vfs_open( &handle, aURI.getStr(),
           (GnomeVFSOpenMode) (GNOME_VFS_OPEN_READ | GNOME_VFS_OPEN_RANDOM ) );
 
     if (result == GNOME_VFS_ERROR_INVALID_OPEN_MODE ||

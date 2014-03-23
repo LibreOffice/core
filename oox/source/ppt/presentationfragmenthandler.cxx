@@ -268,6 +268,17 @@ void PresentationFragmentHandler::endDocument() throw (SAXException, RuntimeExce
                             SlidePersistPtr pNotesPersistPtr( new SlidePersist( rFilter, sal_False, sal_True, xNotesPage,
                                 ShapePtr( new PPTShape( Slide, "com.sun.star.drawing.GroupShape" ) ), mpTextListStyle ) );
                             FragmentHandlerRef xNotesFragmentHandler( new SlideFragmentHandler( getFilter(), aNotesFragmentPath, pNotesPersistPtr, Slide ) );
+                            // import notesMaster slide for notes slide shapes format
+                            OUString aNotesMasterFragmentPath = xNotesFragmentHandler->getFragmentPathFromFirstType( CREATE_OFFICEDOC_RELATION_TYPE( "notesMaster" ) );
+                            SlidePersistPtr pNotesMasterPersistPtr( new SlidePersist( rFilter, sal_True/*sal_False*/, sal_True, xNotesPage,
+                                ShapePtr( new PPTShape( Slide, "com.sun.star.drawing.GroupShape" ) ), mpTextListStyle ) );
+                            FragmentHandlerRef xNotesMasterFragmentHandler( new SlideFragmentHandler( getFilter(), aNotesMasterFragmentPath, pNotesMasterPersistPtr, Slide ) );
+
+                            // TODO: Theme support is missing, theme pointer in SlidePersist is null and used later
+
+                            importSlide( xNotesMasterFragmentHandler, pNotesMasterPersistPtr );
+                            pNotesMasterPersistPtr->createXShapes( rFilter );
+                            pNotesPersistPtr->setMasterPersist(pNotesMasterPersistPtr);
                             rFilter.getNotesPages().push_back( pNotesPersistPtr );
                             rFilter.setActualSlidePersist( pNotesPersistPtr );
                             importSlide( xNotesFragmentHandler, pNotesPersistPtr );

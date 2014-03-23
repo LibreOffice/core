@@ -605,7 +605,7 @@ sal_Bool SfxLibraryContainer::init_Impl(
     meInitMode = DEFAULT;
     INetURLObject aInitUrlInetObj( maInitialDocumentURL );
     OUString aInitFileName = aInitUrlInetObj.GetMainURL( INetURLObject::NO_DECODE );
-    if( aInitFileName.getLength() )
+    if( !aInitFileName.isEmpty() )
     {
         // We need a BasicManager to avoid problems
         StarBASIC* pBas = new StarBASIC();
@@ -834,7 +834,7 @@ sal_Bool SfxLibraryContainer::init_Impl(
 
                 // Check storage URL
                 OUString aStorageURL = rLib.aStorageURL;
-                if( !bStorage && !aStorageURL.getLength() && nPass == 0 )
+                if( !bStorage && aStorageURL.isEmpty() && nPass == 0 )
                 {
                     String aLibraryPath;
                     if( meInitMode == CONTAINER_INIT_FILE )
@@ -1239,7 +1239,7 @@ void SfxLibraryContainer::implScanExtensions( void )
     rtl::OUString aLibURL;
 
     bool bPureDialogLib = false;
-    while( (aLibURL = aScriptIt.nextBasicOrDialogLibrary( bPureDialogLib )).getLength() > 0 )
+    while( (aLibURL = aScriptIt.nextBasicOrDialogLibrary( bPureDialogLib )).isEmpty() == false )
     {
         if( bPureDialogLib && maInfoFileName.equalsAscii( "script" ) )
             continue;
@@ -1351,7 +1351,7 @@ OUString SfxLibraryContainer::createAppLibraryFolder
     ( SfxLibrary* pLib, const OUString& aName )
 {
     OUString aLibDirPath = pLib->maStorageURL;
-    if( !aLibDirPath.getLength() )
+    if( aLibDirPath.isEmpty() )
     {
         INetURLObject aInetObj( String(maLibraryPath).GetToken(1) );
         aInetObj.insertName( aName, sal_True, INetURLObject::LAST_SEGMENT, sal_True, INetURLObject::ENCODE_ALL );
@@ -1976,7 +1976,7 @@ void SfxLibraryContainer::storeLibraries_Impl( const uno::Reference< embed::XSto
 
     // if we did an in-place save into a storage (i.e. a save into the storage we were already based on),
     // then we need to clean up the temporary storage we used for this
-    if ( bInplaceStorage && sTempTargetStorName.getLength() )
+    if ( bInplaceStorage && !sTempTargetStorName.isEmpty() )
     {
         OSL_ENSURE( xSourceLibrariesStor.is(), "SfxLibrariesContainer::storeLibraries_impl: unexpected: we should have a source storage here!" );
         try
@@ -3119,7 +3119,7 @@ void SfxLibrary::impl_removeWithoutChecks( const ::rtl::OUString& _rElementName 
     implSetModified( sal_True );
 
     // Remove element file
-    if( maStorageURL.getLength() )
+    if( !maStorageURL.isEmpty() )
     {
         INetURLObject aElementInetObj( maStorageURL );
         aElementInetObj.insertName( _rElementName, sal_False,
@@ -3254,7 +3254,7 @@ rtl::OUString ScriptExtensionIterator::nextBasicOrDialogLibrary( bool& rbPureDia
 {
     rtl::OUString aRetLib;
 
-    while( !aRetLib.getLength() && m_eState != END_REACHED )
+    while( aRetLib.isEmpty() && m_eState != END_REACHED )
     {
         switch( m_eState )
         {

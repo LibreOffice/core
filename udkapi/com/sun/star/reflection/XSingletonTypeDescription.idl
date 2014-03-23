@@ -47,7 +47,7 @@
     <p>The type class of this type is
     <member scope="com::sun::star::uno">TypeClass::SINGLETON</member>.
 
-    @since OOo 1.1.2
+    @since OpenOffice 1.1.2
   */
 published interface XSingletonTypeDescription : com::sun::star::reflection::XTypeDescription
 {

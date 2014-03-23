@@ -99,7 +99,7 @@ published service LineNumberingProperties
 
         <p>If set to <FALSE/> the line numbering will be continous.</p>
 
-        @since OOo 2.0
+        @since OpenOffice 2.0
      */
     [optional, property] boolean RestartAtEachPage;
 
