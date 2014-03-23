@@ -14,6 +14,8 @@ $(eval $(call gb_CppunitTest_add_exception_objects,sal_rtl_digest,\
     sal/qa/rtl/digest/rtl_digest \
 ))
 
+$(eval $(call gb_CppunitTest_use_external,sal_rtl_digest,boost_headers))
+
 $(eval $(call gb_CppunitTest_use_libraries,sal_rtl_digest,\
     sal \
 	$(gb_UWINAPI) \
