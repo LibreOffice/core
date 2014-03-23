@@ -464,10 +464,8 @@ void SwIndexMarkPane::InsertMark()
         case POS_INDEX:     // keyword index mark
         {
             UpdateKeyBoxes();
-            OUString  aPrim(m_pKey1DCB->GetText());
-            OUString  aSec(m_pKey2DCB->GetText());
-            aDesc.SetPrimKey(aPrim);
-            aDesc.SetSecKey(aSec);
+            aDesc.SetPrimKey(m_pKey1DCB->GetText());
+            aDesc.SetSecKey(m_pKey2DCB->GetText());
             aDesc.SetMainEntry(m_pMainEntryCB->IsChecked());
             aDesc.SetPhoneticReadingOfAltStr(m_pPhoneticED0->GetText());
             aDesc.SetPhoneticReadingOfPrimKey(m_pPhoneticED1->GetText());
@@ -476,11 +474,10 @@ void SwIndexMarkPane::InsertMark()
         break;
         default:            // Userdefined index mark
         {
-            OUString aName(m_pTypeDCB->GetSelectEntry());
-            aDesc.SetTOUName(aName);
+            aDesc.SetTOUName(m_pTypeDCB->GetSelectEntry());
         }
     }
-    if (OUString(aOrgStr) != m_pEntryED->GetText())
+    if (aOrgStr != m_pEntryED->GetText())
         aDesc.SetAltStr(m_pEntryED->GetText());
     sal_Bool bApplyAll = m_pApplyToAllCB->IsChecked();
     sal_Bool bWordOnly = m_pSearchCaseWordOnlyCB->IsChecked();
@@ -1161,32 +1158,28 @@ IMPL_LINK_NOARG(SwAuthorMarkPane, CloseHdl)
 
 static OUString lcl_FindColumnEntry(const beans::PropertyValue* pFields, sal_Int32 nLen, const OUString& rColumnTitle)
 {
-    OUString sRet;
-    OUString uColumnTitle = rColumnTitle;
     for(sal_Int32 i = 0; i < nLen; i++)
     {
-        OUString uTmp;
-        if(pFields[i].Name == uColumnTitle &&
-            (pFields[i].Value >>= uTmp))
+        OUString sRet;
+        if(pFields[i].Name == rColumnTitle &&
+            (pFields[i].Value >>= sRet))
         {
-            sRet = uTmp;
-            break;
+            return sRet;
         }
     }
-    return sRet;
+    return OUString();
 }
 
 IMPL_LINK( SwAuthorMarkPane, CompEntryHdl, ListBox*, pBox)
 {
-    OUString sEntry(pBox->GetSelectEntry());
+    const OUString sEntry(pBox->GetSelectEntry());
     if(bIsFromComponent)
     {
         if(xBibAccess.is() && !sEntry.isEmpty())
         {
-            OUString uEntry(sEntry);
-            if(xBibAccess->hasByName(uEntry))
+            if(xBibAccess->hasByName(sEntry))
             {
-                uno::Any aEntry(xBibAccess->getByName(uEntry));
+                uno::Any aEntry(xBibAccess->getByName(sEntry));
                 uno::Sequence<beans::PropertyValue> aFieldProps;
                 if(aEntry >>= aFieldProps)
                 {
@@ -1252,8 +1245,7 @@ IMPL_LINK_NOARG(SwAuthorMarkPane, InsertHdl)
         OUString sFields;
         for(int i = 0; i < AUTH_FIELD_END; i++)
         {
-            sFields += m_sFields[i];
-            sFields += OUString(TOX_STYLE_DELIMITER);
+            sFields += m_sFields[i] + OUString(TOX_STYLE_DELIMITER);
         }
         if(bNewEntry)
         {
