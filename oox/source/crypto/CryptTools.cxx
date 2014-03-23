@@ -186,93 +186,144 @@ sal_uInt32 Encrypt::update(vector<sal_uInt8>& output, vector<sal_uInt8>& input, 
     return static_cast<sal_uInt32>(outputLength);
 }
 
-bool sha1(vector<sal_uInt8>& output, vector<sal_uInt8>& input)
-{
-    bool aResult = false;
+// Digest
 
 #if USE_TLS_OPENSSL
-    output.clear();
-    output.resize(SHA_DIGEST_LENGTH, 0);
+const sal_uInt32 Digest::DIGEST_LENGTH_SHA1 = SHA_DIGEST_LENGTH;
+const sal_uInt32 Digest::DIGEST_LENGTH_SHA512 = SHA512_DIGEST_LENGTH;
+#endif
+#if USE_TLS_NSS
+const sal_uInt32 Digest::DIGEST_LENGTH_SHA1 = SHA1_LENGTH;
+const sal_uInt32 Digest::DIGEST_LENGTH_SHA512 = SHA512_LENGTH;
+#endif
 
-    SHA_CTX context;
-    SHA1_Init(&context);
-    SHA1_Update(&context, &input[0], input.size());
-    SHA1_Final(&output[0], &context);
-    aResult = true;
+namespace
+{
+
+#if USE_TLS_OPENSSL
+const EVP_MD* lclOpenSSLgetEngine(Digest::DigestType eType)
+{
+    switch(eType)
+    {
+        case Digest::SHA1:
+            return EVP_sha1();
+        case Digest::SHA512:
+            return EVP_sha512();
+        default:
+            break;
+    }
+    return NULL;
+}
 #endif
 
 #if USE_TLS_NSS
-    output.clear();
-    output.resize(SHA1_LENGTH, 0);
-
-    // Initialize NSS, database functions are not needed
-    NSS_NoDB_Init(NULL);
-    SECStatus status;
-
-    PK11Context* mContext = PK11_CreateDigestContext(SEC_OID_SHA1);
-    status = PK11_DigestBegin(mContext);
-    if (status != SECSuccess)
-        return false;
-
-    status = PK11_DigestOp(mContext, &input[0], input.size());
-    if (status != SECSuccess)
-        return false;
-
-    unsigned int outputLength = 0;
-
-    status = PK11_DigestFinal(mContext, &output[0], &outputLength, SHA1_LENGTH);
-    if (status != SECSuccess || outputLength != SHA1_LENGTH)
-        return false;
-
-    PK11_DestroyContext(mContext, PR_TRUE);
-
-    aResult = true;
+HASH_HashType lclNSSgetHashType(Digest::DigestType eType)
+{
+    switch(eType)
+    {
+        case Digest::SHA1:
+            return HASH_AlgSHA1;
+        case Digest::SHA512:
+            return HASH_AlgSHA512;
+        default:
+            break;
+    }
+    return HASH_AlgNULL;
+}
 #endif
+
+}
+
+Digest::Digest(DigestType eType) :
+    meType(eType)
+{
+    #if USE_TLS_OPENSSL
+    mpContext = EVP_MD_CTX_create();
+    EVP_DigestInit_ex(mpContext, lclOpenSSLgetEngine(eType), NULL);
+    #endif
+
+    #if USE_TLS_NSS
+    NSS_NoDB_Init(NULL);
+    mpContext = HASH_Create(lclNSSgetHashType(eType));
+    HASH_Begin(mpContext);
+    #endif
+}
+
+Digest::~Digest()
+{
+    #if USE_TLS_OPENSSL
+    if(mpContext)
+        EVP_MD_CTX_destroy(mpContext);
+    #endif
+
+    #if USE_TLS_NSS
+    if(mpContext)
+        HASH_Destroy(mpContext);
+    #endif
+}
+
+sal_uInt32 Digest::getLength()
+{
+    switch(meType)
+    {
+        case SHA1:
+            return DIGEST_LENGTH_SHA1;
+        case SHA512:
+            return DIGEST_LENGTH_SHA512;
+        default:
+            break;
+    }
+    return 0;
+}
+
+bool Digest::update(std::vector<sal_uInt8>& input)
+{
+    #if USE_TLS_OPENSSL
+    EVP_DigestUpdate(mpContext, &input[0], input.size());
+    #endif
+    #if USE_TLS_NSS
+    HASH_Update(mpContext, &input[0], input.size());
+    #endif
+    return true;
+}
+
+bool Digest::finalize(std::vector<sal_uInt8>& digest)
+{
+    digest.clear();
+    sal_uInt32 digestWrittenLength;
+
+    #if USE_TLS_OPENSSL
+    digest.resize(getLength(), 0);
+    EVP_DigestFinal_ex(mpContext, &digest[0], &digestWrittenLength);
+    #endif
+
+    #if USE_TLS_NSS
+    sal_uInt32 digestLength = getLength();
+    digest.resize(digestLength, 0);
+    HASH_End(mpContext, &digest[0], &digestWrittenLength, digestLength);
+    #endif
+    return true;
+}
+
+bool Digest::sha1(vector<sal_uInt8>& output, vector<sal_uInt8>& input)
+{
+    bool aResult = false;
+
+    Digest aDigest(SHA1);
+    aDigest.update(input);
+    aDigest.finalize(output);
+    aResult = true;
     return aResult;
 }
 
-bool sha512(vector<sal_uInt8>& output, vector<sal_uInt8>& input)
+bool Digest::sha512(vector<sal_uInt8>& output, vector<sal_uInt8>& input)
 {
     bool aResult = false;
 
-#if USE_TLS_OPENSSL
-    output.clear();
-    output.resize(SHA512_DIGEST_LENGTH, 0);
-
-    SHA512_CTX context;
-    SHA512_Init(&context);
-    SHA512_Update(&context, &input[0], input.size());
-    SHA512_Final(&output[0], &context);
+    Digest aDigest(SHA512);
+    aDigest.update(input);
+    aDigest.finalize(output);
     aResult = true;
-#endif
-
-#if USE_TLS_NSS
-    output.clear();
-    output.resize(SHA512_LENGTH, 0);
-
-    // Initialize NSS, database functions are not needed
-    NSS_NoDB_Init(NULL);
-    SECStatus status;
-
-    PK11Context* mContext = PK11_CreateDigestContext(SEC_OID_SHA512);
-    status = PK11_DigestBegin(mContext);
-    if (status != SECSuccess)
-        return false;
-
-    status = PK11_DigestOp(mContext, &input[0], input.size());
-    if (status != SECSuccess)
-        return false;
-
-    unsigned int outputLength = 0;
-
-    status = PK11_DigestFinal(mContext, &output[0], &outputLength, SHA512_LENGTH);
-    if (status != SECSuccess || outputLength != SHA512_LENGTH)
-        return false;
-
-    PK11_DestroyContext(mContext, PR_TRUE);
-
-    aResult = true;
-#endif
     return aResult;
 }
 

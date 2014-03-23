@@ -26,9 +26,9 @@ bool hashCalc( std::vector<sal_uInt8>& output,
                const OUString& algorithm )
 {
     if (algorithm == "SHA1")
-        return sha1(output, input);
+        return Digest::sha1(output, input);
     else if (algorithm == "SHA512")
-        return sha512(output, input);
+        return Digest::sha512(output, input);
     return false;
 }
 

@@ -28,9 +28,11 @@
 #include <openssl/evp.h>
 #include <openssl/sha.h>
 #endif // USE_TLS_OPENSSL
+
 #if USE_TLS_NSS
 #include <nss.h>
 #include <pk11pub.h>
+#include <sechash.h>
 #endif // USE_TLS_NSS
 
 #include <rtl/digest.h>
@@ -115,12 +117,45 @@ public:
                     sal_uInt32 inputLength = 0);
 };
 
-const sal_uInt32 SHA1_LENGTH    = 20;
-const sal_uInt32 SHA512_LENGTH  = 64;
+class Digest
+{
+public:
+    enum DigestType
+    {
+        UNKNOWN,
+        SHA1,
+        SHA512
+    };
 
-bool sha1( std::vector<sal_uInt8>& output, std::vector<sal_uInt8>& input );
+    static const sal_uInt32 DIGEST_LENGTH_SHA1;
+    static const sal_uInt32 DIGEST_LENGTH_SHA512;
 
-bool sha512( std::vector<sal_uInt8>& output, std::vector<sal_uInt8>& input );
+private:
+    DigestType meType;
+
+#if USE_TLS_OPENSSL
+    EVP_MD_CTX* mpContext;
+#endif
+
+#if USE_TLS_NSS
+    HASHContext* mpContext;
+#endif
+
+public:
+    Digest(DigestType eType);
+    virtual ~Digest();
+
+    bool update(std::vector<sal_uInt8>& input);
+    bool finalize(std::vector<sal_uInt8>& digest);
+
+    sal_uInt32 getLength();
+
+    static bool sha1(  std::vector<sal_uInt8>& digest, std::vector<sal_uInt8>& input);
+    static bool sha512(std::vector<sal_uInt8>& digest, std::vector<sal_uInt8>& input);
+};
+
+bool sha1(  std::vector<sal_uInt8>& digest, std::vector<sal_uInt8>& input);
+bool sha512(std::vector<sal_uInt8>& digest, std::vector<sal_uInt8>& input);
 
 } // namespace core
 } // namespace oox
