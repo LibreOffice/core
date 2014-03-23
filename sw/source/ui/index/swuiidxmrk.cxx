@@ -1565,30 +1565,28 @@ SwCreateAuthEntryDlg_Impl::~SwCreateAuthEntryDlg_Impl()
 
 OUString  SwCreateAuthEntryDlg_Impl::GetEntryText(ToxAuthorityField eField) const
 {
-    OUString sRet;
     if( AUTH_FIELD_AUTHORITY_TYPE == eField )
     {
         OSL_ENSURE(pTypeListBox, "No ListBox");
-        sRet = OUString::number(pTypeListBox->GetSelectEntryPos());
+        return OUString::number(pTypeListBox->GetSelectEntryPos());
     }
-    else if( AUTH_FIELD_IDENTIFIER == eField && !m_bNewEntryMode)
+
+    if( AUTH_FIELD_IDENTIFIER == eField && !m_bNewEntryMode)
     {
         OSL_ENSURE(pIdentifierBox, "No ComboBox");
-        sRet = pIdentifierBox->GetText();
+        return pIdentifierBox->GetText();
     }
-    else
+
+    for(int nIndex = 0; nIndex < AUTH_FIELD_END; nIndex++)
     {
-        for(int nIndex = 0; nIndex < AUTH_FIELD_END; nIndex++)
+        const TextInfo aCurInfo = aTextInfoArr[nIndex];
+        if(aCurInfo.nToxField == eField)
         {
-            const TextInfo aCurInfo = aTextInfoArr[nIndex];
-            if(aCurInfo.nToxField == eField)
-            {
-                sRet = pEdits[nIndex]->GetText();
-                break;
-            }
+            return pEdits[nIndex]->GetText();
         }
     }
-    return sRet;
+
+    return OUString();
 }
 
 IMPL_LINK(SwCreateAuthEntryDlg_Impl, IdentifierHdl, ComboBox*, pBox)
