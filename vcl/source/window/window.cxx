@@ -106,10 +106,7 @@ using namespace ::com::sun::star::datatransfer::dnd;
 using namespace ::com::sun::star;
 using namespace com::sun;
 
-
 using ::com::sun::star::awt::XTopWindow;
-
-
 
 #define IMPL_PAINT_PAINT            ((sal_uInt16)0x0001)
 #define IMPL_PAINT_PAINTALL         ((sal_uInt16)0x0002)
@@ -117,8 +114,6 @@ using ::com::sun::star::awt::XTopWindow;
 #define IMPL_PAINT_PAINTCHILDREN      ((sal_uInt16)0x0008)
 #define IMPL_PAINT_ERASE            ((sal_uInt16)0x0010)
 #define IMPL_PAINT_CHECKRTL         ((sal_uInt16)0x0020)
-
-
 
 struct ImplCalcToTopData
 {
@@ -142,7 +137,6 @@ ImplAccessibleInfos::~ImplAccessibleInfos()
     delete pAccessibleName;
     delete pAccessibleDescription;
 }
-
 
 
 WindowImpl::WindowImpl( WindowType nType )
@@ -303,17 +297,12 @@ WindowImpl::~WindowImpl()
     delete mpControlFont;
 }
 
-
-
-
 // helper method to allow inline constructor even for pWindow!=NULL case
 void ImplDelData::AttachToWindow( const Window* pWindow )
 {
     if( pWindow )
         const_cast<Window*>(pWindow)->ImplAddDel( this );
 }
-
-
 
 // define dtor for ImplDelData
 ImplDelData::~ImplDelData()
@@ -327,8 +316,6 @@ ImplDelData::~ImplDelData()
         mpWindow = NULL;
     }
 }
-
-
 
 #ifdef DBG_UTIL
 const char* ImplDbgCheckWindow( const void* pObj )
@@ -418,6 +405,12 @@ bool Window::ImplInitGraphics() const
     }
 
     return mpGraphics ? true : false;
+}
+
+void Window::EnableRTL ( bool bEnable )
+{
+    StateChanged( STATE_CHANGE_MIRRORING );
+    OutputDevice::EnableRTL(bEnable);
 }
 
 void Window::CopyAreaFinal( SalTwoRect& aPosAry, sal_uInt32 nFlags )
