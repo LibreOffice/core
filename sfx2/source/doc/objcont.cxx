@@ -305,6 +305,12 @@ SfxStyleSheetBasePool* SfxObjectShell::GetStyleSheetPool()
     return 0;
 }
 
+struct Styles_Impl
+{
+    SfxStyleSheetBase *pSource;
+    SfxStyleSheetBase *pDest;
+};
+
 void SfxObjectShell::LoadStyles
 (
     SfxObjectShell &rSource         /*  the document template from which
@@ -321,12 +327,6 @@ void SfxObjectShell::LoadStyles
 */
 
 {
-    struct Styles_Impl
-    {
-        SfxStyleSheetBase *pSource;
-        SfxStyleSheetBase *pDest;
-    };
-
     SfxStyleSheetBasePool *pSourcePool = rSource.GetStyleSheetPool();
     DBG_ASSERT(pSourcePool, "Source-DocumentShell ohne StyleSheetPool");
     SfxStyleSheetBasePool *pMyPool = GetStyleSheetPool();
