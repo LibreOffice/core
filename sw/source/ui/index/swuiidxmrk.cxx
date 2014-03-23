@@ -194,8 +194,7 @@ void SwIndexMarkPane::InitControls()
 
     // user index
     sal_uInt16 nCount = pSh->GetTOXTypeCount(TOX_USER);
-    sal_uInt16 i;
-    for( i = 0; i < nCount; ++i )
+    for( sal_uInt16 i = 0; i < nCount; ++i )
         m_pTypeDCB->InsertEntry( pSh->GetTOXType(TOX_USER, i)->GetTypeName() );
 
     // read keywords primary
@@ -265,8 +264,7 @@ void SwIndexMarkPane::InitControls()
     }
     else
     {   // display current selection (first element) ????
-        sal_uInt16 nCnt = pSh->GetCrsrCnt();
-        if (nCnt < 2)
+        if (pSh->GetCrsrCnt() < 2)
         {
             bSelected = !pSh->HasSelection();
             aOrgStr = pSh->GetView().GetSelectionTextParam(true, false);
@@ -326,9 +324,8 @@ void    SwIndexMarkPane::UpdateLanguageDependenciesForPhoneticReading()
     }
     else //if dialog is opened to create a new mark
     {
-        sal_uInt16 nScriptType = pSh->GetScriptType();
         sal_uInt16 nWhich;
-        switch(nScriptType)
+        switch(pSh->GetScriptType())
         {
             case SCRIPTTYPE_ASIAN: nWhich = RES_CHRATR_CJK_LANGUAGE; break;
             case SCRIPTTYPE_COMPLEX:nWhich = RES_CHRATR_CTL_LANGUAGE; break;
@@ -357,8 +354,7 @@ void    SwIndexMarkPane::Activate()
     // display current selection (first element) ????
     if(bNewMark)
     {
-        sal_uInt16 nCnt = pSh->GetCrsrCnt();
-        if (nCnt < 2)
+        if (pSh->GetCrsrCnt() < 2)
         {
             bSelected = !pSh->HasSelection();
             aOrgStr = pSh->GetView().GetSelectionTextParam(true, false);
@@ -461,7 +457,7 @@ void SwIndexMarkPane::InsertMark()
 
     SwTOXMarkDescription aDesc(eType);
 
-    sal_uInt16 nLevel = (sal_uInt16)m_pLevelNF->Denormalize(m_pLevelNF->GetValue());
+    const int nLevel = m_pLevelNF->Denormalize(m_pLevelNF->GetValue());
     switch(nPos)
     {
         case POS_CONTENT : break;
@@ -1167,7 +1163,7 @@ static OUString lcl_FindColumnEntry(const beans::PropertyValue* pFields, sal_Int
 {
     OUString sRet;
     OUString uColumnTitle = rColumnTitle;
-    for(sal_uInt16 i = 0; i < nLen; i++)
+    for(sal_Int32 i = 0; i < nLen; i++)
     {
         OUString uTmp;
         if(pFields[i].Name == uColumnTitle &&
@@ -1195,7 +1191,7 @@ IMPL_LINK( SwAuthorMarkPane, CompEntryHdl, ListBox*, pBox)
                 if(aEntry >>= aFieldProps)
                 {
                     const beans::PropertyValue* pProps = aFieldProps.getConstArray();
-                    for(sal_uInt16 i = 0; i < AUTH_FIELD_END && i < aFieldProps.getLength(); i++)
+                    for(sal_Int32 i = 0; i < AUTH_FIELD_END && i < aFieldProps.getLength(); i++)
                     {
                         m_sFields[i] = lcl_FindColumnEntry(
                                 pProps, aFieldProps.getLength(), m_sColumnTitles[i]);
@@ -1211,14 +1207,14 @@ IMPL_LINK( SwAuthorMarkPane, CompEntryHdl, ListBox*, pBox)
             const SwAuthorityFieldType* pFType = (const SwAuthorityFieldType*)
                                         pSh->GetFldType(RES_AUTHORITY, OUString());
             const SwAuthEntry*  pEntry = pFType ? pFType->GetEntryByIdentifier(sEntry) : 0;
-            for(sal_uInt16 i = 0; i < AUTH_FIELD_END; i++)
+            for(int i = 0; i < AUTH_FIELD_END; i++)
                 m_sFields[i] = pEntry ?
                             pEntry->GetAuthorField((ToxAuthorityField)i) : OUString();
         }
     }
     if (pBox->GetSelectEntry().isEmpty())
     {
-        for(sal_uInt16 i = 0; i < AUTH_FIELD_END; i++)
+        for(int i = 0; i < AUTH_FIELD_END; i++)
             m_sFields[i] = OUString();
     }
     m_pAuthorFI->SetText(m_sFields[AUTH_FIELD_AUTHOR]);
@@ -1242,7 +1238,7 @@ IMPL_LINK_NOARG(SwAuthorMarkPane, InsertHdl)
                 : 0;
         if(pEntry)
         {
-            for(sal_uInt16 i = 0; i < AUTH_FIELD_END && !bDifferent; i++)
+            for(int i = 0; i < AUTH_FIELD_END && !bDifferent; i++)
                 bDifferent |= m_sFields[i] != pEntry->GetAuthorField((ToxAuthorityField)i);
             if(bDifferent)
             {
@@ -1254,7 +1250,7 @@ IMPL_LINK_NOARG(SwAuthorMarkPane, InsertHdl)
 
         SwFldMgr aMgr(pSh);
         OUString sFields;
-        for(sal_uInt16 i = 0; i < AUTH_FIELD_END; i++)
+        for(int i = 0; i < AUTH_FIELD_END; i++)
         {
             sFields += m_sFields[i];
             sFields += OUString(TOX_STYLE_DELIMITER);
@@ -1264,7 +1260,7 @@ IMPL_LINK_NOARG(SwAuthorMarkPane, InsertHdl)
             if(bDifferent)
             {
                 SwAuthEntry aNewData;
-                for(sal_uInt16 i = 0; i < AUTH_FIELD_END; i++)
+                for(int i = 0; i < AUTH_FIELD_END; i++)
                     aNewData.SetAuthorField((ToxAuthorityField)i, m_sFields[i]);
                 pSh->ChangeAuthorityData(&aNewData);
             }
@@ -1285,7 +1281,7 @@ IMPL_LINK(SwAuthorMarkPane, CreateEntryHdl, PushButton*, pButton)
 {
     bool bCreate = pButton == m_pCreateEntryPB;
     OUString sOldId = m_sCreatedEntry[0];
-    for(sal_uInt16 i = 0; i < AUTH_FIELD_END; i++)
+    for(int i = 0; i < AUTH_FIELD_END; i++)
         m_sCreatedEntry[i] = bCreate ? OUString() : m_sFields[i];
     SwCreateAuthEntryDlg_Impl aDlg(pButton,
                 bCreate ? m_sCreatedEntry : m_sFields,
@@ -1300,7 +1296,7 @@ IMPL_LINK(SwAuthorMarkPane, CreateEntryHdl, PushButton*, pButton)
         {
             m_pEntryLB->RemoveEntry(sOldId);
         }
-        for(sal_uInt16 i = 0; i < AUTH_FIELD_END; i++)
+        for(int i = 0; i < AUTH_FIELD_END; i++)
         {
             m_sFields[i] = aDlg.GetEntryText((ToxAuthorityField)i);
             m_sCreatedEntry[i] = m_sFields[i];
@@ -1347,7 +1343,7 @@ IMPL_LINK(SwAuthorMarkPane, ChangeSourceHdl, RadioButton*, pButton)
                 if( aNames >>= aSeq)
                 {
                     const beans::PropertyValue* pArr = aSeq.getConstArray();
-                    for(sal_uInt16 i = 0; i < aSeq.getLength(); i++)
+                    for(sal_Int32 i = 0; i < aSeq.getLength(); i++)
                     {
                         OUString sTitle = pArr[i].Name;
                         sal_Int16 nField = 0;
@@ -1363,7 +1359,7 @@ IMPL_LINK(SwAuthorMarkPane, ChangeSourceHdl, RadioButton*, pButton)
         {
             uno::Sequence<OUString> aIdentifiers = xBibAccess->getElementNames();
             const OUString* pNames = aIdentifiers.getConstArray();
-            for(sal_uInt16 i = 0; i < aIdentifiers.getLength(); i++)
+            for(sal_Int32 i = 0; i < aIdentifiers.getLength(); i++)
             {
                 m_pEntryLB->InsertEntry(pNames[i]);
             }
@@ -1434,7 +1430,7 @@ void SwAuthorMarkPane::InitControls()
         ChangeSourceHdl(m_pFromComponentRB->IsChecked() ? m_pFromComponentRB : m_pFromDocContentRB);
         m_pCreateEntryPB->Enable(!m_pFromComponentRB->IsChecked());
         if(!m_pFromComponentRB->IsChecked() && !m_sCreatedEntry[0].isEmpty())
-            for(sal_uInt16 i = 0; i < AUTH_FIELD_END; i++)
+            for(int i = 0; i < AUTH_FIELD_END; i++)
                 m_sFields[i] = m_sCreatedEntry[i];
     }
     if(bNewEntry || !pField || pField->GetTyp()->Which() != RES_AUTHORITY)
@@ -1446,7 +1442,7 @@ void SwAuthorMarkPane::InitControls()
     OSL_ENSURE(pEntry, "No authority entry found");
     if(!pEntry)
         return;
-    for(sal_uInt16 i = 0; i < AUTH_FIELD_END; i++)
+    for(int i = 0; i < AUTH_FIELD_END; i++)
         m_sFields[i] = pEntry->GetAuthorField((ToxAuthorityField)i);
 
     m_pEntryED->SetText(pEntry->GetAuthorField(AUTH_FIELD_IDENTIFIER));
@@ -1481,7 +1477,7 @@ SwCreateAuthEntryDlg_Impl::SwCreateAuthEntryDlg_Impl(Window* pParent,
 
     bool bLeft = true;
     sal_Int32 nLeftRow(0), nRightRow(0);
-    for(sal_uInt16 nIndex = 0; nIndex < AUTH_FIELD_END; nIndex++)
+    for(int nIndex = 0; nIndex < AUTH_FIELD_END; nIndex++)
     {
         const TextInfo aCurInfo = aTextInfoArr[nIndex];
 
@@ -1495,12 +1491,11 @@ SwCreateAuthEntryDlg_Impl::SwCreateAuthEntryDlg_Impl(Window* pParent,
         if( AUTH_FIELD_AUTHORITY_TYPE == aCurInfo.nToxField )
         {
             pTypeListBox = new ListBox(bLeft ? pLeft : pRight, WB_DROPDOWN|WB_BORDER|WB_VCENTER);
-            for(sal_uInt16 j = 0; j < AUTH_TYPE_END; j++)
+            for(int j = 0; j < AUTH_TYPE_END; j++)
                 pTypeListBox->InsertEntry(SW_RESSTR(STR_AUTH_TYPE_START + j));
             if(!pFields[aCurInfo.nToxField].isEmpty())
             {
-                sal_uInt16 nIndexPos = static_cast< sal_uInt16 >(pFields[aCurInfo.nToxField].toInt32());
-                pTypeListBox->SelectEntryPos(nIndexPos);
+                pTypeListBox->SelectEntryPos(pFields[aCurInfo.nToxField].toInt32());
             }
             pTypeListBox->set_grid_left_attach(1);
             pTypeListBox->set_grid_top_attach(bLeft ? nLeftRow : nRightRow);
@@ -1567,7 +1562,7 @@ SwCreateAuthEntryDlg_Impl::SwCreateAuthEntryDlg_Impl(Window* pParent,
 
 SwCreateAuthEntryDlg_Impl::~SwCreateAuthEntryDlg_Impl()
 {
-    for(sal_uInt16 i = 0; i < AUTH_FIELD_END; i++)
+    for(int i = 0; i < AUTH_FIELD_END; i++)
     {
         delete pFixedTexts[i];
         delete pEdits[i];
@@ -1591,7 +1586,7 @@ OUString  SwCreateAuthEntryDlg_Impl::GetEntryText(ToxAuthorityField eField) cons
     }
     else
     {
-        for(sal_uInt16 nIndex = 0; nIndex < AUTH_FIELD_END; nIndex++)
+        for(int nIndex = 0; nIndex < AUTH_FIELD_END; nIndex++)
         {
             const TextInfo aCurInfo = aTextInfoArr[nIndex];
             if(aCurInfo.nToxField == eField)
@@ -1614,7 +1609,7 @@ IMPL_LINK(SwCreateAuthEntryDlg_Impl, IdentifierHdl, ComboBox*, pBox)
                                                         pBox->GetText());
         if(pEntry)
         {
-            for(sal_uInt16 i = 0; i < AUTH_FIELD_END; i++)
+            for(int i = 0; i < AUTH_FIELD_END; i++)
             {
                 const TextInfo aCurInfo = aTextInfoArr[i];
                 if(AUTH_FIELD_IDENTIFIER == aCurInfo.nToxField)
