@@ -1857,7 +1857,7 @@ bool ScColumn::SetFormulaCells( SCROW nRow, std::vector<ScFormulaCell*>& rCells 
     std::vector<sc::CellTextAttr> aDefaults(rCells.size(), sc::CellTextAttr());
     maCellTextAttrs.set(nRow, aDefaults.begin(), aDefaults.end());
 
-    sc::CellStoreType::iterator it = maCells.set(aPos.first, nRow, rCells.begin(), rCells.end());
+    maCells.set(aPos.first, nRow, rCells.begin(), rCells.end());
 
     CellStorageModified();
 
