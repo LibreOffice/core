@@ -446,6 +446,16 @@ void Window::CopyAreaFinal( SalTwoRect& aPosAry, sal_uInt32 nFlags )
     OutputDevice::CopyAreaFinal(aPosAry, nFlags);
 }
 
+Rectangle& Window::GetPaintArea( Rectangle& rDstRect )
+{
+    const Region aPaintRgn( GetPaintRegion() );
+
+    if( !aPaintRgn.IsNull() )
+        rDstRect.Intersection( LogicToPixel( aPaintRgn.GetBoundRect() ) );
+
+    return rDstRect;
+}
+
 void Window::ImplReleaseGraphics( bool bRelease )
 {
     DBG_TESTSOLARMUTEX();

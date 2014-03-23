@@ -1992,6 +1992,11 @@ Bitmap OutputDevice::ImplBlend( Bitmap              aBmp,
     return res;
 }
 
+Rectangle& OutputDevice::GetPaintArea( Rectangle& rDstRect )
+{
+    return rDstRect;
+}
+
 void OutputDevice::ImplDrawAlpha( const Bitmap& rBmp, const AlphaMask& rAlpha,
                                   const Point& rDestPt, const Size& rDestSize,
                                   const Point& rSrcPtPixel, const Size& rSrcSizePixel )
@@ -2003,13 +2008,7 @@ void OutputDevice::ImplDrawAlpha( const Bitmap& rBmp, const AlphaMask& rAlpha,
     const bool  bHMirr = aOutSz.Width() < 0;
     const bool  bVMirr = aOutSz.Height() < 0;
 
-    if( OUTDEV_WINDOW == meOutDevType )
-    {
-        const Region aPaintRgn( ( (Window*) this )->GetPaintRegion() );
-
-        if( !aPaintRgn.IsNull() )
-            aDstRect.Intersection( LogicToPixel( aPaintRgn.GetBoundRect() ) );
-    }
+    aDstRect = GetPaintArea(aDstRect);
 
     if( bHMirr )
     {
