@@ -428,7 +428,9 @@ uno::Reference< text::XAutoTextEntry >  SwXAutoTextGroup::insertNewByName(const 
         pGlossaries->PutGroupDoc( pGlosGroup );
     }
 
-    uno::Reference< text::XAutoTextEntry > xEntry = pGlossaries->GetAutoTextEntry( m_sGroupName, sName, sShortName, true );
+    uno::Reference< text::XAutoTextEntry > xEntry = pGlossaries ?
+        pGlossaries->GetAutoTextEntry( m_sGroupName, sName, sShortName, true ) :
+        uno::Reference< text::XAutoTextEntry >();
     OSL_ENSURE( xEntry.is(), "SwXAutoTextGroup::insertNewByName: no UNO object created? How this?" );
         // we just inserted the entry into the group, so why doesn't it exist?
 
