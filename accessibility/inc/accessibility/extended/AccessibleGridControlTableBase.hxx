@@ -75,8 +75,7 @@ public:
 
     /*  Derived classes have to implement:
         -   getAccessibleAt,
-        -   grabFocus,
-        -   getAccessibleKeyBinding. */
+        -   grabFocus. */
 
     // XAccessibleTable -------------------------------------------------------
 

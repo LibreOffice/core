@@ -223,17 +223,6 @@ void SAL_CALL AccessibleGridControl::grabFocus()
         m_aTable.GrabFocus();
 }
 
-
-Any SAL_CALL AccessibleGridControl::getAccessibleKeyBinding()
-    throw ( uno::RuntimeException )
-{
-    SolarMutexGuard g;
-
-    ensureIsAlive();
-    return Any();
-}
-
-
 // XServiceInfo ---------------------------------------------------------------
 
 OUString SAL_CALL AccessibleGridControl::getImplementationName()

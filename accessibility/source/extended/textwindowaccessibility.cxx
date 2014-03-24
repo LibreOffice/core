@@ -290,14 +290,6 @@ void SAL_CALL Paragraph::grabFocus() throw (css::uno::RuntimeException, std::exc
 }
 
 // virtual
-css::uno::Any SAL_CALL Paragraph::getAccessibleKeyBinding()
-    throw (css::uno::RuntimeException)
-{
-    checkDisposed();
-    return css::uno::Any();
-}
-
-// virtual
 css::util::Color SAL_CALL Paragraph::getForeground()
     throw (css::uno::RuntimeException, std::exception)
 {

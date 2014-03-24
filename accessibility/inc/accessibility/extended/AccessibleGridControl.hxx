@@ -84,10 +84,6 @@ protected:
     virtual void SAL_CALL grabFocus()
         throw ( ::com::sun::star::uno::RuntimeException, std::exception );
 
-    /** @return  The key bindings associated with this object. */
-    virtual ::com::sun::star::uno::Any SAL_CALL getAccessibleKeyBinding()
-        throw ( ::com::sun::star::uno::RuntimeException );
-
     // XServiceInfo -----------------------------------------------------------
 
     /** @return

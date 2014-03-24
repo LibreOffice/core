@@ -189,14 +189,8 @@ public:
 
     /*  Derived classes have to implement:
         -   getAccessibleAt,
-        -   grabFocus,
-        -   getAccessibleKeyBinding. */
+        -   grabFocus. */
 
-    /** @return
-        No key bindings supported by default.
-    */
-    virtual ::com::sun::star::uno::Any SAL_CALL getAccessibleKeyBinding()
-        throw ( ::com::sun::star::uno::RuntimeException );
     /** @return
             The accessible child rendered under the given point.
     */

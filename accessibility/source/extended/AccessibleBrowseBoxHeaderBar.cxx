@@ -98,13 +98,6 @@ void SAL_CALL AccessibleBrowseBoxHeaderBar::grabFocus()
     // focus on header not supported
 }
 
-Any SAL_CALL AccessibleBrowseBoxHeaderBar::getAccessibleKeyBinding()
-    throw ( uno::RuntimeException )
-{
-    ensureIsAlive();
-    return Any();   // no special key bindings for header
-}
-
 // XAccessibleTable -----------------------------------------------------------
 
 OUString SAL_CALL AccessibleBrowseBoxHeaderBar::getAccessibleRowDescription( sal_Int32 nRow )

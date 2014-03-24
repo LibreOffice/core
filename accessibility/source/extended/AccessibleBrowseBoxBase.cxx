@@ -509,12 +509,6 @@ sal_Int16 SAL_CALL AccessibleBrowseBoxBase::getAccessibleRole()
     return nRole;
 }
 
-Any SAL_CALL AccessibleBrowseBoxBase::getAccessibleKeyBinding()
-        throw ( uno::RuntimeException )
-{
-    return Any();
-}
-
 Reference<XAccessible > SAL_CALL AccessibleBrowseBoxBase::getAccessibleAtPoint( const ::com::sun::star::awt::Point& )
         throw ( uno::RuntimeException, std::exception )
 {

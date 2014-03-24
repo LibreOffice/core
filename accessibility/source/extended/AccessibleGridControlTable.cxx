@@ -115,13 +115,6 @@ void SAL_CALL AccessibleGridControlTable::grabFocus()
     m_aTable.GrabFocus();
 }
 
-Any SAL_CALL AccessibleGridControlTable::getAccessibleKeyBinding()
-    throw ( uno::RuntimeException )
-{
-    ensureIsAlive();
-    return Any();   // no special key bindings for data table
-}
-
 // XAccessibleTable -----------------------------------------------------------
 
 OUString SAL_CALL AccessibleGridControlTable::getAccessibleRowDescription( sal_Int32 nRow )

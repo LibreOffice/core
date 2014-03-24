@@ -98,13 +98,6 @@ void SAL_CALL AccessibleBrowseBoxTable::grabFocus()
     mpBrowseBox->GrabTableFocus();
 }
 
-Any SAL_CALL AccessibleBrowseBoxTable::getAccessibleKeyBinding()
-    throw ( uno::RuntimeException )
-{
-    ensureIsAlive();
-    return Any();   // no special key bindings for data table
-}
-
 // XAccessibleTable -----------------------------------------------------------
 
 OUString SAL_CALL AccessibleBrowseBoxTable::getAccessibleRowDescription( sal_Int32 nRow )

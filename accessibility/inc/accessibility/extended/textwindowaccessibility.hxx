@@ -227,9 +227,6 @@ private:
 
     virtual void SAL_CALL grabFocus() throw (css::uno::RuntimeException, std::exception);
 
-    virtual css::uno::Any SAL_CALL getAccessibleKeyBinding()
-        throw (css::uno::RuntimeException);
-
     virtual css::util::Color SAL_CALL getForeground()
         throw (css::uno::RuntimeException, std::exception);
 

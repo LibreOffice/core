@@ -195,15 +195,6 @@ void SAL_CALL AccessibleBrowseBox::grabFocus()
     mpBrowseBox->GrabFocus();
 }
 
-
-Any SAL_CALL AccessibleBrowseBox::getAccessibleKeyBinding()
-    throw ( uno::RuntimeException )
-{
-    ensureIsAlive();
-    return Any();
-}
-
-
 // XServiceInfo ---------------------------------------------------------------
 
 OUString SAL_CALL AccessibleBrowseBox::getImplementationName()

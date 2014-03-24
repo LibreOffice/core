@@ -118,13 +118,6 @@ void SAL_CALL AccessibleGridControlHeader::grabFocus()
     // focus on header not supported
 }
 
-Any SAL_CALL AccessibleGridControlHeader::getAccessibleKeyBinding()
-    throw ( uno::RuntimeException )
-{
-    ensureIsAlive();
-    return Any();   // no special key bindings for header
-}
-
 // XAccessibleTable -----------------------------------------------------------
 
 OUString SAL_CALL AccessibleGridControlHeader::getAccessibleRowDescription( sal_Int32 nRow )

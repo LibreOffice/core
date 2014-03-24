@@ -430,12 +430,6 @@ sal_Int16 SAL_CALL AccessibleGridControlBase::getAccessibleRole()
     return nRole;
 }
 
-Any SAL_CALL AccessibleGridControlBase::getAccessibleKeyBinding()
-        throw ( uno::RuntimeException )
-{
-    return Any();
-}
-
 Reference<XAccessible > SAL_CALL AccessibleGridControlBase::getAccessibleAtPoint( const ::com::sun::star::awt::Point& )
         throw ( uno::RuntimeException, std::exception )
 {
