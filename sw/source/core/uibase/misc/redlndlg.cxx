@@ -621,7 +621,7 @@ void SwRedlineAcceptDlg::RemoveParents(sal_uInt16 nStart, sal_uInt16 nEnd)
     pTable->SetSelectHdl(aOldSelectHdl);
     pTable->SetDeselectHdl(aOldDeselectHdl);
     bool bChildrenRemoved = false;
-    pTable->SelectAll(sal_False);
+    pTable->SelectAll(false);
 
     // set the cursor after the last entry because otherwise performance problem in TLB.
     // TLB would otherwise reset the cursor at every Remove (expensive)
@@ -679,7 +679,7 @@ void SwRedlineAcceptDlg::RemoveParents(sal_uInt16 nStart, sal_uInt16 nEnd)
     pTable->SetSelectHdl(LINK(this, SwRedlineAcceptDlg, SelectHdl));
     pTable->SetDeselectHdl(LINK(this, SwRedlineAcceptDlg, DeselectHdl));
     // unfortunately by Remove it was selected from the TLB always again ...
-    pTable->SelectAll(sal_False);
+    pTable->SelectAll(false);
 
     aRedlineParents.erase( aRedlineParents.begin() + nStart, aRedlineParents.begin() + nEnd + 1);
 }

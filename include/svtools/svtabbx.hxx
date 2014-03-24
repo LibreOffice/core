@@ -128,7 +128,7 @@ class SVT_DLLPUBLIC SvHeaderTabListBox : public SvTabListBox, public svt::IAcces
 private:
     typedef ::std::vector< css::uno::Reference< css::accessibility::XAccessible > > AccessibleChildren;
 
-    sal_Bool                        m_bFirstPaint;
+    bool                            m_bFirstPaint;
     ::svt::SvHeaderTabListBoxImpl*  m_pImpl;
     ::svt::IAccessibleTabListBox*   m_pAccessible;
     AccessibleChildren              m_aAccessibleChildren;
@@ -145,7 +145,7 @@ public:
     virtual void    Paint( const Rectangle& );
 
     void            InitHeaderBar( HeaderBar* pHeaderBar );
-    sal_Bool        IsItemChecked( SvTreeListEntry* pEntry, sal_uInt16 nCol ) const;
+    bool            IsItemChecked( SvTreeListEntry* pEntry, sal_uInt16 nCol ) const;
 
     virtual SvTreeListEntry* InsertEntryToColumn( const OUString&, sal_uLong nPos = TREELIST_APPEND,
                                  sal_uInt16 nCol = 0xffff, void* pUserData = NULL );
@@ -162,9 +162,9 @@ public:
     // Accessible -------------------------------------------------------------
 
     inline void     DisableTransientChildren()          { SetChildrenNotTransient(); }
-    inline sal_Bool IsTransientChildrenDisabled() const { return !AreChildrenTransient(); }
+    inline bool     IsTransientChildrenDisabled() const { return !AreChildrenTransient(); }
 
-    sal_Bool        IsCellCheckBox( long _nRow, sal_uInt16 _nColumn, TriState& _rState );
+    bool            IsCellCheckBox( long _nRow, sal_uInt16 _nColumn, TriState& _rState );
 
     /** @return  The count of the rows. */
     virtual long                    GetRowCount() const;
@@ -192,7 +192,7 @@ public:
     virtual void                    SetNoSelection();
     using SvListView::SelectAll;
     virtual void                    SelectAll();
-    virtual void                    SelectAll( sal_Bool bSelect, sal_Bool bPaint = sal_True );
+    virtual void                    SelectAll( bool bSelect, bool bPaint = true );
     virtual void                    SelectRow( long _nRow, bool _bSelect = true, bool bExpand = true );
     virtual void                    SelectColumn( sal_uInt16 _nColumn, bool _bSelect = true );
     virtual sal_Int32               GetSelectedRowCount() const;

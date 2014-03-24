@@ -1053,7 +1053,7 @@ void ViewTabListBox_Impl::DoQuickSearch( const sal_Unicode& rChar )
         SvTreeListEntry* pEntry = GetEntry( mnSearchIndex );
         if ( pEntry )
         {
-            SelectAll( sal_False );
+            SelectAll( false );
             Select( pEntry );
             SetCurEntry( pEntry );
             MakeVisible( pEntry );
@@ -1398,7 +1398,7 @@ void SvtFileView::CancelRunningAsyncAction()
 
 void SvtFileView::SetNoSelection()
 {
-    mpImp->mpView->SelectAll( sal_False );
+    mpImp->mpView->SelectAll( false );
 }
 
 
@@ -1971,7 +1971,7 @@ void SvtFileView_Impl::SetSelectHandler( const Link& _rHdl )
 
 void SvtFileView_Impl::InitSelection()
 {
-    mpView->SelectAll( sal_False );
+    mpView->SelectAll( false );
     SvTreeListEntry* pFirst = mpView->First();
     if ( pFirst )
         mpView->SetCursor( pFirst, sal_True );

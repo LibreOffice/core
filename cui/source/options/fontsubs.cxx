@@ -265,7 +265,7 @@ IMPL_LINK(SvxFontSubstTabPage, SelectHdl, Window*, pWin)
                 pEntry = CreateEntry(sFont1, sFont2);
                 m_pCheckLB->Insert(pEntry);
             }
-            m_pCheckLB->SelectAll(sal_False);
+            m_pCheckLB->SelectAll(false);
             m_pCheckLB->Select(pEntry);
         }
         else if (pWin == m_pDelete)
@@ -304,7 +304,7 @@ IMPL_LINK(SvxFontSubstTabPage, SelectHdl, Window*, pWin)
 
             if (pEntry != m_pCheckLB->FirstSelected())
             {
-                m_pCheckLB->SelectAll(sal_False);
+                m_pCheckLB->SelectAll(false);
                 m_pCheckLB->Select(pEntry);
             }
         }
@@ -383,7 +383,7 @@ void SvxFontSubstTabPage::CheckEnable()
             m_pCheckLB->DisableTable();
             m_pCheckLB->SetTextColor(Color(COL_GRAY));
             m_pCheckLB->Invalidate();
-            m_pCheckLB->SelectAll(sal_False);
+            m_pCheckLB->SelectAll(false);
         }
     }
 }

@@ -520,7 +520,7 @@ SvHeaderTabListBox::SvHeaderTabListBox( Window* pParent, WinBits nWinStyle ) :
 
     SvTabListBox( pParent, nWinStyle ),
 
-    m_bFirstPaint   ( sal_True ),
+    m_bFirstPaint   ( true ),
     m_pImpl         ( new ::svt::SvHeaderTabListBoxImpl ),
     m_pAccessible   ( NULL )
 {
@@ -539,7 +539,7 @@ void SvHeaderTabListBox::Paint( const Rectangle& rRect )
 {
     if ( m_bFirstPaint )
     {
-        m_bFirstPaint = sal_False;
+        m_bFirstPaint = false;
         RepaintScrollBars();
     }
     SvTabListBox::Paint( rRect );
@@ -558,7 +558,7 @@ void SvHeaderTabListBox::InitHeaderBar( HeaderBar* pHeaderBar )
 
 
 
-sal_Bool SvHeaderTabListBox::IsItemChecked( SvTreeListEntry* pEntry, sal_uInt16 nCol ) const
+bool SvHeaderTabListBox::IsItemChecked( SvTreeListEntry* pEntry, sal_uInt16 nCol ) const
 {
     SvButtonState eState = SV_BUTTON_UNCHECKED;
     SvLBoxButton* pItem = (SvLBoxButton*)( pEntry->GetItem( nCol + 1 ) );
@@ -684,7 +684,7 @@ void SvHeaderTabListBox::RecalculateAccessibleChildren()
 
 
 
-sal_Bool SvHeaderTabListBox::IsCellCheckBox( long _nRow, sal_uInt16 _nColumn, TriState& _rState )
+bool SvHeaderTabListBox::IsCellCheckBox( long _nRow, sal_uInt16 _nColumn, TriState& _rState )
 {
     bool bRet = false;
     SvTreeListEntry* pEntry = GetEntry( _nRow );
@@ -789,9 +789,9 @@ void SvHeaderTabListBox::SelectAll()
     SvTreeListBox::SelectAll(true);
 }
 
-void SvHeaderTabListBox::SelectAll( sal_Bool bSelect, sal_Bool bPaint )
+void SvHeaderTabListBox::SelectAll( bool bSelect, bool bPaint )
 {
-    // overwritten just to disambiguate the SelectAll() from the base' class SelectAll( BOOl, sal_Bool )
+    // overwritten just to disambiguate the SelectAll() from the base' class SelectAll( bool, bool )
     SvTabListBox::SelectAll( bSelect, bPaint );
 }
 
@@ -918,7 +918,7 @@ Reference< XAccessible > SvHeaderTabListBox::CreateAccessibleCell( sal_Int32 _nR
     if ( !xChild.is() )
     {
         TriState eState = TRISTATE_INDET;
-        sal_Bool bIsCheckBox = IsCellCheckBox( _nRow, _nColumnPos, eState );
+        bool bIsCheckBox = IsCellCheckBox( _nRow, _nColumnPos, eState );
         if ( bIsCheckBox )
             xChild = m_pImpl->m_aFactoryAccess.getFactory().createAccessibleCheckBoxCell(
                 m_pAccessible->getHeaderBar(), *this, NULL, _nRow, _nColumnPos, eState, false );

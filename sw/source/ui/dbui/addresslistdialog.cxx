@@ -223,7 +223,7 @@ SwAddressListDialog::SwAddressListDialog(SwMailMergeAddressBlockPage* pParent)
 
     sal_Bool bEnableEdit = sal_False;
     sal_Bool bEnableOK = sal_True;
-    m_pListLB->SelectAll( sal_False );
+    m_pListLB->SelectAll( false );
 
     SwDBConfig aDb;
     OUString sBibliography = aDb.GetBibliographySource().sDataSource;
