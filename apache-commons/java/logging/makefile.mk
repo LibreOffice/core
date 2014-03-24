@@ -38,16 +38,20 @@ ANT_BUILDFILE=build.xml
 .IF "$(SOLAR_JAVA)" != "" && ( "$(ENABLE_MEDIAWIKI)" == "YES" || "$(ENABLE_REPORTBUILDER)" == "YES" )
 # --- Files --------------------------------------------------------
 
-TARFILE_NAME=commons-logging-1.1.1-src
-TARFILE_MD5=3c219630e4302863a9a83d0efde889db
+TARFILE_NAME=commons-logging-1.1.3-src
+TARFILE_MD5=e8e197d628436490886d17cffa108fe3
+#TARFILE_NAME=commons-logging-1.1.1-src
+#TARFILE_MD5=3c219630e4302863a9a83d0efde889db
 
-TARFILE_ROOTDIR=commons-logging-1.1.1-src
+TARFILE_ROOTDIR=commons-logging-1.1.3-src
+#TARFILE_ROOTDIR=commons-logging-1.1.1-src
 
 PATCH_FILES=$(PRJ)$/patches$/logging.patch
 
 CONVERTFILES=build.xml
-                
-OUT2CLASS=target$/commons-logging-1.1.1-SNAPSHOT.jar
+
+OUT2CLASS=target$/commons-logging-1.1.3.jar
+#OUT2CLASS=target$/commons-logging-1.1.1-SNAPSHOT.jar
 
 .IF "$(SYSTEM_TOMCAT)" != "YES"
 SERVLETAPI_JAR := $(SOLARVER)$/$(INPATH)$/bin$(UPDMINOREXT)$/servlet-api.jar
