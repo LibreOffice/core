@@ -1344,10 +1344,10 @@ BaseContent::cPCL( void )
 {
     osl::MutexGuard aGuard( m_aMutex );
 
-    Sequence< OUString > seqNames;
+    if (!m_pPropertyListener)
+        return NULL;
 
-    if( m_pPropertyListener )
-        seqNames = m_pPropertyListener->getContainedTypes();
+    Sequence< OUString > seqNames = m_pPropertyListener->getContainedTypes();
 
     PropertyChangeNotifier* p = 0;
 
