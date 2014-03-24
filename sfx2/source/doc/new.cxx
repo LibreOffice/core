@@ -68,14 +68,19 @@ Size SfxPreviewBase_Impl::GetOptimalSize() const
 void SfxPreviewWin_Impl::ImpPaint(
     const Rectangle&, GDIMetaFile* pFile, Window* pWindow )
 {
+    pWindow->SetLineColor();
+    Color aLightGrayCol( COL_LIGHTGRAY );
+    pWindow->SetFillColor( aLightGrayCol );
+    pWindow->DrawRect( Rectangle( Point( 0,0 ), pWindow->GetOutputSize() ) );
+
     Size aTmpSize = pFile ? pFile->GetPrefSize() : Size(1,1 );
     DBG_ASSERT( aTmpSize.Height()*aTmpSize.Width(),
                 "size of first page is 0, overload GetFirstPageSize or set vis-area!" );
 #define FRAME 4
     long nWidth = pWindow->GetOutputSize().Width() - 2*FRAME;
     long nHeight = pWindow->GetOutputSize().Height() - 2*FRAME;
-    if( nWidth < 0 ) nWidth = 0;
-    if( nHeight < 0 ) nHeight = 0;
+    if (nWidth <= 0 || nHeight <= 0)
+        return;
 
     double dRatio=((double)aTmpSize.Width())/aTmpSize.Height();
     double dRatioPreV=((double) nWidth ) / nHeight;
@@ -93,11 +98,6 @@ void SfxPreviewWin_Impl::ImpPaint(
     }
     Point bPoint=Point(nWidth,nHeight)-aPoint;
 
-
-    pWindow->SetLineColor();
-    Color aLightGrayCol( COL_LIGHTGRAY );
-    pWindow->SetFillColor( aLightGrayCol );
-    pWindow->DrawRect( Rectangle( Point( 0,0 ), pWindow->GetOutputSize() ) );
     if ( pFile )
     {
         Color aBlackCol( COL_BLACK );
