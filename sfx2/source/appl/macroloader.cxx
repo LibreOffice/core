@@ -251,16 +251,6 @@ ErrCode SfxMacroLoader::loadMacro( const OUString& rURL, com::sun::star::uno::An
                     // check forbids execution
                     return ERRCODE_IO_ACCESSDENIED;
             }
-            else if ( pDoc && pDoc->GetMedium() )
-            {
-                pDoc->AdjustMacroMode( OUString() );
-                SFX_ITEMSET_ARG( pDoc->GetMedium()->GetItemSet(), pUpdateDocItem, SfxUInt16Item, SID_UPDATEDOCMODE, false);
-                SFX_ITEMSET_ARG( pDoc->GetMedium()->GetItemSet(), pMacroExecModeItem, SfxUInt16Item, SID_MACROEXECMODE, false);
-                if ( pUpdateDocItem && pMacroExecModeItem
-                  && pUpdateDocItem->GetValue() == document::UpdateDocMode::NO_UPDATE
-                  && pMacroExecModeItem->GetValue() == document::MacroExecMode::NEVER_EXECUTE )
-                    return ERRCODE_IO_ACCESSDENIED;
-            }
 
             // find BASIC method
             OUString aQualifiedMethod( INetURLObject::decode(aMacro.copy( nHashPos+1 ), INET_HEX_ESCAPE, INetURLObject::DECODE_WITH_CHARSET) );
