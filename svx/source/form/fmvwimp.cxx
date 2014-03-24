@@ -943,7 +943,7 @@ IMPL_LINK(FmXFormView, OnAutoFocus, void*, /*EMPTYTAG*/)
         if ( aControls.getLength() == 0 )
         {
             Reference< XElementAccess > xFormElementAccess( xForm, UNO_QUERY_THROW );
-            if ( xFormElementAccess->hasElements() )
+            if (xFormElementAccess->hasElements() && pPage && m_pView)
             {
                 // there are control models in the form, but no controls, yet.
                 // Well, since some time controls are created on demand only. In particular,
