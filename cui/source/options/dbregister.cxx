@@ -315,7 +315,7 @@ IMPL_LINK( DbRegistrationOptionsPage, HeaderSelect_Impl, HeaderBar*, pBar )
 {
     assert(pBar);
 
-    if ( pBar && pBar->GetCurItemId() != ITEMID_TYPE )
+    if (!pBar || pBar->GetCurItemId() != ITEMID_TYPE)
         return 0;
 
     HeaderBarItemBits nBits = pBar->GetItemBits(ITEMID_TYPE);
