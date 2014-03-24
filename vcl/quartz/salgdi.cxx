@@ -830,91 +830,9 @@ bool SvpSalGraphics::CheckContext()
         return true;
     }
 
-    if(m_aDevice == NULL) // fix tiledrendering crash when changing content size
-    {
-        SAL_INFO( "vcl.ios", "CheckContext() this=" << this << ",  m_aDevice==NULL, return false");
-        return false;
-    }
+    SAL_INFO( "vcl.ios", "CheckContext() this=" << this << ",  not foreign, return false");
+    return false;
 
-    const basegfx::B2IVector size = m_aDevice->getSize();
-    const basegfx::B2IVector bufferSize = m_aDevice->getBufferSize();
-    const sal_Int32 scanlineStride = m_aDevice->getScanlineStride();
-    basebmp::RawMemorySharedArray pixelBuffer = m_aDevice->getBuffer();
-    bool warned = false;
-
-    SAL_INFO( "vcl.ios",
-              "CheckContext: device=" << m_aDevice.get() <<
-              " size=" << size.getX() << "x" << size.getY() <<
-              (m_aDevice->isTopDown() ? " top-down" : " bottom-up") <<
-              " stride=" << scanlineStride <<
-              " bufferSize=(" << bufferSize.getX() << "," << bufferSize.getY() << ")" );
-
-    switch( m_aDevice->getScanlineFormat() ) {
-    case basebmp::FORMAT_EIGHT_BIT_PAL:
-        mrContext = CGBitmapContextCreate(pixelBuffer.get(),
-                                          bufferSize.getX(), bufferSize.getY(),
-                                          8, scanlineStride,
-                                          CGColorSpaceCreateDeviceGray(),
-                                          kCGImageAlphaNone);
-        break;
-    case basebmp::FORMAT_THIRTYTWO_BIT_TC_MASK_RGBA:
-    case basebmp::FORMAT_THIRTYTWO_BIT_TC_MASK_ARGB:
-    case basebmp::FORMAT_THIRTYTWO_BIT_TC_MASK_ABGR:
-    case basebmp::FORMAT_THIRTYTWO_BIT_TC_MASK_BGRA:
-        mrContext = CGBitmapContextCreate(pixelBuffer.get(),
-                                          bufferSize.getX(), bufferSize.getY(),
-                                          8, scanlineStride,
-                                          CGColorSpaceCreateDeviceRGB(),
-                                          kCGImageAlphaNoneSkipFirst);//kCGImageAlphaNoneSkipFirst | kCGBitmapByteOrder32Little);
-        break;
-    default:
-        SAL_WARN( "vcl.ios", "CheckContext: unsupported color format " << basebmp::formatName( m_aDevice->getScanlineFormat() ) );
-        warned = true;
-    }
-
-    SAL_WARN_IF( mrContext == NULL && !warned, "vcl.ios", "CheckContext: CGBitmapContextCreate() failed" );
-
-    // Should we also clip the context? (Then we need to add a
-    // getBounds() function to BitmapDevice.)
-
-    if( mrContext != NULL && m_aDevice->isTopDown() )
-    {
-        CGContextTranslateCTM( mrContext, 0, bufferSize.getY() );
-        CGContextScaleCTM( mrContext, 1, -1 );
-    }
-
-
-    if (mrContext)
-    {
-        RectangleVector aRectangles;
-        m_aClipRegion.GetRegionRectangles(aRectangles);
-
-        CGContextBeginPath( mrContext );
-
-        for(RectangleVector::const_iterator aRectIter(aRectangles.begin()); aRectIter != aRectangles.end(); ++aRectIter)
-        {
-            const long nW(aRectIter->Right() - aRectIter->Left() + 1); // uses +1 logic in original
-
-            if(nW)
-            {
-                const long nH(aRectIter->Bottom() - aRectIter->Top() + 1); // uses +1 logic in original
-
-                if(nH)
-                {
-                    CGRect aRect = {{ (CGFloat) aRectIter->Left(), (CGFloat) aRectIter->Top() }, { (CGFloat) nW, (CGFloat) nH }};
-                    CGContextAddRect( mrContext, aRect );
-                }
-            }
-        }
-
-        if (!CGContextIsPathEmpty(mrContext))
-            CGContextClip(mrContext);
-    }
-
-
-    SAL_INFO( "vcl.ios", "CheckContext: context=" << mrContext );
-
-    return ( mrContext != NULL );
 }
 
 CGContextRef SvpSalGraphics::GetContext()

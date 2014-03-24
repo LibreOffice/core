@@ -88,9 +88,6 @@ bool SvpSalGraphics::drawAlphaRect( long /*nX*/, long /*nY*/, long /*nWidth*/, l
     // TODO(P3) implement alpha blending
     return false;
 }
-#endif
-
-#ifndef IOS
 
 SvpSalGraphics::SvpSalGraphics() :
     m_bUseLineColor( true ),
@@ -110,14 +107,11 @@ SvpSalGraphics::~SvpSalGraphics()
 {
 }
 
-#endif
-
 void SvpSalGraphics::setDevice( basebmp::BitmapDeviceSharedPtr& rDevice )
 {
     m_aOrigDevice = rDevice;
     ResetClipRegion();
 
-#ifndef IOS
     // determine matching bitmap format for masks
     basebmp::Format nDeviceFmt = m_aDevice->getScanlineFormat();
     switch( nDeviceFmt )
@@ -136,8 +130,9 @@ void SvpSalGraphics::setDevice( basebmp::BitmapDeviceSharedPtr& rDevice )
             m_eTextFmt = basebmp::FORMAT_ONE_BIT_LSB_GREY;
             break;
     }
-#endif
 }
+
+#endif
 
 void SvpSalGraphics::GetResolution( sal_Int32& rDPIX, sal_Int32& rDPIY )
 {
@@ -151,8 +146,6 @@ sal_uInt16 SvpSalGraphics::GetBitCount() const
     return SvpSalBitmap::getBitCountFromScanlineFormat( m_aDevice->getScanlineFormat() );
 }
 
-#endif
-
 long SvpSalGraphics::GetGraphicsWidth() const
 {
     if( m_aDevice.get() )
@@ -163,8 +156,6 @@ long SvpSalGraphics::GetGraphicsWidth() const
     return 0;
 }
 
-#ifndef IOS
-
 void SvpSalGraphics::ResetClipRegion()
 {
     m_aDevice = m_aOrigDevice;
@@ -173,8 +164,6 @@ void SvpSalGraphics::ResetClipRegion()
     m_aClipRegion.SetNull();
 }
 
-
-#endif
 
 // verify clip for the whole area is setup
 void SvpSalGraphics::ensureClip()
@@ -284,8 +273,6 @@ bool SvpSalGraphics::isClippedSetup( const basegfx::B2IBox &aRange, SvpSalGraphi
     return false;
 }
 
-#ifndef IOS
-
 // Clipping by creating unconditional mask bitmaps is horribly
 // slow so defer it, as much as possible. It is common to get
 // 3 rectangles pushed, and have to create a vast off-screen
@@ -389,7 +376,6 @@ void SvpSalGraphics::SetROPFillColor( SalROPColor nROPColor )
 }
 
 
-#ifndef IOS
 void SvpSalGraphics::drawPixel( long nX, long nY )
 {
     if( m_bUseLineColor )
@@ -562,8 +548,6 @@ bool SvpSalGraphics::drawPolyPolygon( const basegfx::B2DPolyPolygon&, double /*f
     return false;
 }
 
-#endif
-
 void SvpSalGraphics::copyArea( long nDestX,
                                       long nDestY,
                                       long nSrcX,
@@ -603,7 +587,6 @@ void SvpSalGraphics::copyBits( const SalTwoRect& rPosAry,
     dbgOut( m_aDevice );
 }
 
-#ifndef IOS
 void SvpSalGraphics::drawBitmap( const SalTwoRect& rPosAry,
                                  const SalBitmap& rSalBitmap )
 {
@@ -678,8 +661,6 @@ void SvpSalGraphics::drawMask( const SalTwoRect& rPosAry,
     dbgOut( m_aDevice );
 }
 
-#endif
-
 SalBitmap* SvpSalGraphics::getBitmap( long nX, long nY, long nWidth, long nHeight )
 {
     basebmp::BitmapDeviceSharedPtr aCopy =
@@ -697,15 +678,11 @@ SalBitmap* SvpSalGraphics::getBitmap( long nX, long nY, long nWidth, long nHeigh
     return pBitmap;
 }
 
-#endif
-
 SalColor SvpSalGraphics::getPixel( long nX, long nY )
 {
     basebmp::Color aColor( m_aOrigDevice->getPixel( basegfx::B2IPoint( nX, nY ) ) );
     return aColor.toInt32();
 }
-
-#ifndef IOS
 
 void SvpSalGraphics::invert( long nX, long nY, long nWidth, long nHeight, SalInvert /*nFlags*/ )
 {
@@ -740,12 +717,12 @@ bool SvpSalGraphics::drawEPS( long, long, long, long, void*, sal_uLong )
     return false;
 }
 
+#ifndef IOS
+
 SystemGraphicsData SvpSalGraphics::GetGraphicsData() const
 {
     return SystemGraphicsData();
 }
-
-#ifndef IOS
 
 bool SvpSalGraphics::supportsOperation( OutDevSupportType ) const
 {
@@ -756,10 +733,8 @@ bool SvpSalGraphics::supportsOperation( OutDevSupportType ) const
 
 #ifdef IOS
 
-void  SvpSalGraphics::RefreshRect(float lX, float lY, float lWidth, float lHeight)
+void  SvpSalGraphics::RefreshRect(float /* lX */, float /* lY */, float /* lWidth */, float /* lHeight */)
 {
-    if (m_aDevice && m_aDevice->getDamageTracker() != NULL)
-        m_aDevice->getDamageTracker()->damaged(basegfx::B2IBox( basegfx::fround(lX), basegfx::fround(lY), basegfx::fround(lX + lWidth), basegfx::fround(lY + lHeight)));
 }
 
 #endif

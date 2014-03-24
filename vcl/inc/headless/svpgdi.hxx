@@ -47,10 +47,12 @@ class ServerFont;
 
 class SvpSalGraphics : public SalGraphics
 {
+#ifndef IOS
     basebmp::BitmapDeviceSharedPtr       m_aDevice;
     basebmp::BitmapDeviceSharedPtr       m_aOrigDevice;
 
-#ifndef IOS
+    basebmp::BitmapDeviceSharedPtr       m_aClipMap;
+
     bool                                 m_bUseLineColor;
     basebmp::Color                       m_aLineColor;
     bool                                 m_bUseFillColor;
@@ -63,6 +65,22 @@ class SvpSalGraphics : public SalGraphics
     basebmp::Color                       m_aTextColor;
     ServerFont*                          m_pServerFont[ MAX_FALLBACK ];
     basebmp::Format                      m_eTextFmt;
+
+protected:
+    basegfx::B2IVector                   GetSize() { return m_aOrigDevice->getSize(); }
+
+private:
+    bool                                 m_bClipSetup;
+    struct ClipUndoHandle {
+        SvpSalGraphics                &m_rGfx;
+        basebmp::BitmapDeviceSharedPtr m_aDevice;
+        ClipUndoHandle( SvpSalGraphics *pGfx ) : m_rGfx( *pGfx ) {}
+        ~ClipUndoHandle();
+    };
+
+public:
+    void setDevice( basebmp::BitmapDeviceSharedPtr& rDevice );
+
 #else
     friend class CTLayout;
 
@@ -98,22 +116,8 @@ class SvpSalGraphics : public SalGraphics
     bool                                    mbVirDev;
 #endif
 
-    basebmp::BitmapDeviceSharedPtr       m_aClipMap;
-
 protected:
     Region                               m_aClipRegion;
-    basegfx::B2IVector                   GetSize() { return m_aOrigDevice->getSize(); }
-
-private:
-    bool                                 m_bClipSetup;
-    struct ClipUndoHandle {
-        SvpSalGraphics                &m_rGfx;
-        basebmp::BitmapDeviceSharedPtr m_aDevice;
-        ClipUndoHandle( SvpSalGraphics *pGfx ) : m_rGfx( *pGfx ) {}
-        ~ClipUndoHandle();
-    };
-    bool isClippedSetup( const basegfx::B2IBox &aRange, ClipUndoHandle &rUndo );
-    void ensureClip();
 
 protected:
     virtual bool drawAlphaBitmap( const SalTwoRect&, const SalBitmap& rSourceBitmap, const SalBitmap& rAlphaBitmap );
@@ -128,8 +132,6 @@ protected:
 public:
     SvpSalGraphics();
     virtual ~SvpSalGraphics();
-
-    void setDevice( basebmp::BitmapDeviceSharedPtr& rDevice );
 
     virtual void            GetResolution( sal_Int32& rDPIX, sal_Int32& rDPIY );
     virtual sal_uInt16      GetBitCount() const;

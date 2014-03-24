@@ -170,7 +170,9 @@ void SvpSalFrame::LoseFocus()
 SalGraphics* SvpSalFrame::AcquireGraphics()
 {
     SvpSalGraphics* pGraphics = new SvpSalGraphics();
+#ifndef IOS
     pGraphics->setDevice( m_aFrame );
+#endif
     m_aGraphics.push_back( pGraphics );
     return pGraphics;
 }
@@ -293,7 +295,11 @@ void SvpSalFrame::SetPosSize( long nX, long nY, long nWidth, long nHeight, sal_u
         // update device in existing graphics
         for( std::list< SvpSalGraphics* >::iterator it = m_aGraphics.begin();
              it != m_aGraphics.end(); ++it )
+        {
+#ifndef IOS
              (*it)->setDevice( m_aFrame );
+#endif
+        }
     }
     if( m_bVisible )
         m_pInstance->PostEvent( this, NULL, SALEVENT_RESIZE );

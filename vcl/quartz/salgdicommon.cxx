@@ -1175,8 +1175,6 @@ SalBitmap* AquaSalGraphics::getBitmap( long  nX, long  nY, long  nDX, long  nDY 
     return pBitmap;
 }
 
-#ifndef IOS
-
 SystemGraphicsData AquaSalGraphics::GetGraphicsData() const
 {
     SystemGraphicsData aRes;
@@ -1188,11 +1186,16 @@ SystemGraphicsData AquaSalGraphics::GetGraphicsData() const
 long AquaSalGraphics::GetGraphicsWidth() const
 {
     long w = 0;
-    if( mrContext && (mbWindow || mbVirDev) )
+    if( mrContext && (
+#ifndef IOS
+                      mbWindow ||
+#endif
+                      mbVirDev) )
     {
         w = mnWidth;
     }
 
+#ifndef IOS
     if( w == 0 )
     {
         if( mbWindow && mpFrame )
@@ -1200,6 +1203,7 @@ long AquaSalGraphics::GetGraphicsWidth() const
             w = mpFrame->maGeometry.nWidth;
         }
     }
+#endif
     return w;
 }
 
@@ -1241,6 +1245,8 @@ SalColor AquaSalGraphics::getPixel( long nX, long nY )
     SalColor nSalColor = MAKE_SALCOLOR( aPixel.r, aPixel.g, aPixel.b );
     return nSalColor;
 }
+
+#ifndef IOS
 
 void AquaSalGraphics::GetResolution( sal_Int32& rDPIX, sal_Int32& rDPIY )
 {
