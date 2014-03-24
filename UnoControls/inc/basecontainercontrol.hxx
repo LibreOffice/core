@@ -285,43 +285,9 @@ public:
         @onerror    -
     */
 
-    virtual void SAL_CALL addContainerListener(
-        const ::com::sun::star::uno::Reference< ::com::sun::star::container::XContainerListener >& xListener
-    ) throw( ::com::sun::star::uno::RuntimeException );
-
-    /**_______________________________________________________________________________________________________
-        @short      -
-        @descr      -
-
-        @seealso    -
-
-        @param      -
-
-        @return     -
-
-        @onerror    -
-    */
-
     virtual void SAL_CALL removeControl(
         const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl >& xControl
     ) throw( ::com::sun::star::uno::RuntimeException, std::exception );
-
-    /**_______________________________________________________________________________________________________
-        @short      -
-        @descr      -
-
-        @seealso    -
-
-        @param      -
-
-        @return     -
-
-        @onerror    -
-    */
-
-    virtual void SAL_CALL removeContainerListener(
-        const ::com::sun::star::uno::Reference< ::com::sun::star::container::XContainerListener >& xListener
-    ) throw( ::com::sun::star::uno::RuntimeException );
 
     /**_______________________________________________________________________________________________________
         @short      -
@@ -372,77 +338,6 @@ public:
 
     virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl > > SAL_CALL getControls()
         throw( ::com::sun::star::uno::RuntimeException, std::exception );
-
-
-    //  XUnoControlContainer
-
-
-    /**_______________________________________________________________________________________________________
-        @short      -
-        @descr      -
-
-        @seealso    -
-
-        @param      -
-
-        @return     -
-
-        @onerror    -
-    */
-
-    virtual void SAL_CALL addTabController(
-        const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XTabController >& xTabController
-    ) throw( ::com::sun::star::uno::RuntimeException );
-
-    /**_______________________________________________________________________________________________________
-        @short      -
-        @descr      -
-
-        @seealso    -
-
-        @param      -
-
-        @return     -
-
-        @onerror    -
-    */
-
-    virtual void SAL_CALL removeTabController(
-        const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XTabController >& xTabController
-    ) throw( ::com::sun::star::uno::RuntimeException );
-
-    /**_______________________________________________________________________________________________________
-        @short      -
-        @descr      -
-
-        @seealso    -
-
-        @param      -
-
-        @return     -
-
-        @onerror    -
-    */
-
-    virtual void SAL_CALL setTabControllers(
-        const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::awt::XTabController > >& xTabControllers
-    ) throw( ::com::sun::star::uno::RuntimeException );
-
-    /**_______________________________________________________________________________________________________
-        @short      -
-        @descr      -
-
-        @seealso    -
-
-        @param      -
-
-        @return     -
-
-        @onerror    -
-    */
-
-    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::awt::XTabController > > SAL_CALL getTabControllers()
-        throw( ::com::sun::star::uno::RuntimeException );
 
 
     //  XWindow

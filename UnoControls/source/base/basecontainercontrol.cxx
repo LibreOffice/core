@@ -298,18 +298,6 @@ void SAL_CALL BaseContainerControl::addControl ( const OUString& rName, const Re
 //  XControlContainer
 
 
-void SAL_CALL BaseContainerControl::addContainerListener ( const Reference< XContainerListener > & rListener ) throw( RuntimeException )
-{
-    // Ready for multithreading
-    MutexGuard aGuard ( m_aMutex ) ;
-
-    m_aListeners.addInterface ( ::getCppuType((const Reference< XContainerListener >*)0), rListener ) ;
-}
-
-
-//  XControlContainer
-
-
 void SAL_CALL BaseContainerControl::removeControl ( const Reference< XControl > & rControl ) throw( RuntimeException, std::exception )
 {
     if ( rControl.is() )
@@ -357,18 +345,6 @@ void SAL_CALL BaseContainerControl::removeControl ( const Reference< XControl > 
             }
         }
     }
-}
-
-
-//  XControlContainer
-
-
-void SAL_CALL BaseContainerControl::removeContainerListener ( const Reference< XContainerListener > & rListener ) throw( RuntimeException )
-{
-    // Ready for multithreading
-    MutexGuard aGuard ( m_aMutex ) ;
-
-    m_aListeners.removeInterface ( ::getCppuType((const Reference< XContainerListener >*)0), rListener ) ;
 }
 
 
@@ -437,76 +413,6 @@ Sequence< Reference< XControl > > SAL_CALL BaseContainerControl::getControls () 
 
     // Return sequence
     return aDescriptor ;
-}
-
-
-//  XUnoControlContainer
-
-
-void SAL_CALL BaseContainerControl::addTabController ( const Reference< XTabController > & rTabController ) throw( RuntimeException )
-{
-    // Ready for multithreading
-    MutexGuard aGuard (m_aMutex) ;
-
-    sal_uInt32                                  nOldCount   = m_xTabControllerList.getLength () ;
-    Sequence< Reference< XTabController >  >    aNewList    ( nOldCount + 1 )                   ;
-    sal_uInt32                                  nCount      = 0                                 ;
-
-    // Copy old elements of sequence to new list.
-    for ( nCount = 0; nCount < nOldCount; ++nCount )
-    {
-        aNewList.getArray () [nCount] = m_xTabControllerList.getConstArray () [nCount] ;
-    }
-
-    // Add new controller
-    aNewList.getArray () [nOldCount] = rTabController ;
-
-    // change old and new list
-    m_xTabControllerList = aNewList ;
-}
-
-
-//  XUnoControlContainer
-
-
-void SAL_CALL BaseContainerControl::removeTabController ( const Reference< XTabController > & rTabController ) throw( RuntimeException )
-{
-    // Ready for multithreading
-    MutexGuard aGuard (m_aMutex) ;
-
-    sal_uInt32  nMaxCount   = m_xTabControllerList.getLength () ;
-    sal_uInt32  nCount      = 0                                 ;
-
-    // Search right tabcontroller ...
-    for ( nCount = 0; nCount < nMaxCount; ++nCount )
-    {
-        if ( m_xTabControllerList.getConstArray () [nCount] == rTabController )
-        {
-            // ... if is it found ... remove it from list.
-            m_xTabControllerList.getArray()[ nCount ].clear();
-            break ;
-        }
-    }
-}
-
-
-//  XUnoControlContainer
-
-
-void SAL_CALL BaseContainerControl::setTabControllers ( const Sequence< Reference< XTabController >  >& rTabControllers ) throw( RuntimeException )
-{
-    // Ready for multithreading
-    MutexGuard aGuard (m_aMutex) ;
-
-    m_xTabControllerList = rTabControllers ;
-}
-
-Sequence<Reference< XTabController > > SAL_CALL BaseContainerControl::getTabControllers () throw( RuntimeException )
-{
-    // Ready for multithreading
-    MutexGuard aGuard (m_aMutex) ;
-
-    return m_xTabControllerList ;
 }
 
 
