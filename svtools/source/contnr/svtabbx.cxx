@@ -921,10 +921,10 @@ Reference< XAccessible > SvHeaderTabListBox::CreateAccessibleCell( sal_Int32 _nR
         sal_Bool bIsCheckBox = IsCellCheckBox( _nRow, _nColumnPos, eState );
         if ( bIsCheckBox )
             xChild = m_pImpl->m_aFactoryAccess.getFactory().createAccessibleCheckBoxCell(
-                m_pAccessible->getAccessibleChild( 0 ), *this, NULL, _nRow, _nColumnPos, eState, false );
+                m_pAccessible->getHeaderBar(), *this, NULL, _nRow, _nColumnPos, eState, false );
         else
             xChild = m_pImpl->m_aFactoryAccess.getFactory().createAccessibleBrowseBoxTableCell(
-                m_pAccessible->getAccessibleChild( 0 ), *this, NULL, _nRow, _nColumnPos, OFFSET_NONE );
+                m_pAccessible->getHeaderBar(), *this, NULL, _nRow, _nColumnPos, OFFSET_NONE );
 
         // insert into list
         if ( !AreChildrenTransient() )
@@ -958,7 +958,7 @@ Reference< XAccessible > SvHeaderTabListBox::CreateAccessibleColumnHeader( sal_u
     {
         // no -> create new header cell
         xChild = m_pImpl->m_aFactoryAccess.getFactory().createAccessibleBrowseBoxHeaderCell(
-            _nColumn, m_pAccessible->getHeaderBar( ::svt::BBTYPE_COLUMNHEADERBAR ),
+            _nColumn, m_pAccessible->getHeaderBar(),
             *this, NULL, ::svt::BBTYPE_COLUMNHEADERCELL
         );
 

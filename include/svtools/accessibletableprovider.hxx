@@ -145,14 +145,10 @@ public:
     virtual css::uno::Reference< css::accessibility::XAccessible >
         getMyself() = 0;
 
-    virtual css::uno::Reference< css::accessibility::XAccessible >
-        SAL_CALL getAccessibleChild( sal_Int32 nChildIndex )
-            throw ( css::lang::IndexOutOfBoundsException, css::uno::RuntimeException, std::exception ) = 0;
-
-    /** returns the accessible object for the row or the column header bar
+    /** returns the accessible object for the column header bar
     */
     virtual css::uno::Reference< css::accessibility::XAccessible >
-        getHeaderBar( ::svt::AccessibleBrowseBoxObjType _eObjType ) = 0;
+        getHeaderBar() = 0;
 
 protected:
     ~IAccessibleTabListBox() {}

@@ -83,9 +83,9 @@ public:
     }
 
     ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >
-        getHeaderBar( ::svt::AccessibleBrowseBoxObjType _eObjType )
+        getHeaderBar()
     {
-        return AccessibleBrowseBox::getHeaderBar( _eObjType );
+        return AccessibleBrowseBox::getHeaderBar( svt::BBTYPE_COLUMNHEADERBAR );
     }
 
 protected:
