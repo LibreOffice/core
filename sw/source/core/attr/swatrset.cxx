@@ -278,7 +278,7 @@ void SwAttrSet::CopyToModify( SwModify& rMod ) const
                         // default list id in the source document, the same
                         // should be hold in the destination document.
                         // Thus, create new list id item.
-                        if ( sListId == pSrcDocNumRule->GetDefaultListId() )
+                        if (pSrcDocNumRule && sListId == pSrcDocNumRule->GetDefaultListId())
                         {
                             pNewListIdItem = new SfxStringItem (
                                             RES_PARATR_LIST_ID,
