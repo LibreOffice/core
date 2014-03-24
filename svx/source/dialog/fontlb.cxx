@@ -27,8 +27,9 @@
 
 
 
-SvLBoxFontString::SvLBoxFontString() :
-    SvLBoxString()
+SvLBoxFontString::SvLBoxFontString()
+    : SvLBoxString()
+    , mbUseColor(false)
 {
 }
 
