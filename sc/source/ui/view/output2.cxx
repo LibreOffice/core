@@ -4160,8 +4160,7 @@ void ScOutputData::DrawEditAsianVertical(DrawEditParam& rParam)
     Size aRefOne = mpRefDevice->PixelToLogic(Size(1,1));
 
     bool bHidden = false;
-    bool bRepeat = false;
-    bool bShrink = !rParam.mbBreak && !bRepeat && lcl_GetBoolValue(*rParam.mpPattern, ATTR_SHRINKTOFIT, rParam.mpCondSet);
+    bool bShrink = !rParam.mbBreak && lcl_GetBoolValue(*rParam.mpPattern, ATTR_SHRINKTOFIT, rParam.mpCondSet);
     long nAttrRotate = lcl_GetValue<SfxInt32Item, long>(*rParam.mpPattern, ATTR_ROTATE_VALUE, rParam.mpCondSet);
 
     if (nAttrRotate)
@@ -4276,7 +4275,7 @@ void ScOutputData::DrawEditAsianVertical(DrawEditParam& rParam)
     // for break, the first GetOutputArea call is sufficient
     GetOutputArea( nXForPos, nArrYForPos, rParam.mnPosX, rParam.mnPosY, rParam.mnCellX, rParam.mnCellY, nNeededPixel,
                    *rParam.mpPattern, sal::static_int_cast<sal_uInt16>(eOutHorJust),
-                   rParam.mbCellIsValue || bRepeat || bShrink, false, false, aAreaParam );
+                   rParam.mbCellIsValue || bShrink, false, false, aAreaParam );
 
     if ( bShrink )
     {
@@ -4285,45 +4284,6 @@ void ScOutputData::DrawEditAsianVertical(DrawEditParam& rParam)
             sal::static_int_cast<sal_uInt16>(rParam.meOrient), 0, rParam.mbPixelToLogic,
             nEngineWidth, nEngineHeight, nNeededPixel,
             aAreaParam.mbLeftClip, aAreaParam.mbRightClip );
-    }
-    if ( bRepeat && !aAreaParam.mbLeftClip && !aAreaParam.mbRightClip && rParam.mpEngine->GetParagraphCount() == 1 )
-    {
-        // First check if twice the space for the formatted text is available
-        // (otherwise just keep it unchanged).
-
-        long nFormatted = nNeededPixel - nLeftM - nRightM;      // without margin
-        long nAvailable = aAreaParam.maAlignRect.GetWidth() - nLeftM - nRightM;
-        if ( nAvailable >= 2 * nFormatted )
-        {
-            // "repeat" is handled with unformatted text (for performance reasons)
-            OUString aCellStr = rParam.mpEngine->GetText();
-            rParam.mpEngine->SetText( aCellStr );
-
-            long nRepeatSize = (long) rParam.mpEngine->CalcTextWidth();
-            if (rParam.mbPixelToLogic)
-                nRepeatSize = mpRefDevice->LogicToPixel(Size(nRepeatSize,0)).Width();
-            if ( pFmtDevice != mpRefDevice )
-                ++nRepeatSize;
-            if ( nRepeatSize > 0 )
-            {
-                long nRepeatCount = nAvailable / nRepeatSize;
-                if ( nRepeatCount > 1 )
-                {
-                    OUString aRepeated = aCellStr;
-                    for ( long nRepeat = 1; nRepeat < nRepeatCount; nRepeat++ )
-                        aRepeated += aCellStr;
-                    rParam.mpEngine->SetText( aRepeated );
-
-                    nEngineHeight = rParam.mpEngine->GetTextHeight();
-                    nEngineWidth = (long) rParam.mpEngine->CalcTextWidth();
-                    if (rParam.mbPixelToLogic)
-                        nNeededPixel = mpRefDevice->LogicToPixel(Size(nEngineWidth,0)).Width();
-                    else
-                        nNeededPixel = nEngineWidth;
-                    nNeededPixel += nLeftM + nRightM;
-                }
-            }
-        }
     }
 
     if ( rParam.mbCellIsValue && ( aAreaParam.mbLeftClip || aAreaParam.mbRightClip ) )
