@@ -742,10 +742,6 @@ void Calendar::ImplDrawDate( long nX, long nY,
     if ( bFocus )
         HideFocus();
 
-    // get font
-    Font aOldFont = GetFont();
-    bool bBoldFont = false;
-
     // display background
     const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
     if ( bSel || bBack )
@@ -794,9 +790,6 @@ void Calendar::ImplDrawDate( long nX, long nY,
 
     if( mbDropPos && maDropDate == Date( nDay, nMonth, nYear ) )
         ImplInvertDropPos();
-
-    if ( bBoldFont )
-        SetFont( aOldFont );
 }
 
 
