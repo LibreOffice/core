@@ -63,7 +63,9 @@ public:
         {
             try
             {
-                ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > xChartTypePropertySet( aChartTypes[nN], ::com::sun::star::uno::UNO_QUERY );
+                uno::Reference<beans::XPropertySet> xChartTypePropertySet(aChartTypes[nN], uno::UNO_QUERY);
+                if (!xChartTypePropertySet.is())
+                    continue;
 
                 Any aSingleValue = this->convertInnerToOuterValue( xChartTypePropertySet->getPropertyValue(m_aOwnInnerName) );
                 PROPERTYTYPE aCurValue = PROPERTYTYPE();
