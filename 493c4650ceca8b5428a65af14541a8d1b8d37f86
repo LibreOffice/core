@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da86d52c_b23d46be",
+        "filename": "starmath/source/dialog.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1443,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2014-03-24T09:56:49Z",
+      "side": 1,
+      "message": "why use an OUStringBuffer at all?",
+      "revId": "493c4650ceca8b5428a65af14541a8d1b8d37f86",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
