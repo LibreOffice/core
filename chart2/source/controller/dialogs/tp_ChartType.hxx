@@ -72,6 +72,7 @@ protected:
     virtual void stateChanged( ChangingResource* pResource );
 
     void commitToModel( const ChartTypeParameter& rParameter );
+    void selectMainType();
 
     DECL_LINK( SelectMainTypeHdl, void* );
     DECL_LINK( SelectSubTypeHdl, void* );

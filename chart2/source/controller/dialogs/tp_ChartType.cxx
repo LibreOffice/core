@@ -829,6 +829,12 @@ IMPL_LINK_NOARG(ChartTypeTabPage, SelectSubTypeHdl)
 
 IMPL_LINK_NOARG(ChartTypeTabPage, SelectMainTypeHdl)
 {
+    selectMainType();
+    return 0;
+}
+
+void ChartTypeTabPage::selectMainType()
+{
     ChartTypeParameter aParameter( this->getCurrentParamter() );
 
     if( m_pCurrentMainType )
@@ -855,7 +861,6 @@ IMPL_LINK_NOARG(ChartTypeTabPage, SelectMainTypeHdl)
         uno::Reference< beans::XPropertySet > xTemplateProps( this->getCurrentTemplate(), uno::UNO_QUERY );
         m_pCurrentMainType->fillExtraControls(aParameter,m_xChartModel,xTemplateProps);
     }
-    return 0;
 }
 
 void ChartTypeTabPage::showAllControls( ChartTypeDialogController& rTypeController )
