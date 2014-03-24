@@ -24,25 +24,19 @@
 #include <vcl/field.hxx>
 #include <svtools/stdctrl.hxx>
 #include <mailmergehelper.hxx>
-#include "actctrl.hxx"
 
 class SwMailMergeWizard;
 
 class SwMailMergePrepareMergePage : public svt::OWizardPage
 {
-    SwBoldFixedInfo m_aHeaderFI;
-    FixedInfo       m_aPreviewFI;
-    FixedText       m_aRecipientFT;
-    PushButton      m_aFirstPB;
-    PushButton      m_aPrevPB;
-    NumEditAction   m_aRecordED;
-    PushButton      m_aNextPB;
-    PushButton      m_aLastPB;
-    CheckBox        m_ExcludeCB;
+    PushButton*     m_pFirstPB;
+    PushButton*     m_pPrevPB;
+    NumericField*   m_pRecordED;
+    PushButton*     m_pNextPB;
+    PushButton*     m_pLastPB;
+    CheckBox*       m_pExcludeCB;
 
-    FixedLine       m_aNoteHeaderFL;
-    FixedInfo       m_aEditFI;
-    PushButton      m_aEditPB;
+    PushButton*     m_pEditPB;
 
     SwMailMergeWizard*  m_pWizard;
 
@@ -54,9 +48,7 @@ class SwMailMergePrepareMergePage : public svt::OWizardPage
     virtual sal_Bool    commitPage( ::svt::WizardTypes::CommitPageReason _eReason );
 
 public:
-        SwMailMergePrepareMergePage( SwMailMergeWizard* _pParent);
-        ~SwMailMergePrepareMergePage();
-
+    SwMailMergePrepareMergePage( SwMailMergeWizard* _pParent);
 };
 
 #endif

@@ -29,44 +29,33 @@
 #include <com/sun/star/sdbc/XConnection.hpp>
 #include <swabstdlg.hxx>
 
-#include <mmpreparemergepage.hrc>
-
 #include <unomid.h>
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::sdbc;
 
-SwMailMergePrepareMergePage::SwMailMergePrepareMergePage( SwMailMergeWizard* _pParent) :
-    svt::OWizardPage( _pParent, SW_RES(DLG_MM_PREPAREMERGE_PAGE)),
-    m_aHeaderFI(this,  SW_RES(     FI_HEADER ) ),
-    m_aPreviewFI(this, SW_RES(     FI_PREVIEW ) ),
-    m_aRecipientFT(this, SW_RES(   FT_RECIPIENT ) ),
-    m_aFirstPB(this, SW_RES(       PB_FIRST   ) ),
-    m_aPrevPB(this, SW_RES(        PB_PREV    ) ),
-    m_aRecordED(this, SW_RES(      ED_RECORD  ) ),
-    m_aNextPB(this, SW_RES(        PB_NEXT    ) ),
-    m_aLastPB(this, SW_RES(        PB_LAST    ) ),
-    m_ExcludeCB(this, SW_RES(      CB_EXCLUDE    ) ),
-    m_aNoteHeaderFL(this, SW_RES(  FL_NOTEHEADER ) ),
-    m_aEditFI(this, SW_RES(        FI_EDIT       ) ),
-    m_aEditPB(this, SW_RES(        PB_EDIT       ) ),
-    m_pWizard(_pParent)
+SwMailMergePrepareMergePage::SwMailMergePrepareMergePage( SwMailMergeWizard* _pParent)
+    : svt::OWizardPage(_pParent, "MMPreparePage", "modules/swriter/ui/mmpreparepage.ui")
+    , m_pWizard(_pParent)
 {
-    FreeResource();
-    m_aEditPB.SetClickHdl( LINK( this, SwMailMergePrepareMergePage, EditDocumentHdl_Impl));
-    Link aMoveLink(LINK( this, SwMailMergePrepareMergePage, MoveHdl_Impl));
-    m_aFirstPB.SetClickHdl( aMoveLink );
-    m_aPrevPB.SetClickHdl( aMoveLink );
-    m_aNextPB.SetClickHdl( aMoveLink );
-    m_aLastPB.SetClickHdl( aMoveLink );
-    m_aRecordED.SetActionHdl( aMoveLink );
-    m_ExcludeCB.SetClickHdl(LINK(this, SwMailMergePrepareMergePage, ExcludeHdl_Impl));
-    aMoveLink.Call(&m_aRecordED);
-}
+    get(m_pFirstPB, "first");
+    get(m_pPrevPB, "prev");
+    get(m_pRecordED, "record-nospin");
+    get(m_pNextPB, "next");
+    get(m_pLastPB, "last");
+    get(m_pExcludeCB, "exclude");
+    get(m_pEditPB, "edit");
 
-SwMailMergePrepareMergePage::~SwMailMergePrepareMergePage()
-{
+    m_pEditPB->SetClickHdl( LINK( this, SwMailMergePrepareMergePage, EditDocumentHdl_Impl));
+    Link aMoveLink(LINK( this, SwMailMergePrepareMergePage, MoveHdl_Impl));
+    m_pFirstPB->SetClickHdl( aMoveLink );
+    m_pPrevPB->SetClickHdl( aMoveLink );
+    m_pNextPB->SetClickHdl( aMoveLink );
+    m_pLastPB->SetClickHdl( aMoveLink );
+    m_pRecordED->SetModifyHdl( aMoveLink );
+    m_pExcludeCB->SetClickHdl(LINK(this, SwMailMergePrepareMergePage, ExcludeHdl_Impl));
+    aMoveLink.Call(m_pRecordED);
 }
 
 IMPL_LINK_NOARG(SwMailMergePrepareMergePage, EditDocumentHdl_Impl)
@@ -78,35 +67,36 @@ IMPL_LINK_NOARG(SwMailMergePrepareMergePage, EditDocumentHdl_Impl)
 
 IMPL_LINK( SwMailMergePrepareMergePage, MoveHdl_Impl, void*, pCtrl)
 {
+    fprintf(stderr, "move\n");
     SwMailMergeConfigItem& rConfigItem = m_pWizard->GetConfigItem();
     sal_Int32 nPos = rConfigItem.GetResultSetPosition();
-    if(pCtrl == &m_aFirstPB)
+    if (pCtrl == m_pFirstPB)
     {
         rConfigItem.MoveResultSet(1);
     }
-    else if(pCtrl == &m_aPrevPB)
+    else if (pCtrl == m_pPrevPB)
     {
         rConfigItem.MoveResultSet(nPos - 1);
     }
-    else if(pCtrl == &m_aRecordED)
+    else if (pCtrl == m_pRecordED)
     {
-        rConfigItem.MoveResultSet( static_cast< sal_Int32 >(m_aRecordED.GetValue()) );
+        rConfigItem.MoveResultSet( static_cast< sal_Int32 >(m_pRecordED->GetValue()) );
     }
-    else if(pCtrl == &m_aNextPB)
+    else if (pCtrl == m_pNextPB)
         rConfigItem.MoveResultSet(nPos + 1);
-    else if(pCtrl == &m_aLastPB)
+    else if (pCtrl == m_pLastPB)
         rConfigItem.MoveResultSet(-1);
 
     nPos = rConfigItem.GetResultSetPosition();
-    m_aRecordED.SetValue(nPos);
+    m_pRecordED->SetValue(nPos);
     bool bIsFirst;
     bool bIsLast;
     bool bValid = rConfigItem.IsResultSetFirstLast(bIsFirst, bIsLast);
-    m_aFirstPB.Enable(bValid && !bIsFirst);
-    m_aPrevPB.Enable(bValid && !bIsFirst);
-    m_aNextPB.Enable(bValid && !bIsLast);
-    m_aLastPB.Enable(bValid && !bIsLast);
-    m_ExcludeCB.Check(rConfigItem.IsRecordExcluded( rConfigItem.GetResultSetPosition() ));
+    m_pFirstPB->Enable(bValid && !bIsFirst);
+    m_pPrevPB->Enable(bValid && !bIsFirst);
+    m_pNextPB->Enable(bValid && !bIsLast);
+    m_pLastPB->Enable(bValid && !bIsLast);
+    m_pExcludeCB->Check(rConfigItem.IsRecordExcluded( rConfigItem.GetResultSetPosition() ));
     //now the record has to be merged into the source document
     const SwDBData& rDBData = rConfigItem.GetCurrentDBData();
 
@@ -144,7 +134,7 @@ IMPL_LINK( SwMailMergePrepareMergePage, ExcludeHdl_Impl, CheckBox*, pBox)
 
 void  SwMailMergePrepareMergePage::ActivatePage()
 {
-    MoveHdl_Impl(&m_aRecordED);
+    MoveHdl_Impl(m_pRecordED);
 }
 
 /*-------------------------------------------------------------------------

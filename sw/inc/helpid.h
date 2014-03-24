@@ -364,7 +364,6 @@
 #define HID_PRINT_AS_MERGE                                      "SW_HID_PRINT_AS_MERGE"
 #define HID_MODULE_TOOLBOX                                      "SW_HID_MODULE_TOOLBOX"
 
-#define HID_MM_PREPAREMERGEPAGE                                 "SW_HID_MM_PREPAREMERGEPAGE"
 #define HID_MM_MERGEPAGE                                        "SW_HID_MM_MERGEPAGE"
 #define HID_MM_OUTPUTPAGE                                       "SW_HID_MM_OUTPUTPAGE"
 #define HID_MM_SELECTDBTABLEDDIALOG                             "SW_HID_MM_SELECTDBTABLEDDIALOG"
