@@ -13,6 +13,7 @@ $(eval $(call gb_UnpackedTarball_set_tarball,libetonyek,$(ETONYEK_TARBALL)))
 
 $(eval $(call gb_UnpackedTarball_add_patches,libetonyek,\
 	external/libetonyek/0001-Comma-at-the-end-of-emum-list.patch.1 \
+	external/libetonyek/libetonyek-0.0.3-lexical_cast.patch \
 ))
 
 # vim: set noet sw=4 ts=4:

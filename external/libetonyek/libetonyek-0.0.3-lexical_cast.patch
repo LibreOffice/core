@@ -1,0 +1,56 @@
+--- a/libetonyek-0.0.3/src/lib/KEY2ParserUtils.cpp	2013-12-01 21:44:51.000000000 +0100
++++ b/libetonyek-0.0.3/src/lib/KEY2ParserUtils.cpp	2013-12-15 06:53:07.474721349 +0100
+@@ -125,7 +125,7 @@
+   return KEYSize(size.second, size.first);
+ }
+ 
+-bool KEY2ParserUtils::bool_cast(const char *const value)
++bool KEY2ParserUtils::bool_cast(const char *value)
+ {
+   KEY2Tokenizer tok;
+   switch (tok(value))
+@@ -142,6 +142,16 @@
+   return false;
+ }
+ 
++double KEY2ParserUtils::double_cast(const char *value)
++{
++  return lexical_cast<double, const char *>(value);
++}
++
++int KEY2ParserUtils::int_cast(const char *value)
++{
++  return lexical_cast<int, const char *>(value);
++}
++
+ double KEY2ParserUtils::deg2rad(double value)
+ {
+   // normalize range
+--- a/libetonyek-0.0.3/src/lib/KEY2ParserUtils.h	2013-10-30 22:04:38.000000000 +0100
++++ b/libetonyek-0.0.3/src/lib/KEY2ParserUtils.h	2013-12-15 06:50:40.296884951 +0100
+@@ -81,6 +81,8 @@
+     * @returns the boolean value of the string
+     */
+   static bool bool_cast(const char *value);
++  static double double_cast(const char *value);
++  static int int_cast(const char *value);
+ 
+   static double deg2rad(double value);
+ 
+--- a/libetonyek-0.0.3/src/lib/KEY2StyleParser.cpp	2013-12-06 10:36:13.000000000 +0100
++++ b/libetonyek-0.0.3/src/lib/KEY2StyleParser.cpp	2013-12-15 06:53:45.353451061 +0100
+@@ -62,12 +62,12 @@
+ 
+ optional<double> readDouble(const KEYXMLReader &reader)
+ {
+-  return readNumber<double>(reader, KEY2Token::f, &lexical_cast<double, const char *>);
++  return readNumber<double>(reader, KEY2Token::f, &KEY2ParserUtils::double_cast);
+ }
+ 
+ optional<int> readInt(const KEYXMLReader &reader)
+ {
+-  return readNumber<int>(reader, KEY2Token::i, &lexical_cast<int, const char *>);
++  return readNumber<int>(reader, KEY2Token::i, &KEY2ParserUtils::double_cast);
+ }
+ 
+ optional<KEYColor> readColor(const KEYXMLReader &reader)
