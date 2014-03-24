@@ -952,7 +952,7 @@ String STR_DragMethDistort
 };
 String STR_DragMethCrop
 {
-    Text [ en-US ] = "Crop %O" ;
+    Text [ en-US ] = "Crop %1" ;
 };
 
 String STR_DragRectEckRad
