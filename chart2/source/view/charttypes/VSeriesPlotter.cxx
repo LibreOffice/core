@@ -51,7 +51,7 @@
 #include "CandleStickChart.hxx"
 #include "BubbleChart.hxx"
 #include "NetChart.hxx"
-
+#include "GL3DBarChart.hxx"
 
 #include <com/sun/star/chart/ErrorBarStyle.hpp>
 #include <com/sun/star/chart/TimeUnit.hpp>
@@ -250,6 +250,9 @@ void VSeriesPlotter::addSeries( VDataSeries* pSeries, sal_Int32 zSlot, sal_Int32
 drawing::Direction3D VSeriesPlotter::getPreferredDiagramAspectRatio() const
 {
     drawing::Direction3D aRet(1.0,1.0,1.0);
+    if (!m_pPosHelper)
+        return aRet;
+
     drawing::Direction3D aScale( m_pPosHelper->getScaledLogicWidth() );
     aRet.DirectionZ = aScale.DirectionZ*0.2;
     if(aRet.DirectionZ>1.0)
@@ -803,6 +806,9 @@ void VSeriesPlotter::createErrorBar(
         if(nErrorBarStyle==::com::sun::star::chart::ErrorBarStyle::NONE)
             return;
 
+        if (!m_pPosHelper)
+            return;
+
         drawing::Position3D aUnscaledLogicPosition(rUnscaledLogicPosition);
         if(nErrorBarStyle==::com::sun::star::chart::ErrorBarStyle::STANDARD_DEVIATION)
         {
@@ -965,6 +971,9 @@ void VSeriesPlotter::createRegressionCurvesShapes( VDataSeries& rVDataSeries,
         return;
     uno::Reference< XRegressionCurveContainer > xContainer( rVDataSeries.getModel(), uno::UNO_QUERY );
     if(!xContainer.is())
+        return;
+
+    if (!m_pPosHelper)
         return;
 
     uno::Sequence< uno::Reference< XRegressionCurve > > aCurveList = xContainer->getRegressionCurves();
@@ -1882,7 +1891,7 @@ PlottingPositionHelper& VSeriesPlotter::getPlottingPositionHelper( sal_Int32 nAx
         {
             pRet = aPosIt->second;
         }
-        else
+        else if (m_pPosHelper)
         {
             tSecondaryValueScales::const_iterator aScaleIt = m_aSecondaryValueScales.find( nAxisIndex );
             if( aScaleIt != m_aSecondaryValueScales.end() )
@@ -2434,6 +2443,8 @@ VSeriesPlotter* VSeriesPlotter::createSeriesPlotter(
         pRet = new AreaChart(xChartTypeModel,nDimensionCount,false,true);
     else if( aChartType.equalsIgnoreAsciiCase(CHART2_SERVICE_NAME_CHARTTYPE_BUBBLE) )
         pRet = new BubbleChart(xChartTypeModel,nDimensionCount);
+    else if (aChartType.equalsIgnoreAsciiCase(CHART2_SERVICE_NAME_CHARTTYPE_GL3DBAR))
+        pRet = new GL3DBarChart(xChartTypeModel);
     else if( aChartType.equalsIgnoreAsciiCase(CHART2_SERVICE_NAME_CHARTTYPE_PIE) )
         pRet = new PieChart(xChartTypeModel,nDimensionCount, bExcludingPositioning );
     else if( aChartType.equalsIgnoreAsciiCase(CHART2_SERVICE_NAME_CHARTTYPE_NET) )

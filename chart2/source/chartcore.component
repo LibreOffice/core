@@ -101,6 +101,10 @@
     <service name="com.sun.star.chart2.BubbleChartType"/>
     <service name="com.sun.star.chart2.ChartType"/>
   </implementation>
+  <implementation name="com.sun.star.comp.chart.GL3DBarChartType">
+    <service name="com.sun.star.chart2.GL3DBarChartType"/>
+    <service name="com.sun.star.chart2.ChartType"/>
+  </implementation>
   <implementation name="com.sun.star.comp.chart.CandleStickChartType">
     <service name="com.sun.star.beans.PropertySet"/>
     <service name="com.sun.star.chart2.CandleStickChartType"/>

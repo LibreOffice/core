@@ -22,7 +22,7 @@ namespace chart {
 class GL3DBarChartType : public ChartType
 {
 public:
-    GL3DBarChartType( const com::sun::star::uno::Reference<com::sun::star::uno::XComponentContext>& xContext );
+    GL3DBarChartType( const css::uno::Reference<css::uno::XComponentContext>& xContext );
     virtual ~GL3DBarChartType();
 
     APPHELPER_XSERVICEINFO_DECL()

@@ -20,6 +20,8 @@ namespace chart {
 class GL3DBarChartTypeTemplate : public ChartTypeTemplate
 {
 public:
+    APPHELPER_XSERVICEINFO_DECL()
+
     GL3DBarChartTypeTemplate(
         const css::uno::Reference<
             css::uno::XComponentContext>& xContext,

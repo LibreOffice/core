@@ -60,12 +60,18 @@ PlotterBase::~PlotterBase()
 
 void PlotterBase::setScales( const std::vector< ExplicitScaleData >& rScales, bool bSwapXAndYAxis )
 {
+    if (!m_pPosHelper)
+        return;
+
     OSL_PRECOND(m_nDimension<=static_cast<sal_Int32>(rScales.size()),"Dimension of Plotter does not fit two dimension of given scale sequence");
     m_pPosHelper->setScales( rScales, bSwapXAndYAxis );
 }
 
 void PlotterBase::setTransformationSceneToScreen( const drawing::HomogenMatrix& rMatrix)
 {
+    if (!m_pPosHelper)
+        return;
+
     OSL_PRECOND(m_nDimension==2,"Set this transformation only in case of 2D");
     if(m_nDimension!=2)
         return;

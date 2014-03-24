@@ -15,7 +15,14 @@ using namespace com::sun::star;
 namespace chart {
 
 GL3DBarChartType::GL3DBarChartType( const uno::Reference<uno::XComponentContext>& xContext ) :
-    ChartType(xContext) {}
+    ChartType(xContext)
+{
+}
+
+GL3DBarChartType::GL3DBarChartType( const GL3DBarChartType& rOther ) :
+    ChartType(rOther)
+{
+}
 
 GL3DBarChartType::~GL3DBarChartType() {}
 
@@ -29,9 +36,6 @@ uno::Sequence<OUString> GL3DBarChartType::getSupportedServiceNames_Static()
     aServices[1] = "com.sun.star.chart2.ChartType";
     return aServices;
 }
-
-GL3DBarChartType::GL3DBarChartType( const GL3DBarChartType& rOther ) :
-    ChartType(rOther) {}
 
 OUString SAL_CALL GL3DBarChartType::getChartType()
         throw (::com::sun::star::uno::RuntimeException, std::exception)

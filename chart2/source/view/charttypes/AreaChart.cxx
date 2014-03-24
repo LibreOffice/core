@@ -136,7 +136,7 @@ drawing::Direction3D AreaChart::getPreferredDiagramAspectRatio() const
     drawing::Direction3D aRet(1,-1,1);
     if( m_nDimension == 2 )
         aRet = drawing::Direction3D(-1,-1,-1);
-    else
+    else if (m_pPosHelper)
     {
         drawing::Direction3D aScale( m_pPosHelper->getScaledLogicWidth() );
         aRet.DirectionZ = aScale.DirectionZ*0.2;
