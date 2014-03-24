@@ -349,24 +349,24 @@ private:
     long            mnOffY;
     long            mnLastOffX;
     long            mnSplitSize;
-    sal_uLong           mnSwitchTime;
+    sal_uLong       mnSwitchTime;
     WinBits         mnWinStyle;
-    sal_uInt16          mnCurPageId;
-    sal_uInt16          mnFirstPos;
-    sal_uInt16          mnDropPos;
-    sal_uInt16          mnSwitchId;
-    sal_uInt16          mnEditId;
-    sal_Bool            mbFormat;
-    sal_Bool            mbFirstFormat;
-    sal_Bool            mbSizeFormat;
-    sal_Bool            mbAutoMaxWidth;
-    sal_Bool            mbInSwitching;
-    sal_Bool            mbAutoEditMode;
-    sal_Bool            mbEditCanceled;
-    sal_Bool            mbDropPos;
-    sal_Bool            mbInSelect;
-    sal_Bool            mbSelColor;
-    sal_Bool            mbSelTextColor;
+    sal_uInt16      mnCurPageId;
+    sal_uInt16      mnFirstPos;
+    sal_uInt16      mnDropPos;
+    sal_uInt16      mnSwitchId;
+    sal_uInt16      mnEditId;
+    bool            mbFormat;
+    bool            mbFirstFormat;
+    bool            mbSizeFormat;
+    bool            mbAutoMaxWidth;
+    bool            mbInSwitching;
+    bool            mbAutoEditMode;
+    bool            mbEditCanceled;
+    bool            mbDropPos;
+    bool            mbInSelect;
+    bool            mbSelColor;
+    bool            mbSelTextColor;
     bool            mbMirrored;
     bool            mbHasInsertTab; // if true, the tab bar has an extra tab at the end.
     bool            mbScrollAlwaysEnabled;
@@ -383,18 +383,18 @@ private:
 
     using Window::ImplInit;
     SVT_DLLPRIVATE void            ImplInit( WinBits nWinStyle );
-    SVT_DLLPRIVATE void            ImplInitSettings( sal_Bool bFont, sal_Bool bBackground );
+    SVT_DLLPRIVATE void            ImplInitSettings( bool bFont, bool bBackground );
     SVT_DLLPRIVATE void            ImplGetColors( Color& rFaceColor, Color& rFaceTextColor,
                                    Color& rSelectColor, Color& rSelectTextColor );
     SVT_DLLPRIVATE void            ImplShowPage( sal_uInt16 nPos );
-    SVT_DLLPRIVATE sal_Bool            ImplCalcWidth();
+    SVT_DLLPRIVATE bool            ImplCalcWidth();
     SVT_DLLPRIVATE void            ImplFormat();
-    SVT_DLLPRIVATE sal_uInt16          ImplGetLastFirstPos();
+    SVT_DLLPRIVATE sal_uInt16      ImplGetLastFirstPos();
     SVT_DLLPRIVATE void            ImplInitControls();
     SVT_DLLPRIVATE void            ImplEnableControls();
-    SVT_DLLPRIVATE void         ImplSelect();
-    SVT_DLLPRIVATE void         ImplActivatePage();
-    SVT_DLLPRIVATE long         ImplDeactivatePage();
+    SVT_DLLPRIVATE void            ImplSelect();
+    SVT_DLLPRIVATE void            ImplActivatePage();
+    SVT_DLLPRIVATE long            ImplDeactivatePage();
     SVT_DLLPRIVATE void            ImplPrePaint();
     SVT_DLLPRIVATE ImplTabBarItem* ImplGetLastTabBarItem( sal_uInt16 nItemCount );
     SVT_DLLPRIVATE Rectangle       ImplGetInsertTabRect(ImplTabBarItem* pItem) const;
@@ -439,50 +439,50 @@ public:
 
     Color           GetTabBgColor( sal_uInt16 nPageId ) const;
     void            SetTabBgColor( sal_uInt16 nPageId, const Color& aTabBgColor );
-    sal_Bool        IsDefaultTabBgColor( sal_uInt16 nPageId );
+    bool            IsDefaultTabBgColor( sal_uInt16 nPageId );
 
     void            Clear();
 
-    sal_Bool            IsPageEnabled( sal_uInt16 nPageId ) const;
+    bool            IsPageEnabled( sal_uInt16 nPageId ) const;
 
     void            SetPageBits( sal_uInt16 nPageId, TabBarPageBits nBits = 0 );
     TabBarPageBits  GetPageBits( sal_uInt16 nPageId ) const;
 
-    sal_uInt16          GetPageCount() const;
-    sal_uInt16          GetPageId( sal_uInt16 nPos ) const;
-    sal_uInt16          GetPagePos( sal_uInt16 nPageId ) const;
-    sal_uInt16          GetPageId( const Point& rPos, bool bCheckInsTab = false ) const;
+    sal_uInt16      GetPageCount() const;
+    sal_uInt16      GetPageId( sal_uInt16 nPos ) const;
+    sal_uInt16      GetPagePos( sal_uInt16 nPageId ) const;
+    sal_uInt16      GetPageId( const Point& rPos, bool bCheckInsTab = false ) const;
     Rectangle       GetPageRect( sal_uInt16 nPageId ) const;
     // returns the rectangle in which page tabs are drawn
     Rectangle       GetPageArea() const;
 
     void            SetCurPageId( sal_uInt16 nPageId );
-    sal_uInt16          GetCurPageId() const { return mnCurPageId; }
+    sal_uInt16      GetCurPageId() const { return mnCurPageId; }
 
     void            SetFirstPageId( sal_uInt16 nPageId );
-    sal_uInt16          GetFirstPageId() const { return GetPageId( mnFirstPos ); }
+    sal_uInt16      GetFirstPageId() const { return GetPageId( mnFirstPos ); }
     void            MakeVisible( sal_uInt16 nPageId );
 
-    void            SelectPage( sal_uInt16 nPageId, sal_Bool bSelect = sal_True );
-    sal_uInt16          GetSelectPageCount() const;
-    sal_Bool            IsPageSelected( sal_uInt16 nPageId ) const;
+    void            SelectPage( sal_uInt16 nPageId, bool bSelect = true );
+    sal_uInt16      GetSelectPageCount() const;
+    bool            IsPageSelected( sal_uInt16 nPageId ) const;
 
-    void            EnableAutoMaxPageWidth( sal_Bool bEnable = sal_True ) { mbAutoMaxWidth = bEnable; }
-    sal_Bool            IsAutoMaxPageWidthEnabled() const { return mbAutoMaxWidth; }
+    void            EnableAutoMaxPageWidth( bool bEnable = true ) { mbAutoMaxWidth = bEnable; }
+    bool            IsAutoMaxPageWidthEnabled() const { return mbAutoMaxWidth; }
     void            SetMaxPageWidth( long nMaxWidth );
     long            GetMaxPageWidth() const { return mnMaxPageWidth; }
     void            ResetMaxPageWidth() { SetMaxPageWidth( 0 ); }
-    sal_Bool            IsMaxPageWidth() const { return mnMaxPageWidth != 0; }
+    bool            IsMaxPageWidth() const { return mnMaxPageWidth != 0; }
 
-    void            EnableEditMode( sal_Bool bEnable = sal_True ) { mbAutoEditMode = bEnable; }
-    sal_Bool            IsEditModeEnabled() const { return mbAutoEditMode; }
-    sal_Bool            StartEditMode( sal_uInt16 nPageId );
-    void            EndEditMode( sal_Bool bCancel = sal_False );
+    void            EnableEditMode( bool bEnable = true ) { mbAutoEditMode = bEnable; }
+    bool            IsEditModeEnabled() const { return mbAutoEditMode; }
+    bool            StartEditMode( sal_uInt16 nPageId );
+    void            EndEditMode( bool bCancel = false );
     void            SetEditText( const OUString& rText ) { maEditText = rText; }
     const OUString& GetEditText() const { return maEditText; }
-    sal_Bool            IsInEditMode() const { return (mpEdit != NULL); }
-    sal_Bool            IsEditModeCanceled() const { return mbEditCanceled; }
-    sal_uInt16          GetEditPageId() const { return mnEditId; }
+    bool            IsInEditMode() const { return (mpEdit != NULL); }
+    bool            IsEditModeCanceled() const { return mbEditCanceled; }
+    sal_uInt16      GetEditPageId() const { return mnEditId; }
 
     /** Mirrors the entire control including position of buttons and splitter.
         Mirroring is done relative to the current direction of the GUI.
@@ -500,17 +500,17 @@ public:
     /** Returns true, if the control draws from right to left (see SetEffectiveRTL()). */
     bool            IsEffectiveRTL() const;
 
-    sal_Bool            StartDrag( const CommandEvent& rCEvt, Region& rRegion );
-    sal_uInt16          ShowDropPos( const Point& rPos );
+    bool            StartDrag( const CommandEvent& rCEvt, Region& rRegion );
+    sal_uInt16      ShowDropPos( const Point& rPos );
     void            HideDropPos();
-    sal_Bool            SwitchPage( const Point& rPos );
+    bool            SwitchPage( const Point& rPos );
     void            EndSwitchPage();
-    sal_Bool            IsInSwitching() { return mbInSwitching; }
+    bool            IsInSwitching() { return mbInSwitching; }
 
     const Color&    GetSelectColor() const { return maSelColor; }
-    sal_Bool            IsSelectColor() const { return mbSelColor; }
+    bool            IsSelectColor() const { return mbSelColor; }
     const Color&    GetSelectTextColor() const { return maSelTextColor; }
-    sal_Bool            IsSelectTextColor() const { return mbSelTextColor; }
+    bool            IsSelectTextColor() const { return mbSelTextColor; }
 
     void            SetPageText( sal_uInt16 nPageId, const OUString& rText );
     OUString        GetPageText( sal_uInt16 nPageId ) const;

@@ -73,7 +73,7 @@ public:
 
 private:
     SVT_DLLPRIVATE void InitImpl( );
-    SVT_DLLPRIVATE sal_Bool CanEnableEditBtn() const;
+    SVT_DLLPRIVATE bool CanEnableEditBtn() const;
 };
 
 #endif // INCLUDED_SVTOOLS_TEMPLDLG_HXX

@@ -1510,9 +1510,9 @@ SvtDocumentTemplateDialog::~SvtDocumentTemplateDialog()
 
 
 
-sal_Bool SvtDocumentTemplateDialog::CanEnableEditBtn() const
+bool SvtDocumentTemplateDialog::CanEnableEditBtn() const
 {
-    sal_Bool bEnable = sal_False;
+    bool bEnable = false;
 
     OUString aFolderURL = pImpl->pWin->GetFolderURL();
     if ( pImpl->pWin->IsFileSelected() && !aFolderURL.isEmpty() )

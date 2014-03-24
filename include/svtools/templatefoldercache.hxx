@@ -71,7 +71,7 @@ namespace svt
             If the current state is not known (e.g. because you did not call needsUpdate, which retrieves it),
             it is not retrieved in the dtor, regardless of the <arg>_bAutoStoreState</arg> flag.
         */
-        TemplateFolderCache( sal_Bool _bAutoStoreState = sal_False );
+        TemplateFolderCache( bool _bAutoStoreState = false );
         ~TemplateFolderCache( );
 
         /** determines whether or not the template configuration needs to be updated
@@ -82,7 +82,7 @@ namespace svt
         @return
             <TRUE/> if the template configuration needs to be updated
         */
-        sal_Bool    needsUpdate( sal_Bool _bForceCheck = sal_False );
+        bool    needsUpdate( bool _bForceCheck = false );
 
         /** stores the current state of the template folders in the cache
         @param _bForceRetrieval
@@ -90,7 +90,7 @@ namespace svt
             Usually, you set this to <FALSE/>: After calling <method>needsUpdate</method>, the state is know and does not
             need to be read again.
         */
-        void        storeState( sal_Bool _bForceRetrieval = sal_False );
+        void        storeState( bool _bForceRetrieval = false );
     };
 
 

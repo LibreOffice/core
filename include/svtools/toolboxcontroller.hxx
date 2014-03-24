@@ -59,7 +59,7 @@ class SVT_DLLPUBLIC ToolboxController :
                           public ::comphelper::OPropertyArrayUsageHelper< ToolboxController >
 {
     private:
-        sal_Bool  m_bSupportVisible;
+        bool  m_bSupportVisible;
     public:
         ToolboxController( const com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >& rxContext,
                            const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& xFrame,
@@ -124,7 +124,7 @@ class SVT_DLLPUBLIC ToolboxController :
 
     protected:
         bool getToolboxId( sal_uInt16& rItemId, ToolBox** ppToolBox );
-        void setSupportVisibleProperty(sal_Bool bValue);
+        void setSupportVisibleProperty(bool bValue);
         struct Listener
         {
             Listener( const ::com::sun::star::util::URL& rURL, const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatch >& rDispatch ) :
@@ -161,13 +161,13 @@ class SVT_DLLPUBLIC ToolboxController :
         void removeStatusListener( const OUString& aCommandURL );
         void bindListener();
         void unbindListener();
-        sal_Bool isBound() const;
+        bool isBound() const;
         // TODO remove
         ::com::sun::star::uno::Reference< ::com::sun::star::util::XURLTransformer > getURLTransformer() const;
         // TODO remove
         ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow > getParent() const;
 
-        sal_Bool                                                                            m_bInitialized : 1,
+        bool                                                                                m_bInitialized : 1,
                                                                                             m_bDisposed : 1;
         sal_uInt16                                                                          m_nToolBoxId;
         ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >                 m_xFrame;

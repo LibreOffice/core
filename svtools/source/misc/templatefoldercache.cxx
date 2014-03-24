@@ -89,7 +89,7 @@ namespace svt
     }
 
 
-    sal_Bool operator == ( const util::DateTime& _rLHS, const util::DateTime& _rRHS )
+    bool operator == ( const util::DateTime& _rLHS, const util::DateTime& _rRHS )
     {
         return  _rLHS.NanoSeconds == _rRHS.NanoSeconds
             &&  _rLHS.Seconds   == _rRHS.Seconds
@@ -102,7 +102,7 @@ namespace svt
     }
 
 
-    sal_Bool operator != ( const util::DateTime& _rLHS, const util::DateTime& _rRHS )
+    bool operator != ( const util::DateTime& _rLHS, const util::DateTime& _rRHS )
     {
         return !( _rLHS == _rRHS );
     }
@@ -449,48 +449,48 @@ namespace svt
         uno::Reference< util::XOfficeInstallationDirectories > m_xOfficeInstDirs;
 
         SvStream*                       m_pCacheStream;
-        sal_Bool                        m_bNeedsUpdate : 1;
-        sal_Bool                        m_bKnowState : 1;
-        sal_Bool                        m_bValidCurrentState : 1;
-        sal_Bool                        m_bAutoStoreState : 1;
+        bool                            m_bNeedsUpdate : 1;
+        bool                            m_bKnowState : 1;
+        bool                            m_bValidCurrentState : 1;
+        bool                            m_bAutoStoreState : 1;
 
     public:
-        TemplateFolderCacheImpl( sal_Bool _bAutoStoreState );
+        TemplateFolderCacheImpl( bool _bAutoStoreState );
         ~TemplateFolderCacheImpl( );
 
-        sal_Bool    needsUpdate( sal_Bool _bForceCheck );
-        void        storeState( sal_Bool _bForceRetrieval );
+        bool        needsUpdate( bool _bForceCheck );
+        void        storeState( bool _bForceRetrieval );
 
     private:
-        sal_Bool    openCacheStream( sal_Bool _bForRead );
+        bool        openCacheStream( bool _bForRead );
         void        closeCacheStream( );
 
         /// read the state of the dirs from the cache file
-        sal_Bool    readPreviousState();
+        bool        readPreviousState();
         /// read the current state of the dirs
-        sal_Bool    readCurrentState();
+        bool        readCurrentState();
 
         OUString    implParseSmart( const OUString& _rPath );
 
-        sal_Bool    implReadFolder( const ::rtl::Reference< TemplateContent >& _rxRoot );
+        bool        implReadFolder( const ::rtl::Reference< TemplateContent >& _rxRoot );
 
         static  OUString getCacheFileName();
         static  sal_Int32   getMagicNumber();
         static  void        normalize( TemplateFolderContent& _rState );
 
         // @return <TRUE/> if the states equal
-        static  sal_Bool    equalStates( const TemplateFolderContent& _rLHS, const TemplateFolderContent& _rRHS );
+        static  bool        equalStates( const TemplateFolderContent& _rLHS, const TemplateFolderContent& _rRHS );
 
         // late initialize m_xOfficeInstDirs
         uno::Reference< util::XOfficeInstallationDirectories > getOfficeInstDirs();
     };
 
 
-    TemplateFolderCacheImpl::TemplateFolderCacheImpl( sal_Bool _bAutoStoreState )
+    TemplateFolderCacheImpl::TemplateFolderCacheImpl( bool _bAutoStoreState )
         :m_pCacheStream         ( NULL )
-        ,m_bNeedsUpdate         ( sal_True )
-        ,m_bKnowState           ( sal_False )
-        ,m_bValidCurrentState   ( sal_False )
+        ,m_bNeedsUpdate         ( true )
+        ,m_bKnowState           ( false )
+        ,m_bValidCurrentState   ( false )
         ,m_bAutoStoreState      ( _bAutoStoreState )
     {
     }
@@ -500,7 +500,7 @@ namespace svt
     {
         // store the current state if possible and required
         if ( m_bValidCurrentState && m_bAutoStoreState )
-            storeState( sal_False );
+            storeState( false );
 
         closeCacheStream( );
     }
@@ -530,10 +530,10 @@ namespace svt
     }
 
 
-    sal_Bool TemplateFolderCacheImpl::equalStates( const TemplateFolderContent& _rLHS, const TemplateFolderContent& _rRHS )
+    bool TemplateFolderCacheImpl::equalStates( const TemplateFolderContent& _rLHS, const TemplateFolderContent& _rRHS )
     {
         if ( _rLHS.size() != _rRHS.size() )
-            return sal_False;
+            return false;
 
         // as both arrays are sorted (by definition - this is a precondition of this method)
         // we can simply go from the front to the back and compare the single elements
@@ -549,12 +549,12 @@ namespace svt
     }
 
 
-    void TemplateFolderCacheImpl::storeState( sal_Bool _bForceRetrieval )
+    void TemplateFolderCacheImpl::storeState( bool _bForceRetrieval )
     {
         if ( !m_bValidCurrentState || _bForceRetrieval )
             readCurrentState( );
 
-        if ( m_bValidCurrentState && openCacheStream( sal_False ) )
+        if ( m_bValidCurrentState && openCacheStream( false ) )
         {
             m_pCacheStream->WriteInt32( getMagicNumber() );
 
@@ -599,7 +599,7 @@ namespace svt
     }
 
 
-    sal_Bool TemplateFolderCacheImpl::implReadFolder( const ::rtl::Reference< TemplateContent >& _rxRoot )
+    bool TemplateFolderCacheImpl::implReadFolder( const ::rtl::Reference< TemplateContent >& _rxRoot )
     {
         try
         {
@@ -624,7 +624,7 @@ namespace svt
             catch( CommandAbortedException& )
             {
                 SAL_WARN( "svtools.misc", "TemplateFolderCacheImpl::implReadFolder: caught a CommandAbortedException!" );
-                return sal_False;
+                return false;
             }
             catch( ::com::sun::star::uno::Exception& )
             {
@@ -664,16 +664,16 @@ namespace svt
         catch( const Exception& )
         {
             OSL_FAIL( "TemplateFolderCacheImpl::implReadFolder: caught an exception!" );
-            return sal_False;
+            return false;
         }
-        return sal_True;
+        return true;
     }
 
 
-    sal_Bool TemplateFolderCacheImpl::readCurrentState()
+    bool TemplateFolderCacheImpl::readCurrentState()
     {
         // reset
-        m_bValidCurrentState = sal_False;
+        m_bValidCurrentState = false;
         TemplateFolderContent aTemplateFolderContent;
         m_aCurrentState.swap( aTemplateFolderContent );
 
@@ -704,19 +704,19 @@ namespace svt
             --aCurrentRoot;
 
             if ( !implReadFolder( *aCurrentRoot ) )
-                return sal_False;
+                return false;
         }
         while ( nIndex >= 0 );
 
         // normalize the array (which basically means "sort it")
         normalize( m_aCurrentState );
 
-        m_bValidCurrentState = sal_True;
+        m_bValidCurrentState = true;
         return m_bValidCurrentState;
     }
 
 
-    sal_Bool TemplateFolderCacheImpl::readPreviousState()
+    bool TemplateFolderCacheImpl::readPreviousState()
     {
         DBG_ASSERT( m_pCacheStream, "TemplateFolderCacheImpl::readPreviousState: not to be called without stream!" );
 
@@ -729,7 +729,7 @@ namespace svt
         m_pCacheStream->ReadInt32( nMagic );
         DBG_ASSERT( getMagicNumber() == nMagic, "TemplateFolderCacheImpl::readPreviousState: invalid cache file!" );
         if ( getMagicNumber() != nMagic )
-            return sal_False;
+            return false;
 
         // the root directories
         // their number
@@ -759,11 +759,11 @@ namespace svt
         // normalize the array (which basically means "sort it")
         normalize( m_aPreviousState );
 
-        return sal_True;
+        return true;
     }
 
 
-    sal_Bool TemplateFolderCacheImpl::openCacheStream( sal_Bool _bForRead )
+    bool TemplateFolderCacheImpl::openCacheStream( bool _bForRead )
     {
         // close any old stream instance
         closeCacheStream( );
@@ -774,7 +774,7 @@ namespace svt
         if ( INET_PROT_NOT_VALID == aStorageURL.GetProtocol() )
         {
             OSL_FAIL( "TemplateFolderCacheImpl::openCacheStream: invalid storage path!" );
-            return sal_False;
+            return false;
         }
 
         // append our name
@@ -796,18 +796,18 @@ namespace svt
     }
 
 
-    sal_Bool TemplateFolderCacheImpl::needsUpdate( sal_Bool _bForceCheck )
+    bool TemplateFolderCacheImpl::needsUpdate( bool _bForceCheck )
     {
         if ( m_bKnowState && !_bForceCheck )
             return m_bNeedsUpdate;
 
-        m_bNeedsUpdate = sal_True;
-        m_bKnowState = sal_True;
+        m_bNeedsUpdate = true;
+        m_bKnowState = true;
 
         if ( readCurrentState() )
         {
             // open the stream which contains the cached state of the directories
-            if ( openCacheStream( sal_True ) )
+            if ( openCacheStream( true ) )
             {   // opening the stream succeeded
                 if ( readPreviousState() )
                 {
@@ -843,7 +843,7 @@ namespace svt
     //= TemplateFolderCache
 
 
-    TemplateFolderCache::TemplateFolderCache( sal_Bool _bAutoStoreState )
+    TemplateFolderCache::TemplateFolderCache( bool _bAutoStoreState )
         :m_pImpl( new TemplateFolderCacheImpl( _bAutoStoreState ) )
     {
     }
@@ -855,13 +855,13 @@ namespace svt
     }
 
 
-    sal_Bool TemplateFolderCache::needsUpdate( sal_Bool _bForceCheck )
+    bool TemplateFolderCache::needsUpdate( bool _bForceCheck )
     {
         return m_pImpl->needsUpdate( _bForceCheck );
     }
 
 
-    void TemplateFolderCache::storeState( sal_Bool _bForceRetrieval )
+    void TemplateFolderCache::storeState( bool _bForceRetrieval )
     {
         m_pImpl->storeState( _bForceRetrieval );
     }

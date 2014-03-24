@@ -53,12 +53,12 @@ ToolboxController::ToolboxController(
     const Reference< XComponentContext >& rxContext,
     const Reference< XFrame >& xFrame,
     const OUString& aCommandURL ) :
-    OPropertyContainer(GetBroadcastHelper())
-    ,   m_bSupportVisible(sal_False)
-    ,   m_bInitialized( sal_False )
-    ,   m_bDisposed( sal_False )
+    OPropertyContainer( GetBroadcastHelper() )
+    ,   m_bSupportVisible( false )
+    ,   m_bInitialized( false )
+    ,   m_bDisposed( false )
     ,   m_nToolBoxId( SAL_MAX_UINT16 )
-    ,   m_xFrame(xFrame)
+    ,   m_xFrame( xFrame )
     ,   m_xContext( rxContext )
     ,   m_aCommandURL( aCommandURL )
     ,   m_aListenerContainer( m_aMutex )
@@ -80,9 +80,9 @@ ToolboxController::ToolboxController(
 
 ToolboxController::ToolboxController() :
     OPropertyContainer(GetBroadcastHelper())
-    ,   m_bSupportVisible(sal_False)
-    ,   m_bInitialized( sal_False )
-    ,   m_bDisposed( sal_False )
+    ,   m_bSupportVisible(false)
+    ,   m_bInitialized( false )
+    ,   m_bDisposed( false )
     ,   m_nToolBoxId( SAL_MAX_UINT16 )
     ,   m_aListenerContainer( m_aMutex )
 {
@@ -179,8 +179,8 @@ throw ( Exception, RuntimeException, std::exception )
     if ( !bInitialized )
     {
         SolarMutexGuard aSolarMutexGuard;
-        m_bInitialized = sal_True;
-        m_bSupportVisible = sal_False;
+        m_bInitialized = true;
+        m_bSupportVisible = false;
         PropertyValue aPropValue;
         for ( int i = 0; i < aArguments.getLength(); i++ )
         {
@@ -271,7 +271,7 @@ throw (::com::sun::star::uno::RuntimeException, std::exception)
         ++pIter;
     }
 
-    m_bDisposed = sal_True;
+    m_bDisposed = true;
 }
 
 void SAL_CALL ToolboxController::addEventListener( const Reference< XEventListener >& xListener )
@@ -614,18 +614,18 @@ void ToolboxController::unbindListener()
     }
 }
 
-sal_Bool ToolboxController::isBound() const
+bool ToolboxController::isBound() const
 {
     SolarMutexGuard aSolarMutexGuard;
 
     if ( !m_bInitialized )
-        return sal_False;
+        return false;
 
     URLToDispatchMap::const_iterator pIter = m_aListenerMap.find( m_aCommandURL );
     if ( pIter != m_aListenerMap.end() )
-        return ( pIter->second.is() );
+        return pIter->second.is();
 
-    return sal_False;
+    return false;
 }
 
 void ToolboxController::updateStatus()
@@ -727,7 +727,7 @@ com::sun::star::uno::Reference< com::sun::star::beans::XPropertySetInfo >  SAL_C
         return new ::cppu::OPropertyArrayHelper(aProps);
 }
 
-void ToolboxController::setSupportVisibleProperty(sal_Bool bValue)
+void ToolboxController::setSupportVisibleProperty(bool bValue)
 {
     m_bSupportVisible = bValue;
 }
@@ -743,7 +743,7 @@ sal_Bool SAL_CALL ToolboxController::convertFastPropertyValue( com::sun::star::u
         {
             sal_Bool aNewValue(sal_False);
             aValue >>= aNewValue;
-            if (aNewValue != m_bSupportVisible)
+            if (aNewValue != (m_bSupportVisible ? 1 : 0))
             {
                 aConvertedValue <<= aNewValue;
                 aOldValue <<= m_bSupportVisible;

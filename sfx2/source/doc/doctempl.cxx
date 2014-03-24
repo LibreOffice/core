@@ -1270,7 +1270,7 @@ SfxDocumentTemplates::~SfxDocumentTemplates()
 void SfxDocumentTemplates::Update( bool _bSmart )
 {
     if  (   !_bSmart                                                // don't be smart
-        ||  ::svt::TemplateFolderCache( sal_True ).needsUpdate()    // update is really necessary
+        ||  ::svt::TemplateFolderCache( true ).needsUpdate()    // update is really necessary
         )
     {
         if ( pImp->Construct() )

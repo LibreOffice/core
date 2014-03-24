@@ -59,7 +59,7 @@ GenericToolboxController::GenericToolboxController( const Reference< XComponentC
     ,   m_nID( nID )
 {
     // Initialization is done through ctor
-    m_bInitialized = sal_True;
+    m_bInitialized = true;
 
     // insert main command to our listener map
     if ( !m_aCommandURL.isEmpty() )
