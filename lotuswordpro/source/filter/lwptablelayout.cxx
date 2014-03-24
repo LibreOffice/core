@@ -417,10 +417,14 @@ void  LwpSuperTableLayout::RegisterFrameStyle()
 }
 
 LwpTableLayout::LwpTableLayout(LwpObjectHeader &objHdr, LwpSvStream* pStrm)
-    : LwpLayout(objHdr, pStrm), m_nRows(0), m_nCols(0), m_pXFTable(NULL)
+    : LwpLayout(objHdr, pStrm)
+    , m_nRows(0)
+    , m_nCols(0)
+    , m_pDefaultCellLayout(NULL)
+    , m_pColumns(NULL)
+    , m_pXFTable(NULL)
 {
     m_CellsMap.clear();
-    m_pColumns = NULL;
 }
 
 LwpTableLayout::~LwpTableLayout()
@@ -433,6 +437,7 @@ LwpTableLayout::~LwpTableLayout()
         m_pColumns = NULL;
     }
 }
+
 /**
  * @short   Get neighbour cell by specifying ROW+COL
  * @param   nRow
