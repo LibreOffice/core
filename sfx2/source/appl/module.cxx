@@ -375,9 +375,7 @@ FieldUnit SfxModule::GetModuleFieldUnit( ::com::sun::star::uno::Reference< ::com
     // find the module
     SfxModule const * pModule = GetActiveModule( pViewFrame );
     ENSURE_OR_RETURN( pModule != NULL, "SfxModule::GetModuleFieldUnit: no SfxModule for the given frame!", FUNIT_100TH_MM );
-	if ( pModule )
-		return pModule->GetFieldUnit();
-	return FUNIT_INCH;
+    return pModule->GetFieldUnit();
 }
 
 FieldUnit SfxModule::GetCurrentFieldUnit()
