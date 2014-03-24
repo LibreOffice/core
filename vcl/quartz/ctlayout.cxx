@@ -108,20 +108,11 @@ bool CTLayout::LayoutText( ImplLayoutArgs& rArgs )
     if( mnCharCount <= 0 )
         return false;
 
-    // prepare the string to be layouted by CoreText
+    // create the CoreText line layout
     CFStringRef aCFText = CFStringCreateWithCharactersNoCopy( NULL,
                                                               rArgs.mpStr + mnMinCharPos,
                                                               mnCharCount,
                                                               kCFAllocatorNull );
-
-    // #i124375# force soft-hyphen visibility to meet the expectations of Writer+EditEngine
-    if( CFStringFind( aCFText, (CFStringRef)@"\u00AD", 0).length > 0 )
-    {
-        NSString* pDashStr = [(NSString*)aCFText stringByReplacingOccurrencesOfString: @"\u00AD" withString: @"-"];
-        aCFText = CFStringCreateCopy( NULL, (CFStringRef)pDashStr );
-    }
-
-    // create the CoreText line layout using the requested text style
     // CFAttributedStringCreate copies the attribues parameter
     mpAttrString = CFAttributedStringCreate( NULL, aCFText, mpTextStyle->GetStyleDict() );
     mpCTLine = CTLineCreateWithAttributedString( mpAttrString );
