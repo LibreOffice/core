@@ -109,15 +109,14 @@ if (GUI!=UNX || SYSTEM_ZLIB!=YES)
 if (SOLAR_JAVA==TRUE && ENABLE_MEDIAWIKI==YES)
     MD5 = 2c9b0f83ed5890af02c0df1c1776f39b
     name = commons-httpclient-3.1-src.tar.gz
-    URL1 = http://archive.apache.org/dist/httpcomponents/commons-httpclient/source/commons-httpclient-3.1-src.tar.gz
+    URL1 = http://archive.apache.org/dist/httpcomponents/commons-httpclient/source/$(name)
     URL2 = $(OOO_EXTRAS)$(MD5)-$(name)
 
 if (SOLAR_JAVA==TRUE && ENABLE_MEDIAWIKI==YES)
-    MD5 = 2e482c7567908d334785ce7d69ddfff7
-    name = commons-codec-1.6-src.tar.gz
-    URL1 = http://archive.apache.org/dist/commons/codec/source/commons-codec-1.6-src.tar.gz
-    URL2 = http://apache.spinellicreations.com//commons/codec/source/commons-codec-1.6-src.tar.gz
-    URL3 = $(OOO_EXTRAS)$(MD5)-$(name)
+    MD5 = db87f7004cefc9d17f7ac841f86122bd
+    name = commons-codec-1.9-src.tar.gz
+    URL1 = http://archive.apache.org/dist/commons/codec/source/$(name)
+    URL2 = $(OOO_EXTRAS)$(MD5)-$(name)
 
 if ( true )
     MD5 = 2f6ecca935948f7db92d925d88d0d078
@@ -132,10 +131,9 @@ if ( true )
     URL2 = $(OOO_EXTRAS)$(SHA1)-$(name)
 
 if (SOLAR_JAVA==TRUE && (ENABLE_MEDIAWIKI==YES || ENABLE_REPORTBUILDER==YES))
-    MD5 = 3c219630e4302863a9a83d0efde889db
-    name = commons-logging-1.1.1-src.tar.gz
-    # This seems to be the original host, but the MD5 sum does not match.
-    # URL1 = http://archive.apache.org/dist/commons/logging/source/commons-logging-1.1.1-src.tar.gz
+    MD5 = e8e197d628436490886d17cffa108fe3
+    name = commons-logging-1.1.3-src.tar.gz
+    URL1 = http://archive.apache.org/dist/commons/logging/source/$(name)
     URL2 = $(OOO_EXTRAS)$(MD5)-$(name)
 
 if (SYSTEM_JPEG != YES)
@@ -145,9 +143,9 @@ if (SYSTEM_JPEG != YES)
     URL2 = $(OOO_EXTRAS)$(MD5)-$(name)
 
 if (SOLAR_JAVA==TRUE && ENABLE_MEDIAWIKI==YES)
-    MD5 = 625ff5f2f968dd908bca43c9469d6e6b
-    name = commons-lang-2.4-src.tar.gz
-    URL1 = http://archive.apache.org/dist/commons/lang/source/commons-lang-2.4-src.tar.gz
+    MD5 = 4c8c505cc3cba4c467c479e3e0f09ba4
+    name = commons-lang3-3.3-src.tar.gz
+    URL1 = http://archive.apache.org/dist/commons/lang/source/$(name)
     URL2 = $(OOO_EXTRAS)$(MD5)-$(name)
 
 if (SYSTEM_OPENSSL!=YES && DISABLE_OPENSSL!=TRUE)
@@ -242,9 +240,9 @@ if ( true )
     URL2 = $(OOO_EXTRAS)$(MD5)-$(name)
 
 if (RAT_JAR_HOME==BUILD)
-    MD5 = e4244e69eb3644e71c254aea5952a918
-    name = apache-rat-incubating-0.8-bin.tar.bz2 
-    URL1 = http://archive.apache.org/dist/incubator/rat/binaries/$(name)
+    MD5 = 0f926196d42577addec7e1aa5b510605
+    name = apache-rat-0.10-bin.tar.bz2 
+    URL1 = http://archive.apache.org/dist/creadur/apache-rat-0.10/$(name)
     URL2 = $(OOO_EXTRAS)$(MD5)-$(name)
 
 ###############################################################################

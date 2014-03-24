@@ -2882,7 +2882,7 @@ if test "z$with_build_version" != "z"; then
    BUILD_VER_STRING=$with_build_version
    AC_MSG_RESULT([yes, $BUILD_VER_STRING])
 else
-   BUILD_VER_STRING=
+   BUILD_VER_STRING=`date +"%Y-%m-%d %H:%M:%S (%a, %d %b %Y)"`
    AC_MSG_RESULT([no])
 fi
 AC_SUBST(BUILD_VER_STRING)
@@ -6294,8 +6294,8 @@ if test "$ENABLE_MEDIAWIKI" = "YES" -o "$ENABLE_REPORTBUILDER" = "YES"; then
     AC_MSG_RESULT([external])
     if test "$ENABLE_MEDIAWIKI" = "YES"; then
       if test -z $COMMONS_CODEC_JAR; then
-        AC_CHECK_FILE(/usr/share/java/commons-codec-1.6.jar, 
-          [ COMMONS_CODEC_JAR=/usr/share/java/commons-codec-1.6.jar ],
+        AC_CHECK_FILE(/usr/share/java/commons-codec-1.9.jar, 
+          [ COMMONS_CODEC_JAR=/usr/share/java/commons-codec-1.9.jar ],
           [
             AC_CHECK_FILE(/usr/share/java/commons-codec.jar, 
               [ COMMONS_CODEC_JAR=/usr/share/java/commons-codec.jar ],
@@ -6309,8 +6309,8 @@ if test "$ENABLE_MEDIAWIKI" = "YES" -o "$ENABLE_REPORTBUILDER" = "YES"; then
       fi
 
       if test -z $COMMONS_LANG_JAR; then
-        AC_CHECK_FILE(/usr/share/java/commons-lang-2.4.jar, 
-          [ COMMONS_LANG_JAR=/usr/share/java/commons-lang-2.4.jar ],
+        AC_CHECK_FILE(/usr/share/java/commons-lang3-3.3.jar, 
+          [ COMMONS_LANG_JAR=/usr/share/java/commons-lang3-3.3.jar ],
           [
             AC_CHECK_FILE(/usr/share/java/commons-lang.jar, 
               [ COMMONS_LANG_JAR=/usr/share/java/commons-lang.jar ],
@@ -6340,8 +6340,8 @@ if test "$ENABLE_MEDIAWIKI" = "YES" -o "$ENABLE_REPORTBUILDER" = "YES"; then
     fi
     if test "$ENABLE_MEDIAWIKI" = "YES" -o "$ENABLE_REPORTBUILDER" = "YES"; then
       if test -z $COMMONS_LOGGING_JAR; then
-        AC_CHECK_FILE(/usr/share/java/commons-logging-1.1.1.jar, 
-          [ COMMONS_LOGGING_JAR=/usr/share/java/commons-logging-1.1.1.jar ],
+        AC_CHECK_FILE(/usr/share/java/commons-logging-1.1.3.jar, 
+          [ COMMONS_LOGGING_JAR=/usr/share/java/commons-logging-1.1.3.jar ],
           [
             AC_CHECK_FILE(/usr/share/java/commons-logging.jar, 
               [ COMMONS_LOGGING_JAR=/usr/share/java/commons-logging.jar ],
