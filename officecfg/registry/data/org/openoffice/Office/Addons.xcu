@@ -75,7 +75,7 @@
             <value>vnd.sun.star.script:LibreLogo|LibreLogo.py$run?language=Python&amp;location=share</value>
           </prop>
           <prop oor:name="Title" oor:type="xs:string">
-            <value xml:lang="en-US">Start Logo program (text or selected text of the document)</value>
+            <value xml:lang="en-US">Start Logo program (text or selected text of the documents) or an example (in empty documents)</value>
           </prop>
           <prop oor:name="Target" oor:type="xs:string">
             <value>_self</value>
@@ -151,7 +151,7 @@
             <value>vnd.sun.star.script:LibreLogo|LibreLogo.py$__translate__?language=Python&amp;location=share</value>
           </prop>
           <prop oor:name="Title" oor:type="xs:string">
-            <value xml:lang="en-US">Uppercase commands, also translate them to the language of the document</value>
+            <value xml:lang="en-US">Set editing layout, format program or translate it into the language of the document</value>
           </prop>
           <prop oor:name="Target" oor:type="xs:string">
             <value>_self</value>
