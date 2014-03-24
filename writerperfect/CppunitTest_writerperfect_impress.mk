@@ -14,18 +14,18 @@ $(eval $(call gb_CppunitTest_use_externals,writerperfect_impress,\
 ))
 
 $(eval $(call gb_CppunitTest_use_api,writerperfect_impress,\
-    offapi \
-    udkapi \
+	offapi \
+	udkapi \
 ))
 
-$(eval $(call gb_CppunitTest_use_libraries,writerperfect_impress, \
-    comphelper \
-    cppu \
-    cppuhelper \
-    sal \
-    test \
-    ucbhelper \
-    unotest \
+$(eval $(call gb_CppunitTest_use_libraries,writerperfect_impress,\
+	comphelper \
+	cppu \
+	cppuhelper \
+	sal \
+	test \
+	ucbhelper \
+	unotest \
 	$(gb_UWINAPI) \
 ))
 
@@ -35,8 +35,8 @@ $(eval $(call gb_CppunitTest_use_rdb,writerperfect_impress,services))
 
 $(eval $(call gb_CppunitTest_use_configuration,writerperfect_impress))
 
-$(eval $(call gb_CppunitTest_add_exception_objects,writerperfect_impress, \
-    writerperfect/qa/unit/wpftimpress \
+$(eval $(call gb_CppunitTest_add_exception_objects,writerperfect_impress,\
+	writerperfect/qa/unit/wpftimpress \
 ))
 
 # vim: set noet sw=4 ts=4:
