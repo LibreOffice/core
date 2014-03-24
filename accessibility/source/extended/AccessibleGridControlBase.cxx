@@ -219,30 +219,6 @@ awt::Size SAL_CALL AccessibleGridControlBase::getSize()
     return AWTSize( getBoundingBox().GetSize() );
 }
 
-sal_Bool SAL_CALL AccessibleGridControlBase::isShowing()
-    throw ( uno::RuntimeException )
-{
-    SolarMutexGuard aSolarGuard;
-
-    ensureIsAlive();
-    return implIsShowing();
-}
-
-sal_Bool SAL_CALL AccessibleGridControlBase::isVisible()
-    throw ( uno::RuntimeException )
-{
-    Reference< XAccessibleStateSet > xStateSet = getAccessibleStateSet();
-    return xStateSet.is() ?
-        xStateSet->contains( AccessibleStateType::VISIBLE ) : sal_False;
-}
-
-sal_Bool SAL_CALL AccessibleGridControlBase::isFocusTraversable()
-    throw ( uno::RuntimeException )
-{
-    Reference< XAccessibleStateSet > xStateSet = getAccessibleStateSet();
-    return xStateSet.is() ?
-        xStateSet->contains( AccessibleStateType::FOCUSABLE ) : sal_False;
-}
 // XAccessibleEventBroadcaster ------------------------------------------------
 
 void SAL_CALL AccessibleGridControlBase::addAccessibleEventListener(

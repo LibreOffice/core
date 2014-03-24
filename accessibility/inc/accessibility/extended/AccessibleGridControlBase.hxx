@@ -171,18 +171,6 @@ public:
     virtual ::com::sun::star::awt::Size SAL_CALL getSize()
         throw ( ::com::sun::star::uno::RuntimeException, std::exception );
 
-    /** @return  <TRUE/>, if the object is showing. */
-    virtual sal_Bool SAL_CALL isShowing()
-        throw ( ::com::sun::star::uno::RuntimeException );
-
-    /** @return  <TRUE/>, if the object is visible. */
-    virtual sal_Bool SAL_CALL isVisible()
-        throw ( ::com::sun::star::uno::RuntimeException );
-
-    /** @return  <TRUE/>, if the object can accept the focus. */
-    virtual sal_Bool SAL_CALL isFocusTraversable()
-        throw ( ::com::sun::star::uno::RuntimeException );
-
     virtual sal_Int32 SAL_CALL getForeground(  ) throw (::com::sun::star::uno::RuntimeException, std::exception);
     virtual sal_Int32 SAL_CALL getBackground(  ) throw (::com::sun::star::uno::RuntimeException, std::exception);
 

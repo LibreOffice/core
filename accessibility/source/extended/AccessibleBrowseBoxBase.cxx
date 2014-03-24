@@ -243,31 +243,6 @@ awt::Size SAL_CALL AccessibleBrowseBoxBase::getSize()
     return AWTSize( getBoundingBox().GetSize() );
 }
 
-sal_Bool SAL_CALL AccessibleBrowseBoxBase::isShowing()
-    throw ( uno::RuntimeException )
-{
-    SolarMutexGuard aSolarGuard;
-    ::osl::MutexGuard aGuard( getOslMutex() );
-    ensureIsAlive();
-    return implIsShowing();
-}
-
-sal_Bool SAL_CALL AccessibleBrowseBoxBase::isVisible()
-    throw ( uno::RuntimeException )
-{
-    Reference< XAccessibleStateSet > xStateSet = getAccessibleStateSet();
-    return xStateSet.is() ?
-        xStateSet->contains( AccessibleStateType::VISIBLE ) : sal_False;
-}
-
-sal_Bool SAL_CALL AccessibleBrowseBoxBase::isFocusTraversable()
-    throw ( uno::RuntimeException )
-{
-    Reference< XAccessibleStateSet > xStateSet = getAccessibleStateSet();
-    return xStateSet.is() ?
-        xStateSet->contains( AccessibleStateType::FOCUSABLE ) : sal_False;
-}
-
 void SAL_CALL AccessibleBrowseBoxBase::focusGained( const ::com::sun::star::awt::FocusEvent& ) throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
     com::sun::star::uno::Any aFocused;
