@@ -253,25 +253,29 @@ void lcl_CreateUndoForPages(
     ::sd::ViewShellBase& rBase )
 {
     ::sd::DrawDocShell* pDocSh      = rBase.GetDocShell();
+    if (!pDocSh)
+        return;
     ::svl::IUndoManager* pManager   = pDocSh->GetUndoManager();
+    if (!pManager)
+        return;
     SdDrawDocument* pDoc            = pDocSh->GetDoc();
-    if( pManager && pDocSh && pDoc )
+    if (!pDoc)
+        return;
+
+    OUString aComment( SdResId(STR_UNDO_SLIDE_PARAMS) );
+    pManager->EnterListAction(aComment, aComment);
+    SdUndoGroup* pUndoGroup = new SdUndoGroup( pDoc );
+    pUndoGroup->SetComment( aComment );
+
+    ::std::vector< SdPage * >::const_iterator aIt( rpPages->begin());
+    const ::std::vector< SdPage * >::const_iterator aEndIt( rpPages->end());
+    for( ; aIt != aEndIt; ++aIt )
     {
-        OUString aComment( SdResId(STR_UNDO_SLIDE_PARAMS) );
-        pManager->EnterListAction(aComment, aComment);
-        SdUndoGroup* pUndoGroup = new SdUndoGroup( pDoc );
-        pUndoGroup->SetComment( aComment );
-
-        ::std::vector< SdPage * >::const_iterator aIt( rpPages->begin());
-        const ::std::vector< SdPage * >::const_iterator aEndIt( rpPages->end());
-        for( ; aIt != aEndIt; ++aIt )
-        {
-            pUndoGroup->AddAction( new sd::UndoTransition( pDoc, (*aIt) ) );
-        }
-
-        pManager->AddUndoAction( pUndoGroup );
-        pManager->LeaveListAction();
+        pUndoGroup->AddAction( new sd::UndoTransition( pDoc, (*aIt) ) );
     }
+
+    pManager->AddUndoAction( pUndoGroup );
+    pManager->LeaveListAction();
 }
 
 sal_Int32 lcl_getTransitionEffectIndex(
