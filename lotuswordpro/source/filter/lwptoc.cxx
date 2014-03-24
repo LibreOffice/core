@@ -82,10 +82,15 @@
 
 LwpTocSuperLayout::LwpTocSuperLayout(LwpObjectHeader &objHdr, LwpSvStream* pStrm)
     : LwpSuperTableLayout(objHdr, pStrm)
-{}
+    , m_nFrom(0)
+    , m_pCont(NULL)
+{
+}
 
 LwpTocSuperLayout::~LwpTocSuperLayout()
-{}
+{
+}
+
 /**
  * @short   Read TOCSUPERTABLELAYOUT object
  * @return  none
