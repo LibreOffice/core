@@ -453,6 +453,8 @@ void DeInitVCL()
         pSVData->mpDefaultWin = NULL;
     }
 
+    DBGGUI_DEINIT_SOLARMUTEXCHECK();
+
     if ( pSVData->mpUnoWrapper )
     {
         try

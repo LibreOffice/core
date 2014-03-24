@@ -26,11 +26,13 @@ class Window;
 
 void DbgGUIInit();
 void DbgGUIDeInit();
+void DbgGUIDeInitSolarMutexCheck();
 void DbgGUIStart();
 void DbgDialogTest( Window* pWindow );
 
 #define DBGGUI_INIT()           DbgGUIInit()
 #define DBGGUI_DEINIT()         DbgGUIDeInit()
+#define DBGGUI_DEINIT_SOLARMUTEXCHECK() DbgGUIDeInitSolarMutexCheck()
 #define DBGGUI_START()          DbgGUIStart()
 
 #define DBG_DIALOGTEST( pWindow )                   \
@@ -42,6 +44,7 @@ void DbgDialogTest( Window* pWindow );
 
 #define DBGGUI_INIT()
 #define DBGGUI_DEINIT()
+#define DBGGUI_DEINIT_SOLARMUTEXCHECK()
 #define DBGGUI_START()
 
 #define DBG_DIALOGTEST( pWindow )

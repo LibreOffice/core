@@ -1636,11 +1636,15 @@ void DbgGUIDeInit()
 {
     DbgSetPrintMsgBox( NULL );
     DbgSetPrintWindow( NULL );
-    DbgSetTestSolarMutex( NULL );
     DbgSetAbort( NULL );
 
     DbgWindow* pDbgWindow = ImplGetSVData()->maWinData.mpDbgWin;
     delete pDbgWindow;
+}
+
+void DbgGUIDeInitSolarMutexCheck()
+{
+    DbgSetTestSolarMutex( NULL );
 }
 
 void DbgGUIStart()
