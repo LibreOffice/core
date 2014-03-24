@@ -62,9 +62,10 @@
 #include "xftable.hxx"
 
 XFRow::XFRow()
+    : m_pOwnerTable(NULL)
+    , m_nRepeat(0)
+    , m_nRow(0)
 {
-    m_nRepeat = 0;
-    m_nRow = 0;
 }
 
 XFRow::XFRow(const XFRow& other):XFContent(other)
