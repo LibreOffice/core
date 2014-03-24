@@ -499,7 +499,7 @@ void OTasksWindow::fillTaskEntryList( const TaskEntryList& _rList )
     }
 
     m_aCreation.Show();
-    m_aCreation.SelectAll(sal_False);
+    m_aCreation.SelectAll(false);
     m_aHelpText.Show();
     m_aDescription.Show();
     m_aFL.Show();

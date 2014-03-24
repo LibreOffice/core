@@ -564,7 +564,7 @@ void SfxConfigGroupListBox::Init(const css::uno::Reference< css::uno::XComponent
     const OUString& sModuleLongName,
     bool bEventMode)
 {
-    SetUpdateMode(sal_False);
+    SetUpdateMode(false);
     ClearAll(); // Remove all old entries from treelist box
 
     m_xFrame = xFrame;
@@ -728,8 +728,9 @@ void SfxConfigGroupListBox::Init(const css::uno::Reference< css::uno::XComponent
     }
 
     MakeVisible( GetEntry( 0,0 ) );
-    SetUpdateMode( sal_True );
+    SetUpdateMode( true );
 }
+
 Image SfxConfigGroupListBox::GetImage(
     Reference< browse::XBrowseNode > node,
     Reference< XComponentContext > xCtx,
@@ -860,13 +861,13 @@ void SfxConfigGroupListBox::GroupSelected()
 {
     SvTreeListEntry *pEntry = FirstSelected();
     SfxGroupInfo_Impl *pInfo = (SfxGroupInfo_Impl*) pEntry->GetUserData();
-    pFunctionListBox->SetUpdateMode(sal_False);
+    pFunctionListBox->SetUpdateMode(false);
     pFunctionListBox->ClearAll();
     if ( pInfo->nKind != SFX_CFGGROUP_FUNCTION &&
              pInfo->nKind != SFX_CFGGROUP_SCRIPTCONTAINER &&
              pInfo->nKind != SFX_CFGGROUP_STYLES )
     {
-        pFunctionListBox->SetUpdateMode(sal_True);
+        pFunctionListBox->SetUpdateMode(true);
         return;
     }
 
@@ -979,7 +980,7 @@ void SfxConfigGroupListBox::GroupSelected()
     if ( pFunctionListBox->GetEntryCount() )
         pFunctionListBox->Select( pFunctionListBox->GetEntry( 0, 0 ) );
 
-    pFunctionListBox->SetUpdateMode(sal_True);
+    pFunctionListBox->SetUpdateMode(true);
 }
 
 sal_Bool SfxConfigGroupListBox::Expand( SvTreeListEntry* pParent )
@@ -993,7 +994,7 @@ sal_Bool SfxConfigGroupListBox::Expand( SvTreeListEntry* pParent )
 
         if ( nChildCount+1 > nEntries )
         {
-            MakeVisible( pParent, sal_True );
+            MakeVisible( pParent, true );
         }
         else
         {

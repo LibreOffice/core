@@ -1334,13 +1334,13 @@ void  SwContentTree::RequestingChildren( SvTreeListEntry* pParent )
                              sEntry = sSpace;
                          if(!pChild || (nLevel == 0))
                              pChild = InsertEntry(sEntry, pParent,
-                                         sal_False, TREELIST_APPEND,(void*)pCnt);
+                                         false, TREELIST_APPEND,(void*)pCnt);
                          else
                          {
                              //back search parent.
                              if(((SwOutlineContent*)pCntType->GetMember(i-1))->GetOutlineLevel() < nLevel)
                                  pChild = InsertEntry(sEntry, pChild,
-                                         sal_False, TREELIST_APPEND, (void*)pCnt);
+                                         false, TREELIST_APPEND, (void*)pCnt);
                              else
                              {
                                  pChild = Prev(pChild);
@@ -1353,7 +1353,7 @@ void  SwContentTree::RequestingChildren( SvTreeListEntry* pParent )
                                  }
                                  if(pChild)
                                      pChild = InsertEntry(sEntry, pChild,
-                                                 sal_False, TREELIST_APPEND, (void*)pCnt);
+                                                 false, TREELIST_APPEND, (void*)pCnt);
                              }
                         }
                      }
@@ -1370,7 +1370,7 @@ void  SwContentTree::RequestingChildren( SvTreeListEntry* pParent )
                          if (sEntry.isEmpty())
                              sEntry = sSpace;
                          SvTreeListEntry* pChild = InsertEntry(sEntry, pParent,
-                             sal_False, TREELIST_APPEND, (void*)pCnt);
+                             false, TREELIST_APPEND, (void*)pCnt);
 
                         //If object is marked , the corresponding entry is set true,
                         //else the corresponding entry is set false .
@@ -1601,7 +1601,7 @@ void SwContentTree::Display( bool bActive )
         }
     }
     Clear();
-    SetUpdateMode( sal_False );
+    SetUpdateMode( false );
     if(bActive && !bIsConstant && !bIsActive)
         bIsActive = bActive;
     bIsHidden = !bActive;
@@ -1688,7 +1688,7 @@ void SwContentTree::Display( bool bActive )
             const Image& rImage = aEntryImages.GetImage(20000 + nRootType);
             SvTreeListEntry* pParent = InsertEntry(
                     (*ppRootContentT)->GetName(), rImage, rImage,
-                        0, sal_False, TREELIST_APPEND, *ppRootContentT);
+                        0, false, TREELIST_APPEND, *ppRootContentT);
 
             if(nRootType != CONTENT_TYPE_OUTLINE)
             {
@@ -1701,7 +1701,7 @@ void SwContentTree::Display( bool bActive )
                         if(sEntry.isEmpty())
                             sEntry = sSpace;
                         InsertEntry( sEntry, pParent,
-                            sal_False, TREELIST_APPEND, (void*)pCnt);
+                            false, TREELIST_APPEND, (void*)pCnt);
                     }
                 }
              }
@@ -1752,7 +1752,7 @@ void SwContentTree::Display( bool bActive )
             }
         }
     }
-    SetUpdateMode( sal_True );
+    SetUpdateMode( true );
     ScrollBar* pVScroll = GetVScroll();
     if(GetEntryCount() == nOldEntryCount &&
         nOldScrollPos && pVScroll && pVScroll->IsVisible()
@@ -1768,9 +1768,9 @@ void SwContentTree::Display( bool bActive )
 
 void SwContentTree::Clear()
 {
-    SetUpdateMode(sal_False);
+    SetUpdateMode(false);
     SvTreeListBox::Clear();
-    SetUpdateMode(sal_True);
+    SetUpdateMode(true);
 }
 
 bool SwContentTree::FillTransferData( TransferDataContainer& rTransfer,
@@ -2556,7 +2556,7 @@ sal_Bool  SwContentTree::NotifyCopying( SvTreeListEntry*  pTarget,
 
 // No drop before the first entry - it's a SwContentType
 
-sal_Bool  SwContentTree::NotifyAcceptDrop( SvTreeListEntry* pEntry)
+bool  SwContentTree::NotifyAcceptDrop( SvTreeListEntry* pEntry)
 {
     return pEntry != 0;
 }
@@ -2567,7 +2567,7 @@ sal_Bool  SwContentTree::NotifyAcceptDrop( SvTreeListEntry* pEntry)
 void  SwContentTree::MouseButtonDown( const MouseEvent& rMEvt )
 {
     Point aPos( rMEvt.GetPosPixel());
-    SvTreeListEntry* pEntry = GetEntry( aPos, sal_True );
+    SvTreeListEntry* pEntry = GetEntry( aPos, true );
     if( !pEntry && rMEvt.IsLeft() && rMEvt.IsMod1() && (rMEvt.GetClicks() % 2) == 0)
         Control::MouseButtonDown( rMEvt );
     else
@@ -3008,10 +3008,10 @@ void SwContentTree::ShowActualView()
 
 // Here are the buttons for moving outlines are en-/disabled.
 
-sal_Bool  SwContentTree::Select( SvTreeListEntry* pEntry, sal_Bool bSelect )
+bool SwContentTree::Select( SvTreeListEntry* pEntry, bool bSelect )
 {
     if(!pEntry)
-        return sal_False;
+        return false;
     sal_Bool bEnable = sal_False;
     SvTreeListEntry* pParentEntry = GetParent(pEntry);
     while(pParentEntry && (!lcl_IsContentType(pParentEntry)))

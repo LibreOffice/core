@@ -324,7 +324,7 @@ namespace svxform
                         break;
                     if ( !IsSelected(ptClickedOn) )
                     {
-                        SelectAll(sal_False);
+                        SelectAll(false);
                         Select(ptClickedOn, sal_True);
                         SetCurEntry(ptClickedOn);
                     }
@@ -348,7 +348,7 @@ namespace svxform
                 if ( (m_arrCurrentSelection.size() > 1) && m_bRootSelected )
                 {
                     Select( m_pRootEntry, sal_False );
-                    SetCursor( *m_arrCurrentSelection.begin(), sal_True);
+                    SetCursor( *m_arrCurrentSelection.begin(), true);
                 }
                 sal_Bool bSingleSelection = (m_arrCurrentSelection.size() == 1);
 
@@ -596,7 +596,7 @@ namespace svxform
             // Default-Eintrag "Formulare"
             Image aRootImage( m_aNavigatorImages.GetImage( RID_SVXIMG_FORMS ) );
             m_pRootEntry = InsertEntry( SVX_RESSTR(RID_STR_FORMS), aRootImage, aRootImage,
-                NULL, sal_False, 0, NULL );
+                NULL, false, 0, NULL );
         }
         else if (!m_bMarkingObjects && rHint.ISA(FmNavRequestSelectHint))
         {   // wenn m_bMarkingObjects sal_True ist, markiere ich gerade selber Objekte, und da der ganze Mechanismus dahinter synchron ist,
@@ -623,12 +623,12 @@ namespace svxform
         if( !pParentEntry )
             pNewEntry = InsertEntry( pEntryData->GetText(),
                 pEntryData->GetNormalImage(), pEntryData->GetNormalImage(),
-                m_pRootEntry, sal_False, nRelPos, pEntryData );
+                m_pRootEntry, false, nRelPos, pEntryData );
 
         else
             pNewEntry = InsertEntry( pEntryData->GetText(),
                 pEntryData->GetNormalImage(), pEntryData->GetNormalImage(),
-                pParentEntry, sal_False, nRelPos, pEntryData );
+                pParentEntry, false, nRelPos, pEntryData );
 
 
         // Wenn Root-Eintrag Root expandieren
@@ -957,7 +957,7 @@ namespace svxform
                 // das sollte das AcceptDrop abgefangen haben
 
             // da ich gleich die Zielobjekte alle selektieren will (und nur die)
-            SelectAll(sal_False);
+            SelectAll(false);
 
             Sequence< Reference< XInterface > > aControls = _rData.hiddenControls();
             sal_Int32 nCount = aControls.getLength();
@@ -1312,10 +1312,10 @@ namespace svxform
     }
 
 
-    sal_Bool NavigatorTree::EditingEntry( SvTreeListEntry* pEntry, Selection& rSelection )
+    bool NavigatorTree::EditingEntry( SvTreeListEntry* pEntry, Selection& rSelection )
     {
         if (!SvTreeListBox::EditingEntry( pEntry, rSelection ))
-            return sal_False;
+            return false;
 
         return (pEntry && (pEntry->GetUserData() != NULL));
             // die Wurzel, die ich nicht umbenennen darf, hat als UserData NULL
@@ -1467,20 +1467,20 @@ namespace svxform
     }
 
 
-    sal_Bool NavigatorTree::EditedEntry( SvTreeListEntry* pEntry, const OUString& rNewText )
+    bool NavigatorTree::EditedEntry( SvTreeListEntry* pEntry, const OUString& rNewText )
     {
         if (EditingCanceled())
-            return sal_True;
+            return true;
 
         GrabFocus();
         FmEntryData* pEntryData = (FmEntryData*)pEntry->GetUserData();
-        sal_Bool bRes = GetNavModel()->Rename( pEntryData, rNewText);
+        bool bRes = GetNavModel()->Rename( pEntryData, rNewText);
         if( !bRes )
         {
             m_pEditEntry = pEntry;
             nEditEvent = Application::PostUserEvent( LINK(this, NavigatorTree, OnEdit) );
         } else
-            SetCursor(pEntry, sal_True);
+            SetCursor(pEntry, true);
 
         return bRes;
     }
@@ -1894,7 +1894,7 @@ namespace svxform
         LockSelectionHandling();
         if (arredToSelect.empty())
         {
-            SelectAll(sal_False);
+            SelectAll(false);
         }
         else
         {
@@ -1942,7 +1942,7 @@ namespace svxform
                 {
                     Select(pLoop, sal_True);
                     MakeVisible(pLoop);
-                    SetCursor(pLoop, sal_True);
+                    SetCursor(pLoop, true);
                 }
 
                 pLoop = Next( pLoop );
@@ -2050,7 +2050,7 @@ namespace svxform
 
     sal_Bool NavigatorTree::Select( SvTreeListEntry* pEntry, sal_Bool bSelect )
     {
-        if (bSelect == IsSelected(pEntry))  // das passiert manchmal, ich glaube, die Basisklasse geht zu sehr auf Nummer sicher ;)
+        if (bSelect == (IsSelected(pEntry) ? 1 : 0))  // das passiert manchmal, ich glaube, die Basisklasse geht zu sehr auf Nummer sicher ;)
             return sal_True;
 
         return SvTreeListBox::Select(pEntry, bSelect );

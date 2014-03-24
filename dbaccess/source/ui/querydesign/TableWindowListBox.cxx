@@ -169,7 +169,7 @@ IMPL_LINK( OTableWindowListBox, ScrollUpHdl, SvTreeListBox*, /*pBox*/ )
     {
         ScrollOutputArea( -1 );
         pEntry = GetEntry( m_aMousePos );
-        Select( pEntry, sal_True );
+        Select( pEntry, true );
     }
 
     return 0;
@@ -185,7 +185,7 @@ IMPL_LINK( OTableWindowListBox, ScrollDownHdl, SvTreeListBox*, /*pBox*/ )
     {
         ScrollOutputArea( 1 );
         pEntry = GetEntry( m_aMousePos );
-        Select( pEntry, sal_True );
+        Select( pEntry, true );
     }
 
     return 0;
@@ -218,7 +218,7 @@ sal_Int8 OTableWindowListBox::AcceptDrop( const AcceptDropEvent& _rEvt )
 
         // remove the selection if the dragging operation is leaving the window
         if (_rEvt.mbLeaving)
-            SelectAll(sal_False);
+            SelectAll(false);
         else
         {
             // hit test
@@ -260,8 +260,8 @@ sal_Int8 OTableWindowListBox::AcceptDrop( const AcceptDropEvent& _rEvt )
 
             // automatically select right entry when dragging
             if ((FirstSelected() != pEntry) || (FirstSelected() && NextSelected(FirstSelected())))
-                SelectAll(sal_False);
-            Select(pEntry, sal_True);
+                SelectAll(false);
+            Select(pEntry, true);
 
             // one cannot drop on the first (*) entry
             if(!( m_pTabWin->GetData()->IsShowAll() && (pEntry==First()) ))
@@ -331,8 +331,8 @@ void OTableWindowListBox::GetFocus()
         if ( GetSelectionCount() == 0 || GetCurEntry() != FirstSelected() )
         {
             if ( FirstSelected() )
-                Select(FirstSelected(), sal_False);
-            Select(GetCurEntry(), sal_True);
+                Select(FirstSelected(), false);
+            Select(GetCurEntry(), true);
         }
         else
             ShowFocusRect(FirstSelected());

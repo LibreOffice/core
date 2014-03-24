@@ -377,7 +377,7 @@ void DataSourceTabPage::updateControlsFromDialogModel()
 
 void DataSourceTabPage::fillSeriesListBox()
 {
-    m_pLB_SERIES->SetUpdateMode( sal_False );
+    m_pLB_SERIES->SetUpdateMode( false );
 
     Reference< XDataSeries > xSelected;
     SeriesEntry * pEntry = dynamic_cast< SeriesEntry * >( m_pLB_SERIES->FirstSelected());
@@ -429,7 +429,7 @@ void DataSourceTabPage::fillSeriesListBox()
     if( bHasSelectedEntry && pSelectedEntry )
         m_pLB_SERIES->Select( pSelectedEntry );
 
-    m_pLB_SERIES->SetUpdateMode( sal_True );
+    m_pLB_SERIES->SetUpdateMode( true );
 }
 
 void DataSourceTabPage::fillRoleListBox()
@@ -451,7 +451,7 @@ void DataSourceTabPage::fillRoleListBox()
                 pSeriesEntry->m_xChartType ));
 
         // fill role list
-        m_pLB_ROLE->SetUpdateMode( sal_False );
+        m_pLB_ROLE->SetUpdateMode( false );
         m_pLB_ROLE->Clear();
         m_pLB_ROLE->RemoveSelection();
 
@@ -469,7 +469,7 @@ void DataSourceTabPage::fillRoleListBox()
             m_pLB_ROLE->Select( m_pLB_ROLE->GetEntry( nRoleIndex ));
         }
 
-        m_pLB_ROLE->SetUpdateMode( sal_True );
+        m_pLB_ROLE->SetUpdateMode( true );
 
         if(pSeriesEntry->m_xChartType
                 ->getSupportedPropertyRoles().getLength() == 0)

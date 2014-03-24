@@ -175,7 +175,7 @@ void SvTabListBox::SetTab( sal_uInt16 nTab,long nValue,MapUnit eMapUnit )
 }
 
 SvTreeListEntry* SvTabListBox::InsertEntry( const OUString& rText, SvTreeListEntry* pParent,
-                                        sal_Bool /*bChildrenOnDemand*/,
+                                        bool /*bChildrenOnDemand*/,
                                         sal_uLong nPos, void* pUserData,
                                         SvLBoxButtonKind )
 {
@@ -186,7 +186,7 @@ SvTreeListEntry* SvTabListBox::InsertEntry( const OUString& rText,
                                         const Image& rExpandedEntryBmp,
                                         const Image& rCollapsedEntryBmp,
                                         SvTreeListEntry* pParent,
-                                        sal_Bool /*bChildrenOnDemand*/,
+                                        bool /*bChildrenOnDemand*/,
                                         sal_uLong nPos, void* pUserData,
                                         SvLBoxButtonKind )
 {
@@ -216,7 +216,7 @@ SvTreeListEntry* SvTabListBox::InsertEntryToColumn(const OUString& rStr,SvTreeLi
     }
     else
         aCurEntry = OUString();
-    return SvTreeListBox::InsertEntry( aFirstStr, pParent, sal_False, nPos, pUser );
+    return SvTreeListBox::InsertEntry( aFirstStr, pParent, false, nPos, pUser );
 }
 
 SvTreeListEntry* SvTabListBox::InsertEntryToColumn( const OUString& rStr,
@@ -246,7 +246,7 @@ SvTreeListEntry* SvTabListBox::InsertEntryToColumn( const OUString& rStr,
     return SvTreeListBox::InsertEntry(
         aFirstStr,
         rExpandedEntryBmp, rCollapsedEntryBmp,
-        pParent, sal_False, nPos, pUser );
+        pParent, false, nPos, pUser );
 }
 
 SvTreeListEntry* SvTabListBox::InsertEntryToColumn( const OUString& rStr, sal_uLong nPos,
@@ -768,13 +768,13 @@ bool SvHeaderTabListBox::IsCellFocusable() const
 
 bool SvHeaderTabListBox::GoToCell( sal_Int32 _nRow, sal_uInt16 _nColumn )
 {
-    bool bRet = ( IsCellFocusEnabled() == sal_True );
+    bool bRet = IsCellFocusEnabled();
     if ( bRet )
     {
         // first set cursor to _nRow
-        SetCursor( GetEntry( _nRow ), sal_True );
+        SetCursor( GetEntry( _nRow ), true );
         // then set the focus into _nColumn
-        bRet = ( SetCurrentTabPos( _nColumn ) == true );
+        bRet = SetCurrentTabPos( _nColumn );
     }
     return bRet;
 }

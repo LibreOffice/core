@@ -298,7 +298,7 @@ void ScSolverOptionsDialog::FillListBox()
         pModel->Insert( pEntry );
     }
 
-    m_pLbSettings->SetUpdateMode(sal_True);
+    m_pLbSettings->SetUpdateMode(true);
 }
 
 void ScSolverOptionsDialog::ReadFromComponent()

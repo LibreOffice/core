@@ -194,7 +194,7 @@ sal_Bool  SvxFontSubstTabPage::FillItemSet( SfxItemSet& )
 
 void  SvxFontSubstTabPage::Reset( const SfxItemSet& )
 {
-    m_pCheckLB->SetUpdateMode(sal_False);
+    m_pCheckLB->SetUpdateMode(false);
     m_pCheckLB->Clear();
 
     FontList aFntLst( Application::GetDefaultDevice() );
@@ -217,7 +217,7 @@ void  SvxFontSubstTabPage::Reset( const SfxItemSet& )
     }
 
     CheckEnable();
-    m_pCheckLB->SetUpdateMode(sal_True);
+    m_pCheckLB->SetUpdateMode(true);
 
     //fill font name box first
     m_pNonPropFontsOnlyCB->Check(

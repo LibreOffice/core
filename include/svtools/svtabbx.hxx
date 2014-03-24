@@ -74,7 +74,7 @@ public:
     long            GetLogicTab( sal_uInt16 nTab );
 
     virtual SvTreeListEntry*    InsertEntry( const OUString& rText, SvTreeListEntry* pParent = 0,
-                                         sal_Bool bChildrenOnDemand = sal_False,
+                                         bool bChildrenOnDemand = false,
                                          sal_uLong nPos=TREELIST_APPEND, void* pUserData = 0,
                                          SvLBoxButtonKind eButtonKind = SvLBoxButtonKind_enabledCheckbox );
 
@@ -82,7 +82,7 @@ public:
                                          const Image& rExpandedEntryBmp,
                                          const Image& rCollapsedEntryBmp,
                                          SvTreeListEntry* pParent = 0,
-                                         sal_Bool bChildrenOnDemand = sal_False,
+                                         bool bChildrenOnDemand = false,
                                          sal_uLong nPos = TREELIST_APPEND, void* pUserData = 0,
                                          SvLBoxButtonKind eButtonKind = SvLBoxButtonKind_enabledCheckbox );
 

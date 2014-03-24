@@ -861,11 +861,11 @@ void OJoinTableView::DeselectConn(OTableConnection* pConn)
     // deselect the corresponding entries in the ListBox of the table window
     OTableWindow* pWin = pConn->GetSourceWin();
     if (pWin && pWin->GetListBox())
-        pWin->GetListBox()->SelectAll(sal_False);
+        pWin->GetListBox()->SelectAll(false);
 
     pWin = pConn->GetDestWin();
     if (pWin && pWin->GetListBox())
-        pWin->GetListBox()->SelectAll(sal_False);
+        pWin->GetListBox()->SelectAll(false);
 
     pConn->Deselect();
     m_pSelectedConn = NULL;
@@ -888,8 +888,8 @@ void OJoinTableView::SelectConn(OTableConnection* pConn)
         OTableWindowListBox* pDestBox = pConnDest->GetListBox();
         if (pSourceBox && pDestBox)
         {
-            pSourceBox->SelectAll(sal_False);
-            pDestBox->SelectAll(sal_False);
+            pSourceBox->SelectAll(false);
+            pDestBox->SelectAll(false);
 
             SvTreeListEntry* pFirstSourceVisible = pSourceBox->GetFirstEntryInView();
             SvTreeListEntry* pFirstDestVisible = pDestBox->GetFirstEntryInView();
@@ -903,14 +903,14 @@ void OJoinTableView::SelectConn(OTableConnection* pConn)
                     SvTreeListEntry* pSourceEntry = pSourceBox->GetEntryFromText((*aIter)->GetData()->GetSourceFieldName());
                     if (pSourceEntry)
                     {
-                        pSourceBox->Select(pSourceEntry, sal_True);
+                        pSourceBox->Select(pSourceEntry, true);
                         pSourceBox->MakeVisible(pSourceEntry);
                     }
 
                     SvTreeListEntry* pDestEntry = pDestBox->GetEntryFromText((*aIter)->GetData()->GetDestFieldName());
                     if (pDestEntry)
                     {
-                        pDestBox->Select(pDestEntry, sal_True);
+                        pDestBox->Select(pDestEntry, true);
                         pDestBox->MakeVisible(pDestEntry);
                     }
 

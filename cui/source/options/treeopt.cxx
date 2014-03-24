@@ -779,7 +779,7 @@ void OfaTreeOptionsDialog::InitTreeAndHandler()
                            WB_CLIPCHILDREN | WB_HSCROLL | WB_FORCE_MAKEVISIBLE | WB_QUICK_SEARCH );
     aTreeLB.SetSpaceBetweenEntries( 0 );
     aTreeLB.SetSelectionMode( SINGLE_SELECTION );
-    aTreeLB.SetSublistOpenWithLeftRight( sal_True );
+    aTreeLB.SetSublistOpenWithLeftRight( true );
     aTreeLB.SetExpandedHdl( LINK( this, OfaTreeOptionsDialog, ExpandedHdl_Impl ) );
     aTreeLB.SetSelectHdl( LINK( this, OfaTreeOptionsDialog, ShowPageHdl_Impl ) );
     aBackPB.SetClickHdl( LINK( this, OfaTreeOptionsDialog, BackHdl_Impl ) );

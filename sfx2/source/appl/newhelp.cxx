@@ -326,7 +326,7 @@ void ContentListBox_Impl::InitRoot()
         OUString aURL = aRow.getToken( 0, '\t', nIdx );
         sal_Unicode cFolder = aRow.getToken( 0, '\t', nIdx )[0];
         bool bIsFolder = ( '1' == cFolder );
-        SvTreeListEntry* pEntry = InsertEntry( aTitle, aOpenBookImage, aClosedBookImage, NULL, sal_True );
+        SvTreeListEntry* pEntry = InsertEntry( aTitle, aOpenBookImage, aClosedBookImage, NULL, true );
         if ( bIsFolder )
             pEntry->SetUserData( new ContentEntry_Impl( aURL, sal_True ) );
     }
@@ -370,7 +370,7 @@ void ContentListBox_Impl::RequestingChildren( SvTreeListEntry* pParent )
                     SvTreeListEntry* pEntry = NULL;
                     if ( bIsFolder )
                     {
-                        pEntry = InsertEntry( aTitle, aOpenBookImage, aClosedBookImage, pParent, sal_True );
+                        pEntry = InsertEntry( aTitle, aOpenBookImage, aClosedBookImage, pParent, true );
                         pEntry->SetUserData( new ContentEntry_Impl( aURL, sal_True ) );
                     }
                     else

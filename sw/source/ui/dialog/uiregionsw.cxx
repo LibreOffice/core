@@ -657,7 +657,7 @@ IMPL_LINK( SwEditRegionDlg, GetFirstEntryHdl, SvTreeListBox *, pBox )
         if(!bPasswdValid)
         {
             pEntry = pBox->FirstSelected();
-            pBox->SelectAll( sal_False );
+            pBox->SelectAll( false );
             pBox->Select( pEntry );
             GetFirstEntryHdl(pBox);
             return 0;

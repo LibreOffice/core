@@ -730,12 +730,12 @@ void ScContentTree::ObjectFresh( sal_uInt16 nType, SvTreeListEntry* pEntry )
         return;     // anderes Dokument angezeigt
       if(nType ==SC_CONTENT_GRAPHIC||nType ==SC_CONTENT_OLEOBJECT||nType ==SC_CONTENT_DRAWING)
         {
-        SetUpdateMode(sal_False);
+        SetUpdateMode(false);
         ClearType( nType );
         GetDrawNames( nType/*, nId*/ );
         if( !pEntry )
             ApplySettings();
-        SetUpdateMode(sal_True);
+        SetUpdateMode(true);
         if( pEntry )
         {
             SvTreeListEntry* pParent = pRootNodes[nType];
@@ -756,7 +756,7 @@ void ScContentTree::ObjectFresh( sal_uInt16 nType, SvTreeListEntry* pEntry )
             if( pOldEntry )
             {
                 Expand(pParent);
-                Select( pOldEntry,sal_True);
+                Select( pOldEntry, true);
             }
         }
         }
@@ -804,7 +804,7 @@ void ScContentTree::Refresh( sal_uInt16 nType )
         GetLinkNames();
 
     ApplySettings();
-    SetUpdateMode(sal_True);
+    SetUpdateMode(true);
 }
 
 void ScContentTree::GetTableNames()
@@ -1630,7 +1630,7 @@ void ScContentTree::ApplySettings()
             if( pRootNodes[ nEntry ] )
             {
                 // expand
-                sal_Bool bExp = pSettings->IsExpanded( nEntry );
+                bool bExp = pSettings->IsExpanded( nEntry );
                 if( bExp != IsExpanded( pRootNodes[ nEntry ] ) )
                 {
                     if( bExp )

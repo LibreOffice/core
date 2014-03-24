@@ -1371,7 +1371,7 @@ void SvxLinguTabPage::AddDicBoxEntry(
         const uno::Reference< XDictionary > &rxDic,
         sal_uInt16 nIdx )
 {
-    m_pLinguDicsCLB->SetUpdateMode(sal_False);
+    m_pLinguDicsCLB->SetUpdateMode(false);
 
     OUString aTxt( ::GetDicInfoStr( rxDic->getName(),
                         LanguageTag( rxDic->getLocale() ).getLanguageType(),
@@ -1386,14 +1386,14 @@ void SvxLinguTabPage::AddDicBoxEntry(
         lcl_SetCheckButton( pEntry, aData.IsChecked() );
     }
 
-    m_pLinguDicsCLB->SetUpdateMode(sal_True);
+    m_pLinguDicsCLB->SetUpdateMode(true);
 }
 
 
 
 void SvxLinguTabPage::UpdateDicBox_Impl()
 {
-    m_pLinguDicsCLB->SetUpdateMode(sal_False);
+    m_pLinguDicsCLB->SetUpdateMode(false);
     m_pLinguDicsCLB->Clear();
 
     sal_Int32 nDics  = aDics.getLength();
@@ -1405,7 +1405,7 @@ void SvxLinguTabPage::UpdateDicBox_Impl()
             AddDicBoxEntry( rDic, (sal_uInt16)i );
     }
 
-    m_pLinguDicsCLB->SetUpdateMode(sal_True);
+    m_pLinguDicsCLB->SetUpdateMode(true);
 }
 
 
@@ -1450,7 +1450,7 @@ void SvxLinguTabPage::Reset( const SfxItemSet& rSet )
 
     SvtLinguConfig aLngCfg;
 
-    m_pLinguOptionsCLB->SetUpdateMode(sal_False);
+    m_pLinguOptionsCLB->SetUpdateMode(false);
     m_pLinguOptionsCLB->Clear();
 
     SvTreeList *pModel = m_pLinguOptionsCLB->GetModel();
@@ -1539,7 +1539,7 @@ void SvxLinguTabPage::Reset( const SfxItemSet& rSet )
     pModel->Insert( pEntry );
     lcl_SetCheckButton( pEntry, bVal );
 
-    m_pLinguOptionsCLB->SetUpdateMode(sal_True);
+    m_pLinguOptionsCLB->SetUpdateMode(true);
 }
 
 
@@ -2296,7 +2296,7 @@ IMPL_LINK( SvxEditModulesDlg, UpDownHdl_Impl, PushButton *, pBtn )
     if (nCurPos != TREELIST_ENTRY_NOTFOUND  &&
         0 != (pEntry = m_pModulesCLB->GetEntry(nCurPos)))
     {
-        m_pModulesCLB->SetUpdateMode(sal_False);
+        m_pModulesCLB->SetUpdateMode(false);
         SvTreeList *pModel = m_pModulesCLB->GetModel();
 
         ModuleUserData_Impl* pData = (ModuleUserData_Impl*)pEntry->GetUserData();
@@ -2312,7 +2312,7 @@ IMPL_LINK( SvxEditModulesDlg, UpDownHdl_Impl, PushButton *, pBtn )
         m_pModulesCLB->CheckEntryPos(nDestPos, bIsChecked );
         m_pModulesCLB->SelectEntryPos(nDestPos );
         SelectHdl_Impl(m_pModulesCLB);
-        m_pModulesCLB->SetUpdateMode(sal_True);
+        m_pModulesCLB->SetUpdateMode(true);
     }
     return 0;
 }

@@ -88,7 +88,8 @@ namespace dbaui
     }
 
     extern sal_Bool isCharOk(sal_Unicode _cChar,sal_Bool _bFirstChar,sal_Bool _bUpperCase,const OUString& _sAllowedChars);
-    sal_Bool DbaIndexList::EditedEntry( SvTreeListEntry* _pEntry, const OUString& _rNewText )
+
+    bool DbaIndexList::EditedEntry( SvTreeListEntry* _pEntry, const OUString& _rNewText )
     {
         // first check if this is valid SQL92 name
         if ( isSQL92CheckEnabled(m_xConnection) )
@@ -102,26 +103,26 @@ namespace dbaui
                         sAlias != _rNewText
                         :
                 !_rNewText.equalsIgnoreAsciiCase(sAlias))
-                    return sal_False;
+                    return false;
             }
         }
 
         if (!SvTreeListBox::EditedEntry(_pEntry, _rNewText))
-            return sal_False;
+            return false;
 
         OUString sOldText = GetEntryText(_pEntry);
         SvTreeListBox::SetEntryText(_pEntry, _rNewText);
 
-        sal_Bool bValid = sal_True;
+        bool bValid = true;
         if (m_aEndEditHdl.IsSet())
             bValid = (0 != m_aEndEditHdl.Call(_pEntry));
 
         if (bValid)
-            return sal_True;
+            return true;
 
         SvTreeListBox::SetEntryText(_pEntry, sOldText);
 
-        return sal_False;
+        return false;
     }
 
     void DbaIndexList::enableSelectHandler()

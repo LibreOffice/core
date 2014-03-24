@@ -254,12 +254,12 @@ IMPL_LINK( SwCondCollPage, AssignRemoveHdl, PushButton*, pBtn)
     if ( bAssEnabled )
         sSel += m_pStyleLB->GetSelectEntry();
 
-    m_pTbLinks->SetUpdateMode(sal_False);
+    m_pTbLinks->SetUpdateMode(false);
     m_pTbLinks->GetModel()->Remove(pE);
     pE = m_pTbLinks->InsertEntryToColumn(sSel, nPos);
     m_pTbLinks->Select(pE);
     m_pTbLinks->MakeVisible(pE);
-    m_pTbLinks->SetUpdateMode(sal_True);
+    m_pTbLinks->SetUpdateMode(true);
     return 0;
 }
 

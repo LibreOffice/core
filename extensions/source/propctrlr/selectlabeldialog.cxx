@@ -124,14 +124,14 @@ namespace pcr
 
         if (m_pInitialSelection)
         {
-            m_aControlTree.MakeVisible(m_pInitialSelection, sal_True);
-            m_aControlTree.Select(m_pInitialSelection, sal_True);
+            m_aControlTree.MakeVisible(m_pInitialSelection, true);
+            m_aControlTree.Select(m_pInitialSelection, true);
         }
         else
         {
-            m_aControlTree.MakeVisible(m_aControlTree.First(), sal_True);
+            m_aControlTree.MakeVisible(m_aControlTree.First(), true);
             if (m_aControlTree.FirstSelected())
-                m_aControlTree.Select(m_aControlTree.FirstSelected(), sal_False);
+                m_aControlTree.Select(m_aControlTree.FirstSelected(), false);
             m_aNoAssignment.Check(true);
         }
 

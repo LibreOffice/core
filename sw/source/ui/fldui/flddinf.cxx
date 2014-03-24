@@ -94,7 +94,7 @@ void SwFldDokInfPage::Reset(const SfxItemSet& )
     Init(); // general initialisation
 
     // initialise TypeListBox
-    m_pTypeTLB->SetUpdateMode(sal_False);
+    m_pTypeTLB->SetUpdateMode(false);
     m_pTypeTLB->Clear();
     pSelEntry = 0;
 
@@ -192,7 +192,7 @@ void SwFldDokInfPage::Reset(const SfxItemSet& )
     if ( pSelEntry )
         TypeHdl();
 
-    m_pTypeTLB->SetUpdateMode(sal_True);
+    m_pTypeTLB->SetUpdateMode(true);
     m_pTypeTLB->SetSelectHdl(LINK(this, SwFldDokInfPage, TypeHdl));
     m_pTypeTLB->SetDoubleClickHdl(LINK(this, SwFldDokInfPage, InsertHdl));
     m_pSelectionLB->SetSelectHdl(LINK(this, SwFldDokInfPage, SubTypeHdl));

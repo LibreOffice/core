@@ -49,7 +49,7 @@ SvTreeListEntry* StructListBox::InsertStaticEntry(
         const Image& rEntryImg,
         SvTreeListEntry* pParent, sal_uLong nPos, IFormulaToken* pToken )
 {
-    SvTreeListEntry* pEntry = InsertEntry( rText, rEntryImg, rEntryImg, pParent, sal_False, nPos, pToken );
+    SvTreeListEntry* pEntry = InsertEntry( rText, rEntryImg, rEntryImg, pParent, false, nPos, pToken );
     return pEntry;
 }
 
@@ -118,7 +118,7 @@ SvTreeListEntry* StructPage::InsertEntry( const OUString& rText, SvTreeListEntry
     switch( nFlag )
     {
         case STRUCT_FOLDER:
-            pEntry = aTlbStruct.InsertEntry( rText, pParent, sal_False, nPos, pIFormulaToken );
+            pEntry = aTlbStruct.InsertEntry( rText, pParent, false, nPos, pIFormulaToken );
         break;
         case STRUCT_END:
             pEntry = aTlbStruct.InsertStaticEntry( rText, maImgEnd, pParent, nPos, pIFormulaToken );

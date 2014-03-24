@@ -370,7 +370,7 @@ IMPL_LINK( SdDefineCustomShowDlg, ClickButtonHdl, void *, p )
             {
                 OUString aStr = m_pLbPages->GetSelectEntry( i );
                 pEntry = m_pLbCustomPages->InsertEntry( aStr,
-                                            0, sal_False, nPosCP );
+                                            0, false, nPosCP );
 
                 m_pLbCustomPages->Select( pEntry );
                 SdPage* pPage = rDoc.GetSdPage( (sal_uInt16) m_pLbPages->

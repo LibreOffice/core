@@ -436,10 +436,10 @@ IMPL_LINK( SfxVersionDialog, ButtonHdl_Impl, Button*, pButton )
             aItems[0] = &aComment;
             aItems[1] = NULL;
             pViewFrame->GetBindings().ExecuteSynchron( SID_SAVEDOC, aItems, 0 );
-            m_pVersionBox->SetUpdateMode( sal_False );
+            m_pVersionBox->SetUpdateMode( false );
             m_pVersionBox->Clear();
             Init_Impl();
-            m_pVersionBox->SetUpdateMode( sal_True );
+            m_pVersionBox->SetUpdateMode( true );
         }
 
         delete pDlg;
@@ -448,10 +448,10 @@ IMPL_LINK( SfxVersionDialog, ButtonHdl_Impl, Button*, pButton )
     {
         pObjShell->GetMedium()->RemoveVersion_Impl( ((SfxVersionInfo*) pEntry->GetUserData())->aName );
         pObjShell->SetModified( true );
-        m_pVersionBox->SetUpdateMode( sal_False );
+        m_pVersionBox->SetUpdateMode( false );
         m_pVersionBox->Clear();
         Init_Impl();
-        m_pVersionBox->SetUpdateMode( sal_True );
+        m_pVersionBox->SetUpdateMode( true );
     }
     else if (pButton == m_pOpenButton && pEntry)
     {

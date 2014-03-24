@@ -222,7 +222,7 @@ SwRedlineAcceptDlg::~SwRedlineAcceptDlg()
 void SwRedlineAcceptDlg::Init(sal_uInt16 nStart)
 {
     SwWait aWait( *::GetActiveView()->GetDocShell(), false );
-    pTable->SetUpdateMode(sal_False);
+    pTable->SetUpdateMode(false);
     aUsedSeqNo.clear();
 
     if (nStart)
@@ -238,11 +238,11 @@ void SwRedlineAcceptDlg::Init(sal_uInt16 nStart)
     InsertParents(nStart);
     InitAuthors();
 
-    pTable->SetUpdateMode(sal_True);
+    pTable->SetUpdateMode(true);
     // #i69618# this moves the list box to the right position, visually
     SvTreeListEntry* pSelEntry = pTable->FirstSelected();
     if( pSelEntry )
-        pTable->MakeVisible( pSelEntry, sal_True ); //#i70937#, force the scroll
+        pTable->MakeVisible( pSelEntry, true ); //#i70937#, force the scroll
 }
 
 void SwRedlineAcceptDlg::InitAuthors()
@@ -455,7 +455,7 @@ sal_uInt16 SwRedlineAcceptDlg::CalcDiff(sal_uInt16 nStart, sal_Bool bChild)
         return USHRT_MAX;
     }
 
-    pTable->SetUpdateMode(sal_False);
+    pTable->SetUpdateMode(false);
     SwView *pView   = ::GetActiveView();
     SwWrtShell* pSh = pView->GetWrtShellPtr();
     sal_uInt16 nAutoFmt = HasRedlineAutoFmt() ? nsRedlineType_t::REDLINE_FORM_AUTOFMT : 0;
@@ -488,7 +488,7 @@ sal_uInt16 SwRedlineAcceptDlg::CalcDiff(sal_uInt16 nStart, sal_Bool bChild)
         // insert new children
         InsertChildren(pParent, rRedln, nAutoFmt);
 
-        pTable->SetUpdateMode(sal_True);
+        pTable->SetUpdateMode(true);
         return nStart;
     }
 
@@ -501,7 +501,7 @@ sal_uInt16 SwRedlineAcceptDlg::CalcDiff(sal_uInt16 nStart, sal_Bool bChild)
         {
             // remove entries from nStart to i-1
             RemoveParents(nStart, i - 1);
-            pTable->SetUpdateMode(sal_True);
+            pTable->SetUpdateMode(true);
             return nStart - 1;
         }
     }
@@ -516,12 +516,12 @@ sal_uInt16 SwRedlineAcceptDlg::CalcDiff(sal_uInt16 nStart, sal_Bool bChild)
         {
             // insert entries from nStart to i-1
             InsertParents(nStart, i - 1);
-            pTable->SetUpdateMode(sal_True);
+            pTable->SetUpdateMode(true);
             return nStart - 1;
         }
     }
 
-    pTable->SetUpdateMode(sal_True);
+    pTable->SetUpdateMode(true);
     Init(nStart);   // adjust all entries until the end
     return USHRT_MAX;
 }

@@ -74,7 +74,7 @@ class SVT_DLLPUBLIC SvTreeList
 
     sal_uInt16          nRefCount;
 
-    sal_Bool            bAbsPositionsValid;
+    bool                bAbsPositionsValid;
 
     SvTreeListEntry*        FirstVisible() const { return First(); }
     SvTreeListEntry*        NextVisible( const SvListView*,SvTreeListEntry* pEntry, sal_uInt16* pDepth=0 ) const;
@@ -83,8 +83,8 @@ class SVT_DLLPUBLIC SvTreeList
     SvTreeListEntry*        NextVisible( const SvListView*,SvTreeListEntry* pEntry, sal_uInt16& rDelta ) const;
     SvTreeListEntry*        PrevVisible( const SvListView*,SvTreeListEntry* pEntry, sal_uInt16& rDelta ) const;
 
-    sal_Bool            IsEntryVisible( const SvListView*,SvTreeListEntry* pEntry ) const;
-    SvTreeListEntry*        GetEntryAtVisPos( const SvListView*,sal_uLong nVisPos ) const;
+    bool               IsEntryVisible( const SvListView*,SvTreeListEntry* pEntry ) const;
+    SvTreeListEntry*    GetEntryAtVisPos( const SvListView*,sal_uLong nVisPos ) const;
     sal_uLong           GetVisiblePos( const SvListView*,SvTreeListEntry* pEntry ) const;
     sal_uLong           GetVisibleCount( SvListView* ) const;
     sal_uLong           GetVisibleChildCount( const SvListView*,SvTreeListEntry* pParent ) const;
@@ -94,8 +94,8 @@ class SVT_DLLPUBLIC SvTreeList
     SvTreeListEntry*        PrevSelected( const SvListView*,SvTreeListEntry* pEntry ) const;
     SvTreeListEntry*        LastSelected( const SvListView*) const;
 
-    sal_Bool            Select( SvListView*,SvTreeListEntry* pEntry, sal_Bool bSelect=sal_True );
-    void                SelectAll( SvListView*,sal_Bool bSelect ); // Does not call Select Handler
+    bool                Select( SvListView*,SvTreeListEntry* pEntry, bool bSelect=true );
+    void                SelectAll( SvListView*, bool bSelect ); // Does not call Select Handler
     sal_uLong           GetChildSelectionCount( const SvListView*,SvTreeListEntry* pParent ) const;
 
     void                Expand( SvListView*,SvTreeListEntry* pParent );
@@ -237,7 +237,7 @@ class SVT_DLLPUBLIC SvListView
 
     sal_uLong           nVisibleCount;
     sal_uLong           nSelectionCount;
-    sal_Bool            bVisPositionsValid;
+    bool                bVisPositionsValid;
 
     SVT_DLLPRIVATE void InitTable();
     SVT_DLLPRIVATE void RemoveViewData( SvTreeListEntry* pParent );
@@ -261,7 +261,7 @@ protected:
     void                CollapseListEntry( SvTreeListEntry* pParent )
     { pModel->Collapse((SvListView*)this,pParent); }
 
-    sal_Bool            SelectListEntry( SvTreeListEntry* pEntry, sal_Bool bSelect )
+    bool                SelectListEntry( SvTreeListEntry* pEntry, bool bSelect )
     { return pModel->Select((SvListView*)this,pEntry,bSelect); }
 
 public:
@@ -330,18 +330,18 @@ public:
     { return pModel->GetChildSelectionCount((SvListView*)this,pParent); }
 
     // Does not call the Select Handler
-    virtual void        SelectAll( sal_Bool bSelect, sal_Bool )
+    virtual void        SelectAll( bool bSelect, bool )
     { pModel->SelectAll((SvListView*)this, bSelect); }
 
-    sal_Bool            IsEntryVisible( SvTreeListEntry* pEntry ) const
+    bool               IsEntryVisible( SvTreeListEntry* pEntry ) const
     { return pModel->IsEntryVisible((SvListView*)this,pEntry); }
 
-    sal_Bool            IsExpanded( SvTreeListEntry* pEntry ) const;
-    sal_Bool            IsSelected( SvTreeListEntry* pEntry ) const;
-    void                SetEntryFocus( SvTreeListEntry* pEntry, sal_Bool bFocus );
+    bool                IsExpanded( SvTreeListEntry* pEntry ) const;
+    bool                IsSelected( SvTreeListEntry* pEntry ) const;
+    void                SetEntryFocus( SvTreeListEntry* pEntry, bool bFocus );
     const SvViewDataEntry*         GetViewData( const SvTreeListEntry* pEntry ) const;
     SvViewDataEntry*         GetViewData( SvTreeListEntry* pEntry );
-    sal_Bool            HasViewData() const
+    bool                HasViewData() const
     { return maDataTable.size() > 1; }  // There's always a ROOT
 
     virtual SvViewDataEntry* CreateViewData( SvTreeListEntry* pEntry );

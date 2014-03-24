@@ -589,7 +589,7 @@ void stl_append_effect_func::operator()(CustomAnimationEffectPtr pEffect)
 void CustomAnimationList::update()
 {
     mbIgnorePaint = true;
-    SetUpdateMode( sal_False );
+    SetUpdateMode( false );
 
     CustomAnimationListEntry* pEntry = 0;
 
@@ -752,7 +752,7 @@ void CustomAnimationList::update()
     }
 
     mbIgnorePaint = false;
-    SetUpdateMode( sal_True );
+    SetUpdateMode( true );
     Invalidate();
 }
 
@@ -830,7 +830,7 @@ void CustomAnimationList::onSelectionChanged( Any aSelection )
 {
     try
     {
-        SelectAll(sal_False);
+        SelectAll(false);
 
         if( aSelection.hasValue() )
         {
@@ -930,7 +930,7 @@ EffectSequence CustomAnimationList::getSelection() const
 
 
 
-sal_Bool CustomAnimationList::DoubleClickHdl()
+bool CustomAnimationList::DoubleClickHdl()
 {
     mpController->onDoubleClick();
     return false;

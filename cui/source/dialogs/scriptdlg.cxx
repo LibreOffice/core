@@ -155,7 +155,7 @@ void SFTreeListBox::deleteAllTree()
 
 void SFTreeListBox::Init( const OUString& language  )
 {
-    SetUpdateMode( sal_False );
+    SetUpdateMode( false );
 
     deleteAllTree();
 
@@ -245,7 +245,7 @@ void SFTreeListBox::Init( const OUString& language  )
         SAL_WNODEPRECATED_DECLARATIONS_POP
     }
 
-    SetUpdateMode( sal_True );
+    SetUpdateMode( true );
 }
 
 Reference< XInterface  >

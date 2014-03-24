@@ -116,7 +116,7 @@ protected:
 
     virtual DragDropMode NotifyStartDrag( TransferDataContainer& rData,
                                         SvTreeListEntry* );
-    virtual sal_Bool    NotifyAcceptDrop( SvTreeListEntry* );
+    virtual bool    NotifyAcceptDrop( SvTreeListEntry* );
 
     virtual sal_Bool    NotifyMoving(   SvTreeListEntry*  pTarget,
                                     SvTreeListEntry*  pEntry,
@@ -194,7 +194,7 @@ public:
     virtual void    GetFocus();
     virtual void    KeyInput(const KeyEvent& rKEvt);
 
-    virtual sal_Bool    Select( SvTreeListEntry* pEntry, sal_Bool bSelect=sal_True );
+    virtual bool    Select( SvTreeListEntry* pEntry, bool bSelect=true );
     virtual sal_Int32  GetEntryRealChildrenNum( SvTreeListEntry* pEntry ) const;
 };
 
@@ -275,7 +275,7 @@ protected:
     virtual void    DragFinished( sal_Int8 );
     virtual DragDropMode NotifyStartDrag( TransferDataContainer& rData,
                                         SvTreeListEntry* );
-    virtual sal_Bool    NotifyAcceptDrop( SvTreeListEntry* );
+    virtual bool    NotifyAcceptDrop( SvTreeListEntry* );
 
     virtual void    MouseButtonDown( const MouseEvent& rMEvt );
     virtual void    KeyInput(const KeyEvent& rKEvt);

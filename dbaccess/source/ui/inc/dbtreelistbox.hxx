@@ -115,10 +115,10 @@ namespace dbaui
         virtual void    InitEntry(SvTreeListEntry* pEntry, const OUString& aStr, const Image& aCollEntryBmp, const Image& aExpEntryBmp, SvLBoxButtonKind eButtonKind);
 
         // enable editing for tables/views and queries
-        virtual sal_Bool    EditingEntry( SvTreeListEntry* pEntry, Selection& );
-        virtual sal_Bool    EditedEntry( SvTreeListEntry* pEntry, const OUString& rNewText );
+        virtual bool    EditingEntry( SvTreeListEntry* pEntry, Selection& );
+        virtual bool    EditedEntry( SvTreeListEntry* pEntry, const OUString& rNewText );
 
-        virtual sal_Bool    DoubleClickHdl();
+        virtual bool    DoubleClickHdl();
 
         virtual PopupMenu* CreateContextMenu( void );
         virtual void    ExcecuteContextMenuAction( sal_uInt16 nSelectedPopupEntry );

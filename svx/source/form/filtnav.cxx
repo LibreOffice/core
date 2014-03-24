@@ -1193,7 +1193,7 @@ void FmFilterNavigator::UpdateContent(const Reference< XIndexAccess > & xControl
     SvTreeListEntry* pEntry = FindEntry(m_pModel->GetCurrentForm());
     if (pEntry && !IsExpanded(pEntry))
     {
-        SelectAll(sal_False);
+        SelectAll(false);
 
         if (!IsExpanded(pEntry))
             Expand(pEntry);
@@ -1209,23 +1209,23 @@ void FmFilterNavigator::UpdateContent(const Reference< XIndexAccess > & xControl
 }
 
 
-sal_Bool FmFilterNavigator::EditingEntry( SvTreeListEntry* pEntry, Selection& rSelection )
+bool FmFilterNavigator::EditingEntry( SvTreeListEntry* pEntry, Selection& rSelection )
 {
     m_pEditingCurrently = pEntry;
     if (!SvTreeListBox::EditingEntry( pEntry, rSelection ))
-        return sal_False;
+        return false;
 
     return pEntry && ((FmFilterData*)pEntry->GetUserData())->ISA(FmFilterItem);
 }
 
 
-sal_Bool FmFilterNavigator::EditedEntry( SvTreeListEntry* pEntry, const OUString& rNewText )
+bool FmFilterNavigator::EditedEntry( SvTreeListEntry* pEntry, const OUString& rNewText )
 {
     DBG_ASSERT(pEntry == m_pEditingCurrently, "FmFilterNavigator::EditedEntry: suspicious entry!");
     m_pEditingCurrently = NULL;
 
     if (EditingCanceled())
-        return sal_True;
+        return true;
 
     DBG_ASSERT(((FmFilterData*)pEntry->GetUserData())->ISA(FmFilterItem),
                     "FmFilterNavigator::EditedEntry() wrong entry");
@@ -1248,7 +1248,7 @@ sal_Bool FmFilterNavigator::EditedEntry( SvTreeListEntry* pEntry, const OUString
             // which are connected to this particular entry
             m_pModel->SetTextForItem( static_cast< FmFilterItem* >( pEntry->GetUserData() ), aText );
 
-            SetCursor( pEntry, sal_True );
+            SetCursor( pEntry, true );
             SetEntryText( pEntry, aText );
         }
         else
@@ -1259,10 +1259,10 @@ sal_Bool FmFilterNavigator::EditedEntry( SvTreeListEntry* pEntry, const OUString
             aError.Details = aErrorMsg;
             displayException(aError, this);
 
-            return sal_False;
+            return false;
         }
     }
-    return sal_True;
+    return true;
 }
 
 
@@ -1432,7 +1432,7 @@ sal_Int8 FmFilterNavigator::ExecuteDrop( const ExecuteDropEvent& rEvt )
 
     // search the container where to add the items
     FmFilterItems*  pTargetItems = getTargetItems(pDropTarget);
-    SelectAll(sal_False);
+    SelectAll(false);
     SvTreeListEntry* pEntry = FindEntry(pTargetItems);
     Select(pEntry, sal_True);
     SetCurEntry(pEntry);
@@ -1464,7 +1464,7 @@ void FmFilterNavigator::InitEntry(SvTreeListEntry* pEntry,
 
 sal_Bool FmFilterNavigator::Select( SvTreeListEntry* pEntry, sal_Bool bSelect )
 {
-    if (bSelect == IsSelected(pEntry))  // das passiert manchmal, ich glaube, die Basisklasse geht zu sehr auf Nummer sicher ;)
+    if (bSelect == (IsSelected(pEntry) ? 1 : 0))  // das passiert manchmal, ich glaube, die Basisklasse geht zu sehr auf Nummer sicher ;)
         return sal_True;
 
     if (SvTreeListBox::Select(pEntry, bSelect))
@@ -1552,7 +1552,7 @@ void FmFilterNavigator::Insert(FmFilterData* pItem, sal_uLong nPos)
 
     // insert the item
     SvTreeListEntry* pParentEntry = FindEntry( pParent );
-    InsertEntry( pItem->GetText(), pItem->GetImage(), pItem->GetImage(), pParentEntry, sal_False, nPos, pItem );
+    InsertEntry( pItem->GetText(), pItem->GetImage(), pItem->GetImage(), pParentEntry, false, nPos, pItem );
     if ( pParentEntry )
         Expand( pParentEntry );
 }
@@ -1672,7 +1672,7 @@ void FmFilterNavigator::Command( const CommandEvent& rEvt )
 
                 if (!IsSelected(pClicked))
                 {
-                    SelectAll(sal_False);
+                    SelectAll(false);
                     Select(pClicked, sal_True);
                     SetCurEntry(pClicked);
                 }
@@ -1883,7 +1883,7 @@ void FmFilterNavigator::DeleteSelection()
     }
 
     // Remove the selection
-    SelectAll(sal_False);
+    SelectAll(false);
 
     for (::std::vector<SvTreeListEntry*>::reverse_iterator i = aEntryList.rbegin();
         // link problems with operator ==

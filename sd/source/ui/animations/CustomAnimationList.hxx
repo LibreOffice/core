@@ -67,7 +67,7 @@ public:
 
     // overrides
     virtual void    SelectHdl();
-    virtual sal_Bool    DoubleClickHdl();
+    virtual bool    DoubleClickHdl();
 
     virtual void    Paint( const Rectangle& rRect );
 

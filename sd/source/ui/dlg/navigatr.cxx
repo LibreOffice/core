@@ -498,7 +498,7 @@ IMPL_LINK( SdNavigatorWin, MenuSelectHdl, Menu *, pMenu )
             {
                 // patch, prevents endless loop
                 if( maTlbObjects.GetSelectionCount() > 1 )
-                    maTlbObjects.SelectAll( sal_False );
+                    maTlbObjects.SelectAll( false );
 
                 maTlbObjects.SetSelectionMode( SINGLE_SELECTION );
             }
@@ -994,7 +994,7 @@ void SdPageNameControllerItem::StateChanged( sal_uInt16 nSId,
                 if( pNavigatorWin->maTlbObjects.GetSelectionMode() == MULTIPLE_SELECTION )
                 {
                     // because otherwise it is always additional select
-                    pNavigatorWin->maTlbObjects.SelectAll( sal_False );
+                    pNavigatorWin->maTlbObjects.SelectAll( false );
                 }
                 pNavigatorWin->maTlbObjects.SelectEntry( aPageName );
             }

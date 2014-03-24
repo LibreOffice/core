@@ -69,7 +69,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeExtTreeListBox(Window *pPar
 ExtTreeListBox::~ExtTreeListBox ()
 { }
 
-sal_Bool ExtTreeListBox::EditingEntry( SvTreeListEntry* pEntry, Selection& )
+bool ExtTreeListBox::EditingEntry( SvTreeListEntry* pEntry, Selection& )
 {
     bool bRet = false;
 
@@ -95,7 +95,7 @@ sal_Bool ExtTreeListBox::EditingEntry( SvTreeListEntry* pEntry, Selection& )
     return bRet;
 }
 
-sal_Bool ExtTreeListBox::EditedEntry( SvTreeListEntry* pEntry, const OUString& rNewText )
+bool ExtTreeListBox::EditedEntry( SvTreeListEntry* pEntry, const OUString& rNewText )
 {
     if ( !IsValidSbxName(rNewText) )
     {
@@ -183,7 +183,7 @@ DragDropMode ExtTreeListBox::NotifyStartDrag( TransferDataContainer&, SvTreeList
 }
 
 
-sal_Bool ExtTreeListBox::NotifyAcceptDrop( SvTreeListEntry* pEntry )
+bool ExtTreeListBox::NotifyAcceptDrop( SvTreeListEntry* pEntry )
 {
     // don't drop on a BasicManager (nDepth == 0)
     sal_uInt16 nDepth = pEntry ? GetModel()->GetDepth( pEntry ) : 0;

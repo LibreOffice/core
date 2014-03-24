@@ -189,7 +189,7 @@ private:
     bool            Kill( const OUString& rURL );
 
 protected:
-    virtual sal_Bool     DoubleClickHdl();
+    virtual bool     DoubleClickHdl();
     virtual OUString GetAccessibleObjectDescription( ::svt::AccessibleBrowseBoxObjType _eType, sal_Int32 _nPos ) const;
 
 public:
@@ -198,7 +198,7 @@ public:
 
     virtual void    Resize();
     virtual void    KeyInput( const KeyEvent& rKEvt );
-    virtual sal_Bool    EditedEntry( SvTreeListEntry* pEntry, const OUString& rNewText );
+    virtual bool    EditedEntry( SvTreeListEntry* pEntry, const OUString& rNewText );
 
     void            ClearAll();
     HeaderBar*      GetHeaderBar() const { return mpHeaderBar; }
@@ -966,7 +966,7 @@ void ViewTabListBox_Impl::DeleteEntries()
 }
 
 
-sal_Bool ViewTabListBox_Impl::EditedEntry( SvTreeListEntry* pEntry,
+bool ViewTabListBox_Impl::EditedEntry( SvTreeListEntry* pEntry,
                                  const OUString& rNewText )
 {
     bool bRet = false;
@@ -1064,10 +1064,10 @@ void ViewTabListBox_Impl::DoQuickSearch( const sal_Unicode& rChar )
 }
 
 
-sal_Bool ViewTabListBox_Impl::DoubleClickHdl()
+bool ViewTabListBox_Impl::DoubleClickHdl()
 {
     SvHeaderTabListBox::DoubleClickHdl();
-    return sal_False;
+    return false;
         // this means "do no additional handling". Especially this means that the SvImpLBox does not
         // recognize that the entry at the double click position change after the handler call (which is
         // the case if in the handler, our content was replaced)
@@ -1974,7 +1974,7 @@ void SvtFileView_Impl::InitSelection()
     mpView->SelectAll( false );
     SvTreeListEntry* pFirst = mpView->First();
     if ( pFirst )
-        mpView->SetCursor( pFirst, sal_True );
+        mpView->SetCursor( pFirst, true );
 }
 
 
@@ -1982,7 +1982,7 @@ void SvtFileView_Impl::OpenFolder_Impl()
 {
     ::osl::MutexGuard aGuard( maMutex );
 
-    mpView->SetUpdateMode( sal_False );
+    mpView->SetUpdateMode( false );
     mpView->ClearAll();
 
     std::vector< SortingData_Impl* >::iterator aIt;
@@ -2005,7 +2005,7 @@ void SvtFileView_Impl::OpenFolder_Impl()
     InitSelection();
 
     ++mnSuspendSelectCallback;
-    mpView->SetUpdateMode( sal_True );
+    mpView->SetUpdateMode( true );
     --mnSuspendSelectCallback;
 
     ResetCursor();
@@ -2017,9 +2017,9 @@ void SvtFileView_Impl::ResetCursor()
     // deselect
     SvTreeListEntry* pEntry = mpView->FirstSelected();
     if ( pEntry )
-        mpView->Select( pEntry, sal_False );
+        mpView->Select( pEntry, false );
     // set cursor to the first entry
-    mpView->SetCursor( mpView->First(), sal_True );
+    mpView->SetCursor( mpView->First(), true );
     mpView->Update();
 }
 

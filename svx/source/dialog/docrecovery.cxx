@@ -1007,7 +1007,7 @@ RecoveryDialog::RecoveryDialog(Window*       pParent,
     // mark first item
     SvTreeListEntry* pFirst = m_aFileListLB.First();
     if (pFirst)
-        m_aFileListLB.SetCursor(pFirst, sal_True);
+        m_aFileListLB.SetCursor(pFirst, true);
 }
 
 
@@ -1280,7 +1280,7 @@ void RecoveryDialog::stepNext(TURLInfo* pItem)
         if (pInfo->ID != pItem->ID)
             continue;
 
-        m_aFileListLB.SetCursor(pEntry, sal_True);
+        m_aFileListLB.SetCursor(pEntry, true);
         m_aFileListLB.MakeVisible(pEntry);
         m_aFileListLB.Invalidate();
         m_aFileListLB.Update();

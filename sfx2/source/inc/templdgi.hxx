@@ -100,7 +100,7 @@ private:
 protected:
     virtual void    Command( const CommandEvent& rMEvt );
     virtual bool    Notify( NotifyEvent& rNEvt );
-    virtual sal_Bool    DoubleClickHdl();
+    virtual bool    DoubleClickHdl();
     virtual bool    ExpandingHdl();
     virtual void    ExpandedHdl();
     virtual sal_Bool    NotifyMoving(SvTreeListEntry*  pTarget,

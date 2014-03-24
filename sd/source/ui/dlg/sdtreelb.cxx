@@ -593,7 +593,7 @@ void SdPageObjsTLB::Fill( const SdDrawDocument* pInDoc, SfxMedium* pInMedium,
     Image aImgDocClosed=Image( BitmapEx( SdResId( BMP_DOC_CLOSED ) ) );
 
     // insert document name
-    InsertEntry( maDocName, aImgDocOpen, aImgDocClosed, NULL, sal_True, TREELIST_APPEND,
+    InsertEntry( maDocName, aImgDocOpen, aImgDocClosed, NULL, true, TREELIST_APPEND,
                  reinterpret_cast< void* >( 1 )
     );
 }
@@ -624,7 +624,7 @@ void SdPageObjsTLB::AddShapeList (
         aIcon,
         aIcon,
         pParentEntry,
-        sal_False,
+        false,
         TREELIST_APPEND,
         pUserData);
 
@@ -673,7 +673,7 @@ void SdPageObjsTLB::AddShapeList (
                     maImgOle,
                     maImgOle,
                     pEntry,
-                    sal_False,
+                    false,
                     TREELIST_APPEND,
                     pObj
                 );
@@ -707,7 +707,7 @@ void SdPageObjsTLB::AddShapeList (
                     maImgGraphic,
                     maImgGraphic,
                     pEntry,
-                    sal_False,
+                    false,
                     TREELIST_APPEND,
                     pObj
                 );
@@ -756,7 +756,7 @@ void SdPageObjsTLB::AddShapeList (
                     rIconProvider.maImgObjects,
                     rIconProvider.maImgObjects,
                     pEntry,
-                    sal_False,
+                    false,
                     TREELIST_APPEND,
                     pObj
                 );
@@ -972,7 +972,7 @@ void SdPageObjsTLB::RequestingChildren( SvTreeListEntry* pFileEntry )
                                               aImgPage,
                                               aImgPage,
                                               pFileEntry,
-                                              sal_False,
+                                              false,
                                               TREELIST_APPEND,
                                               reinterpret_cast< void* >( 1 ) );
 
@@ -1188,26 +1188,26 @@ void SdPageObjsTLB::StartDrag( sal_Int8 nAction, const Point& rPosPixel)
 
         // Select all entries and disable them as drop targets.
         SetSelectionMode(MULTIPLE_SELECTION);
-        SetCursor(NULL, sal_False);
-        SelectAll(sal_True, sal_False);
-        EnableSelectionAsDropTarget(sal_False, sal_True);
+        SetCursor(NULL, false);
+        SelectAll(true, false);
+        EnableSelectionAsDropTarget(false, true);
 
         // Enable only the entries as drop targets that are children of the
         // page under the mouse.
         SvTreeListEntry* pParent = GetRootLevelParent(pEntry);
         if (pParent != NULL)
         {
-            SelectAll(sal_False, sal_False);
-            Select(pParent, sal_True);
+            SelectAll(false, false);
+            Select(pParent, true);
             //            for (SvTreeListEntry*pChild=FirstChild(pParent); pChild!=NULL; pChild=NextSibling(pChild))
             //                Select(pChild, sal_True);
-            EnableSelectionAsDropTarget(sal_True, sal_True);//sal_False);
+            EnableSelectionAsDropTarget(true, true);//sal_False);
         }
 
         // Set selection back to the entry under the mouse.
-        SelectAll(sal_False,sal_False);
+        SelectAll(false, false);
         SetSelectionMode(SINGLE_SELECTION);
-        Select(pEntry, sal_True);
+        Select(pEntry, true);
 
         // We can delete the Navigator from ExecuteDrag (when switching to
         // another document type), but that would kill the StarView MouseMove
@@ -1343,7 +1343,7 @@ sal_Int8 SdPageObjsTLB::AcceptDrop (const AcceptDropEvent& rEvent)
         SvTreeListEntry* pEntry = GetDropTarget(rEvent.maPosPixel);
         if (rEvent.mbLeaving || !CheckDragAndDropMode( this, rEvent.mnAction ))
         {
-            ImplShowTargetEmphasis( pTargetEntry, sal_False );
+            ImplShowTargetEmphasis( pTargetEntry, false );
         }
         else if( !GetDragDropMode() )
         {
@@ -1356,16 +1356,16 @@ sal_Int8 SdPageObjsTLB::AcceptDrop (const AcceptDropEvent& rEvent)
             // Draw emphasis.
             if (pEntry != pTargetEntry || !(nImpFlags & SVLBOX_TARGEMPH_VIS))
             {
-                ImplShowTargetEmphasis( pTargetEntry, sal_False );
+                ImplShowTargetEmphasis( pTargetEntry, false );
                 pTargetEntry = pEntry;
-                ImplShowTargetEmphasis( pTargetEntry, sal_True );
+                ImplShowTargetEmphasis( pTargetEntry, true );
             }
         }
     }
 
     // Hide emphasis when there is no valid drop action.
     if (nResult == DND_ACTION_NONE)
-        ImplShowTargetEmphasis(pTargetEntry, sal_False);
+        ImplShowTargetEmphasis(pTargetEntry, false);
 
     return nResult;
 }

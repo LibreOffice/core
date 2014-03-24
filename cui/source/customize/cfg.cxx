@@ -1429,9 +1429,9 @@ sal_Int8 SvxMenuEntriesListBox::AcceptDrop( const AcceptDropEvent& rEvt )
     return SvTreeListBox::AcceptDrop( aNewAcceptDropEvent );
 }
 
-sal_Bool SvxMenuEntriesListBox::NotifyAcceptDrop( SvTreeListEntry* )
+bool SvxMenuEntriesListBox::NotifyAcceptDrop( SvTreeListEntry* )
 {
-    return sal_True;
+    return true;
 }
 
 sal_Bool SvxMenuEntriesListBox::NotifyMoving(
@@ -2043,7 +2043,7 @@ SvTreeListEntry* SvxConfigPage::InsertEntryIntoUI(
     {
         pNewEntry = m_pContentsListBox->InsertEntry(
             OUString(aSeparatorStr),
-            0, sal_False, nPos, pNewEntryData);
+            0, false, nPos, pNewEntryData);
     }
     else
     {
@@ -2055,12 +2055,12 @@ SvTreeListEntry* SvxConfigPage::InsertEntryIntoUI(
         if ( !!aImage )
         {
             pNewEntry = m_pContentsListBox->InsertEntry(
-                aName, aImage, aImage, 0, sal_False, nPos, pNewEntryData );
+                aName, aImage, aImage, 0, false, nPos, pNewEntryData );
         }
         else
         {
             pNewEntry = m_pContentsListBox->InsertEntry(
-                aName, 0, sal_False, nPos, pNewEntryData );
+                aName, 0, false, nPos, pNewEntryData );
         }
 
         if ( pNewEntryData->IsPopup() ||

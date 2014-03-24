@@ -538,7 +538,7 @@ void SvxJavaOptionsPage::AddJRE( JavaInfo* _pInfo )
 
 void SvxJavaOptionsPage::HandleCheckEntry( SvTreeListEntry* _pEntry )
 {
-    m_pJavaList->Select( _pEntry, sal_True );
+    m_pJavaList->Select( _pEntry, true );
     SvButtonState eState = m_pJavaList->GetCheckButtonState( _pEntry );
 
     if ( SV_BUTTON_CHECKED == eState )

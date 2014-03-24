@@ -1047,10 +1047,10 @@ IMPL_LINK_NOARG(SfxAcceleratorConfigPage, Default)
     if (xReset.is())
         xReset->reset();
 
-    m_pEntriesBox->SetUpdateMode(sal_False);
+    m_pEntriesBox->SetUpdateMode(false);
     ResetConfig();
     Init(m_xAct);
-    m_pEntriesBox->SetUpdateMode(sal_True);
+    m_pEntriesBox->SetUpdateMode(true);
     m_pEntriesBox->Invalidate();
     m_pEntriesBox->Select(m_pEntriesBox->GetEntry(0, 0));
 
@@ -1147,7 +1147,7 @@ IMPL_LINK( SfxAcceleratorConfigPage, SelectHdl, Control*, pListBox )
                 if ( pUserData && pUserData->m_sCommand == sPossibleNewCommand )
                 {
                     TAccInfo*    pU1 = new TAccInfo(-1, -1, pUserData->m_aKey);
-                    SvTreeListEntry* pE1 = m_pKeyBox->InsertEntry( pUserData->m_aKey.GetName(), 0L, sal_True, TREELIST_APPEND );
+                    SvTreeListEntry* pE1 = m_pKeyBox->InsertEntry( pUserData->m_aKey.GetName(), 0L, true, TREELIST_APPEND );
                     pE1->SetUserData(pU1);
                     pE1->EnableChildrenOnDemand( false );
                 }
@@ -1194,10 +1194,10 @@ IMPL_LINK_NOARG(SfxAcceleratorConfigPage, RadioHdl)
     if ( m_xAct.is() && ( xOld == m_xAct ) )
         return 0;
 
-    m_pEntriesBox->SetUpdateMode( sal_False );
+    m_pEntriesBox->SetUpdateMode( false );
     ResetConfig();
     Init(m_xAct);
-    m_pEntriesBox->SetUpdateMode( sal_True );
+    m_pEntriesBox->SetUpdateMode( true );
     m_pEntriesBox->Invalidate();
 
     m_pGroupLBox->Init(m_xContext, m_xFrame, m_sModuleLongName, true);
@@ -1266,10 +1266,10 @@ IMPL_LINK_NOARG(SfxAcceleratorConfigPage, LoadHdl)
             // open the configuration and update our UI
             css::uno::Reference< css::ui::XAcceleratorConfiguration > xTempAccMgr(xCfgMgr->getShortCutManager(), css::uno::UNO_QUERY_THROW);
 
-            m_pEntriesBox->SetUpdateMode(sal_False);
+            m_pEntriesBox->SetUpdateMode(false);
             ResetConfig();
             Init(xTempAccMgr);
-            m_pEntriesBox->SetUpdateMode(sal_True);
+            m_pEntriesBox->SetUpdateMode(true);
             m_pEntriesBox->Invalidate();
             m_pEntriesBox->Select(m_pEntriesBox->GetEntry(0, 0));
 

@@ -178,7 +178,7 @@ void DBTreeListBox::SelectHdl()
 
 void DBTreeListBox::MouseButtonDown( const MouseEvent& rMEvt )
 {
-    sal_Bool bHitEmptySpace = (NULL == GetEntry(rMEvt.GetPosPixel(), sal_True));
+    sal_Bool bHitEmptySpace = (NULL == GetEntry(rMEvt.GetPosPixel(), true));
     if (bHitEmptySpace && (rMEvt.GetClicks() == 2) && rMEvt.IsMod1())
         Control::MouseButtonDown(rMEvt);
     else
@@ -382,12 +382,12 @@ void DBTreeListBox::KeyInput( const KeyEvent& rKEvt )
         SvTreeListBox::KeyInput(rKEvt);
 }
 
-sal_Bool DBTreeListBox::EditingEntry( SvTreeListEntry* pEntry, Selection& /*_aSelection*/)
+bool DBTreeListBox::EditingEntry( SvTreeListEntry* pEntry, Selection& /*_aSelection*/)
 {
     return m_aEditingHandler.Call(pEntry) != 0;
 }
 
-sal_Bool DBTreeListBox::EditedEntry( SvTreeListEntry* pEntry, const OUString& rNewText )
+bool DBTreeListBox::EditedEntry( SvTreeListEntry* pEntry, const OUString& rNewText )
 {
     DBTreeEditedEntry aEntry;
     aEntry.pEntry = pEntry;
@@ -399,10 +399,10 @@ sal_Bool DBTreeListBox::EditedEntry( SvTreeListEntry* pEntry, const OUString& rN
     }
     SetEntryText(pEntry,aEntry.aNewText);
 
-    return sal_False;  // we never want that the base change our text
+    return false;  // we never want that the base change our text
 }
 
-sal_Bool DBTreeListBox::DoubleClickHdl()
+bool DBTreeListBox::DoubleClickHdl()
 {
     long nResult = aDoubleClickHdl.Call( this );
     // continue default processing if the DoubleClickHandler didn't handle it

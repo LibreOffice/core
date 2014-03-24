@@ -231,7 +231,7 @@ void DropListBox_Impl::MouseButtonDown( const MouseEvent& rMEvt )
 {
     nModifier = rMEvt.GetModifier();
 
-    sal_Bool bHitEmptySpace = ( NULL == GetEntry( rMEvt.GetPosPixel(), sal_True ) );
+    sal_Bool bHitEmptySpace = ( NULL == GetEntry( rMEvt.GetPosPixel(), true ) );
     if( bHitEmptySpace && ( rMEvt.GetClicks() == 2 ) && rMEvt.IsMod1() )
         Control::MouseButtonDown( rMEvt );
     else
@@ -513,7 +513,7 @@ PopupMenu* StyleTreeListBox_Impl::CreateContextMenu()
     return pDialog->CreateContextMenu();
 }
 
-sal_Bool StyleTreeListBox_Impl::DoubleClickHdl()
+bool StyleTreeListBox_Impl::DoubleClickHdl()
 
 /*  [Description]
 
@@ -522,7 +522,7 @@ sal_Bool StyleTreeListBox_Impl::DoubleClickHdl()
 */
 {
     aDoubleClickLink.Call(this);
-    return sal_False;
+    return false;
 }
 
 
@@ -623,7 +623,7 @@ void  StyleTreeListBox_Impl::ExpandedHdl()
 {
     SvTreeListEntry *pEntry = GetHdlEntry();
     if(!IsExpanded(pEntry) && pCurEntry != GetCurEntry())
-        SelectAll( sal_False );
+        SelectAll( false );
     pCurEntry = 0;
 }
 
@@ -1112,7 +1112,7 @@ void SfxCommonTemplateDialog_Impl::SelectStyle(const OUString &rStr)
             }
         }
         else
-            pTreeBox->SelectAll( sal_False );
+            pTreeBox->SelectAll( false );
     }
     else
     {
@@ -1139,7 +1139,7 @@ void SfxCommonTemplateDialog_Impl::SelectStyle(const OUString &rStr)
 
         if ( !bSelect )
         {
-            aFmtLb.SelectAll( sal_False );
+            aFmtLb.SelectAll( false );
             EnableEdit(sal_False);
             EnableHide( sal_False );
             EnableShow( sal_False );
@@ -1210,7 +1210,7 @@ void SfxCommonTemplateDialog_Impl::FillTreeBox()
         MakeTree_Impl(aArr);
         ExpandedEntries_t aEntries;
         pTreeBox->MakeExpanded_Impl(aEntries);
-        pTreeBox->SetUpdateMode( sal_False );
+        pTreeBox->SetUpdateMode( false );
         pTreeBox->Clear();
         const sal_uInt16 nCount = aArr.size();
         for(sal_uInt16 i = 0; i < nCount; ++i)
@@ -1229,7 +1229,7 @@ void SfxCommonTemplateDialog_Impl::FillTreeBox()
                 pTreeBox->Expand( pEntry );
         }
 
-        pTreeBox->SetUpdateMode( sal_True );
+        pTreeBox->SetUpdateMode( true );
 
         OUString aStyle;
         if(pState)  // Select current entry
@@ -1366,11 +1366,11 @@ void SfxCommonTemplateDialog_Impl::UpdateStyles_Impl(sal_uInt16 nFlags)
             if( nPos < nCount || pEntry )
             {
                 // Fills the display box
-                aFmtLb.SetUpdateMode(sal_False);
+                aFmtLb.SetUpdateMode(false);
                 aFmtLb.Clear();
 
                 for(nPos = 0; nPos < nCount; ++nPos)
-                    aFmtLb.InsertEntry(aStrings[nPos], 0, sal_False, nPos);
+                    aFmtLb.InsertEntry(aStrings[nPos], 0, false, nPos);
 
                 aFmtLb.SetUpdateMode(true);
             }

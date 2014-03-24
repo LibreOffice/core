@@ -563,7 +563,7 @@ void SwNavigationPI::_ZoomOut()
         }
         SvTreeListEntry* pFirst = aContentTree.FirstSelected();
         if(pFirst)
-            aContentTree.Select(pFirst, sal_True); // Enable toolbox
+            aContentTree.Select(pFirst, true); // Enable toolbox
         pConfig->SetSmall( sal_False );
         aContentToolBox.CheckItem(FN_SHOW_CONTENT_BOX);
     }
@@ -592,7 +592,7 @@ void SwNavigationPI::_ZoomIn()
             pFloat->SetOutputSizePixel(aSz);
             SvTreeListEntry* pFirst = aContentTree.FirstSelected();
             if(pFirst)
-                aContentTree.Select(pFirst, sal_True); // Enable toolbox
+                aContentTree.Select(pFirst, true); // Enable toolbox
             pConfig->SetSmall( sal_True );
             aContentToolBox.CheckItem(FN_SHOW_CONTENT_BOX, false);
         }
@@ -776,7 +776,7 @@ SwNavigationPI::SwNavigationPI( SfxBindings* _pBindings,
     aContentTree.SetDragDropMode(   SV_DRAGDROP_CTRL_MOVE |
                                     SV_DRAGDROP_CTRL_COPY |
                                     SV_DRAGDROP_ENABLE_TOP );
-    aContentTree.EnableAsyncDrag(sal_True);
+    aContentTree.EnableAsyncDrag(true);
     aContentTree.ShowTree();
     aContentToolBox.CheckItem(FN_SHOW_CONTENT_BOX, true);
 

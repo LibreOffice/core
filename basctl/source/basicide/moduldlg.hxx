@@ -97,11 +97,11 @@ public:
 class ExtTreeListBox : public TreeListBox
 {
 protected:
-    virtual sal_Bool    EditingEntry( SvTreeListEntry* pEntry, Selection& rSel  );
-    virtual sal_Bool    EditedEntry( SvTreeListEntry* pEntry, const OUString& rNewText );
+    virtual bool    EditingEntry( SvTreeListEntry* pEntry, Selection& rSel  );
+    virtual bool    EditedEntry( SvTreeListEntry* pEntry, const OUString& rNewText );
 
     virtual DragDropMode    NotifyStartDrag( TransferDataContainer& rData, SvTreeListEntry* pEntry );
-    virtual sal_Bool            NotifyAcceptDrop( SvTreeListEntry* pEntry );
+    virtual bool            NotifyAcceptDrop( SvTreeListEntry* pEntry );
 
     virtual sal_Bool    NotifyMoving( SvTreeListEntry* pTarget, SvTreeListEntry* pEntry,
                         SvTreeListEntry*& rpNewParent, sal_uLong& rNewChildPos );
@@ -134,8 +134,8 @@ public:
     bool            IsChecked( sal_uLong nPos ) const;
 
     virtual void    InitEntry(SvTreeListEntry*, const OUString&, const Image&, const Image&, SvLBoxButtonKind eButtonKind);
-    virtual sal_Bool    EditingEntry( SvTreeListEntry* pEntry, Selection& rSel );
-    virtual sal_Bool    EditedEntry( SvTreeListEntry* pEntry, const OUString& rNewText );
+    virtual bool    EditingEntry( SvTreeListEntry* pEntry, Selection& rSel );
+    virtual bool    EditedEntry( SvTreeListEntry* pEntry, const OUString& rNewText );
 
     void            SetDocument( const ScriptDocument& rDocument ) { m_aDocument = rDocument; }
 

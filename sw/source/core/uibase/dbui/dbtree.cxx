@@ -222,7 +222,7 @@ void SwDBTreeList::InitTreeList()
     for(long i = 0; i < nCount; i++)
     {
         OUString sDBName(pDBNames[i]);
-        InsertEntry(sDBName, aImg, aImg, NULL, sal_True);
+        InsertEntry(sDBName, aImg, aImg, NULL, true);
     }
     OUString sDBName(sDefDBName.getToken(0, DB_DELIM));
     OUString sTableName(sDefDBName.getToken(1, DB_DELIM));
@@ -235,7 +235,7 @@ void SwDBTreeList::InitTreeList()
 void    SwDBTreeList::AddDataSource(const OUString& rSource)
 {
     Image aImg = aImageList.GetImage(IMG_DB);
-    SvTreeListEntry* pEntry = InsertEntry(rSource, aImg, aImg, NULL, sal_True);
+    SvTreeListEntry* pEntry = InsertEntry(rSource, aImg, aImg, NULL, true);
     SvTreeListBox::Select(pEntry);
 }
 
@@ -248,7 +248,7 @@ void SwDBTreeList::ShowColumns(sal_Bool bShowCol)
         OUString sColumnName;
         const OUString sDBName(GetDBName(sTableName, sColumnName));
 
-        SetUpdateMode(sal_False);
+        SetUpdateMode(false);
 
         SvTreeListEntry* pEntry = First();
 
@@ -268,7 +268,7 @@ void SwDBTreeList::ShowColumns(sal_Bool bShowCol)
         {
             Select(sDBName, sTableName, sColumnName);   // force RequestingChildren
         }
-        SetUpdateMode(sal_True);
+        SetUpdateMode(true);
     }
 }
 

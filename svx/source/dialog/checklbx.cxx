@@ -89,7 +89,7 @@ void SvxCheckListBox::InsertEntry( const OUString& rStr, sal_uLong nPos,
                                    void* pUserData,
                                    SvLBoxButtonKind eButtonKind )
 {
-    SvTreeListBox::InsertEntry( rStr, NULL, sal_False, nPos, pUserData,
+    SvTreeListBox::InsertEntry( rStr, NULL, false, nPos, pUserData,
                                 eButtonKind );
 }
 
@@ -220,7 +220,7 @@ void SvxCheckListBox::MouseButtonDown( const MouseEvent& rMEvt )
             if (pItem && pItem->GetType() == SV_ITEM_ID_LBOXBUTTON)
             {
                 SvTreeListBox::MouseButtonDown( rMEvt );
-                Select( pEntry, sal_True );
+                Select( pEntry, true );
                 return;
             }
             else
@@ -267,7 +267,7 @@ void SvxCheckListBox::KeyInput( const KeyEvent& rKEvt )
 
 
 
-SvTreeListEntry* SvxCheckListBox::InsertEntry( const OUString& rText, SvTreeListEntry* pParent, sal_Bool bChildrenOnDemand, sal_uIntPtr nPos, void* pUserData, SvLBoxButtonKind eButtonKind )
+SvTreeListEntry* SvxCheckListBox::InsertEntry( const OUString& rText, SvTreeListEntry* pParent, bool bChildrenOnDemand, sal_uIntPtr nPos, void* pUserData, SvLBoxButtonKind eButtonKind )
 {
     return SvTreeListBox::InsertEntry( rText, pParent, bChildrenOnDemand, nPos, pUserData, eButtonKind );
 }

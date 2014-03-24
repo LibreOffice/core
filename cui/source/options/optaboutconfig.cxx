@@ -181,10 +181,10 @@ void CuiAboutConfigTabPage::Reset(/* const SfxItemSet&*/ )
     m_vectorOfModified.clear();
     m_pPrefBox->GetModel()->SetSortMode( SortNone );
 
-    m_pPrefBox->SetUpdateMode(sal_False);
+    m_pPrefBox->SetUpdateMode(false);
     Reference< XNameAccess > xConfigAccess = getConfigAccess( "/", sal_False );
     FillItems( xConfigAccess );
-    m_pPrefBox->SetUpdateMode(sal_True);
+    m_pPrefBox->SetUpdateMode(true);
 }
 
 sal_Bool CuiAboutConfigTabPage::FillItemSet(/* SfxItemSet&*/ )

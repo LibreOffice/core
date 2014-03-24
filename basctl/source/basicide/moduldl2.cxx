@@ -258,7 +258,7 @@ void CheckBox::InitEntry(SvTreeListEntry* pEntry, const OUString& rTxt,
     }
 }
 
-sal_Bool CheckBox::EditingEntry( SvTreeListEntry* pEntry, Selection& )
+bool CheckBox::EditingEntry( SvTreeListEntry* pEntry, Selection& )
 {
     if (eMode != ObjectMode::Module)
         return false;
@@ -304,7 +304,7 @@ sal_Bool CheckBox::EditingEntry( SvTreeListEntry* pEntry, Selection& )
     return true;
 }
 
-sal_Bool CheckBox::EditedEntry( SvTreeListEntry* pEntry, const OUString& rNewName )
+bool CheckBox::EditedEntry( SvTreeListEntry* pEntry, const OUString& rNewName )
 {
     bool bValid = rNewName.getLength() <= 30 && IsValidSbxName(rNewName);
     OUString aOldName( GetEntryText( pEntry, 0 ) );

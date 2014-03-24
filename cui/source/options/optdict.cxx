@@ -534,7 +534,7 @@ void SvxEditDictionaryDialog::ShowWords_Impl( sal_uInt16 nId )
             aStr += "\t";
             aStr += pEntry[i]->getReplacementText();
         }
-        pWordsLB->InsertEntry(aStr, 0, sal_False, nPos == TREELIST_ENTRY_NOTFOUND ?  TREELIST_APPEND : nPos);
+        pWordsLB->InsertEntry(aStr, 0, false, nPos == TREELIST_ENTRY_NOTFOUND ?  TREELIST_APPEND : nPos);
     }
 
     if (pWordsLB->GetEntryCount())
@@ -631,7 +631,7 @@ IMPL_LINK(SvxEditDictionaryDialog, NewDelHdl, PushButton*, pBtn)
         {
             // insert new entry in list-box etc...
 
-            pWordsLB->SetUpdateMode(sal_False);
+            pWordsLB->SetUpdateMode(false);
             sal_uLong _nPos = TREELIST_ENTRY_NOTFOUND;
 
             if(pReplaceFT->IsVisible())
@@ -649,13 +649,13 @@ IMPL_LINK(SvxEditDictionaryDialog, NewDelHdl, PushButton*, pBtn)
             else
             {
                 _nPos = GetLBInsertPos( aNewWord );
-                SvTreeListEntry* pInsEntry = pWordsLB->InsertEntry(sEntry, 0, sal_False,
+                SvTreeListEntry* pInsEntry = pWordsLB->InsertEntry(sEntry, 0, false,
                             _nPos == TREELIST_ENTRY_NOTFOUND ? TREELIST_APPEND : _nPos);
                 pNewEntry = pInsEntry;
             }
 
             pWordsLB->MakeVisible( pNewEntry );
-            pWordsLB->SetUpdateMode(sal_True);
+            pWordsLB->SetUpdateMode(true);
             // if the request came from the ReplaceEdit, give focus to the ShortEdit
             if(pReplaceED->HasFocus())
                 pWordED->GrabFocus();
@@ -732,7 +732,7 @@ IMPL_LINK(SvxEditDictionaryDialog, ModifyHdl, Edit*, pEdt)
 
             if(!bFound)
             {
-                pWordsLB->SelectAll(sal_False);
+                pWordsLB->SelectAll(false);
                 pFirstSel = 0;
 
                 aNewReplaceText = sNew;

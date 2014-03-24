@@ -656,7 +656,7 @@ void ScConflictsDlg::KeepAllHandler( bool bMine )
     }
     maLbConflicts.SetUpdateMode( false );
     maLbConflicts.Clear();
-    maLbConflicts.SetUpdateMode( sal_True );
+    maLbConflicts.SetUpdateMode( true );
     SetPointer( Pointer( POINTER_ARROW ) );
     EndDialog( RET_OK );
 }

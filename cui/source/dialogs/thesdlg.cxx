@@ -297,7 +297,7 @@ bool SvxThesaurusDialog::UpdateAlternativesBox_Impl()
     const sal_Int32 nMeanings = aMeanings.getLength();
     const uno::Reference< linguistic2::XMeaning > *pMeanings = aMeanings.getConstArray();
 
-    m_pAlternativesCT->SetUpdateMode( sal_False );
+    m_pAlternativesCT->SetUpdateMode( false );
 
     // clear old user data of control before creating new ones via AddEntry below
     m_pAlternativesCT->ClearExtraData();
@@ -317,7 +317,7 @@ bool SvxThesaurusDialog::UpdateAlternativesBox_Impl()
             m_pAlternativesCT->AddEntry( -1, pSynonyms[k], false );
     }
 
-    m_pAlternativesCT->SetUpdateMode( sal_True );
+    m_pAlternativesCT->SetUpdateMode( true );
 
     return nMeanings > 0;
 }

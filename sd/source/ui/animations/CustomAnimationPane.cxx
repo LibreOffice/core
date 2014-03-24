@@ -1751,7 +1751,7 @@ void CustomAnimationPane::onChange( bool bCreate )
         {
             if( bCreate )
             {
-                mpCustomAnimationList->SelectAll( sal_False );
+                mpCustomAnimationList->SelectAll( false );
 
                 // gather shapes from the selection
                 std::vector< Any >::iterator aIter( aTargets.begin() );

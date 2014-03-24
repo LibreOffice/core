@@ -2277,7 +2277,7 @@ SbxBase* WatchTreeListBox::ImplGetSBXForEntry( SvTreeListEntry* pEntry, bool& rb
     return pSBX;
 }
 
-sal_Bool WatchTreeListBox::EditingEntry( SvTreeListEntry* pEntry, Selection& )
+bool WatchTreeListBox::EditingEntry( SvTreeListEntry* pEntry, Selection& )
 {
     WatchItem* pItem = (WatchItem*)pEntry->GetUserData();
 
@@ -2302,7 +2302,7 @@ sal_Bool WatchTreeListBox::EditingEntry( SvTreeListEntry* pEntry, Selection& )
     return bEdit;
 }
 
-sal_Bool WatchTreeListBox::EditedEntry( SvTreeListEntry* pEntry, const OUString& rNewText )
+bool WatchTreeListBox::EditedEntry( SvTreeListEntry* pEntry, const OUString& rNewText )
 {
     OUString aResult = comphelper::string::strip(rNewText, ' ');
 

@@ -69,7 +69,7 @@ namespace dbaui
         }
 
     protected:
-        virtual sal_Bool EditedEntry( SvTreeListEntry* pEntry, const OUString& rNewText );
+        virtual bool EditedEntry( SvTreeListEntry* pEntry, const OUString& rNewText );
 
     private:
         using SvTreeListBox::Select;

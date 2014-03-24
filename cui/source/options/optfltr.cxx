@@ -228,7 +228,7 @@ void OfaMSFilterTabPage2::Reset( const SfxItemSet& )
 {
     SvtFilterOptions& rOpt = SvtFilterOptions::Get();
 
-    m_pCheckLB->SetUpdateMode(sal_False);
+    m_pCheckLB->SetUpdateMode(false);
     m_pCheckLB->Clear();
 
     SvtModuleOptions aModuleOpt;
@@ -279,7 +279,7 @@ void OfaMSFilterTabPage2::Reset( const SfxItemSet& )
             }
         }
     }
-    m_pCheckLB->SetUpdateMode( sal_True );
+    m_pCheckLB->SetUpdateMode( true );
 }
 
 void OfaMSFilterTabPage2::InsertEntry( const OUString& _rTxt, sal_IntPtr _nType )

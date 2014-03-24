@@ -404,7 +404,7 @@ void SvxConfigGroupListBox::Init(bool bShowSlots, const Reference< frame::XFrame
     m_bShowSlots = bShowSlots;
     m_xFrame.set(xFrame);
 
-    SetUpdateMode(sal_False);
+    SetUpdateMode(false);
     ClearAll();
 
     Reference< XComponentContext > xContext(
@@ -527,7 +527,7 @@ void SvxConfigGroupListBox::Init(bool bShowSlots, const Reference< frame::XFrame
         }
     }
     MakeVisible( GetEntry( 0,0 ) );
-    SetUpdateMode( sal_True );
+    SetUpdateMode( true );
 }
 
 Image SvxConfigGroupListBox::GetImage(
@@ -623,12 +623,12 @@ void SvxConfigGroupListBox::GroupSelected()
 {
     SvTreeListEntry *pEntry = FirstSelected();
     SvxGroupInfo_Impl *pInfo = (SvxGroupInfo_Impl*) pEntry->GetUserData();
-    pFunctionListBox->SetUpdateMode(sal_False);
+    pFunctionListBox->SetUpdateMode(false);
     pFunctionListBox->ClearAll();
     if ( pInfo->nKind != SVX_CFGGROUP_FUNCTION &&
              pInfo->nKind != SVX_CFGGROUP_SCRIPTCONTAINER )
     {
-        pFunctionListBox->SetUpdateMode(sal_True);
+        pFunctionListBox->SetUpdateMode(true);
         return;
     }
 
@@ -794,7 +794,7 @@ void SvxConfigGroupListBox::GroupSelected()
     if ( pFunctionListBox->GetEntryCount() )
         pFunctionListBox->Select( pFunctionListBox->GetEntry( 0, 0 ) );
 
-    pFunctionListBox->SetUpdateMode(sal_True);
+    pFunctionListBox->SetUpdateMode(true);
 }
 
 sal_Bool SvxConfigGroupListBox::Expand( SvTreeListEntry* pParent )
@@ -808,7 +808,7 @@ sal_Bool SvxConfigGroupListBox::Expand( SvTreeListEntry* pParent )
 
         if ( nChildCount+1 > nEntries )
         {
-            MakeVisible( pParent, sal_True );
+            MakeVisible( pParent, true );
         }
         else
         {

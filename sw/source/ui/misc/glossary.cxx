@@ -664,7 +664,7 @@ IMPL_LINK_NOARG(SwGlossaryDlg, BibHdl)
 ------------------------------------------------------------------------*/
 void SwGlossaryDlg::Init()
 {
-    m_pCategoryBox->SetUpdateMode( sal_False );
+    m_pCategoryBox->SetUpdateMode( false );
     m_pCategoryBox->Clear();
     // display text block regions
     const sal_uInt16 nCnt = pGlossaryHdl->GetGroupCnt();
@@ -743,7 +743,7 @@ void SwGlossaryDlg::Init()
     m_pCategoryBox->Resize();
 
     m_pCategoryBox->GetModel()->Resort();
-    m_pCategoryBox->SetUpdateMode( sal_True );
+    m_pCategoryBox->SetUpdateMode( true );
     m_pCategoryBox->Update();
 
     const SvxAutoCorrCfg& rCfg = SvxAutoCorrCfg::Get();
@@ -926,7 +926,7 @@ DragDropMode SwGlTreeListBox::NotifyStartDrag(
     return eRet;
 }
 
-sal_Bool    SwGlTreeListBox::NotifyAcceptDrop( SvTreeListEntry* pEntry)
+bool SwGlTreeListBox::NotifyAcceptDrop( SvTreeListEntry* pEntry)
 {
     // TODO: Readonly - check still missing!
     SvTreeListEntry* pSrcParent = GetParent(pEntry) ? GetParent(pEntry) : pEntry;

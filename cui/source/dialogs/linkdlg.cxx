@@ -163,7 +163,7 @@ IMPL_LINK( SvBaseLinksDlg, LinksSelectHdl, SvTabListBox *, pSvTabListBox )
         sal_uInt16 nObjectType = pLink->GetObjType();
         if((OBJECT_CLIENT_FILE & nObjectType) != OBJECT_CLIENT_FILE)
         {
-            pSvTabListBox->SelectAll(sal_False);
+            pSvTabListBox->SelectAll(false);
             pSvTabListBox->Select(pEntry);
             nSelectionCount = 1;
         }
@@ -177,7 +177,7 @@ IMPL_LINK( SvBaseLinksDlg, LinksSelectHdl, SvTabListBox *, pSvTabListBox )
                 pLink = (SvBaseLink*)pEntry->GetUserData();
                 DBG_ASSERT(pLink, "Wo ist der Link?");
                 if( (OBJECT_CLIENT_FILE & pLink->GetObjType()) != OBJECT_CLIENT_FILE )
-                    pSvTabListBox->Select( pEntry, sal_False );
+                    pSvTabListBox->Select( pEntry, false );
 
             }
         }
@@ -329,7 +329,7 @@ IMPL_LINK_NOARG(SvBaseLinksDlg, UpdateNowClickHdl)
         {
             SvTreeListEntry* pSelEntry = rListBox.FirstSelected();
             if( pE != pSelEntry )
-                rListBox.Select( pSelEntry, sal_False );
+                rListBox.Select( pSelEntry, false );
             rListBox.Select( pE );
             rListBox.MakeVisible( pE );
         }
@@ -502,7 +502,7 @@ IMPL_LINK( SvBaseLinksDlg, UpdateWaitingHdl, Timer*, pTimer )
 {
     (void)pTimer;
 
-    Links().SetUpdateMode(sal_False);
+    Links().SetUpdateMode(false);
     for( sal_uLong nPos = Links().GetEntryCount(); nPos; )
     {
         SvTreeListEntry* pBox = Links().GetEntry( --nPos );
@@ -515,7 +515,7 @@ IMPL_LINK( SvBaseLinksDlg, UpdateWaitingHdl, Timer*, pTimer )
                 Links().SetEntryText( sCur, pBox, 3 );
         }
     }
-    Links().SetUpdateMode(sal_True);
+    Links().SetUpdateMode(true);
     return 0;
 }
 
@@ -540,13 +540,13 @@ IMPL_LINK( SvBaseLinksDlg, EndEditHdl, sfx2::SvBaseLink*, _pLink )
 
         if( bLinkFnd )
         {
-            Links().SetUpdateMode(sal_False);
+            Links().SetUpdateMode(false);
             Links().GetModel()->Remove( Links().GetEntry( nPos ) );
             SvTreeListEntry* pToUnselect = Links().FirstSelected();
             InsertEntry( *_pLink, nPos, sal_True );
             if(pToUnselect)
-                Links().Select(pToUnselect, sal_False);
-            Links().SetUpdateMode(sal_True);
+                Links().Select(pToUnselect, false);
+            Links().SetUpdateMode(true);
         }
         else
         {
@@ -585,7 +585,7 @@ void SvBaseLinksDlg::SetManager( LinkManager* pNewMgr )
 
     if( pNewMgr )
         // update has to be stopped before clear
-        Links().SetUpdateMode( sal_False );
+        Links().SetUpdateMode( false );
 
     Links().Clear();
     pLinkMgr = pNewMgr;
@@ -613,7 +613,7 @@ void SvBaseLinksDlg::SetManager( LinkManager* pNewMgr )
             Links().Select( pEntry );
             LinksSelectHdl( 0 );
         }
-        Links().SetUpdateMode( sal_True );
+        Links().SetUpdateMode( true );
         Links().Invalidate();
     }
 }

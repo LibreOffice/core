@@ -253,7 +253,7 @@ IMPL_LINK( OWizNameMatching, TableListClickHdl, void*, /*NOTINTERESTEDIN*/ )
                 sal_uLong nNewPos = m_CTRL_LEFT.GetModel()->GetAbsPos(m_CTRL_LEFT.GetFirstEntryInView());
                 if ( nNewPos - nPos == 1 )
                     --nNewPos;
-                m_CTRL_RIGHT.MakeVisible(m_CTRL_RIGHT.GetEntry(nNewPos),sal_True);
+                m_CTRL_RIGHT.MakeVisible(m_CTRL_RIGHT.GetEntry(nNewPos), true);
                 m_CTRL_RIGHT.Select(pOldEntry,sal_True);
             }
         }
@@ -287,7 +287,7 @@ IMPL_LINK( OWizNameMatching, TableListRightSelectHdl, void*, /*NOTINTERESTEDIN*/
                 sal_uLong nNewPos = m_CTRL_RIGHT.GetModel()->GetAbsPos(m_CTRL_RIGHT.GetFirstEntryInView());
                 if ( nNewPos - nPos == 1 )
                     nNewPos--;
-                m_CTRL_LEFT.MakeVisible(m_CTRL_LEFT.GetEntry(nNewPos),sal_True);
+                m_CTRL_LEFT.MakeVisible(m_CTRL_LEFT.GetEntry(nNewPos), true);
                 m_CTRL_LEFT.Select(pOldEntry,sal_True);
             }
         }
@@ -380,7 +380,7 @@ void OColumnTreeBox::FillListBox( const ODatabaseExport::TColumnVector& _rList)
     ODatabaseExport::TColumnVector::const_iterator aEnd = _rList.end();
     for(;aIter != aEnd;++aIter)
     {
-        SvTreeListEntry* pEntry = InsertEntry((*aIter)->first,0,sal_False,TREELIST_APPEND,(*aIter)->second);
+        SvTreeListEntry* pEntry = InsertEntry((*aIter)->first, 0, false, TREELIST_APPEND, (*aIter)->second);
         SvButtonState eState = !(m_bReadOnly && (*aIter)->second->IsAutoIncrement()) ? SV_BUTTON_CHECKED : SV_BUTTON_UNCHECKED;
         SetCheckButtonState( pEntry, eState );
     }

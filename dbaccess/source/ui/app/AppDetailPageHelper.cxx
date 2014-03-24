@@ -269,7 +269,7 @@ void OAppDetailPageHelper::selectAll()
     int nPos = getVisibleControlIndex();
     if ( nPos < E_ELEMENT_TYPE_COUNT )
     {
-        m_pLists[nPos]->SelectAll(sal_True);
+        m_pLists[nPos]->SelectAll(true);
     }
 }
 
@@ -429,7 +429,7 @@ void OAppDetailPageHelper::selectElements(const Sequence< OUString>& _aNames)
     if ( nPos < E_ELEMENT_TYPE_COUNT )
     {
         DBTreeListBox& rTree = *m_pLists[nPos];
-        rTree.SelectAll(sal_False);
+        rTree.SelectAll(false);
         const OUString* pIter = _aNames.getConstArray();
         const OUString* pEnd  = pIter + _aNames.getLength();
         for(;pIter != pEnd;++pIter)
@@ -577,7 +577,7 @@ SvTreeListEntry* OAppDetailPageHelper::getEntry( const Point& _aPosPixel) const
     SvTreeListEntry* pReturn = NULL;
     int nPos = getVisibleControlIndex();
     if ( nPos < E_ELEMENT_TYPE_COUNT )
-        pReturn = m_pLists[nPos]->GetEntry( _aPosPixel,sal_True );
+        pReturn = m_pLists[nPos]->GetEntry( _aPosPixel, true );
     return pReturn;
 }
 
@@ -607,7 +607,7 @@ void OAppDetailPageHelper::createTablesPage(const Reference< XConnection>& _xCon
         SvTreeListEntry* pEntry = m_pLists[E_TABLE]->First();
         if ( pEntry )
             m_pLists[E_TABLE]->Expand(pEntry);
-        m_pLists[E_TABLE]->SelectAll(sal_False);
+        m_pLists[E_TABLE]->SelectAll(false);
     }
 
     setDetailPage(m_pLists[E_TABLE]);
@@ -669,7 +669,7 @@ void OAppDetailPageHelper::createPage(ElementType _eType,const Reference< XNameA
         {
             fillNames( _xContainer, _eType, nImageId, NULL );
 
-            m_pLists[_eType]->SelectAll(sal_False);
+            m_pLists[_eType]->SelectAll(false);
         }
         setDetailPage(m_pLists[_eType]);
     }
@@ -736,7 +736,7 @@ void OAppDetailPageHelper::fillNames( const Reference< XNameAccess >& _xContaine
             Reference<XNameAccess> xSubElements(_xContainer->getByName(*pIter),UNO_QUERY);
             if ( xSubElements.is() )
             {
-                pEntry = pList->InsertEntry( *pIter, _pParent, sal_False, TREELIST_APPEND, reinterpret_cast< void* >( nFolderIndicator ) );
+                pEntry = pList->InsertEntry( *pIter, _pParent, false, TREELIST_APPEND, reinterpret_cast< void* >( nFolderIndicator ) );
                 getBorderWin().getView()->getAppController().containerFound( Reference< XContainer >( xSubElements, UNO_QUERY ) );
                 fillNames( xSubElements, _eType, _nImageId, pEntry );
             }
@@ -868,7 +868,7 @@ SvTreeListEntry* OAppDetailPageHelper::elementAdded(ElementType _eType,const OUS
         if ( xContainer.is() )
         {
             const sal_Int32 nFolderIndicator = lcl_getFolderIndicatorForType( _eType );
-            pRet = pTreeView->InsertEntry( _rName, pEntry, sal_False, TREELIST_APPEND, reinterpret_cast< void* >( nFolderIndicator ) );
+            pRet = pTreeView->InsertEntry( _rName, pEntry, false, TREELIST_APPEND, reinterpret_cast< void* >( nFolderIndicator ) );
             fillNames( xContainer, _eType, nImageId, pRet );
         }
         else

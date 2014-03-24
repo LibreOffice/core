@@ -337,7 +337,7 @@ void SdTPAction::Reset( const SfxItemSet& rAttrs )
         case presentation::ClickAction_BOOKMARK:
         {
             if( !m_pLbTree->SelectEntry( aFileName ) )
-                m_pLbTree->SelectAll( sal_False );
+                m_pLbTree->SelectAll( false );
         }
         break;
 

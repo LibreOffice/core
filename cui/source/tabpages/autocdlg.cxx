@@ -232,7 +232,7 @@ void OfaAutocorrOptionsPage::Reset( const SfxItemSet& )
     SvxAutoCorrect* pAutoCorrect = SvxAutoCorrCfg::Get().GetAutoCorrect();
     const long nFlags = pAutoCorrect->GetFlags();
 
-    m_pCheckLB->SetUpdateMode(sal_False);
+    m_pCheckLB->SetUpdateMode(false);
     m_pCheckLB->Clear();
 
     m_pCheckLB->InsertEntry(m_sInput);
@@ -254,7 +254,7 @@ void OfaAutocorrOptionsPage::Reset( const SfxItemSet& )
     m_pCheckLB->CheckEntryPos( nPos++, 0 != (nFlags & IgnoreDoubleSpace) );
     m_pCheckLB->CheckEntryPos( nPos++, 0 != (nFlags & CorrectCapsLock) );
 
-    m_pCheckLB->SetUpdateMode(sal_True);
+    m_pCheckLB->SetUpdateMode(true);
 }
 
 /*********************************************************************/
@@ -608,7 +608,7 @@ void OfaSwAutoFmtOptionsPage::Reset( const SfxItemSet& )
     SvxSwAutoFmtFlags *pOpt = &pAutoCorrect->GetSwFlags();
     const long nFlags = pAutoCorrect->GetFlags();
 
-    m_pCheckLB->SetUpdateMode(sal_False);
+    m_pCheckLB->SetUpdateMode(false);
     m_pCheckLB->Clear();
 
     // The following entries have to be inserted in the same order
@@ -678,7 +678,7 @@ void OfaSwAutoFmtOptionsPage::Reset( const SfxItemSet& )
     m_pCheckLB->CheckEntryPos( CREATE_TABLE,       CBCOL_SECOND,   pOpt->bCreateTable );
     m_pCheckLB->CheckEntryPos( REPLACE_STYLES,     CBCOL_SECOND,   pOpt->bReplaceStyles );
 
-    m_pCheckLB->SetUpdateMode(sal_True);
+    m_pCheckLB->SetUpdateMode(true);
 }
 
 IMPL_LINK(OfaSwAutoFmtOptionsPage, SelectHdl, OfaACorrCheckListBox*, pBox)
@@ -1030,7 +1030,7 @@ void OfaAutocorrReplacePage::RefillReplaceBox(sal_Bool bFromReset,
     {
         SvxAutoCorrect* pAutoCorrect = SvxAutoCorrCfg::Get().GetAutoCorrect();
         SvxAutocorrWordList* pWordList = pAutoCorrect->LoadAutocorrWordList(eLang);
-        m_pReplaceTLB->SetUpdateMode(sal_False);
+        m_pReplaceTLB->SetUpdateMode(false);
         SvxAutocorrWordList::Content aContent = pWordList->getSortedContent();
         for( SvxAutocorrWordList::Content::const_iterator it = aContent.begin();
              it != aContent.end(); ++it )
@@ -1055,7 +1055,7 @@ void OfaAutocorrReplacePage::RefillReplaceBox(sal_Bool bFromReset,
         }
         m_pNewReplacePB->Enable(false);
         m_pDeleteReplacePB->Enable(false);
-        m_pReplaceTLB->SetUpdateMode(sal_True);
+        m_pReplaceTLB->SetUpdateMode(true);
     }
 
     SfxViewShell* pViewShell = SfxViewShell::Current();
@@ -1212,7 +1212,7 @@ IMPL_LINK(OfaAutocorrReplacePage, NewDelHdl, PushButton*, pBtn)
             bool bKeepSourceFormatting = !bReplaceEditChanged && !m_pTextOnlyCB->IsChecked();
 
             NewEntry(m_pShortED->GetText(), m_pReplaceED->GetText(), bKeepSourceFormatting);
-            m_pReplaceTLB->SetUpdateMode(sal_False);
+            m_pReplaceTLB->SetUpdateMode(false);
             sal_uLong nPos = TREELIST_ENTRY_NOTFOUND;
             sEntry += "\t";
             sEntry += m_pReplaceED->GetText();
@@ -1241,7 +1241,7 @@ IMPL_LINK(OfaAutocorrReplacePage, NewDelHdl, PushButton*, pBtn)
             }
 
             m_pReplaceTLB->MakeVisible( pInsEntry );
-            m_pReplaceTLB->SetUpdateMode( sal_True );
+            m_pReplaceTLB->SetUpdateMode( true );
             // if the request came from the ReplaceEdit, give focus to the ShortEdit
             if(m_pReplaceED->HasFocus())
             {
@@ -1302,7 +1302,7 @@ IMPL_LINK(OfaAutocorrReplacePage, ModifyHdl, Edit*, pEdt)
             }
             if( !bFound )
             {
-                m_pReplaceTLB->SelectAll( sal_False );
+                m_pReplaceTLB->SelectAll( false );
                 pFirstSel = 0;
                 m_pNewReplacePB->SetText( sNew );
                 if( bReplaceEditChanged )
@@ -1906,7 +1906,7 @@ void OfaQuoteTabPage::Reset( const SfxItemSet& )
     {
         SvxSwAutoFmtFlags *pOpt = &pAutoCorrect->GetSwFlags();
 
-        m_pSwCheckLB->SetUpdateMode( sal_False );
+        m_pSwCheckLB->SetUpdateMode( false );
         m_pSwCheckLB->Clear();
 
         m_pSwCheckLB->GetModel()->Insert(CreateEntry(sNonBrkSpace, CBCOL_BOTH ));
@@ -1917,7 +1917,7 @@ void OfaQuoteTabPage::Reset( const SfxItemSet& )
         m_pSwCheckLB->CheckEntryPos( REPLACE_1ST, CBCOL_FIRST,    pOpt->bChgOrdinalNumber );
         m_pSwCheckLB->CheckEntryPos( REPLACE_1ST, CBCOL_SECOND,   0 != (nFlags & ChgOrdinalNumber) );
 
-        m_pSwCheckLB->SetUpdateMode( sal_True );
+        m_pSwCheckLB->SetUpdateMode( true );
     }
 
     // Initialize the non Sw options

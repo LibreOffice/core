@@ -874,7 +874,7 @@ namespace accessibility
         if ( !pEntry )
             throw IndexOutOfBoundsException();
 
-        getListBox()->Select( pEntry, sal_True );
+        getListBox()->Select( pEntry, true );
     }
 
     sal_Bool SAL_CALL AccessibleListBoxEntry::isAccessibleChildSelected( sal_Int32 nChildIndex ) throw (IndexOutOfBoundsException, RuntimeException, std::exception)
@@ -907,7 +907,7 @@ namespace accessibility
         {
             SvTreeListEntry* pEntry = getListBox()->GetEntry( pParent, i );
             if ( getListBox()->IsSelected( pEntry ) )
-                getListBox()->Select( pEntry, sal_False );
+                getListBox()->Select( pEntry, false );
         }
     }
 
@@ -926,7 +926,7 @@ namespace accessibility
         {
             SvTreeListEntry* pEntry = getListBox()->GetEntry( pParent, i );
             if ( !getListBox()->IsSelected( pEntry ) )
-                getListBox()->Select( pEntry, sal_True );
+                getListBox()->Select( pEntry, true );
         }
     }
 
@@ -998,7 +998,7 @@ namespace accessibility
         if ( !pEntry )
             throw IndexOutOfBoundsException();
 
-        getListBox()->Select( pEntry, sal_False );
+        getListBox()->Select( pEntry, false );
     }
     sal_Int32 SAL_CALL AccessibleListBoxEntry::getCaretPosition(  ) throw (::com::sun::star::uno::RuntimeException, std::exception)
     {

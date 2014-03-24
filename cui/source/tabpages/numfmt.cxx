@@ -812,7 +812,7 @@ void SvxNumberFormatTabPage::FillFormatListBox_Impl( std::vector<OUString>& rEnt
     short       aPrivCat;
 
     m_pLbFormat->Clear();
-    m_pLbFormat->SetUpdateMode( sal_False );
+    m_pLbFormat->SetUpdateMode( false );
 
     if( rEntries.empty() )
         return;
@@ -862,7 +862,7 @@ void SvxNumberFormatTabPage::FillFormatListBox_Impl( std::vector<OUString>& rEnt
             }
         }
     }
-    m_pLbFormat->SetUpdateMode( sal_True );
+    m_pLbFormat->SetUpdateMode( true );
     rEntries.clear();
 }
 

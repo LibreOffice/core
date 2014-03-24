@@ -479,7 +479,7 @@ void SwFldRefPage::UpdateSubType()
     m_pSelectionLB->SetUpdateMode(false);
     m_pSelectionLB->Clear();
     // #i83479#
-    m_pSelectionToolTipLB->SetUpdateMode(sal_False);
+    m_pSelectionToolTipLB->SetUpdateMode(false);
     m_pSelectionToolTipLB->Clear();
     bool bShowSelectionToolTipLB( false );
 
@@ -632,7 +632,7 @@ void SwFldRefPage::UpdateSubType()
     m_pSelectionLB->Show( !bShowSelectionToolTipLB );
     if ( bShowSelectionToolTipLB )
     {
-        m_pSelectionToolTipLB->SetUpdateMode(sal_True);
+        m_pSelectionToolTipLB->SetUpdateMode(true);
 
         bool bEnable = m_pSelectionToolTipLB->GetEntryCount() != 0;
         m_pSelection->Enable( bEnable );

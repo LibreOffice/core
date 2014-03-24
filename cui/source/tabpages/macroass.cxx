@@ -336,7 +336,7 @@ IMPL_STATIC_LINK( _SfxMacroTabPage, AssignDeleteHdl_Impl, PushButton*, pBtn )
     rListBox.GetModel()->InvalidateEntry( pE );
     rListBox.Select( pE );
     rListBox.MakeVisible( pE );
-    rListBox.SetUpdateMode( sal_True );
+    rListBox.SetUpdateMode( true );
 
     pThis->EnableButtons();
     return 0;

@@ -278,8 +278,8 @@ void NavigatorTree::Command( const CommandEvent& rEvt )
                     break;
                 if ( !IsSelected(ptClickedOn) )
                 {
-                    SelectAll(sal_False);
-                    Select(ptClickedOn, sal_True);
+                    SelectAll(false);
+                    Select(ptClickedOn, true);
                     SetCurEntry(ptClickedOn);
                 }
             }
@@ -477,11 +477,11 @@ void NavigatorTree::_selectionChanged( const lang::EventObject& aEvent ) throw (
         SvTreeListEntry* pEntry = find(xSelection);
         if ( pEntry && !IsSelected(pEntry) )
         {
-            Select(pEntry, sal_True);
+            Select(pEntry, true);
             SetCurEntry(pEntry);
         }
         else if ( !pEntry )
-            SelectAll(sal_False,sal_False);
+            SelectAll(false,false);
     }
     else
     {
@@ -492,7 +492,7 @@ void NavigatorTree::_selectionChanged( const lang::EventObject& aEvent ) throw (
             SvTreeListEntry* pEntry = find(*pIter);
             if ( pEntry && !IsSelected(pEntry) )
             {
-                Select(pEntry, sal_True);
+                Select(pEntry, true);
                 SetCurEntry(pEntry);
             }
         }
@@ -506,10 +506,10 @@ SvTreeListEntry* NavigatorTree::insertEntry(const OUString& _sName,SvTreeListEnt
     if ( _nImageId )
     {
         const Image aImage( m_aNavigatorImages.GetImage( _nImageId ) );
-        pEntry = InsertEntry(_sName,aImage,aImage,_pParent,sal_False,_nPosition,_pData);
+        pEntry = InsertEntry(_sName,aImage,aImage,_pParent,false,_nPosition,_pData);
     }
     else
-        pEntry = InsertEntry(_sName,_pParent,sal_False,_nPosition,_pData);
+        pEntry = InsertEntry(_sName,_pParent,false,_nPosition,_pData);
     return pEntry;
 }
 

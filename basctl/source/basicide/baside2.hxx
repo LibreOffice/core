@@ -214,8 +214,8 @@ class WatchTreeListBox : public SvHeaderTabListBox
     OUString aEditingRes;
 
 protected:
-    virtual sal_Bool    EditingEntry( SvTreeListEntry* pEntry, Selection& rSel  );
-    virtual sal_Bool    EditedEntry( SvTreeListEntry* pEntry, const OUString& rNewText );
+    virtual bool    EditingEntry( SvTreeListEntry* pEntry, Selection& rSel  );
+    virtual bool    EditedEntry( SvTreeListEntry* pEntry, const OUString& rNewText );
 
     bool            ImplBasicEntryEdited( SvTreeListEntry* pEntry, const OUString& rResult );
     SbxBase*        ImplGetSBXForEntry( SvTreeListEntry* pEntry, bool& rbArrayElement );

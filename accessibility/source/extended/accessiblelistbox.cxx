@@ -482,7 +482,7 @@ namespace accessibility
         if ( !pEntry )
             throw IndexOutOfBoundsException();
 
-        getListBox()->Select( pEntry, sal_True );
+        getListBox()->Select( pEntry, true );
     }
 
     sal_Bool SAL_CALL AccessibleListBox::isAccessibleChildSelected( sal_Int32 nChildIndex ) throw (IndexOutOfBoundsException, RuntimeException, std::exception)
@@ -509,7 +509,7 @@ namespace accessibility
         {
             SvTreeListEntry* pEntry = getListBox()->GetEntry( i );
             if ( getListBox()->IsSelected( pEntry ) )
-                getListBox()->Select( pEntry, sal_False );
+                getListBox()->Select( pEntry, false );
         }
     }
 
@@ -524,7 +524,7 @@ namespace accessibility
         {
             SvTreeListEntry* pEntry = getListBox()->GetEntry( i );
             if ( !getListBox()->IsSelected( pEntry ) )
-                getListBox()->Select( pEntry, sal_True );
+                getListBox()->Select( pEntry, true );
         }
     }
 
@@ -577,7 +577,7 @@ namespace accessibility
         if ( !pEntry )
             throw IndexOutOfBoundsException();
 
-        getListBox()->Select( pEntry, sal_False );
+        getListBox()->Select( pEntry, false );
     }
 
     void AccessibleListBox::FillAccessibleStateSet( utl::AccessibleStateSetHelper& rStateSet )

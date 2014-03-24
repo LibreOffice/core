@@ -126,12 +126,12 @@ public:
 
     void    SetUserData( void* pPtr ) { pUserData = pPtr; }
     void*   GetUserData() const { return pUserData; }
-    sal_Bool    IsDynamic() const { return (sal_Bool)((nFlags & SV_LBOXTAB_DYNAMIC)!=0); }
+    bool    IsDynamic() const { return ((nFlags & SV_LBOXTAB_DYNAMIC)!=0); }
     void    SetPos( long nNewPos) { nPos = nNewPos; }
     long    GetPos() const { return nPos; }
     long    CalcOffset( long nItemLength, long nTabWidth );
-    sal_Bool    IsEditable() const { return (sal_Bool)((nFlags & SV_LBOXTAB_EDITABLE)!=0); }
-    sal_Bool    IsPushable() const { return (sal_Bool)((nFlags & SV_LBOXTAB_PUSHABLE)!=0); }
+    bool    IsEditable() const { return ((nFlags & SV_LBOXTAB_EDITABLE)!=0); }
+    bool    IsPushable() const { return ((nFlags & SV_LBOXTAB_PUSHABLE)!=0); }
 };
 
 // *********************************************************************
@@ -279,10 +279,10 @@ private:
 
 protected:
 
-    sal_Bool            CheckDragAndDropMode( SvTreeListBox* pSource, sal_Int8 );
-    void            ImplShowTargetEmphasis( SvTreeListEntry* pEntry, sal_Bool bShow);
-    void            EnableSelectionAsDropTarget( sal_Bool bEnable = sal_True,
-                                                 sal_Bool bWithChildren = sal_True );
+    bool            CheckDragAndDropMode( SvTreeListBox* pSource, sal_Int8 );
+    void            ImplShowTargetEmphasis( SvTreeListEntry* pEntry, bool bShow);
+    void            EnableSelectionAsDropTarget( bool bEnable = true,
+                                                 bool bWithChildren = true );
     // Standard impl returns 0; must be overloaded by derived classes which support D'n'D
     using Window::GetDropTarget;
     virtual SvTreeListEntry* GetDropTarget( const Point& );
@@ -302,10 +302,10 @@ protected:
     // In-place editing
     SvInplaceEdit2*  pEdCtrl;
     void            EditText( const OUString&, const Rectangle&,const Selection&);
-    void            EditText( const OUString&, const Rectangle&,const Selection&, sal_Bool bMulti);
+    void            EditText( const OUString&, const Rectangle&,const Selection&, bool bMulti);
     void            EditTextMultiLine( const OUString&, const Rectangle&,const Selection&);
     void            CancelTextEditing();
-    sal_Bool            EditingCanceled() const;
+    bool            EditingCanceled() const;
     bool            IsEmptyTextAllowed() const;
 
     // Return value must be derived from SvViewDataEntry!
@@ -362,9 +362,9 @@ public:
     SvTreeListEntry*    NextSibling( SvTreeListEntry* pEntry ) const;
     SvTreeListEntry*    PrevSibling( SvTreeListEntry* pEntry ) const;
 
-    sal_Bool            CopySelection( SvTreeListBox* pSource, SvTreeListEntry* pTarget );
-    sal_Bool            MoveSelection( SvTreeListBox* pSource, SvTreeListEntry* pTarget );
-    sal_Bool            MoveSelectionCopyFallbackPossible( SvTreeListBox* pSource, SvTreeListEntry* pTarget, sal_Bool bAllowCopyFallback );
+    bool            CopySelection( SvTreeListBox* pSource, SvTreeListEntry* pTarget );
+    bool            MoveSelection( SvTreeListBox* pSource, SvTreeListEntry* pTarget );
+    bool            MoveSelectionCopyFallbackPossible( SvTreeListBox* pSource, SvTreeListEntry* pTarget, bool bAllowCopyFallback );
     void            RemoveSelection();
 
     DragDropMode    GetDragDropMode() const { return nDragDropMode; }
@@ -445,8 +445,8 @@ public:
     virtual bool    ExpandingHdl();
     virtual void    SelectHdl();
     virtual void    DeselectHdl();
-    virtual sal_Bool    DoubleClickHdl();
-    sal_Bool            IsTravelSelect() const { return (sal_Bool)((nImpFlags&SVLBOX_IS_TRAVELSELECT)!=0);}
+    virtual bool    DoubleClickHdl();
+    bool            IsTravelSelect() const { return ((nImpFlags&SVLBOX_IS_TRAVELSELECT)!=0);}
     SvTreeListEntry*    GetHdlEntry() const { return pHdlEntry; }
     SvLBoxItem*     GetHdlItem() const;
 
@@ -462,7 +462,7 @@ public:
     virtual DragDropMode    NotifyStartDrag( TransferDataContainer& rData,
                                          SvTreeListEntry* );
     virtual void        DragFinished( sal_Int8 nDropAction );
-    virtual sal_Bool        NotifyAcceptDrop( SvTreeListEntry* );
+    virtual bool        NotifyAcceptDrop( SvTreeListEntry* );
 
     void            SetDragOptions( sal_Int8 nOptions ) { nDragOptions = nOptions; }
     sal_Int8        GetDragOptions() const { return nDragOptions; }
@@ -473,14 +473,14 @@ public:
     virtual SvTreeListEntry* CloneEntry( SvTreeListEntry* pSource );
     virtual SvTreeListEntry* CreateEntry() const; // To create new Entries
 
-    // Return value: sal_True == Ok, sal_False == Cancel
+    // Return value: sal_True == Ok, sal_False == Cancel, 2==some hack
     virtual sal_Bool    NotifyMoving(
         SvTreeListEntry*  pTarget,       // D'n'D DropPosition in this->GetModel()
         SvTreeListEntry*  pEntry,        // Entry to be moved from GetSourceListBox()->GetModel()
         SvTreeListEntry*& rpNewParent,   // New TargetParent
         sal_uLong&        rNewChildPos); // The TargetParent's position in Childlist
 
-    // Return value: sal_True == Ok, sal_False == Cancel
+    // Return value: sal_True == Ok, sal_False == Cancel, 2==some hack
     virtual sal_Bool    NotifyCopying(
         SvTreeListEntry*  pTarget,       // D'n'D DropPosition in this->GetModel()
         SvTreeListEntry*  pEntry,        // Entry to be copied from GetSourceListBox()->GetModel()
@@ -535,8 +535,8 @@ protected:
 
     SVT_DLLPRIVATE void         ImpEntryInserted( SvTreeListEntry* pEntry );
     SVT_DLLPRIVATE long         PaintEntry1( SvTreeListEntry*, long nLine,
-                                sal_uInt16 nTabFlagMask=0xffff,
-                                sal_Bool bHasClipRegion=sal_False );
+                                             sal_uInt16 nTabFlagMask=0xffff,
+                                             bool bHasClipRegion=false );
 
     SVT_DLLPRIVATE void         InitTreeView();
     SVT_DLLPRIVATE SvLBoxItem*  GetItem_Impl( SvTreeListEntry*, long nX, SvLBoxTab** ppTab,
@@ -585,15 +585,15 @@ protected:
     virtual void    PreparePaint( SvTreeListEntry* );
     virtual void    DataChanged( const DataChangedEvent& rDCEvt );
 
-    void            InitSettings(sal_Bool bFont,sal_Bool bForeground,sal_Bool bBackground);
-    sal_Bool            IsCellFocusEnabled() const;
+    void            InitSettings(bool bFont, bool bForeground, bool bBackground);
+    bool            IsCellFocusEnabled() const;
     bool            SetCurrentTabPos( sal_uInt16 _nNewPos );
-    sal_uInt16          GetCurrentTabPos() const;
+    sal_uInt16      GetCurrentTabPos() const;
     void            CallImplEventListeners(sal_uLong nEvent, void* pData);
 
     void            ImplEditEntry( SvTreeListEntry* pEntry );
 
-    sal_Bool        AreChildrenTransient() const;
+    bool            AreChildrenTransient() const;
     void            SetChildrenNotTransient();
 
     void            AdjustEntryHeightAndRecalc( const Font& rFont );
@@ -628,7 +628,7 @@ public:
     }
 
     virtual SvTreeListEntry*    InsertEntry( const OUString& rText, SvTreeListEntry* pParent = 0,
-                                         sal_Bool bChildrenOnDemand = sal_False,
+                                         bool bChildrenOnDemand = false,
                                          sal_uLong nPos=TREELIST_APPEND, void* pUserData = 0,
                                          SvLBoxButtonKind eButtonKind = SvLBoxButtonKind_enabledCheckbox );
 
@@ -636,7 +636,7 @@ public:
                                          const Image& rExpandedEntryBmp,
                                          const Image& rCollapsedEntryBmp,
                                          SvTreeListEntry* pParent = 0,
-                                         sal_Bool bChildrenOnDemand = sal_False,
+                                         bool bChildrenOnDemand = false,
                                          sal_uLong nPos = TREELIST_APPEND, void* pUserData = 0,
                                          SvLBoxButtonKind eButtonKind = SvLBoxButtonKind_enabledCheckbox );
 
@@ -662,14 +662,14 @@ public:
     Link            GetCheckButtonHdl() const { return aCheckButtonHdl; }
     virtual void    CheckButtonHdl();
 
-    void            SetSublistOpenWithReturn( sal_Bool bMode = sal_True );      // open/close sublist with return/enter
-    void            SetSublistOpenWithLeftRight( sal_Bool bMode = sal_True );   // open/close sublist with cursor left/right
+    void            SetSublistOpenWithReturn( bool bMode = true );      // open/close sublist with return/enter
+    void            SetSublistOpenWithLeftRight( bool bMode = true );   // open/close sublist with cursor left/right
 
     void            EnableInplaceEditing( bool bEnable );
     // Edits the Entry's first StringItem, 0 == Cursor
     void            EditEntry( SvTreeListEntry* pEntry = NULL );
-    virtual sal_Bool    EditingEntry( SvTreeListEntry* pEntry, Selection& );
-    virtual sal_Bool    EditedEntry( SvTreeListEntry* pEntry, const OUString& rNewText );
+    virtual bool    EditingEntry( SvTreeListEntry* pEntry, Selection& );
+    virtual bool    EditedEntry( SvTreeListEntry* pEntry, const OUString& rNewText );
 
     virtual void    Paint( const Rectangle& rRect );
     virtual void    MouseButtonDown( const MouseEvent& rMEvt );
@@ -679,7 +679,7 @@ public:
     virtual void    Resize();
     virtual void    GetFocus();
     virtual void    LoseFocus();
-    void            SetUpdateMode( sal_Bool );
+    void            SetUpdateMode( bool );
 
     virtual void    ModelHasCleared();
     virtual void    ModelHasInserted( SvTreeListEntry* pEntry );
@@ -691,11 +691,11 @@ public:
     virtual void    ModelHasRemoved( SvTreeListEntry* pEntry );
     void ModelHasEntryInvalidated( SvTreeListEntry* pEntry );
 
-    void            ShowTargetEmphasis( SvTreeListEntry*, sal_Bool bShow );
+    void            ShowTargetEmphasis( SvTreeListEntry*, bool bShow );
     void            ScrollOutputArea( short nDeltaEntries );
 
     short           GetEntryHeight() const  { return nEntryHeight; }
-    void            SetEntryHeight( short nHeight, sal_Bool bAlways = sal_False );
+    void            SetEntryHeight( short nHeight, bool bAlways = false );
     Size            GetOutputSizePixel() const;
     short           GetIndent() const { return nIndent; }
     void            SetIndent( short nIndent );
@@ -706,7 +706,7 @@ public:
     Point           GetEntryPosition( SvTreeListEntry* ) const;
     void            ShowEntry( SvTreeListEntry* );  // !!!OBSOLETE, use MakeVisible
     void            MakeVisible( SvTreeListEntry* pEntry );
-    void            MakeVisible( SvTreeListEntry* pEntry, sal_Bool bMoveToTop );
+    void            MakeVisible( SvTreeListEntry* pEntry, bool bMoveToTop );
 
     void            SetCollapsedNodeBmp( const Image& );
     void            SetExpandedNodeBmp( const Image& );
@@ -715,9 +715,9 @@ public:
     void            SetFont( const Font& rFont );
 
     using Window::SetCursor;
-    void            SetCursor( SvTreeListEntry* pEntry, sal_Bool bForceNoSelect = sal_False );
+    void            SetCursor( SvTreeListEntry* pEntry, bool bForceNoSelect = false );
 
-    SvTreeListEntry*    GetEntry( const Point& rPos, sal_Bool bHit = sal_False ) const;
+    SvTreeListEntry*    GetEntry( const Point& rPos, bool bHit = false ) const;
 
     void            PaintEntry( SvTreeListEntry* );
     long            PaintEntry( SvTreeListEntry*, long nLine,
@@ -732,11 +732,11 @@ public:
     void            SetDragDropMode( DragDropMode );
     void            SetSelectionMode( SelectionMode );
 
-    sal_Bool Expand( SvTreeListEntry* pParent );
-    sal_Bool Collapse( SvTreeListEntry* pParent );
-    virtual sal_Bool Select( SvTreeListEntry* pEntry, sal_Bool bSelect=sal_True );
-    sal_uLong SelectChildren( SvTreeListEntry* pParent, sal_Bool bSelect );
-    virtual void SelectAll( sal_Bool bSelect, sal_Bool bPaint = sal_True );
+    bool Expand( SvTreeListEntry* pParent );
+    bool Collapse( SvTreeListEntry* pParent );
+    virtual bool Select( SvTreeListEntry* pEntry, bool bSelect=true );
+    sal_uLong SelectChildren( SvTreeListEntry* pParent, bool bSelect );
+    virtual void SelectAll( bool bSelect, bool bPaint = true );
 
     void SetCurEntry( SvTreeListEntry* _pEntry );
     SvTreeListEntry* GetCurEntry() const;
@@ -758,7 +758,7 @@ public:
     void            RepaintScrollBars() const;
     ScrollBar*      GetVScroll();
     ScrollBar*      GetHScroll();
-    void            EnableAsyncDrag( sal_Bool b );
+    void            EnableAsyncDrag( bool b );
 
     SvTreeListEntry*    GetFirstEntryInView() const;
     SvTreeListEntry*    GetNextEntryInView(SvTreeListEntry*) const;
@@ -772,8 +772,8 @@ public:
     virtual void    ExcecuteContextMenuAction( sal_uInt16 nSelectedPopupEntry );
 
     void            EnableContextMenuHandling( void );
-    void            EnableContextMenuHandling( sal_Bool bEnable );
-    sal_Bool        IsContextMenuHandlingEnabled( void ) const;
+    void            EnableContextMenuHandling( bool bEnable );
+    bool            IsContextMenuHandlingEnabled( void ) const;
 
     void            EnableList( bool _bEnable );
 
@@ -800,8 +800,8 @@ class SvInplaceEdit2
     Accelerator aAccEscape;
     Timer       aTimer;
     Edit*       pEdit;
-    sal_Bool        bCanceled;
-    sal_Bool        bAlreadyInCallBack;
+    bool        bCanceled;
+    bool        bAlreadyInCallBack;
 
     void        CallCallBackHdl_Impl();
     DECL_LINK( Timeout_Impl, void * );
@@ -811,14 +811,14 @@ class SvInplaceEdit2
 public:
                 SvInplaceEdit2( Window* pParent, const Point& rPos, const Size& rSize,
                    const OUString& rData, const Link& rNotifyEditEnd,
-                   const Selection&, sal_Bool bMultiLine = sal_False );
+                   const Selection&, bool bMultiLine = false );
                ~SvInplaceEdit2();
-    sal_Bool        KeyInput( const KeyEvent& rKEvt );
+    bool        KeyInput( const KeyEvent& rKEvt );
     void        LoseFocus();
-    sal_Bool        EditingCanceled() const { return bCanceled; }
+    bool        EditingCanceled() const { return bCanceled; }
     OUString    GetText() const;
     OUString    GetSavedValue() const;
-    void        StopEditing( sal_Bool bCancel = sal_False );
+    void        StopEditing( bool bCancel = false );
     void        Hide();
 };
 

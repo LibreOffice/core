@@ -59,7 +59,7 @@ class SwGlTreeListBox : public SvTreeListBox
 
     virtual DragDropMode NotifyStartDrag( TransferDataContainer& rContainer,
                                             SvTreeListEntry* );
-    virtual sal_Bool    NotifyAcceptDrop( SvTreeListEntry* );
+    virtual bool         NotifyAcceptDrop( SvTreeListEntry* );
 
     virtual sal_Bool    NotifyMoving(   SvTreeListEntry*  pTarget,
                                     SvTreeListEntry*  pEntry,

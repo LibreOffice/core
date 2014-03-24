@@ -2064,7 +2064,7 @@ void SbaTableQueryBrowser::implAddDatasource(const OUString& _rDbName, Image& _r
     OUString sDSDisplayName, sDataSourceId;
     getDataSourceDisplayName_isURL( _rDbName, sDSDisplayName, sDataSourceId );
 
-    SvTreeListEntry* pDatasourceEntry = m_pTreeView->getListBox().InsertEntry( sDSDisplayName, _rDbImage, _rDbImage, NULL, sal_False );
+    SvTreeListEntry* pDatasourceEntry = m_pTreeView->getListBox().InsertEntry( sDSDisplayName, _rDbImage, _rDbImage, NULL, false );
     DBTreeListUserData* pDSData = new DBTreeListUserData;
     pDSData->eType = etDatasource;
     pDSData->sAccessor = sDataSourceId;
@@ -2078,7 +2078,7 @@ void SbaTableQueryBrowser::implAddDatasource(const OUString& _rDbName, Image& _r
 
         m_pTreeView->getListBox().InsertEntry(
             _rQueryName, _rQueryImage, _rQueryImage, pDatasourceEntry,
-            sal_True /*ChildrenOnDemand*/, TREELIST_APPEND, pQueriesData );
+            true /*ChildrenOnDemand*/, TREELIST_APPEND, pQueriesData );
     }
 
     // the child for the tables container
@@ -2088,7 +2088,7 @@ void SbaTableQueryBrowser::implAddDatasource(const OUString& _rDbName, Image& _r
 
         m_pTreeView->getListBox().InsertEntry(
             _rTableName, _rTableImage, _rTableImage, pDatasourceEntry,
-            sal_True /*ChildrenOnDemand*/, TREELIST_APPEND, pTablesData );
+            true /*ChildrenOnDemand*/, TREELIST_APPEND, pTablesData );
     }
 
 }

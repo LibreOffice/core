@@ -285,7 +285,7 @@ sal_Bool OTableWindow::Init()
     clearListBox();
     sal_Bool bSuccess = FillListBox();
     if ( bSuccess )
-        m_pListBox->SelectAll( sal_False );
+        m_pListBox->SelectAll( false );
 
     impl_updateImage();
 
@@ -495,7 +495,7 @@ void OTableWindow::setActive(sal_Bool _bActive)
     SetBoldTitle( _bActive );
     m_bActive = _bActive;
     if (!_bActive && m_pListBox && m_pListBox->GetSelectionCount() != 0)
-        m_pListBox->SelectAll(sal_False);
+        m_pListBox->SelectAll(false);
 }
 
 void OTableWindow::Remove()

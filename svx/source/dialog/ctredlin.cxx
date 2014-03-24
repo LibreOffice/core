@@ -343,7 +343,7 @@ SvTreeListEntry* SvxRedlinTable::InsertEntry(const OUString& rStr,RedlinData *pU
     const OUString aFirstStr( rStr.getToken(0, '\t', nIndex ) );
     aCurEntry = nIndex>0 ? rStr.copy(nIndex) : OUString();
 
-    return SvSimpleTable::InsertEntry( aFirstStr, pParent, sal_False, nPos, pUserData );
+    return SvSimpleTable::InsertEntry( aFirstStr, pParent, false, nPos, pUserData );
 }
 
 SvTreeListEntry* SvxRedlinTable::CreateEntry() const

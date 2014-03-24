@@ -385,7 +385,7 @@ namespace svxform
                     {
                         ItemNode* pNode = new ItemNode( xChild );
                         SvTreeListEntry* pEntry = m_aItemList.InsertEntry(
-                            sName, aExpImg, aCollImg, _pParent, sal_False, TREELIST_APPEND, pNode );
+                            sName, aExpImg, aCollImg, _pParent, false, TREELIST_APPEND, pNode );
                         if ( xChild->hasAttributes() )
                         {
                             Reference< css::xml::dom::XNamedNodeMap > xMap = xChild->getAttributes();
@@ -401,7 +401,7 @@ namespace svxform
                                         m_xUIHelper->getNodeDisplayName( xAttr, bShowDetails );
                                     m_aItemList.InsertEntry(
                                         sAttrName, aExpImg, aCollImg,
-                                        pEntry, sal_False, TREELIST_APPEND, pNode );
+                                        pEntry, false, TREELIST_APPEND, pNode );
                                 }
                             }
                         }
@@ -444,7 +444,7 @@ namespace svxform
                         xSubmissions->insert( makeAny( xNewSubmission ) );
                         Reference< XPropertySet > xNewPropSet( xNewSubmission, UNO_QUERY );
                         SvTreeListEntry* pEntry = AddEntry( xNewPropSet );
-                        m_aItemList.Select( pEntry, sal_True );
+                        m_aItemList.Select( pEntry, true );
                         bIsDocModified = true;
                     }
                     catch ( Exception& )
@@ -571,7 +571,7 @@ namespace svxform
                     {
                         SvTreeListEntry* pNewEntry = AddEntry( pNode, bIsElement );
                         m_aItemList.MakeVisible( pNewEntry );
-                        m_aItemList.Select( pNewEntry, sal_True );
+                        m_aItemList.Select( pNewEntry, true );
                         bIsDocModified = true;
                     }
                     else
@@ -597,7 +597,7 @@ namespace svxform
                     if ( RET_OK == nReturn )
                     {
                         SvTreeListEntry* pNewEntry = AddEntry( xNewBinding );
-                        m_aItemList.Select( pNewEntry, sal_True );
+                        m_aItemList.Select( pNewEntry, true );
                         bIsDocModified = true;
                     }
                     else
@@ -763,7 +763,7 @@ namespace svxform
             DBG_UNHANDLED_EXCEPTION();
         }
         return m_aItemList.InsertEntry(
-            sName, aImage, aImage, pParent, sal_False, TREELIST_APPEND, _pNewNode );
+            sName, aImage, aImage, pParent, false, TREELIST_APPEND, _pNewNode );
     }
 
 
@@ -782,7 +782,7 @@ namespace svxform
             {
                 // ID
                 _rEntry->getPropertyValue( PN_SUBMISSION_ID ) >>= sTemp;
-                pEntry = m_aItemList.InsertEntry( sTemp, aImage, aImage, NULL, sal_False, TREELIST_APPEND, pNode );
+                pEntry = m_aItemList.InsertEntry( sTemp, aImage, aImage, NULL, false, TREELIST_APPEND, pNode );
                 // Action
                 _rEntry->getPropertyValue( PN_SUBMISSION_ACTION ) >>= sTemp;
                 OUString sEntry = SVX_RESSTR( RID_STR_DATANAV_SUBM_ACTION );
@@ -826,7 +826,7 @@ namespace svxform
                 _rEntry->getPropertyValue( PN_BINDING_EXPR ) >>= sTemp;
                 sName += sTemp;
                 pEntry = m_aItemList.InsertEntry(
-                    sName, aImage, aImage, NULL, sal_False, TREELIST_APPEND, pNode );
+                    sName, aImage, aImage, NULL, false, TREELIST_APPEND, pNode );
             }
             catch ( Exception& )
             {
@@ -1140,7 +1140,7 @@ namespace svxform
 
                                     ItemNode* pNode = new ItemNode( xPropSet );
                                     m_aItemList.InsertEntry(
-                                        sEntry, aImage1, aImage2, NULL, sal_False, TREELIST_APPEND, pNode );
+                                        sEntry, aImage1, aImage2, NULL, false, TREELIST_APPEND, pNode );
                                 }
                             }
                         }

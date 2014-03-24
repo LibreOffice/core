@@ -88,8 +88,8 @@ SwSelectDBTableDialog::SwSelectDBTableDialog(Window* pParent,
     m_aTableLB.SetStyle( m_aTableLB.GetStyle() | WB_CLIPCHILDREN );
     m_aTableLB.SetSpaceBetweenEntries(3);
     m_aTableLB.SetSelectionMode( SINGLE_SELECTION );
-    m_aTableLB.SetDragDropMode(   0 );
-    m_aTableLB.EnableAsyncDrag(sal_False);
+    m_aTableLB.SetDragDropMode( 0 );
+    m_aTableLB.EnableAsyncDrag(false);
 
     m_aPreviewPB.SetClickHdl(LINK(this, SwSelectDBTableDialog, PreviewHdl));
 

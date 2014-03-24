@@ -189,12 +189,12 @@ sal_Int8 SwGlobalTree::ExecuteDrop( const ExecuteDropEvent& rEvt )
     SvTreeListEntry* pLast = (SvTreeListEntry*)LastVisible();
     if(pEmphasisEntry)
     {
-        ImplShowTargetEmphasis( Prev(pEmphasisEntry), sal_False );
+        ImplShowTargetEmphasis( Prev(pEmphasisEntry), false );
         pEmphasisEntry = 0;
     }
     else if(bLastEntryEmphasis && pLast)
     {
-        ImplShowTargetEmphasis( pLast, sal_False);
+        ImplShowTargetEmphasis( pLast, false);
     }
 
     SvTreeListEntry* pDropEntry = bLastEntryEmphasis ? 0 : GetEntry(rEvt.maPosPixel);
@@ -273,12 +273,12 @@ sal_Int8 SwGlobalTree::AcceptDrop( const AcceptDropEvent& rEvt )
     {
         if( pEmphasisEntry )
         {
-            ImplShowTargetEmphasis( Prev(pEmphasisEntry), sal_False );
+            ImplShowTargetEmphasis( Prev(pEmphasisEntry), false );
             pEmphasisEntry = 0;
         }
         else if(bLastEntryEmphasis && pLast)
         {
-            ImplShowTargetEmphasis( pLast, sal_False);
+            ImplShowTargetEmphasis( pLast, false);
         }
         bLastEntryEmphasis = false;
     }
@@ -302,10 +302,10 @@ sal_Int8 SwGlobalTree::AcceptDrop( const AcceptDropEvent& rEvt )
                 nRet = DND_ACTION_LINK;
 
         if(pEmphasisEntry && pEmphasisEntry != pDropEntry)
-            ImplShowTargetEmphasis( Prev(pEmphasisEntry), sal_False );
+            ImplShowTargetEmphasis( Prev(pEmphasisEntry), false );
         else if(pLast && bLastEntryEmphasis  && pDropEntry)
         {
-            ImplShowTargetEmphasis( pLast, sal_False);
+            ImplShowTargetEmphasis( pLast, false);
             bLastEntryEmphasis = false;
         }
 
@@ -559,7 +559,7 @@ sal_Bool     SwGlobalTree::NotifyCopying(  SvTreeListEntry*  /*pTarget*/,
     return sal_False;
 }
 
-sal_Bool SwGlobalTree::NotifyAcceptDrop( SvTreeListEntry* pEntry)
+bool SwGlobalTree::NotifyAcceptDrop( SvTreeListEntry* pEntry)
 {
     return pEntry != 0;
 }
@@ -582,7 +582,7 @@ void SwGlobalTree::DragFinished( sal_Int8 nAction )
 void  SwGlobalTree::MouseButtonDown( const MouseEvent& rMEvt )
 {
     Point aPos( rMEvt.GetPosPixel());
-    SvTreeListEntry* pEntry = GetEntry( aPos, sal_True );
+    SvTreeListEntry* pEntry = GetEntry( aPos, true );
     if( !pEntry && rMEvt.IsLeft() && rMEvt.IsMod1() && (rMEvt.GetClicks() % 2) == 0)
         Control::MouseButtonDown( rMEvt );
     else
@@ -639,7 +639,7 @@ void    SwGlobalTree::Display(bool bOnlyUpdateUserData)
     }
     else
     {
-        SetUpdateMode( sal_False );
+        SetUpdateMode( false );
         SvTreeListEntry* pOldSelEntry = FirstSelected();
         OUString sEntryName;  // Name of the entry
         sal_uLong nSelPos = TREELIST_ENTRY_NOTFOUND;
@@ -682,7 +682,7 @@ void    SwGlobalTree::Display(bool bOnlyUpdateUserData)
                 break;
             }
             SvTreeListEntry* pEntry = InsertEntry(sEntry, aImage, aImage,
-                        0, sal_False, TREELIST_APPEND, pCont);
+                        0, false, TREELIST_APPEND, pCont);
             if(sEntry == sEntryName)
             {
                 pSelEntry = pEntry;
@@ -700,7 +700,7 @@ void    SwGlobalTree::Display(bool bOnlyUpdateUserData)
             Select(First());
         else
             SelectHdl();
-        SetUpdateMode( sal_True );
+        SetUpdateMode( true );
     }
 }
 

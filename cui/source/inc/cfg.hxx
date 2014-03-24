@@ -326,7 +326,7 @@ public:
 
     virtual sal_Int8    AcceptDrop( const AcceptDropEvent& rEvt );
 
-    virtual sal_Bool        NotifyAcceptDrop( SvTreeListEntry* pEntry );
+    virtual bool        NotifyAcceptDrop( SvTreeListEntry* pEntry );
 
     virtual sal_Bool        NotifyMoving( SvTreeListEntry*, SvTreeListEntry*,
                                       SvTreeListEntry*&, sal_uLong& );

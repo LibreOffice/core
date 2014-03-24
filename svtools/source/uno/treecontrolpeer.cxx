@@ -91,8 +91,8 @@ public:
 
     virtual void    RequestingChildren( SvTreeListEntry* pParent );
 
-    virtual sal_Bool    EditingEntry( SvTreeListEntry* pEntry, Selection& );
-    virtual sal_Bool    EditedEntry( SvTreeListEntry* pEntry, const OUString& rNewText );
+    virtual bool    EditingEntry( SvTreeListEntry* pEntry, Selection& );
+    virtual bool    EditedEntry( SvTreeListEntry* pEntry, const OUString& rNewText );
 
     DECL_LINK(OnSelectionChangeHdl, void *);
     DECL_LINK(OnExpandingHdl, void *);
@@ -500,7 +500,7 @@ void TreeControlPeer::ChangeNodesSelection( const Any& rSelection, bool bSelect,
     }
 
     if( bSetSelection )
-        rTree.SelectAll( sal_False );
+        rTree.SelectAll( false );
 
     if( pNodes && nCount )
     {
@@ -595,7 +595,7 @@ void SAL_CALL TreeControlPeer::removeSelection( const Any& rSelection ) throw (I
 void SAL_CALL TreeControlPeer::clearSelection() throw (RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
-    getTreeListBoxOrThrow().SelectAll( sal_False );
+    getTreeListBoxOrThrow().SelectAll( false );
 }
 
 
@@ -861,7 +861,7 @@ Reference< XTreeNode > SAL_CALL TreeControlPeer::getNodeForLocation( sal_Int32 x
     Reference< XTreeNode > xNode;
 
     const Point aPos( x, y );
-    UnoTreeListEntry* pEntry = dynamic_cast< UnoTreeListEntry* >( rTree.GetEntry( aPos, sal_True ) );
+    UnoTreeListEntry* pEntry = dynamic_cast< UnoTreeListEntry* >( rTree.GetEntry( aPos, true ) );
     if( pEntry )
         xNode = pEntry->mxNode;
 
@@ -879,7 +879,7 @@ Reference< XTreeNode > SAL_CALL TreeControlPeer::getClosestNodeForLocation( sal_
     Reference< XTreeNode > xNode;
 
     const Point aPos( x, y );
-    UnoTreeListEntry* pEntry = dynamic_cast< UnoTreeListEntry* >( rTree.GetEntry( aPos, sal_True ) );
+    UnoTreeListEntry* pEntry = dynamic_cast< UnoTreeListEntry* >( rTree.GetEntry( aPos, true ) );
     if( pEntry )
         xNode = pEntry->mxNode;
 
@@ -1555,16 +1555,16 @@ void UnoTreeListBoxImpl::RequestingChildren( SvTreeListEntry* pParent )
 
 
 
-sal_Bool UnoTreeListBoxImpl::EditingEntry( SvTreeListEntry* pEntry, Selection& )
+bool UnoTreeListBoxImpl::EditingEntry( SvTreeListEntry* pEntry, Selection& )
 {
-    return mxPeer.is() ? mxPeer->onEditingEntry( dynamic_cast< UnoTreeListEntry* >( pEntry ) ) : false;
+    return mxPeer.is() && mxPeer->onEditingEntry( dynamic_cast< UnoTreeListEntry* >( pEntry ) );
 }
 
 
 
-sal_Bool UnoTreeListBoxImpl::EditedEntry( SvTreeListEntry* pEntry, const OUString& rNewText )
+bool UnoTreeListBoxImpl::EditedEntry( SvTreeListEntry* pEntry, const OUString& rNewText )
 {
-    return mxPeer.is() ? mxPeer->onEditedEntry( dynamic_cast< UnoTreeListEntry* >( pEntry ), rNewText ) : false;
+    return mxPeer.is() && mxPeer->onEditedEntry( dynamic_cast< UnoTreeListEntry* >( pEntry ), rNewText );
 }
 
 

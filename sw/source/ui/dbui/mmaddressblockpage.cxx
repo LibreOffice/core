@@ -1190,8 +1190,8 @@ DDListBox::DDListBox(Window* pParent, WinBits nStyle)
     SetStyle( GetStyle() | /*WB_HASBUTTONS|WB_HASBUTTONSATROOT|*/
                             WB_CLIPCHILDREN );
     SetSelectionMode( SINGLE_SELECTION );
-    SetDragDropMode(   SV_DRAGDROP_CTRL_COPY );
-    EnableAsyncDrag(sal_True);
+    SetDragDropMode( SV_DRAGDROP_CTRL_COPY );
+    EnableAsyncDrag(true);
     // expand selection to the complete width of the ListBox
     SetHighlightRange();
     Show();

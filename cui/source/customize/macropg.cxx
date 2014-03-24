@@ -553,7 +553,7 @@ void _SvxMacroTabPage::DisplayAppEvents( bool appEvents)
         rListBox.MakeVisible( pE );
     }
 
-    rListBox.SetUpdateMode( sal_True );
+    rListBox.SetUpdateMode( true );
     EnableButtons();
 }
 
@@ -694,7 +694,7 @@ long _SvxMacroTabPage::GenericHandler_Impl( _SvxMacroTabPage* pThis, PushButton*
     rListBox.GetModel()->InvalidateEntry( pE );
     rListBox.Select( pE );
     rListBox.MakeVisible( pE );
-    rListBox.SetUpdateMode( sal_True );
+    rListBox.SetUpdateMode( true );
 
     pThis->EnableButtons();
     return 0;

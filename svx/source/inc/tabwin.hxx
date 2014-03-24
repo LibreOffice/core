@@ -52,7 +52,7 @@ protected:
     virtual void StartDrag( sal_Int8 nAction, const Point& rPosPixel );
 
     // SvTreeListBox
-    virtual sal_Bool DoubleClickHdl();
+    virtual bool DoubleClickHdl();
 
     using SvTreeListBox::ExecuteDrop;
 };
