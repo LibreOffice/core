@@ -289,7 +289,7 @@ public:
     virtual bool            drawAlphaRect( long nX, long nY, long nWidth,
                                            long nHeight, sal_uInt8 nTransparency );
 
-    CGPoint*                makeCGptArray(sal_uLong nPoints, const SalPoint*  pPtAry);
+    CGPoint*                makeCGptArray(sal_uInt32 nPoints, const SalPoint*  pPtAry);
     // native widget rendering methods that require mirroring
     virtual bool        hitTestNativeControl( ControlType nType, ControlPart nPart, const Rectangle& rControlRegion,
                                               const Point& aPos, bool& rIsInside ) SAL_OVERRIDE;
