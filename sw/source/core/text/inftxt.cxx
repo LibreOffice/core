@@ -182,8 +182,11 @@ void ChkOutDev( const SwTxtSizeInfo &rInf )
 
 inline sal_Int32 GetMinLen( const SwTxtSizeInfo &rInf )
 {
+    const sal_Int32 nTxtLen = rInf.GetTxt().getLength();
+    if (rInf.GetLen() == COMPLETE_STRING)
+        return nTxtLen;
     const sal_Int32 nInfLen = rInf.GetIdx() + rInf.GetLen();
-    return std::min( rInf.GetTxt().getLength(), nInfLen );
+    return std::min(nTxtLen, nInfLen);
 }
 
 SwTxtSizeInfo::SwTxtSizeInfo( const SwTxtSizeInfo &rNew )
