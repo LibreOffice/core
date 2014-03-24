@@ -76,7 +76,12 @@ struct ScAccNote
     sal_Int32   mnParaCount;
     sal_Bool    mbMarkNote;
 
-                ScAccNote() : mpTextHelper(NULL), mnParaCount(0) {}
+    ScAccNote()
+        : mpTextHelper(NULL)
+        , mnParaCount(0)
+        , mbMarkNote(false)
+    {
+    }
 };
 
 class ScNotesChildren
