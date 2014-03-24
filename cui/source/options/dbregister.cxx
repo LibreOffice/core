@@ -346,7 +346,7 @@ IMPL_LINK( DbRegistrationOptionsPage, HeaderEndDrag_Impl, HeaderBar*, pBar )
 {
     assert(pBar);
 
-    if ( pBar && !pBar->GetCurItemId() )
+    if (!pBar || !pBar->GetCurItemId())
         return 0;
 
     if ( !pBar->IsItemMode() )
