@@ -1851,7 +1851,7 @@ bool XorEmulation::UpdateTarget()
 void AquaSalGraphics::SetVirDevGraphics( CGLayerRef xLayer, CGContextRef xContext,
     int nBitmapDepth )
 {
-    SAL_INFO( "vcl.ios", "SetVirDevGraphics() this=" << this << " layer=" << xLayer << " context=" << xContext );
+    SAL_INFO( "vcl.quartz", "SetVirDevGraphics() this=" << this << " layer=" << xLayer << " context=" << xContext );
 
 #ifndef IOS
     mbWindow    = false;
