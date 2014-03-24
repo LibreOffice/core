@@ -578,7 +578,10 @@ sal_Bool SwView::BeginTextEdit(SdrObject* pObj, SdrPageView* pPV, Window* pWin,
         ESelection aNewSelection(EE_PARA_NOT_FOUND, EE_INDEX_NOT_FOUND, EE_PARA_NOT_FOUND, EE_INDEX_NOT_FOUND);
         if (bSetSelectionToStart)
             aNewSelection = ESelection();
-        pView->SetSelection(aNewSelection);
+        if (pView)
+        {
+            pView->SetSelection(aNewSelection);
+        }
     }
 
     return bRet;
