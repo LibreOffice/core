@@ -618,7 +618,11 @@ Size ScIAccessibleViewForwarder::PixelToLogic (const Size& rSize) const
 
 struct ScShapeChild
 {
-    ScShapeChild() : mpAccShape(NULL) {}
+    ScShapeChild()
+        : mpAccShape(NULL)
+        , mnRangeId(0)
+    {
+    }
     ScShapeChild(const ScShapeChild& rOld);
     ~ScShapeChild();
     mutable ::accessibility::AccessibleShape* mpAccShape;
