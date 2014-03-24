@@ -346,7 +346,7 @@ uno::Reference< text::XFlatParagraph > SwXFlatParagraphIterator::getNextPara()
         SwPageFrm* pStartPage = pCurrentPage;
         SwPageFrm* pStopPage = 0;
 
-        while ( pCurrentPage != pStopPage )
+        while ( pCurrentPage && pCurrentPage != pStopPage )
         {
             if (mnType != text::TextMarkupType::SPELLCHECK || pCurrentPage->IsInvalidSpelling() )
             {
