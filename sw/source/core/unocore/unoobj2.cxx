@@ -1173,7 +1173,7 @@ CreateParentXText(SwDoc & rDoc, const SwPosition& rPos)
     {
         pSttNode = pSttNode->StartOfSectionNode();
     }
-    SwStartNodeType eType = pSttNode->GetStartNodeType();
+    SwStartNodeType eType = pSttNode ? pSttNode->GetStartNodeType() : SwNormalStartNode;
     switch(eType)
     {
         case SwTableBoxStartNode:
