@@ -723,9 +723,8 @@ uno::Any SAL_CALL SwXMailMerge::execute(
         aURLObj.SetSmartURL( aCurOutputURL );
         OUString aPath = aURLObj.GetMainURL( INetURLObject::DECODE_TO_IURI );
 
-        OUString aDelim = OUString(INET_PATH_TOKEN);
-        if (aPath.getLength() >= aDelim.getLength() &&
-            aPath.copy( aPath.getLength() - aDelim.getLength() ) != aDelim)
+        const OUString aDelim = OUString(INET_PATH_TOKEN);
+        if (!aPath.isEmpty() && !aPath.endsWith(aDelim))
             aPath += aDelim;
         if (bCurFileNameFromColumn)
             pMgr->SetEMailColumn( aCurFileNamePrefix );
