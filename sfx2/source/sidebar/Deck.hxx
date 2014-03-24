@@ -69,10 +69,7 @@ public:
     virtual void DataChanged (const DataChangedEvent& rEvent);
     virtual bool Notify (NotifyEvent& rEvent);
 
-    void PrintWindowTree (void);
-#ifdef DEBUG
-    void PrintWindowTree (const ::std::vector<Panel*>& rPanels);
-#endif
+    void PrintWindowTree();
     static void PrintWindowSubTree (Window* pRoot, int nIndentation);
 
     sal_Int32 GetMinimalWidth() const { return mnMinimalWidth; }

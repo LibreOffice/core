@@ -68,10 +68,6 @@ public:
     virtual void DataChanged (const DataChangedEvent& rEvent);
     virtual void Activate (void);
 
-#ifdef DEBUG
-    void PrintWindowTree (void);
-#endif
-
 private:
     const ::rtl::OUString msPanelId;
     ::boost::scoped_ptr<PanelTitleBar> mpTitleBar;

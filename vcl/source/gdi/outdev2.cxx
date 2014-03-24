@@ -328,14 +328,6 @@ void OutputDevice::DrawOutDev( const Point& rDestPt, const Size& rDestSize,
     }
 }
 
-void OutputDevice::DrawOutDev( const Point& /*rDestPt*/, const Size& /*rDestSize*/,
-                               const Point& /*rSrcPt*/,  const Size& /*rSrcSize*/,
-                               const Printer& /*rOutDev*/ )
-{
-    // This should never occur! You can't call this function on a Printer instance
-    DBG_ASSERT( false, "Don't use OutputDevice::DrawOutDev(...) with printer devices!" );
-}
-
 void OutputDevice::CopyArea( const Point& rDestPt,
                              const Point& rSrcPt,  const Size& rSrcSize,
                              sal_uInt16 nFlags )

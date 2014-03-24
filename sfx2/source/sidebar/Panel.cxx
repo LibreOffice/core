@@ -223,33 +223,10 @@ void Panel::DataChanged (const DataChangedEvent& rEvent)
     SetBackground(Theme::GetPaint(Theme::Paint_PanelBackground).GetWallpaper());
 }
 
-
-
-
 Reference<ui::XSidebarPanel> Panel::GetPanelComponent (void) const
 {
     return mxPanelComponent;
 }
-
-
-
-
-#ifdef DEBUG
-void Panel::PrintWindowTree (void)
-{
-    Window* pElementWindow = VCLUnoHelper::GetWindow(GetElementWindow());
-    if (pElementWindow != NULL)
-    {
-        OSL_TRACE("panel parent is %x", pElementWindow->GetParent());
-        Deck::PrintWindowSubTree(pElementWindow, 2);
-    }
-    else
-        OSL_TRACE("    panel is empty");
-}
-#endif
-
-
-
 
 Reference<awt::XWindow> Panel::GetElementWindow (void)
 {

@@ -65,7 +65,6 @@ public:
     virtual ~AstDeclaration();
 
     // Data access
-    void setName(const OString& name);
     const OString& getLocalName() const
         { return m_localName; }
     const OString&   getScopedName() const

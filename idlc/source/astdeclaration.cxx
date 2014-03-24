@@ -98,39 +98,6 @@ void AstDeclaration::setPredefined(bool bPredefined)
     }
 }
 
-void AstDeclaration::setName(const OString& name)
-{
-    m_scopedName = name;
-    sal_Int32 nIndex = name.lastIndexOf( ':' );
-    m_localName = name.copy( nIndex+1 );
-
-// Huh ? There is always at least one token
-
-//  sal_Int32 count = name.getTokenCount(':');
-
-//  if ( count > 0 )
-//  {
-//      m_localName = name.getToken(count-1, ':');
-//      m_scopedName = name;
-//  } else if ( m_pScope )
-//  {
-//      m_localName = name;
-//      AstDeclaration* pDecl = scopeAsDecl(m_pScope);
-//      if (pDecl)
-//      {
-//          m_scopedName = pDecl->getScopedName();
-//          if (m_scopedName.getLength() > 0)
-//              m_scopedName += sGlobal;
-//          m_scopedName += m_localName;
-//      }
-//  } else
-//  {
-//      m_localName = name;
-//      m_scopedName = name;
-//  }
-    m_fullName = convertName(m_scopedName);
-}
-
 bool AstDeclaration::isType() const {
     switch (m_nodeType) {
     case NT_interface:

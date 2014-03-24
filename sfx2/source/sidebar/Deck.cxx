@@ -364,26 +364,10 @@ void Deck::PrintWindowSubTree (Window* pRoot, int nIndentation)
         PrintWindowSubTree(pRoot->GetChild(nIndex), nIndentation+1);
 }
 
-
-
-
 void Deck::PrintWindowTree (void)
 {
     PrintWindowSubTree(this, 0);
 }
-
-
-
-#ifdef DEBUG
-void Deck::PrintWindowTree (const ::std::vector<Panel*>& rPanels)
-{
-    (void)rPanels;
-
-    PrintWindowTree();
-}
-#endif
-
-
 
 IMPL_LINK(Deck, HandleVerticalScrollBarChange,void*, EMPTYARG)
 {
