@@ -1306,7 +1306,6 @@ SlideExclusionState GetSlideExclusionState (model::PageEnumeration& rPageSet)
                     eState = MIXED;
                 break;
 
-            case MIXED:
             default:
                 // No need to change anything.
                 break;
