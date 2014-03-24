@@ -1472,3 +1472,19 @@ main/vcl/unx/generic/fontmanager/parseAFM.hxx
 
 main/icc/source/create_sRGB_profile/Makefile.in
 
+
+##############################################################################
+#
+# exclude generated files during the build, e.g. config files, environment scripts
+#
+
+main/config.log
+main/config.parms
+main/config.status
+main/configure
+main/warn
+main/autom4te.cache/*
+
+main/LinuxX86-64Env.Set*
+main/MacOSXX64Env.Set*
+main/winenv.set*
