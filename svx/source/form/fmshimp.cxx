@@ -2289,7 +2289,7 @@ IMPL_LINK(FmXFormShell, OnFoundData, FmFoundRecordInformation*, pfriWhere)
     sal_Int32 nGridColumn = m_arrRelativeGridColumn[pfriWhere->nFieldPos];
     if (nGridColumn != -1)
     {   // dummer weise muss ich mir das Control erst wieder besorgen
-        Reference< XControl> xControl( impl_getControl( xControlModel, *pFormObject ) );
+        Reference<XControl> xControl( pFormObject ? impl_getControl( xControlModel, *pFormObject ) : Reference< XControl>() );
         Reference< XGrid> xGrid(xControl, UNO_QUERY);
         DBG_ASSERT(xGrid.is(), "FmXFormShell::OnFoundData : ungueltiges Control !");
         // wenn eine der Asserts anschlaegt, habe ich beim Aufbauen von m_arrSearchedControls wohl was falsch gemacht
