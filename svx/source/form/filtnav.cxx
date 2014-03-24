@@ -1919,6 +1919,9 @@ FmFilterNavigatorWin::~FmFilterNavigatorWin()
 
 void FmFilterNavigatorWin::UpdateContent(FmFormShell* pFormShell)
 {
+    if (!m_pNavigator)
+        return;
+
     if (!pFormShell)
         m_pNavigator->UpdateContent( NULL, NULL );
     else
