@@ -53,7 +53,7 @@ JARFILES += \
 .IF "$(SYSTEM_APACHE_COMMONS)" == "YES"
 EXTRAJARFILES += $(COMMONS_LOGGING_JAR)
 .ELSE
-JARFILES += commons-logging-1.1.1.jar
+JARFILES += commons-logging-1.1.3.jar
 .ENDIF
 
 .IF "$(SYSTEM_JFREEREPORT)" == "YES" || "$(SYSTEM_APACHE_COMMONS)" == "YES"
@@ -69,7 +69,7 @@ JAVAFILES       := $(shell @$(FIND) . -name "*.java")
 PROPERTYFILES := $(CLASSDIR)$/$(PACKAGE)$/configuration.properties \
                  $(CLASSDIR)$/$(PACKAGE)$/module.properties \
                  $(CLASSDIR)$/$(PACKAGE)$/parser$/selectors.properties
-                 
+
 # CSSFILES := $(subst,./,$(CLASSDIR)$/$(PACKAGE)$/ $(shell @$(FIND) . -name "*.css"))
 CSSFILES := $(CLASSDIR)$/$(PACKAGE)$/oasis-datastyle.css\
             $(CLASSDIR)$/$(PACKAGE)$/oasis-draw.css\
@@ -86,12 +86,12 @@ CSSFILES := $(CLASSDIR)$/$(PACKAGE)$/oasis-datastyle.css\
 
 XSDFILES := $(CLASSDIR)$/$(PACKAGE)$/parser$/rpt-schema-v1.0-os.xsd \
             $(CLASSDIR)$/$(PACKAGE)$/styles$/stylemapper.xsd
-            
+
 XMLFILES := $(CLASSDIR)$/$(PACKAGE)$/styles$/stylemapper.xml
-            
+
 TXTFILES := $(CLASSDIR)$/$(PACKAGE)$/parser$/style-mapping.txt
 
-            
+
 #----- make a jar from compiled files ------------------------------
 
 JARCLASSDIRS    = .
@@ -137,7 +137,7 @@ $(CLASSDIR)$/$(PACKAGE)$/%.css : %.css
 $(CLASSDIR)$/$(PACKAGE)$/%.xsd : %.xsd
     @@-$(MKDIRHIER) $(@:d)
     $(COPY) $< $@
-    
+
 $(CLASSDIR)$/$(PACKAGE)$/%.xml : %.xml
     @@-$(MKDIRHIER) $(@:d)
     $(COPY) $< $@    

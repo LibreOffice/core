@@ -34,7 +34,7 @@ JARFILES        = ridl.jar unoil.jar jurt.jar juh.jar java_uno.jar
 .IF "$(SYSTEM_APACHE_COMMONS)" == "YES"
 EXTRAJARFILES = $(COMMONS_LOGGING_JAR)
 .ELSE
-JARFILES += commons-logging-1.1.1.jar
+JARFILES += commons-logging-1.1.3.jar
 .ENDIF
 
 JAVAFILES       :=	DataRow.java\

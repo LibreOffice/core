@@ -71,7 +71,7 @@ COMPONENT_MERGED_XCU= \
 
 COMPONENT_OTR_FILES= \
     $(EXTENSIONDIR)$/template$/en-US$/wizard$/report$/default.otr
-    
+
 COMPONENT_IMAGES= \
     $(EXTENSIONDIR)$/images$/extension_32.png \
     $(EXTENSIONDIR)$/images$/extension_32_h.png
@@ -107,7 +107,7 @@ COMPONENT_EXTJARFILES += \
 .ENDIF
 .IF "$(SYSTEM_APACHE_COMMONS)" != "YES"
 COMPONENT_EXTJARFILES += \
-    $(EXTENSIONDIR)$/commons-logging-1.1.1.jar
+    $(EXTENSIONDIR)$/commons-logging-1.1.3.jar
 .ENDIF
 
 COMPONENT_MANIFEST_GENERIC:=TRUE
