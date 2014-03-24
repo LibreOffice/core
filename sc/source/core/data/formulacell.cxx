@@ -3233,7 +3233,6 @@ void ScFormulaCell::UpdateTranspose( const ScRange& rSource, const ScAddress& rD
     bool bRefChanged = false;
     ScToken* t;
 
-    ScRangeData* pShared = NULL;
     pCode->Reset();
     while( (t = static_cast<ScToken*>(pCode->GetNextReferenceOrName())) != NULL )
     {
@@ -3256,27 +3255,6 @@ void ScFormulaCell::UpdateTranspose( const ScRange& rSource, const ScAddress& rD
             {
                 rRef.SetRange(aAbs, aPos); // based on the new anchor position.
                 bRefChanged = true;
-            }
-        }
-    }
-
-    if (pShared) // Exchange Shared Formula with real Formula
-    {
-        pDocument->RemoveFromFormulaTree( this ); // update formula count
-        delete pCode;
-        pCode = new ScTokenArray( *pShared->GetCode() );
-        bRefChanged = true;
-        pCode->Reset();
-        while( (t = static_cast<ScToken*>(pCode->GetNextReference())) != NULL )
-        {
-            if( t->GetType() != svIndex )
-            {
-                SingleDoubleRefModifier aMod(*t);
-                ScComplexRefData& rRef = aMod.Ref();
-                ScRange aAbs = rRef.toAbs(aOldPos);
-                bool bMod = (ScRefUpdate::UpdateTranspose(pDocument, rSource, rDest, aAbs) != UR_NOTHING || bPosChanged);
-                if (bMod)
-                    rRef.SetRange(aAbs, aPos); // based on the new anchor position.
             }
         }
     }
@@ -3308,7 +3286,6 @@ void ScFormulaCell::UpdateGrow( const ScRange& rArea, SCCOL nGrowX, SCROW nGrowY
 
     bool bRefChanged = false;
     ScToken* t;
-    ScRangeData* pShared = NULL;
 
     pCode->Reset();
     while( (t = static_cast<ScToken*>(pCode->GetNextReferenceOrName())) != NULL )
@@ -3332,27 +3309,6 @@ void ScFormulaCell::UpdateGrow( const ScRange& rArea, SCCOL nGrowX, SCROW nGrowY
             {
                 rRef.SetRange(aAbs, aPos);
                 bRefChanged = true;
-            }
-        }
-    }
-
-    if (pShared) // Exchange Shared Formula with real Formula
-    {
-        pDocument->RemoveFromFormulaTree( this ); // Update formula count
-        delete pCode;
-        pCode = new ScTokenArray( *pShared->GetCode() );
-        bRefChanged = true;
-        pCode->Reset();
-        while( (t = static_cast<ScToken*>(pCode->GetNextReference())) != NULL )
-        {
-            if( t->GetType() != svIndex )
-            {
-                SingleDoubleRefModifier aMod(*t);
-                ScComplexRefData& rRef = aMod.Ref();
-                ScRange aAbs = rRef.toAbs(aPos);
-                bool bMod = (ScRefUpdate::UpdateGrow(rArea, nGrowX, nGrowY, aAbs) != UR_NOTHING);
-                if (bMod)
-                    rRef.SetRange(aAbs, aPos);
             }
         }
     }
