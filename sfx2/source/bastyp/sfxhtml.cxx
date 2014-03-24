@@ -76,7 +76,7 @@ SfxHTMLParser::SfxHTMLParser( SvStream& rStream, bool bIsNewDoc,
                 "SfxHTMLParser::SfxHTMLParser: Switch to UCS2?" );
 
     // If the file starts with a BOM, switch to UCS2.
-    SetSwitchToUCS2( sal_True );
+    SetSwitchToUCS2( true );
 }
 
 SfxHTMLParser::~SfxHTMLParser()

@@ -164,14 +164,14 @@ sal_Unicode SvParser::GetNextChar()
                     if( 0xfe == c1 && 0xff == c2 )
                     {
                         eSrcEnc = RTL_TEXTENCODING_UCS2;
-                        bUCS2BSrcEnc = sal_True;
-                        bSeekBack = sal_False;
+                        bUCS2BSrcEnc = true;
+                        bSeekBack = false;
                     }
                     else if( 0xff == c1 && 0xfe == c2 )
                     {
                         eSrcEnc = RTL_TEXTENCODING_UCS2;
-                        bUCS2BSrcEnc = sal_False;
-                        bSeekBack = sal_False;
+                        bUCS2BSrcEnc = false;
+                        bSeekBack = false;
                     }
                 }
             }
@@ -179,7 +179,7 @@ sal_Unicode SvParser::GetNextChar()
         if( bSeekBack )
             rInput.Seek( 0 );
 
-        bSwitchToUCS2 = sal_False;
+        bSwitchToUCS2 = false;
     }
 
     nNextChPos = rInput.Tell();
@@ -641,7 +641,7 @@ SvKeyValueIterator::~SvKeyValueIterator (void)
 /*
  * GetFirst.
  */
-sal_Bool SvKeyValueIterator::GetFirst (SvKeyValue &rKeyVal)
+bool SvKeyValueIterator::GetFirst (SvKeyValue &rKeyVal)
 {
     m_nPos = m_pList->size();
     return GetNext (rKeyVal);
@@ -650,17 +650,17 @@ sal_Bool SvKeyValueIterator::GetFirst (SvKeyValue &rKeyVal)
 /*
  * GetNext.
  */
-sal_Bool SvKeyValueIterator::GetNext (SvKeyValue &rKeyVal)
+bool SvKeyValueIterator::GetNext (SvKeyValue &rKeyVal)
 {
     if (m_nPos > 0)
     {
         rKeyVal = (*m_pList)[--m_nPos];
-        return sal_True;
+        return true;
     }
     else
     {
         // Nothing to do.
-        return sal_False;
+        return false;
     }
 }
 

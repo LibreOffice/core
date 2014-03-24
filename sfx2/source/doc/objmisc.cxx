@@ -148,8 +148,8 @@ public:
         xIter( pSh->GetMedium()->GetHeaderAttributes_Impl() ),
         bAlert( false ) {}
 
-    virtual sal_Bool GetFirst( SvKeyValue& rKV ) { return xIter->GetFirst( rKV ); }
-    virtual sal_Bool GetNext( SvKeyValue& rKV ) { return xIter->GetNext( rKV ); }
+    virtual bool GetFirst( SvKeyValue& rKV ) { return xIter->GetFirst( rKV ); }
+    virtual bool GetNext( SvKeyValue& rKV ) { return xIter->GetNext( rKV ); }
     virtual void Append( const SvKeyValue& rKV );
 
     void ClearForSourceView() { xIter = new SvKeyValueIterator; bAlert = false; }

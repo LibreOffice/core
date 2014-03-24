@@ -84,7 +84,7 @@ OHTMLReader::OHTMLReader(SvStream& rIn,const SharedConnection& _rxConnection,
     SAL_INFO("dbaccess.ui", "OHTMLReader::OHTMLReader" );
     SetSrcEncoding( GetExtendedCompatibilityTextEncoding(  RTL_TEXTENCODING_ISO_8859_1 ) );
     // If the file starts with a BOM, switch to UCS2.
-    SetSwitchToUCS2( sal_True );
+    SetSwitchToUCS2( true );
 }
 
 OHTMLReader::OHTMLReader(SvStream& rIn,
@@ -106,7 +106,7 @@ OHTMLReader::OHTMLReader(SvStream& rIn,
     SAL_INFO("dbaccess.ui", "OHTMLReader::OHTMLReader" );
     SetSrcEncoding( GetExtendedCompatibilityTextEncoding(  RTL_TEXTENCODING_ISO_8859_1 ) );
     // If the file starts with a BOM, switch to UCS2.
-    SetSwitchToUCS2( sal_True );
+    SetSwitchToUCS2( true );
 }
 
 OHTMLReader::~OHTMLReader()

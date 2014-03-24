@@ -54,7 +54,7 @@ protected:
 
     SvParser_Impl       *pImplData;         // interne Daten
     long                nTokenValue;        // zusaetzlicher Wert (RTF)
-    sal_Bool            bTokenHasValue;     // indicates whether nTokenValue is valid
+    bool                bTokenHasValue;     // indicates whether nTokenValue is valid
     SvParserState       eState;             // Status auch in abgl. Klassen
 
     rtl_TextEncoding    eSrcEnc;        // Source encoding
@@ -63,7 +63,7 @@ protected:
     sal_Unicode nNextCh;                // Akt. Zeichen fuer die "lex"
 
 
-    sal_Bool            bDownloadingFile : 1;// sal_True: Es wird gerade ein externes
+    bool                bDownloadingFile : 1;// sal_True: Es wird gerade ein externes
                                         //       File geladen. d.h. alle
                                         //       DataAvailable Links muessen
                                         //       ignoriert werden.
@@ -72,16 +72,16 @@ protected:
                                         // Stream als ANSI gelesen,
                                         // aber als CharSet DONTKNOW
                                         // zurueckgegeben.
-    sal_Bool            bUCS2BSrcEnc : 1;   // oder als big-endian UCS2
-    sal_Bool            bSwitchToUCS2 : 1;  // Umschalten des ist erlaubt
+    bool                bUCS2BSrcEnc : 1;   // oder als big-endian UCS2
+    bool                bSwitchToUCS2 : 1;  // Umschalten des ist erlaubt
 
-    sal_Bool            bRTF_InTextRead : 1;  // only for RTF-Parser!!!
+    bool                bRTF_InTextRead : 1;  // only for RTF-Parser!!!
 
     struct TokenStackType
     {
         OUString    sToken;
         long        nTokenValue;
-        sal_Bool    bTokenHasValue;
+        bool        bTokenHasValue;
         int         nTokenId;
 
         inline TokenStackType() { nTokenId = 0; }
@@ -142,21 +142,21 @@ public:
     /*virtual*/ void RestoreState();
     virtual void Continue( int nToken );
 
-    inline void SetDownloadingFile( sal_Bool bSet ) { bDownloadingFile = bSet; }
-    inline sal_Bool IsDownloadingFile() const { return bDownloadingFile; }
+    inline void SetDownloadingFile( bool bSet ) { bDownloadingFile = bSet; }
+    inline bool IsDownloadingFile() const { return bDownloadingFile; }
 
     // Set/get source encoding. The UCS2BEncoding flag is valid if source
     // encoding is UCS2. It specifies a big endian encoding.
     void SetSrcEncoding( rtl_TextEncoding eSrcEnc );
     rtl_TextEncoding GetSrcEncoding() const { return eSrcEnc; }
 
-    void SetSrcUCS2BEncoding( sal_Bool bSet ) { bUCS2BSrcEnc = bSet; }
-    sal_Bool IsSrcUCS2BEncoding() const { return bUCS2BSrcEnc; }
+    void SetSrcUCS2BEncoding( bool bSet ) { bUCS2BSrcEnc = bSet; }
+    bool IsSrcUCS2BEncoding() const { return bUCS2BSrcEnc; }
 
     // Darf der Zeichensatz auf UCS/2 umgeschaltet werden, wenn
     // in den ersten beiden Zeichen im Stream eine BOM steht?
-    void SetSwitchToUCS2( sal_Bool bSet ) { bSwitchToUCS2 = bSet; }
-    sal_Bool IsSwitchToUCS2() const { return bSwitchToUCS2; }
+    void SetSwitchToUCS2( bool bSet ) { bSwitchToUCS2 = bSet; }
+    bool IsSwitchToUCS2() const { return bSwitchToUCS2; }
 
     // Aus wie vielen Bytes betseht ein Zeichen
     inline sal_uInt16 GetCharSize() const;
@@ -266,8 +266,8 @@ public:
 
     /** Operation.
     */
-    virtual sal_Bool GetFirst (SvKeyValue &rKeyVal);
-    virtual sal_Bool GetNext  (SvKeyValue &rKeyVal);
+    virtual bool GetFirst (SvKeyValue &rKeyVal);
+    virtual bool GetNext  (SvKeyValue &rKeyVal);
     virtual void Append   (const SvKeyValue &rKeyVal);
 };
 
