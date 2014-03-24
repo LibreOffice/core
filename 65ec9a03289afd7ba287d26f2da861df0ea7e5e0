@@ -2,6 +2,23 @@
   "comments": [
     {
       "key": {
+        "uuid": "da86d52c_f247be49",
+        "filename": "sc/qa/unit/helper/qahelper.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 575,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2014-03-24T10:04:59Z",
+      "side": 1,
+      "message": "why keep aSep?  arguably more readable if you expand its uses in the line below",
+      "revId": "65ec9a03289afd7ba287d26f2da861df0ea7e5e0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "da86d52c_cfda1117",
         "filename": "sc/qa/unit/helper/qahelper.cxx",
         "patchSetId": 3
@@ -30,6 +47,40 @@
       "writtenOn": "2014-03-21T22:18:34Z",
       "side": 1,
       "message": "OUString::valueOf() and OString::valueOf() are deprecated methods and generate a warning in environments that support the SAL_DEPRECATED attribute or would even break the build if --enable-werror is configured (which I recommend anyway). Please substitute with OUString::number() and OString::number() instead.",
+      "revId": "65ec9a03289afd7ba287d26f2da861df0ea7e5e0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da86d52c_1274529b",
+        "filename": "sc/source/core/data/postit.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 807,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2014-03-24T10:04:59Z",
+      "side": 1,
+      "message": "if you have a OUStringBuffer anyway, you can just as well keep the multiple appends",
+      "revId": "65ec9a03289afd7ba287d26f2da861df0ea7e5e0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da86d52c_32795694",
+        "filename": "sc/source/core/data/validat.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 299,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2014-03-24T10:04:59Z",
+      "side": 1,
+      "message": "why use an OUStringBuffer at all?",
       "revId": "65ec9a03289afd7ba287d26f2da861df0ea7e5e0",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
