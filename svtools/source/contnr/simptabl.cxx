@@ -93,13 +93,13 @@ SvSimpleTable::SvSimpleTable(SvSimpleTableContainer& rParent, WinBits nBits):
         m_rParentTableContainer(rParent),
         aHeaderBar(&rParent,WB_BUTTONSTYLE | WB_BORDER | WB_TABSTOP),
         nHeaderItemId(1),
-        bPaintFlag(sal_True)
+        bPaintFlag(true)
 {
     m_rParentTableContainer.SetTable(this);
 
-    bSortDirection=sal_True;
-    nSortCol=0xFFFF;
-    nOldPos=0;
+    bSortDirection = true;
+    nSortCol = 0xFFFF;
+    nOldPos = 0;
 
     aHeaderBar.SetStartDragHdl(LINK( this, SvSimpleTable, StartDragHdl));
     aHeaderBar.SetDragHdl(LINK( this, SvSimpleTable, DragHdl));
@@ -206,8 +206,9 @@ void SvSimpleTable::Paint( const Rectangle& rRect )
             nPos= static_cast< sal_uInt16 >( GetTab(i) );
         }
     }
-    bPaintFlag=sal_True;
+    bPaintFlag = true;
 }
+
 void SvSimpleTable::InsertHeaderEntry(const OUString& rText,
     sal_uInt16 nCol, HeaderBarItemBits nBits)
 {
@@ -244,7 +245,7 @@ void SvSimpleTable::HideTable()
     m_rParentTableContainer.Hide();
 }
 
-sal_Bool SvSimpleTable::IsVisible() const
+bool SvSimpleTable::IsVisible() const
 {
     return m_rParentTableContainer.IsVisible();
 }
@@ -259,7 +260,7 @@ void SvSimpleTable::DisableTable()
     m_rParentTableContainer.Disable();
 }
 
-sal_Bool SvSimpleTable::IsEnabled() const
+bool SvSimpleTable::IsEnabled() const
 {
     return m_rParentTableContainer.IsEnabled();
 }
@@ -269,7 +270,7 @@ sal_uInt16 SvSimpleTable::GetSelectedCol()
     return (aHeaderBar.GetCurItemId()-1);
 }
 
-void SvSimpleTable::SortByCol(sal_uInt16 nCol,sal_Bool bDir)
+void SvSimpleTable::SortByCol(sal_uInt16 nCol, bool bDir)
 {
     bSortDirection=bDir;
     if(nSortCol!=0xFFFF)
@@ -362,7 +363,7 @@ void SvSimpleTable::HBarEndDrag()
             nPos = nNewSize;
         }
     }
-    bPaintFlag=sal_False;
+    bPaintFlag = false;
     Invalidate();
     Update();
 }

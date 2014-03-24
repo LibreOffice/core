@@ -48,11 +48,11 @@ private:
     long                    nWidth;
     long                    nHeight;
     SvLBoxButtonData_Impl*  pImpl;
-    sal_Bool                    bDataOk;
+    bool                    bDataOk;
     SvButtonState           eState;
 
     SVT_DLLPRIVATE void                     SetWidthAndHeight();
-    SVT_DLLPRIVATE void                 InitData( sal_Bool bImagesFromDefault,
+    SVT_DLLPRIVATE void                 InitData( bool bImagesFromDefault,
                                       bool _bRadioBtn, const Control* pControlForSettings = NULL );
 public:
                             // include creating default images (CheckBox or RadioButton)
@@ -66,7 +66,7 @@ public:
     long                    Height();
     void                    SetLink( const Link& rLink) { aLink=rLink; }
     const Link&             GetLink() const { return aLink; }
-     sal_Bool                   IsRadio();
+    bool                    IsRadio();
     // weil Buttons nicht von LinkHdl abgeleitet sind
     void                    CallLink();
 
@@ -85,7 +85,7 @@ public:
     void                    SetDefaultImages( const Control* pControlForSettings = NULL );
                                 // set images acording to the color scheeme of the Control
                                 // pControlForSettings == NULL: settings are taken from Application
-    sal_Bool                    HasDefaultImages( void ) const;
+    bool                    HasDefaultImages( void ) const;
 };
 
 // **********************************************************************
@@ -154,20 +154,20 @@ public:
     virtual         ~SvLBoxButton();
     virtual void    InitViewData( SvTreeListBox*,SvTreeListEntry*,SvViewDataItem* );
     virtual sal_uInt16 GetType() const;
-    virtual sal_Bool    ClickHdl(SvTreeListBox* pView, SvTreeListEntry* );
+    virtual bool    ClickHdl(SvTreeListBox* pView, SvTreeListEntry* );
     virtual void Paint(
         const Point& rPos, SvTreeListBox& rOutDev, const SvViewDataEntry* pView, const SvTreeListEntry* pEntry);
     virtual SvLBoxItem* Create() const;
     virtual void    Clone( SvLBoxItem* pSource );
     sal_uInt16          GetButtonFlags() const { return nItemFlags; }
-    sal_Bool            IsStateChecked() const { return (sal_Bool)(nItemFlags & SV_ITEMSTATE_CHECKED)!=0; }
-    sal_Bool            IsStateUnchecked() const { return (sal_Bool)(nItemFlags & SV_ITEMSTATE_UNCHECKED)!=0; }
-    sal_Bool            IsStateTristate() const { return (sal_Bool)(nItemFlags & SV_ITEMSTATE_TRISTATE)!=0; }
-    sal_Bool            IsStateHilighted() const { return (sal_Bool)(nItemFlags & SV_ITEMSTATE_HILIGHTED)!=0; }
+    bool            IsStateChecked() const { return (nItemFlags & SV_ITEMSTATE_CHECKED)!=0; }
+    bool            IsStateUnchecked() const { return (nItemFlags & SV_ITEMSTATE_UNCHECKED)!=0; }
+    bool            IsStateTristate() const { return (nItemFlags & SV_ITEMSTATE_TRISTATE)!=0; }
+    bool            IsStateHilighted() const { return (nItemFlags & SV_ITEMSTATE_HILIGHTED)!=0; }
     void            SetStateChecked();
     void            SetStateUnchecked();
     void            SetStateTristate();
-    void            SetStateHilighted( sal_Bool bHilight );
+    void            SetStateHilighted( bool bHilight );
     void            SetStateInvisible();
 
     SvLBoxButtonKind GetKind() const { return eKind; }
@@ -195,7 +195,7 @@ inline void SvLBoxButton::SetStateTristate()
     nItemFlags &= SV_STATE_MASK;
     nItemFlags |= SV_ITEMSTATE_TRISTATE;
 }
-inline void SvLBoxButton::SetStateHilighted( sal_Bool bHilight )
+inline void SvLBoxButton::SetStateHilighted( bool bHilight )
 {
     if ( bHilight )
         nItemFlags |= SV_ITEMSTATE_HILIGHTED;
@@ -222,7 +222,7 @@ public:
     virtual void    Clone( SvLBoxItem* pSource );
 
 
-    sal_Bool            SetModeImages( const Image& _rBitmap1, const Image& _rBitmap2 );
+    bool            SetModeImages( const Image& _rBitmap1, const Image& _rBitmap2 );
     void            GetModeImages(       Image& _rBitmap1,       Image& _rBitmap2 ) const;
 
     inline void         SetBitmap1( const Image& _rImage );
@@ -231,28 +231,28 @@ public:
     inline const Image& GetBitmap2( ) const;
 
 private:
-    Image& implGetImageStore( sal_Bool _bFirst );
+    Image& implGetImageStore( bool _bFirst );
 };
 
 inline void SvLBoxContextBmp::SetBitmap1( const Image& _rImage  )
 {
-    implGetImageStore( sal_True ) = _rImage;
+    implGetImageStore( true ) = _rImage;
 }
 
 inline void SvLBoxContextBmp::SetBitmap2( const Image& _rImage )
 {
-    implGetImageStore( sal_False ) = _rImage;
+    implGetImageStore( false ) = _rImage;
 }
 
 inline const Image& SvLBoxContextBmp::GetBitmap1( ) const
 {
-    Image& rImage = const_cast< SvLBoxContextBmp* >( this )->implGetImageStore( sal_True );
+    Image& rImage = const_cast< SvLBoxContextBmp* >( this )->implGetImageStore( true );
     return rImage;
 }
 
 inline const Image& SvLBoxContextBmp::GetBitmap2( ) const
 {
-    Image& rImage = const_cast< SvLBoxContextBmp* >( this )->implGetImageStore( sal_False );
+    Image& rImage = const_cast< SvLBoxContextBmp* >( this )->implGetImageStore( false );
     return rImage;
 }
 

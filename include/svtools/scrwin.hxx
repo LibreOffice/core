@@ -52,7 +52,7 @@ private:
     ScrollBar       aVScroll;           // the scrollbars
     ScrollBar       aHScroll;
     ScrollBarBox    aCornerWin;         // window in the bottom right corner
-    sal_Bool            bScrolling:1,       // user controlled scrolling
+    bool            bScrolling:1,       // user controlled scrolling
                     bHandleDragging:1,  // scroll window while dragging
                     bHCenter:1,
                     bVCenter:1;

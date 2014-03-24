@@ -51,8 +51,8 @@ StatusbarController::StatusbarController(
     const OUString& aCommandURL,
     unsigned short nID ) :
     OWeakObject()
-    ,   m_bInitialized( sal_False )
-    ,   m_bDisposed( sal_False )
+    ,   m_bInitialized( false )
+    ,   m_bDisposed( false )
     ,   m_nID( nID )
     ,   m_xFrame( xFrame )
     ,   m_xContext( rxContext )
@@ -63,8 +63,8 @@ StatusbarController::StatusbarController(
 
 StatusbarController::StatusbarController() :
     OWeakObject()
-    ,   m_bInitialized( sal_False )
-    ,   m_bDisposed( sal_False )
+    ,   m_bInitialized( false )
+    ,   m_bDisposed( false )
     ,   m_nID( 0 )
     ,   m_aListenerContainer( m_aMutex )
 {
@@ -137,7 +137,7 @@ throw ( Exception, RuntimeException, std::exception )
     if ( !bInitialized )
     {
         SolarMutexGuard aSolarMutexGuard;
-        m_bInitialized = sal_True;
+        m_bInitialized = true;
 
         PropertyValue aPropValue;
         for ( int i = 0; i < aArguments.getLength(); i++ )
@@ -230,7 +230,7 @@ throw (::com::sun::star::uno::RuntimeException, std::exception)
     m_xParentWindow.clear();
     m_xStatusbarItem.clear();
 
-    m_bDisposed = sal_True;
+    m_bDisposed = true;
 }
 
 void SAL_CALL StatusbarController::addEventListener( const Reference< XEventListener >& xListener )

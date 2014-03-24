@@ -29,19 +29,19 @@
 struct SvLBoxButtonData_Impl
 {
     SvTreeListEntry*    pEntry;
-    sal_Bool            bDefaultImages;
-    sal_Bool            bShowRadioButton;
+    bool                bDefaultImages;
+    bool                bShowRadioButton;
 
-    SvLBoxButtonData_Impl() : pEntry( NULL ), bDefaultImages( sal_False ), bShowRadioButton( sal_False ) {}
+    SvLBoxButtonData_Impl() : pEntry( NULL ), bDefaultImages( false ), bShowRadioButton( false ) {}
 };
 
 
 
-void SvLBoxButtonData::InitData( sal_Bool bImagesFromDefault, bool _bRadioBtn, const Control* pCtrl )
+void SvLBoxButtonData::InitData( bool bImagesFromDefault, bool _bRadioBtn, const Control* pCtrl )
 {
     pImpl = new SvLBoxButtonData_Impl;
 
-    bDataOk = sal_False;
+    bDataOk = false;
     eState = SV_BUTTON_UNCHECKED;
     pImpl->bDefaultImages = bImagesFromDefault;
     pImpl->bShowRadioButton = ( _bRadioBtn != false );
@@ -52,14 +52,12 @@ void SvLBoxButtonData::InitData( sal_Bool bImagesFromDefault, bool _bRadioBtn, c
 
 SvLBoxButtonData::SvLBoxButtonData( const Control* pControlForSettings )
 {
-
-    InitData( sal_True, false, pControlForSettings );
+    InitData( true, false, pControlForSettings );
 }
 
 SvLBoxButtonData::SvLBoxButtonData( const Control* pControlForSettings, bool _bRadioBtn )
 {
-
-    InitData( sal_True, _bRadioBtn, pControlForSettings );
+    InitData( true, _bRadioBtn, pControlForSettings );
 }
 
 SvLBoxButtonData::~SvLBoxButtonData()
@@ -105,7 +103,7 @@ void SvLBoxButtonData::SetWidthAndHeight()
     Size aSize = aBmps[0].GetSizePixel();
     nWidth = aSize.Width();
     nHeight = aSize.Height();
-    bDataOk = sal_True;
+    bDataOk = true;
 }
 
 
@@ -165,12 +163,12 @@ void SvLBoxButtonData::SetDefaultImages( const Control* pCtrl )
     }
 }
 
-sal_Bool SvLBoxButtonData::HasDefaultImages( void ) const
+bool SvLBoxButtonData::HasDefaultImages( void ) const
 {
     return pImpl->bDefaultImages;
 }
 
-sal_Bool SvLBoxButtonData::IsRadio() {
+bool SvLBoxButtonData::IsRadio() {
     return pImpl->bShowRadioButton;
 }
 
@@ -331,7 +329,7 @@ sal_uInt16 SvLBoxButton::GetType() const
     return SV_ITEM_ID_LBOXBUTTON;
 }
 
-sal_Bool SvLBoxButton::ClickHdl( SvTreeListBox*, SvTreeListEntry* pEntry )
+bool SvLBoxButton::ClickHdl( SvTreeListBox*, SvTreeListEntry* pEntry )
 {
     if ( CheckModification() )
     {
@@ -342,7 +340,7 @@ sal_Bool SvLBoxButton::ClickHdl( SvTreeListBox*, SvTreeListEntry* pEntry )
         pData->StoreButtonState( pEntry, nItemFlags );
         pData->CallLink();
     }
-    return sal_False;
+    return false;
 }
 
 void SvLBoxButton::Paint(
@@ -355,7 +353,7 @@ void SvLBoxButton::Paint(
         rDev.IsEnabled() ? 0 : IMAGE_DRAW_DISABLE;
 
     //Native drawing
-    sal_Bool bNativeOK = sal_False;
+    bool bNativeOK = false;
     ControlType eCtrlType = (pData->IsRadio())? CTRL_RADIOBUTTON : CTRL_CHECKBOX;
     if ( nIndex != SV_BMP_STATICIMAGE && rDev.IsNativeControlSupported( eCtrlType, PART_ENTIRE_CONTROL) )
 
@@ -492,16 +490,15 @@ sal_uInt16 SvLBoxContextBmp::GetType() const
     return SV_ITEM_ID_LBOXCONTEXTBMP;
 }
 
-sal_Bool SvLBoxContextBmp::SetModeImages( const Image& _rBitmap1, const Image& _rBitmap2 )
+bool SvLBoxContextBmp::SetModeImages( const Image& _rBitmap1, const Image& _rBitmap2 )
 {
-
-    sal_Bool bSuccess = sal_True;
+    bool bSuccess = true;
     m_pImpl->m_aImage1 = _rBitmap1;
     m_pImpl->m_aImage2 = _rBitmap2;
     return bSuccess;
 }
 
-Image& SvLBoxContextBmp::implGetImageStore( sal_Bool _bFirst )
+Image& SvLBoxContextBmp::implGetImageStore( bool _bFirst )
 {
 
     // OJ: #i27071# wrong mode so we just return the normal images
@@ -524,7 +521,7 @@ void SvLBoxContextBmp::Paint(
     // get the image.
     const Image& rImage = implGetImageStore(pView->IsExpanded() != m_pImpl->m_bExpanded);
 
-    sal_Bool _bSemiTransparent = pEntry && ( 0 != ( SV_ENTRYFLAG_SEMITRANSPARENT  & pEntry->GetFlags( ) ) );
+    bool _bSemiTransparent = pEntry && ( 0 != ( SV_ENTRYFLAG_SEMITRANSPARENT  & pEntry->GetFlags( ) ) );
     // draw
     sal_uInt16 nStyle = _rDev.IsEnabled() ? 0 : IMAGE_DRAW_DISABLE;
     if ( _bSemiTransparent )

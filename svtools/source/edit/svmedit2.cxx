@@ -39,12 +39,12 @@ ExtMultiLineEdit::~ExtMultiLineEdit()
 {
 }
 
-void ExtMultiLineEdit::InsertText( const OUString& rNew, sal_Bool )
+void ExtMultiLineEdit::InsertText( const OUString& rNew, bool )
 {
     GetTextView()->InsertText( rNew, false );
 }
 
-void ExtMultiLineEdit::SetAutoScroll( sal_Bool bAutoScroll )
+void ExtMultiLineEdit::SetAutoScroll( bool bAutoScroll )
 {
     GetTextView()->SetAutoScroll( bAutoScroll );
 }

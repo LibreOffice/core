@@ -117,7 +117,7 @@ class SVT_DLLPUBLIC StatusbarController :
         void execute( const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& aArgs );
         void execute( const OUString& aCommand, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& aArgs );
 
-        sal_Bool                                                                            m_bInitialized : 1,
+        bool                                                                                m_bInitialized : 1,
                                                                                             m_bDisposed : 1;
         unsigned short                                                                      m_nID;
         ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >                 m_xFrame;

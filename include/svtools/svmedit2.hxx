@@ -32,8 +32,8 @@ public:
                     ~ExtMultiLineEdit();
 
                     // methods of TextView
-    void            InsertText( const OUString& rNew, sal_Bool bSelect = sal_False );
-    void            SetAutoScroll( sal_Bool bAutoScroll );
+    void            InsertText( const OUString& rNew, bool bSelect = false );
+    void            SetAutoScroll( bool bAutoScroll );
 
                     // methods of TextEngine
     void            SetAttrib( const TextAttrib& rAttr, sal_uLong nPara, sal_uInt16 nStart, sal_uInt16 nEnd );

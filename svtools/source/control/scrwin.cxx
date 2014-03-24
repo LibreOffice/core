@@ -24,10 +24,10 @@
 
 void ScrollableWindow::ImpInitialize( ScrollableWindowFlags nFlags )
 {
-    bHandleDragging = (sal_Bool) ( nFlags & SCRWIN_THUMBDRAGGING );
+    bHandleDragging = (bool) ( nFlags & SCRWIN_THUMBDRAGGING );
     bVCenter = (nFlags & SCRWIN_VCENTER) == SCRWIN_VCENTER;
     bHCenter = (nFlags & SCRWIN_HCENTER) == SCRWIN_HCENTER;
-    bScrolling = sal_False;
+    bScrolling = false;
 
     // set the handlers for the scrollbars
     aVScroll.SetScrollHdl( LINK(this, ScrollableWindow, ScrollHdl) );
@@ -109,7 +109,7 @@ IMPL_LINK( ScrollableWindow, EndScrollHdl, ScrollBar *, pScroll )
 {
     // notify the start of scrolling, if not already scrolling
     if ( !bScrolling )
-        StartScroll(), bScrolling = sal_True;
+        StartScroll(), bScrolling = true;
 
     // get the delta in logic coordinates
     Size aDelta( PixelToLogic( Size( aHScroll.GetDelta(), aVScroll.GetDelta() ) ) );
@@ -124,7 +124,7 @@ IMPL_LINK( ScrollableWindow, EndScrollHdl, ScrollBar *, pScroll )
     }
 
     // notify the end of scrolling
-    bScrolling = sal_False;
+    bScrolling = false;
     EndScroll( aDelta.Width(), aDelta.Height() );
     return 0;
 }
@@ -135,7 +135,7 @@ IMPL_LINK( ScrollableWindow, ScrollHdl, ScrollBar *, pScroll )
 {
     // notify the start of scrolling, if not already scrolling
     if ( !bScrolling )
-        StartScroll(), bScrolling = sal_True;
+        StartScroll(), bScrolling = true;
 
     if ( bHandleDragging )
     {
@@ -159,25 +159,27 @@ void ScrollableWindow::Resize()
 
     // determine the size of the output-area and if we need scrollbars
     const long nScrSize = GetSettings().GetStyleSettings().GetScrollBarSize();
-    sal_Bool bVVisible = sal_False; // by default no vertical-ScrollBar
-    sal_Bool bHVisible = sal_False; // by default no horizontal-ScrollBar
-    sal_Bool bChanged;          // determines if a visiblility was changed
+    bool bVVisible = false; // by default no vertical-ScrollBar
+    bool bHVisible = false; // by default no horizontal-ScrollBar
+    bool bChanged;          // determines if a visiblility was changed
     do
     {
-        bChanged = sal_False;
+        bChanged = false;
 
         // does we need a vertical ScrollBar
         if ( aOutPixSz.Width() < aTotPixSz.Width() && !bHVisible )
-        {   bHVisible = sal_True;
+        {
+            bHVisible = true;
             aOutPixSz.Height() -= nScrSize;
-            bChanged = sal_True;
+            bChanged = true;
         }
 
         // does we need a horizontal ScrollBar
         if ( aOutPixSz.Height() < aTotPixSz.Height() && !bVVisible )
-        {   bVVisible = sal_True;
+        {
+            bVVisible = true;
             aOutPixSz.Width() -= nScrSize;
-            bChanged = sal_True;
+            bChanged = true;
         }
 
     }

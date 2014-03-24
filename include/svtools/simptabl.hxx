@@ -55,10 +55,10 @@ private:
     CommandEvent        aCEvt;
     HeaderBar           aHeaderBar;
     long                nOldPos;
-    sal_uInt16              nHeaderItemId;
-    sal_Bool                bPaintFlag;
-    sal_Bool                bSortDirection;
-    sal_uInt16              nSortCol;
+    sal_uInt16          nHeaderItemId;
+    bool                bPaintFlag;
+    bool                bSortDirection;
+    sal_uInt16          nSortCol;
 
     DECL_LINK( StartDragHdl, HeaderBar* );
     DECL_LINK( DragHdl, HeaderBar* );
@@ -100,20 +100,20 @@ public:
 
     void            ShowTable();
     void            HideTable();
-    sal_Bool        IsVisible() const;
+    bool            IsVisible() const;
 
     void            EnableTable();
     void            DisableTable();
-    sal_Bool        IsEnabled() const;
+    bool            IsEnabled() const;
 
     sal_uInt16      GetSelectedCol();
-    void            SortByCol(sal_uInt16,sal_Bool bDir=sal_True);
-    sal_Bool        GetSortDirection(){ return bSortDirection;}
+    void            SortByCol(sal_uInt16, bool bDir=true);
+    bool            GetSortDirection(){ return bSortDirection;}
     sal_uInt16      GetSortedCol(){ return nSortCol;}
     SvLBoxItem*     GetEntryAtPos( SvTreeListEntry* pEntry, sal_uInt16 nPos ) const;
 
     CommandEvent    GetCommandEvent()const;
-    inline sal_Bool IsFocusOnCellEnabled() const { return IsCellFocusEnabled(); }
+    inline bool     IsFocusOnCellEnabled() const { return IsCellFocusEnabled(); }
 
     void            SetCommandHdl( const Link& rLink ) { aCommandLink = rLink; }
     const Link&     GetCommandHdl() const { return aCommandLink; }

@@ -65,7 +65,7 @@ namespace svt
     }
 
 
-    sal_Bool OStringTransfer::PasteString( OUString& _rContent, Window* _pWindow )
+    bool OStringTransfer::PasteString( OUString& _rContent, Window* _pWindow )
     {
         TransferableDataHelper aClipboardData = TransferableDataHelper::CreateFromSystemClipboard( _pWindow );
 
@@ -79,13 +79,13 @@ namespace svt
             if (SOT_FORMAT_STRING == aSearch->mnSotId)
             {
                 OUString sContent;
-                sal_Bool bSuccess = aClipboardData.GetString( SOT_FORMAT_STRING, sContent );
+                bool bSuccess = aClipboardData.GetString( SOT_FORMAT_STRING, sContent );
                 _rContent = sContent;
                 return bSuccess;
             }
         }
 
-        return sal_False;
+        return false;
     }
 
 

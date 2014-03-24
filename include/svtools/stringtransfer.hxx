@@ -60,7 +60,7 @@ namespace svt
         /** extracts a string from the system clipboard given
             @return <TRUE/> if the extraction was successful, i.e. if the clipboard contained a string content
         */
-        SVT_DLLPUBLIC static sal_Bool       PasteString( OUString& _rContent, Window* _pWindow = NULL );
+        SVT_DLLPUBLIC static bool           PasteString( OUString& _rContent, Window* _pWindow = NULL );
 
         /** starts dragging a simple string
         */
