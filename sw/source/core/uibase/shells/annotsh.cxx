@@ -1151,7 +1151,7 @@ void SwAnnotationShell::GetNoteState(SfxItemSet &rSet)
                 break;
         }
 
-        if (pPostItMgr->HasActiveSidebarWin())
+        if (pPostItMgr && pPostItMgr->HasActiveSidebarWin())
         {
             if ( (pPostItMgr->GetActiveSidebarWin()->IsProtected()) &&
                     ( (nSlotId==FN_DELETE_COMMENT) || (nSlotId==FN_REPLY) ) )
