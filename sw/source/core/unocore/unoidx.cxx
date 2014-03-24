@@ -921,7 +921,7 @@ throw (beans::UnknownPropertyException, lang::WrappedTargetException,
                         SwXTextSection::CreateXTextSection( pSectionFmt );
                     aRet <<= xContentSect;
                 }
-                else
+                else if (pSectionFmt)
                 {
                     SwSections aSectArr;
                     pSectionFmt->GetChildSections(aSectArr,
