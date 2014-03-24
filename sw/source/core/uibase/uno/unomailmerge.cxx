@@ -725,7 +725,7 @@ uno::Any SAL_CALL SwXMailMerge::execute(
 
         OUString aDelim = OUString(INET_PATH_TOKEN);
         if (aPath.getLength() >= aDelim.getLength() &&
-            aPath.copy( aPath.getLength() - aDelim.getLength() ) == aDelim)
+            aPath.copy( aPath.getLength() - aDelim.getLength() ) != aDelim)
             aPath += aDelim;
         if (bCurFileNameFromColumn)
             pMgr->SetEMailColumn( aCurFileNamePrefix );
