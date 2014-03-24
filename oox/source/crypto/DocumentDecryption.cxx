@@ -345,6 +345,7 @@ bool DocumentDecryption::readEncryptionInfo()
     switch (aVersion)
     {
         case VERSION_INFO_2007_FORMAT:
+        case VERSION_INFO_2007_FORMAT_SP2:
             mCryptoType = STANDARD_2007; // Set encryption info format
             bResult = readStandard2007EncryptionInfo( aBinaryInputStream );
             break;
