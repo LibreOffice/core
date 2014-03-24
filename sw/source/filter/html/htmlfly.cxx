@@ -1249,6 +1249,7 @@ static Writer& OutHTML_FrmFmtTableNode( Writer& rWrt, const SwFrmFmt& rFrmFmt )
     if( pTxtNd )
         aCaption = pTxtNd->GetTxt();
 
+    if( pTblNd )
     {
         HTMLSaveData aSaveData( rHTMLWrt, pTblNd->GetIndex()+1,
                                 pTblNd->EndOfSectionIndex(),
