@@ -80,13 +80,14 @@
 LwpSdwGroupLoaderV0102::LwpSdwGroupLoaderV0102(SvStream* pStream, LwpGraphicObject* pGraphicObj)
     : m_pStream(pStream)
     , m_pGraphicObj(pGraphicObj)
-{
-}
-LwpSdwGroupLoaderV0102::~LwpSdwGroupLoaderV0102(void)
+    , m_pDrawObjVector(NULL)
 {
 }
 
-// add by , 03/25/2005
+LwpSdwGroupLoaderV0102::~LwpSdwGroupLoaderV0102()
+{
+}
+
 /**
  * @descr   entry of lwp-drawing objects. the functin begins to parse the sdw-drawing bento stream and create
  *      the corresponding drawing objects.

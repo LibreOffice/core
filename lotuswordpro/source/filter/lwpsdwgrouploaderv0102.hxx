@@ -77,14 +77,9 @@ private:
 
 public:
     LwpSdwGroupLoaderV0102(SvStream* pStream, LwpGraphicObject* pGraphicObj);
-    ~LwpSdwGroupLoaderV0102(void);
+    ~LwpSdwGroupLoaderV0102();
 public:
-//  void LoadDrawGroupObject(void);
-//  void LoadDrawObject(void);
-//  void RegisterGroupStyle(void);
-//  void RegisterStyle(void);
 
-    // add by  ,03/25/2005
     void BeginDrawObjects(std::vector <XFFrame*>* pDrawObjVector);
     XFDrawGroup* CreateDrawGroupObject(void);
     XFFrame* CreateDrawObject(void);
