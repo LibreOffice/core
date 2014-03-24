@@ -230,13 +230,11 @@ m_pBullet(new LwpBulletOverride)
 
 LwpParaBulletProperty::~LwpParaBulletProperty()
 {
-    if (m_pBullet)
-    {
-        delete m_pBullet;
-    }
+    delete m_pBullet;
 }
 
 LwpParaNumberingProperty::LwpParaNumberingProperty(LwpObjectStream * pStrm)
+    : m_pNumberingOverride(NULL)
 {
     LwpObjectID aNumberingPiece;
     aNumberingPiece.ReadIndexed(pStrm);
