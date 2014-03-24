@@ -45,7 +45,11 @@ SalVirtualDevice* AquaSalInstance::CreateVirtualDevice( SalGraphics* pGraphics,
     if( pData )
         return new AquaSalVirtualDevice( static_cast< AquaSalGraphics* >( pGraphics ), nDX, nDY, nBitCount, pData );
     else
-        return new AquaSalVirtualDevice( NULL, nDX, nDY, nBitCount, NULL );
+    {
+        AquaSalVirtualDevice* pNew = new AquaSalVirtualDevice( NULL, nDX, nDY, nBitCount, NULL );
+        pNew->SetSize( nDX, nDY );
+        return pNew;
+    }
 #else
     return new AquaSalVirtualDevice( static_cast< AquaSalGraphics* >( pGraphics ), nDX, nDY, nBitCount, pData );
 #endif

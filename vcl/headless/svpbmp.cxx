@@ -17,6 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#ifndef IOS
+
 #include "headless/svpbmp.hxx"
 
 #include <basegfx/vector/b2ivector.hxx>
@@ -389,5 +391,7 @@ sal_uInt32 SvpSalBitmap::getBitCountFromScanlineFormat( basebmp::Format nFormat 
     }
     return nBitCount;
 }
+
+#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

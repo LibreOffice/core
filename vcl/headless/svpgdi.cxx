@@ -19,6 +19,7 @@
 
 #include "headless/svpgdi.hxx"
 #include "headless/svpbmp.hxx"
+#include "saldatabasic.hxx"
 
 #include <vcl/sysdata.hxx>
 #include <basegfx/range/b2drange.hxx>
@@ -143,10 +144,14 @@ void SvpSalGraphics::GetResolution( sal_Int32& rDPIX, sal_Int32& rDPIY )
     rDPIX = rDPIY = 96;
 }
 
+#ifndef IOS
+
 sal_uInt16 SvpSalGraphics::GetBitCount() const
 {
     return SvpSalBitmap::getBitCountFromScanlineFormat( m_aDevice->getScanlineFormat() );
 }
+
+#endif
 
 long SvpSalGraphics::GetGraphicsWidth() const
 {
@@ -158,6 +163,8 @@ long SvpSalGraphics::GetGraphicsWidth() const
     return 0;
 }
 
+#ifndef IOS
+
 void SvpSalGraphics::ResetClipRegion()
 {
     m_aDevice = m_aOrigDevice;
@@ -166,6 +173,8 @@ void SvpSalGraphics::ResetClipRegion()
     m_aClipRegion.SetNull();
 }
 
+
+#endif
 
 // verify clip for the whole area is setup
 void SvpSalGraphics::ensureClip()
@@ -275,6 +284,7 @@ bool SvpSalGraphics::isClippedSetup( const basegfx::B2IBox &aRange, SvpSalGraphi
     return false;
 }
 
+#ifndef IOS
 
 // Clipping by creating unconditional mask bitmaps is horribly
 // slow so defer it, as much as possible. It is common to get
@@ -289,10 +299,6 @@ bool SvpSalGraphics::isClippedSetup( const basegfx::B2IBox &aRange, SvpSalGraphi
 // bitmapdevice instead.
 bool SvpSalGraphics::setClipRegion( const Region& i_rClip )
 {
-#ifdef IOS
-    if (mbForeignContext)
-        return true;
-#endif
     m_aClipRegion = i_rClip;
     m_aClipMap.reset();
     if( i_rClip.IsEmpty() )
@@ -320,8 +326,6 @@ bool SvpSalGraphics::setClipRegion( const Region& i_rClip )
 
     return true;
 }
-
-#ifndef IOS
 
 void SvpSalGraphics::SetLineColor()
 {
@@ -701,6 +705,8 @@ SalColor SvpSalGraphics::getPixel( long nX, long nY )
     return aColor.toInt32();
 }
 
+#ifndef IOS
+
 void SvpSalGraphics::invert( long nX, long nY, long nWidth, long nHeight, SalInvert /*nFlags*/ )
 {
     // FIXME: handle SAL_INVERT_50 and SAL_INVERT_TRACKFRAME
@@ -727,6 +733,8 @@ void SvpSalGraphics::invert( sal_uInt32 nPoints, const SalPoint* pPtAry, SalInve
     dbgOut( m_aDevice );
 }
 
+#endif
+
 bool SvpSalGraphics::drawEPS( long, long, long, long, void*, sal_uLong )
 {
     return false;
@@ -737,43 +745,22 @@ SystemGraphicsData SvpSalGraphics::GetGraphicsData() const
     return SystemGraphicsData();
 }
 
+#ifndef IOS
+
 bool SvpSalGraphics::supportsOperation( OutDevSupportType ) const
 {
     return false;
 }
 
+#endif
+
 #ifdef IOS
-
-void SvpSalGraphics::SetVirDevGraphics( CGLayerRef xLayer, CGContextRef xContext, int /* nBitmapDepth */ )
-{
-    SAL_INFO( "vcl.ios", "SetVirDevGraphics() this=" << this << " layer=" << xLayer << " context=" << xContext );
-
-    mxLayer = xLayer;
-    mrContext = xContext;
-    mbForeignContext = xContext != NULL;
-
-    if( !mxLayer && !mrContext )
-        return;
-
-    if( !mxLayer )
-    {
-        mnWidth = CGBitmapContextGetWidth( mrContext );
-        mnHeight = CGBitmapContextGetHeight( mrContext );
-    }
-    else
-    {
-        const CGSize aSize = CGLayerGetSize( mxLayer );
-        mnWidth = static_cast<int>(aSize.width);
-        mnHeight = static_cast<int>(aSize.height);
-    }
-};
 
 void  SvpSalGraphics::RefreshRect(float lX, float lY, float lWidth, float lHeight)
 {
     if (m_aDevice && m_aDevice->getDamageTracker() != NULL)
         m_aDevice->getDamageTracker()->damaged(basegfx::B2IBox( basegfx::fround(lX), basegfx::fround(lY), basegfx::fround(lX + lWidth), basegfx::fround(lY + lHeight)));
 }
-
 
 #endif
 

@@ -216,33 +216,24 @@ void SvpSalInstance::DestroyObject( SalObject* pObject )
     delete pObject;
 }
 
-SalVirtualDevice* SvpSalInstance::CreateVirtualDevice( SalGraphics* pGraphics,
+#ifndef IOS
+
+SalVirtualDevice* SvpSalInstance::CreateVirtualDevice( SalGraphics* /* pGraphics */,
                                                        long nDX, long nDY,
                                                        sal_uInt16 nBitCount,
-                                                       const SystemGraphicsData* pData )
+                                                       const SystemGraphicsData* /* pData */ )
 {
-#ifdef IOS
-    if( pData )
-        return new AquaSalVirtualDevice( static_cast< AquaSalGraphics* >( pGraphics ), nDX, nDY, nBitCount, pData );
-    else
-    {
-        AquaSalVirtualDevice* pNew = new AquaSalVirtualDevice( NULL, nDX, nDY, nBitCount, NULL );
-        pNew->SetSize( nDX, nDY );
-        return pNew;
-    }
-#else
-    (void) pGraphics;
-    (void) pData;
     SvpSalVirtualDevice* pNew = new SvpSalVirtualDevice( nBitCount );
     pNew->SetSize( nDX, nDY );
     return pNew;
-#endif
 }
 
 void SvpSalInstance::DestroyVirtualDevice( SalVirtualDevice* pDevice )
 {
     delete pDevice;
 }
+
+#endif
 
 SalTimer* SvpSalInstance::CreateSalTimer()
 {

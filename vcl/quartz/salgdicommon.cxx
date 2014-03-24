@@ -787,6 +787,12 @@ bool AquaSalGraphics::drawPolyLine(
     {
         return false;
     }
+#ifdef IOS
+    if( !CheckContext() )
+    {
+        return false;
+    }
+#endif
     // #i101491# Aqua does not support B2DLINEJOIN_NONE; return false to use
     // the fallback (own geometry preparation)
     // #i104886# linejoin-mode and thus the above only applies to "fat" lines
@@ -1393,6 +1399,20 @@ void AquaSalGraphics::invert( long nX, long nY, long nWidth, long nHeight, SalIn
     }
 }
 
+CGPoint* AquaSalGraphics::makeCGptArray(sal_uInt32 nPoints, const SalPoint* pPtAry)
+{
+    CGPoint *CGpoints = new CGPoint[nPoints];
+    if ( CGpoints )
+    {
+        for(sal_uLong i=0;i<nPoints;i++)
+        {
+            CGpoints[i].x = pPtAry[i].mnX;
+            CGpoints[i].y = pPtAry[i].mnY;
+        }
+    }
+    return CGpoints;
+}
+
 void AquaSalGraphics::invert( sal_uInt32 nPoints, const SalPoint*  pPtAry, SalInvert nSalFlags )
 {
     CGPoint* CGpoints ;
@@ -1458,6 +1478,27 @@ void AquaSalGraphics::ResetClipRegion()
     }
 }
 
+void AquaSalGraphics::SetState()
+{
+    CGContextRestoreGState( mrContext );
+    CGContextSaveGState( mrContext );
+
+    // setup clipping
+    if( mxClipPath )
+    {
+        CGContextBeginPath( mrContext );            // discard any existing path
+        CGContextAddPath( mrContext, mxClipPath );  // set the current path to the clipping path
+        CGContextClip( mrContext );                 // use it for clipping
+    }
+
+    // set RGB colorspace and line and fill colors
+    CGContextSetFillColor( mrContext, maFillColor.AsArray() );
+    CGContextSetStrokeColor( mrContext, maLineColor.AsArray() );
+    CGContextSetShouldAntialias( mrContext, false );
+    if( mnXorMode == 2 )
+        CGContextSetBlendMode( mrContext, kCGBlendModeDifference );
+}
+
 void AquaSalGraphics::SetLineColor()
 {
     maLineColor.SetAlpha( 0.0 );   // transparent
@@ -1515,6 +1556,11 @@ bool AquaSalGraphics::supportsOperation( OutDevSupportType eType ) const
 
 bool AquaSalGraphics::setClipRegion( const Region& i_rClip )
 {
+#ifdef IOS
+    if (mbForeignContext)
+        return true;
+#endif
+
     // release old clip path
     if( mxClipPath )
     {
@@ -1800,6 +1846,76 @@ bool XorEmulation::UpdateTarget()
 
     // TODO: return FALSE if target was not changed
     return true;
+}
+
+void AquaSalGraphics::SetVirDevGraphics( CGLayerRef xLayer, CGContextRef xContext,
+    int nBitmapDepth )
+{
+    SAL_INFO( "vcl.ios", "SetVirDevGraphics() this=" << this << " layer=" << xLayer << " context=" << xContext );
+
+#ifndef IOS
+    mbWindow    = false;
+    mbPrinter   = false;
+    mbVirDev    = true;
+#endif
+
+#ifdef IOS
+    (void) nBitmapDepth;
+
+    if( !xContext )
+    {
+        // We will return early a few lines lower.
+        // Undo the "stack initialization" done at the initial call of
+        // this method, see end.
+        CGContextRestoreGState( mrContext );
+    }
+#endif
+
+    // set graphics properties
+    mxLayer = xLayer;
+    mrContext = xContext;
+
+#ifndef IOS
+    mnBitmapDepth = nBitmapDepth;
+#endif
+
+#ifdef IOS
+    mbForeignContext = xContext != NULL;
+#endif
+
+    // return early if the virdev is being destroyed
+    if( !xContext )
+        return;
+
+    // get new graphics properties
+    if( !mxLayer )
+    {
+        mnWidth = CGBitmapContextGetWidth( mrContext );
+        mnHeight = CGBitmapContextGetHeight( mrContext );
+    }
+    else
+    {
+        const CGSize aSize = CGLayerGetSize( mxLayer );
+        mnWidth = static_cast<int>(aSize.width);
+        mnHeight = static_cast<int>(aSize.height);
+    }
+
+    // prepare graphics for drawing
+    const CGColorSpaceRef aCGColorSpace = GetSalData()->mxRGBSpace;
+    CGContextSetFillColorSpace( mrContext, aCGColorSpace );
+    CGContextSetStrokeColorSpace( mrContext, aCGColorSpace );
+
+    // re-enable XorEmulation for the new context
+    if( mpXorEmulation )
+    {
+        mpXorEmulation->SetTarget( mnWidth, mnHeight, mnBitmapDepth, mrContext, mxLayer );
+        if( mpXorEmulation->IsEnabled() )
+            mrContext = mpXorEmulation->GetMaskContext();
+    }
+
+    // initialize stack of CGContext states
+    CGContextSaveGState( mrContext );
+    SetState();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

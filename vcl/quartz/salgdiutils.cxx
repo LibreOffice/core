@@ -70,55 +70,6 @@ void AquaSalGraphics::SetPrinterGraphics( CGContextRef xContext, long nDPIX, lon
     }
 }
 
-void AquaSalGraphics::SetVirDevGraphics( CGLayerRef xLayer, CGContextRef xContext,
-    int nBitmapDepth )
-{
-    mbWindow    = false;
-    mbPrinter   = false;
-    mbVirDev    = true;
-
-    // set graphics properties
-    mxLayer = xLayer;
-    mrContext = xContext;
-    mnBitmapDepth = nBitmapDepth;
-
-    // return early if the virdev is being destroyed
-    if( !xContext )
-        return;
-
-    // get new graphics properties
-    if( !mxLayer )
-    {
-        mnWidth = CGBitmapContextGetWidth( mrContext );
-        mnHeight = CGBitmapContextGetHeight( mrContext );
-    }
-    else
-    {
-        const CGSize aSize = CGLayerGetSize( mxLayer );
-        mnWidth = static_cast<int>(aSize.width);
-        mnHeight = static_cast<int>(aSize.height);
-    }
-
-    // prepare graphics for drawing
-    const CGColorSpaceRef aCGColorSpace = GetSalData()->mxRGBSpace;
-    CGContextSetFillColorSpace( mrContext, aCGColorSpace );
-    CGContextSetStrokeColorSpace( mrContext, aCGColorSpace );
-
-    // re-enable XorEmulation for the new context
-    if( mpXorEmulation )
-    {
-        mpXorEmulation->SetTarget( mnWidth, mnHeight, mnBitmapDepth, mrContext, mxLayer );
-        if( mpXorEmulation->IsEnabled() )
-            mrContext = mpXorEmulation->GetMaskContext();
-    }
-
-    // initialize stack of CGContext states
-    CGContextSaveGState( mrContext );
-    SetState();
-}
-
-
-
 void AquaSalGraphics::InvalidateContext()
 {
     UnsetState();
@@ -140,29 +91,6 @@ void AquaSalGraphics::UnsetState()
         mxClipPath = NULL;
     }
 }
-
-void AquaSalGraphics::SetState()
-{
-    CGContextRestoreGState( mrContext );
-    CGContextSaveGState( mrContext );
-
-    // setup clipping
-    if( mxClipPath )
-    {
-        CGContextBeginPath( mrContext );            // discard any existing path
-        CGContextAddPath( mrContext, mxClipPath );  // set the current path to the clipping path
-        CGContextClip( mrContext );                 // use it for clipping
-    }
-
-    // set RGB colorspace and line and fill colors
-    CGContextSetFillColor( mrContext, maFillColor.AsArray() );
-    CGContextSetStrokeColor( mrContext, maLineColor.AsArray() );
-    CGContextSetShouldAntialias( mrContext, false );
-    if( mnXorMode == 2 )
-        CGContextSetBlendMode( mrContext, kCGBlendModeDifference );
-}
-
-
 
 bool AquaSalGraphics::CheckContext()
 {
@@ -249,22 +177,6 @@ void AquaSalGraphics::RefreshRect(float lX, float lY, float lWidth, float lHeigh
         mpFrame->maInvalidRect.Union( aVclRect );
     }
 }
-
-CGPoint* AquaSalGraphics::makeCGptArray(sal_uLong nPoints, const SalPoint*  pPtAry)
-{
-    CGPoint *CGpoints = new CGPoint[nPoints];
-    if ( CGpoints )
-      {
-        for(sal_uLong i=0;i<nPoints;i++)
-          {
-            CGpoints[i].x = (float)(pPtAry[i].mnX);
-            CGpoints[i].y = (float)(pPtAry[i].mnY);
-          }
-      }
-    return CGpoints;
-}
-
-
 
 void AquaSalGraphics::UpdateWindow( NSRect& )
 {
