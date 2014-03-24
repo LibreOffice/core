@@ -2096,21 +2096,10 @@ void XMLShapeExport::ImpExportEllipseShape(
 
         sal_Bool bCreateNewline( (nFeatures & SEF_EXPORT_NO_WS) == 0 ); // #86116#/#92210#
 
-        // prepare name (with most used)
-        enum ::xmloff::token::XMLTokenEnum eName(XML_CIRCLE);
-
-        if(bCircle)
-        {
-            // name already set
-        }
-        else
-        {
-            // set name
-            eName = XML_ELLIPSE;
-        }
-
         // write ellipse or circle
-        SvXMLElementExport aOBJ(mrExport, XML_NAMESPACE_DRAW, eName, bCreateNewline, sal_True);
+        SvXMLElementExport aOBJ(mrExport, XML_NAMESPACE_DRAW,
+                                bCircle ? XML_CIRCLE : XML_ELLIPSE,
+                                bCreateNewline, sal_True);
 
         ImpExportDescription( xShape ); // #i68101#
         ImpExportEvents( xShape );
