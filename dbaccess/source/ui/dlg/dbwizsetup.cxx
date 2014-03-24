@@ -181,7 +181,7 @@ ODbTypeWizDialogSetup::ODbTypeWizDialogSetup(Window* _pParent
     m_pCancel->SetHelpId(HID_DBWIZ_CANCEL);
     m_pFinish->SetHelpId(HID_DBWIZ_FINISH);
     m_pHelp->SetUniqueId(UID_DBWIZ_HELP);
-    SetRoadmapInteractive( sal_True );
+    SetRoadmapInteractive( true );
     ActivatePage();
 }
 

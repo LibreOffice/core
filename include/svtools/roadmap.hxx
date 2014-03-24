@@ -59,28 +59,28 @@ namespace svt
         ORoadmap( Window* _pParent, WinBits _nWinStyle = 0 );
         ~ORoadmap( );
 
-        void            SetRoadmapBitmap( const BitmapEx& maBitmap, sal_Bool _bInvalidate = sal_True );
+        void            SetRoadmapBitmap( const BitmapEx& maBitmap, bool _bInvalidate = true );
 
-        void            EnableRoadmapItem( ItemId _nItemId, sal_Bool _bEnable, ItemIndex _nStartIndex = 0  );
+        void            EnableRoadmapItem( ItemId _nItemId, bool _bEnable, ItemIndex _nStartIndex = 0  );
 
         void            ChangeRoadmapItemLabel( ItemId _nID, const OUString& sLabel, ItemIndex _nStartIndex = 0 );
         void            ChangeRoadmapItemID( ItemId _nID, ItemId _NewID, ItemIndex _nStartIndex = 0  );
 
-        void            SetRoadmapInteractive( sal_Bool _bInteractive );
-        sal_Bool        IsRoadmapInteractive();
+        void            SetRoadmapInteractive( bool _bInteractive );
+        bool            IsRoadmapInteractive();
 
-        void            SetRoadmapComplete( sal_Bool _bComplete );
-        sal_Bool        IsRoadmapComplete() const;
+        void            SetRoadmapComplete( bool _bComplete );
+        bool            IsRoadmapComplete() const;
 
         ItemIndex       GetItemCount() const;
         ItemId          GetItemID( ItemIndex _nIndex ) const;
 
-        void            InsertRoadmapItem( ItemIndex _Index, const OUString& _RoadmapItem, ItemId _nUniqueId, sal_Bool _bEnabled = sal_True );
-        void            ReplaceRoadmapItem( ItemIndex _Index, const OUString& _RoadmapItem, ItemId _nUniqueId, sal_Bool _bEnabled );
+        void            InsertRoadmapItem( ItemIndex _Index, const OUString& _RoadmapItem, ItemId _nUniqueId, bool _bEnabled = true );
+        void            ReplaceRoadmapItem( ItemIndex _Index, const OUString& _RoadmapItem, ItemId _nUniqueId, bool _bEnabled );
         void            DeleteRoadmapItem( ItemIndex _nIndex );
 
         ItemId          GetCurrentRoadmapItemID() const;
-        sal_Bool        SelectRoadmapItemByID( ItemId _nItemID );
+        bool            SelectRoadmapItemByID( ItemId _nItemID );
 
         void            SetItemSelectHdl( const Link& _rHdl );
         Link            GetItemSelectHdl( ) const;
@@ -110,7 +110,7 @@ namespace svt
         ItemId                      GetNextAvailableItemId( ItemIndex _NewIndex );
         ItemId                      GetPreviousAvailableItemId( ItemIndex _NewIndex );
         RoadmapItem*                GetByPointer(Window* pWindow);
-        RoadmapItem*                InsertHyperLabel( ItemIndex _Index, const OUString& _aStr, ItemId _RMID, sal_Bool _bEnabled = sal_True  );
+        RoadmapItem*                InsertHyperLabel( ItemIndex _Index, const OUString& _aStr, ItemId _RMID, bool _bEnabled = true  );
         void                        UpdatefollowingHyperLabels( ItemIndex _Index );
     };
 

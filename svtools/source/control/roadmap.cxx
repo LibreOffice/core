@@ -98,11 +98,11 @@ namespace svt
         void                    SetPosition( RoadmapItem* OldHyperLabel );
 
         void                    ToggleBackgroundColor( const Color& _rGBColor );
-        void                    SetInteractive( sal_Bool _bInteractive );
+        void                    SetInteractive( bool _bInteractive );
 
         void                    SetClickHdl( const Link& rLink );
-        void                    Enable( sal_Bool bEnable = sal_True);
-        sal_Bool                    IsEnabled() const;
+        void                    Enable( bool bEnable = true);
+        bool                    IsEnabled() const;
         void                    GrabFocus();
 
         bool                    Contains( const Window* _pWindow ) const;
@@ -125,16 +125,16 @@ namespace svt
         BitmapEx            m_aPicture;
         HL_Vector           m_aRoadmapSteps;
         ItemId              m_iCurItemID;
-        sal_Bool            m_bInteractive;
-        sal_Bool            m_bComplete;
+        bool                m_bInteractive;
+        bool                m_bComplete;
         Size                m_aItemSizePixel;
 
     public:
         RoadmapImpl( const ORoadmap& _rAntiImpl )
             :m_rAntiImpl( _rAntiImpl )
             ,m_iCurItemID( -1 )
-            ,m_bInteractive( sal_True )
-            ,m_bComplete( sal_True )
+            ,m_bInteractive( true )
+            ,m_bComplete( true )
             ,InCompleteHyperLabel ( NULL )
         {
         }
@@ -153,11 +153,11 @@ namespace svt
         void                setCurItemID( ItemId i ) {m_iCurItemID = i; }
         ItemId              getCurItemID() const { return m_iCurItemID; }
 
-        void                setInteractive(const sal_Bool _bInteractive) {m_bInteractive = _bInteractive; }
-        sal_Bool            isInteractive() const { return m_bInteractive; };
+        void                setInteractive(const bool _bInteractive) {m_bInteractive = _bInteractive; }
+        bool                isInteractive() const { return m_bInteractive; };
 
-        void                setComplete(const sal_Bool _bComplete) {m_bComplete = _bComplete; }
-        sal_Bool            isComplete() const { return m_bComplete; };
+        void                setComplete(const bool _bComplete) {m_bComplete = _bComplete; }
+        bool                isComplete() const { return m_bComplete; };
 
         void                setPicture( const BitmapEx& _rPic ) { m_aPicture = _rPic; }
         const BitmapEx&     getPicture( ) const { return m_aPicture; }
@@ -212,7 +212,7 @@ namespace svt
         SetBackground( Wallpaper( rStyleSettings.GetFieldColor() ) );
         m_pImpl->InCompleteHyperLabel = NULL;
         m_pImpl->setCurItemID(-1 );
-        m_pImpl->setComplete( sal_True );
+        m_pImpl->setComplete( true );
 
         // Roadmap control should be reachable as one unit with a Tab key
         // the next Tab key should spring out of the control.
@@ -264,7 +264,7 @@ namespace svt
 
 
 
-    RoadmapItem* ORoadmap::InsertHyperLabel( ItemIndex _Index, const OUString& _sLabel, ItemId _RMID, sal_Bool _bEnabled)
+    RoadmapItem* ORoadmap::InsertHyperLabel( ItemIndex _Index, const OUString& _sLabel, ItemId _RMID, bool _bEnabled)
     {
         if ( m_pImpl->getItemCount() == 0 )
             m_pImpl->initItemSize();
@@ -280,7 +280,7 @@ namespace svt
         }
         else
         {
-            pItem->SetInteractive( sal_False );
+            pItem->SetInteractive( false );
         }
         pItem->SetPosition( pOldItem );
         pItem->Update( _Index, _sLabel );
@@ -293,7 +293,7 @@ namespace svt
     }
 
 
-    void ORoadmap::SetRoadmapBitmap( const BitmapEx& _rBmp, sal_Bool _bInvalidate )
+    void ORoadmap::SetRoadmapBitmap( const BitmapEx& _rBmp, bool _bInvalidate )
     {
         m_pImpl->setPicture( _rBmp );
         if ( _bInvalidate )
@@ -301,7 +301,7 @@ namespace svt
     }
 
 
-    void ORoadmap::SetRoadmapInteractive( sal_Bool _bInteractive )
+    void ORoadmap::SetRoadmapInteractive( bool _bInteractive )
     {
         m_pImpl->setInteractive( _bInteractive );
 
@@ -316,15 +316,15 @@ namespace svt
     }
 
 
-    sal_Bool ORoadmap::IsRoadmapInteractive()
+    bool ORoadmap::IsRoadmapInteractive()
     {
         return m_pImpl->isInteractive();
     }
 
 
-    void ORoadmap::SetRoadmapComplete( sal_Bool _bComplete )
+    void ORoadmap::SetRoadmapComplete( bool _bComplete )
     {
-        sal_Bool bWasComplete = m_pImpl->isComplete();
+        bool bWasComplete = m_pImpl->isComplete();
         m_pImpl->setComplete( _bComplete );
         if ( _bComplete )
         {
@@ -365,7 +365,7 @@ namespace svt
     }
 
 
-    void ORoadmap::ReplaceRoadmapItem( ItemIndex _Index, const OUString& _RoadmapItem, ItemId _RMID, sal_Bool _bEnabled )
+    void ORoadmap::ReplaceRoadmapItem( ItemIndex _Index, const OUString& _RoadmapItem, ItemId _RMID, bool _bEnabled )
     {
         RoadmapItem* pItem = GetByIndex( _Index);
         if ( pItem != NULL )
@@ -392,7 +392,7 @@ namespace svt
     }
 
 
-    void ORoadmap::InsertRoadmapItem( ItemIndex _Index, const OUString& _RoadmapItem, ItemId _nUniqueId, sal_Bool _bEnabled )
+    void ORoadmap::InsertRoadmapItem( ItemIndex _Index, const OUString& _RoadmapItem, ItemId _nUniqueId, bool _bEnabled )
     {
         InsertHyperLabel( _Index, _RoadmapItem, _nUniqueId, _bEnabled );
             // Todo: YPos is superfluous, if items are always appended
@@ -410,13 +410,13 @@ namespace svt
     }
 
 
-    sal_Bool ORoadmap::IsRoadmapComplete( ) const
+    bool ORoadmap::IsRoadmapComplete( ) const
     {
         return m_pImpl->isComplete();
     }
 
 
-    void ORoadmap::EnableRoadmapItem( ItemId _nItemId, sal_Bool _bEnable, ItemIndex _nStartIndex )
+    void ORoadmap::EnableRoadmapItem( ItemId _nItemId, bool _bEnable, ItemIndex _nStartIndex )
     {
         RoadmapItem* pItem = GetByID( _nItemId, _nStartIndex );
         if ( pItem != NULL )
@@ -564,7 +564,7 @@ namespace svt
     }
 
 
-    sal_Bool ORoadmap::SelectRoadmapItemByID( ItemId _nNewID )
+    bool ORoadmap::SelectRoadmapItemByID( ItemId _nNewID )
     {
         DeselectOldRoadmapItems();
         RoadmapItem* pItem = GetByID( _nNewID );
@@ -579,10 +579,10 @@ namespace svt
                 m_pImpl->setCurItemID(_nNewID);
 
                 Select();
-                return sal_True;
+                return true;
             }
         }
-        return sal_False;
+        return false;
     }
 
 
@@ -676,9 +676,9 @@ namespace svt
     }
 
 
-      IMPL_LINK(ORoadmap, ImplClickHdl, HyperLabel*, _CurHyperLabel)
+    IMPL_LINK(ORoadmap, ImplClickHdl, HyperLabel*, _CurHyperLabel)
     {
-       return SelectRoadmapItemByID( _CurHyperLabel->GetID() );
+       return SelectRoadmapItemByID( _CurHyperLabel->GetID() ) ? 1 : 0;
     }
 
 
@@ -732,7 +732,7 @@ namespace svt
     }
 
 
-    void RoadmapItem::SetInteractive( sal_Bool _bInteractive )
+    void RoadmapItem::SetInteractive( bool _bInteractive )
     {
         if ( mpDescription )
         mpDescription->SetInteractive(_bInteractive);
@@ -802,14 +802,14 @@ namespace svt
     }
 
 
-    void RoadmapItem::Enable( sal_Bool _bEnable)
+    void RoadmapItem::Enable( bool _bEnable)
     {
         mpID->Enable(_bEnable);
         mpDescription->Enable(_bEnable);
     }
 
 
-    sal_Bool RoadmapItem::IsEnabled() const
+    bool RoadmapItem::IsEnabled() const
     {
         return mpID->IsEnabled();
     }

@@ -219,7 +219,7 @@ namespace svt
     }
 
 
-    void RoadmapWizard::SetRoadmapInteractive( sal_Bool _bInteractive )
+    void RoadmapWizard::SetRoadmapInteractive( bool _bInteractive )
     {
         m_pImpl->pRoadmap->SetRoadmapInteractive( _bInteractive );
     }

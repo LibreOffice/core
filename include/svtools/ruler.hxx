@@ -645,13 +645,13 @@ private:
     MapUnit         meSourceUnit;
     FieldUnit       meUnit;
     Fraction        maZoom;
-    sal_Bool        mbCalc;
-    sal_Bool        mbFormat;
-    sal_Bool        mbDrag;
-    sal_Bool        mbDragDelete;
-    sal_Bool        mbDragCanceled;
-    sal_Bool        mbAutoWinWidth;
-    sal_Bool        mbActive;
+    bool            mbCalc;
+    bool            mbFormat;
+    bool            mbDrag;
+    bool            mbDragDelete;
+    bool            mbDragCanceled;
+    bool            mbAutoWinWidth;
+    bool            mbActive;
     sal_uInt8       mnUpdateFlags;
 
     RulerSelection  maHoverSelection;
@@ -681,22 +681,22 @@ private:
 
     using Window::ImplInit;
     SVT_DLLPRIVATE void ImplInit( WinBits nWinBits );
-    SVT_DLLPRIVATE void ImplInitSettings( sal_Bool bFont, sal_Bool bForeground, sal_Bool bBackground );
+    SVT_DLLPRIVATE void ImplInitSettings( bool bFont, bool bForeground, bool bBackground );
     SVT_DLLPRIVATE void ImplCalc();
     SVT_DLLPRIVATE void ImplFormat();
-    SVT_DLLPRIVATE void ImplInitExtraField( sal_Bool bUpdate );
-    SVT_DLLPRIVATE void ImplInvertLines( sal_Bool bErase = sal_False );
+    SVT_DLLPRIVATE void ImplInitExtraField( bool bUpdate );
+    SVT_DLLPRIVATE void ImplInvertLines( bool bErase = false );
     SVT_DLLPRIVATE void ImplDraw();
-    SVT_DLLPRIVATE void ImplDrawExtra( sal_Bool bPaint = sal_False );
-    SVT_DLLPRIVATE void ImplUpdate( sal_Bool bMustCalc = sal_False );
+    SVT_DLLPRIVATE void ImplDrawExtra( bool bPaint = false );
+    SVT_DLLPRIVATE void ImplUpdate( bool bMustCalc = false );
 
     using Window::ImplHitTest;
-    SVT_DLLPRIVATE sal_Bool ImplHitTest( const Point& rPosition,
+    SVT_DLLPRIVATE bool ImplHitTest( const Point& rPosition,
                                          RulerSelection* pHitTest,
-                                         sal_Bool bRequiredStyle = sal_False,
+                                         bool bRequiredStyle = false,
                                          sal_uInt16 nRequiredStyle = 0 ) const;
-    SVT_DLLPRIVATE sal_Bool ImplDocHitTest( const Point& rPos, RulerType eDragType, RulerSelection* pHitTest ) const;
-    SVT_DLLPRIVATE sal_Bool ImplStartDrag( RulerSelection* pHitTest, sal_uInt16 nModifier );
+    SVT_DLLPRIVATE bool     ImplDocHitTest( const Point& rPos, RulerType eDragType, RulerSelection* pHitTest ) const;
+    SVT_DLLPRIVATE bool     ImplStartDrag( RulerSelection* pHitTest, sal_uInt16 nModifier );
     SVT_DLLPRIVATE void     ImplDrag( const Point& rPos );
     SVT_DLLPRIVATE void     ImplEndDrag();
 
@@ -732,7 +732,7 @@ public:
 
     void            Activate();
     void            Deactivate();
-    sal_Bool        IsActive() const { return mbActive; }
+    bool            IsActive() const { return mbActive; }
 
     void            SetWinPos( long nOff = 0, long nWidth = 0 );
     long            GetWinOffset() const { return mnWinOff; }
@@ -757,17 +757,17 @@ public:
     sal_uInt16      GetExtraClicks() const { return mnExtraClicks; }
     sal_uInt16      GetExtraModifier() const { return mnExtraModifier; }
 
-    sal_Bool        StartDocDrag( const MouseEvent& rMEvt,
+    bool            StartDocDrag( const MouseEvent& rMEvt,
                                   RulerType eDragType = RULER_TYPE_DONTKNOW );
     RulerType       GetDragType() const { return meDragType; }
     long            GetDragPos() const { return mnDragPos; }
     sal_uInt16      GetDragAryPos() const { return mnDragAryPos; }
     sal_uInt16      GetDragSize() const { return mnDragSize; }
-    sal_Bool        IsDragDelete() const { return mbDragDelete; }
-    sal_Bool        IsDragCanceled() const { return mbDragCanceled; }
+    bool            IsDragDelete() const { return mbDragDelete; }
+    bool            IsDragCanceled() const { return mbDragCanceled; }
     sal_uInt16      GetDragScroll() const { return mnDragScroll; }
     sal_uInt16      GetDragModifier() const { return mnDragModifier; }
-    sal_Bool        IsDrag() const { return mbDrag; }
+    bool            IsDrag() const { return mbDrag; }
     void            CancelDrag();
     long            GetClickPos() const { return mnDragPos; }
     RulerType       GetClickType() const { return meDragType; }
@@ -816,7 +816,7 @@ public:
     void            SetExtraDownHdl( const Link& rLink ) { maExtraDownHdl = rLink; }
     const Link&     GetExtraDownHdl() const { return maExtraDownHdl; }
 
-    void            SetTextRTL(sal_Bool bRTL);
+    void            SetTextRTL(bool bRTL);
     bool            GetTextRTL();
     void            SetCharWidth( long nWidth ) { mnCharWidth = nWidth ; }
     void            SetLineHeight( long nHeight ) { mnLineHeight = nHeight ; }

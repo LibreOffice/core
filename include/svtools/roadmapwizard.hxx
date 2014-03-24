@@ -81,7 +81,7 @@ namespace svt
 
         void            SetRoadmapHelpId( const OString& _rId );
 
-        void            SetRoadmapInteractive( sal_Bool _bInteractive );
+        void            SetRoadmapInteractive( bool _bInteractive );
         virtual void    Resize();
         virtual void    StateChanged( StateChangedType nStateChange );
 

@@ -25,7 +25,7 @@
 #include <svtools/rtfout.hxx>
 
 SvStream& RTFOutFuncs::Out_Char(SvStream& rStream, sal_Unicode c,
-    int *pUCMode, rtl_TextEncoding eDestEnc, sal_Bool bWriteHelpFile)
+    int *pUCMode, rtl_TextEncoding eDestEnc, bool bWriteHelpFile)
 {
     const sal_Char* pStr = 0;
     switch (c)
@@ -148,7 +148,7 @@ SvStream& RTFOutFuncs::Out_Char(SvStream& rStream, sal_Unicode c,
 }
 
 SvStream& RTFOutFuncs::Out_String( SvStream& rStream, const OUString& rStr,
-    rtl_TextEncoding eDestEnc, sal_Bool bWriteHelpFile)
+    rtl_TextEncoding eDestEnc, bool bWriteHelpFile)
 {
     int nUCMode = 1;
     for (sal_Int32 n = 0; n < rStr.getLength(); ++n)

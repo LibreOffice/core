@@ -88,7 +88,7 @@ CreationWizard::CreationWizard( Window* pParent, const uno::Reference< frame::XM
         , WZS_INVALID_STATE
     );
     this->SetRoadmapHelpId( HID_SCH_WIZARD_ROADMAP );
-    this->SetRoadmapInteractive( sal_True );
+    this->SetRoadmapInteractive( true );
     Size aAdditionalRoadmapSize( LogicToPixel( Size( 85, 0 ), MAP_APPFONT ) );
     Size aSize( this->GetSizePixel() );
     aSize.Width() += aAdditionalRoadmapSize.Width();
