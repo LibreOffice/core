@@ -50,10 +50,9 @@ using namespace oox;
 namespace
 {
 
-template<class T>
-T lclGetProperty(uno::Reference<drawing::XShape> rShape, const OUString& rPropName)
+uno::Sequence<beans::PropertyValue> lclGetProperty(uno::Reference<drawing::XShape> rShape, const OUString& rPropName)
 {
-    T aResult;
+    uno::Sequence<beans::PropertyValue> aResult;
     uno::Reference<beans::XPropertySet> xPropertySet(rShape, uno::UNO_QUERY);
     uno::Reference<beans::XPropertySetInfo> xPropSetInfo;
 
@@ -73,7 +72,7 @@ OUString lclGetAnchorIdFromGrabBag(const SdrObject* pObj)
     OUString aResult;
     uno::Reference<drawing::XShape> xShape(const_cast<SdrObject*>(pObj)->getUnoShape(), uno::UNO_QUERY);
     uno::Sequence< beans::PropertyValue > propList =
-        lclGetProperty< uno::Sequence<beans::PropertyValue> >(xShape, "FrameInteropGrabBag");
+        lclGetProperty(xShape, "FrameInteropGrabBag");
     for (sal_Int32 nProp = 0; nProp < propList.getLength(); ++nProp)
     {
         OUString aPropName = propList[nProp].Name;
@@ -609,7 +608,7 @@ void DocxSdrExport::writeDMLDrawing(const SdrObject* pSdrObject, const SwFrmFmt*
 
     bool bLockedCanvas = false;
     uno::Sequence< beans::PropertyValue > propList =
-        lclGetProperty< uno::Sequence<beans::PropertyValue> >(xShape, "InteropGrabBag");
+        lclGetProperty(xShape, "InteropGrabBag");
     for (sal_Int32 nProp=0; nProp < propList.getLength(); ++nProp)
     {
         OUString propName = propList[nProp].Name;
