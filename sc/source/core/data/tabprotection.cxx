@@ -385,6 +385,11 @@ bool ScTableProtectionImpl::updateReference( UpdateRefMode eMode, ScDocument* pD
 
 bool ScTableProtectionImpl::isBlockEditable( const ScRange& rRange ) const
 {
+    /* TODO: ask for password (and remember) if mnPasswordVerifier was set for
+     * a matching range and no matching range without password was encountered.
+     * Would need another return type than boolean to reflect
+     * "password required for a specific protection". */
+
     // No protection exception or overriding permission to edit if empty.
     if (maEnhancedProtection.empty())
         return false;
@@ -400,7 +405,11 @@ bool ScTableProtectionImpl::isBlockEditable( const ScRange& rRange ) const
         if ((*it).maSecurityDescriptor.empty() && (*it).maRangeList.Is())
         {
             if ((*it).maRangeList->In( rRange))
-                return true;
+            {
+                // Range is editable if no password is assigned.
+                if (!(*it).mnPasswordVerifier)
+                    return true;
+            }
         }
     }
 
@@ -417,7 +426,11 @@ bool ScTableProtectionImpl::isBlockEditable( const ScRange& rRange ) const
         {
             ScRangeList aList( (*it).maRangeList->GetIntersectedRange( rRange));
             if (aList.size() == 1 && *aList[0] == rRange)
-                return true;
+            {
+                // Range is editable if no password is assigned.
+                if (!(*it).mnPasswordVerifier)
+                    return true;
+            }
         }
     }
 
