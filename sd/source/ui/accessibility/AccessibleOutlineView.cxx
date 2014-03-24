@@ -71,7 +71,7 @@ AccessibleOutlineView::AccessibleOutlineView (
 
     // Beware! Here we leave the paths of the UNO API and descend into the
     // depths of the core.  Necessary for making the edit engine accessible.
-    if( pViewShell && pSdWindow )
+    if (pSdWindow)
     {
         ::sd::View* pView = pViewShell->GetView();
 
