@@ -578,7 +578,7 @@ void SwTableShell::Execute(SfxRequest &rReq)
             else
                 aCoreSet.InvalidateItem( RES_BACKGROUND );
 
-            if ( (!pDlg && rReq.GetArgs()) || pDlg->Execute() == RET_OK )
+            if ( (!pDlg && rReq.GetArgs()) || (pDlg && pDlg->Execute() == RET_OK) )
             {
                 const SfxItemSet* pOutSet = pDlg ? pDlg->GetOutputItemSet() : rReq.GetArgs();
                 if ( pDlg )
