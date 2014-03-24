@@ -615,15 +615,7 @@ protected:
      */
     void assertXPathContent(xmlDocPtr pXmlDoc, const OString& rXPath, const OUString& rContent)
     {
-        xmlNodeSetPtr pXmlNodes = getXPathNode(pXmlDoc, rXPath);
-
-        CPPUNIT_ASSERT_MESSAGE(OString("XPath '" + rXPath + "' not found").getStr(),
-                xmlXPathNodeSetGetLength(pXmlNodes) > 0);
-
-        xmlNodePtr pXmlNode = pXmlNodes->nodeTab[0];
-
-        CPPUNIT_ASSERT_EQUAL_MESSAGE("XPath contents of child does not match", rContent,
-            OUString::createFromAscii((const char*)((pXmlNode->children[0]).content)));
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("XPath contents of child does not match", rContent, getXPathContent(pXmlDoc, rXPath));
     }
 
     /**
