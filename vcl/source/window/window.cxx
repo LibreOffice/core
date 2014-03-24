@@ -422,31 +422,28 @@ bool Window::ImplInitGraphics() const
 
 void Window::CopyAreaFinal( SalTwoRect& aPosAry, sal_uInt32 nFlags )
 {
+    if (aPosAry.mnSrcWidth == 0 || aPosAry.mnSrcHeight == 0 || aPosAry.mnDestWidth == 0 || aPosAry.mnDestHeight == 0)
+        return;
 
-    const Rectangle aSrcRect   ( Point( aPosAry.mnSrcX, aPosAry.mnSrcY ),
-                                 Size( aPosAry.mnSrcWidth, aPosAry.mnSrcHeight ) );
-
-    if ( aPosAry.mnSrcWidth && aPosAry.mnSrcHeight && aPosAry.mnDestWidth && aPosAry.mnDestHeight )
+    if (nFlags & COPYAREA_WINDOWINVALIDATE)
     {
-        if ( nFlags & COPYAREA_WINDOWINVALIDATE )
-        {
-            ImplMoveAllInvalidateRegions( aSrcRect,
-                                          aPosAry.mnDestX-aPosAry.mnSrcX,
-                                          aPosAry.mnDestY-aPosAry.mnSrcY,
-                                          false );
+        const Rectangle aSrcRect(Point(aPosAry.mnSrcX, aPosAry.mnSrcY),
+                Size(aPosAry.mnSrcWidth, aPosAry.mnSrcHeight));
 
-            mpGraphics->CopyArea( aPosAry.mnDestX, aPosAry.mnDestY,
-                                  aPosAry.mnSrcX, aPosAry.mnSrcY,
-                                  aPosAry.mnSrcWidth, aPosAry.mnSrcHeight,
-                                  SAL_COPYAREA_WINDOWINVALIDATE, this );
-        }
-        else
-        {
-            aPosAry.mnDestWidth  = aPosAry.mnSrcWidth;
-            aPosAry.mnDestHeight = aPosAry.mnSrcHeight;
-            mpGraphics->CopyBits( aPosAry, NULL, this, NULL );
-        }
+        ImplMoveAllInvalidateRegions(aSrcRect,
+                aPosAry.mnDestX-aPosAry.mnSrcX,
+                aPosAry.mnDestY-aPosAry.mnSrcY,
+                false);
+
+        mpGraphics->CopyArea(aPosAry.mnDestX, aPosAry.mnDestY,
+                aPosAry.mnSrcX, aPosAry.mnSrcY,
+                aPosAry.mnSrcWidth, aPosAry.mnSrcHeight,
+                SAL_COPYAREA_WINDOWINVALIDATE, this);
+
+        return;
     }
+
+    OutputDevice::CopyAreaFinal(aPosAry, nFlags);
 }
 
 void Window::ImplReleaseGraphics( bool bRelease )

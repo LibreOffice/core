@@ -377,12 +377,12 @@ void OutputDevice::CopyArea( const Point& rDestPt,
 
 void OutputDevice::CopyAreaFinal( SalTwoRect& aPosAry, sal_uInt32 /*nFlags*/)
 {
-    if ( aPosAry.mnSrcWidth && aPosAry.mnSrcHeight && aPosAry.mnDestWidth && aPosAry.mnDestHeight )
-    {
-        aPosAry.mnDestWidth  = aPosAry.mnSrcWidth;
-        aPosAry.mnDestHeight = aPosAry.mnSrcHeight;
-        mpGraphics->CopyBits( aPosAry, NULL, this, NULL );
-    }
+    if (aPosAry.mnSrcWidth == 0 || aPosAry.mnSrcHeight == 0 || aPosAry.mnDestWidth == 0 || aPosAry.mnDestHeight == 0)
+        return;
+
+    aPosAry.mnDestWidth  = aPosAry.mnSrcWidth;
+    aPosAry.mnDestHeight = aPosAry.mnSrcHeight;
+    mpGraphics->CopyBits(aPosAry, NULL, this, NULL);
 }
 
 void OutputDevice::ImplDrawFrameDev( const Point& rPt, const Point& rDevPt, const Size& rDevSize,
