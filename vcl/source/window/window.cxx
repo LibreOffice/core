@@ -446,14 +446,12 @@ void Window::CopyAreaFinal( SalTwoRect& aPosAry, sal_uInt32 nFlags )
     OutputDevice::CopyAreaFinal(aPosAry, nFlags);
 }
 
-Rectangle& Window::GetPaintArea( Rectangle& rDstRect )
+void Window::ClipToPaintRegion(Rectangle& rDstRect)
 {
-    const Region aPaintRgn( GetPaintRegion() );
+    const Region aPaintRgn(GetPaintRegion());
 
-    if( !aPaintRgn.IsNull() )
-        rDstRect.Intersection( LogicToPixel( aPaintRgn.GetBoundRect() ) );
-
-    return rDstRect;
+    if (!aPaintRgn.IsNull())
+        rDstRect.Intersection(LogicToPixel(aPaintRgn.GetBoundRect()));
 }
 
 void Window::ImplReleaseGraphics( bool bRelease )

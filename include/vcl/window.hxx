@@ -579,7 +579,7 @@ protected:
     virtual OUString getDefaultAccessibleName() const;
 
     virtual void               CopyAreaFinal( SalTwoRect& aPosAry, sal_uInt32 nFlags);
-    virtual Rectangle&         GetPaintArea ( Rectangle& rDstRect );
+    virtual void               ClipToPaintRegion( Rectangle& rDstRect );
 
 public:
     bool HasMirroredGraphics() const;

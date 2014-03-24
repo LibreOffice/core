@@ -1990,9 +1990,8 @@ Bitmap OutputDevice::ImplBlend( Bitmap              aBmp,
     return res;
 }
 
-Rectangle& OutputDevice::GetPaintArea( Rectangle& rDstRect )
+void OutputDevice::ClipToPaintRegion(Rectangle& /*rDstRect*/)
 {
-    return rDstRect;
 }
 
 void OutputDevice::ImplDrawAlpha( const Bitmap& rBmp, const AlphaMask& rAlpha,
@@ -2006,7 +2005,7 @@ void OutputDevice::ImplDrawAlpha( const Bitmap& rBmp, const AlphaMask& rAlpha,
     const bool  bHMirr = aOutSz.Width() < 0;
     const bool  bVMirr = aOutSz.Height() < 0;
 
-    aDstRect = GetPaintArea(aDstRect);
+    ClipToPaintRegion(aDstRect);
 
     if( bHMirr )
     {
