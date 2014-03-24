@@ -68,15 +68,21 @@
 #include "xfilter/xfstylemanager.hxx"
 
 LwpStory::LwpStory(LwpObjectHeader &objHdr, LwpSvStream* pStrm)
-    : LwpContent(objHdr, pStrm),m_bPMModified(sal_False),m_pCurrentLayout(NULL),
-    m_pTabLayout(NULL),m_bDropcap(sal_False), m_pHyperlinkMgr(new LwpHyperlinkMgr)
-{}
+    : LwpContent(objHdr, pStrm)
+    , m_bPMModified(sal_False)
+    , m_pCurrentLayout(NULL)
+    , m_pTabLayout(NULL)
+    , m_bDropcap(sal_False)
+    , m_pHyperlinkMgr(new LwpHyperlinkMgr)
+    , m_pXFContainer(NULL)
+{
+}
 
 LwpStory::~LwpStory()
 {
-    if (m_pHyperlinkMgr)
-        delete m_pHyperlinkMgr;
+    delete m_pHyperlinkMgr;
 }
+
 void LwpStory::Read()
 {
     LwpContent::Read();
