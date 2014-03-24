@@ -38,16 +38,21 @@ ANT_BUILDFILE=build.xml
 .IF "$(SOLAR_JAVA)" != "" && "$(ENABLE_MEDIAWIKI)" == "YES"
 # --- Files --------------------------------------------------------
 
-TARFILE_NAME=commons-codec-1.6-src
-TARFILE_MD5=2e482c7567908d334785ce7d69ddfff7
+TARFILE_NAME=commons-codec-1.9-src
+TARFILE_MD5=db87f7004cefc9d17f7ac841f86122bd
+#TARFILE_NAME=commons-codec-1.6-src
+#TARFILE_MD5=2e482c7567908d334785ce7d69ddfff7
 
-TARFILE_ROOTDIR=commons-codec-1.6-src
+TARFILE_ROOTDIR=commons-codec-1.9-src
+#TARFILE_ROOTDIR=commons-codec-1.6-src
 
-PATCH_FILES=$(PRJ)$/patches$/codec.patch
+#PATCH_FILES=
+#PATCH_FILES=$(PRJ)$/patches$/codec.patch
 
 #CONVERTFILES=build.xml
-                
-OUT2CLASS=dist$/commons-codec-1.6-SNAPSHOT.jar
+
+OUT2CLASS=dist$/commons-codec-1.9.jar
+#OUT2CLASS=dist$/commons-codec-1.6-SNAPSHOT.jar
 
 .IF "$(JAVACISGCJ)"=="yes"
 JAVA_HOME=
