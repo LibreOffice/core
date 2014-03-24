@@ -30,6 +30,7 @@
 #ifdef IOS
 #include "quartz/salgdi.h"
 #include <premac.h>
+#include <Foundation/Foundation.h>
 #include <CoreGraphics/CoreGraphics.h>
 #include <postmac.h>
 #endif
