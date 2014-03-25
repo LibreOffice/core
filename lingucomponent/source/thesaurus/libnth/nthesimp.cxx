@@ -405,7 +405,6 @@ Sequence < Reference < ::com::sun::star::linguistic2::XMeaning > > SAL_CALL Thes
                     OUString sTerm(pe->psyns[i],strlen(pe->psyns[i]),eEnc );
                     sal_Int32 catpos = sTerm.indexOf('(');
                     OUString catst;
-                    OUString catst2;
                     if (catpos > 2)
                     {
                         // remove category name for affixation and casing
