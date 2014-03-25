@@ -636,6 +636,8 @@ void lcl_MoveBorderPropertiesToFrame(uno::Sequence<beans::PropertyValue>& rFrame
 {
     try
     {
+        if (!xStartTextRange.is())   //rhbz#1077780
+            return;
         uno::Reference<text::XTextCursor> xRangeCursor = xStartTextRange->getText()->createTextCursorByRange( xStartTextRange );
         xRangeCursor->gotoRange( xEndTextRange, true );
 
