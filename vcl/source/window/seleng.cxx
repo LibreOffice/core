@@ -29,7 +29,6 @@ FunctionSet::~FunctionSet()
 
 inline bool SelectionEngine::ShouldDeselect( bool bModifierKey1 ) const
 {
-//  return !( eSelMode == MULTIPLE_SELECTION && bModifierKey1 );
     return eSelMode != MULTIPLE_SELECTION || !bModifierKey1;
 }
 
