@@ -50,9 +50,9 @@ class FWE_DLLPUBLIC AddonPopupMenu : public AddonMenu
         ~AddonPopupMenu();
 
         // Check if command URL string has the unique prefix to identify addon popup menus
-        static sal_Bool         IsCommandURLPrefix( const OUString& aCmdURL );
+        static bool        IsCommandURLPrefix( const OUString& aCmdURL );
 
-        void                    SetCommandURL( const OUString& aCmdURL ) { m_aCommandURL = aCmdURL; }
+        void               SetCommandURL( const OUString& aCmdURL ) { m_aCommandURL = aCmdURL; }
         const OUString&    GetCommandURL() const { return m_aCommandURL; }
 
     protected:
@@ -75,12 +75,12 @@ class FWE_DLLPUBLIC AddonMenuManager
             ADDON_POPUPMENU
         };
 
-        static sal_Bool   HasAddonMenuElements();
+        static bool       HasAddonMenuElements();
 
-        static sal_Bool   IsAddonMenuId( sal_uInt16 nId ) { return (( nId >= ADDONMENU_ITEMID_START ) && ( nId < ADDONMENU_ITEMID_END )); }
+        static bool       IsAddonMenuId( sal_uInt16 nId ) { return (( nId >= ADDONMENU_ITEMID_START ) && ( nId < ADDONMENU_ITEMID_END )); }
 
         // Check if the context string matches the provided xModel context
-        static sal_Bool   IsCorrectContext( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >& rModel, const OUString& aContext );
+        static bool       IsCorrectContext( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >& rModel, const OUString& aContext );
 
         // Factory method to create different Add-On menu types
         static PopupMenu* CreatePopupMenuType( MenuType eMenuType, const com::sun::star::uno::Reference< com::sun::star::frame::XFrame >& rFrame );

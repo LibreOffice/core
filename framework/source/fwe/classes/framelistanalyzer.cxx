@@ -70,9 +70,9 @@ FrameListAnalyzer::~FrameListAnalyzer()
 void FrameListAnalyzer::impl_analyze()
 {
     // reset all members to get a consistent state
-    m_bReferenceIsHidden  = sal_False;
-    m_bReferenceIsHelp    = sal_False;
-    m_bReferenceIsBacking = sal_False;
+    m_bReferenceIsHidden  = false;
+    m_bReferenceIsHelp    = false;
+    m_bReferenceIsBacking = false;
     m_xHelp               = css::uno::Reference< css::frame::XFrame >();
     m_xBackingComponent   = css::uno::Reference< css::frame::XFrame >();
 
@@ -143,7 +143,7 @@ void FrameListAnalyzer::impl_analyze()
         (m_xReferenceFrame->getName() == SPECIALTARGET_HELPTASK)
        )
     {
-        m_bReferenceIsHelp = sal_True;
+        m_bReferenceIsHelp = true;
     }
 
     try

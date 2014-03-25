@@ -42,7 +42,7 @@ using namespace ::com::sun::star::container;
 namespace framework
 {
 
-sal_Bool ToolBoxConfiguration::LoadToolBox(
+bool ToolBoxConfiguration::LoadToolBox(
     const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxContext,
     const ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >& rInputStream,
     const ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexContainer >& rToolbarConfiguration )
@@ -64,24 +64,24 @@ sal_Bool ToolBoxConfiguration::LoadToolBox(
     try
     {
         xParser->parseStream( aInputSource );
-        return sal_True;
+        return true;
     }
     catch ( const RuntimeException& )
     {
-        return sal_False;
+        return false;
     }
     catch( const SAXException& )
     {
-        return sal_False;
+        return false;
     }
     catch( const ::com::sun::star::io::IOException& )
     {
-        return sal_False;
+        return false;
     }
 }
 
 
-sal_Bool ToolBoxConfiguration::StoreToolBox(
+bool ToolBoxConfiguration::StoreToolBox(
     const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxContext,
     const ::com::sun::star::uno::Reference< ::com::sun::star::io::XOutputStream >& rOutputStream,
     const ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess >& rToolbarConfiguration )
@@ -94,19 +94,19 @@ sal_Bool ToolBoxConfiguration::StoreToolBox(
         Reference< XDocumentHandler > xHandler( xWriter, UNO_QUERY_THROW );
         OWriteToolBoxDocumentHandler aWriteToolBoxDocumentHandler( rToolbarConfiguration, xHandler );
         aWriteToolBoxDocumentHandler.WriteToolBoxDocument();
-        return sal_True;
+        return true;
     }
     catch ( const RuntimeException& )
     {
-        return sal_False;
+        return false;
     }
     catch ( const SAXException& )
     {
-        return sal_False;
+        return false;
     }
     catch ( const ::com::sun::star::io::IOException& )
     {
-        return sal_False;
+        return false;
     }
 }
 

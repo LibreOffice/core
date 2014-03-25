@@ -29,7 +29,7 @@ using namespace ::com::sun::star;
 namespace framework
 {
 
-sal_Bool UIConfigurationImporterOOo1x::ImportCustomToolbars(
+bool UIConfigurationImporterOOo1x::ImportCustomToolbars(
     const uno::Reference< ui::XUIConfigurationManager2 >& rContainerFactory,
     uno::Sequence< uno::Reference< container::XIndexContainer > >& rSeqContainer,
     const uno::Reference< uno::XComponentContext >& rxContext,
@@ -37,7 +37,7 @@ sal_Bool UIConfigurationImporterOOo1x::ImportCustomToolbars(
 {
     const char USERDEFTOOLBOX[] = "userdeftoolbox0.xml";
 
-    sal_Bool bResult ( sal_False );
+    bool bResult ( false );
     if ( rToolbarStorage.is() && rContainerFactory.is() )
     {
         try
@@ -61,7 +61,7 @@ sal_Bool UIConfigurationImporterOOo1x::ImportCustomToolbars(
                             sal_uInt32 nIndex = rSeqContainer.getLength();
                             rSeqContainer.realloc( nIndex+1 );
                             rSeqContainer[nIndex] = xContainer;
-                            bResult = sal_True;
+                            bResult = true;
                         }
                     }
                 }

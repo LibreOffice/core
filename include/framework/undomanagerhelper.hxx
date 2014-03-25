@@ -126,8 +126,8 @@ namespace framework
         void            addUndoAction( const ::com::sun::star::uno::Reference< ::com::sun::star::document::XUndoAction >& i_action, IMutexGuard& i_instanceLock );
         void            undo( IMutexGuard& i_instanceLock );
         void            redo( IMutexGuard& i_instanceLock );
-        ::sal_Bool      isUndoPossible() const;
-        ::sal_Bool      isRedoPossible() const;
+        bool            isUndoPossible() const;
+        bool            isRedoPossible() const;
         OUString getCurrentUndoActionTitle() const;
         OUString getCurrentRedoActionTitle() const;
         ::com::sun::star::uno::Sequence< OUString >
@@ -143,7 +143,7 @@ namespace framework
         // XLockable, base of XUndoManager, equivalents
         void            lock();
         void            unlock();
-        ::sal_Bool      isLocked();
+        bool            isLocked();
 
         // XModifyBroadcaster equivalents
         void            addModifyListener( const ::com::sun::star::uno::Reference< ::com::sun::star::util::XModifyListener >& i_listener );

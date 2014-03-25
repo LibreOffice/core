@@ -204,7 +204,7 @@ void InsertSubMenuItems( Menu* pSubMenu, sal_uInt16& nItemId, Reference< XIndexC
                             else
                             {
                                 // Support add-on images for context menu interceptors
-                                Image aImage = aAddonOptions.GetImageFromURL( aCommandURL, sal_False, sal_True );
+                                Image aImage = aAddonOptions.GetImageFromURL( aCommandURL, false, true );
                                 if ( !!aImage )
                                     pSubMenu->SetItemImage( nNewItemId, aImage );
                             }

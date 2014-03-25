@@ -69,7 +69,7 @@ AddonMenu::~AddonMenu()
 
 
 // Check if command URL string has the unique prefix to identify addon popup menus
-sal_Bool AddonPopupMenu::IsCommandURLPrefix( const OUString& aCmdURL )
+bool AddonPopupMenu::IsCommandURLPrefix( const OUString& aCmdURL )
 {
     const char aPrefixCharBuf[] = ADDONSPOPUPMENU_URL_PREFIX_STR;
 
@@ -103,7 +103,7 @@ static Reference< XModel > GetModelFromFrame( const Reference< XFrame >& rFrame 
 
 
 
-sal_Bool AddonMenuManager::HasAddonMenuElements()
+bool AddonMenuManager::HasAddonMenuElements()
 {
     return AddonsOptions().HasAddonsMenu();
 }
@@ -279,10 +279,10 @@ void AddonMenuManager::BuildMenu( PopupMenu*                            pCurrent
                                   const Reference< XModel >&            rModel )
 {
     Sequence< Sequence< PropertyValue > >   aAddonSubMenu;
-    sal_Bool                                    bInsertSeparator    = sal_False;
-    sal_uInt32                                  i                   = 0;
-    sal_uInt32                                  nElements           = 0;
-    sal_uInt32                                  nCount              = aAddonMenuDefinition.getLength();
+    bool                                    bInsertSeparator    = false;
+    sal_uInt32                              i                   = 0;
+    sal_uInt32                              nElements           = 0;
+    sal_uInt32                              nCount              = aAddonMenuDefinition.getLength();
     AddonsOptions                           aAddonsOptions;
 
     OUString aTitle;
@@ -299,7 +299,7 @@ void AddonMenuManager::BuildMenu( PopupMenu*                            pCurrent
             continue;
 
         if ( aURL == "private:separator" )
-            bInsertSeparator = sal_True;
+            bInsertSeparator = true;
         else
         {
             PopupMenu* pSubMenu = NULL;
@@ -322,7 +322,7 @@ void AddonMenuManager::BuildMenu( PopupMenu*                            pCurrent
                 // Insert a separator only when we insert a new element afterwards and we
                 // have already one before us
                 nElements = 0;
-                bInsertSeparator = sal_False;
+                bInsertSeparator = false;
                 pCurrentMenu->InsertSeparator(OString(), nInsPos);
                 nInsPos = AddonMenuManager::GetNextPos( nInsPos );
             }
@@ -375,7 +375,7 @@ void AddonMenuManager::GetMenuEntry( const Sequence< PropertyValue >& rAddonMenu
 }
 
 // Check if the context string matches the provided xModel context
-sal_Bool AddonMenuManager::IsCorrectContext( const Reference< XModel >& rModel, const OUString& aContext )
+bool AddonMenuManager::IsCorrectContext( const Reference< XModel >& rModel, const OUString& aContext )
 {
     if ( rModel.is() )
     {
@@ -388,7 +388,7 @@ sal_Bool AddonMenuManager::IsCorrectContext( const Reference< XModel >& rModel, 
                 OUString aToken = aContext.getToken( 0, ',', nIndex );
 
                 if ( xServiceInfo->supportsService( aToken ))
-                    return sal_True;
+                    return true;
             }
             while ( nIndex >= 0 );
         }

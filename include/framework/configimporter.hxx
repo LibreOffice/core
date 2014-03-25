@@ -33,7 +33,7 @@ namespace framework
     class FWE_DLLPUBLIC UIConfigurationImporterOOo1x
     {
         public:
-            static sal_Bool ImportCustomToolbars(
+            static bool ImportCustomToolbars(
                         const ::com::sun::star::uno::Reference< ::com::sun::star::ui::XUIConfigurationManager2 >& rContainerFactory,
                         ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexContainer > >& rSeqContainer,
                         const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxContext,

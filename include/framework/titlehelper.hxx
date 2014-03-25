@@ -187,7 +187,7 @@ class FWE_DLLPUBLIC TitleHelper : private ::cppu::BaseMutex
             It was set from outside and so outside code has to make sure it will be
             updated.
          */
-        ::sal_Bool m_bExternalTitle;
+        bool m_bExternalTitle;
 
         /** the actual title value */
         OUString m_sTitle;

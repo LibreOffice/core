@@ -190,10 +190,10 @@ class FWE_DLLPUBLIC AddonsOptions
             @descr      Call to retrieve if a addons menu is available
 
 
-            @return     sal_True if there is a menu otherwise sal_False
+            @return     true if there is a menu otherwise false
         *//*-*****************************************************************************************************/
 
-        sal_Bool    HasAddonsMenu() const;
+        bool    HasAddonsMenu() const;
 
         /*-****************************************************************************************************
             @short      returns number of addons toolbars
@@ -308,8 +308,8 @@ class FWE_DLLPUBLIC AddonsOptions
             @onerror    An empty image
         *//*-*****************************************************************************************************/
 
-        Image GetImageFromURL( const OUString& aURL, sal_Bool bBig, sal_Bool bNoScale ) const;
-        Image GetImageFromURL( const OUString& aURL, sal_Bool bBig ) const;
+        Image GetImageFromURL( const OUString& aURL, bool bBig, bool bNoScale ) const;
+        Image GetImageFromURL( const OUString& aURL, bool bBig ) const;
 
 
     //  private methods

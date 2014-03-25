@@ -91,7 +91,7 @@ class RequestFilterSelect_Impl : public ::cppu::WeakImplHelper1< ::com::sun::sta
 {
 public:
     RequestFilterSelect_Impl( const OUString& sURL );
-    sal_Bool        isAbort  () const;
+    bool     isAbort  () const;
     OUString getFilter() const;
 
 public:
@@ -130,7 +130,7 @@ RequestFilterSelect_Impl::RequestFilterSelect_Impl( const OUString& sURL )
 // return abort state of interaction
 // If it is true, return value of method "getFilter()" will be unspecified then!
 
-sal_Bool RequestFilterSelect_Impl::isAbort() const
+bool RequestFilterSelect_Impl::isAbort() const
 {
     return m_pAbort->wasSelected();
 }
@@ -181,7 +181,7 @@ RequestFilterSelect::~RequestFilterSelect()
 // return abort state of interaction
 // If it is true, return value of method "getFilter()" will be unspecified then!
 
-sal_Bool RequestFilterSelect::isAbort() const
+bool RequestFilterSelect::isAbort() const
 {
     return pImp->isAbort();
 }

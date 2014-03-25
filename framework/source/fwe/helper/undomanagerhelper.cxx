@@ -1006,25 +1006,25 @@ namespace framework
     }
 
 
-    ::sal_Bool UndoManagerHelper::isUndoPossible() const
+    bool UndoManagerHelper::isUndoPossible() const
     {
         // SYNCHRONIZED --->
         ::osl::MutexGuard aGuard( m_pImpl->getMutex() );
         IUndoManager& rUndoManager = m_pImpl->getUndoManager();
         if ( rUndoManager.IsInListAction() )
-            return sal_False;
+            return false;
         return rUndoManager.GetUndoActionCount( IUndoManager::TopLevel ) > 0;
         // <--- SYNCHRONIZED
     }
 
 
-    ::sal_Bool UndoManagerHelper::isRedoPossible() const
+    bool UndoManagerHelper::isRedoPossible() const
     {
         // SYNCHRONIZED --->
         ::osl::MutexGuard aGuard( m_pImpl->getMutex() );
         const IUndoManager& rUndoManager = m_pImpl->getUndoManager();
         if ( rUndoManager.IsInListAction() )
-            return sal_False;
+            return false;
         return rUndoManager.GetRedoActionCount( IUndoManager::TopLevel ) > 0;
         // <--- SYNCHRONIZED
     }
@@ -1132,7 +1132,7 @@ namespace framework
     }
 
 
-    ::sal_Bool UndoManagerHelper::isLocked()
+    bool UndoManagerHelper::isLocked()
     {
         // SYNCHRONIZED --->
         ::osl::MutexGuard aGuard( m_pImpl->getMutex() );

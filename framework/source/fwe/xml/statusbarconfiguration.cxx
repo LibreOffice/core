@@ -42,7 +42,7 @@ using namespace ::com::sun::star::container;
 namespace framework
 {
 
-sal_Bool StatusBarConfiguration::LoadStatusBar(
+bool StatusBarConfiguration::LoadStatusBar(
     const Reference< XComponentContext >& rxContext,
     const Reference< XInputStream >& xInputStream,
     const Reference< XIndexContainer >& rStatusbarConfiguration )
@@ -63,23 +63,23 @@ sal_Bool StatusBarConfiguration::LoadStatusBar(
     try
     {
         xParser->parseStream( aInputSource );
-        return sal_True;
+        return true;
     }
     catch ( const RuntimeException& )
     {
-        return sal_False;
+        return false;
     }
     catch( const SAXException& )
     {
-        return sal_False;
+        return false;
     }
     catch( const ::com::sun::star::io::IOException& )
     {
-        return sal_False;
+        return false;
     }
 }
 
-sal_Bool StatusBarConfiguration::StoreStatusBar(
+bool StatusBarConfiguration::StoreStatusBar(
     const Reference< XComponentContext >& rxContext,
     const Reference< XOutputStream >& xOutputStream,
     const Reference< XIndexAccess >& rStatusbarConfiguration )
@@ -91,19 +91,19 @@ sal_Bool StatusBarConfiguration::StoreStatusBar(
     {
         OWriteStatusBarDocumentHandler aWriteStatusBarDocumentHandler( rStatusbarConfiguration, xWriter );
         aWriteStatusBarDocumentHandler.WriteStatusBarDocument();
-        return sal_True;
+        return true;
     }
     catch ( const RuntimeException& )
     {
-        return sal_False;
+        return false;
     }
     catch ( const SAXException& )
     {
-        return sal_False;
+        return false;
     }
     catch ( const ::com::sun::star::io::IOException& )
     {
-        return sal_False;
+        return false;
     }
 }
 }

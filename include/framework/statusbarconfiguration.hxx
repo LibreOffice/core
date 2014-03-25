@@ -35,12 +35,12 @@ namespace framework
 class FWE_DLLPUBLIC StatusBarConfiguration
 {
     public:
-        static sal_Bool LoadStatusBar(
+        static bool LoadStatusBar(
             const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& xContext,
             const ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >& xInputStream,
             const ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexContainer >& rStatusbarConfiguration );
 
-        static sal_Bool StoreStatusBar(
+        static bool StoreStatusBar(
             const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& xContext,
             const ::com::sun::star::uno::Reference< ::com::sun::star::io::XOutputStream >& xOutputStream,
             const ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess >& rStatusbarConfiguration );

@@ -45,7 +45,7 @@ TitleHelper::TitleHelper(const css::uno::Reference< css::uno::XComponentContext 
     , m_xOwner          ()
     , m_xUntitledNumbers()
     , m_xSubTitle       ()
-    , m_bExternalTitle  (sal_False)
+    , m_bExternalTitle  (false)
     , m_sTitle          ()
     , m_nLeasedNumber   (css::frame::UntitledNumbersConst::INVALID_NUMBER)
     , m_aListener       (m_aMutex)
@@ -133,7 +133,7 @@ void SAL_CALL TitleHelper::setTitle(const OUString& sTitle)
     // SYNCHRONIZED ->
     ::osl::ResettableMutexGuard aLock(m_aMutex);
 
-        m_bExternalTitle = sal_True;
+        m_bExternalTitle = true;
         m_sTitle         = sTitle;
 
     aLock.clear ();
@@ -383,7 +383,7 @@ void TitleHelper::impl_updateTitleForModel (const css::uno::Reference< css::fram
 
     // WORKAROUND: the notification is currently sent always,
     //             can be changed after shared mode is supported per UNO API
-    sal_Bool bChanged        = !init; // && m_sTitle != sTitle
+    bool     bChanged        = !init; // && m_sTitle != sTitle
 
              m_sTitle        = sTitle;
              m_nLeasedNumber = nLeasedNumber;
@@ -450,9 +450,9 @@ void TitleHelper::impl_updateTitleForController (const css::uno::Reference< css:
     aLock.reset ();
 
         OUString sNewTitle       = sTitle.makeStringAndClear ();
-        sal_Bool        bChanged        = !init && m_sTitle != sNewTitle;
-                        m_sTitle        = sNewTitle;
-                        m_nLeasedNumber = nLeasedNumber;
+        bool     bChanged        = !init && m_sTitle != sNewTitle;
+                 m_sTitle        = sNewTitle;
+                 m_nLeasedNumber = nLeasedNumber;
 
     aLock.clear ();
     // <- SYNCHRONIZED
@@ -497,8 +497,8 @@ void TitleHelper::impl_updateTitleForFrame (const css::uno::Reference< css::fram
     aLock.reset ();
 
         OUString sNewTitle = sTitle.makeStringAndClear ();
-        sal_Bool        bChanged  = !init && m_sTitle != sNewTitle;
-                        m_sTitle  = sNewTitle;
+        bool     bChanged  = !init && m_sTitle != sNewTitle;
+                 m_sTitle  = sNewTitle;
 
     aLock.clear ();
     // <- SYNCHRONIZED

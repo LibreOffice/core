@@ -34,12 +34,12 @@ namespace framework
 class FWE_DLLPUBLIC ToolBoxConfiguration
 {
     public:
-        static sal_Bool LoadToolBox(
+        static bool LoadToolBox(
             const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxContext,
             const ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >& rInputStream,
             const ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexContainer >& rToolbarConfiguration );
 
-        static sal_Bool StoreToolBox(
+        static bool StoreToolBox(
             const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxContext,
             const ::com::sun::star::uno::Reference< ::com::sun::star::io::XOutputStream >& rOutputStream,
             const ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess >& rToolbarConfiguration );

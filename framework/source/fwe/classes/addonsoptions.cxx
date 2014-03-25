@@ -269,14 +269,14 @@ class AddonsOptions_Impl : public ConfigItem
             @onerror    -
         *//*-*****************************************************************************************************/
 
-        sal_Bool                                        HasAddonsMenu        () const ;
+        bool                                            HasAddonsMenu        () const ;
         sal_Int32                                       GetAddonsToolBarCount() const ;
         const Sequence< Sequence< PropertyValue > >&    GetAddonsMenu        () const ;
         const Sequence< Sequence< PropertyValue > >&    GetAddonsMenuBarPart () const ;
         const Sequence< Sequence< PropertyValue > >&    GetAddonsToolBarPart ( sal_uInt32 nIndex ) const ;
         const OUString                           GetAddonsToolbarResourceName( sal_uInt32 nIndex ) const;
         const Sequence< Sequence< PropertyValue > >&    GetAddonsHelpMenu    () const ;
-        Image                                           GetImageFromURL( const OUString& aURL, sal_Bool bBig, sal_Bool bNoScale );
+        Image                                           GetImageFromURL( const OUString& aURL, bool bBig, bool bNoScale );
         const MergeMenuInstructionContainer&            GetMergeMenuInstructions() const;
         bool                                            GetMergeToolbarInstructions( const OUString& rToolbarName, MergeToolbarInstructionContainer& rToolbarInstructions ) const;
         const MergeStatusbarInstructionContainer&       GetMergeStatusbarInstructions() const;
@@ -325,32 +325,32 @@ class AddonsOptions_Impl : public ConfigItem
             @onerror    -
         *//*-*****************************************************************************************************/
 
-        sal_Bool             ReadAddonMenuSet( Sequence< Sequence< PropertyValue > >& aAddonMenuSeq );
-        sal_Bool             ReadOfficeMenuBarSet( Sequence< Sequence< PropertyValue > >& aAddonOfficeMenuBarSeq );
-        sal_Bool             ReadOfficeToolBarSet( AddonToolBars& rAddonOfficeToolBars, std::vector< OUString >& rAddonOfficeToolBarResNames );
-        sal_Bool             ReadToolBarItemSet( const OUString& rToolBarItemSetNodeName, Sequence< Sequence< PropertyValue > >& aAddonOfficeToolBarSeq );
-        sal_Bool             ReadOfficeHelpSet( Sequence< Sequence< PropertyValue > >& aAddonOfficeHelpMenuSeq );
+        bool                 ReadAddonMenuSet( Sequence< Sequence< PropertyValue > >& aAddonMenuSeq );
+        bool                 ReadOfficeMenuBarSet( Sequence< Sequence< PropertyValue > >& aAddonOfficeMenuBarSeq );
+        bool                 ReadOfficeToolBarSet( AddonToolBars& rAddonOfficeToolBars, std::vector< OUString >& rAddonOfficeToolBarResNames );
+        bool                 ReadToolBarItemSet( const OUString& rToolBarItemSetNodeName, Sequence< Sequence< PropertyValue > >& aAddonOfficeToolBarSeq );
+        bool                 ReadOfficeHelpSet( Sequence< Sequence< PropertyValue > >& aAddonOfficeHelpMenuSeq );
         void                 ReadImages( ImageManager& aImageManager );
-        sal_Bool             ReadMenuMergeInstructions( MergeMenuInstructionContainer& rContainer );
-        sal_Bool             ReadToolbarMergeInstructions( ToolbarMergingInstructions& rToolbarMergeMap );
-        sal_Bool             ReadStatusbarMergeInstructions( MergeStatusbarInstructionContainer& rContainer );
+        bool                 ReadMenuMergeInstructions( MergeMenuInstructionContainer& rContainer );
+        bool                 ReadToolbarMergeInstructions( ToolbarMergingInstructions& rToolbarMergeMap );
+        bool                 ReadStatusbarMergeInstructions( MergeStatusbarInstructionContainer& rContainer );
 
-        sal_Bool             ReadMergeMenuData( const OUString& aMergeAddonInstructionBase, Sequence< Sequence< PropertyValue > >& rMergeMenu );
-        sal_Bool             ReadMergeToolbarData( const OUString& aMergeAddonInstructionBase, Sequence< Sequence< PropertyValue > >& rMergeToolbarItems );
-        sal_Bool             ReadMergeStatusbarData( const OUString& aMergeAddonInstructionBase, Sequence< Sequence< PropertyValue > >& rMergeStatusbar );
-        sal_Bool             ReadMenuItem( const OUString& aMenuItemNodeName, Sequence< PropertyValue >& aMenuItem, sal_Bool bIgnoreSubMenu = sal_False );
-        sal_Bool             ReadPopupMenu( const OUString& aPopupMenuNodeName, Sequence< PropertyValue >& aPopupMenu );
-        sal_Bool             AppendPopupMenu( Sequence< PropertyValue >& aTargetPopupMenu, const Sequence< PropertyValue >& rSourcePopupMenu );
-        sal_Bool             ReadToolBarItem( const OUString& aToolBarItemNodeName, Sequence< PropertyValue >& aToolBarItem );
-        sal_Bool             ReadStatusBarItem( const OUString& aStatusbarItemNodeName, Sequence< PropertyValue >& aStatusbarItem );
-        sal_Bool             ReadImagesItem( const OUString& aImagesItemNodeName, Sequence< PropertyValue >& aImagesItem );
+        bool                 ReadMergeMenuData( const OUString& aMergeAddonInstructionBase, Sequence< Sequence< PropertyValue > >& rMergeMenu );
+        bool                 ReadMergeToolbarData( const OUString& aMergeAddonInstructionBase, Sequence< Sequence< PropertyValue > >& rMergeToolbarItems );
+        bool                 ReadMergeStatusbarData( const OUString& aMergeAddonInstructionBase, Sequence< Sequence< PropertyValue > >& rMergeStatusbar );
+        bool                 ReadMenuItem( const OUString& aMenuItemNodeName, Sequence< PropertyValue >& aMenuItem, bool bIgnoreSubMenu = false );
+        bool                 ReadPopupMenu( const OUString& aPopupMenuNodeName, Sequence< PropertyValue >& aPopupMenu );
+        bool                 AppendPopupMenu( Sequence< PropertyValue >& aTargetPopupMenu, const Sequence< PropertyValue >& rSourcePopupMenu );
+        bool                 ReadToolBarItem( const OUString& aToolBarItemNodeName, Sequence< PropertyValue >& aToolBarItem );
+        bool                 ReadStatusBarItem( const OUString& aStatusbarItemNodeName, Sequence< PropertyValue >& aStatusbarItem );
+        bool                 ReadImagesItem( const OUString& aImagesItemNodeName, Sequence< PropertyValue >& aImagesItem );
         ImageEntry*          ReadImageData( const OUString& aImagesNodeName );
         void                 ReadAndAssociateImages( const OUString& aURL, const OUString& aImageId );
         Image                ReadImageFromURL( const OUString& aURL );
-        sal_Bool             HasAssociatedImages( const OUString& aURL );
+        bool                 HasAssociatedImages( const OUString& aURL );
         void                 SubstituteVariables( OUString& aURL );
 
-        sal_Bool             ReadSubMenuEntries( const Sequence< OUString >& aSubMenuNodeNames, Sequence< Sequence< PropertyValue > >& rSubMenu );
+        bool                 ReadSubMenuEntries( const Sequence< OUString >& aSubMenuNodeNames, Sequence< Sequence< PropertyValue > >& rSubMenu );
         void                 InsertToolBarSeparator( Sequence< Sequence< PropertyValue > >& rAddonOfficeToolBarSeq );
         OUString          GeneratePrefixURL();
 
@@ -359,7 +359,7 @@ class AddonsOptions_Impl : public ConfigItem
         Sequence< OUString > GetPropertyNamesToolBarItem( const OUString& aPropertyRootNode ) const;
         Sequence< OUString > GetPropertyNamesStatusbarItem( const ::rtl::OUString& aPropertyRootNode ) const;
         Sequence< OUString > GetPropertyNamesImages( const OUString& aPropertyRootNode ) const;
-        sal_Bool             CreateImageFromSequence( Image& rImage, Sequence< sal_Int8 >& rBitmapDataSeq ) const;
+        bool                 CreateImageFromSequence( Image& rImage, Sequence< sal_Int8 >& rBitmapDataSeq ) const;
 
 
     //  private member
@@ -528,7 +528,7 @@ void AddonsOptions_Impl::Commit()
 
 //  public method
 
-sal_Bool AddonsOptions_Impl::HasAddonsMenu() const
+bool AddonsOptions_Impl::HasAddonsMenu() const
 {
     return ( m_aCachedMenuProperties.getLength() > 0 );
 }
@@ -630,7 +630,7 @@ static Image ScaleImage( const Image &rImage, bool bBig )
     return Image(aScaleBmp);
 }
 
-Image AddonsOptions_Impl::GetImageFromURL( const OUString& aURL, sal_Bool bBig, sal_Bool bNoScale )
+Image AddonsOptions_Impl::GetImageFromURL( const OUString& aURL, bool bBig, bool bNoScale )
 {
     Image aImage;
     ImageSize eSize = bBig ? IMGSIZE_BIG : IMGSIZE_SMALL;
@@ -682,7 +682,7 @@ Image AddonsOptions_Impl::GetImageFromURL( const OUString& aURL, sal_Bool bBig, 
 
 //  private method
 
-sal_Bool AddonsOptions_Impl::ReadAddonMenuSet( Sequence< Sequence< PropertyValue > >& rAddonMenuSeq )
+bool AddonsOptions_Impl::ReadAddonMenuSet( Sequence< Sequence< PropertyValue > >& rAddonMenuSeq )
 {
     // Read the AddonMenu set and fill property sequences
     OUString             aAddonMenuNodeName( "AddonUI/AddonMenu" );
@@ -721,7 +721,7 @@ sal_Bool AddonsOptions_Impl::ReadAddonMenuSet( Sequence< Sequence< PropertyValue
 
 //  private method
 
-sal_Bool AddonsOptions_Impl::ReadOfficeHelpSet( Sequence< Sequence< PropertyValue > >& rAddonOfficeHelpMenuSeq )
+bool AddonsOptions_Impl::ReadOfficeHelpSet( Sequence< Sequence< PropertyValue > >& rAddonOfficeHelpMenuSeq )
 {
     // Read the AddonMenu set and fill property sequences
     OUString             aAddonHelpMenuNodeName( "AddonUI/OfficeHelp" );
@@ -745,7 +745,7 @@ sal_Bool AddonsOptions_Impl::ReadOfficeHelpSet( Sequence< Sequence< PropertyValu
         OUString aRootMenuItemNode( aAddonHelpMenuItemNode + aAddonHelpMenuNodeSeq[n] );
 
         // Read the MenuItem
-        if ( ReadMenuItem( aRootMenuItemNode, aMenuItem, sal_True ) )
+        if ( ReadMenuItem( aRootMenuItemNode, aMenuItem, true ) )
         {
             // Successfully read a menu item, append to our list
             sal_uInt32 nMenuItemCount = rAddonOfficeHelpMenuSeq.getLength() + 1;
@@ -760,7 +760,7 @@ sal_Bool AddonsOptions_Impl::ReadOfficeHelpSet( Sequence< Sequence< PropertyValu
 
 //  private method
 
-sal_Bool AddonsOptions_Impl::ReadOfficeMenuBarSet( Sequence< Sequence< PropertyValue > >& rAddonOfficeMenuBarSeq )
+bool AddonsOptions_Impl::ReadOfficeMenuBarSet( Sequence< Sequence< PropertyValue > >& rAddonOfficeMenuBarSeq )
 {
     // Read the OfficeMenuBar set and fill property sequences
     OUString             aAddonMenuBarNodeName( "AddonUI/OfficeMenuBar" );
@@ -816,7 +816,7 @@ sal_Bool AddonsOptions_Impl::ReadOfficeMenuBarSet( Sequence< Sequence< PropertyV
 
 //  private method
 
-sal_Bool AddonsOptions_Impl::ReadOfficeToolBarSet( AddonToolBars& rAddonOfficeToolBars, std::vector< OUString >& rAddonOfficeToolBarResNames )
+bool AddonsOptions_Impl::ReadOfficeToolBarSet( AddonToolBars& rAddonOfficeToolBars, std::vector< OUString >& rAddonOfficeToolBarResNames )
 {
     // Read the OfficeToolBar set and fill property sequences
     OUString             aAddonToolBarNodeName( "AddonUI/OfficeToolBar" );
@@ -840,10 +840,10 @@ sal_Bool AddonsOptions_Impl::ReadOfficeToolBarSet( AddonToolBars& rAddonOfficeTo
 
 //  private method
 
-sal_Bool AddonsOptions_Impl::ReadToolBarItemSet( const OUString& rToolBarItemSetNodeName, Sequence< Sequence< PropertyValue > >& rAddonOfficeToolBarSeq )
+bool AddonsOptions_Impl::ReadToolBarItemSet( const OUString& rToolBarItemSetNodeName, Sequence< Sequence< PropertyValue > >& rAddonOfficeToolBarSeq )
 {
-    sal_Bool                    bInsertSeparator        = sal_False;
-    sal_uInt32                  nToolBarItemCount       = rAddonOfficeToolBarSeq.getLength();
+    bool                     bInsertSeparator        = false;
+    sal_uInt32               nToolBarItemCount       = rAddonOfficeToolBarSeq.getLength();
     OUString                 aAddonToolBarItemSetNode( rToolBarItemSetNodeName + m_aPathDelimiter );
     Sequence< OUString >     aAddonToolBarItemSetNodeSeq = GetNodeNames( rToolBarItemSetNodeName );
     Sequence< PropertyValue >   aToolBarItem( PROPERTYCOUNT_TOOLBARITEM );
@@ -867,7 +867,7 @@ sal_Bool AddonsOptions_Impl::ReadToolBarItemSet( const OUString& rToolBarItemSet
         {
             if ( bInsertSeparator )
             {
-                bInsertSeparator = sal_False;
+                bInsertSeparator = false;
                 InsertToolBarSeparator( rAddonOfficeToolBarSeq );
             }
 
@@ -978,7 +978,7 @@ OUString AddonsOptions_Impl::GeneratePrefixURL()
 //  private method
 
 
-sal_Bool AddonsOptions_Impl::ReadMenuMergeInstructions( MergeMenuInstructionContainer& aContainer )
+bool AddonsOptions_Impl::ReadMenuMergeInstructions( MergeMenuInstructionContainer& aContainer )
 {
     const OUString aMenuMergeRootName( "AddonUI/OfficeMenuBarMerging/" );
 
@@ -1041,13 +1041,13 @@ sal_Bool AddonsOptions_Impl::ReadMenuMergeInstructions( MergeMenuInstructionCont
         }
     }
 
-    return sal_True;
+    return true;
 }
 
 
 //  private method
 
-sal_Bool AddonsOptions_Impl::ReadMergeMenuData( const OUString& aMergeAddonInstructionBase, Sequence< Sequence< PropertyValue > >& rMergeMenu )
+bool AddonsOptions_Impl::ReadMergeMenuData( const OUString& aMergeAddonInstructionBase, Sequence< Sequence< PropertyValue > >& rMergeMenu )
 {
     OUString aMergeMenuBaseNode( aMergeAddonInstructionBase+m_aPropMergeMenuNames[ OFFSET_MERGEMENU_MENUITEMS ] );
 
@@ -1064,7 +1064,7 @@ sal_Bool AddonsOptions_Impl::ReadMergeMenuData( const OUString& aMergeAddonInstr
 
 //  private method
 
-sal_Bool AddonsOptions_Impl::ReadToolbarMergeInstructions( ToolbarMergingInstructions& rCachedToolbarMergingInstructions )
+bool AddonsOptions_Impl::ReadToolbarMergeInstructions( ToolbarMergingInstructions& rCachedToolbarMergingInstructions )
 {
     const OUString aToolbarMergeRootName( "AddonUI/OfficeToolbarMerging/" );
 
@@ -1133,13 +1133,13 @@ sal_Bool AddonsOptions_Impl::ReadToolbarMergeInstructions( ToolbarMergingInstruc
         }
     }
 
-    return sal_True;
+    return true;
 }
 
 
 //  private method
 
-sal_Bool AddonsOptions_Impl::ReadMergeToolbarData( const OUString& aMergeAddonInstructionBase, Sequence< Sequence< PropertyValue > >& rMergeToolbarItems )
+bool AddonsOptions_Impl::ReadMergeToolbarData( const OUString& aMergeAddonInstructionBase, Sequence< Sequence< PropertyValue > >& rMergeToolbarItems )
 {
     OUStringBuffer aBuffer( aMergeAddonInstructionBase );
     aBuffer.append( m_aPropMergeToolbarNames[ OFFSET_MERGETOOLBAR_TOOLBARITEMS ] );
@@ -1150,7 +1150,7 @@ sal_Bool AddonsOptions_Impl::ReadMergeToolbarData( const OUString& aMergeAddonIn
 }
 
 
-sal_Bool AddonsOptions_Impl::ReadStatusbarMergeInstructions( MergeStatusbarInstructionContainer& aContainer )
+bool AddonsOptions_Impl::ReadStatusbarMergeInstructions( MergeStatusbarInstructionContainer& aContainer )
 {
     const ::rtl::OUString aStatusbarMergeRootName( "AddonUI/OfficeStatusbarMerging/" );
 
@@ -1211,10 +1211,10 @@ sal_Bool AddonsOptions_Impl::ReadStatusbarMergeInstructions( MergeStatusbarInstr
         }
     }
 
-    return sal_True;
+    return true;
 }
 
-sal_Bool AddonsOptions_Impl::ReadMergeStatusbarData(
+bool AddonsOptions_Impl::ReadMergeStatusbarData(
     const ::rtl::OUString& aMergeAddonInstructionBase,
     Sequence< Sequence< PropertyValue > >& rMergeStatusbarItems )
 {
@@ -1252,11 +1252,11 @@ sal_Bool AddonsOptions_Impl::ReadMergeStatusbarData(
     return ( (sal_uInt32)rMergeStatusbarItems.getLength() > nStatusbarItemCount );
 }
 
-sal_Bool AddonsOptions_Impl::ReadStatusBarItem(
+bool AddonsOptions_Impl::ReadStatusBarItem(
     const ::rtl::OUString& aStatusarItemNodeName,
     Sequence< PropertyValue >& aStatusbarItem )
 {
-    sal_Bool bResult( sal_False );
+    bool bResult( false );
     ::rtl::OUString aURL;
     ::rtl::OUString aAddonStatusbarItemTreeNode( aStatusarItemNodeName + m_aPathDelimiter );
     Sequence< Any > aStatusbarItemNodePropValues;
@@ -1278,7 +1278,7 @@ sal_Bool AddonsOptions_Impl::ReadStatusBarItem(
         aStatusbarItemNodePropValues[ OFFSET_STATUSBARITEM_WIDTH ] >>= nValue;
         aStatusbarItem[ OFFSET_STATUSBARITEM_WIDTH ].Value <<= sal_Int32( nValue );
 
-        bResult = sal_True;
+        bResult = true;
     }
 
     return bResult;
@@ -1287,9 +1287,9 @@ sal_Bool AddonsOptions_Impl::ReadStatusBarItem(
 
 //  private method
 
-sal_Bool AddonsOptions_Impl::ReadMenuItem( const OUString& aMenuNodeName, Sequence< PropertyValue >& aMenuItem, sal_Bool bIgnoreSubMenu )
+bool AddonsOptions_Impl::ReadMenuItem( const OUString& aMenuNodeName, Sequence< PropertyValue >& aMenuItem, bool bIgnoreSubMenu )
 {
-    sal_Bool            bResult = sal_False;
+    bool             bResult = false;
     OUString         aStrValue;
     OUString         aAddonMenuItemTreeNode( aMenuNodeName + m_aPathDelimiter );
     Sequence< Any >     aMenuItemNodePropValues;
@@ -1324,7 +1324,7 @@ sal_Bool AddonsOptions_Impl::ReadMenuItem( const OUString& aMenuNodeName, Sequen
                 aRootSubMenuNodeNames[n] = aSubMenuRootNodeName + aRootSubMenuNodeNames[n];
             ReadSubMenuEntries( aRootSubMenuNodeNames, aSubMenuSeq );
             aMenuItem[ OFFSET_MENUITEM_SUBMENU ].Value <<= aSubMenuSeq;
-            bResult = sal_True;
+            bResult = true;
         }
         else if (( aMenuItemNodePropValues[ OFFSET_MENUITEM_URL ] >>= aStrValue ) && !aStrValue.isEmpty() )
         {
@@ -1340,7 +1340,7 @@ sal_Bool AddonsOptions_Impl::ReadMenuItem( const OUString& aMenuNodeName, Sequen
             aMenuItem[ OFFSET_MENUITEM_CONTEXT          ].Value <<= aMenuItemNodePropValues[ OFFSET_MENUITEM_CONTEXT        ];
             aMenuItem[ OFFSET_MENUITEM_SUBMENU          ].Value <<= Sequence< Sequence< PropertyValue > >(); // Submenu set!
 
-            bResult = sal_True;
+            bResult = true;
         }
     }
     else if (( aMenuItemNodePropValues[ OFFSET_MENUITEM_URL ] >>= aStrValue ) &&
@@ -1352,7 +1352,7 @@ sal_Bool AddonsOptions_Impl::ReadMenuItem( const OUString& aMenuNodeName, Sequen
         aMenuItem[ OFFSET_MENUITEM_IMAGEIDENTIFIER  ].Value <<= m_aEmpty;
         aMenuItem[ OFFSET_MENUITEM_CONTEXT          ].Value <<= m_aEmpty;
         aMenuItem[ OFFSET_MENUITEM_SUBMENU          ].Value <<= Sequence< Sequence< PropertyValue > >(); // Submenu set!
-        bResult = sal_True;
+        bResult = true;
     }
 
     return bResult;
@@ -1361,9 +1361,9 @@ sal_Bool AddonsOptions_Impl::ReadMenuItem( const OUString& aMenuNodeName, Sequen
 
 //  private method
 
-sal_Bool AddonsOptions_Impl::ReadPopupMenu( const OUString& aPopupMenuNodeName, Sequence< PropertyValue >& aPopupMenu )
+bool AddonsOptions_Impl::ReadPopupMenu( const OUString& aPopupMenuNodeName, Sequence< PropertyValue >& aPopupMenu )
 {
-    sal_Bool            bResult = sal_False;
+    bool             bResult = false;
     OUString         aStrValue;
     OUString         aAddonPopupMenuTreeNode( aPopupMenuNodeName + m_aPathDelimiter );
     Sequence< Any >     aPopupMenuNodePropValues;
@@ -1392,7 +1392,7 @@ sal_Bool AddonsOptions_Impl::ReadPopupMenu( const OUString& aPopupMenuNodeName, 
                 aRootSubMenuNodeNames[n] = aSubMenuRootNodeName + aRootSubMenuNodeNames[n];
             ReadSubMenuEntries( aRootSubMenuNodeNames, aSubMenuSeq );
             aPopupMenu[ OFFSET_POPUPMENU_SUBMENU ].Value <<= aSubMenuSeq;
-            bResult = sal_True;
+            bResult = true;
         }
     }
 
@@ -1402,7 +1402,7 @@ sal_Bool AddonsOptions_Impl::ReadPopupMenu( const OUString& aPopupMenuNodeName, 
 
 //  private method
 
-sal_Bool AddonsOptions_Impl::AppendPopupMenu( Sequence< PropertyValue >& rTargetPopupMenu, const Sequence< PropertyValue >& rSourcePopupMenu )
+bool AddonsOptions_Impl::AppendPopupMenu( Sequence< PropertyValue >& rTargetPopupMenu, const Sequence< PropertyValue >& rSourcePopupMenu )
 {
     Sequence< Sequence< PropertyValue > > aTargetSubMenuSeq;
     Sequence< Sequence< PropertyValue > > aSourceSubMenuSeq;
@@ -1417,15 +1417,15 @@ sal_Bool AddonsOptions_Impl::AppendPopupMenu( Sequence< PropertyValue >& rTarget
         rTargetPopupMenu[ OFFSET_POPUPMENU_SUBMENU ].Value <<= aTargetSubMenuSeq;
     }
 
-    return sal_True;
+    return true;
 }
 
 
 //  private method
 
-sal_Bool AddonsOptions_Impl::ReadToolBarItem( const OUString& aToolBarItemNodeName, Sequence< PropertyValue >& aToolBarItem )
+bool AddonsOptions_Impl::ReadToolBarItem( const OUString& aToolBarItemNodeName, Sequence< PropertyValue >& aToolBarItem )
 {
-    sal_Bool            bResult = sal_False;
+    bool             bResult = false;
     OUString         aTitle;
     OUString         aURL;
     OUString         aAddonToolBarItemTreeNode( aToolBarItemNodeName + m_aPathDelimiter );
@@ -1447,7 +1447,7 @@ sal_Bool AddonsOptions_Impl::ReadToolBarItem( const OUString& aToolBarItemNodeNa
             aToolBarItem[ OFFSET_TOOLBARITEM_CONTROLTYPE        ].Value <<= m_aEmpty;
             aToolBarItem[ OFFSET_TOOLBARITEM_WIDTH              ].Value <<= sal_Int32( 0 );
 
-            bResult = sal_True;
+            bResult = true;
         }
         else if (( aToolBarItemNodePropValues[ OFFSET_TOOLBARITEM_TITLE ] >>= aTitle ) && !aTitle.isEmpty() )
         {
@@ -1470,7 +1470,7 @@ sal_Bool AddonsOptions_Impl::ReadToolBarItem( const OUString& aToolBarItemNodeNa
             aToolBarItemNodePropValues[ OFFSET_TOOLBARITEM_WIDTH ] >>= nValue;
             aToolBarItem[ OFFSET_TOOLBARITEM_WIDTH              ].Value <<= sal_Int32( nValue );
 
-            bResult = sal_True;
+            bResult = true;
         }
     }
 
@@ -1480,7 +1480,7 @@ sal_Bool AddonsOptions_Impl::ReadToolBarItem( const OUString& aToolBarItemNodeNa
 
 //  private method
 
-sal_Bool AddonsOptions_Impl::ReadSubMenuEntries( const Sequence< OUString >& aSubMenuNodeNames, Sequence< Sequence< PropertyValue > >& rSubMenuSeq )
+bool AddonsOptions_Impl::ReadSubMenuEntries( const Sequence< OUString >& aSubMenuNodeNames, Sequence< Sequence< PropertyValue > >& rSubMenuSeq )
 {
     Sequence< PropertyValue > aMenuItem( PROPERTYCOUNT_MENUITEM );
 
@@ -1504,13 +1504,13 @@ sal_Bool AddonsOptions_Impl::ReadSubMenuEntries( const Sequence< OUString >& aSu
         }
     }
 
-    return sal_True;
+    return true;
 }
 
 
 //  private method
 
-sal_Bool AddonsOptions_Impl::HasAssociatedImages( const OUString& aURL )
+bool AddonsOptions_Impl::HasAssociatedImages( const OUString& aURL )
 {
     // FIXME: potentially this is not so useful in a world of delayed image loading
     ImageManager::const_iterator pIter = m_aImageManager.find( aURL );
@@ -1648,9 +1648,9 @@ AddonsOptions_Impl::ImageEntry* AddonsOptions_Impl::ReadImageData( const OUStrin
 
 //  private method
 
-sal_Bool AddonsOptions_Impl::CreateImageFromSequence( Image& rImage, Sequence< sal_Int8 >& rBitmapDataSeq ) const
+bool AddonsOptions_Impl::CreateImageFromSequence( Image& rImage, Sequence< sal_Int8 >& rBitmapDataSeq ) const
 {
-    sal_Bool bResult = sal_False;
+    bool bResult = false;
 
     if ( rBitmapDataSeq.getLength() > 0 )
     {
@@ -1666,7 +1666,7 @@ sal_Bool AddonsOptions_Impl::CreateImageFromSequence( Image& rImage, Sequence< s
         }
 
         rImage = Image( aBitmapEx );
-        bResult = sal_True;
+        bResult = true;
     }
 
     return bResult;
@@ -1803,7 +1803,7 @@ AddonsOptions::~AddonsOptions()
 
 //  public method
 
-sal_Bool AddonsOptions::HasAddonsMenu() const
+bool AddonsOptions::HasAddonsMenu() const
 {
     MutexGuard aGuard( GetOwnStaticMutex() );
     return m_pDataContainer->HasAddonsMenu();
@@ -1894,7 +1894,7 @@ const MergeStatusbarInstructionContainer& AddonsOptions::GetMergeStatusbarInstru
 
 //  public method
 
-Image AddonsOptions::GetImageFromURL( const OUString& aURL, sal_Bool bBig, sal_Bool bNoScale ) const
+Image AddonsOptions::GetImageFromURL( const OUString& aURL, bool bBig, bool bNoScale ) const
 {
     MutexGuard aGuard( GetOwnStaticMutex() );
     return m_pDataContainer->GetImageFromURL( aURL, bBig, bNoScale );
@@ -1903,9 +1903,9 @@ Image AddonsOptions::GetImageFromURL( const OUString& aURL, sal_Bool bBig, sal_B
 
 //  public method
 
-Image AddonsOptions::GetImageFromURL( const OUString& aURL, sal_Bool bBig ) const
+Image AddonsOptions::GetImageFromURL( const OUString& aURL, bool bBig ) const
 {
-    return GetImageFromURL( aURL, bBig, sal_False );
+    return GetImageFromURL( aURL, bBig, false );
 }
 
 

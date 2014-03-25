@@ -224,12 +224,12 @@ class FWE_DLLPUBLIC PreventDuplicateInteraction : private ThreadHelpBase2
                         - the interaction itself, so it can be analyzed further
 
             @return     [boolean]
-                        sal_True if the queried interaction could be found.
-                        sal_False otherwise.
+                        true if the queried interaction could be found.
+                        false otherwise.
 
             @threadsafe yes
         */
-        virtual sal_Bool getInteractionInfo(const css::uno::Type&                               aInteraction,
+        virtual bool getInteractionInfo(const css::uno::Type&                               aInteraction,
                                                   PreventDuplicateInteraction::InteractionInfo* pReturn     ) const;
 };
 

@@ -86,7 +86,7 @@ void SAL_CALL PreventDuplicateInteraction::handle(const css::uno::Reference< css
     throw(css::uno::RuntimeException, std::exception)
 {
     css::uno::Any aRequest  = xRequest->getRequest();
-    sal_Bool      bHandleIt = sal_True;
+    bool          bHandleIt = true;
 
     // SAFE ->
     ::osl::ResettableMutexGuard aLock(m_aLock);
@@ -224,8 +224,8 @@ void PreventDuplicateInteraction::addInteractionRule(const PreventDuplicateInter
 
 
 
-sal_Bool PreventDuplicateInteraction::getInteractionInfo(const css::uno::Type&                               aInteraction,
-                                                               PreventDuplicateInteraction::InteractionInfo* pReturn     ) const
+bool PreventDuplicateInteraction::getInteractionInfo(const css::uno::Type&                               aInteraction,
+                                                           PreventDuplicateInteraction::InteractionInfo* pReturn     ) const
 {
     // SAFE ->
     ::osl::ResettableMutexGuard aLock(m_aLock);
@@ -239,14 +239,14 @@ sal_Bool PreventDuplicateInteraction::getInteractionInfo(const css::uno::Type&  
         if (rInfo.m_aInteraction == aInteraction)
         {
             *pReturn = rInfo;
-            return sal_True;
+            return true;
         }
     }
 
     aLock.clear();
     // <- SAFE
 
-    return sal_False;
+    return false;
 }
 
 } // namespace framework
