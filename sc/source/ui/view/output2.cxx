@@ -3879,46 +3879,6 @@ void ScOutputData::DrawEditStacked(DrawEditParam& rParam)
             nEngineWidth, nEngineHeight, nNeededPixel,
             aAreaParam.mbLeftClip, aAreaParam.mbRightClip );
 
-        if ( bRepeat && !aAreaParam.mbLeftClip && !aAreaParam.mbRightClip && rParam.mpEngine->GetParagraphCount() == 1 )
-        {
-            // First check if twice the space for the formatted text is available
-            // (otherwise just keep it unchanged).
-
-            long nFormatted = nNeededPixel - nLeftM - nRightM;      // without margin
-            long nAvailable = aAreaParam.maAlignRect.GetWidth() - nLeftM - nRightM;
-            if ( nAvailable >= 2 * nFormatted )
-            {
-                // "repeat" is handled with unformatted text (for performance reasons)
-                OUString aCellStr = rParam.mpEngine->GetText();
-                rParam.mpEngine->SetText( aCellStr );
-
-                long nRepeatSize = (long) rParam.mpEngine->CalcTextWidth();
-                if (rParam.mbPixelToLogic)
-                    nRepeatSize = mpRefDevice->LogicToPixel(Size(nRepeatSize,0)).Width();
-                if ( pFmtDevice != mpRefDevice )
-                    ++nRepeatSize;
-                if ( nRepeatSize > 0 )
-                {
-                    long nRepeatCount = nAvailable / nRepeatSize;
-                    if ( nRepeatCount > 1 )
-                    {
-                        OUString aRepeated = aCellStr;
-                        for ( long nRepeat = 1; nRepeat < nRepeatCount; nRepeat++ )
-                            aRepeated += aCellStr;
-                        rParam.mpEngine->SetText( aRepeated );
-
-                        nEngineHeight = rParam.mpEngine->GetTextHeight();
-                        nEngineWidth = (long) rParam.mpEngine->CalcTextWidth();
-                        if (rParam.mbPixelToLogic)
-                            nNeededPixel = mpRefDevice->LogicToPixel(Size(nEngineWidth,0)).Width();
-                        else
-                            nNeededPixel = nEngineWidth;
-                        nNeededPixel += nLeftM + nRightM;
-                    }
-                }
-            }
-        }
-
         if ( rParam.mbCellIsValue && ( aAreaParam.mbLeftClip || aAreaParam.mbRightClip ) )
         {
             rParam.mpEngine->SetText(OUString("###"));
