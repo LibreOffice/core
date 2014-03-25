@@ -197,8 +197,7 @@ void SerfLockStore::refreshLocks()
                 // refresh the lock.
                 sal_Int32 nlastChanceToSendRefreshRequest = -1;
                 if ( rInfo.m_xSession->LOCK(
-                         (*it).first,
-                         /* out param */ nlastChanceToSendRefreshRequest ) )
+                         (*it).first, &nlastChanceToSendRefreshRequest ) )
                 {
                     rInfo.m_nLastChanceToSendRefreshRequest
                         = nlastChanceToSendRefreshRequest;

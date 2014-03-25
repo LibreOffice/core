@@ -32,10 +32,12 @@ namespace http_dav_ucp
 SerfLockReqProcImpl::SerfLockReqProcImpl( const char* inPath,
                                           const DAVRequestHeaders& inRequestHeaders,
                                           SerfSession& rSession,
-                                          const css::ucb::Lock & rLock )
+                                          const css::ucb::Lock& rLock,
+                                          sal_Int32* plastChanceToSendRefreshRequest )
     : SerfRequestProcessorImpl( inPath, inRequestHeaders )
     , m_rSession( rSession )
     , m_aLock( rLock )
+    , m_plastChanceToSendRefreshRequest( plastChanceToSendRefreshRequest )
     , m_xInputStream( new SerfInputStream() )
 {
 }
@@ -76,9 +78,12 @@ serf_bucket_t * SerfLockReqProcImpl::createSerfRequestBucket( serf_request_t * i
     aBody.append("</lockinfo>\n");
 
     const OString aBodyText(aBody.makeStringAndClear());
-    serf_bucket_t* body_bkt = serf_bucket_simple_copy_create( aBodyText.getStr(),
-                                                              aBodyText.getLength(),
-                                                              pSerfBucketAlloc );
+    serf_bucket_t* body_bkt = 0;
+
+    if (!m_plastChanceToSendRefreshRequest)
+        body_bkt = serf_bucket_simple_copy_create( aBodyText.getStr(),
+                                                   aBodyText.getLength(),
+                                                   pSerfBucketAlloc );
 
     // create serf request
     serf_bucket_t *req_bkt = serf_request_bucket_request_create( inSerfRequest,
@@ -86,7 +91,8 @@ serf_bucket_t * SerfLockReqProcImpl::createSerfRequestBucket( serf_request_t * i
                                                                  getPathStr(),
                                                                  body_bkt,
                                                                  pSerfBucketAlloc );
-    handleChunkedEncoding(req_bkt, aBodyText.getLength());
+    if (!m_plastChanceToSendRefreshRequest)
+        handleChunkedEncoding(req_bkt, aBodyText.getLength());
 
     // set request header fields
     serf_bucket_t* hdrs_bkt = serf_bucket_request_get_headers( req_bkt );
@@ -110,8 +116,18 @@ serf_bucket_t * SerfLockReqProcImpl::createSerfRequestBucket( serf_request_t * i
         default:
             throw DAVException( DAVException::DAV_INVALID_ARG );
     }
-    serf_bucket_headers_set( hdrs_bkt, "Depth", depth );
-    serf_bucket_headers_set( hdrs_bkt, "Content-Type", "application/xml" );
+    if (!m_plastChanceToSendRefreshRequest)
+    {
+        serf_bucket_headers_set( hdrs_bkt, "Depth", depth );
+        serf_bucket_headers_set( hdrs_bkt, "Content-Type", "application/xml" );
+    }
+    else
+    {
+        const OString sToken( "(<" + OUStringToOString( apr_environment::AprEnv::getAprEnv()->
+                    getSerfLockStore()->getLockToken( OUString::createFromAscii(getPathStr())),
+                    RTL_TEXTENCODING_UTF8 ) + ">)" );
+        serf_bucket_headers_set( hdrs_bkt, "If", sToken.getStr() );
+    }
 
     // Set the lock timeout
     if (m_aLock.Timeout == -1)
@@ -121,6 +137,8 @@ serf_bucket_t * SerfLockReqProcImpl::createSerfRequestBucket( serf_request_t * i
         const OString aTimeValue("Second-" + OString::number(m_aLock.Timeout));
         serf_bucket_headers_set( hdrs_bkt, "Timeout", aTimeValue.getStr() );
     }
+    else
+        serf_bucket_headers_set( hdrs_bkt, "Timeout", "Second-180" );
 
     osl_getSystemTime( &m_aStartCall );
 
@@ -157,6 +175,13 @@ void SerfLockReqProcImpl::handleEndOfResponseData( serf_bucket_t * )
                     lastChanceToSendRefreshRequest = aEnd.Seconds + timeout - calltime;
                 else
                     SAL_WARN("ucb.ucp.webdav", "No chance to refresh lock before timeout!" );
+            }
+            if (m_plastChanceToSendRefreshRequest)
+            {
+                *m_plastChanceToSendRefreshRequest = lastChanceToSendRefreshRequest;
+                assert(aLocks.size() == 1);
+                // We are just refreshing lock, do not add it into SerfLockStore
+                break;
             }
             apr_environment::AprEnv::getAprEnv()->getSerfLockStore()->addLock(
                     OUString::createFromAscii(getPathStr()),
