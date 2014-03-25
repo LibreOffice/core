@@ -313,12 +313,13 @@ bool SerfRequestProcessor::processMove( const OUString & inDestinationPath,
 }
 
 
-bool SerfRequestProcessor::processLock( const css::ucb::Lock & rLock )
+bool SerfRequestProcessor::processLock( const css::ucb::Lock & rLock, sal_Int32 *plastChanceToSendRefreshRequest )
 {
     mpProcImpl = new SerfLockReqProcImpl( mPathStr,
                                           mrSerfSession.getRequestEnvironment().m_aRequestHeaders,
                                           mrSerfSession,
-                                          rLock );
+                                          rLock,
+                                          plastChanceToSendRefreshRequest );
 
     return runProcessor() == APR_SUCCESS;
 }

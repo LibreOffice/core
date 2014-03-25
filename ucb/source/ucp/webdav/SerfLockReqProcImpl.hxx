@@ -37,7 +37,8 @@ public:
     SerfLockReqProcImpl( const char* inPath,
                          const DAVRequestHeaders& inRequestHeaders,
                          SerfSession& rSession,
-                         const css::ucb::Lock & rLock );
+                         const css::ucb::Lock& rLock,
+                         sal_Int32* plastChanceToSendRefreshRequest = 0 );
 
     virtual ~SerfLockReqProcImpl() SAL_OVERRIDE;
 
@@ -53,6 +54,8 @@ private:
 
     SerfSession& m_rSession;
     css::ucb::Lock m_aLock;
+    // if m_plastChanceToSendRefreshRequest is not 0 we are sending just refresh request
+    sal_Int32* m_plastChanceToSendRefreshRequest;
     TimeValue m_aStartCall;
     css::uno::Reference< SerfInputStream > m_xInputStream;
 };
