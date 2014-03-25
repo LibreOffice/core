@@ -36,6 +36,8 @@ AVAILABLE TARGETS
        clean            remove all generated files
        debugrun         starts the INSTDIR instance and allows tests to be run
                         against it
+       dump-deps-png    creates dependency diagrams in PNG format
+                        NOTE: needs graphviz to work
        <module>         build the named module
        <module>.check   run unittests of the named module
        <module>.clean   clean the named module
@@ -44,43 +46,43 @@ AVAILABLE TARGETS
                         source
        cmd              execute the command contained in the variable cmd=""
                         in a shell with config_host.mk or config_build.mk
-                        environement set. (see gb_SIDE)
+                        environment set. (see gb_SIDE)
        <target>         build gbuild target (such as Library_vbaswobj or
                         CppunitTest_sw_macros_test)
        <target>.clean   clean gbuild target
        <class>_<target> for all targets and for the following classes:
-       o AllLangResTarget
-       o AllLangZip
-       o CliLibrary
-       o CliNativeLibrary
-       o CliUnoApi
-       o Configuration
-       o CppunitTest
-       o CustomTarget
-       o Dictionary
-       o Executable
-       o Extension
-       o ExternalPackage
-       o ExternalProject
-       o Gallery
-       o Helper
-       o InstallModule
-       o InstallScript
-       o InternalUnoApi
-       o Jar
-       o JunitTest
-       o Library
-       o Package
-       o Pagein
-       o PythonTest_pytests
-       o Pyuno
-       o Rdb
-       o StaticLibrary
-       o UI
-       o UnoApi
-       o UnpackedTarball
-       o WinResTarget
-       o Zip
+           o AllLangResTarget
+           o AllLangZip
+           o CliLibrary
+           o CliNativeLibrary
+           o CliUnoApi
+           o Configuration
+           o CppunitTest
+           o CustomTarget
+           o Dictionary
+           o Executable
+           o Extension
+           o ExternalPackage
+           o ExternalProject
+           o Gallery
+           o Helper
+           o InstallModule
+           o InstallScript
+           o InternalUnoApi
+           o Jar
+           o JunitTest
+           o Library
+           o Package
+           o Pagein
+           o PythonTest_pytests
+           o Pyuno
+           o Rdb
+           o StaticLibrary
+           o UI
+           o UnoApi
+           o UnpackedTarball
+           o WinResTarget
+           o Zip
 
 INTERACTIVE VARIABLES:
        DEBUG / debug   If not empty, build as with --enable-debug.
