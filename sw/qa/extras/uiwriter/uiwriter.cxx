@@ -11,6 +11,7 @@
 #include <wrtsh.hxx>
 #include <crsskip.hxx>
 #include <shellio.hxx>
+#include <expfld.hxx>
 
 #include "UndoManager.hxx"
 
@@ -30,6 +31,7 @@ public:
     void testExportRTF();
     void testFdo75110();
     void testFdo75898();
+    void testFdo74981();
 
     CPPUNIT_TEST_SUITE(SwUiWriterTest);
     CPPUNIT_TEST(testReplaceForward);
@@ -40,6 +42,7 @@ public:
     CPPUNIT_TEST(testExportRTF);
     CPPUNIT_TEST(testFdo75110);
     CPPUNIT_TEST(testFdo75898);
+    CPPUNIT_TEST(testFdo74981);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -230,6 +233,32 @@ void SwUiWriterTest::testExportRTF()
     CPPUNIT_ASSERT_EQUAL(sal_Int32(-1), aData.indexOf("aaa"));
     CPPUNIT_ASSERT(aData.indexOf("bbb") != -1);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(-1), aData.indexOf("ccc"));
+}
+
+void SwUiWriterTest::testFdo74981()
+{
+    // create a document with an input field
+    SwDoc* pDoc = createDoc();
+    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    SwInputField aField((SwInputFieldType*)pWrtShell->GetFldType(0, RES_INPUTFLD), OUString("foo"), OUString("bar"), 0, 0);
+    pWrtShell->Insert(aField);
+
+    // expect hints
+    SwNodeIndex aIdx(pDoc->GetNodes().GetEndOfContent(), -1);
+    SwTxtNode* pTxtNode = aIdx.GetNode().GetTxtNode();
+    CPPUNIT_ASSERT(pTxtNode->HasHints());
+
+    // go to the begin of the paragraph and split this node
+    pWrtShell->Left(CRSR_SKIP_CHARS, false, 100, false);
+    pWrtShell->SplitNode();
+
+    // expect only the second paragraph to have hints
+    aIdx = SwNodeIndex(pDoc->GetNodes().GetEndOfContent(), -1);
+    pTxtNode = aIdx.GetNode().GetTxtNode();
+    CPPUNIT_ASSERT(pTxtNode->HasHints());
+    aIdx--;
+    pTxtNode = aIdx.GetNode().GetTxtNode();
+    CPPUNIT_ASSERT(!pTxtNode->HasHints());
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SwUiWriterTest);
