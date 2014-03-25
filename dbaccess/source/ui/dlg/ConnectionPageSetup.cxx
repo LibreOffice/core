@@ -174,7 +174,8 @@ namespace dbaui
 
         callModifiedHdl();
     }
-       sal_Bool OConnectionTabPageSetup::commitPage( ::svt::WizardTypes::CommitPageReason /*_eReason*/ )
+
+    bool OConnectionTabPageSetup::commitPage( ::svt::WizardTypes::CommitPageReason /*_eReason*/ )
     {
         return commitURL();
     }

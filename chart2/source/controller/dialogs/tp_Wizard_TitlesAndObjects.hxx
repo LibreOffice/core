@@ -46,7 +46,7 @@ public:
                 ::com::sun::star::uno::XComponentContext >& xContext );
 
     virtual void        initializePage();
-    virtual sal_Bool    commitPage( ::svt::WizardTypes::CommitPageReason eReason );
+    virtual bool        commitPage( ::svt::WizardTypes::CommitPageReason eReason );
     virtual bool        canAdvance() const;
 
 protected:

@@ -127,11 +127,11 @@ void SwMailMergeAddressBlockPage::ActivatePage()
     }
 }
 
-sal_Bool    SwMailMergeAddressBlockPage::commitPage( ::svt::WizardTypes::CommitPageReason _eReason )
+bool SwMailMergeAddressBlockPage::commitPage( ::svt::WizardTypes::CommitPageReason _eReason )
 {
     if ( ::svt::WizardTypes::eTravelForward == _eReason && !m_pWizard->GetConfigItem().GetResultSet().is() )
-        return sal_False;
-    return sal_True;
+        return false;
+    return true;
 }
 
 IMPL_LINK_NOARG(SwMailMergeAddressBlockPage, AddressListHdl_Impl)

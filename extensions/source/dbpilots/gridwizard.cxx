@@ -261,33 +261,33 @@ namespace dbp
         enableButtons(WZB_PREVIOUS, m_bHadDataSelection ? (GW_STATE_DATASOURCE_SELECTION < _nState) : GW_STATE_FIELDSELECTION < _nState);
         enableButtons(WZB_NEXT, GW_STATE_FIELDSELECTION != _nState);
         if (_nState < GW_STATE_FIELDSELECTION)
-            enableButtons(WZB_FINISH, sal_False);
+            enableButtons(WZB_FINISH, false);
 
         if (GW_STATE_FIELDSELECTION == _nState)
             defaultButton(WZB_FINISH);
     }
 
 
-    sal_Bool OGridWizard::leaveState(WizardState _nState)
+    bool OGridWizard::leaveState(WizardState _nState)
     {
         if (!OControlWizard::leaveState(_nState))
-            return sal_False;
+            return false;
 
         if (GW_STATE_FIELDSELECTION == _nState)
             defaultButton(WZB_NEXT);
 
-        return sal_True;
+        return true;
     }
 
 
-    sal_Bool OGridWizard::onFinish()
+    bool OGridWizard::onFinish()
     {
         if ( !OControlWizard::onFinish() )
-            return sal_False;
+            return false;
 
         implApplySettings();
 
-        return sal_True;
+        return true;
     }
 
 
@@ -357,10 +357,10 @@ namespace dbp
     }
 
 
-    sal_Bool OGridFieldsSelection::commitPage( ::svt::WizardTypes::CommitPageReason _eReason )
+    bool OGridFieldsSelection::commitPage( ::svt::WizardTypes::CommitPageReason _eReason )
     {
         if (!OGridPage::commitPage(_eReason))
-            return sal_False;
+            return false;
 
         OGridSettings& rSettings = getSettings();
         sal_uInt16 nSelected = m_aSelFields.GetEntryCount();
@@ -371,7 +371,7 @@ namespace dbp
         for (sal_uInt16 i=0; i<nSelected; ++i, ++pSelected)
             *pSelected = m_aSelFields.GetEntry(i);
 
-        return sal_True;
+        return true;
     }
 
 

@@ -71,8 +71,8 @@ namespace abp
         // OWizardMachine overridables
         virtual ::svt::OWizardPage* createPage( WizardState _nState );
         virtual void                enterState( WizardState _nState );
-        virtual sal_Bool            prepareLeaveCurrentState( CommitPageReason _eReason );
-        virtual sal_Bool            onFinish();
+        virtual bool                prepareLeaveCurrentState( CommitPageReason _eReason );
+        virtual bool                onFinish();
 
         // RoadmapWizard
         virtual OUString            getStateDisplayName( WizardState _nState ) const;

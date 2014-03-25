@@ -508,38 +508,38 @@ long WizardDialog::DeactivatePage()
 
 
 
-sal_Bool WizardDialog::ShowNextPage()
+bool WizardDialog::ShowNextPage()
 {
     return ShowPage( mnCurLevel+1 );
 }
 
 
 
-sal_Bool WizardDialog::ShowPrevPage()
+bool WizardDialog::ShowPrevPage()
 {
     if ( !mnCurLevel )
-        return sal_False;
+        return false;
     return ShowPage( mnCurLevel-1 );
 }
 
 
 
-sal_Bool WizardDialog::ShowPage( sal_uInt16 nLevel )
+bool WizardDialog::ShowPage( sal_uInt16 nLevel )
 {
     if ( DeactivatePage() )
     {
         mnCurLevel = nLevel;
         ActivatePage();
         ImplShowTabPage( ImplGetPage( mnCurLevel ) );
-        return sal_True;
+        return true;
     }
     else
-        return sal_False;
+        return false;
 }
 
 
 
-sal_Bool WizardDialog::Finnish( long nResult )
+bool WizardDialog::Finish( long nResult )
 {
     if ( DeactivatePage() )
     {
@@ -550,10 +550,10 @@ sal_Bool WizardDialog::Finnish( long nResult )
             EndDialog( nResult );
         else if ( GetStyle() & WB_CLOSEABLE )
             Close();
-        return sal_True;
+        return true;
     }
     else
-        return sal_False;
+        return false;
 }
 
 
@@ -690,7 +690,7 @@ void WizardDialog::RemoveButton( Button* pButton )
 
 
 
-void WizardDialog::ShowButtonFixedLine( sal_Bool bVisible )
+void WizardDialog::ShowButtonFixedLine( bool bVisible )
 {
     if ( !mpFixedLine )
     {

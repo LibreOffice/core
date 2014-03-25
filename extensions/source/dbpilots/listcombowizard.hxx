@@ -71,8 +71,8 @@ namespace dbp
         virtual ::svt::OWizardPage* createPage( WizardState _nState );
         virtual WizardState         determineNextState( WizardState _nCurrentState ) const;
         virtual void                enterState( WizardState _nState );
-        virtual sal_Bool            leaveState( WizardState _nState );
-        virtual sal_Bool            onFinish();
+        virtual bool                leaveState( WizardState _nState );
+        virtual bool                onFinish();
 
         virtual sal_Bool approveControl(sal_Int16 _nClassId);
 
@@ -120,7 +120,7 @@ namespace dbp
 
         // OWizardPage overridables
         virtual void        initializePage();
-        virtual sal_Bool    commitPage( ::svt::WizardTypes::CommitPageReason _eReason );
+        virtual bool        commitPage( ::svt::WizardTypes::CommitPageReason _eReason );
         virtual bool        canAdvance() const;
 
     protected:
@@ -154,7 +154,7 @@ namespace dbp
 
         // OWizardPage overridables
         virtual void        initializePage();
-        virtual sal_Bool    commitPage( ::svt::WizardTypes::CommitPageReason _eReason );
+        virtual bool        commitPage( ::svt::WizardTypes::CommitPageReason _eReason );
         virtual bool        canAdvance() const;
     };
 
@@ -181,7 +181,7 @@ namespace dbp
 
         // OWizardPage overridables
         virtual void        initializePage();
-        virtual sal_Bool    commitPage( ::svt::WizardTypes::CommitPageReason _eReason );
+        virtual bool        commitPage( ::svt::WizardTypes::CommitPageReason _eReason );
         virtual bool        canAdvance() const;
 
     private:

@@ -139,10 +139,10 @@ namespace svt { namespace uno
     }
 
 
-    sal_Bool WizardPageController::commitPage( WizardTypes::CommitPageReason i_eReason )
+    bool WizardPageController::commitPage( WizardTypes::CommitPageReason i_eReason )
     {
         if ( !m_xWizardPage.is() )
-            return sal_True;
+            return true;
 
         try
         {
@@ -153,7 +153,7 @@ namespace svt { namespace uno
             DBG_UNHANDLED_EXCEPTION();
         }
 
-        return sal_True;
+        return true;
     }
 
 

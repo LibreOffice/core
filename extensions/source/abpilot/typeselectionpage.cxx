@@ -188,14 +188,14 @@ namespace abp
             }
         }
 
-        getDialog()->enableButtons(WZB_PREVIOUS, sal_False);
+        getDialog()->enableButtons(WZB_PREVIOUS, false);
     }
 
 
     void TypeSelectionPage::DeactivatePage()
     {
         AddressBookSourcePage::DeactivatePage();
-        getDialog()->enableButtons(WZB_PREVIOUS, sal_True);
+        getDialog()->enableButtons(WZB_PREVIOUS, true);
     }
 
 
@@ -233,22 +233,22 @@ namespace abp
     }
 
 
-    sal_Bool TypeSelectionPage::commitPage( ::svt::WizardTypes::CommitPageReason _eReason )
+    bool TypeSelectionPage::commitPage( ::svt::WizardTypes::CommitPageReason _eReason )
     {
         if (!AddressBookSourcePage::commitPage(_eReason))
-            return sal_False;
+            return false;
 
         if (AST_INVALID == getSelectedType( ))
         {
             ErrorBox aError(this, ModuleRes(RID_ERR_NEEDTYPESELECTION));
             aError.Execute();
-            return sal_False;
+            return false;
         }
 
         AddressSettings& rSettings = getSettings();
         rSettings.eType = getSelectedType();
 
-        return sal_True;
+        return true;
     }
 
 

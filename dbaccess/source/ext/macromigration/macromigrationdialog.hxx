@@ -50,10 +50,10 @@ namespace dbmm
     protected:
         // OWizardMachine overridables
         virtual void            enterState( WizardState _nState );
-        virtual sal_Bool        prepareLeaveCurrentState( CommitPageReason _eReason );
-        virtual sal_Bool        leaveState( WizardState _nState );
+        virtual bool            prepareLeaveCurrentState( CommitPageReason _eReason );
+        virtual bool            leaveState( WizardState _nState );
         virtual WizardState     determineNextState( WizardState _nCurrentState ) const;
-        virtual sal_Bool        onFinish();
+        virtual bool            onFinish();
 
         // Dialog overridables
         virtual bool    Close();

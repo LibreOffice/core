@@ -159,9 +159,9 @@ IMPL_LINK(SwMailMergeDocSelectPage, FileSelectHdl, PushButton*, pButton)
     return 0;
 }
 
-sal_Bool SwMailMergeDocSelectPage::commitPage( ::svt::WizardTypes::CommitPageReason _eReason )
+bool SwMailMergeDocSelectPage::commitPage( ::svt::WizardTypes::CommitPageReason _eReason )
 {
-    sal_Bool bReturn = sal_False;
+    bool bReturn = false;
     bool bNext = _eReason == ::svt::WizardTypes::eTravelForward;
     if(bNext || _eReason == ::svt::WizardTypes::eValidate )
     {

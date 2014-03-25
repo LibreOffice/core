@@ -56,7 +56,7 @@ namespace dbp
 
         // OWizardPage overridables
         virtual void        initializePage();
-        virtual sal_Bool    commitPage( ::svt::WizardTypes::CommitPageReason _eReason );
+        virtual bool        commitPage( ::svt::WizardTypes::CommitPageReason _eReason );
 
     protected:
         DECL_LINK( OnListboxSelection, ListBox* );
@@ -123,7 +123,7 @@ namespace dbp
 
         // OWizardPage overridables
         virtual void initializePage();
-        virtual sal_Bool commitPage( ::svt::WizardTypes::CommitPageReason _eReason );
+        virtual bool commitPage( ::svt::WizardTypes::CommitPageReason _eReason );
 
         // own overridables
         virtual OUString& getDBFieldSetting() = 0;

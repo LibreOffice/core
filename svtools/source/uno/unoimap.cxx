@@ -761,11 +761,11 @@ Reference< XInterface > SvUnoImageMap_createInstance( const ImageMap& rMap, cons
     return (XWeak*)new SvUnoImageMap( rMap, pSupportedMacroItems );
 }
 
-sal_Bool SvUnoImageMap_fillImageMap( Reference< XInterface > xImageMap, ImageMap& rMap )
+bool SvUnoImageMap_fillImageMap( Reference< XInterface > xImageMap, ImageMap& rMap )
 {
     SvUnoImageMap* pUnoImageMap = SvUnoImageMap::getImplementation( xImageMap );
     if( NULL == pUnoImageMap )
-        return sal_False;
+        return false;
 
     return pUnoImageMap->fillImageMap( rMap );
 }

@@ -95,7 +95,7 @@ namespace dbmm
     protected:
         // IWizardPageController overridables
         virtual void        initializePage();
-        virtual sal_Bool    commitPage( ::svt::WizardTypes::CommitPageReason _eReason );
+        virtual bool        commitPage( ::svt::WizardTypes::CommitPageReason _eReason );
         virtual bool        canAdvance() const;
 
     private:

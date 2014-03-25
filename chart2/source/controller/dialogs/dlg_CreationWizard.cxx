@@ -69,7 +69,7 @@ CreationWizard::CreationWizard( Window* pParent, const uno::Reference< frame::XM
     m_apDialogModel.reset( new DialogModel( m_xChartModel, m_xCC ));
     // Do not call FreeResource(), because there are no sub-elements defined in
     // the dialog resource
-    ShowButtonFixedLine( sal_True );
+    ShowButtonFixedLine( true );
     defaultButton( WZB_FINISH );
 
     if( m_nOnePageOnlyIndex < 0 || m_nOnePageOnlyIndex >= nPageCount )
@@ -155,7 +155,7 @@ svt::OWizardPage* CreationWizard::createPage(WizardState nState)
     return pRet;
 }
 
-sal_Bool CreationWizard::leaveState( WizardState /*_nState*/ )
+bool CreationWizard::leaveState( WizardState /*_nState*/ )
 {
     return m_bCanTravel;
 }

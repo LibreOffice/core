@@ -667,7 +667,7 @@ void OCopyTableWizard::construct()
     SetPrevButton( &m_pbPrev );
     SetNextButton( &m_pbNext );
 
-    ShowButtonFixedLine( sal_True );
+    ShowButtonFixedLine( true );
 
     m_pbNext.GrabFocus();
 

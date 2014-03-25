@@ -83,9 +83,9 @@ ODbTypeWizDialog::ODbTypeWizDialog(Window* _pParent
     m_eType = m_pImpl->getDatasourceType(*m_pOutSet);
 
     SetPageSizePixel(LogicToPixel(::Size(PAGE_X, PAGE_Y), MAP_APPFONT));
-    ShowButtonFixedLine(sal_True);
+    ShowButtonFixedLine(true);
     defaultButton(WZB_NEXT);
-    enableButtons(WZB_FINISH, sal_False);
+    enableButtons(WZB_FINISH, false);
     enableAutomaticNextButtonState( true );
 
     m_pPrevPage->SetHelpId(HID_DBWIZ_PREVIOUS);
@@ -296,12 +296,12 @@ TabPage* ODbTypeWizDialog::createPage(WizardState _nState)
     return pPage;
 }
 
-sal_Bool ODbTypeWizDialog::leaveState(WizardState _nState)
+bool ODbTypeWizDialog::leaveState(WizardState _nState)
 {
     SfxTabPage* pPage = static_cast<SfxTabPage*>(WizardDialog::GetPage(_nState));
     if ( pPage )
         pPage->FillItemSet(*m_pOutSet);
-    return sal_True;
+    return true;
 }
 
 void ODbTypeWizDialog::setTitle(const OUString& _sTitle)
@@ -339,10 +339,10 @@ IWizardPageController* ODbTypeWizDialog::getPageController( TabPage* _pCurrentPa
     return pPage;
 }
 
-sal_Bool ODbTypeWizDialog::onFinish()
+bool ODbTypeWizDialog::onFinish()
 {
     saveDatasource();
-    return m_pImpl->saveChanges(*m_pOutSet) ? OWizardMachine::onFinish() : sal_False;
+    return m_pImpl->saveChanges(*m_pOutSet) && OWizardMachine::onFinish();
 }
 
 }   // namespace dbaui

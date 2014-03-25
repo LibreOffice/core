@@ -58,7 +58,7 @@ public:
     virtual ~ChartTypeTabPage();
 
     virtual void        initializePage();
-    virtual sal_Bool    commitPage( ::svt::WizardTypes::CommitPageReason eReason );
+    virtual bool        commitPage( ::svt::WizardTypes::CommitPageReason eReason );
 
     virtual ::com::sun::star::uno::Reference<
                 ::com::sun::star::chart2::XChartTypeTemplate > getCurrentTemplate() const;

@@ -60,7 +60,7 @@ protected: //methods
 
     //OWizardPage
     virtual void ActivatePage();
-    virtual sal_Bool commitPage( ::svt::WizardTypes::CommitPageReason eReason );
+    virtual bool commitPage( ::svt::WizardTypes::CommitPageReason eReason );
 
     //TabPage
     virtual void DeactivatePage();

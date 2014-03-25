@@ -125,15 +125,15 @@ namespace abp
     }
 
 
-    sal_Bool FinalPage::commitPage( ::svt::WizardTypes::CommitPageReason _eReason )
+    bool FinalPage::commitPage( ::svt::WizardTypes::CommitPageReason _eReason )
     {
         if (!AddressBookSourcePage::commitPage(_eReason))
-            return sal_False;
+            return false;
 
         if  (   ( ::svt::WizardTypes::eTravelBackward != _eReason )
             &&  ( !m_aLocationController.prepareCommit() )
             )
-            return sal_False;
+            return false;
 
         AddressSettings& rSettings = getSettings();
         rSettings.sDataSourceName = m_aLocationController.getURL();
@@ -141,7 +141,7 @@ namespace abp
         if ( rSettings.bRegisterDataSource )
             rSettings.sRegisteredDataSourceName = m_aName.GetText();
 
-        return sal_True;
+        return true;
     }
 
 
@@ -168,7 +168,7 @@ namespace abp
         // default the "next" button, again
         getDialog()->defaultButton( WZB_NEXT );
         // disable the finish button
-        getDialog()->enableButtons( WZB_FINISH, sal_False );
+        getDialog()->enableButtons( WZB_FINISH, false );
     }
 
 

@@ -56,8 +56,8 @@ SdSnapLineDlg::SdSnapLineDlg(
 
     m_pBtnDelete->SetClickHdl(LINK(this, SdSnapLineDlg, ClickHdl));
 
-    SetFieldUnit( *m_pMtrFldX, eUIUnit, sal_True );
-    SetFieldUnit( *m_pMtrFldY, eUIUnit, sal_True );
+    SetFieldUnit( *m_pMtrFldX, eUIUnit, true );
+    SetFieldUnit( *m_pMtrFldY, eUIUnit, true );
 
     // get WorkArea
     Rectangle aWorkArea = pView->GetWorkArea();

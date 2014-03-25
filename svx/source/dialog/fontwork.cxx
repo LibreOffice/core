@@ -245,10 +245,10 @@ SvxFontWorkDialog::SvxFontWorkDialog( SfxBindings *pBindinx,
 
     // Set System metric
     const FieldUnit eDlgUnit = rBindings.GetDispatcher()->GetModule()->GetFieldUnit();
-    SetFieldUnit( aMtrFldDistance, eDlgUnit, sal_True );
-    SetFieldUnit( aMtrFldTextStart, eDlgUnit, sal_True );
-    SetFieldUnit( aMtrFldShadowX, eDlgUnit, sal_True );
-    SetFieldUnit( aMtrFldShadowY, eDlgUnit, sal_True );
+    SetFieldUnit( aMtrFldDistance, eDlgUnit, true );
+    SetFieldUnit( aMtrFldTextStart, eDlgUnit, true );
+    SetFieldUnit( aMtrFldShadowX, eDlgUnit, true );
+    SetFieldUnit( aMtrFldShadowY, eDlgUnit, true );
     if( eDlgUnit == FUNIT_MM )
     {
         aMtrFldDistance.SetSpinSize( 50 );
@@ -723,16 +723,16 @@ IMPL_LINK_NOARG(SvxFontWorkDialog, InputTimoutHdl_Impl)
     const FieldUnit eDlgUnit = rBindings.GetDispatcher()->GetModule()->GetFieldUnit();
     if( eDlgUnit != aMtrFldDistance.GetUnit() )
     {
-        SetFieldUnit( aMtrFldDistance, eDlgUnit, sal_True );
-        SetFieldUnit( aMtrFldTextStart, eDlgUnit, sal_True );
+        SetFieldUnit( aMtrFldDistance, eDlgUnit, true );
+        SetFieldUnit( aMtrFldTextStart, eDlgUnit, true );
         aMtrFldDistance.SetSpinSize( eDlgUnit == FUNIT_MM ? 50 : 10 );
         aMtrFldTextStart.SetSpinSize( eDlgUnit == FUNIT_MM ? 50 : 10 );
     }
     if( eDlgUnit != aMtrFldShadowX.GetUnit() &&
         aTbxShadow.IsItemChecked( TBI_SHADOW_NORMAL ) )
     {
-        SetFieldUnit( aMtrFldShadowX, eDlgUnit, sal_True );
-        SetFieldUnit( aMtrFldShadowY, eDlgUnit, sal_True );
+        SetFieldUnit( aMtrFldShadowX, eDlgUnit, true );
+        SetFieldUnit( aMtrFldShadowY, eDlgUnit, true );
         aMtrFldShadowX.SetSpinSize( eDlgUnit == FUNIT_MM ? 50 : 10 );
         aMtrFldShadowY.SetSpinSize( eDlgUnit == FUNIT_MM ? 50 : 10 );
     }

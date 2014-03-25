@@ -229,8 +229,8 @@ void SvxAngleTabPage::Construct()
 {
     DBG_ASSERT(pView, "No valid view (!)");
     eDlgUnit = GetModuleFieldUnit(GetItemSet());
-    SetFieldUnit(*m_pMtrPosX, eDlgUnit, sal_True);
-    SetFieldUnit(*m_pMtrPosY, eDlgUnit, sal_True);
+    SetFieldUnit(*m_pMtrPosX, eDlgUnit, true);
+    SetFieldUnit(*m_pMtrPosY, eDlgUnit, true);
 
     if(FUNIT_MILE == eDlgUnit || FUNIT_KM == eDlgUnit)
     {
@@ -465,7 +465,7 @@ void SvxSlantTabPage::Construct()
     // get the range
     DBG_ASSERT(pView, "no valid view (!)");
     eDlgUnit = GetModuleFieldUnit(GetItemSet());
-    SetFieldUnit(*m_pMtrRadius, eDlgUnit, sal_True);
+    SetFieldUnit(*m_pMtrRadius, eDlgUnit, true);
 
     { // #i75273#
         Rectangle aTempRect(pView->GetAllMarkedRect());
@@ -689,10 +689,10 @@ void SvxPositionSizeTabPage::Construct()
     // get range and work area
     DBG_ASSERT( mpView, "no valid view (!)" );
     meDlgUnit = GetModuleFieldUnit( GetItemSet() );
-    SetFieldUnit( *m_pMtrPosX, meDlgUnit, sal_True );
-    SetFieldUnit( *m_pMtrPosY, meDlgUnit, sal_True );
-    SetFieldUnit( *m_pMtrWidth, meDlgUnit, sal_True );
-    SetFieldUnit( *m_pMtrHeight, meDlgUnit, sal_True );
+    SetFieldUnit( *m_pMtrPosX, meDlgUnit, true );
+    SetFieldUnit( *m_pMtrPosY, meDlgUnit, true );
+    SetFieldUnit( *m_pMtrWidth, meDlgUnit, true );
+    SetFieldUnit( *m_pMtrHeight, meDlgUnit, true );
 
     if(FUNIT_MILE == meDlgUnit || FUNIT_KM == meDlgUnit)
     {

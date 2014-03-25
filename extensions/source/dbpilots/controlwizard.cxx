@@ -281,9 +281,9 @@ namespace dbp
         initContext();
 
         SetPageSizePixel(LogicToPixel(::Size(WINDOW_SIZE_X, WINDOW_SIZE_Y), MAP_APPFONT));
-        ShowButtonFixedLine(sal_True);
+        ShowButtonFixedLine(true);
         defaultButton(WZB_NEXT);
-        enableButtons(WZB_FINISH, sal_False);
+        enableButtons(WZB_FINISH, false);
     }
 
 

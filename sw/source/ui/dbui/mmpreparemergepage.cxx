@@ -139,7 +139,7 @@ void  SwMailMergePrepareMergePage::ActivatePage()
 /*-------------------------------------------------------------------------
     merge the data into a new file
   -----------------------------------------------------------------------*/
-sal_Bool  SwMailMergePrepareMergePage::commitPage( ::svt::WizardTypes::CommitPageReason _eReason )
+bool SwMailMergePrepareMergePage::commitPage( ::svt::WizardTypes::CommitPageReason _eReason )
 {
     SwMailMergeConfigItem& rConfigItem = m_pWizard->GetConfigItem();
     if(::svt::WizardTypes::eTravelForward == _eReason && !rConfigItem.IsMergeDone())
@@ -148,7 +148,7 @@ sal_Bool  SwMailMergePrepareMergePage::commitPage( ::svt::WizardTypes::CommitPag
         m_pWizard->SetRestartPage(MM_MERGEPAGE);
         m_pWizard->EndDialog(RET_TARGET_CREATED);
     }
-    return sal_True;
+    return true;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

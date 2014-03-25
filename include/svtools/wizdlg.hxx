@@ -265,10 +265,10 @@ public:
 
     virtual void        queue_resize();
 
-    sal_Bool            ShowPrevPage();
-    sal_Bool            ShowNextPage();
-    sal_Bool            ShowPage( sal_uInt16 nLevel );
-    sal_Bool            Finnish( long nResult = 0 );
+    bool                ShowPrevPage();
+    bool                ShowNextPage();
+    bool                ShowPage( sal_uInt16 nLevel );
+    bool                Finish( long nResult = 0 );
     sal_uInt16          GetCurLevel() const { return mnCurLevel; }
 
     void                AddPage( TabPage* pPage );
@@ -284,7 +284,7 @@ public:
     void                SetNextButton( PushButton* pButton ) { mpNextBtn = pButton; }
     PushButton*         GetNextButton() const { return mpNextBtn; }
 
-    void                ShowButtonFixedLine( sal_Bool bVisible );
+    void                ShowButtonFixedLine( bool bVisible );
 
     void                SetViewWindow( Window* pWindow ) { mpViewWindow = pWindow; }
     Window*             GetViewWindow() const { return mpViewWindow; }

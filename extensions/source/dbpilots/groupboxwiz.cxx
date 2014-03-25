@@ -170,7 +170,7 @@ namespace dbp
     }
 
 
-    sal_Bool OGroupBoxWizard::onFinish()
+    bool OGroupBoxWizard::onFinish()
     {
         // commit the basic control setttings
         commitControlSettings(&m_aSettings);
@@ -248,10 +248,10 @@ namespace dbp
     }
 
 
-    sal_Bool ORadioSelectionPage::commitPage( ::svt::WizardTypes::CommitPageReason _eReason )
+    bool ORadioSelectionPage::commitPage( ::svt::WizardTypes::CommitPageReason _eReason )
     {
         if (!OGBWPage::commitPage(_eReason))
-            return sal_False;
+            return false;
 
         // copy the names of the radio buttons to be inserted
         // and initialize the values
@@ -266,7 +266,7 @@ namespace dbp
             rSettings.aValues.push_back(OUString::number((i + 1)));
         }
 
-        return sal_True;
+        return true;
     }
 
 
@@ -378,15 +378,15 @@ namespace dbp
     }
 
 
-    sal_Bool ODefaultFieldSelectionPage::commitPage( ::svt::WizardTypes::CommitPageReason _eReason )
+    bool ODefaultFieldSelectionPage::commitPage( ::svt::WizardTypes::CommitPageReason _eReason )
     {
         if (!OMaybeListSelectionPage::commitPage(_eReason))
-            return sal_False;
+            return false;
 
         OOptionGroupSettings& rSettings = getSettings();
         implCommit(rSettings.sDefaultField);
 
-        return sal_True;
+        return true;
     }
 
 
@@ -468,10 +468,10 @@ namespace dbp
     }
 
 
-    sal_Bool OOptionValuesPage::commitPage( ::svt::WizardTypes::CommitPageReason _eReason )
+    bool OOptionValuesPage::commitPage( ::svt::WizardTypes::CommitPageReason _eReason )
     {
         if (!OGBWPage::commitPage(_eReason))
-            return sal_False;
+            return false;
 
         OOptionGroupSettings& rSettings = getSettings();
 
@@ -480,7 +480,7 @@ namespace dbp
         // copy the uncommitted values
         rSettings.aValues = m_aUncommittedValues;
 
-        return sal_True;
+        return true;
     }
 
 
@@ -536,14 +536,14 @@ namespace dbp
     }
 
 
-    sal_Bool OFinalizeGBWPage::commitPage( ::svt::WizardTypes::CommitPageReason _eReason )
+    bool OFinalizeGBWPage::commitPage( ::svt::WizardTypes::CommitPageReason _eReason )
     {
         if (!OGBWPage::commitPage(_eReason))
-            return sal_False;
+            return false;
 
         getSettings().sControlLabel = m_aName.GetText();
 
-        return sal_True;
+        return true;
     }
 
 

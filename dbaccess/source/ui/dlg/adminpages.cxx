@@ -183,9 +183,9 @@ namespace dbaui
         if ( m_pItemSetHelper )
             Reset(*m_pItemSetHelper->getOutputSet());
     }
-    sal_Bool OGenericAdministrationPage::commitPage( ::svt::WizardTypes::CommitPageReason )
+    bool OGenericAdministrationPage::commitPage( ::svt::WizardTypes::CommitPageReason )
     {
-        return sal_True;
+        return true;
     }
     bool OGenericAdministrationPage::canAdvance() const
     {

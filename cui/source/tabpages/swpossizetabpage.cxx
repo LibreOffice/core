@@ -550,10 +550,10 @@ SvxSwPosSizeTabPage::SvxSwPosSizeTabPage(Window* pParent, const SfxItemSet& rInA
     setOptimalRelWidth();
 
     FieldUnit eDlgUnit = GetModuleFieldUnit( rInAttrs );
-    SetFieldUnit( *m_pHoriByMF, eDlgUnit, sal_True );
-    SetFieldUnit( *m_pVertByMF, eDlgUnit, sal_True );
-    SetFieldUnit( *m_pWidthMF , eDlgUnit, sal_True );
-    SetFieldUnit( *m_pHeightMF, eDlgUnit, sal_True );
+    SetFieldUnit( *m_pHoriByMF, eDlgUnit, true );
+    SetFieldUnit( *m_pVertByMF, eDlgUnit, true );
+    SetFieldUnit( *m_pWidthMF , eDlgUnit, true );
+    SetFieldUnit( *m_pHeightMF, eDlgUnit, true );
 
     SetExchangeSupport();
 

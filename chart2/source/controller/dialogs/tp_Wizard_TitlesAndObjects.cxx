@@ -92,11 +92,11 @@ void TitlesAndObjectsTabPage::initializePage()
     m_bCommitToModel = true;
 }
 
-sal_Bool TitlesAndObjectsTabPage::commitPage( ::svt::WizardTypes::CommitPageReason /*eReason*/ )
+bool TitlesAndObjectsTabPage::commitPage( ::svt::WizardTypes::CommitPageReason /*eReason*/ )
 {
     if( m_xTitleResources->IsModified() ) //titles may have changed in the meanwhile
         commitToModel();
-    return sal_True;//return false if this page should not be left
+    return true;//return false if this page should not be left
 }
 
 void TitlesAndObjectsTabPage::commitToModel()

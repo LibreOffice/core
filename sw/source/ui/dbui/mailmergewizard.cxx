@@ -61,9 +61,9 @@ SwMailMergeWizard::SwMailMergeWizard(SwView& rView, SwMailMergeConfigItem& rItem
         m_nRestartPage( MM_DOCUMENTSELECTPAGE )
 {
     FreeResource();
-    ShowButtonFixedLine(sal_True);
+    ShowButtonFixedLine(true);
     defaultButton(WZB_NEXT);
-    enableButtons(WZB_FINISH, sal_False);
+    enableButtons(WZB_FINISH, false);
 
     m_pFinish->SetText(m_sFinish);
     m_pNextPage->SetHelpId(HID_MM_NEXT_PAGE);

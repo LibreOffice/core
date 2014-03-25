@@ -21,7 +21,7 @@
 
 
 
-void SetFieldUnit( MetricField& rField, FieldUnit eUnit, sal_Bool bAll )
+void SetFieldUnit( MetricField& rField, FieldUnit eUnit, bool bAll )
 {
     sal_Int64 nFirst    = rField.Denormalize( rField.GetFirst( FUNIT_TWIP ) );
     sal_Int64 nLast = rField.Denormalize( rField.GetLast( FUNIT_TWIP ) );
@@ -81,7 +81,7 @@ void SetFieldUnit( MetricField& rField, FieldUnit eUnit, sal_Bool bAll )
 
 
 
-void SetFieldUnit( MetricBox& rBox, FieldUnit eUnit, sal_Bool bAll )
+void SetFieldUnit( MetricBox& rBox, FieldUnit eUnit, bool bAll )
 {
     sal_Int64 nMin = rBox.Denormalize( rBox.GetMin( FUNIT_TWIP ) );
     sal_Int64 nMax = rBox.Denormalize( rBox.GetMax( FUNIT_TWIP ) );

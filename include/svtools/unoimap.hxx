@@ -32,7 +32,7 @@ SVT_DLLPUBLIC com::sun::star::uno::Reference< com::sun::star::uno::XInterface > 
 
 SVT_DLLPUBLIC com::sun::star::uno::Reference< com::sun::star::uno::XInterface > SvUnoImageMap_createInstance( const SvEventDescription* pSupportedMacroItems );
 SVT_DLLPUBLIC com::sun::star::uno::Reference< com::sun::star::uno::XInterface > SvUnoImageMap_createInstance( const ImageMap& rMap, const SvEventDescription* pSupportedMacroItems );
-SVT_DLLPUBLIC sal_Bool SvUnoImageMap_fillImageMap( com::sun::star::uno::Reference< com::sun::star::uno::XInterface > xImageMap, ImageMap& rMap );
+SVT_DLLPUBLIC bool SvUnoImageMap_fillImageMap( com::sun::star::uno::Reference< com::sun::star::uno::XInterface > xImageMap, ImageMap& rMap );
 
 #endif
 

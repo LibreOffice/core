@@ -152,18 +152,18 @@ namespace dbmm
         return !m_aSaveAsLocation.GetText().isEmpty();
     }
 
-    sal_Bool SaveDBDocPage::commitPage( ::svt::WizardTypes::CommitPageReason _eReason )
+    bool SaveDBDocPage::commitPage( ::svt::WizardTypes::CommitPageReason _eReason )
     {
         if ( !MacroMigrationPage::commitPage( _eReason ) )
-            return sal_False;
+            return false;
 
         if ( ::svt::WizardTypes::eTravelBackward == _eReason )
-            return sal_True;
+            return true;
 
         if ( !m_aLocationController.prepareCommit() )
-            return sal_False;
+            return false;
 
-        return sal_True;
+        return true;
     }
 
     TabPage* SaveDBDocPage::Create( ::svt::RoadmapWizard& _rParentDialog )

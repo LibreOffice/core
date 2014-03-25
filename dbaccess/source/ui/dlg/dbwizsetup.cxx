@@ -153,9 +153,9 @@ ODbTypeWizDialogSetup::ODbTypeWizDialogSetup(Window* _pParent
     m_pImpl->translateProperties(xDatasource, *m_pOutSet);
 
     SetPageSizePixel(LogicToPixel(::Size(WIZARD_PAGE_X, WIZARD_PAGE_Y), MAP_APPFONT));
-    ShowButtonFixedLine(sal_True);
+    ShowButtonFixedLine(true);
     defaultButton(WZB_NEXT);
-    enableButtons(WZB_FINISH, sal_True);
+    enableButtons(WZB_FINISH, true);
     enableAutomaticNextButtonState();
 
     ::dbaccess::ODsnTypeCollection::TypeIterator aIter = m_pCollection->begin();
@@ -324,7 +324,7 @@ void ODbTypeWizDialogSetup::activateDatabasePath()
         activatePath( static_cast< PathId >( nCreateNewDBIndex + 1 ), true );
 
         enableState(PAGE_DBSETUPWIZARD_FINAL, true );
-        enableButtons( WZB_FINISH, sal_True);
+        enableButtons( WZB_FINISH, true);
     }
     break;
     case OGeneralPageWizard::eConnectExternal:
@@ -576,7 +576,7 @@ IMPL_LINK(ODbTypeWizDialogSetup, ImplModifiedHdl, OGenericAdministrationPage*, _
     enableState(PAGE_DBSETUPWIZARD_FINAL, m_bIsConnectable);
     enableState(PAGE_DBSETUPWIZARD_AUTHENTIFICATION, m_bIsConnectable);
     if (getCurrentState() == PAGE_DBSETUPWIZARD_FINAL)
-        enableButtons( WZB_FINISH, sal_True);
+        enableButtons( WZB_FINISH, true);
     else
         enableButtons( WZB_FINISH, m_bIsConnectable);
     enableButtons( WZB_NEXT, m_bIsConnectable  && (getCurrentState() != PAGE_DBSETUPWIZARD_FINAL));
@@ -631,7 +631,7 @@ void ODbTypeWizDialogSetup::enterState(WizardState _nState)
             m_sOldURL = m_sURL;
             break;
         case PAGE_DBSETUPWIZARD_FINAL:
-            enableButtons( WZB_FINISH, sal_True);
+            enableButtons( WZB_FINISH, true);
             if ( m_pFinalPage )
                 m_pFinalPage->enableTableWizardCheckBox(m_pCollection->supportsTableCreation(m_sURL));
             break;
@@ -646,10 +646,10 @@ sal_Bool ODbTypeWizDialogSetup::saveDatasource()
     return sal_True;
 }
 
-sal_Bool ODbTypeWizDialogSetup::leaveState(WizardState _nState)
+bool ODbTypeWizDialogSetup::leaveState(WizardState _nState)
 {
     if (_nState == PAGE_DBSETUPWIZARD_MYSQL_INTRO)
-        return sal_True;
+        return true;
     if ( _nState == PAGE_DBSETUPWIZARD_INTRO && m_sURL != m_sOldURL )
     {
         resetPages(m_pImpl->getCurrentDataSource());
@@ -983,7 +983,7 @@ sal_Bool ODbTypeWizDialogSetup::SaveDatabaseDocument()
         }
     }
 
-    sal_Bool ODbTypeWizDialogSetup::onFinish()
+    bool ODbTypeWizDialogSetup::onFinish()
     {
         if ( m_pGeneralPage->GetDatabaseCreationMode() == OGeneralPageWizard::eOpenExisting )
         {
@@ -991,8 +991,8 @@ sal_Bool ODbTypeWizDialogSetup::SaveDatabaseDocument()
             // wants us to load could be a non-database document. Instead, we asynchronously
             // open the selected document. Thus, the wizard's return value is RET_CANCEL,
             // which means to not continue loading the database document
-            if ( !OWizardMachine::Finnish( RET_CANCEL ) )
-                return sal_False;
+            if ( !OWizardMachine::Finish( RET_CANCEL ) )
+                return false;
 
             try
             {
@@ -1005,7 +1005,7 @@ sal_Bool ODbTypeWizDialogSetup::SaveDatabaseDocument()
                 DBG_UNHANDLED_EXCEPTION();
             }
 
-            return sal_True;
+            return true;
         }
 
         if (getCurrentState() != PAGE_DBSETUPWIZARD_FINAL)
@@ -1013,11 +1013,11 @@ sal_Bool ODbTypeWizDialogSetup::SaveDatabaseDocument()
             skipUntil(PAGE_DBSETUPWIZARD_FINAL);
         }
         if (getCurrentState() == PAGE_DBSETUPWIZARD_FINAL)
-            return SaveDatabaseDocument() ? OWizardMachine::onFinish() : sal_False;
+            return SaveDatabaseDocument() && OWizardMachine::onFinish();
         else
         {
-               enableButtons( WZB_FINISH, sal_False );
-            return sal_False;
+            enableButtons( WZB_FINISH, false );
+            return false;
         }
     }
 

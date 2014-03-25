@@ -131,22 +131,22 @@ namespace dbp
         enableButtons(WZB_PREVIOUS, m_bHadDataSelection ? (LCW_STATE_DATASOURCE_SELECTION < _nState) : LCW_STATE_TABLESELECTION < _nState);
         enableButtons(WZB_NEXT, getFinalState() != _nState);
         if (_nState < getFinalState())
-            enableButtons(WZB_FINISH, sal_False);
+            enableButtons(WZB_FINISH, false);
 
         if (getFinalState() == _nState)
             defaultButton(WZB_FINISH);
     }
 
 
-    sal_Bool OListComboWizard::leaveState(WizardState _nState)
+    bool OListComboWizard::leaveState(WizardState _nState)
     {
         if (!OControlWizard::leaveState(_nState))
-            return sal_False;
+            return false;
 
         if (getFinalState() == _nState)
             defaultButton(WZB_NEXT);
 
-        return sal_True;
+        return true;
     }
 
 
@@ -210,13 +210,13 @@ namespace dbp
     }
 
 
-    sal_Bool OListComboWizard::onFinish()
+    bool OListComboWizard::onFinish()
     {
         if ( !OControlWizard::onFinish() )
-            return sal_False;
+            return false;
 
         implApplySettings();
-        return sal_True;
+        return true;
     }
 
 
@@ -343,18 +343,18 @@ namespace dbp
     }
 
 
-    sal_Bool OContentTableSelection::commitPage( ::svt::WizardTypes::CommitPageReason _eReason )
+    bool OContentTableSelection::commitPage( ::svt::WizardTypes::CommitPageReason _eReason )
     {
         if (!OLCPage::commitPage(_eReason))
-            return sal_False;
+            return false;
 
         OListComboSettings& rSettings = getSettings();
         rSettings.sListContentTable = m_aSelectTable.GetSelectEntry();
         if (rSettings.sListContentTable.isEmpty() && (::svt::WizardTypes::eTravelBackward != _eReason))
             // need to select a table
-            return sal_False;
+            return false;
 
-        return sal_True;
+        return true;
     }
 
 
@@ -421,14 +421,14 @@ namespace dbp
     }
 
 
-    sal_Bool OContentFieldSelection::commitPage( ::svt::WizardTypes::CommitPageReason _eReason )
+    bool OContentFieldSelection::commitPage( ::svt::WizardTypes::CommitPageReason _eReason )
     {
         if (!OLCPage::commitPage(_eReason))
-            return sal_False;
+            return false;
 
         getSettings().sListContentField = m_aSelectTableField.GetSelectEntry();
 
-        return sal_True;
+        return true;
     }
 
 
@@ -499,15 +499,15 @@ namespace dbp
     }
 
 
-    sal_Bool OLinkFieldsPage::commitPage( ::svt::WizardTypes::CommitPageReason _eReason )
+    bool OLinkFieldsPage::commitPage( ::svt::WizardTypes::CommitPageReason _eReason )
     {
         if (!OLCPage::commitPage(_eReason))
-            return sal_False;
+            return false;
 
         getSettings().sLinkedFormField = m_aValueListField.GetText();
         getSettings().sLinkedListField = m_aTableField.GetText();
 
-        return sal_True;
+        return true;
     }
 
 
@@ -530,7 +530,7 @@ namespace dbp
     void OComboDBFieldPage::ActivatePage()
     {
         ODBFieldPage::ActivatePage();
-        getDialog()->enableButtons(WZB_FINISH, sal_True);
+        getDialog()->enableButtons(WZB_FINISH, true);
     }
 
 

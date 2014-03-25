@@ -159,11 +159,11 @@ SvxGridTabPage::SvxGridTabPage( Window* pParent, const SfxItemSet& rCoreSet) :
     long nFirst, nLast, nMin, nMax;
 
     lcl_GetMinMax(*pMtrFldDrawX , nFirst, nLast, nMin, nMax);
-    SetFieldUnit( *pMtrFldDrawX , eFUnit, sal_True );
+    SetFieldUnit( *pMtrFldDrawX , eFUnit, true );
     lcl_SetMinMax(*pMtrFldDrawX , nFirst, nLast, nMin, nMax);
 
     lcl_GetMinMax(*pMtrFldDrawY, nFirst, nLast, nMin, nMax);
-    SetFieldUnit( *pMtrFldDrawY, eFUnit, sal_True );
+    SetFieldUnit( *pMtrFldDrawY, eFUnit, true );
     lcl_SetMinMax(*pMtrFldDrawY, nFirst, nLast, nMin, nMax);
 
 
@@ -273,14 +273,14 @@ void SvxGridTabPage::ActivatePage( const SfxItemSet& rSet )
             long nVal = static_cast<long>(pMtrFldDrawX->Denormalize( pMtrFldDrawX->GetValue( FUNIT_TWIP ) ));
 
             lcl_GetMinMax(*pMtrFldDrawX, nFirst, nLast, nMin, nMax);
-            SetFieldUnit( *pMtrFldDrawX, eFUnit, sal_True );
+            SetFieldUnit( *pMtrFldDrawX, eFUnit, true );
             lcl_SetMinMax(*pMtrFldDrawX, nFirst, nLast, nMin, nMax);
 
             pMtrFldDrawX->SetValue( pMtrFldDrawX->Normalize( nVal ), FUNIT_TWIP );
 
             nVal = static_cast<long>(pMtrFldDrawY->Denormalize( pMtrFldDrawY->GetValue( FUNIT_TWIP ) ));
             lcl_GetMinMax(*pMtrFldDrawY, nFirst, nLast, nMin, nMax);
-            SetFieldUnit(*pMtrFldDrawY, eFUnit, sal_True );
+            SetFieldUnit(*pMtrFldDrawY, eFUnit, true );
             lcl_SetMinMax(*pMtrFldDrawY, nFirst, nLast, nMin, nMax);
             pMtrFldDrawY->SetValue( pMtrFldDrawY->Normalize( nVal ), FUNIT_TWIP );
 

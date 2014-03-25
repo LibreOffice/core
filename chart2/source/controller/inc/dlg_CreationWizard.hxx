@@ -59,7 +59,7 @@ public:
     virtual void setValidPage( TabPage * pTabPage );
 
 protected:
-    virtual sal_Bool        leaveState( WizardState _nState );
+    virtual bool            leaveState( WizardState _nState );
     virtual WizardState     determineNextState(WizardState nCurrentState) const;
     virtual void            enterState(WizardState nState);
 

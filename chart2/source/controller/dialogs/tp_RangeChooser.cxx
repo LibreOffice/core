@@ -173,16 +173,16 @@ void RangeChooserTabPage::commitPage()
     commitPage(::svt::WizardTypes::eFinish);
 }
 
-sal_Bool RangeChooserTabPage::commitPage( ::svt::WizardTypes::CommitPageReason /*eReason*/ )
+bool RangeChooserTabPage::commitPage( ::svt::WizardTypes::CommitPageReason /*eReason*/ )
 {
     //ranges may have been edited in the meanwhile (dirty is true in that case here)
     if( isValid() )
     {
         changeDialogModelAccordingToControls();
-        return sal_True;//return false if this page should not be left
+        return true; // return false if this page should not be left
     }
     else
-        return sal_False;
+        return false;
 }
 
 void RangeChooserTabPage::changeDialogModelAccordingToControls()

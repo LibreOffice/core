@@ -77,10 +77,10 @@ CopyDlg::CopyDlg(::Window* pWindow, const SfxItemSet& rInAttrs,
 
     FieldUnit eFUnit( SfxModule::GetCurrentFieldUnit() );
 
-    SetFieldUnit( *m_pMtrFldMoveX, eFUnit, sal_True );
-    SetFieldUnit( *m_pMtrFldMoveY, eFUnit, sal_True );
-    SetFieldUnit( *m_pMtrFldWidth, eFUnit, sal_True );
-    SetFieldUnit( *m_pMtrFldHeight, eFUnit, sal_True );
+    SetFieldUnit( *m_pMtrFldMoveX, eFUnit, true );
+    SetFieldUnit( *m_pMtrFldMoveY, eFUnit, true );
+    SetFieldUnit( *m_pMtrFldWidth, eFUnit, true );
+    SetFieldUnit( *m_pMtrFldHeight, eFUnit, true );
 
     Reset();
 }

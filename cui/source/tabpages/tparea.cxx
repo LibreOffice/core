@@ -687,8 +687,8 @@ SvxAreaTabPage::SvxAreaTabPage( Window* pParent, const SfxItemSet& rInAttrs ) :
         break;
         default: ;//prevent warning
     }
-    SetFieldUnit( *m_pMtrFldXSize, eFUnit, sal_True );
-    SetFieldUnit( *m_pMtrFldYSize, eFUnit, sal_True );
+    SetFieldUnit( *m_pMtrFldXSize, eFUnit, true );
+    SetFieldUnit( *m_pMtrFldYSize, eFUnit, true );
 
     // get PoolUnit
     SfxItemPool* pPool = rOutAttrs.GetPool();

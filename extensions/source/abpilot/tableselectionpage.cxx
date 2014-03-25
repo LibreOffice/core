@@ -99,15 +99,15 @@ namespace abp
     }
 
 
-    sal_Bool TableSelectionPage::commitPage( ::svt::WizardTypes::CommitPageReason _eReason )
+    bool TableSelectionPage::commitPage( ::svt::WizardTypes::CommitPageReason _eReason )
     {
         if (!AddressBookSourcePage::commitPage(_eReason))
-            return sal_False;
+            return false;
 
         AddressSettings& rSettings = getSettings();
         rSettings.sSelectedTable = m_aTableList.GetSelectEntry();
 
-        return sal_True;
+        return true;
     }
 
 

@@ -303,16 +303,16 @@ void DataSourceTabPage::commitPage()
     commitPage(::svt::WizardTypes::eFinish);
 }
 
-sal_Bool DataSourceTabPage::commitPage( ::svt::WizardTypes::CommitPageReason /*eReason*/ )
+bool DataSourceTabPage::commitPage( ::svt::WizardTypes::CommitPageReason /*eReason*/ )
 {
     //ranges may have been edited in the meanwhile (dirty is true in that case here)
     if( isValid() )
     {
         updateModelFromControl( 0 /*update all*/ );
-        return sal_True;//return false if this page should not be left
+        return true; //return false if this page should not be left
     }
     else
-        return sal_False;
+        return false;
 }
 
 bool DataSourceTabPage::isRangeFieldContentValid( Edit & rEdit )

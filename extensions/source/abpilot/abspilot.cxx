@@ -67,7 +67,7 @@ namespace abp
     {
         SetPageSizePixel(LogicToPixel(Size(WINDOW_SIZE_X, WINDOW_SIZE_Y), MAP_APPFONT));
 
-        ShowButtonFixedLine(sal_True);
+        ShowButtonFixedLine(true);
 
         declarePath( PATH_COMPLETE,
             STATE_SELECT_ABTYPE,
@@ -122,7 +122,7 @@ namespace abp
         m_aSettings.bIgnoreNoTable = false;
 
         defaultButton(WZB_NEXT);
-        enableButtons(WZB_FINISH, sal_False);
+        enableButtons(WZB_FINISH, false);
         ActivatePage();
 
         typeSelectionChanged( m_aSettings.eType );
@@ -209,16 +209,16 @@ namespace abp
     }
 
 
-    sal_Bool OAddessBookSourcePilot::onFinish()
+    bool OAddessBookSourcePilot::onFinish()
     {
         if ( !OAddessBookSourcePilot_Base::onFinish() )
-            return sal_False;
+            return false;
 
         implCommitAll();
 
         addressconfig::markPilotSuccess( getORB() );
 
-        return sal_True;
+        return true;
     }
 
 
@@ -244,15 +244,15 @@ namespace abp
     }
 
 
-    sal_Bool OAddessBookSourcePilot::prepareLeaveCurrentState( CommitPageReason _eReason )
+    bool OAddessBookSourcePilot::prepareLeaveCurrentState( CommitPageReason _eReason )
     {
         if ( !OAddessBookSourcePilot_Base::prepareLeaveCurrentState( _eReason ) )
-            return sal_False;
+            return false;
 
         if ( _eReason == eTravelBackward )
-            return sal_True;
+            return true;
 
-        sal_Bool bAllow = sal_True;
+        bool bAllow = true;
 
         switch ( getCurrentState() )
         {
@@ -266,7 +266,7 @@ namespace abp
             if ( !connectToDataSource( sal_False ) )
             {
                 // connecting did not succeed -> do not allow proceeding
-                bAllow = sal_False;
+                bAllow = false;
                 break;
             }
 
@@ -279,7 +279,7 @@ namespace abp
                 if ( RET_YES != QueryBox( this, ModuleRes( ( getSettings().eType == AST_EVOLUTION_GROUPWISE ? RID_QRY_NO_EVO_GW : RID_QRY_NOTABLES ) ) ).Execute() )
                 {
                     // cannot ask the user, or the user chose to use this data source, though there are no tables
-                    bAllow = sal_False;
+                    bAllow = false;
                     break;
                 }
 

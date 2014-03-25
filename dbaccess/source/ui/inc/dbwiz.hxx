@@ -94,10 +94,10 @@ protected:
     /// to override to create new pages
     virtual TabPage*    createPage(WizardState _nState);
     virtual WizardState determineNextState(WizardState _nCurrentState) const;
-    virtual sal_Bool    leaveState(WizardState _nState);
+    virtual bool        leaveState(WizardState _nState);
     virtual ::svt::IWizardPageController*
                         getPageController( TabPage* _pCurrentPage ) const;
-    virtual sal_Bool    onFinish();
+    virtual bool        onFinish();
 
 protected:
     inline sal_Bool isUIEnabled() const { return m_bUIEnabled; }

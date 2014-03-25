@@ -67,7 +67,7 @@ namespace svt
         // to be committed for this.
         // So initializePage and commitPage are designated to initialitzing/committing data on the page.
         virtual void        initializePage() = 0;
-        virtual sal_Bool    commitPage( WizardTypes::CommitPageReason _eReason ) = 0;
+        virtual bool        commitPage( WizardTypes::CommitPageReason _eReason ) = 0;
 
         /** determines whether or not it is allowed to advance to a next page
 
@@ -104,7 +104,7 @@ namespace svt
 
         // IWizardPageController overridables
         virtual void        initializePage();
-        virtual sal_Bool    commitPage( WizardTypes::CommitPageReason _eReason );
+        virtual bool        commitPage( WizardTypes::CommitPageReason _eReason );
         virtual bool        canAdvance() const;
 
     protected:
@@ -180,7 +180,7 @@ namespace svt
         ~OWizardMachine();
 
         /// enable (or disable) buttons
-        void    enableButtons(sal_uInt32 _nWizardButtonFlags, sal_Bool _bEnable);
+        void    enableButtons(sal_uInt32 _nWizardButtonFlags, bool _bEnable);
         /// set the default style for a button
         void    defaultButton(sal_uInt32 _nWizardButtonFlags);
         /// set the default style for a button
@@ -223,7 +223,7 @@ namespace svt
             @return
                 <TRUE/> if and only if the page is allowed to be left
         */
-        virtual sal_Bool    prepareLeaveCurrentState( CommitPageReason _eReason );
+        virtual bool        prepareLeaveCurrentState( CommitPageReason _eReason );
 
         /** will be called when the given state is left
 
@@ -237,7 +237,7 @@ namespace svt
             @return
                 <TRUE/> if and only if the page is allowed to be left
         */
-        virtual sal_Bool    leaveState( WizardState _nState );
+        virtual bool        leaveState( WizardState _nState );
 
         /** determine the next state to travel from the given one
 
@@ -248,15 +248,15 @@ namespace svt
         virtual WizardState determineNextState( WizardState _nCurrentState ) const;
 
         /** called when the finish button is pressed
-            <p>By default, only the base class' Finnish method (which is not virtual) is called</p>
+            <p>By default, only the base class' Finish method (which is not virtual) is called</p>
         */
-        virtual sal_Bool    onFinish();
+        virtual bool        onFinish();
 
         /// travel to the next state
-        sal_Bool            travelNext();
+        bool                travelNext();
 
         /// travel to the previous state
-        sal_Bool            travelPrevious();
+        bool                travelPrevious();
 
         /** enables the automatic enabled/disabled state of the "Next" button
 
@@ -287,7 +287,7 @@ namespace svt
             @see skipUntil
             @see skipBackwardUntil
         */
-        sal_Bool                skip( sal_Int32 _nSteps = 1 );
+        bool                    skip( sal_Int32 _nSteps = 1 );
 
         /** skips one or more states, until a given state is reached
 
@@ -303,7 +303,7 @@ namespace svt
             @see skip
             @see skipBackwardUntil
         */
-        sal_Bool                skipUntil( WizardState _nTargetState );
+        bool                    skipUntil( WizardState _nTargetState );
 
         /** moves back one or more states, until a given state is reached
 
@@ -321,7 +321,7 @@ namespace svt
             @see skipUntil
             @see skip
         */
-        sal_Bool                skipBackwardUntil( WizardState _nTargetState );
+        bool                    skipBackwardUntil( WizardState _nTargetState );
 
         /** returns the current state of the machine
 

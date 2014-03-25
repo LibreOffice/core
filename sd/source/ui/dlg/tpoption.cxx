@@ -314,11 +314,11 @@ void SdTpOptionsMisc::ActivatePage( const SfxItemSet& rSet )
         {
             // set metrics
             sal_Int64 nVal = m_pMtrFldOriginalWidth->Denormalize( m_pMtrFldOriginalWidth->GetValue( FUNIT_TWIP ) );
-            SetFieldUnit( *m_pMtrFldOriginalWidth, eFUnit, sal_True );
+            SetFieldUnit( *m_pMtrFldOriginalWidth, eFUnit, true );
             m_pMtrFldOriginalWidth->SetValue( m_pMtrFldOriginalWidth->Normalize( nVal ), FUNIT_TWIP );
 
             nVal = m_pMtrFldOriginalHeight->Denormalize( m_pMtrFldOriginalHeight->GetValue( FUNIT_TWIP ) );
-            SetFieldUnit( *m_pMtrFldOriginalHeight, eFUnit, sal_True );
+            SetFieldUnit( *m_pMtrFldOriginalHeight, eFUnit, true );
             m_pMtrFldOriginalHeight->SetValue( m_pMtrFldOriginalHeight->Normalize( nVal ), FUNIT_TWIP );
 
 

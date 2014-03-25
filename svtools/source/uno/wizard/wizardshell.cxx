@@ -145,13 +145,13 @@ namespace svt { namespace uno
     }
 
 
-    sal_Bool WizardShell::leaveState( WizardState i_nState )
+    bool WizardShell::leaveState( WizardState i_nState )
     {
         if ( !WizardShell_Base::leaveState( i_nState ) )
-            return sal_False;
+            return false;
 
         if ( !m_xController.is() )
-            return sal_True;
+            return true;
 
         try
         {
@@ -162,7 +162,7 @@ namespace svt { namespace uno
             DBG_UNHANDLED_EXCEPTION();
         }
 
-        return sal_True;
+        return true;
     }
 
 
@@ -248,12 +248,12 @@ namespace svt { namespace uno
     }
 
 
-    sal_Bool WizardShell::onFinish()
+    bool WizardShell::onFinish()
     {
         try
         {
             if ( m_xController.is() && !m_xController->confirmFinish() )
-                return sal_False;
+                return false;
         }
         catch( const Exception& )
         {

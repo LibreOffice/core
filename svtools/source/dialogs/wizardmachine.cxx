@@ -89,9 +89,9 @@ namespace svt
     }
 
 
-    sal_Bool OWizardPage::commitPage( WizardTypes::CommitPageReason )
+    bool OWizardPage::commitPage( WizardTypes::CommitPageReason )
     {
-        return sal_True;
+        return true;
     }
 
 
@@ -106,13 +106,13 @@ namespace svt
             // the WizardDialog does not allow non-linear transitions (e.g. it's
             // not possible to add pages in a non-linear order), so we need some own maintainance data
 
-        sal_Bool                        m_bAutoNextButtonState;
+        bool                            m_bAutoNextButtonState;
 
         bool                            m_bTravelingSuspended;
 
         WizardMachineImplData()
             :nFirstUnknownPage( 0 )
-            ,m_bAutoNextButtonState( sal_False )
+            ,m_bAutoNextButtonState( false )
             ,m_bTravelingSuspended( false )
         {
         }
@@ -366,7 +366,7 @@ namespace svt
     }
 
 
-    void OWizardMachine::enableButtons(sal_uInt32 _nWizardButtonFlags, sal_Bool _bEnable)
+    void OWizardMachine::enableButtons(sal_uInt32 _nWizardButtonFlags, bool _bEnable)
     {
         if (m_pFinish && (_nWizardButtonFlags & WZB_FINISH))
             m_pFinish->Enable(_bEnable);
@@ -399,19 +399,19 @@ namespace svt
     }
 
 
-    sal_Bool OWizardMachine::leaveState(WizardState)
+    bool OWizardMachine::leaveState(WizardState)
     {
         // no need to ask the page here.
         // If we reach this point, we already gave the current page the chance to commit it's data,
         // and it was allowed to commit it's data
 
-        return sal_True;
+        return true;
     }
 
 
-    sal_Bool OWizardMachine::onFinish()
+    bool OWizardMachine::onFinish()
     {
-        return Finnish( RET_OK );
+        return Finish( RET_OK );
     }
 
 
@@ -434,19 +434,19 @@ namespace svt
     }
 
 
-    sal_Bool OWizardMachine::prepareLeaveCurrentState( CommitPageReason _eReason )
+    bool OWizardMachine::prepareLeaveCurrentState( CommitPageReason _eReason )
     {
         IWizardPageController* pController = getPageController( GetPage( getCurrentState() ) );
-        ENSURE_OR_RETURN( pController != NULL, "OWizardMachine::prepareLeaveCurrentState: no controller for the current page!", sal_True );
+        ENSURE_OR_RETURN( pController != NULL, "OWizardMachine::prepareLeaveCurrentState: no controller for the current page!", true );
         return pController->commitPage( _eReason );
     }
 
 
-    sal_Bool OWizardMachine::skipBackwardUntil( WizardState _nTargetState )
+    bool OWizardMachine::skipBackwardUntil( WizardState _nTargetState )
     {
         // allowed to leave the current page?
         if ( !prepareLeaveCurrentState( eTravelBackward ) )
-            return sal_False;
+            return false;
 
         // don't travel directly on m_pImpl->aStateHistory, in case something goes wrong
         ::std::stack< WizardState > aTravelVirtually = m_pImpl->aStateHistory;
@@ -463,19 +463,19 @@ namespace svt
         if ( !ShowPage( _nTargetState ) )
         {
             m_pImpl->aStateHistory = aOldStateHistory;
-            return sal_False;
+            return false;
         }
-        return sal_True;
+        return true;
     }
 
 
-    sal_Bool OWizardMachine::skipUntil( WizardState _nTargetState )
+    bool OWizardMachine::skipUntil( WizardState _nTargetState )
     {
         WizardState nCurrentState = getCurrentState();
 
         // allowed to leave the current page?
         if ( !prepareLeaveCurrentState( nCurrentState < _nTargetState ? eTravelForward : eTravelBackward ) )
-            return sal_False;
+            return false;
 
         // don't travel directly on m_pImpl->aStateHistory, in case something goes wrong
         ::std::stack< WizardState > aTravelVirtually = m_pImpl->aStateHistory;
@@ -486,7 +486,7 @@ namespace svt
             if ( WZS_INVALID_STATE == nNextState )
             {
                 OSL_FAIL( "OWizardMachine::skipUntil: the given target state does not exist!" );
-                return sal_False;
+                return false;
             }
 
             // remember the skipped state in the history
@@ -503,18 +503,18 @@ namespace svt
             // but ShowPage doesn't? Somebody behaves very strange here ....
             OSL_FAIL( "OWizardMachine::skipUntil: very unpolite ...." );
             m_pImpl->aStateHistory = aOldStateHistory;
-            return sal_False;
+            return false;
         }
-        return sal_True;
+        return true;
     }
 
 
-    sal_Bool OWizardMachine::skip(sal_Int32 _nSteps)
+    bool OWizardMachine::skip(sal_Int32 _nSteps)
     {
         DBG_ASSERT(_nSteps > 0, "OWizardMachine::skip: invalid number of steps!");
         // allowed to leave the current page?
         if ( !prepareLeaveCurrentState( eTravelForward ) )
-            return sal_False;
+            return false;
 
         WizardState nCurrentState = getCurrentState();
         WizardState nNextState = determineNextState(nCurrentState);
@@ -522,7 +522,7 @@ namespace svt
         while (_nSteps-- > 0)
         {
             if (WZS_INVALID_STATE == nNextState)
-                return sal_False;
+                return false;
 
             // remember the skipped state in the history
             m_pImpl->aStateHistory.push(nCurrentState);
@@ -541,25 +541,25 @@ namespace svt
                 // if somebody does a skip and then does not allow to leave ...
                 // (can't be a commit error, as we've already committed the current page. So if ShowPage fails here,
                 // somebody behaves really strange ...)
-            return sal_False;
+            return false;
         }
 
         // all fine
-        return sal_True;
+        return true;
     }
 
 
-    sal_Bool OWizardMachine::travelNext()
+    bool OWizardMachine::travelNext()
     {
         // allowed to leave the current page?
         if ( !prepareLeaveCurrentState( eTravelForward ) )
-            return sal_False;
+            return false;
 
         // determine the next state to travel to
         WizardState nCurrentState = getCurrentState();
         WizardState nNextState = determineNextState(nCurrentState);
         if (WZS_INVALID_STATE == nNextState)
-            return sal_False;
+            return false;
 
         // the state history is used by the enterState method
         // all fine
@@ -567,20 +567,20 @@ namespace svt
         if (!ShowPage(nNextState))
         {
             m_pImpl->aStateHistory.pop();
-            return sal_False;
+            return false;
         }
 
-        return sal_True;
+        return true;
     }
 
 
-    sal_Bool OWizardMachine::travelPrevious()
+    bool OWizardMachine::travelPrevious()
     {
         DBG_ASSERT(m_pImpl->aStateHistory.size() > 0, "OWizardMachine::travelPrevious: have no previous page!");
 
         // allowed to leave the current page?
         if ( !prepareLeaveCurrentState( eTravelBackward ) )
-            return sal_False;
+            return false;
 
         // the next state to switch to
         WizardState nPreviousState = m_pImpl->aStateHistory.top();
@@ -591,11 +591,11 @@ namespace svt
         if (!ShowPage(nPreviousState))
         {
             m_pImpl->aStateHistory.push(nPreviousState);
-            return sal_False;
+            return false;
         }
 
         // all fine
-        return sal_True;
+        return true;
     }
 
 
@@ -637,8 +637,8 @@ namespace svt
         if ( isTravelingSuspended() )
             return 0;
         WizardTravelSuspension aTravelGuard( *this );
-        sal_Int32 nRet = travelPrevious();
-        return nRet;
+        bool nRet = travelPrevious();
+        return nRet ? 1 : 0;
     }
 
 
@@ -647,8 +647,8 @@ namespace svt
         if ( isTravelingSuspended() )
             return 0;
         WizardTravelSuspension aTravelGuard( *this );
-        sal_Int32 nRet = travelNext();
-        return nRet;
+        bool nRet = travelNext();
+        return nRet ? 1 : 0;
     }
 
 

@@ -325,7 +325,7 @@ void SwMailMergeGreetingsPage::ActivatePage()
     m_pWizard->enableButtons(WZB_NEXT, m_pWizard->isStateEnabled(MM_PREPAREMERGEPAGE));
 }
 
-sal_Bool    SwMailMergeGreetingsPage::commitPage( ::svt::WizardTypes::CommitPageReason )
+bool SwMailMergeGreetingsPage::commitPage( ::svt::WizardTypes::CommitPageReason )
 {
     SwMailMergeConfigItem& rConfig = m_pWizard->GetConfigItem();
 
@@ -354,7 +354,7 @@ sal_Bool    SwMailMergeGreetingsPage::commitPage( ::svt::WizardTypes::CommitPage
     lcl_StoreGreetingsBox(*m_pNeutralCB, rConfig, SwMailMergeConfigItem::NEUTRAL);
     rConfig.SetGreetingLine(m_pGreetingLineCB->IsChecked(), sal_False);
     rConfig.SetIndividualGreeting(m_pPersonalizedCB->IsChecked(), sal_False);
-    return sal_True;
+    return true;
 }
 
 IMPL_LINK(SwMailMergeGreetingsPage, ContainsHdl_Impl, CheckBox*, pBox)

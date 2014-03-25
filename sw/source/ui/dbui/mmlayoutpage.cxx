@@ -214,7 +214,7 @@ void SwMailMergeLayoutPage::ActivatePage()
     }
 }
 
-sal_Bool SwMailMergeLayoutPage::commitPage( ::svt::WizardTypes::CommitPageReason _eReason )
+bool SwMailMergeLayoutPage::commitPage( ::svt::WizardTypes::CommitPageReason _eReason )
 {
     //now insert the frame and the greeting
     SwMailMergeConfigItem& rConfigItem = m_pWizard->GetConfigItem();
@@ -228,7 +228,7 @@ sal_Bool SwMailMergeLayoutPage::commitPage( ::svt::WizardTypes::CommitPageReason
                     Point(nLeft, nTop),
                     m_pAlignToBodyCB->IsChecked());
     }
-    return sal_True;
+    return true;
 }
 
 SwFrmFmt*  SwMailMergeLayoutPage::InsertAddressAndGreeting(SwView* pView,

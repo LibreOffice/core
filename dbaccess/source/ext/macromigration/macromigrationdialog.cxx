@@ -243,20 +243,20 @@ namespace dbmm
         }
     }
 
-    sal_Bool MacroMigrationDialog::prepareLeaveCurrentState( CommitPageReason _eReason )
+    bool MacroMigrationDialog::prepareLeaveCurrentState( CommitPageReason _eReason )
     {
         if ( !MacroMigrationDialog_Base::prepareLeaveCurrentState( _eReason ) )
-            return sal_False;
+            return false;
 
         switch ( getCurrentState() )
         {
         case STATE_CLOSE_SUB_DOCS:
             if ( !impl_closeSubDocs_nothrow() )
-                return sal_False;
+                return false;
             break;
         case STATE_BACKUP_DBDOC:
             if ( !impl_backupDocument_nothrow() )
-                return sal_False;
+                return false;
             break;
         case STATE_MIGRATE:
             break;
@@ -266,10 +266,10 @@ namespace dbmm
             OSL_FAIL( "MacroMigrationDialog::prepareLeaveCurrentState: unhandled state!" );
         }
 
-        return sal_True;
+        return true;
     }
 
-    sal_Bool MacroMigrationDialog::leaveState( WizardState _nState )
+    bool MacroMigrationDialog::leaveState( WizardState _nState )
     {
         return MacroMigrationDialog_Base::leaveState( _nState );
     }
@@ -279,7 +279,7 @@ namespace dbmm
         return MacroMigrationDialog_Base::determineNextState( _nCurrentState );
     }
 
-    sal_Bool MacroMigrationDialog::onFinish()
+    bool MacroMigrationDialog::onFinish()
     {
         return MacroMigrationDialog_Base::onFinish();
     }

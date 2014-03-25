@@ -145,7 +145,7 @@ namespace dbaui
 
         // svt::IWizardPageController
         virtual void initializePage();
-        virtual sal_Bool commitPage( ::svt::WizardTypes::CommitPageReason _eReason );
+        virtual bool commitPage( ::svt::WizardTypes::CommitPageReason _eReason );
         virtual bool canAdvance() const;
 
         void                SetRoadmapStateValue( sal_Bool _bDoEnable ) { m_abEnableRoadmap = _bDoEnable; }

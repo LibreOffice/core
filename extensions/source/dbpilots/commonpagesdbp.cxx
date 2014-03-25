@@ -153,10 +153,10 @@ namespace dbp
     }
 
 
-    sal_Bool OTableSelectionPage::commitPage( ::svt::WizardTypes::CommitPageReason _eReason )
+    bool OTableSelectionPage::commitPage( ::svt::WizardTypes::CommitPageReason _eReason )
     {
         if (!OControlWizardPage::commitPage(_eReason))
-            return sal_False;
+            return false;
 
         const OControlWizardContext& rContext = getContext();
         try
@@ -179,14 +179,14 @@ namespace dbp
                 setFormConnection( xOldConn, sal_False );
 
             if (!updateContext())
-                return sal_False;
+                return false;
         }
         catch(const Exception&)
         {
             OSL_FAIL("OTableSelectionPage::commitPage: caught an exception!");
         }
 
-        return sal_True;
+        return true;
     }
 
 
@@ -481,14 +481,14 @@ namespace dbp
     }
 
 
-    sal_Bool ODBFieldPage::commitPage( ::svt::WizardTypes::CommitPageReason _eReason )
+    bool ODBFieldPage::commitPage( ::svt::WizardTypes::CommitPageReason _eReason )
     {
         if (!OMaybeListSelectionPage::commitPage(_eReason))
-            return sal_False;
+            return false;
 
         implCommit(getDBFieldSetting());
 
-        return sal_True;
+        return true;
     }
 
 

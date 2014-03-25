@@ -941,7 +941,7 @@ void ChartTypeTabPage::initializePage()
     }
 }
 
-sal_Bool ChartTypeTabPage::commitPage( ::svt::WizardTypes::CommitPageReason /*eReason*/ )
+bool ChartTypeTabPage::commitPage( ::svt::WizardTypes::CommitPageReason /*eReason*/ )
 {
     //commit changes to model
     if( !m_bDoLiveUpdate && m_pCurrentMainType )
@@ -951,7 +951,7 @@ sal_Bool ChartTypeTabPage::commitPage( ::svt::WizardTypes::CommitPageReason /*eR
         commitToModel( aParameter );
     }
 
-    return sal_True;//return false if this page should not be left
+    return true; // return false if this page should not be left
 }
 
 uno::Reference< XChartTypeTemplate > ChartTypeTabPage::getCurrentTemplate() const
