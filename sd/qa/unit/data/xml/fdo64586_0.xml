@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <XShapes>
- <XShape positionX="1397" positionY="838" sizeX="25197" sizeY="3507" type="com.sun.star.presentation.TitleTextShape" fontHeight="44.000000" fontColor="000000" textAutoGrowHeight="true" textAutoGrowWidth="false" textContourFrame="false" textFitToSize="NONE" textHorizontalAdjust="BLOCK" textVerticalAdjust="CENTER" textLeftDistance="0" textRightDistance="0" textUpperDistance="0" textLowerDistance="0" textMaximumFrameHeight="0" textMaximumFrameWidth="0" textMinimumFrameHeight="3507" textMinimumFrameWidth="0" textAnimationAmount="0" textAnimationCount="0" textAnimationDelay="0" textAnimationDirection="LEFT" textAnimationKind="NONE" textAnimationStartInside="false" textAnimationStopInside="false" textWritingMode="LR_TB" fillStyle="NONE" fillColor="ffffff" fillTransparence="0" fillTransparenceGradientName="">
+ <XShape positionX="1397" positionY="838" sizeX="25197" sizeY="3506" type="com.sun.star.presentation.TitleTextShape" fontHeight="44.000000" fontColor="000000" textAutoGrowHeight="true" textAutoGrowWidth="false" textContourFrame="false" textFitToSize="NONE" textHorizontalAdjust="BLOCK" textVerticalAdjust="CENTER" textLeftDistance="0" textRightDistance="0" textUpperDistance="0" textLowerDistance="0" textMaximumFrameHeight="0" textMaximumFrameWidth="0" textMinimumFrameHeight="3506" textMinimumFrameWidth="0" textAnimationAmount="0" textAnimationCount="0" textAnimationDelay="0" textAnimationDirection="LEFT" textAnimationKind="NONE" textAnimationStartInside="false" textAnimationStopInside="false" textWritingMode="LR_TB" fillStyle="NONE" fillColor="ffffff" fillTransparence="0" fillTransparenceGradientName="">
   <FillTransparenceGradient style="LINEAR" startColor="000000" endColor="ffffff" angle="0" border="0" xOffset="50" yOffset="50" startIntensity="100" endIntensity="100" stepCount="0"/>
   <FillGradient style="LINEAR" startColor="000000" endColor="ffffff" angle="0" border="0" xOffset="50" yOffset="50" startIntensity="100" endIntensity="100" stepCount="0"/>
   <FillHatch style="SINGLE" color="3465a4" distance="20" angle="0"/>
@@ -10,7 +10,7 @@
   <LineEnd/>
   <Transformation>
    <Line1 column1="25198.000000" column2="0.000000" column3="1397.000000"/>
-   <Line2 column1="0.000000" column2="3508.000000" column3="838.000000"/>
+   <Line2 column1="0.000000" column2="3507.000000" column3="838.000000"/>
    <Line3 column1="0.000000" column2="0.000000" column3="1.000000"/>
   </Transformation>
  </XShape>

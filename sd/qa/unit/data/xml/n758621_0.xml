@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <XShapes>
- <XShape positionX="12042" positionY="1774" sizeX="12087" sizeY="9782" type="com.sun.star.presentation.TitleTextShape" fontHeight="60.000000" fontColor="004990" textAutoGrowHeight="true" textAutoGrowWidth="false" textContourFrame="false" textFitToSize="NONE" textHorizontalAdjust="RIGHT" textVerticalAdjust="CENTER" textLeftDistance="250" textRightDistance="250" textUpperDistance="130" textLowerDistance="130" textMaximumFrameHeight="0" textMaximumFrameWidth="0" textMinimumFrameHeight="9522" textMinimumFrameWidth="0" textAnimationAmount="0" textAnimationCount="0" textAnimationDelay="0" textAnimationDirection="LEFT" textAnimationKind="NONE" textAnimationStartInside="false" textAnimationStopInside="false" textWritingMode="LR_TB" fillStyle="NONE" fillColor="ffffff" fillTransparence="0" fillTransparenceGradientName="">
+ <XShape positionX="12042" positionY="1904" sizeX="12087" sizeY="9521" type="com.sun.star.presentation.TitleTextShape" fontHeight="60.000000" fontColor="004990" textAutoGrowHeight="true" textAutoGrowWidth="false" textContourFrame="false" textFitToSize="NONE" textHorizontalAdjust="RIGHT" textVerticalAdjust="CENTER" textLeftDistance="250" textRightDistance="250" textUpperDistance="130" textLowerDistance="130" textMaximumFrameHeight="0" textMaximumFrameWidth="0" textMinimumFrameHeight="9261" textMinimumFrameWidth="0" textAnimationAmount="0" textAnimationCount="0" textAnimationDelay="0" textAnimationDirection="LEFT" textAnimationKind="NONE" textAnimationStartInside="false" textAnimationStopInside="false" textWritingMode="LR_TB" fillStyle="NONE" fillColor="ffffff" fillTransparence="0" fillTransparenceGradientName="">
   <FillTransparenceGradient style="LINEAR" startColor="000000" endColor="ffffff" angle="0" border="0" xOffset="50" yOffset="50" startIntensity="100" endIntensity="100" stepCount="0"/>
   <FillGradient style="LINEAR" startColor="000000" endColor="ffffff" angle="0" border="0" xOffset="50" yOffset="50" startIntensity="100" endIntensity="100" stepCount="0"/>
   <FillHatch style="SINGLE" color="3465a4" distance="20" angle="0"/>
@@ -10,11 +10,11 @@
   <LineEnd/>
   <Transformation>
    <Line1 column1="12088.000000" column2="0.000000" column3="12042.000000"/>
-   <Line2 column1="0.000000" column2="9783.000000" column3="1774.000000"/>
+   <Line2 column1="0.000000" column2="9522.000000" column3="1904.000000"/>
    <Line3 column1="0.000000" column2="0.000000" column3="1.000000"/>
   </Transformation>
  </XShape>
- <XShape positionX="14176" positionY="13123" sizeX="9953" sizeY="3811" type="com.sun.star.presentation.SubtitleShape" fontHeight="36.000000" fontColor="92d050" textAutoGrowHeight="true" textAutoGrowWidth="false" textContourFrame="false" textFitToSize="NONE" textHorizontalAdjust="RIGHT" textVerticalAdjust="TOP" textLeftDistance="0" textRightDistance="0" textUpperDistance="0" textLowerDistance="0" textMaximumFrameHeight="0" textMaximumFrameWidth="0" textMinimumFrameHeight="3811" textMinimumFrameWidth="0" textAnimationAmount="0" textAnimationCount="0" textAnimationDelay="0" textAnimationDirection="LEFT" textAnimationKind="NONE" textAnimationStartInside="false" textAnimationStopInside="false" textWritingMode="LR_TB" fillStyle="NONE" fillColor="ffffff" fillTransparence="0" fillTransparenceGradientName="">
+ <XShape positionX="14176" positionY="13123" sizeX="9953" sizeY="3810" type="com.sun.star.presentation.SubtitleShape" fontHeight="36.000000" fontColor="92d050" textAutoGrowHeight="true" textAutoGrowWidth="false" textContourFrame="false" textFitToSize="NONE" textHorizontalAdjust="RIGHT" textVerticalAdjust="TOP" textLeftDistance="0" textRightDistance="0" textUpperDistance="0" textLowerDistance="0" textMaximumFrameHeight="0" textMaximumFrameWidth="0" textMinimumFrameHeight="3810" textMinimumFrameWidth="0" textAnimationAmount="0" textAnimationCount="0" textAnimationDelay="0" textAnimationDirection="LEFT" textAnimationKind="NONE" textAnimationStartInside="false" textAnimationStopInside="false" textWritingMode="LR_TB" fillStyle="NONE" fillColor="ffffff" fillTransparence="0" fillTransparenceGradientName="">
   <FillTransparenceGradient style="LINEAR" startColor="000000" endColor="ffffff" angle="0" border="0" xOffset="50" yOffset="50" startIntensity="100" endIntensity="100" stepCount="0"/>
   <FillGradient style="LINEAR" startColor="000000" endColor="ffffff" angle="0" border="0" xOffset="50" yOffset="50" startIntensity="100" endIntensity="100" stepCount="0"/>
   <FillHatch style="SINGLE" color="3465a4" distance="20" angle="0"/>
@@ -24,7 +24,7 @@
   <LineEnd/>
   <Transformation>
    <Line1 column1="9954.000000" column2="0.000000" column3="14176.000000"/>
-   <Line2 column1="0.000000" column2="3812.000000" column3="13123.000000"/>
+   <Line2 column1="0.000000" column2="3811.000000" column3="13123.000000"/>
    <Line3 column1="0.000000" column2="0.000000" column3="1.000000"/>
   </Transformation>
  </XShape>
