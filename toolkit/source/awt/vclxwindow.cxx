@@ -2243,13 +2243,15 @@ void VCLXWindow::draw( sal_Int32 nX, sal_Int32 nY ) throw(::com::sun::star::uno:
 
     if ( isDesignMode() || mpImpl->isEnableVisible() )
     {
+        OutputDevice* pDev = VCLUnoHelper::GetOutputDevice( mpImpl->mxViewGraphics );
+        if (!pDev)
+            pDev = pWindow->GetParent();
         TabPage* pTabPage = dynamic_cast< TabPage* >( pWindow );
         if ( pTabPage )
         {
             Point aPos( nX, nY );
             Size  aSize = pWindow->GetSizePixel();
 
-            OutputDevice* pDev = VCLUnoHelper::GetOutputDevice( mpImpl->mxViewGraphics );
             aPos  = pDev->PixelToLogic( aPos );
             aSize = pDev->PixelToLogic( aSize );
 
@@ -2257,11 +2259,7 @@ void VCLXWindow::draw( sal_Int32 nX, sal_Int32 nY ) throw(::com::sun::star::uno:
             return;
         }
 
-        OutputDevice* pDev = VCLUnoHelper::GetOutputDevice( mpImpl->mxViewGraphics );
         Point aPos( nX, nY );
-
-        if ( !pDev )
-            pDev = pWindow->GetParent();
 
         if ( pWindow->GetParent() && !pWindow->IsSystemWindow() && ( pWindow->GetParent() == pDev ) )
         {
