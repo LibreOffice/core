@@ -1125,7 +1125,7 @@ void SwTxtNode::_ChgTxtCollUpdateNum( const SwTxtFmtColl *pOldColl,
         pDoc->GetFtnIdxs().UpdateFtn( aTmpIndex);
     }
 
-    if( RES_CONDTXTFMTCOLL == pNewColl->Which() )
+    if( pNewColl && RES_CONDTXTFMTCOLL == pNewColl->Which() )
     {
         // Erfrage die akt. Condition des TextNodes:
         ChkCondColl();
