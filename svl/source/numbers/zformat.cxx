@@ -1502,7 +1502,6 @@ short SvNumberformat::ImpNextSymbol(OUStringBuffer& rString,
                 case '=':
                     eSymbolType = NUMBERFORMAT_OP_EQ;
                     break;
-                default: break;
                 }
                 break;
             case ' ':
