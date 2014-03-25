@@ -748,7 +748,7 @@ void SwView::Execute(SfxRequest &rReq)
                         nVersion = ((const SfxInt16Item *)pItem)->GetValue();
                         m_pViewImpl->SetParam( nVersion );
                     }
-                    if( SFX_ITEM_SET == pArgs->GetItemState( SID_NO_ACCEPT_DIALOG, sal_False, &pItem ))
+                    if( SFX_ITEM_SET == pArgs->GetItemState( SID_NO_ACCEPT_DIALOG, false, &pItem ))
                     {
                         bNoAcceptDialog = ((const SfxBoolItem *)pItem)->GetValue();
                     }
