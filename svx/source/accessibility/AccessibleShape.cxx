@@ -402,15 +402,18 @@ uno::Reference<XAccessibleRelationSet> SAL_CALL
         throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
     ::osl::MutexGuard aGuard (maMutex);
+    if (mpParent == NULL)
+        return uno::Reference<XAccessibleRelationSet>();
+
     ::utl::AccessibleRelationSetHelper* pRelationSet = new utl::AccessibleRelationSetHelper;
 
-    //this mxshape is the captioned shape, only for sw
+    //this mxshape is the captioned shape
     uno::Sequence< uno::Reference< uno::XInterface > > aSequence(1);
     aSequence[0] = mpParent->GetAccessibleCaption(mxShape);
     if(aSequence[0].get())
     {
         pRelationSet->AddRelation(
-            AccessibleRelation( AccessibleRelationType::DESCRIBED_BY, aSequence ) );
+                                  AccessibleRelation( AccessibleRelationType::DESCRIBED_BY, aSequence ) );
     }
     return uno::Reference<XAccessibleRelationSet>(pRelationSet);
 }
