@@ -34,10 +34,6 @@ using namespace com::sun::star::uno;
 TYPEINIT1(SbxVariable,SbxValue)
 TYPEINIT1(SbxHint,SfxSimpleHint)
 
-#ifdef DBG_UTIL
-static sal_uIntPtr nVar = 0;
-#endif
-
 ///////////////////////////// SbxVariableImpl
 
 class SbxVariableImpl
@@ -68,9 +64,6 @@ SbxVariable::SbxVariable() : SbxValue()
     pParent = NULL;
     nUserData = 0;
     nHash = 0;
-#ifdef DBG_UTIL
-    DbgOutf( "SbxVariable::Ctor %lx=%ld", (void*)this, ++nVar );
-#endif
 }
 
 void registerComListenerVariableForBasic( SbxVariable* pVar, StarBASIC* pBasic );
@@ -106,13 +99,6 @@ SbxVariable::SbxVariable( const SbxVariable& r )
         nUserData = 0;
         nHash = 0;
     }
-#ifdef DBG_UTIL
-    if ( maName.equalsAscii( "Cells"))
-    {
-        maName = "Cells";
-    }
-    DbgOutf( "SbxVariable::Ctor %lx=%ld", (void*)this, ++nVar );
-#endif
 }
 
 SbxVariable::SbxVariable( SbxDataType t, void* p ) : SbxValue( t, p )
@@ -122,23 +108,12 @@ SbxVariable::SbxVariable( SbxDataType t, void* p ) : SbxValue( t, p )
     pParent = NULL;
     nUserData = 0;
     nHash = 0;
-#ifdef DBG_UTIL
-    DbgOutf( "SbxVariable::Ctor %lx=%ld", (void*)this, ++nVar );
-#endif
 }
 
 void removeDimAsNewRecoverItem( SbxVariable* pVar );
 
 SbxVariable::~SbxVariable()
 {
-#ifdef DBG_UTIL
-    OString aBStr(OUStringToOString(maName, RTL_TEXTENCODING_ASCII_US));
-    DbgOutf( "SbxVariable::Dtor %lx (%s)", (void*)this, aBStr.getStr() );
-    if ( maName.equalsAscii( "Cells"))
-    {
-        maName = "Cells";
-    }
-#endif
 #ifndef DISABLE_SCRIPTING
     if( IsSet( SBX_DIM_AS_NEW ))
     {
