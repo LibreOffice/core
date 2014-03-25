@@ -196,8 +196,6 @@ protected:
 
 public:
     inline          SfxMiniRecordWriter( SvStream *pStream, sal_uInt8 nTag );
-    inline          SfxMiniRecordWriter( SvStream *pStream, sal_uInt8 nTag,
-                                         sal_uInt32 nSize );
     inline          ~SfxMiniRecordWriter();
 
     inline SvStream& operator*() const;
@@ -590,23 +588,6 @@ inline SfxMiniRecordWriter::SfxMiniRecordWriter( SvStream* pStream, sal_uInt8 nT
     DBG( DbgOutf( "SfxFileRec: writing record to %ul", pStream->Tell() ) );
 
     pStream->SeekRel( + SFX_REC_HEADERSIZE_MINI );
-}
-
-/** create a mini record with a known content size
- *
- * @param pStream the stream that will contain the record
- * @param nTag    a record tag between 0x01 and 0xFE
- * @param nSize   data size in Byte
- */
-inline SfxMiniRecordWriter::SfxMiniRecordWriter( SvStream* pStream, sal_uInt8 nTag, sal_uInt32 nSize )
-:   _pStream( pStream ),
-    _bHeaderOk(true)
-{
-    DBG_ASSERT( nTag != 0 && nTag != 0xFF, "invalid Tag" );
-    DBG(_nStartPos = pStream->Tell());
-    DBG( DbgOutf( "SfxFileRec: writing record to %ul", _nStartPos ) );
-
-    pStream->WriteUInt32( ( nTag << 24 ) | nSize );
 }
 
 /** The destructor closes the record automatically if not done earlier */
