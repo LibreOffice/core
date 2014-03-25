@@ -137,7 +137,6 @@ struct DebugData
         aDbgData.nTestFlags = DBG_TEST_RESOURCE;
         aDbgData.bOverwrite = true;
         aDbgData.nTraceOut = DBG_OUT_NULL;
-        aDbgData.nWarningOut = DBG_OUT_NULL;
 #ifdef UNX
         aDbgData.nErrorOut = DBG_OUT_SHELL;
 #else
@@ -633,7 +632,6 @@ static DebugData* GetDebugData()
                     lcl_tryReadConfigString( pLine, nLineLength, "include_class", aDebugData.aDbgData.aInclClassFilter, sizeof( aDebugData.aDbgData.aInclClassFilter ) );
                     lcl_tryReadConfigString( pLine, nLineLength, "exclude_class", aDebugData.aDbgData.aExclClassFilter, sizeof( aDebugData.aDbgData.aExclClassFilter ) );
                     lcl_tryReadOutputChannel( pLine, nLineLength, "trace", &aDebugData.aDbgData.nTraceOut );
-                    lcl_tryReadOutputChannel( pLine, nLineLength, "warning", &aDebugData.aDbgData.nWarningOut );
                     lcl_tryReadOutputChannel( pLine, nLineLength, "error", &aDebugData.aDbgData.nErrorOut );
                     lcl_tryReadConfigBoolean( pLine, nLineLength, "oslhook", &aDebugData.aDbgData.bHookOSLAssert );
                 }
@@ -671,7 +669,6 @@ static DebugData* GetDebugData()
         else
         {
             lcl_matchOutputChannel( getenv( "DBGSV_TRACE_OUT" ), &aDebugData.aDbgData.nTraceOut );
-            lcl_matchOutputChannel( getenv( "DBGSV_WARNING_OUT" ), &aDebugData.aDbgData.nWarningOut );
             lcl_matchOutputChannel( getenv( "DBGSV_ERROR_OUT" ), &aDebugData.aDbgData.nErrorOut );
 
         }
@@ -1073,7 +1070,6 @@ void* DbgFunc( sal_uInt16 nAction, void* pParam )
                 lcl_writeConfigString( pIniFile, "include_class", pData->aInclClassFilter );
                 lcl_writeConfigString( pIniFile, "exclude_class", pData->aExclClassFilter );
                 lcl_writeConfigOutChannel( pIniFile, "trace", pData->nTraceOut );
-                lcl_writeConfigOutChannel( pIniFile, "warning", pData->nWarningOut );
                 lcl_writeConfigOutChannel( pIniFile, "error", pData->nErrorOut );
                 lcl_writeConfigBoolean( pIniFile, "oslhook", pData->bHookOSLAssert );
 
@@ -1414,11 +1410,6 @@ void DbgOut( const sal_Char* pMsg, sal_uInt16 nDbgOut, const sal_Char* pFile, sa
     {
         nOut = pData->aDbgData.nErrorOut;
         pStr = "Error: ";
-    }
-    else if ( nDbgOut == DBG_OUT_WARNING )
-    {
-        nOut = pData->aDbgData.nWarningOut;
-        pStr = "Warning: ";
     }
     else
     {

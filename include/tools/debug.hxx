@@ -78,7 +78,6 @@ struct DbgData
     sal_uIntPtr       nTestFlags;
     bool              bOverwrite;
     sal_uIntPtr       nTraceOut;
-    sal_uIntPtr       nWarningOut;
     sal_uIntPtr       nErrorOut;
     bool              bHookOSLAssert;
     sal_Char    aDebugName[260];
@@ -163,8 +162,8 @@ typedef sal_uInt16 DbgChannelId;
     @param pProc
         the function for emitting the diagnostic messages
     @return
-        a unique number for this channel, which can be used for ->DbgData::nErrorOut,
-        ->DbgData::nWarningOut and ->DbgData::nTraceOut
+        a unique number for this channel, which can be used for ->DbgData::nErrorOut
+        and ->DbgData::nTraceOut
     @see DBG_OUT_USER_CHANNEL_0
 
     (In theory, this function could replace the other hard-coded channels. Well, at least
@@ -250,8 +249,7 @@ inline void DbgPrintFile( const sal_Char* pLine )
 
 // Dbg output
 #define DBG_OUT_TRACE               1
-#define DBG_OUT_WARNING             2
-#define DBG_OUT_ERROR               3
+#define DBG_OUT_ERROR               2
 
 TOOLS_DLLPUBLIC void DbgOut( const sal_Char* pMsg, sal_uInt16 nOutType = DBG_OUT_TRACE,
              const sal_Char* pFile = NULL, sal_uInt16 nLine = 0 );
@@ -384,12 +382,6 @@ do                                          \
     DbgGetData()->nTraceOut = nOut;         \
 } while(false)
 
-#define DBG_INSTOUTWARNING( nOut )          \
-do                                          \
-{                                           \
-    DbgGetData()->nWarningOut = nOut;       \
-} while(false)
-
 #define DBG_INSTOUTERROR( nOut )            \
 do                                          \
 {                                           \
@@ -434,7 +426,6 @@ typedef const sal_Char* (*DbgUsr)(const void* pThis );
 #define DBG_TESTSOLARMUTEX() ((void)0)
 
 #define DBG_INSTOUTTRACE( nOut ) ((void)0)
-#define DBG_INSTOUTWARNING( nOut ) ((void)0)
 #define DBG_INSTOUTERROR( nOut ) ((void)0)
 
 #endif

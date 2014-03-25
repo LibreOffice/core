@@ -388,8 +388,6 @@ private:
     Edit            maExclFilter;
     FixedText       maTraceText;
     ListBox         maTraceBox;
-    FixedText       maWarningText;
-    ListBox         maWarningBox;
     FixedText       maErrorText;
     ListBox         maErrorBox;
     CheckBox        maHookOSLBox;
@@ -574,8 +572,6 @@ DbgDialog::DbgDialog() :
     maExclFilter( this ),
     maTraceText( this ),
     maTraceBox( this, WB_DROPDOWN ),
-    maWarningText( this ),
-    maWarningBox( this, WB_DROPDOWN ),
     maErrorText( this ),
     maErrorBox( this, WB_DROPDOWN ),
     maHookOSLBox( this ),
@@ -795,29 +791,6 @@ DbgDialog::DbgDialog() :
     }
 
     {
-    maWarningText.Show();
-    maWarningText.SetText("~Warning");
-    maWarningText.SetPosSizePixel( LogicToPixel( Point( 115, 210 ), aAppMap ),
-                                   LogicToPixel( Size( 95, 9 ), aAppMap ) );
-    }
-
-    {
-    maWarningBox.InsertEntry(OUString("None"));
-    maWarningBox.InsertEntry(OUString("File"));
-    maWarningBox.InsertEntry(OUString("Window"));
-    maWarningBox.InsertEntry(OUString("Shell"));
-    maWarningBox.InsertEntry(OUString("MessageBox"));
-    maWarningBox.InsertEntry(OUString("TestTool"));
-    maWarningBox.InsertEntry(OUString("Debugger"));
-    maWarningBox.InsertEntry(OUString("Abort"));
-    ImplAppendUserDefinedChannels( maWarningBox );
-    ImplSelectChannel( maWarningBox, pData->nWarningOut, 0 );
-    maWarningBox.Show();
-    maWarningBox.SetPosSizePixel( LogicToPixel( Point( 115, 220 ), aAppMap ),
-                                  LogicToPixel( Size( 95, 80 ), aAppMap ) );
-    }
-
-    {
     maErrorText.Show();
     maErrorText.SetText("~Error");
     maErrorText.SetPosSizePixel( LogicToPixel( Point( 220, 210 ), aAppMap ),
@@ -893,7 +866,6 @@ IMPL_LINK( DbgDialog, ClickHdl, Button*, pButton )
         aData.nTestFlags = 0;
 
         aData.nTraceOut   = ImplGetChannelId( maTraceBox, 0 );
-        aData.nWarningOut = ImplGetChannelId( maWarningBox, 0 );
         aData.nErrorOut   = ImplGetChannelId( maErrorBox, mnErrorOff );
 
         strncpy( aData.aDebugName, OUStringToOString(maDebugName.GetText(), RTL_TEXTENCODING_UTF8).getStr(), sizeof( aData.aDebugName ) );
@@ -942,7 +914,6 @@ IMPL_LINK( DbgDialog, ClickHdl, Button*, pButton )
 
         // Umschalten der Laufzeitwerte
         DBG_INSTOUTTRACE( aData.nTraceOut );
-        DBG_INSTOUTWARNING( aData.nWarningOut );
         DBG_INSTOUTERROR( aData.nErrorOut );
         DbgUpdateOslHook( &aData );
 
