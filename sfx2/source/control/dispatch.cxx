@@ -2099,7 +2099,7 @@ bool SfxDispatcher::_FillState
         pSh->CallState( pFunc, rState );
 #ifdef DBG_UTIL
         // To examine the conformity of IDL (SlotMap) and current Items
-        if ( DbgIsAssertWarning() && rState.Count() )
+        if ( rState.Count() )
         {
             SfxInterface *pIF = pSh->GetInterface();
             SfxItemIter aIter( rState );
@@ -2110,15 +2110,11 @@ bool SfxDispatcher::_FillState
                 if ( !IsInvalidItem(pItem) && !pItem->ISA(SfxVoidItem) )
                 {
                     sal_uInt16 nSlotId = rState.GetPool()->GetSlotId(pItem->Which());
-                    if ( !pItem->IsA(pIF->GetSlot(nSlotId)->GetType()->Type()) )
-                    {
-                        OStringBuffer aMsg("item-type unequal to IDL (=> no BASIC)");
-                        aMsg.append("\nwith SID: ");
-                        aMsg.append(static_cast<sal_Int32>(nSlotId));
-                        aMsg.append("\nin ");
-                        aMsg.append(pIF->GetClassName());
-                        DbgOut(aMsg.getStr(), DBG_OUT_ERROR, __FILE__, __LINE__);
-                    }
+                    SAL_WARN_IF(
+                        !pItem->IsA(pIF->GetSlot(nSlotId)->GetType()->Type()),
+                        "sfx.control",
+                        "item-type unequal to IDL (=> no BASIC) with SID: "
+                            << nSlotId << " in " << pIF->GetClassName());
                 }
             }
         }
