@@ -600,8 +600,6 @@ double GetYearFrac( sal_Int32 nNullDate, sal_Int32 nStartDate, sal_Int32 nEndDat
         case 3:         // 3=exact/365
             nDaysInYear = 365;
             break;
-        default:
-            throw lang::IllegalArgumentException();
     }
 
     return double( nDayDiff ) / nDaysInYear;
