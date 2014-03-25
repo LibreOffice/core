@@ -241,12 +241,8 @@ inline void DbgPrintFile( const sal_Char* pLine )
 #define DBG_OUT_TRACE               1
 #define DBG_OUT_ERROR               2
 
-TOOLS_DLLPUBLIC void DbgOut( const sal_Char* pMsg, sal_uInt16 nOutType = DBG_OUT_TRACE,
-             const sal_Char* pFile = NULL, sal_uInt16 nLine = 0 );
 TOOLS_DLLPUBLIC void DbgPrintShell(char const * message);
 TOOLS_DLLPUBLIC void DbgOutTypef( sal_uInt16 nOutType, const sal_Char* pFStr, ... );
-TOOLS_DLLPUBLIC void DbgOutf( const sal_Char* pFStr, ... );
-TOOLS_DLLPUBLIC void ImpDbgOutfBuf( sal_Char* pBuf, const sal_Char* pFStr, ... );
 
 // Dbg test functions
 

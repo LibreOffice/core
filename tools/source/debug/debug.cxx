@@ -47,6 +47,8 @@
 
 #ifdef DBG_UTIL
 
+void DbgOutf( const sal_Char* pFStr, ... );
+
 // PointerList
 
 #define PBLOCKCOUNT     1024
@@ -1335,7 +1337,7 @@ void DbgXtor( DbgDataType* pDbgData, sal_uInt16 nAction, const void* pThis,
          : "Leave method from class ") << pDbgData->pName);
 }
 
-void DbgOut( const sal_Char* pMsg, sal_uInt16 nDbgOut, const sal_Char* pFile, sal_uInt16 nLine )
+void DbgOut( const sal_Char* pMsg, sal_uInt16 nDbgOut )
 {
     static bool bIn = false;
     if ( bIn )
@@ -1390,32 +1392,6 @@ void DbgOut( const sal_Char* pMsg, sal_uInt16 nDbgOut, const sal_Char* pFile, sa
     }
     else
         strcpy( &(aBufOut[nBufLen]), pMsg );
-
-    if ( pFile && nLine && (nBufLen+nMsgLen < DBG_BUF_MAXLEN) )
-    {
-        if ( nOut == DBG_OUT_MSGBOX )
-            strcat( aBufOut, "\n" );
-        else
-            strcat( aBufOut, " " );
-        strcat( aBufOut, "From File " );
-        strcat( aBufOut, pFile );
-        strcat( aBufOut, " at Line " );
-
-        // Convert line to String and append
-        sal_Char    aLine[9];
-        sal_Char*   pLine = &aLine[7];
-        sal_uInt16      i;
-        memset( aLine, 0, sizeof( aLine ) );
-        do
-        {
-            i = nLine % 10;
-            pLine--;
-            *(pLine) = (sal_Char)i + 48;
-            nLine /= 10;
-        }
-        while ( nLine );
-        strcat( aBufOut, pLine );
-    }
 
     if ( ( nOut >= DBG_OUT_USER_CHANNEL_0 ) && ( nOut - DBG_OUT_USER_CHANNEL_0 < pData->aDbgPrintUserChannels.size() ) )
     {
@@ -1503,7 +1479,7 @@ void DbgOutf( const sal_Char* pFStr, ... )
     vsprintf( aBuf, pFStr, pList );
     va_end( pList );
 
-    DbgOut( aBuf );
+    DbgOut( aBuf, DBG_OUT_TRACE );
 }
 
 #else
@@ -1513,9 +1489,7 @@ void* DbgFunc( sal_uInt16, void* ) { return NULL; }
 void DbgProf( sal_uInt16, DbgDataType* ) {}
 void DbgXtor( DbgDataType*, sal_uInt16, const void*, DbgUsr ) {}
 
-void DbgOut( const sal_Char*, sal_uInt16, const sal_Char*, sal_uInt16 ) {}
 void DbgOutTypef( sal_uInt16, const sal_Char*, ... ) {}
-void DbgOutf( const sal_Char*, ... ) {}
 
 #endif
 
