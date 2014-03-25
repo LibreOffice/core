@@ -73,9 +73,10 @@ void RulerCtrlItem::StateChanged( sal_uInt16 nSId, SfxItemState, const SfxPoolIt
 
 
 Ruler::Ruler( DrawViewShell& rViewSh, ::Window* pParent, ::sd::Window* pWin, sal_uInt16 nRulerFlags,  SfxBindings& rBindings, WinBits nWinStyle)
-: SvxRuler(pParent, pWin, nRulerFlags, rBindings, nWinStyle)
-, pSdWin(pWin)
-, pDrViewShell(&rViewSh)
+    : SvxRuler(pParent, pWin, nRulerFlags, rBindings, nWinStyle)
+    , pSdView(NULL)
+    , pSdWin(pWin)
+    , pDrViewShell(&rViewSh)
 {
     rBindings.EnterRegistrations();
     pCtrlItem = new RulerCtrlItem(SID_RULER_NULL_OFFSET, *this, rBindings);
