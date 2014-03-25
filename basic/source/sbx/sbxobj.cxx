@@ -17,6 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <iomanip>
+
 #include <tools/stream.hxx>
 #include <basic/sbx.hxx>
 #include "sbxres.hxx"
@@ -212,14 +216,15 @@ SbxVariable* SbxObject::FindUserData( sal_uInt32 nData )
 SbxVariable* SbxObject::Find( const OUString& rName, SbxClassType t )
 {
 #ifdef DBG_UTIL
-    static sal_uInt16 nLvl = 0;
+    static int nLvl = 1;
     static const char* pCls[] = { "DontCare","Array","Value","Variable","Method","Property","Object" };
-    OString aNameStr1(OUStringToOString(rName, RTL_TEXTENCODING_ASCII_US));
-    OString aNameStr2(OUStringToOString(SbxVariable::GetName(), RTL_TEXTENCODING_ASCII_US));
-    DbgOutf( "SBX: Search %.*s %s %s in %s",
-             nLvl++, "                              ",
-             ( t >= SbxCLASS_DONTCARE && t <= SbxCLASS_OBJECT )
-             ? pCls[ t-1 ] : "Unknown class", aNameStr1.getStr(), aNameStr2.getStr() );
+    SAL_INFO(
+        "basic.sbx",
+        "search" << std::setw(nLvl) << " "
+            << (t >= SbxCLASS_DONTCARE && t <= SbxCLASS_OBJECT
+                ? pCls[t - 1] : "Unknown class")
+            << " " << rName << " in " << SbxVariable::GetName());
+    ++nLvl;
 #endif
 
     if( !GetAll( t ) )
@@ -279,14 +284,11 @@ SbxVariable* SbxObject::Find( const OUString& rName, SbxClassType t )
         }
     }
 #ifdef DBG_UTIL
-    nLvl--;
-    if( pRes )
-    {
-        OString aNameStr3(OUStringToOString(rName, RTL_TEXTENCODING_ASCII_US));
-        OString aNameStr4(OUStringToOString(SbxVariable::GetName(), RTL_TEXTENCODING_ASCII_US));
-        DbgOutf( "SBX: Found %.*s %s in %s",
-            nLvl, "                              ", aNameStr3.getStr(), aNameStr4.getStr() );
-    }
+    --nLvl;
+    SAL_INFO_IF(
+        pRes, "basic.sbx",
+        "found" << std::setw(nLvl) << " " << rName << " in "
+            << SbxVariable::GetName());
 #endif
     return pRes;
 }
@@ -498,12 +500,13 @@ void SbxObject::Insert( SbxVariable* pVar )
         {
             aVarName = PTR_CAST(SbxObject,pVar)->GetClassName();
         }
-        OString aNameStr1(OUStringToOString(aVarName, RTL_TEXTENCODING_ASCII_US));
-        OString aNameStr2(OUStringToOString(SbxVariable::GetName(), RTL_TEXTENCODING_ASCII_US));
-        DbgOutf( "SBX: Insert %s %s in %s",
-                 ( pVar->GetClass() >= SbxCLASS_DONTCARE &&
-                   pVar->GetClass() <= SbxCLASS_OBJECT )
-                 ? pCls[ pVar->GetClass()-1 ] : "Unknown class", aNameStr1.getStr(), aNameStr2.getStr() );
+        SAL_INFO(
+            "basic.sbx",
+            "insert "
+                << ((pVar->GetClass() >= SbxCLASS_DONTCARE
+                     && pVar->GetClass() <= SbxCLASS_OBJECT)
+                    ? pCls[pVar->GetClass() - 1] : "Unknown class")
+                << " " << aVarName << " in " << SbxVariable::GetName());
 #endif
     }
 }
@@ -541,12 +544,13 @@ void SbxObject::QuickInsert( SbxVariable* pVar )
         {
             aVarName = PTR_CAST(SbxObject,pVar)->GetClassName();
         }
-        OString aNameStr1(OUStringToOString(aVarName, RTL_TEXTENCODING_ASCII_US));
-        OString aNameStr2(OUStringToOString(SbxVariable::GetName(), RTL_TEXTENCODING_ASCII_US));
-        DbgOutf( "SBX: Insert %s %s in %s",
-                 ( pVar->GetClass() >= SbxCLASS_DONTCARE &&
-                   pVar->GetClass() <= SbxCLASS_OBJECT )
-                 ? pCls[ pVar->GetClass()-1 ] : "Unknown class", aNameStr1.getStr(), aNameStr2.getStr() );
+        SAL_INFO(
+            "basic.sbx",
+            "insert "
+                << ((pVar->GetClass() >= SbxCLASS_DONTCARE
+                     && pVar->GetClass() <= SbxCLASS_OBJECT)
+                    ? pCls[pVar->GetClass() - 1] : "Unknown class")
+                << " " << aVarName << " in " << SbxVariable::GetName());
 #endif
     }
 }
@@ -568,10 +572,9 @@ void SbxObject::Remove( SbxVariable* pVar )
         {
             aVarName = PTR_CAST(SbxObject,pVar)->GetClassName();
         }
-        OString aNameStr1(OUStringToOString(aVarName, RTL_TEXTENCODING_ASCII_US));
-        OString aNameStr2(OUStringToOString(SbxVariable::GetName(), RTL_TEXTENCODING_ASCII_US));
-        DbgOutf( "SBX: Remove %s in %s",
-            aNameStr1.getStr(), aNameStr2.getStr() );
+        SAL_INFO(
+            "basic.sbx",
+            "remove " << aVarName << " in " << SbxVariable::GetName());
 #endif
         SbxVariableRef pVar_ = pArray->Get( nIdx );
         if( pVar_->IsBroadcaster() )
