@@ -20,6 +20,7 @@
 #define INCLUDED_TOOLS_URLOBJ_HXX
 
 #include <tools/toolsdllapi.h>
+#include <tools/stream.hxx>
 #include <com/sun/star/uno/Reference.hxx>
 #include <rtl/string.h>
 #include <rtl/ustrbuf.hxx>
@@ -414,6 +415,9 @@ public:
                                                = DECODE_TO_IURI,
                                            rtl_TextEncoding eCharset
                                                = RTL_TEXTENCODING_UTF8);
+
+    // Data URLs:
+    SvMemoryStream* getData();
 
     // Scheme:
 
