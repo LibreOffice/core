@@ -3171,7 +3171,7 @@ $(eval $(call gb_Helper_register_jars_for_install,OOO,reportbuilder,\
 $(eval $(call gb_Helper_register_jars,OXT,\
 	commons-codec-1.9 \
 	commons-httpclient-3.1 \
-	commons-lang-2.4 \
+	commons-lang3-3.3.1.jar \
 ))
 
 define gb_Jar__use_commons-codec
@@ -3192,7 +3192,7 @@ endef
 
 define gb_Jar__use_commons-lang
 $(call gb_Jar_use_external_project,$(1),apache_commons_lang)
-$(call gb_Jar_use_external_jar,$(1),$(call gb_UnpackedTarball_get_dir,apache_commons_lang)/dist/commons-lang-2.4.jar,commons-lang-2.4.jar)
+$(call gb_Jar_use_external_jar,$(1),$(call gb_UnpackedTarball_get_dir,apache_commons_lang)/target/commons-lang3-3.3.1.jar,commons-lang3-3.3.1.jar)
 endef
 define gb_ExternalProject__use_commons-lang
 $(call gb_ExternalProject_use_external_project,$(1),apache_commons_lang)

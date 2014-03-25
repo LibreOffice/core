@@ -10606,8 +10606,8 @@ if test "$ENABLE_MEDIAWIKI" = "TRUE" -o "$ENABLE_REPORTBUILDER" = "TRUE"; then
             fi
 
             if test -z $COMMONS_LANG_JAR; then
-                AC_CHECK_FILE(/usr/share/java/commons-lang-2.4.jar,
-                    [ COMMONS_LANG_JAR=/usr/share/java/commons-lang-2.4.jar ],
+                AC_CHECK_FILE(/usr/share/java/commons-lang3-3.3.1-src.tar.gz,
+                    [ COMMONS_LANG_JAR=/usr/share/java/commons-lang3-3.3.1-src.tar.gz ],
                     [
                         AC_CHECK_FILE(/usr/share/java/commons-lang.jar,
                             [ COMMONS_LANG_JAR=/usr/share/java/commons-lang.jar ],
