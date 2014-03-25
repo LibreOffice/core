@@ -87,50 +87,6 @@
 #define OSL_DEBUG_LEVEL 0
 #endif
 
-#ifdef __cplusplus
-extern "C" {
-#endif  /* __cplusplus */
-
-/*
-    Diagnostic support
-*/
-
-SAL_DLLPUBLIC void        SAL_CALL osl_breakDebug(void);
-SAL_DLLPUBLIC sal_Bool    SAL_CALL osl_assertFailedLine(const sal_Char* pszFileName, sal_Int32 nLine, const sal_Char* pszMessage);
-SAL_DLLPUBLIC void        SAL_CALL osl_trace(const sal_Char* pszFormat, ...);
-SAL_DLLPUBLIC sal_Int32   SAL_CALL osl_reportError(sal_uInt32 nType, const sal_Char* pszErrorMessage);
-
-/*
-    For message delivery
-*/
-
-/** a message delivery function which receives a pre-formatted message string
-*/
-typedef void (SAL_CALL *pfunc_osl_printDebugMessage)( const sal_Char * pszMessage );
-
-/** a message delivery function which receives detailed information about where the message was triggered
-*/
-typedef void (SAL_CALL *pfunc_osl_printDetailedDebugMessage)( const sal_Char * pszFileName, sal_Int32 nLine, const sal_Char* pszMessage );
-
-/** sets a message delivery function
-
-    The function set here is ignored if a function for detailed message information
-    (pfunc_osl_printDetailedDebugMessage) has been set.
-
-    The given message handler must be able to cope with a null message.
-*/
-SAL_DLLPUBLIC pfunc_osl_printDebugMessage SAL_CALL osl_setDebugMessageFunc( pfunc_osl_printDebugMessage pNewFunc );
-
-/** sets a delivery function for detailed message information.
-
-    The given message handler must be able to cope with a null message.
-*/
-SAL_DLLPUBLIC pfunc_osl_printDetailedDebugMessage SAL_CALL osl_setDetailedDebugMessageFunc( pfunc_osl_printDetailedDebugMessage pNewFunc );
-
-#ifdef __cplusplus
-}
-#endif
-
 #define OSL_THIS_FILE       __FILE__
 
 /* the macro OSL_LOG_PREFIX is intended to be an office internal macro for now

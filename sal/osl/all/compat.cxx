@@ -23,6 +23,16 @@ SAL_DLLPUBLIC_EXPORT sal_Bool SAL_CALL osl_acquireSemaphore(void *) {
     for (;;) { std::abort(); } // avoid "must return a value" warnings
 }
 
+SAL_DLLPUBLIC_EXPORT sal_Bool SAL_CALL osl_assertFailedLine(
+    char const *, sal_Int32, char const *)
+{
+    for (;;) { std::abort(); } // avoid "must return a value" warnings
+}
+
+SAL_DLLPUBLIC_EXPORT void SAL_CALL osl_breakDebug() {
+    std::abort();
+}
+
 SAL_DLLPUBLIC_EXPORT void * SAL_CALL osl_createSemaphore(sal_uInt32) {
     for (;;) { std::abort(); } // avoid "must return a value" warnings
 }
@@ -37,6 +47,33 @@ SAL_DLLPUBLIC_EXPORT sal_Bool SAL_CALL osl_getEthernetAddress(sal_uInt8 *) {
 
 SAL_DLLPUBLIC_EXPORT sal_Bool SAL_CALL osl_releaseSemaphore(void *) {
     for (;;) { std::abort(); } // avoid "must return a value" warnings
+}
+
+SAL_DLLPUBLIC_EXPORT sal_Int32 SAL_CALL osl_reportError(
+    sal_uInt32, char const *)
+{
+    for (;;) { std::abort(); } // avoid "must return a value" warnings
+}
+
+namespace {
+typedef void (SAL_CALL * pfunc_osl_printDebugMessage)(char const *);
+}
+SAL_DLLPUBLIC_EXPORT pfunc_osl_printDebugMessage SAL_CALL
+osl_setDebugMessageFunc(pfunc_osl_printDebugMessage) {
+    for (;;) { std::abort(); } // avoid "must return a value" warnings
+}
+
+namespace {
+typedef void (SAL_CALL * pfunc_osl_printDetailedDebugMessage)(
+    char const *, sal_Int32, char const *);
+}
+SAL_DLLPUBLIC_EXPORT pfunc_osl_printDetailedDebugMessage SAL_CALL
+osl_setDetailedDebugMessageFunc(pfunc_osl_printDetailedDebugMessage) {
+    for (;;) { std::abort(); } // avoid "must return a value" warnings
+}
+
+SAL_DLLPUBLIC_EXPORT void SAL_CALL osl_trace(char const *, ...) {
+    std::abort();
 }
 
 SAL_DLLPUBLIC_EXPORT sal_Bool SAL_CALL osl_tryToAcquireSemaphore(void *) {

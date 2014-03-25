@@ -88,7 +88,6 @@ $(eval $(call gb_Library_add_exception_objects,sal,\
 	sal/osl/all/debugbase \
 	sal/osl/all/loadmodulerelative \
 	sal/osl/all/log  \
-	sal/osl/all/trace  \
 	sal/osl/all/utility \
 	sal/rtl/alloc_arena \
 	sal/rtl/alloc_cache \
@@ -154,7 +153,6 @@ endif
 ifneq ($(OS),WNT)
 $(eval $(call gb_Library_add_exception_objects,sal,\
 	sal/osl/unx/conditn \
-	sal/osl/unx/diagnose \
 	sal/osl/unx/file \
 	sal/osl/unx/file_error_transl \
 	sal/osl/unx/file_misc \
@@ -250,7 +248,6 @@ $(eval $(call gb_Library_add_exception_objects,sal,\
 ))
 $(eval $(call gb_Library_add_cobjects,sal,\
 	sal/osl/w32/conditn \
-	sal/osl/w32/diagnose \
 	sal/osl/w32/dllentry \
 	sal/osl/w32/file_error \
 	sal/osl/w32/interlck \
