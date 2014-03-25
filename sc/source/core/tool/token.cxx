@@ -3018,7 +3018,6 @@ sc::RefUpdateResult ScTokenArray::AdjustReferenceInName(
                         rRef.Ref2.IncRow(rCxt.mnRowDelta);
                         aRes.mbReferenceModified = true;
                     }
-
                 }
             }
             break;
