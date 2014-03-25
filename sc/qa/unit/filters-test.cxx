@@ -31,6 +31,7 @@
 #include "drwlayer.hxx"
 #include "userdat.hxx"
 #include "formulacell.hxx"
+#include "tabprotection.hxx"
 
 #include <svx/svdpage.hxx>
 
@@ -69,6 +70,7 @@ public:
     void testSharedFormulaXLS();
     void testSharedFormulaXLSX();
     void testLegacyCellAnchoredRotatedShape();
+    void testEnhancedProtectionXLS();
 
     CPPUNIT_TEST_SUITE(ScFiltersTest);
     CPPUNIT_TEST(testCVEs);
@@ -82,6 +84,7 @@ public:
     CPPUNIT_TEST(testSharedFormulaXLS);
     CPPUNIT_TEST(testSharedFormulaXLSX);
     CPPUNIT_TEST(testLegacyCellAnchoredRotatedShape);
+    CPPUNIT_TEST(testEnhancedProtectionXLS);
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -489,6 +492,23 @@ void ScFiltersTest::testLegacyCellAnchoredRotatedShape()
         CPPUNIT_ASSERT(pDoc);
         impl_testLegacyCellAnchoredRotatedShape( pDoc, aRect, aAnchor );
     }
+}
+
+void ScFiltersTest::testEnhancedProtectionXLS()
+{
+    ScDocShellRef xDocSh = loadDoc("enhanced-protection.", XLS);
+    CPPUNIT_ASSERT(xDocSh.Is());
+    ScDocument* pDoc = xDocSh->GetDocument();
+
+    const ScTableProtection* pProt = pDoc->GetTabProtection(0);
+
+    CPPUNIT_ASSERT( !pProt->isBlockEditable( ScRange( 0, 0, 0, 0, 0, 0)));  // locked
+    CPPUNIT_ASSERT(  pProt->isBlockEditable( ScRange( 0, 1, 0, 0, 1, 0)));  // editable without password
+    CPPUNIT_ASSERT(  pProt->isBlockEditable( ScRange( 0, 2, 0, 0, 2, 0)));  // editable without password
+    CPPUNIT_ASSERT( !pProt->isBlockEditable( ScRange( 0, 3, 0, 0, 3, 0)));  // editable with password "foo"
+    CPPUNIT_ASSERT(  pProt->isBlockEditable( ScRange( 0, 1, 0, 0, 2, 0)));  // union of two different editables
+    CPPUNIT_ASSERT( !pProt->isBlockEditable( ScRange( 0, 0, 0, 0, 1, 0)));  // union of locked and editable
+    CPPUNIT_ASSERT( !pProt->isBlockEditable( ScRange( 0, 2, 0, 0, 3, 0)));  // union of editable and password editable
 }
 
 ScFiltersTest::ScFiltersTest()
