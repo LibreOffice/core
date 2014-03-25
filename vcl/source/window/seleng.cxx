@@ -247,7 +247,6 @@ bool SelectionEngine::SelMouseButtonDown( const MouseEvent& rMEvt )
 bool SelectionEngine::SelMouseButtonUp( const MouseEvent& rMEvt )
 {
     aWTimer.Stop();
-    //DbgOut("Up");
     if( !pFunctionSet || !pWin )
     {
         nFlags &= ~(SELENG_CMDEVT | SELENG_WAIT_UPEVT | SELENG_IN_SEL);
@@ -312,12 +311,10 @@ bool SelectionEngine::SelMouseMove( const MouseEvent& rMEvt )
         if ( !(nFlags & SELENG_HAS_ANCH) )
         {
             pFunctionSet->CreateAnchor();
-            //DbgOut("Move:Creating anchor");
             nFlags |= SELENG_HAS_ANCH;
         }
     }
 
-    //DbgOut("Move:SetCursor");
     pFunctionSet->SetCursorAtPoint( rMEvt.GetPosPixel() );
 
     return true;
