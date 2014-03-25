@@ -23,17 +23,9 @@
 #include "rtl/ustring.hxx"
 #include "osl/process.h"
 #include "osl/diagnose.hxx"
+#include "sal/log.hxx"
 #include "boost/bind.hpp"
 #include <vector>
-
-// define own ones, independent of OSL_DEBUG_LEVEL:
-#define DEBUGBASE_ENSURE_(c, f, l, m) \
-    do \
-    {  \
-        if (!(c) && _OSL_GLOBAL osl_assertFailedLine(f, l, m)) \
-            _OSL_GLOBAL osl_breakDebug(); \
-    } while (false)
-#define DEBUGBASE_ENSURE(c, m) DEBUGBASE_ENSURE_(c, OSL_THIS_FILE, __LINE__, m)
 
 namespace {
 
@@ -118,16 +110,10 @@ bool SAL_CALL osl_detail_ObjectRegistry_checkObjectCount(
         nSize = static_cast<std::size_t>(rData.m_nCount);
 
     bool const bRet = (nSize == nExpected);
-    if (! bRet) {
-        rtl::OStringBuffer buf;
-        buf.append( "unexpected number of " );
-        buf.append( rData.m_pName );
-        buf.append( ": " );
-        buf.append( static_cast<sal_Int64>(nSize) );
-        buf.append("; Expected: ");
-        buf.append( static_cast<sal_Int64>(nExpected) );
-        DEBUGBASE_ENSURE( false, buf.makeStringAndClear().getStr() );
-    }
+    SAL_WARN_IF(
+        !bRet, "sal.osl",
+        "unexpected number of " << rData.m_pName << ": " << nSize
+            << "; Expected: " << nExpected);
     return bRet;
 }
 
@@ -139,8 +125,7 @@ void SAL_CALL osl_detail_ObjectRegistry_registerObject(
         osl::MutexGuard const guard( osl_detail_ObjectRegistry_getMutex() );
         std::pair<osl::detail::VoidPointerSet::iterator, bool> const insertion(
             rData.m_addresses.insert(pObj) );
-        DEBUGBASE_ENSURE( insertion.second, "### insertion failed!?" );
-        static_cast<void>(insertion);
+        SAL_WARN_IF(!insertion.second, "sal.osl", "insertion failed!?");
     }
     else {
         osl_atomic_increment(&rData.m_nCount);
@@ -154,8 +139,7 @@ void SAL_CALL osl_detail_ObjectRegistry_revokeObject(
     if (rData.m_bStoreAddresses) {
         osl::MutexGuard const guard( osl_detail_ObjectRegistry_getMutex() );
         std::size_t const n = rData.m_addresses.erase(pObj);
-        DEBUGBASE_ENSURE( n == 1, "erased more than 1 entry!?" );
-        static_cast<void>(n);
+        SAL_WARN_IF(n != 1, "sal.osl", "erased more than 1 entry!?");
     }
     else {
         osl_atomic_decrement(&rData.m_nCount);
