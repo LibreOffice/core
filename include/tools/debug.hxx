@@ -142,19 +142,9 @@ inline void DbgSetPrintMsgBox( DbgPrintLine pProc )
     DbgFunc( DBG_FUNC_SETPRINTMSGBOX, (void*)(long)pProc );
 }
 
-inline DbgPrintLine DbgGetPrintMsgBox()
-{
-    return (DbgPrintLine)(long)DbgFunc( DBG_FUNC_GETPRINTMSGBOX );
-}
-
 inline void DbgSetPrintWindow( DbgPrintLine pProc )
 {
     DbgFunc( DBG_FUNC_SETPRINTWINDOW, (void*)(long)pProc );
-}
-
-inline void DbgSetPrintTestTool( DbgPrintLine pProc )
-{
-    DbgFunc( DBG_FUNC_SETPRINTTESTTOOL, (void*)(long)pProc );
 }
 
 inline void DbgSetAbort( DbgPrintLine pProc )
@@ -182,11 +172,6 @@ typedef sal_uInt16 DbgChannelId;
 */
 TOOLS_DLLPUBLIC DbgChannelId DbgRegisterUserChannel( DbgPrintLine pProc );
 
-inline bool DbgFilterMessage( const char* pMsg )
-{
-    return (bool)(long) DbgFunc( DBG_FUNC_FILTERMESSAGE, (void*)pMsg );
-}
-
 inline bool DbgIsAllErrorOut()
 {
     return (DbgFunc( DBG_FUNC_ALLERROROUT ) != 0);
@@ -202,24 +187,6 @@ inline void DbgSaveData( const DbgData& rData )
     DbgFunc( DBG_FUNC_SAVEDATA, (void*)&rData );
 }
 
-inline bool DbgIsTraceOut()
-{
-    DbgData* pData = DbgGetData();
-    return pData && pData->nTraceOut != DBG_OUT_NULL;
-}
-
-inline bool DbgIsWarningOut()
-{
-    DbgData* pData = DbgGetData();
-    return pData && pData->nWarningOut != DBG_OUT_NULL;
-}
-
-inline bool DbgIsErrorOut()
-{
-    DbgData* pData = DbgGetData();
-    return pData && pData->nErrorOut != DBG_OUT_NULL;
-}
-
 inline sal_uIntPtr DbgGetErrorOut()   // Testtool: test whether to collect OSL_ASSERTions as well
 {
     DbgData* pData = DbgGetData();
@@ -227,16 +194,6 @@ inline sal_uIntPtr DbgGetErrorOut()   // Testtool: test whether to collect OSL_A
         return pData->nErrorOut;
     else
         return DBG_OUT_NULL;
-}
-
-inline bool DbgIsAssertWarning()
-{
-    return DbgIsWarningOut();
-}
-
-inline bool DbgIsAssert()
-{
-    return DbgIsErrorOut();
 }
 
 inline sal_uIntPtr DbgIsResource()
