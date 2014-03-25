@@ -71,18 +71,6 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::util;
 
-DBG_NAME(SfxBindingsMsgPos)
-DBG_NAME(SfxBindingsUpdateServers)
-DBG_NAME(SfxBindingsCreateSet)
-DBG_NAME(SfxBindingsUpdateCtrl1)
-DBG_NAME(SfxBindingsUpdateCtrl2)
-DBG_NAME(SfxBindingsNextJob_Impl0)
-DBG_NAME(SfxBindingsNextJob_Impl)
-DBG_NAME(SfxBindingsUpdate_Impl)
-DBG_NAME(SfxBindingsInvalidateAll)
-
-
-
 static sal_uInt16 nTimeOut = 300;
 
 #define TIMEOUT_FIRST       nTimeOut
@@ -392,7 +380,6 @@ void SfxBindings::Update_Impl
 
     if ( !pDispatcher )
         return;
-    DBG_PROFSTART(SfxBindingsUpdate_Impl);
 
     // gather together all with the same status method which are dirty
     SfxDispatcher &rDispat = *pDispatcher;
@@ -435,8 +422,6 @@ void SfxBindings::Update_Impl
                             pRealSlot, pCache );
         UpdateControllers_Impl( 0, &aFoundCache, 0, SFX_ITEM_DISABLED);
     }
-
-    DBG_PROFSTOP(SfxBindingsUpdate_Impl);
 }
 
 
@@ -676,7 +661,6 @@ void SfxBindings::InvalidateAll
                        false  Slot Server remains valid */
 )
 {
-    DBG_PROFSTART(SfxBindingsInvalidateAll);
     DBG_ASSERT( !pImp->bInUpdate, "SfxBindings::Invalidate while in update" );
 
     if ( pImp->pSubBindings )
@@ -687,7 +671,6 @@ void SfxBindings::InvalidateAll
          ( pImp->bAllDirty && ( !bWithMsg || pImp->bAllMsgDirty ) ) ||
          SFX_APP()->IsDowning() )
     {
-        DBG_PROFSTOP(SfxBindingsInvalidateAll);
         return;
     }
 
@@ -705,8 +688,6 @@ void SfxBindings::InvalidateAll
         pImp->aTimer.SetTimeout(TIMEOUT_FIRST);
         pImp->aTimer.Start();
     }
-
-    DBG_PROFSTOP(SfxBindingsInvalidateAll);
 }
 
 
@@ -717,8 +698,6 @@ void SfxBindings::Invalidate
                               slot IDs (individual, not as a couple!) */
 )
 {
-    DBG_PROFSTART(SfxBindingsInvalidateAll);
-
     if ( pImp->bInUpdate )
     {
         sal_Int32 i = 0;
@@ -761,8 +740,6 @@ void SfxBindings::Invalidate
         pImp->aTimer.SetTimeout(TIMEOUT_FIRST);
         pImp->aTimer.Start();
     }
-
-    DBG_PROFSTOP(SfxBindingsInvalidateAll);
 }
 
 
@@ -787,8 +764,6 @@ void SfxBindings::InvalidateShell
 
     if ( !pDispatcher || pImp->bAllDirty || SFX_APP()->IsDowning() )
         return;
-
-    DBG_PROFSTART(SfxBindingsInvalidateAll);
 
     // flush now already, it is done in GetShellLevel (rsh) anyway,
     // important so that is set correctly: pimp-> ball(Msg)Dirty
@@ -824,8 +799,6 @@ void SfxBindings::InvalidateShell
             pImp->nFirstShell = nLevel;
         }
     }
-
-    DBG_PROFSTOP(SfxBindingsInvalidateAll);
 }
 
 
@@ -913,13 +886,11 @@ bool SfxBindings::IsBound( sal_uInt16 nSlotId, sal_uInt16 nStartSearchAt )
 sal_uInt16 SfxBindings::GetSlotPos( sal_uInt16 nId, sal_uInt16 nStartSearchAt )
 {
     DBG_ASSERT( pImp->pCaches != 0, "SfxBindings not initialized" );
-    DBG_PROFSTART(SfxBindingsMsgPos);
 
     // answer immediately if a function-seek comes repeated
     if ( pImp->nCachedFunc1 < pImp->pCaches->size() &&
          (*pImp->pCaches)[pImp->nCachedFunc1]->GetId() == nId )
     {
-        DBG_PROFSTOP(SfxBindingsMsgPos);
         return pImp->nCachedFunc1;
     }
     if ( pImp->nCachedFunc2 < pImp->pCaches->size() &&
@@ -929,19 +900,16 @@ sal_uInt16 SfxBindings::GetSlotPos( sal_uInt16 nId, sal_uInt16 nStartSearchAt )
         sal_uInt16 nTemp = pImp->nCachedFunc1;
         pImp->nCachedFunc1 = pImp->nCachedFunc2;
         pImp->nCachedFunc2 = nTemp;
-        DBG_PROFSTOP(SfxBindingsMsgPos);
         return pImp->nCachedFunc1;
     }
 
     // binary search, if not found, seek to target-position
     if ( pImp->pCaches->size() <= nStartSearchAt )
     {
-        DBG_PROFSTOP(SfxBindingsMsgPos);
         return 0;
     }
     if ( (sal_uInt16) pImp->pCaches->size() == (nStartSearchAt+1) )
     {
-        DBG_PROFSTOP(SfxBindingsMsgPos);
         return (*pImp->pCaches)[nStartSearchAt]->GetId() >= nId ? 0 : 1;
     }
     sal_uInt16 nLow = nStartSearchAt;
@@ -977,7 +945,6 @@ sal_uInt16 SfxBindings::GetSlotPos( sal_uInt16 nId, sal_uInt16 nStartSearchAt )
                 nId < (*pImp->pCaches)[nPos+1]->GetId(), "" );
     pImp->nCachedFunc2 = pImp->nCachedFunc1;
     pImp->nCachedFunc1 = nPos;
-    DBG_PROFSTOP(SfxBindingsMsgPos);
     return nPos;
 }
 
@@ -1297,7 +1264,6 @@ void SfxBindings::Execute_Impl( SfxRequest& aReq, const SfxSlot* pSlot, SfxShell
 
 void SfxBindings::UpdateSlotServer_Impl()
 {
-    DBG_PROFSTART(SfxBindingsUpdateServers);
     DBG_ASSERT( pImp->pCaches != 0, "SfxBindings not initialized" );
 
     // synchronize
@@ -1324,8 +1290,6 @@ void SfxBindings::UpdateSlotServer_Impl()
     pImp->bMsgDirty = pImp->bAllMsgDirty = sal_False;
 
     Broadcast( SfxSimpleHint(SFX_HINT_DOCCHANGED) );
-
-    DBG_PROFSTOP(SfxBindingsUpdateServers);
 }
 
 
@@ -1346,7 +1310,6 @@ SfxItemSet* SfxBindings::CreateSet_Impl
     if(!pMsgSvr || !pDispatcher)
         return 0;
 
-    DBG_PROFSTART(SfxBindingsCreateSet);
     pRealSlot = 0;
     *pMsgServer = pMsgSvr;
 
@@ -1466,7 +1429,6 @@ SfxItemSet* SfxBindings::CreateSet_Impl
     pRanges[j] = 0; // terminating NULL
     SfxItemSet *pSet = new SfxItemSet(rPool, pRanges.get());
     pRanges.reset();
-    DBG_PROFSTOP(SfxBindingsCreateSet);
     return pSet;
 }
 
@@ -1482,7 +1444,6 @@ void SfxBindings::UpdateControllers_Impl
 {
     DBG_ASSERT( !pFound->pSlot || SFX_KIND_ENUM != pFound->pSlot->GetKind(),
                 "direct update of enum slot isn't allowed" );
-    DBG_PROFSTART(SfxBindingsUpdateCtrl1);
 
     SfxStateCache* pCache = pFound->pCache;
     const SfxSlot* pSlot = pFound->pSlot;
@@ -1509,11 +1470,8 @@ void SfxBindings::UpdateControllers_Impl
             pCache->SetState(SFX_ITEM_AVAILABLE, pItem);
     }
 
-    DBG_PROFSTOP(SfxBindingsUpdateCtrl1);
-
     // Update the slots for so far available and bound Controllers for
     // Slave-Slots (Enum-value)
-    DBG_PROFSTART(SfxBindingsUpdateCtrl2);
     DBG_ASSERT( !pSlot || 0 == pSlot->GetLinkedSlot() || !pItem ||
                 pItem->ISA(SfxEnumItemInterface),
                 "master slot with non-enum-type found" );
@@ -1576,8 +1534,6 @@ void SfxBindings::UpdateControllers_Impl
                 break;
         }
     }
-
-    DBG_PROFSTOP(SfxBindingsUpdateCtrl2);
 }
 
 
@@ -1595,8 +1551,6 @@ IMPL_LINK( SfxBindings, NextJob_Impl, Timer *, pTimer )
 
     DBG_ASSERT( pImp->pCaches != 0, "SfxBindings not initialized" );
 
-    DBG_PROFSTART(SfxBindingsNextJob_Impl0);
-
     if ( Application::GetLastInputInterval() < MAX_INPUT_DELAY && pTimer )
     {
         pImp->aTimer.SetTimeout(TIMEOUT_UPDATING);
@@ -1612,12 +1566,10 @@ IMPL_LINK( SfxBindings, NextJob_Impl, Timer *, pTimer )
     SfxViewFrame* pFrame = pDispatcher ? pDispatcher->GetFrame() : NULL;
     if ( (pFrame && !pFrame->GetObjectShell()->AcceptStateUpdate()) || pSfxApp->IsDowning() || pImp->pCaches->empty() )
     {
-        DBG_PROFSTOP(SfxBindingsNextJob_Impl0);
         return sal_True;
     }
     if ( !pDispatcher || !pDispatcher->IsFlushed() )
     {
-        DBG_PROFSTOP(SfxBindingsNextJob_Impl0);
         return sal_True;
     }
 
@@ -1625,12 +1577,9 @@ IMPL_LINK( SfxBindings, NextJob_Impl, Timer *, pTimer )
     if ( pImp->bMsgDirty )
     {
         UpdateSlotServer_Impl();
-        DBG_PROFSTOP(SfxBindingsNextJob_Impl0);
         return sal_False;
     }
 
-    DBG_PROFSTOP(SfxBindingsNextJob_Impl0);
-    DBG_PROFSTART(SfxBindingsNextJob_Impl);
     pImp->bAllDirty = sal_False;
     pImp->aTimer.SetTimeout(TIMEOUT_UPDATING);
 
@@ -1672,7 +1621,6 @@ IMPL_LINK( SfxBindings, NextJob_Impl, Timer *, pTimer )
 
             if ( bWasDirty && !bJobDone && bPreEmptive && (--nLoops == 0) )
             {
-                DBG_PROFSTOP(SfxBindingsNextJob_Impl);
                 pImp->bInNextJob = sal_False;
                 return sal_False;
             }
@@ -1702,7 +1650,6 @@ IMPL_LINK( SfxBindings, NextJob_Impl, Timer *, pTimer )
     // Update round is finished
     pImp->bInNextJob = sal_False;
     Broadcast(SfxSimpleHint(SFX_HINT_UPDATEDONE));
-    DBG_PROFSTOP(SfxBindingsNextJob_Impl);
     return sal_True;
 #ifdef DBG_UTIL
     }

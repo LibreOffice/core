@@ -53,12 +53,6 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::util;
 
-
-
-DBG_NAME(SfxStateCache)
-DBG_NAME(SfxStateCacheSetState)
-
-
 BindDispatch_Impl::BindDispatch_Impl( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatch > & rDisp, const ::com::sun::star::util::URL& rURL, SfxStateCache *pStateCache, const SfxSlot* pS )
     : xDisp( rDisp )
     , aURL( rURL )
@@ -412,7 +406,6 @@ void SfxStateCache::SetState_Impl
 
     DBG_ASSERT( bMaybeDirty || !bSlotDirty, "setting state of dirty message" );
     DBG_ASSERT( SfxControllerItem::GetItemState(pState) == eState, "invalid SfxItemState" );
-    DBG_PROFSTART(SfxStateCacheSetState);
 
     // does the controller have to be notified at all?
     bool bNotify = bItemDirty;
@@ -454,7 +447,6 @@ void SfxStateCache::SetState_Impl
     }
 
     bCtrlDirty = sal_False;
-    DBG_PROFSTOP(SfxStateCacheSetState);
 }
 
 
@@ -464,7 +456,6 @@ void SfxStateCache::SetState_Impl
 void SfxStateCache::SetCachedState( sal_Bool bAlways )
 {
     DBG_ASSERT(pController==NULL||pController->GetId()==nId, "Cache with wrong ControllerItem" );
-    DBG_PROFSTART(SfxStateCacheSetState);
 
     // Only update if cached item exists and also able to process.
     // (If the State is sent, it must be ensured that a SlotServer is present,
@@ -486,8 +477,6 @@ void SfxStateCache::SetCachedState( sal_Bool bAlways )
         // Controller is now ok
         bCtrlDirty = sal_True;
     }
-
-    DBG_PROFSTOP(SfxStateCacheSetState);
 }
 
 

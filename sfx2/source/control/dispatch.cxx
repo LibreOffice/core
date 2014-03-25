@@ -64,9 +64,6 @@
 #include <slotserv.hxx>
 #include <workwin.hxx>
 
-DBG_NAME(SfxDispatcherFlush)
-DBG_NAME(SfxDispatcherFillState)
-
 typedef std::vector<SfxShell*> SfxShellStack_Impl;
 
 typedef std::vector<SfxRequest*> SfxRequestPtrArray;
@@ -1601,7 +1598,6 @@ void SfxDispatcher::FlushImpl()
 */
 
 {
-    DBG_PROFSTART(SfxDispatcherFlush);
     SFX_STACK(SfxDispatcher::FlushImpl);
 
     OSL_TRACE("Flushing dispatcher!");
@@ -1615,7 +1611,6 @@ void SfxDispatcher::FlushImpl()
     if ( !pImp->bFlushing )
     {
         pImp->bFlushing = true;
-        DBG_PROFSTOP(SfxDispatcherFlush);
         return;
     }
 
@@ -1734,7 +1729,6 @@ void SfxDispatcher::FlushImpl()
 
     if( bAwakeBindings && GetBindings() )
         GetBindings()->DLEAVEREGISTRATIONS();
-    DBG_PROFSTOP(SfxDispatcherFlush);
 
     for (sal_uInt16 n=0; n<SFX_OBJECTBAR_MAX; n++)
         pImp->aFixedObjBars[n].nResId = 0;
@@ -2068,13 +2062,10 @@ bool SfxDispatcher::_FillState
 {
     SFX_STACK(SfxDispatcher::_FillState);
 
-    DBG_PROFSTART(SfxDispatcherFillState);
-
     const SfxSlot *pSlot = rSvr.GetSlot();
     if ( pSlot && IsLocked( pSlot->GetSlotId() ) )
     {
         pImp->bInvalidateOnUnlock = true;
-        DBG_PROFSTOP(SfxDispatcherFillState);
         return false;
     }
 
@@ -2120,11 +2111,9 @@ bool SfxDispatcher::_FillState
         }
 #endif
 
-        DBG_PROFSTOP(SfxDispatcherFillState);
         return true;
     }
 
-    DBG_PROFSTOP(SfxDispatcherFillState);
     return false;
 }
 
