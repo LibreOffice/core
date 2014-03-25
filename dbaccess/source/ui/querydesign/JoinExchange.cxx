@@ -113,16 +113,16 @@ namespace dbaui
             AddFormat( SOT_FORMATSTR_ID_SBA_TABID );
     }
 
-    sal_Bool OJoinExchObj::GetData( const ::com::sun::star::datatransfer::DataFlavor& rFlavor )
+    bool OJoinExchObj::GetData( const ::com::sun::star::datatransfer::DataFlavor& rFlavor )
     {
         sal_uInt32 nFormat = SotExchange::GetFormat(rFlavor);
         if ( SOT_FORMATSTR_ID_SBA_JOIN == nFormat )
             // this is a HACK
             // we don't really copy our data, the instances using us have to call GetSourceDescription ....
             // if, one day, we have a _lot_ of time, this hack should be removed ....
-            return sal_True;
+            return true;
 
-        return sal_False;
+        return false;
     }
 
     Any SAL_CALL OJoinExchObj::queryInterface( const Type& _rType ) throw(RuntimeException, std::exception)

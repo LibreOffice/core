@@ -30,7 +30,7 @@ namespace dbaui
         : m_vTableRow(_rvTableRow)
     {
     }
-    sal_Bool OTableRowExchange::WriteObject( SotStorageStreamRef& rxOStm, void* pUserObject, sal_uInt32 nUserObjectId, const ::com::sun::star::datatransfer::DataFlavor& /*rFlavor*/ )
+    bool OTableRowExchange::WriteObject( SotStorageStreamRef& rxOStm, void* pUserObject, sal_uInt32 nUserObjectId, const ::com::sun::star::datatransfer::DataFlavor& /*rFlavor*/ )
     {
         if(nUserObjectId == SOT_FORMATSTR_ID_SBA_TABED)
         {
@@ -42,22 +42,22 @@ namespace dbaui
                 ::std::vector< ::boost::shared_ptr<OTableRow> >::const_iterator aEnd = pRows->end();
                 for(;aIter != aEnd;++aIter)
                     WriteOTableRow(*rxOStm, **aIter);
-                return sal_True;
+                return true;
             }
         }
-        return sal_False;
+        return false;
     }
     void OTableRowExchange::AddSupportedFormats()
     {
         if ( !m_vTableRow.empty() )
             AddFormat(SOT_FORMATSTR_ID_SBA_TABED);
     }
-    sal_Bool OTableRowExchange::GetData( const ::com::sun::star::datatransfer::DataFlavor& rFlavor )
+    bool OTableRowExchange::GetData( const ::com::sun::star::datatransfer::DataFlavor& rFlavor )
     {
         sal_uLong nFormat = SotExchange::GetFormat(rFlavor);
         if(nFormat == SOT_FORMATSTR_ID_SBA_TABED)
             return SetObject(&m_vTableRow,SOT_FORMATSTR_ID_SBA_TABED,rFlavor);
-        return sal_False;
+        return false;
     }
     void OTableRowExchange::ObjectReleased()
     {

@@ -125,21 +125,21 @@ void SdPageObjsTLB::SdPageObjsTransferable::AddSupportedFormats()
 
 
 
-sal_Bool SdPageObjsTLB::SdPageObjsTransferable::GetData( const ::com::sun::star::datatransfer::DataFlavor& rFlavor )
+bool SdPageObjsTLB::SdPageObjsTransferable::GetData( const ::com::sun::star::datatransfer::DataFlavor& rFlavor )
 {
     sal_uLong nFormatId = SotExchange::GetFormat( rFlavor );
     switch (nFormatId)
     {
         case SOT_FORMATSTR_ID_NETSCAPE_BOOKMARK:
             SetINetBookmark( maBookmark, rFlavor );
-            return sal_True;
+            return true;
 
         case SOT_FORMATSTR_ID_TREELISTBOX:
             SetAny(maTreeListBoxData, rFlavor);
-            return sal_True;
+            return true;
 
         default:
-            return sal_False;
+            return false;
     }
 }
 
@@ -1604,7 +1604,7 @@ void SdPageObjsTLB::AddShapeToTransferable (
         aObjectDescriptor.maDisplayName = pDocShell->GetMedium()->GetURLObject().GetURLNoPass();
     else
         aObjectDescriptor.maDisplayName = OUString();
-    aObjectDescriptor.mbCanLink = sal_False;
+    aObjectDescriptor.mbCanLink = false;
 
     rTransferable.SetStartPos(aDragPos);
     rTransferable.SetObjectDescriptor( aObjectDescriptor );

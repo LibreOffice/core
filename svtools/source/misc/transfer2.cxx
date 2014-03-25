@@ -148,7 +148,7 @@ void SAL_CALL DropTargetHelper::DropTargetListener::drop( const DropTargetDropEv
         ( (DropTargetDragEvent&)( aAcceptEvent.maDragEvent ) ).LocationX = rDTDE.LocationX;
         ( (DropTargetDragEvent&)( aAcceptEvent.maDragEvent ) ).LocationY = rDTDE.LocationY;
         ( (DropTargetDragEvent&)( aAcceptEvent.maDragEvent ) ).SourceActions = rDTDE.SourceActions;
-        aAcceptEvent.mbLeaving = sal_False;
+        aAcceptEvent.mbLeaving = false;
         aAcceptEvent.mbDefault = aExecuteEvt.mbDefault;
 
         sal_Int8 nRet = mrParent.AcceptDrop( aAcceptEvent );
@@ -229,7 +229,7 @@ void SAL_CALL DropTargetHelper::DropTargetListener::dragExit( const DropTargetEv
     {
         if( mpLastDragOverEvent )
         {
-            mpLastDragOverEvent->mbLeaving = sal_True;
+            mpLastDragOverEvent->mbLeaving = true;
             mrParent.AcceptDrop( *mpLastDragOverEvent );
             delete mpLastDragOverEvent;
             mpLastDragOverEvent = NULL;
@@ -322,16 +322,16 @@ sal_Int8 DropTargetHelper::ExecuteDrop( const ExecuteDropEvent& )
 
 
 
-sal_Bool DropTargetHelper::IsDropFormatSupported( SotFormatStringId nFormat )
+bool DropTargetHelper::IsDropFormatSupported( SotFormatStringId nFormat )
 {
     DataFlavorExVector::iterator    aIter( mpFormats->begin() ), aEnd( mpFormats->end() );
-    sal_Bool                        bRet = sal_False;
+    bool                            bRet = false;
 
     while( aIter != aEnd )
     {
         if( nFormat == (*aIter++).mnSotId )
         {
-            bRet = sal_True;
+            bRet = true;
             aIter = aEnd;
         }
     }
@@ -341,16 +341,16 @@ sal_Bool DropTargetHelper::IsDropFormatSupported( SotFormatStringId nFormat )
 
 
 
-sal_Bool DropTargetHelper::IsDropFormatSupported( const DataFlavor& rFlavor )
+bool DropTargetHelper::IsDropFormatSupported( const DataFlavor& rFlavor )
 {
     DataFlavorExVector::iterator    aIter( mpFormats->begin() ), aEnd( mpFormats->end() );
-    sal_Bool                        bRet = sal_False;
+    bool                            bRet = false;
 
     while( aIter != aEnd )
     {
         if( TransferableDataHelper::IsEqual( rFlavor, *aIter++ ) )
         {
-            bRet = sal_True;
+            bRet = true;
             aIter = aEnd;
         }
     }
@@ -415,12 +415,12 @@ void TransferDataContainer::AddSupportedFormats()
 
 
 
-sal_Bool TransferDataContainer::GetData( const
+bool TransferDataContainer::GetData( const
             ::com::sun::star::datatransfer::DataFlavor& rFlavor )
 {
     TDataCntnrEntryList::iterator   aIter( pImpl->aFmtList.begin() ),
                                     aEnd( pImpl->aFmtList.end() );
-    sal_Bool bFnd = sal_False;
+    bool bFnd = false;
     sal_uLong nFmtId = SotExchange::GetFormat( rFlavor );
 
     // test first the list
@@ -587,7 +587,7 @@ void TransferDataContainer::CopyAny( sal_uInt16 nFmt,
 
 
 
-sal_Bool TransferDataContainer::HasAnyData() const
+bool TransferDataContainer::HasAnyData() const
 {
     return pImpl->aFmtList.begin() != pImpl->aFmtList.end() ||
             0 != pImpl->pBookmk;

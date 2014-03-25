@@ -75,10 +75,10 @@ void ChartTransferable::AddSupportedFormats()
     AddFormat( SOT_FORMAT_BITMAP );
 }
 
-sal_Bool ChartTransferable::GetData( const ::com::sun::star::datatransfer::DataFlavor& rFlavor )
+bool ChartTransferable::GetData( const ::com::sun::star::datatransfer::DataFlavor& rFlavor )
 {
     sal_uInt32  nFormat = SotExchange::GetFormat( rFlavor );
-    sal_Bool    bResult = sal_False;
+    bool        bResult = false;
 
     if( HasFormat( nFormat ))
     {
@@ -101,12 +101,12 @@ sal_Bool ChartTransferable::GetData( const ::com::sun::star::datatransfer::DataF
     return bResult;
 }
 
-sal_Bool ChartTransferable::WriteObject( SotStorageStreamRef& rxOStm, void* pUserObject, sal_uInt32 nUserObjectId,
+bool ChartTransferable::WriteObject( SotStorageStreamRef& rxOStm, void* pUserObject, sal_uInt32 nUserObjectId,
     const datatransfer::DataFlavor& /* rFlavor */ )
 {
     // called from SetObject, put data into stream
 
-    sal_Bool bRet = sal_False;
+    bool bRet = false;
     switch ( nUserObjectId )
     {
         case CHARTTRANSFER_OBJECTTYPE_DRAWMODEL:

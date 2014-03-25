@@ -1976,7 +1976,7 @@ Any SAL_CALL SfxBaseModel::getTransferData( const datatransfer::DataFlavor& aFla
                 aDesc.maSize = OutputDevice::LogicToLogic( aSize, aMapUnit, MAP_100TH_MM );
                 aDesc.maDragStartPos = Point();
                 aDesc.maDisplayName = "";
-                aDesc.mbCanLink = sal_False;
+                aDesc.mbCanLink = false;
 
                 SvMemoryStream aMemStm( 1024, 1024 );
                 WriteTransferableObjectDescriptor( aMemStm, aDesc );

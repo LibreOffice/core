@@ -390,7 +390,7 @@ namespace
     }
 }
 
-sal_Bool SwTransferable::GetData( const DataFlavor& rFlavor )
+bool SwTransferable::GetData( const DataFlavor& rFlavor )
 {
     sal_uInt32  nFormat = SotExchange::GetFormat( rFlavor );
 
@@ -399,7 +399,7 @@ sal_Bool SwTransferable::GetData( const DataFlavor& rFlavor )
     // 2) we have either a clipboard document (pClpDocFac), or
     //    we have a SwWrtShell (so we can generate a new clipboard document)
     if( !HasFormat( nFormat ) || ( pClpDocFac == NULL && pWrtShell == NULL ) )
-        return sal_False;
+        return false;
 
     if( !pClpDocFac )
     {
@@ -597,11 +597,11 @@ sal_Bool SwTransferable::GetData( const DataFlavor& rFlavor )
     return bOK;
 }
 
-sal_Bool SwTransferable::WriteObject( SotStorageStreamRef& xStream,
+bool SwTransferable::WriteObject( SotStorageStreamRef& xStream,
                                     void* pObject, sal_uInt32 nObjectType,
                                     const DataFlavor& /*rFlavor*/ )
 {
-    sal_Bool bRet = sal_False;
+    bool bRet = false;
     WriterRef xWrt;
 
     switch( nObjectType )
@@ -676,7 +676,7 @@ sal_Bool SwTransferable::WriteObject( SotStorageStreamRef& xStream,
                     pSrcStm.reset();
                 }
 
-                bRet = sal_True;
+                bRet = true;
 
                 xWorkStore->dispose();
                 xWorkStore = uno::Reference < embed::XStorage >();
@@ -743,7 +743,7 @@ sal_Bool SwTransferable::WriteObject( SotStorageStreamRef& xStream,
         {
             xStream->WriteChar( '\0' );               // terminate with a zero
             xStream->Commit();
-            bRet = sal_True;
+            bRet = true;
         }
     }
 
@@ -949,7 +949,7 @@ int SwTransferable::PrepareForCopy( sal_Bool bIsCut )
         //ObjectDescriptor was already filly from the old DocShell.
         //Now adjust it. Thus in GetData the first query can still
         //be answered with delayed rendering.
-        aObjDesc.mbCanLink = sal_False;
+        aObjDesc.mbCanLink = false;
         Size aSz( OLESIZE );
         aObjDesc.maSize = OutputDevice::LogicToLogic( aSz, MAP_TWIP, MAP_100TH_MM );
 
@@ -1046,7 +1046,7 @@ int SwTransferable::CopyGlossary( SwTextBlocks& rGlossary,
     //ObjectDescriptor was already filled from the old DocShell.
     //Now adjust it. Thus in GetData the first query can still
     //be answered with delayed rendering.
-    aObjDesc.mbCanLink = sal_False;
+    aObjDesc.mbCanLink = false;
     Size aSz( OLESIZE );
     aObjDesc.maSize = OutputDevice::LogicToLogic( aSz, MAP_TWIP, MAP_100TH_MM );
 
@@ -3066,7 +3066,7 @@ void SwTransferable::SetDataForDragAndDrop( const Point& rSttPos )
         //ObjectDescriptor was already filled from the old DocShell.
         //Now adjust it. Thus in GetData the first query can still
         //be answered with delayed rendering.
-        aObjDesc.mbCanLink = sal_False;
+        aObjDesc.mbCanLink = false;
         aObjDesc.maDragStartPos = rSttPos;
         aObjDesc.maSize = OutputDevice::LogicToLogic( Size( OLESIZE ),
                                                 MAP_TWIP, MAP_100TH_MM );

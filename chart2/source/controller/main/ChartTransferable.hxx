@@ -43,8 +43,8 @@ protected:
 
     // implementation of TransferableHelper methods
     virtual void        AddSupportedFormats();
-    virtual sal_Bool    GetData( const ::com::sun::star::datatransfer::DataFlavor& rFlavor );
-    virtual sal_Bool    WriteObject( SotStorageStreamRef& rxOStm, void* pUserObject, sal_uInt32 nUserObjectId,
+    virtual bool        GetData( const ::com::sun::star::datatransfer::DataFlavor& rFlavor );
+    virtual bool        WriteObject( SotStorageStreamRef& rxOStm, void* pUserObject, sal_uInt32 nUserObjectId,
                                         const ::com::sun::star::datatransfer::DataFlavor& rFlavor );
 
 private:

@@ -49,14 +49,14 @@ namespace rptui
         }
     }
 
-    sal_Bool OGroupExchange::GetData( const ::com::sun::star::datatransfer::DataFlavor& rFlavor )
+    bool OGroupExchange::GetData( const ::com::sun::star::datatransfer::DataFlavor& rFlavor )
     {
         sal_uLong nFormat = SotExchange::GetFormat(rFlavor);
         if(nFormat == OGroupExchange::getReportGroupId() )
         {
             return SetAny(uno::makeAny(m_aGroupRow),rFlavor);
         }
-        return sal_False;
+        return false;
     }
 
     void OGroupExchange::ObjectReleased()

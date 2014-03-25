@@ -76,9 +76,9 @@ void SvEmbedTransferHelper::AddSupportedFormats()
 
 
 
-sal_Bool SvEmbedTransferHelper::GetData( const ::com::sun::star::datatransfer::DataFlavor& rFlavor )
+bool SvEmbedTransferHelper::GetData( const ::com::sun::star::datatransfer::DataFlavor& rFlavor )
 {
-    sal_Bool bRet = sal_False;
+    bool bRet = false;
 
     if( m_xObj.is() )
     {
@@ -132,7 +132,7 @@ sal_Bool SvEmbedTransferHelper::GetData( const ::com::sun::star::datatransfer::D
                             if ( bDeleteStream )
                                 delete pStream;
 
-                            if( ( bRet = ( aSeq.getLength() > 0 ) ) == sal_True )
+                            if( ( bRet = ( aSeq.getLength() > 0 ) ) )
                             {
                                 aAny <<= aSeq;
                                 SetAny( aAny, rFlavor );
@@ -158,7 +158,7 @@ sal_Bool SvEmbedTransferHelper::GetData( const ::com::sun::star::datatransfer::D
                     aAny <<= uno::Sequence< sal_Int8 >( reinterpret_cast< const sal_Int8* >( aMemStm.GetData() ),
                                                     aMemStm.Seek( STREAM_SEEK_TO_END ) );
                     SetAny( aAny, rFlavor );
-                    bRet = sal_True;
+                    bRet = true;
                 }
                 else if ( m_xObj.is() && :: svt::EmbeddedObjectRef::TryRunningState( m_xObj ) )
                 {
@@ -167,7 +167,7 @@ sal_Bool SvEmbedTransferHelper::GetData( const ::com::sun::star::datatransfer::D
                     {
                         uno::Any aAny = xTransferable->getTransferData( rFlavor );
                         SetAny( aAny, rFlavor );
-                        bRet = sal_True;
+                        bRet = true;
                     }
                 }
             }
@@ -241,7 +241,7 @@ void SvEmbedTransferHelper::FillTransferableObjectDescriptor( TransferableObject
     rDesc.maSize = OutputDevice::LogicToLogic( aSize, aMapMode, MapMode( MAP_100TH_MM ) );
     rDesc.maDragStartPos = Point();
     rDesc.maDisplayName = "";
-    rDesc.mbCanLink = sal_False;
+    rDesc.mbCanLink = false;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

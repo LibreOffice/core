@@ -439,13 +439,13 @@ void SdTransferable::AddSupportedFormats()
     }
 }
 
-sal_Bool SdTransferable::GetData( const DataFlavor& rFlavor )
+bool SdTransferable::GetData( const DataFlavor& rFlavor )
 {
     if (SD_MOD()==NULL)
-        return sal_False;
+        return false;
 
     sal_uInt32  nFormat = SotExchange::GetFormat( rFlavor );
-    sal_Bool    bOK = sal_False;
+    bool        bOK = false;
 
     CreateData();
 
@@ -562,9 +562,9 @@ sal_Bool SdTransferable::GetData( const DataFlavor& rFlavor )
     return bOK;
 }
 
-sal_Bool SdTransferable::WriteObject( SotStorageStreamRef& rxOStm, void* pObject, sal_uInt32 nObjectType, const DataFlavor& )
+bool SdTransferable::WriteObject( SotStorageStreamRef& rxOStm, void* pObject, sal_uInt32 nObjectType, const DataFlavor& )
 {
-    sal_Bool bRet = sal_False;
+    bool bRet = false;
 
     switch( nObjectType )
     {
@@ -593,7 +593,7 @@ sal_Bool SdTransferable::WriteObject( SotStorageStreamRef& rxOStm, void* pObject
             catch( Exception& )
             {
                 OSL_FAIL( "sd::SdTransferable::WriteObject(), exception catched!" );
-                bRet = sal_False;
+                bRet = false;
             }
         }
         break;
@@ -628,7 +628,7 @@ sal_Bool SdTransferable::WriteObject( SotStorageStreamRef& rxOStm, void* pObject
                     delete pSrcStm;
                 }
 
-                bRet = sal_True;
+                bRet = true;
                 rxOStm->Commit();
             }
             catch ( Exception& )

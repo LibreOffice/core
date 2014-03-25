@@ -101,7 +101,7 @@ public:
         SAL_DLLPRIVATE virtual               ~SdPageObjsTransferable();
 
         SAL_DLLPRIVATE virtual void      AddSupportedFormats();
-        SAL_DLLPRIVATE virtual sal_Bool  GetData( const ::com::sun::star::datatransfer::DataFlavor& rFlavor );
+        SAL_DLLPRIVATE virtual bool      GetData( const ::com::sun::star::datatransfer::DataFlavor& rFlavor );
         SAL_DLLPRIVATE virtual void      DragFinished( sal_Int8 nDropAction );
 
         SAL_DLLPRIVATE virtual sal_Int64 SAL_CALL getSomething( const ::com::sun::star::uno::Sequence< sal_Int8 >& rId ) throw( ::com::sun::star::uno::RuntimeException, std::exception );

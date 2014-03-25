@@ -204,7 +204,7 @@ struct SdNavigatorDropEvent : public ExecuteDropEvent
     aObjDesc.maSize = GetAllMarkedRect().GetSize();
     aObjDesc.maDragStartPos = rDragPos;
     aObjDesc.maDisplayName = aDisplayName;
-    aObjDesc.mbCanLink = sal_False;
+    aObjDesc.mbCanLink = false;
 
     pTransferable->SetStartPos( rDragPos );
     pTransferable->SetObjectDescriptor( aObjDesc );

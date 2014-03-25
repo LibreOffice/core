@@ -44,13 +44,13 @@ namespace svt
     }
 
 
-    sal_Bool OStringTransferable::GetData( const DataFlavor& _rFlavor )
+    bool OStringTransferable::GetData( const DataFlavor& _rFlavor )
     {
         sal_uInt32 nFormat = SotExchange::GetFormat( _rFlavor );
         if (SOT_FORMAT_STRING == nFormat)
             return SetString( m_sContent, _rFlavor );
 
-        return sal_False;
+        return false;
     }
 
 

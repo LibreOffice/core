@@ -71,7 +71,7 @@ struct TransferableObjectDescriptor
     sal_uInt32          mnOle2Misc;
     OUString            maTypeName;
     OUString            maDisplayName;
-    sal_Bool            mbCanLink;
+    bool                mbCanLink;
 
     TransferableObjectDescriptor()
         : mnViewAspect(::com::sun::star::embed::Aspects::MSOLE_CONTENT)
@@ -88,23 +88,23 @@ struct AcceptDropEvent
     sal_Int8                                                        mnAction;
     Point                                                           maPosPixel;
     const ::com::sun::star::datatransfer::dnd::DropTargetDragEvent  maDragEvent;
-    sal_Bool                                                        mbLeaving;
-    sal_Bool                                                        mbDefault;
+    bool                                                            mbLeaving;
+    bool                                                            mbDefault;
 
     AcceptDropEvent() :
         mnAction( DND_ACTION_NONE ),
-        mbLeaving( sal_False ),
-        mbDefault( sal_False ) {}
+        mbLeaving( false ),
+        mbDefault( false ) {}
 
     AcceptDropEvent( sal_Int8 nAction,
                      const Point& rPosPixel,
                      const ::com::sun::star::datatransfer::dnd::DropTargetDragEvent& rDragEvent,
-                     sal_Bool bLeaving = sal_False ) :
+                     bool bLeaving = false ) :
         mnAction( nAction ),
         maPosPixel( rPosPixel ),
         maDragEvent( rDragEvent ),
         mbLeaving( bLeaving ),
-        mbDefault( sal_False ) {}
+        mbDefault( false ) {}
 };
 
 struct ExecuteDropEvent
@@ -112,11 +112,11 @@ struct ExecuteDropEvent
     sal_Int8                                                        mnAction;
     Point                                                           maPosPixel;
     const ::com::sun::star::datatransfer::dnd::DropTargetDropEvent  maDropEvent;
-    sal_Bool                                                        mbDefault;
+    bool                                                            mbDefault;
 
     ExecuteDropEvent() :
         mnAction( DND_ACTION_NONE ),
-        mbDefault( sal_False ) {}
+        mbDefault( false ) {}
 
     ExecuteDropEvent( sal_Int8 nAction,
                       const Point& rPosPixel,
@@ -124,7 +124,7 @@ struct ExecuteDropEvent
         mnAction( nAction ),
         maPosPixel( rPosPixel ),
         maDropEvent( rDropEvent ),
-        mbDefault( sal_False ) {}
+        mbDefault( false ) {}
 };
 
 class SVT_DLLPUBLIC TransferableHelper : public ::cppu::WeakImplHelper4< ::com::sun::star::datatransfer::XTransferable,
@@ -218,26 +218,26 @@ protected:
     void                AddFormat( const ::com::sun::star::datatransfer::DataFlavor& rFlavor );
     void                RemoveFormat( SotFormatStringId nFormat );
     void                RemoveFormat( const ::com::sun::star::datatransfer::DataFlavor& rFlavor );
-    sal_Bool            HasFormat( SotFormatStringId nFormat );
-    inline sal_Bool     HasFormat( const ::com::sun::star::datatransfer::DataFlavor& rFlavor ) { return isDataFlavorSupported( rFlavor ); }
+    bool                HasFormat( SotFormatStringId nFormat );
+    inline bool         HasFormat( const ::com::sun::star::datatransfer::DataFlavor& rFlavor ) { return isDataFlavorSupported( rFlavor ); }
     void                ClearFormats();
 
-    sal_Bool            SetAny( const ::com::sun::star::uno::Any& rAny, const ::com::sun::star::datatransfer::DataFlavor& rFlavor );
-    sal_Bool            SetString( const OUString& rString, const ::com::sun::star::datatransfer::DataFlavor& rFlavor );
-    sal_Bool            SetBitmapEx( const BitmapEx& rBitmap, const ::com::sun::star::datatransfer::DataFlavor& rFlavor );
-    sal_Bool            SetGDIMetaFile( const GDIMetaFile& rMtf, const ::com::sun::star::datatransfer::DataFlavor& rFlavor );
-    sal_Bool            SetGraphic( const Graphic& rGraphic, const ::com::sun::star::datatransfer::DataFlavor& rFlavor );
-    sal_Bool            SetImageMap( const ImageMap& rIMap, const ::com::sun::star::datatransfer::DataFlavor& rFlavor );
-    sal_Bool            SetTransferableObjectDescriptor( const TransferableObjectDescriptor& rDesc, const ::com::sun::star::datatransfer::DataFlavor& rFlavor );
-    sal_Bool            SetINetBookmark( const INetBookmark& rBmk, const ::com::sun::star::datatransfer::DataFlavor& rFlavor );
-    sal_Bool            SetINetImage( const INetImage& rINtImg, const ::com::sun::star::datatransfer::DataFlavor& rFlavor );
-    sal_Bool            SetObject( void* pUserObject, sal_uInt32 nUserObjectId, const ::com::sun::star::datatransfer::DataFlavor& rFlavor );
+    bool               SetAny( const ::com::sun::star::uno::Any& rAny, const ::com::sun::star::datatransfer::DataFlavor& rFlavor );
+    bool               SetString( const OUString& rString, const ::com::sun::star::datatransfer::DataFlavor& rFlavor );
+    bool               SetBitmapEx( const BitmapEx& rBitmap, const ::com::sun::star::datatransfer::DataFlavor& rFlavor );
+    bool               SetGDIMetaFile( const GDIMetaFile& rMtf, const ::com::sun::star::datatransfer::DataFlavor& rFlavor );
+    bool               SetGraphic( const Graphic& rGraphic, const ::com::sun::star::datatransfer::DataFlavor& rFlavor );
+    bool               SetImageMap( const ImageMap& rIMap, const ::com::sun::star::datatransfer::DataFlavor& rFlavor );
+    bool               SetTransferableObjectDescriptor( const TransferableObjectDescriptor& rDesc, const ::com::sun::star::datatransfer::DataFlavor& rFlavor );
+    bool               SetINetBookmark( const INetBookmark& rBmk, const ::com::sun::star::datatransfer::DataFlavor& rFlavor );
+    bool               SetINetImage( const INetImage& rINtImg, const ::com::sun::star::datatransfer::DataFlavor& rFlavor );
+    bool               SetObject( void* pUserObject, sal_uInt32 nUserObjectId, const ::com::sun::star::datatransfer::DataFlavor& rFlavor );
 
 protected:
 
     virtual void        AddSupportedFormats() = 0;
-    virtual sal_Bool    GetData( const ::com::sun::star::datatransfer::DataFlavor& rFlavor ) = 0;
-    virtual sal_Bool    WriteObject( SotStorageStreamRef& rxOStm, void* pUserObject, sal_uInt32 nUserObjectId, const ::com::sun::star::datatransfer::DataFlavor& rFlavor );
+    virtual bool        GetData( const ::com::sun::star::datatransfer::DataFlavor& rFlavor ) = 0;
+    virtual bool        WriteObject( SotStorageStreamRef& rxOStm, void* pUserObject, sal_uInt32 nUserObjectId, const ::com::sun::star::datatransfer::DataFlavor& rFlavor );
     virtual void        DragFinished( sal_Int8 nDropAction );
     virtual void        ObjectReleased();
 
@@ -295,8 +295,8 @@ public:
     const ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::XTransferable >&    GetTransferable() const { return mxTransfer; }
     ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::XTransferable >           GetXTransferable() const;
 
-    sal_Bool                    HasFormat( SotFormatStringId nFormat ) const;
-    sal_Bool                    HasFormat( const ::com::sun::star::datatransfer::DataFlavor& rFlavor ) const;
+    bool                        HasFormat( SotFormatStringId nFormat ) const;
+    bool                        HasFormat( const ::com::sun::star::datatransfer::DataFlavor& rFlavor ) const;
 
     sal_uInt32                  GetFormatCount() const;
 
@@ -305,7 +305,7 @@ public:
 
     DataFlavorExVector&         GetDataFlavorExVector() const {return *mpFormats; }
 
-    sal_Bool                    StartClipboardListening( );
+    bool                        StartClipboardListening( );
     void                        StopClipboardListening( );
 
     void                        Rebind( const ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::XTransferable >& _rxNewData );
@@ -315,11 +315,11 @@ public:
     ::com::sun::star::uno::Any  GetAny( SotFormatStringId nFormat ) const;
     ::com::sun::star::uno::Any  GetAny( const ::com::sun::star::datatransfer::DataFlavor& rFlavor ) const;
 
-    sal_Bool                    GetString( SotFormatStringId nFormat, OUString& rStr );
-    sal_Bool                    GetString( const ::com::sun::star::datatransfer::DataFlavor& rFlavor, OUString& rStr );
+    bool                        GetString( SotFormatStringId nFormat, OUString& rStr );
+    bool                        GetString( const ::com::sun::star::datatransfer::DataFlavor& rFlavor, OUString& rStr );
 
-    sal_Bool                    GetBitmapEx( SotFormatStringId nFormat, BitmapEx& rBmp );
-    sal_Bool                    GetBitmapEx( const ::com::sun::star::datatransfer::DataFlavor& rFlavor, BitmapEx& rBmp );
+    bool                        GetBitmapEx( SotFormatStringId nFormat, BitmapEx& rBmp );
+    bool                        GetBitmapEx( const ::com::sun::star::datatransfer::DataFlavor& rFlavor, BitmapEx& rBmp );
 
     /** Return as GDI metafile.
 
@@ -329,45 +329,45 @@ public:
         metafile, with over 3 million (!) actions; which is just too large for
         any reasonable handling - and you need to set a limit.
     */
-    sal_Bool                    GetGDIMetaFile( SotFormatStringId nFormat, GDIMetaFile& rMtf, size_t nMaxActions = 0 );
-    sal_Bool                    GetGDIMetaFile( const ::com::sun::star::datatransfer::DataFlavor& rFlavor, GDIMetaFile& rMtf );
+    bool                        GetGDIMetaFile( SotFormatStringId nFormat, GDIMetaFile& rMtf, size_t nMaxActions = 0 );
+    bool                        GetGDIMetaFile( const ::com::sun::star::datatransfer::DataFlavor& rFlavor, GDIMetaFile& rMtf );
 
-    sal_Bool                    GetGraphic( SotFormatStringId nFormat, Graphic& rGraphic );
-    sal_Bool                    GetGraphic( const ::com::sun::star::datatransfer::DataFlavor& rFlavor, Graphic& rGraphic );
+    bool                        GetGraphic( SotFormatStringId nFormat, Graphic& rGraphic );
+    bool                        GetGraphic( const ::com::sun::star::datatransfer::DataFlavor& rFlavor, Graphic& rGraphic );
 
-    sal_Bool                    GetImageMap( SotFormatStringId nFormat, ImageMap& rIMap );
-    sal_Bool                    GetImageMap( const ::com::sun::star::datatransfer::DataFlavor& rFlavor, ImageMap& rImap );
+    bool                        GetImageMap( SotFormatStringId nFormat, ImageMap& rIMap );
+    bool                        GetImageMap( const ::com::sun::star::datatransfer::DataFlavor& rFlavor, ImageMap& rImap );
 
-    sal_Bool                    GetTransferableObjectDescriptor( SotFormatStringId nFormat, TransferableObjectDescriptor& rDesc );
-    sal_Bool                    GetTransferableObjectDescriptor( const ::com::sun::star::datatransfer::DataFlavor& rFlavor, TransferableObjectDescriptor& rDesc );
+    bool                        GetTransferableObjectDescriptor( SotFormatStringId nFormat, TransferableObjectDescriptor& rDesc );
+    bool                        GetTransferableObjectDescriptor( const ::com::sun::star::datatransfer::DataFlavor& rFlavor, TransferableObjectDescriptor& rDesc );
 
-    sal_Bool                    GetINetBookmark( SotFormatStringId nFormat, INetBookmark& rBmk );
-    sal_Bool                    GetINetBookmark( const ::com::sun::star::datatransfer::DataFlavor& rFlavor, INetBookmark& rBmk );
+    bool                        GetINetBookmark( SotFormatStringId nFormat, INetBookmark& rBmk );
+    bool                        GetINetBookmark( const ::com::sun::star::datatransfer::DataFlavor& rFlavor, INetBookmark& rBmk );
 
-    sal_Bool                    GetINetImage( SotFormatStringId nFormat, INetImage& rINtImg );
-    sal_Bool                    GetINetImage( const ::com::sun::star::datatransfer::DataFlavor& rFlavor, INetImage& rINtImg );
+    bool                        GetINetImage( SotFormatStringId nFormat, INetImage& rINtImg );
+    bool                        GetINetImage( const ::com::sun::star::datatransfer::DataFlavor& rFlavor, INetImage& rINtImg );
 
-    sal_Bool                    GetFileList( SotFormatStringId nFormat, FileList& rFileList );
-    sal_Bool                    GetFileList( const ::com::sun::star::datatransfer::DataFlavor& rFlavor, FileList& rFileList );
+    bool                        GetFileList( SotFormatStringId nFormat, FileList& rFileList );
+    bool                        GetFileList( const ::com::sun::star::datatransfer::DataFlavor& rFlavor, FileList& rFileList );
 
-    sal_Bool                    GetSequence( SotFormatStringId nFormat, ::com::sun::star::uno::Sequence< sal_Int8 >& rSeq );
-    sal_Bool                    GetSequence( const ::com::sun::star::datatransfer::DataFlavor& rFlavor, ::com::sun::star::uno::Sequence< sal_Int8 >& rSeq );
+    bool                        GetSequence( SotFormatStringId nFormat, ::com::sun::star::uno::Sequence< sal_Int8 >& rSeq );
+    bool                        GetSequence( const ::com::sun::star::datatransfer::DataFlavor& rFlavor, ::com::sun::star::uno::Sequence< sal_Int8 >& rSeq );
 
-    sal_Bool                    GetSotStorageStream( SotFormatStringId nFormat, SotStorageStreamRef& rStreamRef );
-    sal_Bool                    GetSotStorageStream( const ::com::sun::star::datatransfer::DataFlavor& rFlavor, SotStorageStreamRef& rStreamRef );
+    bool                        GetSotStorageStream( SotFormatStringId nFormat, SotStorageStreamRef& rStreamRef );
+    bool                        GetSotStorageStream( const ::com::sun::star::datatransfer::DataFlavor& rFlavor, SotStorageStreamRef& rStreamRef );
 
-    sal_Bool                    GetInputStream( SotFormatStringId nFormat, ::com::sun::star::uno::Reference < com::sun::star::io::XInputStream >& xStream );
-    sal_Bool                    GetInputStream( const ::com::sun::star::datatransfer::DataFlavor& rFlavor, ::com::sun::star::uno::Reference < com::sun::star::io::XInputStream >& xStream );
+    bool                        GetInputStream( SotFormatStringId nFormat, ::com::sun::star::uno::Reference < com::sun::star::io::XInputStream >& xStream );
+    bool                        GetInputStream( const ::com::sun::star::datatransfer::DataFlavor& rFlavor, ::com::sun::star::uno::Reference < com::sun::star::io::XInputStream >& xStream );
 
-    sal_Bool                    GetInterface( const ::com::sun::star::datatransfer::DataFlavor& rFlavor, ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& rIf );
+    bool                        GetInterface( const ::com::sun::star::datatransfer::DataFlavor& rFlavor, ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& rIf );
 
 public:
 
     static TransferableDataHelper   CreateFromSystemClipboard( Window * pWindow );
     static TransferableDataHelper   CreateFromSelection( Window * pWindow );
-    static sal_Bool                 IsEqual( const ::com::sun::star::datatransfer::DataFlavor& rInternalFlavor,
+    static bool                     IsEqual( const ::com::sun::star::datatransfer::DataFlavor& rInternalFlavor,
                                              const ::com::sun::star::datatransfer::DataFlavor& rRequestFlavor,
-                                             sal_Bool bCompareParameters = sal_False );
+                                             bool bCompareParameters = false );
 };
 
 class SVT_DLLPUBLIC DragSourceHelper
@@ -405,7 +405,7 @@ private:
                         // not available
                         DragSourceHelper();
     DragSourceHelper&   operator=( const DragSourceHelper& rDragSourceHelper );
-    sal_Bool            operator==( const DragSourceHelper& rDragSourceHelper ) const;
+    bool                operator==( const DragSourceHelper& rDragSourceHelper ) const;
 
 public:
 
@@ -457,7 +457,7 @@ private:
                         // not available
                         DropTargetHelper();
     DropTargetHelper&   operator=( const DropTargetHelper& rDropTargetHelper );
-    sal_Bool            operator==( const DropTargetHelper& rDropTargetHelper ) const;
+    bool                operator==( const DropTargetHelper& rDropTargetHelper ) const;
 
     void                ImplConstruct();
 
@@ -477,8 +477,8 @@ public:
     virtual             ~DropTargetHelper();
 
                         // typically called by the application in ::AcceptDrop and ::ExecuteDrop and (see above)
-    sal_Bool            IsDropFormatSupported( SotFormatStringId nFormat );
-    sal_Bool            IsDropFormatSupported( const ::com::sun::star::datatransfer::DataFlavor& rFlavor );
+    bool                IsDropFormatSupported( SotFormatStringId nFormat );
+    bool                IsDropFormatSupported( const ::com::sun::star::datatransfer::DataFlavor& rFlavor );
 
     DataFlavorExVector& GetDataFlavorExVector() const {return *mpFormats; }
 
@@ -493,7 +493,7 @@ class SVT_DLLPUBLIC TransferDataContainer : public TransferableHelper
 protected:
 
     virtual void        AddSupportedFormats();
-    virtual sal_Bool    GetData( const ::com::sun::star::datatransfer::DataFlavor& rFlavor );
+    virtual bool        GetData( const ::com::sun::star::datatransfer::DataFlavor& rFlavor );
     virtual void        DragFinished( sal_Int8 nDropAction );
 
 public:
@@ -512,7 +512,7 @@ public:
     void                CopyByteString( sal_uLong nFormatId, const OString& rStr );
     void                CopyAnyData( sal_uLong nFormatId, const sal_Char* pData, sal_uLong nLen );
 
-    sal_Bool            HasAnyData() const;
+    bool                HasAnyData() const;
 
     using TransferableHelper::StartDrag;
     void                StartDrag( Window* pWindow, sal_Int8 nDragSourceActions,

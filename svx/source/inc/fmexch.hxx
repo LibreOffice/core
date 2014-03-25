@@ -82,7 +82,7 @@ namespace svxform
 
         // TransferableHelper
         virtual void        DragFinished( sal_Int8 nDropAction );
-        virtual sal_Bool    GetData( const ::com::sun::star::datatransfer::DataFlavor& rFlavor );
+        virtual bool        GetData( const ::com::sun::star::datatransfer::DataFlavor& rFlavor );
 
     private:
         void StartDrag( Window* pWindow, sal_Int8 nDragSourceActions, sal_Int32 nDragPointer = DND_POINTER_NONE, sal_Int32 nDragImage = DND_IMAGE_NONE )
@@ -225,7 +225,7 @@ namespace svxform
         inline static sal_Bool  hasHiddenControlModelsFormat( const DataFlavorExVector& _rFormats );
 
     protected:
-        virtual sal_Bool    GetData( const ::com::sun::star::datatransfer::DataFlavor& rFlavor );
+        virtual bool        GetData( const ::com::sun::star::datatransfer::DataFlavor& rFlavor );
         virtual void        AddSupportedFormats();
     };
 

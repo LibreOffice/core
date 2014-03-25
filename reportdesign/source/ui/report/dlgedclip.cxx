@@ -52,12 +52,10 @@ void OReportExchange::AddSupportedFormats()
     AddFormat(getDescriptorFormatId());
 }
 
-sal_Bool OReportExchange::GetData( const datatransfer::DataFlavor& _rFlavor )
+bool OReportExchange::GetData( const datatransfer::DataFlavor& _rFlavor )
 {
     const sal_uInt32 nFormatId = SotExchange::GetFormat(_rFlavor);
-    return (nFormatId == getDescriptorFormatId()) ?
-        SetAny( uno::Any(m_aCopyElements), _rFlavor )
-        : sal_False;
+    return (nFormatId == getDescriptorFormatId()) && SetAny( uno::Any(m_aCopyElements), _rFlavor );
 }
 
 sal_Bool OReportExchange::canExtract(const DataFlavorExVector& _rFlavor)

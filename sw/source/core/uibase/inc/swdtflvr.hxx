@@ -137,8 +137,8 @@ class SW_DLLPUBLIC SwTransferable : public TransferableHelper
 
 protected:
     virtual void        AddSupportedFormats();
-    virtual sal_Bool    GetData( const css::datatransfer::DataFlavor& rFlavor );
-    virtual sal_Bool    WriteObject( SotStorageStreamRef& rxOStm,
+    virtual bool        GetData( const css::datatransfer::DataFlavor& rFlavor );
+    virtual bool        WriteObject( SotStorageStreamRef& rxOStm,
                                         void* pUserObject,
                                         sal_uInt32 nUserObjectId,
                                         const css::datatransfer::DataFlavor& rFlavor );

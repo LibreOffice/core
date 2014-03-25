@@ -147,7 +147,7 @@ namespace svx
     protected:
         // TransferableHelper overridables
         virtual void        AddSupportedFormats();
-        virtual sal_Bool    GetData( const ::com::sun::star::datatransfer::DataFlavor& rFlavor );
+        virtual bool        GetData( const ::com::sun::star::datatransfer::DataFlavor& rFlavor );
 
         static sal_uInt32   getDescriptorFormatId();
 
@@ -225,7 +225,7 @@ namespace svx
 
     protected:
         virtual void        AddSupportedFormats();
-        virtual sal_Bool    GetData( const ::com::sun::star::datatransfer::DataFlavor& rFlavor );
+        virtual bool        GetData( const ::com::sun::star::datatransfer::DataFlavor& rFlavor );
         virtual void        ObjectReleased();
 
     protected:
@@ -275,7 +275,7 @@ namespace svx
 
     protected:
         virtual void        AddSupportedFormats();
-        virtual sal_Bool    GetData( const ::com::sun::star::datatransfer::DataFlavor& rFlavor );
+        virtual bool        GetData( const ::com::sun::star::datatransfer::DataFlavor& rFlavor );
         virtual void        ObjectReleased();
         static sal_uInt32   getDescriptorFormatId();
     };

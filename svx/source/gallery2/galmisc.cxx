@@ -507,10 +507,10 @@ void GalleryTransferable::AddSupportedFormats()
     }
 }
 
-sal_Bool GalleryTransferable::GetData( const datatransfer::DataFlavor& rFlavor )
+bool GalleryTransferable::GetData( const datatransfer::DataFlavor& rFlavor )
 {
     sal_uInt32  nFormat = SotExchange::GetFormat( rFlavor );
-    sal_Bool    bRet = sal_False;
+    bool        bRet = false;
 
     InitData( false );
 
@@ -543,10 +543,10 @@ sal_Bool GalleryTransferable::GetData( const datatransfer::DataFlavor& rFlavor )
     return bRet;
 }
 
-sal_Bool GalleryTransferable::WriteObject( SotStorageStreamRef& rxOStm, void* pUserObject,
+bool GalleryTransferable::WriteObject( SotStorageStreamRef& rxOStm, void* pUserObject,
                                            sal_uInt32, const datatransfer::DataFlavor& )
 {
-    sal_Bool bRet = sal_False;
+    bool bRet = false;
 
     if( pUserObject )
     {

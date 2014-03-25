@@ -224,7 +224,7 @@ namespace svx
     }
 
 
-    sal_Bool OColumnTransferable::GetData( const DataFlavor& _rFlavor )
+    bool OColumnTransferable::GetData( const DataFlavor& _rFlavor )
     {
         const sal_uInt32 nFormatId = SotExchange::GetFormat(_rFlavor);
         switch (nFormatId)
@@ -236,7 +236,7 @@ namespace svx
         if (nFormatId == getDescriptorFormatId())
             return SetAny( makeAny( m_aDescriptor.createPropertyValueSequence() ), _rFlavor );
 
-        return sal_False;
+        return false;
     }
 
 
@@ -469,7 +469,7 @@ namespace svx
     }
 
 
-    sal_Bool ODataAccessObjectTransferable::GetData( const DataFlavor& rFlavor )
+    bool ODataAccessObjectTransferable::GetData( const DataFlavor& rFlavor )
     {
         sal_uIntPtr nFormat = SotExchange::GetFormat(rFlavor);
         switch (nFormat)
@@ -482,7 +482,7 @@ namespace svx
             case SOT_FORMATSTR_ID_SBA_DATAEXCHANGE:
                 return SetString(m_sCompatibleObjectDescription, rFlavor);
         }
-        return sal_False;
+        return false;
     }
 
 
@@ -644,7 +644,7 @@ namespace svx
         AddFormat(getDescriptorFormatId());
     }
 
-    sal_Bool OMultiColumnTransferable::GetData( const DataFlavor& _rFlavor )
+    bool OMultiColumnTransferable::GetData( const DataFlavor& _rFlavor )
     {
         const sal_uInt32 nFormatId = SotExchange::GetFormat(_rFlavor);
         if (nFormatId == getDescriptorFormatId())
@@ -652,7 +652,7 @@ namespace svx
             return SetAny( makeAny( m_aDescriptors ), _rFlavor );
         }
 
-        return sal_False;
+        return false;
     }
 
 

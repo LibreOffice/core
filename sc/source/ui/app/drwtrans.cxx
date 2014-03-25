@@ -376,9 +376,9 @@ void ScDrawTransferObj::AddSupportedFormats()
 //      AddFormat( SOT_FORMATSTR_ID_SVIM );
 }
 
-sal_Bool ScDrawTransferObj::GetData( const ::com::sun::star::datatransfer::DataFlavor& rFlavor )
+bool ScDrawTransferObj::GetData( const ::com::sun::star::datatransfer::DataFlavor& rFlavor )
 {
-    sal_Bool bOK = false;
+    bool bOK = false;
     sal_uInt32 nFormat = SotExchange::GetFormat( rFlavor );
 
     if ( bOleObj && nFormat != SOT_FORMAT_GDIMETAFILE )
@@ -477,12 +477,12 @@ sal_Bool ScDrawTransferObj::GetData( const ::com::sun::star::datatransfer::DataF
     return bOK;
 }
 
-sal_Bool ScDrawTransferObj::WriteObject( SotStorageStreamRef& rxOStm, void* pUserObject, sal_uInt32 nUserObjectId,
+bool ScDrawTransferObj::WriteObject( SotStorageStreamRef& rxOStm, void* pUserObject, sal_uInt32 nUserObjectId,
                                         const ::com::sun::star::datatransfer::DataFlavor& /* rFlavor */ )
 {
     // called from SetObject, put data into stream
 
-    sal_Bool bRet = false;
+    bool bRet = false;
     switch (nUserObjectId)
     {
         case SCDRAWTRANS_TYPE_DRAWMODEL:
@@ -602,7 +602,7 @@ sal_Bool ScDrawTransferObj::WriteObject( SotStorageStreamRef& rxOStm, void* pUse
                         delete pSrcStm;
                     }
 
-                    bRet = sal_True;
+                    bRet = true;
 
                     xWorkStore->dispose();
                     xWorkStore = uno::Reference < embed::XStorage >();

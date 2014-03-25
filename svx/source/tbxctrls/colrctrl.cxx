@@ -49,8 +49,8 @@ private:
 protected:
 
     virtual void            AddSupportedFormats();
-    virtual sal_Bool        GetData( const ::com::sun::star::datatransfer::DataFlavor& rFlavor );
-    virtual sal_Bool        WriteObject( SotStorageStreamRef& rxOStm, void* pUserObject, sal_uInt32 nUserObjectId, const ::com::sun::star::datatransfer::DataFlavor& rFlavor );
+    virtual bool            GetData( const ::com::sun::star::datatransfer::DataFlavor& rFlavor );
+    virtual bool            WriteObject( SotStorageStreamRef& rxOStm, void* pUserObject, sal_uInt32 nUserObjectId, const ::com::sun::star::datatransfer::DataFlavor& rFlavor );
 
 public:
 
@@ -67,14 +67,14 @@ void SvxColorValueSetData::AddSupportedFormats()
 
 
 
-sal_Bool SvxColorValueSetData::GetData( const ::com::sun::star::datatransfer::DataFlavor& rFlavor )
+bool SvxColorValueSetData::GetData( const ::com::sun::star::datatransfer::DataFlavor& rFlavor )
 {
-    sal_Bool bRet = sal_False;
+    bool bRet = false;
 
     if( SotExchange::GetFormat( rFlavor ) == SOT_FORMATSTR_ID_XFA )
     {
         SetObject( &maData, 0, rFlavor );
-        bRet = sal_True;
+        bRet = true;
     }
 
     return bRet;
@@ -82,7 +82,7 @@ sal_Bool SvxColorValueSetData::GetData( const ::com::sun::star::datatransfer::Da
 
 
 
-sal_Bool SvxColorValueSetData::WriteObject( SotStorageStreamRef& rxOStm, void*, sal_uInt32 , const ::com::sun::star::datatransfer::DataFlavor&  )
+bool SvxColorValueSetData::WriteObject( SotStorageStreamRef& rxOStm, void*, sal_uInt32 , const ::com::sun::star::datatransfer::DataFlavor&  )
 {
     WriteXFillExchangeData( *rxOStm, maData );
     return( rxOStm->GetError() == ERRCODE_NONE );

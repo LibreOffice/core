@@ -65,7 +65,7 @@ public:
     ScDrawTransferObj*  GetDrawData();
 
     virtual void        AddSupportedFormats();
-    virtual sal_Bool    GetData( const ::com::sun::star::datatransfer::DataFlavor& rFlavor );
+    virtual bool        GetData( const ::com::sun::star::datatransfer::DataFlavor& rFlavor );
     virtual void        ObjectReleased();
 };
 

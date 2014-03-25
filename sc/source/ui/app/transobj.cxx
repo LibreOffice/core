@@ -247,10 +247,10 @@ void ScTransferObj::AddSupportedFormats()
         AddFormat( SOT_FORMATSTR_ID_EDITENGINE );
 }
 
-sal_Bool ScTransferObj::GetData( const datatransfer::DataFlavor& rFlavor )
+bool ScTransferObj::GetData( const datatransfer::DataFlavor& rFlavor )
 {
     sal_uInt32  nFormat = SotExchange::GetFormat( rFlavor );
-    bool    bOK = false;
+    bool        bOK = false;
 
     if( HasFormat( nFormat ) )
     {
@@ -396,7 +396,7 @@ sal_Bool ScTransferObj::GetData( const datatransfer::DataFlavor& rFlavor )
     return bOK;
 }
 
-sal_Bool ScTransferObj::WriteObject( SotStorageStreamRef& rxOStm, void* pUserObject, sal_uInt32 nUserObjectId,
+bool ScTransferObj::WriteObject( SotStorageStreamRef& rxOStm, void* pUserObject, sal_uInt32 nUserObjectId,
                                         const datatransfer::DataFlavor& rFlavor )
 {
     // called from SetObject, put data into stream

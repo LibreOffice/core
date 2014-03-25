@@ -55,9 +55,9 @@ void ScLinkTransferObj::AddSupportedFormats()
     }
 }
 
-sal_Bool ScLinkTransferObj::GetData( const ::com::sun::star::datatransfer::DataFlavor& rFlavor )
+bool ScLinkTransferObj::GetData( const ::com::sun::star::datatransfer::DataFlavor& rFlavor )
 {
-    sal_Bool bOK = false;
+    bool bOK = false;
     if ( !aLinkURL.isEmpty() )
     {
         INetBookmark aBmk( aLinkURL, aLinkText );

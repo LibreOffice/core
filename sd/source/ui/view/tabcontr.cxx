@@ -62,9 +62,9 @@ void TabControl::TabControlTransferable::AddSupportedFormats()
 
 
 
-sal_Bool TabControl::TabControlTransferable::GetData( const ::com::sun::star::datatransfer::DataFlavor& )
+bool TabControl::TabControlTransferable::GetData( const ::com::sun::star::datatransfer::DataFlavor& )
 {
-    return sal_False;
+    return false;
 }
 
 

@@ -90,13 +90,13 @@ namespace svx
     }
 
 
-    sal_Bool OComponentTransferable::GetData( const DataFlavor& _rFlavor )
+    bool OComponentTransferable::GetData( const DataFlavor& _rFlavor )
     {
         const sal_uInt32 nFormatId = SotExchange::GetFormat(_rFlavor);
         if ( nFormatId == getDescriptorFormatId(true) || nFormatId == getDescriptorFormatId(false) )
             return SetAny( makeAny( m_aDescriptor.createPropertyValueSequence() ), _rFlavor );
 
-        return sal_False;
+        return false;
     }
 
 

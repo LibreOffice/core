@@ -115,9 +115,9 @@ namespace svxform
     }
 
 
-    sal_Bool OLocalExchange::GetData( const ::com::sun::star::datatransfer::DataFlavor& /*_rFlavor*/ )
+    bool OLocalExchange::GetData( const ::com::sun::star::datatransfer::DataFlavor& /*_rFlavor*/ )
     {
-        return sal_False;   // do not have any formats by default
+        return false;   // do not have any formats by default
     }
 
 
@@ -290,7 +290,7 @@ namespace svxform
     }
 
 
-    sal_Bool OControlExchange::GetData( const DataFlavor& _rFlavor )
+    bool OControlExchange::GetData( const DataFlavor& _rFlavor )
     {
         const sal_uInt32 nFormatId = SotExchange::GetFormat( _rFlavor );
 
@@ -312,7 +312,7 @@ namespace svxform
         else
             return OLocalExchange::GetData( _rFlavor );
 
-        return sal_True;
+        return true;
     }
 
 

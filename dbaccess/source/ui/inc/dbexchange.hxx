@@ -77,9 +77,9 @@ namespace dbaui
 
     protected:
         virtual void        AddSupportedFormats();
-        virtual sal_Bool    GetData( const ::com::sun::star::datatransfer::DataFlavor& rFlavor );
+        virtual bool        GetData( const ::com::sun::star::datatransfer::DataFlavor& rFlavor );
         virtual void        ObjectReleased();
-        virtual sal_Bool    WriteObject( SotStorageStreamRef& rxOStm, void* pUserObject, sal_uInt32 nUserObjectId, const ::com::sun::star::datatransfer::DataFlavor& rFlavor );
+        virtual bool        WriteObject( SotStorageStreamRef& rxOStm, void* pUserObject, sal_uInt32 nUserObjectId, const ::com::sun::star::datatransfer::DataFlavor& rFlavor );
     };
 }
 

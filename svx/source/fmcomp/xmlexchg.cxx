@@ -43,14 +43,14 @@ namespace svx
         AddFormat( SOT_FORMATSTR_ID_XFORMS );
     }
 
-    sal_Bool OXFormsTransferable::GetData( const DataFlavor& _rFlavor )
+    bool OXFormsTransferable::GetData( const DataFlavor& _rFlavor )
     {
         const sal_uInt32 nFormatId = SotExchange::GetFormat( _rFlavor );
         if ( SOT_FORMATSTR_ID_XFORMS == nFormatId )
         {
             return SetString(OUString("XForms-Transferable"), _rFlavor);
         }
-        return sal_False;
+        return false;
     }
 
     const OXFormsDescriptor &OXFormsTransferable::extractDescriptor( const TransferableDataHelper &_rData ) {

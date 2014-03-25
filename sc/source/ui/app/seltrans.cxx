@@ -391,9 +391,9 @@ ScDrawTransferObj* ScSelectionTransferObj::GetDrawData()
     return pDrawData;
 }
 
-sal_Bool ScSelectionTransferObj::GetData( const ::com::sun::star::datatransfer::DataFlavor& rFlavor )
+bool ScSelectionTransferObj::GetData( const ::com::sun::star::datatransfer::DataFlavor& rFlavor )
 {
-    sal_Bool bOK = false;
+    bool bOK = false;
 
     uno::Reference<datatransfer::XTransferable> xSource;
     switch (eMode)

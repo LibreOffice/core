@@ -134,7 +134,7 @@ namespace dbaui
         osl_atomic_decrement( &m_refCount );
     }
 
-    sal_Bool ODataClipboard::WriteObject( SotStorageStreamRef& rxOStm, void* pUserObject, sal_uInt32 nUserObjectId, const ::com::sun::star::datatransfer::DataFlavor& /*rFlavor*/ )
+    bool ODataClipboard::WriteObject( SotStorageStreamRef& rxOStm, void* pUserObject, sal_uInt32 nUserObjectId, const ::com::sun::star::datatransfer::DataFlavor& /*rFlavor*/ )
     {
         if (nUserObjectId == SOT_FORMAT_RTF || nUserObjectId == SOT_FORMATSTR_ID_HTML )
         {
@@ -145,7 +145,7 @@ namespace dbaui
                 return pExport->Write();
             }
         }
-        return sal_False;
+        return false;
     }
 
     void ODataClipboard::AddSupportedFormats()
@@ -159,7 +159,7 @@ namespace dbaui
         ODataAccessObjectTransferable::AddSupportedFormats();
     }
 
-    sal_Bool ODataClipboard::GetData( const DataFlavor& rFlavor )
+    bool ODataClipboard::GetData( const DataFlavor& rFlavor )
     {
         const sal_uLong nFormat = SotExchange::GetFormat(rFlavor);
         switch (nFormat)

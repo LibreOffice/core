@@ -348,7 +348,7 @@ Any SAL_CALL TransferableHelper::getTransferData( const DataFlavor& rFlavor ) th
         try
         {
             DataFlavor  aSubstFlavor;
-            sal_Bool    bDone = sal_False;
+            bool        bDone = false;
 
             // add formats if not already done
             if( !mpFormats->size() )
@@ -366,7 +366,7 @@ Any SAL_CALL TransferableHelper::getTransferData( const DataFlavor& rFlavor ) th
                 && SotExchange::GetFormatDataFlavor(FORMAT_BITMAP, aSubstFlavor))
             {
                 GetData( aSubstFlavor );
-                bDone = sal_True;
+                bDone = true;
             }
             else if( SotExchange::GetFormatDataFlavor( SOT_FORMATSTR_ID_EMF, aSubstFlavor ) &&
                      TransferableDataHelper::IsEqual( aSubstFlavor, rFlavor ) &&
@@ -393,7 +393,7 @@ Any SAL_CALL TransferableHelper::getTransferData( const DataFlavor& rFlavor ) th
                         {
                             maAny <<= ( aSeq = Sequence< sal_Int8 >( reinterpret_cast< const sal_Int8* >( aDstStm.GetData() ),
                                                                      aDstStm.Seek( STREAM_SEEK_TO_END ) ) );
-                            bDone = sal_True;
+                            bDone = true;
                         }
                     }
                 }
@@ -423,7 +423,7 @@ Any SAL_CALL TransferableHelper::getTransferData( const DataFlavor& rFlavor ) th
                         {
                             maAny <<= ( aSeq = Sequence< sal_Int8 >( reinterpret_cast< const sal_Int8* >( aDstStm.GetData() ),
                                                                      aDstStm.Seek( STREAM_SEEK_TO_END ) ) );
-                            bDone = sal_True;
+                            bDone = true;
                         }
                     }
                 }
@@ -500,7 +500,7 @@ sal_Bool SAL_CALL TransferableHelper::isDataFlavorSupported( const DataFlavor& r
     {
         if( TransferableDataHelper::IsEqual( *aIter, rFlavor ) )
         {
-            bRet = sal_True;
+            bRet = true;
             break;
         }
     }
@@ -631,7 +631,7 @@ void TransferableHelper::AddFormat( SotFormatStringId nFormat )
 
 void TransferableHelper::AddFormat( const DataFlavor& rFlavor )
 {
-    sal_Bool bAdd = sal_True;
+    bool bAdd = true;
 
     for (DataFlavorExVector::iterator aIter( mpFormats->begin() ), aEnd( mpFormats->end() ); aIter != aEnd ; ++aIter)
     {
@@ -652,7 +652,7 @@ void TransferableHelper::AddFormat( const DataFlavor& rFlavor )
 #endif
             }
 
-            bAdd = sal_False;
+            bAdd = false;
             break;
         }
     }
@@ -712,15 +712,15 @@ void TransferableHelper::RemoveFormat( const DataFlavor& rFlavor )
 
 
 
-sal_Bool TransferableHelper::HasFormat( SotFormatStringId nFormat )
+bool TransferableHelper::HasFormat( SotFormatStringId nFormat )
 {
-    sal_Bool bRet = sal_False;
+    bool bRet = false;
 
     for (DataFlavorExVector::const_iterator aIter( mpFormats->begin() ), aEnd( mpFormats->end() ); aIter != aEnd ; ++aIter)
     {
         if( nFormat == (*aIter).mnSotId )
         {
-            bRet = sal_True;
+            bRet = true;
             break;
         }
     }
@@ -738,7 +738,7 @@ void TransferableHelper::ClearFormats()
 
 
 
-sal_Bool TransferableHelper::SetAny( const Any& rAny, const DataFlavor& )
+bool TransferableHelper::SetAny( const Any& rAny, const DataFlavor& )
 {
     maAny = rAny;
     return( maAny.hasValue() );
@@ -746,7 +746,7 @@ sal_Bool TransferableHelper::SetAny( const Any& rAny, const DataFlavor& )
 
 
 
-sal_Bool TransferableHelper::SetString( const OUString& rString, const DataFlavor& rFlavor )
+bool TransferableHelper::SetString( const OUString& rString, const DataFlavor& rFlavor )
 {
     DataFlavor aFileFlavor;
 
@@ -769,7 +769,7 @@ sal_Bool TransferableHelper::SetString( const OUString& rString, const DataFlavo
 
 
 
-sal_Bool TransferableHelper::SetBitmapEx( const BitmapEx& rBitmapEx, const DataFlavor& rFlavor )
+bool TransferableHelper::SetBitmapEx( const BitmapEx& rBitmapEx, const DataFlavor& rFlavor )
 {
     if( !rBitmapEx.IsEmpty() )
     {
@@ -809,7 +809,7 @@ sal_Bool TransferableHelper::SetBitmapEx( const BitmapEx& rBitmapEx, const DataF
 
 
 
-sal_Bool TransferableHelper::SetGDIMetaFile( const GDIMetaFile& rMtf, const DataFlavor& )
+bool TransferableHelper::SetGDIMetaFile( const GDIMetaFile& rMtf, const DataFlavor& )
 {
     if( rMtf.GetActionSize() )
     {
@@ -824,7 +824,7 @@ sal_Bool TransferableHelper::SetGDIMetaFile( const GDIMetaFile& rMtf, const Data
 
 
 
-sal_Bool TransferableHelper::SetGraphic( const Graphic& rGraphic, const DataFlavor& )
+bool TransferableHelper::SetGraphic( const Graphic& rGraphic, const DataFlavor& )
 {
     if( rGraphic.GetType() != GRAPHIC_NONE )
     {
@@ -841,7 +841,7 @@ sal_Bool TransferableHelper::SetGraphic( const Graphic& rGraphic, const DataFlav
 
 
 
-sal_Bool TransferableHelper::SetImageMap( const ImageMap& rIMap, const ::com::sun::star::datatransfer::DataFlavor& )
+bool TransferableHelper::SetImageMap( const ImageMap& rIMap, const ::com::sun::star::datatransfer::DataFlavor& )
 {
     SvMemoryStream aMemStm( 8192, 8192 );
 
@@ -854,7 +854,7 @@ sal_Bool TransferableHelper::SetImageMap( const ImageMap& rIMap, const ::com::su
 
 
 
-sal_Bool TransferableHelper::SetTransferableObjectDescriptor( const TransferableObjectDescriptor& rDesc,
+bool TransferableHelper::SetTransferableObjectDescriptor( const TransferableObjectDescriptor& rDesc,
                                                               const ::com::sun::star::datatransfer::DataFlavor& )
 {
     PrepareOLE( rDesc );
@@ -869,7 +869,7 @@ sal_Bool TransferableHelper::SetTransferableObjectDescriptor( const Transferable
 
 
 
-sal_Bool TransferableHelper::SetINetBookmark( const INetBookmark& rBmk,
+bool TransferableHelper::SetINetBookmark( const INetBookmark& rBmk,
                                               const ::com::sun::star::datatransfer::DataFlavor& rFlavor )
 {
     rtl_TextEncoding eSysCSet = osl_getThreadTextEncoding();
@@ -959,7 +959,7 @@ sal_Bool TransferableHelper::SetINetBookmark( const INetBookmark& rBmk,
 
 
 
-sal_Bool TransferableHelper::SetINetImage( const INetImage& rINtImg,
+bool TransferableHelper::SetINetImage( const INetImage& rINtImg,
                                            const ::com::sun::star::datatransfer::DataFlavor& rFlavor )
 {
     SvMemoryStream aMemStm( 1024, 1024 );
@@ -974,7 +974,7 @@ sal_Bool TransferableHelper::SetINetImage( const INetImage& rINtImg,
 
 
 
-sal_Bool TransferableHelper::SetObject( void* pUserObject, sal_uInt32 nUserObjectId, const DataFlavor& rFlavor )
+bool TransferableHelper::SetObject( void* pUserObject, sal_uInt32 nUserObjectId, const DataFlavor& rFlavor )
 {
     SotStorageStreamRef xStm( new SotStorageStream( OUString() ) );
 
@@ -1005,10 +1005,10 @@ sal_Bool TransferableHelper::SetObject( void* pUserObject, sal_uInt32 nUserObjec
 
 
 
-sal_Bool TransferableHelper::WriteObject( SotStorageStreamRef&, void*, sal_uInt32, const DataFlavor& )
+bool TransferableHelper::WriteObject( SotStorageStreamRef&, void*, sal_uInt32, const DataFlavor& )
 {
     OSL_FAIL( "TransferableHelper::WriteObject( ... ) not implemented" );
-    return sal_False;
+    return false;
 }
 
 
@@ -1473,19 +1473,19 @@ void TransferableDataHelper::InitFormats()
 
 
 
-sal_Bool TransferableDataHelper::HasFormat( SotFormatStringId nFormat ) const
+bool TransferableDataHelper::HasFormat( SotFormatStringId nFormat ) const
 {
     ::osl::MutexGuard aGuard( mpImpl->maMutex );
 
     DataFlavorExVector::iterator    aIter( mpFormats->begin() ), aEnd( mpFormats->end() );
-    sal_Bool                        bRet = sal_False;
+    bool                            bRet = false;
 
     while( aIter != aEnd )
     {
         if( nFormat == (*aIter++).mnSotId )
         {
             aIter = aEnd;
-            bRet = sal_True;
+            bRet = true;
         }
     }
 
@@ -1494,19 +1494,19 @@ sal_Bool TransferableDataHelper::HasFormat( SotFormatStringId nFormat ) const
 
 
 
-sal_Bool TransferableDataHelper::HasFormat( const DataFlavor& rFlavor ) const
+bool TransferableDataHelper::HasFormat( const DataFlavor& rFlavor ) const
 {
     ::osl::MutexGuard aGuard( mpImpl->maMutex );
 
     DataFlavorExVector::iterator    aIter( mpFormats->begin() ), aEnd( mpFormats->end() );
-    sal_Bool                        bRet = sal_False;
+    bool                            bRet = false;
 
     while( aIter != aEnd )
     {
         if( TransferableDataHelper::IsEqual( rFlavor, *aIter++ ) )
         {
             aIter = aEnd;
-            bRet = sal_True;
+            bRet = true;
         }
     }
 
@@ -1624,7 +1624,7 @@ Any TransferableDataHelper::GetAny( const DataFlavor& rFlavor ) const
 
 
 
-sal_Bool TransferableDataHelper::GetString( SotFormatStringId nFormat, OUString& rStr )
+bool TransferableDataHelper::GetString( SotFormatStringId nFormat, OUString& rStr )
 {
     DataFlavor aFlavor;
     return( SotExchange::GetFormatDataFlavor( nFormat, aFlavor ) && GetString( aFlavor, rStr ) );
@@ -1632,10 +1632,10 @@ sal_Bool TransferableDataHelper::GetString( SotFormatStringId nFormat, OUString&
 
 
 
-sal_Bool TransferableDataHelper::GetString( const DataFlavor& rFlavor, OUString& rStr )
+bool TransferableDataHelper::GetString( const DataFlavor& rFlavor, OUString& rStr )
 {
     Any         aAny( GetAny( rFlavor ) );
-    sal_Bool    bRet = sal_False;
+    bool        bRet = false;
 
     if( aAny.hasValue() )
     {
@@ -1645,7 +1645,7 @@ sal_Bool TransferableDataHelper::GetString( const DataFlavor& rFlavor, OUString&
         if( aAny >>= aOUString )
         {
             rStr = aOUString;
-            bRet = sal_True;
+            bRet = true;
         }
         else if( aAny >>= aSeq )
         {
@@ -1659,7 +1659,7 @@ sal_Bool TransferableDataHelper::GetString( const DataFlavor& rFlavor, OUString&
                 --nLen;
 
             rStr = OUString( pChars, nLen, osl_getThreadTextEncoding() );
-            bRet = sal_True;
+            bRet = true;
         }
     }
 
@@ -1668,7 +1668,7 @@ sal_Bool TransferableDataHelper::GetString( const DataFlavor& rFlavor, OUString&
 
 
 
-sal_Bool TransferableDataHelper::GetBitmapEx( SotFormatStringId nFormat, BitmapEx& rBmpEx )
+bool TransferableDataHelper::GetBitmapEx( SotFormatStringId nFormat, BitmapEx& rBmpEx )
 {
     if(FORMAT_BITMAP == nFormat)
     {
@@ -1690,7 +1690,7 @@ sal_Bool TransferableDataHelper::GetBitmapEx( SotFormatStringId nFormat, BitmapE
 
 
 
-sal_Bool TransferableDataHelper::GetBitmapEx( const DataFlavor& rFlavor, BitmapEx& rBmpEx )
+bool TransferableDataHelper::GetBitmapEx( const DataFlavor& rFlavor, BitmapEx& rBmpEx )
 {
     SotStorageStreamRef xStm;
     DataFlavor aSubstFlavor;
@@ -1777,7 +1777,7 @@ sal_Bool TransferableDataHelper::GetBitmapEx( const DataFlavor& rFlavor, BitmapE
 
 
 
-sal_Bool TransferableDataHelper::GetGDIMetaFile(SotFormatStringId nFormat, GDIMetaFile& rMtf, size_t nMaxActions)
+bool TransferableDataHelper::GetGDIMetaFile(SotFormatStringId nFormat, GDIMetaFile& rMtf, size_t nMaxActions)
 {
     DataFlavor aFlavor;
     return SotExchange::GetFormatDataFlavor(nFormat, aFlavor) &&
@@ -1787,11 +1787,11 @@ sal_Bool TransferableDataHelper::GetGDIMetaFile(SotFormatStringId nFormat, GDIMe
 
 
 
-sal_Bool TransferableDataHelper::GetGDIMetaFile( const DataFlavor& rFlavor, GDIMetaFile& rMtf )
+bool TransferableDataHelper::GetGDIMetaFile( const DataFlavor& rFlavor, GDIMetaFile& rMtf )
 {
     SotStorageStreamRef xStm;
     DataFlavor          aSubstFlavor;
-    sal_Bool            bRet = sal_False;
+    bool                bRet = false;
 
     if( GetSotStorageStream( rFlavor, xStm ) )
     {
@@ -1809,7 +1809,7 @@ sal_Bool TransferableDataHelper::GetGDIMetaFile( const DataFlavor& rFlavor, GDIM
         if( GraphicConverter::Import( *xStm, aGraphic ) == ERRCODE_NONE )
         {
             rMtf = aGraphic.GetGDIMetaFile();
-            bRet = sal_True;
+            bRet = true;
         }
     }
 
@@ -1823,7 +1823,7 @@ sal_Bool TransferableDataHelper::GetGDIMetaFile( const DataFlavor& rFlavor, GDIM
         if( GraphicConverter::Import( *xStm, aGraphic ) == ERRCODE_NONE )
         {
             rMtf = aGraphic.GetGDIMetaFile();
-            bRet = sal_True;
+            bRet = true;
         }
     }
 
@@ -1832,7 +1832,7 @@ sal_Bool TransferableDataHelper::GetGDIMetaFile( const DataFlavor& rFlavor, GDIM
 
 
 
-sal_Bool TransferableDataHelper::GetGraphic( SotFormatStringId nFormat, Graphic& rGraphic )
+bool TransferableDataHelper::GetGraphic( SotFormatStringId nFormat, Graphic& rGraphic )
 {
     if(FORMAT_BITMAP == nFormat)
     {
@@ -1854,10 +1854,10 @@ sal_Bool TransferableDataHelper::GetGraphic( SotFormatStringId nFormat, Graphic&
 
 
 
-sal_Bool TransferableDataHelper::GetGraphic( const ::com::sun::star::datatransfer::DataFlavor& rFlavor, Graphic& rGraphic )
+bool TransferableDataHelper::GetGraphic( const ::com::sun::star::datatransfer::DataFlavor& rFlavor, Graphic& rGraphic )
 {
     DataFlavor  aFlavor;
-    sal_Bool    bRet = sal_False;
+    bool        bRet = false;
 
     if(SotExchange::GetFormatDataFlavor(SOT_FORMATSTR_ID_PNG, aFlavor) &&
         TransferableDataHelper::IsEqual(aFlavor, rFlavor))
@@ -1865,7 +1865,7 @@ sal_Bool TransferableDataHelper::GetGraphic( const ::com::sun::star::datatransfe
         // try to get PNG first
         BitmapEx aBmpEx;
 
-        if( ( bRet = GetBitmapEx( aFlavor, aBmpEx ) ) == sal_True )
+        if( ( bRet = GetBitmapEx( aFlavor, aBmpEx ) ) )
             rGraphic = aBmpEx;
     }
     else if(SotExchange::GetFormatDataFlavor( SOT_FORMAT_BITMAP, aFlavor ) &&
@@ -1873,7 +1873,7 @@ sal_Bool TransferableDataHelper::GetGraphic( const ::com::sun::star::datatransfe
     {
         BitmapEx aBmpEx;
 
-        if( ( bRet = GetBitmapEx( aFlavor, aBmpEx ) ) == sal_True )
+        if( ( bRet = GetBitmapEx( aFlavor, aBmpEx ) ) )
             rGraphic = aBmpEx;
     }
     else if( SotExchange::GetFormatDataFlavor( SOT_FORMAT_GDIMETAFILE, aFlavor ) &&
@@ -1881,7 +1881,7 @@ sal_Bool TransferableDataHelper::GetGraphic( const ::com::sun::star::datatransfe
     {
         GDIMetaFile aMtf;
 
-        if( ( bRet = GetGDIMetaFile( aFlavor, aMtf ) ) == sal_True )
+        if( ( bRet = GetGDIMetaFile( aFlavor, aMtf ) ) )
             rGraphic = aMtf;
     }
     else
@@ -1900,7 +1900,7 @@ sal_Bool TransferableDataHelper::GetGraphic( const ::com::sun::star::datatransfe
 
 
 
-sal_Bool TransferableDataHelper::GetImageMap( SotFormatStringId nFormat, ImageMap& rIMap )
+bool TransferableDataHelper::GetImageMap( SotFormatStringId nFormat, ImageMap& rIMap )
 {
     DataFlavor aFlavor;
     return( SotExchange::GetFormatDataFlavor( nFormat, aFlavor ) && GetImageMap( aFlavor, rIMap ) );
@@ -1908,10 +1908,10 @@ sal_Bool TransferableDataHelper::GetImageMap( SotFormatStringId nFormat, ImageMa
 
 
 
-sal_Bool TransferableDataHelper::GetImageMap( const ::com::sun::star::datatransfer::DataFlavor& rFlavor, ImageMap& rIMap )
+bool TransferableDataHelper::GetImageMap( const ::com::sun::star::datatransfer::DataFlavor& rFlavor, ImageMap& rIMap )
 {
     SotStorageStreamRef xStm;
-    sal_Bool            bRet = GetSotStorageStream( rFlavor, xStm );
+    bool                bRet = GetSotStorageStream( rFlavor, xStm );
 
     if( bRet )
     {
@@ -1924,7 +1924,7 @@ sal_Bool TransferableDataHelper::GetImageMap( const ::com::sun::star::datatransf
 
 
 
-sal_Bool TransferableDataHelper::GetTransferableObjectDescriptor( SotFormatStringId nFormat, TransferableObjectDescriptor& rDesc )
+bool TransferableDataHelper::GetTransferableObjectDescriptor( SotFormatStringId nFormat, TransferableObjectDescriptor& rDesc )
 {
     DataFlavor aFlavor;
     return( SotExchange::GetFormatDataFlavor( nFormat, aFlavor ) && GetTransferableObjectDescriptor( aFlavor, rDesc ) );
@@ -1932,7 +1932,7 @@ sal_Bool TransferableDataHelper::GetTransferableObjectDescriptor( SotFormatStrin
 
 
 
-sal_Bool TransferableDataHelper::GetTransferableObjectDescriptor( const ::com::sun::star::datatransfer::DataFlavor&, TransferableObjectDescriptor& rDesc )
+bool TransferableDataHelper::GetTransferableObjectDescriptor( const ::com::sun::star::datatransfer::DataFlavor&, TransferableObjectDescriptor& rDesc )
 {
     rDesc = *mpObjDesc;
     return true;
@@ -1940,7 +1940,7 @@ sal_Bool TransferableDataHelper::GetTransferableObjectDescriptor( const ::com::s
 
 
 
-sal_Bool TransferableDataHelper::GetINetBookmark( SotFormatStringId nFormat, INetBookmark& rBmk )
+bool TransferableDataHelper::GetINetBookmark( SotFormatStringId nFormat, INetBookmark& rBmk )
 {
     DataFlavor aFlavor;
     return( SotExchange::GetFormatDataFlavor( nFormat, aFlavor ) && GetINetBookmark( aFlavor, rBmk ) );
@@ -1948,9 +1948,9 @@ sal_Bool TransferableDataHelper::GetINetBookmark( SotFormatStringId nFormat, INe
 
 
 
-sal_Bool TransferableDataHelper::GetINetBookmark( const ::com::sun::star::datatransfer::DataFlavor& rFlavor, INetBookmark& rBmk )
+bool TransferableDataHelper::GetINetBookmark( const ::com::sun::star::datatransfer::DataFlavor& rFlavor, INetBookmark& rBmk )
 {
-    sal_Bool bRet = sal_False;
+    bool bRet = false;
     if( HasFormat( rFlavor ))
     {
     const SotFormatStringId nFormat = SotExchange::GetFormat( rFlavor );
@@ -1965,7 +1965,7 @@ sal_Bool TransferableDataHelper::GetINetBookmark( const ::com::sun::star::datatr
                 if( SOT_FORMATSTR_ID_UNIFORMRESOURCELOCATOR == nFormat )
                 {
                     rBmk = INetBookmark( aString, aString );
-                    bRet = sal_True;
+                    bRet = true;
                 }
                 else
                 {
@@ -1997,7 +1997,7 @@ sal_Bool TransferableDataHelper::GetINetBookmark( const ::com::sun::star::datatr
                     aDesc = aString.copy( nStart+1, nLen );
 
                     rBmk = INetBookmark( aURL, aDesc );
-                    bRet = sal_True;
+                    bRet = true;
                 }
             }
         }
@@ -2013,7 +2013,7 @@ sal_Bool TransferableDataHelper::GetINetBookmark( const ::com::sun::star::datatr
                 const sal_Char* p2 =  reinterpret_cast< const sal_Char* >( aSeq.getConstArray() ) + 1024;
                 rBmk = INetBookmark( OUString( p1, strlen(p1), osl_getThreadTextEncoding() ),
                                      OUString( p2, strlen(p2), osl_getThreadTextEncoding() ) );
-                bRet = sal_True;
+                bRet = true;
             }
         }
         break;
@@ -2056,17 +2056,17 @@ sal_Bool TransferableDataHelper::GetINetBookmark( const ::com::sun::star::datatr
                         if( pStream )
                         {
                             OString aLine;
-                            sal_Bool    bSttFnd = sal_False;
+                            bool    bSttFnd = false;
 
                             while( pStream->ReadLine( aLine ) )
                             {
                                 if (aLine.equalsIgnoreAsciiCase("[InternetShortcut]"))
-                                    bSttFnd = sal_True;
+                                    bSttFnd = true;
                                 else if (bSttFnd && aLine.copy(0, 4).equalsIgnoreAsciiCase("URL="))
                                 {
                                     rBmk = INetBookmark( OStringToOUString(aLine.copy(4), eTextEncoding),
                                                          OStringToOUString(aDesc.copy(0, aDesc.getLength() - 4), eTextEncoding) );
-                                    bRet = sal_True;
+                                    bRet = true;
                                     break;
                                 }
                             }
@@ -2087,7 +2087,7 @@ sal_Bool TransferableDataHelper::GetINetBookmark( const ::com::sun::star::datatr
 
 
 
-sal_Bool TransferableDataHelper::GetINetImage( SotFormatStringId nFormat,
+bool TransferableDataHelper::GetINetImage( SotFormatStringId nFormat,
                                                 INetImage& rINtImg )
 {
     DataFlavor aFlavor;
@@ -2096,12 +2096,12 @@ sal_Bool TransferableDataHelper::GetINetImage( SotFormatStringId nFormat,
 
 
 
-sal_Bool TransferableDataHelper::GetINetImage(
+bool TransferableDataHelper::GetINetImage(
         const ::com::sun::star::datatransfer::DataFlavor& rFlavor,
         INetImage& rINtImg )
 {
     SotStorageStreamRef xStm;
-    sal_Bool bRet = GetSotStorageStream( rFlavor, xStm );
+    bool bRet = GetSotStorageStream( rFlavor, xStm );
 
     if( bRet )
         bRet = rINtImg.Read( *xStm, SotExchange::GetFormat( rFlavor ) );
@@ -2110,7 +2110,7 @@ sal_Bool TransferableDataHelper::GetINetImage(
 
 
 
-sal_Bool TransferableDataHelper::GetFileList( SotFormatStringId nFormat,
+bool TransferableDataHelper::GetFileList( SotFormatStringId nFormat,
                                                 FileList& rFileList )
 {
     DataFlavor aFlavor;
@@ -2119,12 +2119,12 @@ sal_Bool TransferableDataHelper::GetFileList( SotFormatStringId nFormat,
 
 
 
-sal_Bool TransferableDataHelper::GetFileList(
+bool TransferableDataHelper::GetFileList(
             const ::com::sun::star::datatransfer::DataFlavor&,
             FileList& rFileList )
 {
     SotStorageStreamRef xStm;
-    sal_Bool            bRet = sal_False;
+    bool                bRet = false;
 
     for( sal_uInt32 i = 0, nFormatCount = GetFormatCount(); ( i < nFormatCount ) && !bRet; ++i )
     {
@@ -2142,7 +2142,7 @@ sal_Bool TransferableDataHelper::GetFileList(
                         if( !aDiskString.isEmpty() && aDiskString[0] != '#' )
                             rFileList.AppendFile( OStringToOUString(aDiskString, RTL_TEXTENCODING_UTF8) );
 
-                    bRet = sal_True;
+                    bRet = true;
                  }
                  else
                     bRet = ( ( ReadFileList( *xStm, rFileList ) ).GetError() == ERRCODE_NONE );
@@ -2155,7 +2155,7 @@ sal_Bool TransferableDataHelper::GetFileList(
 
 
 
-sal_Bool TransferableDataHelper::GetSequence( SotFormatStringId nFormat, Sequence< sal_Int8 >& rSeq )
+bool TransferableDataHelper::GetSequence( SotFormatStringId nFormat, Sequence< sal_Int8 >& rSeq )
 {
     DataFlavor aFlavor;
     return( SotExchange::GetFormatDataFlavor( nFormat, aFlavor ) && GetSequence( aFlavor, rSeq ) );
@@ -2163,7 +2163,7 @@ sal_Bool TransferableDataHelper::GetSequence( SotFormatStringId nFormat, Sequenc
 
 
 
-sal_Bool TransferableDataHelper::GetSequence( const DataFlavor& rFlavor, Sequence< sal_Int8 >& rSeq )
+bool TransferableDataHelper::GetSequence( const DataFlavor& rFlavor, Sequence< sal_Int8 >& rSeq )
 {
 #ifdef DEBUG
     fprintf( stderr, "TransferableDataHelper requests sequence of data\n" );
@@ -2175,7 +2175,7 @@ sal_Bool TransferableDataHelper::GetSequence( const DataFlavor& rFlavor, Sequenc
 
 
 
-sal_Bool TransferableDataHelper::GetSotStorageStream( SotFormatStringId nFormat, SotStorageStreamRef& rxStream )
+bool TransferableDataHelper::GetSotStorageStream( SotFormatStringId nFormat, SotStorageStreamRef& rxStream )
 {
     DataFlavor aFlavor;
     return( SotExchange::GetFormatDataFlavor( nFormat, aFlavor ) && GetSotStorageStream( aFlavor, rxStream ) );
@@ -2183,10 +2183,10 @@ sal_Bool TransferableDataHelper::GetSotStorageStream( SotFormatStringId nFormat,
 
 
 
-sal_Bool TransferableDataHelper::GetSotStorageStream( const DataFlavor& rFlavor, SotStorageStreamRef& rxStream )
+bool TransferableDataHelper::GetSotStorageStream( const DataFlavor& rFlavor, SotStorageStreamRef& rxStream )
 {
     Sequence< sal_Int8 >    aSeq;
-    sal_Bool                bRet = GetSequence( rFlavor, aSeq );
+    bool                    bRet = GetSequence( rFlavor, aSeq );
 
     if( bRet )
     {
@@ -2198,7 +2198,7 @@ sal_Bool TransferableDataHelper::GetSotStorageStream( const DataFlavor& rFlavor,
     return bRet;
 }
 
-sal_Bool TransferableDataHelper::GetInputStream( SotFormatStringId nFormat, Reference < XInputStream >& rxStream )
+bool TransferableDataHelper::GetInputStream( SotFormatStringId nFormat, Reference < XInputStream >& rxStream )
 {
     DataFlavor aFlavor;
     return( SotExchange::GetFormatDataFlavor( nFormat, aFlavor ) && GetInputStream( aFlavor, rxStream ) );
@@ -2206,10 +2206,10 @@ sal_Bool TransferableDataHelper::GetInputStream( SotFormatStringId nFormat, Refe
 
 
 
-sal_Bool TransferableDataHelper::GetInputStream( const DataFlavor& rFlavor, Reference < XInputStream >& rxStream )
+bool TransferableDataHelper::GetInputStream( const DataFlavor& rFlavor, Reference < XInputStream >& rxStream )
 {
     Sequence< sal_Int8 >    aSeq;
-    sal_Bool                bRet = GetSequence( rFlavor, aSeq );
+    bool                    bRet = GetSequence( rFlavor, aSeq );
 
     if( bRet )
           rxStream = new ::comphelper::SequenceInputStream( aSeq );
@@ -2227,7 +2227,7 @@ void TransferableDataHelper::Rebind( const Reference< XTransferable >& _rxNewCon
 
 
 
-sal_Bool TransferableDataHelper::StartClipboardListening( )
+bool TransferableDataHelper::StartClipboardListening( )
 {
     ::osl::MutexGuard aGuard( mpImpl->maMutex );
 
@@ -2324,12 +2324,12 @@ TransferableDataHelper TransferableDataHelper::CreateFromSelection( Window* pWin
 }
 
 
-sal_Bool TransferableDataHelper::IsEqual( const ::com::sun::star::datatransfer::DataFlavor& rInternalFlavor,
-                                          const ::com::sun::star::datatransfer::DataFlavor& rRequestFlavor,
-                                          sal_Bool )
+bool TransferableDataHelper::IsEqual( const ::com::sun::star::datatransfer::DataFlavor& rInternalFlavor,
+                                      const ::com::sun::star::datatransfer::DataFlavor& rRequestFlavor,
+                                      bool )
 {
     Reference< XComponentContext >          xContext( ::comphelper::getProcessComponentContext() );
-    sal_Bool                                bRet = sal_False;
+    bool                                    bRet = false;
 
     try
     {
@@ -2351,7 +2351,7 @@ sal_Bool TransferableDataHelper::IsEqual( const ::com::sun::star::datatransfer::
                         xRequestType2->getParameterValue( aCharsetString ).equalsIgnoreAsciiCase( "utf-16" ) ||
                         xRequestType2->getParameterValue( aCharsetString ).equalsIgnoreAsciiCase( "unicode" ) )
                     {
-                        bRet = sal_True;
+                        bRet = true;
                     }
                 }
                 else if( xRequestType1->getFullMediaType().equalsIgnoreAsciiCase( "application/x-openoffice" ) )
@@ -2363,11 +2363,11 @@ sal_Bool TransferableDataHelper::IsEqual( const ::com::sun::star::datatransfer::
                         xRequestType2->hasParameter( aFormatString ) &&
                         xRequestType1->getParameterValue( aFormatString ).equalsIgnoreAsciiCase( xRequestType2->getParameterValue( aFormatString ) ) )
                     {
-                        bRet = sal_True;
+                        bRet = true;
                     }
                 }
                 else
-                    bRet = sal_True;
+                    bRet = true;
             }
         }
     }
