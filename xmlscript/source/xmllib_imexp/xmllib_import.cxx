@@ -154,7 +154,7 @@ Reference< xml::input::XElement > LibraryImport::startRootElement(
     else if ( mpLibDesc && rLocalName == "library" )
     {
         LibDescriptor& aDesc = *mpLibDesc;
-        aDesc.bLink = aDesc.bReadOnly = aDesc.bPasswordProtected = aDesc.bPreload = sal_False;
+        aDesc.bLink = aDesc.bReadOnly = aDesc.bPasswordProtected = aDesc.bPreload = false;
 
         aDesc.aName = xAttributes->getValueByUidName(XMLNS_LIBRARY_UID, "name" );
         getBoolAttr( &aDesc.bReadOnly, "readonly", xAttributes, XMLNS_LIBRARY_UID );
@@ -191,7 +191,7 @@ Reference< xml::input::XElement > LibrariesElement::startChildElement(
     else if ( rLocalName == "library" )
     {
         LibDescriptor aDesc;
-        aDesc.bLink = aDesc.bReadOnly = aDesc.bPasswordProtected = aDesc.bPreload = sal_False;
+        aDesc.bLink = aDesc.bReadOnly = aDesc.bPasswordProtected = aDesc.bPreload = false;
 
         aDesc.aName = xAttributes->getValueByUidName(_pImport->XMLNS_LIBRARY_UID, "name" );
         aDesc.aStorageURL = xAttributes->getValueByUidName( _pImport->XMLNS_XLINK_UID, "href" );

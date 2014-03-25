@@ -37,11 +37,11 @@ struct XMLSCRIPT_DLLPUBLIC LibDescriptor
 {
     OUString aName;
     OUString aStorageURL;
-    sal_Bool bLink;
-    sal_Bool bReadOnly;
-    sal_Bool bPasswordProtected;
+    bool bLink;
+    bool bReadOnly;
+    bool bPasswordProtected;
     ::com::sun::star::uno::Sequence< OUString > aElementNames;
-    sal_Bool bPreload;
+    bool bPreload;
 };
 
 struct XMLSCRIPT_DLLPUBLIC LibDescriptorArray

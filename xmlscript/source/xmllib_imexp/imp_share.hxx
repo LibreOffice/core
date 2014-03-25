@@ -53,7 +53,7 @@ inline sal_Int32 toInt32( OUString const & rStr ) SAL_THROW(())
     return nVal;
 }
 inline bool getBoolAttr(
-    sal_Bool * pRet, OUString const & rAttrName,
+    bool * pRet, OUString const & rAttrName,
     Reference< xml::input::XAttributes > const & xAttributes, sal_Int32 uid )
 {
     OUString aValue(
@@ -62,12 +62,12 @@ inline bool getBoolAttr(
     {
         if ( aValue == "true" )
         {
-            *pRet = sal_True;
+            *pRet = true;
             return true;
         }
         else if ( aValue == "false" )
         {
-            *pRet = sal_False;
+            *pRet = false;
             return true;
         }
         else
