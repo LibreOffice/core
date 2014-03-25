@@ -522,6 +522,9 @@ OUString lcl_getDiagramType( const OUString & rTemplateServiceName )
     {
         const OUString aName( rTemplateServiceName.copy( aPrefix.getLength()));
 
+        if (aName.indexOf("GL3DBar") != -1)
+            return OUString("com.sun.star.chart.GL3DBarDiagram");
+
         // "Area" "StackedArea" "PercentStackedArea" "ThreeDArea"
         // "StackedThreeDArea" "PercentStackedThreeDArea"
         if( aName.indexOf( "Area" ) != -1 )
@@ -597,6 +600,7 @@ const tMakeStringStringMap& lcl_getChartTypeNameMap()
         ( "com.sun.star.chart2.NetChartType", "com.sun.star.chart.NetDiagram" )
         ( "com.sun.star.chart2.CandleStickChartType", "com.sun.star.chart.StockDiagram" )
         ( "com.sun.star.chart2.BubbleChartType", "com.sun.star.chart.BubbleDiagram" )
+        ( "com.sun.star.chart2.GL3DBarChartType", "com.sun.star.chart.GL3DBarDiagram" )
         ;
     return g_aChartTypeNameMap;
 }

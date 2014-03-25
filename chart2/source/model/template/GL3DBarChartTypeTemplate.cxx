@@ -19,7 +19,7 @@ namespace chart {
 
 namespace {
 
-const OUString aServiceName("com.sun.star.chart2.BubbleChartTypeTemplate");
+const OUString aServiceName("com.sun.star.chart2.GL3DBarChartTypeTemplate");
 
 }
 

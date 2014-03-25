@@ -900,6 +900,7 @@ namespace xmloff { namespace token {
         XML_GCD,
         XML_GENERATOR,
         XML_GEQ,
+        XML_GL3DBAR,
         XML_GOURAUD,
         XML_GRADIENT,
         XML_GRADIENT_ANGLE,
