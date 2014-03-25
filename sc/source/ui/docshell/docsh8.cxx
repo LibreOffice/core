@@ -488,11 +488,6 @@ void lcl_GetColumnTypes(
     OUString* pColNames, sal_Int32* pColTypes, sal_Int32* pColLengths,
     sal_Int32* pColScales, bool& bHasMemo, rtl_TextEncoding eCharSet )
 {
-    //  updating of column titles didn't work in 5.2 and isn't always wanted
-    //  (saving normally shouldn't modify the document)
-    //! read flag from configuration
-    bool bUpdateTitles = false;
-
     ScDocument* pDoc = rDocShell.GetDocument();
     SvNumberFormatter* pNumFmt = pDoc->GetFormatTable();
 
@@ -714,34 +709,6 @@ void lcl_GetColumnTypes(
             nFieldLen = SvDbaseConverter::ConvertPrecisionToDbase( nFieldLen, nPrecision );
             if ( bSdbLenBad && nFieldLen == 1 )
                 nFieldLen = 2;      // THIS is reality
-        }
-        if ( bUpdateTitles )
-        {   // Angabe anpassen und ausgeben
-            OUString aOutString = aFieldName;
-            switch ( nDbType )
-            {
-                case sdbc::DataType::BIT :
-                    aOutString += ",L";
-                    break;
-                case sdbc::DataType::DATE :
-                    aOutString += ",D";
-                    break;
-                case sdbc::DataType::LONGVARCHAR :
-                    aOutString += ",M";
-                    break;
-                case sdbc::DataType::VARCHAR :
-                    aOutString += ",C," + OUString::number( nFieldLen );
-                    break;
-                case sdbc::DataType::DECIMAL :
-                    aOutString += ",N,"  + OUString::number( nFieldLen ) +
-                                  "," + OUString::number( nPrecision );
-                    break;
-            }
-            if ( !aOutString.equalsIgnoreAsciiCase( aString ) )
-            {
-                pDoc->SetString( nCol, nFirstRow, nTab, aOutString );
-                rDocShell.PostPaint( nCol, nFirstRow, nTab, nCol, nFirstRow, nTab, PAINT_GRID );
-            }
         }
         ++nField;
     }
