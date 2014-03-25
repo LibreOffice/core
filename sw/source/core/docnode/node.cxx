@@ -928,6 +928,7 @@ void SwCntntNode::Modify( const SfxPoolItem* pOldValue, const SfxPoolItem* pNewV
     switch( nWhich )
     {
     case RES_OBJECTDYING :
+        if (pNewValue)
         {
             SwFmt * pFmt = (SwFmt *) ((SwPtrMsgPoolItem *)pNewValue)->pObject;
 
