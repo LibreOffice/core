@@ -453,16 +453,11 @@ sal_Bool SwTOXMgr::UpdateOrInsertTOX(const SwTOXDescription& rDesc,
 
         if (pDoc->GetIDocumentUndoRedo().DoesUndo())
         {
-            if (pNewTOX != NULL)
-            {
-                pDoc->GetIDocumentUndoRedo().DelAllUndoObj();
-            }
-
+            pDoc->GetIDocumentUndoRedo().DelAllUndoObj();
             pDoc->GetIDocumentUndoRedo().StartUndo(UNDO_TOXCHANGE, NULL);
         }
 
-        if (pNewTOX != NULL) // => pTOX != NULL
-            pDoc->ChgTOX(*pTOX, *pNewTOX);
+        pDoc->ChgTOX(*pTOX, *pNewTOX);
 
         pTOX->DisableKeepExpression();
         bRet = pSh->UpdateTableOf(*pTOX, pSet);
@@ -471,11 +466,6 @@ sal_Bool SwTOXMgr::UpdateOrInsertTOX(const SwTOXDescription& rDesc,
         if (pDoc->GetIDocumentUndoRedo().DoesUndo())
         {
             pDoc->GetIDocumentUndoRedo().EndUndo(UNDO_TOXCHANGE, NULL);
-
-            if (pNewTOX == NULL)
-            {
-                pDoc->GetIDocumentUndoRedo().DelAllUndoObj();
-            }
         }
     }
 
