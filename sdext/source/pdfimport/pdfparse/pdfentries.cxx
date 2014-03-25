@@ -912,7 +912,7 @@ PDFEntry* PDFObject::clone() const
         {
             pNewOb->m_pStream = dynamic_cast<PDFStream*>(pNewOb->m_aSubElements[i]);
             PDFDict* pNewDict = dynamic_cast<PDFDict*>(pNewOb->m_pObject);
-            if( pNewDict )
+            if (pNewDict && pNewOb->m_pStream)
                 pNewOb->m_pStream->m_pDict = pNewDict;
         }
     }
