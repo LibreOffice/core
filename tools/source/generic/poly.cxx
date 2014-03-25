@@ -1522,14 +1522,14 @@ SvStream& ReadPolygon( SvStream& rIStream, Polygon& rPoly )
 
     {
         // Determine whether we need to write through operators
-#if (SAL_TYPES_SIZEOFLONG) != 4
-        if ( true )
-#else
+#if (SAL_TYPES_SIZEOFLONG) == 4
 #ifdef OSL_BIGENDIAN
-        if ( rIStream.GetNumberFormatInt() != NUMBERFORMAT_INT_BIGENDIAN )
+        if ( rIStream.GetNumberFormatInt() == NUMBERFORMAT_INT_BIGENDIAN )
 #else
-        if ( rIStream.GetNumberFormatInt() != NUMBERFORMAT_INT_LITTLEENDIAN )
+        if ( rIStream.GetNumberFormatInt() == NUMBERFORMAT_INT_LITTLEENDIAN )
 #endif
+            rIStream.Read( rPoly.mpImplPolygon->mpPointAry, nPoints*sizeof(Point) );
+        else
 #endif
         {
             for( i = 0; i < nPoints; i++ )
@@ -1541,8 +1541,6 @@ SvStream& ReadPolygon( SvStream& rIStream, Polygon& rPoly )
                 rPoly.mpImplPolygon->mpPointAry[i].Y() = nTmpY;
             }
         }
-        else
-            rIStream.Read( rPoly.mpImplPolygon->mpPointAry, nPoints*sizeof(Point) );
     }
 
     return rIStream;
@@ -1560,14 +1558,17 @@ SvStream& WritePolygon( SvStream& rOStream, const Polygon& rPoly )
 
     {
         // Determine whether we need to write through operators
-#if (SAL_TYPES_SIZEOFLONG) != 4
-        if ( true )
-#else
+#if (SAL_TYPES_SIZEOFLONG) == 4
 #ifdef OSL_BIGENDIAN
-        if ( rOStream.GetNumberFormatInt() != NUMBERFORMAT_INT_BIGENDIAN )
+        if ( rOStream.GetNumberFormatInt() == NUMBERFORMAT_INT_BIGENDIAN )
 #else
-        if ( rOStream.GetNumberFormatInt() != NUMBERFORMAT_INT_LITTLEENDIAN )
+        if ( rOStream.GetNumberFormatInt() == NUMBERFORMAT_INT_LITTLEENDIAN )
 #endif
+        {
+            if ( nPoints )
+                rOStream.Write( rPoly.mpImplPolygon->mpPointAry, nPoints*sizeof(Point) );
+        }
+        else
 #endif
         {
             for( i = 0; i < nPoints; i++ )
@@ -1576,11 +1577,6 @@ SvStream& WritePolygon( SvStream& rOStream, const Polygon& rPoly )
                 rOStream.WriteInt32( sal::static_int_cast<sal_Int32>( rPoly.mpImplPolygon->mpPointAry[i].X() ) )
                         .WriteInt32( sal::static_int_cast<sal_Int32>( rPoly.mpImplPolygon->mpPointAry[i].Y() ) );
             }
-        }
-        else
-        {
-            if ( nPoints )
-                rOStream.Write( rPoly.mpImplPolygon->mpPointAry, nPoints*sizeof(Point) );
         }
     }
 
