@@ -28,7 +28,6 @@
 #include <apr_strings.h>
 
 #include "DAVAuthListener.hxx"
-#include "SerfTypes.hxx"
 #include "SerfSession.hxx"
 #include "SerfUri.hxx"
 #include "SerfRequestProcessor.hxx"
@@ -193,7 +192,7 @@ serf_context_t* SerfSession::getSerfContext()
     return m_pSerfContext;
 }
 
-SerfConnection* SerfSession::getSerfConnection()
+serf_connection_t* SerfSession::getSerfConnection()
 {
     return m_pSerfConnection;
 }

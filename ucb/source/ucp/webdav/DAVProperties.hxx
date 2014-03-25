@@ -22,10 +22,11 @@
 #define _DAVPROPERTIES_HXX_
 
 #include <rtl/ustring.hxx>
-#include "SerfTypes.hxx"
 
 namespace http_dav_ucp
 {
+
+typedef struct { const char *nspace, *name; } SerfPropName;
 
 struct DAVProperties
 {

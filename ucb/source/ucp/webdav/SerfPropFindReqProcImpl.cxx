@@ -18,7 +18,6 @@
  */
 
 #include "SerfPropFindReqProcImpl.hxx"
-#include "SerfTypes.hxx"
 #include "DAVProperties.hxx"
 
 #include "webdavresponseparser.hxx"

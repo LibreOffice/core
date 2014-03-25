@@ -23,7 +23,6 @@
 #include "UCBDeadPropertyValue.hxx"
 
 #include "SerfPropPatchReqProcImpl.hxx"
-#include "SerfTypes.hxx"
 
 namespace http_dav_ucp
 {

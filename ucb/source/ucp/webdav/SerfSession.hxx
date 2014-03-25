@@ -26,8 +26,9 @@
 #include <boost/shared_ptr.hpp>
 #include <osl/mutex.hxx>
 #include "DAVSession.hxx"
-#include "SerfTypes.hxx"
 #include "SerfUri.hxx"
+
+#include <serf.h>
 
 namespace ucbhelper { class ProxyDecider; }
 
@@ -51,7 +52,7 @@ private:
     OUString           m_aProxyName;
     sal_Int32               m_nProxyPort;
 
-    SerfConnection*         m_pSerfConnection;
+    serf_connection_t*      m_pSerfConnection;
     serf_context_t*         m_pSerfContext;
     serf_bucket_alloc_t*    m_pSerfBucket_Alloc;
     bool                    m_bIsHeadRequestInProgress;
@@ -104,7 +105,7 @@ public:
     apr_pool_t* getAprPool();
     serf_bucket_alloc_t* getSerfBktAlloc();
     serf_context_t* getSerfContext();
-    SerfConnection* getSerfConnection();
+    serf_connection_t* getSerfConnection();
 
     // DAVSession methods
     virtual sal_Bool CanUse( const OUString & inUri );
@@ -274,7 +275,7 @@ private:
 
     /*
     // low level GET implementation, used by public GET implementations
-    static int GET( SerfConnection * sess,
+    static int GET( serf_connection_t * sess,
                     const char * uri,
                     //ne_block_reader reader,
                     bool getheaders,
@@ -282,14 +283,14 @@ private:
 
     // Buffer-based PUT implementation. Serf only has file descriptor-
     // based API.
-    static int PUT( SerfConnection * sess,
+    static int PUT( serf_connection_t * sess,
                     const char * uri,
                     const char * buffer,
                     size_t size );
 
     // Buffer-based POST implementation. Serf only has file descriptor-
     // based API.
-    int POST( SerfConnection * sess,
+    int POST( serf_connection_t * sess,
               const char * uri,
               const char * buffer,
               //ne_block_reader reader,
