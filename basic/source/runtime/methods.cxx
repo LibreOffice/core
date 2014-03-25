@@ -55,6 +55,7 @@
 #include <com/sun/star/script/XErrorQuery.hpp>
 #include <ooo/vba/XHelperInterface.hpp>
 #include <com/sun/star/bridge/oleautomation/XAutomationObject.hpp>
+#include <boost/scoped_array.hpp>
 
 using namespace comphelper;
 using namespace osl;
@@ -445,28 +446,25 @@ RTLFUNC(CurDir)
     const int PATH_INCR = 250;
 
     int nSize = PATH_INCR;
-    char* pMem;
+    boost::scoped_array<char> pMem;
     while( true )
       {
-        pMem = new char[nSize];
+        pMem.reset(new char[nSize]);
         if( !pMem )
           {
             StarBASIC::Error( SbERR_NO_MEMORY );
             return;
           }
-        if( getcwd( pMem, nSize-1 ) != NULL )
+        if( getcwd( pMem.get(), nSize-1 ) != NULL )
           {
-            rPar.Get(0)->PutString( OUString::createFromAscii(pMem) );
-            delete [] pMem;
+            rPar.Get(0)->PutString( OUString::createFromAscii(pMem.get()) );
             return;
           }
         if( errno != ERANGE )
           {
             StarBASIC::Error( SbERR_INTERNAL_ERROR );
-            delete [] pMem;
             return;
           }
-        delete [] pMem;
         nSize += PATH_INCR;
       };
 

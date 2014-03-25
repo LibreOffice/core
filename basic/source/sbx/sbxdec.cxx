@@ -23,7 +23,7 @@
 #include "sbxconv.hxx"
 
 #include <com/sun/star/bridge/oleautomation/Decimal.hpp>
-
+#include <boost/scoped_array.hpp>
 
 // Implementation SbxDecimal
 SbxDecimal::SbxDecimal( void )
@@ -206,7 +206,7 @@ bool SbxDecimal::setString( OUString* pOUString )
     if( cDecimalSep != '.' || cThousandSep != ',' )
     {
         int nLen = pOUString->getLength();
-        sal_Unicode* pBuffer = new sal_Unicode[nLen +  1];
+        boost::scoped_array<sal_Unicode> pBuffer(new sal_Unicode[nLen +  1]);
         pBuffer[nLen] = 0;
 
         const sal_Unicode* pSrc = pOUString->getStr();
@@ -224,8 +224,7 @@ bool SbxDecimal::setString( OUString* pOUString )
                 pBuffer[i] = ',';
             i++;
         }
-        hResult = VarDecFromStr( (OLECHAR*)pBuffer, nLANGID, 0, &maDec );
-        delete [] pBuffer;
+        hResult = VarDecFromStr( (OLECHAR*)pBuffer.get(), nLANGID, 0, &maDec );
     }
     else
     {

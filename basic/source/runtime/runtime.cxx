@@ -66,6 +66,7 @@
 #include "sbintern.hxx"
 #include "sbunoobj.hxx"
 #include <basic/codecompletecache.hxx>
+#include <boost/scoped_array.hpp>
 
 using com::sun::star::uno::Reference;
 
@@ -4453,9 +4454,9 @@ void SbiRuntime::StepDCREATE_IMPL( sal_uInt32 nOp1, sal_uInt32 nOp2 )
         bool bRangeError = false;
 
         // Store dims to use them for copying later
-        sal_Int32* pLowerBounds = new sal_Int32[nDims];
-        sal_Int32* pUpperBounds = new sal_Int32[nDims];
-        sal_Int32* pActualIndices = new sal_Int32[nDims];
+        boost::scoped_array<sal_Int32> pLowerBounds(new sal_Int32[nDims]);
+        boost::scoped_array<sal_Int32> pUpperBounds(new sal_Int32[nDims]);
+        boost::scoped_array<sal_Int32> pActualIndices(new sal_Int32[nDims]);
         if( nDimsOld != nDimsNew )
         {
             bRangeError = true;
@@ -4488,11 +4489,8 @@ void SbiRuntime::StepDCREATE_IMPL( sal_uInt32 nOp1, sal_uInt32 nOp2 )
             // (It would be faster to work on the flat internal data array of an
             // SbyArray but this solution is clearer and easier)
             implCopyDimArray_DCREATE( pArray, pOldArray, nDims - 1,
-                0, pActualIndices, pLowerBounds, pUpperBounds );
+                                      0, pActualIndices.get(), pLowerBounds.get(), pUpperBounds.get() );
         }
-        delete [] pUpperBounds;
-        delete [] pLowerBounds;
-        delete [] pActualIndices;
         refRedimpArray = NULL;
     }
 }
