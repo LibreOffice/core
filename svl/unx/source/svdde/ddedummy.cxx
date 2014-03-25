@@ -147,6 +147,7 @@ DdePoke::DdePoke( DdeConnection& rConnection, const OUString& rString, const Dde
 
 
 DdeTopic::DdeTopic( const OUString& )
+    : pName(NULL)
 {
 }
 
